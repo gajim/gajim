@@ -55,10 +55,9 @@ class vCard_Window:
 	def delete_event(self, widget):
 		"""close window"""
 		del self.r.tab_vcard[self.jid]
-		self.window.destroy()
+		self.xml.get_widget("vcard").destroy()
 
 	def set_values(self, vcard):
-		self.vc = vcard
 		for i in vcard.keys():
 			if type(vcard[i]) == type({}):
 				for j in vcard[i].keys():
@@ -77,6 +76,7 @@ class vCard_Window:
 						pass
 
 	def add_to_vcard(self, vcard, entry, txt):
+		"""Add an information to the vCard dictionary"""
 		entries = string.split(entry, '_')
 		loc = vcard
 		while len(entries) > 1:
@@ -87,16 +87,8 @@ class vCard_Window:
 		loc[entries[0]] = txt
 		return vcard
 
-	def on_retrieve(self, widget):
-		if self.r.connected:
-			self.r.queueOUT.put(('ASK_VCARD', self.jid))
-		else:
-			warning_Window("You must be connected to get your informations")
-
-	def on_publish(self, widget):
-		if not self.r.connected:
-			warning_Window("You must be connected to publish your informations")
-			return
+	def make_vcard(self):
+		"""make the vCard dictionary"""
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
 			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
 			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE']
@@ -111,13 +103,28 @@ class vCard_Window:
 		txt = buf.get_text(start_iter, end_iter, 0)
 		if txt != '':
 			vcard['DESC']= txt
-		self.r.queueOUT.put(('VCARD', vcard))
+		return vcard
 
-	def __init__(self, acc_pref, jid):
+
+	def on_retrieve(self, widget):
+		acct = self.plugin.accts.which_account(self.user)
+		if self.plugin.connected[acct]:
+			self.plugin.send('ASK_VCARD', acct, self.jid))
+		else:
+			warning_Window("You must be connected to get your informations")
+
+	def on_publish(self, widget):
+		acct = self.plugin.accts.which_account(self.user)
+		if not self.plugin.connected[acct]:
+			warning_Window("You must be connected to publish your informations")
+			return
+		vcard = self.make_vcard()
+		self.plugin.send('VCARD', acct, vcard)
+
+	def __init__(self, plugin, user):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard')
-		self.window = self.xml.get_widget("vcard")
-		self.jid = jid
-		self.r = acc_pref.accs.r
+		self.user = user
+		self.plugin = plugin
 		
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_close_clicked', self.delete_event)
