@@ -596,18 +596,21 @@ class new_message_window: #FIXME: NOT READY
 	def on_chat_button_clicked(self, widget):
 		"""When Chat button is clicked"""
 		#FIXME: either make it simple entry, or find a way to handle windows the easy way
+		userid_comboboxentry = self.xml.get_widget('userid_comboboxentry')
+		userid_comboboxentry.child.set_activates_default(True)
 		userid = self.xml.get_widget('userid_comboboxentry').child.get_text()
 		#FIXME: if the user doesn't give jid, but name look in the roster
 		#DO IT WITH AUTOCOMPLETE
 		#SO USER ID SHOULD BECOME JID and sent to new_chat()
 		jid = userid
 		
-		if not self.contacts[account].has_key(jid):
-			# use User class, new_chat expects it that way
-			user = gtkgui.User(jid, jid, ['not in the roster'], \
-				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
-			self.plugin.roster.contacts[self.account][jid] = [user]
-			self.plugin.roster.add_user_to_roster(user.jid, self.account)
+		#FIXME: if user is there, use that instance IF POSSIBLE [is it Yann?]
+		#if not self.plugin.roster.contacts[self.account].has_key(jid):
+		# use User class, new_chat expects it that way
+		user = gtkgui.User(jid, jid, ['not in the roster'], \
+			'not in the roster', 'not in the roster', 'none', None, '', 0, '')
+		self.plugin.roster.contacts[self.account][jid] = [user]
+		self.plugin.roster.add_user_to_roster(user.jid, self.account)
 		self.plugin.roster.new_chat(user, self.account)
 		widget.get_toplevel().destroy()
 
