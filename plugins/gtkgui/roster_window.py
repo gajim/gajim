@@ -981,7 +981,7 @@ class Roster_window:
 		if get_msg:
 			message = self.get_status_message('offline')
 			if message == -1:
-				message = ''
+				return
 			for acct in accounts:
 				if self.plugin.connected[acct]:
 					self.send_status(acct, 'offline', message)
