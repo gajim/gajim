@@ -680,22 +680,27 @@ class roster_Window:
 			if not self.get_user_iter(user.jid, account):
 				self.add_user_to_roster(user.jid, account)
 			self.redraw_jid(user.jid, account)
-		for u in self.contacts[account][user.jid]:
+		users = self.contacts[account][user.jid]
+		for u in users:
 			if u.resource == user.resource:
 				u.show = show
 				u.status = status
 				break
 		#Print status in chat window
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
-			#TODO: should show pibuf of the prioritest resource
-			if len(self.contacts[account][user.jid]) < 2:
-				img = self.pixbufs[show]
-				if img.get_storage_type() == gtk.IMAGE_ANIMATION:
-					self.plugin.windows[account]['chats'][user.jid].\
-						img.set_from_animation(img.get_animation())
-				elif img.get_storage_type() == gtk.IMAGE_PIXBUF:
-					self.plugin.windows[account]['chats'][user.jid].\
-						img.set_from_pixbuf(img.get_pixbuf())
+			prio = 0
+			sho = users[0].show
+			for u in users:
+				if u.priority > prio:
+					prio = u.priority
+					sho = u.show
+			img = self.pixbufs[sho]
+			if img.get_storage_type() == gtk.IMAGE_ANIMATION:
+				self.plugin.windows[account]['chats'][user.jid].\
+					img.set_from_animation(img.get_animation())
+			elif img.get_storage_type() == gtk.IMAGE_PIXBUF:
+				self.plugin.windows[account]['chats'][user.jid].\
+					img.set_from_pixbuf(img.get_pixbuf())
 			name = user.name
 			if user.resource != '':
 				name += '/'+user.resource
