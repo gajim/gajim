@@ -249,9 +249,15 @@ class preferences_window:
 			self.plugin.config['print_time'] = 'always'
 		self.update_print_time()
 
-	def on_use_emoticons_checkbutton_function(self):
-		"""
-		model = self.emot_tree.get_model()
+	def on_use_emoticons_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'useemoticons',\
+			[self.xml.get_widget('button_new_emoticon'),\
+			self.xml.get_widget('button_remove_emoticon'),\
+			self.xml.get_widget('treeview_emoticons'),\
+			self.xml.get_widget('set_image_button'),\
+			self.xml.get_widget('emoticons_image')])
+
+	def on_emoticons_treemodel_row_deleted(self, model, path, iter):
 		iter = model.get_iter_first()
 		emots = []
 		while iter:
@@ -259,72 +265,72 @@ class preferences_window:
 			emots.append(model.get_value(iter, 1))
 			iter = model.iter_next(iter)
 		self.plugin.config['emoticons'] = '\t'.join(emots)
-		"""
 		self.plugin.roster.mkemoticons()
-	
-	def on_emoticons_treeview_row_changed(self, model, path, iter):
-		print 'row-changed'
 
+	def on_emoticons_treemodel_row_changed(self, model, path, iter):
+		iter = model.get_iter_first()
+		emots = []
+		while iter:
+			emots.append(model.get_value(iter, 0))
+			emots.append(model.get_value(iter, 1))
+			iter = model.iter_next(iter)
+		self.plugin.config['emoticons'] = '\t'.join(emots)
+		self.plugin.roster.mkemoticons()
+
+	def on_auto_pop_up_checkbox_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'autopopup', None,\
+			[self.auto_pp_away_checkbutton])
+
+	def on_auto_pop_up_away_checkbox_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'autopopupaway')
+
+	def on_soundplayer_entry_changed(self, widget):
+		self.plugin.config['soundplayer'] = widget.get_text()
+		
 	def on_prompt_online_status_message_checkbutton_toggled(self, widget):
 		"""On Prompt Online Status Message Checkbutton Toggled"""
-		if widget.get_active():
-			self.plugin.config['ask_online_status'] = 1
-		else:
-			self.plugin.config['ask_online_status'] = 0
+		self.on_checkbutton_toggled(widget, 'ask_online_status')
 	
 	def on_prompt_offline_status_message_checkbutton_toggled(self, widget):
 		"""On Prompt Offline Status Message Checkbutton Toggled"""
-		if widget.get_active():
-			self.plugin.config['ask_offline_status'] = 1
-		else:
-			self.plugin.config['ask_offline_status'] = 0
+		self.on_checkbutton_toggled(widget, 'ask_ofline_status')
 	
-	def write_cfg(self): #FIXME: (nk) instant apply
-		"""Save preferences in config File and apply them"""
-		#sound player
-		self.plugin.config['soundplayer'] = \
-			self.xml.get_widget('entry_soundplayer').get_text()
-		#sounds
-		model = self.sound_tree.get_model()
+	def on_sounds_treemodel_row_changed(self, model, path, iter):
 		iter = model.get_iter_first()
 		while iter:
 			path = model.get_path(iter)
+			sound_event = model.get_value(iter, 0)
 			if model[path][1]:
-				self.plugin.config['sound_' + model.get_value(iter, 0)] = 1
+				self.plugin.config['sound_' + sound_event] = 1
 			else:
-				self.plugin.config['sound_' + model.get_value(iter, 0)] = 0
-			self.plugin.config['sound_' + model.get_value(iter, 0) + '_file'] = \
+				self.plugin.config['sound_' + sound_event] = 0
+			self.plugin.config['sound_' + sound_event + '_file'] = \
 				model.get_value(iter, 2)
 			iter = model.iter_next(iter)
-		#autopopup
-		if self.auto_pp_checkbutton.get_active():
-			self.plugin.config['autopopup'] = 1
-		else:
-			self.plugin.config['autopopup'] = 0
-		#autopopupaway
-		if self.auto_pp_away_checkbutton.get_active():
-			self.plugin.config['autopopupaway'] = 1
-		else:
-			self.plugin.config['autopopupaway'] = 0
-		#autoaway
-		if self.auto_away_checkbutton.get_active():
-			self.plugin.config['autoaway'] = 1
-		else:
-			self.plugin.config['autoaway'] = 0
-		aat = self.auto_away_time_spinbutton.get_value_as_int()
+
+	def on_auto_away_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'autoaway', None,\
+			[self.auto_away_time_spinbutton])
+
+	def on_auto_away_time_spinbutton_value_changed(self, widget):
+		aat = widget.get_value_as_int()
 		self.plugin.config['autoawaytime'] = aat
-		#autoxa
-		if self.auto_xa_checkbutton.get_active():
-			self.plugin.config['autoxa'] = 1
-		else:
-			self.plugin.config['autoxa'] = 0
-		axt = self.auto_xa_time_spinbutton.get_value_as_int()
+		self.plugin.sleeper = common.sleepy.Sleepy(\
+			self.plugin.config['autoawaytime']*60, \
+			self.plugin.config['autoxatime']*60)
+
+	def on_auto_xa_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'autoxa', None,\
+			[self.auto_xa_time_spinbutton])
+
+	def on_auto_xa_time_spinbutton_value_changed(self, widget):
+		axt = widget.get_value_as_int()
 		self.plugin.config['autoxatime'] = axt
 		self.plugin.sleeper = common.sleepy.Sleepy(\
 			self.plugin.config['autoawaytime']*60, \
 			self.plugin.config['autoxatime']*60)
-		#Status messages
-		model = self.msg_tree.get_model()
+
+	def on_msg_treemodel_row_changed(self, model, path, iter):
 		iter = model.get_iter_first()
 		i = 0
 		while iter:
@@ -336,14 +342,46 @@ class preferences_window:
 			del self.plugin.config['msg%i_name' % i]
 			del self.plugin.config['msg%i' % i]
 			i += 1
-		
-		#log presences in user file
-		if self.xml.get_widget('chk_log_pres_usr').get_active():
+
+	def on_msg_treemodel_row_deleted(self, model, path, iter):
+		iter = model.get_iter_first()
+		i = 0
+		while iter:
+			self.plugin.config['msg%i_name' % i] = model.get_value(iter, 0)
+			self.plugin.config['msg%i' % i] = model.get_value(iter, 1)
+			iter = model.iter_next(iter)
+			i += 1
+		while self.plugin.config.has_key('msg%s_name' % i):
+			del self.plugin.config['msg%i_name' % i]
+			del self.plugin.config['msg%i' % i]
+			i += 1
+
+	def on_links_open_with_combobox_changed(self, widget):
+		if widget.get_active() == 2:
+			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
+			self.plugin.config['openwith'] = 'custom'
+		else:
+			if widget.get_active() == 0:
+				self.plugin.config['openwith'] = 'gnome-open'
+			if widget.get_active() == 1:
+				self.plugin.config['openwith'] = 'kfmclient exec'
+			self.xml.get_widget('custom_apps_frame').set_sensitive(False)
+
+	def on_custom_browser_entry_changed(self, widget):
+		self.plugin.config['custombrowser'] = widget.get_text()
+
+	def on_custom_mail_client_entry_changed(self, widget):
+		self.plugin.config['custommailapp'] = widget.get_text()
+
+	def on_log_in_contact_checkbutton_toggled(self, widget):
+		if widget.get_active():
 			self.config_logger['lognotusr'] = 1
 		else:
 			self.config_logger['lognotusr'] = 0
-		#log presences in external file
-		if self.xml.get_widget('chk_log_pres_ext').get_active():
+		self.plugin.send('CONFIG', None, ('Logger', self.config_logger, 'GtkGui'))
+
+	def on_log_in_extern_checkbutton_toggled(self, widget):
+		if widget.get_active():
 			self.config_logger['lognotsep'] = 1
 		else:
 			self.config_logger['lognotsep'] = 0
@@ -606,23 +644,6 @@ class preferences_window:
 			model.set_value(iter, 2, file)
 			model.set_value(iter, 1, 1)
 
-	def on_links_open_with_combobox_changed(self, widget):
-		if widget.get_active() == 2:
-			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
-			self.plugin.config['openwith'] = 'custom'
-		else:
-			if widget.get_active() == 0:
-				self.plugin.config['openwith'] = 'gnome-open'
-			if widget.get_active() == 1:
-				self.plugin.config['openwith'] = 'kfmclient exec'
-			self.xml.get_widget('custom_apps_frame').set_sensitive(False)
-
-	def on_custom_browser_entry_changed(self, widget):
-		self.plugin.config['custombrowser'] = widget.get_text()
-
-	def on_custom_mail_client_entry_changed(self, widget):
-		self.plugin.config['custommailapp'] = widget.get_text()
-
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
@@ -779,11 +800,11 @@ class preferences_window:
 		self.auto_pp_away_checkbutton.set_sensitive(self.plugin.config['autopopup'])
 
 		#sound player
-		self.xml.get_widget('entry_soundplayer').set_text(\
+		self.xml.get_widget('soundplayer_entry').set_text(\
 			self.plugin.config['soundplayer'])
 
 		#sounds
-		self.sound_tree = self.xml.get_widget('treeview_sounds')
+		self.sound_tree = self.xml.get_widget('sounds_treeview')
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, \
 			gobject.TYPE_STRING)
 		self.sound_tree.set_model(model)
@@ -810,10 +831,10 @@ class preferences_window:
 		self.fill_sound_treeview()
 
 		if not os.name == 'posix':
-			self.xml.get_widget('entry_soundplayer').set_sensitive(False)
+			self.xml.get_widget('soundplayer_entry').set_sensitive(False)
 			self.sound_tree.set_sensitive(False)
-			self.xml.get_widget('entry_sounds').set_sensitive(False)
-			self.xml.get_widget('button_sounds').set_sensitive(False)
+			self.xml.get_widget('sounds_entry').set_sensitive(False)
+			self.xml.get_widget('sounds_button').set_sensitive(False)
 		
 		#Autoaway
 		st = self.plugin.config['autoaway']
@@ -856,24 +877,6 @@ class preferences_window:
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		buf.connect('changed', self.on_msg_textview_changed)
 
-		self.xml.signal_connect('on_auto_pop_up_checkbox_toggled', \
-			self.on_checkbutton_toggled, 'autopopup', None,\
-									 [self.auto_pp_away_checkbutton])
-		self.xml.signal_connect('on_auto_away_checkbutton_toggled', \
-			self.on_checkbutton_toggled, 'autopopupaway', None,\
-									[self.auto_away_time_spinbutton])
-		self.xml.signal_connect('on_auto_xa_checkbutton_toggled', \
-			self.on_checkbutton_toggled, 'autoxa', None,\
-									[self.auto_xa_time_spinbutton])
-		self.xml.signal_connect('on_use_emoticons_checkbutton_toggled', \
-			self.on_checkbutton_toggled, 'useemoticons', \
-					self.on_use_emoticons_checkbutton_function, \
-					[self.xml.get_widget('button_new_emoticon'),
-					self.xml.get_widget('button_remove_emoticon'),
-					self.xml.get_widget('treeview_emoticons'),
-					self.xml.get_widget('set_image_button'),
-					self.xml.get_widget('emoticons_image')])
-
 		self.plugin.send('ASK_CONFIG', None, ('GtkGui', 'Logger', {'lognotsep':1,\
 			'lognotusr':1}))
 		self.config_logger = self.plugin.wait('CONFIG')
@@ -894,14 +897,22 @@ class preferences_window:
 				
 		#log presences in user file
 		st = self.config_logger['lognotusr']
-		self.xml.get_widget('chk_log_pres_usr').set_active(st)
+		self.xml.get_widget('log_in_contact_checkbutton').set_active(st)
 
 		#log presences in external file
 		st = self.config_logger['lognotsep']
-		self.xml.get_widget('chk_log_pres_ext').set_active(st)
+		self.xml.get_widget('log_in_extern_checkbutton').set_active(st)
 		
 		self.emot_tree.get_model().connect('row-changed', \
-			self.on_emoticons_treeview_row_changed)
+			self.on_emoticons_treemodel_row_changed)
+		self.emot_tree.get_model().connect('row-deleted', \
+			self.on_emoticons_treemodel_row_deleted)
+		self.sound_tree.get_model().connect('row-changed', \
+			self.on_sounds_treemodel_row_changed)
+		self.msg_tree.get_model().connect('row-changed', \
+			self.on_msg_treemodel_row_changed)
+		self.msg_tree.get_model().connect('row-deleted', \
+			self.on_msg_treemodel_row_deleted)
 		
 		self.xml.signal_autoconnect(self)
 

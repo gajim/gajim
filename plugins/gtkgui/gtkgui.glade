@@ -4424,6 +4424,7 @@ on the server as a vCard</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="on_auto_pop_up_away_checkbutton_toggled" last_modification_time="Tue, 08 Mar 2005 22:51:08 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -4435,6 +4436,7 @@ on the server as a vCard</property>
 	      <child>
 		<widget class="GtkCheckButton" id="ignore_events_from_contacts_not_in_roster_checkbutton">
 		  <property name="visible">True</property>
+		  <property name="sensitive">False</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Ignore events from contacts not in your roster</property>
 		  <property name="use_underline">True</property>
@@ -4482,7 +4484,7 @@ on the server as a vCard</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">entry_soundplayer</property>
+		      <property name="mnemonic_widget">soundplayer_entry</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -4492,7 +4494,7 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkEntry" id="entry_soundplayer">
+		    <widget class="GtkEntry" id="soundplayer_entry">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="editable">True</property>
@@ -4502,6 +4504,7 @@ on the server as a vCard</property>
 		      <property name="has_frame">True</property>
 		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
+		      <signal name="changed" handler="on_soundplayer_entry_changed" last_modification_time="Tue, 08 Mar 2005 22:59:53 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -4527,7 +4530,7 @@ on the server as a vCard</property>
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkTreeView" id="treeview_sounds">
+		    <widget class="GtkTreeView" id="sounds_treeview">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="headers_visible">True</property>
@@ -4552,7 +4555,7 @@ on the server as a vCard</property>
 		  <property name="spacing">5</property>
 
 		  <child>
-		    <widget class="GtkEntry" id="entry_sounds">
+		    <widget class="GtkEntry" id="sounds_entry">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="editable">True</property>
@@ -4571,7 +4574,7 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkButton" id="button_sounds">
+		    <widget class="GtkButton" id="sounds_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">...</property>
@@ -4784,6 +4787,7 @@ on the server as a vCard</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">12 1 100 1 10 10</property>
+			  <signal name="value_changed" handler="on_auto_away_time_spinbutton_value_changed" last_modification_time="Wed, 09 Mar 2005 09:46:53 GMT"/>
 			</widget>
 		      </child>
 		    </widget>
@@ -4821,6 +4825,7 @@ on the server as a vCard</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">20 1 100 1 10 10</property>
+			  <signal name="value_changed" handler="on_auto_xa_time_spinbutton_value_changed" last_modification_time="Wed, 09 Mar 2005 09:46:59 GMT"/>
 			</widget>
 		      </child>
 		    </widget>
@@ -5459,7 +5464,7 @@ Custom</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="chk_log_pres_usr">
+			    <widget class="GtkCheckButton" id="log_in_contact_checkbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Log presences in _contact's log file</property>
@@ -5469,6 +5474,7 @@ Custom</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
+			      <signal name="toggled" handler="on_log_in_contact_checkbutton_toggled" last_modification_time="Tue, 08 Mar 2005 23:21:11 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -5478,7 +5484,7 @@ Custom</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="chk_log_pres_ext">
+			    <widget class="GtkCheckButton" id="log_in_extern_checkbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Log presences in an _external file</property>
@@ -5488,6 +5494,7 @@ Custom</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
+			      <signal name="toggled" handler="on_log_in_extern_checkbutton_toggled" last_modification_time="Tue, 08 Mar 2005 23:27:49 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
