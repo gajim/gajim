@@ -1137,26 +1137,33 @@ class roster_Window:
 				user.groups.append('Agents')
 			else:
 				user.groups.append('general')
-		if user.show != 'offline' or showOffline or 'Agents' in user.groups:
-			model = self.tree.get_model()
-			for g in user.groups:
-				iterG = self.get_group_iter(g, account)
-				if not iterG:
-					acct = self.get_account_iter(account)
-					iterG = model.append(self.get_account_iter(account), \
-						(self.pixbufs['closed'], g, 'group', g, FALSE))
-				if not self.groups[account].has_key(g):
-					self.groups[account][g] = {'expand':True}
-				self.tree.expand_row((model.get_path(iterG)[0]), False)
-				if g == 'Agents':
-					model.append(iterG, (self.pixbufs[user.show], \
-						user.name, 'agent', user.jid, TRUE))
-				else:
-					model.append(iterG, (self.pixbufs[user.show], \
-						user.name, 'user', user.jid, TRUE))
-				
-				if self.groups[account][g]['expand']:
-					self.tree.expand_row(model.get_path(iterG), FALSE)
+
+		if user.show == 'offline' and not showOffline:
+			return
+		if not 'Agents' in user.groups:
+			return
+
+		model = self.tree.get_model()
+		for g in user.groups:
+			iterG = self.get_group_iter(g, account)
+			if not iterG:
+				acct = self.get_account_iter(account)
+				iterG = model.append(acct, \
+					(self.pixbufs['closed'], g, 'group', \
+					g, FALSE))
+			if not self.groups[account].has_key(g):
+				self.groups[account][g] = {'expand': True}
+			self.tree.expand_row((model.get_path(iterG)[0]), False)
+
+			typestr = 'user'
+			if g == 'Agents':
+				typestr = 'agent'
+
+			model.append(iterG, (self.pixbufs[user.show], \
+				user.name, typestr, user.jid, TRUE))
+			
+			if self.groups[account][g]['expand']:
+				self.tree.expand_row(model.get_path(iterG), FALSE)
 	
 	def remove_user(self, user, account):
 		model = self.tree.get_model()
