@@ -1171,7 +1171,7 @@ class agent_registration_window:
 		send registration info to the core"""
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
-		user1 = gtkgui.user(self.agent, self.agent, ['Agents'], 'offline', \
+		user1 = gtkgui.User(self.agent, self.agent, ['Agents'], 'offline', \
 			'offline', 'from', '', '', 0, '')
 		self.plugin.roster.contacts[self.account][self.agent] = [user1]
 		self.plugin.roster.add_user_to_roster(self.agent, self.account)

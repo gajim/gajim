@@ -162,7 +162,7 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 gobject.type_register(ImageCellRenderer)
 
 
-class user:
+class User:
 	"""Information concerning each users"""
 	def __init__(self, *args):
 		if len(args) == 0:
@@ -1416,7 +1416,7 @@ class roster_window:
 					if user.ask == 'subscribe':
 						img = self.pixbufs['requested']
 					else:
-						img = self.pixbufs['not in list']
+						img = self.pixbufs['not in the roster']
 				else:
 					img = self.pixbufs[user.show]
 			model.set_value(iter, 0, img)
@@ -1517,7 +1517,7 @@ class roster_window:
 			if not show:
 				show = 'offline'
 
-			user1 = user(ji, name, array[jid]['groups'], show, \
+			user1 = User(ji, name, array[jid]['groups'], show, \
 				array[jid]['status'], array[jid]['sub'], array[jid]['ask'], \
 				resource, 0, '')
 			#when we draw the roster, we can't have twice the same user with 
@@ -1968,8 +1968,8 @@ class roster_window:
 	def on_message(self, jid, msg, tim, account):
 		"""when we receive a message"""
 		if not self.contacts[account].has_key(jid):
-			user1 = user(jid, jid, ['not in list'], \
-				'not in list', 'not in list', 'none', None, '', 0, '')
+			user1 = User(jid, jid, ['not in the roster'], \
+				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
 		iters = self.get_user_iter(jid, account)
@@ -2212,7 +2212,7 @@ class roster_window:
 		self.pixbufs = {}
 		for state in ('connecting', 'online', 'chat', 'away', 'xa', 'dnd', \
 			'invisible', 'offline', 'error', 'requested', 'message', 'opened', \
-			'closed', 'not in list'):
+			'closed', 'not in the roster'):
 			# try to open a pixfile with the correct method
 			state_file = state.replace(" ", "_")
 			files = []
@@ -2756,7 +2756,7 @@ class plugin:
 				if (resources != [''] and (len(luser) != 1 or 
 					luser[0].show != 'offline')) and not string.find(jid, "@") <= 0:
 					old_show = 0
-					user1 = user(user1.jid, user1.name, user1.groups, user1.show, \
+					user1 = User(user1.jid, user1.name, user1.groups, user1.show, \
 					user1.status, user1.sub, user1.ask, user1.resource, \
 						user1.priority, user1.keyID)
 					luser.append(user1)
@@ -2825,14 +2825,14 @@ class plugin:
 			u = self.roster.contacts[account][jid][0]
 			u.resource = array[1]
 			self.roster.remove_user(u, account)
-			if 'not in list' in u.groups:
-				u.groups.remove('not in list')
+			if 'not in the roster' in u.groups:
+				u.groups.remove('not in the roster')
 			if len(u.groups) == 0:
 				u.groups = ['general']
 			self.roster.add_user_to_roster(u.jid, account)
 			self.send('UPDUSER', account, (u.jid, u.name, u.groups))
 		else:
-			user1 = user(jid, jid, ['general'], 'online', \
+			user1 = User(jid, jid, ['general'], 'online', \
 				'online', 'to', '', array[1], 0, '')
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
