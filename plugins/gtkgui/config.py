@@ -1228,7 +1228,8 @@ class agent_browser_window:
 			else:
 				if not model.iter_next(iter):
 					iter = model.iter_parent(iter)
-				iter = model.iter_next(iter)
+				if iter:
+					iter = model.iter_next(iter)
 		if not iter:
 			iter = model.append(None, (agent, agent))
 			self.agent_infos[agent] = {'features' : []}
