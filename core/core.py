@@ -224,6 +224,12 @@ class GajimCore:
 			self.hub.sendPlugin('WARNING', None, _("Couldn't connect to %s : %s") \
 				% (hostname, e))
 			return 0
+		except common.xmlstream.error, e:
+			log.debug("Couldn't connect to %s %s" % (hostname, e))
+			self.hub.sendPlugin('STATUS', account, 'offline')
+			self.hub.sendPlugin('WARNING', None, _("Couldn't connect to %s : %s") \
+				% (hostname, e))
+			return 0
 		else:
 			log.debug("Connected to server")
 
