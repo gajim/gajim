@@ -1221,6 +1221,9 @@ class browseAgent_Window:
 						self.join_button.set_sensitive(True)
 		
 	def __init__(self, plugin, account):
+		if self.plugin.connected[account]:
+			warning_Window(_("You must be connected to view Agents"))
+			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'browser', APP)
 		self.window = xml.get_widget('browser')
 		self.treeview = xml.get_widget('treeview')
@@ -1250,10 +1253,7 @@ class browseAgent_Window:
 		xml.signal_connect('on_register_button_clicked', self.on_register_button_clicked)
 		xml.signal_connect('on_cursor_changed', self.on_cursor_changed)
 		xml.signal_connect('on_close_clicked', self.on_close)
-		if self.plugin.connected[account]:
-			self.browse()
-		else:
-			warning_Window(_("You must be connected to view Agents"))
+		self.browse()
 
 class join_gc:
 	def delete_event(self, widget):
