@@ -185,62 +185,24 @@ class tabbed_chat_Window:
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat', APP)
-		self.widgets = {}
-		self.widgets[user.jid] = {}
-		self.widgets[user.jid]['conversation'] = \
-			self.xml.get_widget('conversation')
-		buffer_conv = self.widgets[user.jid]['conversation'].get_buffer()
-		self.widgets[user.jid]['message'] = self.xml.get_widget('message')
-		self.widgets[user.jid]['message'].grab_focus()
-		buffer_msg = self.widgets[user.jid]['message'].get_buffer()
-		end_iter = buffer_conv.get_end_iter()
-		buffer_conv.create_mark('end', end_iter, 0)
-		self.widgets[user.jid]['image_status'] = \
-			self.xml.get_widget('image_status')
-		self.widgets[user.jid]['button_contact'] = \
-			self.xml.get_widget('button_contact')
-		self.widgets[user.jid]['toggle_gpg'] = self.xml.get_widget('toggle_gpg')
-		self.widgets[user.jid]['vbox_tab'] = self.xml.get_widget('vbox_tab')
-
+		self.xml.get_widget('notebook').remove_page(0)
 		self.plugin = plugin
 		self.account = account
+		self.widgets = {}
+		self.tagIn = {}
+		self.tagOut = {}
+		self.tagStatus = {}
 		self.users = {user.jid: user}
 		self.nb_unread = {user.jid: 0}
-
-		self.redraw_tab(user.jid)
 		self.window = self.xml.get_widget('tabbed_chat')
+		self.new_user(user)
 		self.show_title()
-		self.draw_widgets(user)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_focus', self.on_focus)
 		self.xml.signal_connect('on_chat_key_press_event', \
 			self.on_chat_key_press_event)
 		self.xml.signal_connect('on_notebook_switch_page', \
 			self.on_notebook_switch_page)
-		self.xml.signal_connect('on_history_clicked', self.on_history)
-		self.xml.signal_connect('on_clear_clicked', self.on_clear)
-		self.xml.signal_connect('on_close_clicked', self.on_close_clicked)
-		self.xml.signal_connect('on_msg_key_press_event', \
-			self.on_msg_key_press_event)
-		self.xml.signal_connect('on_button_contact_clicked', \
-			self.on_button_contact_clicked)
-		self.xml.get_widget('button_contact').set_use_underline(False)
-		self.tagIn = {user.jid: buffer_conv.create_tag("incoming")}
-		color = self.plugin.config['inmsgcolor']
-		self.tagIn[user.jid].set_property("foreground", color)
-		self.tagOut = {user.jid: buffer_conv.create_tag("outgoing")}
-		color = self.plugin.config['outmsgcolor']
-		self.tagOut[user.jid].set_property("foreground", color)
-		self.tagStatus = {user.jid: buffer_conv.create_tag("status")}
-		color = self.plugin.config['statusmsgcolor']
-		self.tagStatus[user.jid].set_property("foreground", color)
-
-		#print queued messages
-		if plugin.queues[account].has_key(user.jid):
-			self.read_queue(plugin.queues[account][user.jid])
-		if user.show != 'online':
-			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
-				user.show, user.status), user.jid, 'status')
 		
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -376,37 +338,49 @@ class tabbed_chat_Window:
 
 		self.widgets[user.jid] = {}
 		vb = gtk.VBox()
+		vb.set_border_width(5)
 		self.widgets[user.jid]['vbox_tab'] = vb
-		hb = gtk.HBox()
-		vb.pack_start(hb)
+		hb = gtk.HBox(spacing=5)
+		hb.set_border_width(5)
+		vb.pack_start(hb, expand=False)
 		
-		button = gtk.Button("History", gtk.STOCK_JUSTIFY_FILL)
+		button = gtk.Button(stock=gtk.STOCK_JUSTIFY_FILL)
+		button.get_children()[0].get_children()[0].get_children()[1].set_text("History")
 		button.connect("clicked", self.on_history)
-		hb.pack_start(button)
+		hb.pack_start(button, expand=False, fill=False)
 
-		button = gtk.Button("Clear", gtk.STOCK_CLEAR)
+		button = gtk.Button(stock=gtk.STOCK_CLEAR)
 		button.connect("clicked", self.on_clear)
-		hb.pack_start(button)
+		hb.pack_start(button, expand=False, fill=False)
 
 		img = gtk.Image()
-		hb.pack_start(img)
+		hb.pack_start(img, expand=False, fill=False)
 		self.widgets[user.jid]['image_status'] = img
 
-		button = gtk.ToggleButton(gtk.STOK_DIALOG_AUTHENTICATION)
-		button.set_use_stock(True)
-		hb.pack_start(button)
+		img = gtk.Image()
+		img.set_from_stock(gtk.STOCK_DIALOG_AUTHENTICATION, gtk.ICON_SIZE_BUTTON)
+		button = gtk.ToggleButton()
+		button.add(img)
+		button.set_relief(gtk.RELIEF_NONE)
+		hb.pack_start(button, expand=False, fill=False)
 		self.widgets[user.jid]['toggle_gpg'] = button
 
 		fixed = gtk.Fixed()
+		fixed.set_size_request(20, -1)
+		hb.pack_start(fixed)
 		button = gtk.Button("Anonymous")
+		button.set_relief(gtk.RELIEF_NONE)
 		button.connect("clicked", self.on_button_contact_clicked)
 		button.set_use_underline(False)
-		fixed.add(button, 0, 0)
+		fixed.put(button, 0, 0)
 		self.widgets[user.jid]['button_contact'] = button
 		
-		button = gtk.Button(stock=gtk.STOCK_CLOSE)
+		img = gtk.Image()
+		img.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_BUTTON)
+		button = gtk.Button()
+		button.add(img)
 		button.connect("clicked", self.on_close_clicked)
-		hb.pack_start(button)
+		hb.pack_start(button, expand=False, fill=False)
 
 		vp = gtk.VPaned()
 		vb.pack_start(vp)
@@ -416,21 +390,12 @@ class tabbed_chat_Window:
 		vp.add1(sw)
 		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 		tv = gtk.TextView()
+		tv.set_wrap_mode(gtk.WRAP_WORD)
 		sw.add_with_viewport(tv)
 		self.widgets[user.jid]['conversation'] = tv
 		buffer = tv.get_buffer()
 		end_iter = buffer.get_end_iter()
 		buffer.create_mark('end', end_iter, 0)
-
-		sw = gtk.ScrolledWindow()
-		vp.add2(sw)
-		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		tv = gtk.TextView()
-		sw.add_with_viewport(tv)
-		self.widgets[user.jid]['message'] = tv
-		tv.grab_focus()
-		tv.connect('key_press_event', self.on_msg_key_press_event)
-		buffer = tv.get_buffer()
 		self.tagIn[user.jid] = buffer.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn[user.jid].set_property("foreground", color)
@@ -441,6 +406,17 @@ class tabbed_chat_Window:
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus[user.jid].set_property("foreground", color)
 
+		sw = gtk.ScrolledWindow()
+		vp.add2(sw)
+		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		tv = gtk.TextView()
+		tv.set_wrap_mode(gtk.WRAP_WORD)
+		sw.add_with_viewport(tv)
+		self.widgets[user.jid]['message'] = tv
+		tv.grab_focus()
+		tv.connect('key_press_event', self.on_msg_key_press_event)
+
+		vb.show_all()
 		nb = self.xml.get_widget("notebook")
 		nb.set_current_page(nb.append_page(vb))
 
@@ -448,8 +424,8 @@ class tabbed_chat_Window:
 		self.draw_widgets(user)
 
 		#print queued messages
-		if plugin.queues[account].has_key(user.jid):
-			self.read_queue(plugin.queues[account][user.jid])
+		if self.plugin.queues[self.account].has_key(user.jid):
+			self.read_queue(self.plugin.queues[self.account][user.jid])
 		if user.show != 'online':
 			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
 				user.show, user.status), user.jid, 'status')
@@ -492,7 +468,7 @@ class tabbed_chat_Window:
 				del self.tagIn[jid]
 				del self.tagOut[jid]
 				del self.tagStatus[jid]
-		elif (event.string in st) \
+		elif event.string and event.string in st \
 			and (event.state & gtk.gdk.MOD1_MASK):
 			nb.set_current_page(st.index(event.string))
 
