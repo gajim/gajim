@@ -2893,7 +2893,8 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <signal name="delete_event" handler="on_delete_event" last_modification_time="Fri, 25 Mar 2005 21:02:26 GMT"/>
+  <signal name="show" handler="on_preferences_window_show" last_modification_time="Tue, 29 Mar 2005 23:33:03 GMT"/>
+  <signal name="delete_event" handler="on_preferences_window_delete_event" last_modification_time="Tue, 29 Mar 2005 23:38:24 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox13">

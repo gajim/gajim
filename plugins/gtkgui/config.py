@@ -37,15 +37,17 @@ GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 class Preferences_window:
 	"""Class for Preferences window"""
 	
-	def on_delete_event(self, widget, event):
+	def on_preferences_window_delete_event(self, widget, event):
 		self.window.hide()
-		return True # do NOT destory the window
+		return True # do NOT destroy the window
 	
 	def on_close_button_clicked(self, widget):
-		self.window.hide()		
+		self.window.hide()	
+
+	def on_preferences_window_show(self, widget):
+		self.notebook.set_current_page(0)
 
 	def on_tray_icon_checkbutton_toggled(self, widget):
-		"""On Tray Icon Checkbutton Toggled"""
 		if widget.get_active():
 			self.plugin.config['trayicon'] = 1
 			self.plugin.show_systray()
@@ -56,14 +58,12 @@ class Preferences_window:
 		self.plugin.roster.draw_roster()
 	
 	def on_save_position_checkbutton_toggled(self, widget):
-		"""On Save Position Checkbutton Toggled"""
 		if widget.get_active():
 			self.plugin.config['saveposition'] = 1
 		else:
 			self.plugin.config['saveposition'] = 0
 	
 	def on_merge_checkbutton_toggled(self, widget):
-		"""On Merge Accounts Checkbutton Toggled"""
 		if widget.get_active():
 			self.plugin.config['mergeaccounts'] = 1
 		else:
@@ -71,9 +71,10 @@ class Preferences_window:
 		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
 		self.plugin.roster.draw_roster()
 	
-	def on_iconstyle_combobox_changed(self, widget, path):
+	def on_iconstyle_combobox_changed(self, widget):
 		model = widget.get_model()
-		icon_string = model[path][0]
+		active = widget.get_active()
+		icon_string = model[active][0]
 		self.plugin.config['iconstyle'] = icon_string
 		self.plugin.roster.mkpixbufs()
 		
@@ -175,7 +176,6 @@ class Preferences_window:
 		self.plugin.roster.draw_roster()
 	
 	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
-		"""On Use Tabbed Chat Window Checkbutton Toggled"""
 		buf1 = {}
 		buf2 = {}
 		jids = {}
@@ -969,7 +969,7 @@ class Preferences_window:
 		self.msg_tree.get_model().connect('row-deleted', \
 			self.on_msg_treemodel_row_deleted)
 		
-		self.notebook.set_current_page(0)
+		#self.notebook.set_current_page(0)
 		self.xml.signal_autoconnect(self)
 
 class Account_modification_window:
