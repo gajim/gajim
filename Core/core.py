@@ -427,7 +427,8 @@ class GajimCore:
 			log.debug("subscribe request from %s" % who)
 			if self.cfgParser.Core['alwaysauth'] == 1 or \
 				who.find("@") <= 0:
-				con.send(common.jabber.Presence(who, 'subscribed'))
+				if con:
+					con.send(common.jabber.Presence(who, 'subscribed'))
 				if who.find("@") <= 0:
 					self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 						(prs.getFrom().getStripped(), 'offline', 'offline', \
@@ -740,77 +741,86 @@ class GajimCore:
 					self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
 			#('MSG', account, (jid, msg, keyID))
 			elif ev[0] == 'MSG':
-				msgtxt = ev[2][1]
-				msgenc = ''
-				if ev[2][2] and USE_GPG:
-					#encrypt
-					msgenc = self.gpg[ev[1]].encrypt(ev[2][1], [ev[2][2]])
-					if msgenc: msgtxt = '[this message is encrypted]'
-				msg = common.jabber.Message(ev[2][0], msgtxt)
-				msg.setType('chat')
-				if msgenc:
-					msg.setX(common.jabber.NS_XENCRYPTED).insertData(msgenc)
-				con.send(msg)
-				self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
+				if con:
+					msgtxt = ev[2][1]
+					msgenc = ''
+					if ev[2][2] and USE_GPG:
+						#encrypt
+						msgenc = self.gpg[ev[1]].encrypt(ev[2][1], [ev[2][2]])
+						if msgenc: msgtxt = '[this message is encrypted]'
+					msg = common.jabber.Message(ev[2][0], msgtxt)
+					msg.setType('chat')
+					if msgenc:
+						msg.setX(common.jabber.NS_XENCRYPTED).insertData(msgenc)
+					con.send(msg)
+					self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
 			#('SUB', account, (jid, txt))
 			elif ev[0] == 'SUB':
-				log.debug('subscription request for %s' % ev[2][0])
-				pres = common.jabber.Presence(ev[2][0], 'subscribe')
-				if ev[2][1]:
-					pres.setStatus(ev[2][1])
-				else:
-					pres.setStatus(_("I would like to add you to my roster."))
-				con.send(pres)
+				if con:
+					log.debug('subscription request for %s' % ev[2][0])
+					pres = common.jabber.Presence(ev[2][0], 'subscribe')
+					if ev[2][1]:
+						pres.setStatus(ev[2][1])
+					else:
+						pres.setStatus(_("I would like to add you to my roster."))
+					con.send(pres)
 			#('REQ', account, jid)
 			elif ev[0] == 'AUTH':
-				con.send(common.jabber.Presence(ev[2], 'subscribed'))
+				if con:
+					con.send(common.jabber.Presence(ev[2], 'subscribed'))
 			#('DENY', account, jid)
 			elif ev[0] == 'DENY':
-				con.send(common.jabber.Presence(ev[2], 'unsubscribed'))
+				if con:
+					con.send(common.jabber.Presence(ev[2], 'unsubscribed'))
 			#('UNSUB', account, jid)
 			elif ev[0] == 'UNSUB':
-				delauth = 1
-				if self.cfgParser.Core.has_key('delauth'):
-					delauth = self.cfgParser.Core['delauth']
-				delroster = 1
-				if self.cfgParser.Core.has_key('delroster'):
-					delroster = self.cfgParser.Core['delroster']
-				if delauth:
-					con.send(common.jabber.Presence(ev[2], 'unsubscribe'))
-				if delroster:
-					con.removeRosterItem(ev[2])
+				if con:
+					delauth = 1
+					if self.cfgParser.Core.has_key('delauth'):
+						delauth = self.cfgParser.Core['delauth']
+					delroster = 1
+					if self.cfgParser.Core.has_key('delroster'):
+						delroster = self.cfgParser.Core['delroster']
+					if delauth:
+						con.send(common.jabber.Presence(ev[2], 'unsubscribe'))
+					if delroster:
+						con.removeRosterItem(ev[2])
 			#('UNSUB_AGENT', account, agent)
 			elif ev[0] == 'UNSUB_AGENT':
-				con.removeRosterItem(ev[2])
-				con.requestRegInfo(ev[2])
-				agent_info = con.getRegInfo()
-				if not agent_info:
-					return
-				key = agent_info['key']
-				iq = common.jabber.Iq(to=ev[2], type="set")
-				q = iq.setQuery(common.jabber.NS_REGISTER)
-				q.insertTag('remove')
-				q.insertTag('key').insertData(key)
-				id = con.getAnID()
-				iq.setID(id)
-				con.send(iq)
-				self.hub.sendPlugin('AGENT_REMOVED', ev[1], ev[2])
+				if con:
+					con.removeRosterItem(ev[2])
+					con.requestRegInfo(ev[2])
+					agent_info = con.getRegInfo()
+					if not agent_info:
+						return
+					key = agent_info['key']
+					iq = common.jabber.Iq(to=ev[2], type="set")
+					q = iq.setQuery(common.jabber.NS_REGISTER)
+					q.insertTag('remove')
+					q.insertTag('key').insertData(key)
+					id = con.getAnID()
+					iq.setID(id)
+					con.send(iq)
+					self.hub.sendPlugin('AGENT_REMOVED', ev[1], ev[2])
 			#('UPDUSER', account, (jid, name, groups))
 			elif ev[0] == 'UPDUSER':
-				con.updateRosterItem(jid=ev[2][0], name=ev[2][1], \
-					groups=ev[2][2])
+				if con:
+					con.updateRosterItem(jid=ev[2][0], name=ev[2][1], \
+						groups=ev[2][2])
 			#('REQ_AGENTS', account, ())
 			elif ev[0] == 'REQ_AGENTS':
 				config = self.cfgParser.__getattr__(ev[1])
 				self.request_infos(ev[1], con, config['hostname'])
 			#('REG_AGENT_INFO', account, agent)
 			elif ev[0] == 'REG_AGENT_INFO':
-				con.requestRegInfo(ev[2])
-				agent_info = con.getRegInfo()
-				self.hub.sendPlugin('REG_AGENT_INFO', ev[1], (ev[2], agent_info))
+				if con:
+					con.requestRegInfo(ev[2])
+					agent_info = con.getRegInfo()
+					self.hub.sendPlugin('REG_AGENT_INFO', ev[1], (ev[2], agent_info))
 			#('REG_AGENT', account, infos)
 			elif ev[0] == 'REG_AGENT':
-				con.sendRegInfo(ev[2])
+				if con:
+					con.sendRegInfo(ev[2])
 			#('NEW_ACC', (hostname, login, password, name, ressource, prio, \
 			# use_proxy, proxyhost, proxyport))
 			elif ev[0] == 'NEW_ACC':
@@ -852,31 +862,34 @@ class GajimCore:
 					self.connexions[con] = ev[2]
 			#('ASK_VCARD', account, jid)
 			elif ev[0] == 'ASK_VCARD':
-				iq = common.jabber.Iq(to=ev[2], type="get")
-				iq._setTag('vCard', common.jabber.NS_VCARD)
-				iq.setID(con.getAnID())
-				con.send(iq)
+				if con:
+					iq = common.jabber.Iq(to=ev[2], type="get")
+					iq._setTag('vCard', common.jabber.NS_VCARD)
+					iq.setID(con.getAnID())
+					con.send(iq)
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 			elif ev[0] == 'VCARD':
-				iq = common.jabber.Iq(type="set")
-				iq.setID(con.getAnID())
-				iq2 = iq._setTag('vCard', common.jabber.NS_VCARD)
-				for i in ev[2].keys():
-					if i != 'jid':
-						if type(ev[2][i]) == type({}):
-							iq3 = iq2.insertTag(i)
-							for j in ev[2][i].keys():
-								iq3.insertTag(j).putData(ev[2][i][j])
-						else:
-							iq2.insertTag(i).putData(ev[2][i])
-				con.send(iq)
+				if con:
+					iq = common.jabber.Iq(type="set")
+					iq.setID(con.getAnID())
+					iq2 = iq._setTag('vCard', common.jabber.NS_VCARD)
+					for i in ev[2].keys():
+						if i != 'jid':
+							if type(ev[2][i]) == type({}):
+								iq3 = iq2.insertTag(i)
+								for j in ev[2][i].keys():
+									iq3.insertTag(j).putData(ev[2][i][j])
+							else:
+								iq2.insertTag(i).putData(ev[2][i])
+					con.send(iq)
 			#('AGENT_LOGGING', account, (agent, typ))
 			elif ev[0] == 'AGENT_LOGGING':
-				t = ev[2][1];
-				if not t:
-					t='available';
-				p = common.jabber.Presence(to=ev[2][0], type=t)
-				con.send(p)
+				if con:
+					t = ev[2][1];
+					if not t:
+						t='available';
+					p = common.jabber.Presence(to=ev[2][0], type=t)
+					con.send(p)
 			#('LOG_NB_LINE', account, jid)
 			elif ev[0] == 'LOG_NB_LINE':
 				fic = open(LOGPATH + ev[2], "r")
@@ -908,48 +921,56 @@ class GajimCore:
 				self.loadPlugins(ev[2])
 			#('GC_JOIN', account, (nick, room, server, passwd))
 			elif ev[0] == 'GC_JOIN':
-				p = common.jabber.Presence(to='%s@%s/%s' % (ev[2][1], ev[2][2], \
-					ev[2][0]))
-				con.send(p)
+				if con:
+					p = common.jabber.Presence(to='%s@%s/%s' % (ev[2][1], ev[2][2], \
+						ev[2][0]))
+					con.send(p)
 			#('GC_MSG', account, (jid, msg))
 			elif ev[0] == 'GC_MSG':
-				msg = common.jabber.Message(ev[2][0], ev[2][1])
-				msg.setType('groupchat')
-				con.send(msg)
-				self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
+				if con:
+					msg = common.jabber.Message(ev[2][0], ev[2][1])
+					msg.setType('groupchat')
+					con.send(msg)
+					self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
 			#('GC_SUBJECT', account, (jid, subject))
 			elif ev[0] == 'GC_SUBJECT':
-				msg = common.jabber.Message(ev[2][0])
-				msg.setType('groupchat')
-				msg.setSubject(ev[2][1])
-				con.send(msg)
+				if con:
+					msg = common.jabber.Message(ev[2][0])
+					msg.setType('groupchat')
+					msg.setSubject(ev[2][1])
+					con.send(msg)
 			#('GC_STATUS', account, (nick, jid, show, status))
 			elif ev[0] == 'GC_STATUS':
-				if ev[2][2] == 'offline':
-					con.send(common.jabber.Presence(to = '%s/%s' % (ev[2][1], \
-						ev[2][0]), type = 'unavailable', status = ev[2][3]))
-				else:
-					con.send(common.jabber.Presence(to = '%s/%s' % (ev[2][1], \
-						ev[2][0]), type = 'available', show = ev[2][2], status = \
-						ev[2][3]))
+				if con:
+					if ev[2][2] == 'offline':
+						con.send(common.jabber.Presence(to = '%s/%s' % (ev[2][1], \
+							ev[2][0]), type = 'unavailable', status = ev[2][3]))
+					else:
+						con.send(common.jabber.Presence(to = '%s/%s' % (ev[2][1], \
+							ev[2][0]), type = 'available', show = ev[2][2], status = \
+							ev[2][3]))
 			#('GC_SET_ROLE', account, (room_jid, nick, role))
 			elif ev[0] == 'GC_SET_ROLE':
-				iq = common.jabber.Iq(type='set', to=ev[2][0])
-				item = iq.setQuery(common.jabber.NS_P_MUC_ADMIN).insertTag('item')
-				item.putAttr('nick', ev[2][1])
-				item.putAttr('role', ev[2][2])
-				id = con.getAnID()
-				iq.setID(id)
-				con.send(iq)
+				if con:
+					iq = common.jabber.Iq(type='set', to=ev[2][0])
+					item = iq.setQuery(common.jabber.NS_P_MUC_ADMIN).\
+						insertTag('item')
+					item.putAttr('nick', ev[2][1])
+					item.putAttr('role', ev[2][2])
+					id = con.getAnID()
+					iq.setID(id)
+					con.send(iq)
 			#('GC_SET_AFFILIATION', account, (room_jid, jid, affiliation))
 			elif ev[0] == 'GC_SET_AFFILIATION':
-				iq = common.jabber.Iq(type='set', to=ev[2][0])
-				item = iq.setQuery(common.jabber.NS_P_MUC_ADMIN).insertTag('item')
-				item.putAttr('jid', ev[2][1])
-				item.putAttr('affiliation', ev[2][2])
-				id = con.getAnID()
-				iq.setID(id)
-				con.send(iq)
+				if con:
+					iq = common.jabber.Iq(type='set', to=ev[2][0])
+					item = iq.setQuery(common.jabber.NS_P_MUC_ADMIN).\
+						insertTag('item')
+					item.putAttr('jid', ev[2][1])
+					item.putAttr('affiliation', ev[2][2])
+					id = con.getAnID()
+					iq.setID(id)
+					con.send(iq)
 			#('GPGPASSPHRASE', account, passphrase)
 			elif ev[0] == 'GPGPASSPHRASE':
 				if USE_GPG:
@@ -962,14 +983,15 @@ class GajimCore:
 				self.passwords[ev[1]] = ev[2]
 			#('CHANGE_PASSWORD', account, (new_password, username))
 			elif ev[0] == 'CHANGE_PASSWORD':
-				hostname = self.cfgParser.tab[ev[1]]['hostname']
-				iq = common.jabber.Iq(type='set', to=hostname)
-				q = iq.setQuery(common.jabber.NS_REGISTER)
-				q.insertTag('username').insertData(ev[2][1])
-				q.insertTag('password').insertData(ev[2][0])
-				id = con.getAnID()
-				iq.setID(id)
-				con.send(iq)
+				if con:
+					hostname = self.cfgParser.tab[ev[1]]['hostname']
+					iq = common.jabber.Iq(type='set', to=hostname)
+					q = iq.setQuery(common.jabber.NS_REGISTER)
+					q.insertTag('username').insertData(ev[2][1])
+					q.insertTag('password').insertData(ev[2][0])
+					id = con.getAnID()
+					iq.setID(id)
+					con.send(iq)
 			else:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':
