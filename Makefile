@@ -1,12 +1,14 @@
-MODULES = common plugins/gtkgui
-PREFIX = /usr
-DESTDIR = /
+VERSION		= 0.51
 
-FIND= find -regex '.*\.\(\(glade\)\|\(py\)\|\(xpm\)\|\(gif\)\|\(png\)\|\(mo\)\|\(wav\)\)'
-FILES=`$(FIND)`
-DIRS= `$(FIND) -exec dirname {} \; | sort -u`
-FIND_LIB= find -regex '.*\.\(so\)'
-FILES_LIB=`$(FIND_LIB)`
+MODULES		= common plugins/gtkgui
+PREFIX		= /usr
+DESTDIR		= /
+
+FIND		= find -regex '.*\.\(\(glade\)\|\(py\)\|\(xpm\)\|\(gif\)\|\(png\)\|\(mo\)\|\(wav\)\)'
+FILES		= `$(FIND)`
+DIRS		= `$(FIND) -exec dirname {} \; | sort -u`
+FIND_LIB	= find -regex '.*\.\(so\)'
+FILES_LIB	= `$(FIND_LIB)`
 
 SCRIPTS = \
 	scripts/gajim
