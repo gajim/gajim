@@ -236,6 +236,7 @@
 	      <signal name="row_activated" handler="on_row_activated" last_modification_time="Sun, 12 Oct 2003 18:11:52 GMT"/>
 	      <signal name="row_expanded" handler="on_row_expanded" last_modification_time="Wed, 10 Dec 2003 10:31:44 GMT"/>
 	      <signal name="row_collapsed" handler="on_row_collapsed" last_modification_time="Wed, 10 Dec 2003 10:54:27 GMT"/>
+	      <signal name="key_release_event" handler="on_treeview_event" last_modification_time="Tue, 18 May 2004 23:30:46 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

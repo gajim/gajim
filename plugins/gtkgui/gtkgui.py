@@ -697,24 +697,35 @@ class roster_Window:
 	
 	def on_treeview_event(self, widget, event):
 		"""popup user's group's or agent menu"""
-		if (event.button == 3) & (event.type == gtk.gdk.BUTTON_PRESS):
-			try:
-				path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
-					int(event.y))
-			except TypeError:
-				return
-			model = self.tree.get_model()
-			iter = model.get_iter(path)
-			type = model.get_value(iter, 2)
-			if type == 'group':
-				self.mk_menu_g(event)
-			elif type == 'agent':
-				self.mk_menu_agent(event, iter)
-			elif type == 'user':
-				self.mk_menu_user(event, iter)
-			elif type == 'account':
-				self.mk_menu_account(event, iter)
-			return gtk.TRUE
+		if event.type == gtk.gdk.BUTTON_PRESS:
+			if event.button == 3:
+				try:
+					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
+						int(event.y))
+				except TypeError:
+					self.tree.get_selection().unselect_all()
+					return
+				model = self.tree.get_model()
+				iter = model.get_iter(path)
+				type = model.get_value(iter, 2)
+				if type == 'group':
+					self.mk_menu_g(event)
+				elif type == 'agent':
+					self.mk_menu_agent(event, iter)
+				elif type == 'user':
+					self.mk_menu_user(event, iter)
+				elif type == 'account':
+					self.mk_menu_account(event, iter)
+				return gtk.TRUE
+			if event.button == 1:
+				try:
+					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
+						int(event.y))
+				except TypeError:
+					self.tree.get_selection().unselect_all()
+		if event.type == gtk.gdk.KEY_RELEASE:
+			if event.keyval == gtk.keysyms.Escape:
+				self.tree.get_selection().unselect_all()
 		return gtk.FALSE
 
 	def on_req_usub(self, widget, user, account):
