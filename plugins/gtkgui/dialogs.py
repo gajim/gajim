@@ -240,7 +240,7 @@ class warning_Window:
 
 	def __init__(self, txt):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'Warning', APP)
-		xml.get_widget('label').set_text(txt.decode('iso-8859-1').encode('utf-8'))
+		xml.get_widget('label').set_text(txt)
 		xml.signal_connect('on_close_clicked', self.on_close)
 
 class about_Window:
