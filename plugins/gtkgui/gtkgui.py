@@ -648,13 +648,13 @@ class roster_Window:
 		acct_iter = model.get_iter((path[0]))
 		account = model.get_value(acct_iter, 3)
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_("Log on"))
+		item = gtk.MenuItem(_(u"Log on"))
 		if self.contacts[account][jid][0].show != 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
 		item.connect("activate", self.on_agent_logging, jid, 'available', account)
 
-		item = gtk.MenuItem(_("Log off"))
+		item = gtk.MenuItem(_(u"Log off"))
 		if self.contacts[account][jid][0].show == 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
@@ -785,8 +785,10 @@ class roster_Window:
 		else:
 			txt = status
 			self.plugin.send('STATUS', account, (status, txt))
-			if status == 'online':
-				self.plugin.sleeper_state[account] = 1
+		if status == 'online':
+			self.plugin.sleeper_state[account] = 1
+		else:
+			self.plugin.sleeper_state[account] = 0
 
 	def on_optionmenu_changed(self, widget):
 		"""When we change our status"""
@@ -809,6 +811,8 @@ class roster_Window:
 			self.plugin.send('STATUS', acct, (status, txt))
 			if status == 'online':
 				self.plugin.sleeper_state[acct] = 1
+			else:
+				self.plugin.sleeper_state[acct] = 0
 	
 	def set_optionmenu(self):
 		#table to change index in plugin.connected to index in optionmenu
