@@ -730,8 +730,8 @@ class roster_window:
 			or (status == 'offline' and not \
 			self.plugin.config['ask_offline_status']):
 			return status
-		w = Away_message_dialog(self.plugin, autoconnect)
-		message = w.run()
+		dlg = Change_status_message_dialog(self.plugin, status, autoconnect)
+		message = dlg.run()
 		return message
 
 	def change_status(self, widget, account, status):

@@ -23,7 +23,7 @@ import gtk.glade
 import pango
 import gobject
 import time
-import sre #usefull later
+import sre #usefull later #(nk) really? :)
 
 from dialogs import *
 from chat import *

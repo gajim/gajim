@@ -90,9 +90,13 @@ class Chat:
 		elif unread == 1:
 			start = "* "
 		chat = self.names[jid]
-		if len(self.xmls) > 1:
+		if len(self.xmls) > 1: # if more than one tabs in the same window
 			chat = 'Chat'
-		self.window.set_title(start + chat + ' (' + self.account + ')')
+		if len(self.plugin.accounts.keys()) >= 2: # if we have 2 or more accounts
+			title = start + chat + ' (account: ' + self.account + ')'
+		else:
+			title = start + chat
+		self.window.set_title(title)
 
 	def redraw_tab(self, jid):
 		"""redraw the label of the tab"""

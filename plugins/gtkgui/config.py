@@ -1067,26 +1067,26 @@ class Account_modification_window:
 		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
 		proxyport = self.xml.get_widget('proxyport_entry').get_text()
 		if (name == ''):
-			Warning_dialog(_('You must enter a name for this account'))
-			return 0
+			Error_dialog(_('You must enter a name for this account'))
+			return
 		if name.find(' ') != -1:
-			Warning_dialog(_('Spaces are not permited in account name'))
-			return 0
+			Error_dialog(_('Spaces are not permited in account name'))
+			return
 		if (jid == '') or (jid.count('@') != 1):
-			Warning_dialog(_('You must enter a Jabber ID for this account\nFor example: someone@someserver.org'))
-			return 0
+			Error_dialog(_('You must enter a Jabber ID for this account\nFor example: someone@someserver.org'))
+			return
 		if new_account_checkbutton.get_active() and password == '':
-			Warning_dialog(_('You must enter a password to register a new account'))
-			return 0
+			Error_dialog(_('You must enter a password to register a new account'))
+			return
 		if use_proxy:
 			if proxyport != '':
 				try:
 					proxyport = int(proxyport)
 				except ValueError:
-					Warning_dialog(_('Proxy Port must be a port number'))
-					return 0
+					Error_dialog(_('Proxy Port must be a port number'))
+					return
 			if proxyhost == '':
-				Warning_dialog(_('You must enter a proxy host to use proxy'))
+				Error_dialog(_('You must enter a proxy host to use proxy'))
 
 		(login, hostname) = jid.split('@')
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
@@ -1145,7 +1145,7 @@ class Account_modification_window:
 			return
 		#if it's a new account
 		if name in self.plugin.accounts.keys():
-			Warning_dialog(_('An account already has this name'))
+			Error_dialog(_('An account already has this name'))
 			return
 		#if we neeed to register a new account
 		if new_account_checkbutton.get_active():
@@ -1234,11 +1234,11 @@ class Account_modification_window:
 
 	def on_edit_details_button_clicked(self, widget):
 		if not self.plugin.windows.has_key(self.account):
-			Warning_dialog(_('You must first create your account before editing your information'))
+			Error_dialog(_('You must first create your account before editing your information'))
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		if self.plugin.connected[self.account] < 2:
-			Warning_dialog(_('You must be connected to edit your information'))
+			Error_dialog(_('You must be connected to edit your information'))
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
 			self.plugin.windows[self.account]['infos'][jid] = \
@@ -1579,7 +1579,7 @@ class agent_browser_window:
 		
 	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:
-			Warning_dialog(_("You must be connected to view Agents"))
+			Error_dialog(_("You must be connected to view Agents"))
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_browser_window', APP)
 		self.window = xml.get_widget('agent_browser_window')

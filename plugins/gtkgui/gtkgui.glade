@@ -7819,12 +7819,12 @@ Custom</property>
   </child>
 </widget>
 
-<widget class="GtkDialog" id="away_message_dialog">
+<widget class="GtkDialog" id="change_status_message_dialog">
   <property name="border_width">4</property>
   <property name="width_request">303</property>
   <property name="height_request">225</property>
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Message</property>
+  <property name="title" translatable="yes">Status Message for</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -7836,7 +7836,7 @@ Custom</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
-  <signal name="key_press_event" handler="on_away_message_dialog_key_press_event" last_modification_time="Wed, 02 Mar 2005 12:35:32 GMT"/>
+  <signal name="key_press_event" handler="on_change_status_message_dialog_key_press_event" last_modification_time="Wed, 16 Mar 2005 00:53:06 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox5">
@@ -7881,7 +7881,7 @@ Custom</property>
 	  <child>
 	    <widget class="GtkLabel" id="label164">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Enter your message :</property>
+	      <property name="label" translatable="yes">Enter your message:</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -7938,7 +7938,7 @@ Custom</property>
 	  <child>
 	    <widget class="GtkLabel" id="label165">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Or choose your message :</property>
+	      <property name="label" translatable="yes">Or choose your message:</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>

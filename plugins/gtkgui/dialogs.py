@@ -151,7 +151,7 @@ class vcard_information_window:
 
 	def on_publish_button_clicked(self, widget):
 		if self.plugin.connected[self.account] < 2:
-			Warning_dialog(_("You must be connected to publish your informations"))
+			Error_dialog(_("You must be connected to publish your informations"))
 			return
 		vcard = self.make_vcard()
 		nick = ''
@@ -166,7 +166,7 @@ class vcard_information_window:
 		if self.plugin.connected[self.account] > 1:
 			self.plugin.send('ASK_VCARD', self.account, self.jid)
 		else:
-			Warning_dialog(_('You must be connected to get your informations'))
+			Error_dialog(_('You must be connected to get your informations'))
 
 	def change_to_vcard(self):
 		self.xml.get_widget('information_notebook').remove_page(0)
@@ -237,7 +237,7 @@ class Passphrase_dialog:
 		self.xml.signal_autoconnect(self)
 
 class choose_gpg_key_dialog:
-	"""Class for Away Message Window"""
+	"""Class for GPG key dialog"""
 	def run(self):
 		"""Wait for Ok button to be pressed and return the selected key"""
 		rep = self.window.run()
@@ -270,7 +270,7 @@ class choose_gpg_key_dialog:
 		self.keys_treeview.insert_column_with_attributes(-1, _('User name'), \
 			renderer, text=1)
 
-class Away_message_dialog:
+class Change_status_message_dialog:
 	"""Class for Away message dialog"""
 	def run(self):
 		"""Wait for OK button to be pressed and return away messsage"""
@@ -296,14 +296,15 @@ class Away_message_dialog:
 		name = model[active][0]
 		self.message_buffer.set_text(self.values[name])
 	
-	def on_away_message_dialog_key_press_event(self, widget, event):
-		if event.keyval == gtk.keysyms.Return:
+	def on_change_status_message_dialog_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Return: # catch CTRL+ENTER
 			if (event.state & gtk.gdk.CONTROL_MASK):
 				self.window.response(gtk.RESPONSE_OK)
 	
-	def __init__(self, plugin, autoconnect = 0):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'away_message_dialog', APP)
-		self.window = self.xml.get_widget('away_message_dialog')
+	def __init__(self, plugin, status, autoconnect = 0):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
+		self.window = self.xml.get_widget('change_status_message_dialog')
+		self.window.set_title(status.capitalize() + ' Status Message')
 		self.plugin = plugin
 		self.autoconnect = autoconnect
 		message_textview = self.xml.get_widget('message_textview')
@@ -336,7 +337,7 @@ class add_contact_window:
 		if not jid:
 			return
 		if jid.find('@') < 0:
-			Warning_dialog(_("The contact's name must be something like login@hostname"))
+			Error_dialog(_("The contact's name must be something like login@hostname"))
 			return
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
@@ -393,7 +394,7 @@ class add_contact_window:
 		
 	def __init__(self, plugin, account, jid=None):
 		if plugin.connected[account] < 2:
-			Warning_dialog(_('You must be connected to add a contact'))
+			Error_dialog(_('You must be connected to add a contact'))
 			return
 		self.plugin = plugin
 		self.account = account
@@ -569,7 +570,7 @@ class join_groupchat_window:
 
 	def __init__(self, plugin, account, server='', room = ''):
 		if plugin.connected[account] < 2:
-			Warning_dialog(_('You must be connected to join a group chat'))
+			Error_dialog(_('You must be connected to join a group chat'))
 			return
 		self.plugin = plugin
 		self.account = account
@@ -613,7 +614,7 @@ class New_message_dialog:
 
 	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:
-			Warning_dialog(_('You must be connected to send a message to a contact'))
+			Error_dialog(_('You must be connected to send a message to a contact'))
 			return
 		self.plugin = plugin
 		self.account = account
@@ -632,11 +633,11 @@ class Change_password_dialog:
 			if rep == gtk.RESPONSE_OK:
 				password1 = self.password1_entry.get_text()
 				if not password1:
-					Warning_dialog(_('Your password cannot be empty'))
+					Error_dialog(_('Your password cannot be empty'))
 					continue
 				password2 = self.password2_entry.get_text()
 				if password1 != password2:
-					Warning_dialog(_('Your passwords are not the same'))
+					Error_dialog(_('Confirmation password is not the same'))
 					continue
 				message = password1
 			else:
@@ -647,7 +648,7 @@ class Change_password_dialog:
 
 	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:
-			Warning_dialog(_('You must be connected to change your password'))
+			Error_dialog(_('You must be connected to change your password'))
 			return
 		self.plugin = plugin
 		self.account = account
