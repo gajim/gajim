@@ -205,6 +205,12 @@ class preference_Window:
 		ist = self.combo_iconstyle.entry.get_text()
 		self.plugin.config['iconstyle'] = ist
 		self.plugin.roster.mkpixbufs()
+		#save position
+		chk = self.xml.get_widget('save_position_checkbutton')
+		if chk.get_active():
+			self.plugin.config['saveposition'] = 1
+		else:
+			self.plugin.config['saveposition'] = 0
 		#autopopup
 		if self.chk_autopp.get_active():
 			self.plugin.config['autopopup'] = 1
@@ -306,6 +312,10 @@ class preference_Window:
 		self.combo_iconstyle.set_popdown_strings(l)
 		if self.plugin.config['iconstyle'] in l:
 			self.combo_iconstyle.entry.set_text(self.plugin.config['iconstyle'])
+
+		#Save position
+		st = self.plugin.config['saveposition']
+		self.xml.get_widget('save_position_checkbutton').set_active(st)
 		
 		#Autopopup
 		st = self.plugin.config['autopopup']

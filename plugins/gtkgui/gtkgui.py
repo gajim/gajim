@@ -1776,11 +1776,30 @@ class roster_Window:
 			context.finish(True, True, etime)
 		return
 
+	def on_unrealize(self, widget, data=None):
+		if self.plugin.config.has_key('saveposition'):
+			if self.plugin.config['saveposition']:
+				self.plugin.config['x-position'], self.plugin.config['y-position']=\
+					widget.get_position()
+				self.plugin.config['width'], self.plugin.config['height'] = \
+					widget.get_size()
+
 	def __init__(self, plugin):
 		# FIXME : handle no file ...
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim', APP)
 		self.tree = self.xml.get_widget('treeview')
 		self.plugin = plugin
+		window = self.xml.get_widget('Gajim')
+		if self.plugin.config.has_key('saveposition'):
+			if self.plugin.config['saveposition']:
+				if self.plugin.config.has_key('x-position') and \
+					self.plugin.config.has_key('y-position'):
+					window.move(self.plugin.config['x-position'], \
+						self.plugin.config['y-position'])
+				if self.plugin.config.has_key('width') and \
+					self.plugin.config.has_key('height'):
+					window.resize(self.plugin.config['width'], \
+						self.plugin.config['height'])
 		self.groups = {}
 		self.contacts = {}
 		for a in self.plugin.accounts.keys():
@@ -1830,6 +1849,7 @@ class roster_Window:
 		self.tree.connect("drag_data_get", self.drag_data_get_data)
 		self.tree.connect("drag_data_received", self.drag_data_received_data)
 		self.xml.signal_connect('gtk_main_quit', self.on_quit)
+		self.xml.signal_connect('on_Gajim_unrealize', self.on_unrealize)
 		self.xml.signal_connect('on_preferences_activate', self.on_prefs)
 		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
 		self.xml.signal_connect('on_show_offline_activate', self.on_show_off)
@@ -2380,7 +2400,12 @@ class plugin:
 			'groupfont': 'Sans Italic 10',\
 			'usertextcolor': '#000000',\
 			'userbgcolor': '#ffffff',\
-			'userfont': 'Sans 10'}))
+			'userfont': 'Sans 10',\
+			'saveposition': 0,\
+			'x-position': 0,\
+			'y-position': 0,\
+			'width': 150,\
+			'height': 400}))
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
 		self.accounts = self.wait('CONFIG')
