@@ -1060,6 +1060,14 @@ class accountPreference_Window:
 			if not widget.get_active():
 				w.set_text('')
 
+	def on_chk_new_toggled(self, widget):
+		if widget.get_active():
+			self.xml.get_widget('entry_password').set_sensitive(True)
+			self.xml.get_widget('chk_password').set_active(True)
+			self.xml.get_widget('chk_password').set_sensitive(False)
+		else:
+			self.xml.get_widget('chk_password').set_sensitive(True)
+
 	#info must be a dictionnary
 	def __init__(self, plugin, infos = {}):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Account', APP)
@@ -1072,11 +1080,6 @@ class accountPreference_Window:
 		self.xml.get_widget('gpg_pass_checkbutton').set_sensitive(False)
 		self.xml.get_widget('gpg_pass_entry').set_sensitive(False)
 		self.xml.get_widget('entry_password').set_sensitive(False)
-		if infos:
-			self.modify = True
-			self.account = infos['accname']
-			self.init_account(infos)
-			self.xml.get_widget("checkbutton").set_sensitive(FALSE)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_save_clicked', self.on_save_clicked)
 		self.xml.signal_connect('on_edit_details_clicked', \
@@ -1087,6 +1090,14 @@ class accountPreference_Window:
 			self.on_chk_toggled_and_clear, [self.xml.get_widget('gpg_pass_entry')])
 		self.xml.signal_connect('on_pass_checkbutton_toggled', \
 			self.on_chk_toggled_and_clear, [self.xml.get_widget('entry_password')])
+		self.xml.signal_connect('on_checkbutton_toggled', self.on_chk_new_toggled)
+		self.xml.get_widget("checkbutton").set_sensitive(FALSE)
+		if infos:
+			self.modify = True
+			self.account = infos['accname']
+			self.init_account(infos)
+		else:
+			self.xml.get_widget("checkbutton").set_active(True)
 
 class accounts_Window:
 	"""Class for accounts window : lists of accounts"""
