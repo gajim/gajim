@@ -59,8 +59,8 @@ class add:
 		self.Wadd.destroy()
 
 	def on_subscribe(self, widget):
-		who=self.xml.get_widget("entry_who").get_text()
-		buf=self.xml.get_widget("textview_sub").get_buffer()
+		who = self.xml.get_widget("entry_who").get_text()
+		buf = self.xml.get_widget("textview_sub").get_buffer()
 		start_iter = buf.get_start_iter()
 		end_iter = buf.get_end_iter()
 		txt = buf.get_text(start_iter, end_iter, 0)
@@ -68,9 +68,9 @@ class add:
 		self.delete_event(self)
 		
 	def __init__(self, roster):
-		self.r=roster
+		self.r = roster
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Add')
-		self.Wadd=self.xml.get_widget("Add")
+		self.Wadd = self.xml.get_widget("Add")
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
 
@@ -80,7 +80,7 @@ class about:
 		
 	def __init__(self):
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'About')
-		self.Wabout=self.xml.get_widget("About")
+		self.Wabout = self.xml.get_widget("About")
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
 class accounts:
@@ -101,7 +101,7 @@ class message:
 		if contact:
 			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<moi> ', 'outgoing')
 		else:
-			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<' + self.user.name + '> ', 'incomming')
+			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<' + self.user.name + '> ', 'incoming')
 		self.convTxtBuffer.insert(end_iter, txt+'\n')
 		self.conversation.scroll_to_mark(\
 			self.convTxtBuffer.get_mark('end'), 0.1, 0, 0, 0)
@@ -135,18 +135,20 @@ class message:
 		self.message = self.xml.get_widget('message')
 		self.conversation = self.xml.get_widget('conversation')
 		self.convTxtBuffer = self.conversation.get_buffer()
-		end_iter=self.convTxtBuffer.get_end_iter()
+		end_iter = self.convTxtBuffer.get_end_iter()
 		self.convTxtBuffer.create_mark('end', end_iter, 0)
 		self.window.show()
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
-		self.tag = self.convTxtBuffer.create_tag("incomming")
+		self.tag = self.convTxtBuffer.create_tag("incoming")
 		color = self.cfgParser.GtkGui_inmsgcolor
-		if not color : color = red
+		if not color:
+			color = red
 		self.tag.set_property("foreground", color)
 		self.tag = self.convTxtBuffer.create_tag("outgoing")
 		color = self.cfgParser.GtkGui_outmsgcolor
-		if not color : color = blue
+		if not color:
+			color = blue
 		self.tag.set_property("foreground", color)
 
 class roster:
@@ -166,7 +168,7 @@ class roster:
 			for g in user1.groups:
 				if not self.l_group.has_key(g):
 					iterG = self.treestore.append(None, (None, g, 'group'))
-					self.l_group[g]=iterG
+					self.l_group[g] = iterG
 				if user1.show != 'offline' or self.showOffline:
 					iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, user1.jid))
 					self.l_contact[user1.jid]['iter'].append(iterU)
