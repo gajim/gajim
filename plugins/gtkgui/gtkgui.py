@@ -2039,8 +2039,9 @@ class roster_window:
 					passphrase = self.plugin.accounts[account]['gpgpassword']
 				else:
 					passphrase = ''
-					w = Passphrase_dialog(_('Enter GPG key passphrase for account %s'\
-							% account, 'Save passphrase', autoconnect))
+					w = Passphrase_dialog(\
+						_('Enter GPG key passphrase for account %s') % account, \
+						'Save passphrase', autoconnect)
 					if autoconnect:
 						gtk.main()
 						passphrase, save = w.get_pass()

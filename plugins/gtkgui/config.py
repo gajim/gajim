@@ -1087,7 +1087,6 @@ class Account_modification_window:
 		self.xml.get_widget('new_account_checkbutton').set_active(False)
 		self.modify = True
 		self.account = acct
-		#TODO:
 		jid = self.xml.get_widget('jid_entry').get_text()
 		(login, hostname) = jid.split('@')
 		save_password = 0
