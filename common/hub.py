@@ -79,10 +79,11 @@ class GajimHub:
 		del self.queues[name]
 	# END unregister
 
-	def sendPlugin(self, event, con, data):
+	def sendPlugin(self, event, con, data, qu=None):
 		""" Sends an event to registered plugins"""
 		if self.events.has_key(event):
-			for i in self.events[event]:
-				i.put((event, con, data))
+			for queue in self.events[event]:
+				if qu == None or qu == queue:
+					queue.put((event, con, data))
 	# END sendPlugin
 # END GajimHub
