@@ -1930,7 +1930,7 @@ class roster_window:
 				model = self.tree.get_model()
 				iter = model.get_iter(path)
 				type = model.get_value(iter, 2)
-				if (type == 'group'): #FIXME: what about doing the same with accounts ?
+				if (type == 'group' or type == 'account'):
 					# The integer 30 is the width of the first CellRenderer (see
 					# iconCellDataFunc function)
 					if x <= 30:
