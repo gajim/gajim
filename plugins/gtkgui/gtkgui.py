@@ -1364,7 +1364,8 @@ class roster_Window:
 						passphrase = ''
 				self.plugin.send('PASSPHRASE', account, passphrase)
 		self.plugin.send('STATUS', account, (status, txt))
-		if status == 'online':
+		if status == 'online' and self.plugin.sleeper.getState() != \
+			common.sleepy.STATE_UNKNOWN:
 			self.plugin.sleeper_state[account] = 1
 		else:
 			self.plugin.sleeper_state[account] = 0
@@ -1425,16 +1426,10 @@ class roster_Window:
 			model.set_value(accountIter, 0, self.pixbufs[status])
 		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
 		if status == 'offline':
-			self.plugin.sleeper = None
 			for jid in self.contacts[account]:
 				luser = self.contacts[account][jid]
 				for user in luser:
 					self.chg_user_status(user, 'offline', 'Disconnected', account)
-		elif self.plugin.connected[account] == 0:
-			if (self.plugin.config['autoaway'] or self.plugin.config['autoxa']):
-				self.plugin.sleeper = common.sleepy.Sleepy(\
-					self.plugin.config['autoawaytime']*60, \
-					self.plugin.config['autoxatime']*60)
 		self.plugin.connected[account] = statuss.index(status)
 		self.set_optionmenu()
 
@@ -2343,9 +2338,8 @@ class plugin:
 	
 	def read_sleepy(self):	
 		"""Check if we are idle"""
-		if not self.sleeper:
+		if not self.sleeper.poll():
 			return 1
-		self.sleeper.poll()
 		state = self.sleeper.getState()
 		for account in self.accounts.keys():
 			if not self.sleeper_state[account]:
@@ -2439,7 +2433,9 @@ class plugin:
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
-		self.sleeper = None
+		self.sleeper = common.sleepy.Sleepy( \
+			self.config['autoawaytime']*60, \
+			self.config['autoxatime']*60)
 		if self.config['trayicon']:
 			try:
 				global trayicon

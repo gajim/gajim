@@ -235,10 +235,9 @@ class preference_Window:
 			self.plugin.config['autoxa'] = 0
 		axt = self.spin_autoxatime.get_value_as_int()
 		self.plugin.config['autoxatime'] = axt
-		if self.chk_autoaway.get_active() or self.chk_autoxa.get_active():
-			self.plugin.sleeper = common.sleepy.Sleepy(\
-				self.plugin.config['autoawaytime']*60, \
-				self.plugin.config['autoxatime']*60)
+		self.plugin.sleeper = common.sleepy.Sleepy(\
+			self.plugin.config['autoawaytime']*60, \
+			self.plugin.config['autoxatime']*60)
 		#trayicon
 		if self.chk_trayicon.get_active():
 			self.plugin.config['trayicon'] = 1
