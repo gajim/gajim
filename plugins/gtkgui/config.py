@@ -397,15 +397,26 @@ class preference_Window:
 		model.clear()
 		emots = self.load_emots()
 		for i in emots:
-			iter = model.append()
-			model.set(iter, 0, i, 1,emots[i])
+			file = emots[i]
+			iter = model.append((i, file, None))
+			if not os.path.exists(file):
+				continue
+			img = gtk.Image()
+			img.show()
+			if file.find('.gif') != -1:
+				pix = gtk.gdk.PixbufAnimation(file)
+				img.set_from_animation(pix)
+			else:
+				pix = gtk.gdk.pixbuf_new_from_file(file)
+				img.set_from_pixbuf(pix)
+			model.set(iter, 2, img)
 
 	def on_emot_cell_edited(self, cell, row, new_text):
 		model = self.emot_tree.get_model()
 		iter = model.get_iter_from_string(row)
 		model.set_value(iter, 0, new_text)
 
-	def on_button_emoticons_clicked(self, widget, data=None):
+	def on_button_set_image_clicked(self, widget, data=None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
@@ -448,28 +459,29 @@ class preference_Window:
 				ok = 1
 		dialog.destroy()
 		if file:
-			self.xml.get_widget('entry_emoticons').set_text(file)
-			self.xml.get_widget('image_emoticon').set_from_file(file)
 			model.set_value(iter, 1, file)
+			img = gtk.Image()
+			img.show()
+			if file.find('.gif') != -1:
+				pix = gtk.gdk.PixbufAnimation(file)
+				img.set_from_animation(pix)
+			else:
+				pix = gtk.gdk.pixbuf_new_from_file(file)
+				img.set_from_pixbuf(pix)
+			model.set(iter, 2, img)
 			
 	def on_button_new_emoticon_clicked(self, widget, data=None):
 		model = self.emot_tree.get_model()
 		iter = model.append()
 		model.set(iter, 0, 'smeiley', 1, '')
+		col = self.emot_tree.get_column(0)
+		self.emot_tree.set_cursor(model.get_path(iter), col, True)
 
 	def on_button_remove_emoticon_clicked(self, widget, data=None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
 		model.remove(iter)
-
-	def on_treeview_emoticons_cursor_changed(self, widget, data=None):
-		(model, iter) = self.emot_tree.get_selection().get_selected()
-		if not iter:
-			return
-		img_str = model.get_value(iter, 1)
-		self.xml.get_widget('entry_emoticons').set_text(img_str)
-		self.xml.get_widget('image_emoticon').set_from_file(img_str)
 
 	def on_chk_toggled(self, widget, widgets):
 		"""set or unset sensitivity of widgets when widget is toggled"""
@@ -607,13 +619,11 @@ class preference_Window:
 		self.xml.get_widget('button_new_emoticon').set_sensitive(st)
 		self.xml.get_widget('button_remove_emoticon').set_sensitive(st)
 		self.xml.get_widget('treeview_emoticons').set_sensitive(st)
-		self.xml.get_widget('entry_emoticons').set_sensitive(st)
-		self.xml.get_widget('button_emoticons').set_sensitive(st)
-		self.xml.get_widget('image_emoticon').set_sensitive(st)
+		self.xml.get_widget('button_set_image').set_sensitive(st)
 
 		#emoticons
 		self.emot_tree = self.xml.get_widget('treeview_emoticons')
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gtk.Image)
 		self.emot_tree.set_model(model)
 		col = gtk.TreeViewColumn('name')
 		self.emot_tree.append_column(col)
@@ -622,6 +632,13 @@ class preference_Window:
 		renderer.set_property('editable', True)
 		col.pack_start(renderer, True)
 		col.set_attributes(renderer, text=0)
+
+		col = gtk.TreeViewColumn('Image')
+		self.emot_tree.append_column(col)
+		renderer = gtkgui.ImageCellRenderer()
+		col.pack_start(renderer, expand = False)
+		col.add_attribute(renderer, 'image', 2)
+		
 		self.fill_emot_treeview()
 
 		#sound player
@@ -759,10 +776,8 @@ class preference_Window:
 					self.xml.get_widget('entry_emoticons'),
 					self.xml.get_widget('button_emoticons'),
 					self.xml.get_widget('image_emoticon')])
-		self.xml.signal_connect('on_treeview_emoticons_cursor_changed', \
-			self.on_treeview_emoticons_cursor_changed)
-		self.xml.signal_connect('on_button_emoticons_clicked', \
-			self.on_button_emoticons_clicked)
+		self.xml.signal_connect('on_button_set_image_clicked', \
+			self.on_button_set_image_clicked)
 		self.xml.signal_connect('on_button_new_emoticon_clicked', \
 			self.on_button_new_emoticon_clicked)
 		self.xml.signal_connect('on_button_remove_emoticon_clicked', \
