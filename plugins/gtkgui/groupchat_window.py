@@ -23,7 +23,6 @@ import gtk.glade
 import pango
 import gobject
 import time
-import sre #usefull later #(nk) really? :)
 
 from dialogs import *
 from chat import *
@@ -248,51 +247,21 @@ class Groupchat_window(Chat):
 		"""Print a line in the conversation :
 		if contact is set : it's a message from someone
 		if contact is not set : it's a message from the server"""
-		conversation_textview = self.xmls[room_jid].\
-			get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		if not text:
-			text = ''
-		end_iter = conversation_buffer.get_end_iter()
-		if self.plugin.config['print_time'] == 'always':
-			if not tim:
-				tim = time.localtime()
-			tim_format = time.strftime('[%H:%M:%S]', tim)
-			conversation_buffer.insert(end_iter, tim_format + ' ')
-
-		otext = ''
-		ttext = ''
+		other_tags_for_name = []
 		if contact:
 			if contact == self.nicks[room_jid]:
-				tag = 'outgoing'
+				kind = 'outgoing'
 			else:
-				tag = 'incoming'
-				self.last_message_time[room_jid] = time.time()
-
-			if text.startswith('/me'):
-				ttext = contact + text[3:] + '\n'
-			else:
-				ttext = '<' + contact + '> '
-				otext = text + '\n'
+				kind = 'incoming'
 		else:
-			tag = 'status'
-			ttext = text + '\n'
+			kind = 'status'
 
-		if tag == 'incoming' and self.nicks[room_jid].lower() in\
+		if kind == 'incoming' and self.nicks[room_jid].lower() in\
 			text.lower().split():
-			conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag,\
-				'bold')
-		else:
-			conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
-		#TODO: emoticons, url grabber
-		conversation_buffer.insert(end_iter, otext)
-		#scroll to the end of the textview
-		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
-			0.1, 0, 0, 0)
-		if not self.window.is_active() and contact != '':
-			self.nb_unread[room_jid] += 1
-			self.redraw_tab(room_jid)
-			self.show_title()
+			other_tags_for_name.append('bold')
+
+		Chat.print_conversation_line(self, text, room_jid, kind, contact, tim, \
+			other_tags_for_name)
 
 	def kick(self, widget, room_jid, nick):
 		"""kick a user"""

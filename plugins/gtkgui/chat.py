@@ -74,7 +74,7 @@ class Chat:
 				del self.print_time_timeout_id[jid]
 		else:
 			for jid in self.xmls:
-				if not self.print_time_timeout_id.has_key(pjid):
+				if not self.print_time_timeout_id.has_key(jid):
 					self.print_time_timeout(jid)
 					self.print_time_timeout_id[jid] = gobject.timeout_add(300000, \
 						self.print_time_timeout, jid)
@@ -423,7 +423,16 @@ class Chat:
 				#we launch the correct application
 				self.plugin.launch_browser_mailer(kind, word)
 
-	def detect_and_print_special_text(self, otext, jid, other_tag, print_all_special):
+	def print_with_tag_list(self, buffer, text, iter, tag_list):
+		begin_mark = buffer.create_mark('begin_tag', iter, True)
+		buffer.insert(iter, text)
+		begin_tagged = buffer.get_iter_at_mark(begin_mark)
+		for tag in tag_list:
+			buffer.apply_tag_by_name(tag, begin_tagged, iter)
+		buffer.delete_mark(begin_mark)
+
+	def detect_and_print_special_text(self, otext, jid, other_tags, \
+		print_all_special):
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
@@ -443,83 +452,136 @@ class Chat:
 				text_before_special_text = otext[index:start]
 				end_iter = conversation_buffer.get_end_iter()
 				if print_all_special:
-					conversation_buffer.insert_with_tags_by_name(end_iter, \
-						text_before_special_text, other_tag)
+					self.print_with_tag_list(conversation_buffer, \
+						text_before_special_text, end_iter, other_tags)
 				else:
 					conversation_buffer.insert(end_iter, text_before_special_text)
 			if not print_all_special:
-				other_tag = ''
+				other_tags = []
 			index = end # update index
 			
 			#now print it
-			self.print_special_text(special_text, other_tag, conversation_buffer)
+			self.print_special_text(special_text, other_tags, conversation_buffer)
 					
-		return index, other_tag
+		return index
 		
-	def print_special_text(self, special_text, other_tag, conversation_buffer):
-		tag2 = None
+	def print_special_text(self, special_text, other_tags, conversation_buffer):
 		# make it CAPS (emoticons keys are all CAPS)
+		tags = []
+		use_other_tags = True
 		possible_emot_ascii_caps = special_text.upper()
 		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
 			#it's an emoticon
-			tag = None
 			emot_ascii = possible_emot_ascii_caps
 			end_iter = conversation_buffer.get_end_iter()
 			conversation_buffer.insert_pixbuf(end_iter, \
 				self.plugin.emoticons[emot_ascii])
 		elif special_text.startswith('mailto:'):
 			#it's a mail
-			tag = 'mail'
+			tags.append('mail')
+			use_other_tags = False
 		elif self.plugin.sth_at_sth_dot_sth_re.match(special_text):
 			#it's a mail
-			tag = 'mail'
+			tags.append('mail')
+			use_other_tags = False
 		elif special_text.startswith('*'): # it's a bold text
-			tag = 'bold'
+			tags.append('bold')
 			if special_text[1] == '/': # it's also italic
-				tag2 = 'italic'
+				tags.append('italic')
 				special_text = special_text[2:-2] # remove */ /*
 			elif special_text[1] == '_': # it's also underlined
-				tag2 = 'underline'
+				tags.append('underline')
 				special_text = special_text[2:-2] # remove *_ _*
 			else:
 				special_text = special_text[1:-1] # remove * *
 		elif special_text.startswith('/'): # it's an italic text
-			tag = 'italic'		
+			tags.append('italic')
 			if special_text[1] == '*': # it's also bold
-				tag2 = 'bold'
+				tags.append('bold')
 				special_text = special_text[2:-2] # remove /* */
 			elif special_text[1] == '_': # it's also underlined
-				tag2 = 'underline'
+				tags.append('underline')
 				special_text = special_text[2:-2] # remove /_ _/
 			else:
 				special_text = special_text[1:-1] # remove / /
 		elif special_text.startswith('_'): # it's an underlined text
-			tag = 'underline'
+			tags.append('underline')
 			if special_text[1] == '*': # it's also bold
-				tag2 = 'bold'
+				tags.append('bold')
 				special_text = special_text[2:-2] # remove _* *_
 			elif special_text[1] == '/': # it's also italic
-				tag2 = 'italic'
+				tags.append('italic')
 				special_text = special_text[2:-2] # remove _/ /_
 			else:
 				special_text = special_text[1:-1] # remove _ _
 		else:
 			#it's a url
-			tag = 'url'
+			tags.append('url')
+			use_other_tags = False
 
+		if len(tags) > 0:
+			end_iter = conversation_buffer.get_end_iter()
+			all_tags = tags[:]
+			if use_other_tags:
+				all_tags += other_tags
+			self.print_with_tag_list(conversation_buffer, special_text, end_iter, \
+				all_tags)
+
+	def print_conversation_line(self, text, jid, kind, name, tim, \
+		other_tags_for_name = []):
+		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
+		print_all_special = False
+		if not text:
+			text = ''
 		end_iter = conversation_buffer.get_end_iter()
-		if tag is not None:
-			if tag in ['bold', 'italic', 'underline'] and other_tag:
-				if tag2 is not None:
-					conversation_buffer.insert_with_tags_by_name(end_iter,\
-						special_text, other_tag, tag, tag2)
-				else:
-					conversation_buffer.insert_with_tags_by_name(end_iter,\
-						special_text, other_tag, tag)
-			else:
-				if tag2 is not None:
-					conversation_buffer.insert_with_tags_by_name(end_iter,\
-						special_text, tag, tag2)
-				else:
-					conversation_buffer.insert_with_tags_by_name(end_iter,\
-						special_text, tag)					
+		if self.plugin.config['print_time'] == 'always':
+			if not tim:
+				tim = time.localtime()
+			tim_format = time.strftime("[%H:%M:%S]", tim)
+			conversation_buffer.insert(end_iter, tim_format + ' ')
+
+		if kind == 'status':
+			print_all_special = True
+		elif text.startswith('/me'):
+			text = name + text[3:]
+			print_all_special = True
+
+		if kind == 'incoming':
+			self.last_message_time[jid] = time.time()
+
+		tags = other_tags_for_name[:] #create a new list
+		tags.append(kind)
+		if name and not print_all_special:
+			self.print_with_tag_list(conversation_buffer, '<' + name + '> ', \
+				end_iter, tags)
+				
+		text += '\n'
+		# detect urls formatting and if the user has it on emoticons
+		index = self.detect_and_print_special_text(text, jid, \
+			tags, print_all_special)
+
+		# add the rest of text located in the index and after
+		end_iter = conversation_buffer.get_end_iter()
+		if print_all_special:
+			conversation_buffer.insert_with_tags_by_name(end_iter, text[index:], \
+				kind)
+		else:
+			conversation_buffer.insert(end_iter, text[index:])
+
+		#scroll to the end of the textview
+		end_iter = conversation_buffer.get_end_iter()
+		end_rect = conversation_textview.get_iter_location(end_iter)
+		visible_rect = conversation_textview.get_visible_rect()
+		end = False
+		if end_rect.y <= (visible_rect.y + visible_rect.height) or \
+			(contact and contact != 'status'):
+			#we are at the end or we are sending something
+			end = True
+			conversation_textview.scroll_to_mark(conversation_buffer.\
+				get_mark('end'), 0.1, 0, 0, 0)
+		if ((jid != self.get_active_jid()) or (not self.window.is_active()) or \
+			(not end)) and kind == 'incoming':
+			self.nb_unread[jid] += 1
+			self.redraw_tab(jid)
+			self.show_title()

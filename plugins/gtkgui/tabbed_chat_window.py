@@ -23,7 +23,6 @@ import gtk.glade
 import pango
 import gobject
 import time
-import sre
 
 from dialogs import *
 from history_window import *
@@ -199,69 +198,15 @@ class Tabbed_chat_window(Chat):
 		if contact is set to another value : it's an outgoing message
 		if contact is not set : it's an incomming message"""
 		user = self.users[jid]
-		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		print_all_special = False
-		if not text:
-			text = ''
-		end_iter = conversation_buffer.get_end_iter()
-		if self.plugin.config['print_time'] == 'always':
-			if not tim:
-				tim = time.localtime()
-			tim_format = time.strftime("[%H:%M:%S]", tim)
-			conversation_buffer.insert(end_iter, tim_format + ' ')
-		
-		otext = ''
-		ttext = ''
 		if contact == 'status':
-			tag = 'status'
-			ttext = text + '\n'
-			print_all_special = True
+			kind = 'status'
+			name = ''
 		else:
 			if contact:
-				tag = 'outgoing'
+				kind = 'outgoing'
 				name = self.plugin.nicks[self.account] 
 			else:
-				tag = 'incoming'
+				kind = 'incoming'
 				name = user.name
-				self.last_message_time[jid] = time.time()
-				
-			if text.startswith('/me'):
-				ttext = name + text[3:] + '\n'
-				print_all_special = True
-			else:
-				ttext = '<' + name + '> '
-				otext = text + '\n'
-		#if it's a status we print special words
-		if not print_all_special:
-			conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
-		else:
-			otext = ttext
 
-		# detect urls formatting and if the user has it on emoticons
-		index, other_tag = self.detect_and_print_special_text(otext, jid, tag, print_all_special)
-		
-		# add the rest of text located in the index and after
-		end_iter = conversation_buffer.get_end_iter()
-		if print_all_special:
-			conversation_buffer.insert_with_tags_by_name(end_iter, \
-				otext[index:], other_tag)
-		else:
-			conversation_buffer.insert(end_iter, otext[index:])
-		
-		#scroll to the end of the textview
-		end_iter = conversation_buffer.get_end_iter()
-		end_rect = conversation_textview.get_iter_location(end_iter)
-		visible_rect = conversation_textview.get_visible_rect()
-		end = False
-		if end_rect.y <= (visible_rect.y + visible_rect.height) or \
-			(contact and contact != 'status'):
-			#we are at the end or we are sending something
-			end = True
-			conversation_textview.scroll_to_mark(conversation_buffer.\
-				get_mark('end'), 0.1, 0, 0, 0)
-		if ((jid != self.get_active_jid()) or (not self.window.is_active()) or \
-			(not end)) and contact == '':
-			self.nb_unread[jid] += 1
-			self.redraw_tab(jid)
-			self.show_title()
+		Chat.print_conversation_line(self, text, jid, kind, name, tim)
