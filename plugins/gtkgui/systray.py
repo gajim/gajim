@@ -175,13 +175,14 @@ class systray:
 		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1:
 			if len(self.jids) == 0:
 				win = self.plugin.roster.window
+				print 'before', win.is_active()
 				if win.is_active():
 					win.iconify()
 					win.skip_taskbar_hint = True
 				else:
 					win.present()
 					win.skip_taskbar_hint = False
-				print win.is_active()
+				print 'after', win.is_active()
 			else:
 				account = self.jids[0][0]
 				jid = self.jids[0][1]
