@@ -21,6 +21,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 from gtk import TRUE, FALSE
+import trayicon
 import gtk.glade,gobject
 import os,string,time,Queue
 import common.optparser,common.sleepy
@@ -102,6 +103,7 @@ class message_Window:
 			if self.plugin.roster.pixbufs.has_key(self.user.show):
 				self.plugin.roster.tree.get_model().set_value(i, 0, \
 					self.plugin.roster.pixbufs[self.user.show])
+		self.plugin.set_systray()
 
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -839,13 +841,15 @@ class roster_Window:
 	def set_optionmenu(self):
 		#table to change index in plugin.connected to index in optionmenu
 		table = {0:6, 1:0, 2:1, 3:2, 4:3, 5:4}
-		mini = min(self.plugin.connected.values())
+		maxi = max(self.plugin.connected.values())
 		optionmenu = self.xml.get_widget('optionmenu')
 		#temporarily block signal in order not to send status that we show
 		#in the optionmenu
 		optionmenu.handler_block(self.id_signal_optionmenu)
-		optionmenu.set_history(table[mini])
+		optionmenu.set_history(table[maxi])
 		optionmenu.handler_unblock(self.id_signal_optionmenu)
+		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
+		self.plugin.set_systray(statuss[maxi])
 
 	def on_status_changed(self, account, status):
 		"""the core tells us that our status has changed"""
@@ -891,6 +895,7 @@ class roster_Window:
 				self.plugin.queues[account][jid] = Queue.Queue(50)
 				for i in self.get_user_iter(jid, account):
 					model.set_value(i, 0, self.pixbufs['message'])
+				self.plugin.set_systray('message')
 			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
 			if path:
@@ -1402,6 +1407,27 @@ class plugin:
 				self.sleeper_state[account] = 3
 		return 1
 
+	def set_systray_img(self, status):
+		if not self.roster.pixbufs.has_key(status):
+			return
+		pix = self.roster.pixbufs[status]
+		if isinstance(pix, gtk.gdk.PixbufAnimation):
+			self.img_tray.set_from_animation(pix)
+		else:
+			self.img_tray.set_from_pixbuf(pix)
+
+	def set_systray(self, status=None):
+		if not status:
+			self.nb_msg -= 1
+			if self.nb_msg == 0:
+				self.set_systray_img(self.status)
+		elif status == 'message':
+			self.nb_msg += 1
+			self.set_systray_img('message')
+		else:
+			self.status = status
+			self.set_systray_img(status)
+
 	def __init__(self, quIN, quOUT):
 		gtk.threads_init()
 		gtk.threads_enter()
@@ -1420,6 +1446,7 @@ class plugin:
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
 		self.accounts = self.wait('CONFIG')
+		self.nb_msg = 0
 		self.windows = {'logs':{}}
 		self.queues = {}
 		self.connected = {}
@@ -1440,6 +1467,13 @@ class plugin:
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
 		self.sleeper = None
+		t = trayicon.TrayIcon("Gajim")
+		tip = gtk.Tooltips()
+		tip.set_tip(t, 'Gajim')
+		self.img_tray = gtk.Image()
+		t.add(self.img_tray)
+		t.show_all()
+		self.set_systray('offline')
 		gtk.main()
 		gtk.threads_leave()
 
