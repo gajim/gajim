@@ -1036,14 +1036,18 @@ class roster_Window:
 			menu_sub.show_all()
 		elif len(self.plugin.accounts.keys()) == 1:
 			#add
-			self.xml.get_widget('add').connect("activate", self.on_add, \
-				self.plugin.accounts.keys()[0])
+			if not self.add_handler_id :
+				self.add_handler_id = self.xml.get_widget('add').connect(
+					"activate", self.on_add, self.plugin.accounts.keys()[0])
 			#agents
-			self.xml.get_widget('browse_agents').connect("activate", \
-				self.on_browse, self.plugin.accounts.keys()[0])
+			if not self.browse_handler_id :
+				self.browse_handler_id = self.xml.get_widget(
+					'browse_agents').connect("activate", self.on_browse, 
+					self.plugin.accounts.keys()[0])
 			#join_gc
-			self.xml.get_widget('join_gc').connect("activate", \
-				self.on_join_gc, self.plugin.accounts.keys()[0])
+			if not self.join_handler_id :
+				self.join_handler_id = self.xml.get_widget('join_gc').connect(
+					"activate", self.on_join_gc, self.plugin.accounts.keys()[0])
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
@@ -1864,6 +1868,9 @@ class roster_Window:
 		self.tree = self.xml.get_widget('treeview')
 		self.plugin = plugin
 		self.nb_unread = 0
+		self.add_handler_id = 0
+		self.browse_handler_id = 0
+		self.join_handler_id = 0
 		window = self.xml.get_widget('Gajim')
 		window.hide()
 		if self.plugin.config.has_key('saveposition'):
