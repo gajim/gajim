@@ -373,7 +373,7 @@ class Roster_window:
 		#Print status in chat window
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
 			prio = 0
-			sho = users[0].show
+			sho = luser[0].show
 			for u in luser:
 				if u.priority > prio:
 					prio = u.priority
