@@ -55,6 +55,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gtk.glade
+import pango
 import gobject
 import os
 import time
@@ -209,9 +210,11 @@ class tabbed_chat_window:
 		self.tagIn = {}
 		self.tagOut = {}
 		self.tagStatus = {}
+		self.tagTimeSometimes = {}
 		self.users = {}
 		self.nb_unread = {}
 		self.last_message_time = {}
+		self.print_time_timeout_id = {}
 		self.window = self.xml.get_widget('tabbed_chat_window')
 		self.new_user(user)
 		self.show_title()
@@ -235,6 +238,19 @@ class tabbed_chat_window:
 				self.plugin.config['outmsgcolor'])
 			self.tagStatus[jid].set_property("foreground", \
 				self.plugin.config['statusmsgcolor'])
+
+	def update_print_time(self):
+		if self.plugin.config['print_time'] != 'sometimes':
+			list_jid = self.print_time_timeout_id.keys()
+			for jid in list_jid:
+				gobject.source_remove(self.print_time_timeout_id[jid])
+				del self.print_time_timeout_id[jid]
+		else:
+			for jid in self.xmls:
+				if not self.print_time_timeout_id.has_key(jid):
+					self.print_time_timeout(jid)
+					self.print_time_timeout_id[jid] = gobject.timeout_add(300000, \
+						self.print_time_timeout, jid)
 
 	def show_title(self):
 		"""redraw the window's title"""
@@ -296,6 +312,7 @@ class tabbed_chat_window:
 		#clean self.plugin.windows[self.account]['chats']
 		for jid in self.users:
 			del self.plugin.windows[self.account]['chats'][jid]
+			#TODO: stop all print time timout
 		if self.plugin.windows[self.account]['chats'].has_key('tabbed'):
 			del self.plugin.windows[self.account]['chats']['tabbed']
 
@@ -384,6 +401,9 @@ class tabbed_chat_window:
 		if len(self.xmls) == 1:
 			self.window.destroy()
 		else:
+			if self.print_time_timeout_id.has_key(jid):
+				gobject.source_remove(self.print_time_timeout_id[jid])
+				del self.print_time_timeout_id[jid]
 			self.chat_notebook.remove_page(\
 				self.chat_notebook.get_current_page())
 			del self.plugin.windows[self.account]['chats'][jid]
@@ -394,6 +414,7 @@ class tabbed_chat_window:
 			del self.tagIn[jid]
 			del self.tagOut[jid]
 			del self.tagStatus[jid]
+			del self.tagTimeSometimes[jid]
 			if len(self.xmls) == 1:
 				self.chat_notebook.set_show_tabs(False)
 			self.show_title()
@@ -418,6 +439,11 @@ class tabbed_chat_window:
 		self.tagStatus[user.jid] = conversation_buffer.create_tag('status')
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus[user.jid].set_property('foreground', color)
+		self.tagTimeSometimes[user.jid] = conversation_buffer.\
+			create_tag('time_sometimes')
+		self.tagTimeSometimes[user.jid].set_property('foreground', '#9e9e9e')
+		self.tagTimeSometimes[user.jid].set_property('scale', pango.SCALE_SMALL)
+		self.tagTimeSometimes[user.jid].set_property('justification', gtk.JUSTIFY_CENTER)
 		
 		self.link_tag = conversation_buffer.create_tag('hyperlink', foreground='blue')
 		self.xmls[user.jid].signal_autoconnect(self)
@@ -441,6 +467,11 @@ class tabbed_chat_window:
 		if user.show != 'online':
 			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
 				user.show, user.status), user.jid, 'status')
+
+		if self.plugin.config['print_time'] == 'sometimes':
+			self.print_time_timeout(user.jid)
+			self.print_time_timeout_id[user.jid] = gobject.timeout_add(3000, \
+				self.print_time_timeout, user.jid)
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -552,6 +583,30 @@ class tabbed_chat_window:
 			self.redraw_tab(jid)
 			self.show_title()
 			self.plugin.systray.remove_jid(jid, self.account)
+	
+	def print_time_timeout(self, jid):
+		if not jid in self.xmls.keys():
+			return 0
+		if self.plugin.config['print_time'] == 'sometimes':
+			conversation_textview = self.xmls[jid].\
+				get_widget('conversation_textview')
+			conversation_buffer = conversation_textview.get_buffer()
+			end_iter = conversation_buffer.get_end_iter()
+			tim = time.localtime()
+			tim_format = time.strftime('%H:%M', tim)
+			conversation_buffer.insert_with_tags_by_name(end_iter, tim_format + \
+				'\n', 'time_sometimes')
+			#scroll to the end of the textview
+			end_rect = conversation_textview.get_iter_location(end_iter)
+			visible_rect = conversation_textview.get_visible_rect()
+			if end_rect.y <= (visible_rect.y + visible_rect.height):
+				#we are at the end
+				conversation_textview.scroll_to_mark(conversation_buffer.\
+					get_mark('end'), 0.1, 0, 0, 0)
+			return 1
+		if self.print_time_timeout_id.has_key(jid):
+			del self.print_time_timeout_id[jid]
+		return 0
 
 	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :
@@ -564,10 +619,11 @@ class tabbed_chat_window:
 		if not text:
 			text = ''
 		end_iter = conversation_buffer.get_end_iter()
-		if not tim:
-			tim = time.localtime()
-		tim_format = time.strftime("[%H:%M:%S]", tim)
-		conversation_buffer.insert(end_iter, tim_format + ' ')
+		if self.plugin.config['print_time'] == 'always':
+			if not tim:
+				tim = time.localtime()
+			tim_format = time.strftime("[%H:%M:%S]", tim)
+			conversation_buffer.insert(end_iter, tim_format + ' ')
 		
 		otext = ''
 		ttext = ''
@@ -918,10 +974,11 @@ class Groupchat_window:
 		if not text:
 			text = ''
 		end_iter = conversation_buffer.get_end_iter()
-		if not tim:
-			tim = time.localtime()
-		tim_format = time.strftime('[%H:%M:%S]', tim)
-		conversation_buffer.insert(end_iter, tim_format + ' ')
+		if self.plugin.config['print_time'] == 'always':
+			if not tim:
+				tim = time.localtime()
+			tim_format = time.strftime('[%H:%M:%S]', tim)
+			conversation_buffer.insert(end_iter, tim_format + ' ')
 
 		otext = ''
 		ttext = ''
@@ -3343,6 +3400,7 @@ class plugin:
 			'saveposition': 1,\
 			'mergeaccounts': 0,\
 			'usetabbedchat': 1,\
+			'print_time': 'always',\
 			'useemoticons': 1,\
 			'emoticons':':-)\tplugins/gtkgui/emoticons/smile.png\t(@)\tplugins/gtkgui/emoticons/pussy.png\t8)\tplugins/gtkgui/emoticons/coolglasses.png\t:(\tplugins/gtkgui/emoticons/unhappy.png\t:)\tplugins/gtkgui/emoticons/smile.png\t(})\tplugins/gtkgui/emoticons/hugleft.png\t:$\tplugins/gtkgui/emoticons/blush.png\t(Y)\tplugins/gtkgui/emoticons/yes.png\t:-@\tplugins/gtkgui/emoticons/angry.png\t:-D\tplugins/gtkgui/emoticons/biggrin.png\t(U)\tplugins/gtkgui/emoticons/brheart.png\t(F)\tplugins/gtkgui/emoticons/flower.png\t:-[\tplugins/gtkgui/emoticons/bat.png\t:>\tplugins/gtkgui/emoticons/biggrin.png\t(T)\tplugins/gtkgui/emoticons/phone.png\t(l)\tplugins/gtkgui/emoticons/heart.png\t:-S\tplugins/gtkgui/emoticons/frowing.png\t:-P\tplugins/gtkgui/emoticons/tongue.png\t(h)\tplugins/gtkgui/emoticons/coolglasses.png\t(D)\tplugins/gtkgui/emoticons/drink.png\t:-O\tplugins/gtkgui/emoticons/oh.png\t(f)\tplugins/gtkgui/emoticons/flower.png\t(C)\tplugins/gtkgui/emoticons/coffee.png\t:-o\tplugins/gtkgui/emoticons/oh.png\t({)\tplugins/gtkgui/emoticons/hugright.png\t(*)\tplugins/gtkgui/emoticons/star.png\tB-)\tplugins/gtkgui/emoticons/coolglasses.png\t(z)\tplugins/gtkgui/emoticons/boy.png\t:-d\tplugins/gtkgui/emoticons/biggrin.png\t(E)\tplugins/gtkgui/emoticons/mail.png\t(N)\tplugins/gtkgui/emoticons/no.png\t(p)\tplugins/gtkgui/emoticons/photo.png\t(K)\tplugins/gtkgui/emoticons/kiss.png\t(r)\tplugins/gtkgui/emoticons/rainbow.png\t:-|\tplugins/gtkgui/emoticons/stare.png\t:-s\tplugins/gtkgui/emoticons/frowing.png\t:-p\tplugins/gtkgui/emoticons/tongue.png\t(c)\tplugins/gtkgui/emoticons/coffee.png\t(e)\tplugins/gtkgui/emoticons/mail.png\t;-)\tplugins/gtkgui/emoticons/wink.png\t;-(\tplugins/gtkgui/emoticons/cry.png\t(6)\tplugins/gtkgui/emoticons/devil.png\t:o\tplugins/gtkgui/emoticons/oh.png\t(L)\tplugins/gtkgui/emoticons/heart.png\t(w)\tplugins/gtkgui/emoticons/brflower.png\t:d\tplugins/gtkgui/emoticons/biggrin.png\t(Z)\tplugins/gtkgui/emoticons/boy.png\t(u)\tplugins/gtkgui/emoticons/brheart.png\t:|\tplugins/gtkgui/emoticons/stare.png\t(P)\tplugins/gtkgui/emoticons/photo.png\t:O\tplugins/gtkgui/emoticons/oh.png\t(R)\tplugins/gtkgui/emoticons/rainbow.png\t(t)\tplugins/gtkgui/emoticons/phone.png\t(i)\tplugins/gtkgui/emoticons/lamp.png\t;)\tplugins/gtkgui/emoticons/wink.png\t;(\tplugins/gtkgui/emoticons/cry.png\t:p\tplugins/gtkgui/emoticons/tongue.png\t(H)\tplugins/gtkgui/emoticons/coolglasses.png\t:s\tplugins/gtkgui/emoticons/frowing.png\t;\'-(\tplugins/gtkgui/emoticons/cry.png\t:-(\tplugins/gtkgui/emoticons/unhappy.png\t:-)\tplugins/gtkgui/emoticons/smile.png\t(b)\tplugins/gtkgui/emoticons/beer.png\t8-)\tplugins/gtkgui/emoticons/coolglasses.png\t(B)\tplugins/gtkgui/emoticons/beer.png\t(W)\tplugins/gtkgui/emoticons/brflower.png\t:D\tplugins/gtkgui/emoticons/biggrin.png\t(y)\tplugins/gtkgui/emoticons/yes.png\t(8)\tplugins/gtkgui/emoticons/music.png\t:@\tplugins/gtkgui/emoticons/angry.png\tB)\tplugins/gtkgui/emoticons/coolglasses.png\t:-$\tplugins/gtkgui/emoticons/blush.png\t:\'(\tplugins/gtkgui/emoticons/cry.png\t(n)\tplugins/gtkgui/emoticons/no.png\t(k)\tplugins/gtkgui/emoticons/kiss.png\t:->\tplugins/gtkgui/emoticons/biggrin.png\t:[\tplugins/gtkgui/emoticons/bat.png\t(I)\tplugins/gtkgui/emoticons/lamp.png\t:P\tplugins/gtkgui/emoticons/tongue.png\t(%)\tplugins/gtkgui/emoticons/cuffs.png\t(d)\tplugins/gtkgui/emoticons/drink.png\t:S\tplugins/gtkgui/emoticons/frowing.png\t:(S)\tplugins/gtkgui/emoticons/moon.png',\
 			'soundplayer': 'play',\

@@ -41,75 +41,83 @@ class preferences_window:
 		"""close window"""
 		del self.plugin.windows['preferences']
 	
-	def on_incoming_msg_colorbutton_color_set(self, widget):
-		"""Take The Color For The Incoming Messages"""
-		color = widget.get_color()
-		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['inmsgcolor'] = color_string
-		self.update_text_tags()
+	def on_tray_icon_checkbutton_toggled(self, widget):
+		"""On Tray Icon Checkbutton Toggled"""
+		if self.widget.get_active():
+			self.plugin.config['trayicon'] = 1
+			self.plugin.show_systray()
+		else:
+			self.plugin.config['trayicon'] = 0
+			self.plugin.hide_systray()
+		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
+		self.plugin.roster.draw_roster()
+	
+	def on_save_position_checkbutton_toggled(self, widget):
+		"""On Save Position Checkbutton Toggled"""
+		if widget.get_active():
+			self.plugin.config['saveposition'] = 1
+		else:
+			self.plugin.config['saveposition'] = 0
+	
+	def on_merge_checkbutton_toggled(self, widget):
+		"""On Merge Accounts Checkbutton Toggled"""
+		if widget.get_active():
+			self.plugin.config['mergeaccounts'] = 1
+		else:
+			self.plugin.config['mergeaccounts'] = 0
+		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
+	
+	def on_iconstyle_combobox_changed(self, widget, path):
+		model = widget.get_model()
+		icon_string = model[path][0]
+		self.plugin.config['iconstyle'] = icon_string
+		self.plugin.roster.mkpixbufs()
 		
-	def on_outgoing_msg_colorbutton_color_set(self, widget):
-		"""Take The Color For The Outgoing Messages"""
-		color = widget.get_color()
-		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['outmsgcolor'] = color_string
-		self.update_text_tags()
-	
-	def on_status_msg_colorbutton_color_set(self, widget):
-		"""Take The Color For The Status Messages"""
-		color = widget.get_color()
-		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['statusmsgcolor'] = color_string
-		self.update_text_tags()
-	
 	def on_account_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The Account Text"""
 		color = widget.get_color()
-		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
+		color_string = '#' + (hex(color.red) + '0')[2:4] + \
+			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['accounttextcolor'] = color_string
 		self.plugin.roster.draw_roster()
 	
 	def on_group_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The Group Text"""
 		color = widget.get_color()
-		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
+		color_string = '#' + (hex(color.red) + '0')[2:4] + \
+			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['grouptextcolor'] = color_string
 		self.plugin.roster.draw_roster()
 
 	def on_user_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The User Text"""
 		color = widget.get_color()
-		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
+		color_string = '#' + (hex(color.red) + '0')[2:4] + \
+			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['usertextcolor'] = color_string
 		self.plugin.roster.draw_roster()
 
 	def on_account_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of Account Text"""
 		color = widget.get_color()
-		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
+		color_string = '#' + (hex(color.red) + '0')[2:4] + \
+			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['accountbgcolor'] = color_string
 		self.plugin.roster.draw_roster()
 	
 	def on_group_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of Group Text"""
 		color = widget.get_color()
-		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
+		color_string = '#' + (hex(color.red) + '0')[2:4] + \
+			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['groupbgcolor'] = color_string
 		self.plugin.roster.draw_roster()
 	
 	def on_user_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of User Text"""
 		color = widget.get_color()
-		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
+		color_string = '#' + (hex(color.red) + '0')[2:4] + \
+			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['userbgcolor'] = color_string
 		self.plugin.roster.draw_roster()
 	
@@ -131,69 +139,6 @@ class preferences_window:
 		self.plugin.config['userfont'] = font_string
 		self.plugin.roster.draw_roster()
 	
-	def update_text_tags(self):
-		"""Update Opened Chat Windows"""
-		for a in self.plugin.accounts.keys():
-			if self.plugin.windows[a]['chats'].has_key('tabbed'):
-				self.plugin.windows[a]['chats']['tabbed'].update_tags()
-			else:
-				for jid in self.plugin.windows[a]['chats'].keys():
-					self.plugin.windows[a]['chats'][jid].update_tags()
-	
-	def on_iconstyle_combobox_changed(self, widget, path):
-		model = widget.get_model()
-		icon_string = model[path][0]
-		self.plugin.config['iconstyle'] = icon_string
-		self.plugin.roster.mkpixbufs()
-		
-	def on_save_position_checkbutton_toggled(self, widget):
-		"""On Save Position Checkbutton Toggled"""
-		if widget.get_active():
-			self.plugin.config['saveposition'] = 1
-		else:
-			self.plugin.config['saveposition'] = 0
-	
-	def on_merge_checkbutton_toggled(self, widget):
-		"""On Merge Accounts Checkbutton Toggled"""
-		if widget.get_active():
-			self.plugin.config['mergeaccounts'] = 1
-		else:
-			self.plugin.config['mergeaccounts'] = 0
-		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
-	
-	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
-		"""On Use Tabbed Chat Window Checkbutton Toggled"""
-		if widget.get_active():
-			self.plugin.config['usetabbedchat'] = 1
-			#TODO: merge opened chat windows
-		else:
-			self.plugin.config['usetabbedchat'] = 0
-			#TODO: split the tabbed chat window
-	
-	def on_tray_icon_checkbutton_toggled(self, widget):
-		"""On Tray Icon Checkbutton Toggled"""
-		if self.widget.get_active():
-			self.plugin.config['trayicon'] = 1
-			self.plugin.show_systray()
-		else:
-			self.plugin.config['trayicon'] = 0
-			self.plugin.hide_systray()
-		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
-		self.plugin.roster.draw_roster()
-	
-	def on_reset_colors_button_clicked(self, widget):
-		defaults = self.plugin.default_config
-		self.plugin.config['inmsgcolor'] = defaults['inmsgcolor']
-		self.plugin.config['outmsgcolor'] = defaults['outmsgcolor']
-		self.plugin.config['statusmsgcolor'] = defaults['statusmsgcolor']
-		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['inmsgcolor']))		
-		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['outmsgcolor']))		
-		self.xml.get_widget('status_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['statusmsgcolor']))		
-		self.update_text_tags()
-
 	def on_reset_colors_and_fonts_button_clicked(self, widget):
 		defaults = self.plugin.default_config
 		self.plugin.config['accounttextcolor'] = defaults['accounttextcolor']
@@ -225,6 +170,85 @@ class preferences_window:
 			defaults['userfont'])
 		self.plugin.roster.draw_roster()
 	
+	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
+		"""On Use Tabbed Chat Window Checkbutton Toggled"""
+		if widget.get_active():
+			self.plugin.config['usetabbedchat'] = 1
+			#TODO: merge opened chat windows
+		else:
+			self.plugin.config['usetabbedchat'] = 0
+			#TODO: split the tabbed chat window
+	
+	def update_text_tags(self):
+		"""Update Opened Chat Windows"""
+		for a in self.plugin.accounts.keys():
+			if self.plugin.windows[a]['chats'].has_key('tabbed'):
+				self.plugin.windows[a]['chats']['tabbed'].update_tags()
+			else:
+				for jid in self.plugin.windows[a]['chats'].keys():
+					self.plugin.windows[a]['chats'][jid].update_tags()
+	
+	def update_print_time(self):
+		"""Update Opened Chat Windows"""
+		for a in self.plugin.accounts.keys():
+			if self.plugin.windows[a]['chats'].has_key('tabbed'):
+				self.plugin.windows[a]['chats']['tabbed'].update_print_time()
+			else:
+				for jid in self.plugin.windows[a]['chats'].keys():
+					self.plugin.windows[a]['chats'][jid].update_print_time()
+	
+	def on_incoming_msg_colorbutton_color_set(self, widget):
+		"""Take The Color For The Incoming Messages"""
+		color = widget.get_color()
+		color_string = '#' + (hex(color.red) + '0')[2:4] + \
+			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
+		self.plugin.config['inmsgcolor'] = color_string
+		self.update_text_tags()
+		
+	def on_outgoing_msg_colorbutton_color_set(self, widget):
+		"""Take The Color For The Outgoing Messages"""
+		color = widget.get_color()
+		color_string = '#' + (hex(color.red) + '0')[2:4] + \
+			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
+		self.plugin.config['outmsgcolor'] = color_string
+		self.update_text_tags()
+	
+	def on_status_msg_colorbutton_color_set(self, widget):
+		"""Take The Color For The Status Messages"""
+		color = widget.get_color()
+		color_string = '#' + (hex(color.red) + '0')[2:4] + \
+			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
+		self.plugin.config['statusmsgcolor'] = color_string
+		self.update_text_tags()
+	
+	def on_reset_colors_button_clicked(self, widget):
+		defaults = self.plugin.default_config
+		self.plugin.config['inmsgcolor'] = defaults['inmsgcolor']
+		self.plugin.config['outmsgcolor'] = defaults['outmsgcolor']
+		self.plugin.config['statusmsgcolor'] = defaults['statusmsgcolor']
+		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['inmsgcolor']))		
+		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['outmsgcolor']))		
+		self.xml.get_widget('status_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['statusmsgcolor']))		
+		self.update_text_tags()
+
+	def on_time_never_radiobutton_toggled(self, widget):
+		if widget.get_active():
+			self.plugin.config['print_time'] = 'never'
+		self.update_print_time()
+
+	def on_time_sometimes_radiobutton_toggled(self, widget):
+		if widget.get_active():
+			self.plugin.config['print_time'] = 'sometimes'
+		self.update_print_time()
+
+	def on_time_always_radiobutton_toggled(self, widget):
+		if widget.get_active():
+			self.plugin.config['print_time'] = 'always'
+		self.update_print_time()
+
 	def on_use_emoticons_checkbutton_function(self):
 		"""
 		model = self.emot_tree.get_model()
@@ -619,21 +643,20 @@ class preferences_window:
 		self.tray_icon_checkbutton = self.xml.get_widget('tray_icon_checkbutton')
 		self.notebook = self.xml.get_widget('preferences_notebook')
 		
-		#Color for incomming messages
-		colSt = self.plugin.config['inmsgcolor']
-		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(colSt))
+		#trayicon
+		st = self.plugin.config['trayicon']
+		self.tray_icon_checkbutton.set_active(st)
+		if isinstance(self.plugin.systray, gtkgui.systrayDummy):
+			self.tray_icon_checkbutton.set_sensitive(False)
+
+		#Save position
+		st = self.plugin.config['saveposition']
+		self.xml.get_widget('save_position_checkbutton').set_active(st)
 		
-		#Color for outgoing messages
-		colSt = self.plugin.config['outmsgcolor']
-		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(colSt))
-		
-		#Color for status messages
-		colSt = self.plugin.config['statusmsgcolor']
-		self.xml.get_widget('status_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(colSt))
-		
+		#Merge accounts
+		st = self.plugin.config['mergeaccounts']
+		self.xml.get_widget('merge_checkbutton').set_active(st)
+
 		#iconStyle
 		list_style = os.listdir('plugins/gtkgui/icons/')
 		model = gtk.ListStore(gobject.TYPE_STRING)
@@ -648,131 +671,6 @@ class preferences_window:
 			model.append([l[i]])
 			if self.plugin.config['iconstyle'] == l[i]:
 				self.iconstyle_combobox.set_active(i)
-
-		#Save position
-		st = self.plugin.config['saveposition']
-		self.xml.get_widget('save_position_checkbutton').set_active(st)
-		
-		#Merge accounts
-		st = self.plugin.config['mergeaccounts']
-		self.xml.get_widget('merge_checkbutton').set_active(st)
-
-		#use tabbed chat window
-		st = self.plugin.config['usetabbedchat']
-		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
-
-		#Use emoticons
-		st = self.plugin.config['useemoticons']
-		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
-		self.xml.get_widget('button_new_emoticon').set_sensitive(st)
-		self.xml.get_widget('button_remove_emoticon').set_sensitive(st)
-		self.xml.get_widget('treeview_emoticons').set_sensitive(st)
-		self.xml.get_widget('set_image_button').set_sensitive(st)
-
-		#emoticons
-		self.emot_tree = self.xml.get_widget('treeview_emoticons')
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gtk.Image)
-		self.emot_tree.set_model(model)
-		col = gtk.TreeViewColumn('name')
-		self.emot_tree.append_column(col)
-		renderer = gtk.CellRendererText()
-		renderer.connect('edited', self.on_emot_cell_edited)
-		renderer.set_property('editable', True)
-		col.pack_start(renderer, True)
-		col.set_attributes(renderer, text=0)
-
-		col = gtk.TreeViewColumn('Image')
-		self.emot_tree.append_column(col)
-		renderer = gtkgui.ImageCellRenderer()
-		col.pack_start(renderer, expand = False)
-		col.add_attribute(renderer, 'image', 2)
-		
-		self.fill_emot_treeview()
-
-		#sound player
-		self.xml.get_widget('entry_soundplayer').set_text(\
-			self.plugin.config['soundplayer'])
-
-		#sounds
-		self.sound_tree = self.xml.get_widget('treeview_sounds')
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, \
-			gobject.TYPE_STRING)
-		self.sound_tree.set_model(model)
-
-		col = gtk.TreeViewColumn('Active')
-		self.sound_tree.append_column(col)
-		renderer = gtk.CellRendererToggle()
-		renderer.set_property('activatable', True)
-		renderer.connect("toggled", self.sound_toggled_cb)
-		col.pack_start(renderer)
-		col.set_attributes(renderer, active=1)
-
-		col = gtk.TreeViewColumn('Event')
-		self.sound_tree.append_column(col)
-		renderer = gtk.CellRendererText()
-		col.pack_start(renderer)
-		col.set_attributes(renderer, text=0)
-
-		col = gtk.TreeViewColumn('Sound')
-		self.sound_tree.append_column(col)
-		renderer = gtk.CellRendererText()
-		col.pack_start(renderer)
-		col.set_attributes(renderer, text=2)
-		self.fill_sound_treeview()
-
-		if not os.name == 'posix':
-			self.xml.get_widget('entry_soundplayer').set_sensitive(False)
-			self.sound_tree.set_sensitive(False)
-			self.xml.get_widget('entry_sounds').set_sensitive(False)
-			self.xml.get_widget('button_sounds').set_sensitive(False)
-		
-		#Autopopup
-		st = self.plugin.config['autopopup']
-		self.auto_pp_checkbutton.set_active(st)
-
-		#Autopopupaway
-		st = self.plugin.config['autopopupaway']
-		self.auto_pp_away_checkbutton.set_active(st)
-		self.auto_pp_away_checkbutton.set_sensitive(self.plugin.config['autopopup'])
-
-		#Autoaway
-		st = self.plugin.config['autoaway']
-		self.auto_away_checkbutton.set_active(st)
-
-		#Autoawaytime
-		st = self.plugin.config['autoawaytime']
-		self.auto_away_time_spinbutton.set_value(st)
-		self.auto_away_time_spinbutton.set_sensitive(self.plugin.config['autoaway'])
-
-		#Autoxa
-		st = self.plugin.config['autoxa']
-		self.auto_xa_checkbutton.set_active(st)
-
-		#Autoxatime
-		st = self.plugin.config['autoxatime']
-		self.auto_xa_time_spinbutton.set_value(st)
-		self.auto_xa_time_spinbutton.set_sensitive(self.plugin.config['autoxa'])
-
-		#Status messages
-		self.msg_tree = self.xml.get_widget('msg_treeview')
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
-		self.msg_tree.set_model(model)
-		col = gtk.TreeViewColumn('name')
-		self.msg_tree.append_column(col)
-		renderer = gtk.CellRendererText()
-		col.pack_start(renderer, True)
-		col.set_attributes(renderer, text=0)
-		renderer.connect('edited', self.on_msg_cell_edited)
-		renderer.set_property('editable', True)
-		self.fill_msg_treeview()
-		buf = self.xml.get_widget('msg_textview').get_buffer()
-		buf.connect('changed', self.on_msg_textview_changed)
-
-		#trayicon
-		st = self.plugin.config['trayicon']
-		self.tray_icon_checkbutton.set_active(st)
-		if isinstance(self.plugin.systray, gtkgui.systrayDummy):
-			self.tray_icon_checkbutton.set_sensitive(False)
 
 		#Color for account text
 		colSt = self.plugin.config['accounttextcolor']
@@ -816,6 +714,148 @@ class preferences_window:
 		fontStr = self.plugin.config['userfont']
 		self.xml.get_widget('user_text_fontbutton').set_font_name(fontStr)
 		
+		#use tabbed chat window
+		st = self.plugin.config['usetabbedchat']
+		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
+
+		#Color for incomming messages
+		colSt = self.plugin.config['inmsgcolor']
+		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
+		#Color for outgoing messages
+		colSt = self.plugin.config['outmsgcolor']
+		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
+		#Color for status messages
+		colSt = self.plugin.config['statusmsgcolor']
+		self.xml.get_widget('status_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
+		#Print time
+		if self.plugin.config['print_time'] == 'never':
+			self.xml.get_widget('time_never_radiobutton').set_active(1)
+		elif self.plugin.config['print_time'] == 'sometimes':
+			self.xml.get_widget('time_sometimes_radiobutton').set_active(1)
+		else:
+			self.xml.get_widget('time_always_radiobutton').set_active(1)
+
+		#Use emoticons
+		st = self.plugin.config['useemoticons']
+		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
+		self.xml.get_widget('button_new_emoticon').set_sensitive(st)
+		self.xml.get_widget('button_remove_emoticon').set_sensitive(st)
+		self.xml.get_widget('treeview_emoticons').set_sensitive(st)
+		self.xml.get_widget('set_image_button').set_sensitive(st)
+
+		#emoticons
+		self.emot_tree = self.xml.get_widget('treeview_emoticons')
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gtk.Image)
+		self.emot_tree.set_model(model)
+		col = gtk.TreeViewColumn('name')
+		self.emot_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		renderer.connect('edited', self.on_emot_cell_edited)
+		renderer.set_property('editable', True)
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text=0)
+
+		col = gtk.TreeViewColumn('Image')
+		self.emot_tree.append_column(col)
+		renderer = gtkgui.ImageCellRenderer()
+		col.pack_start(renderer, expand = False)
+		col.add_attribute(renderer, 'image', 2)
+		
+		self.fill_emot_treeview()
+
+		#Autopopup
+		st = self.plugin.config['autopopup']
+		self.auto_pp_checkbutton.set_active(st)
+
+		#Autopopupaway
+		st = self.plugin.config['autopopupaway']
+		self.auto_pp_away_checkbutton.set_active(st)
+		self.auto_pp_away_checkbutton.set_sensitive(self.plugin.config['autopopup'])
+
+		#sound player
+		self.xml.get_widget('entry_soundplayer').set_text(\
+			self.plugin.config['soundplayer'])
+
+		#sounds
+		self.sound_tree = self.xml.get_widget('treeview_sounds')
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, \
+			gobject.TYPE_STRING)
+		self.sound_tree.set_model(model)
+
+		col = gtk.TreeViewColumn('Active')
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererToggle()
+		renderer.set_property('activatable', True)
+		renderer.connect("toggled", self.sound_toggled_cb)
+		col.pack_start(renderer)
+		col.set_attributes(renderer, active=1)
+
+		col = gtk.TreeViewColumn('Event')
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text=0)
+
+		col = gtk.TreeViewColumn('Sound')
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text=2)
+		self.fill_sound_treeview()
+
+		if not os.name == 'posix':
+			self.xml.get_widget('entry_soundplayer').set_sensitive(False)
+			self.sound_tree.set_sensitive(False)
+			self.xml.get_widget('entry_sounds').set_sensitive(False)
+			self.xml.get_widget('button_sounds').set_sensitive(False)
+		
+		#Autoaway
+		st = self.plugin.config['autoaway']
+		self.auto_away_checkbutton.set_active(st)
+
+		#Autoawaytime
+		st = self.plugin.config['autoawaytime']
+		self.auto_away_time_spinbutton.set_value(st)
+		self.auto_away_time_spinbutton.set_sensitive(self.plugin.config['autoaway'])
+
+		#Autoxa
+		st = self.plugin.config['autoxa']
+		self.auto_xa_checkbutton.set_active(st)
+
+		#Autoxatime
+		st = self.plugin.config['autoxatime']
+		self.auto_xa_time_spinbutton.set_value(st)
+		self.auto_xa_time_spinbutton.set_sensitive(self.plugin.config['autoxa'])
+
+		#ask_status when online / offline
+		st = self.plugin.config['ask_online_status']
+		self.xml.get_widget('prompt_online_status_message_checkbutton').\
+			set_active(st)
+		st = self.plugin.config['ask_offline_status']
+		self.xml.get_widget('prompt_offline_status_message_checkbutton').\
+			set_active(st)
+
+		#Status messages
+		self.msg_tree = self.xml.get_widget('msg_treeview')
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		self.msg_tree.set_model(model)
+		col = gtk.TreeViewColumn('name')
+		self.msg_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text=0)
+		renderer.connect('edited', self.on_msg_cell_edited)
+		renderer.set_property('editable', True)
+		self.fill_msg_treeview()
+		buf = self.xml.get_widget('msg_textview').get_buffer()
+		buf.connect('changed', self.on_msg_textview_changed)
+
 		self.xml.signal_connect('on_auto_pop_up_checkbox_toggled', \
 			self.on_checkbutton_toggled, 'autopopup', None,\
 									 [self.auto_pp_away_checkbutton])
