@@ -1265,9 +1265,11 @@ class systray:
 
 	def mk_menu(self, event):
 		menu = gtk.Menu()
+		item = gtk.TearoffMenuItem()
+		menu.append(item)
+		
 		item = gtk.MenuItem(_("Status"))
 		menu.append(item)
-
 		menu_sub = gtk.Menu()
 		item.set_submenu(menu_sub)
 		item = gtk.MenuItem(_("Online"))
