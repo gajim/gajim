@@ -382,10 +382,11 @@ class accountPreference_Window:
 				if infos.has_key('savegpgpass'):
 					self.xml.get_widget('gpg_pass_checkbutton').set_active(\
 						infos['savegpgpass'])
-					self.xml.get_widget('gpg_pass_entry').set_sensitive(True)
-					if infos.has_key('gpgpass'):
-						self.xml.get_widget('gpg_pass_entry').set_text(\
-							infos['gpgpass'])
+					if infos['savegpgpass']:
+						self.xml.get_widget('gpg_pass_entry').set_sensitive(True)
+						if infos.has_key('gpgpass'):
+							self.xml.get_widget('gpg_pass_entry').set_text(\
+								infos['gpgpass'])
 
 	def on_save_clicked(self, widget):
 		"""When save button is clicked : Save informations in config file"""
