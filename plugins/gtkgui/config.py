@@ -1334,10 +1334,10 @@ class Account_modification_window:
 			self.account = infos['accname']
 			self.init_account(infos)
 			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
-			self.xml.get_widget('name_entry').grab_focus()
+			self.xml.get_widget('save_button').grab_focus()
 
 class Accounts_window:
-	"""Class for accounts window : lists of accounts"""
+	"""Class for accounts window: lists of accounts"""
 	def on_accounts_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows['accounts_window']

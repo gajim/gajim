@@ -2,7 +2,7 @@
 #################
 
 pkgname=gajim
-pkgver=0.6
+pkgver=0.6.1
 pkgrel=1
 pkgdesc="Gajim is a GTK Jabber client"
 url="http://www.gajim.org"

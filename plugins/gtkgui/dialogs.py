@@ -523,7 +523,7 @@ class About_dialog:
 		self.plugin = plugin
 		dlg = gtk.AboutDialog()
 		dlg.set_name('Gajim')
-		dlg.set_version('0.6')
+		dlg.set_version('0.6.1')
 		s = u'Copyright \xa9 2003-2005 Gajim Team'
 		dlg.set_copyright(s)
 		text = open('COPYING').read()
