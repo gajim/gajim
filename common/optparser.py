@@ -33,7 +33,6 @@ class OptionsParser:
 			print 'error cannot open file %s\n' % (self.__fname);
 			return
     
-		self.tab = {}
 		section = ''
 		for line in fd.readlines():
 			if line[0] in "#;":

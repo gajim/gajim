@@ -297,13 +297,13 @@ class GajimCore:
 			fic = open(fname, "w")
 			fic.close()
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
-		self.parse()
 		for part in default_tab.keys():
 			if not self.cfgParser.tab.has_key(part):
 				self.cfgParser.tab[part] = {}
 			for option in default_tab[part].keys():
 				if not self.cfgParser.tab[part].has_key(option):
 					self.cfgParser.tab[part][option] = default_tab[part][option]
+		self.parse()
 	# END init_cfg_file
 
 	def parse(self):
