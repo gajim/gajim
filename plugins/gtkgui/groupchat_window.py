@@ -108,7 +108,7 @@ class Groupchat_window(chat):
 			if not user_iter:
 				fin2=True
 			while not fin2:
-				if nick == model.get_value(user, 1):
+				if nick == model.get_value(user_iter, 1):
 					return user_iter
 				user_iter = model.iter_next(user_iter)
 				if not user_iter:
