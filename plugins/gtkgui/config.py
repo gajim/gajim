@@ -70,6 +70,7 @@ class Preferences_window:
 		else:
 			self.plugin.config['mergeaccounts'] = 0
 		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
+		self.plugin.roster.draw_roster()
 	
 	def on_iconstyle_combobox_changed(self, widget, path):
 		model = widget.get_model()
