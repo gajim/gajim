@@ -46,9 +46,11 @@ class GajimCore:
 		self.connexions = {}
 		for a in self.accounts:
 			self.connected[a] = 0
+		self.myVCardID = []
 	# END __init__
 
 	def init_cfg_file(self):
+		"""Initialize configuration file"""
 		fname = os.path.expanduser(CONFPATH)
 		reps = string.split(fname, '/')
 		del reps[0]
@@ -74,6 +76,7 @@ class GajimCore:
 	# END init_cfg_file
 
 	def parse(self):
+		"""Parse configuratoin file and create self.accounts"""
 		self.cfgParser.parseCfgFile()
 		self.accounts = {}
 		accts = string.split(self.cfgParser.tab['Profile']['accounts'], ' ')
@@ -83,7 +86,8 @@ class GajimCore:
 			self.accounts[a] = self.cfgParser.tab[a]
 
 	def vCardCB(self, con, vc):
-		"""Called when we recieve a vCard"""
+		"""Called when we recieve a vCard
+		Parse the vCard and send it to plugins"""
 		vcard = {'jid': vc.getFrom().getBasic()}
 		if vc._getTag('vCard') == common.jabber.NS_VCARD:
 			card = vc.getChildren()[0]
@@ -94,7 +98,11 @@ class GajimCore:
 					vcard[info.getName()] = {}
 					for c in info.getChildren():
 						 vcard[info.getName()][c.getName()] = c.getData()
-			self.hub.sendPlugin('VCARD', self.connexions[con], vcard)
+			if vc.getID() in self.myVCardID:
+				self.myVCardID.remove(vc.getID())
+				self.hub.sendPlugin('MYVCARD', self.connexions[con], vcard)
+			else:
+				self.hub.sendPlugin('VCARD', self.connexions[con], vcard)
 
 	def messageCB(self, con, msg):
 		"""Called when we recieve a message"""
@@ -209,6 +217,12 @@ class GajimCore:
 				self.hub.sendPlugin('STATUS', account, 'online')
 				self.connexions[con] = account
 				self.connected[account] = 1
+				iq = common.jabber.Iq(type="get")
+				iq._setTag('vCard', common.jabber.NS_VCARD)
+				id = con.getAnID()
+				iq.setID(id)
+				con.send(iq)
+				self.myVCardID.append(id)
 				return con
 			else:
 				log.debug("Couldn't authentificate to %s" % hostname)
@@ -440,12 +454,14 @@ def loadPlugins(gc):
 			gc.hub.register(mod, 'MSG')
 			gc.hub.register(mod, 'MSGSENT')
 			gc.hub.register(mod, 'SUBSCRIBED')
+			gc.hub.register(mod, 'UNSUBSCRIBED')
 			gc.hub.register(mod, 'SUBSCRIBE')
 			gc.hub.register(mod, 'AGENTS')
 			gc.hub.register(mod, 'AGENT_INFO')
 			gc.hub.register(mod, 'QUIT')
 			gc.hub.register(mod, 'ACC_OK')
 			gc.hub.register(mod, 'CONFIG')
+			gc.hub.register(mod, 'MYVCARD')
 			gc.hub.register(mod, 'VCARD')
 			gc.hub.register(mod, 'LOG_NB_LINE')
 			gc.hub.register(mod, 'LOG_LINE')

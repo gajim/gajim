@@ -118,6 +118,12 @@ class vCard_Window:
 			warning_Window("You must be connected to publish your informations")
 			return
 		vcard = self.make_vcard()
+		nick = ''
+		if vcard.has_key('NICKNAME'):
+			nick = vcard['NICKNAME']
+		if nick == '':
+			nick = self.plugin.accounts[self.account]['name']
+		self.plugin.nicks[self.account] = nick
 		self.plugin.send('VCARD', self.account, vcard)
 
 	def __init__(self, jid, plugin, account):
@@ -613,6 +619,7 @@ class accountPreference_Window:
 				self.plugin.windows[name] = self.plugin.windows[self.account]
 				self.plugin.queues[name] = self.plugin.queues[self.account]
 				self.plugin.connected[name] = self.plugin.connected[self.account]
+				self.plugin.nicks[name] = self.plugin.nicks[self.account]
 				self.plugin.roster.groups[name] = \
 					self.plugin.roster.groups[self.account]
 				self.plugin.roster.contacts[name] = \
@@ -620,6 +627,7 @@ class accountPreference_Window:
 				del self.plugin.windows[self.account]
 				del self.plugin.queues[self.account]
 				del self.plugin.connected[self.account]
+				del self.plugin.nicks[self.account]
 				del self.plugin.roster.groups[self.account]
 				del self.plugin.roster.contacts[self.account]
 				del self.plugin.accounts[self.account]
@@ -970,7 +978,7 @@ class message_Window:
 				buffer.insert_with_tags_by_name(end_iter, txt+'\n', \
 					'status')
 			else:
-				buffer.insert_with_tags_by_name(end_iter, '<moi> ', 'outgoing')
+				buffer.insert_with_tags_by_name(end_iter, '<'+self.plugin.nicks[self.account]+'> ', 'outgoing')
 				buffer.insert(end_iter, txt+'\n')
 		else:
 			buffer.insert_with_tags_by_name(end_iter, '<' + \
@@ -1309,6 +1317,7 @@ class roster_Window:
 				self.tree.expand_row(model.get_path(iterG), FALSE)
 	
 	def remove_user(self, user, account):
+		"""Remove a user from the roster"""
 		model = self.tree.get_model()
 		for i in self.get_user_iter(user.jid, account):
 			parent_i = model.iter_parent(i)
@@ -1317,6 +1326,13 @@ class roster_Window:
 				model.remove(parent_i)
 	
 	def mkmenu(self):
+		"""create the browse agents and add sub menus"""
+		if len(self.plugin.accounts.keys()) > 0:
+			self.xml.get_widget('add').set_sensitive(True)
+			self.xml.get_widget('browse_agents').set_sensitive(True)
+		else:
+			self.xml.get_widget('add').set_sensitive(False)
+			self.xml.get_widget('browse_agents').set_sensitive(False)
 		if len(self.plugin.accounts.keys()) > 1:
 			#add
 			menu_sub = gtk.Menu()
@@ -1341,9 +1357,6 @@ class roster_Window:
 			#agents
 			self.xml.get_widget('browse_agents').connect("activate", \
 				self.on_browse, self.plugin.accounts.keys()[0])
-		else:
-			self.xml.get_widget('add').set_sensitive(False)
-			self.xml.get_widget('browse_agents').set_sensitive(False)
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
@@ -1479,11 +1492,11 @@ class roster_Window:
 		"""Make group's popup menu"""
 		menu = gtk.Menu()
 		item = gtk.MenuItem("grp1")
-		menu.append(item)
+#		menu.append(item)
 		item = gtk.MenuItem("grp2")
-		menu.append(item)
+#		menu.append(item)
 		item = gtk.MenuItem("grp3")
-		menu.append(item)
+#		menu.append(item)
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
 	
@@ -2076,6 +2089,13 @@ class plugin:
 					self.windows['accounts'].init_accounts()
 			elif ev[0] == 'QUIT':
 				self.roster.on_quit(self)
+			elif ev[0] == 'MYVCARD':
+				nick = ''
+				if ev[2].has_key('NICKNAME'):
+					nick = ev[2]['NICKNAME']
+				if nick == '':
+					nick = self.accounts[ev[1]]['name']
+				self.nicks[ev[1]] = nick
 			elif ev[0] == 'VCARD':
 				if self.windows[ev[1]]['infos'].has_key(ev[2]['jid']):
 					self.windows[ev[1]]['infos'][ev[2]['jid']].set_values(ev[2])
@@ -2112,7 +2132,7 @@ class plugin:
 					self.roster.optionmenu.set_history(1)
 					self.send('STATUS', None, ('away', 'auto away (idle)'))
 				elif state == common.sleepy.STATE_XAWAY and self.config['autoxa']:
-					#we go extanded away
+					#we go extended away
 					self.roster.optionmenu.set_history(2)
 					self.send('STATUS',('xa', 'auto away (idel)'))
 			self.sleeper_state = state
@@ -2139,12 +2159,14 @@ class plugin:
 		self.windows = {'logs':{}}
 		self.queues = {}
 		self.connected = {}
+		self.nicks = {}
 		for a in self.accounts.keys():
 			self.windows[a] = {}
 			self.windows[a]['infos'] = {}
 			self.windows[a]['chats'] = {}
 			self.queues[a] = {}
 			self.connected[a] = 0
+			self.nicks[a] = self.accounts[a]['name']
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
