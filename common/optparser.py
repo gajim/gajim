@@ -82,10 +82,15 @@ class OptionsParser:
 		except:
 			log.debug("Can't write config %s" % self.__fname)
 			return 0
+		index = 0
 		for s in self.tab.keys():
-			fd.write('[' + s + ']\n\n')
+			if index == 0:
+				fd.write('[' + s + ']\n')
+			else:
+				fd.write('\n[' + s + ']\n')
 			for o in self.tab[s].keys():
 				fd.write(o + ' = ' + str(self.tab[s][o]) + '\n')
+			index += 1
 		return 1
 	# END writeCfgFile
 

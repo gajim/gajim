@@ -302,6 +302,8 @@ class GajimCore:
 		except:
 			print _("creating %s") % fname
 			fic = open(fname, "w")
+			import stat
+			os.chmod(fname, stat.S_IRUSR | stat.S_IWUSR)
 			fic.close()
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
 		for part in default_tab.keys():
