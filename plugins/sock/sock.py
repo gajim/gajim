@@ -19,6 +19,7 @@
 import socket, select
 import pickle
 import Queue
+import sys
 
 from common import i18n
 _ = i18n._
@@ -142,7 +143,12 @@ class plugin:
 		HOST = socket.gethostbyname(socket.gethostname())
 		if self.config.has_key('host'):
 			HOST = socket.gethostbyname(self.config['host'])
-		self.socket.bind((HOST, self.config['port']))
+		try:
+			self.socket.bind((HOST, self.config['port']))
+		except:
+			print _('plugin sock cannot be launched : ') + \
+				str(sys.exc_info()[1][0:])
+			return
 		self.socket.listen(5)
 
 		self.active_socket = [self.socket]
