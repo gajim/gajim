@@ -255,6 +255,10 @@ class message_Window:
 			if len(self.plugin.roster.contacts[self.account][self.user.jid]) == 1:
 				self.plugin.roster.remove_user(self.user, self.account)
 
+	def on_chat_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			widget.get_toplevel().destroy()
+
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
 		if enter is pressed without the shit key, message (if not empty) is sent
@@ -328,6 +332,8 @@ class message_Window:
 		self.xml.signal_connect('on_history_clicked', self.on_history)
 		self.xml.signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
+		self.xml.signal_connect('on_chat_key_press_event', \
+			self.on_chat_key_press_event)
 		self.tagIn = buffer.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn.set_property("foreground", color)
