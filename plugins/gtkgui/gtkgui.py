@@ -557,6 +557,10 @@ class message:
 			return 1
 		return 0
 
+	def on_clear(self, widget):
+		deb, end = self.convTxtBuffer.get_bounds()
+		self.convTxtBuffer.delete(deb, end)
+
 	def __init__(self, user, roster):
 		self.user = user
 		self.r = roster
@@ -576,6 +580,7 @@ class message:
 		self.convTxtBuffer.create_mark('end', end_iter, 0)
 #		self.window.show()
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_clear_button_clicked', self.on_clear)
 		self.xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
 		self.tagIn = self.convTxtBuffer.create_tag("incoming")
 		color = self.cfgParser.GtkGui_inmsgcolor
