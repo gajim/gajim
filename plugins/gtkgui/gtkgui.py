@@ -292,18 +292,7 @@ class tabbed_chat_Window:
 		"""When close button is pressed :
 		close a tab"""
 		jid = self.get_active_jid()
-		if len(self.widgets) == 1:
-			button.get_toplevel().destroy()
-		else:
-			nb = self.xml.get_widget('notebook')
-			nb.remove_page(nb.get_current_page())
-			del self.plugin.windows[self.account]['chats'][jid]
-			del self.users[jid]
-			del self.nb_unread[jid]
-			del self.widgets[jid]
-			del self.tagIn[jid]
-			del self.tagOut[jid]
-			del self.tagStatus[jid]
+		self.remove_tab(jid)
 
 	def on_focus(self, widget, event):
 		"""When window get focus"""
@@ -339,6 +328,22 @@ class tabbed_chat_Window:
 		nb = self.xml.get_widget("notebook")
 		nb.set_current_page(nb.page_num(child))
 		self.widgets[jid]['message'].grab_focus()
+
+	def remove_tab(self, jid):
+		if len(self.widgets) == 1:
+			self.window.destroy()
+		else:
+			nb = self.xml.get_widget('notebook')
+			nb.remove_page(nb.get_current_page())
+			del self.plugin.windows[self.account]['chats'][jid]
+			del self.users[jid]
+			del self.nb_unread[jid]
+			del self.widgets[jid]
+			del self.tagIn[jid]
+			del self.tagOut[jid]
+			del self.tagStatus[jid]
+			if len(self.widgets) == 1:
+				nb.set_show_tabs(False)
 
 	def new_user(self, user):
 		self.nb_unread[user.jid] = 0
@@ -430,6 +435,8 @@ class tabbed_chat_Window:
 		vb.show_all()
 		nb = self.xml.get_widget("notebook")
 		nb.append_page(vb)
+		if len(self.widgets) > 1:
+			nb.set_show_tabs(True)
 
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
@@ -468,17 +475,7 @@ class tabbed_chat_Window:
 		st = "1234567890"
 		if event.keyval == gtk.keysyms.Escape:
 			jid = self.get_active_jid()
-			if len(self.widgets) == 1:
-				widget.get_toplevel().destroy()
-			else:
-				nb.remove_page(nb.get_current_page())
-				del self.plugin.windows[self.account]['chats'][jid]
-				del self.users[jid]
-				del self.nb_unread[jid]
-				del self.widgets[jid]
-				del self.tagIn[jid]
-				del self.tagOut[jid]
-				del self.tagStatus[jid]
+			self.remove_tab(jid)
 		elif event.string and event.string in st \
 			and (event.state & gtk.gdk.MOD1_MASK):
 			nb.set_current_page(st.index(event.string))
