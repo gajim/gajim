@@ -10,11 +10,14 @@ DIRS		= `$(FIND) -exec dirname {} \; | sort -u`
 FIND_LIB	= find -regex '.*\.\(so\)'
 FILES_LIB	= `$(FIND_LIB)`
 
+LANGS		= fr pt_BR
 SCRIPTS = \
 	scripts/gajim
 
 all:
-	msgfmt Messages/fr/LC_MESSAGES/gajim.po -o Messages/fr/LC_MESSAGES/gajim.mo
+	for l in $(LANGS) ; do \
+		msgfmt Messages/$$l/LC_MESSAGES/gajim.po -o Messages/$$l/LC_MESSAGES/gajim.mo; \
+	done
 	$(foreach sdir, $(MODULES), make -C $(sdir) all;)
 
 clean:
