@@ -84,12 +84,13 @@ class plugin:
 					status = string.replace(status, '\n', '\\n')
 					if lognotsep == 1:
 						fic = open(LOGPATH + "notify.log", "a")
-						fic.write("%s:%s:%s:%s\n" % (tim, ev[2][0], \
+						fic.write("%s:%s:%s:%s\n" % (tim, ev[2][0] + '/' + ev[2][3], \
 							ev[2][1], status))
 						fic.close()
 					if lognotusr == 1:
+						print jid
 						fic = open(LOGPATH + jid, "a")
-						fic.write("%s:%s:%s:%s\n" % (tim, jid, \
+						fic.write("%s:%s:%s:%s\n" % (tim, ev[2][0] + '/' + ev[2][3], \
 							ev[2][1], status))
 						fic.close()
 				elif ev[0] == 'MSG':
@@ -104,6 +105,17 @@ class plugin:
 					jid = string.split(ev[2][0], '/')[0]
 					fic = open(LOGPATH + jid, "a")
 					fic.write("%s:sent:%s\n" % (tim, msg))
+					fic.close()
+				elif ev[0] == 'GC_MSG':
+					msg = string.replace(ev[2][1], '\n', '\\n')
+					jids = string.split(ev[2][0], '/')
+					jid = jids[0]
+					nick = ''
+					if len(jids) > 1:
+						nick = string.split(ev[2][0], '/')[1]
+					fic = open(LOGPATH + jid, "a")
+					t = time.mktime(ev[2][2])
+					fic.write("%s:recv:%s:%s\n" % (t, nick, msg))
 					fic.close()
 			time.sleep(0.1)
 
@@ -121,7 +133,7 @@ class plugin:
 		self.queueIN = quIN
 		self.queueOUT = quOUT
 		quOUT.put(('REG_MESSAGE', 'logger', ['CONFIG', 'NOTIFY', 'MSG', \
-			'MSGSENT', 'QUIT']))
+			'MSGSENT', 'GC_MSG', 'QUIT']))
 		quOUT.put(('ASK_CONFIG', None, ('Logger', 'Logger', {\
 			'lognotsep':1, 'lognotusr':1})))
 		self.config = self.wait('CONFIG')
