@@ -187,9 +187,9 @@ class tabbed_chat_Window:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat', APP)
 		self.xmls = {}
 		self.xmls[user.jid] = self.xml
-		conversation = self.xml.get_widget('conversation')
+		conversation = self.xmls[user.jid].get_widget('conversation')
 		buffer_conv = conversation.get_buffer()
-		message = self.xml.get_widget('message')
+		message = self.xmls[user.jid].get_widget('message')
 		message.grab_focus()
 		buffer_msg = message.get_buffer()
 		end_iter = buffer_conv.get_end_iter()
@@ -210,14 +210,14 @@ class tabbed_chat_Window:
 			self.on_chat_key_press_event)
 		self.xml.signal_connect('on_notebook_switch_page', \
 			self.on_notebook_switch_page)
-		self.xml.signal_connect('on_history_clicked', self.on_history)
-		self.xml.signal_connect('on_clear_clicked', self.on_clear)
-		self.xml.signal_connect('on_close_clicked', self.on_close_clicked)
-		self.xml.signal_connect('on_msg_key_press_event', \
+		self.xmls[user.jid].signal_connect('on_history_clicked', self.on_history)
+		self.xmls[user.jid].signal_connect('on_clear_clicked', self.on_clear)
+		self.xmls[user.jid].signal_connect('on_close_clicked', self.on_close_clicked)
+		self.xmls[user.jid].signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
-		self.xml.signal_connect('on_button_contact_clicked', \
+		self.xmls[user.jid].signal_connect('on_button_contact_clicked', \
 			self.on_button_contact_clicked)
-		self.xml.get_widget('button_contact').set_use_underline(False)
+		self.xmls[user.jid].get_widget('button_contact').set_use_underline(False)
 		self.tagIn = {user.jid: buffer_conv.create_tag("incoming")}
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn[user.jid].set_property("foreground", color)
