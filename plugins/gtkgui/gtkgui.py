@@ -791,6 +791,13 @@ class roster:
 		if not self.l_contact.has_key(jid):
 			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub')
 			self.add_user(user1)
+	
+	def init_tree(self):
+		self.treestore.clear()
+		#l_contact = {jid:{'user':_, 'iter':[iter1, ...]]
+		self.l_contact = {}
+		#l_group = {name:iter}
+		self.l_group = {}
 
 	def on_treeview_event(self, widget, event):
 		if (event.button == 3) & (event.type == gtk.gdk.BUTTON_PRESS):
@@ -824,7 +831,8 @@ class roster:
 			self.plugin.sleeper = None
 			for j in self.l_contact.keys():
 				self.chg_status(j, 'offline', 'Disconnected')
-		else:
+		elif self.connected == 0:
+			self.tree
 			self.connected = 1
 			self.plugin.sleeper = common.sleepy.Sleepy(\
 				self.plugin.autoawaytime*60, self.plugin.autoxatime*60)
@@ -915,12 +923,10 @@ class roster:
 		self.window =  self.xml.get_widget('Gajim')
 		self.tree = self.xml.get_widget('treeview')
 		self.plugin = plug
+		self.connected = 0
 		#(icon, name, jid, editable, background color, show_icon)
 		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, gobject.TYPE_BOOLEAN, str, gobject.TYPE_BOOLEAN)
-		#l_contact = {jid:{'user':_, 'iter':[iter1, ...]]
-		self.l_contact = {}
-		#l_group = {name:iter}
-		self.l_group = {}
+		self.init_tree()
 		self.iconstyle = self.cfgParser.GtkGui_iconstyle
 		if not self.iconstyle:
 			self.iconstyle = 'sun'
@@ -1004,6 +1010,7 @@ class plugin:
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
 			if ev[0] == 'ROSTER':
+				self.r.init_tree()
 				self.r.mklists(ev[1])
 				self.r.draw_roster()
 			elif ev[0] == 'NOTIFY':
