@@ -24,8 +24,9 @@ import os
 
 log = logging.getLogger('common.options')
 
-class OptionsParser:
+class OptionsParser(ConfigParser.ConfigParser):
 	def __init__(self, fname):
+		ConfigParser.ConfigParser.__init__(self)
 		self.__fname = os.path.expanduser(fname)
 	# END __init__
 
@@ -36,13 +37,12 @@ class OptionsParser:
 			print 'error cannot open file %s\n' % (self.__fname);
 			return
     
-		self.__config = ConfigParser.ConfigParser()
-		self.__config.readfp(self.__fd)
-		self.__sections = self.__config.sections()
+		self.readfp(self.__fd)
+		self.__sections = self.sections()
 
 		for section in self.__sections:
-			for option in self.__config.options(section):
-				value = self.__config.get(section, option, 1)
+			for option in self.options(section):
+				value = self.get(section, option, 1)
 				setattr(self, str(section) + '_' + \
 					str(option), value)
 	# END parseCfgFile
@@ -63,7 +63,7 @@ class OptionsParser:
 
 	def writeCfgFile(self):
 		try:
-			self.__config.write(open(self.__fname, 'w'))
+			self.write(open(self.__fname, 'w'))
 		except:
 			log.debug("Can't write config %s" % self.__fname)
 			return 0

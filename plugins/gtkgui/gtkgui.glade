@@ -619,6 +619,7 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Wed, 10 Dec 2003 22:31:27 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox5">
@@ -637,14 +638,14 @@
 	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	  <child>
-	    <widget class="GtkTreeView" id="account_treeview">
+	    <widget class="GtkTreeView" id="treeview">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="headers_visible">True</property>
 	      <property name="rules_hint">False</property>
 	      <property name="reorderable">False</property>
 	      <property name="enable_search">True</property>
-	      <signal name="button_press_event" handler="on_account_treeview_button_press_event" last_modification_time="Wed, 22 Oct 2003 20:23:24 GMT"/>
+	      <signal name="cursor_changed" handler="on_row_activated" last_modification_time="Wed, 10 Dec 2003 23:14:58 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -681,13 +682,13 @@
 	      <property name="spacing">20</property>
 
 	      <child>
-		<widget class="GtkButton" id="account_new_button">
+		<widget class="GtkButton" id="new_button">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label">gtk-new</property>
 		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <signal name="clicked" handler="on_account_new_clicked" last_modification_time="Wed, 22 Oct 2003 20:21:31 GMT"/>
+		  <signal name="clicked" handler="on_new_clicked" last_modification_time="Thu, 11 Dec 2003 17:06:22 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -697,13 +698,14 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="account_delete_button">
+		<widget class="GtkButton" id="delete_button">
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>
 		  <property name="can_focus">True</property>
 		  <property name="label">gtk-delete</property>
 		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <signal name="clicked" handler="on_delete_clicked" last_modification_time="Thu, 11 Dec 2003 17:06:43 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -713,11 +715,12 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="account_modify_button">
+		<widget class="GtkButton" id="modify_button">
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>
 		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <signal name="clicked" handler="on_modify_clicked" last_modification_time="Thu, 11 Dec 2003 17:07:02 GMT"/>
 
 		  <child>
 		    <widget class="GtkAlignment" id="alignment1">
@@ -914,12 +917,67 @@ David Ferlier (david@yazzy.org)</property>
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Thu, 11 Dec 2003 17:04:49 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox7">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
       <property name="spacing">0</property>
+
+      <child>
+	<widget class="GtkHBox" id="hbox23">
+	  <property name="border_width">5</property>
+	  <property name="visible">True</property>
+	  <property name="homogeneous">False</property>
+	  <property name="spacing">7</property>
+
+	  <child>
+	    <widget class="GtkLabel" id="label_name">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Name : </property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkEntry" id="entry_name">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="editable">True</property>
+	      <property name="visibility">True</property>
+	      <property name="max_length">0</property>
+	      <property name="text" translatable="yes"></property>
+	      <property name="has_frame">True</property>
+	      <property name="invisible_char" translatable="yes">*</property>
+	      <property name="activates_default">False</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">True</property>
+	      <property name="fill">True</property>
+	    </packing>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">2</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
 
       <child>
 	<widget class="GtkNotebook" id="notebook1">
@@ -967,7 +1025,7 @@ David Ferlier (david@yazzy.org)</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="jabberid_entry">
+		<widget class="GtkEntry" id="entry_jid">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
@@ -1012,7 +1070,7 @@ David Ferlier (david@yazzy.org)</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="password_entry">
+		<widget class="GtkEntry" id="entry_password">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
@@ -1057,7 +1115,7 @@ David Ferlier (david@yazzy.org)</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="ressource_entry">
+		<widget class="GtkEntry" id="entry_ressource">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
@@ -1292,28 +1350,40 @@ David Ferlier (david@yazzy.org)</property>
       </child>
 
       <child>
-	<widget class="GtkAlignment" id="alignment3">
-	  <property name="border_width">10</property>
+	<widget class="GtkHButtonBox" id="hbuttonbox6">
+	  <property name="border_width">7</property>
 	  <property name="visible">True</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xscale">0.2</property>
-	  <property name="yscale">1</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+	  <property name="spacing">20</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button7">
+	    <widget class="GtkButton" id="button_save">
 	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-save</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <signal name="clicked" handler="on_save_clicked" last_modification_time="Thu, 11 Dec 2003 17:13:15 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="button_close">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <signal name="clicked" handler="gtk_widget_destroy" last_modification_time="Thu, 11 Dec 2003 17:13:05 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">False</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
 	</packing>
       </child>
     </widget>

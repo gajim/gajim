@@ -30,6 +30,7 @@ import Queue
 import common.optparser
 CONFPATH = "~/.gajimrc"
 Wbrowser = 0
+Waccounts = 0
 
 class user:
 	def __init__(self, *args):
@@ -87,13 +88,133 @@ class about:
 		self.Wabout = self.xml.get_widget("About")
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
-class accounts:
+class account_pref:
 	def delete_event(self, widget):
 		self.window.destroy()
-		
-	def __init__(self):
-		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Accounts')
+	
+	def init_account(self, infos):
+		if infos.has_key('name'):
+			self.xml.get_widget("entry_name").set_text(infos['name'])
+		if infos.has_key('jid'):
+			self.xml.get_widget("entry_jid").set_text(infos['jid'])
+		if infos.has_key('password'):
+			self.xml.get_widget("entry_password").set_text(infos['password'])
+		if infos.has_key('ressource'):
+			self.xml.get_widget("entry_ressource").set_text(infos['ressource'])
+
+	def on_save_clicked(self, widget):
+#		accountsStr = self.cfgParser.Profile_accounts
+#		accounts = string.split(accountsStr, ' ')
+		name = self.xml.get_widget("entry_name").get_text()
+		if (name == ''):
+			return 0
+		if self.mod:
+			if name != self.acc:
+				self.cfgParser.remove_section(self.acc)
+				self.accs.accounts.remove(self.acc)
+				self.cfgParser.add_section(name)
+				self.accs.accounts.append(name)
+				accountsStr = string.join(self.accs.accounts)
+				self.cfgParser.set('Profile', 'accounts', accountsStr)
+		else:
+			if name in self.accs.accounts:
+				return 0
+			else:
+				self.cfgParser.add_section(name)
+				self.accs.accounts.append(name)
+				accountsStr = string.join(self.accs.accounts)
+				self.cfgParser.set('Profile', 'accounts', accountsStr)
+		(login, hostname) = string.split(self.xml.get_widget("entry_jid").get_text(), '@')
+		self.cfgParser.set(name, 'name', login)
+		self.cfgParser.set(name, 'hostname', hostname)
+		self.cfgParser.set(name, 'password', self.xml.get_widget("entry_password").get_text())
+		self.cfgParser.set(name, 'ressource', self.xml.get_widget("entry_ressource").get_text())
+		self.cfgParser.writeCfgFile()
+		self.cfgParser.parseCfgFile()
+		self.accs.init_accounts()
+	
+	#info must be a dictionnary
+	def __init__(self, accs, infos = {}):
+		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Account')
+		self.window = self.xml.get_widget("Account")
+		self.cfgParser = accs.cfgParser
+		self.accs = accs
+		if infos:
+			self.mod = TRUE
+			self.acc = infos['name']
+			self.init_account(infos)
+		else:
+			self.mod = FALSE
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_save_clicked', self.on_save_clicked)
+
+class accounts:
+	def delete_event(self, widget):
+		global Waccounts
+		Waccounts = 0
+		self.window.destroy()
+		
+	def init_accounts(self):
+		self.model.clear()
+		for account in self.accounts:
+			iter = self.model.append()
+			self.model.set(iter, 0, account, 1, self.cfgParser.__getattr__("%s" % account+"_hostname"))
+
+	def on_row_activated(self, widget):
+		self.modButt.set_sensitive(TRUE)
+		self.delButt.set_sensitive(TRUE)
+
+	def on_new_clicked(self, widget):
+		account_pref(self)
+
+	def on_delete_clicked(self, widget):
+		sel = self.treeview.get_selection()
+		(mod, iter) = sel.get_selected()
+		account = self.model.get_value(iter, 0)
+		self.cfgParser.remove_section(account)
+		self.accounts.remove(account)
+		accountsStr = string.join(self.accounts)
+		self.cfgParser.set('Profile', 'accounts', accountsStr)
+		self.cfgParser.writeCfgFile()
+		self.cfgParser.parseCfgFile()
+		self.init_accounts()
+
+	def on_modify_clicked(self, widget):
+		infos = {}
+		sel = self.treeview.get_selection()
+		(mod, iter) = sel.get_selected()
+		account = self.model.get_value(iter, 0)
+		infos['name'] = account
+		infos['jid'] = self.cfgParser.__getattr__("%s" % account+"_name") + \
+			'@' +  self.cfgParser.__getattr__("%s" % account+"_hostname")
+		infos['password'] = self.cfgParser.__getattr__("%s" % account+"_password")
+		infos['ressource'] = self.cfgParser.__getattr__("%s" % account+"_ressource")
+		account_pref(self, infos)
+		
+	def __init__(self, accounts):
+		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
+		self.cfgParser.parseCfgFile()
+		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Accounts')
+		self.window = self.xml.get_widget("Accounts")
+		self.treeview = self.xml.get_widget("treeview")
+		self.modButt = self.xml.get_widget("modify_button")
+		self.delButt = self.xml.get_widget("delete_button")
+		self.model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		self.treeview.set_model(self.model)
+		#columns
+		renderer = gtk.CellRendererText()
+		renderer.set_data('column', 0)
+		self.treeview.insert_column_with_attributes(-1, 'Name', renderer, text=0)
+		renderer = gtk.CellRendererText()
+		renderer.set_data('column', 1)
+		self.treeview.insert_column_with_attributes(-1, 'Server', renderer, text=1)
+		self.accounts = accounts
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_row_activated', self.on_row_activated)
+		self.xml.signal_connect('on_new_clicked', self.on_new_clicked)
+		self.xml.signal_connect('on_delete_clicked', self.on_delete_clicked)
+		self.xml.signal_connect('on_modify_clicked', self.on_modify_clicked)
+		self.init_accounts()
 
 class confirm:
 	def delete_event(self, widget):
@@ -467,7 +588,9 @@ class roster:
 		window_confirm = confirm(self, iter)
 
 	def on_status_changed(self, widget):
-		self.queueOUT.put(('STATUS',(widget.name, "Account1")))
+		accountsStr = self.cfgParser.Profile_accounts
+		accounts = string.split(accountsStr, ' ')
+		self.queueOUT.put(('STATUS',(widget.name, accounts[0])))
 		if (not self.showOffline) and widget.name == 'offline':
 			self.treestore.clear()
 
@@ -478,7 +601,9 @@ class roster:
 		window_about = about()
 
 	def on_accounts(self, widget):
-		window_accounts = accounts()
+		global Waccounts
+		if not Waccounts:
+			Waccounts = accounts(self.accounts)
 	
 	def on_quit(self, widget):
 		self.queueOUT.put(('QUIT',''))
@@ -572,6 +697,8 @@ class roster:
 		self.optionmenu.set_history(6)
 		self.tab_messages = {}
 		self.tab_queues = {}
+		accountsStr = self.cfgParser.Profile_accounts
+		self.accounts = string.split(accountsStr, ' ')
 
 		showOffline = self.cfgParser.GtkGui_showoffline
 		if showOffline:
