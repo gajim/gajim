@@ -2420,7 +2420,7 @@ class systray:
 				jid = self.jids[0][1]
 				if self.plugin.windows[account]['gc'].has_key(jid):
 					self.plugin.windows[account]['gc'][jid].window.present()
-				if self.plugin.windows[account]['chats'].has_key(jid):
+				elif self.plugin.windows[account]['chats'].has_key(jid):
 					self.plugin.windows[account]['chats'][jid].window.present()
 				else:
 					self.plugin.roster.new_chat(
