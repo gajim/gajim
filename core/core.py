@@ -66,7 +66,8 @@ class GajimCore:
 			#connexions {con: name, ...}
 			self.connexions = {}
 			for a in self.accounts:
-				self.connected[a] = 0
+				self.connected[a] = 0 #0:offline, 1:online, 2:away,
+											 #3:xa, 4:dnd, 5:invisible
 			self.myVCardID = []
 			self.loadPlugins(self.cfgParser.tab['Core']['modules'])
 		else:
@@ -247,8 +248,7 @@ class GajimCore:
 		"""Called when we are disconnected"""
 		log.debug("disconnectedCB")
 		if self.connexions.has_key(con):
-			if self.connected[self.connexions[con]] == 1:
-				self.connected[self.connexions[con]] = 0
+			self.connected[self.connexions[con]] = 0
 			self.hub.sendPlugin('STATUS', self.connexions[con], 'offline')
 	# END disconenctedCB
 
@@ -357,7 +357,7 @@ class GajimCore:
 				self.hub.unregister(ev[2][0])
 				if ev[2][1]:
 					for con in self.connexions.keys():
-						if self.connected[self.connexions[con]] == 1:
+						if self.connected[self.connexions[con]]:
 							self.connected[self.connexions[con]] = 0
 							con.disconnect()
 					self.hub.sendPlugin('QUIT', None, ())
@@ -394,7 +394,7 @@ class GajimCore:
 					for a in accts:
 						self.cfgParser.tab[a] = ev[2][1][a]
 						if not a in self.connected.keys():
-							self.connected[a]= 0
+							self.connected[a] = 0
 				else:
 					self.cfgParser.tab[ev[2][0]] = ev[2][1]
 				self.cfgParser.writeCfgFile()
@@ -404,6 +404,9 @@ class GajimCore:
 				if (ev[2][0] != 'offline') and (self.connected[ev[1]] == 0):
 					con = self.connect(ev[1])
 					if self.connected[ev[1]]:
+						statuss = ['offline', 'online', 'away', 'xa', 'dnd', \
+								'invisible']
+						self.connected[ev[1]] = statuss.index(ev[2][0])
 						#send our presence
 						type = 'available'
 						if ev[2][0] == 'invisible':
@@ -420,11 +423,14 @@ class GajimCore:
 						iq.setID(id)
 						con.send(iq)
 						self.myVCardID.append(id)
-				elif (ev[2][0] == 'offline') and (self.connected[ev[1]] == 1):
+				elif (ev[2][0] == 'offline') and (self.connected[ev[1]]):
 					self.connected[ev[1]] = 0
 					con.disconnect()
 					self.hub.sendPlugin('STATUS', ev[1], 'offline')
-				elif ev[2][0] != 'offline' and self.connected[ev[1]] == 1:
+				elif ev[2][0] != 'offline' and self.connected[ev[1]]:
+					statuss = ['offline', 'online', 'away', 'xa', 'dnd', \
+							'invisible']
+					self.connected[ev[1]] = statuss.index(ev[2][0])
 					type = 'available'
 					if ev[2][0] == 'invisible':
 						type = 'invisible'
@@ -526,7 +532,7 @@ class GajimCore:
 				self.connected[ev[2]] = self.connected[ev[1]]
 				del self.connected[ev[1]]
 				if con:
-					self.connexions[con] = self.connected[ev[2]]
+					self.connexions[con] = ev[2]
 			#('ASK_VCARD', account, jid)
 			elif ev[0] == 'ASK_VCARD':
 				iq = common.jabber.Iq(to=ev[2], type="get")
@@ -587,7 +593,7 @@ class GajimCore:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':
 			for con in self.connexions:
-				if self.connected[self.connexions[con]] == 1:
+				if self.connected[self.connexions[con]]:
 					con.process(1)
 			#remove connexion that have been broken
 			for acc in self.connected:
