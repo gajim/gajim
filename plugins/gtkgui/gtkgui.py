@@ -335,7 +335,13 @@ class tabbed_chat_Window:
 			self.plugin.windows['logs'][jid] = log_Window(self.plugin, jid)
 	
 	def on_notebook_switch_page(self, nb, page, page_num):
-		jid = self.get_active_jid()
+		child = nb.get_nth_page(page_num)
+		jid = ''
+		for j in self.xmls:
+			c = self.xmls[j].get_widget("vbox_tab")
+			if c == child:
+				jid = j
+				break
 		if self.nb_unread[jid] > 0:
 			self.nb_unread[jid] = 0
 			self.redraw_tab(jid)
