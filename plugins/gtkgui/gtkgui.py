@@ -71,9 +71,9 @@ from config import *
 
 def usage():
 	#TODO: use i18n
-	print "usage :", sys.argv[0], ' [OPTION]'
-	print "  -p\tport on which the sock plugin listen"
-	print "  -h, --help\tdisplay this help and exit"
+	print 'usage :', sys.argv[0], ' [OPTION]'
+	print '  -p\tport on which the sock plugin listen'
+	print '  -h, --help\tdisplay this help and exit'
 
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
@@ -675,7 +675,6 @@ class tabbed_chat_window:
 		menu.show_all()
 		menu.reposition()
 
-
 	def hyperlink_handler(self, texttag, widget, event, iter, kind):
 		if event.type == gtk.gdk.BUTTON_RELEASE:
 			begin_iter = iter.copy()
@@ -697,8 +696,12 @@ class tabbed_chat_window:
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
+		print text
+		
 		if text in self.plugin.emoticons.keys():
-			#it's a smiley
+			#it's an emoticon
+			print 'emoticon:', text
+			text = text.upper() # make it CAPS (emoticons keys are are CAPS)
 			end_iter = conversation_buffer.get_end_iter()
 			conversation_buffer.insert_pixbuf(end_iter, \
 				self.plugin.emoticons[text])
@@ -706,9 +709,11 @@ class tabbed_chat_window:
 		elif text.startswith('mailto:'):
 			#it's a mail
 			tag = 'mail'
+			print tag
 		elif self.plugin.sth_at_sth_dot_sth_re.match(text): # returns match object or None
 			#it's a mail
 			tag = 'mail'
+			print tag
 		elif text.startswith('*') and text.endswith('*'):
 			#it's a bold text
 			tag = 'bold'
@@ -717,13 +722,16 @@ class tabbed_chat_window:
 			#it's an italic text
 			tag = 'italic'
 			text = text[1:-1] # remove / /
+			print tag
 		elif text.startswith('_') and text.endswith('_'):
 			#it's an underlined text
 			tag = 'underline'
 			text = text[1:-1] # remove _ _
+			print tag
 		else:
 			#it's a url
 			tag = 'url'
+			print tag
 
 		end_iter = conversation_buffer.get_end_iter()
 		conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
@@ -772,10 +780,10 @@ class tabbed_chat_window:
 		index = 0
 		
 		if self.plugin.config['useemoticons']: # search for emoticons & urls
-			my_re = sre.compile(self.plugin.emot_and_formatting_and_url_pattern, sre.IGNORECASE)
+			my_re = sre.compile(self.plugin.emot_and_basic_pattern, sre.IGNORECASE)
 			iterator = my_re.finditer(otext)
 		else: # search for just urls
-			my_re = sre.compile(self.plugin.formatting_and_url_pattern, sre.IGNORECASE)
+			my_re = sre.compile(self.plugin.basic_pattern, sre.IGNORECASE)
 			iterator = my_re.finditer(otext)
 		for match in iterator:
 			start, end = match.span()
@@ -3092,7 +3100,7 @@ class plugin:
 				os._exit(1)
 		pidp, r = os.waitpid(pid, os.WNOHANG)
 		if pidp == 0:
-			gtk.timeout_add(10000, self.play_timeout, pid)
+			gobject.timeout_add(10000, self.play_timeout, pid)
 
 	def send(self, event, account, data):
 		self.queueOUT.put((event, account, data))
@@ -3502,27 +3510,29 @@ class plugin:
 		# \s matches any whitespace character
 		# \w any alphanumeric character
 		# \W any non-alphanumeric character
+		# \b means word boundary. This is a zero-width assertion that
+		# 					matches only at the beginning or end of a word.
+		#
 		# * means 0 or more times
 		# + means 1 or more times
-		# ? means 1 or 0 times
+		# ? means 0 or 1 time
 		# | means or
 		# [^*] anything but '*'   (inside [] you don't have to escape metachars)
 		# [^\s*] anything but whitespaces and '*'
-		# formatting_and_url_pattern is one string literal.
+		# basic_pattern is one string literal.
 		# I've put spaces to make the regexp look better.
-		links = r'http://\S+|' 'https://\S+|' 'news://\S+|' 'ftp://\S+|' 'ed2k://\S+|' 'www\.\S+|' 'ftp\.\S+'
+		links = r'\bhttp://\S+|' r'\bhttps://\S+|' r'\bnews://\S+|' r'\bftp://\S+|' r'\bed2k://\S+|' r'\bwww\.\S+|' r'\bftp\.\S+|'
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
-		mail = r'mailto:\S+' '\S+@\S+\.\S+'
+		mail = r'\bmailto:\S+|' r'\b\S+@\S+\.\S+'
 
 		#detects eg. *b* *bold* *bold bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold *
-		formatting = '\*[^\s*]([^*]*[^\s*])?\*|' '/[^\s*]([^/]*[^\s*])?/|' '_\[^\s*]([^_]*[^\s*])?_'
+		formatting = r'\b\*[^\s*]([^*]*[^\s*])?\*|' r'\b/[^\s*]([^/]*[^\s*])?/|' r'\b_[^\s*]([^_]*[^\s*])?_'
 
 		if formatting_on:
-			self.formatting_and_url_pattern = links + '|' + mail + '|' + formatting
+			self.basic_pattern = links + mail + '|' + formatting
 		else:
-			self.formatting_and_url_pattern = links + '|' + mail
-
+			self.basic_pattern = links + mail
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
@@ -3573,7 +3583,7 @@ class plugin:
 			'usetabbedchat': 1,\
 			'print_time': 'always',\
 			'useemoticons': 1,\
-			'emoticons':':-)\tplugins/gtkgui/emoticons/smile.png\t(@)\tplugins/gtkgui/emoticons/pussy.png\t8)\tplugins/gtkgui/emoticons/coolglasses.png\t:(\tplugins/gtkgui/emoticons/unhappy.png\t:)\tplugins/gtkgui/emoticons/smile.png\t(})\tplugins/gtkgui/emoticons/hugleft.png\t:$\tplugins/gtkgui/emoticons/blush.png\t(Y)\tplugins/gtkgui/emoticons/yes.png\t:-@\tplugins/gtkgui/emoticons/angry.png\t:-D\tplugins/gtkgui/emoticons/biggrin.png\t(U)\tplugins/gtkgui/emoticons/brheart.png\t(F)\tplugins/gtkgui/emoticons/flower.png\t:-[\tplugins/gtkgui/emoticons/bat.png\t:>\tplugins/gtkgui/emoticons/biggrin.png\t(T)\tplugins/gtkgui/emoticons/phone.png\t(l)\tplugins/gtkgui/emoticons/heart.png\t:-S\tplugins/gtkgui/emoticons/frowing.png\t:-P\tplugins/gtkgui/emoticons/tongue.png\t(h)\tplugins/gtkgui/emoticons/coolglasses.png\t(D)\tplugins/gtkgui/emoticons/drink.png\t:-O\tplugins/gtkgui/emoticons/oh.png\t(f)\tplugins/gtkgui/emoticons/flower.png\t(C)\tplugins/gtkgui/emoticons/coffee.png\t:-o\tplugins/gtkgui/emoticons/oh.png\t({)\tplugins/gtkgui/emoticons/hugright.png\t(*)\tplugins/gtkgui/emoticons/star.png\tB-)\tplugins/gtkgui/emoticons/coolglasses.png\t(z)\tplugins/gtkgui/emoticons/boy.png\t:-d\tplugins/gtkgui/emoticons/biggrin.png\t(E)\tplugins/gtkgui/emoticons/mail.png\t(N)\tplugins/gtkgui/emoticons/no.png\t(p)\tplugins/gtkgui/emoticons/photo.png\t(K)\tplugins/gtkgui/emoticons/kiss.png\t(r)\tplugins/gtkgui/emoticons/rainbow.png\t:-|\tplugins/gtkgui/emoticons/stare.png\t:-s\tplugins/gtkgui/emoticons/frowing.png\t:-p\tplugins/gtkgui/emoticons/tongue.png\t(c)\tplugins/gtkgui/emoticons/coffee.png\t(e)\tplugins/gtkgui/emoticons/mail.png\t;-)\tplugins/gtkgui/emoticons/wink.png\t;-(\tplugins/gtkgui/emoticons/cry.png\t(6)\tplugins/gtkgui/emoticons/devil.png\t:o\tplugins/gtkgui/emoticons/oh.png\t(L)\tplugins/gtkgui/emoticons/heart.png\t(w)\tplugins/gtkgui/emoticons/brflower.png\t:d\tplugins/gtkgui/emoticons/biggrin.png\t(Z)\tplugins/gtkgui/emoticons/boy.png\t(u)\tplugins/gtkgui/emoticons/brheart.png\t:|\tplugins/gtkgui/emoticons/stare.png\t(P)\tplugins/gtkgui/emoticons/photo.png\t:O\tplugins/gtkgui/emoticons/oh.png\t(R)\tplugins/gtkgui/emoticons/rainbow.png\t(t)\tplugins/gtkgui/emoticons/phone.png\t(i)\tplugins/gtkgui/emoticons/lamp.png\t;)\tplugins/gtkgui/emoticons/wink.png\t;(\tplugins/gtkgui/emoticons/cry.png\t:p\tplugins/gtkgui/emoticons/tongue.png\t(H)\tplugins/gtkgui/emoticons/coolglasses.png\t:s\tplugins/gtkgui/emoticons/frowing.png\t;\'-(\tplugins/gtkgui/emoticons/cry.png\t:-(\tplugins/gtkgui/emoticons/unhappy.png\t:-)\tplugins/gtkgui/emoticons/smile.png\t(b)\tplugins/gtkgui/emoticons/beer.png\t8-)\tplugins/gtkgui/emoticons/coolglasses.png\t(B)\tplugins/gtkgui/emoticons/beer.png\t(W)\tplugins/gtkgui/emoticons/brflower.png\t:D\tplugins/gtkgui/emoticons/biggrin.png\t(y)\tplugins/gtkgui/emoticons/yes.png\t(8)\tplugins/gtkgui/emoticons/music.png\t:@\tplugins/gtkgui/emoticons/angry.png\tB)\tplugins/gtkgui/emoticons/coolglasses.png\t:-$\tplugins/gtkgui/emoticons/blush.png\t:\'(\tplugins/gtkgui/emoticons/cry.png\t(n)\tplugins/gtkgui/emoticons/no.png\t(k)\tplugins/gtkgui/emoticons/kiss.png\t:->\tplugins/gtkgui/emoticons/biggrin.png\t:[\tplugins/gtkgui/emoticons/bat.png\t(I)\tplugins/gtkgui/emoticons/lamp.png\t:P\tplugins/gtkgui/emoticons/tongue.png\t(%)\tplugins/gtkgui/emoticons/cuffs.png\t(d)\tplugins/gtkgui/emoticons/drink.png\t:S\tplugins/gtkgui/emoticons/frowing.png\t:(S)\tplugins/gtkgui/emoticons/moon.png',\
+			'emoticons': ':-)\tplugins/gtkgui/emoticons/smile.png\t(@)\tplugins/gtkgui/emoticons/pussy.png\t8)\tplugins/gtkgui/emoticons/coolglasses.png\t:(\tplugins/gtkgui/emoticons/unhappy.png\t:)\tplugins/gtkgui/emoticons/smile.png\t(})\tplugins/gtkgui/emoticons/hugleft.png\t:$\tplugins/gtkgui/emoticons/blush.png\t(Y)\tplugins/gtkgui/emoticons/yes.png\t:-@\tplugins/gtkgui/emoticons/angry.png\t:-D\tplugins/gtkgui/emoticons/biggrin.png\t(U)\tplugins/gtkgui/emoticons/brheart.png\t(F)\tplugins/gtkgui/emoticons/flower.png\t:-[\tplugins/gtkgui/emoticons/bat.png\t:>\tplugins/gtkgui/emoticons/biggrin.png\t(T)\tplugins/gtkgui/emoticons/phone.png\t:-S\tplugins/gtkgui/emoticons/frowing.png\t:-P\tplugins/gtkgui/emoticons/tongue.png\t(H)\tplugins/gtkgui/emoticons/coolglasses.png\t(D)\tplugins/gtkgui/emoticons/drink.png\t:-O\tplugins/gtkgui/emoticons/oh.png\t(C)\tplugins/gtkgui/emoticons/coffee.png\t({)\tplugins/gtkgui/emoticons/hugright.png\t(*)\tplugins/gtkgui/emoticons/star.png\tB-)\tplugins/gtkgui/emoticons/coolglasses.png\t(Z)\tplugins/gtkgui/emoticons/boy.png\t(E)\tplugins/gtkgui/emoticons/mail.png\t(N)\tplugins/gtkgui/emoticons/no.png\t(P)\tplugins/gtkgui/emoticons/photo.png\t(K)\tplugins/gtkgui/emoticons/kiss.png\t(R)\tplugins/gtkgui/emoticons/rainbow.png\t:-|\tplugins/gtkgui/emoticons/stare.png\t;-)\tplugins/gtkgui/emoticons/wink.png\t;-(\tplugins/gtkgui/emoticons/cry.png\t(6)\tplugins/gtkgui/emoticons/devil.png\t(L)\tplugins/gtkgui/emoticons/heart.png\t(W)\tplugins/gtkgui/emoticons/brflower.png\t:|\tplugins/gtkgui/emoticons/stare.png\t:O\tplugins/gtkgui/emoticons/oh.png\t;)\tplugins/gtkgui/emoticons/wink.png\t;(\tplugins/gtkgui/emoticons/cry.png\t:S\tplugins/gtkgui/emoticons/frowing.png\t;\'-(\tplugins/gtkgui/emoticons/cry.png\t:-(\tplugins/gtkgui/emoticons/unhappy.png\t8-)\tplugins/gtkgui/emoticons/coolglasses.png\t(B)\tplugins/gtkgui/emoticons/beer.png\t:D\tplugins/gtkgui/emoticons/biggrin.png\t(8)\tplugins/gtkgui/emoticons/music.png\t:@\tplugins/gtkgui/emoticons/angry.png\tB)\tplugins/gtkgui/emoticons/coolglasses.png\t:-$\tplugins/gtkgui/emoticons/blush.png\t:\'(\tplugins/gtkgui/emoticons/cry.png\t:->\tplugins/gtkgui/emoticons/biggrin.png\t:[\tplugins/gtkgui/emoticons/bat.png\t(I)\tplugins/gtkgui/emoticons/lamp.png\t:P\tplugins/gtkgui/emoticons/tongue.png\t(%)\tplugins/gtkgui/emoticons/cuffs.png\t(S)\tplugins/gtkgui/emoticons/moon.png',\
 			'soundplayer': 'play',\
 			'sound_first_message_received': 1,\
 			'sound_first_message_received_file': 'sounds/message1.wav',\
@@ -3663,10 +3673,12 @@ class plugin:
 		emoticons_pattern = ''
 		for emoticon in self.emoticons: # travel tru emoticons list
 			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
-			emoticons_pattern += emoticon_escaped + '|'# or is | in regexp
+			emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
 
-		self.emot_and_formatting_and_url_pattern =\
-			emoticons_pattern + self.formatting_and_url_pattern
+		self.emot_and_basic_pattern =\
+			emoticons_pattern + self.basic_pattern
+			
+		print self.emot_and_basic_pattern
 
 		gtk.gdk.threads_enter()
 		self.autoconnect()
