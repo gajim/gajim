@@ -545,7 +545,27 @@ class tabbed_chat_window:
 								index+=l
 								beg = index
 					index+=1
-			conversation_buffer.insert(end_iter, otext[beg:])
+
+			#conversation_buffer.insert(end_iter, otext[beg:])
+
+			linksprefix = ['http://', 'https://', 'news://', 'ftp://', 'mailto:', 'ed2k://', 'www.', 'ftp.']
+			start=0
+			end=0
+			otext_lowered = otext.lower() # make them all small letters
+			for word in otext_lowered.split(): # get each word seperately
+				# word must be larger than the linksprefix items which atm the smaller is 4
+				if len(word) > 4:
+					for travelthru in range(len(linksprefix)): # travel tru linksprefix list
+						# linksprefix[travelthru] is http:// then https:// then news:// etc..
+						if word.startswith(linksprefix[travelthru]):
+							start = otext_lowered.index(word)
+							end = start + len(word)
+							print word, 'is a link and is in otext[%s:%s]' % (start, end)
+							conversation_buffer.insert_with_tags_by_name(end_iter, otext[start:end], 'hyperlink')
+							end_iter = conversation_buffer.get_end_iter()
+							break
+							
+			conversation_buffer.insert(end_iter, otext[end:])
 		
 		#scroll to the end of the textview
 		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
