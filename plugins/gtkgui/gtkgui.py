@@ -568,7 +568,7 @@ class tabbed_chat_window:
 							end_iter = conversation_buffer.get_end_iter()
 							break
 							
-			conversation_buffer.insert(end_iter, otext[end:])
+			conversation_buffer.insert(end_iter, otext[start:])
 		
 		#scroll to the end of the textview
 		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
