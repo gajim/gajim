@@ -1734,101 +1734,35 @@ class roster_Window:
 			self.plugin.windows[account]['browser'] = \
 				browseAgent_Window(self.plugin, account)
 
+	def image_is_ok(self, image):
+		if not os.path.exists(image):
+			return 0
+		img = gtk.Image()
+		try:
+			img.set_from_file(image)
+		except:
+			return 0
+		if img.get_storage_type() == gtk.IMAGE_PIXBUF:
+			pix = img.get_pixbuf()
+		else:
+			return 0
+		if pix.get_width() > 24 or pix.get_height() > 24:
+			return 0
+		return 1
+
 	def mkemoticons(self):
 		"""initialize emoticons array"""
-		emots = {':-)' : 'smile.png',
-					':)' : 'smile.png',
-					';-)' : 'wink.png',
-					';)' : 'wink.png',
-					':-p' : 'tongue.png',
-					':-P' : 'tongue.png',
-					':p' : 'tongue.png',
-					':P' : 'tongue.png',
-					':d' : 'biggrin.png',
-					':D' : 'biggrin.png',
-					':-d' : 'biggrin.png',
-					':-D' : 'biggrin.png',
-					':>' : 'biggrin.png',
-					':->' : 'biggrin.png',
-					':(' : 'unhappy.png',
-					':-(' : 'unhappy.png',
-					';(' : 'cry.png',
-					';-(' : 'cry.png',
-					':\'(' : 'cry.png',
-					';\'-(' : 'cry.png',
-					':-O' : 'oh.png',
-					':-o' : 'oh.png',
-					':O' : 'oh.png',
-					':o' : 'oh.png',
-					':-@' : 'angry.png',
-					':@' : 'angry.png',
-					':-$' : 'blush.png',
-					':$' : 'blush.png',
-					':-|' : 'stare.png',
-					':|' : 'stare.png',
-					':-S' : 'frowing.png',
-					':-s' : 'frowing.png',
-					':S' : 'frowing.png',
-					':s' : 'frowing.png',
-					'B-)' : 'coolglasses.png',
-					'B)' : 'coolglasses.png',
-					'8-)' : 'coolglasses.png',
-					'8)' : 'coolglasses.png',
-					'(H)' : 'coolglasses.png',
-					'(h)' : 'coolglasses.png',
-					':-[' : 'bat.png',
-					':[' : 'bat.png',
-					'(l)' : 'heart.png',
-					'(L)' : 'heart.png',
-					'(u)' : 'brheart.png',
-					'(U)' : 'brheart.png',
-					'(y)' : 'yes.png',
-					'(Y)' : 'yes.png',
-					'(n)' : 'no.png',
-					'(N)' : 'no.png',
-					'(z)' : 'boy.png',
-					'(Z)' : 'boy.png',
-					'(@)' : 'pussy.png',
-					'(})' : 'hugleft.png',
-					'({)' : 'hugright.png',
-					'(6)' : 'devil.png',
-					'(r)' : 'rainbow.png',
-					'(R)' : 'rainbow.png',
-					'(w)' : 'brflower.png',
-					'(W)' : 'brflower.png',
-					'(f)' : 'flower.png',
-					'(F)' : 'flower.png',
-					'(p)' : 'photo.png',
-					'(P)' : 'photo.png',
-					'(t)' : 'phone.png',
-					'(T)' : 'phone.png',
-					'(*)' : 'star.png',
-					'(8)' : 'music.png',
-					'(i)' : 'lamp.png',
-					'(I)' : 'lamp.png',
-					'(b)' : 'beer.png',
-					'(B)' : 'beer.png',
-					'(d)' : 'drink.png',
-					'(D)' : 'drink.png',
-					'(c)' : 'coffee.png',
-					'(C)' : 'coffee.png',
-					'(%)' : 'cuffs.png',
-					'(e)' : 'mail.png',
-					'(E)' : 'mail.png',
-					'(k)' : 'kiss.png',
-					'(K)' : 'kiss.png'
-					}
-		path = 'plugins/gtkgui/emoticons/'
 		self.emoticons = {}
 		self.begin_emot = ""
-		for e in emots:
-			file = path + emots[e]
-			if not os.path.exists(file):
+		split_line = string.split(self.plugin.config['emoticons'], '\t')
+		for i in range(0, len(split_line)/2):
+			file = split_line[2*i+1]
+			if not self.image_is_ok(file):
 				continue
 			pix = gtk.gdk.pixbuf_new_from_file(file)
-			self.emoticons[e] = pix
-			if not e[0] in self.begin_emot:
-				self.begin_emot += e[0]
+			self.emoticons[split_line[2*i]] = pix
+			if not split_line[2*i][0] in self.begin_emot:
+				self.begin_emot += split_line[2*i][0]
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
@@ -2692,6 +2626,7 @@ class plugin:
 			'saveposition': 1,\
 			'mergeaccounts': 0,\
 			'useemoticons': 1,\
+			'emoticons':':-)\tplugins/gtkgui/emoticons/smile.png\t(@)\tplugins/gtkgui/emoticons/pussy.png\t8)\tplugins/gtkgui/emoticons/coolglasses.png\t:(\tplugins/gtkgui/emoticons/unhappy.png\t:)\tplugins/gtkgui/emoticons/smile.png\t(})\tplugins/gtkgui/emoticons/hugleft.png\t:$\tplugins/gtkgui/emoticons/blush.png\t(Y)\tplugins/gtkgui/emoticons/yes.png\t:-@\tplugins/gtkgui/emoticons/angry.png\t:-D\tplugins/gtkgui/emoticons/biggrin.png\t(U)\tplugins/gtkgui/emoticons/brheart.png\t(F)\tplugins/gtkgui/emoticons/flower.png\t:-[\tplugins/gtkgui/emoticons/bat.png\t:>\tplugins/gtkgui/emoticons/biggrin.png\t(T)\tplugins/gtkgui/emoticons/phone.png\t(l)\tplugins/gtkgui/emoticons/heart.png\t:-S\tplugins/gtkgui/emoticons/frowing.png\t:-P\tplugins/gtkgui/emoticons/tongue.png\t(h)\tplugins/gtkgui/emoticons/coolglasses.png\t(D)\tplugins/gtkgui/emoticons/drink.png\t:-O\tplugins/gtkgui/emoticons/oh.png\t(f)\tplugins/gtkgui/emoticons/flower.png\t(C)\tplugins/gtkgui/emoticons/coffee.png\t:-o\tplugins/gtkgui/emoticons/oh.png\t({)\tplugins/gtkgui/emoticons/hugright.png\t(*)\tplugins/gtkgui/emoticons/star.png\tB-)\tplugins/gtkgui/emoticons/coolglasses.png\t(z)\tplugins/gtkgui/emoticons/boy.png\t:-d\tplugins/gtkgui/emoticons/biggrin.png\t(E)\tplugins/gtkgui/emoticons/mail.png\t(N)\tplugins/gtkgui/emoticons/no.png\t(p)\tplugins/gtkgui/emoticons/photo.png\t(K)\tplugins/gtkgui/emoticons/kiss.png\t(r)\tplugins/gtkgui/emoticons/rainbow.png\t:-|\tplugins/gtkgui/emoticons/stare.png\t:-s\tplugins/gtkgui/emoticons/frowing.png\t:-p\tplugins/gtkgui/emoticons/tongue.png\t(c)\tplugins/gtkgui/emoticons/coffee.png\t(e)\tplugins/gtkgui/emoticons/mail.png\t;-)\tplugins/gtkgui/emoticons/wink.png\t;-(\tplugins/gtkgui/emoticons/cry.png\t(6)\tplugins/gtkgui/emoticons/devil.png\t:o\tplugins/gtkgui/emoticons/oh.png\t(L)\tplugins/gtkgui/emoticons/heart.png\t(w)\tplugins/gtkgui/emoticons/brflower.png\t:d\tplugins/gtkgui/emoticons/biggrin.png\t(Z)\tplugins/gtkgui/emoticons/boy.png\t(u)\tplugins/gtkgui/emoticons/brheart.png\t:|\tplugins/gtkgui/emoticons/stare.png\t(P)\tplugins/gtkgui/emoticons/photo.png\t:O\tplugins/gtkgui/emoticons/oh.png\t(R)\tplugins/gtkgui/emoticons/rainbow.png\t(t)\tplugins/gtkgui/emoticons/phone.png\t(i)\tplugins/gtkgui/emoticons/lamp.png\t;)\tplugins/gtkgui/emoticons/wink.png\t;(\tplugins/gtkgui/emoticons/cry.png\t:p\tplugins/gtkgui/emoticons/tongue.png\t(H)\tplugins/gtkgui/emoticons/coolglasses.png\t:s\tplugins/gtkgui/emoticons/frowing.png\t;\'-(\tplugins/gtkgui/emoticons/cry.png\t:-(\tplugins/gtkgui/emoticons/unhappy.png\t:-)\tplugins/gtkgui/emoticons/smile.png\t(b)\tplugins/gtkgui/emoticons/beer.png\t8-)\tplugins/gtkgui/emoticons/coolglasses.png\t(B)\tplugins/gtkgui/emoticons/beer.png\t(W)\tplugins/gtkgui/emoticons/brflower.png\t:D\tplugins/gtkgui/emoticons/biggrin.png\t(y)\tplugins/gtkgui/emoticons/yes.png\t(8)\tplugins/gtkgui/emoticons/music.png\t:@\tplugins/gtkgui/emoticons/angry.png\tB)\tplugins/gtkgui/emoticons/coolglasses.png\t:-$\tplugins/gtkgui/emoticons/blush.png\t:\'(\tplugins/gtkgui/emoticons/cry.png\t(n)\tplugins/gtkgui/emoticons/no.png\t(k)\tplugins/gtkgui/emoticons/kiss.png\t:->\tplugins/gtkgui/emoticons/biggrin.png\t:[\tplugins/gtkgui/emoticons/bat.png\t(I)\tplugins/gtkgui/emoticons/lamp.png\t:P\tplugins/gtkgui/emoticons/tongue.png\t(%)\tplugins/gtkgui/emoticons/cuffs.png\t(d)\tplugins/gtkgui/emoticons/drink.png\t:S\tplugins/gtkgui/emoticons/frowing.png',\
 			'x-position': 0,\
 			'y-position': 0,\
 			'width': 150,\

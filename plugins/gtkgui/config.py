@@ -264,6 +264,15 @@ class preference_Window:
 			del self.plugin.config['msg%i_name' % i]
 			del self.plugin.config['msg%i' % i]
 			i += 1
+		#Emoticons
+		model = self.emot_tree.get_model()
+		iter = model.get_iter_first()
+		emots = []
+		while iter:
+			emots.append(model.get_value(iter, 0))
+			emots.append(model.get_value(iter, 1))
+			iter = model.iter_next(iter)
+		self.plugin.config['emoticons'] = string.join(emots, '\t')
 		#trayicon
 		if self.chk_trayicon.get_active():
 			self.plugin.config['trayicon'] = 1
@@ -319,8 +328,46 @@ class preference_Window:
 			model.set(iter, 0, self.plugin.config['msg%s_name' % i], 1, self.plugin.config['msg%s' % i])
 			i += 1
 
+	def image_is_ok(self, image):
+		if not os.path.exists(image):
+			return 0
+		img = gtk.Image()
+		try:
+			img.set_from_file(image)
+		except:
+			return 0
+		if img.get_storage_type() == gtk.IMAGE_PIXBUF:
+			pix = img.get_pixbuf()
+		else:
+			return 0
+		if pix.get_width() > 24 or pix.get_height() > 24:
+			return 0
+		return 1
+
+	def load_emots(self):
+		emots = {}
+		split_line = string.split(self.plugin.config['emoticons'], '\t')
+		for i in range(0, len(split_line)/2):
+			if not self.image_is_ok(split_line[2*i+1]):
+				continue
+			emots[split_line[2*i]] = split_line[2*i+1]
+		return emots
+
+	def fill_emot_treeview(self):
+		model = self.emot_tree.get_model()
+		model.clear()
+		emots = self.load_emots()
+		for i in emots:
+			iter = model.append()
+			model.set(iter, 0, i, 1,emots[i])
+
 	def on_msg_cell_edited(self, cell, row, new_text):
 		model = self.msg_tree.get_model()
+		iter = model.get_iter_from_string(row)
+		model.set_value(iter, 0, new_text)
+
+	def on_emot_cell_edited(self, cell, row, new_text):
+		model = self.emot_tree.get_model()
 		iter = model.get_iter_from_string(row)
 		model.set_value(iter, 0, new_text)
 
@@ -337,12 +384,70 @@ class preference_Window:
 		iter = model.append()
 		model.set(iter, 0, 'msg', 1, 'message')
 
+	def on_button_emoticons_clicked(self, widget, data=None):
+		(model, iter) = self.emot_tree.get_selection().get_selected()
+		if not iter:
+			return
+		file = model.get_value(iter, 1)
+		dialog = gtk.FileChooserDialog("Choose image",
+							None,
+							gtk.FILE_CHOOSER_ACTION_OPEN,
+							(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+							gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		dialog.set_default_response(gtk.RESPONSE_OK)
+		filter = gtk.FileFilter()
+		filter.set_name("All files")
+		filter.add_pattern("*")
+		dialog.add_filter(filter)
+
+		filter = gtk.FileFilter()
+		filter.set_name("Images")
+		filter.add_mime_type("image/png")
+		filter.add_mime_type("image/jpeg")
+		filter.add_mime_type("image/gif")
+		filter.add_pattern("*.png")
+		filter.add_pattern("*.jpg")
+		filter.add_pattern("*.gif")
+		filter.add_pattern("*.tif")
+		filter.add_pattern("*.xpm")
+		dialog.add_filter(filter)
+		dialog.set_filter(filter)
+
+		file = os.path.join(os.getcwd(), file)
+		dialog.set_filename(file)
+		file = ''	
+		ok = 0
+		while(ok == 0):
+			response = dialog.run()
+			if response == gtk.RESPONSE_OK:
+				file = dialog.get_filename()
+				if self.image_is_ok(file):
+					ok = 1
+			else:
+				ok = 1
+		dialog.destroy()
+		if file:
+			self.xml.get_widget('entry_emoticons').set_text(file)
+			self.xml.get_widget('image_emoticon').set_from_file(file)
+			model.set_value(iter, 1, file)
+			
 	def on_delete_msg_button_clicked(self, widget, data=None):
 		(model, iter) = self.msg_tree.get_selection().get_selected()
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		model.remove(iter)
 		buf.set_text('')
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
+			
+	def on_button_new_emoticon_clicked(self, widget, data=None):
+		model = self.emot_tree.get_model()
+		iter = model.append()
+		model.set(iter, 0, 'smeiley', 1, '')
+
+	def on_button_remove_emoticon_clicked(self, widget, data=None):
+		(model, iter) = self.emot_tree.get_selection().get_selected()
+		if not iter:
+			return
+		model.remove(iter)
 
 	def on_msg_textview_changed(self, widget, data=None):
 		(model, iter) = self.msg_tree.get_selection().get_selected()
@@ -353,6 +458,14 @@ class preference_Window:
 		name = model.get_value(iter, 0)
 		model.set_value(iter, 1, buf.get_text(first_iter, end_iter))
 	
+	def on_treeview_emoticons_cursor_changed(self, widget, data=None):
+		(model, iter) = self.emot_tree.get_selection().get_selected()
+		if not iter:
+			return
+		img_str = model.get_value(iter, 1)
+		self.xml.get_widget('entry_emoticons').set_text(img_str)
+		self.xml.get_widget('image_emoticon').set_from_file(img_str)
+
 	def on_chk_toggled(self, widget, widgets):
 		"""set or unset sensitivity of widgets when widget is toggled"""
 		for w in widgets:
@@ -413,6 +526,25 @@ class preference_Window:
 		#Use emoticons
 		st = self.plugin.config['useemoticons']
 		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
+		self.xml.get_widget('button_new_emoticon').set_sensitive(st)
+		self.xml.get_widget('button_remove_emoticon').set_sensitive(st)
+		self.xml.get_widget('treeview_emoticons').set_sensitive(st)
+		self.xml.get_widget('entry_emoticons').set_sensitive(st)
+		self.xml.get_widget('button_emoticons').set_sensitive(st)
+		self.xml.get_widget('image_emoticon').set_sensitive(st)
+
+		#emoticons
+		self.emot_tree = self.xml.get_widget('treeview_emoticons')
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		self.emot_tree.set_model(model)
+		col = gtk.TreeViewColumn('name')
+		self.emot_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		renderer.connect('edited', self.on_emot_cell_edited)
+		renderer.set_property('editable', True)
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text=0)
+		self.fill_emot_treeview()
 		
 		#Autopopup
 		st = self.plugin.config['autopopup']
@@ -510,16 +642,31 @@ class preference_Window:
 		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
 		self.xml.signal_connect('on_msg_treeview_cursor_changed', \
 			self.on_msg_treeview_cursor_changed)
+		self.xml.signal_connect('on_treeview_emoticons_cursor_changed', \
+			self.on_treeview_emoticons_cursor_changed)
+		self.xml.signal_connect('on_button_emoticons_clicked', \
+			self.on_button_emoticons_clicked)
 		self.xml.signal_connect('on_new_msg_button_clicked', \
 			self.on_new_msg_button_clicked)
 		self.xml.signal_connect('on_delete_msg_button_clicked', \
 			self.on_delete_msg_button_clicked)
+		self.xml.signal_connect('on_button_new_emoticon_clicked', \
+			self.on_button_new_emoticon_clicked)
+		self.xml.signal_connect('on_button_remove_emoticon_clicked', \
+			self.on_button_remove_emoticon_clicked)
 		self.xml.signal_connect('on_chk_autopopup_toggled', \
 			self.on_chk_toggled, [self.chk_autoppaway])
 		self.xml.signal_connect('on_chk_autoaway_toggled', \
 			self.on_chk_toggled, [self.spin_autoawaytime])
 		self.xml.signal_connect('on_chk_autoxa_toggled', \
 			self.on_chk_toggled, [self.spin_autoxatime])
+		self.xml.signal_connect('on_use_emoticons_checkbutton_toggled', \
+			self.on_chk_toggled, [self.xml.get_widget('button_new_emoticon'),
+					self.xml.get_widget('button_remove_emoticon'),
+					self.xml.get_widget('treeview_emoticons'),
+					self.xml.get_widget('entry_emoticons'),
+					self.xml.get_widget('button_emoticons'),
+					self.xml.get_widget('image_emoticon')])
 		self.xml.signal_connect('on_lookfeel_button_clicked', \
 			self.on_lookfeel_button_clicked)
 		self.xml.signal_connect('on_events_button_clicked', \
