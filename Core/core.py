@@ -633,7 +633,7 @@ class GajimCore:
 					for con in self.connexions.keys():
 						if self.connected[self.connexions[con]]:
 							self.connected[self.connexions[con]] = 0
-							con.disconnect()
+							con.disconnect('Disconnected')
 					self.hub.sendPlugin('QUIT', None, ())
 					return 1
 			#('ASK_ROSTER', account, queue_for_response)
@@ -692,8 +692,8 @@ class GajimCore:
 					msg = ev[2][0]
 				signed = ''
 				keyID = ''
-				if self.cfgParser.tab[ev[1]].has_key("keyid"):
-					keyID = self.cfgParser.tab[ev[1]]["keyid"]
+				if self.cfgParser.tab[ev[1]].has_key('keyid'):
+					keyID = self.cfgParser.tab[ev[1]]['keyid']
 				if keyID and USE_GPG:
 					signed = self.gpg[ev[1]].sign(msg, keyID)
 					if signed == 'BAD_PASSPHRASE':
@@ -724,7 +724,7 @@ class GajimCore:
 						self.myVCardID.append(id)
 				elif (ev[2][0] == 'offline') and (self.connected[ev[1]]):
 					self.connected[ev[1]] = 0
-					con.disconnect()
+					con.disconnect(msg)
 					self.hub.sendPlugin('STATUS', ev[1], 'offline')
 				elif ev[2][0] != 'offline' and self.connected[ev[1]]:
 					statuss = ['offline', 'online', 'away', 'xa', 'dnd', \

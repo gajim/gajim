@@ -441,9 +441,9 @@ class Client(Connection):
         self._reg_info = {}
         self._reg_agent = ''
 
-    def disconnect(self):
+    def disconnect(self,status=None):
         """Safely disconnects from the connected server"""
-        self.send(Presence(type='unavailable'))
+        self.send(Presence(type='unavailable',status=status))
         xmlstream.Client.disconnect(self)
 
     def sendPresence(self,type=None,priority=None,show=None,status=None,signedStatus=None):
