@@ -69,10 +69,11 @@ class infoUser_Window:
 		#update user.name if it's not ""
 		entry_name = self.xml.get_widget('entry_name')
 		newName = entry_name.get_text()
-		if newName != self.user.name:
+		if newName != self.user.name and newName != '':
 			update = 1
-			if newName != '':
-				self.user.name = newName
+			self.user.name = newName
+			for i in self.plugin.roster.get_user_iter(self.user.jid, self.account):
+				self.plugin.roster.tree.get_model().set_value(i, 1, newName)
 		if update:
 			self.plugin.send('UPDUSER', self.account, (self.user.jid, \
 				self.user.name, self.user.groups))
