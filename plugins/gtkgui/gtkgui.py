@@ -635,6 +635,7 @@ class gc:
 	def chg_user_status(self, nick, show, status, role, affiliation, jid, \
 		reason, actor, statusCode, account):
 		"""When a user change his status"""
+		ji = jid.split('/')[0]
 		model = self.tree.get_model()
 		if show == 'offline' or show == 'error':
 			if statusCode == '307':
@@ -644,12 +645,12 @@ class gc:
 		else:
 			iter = self.get_user_iter(nick)
 			if not iter:
-				iter = self.add_user_to_roster(nick, show, role, jid)
+				iter = self.add_user_to_roster(nick, show, role, ji)
 			else:
 				actual_role = self.get_role(iter)
 				if role != actual_role:
 					self.remove_user(nick)
-					self.add_user_to_roster(nick, show, role, jid)
+					self.add_user_to_roster(nick, show, role, ji)
 				else:
 					img = self.plugin.roster.pixbufs[show]
 					model.set_value(iter, 0, img)
@@ -764,6 +765,13 @@ class gc:
 		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
 			'admin'))
 
+	def on_info(self, widget, jid):
+		"""Call vcard_information_window class to display user's information"""
+		if not self.plugin.windows[self.account]['infos'].has_key(jid):
+			self.plugin.windows[self.account]['infos'][jid] = \
+				vcard_information_window(jid, self.plugin, self.account, True)
+			self.plugin.send('ASK_VCARD', self.account, jid)
+
 	def mk_menu(self, event, iter):
 		"""Make user's popup menu"""
 		model = self.tree.get_model()
@@ -816,6 +824,13 @@ class gc:
 			item = gtk.MenuItem(_('Revoke owner'))
 			menu_sub.append(item)
 			item.connect('activate', self.revoke_owner, self.jid, jid)
+
+			item = gtk.MenuItem()
+			menu.append(item)
+
+			item = gtk.MenuItem(_('Information'))
+			menu.append(item)
+			item.connect('activate', self.on_info, jid)
 		
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
