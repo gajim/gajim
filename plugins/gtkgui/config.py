@@ -1677,10 +1677,14 @@ class Service_discovery_window:
 			' '.join(self.latest_addresses)
 		self.agents_treeview.get_model().clear()
 		self.browse(jid)
+	
+	def on_address_comboboxentry_changed(self, widget):
+		print 'be'
+		self.on_go_button_clicked(widget)
 		
 	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:
-			Error_dialog(_("You must be connected to view Agents"))
+			Error_dialog(_("You must be connected to browse services"))
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')
