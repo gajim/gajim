@@ -55,6 +55,7 @@ import os
 import time
 import sys
 import Queue
+import sre
 import common.sleepy
 
 class ImageCellRenderer(gtk.GenericCellRenderer):
