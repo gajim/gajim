@@ -374,16 +374,77 @@ class addContact_Window:
 		self.plugin.roster.req_sub(self, who, txt, self.account)
 		widget.get_toplevel().destroy()
 		
+	def fill_who(self):
+		cb = self.xml.get_widget('combobox_agent')
+		model = cb.get_model()
+		index = cb.get_active()
+		str = self.xml.get_widget('entry_login').get_text()
+		str = str.replace("@", "%")
+		agent = model[index][1]
+		if agent:
+			str += "@" + agent
+		self.xml.get_widget('entry_who').set_text(str)
+
+	def on_cb_changed(self, widget):
+		self.fill_who()
+
+	def guess_agent(self):
+		login = self.xml.get_widget('entry_login').get_text()
+		cb = self.xml.get_widget('combobox_agent')
+		model = cb.get_model()
+		
+		#If login contains only numbers, it's probably an ICQ number
+		try:
+			string.atoi(login)
+		except:
+			pass
+		else:
+			if 'ICQ' in self.agents:
+				cb.set_active(self.agents.index('ICQ'))
+				return
+		cb.set_active(0)
+			
+	def on_entry_login_changed(self, widget):
+		self.guess_agent() #It changes the cb so automatically call fill_who()
+		
 	def __init__(self, plugin, account, jid=None):
 		self.plugin = plugin
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Add', APP)
 		self.window = self.xml.get_widget('Add')
+		liststore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		liststore.append(['Jabber', ''])
+		self.agents = ['Jabber']
+		jid_agents = []
+		for j in self.plugin.roster.contacts[account]:
+			user = self.plugin.roster.contacts[account][j][0]
+			if 'Agents' in user.groups:
+				jid_agents.append(j)
+		for a in jid_agents:
+			if a.find("aim") > -1:
+				name = "AIM"
+			elif a.find("icq") > -1:
+				name = "ICQ"
+			elif a.find("msn") > -1:
+				name = "MSN"
+			elif a.find("yahoo") > -1:
+				name = "Yahoo!"
+			else:
+				name = a
+			iter = liststore.append([name, a])
+			self.agents.append(name)
+		cb = self.xml.get_widget('combobox_agent')
+		cb.set_model(liststore)
+		cb.set_active(0)
+		self.fill_who()
 		if jid:
 			self.xml.get_widget('entry_who').set_text(jid)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
 		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
+		self.xml.signal_connect('on_cb_changed', self.on_cb_changed)
+		self.xml.signal_connect('on_entry_login_changed', \
+			self.on_entry_login_changed)
 
 class warning_Window:
 	"""Class for warning window : print a warning message"""
