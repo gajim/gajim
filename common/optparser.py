@@ -46,8 +46,7 @@ class OptionsParser:
 				continue
 			option = line[0:index]
 			option = option.strip()
-			value = line[index+1:]
-			value = value.strip()
+			value = line[index+2:-1]
 			if string.find(option, 'password') == -1:
 				try:
 					i = string.atoi(value)
