@@ -2731,7 +2731,7 @@
 <widget class="GtkWindow" id="preferences_window">
   <property name="border_width">4</property>
   <property name="width_request">500</property>
-  <property name="height_request">375</property>
+  <property name="height_request">384</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Preferences</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -7125,6 +7125,8 @@ Custom</property>
 			      <property name="right_margin">0</property>
 			      <property name="indent">0</property>
 			      <property name="text" translatable="yes"></property>
+			      <signal name="motion_notify_event" handler="on_conversation_textview_motion_notify_event" last_modification_time="Sat, 19 Mar 2005 14:59:33 GMT"/>
+			      <signal name="button_press_event" handler="on_conversation_textview_button_press_event" last_modification_time="Sat, 19 Mar 2005 14:59:45 GMT"/>
 			    </widget>
 			  </child>
 			</widget>
