@@ -65,12 +65,42 @@ class systray:
 		if not list in self.jids:
 			self.jids.append(list)
 			self.set_img()
+		#we look for the number of unread messages
+		#in roster
+		nb = self.plugin.roster.nb_unread
+		for acct in self.plugin.accounts:
+			#in chat / groupchat windows
+			for kind in ['chats', 'gc']:
+				for jid in self.plugin.windows[acct][kind]:
+					if jid != 'tabbed':
+						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
+		if nb > 1:
+			label = _('Gajim - %s unread messages') % nb
+		else:
+			label = _('Gajim - 1 unread message')
+		self.tip.set_tip(self.t, label)
 
 	def remove_jid(self, jid, account):
 		list = [account, jid]
 		if list in self.jids:
 			self.jids.remove(list)
 			self.set_img()
+		#we look for the number of unread messages
+		#in roster
+		nb = self.plugin.roster.nb_unread
+		for acct in self.plugin.accounts:
+			#in chat / groupchat windows
+			for kind in ['chats', 'gc']:
+				for jid in self.plugin.windows[acct][kind]:
+					if jid != 'tabbed':
+						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
+		if nb > 1:
+			label = _('Gajim - %s unread messages') % nb
+		elif nb == 1:
+			label = _('Gajim - 1 unread message')
+		else:
+			label = 'Gajim'
+		self.tip.set_tip(self.t, label)
 
 	def set_status(self, status):
 		self.status = status
