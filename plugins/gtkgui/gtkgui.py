@@ -1083,7 +1083,7 @@ class Groupchat_window:
 		jid = model.get_value(iter, 2)
 		
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_('MUC'))
+		item = gtk.MenuItem(_('Privileges'))
 		menu.append(item)
 		
 		menu_sub = gtk.Menu()
