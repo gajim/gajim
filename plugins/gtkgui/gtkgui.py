@@ -1105,6 +1105,7 @@ class roster_Window:
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
 		self.plugin.send('QUIT', None, ('gtkgui', 0))
 		print _("plugin gtkgui stopped")
+		self.plugin.systray.t.destroy()
 		gtk.mainquit()
 
 	def on_row_activated(self, widget, path, col=0):
@@ -1365,7 +1366,7 @@ class systrayDummy:
 	def set_status(self, status):
 		pass
 	def __init__(self):
-		pass
+		self.t = gtk.Button()
 	
 
 class systray:
@@ -1510,15 +1511,15 @@ class systray:
 		self.iconified = 0
 		win = self.plugin.roster.xml.get_widget('Gajim')
 		win.connect("window-state-event", self.state_changed)
-		t = trayicon.TrayIcon("Gajim")
+		self.t = trayicon.TrayIcon("Gajim")
 		eb = gtk.EventBox()
 		eb.connect("button-press-event", self.on_clicked)
 		self.tip = gtk.Tooltips()
-		self.tip.set_tip(t, 'Gajim')
+		self.tip.set_tip(self.t, 'Gajim')
 		self.img_tray = gtk.Image()
 		eb.add(self.img_tray)
-		t.add(eb)
-		t.show_all()
+		self.t.add(eb)
+		self.t.show_all()
 		self.status = 'offline'
 		self.set_img()
 
