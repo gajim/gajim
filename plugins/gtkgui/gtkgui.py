@@ -1367,9 +1367,8 @@ class roster_window:
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
 
-	def on_rename(self, widget, iter, path, user):
+	def on_rename(self, widget, iter, path):
 		model = self.tree.get_model()
-		model.set_value(iter, 1, user.name)
 		model.set_value(iter, 5, True)
 		self.tree.set_cursor(path, self.tree.get_column(0), True)
 		
@@ -1393,7 +1392,7 @@ class roster_window:
 		item.connect("activate", self.on_roster_treeview_row_activated, path)
 		item = gtk.MenuItem(_("Rename"))
 		menu.append(item)
-		item.connect("activate", self.on_rename, iter, path, user)
+		item.connect("activate", self.on_rename, iter, path)
 		item = gtk.MenuItem()
 		menu.append(item)
 		item = gtk.MenuItem(_("Subscription"))
@@ -1428,18 +1427,18 @@ class roster_window:
 		menu.show_all()
 		menu.reposition()
 
-	def mk_menu_g(self, event):
+	def mk_menu_g(self, event, iter):
 		"""Make group's popup menu"""
+		model = self.tree.get_model()
+		path = model.get_path(iter)
+
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_("grp1"))
-#		menu.append(item)
-		item = gtk.MenuItem(_("grp2"))
-#		menu.append(item)
-		item = gtk.MenuItem(_("grp3"))
-#		menu.append(item)
-#		menu.popup(None, None, None, event.button, event.time)
-#		menu.show_all()
-#		menu.reposition()
+		item = gtk.MenuItem(_('Rename'))
+		menu.append(item)
+		item.connect('activate', self.on_rename, iter, path)
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
+		menu.reposition()
 	
 	def mk_menu_agent(self, event, iter):
 		"""Make agent's popup menu"""
@@ -1560,7 +1559,7 @@ class roster_window:
 			if not iter:
 				return
 			type = model.get_value(iter, 2)
-			if type == 'user':
+			if type == 'user' or type == 'group':
 				path = model.get_path(iter)
 				model.set_value(iter, 5, True)
 				self.tree.set_cursor(path, self.tree.get_column(0), True)
@@ -1580,7 +1579,7 @@ class roster_window:
 				iter = model.get_iter(path)
 				type = model.get_value(iter, 2)
 				if type == 'group':
-					self.mk_menu_g(event)
+					self.mk_menu_g(event, iter)
 				elif type == 'agent':
 					self.mk_menu_agent(event, iter)
 				elif type == 'user':
@@ -1941,14 +1940,29 @@ class roster_window:
 		path = model.get_path(iter)
 		account = model.get_value(iter, 4)
 		jid = model.get_value(iter, 3)
-		old_text = self.contacts[account][jid][0].name
-		if old_text != new_text:
-			for u in self.contacts[account][jid]:
-				u.name = new_text
-			self.plugin.send('UPDUSER', account, (jid, new_text, \
-				self.contacts[account][jid][0].groups))
+		type = model.get_value(iter, 2)
+		if type == 'user':
+			old_text = self.contacts[account][jid][0].name
+			if old_text != new_text:
+				for u in self.contacts[account][jid]:
+					u.name = new_text
+				self.plugin.send('UPDUSER', account, (jid, new_text, \
+					self.contacts[account][jid][0].groups))
+			self.redraw_jid(jid, account)
+		elif type == 'group':
+			old_name = model.get_value(iter, 1)
+			#get all users in that group
+			for jid in self.contacts[account]:
+				user = self.contacts[account][jid][0]
+				if old_name in user.groups:
+					#set them in the new one and remove it from the old
+					self.remove_user(user, account)
+					user.groups.remove(old_name)
+					user.groups.append(new_text)
+					self.add_user_to_roster(user.jid, account)
+					self.plugin.send('UPDUSER', account, (user.jid, user.name, \
+						user.groups))
 		model.set_value(iter, 5, False)
-		self.redraw_jid(jid, account)
 		
 	def on_browse_agents(self, widget, account):
 		"""When browse agent is selected :
