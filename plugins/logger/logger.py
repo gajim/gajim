@@ -83,7 +83,8 @@ class plugin:
 	def __init__(self, quIN, quOUT):
 		self.queueIN = quIN
 		self.queueOUT = quOUT
-		quOUT.put(('ASK_CONFIG', ('Logger', 'Logger')))
+		quOUT.put(('ASK_CONFIG', ('Logger', 'Logger', {\
+			'lognotsep':1, 'lognotusr':1})))
 		self.config = self.wait('CONFIG')
 		#create ~/.gajim/logs/ if it doesn't exist
 		try:

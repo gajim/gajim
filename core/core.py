@@ -17,7 +17,7 @@
 ## GNU General Public License for more details.
 ##
 
-import sys
+import sys, os
 
 sys.path.append("..")
 import time
@@ -37,16 +37,44 @@ class GajimCore:
 	"""Core"""
 	def __init__(self):
 		self.connected = 0
+		self.init_cfg_file()
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
 		self.hub = common.hub.GajimHub()
 		self.parse()
 	# END __init__
 
+	def init_cfg_file(self):
+		fname = os.path.expanduser(CONFPATH)
+		reps = string.split(fname, '/')
+		del reps[0]
+		path = ''
+		while len(reps) > 1:
+			path = path + '/' + reps[0]
+			del reps[0]
+			try:
+				os.stat(os.path.expanduser(path))
+			except OSError:
+				try:
+					os.mkdir(os.path.expanduser(path))
+				except:
+					print "Can't create %s" % path
+					sys.exit
+		try:
+			os.stat(fname)
+		except:
+			print "creating %s" % fname
+			fic = open(fname, "w")
+			fic.write("[Profile]\naccounts = \n\n[Core]\ndelauth = 1\nalwaysauth = 0\nmodules = logger gtkgui\ndelroster = 1\n")
+			fic.close()
+	# END init_cfg_file
+
 	def parse(self):
 		self.cfgParser.parseCfgFile()
 		self.accounts = {}
-		accts = self.cfgParser.tab['Profile']['accounts']
-		for a in string.split(accts, ' '):
+		accts = string.split(self.cfgParser.tab['Profile']['accounts'], ' ')
+		if accts == ['']:
+			accts = []
+		for a in accts:
 			self.accounts[a] = self.cfgParser.tab[a]
 
 	def vCardCB(self, con, vc):
@@ -95,7 +123,10 @@ class GajimCore:
 					self.hub.sendPlugin('NOTIFY', (who, 'offline', 'offline', \
 						prs.getFrom().getResource()))
 			else:
-				self.hub.sendPlugin('SUBSCRIBE', who)
+				txt = prs.getStatus()
+				if not txt:
+					txt = "I would like to add you to my roster."
+				self.hub.sendPlugin('SUBSCRIBE', (who, 'txt'))
 		elif type == 'subscribed':
 			jid = prs.getFrom()
 			self.hub.sendPlugin('SUBSCRIBED', {'jid':jid.getBasic(), \
@@ -193,19 +224,26 @@ class GajimCore:
 						self.con.disconnect()
 					self.hub.sendPlugin('QUIT', ())
 					return
-				#('ASK_CONFIG', (who_ask, section))
+				#('ASK_CONFIG', (who_ask, section, default_config))
 				elif ev[0] == 'ASK_CONFIG':
 					if ev[1][1] == 'accounts':
 						self.hub.sendPlugin('CONFIG', (ev[1][0], self.accounts))
 					else:
-						self.hub.sendPlugin('CONFIG', (ev[1][0], \
-							self.cfgParser.__getattr__(ev[1][1])))
+						if self.cfgParser.tab.has_key(ev[1][1]):
+							self.hub.sendPlugin('CONFIG', (ev[1][0], \
+								self.cfgParser.__getattr__(ev[1][1])))
+						else:
+							self.cfgParser.tab[ev[1][1]] = ev[1][2]
+							self.cfgParser.writeCfgFile()
+							self.hub.sendPlugin('CONFIG', (ev[1][0], ev[1][2]))
 				#('CONFIG', (section, config))
 				elif ev[0] == 'CONFIG':
 					if ev[1][0] == 'accounts':
 						#Remove all old accounts
 						accts = string.split(self.cfgParser.tab\
 							['Profile']['accounts'], ' ')
+						if accts == ['']:
+							accts = []
 						for a in accts:
 							del self.cfgParser.tab[a]
 						#Write all new accounts
@@ -241,7 +279,12 @@ class GajimCore:
 				#('SUB', (jid, txt))
 				elif ev[0] == 'SUB':
 					log.debug('subscription request for %s' % ev[1][0])
-					self.con.send(common.jabber.Presence(ev[1][0], 'subscribe'))
+					pres = common.jabber.Presence(ev[1][0], 'subscribe')
+					if ev[1][1]:
+						pres.setStatus(ev[1][1])
+					else:
+						pres.setStatus("I would like to add you to my roster.")
+					self.con.send(pres)
 				#('REQ', jid)
 				elif ev[0] == 'AUTH':
 					self.con.send(common.jabber.Presence(ev[1], 'subscribed'))

@@ -588,7 +588,7 @@ class accountPreference_Window:
 				del self.accs.r.plugin.accounts[self.acc]
 		#if it's a new account
 		else:
-			if name in self.accs.r.accounts:
+			if name in self.accs.r.plugin.accounts:
 				warning_Window('An account already has this name')
 				return 0
 			#if we neeed to register a new account
@@ -664,7 +664,7 @@ class accounts_Window:
 		(mod, iter) = sel.get_selected()
 		model = self.treeview.get_model()
 		account = model.get_value(iter, 0)
-		del self.r.plugin.accountsi[account]
+		del self.r.plugin.accounts[account]
 		self.r.queueOUT.put(('CONFIG', ('accounts', self.r.plugin.accounts)))
 		self.init_accounts()
 
@@ -755,12 +755,14 @@ class authorize_Window:
 		self.r.queueOUT.put(('DENY', self.jid))
 		self.delete_event(self)
 	
-	def __init__(self, roster, jid):
+	def __init__(self, roster, jid, txt):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'Sub_req')
 		self.window = xml.get_widget('Sub_req')
 		self.r = roster
 		self.jid = jid
 		xml.get_widget('label').set_text('Subscription request from ' + self.jid)
+		#TOTOTO
+		xml.get_widget("textview_sub").get_buffer().set_text(txt)
 		xml.signal_connect('on_button_auth_clicked', self.auth)
 		xml.signal_connect('on_button_deny_clicked', self.deny)
 		xml.signal_connect('on_button_close_clicked', self.delete_event)
@@ -1199,8 +1201,11 @@ class roster_Window:
 			txt = w.run()
 		else:
 			txt = widget.name
-		self.queueOUT.put(('STATUS',(widget.name, txt, \
-			self.plugin.accounts.keys()[0])))
+		if len(self.plugin.accounts) > 0:
+			self.queueOUT.put(('STATUS',(widget.name, txt, \
+				self.plugin.accounts.keys()[0])))
+		else:
+			warning_Window("You must setup an account before connecting to jabber network.")
 
 	def on_prefs(self, widget):
 		"""When preferences is selected :
@@ -1518,7 +1523,7 @@ class plugin:
 						self.r.tab_messages[jid].print_conversation(ev[1][1])
 					
 			elif ev[0] == 'SUBSCRIBE':
-				authorize_Window(self.r, ev[1])
+				authorize_Window(self.r, ev[1][0], ev[1][1])
 			elif ev[0] == 'SUBSCRIBED':
 				jid = ev[1]['jid']
 				if self.r.l_contact.has_key(jid):
@@ -1586,7 +1591,16 @@ class plugin:
 		gtk.threads_init()
 		gtk.threads_enter()
 		self.queueIN = quIN
-		quOUT.put(('ASK_CONFIG', ('GtkGui', 'GtkGui')))
+		quOUT.put(('ASK_CONFIG', ('GtkGui', 'GtkGui', {'autopopup':1,\
+			'showoffline':0,\
+			'autoaway':0,\
+			'autoawaytime':10,\
+			'autoxa':0,\
+			'autoxatime':20,\
+			'iconstyle':'sun',\
+			'inmsgcolor':'#ff000',\
+			'outmsgcolor': '#0000ff',\
+			'statusmsgcolor':'#1eaa1e'})))
 		self.config = self.wait('CONFIG')
 		quOUT.put(('ASK_CONFIG', ('GtkGui', 'accounts')))
 		self.accounts = self.wait('CONFIG')
