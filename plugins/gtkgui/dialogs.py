@@ -519,9 +519,7 @@ class Add_new_contact_window:
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
 		for g in self.plugin.roster.groups[account].keys():
-			if g != 'not in the roster': #FIXME: nk 2 yann. it seems that the empty groups are NOT deleted!
-				#NO MATTER WHAT LEAVE THAT HIS, because even if we delete empty groups, not in roster can have one
-				#and we don't want the user to choose to add more
+			if g != 'not in the roster':
 				self.group_comboboxentry.append_text(g)
 
 		self.xml.signal_autoconnect(self)
