@@ -1206,9 +1206,9 @@ class roster_Window:
 #		menu.append(item)
 		item = gtk.MenuItem(_("grp3"))
 #		menu.append(item)
-		menu.popup(None, None, None, event.button, event.time)
-		menu.show_all()
-		menu.reposition()
+#		menu.popup(None, None, None, event.button, event.time)
+#		menu.show_all()
+#		menu.reposition()
 	
 	def mk_menu_agent(self, event, iter):
 		"""Make agent's popup menu"""
@@ -1246,7 +1246,6 @@ class roster_Window:
 		if not self.plugin.windows.has_key('accountPreference'):
 			infos = self.plugin.accounts[account]
 			infos['accname'] = account
-#			if self.plugin.accounts[account].has_key("name"):
 			infos['jid'] = self.plugin.accounts[account]["name"] + \
 				'@' +  self.plugin.accounts[account]["hostname"]
 			self.plugin.windows['accountPreference'] = \
@@ -1287,12 +1286,17 @@ class roster_Window:
 		item = gtk.MenuItem()
 		menu.append(item)
 
-		item = gtk.MenuItem(_("Edit account"))
+		item = gtk.MenuItem(_("_Edit account"))
 		menu.append(item)
 		item.connect("activate", self.on_edit_account, account)
 		item = gtk.MenuItem(_("_Browse agents"))
 		menu.append(item)
 		item.connect("activate", self.on_browse, account)
+		item = gtk.MenuItem(_("_Add contact"))
+		menu.append(item)
+		item.connect("activate", self.on_add, account)
+		if not self.plugin.connected[account]:
+			item.set_sensitive(False)
 		
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
