@@ -2064,10 +2064,10 @@ class roster_window:
 		if self.plugin.systray_visible:
 			self.window.iconify()
 		else:
-			self.quit_gtkui_plugin()
+			self.quit_gtkgui_plugin()
 		return 1
 
-	def quit_gtkui_plugin(self):
+	def quit_gtkgui_plugin(self):
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
 		if self.plugin.config.has_key('saveposition'):
@@ -2086,7 +2086,7 @@ class roster_window:
 		gtk.main_quit()
 
 	def on_quit_menuitem_activate(self, widget):
-		self.quit_gtkui_plugin()
+		self.quit_gtkgui_plugin()
 
 	def on_roster_treeview_row_activated(self, widget, path, col=0):
 		"""When an iter is dubble clicked :
