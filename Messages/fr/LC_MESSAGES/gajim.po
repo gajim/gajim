@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-22 11:31+0100\n"
+"POT-Creation-Date: 2005-03-22 19:57+0100\n"
 "PO-Revision-Date: 2004-05-16 19:40-0400\n"
 "Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
 "Language-Team: none\n"
@@ -247,9 +247,17 @@ msgstr "Le nom du contact doit être de la forme : login@hostname"
 msgid "You must be connected to add a contact"
 msgstr "Vous devez être connecté pour ajouter un contacte"
 
+#: plugins/gtkgui/dialogs.py:521
+msgid "Gajim - A GTK jabber client"
+msgstr "Gajim - Un client Jabber en GTK"
+
+#: plugins/gtkgui/dialogs.py:532
+msgid "A GTK jabber client"
+msgstr "Un client Jabber en GTK"
+
 #: plugins/gtkgui/dialogs.py:538
 msgid "translator_credits"
-msgstr ""
+msgstr "traduction francaise proposée par Yann Le Boulanger"
 
 #: plugins/gtkgui/dialogs.py:617
 #, python-format
