@@ -1106,6 +1106,7 @@ class Roster_window:
 					break
 
 	def reload_pixbufs(self):
+		self.mkpixbufs()
 		# Update the roster
 		self.draw_roster()
 		# Update the status combobox
@@ -1126,6 +1127,16 @@ class Roster_window:
 			for jid in self.plugin.windows[account]['gc']:
 				if jid != 'tabbed':
 					self.plugin.windows[account]['gc'][jid].udpate_pixbufs()
+		# Update windows icons
+		image = self.pixbufs['online']
+		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			pixbuf = image.get_animation().get_static_image()
+		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
+			pixbuf = image.get_pixbuf()
+		for win in gtk.window_list_toplevels():
+			win.set_icon(pixbuf)
+		# Update roster_window icon with the status image
+		self.update_status_comboxbox()
 
 	def on_show_offline_contacts_menuitem_activate(self, widget):
 		"""when show offline option is changed:
