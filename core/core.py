@@ -374,6 +374,7 @@ class GajimCore:
 
 	def presenceCB(self, con, prs):
 		"""Called when we recieve a presence"""
+		if prs.getXNode(common.jabber.NS_DELAY): return
 		who = str(prs.getFrom())
 		prio = prs.getPriority()
 		if not prio:
