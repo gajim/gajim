@@ -153,7 +153,7 @@ class preferences_window:
 		else:
 			self.plugin.config['saveposition'] = 0
 	
-	def on_merge_position_checkbutton_toggled(self, widget):
+	def on_merge_checkbutton_toggled(self, widget):
 		"""On Merge Accounts Checkbutton Toggled"""
 		if widget.get_active():
 			self.plugin.config['mergeaccounts'] = 1
