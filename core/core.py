@@ -137,10 +137,10 @@ class GajimCore:
 			self.hub.sendPlugin('STATUS', 'offline')
 			self.hub.sendPlugin('WARNING', "Couldn't connect to %s" % hostname)
 			return 0
-		except self.con.socket.gaierror, e:
+		except common.xmlstream.socket.error, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
 			self.hub.sendPlugin('STATUS', 'offline')
-			self.hub.sendPlugin('WARNING', "Couldn't connect to %s" % hostname)
+			self.hub.sendPlugin('WARNING', "Couldn't connect to %s : %s" % (hostname, e))
 			return 0
 		else:
 			log.debug("Connected to server")
@@ -178,13 +178,13 @@ class GajimCore:
 						self.con.disconnect()
 					self.hub.sendPlugin('QUIT', ())
 					return
-				#('ASK_CONFIG', section)
+				#('ASK_CONFIG', (who_ask, section))
 				elif ev[0] == 'ASK_CONFIG':
-					if ev[1] == 'accounts':
-						self.hub.sendPlugin('CONFIG', self.accounts)
+					if ev[1][1] == 'accounts':
+						self.hub.sendPlugin('CONFIG', (ev[1][0], self.accounts))
 					else:
-						self.hub.sendPlugin('CONFIG', \
-							self.cfgParser.__getattr__(ev[1]))
+						self.hub.sendPlugin('CONFIG', (ev[1][0], \
+							self.cfgParser.__getattr__(ev[1][1])))
 				#('CONFIG', (section, config))
 				elif ev[0] == 'CONFIG':
 					if ev[1][0] == 'accounts':
@@ -329,4 +329,9 @@ def start():
 			gc.con.disconnect()
 		gc.hub.sendPlugin('QUIT', ())
 		return 0
+#	except:
+#		print "Erreur survenue"
+#		if gc.connected:
+#			gc.con.disconnect()
+#		gc.hub.sendPlugin('QUIT', ())
 # END start
