@@ -704,7 +704,7 @@ class tabbed_chat_window:
 				#we launch the correct application
 				self.plugin.launch_browser_mailer(kind, word)
 
-	def print_special_text(self, text, jid, contact):
+	def print_special_text(self, text, jid, other_tag):
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
@@ -722,7 +722,8 @@ class tabbed_chat_window:
 			#it's a mail
 			tag = 'mail'
 			print tag
-		elif self.plugin.sth_at_sth_dot_sth_re.match(text): # returns match object or None
+		elif self.plugin.sth_at_sth_dot_sth_re.match(text): #returns match object
+																			#or None
 			#it's a mail
 			tag = 'mail'
 			print tag
@@ -746,9 +747,9 @@ class tabbed_chat_window:
 			print tag
 
 		end_iter = conversation_buffer.get_end_iter()
-		if tag in ['bold', 'italic', 'underline'] and contact == 'status':
+		if tag in ['bold', 'italic', 'underline'] and other_tag:
 			conversation_buffer.insert_with_tags_by_name(end_iter, text,\
-				'status', tag)
+				other_tag, tag)
 		else:
 			conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
 		
@@ -760,6 +761,7 @@ class tabbed_chat_window:
 		user = self.users[jid]
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
+		print_all_special = False
 		if not text:
 			text = ''
 		end_iter = conversation_buffer.get_end_iter()
@@ -774,6 +776,7 @@ class tabbed_chat_window:
 		if contact == 'status':
 			tag = 'status'
 			ttext = text + '\n'
+			print_all_special = True
 		else:
 			if contact:
 				tag = 'outgoing'
@@ -785,11 +788,12 @@ class tabbed_chat_window:
 				
 			if text.startswith('/me'):
 				ttext = name + text[3:] + '\n'
+				print_all_special = True
 			else:
 				ttext = '<' + name + '> '
 				otext = text + '\n'
 		#if it's a status we print special words
-		if tag != 'status':
+		if not print_all_special:
 			conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
 		else:
 			otext = ttext
@@ -810,17 +814,20 @@ class tabbed_chat_window:
 			if start != 0:
 				text_before_special_text = otext[index:start]
 				end_iter = conversation_buffer.get_end_iter()
-				if tag == 'status':
+				if print_all_special:
 					conversation_buffer.insert_with_tags_by_name(end_iter, \
 						text_before_special_text, tag)
 				else:
 					conversation_buffer.insert(end_iter, text_before_special_text)
-			self.print_special_text(special_text, jid, contact)
+			if print_all_special:
+				self.print_special_text(special_text, jid, tag)
+			else:
+				self.print_special_text(special_text, jid, '')
 			index = end # update index
 
 		#add the rest in the index and after
 		end_iter = conversation_buffer.get_end_iter()
-		if tag == 'status':
+		if print_all_special:
 			conversation_buffer.insert_with_tags_by_name(end_iter, \
 				otext[index:], tag)
 		else:
