@@ -2681,7 +2681,7 @@ class plugin:
 	def handle_event_notify(self, account, array):
 		#('NOTIFY', account, (jid, status, message, resource, priority, keyID, 
 		# role, affiliation, real_jid, reason, actor, statusCode))
-		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
+		statuss = ['offline', 'error', 'online', 'away', 'xa', 'dnd', 'invisible']
 		old_show = 0
 		jid = string.split(array[0], '/')[0]
 		keyID = array[5]
@@ -2730,10 +2730,10 @@ class plugin:
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
 			#play sound
-			if old_show == 0 and statuss.index(user1.show) > 0 and \
+			if old_show < 2 and statuss.index(user1.show) > 1 and \
 				self.config['sound_contact_connected']:
 				self.play_sound('sound_contact_connected')
-			elif old_show > 0 and statuss.index(user1.show) == 0 and \
+			elif old_show > 1 and statuss.index(user1.show) < 2 and \
 				self.config['sound_contact_disconnected']:
 				self.play_sound('sound_contact_disconnected')
 				
