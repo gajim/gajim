@@ -210,10 +210,10 @@ class infoUser_Window:
 
 		self.xml.signal_autoconnect(self)
 
-class passphrase_Window:
-	"""Class for Passphrase Window"""
+class passphrase_dialog:
+	"""Class for passphrase_dialog"""
 	def run(self):
-		"""Wait for Ok button to be pressed and return passphrase"""
+		"""Wait for OK button to be pressed and return passphrase/password"""
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			passphrase = self.passphrase_entry.get_text()
@@ -231,12 +231,12 @@ class passphrase_Window:
 			else:
 				self.window.response(gtk.RESPONSE_OK)
 
-	def on_ok__button_clicked(self, widget):
+	def on_ok_button_clicked(self, widget):
 		if self.autoconnect:
 			self.passphrase = self.passphrase_entry.get_text()
 			gtk.main_quit()
 	
-	def on_cancel__button_clicked(self, widget):
+	def on_cancel_button_clicked(self, widget):
 		if self.autoconnect:
 			gtk.main_quit()
 	
@@ -252,13 +252,14 @@ class passphrase_Window:
 		if self.autoconnect:
 			gtk.main_quit()
 
-	def __init__(self, text, autoconnect=0):
+	def __init__(self, labeltext, checkbuttontext, autoconnect=0):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'passphrase_dialog', APP)
 		self.window = self.xml.get_widget('passphrase_dialog')
 		self.passphrase_entry = self.xml.get_widget('passphrase_entry')
 		self.passphrase = -1
 		self.autoconnect = autoconnect
-		self.xml.get_widget('message_label').set_text(text)
+		self.xml.get_widget('message_label').set_text(labeltext)
+		self.xml.get_widget('save_passphrase_checkbutton').set_label(checkbuttontext)
 		self.xml.signal_autoconnect(self)
 
 class choose_gpg_Window:
