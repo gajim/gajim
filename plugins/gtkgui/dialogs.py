@@ -1,8 +1,8 @@
 ##	plugins/dialogs.py
 ##
 ## Gajim Team:
-## 	- Yann Le Boulanger <asterix@lagaule.org>
-## 	- Vincent Hanquez <tab@snarc.org>
+## - Yann Le Boulanger <asterix@lagaule.org>
+## - Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Alex Podaras <bigpod@jabber.org>
 ##
@@ -438,35 +438,26 @@ class About_dialog:
 	"""Class for about dialog"""
 	def __init__(self, plugin):
 		if gtk.pygtk_version < (2, 6, 0):
+			Information_dialog('Gajim - The best GTK jabber client')
 			return
 		self.plugin = plugin
-		#xml.get_widget('logo_image').set_from_file('plugins/gtkgui/pixmaps/logo.png')
 		dlg = gtk.AboutDialog()
 		dlg.set_name('Gajim')
 		dlg.set_version('0.6')
-		dlg.set_copyright('Copyright (C) 2003-2005 Gajim Team')
-		dlg.set_license('''This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published
-by the Free Software Foundation; version 2 only.
+		s = u'Copyright \xa9 2003-2005 Gajim Team'
+		dlg.set_copyright(s)
+		text = open('COPYING').read()
+		dlg.set_license(text)
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.''')
-
-		dlg.set_comments('The best GTK jabber-only client')
+		dlg.set_comments('The best GTK jabber client')
 		dlg.set_website('http://www.gajim.org')
-		dlg.set_authors('Yann')
-#		dlg.set_authors('Yann Le Boulanger')
-
+		authors = ['Yann Le Boulanger', 'Vincent Hanquez', 'Nikos Kouremenos', 'Alex Podaras']
+		dlg.set_authors(authors)
 		dlg.set_logo(gtk.gdk.pixbuf_new_from_file('plugins/gtkgui/pixmaps/logo.png'))
+		dlg.set_translator_credits(_('translator_credits'))
 
 		rep = dlg.run()
 		dlg.destroy()
-		'''
-		, version='0.6', 'Nikos Kouremenos', 'The best GTK jabber-only client', 'http://www.gajim.org', 'Official Page', 'GPL', 'Yann')
-		dlg.run()
-		'''
 
 class Confirmation_dialog:
 	"""Class for confirmation dialog"""
