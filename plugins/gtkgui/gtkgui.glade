@@ -3091,7 +3091,7 @@ on the server as a vCard</property>
 	      <child>
 		<widget class="GtkCheckButton" id="tray_icon_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If enabled, it will enable the use of a trayicon</property>
+		  <property name="tooltip" translatable="yes">If enabled, Gajim will also have a trayicon</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Icon in systray (aka. notification area)</property>
 		  <property name="use_underline">True</property>
