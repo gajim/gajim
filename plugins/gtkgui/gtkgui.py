@@ -309,44 +309,90 @@ class gc:
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
 
-	def get_user_iter(self, nick):
+	def get_role_iter(self, name):
 		model = self.tree.get_model()
+		fin = False
 		iter = model.get_iter_root()
 		if not iter:
 			return None
-		while iter:
-			if nick == model.get_value(iter, 1):
+		while not fin:
+			account_name = model.get_value(iter, 1)
+			if name == account_name:
 				return iter
 			iter = model.iter_next(iter)
+			if not iter:
+				fin = True
+		return None
+
+	def get_user_iter(self, jid):
+		model = self.tree.get_model()
+		fin = False
+		role = model.get_iter_root()
+		if not role:
+			return None
+		while not fin:
+			fin2 = False
+			user = model.iter_children(role)
+			if not user:
+				fin2=True
+			while not fin2:
+				if jid == model.get_value(user, 1):
+					return user
+				user = model.iter_next(user)
+				if not user:
+					fin2 = True
+			role = model.iter_next(role)
+			if not role:
+				fin = True
 		return None
 
 	def remove_user(self, nick):
 		"""Remove a user from the roster"""
 		model = self.tree.get_model()
 		iter = self.get_user_iter(nick)
+		parent_iter = model.iter_parent(iter)
 		model.remove(iter)
+		if model.iter_n_children(parent_iter) == 0:
+			model.remove(parent_iter)
 	
-	def add_user_to_roster(self, nick, show):
+	def add_user_to_roster(self, nick, show, role):
 		model = self.tree.get_model()
 		img = self.plugin.roster.pixbufs[show]
-		return model.append(None, (img, nick))
+		role_iter = self.get_role_iter(role)
+		if not role_iter:
+			role_iter = model.append(None, (self.plugin.roster.pixbufs['closed']\
+				, role))
+		iter = model.append(role_iter, (img, nick))
+		self.tree.expand_row((model.get_path(role_iter)), False)
+		return iter
+	
+	def get_role(self, jid_iter):
+		model = self.tree.get_model()
+		path = model.get_path(jid_iter)[0]
+		iter = model.get_iter(path)
+		return model.get_value(iter, 1)
 
-	def chg_user_status(self, nick, show, status, account):
+	def chg_user_status(self, nick, show, status, role, affiliation, jid, \
+		reason, actor, statusCode, account):
 		"""When a user change his status"""
 		model = self.tree.get_model()
 		if show == 'offline' or show == 'error':
+			if statusCode == '307':
+				self.print_conversation(_("%s has been kicked by %s: %s") % (nick, \
+					actor, reason))
 			self.remove_user(nick)
 		else:
 			iter = self.get_user_iter(nick)
 			if not iter:
-				iter = self.add_user_to_roster(nick, show)
+				iter = self.add_user_to_roster(nick, show, role)
 			else:
-				img = self.plugin.roster.pixbufs[show]
-				model.set_value(iter, 0, img)
-#			u = self.contacts[account][user.jid]
-#			u.show = show
-#			u.status = status
-#			self.redraw_jid(user.jid, account)
+				actual_role = self.get_role(iter)
+				if role != actual_role:
+					self.remove_user(nick)
+					self.add_user_to_roster(nick, show, role)
+				else:
+					img = self.plugin.roster.pixbufs[show]
+					model.set_value(iter, 0, img)
 
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -393,9 +439,174 @@ class gc:
 		#scroll to the end of the textview
 		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
 
+	def kick(self, widget, room_jid, nick):
+		"""kick a user"""
+		self.plugin.send('SET_ROLE', self.account, (room_jid, nick, 'none'))
+
+	def grant_voice(self, widget, room_jid, nick):
+		"""grant voice privilege to a user"""
+		self.plugin.send('SET_ROLE', self.account, (room_jid, nick, \
+			'participant'))
+
+	def revoke_voice(self, widget, room_jid, nick):
+		"""revoke voice privilege to a user"""
+		self.plugin.send('SET_ROLE', self.account, (room_jid, nick, 'visitor'))
+
+	def grant_moderator(self, widget, room_jid, nick):
+		"""grant moderator privilege to a user"""
+		self.plugin.send('SET_ROLE', self.account, (room_jid, nick, 'moderator'))
+
+	def revoke_moderator(self, widget, room_jid, nick):
+		"""revoke moderator privilege to a user"""
+		self.plugin.send('SET_ROLE', self.account, (room_jid, nick, \
+			'participant'))
+
+	def ban(self, widget, room_jid, nick):
+		"""ban a user"""
+		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+			'outcast'))
+
+	def grant_membership(self, widget, room_jid, nick):
+		"""grant membership privilege to a user"""
+		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+			'member'))
+
+	def revoke_membership(self, widget, room_jid, nick):
+		"""revoke membership privilege to a user"""
+		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+			'none'))
+
+	def grant_admin(self, widget, room_jid, nick):
+		"""grant administrative privilege to a user"""
+		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+			'admin'))
+
+	def revoke_admin(self, widget, room_jid, nick):
+		"""revoke administrative privilege to a user"""
+		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+			'member'))
+
+	def grant_owner(self, widget, room_jid, nick):
+		"""grant owner privilege to a user"""
+		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+			'owner'))
+
+	def revoke_owner(self, widget, room_jid, nick):
+		"""revoke owner privilege to a user"""
+		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+			'admin'))
+
+	def mk_menu(self, event, iter):
+		"""Make user's popup menu"""
+		model = self.tree.get_model()
+		nick = model.get_value(iter, 1)
+#		jid = model.get_value(iter, 3)
+#		path = model.get_path(iter)
+#		user = self.contacts[account][jid][0]
+		
+		menu = gtk.Menu()
+		item = gtk.MenuItem(_("MUC"))
+		menu.append(item)
+		
+		menu_sub = gtk.Menu()
+		item.set_submenu(menu_sub)
+		item = gtk.MenuItem(_("Kick"))
+		menu_sub.append(item)
+		item.connect("activate", self.kick, self.jid, nick)
+		item = gtk.MenuItem(_("Grant voice"))
+		menu_sub.append(item)
+		item.connect("activate", self.grant_voice, self.jid, nick)
+		item = gtk.MenuItem(_("Revoke voice"))
+		menu_sub.append(item)
+		item.connect("activate", self.revoke_voice, self.jid, nick)
+		item = gtk.MenuItem(_("Grant moderator"))
+		menu_sub.append(item)
+		item.connect("activate", self.grant_moderator, self.jid, nick)
+		item = gtk.MenuItem(_("Revoke moderator"))
+		menu_sub.append(item)
+		item.connect("activate", self.revoke_moderator, self.jid, nick)
+		
+		item = gtk.MenuItem()
+		menu_sub.append(item)
+
+		item = gtk.MenuItem(_("Ban"))
+		menu_sub.append(item)
+		item.connect("activate", self.ban, self.jid, nick)
+		item = gtk.MenuItem(_("Grant membership"))
+		menu_sub.append(item)
+		item.connect("activate", self.grant_membership, self.jid, nick)
+		item = gtk.MenuItem(_("Revoke membership"))
+		menu_sub.append(item)
+		item.connect("activate", self.revoke_membership, self.jid, nick)
+		item = gtk.MenuItem(_("Grant admin"))
+		menu_sub.append(item)
+		item.connect("activate", self.grant_admin, self.jid, nick)
+		item = gtk.MenuItem(_("Revoke admin"))
+		menu_sub.append(item)
+		item.connect("activate", self.revoke_admin, self.jid, nick)
+		item = gtk.MenuItem(_("Grant owner"))
+		menu_sub.append(item)
+		item.connect("activate", self.grant_owner, self.jid, nick)
+		item = gtk.MenuItem(_("Revoke owner"))
+		menu_sub.append(item)
+		item.connect("activate", self.revoke_owner, self.jid, nick)
+		
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
+		menu.reposition()
+
 	def on_focus(self, widget, event):
 		"""When window get focus"""
 		self.plugin.systray.remove_jid(self.jid, self.account)
+
+	def on_treeview_event(self, widget, event):
+		"""popup user's group's or agent menu"""
+		if event.type == gtk.gdk.BUTTON_PRESS:
+			if event.button == 3:
+				try:
+					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
+						int(event.y))
+				except TypeError:
+					self.tree.get_selection().unselect_all()
+					return gtk.FALSE
+				model = self.tree.get_model()
+				iter = model.get_iter(path)
+				if len(path) == 2:
+					self.mk_menu(event, iter)
+				return gtk.TRUE
+			if event.button == 1:
+				try:
+					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
+						int(event.y))
+				except TypeError:
+					self.tree.get_selection().unselect_all()
+		if event.type == gtk.gdk.KEY_RELEASE:
+			if event.keyval == gtk.keysyms.Escape:
+				self.tree.get_selection().unselect_all()
+		return gtk.FALSE
+
+	def on_row_activated(self, widget, path, col=0):
+		"""When an iter is dubble clicked :
+		open the chat window"""
+		model = self.tree.get_model()
+		iter = model.get_iter(path)
+		if len(path) == 1:
+			if (self.tree.row_expanded(path)):
+				self.tree.collapse_row(path)
+			else:
+				self.tree.expand_row(path, False)
+
+	def on_row_expanded(self, widget, iter, path):
+		"""When a row is expanded :
+		change the icon of the arrow"""
+		model = self.tree.get_model()
+		model.set_value(iter, 0, self.plugin.roster.pixbufs['opened'])
+	
+	def on_row_collapsed(self, widget, iter, path):
+		"""When a row is collapsed :
+		change the icon of the arrow"""
+		model = self.tree.get_model()
+		model.set_value(iter, 0, self.plugin.roster.pixbufs['closed'])
 
 	def __init__(self, jid, nick, plugin, account):
 		self.jid = jid
@@ -442,6 +653,10 @@ class gc:
 		self.xml.signal_connect('on_focus', self.on_focus)
 		self.xml.signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
+		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
+		self.xml.signal_connect('on_row_activated', self.on_row_activated)
+		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
+		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
 
 class log_Window:
 	"""Class for bowser agent window :
@@ -1305,7 +1520,8 @@ class roster_Window:
 				self.plugin.windows[account]['chats'][jid].window.present()
 			elif self.contacts[account].has_key(jid):
 				self.plugin.windows[account]['chats'][jid] = \
-					message_Window(self.contacts[account][jid][0], self.plugin, account)
+					message_Window(self.contacts[account][jid][0], self.plugin, \
+						account)
 
 	def on_row_expanded(self, widget, iter, path):
 		"""When a row is expanded :
@@ -1375,7 +1591,8 @@ class roster_Window:
 		"""When browse agent is selected :
 		Call browse class"""
 		if not self.plugin.windows[account].has_key('browser'):
-			self.plugin.windows[account]['browser'] = browseAgent_Window(self.plugin, account)
+			self.plugin.windows[account]['browser'] = \
+				browseAgent_Window(self.plugin, account)
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
@@ -1829,7 +2046,8 @@ class plugin:
 		self.roster.on_status_changed(account, status)
 	
 	def handle_event_notify(self, account, array):
-		#('NOTIFY', account, (jid, status, message, resource, priority))
+		#('NOTIFY', account, (jid, status, message, resource, priority, role, \
+		#affiliation, real_jid, reason, actor, statusCode))
 		jid = string.split(array[0], '/')[0]
 		resource = array[3]
 		if not resource:
@@ -1873,7 +2091,8 @@ class plugin:
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
 			self.windows[account]['gc'][ji].chg_user_status(resource, array[1],\
-				array[2], account)
+				array[2], array[5], array[6], array[7], array[8], array[9], \
+				array[10], account)
 
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (user, msg))

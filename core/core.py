@@ -204,11 +204,15 @@ class GajimCore:
 				show = 'online'
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 				(prs.getFrom().getBasic(), show, prs.getStatus(), \
-				prs.getFrom().getResource(), prio))
+				prs.getFrom().getResource(), prio, prs.getRole(), \
+				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
+				prs.getActor(), prs.getStatusCode()))
 		elif typ == 'unavailable':
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 				(prs.getFrom().getBasic(), 'offline', prs.getStatus(), \
-					prs.getFrom().getResource(), prio))
+				prs.getFrom().getResource(), prio, prs.getRole(), \
+				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
+				prs.getActor(), prs.getStatusCode()))
 		elif typ == 'subscribe':
 			log.debug("subscribe request from %s" % who)
 			if self.cfgParser.Core['alwaysauth'] == 1 or \
@@ -217,7 +221,8 @@ class GajimCore:
 				if string.find(who, "@") <= 0:
 					self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 						(prs.getFrom().getBasic(), 'offline', 'offline', \
-						prs.getFrom().getResource(), prio))
+						prs.getFrom().getResource(), prio, None, None, None, None, \
+						None, None))
 			else:
 				txt = prs.getStatus()
 				if not txt:
@@ -267,7 +272,8 @@ class GajimCore:
 			else:
 				self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 					(prs.getFrom().getBasic(), 'error', errmsg, \
-					prs.getFrom().getResource(), prio))
+					prs.getFrom().getResource(), prio, None, None, None, None, None,\
+					None))
 	# END presenceCB
 
 	def disconnectedCB(self, con):

@@ -125,6 +125,7 @@ NS_XEXPIRE    = "jabber:x:expire" # JEP-0023
 NS_XENCRYPTED = "jabber:x:encrypted" # JEP-0027
 NS_XSIGNED    = "jabber:x:signed" # JEP-0027
 NS_P_MUC      = _NS_PROTOCOL + "/muc" # JEP-0045
+NS_P_MUC_ADMIN = NS_P_MUC + "#admin" # JEP-0045
 NS_VCARD      = "vcard-temp" # JEP-0054
 
 
@@ -716,7 +717,7 @@ class Client(Connection):
             For identity: category, name is mandatory, type is optional.
             For feature: var is mandatory"""
         identities , features = [] , []
-	disco = self._discover(NS_P_DISC_INFO,jid,node)
+        disco = self._discover(NS_P_DISC_INFO,jid,node)
         if disco:
             for i in disco:
                 if i.getName()=='identity': identities.append(i.attrs)
@@ -726,19 +727,22 @@ class Client(Connection):
     def browseAgent(self,jid,node=None):
         identities, features, items = [], [], []
         iq=Iq(to=jid,type='get',query=NS_BROWSE)
-	rep=self.SendAndWaitForResponse(iq)
-	if not rep:
+        rep=self.SendAndWaitForResponse(iq)
+        if not rep:
             return identities, features, items
         q = rep.getTag('service')
-        identities = [q.attrs]
+        if q:
+            identities = [q.attrs]
+        else:
+            identities = []
         if not q:
             return identities, features, items
         for node in q.kids:
             if node.getName() == 'ns':
                 features.append(node.getData())
             else:
-	    	infos = node.attrs
-		infos['category'] = node.getName()
+                infos = node.attrs
+                infos['category'] = node.getName()
                 items.append(node.attrs)
         return identities, features, items
 
@@ -1017,6 +1021,80 @@ class Presence(Protocol):
         """Returns the presence priority"""
         try: return self.getTag('priority').getData()
         except: return None
+
+    def getRole(self):
+        """Returns the presence role (for groupchat)"""
+        try: xtags = self.getTags('x')
+        except: return None
+        for xtag in xtags:
+            for child in xtag.getChildren():
+                if child.getName() == 'item':
+                    try: return child.getAttr('role')
+                    except: pass
+        return None
+
+    def getAffiliation(self):
+        """Returns the presence affiliation (for groupchat)"""
+        try: xtags = self.getTags('x')
+        except: return None
+        for xtag in xtags:
+            for child in xtag.getChildren():
+                if child.getName() == 'item':
+                    try: return child.getAttr('affiliation')
+                    except: pass
+        return None
+
+    def getJid(self):
+        """Returns the presence jid (for groupchat)"""
+        try: xtags = self.getTags('x')
+        except: return None
+        for xtag in xtags:
+            for child in xtag.getChildren():
+                if child.getName() == 'item':
+                    try: return child.getAttr('jid')
+                    except: pass
+        return None
+
+    def getReason(self):
+        """Returns the reason of the presence (for groupchat)"""
+        try: xtags = self.getTags('x')
+        except: return None
+        for xtag in xtags:
+            for child in xtag.getChildren():
+                if not child.getName() == 'item':
+                    continue
+                for cchild in child.getChildren():
+                    if not cchild.getName() == 'reason':
+                        continue
+                    try: return cchild.getData()
+                    except: pass
+        return None
+
+    def getActor(self):
+        """Returns the reason of the presence (for groupchat)"""
+        try: xtags = self.getTags('x')
+        except: return None
+        for xtag in xtags:
+            for child in xtag.getChildren():
+                if not child.getName() == 'item':
+                    continue
+                for cchild in child.getChildren():
+                    if not cchild.getName() == 'actor':
+                        continue
+                    try: return cchild.getAttr('jid')
+                    except: pass
+        return None
+
+    def getStatusCode(self):
+        """Returns the status code of the presence (for groupchat)"""
+        try: xtags = self.getTags('x')
+        except: return None
+        for xtag in xtags:
+            for child in xtag.getChildren():
+                if child.getName() == 'status':
+                    try: return child.getAttr('code')
+                    except: pass
+        return None
 
     def setShow(self,val):
         """Sets the presence show"""
