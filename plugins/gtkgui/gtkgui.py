@@ -3246,7 +3246,7 @@ class plugin:
 			'ACC_OK', 'CONFIG', 'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', \
 			'VISUAL', 'GC_MSG', 'GC_SUBJECT', 'BAD_PASSPHRASE', \
 			'GPG_SECRETE_KEYS', 'ROSTER_INFO', 'MSGSENT'])
-		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
+		self.default_config = {'autopopup':1,\
 			'autopopupaway':1,\
 			'showoffline':0,\
 			'autoaway':1,\
@@ -3297,7 +3297,8 @@ class plugin:
 			'x-position': 0,\
 			'y-position': 0,\
 			'width': 150,\
-			'height': 400}))
+			'height': 400}
+		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', self.default_config))
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
 		self.accounts = self.wait('CONFIG')

@@ -178,7 +178,48 @@ class preferences_window:
 			self.plugin.hide_systray()
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.roster.draw_roster()
-
+	
+	def on_reset_colors_button_clicked(self, widget):
+		defaults = self.plugin.default_config
+		self.plugin.config['inmsgcolor'] = defaults['inmsgcolor']
+		self.plugin.config['outmsgcolor'] = defaults['outmsgcolor']
+		self.plugin.config['statusmsgcolor'] = defaults['statusmsgcolor']
+		self.plugin.config['accounttextcolor'] = defaults['accounttextcolor']
+		self.plugin.config['grouptextcolor'] = defaults['grouptextcolor']
+		self.plugin.config['usertextcolor'] = defaults['usertextcolor']
+		self.plugin.config['accountbgcolor'] = defaults['accountbgcolor']
+		self.plugin.config['groupbgcolor'] = defaults['groupbgcolor']
+		self.plugin.config['userbgcolor'] = defaults['userbgcolor']
+		self.plugin.config['accountfont'] = defaults['accountfont']
+		self.plugin.config['groupfont'] = defaults['groupfont']
+		self.plugin.config['userfont'] = defaults['userfont']
+		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['inmsgcolor']))		
+		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['outmsgcolor']))		
+		self.xml.get_widget('status_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['statusmsgcolor']))		
+		self.xml.get_widget('account_text_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['accounttextcolor']))		
+		self.xml.get_widget('group_text_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['grouptextcolor']))		
+		self.xml.get_widget('user_text_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['usertextcolor']))	
+		self.xml.get_widget('account_text_bg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['accountbgcolor']))		
+		self.xml.get_widget('group_text_bg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['groupbgcolor']))		
+		self.xml.get_widget('user_text_bg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['userbgcolor']))
+		self.xml.get_widget('account_text_fontbutton').set_font_name(\
+			defaults['accountfont'])		
+		self.xml.get_widget('group_text_fontbutton').set_font_name(\
+			defaults['groupfont'])
+		self.xml.get_widget('user_text_fontbutton').set_font_name(\
+			defaults['userfont'])
+		self.update_text_tags()
+		self.plugin.roster.draw_roster()
+	
 	def write_cfg(self): #FIXME: (nk) instant apply
 		"""Save preferences in config File and apply them"""
 		

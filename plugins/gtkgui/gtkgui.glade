@@ -3754,6 +3754,7 @@ on the server as a vCard</property>
 		  <property name="visible">True</property>
 		  <property name="relief">GTK_RELIEF_NONE</property>
 		  <property name="focus_on_click">False</property>
+		  <signal name="clicked" handler="on_reset_colors_button_clicked" last_modification_time="Sun, 06 Mar 2005 18:40:18 GMT"/>
 
 		  <child>
 		    <widget class="GtkAlignment" id="alignment50">
