@@ -100,7 +100,7 @@ class message_Window:
 			self.print_conversation(evt[0], tim = evt[1])
 		del self.plugin.queues[self.account][self.user.jid]
 		self.plugin.roster.redraw_jid(self.user.jid, self.account)
-		self.plugin.systray.remove_jid(self.user.jid)
+		self.plugin.systray.remove_jid(self.user.jid, self.account)
 		showOffline = self.plugin.config['showoffline']
 		if (self.user.show == 'offline' or self.user.show == 'error') and \
 			not showOffline:
@@ -140,7 +140,7 @@ class message_Window:
 
 	def on_focus(self, widget, event):
 		"""When window get focus"""
-		self.plugin.systray.remove_jid(self.user.jid)
+		self.plugin.systray.remove_jid(self.user.jid, self.account)
 	
 	def __init__(self, user, plugin, account):
 		self.user = user
@@ -908,7 +908,7 @@ class roster_Window:
 				model = self.tree.get_model()
 				self.plugin.queues[account][jid] = Queue.Queue(50)
 				self.redraw_jid(jid, account)
-				self.plugin.systray.add_jid(jid)
+				self.plugin.systray.add_jid(jid, account)
 			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
 			if not path:
@@ -932,7 +932,7 @@ class roster_Window:
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg)
 			if not self.plugin.windows[account]['chats'][jid].window.\
 				get_property('is-active'):
-				self.plugin.systray.add_jid(jid)
+				self.plugin.systray.add_jid(jid, account)
 
 	def on_prefs(self, widget):
 		"""When preferences is selected :
@@ -1214,14 +1214,16 @@ class systray:
 		else:
 			self.img_tray.set_from_pixbuf(pix)
 
-	def add_jid(self, jid):
-		if not jid in self.jids:
-			self.jids.append(jid)
+	def add_jid(self, jid, account):
+		list = [account, jid]
+		if not list in self.jids:
+			self.jids.append(list)
 			self.set_img()
 
-	def remove_jid(self, jid):
-   		if jid in self.jids:
-			self.jids.remove(jid)
+	def remove_jid(self, jid, account):
+		list = [account, jid]
+		if list in self.jids:
+			self.jids.remove(list)
 			self.set_img()
 
 	def set_status(self, status):
@@ -1272,14 +1274,34 @@ class systray:
 		menu.show_all()
 		menu.reposition()
 
-
 	def on_clicked(self, widget, event):
+		if event.type == gtk.gdk._2BUTTON_PRESS and event.button == 1:
+			if len(self.jids) == 0:
+				win = self.plugin.roster.xml.get_widget('Gajim')
+				if self.iconified:
+					win.deiconify()
+				else:
+					win.iconify()
+			else:
+				account = self.jids[0][0]
+				jid = self.jids[0][1]
+				if self.plugin.windows[account]['chats'].has_key(jid):
+					self.plugin.windows[account]['chats'][jid].window.present()
 		if event.button == 3:
 			self.mk_menu(event)
+
+	def state_changed(self, widget, event):
+		if event.new_window_state & gtk.gdk.WINDOW_STATE_ICONIFIED:
+			self.iconified = 1
+		else:
+			self.iconified = 0
 
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.jids = []
+		self.iconified = 0
+		win = self.plugin.roster.xml.get_widget('Gajim')
+		win.connect("window-state-event", self.state_changed)
 		t = trayicon.TrayIcon("Gajim")
 		eb = gtk.EventBox()
 		eb.connect("button-press-event", self.on_clicked)
