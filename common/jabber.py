@@ -213,6 +213,7 @@ class Connection(xmlstream.Client):
         self._expected = {}
 
         self._id = 0;
+        self._lastIncome = time.time()
 
         self.lastErr = ''
         self.lastErrCode = 0
@@ -257,6 +258,7 @@ class Connection(xmlstream.Client):
         """Called internally when a 'protocol element' is received.
            Builds the relevant jabber.py object and dispatches it
            to a relevant function or callback."""
+        self.lastIncome = time.time()
         name=stanza.getName()
         if not self.handlers.has_key(name):
             self.DEBUG("whats a tag -> " + name,DBG_NODE_UNKNOWN)
@@ -407,6 +409,15 @@ class Connection(xmlstream.Client):
         """Returns a unique ID"""
         self._id = self._id + 1
         return ustr(self._id)
+
+    def process(self, timeout=0):
+        if time.time() > self._lastIncome + timeout:
+            self._lastIncome = time.time()
+            iq = Iq(type="get", to=self._host, query=NS_LAST)
+            print "iq", iq
+            if not self.SendAndWaitForResponse(iq, timeout=30):
+                self.disconnectHandler(self)
+        return xmlstream.Client.process(self, timeout)
 
 #############################################################################
 
