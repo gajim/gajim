@@ -651,10 +651,7 @@ class Roster_window:
 				iter = model.get_iter(path)
 				type = model.get_value(iter, 2)
 				if (type == 'group' or type == 'account'):
-					print self.tree.get_columns()
-					print column
-					#self.tree.get_column(0)
-					if column == self.tree.get_column(0): # if first column (the one that has \/
+					if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 						if (self.tree.row_expanded(path)):
 							self.tree.collapse_row(path)
 						else:
@@ -1003,8 +1000,7 @@ class Roster_window:
 				self.plugin.windows[account]['chats'][jid].active_tab(jid)
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
-		"""When a row is expanded :
-		change the icon of the arrow"""
+		"""When a row is expanded change the icon of the arrow"""
 		model = self.tree.get_model()
 		account = model.get_value(iter, 4)
 		type = model.get_value(iter, 2)
@@ -1093,8 +1089,8 @@ class Roster_window:
 		self.path = 'plugins/gtkgui/icons/' + iconset + '/'
 		self.pixbufs = {}
 		for state in ('connecting', 'online', 'chat', 'away', 'xa', 'dnd', \
-			'invisible', 'offline', 'error', 'requested', 'message', 'opened', \
-			'closed', 'not in the roster'):
+			'invisible', 'offline', 'error', 'requested', 'message', \
+			'opened', 'closed', 'not in the roster'):
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
 			files = []
@@ -1147,11 +1143,12 @@ class Roster_window:
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('cell-background', \
 				self.plugin.config['groupbgcolor'])
-			renderer.set_property('xalign', 0.3)
+			renderer.set_property('xalign', 0.5)
 		else:
 			renderer.set_property('cell-background', \
 				self.plugin.config['userbgcolor'])
 			renderer.set_property('xalign', 1)
+		renderer.set_property('width', 20)
 	
 	def nameCellDataFunc(self, column, renderer, model, iter, data=None):
 		"""When a row is added, set properties for name renderer"""
@@ -1161,20 +1158,21 @@ class Roster_window:
 			renderer.set_property('cell-background', \
 				self.plugin.config['accountbgcolor'])
 			renderer.set_property('font', self.plugin.config['accountfont'])
+			renderer.set_property('xpad', 0)
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('foreground', \
 				self.plugin.config['grouptextcolor'])
 			renderer.set_property('cell-background', \
 				self.plugin.config['groupbgcolor'])
 			renderer.set_property('font', self.plugin.config['groupfont'])
+			renderer.set_property('xpad', 4)
 		else:
 			renderer.set_property('foreground', \
 				self.plugin.config['usertextcolor'])
 			renderer.set_property('cell-background', \
 				self.plugin.config['userbgcolor'])
 			renderer.set_property('font', self.plugin.config['userfont'])
-
-		renderer.set_property('xpad', 5)
+			renderer.set_property('xpad', 8)
 
 	def compareIters(self, model, iter1, iter2, data = None):
 		"""Compare two iters to sort them"""
@@ -1333,8 +1331,9 @@ class Roster_window:
 		self.xml.get_widget('show_offline_contacts_menuitem').set_active(showOffline)
 
 		#columns
+		
+		#this col has two cells: first one img, second one text
 		col = gtk.TreeViewColumn()
-		self.tree.append_column(col)
 		render_pixbuf = CellRendererImage()
 		col.pack_start(render_pixbuf, expand = False)
 		col.add_attribute(render_pixbuf, 'image', 0)
@@ -1342,13 +1341,14 @@ class Roster_window:
 
 		render_text = gtk.CellRendererText()
 		render_text.connect('edited', self.on_cell_edited)
-		#need gtk2.4
-		#render_text.connect('editing-canceled', self.on_editing_canceled)
+		render_text.connect('editing-canceled', self.on_editing_canceled)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'text', 1)
-		col.add_attribute(render_text, 'editable', 5)
+		col.add_attribute(render_text, 'editable', 5) #5th column?? I don't understand :(
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
+		self.tree.append_column(col)
 		
+		#do not show gtk arrows workaround
 		col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand = False)

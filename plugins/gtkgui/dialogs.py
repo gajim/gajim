@@ -677,14 +677,14 @@ class New_message_dialog:
 		jid = self.jid_entry.get_text()
 		# use User class, new_chat expects it that way
 		# is it in the roster?
-		if not self.plugin.roster.contacts[self.account].has_key(jid):
+		if self.plugin.roster.contacts[self.account].has_key(jid):
+			user = self.plugin.roster.contacts[self.account][jid][0]
+		else:
 			user = gtkgui.User(jid, jid, ['not in the roster'], \
 				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
 			self.plugin.roster.contacts[self.account][jid] = [user]
-			self.plugin.roster.add_user_to_roster(user.jid, self.account)
-		else:
-			user = self.plugin.roster.contacts[self.account][jid][0]
-			
+			self.plugin.roster.add_user_to_roster(user.jid, self.account)			
+
 		if not self.plugin.windows[self.account]['chats'].has_key(jid):
 			self.plugin.roster.new_chat(user, self.account)
 		self.plugin.windows[self.account]['chats'][jid].active_tab(jid)
