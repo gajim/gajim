@@ -225,8 +225,7 @@ class message_Window:
 		
 		#scroll to the end of the textview
 		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
-		if not self.plugin.windows[self.account]['chats'][self.user.jid].\
-			window.get_property('is-active'):
+		if not self.window.get_property('is-active'):
 			self.nb_unread += 1
 			self.show_title()
 
