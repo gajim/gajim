@@ -427,7 +427,18 @@ class tabbed_chat_Window:
 		nb = self.xml.get_widget("notebook")
 		st = "1234567890"
 		if event.keyval == gtk.keysyms.Escape:
-			self.on_close_clicked(widget)
+			jid = self.get_active_jid()
+			if len(self.xmls) == 1:
+				button.get_toplevel().destroy()
+			else:
+				nb.remove_page(nb.get_current_page())
+				del self.plugin.windows[self.account]['chats'][jid]
+				del self.users[jid]
+				del self.nb_unread[jid]
+				del self.xmls[jid]
+				del self.tagIn[jid]
+				del self.tagOut[jid]
+				del self.tagStatus[jid]
 		elif (event.string in st) \
 			and (event.state & gtk.gdk.MOD1_MASK):
 			nb.set_current_page(st.index(event.string))
