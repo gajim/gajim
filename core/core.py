@@ -125,21 +125,23 @@ class GajimCore:
 	def presenceCB(self, con, prs):
 		"""Called when we recieve a presence"""
 		who = str(prs.getFrom())
+		prio = prs.getPriority()
+		if not prio:
+			prio = 0
 		type = prs.getType()
 		if type == None: type = 'available'
 		log.debug("PresenceCB : %s" % type)
 		if type == 'available':
-			if prs.getShow():
-				show = prs.getShow()
-			else:
+			show = prs.getShow()
+			if not show:
 				show = 'online'
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 				(prs.getFrom().getBasic(), show, prs.getStatus(), \
-				prs.getFrom().getResource()))
+				prs.getFrom().getResource(), prio))
 		elif type == 'unavailable':
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 				(prs.getFrom().getBasic(), 'offline', prs.getStatus(), \
-					prs.getFrom().getResource()))
+					prs.getFrom().getResource(), prio))
 		elif type == 'subscribe':
 			log.debug("subscribe request from %s" % who)
 			if self.cfgParser.Core['alwaysauth'] == 1 or \
@@ -148,7 +150,7 @@ class GajimCore:
 				if string.find(who, "@") <= 0:
 					self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 						(prs.getFrom().getBasic(), 'offline', 'offline', \
-						prs.getFrom().getResource()))
+						prs.getFrom().getResource(), prio))
 			else:
 				txt = prs.getStatus()
 				if not txt:
@@ -172,7 +174,7 @@ class GajimCore:
 			errmsg = prs._node.kids[0].getData()
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 				(prs.getFrom().getBasic(), 'error', errmsg, \
-					prs.getFrom().getResource()))
+					prs.getFrom().getResource(), prio))
 	# END presenceCB
 
 	def disconnectedCB(self, con):
@@ -301,21 +303,22 @@ class GajimCore:
 				elif ev[0] == 'STATUS':
 					if (ev[2][0] != 'offline') and (self.connected[ev[1]] == 0):
 						con = self.connect(ev[1])
-						#send our presence
-						p = common.jabber.Presence()
-						p.setShow(ev[2][0])
-						p.setStatus(ev[2][1])
-						if ev[2][0] == 'invisible':
-							p.setType('invisible')
-						con.send(p)
-						self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
-						#ask our VCard
-						iq = common.jabber.Iq(type="get")
-						iq._setTag('vCard', common.jabber.NS_VCARD)
-						id = con.getAnID()
-						iq.setID(id)
-						con.send(iq)
-						self.myVCardID.append(id)
+						if self.connected[ev[1]]:
+							#send our presence
+							p = common.jabber.Presence()
+							p.setShow(ev[2][0])
+							p.setStatus(ev[2][1])
+							if ev[2][0] == 'invisible':
+								p.setType('invisible')
+							con.send(p)
+							self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
+							#ask our VCard
+							iq = common.jabber.Iq(type="get")
+							iq._setTag('vCard', common.jabber.NS_VCARD)
+							id = con.getAnID()
+							iq.setID(id)
+							con.send(iq)
+							self.myVCardID.append(id)
 					elif (ev[2][0] == 'offline') and (self.connected[ev[1]] == 1):
 						self.connected[ev[1]] = 0
 						con.disconnect()
