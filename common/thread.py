@@ -34,7 +34,10 @@ class GajimThread(threading.Thread):
 	# END __init__
  
 	def run(self):
+	#This is VERY bad
 		if self.getName() == 'gtkgui':
 			plugins.gtkgui.plugin(self.queueIn, self.queueOut)
+		elif self.getName() == 'logger':
+			plugins.logger.plugin(self.queueIn, self.queueOut)
 	# END run
 # END GajimThread

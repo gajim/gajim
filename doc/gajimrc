@@ -21,3 +21,10 @@ inmsgcolor = red
 outmsgcolor = blue
 iconstyle = sun
 autopopup = 0
+
+[Logger]
+
+#Log notify messages in a separate file (notify.log)
+lognotsep = 1
+#Log notify messages in user log file
+lognotusr = 1

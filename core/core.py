@@ -121,6 +121,7 @@ class GajimCore:
 				if ev[0] == 'QUIT':
 					if self.connected == 1:
 						self.con.disconnect()
+					self.hub.sendPlugin('QUIT', ())
 					return
 				#('STATUS', status)
 				elif ev[0] == 'STATUS':
@@ -138,6 +139,7 @@ class GajimCore:
 					msg = common.jabber.Message(ev[1][0], ev[1][1])
 					msg.setType('chat')
 					self.con.send(msg)
+					self.hub.sendPlugin('MSGSENT', ev[1])
 				#('SUB', (jid, txt))
 				elif ev[0] == 'SUB':
 					log.debug('subscription request for %s' % ev[1][0])
@@ -180,7 +182,7 @@ class GajimCore:
 
 def start():
 	gc = GajimCore()
-	guiPl = gc.hub.newPlugin ('gtkgui')
+	guiPl = gc.hub.newPlugin('gtkgui')
 	gc.hub.register('gtkgui', 'ROSTER')
 	gc.hub.register('gtkgui', 'NOTIFY')
 	gc.hub.register('gtkgui', 'MSG')
@@ -188,5 +190,11 @@ def start():
 	gc.hub.register('gtkgui', 'SUBSCRIBE')
 	gc.hub.register('gtkgui', 'AGENTS')
 	gc.hub.register('gtkgui', 'AGENT_INFO')
-	guiPl.load ()
+	guiPl.load()
+	logPl = gc.hub.newPlugin('logger')
+	gc.hub.register('logger', 'MSG')
+	gc.hub.register('logger', 'MSGSENT')
+	gc.hub.register('logger', 'NOTIFY')
+	gc.hub.register('logger', 'QUIT')
+	logPl.load()
 	gc.mainLoop()
