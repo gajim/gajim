@@ -1144,7 +1144,7 @@ class configure_accounts_window:
 class agent_registration_window:
 	"""Class for agent registration window :
 	window that appears when we want to subscribe to an agent"""
-	def on_cancel(self, widget):
+	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
 		
@@ -1166,30 +1166,30 @@ class agent_registration_window:
 					entry.grab_focus()
 		table.show_all()
 	
-	def on_ok(self, widget):
+	def on_ok_button_clicked(self, widget):
 		"""When Ok button is clicked :
 		send registration info to the core"""
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
-		user1 = gtkgui.user(self.agent, self.agent, ['Agents'], 'offline', 'offline', \
-			'from', '', '', 0, '')
+		user1 = gtkgui.user(self.agent, self.agent, ['Agents'], 'offline', \
+			'offline', 'from', '', '', 0, '')
 		self.plugin.roster.contacts[self.account][self.agent] = [user1]
 		self.plugin.roster.add_user_to_roster(self.agent, self.account)
 		self.plugin.send('REG_AGENT', self.account, self.agent)
 		widget.get_toplevel().destroy()
 	
 	def __init__(self, agent, infos, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_reg', APP)
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_registration_window', APP)
 		self.agent = agent
 		self.infos = infos
 		self.plugin = plugin
 		self.account = account
-		self.xml.get_widget('agent_reg').set_title(_("Register to %s") % agent)
+		window = self.xml.get_widget('agent_registration_window')
+		window.set_title(_('Register to %s') % agent)
 		self.xml.get_widget('label').set_text(infos['instructions'])
 		self.entries = {}
 		self.draw_table()
-		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
-		self.xml.signal_connect('on_button_ok_clicked', self.on_ok)
+		self.xml.signal_autoconnect(self)
 
 
 class agent_browser_window:
