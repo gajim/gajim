@@ -26,6 +26,7 @@ import gtk.glade
 import gobject
 import os
 import string
+import Queue
 import common.optparser
 CONFPATH = "~/.gajimrc"
 Wbrowser = 0
@@ -238,6 +239,14 @@ class message:
 		self.convTxtBuffer.insert(end_iter, txt+'\n')
 		self.conversation.scroll_to_mark(\
 			self.convTxtBuffer.get_mark('end'), 0.1, 0, 0, 0)
+	
+	def read_queue(self, q):
+		while not q.empty():
+			self.print_conversation(q.get(), 1)
+		del self.r.tab_queues[self.user.jid]
+		for i in self.r.l_contact[self.user.jid]['iter']:
+			if self.r.pixbufs.has_key(self.user.show):
+				self.r.treestore.set_value(i, 0, self.r.pixbufs[self.user.show])
 
 	def on_msg_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Return:
@@ -272,7 +281,7 @@ class message:
 		self.convTxtBuffer = self.conversation.get_buffer()
 		end_iter = self.convTxtBuffer.get_end_iter()
 		self.convTxtBuffer.create_mark('end', end_iter, 0)
-		self.window.show()
+#		self.window.show()
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
 		self.tag = self.convTxtBuffer.create_tag("incoming")
@@ -321,7 +330,7 @@ class roster:
 					self.l_group[g] = iterG
 				if user1.show != 'offline' or self.showOffline or g == 'Agents':
 					if g == 'Agents':
-						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, 'agent', TRUE))
+						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, 'agent', FALSE))
 					else:
 						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, user1.jid, TRUE))
 					self.l_contact[user1.jid]['iter'].append(iterU)
@@ -471,6 +480,8 @@ class roster:
 			self.tab_messages[jid].window.present()
 		elif self.l_contact.has_key(jid):
 			self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
+			if self.tab_queues.has_key(jid):
+				self.tab_messages[jid].read_queue(self.tab_queues[jid])
 
 	def on_cell_edited (self, cell, row, new_text):
 		iter = self.treestore.get_iter_from_string(row)
@@ -482,6 +493,8 @@ class roster:
 				self.tab_messages[jid].window.present()
 			elif self.l_contact.has_key(jid):
 				self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
+				if self.tab_queues.has_key(jid):
+					self.tab_messages[jid].read_queue(self.tab_queues[jid])
 		else:
 			self.treestore.set_value(iter, 1, new_text)
 			self.l_contact[jid]['user'].name = new_text
@@ -505,7 +518,7 @@ class roster:
 			iconstyle = 'sun'
 		self.path = 'plugins/icons/' + iconstyle + '/'
 		self.pixbufs = {}
-		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'requested'):
+		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'requested', 'message'):
 			if not os.path.exists(self.path + state + '.xpm'):
 				print 'No such file : ' + self.path + state + '.xpm'
 				self.pixbufs[state] = None
@@ -517,6 +530,7 @@ class roster:
 		self.optionmenu = self.xml.get_widget('optionmenu')
 		self.optionmenu.set_history(6)
 		self.tab_messages = {}
+		self.tab_queues = {}
 
 		showOffline = self.cfgParser.GtkGui_showoffline
 		if showOffline:
@@ -566,7 +580,7 @@ class plugin:
 					if not self.r.l_contact.has_key(jid):
 						user1 = user(jid, jid, ['Agents'], ev[1][1], ev[1][2], 'from')
 						iterU = self.r.treestore.append(self.r.l_group['Agents'], \
-							(self.r.pixbufs[ev[1][1]], jid, 'agent', TRUE))
+							(self.r.pixbufs[ev[1][1]], jid, 'agent', FALSE))
 						self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
 					else:
 						#Update existing line
@@ -581,10 +595,25 @@ class plugin:
 					jid = string.replace(ev[1][0], '@', '')
 				else:
 					jid = ev[1][0]
-				if not self.r.tab_messages.has_key(jid):
-					#FIXME:message from unknown
-					self.r.tab_messages[jid] = message(self.r.l_contact[jid]['user'], self.r)
-				self.r.tab_messages[jid].print_conversation(ev[1][1])
+				
+				autopopup = self.r.cfgParser.GtkGui_autopopup
+				if autopopup:
+					autopopup = string.atoi(autopopup)
+				else:
+					self.autopopup = 0
+				if autopopup == 0 and not self.r.tab_messages.has_key(jid):
+					#We save it in a queue
+					if not self.r.tab_queues.has_key(jid):
+						self.r.tab_queues[jid] = Queue.Queue(50)
+					self.r.tab_queues[jid].put(ev[1][1])
+					for i in self.r.l_contact[jid]['iter']:
+						self.r.treestore.set_value(i, 0, self.r.pixbufs['message'])
+				else:
+					if not self.r.tab_messages.has_key(jid):
+						#FIXME:message from unknown
+						self.r.tab_messages[jid] = message(self.r.l_contact[jid]['user'], self.r)
+					self.r.tab_messages[jid].print_conversation(ev[1][1])
+					
 			elif ev[0] == 'SUBSCRIBE':
 				authorize(self.r, ev[1])
 			elif ev[0] == 'SUBSCRIBED':

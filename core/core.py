@@ -18,7 +18,6 @@
 ## GNU General Public License for more details.
 ##
 
-import Queue
 import socket
 import sys
 import time

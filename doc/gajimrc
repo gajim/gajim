@@ -20,3 +20,4 @@ showoffline = 0
 inmsgcolor = red
 outmsgcolor = blue
 iconstyle = sun
+autopopup = 0
