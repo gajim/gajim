@@ -303,21 +303,6 @@ class preference_Window:
 		"""When Apply button is clicked"""
 		self.write_cfg()
 
-	def change_notebook_page(self, number):
-		self.notebook.set_current_page(number)
-
-	def on_lookfeel_button_clicked(self, widget, data=None):
-		self.change_notebook_page(0)
-		
-	def on_events_button_clicked(self, widget, data=None):
-		self.change_notebook_page(1)
-		
-	def on_presence_button_clicked(self, widget, data=None):
-		self.change_notebook_page(2)
-
-	def on_log_button_clicked(self, widget, data=None):
-		self.change_notebook_page(3)
-
 	def fill_msg_treeview(self):
 		i = 0
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
@@ -470,6 +455,14 @@ class preference_Window:
 		"""set or unset sensitivity of widgets when widget is toggled"""
 		for w in widgets:
 			w.set_sensitive(widget.get_active())
+
+	def on_msg_treeview_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Delete:
+			self.on_delete_msg_button_clicked(widget)
+
+	def on_treeview_emoticons_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Delete:
+			self.on_button_remove_emoticon_clicked(widget)
 
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
@@ -667,14 +660,10 @@ class preference_Window:
 					self.xml.get_widget('entry_emoticons'),
 					self.xml.get_widget('button_emoticons'),
 					self.xml.get_widget('image_emoticon')])
-		self.xml.signal_connect('on_lookfeel_button_clicked', \
-			self.on_lookfeel_button_clicked)
-		self.xml.signal_connect('on_events_button_clicked', \
-			self.on_events_button_clicked)
-		self.xml.signal_connect('on_presence_button_clicked', \
-			self.on_presence_button_clicked)
-		self.xml.signal_connect('on_log_button_clicked', \
-			self.on_log_button_clicked)
+		self.xml.signal_connect('on_msg_treeview_key_press_event', \
+			self.on_msg_treeview_key_press_event)
+		self.xml.signal_connect('on_treeview_emoticons_key_press_event', \
+			self.on_treeview_emoticons_key_press_event)
 
 		self.plugin.send('ASK_CONFIG', None, ('GtkGui', 'Logger', {'lognotsep':1,\
 			'lognotusr':1}))
