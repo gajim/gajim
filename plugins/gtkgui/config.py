@@ -1049,9 +1049,10 @@ class Account_modification_window:
 		priority = self.xml.get_widget('priority_spinbutton').get_value_as_int()
 		new_account_checkbutton = self.xml.get_widget('new_account_checkbutton')
 		name = self.xml.get_widget('name_entry').get_text()
-		if name != self.account and self.plugin.connected[self.account] != 0:
-			Error_dialog(_('You must be offline to change the account\'s name'))
-			return
+		if self.plugin.connected.has_key(self.account):
+			if name != self.account and self.plugin.connected[self.account] != 0:
+				Error_dialog(_('You must be offline to change the account\'s name'))
+				return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		autoconnect = 0
 		if self.xml.get_widget('autoconnect_checkbutton').get_active():
