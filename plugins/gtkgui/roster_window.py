@@ -436,9 +436,10 @@ class Roster_window:
 		item = gtk.MenuItem(_('Rename'))
 		menu.append(item)
 		item.connect('activate', self.on_rename, iter, path)
-		item = gtk.MenuItem(_('Edit groups'))
-		menu.append(item)
-		item.connect('activate', self.on_edit_groups, user, account)
+		if not 'not in the roster' in user.groups:
+			item = gtk.MenuItem(_('Edit groups'))
+			menu.append(item)
+			item.connect('activate', self.on_edit_groups, user, account)
 		item = gtk.MenuItem()
 		menu.append(item)
 		item = gtk.MenuItem(_('Subscription'))
@@ -1224,7 +1225,7 @@ class Roster_window:
 			return
 		iter_group_source = model.iter_parent(iter_source)
 		grp_source = model.get_value(iter_group_source, 3)
-		if grp_source == 'Agents':
+		if grp_source == 'Agents' or grp_source == 'not in the roster':
 			return
 		account = model.get_value(iter_dest, 4)
 		type_dest = model.get_value(iter_dest, 2)
