@@ -410,7 +410,7 @@ class tabbed_chat_Window:
 
 	def on_chat_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
-			widget.get_toplevel().destroy()
+			self.on_close_clicked(widget)
 
 	def read_queue(self, q):
 		"""read queue and print messages containted in it"""
