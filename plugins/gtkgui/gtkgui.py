@@ -653,6 +653,14 @@ class gc:
 				else:
 					img = self.plugin.roster.pixbufs[show]
 					model.set_value(iter, 0, img)
+	
+	def set_subject(self, subject):
+		self.xml.get_widget('subject_entry').set_text(subject)
+	
+	def on_subject_entry_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Return:
+			subject = self.xml.get_widget('subject_entry').get_text()
+			self.plugin.send('GC_SUBJECT', self.account, (self.jid, subject))
 
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -915,6 +923,7 @@ class gc:
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
 		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
 		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
+		self.xml.signal_connect('on_subject_entry_key_press_event', self.on_subject_entry_key_press_event)
 
 class history_window:
 	"""Class for bowser agent window :
@@ -2742,6 +2751,14 @@ class plugin:
 				get_property('is-active'):
 				self.systray.add_jid(jid, account)
 
+	def handle_event_gc_subject(self, account, array):
+		#('GC_SUBJECT', account, (jid, subject))
+		jids = string.split(array[0], '/')
+		jid = jids[0]
+		if not self.windows[account]['gc'].has_key(jid):
+			return
+		self.windows[account]['gc'][jid].set_subject(array[1])
+
 	def handle_event_bad_passphrase(self, account, array):
 		warning_dialog(_("Your GPG passphrase is wrong, so you are connected without your GPG key."))
 
@@ -2814,6 +2831,8 @@ class plugin:
 				self.handle_event_log_line(ev[1], ev[2])
 			elif ev[0] == 'GC_MSG':
 				self.handle_event_gc_msg(ev[1], ev[2])
+			elif ev[0] == 'GC_SUBJECT':
+				self.handle_event_gc_subject(ev[1], ev[2])
 			elif ev[0] == 'BAD_PASSPHRASE':
 				self.handle_event_bad_passphrase(ev[1], ev[2])
 			elif ev[0] == 'GPG_SECRETE_KEYS':
@@ -2874,8 +2893,8 @@ class plugin:
 			'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
 			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'REG_AGENT_INFO', 'QUIT', \
 			'ACC_OK', 'CONFIG', 'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', \
-			'VISUAL', 'GC_MSG', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS', \
-			'ROSTER_INFO', 'MSGSENT'])
+			'VISUAL', 'GC_MSG', 'GC_SUBJECT', 'BAD_PASSPHRASE', \
+			'GPG_SECRETE_KEYS', 'ROSTER_INFO', 'MSGSENT'])
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'autopopupaway':1,\
 			'showoffline':0,\

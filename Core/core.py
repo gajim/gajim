@@ -367,8 +367,13 @@ class GajimCore:
 			self.hub.sendPlugin('MSGERROR', self.connexions[con], \
 				(str(msg.getFrom()), msg.getErrorCode(), msg.getError(), msgtxt, tim))
 		elif typ == 'groupchat':
-			self.hub.sendPlugin('GC_MSG', self.connexions[con], \
-				(str(msg.getFrom()), msgtxt, tim))
+			subject = msg.getSubject()
+			if subject:
+				self.hub.sendPlugin('GC_SUBJECT', self.connexions[con], \
+					(str(msg.getFrom()), subject))
+			else:
+				self.hub.sendPlugin('GC_MSG', self.connexions[con], \
+					(str(msg.getFrom()), msgtxt, tim))
 		else:
 			self.hub.sendPlugin('MSG', self.connexions[con], \
 				(str(msg.getFrom()), msgtxt, tim))
@@ -906,6 +911,12 @@ class GajimCore:
 				msg.setType('groupchat')
 				con.send(msg)
 				self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
+			#('GC_SUBJECT', account, (jid, subject))
+			elif ev[0] == 'GC_SUBJECT':
+				msg = common.jabber.Message(ev[2][0])
+				msg.setType('groupchat')
+				msg.setSubject(ev[2][1])
+				con.send(msg)
 			#('GC_STATUS', account, (nick, jid, show, status))
 			elif ev[0] == 'GC_STATUS':
 				if ev[2][2] == 'offline':
