@@ -1837,6 +1837,9 @@ class roster_window:
 			if not self.join_gc_handler_id:
 				self.join_gc_handler_id = self.xml.get_widget('join_gc_menuitem').connect(
 					"activate", self.on_join_gc, self.plugin.accounts.keys()[0])
+			if not self.new_message_menuitem_handler_id:
+				self.new_message_menuitem_handler_id = self.xml.get_widget('new_message_menuitem').connect(
+					"activate", self.on_new_message_menuitem_activate, self.plugin.accounts.keys()[0])
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
@@ -2771,6 +2774,7 @@ class roster_window:
 		self.add_contact_handler_id = 0
 		self.browse_agents_handler_id = 0
 		self.join_gc_handler_id = 0
+		self.new_message_menuitem_handler_id = 0
 		self.regroup = 0
 		if self.plugin.config.has_key('mergeaccounts'):
 			self.regroup = self.plugin.config['mergeaccounts']
