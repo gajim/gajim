@@ -42,7 +42,7 @@ class plugin:
 					#default
 					lognotusr = 1
 #				tim = time.strftime("%d%m%y%H%M%S")
-				tim = time.time()
+				tim = "%d" % time.time()
 				
 				ev = self.queueIN.get()
 				if ev[0] == 'QUIT':

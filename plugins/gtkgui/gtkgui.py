@@ -336,14 +336,15 @@ class roster:
 					user1.groups.append('general')
 			for g in user1.groups:
 				if not self.l_group.has_key(g):
-					iterG = self.treestore.append(None, (None, g, 'group', FALSE))
+					iterG = self.treestore.append(None, (None, g, 'group', FALSE, self.grpbgcolor, FALSE))
 					self.l_group[g] = iterG
 				if user1.show != 'offline' or self.showOffline or g == 'Agents':
 					if g == 'Agents':
-						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, 'agent', FALSE))
+						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, 'agent', FALSE, self.userbgcolor, TRUE))
 					else:
-						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, user1.jid, TRUE))
+						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, user1.jid, TRUE, self.userbgcolor, TRUE))
 					self.l_contact[user1.jid]['iter'].append(iterU)
+		self.tree.expand_all()
 
 	def update_iter(self, widget, path, iter, data):
 		jid = self.treestore.get_value(iter, 2)
@@ -363,9 +364,9 @@ class roster:
 		if self.l_contact[jid]['iter'] == []:
 			for g in u.groups:
 				if not self.l_group.has_key(g):
-					iterG = self.treestore.append(None, (None, g, 'group', FALSE))
+					iterG = self.treestore.append(None, (None, g, 'group', FALSE, self.grpbgcolor, FALSE))
 					self.l_group[u.group] = iterG
-				iterU = self.treestore.append(self.l_group[g], (self.pixbufs[show], u.name, u.jid, TRUE))
+				iterU = self.treestore.append(self.l_group[g], (self.pixbufs[show], u.name, u.jid, TRUE, self.userbgcolor, TRUE))
 				self.l_contact[u.jid]['iter'].append(iterU)
 		else:
 			if show == 'offline' and not self.showOffline:
@@ -439,9 +440,9 @@ class roster:
 		if not self.l_contact.has_key(jid):
 			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub')
 			if not self.l_group.has_key('general'):
-				iterG = self.treestore.append(None, (None, 'general', 'group', FALSE))
+				iterG = self.treestore.append(None, (None, 'general', 'group', FALSE, self.grpbgcolor, FALSE))
 				self.l_group['general'] = iterG
-			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid, TRUE))
+			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid, TRUE, self.userbgcolor, TRUE))
 			self.l_contact[jid] = {'user':user1, 'iter':[iterU]}
 
 	def on_treeview_event(self, widget, event):
@@ -522,7 +523,8 @@ class roster:
 		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Gajim')
 		self.window =  self.xml.get_widget('Gajim')
 		self.tree = self.xml.get_widget('treeview')
-		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, gobject.TYPE_BOOLEAN)
+		#(icon, name, jid, editable, background color, show_icon)
+		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, gobject.TYPE_BOOLEAN, str, gobject.TYPE_BOOLEAN)
 		iconstyle = self.cfgParser.GtkGui_iconstyle
 		if not iconstyle:
 			iconstyle = 'sun'
@@ -536,6 +538,23 @@ class roster:
 				pix = gtk.gdk.pixbuf_new_from_file (self.path + state + '.xpm')
 				self.pixbufs[state] = pix
 		self.tree.set_model(self.treestore)
+#		map = self.tree.get_colormap()
+#		colour = map.alloc_color("red") # light red
+#		colour2 = map.alloc_color("blue") # light red
+#		colour = map.alloc_color("#FF9999") # light red
+#		st = self.tree.get_style().copy()
+#		st.bg[gtk.STATE_NORMAL] = colour
+#		st.fg[gtk.STATE_NORMAL] = colour
+#		st.bg[gtk.STATE_ACTIVE] = colour2
+#		st.fg[gtk.STATE_ACTIVE] = colour2
+#		st.bg[gtk.STATE_INSENSITIVE] = colour
+#		st.bg[gtk.STATE_PRELIGHT] = colour
+#		st.bg[gtk.STATE_SELECTED] = colour
+#		st.fg[gtk.STATE_SELECTED] = colour2
+#		st.white = colour
+#		print st.bg
+#		print self.tree.get_property('expander-column')
+#		self.tree.set_style(st)
 		self.queueOUT = queueOUT
 		self.optionmenu = self.xml.get_widget('optionmenu')
 		self.optionmenu.set_history(6)
@@ -548,15 +567,21 @@ class roster:
 		else:
 			self.showOffline = 0
 
+		self.grpbgcolor = 'gray50'
+		self.userbgcolor = 'white'
+
 		#columns
 		self.col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
 		self.col.pack_start(render_pixbuf, expand = False)
 		self.col.add_attribute(render_pixbuf, 'pixbuf', 0)
+		self.col.add_attribute(render_pixbuf, 'cell-background', 4)
+		self.col.add_attribute(render_pixbuf, 'visible', 5)
 		render_text = gtk.CellRendererText()
 		render_text.connect('edited', self.on_cell_edited)
 		self.col.pack_start(render_text, expand = True)
 		self.col.add_attribute(render_text, 'text', 1)
+		self.col.add_attribute(render_text, 'cell-background', 4)
 		self.col.add_attribute(render_text, 'editable', 3)
 		self.tree.append_column(self.col)
 
@@ -594,12 +619,13 @@ class plugin:
 					jid = string.replace(jid, '@', '')
 					if not self.r.l_group.has_key('Agents'):
 						iterG = self.r.treestore.append(None, (None, \
-							'Agents', 'group', FALSE))
+							'Agents', 'group', FALSE, self.r.grpbgcolor, FALSE))
 						self.r.l_group['Agents'] = iterG
 					if not self.r.l_contact.has_key(jid):
 						user1 = user(jid, jid, ['Agents'], ev[1][1], ev[1][2], 'from')
 						iterU = self.r.treestore.append(self.r.l_group['Agents'], \
-							(self.r.pixbufs[ev[1][1]], jid, 'agent', FALSE))
+							(self.r.pixbufs[ev[1][1]], jid, 'agent', FALSE, \
+							self.userbgcolor, TRUE))
 						self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
 					else:
 						#Update existing line
@@ -646,10 +672,10 @@ class plugin:
 					user1 = user(jid, jid, ['general'], 'online', 'online', 'to')
 					if not self.r.l_group.has_key('general'):
 						iterG = self.r.treestore.append(None, (None, \
-							'general', 'group', FALSE))
+							'general', 'group', FALSE, self.r.grpbgcolor, FALSE))
 						self.r.l_group['general'] = iterG
 					iterU = self.r.treestore.append(self.r.l_group['general'], \
-						(self.r.pixbufs['online'], jid, jid, TRUE))
+						(self.r.pixbufs['online'], jid, jid, TRUE, self.userbgcolor, TRUE))
 					self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
 				#TODO: print 'you are now authorized'
 			elif ev[0] == 'AGENTS':
