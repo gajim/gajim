@@ -2,7 +2,6 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
-<requires lib="gnome"/>
 
 <widget class="GtkWindow" id="Gajim">
   <property name="visible">True</property>
@@ -258,7 +257,7 @@
 	    <widget class="GtkMenu" id="menu_status">
 
 	      <child>
-		<widget class="GtkMenuItem" id="online">
+		<widget class="GtkImageMenuItem" id="online">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Online</property>
 		  <property name="use_underline">True</property>
@@ -266,7 +265,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkMenuItem" id="away">
+		<widget class="GtkImageMenuItem" id="away">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Away</property>
 		  <property name="use_underline">True</property>
@@ -274,7 +273,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkMenuItem" id="xa">
+		<widget class="GtkImageMenuItem" id="xa">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">NA</property>
 		  <property name="use_underline">True</property>
@@ -282,7 +281,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkMenuItem" id="dnd">
+		<widget class="GtkImageMenuItem" id="dnd">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">DND</property>
 		  <property name="use_underline">True</property>
@@ -304,7 +303,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkMenuItem" id="offline">
+		<widget class="GtkImageMenuItem" id="offline">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Offline</property>
 		  <property name="use_underline">True</property>

@@ -602,7 +602,8 @@ class accountPreference_Window:
 		if infos.has_key('proxyhost'):
 			self.xml.get_widget("entry_proxyhost").set_text(infos['proxyhost'])
 		if infos.has_key('proxyport'):
-			self.xml.get_widget("entry_proxyport").set_text('%i'%\
+#			self.xml.get_widget("entry_proxyport").set_text('%i'%\
+			self.xml.get_widget("entry_proxyport").set_text(\
 				infos['proxyport'])
 
 	def on_save_clicked(self, widget):
@@ -1874,6 +1875,11 @@ class roster_Window:
 				pix = fct(file)
 				self.pixbufs[state] = pix
 				break
+		for state in ('online', 'away', 'xa', 'dnd', 'offline'):
+			image = gtk.Image()
+			image.set_from_pixbuf(self.pixbufs[state])
+			image.show()
+			self.xml.get_widget(state).set_image(image)
 
 	def on_show_off(self, widget):
 		"""when show offline option is changed :
