@@ -1224,34 +1224,34 @@ class roster_window:
 			#add
 			menu_sub = gtk.Menu()
 			self.xml.get_widget('add_contact_menuitem').set_submenu(menu_sub)
-			for a in self.plugin.accounts.keys():
-				item = gtk.MenuItem(a)
+			for account in self.plugin.accounts.keys():
+				item = gtk.MenuItem('using ' + account)
 				menu_sub.append(item)
-				item.connect("activate", self.on_add_contact, a)
+				item.connect("activate", self.on_add_contact, account)
 			menu_sub.show_all()
 			#agents
 			menu_sub = gtk.Menu()
 			self.xml.get_widget('browse_agents_menuitem').set_submenu(menu_sub)
-			for a in self.plugin.accounts.keys():
-				item = gtk.MenuItem(a)
+			for account in self.plugin.accounts.keys():
+				item = gtk.MenuItem('using ' + account)
 				menu_sub.append(item)
-				item.connect("activate", self.on_browse_agents, a)
+				item.connect("activate", self.on_browse_agents, account)
 			menu_sub.show_all()
 			#join gc
 			menu_sub = gtk.Menu()
 			self.xml.get_widget('join_gc_menuitem').set_submenu(menu_sub)
-			for a in self.plugin.accounts.keys():
-				item = gtk.MenuItem(a)
+			for account in self.plugin.accounts.keys():
+				item = gtk.MenuItem('using ' + account)
 				menu_sub.append(item)
-				item.connect("activate", self.on_join_gc, a)
+				item.connect("activate", self.on_join_gc, account)
 			menu_sub.show_all()
 			#new message
 			menu_sub = gtk.Menu()
 			self.xml.get_widget('new_message_menuitem').set_submenu(menu_sub)
-			for a in self.plugin.accounts.keys():
-				item = gtk.MenuItem(a)
+			for account in self.plugin.accounts.keys():
+				item = gtk.MenuItem('using ' + account)
 				menu_sub.append(item)
-				item.connect("activate", self.on_new_message_menuitem_activate, a)
+				item.connect("activate", self.on_new_message_menuitem_activate, account)
 			menu_sub.show_all()
 		elif len(self.plugin.accounts.keys()) == 1:
 			#add
