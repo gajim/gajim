@@ -104,6 +104,8 @@ class GajimCore:
 
 				self.con.requestRoster()
 				roster = self.con.getRoster().getRaw()
+				if not roster :
+					roster = {}
 				self.hub.sendPlugin('ROSTER', roster)
 				self.con.sendInitPresence()
 				self.connected = 1
@@ -121,16 +123,16 @@ class GajimCore:
 					return
 				#('STATUS', status)
 				elif ev[0] == 'STATUS':
+					
 					if (ev[1] != 'offline') and (self.connected == 0):
 						self.connect()
 					elif (ev[1] == 'offline') and (self.connected == 1):
 						self.con.disconnect()
 						self.connected = 0
-					else:
-						print ev
-						p = common.jabber.Presence()
-						p.setShow(ev[1])
-						self.con.send(p)
+						return 1
+					p = common.jabber.Presence()
+					p.setShow(ev[1])
+					self.con.send(p)
 				#('MSG', (jid, msg))
 				elif ev[0] == 'MSG':
 					msg = common.jabber.Message(ev[1][0], ev[1][1])
@@ -140,6 +142,9 @@ class GajimCore:
 				elif ev[0] == 'SUB':
 					log.debug('subscription request for %s' % ev[1][0])
 					self.con.send(common.jabber.Presence(ev[1][0], 'subscribe'))
+				#('REQ', jid)
+				elif ev[0] == 'AUTH':
+					self.con.send(common.jabber.Presence(ev[1], 'subscribed'))
 				#('UNSUB', jid)
 				elif ev[0] == 'UNSUB':
 					delauth = self.cfgParser.Core_delauth

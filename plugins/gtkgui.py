@@ -64,7 +64,7 @@ class add:
 		start_iter = buf.get_start_iter()
 		end_iter = buf.get_end_iter()
 		txt = buf.get_text(start_iter, end_iter, 0)
-		self.r.req_sub(who, txt)
+		self.r.req_sub(self, who, txt)
 		self.delete_event(self)
 		
 	def __init__(self, roster):
@@ -223,23 +223,43 @@ class roster:
 				self.l_contact[u.jid]['iter'].append(iterU)
 		else:
 			if show == 'offline' and not self.showOffline:
-				self.treestore.remove(iter)
+				for i in self.l_contact[jid]['iter']:
+					self.treestore.remove(i)
 			else:
 				for i in self.l_contact[jid]['iter']:
 					self.treestore.set_value(i, 0, self.pixbufs[show])
-
-
-			
 		u.show = show
 		u.status = status
 	
 	def mk_menu_c(self, event, iter):
+		jid = self.treestore.get_value(iter, 2)
+		path = self.treestore.get_path(iter)
 		self.menu_c = gtk.Menu()
+		item = gtk.MenuItem("Start chat")
+		self.menu_c.append(item)
+		item.connect("activate", self.on_row_activated, path)
+		item = gtk.MenuItem("Rename")
+		self.menu_c.append(item)
+#		item.connect("activate", self.on_rename, iter)
+		item = gtk.MenuItem()
+		self.menu_c.append(item)
+		item = gtk.MenuItem("Subscription")
+		self.menu_c.append(item)
+		
+		menu_sub = gtk.Menu()
+		item.set_submenu(menu_sub)
+		item = gtk.MenuItem("Resend authorization to")
+		menu_sub.append(item)
+		item.connect("activate", self.authorize, jid)
+		item = gtk.MenuItem("Rerequest authorization from")
+		menu_sub.append(item)
+		item.connect("activate", self.req_sub, jid, 'I would like to add you to my contact list, please.')
+		
+		item = gtk.MenuItem()
+		self.menu_c.append(item)
 		item = gtk.MenuItem("Remove")
 		self.menu_c.append(item)
 		item.connect("activate", self.on_req_usub, iter)
-#		item = gtk.MenuItem("user2")
-#		self.menu_c.append(item)
 		self.menu_c.popup(None, None, None, event.button, event.time)
 		self.menu_c.show_all()
 
@@ -254,6 +274,27 @@ class roster:
 		self.menu_c.popup(None, None, None, event.button, event.time)
 		self.menu_c.show_all()
 	
+	def authorize(self, widget, jid):
+		self.queueOUT.put(('AUTH', jid))
+
+	def rename(self, widget, jid, name)
+		u = self.r.l_contact[jid]['user']
+		u.name = name
+		for i in self.r.l_contact[jid]['iter']:
+			self.r.treestore.set_value(i, 1, name)
+	
+	def req_sub(self, widget, jid, txt):
+		self.queueOUT.put(('SUB', (jid, txt)))
+		if not self.l_contact.has_key(jid):
+			#TODO: sub
+			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub')
+			#TODO: ajouter un grp si necessaire
+			if not self.l_group.has_key('general'):
+				iterG = self.treestore.append(None, (None, 'general', 'group'))
+				self.l_group['general'] = iterG
+			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid))
+			self.l_contact[jid] = {'user':user1, 'iter':[iterU]}
+
 	def on_treeview_event(self, widget, event):
 		if (event.button == 3) & (event.type == gtk.gdk.BUTTON_PRESS):
 			try:
@@ -269,15 +310,6 @@ class roster:
 			return gtk.TRUE
 		return gtk.FALSE
 	
-	def req_sub(self, jid, txt):
-		self.queueOUT.put(('SUB', (jid, txt)))
-		if not self.l_contact.has_key(jid):
-			#TODO: sub
-			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub')
-			#TODO: ajouter un grp si necessaire
-			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid))
-			self.l_contact[jid] = {'user':user1, 'iter':[iterU]}
-
 	def on_req_usub(self, widget, iter):
 		window_confirm = confirm(self, iter)
 
@@ -297,7 +329,7 @@ class roster:
 		self.queueOUT.put(('QUIT',''))
 		gtk.mainquit()
 
-	def on_row_activated(self, widget, path, col):
+	def on_row_activated(self, widget, path, col=0):
 		iter = self.treestore.get_iter(path)
 		jid = self.treestore.get_value(iter, 2)
 		if self.tab_messages.has_key(jid):
