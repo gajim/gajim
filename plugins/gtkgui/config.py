@@ -1562,8 +1562,9 @@ class Service_discovery_window:
 		if len(model.get_path(iter)) == 1:
 			expand = True
 		for item in items:
-			if not item.has_key('name'):
-				continue
+			name = ''
+			if item.has_key('name'):
+				name = item['name']
 			# We look if this item is already in the treeview
 			iter_child = model.iter_children(iter)
 			while iter_child:
@@ -1571,7 +1572,7 @@ class Service_discovery_window:
 					break
 				iter_child = model.iter_next(iter_child)
 			if not iter_child: # If it is not we add it
-				iter_child = model.append(iter, (item['name'], item['jid']))
+				iter_child = model.append(iter, (name, item['jid']))
 			self.agent_infos[item['jid']] = {'identities': [item]}
 			if self.iter_is_visible(iter_child) or expand:
 				self.browse(item['jid'])

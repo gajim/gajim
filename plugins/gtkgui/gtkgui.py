@@ -458,12 +458,12 @@ class plugin:
 				array[2], array[3])
 
 	def handle_event_agent_info_items(self, account, array):
-		#('AGENT_INFO', account, (agent, items))
+		#('AGENT_INFO_ITEMS', account, (agent, items))
 		if self.windows[account].has_key('browser'):
 			self.windows[account]['browser'].agent_info_items(array[0], array[1])
 
 	def handle_event_agent_info_info(self, account, array):
-		#('AGENT_INFO', account, (agent, identities, features))
+		#('AGENT_INFO_INFO', account, (agent, identities, features))
 		if self.windows[account].has_key('browser'):
 			self.windows[account]['browser'].agent_info_info(array[0], array[1], \
 				array[2])
