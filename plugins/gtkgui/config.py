@@ -1128,14 +1128,17 @@ class Account_modification_window:
 			'GtkGui'))
 
 	def on_edit_details_button_clicked(self, widget):
-		if not self.plugin.windows.has_key('vcard'):
-			jid = self.xml.get_widget('jid_entry').get_text()
-			if self.plugin.connected[self.account]:
-				self.plugin.windows[self.account]['infos'][jid] = \
-					vcard_information_window(jid, self.plugin, self.account, True)
-				self.plugin.send('ASK_VCARD', self.account, jid)
-			else:
-				Warning_dialog(_('You must be connected to get your informations'))
+		if not self.plugin.windows.has_key(self.account):
+			Warning_dialog(_('You must first create your account before editing your information'))
+			return
+		jid = self.xml.get_widget('jid_entry').get_text()
+		if not self.plugin.connected[self.account]:
+			Warning_dialog(_('You must be connected to edit your information'))
+			return
+		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
+			self.plugin.windows[self.account]['infos'][jid] = \
+				vcard_information_window(jid, self.plugin, self.account, True)
+			self.plugin.send('ASK_VCARD', self.account, jid)
 	
 	def on_gpg_choose_button_clicked(self, widget, data=None):
 		w = choose_gpg_key_dialog()
