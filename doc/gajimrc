@@ -1,0 +1,9 @@
+[Server]
+
+hostname = SERVER HOSTNAME
+
+[Profile]
+
+name = LOGIN NAME
+password = PASSWORD
+ressource = gajim
