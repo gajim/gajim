@@ -1097,13 +1097,11 @@ class accountPreference_Window:
 		self.xml.signal_connect('on_pass_checkbutton_toggled', \
 			self.on_chk_toggled_and_clear, [self.xml.get_widget('entry_password')])
 		self.xml.signal_connect('on_checkbutton_toggled', self.on_chk_new_toggled)
-		self.xml.get_widget("checkbutton").set_sensitive(FALSE)
 		if infos:
 			self.modify = True
 			self.account = infos['accname']
 			self.init_account(infos)
-		else:
-			self.xml.get_widget("checkbutton").set_active(True)
+			self.xml.get_widget("checkbutton").set_sensitive(FALSE)
 
 class accounts_Window:
 	"""Class for accounts window : lists of accounts"""
