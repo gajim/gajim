@@ -1087,7 +1087,7 @@ class accountPreference_Window:
 	def on_chk_pass_toggled(self, widget):
 		if self.xml.get_widget('checkbutton').get_active():
 			return
-		self.on_chk_pass_toggled_and_clear(widget, \
+		self.on_chk_toggled_and_clear(widget, \
 			[self.xml.get_widget('entry_password')])
 
 	def on_chk_new_toggled(self, widget):
