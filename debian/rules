@@ -18,7 +18,7 @@ clean:
 #	-$(MAKE) clean
 	make clean
 	rm -f `find . -name "*~"`
-	rm -rf debian/tmp debian/files* core debian/substvars
+	rm -rf debian/tmp debian/files* core debian/substvars files
 
 install: install-stamp
 install-stamp: build-stamp
