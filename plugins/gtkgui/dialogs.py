@@ -162,7 +162,14 @@ class vcard_information_window:
 		self.plugin.send('VCARD', self.account, vcard)
 
 	def on_retrieve_button_clicked(self, widget):
+		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
+			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
+			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
 		if self.plugin.connected[self.account] > 1:
+			# clear all entries
+			for e in entries:
+				self.xml.get_widget(e + '_entry').set_text('')
+			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
 			self.plugin.send('ASK_VCARD', self.account, self.jid)
 		else:
 			Error_dialog(_('You must be connected to get your informations'))
@@ -190,22 +197,11 @@ class vcard_information_window:
 		information_hbuttonbox.reorder_child(button, 2)
 		
 		#make all entries editable
-		self.xml.get_widget('FN_entry').set_property('editable', True)
-		self.xml.get_widget('NICKNAME_entry').set_property('editable', True)
-		self.xml.get_widget('BDAY_entry').set_property('editable', True)
-		self.xml.get_widget('EMAIL_USERID_entry').set_property('editable', True)
-		self.xml.get_widget('URL_entry').set_property('editable', True)
-		self.xml.get_widget('TEL_NUMBER_entry').set_property('editable', True)
-		self.xml.get_widget('ADR_STREET_entry').set_property('editable', True)
-		self.xml.get_widget('ADR_EXTADR_entry').set_property('editable', True)
-		self.xml.get_widget('ADR_LOCALITY_entry').set_property('editable', True)
-		self.xml.get_widget('ADR_REGION_entry').set_property('editable', True)
-		self.xml.get_widget('ADR_PCODE_entry').set_property('editable', True)
-		self.xml.get_widget('ADR_CTRY_entry').set_property('editable', True)
-		self.xml.get_widget('ORG_ORGNAME_entry').set_property('editable', True)
-		self.xml.get_widget('ORG_ORGUNIT_entry').set_property('editable', True)
-		self.xml.get_widget('TITLE_entry').set_property('editable', True)
-		self.xml.get_widget('ROLE_entry').set_property('editable', True)
+		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
+			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
+			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
+		for e in entries:
+			self.xml.get_widget(e + '_entry').set_property('editable', True)
 		self.xml.get_widget('DESC_textview').set_editable(True)
 		self.xml.get_widget('DESC_textview').set_cursor_visible(True)
 
