@@ -1840,7 +1840,7 @@ class roster_Window:
 			grp_dest = model.get_value(iter_dest, 3)
 		elif len(path_dest) == 3:
 			grp_dest = model.get_value(model.iter_parent(iter_dest), 3)
-		if grp_source != grp_dest:
+		if grp_source == grp_dest:
 			return
 		for u in self.contacts[account][data]:
 			u.groups.remove(grp_source)
