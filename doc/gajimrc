@@ -11,3 +11,5 @@ ressource = gajim
 [GtkGui]
 
 showoffline = 0
+inmsgcolor = red
+outmsgcolor = blue

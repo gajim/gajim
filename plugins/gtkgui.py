@@ -70,9 +70,11 @@ class message:
 	
 	def print_conversation(self, txt, contact = None):
 		end_iter = self.convTxtBuffer.get_end_iter()
-		if contact: who = 'moi'
-		else: who = 'lui'
-		self.convTxtBuffer.insert(end_iter, '<'+who+'> '+txt+'\n', -1)
+		if contact:
+			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<moi> ', 'outgoing')
+		else:
+			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<lui> ', 'incomming')
+		self.convTxtBuffer.insert(end_iter, txt+'\n')
 		self.conversation.scroll_to_mark(\
 			self.convTxtBuffer.get_mark('end'), 0.1, 0, 0, 0)
 
@@ -92,6 +94,8 @@ class message:
 		return 0
 
 	def __init__(self, jid, roster):
+		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
+		self.cfgParser.parseCfgFile()
 		self.jid = jid
 		self.roster = roster
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Chat')
@@ -105,6 +109,14 @@ class message:
 		self.window.show()
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
+		self.tag = self.convTxtBuffer.create_tag("incomming")
+		color = self.cfgParser.GtkGui_inmsgcolor
+		if not color : color = red
+		self.tag.set_property("foreground", color)
+		self.tag = self.convTxtBuffer.create_tag("outgoing")
+		color = self.cfgParser.GtkGui_outmsgcolor
+		if not color : color = blue
+		self.tag.set_property("foreground", color)
 
 class roster:
 	def get_icon_pixbuf(self, stock):
