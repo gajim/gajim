@@ -41,6 +41,9 @@ class plugin:
 				else:
 					#default
 					lognotusr = 1
+#				tim = time.strftime("%d%m%y%H%M%S")
+				tim = time.time()
+				
 				ev = self.queueIN.get()
 				if ev[0] == 'QUIT':
 					return
@@ -50,21 +53,21 @@ class plugin:
 						status = ""
 					if lognotsep == 1:
 						fic = open(LOGPATH + "notify.log", "a")
-						fic.write("%d:%s:%s:%s\n" % (time.time(), ev[1][0], \
+						fic.write("%s:%s:%s:%s\n" % (tim, ev[1][0], \
 							ev[1][1], status))
 						fic.close()
 					if lognotusr == 1:
 						fic = open(LOGPATH + ev[1][0], "a")
-						fic.write("%d:%s:%s:%s\n" % (time.time(), ev[1][0], \
+						fic.write("%s:%s:%s:%s\n" % (tim, ev[1][0], \
 							ev[1][1], status))
 						fic.close()
 				elif ev[0] == 'MSG':
 					fic = open(LOGPATH + ev[1][0], "a")
-					fic.write("%d:recv:%s\n" % (time.time(), ev[1][1]))
+					fic.write("%s:recv:%s\n" % (tim, ev[1][1]))
 					fic.close()
 				elif ev[0] == 'MSGSENT':
 					fic = open(LOGPATH + ev[1][0], "a")
-					fic.write("%d:sent:%s\n" % (time.time(), ev[1][1]))
+					fic.write("%s:sent:%s\n" % (tim, ev[1][1]))
 					fic.close()
 			time.sleep(0.5)
 
