@@ -914,6 +914,24 @@ class GajimCore:
 				else:
 					con.send(common.jabber.Presence('%s/%s' % (ev[2][1], ev[2][0]), \
 						'available', show=ev[2][2], status = ev[2][3]))
+			#('GC_SET_ROLE', account, (room_jid, nick, role))
+			elif ev[0] == 'GC_SET_ROLE':
+				iq = common.jabber.Iq(type='set', to=ev[2][0])
+				item = iq.setQuery(common.jabber.NS_P_MUC_ADMIN).insertTag('item')
+				item.putAttr('nick', ev[2][1])
+				item.putAttr('role', ev[2][2])
+				id = con.getAnID()
+				iq.setID(id)
+				con.send(iq)
+			#('GC_SET_AFFILIATION', account, (room_jid, jid, affiliation))
+			elif ev[0] == 'GC_SET_AFFILIATION':
+				iq = common.jabber.Iq(type='set', to=ev[2][0])
+				item = iq.setQuery(common.jabber.NS_P_MUC_ADMIN).insertTag('item')
+				item.putAttr('jid', ev[2][1])
+				item.putAttr('affiliation', ev[2][2])
+				id = con.getAnID()
+				iq.setID(id)
+				con.send(iq)
 			#('GPGPASSPHRASE', account, passphrase)
 			elif ev[0] == 'GPGPASSPHRASE':
 				if USE_GPG:

@@ -615,14 +615,14 @@ class gc:
 		if model.iter_n_children(parent_iter) == 0:
 			model.remove(parent_iter)
 	
-	def add_user_to_roster(self, nick, show, role):
+	def add_user_to_roster(self, nick, show, role, jid):
 		model = self.tree.get_model()
 		img = self.plugin.roster.pixbufs[show]
 		role_iter = self.get_role_iter(role)
 		if not role_iter:
 			role_iter = model.append(None, (self.plugin.roster.pixbufs['closed']\
-				, role))
-		iter = model.append(role_iter, (img, nick))
+				, role, role))
+		iter = model.append(role_iter, (img, nick, jid))
 		self.tree.expand_row((model.get_path(role_iter)), False)
 		return iter
 	
@@ -638,18 +638,18 @@ class gc:
 		model = self.tree.get_model()
 		if show == 'offline' or show == 'error':
 			if statusCode == '307':
-				self.print_conversation(_("%s has been kicked by %s: %s") % (nick, \
+				self.print_conversation(_('%s has been kicked by %s: %s') % (nick, \
 					jid, actor, reason))
 			self.remove_user(nick)
 		else:
 			iter = self.get_user_iter(nick)
 			if not iter:
-				iter = self.add_user_to_roster(nick, show, role)
+				iter = self.add_user_to_roster(nick, show, role, jid)
 			else:
 				actual_role = self.get_role(iter)
 				if role != actual_role:
 					self.remove_user(nick)
-					self.add_user_to_roster(nick, show, role)
+					self.add_user_to_roster(nick, show, role, jid)
 				else:
 					img = self.plugin.roster.pixbufs[show]
 					model.set_value(iter, 0, img)
@@ -683,7 +683,7 @@ class gc:
 		end_iter = buffer.get_end_iter()
 		if not tim:
 			tim = time.localtime()
-		tims = time.strftime("[%H:%M:%S]", tim)
+		tims = time.strftime('[%H:%M:%S]', tim)
 		buffer.insert(end_iter, tims)
 		if contact:
 			if contact == self.nick:
@@ -701,112 +701,113 @@ class gc:
 
 	def kick(self, widget, room_jid, nick):
 		"""kick a user"""
-		self.plugin.send('SET_ROLE', self.account, (room_jid, nick, 'none'))
+		self.plugin.send('GC_SET_ROLE', self.account, (room_jid, nick, 'none'))
 
 	def grant_voice(self, widget, room_jid, nick):
 		"""grant voice privilege to a user"""
-		self.plugin.send('SET_ROLE', self.account, (room_jid, nick, \
+		self.plugin.send('GC_SET_ROLE', self.account, (room_jid, nick, \
 			'participant'))
 
 	def revoke_voice(self, widget, room_jid, nick):
 		"""revoke voice privilege to a user"""
-		self.plugin.send('SET_ROLE', self.account, (room_jid, nick, 'visitor'))
+		self.plugin.send('GC_SET_ROLE', self.account, (room_jid, nick, 'visitor'))
 
 	def grant_moderator(self, widget, room_jid, nick):
 		"""grant moderator privilege to a user"""
-		self.plugin.send('SET_ROLE', self.account, (room_jid, nick, 'moderator'))
+		self.plugin.send('GC_SET_ROLE', self.account, (room_jid, nick, 'moderator'))
 
 	def revoke_moderator(self, widget, room_jid, nick):
 		"""revoke moderator privilege to a user"""
-		self.plugin.send('SET_ROLE', self.account, (room_jid, nick, \
+		self.plugin.send('GC_SET_ROLE', self.account, (room_jid, nick, \
 			'participant'))
 
-	def ban(self, widget, room_jid, nick):
+	def ban(self, widget, room_jid, jid):
 		"""ban a user"""
-		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
 			'outcast'))
 
-	def grant_membership(self, widget, room_jid, nick):
+	def grant_membership(self, widget, room_jid, jid):
 		"""grant membership privilege to a user"""
-		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
 			'member'))
 
-	def revoke_membership(self, widget, room_jid, nick):
+	def revoke_membership(self, widget, room_jid, jid):
 		"""revoke membership privilege to a user"""
-		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
 			'none'))
 
-	def grant_admin(self, widget, room_jid, nick):
+	def grant_admin(self, widget, room_jid, jid):
 		"""grant administrative privilege to a user"""
-		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
 			'admin'))
 
-	def revoke_admin(self, widget, room_jid, nick):
+	def revoke_admin(self, widget, room_jid, jid):
 		"""revoke administrative privilege to a user"""
-		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
 			'member'))
 
-	def grant_owner(self, widget, room_jid, nick):
+	def grant_owner(self, widget, room_jid, jid):
 		"""grant owner privilege to a user"""
-		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
 			'owner'))
 
-	def revoke_owner(self, widget, room_jid, nick):
+	def revoke_owner(self, widget, room_jid, jid):
 		"""revoke owner privilege to a user"""
-		self.plugin.send('SET_AFFILIATION', self.account, (room_jid, nick, \
+		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
 			'admin'))
 
 	def mk_menu(self, event, iter):
 		"""Make user's popup menu"""
 		model = self.tree.get_model()
 		nick = model.get_value(iter, 1)
+		jid = model.get_value(iter, 2)
 		
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_("MUC"))
+		item = gtk.MenuItem(_('MUC'))
 		menu.append(item)
 		
 		menu_sub = gtk.Menu()
 		item.set_submenu(menu_sub)
-		item = gtk.MenuItem(_("Kick"))
+		item = gtk.MenuItem(_('Kick'))
 		menu_sub.append(item)
-		item.connect("activate", self.kick, self.jid, nick)
-		item = gtk.MenuItem(_("Grant voice"))
+		item.connect('activate', self.kick, self.jid, nick)
+		item = gtk.MenuItem(_('Grant voice'))
 		menu_sub.append(item)
-		item.connect("activate", self.grant_voice, self.jid, nick)
-		item = gtk.MenuItem(_("Revoke voice"))
+		item.connect('activate', self.grant_voice, self.jid, nick)
+		item = gtk.MenuItem(_('Revoke voice'))
 		menu_sub.append(item)
-		item.connect("activate", self.revoke_voice, self.jid, nick)
-		item = gtk.MenuItem(_("Grant moderator"))
+		item.connect('activate', self.revoke_voice, self.jid, nick)
+		item = gtk.MenuItem(_('Grant moderator'))
 		menu_sub.append(item)
-		item.connect("activate", self.grant_moderator, self.jid, nick)
-		item = gtk.MenuItem(_("Revoke moderator"))
+		item.connect('activate', self.grant_moderator, self.jid, nick)
+		item = gtk.MenuItem(_('Revoke moderator'))
 		menu_sub.append(item)
-		item.connect("activate", self.revoke_moderator, self.jid, nick)
-		
-		item = gtk.MenuItem()
-		menu_sub.append(item)
+		item.connect('activate', self.revoke_moderator, self.jid, nick)
+		if jid:
+			item = gtk.MenuItem()
+			menu_sub.append(item)
 
-		item = gtk.MenuItem(_("Ban"))
-		menu_sub.append(item)
-		item.connect("activate", self.ban, self.jid, nick)
-		item = gtk.MenuItem(_("Grant membership"))
-		menu_sub.append(item)
-		item.connect("activate", self.grant_membership, self.jid, nick)
-		item = gtk.MenuItem(_("Revoke membership"))
-		menu_sub.append(item)
-		item.connect("activate", self.revoke_membership, self.jid, nick)
-		item = gtk.MenuItem(_("Grant admin"))
-		menu_sub.append(item)
-		item.connect("activate", self.grant_admin, self.jid, nick)
-		item = gtk.MenuItem(_("Revoke admin"))
-		menu_sub.append(item)
-		item.connect("activate", self.revoke_admin, self.jid, nick)
-		item = gtk.MenuItem(_("Grant owner"))
-		menu_sub.append(item)
-		item.connect("activate", self.grant_owner, self.jid, nick)
-		item = gtk.MenuItem(_("Revoke owner"))
-		menu_sub.append(item)
-		item.connect("activate", self.revoke_owner, self.jid, nick)
+			item = gtk.MenuItem(_('Ban'))
+			menu_sub.append(item)
+			item.connect('activate', self.ban, self.jid, jid)
+			item = gtk.MenuItem(_('Grant membership'))
+			menu_sub.append(item)
+			item.connect('activate', self.grant_membership, self.jid, jid)
+			item = gtk.MenuItem(_('Revoke membership'))
+			menu_sub.append(item)
+			item.connect('activate', self.revoke_membership, self.jid, jid)
+			item = gtk.MenuItem(_('Grant admin'))
+			menu_sub.append(item)
+			item.connect('activate', self.grant_admin, self.jid, jid)
+			item = gtk.MenuItem(_('Revoke admin'))
+			menu_sub.append(item)
+			item.connect('activate', self.revoke_admin, self.jid, jid)
+			item = gtk.MenuItem(_('Grant owner'))
+			menu_sub.append(item)
+			item.connect('activate', self.grant_owner, self.jid, jid)
+			item = gtk.MenuItem(_('Revoke owner'))
+			menu_sub.append(item)
+			item.connect('activate', self.revoke_owner, self.jid, jid)
 		
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
@@ -873,9 +874,9 @@ class gc:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gc', APP)
 		self.window = self.xml.get_widget('Gc')
 		self.tree = self.xml.get_widget('list')
-
-		store = gtk.TreeStore(gtk.Image, str)
-		column = gtk.TreeViewColumn('contacts')#, ImageCellRenderer(), image=0)
+		#status_image, nickname, real_jid
+		store = gtk.TreeStore(gtk.Image, str, str)
+		column = gtk.TreeViewColumn('contacts')
 		render_text = ImageCellRenderer()
 		column.pack_start(render_text, expand = False)
 		column.add_attribute(render_text, 'image', 0)
@@ -897,15 +898,15 @@ class gc:
 		buffer = conversation.get_buffer()
 		end_iter = buffer.get_end_iter()
 		buffer.create_mark('end', end_iter, 0)
-		self.tagIn = buffer.create_tag("incoming")
+		self.tagIn = buffer.create_tag('incoming')
 		color = self.plugin.config['inmsgcolor']
-		self.tagIn.set_property("foreground", color)
-		self.tagOut = buffer.create_tag("outgoing")
+		self.tagIn.set_property('foreground', color)
+		self.tagOut = buffer.create_tag('outgoing')
 		color = self.plugin.config['outmsgcolor']
-		self.tagOut.set_property("foreground", color)
-		self.tagStatus = buffer.create_tag("status")
+		self.tagOut.set_property('foreground', color)
+		self.tagStatus = buffer.create_tag('status')
 		color = self.plugin.config['statusmsgcolor']
-		self.tagStatus.set_property("foreground", color)
+		self.tagStatus.set_property('foreground', color)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_focus', self.on_focus)
 		self.xml.signal_connect('on_msg_key_press_event', \
