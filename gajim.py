@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python -tt
 ##	gajim.py
 ##
 ## Gajim Team:
