@@ -1397,6 +1397,11 @@ class roster_Window:
 		active = self.cb.get_active()
 		if active < 0:
 			return
+		accounts = self.plugin.accounts.keys()
+		if len(accounts) == 0:
+			warning_Window(_("You must setup an account before connecting to jabber network."))
+			self.set_cb()
+			return
 		status = model[active][0]
 		if status != 'online' and status != 'offline':
 			w = awayMsg_Window(self.plugin)
@@ -1406,10 +1411,6 @@ class roster_Window:
 				return
 		else:
 			txt = status
-		accounts = self.plugin.accounts.keys()
-		if len(accounts) == 0:
-			warning_Window(_("You must setup an account before connecting to jabber network."))
-			return
 		for acct in accounts:
 			if self.plugin.accounts[acct].has_key('active'):
 				if not self.plugin.accounts[acct]['active']:
