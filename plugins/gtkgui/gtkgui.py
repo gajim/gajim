@@ -1000,92 +1000,143 @@ class message_Window:
 
 class roster_Window:
 	"""Class for main gtk window"""
-	def add_user(self, u):
+
+	def get_account_iter(self, name):
+		model = self.tree.get_model()
+		root = model.get_iter_root()
+		fin = False
+		account = model.iter_children(root)
+		while not fin:
+			account_name = model.get_value(account, 3)
+			if name == accout_name:
+				return account
+			if not model.iter_next(account):
+				fin = True
+		return None
+
+	def get_group_iter(self, name, account):
+		model = self.tree.get_model()
+		root = self.get_accout_iter(account)
+		fin = False
+		group = model.iter_children(root)
+		if not group:
+			fin = True
+		while not fin:
+			group_name = model.get_value(group, 3)
+			if name == group_name:
+				return group
+			if not model.iter_next(group):
+				fin = True
+		return None
+
+	def get_user_iter(self, jid, account):
+		model = self.tree.get_model()
+		root = self.get_accout_iter(account)
+		found = []
+		fin = False
+		group = model.iter_children(root)
+		if not group:
+			return found
+		while not fin:
+			fin2 = False
+			user = model.iter_children(group)
+			while not fin2:
+				if jid == model.get_value(user, 3):
+					found.append(user)
+				if not model.iter_next(user):
+					fin2 = True
+			if not model.iter_next(group):
+				fin = True
+		return found
+
+	def add_account_to_roster(self, account):
+		if self.get_account_iter(account):
+			return
+		model.append(None, (self.pixbufs['closed'], account, 'account', account, \
+			FALSE))
+
+	def add_user_to_roster(self, user, account):
 		"""Add a user to the roster and add groups if they aren't in roster"""
 		newgrp = 0
-		self.l_contact[u.jid] = {'user': u, 'iter': []}
-		if u.groups == []:
-			if string.find(u.jid, "@") <= 0:
-				u.groups.append('Agents')
+		self.contacts[account][user.jid] = user
+		if user.groups == []:
+			if string.find(user.jid, "@") <= 0:
+				user.groups.append('Agents')
 			else:
-				u.groups.append('general')
-		if u.show != 'offline' or self.showOffline or 'Agents' in u.groups:
+				user.groups.append('general')
+		if user.show != 'offline' or self.showOffline or 'Agents' in user.groups:
 			model = self.tree.get_model()
-			for g in u.groups:
-				if not self.l_group.has_key(g):
-					self.l_group[g] = {'iter':None, 'hide':False}
-				if not self.l_group[g]['iter']:
-					iterG = model.append(None, (self.pixbufs['closed'], g, \
-						'group', FALSE, self.grpbgcolor, TRUE))
-					self.l_group[g] = {'iter':iterG, 'hide':False}
+			for g in user.groups:
+				if not self.groups[account].has_key(g):
+					self.groups[account][g] = {'drawn': False, 'expand':True}
+				if not self.groups[account][g]['drawn']:
+					model.append(self.get_account_iter(account), \
+						(self.pixbufs['closed'], g, 'group', g, FALSE))
+					self.groups[account][g]['drawn'] = True
 					newgrp = 1
+				iterG = self.get_group_iter(g, account)
 				if g == 'Agents':
-					iterU = model.append(self.l_group[g]['iter'], \
-						(self.pixbufs[u.show], u.name, 'agent', FALSE, \
-						self.userbgcolor, TRUE))
+					model.append(iterG, (self.pixbufs[user.show], \
+						user.name, 'agent', user.jid, TRUE))
 				else:
-					iterU = model.append(self.l_group[g]['iter'], \
-						(self.pixbufs[u.show], u.name, u.jid, TRUE, \
-						self.userbgcolor, TRUE))
-				self.l_contact[u.jid]['iter'].append(iterU)
+					model.append(iterG, (self.pixbufs[user.show], \
+						user.name, 'user', user.jid, TRUE))
 				if newgrp == 1:
 					#expand new groups
 					self.tree.expand_row(model.get_path(iterG), FALSE)
 	
-	def remove_user(self, u):
+	def remove_user(self, user, account):
 		model = self.tree.get_model()
-		for i in self.l_contact[u.jid]['iter']:
+		for i in self.get_user_iter(user.jid, account):
 			parent_i = model.iter_parent(i)
-			if model.iter_n_children(parent_i) == 1:
-				model.remove(i)
-				grp = model.get_value(parent_i, 1)
+			model.remove(i)
+			if model.iter_n_children(parent_i) == 0:
 				model.remove(parent_i)
-				self.l_group[grp]['iter'] = None
-			else:
-				model.remove(i)
-		self.l_contact[u.jid]['iter'] = []
-		
-
-	def redraw_roster(self):
-		"""clear l_contact and l_group's iter and redraw roster"""
-		for j in self.l_contact.keys():
-			self.l_contact[j]['iter'] = []
-		for g in self.l_group.keys():
-			self.l_group[g]['iter'] = None
-		self.draw_roster()
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
 		self.tree.get_model().clear()
-		for j in self.l_contact.keys():
-			self.add_user(self.l_contact[j]['user'])
+		for acct in self.contacts.keys()
+			self.add_account_to_roster(acct)
+			for user in self.contacts[acct]:
+				self.add_user_to_roster(user, acct)
 	
-	def mklists(self, tab):
-		"""fill l_contact and l_group"""
-		for jid in tab.keys():
-			#remove ressource from jid string
-			ji = string.split(jid, '/')[0]
-			name = tab[jid]['name']
+	def mklists(self, array, account):
+		"""fill self.contacts and self.groups"""
+		self.contacts[account] = {}
+		self.groups[account] = {}
+		for jid in array.keys():
+			jids = string.split(jid, '/')
+			#get jid
+			ji = jids[0]
+			#get resource
+			resource = ''
+			if len(jids) > 1:
+				resource = jids[1:]
+			#get name
+			name = array[jid]['name']
 			if not name:
 				if string.find(ji, "@") <= 0:
 					name = ji
 				else:
 					name = string.split(jid, '@')[0]
-			show = tab[jid]['show']
+			#get show
+			show = array[jid]['show']
 			if not show:
 				show = 'offline'
-			user1 = user(ji, name, tab[jid]['groups'], show, \
-				tab[jid]['status'], tab[jid]['sub'], '')
-			self.l_contact[ji] = {'user':user1, 'iter':[]}
-			for i in tab[jid]['groups'] :
-				if not i in self.l_group.keys():
-					self.l_group[i] = {'iter':None, 'hide':False}
-			#update icon if chat window is oppened
-			if self.tab_messages.has_key(jid):
-				self.tab_messages[jid].user = user1
-				self.tab_messages[jid].img.set_from_pixbuf(self.pixbufs[show])
 
-	def chg_status(self, user, show, status, account):
+			user1 = user(ji, name, array[jid]['groups'], show, \
+				array[jid]['status'], array[jid]['sub'], resource)
+			self.contacts[account][ji] = user1
+			for g in array[jid]['groups'] :
+				if not g in self.groups[account].keys():
+					self.groups[account][g] = {'drawn':False, 'expand':True}
+#			#update icon if chat window is oppened
+#			if self.tab_messages.has_key(jid):
+#				self.tab_messages[jid].user = user1
+#				self.tab_messages[jid].img.set_from_pixbuf(self.pixbufs[show])
+
+	def chg_user_status(self, user, show, status, account):
 		"""When a user change his status"""
 		if self.l_contact[user.jid]['iter'] == []:
 			self.add_user(user)
@@ -1413,9 +1464,9 @@ class roster_Window:
 		self.tree = self.xml.get_widget('treeview')
 		self.plugin = plugin
 		self.connected = 0
-		#(icon, name, jid, editable, background color, show_icon)
-		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, \
-			gobject.TYPE_BOOLEAN, str, gobject.TYPE_BOOLEAN)
+		#(icon, name, type, jid, editable)
+		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, str, \
+			gobject.TYPE_BOOLEAN)
 		self.tree.set_model(model)
 		self.init_tree()
 		self.iconstyle = self.plugin.config['iconstyle']
@@ -1459,14 +1510,11 @@ class roster_Window:
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand = False)
 		col.add_attribute(render_pixbuf, 'pixbuf', 0)
-		col.add_attribute(render_pixbuf, 'cell-background', 4)
-		col.add_attribute(render_pixbuf, 'visible', 5)
 		render_text = gtk.CellRendererText()
 		render_text.connect('edited', self.on_cell_edited)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'text', 1)
-		col.add_attribute(render_text, 'cell-background', 4)
-		col.add_attribute(render_text, 'editable', 3)
+		col.add_attribute(render_text, 'editable', 4)
 		self.tree.append_column(col)
 		col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
