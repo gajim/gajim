@@ -699,6 +699,8 @@ class plugin:
 		self.systray_enabled = True
 
 	def hide_systray(self):
+		if not self.systray_enabled:
+			return
 		self.systray.hide_icon()
 		self.systray_enabled = False
 	

@@ -691,7 +691,8 @@ class Roster_window:
 				if accountIter:
 					model.set_value(accountIter, 0, self.pixbufs['connecting'])
 				self.plugin.connected[account] = 1
-				self.plugin.systray.set_status('connecting')
+				if self.plugin.systray_enabled:
+					self.plugin.systray.set_status('connecting')
 
 			save_pass = 0
 			if self.plugin.accounts[account].has_key('savepass'):
@@ -797,7 +798,8 @@ class Roster_window:
 		self.cb.handler_unblock(self.id_signal_cb)
 		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',\
 			'invisible']
-		self.plugin.systray.set_status(statuss[maxi])
+		if self.plugin.systray_enabled:
+			self.plugin.systray.set_status(statuss[maxi])
 		image = self.pixbufs[statuss[maxi]]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			pixbuf = image.get_animation().get_static_image()
