@@ -21,6 +21,7 @@ import sys, os, time, string, logging
 import common.hub, common.optparser
 import common.jabber
 import socket, select, pickle
+from tempfile import *
 
 from common import i18n
 _ = i18n._
@@ -137,9 +138,7 @@ else:
 				return self.stripHeaderFooter(output)
 
 		def verify(self, str, sign):
-			file = open('gpg_data', 'w+r')
-			try: os.remove('gpg_data')
-			except: pass
+			file = TemporaryFile(prefix='gajim')
 			fd = file.fileno()
 			file.write(str)
 			file.seek(0)
