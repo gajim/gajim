@@ -1278,6 +1278,9 @@ class join_gc:
 		widget.get_toplevel().destroy()
 
 	def __init__(self, plugin, account, server='', room = ''):
+		if not plugin.connected[account]:
+			warning_Window(_("You must be connected to join a group chat on this serveur"))
+			return
 		self.plugin = plugin
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Join_gc', APP)
