@@ -6717,7 +6717,7 @@ Custom</property>
 		      <child>
 			<widget class="GtkLabel" id="label132">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">earliest</property>
+			  <property name="label" translatable="yes">_Earliest</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6788,7 +6788,7 @@ Custom</property>
 		      <child>
 			<widget class="GtkLabel" id="label131">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Previous</property>
+			  <property name="label" translatable="yes">_Previous</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6872,7 +6872,7 @@ Custom</property>
 		      <child>
 			<widget class="GtkLabel" id="label133">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">latest</property>
+			  <property name="label" translatable="yes">_Latest</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
