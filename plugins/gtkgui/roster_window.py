@@ -204,6 +204,29 @@ class roster_window:
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		add_contact_menuitem  = self.xml.get_widget('add_contact_menuitem')
 		browse_agents_menuitem  = self.xml.get_widget('browse_agents_menuitem')
+		if self.add_contact_handler_id:
+			add_contact_menuitem.handler_disconnect(self.add_contact_handler_id)
+			self.add_contact_handler_id = None
+		if self.browse_agents_handler_id:
+			browse_agents_menuitem.handler_disconnect(\
+				self.browse_agents_handler_id)
+			self.browse_agents_handler_id = None
+		if self.join_gc_handler_id:
+			join_gc_menuitem.handler_disconnect(self.join_gc_handler_id)
+			self.join_gc_handler_id = None
+		if self.new_message_menuitem_handler_id:
+			new_message_menuitem.handler_disconnect(\
+				self.new_message_menuitem_handler_id)
+			self.new_message_menuitem_handler_id = None
+		#remove the existing submenus
+		if add_contact_menuitem.get_submenu():
+			add_contact_menuitem.remove_submenu()
+		if browse_agents_menuitem.get_submenu():
+			browse_agents_menuitem.remove_submenu()
+		if join_gc_menuitem.get_submenu():
+			join_gc_menuitem.remove_submenu()
+		if new_message_menuitem.get_submenu():
+			new_message_menuitem.remove_submenu()
 		if len(self.plugin.accounts.keys()) > 0:
 			new_message_menuitem.set_sensitive(True)
 			join_gc_menuitem.set_sensitive(True)
