@@ -1334,6 +1334,7 @@ class Account_modification_window:
 			self.account = infos['accname']
 			self.init_account(infos)
 			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
+			self.xml.get_widget('name_entry').grab_focus()
 
 class Accounts_window:
 	"""Class for accounts window : lists of accounts"""
