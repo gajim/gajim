@@ -1050,7 +1050,7 @@ class accountpreferences_window:
 			jid = self.xml.get_widget('jid_entry').get_text()
 			if self.plugin.connected[self.account]:
 				self.plugin.windows[self.account]['infos'][jid] = \
-					vCard_Window(jid.get_text(), self.plugin, self.account)
+					vCard_Window(jid, self.plugin, self.account)
 				self.plugin.send('ASK_VCARD', self.account, jid)
 			else:
 				warning_Window(_('You must be connected to get your informations'))
@@ -1128,14 +1128,12 @@ class accountpreferences_window:
 
 class accounts_window:
 	"""Class for accounts window : lists of accounts"""
-	def on_accounts_window_delete_event(self, widget, event):
+	def on_accounts_window_destroy(self, widget):
 		"""close window"""
-		print 'delete'
 		del self.plugin.windows['accounts']
 		
 	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
-		print 'destroy'
 		widget.get_toplevel().destroy()
 		
 	def init_accounts(self):
@@ -1152,7 +1150,7 @@ class accounts_window:
 			model.set(iter, 0, account, 1, \
 				self.plugin.accounts[account]['hostname'], 2, activ)
 
-	def on_row_activated(self, widget):
+	def on_accounts_treeview_cursor_changed(self, widget):
 		"""Activate delete and modify buttons when a row is selected"""
 		self.xml.get_widget("modify_button").set_sensitive(True)
 		self.xml.get_widget("delete_button").set_sensitive(True)
@@ -1169,15 +1167,8 @@ class accounts_window:
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
-
-		dlg = gtk.MessageDialog(None, 
-					gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-					gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO,
-					_("Are you sure you want to remove\nthis account (%s) ?") % account)
-		response = dlg.run()
-		dlg.hide()
-		
-		if response == gtk.RESPONSE_YES:
+		window = confirm_Window(_("Are you sure you want to remove this account (%s) ?") % account)
+		if window.wait() == gtk.RESPONSE_OK:
 			if self.plugin.connected[account]:
 				self.plugin.send('STATUS', account, ('offline', 'offline'))
 			del self.plugin.accounts[account]
@@ -1290,18 +1281,14 @@ class agentRegistration_Window:
 		self.xml.signal_connect('on_button_ok_clicked', self.on_ok)
 
 
-class browseAgent_Window:
+class agent_browser_window:
 	"""Class for bowser agent window :
 	to know the agents on the selected server"""
-	def delete_event(self, widget):
+	def on_agent_browser_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows[self.account]['browser']
 
-	def on_cancel(self, widget):
-		"""When Cancel button is clicked"""
-		widget.get_toplevel().destroy()
-
-	def on_close(self, widget):
+	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
 		widget.get_toplevel().destroy()
 		
@@ -1312,14 +1299,14 @@ class browseAgent_Window:
 	def agents(self, agents):
 		"""When list of available agent arrive :
 		Fill the treeview with it"""
-		model = self.treeview.get_model()
+		model = self.agents_treeview.get_model()
 		for agent in agents:
 			iter = model.append(None, (agent['name'], agent['jid']))
 			self.agent_infos[agent['jid']] = {'features' : []}
 	
 	def agent_info(self, agent, identities, features, items):
 		"""When we recieve informations about an agent"""
-		model = self.treeview.get_model()
+		model = self.agents_treeview.get_model()
 		iter = model.get_iter_root()
 		expand = 0
 		while (iter):
@@ -1344,23 +1331,24 @@ class browseAgent_Window:
 			model.append(iter, (item['name'], item['jid']))
 			self.agent_infos[item['jid']] = {'identities': [item]}
 		if expand:
-			self.treeview.expand_row((model.get_path(iter)), False)
+			self.agents_treeview.expand_row((model.get_path(iter)), False)
 
-	def on_refresh(self, widget):
+	def on_refresh_button_clicked(self, widget):
 		"""When refresh button is clicked :
 		refresh list : clear and rerequest it"""
-		self.treeview.get_model().clear()
+		self.agents_treeview.get_model().clear()
 		self.browse()
 
-	def on_row_activated(self, widget, path, col=0):
+	def on_agents_treeview_row_activated(self, widget, path, col=0):
 		"""When a row is activated :
 		Register or join the selected agent"""
+		#TODO
 		pass
 
 	def on_join_button_clicked(self, widget):
 		"""When we want to join a conference :
 		Ask specific informations about the selected agent and close the window"""
-		model, iter = self.treeview.get_selection().get_selected()
+		model, iter = self.agents_treeview.get_selection().get_selected()
 		if not iter:
 			return
 		service = model.get_value(iter, 1)
@@ -1375,17 +1363,17 @@ class browseAgent_Window:
 	def on_register_button_clicked(self, widget):
 		"""When we want to register an agent :
 		Ask specific informations about the selected agent and close the window"""
-		model, iter = self.treeview.get_selection().get_selected()
+		model, iter = self.agents_treeview.get_selection().get_selected()
 		if not iter :
 			return
 		service = model.get_value(iter, 1)
 		self.plugin.send('REG_AGENT_INFO', self.account, service)
 		widget.get_toplevel().destroy()
 	
-	def on_cursor_changed(self, widget):
+	def on_agents_treeview_cursor_changed(self, widget):
 		"""When we select a row :
 		activate buttons if needed"""
-		model, iter = self.treeview.get_selection().get_selected()
+		model, iter = self.agents_treeview.get_selection().get_selected()
 		jid = model.get_value(iter, 1)
 		self.register_button.set_sensitive(False)
 		if self.agent_infos[jid].has_key('features'):
@@ -1402,35 +1390,29 @@ class browseAgent_Window:
 		if not plugin.connected[account]:
 			warning_Window(_("You must be connected to view Agents"))
 			return
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'browser', APP)
-		self.window = xml.get_widget('browser')
-		self.treeview = xml.get_widget('treeview')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_browser_window', APP)
+		self.window = xml.get_widget('agent_browser_window')
+		self.agents_treeview = xml.get_widget('agents_treeview')
 		self.plugin = plugin
 		self.account = account
 		self.agent_infos = {}
 		model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
-		self.treeview.set_model(model)
+		self.agents_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 0)
-		self.treeview.insert_column_with_attributes(-1, 'Name', renderer, text=0)
+		self.agents_treeview.insert_column_with_attributes(-1, 'Name', \
+			renderer, text=0)
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
-		self.treeview.insert_column_with_attributes(-1, 'Service', \
+		self.agents_treeview.insert_column_with_attributes(-1, 'Service', \
 			renderer, text=1)
 
 		self.register_button = xml.get_widget('register_button')
 		self.register_button.set_sensitive(False)
 		self.join_button = xml.get_widget('join_button')
 		self.join_button.set_sensitive(False)
-
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		xml.signal_connect('on_refresh_clicked', self.on_refresh)
-		xml.signal_connect('on_row_activated', self.on_row_activated)
-		xml.signal_connect('on_join_button_clicked', self.on_join_button_clicked)
-		xml.signal_connect('on_register_button_clicked', self.on_register_button_clicked)
-		xml.signal_connect('on_cursor_changed', self.on_cursor_changed)
-		xml.signal_connect('on_close_clicked', self.on_close)
+		xml.signal_autoconnect(self)
 		self.browse()
 
 class join_gc:
