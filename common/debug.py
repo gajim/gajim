@@ -131,7 +131,7 @@ class Debug:
                   # with prefix = chr(27) + '[34m'
                   #      sufix = chr(27) + '[37;1m\n'
                   #
-                  prefix = 'DEBUG: ', 
+                  prefix = color_red + 'DEBUG: ' + color_white, 
                   sufix = '\n',
                   #
                   # If you want unix style timestamps, 
@@ -139,7 +139,7 @@ class Debug:
                   #  1 before prefix, good when prefix is a string
                   #  2 after prefix, good when prefix is a color
                   #
-                  time_stamp = 0,		  
+                  time_stamp = 2,		  
                   #
                   # flag_show should normaly be of, but can be turned on to get a
                   # good view of what flags are actually used for calls,

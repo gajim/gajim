@@ -28,3 +28,4 @@ import common
 import core
 
 core.core.start()
+print "Core Stopped"

@@ -30,6 +30,7 @@ Wbrowser = 0
 Waccounts = 0
 
 class user:
+	"""Informations concerning each users"""
 	def __init__(self, *args):
 		if len(args) == 0:
 			self.jid = ''
@@ -57,13 +58,17 @@ class user:
 		else: raise TypeError, 'bad arguments'
 
 class info_user:
+	"""Class for user's information window"""
 	def delete_event(self, widget):
+		"""close window"""
 		self.window.destroy()
 
 	def add_grp_to_user(self, model, path, iter):
+		"""Insert user to the group in inter"""
 		self.user.groups.append(model.get_value(iter, 0))
 
 	def on_close(self, widget):
+		"""Save user's informations and update the roster on the Jabber server"""
 		for i in self.r.l_contact[self.user.jid]['iter']:
 			self.r.treestore.remove(i)
 		self.r.l_contact[self.user.jid]['iter'] = []
@@ -75,26 +80,34 @@ class info_user:
 		self.delete_event(self)
 
 	def add_grp(self, model, path, iter, stors):
+		"""Transfert the iter from stors[0] to stors[1]"""
 		i = stors[1].append()
 		stors[1].set(i, 0, stors[0].get_value(iter, 0))
 		stors[0].remove(iter)
 
 	def on_add(self, widget):
+		"""When Add button is clicked"""
 		select = self.list1.get_selection()
 		select.selected_foreach(self.add_grp, (self.store1, self.store2))
 
 	def on_remove(self, widget):
+		"""When Remove button is clicked"""
 		select = self.list2.get_selection()
 		select.selected_foreach(self.add_grp, (self.store2, self.store1))
 
 	def on_new_key_pressed(self, widget, event):
+		"""If enter is pressed in new group entry, add the group"""
 		if event.keyval == gtk.keysyms.Return:
 			txt = self.entry_new.get_text()
 			iter = self.store1.append()
 			self.store1.set(iter, 0, txt)
 			self.entry_new.set_text('')
+			return 1
+		else:
+			return 0
 
 	def init_lists(self):
+		"""Initialize both available and current listStores"""
 		#list available
 		self.store1 = gtk.ListStore(gobject.TYPE_STRING)
 		for i in self.r.l_group.keys():
@@ -127,21 +140,28 @@ class info_user:
 		self.xml.get_widget('label_id').set_text(user.jid)
 		self.xml.get_widget('label_resource').set_text(user.resource)
 		self.xml.get_widget('entry_name').set_text(user.name)
-		self.xml.get_widget('label_status').set_text(user.show + ' : ' + user.status)
+		if not user.status:
+			user.status = ''
+		self.xml.get_widget('label_status').set_text(user.show + ' : ' + \
+			user.status)
 		self.init_lists()
 		
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_close_clicked', self.on_close)
 		self.xml.signal_connect('on_add_clicked', self.on_add)
 		self.xml.signal_connect('on_remove_clicked', self.on_remove)
-		self.xml.signal_connect('on_entry_new_key_press_event', self.on_new_key_pressed)
+		self.xml.signal_connect('on_entry_new_key_press_event', \
+			self.on_new_key_pressed)
 		
 
 class prefs:
+	"""Class for Preferences window"""
 	def delete_event(self, widget):
+		"""close window"""
 		self.window.destroy()
 
 	def on_color_button_clicked(self, widget):
+		"""Open a ColorSelectionDialog and change button's color"""
 		if widget.name == 'colorIn':
 			color = self.colorIn
 			da = self.da_in
@@ -169,6 +189,7 @@ class prefs:
 		colorseldlg.destroy()
 	
 	def write_cfg(self):
+		"""Save preferences in config File and apply them"""
 		#Color for incomming messages
 		colSt = '#'+(hex(self.colorIn.red)+'0')[2:4]\
 			+(hex(self.colorIn.green)+'0')[2:4]\
@@ -235,10 +256,12 @@ class prefs:
 		self.r.redraw_roster()
 		
 	def on_ok(self, widget):
+		"""When Ok button is clicked"""
 		self.write_cfg()
 		self.window.destroy()
 
 	def __init__(self, roster):
+		"""Initialize Preference window"""
 		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Prefs')
 		self.window = self.xml.get_widget("Prefs")
 		self.r = roster
@@ -320,19 +343,25 @@ class prefs:
 		self.spin_autoxatime.set_value(ti)
 
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_but_col_clicked', self.on_color_button_clicked)
+		self.xml.signal_connect('on_but_col_clicked', \
+			self.on_color_button_clicked)
 		self.xml.signal_connect('on_ok_clicked', self.on_ok)
 
 class away_msg:
+	"""Class for Away Message Window"""
 	def delete_event(self, widget):
+		"""close window"""
+		self.window.destroy()
 		self.window.destroy()
 
 	def on_ok(self):
+		"""When Ok button is clicked"""
 		beg, end = self.txtBuffer.get_bounds()
 		self.msg = self.txtBuffer.get_text(beg, end, 0)
 		self.window.destroy()
 	
 	def run(self):
+		"""Wait for Ok button to be pressed and return away messsage"""
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			self.on_ok()
@@ -347,10 +376,13 @@ class away_msg:
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
 class add:
+	"""Class for Add user window"""
 	def delete_event(self, widget):
+		"""close window"""
 		self.Wadd.destroy()
 
 	def on_subscribe(self, widget):
+		"""When Subscribe button is clicked"""
 		who = self.xml.get_widget("entry_who").get_text()
 		buf = self.xml.get_widget("textview_sub").get_buffer()
 		start_iter = buf.get_start_iter()
@@ -369,7 +401,9 @@ class add:
 		self.xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
 
 class warning:
+	"""Class for warning window : print a warning message"""
 	def delete_event(self, widget):
+		"""close window"""
 		self.window.destroy()
 	
 	def __init__(self, txt):
@@ -379,7 +413,9 @@ class warning:
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
 class about:
+	"""Class for about window"""
 	def delete_event(self, widget):
+		"""close window"""
 		self.Wabout.destroy()
 		
 	def __init__(self):
@@ -388,10 +424,13 @@ class about:
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
 class account_pref:
+	"""Class for account informations"""
 	def delete_event(self, widget):
+		"""close window"""
 		self.window.destroy()
 	
 	def init_account(self, infos):
+		"""Initialize window with defaults values"""
 		if infos.has_key('name'):
 			self.xml.get_widget("entry_name").set_text(infos['name'])
 		if infos.has_key('jid'):
@@ -402,6 +441,7 @@ class account_pref:
 			self.xml.get_widget("entry_ressource").set_text(infos['ressource'])
 
 	def on_save_clicked(self, widget):
+		"""When save button is clicked : Save informations in config file"""
 		name = self.xml.get_widget("entry_name").get_text()
 		jid = self.xml.get_widget('entry_jid').get_text()
 		if (name == ''):
@@ -465,25 +505,32 @@ class account_pref:
 		self.xml.signal_connect('on_save_clicked', self.on_save_clicked)
 
 class accounts:
+	"""Class for accounts window : lists of accounts"""
 	def delete_event(self, widget):
+		"""close window"""
 		global Waccounts
 		Waccounts = 0
 		self.window.destroy()
 		
 	def init_accounts(self):
+		"""initialize listStore with existing accounts"""
 		self.model.clear()
 		for account in self.accounts:
 			iter = self.model.append()
 			self.model.set(iter, 0, account, 1, self.cfgParser.__getattr__("%s" % account+"_hostname"))
 
 	def on_row_activated(self, widget):
+		"""Activate delete and modify buttons when a row is selected"""
 		self.modButt.set_sensitive(TRUE)
 		self.delButt.set_sensitive(TRUE)
 
 	def on_new_clicked(self, widget):
+		"""When new button is clicked : open an account information window"""
 		account_pref(self)
 
 	def on_delete_clicked(self, widget):
+		"""When delete button is clicked :
+		Remove an account from the listStore and from the config file"""
 		sel = self.treeview.get_selection()
 		(mod, iter) = sel.get_selected()
 		account = self.model.get_value(iter, 0)
@@ -496,6 +543,8 @@ class accounts:
 		self.init_accounts()
 
 	def on_modify_clicked(self, widget):
+		"""When modify button is clicked :
+		open the account information window for this account"""
 		infos = {}
 		sel = self.treeview.get_selection()
 		(mod, iter) = sel.get_selected()
@@ -534,6 +583,7 @@ class accounts:
 
 class confirm:
 	def delete_event(self, widget):
+		"""close window"""
 		self.window.destroy()
 		
 	def req_usub(self, widget):
@@ -554,6 +604,7 @@ class confirm:
 
 class authorize:
 	def delete_event(self, widget):
+		"""close window"""
 		self.window.destroy()
 		
 	def auth(self, widget):
@@ -578,6 +629,7 @@ class authorize:
 
 class agent_reg:
 	def delete_event(self, widget):
+		"""close window"""
 		self.window.destroy()
 	
 	def draw_table(self):
@@ -620,6 +672,7 @@ class agent_reg:
 
 class browser:
 	def delete_event(self, widget):
+		"""close window"""
 		global Wbrowser
 		Wbrowser = 0
 		self.window.destroy()
@@ -665,6 +718,7 @@ class browser:
 
 class message:
 	def delete_event(self, widget):
+		"""close window"""
 		del self.r.tab_messages[self.user.jid]
 		self.window.destroy()
 	
@@ -1257,6 +1311,8 @@ class plugin:
 				self.r.cfgParser.parseCfgFile()
 				if (Waccounts != 0):
 					Waccounts.init_accounts()
+			elif ev[0] == 'QUIT':
+				self.r.on_quit(self)
 		return 1
 	
 	def read_sleepy(self):

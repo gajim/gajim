@@ -35,6 +35,7 @@ log.setLevel(logging.DEBUG)
 CONFPATH = "~/.gajimrc"
 
 class GajimCore:
+	"""Core"""
 	def __init__(self):
 		self.connected = 0
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
@@ -43,11 +44,13 @@ class GajimCore:
 	# END __init__
 
 	def messageCB(self, con, msg):
+		"""Called when we recieve a message"""
 		self.hub.sendPlugin('MSG', (msg.getFrom().getBasic(), \
 			msg.getBody()))
 	# END messageCB
 
 	def presenceCB(self, con, prs):
+		"""Called when we recieve a presence"""
 		who = str(prs.getFrom())
 		type = prs.getType()
 		if type == None: type = 'available'
@@ -98,6 +101,7 @@ class GajimCore:
 	# END presenceCB
 
 	def disconnectedCB(self, con):
+		"""Called when we are disconnected"""
 		log.debug("disconnectedCB")
 		if self.connected == 1:
 			self.connected = 0
@@ -106,17 +110,23 @@ class GajimCore:
 	# END disconenctedCB
 
 	def connect(self, account):
+		"""Connect and authentificate to the Jabber server"""
 		self.cfgParser.parseCfgFile()
 		hostname = self.cfgParser.__getattr__("%s" % account+"_hostname")
 		name = self.cfgParser.__getattr__("%s" % account+"_name")
 		password = self.cfgParser.__getattr__("%s" % account+"_password")
 		ressource = self.cfgParser.__getattr__("%s" % account+"_ressource")
 		self.con = common.jabber.Client(host = \
-			hostname, debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, connection=common.xmlstream.TCP, port=5222)
+			hostname, debug = [common.jabber.DBG_INIT], log = sys.stderr, connection=common.xmlstream.TCP, port=5222)
 #			hostname, debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, connection=common.xmlstream.TCP_SSL, port=5223)
 		try:
 			self.con.connect()
 		except IOError, e:
+			log.debug("Couldn't connect to %s %s" % (hostname, e))
+			self.hub.sendPlugin('STATUS', 'offline')
+			self.hub.sendPlugin('WARNING', "Couldn't connect to %s" % hostname)
+			return 0
+		except self.con.socket.gaierror, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
 			self.hub.sendPlugin('STATUS', 'offline')
 			self.hub.sendPlugin('WARNING', "Couldn't connect to %s" % hostname)
@@ -127,9 +137,6 @@ class GajimCore:
 			self.con.registerHandler('message', self.messageCB)
 			self.con.registerHandler('presence', self.presenceCB)
 			self.con.setDisconnectHandler(self.disconnectedCB)
-#			self.con.setMessageHandler(self.messageCB)
-#			self.con.setPresenceHandler(self.presenceCB)
-#			self.con.setDisconnectHandler(self.disconnectedCB)
 			#BUG in jabberpy library : if hostname is wrong : "boucle"
 			if self.con.auth(name, password, ressource):
 				self.con.requestRoster()
@@ -148,6 +155,7 @@ class GajimCore:
 	# END connect
 
 	def mainLoop(self):
+		"""Main Loop : Read the incomming queue to execute commands comming from plugins and process Jabber"""
 		while 1:
 			if not self.hub.queueIn.empty():
 				ev = self.hub.queueIn.get()
@@ -238,8 +246,9 @@ class GajimCore:
 # END GajimCore
 
 def loadPlugins(gc):
+	"""Load defaults plugins : 'modules' option in section Core in ConfFile and register then to the hub"""
 	modStr = gc.cfgParser.Core_modules
-	if modStr :
+	if modStr:
 		mods = string.split (modStr, ' ')
 
 		for mod in mods:
@@ -260,7 +269,15 @@ def loadPlugins(gc):
 # END loadPLugins
 
 def start():
+	"""Start the Core"""
 	gc = GajimCore()
 	loadPlugins(gc)
-	gc.mainLoop()
+	try:
+		gc.mainLoop()
+	except KeyboardInterrupt:
+		print "Keyboard Interrupt : Bye!"
+		if self.r.connected:
+			self.r.con.disconnect()
+		gc.hub.sendPlugin('QUIT', ())
+		return 0
 # END start
