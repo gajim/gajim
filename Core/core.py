@@ -511,7 +511,7 @@ class GajimCore:
 		hostname = self.cfgParser.tab[account]["hostname"]
 		name = self.cfgParser.tab[account]["name"]
 		password = self.passwords[account]
-		ressource = self.cfgParser.tab[account]["ressource"]
+		resource = self.cfgParser.tab[account]["resource"]
 
 		#create connexion if it doesn't already existe
 		con = None
@@ -565,7 +565,7 @@ class GajimCore:
 			log.debug("Connected to server")
 
 			#BUG in jabberpy library : if hostname is wrong : "boucle"
-			if con.auth(name, password, ressource):
+			if con.auth(name, password, resource):
 				self.connections[con] = account
 				con.requestRoster()
 				roster = con.getRoster().getRaw()
@@ -821,7 +821,7 @@ class GajimCore:
 			elif ev[0] == 'REG_AGENT':
 				if con:
 					con.sendRegInfo(ev[2])
-			#('NEW_ACC', (hostname, login, password, name, ressource, prio, \
+			#('NEW_ACC', (hostname, login, password, name, resource, prio, \
 			# use_proxy, proxyhost, proxyport))
 			elif ev[0] == 'NEW_ACC':
 				if ev[2][6]:
