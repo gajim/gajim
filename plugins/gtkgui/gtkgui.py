@@ -192,8 +192,9 @@ class message_Window:
 			txt = ""
 		end_iter = buffer.get_end_iter()
 		if not tim:
-			tim = time.strftime("[%H:%M:%S]")
-		buffer.insert(end_iter, tim)
+			tim = time.localtime()
+		tims = time.strftime("[%H:%M:%S]", tim)
+		buffer.insert(end_iter, tims)
 		if contact:
 			if contact == 'status':
 				buffer.insert_with_tags_by_name(end_iter, txt+'\n', \
@@ -423,8 +424,9 @@ class gc:
 			txt = ""
 		end_iter = buffer.get_end_iter()
 		if not tim:
-			tim = time.strftime("[%H:%M:%S]")
-		buffer.insert(end_iter, tim)
+			tim = time.localtime()
+		tims = time.strftime("[%H:%M:%S]", tim)
+		buffer.insert(end_iter, tims)
 		if contact:
 			if contact == self.nick:
 				buffer.insert_with_tags_by_name(end_iter, '<'+contact+'> ', \
@@ -1404,7 +1406,7 @@ class roster_Window:
 		self.plugin.connected[account] = statuss.index(status)
 		self.set_optionmenu()
 
-	def on_message(self, jid, msg, account):
+	def on_message(self, jid, msg, tim, account):
 		"""when we receive a message"""
 		if not self.contacts[account].has_key(jid):
 			user1 = user(jid, jid, ['not in list'], \
@@ -1427,7 +1429,7 @@ class roster_Window:
 				self.plugin.queues[account][jid] = Queue.Queue(50)
 				self.redraw_jid(jid, account)
 				self.plugin.systray.add_jid(jid, account)
-			tim = time.strftime("[%H:%M:%S]")
+#			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
 			if not path:
 				self.add_user_to_roster(jid, account)
@@ -1447,7 +1449,8 @@ class roster_Window:
 					self.tree.expand_row(path[0:2], FALSE)
 					self.tree.scroll_to_cell(path)
 					self.tree.set_cursor(path)
-			self.plugin.windows[account]['chats'][jid].print_conversation(msg)
+			self.plugin.windows[account]['chats'][jid].print_conversation(msg, \
+				tim = tim)
 			if not self.plugin.windows[account]['chats'][jid].window.\
 				get_property('is-active'):
 				self.plugin.systray.add_jid(jid, account)
@@ -1494,7 +1497,7 @@ class roster_Window:
 		tell that to the core and exit gtk"""
 		self.plugin.config['hiddenlines'] = string.join(self.hidden_lines, '\t')
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
-		self.plugin.send('QUIT', None, ('gtkgui', 0))
+		self.plugin.send('QUIT', None, ('gtkgui', 1))
 		print _("plugin gtkgui stopped")
 		self.close_all(self.plugin.windows)
 		self.plugin.systray.t.destroy()
@@ -2093,19 +2096,19 @@ class plugin:
 				array[10], account)
 
 	def handle_event_msg(self, account, array):
-		#('MSG', account, (user, msg))
+		#('MSG', account, (user, msg, time))
 		jid = string.split(array[0], '/')[0]
 		if string.find(jid, "@") <= 0:
 			jid = string.replace(jid, '@', '')
-		self.roster.on_message(jid, array[1], account)
+		self.roster.on_message(jid, array[1], array[2], account)
 		
 	def handle_event_msgerror(self, account, array):
-		#('MSGERROR', account, (user, error_code, error_msg, msg))
+		#('MSGERROR', account, (user, error_code, error_msg, msg, time))
 		jid = string.split(array[0], '/')[0]
 		if string.find(jid, "@") <= 0:
 			jid = string.replace(jid, '@', '')
 		self.roster.on_message(jid, _("error while sending") + " \"%s\" ( %s )"%\
-			(array[3], array[2]), account)
+			(array[3], array[2]), array[4], account)
 		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
@@ -2205,18 +2208,19 @@ class plugin:
 			self.windows['logs'][array[0]].new_line(array[1:])
 
 	def handle_event_gc_msg(self, account, array):
-		#('GC_MSG', account, (jid, msg))
+		#('GC_MSG', account, (jid, msg, time))
 		jids = string.split(array[0], '/')
 		jid = jids[0]
 		if not self.windows[account]['gc'].has_key(jid):
 			return
 		if len(jids) == 1:
 			#message from server
-			self.windows[account]['gc'][jid].print_conversation(array[1])
+			self.windows[account]['gc'][jid].print_conversation(array[1], \
+				tim = array[2])
 		else:
 			#message from someone
 			self.windows[account]['gc'][jid].print_conversation(array[1], \
-				jids[1])
+				jids[1], array[2])
 			if not self.windows[account]['gc'][jid].window.\
 				get_property('is-active'):
 				self.systray.add_jid(jid, account)

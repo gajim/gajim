@@ -977,7 +977,7 @@ class Message(Protocol):
 
     def setTimestamp(self,val=None):
         if not val:
-            val = time.strftime( '%Y%m%dT%H:%M:%S', time.gmtime( time.time()))
+            val = time.strftime( '%Y%m%dT%H:%M:%S', time.localtime(time.time()))
         self.time_stamp = val
 
 

@@ -96,7 +96,8 @@ class plugin:
 					msg = string.replace(ev[2][1], '\n', '\\n')
 					jid = string.split(ev[2][0], '/')[0]
 					fic = open(LOGPATH + jid, "a")
-					fic.write("%s:recv:%s\n" % (tim, msg))
+					t = time.mktime(ev[2][2])
+					fic.write("%s:recv:%s\n" % (t, msg))
 					fic.close()
 				elif ev[0] == 'MSGSENT':
 					msg = string.replace(ev[2][1], '\n', '\\n')

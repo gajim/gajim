@@ -177,16 +177,18 @@ class GajimCore:
 	def messageCB(self, con, msg):
 		"""Called when we recieve a message"""
 		typ = msg.getType()
+		tim = msg.getTimestamp()
+		tim = time.strptime(tim, "%Y%m%dT%H:%M:%S")
 		if typ == 'error':
 			self.hub.sendPlugin('MSGERROR', self.connexions[con], \
 				(str(msg.getFrom()), msg.getErrorCode(), msg.getError(), \
-				msg.getBody()))
+				msg.getBody(), tim))
 		elif typ == 'groupchat':
 			self.hub.sendPlugin('GC_MSG', self.connexions[con], \
-				(str(msg.getFrom()), msg.getBody()))
+				(str(msg.getFrom()), msg.getBody(), tim))
 		else:
 			self.hub.sendPlugin('MSG', self.connexions[con], \
-				(str(msg.getFrom()), msg.getBody()))
+				(str(msg.getFrom()), msg.getBody(), tim))
 	# END messageCB
 
 	def presenceCB(self, con, prs):
