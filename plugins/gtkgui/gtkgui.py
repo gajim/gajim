@@ -365,9 +365,6 @@ class tabbed_chat_window:
 			if len(self.xmls) == 1:
 				self.chat_notebook.set_show_tabs(False)
 			self.show_title()
-			
-	def hyperlink_handler(self, *args):
-		pass
 
 	def new_user(self, user):
 		self.nb_unread[user.jid] = 0
@@ -377,9 +374,7 @@ class tabbed_chat_window:
 		conversation_textview = \
 			self.xmls[user.jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
-		self.link_tag = conversation_buffer.create_tag('hyperlink', foreground='blue')
 		end_iter = conversation_buffer.get_end_iter()
-		self.link_tag.connect('event', self.hyperlink_handler)
 		conversation_buffer.create_mark('end', end_iter, 0)
 		self.tagIn[user.jid] = conversation_buffer.create_tag('incoming')
 		color = self.plugin.config['inmsgcolor']
@@ -550,25 +545,7 @@ class tabbed_chat_window:
 								index+=l
 								beg = index
 					index+=1
-			#conversation_buffer.insert(end_iter, otext[beg:])
-
-			linksprefix = ['http://', 'https://', 'news://', 'ftp://', 'mailto:', 'ed2k://', 'www.', 'ftp.']
-			start=0
-			otext_lowered = otext.lower() # make them all small letters
-			for word in otext_lowered.split(): # get each word seperately
-				# word must be larger than the linksprefix items which atm the smaller is 4
-				if len(word) > 4:
-					for travelthru in range(len(linksprefix)): # travel tru linksprefix list
-						# linksprefix[travelthru] is http:// then https:// then news:// etc..
-						if word.startswith(linksprefix[travelthru]):
-							start = otext_lowered.index(word)
-							end = start + len(word)
-							print word, 'is a link and is in otext[%s:%s]' % (start, end)
-							conversation_buffer.insert_with_tags_by_name(end_iter, otext[start:end], 'hyperlink')
-							end_iter = conversation_buffer.get_end_iter()
-							break
-							
-			conversation_buffer.insert(end_iter, otext[start:])
+			conversation_buffer.insert(end_iter, otext[beg:])
 		
 		#scroll to the end of the textview
 		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
@@ -579,19 +556,15 @@ class tabbed_chat_window:
 			self.redraw_tab(jid)
 			self.show_title()
 
-class gc:
-	def delete_event(self, widget):
+class Groupchat_window:
+	def on_groupchat_window_destroy(self, widget):
 		"""close window"""
 		self.plugin.send('GC_STATUS', self.account, (self.nick, self.jid,\
 			'offline', 'offline'))
 		del self.plugin.windows[self.account]['gc'][self.jid]
 
-	def on_close(self, widget):
-		"""When Cancel button is clicked"""
-		widget.get_toplevel().destroy()
-
 	def get_role_iter(self, name):
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		fin = False
 		iter = model.get_iter_root()
 		if not iter:
@@ -606,7 +579,7 @@ class gc:
 		return None
 
 	def get_user_iter(self, jid):
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		fin = False
 		role = model.get_iter_root()
 		if not role:
@@ -628,7 +601,7 @@ class gc:
 		return None
 
 	def get_user_list(self):
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		list = []
 		fin = False
 		role = model.get_iter_root()
@@ -652,7 +625,7 @@ class gc:
 
 	def remove_user(self, nick):
 		"""Remove a user from the roster"""
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		iter = self.get_user_iter(nick)
 		if not iter:
 			return
@@ -662,18 +635,18 @@ class gc:
 			model.remove(parent_iter)
 	
 	def add_user_to_roster(self, nick, show, role, jid):
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		img = self.plugin.roster.pixbufs[show]
 		role_iter = self.get_role_iter(role)
 		if not role_iter:
 			role_iter = model.append(None, (self.plugin.roster.pixbufs['closed']\
 				, role, role))
 		iter = model.append(role_iter, (img, nick, jid))
-		self.tree.expand_row((model.get_path(role_iter)), False)
+		self.list_treeview.expand_row((model.get_path(role_iter)), False)
 		return iter
 	
 	def get_role(self, jid_iter):
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		path = model.get_path(jid_iter)[0]
 		iter = model.get_iter(path)
 		return model.get_value(iter, 1)
@@ -681,7 +654,7 @@ class gc:
 	def chg_user_status(self, nick, show, status, role, affiliation, jid, \
 		reason, actor, statusCode, account):
 		"""When a user change his status"""
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		if show == 'offline' or show == 'error':
 			if statusCode == '307':
 				self.print_conversation(_('%s has been kicked by %s: %s') % (nick, \
@@ -703,41 +676,63 @@ class gc:
 					img = self.plugin.roster.pixbufs[show]
 					model.set_value(iter, 0, img)
 	
+	def show_title(self):
+		"""redraw the window's title"""
+		#FIXME when multi tabs will be ok
+		unread = 0
+#		for jid in self.nb_unread:
+#			unread += self.nb_unread[jid]
+		unread = self.nb_unread
+		start = ""
+		if unread > 1:
+			start = "[" + str(unread) + "] "
+		elif unread == 1:
+			start = "* "
+		chat = 'Groupchat in ' + self.jid
+#		if len(self.xmls) > 1:
+		if 0:
+			chat = 'Groupchat'
+		self.window.set_title(start + chat + ' (' + self.account + ')')
+
 	def set_subject(self, subject):
 		self.xml.get_widget('subject_entry').set_text(subject)
 	
 	def on_subject_entry_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Return:
-			subject = self.xml.get_widget('subject_entry').get_text()
+			subject = widget.get_text()
 			self.plugin.send('GC_SUBJECT', self.account, (self.jid, subject))
 
-	def on_msg_key_press_event(self, widget, event):
+	def on_set_button_clicked(self, widget):
+		subject = self.xml.get_widget('subject_entry').get_text()
+		self.plugin.send('GC_SUBJECT', self.account, (self.jid, subject))
+
+	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed :
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation"""
 		if event.keyval == gtk.keysyms.Return:
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return 0
-			txt_buffer = widget.get_buffer()
-			start_iter = txt_buffer.get_start_iter()
-			end_iter = txt_buffer.get_end_iter()
-			txt = txt_buffer.get_text(start_iter, end_iter, 0)
+			message_buffer = widget.get_buffer()
+			start_iter = message_buffer.get_start_iter()
+			end_iter = message_buffer.get_end_iter()
+			txt = message_buffer.get_text(start_iter, end_iter, 0)
 			if txt != '':
 				self.plugin.send('GC_MSG', self.account, (self.jid, txt))
-				txt_buffer.set_text('', -1)
+				message_buffer.set_text('', -1)
 				widget.grab_focus()
 			return 1
 		elif event.keyval == gtk.keysyms.Tab:
 			list_nick = self.get_user_list()
-			txt_buffer = widget.get_buffer()
-			start_iter = txt_buffer.get_start_iter()
-			cursor_position = txt_buffer.get_insert()
-			end_iter = txt_buffer.get_iter_at_mark(cursor_position)
-			txt = txt_buffer.get_text(start_iter, end_iter, 0)
+			message_buffer = widget.get_buffer()
+			start_iter = message_buffer.get_start_iter()
+			cursor_position = message_buffer.get_insert()
+			end_iter = message_buffer.get_iter_at_mark(cursor_position)
+			txt = message_buffer.get_text(start_iter, end_iter, 0)
 			begin = txt.split()[-1]
 			for nick in list_nick:
 				if nick.find(begin) == 0:
-					txt_buffer.insert_at_cursor(nick[len(begin):] + ' ')
+					message_buffer.insert_at_cursor(nick[len(begin):] + ' ')
 					return 1
 		return 0
 
@@ -745,28 +740,32 @@ class gc:
 		"""Print a line in the conversation :
 		if contact is set : it's a message from someone
 		if contact is not set : it's a message from the server"""
-		conversation = self.xml.get_widget('conversation')
-		buffer = conversation.get_buffer()
+		conversation_textview = self.xml.get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
 		if not txt:
 			txt = ""
-		end_iter = buffer.get_end_iter()
+		end_iter = conversation_buffer.get_end_iter()
 		if not tim:
 			tim = time.localtime()
 		tims = time.strftime('[%H:%M:%S]', tim)
-		buffer.insert(end_iter, tims)
+		conversation_buffer.insert(end_iter, tims)
 		if contact:
 			if contact == self.nick:
-				buffer.insert_with_tags_by_name(end_iter, '<'+contact+'> ', \
-					'outgoing')
+				conversation_buffer.insert_with_tags_by_name(end_iter, '<' + \
+					contact + '> ', 'outgoing')
 			else:
-				buffer.insert_with_tags_by_name(end_iter, '<' + contact + '> ', \
-					'incoming')
-			buffer.insert(end_iter, txt+'\n')
+				conversation_buffer.insert_with_tags_by_name(end_iter, '<' + \
+					contact + '> ', 'incoming')
+			conversation_buffer.insert(end_iter, txt + '\n')
 		else:
-			buffer.insert_with_tags_by_name(end_iter, txt+'\n', \
+			conversation_buffer.insert_with_tags_by_name(end_iter, txt + '\n', \
 				'status')
 		#scroll to the end of the textview
-		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
+		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
+			0.1, 0, 0, 0)
+		if not self.window.is_active() and contact != 'status':
+			self.nb_unread += 1
+			self.show_title()
 
 	def kick(self, widget, room_jid, nick):
 		"""kick a user"""
@@ -834,7 +833,7 @@ class gc:
 
 	def mk_menu(self, event, iter):
 		"""Make user's popup menu"""
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		nick = model.get_value(iter, 1)
 		jid = model.get_value(iter, 2)
 		
@@ -896,57 +895,63 @@ class gc:
 		menu.show_all()
 		menu.reposition()
 
-	def on_focus(self, widget, event):
+	def on_groupchat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
-		self.plugin.systray.remove_jid(self.jid, self.account)
+		if self.nb_unread > 0:
+			self.nb_unread = 0
+			self.show_title()
+			self.plugin.systray.remove_jid(self.jid, self.account)
 
-	def on_treeview_event(self, widget, event):
+	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			if event.button == 3:
 				try:
-					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
-						int(event.y))
+					path, column, x, y = self.list_treeview.get_path_at_pos(\
+						int(event.x), int(event.y))
 				except TypeError:
-					self.tree.get_selection().unselect_all()
+					self.list_treeview.get_selection().unselect_all()
 					return False
-				model = self.tree.get_model()
+				model = self.list_treeview.get_model()
 				iter = model.get_iter(path)
 				if len(path) == 2:
 					self.mk_menu(event, iter)
 				return True
 			if event.button == 1:
 				try:
-					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
-						int(event.y))
+					path, column, x, y = self.list_treeview.get_path_at_pos(\
+						int(event.x), int(event.y))
 				except TypeError:
-					self.tree.get_selection().unselect_all()
-		if event.type == gtk.gdk.KEY_RELEASE:
-			if event.keyval == gtk.keysyms.Escape:
-				self.tree.get_selection().unselect_all()
+					self.list_treeview.get_selection().unselect_all()
 		return False
 
-	def on_row_activated(self, widget, path, col=0):
+	def on_list_treeview_key_release_event(self, widget, event):
+		if event.type == gtk.gdk.KEY_RELEASE:
+			if event.keyval == gtk.keysyms.Escape:
+				self.list_treeview.get_selection().unselect_all()
+		return False
+
+	def on_list_treeview_row_activated(self, widget, path, col=0):
 		"""When an iter is dubble clicked :
 		open the chat window"""
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		iter = model.get_iter(path)
 		if len(path) == 1:
-			if (self.tree.row_expanded(path)):
-				self.tree.collapse_row(path)
+			if (self.list_treeview.row_expanded(path)):
+				self.list_treeview.collapse_row(path)
 			else:
-				self.tree.expand_row(path, False)
+				self.list_treeview.expand_row(path, False)
 
-	def on_row_expanded(self, widget, iter, path):
+	def on_list_treeview_row_expanded(self, widget, iter, path):
 		"""When a row is expanded :
 		change the icon of the arrow"""
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		model.set_value(iter, 0, self.plugin.roster.pixbufs['opened'])
 	
-	def on_row_collapsed(self, widget, iter, path):
+	def on_list_treeview_row_collapsed(self, widget, iter, path):
 		"""When a row is collapsed :
 		change the icon of the arrow"""
-		model = self.tree.get_model()
+		model = self.list_treeview.get_model()
 		model.set_value(iter, 0, self.plugin.roster.pixbufs['closed'])
 
 	def __init__(self, jid, nick, plugin, account):
@@ -954,9 +959,10 @@ class gc:
 		self.nick = nick
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gc', APP)
-		self.window = self.xml.get_widget('Gc')
-		self.tree = self.xml.get_widget('list')
+		self.nb_unread = 0
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_window', APP)
+		self.window = self.xml.get_widget('groupchat_window')
+		self.list_treeview = self.xml.get_widget('list_treeview')
 		#status_image, nickname, real_jid
 		store = gtk.TreeStore(gtk.Image, str, str)
 		column = gtk.TreeViewColumn('contacts')
@@ -967,38 +973,30 @@ class gc:
 		column.pack_start(render_text, expand = True)
 		column.add_attribute(render_text, 'text', 1)
 
-		self.tree.append_column(column)
-		self.tree.set_model(store)
+		self.list_treeview.append_column(column)
+		self.list_treeview.set_model(store)
 
 		col = gtk.TreeViewColumn()
 		render = gtk.CellRendererPixbuf()
 		col.pack_start(render, expand = False)
-		self.tree.append_column(col)
+		self.list_treeview.append_column(col)
 		col.set_visible(False)
-		self.tree.set_expander_column(col)
+		self.list_treeview.set_expander_column(col)
 
-		conversation = self.xml.get_widget('conversation')
-		buffer = conversation.get_buffer()
-		end_iter = buffer.get_end_iter()
-		buffer.create_mark('end', end_iter, 0)
-		self.tagIn = buffer.create_tag('incoming')
+		conversation_textview = self.xml.get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
+		end_iter = conversation_buffer.get_end_iter()
+		conversation_buffer.create_mark('end', end_iter, 0)
+		self.tagIn = conversation_buffer.create_tag('incoming')
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn.set_property('foreground', color)
-		self.tagOut = buffer.create_tag('outgoing')
+		self.tagOut = conversation_buffer.create_tag('outgoing')
 		color = self.plugin.config['outmsgcolor']
 		self.tagOut.set_property('foreground', color)
-		self.tagStatus = buffer.create_tag('status')
+		self.tagStatus = conversation_buffer.create_tag('status')
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus.set_property('foreground', color)
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_focus', self.on_focus)
-		self.xml.signal_connect('on_msg_key_press_event', \
-			self.on_msg_key_press_event)
-		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
-		self.xml.signal_connect('on_row_activated', self.on_row_activated)
-		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
-		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
-		self.xml.signal_connect('on_subject_entry_key_press_event', self.on_subject_entry_key_press_event)
+		self.xml.signal_autoconnect(self)
 
 class history_window:
 	"""Class for bowser agent window :
