@@ -230,9 +230,12 @@ class GajimCore:
 		while 1:
 			if not self.hub.queueIn.empty():
 				ev = self.hub.queueIn.get()
-				for con in self.connexions.keys():
-					if ev[1] == self.connexions[con]:
-						break
+				if ev[1] and (ev[1] in self.connexions.values()):
+					for con in self.connexions.keys():
+						if ev[1] == self.connexions[con]:
+							break
+				else:
+					con = None
 				#('QUIT', account, ())
 				if ev[0] == 'QUIT':
 #					for con in self.connexions.keys():
@@ -358,6 +361,12 @@ class GajimCore:
 							print "error " + c.lastErr
 						else:
 							self.hub.sendPlugin('ACC_OK', ev[1], ev[2])
+				#('ACC_CHG', old_account, new_account)
+				elif ev[0] == 'ACC_CHG':
+					self.connected[ev[2]] = self.connected[ev[1]]
+					del self.connected[ev[1]]
+					if con:
+						self.connexions[con] = self.connected[ev[2]]
 				#('ASK_VCARD', account, jid)
 				elif ev[0] == 'ASK_VCARD':
 					iq = common.jabber.Iq(to=ev[2], type="get")

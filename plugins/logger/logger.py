@@ -44,29 +44,29 @@ class plugin:
 					print "plugin logger stopped"
 					return
 				elif ev[0] == 'NOTIFY':
-					status = ev[1][2]
-					jid = string.split(ev[1][0], '/')[0]
+					status = ev[2][2]
+					jid = string.split(ev[2][0], '/')[0]
 					if not status:
 						status = ""
 					if lognotsep == 1:
 						fic = open(LOGPATH + "notify.log", "a")
-						fic.write("%s:%s:%s:%s\n" % (tim, ev[1][0], \
-							ev[1][1], status))
+						fic.write("%s:%s:%s:%s\n" % (tim, ev[2][0], \
+							ev[2][1], status))
 						fic.close()
 					if lognotusr == 1:
 						fic = open(LOGPATH + jid, "a")
 						fic.write("%s:%s:%s:%s\n" % (tim, jid, \
-							ev[1][1], status))
+							ev[2][1], status))
 						fic.close()
 				elif ev[0] == 'MSG':
-					jid = string.split(ev[1][0], '/')[0]
+					jid = string.split(ev[2][0], '/')[0]
 					fic = open(LOGPATH + jid, "a")
-					fic.write("%s:recv:%s\n" % (tim, ev[1][1]))
+					fic.write("%s:recv:%s\n" % (tim, ev[2][1]))
 					fic.close()
 				elif ev[0] == 'MSGSENT':
-					jid = string.split(ev[1][0], '/')[0]
+					jid = string.split(ev[2][0], '/')[0]
 					fic = open(LOGPATH + jid, "a")
-					fic.write("%s:sent:%s\n" % (tim, ev[1][1]))
+					fic.write("%s:sent:%s\n" % (tim, ev[2][1]))
 					fic.close()
 			time.sleep(0.5)
 
@@ -76,14 +76,14 @@ class plugin:
 		while 1:
 			if not self.queueIN.empty():
 				ev = self.queueIN.get()
-				if ev[0] == what and ev[1][0] == 'Logger':
-					return ev[1][1]
+				if ev[0] == what and ev[2][0] == 'Logger':
+					return ev[2][1]
 			time.sleep(0.1)
 
 	def __init__(self, quIN, quOUT):
 		self.queueIN = quIN
 		self.queueOUT = quOUT
-		quOUT.put(('ASK_CONFIG', ('Logger', 'Logger', {\
+		quOUT.put(('ASK_CONFIG', None, ('Logger', 'Logger', {\
 			'lognotsep':1, 'lognotusr':1})))
 		self.config = self.wait('CONFIG')
 		#create ~/.gajim/logs/ if it doesn't exist

@@ -622,17 +622,29 @@ class accountPreference_Window:
 				del self.plugin.roster.groups[self.account]
 				del self.plugin.roster.contacts[self.account]
 				del self.plugin.accounts[self.account]
+				self.plugin.send('ACC_CHG', self.account, name)
+				self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
+					'password': entryPass.get_text(), 'ressource': \
+					entryRessource.get_text()}
+				self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
+				#refresh accounts window
+				if self.plugin.windows.has_key('accounts'):
+					self.plugin.windows['accounts'].init_accounts()
+				#refresh roster
+				self.plugin.roster.draw_roster()
+				widget.get_toplevel().destroy()
+				return
 		#if it's a new account
 		else:
 			if name in self.plugin.accounts.keys():
 				warning_Window('An account already has this name')
-				return 0
+				return
 			#if we neeed to register a new account
 			if check.get_active():
 				self.plugin.send('NEW_ACC', None, (hostname, login, \
 					entryPass.get_text(), name, entryRessource.get_text()))
 				check.set_active(FALSE)
-				return 1
+				return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 			'password': entryPass.get_text(), 'ressource': \
 			entryRessource.get_text()}
@@ -814,7 +826,7 @@ class authorize_Window:
 		self.jid = jid
 		self.account = account
 		xml.get_widget('label').set_text('Subscription request from ' + self.jid)
-		xml.get_widget("textview_sub").get_buffer().set_text(txt)
+		xml.get_widget("textview").get_buffer().set_text(txt)
 		xml.signal_connect('on_button_auth_clicked', self.auth)
 		xml.signal_connect('on_button_deny_clicked', self.deny)
 		xml.signal_connect('on_button_close_clicked', self.on_close)
@@ -1276,7 +1288,7 @@ class roster_Window:
 		item.set_submenu(menu_sub)
 		item = gtk.MenuItem("Resend authorization to")
 		menu_sub.append(item)
-		item.connect("activate", self.authorize, jid)
+		item.connect("activate", self.authorize, jid, account)
 		item = gtk.MenuItem("Rerequest authorization from")
 		menu_sub.append(item)
 		item.connect("activate", self.req_sub, jid, \
@@ -1433,7 +1445,7 @@ class roster_Window:
 	def on_add(self, widget, account):
 		"""When add user is selected :
 		call the add class"""
-		addContact_Window(self, account)
+		addContact_Window(self.plugin, account)
 
 	def on_about(self, widget):
 		"""When about is selected :
@@ -1545,7 +1557,7 @@ class roster_Window:
 		"""when show offline option is changed :
 		redraw the treeview"""
 		self.plugin.config['showoffline'] = 1 - self.plugin.config['showoffline']
-		self.redraw_roster()
+		self.draw_roster()
 
 	def __init__(self, plugin):
 		# FIXME : handle no file ...
