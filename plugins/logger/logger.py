@@ -41,6 +41,7 @@ class plugin:
 				
 				ev = self.queueIN.get()
 				if ev[0] == 'QUIT':
+					print "plugin logger stopped"
 					return
 				elif ev[0] == 'NOTIFY':
 					status = ev[1][2]
@@ -75,14 +76,14 @@ class plugin:
 		while 1:
 			if not self.queueIN.empty():
 				ev = self.queueIN.get()
-				if ev[0] == what:
-					return ev[1]
+				if ev[0] == what and ev[1][0] == 'Logger':
+					return ev[1][1]
 			time.sleep(0.1)
 
 	def __init__(self, quIN, quOUT):
 		self.queueIN = quIN
 		self.queueOUT = quOUT
-		quOUT.put(('ASK_CONFIG', 'Logger'))
+		quOUT.put(('ASK_CONFIG', ('Logger', 'Logger')))
 		self.config = self.wait('CONFIG')
 		#create ~/.gajim/logs/ if it doesn't exist
 		try:
