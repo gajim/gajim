@@ -133,7 +133,7 @@ class GajimCore:
 						self.connected = 0
 					if ev[1][0] != 'offline':
 						p = common.jabber.Presence()
-						p.setShow(ev[1])
+						p.setShow(ev[1][0])
 						self.con.send(p)
 				#('MSG', (jid, msg))
 				elif ev[0] == 'MSG':
