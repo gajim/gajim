@@ -22,7 +22,10 @@ import threading
 import socket
 import sys
 import time
-import plugins
+
+sys.path.append("..")
+
+import plugins.sock
 
 class GajimThread(threading.Thread): 
 	def __init__(self, name = None, queueIn = None, queueOut = None): 
@@ -34,10 +37,8 @@ class GajimThread(threading.Thread):
 	# END __init__
  
 	def run(self):
-	#This is VERY bad
-		if self.getName() == 'gtkgui':
-			plugins.gtkgui.plugin(self.queueIn, self.queueOut)
-		elif self.getName() == 'logger':
-			plugins.logger.plugin(self.queueIn, self.queueOut)
+		mod = compile("import plugins.%s" % self.getName(), \
+			self.getName(), "exec")
+		res = eval(mod)
 	# END run
 # END GajimThread

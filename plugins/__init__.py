@@ -1,2 +1,1 @@
-import gtkgui
-import logger
+import sock

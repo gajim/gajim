@@ -18,19 +18,20 @@
 ## GNU General Public License for more details.
 ##
 
-import socket
 import sys
+
+sys.path.append("..")
 import time
 import string
 import logging
 
-import plugins
 import common.hub
 import common.jabber
 import common.optparser
 
 log = logging.getLogger('core.core')
 log.setLevel(logging.DEBUG)
+
 CONFPATH = "~/.gajimrc"
 
 class GajimCore:
@@ -180,21 +181,24 @@ class GajimCore:
 	# END main
 # END GajimCore
 
+def loadPlugins(gc):
+	modStr = gc.cfgParser.Core_modules
+	mods = string.split (modStr, ' ')
+
+	for mod in mods:
+		modObj = gc.hub.newPlugin(mod)
+		gc.hub.register(mod, 'ROSTER')
+		gc.hub.register(mod, 'NOTIFY')
+		gc.hub.register(mod, 'MSG')
+		gc.hub.register(mod, 'SUBSCRIBED')
+		gc.hub.register(mod, 'SUBSCRIBE')
+		gc.hub.register(mod, 'AGENTS')
+		gc.hub.register(mod, 'AGENT_INFO')
+		modObj.load()
+# END loadPLugins
+
 def start():
 	gc = GajimCore()
-	guiPl = gc.hub.newPlugin('gtkgui')
-	gc.hub.register('gtkgui', 'ROSTER')
-	gc.hub.register('gtkgui', 'NOTIFY')
-	gc.hub.register('gtkgui', 'MSG')
-	gc.hub.register('gtkgui', 'SUBSCRIBED')
-	gc.hub.register('gtkgui', 'SUBSCRIBE')
-	gc.hub.register('gtkgui', 'AGENTS')
-	gc.hub.register('gtkgui', 'AGENT_INFO')
-	guiPl.load()
-	logPl = gc.hub.newPlugin('logger')
-	gc.hub.register('logger', 'MSG')
-	gc.hub.register('logger', 'MSGSENT')
-	gc.hub.register('logger', 'NOTIFY')
-	gc.hub.register('logger', 'QUIT')
-	logPl.load()
+	loadPlugins(gc)
 	gc.mainLoop()
+# END start
