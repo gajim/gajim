@@ -1420,7 +1420,9 @@ class roster_Window:
 	def set_cb(self):
 		#table to change index in plugin.connected to index in combobox
 		table = {0:5, 1:0, 2:1, 3:2, 4:3, 5:4}
-		maxi = max(self.plugin.connected.values())
+		maxi = 0
+		if len(self.plugin.connected.values()):
+			maxi = max(self.plugin.connected.values())
 		#temporarily block signal in order not to send status that we show
 		#in the combobox
 		self.cb.handler_block(self.id_signal_cb)
