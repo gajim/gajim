@@ -831,127 +831,126 @@ class preference_Window:
 
 class accountPreference_Window:
 	"""Class for account informations"""
-	def delete_event(self, widget):
+	def on_account_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows['accountPreference']
 	
-	def on_close(self, widget):
+	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
 		widget.get_toplevel().destroy()
 
 	def destroy(self):
-		self.xml.get_widget("Account").destroy()
+		self.window.destroy()
 
 	def init_account(self, infos):
 		"""Initialize window with defaults values"""
 		if infos.has_key('accname'):
-			self.xml.get_widget("entry_name").set_text(infos['accname'])
+			self.xml.get_widget('name_entry').set_text(infos['accname'])
 		if infos.has_key('jid'):
-			self.xml.get_widget("entry_jid").set_text(infos['jid'])
+			self.xml.get_widget('jid_entry').set_text(infos['jid'])
 		if infos.has_key('savepass'):
-			self.xml.get_widget('chk_password').set_active(\
+			self.xml.get_widget('save_password_checkbutton').set_active(\
 				infos['savepass'])
 			if infos['savepass']:
-				self.xml.get_widget('entry_password').set_sensitive(True)
+				password_entry = self.xml.get_widget('password_entry')
+				password_entry.set_sensitive(True)
 				if infos.has_key('password'):
-					self.xml.get_widget("entry_password").set_text(infos['password'])
+					password_entry.set_text(infos['password'])
 		if infos.has_key('ressource'):
-			self.xml.get_widget("entry_ressource").set_text(infos['ressource'])
+			self.xml.get_widget('ressource_entry').set_text(infos['ressource'])
 		if infos.has_key('priority'):
-			self.xml.get_widget("entry_priority").set_text(str(infos['priority']))
+			self.xml.get_widget('priority_entry').set_text(str(infos['priority']))
 		if infos.has_key('use_proxy'):
-			self.xml.get_widget("checkbutton_proxy").set_active(infos['use_proxy'])
+			self.xml.get_widget('use_proxy_checkbutton').\
+				set_active(infos['use_proxy'])
 		if infos.has_key('proxyhost'):
-			self.xml.get_widget("entry_proxyhost").set_text(infos['proxyhost'])
+			self.xml.get_widget('proxyhost_entry').set_text(infos['proxyhost'])
 		if infos.has_key('proxyport'):
-			self.xml.get_widget("entry_proxyport").set_text(str(\
+			self.xml.get_widget('proxyport_entry').set_text(str(\
 				infos['proxyport']))
+		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if not self.plugin.config.has_key('usegpg'):
-			self.xml.get_widget('gpg_key_label').set_text('GPG is not usable on this computer')
-			self.xml.get_widget('gpg_choose_key_button').set_sensitive(False)
+			gpg_key_label.set_text('GPG is not usable on this computer')
+			self.xml.get_widget('gpg_choose_button').set_sensitive(False)
 		if infos.has_key('keyid') and self.plugin.config.has_key('usegpg'):
 			if infos['keyid'] and self.plugin.config['usegpg']:
-				self.xml.get_widget('gpg_key_label').set_text(infos['keyid'])
+				gpg_key_label.set_text(infos['keyid'])
 				if infos.has_key('keyname'):
 					self.xml.get_widget('gpg_name_label').set_text(infos['keyname'])
-				self.xml.get_widget('gpg_pass_checkbutton').set_sensitive(True)
+				gpg_save_password_checkbutton = \
+					self.xml.get_widget('gpg_save_password_checkbutton')
+				gpg_save_password_checkbutton.set_sensitive(True)
 				if infos.has_key('savegpgpass'):
-					self.xml.get_widget('gpg_pass_checkbutton').set_active(\
-						infos['savegpgpass'])
+					gpg_save_password_checkbutton.set_active(infos['savegpgpass'])
 					if infos['savegpgpass']:
-						self.xml.get_widget('gpg_pass_entry').set_sensitive(True)
+						gpg_password_entry = self.xml.get_widget('gpg_password_entry')
+						gpg_password_entry.set_sensitive(True)
 						if infos.has_key('gpgpassword'):
-							self.xml.get_widget('gpg_pass_entry').set_text(\
-								infos['gpgpassword'])
+							gpg_password_entry.set_text(infos['gpgpassword'])
 		if infos.has_key('autoconnect'):
-			self.xml.get_widget('chk_autoconnect').set_active(\
+			self.xml.get_widget('autoconnect_checkbutton').set_active(\
 				infos['autoconnect'])
 
-	def on_save_clicked(self, widget):
+	def on_save_button_clicked(self, widget):
 		"""When save button is clicked : Save informations in config file"""
-		savepass = 0
-		if self.xml.get_widget("chk_password").get_active():
-			savepass = 1
-		entryPass = self.xml.get_widget("entry_password")
-		entryRessource = self.xml.get_widget("entry_ressource")
-		entryPriority = self.xml.get_widget("entry_priority")
-		prio = entryPriority.get_text()
-		check = self.xml.get_widget("checkbutton")
-		entryName = self.xml.get_widget("entry_name")
-		entryJid = self.xml.get_widget("entry_jid")
+		save_password = 0
+		if self.xml.get_widget('save_password_checkbutton').get_active():
+			save_password = 1
+		password = self.xml.get_widget('password_entry').get_text()
+		ressource = self.xml.get_widget('ressource_entry').get_text()
+		priority = self.xml.get_widget('priority_entry').get_text()
+		new_account_checkbutton = self.xml.get_widget('new_account_checkbutton')
+		name = self.xml.get_widget('name_entry').get_text()
+		jid = self.xml.get_widget('jid_entry').get_text()
 		autoconnect = 0
-		if self.xml.get_widget("chk_autoconnect").get_active():
+		if self.xml.get_widget('autoconnect_checkbutton').get_active():
 			autoconnect = 1
-		checkProxy = self.xml.get_widget("checkbutton_proxy")
-		if checkProxy.get_active():
-			useProxy = 1
+		use_proxy_checkbutton = self.xml.get_widget('use_proxy_checkbutton')
+		if use_proxy_checkbutton.get_active():
+			use_proxy = 1
 		else:
-			useProxy = 0
-		entryProxyhost = self.xml.get_widget("entry_proxyhost")
-		entryProxyport = self.xml.get_widget("entry_proxyport")
-		proxyPort = entryProxyport.get_text()
-		proxyHost = entryProxyhost.get_text()
-		name = entryName.get_text()
-		jid = entryJid.get_text()
+			use_proxy = 0
+		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
+		proxyport = self.xml.get_widget('proxyport_entry').get_text()
 		if (name == ''):
-			warning_Window(_("You must enter a name for this account"))
+			warning_Window(_('You must enter a name for this account'))
 			return 0
 		if name.find(' ') != -1:
-			warning_Window(_("Spaces are not permited in account name"))
+			warning_Window(_('Spaces are not permited in account name'))
 			return 0
 		if (jid == '') or (string.count(jid, '@') != 1):
-			warning_Window(_("You must enter a Jabber ID for this account\nFor example : login@hostname"))
+			warning_Window(_('You must enter a Jabber ID for this account\nFor example : login@hostname'))
 			return 0
-		if check.get_active() and entryPass.get_text() == "":
-			warning_Window(_("You must enter a password to register a new account"))
+		if new_account_checkbutton.get_active() and password == '':
+			warning_Window(_('You must enter a password to register a new account'))
 			return 0
-		if useProxy:
-			if proxyPort != '':
+		if use_proxy:
+			if proxyport != '':
 				try:
-					proxyPort = string.atoi(proxyPort)
+					proxyport = string.atoi(proxyport)
 				except ValueError:
-					warning_Window(_("Proxy Port must be a port number"))
+					warning_Window(_('Proxy Port must be a port number'))
 					return 0
-			if proxyHost == '':
-				warning_Window(_("You must enter a proxy host to use proxy"))
-		if prio != '':
+			if proxyhost == '':
+				warning_Window(_('You must enter a proxy host to use proxy'))
+		if priority != '':
 			try:
-				prio = string.atoi(prio)
+				priority = string.atoi(priority)
 			except ValueError:
-				warning_Window(_("Priority must be a number"))
+				warning_Window(_('Priority must be a number'))
 				return 0
 		(login, hostname) = string.split(jid, '@')
-		keyName = self.xml.get_widget('gpg_name_label').get_text()
-		if keyName == '': #no key selected
+		key_name = self.xml.get_widget('gpg_name_label').get_text()
+		if key_name == '': #no key selected
 			keyID = ''
-			save_gpg_pass = 0
-			gpg_pass = ''
+			save_gpg_password = 0
+			gpg_password = ''
 		else:
 			keyID = self.xml.get_widget('gpg_key_label').get_text()
-			save_gpg_pass = 0
-			if self.xml.get_widget('gpg_pass_checkbutton').get_active():
-				save_gpg_pass = 1
-			gpg_pass = self.xml.get_widget('gpg_pass_entry').get_text()
+			save_gpg_password = 0
+			if self.xml.get_widget('gpg_save_password_checkbutton').get_active():
+				save_gpg_password = 1
+			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
 		#if we are modifying an account
 		if self.modify:
 			#if we modify the name of the account
@@ -977,14 +976,16 @@ class accountPreference_Window:
 			if self.plugin.accounts[self.account].has_key('active'):
 				active = self.plugin.accounts[self.account]['active']
 			self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-				'savepass': savepass, 'password': entryPass.get_text(), \
-				'ressource': entryRessource.get_text(), 'priority' : prio, \
-				'autoconnect': autoconnect, 'use_proxy': useProxy, 'proxyhost': \
-				entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
-				'keyname': keyName, 'savegpgpass': save_gpg_pass, \
-				'gpgpassword': gpg_pass, 'active': active}
+				'savepass': save_password, 'password': password, \
+				'ressource': ressource, 'priority' : priority, \
+				'autoconnect': autoconnect, 'use_proxy': use_proxy, 'proxyhost': \
+				proxyhost, 'proxyport': proxyport, 'keyid': keyID, \
+				'keyname': key_name, 'savegpgpass': save_gpg_password, \
+				'gpgpassword': gpg_password, 'active': active}
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 				'GtkGui'))
+			if save_password:
+				self.plugin.send('PASSPHRASE', name, password)
 			#refresh accounts window
 			if self.plugin.windows.has_key('accounts'):
 				self.plugin.windows['accounts'].init_accounts()
@@ -994,25 +995,24 @@ class accountPreference_Window:
 			return
 		#if it's a new account
 		if name in self.plugin.accounts.keys():
-			warning_Window(_("An account already has this name"))
+			warning_Window(_('An account already has this name'))
 			return
 		#if we neeed to register a new account
-		if check.get_active():
-			self.plugin.send('NEW_ACC', None, (hostname, login, \
-				entryPass.get_text(), name, entryRessource.get_text(), prio, \
-				useProxy, proxyHost, proxyPort))
+		if new_account_checkbutton.get_active():
+			self.plugin.send('NEW_ACC', None, (hostname, login, password, name, \
+				ressource, prio, use_proxy, proxyhost, proxyport))
 			return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-			'savepass': savepass, 'password': entryPass.get_text(), 'ressource': \
-			entryRessource.get_text(), 'priority' : prio, 'autoconnect': \
-			autoconnect, 'use_proxy': useProxy, 'proxyhost': \
-			entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
-			'keyname': keyName, 'savegpgpass': save_gpg_pass, 'gpgpassword': gpg_pass,\
+			'savepass': save_password, 'password': password, 'ressource': \
+			ressource, 'priority' : priority, 'autoconnect': autoconnect, \
+			'use_proxy': use_proxy, 'proxyhost': proxyhost, \
+			'proxyport': proxyport, 'keyid': keyID, 'keyname': key_name, \
+			'savegpgpass': save_gpg_password, 'gpgpassword': gpg_password,\
 			'active': 1}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 			'GtkGui'))
-		if savepass:
-			self.plugin.send('PASSPHRASE', name, entryPass.get_text())
+		if save_password:
+			self.plugin.send('PASSPHRASE', name, password)
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.plugin.queues[name] = {}
@@ -1030,7 +1030,7 @@ class accountPreference_Window:
 
 	def account_is_ok(self, acct):
 		"""When the account has been created with sucess"""
-		self.xml.get_widget("checkbutton").set_active(False)
+		self.xml.get_widget('new_account_checkbutton').set_active(False)
 		self.modify = True
 		self.account = acct
 		#TODO:
@@ -1044,87 +1044,86 @@ class accountPreference_Window:
 #		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 #			'GtkGui'))
 
-	def on_edit_details_clicked(self, widget):
-		entryJid = self.xml.get_widget("entry_jid")
+	def on_edit_details_button_clicked(self, widget):
 		if not self.plugin.windows.has_key('vcard'):
-			self.plugin.windows[self.account]['infos'][entryJid.get_text()] = \
-				vCard_Window(entryJid.get_text(), self.plugin, self.account)
+			jid = self.xml.get_widget('jid_entry').get_text()
 			if self.plugin.connected[self.account]:
-				self.plugin.send('ASK_VCARD', self.account, entryJid.get_text())
+				self.plugin.windows[self.account]['infos'][jid] = \
+					vCard_Window(jid.get_text(), self.plugin, self.account)
+				self.plugin.send('ASK_VCARD', self.account, jid)
 			else:
-				warning_Window(_("You must be connected to get your informations"))
+				warning_Window(_('You must be connected to get your informations'))
 	
-	def on_choose_gpg(self, widget, data=None):
+	def on_gpg_choose_button_clicked(self, widget, data=None):
 		w = choose_gpg_Window()
 		self.plugin.windows['gpg_keys'] = w
 		self.plugin.send('GPG_SECRETE_KEYS', None, ())
 		keyID = w.run()
 		if keyID == -1:
 			return
+		gpg_save_password_checkbutton = \
+			self.xml.get_widget('gpg_save_password_checkbutton')
+		gpg_key_label = self.xml.get_widget('gpg_key_label')
+		gpg_name_label = self.xml.get_widget('gpg_name_label')
 		if keyID[0] == 'None':
-			self.xml.get_widget('gpg_key_label').set_text(_('No key selected'))
-			self.xml.get_widget('gpg_name_label').set_text('')
-			self.xml.get_widget('gpg_pass_checkbutton').set_sensitive(False)
-			self.xml.get_widget('gpg_pass_entry').set_sensitive(False)
+			gpg_key_label.set_text(_('No key selected'))
+			gpg_name_label.set_text('')
+			gpg_save_password_checkbutton.set_sensitive(False)
+			self.xml.get_widget('gpg_password_entry').set_sensitive(False)
 		else:
-			self.xml.get_widget('gpg_key_label').set_text(keyID[0])
-			self.xml.get_widget('gpg_name_label').set_text(keyID[1])
-			self.xml.get_widget('gpg_pass_checkbutton').set_sensitive(True)
-		self.xml.get_widget('gpg_pass_checkbutton').set_active(False)
-		self.xml.get_widget('gpg_pass_entry').set_text('')
+			gpg_key_label.set_text(keyID[0])
+			gpg_name_label.set_text(keyID[1])
+			gpg_save_password_checkbutton.set_sensitive(True)
+		gpg_save_password_checkbutton.set_active(False)
+		self.xml.get_widget('gpg_password_entry').set_text('')
 	
-	def on_chk_toggled(self, widget, widgets):
+	def on_checkbutton_toggled(self, widget, widgets):
 		"""set or unset sensitivity of widgets when widget is toggled"""
 		for w in widgets:
 			w.set_sensitive(widget.get_active())
 
-	def on_chk_toggled_and_clear(self, widget, widgets):
-		self.on_chk_toggled(widget, widgets)
+	def on_checkbutton_toggled_and_clear(self, widget, widgets):
+		self.on_checkbutton_toggled(widget, widgets)
 		for w in widgets:
 			if not widget.get_active():
 				w.set_text('')
 
-	def on_chk_pass_toggled(self, widget):
-		if self.xml.get_widget('checkbutton').get_active():
-			return
-		self.on_chk_toggled_and_clear(widget, \
-			[self.xml.get_widget('entry_password')])
+	def on_gpg_save_password_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled_and_clear(widget, [\
+			self.xml.get_widget('gpg_password_entry')])
 
-	def on_chk_new_toggled(self, widget):
+	def on_save_password_checkbutton_toggled(self, widget):
+		if self.xml.get_widget('new_account_checkbutton').get_active():
+			return
+		self.on_checkbutton_toggled_and_clear(widget, \
+			[self.xml.get_widget('password_entry')])
+
+	def on_new_account_checkbutton_toggled(self, widget):
+		password_entry = self.xml.get_widget('password_entry')
 		if widget.get_active():
-			self.xml.get_widget('entry_password').set_sensitive(True)
-		elif not self.xml.get_widget('chk_password').get_active():
-			self.xml.get_widget('entry_password').set_sensitive(False)
-			self.xml.get_widget('entry_password').set_text('')
+			password_entry.set_sensitive(True)
+		elif not self.xml.get_widget('save_password_checkbutton').get_active():
+			password_entry.set_sensitive(False)
+			password_entry.set_text('')
 
 	#info must be a dictionnary
 	def __init__(self, plugin, infos = {}):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Account', APP)
-		self.window = self.xml.get_widget("Account")
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_window', APP)
+		self.window = self.xml.get_widget('account_window')
 		self.plugin = plugin
 		self.account = ''
 		self.modify = False
 		self.xml.get_widget('gpg_key_label').set_text('No key selected')
 		self.xml.get_widget('gpg_name_label').set_text('')
-		self.xml.get_widget('gpg_pass_checkbutton').set_sensitive(False)
-		self.xml.get_widget('gpg_pass_entry').set_sensitive(False)
-		self.xml.get_widget('entry_password').set_sensitive(False)
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_save_clicked', self.on_save_clicked)
-		self.xml.signal_connect('on_edit_details_clicked', \
-			self.on_edit_details_clicked)
-		self.xml.signal_connect('on_close_clicked', self.on_close)
-		self.xml.signal_connect('on_choose_gpg_clicked', self.on_choose_gpg)
-		self.xml.signal_connect('on_gpg_pass_checkbutton_toggled', \
-			self.on_chk_toggled_and_clear, [self.xml.get_widget('gpg_pass_entry')])
-		self.xml.signal_connect('on_pass_checkbutton_toggled', \
-			self.on_chk_pass_toggled)
-		self.xml.signal_connect('on_checkbutton_toggled', self.on_chk_new_toggled)
+		self.xml.get_widget('gpg_save_password_checkbutton').set_sensitive(False)
+		self.xml.get_widget('gpg_password_entry').set_sensitive(False)
+		self.xml.get_widget('password_entry').set_sensitive(False)
+		self.xml.signal_autoconnect(self)
 		if infos:
 			self.modify = True
 			self.account = infos['accname']
 			self.init_account(infos)
-			self.xml.get_widget("checkbutton").set_sensitive(FALSE)
+			self.xml.get_widget('new_account_checkbutton').set_sensitive(FALSE)
 
 class accounts_Window:
 	"""Class for accounts window : lists of accounts"""

@@ -985,7 +985,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="Account">
+<widget class="GtkWindow" id="account_window">
   <property name="visible">True</property>
   <property name="title" translatable="yes">Account Modification</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -998,7 +998,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Thu, 11 Dec 2003 17:04:49 GMT"/>
+  <signal name="destroy" handler="on_account_window_destroy" last_modification_time="Mon, 28 Feb 2005 20:30:37 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox7">
@@ -1014,7 +1014,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 	  <property name="spacing">7</property>
 
 	  <child>
-	    <widget class="GtkLabel" id="label_name">
+	    <widget class="GtkLabel" id="name_label">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Name : </property>
 	      <property name="use_underline">False</property>
@@ -1035,7 +1035,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="entry_name">
+	    <widget class="GtkEntry" id="name_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
@@ -1130,7 +1130,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_ressource">
+		<widget class="GtkEntry" id="ressource_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
@@ -1151,7 +1151,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_password">
+		<widget class="GtkEntry" id="password_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
@@ -1172,7 +1172,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_jid">
+		<widget class="GtkEntry" id="jid_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
@@ -1193,7 +1193,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkCheckButton" id="checkbutton">
+		<widget class="GtkCheckButton" id="new_account_checkbutton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Register new account</property>
@@ -1203,7 +1203,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="on_checkbutton_toggled" last_modification_time="Wed, 16 Feb 2005 00:01:43 GMT"/>
+		  <signal name="toggled" handler="on_new_account_checkbutton_toggled" last_modification_time="Mon, 28 Feb 2005 20:20:46 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
@@ -1241,7 +1241,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_priority">
+		<widget class="GtkEntry" id="priority_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
@@ -1262,7 +1262,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkCheckButton" id="chk_password">
+		<widget class="GtkCheckButton" id="save_password_checkbutton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Save password</property>
@@ -1272,7 +1272,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="on_pass_checkbutton_toggled" last_modification_time="Thu, 28 Oct 2004 13:45:57 GMT"/>
+		  <signal name="toggled" handler="on_save_password_checkbutton_toggled" last_modification_time="Mon, 28 Feb 2005 20:25:48 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
@@ -1372,7 +1372,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="chk_autoconnect">
+			    <widget class="GtkCheckButton" id="autoconnect_checkbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Connect at startup</property>
@@ -1388,10 +1388,6 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 			      <property name="expand">False</property>
 			      <property name="fill">False</property>
 			    </packing>
-			  </child>
-
-			  <child>
-			    <placeholder/>
 			  </child>
 			</widget>
 		      </child>
@@ -1422,10 +1418,6 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 		  <property name="expand">True</property>
 		  <property name="fill">True</property>
 		</packing>
-	      </child>
-
-	      <child>
-		<placeholder/>
 	      </child>
 	    </widget>
 	    <packing>
@@ -1564,14 +1556,14 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkButton" id="gpg_choose_key_button">
+				<widget class="GtkButton" id="gpg_choose_button">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Choose key</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
-				  <signal name="clicked" handler="on_choose_gpg_clicked" last_modification_time="Sun, 10 Oct 2004 18:53:28 GMT"/>
+				  <signal name="clicked" handler="on_gpg_choose_button_clicked" last_modification_time="Mon, 28 Feb 2005 20:24:58 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -1594,7 +1586,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkCheckButton" id="gpg_pass_checkbutton">
+				<widget class="GtkCheckButton" id="gpg_save_password_checkbutton">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Save passphrase (insecure)</property>
@@ -1604,7 +1596,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <signal name="toggled" handler="on_gpg_pass_checkbutton_toggled" last_modification_time="Sun, 10 Oct 2004 18:52:22 GMT"/>
+				  <signal name="toggled" handler="on_gpg_save_password_checkbutton_toggled" last_modification_time="Mon, 28 Feb 2005 21:56:59 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -1614,7 +1606,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="gpg_pass_entry">
+				<widget class="GtkEntry" id="gpg_password_entry">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">True</property>
@@ -1790,137 +1782,124 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 		  <child>
-		    <widget class="GtkHBox" id="hbox35">
+		    <widget class="GtkTable" id="table14">
+		      <property name="border_width">5</property>
 		      <property name="visible">True</property>
+		      <property name="n_rows">3</property>
+		      <property name="n_columns">2</property>
 		      <property name="homogeneous">False</property>
-		      <property name="spacing">0</property>
+		      <property name="row_spacing">5</property>
+		      <property name="column_spacing">5</property>
 
 		      <child>
-			<widget class="GtkTable" id="table14">
-			  <property name="border_width">5</property>
+			<widget class="GtkEntry" id="proxyport_entry">
 			  <property name="visible">True</property>
-			  <property name="n_rows">3</property>
-			  <property name="n_columns">2</property>
-			  <property name="homogeneous">False</property>
-			  <property name="row_spacing">5</property>
-			  <property name="column_spacing">5</property>
-
-			  <child>
-			    <widget class="GtkEntry" id="entry_proxyport">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="editable">True</property>
-			      <property name="visibility">True</property>
-			      <property name="max_length">0</property>
-			      <property name="text" translatable="yes"></property>
-			      <property name="has_frame">True</property>
-			      <property name="invisible_char">*</property>
-			      <property name="activates_default">False</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">1</property>
-			      <property name="right_attach">2</property>
-			      <property name="top_attach">2</property>
-			      <property name="bottom_attach">3</property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkLabel" id="label136">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Port:</property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_LEFT</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">1</property>
-			      <property name="top_attach">2</property>
-			      <property name="bottom_attach">3</property>
-			      <property name="x_options">fill</property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkEntry" id="entry_proxyhost">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="editable">True</property>
-			      <property name="visibility">True</property>
-			      <property name="max_length">0</property>
-			      <property name="text" translatable="yes"></property>
-			      <property name="has_frame">True</property>
-			      <property name="invisible_char">*</property>
-			      <property name="activates_default">False</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">1</property>
-			      <property name="right_attach">2</property>
-			      <property name="top_attach">1</property>
-			      <property name="bottom_attach">2</property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkLabel" id="label135">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Host:</property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_LEFT</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">1</property>
-			      <property name="top_attach">1</property>
-			      <property name="bottom_attach">2</property>
-			      <property name="x_options">fill</property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkCheckButton" id="checkbutton_proxy">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Use proxy</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">True</property>
-			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
-			      <property name="draw_indicator">True</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">1</property>
-			      <property name="right_attach">2</property>
-			      <property name="top_attach">0</property>
-			      <property name="bottom_attach">1</property>
-			      <property name="x_options">fill</property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
+			  <property name="can_focus">True</property>
+			  <property name="editable">True</property>
+			  <property name="visibility">True</property>
+			  <property name="max_length">0</property>
+			  <property name="text" translatable="yes"></property>
+			  <property name="has_frame">True</property>
+			  <property name="invisible_char">*</property>
+			  <property name="activates_default">False</property>
 			</widget>
 			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">True</property>
-			  <property name="fill">True</property>
+			  <property name="left_attach">1</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">2</property>
+			  <property name="bottom_attach">3</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label136">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Port:</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">1</property>
+			  <property name="top_attach">2</property>
+			  <property name="bottom_attach">3</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkEntry" id="proxyhost_entry">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="editable">True</property>
+			  <property name="visibility">True</property>
+			  <property name="max_length">0</property>
+			  <property name="text" translatable="yes"></property>
+			  <property name="has_frame">True</property>
+			  <property name="invisible_char">*</property>
+			  <property name="activates_default">False</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">1</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">1</property>
+			  <property name="bottom_attach">2</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label135">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Host:</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">1</property>
+			  <property name="top_attach">1</property>
+			  <property name="bottom_attach">2</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkCheckButton" id="use_proxy_checkbutton">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">Use proxy</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">False</property>
+			  <property name="inconsistent">False</property>
+			  <property name="draw_indicator">True</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">1</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">0</property>
+			  <property name="bottom_attach">1</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
 			</packing>
 		      </child>
 		    </widget>
@@ -1950,10 +1929,6 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 		  <property name="expand">True</property>
 		  <property name="fill">True</property>
 		</packing>
-	      </child>
-
-	      <child>
-		<placeholder/>
 	      </child>
 	    </widget>
 	    <packing>
@@ -2050,14 +2025,14 @@ on the server as a vCard</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="button19">
+		<widget class="GtkButton" id="edit_details_button">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Edit personal details...</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_edit_details_clicked" last_modification_time="Wed, 18 Feb 2004 21:30:01 GMT"/>
+		  <signal name="clicked" handler="on_edit_details_button_clicked" last_modification_time="Mon, 28 Feb 2005 20:32:40 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">1</property>
@@ -2153,7 +2128,7 @@ on the server as a vCard</property>
 	  <property name="spacing">20</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button_close">
+	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -2161,12 +2136,12 @@ on the server as a vCard</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_close_clicked" last_modification_time="Wed, 17 Mar 2004 20:33:31 GMT"/>
+	      <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Mon, 28 Feb 2005 20:32:02 GMT"/>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button_save">
+	    <widget class="GtkButton" id="save_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -2174,7 +2149,7 @@ on the server as a vCard</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_save_clicked" last_modification_time="Thu, 11 Dec 2003 17:13:15 GMT"/>
+	      <signal name="clicked" handler="on_save_button_clicked" last_modification_time="Mon, 28 Feb 2005 20:30:56 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

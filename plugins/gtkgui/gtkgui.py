@@ -2865,6 +2865,7 @@ class plugin:
 		if self.windows['accountPreference']:
 			self.windows['accountPreference'].account_is_ok(array[1])
 		name = array[3]
+		#TODO: to be removed and done in account_is_ok function or to be put in else
 		self.accounts[array[3]] = {'name': array[1], \
 					'hostname': array[0],\
 					'password': array[2],\
