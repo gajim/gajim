@@ -1267,6 +1267,7 @@ class Account_modification_window:
 			return
 		self.on_checkbutton_toggled_and_clear(widget, \
 			[self.xml.get_widget('password_entry')])
+		self.xml.get_widget('password_entry').grab_focus()
 
 	def on_new_account_checkbutton_toggled(self, widget):
 		password_entry = self.xml.get_widget('password_entry')
@@ -1318,8 +1319,8 @@ class Accounts_window:
 			if self.plugin.accounts[account].has_key('active'):
 				activ = self.plugin.accounts[account]['active']
 			iter = model.append()
-			model.set(iter, 0, account, 1, \
-				self.plugin.accounts[account]['hostname'], 2, activ)
+			model.set(iter, 0, account, 1,\
+				self.plugin.accounts[account]['hostname'])
 
 	def on_accounts_treeview_cursor_changed(self, widget):
 		"""Activate delete and modify buttons when a row is selected"""
@@ -1357,7 +1358,6 @@ class Accounts_window:
 		"""When modify button is clicked :
 		open the account information window for this account"""
 		if not self.plugin.windows.has_key('account_modification_window'):
-#			infos = {}
 			sel = self.accounts_treeview.get_selection()
 			(model, iter) = sel.get_selected()
 			account = model.get_value(iter, 0)
@@ -1368,11 +1368,8 @@ class Accounts_window:
 			self.plugin.windows['account_modification_window'] = \
 				Account_modification_window(self.plugin, infos)
 
-	def on_toggled(self, cell, path, model=None):
-		iter = model.get_iter(path)
-		model.set_value(iter, 2, not cell.get_active())
-		account = model.get_value(iter, 0)
-		if cell.get_active():
+	def on_sync_with_global_status_checkbutton_toggled(self, widget):
+		if widget.get_active():
 			self.plugin.accounts[account]['active'] = 0
 		else:
 			self.plugin.accounts[account]['active'] = 1
@@ -1392,11 +1389,6 @@ class Accounts_window:
 		renderer = gtk.CellRendererText()
 		self.accounts_treeview.insert_column_with_attributes(-1, _('Server'), \
 			renderer, text=1)
-		renderer = gtk.CellRendererToggle()
-		renderer.set_property('activatable', True)
-		renderer.connect('toggled', self.on_toggled, model)
-		self.accounts_treeview.insert_column_with_attributes(-1, _('Sync with global status'), \
-			renderer, active=2)
 		self.xml.signal_autoconnect(self)
 		self.init_accounts()
 
