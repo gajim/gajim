@@ -446,7 +446,6 @@ class Groupchat_window(chat):
 		self.subjects[room_jid] = ''
 		self.list_treeview[room_jid] = self.xmls[room_jid].\
 			get_widget('list_treeview')
-		print self.list_treeview[room_jid]
 
 		#status_image, nickname, real_jid
 		store = gtk.TreeStore(gtk.Image, str, str)
