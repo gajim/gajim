@@ -1358,25 +1358,31 @@ class plugin:
 	
 	def read_sleepy(self):	
 		"""Check if we are idle"""
-		if self.sleeper:
-			self.sleeper.poll()
-			state = self.sleeper.getState()
-			for account in self.accounts.keys():
-				if self.sleeper_state[account]:
-					if state == common.sleepy.STATE_AWAKE and \
-						self.connected[account] > 1:
-						#we go online
-						self.send('STATUS', account, ('online', ''))
-					elif state == common.sleepy.STATE_AWAY and \
-						self.connected[account] == 1 and \
-						self.config['autoaway']:
-						#we go away
-						self.send('STATUS', account, ('away', 'auto away (idle)'))
-					elif state == common.sleepy.STATE_XAWAY and \
-						self.connected[account] == 2 and \
-						self.config['autoxa']:
-						#we go extended away
-						self.send('STATUS', account, ('xa', 'auto away (idle)'))
+		if not self.sleeper:
+			return 1
+		self.sleeper.poll()
+		state = self.sleeper.getState()
+		for account in self.accounts.keys():
+			if not self.sleeper_state[account]:
+				continue
+			if state == common.sleepy.STATE_AWAKE and \
+				self.sleeper_state[account] > 1:
+				#we go online
+				self.send('STATUS', account, ('online', ''))
+				self.sleeper_state[account] = 1
+			elif state == common.sleepy.STATE_AWAY and \
+				self.sleeper_state[account] == 1 and \
+				self.config['autoaway']:
+				#we go away
+				self.send('STATUS', account, ('away', 'auto away (idle)'))
+				self.sleeper_state[account] = 2
+			elif state == common.sleepy.STATE_XAWAY and (\
+				self.sleeper_state[account] == 2 or \
+				self.sleeper_state[account] == 1) and \
+				self.config['autoxa']:
+				#we go extended away
+				self.send('STATUS', account, ('xa', 'auto away (idle)'))
+				self.sleeper_state[account] = 3
 		return 1
 
 	def __init__(self, quIN, quOUT):
@@ -1409,7 +1415,10 @@ class plugin:
 			self.queues[a] = {}
 			self.connected[a] = 0
 			self.nicks[a] = self.accounts[a]['name']
-			self.sleeper_state[a] = 0
+			self.sleeper_state[a] = 0	#0:don't use sleeper for this account
+												#1:online and use sleeper
+												#2:autoaway and use sleeper
+												#3:autoxa and use sleeper
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
