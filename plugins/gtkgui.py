@@ -338,6 +338,8 @@ class roster:
 
 	def on_status_changed(self, widget):
 		self.queueOUT.put(('STATUS',widget.name))
+		if not self.showOffline:
+			self.treestore.clear()
 
 	def on_add(self, widget):
 		window_add = add(self)

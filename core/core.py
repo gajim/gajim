@@ -126,16 +126,15 @@ class GajimCore:
 					return
 				#('STATUS', status)
 				elif ev[0] == 'STATUS':
-					
 					if (ev[1] != 'offline') and (self.connected == 0):
 						self.connect()
 					elif (ev[1] == 'offline') and (self.connected == 1):
 						self.con.disconnect()
 						self.connected = 0
-						return 1
-					p = common.jabber.Presence()
-					p.setShow(ev[1])
-					self.con.send(p)
+					if ev[1] != 'offline':
+						p = common.jabber.Presence()
+						p.setShow(ev[1])
+						self.con.send(p)
 				#('MSG', (jid, msg))
 				elif ev[0] == 'MSG':
 					msg = common.jabber.Message(ev[1][0], ev[1][1])
