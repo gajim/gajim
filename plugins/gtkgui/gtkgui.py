@@ -1089,7 +1089,7 @@ class log_Window:
 		self.xml.get_widget('latest_button').set_sensitive(True)
 		end = 50
 		if end > self.nb_line:
-			end = nb_line
+			end = self.nb_line
 		self.plugin.send('LOG_GET_RANGE', None, (self.jid, 0, end))
 		self.num_begin = self.nb_line
 
@@ -1267,10 +1267,8 @@ class roster_Window:
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
-		if self.plugin.connected[account]:
-			status = 'online'
-		else:
-			status = 'offline'
+		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
+		status = statuss[self.plugin.connected[account]]
 		model.append(None, (self.pixbufs[status], account, 'account', account,\
 			FALSE))
 
@@ -1620,20 +1618,23 @@ class roster_Window:
 			return
 		for acct in accounts:
 			self.plugin.send('STATUS', acct, (status, txt))
+	
+	def set_optionmenu(self):
+		#table to change index in plugin.connected to index in optionmenu
+		table = {0:6, 1:0, 2:1, 3:2, 4:3, 5:4}
+		mini = min(self.plugin.connected.values())
+		optionmenu = self.xml.get_widget('optionmenu')
+		optionmenu.set_history(table[mini])
 
 	def on_status_changed(self, account, status):
 		"""the core tells us that our status has changed"""
 		if not self.contacts.has_key(account):
 			return
-#		optionmenu =  self.xml.get_widget('optionmenu')
-#		for i in range(7):
-#			if optionmenu.get_menu().get_children()[i].name == status:
-#				optionmenu.set_history(i)
-#				break
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
 		if accountIter:
 			model.set_value(accountIter, 0, self.pixbufs[status])
+		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
 		if status == 'offline':
 			self.plugin.connected[account] = 0
 			self.plugin.sleeper = None
@@ -1641,10 +1642,11 @@ class roster_Window:
 				user = self.contacts[account][jid]
 				self.chg_user_status(user, 'offline', 'Disconnected', account)
 		elif self.plugin.connected[account] == 0:
-			self.plugin.connected[account] = 1
+			self.plugin.connected[account] = statuss.index(status)
 			self.plugin.sleeper = None#common.sleepy.Sleepy(\
 				#self.plugin.config['autoawaytime']*60, \
 				#self.plugin.config['autoxatime']*60)
+		self.set_optionmenu()
 
 	def on_message(self, jid, msg, account):
 		"""when we receive a message"""
