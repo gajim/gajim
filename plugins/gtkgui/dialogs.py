@@ -452,26 +452,51 @@ class add_contact_window:
 				agent_combobox.set_active(jid_agents.index(jid_splited[1])+1)
 		self.xml.signal_autoconnect(self)
 
-class about_window: #FIXME REWRITE: (nk) pygtk2.6 has a built-in window for that
-	"""Class for about window"""
+class About_dialog:
+	"""Class for about dialog"""
 	def delete_event(self, widget):
 		"""close window"""
-		del self.plugin.windows['about'] # remove us from open windows
+		#del self.plugin.windows['about'] # remove us from open windows
+		pass
 		
 	def on_close(self, widget):
 		"""When Close button is clicked"""
-		widget.get_toplevel().destroy()
+		#widget.get_toplevel().destroy()
+		pass
 
 	def __init__(self, plugin):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'about_window', APP)
-		self.window = xml.get_widget('about_window')
-		xml.get_widget('logo_image').set_from_file('plugins/gtkgui/pixmaps/logo.png')
-		
 		self.plugin = plugin
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		xml.signal_connect('on_close_clicked', self.on_close)
+		#xml.get_widget('logo_image').set_from_file('plugins/gtkgui/pixmaps/logo.png')
+		dlg = gtk.AboutDialog()
+		dlg.set_name('Gajim')
+		dlg.set_version('0.6')
+		dlg.set_copyright('Copyright (C) 2003-2005 Gajim Team')
+		dlg.set_license('''This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published
+by the Free Software Foundation; version 2 only.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.''')
+
+		dlg.set_comments('The best GTK jabber-only client')
+		dlg.set_website('http://www.gajim.org')
+		dlg.set_authors('Yann')
+#		dlg.set_authors('Yann Le Boulanger')
+
+		dlg.set_logo(gtk.gdk.pixbuf_new_from_file('plugins/gtkgui/pixmaps/logo.png'))
+
+		dlg.run()
+		#dlg.show_all()
+		'''
+		, version='0.6', 'Nikos Kouremenos', 'The best GTK jabber-only client', 'http://www.gajim.org', 'Official Page', 'GPL', 'Yann')
+		dlg.run()
+		'''
+		#xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		#xml.signal_connect('on_close_clicked', self.on_close)
 		
-		self.plugin.windows['about'] = self # add us to open windows
+		#self.plugin.windows['about'] = self # add us to open windows
 
 class Confirmation_dialog:
 	"""Class for confirmation dialog"""

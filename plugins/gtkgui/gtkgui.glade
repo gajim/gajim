@@ -353,7 +353,7 @@
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="headers_visible">True</property>
-	      <property name="rules_hint">True</property>
+	      <property name="rules_hint">False</property>
 	      <property name="reorderable">False</property>
 	      <property name="enable_search">True</property>
 	      <signal name="cursor_changed" handler="on_accounts_treeview_cursor_changed" last_modification_time="Tue, 01 Mar 2005 18:21:26 GMT"/>
@@ -4060,7 +4060,7 @@ on the server as a vCard</property>
 		    <widget class="GtkRadioButton" id="time_always_radiobutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">On every lines</property>
+		      <property name="label" translatable="yes">On every line</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>

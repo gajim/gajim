@@ -18,39 +18,6 @@
 ## GNU General Public License for more details.
 ##
 
-def usage():
-	#TODO: use i18n
-	print "usage :", sys.argv[0], ' [OPTION]'
-	print "  -p\tport on which the sock plugin listen"
-	print "  -h, --help\tdisplay this help and exit"
-
-if __name__ == "__main__":
-	import getopt, pickle, sys, socket
-	try:
-		opts, args = getopt.getopt(sys.argv[1:], "p:h", ["help"])
-	except getopt.GetoptError:
-		# print help information and exit:
-		usage()
-		sys.exit(2)
-	port = 8255
-	for o, a in opts:
-		if o == '-p':
-			port = a
-		if o in ("-h", "--help"):
-			usage()
-			sys.exit()
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	try:
-		sock.connect(('', 8255))
-	except:
-		#TODO: use i18n
-		print "unable to connect to localhost on port ", port
-	else:
-		evp = pickle.dumps(('EXEC_PLUGIN', '', 'gtkgui'))
-		sock.send('<'+evp+'>')
-		sock.close()
-	sys.exit()
-
 import pygtk
 pygtk.require('2.0')
 import gtk
@@ -69,11 +36,40 @@ from common import i18n
 
 _ = i18n._
 APP = i18n.APP
-gtk.glade.bindtextdomain (APP, i18n.DIR)
-gtk.glade.textdomain (APP)
+gtk.glade.bindtextdomain(APP, i18n.DIR)
+gtk.glade.textdomain(APP)
 
 from dialogs import *
 from config import *
+
+def usage():
+	#TODO: use i18n
+	print "usage :", sys.argv[0], ' [OPTION]'
+	print "  -p\tport on which the sock plugin listen"
+	print "  -h, --help\tdisplay this help and exit"
+
+def launch_browser_mailer(self, kind, url):
+	#kind = 'url' or 'mail'
+	if self.plugin.config['openwith'] == 'gnome-open':
+		app = 'gnome-open'
+		args = ['gnome-open']
+		args.append(url)
+	elif self.plugin.config['openwith'] == 'kfmclient exec':
+		app = 'kfmclient'
+		args = ['kfmclient', 'exec']
+	elif self.plugin.config['openwith'] == 'custom':
+		if kind == 'url':
+			conf = self.plugin.config['custombrowser']
+		if kind == 'mail':
+			conf = self.plugin.config['custommailapp']
+		if conf == '': # if no app is configured
+			return
+		args = conf.split()
+		app = args[0]
+	args.append(url)
+	os.spawnvp(os.P_NOWAIT, app, args)
+
+
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
@@ -228,27 +224,6 @@ class tabbed_chat_window:
 			self.on_tabbed_chat_window_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', \
 			self.on_chat_notebook_switch_page)
-
-	def run_application(self, type, url):
-		#type = 'url' or 'mail'
-		if self.plugin.config['openwith'] == 'gnome-open':
-			app = 'gnome-open'
-			args = ['gnome-open']
-			args.append(url)
-		elif self.plugin.config['openwith'] == 'kfmclient exec':
-			app = 'kfmclient'
-			args = ['kfmclient', 'exec']
-		elif self.plugin.config['openwith'] == 'custom':
-			if type == 'url':
-				conf = self.plugin.config['custombrowser']
-			if type == 'mail':
-				conf = self.plugin.config['custommailapp']
-			if conf == '':
-				return
-			args = conf.split()
-			app = args[0]
-		args.append(url)
-		os.spawnvp(os.P_NOWAIT, app, args)
 		
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -353,8 +328,8 @@ class tabbed_chat_window:
 		jid = self.get_active_jid()
 		conversation_buffer = self.xmls[jid].get_widget('conversation_textview').\
 			get_buffer()
-		deb, end = conversation_buffer.get_bounds()
-		conversation_buffer.delete(deb, end)
+		start, end = conversation_buffer.get_bounds()
+		conversation_buffer.delete(start, end)
 
 	def on_close_button_clicked(self, button):
 		"""When close button is pressed :
@@ -462,6 +437,7 @@ class tabbed_chat_window:
 		tag.set_property('foreground', '#9e9e9e')
 		tag.set_property('scale', pango.SCALE_SMALL)
 		tag.set_property('justification', gtk.JUSTIFY_CENTER)
+
 		for way in ['status', 'incoming', 'outgoing']:
 			for special in ['mail', 'italic', 'underline', 'bold', 'url']:
 				tag = conversation_buffer.create_tag(way + '_' + special)
@@ -487,6 +463,7 @@ class tabbed_chat_window:
 				elif special == 'bold':
 					tag.set_property('weight', pango.WEIGHT_BOLD)
 		link_tag = conversation_buffer.create_tag('hyperlink', foreground='blue')
+
 		self.xmls[user.jid].signal_autoconnect(self)
 		conversation_scrolledwindow = self.xmls[user.jid].\
 			get_widget('conversation_scrolledwindow')
@@ -652,7 +629,7 @@ class tabbed_chat_window:
 	def print_special_word(self, word, jid, contact = ''):
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
-		end_iter = conversation_buffer.get_end_iter()
+		
 		if contact == 'status':
 			tag = 'status'
 		else:
@@ -662,13 +639,15 @@ class tabbed_chat_window:
 				tag = 'incoming'
 		if word in self.plugin.emoticons.keys():
 			#it's a smiley
+			end_iter = conversation_buffer.get_end_iter()
 			conversation_buffer.insert_pixbuf(end_iter, self.plugin.emoticons[word])
 			return
-		elif word.startswith('mailto'):
+		elif word.startswith('mailto:'):
 			#it's a mail
 			tag += '_mail'
-		#TODO: search for sth@sth.sth
+		elif self.plugin.sth_at_sth_dot_sth_re.match(word): # returns match object or None
 			#it's a mail too
+			tag += '_mail'
 		elif word.startswith('/') and word.endswith('/'):
 			#it's an italic text
 			tag += '_italic'
@@ -682,7 +661,8 @@ class tabbed_chat_window:
 			#it's an url
 			tag += '_url'
 
-		conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
+		end_iter = conversation_buffer.get_end_iter()
+		conversation_buffer.insert_with_tags_by_name(end_iter, word, tag)
 
 	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :
@@ -723,76 +703,38 @@ class tabbed_chat_window:
 
 		conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
 
-		# regexp meta characters are:  . ^ $ * + ? { [ ] \ | ( )
-		# one escapes the metachars with \
-		# \S matches anything but ' ' '\t' '\n' '\r' '\f' and '\v'
-		# \s matches any whitespace character
-		# \w any alphanumeric character
-		# * means 0 or more times
-		# + means 1 or more times
-		# | means or
-		# [^*] anything but *   (inside [] you don't have to escape metachars)
-		# url_pattern is one string literal. I've put spaces to make the regexp look better
-		url_pattern = r'http://\S*|' 'https://\S*|' 'news://\S*|' 'ftp://\S*|' 'mailto:\S*|' 'ed2k://\S*|' 'www\.\S*|' 'ftp\.\S*|' '\*\w+[^*]*\w+\*|' '/\w+[^/]*\w+/|' '_\w+[^_]*\w+_|' '\w+[^\s]*@\w+\.\w+'
-
 		start = 0
 		end = 0
 		index = 0
-
-		if len(otext) > 0: # is it necessary? maybe that should be above?
-			
-			if self.plugin.config['useemoticons']:
-				emoticons_pattern = ''
-				for emoticon in self.plugin.roster.emoticons: # travel tru emoticons list
-					emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
-					emoticons_pattern += emoticon_escaped + '|'# or is | in regexp
-				emoticons_pattern = emoticons_pattern[0:-1] # remove the last |
-				
-				emoticons_re = sre.compile(emoticons_pattern, sre.IGNORECASE)
-				iterator = emoticons_re.finditer(otext)
-				for match in iterator:
-					emot_start, emot_end = match.span()
-					emot_ascii = otext[emot_start:emot_end]
-					#print 'detected', emot_ascii, 'in (start, end)', '(', emot_start, ',', emot_end, ')'
-					#print 'adding text before emoticon', index, emot_start
-					if emot_start != 0:
-						conversation_buffer.insert(end_iter, otext[index:emot_start])
-					conversation_buffer.insert_pixbuf(end_iter, \
-									self.plugin.roster.emoticons[emot_ascii])
-					index = emot_end # update index
-
-			url_re = sre.compile(url_pattern, sre.IGNORECASE)
-			iterator = url_re.finditer(otext)
+		
+		if self.plugin.config['useemoticons']: # search for emoticons & urls
+			my_re = sre.compile(self.plugin.emot_and_url_pattern, sre.IGNORECASE)
+			iterator = my_re.finditer(otext)
 			for match in iterator:
-				url_start, url_end = match.span()
-				url_text = otext[url_start:url_end]
-				#print 'detected', url_text, 'in (start, end)', '(', url_start, ',', url_end, ')'
-				conversation_buffer.insert_with_tags_by_name(end_iter,\
-					 url_text, 'hyperlink')
-				index = url_end # update index
+				start, end = match.span()
+				special_word = otext[start:end]
+				if start != 0:
+					text_before_special_word = otext[index:start]
+					end_iter = conversation_buffer.get_end_iter()
+					conversation_buffer.insert(end_iter, text_before_special_word)
+				self.print_special_word(special_word, jid, contact)
+				index = end # update index
+		else: # search for just urls
+			my_re = sre.compile(self.plugin.url_pattern, sre.IGNORECASE)
+			iterator = my_re.finditer(otext)
+			for match in iterator:
+				start, end = match.span()
+				special_word = otext[start:end]
+				if start != 0:
+					text_before_special_word = otext[index:start]
+					end_iter = conversation_buffer.get_end_iter()
+					conversation_buffer.insert(end_iter, text_before_special_word)
+				self.print_special_word(special_word, jid, contact)
+				index = end # update index
 
-			#conversation_buffer.insert(end_iter, otext[end:])
-			#print 'adding the rest of the text in', index, 'and after'
-			conversation_buffer.insert(end_iter, otext[index:])
-
-		'''
-		if len(otext) > 0:
-			beg = 0
-			if self.plugin.config['useemoticons']:
-				index = 0
-				while index < len(otext):
-						for s in self.plugin.roster.emoticons:
-							l = len(s)
-							if s == otext[index:index+l]:
-								conversation_buffer.insert(end_iter, otext[beg:index])
-								conversation_buffer.insert_pixbuf(end_iter, \
-									self.plugin.roster.emoticons[s])
-								index+=l
-								beg = index
-					index+=1
-
-			conversation_buffer.insert(end_iter, otext[beg:])
-		'''
+		#add the rest in the index and after
+		end_iter = conversation_buffer.get_end_iter()
+		conversation_buffer.insert(end_iter, otext[index:])
 		
 		#scroll to the end of the textview
 		end_rect = conversation_textview.get_iter_location(end_iter)
@@ -2433,7 +2375,7 @@ class roster_window:
 	def on_about_menuitem_activate(self, widget):
 		"""When about is selected :
 		call the about class"""
-		about_window(self.plugin)
+		About_dialog(self.plugin)
 
 	def on_accounts_menuitem_activate(self, widget):
 		"""When accounts is seleted :
@@ -2582,34 +2524,6 @@ class roster_window:
 		if not self.plugin.windows[account].has_key('browser'):
 			self.plugin.windows[account]['browser'] = \
 				agent_browser_window(self.plugin, account)
-
-	def image_is_ok(self, image):
-		if not os.path.exists(image):
-			return 0
-		img = gtk.Image()
-		try:
-			img.set_from_file(image)
-		except:
-			return 0
-		if img.get_storage_type() == gtk.IMAGE_PIXBUF:
-			pix = img.get_pixbuf()
-		else:
-			return 0
-		if pix.get_width() > 24 or pix.get_height() > 24:
-			return 0
-		return 1
-
-	def mkemoticons(self):
-		"""initialize emoticons dictionary"""
-		self.emoticons = dict()
-		split_line = self.plugin.config['emoticons'].split('\t')
-		for i in range(0, len(split_line)/2):
-			# (nk) lost you here. if you remember add some comments about the idea of the algo
-			emot_file = split_line[2*i+1]
-			if not self.image_is_ok(emot_file):
-				continue
-			pix = gtk.gdk.pixbuf_new_from_file(emot_file)
-			self.emoticons[split_line[2*i]] = pix
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
@@ -2803,8 +2717,6 @@ class roster_window:
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
 		self.mkpixbufs()
-		if self.plugin.config['useemoticons']:
-			self.mkemoticons()
 
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image)
 		self.cb = gtk.ComboBox()
@@ -3485,9 +3397,27 @@ class plugin:
 	def hide_systray(self):
 		self.systray.hide_icon()
 		self.systray_visible = 0
+	
+	def image_is_ok(self, image):
+		if not os.path.exists(image):
+			return False
+		img = gtk.Image()
+		try:
+			img.set_from_file(image)
+		except:
+			return True
+		if img.get_storage_type() == gtk.IMAGE_PIXBUF:
+			pix = img.get_pixbuf()
+		else:
+			return False
+		if pix.get_width() > 24 or pix.get_height() > 24:
+			return False
+		return True
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
+		gtk.about_dialog_set_email_hook(launch_browser_mailer, 'mail')
+		gtk.about_dialog_set_url_hook(launch_browser_mailer, 'url')
 		self.queueIN = quIN
 		self.queueOUT = quOUT
 		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'STATUS', \
@@ -3577,15 +3507,15 @@ class plugin:
 		path = 'plugins/gtkgui/icons/' + iconstyle + '/'
 		files = [path + 'online.gif', path + 'online.png', path + 'online.xpm']
 		pix = None
-		for file in files:
-			if os.path.exists(file):
-				pix = gtk.gdk.pixbuf_new_from_file(file)
+		for f in files:
+			if os.path.exists(f):
+				pix = gtk.gdk.pixbuf_new_from_file(f)
 				break
 		if pix:
 			gtk.window_set_default_icon(pix)
 		self.roster = roster_window(self)
-		gtk.timeout_add(100, self.read_queue)
-		gtk.timeout_add(100, self.read_sleepy)
+		gobject.timeout_add(100, self.read_queue)
+		gobject.timeout_add(100, self.read_sleepy)
 		self.sleeper = common.sleepy.Sleepy( \
 			self.config['autoawaytime']*60, \
 			self.config['autoxatime']*60)
@@ -3601,9 +3531,71 @@ class plugin:
 			self.systray = systray(self)
 		if self.config['trayicon']:
 			self.show_systray()
+			
+		if self.config['useemoticons']:
+			"""initialize emoticons dictionary"""
+			self.emoticons = dict()
+			split_line = self.config['emoticons'].split('\t')
+			for i in range(0, len(split_line)/2):
+				emot_file = split_line[2*i+1]
+				if not self.image_is_ok(emot_file):
+					continue
+				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
+				self.emoticons[split_line[2*i]] = pix
+			
+		# regexp meta characters are:  . ^ $ * + ? { } [ ] \ | ( )
+		# one escapes the metachars with \
+		# \S matches anything but ' ' '\t' '\n' '\r' '\f' and '\v'
+		# \s matches any whitespace character
+		# \w any alphanumeric character
+		# * means 0 or more times
+		# + means 1 or more times
+		# | means or
+		# [^*] anything but *   (inside [] you don't have to escape metachars)
+		# url_pattern is one string literal. I've put spaces to make the regexp look better
+		self.url_pattern = r'http://\S*|' 'https://\S*|' 'news://\S*|' 'ftp://\S*|' 'mailto:\S*|' 'ed2k://\S*|' 'www\.\S*|' 'ftp\.\S*|' '\*\w+[^*]*\w+\*|' '/\w+[^/]*\w+/|' '_\w+[^_]*\w+_|' '\w+[^\s]*@\w+\.\w+'
+		
+		# at least one letter in 3 parts (before @, after @, after .)
+		self.sth_at_sth_dot_sth_re = sre.compile(r'\w+[^\s]*@\w+\.\w+')
+		
+		emoticons_pattern = ''
+		for emoticon in self.emoticons: # travel tru emoticons list
+			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
+			emoticons_pattern += emoticon_escaped + '|'# or is | in regexp
+		#self.emoticons_pattern = self.emoticons_pattern[0:-1] # remove the last |
+
+		self.emot_and_url_pattern = emoticons_pattern + self.url_pattern
+		
 		gtk.gdk.threads_enter()
 		self.autoconnect()
 		gtk.main()
 		gtk.gdk.threads_leave()
+
+if __name__ == "__main__":
+	import getopt, pickle, sys, socket
+	try:
+		opts, args = getopt.getopt(sys.argv[1:], "p:h", ["help"])
+	except getopt.GetoptError:
+		# print help information and exit:
+		usage()
+		sys.exit(2)
+	port = 8255
+	for o, a in opts:
+		if o == '-p':
+			port = a
+		if o in ("-h", "--help"):
+			usage()
+			sys.exit()
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	try:
+		sock.connect(('', 8255))
+	except:
+		#TODO: use i18n
+		print "unable to connect to localhost on port ", port
+	else:
+		evp = pickle.dumps(('EXEC_PLUGIN', '', 'gtkgui'))
+		sock.send('<'+evp+'>')
+		sock.close()
+	sys.exit()
 
 print _("plugin gtkgui loaded")
