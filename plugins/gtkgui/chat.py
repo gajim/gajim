@@ -577,7 +577,7 @@ class Chat:
 		visible_rect = conversation_textview.get_visible_rect()
 		end = False
 		if end_rect.y <= (visible_rect.y + visible_rect.height) or \
-			(contact and contact != 'status'):
+			(kind == 'outgoing'):
 			#we are at the end or we are sending something
 			end = True
 			conversation_textview.scroll_to_mark(conversation_buffer.\
