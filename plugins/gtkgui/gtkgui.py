@@ -432,9 +432,11 @@ class tabbed_chat_window:
 					tag.set_property('foreground', color)
 				if special == 'mail':
 					tag.set_property('foreground', '#0000ff')
+					tag.set_property('underline', pango.UNDERLINE_SINGLE)
 					tag.connect('event', self.hyperlink_handler, 'mail')
 				elif special == 'url':
 					tag.set_property('foreground', '#0000ff')
+					tag.set_property('underline', pango.UNDERLINE_SINGLE)
 					tag.connect('event', self.hyperlink_handler, 'url')
 				elif special == 'italic':
 					tag.set_property('style', pango.STYLE_ITALIC)
