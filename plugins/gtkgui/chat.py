@@ -91,10 +91,12 @@ class Chat:
 			start = "* "
 		chat = self.names[jid]
 		if len(self.xmls) > 1: # if more than one tabs in the same window
-			if isinstance(self.window, Tabbed_chat_window):
-				chat = 'Chat'
-			elif isinstance(self.window, Groupchat_window):
-				chat = 'Groupchat'
+			chat = 'Chat'
+		#FIXME: doesn't work
+#			if isinstance(self.window, Tabbed_chat_window):
+#				chat = 'Chat'
+#			elif isinstance(self.window, Groupchat_window):
+#				chat = 'Groupchat'
 		if len(self.plugin.accounts.keys()) >= 2: # if we have 2 or more accounts
 			title = start + chat + ' (account: ' + self.account + ')'
 		else:
@@ -287,7 +289,6 @@ class Chat:
 				if current < (self.notebook.get_n_pages()-1):
 					self.notebook.set_current_page(current+1)
 			elif event.state & gtk.gdk.SHIFT_MASK:
-				print 'yes'
 				conversation_textview = self.xmls[jid].\
 					get_widget('conversation_textview')
 				rect = conversation_textview.get_visible_rect()
