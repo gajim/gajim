@@ -2758,6 +2758,9 @@ class plugin:
 		if not self.windows[account]['gc'].has_key(jid):
 			return
 		self.windows[account]['gc'][jid].set_subject(array[1])
+		if len(jids) > 1:
+			self.windows[account]['gc'][jid].print_conversation(\
+				'%s has set the subject to %s' % (jids[1], array[1]), jid)
 
 	def handle_event_bad_passphrase(self, account, array):
 		warning_dialog(_("Your GPG passphrase is wrong, so you are connected without your GPG key."))
