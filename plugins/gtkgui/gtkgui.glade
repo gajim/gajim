@@ -2,7 +2,6 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
-<requires lib="gnome"/>
 
 <widget class="GtkWindow" id="Gajim">
   <property name="visible">True</property>
@@ -340,7 +339,6 @@
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Sun, 12 Oct 2003 18:17:05 GMT"/>
-  <signal name="check_resize" handler="on_check_resize" last_modification_time="Tue, 20 Jan 2004 16:57:47 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox2">

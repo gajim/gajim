@@ -4,7 +4,6 @@
 ## Gajim Team:
 ##      - Yann Le Boulanger <asterix@crans.org>
 ##      - Vincent Hanquez <tab@tuxfamily.org>
-##      - David Ferlier <david@yazzy.org>
 ##
 ##      Copyright (C) 2003 Gajim Team
 ##
@@ -29,17 +28,13 @@ class plugin:
 	def read_queue(self):
 		while 1:
 			while self.queueIN.empty() == 0:
-				lognotsep = self.cfgParser.Logger_lognotsep
-				if lognotsep:
-					lognotsep = string.atoi(lognotsep)
+				if self.config.has_key('lognotsep'):
+					lognotsep = self.config['lognotsep']
 				else:
-					#default
 					lognotsep = 1
-				lognotusr = self.cfgParser.Logger_lognotusr
-				if lognotusr:
-					lognotusr = string.atoi(lognotusr)
+				if self.config.has_key('lognotusr'):
+					lognotusr = self.config['lognotusr']
 				else:
-					#default
 					lognotusr = 1
 #				tim = time.strftime("%d%m%y%H%M%S")
 				tim = "%d" % time.time()
@@ -74,12 +69,22 @@ class plugin:
 					fic.close()
 			time.sleep(0.5)
 
+	def wait(self, what):
+		"""Wait for a message from Core"""
+		#TODO: timeout, save messages that don't fit
+		while 1:
+			if not self.queueIN.empty():
+				ev = self.queueIN.get()
+				if ev[0] == what:
+					return ev[1]
+			time.sleep(0.1)
+
 	def __init__(self, quIN, quOUT):
-		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
-		self.cfgParser.parseCfgFile()
 		self.queueIN = quIN
 		self.queueOUT = quOUT
-		#create ~/.gajim/logs if it doesn't exist
+		quOUT.put(('ASK_CONFIG', 'Logger'))
+		self.config = self.wait('CONFIG')
+		#create ~/.gajim/logs/ if it doesn't exist
 		try:
 			os.stat(os.path.expanduser("~/.gajim"))
 		except OSError:

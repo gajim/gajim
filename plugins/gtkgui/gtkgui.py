@@ -4,7 +4,6 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@crans.org>
 ## 	- Vincent Hanquez <tab@tuxfamily.org>
-## 	- David Ferlier <david@yazzy.org>
 ##
 ##	Copyright (C) 2003 Gajim Team
 ##
@@ -25,7 +24,7 @@ from gtk import TRUE, FALSE
 import gtk.glade,gobject
 import os,string,time,Queue
 import common.optparser,common.sleepy
-CONFPATH = "~/.gajim/config"
+#CONFPATH = "~/.gajim/config"
 Wbrowser = 0
 Waccounts = 0
 
@@ -48,13 +47,6 @@ class user:
 			self.status = args[4]
 			self.sub = args[5]
 			self.resource = args[6]
-#		elif ((len(args)) and (type (args[0]) == type (self)) and
-#			(self.__class__ == args[0].__class__)):
-#			self.name = args[0].name
-#			self.groups = args[0].groups
-#			self.show = args[0].show
-#			self.status = args[0].status
-#			self.sub = args[0].sub
 		else: raise TypeError, 'bad arguments'
 
 class info_user:
@@ -69,6 +61,7 @@ class info_user:
 
 	def on_close(self, widget):
 		"""Save user's informations and update the roster on the Jabber server"""
+		#TODO: send things to server only if changes are done
 		#update user.name if it's not ""
 		newName = self.entry_name.get_text()
 		if newName != '':
@@ -202,64 +195,62 @@ class prefs:
 		colSt = '#'+(hex(self.colorIn.red)+'0')[2:4]\
 			+(hex(self.colorIn.green)+'0')[2:4]\
 			+(hex(self.colorIn.blue)+'0')[2:4]
-		self.r.cfgParser.set('GtkGui', 'inmsgcolor', colSt)
+		self.r.plugin.config['inmsgcolor'] = colSt
 		for j in self.r.tab_messages.keys():
 			self.r.tab_messages[j].tagIn.set_property("foreground", colSt)
 		#Color for outgoing messages
 		colSt = '#'+(hex(self.colorOut.red)+'0')[2:4]\
 			+(hex(self.colorOut.green)+'0')[2:4]\
 			+(hex(self.colorOut.blue)+'0')[2:4]
-		self.r.cfgParser.set('GtkGui', 'outmsgcolor', colSt)
+		self.r.plugin.config['outmsgcolor'] = colSt
 		for j in self.r.tab_messages.keys():
 			self.r.tab_messages[j].tagOut.set_property("foreground", colSt)
 		#Color for status messages
 		colSt = '#'+(hex(self.colorStatus.red)+'0')[2:4]\
 			+(hex(self.colorStatus.green)+'0')[2:4]\
 			+(hex(self.colorStatus.blue)+'0')[2:4]
-		self.r.cfgParser.set('GtkGui', 'statusmsgcolor', colSt)
+		self.r.plugin.config['statusmsgcolor'] = colSt
 		for j in self.r.tab_messages.keys():
 			self.r.tab_messages[j].tagStatus.set_property("foreground", colSt)
 		#IconStyle
 		ist = self.combo_iconstyle.entry.get_text()
-		self.r.cfgParser.set('GtkGui', 'iconstyle', ist)
+		self.r.plugin.config['iconstyle'] = ist
 		self.r.iconstyle = ist
 		self.r.mkpixbufs()
 		#autopopup
 		pp = self.chk_autopp.get_active()
 		if pp == True:
-			self.r.cfgParser.set('GtkGui', 'autopopup', '1')
+			self.r.plugin.config['autopopup'] = 1
 			self.r.autopopup = 1
 		else:
-			self.r.cfgParser.set('GtkGui', 'autopopup', '0')
+			self.r.plugin.config['autopopup'] = 0
 			self.r.autopopup = 0
 		#autoaway
 		aw = self.chk_autoaway.get_active()
 		if aw == True:
-			self.r.cfgParser.set('GtkGui', 'autoaway', '1')
+			self.r.plugin.config['autoaway'] = 1
 			self.r.plugin.autoaway = 1
 		else:
-			self.r.cfgParser.set('GtkGui', 'autoaway', '0')
+			self.r.plugin.config['autoaway'] = 0
 			self.r.plugin.autoaway = 0
 		aat = self.spin_autoawaytime.get_value_as_int()
 		self.r.plugin.autoawaytime = aat
-		self.r.cfgParser.set('GtkGui', 'autoawaytime', aat)
+		self.r.plugin.config['autoawaytime'] = aat
 		#autoxa
 		xa = self.chk_autoxa.get_active()
 		if xa == True:
-			self.r.cfgParser.set('GtkGui', 'autoxa', '1')
+			self.r.plugin.config['autoxa'] = 1
 			self.r.plugin.autoxa = 1
 		else:
-			self.r.cfgParser.set('GtkGui', 'autoxa', '0')
+			self.r.plugin.config['autoxa'] = 0
 			self.r.plugin.autoxa = 0
 		axt = self.spin_autoxatime.get_value_as_int()
 		self.r.plugin.autoxatime = axt
-		self.r.cfgParser.set('GtkGui', 'autoxatime', axt)
+		self.r.plugin.config['autoxatime'] = axt
 		if self.r.plugin.sleeper:
 			self.r.plugin.sleeper = common.sleepy.Sleepy(\
 				self.r.plugin.autoawaytime*60, self.r.plugin.autoxatime*60)
-		
-		self.r.cfgParser.writeCfgFile()
-		self.r.cfgParser.parseCfgFile()
+		self.r.queueOUT.put(('CONFIG', ('GtkGui', self.r.plugin.config)))
 
 		self.r.redraw_roster()
 		
@@ -284,7 +275,7 @@ class prefs:
 		self.spin_autoxatime = xml.get_widget("spin_autoxatime")
 
 		#Color for incomming messages
-		colSt = self.r.cfgParser.GtkGui_inmsgcolor
+		colSt = self.r.plugin.config['inmsgcolor']
 		if not colSt:
 			colSt = '#ff0000'
 		cmapIn = self.da_in.get_colormap()
@@ -292,7 +283,7 @@ class prefs:
 		self.da_in.window.set_background(self.colorIn)
 		
 		#Color for outgoing messages
-		colSt = self.r.cfgParser.GtkGui_outmsgcolor
+		colSt = self.r.plugin.config['outmsgcolor']
 		if not colSt:
 			colSt = '#0000ff'
 		cmapOut = self.da_out.get_colormap()
@@ -300,7 +291,7 @@ class prefs:
 		self.da_out.window.set_background(self.colorOut)
 		
 		#Color for status messages
-		colSt = self.r.cfgParser.GtkGui_statusmsgcolor
+		colSt = self.r.plugin.config['statusmsgcolor']
 		if not colSt:
 			colSt = '#00ff00'
 		cmapStatus = self.da_status.get_colormap()
@@ -320,35 +311,35 @@ class prefs:
 			self.combo_iconstyle.entry.set_text(self.r.iconstyle)
 		
 		#Autopopup
-		st = self.r.cfgParser.GtkGui_autopopup
-		if not st:
-			st = '0'
-		pp = string.atoi(st)
-		self.chk_autopp.set_active(pp)
+		if self.r.plugin.config.has_key('autopopup'):
+			st = self.r.plugin.config['autopopup']
+		else:
+			st = 0
+		self.chk_autopp.set_active(st)
 
 		#Autoaway
-		st = self.r.cfgParser.GtkGui_autoaway
-		if not st:
-			st = '1'
-		aw = string.atoi(st)
-		self.chk_autoaway.set_active(aw)
-		st = self.r.cfgParser.GtkGui_autoawaytime
-		if not st:
-			st = '10'
-		ti = string.atoi(st)
-		self.spin_autoawaytime.set_value(ti)
+		if self.r.plugin.config.has_key('autoaway'):
+			st = self.r.plugin.config['autoaway']
+		else:
+			st = 1
+		self.chk_autoaway.set_active(st)
+		if self.r.plugin.config.has_key('autoawaytime'):
+			st = self.r.plugin.config['autoawaytime']
+		else:
+			st = 10
+		self.spin_autoawaytime.set_value(st)
 
 		#Autoxa
-		st = self.r.cfgParser.GtkGui_autoxa
-		if not st:
-			st = '1'
-		xa = string.atoi(st)
-		self.chk_autoxa.set_active(xa)
-		st = self.r.cfgParser.GtkGui_autoxatime
-		if not st:
-			st = '20'
-		ti = string.atoi(st)
-		self.spin_autoxatime.set_value(ti)
+		if self.r.plugin.config.has_key('autoxa'):
+			st = self.r.plugin.config['autoxa']
+		else:
+			st = 1
+		self.chk_autoxa.set_active(st)
+		if self.r.plugin.config.has_key('autoxatime'):
+			st = self.r.plugin.config['autoxatime']
+		else:
+			st = 20
+		self.spin_autoxatime.set_value(st)
 
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_but_col_clicked', \
@@ -460,7 +451,8 @@ class account_pref:
 			warning('You must enter a name for this account')
 			return 0
 		if (jid == '') or (string.count(jid, '@') != 1):
-			warning('You must enter a Jabber ID for this account\nFor example : login@hostname')
+			warning('You must enter a Jabber ID for this account\n\
+				For example : login@hostname')
 			return 0
 		else:
 			(login, hostname) = string.split(jid, '@')
@@ -468,12 +460,7 @@ class account_pref:
 		if self.mod:
 			#if we modify the name of the account
 			if name != self.acc:
-				self.accs.r.cfgParser.remove_section(self.acc)
-				self.accs.r.accounts.remove(self.acc)
-				self.accs.r.cfgParser.add_section(name)
-				self.accs.r.accounts.append(name)
-				accountsStr = string.join(self.accs.accounts)
-				self.accs.r.cfgParser.set('Profile', 'accounts', accountsStr)
+				del self.accs.r.plugin.accounts[self.acc]
 		#if it's a new account
 		else:
 			if name in self.accs.r.accounts:
@@ -486,16 +473,11 @@ class account_pref:
 					self.entryRessource.get_text())))
 				self.check.set_active(FALSE)
 				return 1
-			self.accs.r.cfgParser.add_section(name)
-			self.accs.r.accounts.append(name)
-			accountsStr = string.join(self.accs.accounts)
-			self.accs.r.cfgParser.set('Profile', 'accounts', accountsStr)
-		self.accs.r.cfgParser.set(name, 'name', login)
-		self.accs.r.cfgParser.set(name, 'hostname', hostname)
-		self.accs.r.cfgParser.set(name, 'password', self.entryPass.get_text())
-		self.accs.r.cfgParser.set(name, 'ressource', self.entryRessource.get_text())
-		self.accs.r.cfgParser.writeCfgFile()
-		self.accs.r.cfgParser.parseCfgFile()
+		self.accs.r.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
+			'password': self.entryPass.get_text(), 'ressource': \
+			self.entryRessource.get_text()}
+		self.accs.r.queueOUT.put(('CONFIG', ('accounts', \
+			self.accs.r.plugin.accounts)))
 		self.accs.init_accounts()
 		self.delete_event(self)
 	
@@ -513,10 +495,9 @@ class account_pref:
 			self.mod = TRUE
 			self.acc = infos['name']
 			self.init_account(infos)
+			self.check.set_sensitive(FALSE)
 		else:
 			self.mod = FALSE
-		if self.mod:
-			self.check.set_sensitive(FALSE)
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_save_clicked', self.on_save_clicked)
 
@@ -532,9 +513,10 @@ class accounts:
 		"""initialize listStore with existing accounts"""
 		model = self.treeview.get_model()
 		model.clear()
-		for account in self.r.accounts:
+		for account in self.r.plugin.accounts.keys():
 			iter = model.append()
-			model.set(iter, 0, account, 1, self.r.cfgParser.__getattr__("%s" % account+"_hostname"))
+			model.set(iter, 0, account, 1, \
+				self.r.plugin.accounts[account]["hostname"])
 
 	def on_row_activated(self, widget):
 		"""Activate delete and modify buttons when a row is selected"""
@@ -552,12 +534,8 @@ class accounts:
 		(mod, iter) = sel.get_selected()
 		model = self.treeview.get_model()
 		account = model.get_value(iter, 0)
-		self.r.cfgParser.remove_section(account)
-		self.r.accounts.remove(account)
-		accountsStr = string.join(self.r.accounts)
-		self.r.cfgParser.set('Profile', 'accounts', accountsStr)
-		self.r.cfgParser.writeCfgFile()
-		self.r.cfgParser.parseCfgFile()
+		del self.r.plugin.accountsi[account]
+		self.r.queueOUT.put(('CONFIG', ('accounts', self.r.plugin.accounts)))
 		self.init_accounts()
 
 	def on_modify_clicked(self, widget):
@@ -569,10 +547,10 @@ class accounts:
 		(mod, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
 		infos['name'] = account
-		infos['jid'] = self.r.cfgParser.__getattr__("%s" % account+"_name") + \
-			'@' +  self.r.cfgParser.__getattr__("%s" % account+"_hostname")
-		infos['password'] = self.r.cfgParser.__getattr__("%s" % account+"_password")
-		infos['ressource'] = self.r.cfgParser.__getattr__("%s" % account+"_ressource")
+		infos['jid'] = self.r.plugin.accounts[account]["name"] + \
+			'@' +  self.r.plugin.accounts[account]["hostname"]
+		infos['password'] = self.r.plugin.accounts[account]["password"]
+		infos['ressource'] = self.r.plugin.accounts[account]["ressource"]
 		account_pref(self, infos)
 		
 	def __init__(self, roster):
@@ -590,7 +568,8 @@ class accounts:
 		self.treeview.insert_column_with_attributes(-1, 'Name', renderer, text=0)
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
-		self.treeview.insert_column_with_attributes(-1, 'Server', renderer, text=1)
+		self.treeview.insert_column_with_attributes(-1, 'Server', \
+			renderer, text=1)
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_row_activated', self.on_row_activated)
 		xml.signal_connect('on_new_clicked', self.on_new_clicked)
@@ -607,7 +586,8 @@ class confirm:
 		
 	def req_usub(self, widget):
 		"""When Ok button is clicked :
-		Send a message to the core to remove the user and remove it from the roster"""
+		Send a message to the core to remove the user
+		and remove it from the roster"""
 		model = self.r.tree.get_model()
 		jid = model.get_value(self.iter, 2)
 		self.r.queueOUT.put(('UNSUB', jid))
@@ -621,7 +601,8 @@ class confirm:
 		self.r = roster
 		self.iter = iter
 		jid = self.r.tree.get_model().get_value(iter, 2)
-		xml.get_widget('label_confirm').set_text('Are you sure you want to remove ' + jid + ' from your roster ?')
+		xml.get_widget('label_confirm').set_text(\
+			'Are you sure you want to remove ' + jid + ' from your roster ?')
 		xml.signal_connect('on_okbutton_clicked', self.req_usub)
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
@@ -750,7 +731,8 @@ class browser:
 		self.treeview.insert_column_with_attributes(-1, 'Name', renderer, text=0)
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
-		self.treeview.insert_column_with_attributes(-1, 'Service', renderer, text=1)
+		self.treeview.insert_column_with_attributes(-1, 'Service', \
+			renderer, text=1)
 
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_refresh_clicked', self.on_refresh)
@@ -787,7 +769,8 @@ class message:
 				buffer.insert_with_tags_by_name(end_iter, '<moi> ', 'outgoing')
 				buffer.insert(end_iter, txt+'\n')
 		else:
-			buffer.insert_with_tags_by_name(end_iter, '<' + self.user.name + '> ', 'incoming')
+			buffer.insert_with_tags_by_name(end_iter, '<' + \
+				self.user.name + '> ', 'incoming')
 			buffer.insert(end_iter, txt+'\n')
 		#scroll to the end of the textview
 		self.conversation.scroll_to_mark(\
@@ -801,11 +784,13 @@ class message:
 		del self.r.tab_queues[self.user.jid]
 		for i in self.r.l_contact[self.user.jid]['iter']:
 			if self.r.pixbufs.has_key(self.user.show):
-				self.r.tree.get_model().set_value(i, 0, self.r.pixbufs[self.user.show])
+				self.r.tree.get_model().set_value(i, 0, \
+					self.r.pixbufs[self.user.show])
 
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
-		if enter is pressed without the shit key, message (if not empty) is sent and printed in the conversation"""
+		if enter is pressed without the shit key, message (if not empty) is sent
+		and printed in the conversation"""
 		if event.keyval == gtk.keysyms.Return:
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return 0
@@ -828,11 +813,6 @@ class message:
 		deb, end = buffer.get_bounds()
 		buffer.delete(deb, end)
 
-	def on_test(self, widget):
-		print self.window.get_size()
-		print self.hbox.need_resize
-		print self.hbox.resize_mode
-
 	def __init__(self, user, roster):
 		self.user = user
 		self.r = roster
@@ -854,19 +834,18 @@ class message:
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_clear_button_clicked', self.on_clear)
 		xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
-		xml.signal_connect('on_check_resize', self.on_test)
 		self.tagIn = buffer.create_tag("incoming")
-		color = self.r.cfgParser.GtkGui_inmsgcolor
+		color = self.r.plugin.config['inmsgcolor']
 		if not color:
 			color = '#ff0000' #red
 		self.tagIn.set_property("foreground", color)
 		self.tagOut = buffer.create_tag("outgoing")
-		color = self.r.cfgParser.GtkGui_outmsgcolor
+		color = self.r.plugin.config['outmsgcolor']
 		if not color:
 			color = '#0000ff' #blue
 		self.tagOut.set_property("foreground", color)
 		self.tagStatus = buffer.create_tag("status")
-		color = self.r.cfgParser.GtkGui_statusmsgcolor
+		color = self.r.plugin.config['statusmsgcolor']
 		if not color:
 			color = '#00ff00' #green
 		self.tagStatus.set_property("foreground", color)
@@ -888,7 +867,8 @@ class roster:
 				if not self.l_group.has_key(g):
 					self.l_group[g] = {'iter':None, 'hide':False}
 				if not self.l_group[g]['iter']:
-					iterG = model.append(None, (self.pixbufs['closed'], g, 'group', FALSE, self.grpbgcolor, TRUE))
+					iterG = model.append(None, (self.pixbufs['closed'], g, \
+						'group', FALSE, self.grpbgcolor, TRUE))
 					self.l_group[g] = {'iter':iterG, 'hide':False}
 					newgrp = 1
 				if g == 'Agents':
@@ -946,7 +926,8 @@ class roster:
 			show = tab[jid]['show']
 			if not show:
 				show = 'offline'
-			user1 = user(ji, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'], '')
+			user1 = user(ji, name, tab[jid]['groups'], show, \
+				tab[jid]['status'], tab[jid]['sub'], '')
 			self.l_contact[ji] = {'user':user1, 'iter':[]}
 			for i in tab[jid]['groups'] :
 				if not i in self.l_group.keys():
@@ -990,7 +971,7 @@ class roster:
 		item.connect("activate", self.on_row_activated, path)
 		item = gtk.MenuItem("Rename")
 		self.menu_c.append(item)
-#		item.connect("activate", self.on_rename, iter)
+		#item.connect("activate", self.on_rename, iter)
 		item = gtk.MenuItem()
 		self.menu_c.append(item)
 		item = gtk.MenuItem("Subscription")
@@ -1003,7 +984,8 @@ class roster:
 		item.connect("activate", self.authorize, jid)
 		item = gtk.MenuItem("Rerequest authorization from")
 		menu_sub.append(item)
-		item.connect("activate", self.req_sub, jid, 'I would like to add you to my contact list, please.')
+		item.connect("activate", self.req_sub, jid, \
+			'I would like to add you to my contact list, please.')
 		
 		item = gtk.MenuItem()
 		self.menu_c.append(item)
@@ -1036,17 +1018,12 @@ class roster:
 		"""Authorize a user"""
 		self.queueOUT.put(('AUTH', jid))
 
-#	def rename(self, widget, jid, name):
-#		u = self.l_contact[jid]['user']
-#		u.name = name
-#		for i in self.l_contact[jid]['iter']:
-#			self.tree.get_model().set_value(i, 1, name)
-	
 	def req_sub(self, widget, jid, txt):
 		"""Request subscription to a user"""
 		self.queueOUT.put(('SUB', (jid, txt)))
 		if not self.l_contact.has_key(jid):
-			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub', '')
+			user1 = user(jid, jid, ['general'], 'requested', \
+				'requested', 'sub', '')
 			self.add_user(user1)
 	
 	def init_tree(self):
@@ -1061,7 +1038,8 @@ class roster:
 		"""popup user's group's or agent menu"""
 		if (event.button == 3) & (event.type == gtk.gdk.BUTTON_PRESS):
 			try:
-				path, column, x, y = self.tree.get_path_at_pos(int(event.x), int(event.y))
+				path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
+					int(event.y))
 			except TypeError:
 				return
 			model = self.tree.get_model()
@@ -1083,14 +1061,13 @@ class roster:
 
 	def on_status_changed(self, widget):
 		"""When we change our status"""
-		accountsStr = self.cfgParser.Profile_accounts
-		accounts = string.split(accountsStr, ' ')
 		if widget.name != 'online' and widget.name != 'offline':
 			w = away_msg()
 			txt = w.run()
 		else:
 			txt = widget.name
-		self.queueOUT.put(('STATUS',(widget.name, txt, accounts[0])))
+		self.queueOUT.put(('STATUS',(widget.name, txt, \
+			self.plugin.accounts.keys()[0])))
 
 	def on_prefs(self, widget):
 		"""When preferences is selected :
@@ -1168,7 +1145,8 @@ class roster:
 		else:
 			model.set_value(iter, 1, new_text)
 			self.l_contact[jid]['user'].name = new_text
-			self.queueOUT.put(('UPDUSER', (jid, new_text, self.l_contact[jid]['user'].groups)))
+			self.queueOUT.put(('UPDUSER', (jid, new_text, \
+				self.l_contact[jid]['user'].groups)))
 		
 	def on_browse(self, widget):
 		"""When browse agent is selected :
@@ -1181,7 +1159,8 @@ class roster:
 		"""initialise pixbufs array"""
 		self.path = 'plugins/gtkgui/icons/' + self.iconstyle + '/'
 		self.pixbufs = {}
-		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'requested', 'message', 'opened', 'closed'):
+		for state in ('online', 'away', 'xa', 'dnd', 'offline', \
+			'requested', 'message', 'opened', 'closed', 'not in list'):
 			#open an animated gif file if it exists oterelse a xpm file
 			if not os.path.exists(self.path + state + '.gif'):
 				if not os.path.exists(self.path + state + '.xpm'):
@@ -1202,18 +1181,17 @@ class roster:
 
 	def __init__(self, queueOUT, plug):
 		# FIXME : handle no file ...
-		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
-		self.cfgParser.parseCfgFile()
 		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Gajim')
 		self.window =  xml.get_widget('Gajim')
 		self.tree = xml.get_widget('treeview')
 		self.plugin = plug
 		self.connected = 0
 		#(icon, name, jid, editable, background color, show_icon)
-		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, gobject.TYPE_BOOLEAN, str, gobject.TYPE_BOOLEAN)
+		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, \
+			gobject.TYPE_BOOLEAN, str, gobject.TYPE_BOOLEAN)
 		self.tree.set_model(model)
 		self.init_tree()
-		self.iconstyle = self.cfgParser.GtkGui_iconstyle
+		self.iconstyle = self.plugin.config['iconstyle']
 		if not self.iconstyle:
 			self.iconstyle = 'sun'
 		self.mkpixbufs()
@@ -1239,12 +1217,9 @@ class roster:
 		self.optionmenu.set_history(6)
 		self.tab_messages = {}
 		self.tab_queues = {}
-		accountsStr = self.cfgParser.Profile_accounts
-		self.accounts = string.split(accountsStr, ' ')
 
-		showOffline = self.cfgParser.GtkGui_showoffline
-		if showOffline:
-			self.showOffline = string.atoi(showOffline)
+		if self.plugin.config.has_key('showoffline'):
+			self.showOffline = self.plugin.config['showoffline']
 		else:
 			self.showOffline = 0
 
@@ -1291,6 +1266,16 @@ class roster:
 
 class plugin:
 	"""Class called by the core in a new thread"""
+	def wait(self, what):
+		"""Wait for a message from Core"""
+		#TODO: timeout, save messages that don't fit
+		while 1:
+			if not self.queueIN.empty():
+				ev = self.queueIN.get()
+				if ev[0] == what:
+					return ev[1]
+			time.sleep(0.1)
+		
 	def read_queue(self):
 		"""Read queue from the core and execute commands from it"""
 		global Wbrowser
@@ -1317,7 +1302,7 @@ class plugin:
 						self.r.chg_status(j, 'offline', 'Disconnected')
 				elif self.r.connected == 0:
 					self.r.connected = 1
-					self.r.plugin.sleeper = common.sleepy.Sleepy(\
+					self.sleeper = common.sleepy.Sleepy(\
 						self.autoawaytime*60, self.autoxatime*60)
 
 			elif ev[0] == 'NOTIFY':
@@ -1339,11 +1324,13 @@ class plugin:
 					#Print status in chat window
 					if self.r.tab_messages.has_key(ji):
 						self.r.tab_messages[ji].print_conversation(\
-							"%s is now %s (%s)" % (u.name, ev[1][1], ev[1][2]), 'status')
+							"%s is now %s (%s)" % (u.name, ev[1][1], \
+								ev[1][2]), 'status')
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
 					if not self.r.l_contact.has_key(ji):
-						user1 = user(ji, ji, ['Agents'], ev[1][1], ev[1][2], 'from', res)
+						user1 = user(ji, ji, ['Agents'], ev[1][1], \
+							ev[1][2], 'from', res)
 						self.r.add_user(user1)
 					else:
 						#Update existing iter
@@ -1359,11 +1346,14 @@ class plugin:
 				else:
 					jid = ev[1][0]
 				
-				autopopup = self.r.cfgParser.GtkGui_autopopup
-				if autopopup:
-					self.autopopup = string.atoi(autopopup)
+				if self.config.has_key('autopopup'):
+					self.autopopup = self.config['autopopup']
 				else:
 					self.autopopup = 0
+				if not self.r.l_contact.has_key(jid):
+					user1 = user(jid, jid, ['not in list'], \
+						'not in list', 'not in list', 'none', '')
+					self.r.add_user(user1)
 				if self.autopopup == 0 and not self.r.tab_messages.has_key(jid):
 					#We save it in a queue
 					if not self.r.tab_queues.has_key(jid):
@@ -1374,9 +1364,9 @@ class plugin:
 					self.r.tab_queues[jid].put((ev[1][1], tim))
 				else:
 					if not self.r.tab_messages.has_key(jid):
-						#FIXME:message from unknown
 						if self.r.l_contact.has_key(jid):
-							self.r.tab_messages[jid] = message(self.r.l_contact[jid]['user'], self.r)
+							self.r.tab_messages[jid] = \
+								message(self.r.l_contact[jid]['user'], self.r)
 					if self.r.tab_messages.has_key(jid):
 						self.r.tab_messages[jid].print_conversation(ev[1][1])
 					
@@ -1390,7 +1380,8 @@ class plugin:
 					for i in self.r.l_contact[u.jid]['iter']:
 						model.set_value(i, 1, u.name)
 				else:
-					user1 = user(jid, jid, ['general'], 'online', 'online', 'to', ev[1]['ressource'])
+					user1 = user(jid, jid, ['general'], 'online', \
+						'online', 'to', ev[1]['ressource'])
 					self.r.add_user(user1)
 				warning("You are now authorized by " + jid)
 			elif ev[0] == 'UNSUBSCRIBED':
@@ -1406,16 +1397,9 @@ class plugin:
 					Wreg = agent_reg(ev[1][0], ev[1][1], self.r)
 			#('ACC_OK', (hostname, login, pasword, name, ressource))
 			elif ev[0] == 'ACC_OK':
-				self.r.cfgParser.add_section(ev[1][3])
-				self.r.accounts.append(ev[1][3])
-				accountsStr = string.join(self.r.accounts)
-				self.r.cfgParser.set('Profile', 'accounts', accountsStr)
-				self.r.cfgParser.set(ev[1][3], 'name', ev[1][1])
-				self.r.cfgParser.set(ev[1][3], 'hostname', ev[1][0])
-				self.r.cfgParser.set(ev[1][3], 'password', ev[1][2])
-				self.r.cfgParser.set(ev[1][3], 'ressource', ev[1][4])
-				self.r.cfgParser.writeCfgFile()
-				self.r.cfgParser.parseCfgFile()
+				self.accounts[ev[1][3]] =  {'ressource': ev[1][4], \
+					'password': ev[1][2], 'hostname': ev[1][0], 'name': ev[1][1]}
+				self.r.queueOUT.put(('CONFIG', ('accounts', self.r.plugin.accounts)))
 				if (Waccounts != 0):
 					Waccounts.init_accounts()
 			elif ev[0] == 'QUIT':
@@ -1430,20 +1414,21 @@ class plugin:
 			self.sleeper.poll()
 			state = self.sleeper.getState()
 			if state != self.sleeper_state:
-				accountsStr = self.r.cfgParser.Profile_accounts
-				accounts = string.split(accountsStr, ' ')
 				if state == common.sleepy.STATE_AWAKE:
 					#we go online
 					self.r.optionmenu.set_history(0)
-					self.r.queueOUT.put(('STATUS',('online', '', accounts[0])))
+					self.r.queueOUT.put(('STATUS',('online', '', \
+						self.accounts.keys()[0])))
 				if state == common.sleepy.STATE_AWAY and self.autoaway:
 					#we go away
 					self.r.optionmenu.set_history(1)
-					self.r.queueOUT.put(('STATUS',('away', 'auto away (idle)', accounts[0])))
+					self.r.queueOUT.put(('STATUS',('away', \
+						'auto away (idle)', self.accounts.keys()[0])))
 				if state == common.sleepy.STATE_XAWAY and self.autoxa:
 					#we go extanded away
 					self.r.optionmenu.set_history(2)
-					self.r.queueOUT.put(('STATUS',('xa', 'auto away (idel)', accounts[0])))
+					self.r.queueOUT.put(('STATUS',('xa', \
+						'auto away (idel)', self.accounts.keys[0])))
 			self.sleeper_state = state
 		return 1
 
@@ -1451,23 +1436,28 @@ class plugin:
 		gtk.threads_init()
 		gtk.threads_enter()
 		self.queueIN = quIN
+		quOUT.put(('ASK_CONFIG', 'GtkGui'))
+		self.config = self.wait('CONFIG')
+		quOUT.put(('ASK_CONFIG', 'accounts'))
+		self.accounts = self.wait('CONFIG')
+		#TODO: if no config : default config and save it
 		self.r = roster(quOUT, self)
-		st = self.r.cfgParser.GtkGui_autoaway
-		if not st:
-			st = '1'
-		self.autoaway = string.atoi(st)
-		st = self.r.cfgParser.GtkGui_autoawaytime
-		if not st:
-			st = '10'
-		self.autoawaytime = string.atoi(st)
-		st = self.r.cfgParser.GtkGui_autoxa
-		if not st:
-			st = '1'
-		self.autoxa = string.atoi(st)
-		st = self.r.cfgParser.GtkGui_autoxatime
-		if not st:
-			st = '20'
-		self.autoxatime = string.atoi(st)
+		if self.config.has_key('autoaway'):
+			self.autoaway = self.config['autoaway']
+		else:
+			self.autoaway = 1
+		if self.config.has_key('autoawaytime'):
+			self.autoawaytime = self.config['autoawaytime']
+		else:
+			self.autoawaytime = 10
+		if self.config.has_key('autoxa'):
+			self.autoxa = self.config['autoxa']
+		else:
+			self.autoxa = 1
+		if self.config.has_key('autoxatime'):
+			self.autoxatime = self.config['autoxatime']
+		else:
+			self.autoxatime = 20
 		self.time = gtk.timeout_add(200, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
 		self.sleeper = None

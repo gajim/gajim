@@ -4,7 +4,6 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@crans.org>
 ## 	- Vincent Hanquez <tab@tuxfamily.org>
-## 	- David Ferlier <david@yazzy.org>
 ##
 ##	Copyright (C) 2003 Gajim Team
 ##
