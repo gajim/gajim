@@ -27,13 +27,14 @@ class GajimThread(threading.Thread):
 	def __init__(self, name = None, queueIn = None, queueOut = None): 
 		self.queueIn = queueIn
 		self.queueOut = queueOut
-		threading.Thread.__init__(self, target = self.run, 	name = name) 
+		threading.Thread.__init__(self, target = self.run, name = name) 
 	# END __init__
  
 	def run(self):
-		mod = compile("import plugins.%s" % self.getName(),	self.getName(), "exec")
+		mod = compile('import plugins.%s' % self.getName(), self.getName(), 'exec')
 		res = eval(mod)
-		mod = compile("plugins.%s.%s.plugin(self.queueIn, self.queueOut)" % (self.getName(), self.getName()), self.getName(), "exec")
+		mod = compile('plugins.%s.%s.plugin(self.queueIn, self.queueOut)' 
+		% (self.getName(), self.getName()), self.getName(), 'exec')
 		res = eval(mod)
 	# END run
 # END GajimThread
