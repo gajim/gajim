@@ -99,11 +99,11 @@ class vCard_Window:
 		if self.plugin.connected[self.account]:
 			self.plugin.send('ASK_VCARD', self.account, self.jid)
 		else:
-			warning_Window(_("You must be connected to get your informations"))
+			warning_dialog(_("You must be connected to get your informations"))
 
 	def on_publish(self, widget):
 		if not self.plugin.connected[self.account]:
-			warning_Window(_("You must be connected to publish your informations"))
+			warning_dialog(_("You must be connected to publish your informations"))
 			return
 		vcard = self.make_vcard()
 		nick = ''
@@ -914,31 +914,31 @@ class accountpreferences_window:
 		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
 		proxyport = self.xml.get_widget('proxyport_entry').get_text()
 		if (name == ''):
-			warning_Window(_('You must enter a name for this account'))
+			warning_dialog(_('You must enter a name for this account'))
 			return 0
 		if name.find(' ') != -1:
-			warning_Window(_('Spaces are not permited in account name'))
+			warning_dialog(_('Spaces are not permited in account name'))
 			return 0
 		if (jid == '') or (string.count(jid, '@') != 1):
-			warning_Window(_('You must enter a Jabber ID for this account\nFor example : login@hostname'))
+			warning_dialog(_('You must enter a Jabber ID for this account\nFor example : login@hostname'))
 			return 0
 		if new_account_checkbutton.get_active() and password == '':
-			warning_Window(_('You must enter a password to register a new account'))
+			warning_dialog(_('You must enter a password to register a new account'))
 			return 0
 		if use_proxy:
 			if proxyport != '':
 				try:
 					proxyport = string.atoi(proxyport)
 				except ValueError:
-					warning_Window(_('Proxy Port must be a port number'))
+					warning_dialog(_('Proxy Port must be a port number'))
 					return 0
 			if proxyhost == '':
-				warning_Window(_('You must enter a proxy host to use proxy'))
+				warning_dialog(_('You must enter a proxy host to use proxy'))
 		if priority != '':
 			try:
 				priority = string.atoi(priority)
 			except ValueError:
-				warning_Window(_('Priority must be a number'))
+				warning_dialog(_('Priority must be a number'))
 				return 0
 		(login, hostname) = string.split(jid, '@')
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
@@ -996,7 +996,7 @@ class accountpreferences_window:
 			return
 		#if it's a new account
 		if name in self.plugin.accounts.keys():
-			warning_Window(_('An account already has this name'))
+			warning_dialog(_('An account already has this name'))
 			return
 		#if we neeed to register a new account
 		if new_account_checkbutton.get_active():
@@ -1053,7 +1053,7 @@ class accountpreferences_window:
 					vCard_Window(jid, self.plugin, self.account)
 				self.plugin.send('ASK_VCARD', self.account, jid)
 			else:
-				warning_Window(_('You must be connected to get your informations'))
+				warning_dialog(_('You must be connected to get your informations'))
 	
 	def on_gpg_choose_button_clicked(self, widget, data=None):
 		w = choose_gpg_Window()
@@ -1167,8 +1167,8 @@ class accounts_window:
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
-		window = confirm_window(_("Are you sure you want to remove this account (%s) ?") % account)
-		if window.wait() == gtk.RESPONSE_YES:
+		dialog = confirm_dialog(_("Are you sure you want to remove this account (%s) ?") % account)
+		if dialog.get_response() == gtk.RESPONSE_YES:
 			if self.plugin.connected[account]:
 				self.plugin.send('STATUS', account, ('offline', 'offline'))
 			del self.plugin.accounts[account]
@@ -1388,7 +1388,7 @@ class agent_browser_window:
 		
 	def __init__(self, plugin, account):
 		if not plugin.connected[account]:
-			warning_Window(_("You must be connected to view Agents"))
+			warning_dialog(_("You must be connected to view Agents"))
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_browser_window', APP)
 		self.window = xml.get_widget('agent_browser_window')
@@ -1439,7 +1439,7 @@ class join_gc:
 
 	def __init__(self, plugin, account, server='', room = ''):
 		if not plugin.connected[account]:
-			warning_Window(_("You must be connected to join a group chat on this serveur"))
+			warning_dialog(_("You must be connected to join a group chat on this serveur"))
 			return
 		self.plugin = plugin
 		self.account = account

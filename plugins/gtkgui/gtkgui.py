@@ -1890,7 +1890,7 @@ class roster_Window:
 			return
 		accounts = self.plugin.accounts.keys()
 		if len(accounts) == 0:
-			warning_Window(_("You must setup an account before connecting to jabber network."))
+			warning_dialog(_("You must setup an account before connecting to jabber network."))
 			self.set_cb()
 			return
 		status = model[active][0]
@@ -2699,7 +2699,7 @@ class plugin:
 		self.roster.draw_roster()
 	
 	def handle_event_warning(self, unused, msg):
-		warning_Window(msg)
+		warning_dialog(msg)
 	
 	def handle_event_status(self, account, status):
 		#('STATUS', account, status)
@@ -2820,10 +2820,10 @@ class plugin:
 				'online', 'to', '', array[1], 0, '')
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
-		warning_Window(_("You are now authorized by %s") % jid)
+		warning_dialog(_("You are now authorized by %s") % jid)
 
 	def handle_event_unsubscribed(self, account, jid):
-		warning_Window(_("You are now unsubscribed by %s") % jid)
+		warning_dialog(_("You are now unsubscribed by %s") % jid)
 
 	def handle_event_agents(self, account, agents):
 		#('AGENTS', account, agents)
@@ -2839,7 +2839,7 @@ class plugin:
 	def handle_event_reg_agent_info(self, account, array):
 		#('REG_AGENTS_INFO', account, (agent, infos))
 		if not array[1].has_key('instructions'):
-			warning_Window(_("error contacting %s") % array[0])
+			warning_dialog(_("error contacting %s") % array[0])
 		else:
 			agentRegistration_Window(array[0], array[1], self, account)
 
@@ -2920,7 +2920,7 @@ class plugin:
 				self.systray.add_jid(jid, account)
 
 	def handle_event_bad_passphrase(self, account, array):
-		warning_Window(_("Your GPG passphrase is wrong, so you are connected without your GPG key."))
+		warning_dialog(_("Your GPG passphrase is wrong, so you are connected without your GPG key."))
 
 	def handle_event_gpg_secrete_keys(self, account, keys):
 		keys['None'] = 'None'

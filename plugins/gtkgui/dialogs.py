@@ -272,7 +272,7 @@ class addContact_Window:
 		if not jid:
 			return
 		if jid.find('@') < 0:
-			warning_Window(_("The contact's name must be something like login@hostname"))
+			warning_dialog(_("The contact's name must be something like login@hostname"))
 			return
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
@@ -329,7 +329,7 @@ class addContact_Window:
 		
 	def __init__(self, plugin, account, jid=None):
 		if not plugin.connected[account]:
-			warning_Window(_('You must be connected to add a contact'))
+			warning_dialog(_('You must be connected to add a contact'))
 			return
 		self.plugin = plugin
 		self.account = account
@@ -369,17 +369,6 @@ class addContact_Window:
 				agent_combobox.set_active(jid_agents.index(jid_splited[1])+1)
 		self.xml.signal_autoconnect(self)
 
-class warning_Window:
-	"""Class for warning window : print a warning message"""
-	def on_close(self, widget):
-		"""When Close button is clicked"""
-		widget.get_toplevel().destroy()
-
-	def __init__(self, txt):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Warning', APP)
-		xml.get_widget('label').set_text(txt)
-		xml.signal_connect('on_close_clicked', self.on_close)
-
 class about_Window: #FIXME: (nk) pygtk2.6 has a built-in window for that
 	"""Class for about window"""
 	def delete_event(self, widget):
@@ -398,17 +387,27 @@ class about_Window: #FIXME: (nk) pygtk2.6 has a built-in window for that
 		xml.signal_connect('on_close_clicked', self.on_close)
 
 
-class confirm_window:
-	"""Class for confirmation window"""
-	def wait(self):
-		response = self.window.run()
-		self.window.destroy()
+class confirm_dialog:
+	"""Class for confirmation dialog"""
+	def get_response(self):
+		response = self.dialog.run()
+		self.dialog.destroy()
 		return response
 
 	def __init__(self, label):
-		self.window = gtk.MessageDialog(None,\
+		self.dialog = gtk.MessageDialog(None,\
 			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, label)
+
+class warning_dialog:
+	"""Class for warning dialog"""
+	def __init__(self, label):
+		self.dialog = gtk.MessageDialog(None,\
+			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
+			gtk.MESSAGE_WARNING, gtk.BUTTONS_CLOSE, label)
+
+		response = self.dialog.run()
+		self.dialog.destroy()
 
 class subscription_request_Window:
 	"""Class for authorization window :
