@@ -1817,7 +1817,7 @@ class plugin:
 		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'STATUS', \
 			'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
 			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'QUIT', 'ACC_OK', 'CONFIG', \
-			'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE'])
+			'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', 'VISUAL'])
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'autopopupaway':1,\
 			'showoffline':0,\

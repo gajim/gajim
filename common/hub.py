@@ -29,6 +29,9 @@ class GajimHub:
 		# {event1:[queue1, queue2]}
 		self.events = {}
 		self.queueIn = self.newQueue('in', 100)
+		self.saveQueue = Queue.Queue(100)
+		self.events_to_store = ['WARNING', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', 'SUBSCRIBE']
+		self.queue_to_send = None
 	# END __init__
 
 	def newQueue(self, name, size):
@@ -52,7 +55,11 @@ class GajimHub:
 		if not self.queues.has_key(name):
 			return
 		qu = self.queues[name]
-		if self.events.has_key(event) :
+		if event == 'VISUAL' and not self.saveQueue.empty():
+			# we save the queue in whitch we must send saved events
+			# after the roster is sent
+			self.queue_to_send = qu
+		if self.events.has_key(event):
 			if not qu in self.events[event]:
 				self.events[event].append(qu)
 		else :
@@ -82,8 +89,17 @@ class GajimHub:
 	def sendPlugin(self, event, con, data, qu=None):
 		""" Sends an event to registered plugins"""
 		if self.events.has_key(event):
+			if event in self.events_to_store and len(self.events['VISUAL']) == 0:
+				# Save event if no visual plugin is registered
+				self.saveQueue.put((event, con, data))
 			for queue in self.events[event]:
 				if qu == None or qu == queue:
 					queue.put((event, con, data))
+			if event == 'ROSTER' and self.queue_to_send in self.events[event]:
+				# send saved events
+				while not self.saveQueue.empty():
+					ev = self.saveQueue.get()
+					self.queue_to_send.put(ev)
+				self.queue_to_send = None
 	# END sendPlugin
 # END GajimHub
