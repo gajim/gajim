@@ -580,12 +580,24 @@ class tabbed_chat_window:
 class Groupchat_window:
 	def on_groupchat_window_destroy(self, widget):
 		"""close window"""
-		self.plugin.send('GC_STATUS', self.account, (self.nick, self.jid,\
-			'offline', 'offline'))
-		del self.plugin.windows[self.account]['gc'][self.jid]
+		for room_jid in self.xmls:
+			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
+				room_jid, 'offline', 'offline'))
+			del self.plugin.windows[self.account]['gc'][room_jid]
+		if self.plugin.windows[self.account]['gc'].has_key('tabbed'):
+			del self.plugin.windows[self.account]['gc']['tabbed']
 
-	def get_role_iter(self, name):
-		model = self.list_treeview.get_model()
+	def update_tags(self):
+		for room_jid in self.tagIn:
+			self.tagIn[room_jid].set_property("foreground", \
+				self.plugin.config['inmsgcolor'])
+			self.tagOut[room_jid].set_property("foreground", \
+				self.plugin.config['outmsgcolor'])
+			self.tagStatus[room_jid].set_property("foreground", \
+				self.plugin.config['statusmsgcolor'])
+
+	def get_role_iter(self, room_jid, name):
+		model = self.list_treeview[room_jid].get_model()
 		fin = False
 		iter = model.get_iter_root()
 		if not iter:
@@ -599,8 +611,8 @@ class Groupchat_window:
 				fin = True
 		return None
 
-	def get_user_iter(self, jid):
-		model = self.list_treeview.get_model()
+	def get_user_iter(self, room_jid, jid):
+		model = self.list_treeview[room_jid].get_model()
 		fin = False
 		role = model.get_iter_root()
 		if not role:
@@ -621,8 +633,8 @@ class Groupchat_window:
 				fin = True
 		return None
 
-	def get_user_list(self):
-		model = self.list_treeview.get_model()
+	def get_user_list(self, room_jid):
+		model = self.list_treeview[room_jid].get_model()
 		list = []
 		fin = False
 		role = model.get_iter_root()
@@ -644,10 +656,10 @@ class Groupchat_window:
 				fin = True
 		return list
 
-	def remove_user(self, nick):
+	def remove_user(self, room_jid, nick):
 		"""Remove a user from the roster"""
-		model = self.list_treeview.get_model()
-		iter = self.get_user_iter(nick)
+		model = self.list_treeview[room_jid].get_model()
+		iter = self.get_user_iter(room_jid, nick)
 		if not iter:
 			return
 		parent_iter = model.iter_parent(iter)
@@ -655,77 +667,104 @@ class Groupchat_window:
 		if model.iter_n_children(parent_iter) == 0:
 			model.remove(parent_iter)
 	
-	def add_user_to_roster(self, nick, show, role, jid):
-		model = self.list_treeview.get_model()
+	def add_user_to_roster(self, room_jid, nick, show, role, jid):
+		model = self.list_treeview[room_jid].get_model()
 		img = self.plugin.roster.pixbufs[show]
-		role_iter = self.get_role_iter(role)
+		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None, (self.plugin.roster.pixbufs['closed']\
 				, role, role))
 		iter = model.append(role_iter, (img, nick, jid))
-		self.list_treeview.expand_row((model.get_path(role_iter)), False)
+		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)), \
+			False)
 		return iter
 	
-	def get_role(self, jid_iter):
-		model = self.list_treeview.get_model()
+	def get_role(self, room_jid, jid_iter):
+		model = self.list_treeview[room_jid].get_model()
 		path = model.get_path(jid_iter)[0]
 		iter = model.get_iter(path)
 		return model.get_value(iter, 1)
 
-	def chg_user_status(self, nick, show, status, role, affiliation, jid, \
-		reason, actor, statusCode, account):
+	def chg_user_status(self, room_jid, nick, show, status, role, affiliation, \
+		jid, reason, actor, statusCode, account):
 		"""When a user change his status"""
-		model = self.list_treeview.get_model()
+		model = self.list_treeview[room_jid].get_model()
 		if show == 'offline' or show == 'error':
 			if statusCode == '307':
 				self.print_conversation(_('%s has been kicked by %s: %s') % (nick, \
 					jid, actor, reason))
-			self.remove_user(nick)
+			self.remove_user(room_jid, nick)
 		else:
-			iter = self.get_user_iter(nick)
+			iter = self.get_user_iter(room_jid, nick)
 			ji = jid
 			if jid:
 				ji = jid.split('/')[0]
 			if not iter:
-				iter = self.add_user_to_roster(nick, show, role, ji)
+				iter = self.add_user_to_roster(room_jid, nick, show, role, ji)
 			else:
-				actual_role = self.get_role(iter)
+				actual_role = self.get_role(room_jid, iter)
 				if role != actual_role:
-					self.remove_user(nick)
-					self.add_user_to_roster(nick, show, role, ji)
+					self.remove_user(room_jid, nick)
+					self.add_user_to_roster(room_jid, nick, show, role, ji)
 				else:
 					img = self.plugin.roster.pixbufs[show]
 					model.set_value(iter, 0, img)
 	
 	def show_title(self):
 		"""redraw the window's title"""
-		#FIXME when multi tabs will be ok
 		unread = 0
-#		for jid in self.nb_unread:
-#			unread += self.nb_unread[jid]
-		unread = self.nb_unread
+		for room_jid in self.nb_unread:
+			unread += self.nb_unread[room_jid]
 		start = ""
 		if unread > 1:
 			start = "[" + str(unread) + "] "
 		elif unread == 1:
 			start = "* "
-		chat = 'Groupchat in ' + self.jid
-#		if len(self.xmls) > 1:
-		if 0:
+		chat = 'Groupchat in ' + room_jid
+		if len(self.xmls) > 1:
 			chat = 'Groupchat'
 		self.window.set_title(start + chat + ' (' + self.account + ')')
+	
+	def redraw_tab(self, room_jid):
+		"""redraw the label of the tab"""
+		start = ''
+		if self.nb_unread[room_jid] > 1:
+			start = "[" + str(self.nb_unread[room_jid]) + "] "
+		elif self.nb_unread[room_jid] == 1:
+			start = "* "
+		room = room_jid.split('@')[0]
+		child = self.xmls[room_jid].get_widget('group_vbox')
+		self.chat_notebook.set_tab_label_text(child, start + room)
 
-	def set_subject(self, subject):
+	def get_active_jid(self):
+		active_child = self.chat_notebook.get_nth_page(\
+			self.chat_notebook.get_current_page())
+		active_jid = ''
+		for room_jid in self.xmls:
+			child = self.xmls[room_jid].get_widget('group_vbox')
+			if child == active_child:
+				active_jid = room_jid
+				break
+		return active_jid
+
+	def set_subject(self, room_jid, subject):
+		self.subjects[room_jid] = subject
 		self.xml.get_widget('subject_entry').set_text(subject)
 	
 	def on_subject_entry_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Return:
+			room_jid = self.get_active_jid()
 			subject = widget.get_text()
-			self.plugin.send('GC_SUBJECT', self.account, (self.jid, subject))
+			self.plugin.send('GC_SUBJECT', self.account, (room_jid, subject))
 
 	def on_set_button_clicked(self, widget):
+		room_jid = self.get_active_jid()
 		subject = self.xml.get_widget('subject_entry').get_text()
-		self.plugin.send('GC_SUBJECT', self.account, (self.jid, subject))
+		self.plugin.send('GC_SUBJECT', self.account, (room_jid, subject))
+
+	def on_close_button_clicked(self, button):
+		room_jid = self.get_active_jid()
+		self.remove_tab(room_jid)
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -739,12 +778,14 @@ class Groupchat_window:
 			end_iter = message_buffer.get_end_iter()
 			txt = message_buffer.get_text(start_iter, end_iter, 0)
 			if txt != '':
-				self.plugin.send('GC_MSG', self.account, (self.jid, txt))
+				room_jid = self.get_active_jid()
+				self.plugin.send('GC_MSG', self.account, (room_jid, txt))
 				message_buffer.set_text('', -1)
 				widget.grab_focus()
 			return 1
 		elif event.keyval == gtk.keysyms.Tab:
-			list_nick = self.get_user_list()
+			room_jid = self.get_active_jid()
+			list_nick = self.get_user_list(room_jid)
 			message_buffer = widget.get_buffer()
 			start_iter = message_buffer.get_start_iter()
 			cursor_position = message_buffer.get_insert()
@@ -757,11 +798,56 @@ class Groupchat_window:
 					return 1
 		return 0
 
-	def print_conversation(self, txt, jid, contact = None, tim = None):
+	def on_groupchat_window_key_press_event(self, widget, event):
+		st = "1234567890"
+		room_jid = self.get_active_jid()
+		if event.keyval == gtk.keysyms.Escape:
+			self.remove_tab(room_jid)
+		elif event.string and event.string in st \
+			and (event.state & gtk.gdk.MOD1_MASK):
+			self.chat_notebook.set_current_page(st.index(event.string))
+		elif event.keyval == gtk.keysyms.Page_Down:
+			if event.state & gtk.gdk.CONTROL_MASK:
+				current = self.chat_notebook.get_current_page()
+				if current > 0:
+					self.chat_notebook.set_current_page(current-1)
+#				else:
+#					self.chat_notebook.set_current_page(\
+#						self.chat_notebook.get_n_pages()-1)
+			elif event.state & gtk.gdk.SHIFT_MASK:
+				conversation_textview = self.xmls[room_jid].\
+					get_widget('conversation_textview')
+				rect = conversation_textview.get_visible_rect()
+				iter = conversation_textview.get_iter_at_location(rect.x,\
+					rect.y + rect.height)
+				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
+		elif event.keyval == gtk.keysyms.Page_Up:
+			if event.state & gtk.gdk.CONTROL_MASK:
+				current = self.chat_notebook.get_current_page()
+				if current < (self.chat_notebook.get_n_pages()-1):
+					self.chat_notebook.set_current_page(current+1)
+#				else:
+#					self.chat_notebook.set_current_page(0)
+			elif event.state & gtk.gdk.SHIFT_MASK:
+				conversation_textview = self.xmls[room_jid].\
+					get_widget('conversation_textview')
+				rect = conversation_textview.get_visible_rect()
+				iter = conversation_textview.get_iter_at_location(rect.x, rect.y)
+				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
+		elif event.keyval == gtk.keysyms.Tab and \
+			(event.state & gtk.gdk.CONTROL_MASK):
+			current = self.chat_notebook.get_current_page()
+			if current < (self.chat_notebook.get_n_pages()-1):
+				self.chat_notebook.set_current_page(current+1)
+			else:
+				self.chat_notebook.set_current_page(0)
+
+	def print_conversation(self, txt, room_jid, contact = None, tim = None):
 		"""Print a line in the conversation :
 		if contact is set : it's a message from someone
 		if contact is not set : it's a message from the server"""
-		conversation_textview = self.xml.get_widget('conversation_textview')
+		conversation_textview = self.xmls[room_jid].\
+			get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		if not txt:
 			txt = ""
@@ -771,7 +857,7 @@ class Groupchat_window:
 		tims = time.strftime('[%H:%M:%S]', tim)
 		conversation_buffer.insert(end_iter, tims)
 		if contact:
-			if contact == self.nick:
+			if contact == self.nicks[room_jid]:
 				conversation_buffer.insert_with_tags_by_name(end_iter, '<' + \
 					contact + '> ', 'outgoing')
 			else:
@@ -784,8 +870,9 @@ class Groupchat_window:
 		#scroll to the end of the textview
 		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
 			0.1, 0, 0, 0)
-		if not self.window.is_active() and contact != 'status':
-			self.nb_unread += 1
+		if not self.window.is_active() and contact != '':
+			self.nb_unread[room_jid] += 1
+			self.redraw_tab(room_jid)
 			self.show_title()
 
 	def kick(self, widget, room_jid, nick):
@@ -852,9 +939,9 @@ class Groupchat_window:
 				vcard_information_window(jid, self.plugin, self.account, True)
 			self.plugin.send('ASK_VCARD', self.account, jid)
 
-	def mk_menu(self, event, iter):
+	def mk_menu(self, room_jid, event, iter):
 		"""Make user's popup menu"""
-		model = self.list_treeview.get_model()
+		model = self.list_treeview[room_jid].get_model()
 		nick = model.get_value(iter, 1)
 		jid = model.get_value(iter, 2)
 		
@@ -866,44 +953,44 @@ class Groupchat_window:
 		item.set_submenu(menu_sub)
 		item = gtk.MenuItem(_('Kick'))
 		menu_sub.append(item)
-		item.connect('activate', self.kick, self.jid, nick)
+		item.connect('activate', self.kick, room_jid, nick)
 		item = gtk.MenuItem(_('Grant voice'))
 		menu_sub.append(item)
-		item.connect('activate', self.grant_voice, self.jid, nick)
+		item.connect('activate', self.grant_voice, room_jid, nick)
 		item = gtk.MenuItem(_('Revoke voice'))
 		menu_sub.append(item)
-		item.connect('activate', self.revoke_voice, self.jid, nick)
+		item.connect('activate', self.revoke_voice, room_jid, nick)
 		item = gtk.MenuItem(_('Grant moderator'))
 		menu_sub.append(item)
-		item.connect('activate', self.grant_moderator, self.jid, nick)
+		item.connect('activate', self.grant_moderator, room_jid, nick)
 		item = gtk.MenuItem(_('Revoke moderator'))
 		menu_sub.append(item)
-		item.connect('activate', self.revoke_moderator, self.jid, nick)
+		item.connect('activate', self.revoke_moderator, room_jid, nick)
 		if jid:
 			item = gtk.MenuItem()
 			menu_sub.append(item)
 
 			item = gtk.MenuItem(_('Ban'))
 			menu_sub.append(item)
-			item.connect('activate', self.ban, self.jid, jid)
+			item.connect('activate', self.ban, room_jid, jid)
 			item = gtk.MenuItem(_('Grant membership'))
 			menu_sub.append(item)
-			item.connect('activate', self.grant_membership, self.jid, jid)
+			item.connect('activate', self.grant_membership, room_jid, jid)
 			item = gtk.MenuItem(_('Revoke membership'))
 			menu_sub.append(item)
-			item.connect('activate', self.revoke_membership, self.jid, jid)
+			item.connect('activate', self.revoke_membership, room_jid, jid)
 			item = gtk.MenuItem(_('Grant admin'))
 			menu_sub.append(item)
-			item.connect('activate', self.grant_admin, self.jid, jid)
+			item.connect('activate', self.grant_admin, room_jid, jid)
 			item = gtk.MenuItem(_('Revoke admin'))
 			menu_sub.append(item)
-			item.connect('activate', self.revoke_admin, self.jid, jid)
+			item.connect('activate', self.revoke_admin, room_jid, jid)
 			item = gtk.MenuItem(_('Grant owner'))
 			menu_sub.append(item)
-			item.connect('activate', self.grant_owner, self.jid, jid)
+			item.connect('activate', self.grant_owner, room_jid, jid)
 			item = gtk.MenuItem(_('Revoke owner'))
 			menu_sub.append(item)
-			item.connect('activate', self.revoke_owner, self.jid, jid)
+			item.connect('activate', self.revoke_owner, room_jid, jid)
 
 			item = gtk.MenuItem()
 			menu.append(item)
@@ -918,72 +1005,61 @@ class Groupchat_window:
 
 	def on_groupchat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
-		if self.nb_unread > 0:
-			self.nb_unread = 0
+		room_jid = self.get_active_jid()
+		if self.nb_unread[room_jid] > 0:
+			self.nb_unread[room_jid] = 0
+			self.redraw_tab(room_jid)
 			self.show_title()
-			self.plugin.systray.remove_jid(self.jid, self.account)
+			self.plugin.systray.remove_jid(room_jid, self.account)
 
-	def on_list_treeview_button_press_event(self, widget, event):
-		"""popup user's group's or agent menu"""
-		if event.type == gtk.gdk.BUTTON_PRESS:
-			if event.button == 3:
-				try:
-					path, column, x, y = self.list_treeview.get_path_at_pos(\
-						int(event.x), int(event.y))
-				except TypeError:
-					self.list_treeview.get_selection().unselect_all()
-					return False
-				model = self.list_treeview.get_model()
-				iter = model.get_iter(path)
-				if len(path) == 2:
-					self.mk_menu(event, iter)
-				return True
-			if event.button == 1:
-				try:
-					path, column, x, y = self.list_treeview.get_path_at_pos(\
-						int(event.x), int(event.y))
-				except TypeError:
-					self.list_treeview.get_selection().unselect_all()
-		return False
+	def on_chat_notebook_switch_page(self, notebook, page, page_num):
+		new_child = notebook.get_nth_page(page_num)
+		new_jid = ''
+		for room_jid in self.xmls:
+			child = self.xmls[room_jid].get_widget('group_vbox')
+			if child == new_child:
+				new_jid = room_jid
+				break
+		self.xml.get_widget('subject_entry').set_text(self.subjects[new_jid])
+		if self.nb_unread[new_jid] > 0:
+			self.nb_unread[new_jid] = 0
+			self.redraw_tab(new_jid)
+			self.show_title()
+			self.plugin.systray.remove_jid(new_jid, self.account)
 
-	def on_list_treeview_key_release_event(self, widget, event):
-		if event.type == gtk.gdk.KEY_RELEASE:
-			if event.keyval == gtk.keysyms.Escape:
-				self.list_treeview.get_selection().unselect_all()
-		return False
+	def active_tab(self, room_jid):
+		child = self.xmls[room_jid].get_widget('group_vbox')
+		self.chat_notebook.set_current_page(self.chat_notebook.page_num(child))
+		self.xmls[room_jid].get_widget('message_textview').grab_focus()
 
-	def on_list_treeview_row_activated(self, widget, path, col=0):
-		"""When an iter is dubble clicked :
-		open the chat window"""
-		model = self.list_treeview.get_model()
-		iter = model.get_iter(path)
-		if len(path) == 1:
-			if (self.list_treeview.row_expanded(path)):
-				self.list_treeview.collapse_row(path)
-			else:
-				self.list_treeview.expand_row(path, False)
+	def remove_tab(self, room_jid):
+		if len(self.xmls) == 1:
+			self.window.destroy()
+		else:
+			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
+				room_jid, 'offline', 'offline'))
+			self.chat_notebook.remove_page(self.chat_notebook.get_current_page())
+			del self.plugin.windows[self.account]['gc'][room_jid]
+			del self.nicks[room_jid]
+			del self.nb_unread[room_jid]
+			del self.xmls[room_jid]
+			del self.tagIn[room_jid]
+			del self.tagOut[room_jid]
+			del self.tagStatus[room_jid]
+			del self.list_treeview[room_jid]
+			del self.subjects[room_jid]
+			if len(self.xmls) == 1:
+				self.chat_notebook.set_show_tabs(False)
+			self.show_title()
 
-	def on_list_treeview_row_expanded(self, widget, iter, path):
-		"""When a row is expanded :
-		change the icon of the arrow"""
-		model = self.list_treeview.get_model()
-		model.set_value(iter, 0, self.plugin.roster.pixbufs['opened'])
-	
-	def on_list_treeview_row_collapsed(self, widget, iter, path):
-		"""When a row is collapsed :
-		change the icon of the arrow"""
-		model = self.list_treeview.get_model()
-		model.set_value(iter, 0, self.plugin.roster.pixbufs['closed'])
+	def new_group(self, room_jid, nick):
+		self.nb_unread[room_jid] = 0
+		self.nicks[room_jid] = nick
+		self.subjects[room_jid] = ''
+		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'group_vbox', APP)
+		self.list_treeview[room_jid] = self.xmls[room_jid].\
+			get_widget('list_treeview')
 
-	def __init__(self, jid, nick, plugin, account):
-		self.jid = jid
-		self.nick = nick
-		self.plugin = plugin
-		self.account = account
-		self.nb_unread = 0
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_window', APP)
-		self.window = self.xml.get_widget('groupchat_window')
-		self.list_treeview = self.xml.get_widget('list_treeview')
 		#status_image, nickname, real_jid
 		store = gtk.TreeStore(gtk.Image, str, str)
 		column = gtk.TreeViewColumn('contacts')
@@ -994,30 +1070,122 @@ class Groupchat_window:
 		column.pack_start(render_text, expand = True)
 		column.add_attribute(render_text, 'text', 1)
 
-		self.list_treeview.append_column(column)
-		self.list_treeview.set_model(store)
+		self.list_treeview[room_jid].append_column(column)
+		self.list_treeview[room_jid].set_model(store)
 
-		col = gtk.TreeViewColumn()
+		column = gtk.TreeViewColumn()
 		render = gtk.CellRendererPixbuf()
-		col.pack_start(render, expand = False)
-		self.list_treeview.append_column(col)
-		col.set_visible(False)
-		self.list_treeview.set_expander_column(col)
+		column.pack_start(render, expand = False)
+		self.list_treeview[room_jid].append_column(column)
+		column.set_visible(False)
+		self.list_treeview[room_jid].set_expander_column(column)
 
-		conversation_textview = self.xml.get_widget('conversation_textview')
+		conversation_textview = self.xmls[room_jid].\
+			get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		end_iter = conversation_buffer.get_end_iter()
 		conversation_buffer.create_mark('end', end_iter, 0)
-		self.tagIn = conversation_buffer.create_tag('incoming')
+		self.tagIn[room_jid] = conversation_buffer.create_tag('incoming')
 		color = self.plugin.config['inmsgcolor']
-		self.tagIn.set_property('foreground', color)
-		self.tagOut = conversation_buffer.create_tag('outgoing')
+		self.tagIn[room_jid].set_property('foreground', color)
+		self.tagOut[room_jid] = conversation_buffer.create_tag('outgoing')
 		color = self.plugin.config['outmsgcolor']
-		self.tagOut.set_property('foreground', color)
-		self.tagStatus = conversation_buffer.create_tag('status')
+		self.tagOut[room_jid].set_property('foreground', color)
+		self.tagStatus[room_jid] = conversation_buffer.create_tag('status')
 		color = self.plugin.config['statusmsgcolor']
-		self.tagStatus.set_property('foreground', color)
-		self.xml.signal_autoconnect(self)
+		self.tagStatus[room_jid].set_property('foreground', color)
+
+		self.xmls[room_jid].signal_autoconnect(self)
+
+		self.chat_notebook.append_page(self.xmls[room_jid].\
+			get_widget('group_vbox'))
+		if len(self.xmls) > 1:
+			self.chat_notebook.set_show_tabs(True)
+
+		self.redraw_tab(room_jid)
+		self.show_title()
+
+	def on_list_treeview_button_press_event(self, widget, event):
+		"""popup user's group's or agent menu"""
+		if event.type == gtk.gdk.BUTTON_PRESS:
+			if event.button == 3:
+				try:
+					path, column, x, y = widget.get_path_at_pos(int(event.x), \
+						int(event.y))
+				except TypeError:
+					widget.get_selection().unselect_all()
+					return False
+				model = widget.get_model()
+				iter = model.get_iter(path)
+				if len(path) == 2:
+					self.mk_menu(room_jid, event, iter)
+				return True
+			if event.button == 1:
+				try:
+					path, column, x, y = widget.get_path_at_pos(int(event.x), \
+						int(event.y))
+				except TypeError:
+					widget.get_selection().unselect_all()
+		return False
+
+	def on_list_treeview_key_release_event(self, widget, event):
+		if event.type == gtk.gdk.KEY_RELEASE:
+			if event.keyval == gtk.keysyms.Escape:
+				widget.get_selection().unselect_all()
+		return False
+
+	def on_list_treeview_row_activated(self, widget, path, col=0):
+		"""When an iter is dubble clicked :
+		open the chat window"""
+		model = widget.get_model()
+		iter = model.get_iter(path)
+		if len(path) == 1:
+			if (widget.row_expanded(path)):
+				widget.collapse_row(path)
+			else:
+				widget.expand_row(path, False)
+
+	def on_list_treeview_row_expanded(self, widget, iter, path):
+		"""When a row is expanded :
+		change the icon of the arrow"""
+		model = widget.get_model()
+		model.set_value(iter, 0, self.plugin.roster.pixbufs['opened'])
+	
+	def on_list_treeview_row_collapsed(self, widget, iter, path):
+		"""When a row is collapsed :
+		change the icon of the arrow"""
+		model = widget.get_model()
+		model.set_value(iter, 0, self.plugin.roster.pixbufs['closed'])
+
+	def __init__(self, room_jid, nick, plugin, account):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_window', APP)
+		self.chat_notebook = self.xml.get_widget('chat_notebook')
+		self.chat_notebook.remove_page(0)
+		self.plugin = plugin
+		self.account = account
+		self.xmls = {}
+		self.tagIn = {}
+		self.tagOut = {}
+		self.tagStatus = {}
+		self.nicks = {}
+		self.nb_unread = {}
+		self.list_treeview = {}
+		self.subjects = {}
+		self.window = self.xml.get_widget('groupchat_window')
+		self.new_group(room_jid, nick)
+		self.show_title()
+		self.xml.signal_connect('on_groupchat_window_destroy', \
+			self.on_groupchat_window_destroy)
+		self.xml.signal_connect('on_groupchat_window_focus_in_event', \
+			self.on_groupchat_window_focus_in_event)
+		self.xml.signal_connect('on_groupchat_window_key_press_event', \
+			self.on_groupchat_window_key_press_event)
+		self.xml.signal_connect('on_chat_notebook_switch_page', \
+			self.on_chat_notebook_switch_page)
+		self.xml.signal_connect('on_subject_entry_key_press_event', \
+			self.on_subject_entry_key_press_event)
+		self.xml.signal_connect('on_set_button_clicked', \
+			self.on_set_button_clicked)
 
 class history_window:
 	"""Class for bowser agent window :
@@ -1859,6 +2027,20 @@ class roster_window:
 			self.plugin.windows[account]['chats'][user.jid] = \
 				tabbed_chat_window(user, self.plugin, account)
 
+	def new_group(self, jid, nick, account):
+		if self.plugin.config['usetabbedchat']:
+			if not self.plugin.windows[account]['gc'].has_key('tabbed'):
+				self.plugin.windows[account]['gc']['tabbed'] = \
+					Groupchat_window(jid, nick, self.plugin, account)
+			else:
+				self.plugin.windows[account]['gc']['tabbed'].new_group(jid, nick)
+			self.plugin.windows[account]['gc'][jid] = \
+				self.plugin.windows[account]['gc']['tabbed']
+			self.plugin.windows[account]['gc']['tabbed'].window.present()
+		else:
+			self.plugin.windows[account]['gc'][user.jid] = \
+				Groupchat_window(jid, nick, self.plugin, account)
+
 	def on_message(self, jid, msg, tim, account):
 		"""when we receive a message"""
 		if not self.contacts[account].has_key(jid):
@@ -2698,9 +2880,9 @@ class plugin:
 				
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
-			self.windows[account]['gc'][ji].chg_user_status(resource, array[1],\
-				array[2], array[6], array[7], array[8], array[9], array[10], \
-				array[11], account)
+			self.windows[account]['gc'][ji].chg_user_status(ji, resource, \
+				array[1], array[2], array[6], array[7], array[8], array[9], \
+				array[10], array[11], account)
 
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (user, msg, time))
@@ -2856,7 +3038,7 @@ class plugin:
 		jid = jids[0]
 		if not self.windows[account]['gc'].has_key(jid):
 			return
-		self.windows[account]['gc'][jid].set_subject(array[1])
+		self.windows[account]['gc'][jid].set_subject(jid, array[1])
 		if len(jids) > 1:
 			self.windows[account]['gc'][jid].print_conversation(\
 				'%s has set the subject to %s' % (jids[1], array[1]), jid)
