@@ -1,3 +1,14 @@
+gajim (0.6) unstable; urgency=low
+
+  * GUI improvements
+  * Groupchat improvements
+  * URL, mailto and ascii formation (* / _) detection
+  * Better transports detection
+  * Better group management
+  * Many bugfixes
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Tue, 22 Mar 2005 18:56:18 +0100
+
 gajim (0.5.1-1) unstable; urgency=low
 
   * bugfixs
