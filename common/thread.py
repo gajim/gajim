@@ -19,10 +19,7 @@
 
 import threading
 import socket
-import sys
 import time
-
-sys.path.append("..")
 
 class GajimThread(threading.Thread): 
 	def __init__(self, name = None, queueIn = None, queueOut = None): 

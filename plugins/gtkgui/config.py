@@ -476,6 +476,7 @@ class accountPreference_Window:
 		self.plugin.connected[name] = 0
 		self.plugin.roster.groups[name] = {}
 		self.plugin.roster.contacts[name] = {}
+		self.plugin.nicks[name] = login
 		#refresh accounts window
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].init_accounts()

@@ -49,18 +49,14 @@ class GajimHub:
 		""" Records a plugin from an event """
 		qu = self.queues[name]
 		if self.events.has_key(event) :
-			self.events[event].append(qu)
+			if not qu in self.events[event]:
+				self.events[event].append(qu)
 		else :
 			self.events[event] = [qu]
 	# END register
 
 	def sendPlugin(self, event, con, data):
-		""" Sends an event to registered plugins
-		NOTIFY : ('NOTIFY', (user, status, message))
-		MSG : ('MSG', (user, msg))
-		ROSTER : ('ROSTER', {jid:{'status':_, 'name':_, 'show':_, 'groups':[], 'online':_, 'ask':_, 'sub':_} ,jid:{}})
-		SUBSCRIBED : ('SUBSCRIBED', {'jid':_, 'nom':_, 'server':_, 'resource':_, 'status':_, 'show':_})"""
-
+		""" Sends an event to registered plugins"""
 		if self.events.has_key(event):
 			for i in self.events[event]:
 				i.put((event, con, data))

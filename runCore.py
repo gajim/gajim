@@ -19,9 +19,6 @@
 
 import logging
 logging.basicConfig()
-import sys
-
-sys.path.append("..")
 
 import common
 import core
@@ -30,5 +27,26 @@ from common import i18n
 i18n.init()
 _ = i18n._
 
-core.core.start()
+import getopt, sys
+
+def usage():
+	print "usage :", sys.argv[0], ' [OPTION]'
+	print "  -c\tlaunch Gajim as a client of a Gajim server"
+	print "  -h, --help\tdisplay this help and exit"
+
+try:
+	opts, args = getopt.getopt(sys.argv[1:], "ch", ["help"])
+except getopt.GetoptError:
+	# print help information and exit:
+	usage()
+	sys.exit(2)
+mode = 'server'
+for o, a in opts:
+	if o == '-c':
+		mode = 'client'
+	if o in ("-h", "--help"):
+		usage()
+		sys.exit()
+
+core.core.start(mode)
 print _("Core Stopped")
