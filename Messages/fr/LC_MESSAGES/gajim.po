@@ -1054,7 +1054,7 @@ msgstr "_Choisir l'image"
 
 #: plugins/gtkgui/msg.c:109
 msgid "Emoticons"
-msgstr "Smeileys"
+msgstr "Smileys"
 
 #: plugins/gtkgui/msg.c:110
 msgid ""
