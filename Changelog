@@ -1,4 +1,4 @@
-Gajim 0.6.1 (02 April 2005)
+Gajim 0.6.1 (03 April 2005)
 
   * Rewrite of service discovery. It doesn't freeze Gajim anymore.
   * More HIG Compliant.
