@@ -860,7 +860,7 @@
   </child>
 </widget>
 
-<widget class="GtkWindow" id="About">
+<widget class="GtkWindow" id="about_window">
   <property name="visible">True</property>
   <property name="title" translatable="yes">About</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>

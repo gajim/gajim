@@ -405,8 +405,8 @@ class about_Window:
 		widget.get_toplevel().destroy()
 
 	def __init__(self, plugin):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'About', APP)
-		self.window = xml.get_widget('About')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'about_window', APP)
+		self.window = xml.get_widget('about_window')
 		self.plugin = plugin
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_close_clicked', self.on_close)
