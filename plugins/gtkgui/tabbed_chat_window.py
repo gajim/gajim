@@ -26,6 +26,7 @@ import time
 import sre
 
 from dialogs import *
+from history_window import *
 
 from common import i18n
 
