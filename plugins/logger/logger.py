@@ -86,6 +86,8 @@ class plugin:
 	def __init__(self, quIN, quOUT):
 		self.queueIN = quIN
 		self.queueOUT = quOUT
+		quOUT.put(('REG_MESSAGE', 'logger', ['CONFIG', 'NOTIFY', 'MSG', \
+			'MSGSENT', 'QUIT']))
 		quOUT.put(('ASK_CONFIG', None, ('Logger', 'Logger', {\
 			'lognotsep':1, 'lognotusr':1})))
 		self.config = self.wait('CONFIG')

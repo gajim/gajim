@@ -1763,6 +1763,10 @@ class plugin:
 		gtk.threads_enter()
 		self.queueIN = quIN
 		self.queueOUT = quOUT
+		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'STATUS', \
+			'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
+			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'QUIT', 'ACC_OK', 'CONFIG', \
+			'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE'])
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'autopopupaway':1,\
 			'showoffline':0,\

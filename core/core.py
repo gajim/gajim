@@ -495,6 +495,10 @@ class GajimCore:
 								self.hub.sendPlugin('LOG_LINE', ev[1], (ev[2][0], nb, \
 									lineSplited[0], lineSplited[1], lineSplited[2:]))
 					fic.close()
+				#('REG_MESSAGE', module, list_message)
+				elif ev[0] == 'REG_MESSAGE':
+					for msg in ev[2]:
+						self.hub.register(ev[1], msg)
 				else:
 					log.debug(_("Unknown Command %s") % ev[0])
 			else:
@@ -522,25 +526,6 @@ def loadPlugins(gc):
 
 		for mod in mods:
 			modObj = gc.hub.newPlugin(mod)
-			gc.hub.register(mod, 'ROSTER')
-			gc.hub.register(mod, 'WARNING')
-			gc.hub.register(mod, 'STATUS')
-			gc.hub.register(mod, 'NOTIFY')
-			gc.hub.register(mod, 'MSG')
-			gc.hub.register(mod, 'MSGERROR')
-			gc.hub.register(mod, 'MSGSENT')
-			gc.hub.register(mod, 'SUBSCRIBED')
-			gc.hub.register(mod, 'UNSUBSCRIBED')
-			gc.hub.register(mod, 'SUBSCRIBE')
-			gc.hub.register(mod, 'AGENTS')
-			gc.hub.register(mod, 'AGENT_INFO')
-			gc.hub.register(mod, 'QUIT')
-			gc.hub.register(mod, 'ACC_OK')
-			gc.hub.register(mod, 'CONFIG')
-			gc.hub.register(mod, 'MYVCARD')
-			gc.hub.register(mod, 'VCARD')
-			gc.hub.register(mod, 'LOG_NB_LINE')
-			gc.hub.register(mod, 'LOG_LINE')
 			modObj.load()
 # END loadPLugins
 
