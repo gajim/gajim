@@ -56,7 +56,7 @@ class GajimHub:
         """ Sends an event to registered plugins
 		NOTIFY : ('NOTIFY', (user, status, message))
 		MSG : ('MSG', (user, msg))
-		ROSTER : ('ROSTER', {jid:{'Online':_, 'nom':_, 'server':_, 'resource':_, 'group':_, 'status':_, 'show':_} ,jid:{}})
+		ROSTER : ('ROSTER', {jid:{'status':_, 'name':_, 'show':_, 'groups':[], 'online':_, 'ask':_, 'sub':_} ,jid:{}})
 		SUBSCRIBED : ('SUBSCRIBED', {'jid':_, 'nom':_, 'server':_, 'resource':_, 'status':_, 'show':_})"""
 
         if self.events.has_key(event):
