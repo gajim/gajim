@@ -325,6 +325,7 @@ class away_message_dialog:
 	
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'away_message_dialog', APP)
+		self.window = self.xml.get_widget('away_message_dialog')
 		self.plugin = plugin
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
