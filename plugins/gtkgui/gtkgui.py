@@ -1646,6 +1646,7 @@ class roster_Window:
 		self.draw_roster()
 
 	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
+		"""When a row is added, set properties for icon renderer"""
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('cell-background', '#9fdfff')
 			renderer.set_property('xalign', 0)
@@ -1658,6 +1659,7 @@ class roster_Window:
 		renderer.set_property('width', 30)
 	
 	def nameCellDataFunc(self, column, renderer, model, iter, data=None):
+		"""When a row is added, set properties for name renderer"""
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('foreground', 'red')
 			renderer.set_property('cell-background', '#9fdfff')
@@ -1677,6 +1679,24 @@ class roster_Window:
 			renderer.set_property('weight-set', False)
 			renderer.set_property('xpad', 16)
 
+	def compareIters(self, model, iter1, iter2, data = None):
+		"""Compare two iters to sort them"""
+		name1 = model.get_value(iter1, 1)
+		name2 = model.get_value(iter2, 1)
+		if not name1 or not name2:
+			return 0
+		type = model.get_value(iter1, 2)
+		if type == 'group':
+			if name1 == 'Agents':
+				return 1
+			if name2 == 'Agents':
+				return -1
+		if name1.lower() < name2.lower():
+			return -1
+		if name2.lower < name1.lower():
+			return 1
+		return 0
+
 	def __init__(self, plugin):
 		# FIXME : handle no file ...
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim')
@@ -1690,6 +1710,8 @@ class roster_Window:
 		#(icon, name, type, jid, editable)
 		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, str, \
 			gobject.TYPE_BOOLEAN)
+		model.set_sort_func(1, self.compareIters)
+		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
 		self.mkpixbufs()
 #		map = self.tree.get_colormap()
