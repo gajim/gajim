@@ -165,8 +165,10 @@ class preferences_window:
 		"""On Use Tabbed Chat Window Checkbutton Toggled"""
 		if widget.get_active():
 			self.plugin.config['usetabbedchat'] = 1
+			#TODO: merge opened chat windows
 		else:
 			self.plugin.config['usetabbedchat'] = 0
+			#TODO: split the tabbed chat window
 	
 	def on_tray_icon_checkbutton_toggled(self, widget):
 		"""On Tray Icon Checkbutton Toggled"""
@@ -234,7 +236,21 @@ class preferences_window:
 		self.plugin.roster.mkemoticons()
 	
 	def on_emoticons_treeview_row_changed(self, model, path, iter):
-		print 'row-changed'	
+		print 'row-changed'
+
+	def on_prompt_online_status_message_checkbutton_toggled(self, widget):
+		"""On Prompt Online Status Message Checkbutton Toggled"""
+		if widget.get_active():
+			self.plugin.config['ask_online_status'] = 1
+		else:
+			self.plugin.config['ask_online_status'] = 0
+	
+	def on_prompt_offline_status_message_checkbutton_toggled(self, widget):
+		"""On Prompt Offline Status Message Checkbutton Toggled"""
+		if widget.get_active():
+			self.plugin.config['ask_offline_status'] = 1
+		else:
+			self.plugin.config['ask_offline_status'] = 0
 	
 	def write_cfg(self): #FIXME: (nk) instant apply
 		"""Save preferences in config File and apply them"""
