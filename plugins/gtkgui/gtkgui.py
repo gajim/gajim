@@ -865,7 +865,12 @@ class plugin:
 			'y-position': 0,\
 			'width': 150,\
 			'height': 400,\
-			'latest_disco_addresses': ''}
+			'latest_disco_addresses': '',\
+			'before_time': '[',\
+			'after_time': ']',\
+			'before_nickname': '<',\
+			'after_nickname': '>',\
+			}
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', self.default_config))
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))

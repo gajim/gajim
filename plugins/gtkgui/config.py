@@ -47,6 +47,18 @@ class Preferences_window:
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
 
+	def on_before_time_entry_focus_out_event(self, widget, event):
+		self.plugin.config['before_time'] = widget.get_text()
+	
+	def on_after_time_entry_focus_out_event(self, widget, event):
+		self.plugin.config['after_time'] = widget.get_text()
+
+	def on_before_nickname_entry_focus_out_event(self, widget, event):
+		self.plugin.config['before_nickname'] = widget.get_text()
+
+	def on_after_nickname_entry_focus_out_event(self, widget, event):
+		self.plugin.config['after_nickname'] = widget.get_text()
+
 	def on_tray_icon_checkbutton_toggled(self, widget):
 		if widget.get_active():
 			self.plugin.config['trayicon'] = 1
@@ -230,7 +242,7 @@ class Preferences_window:
 #						get_widget('message_textview').set_buffer(buf2[acct][jid])
 	
 	def update_text_tags(self):
-		"""Update Opened Chat Windows"""
+		"""Update color tags in Opened Chat Windows"""
 		for a in self.plugin.accounts.keys():
 			if self.plugin.windows[a]['chats'].has_key('tabbed'):
 				self.plugin.windows[a]['chats']['tabbed'].update_tags()
@@ -239,7 +251,7 @@ class Preferences_window:
 					self.plugin.windows[a]['chats'][jid].update_tags()
 	
 	def update_print_time(self):
-		"""Update Opened Chat Windows"""
+		"""Update time in Opened Chat Windows"""
 		for a in self.plugin.accounts.keys():
 			if self.plugin.windows[a]['chats'].has_key('tabbed'):
 				self.plugin.windows[a]['chats']['tabbed'].update_print_time()
@@ -690,7 +702,7 @@ class Preferences_window:
 			model.set_value(iter, 1, 1)
 
 	def __init__(self, plugin):
-		"""Initialize Preference window"""
+		"""Initialize Preferences window"""
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
 		self.window = self.xml.get_widget('preferences_window')
 		self.plugin = plugin
@@ -784,6 +796,30 @@ class Preferences_window:
 		#use tabbed chat window
 		st = self.plugin.config['usetabbedchat']
 		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
+		
+		#Print time
+		if self.plugin.config['print_time'] == 'never':
+			self.xml.get_widget('time_never_radiobutton').set_active(1)
+		elif self.plugin.config['print_time'] == 'sometimes':
+			self.xml.get_widget('time_sometimes_radiobutton').set_active(1)
+		else:
+			self.xml.get_widget('time_always_radiobutton').set_active(1)
+
+		#before time
+		st = self.plugin.config['before_time']
+		self.xml.get_widget('before_time_entry').set_text(st)
+		
+		#after time
+		st = self.plugin.config['after_time']
+		self.xml.get_widget('after_time_entry').set_text(st)
+
+		#before nickname
+		st = self.plugin.config['before_nickname']
+		self.xml.get_widget('before_nickname_entry').set_text(st)
+
+		#after nickanme
+		st = self.plugin.config['after_nickname']
+		self.xml.get_widget('after_nickname_entry').set_text(st)
 
 		#Color for incomming messages
 		colSt = self.plugin.config['inmsgcolor']
@@ -799,14 +835,6 @@ class Preferences_window:
 		colSt = self.plugin.config['statusmsgcolor']
 		self.xml.get_widget('status_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
-		
-		#Print time
-		if self.plugin.config['print_time'] == 'never':
-			self.xml.get_widget('time_never_radiobutton').set_active(1)
-		elif self.plugin.config['print_time'] == 'sometimes':
-			self.xml.get_widget('time_sometimes_radiobutton').set_active(1)
-		else:
-			self.xml.get_widget('time_always_radiobutton').set_active(1)
 
 		#Use emoticons
 		st = self.plugin.config['useemoticons']

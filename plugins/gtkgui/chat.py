@@ -559,7 +559,10 @@ class Chat:
 		if self.plugin.config['print_time'] == 'always':
 			if not tim:
 				tim = time.localtime()
-			tim_format = time.strftime("[%H:%M:%S]", tim)
+			self.before_time_symbols = self.plugin.config['before_time']
+			self.after_time_symbols = self.plugin.config['after_time']
+			format = self.before_time_symbols + '%H:%M:%S' + self.after_time_symbols
+			tim_format = time.strftime(format, tim)
 			conversation_buffer.insert(end_iter, tim_format + ' ')
 
 		if kind == 'status':
@@ -574,8 +577,11 @@ class Chat:
 		tags = other_tags_for_name[:] #create a new list
 		tags.append(kind)
 		if name and not print_all_special:
-			self.print_with_tag_list(conversation_buffer, '<' + name + '> ', \
-				end_iter, tags)
+			self.before_nickname_symbols = self.plugin.config['before_nickname']
+			self.after_nickname_symbols = self.plugin.config['after_nickname']
+			format = self.before_nickname_symbols + name\
+				 + self.after_nickname_symbols + ' ' 
+			self.print_with_tag_list(conversation_buffer, format, end_iter, tags)
 				
 		text += '\n'
 		# detect urls formatting and if the user has it on emoticons
