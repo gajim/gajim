@@ -2710,7 +2710,8 @@ class plugin:
 				old_show = statuss.index(user1.show)
 			else:
 				user1 = self.roster.contacts[account][ji][0]
-				old_show = statuss.index(user1.show)
+				if user1.show in statuss:
+					old_show = statuss.index(user1.show)
 				if (resources != [''] and (len(luser) != 1 or 
 					luser[0].show != 'offline')) and not string.find(jid, "@") <= 0:
 					old_show = 0
