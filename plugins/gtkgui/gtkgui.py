@@ -609,7 +609,7 @@ class tabbed_chat_window:
 		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
 		tags = widget.get_iter_at_location(x, y).get_tags()
 		if self.change_cursor:
-			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(None)
+			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(gtk.gdk.XTERM)
 			self.change_cursor = None
 		for tag in tags:
 			if tag == widget.get_buffer().get_tag_table().lookup('url') or \
@@ -620,8 +620,9 @@ class tabbed_chat_window:
 		return False
 			
 	def on_conversation_textview_button_press_event(self, widget, event):
-		# Do not open the standard popup menu
-		return True
+		# Do not open the standard popup menu, so we block right button click
+		if event.button == 3:
+			return True
 	
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
