@@ -438,7 +438,7 @@ class About_dialog:
 	"""Class for about dialog"""
 	def __init__(self, plugin):
 		if gtk.pygtk_version < (2, 6, 0):
-			Information_dialog('Gajim - The best GTK jabber client')
+			Information_dialog('Gajim - A GTK jabber client')
 			return
 		self.plugin = plugin
 		dlg = gtk.AboutDialog()
@@ -449,7 +449,7 @@ class About_dialog:
 		text = open('COPYING').read()
 		dlg.set_license(text)
 
-		dlg.set_comments('The best GTK jabber client')
+		dlg.set_comments('A GTK jabber client')
 		dlg.set_website('http://www.gajim.org')
 		authors = ['Yann Le Boulanger', 'Vincent Hanquez', 'Nikos Kouremenos', 'Alex Podaras']
 		dlg.set_authors(authors)
