@@ -163,7 +163,7 @@ else:
 			keyid = ''
 			if resp.has_key('GOODSIG'):
 				keyid = string.split(resp['GOODSIG'])[0]
-			if resp.has_key('BADSIG'):
+			elif resp.has_key('BADSIG'):
 				keyid = string.split(resp['BADSIG'])[0]
 			return keyid
 
