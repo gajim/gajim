@@ -50,7 +50,6 @@ if __name__ == "__main__":
 	sys.exit()
 
 import os
-import string
 import time
 import common.optparser
 from common import i18n
@@ -76,7 +75,7 @@ class plugin:
 					print _("plugin logger stopped")
 					return
 				elif ev[0] == 'NOTIFY':
-					jid = string.split(ev[2][0], '/')[0]
+					jid = ev[2][0].split('/')[0]
 					if jid in self.no_log_for[ev[1]]:
 						break
 					if ev[1] in self.no_log_for[ev[1]]:
@@ -84,7 +83,7 @@ class plugin:
 					status = ev[2][2]
 					if not status:
 						status = ""
-					status = string.replace(status, '\n', '\\n')
+					status = status.replace('\n', '\\n')
 					if lognotsep == 1:
 						fic = open(LOGPATH + "notify.log", "a")
 						fic.write("%s:%s:%s:%s\n" % (tim, ev[2][0] + '/' + ev[2][3], \
@@ -96,33 +95,33 @@ class plugin:
 							ev[2][1], status))
 						fic.close()
 				elif ev[0] == 'MSG':
-					jid = string.split(ev[2][0], '/')[0]
+					jid = ev[2][0].split('/')[0]
 					if jid in self.no_log_for[ev[1]]:
 						break
 					if ev[1] in self.no_log_for[ev[1]]:
 						break
-					msg = string.replace(ev[2][1], '\n', '\\n')
+					msg = ev[2][1].replace('\n', '\\n')
 					fic = open(LOGPATH + jid, "a")
 					t = time.mktime(ev[2][2])
 					fic.write("%s:recv:%s\n" % (t, msg))
 					fic.close()
 				elif ev[0] == 'MSGSENT':
-					jid = string.split(ev[2][0], '/')[0]
+					jid = ev[2][0].split('/')[0]
 					if jid in self.no_log_for[ev[1]]:
 						break
 					if ev[1] in self.no_log_for[ev[1]]:
 						break
-					msg = string.replace(ev[2][1], '\n', '\\n')
+					msg = ev[2][1].replace('\n', '\\n')
 					fic = open(LOGPATH + jid, "a")
 					fic.write("%s:sent:%s\n" % (tim, msg))
 					fic.close()
 				elif ev[0] == 'GC_MSG':
-					msg = string.replace(ev[2][1], '\n', '\\n')
-					jids = string.split(ev[2][0], '/')
+					msg = ev[2][1].replace('\n', '\\n')
+					jids = ev[2][0].split('/')
 					jid = jids[0]
 					nick = ''
 					if len(jids) > 1:
-						nick = string.split(ev[2][0], '/')[1]
+						nick = ev[2][0].split('/')[1]
 					fic = open(LOGPATH + jid, "a")
 					t = time.mktime(ev[2][2])
 					fic.write("%s:recv:%s:%s\n" % (t, nick, msg))
@@ -137,7 +136,7 @@ class plugin:
 							self.no_log_for[acct] = []
 							if accounts[acct].has_key('no_log_for'):
 								self.no_log_for[acct] = \
-									string.split(accounts[acct]['no_log_for'], ' ')
+									accounts[acct]['no_log_for'].split()
 			time.sleep(0.1)
 
 	def wait(self, what):
@@ -165,7 +164,7 @@ class plugin:
 			self.no_log_for[acct] = []
 			if accounts[acct].has_key('no_log_for'):
 				self.no_log_for[acct] = \
-					string.split(accounts[acct]['no_log_for'], ' ')
+					accounts[acct]['no_log_for'].split()
 		#create ~/.gajim/logs/ if it doesn't exist
 		try:
 			os.stat(os.path.expanduser("~/.gajim"))
