@@ -37,10 +37,15 @@ LOGPATH = os.path.expanduser("~/.gajim/logs/")
 class GajimCore:
 	"""Core"""
 	def __init__(self):
+		self.log = 0
 		self.init_cfg_file()
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
 		self.hub = common.hub.GajimHub()
 		self.parse()
+		if self.log:
+			log.setLevel(logging.DEBUG)
+		else:
+			log.setLevel(None)
 		self.connected = {}
 		#connexions {con: name, ...}
 		self.connexions = {}
@@ -71,7 +76,7 @@ class GajimCore:
 		except:
 			print "creating %s" % fname
 			fic = open(fname, "w")
-			fic.write("[Profile]\naccounts = \n\n[Core]\ndelauth = 1\nalwaysauth = 0\nmodules = logger gtkgui\ndelroster = 1\n")
+			fic.write("[Profile]\naccounts = \nlog = 0\n\n[Core]\ndelauth = 1\nalwaysauth = 0\nmodules = logger gtkgui\ndelroster = 1\n")
 			fic.close()
 	# END init_cfg_file
 
@@ -79,11 +84,15 @@ class GajimCore:
 		"""Parse configuratoin file and create self.accounts"""
 		self.cfgParser.parseCfgFile()
 		self.accounts = {}
-		accts = string.split(self.cfgParser.tab['Profile']['accounts'], ' ')
-		if accts == ['']:
-			accts = []
-		for a in accts:
-			self.accounts[a] = self.cfgParser.tab[a]
+		if self.cfgParser.tab.has_key('Profile'):
+			if self.cfgParser.tab['Profile'].has_key('log'):
+				self.log = self.cfgParser.tab['Profile']['log']
+			if self.cfgParser.tab['Profile'].has_key('accounts'):
+				accts = string.split(self.cfgParser.tab['Profile']['accounts'], ' ')
+				if accts == ['']:
+					accts = []
+				for a in accts:
+					self.accounts[a] = self.cfgParser.tab[a]
 
 	def vCardCB(self, con, vc):
 		"""Called when we recieve a vCard
@@ -183,10 +192,14 @@ class GajimCore:
 			proxy["port"] = self.cfgParser.tab[account]["proxyport"]
 		else:
 			proxy = None
-		con = common.jabber.Client(host = hostname, \
-			debug = [], log = sys.stderr, \
-#			debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
+		if self.log:
+			con = common.jabber.Client(host = hostname, debug = [], \
+			log = sys.stderr, connection=common.xmlstream.TCP, port=5222, \
+			proxy = proxy)
+		else:
+			con = common.jabber.Client(host = hostname, debug = [], log = None, \
 			connection=common.xmlstream.TCP, port=5222, proxy = proxy)
+			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
 			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
 		try:
 			con.connect()
@@ -362,8 +375,8 @@ class GajimCore:
 						proxy = {'host': ev[2][6], 'port': ev[2][7]}
 					else:
 						proxy = None
-					c = common.jabber.Client(host = \
-						ev[2][0], debug = False, log = sys.stderr, proxy = proxy)
+					c = common.jabber.Client(host = ev[2][0], debug = [], \
+						log = None, proxy = proxy)
 					try:
 						c.connect()
 					except IOError, e:
