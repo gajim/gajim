@@ -337,17 +337,6 @@ class preferences_window:
 			del self.plugin.config['msg%i' % i]
 			i += 1
 		
-		#open links with
-		if self.links_open_with_combobox.get_active() == 0:
-			self.plugin.config['openwith'] = 'gnome-open'
-		elif self.links_open_with_combobox.get_active() == 1:
-			self.plugin.config['openwith'] = 'kfmclient exec'
-		elif self.links_open_with_combobox.get_active() == 2:
-			self.plugin.config['openwith'] = 'custom'
-			self.plugin.config['custombrowser'] = \
-				self.xml.get_widget('custom_browser_entry').get_text()
-			self.plugin.config['custommailapp'] = \
-				self.xml.get_widget('custom_mail_app_entry').get_text()
 		#log presences in user file
 		if self.xml.get_widget('chk_log_pres_usr').get_active():
 			self.config_logger['lognotusr'] = 1
@@ -620,8 +609,19 @@ class preferences_window:
 	def on_links_open_with_combobox_changed(self, widget):
 		if widget.get_active() == 2:
 			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
+			self.plugin.config['openwith'] = 'custom'
 		else:
+			if widget.get_active() == 0:
+				self.plugin.config['openwith'] = 'gnome-open'
+			if widget.get_active() == 1:
+				self.plugin.config['openwith'] = 'kfmclient exec'
 			self.xml.get_widget('custom_apps_frame').set_sensitive(False)
+
+	def on_custom_browser_entry_changed(self, widget):
+		self.plugin.config['custombrowser'] = widget.get_text()
+
+	def on_custom_mail_client_entry_changed(self, widget):
+		self.plugin.config['custommailapp'] = widget.get_text()
 
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
@@ -887,10 +887,10 @@ class preferences_window:
 		elif self.plugin.config['openwith'] == 'custom':
 			self.links_open_with_combobox.set_active(2)
 			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
-			self.xml.get_widget('custom_browser_entry').set_text(\
-				self.plugin.config['custombrowser'])
-			self.xml.get_widget('custom_mail_app_entry').set_text(\
-				self.plugin.config['custommailapp'])
+		self.xml.get_widget('custom_browser_entry').set_text(\
+			self.plugin.config['custombrowser'])
+		self.xml.get_widget('custom_mail_client_entry').set_text(\
+			self.plugin.config['custommailapp'])
 				
 		#log presences in user file
 		st = self.config_logger['lognotusr']

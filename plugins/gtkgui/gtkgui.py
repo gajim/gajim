@@ -228,7 +228,27 @@ class tabbed_chat_window:
 			self.on_tabbed_chat_window_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', \
 			self.on_chat_notebook_switch_page)
-		#self.xml.signal_autoconnect(self) #FIXME: (nk) THIS SEGFAULTS GAJIM. WHY? -> (asterix) we delete the first page, so we delete the widgets, so we don't want to connect associated signals.
+
+	def run_application(self, type, url):
+		#type = 'url' or 'mail'
+		if self.plugin.config['openwith'] == 'gnome-open':
+			app = 'gnome-open'
+			args = ['gnome-open']
+			args.append(url)
+		elif self.plugin.config['openwith'] == 'kfmclient exec':
+			app = 'kfmclient'
+			args = ['kfmclient', 'exec']
+		elif self.plugin.config['openwith'] == 'custom':
+			if type == 'url':
+				conf = self.plugin.config['custombrowser']
+			if type == 'mail':
+				conf = self.plugin.config['custommailapp']
+			if conf == '':
+				return
+			args = conf.split()
+			app = args[0]
+		args.append(url)
+		os.spawnvp(os.P_NOWAIT, app, args)
 		
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -1337,7 +1357,6 @@ class Groupchat_window:
 			self.on_chat_notebook_switch_page)
 		self.xml.signal_connect('on_set_button_clicked', \
 			self.on_set_button_clicked)
-		#FIXME: (nk) WHY AUTOCONNECT segfaults? [haven't test here but looks the same] with tabbed chat window ;P
 
 class history_window:
 	"""Class for bowser agent window :
@@ -3418,9 +3437,9 @@ class plugin:
 			'sound_contact_disconnected_file': 'sounds/disconnected.wav',\
 			'sound_message_sent': 1,\
 			'sound_message_sent_file': 'sounds/sent.wav',\
-			'openwith': 'gnome-open', \
-			'custombrowser' : '', \
-			'custommailapp' : '', \
+			'openwith': 'gnome-open',\
+			'custombrowser' : 'firefox',\
+			'custommailapp' : 'thunderbird',\
 			'x-position': 0,\
 			'y-position': 0,\
 			'width': 150,\

@@ -5347,10 +5347,11 @@ Custom</property>
 					  <property name="editable">True</property>
 					  <property name="visibility">True</property>
 					  <property name="max_length">0</property>
-					  <property name="text" translatable="yes">thunderbird -remote 'mailto(%s)'</property>
+					  <property name="text" translatable="yes"></property>
 					  <property name="has_frame">True</property>
 					  <property name="invisible_char">*</property>
 					  <property name="activates_default">False</property>
+					  <signal name="changed" handler="on_custom_mail_client_entry_changed" last_modification_time="Tue, 08 Mar 2005 19:59:41 GMT"/>
 					</widget>
 					<packing>
 					  <property name="left_attach">1</property>
@@ -5368,10 +5369,11 @@ Custom</property>
 					  <property name="editable">True</property>
 					  <property name="visibility">True</property>
 					  <property name="max_length">0</property>
-					  <property name="text" translatable="yes">firefox -remote 'OpenURL(%s)'</property>
+					  <property name="text" translatable="yes"></property>
 					  <property name="has_frame">True</property>
 					  <property name="invisible_char">*</property>
 					  <property name="activates_default">False</property>
+					  <signal name="changed" handler="on_custom_browser_entry_changed" last_modification_time="Tue, 08 Mar 2005 19:59:36 GMT"/>
 					</widget>
 					<packing>
 					  <property name="left_attach">1</property>
