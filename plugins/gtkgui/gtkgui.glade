@@ -657,7 +657,7 @@
   </child>
 </widget>
 
-<widget class="GtkWindow" id="Accounts">
+<widget class="GtkWindow" id="accounts_window">
   <property name="visible">True</property>
   <property name="title" translatable="yes">Accounts</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -690,7 +690,7 @@
 	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	  <child>
-	    <widget class="GtkTreeView" id="treeview">
+	    <widget class="GtkTreeView" id="accounts_treeview">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="headers_visible">True</property>

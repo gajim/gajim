@@ -1140,7 +1140,7 @@ class accounts_Window:
 		"""initialize listStore with existing accounts"""
 		self.xml.get_widget("modify_button").set_sensitive(False)
 		self.xml.get_widget("delete_button").set_sensitive(False)
-		model = self.treeview.get_model()
+		model = self.accounts_treeview.get_model()
 		model.clear()
 		for account in self.plugin.accounts:
 			activ = 1
@@ -1164,7 +1164,7 @@ class accounts_Window:
 	def on_delete_clicked(self, widget):
 		"""When delete button is clicked :
 		Remove an account from the listStore and from the config file"""
-		sel = self.treeview.get_selection()
+		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
 		window = confirm_Window(_("Are you sure you want to remove this account (%s) ?") % account)
@@ -1187,7 +1187,7 @@ class accounts_Window:
 		open the account information window for this account"""
 		if not self.plugin.windows.has_key('accountPreference'):
 #			infos = {}
-			sel = self.treeview.get_selection()
+			sel = self.accounts_treeview.get_selection()
 			(model, iter) = sel.get_selected()
 			account = model.get_value(iter, 0)
 			infos = self.plugin.accounts[account]
@@ -1208,23 +1208,23 @@ class accounts_Window:
 		
 	def __init__(self, plugin):
 		self.plugin = plugin
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Accounts', APP)
-		self.window = self.xml.get_widget("Accounts")
-		self.treeview = self.xml.get_widget("treeview")
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'accounts_window', APP)
+		self.window = self.xml.get_widget("accounts_window")
+		self.accounts_treeview = self.xml.get_widget("accounts_treeview")
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, \
 			gobject.TYPE_BOOLEAN)
-		self.treeview.set_model(model)
+		self.accounts_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
-		self.treeview.insert_column_with_attributes(-1, _('Name'), renderer, \
+		self.accounts_treeview.insert_column_with_attributes(-1, _('Name'), renderer, \
 			text=0)
 		renderer = gtk.CellRendererText()
-		self.treeview.insert_column_with_attributes(-1, _('Server'), \
+		self.accounts_treeview.insert_column_with_attributes(-1, _('Server'), \
 			renderer, text=1)
 		renderer = gtk.CellRendererToggle()
 		renderer.set_property('activatable', True)
 		renderer.connect('toggled', self.on_toggled, model)
-		self.treeview.insert_column_with_attributes(-1, _('Active'), \
+		self.accounts_treeview.insert_column_with_attributes(-1, _('Active'), \
 			renderer, active=2)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
