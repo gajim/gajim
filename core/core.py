@@ -80,6 +80,19 @@ class GajimCore:
 			log.debug("unsubscribe request from %s" % who)
 		elif type == 'unsubscribed':
 			log.debug("we are now unsubscribed to %s" % who)
+		elif type == 'error':
+#			print "\n\n******** ERROR *******"
+#			print "From : %s" % prs.getFrom()
+#			print "To : %s" % prs.getTo()
+#			print "Status : %s" % prs.getStatus()
+#			print "Show : %s" % prs.getShow()
+#			print "X : %s" % prs.getX()
+#			print "XNode : %s" % prs.getXNode()
+#			print "XPayload : %s" % prs.getXPayload()
+#			print "_node : %s" % prs._node.getData()
+#			print "kids : %s" % prs._node.kids[0].getData()
+#			print "\n\n"
+			errmsg = prs._node.kids[0].getData()
 	# END presenceCB
 
 	def disconnectedCB(self, con):

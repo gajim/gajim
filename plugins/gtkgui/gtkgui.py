@@ -26,6 +26,7 @@ import gtk.glade
 import gobject
 import os
 import string
+import time
 import Queue
 import common.optparser
 CONFPATH = "~/.gajimrc"
@@ -378,7 +379,11 @@ class message:
 		self.window.destroy()
 	
 	def print_conversation(self, txt, contact = None):
+		if not txt:
+			txt = ""
 		end_iter = self.convTxtBuffer.get_end_iter()
+		tim = time.strftime("[%H:%M:%S]")
+		self.convTxtBuffer.insert(end_iter, tim)
 		if contact:
 			if contact == 'status':
 				self.convTxtBuffer.insert_with_tags_by_name(end_iter, txt+'\n', \
@@ -394,7 +399,7 @@ class message:
 	
 	def read_queue(self, q):
 		while not q.empty():
-			self.print_conversation(q.get(), 1)
+			self.print_conversation(q.get())
 		del self.r.tab_queues[self.user.jid]
 		for i in self.r.l_contact[self.user.jid]['iter']:
 			if self.r.pixbufs.has_key(self.user.show):
@@ -408,10 +413,11 @@ class message:
 			start_iter = txt_buffer.get_start_iter()
 			end_iter = txt_buffer.get_end_iter()
 			txt = txt_buffer.get_text(start_iter, end_iter, 0)
-			self.r.queueOUT.put(('MSG',(self.user.jid, txt)))
-			txt_buffer.set_text('', -1)
-			self.print_conversation(txt, self.user.jid)
-			widget.grab_focus()
+			if txt != '':
+				self.r.queueOUT.put(('MSG',(self.user.jid, txt)))
+				txt_buffer.set_text('', -1)
+				self.print_conversation(txt, self.user.jid)
+				widget.grab_focus()
 			return 1
 		return 0
 
@@ -459,6 +465,7 @@ class roster:
 	def add_user(self, u):
 		""" add a ligne to the roster """
 		newgrp = 0
+		self.l_contact[u.jid] = {'user': u, 'iter': []}
 		if u.groups == []:
 			if string.find(u.jid, "@") <= 0:
 				u.groups.append('Agents')
@@ -493,12 +500,11 @@ class roster:
 				if string.find(ji, "@") <= 0:
 					name = ji
 				else:
-					name = ''
+					name = string.split(jid, '@')[0]
 			show = tab[jid]['show']
 			if not show:
 				show = 'offline'
 			user1 = user(ji, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'])
-			self.l_contact[user1.jid] = {'user': user1, 'iter': []}
 			self.add_user(user1)
 
 	def update_iter(self, widget, path, iter, data):
@@ -815,9 +821,9 @@ class plugin:
 					#We save it in a queue
 					if not self.r.tab_queues.has_key(jid):
 						self.r.tab_queues[jid] = Queue.Queue(50)
+						for i in self.r.l_contact[jid]['iter']:
+							self.r.treestore.set_value(i, 0, self.r.pixbufs['message'])
 					self.r.tab_queues[jid].put(ev[1][1])
-					for i in self.r.l_contact[jid]['iter']:
-						self.r.treestore.set_value(i, 0, self.r.pixbufs['message'])
 				else:
 					if not self.r.tab_messages.has_key(jid):
 						#FIXME:message from unknown
