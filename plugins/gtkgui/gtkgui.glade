@@ -47,7 +47,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image464">
+			<widget class="GtkImage" id="image481">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -67,7 +67,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image465">
+			<widget class="GtkImage" id="image482">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>
@@ -93,7 +93,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image466">
+			<widget class="GtkImage" id="image483">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -131,7 +131,7 @@
 		      <signal name="activate" handler="on_about_menuitem_activate" last_modification_time="Tue, 01 Mar 2005 22:56:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image467">
+			<widget class="GtkImage" id="image484">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-about</property>
 			  <property name="icon_size">1</property>
@@ -159,7 +159,7 @@
 		      <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image468">
+			<widget class="GtkImage" id="image485">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-quit</property>
 			  <property name="icon_size">1</property>
@@ -194,7 +194,7 @@
 		      <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image469">
+			<widget class="GtkImage" id="image486">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -208,13 +208,13 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="browse_agents_menuitem">
+		    <widget class="GtkImageMenuItem" id="service_disco_menuitem">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Browse Agents</property>
+		      <property name="label" translatable="yes">_Service Discovery</property>
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image470">
+			<widget class="GtkImage" id="image487">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find</property>
 			  <property name="icon_size">1</property>
@@ -242,7 +242,7 @@
 		      <accelerator key="P" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image471">
+			<widget class="GtkImage" id="image488">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-preferences</property>
 			  <property name="icon_size">1</property>
@@ -561,7 +561,7 @@
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
-	      <property name="expand">True</property>
+	      <property name="expand">False</property>
 	      <property name="fill">True</property>
 	    </packing>
 	  </child>
@@ -1580,7 +1580,7 @@
 <widget class="GtkWindow" id="add_contact_window">
   <property name="border_width">4</property>
   <property name="width_request">317</property>
-  <property name="height_request">260</property>
+  <property name="height_request">277</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Add New Contact</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -1603,7 +1603,7 @@
       <child>
 	<widget class="GtkTable" id="table21">
 	  <property name="visible">True</property>
-	  <property name="n_rows">5</property>
+	  <property name="n_rows">6</property>
 	  <property name="n_columns">2</property>
 	  <property name="homogeneous">False</property>
 	  <property name="row_spacing">5</property>
@@ -1636,7 +1636,7 @@
 	  <child>
 	    <widget class="GtkLabel" id="label186">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Agent:</property>
+	      <property name="label" translatable="yes">Protocol:</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1728,10 +1728,10 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkComboBox" id="agent_combobox">
+	    <widget class="GtkComboBox" id="protocol_combobox">
 	      <property name="visible">True</property>
 	      <property name="items" translatable="yes"></property>
-	      <signal name="changed" handler="on_agent_combobox_changed" last_modification_time="Mon, 28 Feb 2005 22:56:52 GMT"/>
+	      <signal name="changed" handler="on_protocol_combobox_changed" last_modification_time="Wed, 23 Mar 2005 13:13:12 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -1740,27 +1740,6 @@
 	      <property name="bottom_attach">2</property>
 	      <property name="x_options">fill</property>
 	      <property name="y_options">fill</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkEntry" id="jid_entry">
-	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="editable">False</property>
-	      <property name="visibility">True</property>
-	      <property name="max_length">0</property>
-	      <property name="text" translatable="yes"></property>
-	      <property name="has_frame">True</property>
-	      <property name="invisible_char">*</property>
-	      <property name="activates_default">True</property>
-	    </widget>
-	    <packing>
-	      <property name="left_attach">1</property>
-	      <property name="right_attach">2</property>
-	      <property name="top_attach">2</property>
-	      <property name="bottom_attach">3</property>
-	      <property name="y_options"></property>
 	    </packing>
 	  </child>
 
@@ -1786,6 +1765,27 @@
 	  </child>
 
 	  <child>
+	    <widget class="GtkEntry" id="jid_entry">
+	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
+	      <property name="editable">False</property>
+	      <property name="visibility">True</property>
+	      <property name="max_length">0</property>
+	      <property name="text" translatable="yes"></property>
+	      <property name="has_frame">True</property>
+	      <property name="invisible_char">*</property>
+	      <property name="activates_default">True</property>
+	    </widget>
+	    <packing>
+	      <property name="left_attach">1</property>
+	      <property name="right_attach">2</property>
+	      <property name="top_attach">2</property>
+	      <property name="bottom_attach">3</property>
+	      <property name="y_options"></property>
+	    </packing>
+	  </child>
+
+	  <child>
 	    <widget class="GtkCheckButton" id="auto_authorize_checkbutton">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
@@ -1800,10 +1800,49 @@
 	    <packing>
 	      <property name="left_attach">1</property>
 	      <property name="right_attach">2</property>
+	      <property name="top_attach">5</property>
+	      <property name="bottom_attach">6</property>
+	      <property name="x_options">fill</property>
+	      <property name="y_options"></property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkLabel" id="label223">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Group:</property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	    </widget>
+	    <packing>
+	      <property name="left_attach">0</property>
+	      <property name="right_attach">1</property>
 	      <property name="top_attach">4</property>
 	      <property name="bottom_attach">5</property>
 	      <property name="x_options">fill</property>
 	      <property name="y_options"></property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkComboBoxEntry" id="comboboxentry1">
+	      <property name="visible">True</property>
+	      <property name="items" translatable="yes"></property>
+	    </widget>
+	    <packing>
+	      <property name="left_attach">1</property>
+	      <property name="right_attach">2</property>
+	      <property name="top_attach">4</property>
+	      <property name="bottom_attach">5</property>
+	      <property name="x_options">fill</property>
+	      <property name="y_options">fill</property>
 	    </packing>
 	  </child>
 	</widget>
@@ -2206,12 +2245,12 @@
   </child>
 </widget>
 
-<widget class="GtkWindow" id="agent_browser_window">
+<widget class="GtkWindow" id="service_discovery_window">
   <property name="border_width">4</property>
   <property name="width_request">400</property>
   <property name="height_request">250</property>
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Agents browser</property>
+  <property name="title" translatable="yes">Service Discovery</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>

@@ -3,8 +3,8 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
-##  	- Nikos Kouremenos <nkour@jabber.org>
-##		- Alex Podaras <bigpod@jabber.org>
+##  	- Nikos Kouremenos <kourem@gmail.com>
+##		- Alex Podaras <bigpod@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -1483,8 +1483,8 @@ class agent_registration_window:
 		self.xml.signal_autoconnect(self)
 
 
-class agent_browser_window:
-	"""Class for bowser agent window :
+class Service_discovery_window:
+	"""Class for Service Discovery Window :
 	to know the agents on the selected server"""
 	def on_agent_browser_window_destroy(self, widget):
 		"""close window"""
@@ -1595,8 +1595,8 @@ class agent_browser_window:
 		if plugin.connected[account] < 2:
 			Error_dialog(_("You must be connected to view Agents"))
 			return
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_browser_window', APP)
-		self.window = xml.get_widget('agent_browser_window')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
+		self.window = xml.get_widget('service_discovery_window')
 		self.agents_treeview = xml.get_widget('agents_treeview')
 		self.plugin = plugin
 		self.account = account

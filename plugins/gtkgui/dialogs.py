@@ -429,9 +429,9 @@ class Add_contact_window:
 		widget.get_toplevel().destroy()
 		
 	def fill_jid(self):
-		agent_combobox = self.xml.get_widget('agent_combobox')
-		model = agent_combobox.get_model()
-		index = agent_combobox.get_active()
+		protocol_combobox = self.xml.get_widget('protocol_combobox')
+		model = protocol_combobox.get_model()
+		index = protocol_combobox.get_active()
 		jid = self.xml.get_widget('uid_entry').get_text()
 		if index > 0:
 			jid = jid.replace('@', '%')
@@ -440,13 +440,13 @@ class Add_contact_window:
 			jid += '@' + agent
 		self.xml.get_widget('jid_entry').set_text(jid)
 
-	def on_agent_combobox_changed(self, widget):
+	def on_protocol_combobox_changed(self, widget):
 		self.fill_jid()
 
 	def guess_agent(self):
 		uid = self.xml.get_widget('uid_entry').get_text()
-		agent_combobox = self.xml.get_widget('agent_combobox')
-		model = agent_combobox.get_model()
+		protocol_combobox = self.xml.get_widget('protocol_combobox')
+		model = protocol_combobox.get_model()
 		
 		#If login contains only numbers, it's probably an ICQ number
 		try:
@@ -455,9 +455,9 @@ class Add_contact_window:
 			pass
 		else:
 			if 'ICQ' in self.agents:
-				agent_combobox.set_active(self.agents.index('ICQ'))
+				protocol_combobox.set_active(self.agents.index('ICQ'))
 				return
-		agent_combobox.set_active(0)
+		protocol_combobox.set_active(0)
 
 	def set_nickname(self):
 		uid = self.xml.get_widget('uid_entry').get_text()
@@ -502,16 +502,16 @@ class Add_contact_window:
 				name = a
 			iter = liststore.append([name, a])
 			self.agents.append(name)
-		agent_combobox = self.xml.get_widget('agent_combobox')
-		agent_combobox.set_model(liststore)
-		agent_combobox.set_active(0)
+		protocol_combobox = self.xml.get_widget('protocol_combobox')
+		protocol_combobox.set_model(liststore)
+		protocol_combobox.set_active(0)
 		self.fill_jid()
 		if jid:
 			self.xml.get_widget('jid_entry').set_text(jid)
 			jid_splited = jid.split('@')
 			self.xml.get_widget('uid_entry').set_text(jid_splited[0])
 			if jid_splited[1] in jid_agents:
-				agent_combobox.set_active(jid_agents.index(jid_splited[1])+1)
+				protocol_combobox.set_active(jid_agents.index(jid_splited[1])+1)
 		self.xml.signal_autoconnect(self)
 
 class About_dialog:

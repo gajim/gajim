@@ -207,19 +207,19 @@ class roster_window:
 			model.set_value(iter, 1, name)
 	
 	def make_menu(self):
-		"""create the browse agents, add contact & join groupchat sub menus"""
+		"""create the main_window's menus"""
 		# try to avoid WIDGET_REALIZED_FOR_EVENT failed which freezes gajim
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		add_contact_menuitem  = self.xml.get_widget('add_contact_menuitem')
-		browse_agents_menuitem  = self.xml.get_widget('browse_agents_menuitem')
+		service_disco_menuitem  = self.xml.get_widget('service_disco_menuitem')
 		if self.add_contact_handler_id:
 			add_contact_menuitem.handler_disconnect(self.add_contact_handler_id)
 			self.add_contact_handler_id = None
-		if self.browse_agents_handler_id:
-			browse_agents_menuitem.handler_disconnect(\
-				self.browse_agents_handler_id)
-			self.browse_agents_handler_id = None
+		if self.service_disco_handler_id:
+			service_disco_menuitem.handler_disconnect(\
+				self.service_disco_handler_id)
+			self.service_disco_handler_id = None
 		if self.join_gc_handler_id:
 			join_gc_menuitem.handler_disconnect(self.join_gc_handler_id)
 			self.join_gc_handler_id = None
@@ -230,8 +230,8 @@ class roster_window:
 		#remove the existing submenus
 		if add_contact_menuitem.get_submenu():
 			add_contact_menuitem.remove_submenu()
-		if browse_agents_menuitem.get_submenu():
-			browse_agents_menuitem.remove_submenu()
+		if service_disco_menuitem.get_submenu():
+			service_disco_menuitem.remove_submenu()
 		if join_gc_menuitem.get_submenu():
 			join_gc_menuitem.remove_submenu()
 		if new_message_menuitem.get_submenu():
@@ -240,12 +240,12 @@ class roster_window:
 			new_message_menuitem.set_sensitive(True)
 			join_gc_menuitem.set_sensitive(True)
 			add_contact_menuitem.set_sensitive(True)
-			browse_agents_menuitem.set_sensitive(True)
+			service_disco_menuitem.set_sensitive(True)
 		else:
 			new_message_menuitem.set_sensitive(False)
 			join_gc_menuitem.set_sensitive(False)
 			add_contact_menuitem.set_sensitive(False)
-			browse_agents_menuitem.set_sensitive(False)
+			service_disco_menuitem.set_sensitive(False)
 		if len(self.plugin.accounts.keys()) >= 2: # 2 or more accounts? make submenus
 			#add
 			sub_menu = gtk.Menu()
@@ -257,11 +257,11 @@ class roster_window:
 			sub_menu.show_all()
 			#agents
 			sub_menu = gtk.Menu()
-			browse_agents_menuitem.set_submenu(sub_menu)
+			service_disco_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem(_('using ') + account + _(' account'))
 				sub_menu.append(item)
-				item.connect('activate', self.on_browse_agents, account)
+				item.connect('activate', self.on_service_disco_menuitem_activate, account)
 			sub_menu.show_all()
 			#join gc
 			sub_menu = gtk.Menu()
@@ -285,9 +285,9 @@ class roster_window:
 				self.add_contact_handler_id = add_contact_menuitem.connect(\
 				'activate', self.on_add_contact, self.plugin.accounts.keys()[0])
 			#agents
-			if not self.browse_agents_handler_id:
-				self.browse_agents_handler_id = browse_agents_menuitem.connect(\
-'activate', self.on_browse_agents, self.plugin.accounts.keys()[0])
+			if not self.service_disco_handler_id:
+				self.service_disco_handler_id = service_disco_menuitem.connect(\
+'activate', self.on_service_disco_menuitem_activate, self.plugin.accounts.keys()[0])
 			#join_gc
 			if not self.join_gc_handler_id:
 				self.join_gc_handler_id = join_gc_menuitem.connect(\
@@ -565,7 +565,7 @@ class roster_window:
 		item.connect("activate", self.on_edit_account, account)
 		item = gtk.MenuItem(_("_Browse agents"))
 		menu.append(item)
-		item.connect("activate", self.on_browse_agents, account)
+		item.connect("activate", self.on_service_disco_menuitem_activate, account)
 		item = gtk.MenuItem(_("_Add contact"))
 		menu.append(item)
 		item.connect("activate", self.on_add_contact, account)
@@ -1083,12 +1083,12 @@ class roster_window:
 						user.groups))
 		model.set_value(iter, 5, False)
 		
-	def on_browse_agents(self, widget, account):
-		"""When browse agent is selected :
+	def on_service_disco_menuitem_activate(self, widget, account):
+		"""When Service Discovery is selected:
 		Call browse class"""
 		if not self.plugin.windows[account].has_key('browser'):
 			self.plugin.windows[account]['browser'] = \
-				agent_browser_window(self.plugin, account)
+				Service_discovery_window(self.plugin, account)
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
@@ -1254,7 +1254,7 @@ class roster_window:
 		self.plugin = plugin
 		self.nb_unread = 0
 		self.add_contact_handler_id = False
-		self.browse_agents_handler_id = False
+		self.service_disco_handler_id = False
 		self.join_gc_handler_id = False
 		self.new_message_menuitem_handler_id = False
 		self.regroup = 0
