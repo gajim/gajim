@@ -260,7 +260,7 @@ class Connection(xmlstream.Client):
         """Called internally when a 'protocol element' is received.
            Builds the relevant jabber.py object and dispatches it
            to a relevant function or callback."""
-        self.lastIncome = time.time()
+        self._lastIncome = time.time()
         name=stanza.getName()
         if not self.handlers.has_key(name):
             self.DEBUG("whats a tag -> " + name,DBG_NODE_UNKNOWN)
@@ -281,6 +281,7 @@ class Connection(xmlstream.Client):
         typns=typ+ns
         if not self.handlers[name].has_key(ns): ns=''
         if not self.handlers[name].has_key(typ): typ=''
+        if not self.handlers[name].has_key(typns): typns=''
         if typ and ns and not self.handlers[name].has_key(typns): typns=''
 
         chain=[]
@@ -412,7 +413,7 @@ class Connection(xmlstream.Client):
         return ustr(self._id)
 
     def process(self, timeout=0):
-        if time.time() > self._lastIncome + timeout:
+        if time.time() > self._lastIncome + 300:
             self._lastIncome = time.time()
             iq = Iq(type="get", to=self._host, query=NS_LAST)
             print "iq", iq
