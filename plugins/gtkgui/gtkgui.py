@@ -389,8 +389,8 @@ class add:
 
 	def on_subscribe(self, widget):
 		"""When Subscribe button is clicked"""
-		who = self.xml.get_widget("entry_who").get_text()
-		buf = self.xml.get_widget("textview_sub").get_buffer()
+		who = self.entry_who.get_text()
+		buf = self.textview_sub.get_buffer()
 		start_iter = buf.get_start_iter()
 		end_iter = buf.get_end_iter()
 		txt = buf.get_text(start_iter, end_iter, 0)
@@ -400,8 +400,10 @@ class add:
 	def __init__(self, roster, jid=None):
 		self.r = roster
 		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Add')
+		self.entry_who = xml.get_widget('entry_who')
+		self.textview_sub = xml.get_widget("textview_sub")
 		if jid:
-			 xml.get_widget('entry_who').set_text(jid)
+			 self.entry_who.set_text(jid)
 		self.Wadd = xml.get_widget("Add")
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
@@ -593,11 +595,15 @@ class accounts:
 		self.init_accounts()
 
 class confirm:
+	"""Class for confirmation window :
+	window that appears to confirm the removal of a contact"""
 	def delete_event(self, widget):
 		"""close window"""
 		self.window.destroy()
 		
 	def req_usub(self, widget):
+		"""When Ok button is clicked :
+		Send a message to the core to remove the user and remove it from the roster"""
 		model = self.r.tree.get_model()
 		jid = model.get_value(self.iter, 2)
 		self.r.queueOUT.put(('UNSUB', jid))
@@ -616,17 +622,21 @@ class confirm:
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
 class authorize:
+	"""Class for authorization window :
+	window that appears when a user wants to add us to his/her roster"""
 	def delete_event(self, widget):
 		"""close window"""
 		self.window.destroy()
 		
 	def auth(self, widget):
+		"""Accept the request"""
 		self.r.queueOUT.put(('AUTH', self.jid))
 		self.delete_event(self)
 		if not self.r.l_contact.has_key(self.jid):
 			add(self.r, self.jid)
 	
 	def deny(self, widget):
+		"""refuse the request"""
 		self.r.queueOUT.put(('DENY', self.jid))
 		self.delete_event(self)
 	
@@ -641,11 +651,14 @@ class authorize:
 		xml.signal_connect('on_button_close_clicked', self.delete_event)
 
 class agent_reg:
+	"""Class for agent registration window :
+	window that appears when we want to subscribe to an agent"""
 	def delete_event(self, widget):
 		"""close window"""
 		self.window.destroy()
 	
 	def draw_table(self):
+		"""Draw the table in the window"""
 		nbrow = 0
 		for name in self.infos.keys():
 			if name != 'key' and name != 'instructions' and name != 'x':
@@ -662,6 +675,8 @@ class agent_reg:
 		self.table.show_all()
 	
 	def on_ok(self, widget):
+		"""When Ok button is clicked :
+		send registration info to the core"""
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
 		self.r.queueOUT.put(('REG_AGENT', self.agent))
@@ -683,6 +698,8 @@ class agent_reg:
 		xml.signal_connect('on_button_ok_clicked', self.on_ok)
 
 class browser:
+	"""Class for rbowser agent window :
+	to know the agents on the selected server"""
 	def delete_event(self, widget):
 		"""close window"""
 		global Wbrowser
@@ -690,19 +707,26 @@ class browser:
 		self.window.destroy()
 
 	def browse(self):
+		"""Send a request to the core to know the available agents"""
 		self.r.queueOUT.put(('REQ_AGENTS', None))
 	
 	def agents(self, agents):
+		"""When list of available agent arrive :
+		Fill the treeview with it"""
 		model = self.treeview.get_model()
 		for jid in agents.keys():
 			iter = model.append()
 			model.set(iter, 0, agents[jid]['name'], 1, agents[jid]['service'])
 
 	def on_refresh(self, widget):
+		"""When refresh button is clicked :
+		refresh list : clear and rerequest it"""
 		self.treeview.get_model().clear()
 		self.browse()
 
 	def on_row_activated(self, widget, path, col=0):
+		"""When a row is activated :
+		Ask specific informations about the selected agent and close the window"""
 		model = self.treeview.get_model()
 		iter = model.get_iter(path)
 		service = model.get_value(iter, 1)
@@ -731,12 +755,17 @@ class browser:
 		self.browse()
 
 class message:
+	"""Class for chat window"""
 	def delete_event(self, widget):
 		"""close window"""
 		del self.r.tab_messages[self.user.jid]
 		self.window.destroy()
 	
 	def print_conversation(self, txt, contact = None, tim = None):
+		"""Print a line in the conversation :
+		if contact is set to status : it's a status message
+		if contact is set to another value : it's an outgoing message
+		if contact is not set : it's an incomming message"""
 		buffer = self.conversation.get_buffer()
 		if not txt:
 			txt = ""
@@ -754,10 +783,12 @@ class message:
 		else:
 			buffer.insert_with_tags_by_name(end_iter, '<' + self.user.name + '> ', 'incoming')
 			buffer.insert(end_iter, txt+'\n')
+		#scroll to the end of the textview
 		self.conversation.scroll_to_mark(\
 			buffer.get_mark('end'), 0.1, 0, 0, 0)
 	
 	def read_queue(self, q):
+		"""read queue and print messages containted in it"""
 		while not q.empty():
 			evt = q.get()
 			self.print_conversation(evt[0], tim = evt[1])
@@ -767,6 +798,8 @@ class message:
 				self.r.tree.get_model().set_value(i, 0, self.r.pixbufs[self.user.show])
 
 	def on_msg_key_press_event(self, widget, event):
+		"""When a key is pressed :
+		if enter is pressed without the shit key, message (if not empty) is sent and printed in the conversation"""
 		if event.keyval == gtk.keysyms.Return:
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return 0
@@ -783,6 +816,8 @@ class message:
 		return 0
 
 	def on_clear(self, widget):
+		"""When clear button is pressed :
+		clear the conversation"""
 		buffer = self.conversation.get_buffer()
 		deb, end = buffer.get_bounds()
 		buffer.delete(deb, end)
@@ -824,11 +859,9 @@ class message:
 		self.tagStatus.set_property("foreground", color)
 
 class roster:
-	def get_icon_pixbuf(self, stock):
-		return self.tree.render_icon(stock, size = gtk.ICON_SIZE_MENU, detail = None)
-	
+	"""Class for main gtk window"""
 	def add_user(self, u):
-		""" add a ligne to the roster """
+		"""Add a user to the roster and add groups if they aren't in roster"""
 		newgrp = 0
 		self.l_contact[u.jid] = {'user': u, 'iter': []}
 		if u.groups == []:
@@ -859,6 +892,7 @@ class roster:
 					self.tree.expand_row(model.get_path(iterG), FALSE)
 
 	def redraw_roster(self):
+		"""clear l_contact and l_group's iter and redraw roster"""
 		for j in self.l_contact.keys():
 			self.l_contact[j]['iter'] = []
 		for g in self.l_group.keys():
@@ -866,11 +900,13 @@ class roster:
 		self.draw_roster()
 
 	def draw_roster(self):
+		"""Clear and draw roster"""
 		self.tree.get_model().clear()
 		for j in self.l_contact.keys():
 			self.add_user(self.l_contact[j]['user'])
 	
 	def mklists(self, tab):
+		"""fill l_contact and l_group"""
 		for jid in tab.keys():
 			#remove ressource from jid string
 			ji = string.split(jid, '/')[0]
@@ -889,21 +925,23 @@ class roster:
 				if not i in self.l_group.keys():
 					self.l_group[i] = {'iter':None, 'hide':False}
 
-	def update_iter(self, widget, path, iter, data):
-		model = self.tree.get_model()
-		jid = model.get_value(iter, 2)
-		if jid == data[0]:
-			if data[1] == 'offline':
-				model.remove(iter)
-				if not self.showOffline:
-					self.found = 1
-			else:
-				model.set_value(iter, 0, self.pixbufs[data[1]])
-				self.found = 1
-			return 1
-		return 0
+#	def update_iter(self, widget, path, iter, data):
+#		"""remove or change icon of iter"""
+#		model = self.tree.get_model()
+#		jid = model.get_value(iter, 2)
+#		if jid == data[0]:
+#			if data[1] == 'offline':
+#				model.remove(iter)
+#				if not self.showOffline:
+#					self.found = 1
+#			else:
+#				model.set_value(iter, 0, self.pixbufs[data[1]])
+#				self.found = 1
+#			return 1
+#		return 0
 	
 	def chg_status(self, jid, show, status):
+		"""When a user change his status remove or change its icon"""
 		u = self.l_contact[jid]['user']
 		if self.l_contact[jid]['iter'] == []:
 			self.add_user(u)
@@ -931,9 +969,11 @@ class roster:
 		u.status = status
 
 	def on_info(self, widget, jid):
+		"""Call info_user class to display user's information"""
 		info_user(self.l_contact[jid]['user'], self)
 	
 	def mk_menu_c(self, event, iter):
+		"""Make user's popup menu"""
 		model = self.tree.get_model()
 		jid = model.get_value(iter, 2)
 		path = model.get_path(iter)
@@ -974,6 +1014,7 @@ class roster:
 		self.menu_c.show_all()
 
 	def mk_menu_g(self, event):
+		"""Make group's popup menu"""
 		self.menu_c = gtk.Menu()
 		item = gtk.MenuItem("grp1")
 		self.menu_c.append(item)
@@ -985,6 +1026,7 @@ class roster:
 		self.menu_c.show_all()
 	
 	def authorize(self, widget, jid):
+		"""Authorize a user"""
 		self.queueOUT.put(('AUTH', jid))
 
 #	def rename(self, widget, jid, name):
@@ -994,12 +1036,14 @@ class roster:
 #			self.tree.get_model().set_value(i, 1, name)
 	
 	def req_sub(self, widget, jid, txt):
+		"""Request subscription to a user"""
 		self.queueOUT.put(('SUB', (jid, txt)))
 		if not self.l_contact.has_key(jid):
 			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub', '')
 			self.add_user(user1)
 	
 	def init_tree(self):
+		"""initialize treeview, l_contact and l_group"""
 		self.tree.get_model().clear()
 		#l_contact = {jid:{'user':_, 'iter':[iter1, ...]]
 		self.l_contact = {}
@@ -1007,6 +1051,7 @@ class roster:
 		self.l_group = {}
 
 	def on_treeview_event(self, widget, event):
+		"""popup user's group's or agent menu"""
 		if (event.button == 3) & (event.type == gtk.gdk.BUTTON_PRESS):
 			try:
 				path, column, x, y = self.tree.get_path_at_pos(int(event.x), int(event.y))
@@ -1026,9 +1071,11 @@ class roster:
 		return gtk.FALSE
 	
 	def on_req_usub(self, widget, iter):
+		"""Remove a user"""
 		window_confirm = confirm(self, iter)
 
 	def on_status_changed(self, widget):
+		"""When we change our status"""
 		accountsStr = self.cfgParser.Profile_accounts
 		accounts = string.split(accountsStr, ' ')
 		if widget.name != 'online' and widget.name != 'offline':
@@ -1039,25 +1086,36 @@ class roster:
 		self.queueOUT.put(('STATUS',(widget.name, txt, accounts[0])))
 
 	def on_prefs(self, widget):
+		"""When preferences is selected :
+		call the prefs class"""
 		window = prefs(self)
 
 	def on_add(self, widget):
+		"""When add user is selected :
+		call the add class"""
 		window_add = add(self)
 
 	def on_about(self, widget):
+		"""When about is selected :
+		call the about class"""
 		window_about = about()
 
 	def on_accounts(self, widget):
+		"""When accounts is seleted :
+		call the accounts class to modify accounts"""
 		global Waccounts
 		if not Waccounts:
 			Waccounts = accounts(self)
 	
 	def on_quit(self, widget):
+		"""When we quit the gtk plugin :
+		tell that to the core and exit gtk"""
 		self.queueOUT.put(('QUIT',''))
 		gtk.mainquit()
-#		sys.exit(0)
 
 	def on_row_activated(self, widget, path, col=0):
+		"""When an iter is dubble clicked :
+		open the chat window"""
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
 		jid = model.get_value(iter, 2)
@@ -1075,12 +1133,19 @@ class roster:
 					self.tab_messages[jid].read_queue(self.tab_queues[jid])
 
 	def on_row_expanded(self, widget, iter, path):
+		"""When a row is expanded :
+		change the icon of the arrow"""
 		self.tree.get_model().set_value(iter, 0, self.pixbufs['opened'])
 	
 	def on_row_collapsed(self, widget, iter, path):
+		"""When a row is collapsed :
+		change the icon of the arrow"""
 		self.tree.get_model().set_value(iter, 0, self.pixbufs['closed'])
 
 	def on_cell_edited (self, cell, row, new_text):
+		"""When an iter is editer :
+		if text has changed, rename the user
+		else open chat window"""
 		model = self.tree.get_model()
 		iter = model.get_iter_from_string(row)
 		jid = model.get_value(iter, 2)
@@ -1099,22 +1164,33 @@ class roster:
 			self.queueOUT.put(('UPDUSER', (jid, new_text, self.l_contact[jid]['user'].groups)))
 		
 	def on_browse(self, widget):
+		"""When browse agent is selected :
+		Call browse class"""
 		global Wbrowser
 		if not Wbrowser:
 			Wbrowser = browser(self)
 
 	def mkpixbufs(self):
+		"""initialise pixbufs array"""
 		self.path = 'plugins/gtkgui/icons/' + self.iconstyle + '/'
 		self.pixbufs = {}
 		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'requested', 'message', 'opened', 'closed'):
-			if not os.path.exists(self.path + state + '.xpm'):
-				print 'No such file : ' + self.path + state + '.xpm'
-				self.pixbufs[state] = None
+			#open an animated gif file if it exists oterelse a xpm file
+			if not os.path.exists(self.path + state + '.gif'):
+				if not os.path.exists(self.path + state + '.xpm'):
+					print 'No such file : ' + self.path + state + '.gif / xpm'
+					self.pixbufs[state] = None
+				else:
+					pix = gtk.gdk.pixbuf_new_from_file(self.path + state + '.xpm')
+					self.pixbufs[state] = pix
 			else:
-				pix = gtk.gdk.pixbuf_new_from_file (self.path + state + '.xpm')
+				#TODO: open an animated gif file
+				pix = gtk.gdk.pixbufAnimation(self.path + state + '.gif')
 				self.pixbufs[state] = pix
 
 	def on_show_off(self, widget):
+		"""when show offline option is changed :
+		redraw the treeview"""
 		self.showOffline = 1 - self.showOffline
 		self.redraw_roster()
 
@@ -1208,7 +1284,9 @@ class roster:
 		xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
 
 class plugin:
+	"""Class called by the core in a new thread"""
 	def read_queue(self):
+		"""Read queue from the core and execute commands from it"""
 		global Wbrowser
 		model = self.r.tree.get_model()
 		while self.queueIN.empty() == 0:
@@ -1217,6 +1295,7 @@ class plugin:
 				self.r.init_tree()
 				self.r.mklists(ev[1])
 				self.r.draw_roster()
+				#TODO: update onpened chat window
 			elif ev[0] == 'WARNING':
 				warning(ev[1])
 			elif ev[0] == 'STATUS':
@@ -1263,9 +1342,7 @@ class plugin:
 						user1 = user(ji, ji, ['Agents'], ev[1][1], ev[1][2], 'from', res)
 						self.r.add_user(user1)
 					else:
-						#Update existing line
-#						self.l_contact[jid]['user'].show = show
-#						self.l_contact[jid]['user'].status = status
+						#Update existing iter
 						for i in self.r.l_contact[ji]['iter']:
 							if self.r.pixbufs.has_key(ev[1][1]):
 								model.set_value(i, 0, self.r.pixbufs[ev[1][1]])
@@ -1338,7 +1415,8 @@ class plugin:
 				self.r.on_quit(self)
 		return 1
 	
-	def read_sleepy(self):
+	def read_sleepy(self):	
+		"""Check if we are idle"""
 		if self.sleeper and (self.autoaway or self.autoxa) and \
 			(self.r.optionmenu.get_history()==0 or \
 			self.sleeper_state!=common.sleepy.STATE_AWAKE):
@@ -1348,15 +1426,15 @@ class plugin:
 				accountsStr = self.r.cfgParser.Profile_accounts
 				accounts = string.split(accountsStr, ' ')
 				if state == common.sleepy.STATE_AWAKE:
-					#on repasse online
+					#we go online
 					self.r.optionmenu.set_history(0)
 					self.r.queueOUT.put(('STATUS',('online', '', accounts[0])))
 				if state == common.sleepy.STATE_AWAY and self.autoaway:
-					#on passe away
+					#we go away
 					self.r.optionmenu.set_history(1)
 					self.r.queueOUT.put(('STATUS',('away', 'auto away (idle)', accounts[0])))
 				if state == common.sleepy.STATE_XAWAY and self.autoxa:
-					#on passe away
+					#we go extanded away
 					self.r.optionmenu.set_history(2)
 					self.r.queueOUT.put(('STATUS',('xa', 'auto away (idel)', accounts[0])))
 			self.sleeper_state = state
@@ -1388,8 +1466,6 @@ class plugin:
 		self.sleeper = None
 		self.sleeper_state = None
 		gtk.main()
-#		while 1:
-#			while gtk.events_pending(): gtk.mainiteration()
 		gtk.threads_leave()
 
 if __name__ == "__main__":

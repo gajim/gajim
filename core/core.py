@@ -106,7 +106,7 @@ class GajimCore:
 		if self.connected == 1:
 			self.connected = 0
 			self.con.disconnect()
-#		self.con.disconnect()
+		self.hub.sendPlugin('STATUS', 'offline')
 	# END disconenctedCB
 
 	def connect(self, account):
