@@ -27,6 +27,7 @@ import gobject
 import string
 import common.optparser
 CONFPATH = "~/.gajimrc"
+Wbrowser = 0
 
 class user:
 	def __init__(self, *args):
@@ -135,6 +136,44 @@ class authorize:
 		self.xml.signal_connect('on_button_deny_clicked', self.deny)
 		self.xml.signal_connect('on_button_close_clicked', self.delete_event)
 
+class browser:
+	def delete_event(self, widget):
+		global Wbrowser
+		Wbrowser = 0
+		self.window.destroy()
+
+	def browse(self):
+		self.r.queueOUT.put(('REQ_AGENTS', None))
+	
+	def agents(self, agents):
+		for jid in agents.keys():
+			iter = self.model.append()
+			self.model.set(iter, 0, agents[jid]['name'], 1, jid)
+
+	def on_refresh(self, widget):
+		self.model.clear()
+		self.browse()
+		
+	def __init__(self, roster):
+		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'browser')
+		self.window = self.xml.get_widget('browser')
+		self.treeview = self.xml.get_widget('treeview')
+		self.r = roster
+		self.model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		self.treeview.set_model(self.model)
+		#columns
+		renderer = gtk.CellRendererText()
+		renderer.set_data('column', 0)
+		self.treeview.insert_column_with_attributes(-1, 'Name', renderer, text=0)
+		renderer = gtk.CellRendererText()
+		renderer.set_data('column', 1)
+		self.treeview.insert_column_with_attributes(-1, 'JID', renderer, text=1)
+		
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_refresh_clicked', self.on_refresh)
+		#TODO: Si connecté
+		self.browse()
+
 class message:
 	def delete_event(self, widget):
 		del self.roster.tab_messages[self.user.jid]
@@ -204,6 +243,7 @@ class roster:
 		self.l_contact = {}
 		""" l_group = {name:iter} """
 		self.l_group = {}
+		self.treestore.clear()
 		for jid in tab.keys():
 			name = tab[jid]['name']
 			if not name:
@@ -378,6 +418,11 @@ class roster:
 			self.l_contact[jid]['user'].name = new_text
 			self.queueOUT.put(('UPDUSER', (jid, new_text, self.l_contact[jid]['user'].groups)))
 		
+	def on_browse(self, widget):
+		global Wbrowser
+		if not Wbrowser:
+			Wbrowser = browser(self)
+
 	def __init__(self, queueOUT):
 		#initialisation des variables
 		# FIXME : handle no file ...
@@ -424,6 +469,7 @@ class roster:
 		#signals
 		self.xml.signal_connect('gtk_main_quit', self.on_quit)
 		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
+		self.xml.signal_connect('on_browse_agents_activate', self.on_browse)
 		self.xml.signal_connect('on_add_activate', self.on_add)
 		self.xml.signal_connect('on_about_activate', self.on_about)
 		self.xml.signal_connect('on_quit_activate', self.on_quit)
@@ -434,6 +480,7 @@ class roster:
 
 class plugin:
 	def read_queue(self):
+		global Wbrowser
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
 #			print ev
@@ -454,6 +501,9 @@ class plugin:
 				u.name = ev[1]['nom']
 				for i in self.r.l_contact[u.jid]['iter']:
 					self.r.treestore.set_value(i, 1, u.name)
+			elif ev[0] == 'AGENTS':
+				if Wbrowser:
+					Wbrowser.agents(ev[1])
 		return 1
 
 	def __init__(self, quIN, quOUT):

@@ -163,6 +163,9 @@ class GajimCore:
 				#('UPDUSER', (jid, name, groups))
 				elif ev[0] == 'UPDUSER':
 					self.con.updateRosterItem(jid=ev[1][0], name=ev[1][1], groups=ev[1][2])
+				elif ev[0] == 'REQ_AGENTS':
+					agents = self.con.requestAgents()
+					self.hub.sendPlugin('AGENTS', agents)				
 				else:
 					log.debug("Unknown Command")
 			elif self.connected == 1:
@@ -179,5 +182,6 @@ def start():
 	gc.hub.register('gtkgui', 'MSG')
 	gc.hub.register('gtkgui', 'SUBSCRIBED')
 	gc.hub.register('gtkgui', 'SUBSCRIBE')
+	gc.hub.register('gtkgui', 'AGENTS')
 	guiPl.load ()
 	gc.mainLoop()
