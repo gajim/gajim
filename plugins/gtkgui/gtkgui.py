@@ -2804,8 +2804,10 @@ class systray:
 				account = self.jids[0][0]
 				jid = self.jids[0][1]
 				if self.plugin.windows[account]['gc'].has_key(jid):
+					self.plugin.windows[account]['gc'][jid].active_tab(jid)
 					self.plugin.windows[account]['gc'][jid].window.present()
 				elif self.plugin.windows[account]['chats'].has_key(jid):
+					self.plugin.windows[account]['chats'][jid].active_tab(jid)
 					self.plugin.windows[account]['chats'][jid].window.present()
 				else:
 					self.plugin.roster.new_chat(
