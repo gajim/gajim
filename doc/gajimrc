@@ -19,3 +19,4 @@ alwaysauth = 0
 showoffline = 0
 inmsgcolor = red
 outmsgcolor = blue
+iconstyle = sun

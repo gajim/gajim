@@ -38,7 +38,6 @@ class GajimCore:
 	def __init__(self):
 		self.connected = 0
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
-#		print '%s\n' % self.cfgParser.Server_hostname;
 		self.hub = common.hub.GajimHub()
 		self.cfgParser.parseCfgFile()
 	# END __init__
@@ -109,7 +108,6 @@ class GajimCore:
 				roster = self.con.getRoster().getRaw()
 				if not roster :
 					roster = {}
-				print roster
 				self.hub.sendPlugin('ROSTER', roster)
 				self.con.sendInitPresence()
 				self.connected = 1
@@ -173,7 +171,6 @@ class GajimCore:
 					self.hub.sendPlugin('AGENT_INFO', (ev[1], agent_info))
 				elif ev[0] == 'REG_AGENT':
 					self.con.sendRegInfo(ev[1])
-					print ev[1]
 				else:
 					log.debug("Unknown Command")
 			elif self.connected == 1:

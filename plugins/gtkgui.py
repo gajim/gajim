@@ -24,6 +24,7 @@ import gtk
 from gtk import TRUE, FALSE
 import gtk.glade
 import gobject
+import os
 import string
 import common.optparser
 CONFPATH = "~/.gajimrc"
@@ -159,16 +160,6 @@ class agent_reg:
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
 		self.r.queueOUT.put(('REG_AGENT', self.agent))
-		print self.infos
-#		jid = string.replace(jid, '@', '')
-#		if not self.r.l_group.has_key('Agents'):
-#			iterG = self.r.treestore.append(None, (None, \
-#				'Agents', 'group', FALSE))
-#			self.r.l_group['Agent'] = iterG
-#		user1 = user(jid, jid, ['Agent'], 'online', 'online', 'from')
-#		iterU = self.r.treestore.append(self.r.l_group['Agent'], \
-#			(self.r.pixbufs['online'], jid, jid, TRUE))
-#		self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
 		self.delete_event(self)
 	
 	def __init__(self, agent, infos, roster):
@@ -273,8 +264,8 @@ class message:
 		self.window.set_title('Chat with ' + user.name)
 		self.xml.get_widget('label_contact').set_text(user.name + ' <'\
 			+ user.jid + '>')
-#+ '/' + user.resource + '>')
 		self.message = self.xml.get_widget('message')
+		self.message.grab_focus()
 		self.conversation = self.xml.get_widget('conversation')
 		self.convTxtBuffer = self.conversation.get_buffer()
 		end_iter = self.convTxtBuffer.get_end_iter()
@@ -304,7 +295,7 @@ class roster:
 		self.l_group = {}
 		self.treestore.clear()
 		for jid in tab.keys():
-			#On enleve la resource
+			#remove ressource from jid string
 			ji = string.split(jid, '/')[0]
 			name = tab[jid]['name']
 			if not name:
@@ -317,7 +308,6 @@ class roster:
 				show = 'offline'
 			user1 = user(ji, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'])
 			self.l_contact[user1.jid] = {'user': user1, 'iter': []}
-			print user1.jid
 			if user1.groups == []:
 				if string.find(ji, "@") <= 0:
 					user1.groups.append('Agents')
@@ -328,7 +318,10 @@ class roster:
 					iterG = self.treestore.append(None, (None, g, 'group', FALSE))
 					self.l_group[g] = iterG
 				if user1.show != 'offline' or self.showOffline or g == 'Agents':
-					iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, user1.jid, TRUE))
+					if g == 'Agents':
+						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, 'agent', TRUE))
+					else:
+						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, user1.jid, TRUE))
 					self.l_contact[user1.jid]['iter'].append(iterU)
 
 	def update_iter(self, widget, path, iter, data):
@@ -437,6 +430,9 @@ class roster:
 			data = self.treestore.get_value(iter, 2)
 			if data == 'group':
 				self.mk_menu_g(event)
+			elif data == 'agent':
+				#TODO
+				pass
 			else:
 				self.mk_menu_c(event, iter)
 			return gtk.TRUE
@@ -447,7 +443,7 @@ class roster:
 
 	def on_status_changed(self, widget):
 		self.queueOUT.put(('STATUS',widget.name))
-		if not self.showOffline:
+		if (not self.showOffline) and widget.name == 'offline':
 			self.treestore.clear()
 
 	def on_add(self, widget):
@@ -467,8 +463,7 @@ class roster:
 		iter = self.treestore.get_iter(path)
 		jid = self.treestore.get_value(iter, 2)
 		if self.tab_messages.has_key(jid):
-			#TODO: NE FONCTIONNE PAS !
-			self.tab_messages[jid].window.grab_focus()
+			self.tab_messages[jid].window.present()
 		elif self.l_contact.has_key(jid):
 			self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
 
@@ -476,10 +471,10 @@ class roster:
 		iter = self.treestore.get_iter_from_string(row)
 		jid = self.treestore.get_value(iter, 2)
 		old_text = self.l_contact[jid]['user'].name
+		#If it is a double click, old_text == new_text
 		if old_text == new_text:
 			if self.tab_messages.has_key(jid):
-				#TODO: NE FONCTIONNE PAS !
-				self.tab_messages[jid].window.grab_focus()
+				self.tab_messages[jid].window.present()
 			elif self.l_contact.has_key(jid):
 				self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
 		else:
@@ -493,22 +488,25 @@ class roster:
 			Wbrowser = browser(self)
 
 	def __init__(self, queueOUT):
-		#initialisation des variables
 		# FIXME : handle no file ...
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
 		self.cfgParser.parseCfgFile()
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Gajim')
+		self.window =  self.xml.get_widget('Gajim')
 		self.tree = self.xml.get_widget('treeview')
 		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, gobject.TYPE_BOOLEAN)
-		add_pixbuf = self.get_icon_pixbuf(gtk.STOCK_ADD)
-		remove_pixbuf = self.get_icon_pixbuf(gtk.STOCK_REMOVE)
-		requested_pixbuf = self.get_icon_pixbuf(gtk.STOCK_QUIT)
-		self.pixbufs = { "online": add_pixbuf, \
-				"away": remove_pixbuf, \
-				"xa": remove_pixbuf, \
-				"dnd": remove_pixbuf, \
-				"offline": remove_pixbuf, \
-				"requested": requested_pixbuf}
+		iconstyle = self.cfgParser.GtkGui_iconstyle
+		if not iconstyle:
+			iconstyle = 'sun'
+		path = 'plugins/icons/' + iconstyle + '/'
+		self.pixbufs = {}
+		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'requested'):
+			if not os.path.exists(path + state + '.xpm'):
+				print 'No such file : ' + path + state + '.xpm'
+				self.pixbufs[state] = None
+			else:
+				pix = gtk.gdk.pixbuf_new_from_file (path + state + '.xpm')
+				self.pixbufs[state] = pix
 		self.tree.set_model(self.treestore)
 		self.queueOUT = queueOUT
 		self.optionmenu = self.xml.get_widget('optionmenu')
@@ -521,13 +519,11 @@ class roster:
 		else:
 			self.showOffline = 0
 
-		#colonnes
+		#columns
 		self.col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
 		self.col.pack_start(render_pixbuf, expand = False)
 		self.col.add_attribute(render_pixbuf, 'pixbuf', 0)
-#		self.col.add_attribute(render_pixbuf, 'pixbuf-expander-closed', 0)
-#		self.col.add_attribute(render_pixbuf, 'pixbuf-expander-open', 0)
 		render_text = gtk.CellRendererText()
 		render_text.connect('edited', self.on_cell_edited)
 		self.col.pack_start(render_text, expand = True)
@@ -545,20 +541,16 @@ class roster:
 		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
 		self.xml.signal_connect('on_status_changed', self.on_status_changed)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
-#		self.mk_menu_c()
 
 class plugin:
 	def read_queue(self):
 		global Wbrowser
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
-#			print ev
 			if ev[0] == 'ROSTER':
 				self.r.mkroster(ev[1])
 			elif ev[0] == 'NOTIFY':
 				jid = string.split(ev[1][0], '/')[0]
-				print self.r.l_contact
-				print jid
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
 					jid = string.replace(jid, '@', '')
@@ -569,21 +561,23 @@ class plugin:
 					if not self.r.l_contact.has_key(jid):
 						user1 = user(jid, jid, ['Agents'], ev[1][1], ev[1][2], 'from')
 						iterU = self.r.treestore.append(self.r.l_group['Agents'], \
-							(self.r.pixbufs[ev[1][1]], jid, jid, TRUE))
+							(self.r.pixbufs[ev[1][1]], jid, 'agent', TRUE))
 						self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
 					else:
-						#On mets a jour la ligne ki existe deja
+						#Update existing line
 						for i in self.r.l_contact[jid]['iter']:
 							if self.r.pixbufs.has_key(ev[1][1]):
 								self.r.treestore.set_value(i, 0, self.r.pixbufs[ev[1][1]])
 				elif self.r.l_contact.has_key(jid):
-					#ca n'est pas un agent
+					#It isn't an agent
 					self.r.chg_status(jid, ev[1][1], ev[1][2])
 			elif ev[0] == 'MSG':
 				if string.find(ev[1][0], "@") <= 0:
 					jid = string.replace(ev[1][0], '@', '')
+				else:
+					jid = ev[1][0]
 				if not self.r.tab_messages.has_key(jid):
-					#FIXME:message d'un inconne
+					#FIXME:message from unknown
 					self.r.tab_messages[jid] = message(self.r.l_contact[jid]['user'], self.r)
 				self.r.tab_messages[jid].print_conversation(ev[1][1])
 			elif ev[0] == 'SUBSCRIBE':
@@ -604,7 +598,7 @@ class plugin:
 					iterU = self.r.treestore.append(self.r.l_group['general'], \
 						(self.r.pixbufs['online'], jid, jid, TRUE))
 					self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
-				#TODO: print you are now authorized
+				#TODO: print 'you are now authorized'
 			elif ev[0] == 'AGENTS':
 				if Wbrowser:
 					Wbrowser.agents(ev[1])
