@@ -1184,7 +1184,7 @@ class roster_Window:
 				menu_sub.append(item)
 				item.connect("activate", self.on_browse, a)
 			menu_sub.show_all()
-		else:
+		elif len(self.plugin.accounts.keys()) == 1:
 			#add
 			self.xml.get_widget('add').connect("activate", self.on_add, \
 				self.plugin.accounts.keys()[0])
