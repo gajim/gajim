@@ -657,6 +657,7 @@ class roster_Window:
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
+		menu.reposition()
 
 	def mk_menu_g(self, event):
 		"""Make group's popup menu"""
@@ -669,6 +670,7 @@ class roster_Window:
 #		menu.append(item)
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
+		menu.reposition()
 	
 	def mk_menu_agent(self, event, iter):
 		"""Make agent's popup menu"""
@@ -692,6 +694,7 @@ class roster_Window:
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
+		menu.reposition()
 
 	def on_edit_account(self, widget, account):
 		if not self.plugin.windows.has_key('accountPreference'):
@@ -756,6 +759,7 @@ class roster_Window:
 		
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
+		menu.reposition()
 	
 	def authorize(self, widget, jid, account):
 		"""Authorize a user"""
