@@ -462,6 +462,34 @@ class tabbed_chat_window:
 		tag.set_property('foreground', '#9e9e9e')
 		tag.set_property('scale', pango.SCALE_SMALL)
 		tag.set_property('justification', gtk.JUSTIFY_CENTER)
+		for way in ['status', 'incoming', 'outgoing']:
+			for special in ['mail', 'italic', 'underline', 'bold', 'url']:
+				tag = conversation_buffer.create_tag(way+special)
+				if way == 'status':
+					color = self.plugin.config['statusmsgcolor']
+					tag.set_property('foreground', color)
+				elif way == 'incoming':
+					color = self.plugin.config['inmsgcolor']
+					tag.set_property('foreground', color)
+				elif way == 'outgoing':
+					color = self.plugin.config['outmsgcolor']
+					tag.set_property('foreground', color)
+				if special == 'mail':
+					tag.set_property('foreground', '#0000ff')
+					#TODO: set it clickable
+				elif special == 'url':
+					tag.set_property('foreground', '#0000ff')
+					#TODO: set it clickable
+				elif special == 'italic':
+					tag.set_property('style', pango.STYLE_ITALIC)
+				elif special == 'underline':
+					tag.set_property('underline', pango.UNDERLINE_SINGLE)
+				elif special == 'bold':
+					tag.set_property('weight', pango.WEIGHT_BOLD)
+		tag = conversation_buffer.create_tag('incomingitalic')
+		tag = conversation_buffer.create_tag('incomingunderline')
+		tag = conversation_buffer.create_tag('incomingbold')
+		tag = conversation_buffer.create_tag('incomingurl')
 		link_tag = conversation_buffer.create_tag('hyperlink', foreground='blue')
 		self.xmls[user.jid].signal_autoconnect(self)
 		conversation_scrolledwindow = self.xmls[user.jid].\
@@ -624,6 +652,41 @@ class tabbed_chat_window:
 		if self.print_time_timeout_id.has_key(jid):
 			del self.print_time_timeout_id[jid]
 		return 0
+
+	def print_special_word(self, word, jid, contact = ''):
+		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
+		end_iter = conversation_buffer.get_end_iter()
+		if contact == 'status':
+			tag = 'status'
+		else:
+			if contact:
+				tag = 'outgoing'
+			else:
+				tag = 'incoming'
+		if word in self.plugin.emoticons.keys():
+			#it's a smiley
+			conversation_buffer.insert_pixbuf(end_iter, self.plugin.emoticons[word])
+			return
+		elif word.startswith('mailto'):
+			#it's a mail
+			tag += 'mail'
+		#TODO: search for sth@sth.sth
+			#it's a mail too
+		elif word.startswith('/') and word.endswith('/'):
+			#it's an italic text
+			tag += 'italic'
+		elif word.startswith('_') and word.endswith('_'):
+			#it's an underlined text
+			tag += 'unerline'
+		elif word.startswith('*') and word.endswith('*'):
+			#it's a bold text
+			tag += 'bold'
+		else:
+			#it's an url
+			tag += 'url'
+
+		conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
 
 	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :
