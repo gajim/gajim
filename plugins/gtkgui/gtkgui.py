@@ -691,10 +691,10 @@ class tabbed_chat_window:
 		index = 0
 		
 		if self.plugin.config['useemoticons']: # search for emoticons & urls
-			my_re = sre.compile(self.plugin.emot_and_formatting_url_pattern, sre.IGNORECASE)
+			my_re = sre.compile(self.plugin.emot_and_formatting_and_url_pattern, sre.IGNORECASE)
 			iterator = my_re.finditer(otext)
 		else: # search for just urls
-			my_re = sre.compile(self.plugin.formatting_url_pattern, sre.IGNORECASE)
+			my_re = sre.compile(self.plugin.formatting_and_url_pattern, sre.IGNORECASE)
 			iterator = my_re.finditer(otext)
 		for match in iterator:
 			start, end = match.span()
@@ -3545,23 +3545,25 @@ class plugin:
 		# \S matches anything but ' ' '\t' '\n' '\r' '\f' and '\v'
 		# \s matches any whitespace character
 		# \w any alphanumeric character
+		# \W any non-alphanumeric character
 		# * means 0 or more times
 		# + means 1 or more times
 		# | means or
 		# [^*] anything but *   (inside [] you don't have to escape metachars)
-		# formatting_url_pattern is one string literal. I've put spaces to make the regexp look better
-		self.formatting_url_pattern = r'http://\w+\S*|' 'https://\w+\S*|' 'news://\w+\S*|' 'ftp://\w+\S*|' 'mailto:\w+\S*|' 'ed2k://\w+\S*|' 'www\.\w+\S*|' 'ftp\.\w+\S*|' '\*\w+[^*]*\w+\*|' '/\w+[^/]*\w+/|' '_\w+[^_]*\w+_|' '\w+[^\s]*@\w+\.\w+'
+		# formatting_and_url_pattern is one string literal.
+		# I've put spaces to make the regexp look better
+		self.formatting_and_url_pattern = r'http://\S+*|' 'https://\S+*|' 'news://\S+*|' 'ftp://\S+*|' 'mailto:\S+|' 'ed2k://\S+*|' 'www\.\S+|' 'ftp\.\S+|' '\*\S+[^*]*[^\s]\*|' '/\S+[^/]*[^\s]/|' '_\S+[^_]*[^\s]_|' '\S+[^\s]*@\S+\.\S+'
 		
 		# at least one letter in 3 parts (before @, after @, after .)
-		self.sth_at_sth_dot_sth_re = sre.compile(r'\w+[^\s]*@\w+\.\w+')
+		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+[^\s]*@\S+\.\S+')
 		
 		emoticons_pattern = ''
 		for emoticon in self.emoticons: # travel tru emoticons list
 			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
 			emoticons_pattern += emoticon_escaped + '|'# or is | in regexp
-		#self.emoticons_pattern = self.emoticons_pattern[0:-1] # remove the last |
 
-		self.emot_and_formatting_url_pattern = emoticons_pattern + self.formatting_url_pattern
+		self.emot_and_formatting_and_url_pattern =\
+			emoticons_pattern + self.formatting_and_url_pattern
 		
 		gtk.gdk.threads_enter()
 		self.autoconnect()
