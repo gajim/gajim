@@ -58,23 +58,25 @@ class GajimCore:
 			else:
 				show = 'online'
 			self.hub.sendPlugin('NOTIFY', \
-			(prs.getFrom().getBasic(), show, prs.getStatus()))
+			(prs.getFrom().getBasic(), show, prs.getStatus(), prs.getFrom().getResource()))
 		elif type == 'unavailable':
 			self.hub.sendPlugin('NOTIFY', \
-				(prs.getFrom().getBasic(), 'offline', prs.getStatus()))
+				(prs.getFrom().getBasic(), 'offline', prs.getStatus(), prs.getFrom().getResource()))
 		elif type == 'subscribe':
 			log.debug("subscribe request from %s" % who)
 			if self.cfgParser.Core_alwaysauth == 1 or string.find(who, "@") <= 0:
 				self.con.send(common.jabber.Presence(who, 'subscribed'))
 				if string.find(who, "@") <= 0:
-					self.hub.sendPlugin('NOTIFY', (who, 'offline', 'offline'))
+					self.hub.sendPlugin('NOTIFY', (who, 'offline', 'offline', prs.getFrom().getResource()))
 			else:
 				self.hub.sendPlugin('SUBSCRIBE', who)
 		elif type == 'subscribed':
 			jid = prs.getFrom()
 			self.hub.sendPlugin('SUBSCRIBED', {'jid':jid.getBasic(), \
-				'nom':jid.getNode()})
-			self.con.updateRosterItem(jid=jid.getBasic(), name=jid.getNode())
+				'nom':jid.getNode(), 'ressource':jid.getResource()})
+			self.hub.queueIn.put(('UPDUSER', (jid.getBasic(), \
+				jid.getNode(), ['general'])))
+#			self.con.updateRosterItem(jid=jid.getBasic(), name=jid.getNode(), groups=['general'])
 			log.debug("we are now subscribed to %s" % who)
 		elif type == 'unsubscribe':
 			log.debug("unsubscribe request from %s" % who)
@@ -97,7 +99,10 @@ class GajimCore:
 
 	def disconnectedCB(self, con):
 		log.debug("disconnectedCB")
-		self.con.disconnect()
+		if self.connected == 1:
+			self.connected = 0
+			self.con.disconnect()
+#		self.con.disconnect()
 	# END disconenctedCB
 
 	def connect(self, account):
@@ -107,7 +112,7 @@ class GajimCore:
 		password = self.cfgParser.__getattr__("%s" % account+"_password")
 		ressource = self.cfgParser.__getattr__("%s" % account+"_ressource")
 		self.con = common.jabber.Client(host = \
-			hostname, debug = False, log = sys.stderr)
+			hostname, debug = [common.jabber.DBG_ALWAYS], log = sys.stderr)
 		try:
 			self.con.connect()
 		except IOError, e:
@@ -118,9 +123,12 @@ class GajimCore:
 		else:
 			log.debug("Connected to server")
 
-			self.con.setMessageHandler(self.messageCB)
-			self.con.setPresenceHandler(self.presenceCB)
+			self.con.registerHandler('message', self.messageCB)
+			self.con.registerHandler('presence', self.presenceCB)
 			self.con.setDisconnectHandler(self.disconnectedCB)
+#			self.con.setMessageHandler(self.messageCB)
+#			self.con.setPresenceHandler(self.presenceCB)
+#			self.con.setDisconnectHandler(self.disconnectedCB)
 			#BUG in jabberpy library : if hostname is wrong : "boucle"
 			if self.con.auth(name, password, ressource):
 				self.con.requestRoster()
@@ -144,20 +152,22 @@ class GajimCore:
 				ev = self.hub.queueIn.get()
 				if ev[0] == 'QUIT':
 					if self.connected == 1:
+						self.connected = 0
 						self.con.disconnect()
 					self.hub.sendPlugin('QUIT', ())
 					return
-				#('STATUS', (status, account))
+				#('STATUS', (status, msg, account))
 				elif ev[0] == 'STATUS':
 					if (ev[1][0] != 'offline') and (self.connected == 0):
-						self.connect(ev[1][1])
+						self.connect(ev[1][2])
 					elif (ev[1][0] == 'offline') and (self.connected == 1):
+						self.connected = 0
 						self.con.disconnect()
 						self.hub.sendPlugin('STATUS', 'offline')
-						self.connected = 0
 					if ev[1][0] != 'offline' and self.connected == 1:
 						p = common.jabber.Presence()
 						p.setShow(ev[1][0])
+						p.setStatus(ev[1][1])
 						self.con.send(p)
 						self.hub.sendPlugin('STATUS', ev[1][0])
 				#('MSG', (jid, msg))

@@ -38,13 +38,15 @@ class user:
 			self.show = ''
 			self.status = ''
 			self.sub == ''
-		elif len(args) == 6:
+			self.resource == ''
+		elif len(args) == 7:
 			self.jid = args[0]
 			self.name = args[1]
 			self.groups = args[2]
 			self.show = args[3]
 			self.status = args[4]
 			self.sub = args[5]
+			self.resource = args[6]
 #		elif ((len(args)) and (type (args[0]) == type (self)) and
 #			(self.__class__ == args[0].__class__)):
 #			self.name = args[0].name
@@ -53,6 +55,87 @@ class user:
 #			self.status = args[0].status
 #			self.sub = args[0].sub
 		else: raise TypeError, 'bad arguments'
+
+class info_user:
+	def delete_event(self, widget):
+		self.window.destroy()
+
+	def add_grp_to_user(self, model, path, iter):
+		self.user.groups.append(model.get_value(iter, 0))
+
+	def on_close(self, widget):
+		for i in self.r.l_contact[self.user.jid]['iter']:
+			self.r.treestore.remove(i)
+		self.r.l_contact[self.user.jid]['iter'] = []
+		self.user.groups = []
+		self.store2.foreach(self.add_grp_to_user)
+		self.r.add_user(self.user)
+		self.r.queueOUT.put(('UPDUSER', (self.user.jid, self.user.name, \
+			self.user.groups)))
+		self.delete_event(self)
+
+	def add_grp(self, model, path, iter, stors):
+		i = stors[1].append()
+		stors[1].set(i, 0, stors[0].get_value(iter, 0))
+		stors[0].remove(iter)
+
+	def on_add(self, widget):
+		select = self.list1.get_selection()
+		select.selected_foreach(self.add_grp, (self.store1, self.store2))
+
+	def on_remove(self, widget):
+		select = self.list2.get_selection()
+		select.selected_foreach(self.add_grp, (self.store2, self.store1))
+
+	def on_new_key_pressed(self, widget, event):
+		if event.keyval == gtk.keysyms.Return:
+			txt = self.entry_new.get_text()
+			iter = self.store1.append()
+			self.store1.set(iter, 0, txt)
+			self.entry_new.set_text('')
+
+	def init_lists(self):
+		#list available
+		self.store1 = gtk.ListStore(gobject.TYPE_STRING)
+		for i in self.r.l_group.keys():
+			if i != 'Agents' and i not in self.user.groups:
+				iter = self.store1.append()
+				self.store1.set(iter, 0, i)
+		self.list1.set_model(self.store1)
+		column = gtk.TreeViewColumn('Available', gtk.CellRendererText(), text=0)
+		self.list1.append_column(column)
+
+		#list_current
+		self.store2 = gtk.ListStore(gobject.TYPE_STRING)
+		for i in self.user.groups:
+			iter = self.store2.append()
+			self.store2.set(iter, 0, i)
+		self.list2.set_model(self.store2)
+		column = gtk.TreeViewColumn('Available', gtk.CellRendererText(), text=0)
+		self.list2.append_column(column)
+
+	def __init__(self, user, roster):
+		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Info_user')
+		self.window = self.xml.get_widget("Info_user")
+		self.r = roster
+		self.user = user
+		self.list1 = self.xml.get_widget("treeview_available")
+		self.list2 = self.xml.get_widget("treeview_current")
+		self.entry_new = self.xml.get_widget("entry_new")
+
+		self.xml.get_widget('label_name').set_text(user.name)
+		self.xml.get_widget('label_id').set_text(user.jid)
+		self.xml.get_widget('label_resource').set_text(user.resource)
+		self.xml.get_widget('entry_name').set_text(user.name)
+		self.xml.get_widget('label_status').set_text(user.show + ' : ' + user.status)
+		self.init_lists()
+		
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_close_clicked', self.on_close)
+		self.xml.signal_connect('on_add_clicked', self.on_add)
+		self.xml.signal_connect('on_remove_clicked', self.on_remove)
+		self.xml.signal_connect('on_entry_new_key_press_event', self.on_new_key_pressed)
+		
 
 class prefs:
 	def delete_event(self, widget):
@@ -240,6 +323,29 @@ class prefs:
 		self.xml.signal_connect('on_but_col_clicked', self.on_color_button_clicked)
 		self.xml.signal_connect('on_ok_clicked', self.on_ok)
 
+class away_msg:
+	def delete_event(self, widget):
+		self.window.destroy()
+
+	def on_ok(self):
+		beg, end = self.txtBuffer.get_bounds()
+		self.msg = self.txtBuffer.get_text(beg, end, 0)
+		self.window.destroy()
+	
+	def run(self):
+		rep = self.window.run()
+		if rep == gtk.RESPONSE_OK:
+			self.on_ok()
+		return self.msg
+	
+	def __init__(self):
+		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Away_msg')
+		self.window = self.xml.get_widget("Away_msg")
+		self.txt = self.xml.get_widget("textview")
+		self.msg = ""
+		self.txtBuffer = self.txt.get_buffer()
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+
 class add:
 	def delete_event(self, widget):
 		self.Wadd.destroy()
@@ -339,6 +445,7 @@ class account_pref:
 		self.cfgParser.writeCfgFile()
 		self.cfgParser.parseCfgFile()
 		self.accs.init_accounts()
+		self.delete_event(self)
 	
 	#info must be a dictionnary
 	def __init__(self, accs, infos = {}):
@@ -699,7 +806,7 @@ class roster:
 			show = tab[jid]['show']
 			if not show:
 				show = 'offline'
-			user1 = user(ji, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'])
+			user1 = user(ji, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'], '')
 			self.l_contact[ji] = {'user':user1, 'iter':[]}
 
 	def update_iter(self, widget, path, iter, data):
@@ -733,6 +840,9 @@ class roster:
 				self.tab_messages[jid].img.set_from_pixbuf(self.pixbufs[show])
 		u.show = show
 		u.status = status
+
+	def on_info(self, widget, jid):
+		info_user(self.l_contact[jid]['user'], self)
 	
 	def mk_menu_c(self, event, iter):
 		jid = self.treestore.get_value(iter, 2)
@@ -763,6 +873,13 @@ class roster:
 		item = gtk.MenuItem("Remove")
 		self.menu_c.append(item)
 		item.connect("activate", self.on_req_usub, iter)
+
+		item = gtk.MenuItem()
+		self.menu_c.append(item)
+		item = gtk.MenuItem("Informations")
+		self.menu_c.append(item)
+		item.connect("activate", self.on_info, jid)
+
 		self.menu_c.popup(None, None, None, event.button, event.time)
 		self.menu_c.show_all()
 
@@ -789,7 +906,7 @@ class roster:
 	def req_sub(self, widget, jid, txt):
 		self.queueOUT.put(('SUB', (jid, txt)))
 		if not self.l_contact.has_key(jid):
-			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub')
+			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub', '')
 			self.add_user(user1)
 	
 	def init_tree(self):
@@ -823,9 +940,12 @@ class roster:
 	def on_status_changed(self, widget):
 		accountsStr = self.cfgParser.Profile_accounts
 		accounts = string.split(accountsStr, ' ')
-		self.queueOUT.put(('STATUS',(widget.name, accounts[0])))
-#		if (not self.showOffline) and widget.name == 'offline':
-#			self.treestore.clear()
+		if widget.name != 'online' and widget.name != 'offline':
+			w = away_msg()
+			txt = w.run()
+		else:
+			txt = ""
+		self.queueOUT.put(('STATUS',(widget.name, txt, accounts[0])))
 
 	def on_prefs(self, widget):
 		window = prefs(self)
@@ -1025,6 +1145,9 @@ class plugin:
 
 			elif ev[0] == 'NOTIFY':
 				jid = string.split(ev[1][0], '/')[0]
+				res = ev[1][3]
+				if not res:
+					res = ''
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
 					ji = string.replace(jid, '@', '')
@@ -1035,6 +1158,7 @@ class plugin:
 					u = self.r.l_contact[ji]['user']
 					u.show = ev[1][1]
 					u.status = ev[1][2]
+					u.resource = res
 					#Print status in chat window
 					if self.r.tab_messages.has_key(ji):
 						self.r.tab_messages[ji].print_conversation(\
@@ -1042,7 +1166,7 @@ class plugin:
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
 					if not self.r.l_contact.has_key(ji):
-						user1 = user(ji, ji, ['Agents'], ev[1][1], ev[1][2], 'from')
+						user1 = user(ji, ji, ['Agents'], ev[1][1], ev[1][2], 'from', res)
 						self.r.add_user(user1)
 					else:
 						#Update existing line
@@ -1091,7 +1215,7 @@ class plugin:
 					for i in self.r.l_contact[u.jid]['iter']:
 						self.r.treestore.set_value(i, 1, u.name)
 				else:
-					user1 = user(jid, jid, ['general'], 'online', 'online', 'to')
+					user1 = user(jid, jid, ['general'], 'online', 'online', 'to', ev[1]['ressource'])
 					self.r.add_user(user1)
 				#TODO: print 'you are now authorized'
 			elif ev[0] == 'AGENTS':
@@ -1130,15 +1254,15 @@ class plugin:
 				if state == common.sleepy.STATE_AWAKE:
 					#on repasse online
 					self.r.optionmenu.set_history(0)
-					self.r.queueOUT.put(('STATUS',('online', accounts[0])))
+					self.r.queueOUT.put(('STATUS',('online', '', accounts[0])))
 				if state == common.sleepy.STATE_AWAY and self.autoaway:
 					#on passe away
 					self.r.optionmenu.set_history(1)
-					self.r.queueOUT.put(('STATUS',('away', accounts[0])))
+					self.r.queueOUT.put(('STATUS',('away', 'auto away (idle)', accounts[0])))
 				if state == common.sleepy.STATE_XAWAY and self.autoxa:
 					#on passe away
 					self.r.optionmenu.set_history(2)
-					self.r.queueOUT.put(('STATUS',('xa', accounts[0])))
+					self.r.queueOUT.put(('STATUS',('xa', 'auto away (idel)', accounts[0])))
 			self.sleeper_state = state
 		return 1
 
