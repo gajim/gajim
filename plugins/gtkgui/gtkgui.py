@@ -741,9 +741,9 @@ class plugin:
 		# (?!\S) is the same thing but it's a lookahead assertion
 		# basic_pattern is one string literal.
 		# I've put spaces to make the regexp look better.
-		links = r'\bhttp://\S+|' r'\bhttps://\S+|' r'\bnews://\S+|' r'\bftp://\S+|' r'\bed2k://\S+|' r'\bwww\.\S+|' r'\bftp\.\S+|'
+		links = r'\bhttp://[^)\s]+|' r'\bhttps://[^)\s]+|' r'\bnews://[^)\s]+|' r'\bftp://[^)\s]+|' r'\bed2k://[^)\s]+|' r'\bwww\.[^)\s]+|' r'\bftp\.[^)\s]+|'
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
-		mail = r'\bmailto:\S+|' r'\b\S+@\S+\.\S+|'
+		mail = r'\bmailto:[^)\s]+|' r'\b[^)\s]+@[^)\s]+\.[^)\s]+|'
 
 		#detects eg. *b* *bold* *bold bold* test *bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
@@ -767,7 +767,7 @@ class plugin:
 	def on_launch_browser_mailer(self, widget, url, kind):
 		self.launch_browser_mailer(kind, url)
 
-	def init_regex(self):
+	def init_regexp(self):
 		if self.config['useemoticons']:
 			"""initialize emoticons dictionary"""
 			self.emoticons = dict()
@@ -822,14 +822,14 @@ class plugin:
 			'outmsgcolor': '#0000ff',\
 			'statusmsgcolor':'#1eaa1e',\
 			'hiddenlines':'',\
-			'accounttextcolor': '#ff0000',\
-			#'#ffffff'
-			'accountbgcolor': '#9fdfff',\
-			#'#94aa8c'
+			'accounttextcolor': '#ffffff',\
+			#ff0000
+			'accountbgcolor': '#94aa8c',\
+			#9fdfff
 			'accountfont': 'Sans Bold 10',\
 			'grouptextcolor': '#0000ff',\
-			'groupbgcolor': '#ffffff',\
-			#'#eff3e7'
+			'groupbgcolor': '##eff3e7',\
+			#ffffff
 			'groupfont': 'Sans Italic 10',\
 			'usertextcolor': '#000000',\
 			'userbgcolor': '#ffffff',\
@@ -915,7 +915,7 @@ class plugin:
 		if self.config['trayicon']:
 			self.show_systray()
 			
-		self.init_regex()
+		self.init_regexp()
 		
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.windows['preferences'] = Preferences_window(self)

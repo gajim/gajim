@@ -141,13 +141,15 @@ class systray:
 			new_message_menuitem.set_submenu(account_menu_for_new_message)
 
 			for account in self.plugin.accounts.keys():
+				our_jid = self.plugin.accounts[account]['name'] + '@' +\
+					self.plugin.accounts[account]['hostname']
 				#for chat_with
-				item = gtk.MenuItem(_('as ') + plugin.accounts[account]['jid'])
+				item = gtk.MenuItem(_('as ') + our_jid)
 				account_menu_for_chat_with.append(item)
 				group_menu = self.make_groups_submenus_for_chat_with(account)
 				item.set_submenu(group_menu)
 				#for new_message
-				item = gtk.MenuItem(_('as ') + plugin.accounts[account]['jid'])
+				item = gtk.MenuItem(_('as ') + our_jid)
 				item.connect('activate',\
 					self.on_new_message_menuitem_activate, account)
 				account_menu_for_new_message.append(item)

@@ -259,7 +259,9 @@ class Roster_window:
 			sub_menu = gtk.Menu()
 			service_disco_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem(_('as ') + self.plugin.accounts[account]['jid'])
+				our_jid = self.plugin.accounts[account]['name'] + '@' +\
+					self.plugin.accounts[account]['hostname']
+				item = gtk.MenuItem(_('as ') + our_jid)
 				sub_menu.append(item)
 				item.connect('activate', self.on_service_disco_menuitem_activate, account)
 			sub_menu.show_all()
@@ -267,7 +269,9 @@ class Roster_window:
 			sub_menu = gtk.Menu()
 			join_gc_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem(_('as ') + self.plugin.accounts[account]['jid'])
+				our_jid = self.plugin.accounts[account]['name'] + '@' +\
+					self.plugin.accounts[account]['hostname']
+				item = gtk.MenuItem(_('as ') + our_jid)
 				sub_menu.append(item)
 				item.connect("activate", self.on_join_gc_activate, account)
 			sub_menu.show_all()
@@ -275,7 +279,9 @@ class Roster_window:
 			sub_menu = gtk.Menu()
 			new_message_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem(_('as ') + self.plugin.accounts[account]['jid'])
+				our_jid = self.plugin.accounts[account]['name'] + '@' +\
+					self.plugin.accounts[account]['hostname']
+				item = gtk.MenuItem(_('as ') + our_jid)
 				sub_menu.append(item)
 				item.connect('activate', self.on_new_message_menuitem_activate, account)
 			sub_menu.show_all()
