@@ -515,14 +515,19 @@ class GajimCore:
 		q = iq_obj.getTag('service')
 		if not q:
 			return identities, features, items
-		identities = [q.attrs]
+		attr = {}
+		for key in q.attrs:
+			attr[key.encode('utf8')] = q.attrs[key].encode('utf8')
+		identities = [attr]
 		for node in q.kids:
 			if node.getName() == 'ns':
 				features.append(node.getData())
 			else:
-				infos = node.attrs
+				infos = {}
+				for key in node.attrs:
+					infos[key.encode('utf8')] = node.attrs[key].encode('utf8')
 				infos['category'] = node.getName()
-				items.append(node.attrs)
+				items.append(infos)
 		jid = str(iq_obj.getFrom())
 		self.hub.sendPlugin('AGENT_INFO', self.connections[con], \
 			(jid, identities, features, items))
@@ -533,7 +538,10 @@ class GajimCore:
 		if not qp:
 			qp = []
 		for i in qp:
-			items.append(i.attrs)
+			attr = {}
+			for key in i.attrs:
+				attr[key.encode('utf8')] = i.attrs[key].encode('utf8')
+			items.append(attr)
 		jid = str(iq_obj.getFrom())
 		self.hub.sendPlugin('AGENT_INFO_ITEMS', self.connections[con],\
 			(jid, items))
@@ -548,7 +556,10 @@ class GajimCore:
 			qp = []
 		for i in qp:
 			if i.getName() == 'identity':
-				identities.append(i.attrs)
+				attr = {}
+				for key in i.attrs:
+					attr[key.encode('utf8')] = i.attrs[key].encode('utf8')
+				identities.append(attr)
 			elif i.getName() == 'feature':
 				features.append(i.getAttr('var'))
 		jid = str(iq_obj.getFrom())
