@@ -725,12 +725,13 @@ class plugin:
 
 		self.basic_pattern = links + mail + formatting
 
+	def on_launch_browser_mailer(self, widget, url, kind):
+		self.launch_browser_mailer(kind, url)
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
-		#(asterix) I don't have pygtk 2.6 for the moment, so I cannot test
-#		gtk.about_dialog_set_email_hook(self.launch_browser_mailer, 'mail')
-#		gtk.about_dialog_set_url_hook(self.launch_browser_mailer, 'url')
+		gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
+		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
 		self.queueIN = quIN
 		self.queueOUT = quOUT
 		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'STATUS', \
