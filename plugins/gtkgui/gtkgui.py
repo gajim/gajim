@@ -387,11 +387,14 @@ class tabbed_chat_Window:
 		vp.set_position(170)
 
 		sw = gtk.ScrolledWindow()
+		sw.set_shadow_type(gtk.SHADOW_IN)
 		vp.add1(sw)
 		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 		tv = gtk.TextView()
 		tv.set_wrap_mode(gtk.WRAP_WORD)
-		sw.add_with_viewport(tv)
+		tv.set_editable(False)
+		tv.set_cursor_visible(False)
+		sw.add(tv)
 		self.widgets[user.jid]['conversation'] = tv
 		buffer = tv.get_buffer()
 		end_iter = buffer.get_end_iter()
@@ -407,11 +410,12 @@ class tabbed_chat_Window:
 		self.tagStatus[user.jid].set_property("foreground", color)
 
 		sw = gtk.ScrolledWindow()
+		sw.set_shadow_type(gtk.SHADOW_IN)
 		vp.add2(sw)
 		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 		tv = gtk.TextView()
 		tv.set_wrap_mode(gtk.WRAP_WORD)
-		sw.add_with_viewport(tv)
+		sw.add(tv)
 		self.widgets[user.jid]['message'] = tv
 		tv.grab_focus()
 		tv.connect('key_press_event', self.on_msg_key_press_event)
