@@ -26,7 +26,7 @@ install-stamp: build-stamp
 	rm -rf debian/tmp
 	install -d debian/tmp
 	cd debian/tmp && install -d `cat ../dirs`
-	make install PREFIX=debian/tmp/usr DESTDIR=`pwd`/debian/tmp
+	make install PREFIX=/usr DESTDIR=`pwd`/debian/tmp
 	cp gajim.xpm debian/tmp/usr/share/pixmaps
 	chmod -x debian/tmp/usr/share/gajim/runCore.py
 	sed -ne '1d;w debian/tmp/runCore.py.tmp' debian/tmp/usr/share/gajim/runCore.py
@@ -42,7 +42,9 @@ binary-arch: checkroot build install
 	$(checkdir)
 # Must have debmake installed for this to work. Otherwise please copy
 # /usr/bin/debstd into the debian directory and change debstd to debian/debstd
-	debstd 
+	debstd -m
+	gzip --best -c gajim.1 > debian/tmp/usr/share/man/man1/gajim.1.gz
+	cd debian/tmp; md5sum usr/share/man/man1/gajim.1.gz >> DEBIAN/md5sums
 	dpkg-gencontrol -isp
 	chown -R root:root debian/tmp
 	chmod -R go=rX debian/tmp
