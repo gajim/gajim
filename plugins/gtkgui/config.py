@@ -526,11 +526,11 @@ class accountPreference_Window:
 		if infos.has_key('proxyport'):
 			self.xml.get_widget("entry_proxyport").set_text(str(\
 				infos['proxyport']))
-		if not infos.has_key('usegpg'):
+		if not self.plugin.config.has_key('usegpg'):
 			self.xml.get_widget('gpg_key_label').set_text('GPG is not usable on this computer')
 			self.xml.get_widget('gpg_choose_key_button').set_sensitive(False)
-		if infos.has_key('keyid') and infos.has_key('usegpg'):
-			if infos['keyid'] and infos['usegpg']:
+		if infos.has_key('keyid') and self.plugin.config.has_key('usegpg'):
+			if infos['keyid'] and self.plugin.config['usegpg']:
 				self.xml.get_widget('gpg_key_label').set_text(infos['keyid'])
 				if infos.has_key('keyname'):
 					self.xml.get_widget('gpg_name_label').set_text(infos['keyname'])
