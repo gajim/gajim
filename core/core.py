@@ -374,7 +374,7 @@ class GajimCore:
 
 	def presenceCB(self, con, prs):
 		"""Called when we recieve a presence"""
-		if prs.getXNode(common.jabber.NS_DELAY): return
+#		if prs.getXNode(common.jabber.NS_DELAY): return
 		who = str(prs.getFrom())
 		prio = prs.getPriority()
 		if not prio:
@@ -654,10 +654,9 @@ class GajimCore:
 							self.gpg[a] = MyGnuPG()
 				else:
 					self.cfgParser.tab[ev[2][0]] = ev[2][1]
-					if ev[2][0] != ev[2][2]:
-						self.hub.sendPlugin('CONFIG', None, (ev[2][0], ev[2][1]))
+				if ev[2][0] != ev[2][2]:
+					self.hub.sendPlugin('CONFIG', None, (ev[2][0], ev[2][1]))
 				self.cfgParser.writeCfgFile()
-				#TODO: tell the changes to other plugins
 			#('STATUS', account, (status, msg))
 			elif ev[0] == 'STATUS':
 				msg = ev[2][1]

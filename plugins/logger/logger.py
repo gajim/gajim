@@ -77,8 +77,10 @@ class plugin:
 					print _("plugin logger stopped")
 					return
 				elif ev[0] == 'NOTIFY':
-					status = ev[2][2]
 					jid = string.split(ev[2][0], '/')[0]
+					if jid in self.no_log_for[ev[1]]:
+						break
+					status = ev[2][2]
 					if not status:
 						status = ""
 					status = string.replace(status, '\n', '\\n')
@@ -93,15 +95,19 @@ class plugin:
 							ev[2][1], status))
 						fic.close()
 				elif ev[0] == 'MSG':
-					msg = string.replace(ev[2][1], '\n', '\\n')
 					jid = string.split(ev[2][0], '/')[0]
+					if jid in self.no_log_for[ev[1]]:
+						break
+					msg = string.replace(ev[2][1], '\n', '\\n')
 					fic = open(LOGPATH + jid, "a")
 					t = time.mktime(ev[2][2])
 					fic.write("%s:recv:%s\n" % (t, msg))
 					fic.close()
 				elif ev[0] == 'MSGSENT':
-					msg = string.replace(ev[2][1], '\n', '\\n')
 					jid = string.split(ev[2][0], '/')[0]
+					if jid in self.no_log_for[ev[1]]:
+						break
+					msg = string.replace(ev[2][1], '\n', '\\n')
 					fic = open(LOGPATH + jid, "a")
 					fic.write("%s:sent:%s\n" % (tim, msg))
 					fic.close()
@@ -119,6 +125,14 @@ class plugin:
 				elif ev[0] == 'CONFIG':
 					if ev[2][0] == 'Logger':
 						self.config = ev[2][1]
+					if ev[2][0] == 'accounts':
+						accounts = ev[2][1]
+						self.no_log_for = {}
+						for acct in accounts.keys():
+							self.no_log_for[acct] = []
+							if accounts[acct].has_key('no_log_for'):
+								self.no_log_for[acct] = \
+									string.split(accounts[acct]['no_log_for'], ' ')
 			time.sleep(0.1)
 
 	def wait(self, what):
@@ -139,6 +153,14 @@ class plugin:
 		quOUT.put(('ASK_CONFIG', None, ('Logger', 'Logger', {\
 			'lognotsep':1, 'lognotusr':1})))
 		self.config = self.wait('CONFIG')
+		quOUT.put(('ASK_CONFIG', None, ('Logger', 'accounts')))
+		accounts = self.wait('CONFIG')
+		self.no_log_for = {}
+		for acct in accounts.keys():
+			self.no_log_for[acct] = []
+			if accounts[acct].has_key('no_log_for'):
+				self.no_log_for[acct] = \
+					string.split(accounts[acct]['no_log_for'], ' ')
 		#create ~/.gajim/logs/ if it doesn't exist
 		try:
 			os.stat(os.path.expanduser("~/.gajim"))

@@ -22,6 +22,7 @@ pygtk.require('2.0')
 import gtk
 from gtk import TRUE, FALSE
 import gtk.glade,gobject
+import string
 from common import i18n
 _ = i18n._
 APP = i18n.APP
@@ -77,6 +78,24 @@ class infoUser_Window:
 		if update:
 			self.plugin.send('UPDUSER', self.account, (self.user.jid, \
 				self.user.name, self.user.groups))
+		#log history ?
+		acct = self.plugin.accounts[self.account]
+		oldlog = 1
+		no_log_for = []
+		if acct.has_key('no_log_for'):
+			no_log_for = acct['no_log_for'].split(' ')
+			if self.user.jid in no_log_for:
+				oldlog = 0
+		log = self.xml.get_widget('chk_log').get_active()
+		if not log and not self.user.jid in no_log_for:
+			no_log_for.append(self.user.jid)
+		if log and self.user.jid in no_log_for:
+			no_log_for.remove(self.user.jid)
+		if oldlog != log:
+			acct['no_log_for'] = string.join(no_log_for, ' ')
+			self.plugin.accounts[self.account] = acct
+			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
+				'Gtkgui'))
 		widget.get_toplevel().destroy()
 
 	def add_grp(self, model, path, iter, stors):
@@ -162,6 +181,12 @@ class infoUser_Window:
 		self.xml.get_widget('label_id').set_text(user.jid)
 		self.xml.get_widget('label_sub').set_text(user.sub)
 		self.xml.get_widget('entry_name').set_text(user.name)
+		acct = self.plugin.accounts[account]
+		log = 1
+		if acct.has_key('no_log_for'):
+			if user.jid in acct['no_log_for'].split(' '):
+				log = 0
+		self.xml.get_widget('chk_log').set_active(log)
 		resources = user.resource + ' (' + str(user.priority) + ')'
 		if not user.status:
 			user.status = ''
