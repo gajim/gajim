@@ -113,6 +113,11 @@ class Roster_window:
 		model.append(None, (self.pixbufs[status], account, 'account', account,\
 			account, False))
 
+	def remove_newly_added(self, jid, account):
+		if jid in self.newly_added[account]:
+			self.newly_added[account].remove(jid)
+			self.redraw_jid(jid, account)
+
 	def add_user_to_roster(self, jid, account):
 		"""Add a user to the roster and add groups if they aren't in roster"""
 		showOffline = self.plugin.config['showoffline']
@@ -157,8 +162,15 @@ class Roster_window:
 				self.tree.expand_row(model.get_path(iterG), False)
 		self.redraw_jid(jid, account)
 	
+	def really_remove_user(self, user, account):
+		if user.jid in self.to_be_removed[account]:
+			self.to_be_removed[account].remove(user.jid)
+			self.remove_user(user, account)
+	
 	def remove_user(self, user, account):
 		"""Remove a user from the roster"""
+		if user.jid in self.to_be_removed[account]:
+			return
 		model = self.tree.get_model()
 		for i in self.get_user_iter(user.jid, account):
 			parent_i = model.iter_parent(i)
@@ -1181,8 +1193,15 @@ class Roster_window:
 			renderer.set_property('font', self.plugin.config['groupfont'])
 			renderer.set_property('xpad', 4)
 		else:
-			renderer.set_property('foreground', \
-				self.plugin.config['usertextcolor'])
+			jid = model.get_value(iter, 3)
+			account = model.get_value(iter, 4)
+			if jid in self.newly_added[account]:
+				renderer.set_property('foreground', 'green')
+			elif jid in self.to_be_removed[account]:
+				renderer.set_property('foreground', 'red')
+			else:
+				renderer.set_property('foreground', \
+					self.plugin.config['usertextcolor'])
 			renderer.set_property('cell-background', \
 				self.plugin.config['userbgcolor'])
 			renderer.set_property('font', self.plugin.config['userfont'])
@@ -1307,10 +1326,14 @@ class Roster_window:
 		self.window.show_all()
 		self.groups = {}
 		self.contacts = {}
+		self.newly_added = {}
+		self.to_be_removed = {}
 		self.popups_height = 0
 		for a in self.plugin.accounts.keys():
 			self.contacts[a] = {}
 			self.groups[a] = {}
+			self.newly_added[a] = []
+			self.to_be_removed[a] = []
 		#(icon, name, type, jid, account, editable)
 		model = gtk.TreeStore(gtk.Image, str, str, str, str, gobject.TYPE_BOOLEAN)
 		model.set_sort_func(1, self.compareIters)

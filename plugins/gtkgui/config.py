@@ -1147,6 +1147,10 @@ class Account_modification_window:
 					self.plugin.roster.groups[self.account]
 				self.plugin.roster.contacts[name] = \
 					self.plugin.roster.contacts[self.account]
+				self.plugin.roster.newly_added[name] = \
+					self.plugin.roster.newly_added[self.account]
+				self.plugin.roster.to_be_removed[name] = \
+					self.plugin.roster.to_be_removed[self.account]
 				self.plugin.sleeper_state[name] = \
 					self.plugin.sleeper_state[self.account]
 				#upgrade account variable in opened windows
@@ -1211,6 +1215,8 @@ class Account_modification_window:
 		self.plugin.connected[name] = 0
 		self.plugin.roster.groups[name] = {}
 		self.plugin.roster.contacts[name] = {}
+		self.plugin.roster.newly_added[name] = []
+		self.plugin.roster.to_be_removed[name] = []
 		self.plugin.nicks[name] = login
 		self.plugin.sleeper_state[name] = 0
 		#refresh accounts window
