@@ -75,6 +75,7 @@ False = 0;
 True  = 1;
 
 timeout = 300
+NAT_TIMEOUT = 60
 
 DBG_INIT, DBG_ALWAYS = debug.DBG_INIT, debug.DBG_ALWAYS
 DBG_DISPATCH = 'jb-dispatch'            ; debug.debug_flags.append( DBG_DISPATCH )
@@ -412,7 +413,7 @@ class Connection(xmlstream.Client):
         return ustr(self._id)
 
     def process(self, timeout=0):
-        if time.time() > self._lastIncome + 300:
+        if time.time() > self._lastIncome + NAT_TIMEOUT:
             self._lastIncome = time.time()
             iq = Iq(type="get", to=self._host, query=NS_LAST)
             if not self.SendAndWaitForResponse(iq, timeout=30):
