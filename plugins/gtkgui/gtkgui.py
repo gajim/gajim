@@ -385,7 +385,8 @@ class tabbed_chat_window:
 		self.tagStatus[user.jid] = conversation_buffer.create_tag('status')
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus[user.jid].set_property('foreground', color)
-
+		
+		self.link_tag = conversation_buffer.create_tag('hyperlink', foreground='blue')
 		self.xmls[user.jid].signal_autoconnect(self)
 		
 		self.chat_notebook.append_page(self.xmls[user.jid].\
