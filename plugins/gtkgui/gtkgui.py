@@ -54,18 +54,59 @@ class vCard_Window:
 	"""Class for window that show vCard information"""
 	def delete_event(self, widget):
 		"""close window"""
+		del self.r.tab_vcard[self.jid]
 		self.window.destroy()
 
 	def set_values(self, vcard):
+		self.vc = vcard
 		for i in vcard.keys():
-			try:
-				self.xml.get_widget('entry_'+i).set_text(vcard[i])
-			except AttributeError, e:
-				pass
-#				print "error with %s" % i
+			if type(vcard[i]) == type({}):
+				for j in vcard[i].keys():
+					try:
+						self.xml.get_widget('entry_'+i+'_'+j).set_text(vcard[i][j])
+					except AttributeError, e:
+						pass
+			else:
+				if i == 'DESC':
+					self.xml.get_widget('textview_DESC').get_buffer().\
+						set_text(vcard[i], 0)
+				else:
+					try:
+						self.xml.get_widget('entry_'+i).set_text(vcard[i])
+					except AttributeError, e:
+						pass
 
 	def on_retrieve(self, widget):
-		self.r.queueOUT.put(('VCARD', self.jid))
+		self.r.queueOUT.put(('ASK_VCARD', self.jid))
+
+	def add_to_vcard(self, vcard, entry, txt):
+		entries = string.split(entry, '_')
+		loc = vcard
+		while len(entries) > 1:
+			if not loc.has_key(entries[0]):
+				loc[entries[0]] = {}
+			loc = loc[entries[0]]
+			del entries[0]
+		loc[entries[0]] = txt
+		return vcard
+
+
+	def on_publish(self, widget):
+		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
+			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
+			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE']
+		vcard = {}
+		for e in entries:
+			txt = self.xml.get_widget('entry_'+e).get_text()
+			if txt != '':
+				vcard = self.add_to_vcard(vcard, e, txt)
+		buf = self.xml.get_widget('textview_DESC').get_buffer()
+		start_iter = buf.get_start_iter()
+		end_iter = buf.get_end_iter()
+		txt = buf.get_text(start_iter, end_iter, 0)
+		if txt != '':
+			vcard['DESC']= txt
+		self.r.queueOUT.put(('VCARD', vcard))
 
 	def __init__(self, acc_pref, jid):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard')
@@ -76,14 +117,13 @@ class vCard_Window:
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_close_clicked', self.delete_event)
 		self.xml.signal_connect('on_retrieve_clicked', self.on_retrieve)
+		self.xml.signal_connect('on_publish_clicked', self.on_publish)
 
 class infoUser_Window:
 	"""Class for user's information window"""
-	def test_vcard(self):
-		self.r.queueOUT.put(('VCARD', self.user.jid))
-
 	def delete_event(self, widget):
 		"""close window"""
+		del self.r.tab_vcard[self.user.jid]
 		self.window.destroy()
 
 	def add_grp_to_user(self, model, path, iter):
@@ -152,6 +192,25 @@ class infoUser_Window:
 		else:
 			return 0
 
+	def set_values(self, vcard):
+		self.vc = vcard
+		for i in vcard.keys():
+			if type(vcard[i]) == type({}):
+				for j in vcard[i].keys():
+					try:
+						self.xml.get_widget('entry_'+i+'_'+j).set_text(vcard[i][j])
+					except AttributeError, e:
+						pass
+			else:
+				if i == 'DESC':
+					self.xml.get_widget('textview_DESC').get_buffer().\
+						set_text(vcard[i], 0)
+				else:
+					try:
+						self.xml.get_widget('entry_'+i).set_text(vcard[i])
+					except AttributeError, e:
+						pass
+
 	def init_lists(self):
 		"""Initialize both available and current listStores"""
 		#list available
@@ -174,34 +233,33 @@ class infoUser_Window:
 		self.list2.append_column(column)
 
 	def __init__(self, user, roster):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Info_user')
-		self.window = xml.get_widget("Info_user")
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Info_user')
+		self.window = self.xml.get_widget("Info_user")
 		self.r = roster
 		self.user = user
-		self.list1 = xml.get_widget("treeview_available")
-		self.list2 = xml.get_widget("treeview_current")
-		self.entry_new = xml.get_widget("entry_new")
+		self.list1 = self.xml.get_widget("treeview_available")
+		self.list2 = self.xml.get_widget("treeview_current")
+		self.entry_new = self.xml.get_widget("entry_new")
 
-		xml.get_widget('label_name').set_text(user.name)
-		xml.get_widget('label_id').set_text(user.jid)
-		xml.get_widget('label_resource').set_text(user.resource)
-		xml.get_widget('label_sub').set_text(user.sub)
-		self.entry_name = xml.get_widget('entry_name')
+		self.xml.get_widget('label_name').set_text(user.name)
+		self.xml.get_widget('label_id').set_text(user.jid)
+		self.xml.get_widget('label_resource').set_text(user.resource)
+		self.xml.get_widget('label_sub').set_text(user.sub)
+		self.entry_name = self.xml.get_widget('entry_name')
 		self.entry_name.set_text(user.name)
 		if not user.status:
 			user.status = ''
-		xml.get_widget('label_status').set_text(user.show + ' : ' + \
+		self.xml.get_widget('label_status').set_text(user.show + ' : ' + \
 			user.status)
 		self.init_lists()
+		self.r.queueOUT.put(('ASK_VCARD', self.user.jid))
 		
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		xml.signal_connect('on_close_clicked', self.on_close)
-		xml.signal_connect('on_add_clicked', self.on_add)
-		xml.signal_connect('on_remove_clicked', self.on_remove)
-		xml.signal_connect('on_entry_new_key_press_event', \
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_close_clicked', self.on_close)
+		self.xml.signal_connect('on_add_clicked', self.on_add)
+		self.xml.signal_connect('on_remove_clicked', self.on_remove)
+		self.xml.signal_connect('on_entry_new_key_press_event', \
 			self.on_new_key_pressed)
-		print "\n***  TEST  ***\n"
-		self.test_vcard()
 		
 
 class preference_Window:
@@ -549,8 +607,9 @@ class accountPreference_Window:
 		self.delete_event(self)
 
 	def on_edit_details_clicked(self, widget):
-		self.accs.r.tab_vcard[self.entryJid.get_text()] = vCard_Window(self, self.entryJid.get_text())
-		self.accs.r.queueOUT.put(('VCARD', self.entryJid.get_text()))
+		if not self.accs.r.tab_vcard.has_key(self.entryJid.get_text()):
+			self.accs.r.tab_vcard[self.entryJid.get_text()] = vCard_Window(self, self.entryJid.get_text())
+			self.accs.r.queueOUT.put(('ASK_VCARD', self.entryJid.get_text()))
 	
 	#info must be a dictionnary
 	def __init__(self, accs, infos = {}):
@@ -1030,7 +1089,9 @@ class roster_Window:
 
 	def on_info(self, widget, jid):
 		"""Call infoUser_Window class to display user's information"""
-		infoUser_Window(self.l_contact[jid]['user'], self)
+		jid = self.l_contact[jid]['user'].jid
+		if not self.tab_vcard.has_key(jid):
+			self.tab_vcard[jid] = infoUser_Window(self.l_contact[jid]['user'], self)
 	
 	def mk_menu_c(self, event, iter):
 		"""Make user's popup menu"""
