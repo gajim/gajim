@@ -317,11 +317,19 @@ class tabbed_chat_window:
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
 		jid = self.get_active_jid()
-		if self.nb_unread[jid] > 0:
-			self.nb_unread[jid] = 0
-			self.redraw_tab(jid)
-			self.show_title()
-			self.plugin.systray.remove_jid(jid, self.account)
+		conversation_textview = self.xmls[jid].\
+			get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
+		end_iter = conversation_buffer.get_end_iter()
+		end_rect = conversation_textview.get_iter_location(end_iter)
+		visible_rect = conversation_textview.get_visible_rect()
+		if end_rect.y <= (visible_rect.y + visible_rect.height):
+			#we are at the end
+			if self.nb_unread[jid] > 0:
+				self.nb_unread[jid] = 0
+				self.redraw_tab(jid)
+				self.show_title()
+				self.plugin.systray.remove_jid(jid, self.account)
 
 	def on_history_button_clicked(self, widget):
 		"""When history button is pressed : call history window"""
@@ -337,11 +345,19 @@ class tabbed_chat_window:
 			if child == new_child:
 				new_jid = jid
 				break
-		if self.nb_unread[new_jid] > 0:
-			self.nb_unread[new_jid] = 0
-			self.redraw_tab(new_jid)
-			self.show_title()
-			self.plugin.systray.remove_jid(new_jid, self.account)
+		conversation_textview = self.xmls[new_jid].\
+			get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
+		end_iter = conversation_buffer.get_end_iter()
+		end_rect = conversation_textview.get_iter_location(end_iter)
+		visible_rect = conversation_textview.get_visible_rect()
+		if end_rect.y <= (visible_rect.y + visible_rect.height):
+			#we are at the end
+			if self.nb_unread[new_jid] > 0:
+				self.nb_unread[new_jid] = 0
+				self.redraw_tab(new_jid)
+				self.show_title()
+				self.plugin.systray.remove_jid(new_jid, self.account)
 
 	def active_tab(self, jid):
 		child = self.xmls[jid].get_widget('chat_vbox')
@@ -495,6 +511,32 @@ class tabbed_chat_window:
 			if len(self.plugin.roster.contacts[self.account][jid]) == 1:
 				self.plugin.roster.remove_user(user, self.account)
 
+	def on_conversation_textview_set_scroll_adjustments(self, widget, scrollstep, count):
+		print "toto"
+	
+	def on_conversation_scrolledwindow_scroll_child(self, widget, scrolltype, \
+		horizontal):
+		print "scrolled"
+		if horizontal:
+			return
+		jid = self.get_active_jid()
+		if not self.nb_unread[jid]:
+			return
+		print "scrolled2"
+		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
+		end_iter = conversation_buffer.get_end_iter()
+		end_rect = conversation_textview.get_iter_location(end_iter)
+		print end_rect.x, end_rect.y, end_rect.width, end_rect.height
+		visible_rect = conversation_textview.get_visible_rect()
+		print visible_rect.x, visible_rect.y, visible_rect.width, visible_rect.height
+		if end_rect.y <= (visible_rect.y + visible_rect.height):
+			#we are at the end
+			self.nb_unread[jid] = 0
+			self.redraw_tab(jid)
+			self.show_title()
+			self.plugin.systray.remove_jid(jid, self.account)
+
 	def print_conversation(self, text, jid, contact = None, tim = None):
 		"""Print a line in the conversation :
 		if contact is set to status : it's a status message
@@ -569,10 +611,16 @@ class tabbed_chat_window:
 			conversation_buffer.insert(end_iter, otext[end:])
 		
 		#scroll to the end of the textview
-		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
-			0.1, 0, 0, 0)
-		if (jid != self.get_active_jid() or not self.window.is_active()) and \
-			contact != 'status':
+		end_rect = conversation_textview.get_iter_location(end_iter)
+		visible_rect = conversation_textview.get_visible_rect()
+		end = False
+		if end_rect.y <= (visible_rect.y + visible_rect.height):
+			#we are at the end
+			end = True
+			conversation_textview.scroll_to_mark(conversation_buffer.\
+				get_mark('end'), 0.1, 0, 0, 0)
+		if (jid != self.get_active_jid() or not self.window.is_active() or \
+			not end) and contact != 'status':
 			self.nb_unread[jid] += 1
 			self.redraw_tab(jid)
 			self.show_title()
