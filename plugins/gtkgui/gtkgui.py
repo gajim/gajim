@@ -620,8 +620,14 @@ class tabbed_chat_window:
 			self.show_title()
 
 class Groupchat_window:
-	def on_groupchat_window_destroy(self, widget):
+	def on_groupchat_window_delete_event(self, widget):
 		"""close window"""
+		for room_jid in self.xmls:
+			if time.time() - self.last_message_time[room_jid] < 2:
+				dialog = Confirmation_dialog(_('You received a message in the room %s in the last two secondes.\nDo you still want to close this window ?') % \
+					room_jid.split('@')[0])
+				if dialog.get_response() != gtk.RESPONSE_YES:
+					return True #stop the propagation of the event
 		for room_jid in self.xmls:
 			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
 				room_jid, 'offline', 'offline'))
@@ -914,6 +920,7 @@ class Groupchat_window:
 					tag = 'incoming_bold'
 				else:
 					tag = 'incoming'
+				self.last_message_time[room_jid] = time.time()
 
 			if text.startswith('/me'):
 				ttext = contact + text[3:] + '\n'
@@ -1093,6 +1100,11 @@ class Groupchat_window:
 		self.xmls[room_jid].get_widget('message_textview').grab_focus()
 
 	def remove_tab(self, room_jid):
+		if time.time() - self.last_message_time[room_jid] < 2:
+			dialog = Confirmation_dialog(_('You received a message in the room %s in the last two secondes.\nDo you still want to close this tab ?') % \
+				room_jid.split('@')[0])
+			if dialog.get_response() != gtk.RESPONSE_YES:
+				return
 		if len(self.xmls) == 1:
 			self.window.destroy()
 		else:
@@ -1102,6 +1114,7 @@ class Groupchat_window:
 			del self.plugin.windows[self.account]['gc'][room_jid]
 			del self.nicks[room_jid]
 			del self.nb_unread[room_jid]
+			del self.last_message_time[room_jid]
 			del self.xmls[room_jid]
 			del self.tagIn[room_jid]
 			del self.tagInBold[room_jid]
@@ -1115,6 +1128,7 @@ class Groupchat_window:
 
 	def new_group(self, room_jid, nick):
 		self.nb_unread[room_jid] = 0
+		self.last_message_time[room_jid] = 0
 		self.nicks[room_jid] = nick
 		self.subjects[room_jid] = ''
 		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'group_vbox', APP)
@@ -1235,13 +1249,14 @@ class Groupchat_window:
 		self.tagStatus = {}
 		self.nicks = {}
 		self.nb_unread = {}
+		self.last_message_time = {}
 		self.list_treeview = {}
 		self.subjects = {}
 		self.window = self.xml.get_widget('groupchat_window')
 		self.new_group(room_jid, nick)
 		self.show_title()
-		self.xml.signal_connect('on_groupchat_window_destroy', \
-			self.on_groupchat_window_destroy)
+		self.xml.signal_connect('on_groupchat_window_delete_event', \
+			self.on_groupchat_window_delete_event)
 		self.xml.signal_connect('on_groupchat_window_focus_in_event', \
 			self.on_groupchat_window_focus_in_event)
 		self.xml.signal_connect('on_groupchat_window_key_press_event', \
