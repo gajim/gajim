@@ -1684,6 +1684,7 @@ David Ferlier (david@yazzy.org)</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <signal name="clicked" handler="on_button_close_clicked" last_modification_time="Mon, 03 Nov 2003 19:01:49 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment11">
@@ -1749,6 +1750,7 @@ David Ferlier (david@yazzy.org)</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <signal name="clicked" handler="on_button_deny_clicked" last_modification_time="Mon, 03 Nov 2003 19:01:54 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment12">
@@ -1814,6 +1816,7 @@ David Ferlier (david@yazzy.org)</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <signal name="clicked" handler="on_button_auth_clicked" last_modification_time="Mon, 03 Nov 2003 19:02:02 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment13">

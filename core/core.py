@@ -64,7 +64,10 @@ class GajimCore:
 				(prs.getFrom().getBasic(), 'offline', prs.getStatus()))
 		elif type == 'subscribe':
 			log.debug("subscribe request from %s" % who)
-			self.con.send(common.jabber.Presence(who, 'subscribed'))
+			if self.cfgParser.Core_alwaysauth == 1:
+				self.con.send(common.jabber.Presence(who, 'subscribed'))
+			else:
+				self.hub.sendPlugin('SUBSCRIBE', who)
 		elif type == 'subscribed':
 			#plein de trucs a faire
 			jid = prs.getFrom()
@@ -145,6 +148,9 @@ class GajimCore:
 				#('REQ', jid)
 				elif ev[0] == 'AUTH':
 					self.con.send(common.jabber.Presence(ev[1], 'subscribed'))
+				#('DENY', jid)
+				elif ev[0] == 'DENY':
+					self.con.send(common.jabber.Presence(ev[1], 'unsubscribed'))
 				#('UNSUB', jid)
 				elif ev[0] == 'UNSUB':
 					delauth = self.cfgParser.Core_delauth
@@ -173,5 +179,6 @@ def start():
 	gc.hub.register('gtkgui', 'NOTIFY')
 	gc.hub.register('gtkgui', 'MSG')
 	gc.hub.register('gtkgui', 'SUBSCRIBED')
+	gc.hub.register('gtkgui', 'SUBSCRIBE')
 	guiPl.load ()
 	gc.mainLoop()

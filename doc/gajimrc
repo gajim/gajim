@@ -12,6 +12,7 @@ ressource = gajim
 
 delauth = 1
 delroster = 1
+alwaysauth = 0
 
 [GtkGui]
 

@@ -52,8 +52,6 @@ class user:
 #			self.status = args[0].status
 #			self.sub = args[0].sub
 		else: raise TypeError, 'bad arguments'
-#		self.jid = self.name + '@' + self.server + '/' + self.resource
-#		self.jid = self.name + '@' + self.server
 
 class add:
 	def delete_event(self, widget):
@@ -68,9 +66,11 @@ class add:
 		self.r.req_sub(self, who, txt)
 		self.delete_event(self)
 		
-	def __init__(self, roster):
+	def __init__(self, roster, jid=None):
 		self.r = roster
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Add')
+		if jid:
+			 self.xml.get_widget('entry_who').set_text(jid)
 		self.Wadd = self.xml.get_widget("Add")
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
@@ -111,6 +111,29 @@ class confirm:
 		self.xml.get_widget('label_confirm').set_text('Are you sure you want to remove ' + self.jid + ' from your roster ?')
 		self.xml.signal_connect('on_okbutton_clicked', self.req_usub)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+
+class authorize:
+	def delete_event(self, widget):
+		self.window.destroy()
+		
+	def auth(self, widget):
+		self.r.queueOUT.put(('AUTH', self.jid))
+		self.delete_event(self)
+		add(self.r, self.jid)
+	
+	def deny(self, widget):
+		self.r.queueOUT.put(('DENY', self.jid))
+		self.delete_event(self)
+	
+	def __init__(self, roster, jid):
+		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Sub_req')
+		self.window = self.xml.get_widget('Sub_req')
+		self.r = roster
+		self.jid = jid
+		self.xml.get_widget('label').set_text('Subscription request from ' + self.jid)
+		self.xml.signal_connect('on_button_auth_clicked', self.auth)
+		self.xml.signal_connect('on_button_deny_clicked', self.deny)
+		self.xml.signal_connect('on_button_close_clicked', self.delete_event)
 
 class message:
 	def delete_event(self, widget):
@@ -288,9 +311,7 @@ class roster:
 	def req_sub(self, widget, jid, txt):
 		self.queueOUT.put(('SUB', (jid, txt)))
 		if not self.l_contact.has_key(jid):
-			#TODO: sub
 			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub')
-			#TODO: ajouter un grp si necessaire
 			if not self.l_group.has_key('general'):
 				iterG = self.treestore.append(None, (None, 'general', 'group'))
 				self.l_group['general'] = iterG
@@ -424,6 +445,8 @@ class plugin:
 					#FIXME:message d'un inconne
 					self.r.tab_messages[ev[1][0]] = message(self.r.l_contact[ev[1][0]]['user'], self.r)
 				self.r.tab_messages[ev[1][0]].print_conversation(ev[1][1])
+			elif ev[0] == 'SUBSCRIBE':
+				authorize(self.r, ev[1])
 			elif ev[0] == 'SUBSCRIBED':
 				u = self.r.l_contact[ev[1]['jid']]['user']
 				u.name = ev[1]['nom']
