@@ -200,7 +200,8 @@ class Tabbed_chat_window(Chat):
 		self.plugin.roster.show_title()
 		del self.plugin.queues[self.account][jid]
 		self.plugin.roster.redraw_jid(jid, self.account)
-		self.plugin.systray.remove_jid(jid, self.account)
+		if self.plugin.systray_enabled:
+			self.plugin.systray.remove_jid(jid, self.account)
 		showOffline = self.plugin.config['showoffline']
 		if (user.show == 'offline' or user.show == 'error') and \
 			not showOffline:

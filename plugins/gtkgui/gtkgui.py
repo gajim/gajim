@@ -738,13 +738,11 @@ class plugin:
 		# [^\s*] anything but whitespaces and '*'
 		# (?<!\S) is a one char lookbehind assertion and asks for any leading whitespace
 		# and mathces beginning of lines so we have correct formatting detection
-		# even if the the text is just '*something*'
+		# even if the the text is just '*foo*'
 		# (?!\S) is the same thing but it's a lookahead assertion
-		# basic_pattern is one string literal.
-		# I've put spaces to make the regexp look better.
-		links = r'\bhttp://[^)\s]+|' r'\bhttps://[^)\s]+|' r'\bnews://[^)\s]+|' r'\bftp://[^)\s]+|' r'\bed2k://[^)\s]+|' r'\bwww\.[^)\s]+|' r'\bftp\.[^)\s]+|'
+		links = r'\bhttp://\S+|' r'\bhttps://\S+|' r'\bnews://\S+|' r'\bftp://\S+|' r'\bed2k://\S+|' r'\bwww\.\S+|' r'\bftp\.\S+|'
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
-		mail = r'\bmailto:[^)\s]+|' r'\b[^)\s]+@[^)\s]+\.[^)\s]+|'
+		mail = r'\bmailto:\S+|' r'\b\S+@\S+\.\S+|'
 
 		#detects eg. *b* *bold* *bold bold* test *bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
@@ -908,8 +906,9 @@ class plugin:
 			except: # user doesn't have trayicon capabilities
 				self.config['trayicon'] = 0
 				self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
-				self.systray = systrayDummy()
+				self.systray_capabilities = False
 			else:
+				self.systray_capabilities = True
 				self.systray = systray(self)
 		else:
 			self.systray = systray(self)

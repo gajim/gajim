@@ -877,7 +877,8 @@ class Roster_window:
 				model = self.tree.get_model()
 				self.plugin.queues[account][jid] = Queue.Queue(50)
 				self.redraw_jid(jid, account)
-				self.plugin.systray.add_jid(jid, account)
+				if self.plugin.systray_enabled:
+					self.plugin.systray.add_jid(jid, account)
 			self.plugin.queues[account][jid].put((msg, tim))
 			self.nb_unread += 1
 			self.show_title()
@@ -1307,7 +1308,20 @@ class Roster_window:
 		cell = gtk.CellRendererText()
 		self.cb.pack_start(cell, True)
 		self.cb.add_attribute(cell, 'text', 0)
-		for status in ['online', 'away', 'xa', 'dnd', 'invisible', 'offline']:
+		for status in ['online', 'dnd', 'away', 'xa', 'invisible', 'offline']:
+			''' GIVES ERROR in core.py line: 805
+			First I like status to be Online and not online
+			and jargon word as dnd and xa should be as I have them
+			that means either this code, or changing 'xa' and 'dnd' all over
+			you know the core better yann so let us talk on this
+			if status == 'dnd':
+				status_better = 'Busy'
+			elif status == 'xa':
+				status_better = 'Extended Away'
+			else:
+				status_better = status.capitalize()
+			iter = liststore.append([status_better, self.pixbufs[status]])
+			'''
 			iter = liststore.append([status, self.pixbufs[status]])
 		self.cb.show_all()
 		self.cb.set_model(liststore)

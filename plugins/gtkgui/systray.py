@@ -31,22 +31,6 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-class systrayDummy:
-	"""Class when we don't want icon in the systray"""
-	def add_jid(self, jid, account):
-		pass
-	def remove_jid(self, jid, account):
-		pass
-	def set_status(self, status):
-		pass
-	def show_icon(self):
-		pass
-	def hide_icon(self):
-		pass
-	def __init__(self):
-		self.t = gtk.Button()
-		self.jids = []
-
 class systray:
 	"""Class for icon in the systray"""
 	def set_img(self):
@@ -61,8 +45,6 @@ class systray:
 			self.img_tray.set_from_pixbuf(image.get_pixbuf())
 
 	def add_jid(self, jid, account):
-		if not self.t: # the systray is hidden
-			return
 		list = [account, jid]
 		if not list in self.jids:
 			self.jids.append(list)
@@ -83,8 +65,6 @@ class systray:
 		self.tip.set_tip(self.t, label)
 
 	def remove_jid(self, jid, account):
-		if not self.t: # the systray is hidden
-			return
 		list = [account, jid]
 		if list in self.jids:
 			self.jids.remove(list)

@@ -716,11 +716,12 @@ class Preferences_window:
 		self.notebook = self.xml.get_widget('preferences_notebook')
 		
 		#trayicon
-		st = self.plugin.config['trayicon']
-		self.tray_icon_checkbutton.set_active(st)
-		if isinstance(self.plugin.systray, gtkgui.systrayDummy):
+		if self.plugin.systray_capabilities:
+			st = self.plugin.config['trayicon']
+			self.tray_icon_checkbutton.set_active(st)
+		else:
 			self.tray_icon_checkbutton.set_sensitive(False)
-
+		
 		#Save position
 		st = self.plugin.config['saveposition']
 		self.xml.get_widget('save_position_checkbutton').set_active(st)

@@ -116,7 +116,7 @@ class Chat:
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
 		#clean self.plugin.windows[self.account][kind]
 		for jid in self.xmls:
-			if self.nb_unread[jid] > 0:
+			if self.plugin.systray_enabled and self.nb_unread[jid] > 0:
 				self.plugin.systray.remove_jid(jid, self.account)
 			del self.plugin.windows[self.account][kind][jid]
 			if self.print_time_timeout_id.has_key(jid):
@@ -154,7 +154,8 @@ class Chat:
 				self.nb_unread[jid] = 0
 				self.redraw_tab(jid)
 				self.show_title()
-				self.plugin.systray.remove_jid(jid, self.account)
+				if self.plugin.systray_enabled:
+					self.plugin.systray.remove_jid(jid, self.account)
 
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
 		new_child = notebook.get_nth_page(page_num)
@@ -175,7 +176,8 @@ class Chat:
 				self.nb_unread[new_jid] = 0
 				self.redraw_tab(new_jid)
 				self.show_title()
-				self.plugin.systray.remove_jid(new_jid, self.account)
+				if self.plugin.systray_enabled:
+					self.plugin.systray.remove_jid(new_jid, self.account)
 
 	def active_tab(self, jid):
 		self.notebook.set_current_page(\
@@ -188,7 +190,8 @@ class Chat:
 			if self.nb_unread[jid] > 0:
 				self.nb_unread[jid] = 0
 				self.show_title()
-				self.plugin.systray.remove_jid(jid, self.account)
+				if self.plugin.systray_enabled:
+					self.plugin.systray.remove_jid(jid, self.account)
 			if self.print_time_timeout_id.has_key(jid):
 				gobject.source_remove(self.print_time_timeout_id[jid])
 				del self.print_time_timeout_id[jid]
@@ -331,7 +334,8 @@ class Chat:
 			self.nb_unread[jid] = 0
 			self.redraw_tab(jid)
 			self.show_title()
-			self.plugin.systray.remove_jid(jid, self.account)
+			if self.plugin.systray_enabled:
+				self.plugin.systray.remove_jid(jid, self.account)
 	
 	def on_conversation_textview_motion_notify_event(self, widget, event):
 		"""change the cursor to a hand when we are on a mail or an url"""
@@ -484,12 +488,14 @@ class Chat:
 				self.plugin.emoticons[emot_ascii])
 		elif special_text.startswith('mailto:'):
 			#it's a mail
+			special_text = special_text[0:-1]
 			tags.append('mail')
 			use_other_tags = False
 		elif self.plugin.sth_at_sth_dot_sth_re.match(special_text):
 			#it's a mail
 			tags.append('mail')
 			use_other_tags = False
+			special_text = special_text[0:-1]
 		elif special_text.startswith('*'): # it's a bold text
 			tags.append('bold')
 			if special_text[1] == '/': # it's also italic
@@ -589,6 +595,7 @@ class Chat:
 		if ((jid != self.get_active_jid()) or (not self.window.is_active()) or \
 			(not end)) and kind == 'incoming':
 			self.nb_unread[jid] += 1
-			self.plugin.systray.add_jid(jid, self.account)
+			if self.plugin.systray_enabled:
+				self.plugin.systray.add_jid(jid, self.account)
 			self.redraw_tab(jid)
 			self.show_title()
