@@ -75,8 +75,6 @@ from config import *
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-USE_TABBED_CHAT = 0
-
 class ImageCellRenderer(gtk.GenericCellRenderer):
 
 	__gproperties__ = {
@@ -98,7 +96,8 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 		if model.get_value(iter, 0) == image:
 			self.redraw = 1
 			cell_area = tree.get_cell_area(path, tree.get_column(0))
-			tree.queue_draw_area(cell_area.x, cell_area.y, cell_area.width, cell_area.height)
+			tree.queue_draw_area(cell_area.x, cell_area.y, cell_area.width, \
+				cell_area.height)
 
 	def animation_timeout(self, tree, image):
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
@@ -107,14 +106,16 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 			model = tree.get_model()
 			model.foreach(self.func, (image, tree))
 			if self.redraw:
-				gobject.timeout_add(image.get_data('iter').get_delay_time(), self.animation_timeout, tree, image)
+				gobject.timeout_add(image.get_data('iter').get_delay_time(), \
+					self.animation_timeout, tree, image)
 			else:
 				image.set_data('iter', None)
 				
 	def on_render(self, window, widget, background_area,cell_area, \
 		expose_area, flags):
 		pix_rect = gtk.gdk.Rectangle()
-		pix_rect.x, pix_rect.y, pix_rect.width, pix_rect.height = self.on_get_size(widget, cell_area)
+		pix_rect.x, pix_rect.y, pix_rect.width, pix_rect.height = \
+			self.on_get_size(widget, cell_area)
 
 		pix_rect.x += cell_area.x
 		pix_rect.y += cell_area.y
@@ -128,7 +129,8 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 			if not self.image.get_data('iter'):
 				animation = self.image.get_animation()
 				self.image.set_data('iter', animation.get_iter())
-				gobject.timeout_add(self.image.get_data('iter').get_delay_time(), self.animation_timeout, widget, self.image)
+				gobject.timeout_add(self.image.get_data('iter').get_delay_time(), \
+					self.animation_timeout, widget, self.image)
 
 			pix = self.image.get_data('iter').get_pixbuf()
 		elif self.image.get_storage_type() == gtk.IMAGE_PIXBUF:
@@ -155,8 +157,10 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 		x_offset = 0
 		y_offset = 0
 		if cell_area and pixbuf_width > 0 and pixbuf_height > 0:
-			x_offset = self.get_property("xalign") * (cell_area.width - calc_width -  self.get_property("xpad"))
-			y_offset = self.get_property("yalign") * (cell_area.height - calc_height -  self.get_property("ypad"))
+			x_offset = self.get_property("xalign") * (cell_area.width - \
+				calc_width -  self.get_property("xpad"))
+			y_offset = self.get_property("yalign") * (cell_area.height - \
+				calc_height -  self.get_property("ypad"))
 		return x_offset, y_offset, calc_width, calc_height
 
 gobject.type_register(ImageCellRenderer)
@@ -192,25 +196,31 @@ class User:
 class tabbed_chat_window:
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat', APP)
-		self.xml.get_widget('notebook').remove_page(0)
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat_window', APP)
+		self.chat_notebook = self.xml.get_widget('chat_notebook')
+		self.chat_notebook.remove_page(0)
 		self.plugin = plugin
 		self.account = account
-		self.widgets = {}
+		self.xmls = {}
 		self.tagIn = {}
 		self.tagOut = {}
 		self.tagStatus = {}
-		self.users = {user.jid: user}
-		self.nb_unread = {user.jid: 0}
-		self.window = self.xml.get_widget('tabbed_chat')
+		self.users = {}
+		self.nb_unread = {}
+		self.window = self.xml.get_widget('tabbed_chat_window')
 		self.new_user(user)
 		self.show_title()
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_focus', self.on_focus)
-		self.xml.signal_connect('on_chat_key_press_event', \
-			self.on_chat_key_press_event)
-		self.xml.signal_connect('on_notebook_switch_page', \
-			self.on_notebook_switch_page)
+		self.xml.signal_connect('on_tabbed_chat_window_destroy', \
+			self.on_tabbed_chat_window_destroy)
+		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event', \
+			self.on_tabbed_chat_window_focus_in_event)
+		self.xml.signal_connect('on_tabbed_chat_window_key_press_event', \
+			self.on_tabbed_chat_window_key_press_event)
+		self.xml.signal_connect('on_chat_notebook_switch_page', \
+			self.on_chat_notebook_switch_page)
+		#TODO
+#		if use_tab:
+#			plugin.windows[account]['chats']['tabbed'] = self
 		
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -222,6 +232,7 @@ class tabbed_chat_window:
 				self.plugin.config['statusmsgcolor'])
 
 	def show_title(self):
+		"""redraw the window's title"""
 		unread = 0
 		for jid in self.nb_unread:
 			unread += self.nb_unread[jid]
@@ -233,68 +244,73 @@ class tabbed_chat_window:
 		self.window.set_title(start + "Chat (" + self.account + ")")
 
 	def draw_widgets(self, user):
-		widget_img = self.widgets[user.jid]['image_status']
+		"""draw the widgets in a tab (status_image, contact_button ...)
+		according to the the information in the user variable"""
+		jid = user.jid
+		status_image = self.xmls[jid].get_widget('status_image')
 		image = self.plugin.roster.pixbufs[user.show]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			widget_img.set_from_animation(image.get_animation())
+			status_image.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			widget_img.set_from_pixbuf(image.get_pixbuf())
-		self.widgets[user.jid]['button_contact'].set_label(\
-			user.name + ' <' + user.jid + '>')
+			status_image.set_from_pixbuf(image.get_pixbuf())
+		contact_button = self.xmls[jid].get_widget('contact_button')
+		contact_button.set_label(user.name + ' <' + jid + '>')
 		if not user.keyID:
-			self.widgets[user.jid]['toggle_gpg'].set_sensitive(False)
+			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
 
 	def redraw_tab(self, jid):
+		"""redraw the label of the tab"""
 		start = ''
 		if self.nb_unread[jid] > 1:
 			start = "[" + str(self.nb_unread[jid]) + "] "
 		elif self.nb_unread[jid] == 1:
 			start = "* "
-		nb = self.xml.get_widget("notebook")
-		child = self.widgets[jid]['vbox_tab']
-		nb.set_tab_label_text(child, start + self.users[jid].name)
+		child = self.xmls[jid].get_widget('chat_vbox')
+		self.chat_notebook.set_tab_label_text(child, start + self.users[jid].name)
 
 	def set_image(self, image, jid):
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			self.widgets[jid]['image_status'].\
+			self.xmls[jid].get_widget('status_image').\
 				set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			self.widgets[jid]['image_status'].\
+			self.xmls[jid].get_widget('status_image').\
 				set_from_pixbuf(image.get_pixbuf())
 
-	def delete_event(self, widget):
+	def on_tabbed_chat_window_destroy(self, widget):
 		"""close window"""
 		#clean self.plugin.windows[self.account]['chats']
 		for jid in self.users:
 			del self.plugin.windows[self.account]['chats'][jid]
-		del self.plugin.windows[self.account]['chats']['tabbed']
+		if self.plugin.windows[self.account]['chats'].has_key('tabbed'):
+			del self.plugin.windows[self.account]['chats']['tabbed']
 
 	def get_active_jid(self):
-		nb = self.xml.get_widget("notebook")
-		child = nb.get_nth_page(nb.get_current_page())
-		jid = ''
-		for j in self.widgets:
-			c = self.widgets[j]['vbox_tab']
-			if c == child:
-				jid = j
+		active_child = self.chat_notebook.get_nth_page(\
+			self.chat_notebook.get_current_page())
+		active_jid = ''
+		for jid in self.xmls:
+			child = self.xmls[jid].get_widget('chat_vbox')
+			if child == active_child:
+				active_jid = jid
 				break
-		return jid
+		return active_jid
 
-	def on_clear(self, widget):
+	def on_clear_button_clicked(self, widget):
 		"""When clear button is pressed :
 		clear the conversation"""
 		jid = self.get_active_jid()
-		buffer = self.widgets[jid]['conversation'].get_buffer()
-		deb, end = buffer.get_bounds()
-		buffer.delete(deb, end)
+		conversation_buffer = self.xmls[jid].get_widget('conversation_textview').\
+			get_buffer()
+		deb, end = conversation_buffer.get_bounds()
+		conversation_buffer.delete(deb, end)
 
-	def on_close_clicked(self, button):
+	def on_close_button_clicked(self, button):
 		"""When close button is pressed :
 		close a tab"""
 		jid = self.get_active_jid()
 		self.remove_tab(jid)
 
-	def on_focus(self, widget, event):
+	def on_tabbed_chat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
 		jid = self.get_active_jid()
 		if self.nb_unread[jid] > 0:
@@ -303,140 +319,74 @@ class tabbed_chat_window:
 			self.show_title()
 			self.plugin.systray.remove_jid(jid, self.account)
 
-	def on_history(self, widget):
-		"""When history button is pressed : call log window"""
+	def on_history_button_clicked(self, widget):
+		"""When history button is pressed : call history window"""
 		jid = self.get_active_jid()
 		if not self.plugin.windows['logs'].has_key(jid):
 			self.plugin.windows['logs'][jid] = history_window(self.plugin, jid)
 
-	def on_notebook_switch_page(self, nb, page, page_num):
-		child = nb.get_nth_page(page_num)
-		jid = ''
-		for j in self.widgets:
-			c = self.widgets[j]['vbox_tab']
-			if c == child:
-				jid = j
+	def on_chat_notebook_switch_page(self, notebook, page, page_num):
+		new_child = notebook.get_nth_page(page_num)
+		new_jid = ''
+		for jid in self.xmls:
+			child = self.xmls[jid].get_widget('chat_vbox')
+			if child == new_child:
+				new_jid = jid
 				break
-		if self.nb_unread[jid] > 0:
-			self.nb_unread[jid] = 0
-			self.redraw_tab(jid)
+		if self.nb_unread[new_jid] > 0:
+			self.nb_unread[new_jid] = 0
+			self.redraw_tab(new_jid)
 			self.show_title()
-			self.plugin.systray.remove_jid(jid, self.account)
+			self.plugin.systray.remove_jid(new_jid, self.account)
 
 	def active_tab(self, jid):
-		child = self.widgets[jid]['vbox_tab']
-		nb = self.xml.get_widget("notebook")
-		nb.set_current_page(nb.page_num(child))
-		self.widgets[jid]['message'].grab_focus()
+		child = self.xmls[jid].get_widget('chat_vbox')
+		self.chat_notebook.set_current_page(\
+			self.chat_notebook.page_num(child))
+		self.xmls[jid].get_widget('message_textview').grab_focus()
 
 	def remove_tab(self, jid):
-		if len(self.widgets) == 1:
+		if len(self.xmls) == 1:
 			self.window.destroy()
 		else:
-			nb = self.xml.get_widget('notebook')
-			nb.remove_page(nb.get_current_page())
+			self.chat_notebook.remove_page(\
+				self.chat_notebook.get_current_page())
 			del self.plugin.windows[self.account]['chats'][jid]
 			del self.users[jid]
 			del self.nb_unread[jid]
-			del self.widgets[jid]
+			del self.xmls[jid]
 			del self.tagIn[jid]
 			del self.tagOut[jid]
 			del self.tagStatus[jid]
-			if len(self.widgets) == 1:
-				nb.set_show_tabs(False)
+			if len(self.xmls) == 1:
+				self.chat_notebook.set_show_tabs(False)
 
 	def new_user(self, user):
 		self.nb_unread[user.jid] = 0
 		self.users[user.jid] = user
-
-		self.widgets[user.jid] = {}
-		vb = gtk.VBox()
-		vb.set_border_width(5)
-		self.widgets[user.jid]['vbox_tab'] = vb
-		hb = gtk.HBox(spacing=5)
-		hb.set_border_width(5)
-		vb.pack_start(hb, expand=False)
+		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chat_vbox', APP)
 		
-		button = gtk.Button(stock=gtk.STOCK_JUSTIFY_FILL)
-		button.get_children()[0].get_children()[0].get_children()[1].set_text("History")
-		button.connect("clicked", self.on_history)
-		hb.pack_start(button, expand=False, fill=False)
-
-		button = gtk.Button(stock=gtk.STOCK_CLEAR)
-		button.connect("clicked", self.on_clear)
-		hb.pack_start(button, expand=False, fill=False)
-
-		img = gtk.Image()
-		hb.pack_start(img, expand=False, fill=False)
-		self.widgets[user.jid]['image_status'] = img
-
-		img = gtk.Image()
-		img.set_from_stock(gtk.STOCK_DIALOG_AUTHENTICATION, gtk.ICON_SIZE_BUTTON)
-		button = gtk.ToggleButton()
-		button.add(img)
-		button.set_relief(gtk.RELIEF_NONE)
-		hb.pack_start(button, expand=False, fill=False)
-		self.widgets[user.jid]['toggle_gpg'] = button
-
-		fixed = gtk.Fixed()
-		fixed.set_size_request(20, -1)
-		hb.pack_start(fixed)
-		button = gtk.Button("Anonymous")
-		button.set_relief(gtk.RELIEF_NONE)
-		button.connect("clicked", self.on_button_contact_clicked)
-		button.set_use_underline(False)
-		fixed.put(button, 0, 0)
-		self.widgets[user.jid]['button_contact'] = button
-		
-		img = gtk.Image()
-		img.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_BUTTON)
-		button = gtk.Button()
-		button.add(img)
-		button.connect("clicked", self.on_close_clicked)
-		hb.pack_start(button, expand=False, fill=False)
-
-		vp = gtk.VPaned()
-		vb.pack_start(vp)
-		vp.set_position(170)
-
-		sw = gtk.ScrolledWindow()
-		sw.set_shadow_type(gtk.SHADOW_IN)
-		vp.add1(sw)
-		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		tv = gtk.TextView()
-		tv.set_wrap_mode(gtk.WRAP_WORD)
-		tv.set_editable(False)
-		tv.set_cursor_visible(False)
-		sw.add(tv)
-		self.widgets[user.jid]['conversation'] = tv
-		buffer = tv.get_buffer()
-		end_iter = buffer.get_end_iter()
-		buffer.create_mark('end', end_iter, 0)
-		self.tagIn[user.jid] = buffer.create_tag("incoming")
+		conversation_textview = \
+			self.xmls[user.jid].get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
+		end_iter = conversation_buffer.get_end_iter()
+		conversation_buffer.create_mark('end', end_iter, 0)
+		self.tagIn[user.jid] = conversation_buffer.create_tag('incoming')
 		color = self.plugin.config['inmsgcolor']
-		self.tagIn[user.jid].set_property("foreground", color)
-		self.tagOut[user.jid] = buffer.create_tag("outgoing")
+		self.tagIn[user.jid].set_property('foreground', color)
+		self.tagOut[user.jid] = conversation_buffer.create_tag('outgoing')
 		color = self.plugin.config['outmsgcolor']
-		self.tagOut[user.jid].set_property("foreground", color)
-		self.tagStatus[user.jid] = buffer.create_tag("status")
+		self.tagOut[user.jid].set_property('foreground', color)
+		self.tagStatus[user.jid] = conversation_buffer.create_tag('status')
 		color = self.plugin.config['statusmsgcolor']
-		self.tagStatus[user.jid].set_property("foreground", color)
+		self.tagStatus[user.jid].set_property('foreground', color)
 
-		sw = gtk.ScrolledWindow()
-		sw.set_shadow_type(gtk.SHADOW_IN)
-		vp.add2(sw)
-		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		tv = gtk.TextView()
-		tv.set_wrap_mode(gtk.WRAP_WORD)
-		sw.add(tv)
-		self.widgets[user.jid]['message'] = tv
-		tv.connect('key_press_event', self.on_msg_key_press_event)
-
-		vb.show_all()
-		nb = self.xml.get_widget("notebook")
-		nb.append_page(vb)
-		if len(self.widgets) > 1:
-			nb.set_show_tabs(True)
+		self.xmls[user.jid].signal_autoconnect(self)
+		
+		self.chat_notebook.append_page(self.xmls[user.jid].\
+			get_widget('chat_vbox'))
+		if len(self.xmls) > 1:
+			self.chat_notebook.set_show_tabs(True)
 
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
@@ -448,53 +398,53 @@ class tabbed_chat_window:
 			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
 				user.show, user.status), user.jid, 'status')
 
-	def on_msg_key_press_event(self, widget, event):
+	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed :
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation"""
 		if event.keyval == gtk.keysyms.Return:
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return 0
-			txt_buffer = widget.get_buffer()
-			start_iter = txt_buffer.get_start_iter()
-			end_iter = txt_buffer.get_end_iter()
-			txt = txt_buffer.get_text(start_iter, end_iter, 0)
-			if txt != '':
+			message_buffer = widget.get_buffer()
+			start_iter = message_buffer.get_start_iter()
+			end_iter = message_buffer.get_end_iter()
+			message = message_buffer.get_text(start_iter, end_iter, 0)
+			if message != '':
 				keyID = ''
 				jid = self.get_active_jid()
-				if self.widgets[jid]['toggle_gpg'].get_active():
+				if self.xmls[jid].get_widget('gpg_togglebutton').get_active():
 					keyID = self.users[jid].keyID
-				self.plugin.send('MSG', self.account, (jid, txt, keyID))
-				txt_buffer.set_text('', -1)
-				self.print_conversation(txt, jid, jid)
+				self.plugin.send('MSG', self.account, (jid, message, keyID))
+				message_buffer.set_text('', -1)
+				self.print_conversation(message, jid, jid)
 			return 1
 		return 0
 
-	def on_chat_key_press_event(self, widget, event):
-		nb = self.xml.get_widget("notebook")
+	def on_tabbed_chat_window_key_press_event(self, widget, event):
 		st = "1234567890"
 		if event.keyval == gtk.keysyms.Escape:
 			jid = self.get_active_jid()
 			self.remove_tab(jid)
 		elif event.string and event.string in st \
 			and (event.state & gtk.gdk.MOD1_MASK):
-			nb.set_current_page(st.index(event.string))
+			self.chat_notebook.set_current_page(st.index(event.string))
 		elif event.keyval == gtk.keysyms.Page_Down and \
 			(event.state & gtk.gdk.CONTROL_MASK):
-			current = nb.get_current_page()
+			current = self.chat_notebook.get_current_page()
 			if current > 0:
-				nb.set_current_page(current-1)
+				self.chat_notebook.set_current_page(current-1)
 			else:
-				nb.set_current_page(nb.get_n_pages()-1)
+				self.chat_notebook.set_current_page(\
+					self.chat_notebook.get_n_pages()-1)
 		elif event.keyval == gtk.keysyms.Page_Up and \
 			(event.state & gtk.gdk.CONTROL_MASK):
-			current = nb.get_current_page()
-			if current < (nb.get_n_pages()-1):
-				nb.set_current_page(current+1)
+			current = self.chat_notebook.get_current_page()
+			if current < (self.chat_notebook.get_n_pages()-1):
+				self.chat_notebook.set_current_page(current+1)
 			else:
-				nb.set_current_page(0)
+				self.chat_notebook.set_current_page(0)
 
-	def on_button_contact_clicked(self, widget):
+	def on_contact_button_clicked(self, widget):
 		"""When button contact is clicked"""
 		jid = self.get_active_jid()
 		user = self.users[jid]
@@ -505,8 +455,8 @@ class tabbed_chat_window:
 		jid = self.get_active_jid()
 		user = self.users[jid]
 		while not q.empty():
-			evt = q.get()
-			self.print_conversation(evt[0], jid, tim = evt[1])
+			event = q.get()
+			self.print_conversation(event[0], jid, tim = event[1])
 			self.plugin.roster.nb_unread -= 1
 		self.plugin.roster.show_title()
 		del self.plugin.queues[self.account][jid]
@@ -518,27 +468,27 @@ class tabbed_chat_window:
 			if len(self.plugin.roster.contacts[self.account][jid]) == 1:
 				self.plugin.roster.remove_user(user, self.account)
 
-	def print_conversation(self, txt, jid, contact = None, tim = None):
+	def print_conversation(self, text, jid, contact = None, tim = None):
 		"""Print a line in the conversation :
 		if contact is set to status : it's a status message
 		if contact is set to another value : it's an outgoing message
 		if contact is not set : it's an incomming message"""
 		user = self.users[jid]
-		conversation = self.widgets[jid]['conversation']
-		buffer = conversation.get_buffer()
-		if not txt:
-			txt = ""
-		end_iter = buffer.get_end_iter()
+		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
+		if not text:
+			text = ""
+		end_iter = conversation_buffer.get_end_iter()
 		if not tim:
 			tim = time.localtime()
 		tims = time.strftime("[%H:%M:%S]", tim)
-		buffer.insert(end_iter, tims + ' ')
+		conversation_buffer.insert(end_iter, tims + ' ')
 		
-		otxt = ''
-		ttxt = ''
+		otext = ''
+		ttext = ''
 		if contact == 'status':
 			tag = 'status'
-			ttxt = txt + '\n'
+			ttext = text + '\n'
 		else:
 			if contact:
 				tag = 'outgoing'
@@ -547,240 +497,38 @@ class tabbed_chat_window:
 				tag = 'incoming'
 				name = user.name
 				
-			if string.find(txt, '/me ') == 0:
-				ttxt = name + ' ' + txt[4:] + '\n'
+			if string.find(text, '/me ') == 0:
+				ttext = name + ' ' + text[4:] + '\n'
 			else:
-				ttxt = '<' + name + '> '
-				otxt = txt + '\n'
+				ttext = '<' + name + '> '
+				otext = text + '\n'
 
-		buffer.insert_with_tags_by_name(end_iter, ttxt, tag)
-		if len(otxt) > 0:
+		conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
+		if len(otext) > 0:
 			beg = 0
 			if self.plugin.config['useemoticons']:
 				index = 0
-				while index < len(otxt):
-					if otxt[index] in self.plugin.roster.begin_emot:
+				while index < len(otext):
+					if otext[index] in self.plugin.roster.begin_emot:
 						for s in self.plugin.roster.emoticons:
 							l = len(s)
-							if s == otxt[index:index+l]:
-								buffer.insert(end_iter, otxt[beg:index])
-								buffer.insert_pixbuf(end_iter, \
+							if s == otext[index:index+l]:
+								conversation_buffer.insert(end_iter, otext[beg:index])
+								conversation_buffer.insert_pixbuf(end_iter, \
 									self.plugin.roster.emoticons[s])
 								index+=l
 								beg = index
 					index+=1
-			buffer.insert(end_iter, otxt[beg:])
+			conversation_buffer.insert(end_iter, otext[beg:])
 		
 		#scroll to the end of the textview
-		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
+		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
+			0.1, 0, 0, 0)
 		if (jid != self.get_active_jid() or not self.window.is_active()) and \
 			contact != 'status':
 			self.nb_unread[jid] += 1
 			self.redraw_tab(jid)
 			self.show_title()
-
-
-class chat_window:
-	"""Class for chat window"""
-	def delete_event(self, widget):
-		"""close window"""
-		del self.plugin.windows[self.account]['chats'][self.user.jid]
-	
-	def print_conversation(self, txt, jid, contact = None, tim = None):
-		"""Print a line in the conversation :
-		if contact is set to status : it's a status message
-		if contact is set to another value : it's an outgoing message
-		if contact is not set : it's an incomming message"""
-		conversation_textview = self.xml.get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		if not txt:
-			txt = ""
-		end_iter = conversation_buffer.get_end_iter()
-		if not tim:
-			tim = time.localtime()
-		tims = time.strftime("[%H:%M:%S]", tim)
-		conversation_buffer.insert(end_iter, tims + ' ')
-		
-		otxt = ''
-		ttxt = ''
-		if contact and contact == 'status':
-			tag = 'status'
-			ttxt = txt + '\n'
-		else:
-			if contact:
-				tag = 'outgoing'
-				name = self.plugin.nicks[self.account] 
-			else:
-				tag = 'incoming'
-				name = self.user.name
-				
-			if string.find(txt, '/me ') == 0:
-				ttxt = name + ' ' + txt[4:] + '\n'
-			else:
-				ttxt = '<' + name + '> '
-				otxt = txt + '\n'
-
-		conversation_buffer.insert_with_tags_by_name(end_iter, ttxt, tag)
-		if len(otxt) > 0:
-			beg = 0
-			if self.plugin.config['useemoticons']:
-				index = 0
-				while index < len(otxt):
-					if otxt[index] in self.plugin.roster.begin_emot:
-						for s in self.plugin.roster.emoticons:
-							l = len(s)
-							if s == otxt[index:index+l]:
-								conversation_buffer.insert(end_iter, otxt[beg:index])
-								conversation_buffer.insert_pixbuf(end_iter, self.plugin.roster.emoticons[s])
-								index+=l
-								beg = index
-					index+=1
-			conversation_buffer.insert(end_iter, otxt[beg:])
-		
-		#scroll to the end of the textview
-		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
-			0.1, 0, 0, 0)
-		if not self.window.is_active() and contact != 'status':
-			self.nb_unread += 1
-			self.show_title()
-
-	def show_title(self):
-		start = ""
-		if self.nb_unread > 1:
-			start = "[" + str(self.nb_unread) + "] "
-		elif self.nb_unread == 1:
-			start = "* "
-		self.window.set_title(start + self.user.name + " (" + self.account + ")")
-
-	def update_tags(self):
-		self.tagIn.set_property("foreground", self.plugin.config['inmsgcolor'])
-		self.tagOut.set_property("foreground", self.plugin.config['outmsgcolor'])
-		self.tagStatus.set_property("foreground", \
-			self.plugin.config['statusmsgcolor'])
-
-	def set_image(self, image, jid):
-		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			self.status_image.set_from_animation(image.get_animation())
-		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			self.status_image.set_from_pixbuf(image.get_pixbuf())
-
-	def read_queue(self, q):
-		"""read queue and print messages containted in it"""
-		while not q.empty():
-			evt = q.get()
-			self.print_conversation(evt[0], self.user.jid, tim = evt[1])
-			self.plugin.roster.nb_unread -= 1
-		self.plugin.roster.show_title()
-		del self.plugin.queues[self.account][self.user.jid]
-		self.plugin.roster.redraw_jid(self.user.jid, self.account)
-		self.plugin.systray.remove_jid(self.user.jid, self.account)
-		showOffline = self.plugin.config['showoffline']
-		if (self.user.show == 'offline' or self.user.show == 'error') and \
-			not showOffline:
-			if len(self.plugin.roster.contacts[self.account][self.user.jid]) == 1:
-				self.plugin.roster.remove_user(self.user, self.account)
-
-	def on_chat_key_press_event(self, widget, event):
-		if event.keyval == gtk.keysyms.Escape:
-			widget.get_toplevel().destroy()
-
-	def on_msg_key_press_event(self, widget, event):
-		"""When a key is pressed :
-		if enter is pressed without the shit key, message (if not empty) is sent
-		and printed in the conversation"""
-		if event.keyval == gtk.keysyms.Return:
-			if (event.state & gtk.gdk.SHIFT_MASK):
-				return 0
-			message_buffer = widget.get_buffer()
-			start_iter = message_buffer.get_start_iter()
-			end_iter = message_buffer.get_end_iter()
-			txt = message_buffer.get_text(start_iter, end_iter, 0)
-			if txt != '':
-				keyID = ''
-				if self.xml.get_widget('gpg_toggle_button').get_active():
-					keyID = self.keyID
-				self.plugin.send('MSG', self.account, (self.user.jid, txt, keyID))
-				message_buffer.set_text('', -1)
-				self.print_conversation(txt, self.user.jid, self.user.jid)
-				widget.grab_focus()
-			return 1
-		return 0
-
-	def on_clear(self, widget):
-		"""When clear button is pressed :
-		clear the conversation"""
-		conversation_buffer = self.xml.get_widget('conversation_textview').\
-			get_buffer()
-		deb, end = conversation_buffer.get_bounds()
-		conversation_buffer.delete(deb, end)
-
-	def on_history(self, widget):
-		"""When history button is pressed : call log window"""
-		if not self.plugin.windows['logs'].has_key(self.user.jid):
-			self.plugin.windows['logs'][self.user.jid] = history_window(self.plugin, self.user.jid)
-
-	def on_focus(self, widget, event):
-		"""When window get focus"""
-		self.plugin.systray.remove_jid(self.user.jid, self.account)
-		if self.nb_unread > 0:
-			self.nb_unread = 0
-			self.show_title()
-	
-	def on_button_contact_clicked(self, widget):
-		"""When button contact is clicked"""
-		self.plugin.roster.on_info(widget, self.user, self.account)
-
-	def __init__(self, user, plugin, account):
-		self.user = user
-		self.plugin = plugin
-		self.account = account
-		self.keyID = self.user.keyID
-		self.nb_unread = 0
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat', APP)
-		self.window = self.xml.get_widget('Chat')
-		self.show_title()
-		self.status_image = self.xml.get_widget('status_image')
-		image = self.plugin.roster.pixbufs[user.show]
-		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			self.status_image.set_from_animation(image.get_animation())
-		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			self.status_image.set_from_pixbuf(image.get_pixbuf())
-		contact_button = self.xml.get_widget('contact_button')
-		contact_button.set_label(user.name + ' <'	+ user.jid + '>')
-		if not self.keyID:
-			self.xml.get_widget('gpg_toggle_button').set_sensitive(False)
-		message_textview = self.xml.get_widget('message_textview')
-		message_textview.grab_focus()
-		conversation_textview = self.xml.get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		end_iter = conversation_buffer.get_end_iter()
-		conversation_buffer.create_mark('end', end_iter, 0)
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_clear_clicked', self.on_clear)
-		self.xml.signal_connect('on_button_contact_clicked', \
-			self.on_button_contact_clicked)
-		self.xml.get_widget('button_contact').set_use_underline(False)
-		self.xml.signal_connect('on_focus', self.on_focus)
-		self.xml.signal_connect('on_history_clicked', self.on_history)
-		self.xml.signal_connect('on_msg_key_press_event', \
-			self.on_msg_key_press_event)
-		self.xml.signal_connect('on_chat_key_press_event', \
-			self.on_chat_key_press_event)
-		self.tagIn = conversation_buffer.create_tag("incoming")
-		color = self.plugin.config['inmsgcolor']
-		self.tagIn.set_property("foreground", color)
-		self.tagOut = conversation_buffer.create_tag("outgoing")
-		color = self.plugin.config['outmsgcolor']
-		self.tagOut.set_property("foreground", color)
-		self.tagStatus = conversation_buffer.create_tag("status")
-		color = self.plugin.config['statusmsgcolor']
-		self.tagStatus.set_property("foreground", color)
-		#print queued messages
-		if plugin.queues[account].has_key(user.jid):
-			self.read_queue(plugin.queues[account][user.jid])
-		if self.user.show != 'online':
-			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
-				user.show, user.status), user.jid, 'status')
 
 class gc:
 	def delete_event(self, widget):
@@ -1952,7 +1700,7 @@ class roster_window:
 		self.set_cb()
 
 	def new_chat(self, user, account):
-		if USE_TABBED_CHAT:
+		if self.plugin.config['usetabbedchat']:
 			if not self.plugin.windows[account]['chats'].has_key('tabbed'):
 				self.plugin.windows[account]['chats']['tabbed'] = \
 					tabbed_chat_window(user, self.plugin, account)
@@ -1963,7 +1711,7 @@ class roster_window:
 			self.plugin.windows[account]['chats']['tabbed'].window.present()
 		else:
 			self.plugin.windows[account]['chats'][user.jid] = \
-				chat_window(user, self.plugin, account)
+				tabbed_chat_window(user, self.plugin, account)
 
 	def on_message(self, jid, msg, tim, account):
 		"""when we receive a message"""
@@ -2098,12 +1846,12 @@ class roster_window:
 				self.tree.expand_row(path, False)
 		else:
 			if self.plugin.windows[account]['chats'].has_key(jid):
-				if USE_TABBED_CHAT:
+				if self.plugin.config['usetabbedchat']:
 					self.plugin.windows[account]['chats'][jid].active_tab(jid)
 				self.plugin.windows[account]['chats'][jid].window.present()
 			elif self.contacts[account].has_key(jid):
 				self.new_chat(self.contacts[account][jid][0], account)
-				self.plugin.windows[account]['chats']['tabbed'].active_tab(jid)
+				self.plugin.windows[account]['chats'][jid].active_tab(jid)
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		"""When a row is expanded :
@@ -3149,9 +2897,6 @@ class plugin:
 				break
 		if pix:
 			gtk.window_set_default_icon(pix)
-		if self.config['usetabbedchat']:
-			global USE_TABBED_CHAT  	 
-			USE_TABBED_CHAT = 1
 		self.roster = roster_window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(100, self.read_sleepy)
