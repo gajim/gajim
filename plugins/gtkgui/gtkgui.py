@@ -2504,7 +2504,10 @@ class systray:
 				if self.iconified:
 					win.deiconify()
 				else:
-					win.iconify()
+					if win.is_active():
+						win.iconify()
+					else:
+						win.present()
 			else:
 				account = self.jids[0][0]
 				jid = self.jids[0][1]
