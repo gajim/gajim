@@ -124,11 +124,12 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 			pix = self.image.get_data('iter').get_pixbuf()
 		elif self.image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			pix = self.image.get_pixbuf()
-		if pix:
-			window.draw_pixbuf(widget.style.black_gc, pix, \
-				draw_rect.x-pix_rect.x, draw_rect.y-pix_rect.y, draw_rect.x, \
-				draw_rect.y+2, draw_rect.width, draw_rect.height, \
-            gtk.gdk.RGB_DITHER_NONE, 0, 0)
+		else:
+			return
+		window.draw_pixbuf(widget.style.black_gc, pix, \
+			draw_rect.x-pix_rect.x, draw_rect.y-pix_rect.y, draw_rect.x, \
+			draw_rect.y+2, draw_rect.width, draw_rect.height, \
+			gtk.gdk.RGB_DITHER_NONE, 0, 0)
 
 	def on_get_size(self, widget, cell_area):
 		if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
@@ -136,6 +137,8 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 			pix = animation.get_iter().get_pixbuf()
 		elif self.image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			pix = self.image.get_pixbuf()
+		else:
+			return 0, 0, 0, 0
 		pixbuf_width  = pix.get_width()
 		pixbuf_height = pix.get_height()
 		calc_width  = self.get_property("xpad") * 2 + pixbuf_width
