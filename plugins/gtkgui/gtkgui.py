@@ -63,8 +63,8 @@ APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
-from config import *
 from dialogs import *
+from config import *
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
@@ -393,6 +393,10 @@ class gc:
 		#scroll to the end of the textview
 		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
 
+	def on_focus(self, widget, event):
+		"""When window get focus"""
+		self.plugin.systray.remove_jid(self.jid, self.account)
+
 	def __init__(self, jid, nick, plugin, account):
 		self.jid = jid
 		self.nick = nick
@@ -435,38 +439,9 @@ class gc:
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus.set_property("foreground", color)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_focus', self.on_focus)
 		self.xml.signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
-
-class join_gc:
-	def delete_event(self, widget):
-		"""close window"""
-		del self.plugin.windows['join_gc']
-
-	def on_close(self, widget):
-		"""When Cancel button is clicked"""
-		widget.get_toplevel().destroy()
-
-	def on_join(self, widget):
-		"""When Join button is clicked"""
-		nick = self.xml.get_widget('entry_nick').get_text()
-		room = self.xml.get_widget('entry_room').get_text()
-		server = self.xml.get_widget('entry_server').get_text()
-		passw = self.xml.get_widget('entry_pass').get_text()
-		jid = '%s@%s' % (room, server)
-		self.plugin.windows[self.account]['gc'][jid] = gc(jid, nick, \
-			self.plugin, self.account)
-		#TODO: verify entries
-		self.plugin.send('GC_JOIN', self.account, (nick, room, server, passw))
-		widget.get_toplevel().destroy()
-
-	def __init__(self, plugin, account):
-		self.plugin = plugin
-		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Join_gc', APP)
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_cancel_clicked', self.on_close)
-		self.xml.signal_connect('on_join_clicked', self.on_join)
 
 class log_Window:
 	"""Class for bowser agent window :
@@ -581,6 +556,7 @@ class log_Window:
 		self.nb_line = 0
 		self.num_begin = 0
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Log', APP)
+		self.window = self.xml.get_widget('Log')
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_close_clicked', self.on_close)
 		self.xml.signal_connect('on_earliest_clicked', self.on_earliest)
@@ -1076,6 +1052,9 @@ class roster_Window:
 		item = gtk.MenuItem(_("Edit account"))
 		menu.append(item)
 		item.connect("activate", self.on_edit_account, account)
+		item = gtk.MenuItem(_("_Browse agents"))
+		menu.append(item)
+		item.connect("activate", self.on_browse, account)
 		
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
@@ -1293,7 +1272,7 @@ class roster_Window:
 			if type(w) == type({}):
 				self.close_all(w)
 			else:
-				w.event(gtk.gdk.Event(gtk.gdk.DESTROY))
+				w.window.destroy()
 	
 	def on_quit(self, widget):
 		"""When we quit the gtk plugin :
@@ -1302,7 +1281,7 @@ class roster_Window:
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
 		self.plugin.send('QUIT', None, ('gtkgui', 0))
 		print _("plugin gtkgui stopped")
-#		self.close_all(self.plugin.windows)
+		self.close_all(self.plugin.windows)
 		self.plugin.systray.t.destroy()
 		gtk.main_quit()
 #		gtk.gdk.threads_leave()
@@ -1427,9 +1406,6 @@ class roster_Window:
 					image.set_from_pixbuf(pix)
 				break
 		for state in ('online', 'away', 'xa', 'dnd', 'invisible', 'offline'):
-#			image = gtk.Image()
-#			image.set_from_pixbuf(self.pixbufs[state])
-#			image.show()
 			self.xml.get_widget(state).set_image(self.pixbufs[state])
 
 	def on_show_off(self, widget):
@@ -1747,6 +1723,10 @@ class systray:
 			else:
 				account = self.jids[0][0]
 				jid = self.jids[0][1]
+				if string.find(jid, '@'):
+					if self.plugin.windows[account]['gc'].has_key(jid):
+						self.plugin.windows[account]['gc'][jid].window.present()
+					return
 				if self.plugin.windows[account]['chats'].has_key(jid):
 					self.plugin.windows[account]['chats'][jid].window.present()
 				else:
@@ -1933,13 +1913,19 @@ class plugin:
 		#TODO: change icon
 		warning_Window(_("You are now unsubscribed by %s") % jid)
 
-	def handle_event_agents(self, account, para):
+	def handle_event_agents(self, account, agents):
 		#('AGENTS', account, agents)
 		if self.windows[account].has_key('browser'):
-			self.windows[account]['browser'].agents(para)
+			self.windows[account]['browser'].agents(agents)
 
 	def handle_event_agent_info(self, account, array):
-		#('AGENTS_INFO', account, (agent, infos))
+		#('AGENT_INFO', account, (agent, identities, features, items))
+		if self.windows[account].has_key('browser'):
+			self.windows[account]['browser'].agent_info(array[0], array[1], \
+				array[2], array[3])
+
+	def handle_event_reg_agent_info(self, account, array):
+		#('REG_AGENTS_INFO', account, (agent, infos))
 		if not array[1].has_key('instructions'):
 			warning_Window(_("error contacting %s") % array[0])
 		else:
@@ -2044,6 +2030,8 @@ class plugin:
 				self.handle_event_agents(ev[1], ev[2])
 			elif ev[0] == 'AGENT_INFO':
 				self.handle_event_agent_info(ev[1], ev[2])
+			elif ev[0] == 'REG_AGENT_INFO':
+				self.handle_event_reg_agent_info(ev[1], ev[2])
 			elif ev[0] == 'ACC_OK':
 				self.handle_event_acc_ok(ev[1], ev[2])
 			elif ev[0] == 'QUIT':
@@ -2091,13 +2079,16 @@ class plugin:
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
+		#in pygtk2.4
+		#gtk.window_set_default_icon(??pixbuf??)
 #		gtk.gdk.threads_enter()
 		self.queueIN = quIN
 		self.queueOUT = quOUT
 		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'STATUS', \
 			'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
-			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'QUIT', 'ACC_OK', 'CONFIG', \
-			'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', 'VISUAL', 'GC_MSG'])
+			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'REG_AGENT_INFO', 'QUIT', \
+			'ACC_OK', 'CONFIG', 'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', \
+			'VISUAL', 'GC_MSG'])
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'autopopupaway':1,\
 			'showoffline':0,\

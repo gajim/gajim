@@ -116,6 +116,7 @@ class vCard_Window:
 
 	def __init__(self, jid, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard', APP)
+		self.window = self.xml.get_widget('vcard')
 		self.jid = jid
 		self.plugin = plugin
 		self.account = account
@@ -254,6 +255,7 @@ class preference_Window:
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Preferences', APP)
+		self.window = self.xml.get_widget('Preferences')
 		self.plugin = plugin
 		self.da_in = self.xml.get_widget('drawing_in')
 		self.da_out = self.xml.get_widget('drawing_out')
@@ -497,6 +499,7 @@ class accountPreference_Window:
 	#info must be a dictionnary
 	def __init__(self, plugin, infos = {}):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Account', APP)
+		self.window = self.xml.get_widget("Account")
 		self.plugin = plugin
 		self.account = ''
 		self.modify = False
@@ -595,6 +598,7 @@ class accounts_Window:
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Accounts', APP)
+		self.window = self.xml.get_widget("Accounts")
 		self.treeview = self.xml.get_widget("treeview")
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		self.treeview.set_model(model)
@@ -688,10 +692,35 @@ class browseAgent_Window:
 		"""When list of available agent arrive :
 		Fill the treeview with it"""
 		model = self.treeview.get_model()
-		for jid in agents.keys():
-			iter = model.append()
-#			model.set(iter, 0, agents[jid]['name'], 1, agents[jid]['service'])
-			model.set(iter, 0, agents[jid]['name'], 1, jid)
+		for agent in agents:
+			iter = model.append(None, (agent['name'], agent['jid']))
+			self.agent_infos[agent['jid']] = {'features' : []}
+	
+	def agent_info(self, agent, identities, features, items):
+		"""When we recieve informations about an agent"""
+		model = self.treeview.get_model()
+		iter = model.get_iter_root()
+		if not iter:
+			return
+		while (1):
+			if agent == model.get_value(iter, 1):
+				break
+			if model.iter_has_child(iter):
+				iter = model.iter_children(iter)
+			else:
+				if not model.iter_next(iter):
+					iter = model.iter_parent(iter)
+				iter = model.iter_next(iter)
+			if not iter:
+				return
+		self.agent_infos[agent]['features'] = features
+		if len(identities):
+			self.agent_infos[agent]['identities'] = identities
+			if identities[0].has_key('name'):
+				model.set_value(iter, 0, identities[0]['name'])
+		for item in items:
+			model.append(iter, (item['name'], item['jid']))
+			self.agent_infos[item['jid']] = {'identities': [item]}
 
 	def on_refresh(self, widget):
 		"""When refresh button is clicked :
@@ -701,19 +730,54 @@ class browseAgent_Window:
 
 	def on_row_activated(self, widget, path, col=0):
 		"""When a row is activated :
+		Register or join the selected agent"""
+		pass
+
+	def on_join_button_clicked(self, widget):
+		"""When we want to join a conference :
 		Ask specific informations about the selected agent and close the window"""
-		model = self.treeview.get_model()
-		iter = model.get_iter(path)
+		model, iter = self.treeview.get_selection().get_selected()
 		service = model.get_value(iter, 1)
-		self.plugin.send('REQ_AGENT_INFO', self.account, service)
+		room = ''
+		if string.find(service, '@') > -1:
+			services = string.split(service, '@')
+			room = services[0]
+			service = services[1]
+		if not self.plugin.windows.has_key('join_gc'):
+			self.plugin.windows['join_gc'] = join_gc(self.plugin, self.account, service, room)
+
+	def on_register_button_clicked(self, widget):
+		"""When we want to register an agent :
+		Ask specific informations about the selected agent and close the window"""
+		model, iter = self.treeview.get_selection().get_selected()
+		service = model.get_value(iter, 1)
+		self.plugin.send('REG_AGENT_INFO', self.account, service)
 		widget.get_toplevel().destroy()
+	
+	def on_cursor_changed(self, widget):
+		"""When we select a row :
+		activate buttons if needed"""
+		model, iter = self.treeview.get_selection().get_selected()
+		jid = model.get_value(iter, 1)
+		self.register_button.set_sensitive(False)
+		if self.agent_infos[jid].has_key('features'):
+			if common.jabber.NS_REGISTER in self.agent_infos[jid]['features']:
+				self.register_button.set_sensitive(True)
+		self.join_button.set_sensitive(False)
+		if self.agent_infos[jid].has_key('identities'):
+			if len(self.agent_infos[jid]['identities']):
+				if self.agent_infos[jid]['identities'][0].has_key('category'):
+					if self.agent_infos[jid]['identities'][0]['category'] == 'conference':
+						self.join_button.set_sensitive(True)
 		
 	def __init__(self, plugin, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'browser', APP)
+		self.window = xml.get_widget('browser')
 		self.treeview = xml.get_widget('treeview')
 		self.plugin = plugin
 		self.account = account
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		self.agent_infos = {}
+		model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		self.treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
@@ -724,11 +788,53 @@ class browseAgent_Window:
 		self.treeview.insert_column_with_attributes(-1, 'Service', \
 			renderer, text=1)
 
+		self.register_button = xml.get_widget('register_button')
+		self.register_button.set_sensitive(False)
+		self.join_button = xml.get_widget('join_button')
+		self.join_button.set_sensitive(False)
+
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_refresh_clicked', self.on_refresh)
 		xml.signal_connect('on_row_activated', self.on_row_activated)
+		xml.signal_connect('on_join_button_clicked', self.on_join_button_clicked)
+		xml.signal_connect('on_register_button_clicked', self.on_register_button_clicked)
+		xml.signal_connect('on_cursor_changed', self.on_cursor_changed)
 		xml.signal_connect('on_close_clicked', self.on_close)
 		if self.plugin.connected[account]:
 			self.browse()
 		else:
 			warning_Window(_("You must be connected to view Agents"))
+
+class join_gc:
+	def delete_event(self, widget):
+		"""close window"""
+		del self.plugin.windows['join_gc']
+
+	def on_close(self, widget):
+		"""When Cancel button is clicked"""
+		widget.get_toplevel().destroy()
+
+	def on_join(self, widget):
+		"""When Join button is clicked"""
+		nick = self.xml.get_widget('entry_nick').get_text()
+		room = self.xml.get_widget('entry_room').get_text()
+		server = self.xml.get_widget('entry_server').get_text()
+		passw = self.xml.get_widget('entry_pass').get_text()
+		jid = '%s@%s' % (room, server)
+		self.plugin.windows[self.account]['gc'][jid] = gtkgui.gc(jid, nick, \
+			self.plugin, self.account)
+		#TODO: verify entries
+		self.plugin.send('GC_JOIN', self.account, (nick, room, server, passw))
+		widget.get_toplevel().destroy()
+
+	def __init__(self, plugin, account, server='', room = ''):
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Join_gc', APP)
+		self.window = self.xml.get_widget('Join_gc')
+		self.xml.get_widget('entry_server').set_text(server)
+		self.xml.get_widget('entry_room').set_text(room)
+		self.xml.get_widget('entry_nick').set_text(self.plugin.nicks[self.account])
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_cancel_clicked', self.on_close)
+		self.xml.signal_connect('on_join_clicked', self.on_join)

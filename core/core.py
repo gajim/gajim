@@ -348,6 +348,16 @@ class GajimCore:
 			self.data = self.data[end+1:]
 		return list_ev
 
+	def request_infos(self, account, con, jid):
+		identities, features = con.discoverInfo(jid)
+		if not identities:
+			identities, features, items = con.browseAgent(jid)
+		else:
+			items = con.discoverItems(jid)
+		self.hub.sendPlugin('AGENT_INFO', account, (jid, identities, features, items))
+		for item in items:
+			self.request_infos(account, con, item['jid'])
+
 	def read_queue(self):
 		while self.hub.queueIn.empty() == 0:
 			ev = self.hub.queueIn.get()
@@ -513,13 +523,18 @@ class GajimCore:
 					groups=ev[2][2])
 			#('REQ_AGENTS', account, ())
 			elif ev[0] == 'REQ_AGENTS':
-				agents = con.requestAgents()
+#				agents = con.requestAgents()
+				#do we need that ?
+				#con.discoverInfo('jabber.lagaule.org')
+				agents = con.discoverItems('jabber.lagaule.org')
 				self.hub.sendPlugin('AGENTS', ev[1], agents)
-			#('REQ_AGENT_INFO', account, agent)
-			elif ev[0] == 'REQ_AGENT_INFO':
+				for agent in agents:
+					self.request_infos(ev[1], con, agent['jid'])
+			#('REG_AGENT_INFO', account, agent)
+			elif ev[0] == 'REG_AGENT_INFO':
 				con.requestRegInfo(ev[2])
 				agent_info = con.getRegInfo()
-				self.hub.sendPlugin('AGENT_INFO', ev[1], (ev[2], agent_info))
+				self.hub.sendPlugin('REG_AGENT_INFO', ev[1], (ev[2], agent_info))
 			#('REG_AGENT', account, infos)
 			elif ev[0] == 'REG_AGENT':
 				con.sendRegInfo(ev[2])

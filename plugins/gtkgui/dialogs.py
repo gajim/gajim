@@ -151,6 +151,7 @@ class infoUser_Window:
 
 	def __init__(self, user, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Info_user', APP)
+		self.window = self.xml.get_widget("Info_user")
 		self.plugin = plugin
 		self.user = user
 		self.account = account
@@ -234,6 +235,7 @@ class addContact_Window:
 		self.plugin = plugin
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Add', APP)
+		self.window = self.xml.get_widget('Add')
 		if jid:
 			self.xml.get_widget('entry_who').set_text(jid)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
@@ -263,6 +265,7 @@ class about_Window:
 
 	def __init__(self, plugin):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'About', APP)
+		self.window = xml.get_widget('About')
 		self.plugin = plugin
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_close_clicked', self.on_close)

@@ -705,8 +705,10 @@ class Client(Connection):
     def discoverItems(self,jid,node=None):
         """ According to JEP-0030: jid is mandatory, name, node, action is optional. """
         ret=[]
-        for i in self._discover(NS_P_DISC_ITEMS,jid,node):
-            ret.append(i.attrs)
+        disco = self._discover(NS_P_DISC_ITEMS,jid,node)
+        if disco:
+            for i in disco:
+                ret.append(i.attrs)
         return ret
 
     def discoverInfo(self,jid,node=None):
@@ -714,10 +716,31 @@ class Client(Connection):
             For identity: category, name is mandatory, type is optional.
             For feature: var is mandatory"""
         identities , features = [] , []
-        for i in self._discover(NS_P_DISC_INFO,jid,node):
-            if i.getName()=='identity': identities.append(i.attrs)
-            elif i.getName()=='feature': features.append(i.getAttr('var'))
-        return identities , features
+	disco = self._discover(NS_P_DISC_INFO,jid,node)
+        if disco:
+            for i in disco:
+                if i.getName()=='identity': identities.append(i.attrs)
+                elif i.getName()=='feature': features.append(i.getAttr('var'))
+        return identities, features
+
+    def browseAgent(self,jid,node=None):
+        identities, features, items = [], [], []
+        iq=Iq(to=jid,type='get',query=NS_BROWSE)
+	rep=self.SendAndWaitForResponse(iq)
+	if not rep:
+            return identities, features, items
+        q = rep.getTag('service')
+        identities = [q.attrs]
+        if not q:
+            return identities, features, items
+        for node in q.kids:
+            if node.getName() == 'ns':
+                features.append(node.getData())
+            else:
+	    	infos = node.attrs
+		infos['category'] = node.getName()
+                items.append(node.attrs)
+        return identities, features, items
 
 #############################################################################
 
