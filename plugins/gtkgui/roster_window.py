@@ -932,12 +932,18 @@ class roster_window:
 			self.window.hide()
 		else:
 			accounts = self.plugin.accounts.keys()
-			message = self.get_status_message('offline')
-			if message == -1:
-				message = ''
+			get_msg = False
 			for acct in accounts:
 				if self.plugin.connected[acct]:
-					self.send_status(acct, 'offline', message)
+					get_msg = True
+					break
+			if get_msg:
+				message = self.get_status_message('offline')
+				if message == -1:
+					message = ''
+				for acct in accounts:
+					if self.plugin.connected[acct]:
+						self.send_status(acct, 'offline', message)
 			self.quit_gtkgui_plugin()
 		return 1
 
@@ -961,12 +967,18 @@ class roster_window:
 
 	def on_quit_menuitem_activate(self, widget):
 		accounts = self.plugin.accounts.keys()
-		message = self.get_status_message('offline')
-		if message == -1:
-			message = ''
+		get_msg = False
 		for acct in accounts:
 			if self.plugin.connected[acct]:
-				self.send_status(acct, 'offline', message)
+				get_msg = True
+				break
+		if get_msg:
+			message = self.get_status_message('offline')
+			if message == -1:
+				message = ''
+			for acct in accounts:
+				if self.plugin.connected[acct]:
+					self.send_status(acct, 'offline', message)
 		self.quit_gtkgui_plugin()
 
 	def on_roster_treeview_row_activated(self, widget, path, col=0):
