@@ -1,4 +1,4 @@
-VERSION		= 0.51
+VERSION		?= 0.51
 
 MODULES		= common plugins/gtkgui
 PREFIX		= /usr
