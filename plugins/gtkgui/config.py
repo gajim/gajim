@@ -1368,7 +1368,10 @@ class Accounts_window:
 			self.plugin.windows[account_modification_window].window.present()
 
 	def on_sync_with_global_status_checkbutton_toggled(self, widget):
-		self.plugin.accounts[account]['sync_with_global_status'] = widget.get_active()
+		if widget.get_active():
+			self.plugin.accounts[account]['sync_with_global_status'] = 0
+		else:
+			self.plugin.accounts[account]['sync_with_global_status'] = 1
 		
 	def __init__(self, plugin):
 		self.plugin = plugin

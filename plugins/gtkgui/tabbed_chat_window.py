@@ -27,6 +27,7 @@ import sre
 
 from dialogs import *
 from history_window import *
+from chat import *
 
 from common import i18n
 
@@ -37,24 +38,11 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-class tabbed_chat_window:
+class tabbed_chat_window(chat):
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat_window', APP)
-		self.chat_notebook = self.xml.get_widget('chat_notebook')
-		self.chat_notebook.remove_page(0)
-		self.plugin = plugin
-		self.account = account
-		self.change_cursor = None
-		self.xmls = {}
-		self.tagIn = {}
-		self.tagOut = {}
-		self.tagStatus = {}
+		chat.__init__(plugin, account, 'tabbed_chat_window')
 		self.users = {}
-		self.nb_unread = {}
-		self.last_message_time = {}
-		self.print_time_timeout_id = {}
-		self.window = self.xml.get_widget('tabbed_chat_window')
 		self.new_user(user)
 		self.show_title()
 		self.xml.signal_connect('on_tabbed_chat_window_destroy', \
@@ -68,43 +56,6 @@ class tabbed_chat_window:
 		self.xml.signal_connect('on_chat_notebook_switch_page', \
 			self.on_chat_notebook_switch_page)
 		
-	def update_tags(self):
-		for jid in self.tagIn:
-			self.tagIn[jid].set_property("foreground", \
-				self.plugin.config['inmsgcolor'])
-			self.tagOut[jid].set_property("foreground", \
-				self.plugin.config['outmsgcolor'])
-			self.tagStatus[jid].set_property("foreground", \
-				self.plugin.config['statusmsgcolor'])
-
-	def update_print_time(self):
-		if self.plugin.config['print_time'] != 'sometimes':
-			list_jid = self.print_time_timeout_id.keys()
-			for jid in list_jid:
-				gobject.source_remove(self.print_time_timeout_id[jid])
-				del self.print_time_timeout_id[jid]
-		else:
-			for jid in self.xmls:
-				if not self.print_time_timeout_id.has_key(jid):
-					self.print_time_timeout(jid)
-					self.print_time_timeout_id[jid] = gobject.timeout_add(300000, \
-						self.print_time_timeout, jid)
-
-	def show_title(self):
-		"""redraw the window's title"""
-		unread = 0
-		for jid in self.nb_unread:
-			unread += self.nb_unread[jid]
-		start = ""
-		if unread > 1:
-			start = "[" + str(unread) + "] "
-		elif unread == 1:
-			start = "* "
-		chat = self.users[jid].name
-		if len(self.xmls) > 1:
-			chat = 'Chat'
-		self.window.set_title(start + chat + ' (' + self.account + ')')
-
 	def draw_widgets(self, user):
 		"""draw the widgets in a tab (status_image, contact_button ...)
 		according to the the information in the user variable"""
@@ -120,16 +71,8 @@ class tabbed_chat_window:
 		if not user.keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
 
-	def redraw_tab(self, jid):
-		"""redraw the label of the tab"""
-		start = ''
-		if self.nb_unread[jid] > 1:
-			start = "[" + str(self.nb_unread[jid]) + "] "
-		elif self.nb_unread[jid] == 1:
-			start = "* "
-		child = self.xmls[jid].get_widget('chat_vbox')
-		tab_label = self.chat_notebook.get_tab_label(child).get_children()[0]
-		tab_label.set_text(start + self.users[jid].name)
+#	def redraw_tab(self, jid):
+#		tab_label.set_text(start + self.users[jid].name)
 
 	def set_image(self, image, jid):
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
@@ -149,23 +92,7 @@ class tabbed_chat_window:
 
 	def on_tabbed_chat_window_destroy(self, widget):
 		#clean self.plugin.windows[self.account]['chats']
-		for jid in self.users:
-			del self.plugin.windows[self.account]['chats'][jid]
-			if self.print_time_timeout_id.has_key(jid):
-				gobject.source_remove(self.print_time_timeout_id[jid])
-		if self.plugin.windows[self.account]['chats'].has_key('tabbed'):
-			del self.plugin.windows[self.account]['chats']['tabbed']
-
-	def get_active_jid(self):
-		active_child = self.chat_notebook.get_nth_page(\
-			self.chat_notebook.get_current_page())
-		active_jid = ''
-		for jid in self.xmls:
-			child = self.xmls[jid].get_widget('chat_vbox')
-			if child == active_child:
-				active_jid = jid
-				break
-		return active_jid
+		chat.on_window_destroy(widget, 'chats')
 
 	def on_clear_button_clicked(self, widget):
 		"""When clear button is pressed :
@@ -176,60 +103,11 @@ class tabbed_chat_window:
 		start, end = conversation_buffer.get_bounds()
 		conversation_buffer.delete(start, end)
 
-	def on_close_button_clicked(self, button, jid):
-		"""When close button is pressed :
-		close a tab"""
-		self.remove_tab(jid)
-
-	def on_tabbed_chat_window_focus_in_event(self, widget, event):
-		"""When window get focus"""
-		jid = self.get_active_jid()
-		conversation_textview = self.xmls[jid].\
-			get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		end_iter = conversation_buffer.get_end_iter()
-		end_rect = conversation_textview.get_iter_location(end_iter)
-		visible_rect = conversation_textview.get_visible_rect()
-		if end_rect.y <= (visible_rect.y + visible_rect.height):
-			#we are at the end
-			if self.nb_unread[jid] > 0:
-				self.nb_unread[jid] = 0
-				self.redraw_tab(jid)
-				self.show_title()
-				self.plugin.systray.remove_jid(jid, self.account)
-
 	def on_history_button_clicked(self, widget):
 		"""When history button is pressed : call history window"""
 		jid = self.get_active_jid()
 		if not self.plugin.windows['logs'].has_key(jid):
 			self.plugin.windows['logs'][jid] = history_window(self.plugin, jid)
-
-	def on_chat_notebook_switch_page(self, notebook, page, page_num):
-		new_child = notebook.get_nth_page(page_num)
-		new_jid = ''
-		for jid in self.xmls:
-			child = self.xmls[jid].get_widget('chat_vbox')
-			if child == new_child:
-				new_jid = jid
-				break
-		conversation_textview = self.xmls[new_jid].\
-			get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		end_iter = conversation_buffer.get_end_iter()
-		end_rect = conversation_textview.get_iter_location(end_iter)
-		visible_rect = conversation_textview.get_visible_rect()
-		if end_rect.y <= (visible_rect.y + visible_rect.height):
-			#we are at the end
-			if self.nb_unread[new_jid] > 0:
-				self.nb_unread[new_jid] = 0
-				self.redraw_tab(new_jid)
-				self.show_title()
-				self.plugin.systray.remove_jid(new_jid, self.account)
-
-	def active_tab(self, jid):
-		child = self.xmls[jid].get_widget('chat_vbox')
-		self.chat_notebook.set_current_page(\
-			self.chat_notebook.page_num(child))
 
 	def remove_tab(self, jid):
 		if time.time() - self.last_message_time[jid] < 2:
@@ -237,83 +115,18 @@ class tabbed_chat_window:
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 
-		if len(self.xmls) == 1:
-			self.window.destroy()
-		else:
-			if self.print_time_timeout_id.has_key(jid):
-				gobject.source_remove(self.print_time_timeout_id[jid])
-				del self.print_time_timeout_id[jid]
-			child = self.xmls[jid].get_widget('chat_vbox')
-			self.chat_notebook.remove_page(\
-				self.chat_notebook.page_num(child))
-			del self.plugin.windows[self.account]['chats'][jid]
+		chat.remove_tab(jid, 'chats')
+		if len(self.xmls) > 0:
 			del self.users[jid]
-			del self.nb_unread[jid]
-			del self.last_message_time[jid]
-			del self.xmls[jid]
-			del self.tagIn[jid]
-			del self.tagOut[jid]
-			del self.tagStatus[jid]
-			if len(self.xmls) == 1:
-				self.chat_notebook.set_show_tabs(False)
-			self.show_title()
 
 	def new_user(self, user):
-		self.nb_unread[user.jid] = 0
-		self.last_message_time[user.jid] = 0
+		chat.new_user(user.jid)
 		self.users[user.jid] = user
-		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chat_vbox', APP)
 		
 		conversation_textview = \
 			self.xmls[user.jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
-		end_iter = conversation_buffer.get_end_iter()
-		conversation_buffer.create_mark('end', end_iter, 0)
-		self.tagIn[user.jid] = conversation_buffer.create_tag('incoming')
-		color = self.plugin.config['inmsgcolor']
-		self.tagIn[user.jid].set_property('foreground', color)
-		self.tagOut[user.jid] = conversation_buffer.create_tag('outgoing')
-		color = self.plugin.config['outmsgcolor']
-		self.tagOut[user.jid].set_property('foreground', color)
-		self.tagStatus[user.jid] = conversation_buffer.create_tag('status')
-		color = self.plugin.config['statusmsgcolor']
-		self.tagStatus[user.jid].set_property('foreground', color)
 		
-		tag = conversation_buffer.create_tag('time_sometimes')
-		tag.set_property('foreground', '#9e9e9e')
-		tag.set_property('scale', pango.SCALE_SMALL)
-		tag.set_property('justification', gtk.JUSTIFY_CENTER)
-		
-		tag = conversation_buffer.create_tag('url')
-		tag.set_property('foreground', '#0000ff')
-		tag.set_property('underline', pango.UNDERLINE_SINGLE)
-		tag.connect('event', self.hyperlink_handler, 'url')
-
-		tag = conversation_buffer.create_tag('mail')
-		tag.set_property('foreground', '#0000ff')
-		tag.set_property('underline', pango.UNDERLINE_SINGLE)
-		tag.connect('event', self.hyperlink_handler, 'mail')
-		
-		tag = conversation_buffer.create_tag('bold')
-		tag.set_property('weight', pango.WEIGHT_BOLD)
-		
-		tag = conversation_buffer.create_tag('italic')
-		tag.set_property('style', pango.STYLE_ITALIC)
-		
-		tag = conversation_buffer.create_tag('underline')
-		tag.set_property('underline', pango.UNDERLINE_SINGLE)
-		
-		self.xmls[user.jid].signal_autoconnect(self)
-		conversation_scrolledwindow = self.xmls[user.jid].\
-			get_widget('conversation_scrolledwindow')
-		conversation_scrolledwindow.get_vadjustment().connect('value-changed', \
-			self.on_conversation_vadjustment_value_changed)
-		
-		child = self.xmls[user.jid].get_widget('chat_vbox')
-		self.chat_notebook.append_page(child)
-		if len(self.xmls) > 1:
-			self.chat_notebook.set_show_tabs(True)
-
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'tab_hbox', APP)
 		tab_hbox = xm.get_widget('tab_hbox')
 		xm.signal_connect('on_close_button_clicked', \
@@ -322,7 +135,6 @@ class tabbed_chat_window:
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
-		self.show_title()
 
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
