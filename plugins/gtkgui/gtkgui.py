@@ -1688,10 +1688,11 @@ class roster_Window:
 			'offline', 'error', 'requested', 'message', 'opened', 'closed', \
 			'not in list'):
 			# try to open a pixfile with the correct method
+			state_file = state.replace(" ", "_")
 			files = []
-			files.append(self.path + state + '.gif')
-			files.append(self.path + state + '.png')
-			files.append(self.path + state + '.xpm')
+			files.append(self.path + state_file + '.gif')
+			files.append(self.path + state_file + '.png')
+			files.append(self.path + state_file + '.xpm')
 			image = gtk.Image()
 			image.show()
 			self.pixbufs[state] = image
