@@ -233,15 +233,7 @@ class GajimCore:
 				if not roster :
 					roster = {}
 				self.hub.sendPlugin('ROSTER', account, roster)
-				con.sendInitPresence()
-				self.hub.sendPlugin('STATUS', account, 'online')
 				self.connected[account] = 1
-				iq = common.jabber.Iq(type="get")
-				iq._setTag('vCard', common.jabber.NS_VCARD)
-				id = con.getAnID()
-				iq.setID(id)
-				con.send(iq)
-				self.myVCardID.append(id)
 				return con
 			else:
 				log.debug("Couldn't authentificate to %s" % hostname)
@@ -309,14 +301,31 @@ class GajimCore:
 				elif ev[0] == 'STATUS':
 					if (ev[2][0] != 'offline') and (self.connected[ev[1]] == 0):
 						con = self.connect(ev[1])
+						#send our presence
+						p = common.jabber.Presence()
+						p.setShow(ev[2][0])
+						p.setStatus(ev[2][1])
+						if ev[2][0] == 'invisible':
+							p.setType('invisible')
+						con.send(p)
+						self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
+						#ask our VCard
+						iq = common.jabber.Iq(type="get")
+						iq._setTag('vCard', common.jabber.NS_VCARD)
+						id = con.getAnID()
+						iq.setID(id)
+						con.send(iq)
+						self.myVCardID.append(id)
 					elif (ev[2][0] == 'offline') and (self.connected[ev[1]] == 1):
 						self.connected[ev[1]] = 0
 						con.disconnect()
 						self.hub.sendPlugin('STATUS', ev[1], 'offline')
-					if ev[2][0] != 'offline' and self.connected[ev[1]] == 1:
+					elif ev[2][0] != 'offline' and self.connected[ev[1]] == 1:
 						p = common.jabber.Presence()
 						p.setShow(ev[2][0])
 						p.setStatus(ev[2][1])
+						if ev[2][0] == 'invisible':
+							p.setType('invisible')
 						con.send(p)
 						self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
 				#('MSG', account, (jid, msg))

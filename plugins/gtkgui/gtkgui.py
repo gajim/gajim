@@ -706,6 +706,9 @@ class roster_Window:
 		item = gtk.MenuItem(_("DND"))
 		menu_sub.append(item)
 		item.connect("activate", self.change_status, account, 'dnd')
+		item = gtk.MenuItem(_("Invisible"))
+		menu_sub.append(item)
+		item.connect("activate", self.change_status, account, 'invisible')
 		item = gtk.MenuItem()
 		menu_sub.append(item)
 		item = gtk.MenuItem(_("Offline"))
@@ -1008,8 +1011,9 @@ class roster_Window:
 			iconstyle = 'sun'
 		self.path = 'plugins/gtkgui/icons/' + iconstyle + '/'
 		self.pixbufs = {}
-		for state in ('online', 'chat', 'away', 'xa', 'dnd', 'offline', 'error', \
-			'requested', 'message', 'opened', 'closed', 'not in list'):
+		for state in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible', \
+			'offline', 'error', 'requested', 'message', 'opened', 'closed', \
+			'not in list'):
 			# try to open a pixfile with the correct method
 			files = []
 			files.append(self.path + state + '.gif')
@@ -1025,12 +1029,11 @@ class roster_Window:
 				pix = fct(file)
 				self.pixbufs[state] = pix
 				break
-		for state in ('online', 'away', 'xa', 'dnd', 'offline'):
+		for state in ('online', 'away', 'xa', 'dnd', 'invisible', 'offline'):
 			image = gtk.Image()
 			image.set_from_pixbuf(self.pixbufs[state])
 			image.show()
 			self.xml.get_widget(state).set_image(image)
-		self.xml.get_widget('invisible').set_sensitive(False)
 
 	def on_show_off(self, widget):
 		"""when show offline option is changed :
