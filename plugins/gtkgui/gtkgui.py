@@ -641,24 +641,30 @@ class tabbed_chat_window:
 		elif word.startswith('mailto:'):
 			#it's a mail
 			tag += '_mail'
+			text = word[7:]
 		elif self.plugin.sth_at_sth_dot_sth_re.match(word): # returns match object or None
 			#it's a mail too
 			tag += '_mail'
+			text = word
 		elif word.startswith('/') and word.endswith('/'):
 			#it's an italic text
 			tag += '_italic'
+			text = word[1:-1]
 		elif word.startswith('_') and word.endswith('_'):
 			#it's an underlined text
 			tag += '_underline'
+			text = word[1:-1]
 		elif word.startswith('*') and word.endswith('*'):
 			#it's a bold text
 			tag += '_bold'
+			text = word[1:-1]
 		else:
 			#it's an url
 			tag += '_url'
+			text = word
 
 		end_iter = conversation_buffer.get_end_iter()
-		conversation_buffer.insert_with_tags_by_name(end_iter, word, tag)
+		conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
 
 	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :
