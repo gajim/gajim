@@ -197,7 +197,7 @@ class roster_window:
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
 	
-	def makemenu(self):
+	def make_menu(self):
 		"""create the browse agents, add contact & join groupchat sub menus"""
 		# try to avoid WIDGET_REALIZED_FOR_EVENT failed which freezes gajim
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
@@ -289,7 +289,7 @@ class roster_window:
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
-		self.makemenu()
+		self.make_menu()
 		self.tree.get_model().clear()
 		for acct in self.contacts.keys():
 			self.add_account_to_roster(acct)
@@ -444,10 +444,8 @@ class roster_window:
 		item = gtk.MenuItem(_('Rerequest authorization from'))
 		sub_menu.append(item)
 		item.connect('activate', self.req_sub, jid, \
-			_('I would like to add you to my contact list, please.'), account)
+			_('I would like to add you to my contact list.'), account)
 		
-		item = gtk.MenuItem()
-		menu.append(item)
 		item = gtk.MenuItem(_('Remove'))
 		menu.append(item)
 		item.connect('activate', self.on_req_usub, user, account)
