@@ -3222,6 +3222,9 @@ class plugin:
 		jid = array[0].split('/')[0]
 		if jid.find("@") <= 0:
 			jid = jid.replace('@', '')
+		if self.config['ignore_unknown_contacts'] and \
+			not self.roster.contacts[account].has_key(jid):
+			return
 		first = 0
 		if not self.windows[account]['chats'].has_key(jid) and \
 			not self.queues[account].has_key(jid):
@@ -3564,6 +3567,7 @@ class plugin:
 			'GPG_SECRETE_KEYS', 'ROSTER_INFO', 'MSGSENT'])
 		self.default_config = {'autopopup':1,\
 			'autopopupaway':1,\
+			'ignore_unknown_contacts':0,\
 			'showoffline':0,\
 			'autoaway':1,\
 			'autoawaytime':10,\

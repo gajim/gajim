@@ -308,6 +308,9 @@ class preferences_window:
 	def on_auto_pop_up_away_checkbox_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopupaway')
 
+	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
+
 	def on_soundplayer_entry_changed(self, widget):
 		self.plugin.config['soundplayer'] = widget.get_text()
 		

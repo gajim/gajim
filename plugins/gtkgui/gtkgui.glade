@@ -4434,9 +4434,8 @@ on the server as a vCard</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkCheckButton" id="ignore_events_from_contacts_not_in_roster_checkbutton">
+		<widget class="GtkCheckButton" id="ignore_events_from_unknown_contacts_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="sensitive">False</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Ignore events from contacts not in your roster</property>
 		  <property name="use_underline">True</property>
@@ -4445,7 +4444,7 @@ on the server as a vCard</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="on_chk_autopopup_toggled" last_modification_time="Thu, 28 Oct 2004 11:01:25 GMT"/>
+		  <signal name="toggled" handler="on_ignore_events_from_unknown_contacts_checkbutton_toggled" last_modification_time="Thu, 10 Mar 2005 23:38:45 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
