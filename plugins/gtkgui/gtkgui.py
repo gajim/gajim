@@ -717,7 +717,7 @@ class tabbed_chat_window:
 				index = url_end # update index
 
 			#conversation_buffer.insert(end_iter, otext[end:])
-			print 'adding the rest of the text in', index, 'and after'
+			#print 'adding the rest of the text in', index, 'and after'
 			conversation_buffer.insert(end_iter, otext[index:])
 
 		'''
