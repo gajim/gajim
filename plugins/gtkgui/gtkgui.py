@@ -2089,7 +2089,7 @@ class systray:
 		menu.reposition()
 
 	def on_clicked(self, widget, event):
-		if event.type == gtk.gdk._2BUTTON_PRESS and event.button == 1:
+		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1:
 			if len(self.jids) == 0:
 				win = self.plugin.roster.xml.get_widget('Gajim')
 				if self.iconified:
