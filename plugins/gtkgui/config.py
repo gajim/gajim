@@ -1213,8 +1213,8 @@ class Account_modification_window:
 		self.plugin.nicks[name] = login
 		self.plugin.sleeper_state[name] = 0
 		#refresh accounts window
-		if self.plugin.windows.has_key('accounts_window'):
-			self.plugin.windows['accounts_window'].init_accounts()
+		if self.plugin.windows.has_key('accounts'):
+			self.plugin.windows['accounts'].init_accounts()
 		#refresh roster
 		self.plugin.roster.draw_roster()
 		widget.get_toplevel().destroy()
