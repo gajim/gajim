@@ -1402,7 +1402,7 @@ class roster_Window:
 			if keyid and not self.plugin.connected[account] and \
 				self.plugin.config['usegpg']:
 				if save_gpg_pass:
-					passphrase = self.plugin.accounts[account]['gpgpass']
+					passphrase = self.plugin.accounts[account]['gpgpassword']
 				else:
 					passphrase = ''
 					w = passphrase_Window('Enter your passphrase for your the GPG key of your account %s' % account, autoconnect)

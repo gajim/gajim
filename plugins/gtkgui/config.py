@@ -568,9 +568,9 @@ class accountPreference_Window:
 						infos['savegpgpass'])
 					if infos['savegpgpass']:
 						self.xml.get_widget('gpg_pass_entry').set_sensitive(True)
-						if infos.has_key('gpgpass'):
+						if infos.has_key('gpgpassword'):
 							self.xml.get_widget('gpg_pass_entry').set_text(\
-								infos['gpgpass'])
+								infos['gpgpassword'])
 		if infos.has_key('autoconnect'):
 			self.xml.get_widget('chk_autoconnect').set_active(\
 				infos['autoconnect'])
@@ -667,7 +667,7 @@ class accountPreference_Window:
 				'autoconnect': autoconnect, 'use_proxy': useProxy, 'proxyhost': \
 				entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
 				'keyname': keyName, 'savegpgpass': save_gpg_pass, \
-				'gpgpass': gpg_pass, 'active': active}
+				'gpgpassword': gpg_pass, 'active': active}
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 				'GtkGui'))
 			#refresh accounts window
@@ -693,7 +693,7 @@ class accountPreference_Window:
 			entryRessource.get_text(), 'priority' : prio, 'autoconnect': \
 			autoconnect, 'use_proxy': useProxy, 'proxyhost': \
 			entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
-			'keyname': keyName, 'savegpgpass': save_gpg_pass, 'gpgpass': gpg_pass,\
+			'keyname': keyName, 'savegpgpass': save_gpg_pass, 'gpgpassword': gpg_pass,\
 			'active': 1}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 			'GtkGui'))
