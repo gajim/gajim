@@ -343,8 +343,8 @@ class awayMsg_Window:
 		self.xml.signal_connect('on_comboboxentry_changed', self.on_entry_changed)
 		self.xml.signal_connect('on_key_press_event', self.on_key_pressed)
 
-class addContact_Window:
-	"""Class for Add user window"""
+class add_contact_window:
+	"""Class for add_contact_window"""
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
@@ -417,8 +417,8 @@ class addContact_Window:
 			return
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_window', APP)
-		self.window = self.xml.get_widget('add_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_contact_window', APP)
+		self.window = self.xml.get_widget('add_contact_window')
 		self.old_uid_value = ''
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		liststore.append(['Jabber', ''])
@@ -521,3 +521,80 @@ class subscription_request_Window:
 			_('Subscription request from %s') % self.jid)
 		xml.get_widget('message_textview').get_buffer().set_text(text)
 		xml.signal_autoconnect(self)
+
+class join_gc:
+	def delete_event(self, widget):
+		"""close window"""
+		del self.plugin.windows['join_gc']
+
+	def on_close(self, widget):
+		"""When Cancel button is clicked"""
+		widget.get_toplevel().destroy()
+
+	def on_join(self, widget):
+		"""When Join button is clicked"""
+		nick = self.xml.get_widget('entry_nick').get_text()
+		room = self.xml.get_widget('entry_room').get_text()
+		server = self.xml.get_widget('entry_server').get_text()
+		passw = self.xml.get_widget('entry_pass').get_text()
+		jid = '%s@%s' % (room, server)
+		self.plugin.windows[self.account]['gc'][jid] = gtkgui.gc(jid, nick, \
+			self.plugin, self.account)
+		#TODO: verify entries
+		self.plugin.send('GC_JOIN', self.account, (nick, room, server, passw))
+		widget.get_toplevel().destroy()
+
+	def __init__(self, plugin, account, server='', room = ''):
+		if not plugin.connected[account]:
+			warning_dialog(_("You must be connected to join a group chat on this serveur"))
+			return
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Join_gc', APP)
+		self.window = self.xml.get_widget('Join_gc')
+		self.xml.get_widget('entry_server').set_text(server)
+		self.xml.get_widget('entry_room').set_text(room)
+		self.xml.get_widget('entry_nick').set_text(self.plugin.nicks[self.account])
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_cancel_clicked', self.on_close)
+		self.xml.signal_connect('on_join_clicked', self.on_join)
+
+class new_message_window: #FIXME: NOT READY
+	def delete_event(self, widget):
+		"""close window"""
+		del self.plugin.windows['join_gc']
+
+	def on_close(self, widget):
+		"""When Cancel button is clicked"""
+		widget.get_toplevel().destroy()
+
+	def on_join(self, widget):
+		"""When Join button is clicked"""
+		nick = self.xml.get_widget('entry_nick').get_text()
+		room = self.xml.get_widget('entry_room').get_text()
+		server = self.xml.get_widget('entry_server').get_text()
+		passw = self.xml.get_widget('entry_pass').get_text()
+		jid = '%s@%s' % (room, server)
+		self.plugin.windows[self.account]['gc'][jid] = gtkgui.gc(jid, nick, \
+			self.plugin, self.account)
+		#TODO: verify entries
+		self.plugin.send('GC_JOIN', self.account, (nick, room, server, passw))
+		widget.get_toplevel().destroy()
+
+	def __init__(self, plugin, account, server='', room = ''):
+		#FIXME:
+		return True
+		
+		if not plugin.connected[account]:
+			warning_dialog(_("You must be connected to join a group chat on this serveur"))
+			return
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Join_gc', APP)
+		self.window = self.xml.get_widget('Join_gc')
+		self.xml.get_widget('entry_server').set_text(server)
+		self.xml.get_widget('entry_room').set_text(room)
+		self.xml.get_widget('entry_nick').set_text(self.plugin.nicks[self.account])
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_cancel_clicked', self.on_close)
+		self.xml.signal_connect('on_join_clicked', self.on_join)

@@ -31,24 +31,23 @@
 	  <property name="visible">True</property>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="gajim_menu">
+	    <widget class="GtkMenuItem" id="chat_menu">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_Chat</property>
 	      <property name="use_underline">True</property>
 
 	      <child>
-		<widget class="GtkMenu" id="gajim_menu_menu">
+		<widget class="GtkMenu" id="chat_menu_menu">
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="new_message_mni">
+		    <widget class="GtkImageMenuItem" id="new_message_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_New Message</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_new_message_mni_activate" last_modification_time="Mon, 28 Feb 2005 00:31:12 GMT"/>
 		      <accelerator key="N" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image311">
+			<widget class="GtkImage" id="image398">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -62,11 +61,22 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkMenuItem" id="join_gc">
+		    <widget class="GtkImageMenuItem" id="join_gc_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Join Groupchat</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_join_gc_activate" last_modification_time="Tue, 03 Aug 2004 22:15:03 GMT"/>
+
+		      <child internal-child="image">
+			<widget class="GtkImage" id="image399">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-connect</property>
+			  <property name="icon_size">1</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
 		    </widget>
 		  </child>
 
@@ -77,13 +87,13 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="add">
+		    <widget class="GtkImageMenuItem" id="add_contact_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">Add Contact</property>
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image312">
+			<widget class="GtkImage" id="image400">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -97,12 +107,12 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkCheckMenuItem" id="show_offline">
+		    <widget class="GtkCheckMenuItem" id="show_offline_contacts_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">Show Offline Contacts</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">False</property>
-		      <signal name="activate" handler="on_show_offline_contacts_activate" last_modification_time="Mon, 28 Feb 2005 15:56:24 GMT"/>
+		      <signal name="activate" handler="on_show_offline_contacts_menuitem_activate" last_modification_time="Tue, 01 Mar 2005 23:29:52 GMT"/>
 		      <accelerator key="O" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 		    </widget>
 		  </child>
@@ -114,15 +124,15 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="quit">
+		    <widget class="GtkImageMenuItem" id="quit_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Quit</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_quit_activate" last_modification_time="Fri, 03 Oct 2003 12:49:50 GMT"/>
+		      <signal name="activate" handler="on_quit_menuitem_activate" last_modification_time="Tue, 01 Mar 2005 23:37:49 GMT"/>
 		      <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image313">
+			<widget class="GtkImage" id="image401">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-quit</property>
 			  <property name="icon_size">1</property>
@@ -140,24 +150,24 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="edit">
+	    <widget class="GtkMenuItem" id="edit_menu">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_Edit</property>
 	      <property name="use_underline">True</property>
 
 	      <child>
-		<widget class="GtkMenu" id="edit_menu">
+		<widget class="GtkMenu" id="edit_menu_menu">
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="accounts">
+		    <widget class="GtkImageMenuItem" id="accounts_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">A_ccounts</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_accounts_activate" last_modification_time="Wed, 22 Oct 2003 21:18:21 GMT"/>
+		      <signal name="activate" handler="on_accounts_menuitem_activate" last_modification_time="Tue, 01 Mar 2005 23:23:19 GMT"/>
 		      <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image314">
+			<widget class="GtkImage" id="image402">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -171,14 +181,13 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="browse_agents">
+		    <widget class="GtkImageMenuItem" id="browse_agents_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Browse Agents</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_browse_agents_activate" last_modification_time="Wed, 12 Nov 2003 10:50:33 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image315">
+			<widget class="GtkImage" id="image403">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find</property>
 			  <property name="icon_size">1</property>
@@ -198,15 +207,15 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="preferences">
+		    <widget class="GtkImageMenuItem" id="preferences_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Preferences</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_preferences_activate" last_modification_time="Wed, 22 Oct 2003 21:18:29 GMT"/>
+		      <signal name="activate" handler="on_preferences_menuitem_activate" last_modification_time="Tue, 01 Mar 2005 22:58:18 GMT"/>
 		      <accelerator key="P" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image316">
+			<widget class="GtkImage" id="image404">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-preferences</property>
 			  <property name="icon_size">1</property>
@@ -224,23 +233,23 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="help">
+	    <widget class="GtkMenuItem" id="help_menu">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_Help</property>
 	      <property name="use_underline">True</property>
 
 	      <child>
-		<widget class="GtkMenu" id="help_menu">
+		<widget class="GtkMenu" id="help_menu_menu">
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="about">
+		    <widget class="GtkImageMenuItem" id="about_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_About</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_about_activate" last_modification_time="Fri, 03 Oct 2003 12:49:50 GMT"/>
+		      <signal name="activate" handler="on_about_menuitem_activate" last_modification_time="Tue, 01 Mar 2005 22:56:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image317">
+			<widget class="GtkImage" id="image405">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-about</property>
 			  <property name="icon_size">1</property>
@@ -761,7 +770,7 @@
 		  <signal name="clicked" handler="on_modify_button_clicked" last_modification_time="Tue, 01 Mar 2005 18:20:53 GMT"/>
 
 		  <child>
-		    <widget class="GtkAlignment" id="alignment30">
+		    <widget class="GtkAlignment" id="alignment44">
 		      <property name="visible">True</property>
 		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
@@ -773,15 +782,15 @@
 		      <property name="right_padding">0</property>
 
 		      <child>
-			<widget class="GtkHBox" id="hbox45">
+			<widget class="GtkHBox" id="hbox2919">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">2</property>
 
 			  <child>
-			    <widget class="GtkImage" id="image172">
+			    <widget class="GtkImage" id="image334">
 			      <property name="visible">True</property>
-			      <property name="stock">gtk-refresh</property>
+			      <property name="stock">gtk-preferences</property>
 			      <property name="icon_size">4</property>
 			      <property name="xalign">0.5</property>
 			      <property name="yalign">0.5</property>
@@ -796,7 +805,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="label167">
+			    <widget class="GtkLabel" id="label201">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">_Modify</property>
 			      <property name="use_underline">True</property>
@@ -1084,7 +1093,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 	      <child>
 		<widget class="GtkLabel" id="label11">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Ressource: </property>
+		  <property name="label" translatable="yes">Resource: </property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2163,7 +2172,7 @@ on the server as a vCard</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="add_window">
+<widget class="GtkWindow" id="add_contact_window">
   <property name="border_width">5</property>
   <property name="width_request">400</property>
   <property name="height_request">334</property>
@@ -8233,7 +8242,7 @@ Custom</property>
 	    <widget class="GtkLabel" id="label194">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Enter the user ID of the contact you would like to
-send a chat messate to.</property>
+send a chat messate to</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -8259,7 +8268,7 @@ send a chat messate to.</property>
       </child>
 
       <child>
-	<widget class="GtkComboBoxEntry" id="comboboxentry1">
+	<widget class="GtkComboBoxEntry" id="userID_comboboxentry">
 	  <property name="visible">True</property>
 	</widget>
 	<packing>

@@ -33,13 +33,9 @@ class GajimThread(threading.Thread):
  
 	def run(self):
 		mod = compile("import plugins.%s" % self.getName(), \
-			self.getName(), "exec")
-		try:
-			res = eval(mod)
-			mod = compile("plugins.%s.%s.plugin(self.queueIn, self.queueOut)" % (self.getName(),self.getName()), self.getName(), "exec")
-			res = eval(mod)
-		except:
-			print _("plugin %s cannot be launched : ") % self.getName() + \
-				str(sys.exc_info()[1][0:])
+		self.getName(), "exec")
+		res = eval(mod)
+		mod = compile("plugins.%s.%s.plugin(self.queueIn, self.queueOut)" % (self.getName(),self.getName()), self.getName(), "exec")
+		res = eval(mod)
 	# END run
 # END GajimThread

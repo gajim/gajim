@@ -163,7 +163,7 @@ gobject.type_register(ImageCellRenderer)
 
 
 class user:
-	"""Informations concerning each users"""
+	"""Information concerning each users"""
 	def __init__(self, *args):
 		if len(args) == 0:
 			self.jid = ''
@@ -1270,8 +1270,8 @@ class log_Window:
 		tagStatus.set_property('foreground', color)
 		self.plugin.send('LOG_NB_LINE', None, jid)
 
-class roster_Window:
-	"""Class for main gtk window"""
+class roster_window:
+	"""Class for main window of gtkgui plugin"""
 
 	def get_account_iter(self, name):
 		if self.regroup:
@@ -1425,59 +1425,70 @@ class roster_Window:
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
 	
-	def mkmenu(self):
-		"""create the browse agents, add and join groupchat sub menus"""
+	def makemenu(self):
+		"""create the browse agents, add contact & join groupchat sub menus"""
 		if len(self.plugin.accounts.keys()) > 0:
-			self.xml.get_widget('add').set_sensitive(True)
-			self.xml.get_widget('browse_agents').set_sensitive(True)
-			self.xml.get_widget('join_gc').set_sensitive(True)
+			self.xml.get_widget('new_message_menuitem').set_sensitive(True)
+			self.xml.get_widget('join_gc_menuitem').set_sensitive(True)
+			self.xml.get_widget('add_contact_menuitem').set_sensitive(True)
+			self.xml.get_widget('browse_agents_menuitem').set_sensitive(True)
 		else:
-			self.xml.get_widget('add').set_sensitive(False)
-			self.xml.get_widget('browse_agents').set_sensitive(False)
-			self.xml.get_widget('join_gc').set_sensitive(False)
-		if len(self.plugin.accounts.keys()) > 1:
+			self.xml.get_widget('new_message_menuitem').set_sensitive(False)
+			self.xml.get_widget('join_gc_menuitem').set_sensitive(False)
+			self.xml.get_widget('add_contact_menuitem').set_sensitive(False)
+			self.xml.get_widget('browse_agents_menuitem').set_sensitive(False)
+		if len(self.plugin.accounts.keys()) > 1: # 2 or more accounts? make submenus
+			
 			#add
 			menu_sub = gtk.Menu()
-			self.xml.get_widget('add').set_submenu(menu_sub)
+			self.xml.get_widget('add_contact_menuitem').set_submenu(menu_sub)
 			for a in self.plugin.accounts.keys():
 				item = gtk.MenuItem(a)
 				menu_sub.append(item)
-				item.connect("activate", self.on_add, a)
+				item.connect("activate", self.on_add_contact, a)
 			menu_sub.show_all()
 			#agents
 			menu_sub = gtk.Menu()
-			self.xml.get_widget('browse_agents').set_submenu(menu_sub)
+			self.xml.get_widget('browse_agents_menuitem').set_submenu(menu_sub)
 			for a in self.plugin.accounts.keys():
 				item = gtk.MenuItem(a)
 				menu_sub.append(item)
-				item.connect("activate", self.on_browse, a)
+				item.connect("activate", self.on_browse_agents, a)
 			menu_sub.show_all()
 			#join gc
 			menu_sub = gtk.Menu()
-			self.xml.get_widget('join_gc').set_submenu(menu_sub)
+			self.xml.get_widget('join_gc_menuitem').set_submenu(menu_sub)
 			for a in self.plugin.accounts.keys():
 				item = gtk.MenuItem(a)
 				menu_sub.append(item)
 				item.connect("activate", self.on_join_gc, a)
 			menu_sub.show_all()
+			#new message
+			menu_sub = gtk.Menu()
+			self.xml.get_widget('new_message_menuitem').set_submenu(menu_sub)
+			for a in self.plugin.accounts.keys():
+				item = gtk.MenuItem(a)
+				menu_sub.append(item)
+				item.connect("activate", self.on_new_message_menuitem_activate, a)
+			menu_sub.show_all()
 		elif len(self.plugin.accounts.keys()) == 1:
 			#add
-			if not self.add_handler_id :
-				self.add_handler_id = self.xml.get_widget('add').connect(
-					"activate", self.on_add, self.plugin.accounts.keys()[0])
+			if not self.add_contact_handler_id :
+				self.add_contact_handler_id = self.xml.get_widget('add_contact_menuitem').connect(
+					"activate", self.on_add_contact, self.plugin.accounts.keys()[0])
 			#agents
-			if not self.browse_handler_id :
-				self.browse_handler_id = self.xml.get_widget(
-					'browse_agents').connect("activate", self.on_browse, 
+			if not self.browse_agents_handler_id :
+				self.browse_agents_handler_id = self.xml.get_widget(
+					'browse_agents_menuitem').connect("activate", self.on_browse_agents, 
 					self.plugin.accounts.keys()[0])
 			#join_gc
-			if not self.join_handler_id :
-				self.join_handler_id = self.xml.get_widget('join_gc').connect(
+			if not self.join_gc_handler_id :
+				self.join_gc_handler_id = self.xml.get_widget('join_gc_menuitem').connect(
 					"activate", self.on_join_gc, self.plugin.accounts.keys()[0])
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
-		self.mkmenu()
+		self.makemenu()
 		self.tree.get_model().clear()
 		for acct in self.contacts.keys():
 			self.add_account_to_roster(acct)
@@ -1740,10 +1751,13 @@ class roster_Window:
 		item.connect("activate", self.on_edit_account, account)
 		item = gtk.MenuItem(_("_Browse agents"))
 		menu.append(item)
-		item.connect("activate", self.on_browse, account)
+		item.connect("activate", self.on_browse_agents, account)
 		item = gtk.MenuItem(_("_Add contact"))
 		menu.append(item)
-		item.connect("activate", self.on_add, account)
+		item.connect("activate", self.on_add_contact, account)
+		item = gtk.MenuItem(_('_New Message'))
+		menu.append(item)
+		item.connect("activate", self.on_new_message_menuitem_activate, account)
 		if not self.plugin.connected[account]:
 			item.set_sensitive(False)
 		
@@ -2002,16 +2016,16 @@ class roster_Window:
 				get_property('is-active'):
 				self.plugin.systray.add_jid(jid, account)
 
-	def on_preferences_activate(self, widget):
+	def on_preferences_menuitem_activate(self, widget):
 		"""When preferences is selected :
-		call the preference_Window class"""
+		call the preferences_window class"""
 		if not self.plugin.windows.has_key('preferences'):
 			self.plugin.windows['preferences'] = preferences_window(self.plugin)
 
-	def on_add(self, widget, account):
+	def on_add_contact(self, widget, account):
 		"""When add user is selected :
-		call the add class"""
-		addContact_Window(self.plugin, account)
+		call the add_contact_window class"""
+		add_contact_window(self.plugin, account)
 
 	def on_join_gc(self, widget, account):
 		"""When Join Groupchat is selected :
@@ -2019,13 +2033,19 @@ class roster_Window:
 		if not self.plugin.windows.has_key('join_gc'):
 			self.plugin.windows['join_gc'] = join_gc(self.plugin, account)
 
-	def on_about_activate(self, widget):
+	def on_new_message_menuitem_activate(self, widget, account):
+		"""When New Message is activated:
+		call the new_message_window class"""
+		if not self.plugin.windows.has_key('new_message'):
+			self.plugin.windows['new_message'] = new_message_window(self.plugin, account)
+			
+	def on_about_menuitem_activate(self, widget):
 		"""When about is selected :
 		call the about class"""
 		if not self.plugin.windows.has_key('about'):
 			self.plugin.windows['about'] = about_Window(self.plugin)
 
-	def on_accounts_activate(self, widget):
+	def on_accounts_menuitem_activate(self, widget):
 		"""When accounts is seleted :
 		call the accounts class to modify accounts"""
 		if not self.plugin.windows.has_key('accounts'):
@@ -2044,10 +2064,10 @@ class roster_Window:
 		if self.plugin.systray_visible:
 			self.window.iconify()
 		else:
-			self.on_quit()
+			self.quit_gtkui_plugin()
 		return 1
 
-	def on_quit(self):
+	def quit_gtkui_plugin(self):
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
 		if self.plugin.config.has_key('saveposition'):
@@ -2065,8 +2085,8 @@ class roster_Window:
 		self.plugin.hide_systray()
 		gtk.main_quit()
 
-	def on_quit_activate(self, widget):
-		self.on_quit()
+	def on_quit_menuitem_activate(self, widget):
+		self.quit_gtkui_plugin()
 
 	def on_roster_treeview_row_activated(self, widget, path, col=0):
 		"""When an iter is dubble clicked :
@@ -2151,7 +2171,7 @@ class roster_Window:
 		model.set_value(iter, 5, False)
 		self.redraw_jid(jid, account)
 		
-	def on_browse(self, widget, account):
+	def on_browse_agents(self, widget, account):
 		"""When browse agent is selected :
 		Call browse class"""
 		if not self.plugin.windows[account].has_key('browser'):
@@ -2218,8 +2238,8 @@ class roster_Window:
 			return 0
 		return 1
 
-	def on_show_offline_contacts_activate(self, widget):
-		"""when show offline option is changed :
+	def on_show_offline_contacts_menuitem_activate(self, widget):
+		"""when show offline option is changed:
 		redraw the treeview"""
 		self.plugin.config['showoffline'] = 1 - self.plugin.config['showoffline']
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
@@ -2350,9 +2370,9 @@ class roster_Window:
 		self.tree = self.xml.get_widget('roster_treeview')
 		self.plugin = plugin
 		self.nb_unread = 0
-		self.add_handler_id = 0
-		self.browse_handler_id = 0
-		self.join_handler_id = 0
+		self.add_contact_handler_id = 0
+		self.browse_agents_handler_id = 0
+		self.join_gc_handler_id = 0
 		self.regroup = 0
 		if self.plugin.config.has_key('mergeaccounts'):
 			self.regroup = self.plugin.config['mergeaccounts']
@@ -2398,7 +2418,7 @@ class roster_Window:
 		self.cb.set_active(5)
 
 		showOffline = self.plugin.config['showoffline']
-		self.xml.get_widget('show_offline').set_active(showOffline)
+		self.xml.get_widget('show_offline_contacts_menuitem').set_active(showOffline)
 
 		#columns
 		col = gtk.TreeViewColumn()
@@ -2555,7 +2575,7 @@ class systray:
 
 		item = gtk.MenuItem(_("Quit"))
 		menu.append(item)
-		item.connect("activate", self.plugin.roster.on_quit_activate)
+		item.connect("activate", self.plugin.roster.on_quit_menuitem_activate)
 		
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
@@ -3136,7 +3156,7 @@ class plugin:
 		if self.config['usetabbedchat']:
 			global USE_TABBED_CHAT  	 
 			USE_TABBED_CHAT = 1
-		self.roster = roster_Window(self)
+		self.roster = roster_window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(100, self.read_sleepy)
 		self.sleeper = common.sleepy.Sleepy( \
