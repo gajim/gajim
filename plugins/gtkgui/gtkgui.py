@@ -100,7 +100,7 @@ class message_Window:
 			self.print_conversation(evt[0], tim = evt[1])
 		del self.plugin.queues[self.account][self.user.jid]
 		self.plugin.roster.redraw_jid(self.user.jid, self.account)
-		self.plugin.set_systray()
+		self.plugin.systray.remove_jid(self.user.jid)
 		showOffline = self.plugin.config['showoffline']
 		if (self.user.show == 'offline' or self.user.show == 'error') and \
 			not showOffline:
@@ -137,6 +137,10 @@ class message_Window:
 		"""When history button is pressed : call log window"""
 		if not self.plugin.windows['logs'].has_key(self.user.jid):
 			self.plugin.windows['logs'][self.user.jid] = log_Window(self.plugin, self.user.jid)
+
+	def on_focus(self, widget, event):
+		"""When window get focus"""
+		self.plugin.systray.remove_jid(self.user.jid)
 	
 	def __init__(self, user, plugin, account):
 		self.user = user
@@ -160,6 +164,7 @@ class message_Window:
 		buffer.create_mark('end', end_iter, 0)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_clear_clicked', self.on_clear)
+		self.xml.signal_connect('on_focus', self.on_focus)
 		self.xml.signal_connect('on_history_clicked', self.on_history)
 		self.xml.signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
@@ -856,7 +861,7 @@ class roster_Window:
 		optionmenu.set_history(table[maxi])
 		optionmenu.handler_unblock(self.id_signal_optionmenu)
 		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
-		self.plugin.set_systray(statuss[maxi])
+		self.plugin.systray.set_status(statuss[maxi])
 
 	def on_status_changed(self, account, status):
 		"""the core tells us that our status has changed"""
@@ -903,7 +908,7 @@ class roster_Window:
 				model = self.tree.get_model()
 				self.plugin.queues[account][jid] = Queue.Queue(50)
 				self.redraw_jid(jid, account)
-				self.plugin.set_systray('message')
+				self.plugin.systray.add_jid(jid)
 			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
 			if not path:
@@ -925,6 +930,9 @@ class roster_Window:
 					self.tree.scroll_to_cell(path)
 					self.tree.set_cursor(path)
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg)
+			if not self.plugin.windows[account]['chats'][jid].window.\
+				get_property('is-active'):
+				self.plugin.systray.add_jid(jid)
 
 	def on_prefs(self, widget):
 		"""When preferences is selected :
@@ -1193,6 +1201,46 @@ class roster_Window:
 
 		self.draw_roster()
 
+class systray:
+	"""Class for icon in the systray"""
+	def set_img(self):
+		if len(self.jids) > 0:
+			status = 'message'
+		else:
+			status = self.status
+		pix = self.plugin.roster.pixbufs[status]
+		if isinstance(pix, gtk.gdk.PixbufAnimation):
+			self.img_tray.set_from_animation(pix)
+		else:
+			self.img_tray.set_from_pixbuf(pix)
+
+	def add_jid(self, jid):
+		if not jid in self.jids:
+			self.jids.append(jid)
+			self.set_img()
+
+	def remove_jid(self, jid):
+   		if jid in self.jids:
+			self.jids.remove(jid)
+			self.set_img()
+
+	def set_status(self, status):
+		self.status = status
+		self.set_img()
+
+	def __init__(self, plugin):
+		self.plugin = plugin
+		self.jids = []
+		t = trayicon.TrayIcon("Gajim")
+		tip = gtk.Tooltips()
+		tip.set_tip(t, 'Gajim')
+		self.img_tray = gtk.Image()
+		t.add(self.img_tray)
+		t.show_all()
+		self.status = 'offline'
+		self.set_img()
+
+	
 class plugin:
 	"""Class called by the core in a new thread"""
 
@@ -1304,9 +1352,6 @@ class plugin:
 					else:
 						#Update existing iter
 						self.roster.redraw_jid(ji, ev[1])
-#						for i in self.roster.get_user_iter(ji, ev[1]):
-#							if self.roster.pixbufs.has_key(ev[2][1]):
-#								model.set_value(i, 0, self.roster.pixbufs[ev[2][1]])
 				elif self.roster.contacts[ev[1]].has_key(ji):
 					#It isn't an agent
 					self.roster.chg_user_status(user1, ev[2][1], ev[2][2], ev[1])
@@ -1327,8 +1372,6 @@ class plugin:
 					u.name = ev[2][1]
 					u.resource = ev[2][2]
 					self.roster.redraw_jid(u.jid, ev[1])
-#					for i in self.roster.get_user_iter(u.jid, ev[1]):
-#						model.set_value(i, 1, u.name)
 				else:
 					user1 = user(jid, jid, ['general'], 'online', \
 						'online', 'to', ev[2][2], 0)
@@ -1420,27 +1463,6 @@ class plugin:
 				self.sleeper_state[account] = 3
 		return 1
 
-	def set_systray_img(self, status):
-		if not self.roster.pixbufs.has_key(status):
-			return
-		pix = self.roster.pixbufs[status]
-		if isinstance(pix, gtk.gdk.PixbufAnimation):
-			self.img_tray.set_from_animation(pix)
-		else:
-			self.img_tray.set_from_pixbuf(pix)
-
-	def set_systray(self, status=None):
-		if not status:
-			self.nb_msg -= 1
-		elif status == 'message':
-			self.nb_msg += 1
-		else:
-			self.status = status
-		if self.nb_msg == 0:
-			self.set_systray_img(self.status)
-		else:
-			self.set_systray_img('message')
-
 	def __init__(self, quIN, quOUT):
 		gtk.threads_init()
 		gtk.threads_enter()
@@ -1460,7 +1482,6 @@ class plugin:
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
 		self.accounts = self.wait('CONFIG')
-		self.nb_msg = 0
 		self.windows = {'logs':{}}
 		self.queues = {}
 		self.connected = {}
@@ -1481,13 +1502,7 @@ class plugin:
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
 		self.sleeper = None
-		t = trayicon.TrayIcon("Gajim")
-		tip = gtk.Tooltips()
-		tip.set_tip(t, 'Gajim')
-		self.img_tray = gtk.Image()
-		t.add(self.img_tray)
-		t.show_all()
-		self.set_systray('offline')
+		self.systray = systray(self)
 		gtk.main()
 		gtk.threads_leave()
 

@@ -344,6 +344,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Sun, 12 Oct 2003 18:17:05 GMT"/>
+  <signal name="focus_in_event" handler="on_focus" last_modification_time="Fri, 11 Jun 2004 03:14:21 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox2">
