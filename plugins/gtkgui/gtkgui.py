@@ -2343,8 +2343,6 @@ class plugin:
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
-		#in pygtk2.4
-		#gtk.window_set_default_icon(??pixbuf??)
 #		gtk.gdk.threads_enter()
 		self.queueIN = quIN
 		self.queueOUT = quOUT
@@ -2384,6 +2382,17 @@ class plugin:
 												#2:autoaway and use sleeper
 												#3:autoxa and use sleeper
 			self.send('ASK_ROSTER', a, self.queueIN)
+		#in pygtk2.4
+		iconstyle = self.config['iconstyle']
+		if not iconstyle:
+			iconstyle = 'sun'
+		path = 'plugins/gtkgui/icons/' + iconstyle + '/'
+		files = [path + 'online.gif', path + 'online.png', path + 'online.xpm']
+		for file in files:
+			if os.path.exists(file):
+				pix = gtk.gdk.pixbuf_new_from_file(file)
+				break
+		gtk.window_set_default_icon(pix)
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
