@@ -69,11 +69,12 @@ class message:
 		self.window.destroy()
 	
 	def print_conversation(self, txt, contact = None):
-		txt_buffer = self.conversation.get_buffer()
-		end_iter = txt_buffer.get_end_iter()
+		end_iter = self.convTxtBuffer.get_end_iter()
 		if contact: who = 'moi'
 		else: who = 'lui'
-		txt_buffer.insert(end_iter, '<'+who+'> '+txt+'\n', -1)
+		self.convTxtBuffer.insert(end_iter, '<'+who+'> '+txt+'\n', -1)
+		self.conversation.scroll_to_mark(\
+			self.convTxtBuffer.get_mark('end'), 0.1, 0, 0, 0)
 
 	def on_msg_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Return:
@@ -98,6 +99,9 @@ class message:
 		self.window.set_title('Chat with ' + jid)
 		self.message = self.xml.get_widget('message')
 		self.conversation = self.xml.get_widget('conversation')
+		self.convTxtBuffer = self.conversation.get_buffer()
+		end_iter=self.convTxtBuffer.get_end_iter()
+		self.convTxtBuffer.create_mark('end', end_iter, 0)
 		self.window.show()
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
