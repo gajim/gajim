@@ -439,7 +439,7 @@ class preference_Window:
 		list_style = os.listdir('plugins/gtkgui/icons/')
 		l = []
 		for i in list_style:
-			if i != 'CVS':
+			if i != 'CVS' and i[0] != '.':
 				l.append(i)
 		if l.count == 0:
 			l.append(" ")
