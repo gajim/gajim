@@ -52,11 +52,18 @@ if __name__ == "__main__":
 import pygtk
 pygtk.require('2.0')
 import gtk
-from gtk import TRUE, FALSE
-import gtk.glade,gobject
-import os,string,time,Queue, sys
-import common.optparser,common.sleepy
+import gtk.glade
+import gobject
+import os
+import string
+import time
+import Queue
+import sys
+import common.optparser
+import common.sleepy
+
 from common import i18n
+
 _ = i18n._
 APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
@@ -75,7 +82,7 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 		"image": (gobject.TYPE_OBJECT, "Image", 
 		"Image", gobject.PARAM_READWRITE),
 	}
-                     
+
 	def __init__(self):
 		self.__gobject_init__()
 		self.image = None
