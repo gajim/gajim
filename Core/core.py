@@ -448,7 +448,7 @@ class GajimCore:
 			self.hub.sendPlugin('SUBSCRIBED', self.connections[con],\
 				(jid.getStripped(), jid.getResource()))
 			self.hub.queueIn.put(('UPDUSER', self.connections[con], \
-				(jid.getStripped(), jid.getNode(), ['general'])))
+				(jid.getStripped(), jid.getNode(), ['General'])))
 			#BE CAREFUL : no con.updateRosterItem() in a callback
 			log.debug("we are now subscribed to %s" % who)
 		elif typ == 'unsubscribe':
