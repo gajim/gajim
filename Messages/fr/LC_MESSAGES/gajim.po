@@ -340,7 +340,7 @@ msgid ""
 "Copyright 2003-2004 Gajim Team\n"
 "\n"
 "<b>Gajim Team</b>\n"
-"Vincent Hanquez (tab@tuxfamily.org)\n"
+"Vincent Hanquez (tab@snarc.org)\n"
 "Yann Le Boulanger (asterix@crans.org)"
 msgstr ""
 

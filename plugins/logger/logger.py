@@ -3,7 +3,7 @@
 ##
 ## Gajim Team:
 ##      - Yann Le Boulanger <asterix@crans.org>
-##      - Vincent Hanquez <tab@tuxfamily.org>
+##      - Vincent Hanquez <tab@snarc.org>
 ##
 ##      Copyright (C) 2003 Gajim Team
 ##
