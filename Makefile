@@ -21,6 +21,20 @@ clean:
 	find -name *.pyc -exec rm {} \;
 	$(foreach sdir, $(MODULES), make -C $(sdir) clean;)
 
+# FIXME -- olé gorito
+dist:
+	-rm -rf gajim-$(VERSION)
+	mkdir gajim-$(VERSION)
+	cp -r plugins debian scripts common Core doc Messages sounds gajim-$(VERSION)/
+	cp setup_win32.py gajim.iss AUTHORS gajim.1 gajim.xpm gajim.ico COPYING Makefile gajim.py gajim-$(VERSION)
+	-find gajim-$(VERSION) -name '.svn' -exec rm -rf {} \; 2> /dev/null
+	find gajim-$(VERSION) -name '*.pyc' -exec rm {} \;
+	find gajim-$(VERSION) -name '*.pyo' -exec rm {} \;
+	find gajim-$(VERSION) -name '.*' -exec rm {} \;
+	@echo tarring gajim-$(VERSION) ...
+	@tar cjf gajim-$(VERSION).tar.bz2 gajim-$(VERSION)/
+	rm -rf gajim-$(VERSION)
+
 install:
 	for d in $(DIRS) ; do \
 		if [ ! -d $(DESTDIR)$(PREFIX)/share/gajim/$$d ] ; then \
