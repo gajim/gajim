@@ -342,9 +342,9 @@ class preference_Window:
 			for w in self.plugin.windows[a]['chats'].keys():
 				self.plugin.windows[a]['chats'][w].tagIn.\
 					set_property("foreground", colSt_in)
-				self.plugin.windows[a]['chats'][w].tagIn.\
+				self.plugin.windows[a]['chats'][w].tagOut.\
 					set_property("foreground", colSt_out)
-				self.plugin.windows[a]['chats'][w].tagIn.\
+				self.plugin.windows[a]['chats'][w].tagStatus.\
 					set_property("foreground", colSt_status)
 		#IconStyle
 		ist = self.combo_iconstyle.entry.get_text()
