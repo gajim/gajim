@@ -4,7 +4,6 @@
 ## - Yann Le Boulanger <asterix@lagaule.org>
 ## - Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
-##	- Alex Podaras <bigpod@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -909,9 +908,9 @@ class plugin:
 				self.systray_capabilities = False
 			else:
 				self.systray_capabilities = True
-				self.systray = systray(self)
+				self.systray = Systray(self)
 		else:
-			self.systray = systray(self)
+			self.systray = Systray(self)
 		if self.config['trayicon']:
 			self.show_systray()
 			

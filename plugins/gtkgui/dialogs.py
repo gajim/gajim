@@ -1,10 +1,9 @@
 ##	plugins/dialogs.py
 ##
 ## Gajim Team:
-##		- Yann Le Boulanger <asterix@lagaule.org>
-##		- Vincent Hanquez <tab@snarc.org>
-##		- Nikos Kouremenos <kourem@gmail.com>
-##		- Alex Podaras <bigpod@gmail.com>
+##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Vincent Hanquez <tab@snarc.org>
+##	- Nikos Kouremenos <kourem@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -542,7 +541,7 @@ class About_dialog:
 		dlg.set_comments(_('A GTK jabber client'))
 		dlg.set_website('http://www.gajim.org')
 
-		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>', 'Alex Podaras <bigpod@gmail.com>']
+		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>']
 		dlg.set_authors(authors)
 		dlg.set_logo(gtk.gdk.pixbuf_new_from_file('plugins/gtkgui/pixmaps/logo.png'))
 		dlg.set_translator_credits(_('translator_credits'))

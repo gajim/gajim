@@ -4,7 +4,6 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
-##	- Alex Podaras <bigpod@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##

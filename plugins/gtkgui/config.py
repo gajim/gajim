@@ -1,10 +1,9 @@
 ##	plugins/config.py
 ##
 ## Gajim Team:
-##		- Yann Le Boulanger <asterix@lagaule.org>
-##		- Vincent Hanquez <tab@snarc.org>
-##		- Nikos Kouremenos <kourem@gmail.com>
-##		- Alex Podaras <bigpod@gmail.com>
+##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Vincent Hanquez <tab@snarc.org>
+##	- Nikos Kouremenos <kourem@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -721,7 +720,7 @@ class Preferences_window:
 			self.tray_icon_checkbutton.set_active(st)
 		else:
 			self.tray_icon_checkbutton.set_sensitive(False)
-		
+
 		#Save position
 		st = self.plugin.config['saveposition']
 		self.xml.get_widget('save_position_checkbutton').set_active(st)

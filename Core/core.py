@@ -1,9 +1,9 @@
 ##	core/core.py
 ##
 ## Gajim Team:
-##		- Yann Le Boulanger <asterix@lagaule.org>
-##		- Vincent Hanquez <tab@snarc.org>
-##		- Nikos Kouremenos <nkour@jabber.org>
+##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Vincent Hanquez <tab@snarc.org>
+##	- Nikos Kouremenos <nkour@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##

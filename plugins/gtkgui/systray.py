@@ -4,7 +4,6 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
-##	- Alex Podaras <bigpod@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -31,7 +30,7 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-class systray:
+class Systray:
 	"""Class for icon in the systray"""
 	def set_img(self):
 		if len(self.jids) > 0:
