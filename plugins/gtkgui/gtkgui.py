@@ -608,6 +608,8 @@ class gc:
 		"""Remove a user from the roster"""
 		model = self.tree.get_model()
 		iter = self.get_user_iter(nick)
+		if not iter:
+			return
 		parent_iter = model.iter_parent(iter)
 		model.remove(iter)
 		if model.iter_n_children(parent_iter) == 0:
