@@ -222,6 +222,7 @@ class tabbed_chat_window:
 			self.on_tabbed_chat_window_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', \
 			self.on_chat_notebook_switch_page)
+		#self.xml.signal_autoconnect(self) #FIXME: (nk) THIS SEGFAULTS GAJIM. WHY?
 		
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -363,7 +364,6 @@ class tabbed_chat_window:
 		child = self.xmls[jid].get_widget('chat_vbox')
 		self.chat_notebook.set_current_page(\
 			self.chat_notebook.page_num(child))
-		self.xmls[jid].get_widget('message_textview').grab_focus()
 
 	def remove_tab(self, jid):
 		if len(self.xmls) == 1:
@@ -444,14 +444,14 @@ class tabbed_chat_window:
 		return 0
 
 	def on_tabbed_chat_window_key_press_event(self, widget, event):
-		st = "1234567890"
+		st = '1234567890' # zero is here cause humans count from 1, pc from 0 :P
 		jid = self.get_active_jid()
-		if event.keyval == gtk.keysyms.Escape:
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
 			self.remove_tab(jid)
 		elif event.string and event.string in st \
-			and (event.state & gtk.gdk.MOD1_MASK):
+			and (event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
 			self.chat_notebook.set_current_page(st.index(event.string))
-		elif event.keyval == gtk.keysyms.Page_Down:
+		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
 			if event.state & gtk.gdk.CONTROL_MASK:
 				current = self.chat_notebook.get_current_page()
 				if current > 0:
@@ -466,7 +466,7 @@ class tabbed_chat_window:
 				iter = conversation_textview.get_iter_at_location(rect.x,\
 					rect.y + rect.height)
 				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
-		elif event.keyval == gtk.keysyms.Page_Up:
+		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
 			if event.state & gtk.gdk.CONTROL_MASK:
 				current = self.chat_notebook.get_current_page()
 				if current < (self.chat_notebook.get_n_pages()-1):
@@ -480,12 +480,17 @@ class tabbed_chat_window:
 				iter = conversation_textview.get_iter_at_location(rect.x, rect.y)
 				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
 		elif event.keyval == gtk.keysyms.Tab and \
-			(event.state & gtk.gdk.CONTROL_MASK):
+			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
 			current = self.chat_notebook.get_current_page()
 			if current < (self.chat_notebook.get_n_pages()-1):
 				self.chat_notebook.set_current_page(current+1)
 			else:
 				self.chat_notebook.set_current_page(0)
+		else: # it's a normal key press make sure message_textview has focus
+			message_textview = self.xmls[jid].\
+					get_widget('message_textview')
+			if not message_textview.is_focus():
+				message_textview.grab_focus()
 
 	def on_contact_button_clicked(self, widget):
 		"""When button contact is clicked"""
@@ -2343,9 +2348,9 @@ class roster_window:
 		return 1
 
 	def mkemoticons(self):
-		"""initialize emoticons array"""
-		self.emoticons = {}
-		self.begin_emot = ""
+		"""initialize emoticons dictionary"""
+		self.emoticons = dict()
+		self.begin_emot = ''
 		split_line = string.split(self.plugin.config['emoticons'], '\t')
 		for i in range(0, len(split_line)/2):
 			file = split_line[2*i+1]
@@ -2832,7 +2837,7 @@ class plugin:
 			argv.append(file)
 			try: 
 				os.execvp(argv[0], argv)
-			except: 
+			except:
 				print _("error while running %s :") % string.join(argv, ' '), \
 					sys.exc_info()[1]
 				os._exit(1)

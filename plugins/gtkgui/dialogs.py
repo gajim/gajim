@@ -623,8 +623,6 @@ class New_message_window:
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'new_message_window', APP)
 		self.window = self.xml.get_widget('new_message_window')
-		self.jid_entry = self.xml.get_widget('jid_entry')
-		self.jid_entry.set_activates_default(True)
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows['new_message'] = self # now add us to open windows
 

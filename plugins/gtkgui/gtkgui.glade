@@ -7307,7 +7307,7 @@ Custom</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char">*</property>
-	      <property name="activates_default">False</property>
+	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -7322,13 +7322,14 @@ Custom</property>
 	    <widget class="GtkEntry" id="room_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
+	      <property name="has_focus">True</property>
 	      <property name="editable">True</property>
 	      <property name="visibility">True</property>
 	      <property name="max_length">0</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char">*</property>
-	      <property name="activates_default">False</property>
+	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -7349,7 +7350,7 @@ Custom</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char">*</property>
-	      <property name="activates_default">False</property>
+	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -7365,12 +7366,12 @@ Custom</property>
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
-	      <property name="visibility">True</property>
-	      <property name="max_length">3</property>
+	      <property name="visibility">False</property>
+	      <property name="max_length">0</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char">*</property>
-	      <property name="activates_default">False</property>
+	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -7933,6 +7934,7 @@ Custom</property>
 
 <widget class="GtkWindow" id="tabbed_chat_window">
   <property name="visible">True</property>
+  <property name="can_focus">True</property>
   <property name="title" translatable="yes">Chat</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -7977,7 +7979,6 @@ Custom</property>
 	      <child>
 		<widget class="GtkButton" id="history_button">
 		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
 		  <signal name="clicked" handler="on_history_button_clicked" last_modification_time="Wed, 02 Mar 2005 17:03:17 GMT"/>
@@ -8052,70 +8053,11 @@ Custom</property>
 	      <child>
 		<widget class="GtkButton" id="clear_button">
 		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
+		  <property name="label">gtk-clear</property>
+		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
 		  <signal name="clicked" handler="on_clear_button_clicked" last_modification_time="Wed, 02 Mar 2005 17:03:09 GMT"/>
-
-		  <child>
-		    <widget class="GtkAlignment" id="alignment46">
-		      <property name="visible">True</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xscale">0</property>
-		      <property name="yscale">0</property>
-		      <property name="top_padding">0</property>
-		      <property name="bottom_padding">0</property>
-		      <property name="left_padding">0</property>
-		      <property name="right_padding">0</property>
-
-		      <child>
-			<widget class="GtkHBox" id="hbox2923">
-			  <property name="visible">True</property>
-			  <property name="homogeneous">False</property>
-			  <property name="spacing">2</property>
-
-			  <child>
-			    <widget class="GtkImage" id="image411">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-clear</property>
-			      <property name="icon_size">4</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">False</property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkLabel" id="label204">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Clear</property>
-			      <property name="use_underline">True</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_LEFT</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">False</property>
-			    </packing>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -8144,14 +8086,13 @@ Custom</property>
 	      <child>
 		<widget class="GtkToggleButton" id="gpg_togglebutton">
 		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NONE</property>
 		  <property name="focus_on_click">False</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 
 		  <child>
-		    <widget class="GtkImage" id="image413">
+		    <widget class="GtkImage" id="image433">
 		      <property name="visible">True</property>
 		      <property name="stock">gtk-dialog-authentication</property>
 		      <property name="icon_size">4</property>
@@ -8180,7 +8121,6 @@ Custom</property>
 		      <property name="height_request">0</property>
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Click for contact's extented information</property>
-		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Anonymous &lt;id@server/res&gt;</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NONE</property>
@@ -8203,13 +8143,12 @@ Custom</property>
 	      <child>
 		<widget class="GtkButton" id="close_button">
 		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
 		  <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Wed, 02 Mar 2005 21:05:12 GMT"/>
 
 		  <child>
-		    <widget class="GtkImage" id="image414">
+		    <widget class="GtkImage" id="image434">
 		      <property name="visible">True</property>
 		      <property name="stock">gtk-close</property>
 		      <property name="icon_size">4</property>
@@ -8237,13 +8176,11 @@ Custom</property>
 	  <child>
 	    <widget class="GtkVPaned" id="vpaned3">
 	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
 	      <property name="position">170</property>
 
 	      <child>
 		<widget class="GtkScrolledWindow" id="conversation_scrolledwindow">
 		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
 		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="shadow_type">GTK_SHADOW_IN</property>
@@ -8253,7 +8190,6 @@ Custom</property>
 		  <child>
 		    <widget class="GtkTextView" id="conversation_textview">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
 		      <property name="editable">False</property>
 		      <property name="overwrite">False</property>
 		      <property name="accepts_tab">True</property>
@@ -8281,7 +8217,6 @@ Custom</property>
 	      <child>
 		<widget class="GtkScrolledWindow" id="scrolledwindow31">
 		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
 		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="shadow_type">GTK_SHADOW_IN</property>
@@ -8291,7 +8226,6 @@ Custom</property>
 		    <widget class="GtkTextView" id="message_textview">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="has_focus">True</property>
 		      <property name="editable">True</property>
 		      <property name="overwrite">False</property>
 		      <property name="accepts_tab">True</property>
@@ -8437,7 +8371,7 @@ send a chat message to</property>
 	  <property name="text" translatable="yes"></property>
 	  <property name="has_frame">True</property>
 	  <property name="invisible_char">*</property>
-	  <property name="activates_default">False</property>
+	  <property name="activates_default">True</property>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
