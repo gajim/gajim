@@ -285,6 +285,7 @@ class GajimCore:
 					elif (ev[2][0] == 'offline') and (self.connected[ev[1]] == 1):
 						self.connected[ev[1]] = 0
 						con.disconnect()
+						del self.connexions[con]
 						self.hub.sendPlugin('STATUS', ev[1], 'offline')
 					if ev[2][0] != 'offline' and self.connected[ev[1]] == 1:
 						p = common.jabber.Presence()
