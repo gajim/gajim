@@ -100,11 +100,12 @@ class message_Window:
 			self.print_conversation(evt[0], tim = evt[1])
 		del self.plugin.queues[self.account][self.user.jid]
 		self.plugin.roster.redraw_jid(self.user.jid, self.account)
-#		for i in self.plugin.roster.get_user_iter(self.user.jid, self.account):
-#			if self.plugin.roster.pixbufs.has_key(self.user.show):
-#				self.plugin.roster.tree.get_model().set_value(i, 0, \
-#					self.plugin.roster.pixbufs[self.user.show])
 		self.plugin.set_systray()
+		showOffline = self.plugin.config['showoffline']
+		if (self.user.show == 'offline' or self.user.show == 'error') and \
+			not showOffline:
+			if len(self.plugin.roster.contacts[self.account][self.user.jid]) == 1:
+				self.plugin.roster.remove_user(self.user, self.account)
 
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -408,7 +409,8 @@ class roster_Window:
 				user.groups.append('general')
 
 		if (user.show == 'offline' or user.show == 'error') and not showOffline\
-			and not 'Agents' in user.groups:
+			and not 'Agents' in user.groups and \
+			not self.plugin.queues[account].has_key(user.jid):
 			return
 
 		model = self.tree.get_model()
@@ -547,7 +549,8 @@ class roster_Window:
 		"""When a user change his status"""
 		showOffline = self.plugin.config['showoffline']
 		model = self.tree.get_model()
-		if (show == 'offline' or show == 'error') and not showOffline:
+		if (show == 'offline' or show == 'error') and not showOffline and \
+			not self.plugin.queues[account].has_key(user.jid):
 			if len(self.contacts[account][user.jid]) > 1:
 				luser = self.contacts[account][user.jid]
 				for u in luser:
@@ -885,9 +888,9 @@ class roster_Window:
 				'not in list', 'not in list', 'none', '', 0)
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
-		iter = self.get_user_iter(jid, account)
-		if iter:
-			path = self.tree.get_model().get_path(iter[0])
+		iters = self.get_user_iter(jid, account)
+		if iters:
+			path = self.tree.get_model().get_path(iters[0])
 		else:
 			path = None
 		autopopup = self.plugin.config['autopopup']
@@ -903,11 +906,14 @@ class roster_Window:
 				self.plugin.set_systray('message')
 			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
-			if path:
-				self.tree.expand_row(path[0:1], FALSE)
-				self.tree.expand_row(path[0:2], FALSE)
-				self.tree.scroll_to_cell(path)
-				self.tree.set_cursor(path)
+			if not path:
+				self.add_user_to_roster(jid, account)
+				iters = self.get_user_iter(jid, account)
+				path = self.tree.get_model().get_path(iters[0])
+			self.tree.expand_row(path[0:1], FALSE)
+			self.tree.expand_row(path[0:2], FALSE)
+			self.tree.scroll_to_cell(path)
+			self.tree.set_cursor(path)
 		else:
 			if not self.plugin.windows[account]['chats'].has_key(jid):
 				self.plugin.windows[account]['chats'][jid] = \
