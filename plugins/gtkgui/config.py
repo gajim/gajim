@@ -215,7 +215,7 @@ class preference_Window:
 			self.plugin.config['autoxa'] = 0
 		axt = self.spin_autoxatime.get_value_as_int()
 		self.plugin.config['autoxatime'] = axt
-		if self.plugin.sleeper:
+		if aw or xa:
 			self.plugin.sleeper = common.sleepy.Sleepy(\
 				self.plugin.config['autoawaytime']*60, \
 				self.plugin.config['autoxatime']*60)
