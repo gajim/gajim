@@ -530,16 +530,28 @@ class roster_Window:
 							break
 				else:
 					self.remove_user(user, account)
+					iters = []
 			else:
+				#TODO: should show pibuf of the prioritest resource
 				for i in iters:
 					if self.pixbufs.has_key(show):
 						model.set_value(i, 0, self.pixbufs[show])
+			l = len(self.contacts[account][user.jid])
+			if l > 1:
+				for iter in iters:
+					model.set_value(iter, 1, user.name + " (" + str(l) + ")")
+			elif l == 1:
+				for iter in iters:
+					model.set_value(iter, 1, user.name)
 		for u in self.contacts[account][user.jid]:
-			u.show = show
-			u.status = status
+			if u.resource == user.resource:
+				u.show = show
+				u.status = status
+				break
 		#Print status in chat window
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
-			if len(self.contacts[account][user.jid]) == 0:
+			#TODO: should show pibuf of the prioritest resource
+			if len(self.contacts[account][user.jid]) < 2:
 				self.plugin.windows[account]['chats'][user.jid].\
 					img.set_from_pixbuf(self.pixbufs[show])
 			name = user.name
