@@ -690,6 +690,8 @@ class roster_Window:
 				infos['password'] = self.plugin.accounts[account]["password"]
 			if self.plugin.accounts[account].has_key("ressource"):
 				infos['ressource'] = self.plugin.accounts[account]["ressource"]
+			if self.plugin.accounts[account].has_key("priority"):
+				infos['priority'] = self.plugin.accounts[account]["priority"]
 			if self.plugin.accounts[account].has_key("use_proxy"):
 				infos['use_proxy'] = self.plugin.accounts[account]["use_proxy"]
 			if self.plugin.accounts[account].has_key("proxyhost"):
@@ -1280,7 +1282,7 @@ class plugin:
 					#It must be an agent
 					if not self.roster.contacts[ev[1]].has_key(ji):
 						user1 = user(ji, ji, ['Agents'], ev[2][1], \
-							ev[2][2], 'from', resource)
+							ev[2][2], 'from', resource, 0)
 						self.roster.contacts[ev[1]][ji] = [user1]
 						self.roster.add_user_to_roster(ji, ev[1])
 					else:
@@ -1328,10 +1330,13 @@ class plugin:
 					warning_Window(_("error contacting %s") % ev[2][0])
 				else:
 					agentRegistration_Window(ev[2][0], ev[2][1], self, ev[1])
-			#('ACC_OK', account, (hostname, login, pasword, name, ressource))
+			#('ACC_OK', account, (hostname, login, pasword, name, ressource, prio,
+			#use_proxy, proxyhost, proxyport))
 			elif ev[0] == 'ACC_OK':
-				self.accounts[ev[2][3]] =  {'ressource': ev[2][4], \
-					'password': ev[2][2], 'hostname': ev[2][0], 'name': ev[2][1]}
+				self.accounts[ev[2][3]] =  {'name': ev[2][1], 'hostname': ev[2][0],\
+					'password': ev[2][2], 'ressource': ev[2][4], 'priority': \
+					ev[2][5], 'use_proxy': ev[2][6], 'proxyhost': ev[2][7], \
+					'proxyport': ev[2][8]}
 				self.send('CONFIG', None, ('accounts', self.accounts))
 				self.windows[name] = {'infos': {}, 'chats': {}}
 				self.queues[name] = {}

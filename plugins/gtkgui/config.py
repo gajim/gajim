@@ -354,6 +354,8 @@ class accountPreference_Window:
 			self.xml.get_widget("entry_password").set_text(infos['password'])
 		if infos.has_key('ressource'):
 			self.xml.get_widget("entry_ressource").set_text(infos['ressource'])
+		if infos.has_key('priority'):
+			self.xml.get_widget("entry_priority").set_text(str(infos['priority']))
 		if infos.has_key('use_proxy'):
 			self.xml.get_widget("checkbutton_proxy").set_active(infos['use_proxy'])
 		if infos.has_key('proxyhost'):
@@ -367,6 +369,8 @@ class accountPreference_Window:
 		"""When save button is clicked : Save informations in config file"""
 		entryPass = self.xml.get_widget("entry_password")
 		entryRessource = self.xml.get_widget("entry_ressource")
+		entryPriority = self.xml.get_widget("entry_priority")
+		prio = entryPriority.get_text()
 		check = self.xml.get_widget("checkbutton")
 		entryName = self.xml.get_widget("entry_name")
 		entryJid = self.xml.get_widget("entry_jid")
@@ -395,6 +399,12 @@ class accountPreference_Window:
 			except ValueError:
 				warning_Window(_("Proxy Port must be a port number"))
 				return 0
+		if prio != '':
+			try:
+				prio = string.atoi(prio)
+			except ValueError:
+				warning_Window(_("Priority must be a number"))
+				return 0
 		(login, hostname) = string.split(jid, '@')
 		#if we are modifying an account
 		if self.modify:
@@ -419,8 +429,9 @@ class accountPreference_Window:
 				self.plugin.send('ACC_CHG', self.account, name)
 				self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 					'password': entryPass.get_text(), 'ressource': \
-					entryRessource.get_text(), 'use_proxy': useProxy, 'proxyhost': \
-					entryProxyhost.get_text(), 'proxyport': proxyPort}
+					entryRessource.get_text(), 'priority' : prio, 'use_proxy': \
+					useProxy, 'proxyhost': entryProxyhost.get_text(), 'proxyport': \
+					proxyPort}
 				self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
 				#refresh accounts window
 				if self.plugin.windows.has_key('accounts'):
@@ -437,15 +448,15 @@ class accountPreference_Window:
 			#if we neeed to register a new account
 			if check.get_active():
 				self.plugin.send('NEW_ACC', None, (hostname, login, \
-					entryPass.get_text(), name, entryRessource.get_text(), \
+					entryPass.get_text(), name, entryRessource.get_text(), prio, \
 					checkProxy.get_active(), entryProxyhost.get_text(), \
 					entryProxyport.get_text()))
 				check.set_active(FALSE)
 				return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 			'password': entryPass.get_text(), 'ressource': \
-			entryRessource.get_text(), 'use_proxy': useProxy, 'proxyhost': \
-			entryProxyhost.get_text(), 'proxyport': proxyPort}
+			entryRessource.get_text(), 'priority' : prio, 'use_proxy': useProxy, \
+			'proxyhost': entryProxyhost.get_text(), 'proxyport': proxyPort}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}}
@@ -557,6 +568,8 @@ class accounts_Window:
 				infos['password'] = self.plugin.accounts[account]["password"]
 			if self.plugin.accounts[account].has_key("ressource"):
 				infos['ressource'] = self.plugin.accounts[account]["ressource"]
+			if self.plugin.accounts[account].has_key("priority"):
+				infos['priority'] = self.plugin.accounts[account]["priority"]
 			if self.plugin.accounts[account].has_key("use_proxy"):
 				infos['use_proxy'] = self.plugin.accounts[account]["use_proxy"]
 			if self.plugin.accounts[account].has_key("proxyhost"):

@@ -305,12 +305,11 @@ class GajimCore:
 						con = self.connect(ev[1])
 						if self.connected[ev[1]]:
 							#send our presence
-							p = common.jabber.Presence()
-							p.setShow(ev[2][0])
-							p.setStatus(ev[2][1])
+							type = 'available'
 							if ev[2][0] == 'invisible':
-								p.setType('invisible')
-							con.send(p)
+								type = 'invisible'
+							prio = str(self.cfgParser.tab[ev[1]]['priority'])
+							con.sendPresence(type, prio, ev[2][0], ev[2][1])
 							self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
 							#ask our VCard
 							iq = common.jabber.Iq(type="get")
