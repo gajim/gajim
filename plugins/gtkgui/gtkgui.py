@@ -194,18 +194,31 @@ class message_Window:
 		if not tim:
 			tim = time.localtime()
 		tims = time.strftime("[%H:%M:%S]", tim)
-		buffer.insert(end_iter, tims)
-		if contact:
-			if contact == 'status':
-				buffer.insert_with_tags_by_name(end_iter, txt+'\n', \
-					'status')
-			else:
-				buffer.insert_with_tags_by_name(end_iter, '<'+self.plugin.nicks[self.account]+'> ', 'outgoing')
-				buffer.insert(end_iter, txt+'\n')
+		buffer.insert(end_iter, tims + ' ')
+		
+		otxt = ''
+		ttxt = ''
+		if contact and contact == 'status':
+			tag = 'status'
+			ttxt = txt + '\n'
 		else:
-			buffer.insert_with_tags_by_name(end_iter, '<' + \
-				self.user.name + '> ', 'incoming')
-			buffer.insert(end_iter, txt+'\n')
+			if contact:
+				tag = 'outgoing'
+				name = self.plugin.nicks[self.account] 
+			else:
+				tag = 'incoming'
+				name = self.user.name
+				
+			if string.find(txt, '/me ') == 0:
+				ttxt = name + ' ' + txt[4:] + '\n'
+			else:
+				ttxt = '<' + name + '> '
+				otxt = txt + '\n'
+
+		buffer.insert_with_tags_by_name(end_iter, ttxt, tag)
+		if len(otxt) > 0:
+			buffer.insert(end_iter, otxt)
+		
 		#scroll to the end of the textview
 		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
 	
