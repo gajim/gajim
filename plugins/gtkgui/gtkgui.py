@@ -1232,8 +1232,8 @@ class systray:
 		self.plugin = plugin
 		self.jids = []
 		t = trayicon.TrayIcon("Gajim")
-		tip = gtk.Tooltips()
-		tip.set_tip(t, 'Gajim')
+		self.tip = gtk.Tooltips()
+		self.tip.set_tip(t, 'Gajim')
 		self.img_tray = gtk.Image()
 		t.add(self.img_tray)
 		t.show_all()
