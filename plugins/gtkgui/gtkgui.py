@@ -2046,7 +2046,7 @@ class roster_window:
 		"""When accounts is seleted :
 		call the accounts class to modify accounts"""
 		if not self.plugin.windows.has_key('accounts'):
-			self.plugin.windows['accounts'] = accounts_window(self.plugin)
+			self.plugin.windows['accounts'] = configure_accounts_window(self.plugin)
 
 	def close_all(self, dic):
 		"""close all the windows in the given dictionary"""

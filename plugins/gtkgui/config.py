@@ -1037,9 +1037,9 @@ class accountpreferences_window:
 			self.init_account(infos)
 			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
 
-class accounts_window:
+class configure_accounts_window:
 	"""Class for accounts window : lists of accounts"""
-	def on_accounts_window_destroy(self, widget):
+	def on_configure_accounts_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows['accounts']
 		
@@ -1063,8 +1063,8 @@ class accounts_window:
 
 	def on_accounts_treeview_cursor_changed(self, widget):
 		"""Activate delete and modify buttons when a row is selected"""
-		self.xml.get_widget("modify_button").set_sensitive(True)
-		self.xml.get_widget("delete_button").set_sensitive(True)
+		self.xml.get_widget('modify_button').set_sensitive(True)
+		self.xml.get_widget('delete_button').set_sensitive(True)
 
 	def on_new_button_clicked(self, widget):
 		"""When new button is clicked : open an account information window"""
@@ -1078,7 +1078,7 @@ class accounts_window:
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
-		dialog = confirm_dialog(_("Are you sure you want to remove this account (%s) ?") % account)
+		dialog = confirm_dialog(_('Are you sure you want to remove this account (%s) ?') % account)
 		if dialog.get_response() == gtk.RESPONSE_YES:
 			if self.plugin.connected[account]:
 				self.plugin.send('STATUS', account, ('offline', 'offline'))
@@ -1103,8 +1103,8 @@ class accounts_window:
 			account = model.get_value(iter, 0)
 			infos = self.plugin.accounts[account]
 			infos['accname'] = account
-			infos['jid'] = self.plugin.accounts[account]["name"] + \
-				'@' +  self.plugin.accounts[account]["hostname"]
+			infos['jid'] = self.plugin.accounts[account]['name'] + \
+				'@' +  self.plugin.accounts[account]['hostname']
 			self.plugin.windows['accountPreference'] = \
 				accountpreferences_window(self.plugin, infos)
 
@@ -1113,15 +1113,15 @@ class accounts_window:
 		model.set_value(iter, 2, not cell.get_active())
 		account = model.get_value(iter, 0)
 		if cell.get_active():
-			self.plugin.accounts[account]["active"] = 0
+			self.plugin.accounts[account]['active'] = 0
 		else:
-			self.plugin.accounts[account]["active"] = 1
+			self.plugin.accounts[account]['active'] = 1
 		
 	def __init__(self, plugin):
 		self.plugin = plugin
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'accounts_window', APP)
-		self.window = self.xml.get_widget("accounts_window")
-		self.accounts_treeview = self.xml.get_widget("accounts_treeview")
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'configure_accounts_window', APP)
+		self.window = self.xml.get_widget('configure_accounts_window')
+		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, \
 			gobject.TYPE_BOOLEAN)
 		self.accounts_treeview.set_model(model)
