@@ -248,12 +248,16 @@ class roster:
 				self.mk_menu_c(event, iter)
 			return gtk.TRUE
 		return gtk.FALSE
+	
+	def destroy_window(self, widget, window):
+		window.destroy()
 
-	def on_req_usub(self, widget, iter):
+	def req_usub(self, widget, iter, window):
 		jid = self.treestore.get_value(iter, 2)
 		self.queueOUT.put(('UNSUB', jid))
 		del self.l_contact[jid]
 		self.treestore.remove(iter)
+		self.destroy_window(widget, window)
 	
 	def req_sub(self, jid, txt):
 		self.queueOUT.put(('SUB', (jid, txt)))
@@ -263,6 +267,14 @@ class roster:
 			#TODO: ajouter un grp si necessaire
 			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid))
 			self.l_contact[jid] = {'user':user1, 'iter':[iterU]}
+
+	def on_req_usub(self, widget, iter):
+		jid = self.treestore.get_value(iter, 2)
+		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Confirm')
+		self.window = self.xml.get_widget('Confirm')
+		self.xml.get_widget('label_confirm').set_text('Are you sure you want to remove ' + jid + ' from your roster ?')
+		self.xml.signal_connect('gtk_widget_destroy', self.destroy_window, self.window)
+		self.xml.signal_connect('on_okbutton_clicked', self.req_usub, iter, self.window)
 
 	def on_status_changed(self, widget):
 		self.queueOUT.put(('STATUS',widget.name))
