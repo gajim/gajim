@@ -204,6 +204,7 @@ class GajimCore:
 			connection=common.xmlstream.TCP, port=5222, proxy = proxy)
 			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
 			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
+			con.setDisconnectHandler(self.disconnectedCB)
 		try:
 			con.connect()
 		except IOError, e:
@@ -224,7 +225,6 @@ class GajimCore:
 			con.registerHandler('message', self.messageCB)
 			con.registerHandler('presence', self.presenceCB)
 			con.registerHandler('iq',self.vCardCB,'result')#common.jabber.NS_VCARD)
-			con.setDisconnectHandler(self.disconnectedCB)
 			#BUG in jabberpy library : if hostname is wrong : "boucle"
 			if con.auth(name, password, ressource):
 				self.connexions[con] = account
