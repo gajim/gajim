@@ -195,7 +195,7 @@ class Roster_window:
 			if self.plugin.queues[account].has_key(jid):
 				img = self.pixbufs['message']
 			else:
-				if user.sub == 'none':
+				if user.sub != 'both':
 					if user.ask == 'subscribe':
 						img = self.pixbufs['requested']
 					else:
