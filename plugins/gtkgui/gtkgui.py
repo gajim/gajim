@@ -2321,7 +2321,7 @@ class plugin:
 				self.systray.add_jid(jid, account)
 
 	def handle_event_bad_passphrase(self, account, array):
-		warning_Window(_"Your GPG passphrase is wrong, so you are connected without your GPG key.")
+		warning_Window(_("Your GPG passphrase is wrong, so you are connected without your GPG key."))
 
 	def handle_event_gpg_secrete_keys(self, account, keys):
 		keys['None'] = 'None'
