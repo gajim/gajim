@@ -1254,10 +1254,9 @@ class plugin:
 					self.roster.chg_user_status(user1, ev[2][1], ev[2][2], ev[1])
 			#('MSG', account, (user, msg))
 			elif ev[0] == 'MSG':
-				if string.find(ev[2][0], "@") <= 0:
-					jid = string.replace(ev[2][0], '@', '')
-				else:
-					jid = ev[2][0]
+				jid = string.split(ev[2][0], '/')[0]
+				if string.find(jid, "@") <= 0:
+					jid = string.replace(jid, '@', '')
 				self.roster.on_message(jid, ev[2][1], ev[1])
 			#('SUBSCRIBE', account, (jid, text))
 			elif ev[0] == 'SUBSCRIBE':

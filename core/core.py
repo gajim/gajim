@@ -119,7 +119,7 @@ class GajimCore:
 	def messageCB(self, con, msg):
 		"""Called when we recieve a message"""
 		self.hub.sendPlugin('MSG', self.connexions[con], \
-			(msg.getFrom(), msg.getBody()))
+			(str(msg.getFrom()), msg.getBody()))
 	# END messageCB
 
 	def presenceCB(self, con, prs):
