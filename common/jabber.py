@@ -343,7 +343,7 @@ class Connection(xmlstream.Client):
         """
         if not type and not ns: type='default'
         if not self.handlers[name].has_key(type+ns): self.handlers[name][type+ns]=[]
-        if makefirst: self.handlers[name][type+ns].insert({'chain':chained,'func':handler,'system':system})
+        if makefirst: self.handlers[name][type+ns].insert(0, {'chain':chained,'func':handler,'system':system})
         else: self.handlers[name][type+ns].append({'chain':chained,'func':handler,'system':system})
 
     def setDisconnectHandler(self, func):
@@ -481,7 +481,7 @@ class Client(Connection):
                 groups.append(group.getData())
 
             if jid:
-                if sub == 'remove' or sub == 'none':
+                if sub == 'remove' or (sub == 'none' and not ask):
                     self._roster._remove(jid)
                 else:
                     self._roster._set(jid=jid, name=name,
