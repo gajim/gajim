@@ -230,8 +230,11 @@ class roster:
 		self.optionmenu = self.xml.get_widget('optionmenu')
 		self.optionmenu.set_history(6)
 		self.tab_messages = {}
-		self.showOffline=string.atoi(self.cfgParser.GtkGui_showoffline)
-		print self.showOffline
+		showOffline=self.cfgParser.GtkGui_showoffline
+		if showOffline :
+			self.showOffline=string.atoi(self.cfgParser.GtkGui_showoffline)
+		else :
+			self.showOffline=0
 
 		#colonnes
 		self.col = gtk.TreeViewColumn()

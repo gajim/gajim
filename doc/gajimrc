@@ -7,3 +7,7 @@ hostname = SERVER HOSTNAME
 name = LOGIN NAME
 password = PASSWORD
 ressource = gajim
+
+[GtkGui]
+
+showoffline = 0
