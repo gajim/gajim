@@ -3,7 +3,7 @@
 
 <glade-interface>
 
-<widget class="GtkWindow" id="gajim_window">
+<widget class="GtkWindow" id="roster_window">
   <property name="width_request">85</property>
   <property name="height_request">200</property>
   <property name="title" translatable="yes">Gajim</property>
@@ -19,7 +19,7 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="delete_event" handler="on_gajim_window_delete_event" last_modification_time="Wed, 02 Mar 2005 15:44:47 GMT"/>
+  <signal name="delete_event" handler="on_roster_window_delete_event" last_modification_time="Mon, 21 Mar 2005 12:34:59 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox1">
@@ -69,7 +69,8 @@
 		      <child internal-child="image">
 			<widget class="GtkImage" id="image465">
 			  <property name="visible">True</property>
-			  <property name="pixbuf">gtk-connect</property>
+			  <property name="stock">gtk-connect</property>
+			  <property name="icon_size">1</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
@@ -132,7 +133,8 @@
 		      <child internal-child="image">
 			<widget class="GtkImage" id="image467">
 			  <property name="visible">True</property>
-			  <property name="pixbuf">gtk-about</property>
+			  <property name="stock">gtk-about</property>
+			  <property name="icon_size">1</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>

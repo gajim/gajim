@@ -930,7 +930,7 @@ class roster_window:
 			else:
 				w.window.destroy()
 	
-	def on_gajim_window_delete_event(self, widget, event):
+	def on_roster_window_delete_event(self, widget, event):
 		"""When we want to close the window"""
 		if self.plugin.systray_visible:
 			self.window.hide()
@@ -1248,8 +1248,8 @@ class roster_window:
 		self.window.set_title(start + " Gajim")
 
 	def __init__(self, plugin):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_window', APP)
-		self.window = self.xml.get_widget('gajim_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
+		self.window = self.xml.get_widget('roster_window')
 		self.tree = self.xml.get_widget('roster_treeview')
 		self.plugin = plugin
 		self.nb_unread = 0
