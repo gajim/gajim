@@ -268,14 +268,15 @@ class preferences_window:
 		self.plugin.roster.mkemoticons()
 
 	def on_emoticons_treemodel_row_changed(self, model, path, iter):
-		iter = model.get_iter_first()
-		emots = []
-		while iter:
-			emots.append(model.get_value(iter, 0))
-			emots.append(model.get_value(iter, 1))
-			iter = model.iter_next(iter)
-		self.plugin.config['emoticons'] = '\t'.join(emots)
-		self.plugin.roster.mkemoticons()
+		if model[path][1] != None and len(model[path][1]) != 0:
+			iter = model.get_iter_first()
+			emots = []
+			while iter:
+				emots.append(model.get_value(iter, 0))
+				emots.append(model.get_value(iter, 1))
+				iter = model.iter_next(iter)
+			self.plugin.config['emoticons'] = '\t'.join(emots)
+			self.plugin.roster.mkemoticons()
 
 	def on_auto_pop_up_checkbox_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopup', None,\
