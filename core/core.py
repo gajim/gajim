@@ -101,6 +101,7 @@ class GajimCore:
 	# END disconenctedCB
 
 	def connect(self, account):
+		self.cfgParser.parseCfgFile()
 		hostname = self.cfgParser.__getattr__("%s" % account+"_hostname")
 		name = self.cfgParser.__getattr__("%s" % account+"_name")
 		password = self.cfgParser.__getattr__("%s" % account+"_password")

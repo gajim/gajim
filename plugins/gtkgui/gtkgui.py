@@ -425,10 +425,9 @@ class message:
 		return 0
 
 	def __init__(self, user, roster):
-		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
-		self.cfgParser.parseCfgFile()
 		self.user = user
 		self.r = roster
+		self.cfgParser = self.r.cfgParser
 		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Chat')
 		self.window = self.xml.get_widget('Chat')
 		self.window.set_title('Chat with ' + user.name)
@@ -625,8 +624,11 @@ class roster:
 		accountsStr = self.cfgParser.Profile_accounts
 		accounts = string.split(accountsStr, ' ')
 		self.queueOUT.put(('STATUS',(widget.name, accounts[0])))
-		if (not self.showOffline) and widget.name == 'offline':
-			self.treestore.clear()
+#		if (not self.showOffline) and widget.name == 'offline':
+#			self.treestore.clear()
+		if widget.name == 'offline':
+			for j in self.l_contact.keys():
+				self.chg_status(j, 'offline', 'Disconnected')
 
 	def on_add(self, widget):
 		window_add = add(self)
