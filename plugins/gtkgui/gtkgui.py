@@ -356,6 +356,11 @@ class tabbed_chat_Window:
 			self.redraw_tab(jid)
 			self.show_title()
 			self.plugin.systray.remove_jid(jid, self.account)
+
+	def active_tab(self, jid):
+		child = self.xmls[jid].get_widget("vbox_tab")
+		nb = self.xml.get_widget("notebook")
+		nb.set_current_page(nb.page_num(child))
 	
 	def new_user(self, user):
 		self.nb_unread[user.jid] = 0
@@ -1988,7 +1993,10 @@ class roster_Window:
 				self.tree.expand_row(path, False)
 		else:
 			if self.plugin.windows[account]['chats'].has_key(jid):
-				self.plugin.windows[account]['chats'][jid].window.present()
+				if USE_TABBED_CHAT:
+					self.plugin.windows[account]['chats'][jid].active_tab(jid)
+				else:
+					self.plugin.windows[account]['chats'][jid].window.present()
 			elif self.contacts[account].has_key(jid):
 				self.new_chat(self.contacts[account][jid][0], account)
 
