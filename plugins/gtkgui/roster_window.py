@@ -1273,9 +1273,11 @@ class Roster_window:
 			grp_dest = model.get_value(model.iter_parent(iter_dest), 3)
 		if grp_source == grp_dest:
 			return
-		for u in self.contacts[account][data]:
-			u.groups.remove(grp_source)
-			u.groups.append(grp_dest)
+		# We upgrade only the first user because user2.groups is a pointer to
+		# user1.groups
+		u = self.contacts[account][data][0]
+		u.groups.remove(grp_source)
+		u.groups.append(grp_dest)
 		self.plugin.send('UPDUSER', account, (u.jid, u.name, u.groups))
 		if model.iter_n_children(iter_group_source) == 1: #this was the only child
 			model.remove(iter_group_source)
