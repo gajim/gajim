@@ -340,7 +340,7 @@ class preferences_window:
 		iter = model.get_iter_from_string(row)
 		model.set_value(iter, 0, new_text)
 
-	def on_button_set_image_clicked(self, widget, data=None):
+	def on_set_image_button_clicked(self, widget, data=None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
@@ -560,7 +560,7 @@ class preferences_window:
 		self.xml.get_widget('button_new_emoticon').set_sensitive(st)
 		self.xml.get_widget('button_remove_emoticon').set_sensitive(st)
 		self.xml.get_widget('treeview_emoticons').set_sensitive(st)
-		self.xml.get_widget('button_set_image').set_sensitive(st)
+		self.xml.get_widget('set_image_button').set_sensitive(st)
 
 		#emoticons
 		self.emot_tree = self.xml.get_widget('treeview_emoticons')
@@ -709,7 +709,7 @@ class preferences_window:
 		fontStr = self.plugin.config['userfont']
 		self.xml.get_widget('fontbutton_user_text').set_font_name(fontStr)
 		
-		self.xml.signal_connect('on_chk_autopopup_toggled', \
+		self.xml.signal_connect('on_auto_pop_up_checkbox_toggled', \
 			self.on_chk_toggled, [self.auto_pp_away_checkbutton])
 		self.xml.signal_connect('on_auto_away_checkbutton_toggled', \
 			self.on_chk_toggled, [self.auto_away_time_spinbutton])
@@ -719,9 +719,10 @@ class preferences_window:
 			self.on_chk_toggled, [self.xml.get_widget('button_new_emoticon'),
 					self.xml.get_widget('button_remove_emoticon'),
 					self.xml.get_widget('treeview_emoticons'),
-					self.xml.get_widget('entry_emoticons'),
-					self.xml.get_widget('button_emoticons'),
-					self.xml.get_widget('image_emoticon')])
+					#self.xml.get_widget('entry_emoticons'),	#FIXME: Are this two supposed to be here ?
+					#self.xml.get_widget('button_emoticons'),
+					self.xml.get_widget('set_image_button'),
+					self.xml.get_widget('emoticons_image')])
 
 		self.plugin.send('ASK_CONFIG', None, ('GtkGui', 'Logger', {'lognotsep':1,\
 			'lognotusr':1}))

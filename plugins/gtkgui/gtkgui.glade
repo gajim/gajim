@@ -3897,13 +3897,13 @@ on the server as a vCard</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkButton" id="button_set_image">
+			<widget class="GtkButton" id="set_image_button">
 			  <property name="visible">True</property>
 			  <property name="can_default">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="on_button_set_image_clicked" last_modification_time="Sun, 13 Feb 2005 14:32:31 GMT"/>
+			  <signal name="clicked" handler="on_set_image_button_clicked" last_modification_time="Sun, 06 Mar 2005 01:57:33 GMT"/>
 
 			  <child>
 			    <widget class="GtkAlignment" id="alignment38">
@@ -4052,7 +4052,7 @@ on the server as a vCard</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="on_chk_autopopup_toggled" last_modification_time="Thu, 28 Oct 2004 11:01:25 GMT"/>
+		  <signal name="toggled" handler="on_auto_pop_up_checkbox_toggled" last_modification_time="Sun, 06 Mar 2005 01:20:06 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -4314,7 +4314,7 @@ on the server as a vCard</property>
 		  <property name="column_spacing">20</property>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="autoaway_checkbutton">
+		    <widget class="GtkCheckButton" id="auto_away_checkbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Auto away after</property>
