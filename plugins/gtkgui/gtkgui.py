@@ -1940,10 +1940,8 @@ class systray:
 			else:
 				account = self.jids[0][0]
 				jid = self.jids[0][1]
-				if string.find(jid, '@'):
-					if self.plugin.windows[account]['gc'].has_key(jid):
-						self.plugin.windows[account]['gc'][jid].window.present()
-					return
+				if self.plugin.windows[account]['gc'].has_key(jid):
+					self.plugin.windows[account]['gc'][jid].window.present()
 				if self.plugin.windows[account]['chats'].has_key(jid):
 					self.plugin.windows[account]['chats'][jid].window.present()
 				else:
