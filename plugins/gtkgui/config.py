@@ -31,6 +31,7 @@ gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
 from dialogs import *
+import gtkgui
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
@@ -642,6 +643,10 @@ class agentRegistration_Window:
 		send registration info to the core"""
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
+		user1 = gtkgui.user(self.agent, self.agent, ['Agents'], 'offline', 'offline', \
+			'from', '', 0)
+		self.plugin.roster.contacts[self.account][self.agent] = [user1]
+		self.plugin.roster.add_user_to_roster(self.agent, self.account)
 		self.plugin.send('REG_AGENT', self.account, self.agent)
 		widget.get_toplevel().destroy()
 	

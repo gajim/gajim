@@ -364,20 +364,32 @@ class GajimCore:
 				#('DENY', account, jid)
 				elif ev[0] == 'DENY':
 					con.send(common.jabber.Presence(ev[2], 'unsubscribed'))
-				#('UNSUB', accountjid)
+				#('UNSUB', account, jid)
 				elif ev[0] == 'UNSUB':
+					delauth = 1
 					if self.cfgParser.Core.has_key('delauth'):
 						delauth = self.cfgParser.Core['delauth']
-					else:
-						delauth = 1
+					delroster = 1
 					if self.cfgParser.Core.has_key('delroster'):
 						delroster = self.cfgParser.Core['delroster']
-					else:
-						delroster = 1
 					if delauth:
 						con.send(common.jabber.Presence(ev[2], 'unsubscribe'))
 					if delroster:
 						con.removeRosterItem(ev[2])
+				#('UNSUB_AGENT', account, agent)
+				elif ev[0] == 'UNSUB_AGENT':
+					con.removeRosterItem(ev[2])
+					con.requestRegInfo(ev[2])
+					agent_info = con.getRegInfo()
+					key = agent_info['key']
+					iq = common.jabber.Iq(to=ev[2], type="set")
+					q = iq.setQuery(common.jabber.NS_REGISTER)
+					q.insertTag('remove')
+					q.insertTag('key').insertData(key)
+					id = con.getAnID()
+					iq.setID(id)
+					con.send(iq)
+					self.hub.sendPlugin('AGENT_REMOVED', ev[1], ev[2])
 				#('UPDUSER', account, (jid, name, groups))
 				elif ev[0] == 'UPDUSER':
 					con.updateRosterItem(jid=ev[2][0], name=ev[2][1], \

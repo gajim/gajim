@@ -614,6 +614,15 @@ class roster_Window:
 		"""When an agent is requested to log in or off"""
 		self.plugin.send('AGENT_LOGGING', account, (jid, state))
 
+	def on_remove_agent(self, widget, jid, account):
+		"""When an agent is requested to log in or off"""
+		window = confirm_Window(_("Are you sure you want to remove the agent %s from your roster ?") % jid)
+		if window.wait() == gtk.RESPONSE_OK:
+			self.plugin.send('UNSUB_AGENT', account, jid)
+			for u in self.contacts[account][jid]:
+				self.remove_user(u, account)
+			del self.contacts[account][u.jid]
+
 	def on_rename(self, widget, iter, path, user):
 		model = self.tree.get_model()
 		model.set_value(iter, 1, user.name)
@@ -707,7 +716,15 @@ class roster_Window:
 		if self.contacts[account][jid][0].show == 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
-		item.connect("activate", self.on_agent_logging, jid, 'unavailable', account)
+		item.connect("activate", self.on_agent_logging, jid, 'unavailable', \
+			account)
+
+		item = gtk.MenuItem()
+		menu.append(item)
+
+		item = gtk.MenuItem(_("Remove"))
+		menu.append(item)
+		item.connect("activate", self.on_remove_agent, jid, account)
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
@@ -1477,12 +1494,7 @@ class plugin:
 			user1.priority = priority
 		if string.find(jid, "@") <= 0:
 			#It must be an agent
-			if not self.roster.contacts[account].has_key(ji):
-				user1 = user(ji, ji, ['Agents'], array[1], \
-					array[2], 'from', resource, 0)
-				self.roster.contacts[account][ji] = [user1]
-				self.roster.add_user_to_roster(ji, account)
-			else:
+			if self.roster.contacts[account].has_key(ji):
 				#Update existing iter
 				self.roster.redraw_jid(ji, account)
 		elif self.roster.contacts[account].has_key(ji):
