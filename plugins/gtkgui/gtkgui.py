@@ -852,6 +852,8 @@ class roster_Window:
 	"""Class for main gtk window"""
 
 	def get_account_iter(self, name):
+		if self.regroup:
+			return None
 		model = self.tree.get_model()
 		fin = False
 		account = model.get_iter_root()
@@ -907,13 +909,15 @@ class roster_Window:
 		return found
 
 	def add_account_to_roster(self, account):
+		if self.regroup:
+			return
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
 		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
 		status = statuss[self.plugin.connected[account]]
 		model.append(None, (self.pixbufs[status], account, 'account', account,\
-			FALSE))
+			account, FALSE))
 
 	def add_user_to_roster(self, jid, account):
 		"""Add a user to the roster and add groups if they aren't in roster"""
@@ -940,7 +944,7 @@ class roster_Window:
 				IterAcct = self.get_account_iter(account)
 				iterG = model.append(IterAcct, \
 					(self.pixbufs['closed'], g, 'group', \
-					g, FALSE))
+					g, account, FALSE))
 			if not self.groups[account].has_key(g): #It can probably never append
 				if account+g in self.hidden_lines:
 					self.groups[account][g] = {'expand': False}
@@ -954,7 +958,7 @@ class roster_Window:
 				typestr = 'agent'
 
 			model.append(iterG, (self.pixbufs[user.show], \
-				user.name, typestr, user.jid, False))
+				user.name, typestr, user.jid, account, False))
 			
 			if self.groups[account][g]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)
@@ -1167,7 +1171,7 @@ class roster_Window:
 	def on_rename(self, widget, iter, path, user):
 		model = self.tree.get_model()
 		model.set_value(iter, 1, user.name)
-		model.set_value(iter, 4, True)
+		model.set_value(iter, 5, True)
 		self.tree.set_cursor(path, self.tree.get_column(0), True)
 		
 	def on_history(self, widget, user):
@@ -1181,8 +1185,7 @@ class roster_Window:
 		model = self.tree.get_model()
 		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
-		acct_iter = model.get_iter((path[0]))
-		account = model.get_value(acct_iter, 3)
+		account = model.get_value(iter, 4)
 		user = self.contacts[account][jid][0]
 		
 		menu = gtk.Menu()
@@ -1244,8 +1247,7 @@ class roster_Window:
 		model = self.tree.get_model()
 		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
-		acct_iter = model.get_iter((path[0]))
-		account = model.get_value(acct_iter, 3)
+		account = model.get_value(iter, 4)
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_("Log on"))
 		if self.contacts[account][jid][0].show != 'offline':
@@ -1616,9 +1618,8 @@ class roster_Window:
 		"""When an iter is dubble clicked :
 		open the chat window"""
 		model = self.tree.get_model()
-		acct_iter = model.get_iter((path[0]))
-		account = model.get_value(acct_iter, 3)
 		iter = model.get_iter(path)
+		account = model.get_value(iter, 4)
 		type = model.get_value(iter, 2)
 		jid = model.get_value(iter, 3)
 		if (type == 'group') or (type == 'account'):
@@ -1638,8 +1639,7 @@ class roster_Window:
 		"""When a row is expanded :
 		change the icon of the arrow"""
 		model = self.tree.get_model()
-		acct_iter = model.get_iter((path[0]))
-		account = model.get_value(acct_iter, 3)
+		account = model.get_value(iter, 4)
 		type = model.get_value(iter, 2)
 		if type == 'group':
 			model.set_value(iter, 0, self.pixbufs['opened'])
@@ -1661,8 +1661,7 @@ class roster_Window:
 		"""When a row is collapsed :
 		change the icon of the arrow"""
 		model = self.tree.get_model()
-		acct_iter = model.get_iter((path[0]))
-		account = model.get_value(acct_iter, 3)
+		account = model.get_value(iter, 4)
 		type = model.get_value(iter, 2)
 		if type == 'group':
 			model.set_value(iter, 0, self.pixbufs['closed'])
@@ -1677,7 +1676,7 @@ class roster_Window:
 	def on_editing_canceled (self, cell):
 		"""editing have been canceled"""
 		#TODO: get iter
-		#model.set_value(iter, 4, False)
+		#model.set_value(iter, 5, False)
 		pass
 
 	def on_cell_edited (self, cell, row, new_text):
@@ -1686,8 +1685,7 @@ class roster_Window:
 		model = self.tree.get_model()
 		iter = model.get_iter_from_string(row)
 		path = model.get_path(iter)
-		acct_iter = model.get_iter((path[0]))
-		account = model.get_value(acct_iter, 3)
+		account = model.get_value(iter, 4)
 		jid = model.get_value(iter, 3)
 		old_text = self.contacts[account][jid][0].name
 		if old_text != new_text:
@@ -1695,7 +1693,7 @@ class roster_Window:
 				u.name = new_text
 			self.plugin.send('UPDUSER', account, (jid, new_text, \
 				self.contacts[account][jid][0].groups))
-		model.set_value(iter, 4, False)
+		model.set_value(iter, 5, False)
 		self.redraw_jid(jid, account)
 		
 	def on_browse(self, widget, account):
@@ -1880,6 +1878,7 @@ class roster_Window:
 		self.add_handler_id = 0
 		self.browse_handler_id = 0
 		self.join_handler_id = 0
+		self.regroup = 0
 		window = self.xml.get_widget('Gajim')
 		if self.plugin.config.has_key('saveposition'):
 			window.hide()
@@ -1898,9 +1897,8 @@ class roster_Window:
 		for a in self.plugin.accounts.keys():
 			self.contacts[a] = {}
 			self.groups[a] = {}
-		#(icon, name, type, jid, editable)
-		model = gtk.TreeStore(gtk.Image, str, str, str, \
-			gobject.TYPE_BOOLEAN)
+		#(icon, name, type, jid, account, editable)
+		model = gtk.TreeStore(gtk.Image, str, str, str, str, gobject.TYPE_BOOLEAN)
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
@@ -1938,7 +1936,7 @@ class roster_Window:
 		#render_text.connect('editing-canceled', self.on_editing_canceled)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'text', 1)
-		col.add_attribute(render_text, 'editable', 4)
+		col.add_attribute(render_text, 'editable', 5)
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
 		
 		col = gtk.TreeViewColumn()
