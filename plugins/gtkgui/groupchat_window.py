@@ -168,8 +168,8 @@ class Groupchat_window(Chat):
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None, (self.plugin.roster.pixbufs['closed']\
-				, role + 's', role))
-		iter = model.append(role_iter, (img, nick, jid))
+				, role + 's', role, ''))
+		iter = model.append(role_iter, (img, nick, jid, show))
 		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)), \
 			False)
 		return iter
@@ -179,6 +179,23 @@ class Groupchat_window(Chat):
 		path = model.get_path(jid_iter)[0]
 		iter = model.get_iter(path)
 		return model.get_value(iter, 2)
+
+	def udpate_pixbufs(self):
+		for room_jid in self.list_treeview:
+			model = self.list_treeview[room_jid].get_model()
+			role_iter = model.get_iter_root()
+			if not role_iter:
+				continue
+			while role_iter:
+				user_iter = model.iter_children(role_iter)
+				if not user_iter:
+					continue
+				while user_iter:
+					show = model.get_value(user_iter, 3)
+					img = self.plugin.roster.pixbufs[show]
+					model.set_value(user_iter, 0, img)
+					user_iter = model.iter_next(user_iter)
+				role_iter = model.iter_next(role_iter)
 
 	def chg_user_status(self, room_jid, nick, show, status, role, affiliation, \
 		jid, reason, actor, statusCode, account):
@@ -204,6 +221,7 @@ class Groupchat_window(Chat):
 				else:
 					img = self.plugin.roster.pixbufs[show]
 					model.set_value(iter, 0, img)
+					model.set_value(iter, 3, show)
 	
 	def set_subject(self, room_jid, subject):
 		self.subjects[room_jid] = subject
@@ -428,8 +446,8 @@ class Groupchat_window(Chat):
 		self.list_treeview[room_jid] = self.xmls[room_jid].\
 			get_widget('list_treeview')
 
-		#status_image, nickname, real_jid
-		store = gtk.TreeStore(gtk.Image, str, str)
+		#status_image, nickname, real_jid, status
+		store = gtk.TreeStore(gtk.Image, str, str, str)
 		column = gtk.TreeViewColumn('contacts')
 		render_text = ImageCellRenderer()
 		column.pack_start(render_text, expand = False)

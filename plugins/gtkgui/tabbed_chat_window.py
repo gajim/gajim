@@ -69,7 +69,15 @@ class Tabbed_chat_window(Chat):
 		if not user.keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
 
-	def set_image(self, image, jid):
+	def set_image(self, jid):
+		prio = 0
+		list_users = self.plugin.roster.contacts[self.account][jid]
+		sho = list_users[0].show
+		for u in list_users:
+			if u.priority > prio:
+				prio = u.priority
+				sho = u.show
+		image = self.plugin.roster.pixbufs[sho]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			self.xmls[jid].get_widget('status_image').\
 				set_from_animation(image.get_animation())

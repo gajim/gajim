@@ -371,15 +371,7 @@ class Roster_window:
 			self.redraw_jid(user.jid, account)
 		#Print status in chat window
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
-			prio = 0
-			sho = luser[0].show
-			for u in luser:
-				if u.priority > prio:
-					prio = u.priority
-					sho = u.show
-			img = self.pixbufs[sho]
-			self.plugin.windows[account]['chats'][user.jid].\
-				set_image(img, user.jid)
+			self.plugin.windows[account]['chats'][user.jid].set_image(user.jid)
 			name = user.name
 			if user.resource != '':
 				name += '/'+user.resource
@@ -1115,6 +1107,28 @@ class Roster_window:
 				if os.path.exists(file):
 					image.set_from_file(file)
 					break
+
+	def reload_pixbufs(self):
+		# Update the roster
+		self.draw_roster()
+		# Update the status combobox
+		model = self.cb.get_model()
+		iter = model.get_iter_root()
+		while iter:
+			model.set_value(iter, 1, self.pixbufs[model.get_value(iter, 2)])
+			iter = model.iter_next(iter)
+		# Update the systray
+		if self.plugin.systray_enabled:
+			self.plugin.systray.set_img()
+		for account in self.plugin.accounts.keys():
+			# Update opened chat windows
+			for jid in self.plugin.windows[account]['chats']:
+				if jid != 'tabbed':
+					self.plugin.windows[account]['chats'][jid].set_image(jid)
+			# Update opened groupchat windows
+			for jid in self.plugin.windows[account]['gc']:
+				if jid != 'tabbed':
+					self.plugin.windows[account]['gc'][jid].udpate_pixbufs()
 
 	def sound_is_ok(self, sound):
 		if not os.path.exists(sound):
