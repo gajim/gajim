@@ -1380,16 +1380,18 @@ class roster_Window:
 			txt = status
 		self.send_status(account, status, txt)
 
-	def on_optionmenu_changed(self, widget):
+	def on_cb_changed(self, widget):
 		"""When we change our status"""
-		optionmenu =  self.xml.get_widget('optionmenu')
-		history = optionmenu.get_history()
-		status = optionmenu.get_menu().get_children()[history].name
+		model = self.cb.get_model()
+		active = self.cb.get_active()
+		if active < 0:
+			return
+		status = model[active][0]
 		if status != 'online' and status != 'offline':
 			w = awayMsg_Window(self.plugin)
 			txt = w.run()
 			if txt == -1:
-				self.set_optionmenu()
+				self.set_cb()
 				return
 		else:
 			txt = status
@@ -1403,16 +1405,15 @@ class roster_Window:
 					continue
 			self.send_status(acct, status, txt)
 	
-	def set_optionmenu(self):
-		#table to change index in plugin.connected to index in optionmenu
-		table = {0:6, 1:0, 2:1, 3:2, 4:3, 5:4}
+	def set_cb(self):
+		#table to change index in plugin.connected to index in combobox
+		table = {0:5, 1:0, 2:1, 3:2, 4:3, 5:4}
 		maxi = max(self.plugin.connected.values())
-		optionmenu = self.xml.get_widget('optionmenu')
 		#temporarily block signal in order not to send status that we show
-		#in the optionmenu
-		optionmenu.handler_block(self.id_signal_optionmenu)
-		optionmenu.set_history(table[maxi])
-		optionmenu.handler_unblock(self.id_signal_optionmenu)
+		#in the combobox
+		self.cb.handler_block(self.id_signal_cb)
+		self.cb.set_active(table[maxi])
+		self.cb.handler_unblock(self.id_signal_cb)
 		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
 		self.plugin.systray.set_status(statuss[maxi])
 
@@ -1431,7 +1432,7 @@ class roster_Window:
 				for user in luser:
 					self.chg_user_status(user, 'offline', 'Disconnected', account)
 		self.plugin.connected[account] = statuss.index(status)
-		self.set_optionmenu()
+		self.set_cb()
 
 	def on_message(self, jid, msg, tim, account):
 		"""when we receive a message"""
@@ -1652,8 +1653,8 @@ class roster_Window:
 					pix = gtk.gdk.pixbuf_new_from_file(file)
 					image.set_from_pixbuf(pix)
 				break
-		for state in ('online', 'away', 'xa', 'dnd', 'invisible', 'offline'):
-			self.xml.get_widget(state).set_image(self.pixbufs[state])
+#		for state in ('online', 'away', 'xa', 'dnd', 'invisible', 'offline'):
+#			self.xml.get_widget(state).set_image(self.pixbufs[state])
 
 	def on_show_off(self, widget):
 		"""when show offline option is changed :
@@ -1808,7 +1809,21 @@ class roster_Window:
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
 		self.mkpixbufs()
-		self.xml.get_widget('optionmenu').set_history(6)
+
+		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image)
+		self.cb = gtk.ComboBox()
+		self.xml.get_widget('vbox1').pack_end(self.cb, False)
+		cell = ImageCellRenderer()
+		self.cb.pack_start(cell, False)
+		self.cb.add_attribute(cell, 'image', 1)
+		cell = gtk.CellRendererText()
+		self.cb.pack_start(cell, True)
+		self.cb.add_attribute(cell, 'text', 0)
+		for status in ['online', 'away', 'xa', 'dnd', 'invisible', 'offline']:
+			iter = liststore.append([status, self.pixbufs[status]])
+		self.cb.show_all()
+		self.cb.set_model(liststore)
+		self.cb.set_active(5)
 
 		showOffline = self.plugin.config['showoffline']
 		self.xml.get_widget('show_offline').set_active(showOffline)
@@ -1853,9 +1868,7 @@ class roster_Window:
 		self.xml.signal_connect('on_quit_activate', self.on_quit)
 		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
 		self.xml.signal_connect('on_status_changed', self.on_status_changed)
-		optionmenu = self.xml.get_widget('optionmenu')
-		self.id_signal_optionmenu = optionmenu.connect('changed', \
-			self.on_optionmenu_changed)
+		self.id_signal_cb = self.cb.connect('changed', self.on_cb_changed)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
 		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
 		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
@@ -1904,10 +1917,9 @@ class systray:
 		self.status = status
 		self.set_img()
 
-	def set_optionmenu(self, widget, status):
-		optionmenu = self.plugin.roster.xml.get_widget('optionmenu')
+	def set_cb(self, widget, status):
 		statuss = ['online', 'away', 'xa', 'dnd', 'invisible', 'vide', 'offline']
-		optionmenu.set_history(statuss.index(status))
+		self.cb.set_active(statuss.index(status))
 
 	def start_chat(self, widget, account, jid):
 		if self.plugin.windows[account]['chats'].has_key(jid):
@@ -1928,24 +1940,24 @@ class systray:
 		item.set_submenu(menu_sub)
 		item = gtk.MenuItem(_("Online"))
 		menu_sub.append(item)
-		item.connect("activate", self.set_optionmenu, 'online')
+		item.connect("activate", self.set_cb, 'online')
 		item = gtk.MenuItem(_("Away"))
 		menu_sub.append(item)
-		item.connect("activate", self.set_optionmenu, 'away')
+		item.connect("activate", self.set_cb, 'away')
 		item = gtk.MenuItem(_("NA"))
 		menu_sub.append(item)
-		item.connect("activate", self.set_optionmenu, 'xa')
+		item.connect("activate", self.set_cb, 'xa')
 		item = gtk.MenuItem(_("DND"))
 		menu_sub.append(item)
-		item.connect("activate", self.set_optionmenu, 'dnd')
+		item.connect("activate", self.set_cb, 'dnd')
 		item = gtk.MenuItem(_("Invisible"))
 		menu_sub.append(item)
-		item.connect("activate", self.set_optionmenu, 'invisible')
+		item.connect("activate", self.set_cb, 'invisible')
 		item = gtk.MenuItem()
 		menu_sub.append(item)
 		item = gtk.MenuItem(_("Offline"))
 		menu_sub.append(item)
-		item.connect("activate", self.set_optionmenu, 'offline')
+		item.connect("activate", self.set_cb, 'offline')
 		
 		item = gtk.MenuItem()
 		menu.append(item)
@@ -2381,12 +2393,12 @@ class plugin:
 			'autoxa':1,\
 			'autoxatime':20,\
 			'last_msg':'',\
-			'msg1_name':'Brb',\
-			'msg1':'Back in some minutes.',\
-			'msg2_name':'Eating',\
-			'msg2':'I\'m eating, so let a message.',\
-			'msg3_name':'Film',\
-			'msg3':'I\'m watching a film.',\
+			'msg0_name':'Brb',\
+			'msg0':'Back in some minutes.',\
+			'msg1_name':'Eating',\
+			'msg1':'I\'m eating, so let a message.',\
+			'msg2_name':'Film',\
+			'msg2':'I\'m watching a film.',\
 			'trayicon':1,\
 			'iconstyle':'sun',\
 			'inmsgcolor':'#ff0000',\

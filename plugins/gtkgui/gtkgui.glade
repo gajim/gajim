@@ -263,76 +263,7 @@
       </child>
 
       <child>
-	<widget class="GtkOptionMenu" id="optionmenu">
-	  <property name="visible">True</property>
-	  <property name="can_focus">True</property>
-	  <property name="history">0</property>
-	  <signal name="changed" handler="on_optionmenu_changed" last_modification_time="Thu, 11 Mar 2004 18:16:58 GMT"/>
-
-	  <child>
-	    <widget class="GtkMenu" id="menu_status">
-
-	      <child>
-		<widget class="GtkImageMenuItem" id="online">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Online</property>
-		  <property name="use_underline">True</property>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkImageMenuItem" id="away">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Away</property>
-		  <property name="use_underline">True</property>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkImageMenuItem" id="xa">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">NA</property>
-		  <property name="use_underline">True</property>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkImageMenuItem" id="dnd">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">DND</property>
-		  <property name="use_underline">True</property>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkImageMenuItem" id="invisible">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Invisible</property>
-		  <property name="use_underline">True</property>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkMenuItem" id="menuitem6">
-		  <property name="visible">True</property>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkImageMenuItem" id="offline">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Offline</property>
-		  <property name="use_underline">True</property>
-		</widget>
-	      </child>
-	    </widget>
-	  </child>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">False</property>
-	</packing>
+	<placeholder/>
       </child>
     </widget>
   </child>
@@ -3645,8 +3576,7 @@ on the server.</property>
 	    <widget class="GtkNotebook" id="preferences_notebook">
 	      <property name="border_width">10</property>
 	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="show_tabs">True</property>
+	      <property name="show_tabs">False</property>
 	      <property name="show_border">False</property>
 	      <property name="tab_pos">GTK_POS_TOP</property>
 	      <property name="scrollable">False</property>
@@ -4204,7 +4134,7 @@ on the server.</property>
 			    <widget class="GtkEntry" id="entry2">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="editable">True</property>
+			      <property name="editable">False</property>
 			      <property name="visibility">True</property>
 			      <property name="max_length">0</property>
 			      <property name="text" translatable="yes"></property>
