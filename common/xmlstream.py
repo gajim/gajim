@@ -460,6 +460,7 @@ class Client(Stream):
             return
 
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._sock.settimeout(10)
         try:
             if self._proxy: self._sock.connect((self._proxy['host'], self._proxy['port']))
             else: self._sock.connect((self._hostIP, self._port))
