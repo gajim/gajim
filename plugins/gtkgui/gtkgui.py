@@ -1390,6 +1390,13 @@ class roster_Window:
 
 	def send_status(self, account, status, txt, autoconnect=0):
 		if status != 'offline':
+			if not self.plugin.connected[account]:
+				model = self.tree.get_model()
+				accountIter = self.get_account_iter(account)
+				if accountIter:
+					model.set_value(accountIter, 0, self.pixbufs['connecting'])
+				self.plugin.systray.set_status('connecting')
+
 			save_pass = 0
 			if self.plugin.accounts[account].has_key("savepass"):
 				save_pass = self.plugin.accounts[account]["savepass"]
@@ -1402,6 +1409,9 @@ class roster_Window:
 				else:
 					passphrase, save = w.run()
 				if passphrase == -1:
+					if accountIter:
+						model.set_value(accountIter, 0, self.pixbufs['offline'])
+					self.set_cb()
 					return
 				self.plugin.send('PASSPHRASE', account, passphrase)
 				if save:
@@ -1710,9 +1720,9 @@ class roster_Window:
 			iconstyle = 'sun'
 		self.path = 'plugins/gtkgui/icons/' + iconstyle + '/'
 		self.pixbufs = {}
-		for state in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible', \
-			'offline', 'error', 'requested', 'message', 'opened', 'closed', \
-			'not in list'):
+		for state in ('connecting', 'online', 'chat', 'away', 'xa', 'dnd', \
+			'invisible', 'offline', 'error', 'requested', 'message', 'opened', \
+			'closed', 'not in list'):
 			# try to open a pixfile with the correct method
 			state_file = state.replace(" ", "_")
 			files = []
