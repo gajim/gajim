@@ -71,11 +71,11 @@ class Preferences_window:
 		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
 		self.plugin.roster.draw_roster()
 	
-	def on_iconstyle_combobox_changed(self, widget):
+	def on_iconset_combobox_changed(self, widget):
 		model = widget.get_model()
 		active = widget.get_active()
 		icon_string = model[active][0]
-		self.plugin.config['iconstyle'] = icon_string
+		self.plugin.config['iconset'] = icon_string
 		self.plugin.roster.mkpixbufs()
 		self.plugin.roster.draw_roster()
 		
@@ -702,7 +702,7 @@ class Preferences_window:
 		self.plugin = plugin
 		self.xml.get_widget('emoticons_image').set_from_file(\
 			'plugins/gtkgui/pixmaps/smile.png')
-		self.iconstyle_combobox = self.xml.get_widget('iconstyle_combobox')
+		self.iconset_combobox = self.xml.get_widget('iconset_combobox')
 		self.auto_pp_checkbutton = self.xml.get_widget('auto_pop_up_checkbutton')
 		self.auto_pp_away_checkbutton = self.xml.get_widget \
 			('auto_pop_up_away_checkbutton')
@@ -730,10 +730,10 @@ class Preferences_window:
 		st = self.plugin.config['mergeaccounts']
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
-		#iconStyle
+		#iconset
 		list_style = os.listdir('plugins/gtkgui/icons/')
 		model = gtk.ListStore(gobject.TYPE_STRING)
-		self.iconstyle_combobox.set_model(model)
+		self.iconset_combobox.set_model(model)
 		l = []
 		for i in list_style:
 			if i != 'CVS' and i[0] != '.':
@@ -742,8 +742,8 @@ class Preferences_window:
 			l.append(' ')
 		for i in range(len(l)):
 			model.append([l[i]])
-			if self.plugin.config['iconstyle'] == l[i]:
-				self.iconstyle_combobox.set_active(i)
+			if self.plugin.config['iconset'] == l[i]:
+				self.iconset_combobox.set_active(i)
 
 		#Color for account text
 		colSt = self.plugin.config['accounttextcolor']

@@ -818,8 +818,10 @@ class plugin:
 			'msg4':'I\'m working.',\
 			'msg5_name':'Nap',\
 			'msg5':'I\'m taking a nap.',\
+			'msg6_name':'Offline',\
+			'msg6':'I\'m offline.',\
 			'trayicon':1,\
-			'iconstyle':'sun',\
+			'iconset':'sun',\
 			'inmsgcolor':'#ff0000',\
 			'outmsgcolor': '#0000ff',\
 			'statusmsgcolor':'#1eaa1e',\
@@ -881,11 +883,11 @@ class plugin:
 												#2:autoaway and use sleeper
 												#3:autoxa and use sleeper
 			self.send('ASK_ROSTER', a, self.queueIN)
-		#in pygtk2.4
-		iconstyle = self.config['iconstyle']
-		if not iconstyle:
-			iconstyle = 'sun'
-		path = 'plugins/gtkgui/icons/' + iconstyle + '/'
+		#in pygtk2.4 FIXME: (nk) WHAT DO YOU MEAN?
+		iconset = self.config['iconset']
+		if not iconset:
+			iconset = 'sun'
+		path = 'plugins/gtkgui/icons/' + iconset + '/'
 		files = [path + 'online.gif', path + 'online.png', path + 'online.xpm']
 		pix = None
 		for fname in files:

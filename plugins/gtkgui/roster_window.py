@@ -1097,16 +1097,16 @@ class Roster_window:
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
-		iconstyle = self.plugin.config['iconstyle']
-		if not iconstyle:
-			iconstyle = 'sun'
-		self.path = 'plugins/gtkgui/icons/' + iconstyle + '/'
+		iconset = self.plugin.config['iconset']
+		if not iconset:
+			iconset = 'sun'
+		self.path = 'plugins/gtkgui/icons/' + iconset + '/'
 		self.pixbufs = {}
 		for state in ('connecting', 'online', 'chat', 'away', 'xa', 'dnd', \
 			'invisible', 'offline', 'error', 'requested', 'message', 'opened', \
 			'closed', 'not in the roster'):
 			# try to open a pixfile with the correct method
-			state_file = state.replace(" ", "_")
+			state_file = state.replace(' ', '_')
 			files = []
 			files.append(self.path + state_file + '.gif')
 			files.append(self.path + state_file + '.png')
@@ -1115,10 +1115,9 @@ class Roster_window:
 			image.show()
 			self.pixbufs[state] = image
 			for file in files:
-				if not os.path.exists(file):
-					continue
-				image.set_from_file(file)
-				break
+				if os.path.exists(file):
+					image.set_from_file(file)
+					break
 
 	def sound_is_ok(self, sound):
 		if not os.path.exists(sound):
