@@ -597,6 +597,13 @@ class accountPreference_Window:
 			self.xml.get_widget("entry_password").set_text(infos['password'])
 		if infos.has_key('ressource'):
 			self.xml.get_widget("entry_ressource").set_text(infos['ressource'])
+		if infos.has_key('use_proxy'):
+			self.xml.get_widget("checkbutton_proxy").set_active(infos['use_proxy'])
+		if infos.has_key('proxyhost'):
+			self.xml.get_widget("entry_proxyhost").set_text(infos['proxyhost'])
+		if infos.has_key('proxyport'):
+			self.xml.get_widget("entry_proxyport").set_text('%i'%\
+				infos['proxyport'])
 
 	def on_save_clicked(self, widget):
 		"""When save button is clicked : Save informations in config file"""
@@ -605,6 +612,14 @@ class accountPreference_Window:
 		check = self.xml.get_widget("checkbutton")
 		entryName = self.xml.get_widget("entry_name")
 		entryJid = self.xml.get_widget("entry_jid")
+		checkProxy = self.xml.get_widget("checkbutton_proxy")
+		if checkProxy.get_active():
+			useProxy = 1
+		else:
+			useProxy = 0
+		entryProxyhost = self.xml.get_widget("entry_proxyhost")
+		entryProxyport = self.xml.get_widget("entry_proxyport")
+		proxyPort = entryProxyport.get_text()
 		name = entryName.get_text()
 		jid = entryJid.get_text()
 		if (name == ''):
@@ -614,8 +629,13 @@ class accountPreference_Window:
 			warning_Window('You must enter a Jabber ID for this account\n\
 				For example : login@hostname')
 			return 0
-		else:
-			(login, hostname) = string.split(jid, '@')
+		if proxyPort != '':
+			try:
+				proxyPort = string.atoi(proxyPort)
+			except ValueError:
+				warning_Window('Proxy Port must be a port number')
+				return 0
+		(login, hostname) = string.split(jid, '@')
 		#if we are modifying an account
 		if self.modify:
 			#if we modify the name of the account
@@ -639,7 +659,8 @@ class accountPreference_Window:
 				self.plugin.send('ACC_CHG', self.account, name)
 				self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 					'password': entryPass.get_text(), 'ressource': \
-					entryRessource.get_text()}
+					entryRessource.get_text(), 'use_proxy': useProxy, 'proxyhost': \
+					entryProxyhost.get_text(), 'proxyport': proxyPort}
 				self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
 				#refresh accounts window
 				if self.plugin.windows.has_key('accounts'):
@@ -656,12 +677,15 @@ class accountPreference_Window:
 			#if we neeed to register a new account
 			if check.get_active():
 				self.plugin.send('NEW_ACC', None, (hostname, login, \
-					entryPass.get_text(), name, entryRessource.get_text()))
+					entryPass.get_text(), name, entryRessource.get_text(), \
+					checkProxy.get_active(), entryProxyhost.get_text(), \
+					entryProxyport.get_text()))
 				check.set_active(FALSE)
 				return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 			'password': entryPass.get_text(), 'ressource': \
-			entryRessource.get_text()}
+			entryRessource.get_text(), 'use_proxy': useProxy, 'proxyhost': \
+			entryProxyhost.get_text(), 'proxyport': proxyPort}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}}
@@ -766,10 +790,19 @@ class accounts_Window:
 			(model, iter) = sel.get_selected()
 			account = model.get_value(iter, 0)
 			infos['name'] = account
-			infos['jid'] = self.plugin.accounts[account]["name"] + \
-				'@' +  self.plugin.accounts[account]["hostname"]
-			infos['password'] = self.plugin.accounts[account]["password"]
-			infos['ressource'] = self.plugin.accounts[account]["ressource"]
+			if self.plugin.accounts[account].has_key("name"):
+				infos['jid'] = self.plugin.accounts[account]["name"] + \
+					'@' +  self.plugin.accounts[account]["hostname"]
+			if self.plugin.accounts[account].has_key("password"):
+				infos['password'] = self.plugin.accounts[account]["password"]
+			if self.plugin.accounts[account].has_key("ressource"):
+				infos['ressource'] = self.plugin.accounts[account]["ressource"]
+			if self.plugin.accounts[account].has_key("use_proxy"):
+				infos['use_proxy'] = self.plugin.accounts[account]["use_proxy"]
+			if self.plugin.accounts[account].has_key("proxyhost"):
+				infos['proxyhost'] = self.plugin.accounts[account]["proxyhost"]
+			if self.plugin.accounts[account].has_key("proxyport"):
+				infos['proxyport'] = self.plugin.accounts[account]["proxyport"]
 			self.plugin.windows['accountPreference'] = \
 				accountPreference_Window(self.plugin, infos)
 		
@@ -1521,10 +1554,19 @@ class roster_Window:
 		if not self.plugin.windows.has_key('accountPreference'):
 			infos = {}
 			infos['name'] = account
-			infos['jid'] = self.plugin.accounts[account]["name"] + \
-				'@' +  self.plugin.accounts[account]["hostname"]
-			infos['password'] = self.plugin.accounts[account]["password"]
-			infos['ressource'] = self.plugin.accounts[account]["ressource"]
+			if self.plugin.accounts[account].has_key("name"):
+				infos['jid'] = self.plugin.accounts[account]["name"] + \
+					'@' +  self.plugin.accounts[account]["hostname"]
+			if self.plugin.accounts[account].has_key("password"):
+				infos['password'] = self.plugin.accounts[account]["password"]
+			if self.plugin.accounts[account].has_key("ressource"):
+				infos['ressource'] = self.plugin.accounts[account]["ressource"]
+			if self.plugin.accounts[account].has_key("use_proxy"):
+				infos['use_proxy'] = self.plugin.accounts[account]["use_proxy"]
+			if self.plugin.accounts[account].has_key("proxyhost"):
+				infos['proxyhost'] = self.plugin.accounts[account]["proxyhost"]
+			if self.plugin.accounts[account].has_key("proxyport"):
+				infos['proxyport'] = self.plugin.accounts[account]["proxyport"]
 			self.plugin.windows['accountPreference'] = \
 				accountPreference_Window(self.plugin, infos)
 

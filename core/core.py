@@ -178,12 +178,16 @@ class GajimCore:
 		name = self.cfgParser.tab[account]["name"]
 		password = self.cfgParser.tab[account]["password"]
 		ressource = self.cfgParser.tab[account]["ressource"]
+		if self.cfgParser.tab[account]["use_proxy"]:
+			proxy = {"host":self.cfgParser.tab[account]["proxyhost"]}
+			proxy["port"] = self.cfgParser.tab[account]["proxyport"]
+		else:
+			proxy = None
 		con = common.jabber.Client(host = hostname, \
 			debug = [], log = sys.stderr, \
 #			debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
-			connection=common.xmlstream.TCP, port=5222)
-			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
-			#connection=common.xmlstream.TCP_SSL, port=5223)
+			connection=common.xmlstream.TCP, port=5222, proxy = proxy)
+			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
 		try:
 			con.connect()
 		except IOError, e:
@@ -351,10 +355,15 @@ class GajimCore:
 				#('REG_AGENT', account, infos)
 				elif ev[0] == 'REG_AGENT':
 					con.sendRegInfo(ev[2])
-				#('NEW_ACC', (hostname, login, password, name, ressource))
+				#('NEW_ACC', (hostname, login, password, name, ressource, use_proxy\
+				#, proxyhost, proxyport))
 				elif ev[0] == 'NEW_ACC':
+					if ev[2][5]:
+						proxy = {'host': ev[2][6], 'port': ev[2][7]}
+					else:
+						proxy = None
 					c = common.jabber.Client(host = \
-						ev[2][0], debug = False, log = sys.stderr)
+						ev[2][0], debug = False, log = sys.stderr, proxy = proxy)
 					try:
 						c.connect()
 					except IOError, e:
