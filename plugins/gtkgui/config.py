@@ -1002,7 +1002,7 @@ class Account_modification_window:
 			self.xml.get_widget('autoconnect_checkbutton').set_active(\
 				infos['autoconnect'])
 		#default is checked
-		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(1)
+		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(True)
 		if infos.has_key('sync_with_global_status'):
 			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(\
 				infos['sync_with_global_status'])
@@ -1035,12 +1035,8 @@ class Account_modification_window:
 			list_no_log_for.append(name)
 		self.infos['no_log_for'] = ' '.join(list_no_log_for)
 
-		sync_with_global_status = 0
-		if self.xml.get_widget('sync_with_global_status_checkbutton').\
-			get_active():
-			sync_with_global_status = 1
-		self.plugin.accounts[self.account]['sync_with_global_status'] =\
-			sync_with_global_status
+		self.plugin.accounts[self.account]['sync_with_global_status'] = \
+			self.xml.get_widget('sync_with_global_status_checkbutton').get_active()
 
 		use_proxy = 0
 		if self.xml.get_widget('use_proxy_checkbutton').get_active():
@@ -1111,7 +1107,7 @@ class Account_modification_window:
 				'autoconnect': autoconnect, 'use_proxy': use_proxy, 'proxyhost': \
 				proxyhost, 'proxyport': proxyport, 'keyid': keyID, \
 				'keyname': key_name, 'savegpgpass': save_gpg_password, \
-				'gpgpassword': gpg_password, 'sync_with_global_status':\
+				'gpgpassword': gpg_password, 'sync_with_global_status': \
 				sync_with_global_status, 'no_log_for': self.infos['no_log_for']}
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 				'GtkGui'))
@@ -1372,10 +1368,7 @@ class Accounts_window:
 			self.plugin.windows[account_modification_window].window.present()
 
 	def on_sync_with_global_status_checkbutton_toggled(self, widget):
-		if widget.get_active():
-			self.plugin.accounts[account]['sync_with_global_status'] = 0
-		else:
-			self.plugin.accounts[account]['sync_with_global_status'] = 1
+		self.plugin.accounts[account]['sync_with_global_status'] = widget.get_active()
 		
 	def __init__(self, plugin):
 		self.plugin = plugin

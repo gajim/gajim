@@ -625,6 +625,7 @@ class New_message_dialog:
 		"""When Chat button is clicked"""
 		jid = self.jid_entry.get_text()
 		# use User class, new_chat expects it that way
+		# is it in the roster?
 		if not self.plugin.roster.contacts[self.account].has_key(jid):
 			user = gtkgui.User(jid, jid, ['not in the roster'], \
 				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
@@ -632,10 +633,12 @@ class New_message_dialog:
 			self.plugin.roster.add_user_to_roster(user.jid, self.account)
 		else:
 			user = self.plugin.roster.contacts[self.account][jid][0]
+			
 		if not self.plugin.windows[self.account]['chats'].has_key(jid):
 			self.plugin.roster.new_chat(user, self.account)
 		self.plugin.windows[self.account]['chats'][jid].active_tab(jid)
 		self.plugin.windows[self.account]['chats'][jid].window.present()
+		
 		widget.get_toplevel().destroy()
 
 	def __init__(self, plugin, account):

@@ -788,9 +788,11 @@ class roster_window:
 					tabbed_chat_window(user, self.plugin, account)
 			else:
 				self.plugin.windows[account]['chats']['tabbed'].new_user(user)
+				
 			self.plugin.windows[account]['chats'][user.jid] = \
 				self.plugin.windows[account]['chats']['tabbed']
 			self.plugin.windows[account]['chats']['tabbed'].window.present()
+			
 		else:
 			self.plugin.windows[account]['chats'][user.jid] = \
 				tabbed_chat_window(user, self.plugin, account)
