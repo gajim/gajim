@@ -1407,7 +1407,7 @@ class systray:
 					user = users[0]
 					if group in user.groups and user.show != 'offline' and \
 						user.show != 'error':
-						item = gtk.MenuItem(user.name)
+						item = gtk.MenuItem(string.replace(user.name, '_', '__'))
 						menu_user.append(item)
 						item.connect("activate", self.start_chat, account, user.jid)
 
