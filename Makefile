@@ -4,17 +4,19 @@ MODULES		= common plugins/gtkgui
 PREFIX		= /usr
 DESTDIR		= /
 
-FIND		= find -regex '.*\.\(\(glade\)\|\(py\)\|\(xpm\)\|\(gif\)\|\(png\)\|\(mo\)\|\(wav\)\)'
+FIND		= find -regex '.*\.\(\(glade\)\|\(pyo\)\|\(xpm\)\|\(gif\)\|\(png\)\|\(mo\)\|\(wav\)\)'
 FILES		= `$(FIND)`
 DIRS		= `$(FIND) -exec dirname {} \; | sort -u`
 FIND_LIB	= find -regex '.*\.\(so\)'
 FILES_LIB	= `$(FIND_LIB)`
+FIND_PY		= find -regex '.*\.\(py\)'
+FILES_PY	= `$(FIND_PY)`
 
 LANGS		= fr pt_BR
 SCRIPTS = \
 	scripts/gajim
 
-all: translation trayicon idle
+all: translation trayicon idle pyo
 
 translation:
 	for l in $(LANGS) ; do \
@@ -26,6 +28,12 @@ trayicon:
 
 idle:
 	make -C common all;
+
+pyo:
+	ST="import py_compile\n py_compile.compile('$$f')"
+	for f in $(FILES_PY) ; do \
+		python -O -c "$$ST"; \
+	done
 
 clean:
 	find -name *.pyc -exec rm {} \;
