@@ -37,35 +37,11 @@ class infoUser_Window:
 		"""close window"""
 		del self.plugin.windows[self.account]['infos'][self.user.jid]
 
-	def add_grp_to_user(self, model, path, iter):
-		"""Insert user to the group in inter"""
-		self.user.groups.append(model.get_value(iter, 0))
-
 	def on_close(self, widget):
 		"""Save user's informations and update the roster on the Jabber server"""
 		#update: to know if things have changed to send things 
 		# to server only if changes are done
 		update = 0
-		#update user.groups and redraw the user in the roster
-		old_groups = self.user.groups
-		self.user.groups = []
-		model = self.list2.get_model()
-		model.foreach(self.add_grp_to_user)
-		for g in old_groups:
-			if not g in self.user.groups:
-				update = 1
-				break
-		if not update:
-			for g in self.user.groups:
-				if not g in old_groups:
-					update = 1
-					break
-		if update:
-			new_groups = self.user.groups
-			self.user.groups = old_groups
-			self.plugin.roster.remove_user(self.user, self.account)
-			self.user.groups = new_groups
-			self.plugin.roster.add_user_to_roster(self.user.jid, self.account)
 		#update user.name if it's not ""
 		entry_name = self.xml.get_widget('entry_name')
 		newName = entry_name.get_text()
@@ -97,37 +73,6 @@ class infoUser_Window:
 				'Gtkgui'))
 		widget.get_toplevel().destroy()
 
-	def add_grp(self, model, path, iter, stors):
-		"""Transfert the iter from stors[0] to stors[1]"""
-		i = stors[1].append()
-		stors[1].set(i, 0, stors[0].get_value(iter, 0))
-		stors[0].remove(iter)
-
-	def on_add(self, widget):
-		"""When Add button is clicked"""
-		model = self.list1.get_model()
-		select = self.list1.get_selection()
-		select.selected_foreach(self.add_grp, (model, self.list2.get_model()))
-
-	def on_remove(self, widget):
-		"""When Remove button is clicked"""
-		model = self.list2.get_model()
-		select = self.list2.get_selection()
-		select.selected_foreach(self.add_grp, (model, self.list1.get_model()))
-
-	def on_new_key_pressed(self, widget, event):
-		"""If enter is pressed in new group entry, add the group"""
-		if event.keyval == gtk.keysyms.Return:
-			entry_new = self.xml.get_widget("entry_new")
-			model = self.list1.get_model()
-			txt = entry_new.get_text()
-			iter = model.append()
-			model.set(iter, 0, txt)
-			entry_new.set_text('')
-			return 1
-		else:
-			return 0
-
 	def set_value(self, entry_name, value):
 		try:
 			self.xml.get_widget(entry_name).set_text(value)
@@ -146,35 +91,12 @@ class infoUser_Window:
 				else:
 					self.set_value('entry_'+i, vcard[i])
 
-	def init_lists(self):
-		"""Initialize both available and current listStores"""
-		#list available
-		store = gtk.ListStore(gobject.TYPE_STRING)
-		for g in self.plugin.roster.groups[self.account].keys():
-			if g != 'Agents' and g not in self.user.groups:
-				iter = store.append()
-				store.set(iter, 0, g)
-		self.list1.set_model(store)
-		column = gtk.TreeViewColumn('Available', gtk.CellRendererText(), text=0)
-		self.list1.append_column(column)
-
-		#list_current
-		store = gtk.ListStore(gobject.TYPE_STRING)
-		for g in self.user.groups:
-			iter = store.append()
-			store.set(iter, 0, g)
-		self.list2.set_model(store)
-		column = gtk.TreeViewColumn('Available', gtk.CellRendererText(), text=0)
-		self.list2.append_column(column)
-
 	def __init__(self, user, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Info_user', APP)
 		self.window = self.xml.get_widget("Info_user")
 		self.plugin = plugin
 		self.user = user
 		self.account = account
-		self.list1 = self.xml.get_widget("treeview_available")
-		self.list2 = self.xml.get_widget("treeview_current")
 
 		self.xml.get_widget('label_name').set_text(user.name)
 		self.xml.get_widget('label_id').set_text(user.jid)
@@ -202,15 +124,10 @@ class infoUser_Window:
 				stats += '\n' + u.show + ' : ' + u.status
 		self.xml.get_widget('label_resource').set_text(resources)
 		self.xml.get_widget('label_status').set_text(stats)
-		self.init_lists()
 		plugin.send('ASK_VCARD', account, self.user.jid)
 		
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_close_clicked', self.on_close)
-		self.xml.signal_connect('on_add_clicked', self.on_add)
-		self.xml.signal_connect('on_remove_clicked', self.on_remove)
-		self.xml.signal_connect('on_entry_new_key_press_event', \
-			self.on_new_key_pressed)
 
 class passphrase_Window:
 	"""Class for Passphrase Window"""
