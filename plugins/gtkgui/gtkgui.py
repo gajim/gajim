@@ -697,11 +697,16 @@ class tabbed_chat_window:
 		conversation_buffer = conversation_textview.get_buffer()
 		
 		print text
+		if text[0] == ' ': # that happens ATM only with formating detection 
+			text = text.lstrip() # remove ALL leading spaces
+			#(I add those in the formating detection later)
+		print 'text after'
+		print text
 		
 		if text in self.plugin.emoticons.keys():
 			#it's an emoticon
-			print 'emoticon:', text
 			text = text.upper() # make it CAPS (emoticons keys are are CAPS)
+			print 'emoticon:', text
 			end_iter = conversation_buffer.get_end_iter()
 			conversation_buffer.insert_pixbuf(end_iter, \
 				self.plugin.emoticons[text])
@@ -718,15 +723,18 @@ class tabbed_chat_window:
 			#it's a bold text
 			tag = 'bold'
 			text = text[1:-1] # remove * *
+			text = ' ' + text # add the first space
 		elif text.startswith('/') and text.endswith('/'):
 			#it's an italic text
 			tag = 'italic'
 			text = text[1:-1] # remove / /
+			text = ' ' + text # add the first space
 			print tag
 		elif text.startswith('_') and text.endswith('_'):
 			#it's an underlined text
 			tag = 'underline'
 			text = text[1:-1] # remove _ _
+			text = ' ' + text # add the first space
 			print tag
 		else:
 			#it's a url
@@ -3534,6 +3542,7 @@ class plugin:
 		# \W any non-alphanumeric character
 		# \b means word boundary. This is a zero-width assertion that
 		# 					matches only at the beginning or end of a word.
+		# ^ matches at the beginning of lines
 		#
 		# * means 0 or more times
 		# + means 1 or more times
@@ -3549,7 +3558,7 @@ class plugin:
 
 		#detects eg. *b* *bold* *bold bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold *
-		formatting = r'\b\*[^\s*]([^*]*[^\s*])?\*|' r'\b/[^\s*]([^/]*[^\s*])?/|' r'\b_[^\s*]([^_]*[^\s*])?_'
+		formatting = r'(\s+|^)\*[^\s*]([^*]*[^\s*])?\*|' r'(\s+|^)/[^\s*]([^/]*[^\s*])?/|' r'(\s+|^)_[^\s*]([^_]*[^\s*])?_'
 
 		if formatting_on:
 			self.basic_pattern = links + mail + '|' + formatting
