@@ -62,7 +62,7 @@ An example of usage for a simple client would be ( only psuedo code !)
 
 """
 
-# $Id: jabber.py,v 1.1.1.1 2003/10/22 18:45:18 tab Exp $
+# $Id: jabber.py,v 1.2 2003/11/01 19:41:35 asterix86 Exp $
 
 import xmlstream
 import sha, time
@@ -177,7 +177,8 @@ def ustr(what, encoding=USTR_ENCODING):
         r = what.__str__()
         # make sure __str__() didnt return a unicode
         if type(r) <> type(u''):
-            r = unicode(r,encoding,'replace')
+#            r = unicode(r,encoding,'replace')
+            r = unicode(r)
     return r
 
 
