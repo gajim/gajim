@@ -6828,7 +6828,7 @@ Custom</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="Gc">
+<widget class="GtkWindow" id="groupchat_window">
   <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Groupchat</property>
@@ -6844,8 +6844,8 @@ Custom</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Tue, 03 Aug 2004 22:05:41 GMT"/>
-  <signal name="focus_in_event" handler="on_focus" last_modification_time="Sun, 05 Sep 2004 09:15:16 GMT"/>
+  <signal name="destroy" handler="on_groupchat_window_destroy" last_modification_time="Sat, 05 Mar 2005 00:34:45 GMT"/>
+  <signal name="focus_in_event" handler="on_groupchat_window_focus_in_event" last_modification_time="Sat, 05 Mar 2005 00:34:51 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox27">
@@ -6901,7 +6901,20 @@ Custom</property>
 	  </child>
 
 	  <child>
-	    <placeholder/>
+	    <widget class="GtkButton" id="set_button">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">Set</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="on_set_button_clicked" last_modification_time="Sat, 05 Mar 2005 00:17:20 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
 	  </child>
 	</widget>
 	<packing>
@@ -6912,21 +6925,21 @@ Custom</property>
       </child>
 
       <child>
-	<widget class="GtkVPaned" id="vpaned2">
+	<widget class="GtkNotebook" id="notebook">
+	  <property name="border_width">4</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="position">280</property>
+	  <property name="show_tabs">True</property>
+	  <property name="show_border">True</property>
+	  <property name="tab_pos">GTK_POS_TOP</property>
+	  <property name="scrollable">True</property>
+	  <property name="enable_popup">False</property>
 
 	  <child>
-	    <widget class="GtkNotebook" id="notebook">
-	      <property name="border_width">4</property>
+	    <widget class="GtkVPaned" id="vpaned4">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="show_tabs">True</property>
-	      <property name="show_border">True</property>
-	      <property name="tab_pos">GTK_POS_TOP</property>
-	      <property name="scrollable">True</property>
-	      <property name="enable_popup">False</property>
+	      <property name="position">225</property>
 
 	      <child>
 		<widget class="GtkHPaned" id="hpaned">
@@ -6940,22 +6953,22 @@ Custom</property>
 		      <property name="can_focus">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
 		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-		      <property name="shadow_type">GTK_SHADOW_NONE</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
 		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		      <child>
-			<widget class="GtkTreeView" id="list">
+			<widget class="GtkTreeView" id="list_treeview">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="headers_visible">False</property>
 			  <property name="rules_hint">False</property>
 			  <property name="reorderable">True</property>
 			  <property name="enable_search">False</property>
-			  <signal name="row_activated" handler="on_row_activated" last_modification_time="Mon, 20 Sep 2004 13:30:37 GMT"/>
-			  <signal name="row_collapsed" handler="on_row_collapsed" last_modification_time="Mon, 20 Sep 2004 13:30:45 GMT"/>
-			  <signal name="row_expanded" handler="on_row_expanded" last_modification_time="Mon, 20 Sep 2004 13:30:52 GMT"/>
-			  <signal name="button_press_event" handler="on_treeview_event" last_modification_time="Mon, 20 Sep 2004 16:22:47 GMT"/>
-			  <signal name="key_release_event" handler="on_treeview_event" last_modification_time="Mon, 20 Sep 2004 16:23:36 GMT"/>
+			  <signal name="row_activated" handler="on_list_treeview_row_activated" last_modification_time="Sat, 05 Mar 2005 00:31:45 GMT"/>
+			  <signal name="row_collapsed" handler="on_list_treeview_row_collapsed" last_modification_time="Sat, 05 Mar 2005 00:31:52 GMT"/>
+			  <signal name="row_expanded" handler="on_list_treeview_row_expanded" last_modification_time="Sat, 05 Mar 2005 00:31:57 GMT"/>
+			  <signal name="button_press_event" handler="on_list_treeview_button_press_event" last_modification_time="Sat, 05 Mar 2005 00:32:05 GMT"/>
+			  <signal name="key_release_event" handler="on_list_treeview_key_release_event" last_modification_time="Sat, 05 Mar 2005 00:32:15 GMT"/>
 			</widget>
 		      </child>
 		    </widget>
@@ -6971,11 +6984,11 @@ Custom</property>
 		      <property name="can_focus">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-		      <property name="shadow_type">GTK_SHADOW_NONE</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
 		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		      <child>
-			<widget class="GtkTextView" id="conversation">
+			<widget class="GtkTextView" id="conversation_textview">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="editable">False</property>
@@ -7001,69 +7014,69 @@ Custom</property>
 		  </child>
 		</widget>
 		<packing>
-		  <property name="tab_expand">False</property>
-		  <property name="tab_fill">True</property>
+		  <property name="shrink">True</property>
+		  <property name="resize">False</property>
 		</packing>
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="label141">
+		<widget class="GtkScrolledWindow" id="scrolledwindow19">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Group</property>
-		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap">False</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
+		  <property name="can_focus">True</property>
+		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="shadow_type">GTK_SHADOW_IN</property>
+		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+		  <child>
+		    <widget class="GtkTextView" id="message_textview">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="editable">True</property>
+		      <property name="overwrite">False</property>
+		      <property name="accepts_tab">True</property>
+		      <property name="justification">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap_mode">GTK_WRAP_WORD</property>
+		      <property name="cursor_visible">True</property>
+		      <property name="pixels_above_lines">0</property>
+		      <property name="pixels_below_lines">0</property>
+		      <property name="pixels_inside_wrap">0</property>
+		      <property name="left_margin">0</property>
+		      <property name="right_margin">0</property>
+		      <property name="indent">0</property>
+		      <property name="text" translatable="yes"></property>
+		      <signal name="key_press_event" handler="on_message_textview_key_press_event" last_modification_time="Sat, 05 Mar 2005 00:31:14 GMT"/>
+		    </widget>
+		  </child>
 		</widget>
 		<packing>
-		  <property name="type">tab</property>
+		  <property name="shrink">True</property>
+		  <property name="resize">True</property>
 		</packing>
 	      </child>
 	    </widget>
 	    <packing>
-	      <property name="shrink">True</property>
-	      <property name="resize">False</property>
+	      <property name="tab_expand">False</property>
+	      <property name="tab_fill">True</property>
 	    </packing>
 	  </child>
 
 	  <child>
-	    <widget class="GtkScrolledWindow" id="scrolledwindow19">
+	    <widget class="GtkLabel" id="label141">
 	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-	      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-	      <property name="shadow_type">GTK_SHADOW_NONE</property>
-	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-	      <child>
-		<widget class="GtkTextView" id="message">
-		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="editable">True</property>
-		  <property name="overwrite">False</property>
-		  <property name="accepts_tab">True</property>
-		  <property name="justification">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap_mode">GTK_WRAP_WORD</property>
-		  <property name="cursor_visible">True</property>
-		  <property name="pixels_above_lines">0</property>
-		  <property name="pixels_below_lines">0</property>
-		  <property name="pixels_inside_wrap">0</property>
-		  <property name="left_margin">0</property>
-		  <property name="right_margin">0</property>
-		  <property name="indent">0</property>
-		  <property name="text" translatable="yes"></property>
-		  <signal name="key_press_event" handler="on_msg_key_press_event" last_modification_time="Thu, 05 Aug 2004 15:29:07 GMT"/>
-		</widget>
-	      </child>
+	      <property name="label" translatable="yes">Group</property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
 	    </widget>
 	    <packing>
-	      <property name="shrink">True</property>
-	      <property name="resize">True</property>
+	      <property name="type">tab</property>
 	    </packing>
 	  </child>
 	</widget>

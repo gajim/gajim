@@ -568,8 +568,8 @@ class join_groupchat_window:
 		server = self.xml.get_widget('server_entry').get_text()
 		password = self.xml.get_widget('password_entry').get_text()
 		jid = '%s@%s' % (room, server)
-		self.plugin.windows[self.account]['gc'][jid] = gtkgui.gc(jid, nickname,\
-			self.plugin, self.account)
+		self.plugin.windows[self.account]['gc'][jid] = \
+			gtkgui.Groupchat_window(jid, nickname, self.plugin, self.account)
 		#TODO: verify entries
 		self.plugin.send('GC_JOIN', self.account, (nickname, room, server, \
 			password))
