@@ -420,8 +420,6 @@ class Chat:
 				self.plugin.launch_browser_mailer(kind, word)
 
 	def detect_and_print_special_text(self, otext, jid, other_tag, print_all_special):
-		# nk 2 yann: when doing this in GC you have to pass sth and looks for
-		# xmls[Other-key-here] I believe  :D
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
@@ -462,7 +460,6 @@ class Chat:
 			#it's an emoticon
 			tag = None
 			emot_ascii = possible_emot_ascii_caps
-			print 'emoticon:', emot_ascii
 			end_iter = conversation_buffer.get_end_iter()
 			conversation_buffer.insert_pixbuf(end_iter, \
 				self.plugin.emoticons[emot_ascii])

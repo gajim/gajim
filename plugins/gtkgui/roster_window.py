@@ -219,7 +219,7 @@ class roster_window:
 			sub_menu = gtk.Menu()
 			add_contact_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem('using ' + account + ' account')
+				item = gtk.MenuItem(_('using ') + account + _(' account'))
 				sub_menu.append(item)
 				item.connect("activate", self.on_add_contact, account)
 			sub_menu.show_all()
@@ -227,15 +227,15 @@ class roster_window:
 			sub_menu = gtk.Menu()
 			browse_agents_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem('using ' + account + ' account')
+				item = gtk.MenuItem(_('using ') + account + _(' account'))
 				sub_menu.append(item)
-				item.connect("activate", self.on_browse_agents, account)
+				item.connect('activate', self.on_browse_agents, account)
 			sub_menu.show_all()
 			#join gc
 			sub_menu = gtk.Menu()
 			join_gc_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem('using ' + account + ' account')
+				item = gtk.MenuItem(_('using ') + account + _(' account'))
 				sub_menu.append(item)
 				item.connect("activate", self.on_join_gc, account)
 			sub_menu.show_all()
@@ -243,7 +243,7 @@ class roster_window:
 			sub_menu = gtk.Menu()
 			new_message_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem('using ' + account + ' account')
+				item = gtk.MenuItem(_('using ') + account + _(' account'))
 				sub_menu.append(item)
 				item.connect("activate", self.on_new_message_menuitem_activate, account)
 			sub_menu.show_all()
@@ -259,7 +259,7 @@ class roster_window:
 			#join_gc
 			if not self.join_gc_handler_id:
 				self.join_gc_handler_id = join_gc_menuitem.connect(\
-					"activate", self.on_join_gc, self.plugin.accounts.keys()[0])
+					'activate', self.on_join_gc, self.plugin.accounts.keys()[0])
 			if not self.new_message_menuitem_handler_id:
 				self.new_message_menuitem_handler_id = new_message_menuitem.connect(\
 'activate', self.on_new_message_menuitem_activate, self.plugin.accounts.keys()[0])
@@ -1195,10 +1195,10 @@ class roster_window:
 		self.tree = self.xml.get_widget('roster_treeview')
 		self.plugin = plugin
 		self.nb_unread = 0
-		self.add_contact_handler_id = 0
-		self.browse_agents_handler_id = 0
-		self.join_gc_handler_id = 0
-		self.new_message_menuitem_handler_id = 0
+		self.add_contact_handler_id = False
+		self.browse_agents_handler_id = False
+		self.join_gc_handler_id = False
+		self.new_message_menuitem_handler_id = False
 		self.regroup = 0
 		if self.plugin.config.has_key('mergeaccounts'):
 			self.regroup = self.plugin.config['mergeaccounts']

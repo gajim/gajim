@@ -92,7 +92,7 @@ class systray:
 		New_message_dialog(self.plugin, account)
 
 	def make_menu(self, event):
-		"""create the browse agents, add contact & join groupchat sub menus"""
+		"""create chat with and new message (sub) menus/menuitems"""
 		menu = gtk.Menu()
 		
 		item = gtk.MenuItem(_("Status"))
@@ -120,7 +120,7 @@ class systray:
 		sub_menu.append(item)
 		item.connect("activate", self.set_cb, 'offline')
 
-		chat_with_menuitem = gtk.MenuItem(_("Chat with"))
+		chat_with_menuitem = gtk.MenuItem(_('Chat with'))
 		menu.append(chat_with_menuitem)
 		new_message_menuitem = gtk.MenuItem(_('New Message'))
 		menu.append(new_message_menuitem)
@@ -133,39 +133,31 @@ class systray:
 			new_message_menuitem.set_sensitive(False)
 		
 		if len(self.plugin.accounts.keys()) >= 2: # 2 or more accounts? make submenus
-			menu_account = gtk.Menu()
-			chat_with_menuitem.set_submenu(menu_account)
+			account_menu_for_chat_with = gtk.Menu()
+			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
+
+			account_menu_for_new_message = gtk.Menu()
+			new_message_menuitem.set_submenu(account_menu_for_new_message)
+
 			for account in self.plugin.accounts.keys():
 				#for chat_with
-				menu_account = gtk.Menu()
-				chat_with_menuitem.set_submenu(menu_account)
-				for account in self.plugin.accounts.keys():
-					item = gtk.MenuItem('using ' + account + ' account')
-					menu_account.append(item)
-					menu_group = gtk.Menu()
-					item.set_submenu(menu_group)
-					for group in self.plugin.roster.groups[account].keys():
-						if group == 'Agents':
-							continue
-						item = gtk.MenuItem(group)
-						menu_group.append(item)
-						menu_user = gtk.Menu()
-						item.set_submenu(menu_user)
-						for users in self.plugin.roster.contacts[account].values():
-							user = users[0]
-							if group in user.groups and user.show != 'offline' and \
-									user.show != 'error':
-								item = gtk.MenuItem(user.name.replace('_', '__'))
-								menu_user.append(item)
-								item.connect("activate", self.start_chat, account,\
-									user.jid)
+				item = gtk.MenuItem(_('using ') + account + _(' account'))
+				account_menu_for_chat_with.append(item)
+				group_menu = self.make_groups_submenus_for_chat_with(account)
+				item.set_submenu(group_menu)
+				#for new_message
+				item = gtk.MenuItem(_('using ') + account + _(' account'))
+				item.connect('activate',\
+					self.on_new_message_menuitem_activate, account)
+				account_menu_for_new_message.append(item)
+				
 		elif len(self.plugin.accounts.keys()) == 1: # one account
+			#one account, no need to show 'using foo account'
 			#for chat_with
-			menu_account = gtk.Menu()
-			chat_with_menuitem.set_submenu(menu_account)
-			if not self.chat_with_handler_id:
-				self.chat_with_handler_id = chat_with_menuitem.connect(\
-					'activate', self.start_chat, self.plugin.accounts.keys()[0])
+			account = self.plugin.accounts.keys()[0]
+			
+			group_menu = self.make_groups_submenus_for_chat_with(account)
+			chat_with_menuitem.set_submenu(group_menu)
 					
 			#for new message
 			self.new_message_handler_id = new_message_menuitem.connect(\
@@ -174,13 +166,44 @@ class systray:
 		item = gtk.MenuItem() # seperator
 		menu.append(item)
 		
-		item = gtk.MenuItem(_("Quit"))
+		item = gtk.MenuItem(_('Quit'))
 		menu.append(item)
-		item.connect("activate", self.plugin.roster.on_quit_menuitem_activate)
+		item.connect('activate', self.plugin.roster.on_quit_menuitem_activate)
 		
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
 		menu.reposition()
+	
+	def make_groups_submenus_for_chat_with(self, account):
+		groups_menu = gtk.Menu()
+		
+		for group in self.plugin.roster.groups[account].keys():
+			if group == 'Agents':
+				continue
+			# at least one not offline or with errors in this group
+			at_least_one = False
+			item = gtk.MenuItem(group)
+			groups_menu.append(item)
+			contacts_menu = gtk.Menu()
+			item.set_submenu(contacts_menu)
+			for users in self.plugin.roster.contacts[account].values():
+				user = users[0]
+				if group in user.groups and user.show != 'offline' and \
+						user.show != 'error':
+					at_least_one = True
+					s = user.name.replace('_', '__') + ' (' + user.show + ')'
+					item = gtk.MenuItem(s)
+					item.connect('activate', self.start_chat, account,\
+							user.jid)
+					contacts_menu.append(item)
+			
+			if not at_least_one:
+				message = _('All contacts in this group are offline or have errors')
+				item = gtk.MenuItem(message)
+				item.set_sensitive(False)
+				contacts_menu.append(item)
+
+		return groups_menu
 
 	def on_clicked(self, widget, event):
 		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1:
@@ -232,11 +255,8 @@ class systray:
 		self.t = None
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
-		self.chat_with_handler_id = None
-		self.new_message_handler_id = None
 		global trayicon
 		try:
 			import egg.trayicon as trayicon	# gnomepythonextras trayicon
 		except:
 			import trayicon # yann's trayicon
-

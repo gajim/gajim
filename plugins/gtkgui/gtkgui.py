@@ -849,7 +849,7 @@ class plugin:
 			self.config['autoxatime']*60)
 		self.systray_visible = 0
 		try:
-			import egg.trayicon as trayicon # use gnomepythonextras traycion
+			import egg.trayicon as trayicon # use gnomepythonextras trayicon
 		except:
 			try:
 				import trayicon # use yann's

@@ -3,8 +3,8 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
-##		- Nikos Kouremenos <nkour@jabber.org>
-##		- Alex Podaras <bigpod@jabber.org>
+##	- Nikos Kouremenos <nkour@jabber.org>
+##	- Alex Podaras <bigpod@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -519,6 +519,7 @@ class Information_dialog:
 			gtk.MESSAGE_INFO, gtk.BUTTONS_CLOSE, label)
 		dialog.connect('response', self.on_response)
 		dialog.show()
+		#dialog.run() #IT freezes WHY? also if you do a lot of stuff all together it freezes
 
 class Error_dialog:
 	"""Class for error dialog"""
