@@ -1616,6 +1616,14 @@ class roster_Window:
 	def on_quit(self, widget):
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
+		if self.plugin.config.has_key('saveposition'):
+			if self.plugin.config['saveposition']:
+				win = self.xml.get_widget('Gajim')
+				self.plugin.config['x-position'], self.plugin.config['y-position']=\
+					win.get_position()
+				self.plugin.config['width'], self.plugin.config['height'] = \
+					win.get_size()
+
 		self.plugin.config['hiddenlines'] = string.join(self.hidden_lines, '\t')
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.send('QUIT', None, ('gtkgui', 1))
@@ -1862,14 +1870,6 @@ class roster_Window:
 			context.finish(True, True, etime)
 		return
 
-	def on_unrealize(self, widget, data=None):
-		if self.plugin.config.has_key('saveposition'):
-			if self.plugin.config['saveposition']:
-				self.plugin.config['x-position'], self.plugin.config['y-position']=\
-					widget.get_position()
-				self.plugin.config['width'], self.plugin.config['height'] = \
-					widget.get_size()
-
 	def show_title(self):
 		start = ""
 		if self.nb_unread > 1:
@@ -1966,7 +1966,6 @@ class roster_Window:
 		self.tree.connect("drag_data_get", self.drag_data_get_data)
 		self.tree.connect("drag_data_received", self.drag_data_received_data)
 		self.xml.signal_connect('on_widget_destroy', self.on_close)
-		self.xml.signal_connect('on_Gajim_unrealize', self.on_unrealize)
 		self.xml.signal_connect('on_preferences_activate', self.on_prefs)
 		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
 		self.xml.signal_connect('on_show_offline_activate', self.on_show_off)

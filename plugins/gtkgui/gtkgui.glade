@@ -18,7 +18,6 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="unrealize" handler="on_Gajim_unrealize" last_modification_time="Wed, 13 Oct 2004 21:42:08 GMT"/>
   <signal name="delete_event" handler="on_widget_destroy" last_modification_time="Sun, 16 Jan 2005 21:31:06 GMT"/>
 
   <child>
