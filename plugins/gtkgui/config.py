@@ -280,7 +280,7 @@ class preferences_window:
 			self.xml.get_widget('set_image_button'),\
 			self.xml.get_widget('emoticons_image')])
 
-	def on_emoticons_treemodel_row_deleted(self, model, path, iter):
+	def on_emoticons_treemodel_row_deleted(self, model, path):
 		iter = model.get_iter_first()
 		emots = []
 		while iter:
