@@ -455,7 +455,30 @@ class message:
 class roster:
 	def get_icon_pixbuf(self, stock):
 		return self.tree.render_icon(stock, size = gtk.ICON_SIZE_MENU, detail = None)
-
+	
+	def add_user(self, u):
+		""" add a ligne to the roster """
+		newgrp = 0
+		if u.groups == []:
+			if string.find(u.jid, "@") <= 0:
+				u.groups.append('Agents')
+			else:
+				u.groups.append('general')
+		if u.show != 'offline' or self.showOffline or 'Agents' in u.groups:
+			for g in u.groups:
+				if not self.l_group.has_key(g):
+					iterG = self.treestore.append(None, (self.pixbufs['closed'], g, 'group', FALSE, self.grpbgcolor, TRUE))
+					self.l_group[g] = iterG
+					newgrp = 1
+				if g == 'Agents':
+					iterU = self.treestore.append(self.l_group[g], (self.pixbufs[u.show], u.name, 'agent', FALSE, self.userbgcolor, TRUE))
+				else:
+					iterU = self.treestore.append(self.l_group[g], (self.pixbufs[u.show], u.name, u.jid, TRUE, self.userbgcolor, TRUE))
+				self.l_contact[u.jid]['iter'].append(iterU)
+				if newgrp == 1:
+					#expand new groups
+					self.tree.expand_row(self.treestore.get_path(iterG), FALSE)
+	
 	def mkroster(self, tab):
 		""" l_contact = {jid:{'user':_, 'iter':[iter1, ...]] """
 		self.l_contact = {}
@@ -476,22 +499,7 @@ class roster:
 				show = 'offline'
 			user1 = user(ji, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'])
 			self.l_contact[user1.jid] = {'user': user1, 'iter': []}
-			if user1.groups == []:
-				if string.find(ji, "@") <= 0:
-					user1.groups.append('Agents')
-				else:
-					user1.groups.append('general')
-			for g in user1.groups:
-				if not self.l_group.has_key(g):
-					iterG = self.treestore.append(None, (self.pixbufs['closed'], g, 'group', FALSE, self.grpbgcolor, TRUE))
-					self.l_group[g] = iterG
-				if user1.show != 'offline' or self.showOffline or g == 'Agents':
-					if g == 'Agents':
-						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, 'agent', FALSE, self.userbgcolor, TRUE))
-					else:
-						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, user1.jid, TRUE, self.userbgcolor, TRUE))
-					self.l_contact[user1.jid]['iter'].append(iterU)
-		self.tree.expand_all()
+			self.add_user(user1)
 
 	def update_iter(self, widget, path, iter, data):
 		jid = self.treestore.get_value(iter, 2)
@@ -509,12 +517,7 @@ class roster:
 	def chg_status(self, jid, show, status):
 		u = self.l_contact[jid]['user']
 		if self.l_contact[jid]['iter'] == []:
-			for g in u.groups:
-				if not self.l_group.has_key(g):
-					iterG = self.treestore.append(None, (self.pixbufs['closed'], g, 'group', FALSE, self.grpbgcolor, TRUE))
-					self.l_group[u.group] = iterG
-				iterU = self.treestore.append(self.l_group[g], (self.pixbufs[show], u.name, u.jid, TRUE, self.userbgcolor, TRUE))
-				self.l_contact[u.jid]['iter'].append(iterU)
+			self.add_user(u)
 		else:
 			if show == 'offline' and not self.showOffline:
 				for i in self.l_contact[jid]['iter']:
@@ -586,11 +589,7 @@ class roster:
 		self.queueOUT.put(('SUB', (jid, txt)))
 		if not self.l_contact.has_key(jid):
 			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub')
-			if not self.l_group.has_key('general'):
-				iterG = self.treestore.append(None, (self.pixbufs['closed'], 'general', 'group', FALSE, self.grpbgcolor, TRUE))
-				self.l_group['general'] = iterG
-			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid, TRUE, self.userbgcolor, TRUE))
-			self.l_contact[jid] = {'user':user1, 'iter':[iterU]}
+			self.add_user(user1)
 
 	def on_treeview_event(self, widget, event):
 		if (event.button == 3) & (event.type == gtk.gdk.BUTTON_PRESS):
@@ -790,16 +789,9 @@ class plugin:
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
 					jid = string.replace(jid, '@', '')
-					if not self.r.l_group.has_key('Agents'):
-						iterG = self.r.treestore.append(None, (self.pixbufs['closed'], \
-							'Agents', 'group', FALSE, self.r.grpbgcolor, TRUE))
-						self.r.l_group['Agents'] = iterG
 					if not self.r.l_contact.has_key(jid):
 						user1 = user(jid, jid, ['Agents'], ev[1][1], ev[1][2], 'from')
-						iterU = self.r.treestore.append(self.r.l_group['Agents'], \
-							(self.r.pixbufs[ev[1][1]], jid, 'agent', FALSE, \
-							self.r.userbgcolor, TRUE))
-						self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
+						self.r.add_user(user1)
 					else:
 						#Update existing line
 						for i in self.r.l_contact[jid]['iter']:
@@ -845,13 +837,7 @@ class plugin:
 						self.r.treestore.set_value(i, 1, u.name)
 				else:
 					user1 = user(jid, jid, ['general'], 'online', 'online', 'to')
-					if not self.r.l_group.has_key('general'):
-						iterG = self.r.treestore.append(None, (self.pixbufs['closed'], \
-							'general', 'group', FALSE, self.r.grpbgcolor, TRUE))
-						self.r.l_group['general'] = iterG
-					iterU = self.r.treestore.append(self.r.l_group['general'], \
-						(self.r.pixbufs['online'], jid, jid, TRUE, self.userbgcolor, TRUE))
-					self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
+					self.r.add_user(user1)
 				#TODO: print 'you are now authorized'
 			elif ev[0] == 'AGENTS':
 				if Wbrowser:

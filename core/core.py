@@ -215,6 +215,7 @@ def loadPlugins(gc):
 			gc.hub.register(mod, 'ROSTER')
 			gc.hub.register(mod, 'NOTIFY')
 			gc.hub.register(mod, 'MSG')
+			gc.hub.register(mod, 'MSGSENT')
 			gc.hub.register(mod, 'SUBSCRIBED')
 			gc.hub.register(mod, 'SUBSCRIBE')
 			gc.hub.register(mod, 'AGENTS')
