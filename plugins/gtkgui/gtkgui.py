@@ -163,7 +163,8 @@ class user:
 			self.sub = ''
 			self.resource = ''
 			self.priority = 0
-		elif len(args) == 8:
+			self.keyID = ''
+		elif len(args) == 9:
 			self.jid = args[0]
 			self.name = args[1]
 			self.groups = args[2]
@@ -172,6 +173,7 @@ class user:
 			self.sub = args[5]
 			self.resource = args[6]
 			self.priority = args[7]
+			self.keyID = args[8]
 		else: raise TypeError, _('bad arguments')
 
 
@@ -248,7 +250,10 @@ class message_Window:
 			end_iter = txt_buffer.get_end_iter()
 			txt = txt_buffer.get_text(start_iter, end_iter, 0)
 			if txt != '':
-				self.plugin.send('MSG', self.account, (self.user.jid, txt))
+				keyID = ''
+				if self.xml.get_widget('toggle_gpg').get_active():
+					keyID = self.keyID
+				self.plugin.send('MSG', self.account, (self.user.jid, txt, keyID))
 				txt_buffer.set_text('', -1)
 				self.print_conversation(txt, self.user.jid)
 				widget.grab_focus()
@@ -275,6 +280,7 @@ class message_Window:
 		self.user = user
 		self.plugin = plugin
 		self.account = account
+		self.keyID = self.user.keyID
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat', APP)
 		self.window = self.xml.get_widget('Chat')
 		self.window.set_title('Chat with ' + user.name + " (" + account + ")")
@@ -287,6 +293,8 @@ class message_Window:
 		self.xml.get_widget('button_contact').set_label(user.name + ' <'\
 			+ user.jid + '>')
 		self.xml.get_widget('button_contact').set_resize_mode(gtk.RESIZE_QUEUE)
+		if not self.keyID:
+			self.xml.get_widget('toggle_gpg').set_sensitive(False)
 		message = self.xml.get_widget('message')
 		message.grab_focus()
 		conversation = self.xml.get_widget('conversation')
@@ -419,7 +427,6 @@ class gc:
 			start_iter = txt_buffer.get_start_iter()
 			end_iter = txt_buffer.get_end_iter()
 			txt = txt_buffer.get_text(start_iter, end_iter, 0)
-			print self.jid
 			if txt != '':
 				self.plugin.send('GC_MSG', self.account, (self.jid, txt))
 				txt_buffer.set_text('', -1)
@@ -878,7 +885,7 @@ class roster_Window:
 		model.append(None, (self.pixbufs[status], account, 'account', account,\
 			FALSE))
 
-	def add_user_to_roster(self, jid, account):
+	def add_user_to_roster(self, jid, account, keyID):
 		"""Add a user to the roster and add groups if they aren't in roster"""
 		showOffline = self.plugin.config['showoffline']
 		if not self.contacts[account].has_key(jid):
@@ -1009,7 +1016,8 @@ class roster_Window:
 		for acct in self.contacts.keys():
 			self.add_account_to_roster(acct)
 			for jid in self.contacts[acct].keys():
-				self.add_user_to_roster(jid, acct)
+				#TODO: get the good keyID
+				self.add_user_to_roster(jid, acct, '')
 	
 	def mklists(self, array, account):
 		"""fill self.contacts and self.groups"""
@@ -1038,7 +1046,7 @@ class roster_Window:
 				show = 'offline'
 
 			user1 = user(ji, name, array[jid]['groups'], show, \
-				array[jid]['status'], array[jid]['sub'], resource, 0)
+				array[jid]['status'], array[jid]['sub'], resource, 0, '')
 			#when we draw the roster, we can't have twice the same user with 
 			# 2 resources
 			self.contacts[account][ji] = [user1]
@@ -1067,13 +1075,14 @@ class roster_Window:
 				iters = []
 		else:
 			if not self.get_user_iter(user.jid, account):
-				self.add_user_to_roster(user.jid, account)
+				self.add_user_to_roster(user.jid, account, user.keyID)
 			self.redraw_jid(user.jid, account)
 		users = self.contacts[account][user.jid]
 		for u in users:
 			if u.resource == user.resource:
 				u.show = show
 				u.status = status
+				u.keyID = user.keyID
 				break
 		#Print status in chat window
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
@@ -1299,9 +1308,9 @@ class roster_Window:
 		self.plugin.send('SUB', account, (jid, txt))
 		if not self.contacts[account].has_key(jid):
 			user1 = user(jid, jid, ['general'], 'requested', \
-				'requested', 'sub', '', 0)
+				'requested', 'sub', '', 0, '')
 			self.contacts[account][jid] = [user1]
-			self.add_user_to_roster(jid, account)
+			self.add_user_to_roster(jid, account, '')
 	
 	def on_treeview_event(self, widget, event):
 		"""popup user's group's or agent menu"""
@@ -1345,19 +1354,34 @@ class roster_Window:
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
 
-	def change_status(self, widget, account, status):
-		if status != 'online' and status != 'offline':
-			w = awayMsg_Window()
-			txt = w.run()
-			if txt != -1:
-				self.plugin.send('STATUS', account, (status, txt))
-		else:
-			txt = status
-			self.plugin.send('STATUS', account, (status, txt))
+	def send_status(self, account, status, txt):
+		if status != 'offline':
+			keyid = None
+			if self.plugin.accounts[account].has_key("keyid"):
+				keyid = self.plugin.accounts[account]["keyid"]
+			if keyid and not self.plugin.connected[account]:
+				passphrase = ''
+				#TODO: ask passphrase
+				w = passphrase_Window()
+				passphrase = w.run()
+				if passphrase == -1:
+					passphrase = ''
+				self.plugin.send('PASSPHRASE', account, passphrase)
+		self.plugin.send('STATUS', account, (status, txt))
 		if status == 'online':
 			self.plugin.sleeper_state[account] = 1
 		else:
 			self.plugin.sleeper_state[account] = 0
+
+	def change_status(self, widget, account, status):
+		if status != 'online' and status != 'offline':
+			w = awayMsg_Window()
+			txt = w.run()
+			if txt == -1:
+				return
+		else:
+			txt = status
+		self.send_status(account, status, txt)
 
 	def on_optionmenu_changed(self, widget):
 		"""When we change our status"""
@@ -1377,11 +1401,7 @@ class roster_Window:
 			warning_Window(_("You must setup an account before connecting to jabber network."))
 			return
 		for acct in accounts:
-			self.plugin.send('STATUS', acct, (status, txt))
-			if status == 'online':
-				self.plugin.sleeper_state[acct] = 1
-			else:
-				self.plugin.sleeper_state[acct] = 0
+			self.send_status(acct, status, txt)
 	
 	def set_optionmenu(self):
 		#table to change index in plugin.connected to index in optionmenu
@@ -1423,9 +1443,9 @@ class roster_Window:
 		"""when we receive a message"""
 		if not self.contacts[account].has_key(jid):
 			user1 = user(jid, jid, ['not in list'], \
-				'not in list', 'not in list', 'none', '', 0)
+				'not in list', 'not in list', 'none', '', 0, '')
 			self.contacts[account][jid] = [user1]
-			self.add_user_to_roster(jid, account)
+			self.add_user_to_roster(jid, account, '')
 		iters = self.get_user_iter(jid, account)
 		if iters:
 			path = self.tree.get_model().get_path(iters[0])
@@ -1445,7 +1465,7 @@ class roster_Window:
 #			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
 			if not path:
-				self.add_user_to_roster(jid, account)
+				self.add_user_to_roster(jid, account, '')
 				iters = self.get_user_iter(jid, account)
 				path = self.tree.get_model().get_path(iters[0])
 			self.tree.expand_row(path[0:1], FALSE)
@@ -1747,7 +1767,8 @@ class roster_Window:
 		parent_i = model.iter_parent(iter_source)
 		if model.iter_n_children(parent_i) == 1: #this was the only child
 			model.remove(parent_i)
-		self.add_user_to_roster(data, account)
+		#TODO: get the good keyID
+		self.add_user_to_roster(data, account, '')
 		if context.action == gtk.gdk.ACTION_MOVE:
 			context.finish(True, True, etime)
 		return
@@ -2060,9 +2081,10 @@ class plugin:
 		self.roster.on_status_changed(account, status)
 	
 	def handle_event_notify(self, account, array):
-		#('NOTIFY', account, (jid, status, message, resource, priority, role, \
-		#affiliation, real_jid, reason, actor, statusCode))
+		#('NOTIFY', account, (jid, status, message, resource, priority, keyID, 
+		# role, affiliation, real_jid, reason, actor, statusCode))
 		jid = string.split(array[0], '/')[0]
+		keyID = array[5]
 		resource = array[3]
 		if not resource:
 			resource = ''
@@ -2088,12 +2110,13 @@ class plugin:
 					luser[0].show != 'offline')) and not string.find(jid, "@") <= 0:
 					user1 = user(user1.jid, user1.name, user1.groups, \
 						user1.show, user1.status, user1.sub, user1.resource, \
-						user1.priority)
+						user1.priority, user1.keyID)
 					luser.append(user1)
 				user1.resource = resource
 			user1.show = array[1]
 			user1.status = array[2]
 			user1.priority = priority
+			user1.keyID = keyID
 		if string.find(jid, "@") <= 0:
 			#It must be an agent
 			if self.roster.contacts[account].has_key(ji):
@@ -2105,8 +2128,8 @@ class plugin:
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
 			self.windows[account]['gc'][ji].chg_user_status(resource, array[1],\
-				array[2], array[5], array[6], array[7], array[8], array[9], \
-				array[10], account)
+				array[2], array[6], array[7], array[8], array[9], array[10], \
+				array[11], account)
 
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (user, msg, time))
@@ -2137,9 +2160,9 @@ class plugin:
 			self.roster.redraw_jid(u.jid, account)
 		else:
 			user1 = user(jid, jid, ['general'], 'online', \
-				'online', 'to', array[2], 0)
+				'online', 'to', array[2], 0, '')
 			self.roster.contacts[account][jid] = [user1]
-			self.roster.add_user_to_roster(jid, account)
+			self.roster.add_user_to_roster(jid, account, '')
 		warning_Window(_("You are now authorized by %s") % jid)
 
 	def handle_event_unsubscribed(self, account, jid):

@@ -22,6 +22,7 @@ import sys, os, time, string, logging
 import common.hub, common.optparser
 import common.jabber
 import socket, select, pickle
+import GnuPGInterface
 
 
 from common import i18n
@@ -47,6 +48,142 @@ def XMLunescape(txt):
 	txt = txt.replace("&amp;", "&")
 	return txt
 
+class  MyGnuPG(GnuPGInterface.GnuPG):
+	def __init__(self):
+		GnuPGInterface.GnuPG.__init__(self)
+		self.setup_my_options()
+
+	def setup_my_options(self):
+		self.options.armor = 1
+		self.options.meta_interactive = 0
+		self.options.extra_args.append('--no-secmem-warning')
+
+	def _read_response(self, child_stdout):
+		# Internal method: reads all the output from GPG, taking notice
+		# only of lines that begin with the magic [GNUPG:] prefix.
+		# (See doc/DETAILS in the GPG distribution for info on GPG's
+		# output when --status-fd is specified.)
+		#
+		# Returns a dictionary, mapping GPG's keywords to the arguments
+		# for that keyword.
+
+		resp = {}
+		while 1:
+			line = child_stdout.readline()
+			if line == "": break
+			line = string.rstrip( line )
+			if line[0:9] == '[GNUPG:] ':
+				# Chop off the prefix
+				line = line[9:]
+				L = string.split(line, None, 1)
+				keyword = L[0]
+				if len(L) > 1:
+					resp[ keyword ] = L[1]
+				else:
+					resp[ keyword ] = ""
+		return resp
+
+	def encrypt(self, string, recipients):
+		self.options.recipients = recipients   # a list!
+
+		proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout'])
+		proc.handles['stdin'].write(string)
+		proc.handles['stdin'].close()
+
+		output = proc.handles['stdout'].read()
+		proc.handles['stdout'].close()
+
+		try: proc.wait()
+		except IOError: pass
+		return self.stripHeaderFooter(output)
+
+	def decrypt(self, string, keyID):
+		proc = self.run(['--decrypt', '-q', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status'])
+		enc = self.addHeaderFooter(string, 'MESSAGE')
+		proc.handles['stdin'].write(enc)
+		proc.handles['stdin'].close()
+		
+		output = proc.handles['stdout'].read()
+		proc.handles['stdout'].close()
+
+		resp = proc.handles['status'].read()
+		proc.handles['status'].close()
+
+		try: proc.wait()
+		except IOError: pass
+		return output
+	
+	def sign(self, string, keyID):
+		proc = self.run(['-b', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status', 'stderr'])
+		proc.handles['stdin'].write(string)
+		proc.handles['stdin'].close()
+
+		output = proc.handles['stdout'].read()
+		proc.handles['stdout'].close()
+		proc.handles['stderr'].close()
+
+		stat = proc.handles['status']
+		resp = self._read_response(stat)
+		proc.handles['status'].close()
+
+		try: proc.wait()
+		except IOError: pass
+		if resp.has_key('BAD_PASSPHRASE'):
+			return 'BAD_PASSPHRASE'
+		elif resp.has_key('GOOD_PASSPHRASE'):
+			return self.stripHeaderFooter(output)
+
+	def verify(self, str, sign):
+		file = open('gpg_data', 'w+r')
+		os.remove('gpg_data')
+		fd = file.fileno()
+		file.write(str)
+		file.seek(0)
+		
+		proc = self.run(['--verify', '--enable-special-filenames', '-', '-&%s'%fd], create_fhs=['stdin', 'status', 'stderr'])
+
+		file.close
+		sign = self.addHeaderFooter(sign, 'SIGNATURE')
+		proc.handles['stdin'].write(sign)
+		proc.handles['stdin'].close()
+		proc.handles['stderr'].close()
+
+		stat = proc.handles['status']
+		resp = self._read_response(stat)
+		proc.handles['status'].close()
+
+		try: proc.wait()
+		except IOError: pass
+
+		keyid = ''
+		if resp.has_key('GOODSIG'):
+			keyid = string.split(resp['GOODSIG'])[0]
+		return keyid
+
+	def stripHeaderFooter(self, data):
+		"""Remove header and footer from data"""
+		lines = string.split(data, '\n')
+		while lines[0] != '':
+			lines.remove(lines[0])
+		while lines[0] == '':
+			lines.remove(lines[0])
+		i = 0
+		for line in lines:
+			if line:
+				if line[0] == '-': break
+			i = i+1
+		line = string.join(lines[0:i], '\n')
+		return line
+
+	def addHeaderFooter(self, data, type):
+		"""Add header and footer from data"""
+		out = "-----BEGIN PGP %s-----\n" % type
+		out = out + "Version: PGP\n"
+		out = out + "\n"
+		out = out + data + "\n"
+		out = out + "-----END PGP %s-----\n" % type
+		return out
+
 class GajimCore:
 	"""Core"""
 	def __init__(self, mode='client'):
@@ -65,9 +202,11 @@ class GajimCore:
 			self.connected = {}
 			#connexions {con: name, ...}
 			self.connexions = {}
+			self.gpg = {}
 			for a in self.accounts:
 				self.connected[a] = 0 #0:offline, 1:online, 2:away,
 											 #3:xa, 4:dnd, 5:invisible
+				self.gpg[a] = MyGnuPG()
 			self.myVCardID = []
 			self.loadPlugins(self.cfgParser.tab['Core']['modules'])
 		else:
@@ -158,7 +297,7 @@ class GajimCore:
 	def vCardCB(self, con, vc):
 		"""Called when we recieve a vCard
 		Parse the vCard and send it to plugins"""
-		vcard = {'jid': vc.getFrom().getBasic()}
+		vcard = {'jid': vc.getFrom().getStripped()}
 		if vc._getTag('vCard') == common.jabber.NS_VCARD:
 			card = vc.getChildren()[0]
 			for info in card.getChildren():
@@ -179,16 +318,33 @@ class GajimCore:
 		typ = msg.getType()
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, "%Y%m%dT%H:%M:%S")
+		msgtxt = msg.getBody()
+		xtags = msg.getXNodes()
+		encTag = None
+		decmsg = ''
+		for xtag in xtags:
+			if xtag.getNamespace() == common.jabber.NS_XENCRYPTED:
+				encTag = xtag
+				break
+		if encTag:
+			#decrypt
+			encmsg = encTag.getData()
+			keyID = ''
+			if self.cfgParser.tab[self.connexions[con]].has_key("keyid"):
+				keyID = self.cfgParser.tab[self.connexions[con]]["keyid"]
+			if keyID:
+				decmsg = self.gpg[self.connexions[con]].decrypt(encmsg, keyID)
+		if decmsg:
+			msgtxt = decmsg
 		if typ == 'error':
 			self.hub.sendPlugin('MSGERROR', self.connexions[con], \
-				(str(msg.getFrom()), msg.getErrorCode(), msg.getError(), \
-				msg.getBody(), tim))
+				(str(msg.getFrom()), msg.getErrorCode(), msg.getError(), msgtxt, tim))
 		elif typ == 'groupchat':
 			self.hub.sendPlugin('GC_MSG', self.connexions[con], \
-				(str(msg.getFrom()), msg.getBody(), tim))
+				(str(msg.getFrom()), msgtxt, tim))
 		else:
 			self.hub.sendPlugin('MSG', self.connexions[con], \
-				(str(msg.getFrom()), msg.getBody(), tim))
+				(str(msg.getFrom()), msgtxt, tim))
 	# END messageCB
 
 	def presenceCB(self, con, prs):
@@ -200,19 +356,31 @@ class GajimCore:
 		typ = prs.getType()
 		if typ == None: typ = 'available'
 		log.debug("PresenceCB : %s" % typ)
+		xtags = prs.getXNodes()
+		sigTag = None
+		keyID = ''
+		status = prs.getStatus()
+		for xtag in xtags:
+			if xtag.getNamespace() == common.jabber.NS_XSIGNED:
+				sigTag = xtag
+				break
+		if sigTag:
+			#verify
+			sigmsg = sigTag.getData()
+			keyID = self.gpg[self.connexions[con]].verify(status, sigmsg)
 		if typ == 'available':
 			show = prs.getShow()
 			if not show:
 				show = 'online'
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
-				(prs.getFrom().getBasic(), show, prs.getStatus(), \
-				prs.getFrom().getResource(), prio, prs.getRole(), \
+				(prs.getFrom().getStripped(), show, status, \
+				prs.getFrom().getResource(), prio, keyID, prs.getRole(), \
 				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
 				prs.getActor(), prs.getStatusCode()))
 		elif typ == 'unavailable':
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
-				(prs.getFrom().getBasic(), 'offline', prs.getStatus(), \
-				prs.getFrom().getResource(), prio, prs.getRole(), \
+				(prs.getFrom().getStripped(), 'offline', status, \
+				prs.getFrom().getResource(), prio, keyID, prs.getRole(), \
 				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
 				prs.getActor(), prs.getStatusCode()))
 		elif typ == 'subscribe':
@@ -222,20 +390,20 @@ class GajimCore:
 				con.send(common.jabber.Presence(who, 'subscribed'))
 				if string.find(who, "@") <= 0:
 					self.hub.sendPlugin('NOTIFY', self.connexions[con], \
-						(prs.getFrom().getBasic(), 'offline', 'offline', \
-						prs.getFrom().getResource(), prio, None, None, None, None, \
-						None, None))
+						(prs.getFrom().getStripped(), 'offline', 'offline', \
+						prs.getFrom().getResource(), prio, keyID, None, None, None, \
+						None, None, None))
 			else:
-				txt = prs.getStatus()
-				if not txt:
-					txt = _("I would like to add you to my roster.")
-				self.hub.sendPlugin('SUBSCRIBE', self.connexions[con], (who, txt))
+				if not status:
+					status = _("I would like to add you to my roster.")
+				self.hub.sendPlugin('SUBSCRIBE', self.connexions[con], (who, \
+					status))
 		elif typ == 'subscribed':
 			jid = prs.getFrom()
 			self.hub.sendPlugin('SUBSCRIBED', self.connexions[con],\
-				(jid.getBasic(), jid.getNode(), jid.getResource()))
+				(jid.getStripped(), jid.getNode(), jid.getResource()))
 			self.hub.queueIn.put(('UPDUSER', self.connexions[con], \
-				(jid.getBasic(), jid.getNode(), ['general'])))
+				(jid.getStripped(), jid.getNode(), ['general'])))
 			#BE CAREFUL : no con.updateRosterItem() in a callback
 			log.debug("we are now subscribed to %s" % who)
 		elif typ == 'unsubscribe':
@@ -243,7 +411,7 @@ class GajimCore:
 		elif typ == 'unsubscribed':
 			log.debug("we are now unsubscribed to %s" % who)
 			self.hub.sendPlugin('UNSUBSCRIBED', self.connexions[con], \
-				prs.getFrom().getBasic())
+				prs.getFrom().getStripped())
 		elif typ == 'error':
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
@@ -273,9 +441,9 @@ class GajimCore:
 				self.hub.sendPlugin('WARNING', None, errmsg)
 			else:
 				self.hub.sendPlugin('NOTIFY', self.connexions[con], \
-					(prs.getFrom().getBasic(), 'error', errmsg, \
-					prs.getFrom().getResource(), prio, None, None, None, None, None,\
-					None))
+					(prs.getFrom().getStripped(), 'error', errmsg, \
+					prs.getFrom().getResource(), prio, keyID, None, None, None, \
+					None, None, None))
 	# END presenceCB
 
 	def disconnectedCB(self, con):
@@ -463,6 +631,16 @@ class GajimCore:
 			#('STATUS', account, (status, msg))
 			elif ev[0] == 'STATUS':
 				activ = 1
+				signed = ''
+				keyID = ''
+				if self.cfgParser.tab[ev[1]].has_key("keyid"):
+					keyID = self.cfgParser.tab[ev[1]]["keyid"]
+				if keyID:
+					signed = self.gpg[ev[1]].sign(ev[2][0], keyID)
+					if signed == 'BAD_PASSPHRASE':
+						signed = ''
+						if self.connected[ev[1]] == 0:
+							self.hub.sendPlugin('BAD_PASSPHRASE', ev[1], ())
 				if self.cfgParser.tab[ev[1]].has_key('active'):
 					activ = self.cfgParser.tab[ev[1]]['active']
 				if (ev[2][0] != 'offline') and (self.connected[ev[1]] == 0) and \
@@ -479,7 +657,7 @@ class GajimCore:
 						prio = 0
 						if self.cfgParser.tab[ev[1]].has_key('priority'):
 							prio = str(self.cfgParser.tab[ev[1]]['priority'])
-						con.sendPresence(typ, prio, ev[2][0], ev[2][1])
+						con.sendPresence(typ, prio, ev[2][0], ev[2][1], signed)
 						self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
 						#ask our VCard
 						iq = common.jabber.Iq(type="get")
@@ -502,12 +680,20 @@ class GajimCore:
 					prio = 0
 					if self.cfgParser.tab[ev[1]].has_key('priority'):
 						prio = str(self.cfgParser.tab[ev[1]]['priority'])
-					con.sendPresence(typ, prio, ev[2][0], ev[2][1])
+					con.sendPresence(typ, prio, ev[2][0], ev[2][1], signed)
 					self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
-			#('MSG', account, (jid, msg))
+			#('MSG', account, (jid, msg, keyID))
 			elif ev[0] == 'MSG':
-				msg = common.jabber.Message(ev[2][0], ev[2][1])
+				msgtxt = ev[2][1]
+				msgenc = ''
+				if ev[2][2]:
+					#encrypt
+					msgenc = self.gpg[ev[1]].encrypt(ev[2][1], [ev[2][2]])
+					if msgenc: msgtxt = '[this message is encrypted]'
+				msg = common.jabber.Message(ev[2][0], msgtxt)
 				msg.setType('chat')
+				if msgenc:
+					msg.setX(common.jabber.NS_XENCRYPTED).insertData(msgenc)
 				con.send(msg)
 				self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
 			#('SUB', account, (jid, txt))
@@ -678,6 +864,9 @@ class GajimCore:
 				else:
 					con.send(common.jabber.Presence('%s/%s' % (ev[2][1], ev[2][0]), \
 						'available', show=ev[2][2], status = ev[2][3]))
+			#('PASSPHRASE', account, passphrase)
+			elif ev[0] == 'PASSPHRASE':
+				self.gpg[ev[1]].passphrase = ev[2]
 			else:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':

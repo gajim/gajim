@@ -183,7 +183,28 @@ class infoUser_Window:
 		self.xml.signal_connect('on_remove_clicked', self.on_remove)
 		self.xml.signal_connect('on_entry_new_key_press_event', \
 			self.on_new_key_pressed)
-		
+
+class passphrase_Window:
+	"""Class for Passphrase Window"""
+	def run(self):
+		"""Wait for Ok button to be pressed and return passphrase"""
+		rep = self.xml.get_widget("Passphrase").run()
+		if rep == gtk.RESPONSE_OK:
+			msg = self.entry.get_text()
+		else:
+			msg = -1
+		self.xml.get_widget("Passphrase").destroy()
+		return msg
+
+	def on_key_pressed(self, widget, event):
+		if event.keyval == gtk.keysyms.Return:
+			self.xml.get_widget("Passphrase").response(gtk.RESPONSE_OK)
+	
+	def __init__(self):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Passphrase', APP)
+		self.entry = self.xml.get_widget("entry")
+		self.xml.signal_connect('on_Passphrase_key_press_event', \
+			self.on_key_pressed)
 
 class awayMsg_Window:
 	"""Class for Away Message Window"""
