@@ -62,7 +62,7 @@ An example of usage for a simple client would be ( only psuedo code !)
 
 """
 
-# $Id: jabber.py,v 1.56 2004/01/08 15:48:59 snakeru Exp $
+# $Id: jabber.py,v 1.4 2004/01/14 01:06:27 asterix86 Exp $
 
 import xmlstream
 import sha, time
@@ -373,18 +373,13 @@ class Connection(xmlstream.Client):
             self.DEBUG("waiting for %s" % ustr(ID),DBG_NODE_IQ)
         
         while (not self._expected[ID]) and not has_timed_out:
-	    print "tjs pas"
             if not self.process(0.2): return None
             if timeout and (time.time() > abort_time):
-	    	print "Timeout"
                 has_timed_out = True
         if has_timed_out:
-	    print "\n timeOut "
             self.lastErr = "Timeout"
             return None
-	print "On a eut la rep"
         response = self._expected[ID]
-	print response
         del self._expected[ID]
         if response.getErrorCode():
             self.lastErr     = response.getError()

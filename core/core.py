@@ -112,7 +112,8 @@ class GajimCore:
 		password = self.cfgParser.__getattr__("%s" % account+"_password")
 		ressource = self.cfgParser.__getattr__("%s" % account+"_ressource")
 		self.con = common.jabber.Client(host = \
-			hostname, debug = [common.jabber.DBG_ALWAYS], log = sys.stderr)
+			hostname, debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, connection=common.xmlstream.TCP, port=5222)
+#			hostname, debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, connection=common.xmlstream.TCP_SSL, port=5223)
 		try:
 			self.con.connect()
 		except IOError, e:

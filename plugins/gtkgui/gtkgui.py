@@ -770,13 +770,19 @@ class roster:
 		if u.show != 'offline' or self.showOffline or 'Agents' in u.groups:
 			for g in u.groups:
 				if not self.l_group.has_key(g):
+					self.l_group[g] = {'iter':None, 'hide':False}
+				if not self.l_group[g]['iter']:
 					iterG = self.treestore.append(None, (self.pixbufs['closed'], g, 'group', FALSE, self.grpbgcolor, TRUE))
-					self.l_group[g] = iterG
+					self.l_group[g] = {'iter':iterG, 'hide':False}
 					newgrp = 1
 				if g == 'Agents':
-					iterU = self.treestore.append(self.l_group[g], (self.pixbufs[u.show], u.name, 'agent', FALSE, self.userbgcolor, TRUE))
+					iterU = self.treestore.append(self.l_group[g]['iter'], \
+						(self.pixbufs[u.show], u.name, 'agent', FALSE, \
+						self.userbgcolor, TRUE))
 				else:
-					iterU = self.treestore.append(self.l_group[g], (self.pixbufs[u.show], u.name, u.jid, TRUE, self.userbgcolor, TRUE))
+					iterU = self.treestore.append(self.l_group[g]['iter'], \
+						(self.pixbufs[u.show], u.name, u.jid, TRUE, \
+						self.userbgcolor, TRUE))
 				self.l_contact[u.jid]['iter'].append(iterU)
 				if newgrp == 1:
 					#expand new groups
@@ -785,7 +791,8 @@ class roster:
 	def redraw_roster(self):
 		for j in self.l_contact.keys():
 			self.l_contact[j]['iter'] = []
-		self.l_group = {}
+		for g in self.l_group.keys():
+			self.l_group[g]['iter'] = None
 		self.draw_roster()
 
 	def draw_roster(self):
@@ -808,6 +815,9 @@ class roster:
 				show = 'offline'
 			user1 = user(ji, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'], '')
 			self.l_contact[ji] = {'user':user1, 'iter':[]}
+			for i in tab[jid]['groups'] :
+				if not i in self.l_group.keys():
+					self.l_group[i] = {'iter':None, 'hide':False}
 
 	def update_iter(self, widget, path, iter, data):
 		jid = self.treestore.get_value(iter, 2)
@@ -829,7 +839,14 @@ class roster:
 		else:
 			if show == 'offline' and not self.showOffline:
 				for i in self.l_contact[jid]['iter']:
-					self.treestore.remove(i)
+					parent_i = self.treestore.iter_parent(i)
+					if self.treestore.iter_n_children(parent_i) == 1:
+						self.treestore.remove(i)
+						grp = self.treestore.get_value(parent_i, 1)
+						self.treestore.remove(parent_i)
+						self.l_group[grp]['iter'] = None
+					else:
+						self.treestore.remove(i)
 				self.l_contact[jid]['iter'] = []
 			else:
 				for i in self.l_contact[jid]['iter']:
@@ -913,7 +930,7 @@ class roster:
 		self.treestore.clear()
 		#l_contact = {jid:{'user':_, 'iter':[iter1, ...]]
 		self.l_contact = {}
-		#l_group = {name:iter}
+		#l_group = {name:{'iter':_, 'hide':Bool}
 		self.l_group = {}
 
 	def on_treeview_event(self, widget, event):
