@@ -1225,7 +1225,7 @@ class roster_window:
 			menu_sub = gtk.Menu()
 			self.xml.get_widget('add_contact_menuitem').set_submenu(menu_sub)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem('using ' + account)
+				item = gtk.MenuItem('using ' + account + ' account')
 				menu_sub.append(item)
 				item.connect("activate", self.on_add_contact, account)
 			menu_sub.show_all()
@@ -1233,7 +1233,7 @@ class roster_window:
 			menu_sub = gtk.Menu()
 			self.xml.get_widget('browse_agents_menuitem').set_submenu(menu_sub)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem('using ' + account)
+				item = gtk.MenuItem('using ' + account + ' account')
 				menu_sub.append(item)
 				item.connect("activate", self.on_browse_agents, account)
 			menu_sub.show_all()
@@ -1241,7 +1241,7 @@ class roster_window:
 			menu_sub = gtk.Menu()
 			self.xml.get_widget('join_gc_menuitem').set_submenu(menu_sub)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem('using ' + account)
+				item = gtk.MenuItem('using ' + account + ' account')
 				menu_sub.append(item)
 				item.connect("activate", self.on_join_gc, account)
 			menu_sub.show_all()
@@ -1249,7 +1249,7 @@ class roster_window:
 			menu_sub = gtk.Menu()
 			self.xml.get_widget('new_message_menuitem').set_submenu(menu_sub)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem('using ' + account)
+				item = gtk.MenuItem('using ' + account + ' account')
 				menu_sub.append(item)
 				item.connect("activate", self.on_new_message_menuitem_activate, account)
 			menu_sub.show_all()
