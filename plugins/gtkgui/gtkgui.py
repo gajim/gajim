@@ -1309,7 +1309,7 @@ class roster_Window:
 			user1 = user(jid, jid, ['general'], 'requested', \
 				'requested', 'sub', '', 0, '')
 			self.contacts[account][jid] = [user1]
-			self.add_user_to_roster(jid, account, '')
+			self.add_user_to_roster(jid, account)
 	
 	def on_treeview_event(self, widget, event):
 		"""popup user's group's or agent menu"""
@@ -1444,7 +1444,7 @@ class roster_Window:
 			user1 = user(jid, jid, ['not in list'], \
 				'not in list', 'not in list', 'none', '', 0, '')
 			self.contacts[account][jid] = [user1]
-			self.add_user_to_roster(jid, account, '')
+			self.add_user_to_roster(jid, account)
 		iters = self.get_user_iter(jid, account)
 		if iters:
 			path = self.tree.get_model().get_path(iters[0])
@@ -1464,7 +1464,7 @@ class roster_Window:
 #			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
 			if not path:
-				self.add_user_to_roster(jid, account, '')
+				self.add_user_to_roster(jid, account)
 				iters = self.get_user_iter(jid, account)
 				path = self.tree.get_model().get_path(iters[0])
 			self.tree.expand_row(path[0:1], FALSE)
@@ -1767,7 +1767,7 @@ class roster_Window:
 		if model.iter_n_children(parent_i) == 1: #this was the only child
 			model.remove(parent_i)
 		#TODO: get the good keyID
-		self.add_user_to_roster(data, account, '')
+		self.add_user_to_roster(data, account)
 		if context.action == gtk.gdk.ACTION_MOVE:
 			context.finish(True, True, etime)
 		return
@@ -2161,7 +2161,7 @@ class plugin:
 			user1 = user(jid, jid, ['general'], 'online', \
 				'online', 'to', array[2], 0, '')
 			self.roster.contacts[account][jid] = [user1]
-			self.roster.add_user_to_roster(jid, account, '')
+			self.roster.add_user_to_roster(jid, account)
 		warning_Window(_("You are now authorized by %s") % jid)
 
 	def handle_event_unsubscribed(self, account, jid):
