@@ -1309,7 +1309,7 @@ class Roster_window:
 		cell = gtk.CellRendererText()
 		self.cb.pack_start(cell, True)
 		self.cb.add_attribute(cell, 'text', 0)
-		for status in ['online', 'dnd', 'away', 'xa', 'invisible', 'offline']:
+		for status in ['online', 'away', 'xa', 'dnd', 'invisible', 'offline']:
 			''' GIVES ERROR in core.py line: 805
 			First I like status to be Online and not online
 			and jargon word as dnd and xa should be as I have them
