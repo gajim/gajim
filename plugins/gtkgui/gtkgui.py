@@ -298,6 +298,92 @@ class message_Window:
 		if plugin.queues[account].has_key(user.jid):
 			self.read_queue(plugin.queues[account][user.jid])
 
+class gc:
+	def delete_event(self, widget):
+		"""close window"""
+		del self.plugin.windows[self.account]['chats'][self.jid]
+
+	def on_close(self, widget):
+		"""When Cancel button is clicked"""
+		widget.get_toplevel().destroy()
+
+	def print_conversation(self, txt, contact = None, tim = None):
+		"""Print a line in the conversation :
+		if contact is set : it's a message from someone
+		if contact is not set : it's a message from the server"""
+		conversation = self.xml.get_widget('conversation')
+		buffer = conversation.get_buffer()
+		if not txt:
+			txt = ""
+		end_iter = buffer.get_end_iter()
+		if not tim:
+			tim = time.strftime("[%H:%M:%S]")
+		buffer.insert(end_iter, tim)
+		if contact:
+			#TODO it a message from me
+			if contact == '':
+				buffer.insert_with_tags_by_name(end_iter, '<'+contact+'> ', 'outgoing')
+			else:
+				buffer.insert_with_tags_by_name(end_iter, '<' + \
+					contact + '> ', 'incoming')
+			buffer.insert(end_iter, txt+'\n')
+		else:
+			buffer.insert_with_tags_by_name(end_iter, txt+'\n', \
+				'status')
+		#scroll to the end of the textview
+		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
+
+	def __init__(self, jid, plugin, account):
+		self.jid = jid
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gc', APP)
+		self.window = self.xml.get_widget('Gc')
+		conversation = self.xml.get_widget('conversation')
+		buffer = conversation.get_buffer()
+		end_iter = buffer.get_end_iter()
+		buffer.create_mark('end', end_iter, 0)
+		self.tagIn = buffer.create_tag("incoming")
+		color = self.plugin.config['inmsgcolor']
+		self.tagIn.set_property("foreground", color)
+		self.tagOut = buffer.create_tag("outgoing")
+		color = self.plugin.config['outmsgcolor']
+		self.tagOut.set_property("foreground", color)
+		self.tagStatus = buffer.create_tag("status")
+		color = self.plugin.config['statusmsgcolor']
+		self.tagStatus.set_property("foreground", color)
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+
+class join_gc:
+	def delete_event(self, widget):
+		"""close window"""
+		del self.plugin.windows['join_gc']
+
+	def on_close(self, widget):
+		"""When Cancel button is clicked"""
+		widget.get_toplevel().destroy()
+
+	def on_join(self, widget):
+		"""When Join button is clicked"""
+		nick = self.xml.get_widget('entry_nick').get_text()
+		room = self.xml.get_widget('entry_room').get_text()
+		server = self.xml.get_widget('entry_server').get_text()
+		passw = self.xml.get_widget('entry_pass').get_text()
+		jid = '%s@%s' % (room, server)
+		self.plugin.windows[self.account]['chats'][jid] = gc(jid, self.plugin,\
+			self.account)
+		#TODO: verify entries
+		self.plugin.send('GC_JOIN', self.account, (nick, room, server, passw))
+		widget.get_toplevel().destroy()
+
+	def __init__(self, plugin, account):
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Join_gc', APP)
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_cancel_clicked', self.on_close)
+		self.xml.signal_connect('on_join_clicked', self.on_join)
+
 class log_Window:
 	"""Class for bowser agent window :
 	to know the agents on the selected server"""
@@ -581,13 +667,15 @@ class roster_Window:
 			model.set_value(iter, 1, name)
 	
 	def mkmenu(self):
-		"""create the browse agents and add sub menus"""
+		"""create the browse agents, add and join groupchat sub menus"""
 		if len(self.plugin.accounts.keys()) > 0:
 			self.xml.get_widget('add').set_sensitive(True)
 			self.xml.get_widget('browse_agents').set_sensitive(True)
+			self.xml.get_widget('join_gc').set_sensitive(True)
 		else:
 			self.xml.get_widget('add').set_sensitive(False)
 			self.xml.get_widget('browse_agents').set_sensitive(False)
+			self.xml.get_widget('join_gc').set_sensitive(False)
 		if len(self.plugin.accounts.keys()) > 1:
 			#add
 			menu_sub = gtk.Menu()
@@ -605,6 +693,14 @@ class roster_Window:
 				menu_sub.append(item)
 				item.connect("activate", self.on_browse, a)
 			menu_sub.show_all()
+			#join gc
+			menu_sub = gtk.Menu()
+			self.xml.get_widget('join_gc').set_submenu(menu_sub)
+			for a in self.plugin.accounts.keys():
+				item = gtk.MenuItem(a)
+				menu_sub.append(item)
+				item.connect("activate", self.on_join_gc, a)
+			menu_sub.show_all()
 		elif len(self.plugin.accounts.keys()) == 1:
 			#add
 			self.xml.get_widget('add').connect("activate", self.on_add, \
@@ -612,6 +708,9 @@ class roster_Window:
 			#agents
 			self.xml.get_widget('browse_agents').connect("activate", \
 				self.on_browse, self.plugin.accounts.keys()[0])
+			#join_gc
+			self.xml.get_widget('join_gc').connect("activate", \
+				self.on_join_gc, self.plugin.accounts.keys()[0])
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
@@ -1086,6 +1185,12 @@ class roster_Window:
 		call the add class"""
 		addContact_Window(self.plugin, account)
 
+	def on_join_gc(self, widget, account):
+		"""When Join Groupchat is selected :
+		call the join_gc class"""
+		if not self.plugin.windows.has_key('join_gc'):
+			self.plugin.windows['join_gc'] = join_gc(self.plugin, account)
+
 	def on_about(self, widget):
 		"""When about is selected :
 		call the about class"""
@@ -1097,6 +1202,14 @@ class roster_Window:
 		call the accounts class to modify accounts"""
 		if not self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'] = accounts_Window(self.plugin)
+
+	def close_all(self, dic):
+		"""close all the windows in the given dictionary"""
+		for w in dic.values():
+			if type(w) == type({}):
+				self.close_all(w)
+			else:
+				w.event(gtk.gdk.Event(gtk.gdk.DESTROY))
 	
 	def on_quit(self, widget):
 		"""When we quit the gtk plugin :
@@ -1105,8 +1218,10 @@ class roster_Window:
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
 		self.plugin.send('QUIT', None, ('gtkgui', 0))
 		print _("plugin gtkgui stopped")
+#		self.close_all(self.plugin.windows)
 		self.plugin.systray.t.destroy()
-		gtk.mainquit()
+		gtk.main_quit()
+#		gtk.gdk.threads_leave()
 
 	def on_row_activated(self, widget, path, col=0):
 		"""When an iter is dubble clicked :
@@ -1798,6 +1913,23 @@ class plugin:
 		if self.windows['logs'].has_key(array[0]):
 			self.windows['logs'][array[0]].new_line(array[1:])
 
+	def handle_event_gc_msg(self, account, array):
+		#('GC_MSG', account, (jid, msg))
+		jids = string.split(array[0], '/')
+		jid = jids[0]
+		if not self.windows[account]['chats'].has_key(jid):
+			return
+		if len(jids) == 1:
+			#message from server
+			self.windows[account]['chats'][jid].print_conversation(array[1])
+		else:
+			#message from someone
+			self.windows[account]['chats'][jid].print_conversation(array[1], \
+				jids[1])
+			if not self.windows[account]['chats'][jid].window.\
+				get_property('is-active'):
+				self.systray.add_jid(jid, account)
+
 	def read_queue(self):
 		"""Read queue from the core and execute commands from it"""
 		while self.queueIN.empty() == 0:
@@ -1836,6 +1968,8 @@ class plugin:
 				self.handle_event_log_nb_line(ev[1], ev[2])
 			elif ev[0] == 'LOG_LINE':
 				self.handle_event_log_line(ev[1], ev[2])
+			elif ev[0] == 'GC_MSG':
+				self.handle_event_gc_msg(ev[1], ev[2])
 		return 1
 	
 	def read_sleepy(self):	
@@ -1868,14 +2002,14 @@ class plugin:
 		return 1
 
 	def __init__(self, quIN, quOUT):
-		gtk.threads_init()
-		gtk.threads_enter()
+		gtk.gdk.threads_init()
+#		gtk.gdk.threads_enter()
 		self.queueIN = quIN
 		self.queueOUT = quOUT
 		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'STATUS', \
 			'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
 			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'QUIT', 'ACC_OK', 'CONFIG', \
-			'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', 'VISUAL'])
+			'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', 'VISUAL', 'GC_MSG'])
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'autopopupaway':1,\
 			'showoffline':0,\
@@ -1926,6 +2060,5 @@ class plugin:
 		else:
 			self.systray = systrayDummy()
 		gtk.main()
-		gtk.threads_leave()
 
 print _("plugin gtkgui loaded")

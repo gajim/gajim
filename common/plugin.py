@@ -31,6 +31,7 @@ class GajimPlugin:
 
 	def load(self):
 		thr = common.thread.GajimThread(self.name, self.queueIn, self.queueOut)
+		thr.setDaemon(1)
 		thr.start()
 	# END load
 # END GajimPlugin

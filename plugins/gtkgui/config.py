@@ -125,7 +125,6 @@ class vCard_Window:
 		self.xml.signal_connect('on_retrieve_clicked', self.on_retrieve)
 		self.xml.signal_connect('on_publish_clicked', self.on_publish)
 
-
 class preference_Window:
 	"""Class for Preferences window"""
 	def delete_event(self, widget):

@@ -176,10 +176,14 @@ class GajimCore:
 
 	def messageCB(self, con, msg):
 		"""Called when we recieve a message"""
-		if msg.getType() == 'error':
+		typ = msg.getType()
+		if typ == 'error':
 			self.hub.sendPlugin('MSGERROR', self.connexions[con], \
 				(str(msg.getFrom()), msg.getErrorCode(), msg.getError(), \
 				msg.getBody()))
+		elif typ == 'groupchat':
+			self.hub.sendPlugin('GC_MSG', self.connexions[con], \
+				(str(msg.getFrom()), msg.getBody()))
 		else:
 			self.hub.sendPlugin('MSG', self.connexions[con], \
 				(str(msg.getFrom()), msg.getBody()))
@@ -258,20 +262,31 @@ class GajimCore:
 		name = self.cfgParser.tab[account]["name"]
 		password = self.cfgParser.tab[account]["password"]
 		ressource = self.cfgParser.tab[account]["ressource"]
-		if self.cfgParser.tab[account]["use_proxy"]:
-			proxy = {"host":self.cfgParser.tab[account]["proxyhost"]}
-			proxy["port"] = self.cfgParser.tab[account]["proxyport"]
-		else:
-			proxy = None
-		if self.log:
-			con = common.jabber.Client(host = hostname, debug = [], \
-			log = sys.stderr, connection=common.xmlstream.TCP, port=5222, \
-			proxy = proxy)
-		else:
-			con = common.jabber.Client(host = hostname, debug = [], log = None, \
-			connection=common.xmlstream.TCP, port=5222, proxy = proxy)
-			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
-			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
+
+		#create connexion if it doesn't already existe
+		con = None
+		for conn in self.connexions:
+			if self.connexions[conn] == account:
+				con = conn
+		if not con:
+			if self.cfgParser.tab[account]["use_proxy"]:
+				proxy = {"host":self.cfgParser.tab[account]["proxyhost"]}
+				proxy["port"] = self.cfgParser.tab[account]["proxyport"]
+			else:
+				proxy = None
+			if self.log:
+				con = common.jabber.Client(host = hostname, debug = [], \
+				log = sys.stderr, connection=common.xmlstream.TCP, port=5222, \
+				proxy = proxy)
+			else:
+				con = common.jabber.Client(host = hostname, debug = [], log = None,\
+				connection=common.xmlstream.TCP, port=5222, proxy = proxy)
+				#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
+				#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
+			con.setDisconnectHandler(self.disconnectedCB)
+			con.registerHandler('message', self.messageCB)
+			con.registerHandler('presence', self.presenceCB)
+			con.registerHandler('iq',self.vCardCB,'result')#common.jabber.NS_VCARD)
 		try:
 			con.connect()
 		except IOError, e:
@@ -292,13 +307,12 @@ class GajimCore:
 			self.hub.sendPlugin('WARNING', None, _("Couldn't connect to %s : %s") \
 				% (hostname, e))
 			return 0
+		except:
+			sys.exc_info()[1][0]
+			sys.exc_info()[1][1]
 		else:
 			log.debug("Connected to server")
 
-			con.registerHandler('message', self.messageCB)
-			con.registerHandler('presence', self.presenceCB)
-			con.registerHandler('iq',self.vCardCB,'result')#common.jabber.NS_VCARD)
-			con.setDisconnectHandler(self.disconnectedCB)
 			#BUG in jabberpy library : if hostname is wrong : "boucle"
 			if con.auth(name, password, ressource):
 				self.connexions[con] = account
@@ -596,6 +610,11 @@ class GajimCore:
 					self.hub.register(ev[1], msg)
 			elif ev[0] == 'EXEC_PLUGIN':
 				self.loadPlugins(ev[2])
+			#('GC_JOIN', account, (nick, room, server, passwd))
+			elif ev[0] == 'GC_JOIN':
+				p = common.jabber.Presence(to='%s@%s/%s' % (ev[2][1], ev[2][2], \
+					ev[2][0]))
+				con.send(p)
 			else:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':
