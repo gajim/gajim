@@ -1052,6 +1052,9 @@ class Account_modification_window:
 			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
 		#if we are modifying an account
 		if self.modify:
+			active = 1
+			if self.plugin.accounts[self.account].has_key('active'):
+				active = self.plugin.accounts[self.account]['active']
 			#if we modify the name of the account
 			if name != self.account:
 				#update variables
@@ -1063,6 +1066,8 @@ class Account_modification_window:
 					self.plugin.roster.groups[self.account]
 				self.plugin.roster.contacts[name] = \
 					self.plugin.roster.contacts[self.account]
+				self.plugin.sleeper_state[name] = \
+					self.plugin.sleeper_state[self.account]
 				del self.plugin.windows[self.account]
 				del self.plugin.queues[self.account]
 				del self.plugin.connected[self.account]
@@ -1070,10 +1075,8 @@ class Account_modification_window:
 				del self.plugin.roster.groups[self.account]
 				del self.plugin.roster.contacts[self.account]
 				del self.plugin.accounts[self.account]
+				del self.plugin.sleeper_state[self.account]
 				self.plugin.send('ACC_CHG', self.account, name)
-			active = 1
-			if self.plugin.accounts[self.account].has_key('active'):
-				active = self.plugin.accounts[self.account]['active']
 			self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 				'savepass': save_password, 'password': password, \
 				'resource': resource, 'priority' : priority, \
