@@ -678,7 +678,6 @@ class Join_groupchat_window:
 		cell = gtk.CellRendererText()
 		self.recently_combobox.pack_start(cell, True)
 		self.recently_combobox.add_attribute(cell, 'text', 0)
-#		self.recently_combobox.set_text_column(0)
 		self.recently_groupchat = self.plugin.config['recently_groupchat'].split()
 		for g in self.recently_groupchat:
 			self.recently_combobox.append_text(g)
