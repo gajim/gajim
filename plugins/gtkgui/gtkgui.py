@@ -218,15 +218,15 @@ class tabbed_chat_Window:
 		self.xml.signal_connect('on_button_contact_clicked', \
 			self.on_button_contact_clicked)
 		self.xml.get_widget('button_contact').set_use_underline(False)
-		self.tagIn = buffer_conv.create_tag("incoming")
+		self.tagIn = {user.jid: buffer_conv.create_tag("incoming")}
 		color = self.plugin.config['inmsgcolor']
-		self.tagIn.set_property("foreground", color)
-		self.tagOut = buffer_conv.create_tag("outgoing")
+		self.tagIn[user.jid].set_property("foreground", color)
+		self.tagOut = {user.jid: buffer_conv.create_tag("outgoing")}
 		color = self.plugin.config['outmsgcolor']
-		self.tagOut.set_property("foreground", color)
-		self.tagStatus = buffer_conv.create_tag("status")
+		self.tagOut[user.jid].set_property("foreground", color)
+		self.tagStatus = {user.jid: buffer_conv.create_tag("status")}
 		color = self.plugin.config['statusmsgcolor']
-		self.tagStatus.set_property("foreground", color)
+		self.tagStatus[user.jid].set_property("foreground", color)
 
 		#print queued messages
 		if plugin.queues[account].has_key(user.jid):
@@ -315,15 +315,18 @@ class tabbed_chat_Window:
 			del self.users[jid]
 			del self.nb_unread[jid]
 			del self.xmls[jid]
+			del self.tagIn[jid]
+			del self.tagOut[jid]
+			del self.tagStatus[jid]
 
 	def on_focus(self, widget, event):
 		"""When window get focus"""
 		jid = self.get_active_jid()
-		self.plugin.systray.remove_jid(jid, self.account)
 		if self.nb_unread[jid] > 0:
 			self.nb_unread[jid] = 0
 			self.redraw_tab(jid)
 			self.show_title()
+			self.plugin.systray.remove_jid(jid, self.account)
 
 	def on_history(self, widget):
 		"""When history button is pressed : call log window"""
@@ -332,13 +335,7 @@ class tabbed_chat_Window:
 			self.plugin.windows['logs'][jid] = log_Window(self.plugin, jid)
 	
 	def on_notebook_switch_page(self, nb, page, page_num):
-		child = nb.get_nth_page(page_num)
-		jid = ''
-		for j in self.xmls:
-			c = self.xmls[j].get_widget("vbox_tab")
-			if c == child:
-				jid = j
-				break
+		jid = self.get_active_jid()
 		if self.nb_unread[jid] > 0:
 			self.nb_unread[jid] = 0
 			self.redraw_tab(jid)
@@ -354,13 +351,11 @@ class tabbed_chat_Window:
 	
 	def new_user(self, user):
 		self.nb_unread[user.jid] = 0
+		self.users[user.jid] = user
 		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, "vbox_tab", APP)
 		vb = self.xmls[user.jid].get_widget("vbox_tab")
 		nb = self.xml.get_widget("notebook")
 		nb.set_current_page(nb.append_page(vb))
-		
-		
-		self.users[user.jid] = user
 
 		conversation = self.xmls[user.jid].get_widget('conversation')
 		buffer_conv = conversation.get_buffer()
@@ -369,15 +364,15 @@ class tabbed_chat_Window:
 		buffer_msg = message.get_buffer()
 		end_iter = buffer_conv.get_end_iter()
 		buffer_conv.create_mark('end', end_iter, 0)
-		tagIn = buffer_conv.create_tag("incoming")
+		self.tagIn[user.jid] = buffer_conv.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
-		tagIn.set_property("foreground", color)
-		tagOut = buffer_conv.create_tag("outgoing")
+		self.tagIn[user.jid].set_property("foreground", color)
+		self.tagOut[user.jid] = buffer_conv.create_tag("outgoing")
 		color = self.plugin.config['outmsgcolor']
-		tagOut.set_property("foreground", color)
-		tagStatus = buffer_conv.create_tag("status")
+		self.tagOut[user.jid].set_property("foreground", color)
+		self.tagStatus[user.jid] = buffer_conv.create_tag("status")
 		color = self.plugin.config['statusmsgcolor']
-		tagStatus.set_property("foreground", color)
+		self.tagStatus[user.jid].set_property("foreground", color)
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
@@ -395,8 +390,6 @@ class tabbed_chat_Window:
 		"""When a key is pressed :
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation"""
-		jid = self.get_active_jid()
-		user = self.users[jid]
 		if event.keyval == gtk.keysyms.Return:
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return 0
@@ -406,12 +399,12 @@ class tabbed_chat_Window:
 			txt = txt_buffer.get_text(start_iter, end_iter, 0)
 			if txt != '':
 				keyID = ''
+				jid = self.get_active_jid()
 				if self.xmls[jid].get_widget('toggle_gpg').get_active():
-					keyID = user.keyID
+					keyID = self.users[jid].keyID
 				self.plugin.send('MSG', self.account, (jid, txt, keyID))
 				txt_buffer.set_text('', -1)
-				self.print_conversation(txt, jid, user.jid)
-				widget.grab_focus()
+				self.print_conversation(txt, jid, jid)
 			return 1
 		return 0
 
@@ -466,7 +459,7 @@ class tabbed_chat_Window:
 		
 		otxt = ''
 		ttxt = ''
-		if contact and contact == 'status':
+		if contact == 'status':
 			tag = 'status'
 			ttxt = txt + '\n'
 		else:
@@ -494,7 +487,8 @@ class tabbed_chat_Window:
 							l = len(s)
 							if s == otxt[index:index+l]:
 								buffer.insert(end_iter, otxt[beg:index])
-								buffer.insert_pixbuf(end_iter, self.plugin.roster.emoticons[s])
+								buffer.insert_pixbuf(end_iter, \
+									self.plugin.roster.emoticons[s])
 								index+=l
 								beg = index
 					index+=1
@@ -502,7 +496,8 @@ class tabbed_chat_Window:
 		
 		#scroll to the end of the textview
 		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
-		if (jid != self.get_active_jid() or not self.window.is_active()) and contact != 'status':
+		if (jid != self.get_active_jid() or not self.window.is_active()) and \
+			contact != 'status':
 			self.nb_unread[jid] += 1
 			self.redraw_tab(jid)
 			self.show_title()
