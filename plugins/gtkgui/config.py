@@ -111,7 +111,7 @@ class preferences_window:
 				for jid in self.plugin.windows[a]['chats'].keys():
 					self.plugin.windows[a]['chats'][jid].update_tags()
 		#IconStyle
-		ist = self.combo_iconstyle.entry.get_text()
+		ist = self.iconstyle_combobox.entry.get_text()
 		self.plugin.config['iconstyle'] = ist
 		self.plugin.roster.mkpixbufs()
 		#save position
@@ -165,28 +165,28 @@ class preferences_window:
 				model.get_value(iter, 2)
 			iter = model.iter_next(iter)
 		#autopopup
-		if self.chk_autopp.get_active():
+		if self.auto_pp_checkbutton.get_active():
 			self.plugin.config['autopopup'] = 1
 		else:
 			self.plugin.config['autopopup'] = 0
 		#autopopupaway
-		if self.chk_autoppaway.get_active():
+		if self.auto_pp_away_checkbutton.get_active():
 			self.plugin.config['autopopupaway'] = 1
 		else:
 			self.plugin.config['autopopupaway'] = 0
 		#autoaway
-		if self.chk_autoaway.get_active():
+		if self.auto_away_checkbutton.get_active():
 			self.plugin.config['autoaway'] = 1
 		else:
 			self.plugin.config['autoaway'] = 0
-		aat = self.spin_autoawaytime.get_value_as_int()
+		aat = self.auto_away_time_spinbutton.get_value_as_int()
 		self.plugin.config['autoawaytime'] = aat
 		#autoxa
-		if self.chk_autoxa.get_active():
+		if self.auto_xa_checkbutton.get_active():
 			self.plugin.config['autoxa'] = 1
 		else:
 			self.plugin.config['autoxa'] = 0
-		axt = self.spin_autoxatime.get_value_as_int()
+		axt = self.auto_xa_time_spinbutton.get_value_as_int()
 		self.plugin.config['autoxatime'] = axt
 		self.plugin.sleeper = common.sleepy.Sleepy(\
 			self.plugin.config['autoawaytime']*60, \
@@ -205,7 +205,7 @@ class preferences_window:
 			del self.plugin.config['msg%i' % i]
 			i += 1
 		#trayicon
-		if self.chk_trayicon.get_active():
+		if self.tray_icon_checkbutton.get_active():
 			self.plugin.config['trayicon'] = 1
 			self.plugin.show_systray()
 		else:
@@ -502,16 +502,19 @@ class preferences_window:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
 		self.window = self.xml.get_widget('preferences_window')
 		self.plugin = plugin
-		self.xml.get_widget('image_emoticons').set_from_file(\
+		self.xml.get_widget('emoticons_image').set_from_file(\
 			'plugins/gtkgui/pixmaps/smile.png')
-		self.combo_iconstyle = self.xml.get_widget('combo_iconstyle')
-		self.chk_autopp = self.xml.get_widget('chk_autopopup')
-		self.chk_autoppaway = self.xml.get_widget('chk_autopopupaway')
-		self.chk_autoaway = self.xml.get_widget('chk_autoaway')
-		self.spin_autoawaytime = self.xml.get_widget('spin_autoawaytime')
-		self.chk_autoxa = self.xml.get_widget('chk_autoxa')
-		self.spin_autoxatime = self.xml.get_widget('spin_autoxatime')
-		self.chk_trayicon = self.xml.get_widget('chk_trayicon')
+		self.iconstyle_combobox = self.xml.get_widget('iconstyle_combobox')
+		self.auto_pp_checkbutton = self.xml.get_widget('auto_pop_up_checkbutton')
+		self.auto_pp_away_checkbutton = self.xml.get_widget \
+			('auto_pop_up_away_checkbutton')
+		self.auto_away_checkbutton = self.xml.get_widget('auto_away_checkbutton')
+		self.auto_away_time_spinbutton = self.xml.get_widget \
+			('auto_away_time_spinbutton')
+		self.auto_xa_checkbutton = self.xml.get_widget('auto_xa_checkbutton')
+		self.auto_xa_time_spinbutton = self.xml.get_widget \
+			('auto_xa_time_spinbutton')
+		self.tray_icon_checkbutton = self.xml.get_widget('tray_icon_checkbutton')
 		self.notebook = self.xml.get_widget('preferences_notebook')
 		
 		#Color for incomming messages
@@ -537,9 +540,9 @@ class preferences_window:
 				l.append(i)
 		if l.count == 0:
 			l.append(" ")
-		self.combo_iconstyle.set_popdown_strings(l)
+		self.iconstyle_combobox.set_popdown_strings(l)
 		if self.plugin.config['iconstyle'] in l:
-			self.combo_iconstyle.entry.set_text(self.plugin.config['iconstyle'])
+			self.iconstyle_combobox.entry.set_text(self.plugin.config['iconstyle'])
 
 		#Save position
 		st = self.plugin.config['saveposition']
@@ -620,30 +623,30 @@ class preferences_window:
 		
 		#Autopopup
 		st = self.plugin.config['autopopup']
-		self.chk_autopp.set_active(st)
+		self.auto_pp_checkbutton.set_active(st)
 
 		#Autopopupaway
 		st = self.plugin.config['autopopupaway']
-		self.chk_autoppaway.set_active(st)
-		self.chk_autoppaway.set_sensitive(self.plugin.config['autopopup'])
+		self.auto_pp_away_checkbutton.set_active(st)
+		self.auto_pp_away_checkbutton.set_sensitive(self.plugin.config['autopopup'])
 
 		#Autoaway
 		st = self.plugin.config['autoaway']
-		self.chk_autoaway.set_active(st)
+		self.auto_away_checkbutton.set_active(st)
 
 		#Autoawaytime
 		st = self.plugin.config['autoawaytime']
-		self.spin_autoawaytime.set_value(st)
-		self.spin_autoawaytime.set_sensitive(self.plugin.config['autoaway'])
+		self.auto_away_time_spinbutton.set_value(st)
+		self.auto_away_time_spinbutton.set_sensitive(self.plugin.config['autoaway'])
 
 		#Autoxa
 		st = self.plugin.config['autoxa']
-		self.chk_autoxa.set_active(st)
+		self.auto_xa_checkbutton.set_active(st)
 
 		#Autoxatime
 		st = self.plugin.config['autoxatime']
-		self.spin_autoxatime.set_value(st)
-		self.spin_autoxatime.set_sensitive(self.plugin.config['autoxa'])
+		self.auto_xa_time_spinbutton.set_value(st)
+		self.auto_xa_time_spinbutton.set_sensitive(self.plugin.config['autoxa'])
 
 		#Status messages
 		self.msg_tree = self.xml.get_widget('msg_treeview')
@@ -662,9 +665,9 @@ class preferences_window:
 
 		#trayicon
 		st = self.plugin.config['trayicon']
-		self.chk_trayicon.set_active(st)
+		self.tray_icon_checkbutton.set_active(st)
 		if isinstance(self.plugin.systray, gtkgui.systrayDummy):
-			self.chk_trayicon.set_sensitive(False)
+			self.tray_icon_checkbutton.set_sensitive(False)
 
 		#Color for account text
 		colSt = self.plugin.config['accounttextcolor']
@@ -709,11 +712,11 @@ class preferences_window:
 		self.xml.get_widget('fontbutton_user_text').set_font_name(fontStr)
 		
 		self.xml.signal_connect('on_chk_autopopup_toggled', \
-			self.on_chk_toggled, [self.chk_autoppaway])
-		self.xml.signal_connect('on_chk_autoaway_toggled', \
-			self.on_chk_toggled, [self.spin_autoawaytime])
-		self.xml.signal_connect('on_chk_autoxa_toggled', \
-			self.on_chk_toggled, [self.spin_autoxatime])
+			self.on_chk_toggled, [self.auto_pp_away_checkbutton])
+		self.xml.signal_connect('on_auto_away_checkbutton_toggled', \
+			self.on_chk_toggled, [self.auto_away_time_spinbutton])
+		self.xml.signal_connect('on_auto_xa_checkbutton_toggled', \
+			self.on_chk_toggled, [self.auto_xa_time_spinbutton])
 		self.xml.signal_connect('on_use_emoticons_checkbutton_toggled', \
 			self.on_chk_toggled, [self.xml.get_widget('button_new_emoticon'),
 					self.xml.get_widget('button_remove_emoticon'),

@@ -3068,7 +3068,7 @@ on the server as a vCard</property>
 	      <property name="spacing">2</property>
 
 	      <child>
-		<widget class="GtkCheckButton" id="chk_trayicon">
+		<widget class="GtkCheckButton" id="tray_icon_checkbutton">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">If enabled, it will enable the use of a trayicon</property>
 		  <property name="can_focus">True</property>
@@ -3183,7 +3183,7 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkCombo" id="combo_iconstyle">
+		    <widget class="GtkCombo" id="iconstyle_combobox">
 		      <property name="visible">True</property>
 		      <property name="value_in_list">True</property>
 		      <property name="allow_empty">False</property>
@@ -3994,7 +3994,7 @@ on the server as a vCard</property>
 	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkImage" id="image_emoticons">
+		<widget class="GtkImage" id="emoticons_image">
 		  <property name="visible">True</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
@@ -4042,7 +4042,7 @@ on the server as a vCard</property>
 	      <property name="spacing">5</property>
 
 	      <child>
-		<widget class="GtkCheckButton" id="chk_autopopup">
+		<widget class="GtkCheckButton" id="auto_pop_up_checkbutton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Autopopup new messages</property>
@@ -4062,7 +4062,7 @@ on the server as a vCard</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkCheckButton" id="chk_autopopupaway">
+		<widget class="GtkCheckButton" id="auto_pop_up_away_checkbutton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Allow auto popup when away/DND</property>
@@ -4314,7 +4314,7 @@ on the server as a vCard</property>
 		  <property name="column_spacing">20</property>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="chk_autoaway">
+		    <widget class="GtkCheckButton" id="autoaway_checkbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Auto away after</property>
@@ -4324,7 +4324,7 @@ on the server as a vCard</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
-		      <signal name="toggled" handler="on_chk_autoaway_toggled" last_modification_time="Thu, 28 Oct 2004 11:17:52 GMT"/>
+		      <signal name="toggled" handler="on_auto_away_checkbutton_toggled" last_modification_time="Sat, 05 Mar 2005 18:27:09 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -4337,7 +4337,7 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="chk_autoxa">
+		    <widget class="GtkCheckButton" id="auto_xa_checkbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Auto eXtended Away after</property>
@@ -4347,7 +4347,7 @@ on the server as a vCard</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
-		      <signal name="toggled" handler="on_chk_autoxa_toggled" last_modification_time="Thu, 28 Oct 2004 11:20:22 GMT"/>
+		      <signal name="toggled" handler="on_auto_xa_checkbutton_toggled" last_modification_time="Sat, 05 Mar 2005 18:33:24 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -4420,7 +4420,7 @@ on the server as a vCard</property>
 		      <property name="right_padding">0</property>
 
 		      <child>
-			<widget class="GtkSpinButton" id="spin_autoawaytime">
+			<widget class="GtkSpinButton" id="auto_away_time_spinbutton">
 			  <property name="width_request">50</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
@@ -4430,7 +4430,7 @@ on the server as a vCard</property>
 			  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
-			  <property name="adjustment">10 1 100 1 10 10</property>
+			  <property name="adjustment">12 1 100 1 10 10</property>
 			</widget>
 		      </child>
 		    </widget>
@@ -4457,7 +4457,7 @@ on the server as a vCard</property>
 		      <property name="right_padding">0</property>
 
 		      <child>
-			<widget class="GtkSpinButton" id="spin_autoxatime">
+			<widget class="GtkSpinButton" id="auto_xa_time_spinbutton">
 			  <property name="width_request">50</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
