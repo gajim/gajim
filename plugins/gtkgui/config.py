@@ -243,12 +243,15 @@ class preference_Window:
 		#sounds
 		model = self.sound_tree.get_model()
 		iter = model.get_iter_first()
-		events = []
 		while iter:
-			events.append(model.get_value(iter, 0))
-			events.append(model.get_value(iter, 1))
+			path = model.get_path(iter)
+			if model[path][1]:
+				self.plugin.config['sound_' + model.get_value(iter, 0)] = 1
+			else:
+				self.plugin.config['sound_' + model.get_value(iter, 0)] = 0
+			self.plugin.config['sound_' + model.get_value(iter, 0) + '_file'] = \
+				model.get_value(iter, 2)
 			iter = model.iter_next(iter)
-		self.plugin.config['sounds'] = string.join(events, '\t')
 		#autopopup
 		if self.chk_autopp.get_active():
 			self.plugin.config['autopopup'] = 1
@@ -497,32 +500,39 @@ class preference_Window:
 			return 0
 		return 1
 
+	def sound_toggled_cb(self, cell, path):
+		model = self.sound_tree.get_model()
+		model[path][1] = not model[path][1]
+		return
+
 	def fill_sound_treeview(self):
-		eventList = ['message']
 		events = {}
-		split_line = string.split(self.plugin.config['sounds'], '\t')
-		for i in range(0, len(split_line)/2):
-			events[split_line[2*i]] = split_line[2*i+1]
+		#events = {name : [use_it, file], name2 : [., .], ...}
+		for key in self.plugin.config.keys():
+			if key.find('sound_') == 0:
+				if not self.plugin.config.has_key(key + '_file'):
+					continue
+				ev = key.replace('sound_', '')
+				events[ev] = [self.plugin.config[key], self.plugin.config[key + \
+					'_file']]
 		model = self.sound_tree.get_model()
 		model.clear()
-		for ev in eventList:
-			if ev in events:
-				iter = model.append()
-				model.set(iter, 0, ev, 1, events[ev])
+		for ev in events:
+			iter = model.append((ev, events[ev][0], events[ev][1]))
 
 	def on_treeview_sounds_cursor_changed(self, widget, data=None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
 		if not iter:
 			self.xml.get_widget('entry_sounds').set_text('')
 			return
-		str = model.get_value(iter, 1)
+		str = model.get_value(iter, 2)
 		self.xml.get_widget('entry_sounds').set_text(str)
 
 	def on_button_sounds_clicked(self, widget, data=None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
 		if not iter:
 			return
-		file = model.get_value(iter, 1)
+		file = model.get_value(iter, 2)
 		dialog = gtk.FileChooserDialog("Choose sound",
 							None,
 							gtk.FILE_CHOOSER_ACTION_OPEN,
@@ -542,7 +552,7 @@ class preference_Window:
 
 		file = os.path.join(os.getcwd(), file)
 		dialog.set_filename(file)
-		file = ''	
+		file = ''
 		ok = 0
 		while(ok == 0):
 			response = dialog.run()
@@ -555,7 +565,8 @@ class preference_Window:
 		dialog.destroy()
 		if file:
 			self.xml.get_widget('entry_sounds').set_text(file)
-			model.set_value(iter, 1, file)
+			model.set_value(iter, 2, file)
+			model.set_value(iter, 1, 1)
 			
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
@@ -647,18 +658,29 @@ class preference_Window:
 
 		#sounds
 		self.sound_tree = self.xml.get_widget('treeview_sounds')
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, \
+			gobject.TYPE_STRING)
 		self.sound_tree.set_model(model)
+
+		col = gtk.TreeViewColumn('Active')
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererToggle()
+		renderer.set_property('activatable', True)
+		renderer.connect("toggled", self.sound_toggled_cb)
+		col.pack_start(renderer)
+		col.set_attributes(renderer, active=1)
+
 		col = gtk.TreeViewColumn('Event')
 		self.sound_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text=0)
+
 		col = gtk.TreeViewColumn('Sound')
 		self.sound_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
-		col.set_attributes(renderer, text=1)
+		col.set_attributes(renderer, text=2)
 		self.fill_sound_treeview()
 		
 		#Autopopup

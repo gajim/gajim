@@ -2181,16 +2181,6 @@ class roster_Window:
 			return 0
 		return 1
 
-	def mkevents(self):
-		"""initialize events array"""
-		self.events = {}
-		split_line = string.split(self.plugin.config['sounds'], '\t')
-		for i in range(0, len(split_line)/2):
-			file = split_line[2*i+1]
-			if not self.sound_is_ok(file):
-				continue
-			self.events[split_line[2*i]] = file
-
 	def on_show_off(self, widget):
 		"""when show offline option is changed :
 		redraw the treeview"""
@@ -2355,7 +2345,6 @@ class roster_Window:
 		self.mkpixbufs()
 		if self.plugin.config['useemoticons']:
 			self.mkemoticons()
-		self.mkevents()
 
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image)
 		self.cb = gtk.ComboBox()
@@ -2636,12 +2625,15 @@ class plugin:
 			
 
 	def play_sound(self, event):
-		if not self.roster.events.has_key(event):
+		if not self.config[event]:
+			return
+		file = self.config[event + '_file']
+		if not os.path.exists(file):
 			return
 		pid = os.fork()
 		if pid == 0:
 			argv = self.config['soundplayer'].split()
-			argv.append(self.roster.events[event])
+			argv.append(file)
 			try: 
 				os.execvp(argv[0], argv)
 			except: 
@@ -2742,8 +2734,15 @@ class plugin:
 		jid = string.split(array[0], '/')[0]
 		if string.find(jid, "@") <= 0:
 			jid = string.replace(jid, '@', '')
-		self.play_sound('message')
+		first = 0
+		if not self.windows[account]['chats'].has_key(jid) and \
+			not self.queues[account].has_key(jid):
+			first = 1
 		self.roster.on_message(jid, array[1], array[2], account)
+		if self.config['sound_first_message_received'] and first:
+			self.play_sound('sound_first_message_received')
+		if self.config['sound_next_message_received'] and not first:
+			self.play_sound('sound_next_message_received')
 		
 	def handle_event_msgerror(self, account, array):
 		#('MSGERROR', account, (user, error_code, error_msg, msg, time))
@@ -3040,7 +3039,16 @@ class plugin:
 			'useemoticons': 1,\
 			'emoticons':':-)\tplugins/gtkgui/emoticons/smile.png\t(@)\tplugins/gtkgui/emoticons/pussy.png\t8)\tplugins/gtkgui/emoticons/coolglasses.png\t:(\tplugins/gtkgui/emoticons/unhappy.png\t:)\tplugins/gtkgui/emoticons/smile.png\t(})\tplugins/gtkgui/emoticons/hugleft.png\t:$\tplugins/gtkgui/emoticons/blush.png\t(Y)\tplugins/gtkgui/emoticons/yes.png\t:-@\tplugins/gtkgui/emoticons/angry.png\t:-D\tplugins/gtkgui/emoticons/biggrin.png\t(U)\tplugins/gtkgui/emoticons/brheart.png\t(F)\tplugins/gtkgui/emoticons/flower.png\t:-[\tplugins/gtkgui/emoticons/bat.png\t:>\tplugins/gtkgui/emoticons/biggrin.png\t(T)\tplugins/gtkgui/emoticons/phone.png\t(l)\tplugins/gtkgui/emoticons/heart.png\t:-S\tplugins/gtkgui/emoticons/frowing.png\t:-P\tplugins/gtkgui/emoticons/tongue.png\t(h)\tplugins/gtkgui/emoticons/coolglasses.png\t(D)\tplugins/gtkgui/emoticons/drink.png\t:-O\tplugins/gtkgui/emoticons/oh.png\t(f)\tplugins/gtkgui/emoticons/flower.png\t(C)\tplugins/gtkgui/emoticons/coffee.png\t:-o\tplugins/gtkgui/emoticons/oh.png\t({)\tplugins/gtkgui/emoticons/hugright.png\t(*)\tplugins/gtkgui/emoticons/star.png\tB-)\tplugins/gtkgui/emoticons/coolglasses.png\t(z)\tplugins/gtkgui/emoticons/boy.png\t:-d\tplugins/gtkgui/emoticons/biggrin.png\t(E)\tplugins/gtkgui/emoticons/mail.png\t(N)\tplugins/gtkgui/emoticons/no.png\t(p)\tplugins/gtkgui/emoticons/photo.png\t(K)\tplugins/gtkgui/emoticons/kiss.png\t(r)\tplugins/gtkgui/emoticons/rainbow.png\t:-|\tplugins/gtkgui/emoticons/stare.png\t:-s\tplugins/gtkgui/emoticons/frowing.png\t:-p\tplugins/gtkgui/emoticons/tongue.png\t(c)\tplugins/gtkgui/emoticons/coffee.png\t(e)\tplugins/gtkgui/emoticons/mail.png\t;-)\tplugins/gtkgui/emoticons/wink.png\t;-(\tplugins/gtkgui/emoticons/cry.png\t(6)\tplugins/gtkgui/emoticons/devil.png\t:o\tplugins/gtkgui/emoticons/oh.png\t(L)\tplugins/gtkgui/emoticons/heart.png\t(w)\tplugins/gtkgui/emoticons/brflower.png\t:d\tplugins/gtkgui/emoticons/biggrin.png\t(Z)\tplugins/gtkgui/emoticons/boy.png\t(u)\tplugins/gtkgui/emoticons/brheart.png\t:|\tplugins/gtkgui/emoticons/stare.png\t(P)\tplugins/gtkgui/emoticons/photo.png\t:O\tplugins/gtkgui/emoticons/oh.png\t(R)\tplugins/gtkgui/emoticons/rainbow.png\t(t)\tplugins/gtkgui/emoticons/phone.png\t(i)\tplugins/gtkgui/emoticons/lamp.png\t;)\tplugins/gtkgui/emoticons/wink.png\t;(\tplugins/gtkgui/emoticons/cry.png\t:p\tplugins/gtkgui/emoticons/tongue.png\t(H)\tplugins/gtkgui/emoticons/coolglasses.png\t:s\tplugins/gtkgui/emoticons/frowing.png\t;\'-(\tplugins/gtkgui/emoticons/cry.png\t:-(\tplugins/gtkgui/emoticons/unhappy.png\t:-)\tplugins/gtkgui/emoticons/smile.png\t(b)\tplugins/gtkgui/emoticons/beer.png\t8-)\tplugins/gtkgui/emoticons/coolglasses.png\t(B)\tplugins/gtkgui/emoticons/beer.png\t(W)\tplugins/gtkgui/emoticons/brflower.png\t:D\tplugins/gtkgui/emoticons/biggrin.png\t(y)\tplugins/gtkgui/emoticons/yes.png\t(8)\tplugins/gtkgui/emoticons/music.png\t:@\tplugins/gtkgui/emoticons/angry.png\tB)\tplugins/gtkgui/emoticons/coolglasses.png\t:-$\tplugins/gtkgui/emoticons/blush.png\t:\'(\tplugins/gtkgui/emoticons/cry.png\t(n)\tplugins/gtkgui/emoticons/no.png\t(k)\tplugins/gtkgui/emoticons/kiss.png\t:->\tplugins/gtkgui/emoticons/biggrin.png\t:[\tplugins/gtkgui/emoticons/bat.png\t(I)\tplugins/gtkgui/emoticons/lamp.png\t:P\tplugins/gtkgui/emoticons/tongue.png\t(%)\tplugins/gtkgui/emoticons/cuffs.png\t(d)\tplugins/gtkgui/emoticons/drink.png\t:S\tplugins/gtkgui/emoticons/frowing.png',\
 			'soundplayer': 'play',\
-			'sounds': 'message\tsounds/message.wav',\
+			'sound_first_message_received': 1,\
+			'sound_first_message_received_file': 'sounds/message1.wav',\
+			'sound_next_message_received': 0,\
+			'sound_next_message_received_file': 'sounds/message2.wav',\
+			'sound_contact_connected': 1,\
+			'sound_contact_connected_file': 'sounds/connected.wav',\
+			'sound_contact_disconnected': 1,\
+			'sound_contact_disconnected_file': 'sounds/disconnected.wav',\
+			'sound_message_sent': 1,\
+			'sound_message_sent_file': 'sounds/sent.wav',\
 			'x-position': 0,\
 			'y-position': 0,\
 			'width': 150,\
