@@ -6,7 +6,6 @@
 <widget class="GtkWindow" id="gajim_window">
   <property name="width_request">85</property>
   <property name="height_request">200</property>
-  <property name="visible">True</property>
   <property name="title" translatable="yes">Gajim</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -70,8 +69,7 @@
 		      <child internal-child="image">
 			<widget class="GtkImage" id="image465">
 			  <property name="visible">True</property>
-			  <property name="stock">gtk-connect</property>
-			  <property name="icon_size">1</property>
+			  <property name="pixbuf">gtk-connect</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
@@ -134,8 +132,7 @@
 		      <child internal-child="image">
 			<widget class="GtkImage" id="image467">
 			  <property name="visible">True</property>
-			  <property name="stock">gtk-about</property>
-			  <property name="icon_size">1</property>
+			  <property name="pixbuf">gtk-about</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>

@@ -1261,7 +1261,6 @@ class roster_window:
 		if self.plugin.config.has_key('mergeaccounts'):
 			self.regroup = self.plugin.config['mergeaccounts']
 		if self.plugin.config.has_key('saveposition'):
-			self.window.hide()
 			if self.plugin.config['saveposition']:
 				if self.plugin.config.has_key('x-position') and \
 					self.plugin.config.has_key('y-position'):
@@ -1271,7 +1270,7 @@ class roster_window:
 					self.plugin.config.has_key('height'):
 					self.window.resize(self.plugin.config['width'], \
 						self.plugin.config['height'])
-			self.window.show_all()
+		self.window.show_all()
 		self.groups = {}
 		self.contacts = {}
 		for a in self.plugin.accounts.keys():
