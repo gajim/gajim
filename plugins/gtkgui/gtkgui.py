@@ -3026,7 +3026,10 @@ class plugin:
 			args = conf.split()
 			app = args[0]
 		args.append(url)
-		os.spawnvp(os.P_NOWAIT, app, args)
+		if os.name == 'posix':
+			os.spawnvp(os.P_NOWAIT, app, args)
+		else:
+			os.spawnv(os.P_NOWAIT, app, args)
 
 	def play_timeout(self, pid):
 		pidp, r = os.waitpid(pid, os.WNOHANG)
