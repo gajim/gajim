@@ -7854,7 +7854,7 @@ Custom</property>
 		  <signal name="clicked" handler="on_history_button_clicked" last_modification_time="Wed, 02 Mar 2005 17:03:17 GMT"/>
 
 		  <child>
-		    <widget class="GtkAlignment" id="alignment45">
+		    <widget class="GtkAlignment" id="alignment47">
 		      <property name="visible">True</property>
 		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
@@ -7866,13 +7866,13 @@ Custom</property>
 		      <property name="right_padding">0</property>
 
 		      <child>
-			<widget class="GtkHBox" id="hbox2922">
+			<widget class="GtkHBox" id="hbox2924">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">2</property>
 
 			  <child>
-			    <widget class="GtkImage" id="image406">
+			    <widget class="GtkImage" id="image412">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">4</property>
@@ -7889,7 +7889,7 @@ Custom</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="label203">
+			    <widget class="GtkLabel" id="label205">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">History</property>
 			      <property name="use_underline">True</property>
@@ -7947,7 +7947,7 @@ Custom</property>
 			  <property name="spacing">2</property>
 
 			  <child>
-			    <widget class="GtkImage" id="image407">
+			    <widget class="GtkImage" id="image411">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-clear</property>
 			      <property name="icon_size">4</property>
@@ -8022,7 +8022,7 @@ Custom</property>
 		  <property name="inconsistent">False</property>
 
 		  <child>
-		    <widget class="GtkImage" id="image409">
+		    <widget class="GtkImage" id="image413">
 		      <property name="visible">True</property>
 		      <property name="stock">gtk-dialog-authentication</property>
 		      <property name="icon_size">4</property>
@@ -8050,7 +8050,7 @@ Custom</property>
 		      <property name="width_request">0</property>
 		      <property name="height_request">0</property>
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Click to see contact's information</property>
+		      <property name="tooltip" translatable="yes">Click for contact's extented information</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Anonymous &lt;id@server/res&gt;</property>
 		      <property name="use_underline">True</property>
@@ -8080,7 +8080,7 @@ Custom</property>
 		  <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Wed, 02 Mar 2005 21:05:12 GMT"/>
 
 		  <child>
-		    <widget class="GtkImage" id="image410">
+		    <widget class="GtkImage" id="image414">
 		      <property name="visible">True</property>
 		      <property name="stock">gtk-close</property>
 		      <property name="icon_size">4</property>
