@@ -340,31 +340,23 @@ class preference_Window:
 		pp = self.chk_autopp.get_active()
 		if pp == True:
 			self.r.plugin.config['autopopup'] = 1
-			self.r.autopopup = 1
 		else:
 			self.r.plugin.config['autopopup'] = 0
-			self.r.autopopup = 0
 		#autoaway
 		aw = self.chk_autoaway.get_active()
 		if aw == True:
 			self.r.plugin.config['autoaway'] = 1
-			self.r.plugin.autoaway = 1
 		else:
 			self.r.plugin.config['autoaway'] = 0
-			self.r.plugin.autoaway = 0
 		aat = self.spin_autoawaytime.get_value_as_int()
-		self.r.plugin.autoawaytime = aat
 		self.r.plugin.config['autoawaytime'] = aat
 		#autoxa
 		xa = self.chk_autoxa.get_active()
 		if xa == True:
 			self.r.plugin.config['autoxa'] = 1
-			self.r.plugin.autoxa = 1
 		else:
 			self.r.plugin.config['autoxa'] = 0
-			self.r.plugin.autoxa = 0
 		axt = self.spin_autoxatime.get_value_as_int()
-		self.r.plugin.autoxatime = axt
 		self.r.plugin.config['autoxatime'] = axt
 		if self.r.plugin.sleeper:
 			self.r.plugin.sleeper = common.sleepy.Sleepy(\
@@ -1003,12 +995,13 @@ class roster_Window:
 
 	def get_account_iter(self, name):
 		model = self.tree.get_model()
-		root = model.get_iter_root()
 		fin = False
-		account = model.iter_children(root)
+		account = model.get_iter_root()
+		if not account:
+			return None
 		while not fin:
 			account_name = model.get_value(account, 3)
-			if name == accout_name:
+			if name == account_name:
 				return account
 			if not model.iter_next(account):
 				fin = True
@@ -1016,7 +1009,7 @@ class roster_Window:
 
 	def get_group_iter(self, name, account):
 		model = self.tree.get_model()
-		root = self.get_accout_iter(account)
+		root = self.get_account_iter(account)
 		fin = False
 		group = model.iter_children(root)
 		if not group:
@@ -1031,15 +1024,17 @@ class roster_Window:
 
 	def get_user_iter(self, jid, account):
 		model = self.tree.get_model()
-		root = self.get_accout_iter(account)
+		acct = self.get_account_iter(account)
 		found = []
 		fin = False
-		group = model.iter_children(root)
+		group = model.iter_children(acct)
 		if not group:
 			return found
 		while not fin:
 			fin2 = False
 			user = model.iter_children(group)
+			if not user:
+				fin2=True
 			while not fin2:
 				if jid == model.get_value(user, 3):
 					found.append(user)
@@ -1050,6 +1045,7 @@ class roster_Window:
 		return found
 
 	def add_account_to_roster(self, account):
+		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
 		model.append(None, (self.pixbufs['closed'], account, 'account', account, \
@@ -1059,7 +1055,7 @@ class roster_Window:
 		"""Add a user to the roster and add groups if they aren't in roster"""
 		newgrp = 0
 		showOffline = self.plugin.config['showoffline']
-		self.contacts[account][user.jid] = user
+#		self.contacts[account][user.jid] = user
 		if user.groups == []:
 			if string.find(user.jid, "@") <= 0:
 				user.groups.append('Agents')
@@ -1068,14 +1064,13 @@ class roster_Window:
 		if user.show != 'offline' or showOffline or 'Agents' in user.groups:
 			model = self.tree.get_model()
 			for g in user.groups:
-				if not self.groups[account].has_key(g):
-					self.groups[account][g] = {'drawn': False, 'expand':True}
-				if not self.groups[account][g]['drawn']:
-					model.append(self.get_account_iter(account), \
-						(self.pixbufs['closed'], g, 'group', g, FALSE))
-					self.groups[account][g]['drawn'] = True
-					newgrp = 1
 				iterG = self.get_group_iter(g, account)
+				if not iterG:
+					self.groups[account][g] = {'drawn': True, 'expand':True}
+					acct = self.get_account_iter(account)
+					iterG = model.append(self.get_account_iter(account), \
+						(self.pixbufs['closed'], g, 'group', g, FALSE))
+					newgrp = 1
 				if g == 'Agents':
 					model.append(iterG, (self.pixbufs[user.show], \
 						user.name, 'agent', user.jid, TRUE))
@@ -1099,7 +1094,7 @@ class roster_Window:
 		self.tree.get_model().clear()
 		for acct in self.contacts.keys():
 			self.add_account_to_roster(acct)
-			for user in self.contacts[acct]:
+			for user in self.contacts[acct].values():
 				self.add_user_to_roster(user, acct)
 	
 	def mklists(self, array, account):
@@ -1132,17 +1127,13 @@ class roster_Window:
 			for g in array[jid]['groups'] :
 				if not g in self.groups[account].keys():
 					self.groups[account][g] = {'drawn':False, 'expand':True}
-#			#update icon if chat window is oppened
-#			if self.tab_messages.has_key(jid):
-#				self.tab_messages[jid].user = user1
-#				self.tab_messages[jid].img.set_from_pixbuf(self.pixbufs[show])
 
 	def chg_user_status(self, user, show, status, account):
 		"""When a user change his status"""
-		iters = self.get_user_iter(user.jid, account)
 		showOffline = self.plugin.config['showoffline']
+		iters = self.get_user_iter(user.jid, account)
 		if not iters:
-			self.add_user(user)
+			self.add_user_to_roster(user, account)
 		else:
 			model = self.tree.get_model()
 			if show == 'offline' and not showOffline:
@@ -1252,7 +1243,7 @@ class roster_Window:
 		if not self.contacts[account].has_key(jid):
 			user1 = user(jid, jid, ['general'], 'requested', \
 				'requested', 'sub', '')
-			self.add_user(user1)
+			self.add_user_to_roster(user1, account)
 	
 	def on_treeview_event(self, widget, event):
 		"""popup user's group's or agent menu"""
@@ -1288,7 +1279,7 @@ class roster_Window:
 			txt = w.run()
 		else:
 			txt = status
-		accounts = self.plugin.accts.get_accounts()
+		accounts = self.plugin.accounts.keys()
 		if len(accounts) == 0:
 			warning_Window("You must setup an account before connecting to jabber network.")
 			return
@@ -1311,14 +1302,15 @@ class roster_Window:
 		elif self.plugin.connected[account] == 0:
 			self.plugin.connected[account] = 1
 			self.plugin.sleeper = None#common.sleepy.Sleepy(\
-				#self.autoawaytime*60, self.autoxatime*60)
+				#self.plugin.config['autoawaytime']*60, \
+				#self.plugin.config['autoxatime']*60)
 
 	def on_message(self, jid, msg, account):
 		"""when we receive a message"""
 		if not self.contacts.has_key(jid):
 			user1 = user(jid, jid, ['not in list'], \
 				'not in list', 'not in list', 'none', '')
-			self.add_user(user1)
+			self.add_user_to_roster(user1, account)
 		autopopup = self.plugin.config['autopopup']
 		if autopopup == 0 and not self.plugin.windows[account].has_key(jid):
 			#We save it in a queue
@@ -1463,11 +1455,10 @@ class roster_Window:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim')
 		self.tree = self.xml.get_widget('treeview')
 		self.plugin = plugin
-		self.connected = {}
+		self.groups = {}
 		self.contacts = {}
 		for a in self.plugin.accounts.keys():
 			self.contacts[a] = {}
-			self.connected[a] = 0
 		#(icon, name, type, jid, editable)
 		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, str, \
 			gobject.TYPE_BOOLEAN)
@@ -1511,7 +1502,7 @@ class roster_Window:
 		col.pack_start(render_pixbuf, expand = False)
 		self.tree.append_column(col)
 		col.set_visible(FALSE)
-		self.tree.set_expander_column(col)
+#		self.tree.set_expander_column(col)
 
 		#signals
 		self.xml.signal_connect('gtk_main_quit', self.on_quit)
@@ -1585,13 +1576,11 @@ class plugin:
 		
 	def read_queue(self):
 		"""Read queue from the core and execute commands from it"""
-		global browserWindow
 		model = self.roster.tree.get_model()
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
 			if ev[0] == 'ROSTER':
-				self.roster.init_tree()
-				self.roster.mklists(ev[2])
+				self.roster.mklists(ev[2], ev[1])
 				self.roster.draw_roster()
 			elif ev[0] == 'WARNING':
 				warning_Window(ev[2])
@@ -1610,25 +1599,25 @@ class plugin:
 				else:
 					ji = jid
 				#Update user
-				if self.roster.l_contact.has_key(ji):
-					user = self.roster.l_contact[ji]['user']
+				if self.roster.contacts[ev[1]].has_key(ji):
+					user = self.roster.contacts[ev[1]][ji]
 					user.show = ev[2][1]
 					user.status = ev[2][2]
 					user.resource = resource
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
-					if not self.roster.l_contact.has_key(ji):
+					if not self.roster.contacts[ev[1]].has_key(ji):
 						user1 = user(ji, ji, ['Agents'], ev[2][1], \
 							ev[2][2], 'from', resource)
-						self.roster.add_user(user1)
+						self.roster.add_user_to_roster(user1, ev[1])
 					else:
 						#Update existing iter
-						for i in self.roster.l_contact[ji]['iter']:
+						for i in self.roster.get_user_iter(ji, ev[1]):
 							if self.roster.pixbufs.has_key(ev[2][1]):
 								model.set_value(i, 0, self.r.pixbufs[ev[2][1]])
-				elif self.roster.l_contact.has_key(ji):
+				elif self.roster.contacts[ev[1]].has_key(ji):
 					#It isn't an agent
-					self.roster.chg_status(user, ev[2][1], ev[2][2], ev[1])
+					self.roster.chg_user_status(user, ev[2][1], ev[2][2], ev[1])
 			#('MSG', account, (user, msg))
 			elif ev[0] == 'MSG':
 				if string.find(ev[2][0], "@") <= 0:
@@ -1691,11 +1680,11 @@ class plugin:
 					#we go online
 					self.roster.optionmenu.set_history(0)
 					self.send('STATUS', None, ('online', ''))
-				if state == common.sleepy.STATE_AWAY and self.autoaway:
+				if state == common.sleepy.STATE_AWAY and self.config['autoaway']:
 					#we go away
 					self.roster.optionmenu.set_history(1)
 					self.send('STATUS', None, ('away', 'auto away (idle)'))
-				if state == common.sleepy.STATE_XAWAY and self.autoxa:
+				if state == common.sleepy.STATE_XAWAY and self.config['autoxa']:
 					#we go extanded away
 					self.roster.optionmenu.set_history(2)
 					self.send('STATUS',('xa', 'auto away (idel)'))
@@ -1722,26 +1711,12 @@ class plugin:
 		self.accounts = self.wait('CONFIG')
 		self.windows = {}
 		self.queues = {}
+		self.connected = {}
 		for a in self.accounts.keys():
 			self.windows[a] = {}
 			self.queues[a] = {}
+			self.connected[a] = 0
 		self.roster = roster_Window(self)
-#		if self.config.has_key('autoaway'):
-#			self.autoaway = self.config['autoaway']
-#		else:
-#			self.autoaway = 1
-#		if self.config.has_key('autoawaytime'):
-#			self.autoawaytime = self.config['autoawaytime']
-#		else:
-#			self.autoawaytime = 10
-#		if self.config.has_key('autoxa'):
-#			self.autoxa = self.config['autoxa']
-#		else:
-#			self.autoxa = 1
-#		if self.config.has_key('autoxatime'):
-#			self.autoxatime = self.config['autoxatime']
-#		else:
-#			self.autoxatime = 20
 		gtk.timeout_add(200, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
 		self.sleeper = None

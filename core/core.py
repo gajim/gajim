@@ -213,6 +213,7 @@ class GajimCore:
 				con.sendInitPresence()
 				self.hub.sendPlugin('STATUS', account, 'online')
 				self.connected[account] = 1
+				return con
 			else:
 				log.debug("Couldn't authentificate to %s" % hostname)
 				self.hub.sendPlugin('STATUS', account, 'offline')
@@ -233,10 +234,10 @@ class GajimCore:
 						break
 				#('QUIT', account, ())
 				if ev[0] == 'QUIT':
-					for con in self.connexions.keys():
+#					for con in self.connexions.keys():
 #						if self.connected[a] == 1:
 #							self.connected[a] = 0
-						con.disconnect()
+#						con.disconnect()
 					self.hub.sendPlugin('QUIT', None, ())
 					return
 				#('ASK_CONFIG', account, (who_ask, section, default_config))
@@ -274,7 +275,7 @@ class GajimCore:
 				#('STATUS', account, (status, msg))
 				elif ev[0] == 'STATUS':
 					if (ev[2][0] != 'offline') and (self.connected[ev[1]] == 0):
-						self.connect(ev[1])
+						con = self.connect(ev[1])
 					elif (ev[2][0] == 'offline') and (self.connected[ev[1]] == 1):
 						self.connected[ev[1]] = 0
 						con.disconnect()
@@ -427,7 +428,7 @@ def start():
 		gc.mainLoop()
 	except KeyboardInterrupt:
 		print "Keyboard Interrupt : Bye!"
-		for con in gc.connexions:
+		for con in gc.connexions.keys():
 			if gc.connected[gc.connexions[con]]:
 				con.disconnect()
 		gc.hub.sendPlugin('QUIT', None, ())
