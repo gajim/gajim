@@ -7109,7 +7109,7 @@ Custom</property>
       <child>
 	<widget class="GtkNotebook" id="chat_notebook">
 	  <property name="visible">True</property>
-	  <property name="show_tabs">True</property>
+	  <property name="show_tabs">False</property>
 	  <property name="show_border">True</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
 	  <property name="scrollable">True</property>
