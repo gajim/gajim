@@ -358,9 +358,12 @@ class tabbed_chat_Window:
 			self.plugin.systray.remove_jid(jid, self.account)
 	
 	def new_user(self, user):
+		self.nb_unread[user.jid] = 0
 		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, "vbox_tab", APP)
 		vb = self.xmls[user.jid].get_widget("vbox_tab")
-		self.xml.get_widget("notebook").append_page(vb)
+		nb = self.xml.get_widget("notebook")
+		nb.set_current_page(nb.append_page(vb))
+		
 		
 		self.users[user.jid] = user
 
@@ -381,7 +384,6 @@ class tabbed_chat_Window:
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus.set_property("foreground", color)
 		
-		self.nb_unread[user.jid] = 0
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
 		self.xmls[user.jid].signal_connect('on_history_clicked', self.on_history)
