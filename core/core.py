@@ -112,6 +112,8 @@ class GajimCore:
 			self.con.connect()
 		except IOError, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
+			self.hub.sendPlugin('STATUS', 'offline')
+			self.hub.sendPlugin('WARNING', "Couldn't connect to %s" % hostname)
 			return 0
 		else:
 			log.debug("Connected to server")
@@ -127,9 +129,12 @@ class GajimCore:
 					roster = {}
 				self.hub.sendPlugin('ROSTER', roster)
 				self.con.sendInitPresence()
+				self.hub.sendPlugin('STATUS', 'online')
 				self.connected = 1
 			else:
 				log.debug("Couldn't authentificate to %s" % hostname)
+				self.hub.sendPlugin('STATUS', 'offline')
+				self.hub.sendPlugin('WARNING', 'Authentification failed, check your login and password')
 				return 0
 	# END connect
 
@@ -148,11 +153,13 @@ class GajimCore:
 						self.connect(ev[1][1])
 					elif (ev[1][0] == 'offline') and (self.connected == 1):
 						self.con.disconnect()
+						self.hub.sendPlugin('STATUS', 'offline')
 						self.connected = 0
-					if ev[1][0] != 'offline':
+					if ev[1][0] != 'offline' and self.connected == 1:
 						p = common.jabber.Presence()
 						p.setShow(ev[1][0])
 						self.con.send(p)
+						self.hub.sendPlugin('STATUS', ev[1][0])
 				#('MSG', (jid, msg))
 				elif ev[0] == 'MSG':
 					msg = common.jabber.Message(ev[1][0], ev[1][1])
@@ -227,6 +234,8 @@ def loadPlugins(gc):
 		for mod in mods:
 			modObj = gc.hub.newPlugin(mod)
 			gc.hub.register(mod, 'ROSTER')
+			gc.hub.register(mod, 'WARNING')
+			gc.hub.register(mod, 'STATUS')
 			gc.hub.register(mod, 'NOTIFY')
 			gc.hub.register(mod, 'MSG')
 			gc.hub.register(mod, 'MSGSENT')

@@ -826,16 +826,6 @@ class roster:
 		self.queueOUT.put(('STATUS',(widget.name, accounts[0])))
 #		if (not self.showOffline) and widget.name == 'offline':
 #			self.treestore.clear()
-		if widget.name == 'offline':
-			self.connected = 0
-			self.plugin.sleeper = None
-			for j in self.l_contact.keys():
-				self.chg_status(j, 'offline', 'Disconnected')
-		elif self.connected == 0:
-			self.tree
-			self.connected = 1
-			self.plugin.sleeper = common.sleepy.Sleepy(\
-				self.plugin.autoawaytime*60, self.plugin.autoxatime*60)
 
 	def on_prefs(self, widget):
 		window = prefs(self)
@@ -1013,6 +1003,26 @@ class plugin:
 				self.r.init_tree()
 				self.r.mklists(ev[1])
 				self.r.draw_roster()
+			elif ev[0] == 'WARNING':
+				warning(ev[1])
+			elif ev[0] == 'STATUS':
+				st = ""
+				for i in range(7):
+					if self.r.optionmenu.get_menu().get_children()[i].name == ev[1]:
+						st = self.r.optionmenu.get_menu().get_children()[i].name
+						self.r.optionmenu.set_history(i)
+						break
+				if st == 'offline':
+					self.r.connected = 0
+					self.sleeper = None
+					for j in self.r.l_contact.keys():
+						self.r.chg_status(j, 'offline', 'Disconnected')
+				elif self.r.connected == 0:
+#					self.tree
+					self.r.connected = 1
+					self.r.plugin.sleeper = common.sleepy.Sleepy(\
+						self.autoawaytime*60, self.autoxatime*60)
+
 			elif ev[0] == 'NOTIFY':
 				jid = string.split(ev[1][0], '/')[0]
 				if string.find(jid, "@") <= 0:
@@ -1094,8 +1104,6 @@ class plugin:
 					Wreg = agent_reg(ev[1][0], ev[1][1], self.r)
 			#('ACC_OK', (hostname, login, pasword, name, ressource))
 			elif ev[0] == 'ACC_OK':
-				print "acc_ok"
-				print ev[1]
 				self.r.cfgParser.add_section(ev[1][3])
 				self.r.accounts.append(ev[1][3])
 				accountsStr = string.join(self.r.accounts)

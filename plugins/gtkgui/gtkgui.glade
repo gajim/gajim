@@ -2884,6 +2884,7 @@ messages</property>
 		      <child>
 			<widget class="GtkCheckButton" id="chk_autopopup_not_online">
 			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Allow AutoPopup 
 when NOT onlie</property>
@@ -2903,6 +2904,7 @@ when NOT onlie</property>
 		      <child>
 			<widget class="GtkCheckButton" id="checkbutton5">
 			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">checkbutton5</property>
 			  <property name="use_underline">True</property>
