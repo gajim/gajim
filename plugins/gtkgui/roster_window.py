@@ -163,9 +163,18 @@ class roster_window:
 		model = self.tree.get_model()
 		for i in self.get_user_iter(user.jid, account):
 			parent_i = model.iter_parent(i)
+			group = model.get_value(parent_i, 3)
 			model.remove(i)
 			if model.iter_n_children(parent_i) == 0:
 				model.remove(parent_i)
+				# We need to check all contacts, even offline contacts
+				group_empty = True
+				for jid in self.contacts[account]:
+					if group in self.contacts[account][jid][0].groups:
+						group_empty = False
+						break
+				if group_empty:
+					del self.groups[account][group]
 
 	def redraw_jid(self, jid, account):
 		"""draw the correct pixbuf and name"""

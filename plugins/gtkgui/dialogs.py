@@ -227,12 +227,12 @@ class Edit_groups_dialog:
 	def run(self):
 		self.dialog.run()
 		self.dialog.destroy()
-		#TODO: send to the core
+		#TODO: do not send if unnecesary
+		self.plugin.send('UPDUSER', self.account, (self.user.jid, \
+			self.user.name, self.user.groups))
 
 	def update_user(self):
-		luser = self.plugin.roster.contacts[self.account][self.user.jid]
-		for u in luser:
-			self.plugin.roster.remove_user(u, self.account)
+		self.plugin.roster.remove_user(self.user, self.account)
 		self.plugin.roster.add_user_to_roster(self.user.jid, self.account)
 
 	def on_add_button_clicked(self, widget):
@@ -255,7 +255,6 @@ class Edit_groups_dialog:
 		if model[path][1] and len(self.user.groups) == 1: # we try to remove 
 																		  # the latest group
 			Error_dialog(_('There must be at least one group for each contact'))
-			#TODO: re-set the checkbutton
 			return
 		model[path][1] = not model[path][1]
 		if model[path][1]:
