@@ -751,8 +751,10 @@ class browser:
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_refresh_clicked', self.on_refresh)
 		xml.signal_connect('on_row_activated', self.on_row_activated)
-		#TODO: Si connecte
-		self.browse()
+		if self.r.connected:
+			self.browse()
+		else:
+			warning("You must be connected to view Agents")
 
 class message:
 	"""Class for chat window"""
@@ -822,10 +824,17 @@ class message:
 		deb, end = buffer.get_bounds()
 		buffer.delete(deb, end)
 
+	def on_test(self, widget):
+		print self.window.get_size()
+		print self.hbox.need_resize
+		print self.hbox.resize_mode
+
 	def __init__(self, user, roster):
 		self.user = user
 		self.r = roster
 		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Chat')
+		self.hbox = xml.get_widget('hbox1')
+		self.hbox.set_property('resize-mode', 2)
 		self.window = xml.get_widget('Chat')
 		self.window.set_title('Chat with ' + user.name)
 		self.img = xml.get_widget('image')
@@ -838,10 +847,10 @@ class message:
 		buffer = self.conversation.get_buffer()
 		end_iter = buffer.get_end_iter()
 		buffer.create_mark('end', end_iter, 0)
-#		self.window.show()
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_clear_button_clicked', self.on_clear)
 		xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
+		xml.signal_connect('on_check_resize', self.on_test)
 		self.tagIn = buffer.create_tag("incoming")
 		color = self.r.cfgParser.GtkGui_inmsgcolor
 		if not color:
@@ -855,7 +864,7 @@ class message:
 		self.tagStatus = buffer.create_tag("status")
 		color = self.r.cfgParser.GtkGui_statusmsgcolor
 		if not color:
-			color = 'green'
+			color = '#00ff00' #green
 		self.tagStatus.set_property("foreground", color)
 
 class roster:
@@ -1184,7 +1193,6 @@ class roster:
 					pix = gtk.gdk.pixbuf_new_from_file(self.path + state + '.xpm')
 					self.pixbufs[state] = pix
 			else:
-				#TODO: open an animated gif file
 				pix = gtk.gdk.pixbufAnimation(self.path + state + '.gif')
 				self.pixbufs[state] = pix
 
