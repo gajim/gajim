@@ -2366,7 +2366,6 @@ class plugin:
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
-#		gtk.gdk.threads_enter()
 		self.queueIN = quIN
 		self.queueOUT = quOUT
 		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'STATUS', \
@@ -2448,6 +2447,8 @@ class plugin:
 				self.systray = systray(self)
 		else:
 			self.systray = systrayDummy()
+		gtk.gdk.threads_enter()
 		gtk.main()
+		gtk.gdk.threads_leave()
 
 print _("plugin gtkgui loaded")
