@@ -969,6 +969,7 @@ class Preferences_window:
 		self.msg_tree.get_model().connect('row-deleted', \
 			self.on_msg_treemodel_row_deleted)
 		
+		self.notebook.set_current_page(0)
 		self.xml.signal_autoconnect(self)
 
 class Account_modification_window:
@@ -1619,6 +1620,17 @@ class Service_discovery_window:
 		jid = self.address_comboboxentry.child.get_text()
 		self.browse(jid)
 
+	def on_address_comboboxentry_changed(self, widget):
+		return # not ready
+		'is executed on each keypress'
+		text = self.comboboxentry_entry.get_text()
+		
+		self.on_go_button_clicked(widget)
+		
+	def on_address_comboboxentry_button_press_event(self, widget, event):
+		return # not ready
+		if event.click == 1: #Left click (user possibly selected sth)
+			pass
 	def on_services_treeview_row_activated(self, widget, path, col=0):
 		"""When a row is activated: Register or join the selected agent"""
 		#if both buttons are sensitive, it will register [default]
@@ -1669,10 +1681,10 @@ class Service_discovery_window:
 						self.join_button.set_sensitive(True)
 	
 	def on_go_button_clicked(self, widget):
-		jid = self.address_comboboxentry.child.get_text()
-		if jid in self.latest_addresses:
-			self.latest_addresses.remove(jid)
-		self.latest_addresses.insert(0, jid)
+		server_address = self.address_comboboxentry.child.get_text()
+		if server_address in self.latest_addresses:
+			self.latest_addresses.remove(server_address)
+		self.latest_addresses.insert(0, server_address)
 		if len(self.latest_addresses) > 10:
 			self.latest_addresses = self.latest_addresses[0:10]
 		self.address_comboboxentry.get_model().clear()
@@ -1681,7 +1693,7 @@ class Service_discovery_window:
 		self.plugin.config['latest_disco_addresses'] = \
 			' '.join(self.latest_addresses)
 		self.services_treeview.get_model().clear()
-		self.browse(jid)
+		self.browse(server_address)
 	
 	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:
@@ -1692,6 +1704,9 @@ class Service_discovery_window:
 		self.services_treeview = xml.get_widget('services_treeview')
 		self.join_button = xml.get_widget('join_button')
 		self.register_button = xml.get_widget('register_button')
+		self.address_comboboxentry = xml.get_widget('address_comboboxentry')
+		self.address_comboboxentry_entry = self.address_comboboxentry.child
+		self.address_comboboxentry_entry.set_activates_default(True)
 		self.plugin = plugin
 		self.account = account
 		self.agent_infos = {}
@@ -1713,19 +1728,19 @@ class Service_discovery_window:
 		self.address_comboboxentry.set_text_column(0)
 		self.latest_addresses = \
 			self.plugin.config['latest_disco_addresses'].split()
-		jid = self.plugin.accounts[self.account]['hostname']
-		if jid in self.latest_addresses:
-			self.latest_addresses.remove(jid)
-		self.latest_addresses.insert(0, jid)
+		server_address = self.plugin.accounts[self.account]['hostname']
+		if server_address in self.latest_addresses:
+			self.latest_addresses.remove(server_address)
+		self.latest_addresses.insert(0, server_address)
 		if len(self.latest_addresses) > 10:
 			self.latest_addresses = self.latest_addresses[0:10]
 		for j in self.latest_addresses:
 			self.address_comboboxentry.append_text(j)
-		self.address_comboboxentry.child.set_text(jid)
+		self.address_comboboxentry.child.set_text(server_address)
 
 		self.register_button = xml.get_widget('register_button')
 		self.register_button.set_sensitive(False)
 		self.join_button = xml.get_widget('join_button')
 		self.join_button.set_sensitive(False)
 		xml.signal_autoconnect(self)
-		self.browse(jid)
+		self.browse(server_address)

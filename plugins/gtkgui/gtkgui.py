@@ -699,8 +699,6 @@ class plugin:
 		self.systray_enabled = True
 
 	def hide_systray(self):
-		if not self.systray_enabled:
-			return
 		self.systray.hide_icon()
 		self.systray_enabled = False
 	
@@ -741,9 +739,11 @@ class plugin:
 		# and mathces beginning of lines so we have correct formatting detection
 		# even if the the text is just '*foo*'
 		# (?!\S) is the same thing but it's a lookahead assertion
-		links = r'\bhttp://\S+|' r'\bhttps://\S+|' r'\bnews://\S+|' r'\bftp://\S+|' r'\bed2k://\S+|' r'\bwww\.\S+|' r'\bftp\.\S+|'
+		# \S*[^\s)?!,.;] --> in the matching string don't match ? or ) etc.. if at the end
+		# so http://be) will match http://be and http://be)be) will match http://be)be
+		links = r'\bhttp://\S*[^\s)?!,.;]|' r'\bhttps://\S*[^\s)?!,.;]|' r'\bnews://\S*[^\s)?!,.;]|' r'\bftp://\S*[^\s)?!,.;]|' r'\bed2k://\S*[^\s)?!,.;]|' r'\bwww\.\S*[^\s)?!,.;]|' r'\bftp\.\S*[^\s)?!,.;]|'
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
-		mail = r'\bmailto:\S+|' r'\b\S+@\S+\.\S+|'
+		mail = r'\bmailto:\S*[^\s)?!,.;]|' r'\b\S+@\S+\.\S*[^\s)?]|'
 
 		#detects eg. *b* *bold* *bold bold* test *bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
@@ -762,7 +762,7 @@ class plugin:
 															sre.IGNORECASE)
 		
 		# at least one character in 3 parts (before @, after @, after .)
-		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S+')
+		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?]')
 
 	def on_launch_browser_mailer(self, widget, url, kind):
 		self.launch_browser_mailer(kind, url)
@@ -914,6 +914,7 @@ class plugin:
 				self.systray_capabilities = True
 				self.systray = Systray(self)
 		else:
+			self.systray_capabilities = True
 			self.systray = Systray(self)
 		if self.config['trayicon']:
 			self.show_systray()

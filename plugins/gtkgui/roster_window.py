@@ -970,7 +970,8 @@ class Roster_window:
 		self.plugin.send('QUIT', None, ('gtkgui', 1))
 		print _("plugin gtkgui stopped")
 		self.close_all(self.plugin.windows)
-		self.plugin.hide_systray()
+		if self.plugin.systray_enabled:
+			self.plugin.hide_systray()
 		gtk.main_quit()
 
 	def on_quit_menuitem_activate(self, widget):
