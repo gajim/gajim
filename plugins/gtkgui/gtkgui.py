@@ -504,11 +504,12 @@ class awayMsg_Window:
 	def run(self):
 		"""Wait for Ok button to be pressed and return away messsage"""
 		rep = self.xml.get_widget("Away_msg").run()
-		msg = ''
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.txtBuffer.get_bounds()
 			msg = self.txtBuffer.get_text(beg, end, 0)
-			self.xml.get_widget("Away_msg").destroy()
+		else:
+			msg = -1
+		self.xml.get_widget("Away_msg").destroy()
 		return msg
 	
 	def __init__(self):
@@ -1598,9 +1599,11 @@ class roster_Window:
 		if status != 'online' and status != 'offline':
 			w = awayMsg_Window()
 			txt = w.run()
+			if txt != -1:
+				self.plugin.send('STATUS', account, (status, txt))
 		else:
 			txt = status
-		self.plugin.send('STATUS', account, (status, txt))
+			self.plugin.send('STATUS', account, (status, txt))
 
 	def on_optionmenu_changed(self, widget):
 		"""When we change our status"""
@@ -1610,6 +1613,9 @@ class roster_Window:
 		if status != 'online' and status != 'offline':
 			w = awayMsg_Window()
 			txt = w.run()
+			if txt == -1:
+				self.set_optionmenu()
+				return
 		else:
 			txt = status
 		accounts = self.plugin.accounts.keys()
