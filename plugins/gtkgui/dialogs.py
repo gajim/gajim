@@ -274,6 +274,8 @@ class Away_message_dialog:
 	"""Class for Away message dialog"""
 	def run(self):
 		"""Wait for OK button to be pressed and return away messsage"""
+		if self.autoconnect:
+			gtk.gdk.threads_enter()
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
@@ -282,6 +284,8 @@ class Away_message_dialog:
 		else:
 			message = -1
 		self.window.destroy()
+		if self.autoconnect:
+			gtk.gdk.threads_leave()
 		return message
 
 	def on_message_comboboxentry_changed(self, widget, data=None):
@@ -297,10 +301,11 @@ class Away_message_dialog:
 			if (event.state & gtk.gdk.CONTROL_MASK):
 				self.window.response(gtk.RESPONSE_OK)
 	
-	def __init__(self, plugin):
+	def __init__(self, plugin, autoconnect = 0):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'away_message_dialog', APP)
 		self.window = self.xml.get_widget('away_message_dialog')
 		self.plugin = plugin
+		self.autoconnect = autoconnect
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
 		self.message_buffer.set_text(self.plugin.config['last_msg'])

@@ -657,10 +657,13 @@ class plugin:
 
 	def autoconnect(self):
 		"""auto connect at startup"""
+		message = self.roster.get_status_message('online', 1)
+		if message == -1:
+			return
 		for a in self.accounts.keys():
 			if self.accounts[a].has_key('autoconnect'):
 				if self.accounts[a]['autoconnect']:
-					self.roster.send_status(a, 'online', 'Online', 1)
+					self.roster.send_status(a, 'online', message, 1)
 		return 0
 
 	def show_systray(self):

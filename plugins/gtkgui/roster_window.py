@@ -725,12 +725,12 @@ class roster_window:
 		else:
 			self.plugin.sleeper_state[account] = 0
 
-	def get_status_message(self, status):
+	def get_status_message(self, status, autoconnect = 0):
 		if (status == 'online' and not self.plugin.config['ask_online_status']) \
 			or (status == 'offline' and not \
 			self.plugin.config['ask_offline_status']):
 			return status
-		w = Away_message_dialog(self.plugin)
+		w = Away_message_dialog(self.plugin, autoconnect)
 		message = w.run()
 		return message
 
