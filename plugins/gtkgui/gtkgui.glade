@@ -360,17 +360,6 @@
       </child>
 
       <child>
-	<widget class="GtkHSeparator" id="hseparator1">
-	  <property name="visible">True</property>
-	</widget>
-	<packing>
-	  <property name="padding">10</property>
-	  <property name="expand">False</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
-
-      <child>
 	<widget class="GtkAlignment" id="alignment1">
 	  <property name="visible">True</property>
 	  <property name="xalign">0.5</property>
@@ -510,7 +499,7 @@
 <widget class="GtkWindow" id="account_modification_window">
   <property name="border_width">4</property>
   <property name="width_request">440</property>
-  <property name="height_request">290</property>
+  <property name="height_request">220</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Account Modification</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -529,7 +518,7 @@
     <widget class="GtkVBox" id="vbox7">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">5</property>
 
       <child>
 	<widget class="GtkHBox" id="hbox23">
@@ -598,11 +587,12 @@
 	    <widget class="GtkVBox" id="vbox60">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">2</property>
+	      <property name="spacing">5</property>
 
 	      <child>
 		<widget class="GtkCheckButton" id="new_account_checkbutton">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Enable if you want to register for a new jabber account</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Register new account</property>
 		  <property name="use_underline">True</property>
@@ -668,7 +658,7 @@
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -760,7 +750,7 @@
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -813,7 +803,7 @@
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -866,7 +856,7 @@
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -1572,7 +1562,7 @@
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
-	  <property name="expand">True</property>
+	  <property name="expand">False</property>
 	  <property name="fill">True</property>
 	</packing>
       </child>
@@ -1582,8 +1572,8 @@
 
 <widget class="GtkWindow" id="add_contact_window">
   <property name="border_width">4</property>
-  <property name="width_request">400</property>
-  <property name="height_request">334</property>
+  <property name="width_request">317</property>
+  <property name="height_request">260</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Add New Contact</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -1854,17 +1844,6 @@
       </child>
 
       <child>
-	<widget class="GtkHSeparator" id="hseparator4">
-	  <property name="visible">True</property>
-	</widget>
-	<packing>
-	  <property name="padding">10</property>
-	  <property name="expand">False</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
-
-      <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox1">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
@@ -2043,17 +2022,6 @@
 	<packing>
 	  <property name="padding">0</property>
 	  <property name="expand">True</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkHSeparator" id="hseparator5">
-	  <property name="visible">True</property>
-	</widget>
-	<packing>
-	  <property name="padding">5</property>
-	  <property name="expand">False</property>
 	  <property name="fill">True</property>
 	</packing>
       </child>
@@ -2326,17 +2294,6 @@
       </child>
 
       <child>
-	<widget class="GtkHSeparator" id="hseparator6">
-	  <property name="visible">True</property>
-	</widget>
-	<packing>
-	  <property name="padding">3</property>
-	  <property name="expand">False</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
-
-      <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox4">
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
@@ -2557,17 +2514,6 @@
       </child>
 
       <child>
-	<widget class="GtkHSeparator" id="hseparator7">
-	  <property name="visible">True</property>
-	</widget>
-	<packing>
-	  <property name="padding">4</property>
-	  <property name="expand">False</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
-
-      <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox5">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
@@ -2772,7 +2718,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="tray_icon_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If enabled, Gajim will also have a trayicon</property>
+		  <property name="tooltip" translatable="yes">If checked, Gajim will also have a trayicon</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Icon in systray (aka. notification area)</property>
 		  <property name="use_underline">True</property>
@@ -2813,6 +2759,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="merge_checkbutton">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">If you have 2 or more accounts and you enable it, Gajim will list all contacts as if you had one account</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Merge accounts</property>
 		  <property name="use_underline">True</property>
@@ -3820,7 +3767,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="use_emoticons_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If enabled, it will replace ascii smilies eg. :) with equivalent graphical emoticons</property>
+		  <property name="tooltip" translatable="yes">If checked, it will replace ascii smilies eg. :) with equivalent graphical emoticons</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Use _emoticons</property>
 		  <property name="use_underline">True</property>
@@ -5262,17 +5209,6 @@ Custom</property>
 	<packing>
 	  <property name="padding">0</property>
 	  <property name="expand">True</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkHSeparator" id="hseparator8">
-	  <property name="visible">True</property>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">False</property>
 	  <property name="fill">True</property>
 	</packing>
       </child>
@@ -7441,17 +7377,6 @@ Custom</property>
       </child>
 
       <child>
-	<widget class="GtkHSeparator" id="hseparator9">
-	  <property name="visible">True</property>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
-
-      <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox12">
 	  <property name="border_width">10</property>
 	  <property name="visible">True</property>
@@ -7567,7 +7492,7 @@ Custom</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="has_separator">True</property>
+  <property name="has_separator">False</property>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox4">
@@ -7707,7 +7632,7 @@ Custom</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="has_separator">True</property>
+  <property name="has_separator">False</property>
   <signal name="key_press_event" handler="on_Passphrase_key_press_event" last_modification_time="Thu, 07 Oct 2004 14:25:48 GMT"/>
 
   <child internal-child="vbox">
@@ -7836,7 +7761,7 @@ Custom</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="has_separator">True</property>
+  <property name="has_separator">False</property>
   <signal name="key_press_event" handler="on_change_status_message_dialog_key_press_event" last_modification_time="Wed, 16 Mar 2005 00:53:06 GMT"/>
 
   <child internal-child="vbox">
@@ -8027,6 +7952,7 @@ Custom</property>
 	      <child>
 		<widget class="GtkButton" id="history_button">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Click to see past conversations with this contact</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
 		  <signal name="clicked" handler="on_history_button_clicked" last_modification_time="Wed, 02 Mar 2005 17:03:17 GMT"/>
@@ -8101,6 +8027,7 @@ Custom</property>
 	      <child>
 		<widget class="GtkButton" id="clear_button">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Click to clear conversation (won't delete it from history)</property>
 		  <property name="label">gtk-clear</property>
 		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -8561,7 +8488,7 @@ Custom</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="has_separator">True</property>
+  <property name="has_separator">False</property>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox7">
