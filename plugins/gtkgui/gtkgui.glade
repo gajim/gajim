@@ -497,16 +497,14 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkScrolledWindow" id="scrolledwindow21">
+	    <widget class="GtkFixed" id="fixed1">
+	      <property name="width_request">20</property>
 	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-	      <property name="vscrollbar_policy">GTK_POLICY_NEVER</property>
-	      <property name="shadow_type">GTK_SHADOW_NONE</property>
-	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
 		<widget class="GtkButton" id="button_contact">
+		  <property name="width_request">0</property>
+		  <property name="height_request">0</property>
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Anonymous &lt;id@server/res&gt;</property>
@@ -515,6 +513,10 @@
 		  <property name="focus_on_click">True</property>
 		  <signal name="clicked" handler="on_button_contact_clicked" last_modification_time="Sun, 15 Feb 2004 14:26:53 GMT"/>
 		</widget>
+		<packing>
+		  <property name="x">0</property>
+		  <property name="y">0</property>
+		</packing>
 	      </child>
 	    </widget>
 	    <packing>
