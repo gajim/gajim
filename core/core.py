@@ -801,10 +801,13 @@ class GajimCore:
 					req = c.getRegInfo()
 					c.setRegInfo( 'username', ev[2][1])
 					c.setRegInfo( 'password', ev[2][2])
-					#FIXME: if users already exist, no error message :(
 					if not c.sendRegInfo():
-						print "error " + c.lastErr
+						self.hub.sendPlugin('WARNING', None, _('Error : ')+c.lastErr)
 					else:
+						self.connected[ev[2][3]] = 0
+						self.passwords[ev[2][3]] = ''
+						if USE_GPG:
+							self.gpg[ev[2][3]] = MyGnuPG()
 						self.hub.sendPlugin('ACC_OK', ev[1], ev[2])
 			#('ACC_CHG', old_account, new_account)
 			elif ev[0] == 'ACC_CHG':

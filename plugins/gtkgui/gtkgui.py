@@ -2252,9 +2252,10 @@ class plugin:
 		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.queues[name] = {}
 		self.connected[name] = 0
+		self.nicks[name] = array[1]
 		self.roster.groups[name] = {}
 		self.roster.contacts[name] = {}
-		self.sleeper_state[a] = 0
+		self.sleeper_state[name] = 0
 		if self.windows.has_key('accounts'):
 			self.windows['accounts'].init_accounts()
 		self.roster.draw_roster()
