@@ -214,54 +214,52 @@ class passphrase_Window:
 	"""Class for Passphrase Window"""
 	def run(self):
 		"""Wait for Ok button to be pressed and return passphrase"""
-		rep = self.win.run()
+		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
-			msg = self.entry.get_text()
+			passphrase = self.passphrase_entry.get_text()
 		else:
-			msg = -1
-		chk = self.xml.get_widget("save_checkbutton")
-		self.win.destroy()
-		return msg, chk.get_active()
+			passphrase = -1
+		save_passphrase_checkbutton = self.xml.\
+			get_widget('save_passphrase_checkbutton')
+		self.window.destroy()
+		return passphrase, save_passphrase_checkbutton.get_active()
 
-	def on_key_pressed(self, widget, event):
+	def on_passphrase_dialog_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Return:
 			if self.autoconnect:
-				self.on_ok_clicked(widget)
+				self.on_ok_button_clicked(widget)
 			else:
-				self.win.response(gtk.RESPONSE_OK)
+				self.window.response(gtk.RESPONSE_OK)
 
-	def on_ok_clicked(self, widget):
+	def on_ok__button_clicked(self, widget):
 		if self.autoconnect:
-			self.msg = self.entry.get_text()
+			self.passphrase = self.passphrase_entry.get_text()
 			gtk.main_quit()
 	
-	def on_cancel_clicked(self, widget):
+	def on_cancel__button_clicked(self, widget):
 		if self.autoconnect:
 			gtk.main_quit()
 	
 	def get_pass(self):
 		self.autoconnect = 0
-		chk = self.xml.get_widget("save_checkbutton")
-		self.win.destroy()
-		return self.msg, chk.get_active()
+		save_passphrase_checkbutton = self.xml.\
+			get_widget('save_passphrase_checkbutton')
+		self.window.destroy()
+		return self.passphrase, save_passphrase_checkbutton.get_active()
 		
-	def delete_event(self, widget=None):
+	def on_passphrase_dialog_destroy(self, widget=None):
 		"""close window"""
 		if self.autoconnect:
 			gtk.main_quit()
 
-	def __init__(self, txt, autoconnect=0):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Passphrase', APP)
-		self.win = self.xml.get_widget("Passphrase")
-		self.entry = self.xml.get_widget("entry")
-		self.msg = -1
+	def __init__(self, text, autoconnect=0):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'passphrase_dialog', APP)
+		self.window = self.xml.get_widget('passphrase_dialog')
+		self.passphrase_entry = self.xml.get_widget('passphrase_entry')
+		self.passphrase = -1
 		self.autoconnect = autoconnect
-		self.xml.get_widget("label").set_text(txt)
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_ok_clicked', self.on_ok_clicked)
-		self.xml.signal_connect('on_cancel_clicked', self.on_cancel_clicked)
-		self.xml.signal_connect('on_Passphrase_key_press_event', \
-			self.on_key_pressed)
+		self.xml.get_widget('message_label').set_text(text)
+		self.xml.signal_autoconnect(self)
 
 class choose_gpg_Window:
 	"""Class for Away Message Window"""
