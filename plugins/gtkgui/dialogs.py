@@ -21,7 +21,6 @@
 import gtk
 import gtk.glade
 import gobject
-import string
 from common import i18n
 _ = i18n._
 APP = i18n.APP
@@ -67,7 +66,7 @@ class vcard_information_window:
 		if log and self.user.jid in no_log_for:
 			no_log_for.remove(self.user.jid)
 		if oldlog != log:
-			account_info['no_log_for'] = string.join(no_log_for, ' ')
+			account_info['no_log_for'] = ' '.join(no_log_for)
 			self.plugin.accounts[self.account] = account_info
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 				'Gtkgui'))
@@ -122,7 +121,7 @@ class vcard_information_window:
 
 	def add_to_vcard(self, vcard, entry, txt):
 		"""Add an information to the vCard dictionary"""
-		entries = string.split(entry, '_')
+		entries = '_'.split(entry)
 		loc = vcard
 		while len(entries) > 1:
 			if not loc.has_key(entries[0]):
@@ -389,7 +388,7 @@ class add_contact_window:
 		
 		#If login contains only numbers, it's probably an ICQ number
 		try:
-			string.atoi(uid)
+			int(uid) # will raise ValueError if not all numbers
 		except:
 			pass
 		else:

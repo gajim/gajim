@@ -44,7 +44,7 @@ if __name__ == "__main__":
 		sock.connect(('', 8255))
 	except:
 		#TODO: use i18n
-		print "unable to connect to localhost on port "+str(port)
+		print "unable to connect to localhost on port ", port
 	else:
 		evp = pickle.dumps(('EXEC_PLUGIN', '', 'gtkgui'))
 		sock.send('<'+evp+'>')
@@ -57,7 +57,6 @@ import gtk
 import gtk.glade
 import gobject
 import os
-import string
 import time
 import Queue
 import sys
@@ -551,12 +550,12 @@ class tabbed_chat_window:
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		if not text:
-			text = ""
+			text = ''
 		end_iter = conversation_buffer.get_end_iter()
 		if not tim:
 			tim = time.localtime()
-		tims = time.strftime("[%H:%M:%S]", tim)
-		conversation_buffer.insert(end_iter, tims + ' ')
+		tim_format = time.strftime("[%H:%M:%S]", tim)
+		conversation_buffer.insert(end_iter, tim_format + ' ')
 		
 		otext = ''
 		ttext = ''
@@ -571,7 +570,7 @@ class tabbed_chat_window:
 				tag = 'incoming'
 				name = user.name
 				
-			if string.find(text, '/me ') == 0:
+			if text.find('/me ') == 0:
 				ttext = name + ' ' + text[4:] + '\n'
 			else:
 				ttext = '<' + name + '> '
@@ -898,20 +897,20 @@ class Groupchat_window:
 				message_textview.grab_focus()
 		'''
 
-	def print_conversation(self, txt, room_jid, contact = None, tim = None):
+	def print_conversation(self, text, room_jid, contact = None, tim = None):
 		"""Print a line in the conversation :
 		if contact is set : it's a message from someone
 		if contact is not set : it's a message from the server"""
 		conversation_textview = self.xmls[room_jid].\
 			get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
-		if not txt:
-			txt = ""
+		if not text:
+			text = ''
 		end_iter = conversation_buffer.get_end_iter()
 		if not tim:
 			tim = time.localtime()
-		tims = time.strftime('[%H:%M:%S]', tim)
-		conversation_buffer.insert(end_iter, tims)
+		tim_format = time.strftime('[%H:%M:%S]', time)
+		conversation_buffer.insert(end_iter, tim_format) # CHECK! in tabbed print_conver you have + ' ' here
 		if contact:
 			if contact == self.nicks[room_jid]:
 				conversation_buffer.insert_with_tags_by_name(end_iter, '<' + \
@@ -919,9 +918,9 @@ class Groupchat_window:
 			else:
 				conversation_buffer.insert_with_tags_by_name(end_iter, '<' + \
 					contact + '> ', 'incoming')
-			conversation_buffer.insert(end_iter, txt + '\n')
+			conversation_buffer.insert(end_iter, text + '\n')
 		else:
-			conversation_buffer.insert_with_tags_by_name(end_iter, txt + '\n', \
+			conversation_buffer.insert_with_tags_by_name(end_iter, text + '\n', \
 				'status')
 		#scroll to the end of the textview
 		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
@@ -1328,18 +1327,18 @@ class history_window:
 		tim = time.strftime("[%x %X] ", time.localtime(float(infos[1])))
 		self.history_buffer.insert(start_iter, tim)
 		if infos[2] == 'recv':
-			msg = string.join(infos[3][0:], ':')
-			msg = string.replace(msg, '\\n', '\n')
+			msg = ':'.join(infos[3][0:])
+			msg = msg.replace('\\n', '\n')
 			self.history_buffer.insert_with_tags_by_name(start_iter, msg, \
 				'incoming')
 		elif infos[2] == 'sent':
-			msg = string.join(infos[3][0:], ':')
-			msg = string.replace(msg, '\\n', '\n')
+			msg = ':'.join(infos[3][0:])
+			msg = msg.replace('\\n', '\n')
 			self.history_buffer.insert_with_tags_by_name(start_iter, msg, \
 				'outgoing')
 		else:
-			msg = string.join(infos[3][1:], ':')
-			msg = string.replace(msg, '\\n', '\n')
+			msg = ':'.join(infos[3][1:], ':')
+			msg = msg.replace('\\n', '\n')
 			self.history_buffer.insert_with_tags_by_name(start_iter, \
 				_('Status is now : ') + infos[3][0]+' : ' + msg, 'status')
 	
@@ -1450,7 +1449,7 @@ class roster_window:
 		users = self.contacts[account][jid]
 		user = users[0]
 		if user.groups == []:
-			if string.find(user.jid, "@") <= 0:
+			if user.jid.find("@") <= 0:
 				user.groups.append('Agents')
 			else:
 				user.groups.append('general')
@@ -1607,7 +1606,7 @@ class roster_window:
 		if not self.groups.has_key(account):
 			self.groups[account] = {}
 		for jid in array.keys():
-			jids = string.split(jid, '/')
+			jids = jid.split('/')
 			#get jid
 			ji = jids[0]
 			#get resource
@@ -1617,10 +1616,10 @@ class roster_window:
 			#get name
 			name = array[jid]['name']
 			if not name:
-				if string.find(ji, "@") <= 0:
+				if ji.find("@") <= 0:
 					name = ji
 				else:
-					name = string.split(jid, '@')[0]
+					name = jid.split('@')[0]
 			#get show
 			show = array[jid]['show']
 			if not show:
@@ -2217,7 +2216,7 @@ class roster_window:
 				self.plugin.config['width'], self.plugin.config['height'] = \
 					self.window.get_size()
 
-		self.plugin.config['hiddenlines'] = string.join(self.hidden_lines, '\t')
+		self.plugin.config['hiddenlines'] = '\t'.join(self.hidden_lines)
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.send('QUIT', None, ('gtkgui', 1))
 		print _("plugin gtkgui stopped")
@@ -2353,7 +2352,7 @@ class roster_window:
 		"""initialize emoticons dictionary"""
 		self.emoticons = dict()
 		self.begin_emot = ''
-		split_line = string.split(self.plugin.config['emoticons'], '\t')
+		split_line = self.plugin.config['emoticons'].split('\t')
 		for i in range(0, len(split_line)/2):
 			file = split_line[2*i+1]
 			if not self.image_is_ok(file):
@@ -2610,7 +2609,7 @@ class roster_window:
 		self.xml.signal_autoconnect(self)
 		self.id_signal_cb = self.cb.connect('changed', self.on_cb_changed)
 
-		self.hidden_lines = string.split(self.plugin.config['hiddenlines'], '\t')
+		self.hidden_lines = self.plugin.config['hiddenlines'].split('\t')
 		self.draw_roster()
 
 class systrayDummy:
@@ -2722,7 +2721,7 @@ class systray:
 					user = users[0]
 					if group in user.groups and user.show != 'offline' and \
 						user.show != 'error':
-						item = gtk.MenuItem(string.replace(user.name, '_', '__'))
+						item = gtk.MenuItem(user.name.replace('_', '__'))
 						menu_user.append(item)
 						item.connect("activate", self.start_chat, account, user.jid)
 
@@ -2840,7 +2839,7 @@ class plugin:
 			try: 
 				os.execvp(argv[0], argv)
 			except:
-				print _("error while running %s :") % string.join(argv, ' '), \
+				print _("error while running %s :") % ' '.join(argv), \
 					sys.exc_info()[1]
 				os._exit(1)
 		pidp, r = os.waitpid(pid, os.WNOHANG)
@@ -2892,15 +2891,15 @@ class plugin:
 		# role, affiliation, real_jid, reason, actor, statusCode))
 		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd', 'invisible']
 		old_show = 0
-		jid = string.split(array[0], '/')[0]
+		jid = array[0].split('/')[0]
 		keyID = array[5]
 		resource = array[3]
 		if not resource:
 			resource = ''
 		priority = array[4]
-		if string.find(jid, "@") <= 0:
+		if jid.find("@") <= 0:
 			#It must be an agent
-			ji = string.replace(jid, '@', '')
+			ji = jid.replace('@', '')
 		else:
 			ji = jid
 		#Update user
@@ -2920,7 +2919,7 @@ class plugin:
 				if user1.show in statuss:
 					old_show = statuss.index(user1.show)
 				if (resources != [''] and (len(luser) != 1 or 
-					luser[0].show != 'offline')) and not string.find(jid, "@") <= 0:
+					luser[0].show != 'offline')) and not jid.find("@") <= 0:
 					old_show = 0
 					user1 = User(user1.jid, user1.name, user1.groups, user1.show, \
 					user1.status, user1.sub, user1.ask, user1.resource, \
@@ -2931,7 +2930,7 @@ class plugin:
 			user1.status = array[2]
 			user1.priority = priority
 			user1.keyID = keyID
-		if string.find(jid, "@") <= 0:
+		if jid.find("@") <= 0:
 			#It must be an agent
 			if self.roster.contacts[account].has_key(ji):
 				#Update existing iter
@@ -2955,9 +2954,9 @@ class plugin:
 
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (user, msg, time))
-		jid = string.split(array[0], '/')[0]
-		if string.find(jid, "@") <= 0:
-			jid = string.replace(jid, '@', '')
+		jid = array[0].split('/')[0]
+		if jid.find("@") <= 0:
+			jid = jid.replace('@', '')
 		first = 0
 		if not self.windows[account]['chats'].has_key(jid) and \
 			not self.queues[account].has_key(jid):
@@ -2970,9 +2969,9 @@ class plugin:
 		
 	def handle_event_msgerror(self, account, array):
 		#('MSGERROR', account, (user, error_code, error_msg, msg, time))
-		jid = string.split(array[0], '/')[0]
-		if string.find(jid, "@") <= 0:
-			jid = string.replace(jid, '@', '')
+		jid = array[0].split('/')[0]
+		if jid.find("@") <= 0:
+			jid = jid.replace('@', '')
 		self.roster.on_message(jid, _("error while sending") + " \"%s\" ( %s )"%\
 			(array[3], array[2]), array[4], account)
 		
@@ -3085,7 +3084,7 @@ class plugin:
 
 	def handle_event_gc_msg(self, account, array):
 		#('GC_MSG', account, (jid, msg, time))
-		jids = string.split(array[0], '/')
+		jids = array[0].split('/')
 		jid = jids[0]
 		if not self.windows[account]['gc'].has_key(jid):
 			return
@@ -3103,7 +3102,7 @@ class plugin:
 
 	def handle_event_gc_subject(self, account, array):
 		#('GC_SUBJECT', account, (jid, subject))
-		jids = string.split(array[0], '/')
+		jids = array[0].split('/')
 		jid = jids[0]
 		if not self.windows[account]['gc'].has_key(jid):
 			return

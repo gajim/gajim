@@ -3,7 +3,8 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
-##  - Nikos Kouremenos <nkour@jabber.org>
+##  	- Nikos Kouremenos <nkour@jabber.org>
+##		- Alex Podaras <bigpod@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -17,13 +18,10 @@
 ## GNU General Public License for more details.
 ##
 
-import pygtk
-pygtk.require('2.0')
 import gtk
 import gtk.glade
 import gobject
 import os
-import string
 import common.sleepy
 from common import i18n
 _ = i18n._
@@ -141,7 +139,7 @@ class preferences_window:
 			emots.append(model.get_value(iter, 0))
 			emots.append(model.get_value(iter, 1))
 			iter = model.iter_next(iter)
-		self.plugin.config['emoticons'] = string.join(emots, '\t')
+		self.plugin.config['emoticons'] = '\t'.join(emots)
 		#use emoticons
 		chk = self.xml.get_widget('use_emoticons_checkbutton')
 		if chk.get_active():
@@ -311,7 +309,7 @@ class preferences_window:
 
 	def load_emots(self):
 		emots = {}
-		split_line = string.split(self.plugin.config['emoticons'], '\t')
+		split_line = self.plugin.config['emoticons'].split('\t')
 		for i in range(0, len(split_line)/2):
 			if not self.image_is_ok(split_line[2*i+1]):
 				continue
@@ -834,33 +832,33 @@ class account_window:
 		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
 		proxyport = self.xml.get_widget('proxyport_entry').get_text()
 		if (name == ''):
-			warning_dialog(_('You must enter a name for this account'))
+			Warning_dialog(_('You must enter a name for this account'))
 			return 0
 		if name.find(' ') != -1:
-			warning_dialog(_('Spaces are not permited in account name'))
+			Warning_dialog(_('Spaces are not permited in account name'))
 			return 0
-		if (jid == '') or (string.count(jid, '@') != 1):
-			warning_dialog(_('You must enter a Jabber ID for this account\nFor example: someone@someserver.org'))
+		if (jid == '') or (jid.count('@') != 1):
+			Warning_dialog(_('You must enter a Jabber ID for this account\nFor example: someone@someserver.org'))
 			return 0
 		if new_account_checkbutton.get_active() and password == '':
-			warning_dialog(_('You must enter a password to register a new account'))
+			Warning_dialog(_('You must enter a password to register a new account'))
 			return 0
 		if use_proxy:
 			if proxyport != '':
 				try:
-					proxyport = string.atoi(proxyport)
+					proxyport = int(proxyport)
 				except ValueError:
-					warning_dialog(_('Proxy Port must be a port number'))
+					Warning_dialog(_('Proxy Port must be a port number'))
 					return 0
 			if proxyhost == '':
-				warning_dialog(_('You must enter a proxy host to use proxy'))
+				Warning_dialog(_('You must enter a proxy host to use proxy'))
 		if priority != '':
 			try:
-				priority = string.atoi(priority)
+				priority = int(priority)
 			except ValueError:
-				warning_dialog(_('Priority must be a number'))
+				Warning_dialog(_('Priority must be a number'))
 				return 0
-		(login, hostname) = string.split(jid, '@')
+		(login, hostname) = jid.split('@')
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
 		if key_name == '': #no key selected
 			keyID = ''
@@ -916,7 +914,7 @@ class account_window:
 			return
 		#if it's a new account
 		if name in self.plugin.accounts.keys():
-			warning_dialog(_('An account already has this name'))
+			Warning_dialog(_('An account already has this name'))
 			return
 		#if we neeed to register a new account
 		if new_account_checkbutton.get_active():
@@ -982,7 +980,7 @@ class account_window:
 					vcard_information_window(jid, self.plugin, self.account, True)
 				self.plugin.send('ASK_VCARD', self.account, jid)
 			else:
-				warning_dialog(_('You must be connected to get your informations'))
+				Warning_dialog(_('You must be connected to get your informations'))
 	
 	def on_gpg_choose_button_clicked(self, widget, data=None):
 		w = choose_gpg_key_dialog()
@@ -1285,8 +1283,8 @@ class agent_browser_window:
 			return
 		service = model.get_value(iter, 1)
 		room = ''
-		if string.find(service, '@') > -1:
-			services = string.split(service, '@')
+		if service.find('@') > -1:
+			services = service.split('@')
 			room = services[0]
 			service = services[1]
 		if not self.plugin.windows.has_key('join_gc'):
@@ -1320,7 +1318,7 @@ class agent_browser_window:
 		
 	def __init__(self, plugin, account):
 		if not plugin.connected[account]:
-			warning_dialog(_("You must be connected to view Agents"))
+			Warning_dialog(_("You must be connected to view Agents"))
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_browser_window', APP)
 		self.window = xml.get_widget('agent_browser_window')

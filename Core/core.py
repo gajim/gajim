@@ -3,6 +3,7 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
+##		- Nikos Kouremenos <nkour@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -16,11 +17,17 @@
 ## GNU General Public License for more details.
 ##
 
-import sys, os, time, string, logging
+import sys
+import os
+import time
+import logging
 
-import common.hub, common.optparser
+import common.hub
+import common.optparser
 import common.jabber
-import socket, select, pickle
+import socket
+import select
+import pickle
 from tempfile import *
 
 from common import i18n
@@ -75,11 +82,11 @@ else:
 			while 1:
 				line = child_stdout.readline()
 				if line == "": break
-				line = string.rstrip( line )
+				line = line.rstrip()
 				if line[0:9] == '[GNUPG:] ':
 					# Chop off the prefix
 					line = line[9:]
-					L = string.split(line, None, 1)
+					L = line.split(None, 1)
 					keyword = L[0]
 					if len(L) > 1:
 						resp[ keyword ] = L[1]
@@ -162,9 +169,9 @@ else:
 
 			keyid = ''
 			if resp.has_key('GOODSIG'):
-				keyid = string.split(resp['GOODSIG'])[0]
+				keyid = resp['GOODSIG'].split()[0]
 			elif resp.has_key('BADSIG'):
-				keyid = string.split(resp['BADSIG'])[0]
+				keyid = resp['BADSIG'].split()[0]
 			return keyid
 
 		def get_secret_keys(self):
@@ -174,9 +181,9 @@ else:
 			proc.handles['stdout'].close()
 
 			keys = {}
-			lines = string.split(output, '\n')
+			lines = output.split('\n')
 			for line in lines:
-				sline = string.split(line, ':')
+				sline = line.split(':')
 				if sline[0] == 'sec':
 					keys[sline[4][8:]] = sline[9]
 			return keys
@@ -185,7 +192,7 @@ else:
 
 		def stripHeaderFooter(self, data):
 			"""Remove header and footer from data"""
-			lines = string.split(data, '\n')
+			lines = data.split('\n')
 			while lines[0] != '':
 				lines.remove(lines[0])
 			while lines[0] == '':
@@ -195,7 +202,7 @@ else:
 				if line:
 					if line[0] == '-': break
 				i = i+1
-			line = string.join(lines[0:i], '\n')
+			line = '\n'.join(lines[0:i])
 			return line
 
 		def addHeaderFooter(self, data, type):
@@ -248,7 +255,7 @@ class GajimCore:
 		"""Load defaults plugins : plugins in 'modules' option of Core section 
 		in ConfFile and register them to the hub"""
 		if moduleStr:
-			mods = string.split (moduleStr, ' ')
+			mods = moduleStr.split(' ')
 
 			for mod in mods:
 				try:
@@ -277,7 +284,7 @@ class GajimCore:
 			default_tab = {'Profile': {'log': 0}, 'Core_client': {'host': \
 			'localhost', 'port': 8255, 'modules': 'gtkgui'}}
 		fname = os.path.expanduser(CONFPATH)
-		reps = string.split(fname, '/')
+		reps = fname.split('/')
 		path = ''
 		while len(reps) > 1:
 			path = path + reps[0] + '/'
@@ -315,7 +322,7 @@ class GajimCore:
 			if self.mode == 'server':
 				self.accounts = {}
 				if self.cfgParser.tab['Profile'].has_key('accounts'):
-					accts = string.split(self.cfgParser.tab['Profile']['accounts'], ' ')
+					accts = self.cfgParser.tab['Profile']['accounts'].split()
 					if accts == ['']:
 						accts = []
 					for a in accts:
@@ -419,9 +426,9 @@ class GajimCore:
 		elif typ == 'subscribe':
 			log.debug("subscribe request from %s" % who)
 			if self.cfgParser.Core['alwaysauth'] == 1 or \
-				string.find(who, "@") <= 0:
+				who.find("@") <= 0:
 				con.send(common.jabber.Presence(who, 'subscribed'))
-				if string.find(who, "@") <= 0:
+				if who.find("@") <= 0:
 					self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 						(prs.getFrom().getStripped(), 'offline', 'offline', \
 						prs.getFrom().getResource(), prio, keyID, None, None, None, \
@@ -656,8 +663,7 @@ class GajimCore:
 			elif ev[0] == 'CONFIG':
 				if ev[2][0] == 'accounts':
 					#Remove all old accounts
-					accts = string.split(self.cfgParser.tab\
-						['Profile']['accounts'], ' ')
+					accts = self.cfgParser.tab['Profile']['accounts'].split()
 					if accts == ['']:
 						accts = []
 					for a in accts:
@@ -665,7 +671,7 @@ class GajimCore:
 					#Write all new accounts
 					accts = ev[2][1].keys()
 					self.cfgParser.tab['Profile']['accounts'] = \
-						string.join(accts)
+						' '.join(accts)
 					for a in accts:
 						self.cfgParser.tab[a] = ev[2][1][a]
 						if not a in self.connected.keys():
@@ -889,7 +895,7 @@ class GajimCore:
 					line = fic.readline()
 					nb = nb+1
 					if line:
-						lineSplited = string.split(line, ':')
+						lineSplited = line.split(':')
 						if len(lineSplited) > 2:
 							self.hub.sendPlugin('LOG_LINE', ev[1], (ev[2][0], nb, \
 								lineSplited[0], lineSplited[1], lineSplited[2:]))
