@@ -236,8 +236,23 @@ class Groupchat_window(Chat):
 		"""When a key is pressed:
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation. Tab does autocompete in nickames"""
-		if event.keyval == gtk.keysyms.Return or \
-		event.keyval == gtk.keysyms.KP_Enter: # ENTER
+		jid = self.get_active_jid()
+		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		if event.keyval == gtk.keysyms.Tab and \
+			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
+			self.notebook.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
+				self.notebook.emit('key_press_event', event)
+			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
+				conversation_textview.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
+				self.notebook.emit('key_press_event', event)
+			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
+				conversation_textview.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.Return or \
+			event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return 0
 			message_buffer = widget.get_buffer()

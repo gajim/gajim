@@ -162,12 +162,12 @@ class Tabbed_chat_window(Chat):
 		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				self.notebook.emit('key_press_event', event)
-			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
+			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
 				conversation_textview.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
 				self.notebook.emit('key_press_event', event)
-			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
+			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
 				conversation_textview.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
