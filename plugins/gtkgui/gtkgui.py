@@ -279,6 +279,14 @@ class tabbed_chat_Window:
 		child = self.xmls[jid].get_widget("vbox_tab")
 		nb.set_tab_label_text(child, start + self.users[jid].name)
 
+	def set_image(self, image, jid):
+		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			self.xmls[jid].get_widget('image_status').\
+				set_from_animation(image.get_animation())
+		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
+			self.xmls[jid].get_widget('image_status').\
+				set_from_pixbuf(image.get_pixbuf())
+
 	def delete_event(self, widget):
 		"""close window"""
 		#clean self.plugin.windows[self.account]['chats']
@@ -559,6 +567,12 @@ class message_Window:
 		elif self.nb_unread == 1:
 			start = "* "
 		self.window.set_title(start + self.user.name + " (" + self.account + ")")
+
+	def set_image(self, image, jid):
+		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			self.img.set_from_animation(image.get_animation())
+		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
+			self.img.set_from_pixbuf(image.get_pixbuf())
 
 	def read_queue(self, q):
 		"""read queue and print messages containted in it"""
@@ -1455,12 +1469,8 @@ class roster_Window:
 					prio = u.priority
 					sho = u.show
 			img = self.pixbufs[sho]
-			if img.get_storage_type() == gtk.IMAGE_ANIMATION:
-				self.plugin.windows[account]['chats'][user.jid].\
-					img.set_from_animation(img.get_animation())
-			elif img.get_storage_type() == gtk.IMAGE_PIXBUF:
-				self.plugin.windows[account]['chats'][user.jid].\
-					img.set_from_pixbuf(img.get_pixbuf())
+			self.plugin.windows[account]['chats'][user.jid].\
+				set_image(img, user.jid)
 			name = user.name
 			if user.resource != '':
 				name += '/'+user.resource
