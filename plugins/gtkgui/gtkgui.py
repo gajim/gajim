@@ -886,7 +886,7 @@ class Groupchat_window:
 		if not tim:
 			tim = time.localtime()
 		tim_format = time.strftime('[%H:%M:%S]', tim)
-		conversation_buffer.insert(end_iter, tim_format) # CHECK! in tabbed print_conver you have + ' ' here
+		conversation_buffer.insert(end_iter, tim_format + ' ')
 
 		otext = ''
 		ttext = ''
