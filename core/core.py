@@ -32,6 +32,7 @@ log = logging.getLogger('core.core')
 log.setLevel(logging.DEBUG)
 
 CONFPATH = "~/.gajim/config"
+LOGPATH = os.path.expanduser("~/.gajim/logs/")
 
 class GajimCore:
 	"""Core"""
@@ -390,6 +391,29 @@ class GajimCore:
 						t='available';
 					p = common.jabber.Presence(to=ev[2][0], type=t)
 					con.send(p)
+				#('LOG_NB_LINE', account, jid)
+				elif ev[0] == 'LOG_NB_LINE':
+					fic = open(LOGPATH + ev[2], "r")
+					nb = 0
+					while (fic.readline()):
+						nb = nb+1
+					fic.close()
+					self.hub.sendPlugin('LOG_NB_LINE', ev[1], (ev[2], nb))
+				#('LOG_GET_RANGE', account, (jid, line_begin, line_end))
+				elif ev[0] == 'LOG_GET_RANGE':
+					fic = open(LOGPATH + ev[2][0], "r")
+					nb = 0
+					while (nb < ev[2][1] and fic.readline()):
+						nb = nb+1
+					while nb < ev[2][2]:
+						line = fic.readline()
+						nb = nb+1
+						if line:
+							lineSplited = string.split(line, ':')
+							if len(lineSplited) > 2:
+								self.hub.sendPlugin('LOG_LINE', ev[1], (ev[2][0], nb, \
+									lineSplited[0], lineSplited[1], lineSplited[2:]))
+					fic.close()
 				else:
 					log.debug("Unknown Command %s" % ev[0])
 			else:
@@ -423,6 +447,8 @@ def loadPlugins(gc):
 			gc.hub.register(mod, 'ACC_OK')
 			gc.hub.register(mod, 'CONFIG')
 			gc.hub.register(mod, 'VCARD')
+			gc.hub.register(mod, 'LOG_NB_LINE')
+			gc.hub.register(mod, 'LOG_LINE')
 			modObj.load()
 # END loadPLugins
 

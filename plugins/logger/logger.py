@@ -21,7 +21,6 @@ import os
 import string
 import time
 import common.optparser
-CONFPATH = "~/.gajim/config"
 LOGPATH = os.path.expanduser("~/.gajim/logs/")
 
 class plugin:
@@ -36,8 +35,7 @@ class plugin:
 					lognotusr = self.config['lognotusr']
 				else:
 					lognotusr = 1
-#				tim = time.strftime("%d%m%y%H%M%S")
-				tim = "%d" % time.time()
+				tim = time.time()
 				
 				ev = self.queueIN.get()
 				if ev[0] == 'QUIT':
@@ -48,6 +46,7 @@ class plugin:
 					jid = string.split(ev[2][0], '/')[0]
 					if not status:
 						status = ""
+					status = string.replace(status, '\n', '\\n')
 					if lognotsep == 1:
 						fic = open(LOGPATH + "notify.log", "a")
 						fic.write("%s:%s:%s:%s\n" % (tim, ev[2][0], \
@@ -59,14 +58,16 @@ class plugin:
 							ev[2][1], status))
 						fic.close()
 				elif ev[0] == 'MSG':
+					msg = string.replace(ev[2][1], '\n', '\\n')
 					jid = string.split(ev[2][0], '/')[0]
 					fic = open(LOGPATH + jid, "a")
-					fic.write("%s:recv:%s\n" % (tim, ev[2][1]))
+					fic.write("%s:recv:%s\n" % (tim, msg))
 					fic.close()
 				elif ev[0] == 'MSGSENT':
+					msg = string.replace(ev[2][1], '\n', '\\n')
 					jid = string.split(ev[2][0], '/')[0]
 					fic = open(LOGPATH + jid, "a")
-					fic.write("%s:sent:%s\n" % (tim, ev[2][1]))
+					fic.write("%s:sent:%s\n" % (tim, msg))
 					fic.close()
 			time.sleep(0.5)
 

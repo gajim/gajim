@@ -1016,6 +1016,11 @@ class message_Window:
 		deb, end = buffer.get_bounds()
 		buffer.delete(deb, end)
 
+	def on_history(self, widget):
+		"""When history button is pressed : call log window"""
+		if not self.plugin.windows['logs'].has_key(self.user.jid):
+			self.plugin.windows['logs'][self.user.jid] = log_Window(self.plugin, self.user.jid)
+	
 	def __init__(self, user, plugin, account):
 		self.user = user
 		self.plugin = plugin
@@ -1038,26 +1043,164 @@ class message_Window:
 		buffer.create_mark('end', end_iter, 0)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_clear_clicked', self.on_clear)
+		self.xml.signal_connect('on_history_clicked', self.on_history)
 		self.xml.signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
-		self.tagIn = buffer.create_tag("incoming")
+		tagIn = buffer.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
 		if not color:
 			color = 'red'
-		self.tagIn.set_property("foreground", color)
-		self.tagOut = buffer.create_tag("outgoing")
+		tagIn.set_property("foreground", color)
+		tagOut = buffer.create_tag("outgoing")
 		color = self.plugin.config['outmsgcolor']
 		if not color:
 			color = 'blue'
-		self.tagOut.set_property("foreground", color)
-		self.tagStatus = buffer.create_tag("status")
+		tagOut.set_property("foreground", color)
+		tagStatus = buffer.create_tag("status")
 		color = self.plugin.config['statusmsgcolor']
 		if not color:
 			color = 'green'
-		self.tagStatus.set_property("foreground", color)
+		tagStatus.set_property("foreground", color)
 		#print queued messages
 		if plugin.queues[account].has_key(user.jid):
 			self.read_queue(plugin.queues[account][user.jid])
+
+class log_Window:
+	"""Class for bowser agent window :
+	to know the agents on the selected server"""
+	def delete_event(self, widget):
+		"""close window"""
+		del self.plugin.windows['logs'][self.jid]
+
+	def on_close(self, widget):
+		"""When Close button is clicked"""
+		widget.get_toplevel().destroy()
+
+	def on_earliest(self, widget):
+		buffer = self.xml.get_widget('textview').get_buffer()
+		start, end = buffer.get_bounds()
+		buffer.delete(start, end)
+		self.xml.get_widget('earliest_button').set_sensitive(False)
+		self.xml.get_widget('previous_button').set_sensitive(False)
+		self.xml.get_widget('forward_button').set_sensitive(True)
+		self.xml.get_widget('lastest_button').set_sensitive(True)
+		end = 50
+		if end > self.nb_line:
+			end = nb_line
+		self.plugin.send('LOG_GET_RANGE', None, (self.jid, 0, end))
+		self.num_begin = self.nb_line
+
+	def on_previous(self, widget):
+		buffer = self.xml.get_widget('textview').get_buffer()
+		start, end = buffer.get_bounds()
+		buffer.delete(start, end)
+		self.xml.get_widget('earliest_button').set_sensitive(True)
+		self.xml.get_widget('previous_button').set_sensitive(True)
+		self.xml.get_widget('forward_button').set_sensitive(True)
+		self.xml.get_widget('lastest_button').set_sensitive(True)
+		begin = self.num_begin - 50
+		if begin < 0:
+			begin = 0
+		end = begin + 50
+		if end > self.nb_line:
+			end = self.nb_line
+		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, end))
+		self.num_begin = self.nb_line
+
+	def on_forward(self, widget):
+		buffer = self.xml.get_widget('textview').get_buffer()
+		start, end = buffer.get_bounds()
+		buffer.delete(start, end)
+		self.xml.get_widget('earliest_button').set_sensitive(True)
+		self.xml.get_widget('previous_button').set_sensitive(True)
+		self.xml.get_widget('forward_button').set_sensitive(True)
+		self.xml.get_widget('lastest_button').set_sensitive(True)
+		begin = self.num_begin + 50
+		if begin > self.nb_line:
+			begin = self.nb_line
+		end = begin + 50
+		if end > self.nb_line:
+			end = self.nb_line
+		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, end))
+		self.num_begin = self.nb_line
+
+	def on_latest(self, widget):
+		buffer = self.xml.get_widget('textview').get_buffer()
+		start, end = buffer.get_bounds()
+		buffer.delete(start, end)
+		self.xml.get_widget('earliest_button').set_sensitive(True)
+		self.xml.get_widget('previous_button').set_sensitive(True)
+		self.xml.get_widget('forward_button').set_sensitive(False)
+		self.xml.get_widget('lastest_button').set_sensitive(False)
+		begin = self.nb_line - 50
+		if begin < 0:
+			begin = 0
+		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, self.nb_line))
+		self.num_begin = self.nb_line
+
+	def new_line(self, infos):
+		"""write a new line"""
+		#infos = [num_line, date, type, data]
+		if infos[0] < self.num_begin:
+			self.num_begin = infos[0]
+		if infos[0] == 0:
+			self.xml.get_widget('earliest_button').set_sensitive(False)
+			self.xml.get_widget('previous_button').set_sensitive(False)
+		if infos[0] == self.nb_line:
+			self.xml.get_widget('forward_button').set_sensitive(False)
+			self.xml.get_widget('lastest_button').set_sensitive(False)
+		buffer = self.xml.get_widget('textview').get_buffer()
+		start_iter = buffer.get_start_iter()
+		end_iter = buffer.get_end_iter()
+		tim = time.strftime("[%x %X] ", time.localtime(float(infos[1])))
+		buffer.insert(start_iter, tim)
+		if infos[2] == 'recv':
+			msg = string.join(infos[3][0:], ':')
+			msg = string.replace(msg, '\\n', '\n')
+			buffer.insert_with_tags_by_name(start_iter, msg, 'incoming')
+		elif infos[2] == 'sent':
+			msg = string.join(infos[3][0:], ':')
+			msg = string.replace(msg, '\\n', '\n')
+			buffer.insert_with_tags_by_name(start_iter, msg, 'outgoing')
+		else:
+			msg = string.join(infos[3][1:], ':')
+			msg = string.replace(msg, '\\n', '\n')
+			buffer.insert_with_tags_by_name(start_iter, 'Status is now : ' + \
+				infos[3][0]+' : ' + msg, 'status')
+	
+	def set_nb_line(self, nb_line):
+		self.nb_line = nb_line
+		self.num_begin = nb_line
+
+	def __init__(self, plugin, jid):
+		self.plugin = plugin
+		self.jid = jid
+		self.nb_line = 0
+		self.num_begin = 0
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Log')
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_close_clicked', self.on_close)
+		self.xml.signal_connect('on_earliest_clicked', self.on_earliest)
+		self.xml.signal_connect('on_previous_clicked', self.on_previous)
+		self.xml.signal_connect('on_forward_clicked', self.on_forward)
+		self.xml.signal_connect('on_latest_clicked', self.on_latest)
+		buffer = self.xml.get_widget('textview').get_buffer()
+		tagIn = buffer.create_tag("incoming")
+		color = self.plugin.config['inmsgcolor']
+		if not color:
+			color = 'red'
+		tagIn.set_property("foreground", color)
+		tagOut = buffer.create_tag("outgoing")
+		color = self.plugin.config['outmsgcolor']
+		if not color:
+			color = 'blue'
+		tagOut.set_property("foreground", color)
+		tagStatus = buffer.create_tag("status")
+		color = self.plugin.config['statusmsgcolor']
+		if not color:
+			color = 'green'
+		tagStatus.set_property("foreground", color)
+		self.plugin.send('LOG_NB_LINE', None, jid)
 
 class roster_Window:
 	"""Class for main gtk window"""
@@ -1928,6 +2071,20 @@ class plugin:
 			elif ev[0] == 'VCARD':
 				if self.windows[ev[1]]['infos'].has_key(ev[2]['jid']):
 					self.windows[ev[1]]['infos'][ev[2]['jid']].set_values(ev[2])
+			#('LOG_NB_LINE', account, (jid, nb_line))
+			elif ev[0] == 'LOG_NB_LINE':
+				if self.windows['logs'].has_key(ev[2][0]):
+					self.windows['logs'][ev[2][0]].set_nb_line(ev[2][1])
+					begin = 0
+					if ev[2][1] > 50:
+						begin = ev[2][1] - 50
+					self.send('LOG_GET_RANGE', None, (ev[2][0], begin, ev[2][1]))
+			#('LOG_LINE', account, (jid, num_line, date, type, data))
+			# if type = 'recv' or 'sent' data = [msg]
+			# else type = jid and data = [status, away_msg]
+			elif ev[0] == 'LOG_LINE':
+				if self.windows['logs'].has_key(ev[2][0]):
+					self.windows['logs'][ev[2][0]].new_line(ev[2][1:])
 		return 1
 	
 	def read_sleepy(self):	
@@ -1971,7 +2128,7 @@ class plugin:
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
 		self.accounts = self.wait('CONFIG')
-		self.windows = {}
+		self.windows = {'logs':{}}
 		self.queues = {}
 		self.connected = {}
 		for a in self.accounts.keys():
