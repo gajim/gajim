@@ -353,15 +353,14 @@ class Roster_window:
 		"""When a user change his status"""
 		showOffline = self.plugin.config['showoffline']
 		model = self.tree.get_model()
+		luser = self.contacts[account][user.jid]
+		user.show = show
+		user.status = status
 		if (show == 'offline' or show == 'error') and \
 			not self.plugin.queues[account].has_key(user.jid):
-			if len(self.contacts[account][user.jid]) > 1:
-				luser = self.contacts[account][user.jid]
-				for u in luser:
-					if u.resource == user.resource:
-						luser.remove(u)
-						self.redraw_jid(user.jid, account)
-						break
+			if len(luser) > 1:
+				luser.remove(user)
+				self.redraw_jid(user.jid, account)
 			elif not showOffline:
 				self.remove_user(user, account)
 				iters = []
@@ -371,18 +370,11 @@ class Roster_window:
 			if not self.get_user_iter(user.jid, account):
 				self.add_user_to_roster(user.jid, account)
 			self.redraw_jid(user.jid, account)
-		users = self.contacts[account][user.jid]
-		for u in users:
-			if u.resource == user.resource:
-				u.show = show
-				u.status = status
-				u.keyID = user.keyID
-				break
 		#Print status in chat window
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
 			prio = 0
 			sho = users[0].show
-			for u in users:
+			for u in luser:
 				if u.priority > prio:
 					prio = u.priority
 					sho = u.show
@@ -822,7 +814,10 @@ class Roster_window:
 		if status == 'offline':
 			for jid in self.contacts[account]:
 				luser = self.contacts[account][jid]
+				luser_copy = []
 				for user in luser:
+					luser_copy.append(user)
+				for user in luser_copy:
 					self.chg_user_status(user, 'offline', 'Disconnected', account)
 		self.plugin.connected[account] = statuss.index(status)
 		self.set_cb()
