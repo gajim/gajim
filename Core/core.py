@@ -926,11 +926,12 @@ class GajimCore:
 			#('GC_STATUS', account, (nick, jid, show, status))
 			elif ev[0] == 'GC_STATUS':
 				if ev[2][2] == 'offline':
-					con.send(common.jabber.Presence('%s/%s' % (ev[2][1], ev[2][0]), \
-						'unavailable'))
+					con.send(common.jabber.Presence(to = '%s/%s' % (ev[2][1], \
+						ev[2][0]), type = 'unavailable', status = ev[2][3]))
 				else:
-					con.send(common.jabber.Presence('%s/%s' % (ev[2][1], ev[2][0]), \
-						'available', show=ev[2][2], status = ev[2][3]))
+					con.send(common.jabber.Presence(to = '%s/%s' % (ev[2][1], \
+						ev[2][0]), type = 'available', show = ev[2][2], status = \
+						ev[2][3]))
 			#('GC_SET_ROLE', account, (room_jid, nick, role))
 			elif ev[0] == 'GC_SET_ROLE':
 				iq = common.jabber.Iq(type='set', to=ev[2][0])

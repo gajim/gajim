@@ -2045,6 +2045,11 @@ class roster_window:
 						self.plugin.accounts[account]['gpgpassword'] = passphrase
 				self.plugin.send('GPGPASSPHRASE', account, passphrase)
 		self.plugin.send('STATUS', account, (status, txt))
+		for room_jid in self.plugin.windows[account]['gc']:
+			if room_jid != 'tabbed':
+				nick = self.plugin.windows[account]['gc'][room_jid].nicks[room_jid]
+				self.plugin.send('GC_STATUS', account, (nick, room_jid, status, \
+					txt))
 		if status == 'online' and self.plugin.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
 			self.plugin.sleeper_state[account] = 1
