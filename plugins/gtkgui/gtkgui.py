@@ -1488,6 +1488,7 @@ class plugin:
 		elif self.roster.contacts[account].has_key(ji):
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
+
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (user, msg))
 		jid = string.split(array[0], '/')[0]
@@ -1513,7 +1514,6 @@ class plugin:
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
 		warning_Window(_("You are now authorized by %s") % jid)
-
 
 	def handle_event_unsubscribed(self, account, jid):
 		#TODO: change icon
@@ -1555,17 +1555,17 @@ class plugin:
 	def handle_event_quit(self, p1, p2):
 		self.roster.on_quit(self)
 
-	def handle_event_myvcard(self, p1, p2):
+	def handle_event_myvcard(self, account, array):
 		nick = ''
-		if p2.has_key('NICKNAME'):
-			nick = p2['NICKNAME']
+		if array.has_key('NICKNAME'):
+			nick = array['NICKNAME']
 		if nick == '':
-			nick = self.accounts[p1]['name']
-		self.nicks[p1] = nick
+			nick = self.accounts[account]['name']
+		self.nicks[account] = nick
 
-	def handle_event_vcard(self, p1, p2):
-		if self.windows[p1]['infos'].has_key(p2['jid']):
-			self.windows[p1]['infos'][p2['jid']].set_values(p2)
+	def handle_event_vcard(self, account, array):
+		if self.windows[account]['infos'].has_key(array['jid']):
+			self.windows[account]['infos'][array['jid']].set_values(array)
 
 	def handle_event_log_nb_line(self, account, array):
 		#('LOG_NB_LINE', account, (jid, nb_line))
