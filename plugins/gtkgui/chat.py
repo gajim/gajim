@@ -403,7 +403,7 @@ class Chat:
 		menu.reposition()
 
 	def hyperlink_handler(self, texttag, widget, event, iter, kind):
-		if event.type == gtk.gdk.BUTTON_RELEASE:
+		if event.type == gtk.gdk.BUTTON_PRESS:
 			begin_iter = iter.copy()
 			#we get the begining of the tag
 			while not begin_iter.begins_tag(texttag):
@@ -412,14 +412,6 @@ class Chat:
 			#we get the end of the tag
 			while not end_iter.ends_tag(texttag):
 				end_iter.forward_char()
-			bounds = widget.get_buffer().get_selection_bounds()
-			if len(bounds) == 2:
-				begin_sel, end_sel = bounds
-				if begin_sel.in_range(begin_iter, end_iter) or\
-					end_sel.in_range(begin_iter, end_iter):
-					# we have selected a text and release the button in an url, we
-					# don't want to open the url
-					return
 			word = begin_iter.get_text(end_iter)
 			if event.button == 3:
 				self.make_link_menu(event, kind, word)
