@@ -842,7 +842,7 @@ class roster_window:
 				self.plugin.windows[account]['gc']['tabbed']
 			self.plugin.windows[account]['gc']['tabbed'].window.present()
 		else:
-			self.plugin.windows[account]['gc'][user.jid] = \
+			self.plugin.windows[account]['gc'][jid] = \
 				Groupchat_window(jid, nick, self.plugin, account)
 
 	def on_message(self, jid, msg, tim, account):
