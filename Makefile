@@ -28,7 +28,7 @@ clean:
 dist:
 	-rm -rf gajim-$(VERSION)
 	mkdir gajim-$(VERSION)
-	cp -r plugins debian scripts common Core doc Messages sounds gajim-$(VERSION)/
+	cp -r plugins scripts common Core doc Messages sounds gajim-$(VERSION)/
 	cp setup_win32.py gajim.iss AUTHORS gajim.1 gajim.xpm gajim.ico COPYING Makefile Changelog README gajim.py gajim-$(VERSION)
 	-find gajim-$(VERSION) -name '.svn' -exec rm -rf {} \; 2> /dev/null
 	find gajim-$(VERSION) -name '*.pyc' -exec rm {} \;
