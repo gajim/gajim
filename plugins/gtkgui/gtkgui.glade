@@ -8180,8 +8180,6 @@ Custom</property>
 		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="shadow_type">GTK_SHADOW_IN</property>
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-		  <signal name="scroll_child" handler="on_conversation_scrolledwindow_scroll_child" last_modification_time="Sat, 05 Mar 2005 16:20:42 GMT"/>
-		  <signal name="move_focus_out" handler="on_conversation_scrolledwindow_move_focus_out" last_modification_time="Sun, 06 Mar 2005 01:28:04 GMT"/>
 
 		  <child>
 		    <widget class="GtkTextView" id="conversation_textview">
@@ -8199,8 +8197,6 @@ Custom</property>
 		      <property name="right_margin">0</property>
 		      <property name="indent">0</property>
 		      <property name="text" translatable="yes"></property>
-		      <signal name="move_viewport" handler="on_conversation_textview_move_viewport" last_modification_time="Sat, 05 Mar 2005 16:49:44 GMT"/>
-		      <signal name="set_scroll_adjustments" handler="on_conversation_textview_set_scroll_adjustments" last_modification_time="Sat, 05 Mar 2005 16:52:18 GMT"/>
 		    </widget>
 		  </child>
 		</widget>
