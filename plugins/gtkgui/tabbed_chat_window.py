@@ -41,7 +41,7 @@ GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 class tabbed_chat_window(chat):
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
-		chat.__init__(plugin, account, 'tabbed_chat_window')
+		chat.__init__(self, plugin, account, 'tabbed_chat_window')
 		self.users = {}
 		self.new_user(user)
 		self.show_title()
@@ -71,9 +71,6 @@ class tabbed_chat_window(chat):
 		if not user.keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
 
-#	def redraw_tab(self, jid):
-#		tab_label.set_text(start + self.users[jid].name)
-
 	def set_image(self, image, jid):
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			self.xmls[jid].get_widget('status_image').\
@@ -92,7 +89,13 @@ class tabbed_chat_window(chat):
 
 	def on_tabbed_chat_window_destroy(self, widget):
 		#clean self.plugin.windows[self.account]['chats']
-		chat.on_window_destroy(widget, 'chats')
+		chat.on_window_destroy(self, widget, 'chats')
+
+	def on_tabbed_chat_window_focus_in_event(self, widget, event):
+		chat.on_chat_window_focus_in_event(self, widget, event)
+
+	def on_tabbed_chat_window_key_press_event(self, widget, event):
+		chat.on_chat_window_key_press_event(self, widget, event)
 
 	def on_clear_button_clicked(self, widget):
 		"""When clear button is pressed :
@@ -115,23 +118,25 @@ class tabbed_chat_window(chat):
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 
-		chat.remove_tab(jid, 'chats')
+		chat.remove_tab(self, jid, 'chats')
 		if len(self.xmls) > 0:
 			del self.users[jid]
 
 	def new_user(self, user):
-		chat.new_user(user.jid)
+		self.names[user.jid] = user.name
+		chat.new_tab(self, user.jid)
 		self.users[user.jid] = user
 		
 		conversation_textview = \
 			self.xmls[user.jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
+		child = self.xmls[user.jid].get_widget('tab_vbox')
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'tab_hbox', APP)
 		tab_hbox = xm.get_widget('tab_hbox')
 		xm.signal_connect('on_close_button_clicked', \
 			self.on_close_button_clicked, user.jid)
-		self.chat_notebook.set_tab_label(child, tab_hbox)
+		self.notebook.set_tab_label(child, tab_hbox)
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
@@ -170,59 +175,6 @@ class tabbed_chat_window(chat):
 			return 1
 		return 0
 
-	def on_tabbed_chat_window_key_press_event(self, widget, event):
-		st = '1234567890' # zero is here cause humans count from 1, pc from 0 :P
-		jid = self.get_active_jid()
-		if event.keyval == gtk.keysyms.Escape: # ESCAPE
-			self.remove_tab(jid)
-		elif event.string and event.string in st \
-			and (event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
-			self.chat_notebook.set_current_page(st.index(event.string))
-		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
-			if event.state & gtk.gdk.CONTROL_MASK:
-				current = self.chat_notebook.get_current_page()
-				if current > 0:
-					self.chat_notebook.set_current_page(current-1)
-#				else:
-#					self.chat_notebook.set_current_page(\
-#						self.chat_notebook.get_n_pages()-1)
-			elif event.state & gtk.gdk.SHIFT_MASK:
-				conversation_textview = self.xmls[jid].\
-					get_widget('conversation_textview')
-				rect = conversation_textview.get_visible_rect()
-				iter = conversation_textview.get_iter_at_location(rect.x,\
-					rect.y + rect.height)
-				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
-		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
-			if event.state & gtk.gdk.CONTROL_MASK:
-				current = self.chat_notebook.get_current_page()
-				if current < (self.chat_notebook.get_n_pages()-1):
-					self.chat_notebook.set_current_page(current+1)
-#				else:
-#					self.chat_notebook.set_current_page(0)
-			elif event.state & gtk.gdk.SHIFT_MASK:
-				conversation_textview = self.xmls[jid].\
-					get_widget('conversation_textview')
-				rect = conversation_textview.get_visible_rect()
-				iter = conversation_textview.get_iter_at_location(rect.x, rect.y)
-				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
-		elif event.keyval == gtk.keysyms.Tab and \
-			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
-			current = self.chat_notebook.get_current_page()
-			if current < (self.chat_notebook.get_n_pages()-1):
-				self.chat_notebook.set_current_page(current+1)
-			else:
-				self.chat_notebook.set_current_page(0)
-		elif (event.state & gtk.gdk.CONTROL_MASK) or (event.keyval ==\
-			gtk.keysyms.Control_L) or (event.keyval == gtk.keysyms.Control_R):
-			# we pressed a control key or ctrl+sth : we don't block the event
-			# in order to let ctrl+c do its work
-			pass
-		else: # it's a normal key press make sure message_textview has focus
-			message_textview = self.xmls[jid].get_widget('message_textview')
-			if not message_textview.is_focus():
-				message_textview.grab_focus()
-
 	def on_contact_button_clicked(self, widget):
 		"""When button contact is clicked"""
 		jid = self.get_active_jid()
@@ -247,176 +199,6 @@ class tabbed_chat_window(chat):
 			if len(self.plugin.roster.contacts[self.account][jid]) == 1:
 				self.plugin.roster.remove_user(user, self.account)
 
-	def on_conversation_vadjustment_value_changed(self, widget):
-		jid = self.get_active_jid()
-		if not self.nb_unread[jid]:
-			return
-		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		end_iter = conversation_buffer.get_end_iter()
-		end_rect = conversation_textview.get_iter_location(end_iter)
-		visible_rect = conversation_textview.get_visible_rect()
-		if end_rect.y <= (visible_rect.y + visible_rect.height) and \
-			self.window.is_active():
-			#we are at the end
-			self.nb_unread[jid] = 0
-			self.redraw_tab(jid)
-			self.show_title()
-			self.plugin.systray.remove_jid(jid, self.account)
-	
-	def on_conversation_textview_motion_notify_event(self, widget, event):
-		"""change the cursor to a hand when we are on a mail or an url"""
-		x, y, spam = widget.window.get_pointer()
-		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
-		tags = widget.get_iter_at_location(x, y).get_tags()
-		if self.change_cursor:
-			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(\
-				gtk.gdk.Cursor(gtk.gdk.XTERM))
-			self.change_cursor = None
-		for tag in tags:
-			if tag == widget.get_buffer().get_tag_table().lookup('url') or \
-				tag == widget.get_buffer().get_tag_table().lookup('mail'):
-				widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(\
-					gtk.gdk.Cursor(gtk.gdk.HAND2))
-				self.change_cursor = tag
-		return False
-			
-	def on_conversation_textview_button_press_event(self, widget, event):
-		# Do not open the standard popup menu, so we block right button click
-		# on a taged text
-		if event.button == 3:
-			win = widget.get_window(gtk.TEXT_WINDOW_TEXT)
-			x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,\
-				int(event.x), int(event.y))
-			iter = widget.get_iter_at_location(x, y)
-			tags = iter.get_tags()
-			if tags:
-				return True
-	
-	def print_time_timeout(self, jid):
-		if not jid in self.xmls.keys():
-			return 0
-		if self.plugin.config['print_time'] == 'sometimes':
-			conversation_textview = self.xmls[jid].\
-				get_widget('conversation_textview')
-			conversation_buffer = conversation_textview.get_buffer()
-			end_iter = conversation_buffer.get_end_iter()
-			tim = time.localtime()
-			tim_format = time.strftime('%H:%M', tim)
-			conversation_buffer.insert_with_tags_by_name(end_iter, tim_format + \
-				'\n', 'time_sometimes')
-			#scroll to the end of the textview
-			end_rect = conversation_textview.get_iter_location(end_iter)
-			visible_rect = conversation_textview.get_visible_rect()
-			if end_rect.y <= (visible_rect.y + visible_rect.height):
-				#we are at the end
-				conversation_textview.scroll_to_mark(conversation_buffer.\
-					get_mark('end'), 0.1, 0, 0, 0)
-			return 1
-		if self.print_time_timeout_id.has_key(jid):
-			del self.print_time_timeout_id[jid]
-		return 0
-
-	def on_open_link_activated(self, widget, kind, text):
-		self.plugin.launch_browser_mailer(kind, text)
-
-	def on_copy_link_activated(self, widget, text):
-		clip = gtk.clipboard_get()
-		clip.set_text(text)
-
-	def make_link_menu(self, event, kind, text):
-		menu = gtk.Menu()
-		if kind == 'mail':
-			item = gtk.MenuItem(_('_Open email composer'))
-		else:
-			item = gtk.MenuItem(_('_Open link'))
-		item.connect('activate', self.on_open_link_activated, kind, text)
-		menu.append(item)
-		if kind == 'mail':
-			item = gtk.MenuItem(_('_Copy email address'))
-		else: # It's an url
-			item = gtk.MenuItem(_('_Copy link address'))
-		item.connect('activate', self.on_copy_link_activated, text)
-		menu.append(item)
-
-		menu.popup(None, None, None, event.button, event.time)
-		menu.show_all()
-		menu.reposition()
-
-	def hyperlink_handler(self, texttag, widget, event, iter, kind):
-		if event.type == gtk.gdk.BUTTON_RELEASE:
-			#FIXME (nk to yann):
-			# can we know if that button release had also before selected text?
-			# let's say we have http://be this is nice
-			# and I start to select (with my mouse) the text from right to left
-			# starting with nice. SO I go nice is this eb//:ptth and just stop pressing the mouse button
-			# then we will launch the mailer/browser which is not what the user want
-			# is there sth you do to fix this?
-			# maybe check before launching if we have a selection with non empty text in it?
-			begin_iter = iter.copy()
-			#we get the begining of the tag
-			while not begin_iter.begins_tag(texttag):
-				begin_iter.backward_char()
-			end_iter = iter.copy()
-			#we get the end of the tag
-			while not end_iter.ends_tag(texttag):
-				end_iter.forward_char()
-			word = begin_iter.get_text(end_iter)
-			if event.button == 3:
-				self.make_link_menu(event, kind, word)
-			else:
-				#we launch the correct application
-				self.plugin.launch_browser_mailer(kind, word)
-
-	def print_special_text(self, text, jid, other_tag):
-		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		
-		# make it CAPS (emoticons keys are all CAPS)
-		possible_emot_ascii_caps = text.upper()
-		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
-			#it's an emoticon
-			emot_ascii = possible_emot_ascii_caps
-			print 'emoticon:', emot_ascii
-			end_iter = conversation_buffer.get_end_iter()
-			conversation_buffer.insert_pixbuf(end_iter, \
-				self.plugin.emoticons[emot_ascii])
-			return
-		elif text.startswith('mailto:'):
-			#it's a mail
-			tag = 'mail'
-			print tag
-		elif self.plugin.sth_at_sth_dot_sth_re.match(text): #returns match object
-																			#or None
-			#it's a mail
-			tag = 'mail'
-			print tag
-		elif text.startswith('*') and text.endswith('*'):
-			#it's a bold text
-			tag = 'bold'
-			text = text[1:-1] # remove * *
-		elif text.startswith('/') and text.endswith('/'):
-			#it's an italic text
-			tag = 'italic'
-			text = text[1:-1] # remove / /
-			print tag
-		elif text.startswith('_') and text.endswith('_'):
-			#it's an underlined text
-			tag = 'underline'
-			text = text[1:-1] # remove _ _
-			print tag
-		else:
-			#it's a url
-			tag = 'url'
-			print tag
-
-		end_iter = conversation_buffer.get_end_iter()
-		if tag in ['bold', 'italic', 'underline'] and other_tag:
-			conversation_buffer.insert_with_tags_by_name(end_iter, text,\
-				other_tag, tag)
-		else:
-			conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
-		
 	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :
 		if contact is set to status : it's a status message

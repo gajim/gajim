@@ -8082,7 +8082,7 @@ Custom</property>
       <signal name="switch_page" handler="on_chat_notebook_switch_page" last_modification_time="Wed, 02 Mar 2005 18:00:21 GMT"/>
 
       <child>
-	<widget class="GtkVBox" id="chat_vbox">
+	<widget class="GtkVBox" id="tab_vbox">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
