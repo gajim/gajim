@@ -119,6 +119,11 @@ class prefs:
 		else:
 			self.r.cfgParser.set('GtkGui', 'autopopup', '0')
 			self.r.autopopup = 0
+		#IconStyle
+		ist = self.combo_iconstyle.entry.get_text()
+		self.r.cfgParser.set('GtkGui', 'iconstyle', ist)
+		self.r.iconstyle = ist
+		self.r.mkpixbufs()
 		
 		self.r.cfgParser.writeCfgFile()
 		self.r.cfgParser.parseCfgFile()
@@ -135,6 +140,7 @@ class prefs:
 		self.da_out = self.xml.get_widget("drawing_out")
 		self.da_status = self.xml.get_widget("drawing_status")
 		self.chk_autopp = self.xml.get_widget("chk_autopopup")
+		self.combo_iconstyle = self.xml.get_widget("combo_iconstyle")
 
 		#Color for incomming messages
 		colSt = self.r.cfgParser.GtkGui_inmsgcolor
@@ -166,6 +172,18 @@ class prefs:
 			st = '0'
 		pp = string.atoi(st)
 		self.chk_autopp.set_active(pp)
+
+		#iconStyle
+		list_style = os.listdir('plugins/gtkgui/icons/')
+		l = []
+		for i in list_style:
+			if i != 'CVS':
+				l.append(i)
+		if l.count == 0:
+			l.append(" ")
+		self.combo_iconstyle.set_popdown_strings(l)
+		if self.r.iconstyle in l:
+			self.combo_iconstyle.entry.set_text(self.r.iconstyle)
 		
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_but_col_clicked', self.on_color_button_clicked)
@@ -805,6 +823,17 @@ class roster:
 		if not Wbrowser:
 			Wbrowser = browser(self)
 
+	def mkpixbufs(self):
+		self.path = 'plugins/gtkgui/icons/' + self.iconstyle + '/'
+		self.pixbufs = {}
+		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'requested', 'message', 'opened', 'closed'):
+			if not os.path.exists(self.path + state + '.xpm'):
+				print 'No such file : ' + self.path + state + '.xpm'
+				self.pixbufs[state] = None
+			else:
+				pix = gtk.gdk.pixbuf_new_from_file (self.path + state + '.xpm')
+				self.pixbufs[state] = pix
+
 	def __init__(self, queueOUT, plug):
 		# FIXME : handle no file ...
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
@@ -815,18 +844,10 @@ class roster:
 		self.plug = plug
 		#(icon, name, jid, editable, background color, show_icon)
 		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, gobject.TYPE_BOOLEAN, str, gobject.TYPE_BOOLEAN)
-		iconstyle = self.cfgParser.GtkGui_iconstyle
-		if not iconstyle:
-			iconstyle = 'sun'
-		self.path = 'plugins/gtkgui/icons/' + iconstyle + '/'
-		self.pixbufs = {}
-		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'requested', 'message', 'opened', 'closed'):
-			if not os.path.exists(self.path + state + '.xpm'):
-				print 'No such file : ' + self.path + state + '.xpm'
-				self.pixbufs[state] = None
-			else:
-				pix = gtk.gdk.pixbuf_new_from_file (self.path + state + '.xpm')
-				self.pixbufs[state] = pix
+		self.iconstyle = self.cfgParser.GtkGui_iconstyle
+		if not self.iconstyle:
+			self.iconstyle = 'sun'
+		self.mkpixbufs()
 		self.tree.set_model(self.treestore)
 #		map = self.tree.get_colormap()
 #		colour = map.alloc_color("red") # light red
