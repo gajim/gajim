@@ -1307,6 +1307,10 @@ class systray:
 				jid = self.jids[0][1]
 				if self.plugin.windows[account]['chats'].has_key(jid):
 					self.plugin.windows[account]['chats'][jid].window.present()
+				else:
+					self.plugin.windows[account]['chats'][jid] = message_Window(\
+						self.plugin.roster.contacts[account][jid][0], self.plugin, \
+						account)
 		if event.button == 3:
 			self.mk_menu(event)
 
