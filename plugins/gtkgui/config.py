@@ -682,6 +682,12 @@ class preference_Window:
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text=2)
 		self.fill_sound_treeview()
+
+		if not os.name == 'posix':
+			self.xml.get_widget('entry_soundplayer').set_sensitive(False)
+			self.sound_tree.set_sensitive(False)
+			self.xml.get_widget('entry_sounds').set_sensitive(False)
+			self.xml.get_widget('button_sounds').set_sensitive(False)
 		
 		#Autopopup
 		st = self.plugin.config['autopopup']

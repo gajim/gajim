@@ -2625,6 +2625,8 @@ class plugin:
 			
 
 	def play_sound(self, event):
+		if not os.name == 'posix':
+			return
 		if not self.config[event]:
 			return
 		file = self.config[event + '_file']
