@@ -326,10 +326,14 @@ class Preferences_window:
 
 	def on_use_emoticons_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'useemoticons', None, \
-			self.xml.get_widget('add_remove_emoticons_button'))
+			[self.xml.get_widget('add_remove_emoticons_button')])
 	
 	def on_add_remove_emoticons_button_clicked(self, widget):
-		Add_remove_emoticons_window(self.plugin)
+		window = self.plugin.windows['add_remove_emoticons_window'].window
+		if window.get_property('visible'):
+			window.present()
+		else:
+			window.show_all()
 
 	def on_auto_popup_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopup', None,\
@@ -341,6 +345,10 @@ class Preferences_window:
 	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
 
+	def on_play_sounds_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
+		
+	
 	def on_soundplayer_entry_changed(self, widget):
 		self.plugin.config['soundplayer'] = widget.get_text()
 		
@@ -1367,7 +1375,7 @@ class Add_remove_emoticons_window:
 		self.emot_tree = self.xml.get_widget('emoticons_treeview')
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gtk.Image)
 		self.emot_tree.set_model(model)
-		col = gtk.TreeViewColumn(_('Name'))
+		col = gtk.TreeViewColumn(_('Text'))
 		self.emot_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		renderer.connect('edited', self.on_emot_cell_edited)
@@ -1389,7 +1397,6 @@ class Add_remove_emoticons_window:
 
 		self.plugin = plugin
 		self.xml.signal_autoconnect(self)
-		self.window.show_all()
 
 	def on_add_remove_emoticons_window_delete_event(self, widget, event):
 		self.window.hide()

@@ -903,7 +903,7 @@ class Roster_window:
 
 	def on_preferences_menuitem_activate(self, widget):
 		if self.plugin.windows['preferences'].window.get_property('visible'):
-			self.plugin.windows['preferences'].window.present() # give focus
+			self.plugin.windows['preferences'].window.present()
 		else:
 			self.plugin.windows['preferences'].window.show_all()
 
