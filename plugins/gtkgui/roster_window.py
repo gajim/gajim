@@ -1198,6 +1198,9 @@ class Roster_window:
 
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
 		etime):
+		merge = 0
+		if self.plugin.config['mergeaccounts']:
+			merge = 1
 		model = treeview.get_model()
 		data = selection.data
 		if not data:
@@ -1206,26 +1209,29 @@ class Roster_window:
 		if not drop_info:
 			return
 		path_dest, position = drop_info
-		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2\
-			and path_dest[1] == 0: #droped before the first group
+		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2 - merge\
+			and path_dest[1 - merge] == 0: #droped before the first group
 			return
-		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
+		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2 - merge:
 			#droped before a group : we drop it in the previous group
-			path_dest = (path_dest[0], path_dest[1]-1)
+			path_dest = (path_dest[1 - merge], path_dest[1 - merge]-1)
 		iter_dest = model.get_iter(path_dest)
 		iter_source = treeview.get_selection().get_selected()[1]
 		path_source = model.get_path(iter_source)
-		if len(path_dest) == 1: #droped on an account
+		if len(path_dest) == 1 and not merge: #droped on an account
 			return
-		if path_dest[0] != path_source[0]: #droped in another account
+		if path_dest[0] != path_source[0] and not merge:
+			#droped in another account
 			return
-		grp_source = model.get_value(model.iter_parent(iter_source), 3)
+		iter_group_source = model.iter_parent(iter_source)
+		grp_source = model.get_value(iter_group_source, 3)
 		if grp_source == 'Agents':
 			return
-		account = model.get_value(model.get_iter(path_dest[0]), 3)
-		if len(path_dest) == 2:
+		account = model.get_value(iter_dest, 4)
+		type_dest = model.get_value(iter_dest, 2)
+		if type_dest == 'group':
 			grp_dest = model.get_value(iter_dest, 3)
-		elif len(path_dest) == 3:
+		else:
 			grp_dest = model.get_value(model.iter_parent(iter_dest), 3)
 		if grp_source == grp_dest:
 			return
@@ -1233,9 +1239,16 @@ class Roster_window:
 			u.groups.remove(grp_source)
 			u.groups.append(grp_dest)
 		self.plugin.send('UPDUSER', account, (u.jid, u.name, u.groups))
-		parent_i = model.iter_parent(iter_source)
-		if model.iter_n_children(parent_i) == 1: #this was the only child
-			model.remove(parent_i)
+		if model.iter_n_children(iter_group_source) == 1: #this was the only child
+			model.remove(iter_group_source)
+		#delete the group if it is empty (need to look for offline users too)
+		group_empty = True
+		for jid in self.contacts[account]:
+			if grp_source in self.contacts[account][jid][0].groups:
+				group_empty = False
+				break
+		if group_empty:
+			del self.groups[account][grp_source]
 		self.add_user_to_roster(data, account)
 		if context.action == gtk.gdk.ACTION_MOVE:
 			context.finish(True, True, etime)
