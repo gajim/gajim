@@ -185,15 +185,22 @@ class tabbed_chat_Window:
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat', APP)
-		self.xmls = {}
-		self.xmls[user.jid] = self.xml
-		conversation = self.xmls[user.jid].get_widget('conversation')
-		buffer_conv = conversation.get_buffer()
-		message = self.xmls[user.jid].get_widget('message')
-		message.grab_focus()
-		buffer_msg = message.get_buffer()
+		self.widgets = {}
+		self.widgets[user.jid] = {}
+		self.widgets[user.jid]['conversation'] = \
+			self.xml.get_widget('conversation')
+		buffer_conv = self.widgets[user.jid]['conversation'].get_buffer()
+		self.widgets[user.jid]['message'] = self.xml.get_widget('message')
+		self.widgets[user.jid]['message'].grab_focus()
+		buffer_msg = self.widgets[user.jid]['message'].get_buffer()
 		end_iter = buffer_conv.get_end_iter()
 		buffer_conv.create_mark('end', end_iter, 0)
+		self.widgets[user.jid]['image_status'] = \
+			self.xml.get_widget('image_status')
+		self.widgets[user.jid]['button_contact'] = \
+			self.xml.get_widget('button_contact')
+		self.widgets[user.jid]['toggle_gpg'] = self.xml.get_widget('toggle_gpg')
+		self.widgets[user.jid]['vbox_tab'] = self.xml.get_widget('vbox_tab')
 
 		self.plugin = plugin
 		self.account = account
@@ -210,14 +217,14 @@ class tabbed_chat_Window:
 			self.on_chat_key_press_event)
 		self.xml.signal_connect('on_notebook_switch_page', \
 			self.on_notebook_switch_page)
-		self.xmls[user.jid].signal_connect('on_history_clicked', self.on_history)
-		self.xmls[user.jid].signal_connect('on_clear_clicked', self.on_clear)
-		self.xmls[user.jid].signal_connect('on_close_clicked', self.on_close_clicked)
-		self.xmls[user.jid].signal_connect('on_msg_key_press_event', \
+		self.xml.signal_connect('on_history_clicked', self.on_history)
+		self.xml.signal_connect('on_clear_clicked', self.on_clear)
+		self.xml.signal_connect('on_close_clicked', self.on_close_clicked)
+		self.xml.signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
-		self.xmls[user.jid].signal_connect('on_button_contact_clicked', \
+		self.xml.signal_connect('on_button_contact_clicked', \
 			self.on_button_contact_clicked)
-		self.xmls[user.jid].get_widget('button_contact').set_use_underline(False)
+		self.xml.get_widget('button_contact').set_use_underline(False)
 		self.tagIn = {user.jid: buffer_conv.create_tag("incoming")}
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn[user.jid].set_property("foreground", color)
@@ -256,16 +263,16 @@ class tabbed_chat_Window:
 		self.window.set_title(start + "Chat (" + self.account + ")")
 
 	def draw_widgets(self, user):
-		widget_img = self.xmls[user.jid].get_widget('image_status')
+		widget_img = self.widgets[user.jid]['image_status']
 		image = self.plugin.roster.pixbufs[user.show]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			widget_img.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			widget_img.set_from_pixbuf(image.get_pixbuf())
-		self.xmls[user.jid].get_widget('button_contact').set_label(\
+		self.widgets[user.jid]['button_contact'].set_label(\
 			user.name + ' <' + user.jid + '>')
 		if not user.keyID:
-			self.xmls[user.jid].get_widget('toggle_gpg').set_sensitive(False)
+			self.widgets[user.jid]['toggle_gpg'].set_sensitive(False)
 
 	def redraw_tab(self, jid):
 		start = ''
@@ -274,15 +281,15 @@ class tabbed_chat_Window:
 		elif self.nb_unread[jid] == 1:
 			start = "* "
 		nb = self.xml.get_widget("notebook")
-		child = self.xmls[jid].get_widget("vbox_tab")
+		child = self.widgets[jid]['vbox_tab']
 		nb.set_tab_label_text(child, start + self.users[jid].name)
 
 	def set_image(self, image, jid):
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			self.xmls[jid].get_widget('image_status').\
+			self.widgets[jid]['image_status'].\
 				set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			self.xmls[jid].get_widget('image_status').\
+			self.widgets[jid]['image_status'].\
 				set_from_pixbuf(image.get_pixbuf())
 
 	def delete_event(self, widget):
@@ -296,8 +303,8 @@ class tabbed_chat_Window:
 		nb = self.xml.get_widget("notebook")
 		child = nb.get_nth_page(nb.get_current_page())
 		jid = ''
-		for j in self.xmls:
-			c = self.xmls[j].get_widget("vbox_tab")
+		for j in self.widgets:
+			c = self.widgets[j]['vbox_tab']
 			if c == child:
 				jid = j
 				break
@@ -307,7 +314,7 @@ class tabbed_chat_Window:
 		"""When clear button is pressed :
 		clear the conversation"""
 		jid = self.get_active_jid()
-		buffer = self.xmls[jid].get_widget('conversation').get_buffer()
+		buffer = self.widgets[jid]['conversation'].get_buffer()
 		deb, end = buffer.get_bounds()
 		buffer.delete(deb, end)
 
@@ -315,7 +322,7 @@ class tabbed_chat_Window:
 		"""When close button is pressed :
 		close a tab"""
 		jid = self.get_active_jid()
-		if len(self.xmls) == 1:
+		if len(self.widgets) == 1:
 			button.get_toplevel().destroy()
 		else:
 			nb = self.xml.get_widget('notebook')
@@ -323,7 +330,7 @@ class tabbed_chat_Window:
 			del self.plugin.windows[self.account]['chats'][jid]
 			del self.users[jid]
 			del self.nb_unread[jid]
-			del self.xmls[jid]
+			del self.widgets[jid]
 			del self.tagIn[jid]
 			del self.tagOut[jid]
 			del self.tagStatus[jid]
@@ -342,12 +349,12 @@ class tabbed_chat_Window:
 		jid = self.get_active_jid()
 		if not self.plugin.windows['logs'].has_key(jid):
 			self.plugin.windows['logs'][jid] = log_Window(self.plugin, jid)
-	
+
 	def on_notebook_switch_page(self, nb, page, page_num):
 		child = nb.get_nth_page(page_num)
 		jid = ''
-		for j in self.xmls:
-			c = self.xmls[j].get_widget("vbox_tab")
+		for j in self.widgets:
+			c = self.widgets[j]['vbox_tab']
 			if c == child:
 				jid = j
 				break
@@ -358,48 +365,94 @@ class tabbed_chat_Window:
 			self.plugin.systray.remove_jid(jid, self.account)
 
 	def active_tab(self, jid):
-		child = self.xmls[jid].get_widget("vbox_tab")
+		child = self.widgets[jid]['vbox_tab']
 		nb = self.xml.get_widget("notebook")
 		nb.set_current_page(nb.page_num(child))
-		message = self.xmls[jid].get_widget('message')
-		message.grab_focus()
-	
+		self.widgets[jid]['message'].grab_focus()
+
 	def new_user(self, user):
 		self.nb_unread[user.jid] = 0
 		self.users[user.jid] = user
-		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, "vbox_tab", APP)
-		vb = self.xmls[user.jid].get_widget("vbox_tab")
+
+		self.widgets[user.jid] = {}
+		vb = gtk.VBox()
+		self.widgets[user.jid]['vbox_tab'] = vb
+		hb = gtk.HBox()
+		vb.pack_start(hb)
+		
+		button = gtk.Button("History", gtk.STOCK_JUSTIFY_FILL)
+		button.connect("clicked", self.on_history)
+		hb.pack_start(button)
+
+		button = gtk.Button("Clear", gtk.STOCK_CLEAR)
+		button.connect("clicked", self.on_clear)
+		hb.pack_start(button)
+
+		img = gtk.Image()
+		hb.pack_start(img)
+		self.widgets[user.jid]['image_status'] = img
+
+		button = gtk.ToggleButton(gtk.STOK_DIALOG_AUTHENTICATION)
+		button.set_use_stock(True)
+		hb.pack_start(button)
+		self.widgets[user.jid]['toggle_gpg'] = button
+
+		fixed = gtk.Fixed()
+		button = gtk.Button("Anonymous")
+		button.connect("clicked", self.on_button_contact_clicked)
+		button.set_use_underline(False)
+		fixed.add(button, 0, 0)
+		self.widgets[user.jid]['button_contact'] = button
+		
+		button = gtk.Button(stock=gtk.STOCK_CLOSE)
+		button.connect("clicked", self.on_close_clicked)
+		hb.pack_start(button)
+
+		vp = gtk.VPaned()
+		vb.pack_start(vp)
+		vp.set_position(170)
+
+		sw = gtk.ScrolledWindow()
+		vp.add1(sw)
+		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		tv = gtk.TextView()
+		sw.add_with_viewport(tv)
+		self.widgets[user.jid]['conversation'] = tv
+		buffer = tv.get_buffer()
+		end_iter = buffer.get_end_iter()
+		buffer.create_mark('end', end_iter, 0)
+
+		sw = gtk.ScrolledWindow()
+		vp.add2(sw)
+		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		tv = gtk.TextView()
+		sw.add_with_viewport(tv)
+		self.widgets[user.jid]['message'] = tv
+		tv.grab_focus()
+		tv.connect('key_press_event', self.on_msg_key_press_event)
+		buffer = tv.get_buffer()
+		self.tagIn[user.jid] = buffer.create_tag("incoming")
+		color = self.plugin.config['inmsgcolor']
+		self.tagIn[user.jid].set_property("foreground", color)
+		self.tagOut[user.jid] = buffer.create_tag("outgoing")
+		color = self.plugin.config['outmsgcolor']
+		self.tagOut[user.jid].set_property("foreground", color)
+		self.tagStatus[user.jid] = buffer.create_tag("status")
+		color = self.plugin.config['statusmsgcolor']
+		self.tagStatus[user.jid].set_property("foreground", color)
+
 		nb = self.xml.get_widget("notebook")
 		nb.set_current_page(nb.append_page(vb))
 
-		conversation = self.xmls[user.jid].get_widget('conversation')
-		buffer_conv = conversation.get_buffer()
-		message = self.xmls[user.jid].get_widget('message')
-		message.grab_focus()
-		buffer_msg = message.get_buffer()
-		end_iter = buffer_conv.get_end_iter()
-		buffer_conv.create_mark('end', end_iter, 0)
-		self.tagIn[user.jid] = buffer_conv.create_tag("incoming")
-		color = self.plugin.config['inmsgcolor']
-		self.tagIn[user.jid].set_property("foreground", color)
-		self.tagOut[user.jid] = buffer_conv.create_tag("outgoing")
-		color = self.plugin.config['outmsgcolor']
-		self.tagOut[user.jid].set_property("foreground", color)
-		self.tagStatus[user.jid] = buffer_conv.create_tag("status")
-		color = self.plugin.config['statusmsgcolor']
-		self.tagStatus[user.jid].set_property("foreground", color)
-		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
-		self.xmls[user.jid].signal_connect('on_history_clicked', self.on_history)
-		self.xmls[user.jid].signal_connect('on_clear_clicked', self.on_clear)
-		self.xmls[user.jid].signal_connect('on_close_clicked', \
-			self.on_close_clicked)
-		self.xmls[user.jid].signal_connect('on_msg_key_press_event', \
-			self.on_msg_key_press_event)
-		self.xmls[user.jid].signal_connect('on_button_contact_clicked', \
-			self.on_button_contact_clicked)
-		self.xmls[user.jid].get_widget('button_contact').set_use_underline(False)
+
+		#print queued messages
+		if plugin.queues[account].has_key(user.jid):
+			self.read_queue(plugin.queues[account][user.jid])
+		if user.show != 'online':
+			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
+				user.show, user.status), user.jid, 'status')
 
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -415,7 +468,7 @@ class tabbed_chat_Window:
 			if txt != '':
 				keyID = ''
 				jid = self.get_active_jid()
-				if self.xmls[jid].get_widget('toggle_gpg').get_active():
+				if self.widgets[jid]['toggle_gpg'].get_active():
 					keyID = self.users[jid].keyID
 				self.plugin.send('MSG', self.account, (jid, txt, keyID))
 				txt_buffer.set_text('', -1)
@@ -428,14 +481,14 @@ class tabbed_chat_Window:
 		st = "1234567890"
 		if event.keyval == gtk.keysyms.Escape:
 			jid = self.get_active_jid()
-			if len(self.xmls) == 1:
+			if len(self.widgets) == 1:
 				widget.get_toplevel().destroy()
 			else:
 				nb.remove_page(nb.get_current_page())
 				del self.plugin.windows[self.account]['chats'][jid]
 				del self.users[jid]
 				del self.nb_unread[jid]
-				del self.xmls[jid]
+				del self.widgets[jid]
 				del self.tagIn[jid]
 				del self.tagOut[jid]
 				del self.tagStatus[jid]
@@ -473,7 +526,7 @@ class tabbed_chat_Window:
 		if contact is set to another value : it's an outgoing message
 		if contact is not set : it's an incomming message"""
 		user = self.users[jid]
-		conversation = self.xmls[jid].get_widget('conversation')
+		conversation = self.widgets[jid]['conversation']
 		buffer = conversation.get_buffer()
 		if not txt:
 			txt = ""
