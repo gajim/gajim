@@ -4,7 +4,7 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@crans.org>
 ## 	- Vincent Hanquez <tab@tuxfamily.org>
-## 	- David Ferlier <krp@yazzy.org>
+## 	- David Ferlier <david@yazzy.org>
 ##
 ##	Copyright (C) 2003 Gajim Team
 ##
@@ -21,6 +21,7 @@
 import Queue
 import socket
 import sys
+import os
 import time
 import logging
 
@@ -31,7 +32,11 @@ import common.optparser
 
 log = logging.getLogger('core.core')
 log.setLevel(logging.DEBUG)
-CONFPATH = ".gajimrc"
+if 'HOME' in os.environ:
+	home = os.environ['HOME']
+elif os.name == 'posix':
+	home = os.path.expanduser("~/")
+CONFPATH = os.path.join(home,".gajimrc")
 
 class GajimCore:
 	def __init__(self):

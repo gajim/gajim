@@ -4,7 +4,7 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@crans.org>
 ## 	- Vincent Hanquez <tab@tuxfamily.org>
-## 	- David Ferlier <krp@yazzy.org>
+## 	- David Ferlier <david@yazzy.org>
 ##
 ##	Copyright (C) 2003 Gajim Team
 ##
@@ -225,7 +225,7 @@ class roster:
 		self.optionmenu = self.xml.get_widget('optionmenu')
 		self.optionmenu.set_history(6)
 		self.tab_messages = {}
-		self.showOffline=1
+		self.showOffline=0
 
 		#colonnes
 		self.col = gtk.TreeViewColumn()
