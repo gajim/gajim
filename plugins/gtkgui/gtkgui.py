@@ -534,14 +534,19 @@ class roster_Window:
 				for i in iters:
 					if self.pixbufs.has_key(show):
 						model.set_value(i, 0, self.pixbufs[show])
-		user.show = show
-		user.status = status
+		for u in self.contacts[account][user.jid]:
+			u.show = show
+			u.status = status
 		#Print status in chat window
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
-			self.plugin.windows[account]['chats'][user.jid].\
-				img.set_from_pixbuf(self.pixbufs[show])
+			if len(self.contacts[account][user.jid]) == 0:
+				self.plugin.windows[account]['chats'][user.jid].\
+					img.set_from_pixbuf(self.pixbufs[show])
+			name = user.name
+			if user.resource != '':
+				name += '/'+user.resource
 			self.plugin.windows[account]['chats'][user.jid].print_conversation(\
-				_("%s is now %s (%s)") % (user.name, show, status), 'status')
+				_("%s is now %s (%s)") % (name, show, status), 'status')
 
 	def on_info(self, widget, user, account):
 		"""Call infoUser_Window class to display user's information"""
