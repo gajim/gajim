@@ -44,7 +44,6 @@ class Groupchat_window(Chat):
 		self.nicks = {}
 		self.list_treeview = {}
 		self.subjects = {}
-		self.account = account
 		self.new_group(room_jid, nick)
 		self.show_title()
 		self.xml.signal_connect('on_groupchat_window_destroy', \
