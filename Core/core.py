@@ -1,8 +1,8 @@
 ##	core/core.py
 ##
 ## Gajim Team:
-## 	- Yann Le Boulanger <asterix@lagaule.org>
-## 	- Vincent Hanquez <tab@snarc.org>
+##		- Yann Le Boulanger <asterix@lagaule.org>
+##		- Vincent Hanquez <tab@snarc.org>
 ##		- Nikos Kouremenos <nkour@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
@@ -510,6 +510,55 @@ class GajimCore:
 				groups.append(group.getData())
 			self.hub.sendPlugin('ROSTER_INFO', self.connections[con], (jid, name, sub, ask, groups))
 
+	def BrowseResultCB(self, con, iq_obj):
+		identities, features, items = [], [], []
+		q = iq_obj.getTag('service')
+		if not q:
+			return identities, features, items
+		identities = [q.attrs]
+		for node in q.kids:
+			if node.getName() == 'ns':
+				features.append(node.getData())
+			else:
+				infos = node.attrs
+				infos['category'] = node.getName()
+				items.append(node.attrs)
+		jid = str(iq_obj.getFrom())
+		self.hub.sendPlugin('AGENT_INFO', self.connections[con], \
+			(jid, identities, features, items))
+
+	def DiscoverItemsCB(self, con, iq_obj):
+		qp = iq_obj.getQueryPayload()
+		items = []
+		if not qp:
+			qp = []
+		for i in qp:
+			items.append(i.attrs)
+		jid = str(iq_obj.getFrom())
+		self.hub.sendPlugin('AGENT_INFO_ITEMS', self.connections[con],\
+			(jid, items))
+
+	def DiscoverInfoCB(self, con, iq_obj):
+		# According to JEP-0030:
+		# For identity: category, name is mandatory, type is optional.
+		# For feature: var is mandatory
+		identities, features = [], []
+		qp = iq_obj.getQueryPayload()
+		if not qp:
+			qp = []
+		for i in qp:
+			if i.getName() == 'identity':
+				identities.append(i.attrs)
+			elif i.getName() == 'feature':
+				features.append(i.getAttr('var'))
+		jid = str(iq_obj.getFrom())
+		if not identities:
+			con.browseAgents(jid)
+		else:
+			self.hub.sendPlugin('AGENT_INFO_INFO', self.connections[con],\
+				(jid, identities, features))
+			con.discoverItems(jid)
+
 	def connect(self, account):
 		"""Connect and authentificate to the Jabber server"""
 		hostname = self.cfgParser.tab[account]["hostname"]
@@ -551,6 +600,12 @@ class GajimCore:
 			con.registerHandler('iq',self.vCardCB,'result')#common.jabber.NS_VCARD)
 			con.registerHandler('iq',self.rosterSetCB,'set', \
 				common.jabber.NS_ROSTER)
+			con.registerHandler('iq',self.BrowseResultCB,'result', \
+				common.jabber.NS_BROWSE)
+			con.registerHandler('iq',self.DiscoverItemsCB,'result', \
+				common.jabber.NS_P_DISC_ITEMS)
+			con.registerHandler('iq',self.DiscoverInfoCB,'result', \
+				common.jabber.NS_P_DISC_INFO)
 		try:
 			con.connect()
 		except IOError, e:
@@ -612,14 +667,7 @@ class GajimCore:
 		return list_ev
 
 	def request_infos(self, account, con, jid):
-		identities, features = con.discoverInfo(jid)
-		if not identities:
-			identities, features, items = con.browseAgents(jid)
-		else:
-			items = con.discoverItems(jid)
-		self.hub.sendPlugin('AGENT_INFO', account, (jid, identities, features, items))
-		for item in items:
-			self.request_infos(account, con, item['jid'])
+		con.discoverInfo(jid)
 
 	def read_queue(self):
 		while self.hub.queueIn.empty() == 0:
@@ -819,10 +867,9 @@ class GajimCore:
 				if con:
 					con.updateRosterItem(jid=ev[2][0], name=ev[2][1], \
 						groups=ev[2][2])
-			#('REQ_AGENTS', account, ())
+			#('REQ_AGENTS', account, jid)
 			elif ev[0] == 'REQ_AGENTS':
-				config = self.cfgParser.__getattr__(ev[1])
-				self.request_infos(ev[1], con, config['hostname'])
+				self.request_infos(ev[1], con, ev[2])
 			#('REG_AGENT_INFO', account, agent)
 			elif ev[0] == 'REG_AGENT_INFO':
 				if con:

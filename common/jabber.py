@@ -718,49 +718,21 @@ class Client(Connection):
     def _discover(self,ns,jid,node=None):
         iq=Iq(to=jid,type='get',query=ns)
         if node: iq.putAttr('node',node)
-        rep=self.SendAndWaitForResponse(iq)
-        if rep: ret=rep.getQueryPayload()
-        else: ret=[]
-        if not ret: ret=[]
-        return ret
+        self.send(iq)
 
     def discoverItems(self,jid,node=None):
         """ According to JEP-0030: jid is mandatory, name, node, action is optional. """
-        ret=[]
-        disco = self._discover(NS_P_DISC_ITEMS,jid,node)
-        for i in disco:
-            ret.append(i.attrs)
-        return ret
+        self._discover(NS_P_DISC_ITEMS,jid,node)
 
     def discoverInfo(self,jid,node=None):
         """ According to JEP-0030:
             For identity: category, name is mandatory, type is optional.
             For feature: var is mandatory"""
-        identities , features = [] , []
-        disco = self._discover(NS_P_DISC_INFO,jid,node)
-        for i in disco:
-            if i.getName()=='identity': identities.append(i.attrs)
-            elif i.getName()=='feature': features.append(i.getAttr('var'))
-        return identities, features
+        self._discover(NS_P_DISC_INFO,jid,node)
 
     def browseAgents(self,jid,node=None):
-        identities, features, items = [], [], []
         iq=Iq(to=jid,type='get',query=NS_BROWSE)
-        rep=self.SendAndWaitForResponse(iq)
-        if not rep:
-            return identities, features, items
-        q = rep.getTag('service')
-        if not q:
-            return identities, features, items
-        identities = [q.attrs]
-        for node in q.kids:
-            if node.getName() == 'ns':
-                features.append(node.getData())
-            else:
-                infos = node.attrs
-                infos['category'] = node.getName()
-                items.append(node.attrs)
-        return identities, features, items
+        self.send(iq)
 
 #############################################################################
 

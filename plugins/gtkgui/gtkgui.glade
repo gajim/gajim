@@ -2354,6 +2354,7 @@
 	      <property name="enable_search">True</property>
 	      <signal name="row_activated" handler="on_agents_treeview_row_activated" last_modification_time="Tue, 01 Mar 2005 14:20:15 GMT"/>
 	      <signal name="cursor_changed" handler="on_agents_treeview_cursor_changed" last_modification_time="Tue, 01 Mar 2005 14:20:21 GMT"/>
+	      <signal name="row_expanded" handler="on_agents_treeview_row_expanded" last_modification_time="Sun, 27 Mar 2005 10:28:52 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

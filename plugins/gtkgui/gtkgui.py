@@ -458,6 +458,17 @@ class plugin:
 			self.windows[account]['browser'].agent_info(array[0], array[1], \
 				array[2], array[3])
 
+	def handle_event_agent_info_items(self, account, array):
+		#('AGENT_INFO', account, (agent, items))
+		if self.windows[account].has_key('browser'):
+			self.windows[account]['browser'].agent_info_items(array[0], array[1])
+
+	def handle_event_agent_info_info(self, account, array):
+		#('AGENT_INFO', account, (agent, identities, features))
+		if self.windows[account].has_key('browser'):
+			self.windows[account]['browser'].agent_info_info(array[0], array[1], \
+				array[2])
+
 	def handle_event_reg_agent_info(self, account, array):
 		#('REG_AGENTS_INFO', account, (agent, infos))
 		if not array[1].has_key('instructions'):
@@ -607,6 +618,10 @@ class plugin:
 				self.handle_event_agents(ev[1], ev[2])
 			elif ev[0] == 'AGENT_INFO':
 				self.handle_event_agent_info(ev[1], ev[2])
+			elif ev[0] == 'AGENT_INFO_ITEMS':
+				self.handle_event_agent_info_items(ev[1], ev[2])
+			elif ev[0] == 'AGENT_INFO_INFO':
+				self.handle_event_agent_info_info(ev[1], ev[2])
 			elif ev[0] == 'REG_AGENT_INFO':
 				self.handle_event_reg_agent_info(ev[1], ev[2])
 			elif ev[0] == 'ACC_OK':
@@ -775,10 +790,11 @@ class plugin:
 		self.queueOUT = quOUT
 		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'ERROR', \
 			'STATUS', 'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
-			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'REG_AGENT_INFO', 'QUIT', \
-			'ACC_OK', 'CONFIG', 'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', \
-			'VISUAL', 'GC_MSG', 'GC_SUBJECT', 'BAD_PASSPHRASE', \
-			'GPG_SECRETE_KEYS', 'ROSTER_INFO', 'MSGSENT'])
+			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'AGENT_INFO_ITEMS', \
+			'AGENT_INFO_INFO', 'REG_AGENT_INFO', 'QUIT', 'ACC_OK', 'CONFIG', \
+			'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', 'VISUAL', 'GC_MSG', \
+			'GC_SUBJECT', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS', 'ROSTER_INFO', \
+			'MSGSENT'])
 		self.default_config = {'autopopup':1,\
 			'autopopupaway':1,\
 			'ignore_unknown_contacts':0,\
@@ -806,11 +822,14 @@ class plugin:
 			'outmsgcolor': '#0000ff',\
 			'statusmsgcolor':'#1eaa1e',\
 			'hiddenlines':'',\
-			'accounttextcolor': '#ff0000',\ #'#ffffff'
-			'accountbgcolor': '#9fdfff',\ #'#94aa8c'
+			'accounttextcolor': '#ff0000',\
+			#'#ffffff'
+			'accountbgcolor': '#9fdfff',\
+			#'#94aa8c'
 			'accountfont': 'Sans Bold 10',\
 			'grouptextcolor': '#0000ff',\
-			'groupbgcolor': '#ffffff',\ #'#eff3e7'
+			'groupbgcolor': '#ffffff',\
+			#'#eff3e7'
 			'groupfont': 'Sans Italic 10',\
 			'usertextcolor': '#000000',\
 			'userbgcolor': '#ffffff',\

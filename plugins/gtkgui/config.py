@@ -1528,6 +1528,42 @@ class Service_discovery_window:
 				self.browse(child_jid)
 			child = model.iter_next(child)
 	
+	def agent_info_info(self, agent, identities, features):
+		"""When we recieve informations about an agent, but not its items"""
+		self.agent_info(agent, identities, features, [])
+
+	def agent_info_items(self, agent, items):
+		"""When we recieve items about an agent"""
+		model = self.agents_treeview.get_model()
+		iter = model.get_iter_root()
+		# We look if this agent is in the treeview
+		while (iter):
+			if agent == model.get_value(iter, 1):
+				break
+			if model.iter_has_child(iter):
+				iter = model.iter_children(iter)
+			else:
+				if not model.iter_next(iter):
+					iter = model.iter_parent(iter)
+				if iter:
+					iter = model.iter_next(iter)
+		if not iter: #If it is not, we stop
+			return
+		for item in items:
+			if not item.has_key('name'):
+				continue
+			# We look if this item is already in the treeview
+			iter_child = model.iter_children(iter)
+			while iter_child:
+				if item['jid'] == model.get_value(iter_child, 1):
+					break
+				iter_child = model.iter_next(iter_child)
+			if not iter_child: # If it is not we add it
+				iter_child = model.append(iter, (item['name'], item['jid']))
+			self.agent_infos[item['jid']] = {'identities': [item]}
+			if self.iter_is_visible(iter_child):
+				self.browse(item['jid'])
+
 	def agent_info(self, agent, identities, features, items):
 		"""When we recieve informations about an agent"""
 		model = self.agents_treeview.get_model()
