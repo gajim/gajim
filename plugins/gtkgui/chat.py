@@ -487,14 +487,12 @@ class Chat:
 				self.plugin.emoticons[emot_ascii])
 		elif special_text.startswith('mailto:'):
 			#it's a mail
-			special_text = special_text[0:-1]
 			tags.append('mail')
 			use_other_tags = False
 		elif self.plugin.sth_at_sth_dot_sth_re.match(special_text):
 			#it's a mail
 			tags.append('mail')
 			use_other_tags = False
-			special_text = special_text[0:-1]
 		elif special_text.startswith('*'): # it's a bold text
 			tags.append('bold')
 			if special_text[1] == '/': # it's also italic
