@@ -2253,7 +2253,12 @@ class plugin:
 			u = self.roster.contacts[account][jid][0]
 			u.name = array[1]
 			u.resource = array[2]
-			self.roster.redraw_jid(u.jid, account)
+			self.roster.remove_user(u, account)
+			if 'not in list' in u.groups:
+				u.groups.remove('not in list')
+			if len(u.groups) == 0:
+				u.groups = ['general']
+			self.roster.add_user_to_roster(u.jid, account)
 		else:
 			user1 = user(jid, jid, ['general'], 'online', \
 				'online', 'to', '', array[2], 0, '')
