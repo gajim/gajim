@@ -640,8 +640,12 @@ class tabbed_chat_window:
 			return
 		elif word.startswith('mailto:'):
 			#it's a mail
-			tag += '_mail'
-			text = word[7:]
+			if len(word) > 7:
+				tag += '_mail'
+				text = word[7:]
+			else:
+				text = word
+				tag = None
 		elif self.plugin.sth_at_sth_dot_sth_re.match(word): # returns match object or None
 			#it's a mail too
 			tag += '_mail'
@@ -660,11 +664,22 @@ class tabbed_chat_window:
 			text = word[1:-1]
 		else:
 			#it's an url
-			tag += '_url'
-			text = word
+			if word.startswith('http://'):
+				if len(word) > 7:
+					text = word[7:]
+					tag += '_url'
+				else:
+					text = word
+					tag = None
+			else:
+				tag += '_url'
+				text = word
 
 		end_iter = conversation_buffer.get_end_iter()
-		conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
+		if tag:
+			conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
+		else:
+			conversation_buffer.insert(end_iter, text)
 
 	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :
@@ -712,27 +727,18 @@ class tabbed_chat_window:
 		if self.plugin.config['useemoticons']: # search for emoticons & urls
 			my_re = sre.compile(self.plugin.emot_and_url_pattern, sre.IGNORECASE)
 			iterator = my_re.finditer(otext)
-			for match in iterator:
-				start, end = match.span()
-				special_word = otext[start:end]
-				if start != 0:
-					text_before_special_word = otext[index:start]
-					end_iter = conversation_buffer.get_end_iter()
-					conversation_buffer.insert(end_iter, text_before_special_word)
-				self.print_special_word(special_word, jid, contact)
-				index = end # update index
 		else: # search for just urls
 			my_re = sre.compile(self.plugin.url_pattern, sre.IGNORECASE)
 			iterator = my_re.finditer(otext)
-			for match in iterator:
-				start, end = match.span()
-				special_word = otext[start:end]
-				if start != 0:
-					text_before_special_word = otext[index:start]
-					end_iter = conversation_buffer.get_end_iter()
-					conversation_buffer.insert(end_iter, text_before_special_word)
-				self.print_special_word(special_word, jid, contact)
-				index = end # update index
+		for match in iterator:
+			start, end = match.span()
+			special_word = otext[start:end]
+			if start != 0:
+				text_before_special_word = otext[index:start]
+				end_iter = conversation_buffer.get_end_iter()
+				conversation_buffer.insert(end_iter, text_before_special_word)
+			self.print_special_word(special_word, jid, contact)
+			index = end # update index
 
 		#add the rest in the index and after
 		end_iter = conversation_buffer.get_end_iter()
