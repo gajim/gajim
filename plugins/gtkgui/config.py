@@ -1679,9 +1679,6 @@ class Service_discovery_window:
 		self.services_treeview.get_model().clear()
 		self.browse(jid)
 	
-	def on_address_comboboxentry_changed(self, widget):
-		self.on_go_button_clicked(widget)
-		
 	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:
 			Error_dialog(_("You must be connected to browse services"))
