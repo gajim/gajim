@@ -604,6 +604,29 @@ class gc:
 				fin = True
 		return None
 
+	def get_user_list(self):
+		model = self.tree.get_model()
+		list = []
+		fin = False
+		role = model.get_iter_root()
+		if not role:
+			return list
+		while not fin:
+			fin2 = False
+			user = model.iter_children(role)
+			if not user:
+				fin2=True
+			while not fin2:
+				nick = model.get_value(user, 1)
+				list.append(nick)
+				user = model.iter_next(user)
+				if not user:
+					fin2 = True
+			role = model.iter_next(role)
+			if not role:
+				fin = True
+		return list
+
 	def remove_user(self, nick):
 		"""Remove a user from the roster"""
 		model = self.tree.get_model()
@@ -681,6 +704,18 @@ class gc:
 				txt_buffer.set_text('', -1)
 				widget.grab_focus()
 			return 1
+		elif event.keyval == gtk.keysyms.Tab:
+			list_nick = self.get_user_list()
+			txt_buffer = widget.get_buffer()
+			start_iter = txt_buffer.get_start_iter()
+			cursor_position = txt_buffer.get_insert()
+			end_iter = txt_buffer.get_iter_at_mark(cursor_position)
+			txt = txt_buffer.get_text(start_iter, end_iter, 0)
+			begin = txt.split()[-1]
+			for nick in list_nick:
+				if nick.find(begin) == 0:
+					txt_buffer.insert_at_cursor(nick[len(begin):])
+					return 1
 		return 0
 
 	def print_conversation(self, txt, jid, contact = None, tim = None):
