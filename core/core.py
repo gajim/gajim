@@ -344,6 +344,7 @@ class GajimCore:
 					iq._setTag('vCard', common.jabber.NS_VCARD)
 					iq.setID(self.con.getAnID())
 					self.con.send(iq)
+				#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 				elif ev[0] == 'VCARD':
 					iq = common.jabber.Iq(type="set")
 					iq.setID(self.con.getAnID())
@@ -357,6 +358,13 @@ class GajimCore:
 							else:
 								iq2.insertTag(i).putData(ev[1][i])
 					self.con.send(iq)
+				#('AGENT_LOGGING', (agent, type))
+				elif ev[0] == 'AGENT_LOGGING':
+					t = ev[1][1];
+					if not t:
+						t='available';
+					p = common.jabber.Presence(to=ev[1][0], type=t)
+					self.con.send(p)
 				else:
 					log.debug("Unknown Command %s" % ev[0])
 			elif self.connected == 1:

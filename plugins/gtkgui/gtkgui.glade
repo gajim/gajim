@@ -5165,7 +5165,7 @@ when NOT onlie</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkTextView" id="textview1">
+	    <widget class="GtkTextView" id="textview_DESC">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">False</property>

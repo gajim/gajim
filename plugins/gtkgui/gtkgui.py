@@ -840,7 +840,8 @@ class browseAgent_Window:
 		model = self.treeview.get_model()
 		for jid in agents.keys():
 			iter = model.append()
-			model.set(iter, 0, agents[jid]['name'], 1, agents[jid]['service'])
+#			model.set(iter, 0, agents[jid]['name'], 1, agents[jid]['service'])
+			model.set(iter, 0, agents[jid]['name'], 1, jid)
 
 	def on_refresh(self, widget):
 		"""When refresh button is clicked :
@@ -1101,23 +1102,27 @@ class roster_Window:
 		jid = self.l_contact[jid]['user'].jid
 		if not self.tab_vcard.has_key(jid):
 			self.tab_vcard[jid] = infoUser_Window(self.l_contact[jid]['user'], self)
-	
+
+	def on_agent_logging(self, widget, jid, type):
+		"""When an agent is requested to log in or off"""
+		self.queueOUT.put(('AGENT_LOGGING', (jid, type)))
+		
 	def mk_menu_c(self, event, iter):
 		"""Make user's popup menu"""
 		model = self.tree.get_model()
 		jid = model.get_value(iter, 2)
 		path = model.get_path(iter)
-		self.menu_c = gtk.Menu()
+		menu = gtk.Menu()
 		item = gtk.MenuItem("Start chat")
-		self.menu_c.append(item)
+		menu.append(item)
 		item.connect("activate", self.on_row_activated, path)
 		item = gtk.MenuItem("Rename")
-		self.menu_c.append(item)
+		menu.append(item)
 		#item.connect("activate", self.on_rename, iter)
 		item = gtk.MenuItem()
-		self.menu_c.append(item)
+		menu.append(item)
 		item = gtk.MenuItem("Subscription")
-		self.menu_c.append(item)
+		menu.append(item)
 		
 		menu_sub = gtk.Menu()
 		item.set_submenu(menu_sub)
@@ -1130,31 +1135,51 @@ class roster_Window:
 			'I would like to add you to my contact list, please.')
 		
 		item = gtk.MenuItem()
-		self.menu_c.append(item)
+		menu.append(item)
 		item = gtk.MenuItem("Remove")
-		self.menu_c.append(item)
+		menu.append(item)
 		item.connect("activate", self.on_req_usub, iter)
 
 		item = gtk.MenuItem()
-		self.menu_c.append(item)
+		menu.append(item)
 		item = gtk.MenuItem("Informations")
-		self.menu_c.append(item)
+		menu.append(item)
 		item.connect("activate", self.on_info, jid)
 
-		self.menu_c.popup(None, None, None, event.button, event.time)
-		self.menu_c.show_all()
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
 
 	def mk_menu_g(self, event):
 		"""Make group's popup menu"""
-		self.menu_c = gtk.Menu()
+		menu = gtk.Menu()
 		item = gtk.MenuItem("grp1")
-		self.menu_c.append(item)
+		menu.append(item)
 		item = gtk.MenuItem("grp2")
-		self.menu_c.append(item)
+		menu.append(item)
 		item = gtk.MenuItem("grp3")
-		self.menu_c.append(item)
-		self.menu_c.popup(None, None, None, event.button, event.time)
-		self.menu_c.show_all()
+		menu.append(item)
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
+	
+	def mk_menu_agent(self, event, iter):
+		"""Make agent's popup menu"""
+		model = self.tree.get_model()
+		jid = model.get_value(iter, 1)
+		menu = gtk.Menu()
+		item = gtk.MenuItem("Log on")
+		if self.l_contact[jid]['user'].show != 'offline':
+			item.set_sensitive(FALSE)
+		menu.append(item)
+		item.connect("activate", self.on_agent_logging, jid, 'available')
+
+		item = gtk.MenuItem("Log off")
+		if self.l_contact[jid]['user'].show == 'offline':
+			item.set_sensitive(FALSE)
+		menu.append(item)
+		item.connect("activate", self.on_agent_logging, jid, 'unavailable')
+
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
 	
 	def authorize(self, widget, jid):
 		"""Authorize a user"""
@@ -1190,8 +1215,7 @@ class roster_Window:
 			if data == 'group':
 				self.mk_menu_g(event)
 			elif data == 'agent':
-				#TODO
-				pass
+				self.mk_menu_agent(event, iter)
 			else:
 				self.mk_menu_c(event, iter)
 			return gtk.TRUE

@@ -612,11 +612,13 @@ class Client(Connection):
     def requestRegInfo(self,agent=''):
         """Requests registration info from the server.
            Returns the Iq object received from the server."""
-        if agent: agent = agent + '.'
+#        if agent: agent = agent + '.'
         self._reg_info = {}
-        reg_iq = Iq(type='get', to = agent + self._host)
+#        reg_iq = Iq(type='get', to = agent + self._host)
+        reg_iq = Iq(type='get', to = agent)
         reg_iq.setQuery(NS_REGISTER)
-        self.DEBUG("Requesting reg info from %s%s:" % (agent, self._host), DBG_NODE_IQ)
+#        self.DEBUG("Requesting reg info from %s%s:" % (agent, self._host), DBG_NODE_IQ)
+        self.DEBUG("Requesting reg info from %s:" % agent, DBG_NODE_IQ)
         self.DEBUG(ustr(reg_iq),DBG_NODE_IQ)
         return self.SendAndWaitForResponse(reg_iq)        
 
@@ -637,9 +639,10 @@ class Client(Connection):
 
     def sendRegInfo(self, agent=None):
         """Sends the populated registration dictionary back to the server"""
-        if agent: agent = agent + '.'
+#        if agent: agent = agent + '.'
         if agent is None: agent = ''
-        reg_iq = Iq(to = agent + self._host, type='set')
+#        reg_iq = Iq(to = agent + self._host, type='set')
+        reg_iq = Iq(to = agent, type='set')
         q = reg_iq.setQuery(NS_REGISTER)
         for info in self._reg_info.keys():
             q.insertTag(info).putData(self._reg_info[info])
