@@ -1780,6 +1780,10 @@ class roster_Window:
 			txt = status
 		self.send_status(account, status, txt)
 
+	def on_cb_clicked(self, widget, event=None):
+		"""When we click on the comboBox"""
+		print "clicked"
+		
 	def on_cb_changed(self, widget):
 		"""When we change our status"""
 		model = self.cb.get_model()
@@ -2339,6 +2343,7 @@ class roster_Window:
 		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
 		self.xml.signal_connect('on_status_changed', self.on_status_changed)
 		self.id_signal_cb = self.cb.connect('changed', self.on_cb_changed)
+		self.cb.connect('enter-notify-event', self.on_cb_clicked)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
 		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
 		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
