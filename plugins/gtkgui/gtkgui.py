@@ -1517,6 +1517,17 @@ class roster_Window:
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
 
+	def on_edit_account(self, widget, account):
+		if not self.plugin.windows.has_key('accountPreference'):
+			infos = {}
+			infos['name'] = account
+			infos['jid'] = self.plugin.accounts[account]["name"] + \
+				'@' +  self.plugin.accounts[account]["hostname"]
+			infos['password'] = self.plugin.accounts[account]["password"]
+			infos['ressource'] = self.plugin.accounts[account]["ressource"]
+			self.plugin.windows['accountPreference'] = \
+				accountPreference_Window(self.plugin, infos)
+
 	def mk_menu_account(self, event, iter):
 		"""Make account's popup menu"""
 		model = self.tree.get_model()
@@ -1549,6 +1560,10 @@ class roster_Window:
 		item = gtk.MenuItem()
 		menu.append(item)
 
+		item = gtk.MenuItem("Edit account")
+		menu.append(item)
+		item.connect("activate", self.on_edit_account, account)
+		
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
 	
