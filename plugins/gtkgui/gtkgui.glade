@@ -3750,11 +3750,11 @@ on the server as a vCard</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="reset_colors_button">
+		<widget class="GtkButton" id="reset_colors_and_fonts_button">
 		  <property name="visible">True</property>
 		  <property name="relief">GTK_RELIEF_NONE</property>
 		  <property name="focus_on_click">False</property>
-		  <signal name="clicked" handler="on_reset_colors_button_clicked" last_modification_time="Sun, 06 Mar 2005 18:40:18 GMT"/>
+		  <signal name="clicked" handler="on_reset_colors_and_fonts_button_clicked" last_modification_time="Sun, 06 Mar 2005 20:29:53 GMT"/>
 
 		  <child>
 		    <widget class="GtkAlignment" id="alignment50">
@@ -3794,7 +3794,7 @@ on the server as a vCard</property>
 			  <child>
 			    <widget class="GtkLabel" id="label215">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Reset to default colors</property>
+			      <property name="label" translatable="yes">_Reset to default colors &amp; fonts</property>
 			      <property name="use_underline">True</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>

@@ -2362,7 +2362,7 @@ class roster_window:
 		self.begin_emot = ''
 		split_line = self.plugin.config['emoticons'].split('\t')
 		for i in range(0, len(split_line)/2):
-			 # (nk) lost you here. if you remember add some comments about the idea of the algo
+			# (nk) lost you here. if you remember add some comments about the idea of the algo
 			emot_file = split_line[2*i+1]
 			if not self.image_is_ok(emot_file):
 				continue

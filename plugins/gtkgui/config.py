@@ -179,7 +179,7 @@ class preferences_window:
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.roster.draw_roster()
 	
-	def on_reset_colors_button_clicked(self, widget):
+	def on_reset_colors_and_fonts_button_clicked(self, widget):
 		defaults = self.plugin.default_config
 		self.plugin.config['inmsgcolor'] = defaults['inmsgcolor']
 		self.plugin.config['outmsgcolor'] = defaults['outmsgcolor']
