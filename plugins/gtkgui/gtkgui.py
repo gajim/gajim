@@ -619,6 +619,9 @@ class tabbed_chat_window:
 				self.change_cursor = tag
 		return False
 			
+	def on_conversation_textview_button_press_event(self, widget, event):
+		# Do not open the standard popup menu
+		return True
 	
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
@@ -644,7 +647,34 @@ class tabbed_chat_window:
 			del self.print_time_timeout_id[jid]
 		return 0
 
-	def hyperlink_handler(self, texttag, widget, event, iter, type):
+	def on_open_link_activated(self, widget, kind, text):
+		self.plugin.launch_browser_mailer(kind, text)
+
+	def on_copy_link_activated(self, widget, text):
+		clip = gtk.clipboard_get()
+		clip.set_text(text)
+
+	def make_link_menu(self, event, kind, text):
+		menu = gtk.Menu()
+		if kind == 'mail':
+			item = gtk.MenuItem(_('_Open email composer'))
+		else:
+			item = gtk.MenuItem(_('_Open link'))
+		item.connect('activate', self.on_open_link_activated, kind, text)
+		menu.append(item)
+		if kind == 'mail':
+			item = gtk.MenuItem(_('_Copy email address'))
+		else: # It's an url
+			item = gtk.MenuItem(_('_Copy link address'))
+		item.connect('activate', self.on_copy_link_activated, text)
+		menu.append(item)
+
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
+		menu.reposition()
+
+
+	def hyperlink_handler(self, texttag, widget, event, iter, kind):
 		if event.type == gtk.gdk.BUTTON_RELEASE:
 			begin_iter = iter.copy()
 			#we get the begining of the tag
@@ -655,8 +685,11 @@ class tabbed_chat_window:
 			while not end_iter.ends_tag(texttag):
 				end_iter.forward_word_end()
 			word = begin_iter.get_text(end_iter)
-			#we launch the correct application
-			self.plugin.launch_browser_mailer(type, word)
+			if event.button == 3:
+				self.make_link_menu(event, kind, word)
+			else:
+				#we launch the correct application
+				self.plugin.launch_browser_mailer(kind, word)
 
 	def print_special_text(self, text, jid, contact = ''):
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
