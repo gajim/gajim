@@ -1941,7 +1941,8 @@ class roster_window:
 					type = model.get_value(iter, 2)
 					if (type == 'group'):
 						if (self.tree.row_expanded(path)):
-							if x <= self.pixbufs['opened'].get_pixbuf()\			#The integer 10 is the xoffset
+							#The integer 10 is the xoffset
+							if x <= self.pixbufs['opened'].get_pixbuf()\
 								.get_width()+10:
 								self.tree.collapse_row(path)
 						else:
