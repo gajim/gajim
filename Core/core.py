@@ -33,11 +33,62 @@ from tempfile import *
 from common import i18n
 _ = i18n._
 
+VERSION = '0.6.1'
+
 log = logging.getLogger('core.core')
 log.setLevel(logging.DEBUG)
 
 CONFPATH = "~/.gajim/config"
 LOGPATH = os.path.expanduser("~/.gajim/logs/")
+
+distro_info = {
+	'Arch Linux': '/etc/arch-release',\
+	'Aurox Linux': '/etc/aurox-release',\
+	'Conectiva Linux': '/etc/conectiva-release',\
+	'Debian GNU/Linux': '/etc/debian_release',\
+	'Debian GNU/Linux': '/etc/debian_version',\
+	'Fedora Linux': '/etc/fedora-release',\
+	'Gentoo Linux': '/etc/gentoo-release',\
+	'Mandrake Linux': '/etc/mandrake-release',\
+	'Slackware Linux': '/etc/slackware-release',\
+	'Slackware Linux': '/etc/slackware-version',\
+	'Solaris/Sparc': '/etc/release',\
+	'Sun JDS': '/etc/sun-release',\
+	'Novell SUSE Linux': '/etc/SuSE-release',\
+	'PLD Linux': '/etc/pld-release',\
+	'SUSE Linux': '/etc/SuSE-release',\
+	'Yellow Dog Linux': '/etc/yellowdog-release',\
+	# many distros use the /etc/redhat-release for compatibility
+	# so Redhat is the last
+	'Redhat Linux': '/etc/redhat-release'\
+}
+
+def get_os_info():
+	if os.name =='nt':
+		return 'windows'
+	elif os.name =='posix':
+		executable = 'lsb_release'
+		params = ' --id --codename --release --short'
+		for path in os.environ['PATH'].split(':'):
+			full_path_to_executable = os.path.join(path, executable)
+			if os.path.exists(full_path_to_executable):
+				command = executable + params
+				child_stdin, child_stdout = os.popen2(command)
+				output = child_stdout.readline().strip()
+				child_stdout.close()
+				child_stdin.close()
+				return output
+		# lsb_release executable not available, so parse files
+		for distro in distro_info:
+			path_to_file = distro_info[distro]
+			if os.path.exists(path_to_file):
+				fd = open(path_to_file)
+				text = fd.read().strip()
+				fd.close()
+				if path_to_file.endswith('version'):
+					text = distro + ' ' + text
+				return text
+	return ''
 
 def XMLescape(txt):
 	"Escape XML entities"
@@ -574,6 +625,17 @@ class GajimCore:
 				(jid, identities, features))
 			con.discoverItems(jid)
 
+	def VersionCB(self, con, iq_obj):
+		f = iq_obj.getFrom()
+		iq_obj.setFrom(iq_obj.getTo())
+		iq_obj.setTo(f)
+		iq_obj.setType('result')
+		qp = iq_obj.getTag('query')
+		qp.insertTag('name').insertData('Gajim')
+		qp.insertTag('version').insertData(VERSION)
+		qp.insertTag('os').insertData(get_os_info())
+		con.send(iq_obj)
+
 	def connect(self, account):
 		"""Connect and authentificate to the Jabber server"""
 		hostname = self.cfgParser.tab[account]['hostname']
@@ -623,6 +685,8 @@ class GajimCore:
 				common.jabber.NS_P_DISC_INFO)
 			con.registerHandler('iq',self.DiscoverInfoErrorCB,'error', \
 				common.jabber.NS_P_DISC_INFO)
+			con.registerHandler('iq',self.VersionCB,'get', \
+				common.jabber.NS_VERSION)
 		try:
 			con.connect()
 		except IOError, e:
