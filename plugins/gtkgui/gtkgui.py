@@ -348,7 +348,8 @@ class plugin:
 					user1 = u
 					break
 			if user1:
-				old_show = statuss.index(user1.show)
+				if user1.show in statuss:
+					old_show = statuss.index(user1.show)
 			else:
 				user1 = self.roster.contacts[account][ji][0]
 				if user1.show in statuss:
