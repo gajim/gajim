@@ -1246,6 +1246,8 @@ class agent_browser_window:
 			if identities[0].has_key('name'):
 				model.set_value(iter, 0, identities[0]['name'])
 		for item in items:
+			if not item.has_key('name'):
+				continue
 			model.append(iter, (item['name'], item['jid']))
 			self.agent_infos[item['jid']] = {'identities': [item]}
 		if expand:
