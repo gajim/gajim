@@ -772,9 +772,10 @@ class GajimCore:
 					groups=ev[2][2])
 			#('REQ_AGENTS', account, ())
 			elif ev[0] == 'REQ_AGENTS':
+				config = self.cfgParser.__getattr__(ev[1])
 				#do we need that ?
-				#con.discoverInfo('jabber.lagaule.org')
-				agents = con.discoverItems('jabber.lagaule.org')
+				#con.discoverInfo(config['hostname'])
+				agents = con.discoverItems(config['hostname'])
 				self.hub.sendPlugin('AGENTS', ev[1], agents)
 				for agent in agents:
 					self.request_infos(ev[1], con, agent['jid'])
