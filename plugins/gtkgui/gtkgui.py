@@ -3491,6 +3491,35 @@ class plugin:
 		if pix.get_width() > 24 or pix.get_height() > 24:
 			return False
 		return True
+		
+	def make_pattern_with_formatting_on(self, formatting_on=True):
+		# regexp meta characters are:  . ^ $ * + ? { } [ ] \ | ( )
+		# one escapes the metachars with \
+		# \S matches anything but ' ' '\t' '\n' '\r' '\f' and '\v'
+		# \s matches any whitespace character
+		# \w any alphanumeric character
+		# \W any non-alphanumeric character
+		# * means 0 or more times
+		# + means 1 or more times
+		# ? means 1 or 0 times
+		# | means or
+		# [^*] anything but '*'   (inside [] you don't have to escape metachars)
+		# [^\s*] anything but whitespaces and '*'
+		# formatting_and_url_pattern is one string literal.
+		# I've put spaces to make the regexp look better.
+		links = r'http://\S+|' 'https://\S+|' 'news://\S+|' 'ftp://\S+|' 'ed2k://\S+|' 'www\.\S+|' 'ftp\.\S+'
+		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
+		mail = r'mailto:\S+' '\S+@\S+\.\S+'
+
+		#detects eg. *b* *bold* *bold bold*
+		#doesn't detect (it's a feature :P) * bold* *bold * * bold *
+		formatting = '\*[^\s*]([^*]*[^\s*])?\*|' '/[^\s*]([^/]*[^\s*])?/|' '_\[^\s*]([^_]*[^\s*])?_'
+
+		if formatting_on:
+			self.formatting_and_url_pattern = links + '|' + mail + '|' + formatting
+		else:
+			self.formatting_and_url_pattern = links + '|' + mail
+
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
@@ -3622,25 +3651,11 @@ class plugin:
 				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
 				self.emoticons[split_line[2*i]] = pix
 			
-		# regexp meta characters are:  . ^ $ * + ? { } [ ] \ | ( )
-		# one escapes the metachars with \
-		# \S matches anything but ' ' '\t' '\n' '\r' '\f' and '\v'
-		# \s matches any whitespace character
-		# \w any alphanumeric character
-		# \W any non-alphanumeric character
-		# * means 0 or more times
-		# + means 1 or more times
-		# | means or
-		# [^*] anything but '*'   (inside [] you don't have to escape metachars)
-		# [^\s*] anything but whitespaces and '*'
-		# formatting_and_url_pattern is one string literal.
-		# I've put spaces to make the regexp look better
-		self.formatting_and_url_pattern = r'http://\S+|' 'https://\S+|' 'news://\S+|' 'ftp://\S+|' 'mailto:\S+|' 'ed2k://\S+|' 'www\.\S+|' 'ftp\.\S+|' '\*\S+[^*]*[^\s*]\*|' '/\S+[^/]*[^\s*]/|' '_\S+[^_]*[^\s*]_|' '\S+[^\s]*@\S+\.\S+'
+		# FIXME: put pref widget code AND check configs (so the user can disable __ // bb)
+		self.make_pattern_with_formatting_on(True)
 		
-		#self.formatting_and_url_pattern = r'http://\S+|' 'https://\S+|' 'news://\S+|' 'ftp://\S+|' 'mailto:\S+|' 'ed2k://\S+|' 'www\.\S+|' 'ftp\.\S+|' '\S+[^\s]*@\S+\.\S+'
-		
-		# at least one letter in 3 parts (before @, after @, after .)
-		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+[^\s*]@\S+\.\S+')
+		# at least one character in 3 parts (before @, after @, after .)
+		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S+')
 		
 		emoticons_pattern = ''
 		for emoticon in self.emoticons: # travel tru emoticons list

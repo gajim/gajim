@@ -635,6 +635,7 @@ class New_message_dialog:
 		if not self.plugin.windows[self.account]['chats'].has_key(jid):
 			self.plugin.roster.new_chat(user, self.account)
 		self.plugin.windows[self.account]['chats'][jid].active_tab(jid)
+		self.plugin.windows[self.account]['chats'][jid].window.present()
 		widget.get_toplevel().destroy()
 
 	def __init__(self, plugin, account):
