@@ -1171,8 +1171,15 @@ class Roster_window:
 				self.plugin.config['groupbgcolor'])
 			renderer.set_property('xalign', 0.5)
 		else:
-			renderer.set_property('cell-background', \
-				self.plugin.config['userbgcolor'])
+			jid = model.get_value(iter, 3)
+			account = model.get_value(iter, 4)
+			if jid in self.newly_added[account]:
+				renderer.set_property('cell-background', '#adc3c6')
+			elif jid in self.to_be_removed[account]:
+				renderer.set_property('cell-background', '#ab6161')
+			else:
+				renderer.set_property('cell-background', \
+					self.plugin.config['userbgcolor'])
 			renderer.set_property('xalign', 1)
 		renderer.set_property('width', 20)
 	
@@ -1195,15 +1202,15 @@ class Roster_window:
 		else:
 			jid = model.get_value(iter, 3)
 			account = model.get_value(iter, 4)
+			renderer.set_property('foreground', \
+				self.plugin.config['usertextcolor'])
 			if jid in self.newly_added[account]:
-				renderer.set_property('foreground', 'green')
+				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in self.to_be_removed[account]:
-				renderer.set_property('foreground', 'red')
+				renderer.set_property('cell-background', '#ab6161')
 			else:
-				renderer.set_property('foreground', \
-					self.plugin.config['usertextcolor'])
-			renderer.set_property('cell-background', \
-				self.plugin.config['userbgcolor'])
+				renderer.set_property('cell-background', \
+					self.plugin.config['userbgcolor'])
 			renderer.set_property('font', self.plugin.config['userfont'])
 			renderer.set_property('xpad', 8)
 
