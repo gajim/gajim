@@ -889,9 +889,6 @@ class roster_window:
 					self.tree.set_cursor(path)
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg, \
 				jid, tim = tim)
-			if not self.plugin.windows[account]['chats'][jid].window.\
-				get_property('is-active'):
-				self.plugin.systray.add_jid(jid, account)
 
 	def on_preferences_menuitem_activate(self, widget):
 		"""When preferences is selected :

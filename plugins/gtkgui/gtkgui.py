@@ -534,9 +534,6 @@ class plugin:
 			#message from someone
 			self.windows[account]['gc'][jid].print_conversation(array[1], jid, \
 				jids[1], array[2])
-			if not self.windows[account]['gc'][jid].window.\
-				get_property('is-active'):
-				self.systray.add_jid(jid, account)
 
 	def handle_event_gc_subject(self, account, array):
 		#('GC_SUBJECT', account, (jid, subject))
