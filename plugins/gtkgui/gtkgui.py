@@ -429,7 +429,7 @@ class tabbed_chat_Window:
 		if event.keyval == gtk.keysyms.Escape:
 			jid = self.get_active_jid()
 			if len(self.xmls) == 1:
-				button.get_toplevel().destroy()
+				widget.get_toplevel().destroy()
 			else:
 				nb.remove_page(nb.get_current_page())
 				del self.plugin.windows[self.account]['chats'][jid]
