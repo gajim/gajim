@@ -44,6 +44,22 @@ class user:
 			self.status = args[0].status
 		else: raise TypeError, 'bad arguments'
 
+class about:
+	def delete_event(self, widget):
+		self.window.destroy()
+		
+	def __init__(self):
+		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'About')
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+
+class accounts:
+	def delete_event(self, widget):
+		self.window.destroy()
+		
+	def __init__(self):
+		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Accounts')
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+
 class message:
 	def delete_event(self, widget):
 		del self.roster.tab_messages[self.jid]
@@ -169,6 +185,12 @@ class roster:
 
 	def on_status_changed(self, widget):
 		self.queueOUT.put(('STATUS',widget.name))
+
+	def on_about(self, widget):
+		window_about = about()
+
+	def on_accounts(self, widget):
+		window_accounts = accounts()
 	
 	def on_quit(self, widget):
 		self.queueOUT.put(('QUIT',''))
@@ -181,7 +203,7 @@ class roster:
 			#NE FONCTIONNE PAS !
 			self.tab_messages[jid].window.grab_focus()
 		else:
-			self.tab_messages[jid]=message(jid, self)
+			self.tab_messages[jid] = message(jid, self)
 		
 	def __init__(self, queueOUT):
 		#initialisation des variables
@@ -197,6 +219,7 @@ class roster:
 		self.optionmenu = self.xml.get_widget('optionmenu')
 		self.optionmenu.set_history(6)
 		self.tab_messages = {}
+
 		#colonnes
 		self.col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
@@ -206,8 +229,11 @@ class roster:
 		self.col.pack_start(render_text, expand = True)
 		self.col.add_attribute(render_text, 'text', 1)
 		self.tree.append_column(self.col)
-		#signales
+
+		#signals
 		self.xml.signal_connect('gtk_main_quit', self.on_quit)
+		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
+		self.xml.signal_connect('on_about_activate', self.on_about)
 		self.xml.signal_connect('on_quit_activate', self.on_quit)
 		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
 		self.xml.signal_connect('on_status_changed', self.on_status_changed)
