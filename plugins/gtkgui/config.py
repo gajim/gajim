@@ -1549,6 +1549,9 @@ class Service_discovery_window:
 					iter = model.iter_next(iter)
 		if not iter: #If it is not, we stop
 			return
+		expand = False
+		if len(model.get_path(iter)) == 1:
+			expand = True
 		for item in items:
 			if not item.has_key('name'):
 				continue
@@ -1561,14 +1564,16 @@ class Service_discovery_window:
 			if not iter_child: # If it is not we add it
 				iter_child = model.append(iter, (item['name'], item['jid']))
 			self.agent_infos[item['jid']] = {'identities': [item]}
-			if self.iter_is_visible(iter_child):
+			if self.iter_is_visible(iter_child) or expand:
 				self.browse(item['jid'])
+		if expand:
+			self.agents_treeview.expand_row((model.get_path(iter)), False)
 
 	def agent_info(self, agent, identities, features, items):
 		"""When we recieve informations about an agent"""
 		model = self.agents_treeview.get_model()
 		iter = model.get_iter_root()
-		expand = 0
+		expand = False
 		# We look if this agent is in the treeview
 		while (iter):
 			if agent == model.get_value(iter, 1):
@@ -1583,7 +1588,7 @@ class Service_discovery_window:
 		if not iter: #If it is not we add it
 			iter = model.append(None, (agent, agent))
 			self.agent_infos[agent] = {'features' : []}
-			expand = 1
+			expand = True
 		self.agent_infos[agent]['features'] = features
 		if len(identities):
 			self.agent_infos[agent]['identities'] = identities

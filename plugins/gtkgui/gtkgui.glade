@@ -2262,14 +2262,14 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy" handler="on_agent_browser_window_destroy" last_modification_time="Tue, 01 Mar 2005 14:19:07 GMT"/>
+  <signal name="destroy" handler="on_service_discovery_window_destroy" last_modification_time="Sun, 27 Mar 2005 18:05:35 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox11">
       <property name="border_width">5</property>
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">5</property>
 
       <child>
 	<widget class="GtkHBox" id="hbox2942">
@@ -2336,12 +2336,11 @@
 
       <child>
 	<widget class="GtkScrolledWindow" id="scrolledwindow9">
-	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
 	  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 	  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-	  <property name="shadow_type">GTK_SHADOW_NONE</property>
+	  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	  <child>
