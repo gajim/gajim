@@ -1638,7 +1638,7 @@ class roster_Window:
 
 		item = gtk.MenuItem()
 		menu.append(item)
-		item = gtk.MenuItem(_("Informations"))
+		item = gtk.MenuItem(_("Information"))
 		menu.append(item)
 		item.connect("activate", self.on_info, user, account)
 		item = gtk.MenuItem(_("History"))

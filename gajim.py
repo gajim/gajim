@@ -27,7 +27,9 @@ from common import i18n
 i18n.init()
 _ = i18n._
 
-import getopt, sys
+import getopt
+import sys
+import signal
 
 def usage():
 	print "usage :", sys.argv[0], ' [OPTION]'
@@ -47,6 +49,11 @@ for o, a in opts:
 	if o in ("-h", "--help"):
 		usage()
 		sys.exit()
+
+
+# FIXME: not sure where to put that. maybe here?
+# ^C exits the application
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 Core.core.start(mode)
 print _("Core Stopped")
