@@ -21,7 +21,6 @@
 import Queue
 import socket
 import sys
-import os
 import time
 import logging
 
@@ -32,17 +31,13 @@ import common.optparser
 
 log = logging.getLogger('core.core')
 log.setLevel(logging.DEBUG)
-if 'HOME' in os.environ:
-	home = os.environ['HOME']
-elif os.name == 'posix':
-	home = os.path.expanduser("~/")
-CONFPATH = os.path.join(home,".gajimrc")
+CONFPATH = "~/.gajimrc"
 
 class GajimCore:
 	def __init__(self):
 		self.connected = 0
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
-		print '%s\n' % self.cfgParser.Server_hostname;
+#		print '%s\n' % self.cfgParser.Server_hostname;
 		self.hub = common.hub.GajimHub()
 		self.cfgParser.parseCfgFile()
 	# END __init__

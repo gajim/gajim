@@ -20,12 +20,13 @@
 
 import ConfigParser 
 import logging
+import os
 
 log = logging.getLogger('common.options')
 
 class OptionsParser:
 	def __init__(self, fname):
-		self.__fname = fname
+		self.__fname = os.path.expanduser(fname)
 	# END __init__
 
 	def parseCfgFile(self):

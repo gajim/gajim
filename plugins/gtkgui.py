@@ -23,6 +23,9 @@ pygtk.require('2.0')
 import gtk
 import gtk.glade
 import gobject
+import string
+import common.optparser
+CONFPATH = "~/.gajimrc"
 
 class user:
 	def __init__(self, *args):
@@ -214,6 +217,8 @@ class roster:
 	def __init__(self, queueOUT):
 		#initialisation des variables
 		# FIXME : handle no file ...
+		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
+		self.cfgParser.parseCfgFile()
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Gajim')
 		self.tree = self.xml.get_widget('treeview')
 		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str)
@@ -225,7 +230,8 @@ class roster:
 		self.optionmenu = self.xml.get_widget('optionmenu')
 		self.optionmenu.set_history(6)
 		self.tab_messages = {}
-		self.showOffline=0
+		self.showOffline=string.atoi(self.cfgParser.GtkGui_showoffline)
+		print self.showOffline
 
 		#colonnes
 		self.col = gtk.TreeViewColumn()
