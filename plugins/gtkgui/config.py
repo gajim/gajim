@@ -692,6 +692,8 @@ class accountPreference_Window:
 			'keyname': keyName, 'savegpgpass': save_gpg_pass, 'gpgpass': gpg_pass}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 			'GtkGui'))
+		if savepass:
+			self.plugin.send('PASSPHRASE', name, entryPass.get_text())
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.plugin.queues[name] = {}
