@@ -1,7 +1,7 @@
 from distutils.core import setup, Extension
 
 module1 = Extension( 'idle',
-		     sources = ['common/idle.c'],
+		     sources = ['idle.c'],
 #                     extra_compile_args = ['-W'],
                      libraries = ['gtk-x11-2.0','gdk-x11-2.0','glib-2.0','X11','Xext','Xss','atk-1.0'],
                      library_dirs = ['/usr/X11R6/lib'],
