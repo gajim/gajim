@@ -1686,13 +1686,13 @@ class Service_discovery_window:
 		return # not ready
 		'is executed on each keypress'
 		text = self.comboboxentry_entry.get_text()
-		
 		self.on_go_button_clicked(widget)
 		
 	def on_address_comboboxentry_button_press_event(self, widget, event):
 		return # not ready
 		if event.click == 1: #Left click (user possibly selected sth)
 			pass
+
 	def on_services_treeview_row_activated(self, widget, path, col=0):
 		"""When a row is activated: Register or join the selected agent"""
 		#if both buttons are sensitive, it will register [default]
@@ -1714,7 +1714,7 @@ class Service_discovery_window:
 			room = services[0]
 			service = services[1]
 		if not self.plugin.windows.has_key('join_gc'):
-			self.plugin.windows['join_gc'] = Join_groupchat_window(self.plugin, self.account, service, room)
+			Join_groupchat_window(self.plugin, self.account, service, room)
 
 	def on_register_button_clicked(self, widget):
 		"""When we want to register an agent :
