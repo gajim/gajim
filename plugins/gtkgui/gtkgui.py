@@ -99,10 +99,11 @@ class message_Window:
 			evt = q.get()
 			self.print_conversation(evt[0], tim = evt[1])
 		del self.plugin.queues[self.account][self.user.jid]
-		for i in self.plugin.roster.get_user_iter(self.user.jid, self.account):
-			if self.plugin.roster.pixbufs.has_key(self.user.show):
-				self.plugin.roster.tree.get_model().set_value(i, 0, \
-					self.plugin.roster.pixbufs[self.user.show])
+		self.plugin.roster.redraw_jid(self.user.jid, self.account)
+#		for i in self.plugin.roster.get_user_iter(self.user.jid, self.account):
+#			if self.plugin.roster.pixbufs.has_key(self.user.show):
+#				self.plugin.roster.tree.get_model().set_value(i, 0, \
+#					self.plugin.roster.pixbufs[self.user.show])
 		self.plugin.set_systray()
 
 	def on_msg_key_press_event(self, widget, event):
@@ -459,7 +460,10 @@ class roster_Window:
 				prio = u.priority
 				show = u.show
 		for iter in iters:
-			model.set_value(iter, 0, self.pixbufs[show])
+			if self.plugin.queues[account].has_key(jid):
+				model.set_value(iter, 0, self.pixbufs['message'])
+			else:
+				model.set_value(iter, 0, self.pixbufs[show])
 			model.set_value(iter, 1, name)
 	
 	def mkmenu(self):
@@ -893,8 +897,7 @@ class roster_Window:
 			if not self.plugin.queues[account].has_key(jid):
 				model = self.tree.get_model()
 				self.plugin.queues[account][jid] = Queue.Queue(50)
-				for i in self.get_user_iter(jid, account):
-					model.set_value(i, 0, self.pixbufs['message'])
+				self.redraw_jid(jid, account)
 				self.plugin.set_systray('message')
 			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
@@ -1292,9 +1295,10 @@ class plugin:
 						self.roster.add_user_to_roster(ji, ev[1])
 					else:
 						#Update existing iter
-						for i in self.roster.get_user_iter(ji, ev[1]):
-							if self.roster.pixbufs.has_key(ev[2][1]):
-								model.set_value(i, 0, self.roster.pixbufs[ev[2][1]])
+						self.roster.redraw_jid(ji, ev[1])
+#						for i in self.roster.get_user_iter(ji, ev[1]):
+#							if self.roster.pixbufs.has_key(ev[2][1]):
+#								model.set_value(i, 0, self.roster.pixbufs[ev[2][1]])
 				elif self.roster.contacts[ev[1]].has_key(ji):
 					#It isn't an agent
 					self.roster.chg_user_status(user1, ev[2][1], ev[2][2], ev[1])
@@ -1314,8 +1318,9 @@ class plugin:
 					u = self.roster.contacts[ev[1]][jid][0]
 					u.name = ev[2][1]
 					u.resource = ev[2][2]
-					for i in self.roster.get_user_iter(u.jid, ev[1]):
-						model.set_value(i, 1, u.name)
+					self.roster.redraw_jid(u.jid, ev[1])
+#					for i in self.roster.get_user_iter(u.jid, ev[1]):
+#						model.set_value(i, 1, u.name)
 				else:
 					user1 = user(jid, jid, ['general'], 'online', \
 						'online', 'to', ev[2][2], 0)
@@ -1419,14 +1424,14 @@ class plugin:
 	def set_systray(self, status=None):
 		if not status:
 			self.nb_msg -= 1
-			if self.nb_msg == 0:
-				self.set_systray_img(self.status)
 		elif status == 'message':
 			self.nb_msg += 1
-			self.set_systray_img('message')
 		else:
 			self.status = status
-			self.set_systray_img(status)
+		if self.nb_msg == 0:
+			self.set_systray_img(self.status)
+		else:
+			self.set_systray_img('message')
 
 	def __init__(self, quIN, quOUT):
 		gtk.threads_init()
