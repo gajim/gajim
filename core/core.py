@@ -49,6 +49,24 @@ class GajimCore:
 		for a in string.split(accts, ' '):
 			self.accounts[a] = self.cfgParser.tab[a]
 
+	def vCardCB(self, con, vc):
+		"""Called when we recieve a vCard"""
+#		print vc
+		if vc._getTag('vCard') == common.jabber.NS_VCARD:
+			print "vcard :"
+			card = vc.getChildren()[0]
+			for info in card.getChildren():
+#				print "name"
+				print info.getName() + " : " + info.getData()
+#				print "Data"
+#				print info.getData()
+#				print "DataAsParts"
+#				print info.getDataAsParts()
+#				print "Namespace"
+#				print info.getNamespace()
+#				print "Children"
+#				print info.getChildren()			
+
 	def messageCB(self, con, msg):
 		"""Called when we recieve a message"""
 		self.hub.sendPlugin('MSG', (msg.getFrom().getBasic(), \
@@ -147,6 +165,7 @@ class GajimCore:
 
 			self.con.registerHandler('message', self.messageCB)
 			self.con.registerHandler('presence', self.presenceCB)
+			self.con.registerHandler('iq',self.vCardCB,'result')#common.jabber.NS_VCARD)
 			self.con.setDisconnectHandler(self.disconnectedCB)
 			#BUG in jabberpy library : if hostname is wrong : "boucle"
 			if self.con.auth(name, password, ressource):
@@ -280,6 +299,11 @@ class GajimCore:
 							print "error " + c.lastErr
 						else:
 							self.hub.sendPlugin('ACC_OK', ev[1])
+				elif ev[0] == 'TEST_VCARD':
+					iq = ev[1]
+					id = self.con.getAnID()
+					iq.setID(id)
+					self.con.send(ev[1])
 				else:
 					log.debug("Unknown Command %s" % ev[0])
 			elif self.connected == 1:

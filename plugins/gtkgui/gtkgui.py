@@ -52,6 +52,13 @@ class user:
 
 class infoUser_Window:
 	"""Class for user's information window"""
+	def test_vcard(self):
+		iq = common.jabber.Iq(to="asterix2@jabber.lagaule.org", type="get")
+		print iq
+		iq._setTag('vcard', common.jabber.NS_VCARD)
+		print iq
+		self.r.queueOUT.put(('TEST_VCARD', iq))
+
 	def delete_event(self, widget):
 		"""close window"""
 		self.window.destroy()
@@ -170,6 +177,8 @@ class infoUser_Window:
 		xml.signal_connect('on_remove_clicked', self.on_remove)
 		xml.signal_connect('on_entry_new_key_press_event', \
 			self.on_new_key_pressed)
+		print "\n***  TEST  ***\n"
+		self.test_vcard()
 		
 
 class preference_Window:
