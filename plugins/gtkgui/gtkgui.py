@@ -1526,7 +1526,6 @@ class plugin:
 
 	def handle_event_agent_info(self, account, array):
 		#('AGENTS_INFO', account, (agent, infos))
-		self.handle_event_agent_info(account, array)
 		if not array[1].has_key('instructions'):
 			warning_Window(_("error contacting %s") % array[0])
 		else:
