@@ -455,24 +455,24 @@ class plugin:
 
 	def handle_event_agents(self, account, agents):
 		#('AGENTS', account, agents)
-		if self.windows[account].has_key('browser'):
-			self.windows[account]['browser'].agents(agents)
+		if self.windows[account].has_key('disco'):
+			self.windows[account]['disco'].agents(agents)
 
 	def handle_event_agent_info(self, account, array):
 		#('AGENT_INFO', account, (agent, identities, features, items))
-		if self.windows[account].has_key('browser'):
-			self.windows[account]['browser'].agent_info(array[0], array[1], \
+		if self.windows[account].has_key('disco'):
+			self.windows[account]['disco'].agent_info(array[0], array[1], \
 				array[2], array[3])
 
 	def handle_event_agent_info_items(self, account, array):
 		#('AGENT_INFO_ITEMS', account, (agent, items))
-		if self.windows[account].has_key('browser'):
-			self.windows[account]['browser'].agent_info_items(array[0], array[1])
+		if self.windows[account].has_key('disco'):
+			self.windows[account]['disco'].agent_info_items(array[0], array[1])
 
 	def handle_event_agent_info_info(self, account, array):
 		#('AGENT_INFO_INFO', account, (agent, identities, features))
-		if self.windows[account].has_key('browser'):
-			self.windows[account]['browser'].agent_info_info(array[0], array[1], \
+		if self.windows[account].has_key('disco'):
+			self.windows[account]['disco'].agent_info_info(array[0], array[1], \
 				array[2])
 
 	def handle_event_reg_agent_info(self, account, array):
