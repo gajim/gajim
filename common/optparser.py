@@ -42,12 +42,15 @@ class OptionsParser(ConfigParser.ConfigParser):
 			for option in self.options(section):
 				value = self.get(section, option, 1)
 				#convert to int options than can be
-				try:
-					i = string.atoi(value)
-				except ValueError:
-					self.tab[section][option] = value
+				if string.find(option, 'password') == -1:
+					try:
+						i = string.atoi(value)
+					except ValueError:
+						self.tab[section][option] = value
+					else:
+						self.tab[section][option] = i
 				else:
-					self.tab[section][option] = i
+					self.tab[section][option] = value
 
 #				setattr(self, str(section) + '_' + \
 #					str(option), value)
