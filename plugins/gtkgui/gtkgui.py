@@ -2220,15 +2220,8 @@ class roster_Window:
 			for file in files:
 				if not os.path.exists(file):
 					continue
-				if file.find('.gif') != -1:
-					pix = gtk.gdk.PixbufAnimation(file)
-					image.set_from_animation(pix)
-				else:
-					pix = gtk.gdk.pixbuf_new_from_file(file)
-					image.set_from_pixbuf(pix)
+				image.set_from_file(file)
 				break
-#		for state in ('online', 'away', 'xa', 'dnd', 'invisible', 'offline'):
-#			self.xml.get_widget(state).set_image(self.pixbufs[state])
 
 	def sound_is_ok(self, sound):
 		if not os.path.exists(sound):
