@@ -156,4 +156,5 @@ class history_window:
 		tagStatus = self.history_buffer.create_tag('status')
 		color = self.plugin.config['statusmsgcolor']
 		tagStatus.set_property('foreground', color)
+		self.window.show_all()
 		self.plugin.send('LOG_NB_LINE', None, jid)
