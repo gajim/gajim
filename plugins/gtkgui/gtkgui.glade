@@ -8978,7 +8978,7 @@ send a chat message to</property>
   </child>
 </widget>
 
-<widget class="GtkMenu" id="menu1">
+<widget class="GtkMenu" id="systray_context_menu">
 
   <child>
     <widget class="GtkMenuItem" id="status_menu">
@@ -8990,60 +8990,103 @@ send a chat message to</property>
 	<widget class="GtkMenu" id="status_menu_menu">
 
 	  <child>
-	    <widget class="GtkMenuItem" id="online1">
+	    <widget class="GtkMenuItem" id="online_menuitem">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Online</property>
 	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="set_cb" last_modification_time="Mon, 14 Mar 2005 16:14:43 GMT"/>
+	      <signal name="activate" handler="on_online_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="away1">
+	    <widget class="GtkMenuItem" id="away_menuitem">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Away</property>
 	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="set_cb" last_modification_time="Mon, 14 Mar 2005 16:14:43 GMT"/>
+	      <signal name="activate" handler="on_away_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="xa1">
+	    <widget class="GtkMenuItem" id="xa_menuitem">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">XA</property>
 	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="set_cb" last_modification_time="Mon, 14 Mar 2005 16:14:43 GMT"/>
+	      <signal name="activate" handler="on_xa_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="dnd1">
+	    <widget class="GtkMenuItem" id="dnd_menuitem">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">DND</property>
 	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="set_cb" last_modification_time="Mon, 14 Mar 2005 16:14:43 GMT"/>
+	      <signal name="activate" handler="on_dnd_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="invisible1">
+	    <widget class="GtkMenuItem" id="invisible_menuitem">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Invisible</property>
 	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="set_cb" last_modification_time="Mon, 14 Mar 2005 16:14:43 GMT"/>
+	      <signal name="activate" handler="on_invisible_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="offline1">
+	    <widget class="GtkMenuItem" id="offline_menuitem">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Offline</property>
 	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="set_cb" last_modification_time="Mon, 14 Mar 2005 16:14:43 GMT"/>
+	      <signal name="activate" handler="on_offline_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
       </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="chat_with_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Chat with</property>
+      <property name="use_underline">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="new_message_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">New message</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image472">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-new</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkSeparatorMenuItem" id="separator">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="quit_menuitem">
+      <property name="visible">True</property>
+      <property name="label">gtk-quit</property>
+      <property name="use_stock">True</property>
+      <signal name="activate" handler="on_quit_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
     </widget>
   </child>
 </widget>

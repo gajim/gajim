@@ -75,10 +75,6 @@ class systray:
 		self.status = status
 		self.set_img()
 
-	def set_cb(self, widget, status):
-		statuss = ['online', 'away', 'xa', 'dnd', 'invisible', 'offline']
-		self.plugin.roster.cb.set_active(statuss.index(status))
-
 	def start_chat(self, widget, account, jid):
 		if self.plugin.windows[account]['chats'].has_key(jid):
 			self.plugin.windows[account]['chats'][jid].window.present()
@@ -93,37 +89,11 @@ class systray:
 
 	def make_menu(self, event):
 		"""create chat with and new message (sub) menus/menuitems"""
-		menu = gtk.Menu()
 		
-		item = gtk.MenuItem(_("Status"))
-		menu.append(item)
-		sub_menu = gtk.Menu()
-		item.set_submenu(sub_menu)
-		item = gtk.MenuItem(_("Online"))
-		sub_menu.append(item)
-		item.connect("activate", self.set_cb, 'online')
-		item = gtk.MenuItem(_("Away"))
-		sub_menu.append(item)
-		item.connect("activate", self.set_cb, 'away')
-		item = gtk.MenuItem(_("NA"))
-		sub_menu.append(item)
-		item.connect("activate", self.set_cb, 'xa')
-		item = gtk.MenuItem(_("DND"))
-		sub_menu.append(item)
-		item.connect("activate", self.set_cb, 'dnd')
-		item = gtk.MenuItem(_("Invisible"))
-		sub_menu.append(item)
-		item.connect("activate", self.set_cb, 'invisible')
-		item = gtk.MenuItem()
-		sub_menu.append(item)
-		item = gtk.MenuItem(_("Offline"))
-		sub_menu.append(item)
-		item.connect("activate", self.set_cb, 'offline')
-
-		chat_with_menuitem = gtk.MenuItem(_('Chat with'))
-		menu.append(chat_with_menuitem)
-		new_message_menuitem = gtk.MenuItem(_('New Message'))
-		menu.append(new_message_menuitem)
+		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
+		#menu.append(chat_with_menuitem)
+		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
+		#menu.append(new_message_menuitem)
 		
 		if len(self.plugin.accounts.keys()) > 0:
 			chat_with_menuitem.set_sensitive(True)
@@ -163,17 +133,13 @@ class systray:
 			self.new_message_handler_id = new_message_menuitem.connect(\
 				'activate', self.on_new_message_menuitem_activate, account)
 
-		item = gtk.MenuItem() # seperator
-		menu.append(item)
-		
-		item = gtk.MenuItem(_('Quit'))
-		menu.append(item)
-		item.connect('activate', self.plugin.roster.on_quit_menuitem_activate)
-		
-		menu.popup(None, None, None, event.button, event.time)
-		menu.show_all()
-		menu.reposition()
+		self.systray_context_menu.popup(None, None, None, event.button, event.time)
+		self.systray_context_menu.show_all()
+		self.systray_context_menu.reposition()
 	
+	def on_quit_menuitem_activate(self, widget):	
+		self.plugin.roster.on_quit_menuitem_activate(widget)
+
 	def make_groups_submenus_for_chat_with(self, account):
 		groups_menu = gtk.Menu()
 		
@@ -230,6 +196,24 @@ class systray:
 						self.plugin.roster.contacts[account][jid][0], account)
 		if event.button == 3:
 			self.make_menu(event)
+	
+	def on_online_menuitem_activate(self, widget):
+		self.plugin.roster.cb.set_active(0) # 0 is online
+	
+	def on_away_menuitem_activate(self, widget):
+		self.plugin.roster.cb.set_active(1) # 1 is away
+	
+	def on_xa_menuitem_activate(self, widget):
+		self.plugin.roster.cb.set_active(2) # 2 is xa
+
+	def on_away_menuitem_activate(self, widget):
+		self.plugin.roster.cb.set_active(3) # 3 is dnd
+
+	def on_away_menuitem_activate(self, widget):
+		self.plugin.roster.cb.set_active(4) # 4 is invisible
+		
+	def on_away_menuitem_activate(self, widget):
+		self.plugin.roster.cb.set_active(5) # 5 is offline
 
 	def show_icon(self):
 		if not self.t:
@@ -255,6 +239,9 @@ class systray:
 		self.t = None
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
+		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
+		self.xml.signal_autoconnect(self)
 		global trayicon
 		try:
 			import egg.trayicon as trayicon	# gnomepythonextras trayicon
