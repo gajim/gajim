@@ -372,6 +372,8 @@ class addContact_Window:
 		end_iter = buf.get_end_iter()
 		txt = buf.get_text(start_iter, end_iter, 0)
 		self.plugin.roster.req_sub(self, who, txt, self.account, pseudo)
+		if self.xml.get_widget('checkbutton_auth').get_active():
+			self.plugin.send('AUTH', self.account, who)
 		widget.get_toplevel().destroy()
 		
 	def fill_who(self):
@@ -450,6 +452,10 @@ class addContact_Window:
 		self.fill_who()
 		if jid:
 			self.xml.get_widget('entry_who').set_text(jid)
+			jida = jid.split("@")
+			self.xml.get_widget('entry_login').set_text(jida[0])
+			if jida[1] in jid_agents:
+				cb.set_active(jid_agents.index(jida[1])+1)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
 		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
