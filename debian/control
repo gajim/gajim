@@ -1,0 +1,13 @@
+Source: gajim
+Section: net
+Priority: optional
+Maintainer: Yann Le Boulanger <asterix@lagaule.org>
+Standards-Version: 3.5.8
+Build-Depends: debmake
+
+Package: gajim
+Architecture: any
+Depends: python (>= 2.3), python-glade2 (>= 2.0.0), python-gtk2 (>= 2.0.0)
+Description: Jabber client in python
+ Gajim is a Jabber client, like Psi, based on a plugin system.
+ logger and gtkgui plugins are included.

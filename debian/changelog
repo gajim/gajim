@@ -1,0 +1,37 @@
+gajim (0.3-1) unstable; urgency=low
+
+  * GUI improvements
+  * group chat support with MUC (JEP 45)
+  * New agent browser (JEP 30)
+  * GnuPG support
+  * Autoconnect at startup
+  * New socket plugin
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Sat, 18 Dec 2004 14:52:07 +0100
+
+gajim (0.2-2) unstable; urgency=low
+
+  * bugfixes : when configfile is incomplete
+  * icon in systray with popup menu (for linux)
+  * "auto away even if not online" option
+  * always show contacts with unread messages
+  * new imageCellRenderer to show animated gifs
+  * allow agents unregistration
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Thu,  1 Jul 2004 23:45:02 +0200
+
+gajim (0.2-1) unstable; urgency=low
+
+  * bugfix for french translation
+  * multi-resource support
+  * auto away support (for linux)
+  * invisible support
+  * priority support
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Tue,  8 Jun 2004 04:52:36 +0200
+
+gajim (0.1-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Fri, 21 May 2004 18:15:28 -0400
