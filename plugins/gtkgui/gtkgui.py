@@ -213,6 +213,7 @@ class tabbed_chat_Window:
 			self.on_notebook_switch_page)
 		self.xml.signal_connect('on_history_clicked', self.on_history)
 		self.xml.signal_connect('on_clear_clicked', self.on_clear)
+		self.xml.signal_connect('on_close_clicked', self.on_close_clicked)
 		self.xml.signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
 		self.tagIn = buffer_conv.create_tag("incoming")
@@ -313,6 +314,20 @@ class tabbed_chat_Window:
 		deb, end = buffer.get_bounds()
 		buffer.delete(deb, end)
 
+	def on_close_clicked(self, button):
+		"""When close button is pressed :
+		close a tab"""
+		jid = self.get_active_jid()
+		if len(self.xmls) == 1:
+			button.get_toplevel().destroy()
+		else:
+			nb = self.xml.get_widget('notebook')
+			nb.remove_page(nb.get_current_page())
+			del self.plugin.windows[self.account]['chats'][jid]
+			del self.users[jid]
+			del self.nb_unread[jid]
+			del self.xmls[jid]
+
 	def on_focus(self, widget, event):
 		"""When window get focus"""
 		jid = self.get_active_jid()
@@ -371,26 +386,11 @@ class tabbed_chat_Window:
 		self.draw_widgets(user)
 		self.xmls[user.jid].signal_connect('on_history_clicked', self.on_history)
 		self.xmls[user.jid].signal_connect('on_clear_clicked', self.on_clear)
+		self.xmls[user.jid].signal_connect('on_close_clicked', \
+			self.on_close_clicked)
 		self.xmls[user.jid].signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
 
-	def on_button_close_clicked(self, button):
-		if len(self.xml.get_widget('hbuttonbox').get_children()) == 2:
-			button.get_toplevel().destroy()
-		else:
-			self.xml.get_widget('hbuttonbox').remove(self.active_button)
-			del self.plugin.windows[self.account]['chats'][self.users[\
-				self.active_button].jid]
-			del self.users[self.active_button]
-			del self.buffers[self.active_button]
-			del self.nb_unread[self.active_button]
-			i = 0
-			if self.xml.get_widget('hbuttonbox').get_children()[i] == \
-				self.xml.get_widget('button_close'):
-				i = 1
-			self.on_button_jid_clicked(self.xml.get_widget('hbuttonbox').\
-				get_children()[i])
-		
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
 		if enter is pressed without the shit key, message (if not empty) is sent
