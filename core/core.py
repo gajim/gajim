@@ -271,10 +271,10 @@ class GajimCore:
 			'localhost', 'port': 8255, 'modules': 'gtkgui'}}
 		fname = os.path.expanduser(CONFPATH)
 		reps = string.split(fname, '/')
-		del reps[0]
+#		del reps[0]
 		path = ''
 		while len(reps) > 1:
-			path = path + '/' + reps[0]
+			path = path + reps[0] + '/'
 			del reps[0]
 			try:
 				os.stat(os.path.expanduser(path))
