@@ -22,6 +22,7 @@ DIR='Messages'
 
 import locale, gettext
 
+locale.setlocale(locale.LC_ALL, '')
 _translation = None
 
 def init():
