@@ -51,13 +51,19 @@ class GajimCore:
 
 	def vCardCB(self, con, vc):
 		"""Called when we recieve a vCard"""
+		vcard = {'jid': vc.getFrom().getBasic()}
 #		print vc
-		if vc._getTag('vCard') == common.jabber.NS_VCARD:
-			print "vcard :"
+		if vc._getTag('vcard') == common.jabber.NS_VCARD:
+#			print "vcard :"
 			card = vc.getChildren()[0]
 			for info in card.getChildren():
 #				print "name"
-				print info.getName() + " : " + info.getData()
+#				print info.getName() + " : " + info.getData()
+				if info.getChildren() == []:
+					vcard[info.getName()] = info.getData()
+				else:
+					for c in info.getChildren():
+						 vcard[info.getName()+'_'+c.getName()] = c.getData()
 #				print "Data"
 #				print info.getData()
 #				print "DataAsParts"
@@ -65,7 +71,9 @@ class GajimCore:
 #				print "Namespace"
 #				print info.getNamespace()
 #				print "Children"
-#				print info.getChildren()			
+#				print info.getChildren()
+#			print vcard
+			self.hub.sendPlugin('VCARD', vcard)
 
 	def messageCB(self, con, msg):
 		"""Called when we recieve a message"""
@@ -299,11 +307,12 @@ class GajimCore:
 							print "error " + c.lastErr
 						else:
 							self.hub.sendPlugin('ACC_OK', ev[1])
-				elif ev[0] == 'TEST_VCARD':
-					iq = ev[1]
-					id = self.con.getAnID()
-					iq.setID(id)
-					self.con.send(ev[1])
+				#('VCARD', jid)
+				elif ev[0] == 'VCARD':
+					iq = common.jabber.Iq(to=ev[1], type="get")
+					iq._setTag('vcard', common.jabber.NS_VCARD)
+					iq.setID(self.con.getAnID())
+					self.con.send(iq)
 				else:
 					log.debug("Unknown Command %s" % ev[0])
 			elif self.connected == 1:
@@ -334,6 +343,7 @@ def loadPlugins(gc):
 			gc.hub.register(mod, 'QUIT')
 			gc.hub.register(mod, 'ACC_OK')
 			gc.hub.register(mod, 'CONFIG')
+			gc.hub.register(mod, 'VCARD')
 			modObj.load()
 # END loadPLugins
 

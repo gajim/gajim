@@ -50,14 +50,37 @@ class user:
 			self.resource = args[6]
 		else: raise TypeError, 'bad arguments'
 
+class vCard_Window:
+	"""Class for window that show vCard information"""
+	def delete_event(self, widget):
+		"""close window"""
+		self.window.destroy()
+
+	def set_values(self, vcard):
+		for i in vcard.keys():
+			try:
+				self.xml.get_widget('entry_'+i).set_text(vcard[i])
+			except AttributeError, e:
+				pass
+#				print "error with %s" % i
+
+	def on_retrieve(self, widget):
+		self.r.queueOUT.put(('VCARD', self.jid))
+
+	def __init__(self, acc_pref, jid):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard')
+		self.window = self.xml.get_widget("vcard")
+		self.jid = jid
+		self.r = acc_pref.accs.r
+		
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_close_clicked', self.delete_event)
+		self.xml.signal_connect('on_retrieve_clicked', self.on_retrieve)
+
 class infoUser_Window:
 	"""Class for user's information window"""
 	def test_vcard(self):
-		iq = common.jabber.Iq(to="asterix2@jabber.lagaule.org", type="get")
-		print iq
-		iq._setTag('vcard', common.jabber.NS_VCARD)
-		print iq
-		self.r.queueOUT.put(('TEST_VCARD', iq))
+		self.r.queueOUT.put(('VCARD', self.user.jid))
 
 	def delete_event(self, widget):
 		"""close window"""
@@ -524,6 +547,10 @@ class accountPreference_Window:
 			self.accs.r.plugin.accounts)))
 		self.accs.init_accounts()
 		self.delete_event(self)
+
+	def on_edit_details_clicked(self, widget):
+		self.accs.r.tab_vcard[self.entryJid.get_text()] = vCard_Window(self, self.entryJid.get_text())
+		self.accs.r.queueOUT.put(('VCARD', self.entryJid.get_text()))
 	
 	#info must be a dictionnary
 	def __init__(self, accs, infos = {}):
@@ -543,6 +570,7 @@ class accountPreference_Window:
 			self.check.set_sensitive(FALSE)
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_save_clicked', self.on_save_clicked)
+		xml.signal_connect('on_edit_details_clicked', self.on_edit_details_clicked)
 
 class accounts_Window:
 	"""Class for accounts window : lists of accounts"""
@@ -1266,6 +1294,7 @@ class roster_Window:
 		self.optionmenu.set_history(6)
 		self.tab_messages = {}
 		self.tab_queues = {}
+		self.tab_vcard = {}
 
 		if self.plugin.config.has_key('showoffline'):
 			self.showOffline = self.plugin.config['showoffline']
@@ -1461,6 +1490,9 @@ class plugin:
 					accountsWindow.init_accounts()
 			elif ev[0] == 'QUIT':
 				self.r.on_quit(self)
+			elif ev[0] == 'VCARD':
+				if self.r.tab_vcard.has_key(ev[1]['jid']):
+					self.r.tab_vcard[ev[1]['jid']].set_values(ev[1])
 		return 1
 	
 	def read_sleepy(self):	
