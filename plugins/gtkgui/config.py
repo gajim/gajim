@@ -185,15 +185,12 @@ class preference_Window:
 		self.plugin.config['userbgcolor'] = colSt
 		#Font for account
 		fontStr = self.xml.get_widget('fontbutton_account_text').get_font_name()
-		print fontStr
 		self.plugin.config['accountfont'] = fontStr
 		#Font for group
 		fontStr = self.xml.get_widget('fontbutton_group_text').get_font_name()
-		print fontStr
 		self.plugin.config['groupfont'] = fontStr
 		#Font for user
 		fontStr = self.xml.get_widget('fontbutton_user_text').get_font_name()
-		print fontStr
 		self.plugin.config['userfont'] = fontStr
 		#update opened chat windows
 		for a in self.plugin.accounts.keys():
