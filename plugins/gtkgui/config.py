@@ -922,6 +922,9 @@ class accountPreference_Window:
 		if (jid == '') or (string.count(jid, '@') != 1):
 			warning_Window(_("You must enter a Jabber ID for this account\nFor example : login@hostname"))
 			return 0
+		if check.get_active() and entryPass.get_text() == "":
+			warning_Window(_("You must enter a password to register a new account"))
+			return 0
 		if useProxy:
 			if proxyPort != '':
 				try:
@@ -998,7 +1001,6 @@ class accountPreference_Window:
 			self.plugin.send('NEW_ACC', None, (hostname, login, \
 				entryPass.get_text(), name, entryRessource.get_text(), prio, \
 				useProxy, proxyHost, proxyPort))
-			check.set_active(FALSE)
 			return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 			'savepass': savepass, 'password': entryPass.get_text(), 'ressource': \
@@ -1025,6 +1027,22 @@ class accountPreference_Window:
 		#refresh roster
 		self.plugin.roster.draw_roster()
 		widget.get_toplevel().destroy()
+
+	def account_is_ok(self, acct):
+		"""When the account has been created with sucess"""
+		self.xml.get_widget("checkbutton").set_active(False)
+		self.modify = True
+		self.account = acct
+		#TODO:
+#		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
+#			'savepass': savepass, 'password': entryPass.get_text(), 'ressource': \
+#			entryRessource.get_text(), 'priority' : prio, 'autoconnect': \
+#			autoconnect, 'use_proxy': useProxy, 'proxyhost': \
+#			entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
+#			'keyname': keyName, 'savegpgpass': save_gpg_pass, 'gpgpassword': gpg_pass,\
+#			'active': 1}
+#		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
+#			'GtkGui'))
 
 	def on_edit_details_clicked(self, widget):
 		entryJid = self.xml.get_widget("entry_jid")
@@ -1066,13 +1084,18 @@ class accountPreference_Window:
 			if not widget.get_active():
 				w.set_text('')
 
+	def on_chk_pass_toggled(self, widget):
+		if self.xml.get_widget('checkbutton').get_active():
+			return
+		self.on_chk_pass_toggled_and_clear(widget, \
+			[self.xml.get_widget('entry_password')])
+
 	def on_chk_new_toggled(self, widget):
 		if widget.get_active():
 			self.xml.get_widget('entry_password').set_sensitive(True)
-			self.xml.get_widget('chk_password').set_active(True)
-			self.xml.get_widget('chk_password').set_sensitive(False)
-		else:
-			self.xml.get_widget('chk_password').set_sensitive(True)
+		elif not self.xml.get_widget('chk_password').get_active():
+			self.xml.get_widget('entry_password').set_sensitive(False)
+			self.xml.get_widget('entry_password').set_text('')
 
 	#info must be a dictionnary
 	def __init__(self, plugin, infos = {}):
@@ -1095,7 +1118,7 @@ class accountPreference_Window:
 		self.xml.signal_connect('on_gpg_pass_checkbutton_toggled', \
 			self.on_chk_toggled_and_clear, [self.xml.get_widget('gpg_pass_entry')])
 		self.xml.signal_connect('on_pass_checkbutton_toggled', \
-			self.on_chk_toggled_and_clear, [self.xml.get_widget('entry_password')])
+			self.on_chk_pass_toggled)
 		self.xml.signal_connect('on_checkbutton_toggled', self.on_chk_new_toggled)
 		if infos:
 			self.modify = True

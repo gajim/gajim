@@ -2822,7 +2822,7 @@ class plugin:
 		#('ACC_OK', account, (hostname, login, pasword, name, ressource, prio,
 		#use_proxy, proxyhost, proxyport))
 		if self.windows['accountPreference']:
-			self.windows['accountPreference'].destroy()
+			self.windows['accountPreference'].account_is_ok(array[1])
 		name = array[3]
 		self.accounts[array[3]] = {'name': array[1], \
 					'hostname': array[0],\
