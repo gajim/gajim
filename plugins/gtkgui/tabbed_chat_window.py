@@ -147,7 +147,22 @@ class Tabbed_chat_window(Chat):
 		"""When a key is pressed :
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation"""
-		if event.keyval == gtk.keysyms.Return:
+		jid = self.get_active_jid()
+		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		if event.keyval == gtk.keysyms.Tab and \
+         (event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
+			self.notebook.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
+				self.notebook.emit('key_press_event', event)
+			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
+				conversation_textview.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
+				self.notebook.emit('key_press_event', event)
+			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
+				conversation_textview.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.Return:
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return False
 			if self.plugin.connected[self.account] < 2: #we are not connected
@@ -159,7 +174,6 @@ class Tabbed_chat_window(Chat):
 			message = message_buffer.get_text(start_iter, end_iter, 0)
 			if message != '':
 				keyID = ''
-				jid = self.get_active_jid()
 				if self.xmls[jid].get_widget('gpg_togglebutton').get_active():
 					keyID = self.users[jid].keyID
 				self.plugin.send('MSG', self.account, (jid, message, keyID))
