@@ -127,6 +127,8 @@ class prefs:
 		
 		self.r.cfgParser.writeCfgFile()
 		self.r.cfgParser.parseCfgFile()
+
+		self.r.redraw_roster()
 		
 	def on_ok(self, widget):
 		self.write_cfg()
@@ -618,13 +620,23 @@ class roster:
 				if newgrp == 1:
 					#expand new groups
 					self.tree.expand_row(self.treestore.get_path(iterG), FALSE)
+
+	def redraw_roster(self):
+		for j in self.l_contact.keys():
+			self.l_contact[j]['iter'] = []
+		self.l_group = {}
+		self.draw_roster()
+
+	def draw_roster(self):
+		self.treestore.clear()
+		for j in self.l_contact.keys():
+			self.add_user(self.l_contact[j]['user'])
 	
-	def mkroster(self, tab):
+	def mklists(self, tab):
 		""" l_contact = {jid:{'user':_, 'iter':[iter1, ...]] """
 		self.l_contact = {}
 		""" l_group = {name:iter} """
 		self.l_group = {}
-		self.treestore.clear()
 		for jid in tab.keys():
 			#remove ressource from jid string
 			ji = string.split(jid, '/')[0]
@@ -638,7 +650,7 @@ class roster:
 			if not show:
 				show = 'offline'
 			user1 = user(ji, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'])
-			self.add_user(user1)
+			self.l_contact[ji] = {'user':user1, 'iter':[]}
 
 	def update_iter(self, widget, path, iter, data):
 		jid = self.treestore.get_value(iter, 2)
@@ -834,6 +846,10 @@ class roster:
 				pix = gtk.gdk.pixbuf_new_from_file (self.path + state + '.xpm')
 				self.pixbufs[state] = pix
 
+	def on_show_off(self, widget):
+		self.showOffline = 1 - self.showOffline
+		self.redraw_roster()
+
 	def __init__(self, queueOUT, plug):
 		# FIXME : handle no file ...
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
@@ -880,6 +896,8 @@ class roster:
 		else:
 			self.showOffline = 0
 
+		self.xml.get_widget('show_offline').set_active(self.showOffline)
+
 		self.grpbgcolor = 'gray50'
 		self.userbgcolor = 'white'
 
@@ -910,6 +928,7 @@ class roster:
 		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
 		self.xml.signal_connect('on_browse_agents_activate', self.on_browse)
 		self.xml.signal_connect('on_add_activate', self.on_add)
+		self.xml.signal_connect('on_show_offline_activate', self.on_show_off)
 		self.xml.signal_connect('on_about_activate', self.on_about)
 		self.xml.signal_connect('on_quit_activate', self.on_quit)
 		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
@@ -924,30 +943,37 @@ class plugin:
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
 			if ev[0] == 'ROSTER':
-				self.r.mkroster(ev[1])
+				self.r.mklists(ev[1])
+				self.r.draw_roster()
 			elif ev[0] == 'NOTIFY':
 				jid = string.split(ev[1][0], '/')[0]
+				if string.find(jid, "@") <= 0:
+					#It must be an agent
+					ji = string.replace(jid, '@', '')
+				else:
+					ji = jid
 				#Update user
-				if self.r.l_contact.has_key(jid):
-					u = self.r.l_contact[jid]['user']
+				if self.r.l_contact.has_key(ji):
+					u = self.r.l_contact[ji]['user']
 					u.show = ev[1][1]
 					u.status = ev[1][2]
 					#Print status in chat window
-					if self.r.tab_messages.has_key(jid):
-						self.r.tab_messages[jid].print_conversation(\
+					if self.r.tab_messages.has_key(ji):
+						self.r.tab_messages[ji].print_conversation(\
 							"%s is now %s (%s)" % (u.name, ev[1][1], ev[1][2]), 'status')
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
-					jid = string.replace(jid, '@', '')
-					if not self.r.l_contact.has_key(jid):
-						user1 = user(jid, jid, ['Agents'], ev[1][1], ev[1][2], 'from')
+					if not self.r.l_contact.has_key(ji):
+						user1 = user(ji, ji, ['Agents'], ev[1][1], ev[1][2], 'from')
 						self.r.add_user(user1)
 					else:
 						#Update existing line
-						for i in self.r.l_contact[jid]['iter']:
+#						self.l_contact[jid]['user'].show = show
+#						self.l_contact[jid]['user'].status = status
+						for i in self.r.l_contact[ji]['iter']:
 							if self.r.pixbufs.has_key(ev[1][1]):
 								self.r.treestore.set_value(i, 0, self.r.pixbufs[ev[1][1]])
-				elif self.r.l_contact.has_key(jid):
+				elif self.r.l_contact.has_key(ji):
 					#It isn't an agent
 					self.r.chg_status(jid, ev[1][1], ev[1][2])
 			elif ev[0] == 'MSG':
