@@ -50,8 +50,6 @@ for o, a in opts:
 		usage()
 		sys.exit()
 
-
-# FIXME: not sure where to put that. maybe here?
 # ^C exits the application
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
