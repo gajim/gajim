@@ -2501,7 +2501,7 @@ class systray:
 		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1:
 			if len(self.jids) == 0:
 				win = self.plugin.roster.xml.get_widget('Gajim')
-				if self.iconified:
+				if win.iconify_initially:
 					win.deiconify()
 				else:
 					if win.is_active():
@@ -2520,12 +2520,6 @@ class systray:
 						self.plugin.roster.contacts[account][jid][0], account)
 		if event.button == 3:
 			self.mk_menu(event)
-
-	def state_changed(self, widget, event):
-		if event.new_window_state & gtk.gdk.WINDOW_STATE_ICONIFIED:
-			self.iconified = 1
-		else:
-			self.iconified = 0
 
 	def show_icon(self):
 		if not self.t:
@@ -2548,9 +2542,7 @@ class systray:
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.jids = []
-		self.iconified = 0
 		win = self.plugin.roster.xml.get_widget('Gajim')
-		win.connect("window-state-event", self.state_changed)
 		self.t = None
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
