@@ -217,6 +217,12 @@ class preference_Window:
 		else:
 			self.plugin.config['mergeaccounts'] = 0
 		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
+		#use tabbed chat window
+		chk = self.xml.get_widget('checkbutton_tabbed')
+		if chk.get_active():
+			self.plugin.config['usetabbedchat'] = 1
+		else:
+			self.plugin.config['usetabbedchat'] = 0
 		#Emoticons
 		model = self.emot_tree.get_model()
 		iter = model.get_iter_first()
@@ -515,6 +521,10 @@ class preference_Window:
 		#Merge accounts
 		st = self.plugin.config['mergeaccounts']
 		self.xml.get_widget('merge_checkbutton').set_active(st)
+
+		#use tabbed chat window
+		st = self.plugin.config['usetabbedchat']
+		self.xml.get_widget('checkbutton_tabbed').set_active(st)
 
 		#Use emoticons
 		st = self.plugin.config['useemoticons']
