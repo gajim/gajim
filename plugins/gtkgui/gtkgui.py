@@ -301,6 +301,8 @@ class message_Window:
 class gc:
 	def delete_event(self, widget):
 		"""close window"""
+		self.plugin.send('GC_STATUS', self.account, (self.nick, self.jid,\
+			'offline', 'offline'))
 		del self.plugin.windows[self.account]['gc'][self.jid]
 
 	def on_close(self, widget):
@@ -313,23 +315,34 @@ class gc:
 		if not iter:
 			return None
 		while iter:
-			if nick == model.get_value(iter, 0):
+			if nick == model.get_value(iter, 1):
 				return iter
 			iter = model.iter_next(iter)
 		return None
-	
-	def add_user_to_roster(self, nick):
+
+	def remove_user(self, nick):
+		"""Remove a user from the roster"""
 		model = self.tree.get_model()
-		model.append(None, (nick,))
+		iter = self.get_user_iter(nick)
+		model.remove(iter)
+	
+	def add_user_to_roster(self, nick, show):
+		model = self.tree.get_model()
+		img = self.plugin.roster.pixbufs[show]
+		return model.append(None, (img, nick))
 
 	def chg_user_status(self, nick, show, status, account):
 		"""When a user change his status"""
 		model = self.tree.get_model()
 		if show == 'offline' or show == 'error':
-			self.remove_user(user, account)
+			self.remove_user(nick)
 		else:
-			if not self.get_user_iter(nick):
-				self.add_user_to_roster(nick)
+			iter = self.get_user_iter(nick)
+			if not iter:
+				iter = self.add_user_to_roster(nick, show)
+			else:
+				img = self.plugin.roster.pixbufs[show]
+				model.set_value(iter, 0, img)
 #			u = self.contacts[account][user.jid]
 #			u.show = show
 #			u.status = status
@@ -388,10 +401,26 @@ class gc:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gc', APP)
 		self.window = self.xml.get_widget('Gc')
 		self.tree = self.xml.get_widget('list')
-		store = gtk.TreeStore(str)
-		column = gtk.TreeViewColumn('contacts', gtk.CellRendererText(), text=0)
+
+		store = gtk.TreeStore(gtk.Image, str)
+		column = gtk.TreeViewColumn('contacts')#, ImageCellRenderer(), image=0)
+		render_text = ImageCellRenderer()
+		column.pack_start(render_text, expand = False)
+		column.add_attribute(render_text, 'image', 0)
+		render_text = gtk.CellRendererText()
+		column.pack_start(render_text, expand = True)
+		column.add_attribute(render_text, 'text', 1)
+
 		self.tree.append_column(column)
 		self.tree.set_model(store)
+
+		col = gtk.TreeViewColumn()
+		render = gtk.CellRendererPixbuf()
+		col.pack_start(render, expand = False)
+		self.tree.append_column(col)
+		col.set_visible(FALSE)
+		self.tree.set_expander_column(col)
+
 		conversation = self.xml.get_widget('conversation')
 		buffer = conversation.get_buffer()
 		end_iter = buffer.get_end_iter()

@@ -466,12 +466,6 @@ class GajimCore:
 				msg.setType('chat')
 				con.send(msg)
 				self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
-			#('GC_MSG', account, (jid, msg))
-			elif ev[0] == 'GC_MSG':
-				msg = common.jabber.Message(ev[2][0], ev[2][1])
-				msg.setType('groupchat')
-				con.send(msg)
-				self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
 			#('SUB', account, (jid, txt))
 			elif ev[0] == 'SUB':
 				log.debug('subscription request for %s' % ev[2][0])
@@ -621,6 +615,20 @@ class GajimCore:
 				p = common.jabber.Presence(to='%s@%s/%s' % (ev[2][1], ev[2][2], \
 					ev[2][0]))
 				con.send(p)
+			#('GC_MSG', account, (jid, msg))
+			elif ev[0] == 'GC_MSG':
+				msg = common.jabber.Message(ev[2][0], ev[2][1])
+				msg.setType('groupchat')
+				con.send(msg)
+				self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
+			#('GC_STATUS', account, (nick, jid, show, status))
+			elif ev[0] == 'GC_STATUS':
+				if ev[2][2] == 'offline':
+					con.send(common.jabber.Presence('%s/%s' % (ev[2][1], ev[2][0]), \
+						'unavailable'))
+				else:
+					con.send(common.jabber.Presence('%s/%s' % (ev[2][1], ev[2][0]), \
+						'available', show=ev[2][2], status = ev[2][3]))
 			else:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':
