@@ -2341,7 +2341,10 @@ class plugin:
 			#TODO if it was the only one in its group, remove the group
 			return
 		for user in users:
-			user.name = array[1]
+			name = array[1]
+			if not name:
+				name = jid
+			user.name = name
 			user.sub = array[2]
 			user.ask = array[3]
 			user.groups = array[4]
