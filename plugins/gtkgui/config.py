@@ -71,7 +71,7 @@ class preferences_window:
 		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
 			+(hex(color.blue)+'0')[2:4]
 		self.plugin.config['accounttextcolor'] = color_string
-		self.update_text_tags()
+		self.plugin.roster.draw_roster()
 	
 	def on_group_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The Group Text"""
@@ -79,7 +79,7 @@ class preferences_window:
 		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
 			+(hex(color.blue)+'0')[2:4]
 		self.plugin.config['grouptextcolor'] = color_string
-		self.update_text_tags()
+		self.plugin.roster.draw_roster()
 
 	def on_user_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The User Text"""
@@ -87,7 +87,7 @@ class preferences_window:
 		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
 			+(hex(color.blue)+'0')[2:4]
 		self.plugin.config['usertextcolor'] = color_string
-		self.update_text_tags()
+		self.plugin.roster.draw_roster()
 
 	def on_account_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of Account Text"""
@@ -95,7 +95,7 @@ class preferences_window:
 		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
 			+(hex(color.blue)+'0')[2:4]
 		self.plugin.config['accountbgcolor'] = color_string
-		self.update_text_tags()
+		self.plugin.roster.draw_roster()
 	
 	def on_group_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of Group Text"""
@@ -103,7 +103,7 @@ class preferences_window:
 		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
 			+(hex(color.blue)+'0')[2:4]
 		self.plugin.config['groupbgcolor'] = color_string
-		self.update_text_tags()
+		self.plugin.roster.draw_roster()
 	
 	def on_user_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of User Text"""
@@ -111,25 +111,25 @@ class preferences_window:
 		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
 			+(hex(color.blue)+'0')[2:4]
 		self.plugin.config['userbgcolor'] = color_string
-		self.update_text_tags()
+		self.plugin.roster.draw_roster()
 	
 	def on_account_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The User Text"""
 		font_string = widget.get_font_name()
 		self.plugin.config['accountfont'] = font_string
-		self.update_text_tags()
+		self.plugin.roster.draw_roster()
 
 	def on_group_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The Group Text"""
 		font_string = widget.get_font_name()
 		self.plugin.config['groupfont'] = font_string
-		self.update_text_tags()
+		self.plugin.roster.draw_roster()
 	
 	def on_user_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The User Text"""
 		font_string = widget.get_font_name()
 		self.plugin.config['userfont'] = font_string
-		self.update_text_tags()
+		self.plugin.roster.draw_roster()
 	
 	def update_text_tags(self):
 		"""Update Opened Chat Windows"""
@@ -140,8 +140,11 @@ class preferences_window:
 				for jid in self.plugin.windows[a]['chats'].keys():
 					self.plugin.windows[a]['chats'][jid].update_tags()
 	
-	def on_iconstyle_combobox_changed(self, widget):
-		pass
+	def on_iconstyle_combobox_changed(self, widget, path):
+		model = widget.get_model()
+		icon_string = model[path][0]
+		self.plugin.config['iconstyle'] = icon_string
+		self.plugin.roster.mkpixbufs()
 		
 	def on_save_position_checkbutton_toggled(self, widget):
 		"""On Save Position Checkbutton Toggled"""
@@ -179,10 +182,6 @@ class preferences_window:
 	def write_cfg(self): #FIXME: (nk) instant apply
 		"""Save preferences in config File and apply them"""
 		
-		#IconStyle
-		ist = self.iconstyle_combobox.entry.get_text()
-		self.plugin.config['iconstyle'] = ist
-		self.plugin.roster.mkpixbufs()
 		#Emoticons
 		model = self.emot_tree.get_model()
 		iter = model.get_iter_first()
@@ -278,15 +277,6 @@ class preferences_window:
 			self.config_logger['lognotsep'] = 0
 		self.plugin.send('CONFIG', None, ('Logger', self.config_logger, 'GtkGui'))
 		
-	def on_ok(self, widget):
-		"""When Ok button is clicked"""
-		self.write_cfg()
-		self.xml.get_widget('preferences_window').destroy()
-
-	def on_apply(self, widget):
-		"""When Apply button is clicked"""
-		self.write_cfg()
-	
 	def on_close_button_clicked(self, widget):
 		"""When The close button is clicked"""
 		widget.get_toplevel().destroy()
@@ -582,19 +572,16 @@ class preferences_window:
 		list_style = os.listdir('plugins/gtkgui/icons/')
 		model = gtk.ListStore(gobject.TYPE_STRING)
 		self.iconstyle_combobox.set_model(model)
-		cell = gtk.CellRendererText()
-		self.iconstyle_combobox.pack_start(cell, gtk.TRUE)
-		self.iconstyle_combobox.add_attribute(cell, 'text', 0)
+		l = []
 		for i in list_style:
 			if i != 'CVS' and i[0] != '.':
-				model.append([i])
-		#if l.count == 0:
-		#	l.append(" ")
-		
-		#self.iconstyle_combobox.set_popdown_strings(l)
-		#if self.plugin.config['iconstyle'] in l:
-			#self.iconstyle_combobox.entry.set_text(self.plugin.config['iconstyle'])
-		#	pass
+				l.append(i)
+		if l.count == 0:
+			l.append(' ')
+		for i in range(len(l)):
+			model.append([l[i]])
+			if self.plugin.config['iconstyle'] == l[i]:
+				self.iconstyle_combobox.set_active(i)
 
 		#Save position
 		st = self.plugin.config['saveposition']
