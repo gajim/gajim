@@ -2059,7 +2059,7 @@ class roster_window:
 			else:
 				w.window.destroy()
 	
-	def on_gajim_delete_event(self, widget, event):
+	def on_gajim_window_delete_event(self, widget, event):
 		"""When we want to close the window"""
 		if self.plugin.systray_visible:
 			self.window.iconify()
