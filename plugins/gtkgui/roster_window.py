@@ -934,7 +934,7 @@ class Roster_window:
 	
 	def on_roster_window_delete_event(self, widget, event):
 		"""When we want to close the window"""
-		if self.plugin.systray_visible:
+		if self.plugin.systray_enabled:
 			self.window.hide()
 		else:
 			accounts = self.plugin.accounts.keys()

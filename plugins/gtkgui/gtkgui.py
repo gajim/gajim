@@ -697,11 +697,11 @@ class plugin:
 
 	def show_systray(self):
 		self.systray.show_icon()
-		self.systray_visible = 1
+		self.systray_enabled = True
 
 	def hide_systray(self):
 		self.systray.hide_icon()
-		self.systray_visible = 0
+		self.systray_enabled = False
 	
 	def image_is_ok(self, image):
 		if not os.path.exists(image):
@@ -899,7 +899,7 @@ class plugin:
 		self.sleeper = common.sleepy.Sleepy( \
 			self.config['autoawaytime']*60, \
 			self.config['autoxatime']*60)
-		self.systray_visible = 0
+		self.systray_enabled = False
 		try:
 			import egg.trayicon as trayicon # use gnomepythonextras trayicon
 		except:

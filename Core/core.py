@@ -678,7 +678,11 @@ class GajimCore:
 		return list_ev
 
 	def request_infos(self, account, con, jid):
-		con.discoverInfo(jid)
+		try: # FIXME: nk 2 yann. is this the best way ?
+			con.discoverInfo(jid)
+		except AttributeError:
+			pass
+			
 
 	def read_queue(self):
 		while self.hub.queueIn.empty() == 0:
