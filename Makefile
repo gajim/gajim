@@ -10,15 +10,11 @@ SCRIPTS = \
 
 all:
 	msgfmt Messages/fr/LC_MESSAGES/gajim.po -o Messages/fr/LC_MESSAGES/gajim.mo
-	for dir in $(MODULES); do \
-	  (cd $$dir; make all); \
-	done
+	$(foreach sdir, $(MODULES), make -C $(sdir) all;)
 
 clean:
 	find -name *.pyc -exec rm {} \;
-	for dir in $(MODULES) ; do \
-	  (cd $$dir; make clean); \
-	done
+	$(foreach sdir, $(MODULES), make -C $(sdir) clean;)
 
 install:
 	for d in $(DIRS) ; do \
