@@ -639,6 +639,20 @@ class GajimCore:
 			qp.insertTag('os').insertData(get_os_info())
 		con.send(iq_obj)
 
+	def VersionResultCB(self, con, iq_obj):
+		client_info = ''
+		os_info = ''
+		qp = iq_obj.getTag('query')
+		if qp.getTag('name'):
+			client_info += qp.getTag('name').getData()
+		if qp.getTag('version'):
+			client_info += qp.getTag('version').getData()
+		if qp.getTag('os'):
+			os_info += qp.getTag('os').getData()
+		jid = iq_obj.getFrom().getStripped()
+		self.hub.sendPlugin('OS_INFO', self.connections[con],\
+			(jid, client_info, os_info))
+
 	def connect(self, account):
 		"""Connect and authentificate to the Jabber server"""
 		hostname = self.cfgParser.tab[account]['hostname']
@@ -689,6 +703,8 @@ class GajimCore:
 			con.registerHandler('iq',self.DiscoverInfoErrorCB,'error', \
 				common.jabber.NS_P_DISC_INFO)
 			con.registerHandler('iq',self.VersionCB,'get', \
+				common.jabber.NS_VERSION)
+			con.registerHandler('iq',self.VersionResultCB,'result', \
 				common.jabber.NS_VERSION)
 		try:
 			con.connect()
@@ -1006,6 +1022,13 @@ class GajimCore:
 					del self.gpg[ev[1]]
 				if con:
 					self.connections[con] = ev[2]
+			#('ASK_OS_INFO', account, (jid, resource))
+			elif ev[0] == 'ASK_OS_INFO':
+				if con:
+					iq = common.jabber.Iq(to=ev[2][0]+'/'+ev[2][1], type="get", \
+						query=common.jabber.NS_VERSION)
+					iq.setID(con.getAnID())
+					con.send(iq)
 			#('ASK_VCARD', account, jid)
 			elif ev[0] == 'ASK_VCARD':
 				if con:

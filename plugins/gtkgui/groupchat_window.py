@@ -373,6 +373,8 @@ class Groupchat_window(Chat):
 			self.plugin.windows[self.account]['infos'][jid] = \
 				vcard_information_window(jid, self.plugin, self.account, True)
 			self.plugin.send('ASK_VCARD', self.account, jid)
+			#FIXME: we need the resource but it's not saved
+			#self.plugin.send('ASK_OS_INFO', self.account, jid, resource)
 
 	def mk_menu(self, room_jid, event, iter):
 		"""Make user's popup menu"""

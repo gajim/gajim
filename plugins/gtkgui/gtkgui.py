@@ -550,6 +550,11 @@ class plugin:
 		if self.windows[account]['infos'].has_key(array['jid']):
 			self.windows[account]['infos'][array['jid']].set_values(array)
 
+	def handle_event_os_info(self, account, array):
+		if self.windows[account]['infos'].has_key(array[0]):
+			self.windows[account]['infos'][array[0]].set_os_info(array[1], \
+				array[2])
+
 	def handle_event_log_nb_line(self, account, array):
 		#('LOG_NB_LINE', account, (jid, nb_line))
 		if self.windows['logs'].has_key(array[0]):
@@ -663,6 +668,8 @@ class plugin:
 				self.handle_event_quit(ev[1], ev[2])
 			elif ev[0] == 'MYVCARD':
 				self.handle_event_myvcard(ev[1], ev[2])
+			elif ev[0] == 'OS_INFO':
+				self.handle_event_os_info(ev[1], ev[2])
 			elif ev[0] == 'VCARD':
 				self.handle_event_vcard(ev[1], ev[2])
 			elif ev[0] == 'LOG_NB_LINE':
@@ -825,9 +832,9 @@ class plugin:
 			'STATUS', 'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
 			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'AGENT_INFO_ITEMS', \
 			'AGENT_INFO_INFO', 'REG_AGENT_INFO', 'QUIT', 'ACC_OK', 'CONFIG', \
-			'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', 'VISUAL', 'GC_MSG', \
-			'GC_SUBJECT', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS', 'ROSTER_INFO', \
-			'MSGSENT'])
+			'MYVCARD', 'OS_INFO', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', 'VISUAL', \
+			'GC_MSG', 'GC_SUBJECT', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS', \
+			'ROSTER_INFO', 'MSGSENT'])
 		self.default_config = {'autopopup':0,\
 			'autopopupaway':0,\
 			'ignore_unknown_contacts':0,\

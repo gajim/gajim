@@ -88,6 +88,10 @@ class vcard_information_window:
 						set_text(vcard[i], 0)
 				else:
 					self.set_value(i+'_entry', vcard[i])
+	
+	def set_os_info(self, client_info, os_info):
+		self.xml.get_widget('client_name_version_label').set_text(client_info)
+		self.xml.get_widget('platform_label').set_text(os_info)
 
 	def fill_jabber_page(self):
 		self.xml.get_widget('nickname_label').set_text(self.user.name)
@@ -117,6 +121,7 @@ class vcard_information_window:
 		self.xml.get_widget('resource_label').set_text(resources)
 		self.xml.get_widget('status_label').set_text(stats)
 		self.plugin.send('ASK_VCARD', self.account, self.user.jid)
+		self.plugin.send('ASK_OS_INFO', self.account, (self.user.jid, self.user.resource))
 
 	def add_to_vcard(self, vcard, entry, txt):
 		"""Add an information to the vCard dictionary"""
@@ -212,7 +217,7 @@ class vcard_information_window:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
 		self.window = self.xml.get_widget('vcard_information_window')
 		self.plugin = plugin
-		self.user = user #don't use it is vcard is true
+		self.user = user #don't use it if vcard is true
 		self.account = account
 		self.vcard = vcard
 
