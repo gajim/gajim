@@ -632,7 +632,11 @@ class GajimCore:
 		qp = iq_obj.getTag('query')
 		qp.insertTag('name').insertData('Gajim')
 		qp.insertTag('version').insertData(version.version)
-		qp.insertTag('os').insertData(get_os_info())
+		no_send_os = True
+		if self.cfgParser.tab['GtkGui'].has_key('do_not_send_os_info'):
+			no_send_os = self.cfgParser.tab['GtkGui']['do_not_send_os_info']
+		if not no_send_os:
+			qp.insertTag('os').insertData(get_os_info())
 		con.send(iq_obj)
 
 	def connect(self, account):
