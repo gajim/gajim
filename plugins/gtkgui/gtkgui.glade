@@ -7929,7 +7929,6 @@ Custom</property>
 <widget class="GtkWindow" id="tabbed_chat_window">
   <property name="visible">True</property>
   <property name="can_focus">True</property>
-  <property name="has_focus">True</property>
   <property name="title" translatable="yes">Chat</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -8222,6 +8221,7 @@ Custom</property>
 		    <widget class="GtkTextView" id="message_textview">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
+		      <property name="has_focus">True</property>
 		      <property name="editable">True</property>
 		      <property name="overwrite">False</property>
 		      <property name="accepts_tab">True</property>
