@@ -1138,9 +1138,7 @@ class roster_Window:
 			else:
 				user.groups.append('general')
 
-		if user.show == 'offline' and not showOffline:
-			return
-		if not 'Agents' in user.groups:
+		if user.show == 'offline' and not showOffline and not 'Agents' in user.groups:
 			return
 
 		model = self.tree.get_model()
@@ -1662,19 +1660,19 @@ class roster_Window:
 	def nameCellDataFunc(self, column, renderer, model, iter, data=None):
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('foreground', 'red')
-			renderer.set_property('background', '#9fdfff')
+			renderer.set_property('cell-background', '#9fdfff')
 			renderer.set_property('font', 'Normal')
 			renderer.set_property('weight', 700)
 			renderer.set_property('xpad', 0)
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('foreground', 'blue')
-			renderer.set_property('background-set', False)
+			renderer.set_property('cell-background-set', False)
 			renderer.set_property('font', 'Italic')
 			renderer.set_property('weight-set', False)
 			renderer.set_property('xpad', 8)
 		else:
 			renderer.set_property('foreground-set', False)
-			renderer.set_property('background-set', False)
+			renderer.set_property('cell-background-set', False)
 			renderer.set_property('font', 'Normal')
 			renderer.set_property('weight-set', False)
 			renderer.set_property('xpad', 16)
