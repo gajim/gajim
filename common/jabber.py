@@ -127,6 +127,8 @@ NS_XENCRYPTED = "jabber:x:encrypted" # JEP-0027
 NS_XSIGNED    = "jabber:x:signed" # JEP-0027
 NS_P_MUC      = _NS_PROTOCOL + "/muc" # JEP-0045
 NS_P_MUC_ADMIN = NS_P_MUC + "#admin" # JEP-0045
+NS_P_MUC_OWNER = NS_P_MUC + "#owner" # JEP-0045
+NS_P_MUC_USER  = NS_P_MUC + "#user" # JEP-0045
 NS_VCARD      = "vcard-temp" # JEP-0054
 
 
@@ -279,8 +281,7 @@ class Connection(xmlstream.Client):
         typns=typ+ns
         if not self.handlers[name].has_key(ns): ns=''
         if not self.handlers[name].has_key(typ): typ=''
-        if not self.handlers[name].has_key(typns): typns=''
-	if typ==typns: typns='' # we don't want to launch twice the same handler
+        if typ and ns and not self.handlers[name].has_key(typns): typns=''
 
         chain=[]
         for key in ['default',typ,ns,typns]: # we will use all handlers: from very common to very particular
@@ -715,15 +716,17 @@ class Client(Connection):
         iq=Iq(to=jid,type='get',query=ns)
         if node: iq.putAttr('node',node)
         rep=self.SendAndWaitForResponse(iq)
-        if rep: return rep.getQueryPayload()
+        if rep: ret=rep.getQueryPayload()
+        else: ret=[]
+        if not ret: ret=[]
+        return ret
 
     def discoverItems(self,jid,node=None):
         """ According to JEP-0030: jid is mandatory, name, node, action is optional. """
         ret=[]
         disco = self._discover(NS_P_DISC_ITEMS,jid,node)
-        if disco:
-            for i in disco:
-                ret.append(i.attrs)
+        for i in disco:
+            ret.append(i.attrs)
         return ret
 
     def discoverInfo(self,jid,node=None):
@@ -732,13 +735,12 @@ class Client(Connection):
             For feature: var is mandatory"""
         identities , features = [] , []
         disco = self._discover(NS_P_DISC_INFO,jid,node)
-        if disco:
-            for i in disco:
-                if i.getName()=='identity': identities.append(i.attrs)
-                elif i.getName()=='feature': features.append(i.getAttr('var'))
+        for i in disco:
+            if i.getName()=='identity': identities.append(i.attrs)
+            elif i.getName()=='feature': features.append(i.getAttr('var'))
         return identities, features
 
-    def browseAgent(self,jid,node=None):
+    def browseAgents(self,jid,node=None):
         identities, features, items = [], [], []
         iq=Iq(to=jid,type='get',query=NS_BROWSE)
         rep=self.SendAndWaitForResponse(iq)
@@ -1033,79 +1035,41 @@ class Presence(Protocol):
         try: return self.getTag('priority').getData()
         except: return None
 
+    def _muc_getItemAttr(self,tag,attr):
+        for xtag in self.getTags('x'):
+            for child in xtag.getTags(tag):
+                return child.getAttr(attr)
+
+    def _muc_getSubTagDataAttr(self,tag,attr):
+        for xtag in self.getTags('x'):
+            for child in xtag.getTags('item'):
+                for cchild in child.getTags(tag):
+                    return cchild.getData(),cchild.getAttr(attr)
+        return None,None
+
     def getRole(self):
         """Returns the presence role (for groupchat)"""
-        try: xtags = self.getTags('x')
-        except: return None
-        for xtag in xtags:
-            for child in xtag.getChildren():
-                if child.getName() == 'item':
-                    try: return child.getAttr('role')
-                    except: pass
-        return None
+        return self._muc_getItemAttr('item','role')
 
     def getAffiliation(self):
         """Returns the presence affiliation (for groupchat)"""
-        try: xtags = self.getTags('x')
-        except: return None
-        for xtag in xtags:
-            for child in xtag.getChildren():
-                if child.getName() == 'item':
-                    try: return child.getAttr('affiliation')
-                    except: pass
-        return None
+        return self._muc_getItemAttr('item','affiliation')
 
     def getJid(self):
         """Returns the presence jid (for groupchat)"""
-        try: xtags = self.getTags('x')
-        except: return None
-        for xtag in xtags:
-            for child in xtag.getChildren():
-                if child.getName() == 'item':
-                    try: return child.getAttr('jid')
-                    except: pass
-        return None
+        return self._muc_getItemAttr('item','jid')
 
     def getReason(self):
         """Returns the reason of the presence (for groupchat)"""
-        try: xtags = self.getTags('x')
-        except: return None
-        for xtag in xtags:
-            for child in xtag.getChildren():
-                if not child.getName() == 'item':
-                    continue
-                for cchild in child.getChildren():
-                    if not cchild.getName() == 'reason':
-                        continue
-                    try: return cchild.getData()
-                    except: pass
-        return None
+        return self._muc_getSubTagDataAttr('reason','')[0]
 
     def getActor(self):
         """Returns the reason of the presence (for groupchat)"""
-        try: xtags = self.getTags('x')
-        except: return None
-        for xtag in xtags:
-            for child in xtag.getChildren():
-                if not child.getName() == 'item':
-                    continue
-                for cchild in child.getChildren():
-                    if not cchild.getName() == 'actor':
-                        continue
-                    try: return cchild.getAttr('jid')
-                    except: pass
-        return None
+        return self._muc_getSubTagDataAttr('actor','jid')[1]
 
     def getStatusCode(self):
         """Returns the status code of the presence (for groupchat)"""
-        try: xtags = self.getTags('x')
-        except: return None
-        for xtag in xtags:
-            for child in xtag.getChildren():
-                if child.getName() == 'status':
-                    try: return child.getAttr('code')
-                    except: pass
-        return None
+        return self._muc_getItemAttr('status','code')
 
     def setShow(self,val):
         """Sets the presence show"""
@@ -1426,7 +1390,11 @@ class Roster:
 class JID:
     """A Simple class for managing jabber users id's """
     def __init__(self, jid='', node='', domain='', resource=''):
-        if jid:
+        if type(jid)==type(self):
+            self.node = jid.node
+            self.domain = jid.domain
+            self.resource = jid.resource
+        elif jid:
             if jid.find('@') == -1:
                 self.node = ''
             else:
@@ -1452,6 +1420,7 @@ class JID:
         return jid_str
 
     __repr__ = __str__
+
 
     def getNode(self):
         """Returns JID Node as string"""
