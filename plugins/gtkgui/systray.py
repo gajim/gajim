@@ -181,6 +181,7 @@ class systray:
 				else:
 					win.present()
 					win.skip_taskbar_hint = False
+				print win.is_active()
 			else:
 				account = self.jids[0][0]
 				jid = self.jids[0][1]
