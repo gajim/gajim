@@ -711,6 +711,7 @@ class plugin:
 		# (?<!\S) is a one char lookbehind assertion and asks for any leading whitespace
 		# and mathces beginning of lines so we have correct formatting detection
 		# even if the the text is just '*something*'
+		# (?!\S) is the same thing but it's a lookahead assertion
 		# basic_pattern is one string literal.
 		# I've put spaces to make the regexp look better.
 		links = r'\bhttp://\S+|' r'\bhttps://\S+|' r'\bnews://\S+|' r'\bftp://\S+|' r'\bed2k://\S+|' r'\bwww\.\S+|' r'\bftp\.\S+|'
@@ -719,7 +720,7 @@ class plugin:
 
 		#detects eg. *b* *bold* *bold bold* test *bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
-		formatting = r'(?<!\S)\*[^\s*]([^*]*[^\s*])?\*|' r'(?<!\S)/[^\s*]([^/]*[^\s*])?/|' r'(?<!\S)_[^\s*]([^_]*[^\s*])?_'
+		formatting = r'(?<!\S)\*[^\s*]([^*]*[^\s*])?\*(?!\S)|' r'(?<!\S)/[^\s/]([^/]*[^\s/])?/(?!\S)|' r'(?<!\S)_[^\s_]([^_]*[^\s_])?_(?!\S)'
 
 		self.basic_pattern = links + mail + formatting
 
