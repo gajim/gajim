@@ -719,8 +719,6 @@ class preferences_window:
 			self.on_chk_toggled, [self.xml.get_widget('button_new_emoticon'),
 					self.xml.get_widget('button_remove_emoticon'),
 					self.xml.get_widget('treeview_emoticons'),
-					#self.xml.get_widget('entry_emoticons'),	#FIXME: Are this two supposed to be here ?
-					#self.xml.get_widget('button_emoticons'),
 					self.xml.get_widget('set_image_button'),
 					self.xml.get_widget('emoticons_image')])
 
