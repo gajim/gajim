@@ -256,10 +256,13 @@ class plugin:
 			args = conf.split()
 			app = args[0]
 		args.append(url)
-		if os.name == 'posix':
-			os.spawnvp(os.P_NOWAIT, app, args)
-		else:
-			os.spawnv(os.P_NOWAIT, app, args)
+		try:
+			if os.name == 'posix':
+				os.spawnvp(os.P_NOWAIT, app, args)
+			else:
+				os.spawnv(os.P_NOWAIT, app, args)
+		except:
+			pass
 
 	def play_timeout(self, pid):
 		pidp, r = os.waitpid(pid, os.WNOHANG)
