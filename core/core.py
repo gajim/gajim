@@ -466,6 +466,12 @@ class GajimCore:
 				msg.setType('chat')
 				con.send(msg)
 				self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
+			#('GC_MSG', account, (jid, msg))
+			elif ev[0] == 'GC_MSG':
+				msg = common.jabber.Message(ev[2][0], ev[2][1])
+				msg.setType('groupchat')
+				con.send(msg)
+				self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
 			#('SUB', account, (jid, txt))
 			elif ev[0] == 'SUB':
 				log.debug('subscription request for %s' % ev[2][0])

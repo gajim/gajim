@@ -307,6 +307,25 @@ class gc:
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
 
+	def on_msg_key_press_event(self, widget, event):
+		"""When a key is pressed :
+		if enter is pressed without the shit key, message (if not empty) is sent
+		and printed in the conversation"""
+		if event.keyval == gtk.keysyms.Return:
+			if (event.state & gtk.gdk.SHIFT_MASK):
+				return 0
+			txt_buffer = widget.get_buffer()
+			start_iter = txt_buffer.get_start_iter()
+			end_iter = txt_buffer.get_end_iter()
+			txt = txt_buffer.get_text(start_iter, end_iter, 0)
+			print self.jid
+			if txt != '':
+				self.plugin.send('GC_MSG', self.account, (self.jid, txt))
+				txt_buffer.set_text('', -1)
+				widget.grab_focus()
+			return 1
+		return 0
+
 	def print_conversation(self, txt, contact = None, tim = None):
 		"""Print a line in the conversation :
 		if contact is set : it's a message from someone
@@ -320,12 +339,12 @@ class gc:
 			tim = time.strftime("[%H:%M:%S]")
 		buffer.insert(end_iter, tim)
 		if contact:
-			#TODO it a message from me
-			if contact == '':
-				buffer.insert_with_tags_by_name(end_iter, '<'+contact+'> ', 'outgoing')
+			if contact == self.nick:
+				buffer.insert_with_tags_by_name(end_iter, '<'+contact+'> ', \
+					'outgoing')
 			else:
-				buffer.insert_with_tags_by_name(end_iter, '<' + \
-					contact + '> ', 'incoming')
+				buffer.insert_with_tags_by_name(end_iter, '<' + contact + '> ', \
+					'incoming')
 			buffer.insert(end_iter, txt+'\n')
 		else:
 			buffer.insert_with_tags_by_name(end_iter, txt+'\n', \
@@ -333,12 +352,14 @@ class gc:
 		#scroll to the end of the textview
 		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
 
-	def __init__(self, jid, plugin, account):
+	def __init__(self, jid, nick, plugin, account):
 		self.jid = jid
+		self.nick = nick
 		self.plugin = plugin
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gc', APP)
 		self.window = self.xml.get_widget('Gc')
+		self.list = self.xml.get_widget('list')
 		conversation = self.xml.get_widget('conversation')
 		buffer = conversation.get_buffer()
 		end_iter = buffer.get_end_iter()
@@ -353,6 +374,8 @@ class gc:
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus.set_property("foreground", color)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_msg_key_press_event', \
+			self.on_msg_key_press_event)
 
 class join_gc:
 	def delete_event(self, widget):
@@ -370,8 +393,8 @@ class join_gc:
 		server = self.xml.get_widget('entry_server').get_text()
 		passw = self.xml.get_widget('entry_pass').get_text()
 		jid = '%s@%s' % (room, server)
-		self.plugin.windows[self.account]['chats'][jid] = gc(jid, self.plugin,\
-			self.account)
+		self.plugin.windows[self.account]['chats'][jid] = gc(jid, nick, \
+			self.plugin, self.account)
 		#TODO: verify entries
 		self.plugin.send('GC_JOIN', self.account, (nick, room, server, passw))
 		widget.get_toplevel().destroy()
