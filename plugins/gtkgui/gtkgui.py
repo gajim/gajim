@@ -490,6 +490,13 @@ class tabbed_chat_window:
 			message_textview = self.xmls[jid].get_widget('message_textview')
 			if not message_textview.is_focus():
 				message_textview.grab_focus()
+			'''FIXME: DOES NOT WORK
+			# remove * or [n] from title of tab/window
+			self.nb_unread[jid] = 0
+			self.redraw_tab(jid)
+			self.show_title()
+			self.plugin.systray.remove_jid(jid, self.account)
+			'''
 
 	def on_contact_button_clicked(self, widget):
 		"""When button contact is clicked"""
