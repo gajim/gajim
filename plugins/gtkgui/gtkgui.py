@@ -833,7 +833,6 @@ class plugin:
 			self.config['autoxatime']*60)
 		self.systray_visible = 0
 		try:
-			global trayicon
 			import trayicon
 		except:
 			self.config['trayicon'] = 0
