@@ -3192,6 +3192,7 @@ on the server as a vCard</property>
 		    <widget class="GtkComboBox" id="iconstyle_combobox">
 		      <property name="visible">True</property>
 		      <property name="items" translatable="yes"></property>
+		      <signal name="changed" handler="on_iconstyle_combobox_changed" last_modification_time="Sun, 06 Mar 2005 16:01:18 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>

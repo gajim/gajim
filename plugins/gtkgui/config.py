@@ -140,6 +140,9 @@ class preferences_window:
 				for jid in self.plugin.windows[a]['chats'].keys():
 					self.plugin.windows[a]['chats'][jid].update_tags()
 	
+	def on_iconstyle_combobox_changed(self, widget):
+		pass
+		
 	def on_save_position_checkbutton_toggled(self, widget):
 		"""On Save Position Checkbutton Toggled"""
 		if widget.get_active():
@@ -577,15 +580,21 @@ class preferences_window:
 		
 		#iconStyle
 		list_style = os.listdir('plugins/gtkgui/icons/')
-		l = []
+		model = gtk.ListStore(gobject.TYPE_STRING)
+		self.iconstyle_combobox.set_model(model)
+		cell = gtk.CellRendererText()
+		self.iconstyle_combobox.pack_start(cell, gtk.TRUE)
+		self.iconstyle_combobox.add_attribute(cell, 'text', 0)
 		for i in list_style:
 			if i != 'CVS' and i[0] != '.':
-				l.append(i)
-		if l.count == 0:
-			l.append(" ")
-		self.iconstyle_combobox.set_popdown_strings(l)
-		if self.plugin.config['iconstyle'] in l:
-			self.iconstyle_combobox.entry.set_text(self.plugin.config['iconstyle'])
+				model.append([i])
+		#if l.count == 0:
+		#	l.append(" ")
+		
+		#self.iconstyle_combobox.set_popdown_strings(l)
+		#if self.plugin.config['iconstyle'] in l:
+			#self.iconstyle_combobox.entry.set_text(self.plugin.config['iconstyle'])
+		#	pass
 
 		#Save position
 		st = self.plugin.config['saveposition']
