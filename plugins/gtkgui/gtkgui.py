@@ -3664,8 +3664,7 @@ class plugin:
 
 		self.emot_and_formatting_and_url_pattern =\
 			emoticons_pattern + self.formatting_and_url_pattern
-		
-		print 'self.emot_and_formatting_and_url_pattern', self.emot_and_formatting_and_url_pattern
+
 		gtk.gdk.threads_enter()
 		self.autoconnect()
 		gtk.main()
