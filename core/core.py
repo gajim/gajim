@@ -155,6 +155,9 @@ class GajimCore:
 						self.con.send(common.jabber.Presence(ev[1], 'unsubscribe'))
 					if delroster:
 						self.con.removeRosterItem(ev[1])
+				#('UPDUSER', (jid, name, groups))
+				elif ev[0] == 'UPDUSER':
+					self.con.updateRosterItem(jid=ev[1][0], name=ev[1][1], groups=ev[1][2])
 				else:
 					log.debug("Unknown Command")
 			elif self.connected == 1:

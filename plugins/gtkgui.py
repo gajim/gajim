@@ -21,6 +21,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+from gtk import TRUE, FALSE
 import gtk.glade
 import gobject
 import string
@@ -193,10 +194,10 @@ class roster:
 				user1.groups.append('general')
 			for g in user1.groups:
 				if not self.l_group.has_key(g):
-					iterG = self.treestore.append(None, (None, g, 'group'))
+					iterG = self.treestore.append(None, (None, g, 'group', FALSE))
 					self.l_group[g] = iterG
 				if user1.show != 'offline' or self.showOffline:
-					iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, user1.jid))
+					iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, user1.jid, TRUE))
 					self.l_contact[user1.jid]['iter'].append(iterU)
 
 	def update_iter(self, widget, path, iter, data):
@@ -217,14 +218,15 @@ class roster:
 		if self.l_contact[jid]['iter'] == []:
 			for g in u.groups:
 				if not self.l_group.has_key(g):
-					iterG = self.treestore.append(None, (None, g, 'group'))
+					iterG = self.treestore.append(None, (None, g, 'group', FALSE))
 					self.l_group[u.group] = iterG
-				iterU = self.treestore.append(self.l_group[g], (self.pixbufs[show], u.name, u.jid))
+				iterU = self.treestore.append(self.l_group[g], (self.pixbufs[show], u.name, u.jid, TRUE))
 				self.l_contact[u.jid]['iter'].append(iterU)
 		else:
 			if show == 'offline' and not self.showOffline:
 				for i in self.l_contact[jid]['iter']:
 					self.treestore.remove(i)
+				self.l_contact[jid]['iter'] = []
 			else:
 				for i in self.l_contact[jid]['iter']:
 					self.treestore.set_value(i, 0, self.pixbufs[show])
@@ -277,7 +279,7 @@ class roster:
 	def authorize(self, widget, jid):
 		self.queueOUT.put(('AUTH', jid))
 
-	def rename(self, widget, jid, name)
+	def rename(self, widget, jid, name):
 		u = self.r.l_contact[jid]['user']
 		u.name = name
 		for i in self.r.l_contact[jid]['iter']:
@@ -292,7 +294,7 @@ class roster:
 			if not self.l_group.has_key('general'):
 				iterG = self.treestore.append(None, (None, 'general', 'group'))
 				self.l_group['general'] = iterG
-			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid))
+			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid, TRUE))
 			self.l_contact[jid] = {'user':user1, 'iter':[iterU]}
 
 	def on_treeview_event(self, widget, event):
@@ -333,10 +335,25 @@ class roster:
 		iter = self.treestore.get_iter(path)
 		jid = self.treestore.get_value(iter, 2)
 		if self.tab_messages.has_key(jid):
-			#NE FONCTIONNE PAS !
+			#TODO: NE FONCTIONNE PAS !
 			self.tab_messages[jid].window.grab_focus()
 		elif self.l_contact.has_key(jid):
 			self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
+
+	def on_cell_edited (self, cell, row, new_text):
+		iter = self.treestore.get_iter_from_string(row)
+		jid = self.treestore.get_value(iter, 2)
+		old_text = self.l_contact[jid]['user'].name
+		if old_text == new_text:
+			if self.tab_messages.has_key(jid):
+				#TODO: NE FONCTIONNE PAS !
+				self.tab_messages[jid].window.grab_focus()
+			elif self.l_contact.has_key(jid):
+				self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
+		else:
+			self.treestore.set_value(iter, 1, new_text)
+			self.l_contact[jid]['user'].name = new_text
+			self.queueOUT.put(('UPDUSER', (jid, new_text, self.l_contact[jid]['user'].groups)))
 		
 	def __init__(self, queueOUT):
 		#initialisation des variables
@@ -345,7 +362,7 @@ class roster:
 		self.cfgParser.parseCfgFile()
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Gajim')
 		self.tree = self.xml.get_widget('treeview')
-		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str)
+		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, gobject.TYPE_BOOLEAN)
 		add_pixbuf = self.get_icon_pixbuf(gtk.STOCK_ADD)
 		remove_pixbuf = self.get_icon_pixbuf(gtk.STOCK_REMOVE)
 		requested_pixbuf = self.get_icon_pixbuf(gtk.STOCK_QUIT)
@@ -375,8 +392,10 @@ class roster:
 #		self.col.add_attribute(render_pixbuf, 'pixbuf-expander-closed', 0)
 #		self.col.add_attribute(render_pixbuf, 'pixbuf-expander-open', 0)
 		render_text = gtk.CellRendererText()
+		render_text.connect('edited', self.on_cell_edited)
 		self.col.pack_start(render_text, expand = True)
 		self.col.add_attribute(render_text, 'text', 1)
+		self.col.add_attribute(render_text, 'editable', 3)
 		self.tree.append_column(self.col)
 
 		#signals
