@@ -653,10 +653,10 @@ class roster_Window:
 				img = self.pixbufs[show]
 				if img.get_storage_type() == gtk.IMAGE_ANIMATION:
 					self.plugin.windows[account]['chats'][user.jid].\
-						img = set_from_animation(img.get_animation())
+						img.set_from_animation(img.get_animation())
 				elif img.get_storage_type() == gtk.IMAGE_PIXBUF:
 					self.plugin.windows[account]['chats'][user.jid].\
-						img = set_from_pixbuf(img.get_pixbuf())
+						img.set_from_pixbuf(img.get_pixbuf())
 			name = user.name
 			if user.resource != '':
 				name += '/'+user.resource
