@@ -449,6 +449,9 @@ class Client(Connection):
     def sendPresence(self,type=None,priority=None,show=None,status=None,signedStatus=None):
         """Sends a presence protocol element to the server.
            Used to inform the server that you are online"""
+        if type == 'available':
+            type = None
+            show = None
         presence = Presence(type=type,priority=priority,show=show,status=status)
         if signedStatus:
             presence.setX(NS_XSIGNED).insertData(signedStatus)
