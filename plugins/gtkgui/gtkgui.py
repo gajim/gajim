@@ -270,7 +270,8 @@ class authorize:
 	def auth(self, widget):
 		self.r.queueOUT.put(('AUTH', self.jid))
 		self.delete_event(self)
-		add(self.r, self.jid)
+		if not self.r.l_contact.has_key(self.jid):
+			add(self.r, self.jid)
 	
 	def deny(self, widget):
 		self.r.queueOUT.put(('DENY', self.jid))
@@ -378,11 +379,12 @@ class message:
 		del self.r.tab_messages[self.user.jid]
 		self.window.destroy()
 	
-	def print_conversation(self, txt, contact = None):
+	def print_conversation(self, txt, contact = None, tim = None):
 		if not txt:
 			txt = ""
 		end_iter = self.convTxtBuffer.get_end_iter()
-		tim = time.strftime("[%H:%M:%S]")
+		if not tim:
+			tim = time.strftime("[%H:%M:%S]")
 		self.convTxtBuffer.insert(end_iter, tim)
 		if contact:
 			if contact == 'status':
@@ -399,7 +401,8 @@ class message:
 	
 	def read_queue(self, q):
 		while not q.empty():
-			self.print_conversation(q.get())
+			evt = q.get()
+			self.print_conversation(evt[0], tim = evt[1])
 		del self.r.tab_queues[self.user.jid]
 		for i in self.r.l_contact[self.user.jid]['iter']:
 			if self.r.pixbufs.has_key(self.user.show):
@@ -823,7 +826,8 @@ class plugin:
 						self.r.tab_queues[jid] = Queue.Queue(50)
 						for i in self.r.l_contact[jid]['iter']:
 							self.r.treestore.set_value(i, 0, self.r.pixbufs['message'])
-					self.r.tab_queues[jid].put(ev[1][1])
+					tim = time.strftime("[%H:%M:%S]")
+					self.r.tab_queues[jid].put((ev[1][1], tim))
 				else:
 					if not self.r.tab_messages.has_key(jid):
 						#FIXME:message from unknown
