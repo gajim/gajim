@@ -239,6 +239,18 @@ class preference_Window:
 			self.plugin.roster.mkemoticons()
 		else:
 			self.plugin.config['useemoticons'] = 0
+		#sound player
+		self.plugin.config['soundplayer'] = \
+			self.xml.get_widget('entry_soundplayer').get_text()
+		#sounds
+		model = self.sound_tree.get_model()
+		iter = model.get_iter_first()
+		events = []
+		while iter:
+			events.append(model.get_value(iter, 0))
+			events.append(model.get_value(iter, 1))
+			iter = model.iter_next(iter)
+		self.plugin.config['sounds'] = string.join(events, '\t')
 		#autopopup
 		if self.chk_autopp.get_active():
 			self.plugin.config['autopopup'] = 1
@@ -319,6 +331,44 @@ class preference_Window:
 			model.set(iter, 0, self.plugin.config['msg%s_name' % i], 1, self.plugin.config['msg%s' % i])
 			i += 1
 
+	def on_msg_cell_edited(self, cell, row, new_text):
+		model = self.msg_tree.get_model()
+		iter = model.get_iter_from_string(row)
+		model.set_value(iter, 0, new_text)
+
+	def on_msg_treeview_cursor_changed(self, widget, data=None):
+		self.xml.get_widget('delete_msg_button').set_sensitive(True)
+		buf = self.xml.get_widget('msg_textview').get_buffer()
+		(model, iter) = self.msg_tree.get_selection().get_selected()
+		name = model.get_value(iter, 0)
+		msg = model.get_value(iter, 1)
+		buf.set_text(msg)
+
+	def on_new_msg_button_clicked(self, widget, data=None):
+		model = self.msg_tree.get_model()
+		iter = model.append()
+		model.set(iter, 0, 'msg', 1, 'message')
+
+	def on_delete_msg_button_clicked(self, widget, data=None):
+		(model, iter) = self.msg_tree.get_selection().get_selected()
+		buf = self.xml.get_widget('msg_textview').get_buffer()
+		model.remove(iter)
+		buf.set_text('')
+		self.xml.get_widget('delete_msg_button').set_sensitive(False)
+			
+	def on_msg_textview_changed(self, widget, data=None):
+		(model, iter) = self.msg_tree.get_selection().get_selected()
+		if not iter:
+			return
+		buf = self.xml.get_widget('msg_textview').get_buffer()
+		first_iter, end_iter = buf.get_bounds()
+		name = model.get_value(iter, 0)
+		model.set_value(iter, 1, buf.get_text(first_iter, end_iter))
+	
+	def on_msg_treeview_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Delete:
+			self.on_delete_msg_button_clicked(widget)
+
 	def image_is_ok(self, image):
 		if not os.path.exists(image):
 			return 0
@@ -352,28 +402,10 @@ class preference_Window:
 			iter = model.append()
 			model.set(iter, 0, i, 1,emots[i])
 
-	def on_msg_cell_edited(self, cell, row, new_text):
-		model = self.msg_tree.get_model()
-		iter = model.get_iter_from_string(row)
-		model.set_value(iter, 0, new_text)
-
 	def on_emot_cell_edited(self, cell, row, new_text):
 		model = self.emot_tree.get_model()
 		iter = model.get_iter_from_string(row)
 		model.set_value(iter, 0, new_text)
-
-	def on_msg_treeview_cursor_changed(self, widget, data=None):
-		self.xml.get_widget('delete_msg_button').set_sensitive(True)
-		buf = self.xml.get_widget('msg_textview').get_buffer()
-		(model, iter) = self.msg_tree.get_selection().get_selected()
-		name = model.get_value(iter, 0)
-		msg = model.get_value(iter, 1)
-		buf.set_text(msg)
-
-	def on_new_msg_button_clicked(self, widget, data=None):
-		model = self.msg_tree.get_model()
-		iter = model.append()
-		model.set(iter, 0, 'msg', 1, 'message')
 
 	def on_button_emoticons_clicked(self, widget, data=None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
@@ -422,13 +454,6 @@ class preference_Window:
 			self.xml.get_widget('image_emoticon').set_from_file(file)
 			model.set_value(iter, 1, file)
 			
-	def on_delete_msg_button_clicked(self, widget, data=None):
-		(model, iter) = self.msg_tree.get_selection().get_selected()
-		buf = self.xml.get_widget('msg_textview').get_buffer()
-		model.remove(iter)
-		buf.set_text('')
-		self.xml.get_widget('delete_msg_button').set_sensitive(False)
-			
 	def on_button_new_emoticon_clicked(self, widget, data=None):
 		model = self.emot_tree.get_model()
 		iter = model.append()
@@ -440,15 +465,6 @@ class preference_Window:
 			return
 		model.remove(iter)
 
-	def on_msg_textview_changed(self, widget, data=None):
-		(model, iter) = self.msg_tree.get_selection().get_selected()
-		if not iter:
-			return
-		buf = self.xml.get_widget('msg_textview').get_buffer()
-		first_iter, end_iter = buf.get_bounds()
-		name = model.get_value(iter, 0)
-		model.set_value(iter, 1, buf.get_text(first_iter, end_iter))
-	
 	def on_treeview_emoticons_cursor_changed(self, widget, data=None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
@@ -462,14 +478,75 @@ class preference_Window:
 		for w in widgets:
 			w.set_sensitive(widget.get_active())
 
-	def on_msg_treeview_key_press_event(self, widget, event):
-		if event.keyval == gtk.keysyms.Delete:
-			self.on_delete_msg_button_clicked(widget)
-
 	def on_treeview_emoticons_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Delete:
 			self.on_button_remove_emoticon_clicked(widget)
 
+	def sound_is_ok(self, sound):
+		if not os.path.exists(sound):
+			return 0
+		return 1
+
+	def fill_sound_treeview(self):
+		eventList = ['message']
+		events = {}
+		split_line = string.split(self.plugin.config['sounds'], '\t')
+		for i in range(0, len(split_line)/2):
+			events[split_line[2*i]] = split_line[2*i+1]
+		model = self.sound_tree.get_model()
+		model.clear()
+		for ev in eventList:
+			if ev in events:
+				iter = model.append()
+				model.set(iter, 0, ev, 1, events[ev])
+
+	def on_treeview_sounds_cursor_changed(self, widget, data=None):
+		(model, iter) = self.sound_tree.get_selection().get_selected()
+		if not iter:
+			self.xml.get_widget('entry_sounds').set_text('')
+			return
+		str = model.get_value(iter, 1)
+		self.xml.get_widget('entry_sounds').set_text(str)
+
+	def on_button_sounds_clicked(self, widget, data=None):
+		(model, iter) = self.sound_tree.get_selection().get_selected()
+		if not iter:
+			return
+		file = model.get_value(iter, 1)
+		dialog = gtk.FileChooserDialog("Choose sound",
+							None,
+							gtk.FILE_CHOOSER_ACTION_OPEN,
+							(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+							gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		dialog.set_default_response(gtk.RESPONSE_OK)
+		filter = gtk.FileFilter()
+		filter.set_name("All files")
+		filter.add_pattern("*")
+		dialog.add_filter(filter)
+
+		filter = gtk.FileFilter()
+		filter.set_name("Wav Sounds")
+		filter.add_pattern("*.wav")
+		dialog.add_filter(filter)
+		dialog.set_filter(filter)
+
+		file = os.path.join(os.getcwd(), file)
+		dialog.set_filename(file)
+		file = ''	
+		ok = 0
+		while(ok == 0):
+			response = dialog.run()
+			if response == gtk.RESPONSE_OK:
+				file = dialog.get_filename()
+				if self.sound_is_ok(file):
+					ok = 1
+			else:
+				ok = 1
+		dialog.destroy()
+		if file:
+			self.xml.get_widget('entry_sounds').set_text(file)
+			model.set_value(iter, 1, file)
+			
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Preferences', APP)
@@ -548,6 +625,26 @@ class preference_Window:
 		col.pack_start(renderer, True)
 		col.set_attributes(renderer, text=0)
 		self.fill_emot_treeview()
+
+		#sound player
+		self.xml.get_widget('entry_soundplayer').set_text(\
+			self.plugin.config['soundplayer'])
+
+		#sounds
+		self.sound_tree = self.xml.get_widget('treeview_sounds')
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		self.sound_tree.set_model(model)
+		col = gtk.TreeViewColumn('Event')
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text=0)
+		col = gtk.TreeViewColumn('Sound')
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text=1)
+		self.fill_sound_treeview()
 		
 		#Autopopup
 		st = self.plugin.config['autopopup']
@@ -645,18 +742,12 @@ class preference_Window:
 		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
 		self.xml.signal_connect('on_msg_treeview_cursor_changed', \
 			self.on_msg_treeview_cursor_changed)
-		self.xml.signal_connect('on_treeview_emoticons_cursor_changed', \
-			self.on_treeview_emoticons_cursor_changed)
-		self.xml.signal_connect('on_button_emoticons_clicked', \
-			self.on_button_emoticons_clicked)
 		self.xml.signal_connect('on_new_msg_button_clicked', \
 			self.on_new_msg_button_clicked)
 		self.xml.signal_connect('on_delete_msg_button_clicked', \
 			self.on_delete_msg_button_clicked)
-		self.xml.signal_connect('on_button_new_emoticon_clicked', \
-			self.on_button_new_emoticon_clicked)
-		self.xml.signal_connect('on_button_remove_emoticon_clicked', \
-			self.on_button_remove_emoticon_clicked)
+		self.xml.signal_connect('on_msg_treeview_key_press_event', \
+			self.on_msg_treeview_key_press_event)
 		self.xml.signal_connect('on_chk_autopopup_toggled', \
 			self.on_chk_toggled, [self.chk_autoppaway])
 		self.xml.signal_connect('on_chk_autoaway_toggled', \
@@ -670,10 +761,20 @@ class preference_Window:
 					self.xml.get_widget('entry_emoticons'),
 					self.xml.get_widget('button_emoticons'),
 					self.xml.get_widget('image_emoticon')])
-		self.xml.signal_connect('on_msg_treeview_key_press_event', \
-			self.on_msg_treeview_key_press_event)
+		self.xml.signal_connect('on_treeview_emoticons_cursor_changed', \
+			self.on_treeview_emoticons_cursor_changed)
+		self.xml.signal_connect('on_button_emoticons_clicked', \
+			self.on_button_emoticons_clicked)
+		self.xml.signal_connect('on_button_new_emoticon_clicked', \
+			self.on_button_new_emoticon_clicked)
+		self.xml.signal_connect('on_button_remove_emoticon_clicked', \
+			self.on_button_remove_emoticon_clicked)
 		self.xml.signal_connect('on_treeview_emoticons_key_press_event', \
 			self.on_treeview_emoticons_key_press_event)
+		self.xml.signal_connect('on_treeview_sounds_cursor_changed', \
+			self.on_treeview_sounds_cursor_changed)
+		self.xml.signal_connect('on_button_sounds_clicked', \
+			self.on_button_sounds_clicked)
 
 		self.plugin.send('ASK_CONFIG', None, ('GtkGui', 'Logger', {'lognotsep':1,\
 			'lognotusr':1}))
