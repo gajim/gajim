@@ -404,8 +404,8 @@ class Change_status_message_dialog:
 			message_comboboxentry.append_text(val)
 		self.xml.signal_autoconnect(self)
 
-class Add_contact_window:
-	"""Class for add_contact_window"""
+class Add_new_contact_window:
+	"""Class for Add_new_contact_window"""
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
@@ -480,8 +480,8 @@ class Add_contact_window:
 			return
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_contact_window', APP)
-		self.window = self.xml.get_widget('add_contact_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_new_contact_window', APP)
+		self.window = self.xml.get_widget('add_new_contact_window')
 		self.old_uid_value = ''
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		liststore.append(['Jabber', ''])
@@ -519,7 +519,10 @@ class Add_contact_window:
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
 		for g in self.plugin.roster.groups[account].keys():
-			self.group_comboboxentry.append_text(g)
+			if g != 'not in the roster': #FIXME: nk 2 yann. it seems that the empty groups are NOT deleted!
+				#NO MATTER WHAT LEAVE THAT HIS, because even if we delete empty groups, not in roster can have one
+				#and we don't want the user to choose to add more
+				self.group_comboboxentry.append_text(g)
 
 		self.xml.signal_autoconnect(self)
 
@@ -584,7 +587,6 @@ class Information_dialog:
 			gtk.MESSAGE_INFO, gtk.BUTTONS_CLOSE, label)
 		dialog.connect('response', self.on_response)
 		dialog.show()
-		#dialog.run() #IT freezes WHY? also if you do a lot of stuff all together it freezes
 
 class Error_dialog:
 	"""Class for error dialog"""
@@ -610,7 +612,7 @@ class subscription_request_window:
 		self.plugin.send('AUTH', self.account, self.jid)
 		widget.get_toplevel().destroy()
 		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
-			Add_contact_window(self.plugin, self.account, self.jid)
+			Add_new_contact_window(self.plugin, self.account, self.jid)
 	
 	def on_deny_button_clicked(self, widget):
 		"""refuse the request"""
@@ -702,12 +704,16 @@ class New_message_dialog:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'new_message_dialog', APP)
 		self.window = self.xml.get_widget('new_message_dialog')
 		self.jid_entry = self.xml.get_widget('jid_entry')
-		self.xml.signal_autoconnect(self)
+
+		our_jid = self.plugin.accounts[account]['name'] + '@' +\
+					self.plugin.accounts[account]['hostname']
 		if len(self.plugin.accounts) > 1:
-			title = 'New Message as %s' % self.plugin.accounts[account]['jid']
+			title = 'New Message as ' + our_jid
 		else:
 			title = 'New Message'
 		self.window.set_title(title)
+		
+		self.xml.signal_autoconnect(self)
 
 class Change_password_dialog:
 	def run(self):

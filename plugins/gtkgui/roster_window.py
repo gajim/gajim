@@ -211,11 +211,11 @@ class Roster_window:
 		# try to avoid WIDGET_REALIZED_FOR_EVENT failed which freezes gajim
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
-		add_contact_menuitem  = self.xml.get_widget('add_contact_menuitem')
+		add_new_contact_menuitem  = self.xml.get_widget('add_new_contact_menuitem')
 		service_disco_menuitem  = self.xml.get_widget('service_disco_menuitem')
-		if self.add_contact_handler_id:
-			add_contact_menuitem.handler_disconnect(self.add_contact_handler_id)
-			self.add_contact_handler_id = None
+		if self.add_new_contact_handler_id:
+			add_new_contact_menuitem.handler_disconnect(self.add_new_contact_handler_id)
+			self.add_new_contact_handler_id = None
 		if self.service_disco_handler_id:
 			service_disco_menuitem.handler_disconnect(\
 				self.service_disco_handler_id)
@@ -228,8 +228,8 @@ class Roster_window:
 				self.new_message_menuitem_handler_id)
 			self.new_message_menuitem_handler_id = None
 		#remove the existing submenus
-		if add_contact_menuitem.get_submenu():
-			add_contact_menuitem.remove_submenu()
+		if add_new_contact_menuitem.get_submenu():
+			add_new_contact_menuitem.remove_submenu()
 		if service_disco_menuitem.get_submenu():
 			service_disco_menuitem.remove_submenu()
 		if join_gc_menuitem.get_submenu():
@@ -239,21 +239,21 @@ class Roster_window:
 		if len(self.plugin.accounts.keys()) > 0:
 			new_message_menuitem.set_sensitive(True)
 			join_gc_menuitem.set_sensitive(True)
-			add_contact_menuitem.set_sensitive(True)
+			add_new_contact_menuitem.set_sensitive(True)
 			service_disco_menuitem.set_sensitive(True)
 		else:
 			new_message_menuitem.set_sensitive(False)
 			join_gc_menuitem.set_sensitive(False)
-			add_contact_menuitem.set_sensitive(False)
+			add_new_contact_menuitem.set_sensitive(False)
 			service_disco_menuitem.set_sensitive(False)
 		if len(self.plugin.accounts.keys()) >= 2: # 2 or more accounts? make submenus
 			#add
 			sub_menu = gtk.Menu()
-			add_contact_menuitem.set_submenu(sub_menu)
+			add_new_contact_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem(_('to ') + account + _(' account'))
 				sub_menu.append(item)
-				item.connect("activate", self.on_add_contact, account)
+				item.connect("activate", self.on_add_new_contact, account)
 			sub_menu.show_all()
 			#disco
 			sub_menu = gtk.Menu()
@@ -287,9 +287,9 @@ class Roster_window:
 			sub_menu.show_all()
 		elif len(self.plugin.accounts.keys()) == 1: # one account
 			#add
-			if not self.add_contact_handler_id:
-				self.add_contact_handler_id = add_contact_menuitem.connect(\
-				'activate', self.on_add_contact, self.plugin.accounts.keys()[0])
+			if not self.add_new_contact_handler_id:
+				self.add_new_contact_handler_id = add_new_contact_menuitem.connect(\
+				'activate', self.on_add_new_contact, self.plugin.accounts.keys()[0])
 			#disco
 			if not self.service_disco_handler_id:
 				self.service_disco_handler_id = service_disco_menuitem.connect(\
@@ -574,7 +574,7 @@ class Roster_window:
 		item.connect('activate', self.on_service_disco_menuitem_activate, account)
 		item = gtk.MenuItem(_('_Add contact'))
 		menu.append(item)
-		item.connect('activate', self.on_add_contact, account)
+		item.connect('activate', self.on_add_new_contact, account)
 		item = gtk.MenuItem(_('Join _groupchat'))
 		menu.append(item)
 		item.connect('activate', self.on_join_gc_activate, account)
@@ -906,8 +906,8 @@ class Roster_window:
 		else:
 			self.plugin.windows['preferences'].window.show_all()
 
-	def on_add_contact(self, widget, account):
-		Add_contact_window(self.plugin, account)
+	def on_add_new_contact(self, widget, account):
+		Add_new_contact_window(self.plugin, account)
 
 	def on_join_gc_activate(self, widget, account):
 		Join_groupchat_window(self.plugin, account)
@@ -1255,7 +1255,7 @@ class Roster_window:
 		self.tree = self.xml.get_widget('roster_treeview')
 		self.plugin = plugin
 		self.nb_unread = 0
-		self.add_contact_handler_id = False
+		self.add_new_contact_handler_id = False
 		self.service_disco_handler_id = False
 		self.join_gc_handler_id = False
 		self.new_message_menuitem_handler_id = False

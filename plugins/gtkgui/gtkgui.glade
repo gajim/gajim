@@ -48,7 +48,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image481">
+			<widget class="GtkImage" id="image488">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -68,7 +68,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image482">
+			<widget class="GtkImage" id="image489">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>
@@ -88,13 +88,13 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="add_contact_menuitem">
+		    <widget class="GtkImageMenuItem" id="add_new_contact_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">Add _Contact</property>
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image483">
+			<widget class="GtkImage" id="image490">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -132,7 +132,7 @@
 		      <signal name="activate" handler="on_about_menuitem_activate" last_modification_time="Tue, 01 Mar 2005 22:56:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image484">
+			<widget class="GtkImage" id="image491">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-about</property>
 			  <property name="icon_size">1</property>
@@ -160,7 +160,7 @@
 		      <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image485">
+			<widget class="GtkImage" id="image492">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-quit</property>
 			  <property name="icon_size">1</property>
@@ -195,7 +195,7 @@
 		      <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image486">
+			<widget class="GtkImage" id="image493">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -215,7 +215,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image487">
+			<widget class="GtkImage" id="image494">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find</property>
 			  <property name="icon_size">1</property>
@@ -243,7 +243,7 @@
 		      <accelerator key="P" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image488">
+			<widget class="GtkImage" id="image495">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-preferences</property>
 			  <property name="icon_size">1</property>
@@ -1666,7 +1666,7 @@
   </child>
 </widget>
 
-<widget class="GtkWindow" id="add_contact_window">
+<widget class="GtkWindow" id="add_new_contact_window">
   <property name="border_width">4</property>
   <property name="width_request">317</property>
   <property name="height_request">277</property>
