@@ -202,8 +202,10 @@ class vcard_information_window:
 			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
 		for e in entries:
 			self.xml.get_widget(e + '_entry').set_property('editable', True)
-		self.xml.get_widget('DESC_textview').set_editable(True)
-		self.xml.get_widget('DESC_textview').set_cursor_visible(True)
+
+		description_textview = self.xml.get_widget('DESC_textview')
+		description_textview.set_editable(True)
+		description_textview.set_cursor_visible(True)
 
 	#the user variable is the jid if vcard is true
 	def __init__(self, user, plugin, account, vcard=False):

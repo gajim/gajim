@@ -137,13 +137,12 @@ class Tabbed_chat_window(Chat):
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
+		self.print_conversation(_("%s is %s (%s)") % (user.name, \
+										user.show, user.status), user.jid, 'status')
 
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
 			self.read_queue(user.jid)
-		if user.show != 'online':
-			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
-				user.show, user.status), user.jid, 'status')
 
 		if self.plugin.config['print_time'] == 'sometimes':
 			self.print_time_timeout(user.jid)
