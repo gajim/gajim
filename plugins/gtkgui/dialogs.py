@@ -398,17 +398,17 @@ class about_Window: #FIXME: (nk) pygtk2.6 has a built-in window for that
 		xml.signal_connect('on_close_clicked', self.on_close)
 
 
-class confirm_Window:
+class confirm_window:
 	"""Class for confirmation window"""
 	def wait(self):
-		out = self.win.run()
-		self.win.destroy()
-		return out
+		response = self.window.run()
+		self.window.destroy()
+		return response
 
 	def __init__(self, label):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Confirm', APP)
-		xml.get_widget('label_confirm').set_text(label)
-		self.win = xml.get_widget('Confirm')
+		self.window = gtk.MessageDialog(None,\
+			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
+			gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, label)
 
 class subscription_request_Window:
 	"""Class for authorization window :
