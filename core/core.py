@@ -119,7 +119,7 @@ class GajimCore:
 	def messageCB(self, con, msg):
 		"""Called when we recieve a message"""
 		self.hub.sendPlugin('MSG', self.connexions[con], \
-			(msg.getFrom().getBasic(), msg.getBody()))
+			(msg.getFrom(), msg.getBody()))
 	# END messageCB
 
 	def presenceCB(self, con, prs):
@@ -147,7 +147,8 @@ class GajimCore:
 				con.send(common.jabber.Presence(who, 'subscribed'))
 				if string.find(who, "@") <= 0:
 					self.hub.sendPlugin('NOTIFY', self.connexions[con], \
-						(who, 'offline', 'offline', prs.getFrom().getResource()))
+						(prs.getFrom().getBasic(), 'offline', 'offline', \
+						prs.getFrom().getResource()))
 			else:
 				txt = prs.getStatus()
 				if not txt:

@@ -384,7 +384,16 @@ class roster_Window:
 		"""Add a user to the roster and add groups if they aren't in roster"""
 		showOffline = self.plugin.config['showoffline']
 		if not self.contacts[account].has_key(user.jid):
-			self.contacts[account][user.jid] = user
+			self.contacts[account][user.jid] = [user]
+		else:
+			resources = []
+			for u in self.contacts[account][user.jid]:
+				resources.append(u.resource)
+			if resources == ['']:
+				self.contacts[account][user.jid][0].resource = user.resource
+			else:
+				if not user.resource in resources:
+					self.contacts[account][user.jid].append(user)
 		if user.groups == []:
 			if string.find(user.jid, "@") <= 0:
 				user.groups.append('Agents')
@@ -465,8 +474,8 @@ class roster_Window:
 		self.tree.get_model().clear()
 		for acct in self.contacts.keys():
 			self.add_account_to_roster(acct)
-			for user in self.contacts[acct].values():
-				self.add_user_to_roster(user, acct)
+			for luser in self.contacts[acct].values():
+				self.add_user_to_roster(luser[0], acct)
 	
 	def mklists(self, array, account):
 		"""fill self.contacts and self.groups"""
@@ -496,7 +505,9 @@ class roster_Window:
 
 			user1 = user(ji, name, array[jid]['groups'], show, \
 				array[jid]['status'], array[jid]['sub'], resource)
-			self.contacts[account][ji] = user1
+			#when we draw the roster, we can't have twice the same user with 
+			# 2 resources
+			self.contacts[account][ji] = [user1]
 			for g in array[jid]['groups'] :
 				if not g in self.groups[account].keys():
 					self.groups[account][g] = {'expand':True}
@@ -510,7 +521,15 @@ class roster_Window:
 		else:
 			model = self.tree.get_model()
 			if (show == 'offline' or show == 'error') and not showOffline:
-				self.remove_user(user, account)
+				if len(self.contacts[account][user.jid]) > 1:
+					luser = self.contacts[account][user.jid]
+					user1 = None
+					for u in luser:
+						if u.resource == user.resource:
+							luser.remove(u)
+							break
+				else:
+					self.remove_user(user, account)
 			else:
 				for i in iters:
 					if self.pixbufs.has_key(show):
@@ -547,7 +566,7 @@ class roster_Window:
 		path = model.get_path(iter)
 		acct_iter = model.get_iter((path[0]))
 		account = model.get_value(acct_iter, 3)
-		user = self.contacts[account][jid]
+		user = self.contacts[account][jid][0]
 		
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_("Start chat"))
@@ -610,13 +629,13 @@ class roster_Window:
 		account = model.get_value(acct_iter, 3)
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_("Log on"))
-		if self.contacts[account][jid].show != 'offline':
+		if self.contacts[account][jid][0].show != 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
 		item.connect("activate", self.on_agent_logging, jid, 'available', account)
 
 		item = gtk.MenuItem(_("Log off"))
-		if self.contacts[account][jid].show == 'offline':
+		if self.contacts[account][jid][0].show == 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
 		item.connect("activate", self.on_agent_logging, jid, 'unavailable', account)
@@ -733,8 +752,9 @@ class roster_Window:
 		window = confirm_Window(_("Are you sure you want to remove %s (%s) from your roster ?") % (user.name, user.jid))
 		if window.wait() == gtk.RESPONSE_OK:
 			self.plugin.send('UNSUB', account, user.jid)
-			self.remove_user(user, account)
-			del self.contacts[account][user.jid]
+			for u in self.contacts[account][user.jid]:
+				self.remove_user(u, account)
+			del self.contacts[account][u.jid]
 
 	def change_status(self, widget, account, status):
 		if status != 'online' and status != 'offline':
@@ -789,8 +809,9 @@ class roster_Window:
 		if status == 'offline':
 			self.plugin.sleeper = None
 			for jid in self.contacts[account]:
-				user = self.contacts[account][jid]
-				self.chg_user_status(user, 'offline', 'Disconnected', account)
+				luser = self.contacts[account][jid]
+				for user in luser:
+					self.chg_user_status(user, 'offline', 'Disconnected', account)
 		elif self.plugin.connected[account] == 0:
 			self.plugin.sleeper = None#common.sleepy.Sleepy(\
 				#self.plugin.config['autoawaytime']*60, \
@@ -828,7 +849,8 @@ class roster_Window:
 		else:
 			if not self.plugin.windows[account]['chats'].has_key(jid):
 				self.plugin.windows[account]['chats'][jid] = \
-					message_Window(self.contacts[account][jid], self.plugin, account)
+					message_Window(self.contacts[account][jid][0], self.plugin, \
+						account)
 				if path:
 					self.tree.expand_row(path[0:1], FALSE)
 					self.tree.expand_row(path[0:2], FALSE)
@@ -885,7 +907,7 @@ class roster_Window:
 				self.plugin.windows[account]['chats'][jid].window.present()
 			elif self.contacts[account].has_key(jid):
 				self.plugin.windows[account]['chats'][jid] = \
-					message_Window(self.contacts[account][jid], self.plugin, account)
+					message_Window(self.contacts[account][jid][0], self.plugin, account)
 
 	def on_row_expanded(self, widget, iter, path):
 		"""When a row is expanded :
@@ -928,7 +950,7 @@ class roster_Window:
 		acct_iter = model.get_iter((path[0]))
 		account = model.get_value(acct_iter, 3)
 		jid = model.get_value(iter, 3)
-		old_text = self.contacts[account][jid].name
+		old_text = self.contacts[account][jid][0].name
 		#FIXME:If it is a double click, old_text == new_text
 		if old_text == new_text:
 			if self.plugin.windows[account]['chats'].has_key(jid):
@@ -936,12 +958,13 @@ class roster_Window:
 				chat.xml.get_widget('Chat').present()
 			elif self.contacts[account].has_key(jid):
 				self.plugin.windows[account]['chats'][jid] = \
-					message_Window(self.contacts[account][jid], self.plugin, account)
+					message_Window(self.contacts[account][jid][0], self.plugin, account)
 		else:
 			model.set_value(iter, 1, new_text)
-			self.contacts[account][jid].name = new_text
+			for u in self.contacts[account][jid]:
+				u.name = new_text
 			self.plugin.send('UPDUSER', account, (jid, new_text, \
-				self.contacts[account][jid].groups))
+				self.contacts[account][jid][0].groups))
 		
 	def on_browse(self, widget, account):
 		"""When browse agent is selected :
@@ -1198,10 +1221,23 @@ class plugin:
 					ji = jid
 				#Update user
 				if self.roster.contacts[ev[1]].has_key(ji):
-					user = self.roster.contacts[ev[1]][ji]
-					user.show = ev[2][1]
-					user.status = ev[2][2]
-					user.resource = resource
+					luser = self.roster.contacts[ev[1]][ji]
+					user1 = None
+					resources = []
+					for u in luser:
+						resources.append(u.resource)
+						if u.resource == resource:
+							user1 = u
+							break
+					if not user1:
+						user1 = self.roster.contacts[ev[1]][ji][0]
+						if resources != ['']:
+							user1 = user(user1.jid, user1.name, user1.groups, \
+								user1.show, user1.status, user1.sub, user1.resource)
+							luser.append(user1)
+						user1.resource = resource
+					user1.show = ev[2][1]
+					user1.status = ev[2][2]
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
 					if not self.roster.contacts[ev[1]].has_key(ji):
@@ -1215,7 +1251,7 @@ class plugin:
 								model.set_value(i, 0, self.roster.pixbufs[ev[2][1]])
 				elif self.roster.contacts[ev[1]].has_key(ji):
 					#It isn't an agent
-					self.roster.chg_user_status(user, ev[2][1], ev[2][2], ev[1])
+					self.roster.chg_user_status(user1, ev[2][1], ev[2][2], ev[1])
 			#('MSG', account, (user, msg))
 			elif ev[0] == 'MSG':
 				if string.find(ev[2][0], "@") <= 0:
@@ -1229,10 +1265,10 @@ class plugin:
 			#('SUBSCRIBED', account, (jid, nom, resource))
 			elif ev[0] == 'SUBSCRIBED':
 				if self.roster.contacts[ev[1]].has_key(ev[2][0]):
-					u = self.roster.contacts[ev[1]][ev[2][0]]['user']
+					u = self.roster.contacts[ev[1]][ev[2][0]][0]
 					u.name = ev[2][1]
 					u.resource = ev[2][2]
-					for i in self.roster.contacts[ev[1]][u.jid]['iter']:
+					for i in self.roster.get_user_iter(u.jid, ev[1]):
 						model.set_value(i, 1, u.name)
 				else:
 					user1 = user(ev[2][0], ev[2][0], ['general'], 'online', \
