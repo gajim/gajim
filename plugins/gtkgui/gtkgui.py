@@ -222,9 +222,6 @@ class tabbed_chat_window:
 			self.on_tabbed_chat_window_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', \
 			self.on_chat_notebook_switch_page)
-		#TODO
-#		if use_tab:
-#			plugin.windows[account]['chats']['tabbed'] = self
 		
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -245,7 +242,10 @@ class tabbed_chat_window:
 			start = "[" + str(unread) + "] "
 		elif unread == 1:
 			start = "* "
-		self.window.set_title(start + "Chat (" + self.account + ")")
+		chat = self.users[jid].name
+		if len(self.xmls) > 1:
+			chat = 'Chat'
+		self.window.set_title(start + chat + ' (' + self.account + ')')
 
 	def draw_widgets(self, user):
 		"""draw the widgets in a tab (status_image, contact_button ...)
@@ -364,6 +364,7 @@ class tabbed_chat_window:
 			del self.tagStatus[jid]
 			if len(self.xmls) == 1:
 				self.chat_notebook.set_show_tabs(False)
+			self.show_title()
 
 	def new_user(self, user):
 		self.nb_unread[user.jid] = 0
@@ -394,6 +395,7 @@ class tabbed_chat_window:
 
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
+		self.show_title()
 
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
