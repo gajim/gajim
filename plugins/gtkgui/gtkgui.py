@@ -215,6 +215,8 @@ class tabbed_chat_window:
 		self.window = self.xml.get_widget('tabbed_chat_window')
 		self.new_user(user)
 		self.show_title()
+		self.xml.signal_connect('on_tabbed_chat_window_destroy', \
+			self.on_tabbed_chat_window_destroy)
 		self.xml.signal_connect('on_tabbed_chat_window_delete_event', \
 			self.on_tabbed_chat_window_delete_event)
 		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event', \
@@ -284,12 +286,14 @@ class tabbed_chat_window:
 
 	def on_tabbed_chat_window_delete_event(self, widget, event):
 		"""close window"""
-		#clean self.plugin.windows[self.account]['chats']
 		for jid in self.users:
 			if time.time() - self.last_message_time[jid] < 2:
 				dialog = Confirmation_dialog(_('You received a message from %s in the last two secondes.\nDo you still want to close this window ?') % jid)
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
+
+	def on_tabbed_chat_window_destroy(self, widget):
+		#clean self.plugin.windows[self.account]['chats']
 		for jid in self.users:
 			del self.plugin.windows[self.account]['chats'][jid]
 		if self.plugin.windows[self.account]['chats'].has_key('tabbed'):
@@ -620,7 +624,7 @@ class tabbed_chat_window:
 			self.show_title()
 
 class Groupchat_window:
-	def on_groupchat_window_delete_event(self, widget):
+	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
 		for room_jid in self.xmls:
 			if time.time() - self.last_message_time[room_jid] < 2:
@@ -628,6 +632,8 @@ class Groupchat_window:
 					room_jid.split('@')[0])
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
+	
+	def on_groupchat_window_destroy(self, widget):
 		for room_jid in self.xmls:
 			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
 				room_jid, 'offline', 'offline'))
@@ -1255,6 +1261,8 @@ class Groupchat_window:
 		self.window = self.xml.get_widget('groupchat_window')
 		self.new_group(room_jid, nick)
 		self.show_title()
+		self.xml.signal_connect('on_groupchat_window_destroy', \
+			self.on_groupchat_window_destroy)
 		self.xml.signal_connect('on_groupchat_window_delete_event', \
 			self.on_groupchat_window_delete_event)
 		self.xml.signal_connect('on_groupchat_window_focus_in_event', \
