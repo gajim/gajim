@@ -51,8 +51,8 @@ class tabbed_chat_window(chat):
 			self.on_tabbed_chat_window_delete_event)
 		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event', \
 			self.on_tabbed_chat_window_focus_in_event)
-		self.xml.signal_connect('on_tabbed_chat_window_key_press_event', \
-			self.on_tabbed_chat_window_key_press_event)
+		self.xml.signal_connect('on_chat_notebook_key_press_event', \
+			self.on_chat_notebook_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', \
 			self.on_chat_notebook_switch_page)
 		
@@ -83,7 +83,7 @@ class tabbed_chat_window(chat):
 		"""close window"""
 		for jid in self.users:
 			if time.time() - self.last_message_time[jid] < 2: # 2 seconds
-				dialog = Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this window?') % jid)
+				dialog = Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this window ?') % jid)
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
 
@@ -94,8 +94,8 @@ class tabbed_chat_window(chat):
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
 		chat.on_chat_window_focus_in_event(self, widget, event)
 
-	def on_tabbed_chat_window_key_press_event(self, widget, event):
-		chat.on_chat_window_key_press_event(self, widget, event)
+	def on_chat_notebook_key_press_event(self, widget, event):
+		chat.on_chat_notebook_key_press_event(self, widget, event)
 
 	def on_clear_button_clicked(self, widget):
 		"""When clear button is pressed :
@@ -124,19 +124,10 @@ class tabbed_chat_window(chat):
 
 	def new_user(self, user):
 		self.names[user.jid] = user.name
+		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
+		self.childs[user.jid] = self.xmls[user.jid].get_widget('chats_vbox')
 		chat.new_tab(self, user.jid)
 		self.users[user.jid] = user
-		
-		conversation_textview = \
-			self.xmls[user.jid].get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		
-		child = self.xmls[user.jid].get_widget('tab_vbox')
-		xm = gtk.glade.XML(GTKGUI_GLADE, 'tab_hbox', APP)
-		tab_hbox = xm.get_widget('tab_hbox')
-		xm.signal_connect('on_close_button_clicked', \
-			self.on_close_button_clicked, user.jid)
-		self.notebook.set_tab_label(child, tab_hbox)
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)

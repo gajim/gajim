@@ -37,8 +37,6 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-#the child of the tab must be called tab_vbox
-
 class chat:
 	"""Class for tabbed chat window"""
 	def __init__(self, plugin, account, widget_name):
@@ -56,6 +54,7 @@ class chat:
 		self.last_message_time = {}
 		self.print_time_timeout_id = {}
 		self.names = {} # what is printed in the tab : user.name for example
+		self.childs = {}
 		self.window = self.xml.get_widget(widget_name)
 
 	def update_tags(self):
@@ -102,7 +101,7 @@ class chat:
 			start = "[" + str(self.nb_unread[jid]) + "] "
 		elif self.nb_unread[jid] == 1:
 			start = "* "
-		child = self.xmls[jid].get_widget('tab_vbox')
+		child = self.childs[jid]
 		tab_label = self.notebook.get_tab_label(child).get_children()[0]
 		tab_label.set_text(start + self.names[jid])
 
@@ -120,8 +119,7 @@ class chat:
 			self.notebook.get_current_page())
 		active_jid = ''
 		for jid in self.xmls:
-			child = self.xmls[jid].get_widget('tab_vbox')
-			if child == active_child:
+			if self.childs[jid] == active_child:
 				active_jid = jid
 				break
 		return active_jid
@@ -152,8 +150,7 @@ class chat:
 		new_child = notebook.get_nth_page(page_num)
 		new_jid = ''
 		for jid in self.xmls:
-			child = self.xmls[jid].get_widget('tab_vbox')
-			if child == new_child:
+			if self.childs[jid] == new_child:
 				new_jid = jid
 				break
 		conversation_textview = self.xmls[new_jid].\
@@ -171,9 +168,8 @@ class chat:
 				self.plugin.systray.remove_jid(new_jid, self.account)
 
 	def active_tab(self, jid):
-		child = self.xmls[jid].get_widget('tab_vbox')
 		self.notebook.set_current_page(\
-			self.notebook.page_num(child))
+			self.notebook.page_num(self.childs[jid]))
 
 	def remove_tab(self, jid, kind): #kind is 'chats' or 'gc'
 		if len(self.xmls) == 1:
@@ -182,9 +178,8 @@ class chat:
 			if self.print_time_timeout_id.has_key(jid):
 				gobject.source_remove(self.print_time_timeout_id[jid])
 				del self.print_time_timeout_id[jid]
-			child = self.xmls[jid].get_widget('tab_vbox')
 			self.notebook.remove_page(\
-				self.notebook.page_num(child))
+				self.notebook.page_num(self.childs[jid]))
 			del self.plugin.windows[self.account][kind][jid]
 			del self.nb_unread[jid]
 			del self.last_message_time[jid]
@@ -199,7 +194,6 @@ class chat:
 	def new_tab(self, jid):
 		self.nb_unread[jid] = 0
 		self.last_message_time[jid] = 0
-		self.xmls[jid] = gtk.glade.XML(GTKGUI_GLADE, 'tab_vbox', APP)
 		
 		conversation_textview = \
 			self.xmls[jid].get_widget('conversation_textview')
@@ -246,14 +240,20 @@ class chat:
 		conversation_scrolledwindow.get_vadjustment().connect('value-changed', \
 			self.on_conversation_vadjustment_value_changed)
 		
-		child = self.xmls[jid].get_widget('tab_vbox')
+		child = self.childs[jid]
 		self.notebook.append_page(child)
 		if len(self.xmls) > 1:
 			self.notebook.set_show_tabs(True)
 
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'tab_hbox', APP)
+		tab_hbox = xm.get_widget('tab_hbox')
+		xm.signal_connect('on_close_button_clicked', \
+			self.on_close_button_clicked, jid)
+		self.notebook.set_tab_label(child, tab_hbox)
+
 		self.show_title()
 
-	def on_chat_window_key_press_event(self, widget, event):
+	def on_chat_notebook_key_press_event(self, widget, event):
 		st = '1234567890' # zero is here cause humans count from 1, pc from 0 :P
 		jid = self.get_active_jid()
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
@@ -301,7 +301,6 @@ class chat:
 			# we pressed a control key or ctrl+sth : we don't block the event
 			# in order to let ctrl+c do its work
 			pass
-		#FIXME: will not work with gc
 		else: # it's a normal key press make sure message_textview has focus
 			message_textview = self.xmls[jid].get_widget('message_textview')
 			if not message_textview.is_focus():

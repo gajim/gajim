@@ -26,6 +26,8 @@ import time
 import sre #usefull later
 
 from dialogs import *
+from chat import *
+from gtkgui import ImageCellRenderer
 
 from common import i18n
 
@@ -36,7 +38,27 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-class Groupchat_window:
+class Groupchat_window(chat):
+	def __init__(self, room_jid, nick, plugin, account):
+		chat.__init__(self, plugin, account, 'groupchat_window')
+		self.nicks = {}
+		self.list_treeview = {}
+		self.subjects = {}
+		self.new_group(room_jid, nick)
+		self.show_title()
+		self.xml.signal_connect('on_groupchat_window_destroy', \
+			self.on_groupchat_window_destroy)
+		self.xml.signal_connect('on_groupchat_window_delete_event', \
+			self.on_groupchat_window_delete_event)
+		self.xml.signal_connect('on_groupchat_window_focus_in_event', \
+			self.on_groupchat_window_focus_in_event)
+		self.xml.signal_connect('on_chat_notebook_key_press_event', \
+			self.on_chat_notebook_key_press_event)
+		self.xml.signal_connect('on_chat_notebook_switch_page', \
+			self.on_chat_notebook_switch_page)
+		self.xml.signal_connect('on_set_button_clicked', \
+			self.on_set_button_clicked)
+
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
 		for room_jid in self.xmls:
@@ -50,20 +72,14 @@ class Groupchat_window:
 		for room_jid in self.xmls:
 			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
 				room_jid, 'offline', 'offline'))
-			del self.plugin.windows[self.account]['gc'][room_jid]
-		if self.plugin.windows[self.account]['gc'].has_key('tabbed'):
-			del self.plugin.windows[self.account]['gc']['tabbed']
+		chat.on_window_destroy(self, widget, 'gc')
 
-	def update_tags(self):
-		for room_jid in self.tagIn:
-			self.tagIn[room_jid].set_property('foreground', \
-				self.plugin.config['inmsgcolor'])
-			self.tagInBold[room_jid].set_property('foreground', \
-				self.plugin.config['inmsgcolor'])
-			self.tagOut[room_jid].set_property('foreground', \
-				self.plugin.config['outmsgcolor'])
-			self.tagStatus[room_jid].set_property('foreground', \
-				self.plugin.config['statusmsgcolor'])
+	def on_groupchat_window_focus_in_event(self, widget, event):
+		"""When window get focus"""
+		chat.on_chat_window_focus_in_event(self, widget, event)
+
+	def on_chat_notebook_key_press_event(self, widget, event):
+		chat.on_chat_notebook_key_press_event(self, widget, event)
 
 	def get_role_iter(self, room_jid, role):
 		model = self.list_treeview[room_jid].get_model()
@@ -179,43 +195,6 @@ class Groupchat_window:
 					img = self.plugin.roster.pixbufs[show]
 					model.set_value(iter, 0, img)
 	
-	def show_title(self):
-		"""redraw the window's title"""
-		unread = 0
-		for room_jid in self.nb_unread:
-			unread += self.nb_unread[room_jid]
-		start = ""
-		if unread > 1:
-			start = "[" + str(unread) + "] "
-		elif unread == 1:
-			start = "* "
-		chat = 'Groupchat in ' + room_jid
-		if len(self.xmls) > 1:
-			chat = 'Groupchat'
-		self.window.set_title(start + chat + ' (' + self.account + ')')
-	
-	def redraw_tab(self, room_jid):
-		"""redraw the label of the tab"""
-		start = ''
-		if self.nb_unread[room_jid] > 1:
-			start = "[" + str(self.nb_unread[room_jid]) + "] "
-		elif self.nb_unread[room_jid] == 1:
-			start = "* "
-		room = room_jid.split('@')[0]
-		child = self.xmls[room_jid].get_widget('group_vbox')
-		self.chat_notebook.set_tab_label_text(child, start + room)
-
-	def get_active_jid(self):
-		active_child = self.chat_notebook.get_nth_page(\
-			self.chat_notebook.get_current_page())
-		active_jid = ''
-		for room_jid in self.xmls:
-			child = self.xmls[room_jid].get_widget('group_vbox')
-			if child == active_child:
-				active_jid = room_jid
-				break
-		return active_jid
-
 	def set_subject(self, room_jid, subject):
 		self.subjects[room_jid] = subject
 		self.xml.get_widget('subject_entry').set_text(subject)
@@ -224,10 +203,6 @@ class Groupchat_window:
 		room_jid = self.get_active_jid()
 		subject = self.xml.get_widget('subject_entry').get_text()
 		self.plugin.send('GC_SUBJECT', self.account, (room_jid, subject))
-
-	def on_close_button_clicked(self, button):
-		room_jid = self.get_active_jid()
-		self.remove_tab(room_jid)
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
@@ -268,59 +243,6 @@ class Groupchat_window:
 					return 1
 		return 0
 
-	def on_groupchat_window_key_press_event(self, widget, event):
-		st = "1234567890" # humans count from 1, pc from 0 :P
-		room_jid = self.get_active_jid()
-		if event.keyval == gtk.keysyms.Escape: #ESCAPE
-			self.remove_tab(room_jid)
-		elif event.string and event.string in st \
-			and (event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3 ...
-			self.chat_notebook.set_current_page(st.index(event.string))
-		elif event.keyval == gtk.keysyms.Page_Down: # PAGEDOWN
-			if event.state & gtk.gdk.CONTROL_MASK:
-				current = self.chat_notebook.get_current_page()
-				if current > 0:
-					self.chat_notebook.set_current_page(current-1)
-#				else:
-#					self.chat_notebook.set_current_page(\
-#						self.chat_notebook.get_n_pages()-1)
-			elif event.state & gtk.gdk.SHIFT_MASK:
-				conversation_textview = self.xmls[room_jid].\
-					get_widget('conversation_textview')
-				rect = conversation_textview.get_visible_rect()
-				iter = conversation_textview.get_iter_at_location(rect.x,\
-					rect.y + rect.height)
-				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
-		elif event.keyval == gtk.keysyms.Page_Up: # PAGEUP
-			if event.state & gtk.gdk.CONTROL_MASK:
-				current = self.chat_notebook.get_current_page()
-				if current < (self.chat_notebook.get_n_pages()-1):
-					self.chat_notebook.set_current_page(current+1)
-#				else:
-#					self.chat_notebook.set_current_page(0)
-			elif event.state & gtk.gdk.SHIFT_MASK:
-				conversation_textview = self.xmls[room_jid].\
-					get_widget('conversation_textview')
-				rect = conversation_textview.get_visible_rect()
-				iter = conversation_textview.get_iter_at_location(rect.x, rect.y)
-				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
-		elif event.keyval == gtk.keysyms.Tab and \
-			(event.state & gtk.gdk.CONTROL_MASK): # CTRL+TAB
-			current = self.chat_notebook.get_current_page()
-			if current < (self.chat_notebook.get_n_pages()-1):
-				self.chat_notebook.set_current_page(current+1)
-			else:
-				self.chat_notebook.set_current_page(0)
-		
-		'''FIXME:
-		NOT GOOD steals focus from Subject entry and I cannot find a way to prevent this
-		
-		else: # it's a normal key press make sure message_textview has focus
-			message_textview = self.xmls[room_jid].get_widget('message_textview')
-			if not message_textview.is_focus():
-				message_textview.grab_focus()
-		'''
-
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
 		"""Print a line in the conversation :
 		if contact is set : it's a message from someone
@@ -343,10 +265,7 @@ class Groupchat_window:
 			if contact == self.nicks[room_jid]:
 				tag = 'outgoing'
 			else:
-				if self.nicks[room_jid].lower() in text.lower().split():
-					tag = 'incoming_bold'
-				else:
-					tag = 'incoming'
+				tag = 'incoming'
 				self.last_message_time[room_jid] = time.time()
 
 			if text.startswith('/me'):
@@ -358,7 +277,12 @@ class Groupchat_window:
 			tag = 'status'
 			ttext = text + '\n'
 
-		conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
+		if tag == 'incoming' and self.nicks[room_jid].lower() in\
+			text.lower().split():
+			conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag,\
+				'bold')
+		else:
+			conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
 		#TODO: emoticons, url grabber
 		conversation_buffer.insert(end_iter, otext)
 		#scroll to the end of the textview
@@ -498,70 +422,31 @@ class Groupchat_window:
 		menu.show_all()
 		menu.reposition()
 
-	def on_groupchat_window_focus_in_event(self, widget, event):
-		"""When window get focus"""
-		room_jid = self.get_active_jid()
-		if self.nb_unread[room_jid] > 0:
-			self.nb_unread[room_jid] = 0
-			self.redraw_tab(room_jid)
-			self.show_title()
-			self.plugin.systray.remove_jid(room_jid, self.account)
-
-	def on_chat_notebook_switch_page(self, notebook, page, page_num):
-		new_child = notebook.get_nth_page(page_num)
-		new_jid = ''
-		for room_jid in self.xmls:
-			child = self.xmls[room_jid].get_widget('group_vbox')
-			if child == new_child:
-				new_jid = room_jid
-				break
-		self.xml.get_widget('subject_entry').set_text(self.subjects[new_jid])
-		if self.nb_unread[new_jid] > 0:
-			self.nb_unread[new_jid] = 0
-			self.redraw_tab(new_jid)
-			self.show_title()
-			self.plugin.systray.remove_jid(new_jid, self.account)
-
-	def active_tab(self, room_jid):
-		child = self.xmls[room_jid].get_widget('group_vbox')
-		self.chat_notebook.set_current_page(self.chat_notebook.page_num(child))
-		self.xmls[room_jid].get_widget('message_textview').grab_focus()
-
 	def remove_tab(self, room_jid):
 		if time.time() - self.last_message_time[room_jid] < 2:
 			dialog = Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this tab ?') % \
 				room_jid.split('@')[0])
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
-		if len(self.xmls) == 1:
-			self.window.destroy()
-		else:
+
+		chat.remove_tab(self, jid, 'gc')
+		if len(self.xmls) > 0:
 			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
 				room_jid, 'offline', 'offline'))
-			self.chat_notebook.remove_page(self.chat_notebook.get_current_page())
-			del self.plugin.windows[self.account]['gc'][room_jid]
 			del self.nicks[room_jid]
-			del self.nb_unread[room_jid]
-			del self.last_message_time[room_jid]
-			del self.xmls[room_jid]
-			del self.tagIn[room_jid]
-			del self.tagInBold[room_jid]
-			del self.tagOut[room_jid]
-			del self.tagStatus[room_jid]
 			del self.list_treeview[room_jid]
 			del self.subjects[room_jid]
-			if len(self.xmls) == 1:
-				self.chat_notebook.set_show_tabs(False)
-			self.show_title()
 
 	def new_group(self, room_jid, nick):
-		self.nb_unread[room_jid] = 0
-		self.last_message_time[room_jid] = 0
+		self.names[room_jid] = room_jid.split('@')[0]
+		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'gc_vbox', APP)
+		self.childs[room_jid] = self.xmls[room_jid].get_widget('gc_vbox')
+		chat.new_tab(self, room_jid)
 		self.nicks[room_jid] = nick
 		self.subjects[room_jid] = ''
-		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'group_vbox', APP)
 		self.list_treeview[room_jid] = self.xmls[room_jid].\
 			get_widget('list_treeview')
+		print self.list_treeview[room_jid]
 
 		#status_image, nickname, real_jid
 		store = gtk.TreeStore(gtk.Image, str, str)
@@ -582,32 +467,6 @@ class Groupchat_window:
 		self.list_treeview[room_jid].append_column(column)
 		column.set_visible(False)
 		self.list_treeview[room_jid].set_expander_column(column)
-
-		conversation_textview = self.xmls[room_jid].\
-			get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		end_iter = conversation_buffer.get_end_iter()
-		conversation_buffer.create_mark('end', end_iter, 0)
-		self.tagIn[room_jid] = conversation_buffer.create_tag('incoming')
-		# (nk) what is this?
-		self.tagInBold[room_jid] = conversation_buffer.create_tag('incoming_bold')
-		color = self.plugin.config['inmsgcolor']
-		self.tagIn[room_jid].set_property('foreground', color)
-		self.tagInBold[room_jid].set_property('foreground', color)
-		self.tagInBold[room_jid].set_property('weight', 700)
-		self.tagOut[room_jid] = conversation_buffer.create_tag('outgoing')
-		color = self.plugin.config['outmsgcolor']
-		self.tagOut[room_jid].set_property('foreground', color)
-		self.tagStatus[room_jid] = conversation_buffer.create_tag('status')
-		color = self.plugin.config['statusmsgcolor']
-		self.tagStatus[room_jid].set_property('foreground', color)
-
-		self.xmls[room_jid].signal_autoconnect(self)
-
-		self.chat_notebook.append_page(self.xmls[room_jid].\
-			get_widget('group_vbox'))
-		if len(self.xmls) > 1:
-			self.chat_notebook.set_show_tabs(True)
 
 		self.redraw_tab(room_jid)
 		self.show_title()
@@ -664,35 +523,3 @@ class Groupchat_window:
 		change the icon of the arrow"""
 		model = widget.get_model()
 		model.set_value(iter, 0, self.plugin.roster.pixbufs['closed'])
-
-	def __init__(self, room_jid, nick, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_window', APP)
-		self.chat_notebook = self.xml.get_widget('chat_notebook')
-		self.chat_notebook.remove_page(0)
-		self.plugin = plugin
-		self.account = account
-		self.xmls = {}
-		self.tagIn = {}
-		self.tagInBold = {}
-		self.tagOut = {}
-		self.tagStatus = {}
-		self.nicks = {}
-		self.nb_unread = {}
-		self.last_message_time = {}
-		self.list_treeview = {}
-		self.subjects = {}
-		self.window = self.xml.get_widget('groupchat_window')
-		self.new_group(room_jid, nick)
-		self.show_title()
-		self.xml.signal_connect('on_groupchat_window_destroy', \
-			self.on_groupchat_window_destroy)
-		self.xml.signal_connect('on_groupchat_window_delete_event', \
-			self.on_groupchat_window_delete_event)
-		self.xml.signal_connect('on_groupchat_window_focus_in_event', \
-			self.on_groupchat_window_focus_in_event)
-		self.xml.signal_connect('on_groupchat_window_key_press_event', \
-			self.on_groupchat_window_key_press_event)
-		self.xml.signal_connect('on_chat_notebook_switch_page', \
-			self.on_chat_notebook_switch_page)
-		self.xml.signal_connect('on_set_button_clicked', \
-			self.on_set_button_clicked)
