@@ -36,10 +36,13 @@ class infoUser_Window:
 	"""Class for user's information window"""
 	def on_user_information_window_destroy(self, widget=None):
 		"""close window"""
-		del self.plugin.windows[self.account]['infos'][self.user.jid]
+		del self.plugin.windows[self.account]['infos'][self.jid]
 
 	def on_close_button_clicked(self, widget):
 		"""Save user's informations and update the roster on the Jabber server"""
+		if self.vcard:
+			widget.get_toplevel().destroy()
+			return
 		#update user.name if it's not ""
 		name_entry = self.xml.get_widget('nickname_entry')
 		new_name = name_entry.get_text()
@@ -87,41 +90,122 @@ class infoUser_Window:
 				else:
 					self.set_value(i+'_entry', vcard[i])
 
-	def __init__(self, user, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'user_information_window', APP)
-		self.window = self.xml.get_widget('user_information_window')
-		self.plugin = plugin
-		self.user = user
-		self.account = account
-
-		self.xml.get_widget('nickname_label').set_text(user.name)
-		self.xml.get_widget('jid_label').set_text(user.jid)
-		self.xml.get_widget('subscription_label').set_text(user.sub)
-		if user.ask:
-			self.xml.get_widget('ask_label').set_text(user.ask)
+	def fill_jabber_page(self):
+		self.xml.get_widget('nickname_label').set_text(self.user.name)
+		self.xml.get_widget('jid_label').set_text(self.user.jid)
+		self.xml.get_widget('subscription_label').set_text(self.user.sub)
+		if self.user.ask:
+			self.xml.get_widget('ask_label').set_text(self.user.ask)
 		else:
 			self.xml.get_widget('ask_label').set_text('None')
-		self.xml.get_widget('nickname_entry').set_text(user.name)
-		account_info = self.plugin.accounts[account]
+		self.xml.get_widget('nickname_entry').set_text(self.user.name)
+		account_info = self.plugin.accounts[self.account]
 		log = 1
 		if account_info.has_key('no_log_for'):
-			if user.jid in account_info['no_log_for'].split(' '):
+			if self.user.jid in account_info['no_log_for'].split(' '):
 				log = 0
 		self.xml.get_widget('log_checkbutton').set_active(log)
-		resources = user.resource + ' (' + str(user.priority) + ')'
-		if not user.status:
+		resources = self.user.resource + ' (' + str(self.user.priority) + ')'
+		if not self.user.status:
 			user.status = ''
-		stats = user.show + ' : ' + user.status
-		for u in self.plugin.roster.contacts[account][user.jid]:
-			if u.resource != user.resource:
+		stats = self.user.show + ' : ' + self.user.status
+		for u in self.plugin.roster.contacts[self.account][self.user.jid]:
+			if u.resource != self.user.resource:
 				resources += '\n' + u.resource + ' (' + str(u.priority) + ')'
 				if not u.status:
 					u.status = ''
 				stats += '\n' + u.show + ' : ' + u.status
 		self.xml.get_widget('resource_label').set_text(resources)
 		self.xml.get_widget('status_label').set_text(stats)
-		plugin.send('ASK_VCARD', account, self.user.jid)
-		
+		plugin.send('ASK_VCARD', self.account, self.user.jid)
+
+	def add_to_vcard(self, vcard, entry, txt):
+		"""Add an information to the vCard dictionary"""
+		entries = string.split(entry, '_')
+		loc = vcard
+		while len(entries) > 1:
+			if not loc.has_key(entries[0]):
+				loc[entries[0]] = {}
+			loc = loc[entries[0]]
+			del entries[0]
+		loc[entries[0]] = txt
+		return vcard
+
+	def make_vcard(self):
+		"""make the vCard dictionary"""
+		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
+			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
+			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
+		vcard = {}
+		for e in entries: 
+			txt = self.xml.get_widget(e+'_entry').get_text()
+			if txt != '':
+				vcard = self.add_to_vcard(vcard, e, txt)
+		buffer = self.xml.get_widget('DESC_textview').get_buffer()
+		start_iter = buffer.get_start_iter()
+		end_iter = buffer.get_end_iter()
+		txt = buffer.get_text(start_iter, end_iter, 0)
+		if txt != '':
+			vcard['DESC'] = txt
+		return vcard
+
+	def on_publish_button_clicked(self, widget):
+		if not self.plugin.connected[self.account]:
+			warning_dialog(_("You must be connected to publish your informations"))
+			return
+		vcard = self.make_vcard()
+		nick = ''
+		if vcard.has_key('NICKNAME'):
+			nick = vcard['NICKNAME']
+		if nick == '':
+			nick = self.plugin.accounts[self.account]['name']
+		self.plugin.nicks[self.account] = nick
+		self.plugin.send('VCARD', self.account, vcard)
+
+	def on_retrieve_button_clicked(self, widget):
+		if self.plugin.connected[self.account]:
+			self.plugin.send('ASK_VCARD', self.account, self.jid)
+		else:
+			warning_dialog(_('You must be connected to get your informations'))
+
+	def change_to_vcard(self):
+		self.xml.get_widget('information_notebook').remove_page(0)
+		self.xml.get_widget('nickname_label').set_text('Personal details')
+		information_hbuttonbox = self.xml.get_widget('information_hbuttonbox')
+		#publish button
+		button = gtk.Button(stock=gtk.STOCK_GOTO_TOP)
+		button.get_children()[0].get_children()[0].get_children()[1].\
+			set_text('Publish')
+		button.connect('clicked', self.on_publish_button_clicked)
+		button.show_all()
+		information_hbuttonbox.pack_start(button)
+		#retrieve button
+		button = gtk.Button(stock=gtk.STOCK_GOTO_BOTTOM)
+		button.get_children()[0].get_children()[0].get_children()[1].\
+			set_text('Retrieve')
+		button.connect('clicked', self.on_retrieve_button_clicked)
+		button.show_all()
+		information_hbuttonbox.pack_start(button)
+		#close button at the end
+		button = self.xml.get_widget('close_button')
+		information_hbuttonbox.reorder_child(button, 2)
+
+	#the user variable is the jid if vcard is true
+	def __init__(self, user, plugin, account, vcard=False):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
+		self.window = self.xml.get_widget('vcard_information_window')
+		self.plugin = plugin
+		self.user = user #don't use it is vcard is true
+		self.account = account
+		self.vcard = vcard
+
+		if vcard:
+			self.jid = user
+			self.change_to_vcard()
+		else:
+			self.jid = user.jid
+			self.fill_jabber_page()
+
 		self.xml.signal_autoconnect(self)
 
 class passphrase_Window:

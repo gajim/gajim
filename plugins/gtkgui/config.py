@@ -37,95 +37,6 @@ import gtkgui
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
 
-class vCard_Window:
-	"""Class for window that show vCard information"""
-	def delete_event(self, widget=None):
-		"""close window"""
-		del self.plugin.windows[self.account]['infos'][self.jid]
-
-	def on_close(self, widget):
-		"""When Close button is clicked"""
-		widget.get_toplevel().destroy()
-
-	def set_value(self, entry_name, value):
-		try:
-			self.xml.get_widget(entry_name).set_text(value)
-		except AttributeError, e:
-			pass
-
-	def set_values(self, vcard):
-		for i in vcard.keys():
-			if type(vcard[i]) == type({}):
-				for j in vcard[i].keys():
-					self.set_value('entry_'+i+'_'+j, vcard[i][j])
-			else:
-				if i == 'DESC':
-					self.xml.get_widget('textview_DESC').get_buffer().\
-						set_text(vcard[i], 0)
-				else:
-					self.set_value('entry_'+i, vcard[i])
-
-	def add_to_vcard(self, vcard, entry, txt):
-		"""Add an information to the vCard dictionary"""
-		entries = string.split(entry, '_')
-		loc = vcard
-		while len(entries) > 1:
-			if not loc.has_key(entries[0]):
-				loc[entries[0]] = {}
-			loc = loc[entries[0]]
-			del entries[0]
-		loc[entries[0]] = txt
-		return vcard
-
-	def make_vcard(self):
-		"""make the vCard dictionary"""
-		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
-			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
-			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE']
-		vcard = {}
-		for e in entries:
-			txt = self.xml.get_widget('entry_'+e).get_text()
-			if txt != '':
-				vcard = self.add_to_vcard(vcard, e, txt)
-		buf = self.xml.get_widget('textview_DESC').get_buffer()
-		start_iter = buf.get_start_iter()
-		end_iter = buf.get_end_iter()
-		txt = buf.get_text(start_iter, end_iter, 0)
-		if txt != '':
-			vcard['DESC']= txt
-		return vcard
-
-	def on_retrieve(self, widget):
-		if self.plugin.connected[self.account]:
-			self.plugin.send('ASK_VCARD', self.account, self.jid)
-		else:
-			warning_dialog(_("You must be connected to get your informations"))
-
-	def on_publish(self, widget):
-		if not self.plugin.connected[self.account]:
-			warning_dialog(_("You must be connected to publish your informations"))
-			return
-		vcard = self.make_vcard()
-		nick = ''
-		if vcard.has_key('NICKNAME'):
-			nick = vcard['NICKNAME']
-		if nick == '':
-			nick = self.plugin.accounts[self.account]['name']
-		self.plugin.nicks[self.account] = nick
-		self.plugin.send('VCARD', self.account, vcard)
-
-	def __init__(self, jid, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard', APP)
-		self.window = self.xml.get_widget('vcard')
-		self.jid = jid
-		self.plugin = plugin
-		self.account = account
-		
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_close_clicked', self.on_close)
-		self.xml.signal_connect('on_retrieve_clicked', self.on_retrieve)
-		self.xml.signal_connect('on_publish_clicked', self.on_publish)
-
 class preferences_window:
 	"""Class for Preferences window"""
 	def delete_event(self, widget):
@@ -1050,7 +961,8 @@ class accountpreferences_window:
 			jid = self.xml.get_widget('jid_entry').get_text()
 			if self.plugin.connected[self.account]:
 				self.plugin.windows[self.account]['infos'][jid] = \
-					vCard_Window(jid, self.plugin, self.account)
+					infoUser_Window(jid, self.plugin, self.account, True)
+#					vCard_Window(jid, self.plugin, self.account)
 				self.plugin.send('ASK_VCARD', self.account, jid)
 			else:
 				warning_dialog(_('You must be connected to get your informations'))
