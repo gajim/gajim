@@ -49,7 +49,6 @@ def usage():
 	print "  -h, --help\tdisplay this help and exit"
 
 
-
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
 class ImageCellRenderer(gtk.GenericCellRenderer):
@@ -413,39 +412,31 @@ class tabbed_chat_window:
 		self.tagStatus[user.jid] = conversation_buffer.create_tag('status')
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus[user.jid].set_property('foreground', color)
+		
 		tag = conversation_buffer.create_tag('time_sometimes')
 		tag.set_property('foreground', '#9e9e9e')
 		tag.set_property('scale', pango.SCALE_SMALL)
 		tag.set_property('justification', gtk.JUSTIFY_CENTER)
+		
+		tag = conversation_buffer.create_tag('url')
+		tag.set_property('foreground', '#0000ff')
+		tag.set_property('underline', pango.UNDERLINE_SINGLE)
+		tag.connect('event', self.hyperlink_handler, 'url')
 
-		for way in ['status', 'incoming', 'outgoing']:
-			for special in ['mail', 'italic', 'underline', 'bold', 'url']:
-				tag = conversation_buffer.create_tag(way + '_' + special)
-				if way == 'status':
-					color = self.plugin.config['statusmsgcolor']
-					tag.set_property('foreground', color)
-				elif way == 'incoming':
-					color = self.plugin.config['inmsgcolor']
-					tag.set_property('foreground', color)
-				elif way == 'outgoing':
-					color = self.plugin.config['outmsgcolor']
-					tag.set_property('foreground', color)
-				if special == 'mail':
-					tag.set_property('foreground', '#0000ff')
-					tag.set_property('underline', pango.UNDERLINE_SINGLE)
-					tag.connect('event', self.hyperlink_handler, 'mail')
-				elif special == 'url':
-					tag.set_property('foreground', '#0000ff')
-					tag.set_property('underline', pango.UNDERLINE_SINGLE)
-					tag.connect('event', self.hyperlink_handler, 'url')
-				elif special == 'italic':
-					tag.set_property('style', pango.STYLE_ITALIC)
-				elif special == 'underline':
-					tag.set_property('underline', pango.UNDERLINE_SINGLE)
-				elif special == 'bold':
-					tag.set_property('weight', pango.WEIGHT_BOLD)
-		link_tag = conversation_buffer.create_tag('hyperlink', foreground='blue')
-
+		tag = conversation_buffer.create_tag('mail')
+		tag.set_property('foreground', '#0000ff')
+		tag.set_property('underline', pango.UNDERLINE_SINGLE)
+		tag.connect('event', self.hyperlink_handler, 'mail')
+		
+		tag = conversation_buffer.create_tag('bold')
+		tag.set_property('weight', pango.WEIGHT_BOLD)
+		
+		tag = conversation_buffer.create_tag('italic')
+		tag.set_property('style', pango.STYLE_ITALIC)
+		
+		tag = conversation_buffer.create_tag('underline')
+		tag.set_property('underline', pango.UNDERLINE_SINGLE)
+		
 		self.xmls[user.jid].signal_autoconnect(self)
 		conversation_scrolledwindow = self.xmls[user.jid].\
 			get_widget('conversation_scrolledwindow')
@@ -622,79 +613,40 @@ class tabbed_chat_window:
 			#we launch the correct application
 			self.plugin.launch_browser_mailer(type, word)
 
-	def print_special_word(self, word, jid, contact = ''):
+	def print_special_text(self, text, jid, contact = ''):
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
-		if contact == 'status':
-			tag = 'status'
-		else:
-			if contact:
-				tag = 'outgoing'
-			else:
-				tag = 'incoming'
-		if word in self.plugin.emoticons.keys():
+		if text in self.plugin.emoticons.keys():
 			#it's a smiley
 			end_iter = conversation_buffer.get_end_iter()
-			conversation_buffer.insert_pixbuf(end_iter, self.plugin.emoticons[word])
+			conversation_buffer.insert_pixbuf(end_iter, self.plugin.emoticons[text])
 			return
-		elif word.startswith('mailto:'):
+		elif text.startswith('mailto:'):
 			#it's a mail
-			if len(word) > 7:
-				tag += '_mail'
-				text = word[7:]
-			else:
-				text = word
-				tag = None
-		elif self.plugin.sth_at_sth_dot_sth_re.match(word): # returns match object or None
-			#it's a mail too
-			tag += '_mail'
-			text = word
-		elif word.startswith('/') and word.endswith('/'):
-			#it's an italic text
-			tag += '_italic'
-			text = word[1:-1]
-		elif word.startswith('_') and word.endswith('_'):
-			#it's an underlined text
-			tag += '_underline'
-			text = word[1:-1]
-		elif word.startswith('*') and word.endswith('*'):
+			tag = 'mail'
+		elif self.plugin.sth_at_sth_dot_sth_re.match(text): # returns match object or None
+			#it's a mail
+			tag = 'mail'
+		elif text.startswith('*') and text.endswith('*'):
 			#it's a bold text
-			tag += '_bold'
-			text = word[1:-1]
+			tag = 'bold'
+			text = text[1:-1] # remove * *
+		elif text.startswith('/') and text.endswith('/'):
+			#it's an italic text
+			tag = 'italic'
+			text = text[1:-1] # remove / /
+		elif text.startswith('_') and text.endswith('_'):
+			#it's an underlined text
+			tag = 'underline'
+			text = text[1:-1] # remove _ _
 		else:
-			#it's an url
-			if word.startswith('ftp://'):
-				if len(word) > 6:
-					text = word[6:]
-					tag += '_url'
-				else:
-					text = word
-					tag = None
-			elif word.startswith('http://') or word.startswith('news://'):
-				if len(word) > 7:
-					text = word[7:]
-					tag += '_url'
-				else:
-					text = word
-					tag = None
-			elif word.startswith('https://'):
-				if len(word) > 8:
-					text = word[8:]
-					tag += '_url'
-				else:
-					text = word
-					tag = None
-			else:
-				tag += '_url'
-				text = word
+			#it's a url
+			tag = 'url'
 
 		end_iter = conversation_buffer.get_end_iter()
-		if tag:
-			conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
-		else:
-			conversation_buffer.insert(end_iter, text)
-
+		conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
+		
 	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :
 		if contact is set to status : it's a status message
@@ -739,19 +691,19 @@ class tabbed_chat_window:
 		index = 0
 		
 		if self.plugin.config['useemoticons']: # search for emoticons & urls
-			my_re = sre.compile(self.plugin.emot_and_url_pattern, sre.IGNORECASE)
+			my_re = sre.compile(self.plugin.emot_and_formatting_url_pattern, sre.IGNORECASE)
 			iterator = my_re.finditer(otext)
 		else: # search for just urls
-			my_re = sre.compile(self.plugin.url_pattern, sre.IGNORECASE)
+			my_re = sre.compile(self.plugin.formatting_url_pattern, sre.IGNORECASE)
 			iterator = my_re.finditer(otext)
 		for match in iterator:
 			start, end = match.span()
-			special_word = otext[start:end]
+			special_text = otext[start:end]
 			if start != 0:
-				text_before_special_word = otext[index:start]
+				text_before_special_text = otext[index:start]
 				end_iter = conversation_buffer.get_end_iter()
-				conversation_buffer.insert(end_iter, text_before_special_word)
-			self.print_special_word(special_word, jid, contact)
+				conversation_buffer.insert(end_iter, text_before_special_text)
+			self.print_special_text(special_text, jid, contact)
 			index = end # update index
 
 		#add the rest in the index and after
@@ -1180,47 +1132,47 @@ class Groupchat_window:
 		item = gtk.MenuItem(_('Privileges'))
 		menu.append(item)
 		
-		menu_sub = gtk.Menu()
-		item.set_submenu(menu_sub)
+		sub_menu = gtk.Menu()
+		item.set_submenu(sub_menu)
 		item = gtk.MenuItem(_('Kick'))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect('activate', self.kick, room_jid, nick)
 		item = gtk.MenuItem(_('Grant voice'))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect('activate', self.grant_voice, room_jid, nick)
 		item = gtk.MenuItem(_('Revoke voice'))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect('activate', self.revoke_voice, room_jid, nick)
 		item = gtk.MenuItem(_('Grant moderator'))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect('activate', self.grant_moderator, room_jid, nick)
 		item = gtk.MenuItem(_('Revoke moderator'))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect('activate', self.revoke_moderator, room_jid, nick)
 		if jid:
 			item = gtk.MenuItem()
-			menu_sub.append(item)
+			sub_menu.append(item)
 
 			item = gtk.MenuItem(_('Ban'))
-			menu_sub.append(item)
+			sub_menu.append(item)
 			item.connect('activate', self.ban, room_jid, jid)
 			item = gtk.MenuItem(_('Grant membership'))
-			menu_sub.append(item)
+			sub_menu.append(item)
 			item.connect('activate', self.grant_membership, room_jid, jid)
 			item = gtk.MenuItem(_('Revoke membership'))
-			menu_sub.append(item)
+			sub_menu.append(item)
 			item.connect('activate', self.revoke_membership, room_jid, jid)
 			item = gtk.MenuItem(_('Grant admin'))
-			menu_sub.append(item)
+			sub_menu.append(item)
 			item.connect('activate', self.grant_admin, room_jid, jid)
 			item = gtk.MenuItem(_('Revoke admin'))
-			menu_sub.append(item)
+			sub_menu.append(item)
 			item.connect('activate', self.revoke_admin, room_jid, jid)
 			item = gtk.MenuItem(_('Grant owner'))
-			menu_sub.append(item)
+			sub_menu.append(item)
 			item.connect('activate', self.grant_owner, room_jid, jid)
 			item = gtk.MenuItem(_('Revoke owner'))
-			menu_sub.append(item)
+			sub_menu.append(item)
 			item.connect('activate', self.revoke_owner, room_jid, jid)
 
 			item = gtk.MenuItem()
@@ -1325,6 +1277,7 @@ class Groupchat_window:
 		end_iter = conversation_buffer.get_end_iter()
 		conversation_buffer.create_mark('end', end_iter, 0)
 		self.tagIn[room_jid] = conversation_buffer.create_tag('incoming')
+		# (nk) what is this?
 		self.tagInBold[room_jid] = conversation_buffer.create_tag('incoming_bold')
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn[room_jid].set_property('foreground', color)
@@ -1734,37 +1687,37 @@ class roster_window:
 			browse_agents_menuitem.set_sensitive(False)
 		if len(self.plugin.accounts.keys()) > 1: # 2 or more accounts? make submenus
 			#add
-			menu_sub = gtk.Menu()
-			add_contact_menuitem.set_submenu(menu_sub)
+			sub_menu = gtk.Menu()
+			add_contact_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem('using ' + account + ' account')
-				menu_sub.append(item)
+				sub_menu.append(item)
 				item.connect("activate", self.on_add_contact, account)
-			menu_sub.show_all()
+			sub_menu.show_all()
 			#agents
-			menu_sub = gtk.Menu()
-			browse_agents_menuitem.set_submenu(menu_sub)
+			sub_menu = gtk.Menu()
+			browse_agents_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem('using ' + account + ' account')
-				menu_sub.append(item)
+				sub_menu.append(item)
 				item.connect("activate", self.on_browse_agents, account)
-			menu_sub.show_all()
+			sub_menu.show_all()
 			#join gc
-			menu_sub = gtk.Menu()
-			join_gc_menuitem.set_submenu(menu_sub)
+			sub_menu = gtk.Menu()
+			join_gc_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem('using ' + account + ' account')
-				menu_sub.append(item)
+				sub_menu.append(item)
 				item.connect("activate", self.on_join_gc, account)
-			menu_sub.show_all()
+			sub_menu.show_all()
 			#new message
-			menu_sub = gtk.Menu()
-			new_message_menuitem.set_submenu(menu_sub)
+			sub_menu = gtk.Menu()
+			new_message_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem('using ' + account + ' account')
-				menu_sub.append(item)
+				sub_menu.append(item)
 				item.connect("activate", self.on_new_message_menuitem_activate, account)
-			menu_sub.show_all()
+			sub_menu.show_all()
 		elif len(self.plugin.accounts.keys()) == 1:
 			#add
 			if not self.add_contact_handler_id:
@@ -1922,13 +1875,13 @@ class roster_window:
 		item = gtk.MenuItem(_("Subscription"))
 		menu.append(item)
 		
-		menu_sub = gtk.Menu()
-		item.set_submenu(menu_sub)
+		sub_menu = gtk.Menu()
+		item.set_submenu(sub_menu)
 		item = gtk.MenuItem(_("Resend authorization to"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.authorize, jid, account)
 		item = gtk.MenuItem(_("Rerequest authorization from"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.req_sub, jid, \
 			_('I would like to add you to my contact list, please.'), account)
 		
@@ -2013,27 +1966,27 @@ class roster_window:
 		item = gtk.MenuItem(_("Status"))
 		menu.append(item)
 		
-		menu_sub = gtk.Menu()
-		item.set_submenu(menu_sub)
+		sub_menu = gtk.Menu()
+		item.set_submenu(sub_menu)
 		item = gtk.MenuItem(_("Online"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.change_status, account, 'online')
 		item = gtk.MenuItem(_("Away"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.change_status, account, 'away')
 		item = gtk.MenuItem(_("NA"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.change_status, account, 'xa')
 		item = gtk.MenuItem(_("DND"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.change_status, account, 'dnd')
 		item = gtk.MenuItem(_("Invisible"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.change_status, account, 'invisible')
 		item = gtk.MenuItem()
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item = gtk.MenuItem(_("Offline"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.change_status, account, 'offline')
 		
 		item = gtk.MenuItem()
@@ -2862,27 +2815,27 @@ class systray:
 		
 		item = gtk.MenuItem(_("Status"))
 		menu.append(item)
-		menu_sub = gtk.Menu()
-		item.set_submenu(menu_sub)
+		sub_menu = gtk.Menu()
+		item.set_submenu(sub_menu)
 		item = gtk.MenuItem(_("Online"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.set_cb, 'online')
 		item = gtk.MenuItem(_("Away"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.set_cb, 'away')
 		item = gtk.MenuItem(_("NA"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.set_cb, 'xa')
 		item = gtk.MenuItem(_("DND"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.set_cb, 'dnd')
 		item = gtk.MenuItem(_("Invisible"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.set_cb, 'invisible')
 		item = gtk.MenuItem()
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item = gtk.MenuItem(_("Offline"))
-		menu_sub.append(item)
+		sub_menu.append(item)
 		item.connect("activate", self.set_cb, 'offline')
 		
 		item = gtk.MenuItem()
@@ -3596,8 +3549,8 @@ class plugin:
 		# + means 1 or more times
 		# | means or
 		# [^*] anything but *   (inside [] you don't have to escape metachars)
-		# url_pattern is one string literal. I've put spaces to make the regexp look better
-		self.url_pattern = r'http://\S*|' 'https://\S*|' 'news://\S*|' 'ftp://\S*|' 'mailto:\S*|' 'ed2k://\S*|' 'www\.\S*|' 'ftp\.\S*|' '\*\w+[^*]*\w+\*|' '/\w+[^/]*\w+/|' '_\w+[^_]*\w+_|' '\w+[^\s]*@\w+\.\w+'
+		# formatting_url_pattern is one string literal. I've put spaces to make the regexp look better
+		self.formatting_url_pattern = r'http://\w+\S*|' 'https://\w+\S*|' 'news://\w+\S*|' 'ftp://\w+\S*|' 'mailto:\w+\S*|' 'ed2k://\w+\S*|' 'www\.\w+\S*|' 'ftp\.\w+\S*|' '\*\w+[^*]*\w+\*|' '/\w+[^/]*\w+/|' '_\w+[^_]*\w+_|' '\w+[^\s]*@\w+\.\w+'
 		
 		# at least one letter in 3 parts (before @, after @, after .)
 		self.sth_at_sth_dot_sth_re = sre.compile(r'\w+[^\s]*@\w+\.\w+')
@@ -3608,7 +3561,7 @@ class plugin:
 			emoticons_pattern += emoticon_escaped + '|'# or is | in regexp
 		#self.emoticons_pattern = self.emoticons_pattern[0:-1] # remove the last |
 
-		self.emot_and_url_pattern = emoticons_pattern + self.url_pattern
+		self.emot_and_formatting_url_pattern = emoticons_pattern + self.formatting_url_pattern
 		
 		gtk.gdk.threads_enter()
 		self.autoconnect()

@@ -1369,7 +1369,7 @@ class Accounts_window:
 		renderer = gtk.CellRendererToggle()
 		renderer.set_property('activatable', True)
 		renderer.connect('toggled', self.on_toggled, model)
-		self.accounts_treeview.insert_column_with_attributes(-1, _('Active'), \
+		self.accounts_treeview.insert_column_with_attributes(-1, _('Sync with global status'), \
 			renderer, active=2)
 		self.xml.signal_autoconnect(self)
 		self.init_accounts()
