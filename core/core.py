@@ -99,13 +99,10 @@ class GajimCore:
 	def init_cfg_file(self):
 		"""Initialize configuration file"""
 		if self.mode == 'server':
-			#TODO: only one should be needed
-			default_file = "[Profile]\naccounts = \nlog = 0\n\n[Core]\ndelauth = 1\nalwaysauth = 0\nmodules = logger gtkgui\ndelroster = 1\n"
 			default_tab = {'Profile': {'accounts': '', 'log': 0}, 'Core': \
 				{'delauth': 1, 'alwaysauth': 0, 'modules': 'logger gtkgui', \
 				'delroster': 1}}
 		else:
-			default_file = "[Profile]\nlog = 0\n\n[Core_client]\nhost = \nport = 8255\nmodules = gtkgui\n"
 			default_tab = {'Profile': {'log': 0}, 'Core_client': {'host': \
 			'localhost', 'port': 8255, 'modules': 'gtkgui'}}
 		fname = os.path.expanduser(CONFPATH)
@@ -128,7 +125,6 @@ class GajimCore:
 		except:
 			print _("creating %s") % fname
 			fic = open(fname, "w")
-			fic.write(default_file)
 			fic.close()
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
 		self.parse()
@@ -140,6 +136,7 @@ class GajimCore:
 				if not self.cfgParser.tab[part].has_key(option):
 					self.cfgParser.tab[part][option] = default_tab[part][option]
 				self.cfgParser.writeCfgFile()
+		self.parse()
 	# END init_cfg_file
 
 	def parse(self):
