@@ -290,7 +290,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkMenuItem" id="invisible">
+		<widget class="GtkImageMenuItem" id="invisible">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Invisible</property>
 		  <property name="use_underline">True</property>
