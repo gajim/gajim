@@ -1,8 +1,8 @@
-si un server deconne, se connecter a un autre
-popup qd qqn se connecte
-option autopopup differencie pr chaque user
+* connect to another server when one is unavailable
+* autopopup for each contact ? ( really usefull ?)
 * Gui :
-	calcule de idle time
+	save last ststus time
 
 TO SEE LATER
-ignore list
+
+* ignore list
