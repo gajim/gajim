@@ -17,6 +17,39 @@
 ## GNU General Public License for more details.
 ##
 
+def usage():
+	#TODO: use i18n
+	print "usage :", sys.argv[0], ' [OPTION]'
+	print "  -p\tport on whitch the sock plugin listen"
+	print "  -h, --help\tdisplay this help and exit"
+
+if __name__ == "__main__":
+	import getopt, sys, pickle, socket
+	try:
+		opts, args = getopt.getopt(sys.argv[1:], "p:h", ["help"])
+	except getopt.GetoptError:
+		# print help information and exit:
+		usage()
+		sys.exit(2)
+	port = 8255
+	for o, a in opts:
+		if o == '-p':
+			port = a
+		if o in ("-h", "--help"):
+			usage()
+			sys.exit()
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	try:
+		sock.connect(('', 8255))
+	except:
+		#TODO: use i18n
+		print "unable to connect to localhost on port "+str(port)
+	else:
+		evp = pickle.dumps(('EXEC_PLUGIN', '', 'logger'))
+		sock.send('<'+evp+'>')
+		sock.close()
+	sys.exit()
+
 import os
 import string
 import time
@@ -104,8 +137,4 @@ class plugin:
 			print _("creating ~/.gajim/logs/")
 		self.read_queue()
 		
-
-if __name__ == "__main__":
-	plugin(None, None)
-
 print _("plugin logger loaded")

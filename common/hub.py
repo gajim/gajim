@@ -40,6 +40,8 @@ class GajimHub:
 
 	def newPlugin(self, name):
 		"""Creates a new Plugin """
+		if name in self.queues.keys():
+			return 0
 		qu = self.newQueue(name, 100)
 		pl = common.plugin.GajimPlugin(name, qu, self.queueIn)
 		return pl

@@ -20,6 +20,9 @@
 import threading
 import socket
 import time
+import sys
+from common import i18n
+_ = i18n._
 
 class GajimThread(threading.Thread): 
 	def __init__(self, name = None, queueIn = None, queueOut = None): 
@@ -33,8 +36,12 @@ class GajimThread(threading.Thread):
 	def run(self):
 		mod = compile("import plugins.%s" % self.getName(), \
 			self.getName(), "exec")
-		res = eval(mod)
-		mod = compile("plugins.%s.%s.plugin(self.queueIn, self.queueOut)" % (self.getName(),self.getName()), self.getName(), "exec")
-		res = eval(mod)
+		try:
+			res = eval(mod)
+			mod = compile("plugins.%s.%s.plugin(self.queueIn, self.queueOut)" % (self.getName(),self.getName()), self.getName(), "exec")
+			res = eval(mod)
+		except:
+			print _("plugin %s cannot be launched : ") % self.getName() + \
+				sys.exc_info()[1][1]
 	# END run
 # END GajimThread

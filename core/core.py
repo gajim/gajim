@@ -80,7 +80,13 @@ class GajimCore:
 			mods = string.split (moduleStr, ' ')
 
 			for mod in mods:
-				modObj = self.hub.newPlugin(mod)
+				try:
+					modObj = self.hub.newPlugin(mod)
+				except:
+					print _("The plugin %s cannot be launched")
+				if not modObj:
+					print _("The plugin %s is already launched" % mod)
+					return
 				modObj.load()
 	# END loadPLugins
 
@@ -576,6 +582,8 @@ class GajimCore:
 			elif ev[0] == 'REG_MESSAGE':
 				for msg in ev[2]:
 					self.hub.register(ev[1], msg)
+			elif ev[0] == 'EXEC_PLUGIN':
+				self.loadPlugins(ev[2])
 			else:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':
