@@ -1083,7 +1083,7 @@ class log_Window:
 		self.xml.get_widget('earliest_button').set_sensitive(False)
 		self.xml.get_widget('previous_button').set_sensitive(False)
 		self.xml.get_widget('forward_button').set_sensitive(True)
-		self.xml.get_widget('lastest_button').set_sensitive(True)
+		self.xml.get_widget('latest_button').set_sensitive(True)
 		end = 50
 		if end > self.nb_line:
 			end = nb_line
@@ -1097,7 +1097,7 @@ class log_Window:
 		self.xml.get_widget('earliest_button').set_sensitive(True)
 		self.xml.get_widget('previous_button').set_sensitive(True)
 		self.xml.get_widget('forward_button').set_sensitive(True)
-		self.xml.get_widget('lastest_button').set_sensitive(True)
+		self.xml.get_widget('latest_button').set_sensitive(True)
 		begin = self.num_begin - 50
 		if begin < 0:
 			begin = 0
@@ -1114,7 +1114,7 @@ class log_Window:
 		self.xml.get_widget('earliest_button').set_sensitive(True)
 		self.xml.get_widget('previous_button').set_sensitive(True)
 		self.xml.get_widget('forward_button').set_sensitive(True)
-		self.xml.get_widget('lastest_button').set_sensitive(True)
+		self.xml.get_widget('latest_button').set_sensitive(True)
 		begin = self.num_begin + 50
 		if begin > self.nb_line:
 			begin = self.nb_line
@@ -1131,7 +1131,7 @@ class log_Window:
 		self.xml.get_widget('earliest_button').set_sensitive(True)
 		self.xml.get_widget('previous_button').set_sensitive(True)
 		self.xml.get_widget('forward_button').set_sensitive(False)
-		self.xml.get_widget('lastest_button').set_sensitive(False)
+		self.xml.get_widget('latest_button').set_sensitive(False)
 		begin = self.nb_line - 50
 		if begin < 0:
 			begin = 0
@@ -1148,7 +1148,7 @@ class log_Window:
 			self.xml.get_widget('previous_button').set_sensitive(False)
 		if infos[0] == self.nb_line:
 			self.xml.get_widget('forward_button').set_sensitive(False)
-			self.xml.get_widget('lastest_button').set_sensitive(False)
+			self.xml.get_widget('latest_button').set_sensitive(False)
 		buffer = self.xml.get_widget('textview').get_buffer()
 		start_iter = buffer.get_start_iter()
 		end_iter = buffer.get_end_iter()

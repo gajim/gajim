@@ -6530,12 +6530,12 @@ when NOT onlie</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="lastest_button">
+	    <widget class="GtkButton" id="latest_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <signal name="clicked" handler="on_lastest_clicked" last_modification_time="Sun, 04 Apr 2004 17:24:42 GMT"/>
+	      <signal name="clicked" handler="on_latest_clicked" last_modification_time="Sun, 04 Apr 2004 17:24:42 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment24">
@@ -6571,7 +6571,7 @@ when NOT onlie</property>
 		      <child>
 			<widget class="GtkLabel" id="label133">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">lastest</property>
+			  <property name="label" translatable="yes">latest</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
