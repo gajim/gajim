@@ -155,6 +155,7 @@ class infoUser_Window:
 		xml.get_widget('label_name').set_text(user.name)
 		xml.get_widget('label_id').set_text(user.jid)
 		xml.get_widget('label_resource').set_text(user.resource)
+		xml.get_widget('label_sub').set_text(user.sub)
 		self.entry_name = xml.get_widget('entry_name')
 		self.entry_name.set_text(user.name)
 		if not user.status:
