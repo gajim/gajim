@@ -455,6 +455,8 @@ class add_contact_window:
 class About_dialog:
 	"""Class for about dialog"""
 	def __init__(self, plugin):
+		if gtk.check_version(2, 6, 0):
+			return
 		self.plugin = plugin
 		#xml.get_widget('logo_image').set_from_file('plugins/gtkgui/pixmaps/logo.png')
 		dlg = gtk.AboutDialog()
