@@ -177,7 +177,8 @@ class GajimCore:
 		password = self.cfgParser.tab[account]["password"]
 		ressource = self.cfgParser.tab[account]["ressource"]
 		con = common.jabber.Client(host = hostname, \
-			debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
+			debug = [], log = sys.stderr, \
+#			debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
 			connection=common.xmlstream.TCP, port=5222)
 			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
 			#connection=common.xmlstream.TCP_SSL, port=5223)

@@ -39,7 +39,7 @@
 		  <property name="use_underline">True</property>
 
 		  <child internal-child="image">
-		    <widget class="GtkImage" id="image115">
+		    <widget class="GtkImage" id="image138">
 		      <property name="visible">True</property>
 		      <property name="stock">gtk-convert</property>
 		      <property name="icon_size">1</property>
@@ -61,7 +61,7 @@
 			  <signal name="activate" handler="on_preferences_activate" last_modification_time="Wed, 22 Oct 2003 21:18:29 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image116">
+			    <widget class="GtkImage" id="image139">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-preferences</property>
 			      <property name="icon_size">1</property>
@@ -82,7 +82,7 @@
 			  <signal name="activate" handler="on_accounts_activate" last_modification_time="Wed, 22 Oct 2003 21:18:21 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image117">
+			    <widget class="GtkImage" id="image140">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-select-color</property>
 			      <property name="icon_size">1</property>
@@ -103,7 +103,7 @@
 			  <signal name="activate" handler="on_browse_agents_activate" last_modification_time="Wed, 12 Nov 2003 10:50:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image118">
+			    <widget class="GtkImage" id="image141">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-find</property>
 			      <property name="icon_size">1</property>
@@ -127,10 +127,9 @@
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Add</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="on_add_activate" last_modification_time="Sun, 26 Oct 2003 17:26:34 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image119">
+			    <widget class="GtkImage" id="image142">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-add</property>
 			      <property name="icon_size">1</property>
@@ -167,7 +166,7 @@
 			  <signal name="activate" handler="on_about_activate" last_modification_time="Fri, 03 Oct 2003 12:49:50 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image120">
+			    <widget class="GtkImage" id="image143">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-help</property>
 			      <property name="icon_size">1</property>
@@ -189,7 +188,7 @@
 			  <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image121">
+			    <widget class="GtkImage" id="image144">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-quit</property>
 			      <property name="icon_size">1</property>
@@ -804,6 +803,7 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Wed, 17 Mar 2004 19:51:57 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox6">
@@ -1511,7 +1511,7 @@ on the server.</property>
 	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <signal name="clicked" handler="gtk_widget_destroy" last_modification_time="Thu, 11 Dec 2003 17:13:05 GMT"/>
+	      <signal name="clicked" handler="on_close_clicked" last_modification_time="Wed, 17 Mar 2004 20:33:31 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -1774,7 +1774,7 @@ on the server.</property>
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <signal name="clicked" handler="gtk_widget_destroy" last_modification_time="Sun, 26 Oct 2003 20:52:16 GMT"/>
+	      <signal name="clicked" handler="on_cancel_clicked" last_modification_time="Wed, 17 Mar 2004 19:44:15 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -1818,7 +1818,7 @@ on the server.</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">-6</property>
-	      <signal name="clicked" handler="gtk_widget_destroy" last_modification_time="Sat, 01 Nov 2003 21:36:49 GMT"/>
+	      <signal name="clicked" handler="on_cancel_clicked" last_modification_time="Wed, 17 Mar 2004 21:04:05 GMT"/>
 	    </widget>
 	  </child>
 
@@ -2303,7 +2303,7 @@ on the server.</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <signal name="clicked" handler="gtk_widget_destroy" last_modification_time="Wed, 12 Nov 2003 12:22:42 GMT"/>
+	      <signal name="clicked" handler="on_close_clicked" last_modification_time="Thu, 18 Mar 2004 14:42:04 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment15">
@@ -2518,7 +2518,7 @@ on the server.</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <signal name="clicked" handler="on_button_cancel_clicked" last_modification_time="Fri, 14 Nov 2003 11:04:06 GMT"/>
+	      <signal name="clicked" handler="on_cancel_clicked" last_modification_time="Thu, 18 Mar 2004 14:49:06 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment18">
@@ -2618,7 +2618,7 @@ on the server.</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">-7</property>
-	      <signal name="clicked" handler="gtk_widget_destroy" last_modification_time="Sat, 13 Dec 2003 20:39:21 GMT"/>
+	      <signal name="clicked" handler="on_close_clicked" last_modification_time="Wed, 17 Mar 2004 19:51:00 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -2684,7 +2684,7 @@ on the server.</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="preferences_window">
+<widget class="GtkWindow" id="Preferences">
   <property name="visible">True</property>
   <property name="title" translatable="yes">Préférences</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -2692,7 +2692,7 @@ on the server.</property>
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
-  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Sun, 28 Dec 2003 21:30:10 GMT"/>
+  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Wed, 17 Mar 2004 01:55:57 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox13">
@@ -3576,7 +3576,7 @@ when NOT onlie</property>
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <signal name="clicked" handler="gtk_widget_destroy" last_modification_time="Mon, 29 Dec 2003 13:48:26 GMT"/>
+	      <signal name="clicked" handler="on_cancel_clicked" last_modification_time="Wed, 17 Mar 2004 03:07:18 GMT"/>
 	    </widget>
 	  </child>
 
@@ -3781,6 +3781,7 @@ when NOT onlie</property>
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Wed, 17 Mar 2004 18:52:36 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox17">

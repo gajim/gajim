@@ -24,8 +24,6 @@ from gtk import TRUE, FALSE
 import gtk.glade,gobject
 import os,string,time,Queue
 import common.optparser,common.sleepy
-browserWindow = 0
-accountsWindow = 0
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
@@ -52,28 +50,31 @@ class user:
 
 class vCard_Window:
 	"""Class for window that show vCard information"""
-	def delete_event(self, widget):
+	def delete_event(self, widget=None):
 		"""close window"""
-		del self.r.tab_vcard[self.jid]
-		self.xml.get_widget("vcard").destroy()
+		del self.plugin.windows[self.account]['infos'][self.jid]
+
+	def on_close(self, widget):
+		"""When Close button is clicked"""
+		widget.get_toplevel().destroy()
+
+	def set_value(self, entry_name, value):
+		try:
+			self.xml.get_widget(entry_name).set_text(value)
+		except AttributeError, e:
+			pass
 
 	def set_values(self, vcard):
 		for i in vcard.keys():
 			if type(vcard[i]) == type({}):
 				for j in vcard[i].keys():
-					try:
-						self.xml.get_widget('entry_'+i+'_'+j).set_text(vcard[i][j])
-					except AttributeError, e:
-						pass
+					self.set_value('entry_'+i+'_'+j, vcard[i][j])
 			else:
 				if i == 'DESC':
 					self.xml.get_widget('textview_DESC').get_buffer().\
 						set_text(vcard[i], 0)
 				else:
-					try:
-						self.xml.get_widget('entry_'+i).set_text(vcard[i])
-					except AttributeError, e:
-						pass
+					self.set_value('entry_'+i, vcard[i])
 
 	def add_to_vcard(self, vcard, entry, txt):
 		"""Add an information to the vCard dictionary"""
@@ -107,36 +108,34 @@ class vCard_Window:
 
 
 	def on_retrieve(self, widget):
-		acct = self.plugin.accts.which_account(self.user)
-		if self.plugin.connected[acct]:
-			self.plugin.send('ASK_VCARD', acct, self.jid)
+		if self.plugin.connected[self.account]:
+			self.plugin.send('ASK_VCARD', self.account, self.jid)
 		else:
 			warning_Window("You must be connected to get your informations")
 
 	def on_publish(self, widget):
-		acct = self.plugin.accts.which_account(self.user)
-		if not self.plugin.connected[acct]:
+		if not self.plugin.connected[self.account]:
 			warning_Window("You must be connected to publish your informations")
 			return
 		vcard = self.make_vcard()
-		self.plugin.send('VCARD', acct, vcard)
+		self.plugin.send('VCARD', self.account, vcard)
 
-	def __init__(self, plugin, user):
+	def __init__(self, jid, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard')
-		self.user = user
+		self.jid = jid
 		self.plugin = plugin
+		self.account = account
 		
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_close_clicked', self.delete_event)
+		self.xml.signal_connect('on_close_clicked', self.on_close)
 		self.xml.signal_connect('on_retrieve_clicked', self.on_retrieve)
 		self.xml.signal_connect('on_publish_clicked', self.on_publish)
 
 class infoUser_Window:
 	"""Class for user's information window"""
-	def delete_event(self, widget):
+	def delete_event(self, widget=None):
 		"""close window"""
-		del self.r.tab_vcard[self.user.jid]
-		self.window.destroy()
+		del self.plugin.windows[self.account]['infos'][self.user.jid]
 
 	def add_grp_to_user(self, model, path, iter):
 		"""Insert user to the group in inter"""
@@ -147,19 +146,11 @@ class infoUser_Window:
 		#update: to know if things have changed to send things 
 		# to server only if changes are done
 		update = 0
-		#update user.name if it's not ""
-		newName = self.entry_name.get_text()
-		if newName != self.user.name:
-			update = 1
-			if newName != '':
-				self.user.name = newName
 		#update user.groups and redraw the user in the roster
 		old_groups = self.user.groups
-		self.r.remove_user(self.user)
 		self.user.groups = []
 		model = self.list2.get_model()
 		model.foreach(self.add_grp_to_user)
-		self.r.add_user(self.user)
 		for g in old_groups:
 			if not g in self.user.groups:
 				update = 1
@@ -170,9 +161,22 @@ class infoUser_Window:
 					update = 1
 					break
 		if update:
-			self.r.queueOUT.put(('UPDUSER', (self.user.jid, self.user.name, \
-				self.user.groups)))
-		self.delete_event(self)
+			new_groups = self.user.groups
+			self.user.groups = old_groups
+			self.plugin.roster.remove_user(self.user, self.account)
+			self.user.groups = new_groups
+			self.plugin.roster.add_user_to_roster(self.user, self.account)
+		#update user.name if it's not ""
+		entry_name = self.xml.get_widget('entry_name')
+		newName = entry_name.get_text()
+		if newName != self.user.name:
+			update = 1
+			if newName != '':
+				self.user.name = newName
+		if update:
+			self.plugin.send('UPDUSER', self.account, (self.user.jid, \
+				self.user.name, self.user.groups))
+		widget.get_toplevel().destroy()
 
 	def add_grp(self, model, path, iter, stors):
 		"""Transfert the iter from stors[0] to stors[1]"""
@@ -195,39 +199,39 @@ class infoUser_Window:
 	def on_new_key_pressed(self, widget, event):
 		"""If enter is pressed in new group entry, add the group"""
 		if event.keyval == gtk.keysyms.Return:
+			entry_new = self.xml.get_widget("entry_new")
 			model = self.list1.get_model()
-			txt = self.entry_new.get_text()
+			txt = entry_new.get_text()
 			iter = model.append()
 			model.set(iter, 0, txt)
-			self.entry_new.set_text('')
+			entry_new.set_text('')
 			return 1
 		else:
 			return 0
 
+	def set_value(self, entry_name, value):
+		try:
+			self.xml.get_widget(entry_name).set_text(value)
+		except AttributeError, e:
+			pass
+
 	def set_values(self, vcard):
-		self.vc = vcard
 		for i in vcard.keys():
 			if type(vcard[i]) == type({}):
 				for j in vcard[i].keys():
-					try:
-						self.xml.get_widget('entry_'+i+'_'+j).set_text(vcard[i][j])
-					except AttributeError, e:
-						pass
+					self.set_value('entry_'+i+'_'+j, vcard[i][j])
 			else:
 				if i == 'DESC':
 					self.xml.get_widget('textview_DESC').get_buffer().\
 						set_text(vcard[i], 0)
 				else:
-					try:
-						self.xml.get_widget('entry_'+i).set_text(vcard[i])
-					except AttributeError, e:
-						pass
+					self.set_value('entry_'+i, vcard[i])
 
 	def init_lists(self):
 		"""Initialize both available and current listStores"""
 		#list available
 		store = gtk.ListStore(gobject.TYPE_STRING)
-		for g in self.r.l_group.keys():
+		for g in self.plugin.roster.groups[self.account].keys():
 			if g != 'Agents' and g not in self.user.groups:
 				iter = store.append()
 				store.set(iter, 0, g)
@@ -244,27 +248,25 @@ class infoUser_Window:
 		column = gtk.TreeViewColumn('Available', gtk.CellRendererText(), text=0)
 		self.list2.append_column(column)
 
-	def __init__(self, user, roster):
+	def __init__(self, user, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Info_user')
-		self.window = self.xml.get_widget("Info_user")
-		self.r = roster
+		self.plugin = plugin
 		self.user = user
+		self.account = account
 		self.list1 = self.xml.get_widget("treeview_available")
 		self.list2 = self.xml.get_widget("treeview_current")
-		self.entry_new = self.xml.get_widget("entry_new")
 
 		self.xml.get_widget('label_name').set_text(user.name)
 		self.xml.get_widget('label_id').set_text(user.jid)
 		self.xml.get_widget('label_resource').set_text(user.resource)
 		self.xml.get_widget('label_sub').set_text(user.sub)
-		self.entry_name = self.xml.get_widget('entry_name')
-		self.entry_name.set_text(user.name)
+		self.xml.get_widget('entry_name').set_text(user.name)
 		if not user.status:
 			user.status = ''
 		self.xml.get_widget('label_status').set_text(user.show + ' : ' + \
 			user.status)
 		self.init_lists()
-		self.r.queueOUT.put(('ASK_VCARD', self.user.jid))
+		plugin.send('ASK_VCARD', account, self.user.jid)
 		
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_close_clicked', self.on_close)
@@ -278,7 +280,11 @@ class preference_Window:
 	"""Class for Preferences window"""
 	def delete_event(self, widget):
 		"""close window"""
-		self.window.destroy()
+		del self.plugin.windows['preferences']
+
+	def on_cancel(self, widget):
+		"""When Cancel button is clicked"""
+		widget.get_toplevel().destroy()
 
 	def on_color_button_clicked(self, widget):
 		"""Open a ColorSelectionDialog and change button's color"""
@@ -311,64 +317,65 @@ class preference_Window:
 	def write_cfg(self):
 		"""Save preferences in config File and apply them"""
 		#Color for incomming messages
-		colSt = '#'+(hex(self.colorIn.red)+'0')[2:4]\
+		colSt_in = '#'+(hex(self.colorIn.red)+'0')[2:4]\
 			+(hex(self.colorIn.green)+'0')[2:4]\
 			+(hex(self.colorIn.blue)+'0')[2:4]
-		self.r.plugin.config['inmsgcolor'] = colSt
-		for j in self.r.tab_messages.keys():
-			self.r.tab_messages[j].tagIn.set_property("foreground", colSt)
+		self.plugin.config['inmsgcolor'] = colSt_in
 		#Color for outgoing messages
-		colSt = '#'+(hex(self.colorOut.red)+'0')[2:4]\
+		colSt_out = '#'+(hex(self.colorOut.red)+'0')[2:4]\
 			+(hex(self.colorOut.green)+'0')[2:4]\
 			+(hex(self.colorOut.blue)+'0')[2:4]
-		self.r.plugin.config['outmsgcolor'] = colSt
-		for j in self.r.tab_messages.keys():
-			self.r.tab_messages[j].tagOut.set_property("foreground", colSt)
+		self.plugin.config['outmsgcolor'] = colSt_out
 		#Color for status messages
-		colSt = '#'+(hex(self.colorStatus.red)+'0')[2:4]\
+		colSt_status = '#'+(hex(self.colorStatus.red)+'0')[2:4]\
 			+(hex(self.colorStatus.green)+'0')[2:4]\
 			+(hex(self.colorStatus.blue)+'0')[2:4]
-		self.r.plugin.config['statusmsgcolor'] = colSt
-		for j in self.r.tab_messages.keys():
-			self.r.tab_messages[j].tagStatus.set_property("foreground", colSt)
+		self.plugin.config['statusmsgcolor'] = colSt_status
+		#update opened chat windows
+		for a in self.plugin.accounts.keys():
+			for w in self.plugin.windows[a]['chats'].keys():
+				self.plugin.windows[a]['chats'][w].tagIn.\
+					set_property("foreground", colSt_in)
+				self.plugin.windows[a]['chats'][w].tagIn.\
+					set_property("foreground", colSt_out)
+				self.plugin.windows[a]['chats'][w].tagIn.\
+					set_property("foreground", colSt_status)
 		#IconStyle
 		ist = self.combo_iconstyle.entry.get_text()
-		self.r.plugin.config['iconstyle'] = ist
-		self.r.iconstyle = ist
-		self.r.mkpixbufs()
+		self.plugin.config['iconstyle'] = ist
+		self.plugin.roster.mkpixbufs()
 		#autopopup
 		pp = self.chk_autopp.get_active()
 		if pp == True:
-			self.r.plugin.config['autopopup'] = 1
+			self.plugin.config['autopopup'] = 1
 		else:
-			self.r.plugin.config['autopopup'] = 0
+			self.plugin.config['autopopup'] = 0
 		#autoaway
 		aw = self.chk_autoaway.get_active()
 		if aw == True:
-			self.r.plugin.config['autoaway'] = 1
+			self.plugin.config['autoaway'] = 1
 		else:
-			self.r.plugin.config['autoaway'] = 0
+			self.plugin.config['autoaway'] = 0
 		aat = self.spin_autoawaytime.get_value_as_int()
-		self.r.plugin.config['autoawaytime'] = aat
+		self.plugin.config['autoawaytime'] = aat
 		#autoxa
 		xa = self.chk_autoxa.get_active()
 		if xa == True:
-			self.r.plugin.config['autoxa'] = 1
+			self.plugin.config['autoxa'] = 1
 		else:
-			self.r.plugin.config['autoxa'] = 0
+			self.plugin.config['autoxa'] = 0
 		axt = self.spin_autoxatime.get_value_as_int()
-		self.r.plugin.config['autoxatime'] = axt
-		if self.r.plugin.sleeper:
-			self.r.plugin.sleeper = common.sleepy.Sleepy(\
-				self.r.plugin.autoawaytime*60, self.r.plugin.autoxatime*60)
-		self.r.queueOUT.put(('CONFIG', ('GtkGui', self.r.plugin.config)))
-
-		self.r.redraw_roster()
+		self.plugin.config['autoxatime'] = axt
+		if self.plugin.sleeper:
+			self.plugin.sleeper = common.sleepy.Sleepy(\
+				self.plugin['autoawaytime']*60, self.plugin['autoxatime']*60)
+		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
+		self.plugin.roster.draw_roster()
 		
 	def on_ok(self, widget):
 		"""When Ok button is clicked"""
 		self.write_cfg()
-		self.window.destroy()
+		self.xml.get_widget('Preferences').destroy()
 
 	def change_notebook_page(self, number):
 		self.notebook.set_current_page(number)
@@ -382,31 +389,30 @@ class preference_Window:
 	def on_presence_button_clicked(self, widget, data=None):
 		self.change_notebook_page(2)
 
-	def __init__(self, roster):
+	def __init__(self, plugin):
 		"""Initialize Preference window"""
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window')
-		self.window = xml.get_widget('preferences_window')
-		self.r = roster
-		self.da_in = xml.get_widget('drawing_in')
-		self.da_out = xml.get_widget('drawing_out')
-		self.da_status = xml.get_widget('drawing_status')
-		self.combo_iconstyle = xml.get_widget('combo_iconstyle')
-		self.chk_autopp = xml.get_widget('chk_autopopup')
-		self.chk_autoaway = xml.get_widget('chk_autoaway')
-		self.spin_autoawaytime = xml.get_widget('spin_autoawaytime')
-		self.chk_autoxa = xml.get_widget('chk_autoxa')
-		self.spin_autoxatime = xml.get_widget('spin_autoxatime')
-		self.notebook = xml.get_widget('preferences_notebook')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Preferences')
+		self.plugin = plugin
+		self.da_in = self.xml.get_widget('drawing_in')
+		self.da_out = self.xml.get_widget('drawing_out')
+		self.da_status = self.xml.get_widget('drawing_status')
+		self.combo_iconstyle = self.xml.get_widget('combo_iconstyle')
+		self.chk_autopp = self.xml.get_widget('chk_autopopup')
+		self.chk_autoaway = self.xml.get_widget('chk_autoaway')
+		self.spin_autoawaytime = self.xml.get_widget('spin_autoawaytime')
+		self.chk_autoxa = self.xml.get_widget('chk_autoxa')
+		self.spin_autoxatime = self.xml.get_widget('spin_autoxatime')
+		self.notebook = self.xml.get_widget('preferences_notebook')
 		
-		button = xml.get_widget('lookfeel_button')
+		button = self.xml.get_widget('lookfeel_button')
 		button.connect('clicked', self.on_lookfeel_button_clicked)
-		button = xml.get_widget('events_button')
+		button = self.xml.get_widget('events_button')
 		button.connect('clicked', self.on_events_button_clicked)
-		button = xml.get_widget('presence_button')
+		button = self.xml.get_widget('presence_button')
 		button.connect('clicked', self.on_presence_button_clicked)
 
 		#Color for incomming messages
-		colSt = self.r.plugin.config['inmsgcolor']
+		colSt = self.plugin.config['inmsgcolor']
 		if not colSt:
 			colSt = '#ff0000'
 		cmapIn = self.da_in.get_colormap()
@@ -414,7 +420,7 @@ class preference_Window:
 		self.da_in.window.set_background(self.colorIn)
 		
 		#Color for outgoing messages
-		colSt = self.r.plugin.config['outmsgcolor']
+		colSt = self.plugin.config['outmsgcolor']
 		if not colSt:
 			colSt = '#0000ff'
 		cmapOut = self.da_out.get_colormap()
@@ -422,7 +428,7 @@ class preference_Window:
 		self.da_out.window.set_background(self.colorOut)
 		
 		#Color for status messages
-		colSt = self.r.plugin.config['statusmsgcolor']
+		colSt = self.plugin.config['statusmsgcolor']
 		if not colSt:
 			colSt = '#00ff00'
 		cmapStatus = self.da_status.get_colormap()
@@ -438,144 +444,157 @@ class preference_Window:
 		if l.count == 0:
 			l.append(" ")
 		self.combo_iconstyle.set_popdown_strings(l)
-		if self.r.iconstyle in l:
-			self.combo_iconstyle.entry.set_text(self.r.iconstyle)
+		if self.plugin.config['iconstyle'] in l:
+			self.combo_iconstyle.entry.set_text(self.plugin.config['iconstyle'])
 		
 		#Autopopup
 		st = 0
-		if self.r.plugin.config.has_key('autopopup'):
-			st = self.r.plugin.config['autopopup']
+		if self.plugin.config.has_key('autopopup'):
+			st = self.plugin.config['autopopup']
 		self.chk_autopp.set_active(st)
 
 		#Autoaway
 		st = 1
-		if self.r.plugin.config.has_key('autoaway'):
-			st = self.r.plugin.config['autoaway']
+		if self.plugin.config.has_key('autoaway'):
+			st = self.plugin.config['autoaway']
 		self.chk_autoaway.set_active(st)
 
 		#Autoawaytime
 		st = 10
-		if self.r.plugin.config.has_key('autoawaytime'):
-			st = self.r.plugin.config['autoawaytime']
+		if self.plugin.config.has_key('autoawaytime'):
+			st = self.plugin.config['autoawaytime']
 		self.spin_autoawaytime.set_value(st)
 
 		#Autoxa
 		st = 1
-		if self.r.plugin.config.has_key('autoxa'):
-			st = self.r.plugin.config['autoxa']
+		if self.plugin.config.has_key('autoxa'):
+			st = self.plugin.config['autoxa']
 		self.chk_autoxa.set_active(st)
 
 		#Autoxatime
 		st = 20
-		if self.r.plugin.config.has_key('autoxatime'):
-			st = self.r.plugin.config['autoxatime']
+		if self.plugin.config.has_key('autoxatime'):
+			st = self.plugin.config['autoxatime']
 		self.spin_autoxatime.set_value(st)
 
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		xml.signal_connect('on_but_col_clicked', \
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_but_col_clicked', \
 			self.on_color_button_clicked)
-		xml.signal_connect('on_ok_clicked', self.on_ok)
+		self.xml.signal_connect('on_ok_clicked', self.on_ok)
+		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
 
 class awayMsg_Window:
 	"""Class for Away Message Window"""
-	def delete_event(self, widget):
-		"""close window"""
-		self.window.destroy()
-
 	def on_ok(self):
 		"""When Ok button is clicked"""
 		beg, end = self.txtBuffer.get_bounds()
 		self.msg = self.txtBuffer.get_text(beg, end, 0)
-		self.window.destroy()
+		self.xml.get_widget("Away_msg").destroy()
 	
 	def run(self):
 		"""Wait for Ok button to be pressed and return away messsage"""
-		rep = self.window.run()
+		rep = self.xml.get_widget("Away_msg").run()
 		msg = ''
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.txtBuffer.get_bounds()
 			msg = self.txtBuffer.get_text(beg, end, 0)
-			self.window.destroy()
+			self.xml.get_widget("Away_msg").destroy()
 		return msg
 	
 	def __init__(self):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Away_msg')
-		self.window = xml.get_widget("Away_msg")
-		txt = xml.get_widget("textview")
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Away_msg')
+		txt = self.xml.get_widget("textview")
 		self.txtBuffer = txt.get_buffer()
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
 class addContact_Window:
 	"""Class for Add user window"""
 	def delete_event(self, widget):
 		"""close window"""
-		self.Wadd.destroy()
+		del self.plugin.windows['add']
+
+	def on_cancel(self, widget):
+		"""When Cancel button is clicked"""
+		widget.get_toplevel().destroy()
 
 	def on_subscribe(self, widget):
 		"""When Subscribe button is clicked"""
-		who = self.entry_who.get_text()
-		buf = self.textview_sub.get_buffer()
+		textview_sub = self.xml.get_widget("textview_sub")
+		entry_who = self.xml.get_widget('entry_who')
+		who = entry_who.get_text()
+		buf = textview_sub.get_buffer()
 		start_iter = buf.get_start_iter()
 		end_iter = buf.get_end_iter()
 		txt = buf.get_text(start_iter, end_iter, 0)
-		self.r.req_sub(self, who, txt)
-		self.delete_event(self)
+		self.plugin.roster.req_sub(self, who, txt, self.account)
+		widget.get_toplevel().destroy()
 		
-	def __init__(self, roster, jid=None):
-		self.r = roster
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Add')
-		self.entry_who = xml.get_widget('entry_who')
-		self.textview_sub = xml.get_widget("textview_sub")
+	def __init__(self, plugin, account, jid=None):
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Add')
 		if jid:
-			 self.entry_who.set_text(jid)
-		self.Wadd = xml.get_widget("Add")
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
+			self.xml.get_widget('entry_who').set_text(jid)
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
+		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
 
 class warning_Window:
 	"""Class for warning window : print a warning message"""
-	def delete_event(self, widget):
-		"""close window"""
-		self.window.destroy()
-	
+	def on_close(self, widget):
+		"""When Close button is clicked"""
+		widget.get_toplevel().destroy()
+
 	def __init__(self, txt):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'Warning')
-		self.window = xml.get_widget("Warning")
 		xml.get_widget('label').set_text(txt)
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		xml.signal_connect('on_close_clicked', self.on_close)
 
 class about_Window:
 	"""Class for about window"""
 	def delete_event(self, widget):
 		"""close window"""
-		self.Wabout.destroy()
+		del self.plugin.windows['about']
 		
+	def on_close(self, widget):
+		"""When Close button is clicked"""
+		widget.get_toplevel().destroy()
+
 	def __init__(self):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'About')
-		self.Wabout = xml.get_widget("About")
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		xml.signal_connect('on_close_clicked', self.on_close)
+
 
 class accountPreference_Window:
 	"""Class for account informations"""
 	def delete_event(self, widget):
 		"""close window"""
-		self.window.destroy()
+		del self.plugin.windows['accountPreference']
 	
+	def on_close(self, widget):
+		"""When Close button is clicked"""
+		widget.get_toplevel().destroy()
+
 	def init_account(self, infos):
 		"""Initialize window with defaults values"""
 		if infos.has_key('name'):
-			self.entryName.set_text(infos['name'])
+			self.xml.get_widget("entry_name").set_text(infos['name'])
 		if infos.has_key('jid'):
-			self.entryJid.set_text(infos['jid'])
+			self.xml.get_widget("entry_jid").set_text(infos['jid'])
 		if infos.has_key('password'):
-			self.entryPass.set_text(infos['password'])
+			self.xml.get_widget("entry_password").set_text(infos['password'])
 		if infos.has_key('ressource'):
-			self.entryRessource.set_text(infos['ressource'])
+			self.xml.get_widget("entry_ressource").set_text(infos['ressource'])
 
 	def on_save_clicked(self, widget):
 		"""When save button is clicked : Save informations in config file"""
-		name = self.entryName.get_text()
-		jid = self.entryJid.get_text()
+		entryPass = self.xml.get_widget("entry_password")
+		entryRessource = self.xml.get_widget("entry_ressource")
+		check = self.xml.get_widget("checkbutton")
+		entryName = self.xml.get_widget("entry_name")
+		entryJid = self.xml.get_widget("entry_jid")
+		name = entryName.get_text()
+		jid = entryJid.get_text()
 		if (name == ''):
 			warning_Window('You must enter a name for this account')
 			return 0
@@ -586,117 +605,121 @@ class accountPreference_Window:
 		else:
 			(login, hostname) = string.split(jid, '@')
 		#if we are modifying an account
-		if self.mod:
+		if self.modify:
 			#if we modify the name of the account
-			if name != self.acc:
-				del self.accs.r.plugin.accounts[self.acc]
+			if name != self.account:
+				del self.plugin.accounts[self.account]
+				#TODO: update many variables
 		#if it's a new account
 		else:
-			if name in self.accs.r.plugin.accounts:
+			if name in self.plugin.accounts.keys():
 				warning_Window('An account already has this name')
 				return 0
 			#if we neeed to register a new account
-			if self.check.get_active():
-				self.accs.r.queueOUT.put(('NEW_ACC', (hostname, login, \
-					self.entryPass.get_text(), name, \
-					self.entryRessource.get_text())))
-				self.check.set_active(FALSE)
+			if check.get_active():
+				self.plugin.send('NEW_ACC', None, (hostname, login, \
+					entryPass.get_text(), name, entryRessource.get_text()))
+				check.set_active(FALSE)
 				return 1
-		self.accs.r.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-			'password': self.entryPass.get_text(), 'ressource': \
-			self.entryRessource.get_text()}
-		self.accs.r.queueOUT.put(('CONFIG', ('accounts', \
-			self.accs.r.plugin.accounts)))
-		self.accs.init_accounts()
-		self.delete_event(self)
+		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
+			'password': entryPass.get_text(), 'ressource': \
+			entryRessource.get_text()}
+		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
+		#refresh accounts window
+		if self.plugin.windows.has_key('accounts'):
+			self.plugin.windows['accounts'].init_accounts()
+		widget.get_toplevel().destroy()
 
 	def on_edit_details_clicked(self, widget):
-		if not self.accs.r.tab_vcard.has_key(self.entryJid.get_text()):
-			self.accs.r.tab_vcard[self.entryJid.get_text()] = vCard_Window(self, self.entryJid.get_text())
-			if self.accs.r.connected:
-				self.accs.r.queueOUT.put(('ASK_VCARD', self.entryJid.get_text()))
+		entryJid = self.xml.get_widget("entry_jid")
+		if not self.plugin.windows.has_key('vcard'):
+			self.plugin.windows[self.account]['infos'][entryJid.get_text()] = \
+				vCard_Window(entryJid.get_text(), self.plugin, self.account)
+			if self.plugin.connected[self.account]:
+				self.plugin.send('ASK_VCARD', self.account, entryJid.get_text())
 			else:
 				warning_Window("You must be connected to get your informations")
 	
 	#info must be a dictionnary
-	def __init__(self, accs, infos = {}):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Account')
-		self.window = xml.get_widget("Account")
-		self.entryPass = xml.get_widget("entry_password")
-		self.entryRessource = xml.get_widget("entry_ressource")
-		self.check = xml.get_widget("checkbutton")
-		self.entryName = xml.get_widget("entry_name")
-		self.entryJid = xml.get_widget("entry_jid")
-		self.accs = accs
-		self.mod = FALSE
+	def __init__(self, plugin, infos = {}):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Account')
+		self.plugin = plugin
+		self.account = ''
+		self.modify = False
 		if infos:
-			self.mod = TRUE
-			self.acc = infos['name']
+			self.modify = True
+			self.account = infos['name']
 			self.init_account(infos)
-			self.check.set_sensitive(FALSE)
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		xml.signal_connect('on_save_clicked', self.on_save_clicked)
-		xml.signal_connect('on_edit_details_clicked', self.on_edit_details_clicked)
+			self.xml.get_widget("checkbutton").set_sensitive(FALSE)
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_save_clicked', self.on_save_clicked)
+		self.xml.signal_connect('on_edit_details_clicked', \
+			self.on_edit_details_clicked)
+		self.xml.signal_connect('on_close_clicked', self.on_close)
 
 class accounts_Window:
 	"""Class for accounts window : lists of accounts"""
 	def delete_event(self, widget):
 		"""close window"""
-		global accountsWindow
-		accountsWindow = 0
-		self.window.destroy()
+		del self.plugin.windows['accounts']
+		
+#Not for the moment ... but maybe one day there will be a button	
+#	def on_close(self, widget):
+#		"""When Close button is clicked"""
+#		widget.get_toplevel().destroy()
 		
 	def init_accounts(self):
 		"""initialize listStore with existing accounts"""
+		self.xml.get_widget("modify_button").set_sensitive(False)
+		self.xml.get_widget("delete_button").set_sensitive(False)
 		model = self.treeview.get_model()
 		model.clear()
-		for account in self.r.plugin.accounts.keys():                        
+		for account in self.plugin.accounts:
 			iter = model.append()
 			model.set(iter, 0, account, 1, \
-				self.r.plugin.accounts[account]["hostname"])
+				self.plugin.accounts[account]["hostname"])
 
 	def on_row_activated(self, widget):
 		"""Activate delete and modify buttons when a row is selected"""
-		self.modButt.set_sensitive(TRUE)
-		self.delButt.set_sensitive(TRUE)
+		self.xml.get_widget("modify_button").set_sensitive(True)
+		self.xml.get_widget("delete_button").set_sensitive(True)
 
 	def on_new_clicked(self, widget):
 		"""When new button is clicked : open an account information window"""
-		accountPreference_Window(self)
+		if not self.plugin.windows.has_key('accountPreference'):
+			self.plugin.windows['accountPreference'] = \
+				accountPreference_Window(self.plugin)
 
 	def on_delete_clicked(self, widget):
 		"""When delete button is clicked :
 		Remove an account from the listStore and from the config file"""
 		sel = self.treeview.get_selection()
-		(mod, iter) = sel.get_selected()
-		model = self.treeview.get_model()
+		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
-		del self.r.plugin.accounts[account]
-		self.r.queueOUT.put(('CONFIG', ('accounts', self.r.plugin.accounts)))
+		del self.plugin.accounts[account]
+		self.plugin.put('CONFIG', None, ('accounts', self.plugin.accounts))
 		self.init_accounts()
 
 	def on_modify_clicked(self, widget):
 		"""When modify button is clicked :
 		open the account information window for this account"""
-		infos = {}
-		sel = self.treeview.get_selection()
-		model = self.treeview.get_model()
-		(mod, iter) = sel.get_selected()
-		account = model.get_value(iter, 0)
-		infos['name'] = account
-		infos['jid'] = self.r.plugin.accounts[account]["name"] + \
-			'@' +  self.r.plugin.accounts[account]["hostname"]
-		infos['password'] = self.r.plugin.accounts[account]["password"]
-		infos['ressource'] = self.r.plugin.accounts[account]["ressource"]
-		accountPreference_Window(self, infos)
+		if not self.plugin.windows.has_key('accountPreference'):
+			infos = {}
+			sel = self.treeview.get_selection()
+			(model, iter) = sel.get_selected()
+			account = model.get_value(iter, 0)
+			infos['name'] = account
+			infos['jid'] = self.plugin.accounts[account]["name"] + \
+				'@' +  self.plugin.accounts[account]["hostname"]
+			infos['password'] = self.plugin.accounts[account]["password"]
+			infos['ressource'] = self.plugin.accounts[account]["ressource"]
+			self.plugin.windows['accountPreference'] = \
+				accountPreference_Window(self.plugin, infos)
 		
-	def __init__(self, roster):
-		self.r = roster
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Accounts')
-		self.window = xml.get_widget("Accounts")
-		self.treeview = xml.get_widget("treeview")
-		self.modButt = xml.get_widget("modify_button")
-		self.delButt = xml.get_widget("delete_button")
+	def __init__(self, plugin):
+		self.plugin = plugin
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Accounts')
+		self.treeview = self.xml.get_widget("treeview")
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		self.treeview.set_model(model)
 		#columns
@@ -707,131 +730,130 @@ class accounts_Window:
 		renderer.set_data('column', 1)
 		self.treeview.insert_column_with_attributes(-1, 'Server', \
 			renderer, text=1)
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		xml.signal_connect('on_row_activated', self.on_row_activated)
-		xml.signal_connect('on_new_clicked', self.on_new_clicked)
-		xml.signal_connect('on_delete_clicked', self.on_delete_clicked)
-		xml.signal_connect('on_modify_clicked', self.on_modify_clicked)
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_row_activated', self.on_row_activated)
+		self.xml.signal_connect('on_new_clicked', self.on_new_clicked)
+		self.xml.signal_connect('on_delete_clicked', self.on_delete_clicked)
+		self.xml.signal_connect('on_modify_clicked', self.on_modify_clicked)
 		self.init_accounts()
 
 class confirm_Window:
 	"""Class for confirmation window :
 	window that appears to confirm the removal of a contact"""
-	def delete_event(self, widget):
-		"""close window"""
-		self.window.destroy()
-		
+	def on_cancel(self, widget):
+		"""When Cancel button is clicked"""
+		widget.get_toplevel().destroy()
+
 	def req_usub(self, widget):
 		"""When Ok button is clicked :
 		Send a message to the core to remove the user
 		and remove it from the roster"""
-		model = self.r.tree.get_model()
-		jid = model.get_value(self.iter, 2)
-		self.r.queueOUT.put(('UNSUB', jid))
-		self.r.remove_user(self.r.l_contact[jid]['user'])
-		del self.r.l_contact[jid]
-		self.delete_event(self)
+		self.plugin.send('UNSUB', self.account, self.user.jid)
+		self.plugin.roster.remove_user(self.user, self.account)
+		del self.plugin.roster.contacts[self.account][self.user.jid]
+		widget.get_toplevel().destroy()
 	
-	def __init__(self, roster, iter):
+	def __init__(self, plugin, user, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'Confirm')
-		self.window = xml.get_widget('Confirm')
-		self.r = roster
-		self.iter = iter
-		jid = self.r.tree.get_model().get_value(iter, 2)
+		self.plugin = plugin
+		self.user = user
+		self.account = account
 		xml.get_widget('label_confirm').set_text(\
-			'Are you sure you want to remove ' + jid + ' from your roster ?')
+			'Are you sure you want to remove ' + user.name + ' (' + user.jid + ') from your roster ?')
 		xml.signal_connect('on_okbutton_clicked', self.req_usub)
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		xml.signal_connect('on_cancel_clicked', self.on_cancel)
 
 class authorize_Window:
 	"""Class for authorization window :
 	window that appears when a user wants to add us to his/her roster"""
-	def delete_event(self, widget):
-		"""close window"""
-		self.window.destroy()
+	def on_close(self, widget):
+		"""When Close button is clicked"""
+		widget.get_toplevel().destroy()
 		
 	def auth(self, widget):
 		"""Accept the request"""
-		self.r.queueOUT.put(('AUTH', self.jid))
-		self.delete_event(self)
-		if not self.r.l_contact.has_key(self.jid):
-			addContact_Window(self.r, self.jid)
+		self.plugin.send('AUTH', self.account, self.jid)
+		widget.get_toplevel().destroy()
+		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
+			addContact_Window(self.plugin, self.account, self.jid)
 	
 	def deny(self, widget):
 		"""refuse the request"""
-		self.r.queueOUT.put(('DENY', self.jid))
-		self.delete_event(self)
+		self.plugin.send('DENY', self.account, self.jid)
+		widget.get_toplevel().destroy()
 	
-	def __init__(self, roster, jid, txt):
+	def __init__(self, plugin, jid, txt, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'Sub_req')
-		self.window = xml.get_widget('Sub_req')
-		self.r = roster
+		self.plugin = plugin
 		self.jid = jid
+		self.account = account
 		xml.get_widget('label').set_text('Subscription request from ' + self.jid)
 		xml.get_widget("textview_sub").get_buffer().set_text(txt)
 		xml.signal_connect('on_button_auth_clicked', self.auth)
 		xml.signal_connect('on_button_deny_clicked', self.deny)
-		xml.signal_connect('on_button_close_clicked', self.delete_event)
+		xml.signal_connect('on_button_close_clicked', self.on_close)
 
 class agentRegistration_Window:
 	"""Class for agent registration window :
 	window that appears when we want to subscribe to an agent"""
-	def delete_event(self, widget):
-		"""close window"""
-		self.window.destroy()
-	
 	def draw_table(self):
 		"""Draw the table in the window"""
 		nbrow = 0
+		table = self.xml.get_widget('table')
 		for name in self.infos.keys():
 			if name != 'key' and name != 'instructions' and name != 'x':
 				nbrow = nbrow + 1
-				self.table.resize(rows=nbrow, columns=2)
+				table.resize(rows=nbrow, columns=2)
 				label = gtk.Label(name)
-				self.table.attach(label, 0, 1, nbrow-1, nbrow, 0, 0, 0, 0)
+				table.attach(label, 0, 1, nbrow-1, nbrow, 0, 0, 0, 0)
 				entry = gtk.Entry()
 				entry.set_text(self.infos[name])
-				self.table.attach(entry, 1, 2, nbrow-1, nbrow, 0, 0, 0, 0)
+				table.attach(entry, 1, 2, nbrow-1, nbrow, 0, 0, 0, 0)
 				self.entries[name] = entry
 				if nbrow == 1:
 					entry.grab_focus()
-		self.table.show_all()
+		table.show_all()
 	
 	def on_ok(self, widget):
 		"""When Ok button is clicked :
 		send registration info to the core"""
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
-		self.r.queueOUT.put(('REG_AGENT', self.agent))
-		self.delete_event(self)
+		self.plugin.send('REG_AGENT', self.account, self.agent)
+		widget.get_toplevel().destroy()
 	
-	def __init__(self, agent, infos, roster):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_reg')
+	def __init__(self, agent, infos, plugin, account):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_reg')
 		self.agent = agent
 		self.infos = infos
-		self.r = roster
-		self.window = xml.get_widget('agent_reg')
-		self.table = xml.get_widget('table')
-		self.window.set_title('Register to ' + agent)
-		xml.get_widget('label').set_text(infos['instructions'])
+		self.plugin = plugin
+		self.account = account
+		self.xml.get_widget('agent_reg').set_title('Register to ' + agent)
+		self.xml.get_widget('label').set_text(infos['instructions'])
 		self.entries = {}
 		self.draw_table()
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		xml.signal_connect('on_button_cancel_clicked', self.delete_event)
-		xml.signal_connect('on_button_ok_clicked', self.on_ok)
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
+		self.xml.signal_connect('on_button_ok_clicked', self.on_ok)
 
 class browseAgent_Window:
 	"""Class for bowser agent window :
 	to know the agents on the selected server"""
 	def delete_event(self, widget):
 		"""close window"""
-		global browserWindow
-		browserWindow = 0
-		self.window.destroy()
+		del self.plugin.windows['browser']
 
+	def on_cancel(self, widget):
+		"""When Cancel button is clicked"""
+		widget.get_toplevel().destroy()
+
+	def on_close(self, widget):
+		"""When Close button is clicked"""
+		widget.get_toplevel().destroy()
+		
 	def browse(self):
 		"""Send a request to the core to know the available agents"""
-		self.r.queueOUT.put(('REQ_AGENTS', None))
+		self.plugin.send('REQ_AGENTS', self.account, None)
 	
 	def agents(self, agents):
 		"""When list of available agent arrive :
@@ -854,14 +876,14 @@ class browseAgent_Window:
 		model = self.treeview.get_model()
 		iter = model.get_iter(path)
 		service = model.get_value(iter, 1)
-		self.r.queueOUT.put(('REQ_AGENT_INFO', service))
-		self.delete_event(self)
+		self.plugin.send('REQ_AGENT_INFO', self.account, service)
+		widget.get_toplevel().destroy()
 		
-	def __init__(self, roster):
+	def __init__(self, plugin, roster):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'browser')
-		self.window = xml.get_widget('browser')
 		self.treeview = xml.get_widget('treeview')
-		self.r = roster
+		self.plugin = plugin
+		self.account = account
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		self.treeview.set_model(model)
 		#columns
@@ -876,7 +898,8 @@ class browseAgent_Window:
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_refresh_clicked', self.on_refresh)
 		xml.signal_connect('on_row_activated', self.on_row_activated)
-		if self.r.connected:
+		xml.signal_connect('on_close_clicked', self.on_close)
+		if self.plugin.connected[account]:
 			self.browse()
 		else:
 			warning_Window("You must be connected to view Agents")
@@ -885,15 +908,15 @@ class message_Window:
 	"""Class for chat window"""
 	def delete_event(self, widget):
 		"""close window"""
-		del self.r.tab_messages[self.user.jid]
-		self.window.destroy()
+		del self.plugin.windows[self.account]['chats'][self.user.jid]
 	
 	def print_conversation(self, txt, contact = None, tim = None):
 		"""Print a line in the conversation :
 		if contact is set to status : it's a status message
 		if contact is set to another value : it's an outgoing message
 		if contact is not set : it's an incomming message"""
-		buffer = self.conversation.get_buffer()
+		conversation = self.xml.get_widget('conversation')
+		buffer = conversation.get_buffer()
 		if not txt:
 			txt = ""
 		end_iter = buffer.get_end_iter()
@@ -912,19 +935,18 @@ class message_Window:
 				self.user.name + '> ', 'incoming')
 			buffer.insert(end_iter, txt+'\n')
 		#scroll to the end of the textview
-		self.conversation.scroll_to_mark(\
-			buffer.get_mark('end'), 0.1, 0, 0, 0)
+		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
 	
 	def read_queue(self, q):
 		"""read queue and print messages containted in it"""
 		while not q.empty():
 			evt = q.get()
 			self.print_conversation(evt[0], tim = evt[1])
-		del self.r.tab_queues[self.user.jid]
-		for i in self.r.l_contact[self.user.jid]['iter']:
-			if self.r.pixbufs.has_key(self.user.show):
-				self.r.tree.get_model().set_value(i, 0, \
-					self.r.pixbufs[self.user.show])
+		del self.plugin.queues[self.account][self.user.jid]
+		for i in self.plugin.roster.get_user_iter(self.user.jid, self.account):
+			if self.plugin.roster.pixbufs.has_key(self.user.show):
+				self.plugin.roster.tree.get_model().set_value(i, 0, \
+					self.plugin.roster.pixbufs[self.user.show])
 
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -938,7 +960,7 @@ class message_Window:
 			end_iter = txt_buffer.get_end_iter()
 			txt = txt_buffer.get_text(start_iter, end_iter, 0)
 			if txt != '':
-				self.r.queueOUT.put(('MSG',(self.user.jid, txt)))
+				self.plugin.send('MSG', self.account, (self.user.jid, txt))
 				txt_buffer.set_text('', -1)
 				self.print_conversation(txt, self.user.jid)
 				widget.grab_focus()
@@ -948,47 +970,51 @@ class message_Window:
 	def on_clear(self, widget):
 		"""When clear button is pressed :
 		clear the conversation"""
-		buffer = self.conversation.get_buffer()
+		buffer = self.xml.get_widget('conversation').get_buffer()
 		deb, end = buffer.get_bounds()
 		buffer.delete(deb, end)
 
-	def __init__(self, user, roster):
+	def __init__(self, user, plugin, account):
 		self.user = user
-		self.r = roster
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat')
-		self.hbox = xml.get_widget('hbox1')
-		self.hbox.set_property('resize-mode', 2)
-		self.window = xml.get_widget('Chat')
-		self.window.set_title('Chat with ' + user.name)
-		self.img = xml.get_widget('image')
-		self.img.set_from_pixbuf(self.r.pixbufs[user.show])
-		xml.get_widget('button_contact').set_label(user.name + ' <'\
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat')
+#		hbox = xml.get_widget('hbox1')
+#		hbox.set_property('resize-mode', 2)
+		self.xml.get_widget('Chat').set_title('Chat with ' + user.name)
+		self.img = self.xml.get_widget('image')
+		self.img.set_from_pixbuf(self.plugin.roster.pixbufs[user.show])
+		self.xml.get_widget('button_contact').set_label(user.name + ' <'\
 			+ user.jid + '>')
-		xml.get_widget('button_contact').set_resize_mode(gtk.RESIZE_QUEUE)
-		self.message = xml.get_widget('message')
-		self.message.grab_focus()
-		self.conversation = xml.get_widget('conversation')
-		buffer = self.conversation.get_buffer()
+		self.xml.get_widget('button_contact').set_resize_mode(gtk.RESIZE_QUEUE)
+		message = self.xml.get_widget('message')
+		message.grab_focus()
+		conversation = self.xml.get_widget('conversation')
+		buffer = conversation.get_buffer()
 		end_iter = buffer.get_end_iter()
 		buffer.create_mark('end', end_iter, 0)
-		xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		xml.signal_connect('on_clear_button_clicked', self.on_clear)
-		xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_clear_button_clicked', self.on_clear)
+		self.xml.signal_connect('on_msg_key_press_event', \
+			self.on_msg_key_press_event)
 		self.tagIn = buffer.create_tag("incoming")
-		color = self.r.plugin.config['inmsgcolor']
+		color = self.plugin.config['inmsgcolor']
 		if not color:
 			color = '#ff0000' #red
 		self.tagIn.set_property("foreground", color)
 		self.tagOut = buffer.create_tag("outgoing")
-		color = self.r.plugin.config['outmsgcolor']
+		color = self.plugin.config['outmsgcolor']
 		if not color:
 			color = '#0000ff' #blue
 		self.tagOut.set_property("foreground", color)
 		self.tagStatus = buffer.create_tag("status")
-		color = self.r.plugin.config['statusmsgcolor']
+		color = self.plugin.config['statusmsgcolor']
 		if not color:
 			color = '#00ff00' #green
 		self.tagStatus.set_property("foreground", color)
+		#print queued messages
+		if plugin.queues[account].has_key(user.jid):
+			self.read_queue(plugin.queues[account][user.jid])
 
 class roster_Window:
 	"""Class for main gtk window"""
@@ -1003,7 +1029,8 @@ class roster_Window:
 			account_name = model.get_value(account, 3)
 			if name == account_name:
 				return account
-			if not model.iter_next(account):
+			account = model.iter_next(account)
+			if not account:
 				fin = True
 		return None
 
@@ -1018,7 +1045,8 @@ class roster_Window:
 			group_name = model.get_value(group, 3)
 			if name == group_name:
 				return group
-			if not model.iter_next(group):
+			group = model.iter_next(group)
+			if not group:
 				fin = True
 		return None
 
@@ -1038,9 +1066,11 @@ class roster_Window:
 			while not fin2:
 				if jid == model.get_value(user, 3):
 					found.append(user)
-				if not model.iter_next(user):
+				user = model.iter_next(user)
+				if not user:
 					fin2 = True
-			if not model.iter_next(group):
+			group = model.iter_next(group)
+			if not group:
 				fin = True
 		return found
 
@@ -1055,7 +1085,8 @@ class roster_Window:
 		"""Add a user to the roster and add groups if they aren't in roster"""
 		newgrp = 0
 		showOffline = self.plugin.config['showoffline']
-#		self.contacts[account][user.jid] = user
+		if not self.contacts[account].has_key(user.jid):
+			self.contacts[account][user.jid] = user
 		if user.groups == []:
 			if string.find(user.jid, "@") <= 0:
 				user.groups.append('Agents')
@@ -1071,12 +1102,14 @@ class roster_Window:
 					iterG = model.append(self.get_account_iter(account), \
 						(self.pixbufs['closed'], g, 'group', g, FALSE))
 					newgrp = 1
+				self.tree.expand_row((model.get_path(iterG)[0]), False)
 				if g == 'Agents':
 					model.append(iterG, (self.pixbufs[user.show], \
 						user.name, 'agent', user.jid, TRUE))
 				else:
 					model.append(iterG, (self.pixbufs[user.show], \
 						user.name, 'user', user.jid, TRUE))
+				
 				if newgrp == 1:
 					#expand new groups
 					self.tree.expand_row(model.get_path(iterG), FALSE)
@@ -1145,15 +1178,17 @@ class roster_Window:
 		user.show = show
 		user.status = status
 		#Print status in chat window
-		if self.plugin.windows[account].has_key(user.jid):
-			self.plugin.windows[account][user.jid].img.set_from_pixbuf(self.pixbufs[show])
-			self.plugin.windows[account][user.jid].print_conversation(\
+		if self.plugin.windows[account]['chats'].has_key(user.jid):
+			self.plugin.windows[account]['chats'][user.jid].\
+				img.set_from_pixbuf(self.pixbufs[show])
+			self.plugin.windows[account]['chats'][user.jid].print_conversation(\
 				"%s is now %s (%s)" % (user.name, show, status), 'status')
 
 	def on_info(self, widget, user, account):
 		"""Call infoUser_Window class to display user's information"""
-		if not self.plugin.windows[account].has_key('infos'+user.jid):
-			self.plugin.windows[account]['infos'+user.jid] = infoUser_Window(user, self.plugin)
+		if not self.plugin.windows[account]['infos'].has_key(user.jid):
+			self.plugin.windows[account]['infos'][user.jid] = \
+				infoUser_Window(user, self.plugin, account)
 
 	def on_agent_logging(self, widget, jid, state, account):
 		"""When an agent is requested to log in or off"""
@@ -1164,6 +1199,10 @@ class roster_Window:
 		model = self.tree.get_model()
 		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
+		acct_iter = model.get_iter((path[0]))
+		account = model.get_value(acct_iter, 3)
+		user = self.contacts[account][jid]
+		
 		menu = gtk.Menu()
 		item = gtk.MenuItem("Start chat")
 		menu.append(item)
@@ -1184,19 +1223,19 @@ class roster_Window:
 		item = gtk.MenuItem("Rerequest authorization from")
 		menu_sub.append(item)
 		item.connect("activate", self.req_sub, jid, \
-			'I would like to add you to my contact list, please.')
+			'I would like to add you to my contact list, please.', account)
 		
 		item = gtk.MenuItem()
 		menu.append(item)
 		item = gtk.MenuItem("Remove")
 		menu.append(item)
-		item.connect("activate", self.on_req_usub, iter)
+		item.connect("activate", self.on_req_usub, user, account)
 
 		item = gtk.MenuItem()
 		menu.append(item)
 		item = gtk.MenuItem("Informations")
 		menu.append(item)
-		item.connect("activate", self.on_info, jid)
+		item.connect("activate", self.on_info, user, account)
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
@@ -1256,18 +1295,18 @@ class roster_Window:
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			type = model.get_value(iter, 2)
-			if data == 'group':
+			if type == 'group':
 				self.mk_menu_g(event)
-			elif data == 'agent':
+			elif type == 'agent':
 				self.mk_menu_agent(event, iter)
-			elif data == 'user':
+			elif type == 'user':
 				self.mk_menu_user(event, iter)
 			return gtk.TRUE
 		return gtk.FALSE
 
-	def on_req_usub(self, widget, iter):
+	def on_req_usub(self, widget, user, account):
 		"""Remove a user"""
-		window_confirm = confirm_Window(self, iter)
+		confirm_Window(self.plugin, user, account)
 
 	def on_optionmenu_changed(self, widget):
 		"""When we change our status"""
@@ -1296,8 +1335,8 @@ class roster_Window:
 		if status == 'offline':
 			self.plugin.connected[account] = 0
 			self.plugin.sleeper = None
-			for jid in self.contacts.keys():
-				user = self.contacts[jid]
+			for jid in self.contacts[account]:
+				user = self.contacts[account][jid]
 				self.chg_user_status(user, 'offline', 'Disconnected', account)
 		elif self.plugin.connected[account] == 0:
 			self.plugin.connected[account] = 1
@@ -1312,7 +1351,8 @@ class roster_Window:
 				'not in list', 'not in list', 'none', '')
 			self.add_user_to_roster(user1, account)
 		autopopup = self.plugin.config['autopopup']
-		if autopopup == 0 and not self.plugin.windows[account].has_key(jid):
+		if autopopup == 0 and not \
+			self.plugin.windows[account]['chats'].has_key(jid):
 			#We save it in a queue
 			if not self.plugin.queues[account].has_key(jid):
 				model = self.tree.get_model()
@@ -1322,21 +1362,21 @@ class roster_Window:
 			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
 		else:
-			if not self.plugin.windows[account].has_key(jid):
-				self.plugin.windows[account][jid] = \
+			if not self.plugin.windows[account]['chats'].has_key(jid):
+				self.plugin.windows[account]['chats'][jid] = \
 					message_Window(self.contacts[account][jid], self)
-			self.plugin.windows[account][jid].print_conversation(msg)
+			self.plugin.windows[account]['chats'][jid].print_conversation(msg)
 
 	def on_prefs(self, widget):
 		"""When preferences is selected :
 		call the preference_Window class"""
 		if not self.plugin.windows.has_key('preferences'):
-			self.plugin.windows['preferences'] = preference_Window(self)
+			self.plugin.windows['preferences'] = preference_Window(self.plugin)
 
-	def on_add(self, widget):
+	def on_add(self, widget, account):
 		"""When add user is selected :
 		call the add class"""
-		addContact_Window(self)
+		addContact_Window(self, account)
 
 	def on_about(self, widget):
 		"""When about is selected :
@@ -1348,7 +1388,7 @@ class roster_Window:
 		"""When accounts is seleted :
 		call the accounts class to modify accounts"""
 		if not self.plugin.windows.has_key('accounts'):
-			self.plugin.windows['accounts'] = accounts_Window(self)
+			self.plugin.windows['accounts'] = accounts_Window(self.plugin)
 	
 	def on_quit(self, widget):
 		"""When we quit the gtk plugin :
@@ -1372,14 +1412,11 @@ class roster_Window:
 			else:
 				self.tree.expand_row(path, FALSE)
 		else:
-			if self.plugin.windows[account].has_key(jid):
-				self.plugin.windows[account][jid].window.present()
+			if self.plugin.windows[account]['chats'].has_key(jid):
+				self.plugin.windows[account]['chats'][jid].window.present()
 			elif self.contacts[account].has_key(jid):
-				self.plugin.windows[account][jid] = \
-					message_Window(self.contacts[account][jid], self)
-				if self.plugin.queues[account].has_key(jid):
-					self.plugin.windows[account][jid].read_queue(\
-						self.plugin.queues[account][jid])
+				self.plugin.windows[account]['chats'][jid] = \
+					message_Window(self.contacts[account][jid], self.plugin, account)
 
 	def on_row_expanded(self, widget, iter, path):
 		"""When a row is expanded :
@@ -1397,21 +1434,24 @@ class roster_Window:
 		else open chat window"""
 		model = self.tree.get_model()
 		iter = model.get_iter_from_string(row)
-		jid = model.get_value(iter, 2)
-		old_text = self.l_contact[jid]['user'].name
-		#If it is a double click, old_text == new_text
+		path = model.get_path(iter)
+		acct_iter = model.get_iter((path[0]))
+		account = model.get_value(acct_iter, 3)
+		jid = model.get_value(iter, 3)
+		old_text = self.contacts[account][jid].name
+		#FIXME:If it is a double click, old_text == new_text
 		if old_text == new_text:
-			if self.tab_messages.has_key(jid):
-				self.tab_messages[jid].window.present()
-			elif self.l_contact.has_key(jid):
-				self.tab_messages[jid] = message_Window(self.l_contact[jid]['user'], self)
-				if self.tab_queues.has_key(jid):
-					self.tab_messages[jid].read_queue(self.tab_queues[jid])
+			if self.plugin.windows[account]['chats'].has_key(jid):
+				chat = self.plugin.windows[account]['chats'][jid]
+				chat.xml.get_widget('Chat').present()
+			elif self.contacts[account].has_key(jid):
+				self.plugin.windows[account]['chats'][jid] = \
+					message_Window(self.contacts[account][jid], self.plugin, account)
 		else:
 			model.set_value(iter, 1, new_text)
-			self.l_contact[jid]['user'].name = new_text
-			self.queueOUT.put(('UPDUSER', (jid, new_text, \
-				self.l_contact[jid]['user'].groups)))
+			self.contacts[account][jid].name = new_text
+			self.plugin.send('UPDUSER', account, (jid, new_text, \
+				self.contacts[account][jid].groups))
 		
 	def on_browse(self, widget):
 		"""When browse agent is selected :
@@ -1486,6 +1526,19 @@ class roster_Window:
 		showOffline = self.plugin.config['showoffline']
 		self.xml.get_widget('show_offline').set_active(showOffline)
 
+		#Menu
+		if len(self.plugin.accounts.keys()):
+			menu_sub = gtk.Menu()
+			self.xml.get_widget('add').set_submenu(menu_sub)
+			for a in self.plugin.accounts.keys():
+				item = gtk.MenuItem(a)
+				menu_sub.append(item)
+				item.connect("activate", self.on_add, a)
+			menu_sub.show_all()
+		else:
+			self.xml.get_widget('add').connect("activate", self.on_add, \
+				self.plugin.accounts.keys()[0])
+
 		#columns
 		col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
@@ -1509,16 +1562,18 @@ class roster_Window:
 		self.xml.signal_connect('on_preferences_activate', self.on_prefs)
 		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
 		self.xml.signal_connect('on_browse_agents_activate', self.on_browse)
-		self.xml.signal_connect('on_add_activate', self.on_add)
 		self.xml.signal_connect('on_show_offline_activate', self.on_show_off)
 		self.xml.signal_connect('on_about_activate', self.on_about)
 		self.xml.signal_connect('on_quit_activate', self.on_quit)
 		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
 		self.xml.signal_connect('on_status_changed', self.on_status_changed)
-		self.xml.signal_connect('on_optionmenu_changed', self.on_optionmenu_changed)
+		self.xml.signal_connect('on_optionmenu_changed', \
+			self.on_optionmenu_changed)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
 		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
 		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
+
+		self.draw_roster()
 
 class plugin:
 	"""Class called by the core in a new thread"""
@@ -1614,7 +1669,7 @@ class plugin:
 						#Update existing iter
 						for i in self.roster.get_user_iter(ji, ev[1]):
 							if self.roster.pixbufs.has_key(ev[2][1]):
-								model.set_value(i, 0, self.r.pixbufs[ev[2][1]])
+								model.set_value(i, 0, self.roster.pixbufs[ev[2][1]])
 				elif self.roster.contacts[ev[1]].has_key(ji):
 					#It isn't an agent
 					self.roster.chg_user_status(user, ev[2][1], ev[2][2], ev[1])
@@ -1625,9 +1680,9 @@ class plugin:
 				else:
 					jid = ev[2][0]
 				self.roster.on_message(jid, ev[2][1], ev[1])
-				
+			#('SUBSCRIBE', account, (jid, text))
 			elif ev[0] == 'SUBSCRIBE':
-				authorize_Window(self.roster, ev[2][0], ev[2][1])
+				authorize_Window(self, ev[2][0], ev[2][1], ev[1])
 			#('SUBSCRIBED', account, (jid, nom, resource))
 			elif ev[0] == 'SUBSCRIBED':
 				if self.roster.l_contact.has_key(ev[2][0]):
@@ -1653,7 +1708,7 @@ class plugin:
 				if not ev[2][1].has_key('instructions'):
 					warning_Window('error contacting %s' % ev[2][0])
 				else:
-					agentRegistration_Window(ev[2][0], ev[2][1], self.roster)
+					agentRegistration_Window(ev[2][0], ev[2][1], self.plugin, ev[1])
 			#('ACC_OK', account, (hostname, login, pasword, name, ressource))
 			elif ev[0] == 'ACC_OK':
 				self.accounts[ev[2][3]] =  {'ressource': ev[2][4], \
@@ -1664,8 +1719,8 @@ class plugin:
 			elif ev[0] == 'QUIT':
 				self.roster.on_quit(self)
 			elif ev[0] == 'VCARD':
-				if self.roster.tab_vcard.has_key(ev[2]['jid']):
-					self.roster.tab_vcard[ev[2]['jid']].set_values(ev[2])
+				if self.windows[ev[1]]['infos'].has_key(ev[2]['jid']):
+					self.windows[ev[1]]['infos'][ev[2]['jid']].set_values(ev[2])
 		return 1
 	
 	def read_sleepy(self):	
@@ -1714,6 +1769,8 @@ class plugin:
 		self.connected = {}
 		for a in self.accounts.keys():
 			self.windows[a] = {}
+			self.windows[a]['infos'] = {}
+			self.windows[a]['chats'] = {}
 			self.queues[a] = {}
 			self.connected[a] = 0
 		self.roster = roster_Window(self)
