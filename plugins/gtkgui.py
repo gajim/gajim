@@ -226,7 +226,7 @@ class browser:
 
 class message:
 	def delete_event(self, widget):
-		del self.roster.tab_messages[self.user.jid]
+		del self.r.tab_messages[self.user.jid]
 		self.window.destroy()
 	
 	def print_conversation(self, txt, contact = None):
@@ -247,7 +247,7 @@ class message:
 			start_iter = txt_buffer.get_start_iter()
 			end_iter = txt_buffer.get_end_iter()
 			txt = txt_buffer.get_text(start_iter, end_iter, 0)
-			self.roster.queueOUT.put(('MSG',(self.user.jid, txt)))
+			self.r.queueOUT.put(('MSG',(self.user.jid, txt)))
 			txt_buffer.set_text('', -1)
 			self.print_conversation(txt, self.user.jid)
 			widget.grab_focus()
@@ -258,10 +258,12 @@ class message:
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
 		self.cfgParser.parseCfgFile()
 		self.user = user
-		self.roster = roster
+		self.r = roster
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Chat')
 		self.window = self.xml.get_widget('Chat')
 		self.window.set_title('Chat with ' + user.name)
+		self.img = self.xml.get_widget('image')
+		self.img.set_from_pixbuf(self.r.pixbufs[user.show])
 		self.xml.get_widget('label_contact').set_text(user.name + ' <'\
 			+ user.jid + '>')
 		self.message = self.xml.get_widget('message')
@@ -355,6 +357,9 @@ class roster:
 				for i in self.l_contact[jid]['iter']:
 					if self.pixbufs.has_key(show):
 						self.treestore.set_value(i, 0, self.pixbufs[show])
+			#update icon in chat window
+			if self.tab_messages.has_key(jid):
+				self.tab_messages[jid].img.set_from_pixbuf(self.pixbufs[show])
 		u.show = show
 		u.status = status
 	
@@ -498,14 +503,14 @@ class roster:
 		iconstyle = self.cfgParser.GtkGui_iconstyle
 		if not iconstyle:
 			iconstyle = 'sun'
-		path = 'plugins/icons/' + iconstyle + '/'
+		self.path = 'plugins/icons/' + iconstyle + '/'
 		self.pixbufs = {}
 		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'requested'):
-			if not os.path.exists(path + state + '.xpm'):
-				print 'No such file : ' + path + state + '.xpm'
+			if not os.path.exists(self.path + state + '.xpm'):
+				print 'No such file : ' + self.path + state + '.xpm'
 				self.pixbufs[state] = None
 			else:
-				pix = gtk.gdk.pixbuf_new_from_file (path + state + '.xpm')
+				pix = gtk.gdk.pixbuf_new_from_file (self.path + state + '.xpm')
 				self.pixbufs[state] = pix
 		self.tree.set_model(self.treestore)
 		self.queueOUT = queueOUT
