@@ -1,8 +1,8 @@
 ##	plugins/gtkgui.py
 ##
 ## Gajim Team:
-## 	- Yann Le Boulanger <asterix@lagaule.org>
-## 	- Vincent Hanquez <tab@snarc.org>
+## - Yann Le Boulanger <asterix@lagaule.org>
+## - Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Alex Podaras <bigpod@gmail.com>
 ##

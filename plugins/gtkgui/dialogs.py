@@ -324,7 +324,7 @@ class Change_status_message_dialog:
 			message_comboboxentry.append_text(val)
 		self.xml.signal_autoconnect(self)
 
-class add_contact_window:
+class Add_contact_window:
 	"""Class for add_contact_window"""
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
@@ -520,7 +520,7 @@ class subscription_request_window:
 		self.plugin.send('AUTH', self.account, self.jid)
 		widget.get_toplevel().destroy()
 		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
-			add_contact_window(self.plugin, self.account, self.jid)
+			Add_contact_window(self.plugin, self.account, self.jid)
 	
 	def on_deny_button_clicked(self, widget):
 		"""refuse the request"""
@@ -537,7 +537,7 @@ class subscription_request_window:
 		xml.get_widget('message_textview').get_buffer().set_text(text)
 		xml.signal_autoconnect(self)
 
-class join_groupchat_window:
+class Join_groupchat_window:
 	def on_join_groupchat_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows['join_gc'] # remove us from open windows
@@ -557,6 +557,8 @@ class join_groupchat_window:
 		#TODO: verify entries
 		self.plugin.send('GC_JOIN', self.account, (nickname, room, server, \
 			password))
+			
+		#FIXME: call active_tab()
 		widget.get_toplevel().destroy()
 
 	def __init__(self, plugin, account, server='', room = ''):

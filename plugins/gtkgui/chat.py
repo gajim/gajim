@@ -56,6 +56,7 @@ class Chat:
 		self.names = {} # what is printed in the tab : user.name for example
 		self.childs = {}
 		self.window = self.xml.get_widget(widget_name)
+		self.widget_name = widget_name
 
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -91,12 +92,10 @@ class Chat:
 			start = "* "
 		chat = self.names[jid]
 		if len(self.xmls) > 1: # if more than one tabs in the same window
-			chat = 'Chat'
-		#FIXME: doesn't work
-#			if isinstance(self.window, Tabbed_chat_window):
-#				chat = 'Chat'
-#			elif isinstance(self.window, Groupchat_window):
-#				chat = 'Groupchat'
+			if self.widget_name == 'tabbed_chat_window':
+				chat = 'Chat'
+			elif self.widget_name == 'groupchat_window':
+				chat = 'Groupchat'
 		if len(self.plugin.accounts.keys()) >= 2: # if we have 2 or more accounts
 			title = start + chat + ' (account: ' + self.account + ')'
 		else:

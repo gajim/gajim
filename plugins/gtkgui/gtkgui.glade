@@ -7053,8 +7053,6 @@ Custom</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
 	  <property name="scrollable">True</property>
 	  <property name="enable_popup">False</property>
-	  <signal name="switch_page" handler="on_chat_notebook_switch_page" last_modification_time="Sat, 05 Mar 2005 10:57:01 GMT"/>
-	  <signal name="key_press_event" handler="on_chat_notebook_key_press_event" last_modification_time="Sat, 12 Mar 2005 21:19:23 GMT"/>
 
 	  <child>
 	    <widget class="GtkVBox" id="gc_vbox">

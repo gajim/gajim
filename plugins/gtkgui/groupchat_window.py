@@ -44,6 +44,7 @@ class Groupchat_window(Chat):
 		self.nicks = {}
 		self.list_treeview = {}
 		self.subjects = {}
+		self.account = account
 		self.new_group(room_jid, nick)
 		self.show_title()
 		self.xml.signal_connect('on_groupchat_window_destroy', \
@@ -80,6 +81,16 @@ class Groupchat_window(Chat):
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		Chat.on_chat_notebook_key_press_event(self, widget, event)
+	
+	def on_chat_notebook_switch_page(self, notebook, page, page_num):
+		new_child = notebook.get_nth_page(page_num)
+		new_jid = ''
+		for jid in self.xmls:
+			if self.childs[jid] == new_child: 
+				new_jid = jid
+				break
+		self.set_subject(self, new_jid, subject)
+		Chat.on_chat_notebook_switch_page(notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
 		model = self.list_treeview[room_jid].get_model()

@@ -888,12 +888,12 @@ class roster_window:
 	def on_add_contact(self, widget, account):
 		"""When add user is selected :
 		call the add_contact_window class"""
-		add_contact_window(self.plugin, account)
+		Add_contact_window(self.plugin, account)
 
 	def on_join_gc_activate(self, widget, account):
 		"""When Join Groupchat is selected :
 		call the join_gc class"""
-		join_groupchat_window(self.plugin, account)
+		Join_groupchat_window(self.plugin, account)
 
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When new message menuitem is activated:

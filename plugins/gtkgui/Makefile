@@ -1,5 +1,5 @@
 # Set the C flags to include the GTK+ and Python libraries
-CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -I/usr/include/python2.3/ -I.
+CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -I/usr/include/python2.4/ -I.
 LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0`
 
 # Build the shared object
