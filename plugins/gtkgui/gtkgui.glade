@@ -896,7 +896,7 @@ Yann Le Boulanger (asterix@crans.org)</property>
 	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <signal name="clicked" handler="gtk_widget_destroy" last_modification_time="Sun, 26 Oct 2003 20:45:42 GMT"/>
+	      <signal name="clicked" handler="on_close_clicked" last_modification_time="Sun, 26 Oct 2003 20:45:42 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

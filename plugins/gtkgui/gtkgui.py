@@ -559,8 +559,9 @@ class about_Window:
 		"""When Close button is clicked"""
 		widget.get_toplevel().destroy()
 
-	def __init__(self):
+	def __init__(self, plugin):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'About')
+		self.plugin = plugin
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_close_clicked', self.on_close)
 
@@ -1516,7 +1517,7 @@ class roster_Window:
 		"""When about is selected :
 		call the about class"""
 		if not self.plugin.windows.has_key('about'):
-			self.plugin.windows['about'] = about_Window()
+			self.plugin.windows['about'] = about_Window(self.plugin)
 
 	def on_accounts(self, widget):
 		"""When accounts is seleted :
