@@ -220,10 +220,8 @@ class preferences_window:
 		self.update_text_tags()
 		self.plugin.roster.draw_roster()
 	
-	def write_cfg(self): #FIXME: (nk) instant apply
-		"""Save preferences in config File and apply them"""
-		
-		#Emoticons
+	def on_use_emoticons_checkbutton_function(self):
+		"""
 		model = self.emot_tree.get_model()
 		iter = model.get_iter_first()
 		emots = []
@@ -232,13 +230,14 @@ class preferences_window:
 			emots.append(model.get_value(iter, 1))
 			iter = model.iter_next(iter)
 		self.plugin.config['emoticons'] = '\t'.join(emots)
-		#use emoticons
-		chk = self.xml.get_widget('use_emoticons_checkbutton')
-		if chk.get_active():
-			self.plugin.config['useemoticons'] = 1
-			self.plugin.roster.mkemoticons()
-		else:
-			self.plugin.config['useemoticons'] = 0
+		"""
+		self.plugin.roster.mkemoticons()
+	
+	def on_emoticons_treeview_row_changed(self, model, path, iter):
+		print 'row-changed'	
+	
+	def write_cfg(self): #FIXME: (nk) instant apply
+		"""Save preferences in config File and apply them"""
 		#sound player
 		self.plugin.config['soundplayer'] = \
 			self.xml.get_widget('entry_soundplayer').get_text()
@@ -485,11 +484,18 @@ class preferences_window:
 		if not iter:
 			return
 		model.remove(iter)
-
-	def on_chk_toggled(self, widget, widgets):
-		"""set or unset sensitivity of widgets when widget is toggled"""
-		for w in widgets:
-			w.set_sensitive(widget.get_active())
+		
+	def on_checkbutton_toggled(self, widget, config_name, \
+		extra_function = None, change_sensitivity_widgets = None):
+		if widget.get_active():
+			self.plugin.config[config_name] = 1
+			if extra_function != None:
+				apply(extra_function)
+		else:
+			self.plugin.config[config_name] = 0
+		if change_sensitivity_widgets != None:
+			for w in change_sensitivity_widgets:
+				w.set_sensitive(widget.get_active())
 
 	def on_treeview_emoticons_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Delete:
@@ -792,13 +798,18 @@ class preferences_window:
 		self.xml.get_widget('user_text_fontbutton').set_font_name(fontStr)
 		
 		self.xml.signal_connect('on_auto_pop_up_checkbox_toggled', \
-			self.on_chk_toggled, [self.auto_pp_away_checkbutton])
+			self.on_checkbutton_toggled, 'autopopup', None,\
+									 [self.auto_pp_away_checkbutton])
 		self.xml.signal_connect('on_auto_away_checkbutton_toggled', \
-			self.on_chk_toggled, [self.auto_away_time_spinbutton])
+			self.on_checkbutton_toggled, 'autopopupaway', None,\
+									[self.auto_away_time_spinbutton])
 		self.xml.signal_connect('on_auto_xa_checkbutton_toggled', \
-			self.on_chk_toggled, [self.auto_xa_time_spinbutton])
+			self.on_checkbutton_toggled, 'autoxa', None,\
+									[self.auto_xa_time_spinbutton])
 		self.xml.signal_connect('on_use_emoticons_checkbutton_toggled', \
-			self.on_chk_toggled, [self.xml.get_widget('button_new_emoticon'),
+			self.on_checkbutton_toggled, 'useemoticons', \
+					self.on_use_emoticons_checkbutton_function, \
+					[self.xml.get_widget('button_new_emoticon'),
 					self.xml.get_widget('button_remove_emoticon'),
 					self.xml.get_widget('treeview_emoticons'),
 					self.xml.get_widget('set_image_button'),
@@ -829,6 +840,9 @@ class preferences_window:
 		#log presences in external file
 		st = self.config_logger['lognotsep']
 		self.xml.get_widget('chk_log_pres_ext').set_active(st)
+		
+		self.emot_tree.get_model().connect('row-changed', \
+			self.on_emoticons_treeview_row_changed)
 		
 		self.xml.signal_autoconnect(self)
 
