@@ -1810,6 +1810,7 @@ class roster_Window:
 		"""when show offline option is changed :
 		redraw the treeview"""
 		self.plugin.config['showoffline'] = 1 - self.plugin.config['showoffline']
+		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
 		self.draw_roster()
 
 	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
