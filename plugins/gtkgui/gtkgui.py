@@ -1767,8 +1767,14 @@ class roster_Window:
 				'requested', 'none', 'subscribe', '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
+
+	def on_roster_treeview_key_release_event(self, widget, event):
+		"""when a key is pressed in the treevies"""
+		if event.keyval == gtk.keysyms.Escape:
+			self.tree.get_selection().unselect_all()
+		return gtk.FALSE
 	
-	def on_treeview_event(self, widget, event):
+	def on_roster_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			if event.button == 3:
@@ -1796,9 +1802,6 @@ class roster_Window:
 						int(event.y))
 				except TypeError:
 					self.tree.get_selection().unselect_all()
-		if event.type == gtk.gdk.KEY_RELEASE:
-			if event.keyval == gtk.keysyms.Escape:
-				self.tree.get_selection().unselect_all()
 		return gtk.FALSE
 
 	def on_req_usub(self, widget, user, account):
@@ -2001,7 +2004,7 @@ class roster_Window:
 				get_property('is-active'):
 				self.plugin.systray.add_jid(jid, account)
 
-	def on_prefs(self, widget):
+	def on_preferences_activate(self, widget):
 		"""When preferences is selected :
 		call the preference_Window class"""
 		if not self.plugin.windows.has_key('preferences'):
@@ -2018,13 +2021,13 @@ class roster_Window:
 		if not self.plugin.windows.has_key('join_gc'):
 			self.plugin.windows['join_gc'] = join_gc(self.plugin, account)
 
-	def on_about(self, widget):
+	def on_about_activate(self, widget):
 		"""When about is selected :
 		call the about class"""
 		if not self.plugin.windows.has_key('about'):
 			self.plugin.windows['about'] = about_Window(self.plugin)
 
-	def on_accounts(self, widget):
+	def on_accounts_activate(self, widget):
 		"""When accounts is seleted :
 		call the accounts class to modify accounts"""
 		if not self.plugin.windows.has_key('accounts'):
@@ -2038,25 +2041,23 @@ class roster_Window:
 			else:
 				w.window.destroy()
 	
-	def on_close(self, widget, event):
+	def on_Gajim_delete_event(self, widget, event):
 		"""When we want to close the window"""
 		if self.plugin.systray_visible:
-			win = self.xml.get_widget('Gajim')
-			win.iconify()
+			self.window.iconify()
 		else:
-			self.on_quit(widget)
+			self.on_quit()
 		return 1
 
-	def on_quit(self, widget):
+	def on_quit(self):
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
 		if self.plugin.config.has_key('saveposition'):
 			if self.plugin.config['saveposition']:
-				win = self.xml.get_widget('Gajim')
 				self.plugin.config['x-position'], self.plugin.config['y-position']=\
-					win.get_position()
+					self.window.get_position()
 				self.plugin.config['width'], self.plugin.config['height'] = \
-					win.get_size()
+					self.window.get_size()
 
 		self.plugin.config['hiddenlines'] = string.join(self.hidden_lines, '\t')
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
@@ -2066,7 +2067,10 @@ class roster_Window:
 		self.plugin.hide_systray()
 		gtk.main_quit()
 
-	def on_row_activated(self, widget, path, col=0):
+	def on_quit_activate(self, widget):
+		self.on_quit()
+
+	def on_roster_treeview_row_activated(self, widget, path, col=0):
 		"""When an iter is dubble clicked :
 		open the chat window"""
 		model = self.tree.get_model()
@@ -2087,7 +2091,7 @@ class roster_Window:
 			elif self.contacts[account].has_key(jid):
 				self.new_chat(self.contacts[account][jid][0], account)
 
-	def on_row_expanded(self, widget, iter, path):
+	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		"""When a row is expanded :
 		change the icon of the arrow"""
 		model = self.tree.get_model()
@@ -2109,7 +2113,7 @@ class roster_Window:
 					self.tree.expand_row(pathG, False)
 			
 	
-	def on_row_collapsed(self, widget, iter, path):
+	def on_roster_treeview_row_collapsed(self, widget, iter, path):
 		"""When a row is collapsed :
 		change the icon of the arrow"""
 		model = self.tree.get_model()
@@ -2222,7 +2226,7 @@ class roster_Window:
 			return 0
 		return 1
 
-	def on_show_off(self, widget):
+	def on_show_offline_contacts_activate(self, widget):
 		"""when show offline option is changed :
 		redraw the treeview"""
 		self.plugin.config['showoffline'] = 1 - self.plugin.config['showoffline']
@@ -2345,13 +2349,13 @@ class roster_Window:
 			start = "[" + str(self.nb_unread) + "] "
 		elif self.nb_unread == 1:
 			start = "* "
-		window = self.xml.get_widget('Gajim')
-		window.set_title(start + " Gajim")
+		self.window.set_title(start + " Gajim")
 
 	def __init__(self, plugin):
 		# FIXME : handle no file ...
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim', APP)
-		self.tree = self.xml.get_widget('treeview')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim_window', APP)
+		self.window = self.xml.get_widget('Gajim_window')
+		self.tree = self.xml.get_widget('roster_treeview')
 		self.plugin = plugin
 		self.nb_unread = 0
 		self.add_handler_id = 0
@@ -2360,19 +2364,18 @@ class roster_Window:
 		self.regroup = 0
 		if self.plugin.config.has_key('mergeaccounts'):
 			self.regroup = self.plugin.config['mergeaccounts']
-		window = self.xml.get_widget('Gajim')
 		if self.plugin.config.has_key('saveposition'):
-			window.hide()
+			self.window.hide()
 			if self.plugin.config['saveposition']:
 				if self.plugin.config.has_key('x-position') and \
 					self.plugin.config.has_key('y-position'):
-					window.move(self.plugin.config['x-position'], \
+					self.window.move(self.plugin.config['x-position'], \
 						self.plugin.config['y-position'])
 				if self.plugin.config.has_key('width') and \
 					self.plugin.config.has_key('height'):
-					window.resize(self.plugin.config['width'], \
+					self.window.resize(self.plugin.config['width'], \
 						self.plugin.config['height'])
-			window.show_all()
+			self.window.show_all()
 		self.groups = {}
 		self.contacts = {}
 		for a in self.plugin.accounts.keys():
@@ -2436,18 +2439,8 @@ class roster_Window:
 		self.tree.enable_model_drag_dest(TARGETS, gtk.gdk.ACTION_DEFAULT)
 		self.tree.connect("drag_data_get", self.drag_data_get_data)
 		self.tree.connect("drag_data_received", self.drag_data_received_data)
-		self.xml.signal_connect('on_widget_destroy', self.on_close)
-		self.xml.signal_connect('on_preferences_activate', self.on_prefs)
-		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
-		self.xml.signal_connect('on_show_offline_activate', self.on_show_off)
-		self.xml.signal_connect('on_about_activate', self.on_about)
-		self.xml.signal_connect('on_quit_activate', self.on_quit)
-		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
-		self.xml.signal_connect('on_status_changed', self.on_status_changed)
+		self.xml.signal_autoconnect(self)
 		self.id_signal_cb = self.cb.connect('changed', self.on_cb_changed)
-		self.xml.signal_connect('on_row_activated', self.on_row_activated)
-		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
-		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
 
 		self.hidden_lines = string.split(self.plugin.config['hiddenlines'], '\t')
 		self.draw_roster()
@@ -2570,7 +2563,7 @@ class systray:
 
 		item = gtk.MenuItem(_("Quit"))
 		menu.append(item)
-		item.connect("activate", self.plugin.roster.on_quit)
+		item.connect("activate", self.plugin.roster.on_quit_activate)
 		
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
@@ -2886,7 +2879,7 @@ class plugin:
 		self.roster.draw_roster()
 
 	def handle_event_quit(self, p1, p2):
-		self.roster.on_quit(self)
+		self.roster.on_quit()
 
 	def handle_event_myvcard(self, account, array):
 		nick = ''

@@ -3,7 +3,7 @@
 
 <glade-interface>
 
-<widget class="GtkWindow" id="Gajim">
+<widget class="GtkWindow" id="Gajim_window">
   <property name="visible">True</property>
   <property name="title" translatable="yes">Gajim</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -18,7 +18,7 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="delete_event" handler="on_widget_destroy" last_modification_time="Sun, 16 Jan 2005 21:31:06 GMT"/>
+  <signal name="delete_event" handler="on_Gajim_delete_event" last_modification_time="Mon, 28 Feb 2005 14:40:21 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox1">
@@ -48,7 +48,7 @@
 		      <accelerator key="N" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image287">
+			<widget class="GtkImage" id="image299">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -83,7 +83,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image288">
+			<widget class="GtkImage" id="image300">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -99,7 +99,7 @@
 		  <child>
 		    <widget class="GtkCheckMenuItem" id="show_offline">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Show Offline</property>
+		      <property name="label" translatable="yes">Show Offline Contacts</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">False</property>
 		      <signal name="activate" handler="on_show_offline_activate" last_modification_time="Wed, 31 Dec 2003 09:49:15 GMT"/>
@@ -122,7 +122,7 @@
 		      <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image289">
+			<widget class="GtkImage" id="image301">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-quit</property>
 			  <property name="icon_size">1</property>
@@ -157,7 +157,7 @@
 		      <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image290">
+			<widget class="GtkImage" id="image302">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -178,7 +178,7 @@
 		      <signal name="activate" handler="on_browse_agents_activate" last_modification_time="Wed, 12 Nov 2003 10:50:33 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image291">
+			<widget class="GtkImage" id="image303">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find</property>
 			  <property name="icon_size">1</property>
@@ -200,7 +200,7 @@
 		      <accelerator key="P" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image292">
+			<widget class="GtkImage" id="image304">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-preferences</property>
 			  <property name="icon_size">1</property>
@@ -234,7 +234,7 @@
 		      <signal name="activate" handler="on_about_activate" last_modification_time="Fri, 03 Oct 2003 12:49:50 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image293">
+			<widget class="GtkImage" id="image305">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-about</property>
 			  <property name="icon_size">1</property>
@@ -269,18 +269,18 @@
 	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	  <child>
-	    <widget class="GtkTreeView" id="treeview">
+	    <widget class="GtkTreeView" id="roster_treeview">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="headers_visible">False</property>
 	      <property name="rules_hint">False</property>
 	      <property name="reorderable">True</property>
 	      <property name="enable_search">True</property>
-	      <signal name="button_press_event" handler="on_treeview_event" last_modification_time="Tue, 30 Sep 2003 09:11:17 GMT"/>
-	      <signal name="row_activated" handler="on_row_activated" last_modification_time="Sun, 12 Oct 2003 18:11:52 GMT"/>
-	      <signal name="row_expanded" handler="on_row_expanded" last_modification_time="Wed, 10 Dec 2003 10:31:44 GMT"/>
-	      <signal name="row_collapsed" handler="on_row_collapsed" last_modification_time="Wed, 10 Dec 2003 10:54:27 GMT"/>
-	      <signal name="key_release_event" handler="on_treeview_event" last_modification_time="Tue, 18 May 2004 23:30:46 GMT"/>
+	      <signal name="button_press_event" handler="on_roster_treeview_button_press_event" last_modification_time="Mon, 28 Feb 2005 14:16:44 GMT"/>
+	      <signal name="row_activated" handler="on_roster_treeview_row_activated" last_modification_time="Mon, 28 Feb 2005 14:18:06 GMT"/>
+	      <signal name="row_expanded" handler="on_roster_treeview_row_expanded" last_modification_time="Mon, 28 Feb 2005 14:18:14 GMT"/>
+	      <signal name="row_collapsed" handler="on_roster_treeview_row_collapsed" last_modification_time="Mon, 28 Feb 2005 14:18:33 GMT"/>
+	      <signal name="key_release_event" handler="on_roster_treeview_key_release_event" last_modification_time="Mon, 28 Feb 2005 14:18:53 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
