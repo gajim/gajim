@@ -128,7 +128,8 @@ class tabbed_chat_window:
 		elif self.nb_unread[jid] == 1:
 			start = "* "
 		child = self.xmls[jid].get_widget('chat_vbox')
-		self.chat_notebook.set_tab_label_text(child, start + self.users[jid].name)
+		tab_label = self.chat_notebook.get_tab_label(child).get_children()[0]
+		tab_label.set_text(start + self.users[jid].name)
 
 	def set_image(self, image, jid):
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
@@ -175,10 +176,9 @@ class tabbed_chat_window:
 		start, end = conversation_buffer.get_bounds()
 		conversation_buffer.delete(start, end)
 
-	def on_close_button_clicked(self, button):
+	def on_close_button_clicked(self, button, jid):
 		"""When close button is pressed :
 		close a tab"""
-		jid = self.get_active_jid()
 		self.remove_tab(jid)
 
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
@@ -243,8 +243,9 @@ class tabbed_chat_window:
 			if self.print_time_timeout_id.has_key(jid):
 				gobject.source_remove(self.print_time_timeout_id[jid])
 				del self.print_time_timeout_id[jid]
+			child = self.xmls[jid].get_widget('chat_vbox')
 			self.chat_notebook.remove_page(\
-				self.chat_notebook.get_current_page())
+				self.chat_notebook.page_num(child))
 			del self.plugin.windows[self.account]['chats'][jid]
 			del self.users[jid]
 			del self.nb_unread[jid]
@@ -308,11 +309,17 @@ class tabbed_chat_window:
 		conversation_scrolledwindow.get_vadjustment().connect('value-changed', \
 			self.on_conversation_vadjustment_value_changed)
 		
-		self.chat_notebook.append_page(self.xmls[user.jid].\
-			get_widget('chat_vbox'))
+		child = self.xmls[user.jid].get_widget('chat_vbox')
+		self.chat_notebook.append_page(child)
 		if len(self.xmls) > 1:
 			self.chat_notebook.set_show_tabs(True)
 
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'tab_hbox', APP)
+		tab_hbox = xm.get_widget('tab_hbox')
+		xm.signal_connect('on_close_button_clicked', \
+			self.on_close_button_clicked, user.jid)
+		self.chat_notebook.set_tab_label(child, tab_hbox)
+		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
 		self.show_title()
