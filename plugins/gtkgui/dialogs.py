@@ -139,6 +139,7 @@ class vcard_information_window:
 		for e in entries: 
 			txt = self.xml.get_widget(e+'_entry').get_text()
 			if txt != '':
+				print 'text:', txt
 				vcard = self.add_to_vcard(vcard, e, txt)
 		buffer = self.xml.get_widget('DESC_textview').get_buffer()
 		start_iter = buffer.get_start_iter()
@@ -160,6 +161,7 @@ class vcard_information_window:
 			nick = self.plugin.accounts[self.account]['name']
 		self.plugin.nicks[self.account] = nick
 		self.plugin.send('VCARD', self.account, vcard)
+		print 'finished with vcard'
 
 	def on_retrieve_button_clicked(self, widget):
 		if self.plugin.connected[self.account] > 1:
@@ -188,6 +190,26 @@ class vcard_information_window:
 		#close button at the end
 		button = self.xml.get_widget('close_button')
 		information_hbuttonbox.reorder_child(button, 2)
+		
+		#make all entries editable
+		self.xml.get_widget('FN_entry').set_property('editable', True)
+		self.xml.get_widget('NICKNAME_entry').set_property('editable', True)
+		self.xml.get_widget('BDAY_entry').set_property('editable', True)
+		self.xml.get_widget('EMAIL_USERID_entry').set_property('editable', True)
+		self.xml.get_widget('URL_entry').set_property('editable', True)
+		self.xml.get_widget('TEL_NUMBER_entry').set_property('editable', True)
+		self.xml.get_widget('ADR_STREET_entry').set_property('editable', True)
+		self.xml.get_widget('ADR_EXTADR_entry').set_property('editable', True)
+		self.xml.get_widget('ADR_LOCALITY_entry').set_property('editable', True)
+		self.xml.get_widget('ADR_REGION_entry').set_property('editable', True)
+		self.xml.get_widget('ADR_PCODE_entry').set_property('editable', True)
+		self.xml.get_widget('ADR_CTRY_entry').set_property('editable', True)
+		self.xml.get_widget('ORG_ORGNAME_entry').set_property('editable', True)
+		self.xml.get_widget('ORG_ORGUNIT_entry').set_property('editable', True)
+		self.xml.get_widget('TITLE_entry').set_property('editable', True)
+		self.xml.get_widget('ROLE_entry').set_property('editable', True)
+		self.xml.get_widget('DESC_textview').set_editable(True)
+		self.xml.get_widget('DESC_textview').set_cursor_visible(True)
 
 	#the user variable is the jid if vcard is true
 	def __init__(self, user, plugin, account, vcard=False):
@@ -518,7 +540,7 @@ class Add_new_contact_window:
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
 		for g in self.plugin.roster.groups[account].keys():
-			if g != 'not in the roster':
+			if g != 'not in the roster' and g != 'Agents':
 				self.group_comboboxentry.append_text(g)
 
 		self.xml.signal_autoconnect(self)

@@ -1430,7 +1430,7 @@ class Accounts_window:
 			self.plugin.windows['account_modification_window'] = \
 				Account_modification_window(self.plugin, infos) # may it messes with this one
 		else:
-			self.plugin.windows[account_modification_window].window.present()
+			self.plugin.windows['account_modification_window'].window.present()
 
 	def on_sync_with_global_status_checkbutton_toggled(self, widget):
 		if widget.get_active():
