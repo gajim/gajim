@@ -116,6 +116,8 @@ class Chat:
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
 		#clean self.plugin.windows[self.account][kind]
 		for jid in self.xmls:
+			if self.nb_unread[jid] > 0:
+				self.plugin.systray.remove_jid(jid, self.account)
 			del self.plugin.windows[self.account][kind][jid]
 			if self.print_time_timeout_id.has_key(jid):
 				gobject.source_remove(self.print_time_timeout_id[jid])
@@ -183,6 +185,10 @@ class Chat:
 		if len(self.xmls) == 1:
 			self.window.destroy()
 		else:
+			if self.nb_unread[jid] > 0:
+				self.nb_unread[jid] = 0
+				self.show_title()
+				self.plugin.systray.remove_jid(jid, self.account)
 			if self.print_time_timeout_id.has_key(jid):
 				gobject.source_remove(self.print_time_timeout_id[jid])
 				del self.print_time_timeout_id[jid]
