@@ -42,6 +42,6 @@ class GajimThread(threading.Thread):
 			res = eval(mod)
 		except:
 			print _("plugin %s cannot be launched : ") % self.getName() + \
-				sys.exc_info()[1][0]
+				str(sys.exc_info()[1][0:])
 	# END run
 # END GajimThread
