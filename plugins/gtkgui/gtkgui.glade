@@ -3079,6 +3079,7 @@ on the server as a vCard</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="on_tray_icon_checkbutton_toggled" last_modification_time="Sun, 06 Mar 2005 15:13:50 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -3098,6 +3099,7 @@ on the server as a vCard</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="on_save_position_checkbutton_toggled" last_modification_time="Sun, 06 Mar 2005 15:04:10 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -3117,6 +3119,7 @@ on the server as a vCard</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="on_merge_checkbutton_toggled" last_modification_time="Sun, 06 Mar 2005 15:07:26 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -3126,7 +3129,7 @@ on the server as a vCard</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkCheckButton" id="checkbutton_tabbed">
+		<widget class="GtkCheckButton" id="use_tabbed_chat_window_checkbutton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Use a single chat window with tabs</property>
@@ -3136,6 +3139,7 @@ on the server as a vCard</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="on_use_tabbed_chat_window_checkbutton_toggled" last_modification_time="Sun, 06 Mar 2005 15:11:41 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -3318,7 +3322,7 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkColorButton" id="colorbutton_in">
+		    <widget class="GtkColorButton" id="incoming_msg_colorbutton">
 		      <property name="visible">True</property>
 		      <property name="can_default">True</property>
 		      <property name="has_default">True</property>
@@ -3326,6 +3330,7 @@ on the server as a vCard</property>
 		      <property name="has_focus">True</property>
 		      <property name="use_alpha">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="color_set" handler="on_incoming_msg_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:07:44 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -3338,11 +3343,12 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkColorButton" id="colorbutton_out">
+		    <widget class="GtkColorButton" id="outgoing_msg_colorbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="use_alpha">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="color_set" handler="on_outgoing_msg_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:07:56 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -3355,11 +3361,12 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkColorButton" id="colorbutton_status">
+		    <widget class="GtkColorButton" id="status_msg_colorbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="use_alpha">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="color_set" handler="on_status_msg_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:08:04 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -3471,7 +3478,7 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkFontButton" id="fontbutton_account_text">
+		    <widget class="GtkFontButton" id="account_text_fontbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="show_style">True</property>
@@ -3479,6 +3486,7 @@ on the server as a vCard</property>
 		      <property name="use_font">False</property>
 		      <property name="use_size">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="font_set" handler="on_account_text_fontbutton_font_set" last_modification_time="Sun, 06 Mar 2005 14:37:23 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">2</property>
@@ -3491,7 +3499,7 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkFontButton" id="fontbutton_group_text">
+		    <widget class="GtkFontButton" id="group_text_fontbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="show_style">True</property>
@@ -3499,6 +3507,7 @@ on the server as a vCard</property>
 		      <property name="use_font">False</property>
 		      <property name="use_size">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="font_set" handler="on_group_text_fontbutton_font_set" last_modification_time="Sun, 06 Mar 2005 14:37:32 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">2</property>
@@ -3511,7 +3520,7 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkFontButton" id="fontbutton_user_text">
+		    <widget class="GtkFontButton" id="user_text_fontbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="show_style">True</property>
@@ -3519,6 +3528,7 @@ on the server as a vCard</property>
 		      <property name="use_font">False</property>
 		      <property name="use_size">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="font_set" handler="on_user_text_fontbutton_font_set" last_modification_time="Sun, 06 Mar 2005 14:37:36 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">2</property>
@@ -3627,11 +3637,12 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkColorButton" id="colorbutton_account_bg">
+		    <widget class="GtkColorButton" id="account_text_bg_colorbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="use_alpha">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="color_set" handler="on_account_text_bg_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:35:55 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">3</property>
@@ -3644,11 +3655,12 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkColorButton" id="colorbutton_group_bg">
+		    <widget class="GtkColorButton" id="group_text_bg_colorbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="use_alpha">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="color_set" handler="on_group_text_bg_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:36:00 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">3</property>
@@ -3661,11 +3673,12 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkColorButton" id="colorbutton_user_bg">
+		    <widget class="GtkColorButton" id="user_text_bg_colorbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="use_alpha">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="color_set" handler="on_user_text_bg_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:36:07 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">3</property>
@@ -3678,11 +3691,12 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkColorButton" id="colorbutton_account_text">
+		    <widget class="GtkColorButton" id="account_text_colorbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="use_alpha">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="color_set" handler="on_account_text_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:24:01 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -3695,11 +3709,12 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkColorButton" id="colorbutton_group_text">
+		    <widget class="GtkColorButton" id="group_text_colorbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="use_alpha">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="color_set" handler="on_group_text_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:24:07 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -3712,11 +3727,12 @@ on the server as a vCard</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkColorButton" id="colorbutton_user_text">
+		    <widget class="GtkColorButton" id="user_text_colorbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="use_alpha">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="color_set" handler="on_user_text_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:24:35 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -5151,46 +5167,19 @@ Custom</property>
 	<widget class="GtkHButtonBox" id="hbuttonbox7">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
 	  <property name="spacing">15</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button_apply">
+	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-apply</property>
+	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_apply" last_modification_time="Sat, 05 Mar 2005 16:24:18 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="button_cancel">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_cancel" last_modification_time="Sat, 05 Mar 2005 16:24:59 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="button_ok">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="has_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_ok" last_modification_time="Sat, 05 Mar 2005 16:25:12 GMT"/>
+	      <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Sun, 06 Mar 2005 13:49:57 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

@@ -40,97 +40,146 @@ class preferences_window:
 	def delete_event(self, widget):
 		"""close window"""
 		del self.plugin.windows['preferences']
+	
+	def on_incoming_msg_colorbutton_color_set(self, widget):
+		"""Take The Color For The Incoming Messages"""
+		color = widget.get_color()
+		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['inmsgcolor'] = color_string
+		self.update_text_tags()
+		
+	def on_outgoing_msg_colorbutton_color_set(self, widget):
+		"""Take The Color For The Outgoing Messages"""
+		color = widget.get_color()
+		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['outmsgcolor'] = color_string
+		self.update_text_tags()
+	
+	def on_status_msg_colorbutton_color_set(self, widget):
+		"""Take The Color For The Status Messages"""
+		color = widget.get_color()
+		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['statusmsgcolor'] = color_string
+		self.update_text_tags()
+	
+	def on_account_text_colorbutton_color_set(self, widget):
+		"""Take The Color For The Account Text"""
+		color = widget.get_color()
+		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['accounttextcolor'] = color_string
+		self.update_text_tags()
+	
+	def on_group_text_colorbutton_color_set(self, widget):
+		"""Take The Color For The Group Text"""
+		color = widget.get_color()
+		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['grouptextcolor'] = color_string
+		self.update_text_tags()
 
-	def on_cancel(self, widget):
-		"""When Cancel button is clicked"""
-		widget.get_toplevel().destroy()
+	def on_user_text_colorbutton_color_set(self, widget):
+		"""Take The Color For The User Text"""
+		color = widget.get_color()
+		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['usertextcolor'] = color_string
+		self.update_text_tags()
 
-	def write_cfg(self): #FIXME: (nk) instant apply
-		"""Save preferences in config File and apply them"""
-		#Color for incomming messages
-		color = self.xml.get_widget('colorbutton_in').get_color()
-		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+	def on_account_text_bg_colorbutton_color_set(self, widget):
+		"""Take The Color For The Background Of Account Text"""
+		color = widget.get_color()
+		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
 			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['inmsgcolor'] = colSt
-		#Color for outgoing messages
-		color = self.xml.get_widget('colorbutton_out').get_color()
-		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+		self.plugin.config['accountbgcolor'] = color_string
+		self.update_text_tags()
+	
+	def on_group_text_bg_colorbutton_color_set(self, widget):
+		"""Take The Color For The Background Of Group Text"""
+		color = widget.get_color()
+		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
 			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['outmsgcolor'] = colSt
-		#Color for status messages
-		color = self.xml.get_widget('colorbutton_status').get_color()
-		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+		self.plugin.config['groupbgcolor'] = color_string
+		self.update_text_tags()
+	
+	def on_user_text_bg_colorbutton_color_set(self, widget):
+		"""Take The Color For The Background Of User Text"""
+		color = widget.get_color()
+		color_string = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
 			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['statusmsgcolor'] = colSt
-		#Color for account text
-		color = self.xml.get_widget('colorbutton_account_text').get_color()
-		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['accounttextcolor'] = colSt
-		#Color for group text
-		color = self.xml.get_widget('colorbutton_group_text').get_color()
-		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['grouptextcolor'] = colSt
-		#Color for user text
-		color = self.xml.get_widget('colorbutton_user_text').get_color()
-		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['usertextcolor'] = colSt
-		#Color for background account
-		color = self.xml.get_widget('colorbutton_account_bg').get_color()
-		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['accountbgcolor'] = colSt
-		#Color for background group
-		color = self.xml.get_widget('colorbutton_group_bg').get_color()
-		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['groupbgcolor'] = colSt
-		#Color for background user
-		color = self.xml.get_widget('colorbutton_user_bg').get_color()
-		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
-			+(hex(color.blue)+'0')[2:4]
-		self.plugin.config['userbgcolor'] = colSt
-		#Font for account
-		fontStr = self.xml.get_widget('fontbutton_account_text').get_font_name()
-		self.plugin.config['accountfont'] = fontStr
-		#Font for group
-		fontStr = self.xml.get_widget('fontbutton_group_text').get_font_name()
-		self.plugin.config['groupfont'] = fontStr
-		#Font for user
-		fontStr = self.xml.get_widget('fontbutton_user_text').get_font_name()
-		self.plugin.config['userfont'] = fontStr
-		#update opened chat windows
+		self.plugin.config['userbgcolor'] = color_string
+		self.update_text_tags()
+	
+	def on_account_text_fontbutton_font_set(self, widget):
+		"""Take The Font For The User Text"""
+		font_string = widget.get_font_name()
+		self.plugin.config['accountfont'] = font_string
+		self.update_text_tags()
+
+	def on_group_text_fontbutton_font_set(self, widget):
+		"""Take The Font For The Group Text"""
+		font_string = widget.get_font_name()
+		self.plugin.config['groupfont'] = font_string
+		self.update_text_tags()
+	
+	def on_user_text_fontbutton_font_set(self, widget):
+		"""Take The Font For The User Text"""
+		font_string = widget.get_font_name()
+		self.plugin.config['userfont'] = font_string
+		self.update_text_tags()
+	
+	def update_text_tags(self):
+		"""Update Opened Chat Windows"""
 		for a in self.plugin.accounts.keys():
 			if self.plugin.windows[a]['chats'].has_key('tabbed'):
 				self.plugin.windows[a]['chats']['tabbed'].update_tags()
 			else:
 				for jid in self.plugin.windows[a]['chats'].keys():
 					self.plugin.windows[a]['chats'][jid].update_tags()
-		#IconStyle
-		ist = self.iconstyle_combobox.entry.get_text()
-		self.plugin.config['iconstyle'] = ist
-		self.plugin.roster.mkpixbufs()
-		#save position
-		chk = self.xml.get_widget('save_position_checkbutton')
-		if chk.get_active():
+	
+	def on_save_position_checkbutton_toggled(self, widget):
+		"""On Save Position Checkbutton Toggled"""
+		if widget.get_active():
 			self.plugin.config['saveposition'] = 1
 		else:
 			self.plugin.config['saveposition'] = 0
-		#merge groups
-		chk = self.xml.get_widget('merge_checkbutton')
-		if chk.get_active():
+	
+	def on_merge_position_checkbutton_toggled(self, widget):
+		"""On Merge Accounts Checkbutton Toggled"""
+		if widget.get_active():
 			self.plugin.config['mergeaccounts'] = 1
 		else:
 			self.plugin.config['mergeaccounts'] = 0
 		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
-		#use tabbed chat window
-		chk = self.xml.get_widget('checkbutton_tabbed')
-		if chk.get_active():
+	
+	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
+		"""On Use Tabbed Chat Window Checkbutton Toggled"""
+		if widget.get_active():
 			self.plugin.config['usetabbedchat'] = 1
 		else:
 			self.plugin.config['usetabbedchat'] = 0
+	
+	def on_tray_icon_checkbutton_toggled(self, widget):
+		"""On Tray Icon Checkbutton Toggled"""
+		if self.widget.get_active():
+			self.plugin.config['trayicon'] = 1
+			self.plugin.show_systray()
+		else:
+			self.plugin.config['trayicon'] = 0
+			self.plugin.hide_systray()
+		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
+		self.plugin.roster.draw_roster()
+
+	def write_cfg(self): #FIXME: (nk) instant apply
+		"""Save preferences in config File and apply them"""
+		
+		#IconStyle
+		ist = self.iconstyle_combobox.entry.get_text()
+		self.plugin.config['iconstyle'] = ist
+		self.plugin.roster.mkpixbufs()
 		#Emoticons
 		model = self.emot_tree.get_model()
 		iter = model.get_iter_first()
@@ -202,15 +251,7 @@ class preferences_window:
 			del self.plugin.config['msg%i_name' % i]
 			del self.plugin.config['msg%i' % i]
 			i += 1
-		#trayicon
-		if self.tray_icon_checkbutton.get_active():
-			self.plugin.config['trayicon'] = 1
-			self.plugin.show_systray()
-		else:
-			self.plugin.config['trayicon'] = 0
-			self.plugin.hide_systray()
-		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
-		self.plugin.roster.draw_roster()
+		
 		#open links with
 		if self.links_open_with_combobox.get_active() == 0:
 			self.plugin.config['openwith'] = 'gnome-open'
@@ -242,6 +283,10 @@ class preferences_window:
 	def on_apply(self, widget):
 		"""When Apply button is clicked"""
 		self.write_cfg()
+	
+	def on_close_button_clicked(self, widget):
+		"""When The close button is clicked"""
+		widget.get_toplevel().destroy()
 
 	def fill_msg_treeview(self):
 		i = 0
@@ -517,17 +562,17 @@ class preferences_window:
 		
 		#Color for incomming messages
 		colSt = self.plugin.config['inmsgcolor']
-		self.xml.get_widget('colorbutton_in').set_color(\
+		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for outgoing messages
 		colSt = self.plugin.config['outmsgcolor']
-		self.xml.get_widget('colorbutton_out').set_color(\
+		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for status messages
 		colSt = self.plugin.config['statusmsgcolor']
-		self.xml.get_widget('colorbutton_status').set_color(\
+		self.xml.get_widget('status_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#iconStyle
@@ -552,7 +597,7 @@ class preferences_window:
 
 		#use tabbed chat window
 		st = self.plugin.config['usetabbedchat']
-		self.xml.get_widget('checkbutton_tabbed').set_active(st)
+		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
 
 		#Use emoticons
 		st = self.plugin.config['useemoticons']
@@ -669,45 +714,45 @@ class preferences_window:
 
 		#Color for account text
 		colSt = self.plugin.config['accounttextcolor']
-		self.xml.get_widget('colorbutton_account_text').set_color(\
+		self.xml.get_widget('account_text_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for group text
 		colSt = self.plugin.config['grouptextcolor']
-		self.xml.get_widget('colorbutton_group_text').set_color(\
+		self.xml.get_widget('group_text_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for user text
 		colSt = self.plugin.config['usertextcolor']
-		self.xml.get_widget('colorbutton_user_text').set_color(\
+		self.xml.get_widget('user_text_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for background account
 		colSt = self.plugin.config['accountbgcolor']
-		self.xml.get_widget('colorbutton_account_bg').set_color(\
+		self.xml.get_widget('account_text_bg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for background group
 		colSt = self.plugin.config['groupbgcolor']
-		self.xml.get_widget('colorbutton_group_bg').set_color(\
+		self.xml.get_widget('group_text_bg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for background user
 		colSt = self.plugin.config['userbgcolor']
-		self.xml.get_widget('colorbutton_user_bg').set_color(\
+		self.xml.get_widget('user_text_bg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 
 		#font for account
 		fontStr = self.plugin.config['accountfont']
-		self.xml.get_widget('fontbutton_account_text').set_font_name(fontStr)
+		self.xml.get_widget('account_text_fontbutton').set_font_name(fontStr)
 		
 		#font for group
 		fontStr = self.plugin.config['groupfont']
-		self.xml.get_widget('fontbutton_group_text').set_font_name(fontStr)
+		self.xml.get_widget('group_text_fontbutton').set_font_name(fontStr)
 		
 		#font for account
 		fontStr = self.plugin.config['userfont']
-		self.xml.get_widget('fontbutton_user_text').set_font_name(fontStr)
+		self.xml.get_widget('user_text_fontbutton').set_font_name(fontStr)
 		
 		self.xml.signal_connect('on_auto_pop_up_checkbox_toggled', \
 			self.on_chk_toggled, [self.auto_pp_away_checkbutton])
