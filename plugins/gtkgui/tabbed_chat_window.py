@@ -143,7 +143,7 @@ class tabbed_chat_window:
 		"""close window"""
 		for jid in self.users:
 			if time.time() - self.last_message_time[jid] < 2: # 2 seconds
-				dialog = Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this window ?') % jid)
+				dialog = Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this window?') % jid)
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
 
@@ -233,7 +233,7 @@ class tabbed_chat_window:
 
 	def remove_tab(self, jid):
 		if time.time() - self.last_message_time[jid] < 2:
-			dialog = Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this tab ?') % jid)
+			dialog = Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this tab?') % jid)
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 
@@ -533,6 +533,14 @@ class tabbed_chat_window:
 
 	def hyperlink_handler(self, texttag, widget, event, iter, kind):
 		if event.type == gtk.gdk.BUTTON_RELEASE:
+			#FIXME (nk to yann):
+			# can we know if that button release had also before selected text?
+			# let's say we have http://be this is nice
+			# and I start to select (with my mouse) the text from right to left
+			# starting with nice. SO I go nice is this eb//:ptth and just stop pressing the mouse button
+			# then we will launch the mailer/browser which is not what the user want
+			# is there sth you do to fix this?
+			# maybe check before launching if we have a selection with non empty text in it?
 			begin_iter = iter.copy()
 			#we get the begining of the tag
 			while not begin_iter.begins_tag(texttag):
