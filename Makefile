@@ -32,7 +32,7 @@ idle:
 pyo:
 	ST="import py_compile\n py_compile.compile('$$f')"
 	for f in $(FILES_PY) ; do \
-		python -O -c "$$ST"; \
+		python -OO -c "$$ST"; \
 	done
 
 clean:
@@ -40,7 +40,6 @@ clean:
 	find -name *.mo -exec rm {} \;
 	$(foreach sdir, $(MODULES), make -C $(sdir) clean;)
 
-# FIXME -- olé gorito
 dist:
 	-rm -rf gajim-$(VERSION)
 	mkdir gajim-$(VERSION)
