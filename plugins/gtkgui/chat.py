@@ -23,7 +23,6 @@ import gtk.glade
 import pango
 import gobject
 import time
-import sre
 
 from dialogs import *
 from history_window import *
