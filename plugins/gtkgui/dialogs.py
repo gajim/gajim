@@ -206,6 +206,40 @@ class passphrase_Window:
 		self.xml.signal_connect('on_Passphrase_key_press_event', \
 			self.on_key_pressed)
 
+class choose_gpg_Window:
+	"""Class for Away Message Window"""
+	def run(self):
+		"""Wait for Ok button to be pressed and return the selected key"""
+		rep = self.xml.get_widget("Choose_gpg_key").run()
+		if rep == gtk.RESPONSE_OK:
+			selection = self.treeview.get_selection()
+			(model, iter) = selection.get_selected()
+			keyID = [model.get_value(iter, 0), model.get_value(iter, 1)]
+		else:
+			keyID = -1
+		self.xml.get_widget("Choose_gpg_key").destroy()
+		return keyID
+
+	def fill_tree(self, list):
+		model = self.treeview.get_model()
+		for keyID in list.keys():
+			model.append((keyID, list[keyID]))
+	
+	def __init__(self):
+		#list : {keyID: userName, ...}
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Choose_gpg_key', APP)
+		self.window = self.xml.get_widget("Choose_gpg_key")
+		self.treeview = self.xml.get_widget("treeview")
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		self.treeview.set_model(model)
+		#columns
+		renderer = gtk.CellRendererText()
+		self.treeview.insert_column_with_attributes(-1, _('KeyID'), renderer, \
+			text=0)
+		renderer = gtk.CellRendererText()
+		self.treeview.insert_column_with_attributes(-1, _('User name'), renderer,\
+			text=1)
+
 class awayMsg_Window:
 	"""Class for Away Message Window"""
 	def on_ok(self):

@@ -160,6 +160,22 @@ class  MyGnuPG(GnuPGInterface.GnuPG):
 			keyid = string.split(resp['GOODSIG'])[0]
 		return keyid
 
+	def get_secret_keys(self):
+		proc = self.run(['--with-colons', '--list-secret-keys'], \
+			create_fhs=['stdout'])
+		output = proc.handles['stdout'].read()
+		proc.handles['stdout'].close()
+
+		keys = {}
+		lines = string.split(output, '\n')
+		for line in lines:
+			sline = string.split(line, ':')
+			if sline[0] == 'sec':
+				keys[sline[4][8:]] = sline[9]
+		return keys
+		try: proc.wait()
+		except IOError: pass
+
 	def stripHeaderFooter(self, data):
 		"""Remove header and footer from data"""
 		lines = string.split(data, '\n')
@@ -203,6 +219,7 @@ class GajimCore:
 			#connexions {con: name, ...}
 			self.connexions = {}
 			self.gpg = {}
+			self.gpg_common = MyGnuPG()
 			for a in self.accounts:
 				self.connected[a] = 0 #0:offline, 1:online, 2:away,
 											 #3:xa, 4:dnd, 5:invisible
@@ -870,6 +887,9 @@ class GajimCore:
 			#('PASSPHRASE', account, passphrase)
 			elif ev[0] == 'PASSPHRASE':
 				self.gpg[ev[1]].passphrase = ev[2]
+			elif ev[0] == 'GPG_SECRETE_KEYS':
+				keys = self.gpg_common.get_secret_keys()
+				self.hub.sendPlugin('GPG_SECRETE_KEYS', ev[1], keys)
 			else:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':

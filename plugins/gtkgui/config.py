@@ -251,7 +251,7 @@ class preference_Window:
 		
 	def on_presence_button_clicked(self, widget, data=None):
 		self.change_notebook_page(2)
-
+	
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Preferences', APP)
@@ -341,7 +341,6 @@ class preference_Window:
 		self.xml.signal_connect('on_ok_clicked', self.on_ok)
 		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
 
-
 class accountPreference_Window:
 	"""Class for account informations"""
 	def delete_event(self, widget):
@@ -357,8 +356,8 @@ class accountPreference_Window:
 
 	def init_account(self, infos):
 		"""Initialize window with defaults values"""
-		if infos.has_key('name'):
-			self.xml.get_widget("entry_name").set_text(infos['name'])
+		if infos.has_key('accname'):
+			self.xml.get_widget("entry_name").set_text(infos['accname'])
 		if infos.has_key('jid'):
 			self.xml.get_widget("entry_jid").set_text(infos['jid'])
 		if infos.has_key('password'):
@@ -374,6 +373,19 @@ class accountPreference_Window:
 		if infos.has_key('proxyport'):
 			self.xml.get_widget("entry_proxyport").set_text(str(\
 				infos['proxyport']))
+		if infos.has_key('keyid'):
+			if infos['keyid']:
+				self.xml.get_widget('gpg_key_label').set_text(infos['keyid'])
+				if infos.has_key('keyname'):
+					self.xml.get_widget('gpg_name_label').set_text(infos['keyname'])
+				self.xml.get_widget('gpg_pass_checkbutton').set_sensitive(True)
+				if infos.has_key('savegpgpass'):
+					self.xml.get_widget('gpg_pass_checkbutton').set_active(\
+						infos['savegpgpass'])
+					self.xml.get_widget('gpg_pass_entry').set_sensitive(True)
+					if infos.has_key('gpgpass'):
+						self.xml.get_widget('gpg_pass_entry').set_text(\
+							infos['gpgpass'])
 
 	def on_save_clicked(self, widget):
 		"""When save button is clicked : Save informations in config file"""
@@ -420,6 +432,17 @@ class accountPreference_Window:
 				warning_Window(_("Priority must be a number"))
 				return 0
 		(login, hostname) = string.split(jid, '@')
+		keyName = self.xml.get_widget('gpg_name_label').get_text()
+		if keyName == '': #no key selected
+			keyID = ''
+			save_gpg_pass = 0
+			gpg_pass = ''
+		else:
+			keyID = self.xml.get_widget('gpg_key_label').get_text()
+			save_gpg_pass = 0
+			if self.xml.get_widget('gpg_pass_checkbutton').get_active():
+				save_gpg_pass = 1
+			gpg_pass = self.xml.get_widget('gpg_pass_entry').get_text()
 		#if we are modifying an account
 		if self.modify:
 			#if we modify the name of the account
@@ -445,7 +468,8 @@ class accountPreference_Window:
 				'password': entryPass.get_text(), 'ressource': \
 				entryRessource.get_text(), 'priority' : prio, 'use_proxy': \
 				useProxy, 'proxyhost': entryProxyhost.get_text(), 'proxyport': \
-				proxyPort}
+				proxyPort, 'keyid': keyID, 'keyname': keyName, 'savegpgpass': \
+				save_gpg_pass, 'gpgpass': gpg_pass}
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
 			#refresh accounts window
 			if self.plugin.windows.has_key('accounts'):
@@ -455,21 +479,22 @@ class accountPreference_Window:
 			widget.get_toplevel().destroy()
 			return
 		#if it's a new account
-		else:
-			if name in self.plugin.accounts.keys():
-				warning_Window(_("An account already has this name"))
-				return
-			#if we neeed to register a new account
-			if check.get_active():
-				self.plugin.send('NEW_ACC', None, (hostname, login, \
-					entryPass.get_text(), name, entryRessource.get_text(), prio, \
-					useProxy, proxyHost, proxyPort))
-				check.set_active(FALSE)
-				return
+		if name in self.plugin.accounts.keys():
+			warning_Window(_("An account already has this name"))
+			return
+		#if we neeed to register a new account
+		if check.get_active():
+			self.plugin.send('NEW_ACC', None, (hostname, login, \
+				entryPass.get_text(), name, entryRessource.get_text(), prio, \
+				useProxy, proxyHost, proxyPort))
+			check.set_active(FALSE)
+			return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 			'password': entryPass.get_text(), 'ressource': \
 			entryRessource.get_text(), 'priority' : prio, 'use_proxy': useProxy, \
-			'proxyhost': entryProxyhost.get_text(), 'proxyport': proxyPort}
+			'proxyhost': entryProxyhost.get_text(), 'proxyport': proxyPort, \
+			'keyid': keyID, 'keyname': keyName, 'savegpgpass': save_gpg_pass, \
+			'gpgpass': gpg_pass}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}}
@@ -496,6 +521,32 @@ class accountPreference_Window:
 			else:
 				warning_Window(_("You must be connected to get your informations"))
 	
+	def on_choose_gpg(self, widget, data=None):
+		w = choose_gpg_Window()
+		self.plugin.windows['gpg_keys'] = w
+		self.plugin.send('GPG_SECRETE_KEYS', None, ())
+		keyID = w.run()
+		if keyID == -1:
+			return
+		if keyID[0] == 'None':
+			self.xml.get_widget('gpg_key_label').set_text(_('No key selected'))
+			self.xml.get_widget('gpg_name_label').set_text('')
+			self.xml.get_widget('gpg_pass_checkbutton').set_sensitive(False)
+			self.xml.get_widget('gpg_pass_entry').set_sensitive(False)
+		else:
+			self.xml.get_widget('gpg_key_label').set_text(keyID[0])
+			self.xml.get_widget('gpg_name_label').set_text(keyID[1])
+			self.xml.get_widget('gpg_pass_checkbutton').set_sensitive(True)
+		self.xml.get_widget('gpg_pass_checkbutton').set_active(False)
+		self.xml.get_widget('gpg_pass_entry').set_text('')
+	
+	def on_gpg_pass_checkbutton_toggled(self, widget, data=None):
+		if self.xml.get_widget('gpg_pass_checkbutton').get_active():
+			self.xml.get_widget('gpg_pass_entry').set_sensitive(True)
+		else:
+			self.xml.get_widget('gpg_pass_entry').set_sensitive(False)
+			self.xml.get_widget('gpg_pass_entry').set_text('')
+
 	#info must be a dictionnary
 	def __init__(self, plugin, infos = {}):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Account', APP)
@@ -503,9 +554,13 @@ class accountPreference_Window:
 		self.plugin = plugin
 		self.account = ''
 		self.modify = False
+		self.xml.get_widget('gpg_key_label').set_text('No key selected')
+		self.xml.get_widget('gpg_name_label').set_text('')
+		self.xml.get_widget('gpg_pass_checkbutton').set_sensitive(False)
+		self.xml.get_widget('gpg_pass_entry').set_sensitive(False)
 		if infos:
 			self.modify = True
-			self.account = infos['name']
+			self.account = infos['accname']
 			self.init_account(infos)
 			self.xml.get_widget("checkbutton").set_sensitive(FALSE)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
@@ -513,7 +568,9 @@ class accountPreference_Window:
 		self.xml.signal_connect('on_edit_details_clicked', \
 			self.on_edit_details_clicked)
 		self.xml.signal_connect('on_close_clicked', self.on_close)
-
+		self.xml.signal_connect('on_choose_gpg_clicked', self.on_choose_gpg)
+		self.xml.signal_connect('on_gpg_pass_checkbutton_toggled', \
+			self.on_gpg_pass_checkbutton_toggled)
 
 class accounts_Window:
 	"""Class for accounts window : lists of accounts"""
@@ -575,26 +632,14 @@ class accounts_Window:
 		"""When modify button is clicked :
 		open the account information window for this account"""
 		if not self.plugin.windows.has_key('accountPreference'):
-			infos = {}
+#			infos = {}
 			sel = self.treeview.get_selection()
 			(model, iter) = sel.get_selected()
 			account = model.get_value(iter, 0)
-			infos['name'] = account
-			if self.plugin.accounts[account].has_key("name"):
-				infos['jid'] = self.plugin.accounts[account]["name"] + \
-					'@' +  self.plugin.accounts[account]["hostname"]
-			if self.plugin.accounts[account].has_key("password"):
-				infos['password'] = self.plugin.accounts[account]["password"]
-			if self.plugin.accounts[account].has_key("ressource"):
-				infos['ressource'] = self.plugin.accounts[account]["ressource"]
-			if self.plugin.accounts[account].has_key("priority"):
-				infos['priority'] = self.plugin.accounts[account]["priority"]
-			if self.plugin.accounts[account].has_key("use_proxy"):
-				infos['use_proxy'] = self.plugin.accounts[account]["use_proxy"]
-			if self.plugin.accounts[account].has_key("proxyhost"):
-				infos['proxyhost'] = self.plugin.accounts[account]["proxyhost"]
-			if self.plugin.accounts[account].has_key("proxyport"):
-				infos['proxyport'] = self.plugin.accounts[account]["proxyport"]
+			infos = self.plugin.accounts[account]
+			infos['accname'] = account
+			infos['jid'] = self.plugin.accounts[account]["name"] + \
+				'@' +  self.plugin.accounts[account]["hostname"]
 			self.plugin.windows['accountPreference'] = \
 				accountPreference_Window(self.plugin, infos)
 

@@ -1232,23 +1232,11 @@ class roster_Window:
 
 	def on_edit_account(self, widget, account):
 		if not self.plugin.windows.has_key('accountPreference'):
-			infos = {}
-			infos['name'] = account
-			if self.plugin.accounts[account].has_key("name"):
-				infos['jid'] = self.plugin.accounts[account]["name"] + \
-					'@' +  self.plugin.accounts[account]["hostname"]
-			if self.plugin.accounts[account].has_key("password"):
-				infos['password'] = self.plugin.accounts[account]["password"]
-			if self.plugin.accounts[account].has_key("ressource"):
-				infos['ressource'] = self.plugin.accounts[account]["ressource"]
-			if self.plugin.accounts[account].has_key("priority"):
-				infos['priority'] = self.plugin.accounts[account]["priority"]
-			if self.plugin.accounts[account].has_key("use_proxy"):
-				infos['use_proxy'] = self.plugin.accounts[account]["use_proxy"]
-			if self.plugin.accounts[account].has_key("proxyhost"):
-				infos['proxyhost'] = self.plugin.accounts[account]["proxyhost"]
-			if self.plugin.accounts[account].has_key("proxyport"):
-				infos['proxyport'] = self.plugin.accounts[account]["proxyport"]
+			infos = self.plugin.accounts[account]
+			infos['accname'] = account
+#			if self.plugin.accounts[account].has_key("name"):
+			infos['jid'] = self.plugin.accounts[account]["name"] + \
+				'@' +  self.plugin.accounts[account]["hostname"]
 			self.plugin.windows['accountPreference'] = \
 				accountPreference_Window(self.plugin, infos)
 
@@ -1356,15 +1344,20 @@ class roster_Window:
 	def send_status(self, account, status, txt):
 		if status != 'offline':
 			keyid = None
+			save_gpg_pass = 0
+			if self.plugin.accounts[account].has_key("savegpgpass"):
+				save_gpg_pass = self.plugin.accounts[account]["savegpgpass"]
 			if self.plugin.accounts[account].has_key("keyid"):
 				keyid = self.plugin.accounts[account]["keyid"]
 			if keyid and not self.plugin.connected[account]:
-				passphrase = ''
-				#TODO: ask passphrase
-				w = passphrase_Window()
-				passphrase = w.run()
-				if passphrase == -1:
+				if save_gpg_pass:
+					passphrase = self.plugin.accounts[account]['gpgpass']
+				else:
 					passphrase = ''
+					w = passphrase_Window()
+					passphrase = w.run()
+					if passphrase == -1:
+						passphrase = ''
 				self.plugin.send('PASSPHRASE', account, passphrase)
 		self.plugin.send('STATUS', account, (status, txt))
 		if status == 'online':
@@ -2260,6 +2253,14 @@ class plugin:
 				get_property('is-active'):
 				self.systray.add_jid(jid, account)
 
+	def handle_event_bad_passphrase(self, account, array):
+		pass
+
+	def handle_event_gpg_secrete_keys(self, account, keys):
+		keys['None'] = 'None'
+		if self.windows.has_key('gpg_keys'):
+			self.windows['gpg_keys'].fill_tree(keys)
+
 	def read_queue(self):
 		"""Read queue from the core and execute commands from it"""
 		while self.queueIN.empty() == 0:
@@ -2302,6 +2303,10 @@ class plugin:
 				self.handle_event_log_line(ev[1], ev[2])
 			elif ev[0] == 'GC_MSG':
 				self.handle_event_gc_msg(ev[1], ev[2])
+			elif ev[0] == 'BAD_PASSPHRASE':
+				self.handle_event_bad_passphrase(ev[1], ev[2])
+			elif ev[0] == 'GPG_SECRETE_KEYS':
+				self.handle_event_gpg_secrete_keys(ev[1], ev[2])
 		return 1
 	
 	def read_sleepy(self):	
@@ -2344,7 +2349,7 @@ class plugin:
 			'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
 			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'REG_AGENT_INFO', 'QUIT', \
 			'ACC_OK', 'CONFIG', 'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', \
-			'VISUAL', 'GC_MSG'])
+			'VISUAL', 'GC_MSG', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS'])
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'autopopupaway':1,\
 			'showoffline':0,\
