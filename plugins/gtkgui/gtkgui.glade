@@ -6368,6 +6368,8 @@ when NOT onlie</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
+  <property name="default_width">555</property>
+  <property name="default_height">350</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Sun, 04 Apr 2004 18:55:52 GMT"/>
@@ -6380,10 +6382,10 @@ when NOT onlie</property>
 
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox11">
-	  <property name="border_width">10</property>
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
-	  <property name="spacing">5</property>
+	  <property name="spacing">3</property>
 
 	  <child>
 	    <widget class="GtkButton" id="earliest_button">
