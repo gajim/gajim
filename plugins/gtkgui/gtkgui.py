@@ -301,11 +301,39 @@ class message_Window:
 class gc:
 	def delete_event(self, widget):
 		"""close window"""
-		del self.plugin.windows[self.account]['chats'][self.jid]
+		del self.plugin.windows[self.account]['gc'][self.jid]
 
 	def on_close(self, widget):
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
+
+	def get_user_iter(self, nick):
+		model = self.tree.get_model()
+		iter = model.get_iter_root()
+		if not iter:
+			return None
+		while iter:
+			if nick == model.get_value(iter, 0):
+				return iter
+			iter = model.iter_next(iter)
+		return None
+	
+	def add_user_to_roster(self, nick):
+		model = self.tree.get_model()
+		model.append(None, (nick,))
+
+	def chg_user_status(self, nick, show, status, account):
+		"""When a user change his status"""
+		model = self.tree.get_model()
+		if show == 'offline' or show == 'error':
+			self.remove_user(user, account)
+		else:
+			if not self.get_user_iter(nick):
+				self.add_user_to_roster(nick)
+#			u = self.contacts[account][user.jid]
+#			u.show = show
+#			u.status = status
+#			self.redraw_jid(user.jid, account)
 
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -359,7 +387,11 @@ class gc:
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gc', APP)
 		self.window = self.xml.get_widget('Gc')
-		self.list = self.xml.get_widget('list')
+		self.tree = self.xml.get_widget('list')
+		store = gtk.TreeStore(str)
+		column = gtk.TreeViewColumn('contacts', gtk.CellRendererText(), text=0)
+		self.tree.append_column(column)
+		self.tree.set_model(store)
 		conversation = self.xml.get_widget('conversation')
 		buffer = conversation.get_buffer()
 		end_iter = buffer.get_end_iter()
@@ -393,7 +425,7 @@ class join_gc:
 		server = self.xml.get_widget('entry_server').get_text()
 		passw = self.xml.get_widget('entry_pass').get_text()
 		jid = '%s@%s' % (room, server)
-		self.plugin.windows[self.account]['chats'][jid] = gc(jid, nick, \
+		self.plugin.windows[self.account]['gc'][jid] = gc(jid, nick, \
 			self.plugin, self.account)
 		#TODO: verify entries
 		self.plugin.send('GC_JOIN', self.account, (nick, room, server, passw))
@@ -1829,6 +1861,10 @@ class plugin:
 		elif self.roster.contacts[account].has_key(ji):
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
+		elif self.windows[account]['gc'].has_key(ji):
+			#it is a groupchat presence
+			self.windows[account]['gc'][ji].chg_user_status(resource, array[1],\
+				array[2], account)
 
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (user, msg))
@@ -1895,7 +1931,7 @@ class plugin:
 					'proxyhost': array[7], \
 					'proxyport': array[8]}
 		self.send('CONFIG', None, ('accounts', self.accounts))
-		self.windows[name] = {'infos': {}, 'chats': {}}
+		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.queues[name] = {}
 		self.connected[name] = 0
 		self.roster.groups[name] = {}
@@ -1940,16 +1976,16 @@ class plugin:
 		#('GC_MSG', account, (jid, msg))
 		jids = string.split(array[0], '/')
 		jid = jids[0]
-		if not self.windows[account]['chats'].has_key(jid):
+		if not self.windows[account]['gc'].has_key(jid):
 			return
 		if len(jids) == 1:
 			#message from server
-			self.windows[account]['chats'][jid].print_conversation(array[1])
+			self.windows[account]['gc'][jid].print_conversation(array[1])
 		else:
 			#message from someone
-			self.windows[account]['chats'][jid].print_conversation(array[1], \
+			self.windows[account]['gc'][jid].print_conversation(array[1], \
 				jids[1])
-			if not self.windows[account]['chats'][jid].window.\
+			if not self.windows[account]['gc'][jid].window.\
 				get_property('is-active'):
 				self.systray.add_jid(jid, account)
 
@@ -2055,9 +2091,7 @@ class plugin:
 		self.nicks = {}
 		self.sleeper_state = {} #whether we pass auto away / xa or not
 		for a in self.accounts.keys():
-			self.windows[a] = {}
-			self.windows[a]['infos'] = {}
-			self.windows[a]['chats'] = {}
+			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}}
 			self.queues[a] = {}
 			self.connected[a] = 0
 			self.nicks[a] = self.accounts[a]['name']
