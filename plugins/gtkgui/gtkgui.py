@@ -577,7 +577,7 @@ class tabbed_chat_window:
 				tag = 'incoming'
 				name = user.name
 				
-			if text.find('/me ') == 0:
+			if text.startswith('/me'):
 				ttext = name + ' ' + text[4:] + '\n'
 			else:
 				ttext = '<' + name + '> '
