@@ -1799,6 +1799,7 @@ class roster_Window:
 		self.tree = self.xml.get_widget('treeview')
 		self.plugin = plugin
 		window = self.xml.get_widget('Gajim')
+		window.hide()
 		if self.plugin.config.has_key('saveposition'):
 			if self.plugin.config['saveposition']:
 				if self.plugin.config.has_key('x-position') and \
@@ -1809,6 +1810,7 @@ class roster_Window:
 					self.plugin.config.has_key('height'):
 					window.resize(self.plugin.config['width'], \
 						self.plugin.config['height'])
+		window.show_all()
 		self.groups = {}
 		self.contacts = {}
 		for a in self.plugin.accounts.keys():
