@@ -805,15 +805,17 @@ class plugin:
 			'ask_offline_status':0,\
 			'last_msg':'',\
 			'msg0_name':'Online',\
-			'msg0':'Yep I\'m online',\
+			'msg0':'Yep I\'m online.',\
 			'msg1_name':'Brb',\
 			'msg1':'Back in some minutes.',\
 			'msg2_name':'Eating',\
 			'msg2':'I\'m eating, so leave me a message.',\
-			'msg3_name':'Film',\
-			'msg3':'I\'m watching a film.',\
-			'msg4_name':'Offline',\
-			'msg4':'I\'m just offline',\
+			'msg3_name':'Movie',\
+			'msg3':'I\'m watching a movie.',\
+			'msg4_name':'Working',\
+			'msg4':'I\'m working.',\
+			'msg5_name':'Nap',\
+			'msg5':'I\'m taking a nap.',\
 			'trayicon':1,\
 			'iconstyle':'sun',\
 			'inmsgcolor':'#ff0000',\
