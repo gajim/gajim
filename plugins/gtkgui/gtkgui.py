@@ -131,7 +131,20 @@ class prefs:
 		aat = self.spin_autoawaytime.get_value_as_int()
 		self.r.plugin.autoawaytime = aat
 		self.r.cfgParser.set('GtkGui', 'autoawaytime', aat)
-		self.r.plugin.sleeper = common.sleepy.Sleepy(self.r.plugin.autoawaytime*60)
+		#autoxa
+		xa = self.chk_autoxa.get_active()
+		if xa == True:
+			self.r.cfgParser.set('GtkGui', 'autoxa', '1')
+			self.r.plugin.autoxa = 1
+		else:
+			self.r.cfgParser.set('GtkGui', 'autoxa', '0')
+			self.r.plugin.autoxa = 0
+		axt = self.spin_autoxatime.get_value_as_int()
+		self.r.plugin.autoxatime = axt
+		self.r.cfgParser.set('GtkGui', 'autoxatime', axt)
+		if self.r.plugin.sleeper:
+			self.r.plugin.sleeper = common.sleepy.Sleepy(\
+				self.r.plugin.autoawaytime*60, self.r.plugin.autoxatime*60)
 		
 		self.r.cfgParser.writeCfgFile()
 		self.r.cfgParser.parseCfgFile()
@@ -153,6 +166,8 @@ class prefs:
 		self.chk_autopp = self.xml.get_widget("chk_autopopup")
 		self.chk_autoaway = self.xml.get_widget("chk_autoaway")
 		self.spin_autoawaytime = self.xml.get_widget("spin_autoawaytime")
+		self.chk_autoxa = self.xml.get_widget("chk_autoxa")
+		self.spin_autoxatime = self.xml.get_widget("spin_autoxatime")
 
 		#Color for incomming messages
 		colSt = self.r.cfgParser.GtkGui_inmsgcolor
@@ -208,6 +223,18 @@ class prefs:
 			st = '10'
 		ti = string.atoi(st)
 		self.spin_autoawaytime.set_value(ti)
+
+		#Autoxa
+		st = self.r.cfgParser.GtkGui_autoxa
+		if not st:
+			st = '1'
+		xa = string.atoi(st)
+		self.chk_autoxa.set_active(xa)
+		st = self.r.cfgParser.GtkGui_autoxatime
+		if not st:
+			st = '20'
+		ti = string.atoi(st)
+		self.spin_autoxatime.set_value(ti)
 
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_but_col_clicked', self.on_color_button_clicked)
@@ -799,7 +826,8 @@ class roster:
 				self.chg_status(j, 'offline', 'Disconnected')
 		else:
 			self.connected = 1
-			self.plugin.sleeper = common.sleepy.Sleepy(self.plugin.autoawaytime*60)
+			self.plugin.sleeper = common.sleepy.Sleepy(\
+				self.plugin.autoawaytime*60, self.plugin.autoxatime*60)
 
 	def on_prefs(self, widget):
 		window = prefs(self)
@@ -1076,24 +1104,26 @@ class plugin:
 		return 1
 	
 	def read_sleepy(self):
-		if self.sleeper:
-			state_pres = None
+		if self.sleeper and (self.autoaway or self.autoxa) and \
+			(self.r.optionmenu.get_history()==0 or \
+			self.sleeper_state!=common.sleepy.STATE_AWAKE):
 			self.sleeper.poll()
 			state = self.sleeper.getState()
 			if state != self.sleeper_state:
 				accountsStr = self.r.cfgParser.Profile_accounts
 				accounts = string.split(accountsStr, ' ')
-				if state == common.sleepy.STATE_WOKEN:
+				if state == common.sleepy.STATE_AWAKE:
 					#on repasse online
 					self.r.optionmenu.set_history(0)
 					self.r.queueOUT.put(('STATUS',('online', accounts[0])))
-				if state == common.sleepy.STATE_SLEEPING:
+				if state == common.sleepy.STATE_AWAY and self.autoaway:
 					#on passe away
 					self.r.optionmenu.set_history(1)
 					self.r.queueOUT.put(('STATUS',('away', accounts[0])))
-				if state_pres: 
-					pass
-					#self.send(state_pres)
+				if state == common.sleepy.STATE_XAWAY and self.autoxa:
+					#on passe away
+					self.r.optionmenu.set_history(2)
+					self.r.queueOUT.put(('STATUS',('xa', accounts[0])))
 			self.sleeper_state = state
 		return 1
 
@@ -1110,10 +1140,17 @@ class plugin:
 		if not st:
 			st = '10'
 		self.autoawaytime = string.atoi(st)
+		st = self.r.cfgParser.GtkGui_autoxa
+		if not st:
+			st = '1'
+		self.autoxa = string.atoi(st)
+		st = self.r.cfgParser.GtkGui_autoxatime
+		if not st:
+			st = '20'
+		self.autoxatime = string.atoi(st)
 		self.time = gtk.timeout_add(200, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
 		self.sleeper = None
-#		self.sleeper = common.sleepy.Sleepy(10)
 		self.sleeper_state = None
 		gtk.main()
 #		while 1:
