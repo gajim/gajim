@@ -1624,7 +1624,11 @@ class roster_Window:
 		table = {0:6, 1:0, 2:1, 3:2, 4:3, 5:4}
 		mini = min(self.plugin.connected.values())
 		optionmenu = self.xml.get_widget('optionmenu')
+		#temporarily block signal in order not to send status that we show
+		#in the optionmenu
+		optionmenu.handler_block(self.id_signal_optionmenu)
 		optionmenu.set_history(table[mini])
+		optionmenu.handler_unblock(self.id_signal_optionmenu)
 
 	def on_status_changed(self, account, status):
 		"""the core tells us that our status has changed"""
@@ -1938,7 +1942,8 @@ class roster_Window:
 		self.xml.signal_connect('on_quit_activate', self.on_quit)
 		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
 		self.xml.signal_connect('on_status_changed', self.on_status_changed)
-		self.xml.signal_connect('on_optionmenu_changed', \
+		optionmenu = self.xml.get_widget('optionmenu')
+		self.id_signal_optionmenu = optionmenu.connect('changed', \
 			self.on_optionmenu_changed)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
 		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
