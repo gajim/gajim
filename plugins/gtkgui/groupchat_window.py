@@ -430,7 +430,7 @@ class Groupchat_window(Chat):
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 
-		Chat.remove_tab(self, jid, 'gc')
+		Chat.remove_tab(self, room_jid, 'gc')
 		if len(self.xmls) > 0:
 			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
 				room_jid, 'offline', 'offline'))
