@@ -211,7 +211,6 @@ class tabbed_chat_window:
 		self.tagIn = {}
 		self.tagOut = {}
 		self.tagStatus = {}
-		self.tagTimeSometimes = {}
 		self.users = {}
 		self.nb_unread = {}
 		self.last_message_time = {}
@@ -435,7 +434,6 @@ class tabbed_chat_window:
 			del self.tagIn[jid]
 			del self.tagOut[jid]
 			del self.tagStatus[jid]
-			del self.tagTimeSometimes[jid]
 			if len(self.xmls) == 1:
 				self.chat_notebook.set_show_tabs(False)
 			self.show_title()
@@ -460,13 +458,11 @@ class tabbed_chat_window:
 		self.tagStatus[user.jid] = conversation_buffer.create_tag('status')
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus[user.jid].set_property('foreground', color)
-		self.tagTimeSometimes[user.jid] = conversation_buffer.\
-			create_tag('time_sometimes')
-		self.tagTimeSometimes[user.jid].set_property('foreground', '#9e9e9e')
-		self.tagTimeSometimes[user.jid].set_property('scale', pango.SCALE_SMALL)
-		self.tagTimeSometimes[user.jid].set_property('justification', gtk.JUSTIFY_CENTER)
-		
-		self.link_tag = conversation_buffer.create_tag('hyperlink', foreground='blue')
+		tag = conversation_buffer.create_tag('time_sometimes')
+		tag.set_property('foreground', '#9e9e9e')
+		tag.set_property('scale', pango.SCALE_SMALL)
+		tag.set_property('justification', gtk.JUSTIFY_CENTER)
+		link_tag = conversation_buffer.create_tag('hyperlink', foreground='blue')
 		self.xmls[user.jid].signal_autoconnect(self)
 		conversation_scrolledwindow = self.xmls[user.jid].\
 			get_widget('conversation_scrolledwindow')
