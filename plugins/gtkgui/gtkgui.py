@@ -1592,6 +1592,15 @@ class roster_Window:
 			else:
 				w.window.destroy()
 	
+	def on_close(self, widget, event):
+		"""When we want to close the window"""
+		if self.plugin.systray_visible:
+			win = self.xml.get_widget('Gajim')
+			win.iconify()
+		else:
+			self.on_quit(widget)
+		return 1
+
 	def on_quit(self, widget):
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
@@ -1872,8 +1881,8 @@ class roster_Window:
 		self.browse_handler_id = 0
 		self.join_handler_id = 0
 		window = self.xml.get_widget('Gajim')
-		window.hide()
 		if self.plugin.config.has_key('saveposition'):
+			window.hide()
 			if self.plugin.config['saveposition']:
 				if self.plugin.config.has_key('x-position') and \
 					self.plugin.config.has_key('y-position'):
@@ -1883,7 +1892,7 @@ class roster_Window:
 					self.plugin.config.has_key('height'):
 					window.resize(self.plugin.config['width'], \
 						self.plugin.config['height'])
-		window.show_all()
+			window.show_all()
 		self.groups = {}
 		self.contacts = {}
 		for a in self.plugin.accounts.keys():
@@ -1946,7 +1955,7 @@ class roster_Window:
 		self.tree.enable_model_drag_dest(TARGETS, gtk.gdk.ACTION_DEFAULT)
 		self.tree.connect("drag_data_get", self.drag_data_get_data)
 		self.tree.connect("drag_data_received", self.drag_data_received_data)
-		self.xml.signal_connect('gtk_main_quit', self.on_quit)
+		self.xml.signal_connect('on_widget_destroy', self.on_close)
 		self.xml.signal_connect('on_Gajim_unrealize', self.on_unrealize)
 		self.xml.signal_connect('on_preferences_activate', self.on_prefs)
 		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
@@ -2515,9 +2524,11 @@ class plugin:
 
 	def show_systray(self):
 		self.systray.show_icon()
+		self.systray_visible = 1
 
 	def hide_systray(self):
 		self.systray.hide_icon()
+		self.systray_visible = 0
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
@@ -2600,6 +2611,7 @@ class plugin:
 		self.sleeper = common.sleepy.Sleepy( \
 			self.config['autoawaytime']*60, \
 			self.config['autoxatime']*60)
+		self.systray_visible = 0
 		try:
 			global trayicon
 			import trayicon
