@@ -1129,7 +1129,6 @@ class roster_Window:
 
 	def add_user_to_roster(self, user, account):
 		"""Add a user to the roster and add groups if they aren't in roster"""
-		newgrp = 0
 		showOffline = self.plugin.config['showoffline']
 		if not self.contacts[account].has_key(user.jid):
 			self.contacts[account][user.jid] = user
@@ -1143,11 +1142,11 @@ class roster_Window:
 			for g in user.groups:
 				iterG = self.get_group_iter(g, account)
 				if not iterG:
-					self.groups[account][g] = {'expand':True}
 					acct = self.get_account_iter(account)
 					iterG = model.append(self.get_account_iter(account), \
 						(self.pixbufs['closed'], g, 'group', g, FALSE))
-					newgrp = 1
+				if not self.groups[account].has_key(g):
+					self.groups[account][g] = {'expand':True}
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 				if g == 'Agents':
 					model.append(iterG, (self.pixbufs[user.show], \
@@ -1156,8 +1155,7 @@ class roster_Window:
 					model.append(iterG, (self.pixbufs[user.show], \
 						user.name, 'user', user.jid, TRUE))
 				
-				if newgrp == 1:
-					#expand new groups
+				if self.groups[account][g]['expand']:
 					self.tree.expand_row(model.get_path(iterG), FALSE)
 	
 	def remove_user(self, user, account):
@@ -1205,8 +1203,10 @@ class roster_Window:
 	
 	def mklists(self, array, account):
 		"""fill self.contacts and self.groups"""
-		self.contacts[account] = {}
-		self.groups[account] = {}
+		if not self.contacts.has_key(account):
+			self.contacts[account] = {}
+		if not self.groups.has_key(account):
+			self.groups[account] = {}
 		for jid in array.keys():
 			jids = string.split(jid, '/')
 			#get jid
@@ -1329,18 +1329,56 @@ class roster_Window:
 		"""Make agent's popup menu"""
 		model = self.tree.get_model()
 		jid = model.get_value(iter, 3)
+		path = model.get_path(iter)
+		acct_iter = model.get_iter((path[0]))
+		account = model.get_value(acct_iter, 3)
 		menu = gtk.Menu()
 		item = gtk.MenuItem("Log on")
-		if self.contacts[jid].show != 'offline':
+		if self.contacts[account][jid].show != 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
-		item.connect("activate", self.on_agent_logging, jid, 'available')
+		item.connect("activate", self.on_agent_logging, jid, 'available', account)
 
 		item = gtk.MenuItem("Log off")
-		if self.contacts[jid].show == 'offline':
+		if self.contacts[account][jid].show == 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
-		item.connect("activate", self.on_agent_logging, jid, 'unavailable')
+		item.connect("activate", self.on_agent_logging, jid, 'unavailable', account)
+
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
+
+	def mk_menu_account(self, event, iter):
+		"""Make account's popup menu"""
+		model = self.tree.get_model()
+		account = model.get_value(iter, 3)
+		
+		menu = gtk.Menu()
+		item = gtk.MenuItem("Status")
+		menu.append(item)
+		
+		menu_sub = gtk.Menu()
+		item.set_submenu(menu_sub)
+		item = gtk.MenuItem("Online")
+		menu_sub.append(item)
+		item.connect("activate", self.change_status, account, 'online')
+		item = gtk.MenuItem("Away")
+		menu_sub.append(item)
+		item.connect("activate", self.change_status, account, 'away')
+		item = gtk.MenuItem("NA")
+		menu_sub.append(item)
+		item.connect("activate", self.change_status, account, 'na')
+		item = gtk.MenuItem("DND")
+		menu_sub.append(item)
+		item.connect("activate", self.change_status, account, 'dnd')
+		item = gtk.MenuItem()
+		menu_sub.append(item)
+		item = gtk.MenuItem("Offline")
+		menu_sub.append(item)
+		item.connect("activate", self.change_status, account, 'offline')
+		
+		item = gtk.MenuItem()
+		menu.append(item)
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
@@ -1374,12 +1412,23 @@ class roster_Window:
 				self.mk_menu_agent(event, iter)
 			elif type == 'user':
 				self.mk_menu_user(event, iter)
+			elif type == 'account':
+				self.mk_menu_account(event, iter)
 			return gtk.TRUE
 		return gtk.FALSE
 
 	def on_req_usub(self, widget, user, account):
 		"""Remove a user"""
 		confirm_Window(self.plugin, user, account)
+
+	def change_status(self, widget, account, status):
+		if status != 'online' and status != 'offline':
+			w = awayMsg_Window()
+			txt = w.run()
+		else:
+			txt = status
+		self.plugin.send('STATUS', account, (status, txt))
+		
 
 	def on_optionmenu_changed(self, widget):
 		"""When we change our status"""
@@ -1400,11 +1449,11 @@ class roster_Window:
 
 	def on_status_changed(self, account, status):
 		"""the core tells us that our status has changed"""
-		optionmenu =  self.xml.get_widget('optionmenu')
-		for i in range(7):
-			if optionmenu.get_menu().get_children()[i].name == status:
-				optionmenu.set_history(i)
-				break
+#		optionmenu =  self.xml.get_widget('optionmenu')
+#		for i in range(7):
+#			if optionmenu.get_menu().get_children()[i].name == status:
+#				optionmenu.set_history(i)
+#				break
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
 		if accountIter:
