@@ -557,7 +557,7 @@ class join_groupchat_window:
 		"""close window"""
 		del self.plugin.windows['join_gc'] # remove us from open windows
 
-	def on_close_button_clicked(self, widget):
+	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
 
@@ -566,7 +566,7 @@ class join_groupchat_window:
 		nickname = self.xml.get_widget('nickname_entry').get_text()
 		room = self.xml.get_widget('room_entry').get_text()
 		server = self.xml.get_widget('server_entry').get_text()
-		password = self.xml.get_widget('passwrd_entry').get_text()
+		password = self.xml.get_widget('password_entry').get_text()
 		jid = '%s@%s' % (room, server)
 		self.plugin.windows[self.account]['gc'][jid] = gtkgui.gc(jid, nickname,\
 			self.plugin, self.account)

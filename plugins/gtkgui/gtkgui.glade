@@ -7314,7 +7314,7 @@ Custom</property>
 	  <property name="spacing">20</property>
 
 	  <child>
-	    <widget class="GtkButton" id="cancel_utton">
+	    <widget class="GtkButton" id="cancel_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -7322,7 +7322,7 @@ Custom</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_cancel_utton_clicked" last_modification_time="Wed, 02 Mar 2005 12:19:37 GMT"/>
+	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Fri, 04 Mar 2005 13:40:16 GMT"/>
 	    </widget>
 	  </child>
 
