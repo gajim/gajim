@@ -622,8 +622,15 @@ class tabbed_chat_window:
 			
 	def on_conversation_textview_button_press_event(self, widget, event):
 		# Do not open the standard popup menu, so we block right button click
+		# on a taged text
 		if event.button == 3:
-			return True
+			win = widget.get_window(gtk.TEXT_WINDOW_TEXT)
+			x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,\
+				int(event.x), int(event.y))
+			iter = widget.get_iter_at_location(x, y)
+			tags = iter.get_tags()
+			if tags:
+				return True
 	
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
