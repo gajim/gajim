@@ -1222,7 +1222,7 @@ class configure_accounts_window:
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
-		dialog = confirm_dialog(_('Are you sure you want to remove account (%s) ?') % account)
+		dialog = Confirmation_dialog(_('Are you sure you want to remove account (%s) ?') % account)
 		if dialog.get_response() == gtk.RESPONSE_YES:
 			if self.plugin.connected[account]:
 				self.plugin.send('STATUS', account, ('offline', 'offline'))
