@@ -636,19 +636,19 @@ class preferences_window:
 		if not iter:
 			return
 		file = model.get_value(iter, 2)
-		dialog = gtk.FileChooserDialog("Choose sound",
+		dialog = gtk.FileChooserDialog(_('Choose sound'),
 							None,
 							gtk.FILE_CHOOSER_ACTION_OPEN,
 							(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 							gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		filter = gtk.FileFilter()
-		filter.set_name("All files")
+		filter.set_name(_('All files'))
 		filter.add_pattern("*")
 		dialog.add_filter(filter)
 
 		filter = gtk.FileFilter()
-		filter.set_name("Wav Sounds")
+		filter.set_name(_('Wav Sounds'))
 		filter.add_pattern("*.wav")
 		dialog.add_filter(filter)
 		dialog.set_filter(filter)
@@ -801,7 +801,7 @@ class preferences_window:
 		self.emot_tree = self.xml.get_widget('treeview_emoticons')
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gtk.Image)
 		self.emot_tree.set_model(model)
-		col = gtk.TreeViewColumn('name')
+		col = gtk.TreeViewColumn(_('Name'))
 		self.emot_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		renderer.connect('edited', self.on_emot_cell_edited)
@@ -809,7 +809,7 @@ class preferences_window:
 		col.pack_start(renderer, True)
 		col.set_attributes(renderer, text=0)
 
-		col = gtk.TreeViewColumn('Image')
+		col = gtk.TreeViewColumn(_('Image'))
 		self.emot_tree.append_column(col)
 		renderer = gtkgui.ImageCellRenderer()
 		col.pack_start(renderer, expand = False)
@@ -836,21 +836,21 @@ class preferences_window:
 			gobject.TYPE_STRING)
 		self.sound_tree.set_model(model)
 
-		col = gtk.TreeViewColumn('Active')
+		col = gtk.TreeViewColumn(_('Active'))
 		self.sound_tree.append_column(col)
 		renderer = gtk.CellRendererToggle()
 		renderer.set_property('activatable', True)
-		renderer.connect("toggled", self.sound_toggled_cb)
+		renderer.connect('toggled', self.sound_toggled_cb)
 		col.pack_start(renderer)
 		col.set_attributes(renderer, active=1)
 
-		col = gtk.TreeViewColumn('Event')
+		col = gtk.TreeViewColumn(_('Event'))
 		self.sound_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text=0)
 
-		col = gtk.TreeViewColumn('Sound')
+		col = gtk.TreeViewColumn(_('Sound'))
 		self.sound_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
