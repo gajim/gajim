@@ -857,6 +857,8 @@ class plugin:
 				self.config['trayicon'] = 0
 				self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
 				self.systray = systrayDummy()
+			else:
+				self.systray = systray(self)
 		else:
 			self.systray = systray(self)
 		if self.config['trayicon']:
