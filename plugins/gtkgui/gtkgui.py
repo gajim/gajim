@@ -806,11 +806,11 @@ class plugin:
 			'outmsgcolor': '#0000ff',\
 			'statusmsgcolor':'#1eaa1e',\
 			'hiddenlines':'',\
-			'accounttextcolor': '#ff0000',\
-			'accountbgcolor': '#9fdfff',\
+			'accounttextcolor': '#ff0000',\ #'#ffffff'
+			'accountbgcolor': '#9fdfff',\ #'#94aa8c'
 			'accountfont': 'Sans Bold 10',\
 			'grouptextcolor': '#0000ff',\
-			'groupbgcolor': '#ffffff',\
+			'groupbgcolor': '#ffffff',\ #'#eff3e7'
 			'groupfont': 'Sans Italic 10',\
 			'usertextcolor': '#000000',\
 			'userbgcolor': '#ffffff',\
@@ -838,7 +838,8 @@ class plugin:
 			'x-position': 0,\
 			'y-position': 0,\
 			'width': 150,\
-			'height': 400}
+			'height': 400,\
+			'latest_disco_addresses': ''}
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', self.default_config))
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))

@@ -1,9 +1,9 @@
 ##	plugins/config.py
 ##
 ## Gajim Team:
-## 	- Yann Le Boulanger <asterix@lagaule.org>
-## 	- Vincent Hanquez <tab@snarc.org>
-##  	- Nikos Kouremenos <kourem@gmail.com>
+##		- Yann Le Boulanger <asterix@lagaule.org>
+##		- Vincent Hanquez <tab@snarc.org>
+##		- Nikos Kouremenos <kourem@gmail.com>
 ##		- Alex Podaras <bigpod@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
@@ -1125,11 +1125,9 @@ class Account_modification_window:
 					for j in self.plugin.windows[name][kind]:
 						self.plugin.windows[name][kind][j].account = name
 				#upgrade account in systray
-				print self.plugin.systray.jids
 				for list in self.plugin.systray.jids:
 					if list[0] == self.account:
 						list[0] = name
-				print self.plugin.systray.jids
 				del self.plugin.windows[self.account]
 				del self.plugin.queues[self.account]
 				del self.plugin.connected[self.account]
@@ -1488,7 +1486,7 @@ class agent_registration_window:
 class Service_discovery_window:
 	"""Class for Service Discovery Window :
 	to know the agents on the selected server"""
-	def on_agent_browser_window_destroy(self, widget):
+	def on_service_discovery_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows[self.account]['browser']
 
@@ -1496,9 +1494,9 @@ class Service_discovery_window:
 		"""When Close button is clicked"""
 		widget.get_toplevel().destroy()
 		
-	def browse(self):
+	def browse(self, jid):
 		"""Send a request to the core to know the available agents"""
-		self.plugin.send('REQ_AGENTS', self.account, None)
+		self.plugin.send('REQ_AGENTS', self.account, jid)
 	
 	def agents(self, agents):
 		"""When list of available agent arrive :
@@ -1507,12 +1505,35 @@ class Service_discovery_window:
 		for agent in agents:
 			iter = model.append(None, (agent['name'], agent['jid']))
 			self.agent_infos[agent['jid']] = {'features' : []}
+
+	def iter_is_visible(self, iter):
+		if not iter:
+			return False
+		model = self.agents_treeview.get_model()
+		iter = model.iter_parent(iter)
+		while iter:
+			if not self.agents_treeview.row_expanded(model.get_path(iter)):
+				return False
+			iter = model.iter_parent(iter)
+		return True
+
+	def on_agents_treeview_row_expanded(self, widget, iter, path):
+		model = self.agents_treeview.get_model()
+		jid = model.get_value(iter, 1)
+		child = model.iter_children(iter)
+		while child:
+			child_jid = model.get_value(child, 1)
+			# We never requested its infos
+			if not self.agent_infos[child_jid].has_key('features'):
+				self.browse(child_jid)
+			child = model.iter_next(child)
 	
 	def agent_info(self, agent, identities, features, items):
 		"""When we recieve informations about an agent"""
 		model = self.agents_treeview.get_model()
 		iter = model.get_iter_root()
 		expand = 0
+		# We look if this agent is in the treeview
 		while (iter):
 			if agent == model.get_value(iter, 1):
 				break
@@ -1523,7 +1544,7 @@ class Service_discovery_window:
 					iter = model.iter_parent(iter)
 				if iter:
 					iter = model.iter_next(iter)
-		if not iter:
+		if not iter: #If it is not we add it
 			iter = model.append(None, (agent, agent))
 			self.agent_infos[agent] = {'features' : []}
 			expand = 1
@@ -1535,8 +1556,17 @@ class Service_discovery_window:
 		for item in items:
 			if not item.has_key('name'):
 				continue
-			model.append(iter, (item['name'], item['jid']))
+			# We look if this item is already in the treeview
+			iter_child = model.iter_children(iter)
+			while iter_child:
+				if item['jid'] == model.get_value(iter_child, 1):
+					break
+				iter_child = model.iter_next(iter_child)
+			if not iter_child: # If it is not we add it
+				iter_child = model.append(iter, (item['name'], item['jid']))
 			self.agent_infos[item['jid']] = {'identities': [item]}
+			if self.iter_is_visible(iter_child) or expand:
+				self.browse(item['jid'])
 		if expand:
 			self.agents_treeview.expand_row((model.get_path(iter)), False)
 
@@ -1544,7 +1574,8 @@ class Service_discovery_window:
 		"""When refresh button is clicked :
 		refresh list : clear and rerequest it"""
 		self.agents_treeview.get_model().clear()
-		self.browse()
+		jid = self.address_comboboxentry.child.get_text()
+		self.browse(jid)
 
 	def on_agents_treeview_row_activated(self, widget, path, col=0):
 		"""When a row is activated :
@@ -1592,6 +1623,19 @@ class Service_discovery_window:
 				if self.agent_infos[jid]['identities'][0].has_key('category'):
 					if self.agent_infos[jid]['identities'][0]['category'] == 'conference':
 						self.join_button.set_sensitive(True)
+	
+	def on_go_button_clicked(self, widget):
+		jid = self.address_comboboxentry.child.get_text()
+		if jid in self.latest_addresses:
+			self.latest_addresses.remove(jid)
+		self.latest_addresses.insert(0, jid)
+		self.address_comboboxentry.get_model().clear()
+		for j in self.latest_addresses:
+			self.address_comboboxentry.append_text(j)
+		self.plugin.config['latest_disco_addresses'] = \
+			' '.join(self.latest_addresses)
+		self.agents_treeview.get_model().clear()
+		self.browse(jid)
 		
 	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:
@@ -1615,9 +1659,23 @@ class Service_discovery_window:
 		self.agents_treeview.insert_column_with_attributes(-1, 'Service', \
 			renderer, text=1)
 
+		self.address_comboboxentry = xml.get_widget('address_comboboxentry')
+		liststore = gtk.ListStore(str)
+		self.address_comboboxentry.set_model(liststore)
+		self.address_comboboxentry.set_text_column(0)
+		self.latest_addresses = \
+			self.plugin.config['latest_disco_addresses'].split()
+		jid = self.plugin.accounts[self.account]['hostname']
+		if jid in self.latest_addresses:
+			self.latest_addresses.remove(jid)
+		self.latest_addresses.insert(0, jid)
+		for j in self.latest_addresses:
+			self.address_comboboxentry.append_text(j)
+		self.address_comboboxentry.child.set_text(jid)
+
 		self.register_button = xml.get_widget('register_button')
 		self.register_button.set_sensitive(False)
 		self.join_button = xml.get_widget('join_button')
 		self.join_button.set_sensitive(False)
 		xml.signal_autoconnect(self)
-		self.browse()
+		self.browse(jid)
