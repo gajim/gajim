@@ -470,7 +470,7 @@ class tabbed_chat_window:
 
 		if self.plugin.config['print_time'] == 'sometimes':
 			self.print_time_timeout(user.jid)
-			self.print_time_timeout_id[user.jid] = gobject.timeout_add(3000, \
+			self.print_time_timeout_id[user.jid] = gobject.timeout_add(300000, \
 				self.print_time_timeout, user.jid)
 
 	def on_message_textview_key_press_event(self, widget, event):
