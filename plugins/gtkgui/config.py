@@ -1119,9 +1119,16 @@ class Account_modification_window:
 					self.plugin.roster.contacts[self.account]
 				self.plugin.sleeper_state[name] = \
 					self.plugin.sleeper_state[self.account]
+				#upgrade account variable in opened windows
 				for kind in ['infos', 'chats', 'gc']:
-					for jid in self.plugin.windows[name][kind]:
-						self.plugin.windows[name][kind][jid].account = name
+					for j in self.plugin.windows[name][kind]:
+						self.plugin.windows[name][kind][j].account = name
+				#upgrade account in systray
+				print self.plugin.systray.jids
+				for list in self.plugin.systray.jids:
+					if list[0] == self.account:
+						list[0] = name
+				print self.plugin.systray.jids
 				del self.plugin.windows[self.account]
 				del self.plugin.queues[self.account]
 				del self.plugin.connected[self.account]

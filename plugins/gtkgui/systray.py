@@ -45,6 +45,7 @@ class systrayDummy:
 		pass
 	def __init__(self):
 		self.t = gtk.Button()
+		self.jids = []
 
 class systray:
 	"""Class for icon in the systray"""
