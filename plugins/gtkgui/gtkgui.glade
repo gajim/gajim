@@ -873,7 +873,7 @@
 	    <widget class="GtkLabel" id="label2">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">&lt;b&gt;Gajim&lt;/b&gt; (http://www.gajim.org) 
-Version 0.5
+Version 0.5.1
 
 Copyright © 2003-2005 Gajim Team
 

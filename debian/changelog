@@ -1,3 +1,10 @@
+gajim (0.5.1) unstable; urgency=low
+
+  * bugfixs
+  * GUI improvements
+
+ -- asterix <asterix@lagaule.org>  Sun, 27 Feb 2005 11:34:08 +0100
+
 gajim (0.5) unstable; urgency=low
 
   * tabbed chat window
