@@ -608,8 +608,20 @@ class accountPreference_Window:
 		if self.modify:
 			#if we modify the name of the account
 			if name != self.account:
+				#update variables
+				self.plugin.windows[name] = self.plugin.windows[self.account]
+				self.plugin.queues[name] = self.plugin.queues[self.account]
+				self.plugin.connected[name] = self.plugin.connected[self.account]
+				self.plugin.roster.groups[name] = \
+					self.plugin.roster.groups[self.account]
+				self.plugin.roster.contacts[name] = \
+					self.plugin.roster.contacts[self.account]
+				del self.plugin.windows[self.account]
+				del self.plugin.queues[self.account]
+				del self.plugin.connected[self.account]
+				del self.plugin.roster.groups[self.account]
+				del self.plugin.roster.contacts[self.account]
 				del self.plugin.accounts[self.account]
-				#TODO: update many variables
 		#if it's a new account
 		else:
 			if name in self.plugin.accounts.keys():
@@ -625,9 +637,17 @@ class accountPreference_Window:
 			'password': entryPass.get_text(), 'ressource': \
 			entryRessource.get_text()}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
+		#update variables
+		self.plugin.windows[name] = {'infos': {}, 'chats': {}}
+		self.plugin.queues[name] = {}
+		self.plugin.connected[name] = 0
+		self.plugin.roster.groups[name] = {}
+		self.plugin.roster.contacts[name] = {}
 		#refresh accounts window
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].init_accounts()
+		#refresh roster
+		self.plugin.roster.draw_roster()
 		widget.get_toplevel().destroy()
 
 	def on_edit_details_clicked(self, widget):
@@ -697,7 +717,13 @@ class accounts_Window:
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
 		del self.plugin.accounts[account]
-		self.plugin.put('CONFIG', None, ('accounts', self.plugin.accounts))
+		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
+		del self.plugin.windows[account]
+		del self.plugin.queues[account]
+		del self.plugin.connected[account]
+		del self.plugin.roster.groups[account]
+		del self.plugin.roster.contacts[account]
+		self.plugin.roster.draw_roster()
 		self.init_accounts()
 
 	def on_modify_clicked(self, widget):
@@ -796,6 +822,10 @@ class authorize_Window:
 class agentRegistration_Window:
 	"""Class for agent registration window :
 	window that appears when we want to subscribe to an agent"""
+	def on_cancel(self, widget):
+		"""When Cancel button is clicked"""
+		widget.get_toplevel().destroy()
+		
 	def draw_table(self):
 		"""Draw the table in the window"""
 		nbrow = 0
@@ -832,7 +862,6 @@ class agentRegistration_Window:
 		self.xml.get_widget('label').set_text(infos['instructions'])
 		self.entries = {}
 		self.draw_table()
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
 		self.xml.signal_connect('on_button_ok_clicked', self.on_ok)
 
@@ -841,7 +870,7 @@ class browseAgent_Window:
 	to know the agents on the selected server"""
 	def delete_event(self, widget):
 		"""close window"""
-		del self.plugin.windows['browser']
+		del self.plugin.windows[self.account]['browser']
 
 	def on_cancel(self, widget):
 		"""When Cancel button is clicked"""
@@ -879,7 +908,7 @@ class browseAgent_Window:
 		self.plugin.send('REQ_AGENT_INFO', self.account, service)
 		widget.get_toplevel().destroy()
 		
-	def __init__(self, plugin, roster):
+	def __init__(self, plugin, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'browser')
 		self.treeview = xml.get_widget('treeview')
 		self.plugin = plugin
@@ -979,9 +1008,10 @@ class message_Window:
 		self.plugin = plugin
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat')
+		self.window = self.xml.get_widget('Chat')
 #		hbox = xml.get_widget('hbox1')
 #		hbox.set_property('resize-mode', 2)
-		self.xml.get_widget('Chat').set_title('Chat with ' + user.name)
+		self.window.set_title('Chat with ' + user.name)
 		self.img = self.xml.get_widget('image')
 		self.img.set_from_pixbuf(self.plugin.roster.pixbufs[user.show])
 		self.xml.get_widget('button_contact').set_label(user.name + ' <'\
@@ -994,7 +1024,7 @@ class message_Window:
 		end_iter = buffer.get_end_iter()
 		buffer.create_mark('end', end_iter, 0)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_clear_button_clicked', self.on_clear)
+		self.xml.signal_connect('on_clear_clicked', self.on_clear)
 		self.xml.signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
 		self.tagIn = buffer.create_tag("incoming")
@@ -1121,9 +1151,36 @@ class roster_Window:
 			model.remove(i)
 			if model.iter_n_children(parent_i) == 0:
 				model.remove(parent_i)
+	
+	def mkmenu(self):
+		if len(self.plugin.accounts.keys()) > 1:
+			#add
+			menu_sub = gtk.Menu()
+			self.xml.get_widget('add').set_submenu(menu_sub)
+			for a in self.plugin.accounts.keys():
+				item = gtk.MenuItem(a)
+				menu_sub.append(item)
+				item.connect("activate", self.on_add, a)
+			menu_sub.show_all()
+			#agents
+			menu_sub = gtk.Menu()
+			self.xml.get_widget('browse_agents').set_submenu(menu_sub)
+			for a in self.plugin.accounts.keys():
+				item = gtk.MenuItem(a)
+				menu_sub.append(item)
+				item.connect("activate", self.on_browse, a)
+			menu_sub.show_all()
+		else:
+			#add
+			self.xml.get_widget('add').connect("activate", self.on_add, \
+				self.plugin.accounts.keys()[0])
+			#agents
+			self.xml.get_widget('browse_agents').connect("activate", \
+				self.on_browse, self.plugin.accounts.keys()[0])
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
+		self.mkmenu()
 		self.tree.get_model().clear()
 		for acct in self.contacts.keys():
 			self.add_account_to_roster(acct)
@@ -1170,7 +1227,7 @@ class roster_Window:
 		else:
 			model = self.tree.get_model()
 			if show == 'offline' and not showOffline:
-				self.remove_user(user)
+				self.remove_user(user, account)
 			else:
 				for i in iters:
 					if self.pixbufs.has_key(show):
@@ -1346,7 +1403,7 @@ class roster_Window:
 
 	def on_message(self, jid, msg, account):
 		"""when we receive a message"""
-		if not self.contacts.has_key(jid):
+		if not self.contacts[account].has_key(jid):
 			user1 = user(jid, jid, ['not in list'], \
 				'not in list', 'not in list', 'none', '')
 			self.add_user_to_roster(user1, account)
@@ -1364,7 +1421,7 @@ class roster_Window:
 		else:
 			if not self.plugin.windows[account]['chats'].has_key(jid):
 				self.plugin.windows[account]['chats'][jid] = \
-					message_Window(self.contacts[account][jid], self)
+					message_Window(self.contacts[account][jid], self.plugin, account)
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg)
 
 	def on_prefs(self, widget):
@@ -1406,7 +1463,7 @@ class roster_Window:
 		iter = model.get_iter(path)
 		type = model.get_value(iter, 2)
 		jid = model.get_value(iter, 3)
-		if (type == 'group'):
+		if (type == 'group') or (type == 'account'):
 			if (self.tree.row_expanded(path)):
 				self.tree.collapse_row(path)
 			else:
@@ -1453,11 +1510,11 @@ class roster_Window:
 			self.plugin.send('UPDUSER', account, (jid, new_text, \
 				self.contacts[account][jid].groups))
 		
-	def on_browse(self, widget):
+	def on_browse(self, widget, account):
 		"""When browse agent is selected :
 		Call browse class"""
-		if not self.plugin.windows.has_key('browser'):
-			self.plugin.windows['browser'] = browseAgent_Window(self)
+		if not self.plugin.windows[account].has_key('browser'):
+			self.plugin.windows[account]['browser'] = browseAgent_Window(self.plugin, account)
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
@@ -1499,6 +1556,7 @@ class roster_Window:
 		self.contacts = {}
 		for a in self.plugin.accounts.keys():
 			self.contacts[a] = {}
+			self.groups[a] = {}
 		#(icon, name, type, jid, editable)
 		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, str, \
 			gobject.TYPE_BOOLEAN)
@@ -1526,19 +1584,6 @@ class roster_Window:
 		showOffline = self.plugin.config['showoffline']
 		self.xml.get_widget('show_offline').set_active(showOffline)
 
-		#Menu
-		if len(self.plugin.accounts.keys()):
-			menu_sub = gtk.Menu()
-			self.xml.get_widget('add').set_submenu(menu_sub)
-			for a in self.plugin.accounts.keys():
-				item = gtk.MenuItem(a)
-				menu_sub.append(item)
-				item.connect("activate", self.on_add, a)
-			menu_sub.show_all()
-		else:
-			self.xml.get_widget('add').connect("activate", self.on_add, \
-				self.plugin.accounts.keys()[0])
-
 		#columns
 		col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
@@ -1561,7 +1606,6 @@ class roster_Window:
 		self.xml.signal_connect('gtk_main_quit', self.on_quit)
 		self.xml.signal_connect('on_preferences_activate', self.on_prefs)
 		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
-		self.xml.signal_connect('on_browse_agents_activate', self.on_browse)
 		self.xml.signal_connect('on_show_offline_activate', self.on_show_off)
 		self.xml.signal_connect('on_about_activate', self.on_about)
 		self.xml.signal_connect('on_quit_activate', self.on_quit)
@@ -1708,12 +1752,17 @@ class plugin:
 				if not ev[2][1].has_key('instructions'):
 					warning_Window('error contacting %s' % ev[2][0])
 				else:
-					agentRegistration_Window(ev[2][0], ev[2][1], self.plugin, ev[1])
+					agentRegistration_Window(ev[2][0], ev[2][1], self, ev[1])
 			#('ACC_OK', account, (hostname, login, pasword, name, ressource))
 			elif ev[0] == 'ACC_OK':
 				self.accounts[ev[2][3]] =  {'ressource': ev[2][4], \
 					'password': ev[2][2], 'hostname': ev[2][0], 'name': ev[2][1]}
 				self.send('CONFIG', None, ('accounts', self.accounts))
+				self.windows[name] = {'infos': {}, 'chats': {}}
+				self.queues[name] = {}
+				self.connected[name] = 0
+				self.roster.groups[name] = {}
+				self.roster.contacts[name] = {}
 				if self.windows.has_key('accounts'):
 					self.windows['accounts'].init_accounts()
 			elif ev[0] == 'QUIT':
