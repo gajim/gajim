@@ -547,7 +547,7 @@ class join_groupchat_window:
 
 	def __init__(self, plugin, account, server='', room = ''):
 		if not plugin.connected[account]:
-			warning_dialog(_('You must be connected to join a group chat on this serveur'))
+			warning_dialog(_('You must be connected to join a group chat on this server'))
 			return
 		self.plugin = plugin
 		self.account = account
@@ -586,7 +586,7 @@ class new_message_window: #FIXME: NOT READY
 		return True
 		
 		if not plugin.connected[account]:
-			warning_dialog(_("You must be connected to join a group chat on this serveur"))
+			warning_dialog(_("You must be connected to join a group chat on this server"))
 			return
 		self.plugin = plugin
 		self.account = account

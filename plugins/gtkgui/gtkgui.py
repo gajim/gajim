@@ -1435,7 +1435,6 @@ class roster_window:
 			self.xml.get_widget('add_contact_menuitem').set_sensitive(False)
 			self.xml.get_widget('browse_agents_menuitem').set_sensitive(False)
 		if len(self.plugin.accounts.keys()) > 1: # 2 or more accounts? make submenus
-			
 			#add
 			menu_sub = gtk.Menu()
 			self.xml.get_widget('add_contact_menuitem').set_submenu(menu_sub)
@@ -1470,16 +1469,16 @@ class roster_window:
 			menu_sub.show_all()
 		elif len(self.plugin.accounts.keys()) == 1:
 			#add
-			if not self.add_contact_handler_id :
+			if not self.add_contact_handler_id:
 				self.add_contact_handler_id = self.xml.get_widget('add_contact_menuitem').connect(
 					"activate", self.on_add_contact, self.plugin.accounts.keys()[0])
 			#agents
-			if not self.browse_agents_handler_id :
+			if not self.browse_agents_handler_id:
 				self.browse_agents_handler_id = self.xml.get_widget(
 					'browse_agents_menuitem').connect("activate", self.on_browse_agents, 
 					self.plugin.accounts.keys()[0])
 			#join_gc
-			if not self.join_gc_handler_id :
+			if not self.join_gc_handler_id:
 				self.join_gc_handler_id = self.xml.get_widget('join_gc_menuitem').connect(
 					"activate", self.on_join_gc, self.plugin.accounts.keys()[0])
 

@@ -831,7 +831,7 @@ class account_window:
 			warning_dialog(_('Spaces are not permited in account name'))
 			return 0
 		if (jid == '') or (string.count(jid, '@') != 1):
-			warning_dialog(_('You must enter a Jabber ID for this account\nFor example : login@hostname'))
+			warning_dialog(_('You must enter a Jabber ID for this account\nFor example: someone@someserver.org'))
 			return 0
 		if new_account_checkbutton.get_active() and password == '':
 			warning_dialog(_('You must enter a password to register a new account'))
