@@ -433,7 +433,6 @@ class Chat:
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
-		# == DETECT SPECIAL TEXT == 
 		start = 0
 		end = 0
 		index = 0
@@ -464,7 +463,7 @@ class Chat:
 		return index, other_tag
 		
 	def print_special_text(self, special_text, other_tag, conversation_buffer):
-		# == PRINT SPECIAL TEXT ==
+		tag2 = None
 		# make it CAPS (emoticons keys are all CAPS)
 		possible_emot_ascii_caps = special_text.upper()
 		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
@@ -478,36 +477,56 @@ class Chat:
 		elif special_text.startswith('mailto:'):
 			#it's a mail
 			tag = 'mail'
-			print tag
 		elif self.plugin.sth_at_sth_dot_sth_re.match(special_text):
 			#it's a mail
 			tag = 'mail'
-			print tag
-		elif special_text.startswith('*') and special_text.endswith('*'):
-			#it's a bold text
+		elif special_text.startswith('*'): # it's a bold text
 			tag = 'bold'
-			special_text = special_text[1:-1] # remove * *
-			print tag
-		elif special_text.startswith('/') and special_text.endswith('/'):
-			#it's an italic text
-			tag = 'italic'
-			special_text = special_text[1:-1] # remove / /
-			print tag
-		elif special_text.startswith('_') and special_text.endswith('_'):
-			#it's an underlined text
+			if special_text[1] == '/': # it's also italic
+				tag2 = 'italic'
+				special_text = special_text[2:-2] # remove */ /*
+			elif special_text[1] == '_': # it's also underlined
+				tag2 = 'underline'
+				special_text = special_text[2:-2] # remove *_ _*
+			else:
+				special_text = special_text[1:-1] # remove * *
+		elif special_text.startswith('/'): # it's an italic text
+			tag = 'italic'		
+			if special_text[1] == '*': # it's also bold
+				tag2 = 'bold'
+				special_text = special_text[2:-2] # remove /* */
+			elif special_text[1] == '_': # it's also underlined
+				tag2 = 'underline'
+				special_text = special_text[2:-2] # remove /_ _/
+			else:
+				special_text = special_text[1:-1] # remove / /
+		elif special_text.startswith('_'): # it's an underlined text
 			tag = 'underline'
-			special_text = special_text[1:-1] # remove _ _
-			print tag
+			if special_text[1] == '*': # it's also bold
+				tag2 = 'bold'
+				special_text = special_text[2:-2] # remove _* *_
+			elif special_text[1] == '/': # it's also italic
+				tag2 = 'italic'
+				special_text = special_text[2:-2] # remove _/ /_
+			else:
+				special_text = special_text[1:-1] # remove _ _
 		else:
 			#it's a url
 			tag = 'url'
-			print tag
 
 		end_iter = conversation_buffer.get_end_iter()
 		if tag is not None:
 			if tag in ['bold', 'italic', 'underline'] and other_tag:
-				conversation_buffer.insert_with_tags_by_name(end_iter,\
-					special_text, other_tag, tag)
+				if tag2 is not None:
+					conversation_buffer.insert_with_tags_by_name(end_iter,\
+						special_text, other_tag, tag, tag2)
+				else:
+					conversation_buffer.insert_with_tags_by_name(end_iter,\
+						special_text, other_tag, tag)
 			else:
-				conversation_buffer.insert_with_tags_by_name(end_iter,\
-					special_text, tag)
+				if tag2 is not None:
+					conversation_buffer.insert_with_tags_by_name(end_iter,\
+						special_text, tag, tag2)
+				else:
+					conversation_buffer.insert_with_tags_by_name(end_iter,\
+						special_text, tag)					
