@@ -8105,9 +8105,9 @@ Custom</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy" handler="on_tabbed_chat_window_destroy" last_modification_time="Wed, 02 Mar 2005 17:56:08 GMT"/>
   <signal name="focus_in_event" handler="on_tabbed_chat_window_focus_in_event" last_modification_time="Wed, 02 Mar 2005 17:57:33 GMT"/>
   <signal name="key_press_event" handler="on_tabbed_chat_window_key_press_event" last_modification_time="Wed, 02 Mar 2005 17:59:50 GMT"/>
+  <signal name="delete_event" handler="on_tabbed_chat_window_delete_event" last_modification_time="Mon, 07 Mar 2005 11:06:00 GMT"/>
 
   <child>
     <widget class="GtkNotebook" id="chat_notebook">

@@ -211,11 +211,12 @@ class tabbed_chat_window:
 		self.tagStatus = {}
 		self.users = {}
 		self.nb_unread = {}
+		self.last_message_time = {}
 		self.window = self.xml.get_widget('tabbed_chat_window')
 		self.new_user(user)
 		self.show_title()
-		self.xml.signal_connect('on_tabbed_chat_window_destroy', \
-			self.on_tabbed_chat_window_destroy)
+		self.xml.signal_connect('on_tabbed_chat_window_delete_event', \
+			self.on_tabbed_chat_window_delete_event)
 		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event', \
 			self.on_tabbed_chat_window_focus_in_event)
 		self.xml.signal_connect('on_tabbed_chat_window_key_press_event', \
@@ -281,9 +282,14 @@ class tabbed_chat_window:
 			self.xmls[jid].get_widget('status_image').\
 				set_from_pixbuf(image.get_pixbuf())
 
-	def on_tabbed_chat_window_destroy(self, widget):
+	def on_tabbed_chat_window_delete_event(self, widget, event):
 		"""close window"""
 		#clean self.plugin.windows[self.account]['chats']
+		for jid in self.users:
+			if time.time() - self.last_message_time[jid] < 2:
+				dialog = Confirmation_dialog(_('You received a message from %s in the last two secondes.\nDo you still want to close this window ?') % jid)
+				if dialog.get_response() != gtk.RESPONSE_YES:
+					return True #stop the propagation of the event
 		for jid in self.users:
 			del self.plugin.windows[self.account]['chats'][jid]
 		if self.plugin.windows[self.account]['chats'].has_key('tabbed'):
@@ -366,6 +372,11 @@ class tabbed_chat_window:
 			self.chat_notebook.page_num(child))
 
 	def remove_tab(self, jid):
+		if time.time() - self.last_message_time[jid] < 2:
+			dialog = Confirmation_dialog(_('You received a message from %s in the last two secondes.\nDo you still want to close this tab ?') % jid)
+			if dialog.get_response() != gtk.RESPONSE_YES:
+				return
+
 		if len(self.xmls) == 1:
 			self.window.destroy()
 		else:
@@ -374,6 +385,7 @@ class tabbed_chat_window:
 			del self.plugin.windows[self.account]['chats'][jid]
 			del self.users[jid]
 			del self.nb_unread[jid]
+			del self.last_message_time[jid]
 			del self.xmls[jid]
 			del self.tagIn[jid]
 			del self.tagOut[jid]
@@ -384,6 +396,7 @@ class tabbed_chat_window:
 
 	def new_user(self, user):
 		self.nb_unread[user.jid] = 0
+		self.last_message_time[user.jid] = 0
 		self.users[user.jid] = user
 		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chat_vbox', APP)
 		
@@ -564,6 +577,7 @@ class tabbed_chat_window:
 			else:
 				tag = 'incoming'
 				name = user.name
+				self.last_message_time[jid] = time.time()
 				
 			if text.startswith('/me'):
 				ttext = name + text[3:] + '\n'
