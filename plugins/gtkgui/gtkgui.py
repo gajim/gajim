@@ -1769,7 +1769,7 @@ class roster_Window:
 			self.add_user_to_roster(jid, account)
 
 	def on_roster_treeview_key_release_event(self, widget, event):
-		"""when a key is pressed in the treevies"""
+		"""when a key is pressed in the treeviews"""
 		if event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
 		return gtk.FALSE
@@ -2041,7 +2041,7 @@ class roster_Window:
 			else:
 				w.window.destroy()
 	
-	def on_Gajim_delete_event(self, widget, event):
+	def on_gajim_delete_event(self, widget, event):
 		"""When we want to close the window"""
 		if self.plugin.systray_visible:
 			self.window.iconify()
@@ -2353,8 +2353,8 @@ class roster_Window:
 
 	def __init__(self, plugin):
 		# FIXME : handle no file ...
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim_window', APP)
-		self.window = self.xml.get_widget('Gajim_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_window', APP)
+		self.window = self.xml.get_widget('gajim_window')
 		self.tree = self.xml.get_widget('roster_treeview')
 		self.plugin = plugin
 		self.nb_unread = 0
@@ -2572,7 +2572,7 @@ class systray:
 	def on_clicked(self, widget, event):
 		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1:
 			if len(self.jids) == 0:
-				win = self.plugin.roster.xml.get_widget('Gajim')
+				win = self.plugin.roster.window
 				if win.iconify_initially:
 					win.deiconify()
 				else:
@@ -2614,7 +2614,6 @@ class systray:
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.jids = []
-		win = self.plugin.roster.xml.get_widget('Gajim')
 		self.t = None
 		self.img_tray = gtk.Image()
 		self.status = 'offline'

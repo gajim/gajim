@@ -3,7 +3,7 @@
 
 <glade-interface>
 
-<widget class="GtkWindow" id="Gajim_window">
+<widget class="GtkWindow" id="gajim_window">
   <property name="visible">True</property>
   <property name="title" translatable="yes">Gajim</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
