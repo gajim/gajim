@@ -69,7 +69,7 @@ class plugin:
 					fic = open(LOGPATH + jid, "a")
 					fic.write("%s:sent:%s\n" % (tim, msg))
 					fic.close()
-			time.sleep(0.5)
+			time.sleep(0.1)
 
 	def wait(self, what):
 		"""Wait for a message from Core"""

@@ -1420,6 +1420,12 @@ class roster_Window:
 		"""When an agent is requested to log in or off"""
 		self.plugin.send('AGENT_LOGGING', account, (jid, state))
 		
+	def on_history(self, widget, user):
+		"""When history button is pressed : call log window"""
+		if not self.plugin.windows['logs'].has_key(user.jid):
+			self.plugin.windows['logs'][user.jid] = log_Window(self.plugin, \
+				user.jid)
+	
 	def mk_menu_user(self, event, iter):
 		"""Make user's popup menu"""
 		model = self.tree.get_model()
@@ -1462,6 +1468,9 @@ class roster_Window:
 		item = gtk.MenuItem("Informations")
 		menu.append(item)
 		item.connect("activate", self.on_info, user, account)
+		item = gtk.MenuItem("History")
+		menu.append(item)
+		item.connect("activate", self.on_history, user)
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
@@ -1972,7 +1981,6 @@ class plugin:
 				else:
 					#Save messages
 					temp_q.put(ev)
-			time.sleep(0.1)
 		
 	def read_queue(self):
 		"""Read queue from the core and execute commands from it"""
@@ -2138,7 +2146,7 @@ class plugin:
 			self.queues[a] = {}
 			self.connected[a] = 0
 		self.roster = roster_Window(self)
-		gtk.timeout_add(200, self.read_queue)
+		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
 		self.sleeper = None
 		self.sleeper_state = None
