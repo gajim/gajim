@@ -7567,8 +7567,6 @@ Custom</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
-  <signal name="key_press_event" handler="on_passphrase_dialog_key_press_event" last_modification_time="Wed, 02 Mar 2005 10:37:49 GMT"/>
-  <signal name="destroy" handler="on_passphrase_dialog_destroy" last_modification_time="Wed, 02 Mar 2005 10:36:32 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox4">
@@ -7591,7 +7589,6 @@ Custom</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-6</property>
-	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Wed, 02 Mar 2005 10:33:28 GMT"/>
 	    </widget>
 	  </child>
 
@@ -7606,7 +7603,6 @@ Custom</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-5</property>
-	      <signal name="clicked" handler="on_ok_button_clicked" last_modification_time="Wed, 02 Mar 2005 10:33:19 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

@@ -1214,7 +1214,7 @@ class Account_modification_window:
 			Warning_dialog(_('You must first create your account before editing your information'))
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
-		if not self.plugin.connected[self.account]:
+		if self.plugin.connected[self.account] < 2:
 			Warning_dialog(_('You must be connected to edit your information'))
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
@@ -1555,7 +1555,7 @@ class agent_browser_window:
 						self.join_button.set_sensitive(True)
 		
 	def __init__(self, plugin, account):
-		if not plugin.connected[account]:
+		if plugin.connected[account] < 2:
 			Warning_dialog(_("You must be connected to view Agents"))
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_browser_window', APP)

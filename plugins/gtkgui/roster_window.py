@@ -108,7 +108,8 @@ class roster_window:
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
-		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
+		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',\
+			'invisible']
 		status = statuss[self.plugin.connected[account]]
 		model.append(None, (self.pixbufs[status], account, 'account', account,\
 			account, False))
@@ -558,7 +559,7 @@ class roster_window:
 		item = gtk.MenuItem(_('_New message'))
 		menu.append(item)
 		item.connect("activate", self.on_new_message_menuitem_activate, account)
-		if not self.plugin.connected[account]:
+		if self.plugin.connected[account] < 2:
 			item.set_sensitive(False)
 		
 		menu.popup(None, None, None, event.button, event.time)
@@ -662,28 +663,27 @@ class roster_window:
 
 	def send_status(self, account, status, txt, autoconnect=0):
 		if status != 'offline':
-			if not self.plugin.connected[account]:
+			if self.plugin.connected[account] < 2:
 				model = self.tree.get_model()
 				accountIter = self.get_account_iter(account)
 				if accountIter:
 					model.set_value(accountIter, 0, self.pixbufs['connecting'])
+				self.plugin.connected[account] = 1
 				self.plugin.systray.set_status('connecting')
 
 			save_pass = 0
 			if self.plugin.accounts[account].has_key('savepass'):
 				save_pass = self.plugin.accounts[account]['savepass']
-			if not save_pass and not self.plugin.connected[account]:
+			if not save_pass and self.plugin.connected[account] < 2:
 				passphrase = ''
 				w = Passphrase_dialog(_('Enter your password for account %s') \
 					% account, 'Save password', autoconnect)
-				if autoconnect:
-					gtk.main()
-					passphrase, save = w.get_pass()
-				else:
-					passphrase, save = w.run()
+				passphrase, save = w.run()
 				if passphrase == -1:
 					if accountIter:
 						model.set_value(accountIter, 0, self.pixbufs['offline'])
+					self.plugin.connected[account] = 0
+					self.plugin.systray.set_status('offline')
 					self.set_cb()
 					return
 				self.plugin.send('PASSPHRASE', account, passphrase)
@@ -697,7 +697,7 @@ class roster_window:
 				save_gpg_pass = self.plugin.accounts[account]['savegpgpass']
 			if self.plugin.accounts[account].has_key('keyid'):
 				keyid = self.plugin.accounts[account]['keyid']
-			if keyid and not self.plugin.connected[account] and \
+			if keyid and self.plugin.connected[account] < 2 and \
 				self.plugin.config['usegpg']:
 				if save_gpg_pass:
 					passphrase = self.plugin.accounts[account]['gpgpassword']
@@ -706,11 +706,7 @@ class roster_window:
 					w = Passphrase_dialog(\
 						_('Enter GPG key passphrase for account %s') % account, \
 						'Save passphrase', autoconnect)
-					if autoconnect:
-						gtk.main()
-						passphrase, save = w.get_pass()
-					else:
-						passphrase, save = w.run()
+					passphrase, save = w.run()
 					if passphrase == -1:
 						passphrase = ''
 					if save:
@@ -768,7 +764,7 @@ class roster_window:
 	
 	def set_cb(self):
 		#table to change index in plugin.connected to index in combobox
-		table = {0:5, 1:0, 2:1, 3:2, 4:3, 5:4}
+		table = {0:5, 1:5, 2:0, 3:1, 4:2, 5:3, 6:4}
 		maxi = 0
 		if len(self.plugin.connected.values()):
 			maxi = max(self.plugin.connected.values())
@@ -777,7 +773,8 @@ class roster_window:
 		self.cb.handler_block(self.id_signal_cb)
 		self.cb.set_active(table[maxi])
 		self.cb.handler_unblock(self.id_signal_cb)
-		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
+		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',\
+			'invisible']
 		self.plugin.systray.set_status(statuss[maxi])
 		image = self.pixbufs[statuss[maxi]]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
@@ -794,7 +791,8 @@ class roster_window:
 		accountIter = self.get_account_iter(account)
 		if accountIter:
 			model.set_value(accountIter, 0, self.pixbufs[status])
-		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
+		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',\
+			'invisible']
 		if status == 'offline':
 			for jid in self.contacts[account]:
 				luser = self.contacts[account][jid]
@@ -848,7 +846,7 @@ class roster_window:
 		autopopup = self.plugin.config['autopopup']
 		autopopupaway = self.plugin.config['autopopupaway']
 		if (autopopup == 0 or ( not autopopupaway and \
-			self.plugin.connected[account] > 1)) and not \
+			self.plugin.connected[account] > 2)) and not \
 			self.plugin.windows[account]['chats'].has_key(jid):
 			#We save it in a queue
 			if not self.plugin.queues[account].has_key(jid):

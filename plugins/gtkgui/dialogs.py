@@ -150,7 +150,7 @@ class vcard_information_window:
 		return vcard
 
 	def on_publish_button_clicked(self, widget):
-		if not self.plugin.connected[self.account]:
+		if self.plugin.connected[self.account] < 2:
 			Warning_dialog(_("You must be connected to publish your informations"))
 			return
 		vcard = self.make_vcard()
@@ -163,7 +163,7 @@ class vcard_information_window:
 		self.plugin.send('VCARD', self.account, vcard)
 
 	def on_retrieve_button_clicked(self, widget):
-		if self.plugin.connected[self.account]:
+		if self.plugin.connected[self.account] > 1:
 			self.plugin.send('ASK_VCARD', self.account, self.jid)
 		else:
 			Warning_dialog(_('You must be connected to get your informations'))
@@ -212,6 +212,8 @@ class Passphrase_dialog:
 	"""Class for Passphrase dialog"""
 	def run(self):
 		"""Wait for OK button to be pressed and return passphrase/password"""
+		if self.autoconnect:
+			gtk.gdk.threads_enter()
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			passphrase = self.passphrase_entry.get_text()
@@ -220,35 +222,9 @@ class Passphrase_dialog:
 		save_passphrase_checkbutton = self.xml.\
 			get_widget('save_passphrase_checkbutton')
 		self.window.destroy()
+		if self.autoconnect:
+			gtk.gdk.threads_leave()
 		return passphrase, save_passphrase_checkbutton.get_active()
-
-	def on_passphrase_dialog_key_press_event(self, widget, event):
-		if event.keyval == gtk.keysyms.Return:
-			if self.autoconnect:
-				self.on_ok_button_clicked(widget)
-			else:
-				self.window.response(gtk.RESPONSE_OK)
-
-	def on_ok_button_clicked(self, widget):
-		if self.autoconnect:
-			self.passphrase = self.passphrase_entry.get_text()
-			gtk.main_quit()
-	
-	def on_cancel_button_clicked(self, widget):
-		if self.autoconnect:
-			gtk.main_quit()
-	
-	def get_pass(self):
-		self.autoconnect = 0
-		save_passphrase_checkbutton = self.xml.\
-			get_widget('save_passphrase_checkbutton')
-		self.window.destroy()
-		return self.passphrase, save_passphrase_checkbutton.get_active()
-		
-	def on_passphrase_dialog_destroy(self, widget=None):
-		"""close window"""
-		if self.autoconnect:
-			gtk.main_quit()
 
 	def __init__(self, labeltext, checkbuttontext, autoconnect=0):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'passphrase_dialog', APP)
@@ -411,7 +387,7 @@ class add_contact_window:
 		self.old_uid_value = uid.split('@')[0]
 		
 	def __init__(self, plugin, account, jid=None):
-		if not plugin.connected[account]:
+		if plugin.connected[account] < 2:
 			Warning_dialog(_('You must be connected to add a contact'))
 			return
 		self.plugin = plugin
@@ -587,7 +563,7 @@ class join_groupchat_window:
 		widget.get_toplevel().destroy()
 
 	def __init__(self, plugin, account, server='', room = ''):
-		if not plugin.connected[account]:
+		if plugin.connected[account] < 2:
 			Warning_dialog(_('You must be connected to join a group chat'))
 			return
 		self.plugin = plugin
@@ -631,7 +607,7 @@ class New_message_dialog:
 		widget.get_toplevel().destroy()
 
 	def __init__(self, plugin, account):
-		if not plugin.connected[account]:
+		if plugin.connected[account] < 2:
 			Warning_dialog(_('You must be connected to send a message to a contact'))
 			return
 		self.plugin = plugin
@@ -665,7 +641,7 @@ class Change_password_dialog:
 		return message
 
 	def __init__(self, plugin, account):
-		if not plugin.connected[account]:
+		if plugin.connected[account] < 2:
 			Warning_dialog(_('You must be connected to change your password'))
 			return
 		self.plugin = plugin

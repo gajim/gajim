@@ -831,7 +831,8 @@ class plugin:
 		for a in self.accounts.keys():
 			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}}
 			self.queues[a] = {}
-			self.connected[a] = 0
+			self.connected[a] = 0 #0->offline 1->connecting 2->online 3->away
+										#4->xa 5->dnd 6->invisible
 			self.nicks[a] = self.accounts[a]['name']
 			self.sleeper_state[a] = 0	#0:don't use sleeper for this account
 												#1:online and use sleeper
@@ -877,7 +878,7 @@ class plugin:
 		self.init_regex()
 
 		gtk.gdk.threads_enter()
-		self.autoconnect()
+		gobject.timeout_add(100, self.autoconnect)
 		gtk.main()
 		gtk.gdk.threads_leave()
 
