@@ -1619,6 +1619,8 @@ class roster_Window:
 
 	def on_status_changed(self, account, status):
 		"""the core tells us that our status has changed"""
+		if not self.contacts.has_key(account):
+			return
 #		optionmenu =  self.xml.get_widget('optionmenu')
 #		for i in range(7):
 #			if optionmenu.get_menu().get_children()[i].name == status:
