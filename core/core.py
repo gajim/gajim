@@ -224,11 +224,13 @@ class GajimCore:
 			#connexions {con: name, ...}
 			self.connexions = {}
 			self.gpg = {}
+			self.passwords = {}
 			if USE_GPG:
 				self.gpg_common = MyGnuPG()
 			for a in self.accounts:
 				self.connected[a] = 0 #0:offline, 1:online, 2:away,
 											 #3:xa, 4:dnd, 5:invisible
+				self.passwords[a] = self.cfgParser.tab[a]["password"]
 				if USE_GPG:
 					self.gpg[a] = MyGnuPG()
 			self.myVCardID = []
@@ -271,7 +273,6 @@ class GajimCore:
 			'localhost', 'port': 8255, 'modules': 'gtkgui'}}
 		fname = os.path.expanduser(CONFPATH)
 		reps = string.split(fname, '/')
-#		del reps[0]
 		path = ''
 		while len(reps) > 1:
 			path = path + reps[0] + '/'
@@ -482,7 +483,7 @@ class GajimCore:
 		"""Connect and authentificate to the Jabber server"""
 		hostname = self.cfgParser.tab[account]["hostname"]
 		name = self.cfgParser.tab[account]["name"]
-		password = self.cfgParser.tab[account]["password"]
+		password = self.passwords[account]
 		ressource = self.cfgParser.tab[account]["ressource"]
 
 		#create connexion if it doesn't already existe
@@ -811,7 +812,9 @@ class GajimCore:
 			#('ACC_CHG', old_account, new_account)
 			elif ev[0] == 'ACC_CHG':
 				self.connected[ev[2]] = self.connected[ev[1]]
+				self.passwords[ev[2]] = self.passwords[ev[1]]
 				del self.connected[ev[1]]
+				del self.passwords[ev[1]]
 				if USE_GPG:
 					self.gpg[ev[2]] = self.gpg[ev[1]]
 					del self.gpg[ev[1]]
@@ -892,14 +895,16 @@ class GajimCore:
 				else:
 					con.send(common.jabber.Presence('%s/%s' % (ev[2][1], ev[2][0]), \
 						'available', show=ev[2][2], status = ev[2][3]))
-			#('PASSPHRASE', account, passphrase)
-			elif ev[0] == 'PASSPHRASE':
+			#('GPGPASSPHRASE', account, passphrase)
+			elif ev[0] == 'GPGPASSPHRASE':
 				if USE_GPG:
 					self.gpg[ev[1]].passphrase = ev[2]
 			elif ev[0] == 'GPG_SECRETE_KEYS':
 				if USE_GPG:
 					keys = self.gpg_common.get_secret_keys()
 					self.hub.sendPlugin('GPG_SECRETE_KEYS', ev[1], keys)
+			elif ev[0] == 'PASSPHRASE':
+				self.passwords[ev[1]] = ev[2]
 			else:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':

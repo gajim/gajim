@@ -1346,6 +1346,17 @@ class roster_Window:
 
 	def send_status(self, account, status, txt):
 		if status != 'offline':
+			save_pass = 0
+			if self.plugin.accounts[account].has_key("savepass"):
+				save_pass = self.plugin.accounts[account]["savepass"]
+			if not save_pass and not self.plugin.connected[account]:
+				passphrase = ''
+				w = passphrase_Window('Enter your passphrase for your account %s' % account)
+				passphrase = w.run()
+				if passphrase == -1:
+					return
+				self.plugin.send('PASSPHRASE', account, passphrase)
+
 			keyid = None
 			save_gpg_pass = 0
 			if self.plugin.accounts[account].has_key("savegpgpass"):
@@ -1358,11 +1369,11 @@ class roster_Window:
 					passphrase = self.plugin.accounts[account]['gpgpass']
 				else:
 					passphrase = ''
-					w = passphrase_Window()
+					w = passphrase_Window('Enter your passphrase for your the GPG key of your account %s' % account)
 					passphrase = w.run()
 					if passphrase == -1:
 						passphrase = ''
-				self.plugin.send('PASSPHRASE', account, passphrase)
+				self.plugin.send('GPGPASSPHRASE', account, passphrase)
 		self.plugin.send('STATUS', account, (status, txt))
 		if status == 'online' and self.plugin.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
@@ -2396,7 +2407,7 @@ class plugin:
 			'msg0_name':'Brb',\
 			'msg0':'Back in some minutes.',\
 			'msg1_name':'Eating',\
-			'msg1':'I\'m eating, so let a message.',\
+			'msg1':'I\'m eating, so leave me a message.',\
 			'msg2_name':'Film',\
 			'msg2':'I\'m watching a film.',\
 			'trayicon':1,\
@@ -2453,6 +2464,11 @@ class plugin:
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
+		#auto connect at startup
+		for a in self.accounts.keys():
+			if self.accounts[a].has_key('autoconnect'):
+				if self.accounts[a]['autoconnect']:
+					self.roster.send_status(a, 'online', 'Online')
 		self.sleeper = common.sleepy.Sleepy( \
 			self.config['autoawaytime']*60, \
 			self.config['autoxatime']*60)

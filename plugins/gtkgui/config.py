@@ -264,6 +264,10 @@ class preference_Window:
 		self.write_cfg()
 		self.xml.get_widget('Preferences').destroy()
 
+	def on_apply(self, widget):
+		"""When Apply button is clicked"""
+		self.write_cfg()
+
 	def change_notebook_page(self, number):
 		self.notebook.set_current_page(number)
 
@@ -319,6 +323,11 @@ class preference_Window:
 		first_iter, end_iter = buf.get_bounds()
 		name = model.get_value(iter, 0)
 		model.set_value(iter, 1, buf.get_text(first_iter, end_iter))
+	
+	def on_chk_toggled(self, widget, widgets):
+		"""set or unset sensitivity of widgets when widget is toggled"""
+		for w in widgets:
+			w.set_sensitive(widget.get_active())
 
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
@@ -380,6 +389,7 @@ class preference_Window:
 		#Autopopupaway
 		st = self.plugin.config['autopopupaway']
 		self.chk_autoppaway.set_active(st)
+		self.chk_autoppaway.set_sensitive(self.plugin.config['autopopup'])
 
 		#Autoaway
 		st = self.plugin.config['autoaway']
@@ -388,6 +398,7 @@ class preference_Window:
 		#Autoawaytime
 		st = self.plugin.config['autoawaytime']
 		self.spin_autoawaytime.set_value(st)
+		self.spin_autoawaytime.set_sensitive(self.plugin.config['autoaway'])
 
 		#Autoxa
 		st = self.plugin.config['autoxa']
@@ -396,6 +407,7 @@ class preference_Window:
 		#Autoxatime
 		st = self.plugin.config['autoxatime']
 		self.spin_autoxatime.set_value(st)
+		self.spin_autoxatime.set_sensitive(self.plugin.config['autoxa'])
 
 		#Status messages
 		self.msg_tree = self.xml.get_widget('msg_treeview')
@@ -461,6 +473,7 @@ class preference_Window:
 		self.xml.get_widget('fontbutton_user_text').set_font_name(fontStr)
 		
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_apply_clicked', self.on_apply)
 		self.xml.signal_connect('on_ok_clicked', self.on_ok)
 		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
 		self.xml.signal_connect('on_msg_treeview_cursor_changed', \
@@ -469,6 +482,12 @@ class preference_Window:
 			self.on_new_msg_button_clicked)
 		self.xml.signal_connect('on_delete_msg_button_clicked', \
 			self.on_delete_msg_button_clicked)
+		self.xml.signal_connect('on_chk_autopopup_toggled', \
+			self.on_chk_toggled, [self.chk_autoppaway])
+		self.xml.signal_connect('on_chk_autoaway_toggled', \
+			self.on_chk_toggled, [self.spin_autoawaytime])
+		self.xml.signal_connect('on_chk_autoxa_toggled', \
+			self.on_chk_toggled, [self.spin_autoxatime])
 
 class accountPreference_Window:
 	"""Class for account informations"""
@@ -489,8 +508,13 @@ class accountPreference_Window:
 			self.xml.get_widget("entry_name").set_text(infos['accname'])
 		if infos.has_key('jid'):
 			self.xml.get_widget("entry_jid").set_text(infos['jid'])
-		if infos.has_key('password'):
-			self.xml.get_widget("entry_password").set_text(infos['password'])
+		if infos.has_key('savepass'):
+			self.xml.get_widget('chk_password').set_active(\
+				infos['savepass'])
+			if infos['savepass']:
+				self.xml.get_widget('entry_password').set_sensitive(True)
+				if infos.has_key('password'):
+					self.xml.get_widget("entry_password").set_text(infos['password'])
 		if infos.has_key('ressource'):
 			self.xml.get_widget("entry_ressource").set_text(infos['ressource'])
 		if infos.has_key('priority'):
@@ -519,9 +543,15 @@ class accountPreference_Window:
 						if infos.has_key('gpgpass'):
 							self.xml.get_widget('gpg_pass_entry').set_text(\
 								infos['gpgpass'])
+		if infos.has_key('autoconnect'):
+			self.xml.get_widget('chk_autoconnect').set_active(\
+				infos['autoconnect'])
 
 	def on_save_clicked(self, widget):
 		"""When save button is clicked : Save informations in config file"""
+		savepass = 0
+		if self.xml.get_widget("chk_password").get_active():
+			savepass = 1
 		entryPass = self.xml.get_widget("entry_password")
 		entryRessource = self.xml.get_widget("entry_ressource")
 		entryPriority = self.xml.get_widget("entry_priority")
@@ -529,6 +559,9 @@ class accountPreference_Window:
 		check = self.xml.get_widget("checkbutton")
 		entryName = self.xml.get_widget("entry_name")
 		entryJid = self.xml.get_widget("entry_jid")
+		autoconnect = 0
+		if self.xml.get_widget("chk_autoconnect").get_active():
+			autoconnect = 1
 		checkProxy = self.xml.get_widget("checkbutton_proxy")
 		if checkProxy.get_active():
 			useProxy = 1
@@ -598,11 +631,12 @@ class accountPreference_Window:
 				del self.plugin.accounts[self.account]
 				self.plugin.send('ACC_CHG', self.account, name)
 			self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-				'password': entryPass.get_text(), 'ressource': \
-				entryRessource.get_text(), 'priority' : prio, 'use_proxy': \
-				useProxy, 'proxyhost': entryProxyhost.get_text(), 'proxyport': \
-				proxyPort, 'keyid': keyID, 'keyname': keyName, 'savegpgpass': \
-				save_gpg_pass, 'gpgpass': gpg_pass}
+				'savepass': savepass, 'password': entryPass.get_text(), \
+				'ressource': entryRessource.get_text(), 'priority' : prio, \
+				'autoconnect': autoconnect, 'use_proxy': useProxy, 'proxyhost': \
+				entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
+				'keyname': keyName, 'savegpgpass': save_gpg_pass, \
+				'gpgpass': gpg_pass}
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
 			#refresh accounts window
 			if self.plugin.windows.has_key('accounts'):
@@ -623,11 +657,11 @@ class accountPreference_Window:
 			check.set_active(FALSE)
 			return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-			'password': entryPass.get_text(), 'ressource': \
-			entryRessource.get_text(), 'priority' : prio, 'use_proxy': useProxy, \
-			'proxyhost': entryProxyhost.get_text(), 'proxyport': proxyPort, \
-			'keyid': keyID, 'keyname': keyName, 'savegpgpass': save_gpg_pass, \
-			'gpgpass': gpg_pass}
+			'savepass': savepass, 'password': entryPass.get_text(), 'ressource': \
+			entryRessource.get_text(), 'priority' : prio, 'autoconnect': \
+			autoconnect, 'use_proxy': useProxy, 'proxyhost': \
+			entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
+			'keyname': keyName, 'savegpgpass': save_gpg_pass, 'gpgpass': gpg_pass}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
@@ -673,12 +707,16 @@ class accountPreference_Window:
 		self.xml.get_widget('gpg_pass_checkbutton').set_active(False)
 		self.xml.get_widget('gpg_pass_entry').set_text('')
 	
-	def on_gpg_pass_checkbutton_toggled(self, widget, data=None):
-		if self.xml.get_widget('gpg_pass_checkbutton').get_active():
-			self.xml.get_widget('gpg_pass_entry').set_sensitive(True)
-		else:
-			self.xml.get_widget('gpg_pass_entry').set_sensitive(False)
-			self.xml.get_widget('gpg_pass_entry').set_text('')
+	def on_chk_toggled(self, widget, widgets):
+		"""set or unset sensitivity of widgets when widget is toggled"""
+		for w in widgets:
+			w.set_sensitive(widget.get_active())
+
+	def on_chk_toggled_and_clear(self, widget, widgets):
+		self.on_chk_toggled(widget, widgets)
+		for w in widgets:
+			if not widget.get_active():
+				w.set_text('')
 
 	#info must be a dictionnary
 	def __init__(self, plugin, infos = {}):
@@ -691,6 +729,7 @@ class accountPreference_Window:
 		self.xml.get_widget('gpg_name_label').set_text('')
 		self.xml.get_widget('gpg_pass_checkbutton').set_sensitive(False)
 		self.xml.get_widget('gpg_pass_entry').set_sensitive(False)
+		self.xml.get_widget('entry_password').set_sensitive(False)
 		if infos:
 			self.modify = True
 			self.account = infos['accname']
@@ -703,7 +742,9 @@ class accountPreference_Window:
 		self.xml.signal_connect('on_close_clicked', self.on_close)
 		self.xml.signal_connect('on_choose_gpg_clicked', self.on_choose_gpg)
 		self.xml.signal_connect('on_gpg_pass_checkbutton_toggled', \
-			self.on_gpg_pass_checkbutton_toggled)
+			self.on_chk_toggled_and_clear, [self.xml.get_widget('gpg_pass_entry')])
+		self.xml.signal_connect('on_pass_checkbutton_toggled', \
+			self.on_chk_toggled_and_clear, [self.xml.get_widget('entry_password')])
 
 class accounts_Window:
 	"""Class for accounts window : lists of accounts"""
@@ -711,10 +752,9 @@ class accounts_Window:
 		"""close window"""
 		del self.plugin.windows['accounts']
 		
-#Not for the moment ... but maybe one day there will be a button	
-#	def on_close(self, widget):
-#		"""When Close button is clicked"""
-#		widget.get_toplevel().destroy()
+	def on_close(self, widget):
+		"""When Close button is clicked"""
+		widget.get_toplevel().destroy()
 		
 	def init_accounts(self):
 		"""initialize listStore with existing accounts"""
@@ -810,6 +850,7 @@ class accounts_Window:
 		self.xml.signal_connect('on_new_clicked', self.on_new_clicked)
 		self.xml.signal_connect('on_delete_clicked', self.on_delete_clicked)
 		self.xml.signal_connect('on_modify_clicked', self.on_modify_clicked)
+		self.xml.signal_connect('on_close_clicked', self.on_close)
 		self.init_accounts()
 
 

@@ -200,9 +200,10 @@ class passphrase_Window:
 		if event.keyval == gtk.keysyms.Return:
 			self.xml.get_widget("Passphrase").response(gtk.RESPONSE_OK)
 	
-	def __init__(self):
+	def __init__(self, txt):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Passphrase', APP)
 		self.entry = self.xml.get_widget("entry")
+		self.xml.get_widget("label").set_text(txt)
 		self.xml.signal_connect('on_Passphrase_key_press_event', \
 			self.on_key_pressed)
 
