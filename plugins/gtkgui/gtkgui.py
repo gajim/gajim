@@ -58,6 +58,119 @@ class user:
 #			self.sub = args[0].sub
 		else: raise TypeError, 'bad arguments'
 
+class prefs:
+	def delete_event(self, widget):
+		self.window.destroy()
+
+	def on_color_button_clicked(self, widget):
+		if widget.name == 'colorIn':
+			color = self.colorIn
+			da = self.da_in
+		elif widget.name == 'colorOut':
+			color = self.colorOut
+			da = self.da_out
+		elif widget.name == 'colorStatus':
+			color = self.colorStatus
+			da = self.da_status
+		colorseldlg = gtk.ColorSelectionDialog('Select Color')
+		colorsel = colorseldlg.colorsel
+		colorsel.set_previous_color(color)
+		colorsel.set_current_color(color)
+		colorsel.set_has_palette(gtk.TRUE)
+		response = colorseldlg.run()
+		if response == gtk.RESPONSE_OK:
+			color = colorsel.get_current_color()
+			da.modify_bg(gtk.STATE_NORMAL, color)
+			if widget.name == 'colorIn':
+				self.colorIn = color
+			elif widget.name == 'colorOut':
+				self.colorOut = color
+			elif widget.name == 'colorStatus':
+				self.colorStatus = color
+		colorseldlg.destroy()
+	
+	def write_cfg(self):
+		#Color for incomming messages
+		colSt = '#'+(hex(self.colorIn.red)+'0')[2:4]\
+			+(hex(self.colorIn.green)+'0')[2:4]\
+			+(hex(self.colorIn.blue)+'0')[2:4]
+		self.r.cfgParser.set('GtkGui', 'inmsgcolor', colSt)
+		for j in self.r.tab_messages.keys():
+			self.r.tab_messages[j].tagIn.set_property("foreground", colSt)
+		#Color for outgoing messages
+		colSt = '#'+(hex(self.colorOut.red)+'0')[2:4]\
+			+(hex(self.colorOut.green)+'0')[2:4]\
+			+(hex(self.colorOut.blue)+'0')[2:4]
+		self.r.cfgParser.set('GtkGui', 'outmsgcolor', colSt)
+		for j in self.r.tab_messages.keys():
+			self.r.tab_messages[j].tagOut.set_property("foreground", colSt)
+		#Color for status messages
+		colSt = '#'+(hex(self.colorStatus.red)+'0')[2:4]\
+			+(hex(self.colorStatus.green)+'0')[2:4]\
+			+(hex(self.colorStatus.blue)+'0')[2:4]
+		self.r.cfgParser.set('GtkGui', 'statusmsgcolor', colSt)
+		for j in self.r.tab_messages.keys():
+			self.r.tab_messages[j].tagStatus.set_property("foreground", colSt)
+		#autopopup
+		pp = self.chk_autopp.get_active()
+		if pp == True:
+			self.r.cfgParser.set('GtkGui', 'autopopup', '1')
+			self.r.autopopup = 1
+		else:
+			self.r.cfgParser.set('GtkGui', 'autopopup', '0')
+			self.r.autopopup = 0
+		
+		self.r.cfgParser.writeCfgFile()
+		self.r.cfgParser.parseCfgFile()
+		
+	def on_ok(self, widget):
+		self.write_cfg()
+		self.window.destroy()
+
+	def __init__(self, roster):
+		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Prefs')
+		self.window = self.xml.get_widget("Prefs")
+		self.r = roster
+		self.da_in = self.xml.get_widget("drawing_in")
+		self.da_out = self.xml.get_widget("drawing_out")
+		self.da_status = self.xml.get_widget("drawing_status")
+		self.chk_autopp = self.xml.get_widget("chk_autopopup")
+
+		#Color for incomming messages
+		colSt = self.r.cfgParser.GtkGui_inmsgcolor
+		if not colSt:
+			colSt = '#ff0000'
+		cmapIn = self.da_in.get_colormap()
+		self.colorIn = cmapIn.alloc_color(colSt)
+		self.da_in.window.set_background(self.colorIn)
+		
+		#Color for outgoing messages
+		colSt = self.r.cfgParser.GtkGui_outmsgcolor
+		if not colSt:
+			colSt = '#0000ff'
+		cmapOut = self.da_out.get_colormap()
+		self.colorOut = cmapOut.alloc_color(colSt)
+		self.da_out.window.set_background(self.colorOut)
+		
+		#Color for status messages
+		colSt = self.r.cfgParser.GtkGui_statusmsgcolor
+		if not colSt:
+			colSt = '#00ff00'
+		cmapStatus = self.da_status.get_colormap()
+		self.colorStatus = cmapStatus.alloc_color(colSt)
+		self.da_status.window.set_background(self.colorStatus)
+		
+		#Autopopup
+		st = self.r.cfgParser.GtkGui_autopopup
+		if not st:
+			st = '0'
+		pp = string.atoi(st)
+		self.chk_autopp.set_active(pp)
+		
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_but_col_clicked', self.on_color_button_clicked)
+		self.xml.signal_connect('on_ok_clicked', self.on_ok)
+
 class add:
 	def delete_event(self, widget):
 		self.Wadd.destroy()
@@ -444,21 +557,21 @@ class message:
 #		self.window.show()
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
-		self.tag = self.convTxtBuffer.create_tag("incoming")
+		self.tagIn = self.convTxtBuffer.create_tag("incoming")
 		color = self.cfgParser.GtkGui_inmsgcolor
 		if not color:
-			color = 'red'
-		self.tag.set_property("foreground", color)
-		self.tag = self.convTxtBuffer.create_tag("outgoing")
+			color = '#ff0000' #red
+		self.tagIn.set_property("foreground", color)
+		self.tagOut = self.convTxtBuffer.create_tag("outgoing")
 		color = self.cfgParser.GtkGui_outmsgcolor
 		if not color:
-			color = 'blue'
-		self.tag.set_property("foreground", color)
-		self.tag = self.convTxtBuffer.create_tag("status")
+			color = '#0000ff' #blue
+		self.tagOut.set_property("foreground", color)
+		self.tagStatus = self.convTxtBuffer.create_tag("status")
 		color = self.cfgParser.GtkGui_statusmsgcolor
 		if not color:
 			color = 'green'
-		self.tag.set_property("foreground", color)
+		self.tagStatus.set_property("foreground", color)
 
 class roster:
 	def get_icon_pixbuf(self, stock):
@@ -630,6 +743,9 @@ class roster:
 			for j in self.l_contact.keys():
 				self.chg_status(j, 'offline', 'Disconnected')
 
+	def on_prefs(self, widget):
+		window = prefs(self)
+
 	def on_add(self, widget):
 		window_add = add(self)
 
@@ -689,13 +805,14 @@ class roster:
 		if not Wbrowser:
 			Wbrowser = browser(self)
 
-	def __init__(self, queueOUT):
+	def __init__(self, queueOUT, plug):
 		# FIXME : handle no file ...
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
 		self.cfgParser.parseCfgFile()
 		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Gajim')
 		self.window =  self.xml.get_widget('Gajim')
 		self.tree = self.xml.get_widget('treeview')
+		self.plug = plug
 		#(icon, name, jid, editable, background color, show_icon)
 		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, gobject.TYPE_BOOLEAN, str, gobject.TYPE_BOOLEAN)
 		iconstyle = self.cfgParser.GtkGui_iconstyle
@@ -768,6 +885,7 @@ class roster:
 
 		#signals
 		self.xml.signal_connect('gtk_main_quit', self.on_quit)
+		self.xml.signal_connect('on_preferences_activate', self.on_prefs)
 		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
 		self.xml.signal_connect('on_browse_agents_activate', self.on_browse)
 		self.xml.signal_connect('on_add_activate', self.on_add)
@@ -819,10 +937,10 @@ class plugin:
 				
 				autopopup = self.r.cfgParser.GtkGui_autopopup
 				if autopopup:
-					autopopup = string.atoi(autopopup)
+					self.autopopup = string.atoi(autopopup)
 				else:
 					self.autopopup = 0
-				if autopopup == 0 and not self.r.tab_messages.has_key(jid):
+				if self.autopopup == 0 and not self.r.tab_messages.has_key(jid):
 					#We save it in a queue
 					if not self.r.tab_queues.has_key(jid):
 						self.r.tab_queues[jid] = Queue.Queue(50)
@@ -881,7 +999,7 @@ class plugin:
 		gtk.threads_init()
 		gtk.threads_enter()
 		self.queueIN = quIN
-		self.r = roster(quOUT)
+		self.r = roster(quOUT, self)
 		self.time = gtk.timeout_add(200, self.read_queue)
 		gtk.main()
 		gtk.threads_leave()
