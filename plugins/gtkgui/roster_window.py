@@ -513,7 +513,7 @@ class Roster_window:
 			infos['accname'] = account
 			infos['jid'] = self.plugin.accounts[account]["name"] + \
 				'@' +  self.plugin.accounts[account]["hostname"]
-			self.plugin.windows['account_modification_window'] = \
+			self.plugin.windows['account_modification'] = \
 				Account_modification_window(self.plugin, infos)
 
 	def mk_menu_account(self, event, iter):
@@ -1075,8 +1075,10 @@ class Roster_window:
 	def on_service_disco_menuitem_activate(self, widget, account):
 		"""When Service Discovery is selected:
 		Call browse class"""
-		if not self.plugin.windows[account].has_key('browser'):
-			self.plugin.windows[account]['browser'] = \
+		if self.plugin.windows[account].has_key('disco'):
+			self.plugin.windows[account]['disco'].present()
+		else:
+			self.plugin.windows[account]['disco'] = \
 				Service_discovery_window(self.plugin, account)
 
 	def mkpixbufs(self):
@@ -1379,5 +1381,5 @@ class Roster_window:
 		self.hidden_lines = self.plugin.config['hiddenlines'].split('\t')
 		self.draw_roster()
 		if len(self.plugin.accounts) == 0: # if no account
-			self.plugin.windows['account_modification_window'] = \
+			self.plugin.windows['account_modification'] = \
 				Account_modification_window(self.plugin, {})

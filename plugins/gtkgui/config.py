@@ -1000,7 +1000,7 @@ class Account_modification_window:
 	"""Class for account informations"""
 	def on_account_modification_window_destroy(self, widget):
 		"""close window"""
-		del self.plugin.windows['account_modification_window']
+		del self.plugin.windows['account_modification']
 	
 	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
@@ -1179,8 +1179,8 @@ class Account_modification_window:
 			if save_password:
 				self.plugin.send('PASSPHRASE', name, password)
 			#refresh accounts window
-			if self.plugin.windows.has_key('accounts_window'):
-				self.plugin.windows['accounts_window'].init_accounts()
+			if self.plugin.windows.has_key('accounts'):
+				self.plugin.windows['accounts'].init_accounts()
 			#refresh roster
 			self.plugin.roster.draw_roster()
 			widget.get_toplevel().destroy()
@@ -1363,6 +1363,7 @@ class Account_modification_window:
 			self.init_account(infos)
 			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
 			self.xml.get_widget('save_button').grab_focus()
+		self.window.show_all()
 
 class Accounts_window:
 	"""Class for accounts window: lists of accounts"""
@@ -1391,10 +1392,10 @@ class Accounts_window:
 	def on_new_button_clicked(self, widget):
 		"""When new button is clicked : open an account information window"""
 		if not self.plugin.windows.has_key('account_modification_window'):
-			self.plugin.windows['account_modification_window'] = \
+			self.plugin.windows['account_modification'] = \
 				Account_modification_window(self.plugin, {}) #find out what's wrong
 		else:
-			self.plugin.windows['account_modification_window'].window.present()
+			self.plugin.windows['account_modification'].window.present()
 
 	def on_delete_button_clicked(self, widget):
 		"""When delete button is clicked :
@@ -1428,10 +1429,10 @@ class Accounts_window:
 			infos['accname'] = account
 			infos['jid'] = self.plugin.accounts[account]['name'] + \
 				'@' +  self.plugin.accounts[account]['hostname']
-			self.plugin.windows['account_modification_window'] = \
+			self.plugin.windows['account_modification'] = \
 				Account_modification_window(self.plugin, infos) # may it messes with this one
 		else:
-			self.plugin.windows['account_modification_window'].window.present()
+			self.plugin.windows['account_modification'].window.present()
 
 	def on_sync_with_global_status_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -1458,6 +1459,7 @@ class Accounts_window:
 			renderer, text=1)
 		self.xml.signal_autoconnect(self)
 		self.init_accounts()
+		self.window.show_all()
 
 class Service_registration_window:
 	"""Class for Service registration window:
@@ -1508,6 +1510,7 @@ class Service_registration_window:
 		self.entries = {}
 		self.draw_table()
 		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
 
 class Service_discovery_window:
@@ -1515,7 +1518,7 @@ class Service_discovery_window:
 	to know the services on the selected server"""
 	def on_service_discovery_window_destroy(self, widget):
 		"""close window"""
-		del self.plugin.windows[self.account]['browser']
+		del self.plugin.windows[self.account]['disco']
 
 	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
@@ -1769,3 +1772,4 @@ class Service_discovery_window:
 		self.join_button.set_sensitive(False)
 		xml.signal_autoconnect(self)
 		self.browse(server_address)
+		self.window.show_all()

@@ -30,7 +30,6 @@ import gtkgui
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-
 class vcard_information_window:
 	"""Class for user's information window"""
 	def on_user_information_window_destroy(self, widget=None):
@@ -224,6 +223,7 @@ class vcard_information_window:
 			self.fill_jabber_page()
 
 		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
 class Edit_groups_dialog:
 	"""Class for the edit group dialog window"""
@@ -239,6 +239,7 @@ class Edit_groups_dialog:
 		self.xml.get_widget('jid_label').set_markup(\
 			_('JID: <i>%s</i>') % user.jid)
 		self.xml.signal_autoconnect(self)
+		self.dialog.show_all()
 		self.init_list()
 
 	def run(self):
@@ -331,6 +332,7 @@ class Passphrase_dialog:
 		self.xml.get_widget('message_label').set_text(labeltext)
 		self.xml.get_widget('save_passphrase_checkbutton').set_label(checkbuttontext)
 		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
 class choose_gpg_key_dialog:
 	"""Class for GPG key dialog"""
@@ -365,6 +367,8 @@ class choose_gpg_key_dialog:
 		renderer = gtk.CellRendererText()
 		self.keys_treeview.insert_column_with_attributes(-1, _('User name'), \
 			renderer, text=1)
+
+		self.window.show_all()
 
 class Change_status_message_dialog:
 	"""Class for Away message dialog"""
@@ -420,6 +424,7 @@ class Change_status_message_dialog:
 		for val in self.values.keys():
 			message_comboboxentry.append_text(val)
 		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
 class Add_new_contact_window:
 	"""Class for Add_new_contact_window"""
@@ -540,6 +545,7 @@ class Add_new_contact_window:
 				self.group_comboboxentry.append_text(g)
 
 		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
 class About_dialog:
 	"""Class for about dialog"""
@@ -564,7 +570,7 @@ class About_dialog:
 		dlg.set_logo(gtk.gdk.pixbuf_new_from_file('plugins/gtkgui/pixmaps/logo.png'))
 		dlg.set_translator_credits(_('translator_credits'))
 
-		rep = dlg.run()
+		rep = dlg.run() # this run doesn't crash threads.. interesting.. 
 		dlg.destroy()
 
 class Confirmation_dialog:
@@ -643,6 +649,7 @@ class subscription_request_window:
 			_('Subscription request from %s') % self.jid)
 		xml.get_widget('message_textview').get_buffer().set_text(text)
 		xml.signal_autoconnect(self)
+		self.window.show_all()
 
 class Join_groupchat_window:
 	def on_join_groupchat_window_destroy(self, widget):
@@ -680,6 +687,7 @@ class Join_groupchat_window:
 			set_text(self.plugin.nicks[self.account])
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows['join_gc'] = self # now add us to open windows
+		self.window.show_all()
 
 class New_message_dialog:
 	def on_delete_event(self, widget, event):
@@ -733,6 +741,7 @@ class New_message_dialog:
 		self.window.set_title(title)
 		
 		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
 class Change_password_dialog:
 	def run(self):
@@ -766,4 +775,5 @@ class Change_password_dialog:
 		self.dialog = self.xml.get_widget('change_password_dialog')
 		self.password1_entry = self.xml.get_widget('password1_entry')
 		self.password2_entry = self.xml.get_widget('password2_entry')
-		self.password1_entry.set_activates_default(True)
+
+		self.window.show_all()
