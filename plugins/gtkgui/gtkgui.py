@@ -4,6 +4,7 @@
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
 ##		- Nikos Kouremenos <nkour@jabber.org>
+##		- Alex Podaras <bigpod@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -1693,7 +1694,7 @@ class roster_window:
 
 	def on_remove_agent(self, widget, jid, account):
 		"""When an agent is requested to log in or off"""
-		window = confirm_dialog(_("Are you sure you want to remove the agent %s from your roster ?") % jid)
+		window = Confirmation_dialog(_('Are you sure you want to remove the agent %s from your roster?') % jid)
 		if window.get_response() == gtk.RESPONSE_YES:
 			self.plugin.send('UNSUB_AGENT', account, jid)
 			for u in self.contacts[account][jid]:
@@ -1943,7 +1944,7 @@ class roster_window:
 
 	def on_req_usub(self, widget, user, account):
 		"""Remove a user"""
-		window = confirm_dialog(_("Are you sure you want to remove %s (%s) from your roster ?") % (user.name, user.jid))
+		window = Confirmation_dialog(_("Are you sure you want to remove %s (%s) from your roster?") % (user.name, user.jid))
 		if window.get_response() == gtk.RESPONSE_YES:
 			self.plugin.send('UNSUB', account, user.jid)
 			for u in self.contacts[account][user.jid]:
@@ -2031,7 +2032,7 @@ class roster_window:
 			return
 		accounts = self.plugin.accounts.keys()
 		if len(accounts) == 0:
-			error_dialog(_("You must setup an account before connecting to jabber network."))
+			Error_dialog(_("You must setup an account before connecting to jabber network."))
 			self.set_cb()
 			return
 		status = model[active][0]
@@ -2175,8 +2176,8 @@ class roster_window:
 
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When new message menuitem is activated:
-		call the new_message_window class"""
-		New_message_window(self.plugin, account)
+		call the New_message_dialog class"""
+		New_message_dialog(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
 		"""When about is selected :
@@ -2873,7 +2874,7 @@ class plugin:
 		self.roster.draw_roster()
 	
 	def handle_event_warning(self, unused, msg):
-		warning_dialog(msg)
+		Warning_dialog(msg)
 	
 	def handle_event_status(self, account, status):
 		#('STATUS', account, status)
@@ -3000,10 +3001,10 @@ class plugin:
 				'online', 'to', '', array[1], 0, '')
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
-		information_dialog(_("You are now authorized by %s") % jid)
+		Information_dialog(_("You are now authorized by %s") % jid)
 
 	def handle_event_unsubscribed(self, account, jid):
-		information_dialog(_("You are now unsubscribed by %s") % jid)
+		Information_dialog(_("You are now unsubscribed by %s") % jid)
 
 	def handle_event_agents(self, account, agents):
 		#('AGENTS', account, agents)
@@ -3019,7 +3020,7 @@ class plugin:
 	def handle_event_reg_agent_info(self, account, array):
 		#('REG_AGENTS_INFO', account, (agent, infos))
 		if not array[1].has_key('instructions'):
-			error_dialog(_("error contacting %s") % array[0])
+			Error_dialog(_("error contacting %s") % array[0])
 		else:
 			agent_registration_window(array[0], array[1], self, account)
 
@@ -3111,7 +3112,7 @@ class plugin:
 				'%s has set the subject to %s' % (jids[1], array[1]), jid)
 
 	def handle_event_bad_passphrase(self, account, array):
-		warning_dialog(_("Your GPG passphrase is wrong, so you are connected without your GPG key."))
+		Warning_dialog(_("Your GPG passphrase is wrong, so you are connected without your GPG key."))
 
 	def handle_event_gpg_secrete_keys(self, account, keys):
 		keys['None'] = 'None'

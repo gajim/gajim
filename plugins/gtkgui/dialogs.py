@@ -4,6 +4,7 @@
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
 ##		- Nikos Kouremenos <nkour@jabber.org>
+##		- Alex Podaras <bigpod@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -17,8 +18,6 @@
 ## GNU General Public License for more details.
 ##
 
-import pygtk
-pygtk.require('2.0')
 import gtk
 import gtk.glade
 import gobject
@@ -153,7 +152,7 @@ class vcard_information_window:
 
 	def on_publish_button_clicked(self, widget):
 		if not self.plugin.connected[self.account]:
-			warning_dialog(_("You must be connected to publish your informations"))
+			Warning_dialog(_("You must be connected to publish your informations"))
 			return
 		vcard = self.make_vcard()
 		nick = ''
@@ -168,7 +167,7 @@ class vcard_information_window:
 		if self.plugin.connected[self.account]:
 			self.plugin.send('ASK_VCARD', self.account, self.jid)
 		else:
-			warning_dialog(_('You must be connected to get your informations'))
+			Warning_dialog(_('You must be connected to get your informations'))
 
 	def change_to_vcard(self):
 		self.xml.get_widget('information_notebook').remove_page(0)
@@ -299,7 +298,7 @@ class choose_gpg_key_dialog:
 class away_message_dialog:
 	"""Class for away_message_dialogWindow"""
 	def run(self):
-		"""Wait for Ok button to be pressed and return away messsage"""
+		"""Wait for OK button to be pressed and return away messsage"""
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
@@ -357,7 +356,7 @@ class add_contact_window:
 		if not jid:
 			return
 		if jid.find('@') < 0:
-			warning_dialog(_("The contact's name must be something like login@hostname"))
+			Warning_dialog(_("The contact's name must be something like login@hostname"))
 			return
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
@@ -414,7 +413,7 @@ class add_contact_window:
 		
 	def __init__(self, plugin, account, jid=None):
 		if not plugin.connected[account]:
-			warning_dialog(_('You must be connected to add a contact'))
+			Warning_dialog(_('You must be connected to add a contact'))
 			return
 		self.plugin = plugin
 		self.account = account
@@ -475,7 +474,7 @@ class about_window: #FIXME REWRITE: (nk) pygtk2.6 has a built-in window for that
 		
 		self.plugin.windows['about'] = self # add us to open windows
 
-class confirm_dialog:
+class Confirmation_dialog:
 	"""Class for confirmation dialog"""
 	def get_response(self):
 		response = self.dialog.run()
@@ -487,7 +486,7 @@ class confirm_dialog:
 			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, label)
 
-class warning_dialog:
+class Warning_dialog:
 	"""Class for warning dialog"""
 	def on_response(self, dialog, response_id):
 		dialog.destroy()
@@ -499,7 +498,7 @@ class warning_dialog:
 		dialog.connect('response', self.on_response)
 		dialog.show()
 
-class information_dialog:
+class Information_dialog:
 	"""Class for information dialog"""
 	def on_response(self, dialog, response_id):
 		dialog.destroy()
@@ -511,7 +510,7 @@ class information_dialog:
 		dialog.connect('response', self.on_response)
 		dialog.show()
 
-class error_dialog:
+class Error_dialog:
 	"""Class for error dialog"""
 	def on_response(self, dialog, response_id):
 		dialog.destroy()
@@ -576,7 +575,7 @@ class join_groupchat_window:
 
 	def __init__(self, plugin, account, server='', room = ''):
 		if not plugin.connected[account]:
-			warning_dialog(_('You must be connected to join a group chat on this server'))
+			Warning_dialog(_('You must be connected to join a group chat on this server'))
 			return
 		self.plugin = plugin
 		self.account = account
@@ -589,10 +588,10 @@ class join_groupchat_window:
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows['join_gc'] = self # now add us to open windows
 
-class New_message_window:
-	def on_delete_event(self, widget):
+class New_message_dialog:
+	def on_delete_event(self, widget, event):
 		"""close window"""
-		del self.plugin.windows['new_msg']
+		del self.plugin.windows['new_message']
 
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
@@ -617,29 +616,30 @@ class New_message_window:
 
 	def __init__(self, plugin, account):
 		if not plugin.connected[account]:
-			warning_dialog(_('You must be connected to send a message to a contact'))
+			Warning_dialog(_('You must be connected to send a message to a contact'))
 			return
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'new_message_window', APP)
-		self.window = self.xml.get_widget('new_message_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'new_message_dialog', APP)
+		self.window = self.xml.get_widget('new_message_dialog')
+		self.jid_entry = self.xml.get_widget('jid_entry')
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows['new_message'] = self # now add us to open windows
 
 class Change_password_dialog:
 	def run(self):
-		"""Wait for Ok button to be pressed and return away messsage"""
+		"""Wait for OK button to be pressed and return new password"""
 		end = False
 		while not end:
 			rep = self.dialog.run()
 			if rep == gtk.RESPONSE_OK:
 				password1 = self.password1_entry.get_text()
 				if not password1:
-					warning_dialog(_('Your password cannot be empty'))
+					Warning_dialog(_('Your password cannot be empty'))
 					continue
 				password2 = self.password2_entry.get_text()
 				if password1 != password2:
-					warning_dialog(_('Your passwords are not the same'))
+					Warning_dialog(_('Your passwords are not the same'))
 					continue
 				message = password1
 			else:
@@ -650,7 +650,7 @@ class Change_password_dialog:
 
 	def __init__(self, plugin, account):
 		if not plugin.connected[account]:
-			warning_dialog(_('You must be connected to change your password'))
+			Warning_dialog(_('You must be connected to change your password'))
 			return
 		self.plugin = plugin
 		self.account = account
