@@ -161,13 +161,13 @@ class infoUser_Window:
 		self.xml.get_widget('label_id').set_text(user.jid)
 		self.xml.get_widget('label_sub').set_text(user.sub)
 		self.xml.get_widget('entry_name').set_text(user.name)
-		resources = user.resource + ' (' + user.priority + ')'
+		resources = user.resource + ' (' + str(user.priority) + ')'
 		if not user.status:
 			user.status = ''
 		stats = user.show + ' : ' + user.status
 		for u in self.plugin.roster.contacts[account][user.jid]:
 			if u.resource != user.resource:
-				resources += '\n' + u.resource + ' (' + u.priority + ')'
+				resources += '\n' + u.resource + ' (' + str(u.priority) + ')'
 				if not u.status:
 					u.status = ''
 				stats += '\n' + u.show + ' : ' + u.status
