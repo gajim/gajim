@@ -1429,11 +1429,11 @@ class plugin:
 					#Save messages
 					temp_q.put(ev)
 
-	def handle_event_roster(self, array, account):
+	def handle_event_roster(self, account, array):
 		self.roster.mklists(array, account)
 		self.roster.draw_roster()
 	
-	def handle_event_warning(self, msg):
+	def handle_event_warning(self, unused, msg):
 		#('ROSTER', account, array)
 		warning_Window(msg)
 	
@@ -1588,9 +1588,9 @@ class plugin:
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
 			if ev[0] == 'ROSTER':
-				self.handle_event_roster(ev[2], ev[1])
+				self.handle_event_roster(ev[1], ev[2])
 			elif ev[0] == 'WARNING':
-				self.handle_event_warning(ev[2])
+				self.handle_event_warning(ev[1], ev[2])
 			elif ev[0] == 'STATUS':
 				self.handle_event_status(ev[1], ev[2])
 			elif ev[0] == 'NOTIFY':
