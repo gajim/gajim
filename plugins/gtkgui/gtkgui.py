@@ -474,7 +474,7 @@ class plugin:
 		if not array[1].has_key('instructions'):
 			Error_dialog(_("error contacting %s") % array[0])
 		else:
-			agent_registration_window(array[0], array[1], self, account)
+			Service_registration_window(array[0], array[1], self, account)
 
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (hostname, login, pasword, name, resource, prio,

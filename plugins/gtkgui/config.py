@@ -1430,9 +1430,9 @@ class Accounts_window:
 		self.xml.signal_autoconnect(self)
 		self.init_accounts()
 
-class agent_registration_window:
-	"""Class for agent registration window :
-	window that appears when we want to subscribe to an agent"""
+class Service_registration_window:
+	"""Class for Service registration window:
+	Window that appears when we want to subscribe to a service"""
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
@@ -1445,7 +1445,7 @@ class agent_registration_window:
 			if name != 'key' and name != 'instructions' and name != 'x':
 				nbrow = nbrow + 1
 				table.resize(rows=nbrow, columns=2)
-				label = gtk.Label(name)
+				label = gtk.Label(name.capitalize() + ':')
 				table.attach(label, 0, 1, nbrow-1, nbrow, 0, 0, 0, 0)
 				entry = gtk.Entry()
 				entry.set_text(self.infos[name])
@@ -1460,21 +1460,21 @@ class agent_registration_window:
 		send registration info to the core"""
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
-		user1 = gtkgui.User(self.agent, self.agent, ['Agents'], 'offline', \
+		user1 = gtkgui.User(self.service, self.service, ['Agents'], 'offline', \
 			'offline', 'from', '', '', 0, '')
-		self.plugin.roster.contacts[self.account][self.agent] = [user1]
-		self.plugin.roster.add_user_to_roster(self.agent, self.account)
-		self.plugin.send('REG_AGENT', self.account, self.agent)
+		self.plugin.roster.contacts[self.account][self.service] = [user1]
+		self.plugin.roster.add_user_to_roster(self.service, self.account)
+		self.plugin.send('REG_AGENT', self.account, self.service)
 		widget.get_toplevel().destroy()
 	
-	def __init__(self, agent, infos, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_registration_window', APP)
-		self.agent = agent
+	def __init__(self, service, infos, plugin, account):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'service_registration_window', APP)
+		self.service = service
 		self.infos = infos
 		self.plugin = plugin
 		self.account = account
-		window = self.xml.get_widget('agent_registration_window')
-		window.set_title(_('Register to %s') % agent)
+		window = self.xml.get_widget('service_registration_window')
+		window.set_title(_('Register to %s') % service)
 		self.xml.get_widget('label').set_text(infos['instructions'])
 		self.entries = {}
 		self.draw_table()
@@ -1482,8 +1482,8 @@ class agent_registration_window:
 
 
 class Service_discovery_window:
-	"""Class for Service Discovery Window :
-	to know the agents on the selected server"""
+	"""Class for Service Discovery Window:
+	to know the services on the selected server"""
 	def on_service_discovery_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows[self.account]['browser']
@@ -1493,8 +1493,8 @@ class Service_discovery_window:
 		widget.get_toplevel().destroy()
 		
 	def browse(self, jid):
-		"""Send a request to the core to know the available agents"""
-		model = self.agents_treeview.get_model()
+		"""Send a request to the core to know the available services"""
+		model = self.services_treeview.get_model()
 		if not model.get_iter_first():
 			# we begin to fill the treevier with the first line
 			iter = model.append(None, (jid, jid))
@@ -1504,7 +1504,7 @@ class Service_discovery_window:
 	def agents(self, agents):
 		"""When list of available agent arrive :
 		Fill the treeview with it"""
-		model = self.agents_treeview.get_model()
+		model = self.services_treeview.get_model()
 		for agent in agents:
 			iter = model.append(None, (agent['name'], agent['jid']))
 			self.agent_infos[agent['jid']] = {'features' : []}
@@ -1512,16 +1512,16 @@ class Service_discovery_window:
 	def iter_is_visible(self, iter):
 		if not iter:
 			return False
-		model = self.agents_treeview.get_model()
+		model = self.services_treeview.get_model()
 		iter = model.iter_parent(iter)
 		while iter:
-			if not self.agents_treeview.row_expanded(model.get_path(iter)):
+			if not self.services_treeview.row_expanded(model.get_path(iter)):
 				return False
 			iter = model.iter_parent(iter)
 		return True
 
-	def on_agents_treeview_row_expanded(self, widget, iter, path):
-		model = self.agents_treeview.get_model()
+	def on_services_treeview_row_expanded(self, widget, iter, path):
+		model = self.services_treeview.get_model()
 		jid = model.get_value(iter, 1)
 		child = model.iter_children(iter)
 		while child:
@@ -1537,7 +1537,7 @@ class Service_discovery_window:
 
 	def agent_info_items(self, agent, items):
 		"""When we recieve items about an agent"""
-		model = self.agents_treeview.get_model()
+		model = self.services_treeview.get_model()
 		iter = model.get_iter_root()
 		# We look if this agent is in the treeview
 		while (iter):
@@ -1570,11 +1570,11 @@ class Service_discovery_window:
 			if self.iter_is_visible(iter_child) or expand:
 				self.browse(item['jid'])
 		if expand:
-			self.agents_treeview.expand_row((model.get_path(iter)), False)
+			self.services_treeview.expand_row((model.get_path(iter)), False)
 
 	def agent_info(self, agent, identities, features, items):
 		"""When we recieve informations about an agent"""
-		model = self.agents_treeview.get_model()
+		model = self.services_treeview.get_model()
 		iter = model.get_iter_root()
 		# We look if this agent is in the treeview
 		while (iter):
@@ -1610,22 +1610,23 @@ class Service_discovery_window:
 				self.browse(item['jid'])
 
 	def on_refresh_button_clicked(self, widget):
-		"""When refresh button is clicked :
-		refresh list : clear and rerequest it"""
-		self.agents_treeview.get_model().clear()
+		"""When refresh button is clicked: refresh list: clear and rerequest it"""
+		self.services_treeview.get_model().clear()
 		jid = self.address_comboboxentry.child.get_text()
 		self.browse(jid)
 
-	def on_agents_treeview_row_activated(self, widget, path, col=0):
-		"""When a row is activated :
-		Register or join the selected agent"""
-		#TODO
-		pass
+	def on_services_treeview_row_activated(self, widget, path, col=0):
+		"""When a row is activated: Register or join the selected agent"""
+		#if both buttons are sensitive, it will register [default]
+		if self.register_button.get_property('sensitive'):
+			self.on_register_button_clicked(widget)
+		elif self.join_button.get_property('sensitive'):
+			self.on_join_button_clicked(widget)
 
 	def on_join_button_clicked(self, widget):
-		"""When we want to join a conference :
+		"""When we want to join a conference:
 		Ask specific informations about the selected agent and close the window"""
-		model, iter = self.agents_treeview.get_selection().get_selected()
+		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter:
 			return
 		service = model.get_value(iter, 1)
@@ -1640,17 +1641,17 @@ class Service_discovery_window:
 	def on_register_button_clicked(self, widget):
 		"""When we want to register an agent :
 		Ask specific informations about the selected agent and close the window"""
-		model, iter = self.agents_treeview.get_selection().get_selected()
+		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter :
 			return
 		service = model.get_value(iter, 1)
 		self.plugin.send('REG_AGENT_INFO', self.account, service)
 		widget.get_toplevel().destroy()
 	
-	def on_agents_treeview_cursor_changed(self, widget):
+	def on_services_treeview_cursor_changed(self, widget):
 		"""When we select a row :
 		activate buttons if needed"""
-		model, iter = self.agents_treeview.get_selection().get_selected()
+		model, iter = self.services_treeview.get_selection().get_selected()
 		jid = model.get_value(iter, 1)
 		self.register_button.set_sensitive(False)
 		if self.agent_infos[jid].has_key('features'):
@@ -1675,7 +1676,7 @@ class Service_discovery_window:
 			self.address_comboboxentry.append_text(j)
 		self.plugin.config['latest_disco_addresses'] = \
 			' '.join(self.latest_addresses)
-		self.agents_treeview.get_model().clear()
+		self.services_treeview.get_model().clear()
 		self.browse(jid)
 	
 	def on_address_comboboxentry_changed(self, widget):
@@ -1687,20 +1688,22 @@ class Service_discovery_window:
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')
-		self.agents_treeview = xml.get_widget('agents_treeview')
+		self.services_treeview = xml.get_widget('services_treeview')
+		self.join_button = xml.get_widget('join_button')
+		self.register_button = xml.get_widget('register_button')
 		self.plugin = plugin
 		self.account = account
 		self.agent_infos = {}
 		model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
-		self.agents_treeview.set_model(model)
+		self.services_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 0)
-		self.agents_treeview.insert_column_with_attributes(-1, 'Name', \
+		self.services_treeview.insert_column_with_attributes(-1, 'Name', \
 			renderer, text=0)
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
-		self.agents_treeview.insert_column_with_attributes(-1, 'Service', \
+		self.services_treeview.insert_column_with_attributes(-1, 'Service', \
 			renderer, text=1)
 
 		self.address_comboboxentry = xml.get_widget('address_comboboxentry')

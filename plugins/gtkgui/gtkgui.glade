@@ -2484,19 +2484,19 @@
 	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	  <child>
-	    <widget class="GtkTreeView" id="agents_treeview">
+	    <widget class="GtkTreeView" id="services_treeview">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="headers_visible">True</property>
 	      <property name="rules_hint">False</property>
 	      <property name="reorderable">False</property>
 	      <property name="enable_search">True</property>
-	      <property name="fixed_height_mode">True</property>
+	      <property name="fixed_height_mode">False</property>
 	      <property name="hover_selection">False</property>
 	      <property name="hover_expand">False</property>
-	      <signal name="row_activated" handler="on_agents_treeview_row_activated" last_modification_time="Tue, 01 Mar 2005 14:20:15 GMT"/>
-	      <signal name="cursor_changed" handler="on_agents_treeview_cursor_changed" last_modification_time="Tue, 01 Mar 2005 14:20:21 GMT"/>
-	      <signal name="row_expanded" handler="on_agents_treeview_row_expanded" last_modification_time="Sun, 27 Mar 2005 10:28:52 GMT"/>
+	      <signal name="row_activated" handler="on_services_treeview_row_activated" last_modification_time="Mon, 28 Mar 2005 00:28:25 GMT"/>
+	      <signal name="cursor_changed" handler="on_services_treeview_cursor_changed" last_modification_time="Mon, 28 Mar 2005 00:28:33 GMT"/>
+	      <signal name="row_expanded" handler="on_services_treeview_row_expanded" last_modification_time="Mon, 28 Mar 2005 00:28:39 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -2639,7 +2639,7 @@
   </child>
 </widget>
 
-<widget class="GtkWindow" id="agent_registration_window">
+<widget class="GtkWindow" id="service_registration_window">
   <property name="border_width">4</property>
   <property name="width_request">300</property>
   <property name="height_request">200</property>
