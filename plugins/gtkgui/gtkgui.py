@@ -325,7 +325,7 @@ class plugin:
 	def handle_event_error(self, unused, msg):
 		Error_dialog(msg)
 	
-	def handle_event_status(self, account, status):
+	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
 		self.roster.on_status_changed(account, status)
 	
@@ -398,9 +398,19 @@ class plugin:
 			if old_show < 2 and statuss.index(user1.show) > 1 and \
 				self.config['sound_contact_connected']:
 				self.play_sound('sound_contact_connected')
+				if not self.windows[account]['chats'].has_key(jid) and \
+					not self.queues[account].has_key(jid) and \
+											not self.config['autopopup']:
+					instance = Popup_window(self, 'Contact Online', jid )
+					self.roster.popup_windows.append(instance)
 			elif old_show > 1 and statuss.index(user1.show) < 2 and \
 				self.config['sound_contact_disconnected']:
 				self.play_sound('sound_contact_disconnected')
+				if not self.windows[account]['chats'].has_key(jid) and \
+							not self.queues[account].has_key(jid) and \
+											not self.config['autopopup']:
+					instance = Popup_window(self, 'Contact Offline', jid )
+					self.roster.popup_windows.append(instance)
 				
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
@@ -416,10 +426,14 @@ class plugin:
 		if self.config['ignore_unknown_contacts'] and \
 			not self.roster.contacts[account].has_key(jid):
 			return
-		first = 0
+
+		first = False
 		if not self.windows[account]['chats'].has_key(jid) and \
-			not self.queues[account].has_key(jid):
-			first = 1
+						not self.queues[account].has_key(jid):
+			first = True
+			if	not self.config['autopopup']:
+				instance = Popup_window(self, 'New Message', 'From '+ jid )
+				self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
 		if self.config['sound_first_message_received'] and first:
 			self.play_sound('sound_first_message_received')
@@ -772,7 +786,7 @@ class plugin:
 		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
 		
 		emoticons_pattern = ''
-		for emoticon in self.emoticons: # travel tru emoticons list
+		for emoticon in self.emoticons: # travel thru emoticons list
 			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
 			emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
 
@@ -787,17 +801,17 @@ class plugin:
 		self.launch_browser_mailer(kind, url)
 
 	def init_regexp(self):
-		if self.config['useemoticons']:
-			"""initialize emoticons dictionary"""
-			self.emoticons = dict()
-			split_line = self.config['emoticons'].split('\t')
-			for i in range(0, len(split_line)/2):
-				emot_file = split_line[2*i+1]
-				if not self.image_is_ok(emot_file):
-					continue
-				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
-				self.emoticons[split_line[2*i]] = pix
-
+		#initialize emoticons dictionary
+		self.emoticons = dict()
+		split_line = self.config['emoticons'].split('\t')
+		for i in range(0, len(split_line)/2):
+			emot_file = split_line[2*i+1]
+			if not self.image_is_ok(emot_file):
+				continue
+			pix = gtk.gdk.pixbuf_new_from_file(emot_file)
+			self.emoticons[split_line[2*i]] = pix
+		
+		# update regular expressions
 		self.make_regexps()
 
 	def __init__(self, quIN, quOUT):
@@ -814,8 +828,8 @@ class plugin:
 			'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', 'VISUAL', 'GC_MSG', \
 			'GC_SUBJECT', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS', 'ROSTER_INFO', \
 			'MSGSENT'])
-		self.default_config = {'autopopup':1,\
-			'autopopupaway':1,\
+		self.default_config = {'autopopup':0,\
+			'autopopupaway':0,\
 			'ignore_unknown_contacts':0,\
 			'showoffline':0,\
 			'autoaway':1,\
@@ -882,6 +896,7 @@ class plugin:
 			'after_time': ']',\
 			'before_nickname': '<',\
 			'after_nickname': '>',\
+			'do_not_send_os_info': 0,\
 			}
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', self.default_config))
 		self.config = self.wait('CONFIG')

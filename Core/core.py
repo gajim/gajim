@@ -28,12 +28,11 @@ import common.jabber
 import socket
 import select
 import pickle
+import version
 from tempfile import *
 
 from common import i18n
 _ = i18n._
-
-VERSION = '0.6.1'
 
 log = logging.getLogger('core.core')
 log.setLevel(logging.DEBUG)
@@ -632,7 +631,7 @@ class GajimCore:
 		iq_obj.setType('result')
 		qp = iq_obj.getTag('query')
 		qp.insertTag('name').insertData('Gajim')
-		qp.insertTag('version').insertData(VERSION)
+		qp.insertTag('version').insertData(version.version)
 		qp.insertTag('os').insertData(get_os_info())
 		con.send(iq_obj)
 

@@ -27,6 +27,7 @@ gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
 import gtkgui
+import version
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
@@ -555,7 +556,7 @@ class About_dialog:
 
 		dlg = gtk.AboutDialog()
 		dlg.set_name('Gajim')
-		dlg.set_version('0.6.1')
+		dlg.set_version(version.version)
 		s = u'Copyright \xa9 2003-2005 Gajim Team'
 		dlg.set_copyright(s)
 		text = open('COPYING').read()
@@ -778,21 +779,32 @@ class Change_password_dialog:
 		return message
 
 class Popup_window:
-	def __init__(self, plugin=None, account=None):
+	def __init__(self, plugin, event_type, event_desc):
 		self.plugin = plugin
-		self.account = account
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_window', APP)
 		self.window = xml.get_widget('popup_window')
 		close_button = xml.get_widget('close_button')
-		event_label = xml.get_widget('event_label')
+		event_type_label = xml.get_widget('event_type_label')
+		event_description_label = xml.get_widget('event_description_label')
+		eventbox = xml.get_widget('eventbox')
 		
-		event_label.set_text(str(len(self.plugin.roster.popup_windows)))
-
-		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('green'))
+		event_type_label.set_markup('<b>'+event_type+'</b>')
+		event_description_label.set_text(event_desc)
 		
+		# set colors [ http://www.w3schools.com/html/html_colornames.asp ]
+		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
+		if event_type == 'Contact Online':
+			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('forestgreen'))
+			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('forestgreen'))
+		elif event_type == 'Contact Offline':
+			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('firebrick'))
+			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('firebrick'))
+		elif event_type == 'New Message':
+			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('dodgerblue'))
+			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('dodgerblue'))
+	
 		# position the window to bottom-right of screen
-		gtk.gdk.flush()
 		window_width, window_height = self.window.get_size()
 		self.plugin.roster.popups_height += window_height
 		self.window.move(gtk.gdk.screen_width() - window_width, \
@@ -805,24 +817,19 @@ class Popup_window:
 		gobject.timeout_add(5000, self.on_timeout, window_height)
 
 	def on_close_button_clicked(self, widget, window_height):
-		print 'window h', window_height
 		self.adjust_height_and_move_popup_windows(window_height)
 
 	def on_timeout(self, window_height):
 		self.adjust_height_and_move_popup_windows(window_height)
-		print 'window h', window_height
 		
 	def adjust_height_and_move_popup_windows(self, window_height):
 		#remove
-		print 'self.plugin.roster.popups_height before', self.plugin.roster.popups_height
 		self.plugin.roster.popups_height -= window_height
-		print 'self.plugin.roster.popups_height now', self.plugin.roster.popups_height
-		print 'removing', self.window
 		self.window.destroy()
 		
 		if len(self.plugin.roster.popup_windows) > 0:
 			# we want to remove the first window added in the list
-			self.plugin.roster.popup_windows.pop(0) # remove
+			self.plugin.roster.popup_windows.pop(0) # remove first item
 		
 		# move the rest of popup windows
 		self.plugin.roster.popups_height = 0
@@ -831,3 +838,6 @@ class Popup_window:
 			self.plugin.roster.popups_height += window_height
 			window_instance.window.move(gtk.gdk.screen_width() - window_width, \
 					gtk.gdk.screen_height() - self.plugin.roster.popups_height)
+
+	def on_popup_window_button_press_event(self, widget, event):
+		print 'IN YOUR DREAMS ONLY..'

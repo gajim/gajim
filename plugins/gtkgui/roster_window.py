@@ -917,8 +917,9 @@ class Roster_window:
 		New_message_dialog(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
-		#About_dialog()
-		self.popup_windows.append( Popup_window(self.plugin) )
+		About_dialog()
+		#inst = Popup_window(self.plugin, 'Fake Message', 'nkour@')
+		#self.popup_windows.append( inst )
 
 	def on_accounts_menuitem_activate(self, widget):
 		if self.plugin.windows.has_key('accounts'):
