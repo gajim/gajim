@@ -714,7 +714,7 @@ class gc:
 			begin = txt.split()[-1]
 			for nick in list_nick:
 				if nick.find(begin) == 0:
-					txt_buffer.insert_at_cursor(nick[len(begin):])
+					txt_buffer.insert_at_cursor(nick[len(begin):] + ' ')
 					return 1
 		return 0
 
