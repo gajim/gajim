@@ -19,7 +19,7 @@ msgstr ""
 
 #: runCore.py:34
 msgid "Core Stopped"
-msgstr ""
+msgstr "Core arrêté"
 
 #: plugins/gtkgui/toto.c:7 plugins/gtkgui/toto.c:35
 msgid "Gajim"
@@ -31,47 +31,47 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:9
 msgid "_Preferences"
-msgstr ""
+msgstr "_Préférences"
 
 #: plugins/gtkgui/toto.c:10
 msgid "A_ccounts"
-msgstr ""
+msgstr "_Comptes"
 
 #: plugins/gtkgui/toto.c:11
 msgid "_Browse agents"
-msgstr ""
+msgstr "A_gents"
 
 #: plugins/gtkgui/toto.c:12
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #: plugins/gtkgui/toto.c:13
 msgid "Show Offline"
-msgstr ""
+msgstr "Montrer les déconnectés"
 
 #: plugins/gtkgui/toto.c:14
 msgid "_About"
-msgstr ""
+msgstr "_A Propos"
 
 #: plugins/gtkgui/toto.c:15
 msgid "_Quit"
-msgstr ""
+msgstr "_Quitter"
 
 #: plugins/gtkgui/toto.c:16 plugins/gtkgui/gtkgui.py:658
 msgid "Online"
-msgstr ""
+msgstr "En ligne"
 
 #: plugins/gtkgui/toto.c:17 plugins/gtkgui/gtkgui.py:661
 msgid "Away"
-msgstr ""
+msgstr "Absent"
 
 #: plugins/gtkgui/toto.c:18 plugins/gtkgui/gtkgui.py:664
 msgid "NA"
-msgstr ""
+msgstr "Non Disponible"
 
 #: plugins/gtkgui/toto.c:19 plugins/gtkgui/gtkgui.py:667
 msgid "DND"
-msgstr ""
+msgstr "Ne Pas Déranger"
 
 #: plugins/gtkgui/toto.c:20
 msgid "Invisible"
@@ -79,19 +79,19 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:21 plugins/gtkgui/gtkgui.py:672
 msgid "Offline"
-msgstr ""
+msgstr "Déconnecter"
 
 #: plugins/gtkgui/toto.c:22
 msgid "Chat"
-msgstr ""
+msgstr "Discution"
 
 #: plugins/gtkgui/toto.c:23 plugins/gtkgui/gtkgui.py:585
 msgid "History"
-msgstr ""
+msgstr "Historique"
 
 #: plugins/gtkgui/toto.c:24
 msgid "Clear"
-msgstr ""
+msgstr "Effacer"
 
 #: plugins/gtkgui/toto.c:25
 msgid "Anonymous <id@server/res>"
@@ -99,24 +99,24 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:26
 msgid "Accounts"
-msgstr ""
+msgstr "Comptes"
 
 #: plugins/gtkgui/toto.c:27
 msgid "_Modify"
-msgstr ""
+msgstr "_Modifier"
 
 #: plugins/gtkgui/toto.c:28 plugins/gtkgui/toto.c:148
 #: plugins/gtkgui/toto.c:184
 msgid "About"
-msgstr ""
+msgstr "A Propos"
 
 #: plugins/gtkgui/toto.c:29
 msgid "Account Modification"
-msgstr ""
+msgstr "Modification du compte"
 
 #: plugins/gtkgui/toto.c:30
 msgid "Name : "
-msgstr ""
+msgstr "Nom : "
 
 #: plugins/gtkgui/toto.c:31 plugins/gtkgui/toto.c:36 plugins/gtkgui/toto.c:37
 #: plugins/gtkgui/toto.c:38 plugins/gtkgui/toto.c:43 plugins/gtkgui/toto.c:45
@@ -143,43 +143,43 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:32
 msgid "Ressource: "
-msgstr ""
+msgstr "Ressource: "
 
 #: plugins/gtkgui/toto.c:33
 msgid "Password:"
-msgstr ""
+msgstr "Mot de passe: "
 
 #: plugins/gtkgui/toto.c:34
 msgid "Jabber ID:"
-msgstr ""
+msgstr "Identifiant Jabber: "
 
 #: plugins/gtkgui/toto.c:39
 msgid "Register new account"
-msgstr ""
+msgstr "Enregistrer un nouveau compte"
 
 #: plugins/gtkgui/toto.c:40
 msgid "<b>Account</b>"
-msgstr ""
+msgstr "<b>Compte</b>"
 
 #: plugins/gtkgui/toto.c:41
 msgid "Empty"
-msgstr ""
+msgstr "Vide"
 
 #: plugins/gtkgui/toto.c:42
 msgid "<b>Preferences</b>"
-msgstr ""
+msgstr "<b>Préférences</b>"
 
 #: plugins/gtkgui/toto.c:44
 msgid "Port:"
-msgstr ""
+msgstr "Port:"
 
 #: plugins/gtkgui/toto.c:46
 msgid "Host:"
-msgstr ""
+msgstr "Serveur:"
 
 #: plugins/gtkgui/toto.c:47
 msgid "Use proxy"
-msgstr ""
+msgstr "Utiliser un proxy"
 
 #: plugins/gtkgui/toto.c:48
 msgid "Proxy"
@@ -191,63 +191,63 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:50
 msgid "Edit personal details..."
-msgstr ""
+msgstr "Editer les informationss personnelles"
 
 #: plugins/gtkgui/toto.c:51
 msgid "<b>Details</b>"
-msgstr ""
+msgstr "<b>Détails</b>"
 
 #: plugins/gtkgui/toto.c:52
 msgid "Add user"
-msgstr ""
+msgstr "Ajouter un contact"
 
 #: plugins/gtkgui/toto.c:53
 msgid "Send subscription to :"
-msgstr ""
+msgstr "Demander l'authorisation à : "
 
 #: plugins/gtkgui/toto.c:55 plugins/gtkgui/gtkgui.py:572
 msgid "I would like to add you to my contact list, please."
-msgstr ""
+msgstr "Je souhaiterai t'ajouter à ma contact list"
 
 #: plugins/gtkgui/toto.c:56
 msgid "Subscribe"
-msgstr ""
+msgstr "Ajouter"
 
 #: plugins/gtkgui/toto.c:57
 msgid "Sure ?"
-msgstr ""
+msgstr "Sur ?"
 
 #: plugins/gtkgui/toto.c:58
 msgid "Subscription request"
-msgstr ""
+msgstr "Requête d'inscription"
 
 #: plugins/gtkgui/toto.c:59
 msgid "Subscription request from"
-msgstr ""
+msgstr "Requête d'inscription de la part de"
 
 #: plugins/gtkgui/toto.c:60 plugins/gtkgui/toto.c:65
 msgid "_Close"
-msgstr ""
+msgstr "_Fermer"
 
 #: plugins/gtkgui/toto.c:61
 msgid "_Deny"
-msgstr ""
+msgstr "_Refuser"
 
 #: plugins/gtkgui/toto.c:62
 msgid "_Authorize"
-msgstr ""
+msgstr "_Autoriser"
 
 #: plugins/gtkgui/toto.c:63
 msgid "Agents browser"
-msgstr ""
+msgstr "Navigateur d'agents"
 
 #: plugins/gtkgui/toto.c:64
 msgid "_Refresh"
-msgstr ""
+msgstr "_Rafraîchir"
 
 #: plugins/gtkgui/toto.c:66
 msgid "Register to"
-msgstr ""
+msgstr "S'enregistrer à"
 
 #: plugins/gtkgui/toto.c:67
 msgid "_OK"
@@ -255,11 +255,11 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:68
 msgid "_Cancel"
-msgstr ""
+msgstr "_Annuler"
 
 #: plugins/gtkgui/toto.c:69
 msgid "Warning"
-msgstr ""
+msgstr "Attention"
 
 #: plugins/gtkgui/toto.c:70 plugins/gtkgui/toto.c:90
 msgid "Message"
@@ -267,35 +267,35 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:71
 msgid "Look&Feel"
-msgstr ""
+msgstr "Apparence"
 
 #: plugins/gtkgui/toto.c:72 plugins/gtkgui/toto.c:83
 msgid "Events"
-msgstr ""
+msgstr "Evénements"
 
 #: plugins/gtkgui/toto.c:73 plugins/gtkgui/toto.c:89
 msgid "Presence"
-msgstr ""
+msgstr "Présence"
 
 #: plugins/gtkgui/toto.c:75
 msgid "Icon Style"
-msgstr ""
+msgstr "Style d'Icône"
 
 #: plugins/gtkgui/toto.c:76
 msgid "Outgoing Messages"
-msgstr ""
+msgstr "Messages sortants"
 
 #: plugins/gtkgui/toto.c:77
 msgid "Status Messages"
-msgstr ""
+msgstr "Messages d'état"
 
 #: plugins/gtkgui/toto.c:78
 msgid "Incoming Messages"
-msgstr ""
+msgstr "Messages entrant"
 
 #: plugins/gtkgui/toto.c:79
 msgid "Color"
-msgstr ""
+msgstr "Couleur"
 
 #: plugins/gtkgui/toto.c:80
 msgid "Look"
@@ -307,11 +307,11 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:82
 msgid "AutoPopup"
-msgstr ""
+msgstr "Popup automatique"
 
 #: plugins/gtkgui/toto.c:84
 msgid "Auto Away After"
-msgstr ""
+msgstr "Passer absent après"
 
 #: plugins/gtkgui/toto.c:85 plugins/gtkgui/toto.c:87
 msgid "Minutes"
@@ -319,19 +319,19 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:86
 msgid "Auto eXtanded Away After"
-msgstr ""
+msgstr "Passer Non Disponible après"
 
 #: plugins/gtkgui/toto.c:88
 msgid "Auto Status"
-msgstr ""
+msgstr "Etat automatique"
 
 #: plugins/gtkgui/toto.c:91
 msgid "Enter your message :"
-msgstr ""
+msgstr "Entrez votre message :"
 
 #: plugins/gtkgui/toto.c:92
 msgid "Or choose your message :"
-msgstr ""
+msgstr "Ou choisissez votre message :"
 
 #: plugins/gtkgui/toto.c:94
 msgid "Information"
@@ -339,40 +339,40 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:95
 msgid "name"
-msgstr ""
+msgstr "nom"
 
 #: plugins/gtkgui/toto.c:96
 msgid "ID"
-msgstr ""
+msgstr "Identifiant"
 
 #: plugins/gtkgui/toto.c:97
 msgid "id"
-msgstr ""
+msgstr "identfiant"
 
 #: plugins/gtkgui/toto.c:98
 msgid "status"
-msgstr ""
+msgstr "état"
 
 #: plugins/gtkgui/toto.c:99 plugins/gtkgui/gtkgui.py:653
 msgid "Status"
-msgstr ""
+msgstr "Etat"
 
 #: plugins/gtkgui/toto.c:100 plugins/gtkgui/toto.c:114
 #: plugins/gtkgui/toto.c:150
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: plugins/gtkgui/toto.c:102
 msgid "Resource :"
-msgstr ""
+msgstr "Ressource :"
 
 #: plugins/gtkgui/toto.c:103
 msgid "resource"
-msgstr ""
+msgstr "ressource"
 
 #: plugins/gtkgui/toto.c:104
 msgid "Subscription :"
-msgstr ""
+msgstr "Inscription :"
 
 #: plugins/gtkgui/toto.c:105
 msgid "sub"
@@ -381,39 +381,39 @@ msgstr ""
 #: plugins/gtkgui/toto.c:106 plugins/gtkgui/toto.c:126
 #: plugins/gtkgui/toto.c:162
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 #: plugins/gtkgui/toto.c:107
 msgid "New Group :"
-msgstr ""
+msgstr "Nouveau Groupe :"
 
 #: plugins/gtkgui/toto.c:109
 msgid "Available groups"
-msgstr ""
+msgstr "Groupes possibles"
 
 #: plugins/gtkgui/toto.c:110
 msgid "Add ->"
-msgstr ""
+msgstr "Ajjouter ->"
 
 #: plugins/gtkgui/toto.c:111
 msgid "<- Remove"
-msgstr ""
+msgstr "<- Supprimer"
 
 #: plugins/gtkgui/toto.c:112
 msgid "Current groups"
-msgstr ""
+msgstr "Groupes actuels"
 
 #: plugins/gtkgui/toto.c:113
 msgid "Groups"
-msgstr ""
+msgstr "Groupes"
 
 #: plugins/gtkgui/toto.c:115 plugins/gtkgui/toto.c:151
 msgid "Nickname"
-msgstr ""
+msgstr "Surnom"
 
 #: plugins/gtkgui/toto.c:116 plugins/gtkgui/toto.c:152
 msgid "Birthday"
-msgstr ""
+msgstr "Anniversaire"
 
 #: plugins/gtkgui/toto.c:117 plugins/gtkgui/toto.c:153
 msgid "E-Mail"
@@ -421,43 +421,43 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:118 plugins/gtkgui/toto.c:154
 msgid "Homepage"
-msgstr ""
+msgstr "Page d'accueil"
 
 #: plugins/gtkgui/toto.c:119 plugins/gtkgui/toto.c:155
 msgid "Phone #"
-msgstr ""
+msgstr "Téléphone"
 
 #: plugins/gtkgui/toto.c:127 plugins/gtkgui/toto.c:163
 msgid "Street"
-msgstr ""
+msgstr "Rue"
 
 #: plugins/gtkgui/toto.c:128 plugins/gtkgui/toto.c:164
 msgid "City"
-msgstr ""
+msgstr "Ville"
 
 #: plugins/gtkgui/toto.c:129 plugins/gtkgui/toto.c:165
 msgid "State"
-msgstr ""
+msgstr "Etat"
 
 #: plugins/gtkgui/toto.c:130 plugins/gtkgui/toto.c:166
 msgid "Postal Code"
-msgstr ""
+msgstr "Code postal"
 
 #: plugins/gtkgui/toto.c:131 plugins/gtkgui/toto.c:167
 msgid "Country"
-msgstr ""
+msgstr "Pays"
 
 #: plugins/gtkgui/toto.c:138 plugins/gtkgui/toto.c:174
 msgid "Location"
-msgstr ""
+msgstr "Adresse"
 
 #: plugins/gtkgui/toto.c:139 plugins/gtkgui/toto.c:175
 msgid "Company"
-msgstr ""
+msgstr "Companie"
 
 #: plugins/gtkgui/toto.c:140 plugins/gtkgui/toto.c:176
 msgid "Department"
-msgstr ""
+msgstr "Département"
 
 #: plugins/gtkgui/toto.c:141 plugins/gtkgui/toto.c:177
 msgid "Position"
@@ -465,11 +465,11 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:142 plugins/gtkgui/toto.c:178
 msgid "Role"
-msgstr ""
+msgstr "Rôle"
 
 #: plugins/gtkgui/toto.c:147 plugins/gtkgui/toto.c:183
 msgid "Work"
-msgstr ""
+msgstr "Emploie"
 
 #: plugins/gtkgui/toto.c:149
 msgid "jid"
@@ -477,117 +477,119 @@ msgstr ""
 
 #: plugins/gtkgui/toto.c:185
 msgid "Publish"
-msgstr ""
+msgstr "Publier"
 
 #: plugins/gtkgui/toto.c:186
 msgid "Retrieve"
-msgstr ""
+msgstr "Récupérer"
 
 #: plugins/gtkgui/toto.c:187
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 #: plugins/gtkgui/toto.c:188
 msgid "Log"
-msgstr ""
+msgstr "Historique"
 
 #: plugins/gtkgui/toto.c:189
 msgid "earliest"
-msgstr ""
+msgstr "premiers"
 
 #: plugins/gtkgui/toto.c:190
 msgid "Previous"
-msgstr ""
+msgstr "Précédent"
 
 #: plugins/gtkgui/toto.c:191
 msgid "latest"
-msgstr ""
+msgstr "derniers"
 
 #: plugins/gtkgui/config.py:100 plugins/gtkgui/config.py:473
 msgid "You must be connected to get your informations"
-msgstr ""
+msgstr "Vous devez être connecté pour récupérer vos informations"
 
 #: plugins/gtkgui/config.py:104
 msgid "You must be connected to publish your informations"
-msgstr ""
+msgstr "Vous devez être connecté pour publier vos informations"
 
 #: plugins/gtkgui/config.py:386
 msgid "You must enter a name for this account"
-msgstr ""
+msgstr "Vous devez entrer un nom pour ce compte"
 
 #: plugins/gtkgui/config.py:389
 msgid "Spaces are not permited in account name"
-msgstr ""
+msgstr "Vous ne pouvez pas utiliser d'espace pour le nom du compte"
 
 #: plugins/gtkgui/config.py:392
 msgid ""
 "You must enter a Jabber ID for this account\n"
 "For example : login@hostname"
 msgstr ""
+"Vous devez entrer un identifiant Jabber pour ce compte\n"
+"Par exemple : login@serveur"
 
 #: plugins/gtkgui/config.py:398
 msgid "Proxy Port must be a port number"
-msgstr ""
+msgstr "Le Port du proxy doivent être un numéro de port"
 
 #: plugins/gtkgui/config.py:437
 msgid "An account already has this name"
-msgstr ""
+msgstr "Un autre compte porte déjà ce nom"
 
 #: plugins/gtkgui/config.py:532
 #, python-format
 msgid "Are you sure you want to remove this account (%s) ?"
-msgstr ""
+msgstr "Etes vous sur de vouloir supprimer ce compte (%s) ?"
 
 #: plugins/gtkgui/config.py:632
 #, python-format
 msgid "Register to %s"
-msgstr ""
+msgstr "S'enregistrer à %s"
 
 #: plugins/gtkgui/config.py:706
 msgid "You must be connected to view Agents"
-msgstr ""
+msgstr "Vous devez être connecté pour voir les Agents"
 
 #: plugins/gtkgui/dialogs.py:299
 #, python-format
 msgid "Subscription request from %s"
-msgstr ""
+msgstr "Requête d'inscription de la part de %s"
 
 #: plugins/gtkgui/gtkgui.py:57
 msgid "bad arguments"
-msgstr ""
+msgstr "Mauvais arguments"
 
 #: plugins/gtkgui/gtkgui.py:279
 msgid "Status is now : "
-msgstr ""
+msgstr "L'état est maintenant : "
 
 #: plugins/gtkgui/gtkgui.py:525
 #, python-format
 msgid "%s is now %s (%s)"
-msgstr ""
+msgstr "%s est maintenant %s (%s)"
 
 #: plugins/gtkgui/gtkgui.py:553
 msgid "Start chat"
-msgstr ""
+msgstr "Envoyer un message"
 
 #: plugins/gtkgui/gtkgui.py:556
 msgid "Rename"
-msgstr ""
+msgstr "Renomer"
 
 #: plugins/gtkgui/gtkgui.py:561
 msgid "Subscription"
-msgstr ""
+msgstr "Autorisation"
 
 #: plugins/gtkgui/gtkgui.py:566
 msgid "Resend authorization to"
-msgstr ""
+msgstr "Renvoyer l'autorisation à"
 
 #: plugins/gtkgui/gtkgui.py:569
 msgid "Rerequest authorization from"
-msgstr ""
+msgstr "Redemander l'autorisation à"
 
 #: plugins/gtkgui/gtkgui.py:576
 msgid "Remove"
-msgstr ""
+msgstr "Supprimer"
 
 #: plugins/gtkgui/gtkgui.py:582
 msgid "Informations"
@@ -607,98 +609,98 @@ msgstr ""
 
 #: plugins/gtkgui/gtkgui.py:612
 msgid "Log on"
-msgstr ""
+msgstr "Connecter"
 
 #: plugins/gtkgui/gtkgui.py:618
 msgid "Log off"
-msgstr ""
+msgstr "Déconnecter"
 
 #: plugins/gtkgui/gtkgui.py:679
 msgid "Edit account"
-msgstr ""
+msgstr "Editer le compte"
 
 #: plugins/gtkgui/gtkgui.py:722
 #, python-format
 msgid "Are you sure you want to remove %s (%s) from your roster ?"
-msgstr ""
+msgstr "Etes vous sur de vouloir supprimer %s (%s) de votre liste ?"
 
 #: plugins/gtkgui/gtkgui.py:753
 msgid "You must setup an account before connecting to jabber network."
-msgstr ""
+msgstr "Vous devez configurer un compte pour pouvoir vous connecter au réseau Jabber"
 
 #: plugins/gtkgui/gtkgui.py:840
 msgid "plugin gtkgui stopped"
-msgstr ""
+msgstr "Module gtkgui arrêté"
 
 #: plugins/gtkgui/gtkgui.py:1215
 #, python-format
 msgid "You are now authorized by %s"
-msgstr ""
+msgstr "%s vous a autorisé"
 
 #: plugins/gtkgui/gtkgui.py:1217
 #, python-format
 msgid "You are now unsubscribed by %s"
-msgstr ""
+msgstr "%s vous a supprimé"
 
 #: plugins/gtkgui/gtkgui.py:1226
 #, python-format
 msgid "error contacting %s"
-msgstr ""
+msgstr "Erreur survenue pour contacter %s"
 
 #: plugins/gtkgui/gtkgui.py:1332
 msgid "plugin gtkgui loaded"
-msgstr ""
+msgstr "Module gtkgui chargé"
 
 #: plugins/logger/logger.py:44
 msgid "plugin logger stopped"
-msgstr ""
+msgstr "Module logger arrêté"
 
 #: plugins/logger/logger.py:97
 msgid "creating ~/.gajim/"
-msgstr ""
+msgstr "crée ~/.gajim/"
 
 #: plugins/logger/logger.py:102
 msgid "creating ~/.gajim/logs/"
-msgstr ""
+msgstr "Crée ~/.gajim/logs/"
 
 #: plugins/logger/logger.py:109
 msgid "plugin logger loaded"
-msgstr ""
+msgstr "Module logger chargé"
 
 #: core/core.py:75
 #, python-format
 msgid "Can't create %s"
-msgstr ""
+msgstr "Impossible de créer %s"
 
 #: core/core.py:80
 #, python-format
 msgid "creating %s"
-msgstr ""
+msgstr "crée %s"
 
 #: core/core.py:154 core/core.py:334
 msgid "I would like to add you to my roster."
-msgstr ""
+msgstr "Je souhaiterai t'ajouter à ma liste de contactes"
 
 #: core/core.py:211
 #, python-format
 msgid "Couldn't connect to %s"
-msgstr ""
+msgstr "Impossible de se connecter à %s"
 
 #: core/core.py:217
 #, python-format
 msgid "Couldn't connect to %s : %s"
-msgstr ""
+msgstr "Impossible de se connecter à %s : %s"
 
 #: core/core.py:249
 #, python-format
 msgid "Authentification failed with %s, check your login and password"
-msgstr ""
+msgstr "Impossible de s'authentifier à %s, vérifiez votre login et votre mot de passe"
 
 #: core/core.py:454
 #, python-format
 msgid "Unknown Command %s"
-msgstr ""
+msgstr "Commande inconnue %s"
 
 #: core/core.py:508
 msgid "Keyboard Interrupt : Bye!"
-msgstr ""
+msgstr "Interruption au clavier : Au revoir !"
