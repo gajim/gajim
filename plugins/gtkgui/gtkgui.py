@@ -692,7 +692,7 @@ class tabbed_chat_window:
 				#we launch the correct application
 				self.plugin.launch_browser_mailer(kind, word)
 
-	def print_special_text(self, text, jid, contact = ''):
+	def print_special_text(self, text, jid, contact):
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
@@ -734,7 +734,11 @@ class tabbed_chat_window:
 			print tag
 
 		end_iter = conversation_buffer.get_end_iter()
-		conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
+		if tag in ['bold', 'italic', 'underline'] and contact == 'status':
+			conversation_buffer.insert_with_tags_by_name(end_iter, text,\
+				'status', tag)
+		else:
+			conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
 		
 	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :
@@ -772,8 +776,11 @@ class tabbed_chat_window:
 			else:
 				ttext = '<' + name + '> '
 				otext = text + '\n'
-
-		conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
+		#if it's a status we print special words
+		if tag != 'status':
+			conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
+		else:
+			otext = ttext
 
 		start = 0
 		end = 0
@@ -791,13 +798,21 @@ class tabbed_chat_window:
 			if start != 0:
 				text_before_special_text = otext[index:start]
 				end_iter = conversation_buffer.get_end_iter()
-				conversation_buffer.insert(end_iter, text_before_special_text)
+				if tag == 'status':
+					conversation_buffer.insert_with_tags_by_name(end_iter, \
+						text_before_special_text, tag)
+				else:
+					conversation_buffer.insert(end_iter, text_before_special_text)
 			self.print_special_text(special_text, jid, contact)
 			index = end # update index
 
 		#add the rest in the index and after
 		end_iter = conversation_buffer.get_end_iter()
-		conversation_buffer.insert(end_iter, otext[index:])
+		if tag == 'status':
+			conversation_buffer.insert_with_tags_by_name(end_iter, \
+				otext[index:], tag)
+		else:
+			conversation_buffer.insert(end_iter, otext[index:])
 		
 		#scroll to the end of the textview
 		end_rect = conversation_textview.get_iter_location(end_iter)
@@ -2840,7 +2855,7 @@ class roster_window:
 		if len(self.plugin.accounts) == 0:
 			self.plugin.windows['accounts_window'] = Accounts_window(self.plugin)
 			self.plugin.windows['account_modification_window'] = \
-				Account_modification_window(self.plugin)
+				Account_modification_window(self.plugin, {})
 
 class systrayDummy:
 	"""Class when we don't want icon in the systray"""

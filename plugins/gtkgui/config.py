@@ -1274,7 +1274,7 @@ class Account_modification_window:
 			password_entry.set_text('')
 
 	#infos must be a dictionnary
-	def __init__(self, plugin, infos = {}):
+	def __init__(self, plugin, infos):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_modification_window', APP)
 		self.window = self.xml.get_widget('account_modification_window')
 		self.plugin = plugin
@@ -1327,7 +1327,7 @@ class Accounts_window:
 		"""When new button is clicked : open an account information window"""
 		if not self.plugin.windows.has_key('account_modification_window'):
 			self.plugin.windows['account_modification_window'] = \
-				Account_modification_window(self.plugin)
+				Account_modification_window(self.plugin, {})
 
 	def on_delete_button_clicked(self, widget):
 		"""When delete button is clicked :
