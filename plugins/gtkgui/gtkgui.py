@@ -1042,17 +1042,17 @@ class message_Window:
 		self.tagIn = buffer.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
 		if not color:
-			color = '#ff0000' #red
+			color = 'red'
 		self.tagIn.set_property("foreground", color)
 		self.tagOut = buffer.create_tag("outgoing")
 		color = self.plugin.config['outmsgcolor']
 		if not color:
-			color = '#0000ff' #blue
+			color = 'blue'
 		self.tagOut.set_property("foreground", color)
 		self.tagStatus = buffer.create_tag("status")
 		color = self.plugin.config['statusmsgcolor']
 		if not color:
-			color = '#00ff00' #green
+			color = 'green'
 		self.tagStatus.set_property("foreground", color)
 		#print queued messages
 		if plugin.queues[account].has_key(user.jid):
