@@ -430,11 +430,11 @@ class plugin:
 			if 'not in the roster' in u.groups:
 				u.groups.remove('not in the roster')
 			if len(u.groups) == 0:
-				u.groups = ['general']
+				u.groups = ['General']
 			self.roster.add_user_to_roster(u.jid, account)
 			self.send('UPDUSER', account, (u.jid, u.name, u.groups))
 		else:
-			user1 = User(jid, jid, ['general'], 'online', \
+			user1 = User(jid, jid, ['General'], 'online', \
 				'online', 'to', '', array[1], 0, '')
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)

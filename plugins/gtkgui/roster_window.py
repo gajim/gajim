@@ -121,11 +121,10 @@ class roster_window:
 			return
 		users = self.contacts[account][jid]
 		user = users[0]
-		if user.groups == []:
-			if user.jid.find("@") <= 0:
-				user.groups.append('Agents')
-			elif user.groups == []:
-				user.groups.append('general')
+		if user.jid.find("@") <= 0:
+			user.groups = ['Agents']
+		elif user.groups == []:
+			user.groups.append('General')
 
 		if (user.show == 'offline' or user.show == 'error') and not showOffline\
 			and not 'Agents' in user.groups and \
@@ -576,7 +575,7 @@ class roster_window:
 			pseudo = jid
 		self.plugin.send('SUB', account, (jid, txt))
 		if not self.contacts[account].has_key(jid):
-			user1 = User(jid, pseudo, ['general'], 'requested', \
+			user1 = User(jid, pseudo, ['General'], 'requested', \
 				'requested', 'none', 'subscribe', '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
