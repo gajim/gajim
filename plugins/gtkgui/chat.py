@@ -405,15 +405,6 @@ class chat:
 
 	def hyperlink_handler(self, texttag, widget, event, iter, kind):
 		if event.type == gtk.gdk.BUTTON_RELEASE:
-			#FIXME (nk to yann):
-			# can we know if that button release had also before selected text?
-			# let's say we have http://be this is nice
-			# and I start to select (with my mouse) the text from right to left
-			# starting with nice. SO I go nice is this eb//:ptth and just stop
-			# pressing the mouse button then we will launch the mailer/browser
-			# which is not what the user want is there sth you do to fix this?
-			# maybe check before launching if we have a selection with non empty
-			# text in it?
 			begin_iter = iter.copy()
 			#we get the begining of the tag
 			while not begin_iter.begins_tag(texttag):
@@ -422,6 +413,12 @@ class chat:
 			#we get the end of the tag
 			while not end_iter.ends_tag(texttag):
 				end_iter.forward_char()
+			begin_sel, end_sel = widget.get_buffer().get_selection_bounds()
+			if begin_sel.in_range(begin_iter, end_iter) or\
+				end_sel.in_range(begin_iter, end_iter):
+				# we have selected a text and release the button in an url, we don't
+				# want to open the url
+				return
 			word = begin_iter.get_text(end_iter)
 			if event.button == 3:
 				self.make_link_menu(event, kind, word)
