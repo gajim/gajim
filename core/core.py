@@ -147,10 +147,9 @@ class GajimCore:
 			self.hub.sendPlugin('UNSUBSCRIBED', self.connexions[con], \
 				prs.getFrom().getBasic())
 		elif type == 'error':
-			print "\n\n******** ERROR *******"
 			errmsg = prs._node.kids[0].getData()
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
-				(prs.getFrom().getBasic(), 'offline', errmsg, \
+				(prs.getFrom().getBasic(), 'error', errmsg, \
 					prs.getFrom().getResource()))
 	# END presenceCB
 
@@ -160,6 +159,7 @@ class GajimCore:
 		if self.connected[self.connexions[con]] == 1:
 			self.connected[self.connexions[con]] = 0
 			con.disconnect()
+		del self.connexions[con]
 		self.hub.sendPlugin('STATUS', self.connexions[con], 'offline')
 	# END disconenctedCB
 
@@ -175,7 +175,6 @@ class GajimCore:
 			connection=common.xmlstream.TCP, port=5222)
 			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
 			#connection=common.xmlstream.TCP_SSL, port=5223)
-		self.connexions[con] = account
 		try:
 			con.connect()
 		except IOError, e:
@@ -206,6 +205,7 @@ class GajimCore:
 				self.hub.sendPlugin('ROSTER', account, roster)
 				con.sendInitPresence()
 				self.hub.sendPlugin('STATUS', account, 'online')
+				self.connexions[con] = account
 				self.connected[account] = 1
 				return con
 			else:

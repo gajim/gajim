@@ -1139,7 +1139,8 @@ class roster_Window:
 			else:
 				user.groups.append('general')
 
-		if user.show == 'offline' and not showOffline and not 'Agents' in user.groups:
+		if (user.show == 'offline' or user.show == 'error') and not showOffline\
+			and not 'Agents' in user.groups:
 			return
 
 		model = self.tree.get_model()
@@ -1251,7 +1252,7 @@ class roster_Window:
 			self.add_user_to_roster(user, account)
 		else:
 			model = self.tree.get_model()
-			if show == 'offline' and not showOffline:
+			if (show == 'offline' or show == 'error') and not showOffline:
 				self.remove_user(user, account)
 			else:
 				for i in iters:
@@ -1622,7 +1623,7 @@ class roster_Window:
 			iconstyle = 'sun'
 		self.path = 'plugins/gtkgui/icons/' + iconstyle + '/'
 		self.pixbufs = {}
-		for state in ('online', 'away', 'xa', 'dnd', 'offline', \
+		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'error', \
 			'requested', 'message', 'opened', 'closed', 'not in list'):
 			# try to open a pixfile with the correct method
 			files = []
