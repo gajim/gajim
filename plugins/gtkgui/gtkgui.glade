@@ -3078,7 +3078,7 @@ on the server.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkButton" id="button16">
+			    <widget class="GtkButton" id="colorOut">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -3103,7 +3103,7 @@ on the server.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkButton" id="button17">
+			    <widget class="GtkButton" id="colorStatus">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -3128,7 +3128,7 @@ on the server.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkButton" id="button18">
+			    <widget class="GtkButton" id="colorIn">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>

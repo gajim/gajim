@@ -76,9 +76,6 @@ class vCard_Window:
 					except AttributeError, e:
 						pass
 
-	def on_retrieve(self, widget):
-		self.r.queueOUT.put(('ASK_VCARD', self.jid))
-
 	def add_to_vcard(self, vcard, entry, txt):
 		entries = string.split(entry, '_')
 		loc = vcard
@@ -90,8 +87,16 @@ class vCard_Window:
 		loc[entries[0]] = txt
 		return vcard
 
+	def on_retrieve(self, widget):
+		if self.r.connected:
+			self.r.queueOUT.put(('ASK_VCARD', self.jid))
+		else:
+			warning_Window("You must be connected to get your informations")
 
 	def on_publish(self, widget):
+		if not self.r.connected:
+			warning_Window("You must be connected to publish your informations")
+			return
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
 			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
 			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE']
@@ -609,7 +614,10 @@ class accountPreference_Window:
 	def on_edit_details_clicked(self, widget):
 		if not self.accs.r.tab_vcard.has_key(self.entryJid.get_text()):
 			self.accs.r.tab_vcard[self.entryJid.get_text()] = vCard_Window(self, self.entryJid.get_text())
-			self.accs.r.queueOUT.put(('ASK_VCARD', self.entryJid.get_text()))
+			if self.accs.r.connected:
+				self.accs.r.queueOUT.put(('ASK_VCARD', self.entryJid.get_text()))
+			else:
+				warning_Window("You must be connected to get your informations")
 	
 	#info must be a dictionnary
 	def __init__(self, accs, infos = {}):
@@ -761,7 +769,6 @@ class authorize_Window:
 		self.r = roster
 		self.jid = jid
 		xml.get_widget('label').set_text('Subscription request from ' + self.jid)
-		#TOTOTO
 		xml.get_widget("textview_sub").get_buffer().set_text(txt)
 		xml.signal_connect('on_button_auth_clicked', self.auth)
 		xml.signal_connect('on_button_deny_clicked', self.deny)
@@ -1598,13 +1605,12 @@ class plugin:
 			'autoxa':0,\
 			'autoxatime':20,\
 			'iconstyle':'sun',\
-			'inmsgcolor':'#ff000',\
+			'inmsgcolor':'#ff0000',\
 			'outmsgcolor': '#0000ff',\
 			'statusmsgcolor':'#1eaa1e'})))
 		self.config = self.wait('CONFIG')
 		quOUT.put(('ASK_CONFIG', ('GtkGui', 'accounts')))
 		self.accounts = self.wait('CONFIG')
-		#TODO: if no config : default config and save it
 		self.r = roster_Window(quOUT, self)
 		if self.config.has_key('autoaway'):
 			self.autoaway = self.config['autoaway']
