@@ -254,8 +254,10 @@ class preference_Window:
 		#trayicon
 		if self.chk_trayicon.get_active():
 			self.plugin.config['trayicon'] = 1
+			self.plugin.show_systray()
 		else:
 			self.plugin.config['trayicon'] = 0
+			self.plugin.hide_systray()
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.roster.draw_roster()
 		#log presences in user file

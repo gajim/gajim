@@ -1582,7 +1582,7 @@ class roster_Window:
 		self.plugin.send('QUIT', None, ('gtkgui', 1))
 		print _("plugin gtkgui stopped")
 		self.close_all(self.plugin.windows)
-		self.plugin.systray.t.destroy()
+		self.plugin.hide_systray()
 		gtk.main_quit()
 
 	def on_row_activated(self, widget, path, col=0):
@@ -1949,6 +1949,10 @@ class systrayDummy:
 		pass
 	def set_status(self, status):
 		pass
+	def show_icon(self):
+		pass
+	def hide_icon(self):
+		pass
 	def __init__(self):
 		self.t = gtk.Button()
 	
@@ -2090,23 +2094,33 @@ class systray:
 		else:
 			self.iconified = 0
 
+	def show_icon(self):
+		if not self.t:
+			self.t = trayicon.TrayIcon("Gajim")
+			eb = gtk.EventBox()
+			eb.connect("button-press-event", self.on_clicked)
+			self.tip = gtk.Tooltips()
+			self.tip.set_tip(self.t, 'Gajim')
+			self.img_tray = gtk.Image()
+			eb.add(self.img_tray)
+			self.t.add(eb)
+			self.set_img()
+		self.t.show_all()
+	
+	def hide_icon(self):
+		if self.t:
+			self.t.destroy()
+			self.t = None
+
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.jids = []
 		self.iconified = 0
 		win = self.plugin.roster.xml.get_widget('Gajim')
 		win.connect("window-state-event", self.state_changed)
-		self.t = trayicon.TrayIcon("Gajim")
-		eb = gtk.EventBox()
-		eb.connect("button-press-event", self.on_clicked)
-		self.tip = gtk.Tooltips()
-		self.tip.set_tip(self.t, 'Gajim')
+		self.t = None
 		self.img_tray = gtk.Image()
-		eb.add(self.img_tray)
-		self.t.add(eb)
-		self.t.show_all()
 		self.status = 'offline'
-		self.set_img()
 
 	
 class plugin:
@@ -2477,6 +2491,12 @@ class plugin:
 					self.roster.send_status(a, 'online', 'Online', 1)
 		return 0
 
+	def show_systray(self):
+		self.systray.show_icon()
+
+	def hide_systray(self):
+		self.systray.hide_icon()
+
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
 		self.queueIN = quIN
@@ -2558,18 +2578,17 @@ class plugin:
 		self.sleeper = common.sleepy.Sleepy( \
 			self.config['autoawaytime']*60, \
 			self.config['autoxatime']*60)
-		if self.config['trayicon']:
-			try:
-				global trayicon
-				import trayicon
-			except:
-				self.config['trayicon'] = 0
-				self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
-				self.systray = systrayDummy()
-			else:
-				self.systray = systray(self)
-		else:
+		try:
+			global trayicon
+			import trayicon
+		except:
+			self.config['trayicon'] = 0
+			self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
 			self.systray = systrayDummy()
+		else:
+			self.systray = systray(self)
+		if self.config['trayicon']:
+			self.show_systray()
 		gtk.gdk.threads_enter()
 		self.autoconnect()
 		gtk.main()
