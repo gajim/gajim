@@ -464,7 +464,7 @@ class tabbed_chat_window:
 		tag.set_property('justification', gtk.JUSTIFY_CENTER)
 		for way in ['status', 'incoming', 'outgoing']:
 			for special in ['mail', 'italic', 'underline', 'bold', 'url']:
-				tag = conversation_buffer.create_tag(way+special)
+				tag = conversation_buffer.create_tag(way + '_' + special)
 				if way == 'status':
 					color = self.plugin.config['statusmsgcolor']
 					tag.set_property('foreground', color)
@@ -486,10 +486,6 @@ class tabbed_chat_window:
 					tag.set_property('underline', pango.UNDERLINE_SINGLE)
 				elif special == 'bold':
 					tag.set_property('weight', pango.WEIGHT_BOLD)
-		tag = conversation_buffer.create_tag('incomingitalic')
-		tag = conversation_buffer.create_tag('incomingunderline')
-		tag = conversation_buffer.create_tag('incomingbold')
-		tag = conversation_buffer.create_tag('incomingurl')
 		link_tag = conversation_buffer.create_tag('hyperlink', foreground='blue')
 		self.xmls[user.jid].signal_autoconnect(self)
 		conversation_scrolledwindow = self.xmls[user.jid].\
@@ -670,21 +666,21 @@ class tabbed_chat_window:
 			return
 		elif word.startswith('mailto'):
 			#it's a mail
-			tag += 'mail'
+			tag += '_mail'
 		#TODO: search for sth@sth.sth
 			#it's a mail too
 		elif word.startswith('/') and word.endswith('/'):
 			#it's an italic text
-			tag += 'italic'
+			tag += '_italic'
 		elif word.startswith('_') and word.endswith('_'):
 			#it's an underlined text
-			tag += 'unerline'
+			tag += '_underline'
 		elif word.startswith('*') and word.endswith('*'):
 			#it's a bold text
-			tag += 'bold'
+			tag += '_bold'
 		else:
 			#it's an url
-			tag += 'url'
+			tag += '_url'
 
 		conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
 
