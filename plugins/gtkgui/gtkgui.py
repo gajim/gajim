@@ -480,7 +480,7 @@ class tabbed_chat_window:
 
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
-			self.read_queue(self.plugin.queues[self.account][user.jid])
+			self.read_queue(user.jid)
 		if user.show != 'online':
 			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
 				user.show, user.status), user.jid, 'status')
@@ -566,9 +566,9 @@ class tabbed_chat_window:
 		user = self.users[jid]
 		self.plugin.roster.on_info(widget, user, self.account)
 
-	def read_queue(self, q):
+	def read_queue(self, jid):
 		"""read queue and print messages containted in it"""
-		jid = self.get_active_jid()
+		q = self.plugin.queues[self.account][jid]
 		user = self.users[jid]
 		while not q.empty():
 			event = q.get()
@@ -2144,8 +2144,8 @@ class roster_window:
 				save_pass = self.plugin.accounts[account]['savepass']
 			if not save_pass and not self.plugin.connected[account]:
 				passphrase = ''
-				w = Passphrase_dialog(_('Enter your password for account %s' \
-					% account, 'Save password', autoconnect))
+				w = Passphrase_dialog(_('Enter your password for account %s') \
+					% account, 'Save password', autoconnect)
 				if autoconnect:
 					gtk.main()
 					passphrase, save = w.get_pass()
