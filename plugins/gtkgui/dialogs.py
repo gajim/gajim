@@ -109,7 +109,7 @@ class infoUser_Window:
 		self.xml.get_widget('log_checkbutton').set_active(log)
 		resources = self.user.resource + ' (' + str(self.user.priority) + ')'
 		if not self.user.status:
-			user.status = ''
+			self.user.status = ''
 		stats = self.user.show + ' : ' + self.user.status
 		for u in self.plugin.roster.contacts[self.account][self.user.jid]:
 			if u.resource != self.user.resource:
