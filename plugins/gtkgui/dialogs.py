@@ -371,7 +371,30 @@ class choose_gpg_key_dialog:
 		self.window.show_all()
 
 class Change_status_message_dialog:
-	"""Class for Away message dialog"""
+	def __init__(self, plugin, status, autoconnect = 0):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
+		self.window = self.xml.get_widget('change_status_message_dialog')
+		self.window.set_title(status.capitalize() + ' Status Message')
+		self.plugin = plugin
+		self.autoconnect = autoconnect
+		message_textview = self.xml.get_widget('message_textview')
+		self.message_buffer = message_textview.get_buffer()
+		self.message_buffer.set_text(self.plugin.config['last_msg'])
+		self.values = {'':''}
+		i = 0
+		while self.plugin.config.has_key('msg%s_name' % i):
+			self.values[self.plugin.config['msg%s_name' % i]] = \
+				self.plugin.config['msg%s' % i]
+			i += 1
+		liststore = gtk.ListStore(str, str)
+		message_comboboxentry = self.xml.get_widget('message_comboboxentry')
+		message_comboboxentry.set_model(liststore)
+		message_comboboxentry.set_text_column(0)
+		for val in self.values.keys():
+			message_comboboxentry.append_text(val)
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
 	def run(self):
 		"""Wait for OK button to be pressed and return away messsage"""
 		if self.autoconnect:
@@ -401,33 +424,60 @@ class Change_status_message_dialog:
 		event.keyval == gtk.keysyms.KP_Enter:  # catch CTRL+ENTER
 			if (event.state & gtk.gdk.CONTROL_MASK):
 				self.window.response(gtk.RESPONSE_OK)
-	
-	def __init__(self, plugin, status, autoconnect = 0):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
-		self.window = self.xml.get_widget('change_status_message_dialog')
-		self.window.set_title(status.capitalize() + ' Status Message')
-		self.plugin = plugin
-		self.autoconnect = autoconnect
-		message_textview = self.xml.get_widget('message_textview')
-		self.message_buffer = message_textview.get_buffer()
-		self.message_buffer.set_text(self.plugin.config['last_msg'])
-		self.values = {'':''}
-		i = 0
-		while self.plugin.config.has_key('msg%s_name' % i):
-			self.values[self.plugin.config['msg%s_name' % i]] = \
-				self.plugin.config['msg%s' % i]
-			i += 1
-		liststore = gtk.ListStore(str, str)
-		message_comboboxentry = self.xml.get_widget('message_comboboxentry')
-		message_comboboxentry.set_model(liststore)
-		message_comboboxentry.set_text_column(0)
-		for val in self.values.keys():
-			message_comboboxentry.append_text(val)
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
 
 class Add_new_contact_window:
 	"""Class for Add_new_contact_window"""
+	def __init__(self, plugin, account, jid=None):
+		if plugin.connected[account] < 2:
+			Error_dialog(_('You must be connected to add a contact'))
+			return
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_new_contact_window', APP)
+		self.window = self.xml.get_widget('add_new_contact_window')
+		self.old_uid_value = ''
+		liststore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		liststore.append(['Jabber', ''])
+		self.agents = ['Jabber']
+		jid_agents = []
+		for j in self.plugin.roster.contacts[account]:
+			user = self.plugin.roster.contacts[account][j][0]
+			if 'Agents' in user.groups:
+				jid_agents.append(j)
+		for a in jid_agents:
+			if a.find('aim') > -1:
+				name = 'AIM'
+			elif a.find('icq') > -1:
+				name = 'ICQ'
+			elif a.find('msn') > -1:
+				name = 'MSN'
+			elif a.find('yahoo') > -1:
+				name = 'Yahoo!'
+			else:
+				name = a
+			iter = liststore.append([name, a])
+			self.agents.append(name)
+		protocol_combobox = self.xml.get_widget('protocol_combobox')
+		protocol_combobox.set_model(liststore)
+		protocol_combobox.set_active(0)
+		self.fill_jid()
+		if jid:
+			self.xml.get_widget('jid_entry').set_text(jid)
+			jid_splited = jid.split('@')
+			self.xml.get_widget('uid_entry').set_text(jid_splited[0])
+			if jid_splited[1] in jid_agents:
+				protocol_combobox.set_active(jid_agents.index(jid_splited[1])+1)
+
+		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
+		liststore = gtk.ListStore(str)
+		self.group_comboboxentry.set_model(liststore)
+		for g in self.plugin.roster.groups[account].keys():
+			if g != 'not in the roster' and g != 'Agents':
+				self.group_comboboxentry.append_text(g)
+
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
@@ -495,65 +545,14 @@ class Add_new_contact_window:
 		self.fill_jid()
 		uid = self.xml.get_widget('uid_entry').get_text()
 		self.old_uid_value = uid.split('@')[0]
-		
-	def __init__(self, plugin, account, jid=None):
-		if plugin.connected[account] < 2:
-			Error_dialog(_('You must be connected to add a contact'))
-			return
-		self.plugin = plugin
-		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_new_contact_window', APP)
-		self.window = self.xml.get_widget('add_new_contact_window')
-		self.old_uid_value = ''
-		liststore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
-		liststore.append(['Jabber', ''])
-		self.agents = ['Jabber']
-		jid_agents = []
-		for j in self.plugin.roster.contacts[account]:
-			user = self.plugin.roster.contacts[account][j][0]
-			if 'Agents' in user.groups:
-				jid_agents.append(j)
-		for a in jid_agents:
-			if a.find('aim') > -1:
-				name = 'AIM'
-			elif a.find('icq') > -1:
-				name = 'ICQ'
-			elif a.find('msn') > -1:
-				name = 'MSN'
-			elif a.find('yahoo') > -1:
-				name = 'Yahoo!'
-			else:
-				name = a
-			iter = liststore.append([name, a])
-			self.agents.append(name)
-		protocol_combobox = self.xml.get_widget('protocol_combobox')
-		protocol_combobox.set_model(liststore)
-		protocol_combobox.set_active(0)
-		self.fill_jid()
-		if jid:
-			self.xml.get_widget('jid_entry').set_text(jid)
-			jid_splited = jid.split('@')
-			self.xml.get_widget('uid_entry').set_text(jid_splited[0])
-			if jid_splited[1] in jid_agents:
-				protocol_combobox.set_active(jid_agents.index(jid_splited[1])+1)
-
-		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
-		liststore = gtk.ListStore(str)
-		self.group_comboboxentry.set_model(liststore)
-		for g in self.plugin.roster.groups[account].keys():
-			if g != 'not in the roster' and g != 'Agents':
-				self.group_comboboxentry.append_text(g)
-
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
 
 class About_dialog:
 	"""Class for about dialog"""
-	def __init__(self, plugin):
+	def __init__(self):
 		if gtk.pygtk_version < (2, 6, 0):
 			Information_dialog(_('Gajim - A GTK jabber client'))
 			return
-		self.plugin = plugin
+
 		dlg = gtk.AboutDialog()
 		dlg.set_name('Gajim')
 		dlg.set_version('0.6.1')
@@ -622,6 +621,17 @@ class Error_dialog:
 		dialog.show()
 
 class subscription_request_window:
+	def __init__(self, plugin, jid, text, account):
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'subscription_request_window', APP)
+		self.plugin = plugin
+		self.jid = jid
+		self.account = account
+		xml.get_widget('from_label').set_text(\
+			_('Subscription request from %s') % self.jid)
+		xml.get_widget('message_textview').get_buffer().set_text(text)
+		xml.signal_autoconnect(self)
+		self.window.show_all()
+
 	"""Class for authorization window :
 	window that appears when a user wants to add us to his/her roster"""
 	def on_close_button_clicked(self, widget):
@@ -639,19 +649,24 @@ class subscription_request_window:
 		"""refuse the request"""
 		self.plugin.send('DENY', self.account, self.jid)
 		widget.get_toplevel().destroy()
-	
-	def __init__(self, plugin, jid, text, account):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'subscription_request_window', APP)
-		self.plugin = plugin
-		self.jid = jid
-		self.account = account
-		xml.get_widget('from_label').set_text(\
-			_('Subscription request from %s') % self.jid)
-		xml.get_widget('message_textview').get_buffer().set_text(text)
-		xml.signal_autoconnect(self)
-		self.window.show_all()
 
 class Join_groupchat_window:
+	def __init__(self, plugin, account, server='', room = ''):
+		if plugin.connected[account] < 2:
+			Error_dialog(_('You must be connected to join a group chat'))
+			return
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'join_groupchat_window', APP)
+		self.window = self.xml.get_widget('join_groupchat_window')
+		self.xml.get_widget('server_entry').set_text(server)
+		self.xml.get_widget('room_entry').set_text(room)
+		self.xml.get_widget('nickname_entry').\
+			set_text(self.plugin.nicks[self.account])
+		self.xml.signal_autoconnect(self)
+		self.plugin.windows['join_gc'] = self # now add us to open windows
+		self.window.show_all()
+
 	def on_join_groupchat_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows['join_gc'] # remove us from open windows
@@ -673,23 +688,28 @@ class Join_groupchat_window:
 			
 		widget.get_toplevel().destroy()
 
-	def __init__(self, plugin, account, server='', room = ''):
+class New_message_dialog:
+	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:
-			Error_dialog(_('You must be connected to join a group chat'))
+			Error_dialog(_('You must be connected to send a message to a contact'))
 			return
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'join_groupchat_window', APP)
-		self.window = self.xml.get_widget('join_groupchat_window')
-		self.xml.get_widget('server_entry').set_text(server)
-		self.xml.get_widget('room_entry').set_text(room)
-		self.xml.get_widget('nickname_entry').\
-			set_text(self.plugin.nicks[self.account])
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'new_message_dialog', APP)
+		self.window = self.xml.get_widget('new_message_dialog')
+		self.jid_entry = self.xml.get_widget('jid_entry')
+
+		our_jid = self.plugin.accounts[account]['name'] + '@' +\
+					self.plugin.accounts[account]['hostname']
+		if len(self.plugin.accounts) > 1:
+			title = 'New Message as ' + our_jid
+		else:
+			title = 'New Message'
+		self.window.set_title(title)
+		
 		self.xml.signal_autoconnect(self)
-		self.plugin.windows['join_gc'] = self # now add us to open windows
 		self.window.show_all()
 
-class New_message_dialog:
 	def on_delete_event(self, widget, event):
 		"""close window"""
 		del self.plugin.windows['new_message']
@@ -722,28 +742,20 @@ class New_message_dialog:
 		
 		widget.get_toplevel().destroy()
 
+class Change_password_dialog:
 	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:
-			Error_dialog(_('You must be connected to send a message to a contact'))
+			Error_dialog(_('You must be connected to change your password'))
 			return
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'new_message_dialog', APP)
-		self.window = self.xml.get_widget('new_message_dialog')
-		self.jid_entry = self.xml.get_widget('jid_entry')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_password_dialog', APP)
+		self.dialog = self.xml.get_widget('change_password_dialog')
+		self.password1_entry = self.xml.get_widget('password1_entry')
+		self.password2_entry = self.xml.get_widget('password2_entry')
 
-		our_jid = self.plugin.accounts[account]['name'] + '@' +\
-					self.plugin.accounts[account]['hostname']
-		if len(self.plugin.accounts) > 1:
-			title = 'New Message as ' + our_jid
-		else:
-			title = 'New Message'
-		self.window.set_title(title)
-		
-		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-class Change_password_dialog:
 	def run(self):
 		"""Wait for OK button to be pressed and return new password"""
 		end = False
@@ -765,15 +777,21 @@ class Change_password_dialog:
 		self.dialog.destroy()
 		return message
 
-	def __init__(self, plugin, account):
-		if plugin.connected[account] < 2:
-			Error_dialog(_('You must be connected to change your password'))
-			return
+class Popup_window:
+	def __init__(self, plugin=None, account=None):
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_password_dialog', APP)
-		self.dialog = self.xml.get_widget('change_password_dialog')
-		self.password1_entry = self.xml.get_widget('password1_entry')
-		self.password2_entry = self.xml.get_widget('password2_entry')
-
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_window', APP)
+		self.window = self.xml.get_widget('popup_window')
+		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('green'))
+		
+		# position the window to bottom-right of screen
+		gtk.gdk.flush()
+		window_width, window_height = self.window.get_size()
+		self.window.move(gtk.gdk.screen_width() - window_width, gtk.gdk.screen_height() - window_height)
+		
+		self.xml.signal_autoconnect(self)
 		self.window.show_all()
+
+	def on_close_button_clicked(self, widget):
+		self.window.hide()

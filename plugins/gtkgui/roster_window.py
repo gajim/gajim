@@ -905,7 +905,8 @@ class Roster_window:
 		New_message_dialog(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
-		About_dialog(self.plugin)
+		#About_dialog()
+		Popup_window(self.plugin)
 
 	def on_accounts_menuitem_activate(self, widget):
 		if not self.plugin.windows.has_key('accounts'):
