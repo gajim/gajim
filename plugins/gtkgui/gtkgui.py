@@ -752,7 +752,7 @@ class plugin:
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
-		if not gtk.check_version(2, 6, 0):
+		if gtk.pygtk_version >= (2, 6, 0):
 			gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 			gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
 		self.queueIN = quIN
