@@ -1880,6 +1880,7 @@ class roster_Window:
 			image.set_from_pixbuf(self.pixbufs[state])
 			image.show()
 			self.xml.get_widget(state).set_image(image)
+		self.xml.get_widget('invisible').set_sensitive(False)
 
 	def on_show_off(self, widget):
 		"""when show offline option is changed :
