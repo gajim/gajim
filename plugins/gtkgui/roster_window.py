@@ -1305,6 +1305,7 @@ class Roster_window:
 		self.cb.pack_start(cell, False)
 		self.cb.add_attribute(cell, 'image', 1)
 		cell = gtk.CellRendererText()
+		cell.set_property('xpad', 8)
 		self.cb.pack_start(cell, True)
 		self.cb.add_attribute(cell, 'text', 0)
 		for status in ['online', 'away', 'xa', 'dnd', 'invisible', 'offline']:
