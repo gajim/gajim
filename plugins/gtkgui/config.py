@@ -1033,6 +1033,11 @@ class Account_modification_window:
 			list_no_log_for.append(name)
 		self.infos['no_log_for'] = ' '.join(list_no_log_for)
 
+		sync_with_global_status = 0
+		if self.xml.get_widget('sync_with_global_status_checkbutton').\
+			get_active():
+			sync_with_global_status = 1
+
 		use_proxy = 0
 		if self.xml.get_widget('use_proxy_checkbutton').get_active():
 			use_proxy = 1
