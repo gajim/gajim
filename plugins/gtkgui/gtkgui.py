@@ -1428,145 +1428,197 @@ class plugin:
 				else:
 					#Save messages
 					temp_q.put(ev)
+
+	def handle_event_roster(self, array, account):
+		self.roster.mklists(array, account)
+		self.roster.draw_roster()
+	
+	def handle_event_warning(self, msg):
+		#('ROSTER', account, array)
+		warning_Window(msg)
+	
+	def handle_event_status(self, account, status):
+		#('STATUS', account, status)
+		self.roster.on_status_changed(account, status)
+	
+	def handle_event_notify(self, account, array):
+		#('NOTIFY', account, (jid, status, message, resource, priority))
+		jid = string.split(array[0], '/')[0]
+		resource = array[3]
+		if not resource:
+			resource = ''
+		priority = array[4]
+		if string.find(jid, "@") <= 0:
+			#It must be an agent
+			ji = string.replace(jid, '@', '')
+		else:
+			ji = jid
+		#Update user
+		if self.roster.contacts[account].has_key(ji):
+			luser = self.roster.contacts[account][ji]
+			user1 = None
+			resources = []
+			for u in luser:
+				resources.append(u.resource)
+				if u.resource == resource:
+					user1 = u
+					break
+			if not user1:
+				user1 = self.roster.contacts[account][ji][0]
+				if resources != [''] and (len(luser) != 1 or 
+					luser[0].show != 'offline'):
+					user1 = user(user1.jid, user1.name, user1.groups, \
+						user1.show, user1.status, user1.sub, user1.resource, \
+						user1.priority)
+					luser.append(user1)
+				user1.resource = resource
+			user1.show = array[1]
+			user1.status = array[2]
+			user1.priority = priority
+		if string.find(jid, "@") <= 0:
+			#It must be an agent
+			if not self.roster.contacts[account].has_key(ji):
+				user1 = user(ji, ji, ['Agents'], array[1], \
+					array[2], 'from', resource, 0)
+				self.roster.contacts[account][ji] = [user1]
+				self.roster.add_user_to_roster(ji, account)
+			else:
+				#Update existing iter
+				self.roster.redraw_jid(ji, account)
+		elif self.roster.contacts[account].has_key(ji):
+			#It isn't an agent
+			self.roster.chg_user_status(user1, array[1], array[2], account)
+	def handle_event_msg(self, account, array):
+		#('MSG', account, (user, msg))
+		jid = string.split(array[0], '/')[0]
+		if string.find(jid, "@") <= 0:
+			jid = string.replace(jid, '@', '')
+		self.roster.on_message(jid, array[1], account)
 		
+	def handle_event_subscribe(self, account, array):
+		#('SUBSCRIBE', account, (jid, text))
+		authorize_Window(self, array[0], array[1], account)
+
+	def handle_event_subscribed(self, account, array):
+		#('SUBSCRIBED', account, (jid, nom, resource))
+		jid = array[0]
+		if self.roster.contacts[account].has_key(jid):
+			u = self.roster.contacts[account][jid][0]
+			u.name = array[1]
+			u.resource = array[2]
+			self.roster.redraw_jid(u.jid, account)
+		else:
+			user1 = user(jid, jid, ['general'], 'online', \
+				'online', 'to', array[2], 0)
+			self.roster.contacts[account][jid] = [user1]
+			self.roster.add_user_to_roster(jid, account)
+		warning_Window(_("You are now authorized by %s") % jid)
+
+
+	def handle_event_unsubscribed(self, account, jid):
+		#TODO: change icon
+		warning_Window(_("You are now unsubscribed by %s") % jid)
+
+	def handle_event_agents(self, account, para):
+		#('AGENTS', account, agents)
+		if self.windows[account].has_key('browser'):
+			self.windows[account]['browser'].agents(para)
+
+	def handle_event_agent_info(self, account, array):
+		#('AGENTS_INFO', account, (agent, infos))
+		self.handle_event_agent_info(account, array)
+		if not array[1].has_key('instructions'):
+			warning_Window(_("error contacting %s") % array[0])
+		else:
+			agentRegistration_Window(array[0], array[1], self, account)
+
+	def handle_event_acc_ok(self, account, array):
+		#('ACC_OK', account, (hostname, login, pasword, name, ressource, prio,
+		#use_proxy, proxyhost, proxyport))
+		self.accounts[array[3]] = {'name': array[1], \
+					'hostname': array[0],\
+					'password': array[2],\
+					'ressource': array[4],\
+					'priority': array[5],\
+					'use_proxy': array[6],\
+					'proxyhost': array[7], \
+					'proxyport': array[8]}
+		self.send('CONFIG', None, ('accounts', self.accounts))
+		self.windows[name] = {'infos': {}, 'chats': {}}
+		self.queues[name] = {}
+		self.connected[name] = 0
+		self.roster.groups[name] = {}
+		self.roster.contacts[name] = {}
+		if self.windows.has_key('accounts'):
+			self.windows['accounts'].init_accounts()
+
+	def handle_event_quit(self, p1, p2):
+		self.roster.on_quit(self)
+
+	def handle_event_myvcard(self, p1, p2):
+		nick = ''
+		if p2.has_key('NICKNAME'):
+			nick = p2['NICKNAME']
+		if nick == '':
+			nick = self.accounts[p1]['name']
+		self.nicks[p1] = nick
+
+	def handle_event_vcard(self, p1, p2):
+		if self.windows[p1]['infos'].has_key(p2['jid']):
+			self.windows[p1]['infos'][p2['jid']].set_values(p2)
+
+	def handle_event_log_nb_line(self, account, array):
+		#('LOG_NB_LINE', account, (jid, nb_line))
+		if self.windows['logs'].has_key(array[0]):
+			self.windows['logs'][array[0]].set_nb_line(array[1])
+			begin = 0
+			if array[1] > 50:
+				begin = array[1] - 50
+			self.send('LOG_GET_RANGE', None, (array[0], begin, array[1]))
+
+	def handle_event_log_line(self, account, array):
+		#('LOG_LINE', account, (jid, num_line, date, type, data))
+		# if type = 'recv' or 'sent' data = [msg]
+		# else type = jid and data = [status, away_msg]
+		if self.windows['logs'].has_key(array[0]):
+			self.windows['logs'][array[0]].new_line(array[1:])
+
 	def read_queue(self):
 		"""Read queue from the core and execute commands from it"""
-		model = self.roster.tree.get_model()
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
-			#('ROSTER', account, array)
 			if ev[0] == 'ROSTER':
-				self.roster.mklists(ev[2], ev[1])
-				self.roster.draw_roster()
+				self.handle_event_roster(ev[2], ev[1])
 			elif ev[0] == 'WARNING':
-				warning_Window(ev[2])
-			#('STATUS', account, status)
+				self.handle_event_warning(ev[2])
 			elif ev[0] == 'STATUS':
-				self.roster.on_status_changed(ev[1], ev[2])
-			#('NOTIFY', account, (jid, status, message, resource, priority))
+				self.handle_event_status(ev[1], ev[2])
 			elif ev[0] == 'NOTIFY':
-				jid = string.split(ev[2][0], '/')[0]
-				resource = ev[2][3]
-				if not resource:
-					resource = ''
-				priority = ev[2][4]
-				if string.find(jid, "@") <= 0:
-					#It must be an agent
-					ji = string.replace(jid, '@', '')
-				else:
-					ji = jid
-				#Update user
-				if self.roster.contacts[ev[1]].has_key(ji):
-					luser = self.roster.contacts[ev[1]][ji]
-					user1 = None
-					resources = []
-					for u in luser:
-						resources.append(u.resource)
-						if u.resource == resource:
-							user1 = u
-							break
-					if not user1:
-						user1 = self.roster.contacts[ev[1]][ji][0]
-						if resources != [''] and (len(luser) != 1 or 
-							luser[0].show != 'offline'):
-							user1 = user(user1.jid, user1.name, user1.groups, \
-								user1.show, user1.status, user1.sub, user1.resource, \
-								user1.priority)
-							luser.append(user1)
-						user1.resource = resource
-					user1.show = ev[2][1]
-					user1.status = ev[2][2]
-					user1.priority = priority
-				if string.find(jid, "@") <= 0:
-					#It must be an agent
-					if not self.roster.contacts[ev[1]].has_key(ji):
-						user1 = user(ji, ji, ['Agents'], ev[2][1], \
-							ev[2][2], 'from', resource, 0)
-						self.roster.contacts[ev[1]][ji] = [user1]
-						self.roster.add_user_to_roster(ji, ev[1])
-					else:
-						#Update existing iter
-						self.roster.redraw_jid(ji, ev[1])
-				elif self.roster.contacts[ev[1]].has_key(ji):
-					#It isn't an agent
-					self.roster.chg_user_status(user1, ev[2][1], ev[2][2], ev[1])
-			#('MSG', account, (user, msg))
+				self.handle_event_notify(ev[1], ev[2])
 			elif ev[0] == 'MSG':
-				jid = string.split(ev[2][0], '/')[0]
-				if string.find(jid, "@") <= 0:
-					jid = string.replace(jid, '@', '')
-				self.roster.on_message(jid, ev[2][1], ev[1])
-			#('SUBSCRIBE', account, (jid, text))
+				self.handle_event_msg(ev[1], ev[2])
 			elif ev[0] == 'SUBSCRIBE':
-				authorize_Window(self, ev[2][0], ev[2][1], ev[1])
-			#('SUBSCRIBED', account, (jid, nom, resource))
+				self.handle_event_subscribe(ev[1], ev[2])
 			elif ev[0] == 'SUBSCRIBED':
-				jid = ev[2][0]
-				if self.roster.contacts[ev[1]].has_key(jid):
-					u = self.roster.contacts[ev[1]][jid][0]
-					u.name = ev[2][1]
-					u.resource = ev[2][2]
-					self.roster.redraw_jid(u.jid, ev[1])
-				else:
-					user1 = user(jid, jid, ['general'], 'online', \
-						'online', 'to', ev[2][2], 0)
-					self.roster.contacts[ev[1]][jid] = [user1]
-					self.roster.add_user_to_roster(jid, ev[1])
-				warning_Window(_("You are now authorized by %s") % jid)
+				self.handle_event_subscribed(ev[1], ev[2])
 			elif ev[0] == 'UNSUBSCRIBED':
-				warning_Window(_("You are now unsubscribed by %s") % ev[2])
-				#TODO: change icon
-			#('AGENTS', account, agents)
+				self.handle_event_unsubscribed(ev[1], ev[2])
 			elif ev[0] == 'AGENTS':
-				if self.windows[ev[1]].has_key('browser'):
-					self.windows[ev[1]]['browser'].agents(ev[2])
-			#('AGENTS_INFO', account, (agent, infos))
+				self.handle_event_agents(ev[1], ev[2])
 			elif ev[0] == 'AGENT_INFO':
-				if not ev[2][1].has_key('instructions'):
-					warning_Window(_("error contacting %s") % ev[2][0])
-				else:
-					agentRegistration_Window(ev[2][0], ev[2][1], self, ev[1])
-			#('ACC_OK', account, (hostname, login, pasword, name, ressource, prio,
-			#use_proxy, proxyhost, proxyport))
+				self.handle_event_agent_info(ev[1], ev[2])
 			elif ev[0] == 'ACC_OK':
-				self.accounts[ev[2][3]] =  {'name': ev[2][1], 'hostname': ev[2][0],\
-					'password': ev[2][2], 'ressource': ev[2][4], 'priority': \
-					ev[2][5], 'use_proxy': ev[2][6], 'proxyhost': ev[2][7], \
-					'proxyport': ev[2][8]}
-				self.send('CONFIG', None, ('accounts', self.accounts))
-				self.windows[name] = {'infos': {}, 'chats': {}}
-				self.queues[name] = {}
-				self.connected[name] = 0
-				self.roster.groups[name] = {}
-				self.roster.contacts[name] = {}
-				if self.windows.has_key('accounts'):
-					self.windows['accounts'].init_accounts()
+				self.handle_event_acc_ok(ev[1], ev[2])
 			elif ev[0] == 'QUIT':
-				self.roster.on_quit(self)
+				self.handle_event_quit(ev[1], ev[2])
 			elif ev[0] == 'MYVCARD':
-				nick = ''
-				if ev[2].has_key('NICKNAME'):
-					nick = ev[2]['NICKNAME']
-				if nick == '':
-					nick = self.accounts[ev[1]]['name']
-				self.nicks[ev[1]] = nick
+				self.handle_event_myvcard(ev[1], ev[2])
 			elif ev[0] == 'VCARD':
-				if self.windows[ev[1]]['infos'].has_key(ev[2]['jid']):
-					self.windows[ev[1]]['infos'][ev[2]['jid']].set_values(ev[2])
-			#('LOG_NB_LINE', account, (jid, nb_line))
+				self.handle_event_vcard(ev[1], ev[2])
 			elif ev[0] == 'LOG_NB_LINE':
-				if self.windows['logs'].has_key(ev[2][0]):
-					self.windows['logs'][ev[2][0]].set_nb_line(ev[2][1])
-					begin = 0
-					if ev[2][1] > 50:
-						begin = ev[2][1] - 50
-					self.send('LOG_GET_RANGE', None, (ev[2][0], begin, ev[2][1]))
-			#('LOG_LINE', account, (jid, num_line, date, type, data))
-			# if type = 'recv' or 'sent' data = [msg]
-			# else type = jid and data = [status, away_msg]
+				self.handle_event_log_nb_line(ev[1], ev[2])
 			elif ev[0] == 'LOG_LINE':
-				if self.windows['logs'].has_key(ev[2][0]):
-					self.windows['logs'][ev[2][0]].new_line(ev[2][1:])
+				self.handle_event_log_line(ev[1], ev[2])
 		return 1
 	
 	def read_sleepy(self):	
