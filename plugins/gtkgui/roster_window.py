@@ -842,6 +842,7 @@ class Roster_window:
 			self.plugin.windows[account]['gc'][jid] = \
 				self.plugin.windows[account]['gc']['tabbed']
 			self.plugin.windows[account]['gc']['tabbed'].window.present()
+			self.plugin.windows[account]['gc']['tabbed'].active_tab(jid)
 		else:
 			self.plugin.windows[account]['gc'][jid] = \
 				Groupchat_window(jid, nick, self.plugin, account)
