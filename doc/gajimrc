@@ -1,9 +1,10 @@
-[Server]
-
-hostname = SERVER HOSTNAME
-
 [Profile]
 
+accounts = Account1
+
+[Account1]
+
+hostname = SERVER HOSTNAME
 name = LOGIN NAME
 password = PASSWORD
 ressource = gajim
@@ -20,6 +21,7 @@ modules = sock
 showoffline = 0
 inmsgcolor = red
 outmsgcolor = blue
+statusmsgcolor = green
 iconstyle = sun
 autopopup = 0
 

@@ -233,10 +233,15 @@ class message:
 	def print_conversation(self, txt, contact = None):
 		end_iter = self.convTxtBuffer.get_end_iter()
 		if contact:
-			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<moi> ', 'outgoing')
+			if contact == 'status':
+				self.convTxtBuffer.insert_with_tags_by_name(end_iter, txt+'\n', \
+					'status')
+			else:
+				self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<moi> ', 'outgoing')
+				self.convTxtBuffer.insert(end_iter, txt+'\n')
 		else:
 			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<' + self.user.name + '> ', 'incoming')
-		self.convTxtBuffer.insert(end_iter, txt+'\n')
+			self.convTxtBuffer.insert(end_iter, txt+'\n')
 		self.conversation.scroll_to_mark(\
 			self.convTxtBuffer.get_mark('end'), 0.1, 0, 0, 0)
 	
@@ -287,12 +292,17 @@ class message:
 		self.tag = self.convTxtBuffer.create_tag("incoming")
 		color = self.cfgParser.GtkGui_inmsgcolor
 		if not color:
-			color = red
+			color = 'red'
 		self.tag.set_property("foreground", color)
 		self.tag = self.convTxtBuffer.create_tag("outgoing")
 		color = self.cfgParser.GtkGui_outmsgcolor
 		if not color:
-			color = blue
+			color = 'blue'
+		self.tag.set_property("foreground", color)
+		self.tag = self.convTxtBuffer.create_tag("status")
+		color = self.cfgParser.GtkGui_statusmsgcolor
+		if not color:
+			color = 'green'
 		self.tag.set_property("foreground", color)
 
 class roster:
@@ -570,6 +580,15 @@ class plugin:
 				self.r.mkroster(ev[1])
 			elif ev[0] == 'NOTIFY':
 				jid = string.split(ev[1][0], '/')[0]
+				#Update user
+				if self.r.l_contact.has_key(jid):
+					u = self.r.l_contact[jid]['user']
+					u.show = ev[1][1]
+					u.status = ev[1][2]
+					#Print status in chat window
+					if self.r.tab_messages.has_key(jid):
+						self.r.tab_messages[jid].print_conversation(\
+							"%s is now %s (%s)" % (u.name, ev[1][1], ev[1][2]), 'status')
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
 					jid = string.replace(jid, '@', '')

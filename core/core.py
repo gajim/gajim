@@ -78,11 +78,11 @@ class GajimCore:
 			log.debug("unsubscribe request from %s" % who)
 		elif type == 'unsubscribed':
 			log.debug("we are now unsubscribed to %s" % who)
-			
 	# END presenceCB
 
 	def disconnectedCB(self, con):
 		log.debug("disconnectedCB")
+		self.con.disconnect()
 	# END disconenctedCB
 
 	def connect(self, account):
@@ -95,14 +95,15 @@ class GajimCore:
 		try:
 			self.con.connect()
 		except IOError, e:
-			log.debug("Couldn't connect to %s" % e)
-			sys.exit(0)
+			log.debug("Couldn't connect to %s %s" % (hostname, e))
+			return 0
 		else:
 			log.debug("Connected to server")
 
 			self.con.setMessageHandler(self.messageCB)
 			self.con.setPresenceHandler(self.presenceCB)
 			self.con.setDisconnectHandler(self.disconnectedCB)
+			#BUG in jabberpy library : if hostname is wrong : "boucle"
 			if self.con.auth(name, password, ressource):
 				self.con.requestRoster()
 				roster = self.con.getRoster().getRaw()
@@ -112,7 +113,8 @@ class GajimCore:
 				self.con.sendInitPresence()
 				self.connected = 1
 			else:
-				sys.exit(1)
+				log.debug("Couldn't authentificate to %s" % hostname)
+				return 0
 	# END connect
 
 	def mainLoop(self):
