@@ -363,7 +363,6 @@ class Roster_window:
 				self.redraw_jid(user.jid, account)
 			elif not showOffline:
 				self.remove_user(user, account)
-				iters = []
 			else:
 				self.redraw_jid(user.jid, account)
 		else:
