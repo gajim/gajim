@@ -600,10 +600,10 @@ class preferences_window:
 	def on_treeview_sounds_cursor_changed(self, widget, data=None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
 		if not iter:
-			self.xml.get_widget('entry_sounds').set_text('')
+			self.xml.get_widget('sounds_entry').set_text('')
 			return
 		str = model.get_value(iter, 2)
-		self.xml.get_widget('entry_sounds').set_text(str)
+		self.xml.get_widget('sounds_entry').set_text(str)
 
 	def on_button_sounds_clicked(self, widget, data=None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
@@ -641,7 +641,7 @@ class preferences_window:
 				ok = 1
 		dialog.destroy()
 		if file:
-			self.xml.get_widget('entry_sounds').set_text(file)
+			self.xml.get_widget('sounds_entry').set_text(file)
 			model.set_value(iter, 2, file)
 			model.set_value(iter, 1, 1)
 
