@@ -1883,7 +1883,7 @@ class plugin:
 		self.roster.on_message(jid, array[1], account)
 		
 	def handle_event_msgerror(self, account, array):
-		#('MSG', account, (user, error_code, error_msg, msg))
+		#('MSGERROR', account, (user, error_code, error_msg, msg))
 		jid = string.split(array[0], '/')[0]
 		if string.find(jid, "@") <= 0:
 			jid = string.replace(jid, '@', '')

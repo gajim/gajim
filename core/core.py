@@ -84,7 +84,7 @@ class GajimCore:
 				try:
 					modObj = self.hub.newPlugin(mod)
 				except:
-					print _("The plugin %s cannot be launched")
+					print _("The plugin %s cannot be launched" % mod)
 				if not modObj:
 					print _("The plugin %s is already launched" % mod)
 					return
@@ -238,13 +238,35 @@ class GajimCore:
 			self.hub.sendPlugin('UNSUBSCRIBED', self.connexions[con], \
 				prs.getFrom().getBasic())
 		elif typ == 'error':
-			errmsg = ''
-			for child in prs._node.getChildren():
-				if child.getName() == 'error':
-					errmsg = child.getData()
-					break
-			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
-				(prs.getFrom().getBasic(), 'error', errmsg, \
+			errmsg = prs.getError()
+			errcode = prs.getErrorCode()
+			if errcode == '400': #Bad Request : JID Malformed or Private message when not allowed
+				pass
+			elif errcode == '401': #No Password Provided
+				pass
+			elif errcode == '403':	#forbidden :	User is Banned
+											#					Unauthorized Subject Change
+											#					Attempt by Mere Member to Invite Others to a Members-Only Room
+											#					Configuration Access to Non-Owner
+											#					Attempt by Non-Owner to Modify Owner List
+											#					Attempt by Non-Owner to Modify Admin List
+											#					Destroy Request Submitted by Non-Owner
+				pass
+			elif errcode == '404':	#item not found :	Room Does Not Exist
+				pass
+			elif errcode == '405':	#Not allowed :	Attempt to Kick Moderator, Admin, or Owner
+											#					Attempt to Ban an Admin or Owner
+											#					Attempt to Revoke Voice from an Admin, Owner, or User with a Higher Affiliation
+											#					Attempt to Revoke Moderator Privileges from an Admin or Owner
+				pass
+			elif errcode == '407':	#registration required :	User Is Not on Member List
+											#									
+				pass
+			elif errcode == '409':	#conflict :	Nick Conflict
+				self.hub.sendPlugin('WARNING', None, errmsg)
+			else:
+				self.hub.sendPlugin('NOTIFY', self.connexions[con], \
+					(prs.getFrom().getBasic(), 'error', errmsg, \
 					prs.getFrom().getResource(), prio))
 	# END presenceCB
 
