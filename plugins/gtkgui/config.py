@@ -550,7 +550,7 @@ class accountPreference_Window:
 			'gpgpass': gpg_pass}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
 		#update variables
-		self.plugin.windows[name] = {'infos': {}, 'chats': {}}
+		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.plugin.queues[name] = {}
 		self.plugin.connected[name] = 0
 		self.plugin.roster.groups[name] = {}
