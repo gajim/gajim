@@ -66,6 +66,7 @@ An example of usage for a simple client would be ( only psuedo code !)
 
 import xmlstream
 import sha, time
+import string
 
 debug=xmlstream.debug
 
@@ -277,7 +278,7 @@ class Connection(xmlstream.Client):
         if not self.handlers[name].has_key(ns): ns=''
         if not self.handlers[name].has_key(typ): typ=''
         if not self.handlers[name].has_key(typns): typns=''
-	if typ==typns: typns=''
+	if typ==typns: typns='' # we don't want to launch twice the same handler
 
         chain=[]
         for key in ['default',typ,ns,typns]: # we will use all handlers: from very common to very particular
@@ -433,10 +434,13 @@ class Client(Connection):
         self.send(Presence(type='unavailable'))
         xmlstream.Client.disconnect(self)
 
-    def sendPresence(self,type=None,priority=None,show=None,status=None):
+    def sendPresence(self,type=None,priority=None,show=None,status=None,signedStatus=None):
         """Sends a presence protocol element to the server.
            Used to inform the server that you are online"""
-        self.send(Presence(type=type,priority=priority,show=show,status=status))
+        presence = Presence(type=type,priority=priority,show=show,status=status)
+        if signedStatus:
+            presence.setX(NS_XSIGNED).insertData(signedStatus)
+        self.send(presence)
 
     sendInitPresence=sendPresence
 
@@ -612,12 +616,12 @@ class Client(Connection):
     def requestRegInfo(self,agent=''):
         """Requests registration info from the server.
            Returns the Iq object received from the server."""
-#        if agent: agent = agent + '.'
+        if string.find(agent, self._host) == -1:
+            if agent: agent = agent + '.'
+            agent = + self._host
         self._reg_info = {}
-#        reg_iq = Iq(type='get', to = agent + self._host)
         reg_iq = Iq(type='get', to = agent)
         reg_iq.setQuery(NS_REGISTER)
-#        self.DEBUG("Requesting reg info from %s%s:" % (agent, self._host), DBG_NODE_IQ)
         self.DEBUG("Requesting reg info from %s:" % agent, DBG_NODE_IQ)
         self.DEBUG(ustr(reg_iq),DBG_NODE_IQ)
         return self.SendAndWaitForResponse(reg_iq)
@@ -637,11 +641,11 @@ class Client(Connection):
         self._reg_info[key] = val
 
 
-    def sendRegInfo(self, agent=None):
+    def sendRegInfo(self, agent=''):
         """Sends the populated registration dictionary back to the server"""
-#        if agent: agent = agent + '.'
-        if agent is None: agent = ''
-#        reg_iq = Iq(to = agent + self._host, type='set')
+        if string.find(agent, self._host) == -1:
+            if agent: agent = agent + '.'
+            agent = agent + self._host
         reg_iq = Iq(to = agent, type='set')
         q = reg_iq.setQuery(NS_REGISTER)
         for info in self._reg_info.keys():
@@ -649,22 +653,21 @@ class Client(Connection):
         return self.SendAndWaitForResponse(reg_iq)
 
 
-    def deregister(self, agent=None):
+    def deregister(self, agent=''):
         """ Send off a request to deregister with the server or with the given
             agent.  Returns True if successful, else False.
 
             Note that you must be authorised before attempting to deregister.
         """
         if agent:
-#            agent = agent + '.'
-#            self.send(Presence(to=agent+self._host,type='unsubscribed'))       # This is enough f.e. for icqv7t or jit
+            if string.find(agent, self._host) == -1:
+                agent = agent + '.' + self._host
             self.send(Presence(to=agent,type='unsubscribed'))       # This is enough f.e. for icqv7t or jit
-        if agent is None: agent = ''
+        else: agent = self._host
         q = self.requestRegInfo()
         kids = q.getQueryPayload()
         keyTag = kids.getTag("key")
 
-#        iq = Iq(to=agent+self._host, type="set")
         iq = Iq(to=agent, type="set")
         iq.setQuery(NS_REGISTER)
         iq.setQueryNode("")
@@ -731,12 +734,9 @@ class Client(Connection):
         if not rep:
             return identities, features, items
         q = rep.getTag('service')
-        if q:
-            identities = [q.attrs]
-        else:
-            identities = []
         if not q:
             return identities, features, items
+        identities = [q.attrs]
         for node in q.kids:
             if node.getName() == 'ns':
                 features.append(node.getData())
@@ -1441,10 +1441,6 @@ class JID:
         return jid_str
 
     __repr__ = __str__
-
-    def getBasic(self):
-        """Returns a jid string with no resource"""
-        return self.node + '@' + self.domain
 
     def getNode(self):
         """Returns JID Node as string"""
