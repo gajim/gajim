@@ -68,6 +68,8 @@ else:
 			self.options.armor = 1
 			self.options.meta_interactive = 0
 			self.options.extra_args.append('--no-secmem-warning')
+			# Nolith's patch - prevent crashs on non fully-trusted keys
+			self.options.extra_args.append('--always-trust')
 
 		def _read_response(self, child_stdout):
 			# Internal method: reads all the output from GPG, taking notice
