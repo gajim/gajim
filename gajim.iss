@@ -5,7 +5,7 @@
 
 [Setup]
 AppName=Gajim
-AppVerName=Gajim version 0.5
+AppVerName=Gajim version 0.5.1
 DefaultDirName={pf}\Gajim
 DefaultGroupName=Gajim
 UninstallDisplayIcon={app}\Gajim.exe
@@ -22,7 +22,7 @@ Name: desktopicon; Description: "Create a &desktop icon"; GroupDescription: "Add
 Source: "dist\*.pyd"; DestDir: "{app}"
 Source: "dist\*.dll"; DestDir: "{app}"
 Source: "dist\*.zip"; DestDir: "{app}"
-Source: "dist\*.exe"; DestDir: "{app}"; components: main
+Source: "dist\gajim.exe"; DestDir: "{app}"; components: main
 Source: "*.ico"; DestDir: "{app}"
 Source: "dist\plugins\gtkgui\*.glade"; DestDir: "{app}\plugins\gtkgui"
 Source: "dist\plugins\gtkgui\icons\sun\*"; DestDir: "{app}\plugins\gtkgui\icons\sun"
