@@ -193,13 +193,11 @@ class preference_Window:
 		self.plugin.config['userfont'] = fontStr
 		#update opened chat windows
 		for a in self.plugin.accounts.keys():
-			for w in self.plugin.windows[a]['chats'].keys():
-				self.plugin.windows[a]['chats'][w].tagIn.\
-					set_property("foreground", self.plugin.config['inmsgcolor'])
-				self.plugin.windows[a]['chats'][w].tagOut.\
-					set_property("foreground", self.plugin.config['outmsgcolor'])
-				self.plugin.windows[a]['chats'][w].tagStatus.\
-					set_property("foreground", self.plugin.config['statusmsgcolor'])
+			if self.plugin.windows[a]['chats'].has_key('tabbed'):
+				self.plugin.windows[a]['chats']['tabbed'].update_tags()
+			else:
+				for jid in self.plugin.windows[a]['chats'].keys():
+					self.plugin.windows[a]['chats'][jid].update_tags()
 		#IconStyle
 		ist = self.combo_iconstyle.entry.get_text()
 		self.plugin.config['iconstyle'] = ist

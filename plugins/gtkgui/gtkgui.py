@@ -235,6 +235,15 @@ class tabbed_chat_Window:
 			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
 				user.show, user.status), user.jid, 'status')
 		
+	def update_tags(self):
+		for jid in self.tagIn:
+			self.tagIn[jid].set_property("foreground", \
+				self.plugin.config['inmsgcolor'])
+			self.tagOut[jid].set_property("foreground", \
+				self.plugin.config['outmsgcolor'])
+			self.tagStatus[jid].set_property("foreground", \
+				self.plugin.config['statusmsgcolor'])
+
 	def show_title(self):
 		unread = 0
 		for jid in self.nb_unread:
@@ -579,6 +588,12 @@ class message_Window:
 		elif self.nb_unread == 1:
 			start = "* "
 		self.window.set_title(start + self.user.name + " (" + self.account + ")")
+
+	def update_tags(self):
+		self.tagIn.set_property("foreground", self.plugin.config['inmsgcolor'])
+		self.tagOut.set_property("foreground", self.plugin.config['outmsgcolor'])
+		self.tagStatus.set_property("foreground", \
+			self.plugin.config['statusmsgcolor'])
 
 	def set_image(self, image, jid):
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
