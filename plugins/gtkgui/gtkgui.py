@@ -113,6 +113,8 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 				
 	def on_render(self, window, widget, background_area,cell_area, \
 		expose_area, flags):
+		if not self.image:
+			return
 		pix_rect = gtk.gdk.Rectangle()
 		pix_rect.x, pix_rect.y, pix_rect.width, pix_rect.height = \
 			self.on_get_size(widget, cell_area)
@@ -143,6 +145,8 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 			gtk.gdk.RGB_DITHER_NONE, 0, 0)
 
 	def on_get_size(self, widget, cell_area):
+		if not self.image:
+			return 0, 0, 0, 0
 		if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			animation = self.image.get_animation()
 			pix = animation.get_iter().get_pixbuf()
