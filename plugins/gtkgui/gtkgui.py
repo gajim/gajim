@@ -1083,21 +1083,21 @@ class message_Window:
 		self.xml.signal_connect('on_history_clicked', self.on_history)
 		self.xml.signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
-		tagIn = buffer.create_tag("incoming")
+		self.tagIn = buffer.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
 		if not color:
 			color = 'red'
-		tagIn.set_property("foreground", color)
-		tagOut = buffer.create_tag("outgoing")
+		self.tagIn.set_property("foreground", color)
+		self.tagOut = buffer.create_tag("outgoing")
 		color = self.plugin.config['outmsgcolor']
 		if not color:
 			color = 'blue'
-		tagOut.set_property("foreground", color)
-		tagStatus = buffer.create_tag("status")
+		self.tagOut.set_property("foreground", color)
+		self.tagStatus = buffer.create_tag("status")
 		color = self.plugin.config['statusmsgcolor']
 		if not color:
 			color = 'green'
-		tagStatus.set_property("foreground", color)
+		self.tagStatus.set_property("foreground", color)
 		#print queued messages
 		if plugin.queues[account].has_key(user.jid):
 			self.read_queue(plugin.queues[account][user.jid])
