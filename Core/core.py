@@ -322,7 +322,7 @@ class GajimCore:
 			if self.mode == 'server':
 				self.accounts = {}
 				if self.cfgParser.tab['Profile'].has_key('accounts'):
-					accts = self.cfgParser.tab['Profile']['accounts'].split()
+					accts = self.cfgParser.tab['Profile']['accounts'].split(' ')
 					if accts == ['']:
 						accts = []
 					for a in accts:
@@ -663,7 +663,7 @@ class GajimCore:
 			elif ev[0] == 'CONFIG':
 				if ev[2][0] == 'accounts':
 					#Remove all old accounts
-					accts = self.cfgParser.tab['Profile']['accounts'].split()
+					accts = self.cfgParser.tab['Profile']['accounts'].split(' ')
 					if accts == ['']:
 						accts = []
 					for a in accts:
