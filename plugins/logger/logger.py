@@ -79,6 +79,8 @@ class plugin:
 					jid = string.split(ev[2][0], '/')[0]
 					if jid in self.no_log_for[ev[1]]:
 						break
+					if ev[1] in self.no_log_for[ev[1]]:
+						break
 					status = ev[2][2]
 					if not status:
 						status = ""
@@ -97,6 +99,8 @@ class plugin:
 					jid = string.split(ev[2][0], '/')[0]
 					if jid in self.no_log_for[ev[1]]:
 						break
+					if ev[1] in self.no_log_for[ev[1]]:
+						break
 					msg = string.replace(ev[2][1], '\n', '\\n')
 					fic = open(LOGPATH + jid, "a")
 					t = time.mktime(ev[2][2])
@@ -105,6 +109,8 @@ class plugin:
 				elif ev[0] == 'MSGSENT':
 					jid = string.split(ev[2][0], '/')[0]
 					if jid in self.no_log_for[ev[1]]:
+						break
+					if ev[1] in self.no_log_for[ev[1]]:
 						break
 					msg = string.replace(ev[2][1], '\n', '\\n')
 					fic = open(LOGPATH + jid, "a")

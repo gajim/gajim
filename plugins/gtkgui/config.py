@@ -849,6 +849,10 @@ class account_window:
 		if infos.has_key('autoconnect'):
 			self.xml.get_widget('autoconnect_checkbutton').set_active(\
 				infos['autoconnect'])
+		if infos.has_key('no_log_for'):
+			list_no_log_for = infos['no_log_for'].split()
+			if infos['accname'] in list_no_log_for:
+				self.xml.get_widget('log_history_checkbutton').set_active(0)
 
 	def on_save_button_clicked(self, widget):
 		"""When save button is clicked : Save informations in config file"""
@@ -864,6 +868,16 @@ class account_window:
 		autoconnect = 0
 		if self.xml.get_widget('autoconnect_checkbutton').get_active():
 			autoconnect = 1
+
+		if not self.infos.has_key('no_log_for'):
+			self.infos['no_log_for'] = ''
+		list_no_log_for = self.infos['no_log_for'].split()
+		if self.account in list_no_log_for:
+			list_no_log_for.remove(self.account)
+		if not self.xml.get_widget('log_history_checkbutton').get_active():
+			list_no_log_for.append(name)
+		self.infos['no_log_for'] = ' '.join(list_no_log_for)
+
 		use_proxy_checkbutton = self.xml.get_widget('use_proxy_checkbutton')
 		if use_proxy_checkbutton.get_active():
 			use_proxy = 1
@@ -940,7 +954,8 @@ class account_window:
 				'autoconnect': autoconnect, 'use_proxy': use_proxy, 'proxyhost': \
 				proxyhost, 'proxyport': proxyport, 'keyid': keyID, \
 				'keyname': key_name, 'savegpgpass': save_gpg_password, \
-				'gpgpassword': gpg_password, 'active': active}
+				'gpgpassword': gpg_password, 'active': active, 'no_log_for': \
+				self.infos['no_log_for']}
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 				'GtkGui'))
 			if save_password:
@@ -967,7 +982,7 @@ class account_window:
 			'use_proxy': use_proxy, 'proxyhost': proxyhost, \
 			'proxyport': proxyport, 'keyid': keyID, 'keyname': key_name, \
 			'savegpgpass': save_gpg_password, 'gpgpassword': gpg_password,\
-			'active': 1}
+			'active': 1, 'no_log_for': self.infos['no_log_for']}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 			'GtkGui'))
 		if save_password:
@@ -1081,11 +1096,13 @@ class account_window:
 		self.plugin = plugin
 		self.account = ''
 		self.modify = False
+		self.infos = infos
 		self.xml.get_widget('gpg_key_label').set_text('No key selected')
 		self.xml.get_widget('gpg_name_label').set_text('')
 		self.xml.get_widget('gpg_save_password_checkbutton').set_sensitive(False)
 		self.xml.get_widget('gpg_password_entry').set_sensitive(False)
 		self.xml.get_widget('password_entry').set_sensitive(False)
+		self.xml.get_widget('log_history_checkbutton').set_active(1)
 		self.xml.signal_autoconnect(self)
 		if infos:
 			self.modify = True
