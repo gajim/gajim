@@ -3,8 +3,8 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
-##		- Nikos Kouremenos <kourem@gmail.com>
-##		- Alex Podaras <bigpod@gmail.com>
+##	- Nikos Kouremenos <kourem@gmail.com>
+##	- Alex Podaras <bigpod@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -849,11 +849,14 @@ class plugin:
 			self.config['autoxatime']*60)
 		self.systray_visible = 0
 		try:
-			import trayicon
+			import egg.trayicon as trayicon # use gnomepythonextras traycion
 		except:
-			self.config['trayicon'] = 0
-			self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
-			self.systray = systrayDummy()
+			try:
+				import trayicon # use yann's
+			except: # user doesn't have trayicon capabilities
+				self.config['trayicon'] = 0
+				self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
+				self.systray = systrayDummy()
 		else:
 			self.systray = systray(self)
 		if self.config['trayicon']:

@@ -214,7 +214,7 @@ class roster_window:
 			join_gc_menuitem.set_sensitive(False)
 			add_contact_menuitem.set_sensitive(False)
 			browse_agents_menuitem.set_sensitive(False)
-		if len(self.plugin.accounts.keys()) > 1: # 2 or more accounts? make submenus
+		if len(self.plugin.accounts.keys()) >= 2: # 2 or more accounts? make submenus
 			#add
 			sub_menu = gtk.Menu()
 			add_contact_menuitem.set_submenu(sub_menu)
@@ -247,23 +247,22 @@ class roster_window:
 				sub_menu.append(item)
 				item.connect("activate", self.on_new_message_menuitem_activate, account)
 			sub_menu.show_all()
-		elif len(self.plugin.accounts.keys()) == 1:
+		elif len(self.plugin.accounts.keys()) == 1: # one account
 			#add
 			if not self.add_contact_handler_id:
-				self.add_contact_handler_id = self.xml.get_widget('add_contact_menuitem').connect(
-					"activate", self.on_add_contact, self.plugin.accounts.keys()[0])
+				self.add_contact_handler_id = add_contact_menuitem.connect(\
+				'activate', self.on_add_contact, self.plugin.accounts.keys()[0])
 			#agents
 			if not self.browse_agents_handler_id:
-				self.browse_agents_handler_id = self.xml.get_widget(
-					'browse_agents_menuitem').connect("activate", self.on_browse_agents, 
-					self.plugin.accounts.keys()[0])
+				self.browse_agents_handler_id = browse_agents_menuitem.connect(\
+'activate', self.on_browse_agents, self.plugin.accounts.keys()[0])
 			#join_gc
 			if not self.join_gc_handler_id:
-				self.join_gc_handler_id = self.xml.get_widget('join_gc_menuitem').connect(
+				self.join_gc_handler_id = join_gc_menuitem.connect(\
 					"activate", self.on_join_gc, self.plugin.accounts.keys()[0])
 			if not self.new_message_menuitem_handler_id:
-				self.new_message_menuitem_handler_id = self.xml.get_widget('new_message_menuitem').connect(
-					"activate", self.on_new_message_menuitem_activate, self.plugin.accounts.keys()[0])
+				self.new_message_menuitem_handler_id = new_message_menuitem.connect(\
+'activate', self.on_new_message_menuitem_activate, self.plugin.accounts.keys()[0])
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
