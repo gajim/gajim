@@ -3,7 +3,7 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
-##  - Nikos Kouremenos <nkour@jabber.org>
+##		- Nikos Kouremenos <nkour@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -1815,9 +1815,9 @@ class roster_window:
 		join_groupchat_window(self.plugin, account)
 
 	def on_new_message_menuitem_activate(self, widget, account):
-		"""When New Message is activated:
+		"""When new message menuitem is activated:
 		call the new_message_window class"""
-		new_message_window(self.plugin, account)
+		New_message_window(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
 		"""When about is selected :

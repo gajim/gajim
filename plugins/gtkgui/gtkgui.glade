@@ -314,6 +314,7 @@
 </widget>
 
 <widget class="GtkWindow" id="configure_accounts_window">
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Accounts</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -518,6 +519,7 @@
 </widget>
 
 <widget class="GtkWindow" id="about_window">
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">About</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -644,6 +646,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 </widget>
 
 <widget class="GtkWindow" id="account_window">
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Account Modification</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -1858,7 +1861,7 @@ on the server as a vCard</property>
 </widget>
 
 <widget class="GtkWindow" id="add_contact_window">
-  <property name="border_width">5</property>
+  <property name="border_width">4</property>
   <property name="width_request">400</property>
   <property name="height_request">334</property>
   <property name="visible">True</property>
@@ -2244,7 +2247,7 @@ on the server as a vCard</property>
 </widget>
 
 <widget class="GtkWindow" id="subscription_request_window">
-  <property name="border_width">5</property>
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Subscription request</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -2509,6 +2512,7 @@ on the server as a vCard</property>
 </widget>
 
 <widget class="GtkWindow" id="agent_browser_window">
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Agents browser</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -2772,7 +2776,7 @@ on the server as a vCard</property>
 </widget>
 
 <widget class="GtkWindow" id="agent_registration_window">
-  <property name="border_width">5</property>
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Register to</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -3004,7 +3008,7 @@ on the server as a vCard</property>
 </widget>
 
 <widget class="GtkWindow" id="preferences_window">
-  <property name="border_width">5</property>
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Preferences</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -5180,7 +5184,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkWindow" id="vcard_information_window">
-  <property name="border_width">5</property>
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Information</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -6491,6 +6495,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkWindow" id="history_window">
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Log</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -6807,7 +6812,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkWindow" id="Gc">
-  <property name="border_width">5</property>
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Groupchat</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -7055,7 +7060,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkWindow" id="join_groupchat_window">
-  <property name="border_width">5</property>
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Join Groupchat</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -7387,6 +7392,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkDialog" id="passphrase_dialog">
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Passphrase</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -7528,6 +7534,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkDialog" id="choose_gpg_key_dialog">
+  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Passphrase</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -7656,7 +7663,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkDialog" id="away_message_dialog">
-  <property name="border_width">5</property>
+  <property name="border_width">4</property>
   <property name="width_request">303</property>
   <property name="height_request">225</property>
   <property name="visible">True</property>
@@ -8171,6 +8178,7 @@ Custom</property>
 		    <widget class="GtkTextView" id="message_textview">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
+		      <property name="has_focus">True</property>
 		      <property name="editable">True</property>
 		      <property name="overwrite">False</property>
 		      <property name="accepts_tab">True</property>
@@ -8230,6 +8238,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkWindow" id="new_message_window">
+  <property name="border_width">4</property>
   <property name="width_request">461</property>
   <property name="height_request">163</property>
   <property name="visible">True</property>
@@ -8305,13 +8314,22 @@ send a chat message to</property>
       </child>
 
       <child>
-	<widget class="GtkComboBoxEntry" id="userid_comboboxentry">
+	<widget class="GtkEntry" id="jid_entry">
 	  <property name="visible">True</property>
+	  <property name="can_focus">True</property>
+	  <property name="has_focus">True</property>
+	  <property name="editable">True</property>
+	  <property name="visibility">True</property>
+	  <property name="max_length">0</property>
+	  <property name="text" translatable="yes"></property>
+	  <property name="has_frame">True</property>
+	  <property name="invisible_char">*</property>
+	  <property name="activates_default">False</property>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
 	  <property name="expand">False</property>
-	  <property name="fill">True</property>
+	  <property name="fill">False</property>
 	</packing>
       </child>
 

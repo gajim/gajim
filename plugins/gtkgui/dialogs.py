@@ -3,7 +3,7 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
-##  - Nikos Kouremenos <nkour@jabber.org>
+##		- Nikos Kouremenos <nkour@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -584,7 +584,7 @@ class join_groupchat_window:
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows['join_gc'] = self # now add us to open windows
 
-class new_message_window: #FIXME: NOT READY
+class New_message_window:
 	def on_delete_event(self, widget):
 		"""close window"""
 		del self.plugin.windows['new_msg']
@@ -595,22 +595,15 @@ class new_message_window: #FIXME: NOT READY
 
 	def on_chat_button_clicked(self, widget):
 		"""When Chat button is clicked"""
-		#FIXME: either make it simple entry, or find a way to handle windows the easy way
-		userid_comboboxentry = self.xml.get_widget('userid_comboboxentry')
-		userid_comboboxentry.child.set_activates_default(True)
-		userid = self.xml.get_widget('userid_comboboxentry').child.get_text()
-		#FIXME: if the user doesn't give jid, but name look in the roster
-		#DO IT WITH AUTOCOMPLETE
-		#SO USER ID SHOULD BECOME JID and sent to new_chat()
-		jid = userid
-		
-		#FIXME: if user is there, use that instance IF POSSIBLE [is it Yann?]
-		#if not self.plugin.roster.contacts[self.account].has_key(jid):
+		jid = self.jid_entry.get_text()
 		# use User class, new_chat expects it that way
-		user = gtkgui.User(jid, jid, ['not in the roster'], \
-			'not in the roster', 'not in the roster', 'none', None, '', 0, '')
-		self.plugin.roster.contacts[self.account][jid] = [user]
-		self.plugin.roster.add_user_to_roster(user.jid, self.account)
+		if not self.plugin.roster.contacts[self.account].has_key(jid):
+			user = gtkgui.User(jid, jid, ['not in the roster'], \
+				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
+			self.plugin.roster.contacts[self.account][jid] = [user]
+			self.plugin.roster.add_user_to_roster(user.jid, self.account)
+		else:
+			[user] = self.plugin.roster.contacts[self.account][jid]
 		self.plugin.roster.new_chat(user, self.account)
 		widget.get_toplevel().destroy()
 
@@ -622,5 +615,7 @@ class new_message_window: #FIXME: NOT READY
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'new_message_window', APP)
 		self.window = self.xml.get_widget('new_message_window')
+		self.jid_entry = self.xml.get_widget('jid_entry')
+		self.jid_entry.set_activates_default(True)
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows['new_message'] = self # now add us to open windows
