@@ -120,7 +120,7 @@ class vcard_information_window:
 
 	def add_to_vcard(self, vcard, entry, txt):
 		"""Add an information to the vCard dictionary"""
-		entries = '_'.split(entry)
+		entries = entry.split('_')
 		loc = vcard
 		while len(entries) > 1:
 			if not loc.has_key(entries[0]):
@@ -139,7 +139,6 @@ class vcard_information_window:
 		for e in entries: 
 			txt = self.xml.get_widget(e+'_entry').get_text()
 			if txt != '':
-				print 'text:', txt
 				vcard = self.add_to_vcard(vcard, e, txt)
 		buffer = self.xml.get_widget('DESC_textview').get_buffer()
 		start_iter = buffer.get_start_iter()
@@ -161,7 +160,6 @@ class vcard_information_window:
 			nick = self.plugin.accounts[self.account]['name']
 		self.plugin.nicks[self.account] = nick
 		self.plugin.send('VCARD', self.account, vcard)
-		print 'finished with vcard'
 
 	def on_retrieve_button_clicked(self, widget):
 		if self.plugin.connected[self.account] > 1:
