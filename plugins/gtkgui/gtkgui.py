@@ -1936,6 +1936,18 @@ class roster_window:
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
 						int(event.y))
+					model = self.tree.get_model()
+					iter = model.get_iter(path)
+					type = model.get_value(iter, 2)
+					if (type == 'group'):
+						if (self.tree.row_expanded(path)):
+							if x <= self.pixbufs['opened'].get_pixbuf()\			#The integer 10 is the xoffset
+								.get_width()+10:
+								self.tree.collapse_row(path)
+						else:
+							if x <= self.pixbufs['closed'].get_pixbuf()\
+								.get_width()+10:
+								self.tree.expand_row(path, False)
 				except TypeError:
 					self.tree.get_selection().unselect_all()
 		return False
