@@ -27,6 +27,8 @@ import Queue
 import common.sleepy
 
 from tabbed_chat_window import *
+from groupchat_window import *
+from history_window import *
 from gtkgui import ImageCellRenderer, User
 from dialogs import *
 from config import *
