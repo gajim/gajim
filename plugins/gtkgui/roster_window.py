@@ -1379,6 +1379,6 @@ class Roster_window:
 		self.hidden_lines = self.plugin.config['hiddenlines'].split('\t')
 		self.draw_roster()
 		if len(self.plugin.accounts) == 0:
-			self.plugin.windows['accounts_window'] = Accounts_window(self.plugin)
+			self.plugin.windows['accounts'] = Accounts_window(self.plugin)
 			self.plugin.windows['account_modification_window'] = \
 				Account_modification_window(self.plugin, {})
