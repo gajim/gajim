@@ -109,7 +109,7 @@ class vCard_Window:
 	def on_retrieve(self, widget):
 		acct = self.plugin.accts.which_account(self.user)
 		if self.plugin.connected[acct]:
-			self.plugin.send('ASK_VCARD', acct, self.jid))
+			self.plugin.send('ASK_VCARD', acct, self.jid)
 		else:
 			warning_Window("You must be connected to get your informations")
 
@@ -1085,24 +1085,27 @@ class roster_Window:
 				self.tab_messages[jid].user = user1
 				self.tab_messages[jid].img.set_from_pixbuf(self.pixbufs[show])
 
-	def chg_status(self, jid, show, status):
-		"""When a user change his status remove or change its icon"""
-		u = self.l_contact[jid]['user']
-		if self.l_contact[jid]['iter'] == []:
-			self.add_user(u)
+	def chg_status(self, user, show, status, account):
+		"""When a user change his status"""
+		if self.l_contact[user.jid]['iter'] == []:
+			self.add_user(user)
 		else:
 			model = self.tree.get_model()
 			if show == 'offline' and not self.showOffline:
-				self.remove_user(u)
+				self.remove_user(user)
 			else:
-				for i in self.l_contact[jid]['iter']:
+				for i in self.l_contact[user.jid]['iter']:
 					if self.pixbufs.has_key(show):
 						model.set_value(i, 0, self.pixbufs[show])
 			#update icon in chat window
-			if self.tab_messages.has_key(jid):
-				self.tab_messages[jid].img.set_from_pixbuf(self.pixbufs[show])
+			if self.tab_messages.has_key(user.jid):
+				self.tab_messages[user.jid].img.set_from_pixbuf(self.pixbufs[show])
 		u.show = show
 		u.status = status
+		#Print status in chat window
+		if self.plugin.windows.has_key("%s_%s" % (user.jid, account)):
+			self.windows["%s_%s" % (user.jid, account)].print_conversation(\
+				"%s is now %s (%s)" % (user.name, show, status), 'status')
 
 	def on_info(self, widget, jid):
 		"""Call infoUser_Window class to display user's information"""
@@ -1232,18 +1235,61 @@ class roster_Window:
 		"""Remove a user"""
 		window_confirm = confirm_Window(self, iter)
 
-	def on_status_changed(self, widget):
+	def on_optionmenu_changed(self, widget):
 		"""When we change our status"""
-		if widget.name != 'online' and widget.name != 'offline':
+		optionmenu =  self.xml.get_widget('optionmenu')
+		history = optionmenu.get_history()
+		status = optionmenu.get_menu().get_children()[history].name
+		if status != 'online' and status != 'offline':
 			w = awayMsg_Window()
 			txt = w.run()
 		else:
-			txt = widget.name
+			txt = status
 		if len(self.plugin.accounts) > 0:
-			self.queueOUT.put(('STATUS',(widget.name, txt, \
-				self.plugin.accounts.keys()[0])))
+			self.queueOUT.put(('STATUS', None, (status, txt)))
 		else:
 			warning_Window("You must setup an account before connecting to jabber network.")
+
+	def on_status_changed(self, account, status):
+		optionmenu =  self.xml.get_widget('optionmenu')
+		for i in range(7):
+			if optionmenu.get_menu().get_children()[i].name == status:
+				optionmenu.set_history(i)
+				break
+		if status == 'offline':
+			self.plugin.connected[account] = 0
+			self.plugin.sleeper = None
+			for jid in self.l_contact.keys():
+				user = self.l_contact[jid]['user']
+#TODO: give account to chg_status
+				self.chg_status(user, 'offline', 'Disconnected', 'account')
+		elif self.plugin.connected[ev[1]] == 0:
+			self.plugin.connected[ev[1]] = 1
+			self.plugin.sleeper = None#common.sleepy.Sleepy(\
+				#self.autoawaytime*60, self.autoxatime*60)
+
+	def on_message(self, jid, msg, account):
+		"""when we receive a message"""
+		if not self.l_contact.has_key(jid):
+			user1 = user(jid, jid, ['not in list'], \
+				'not in list', 'not in list', 'none', '')
+			self.add_user(user1)
+		autopopup = self.plugin.config['autopopup']
+		if autopopup == 0 and not self.tab_messages.has_key(jid):
+			#We save it in a queue
+			if not self.tab_queues.has_key(jid):
+				model = self.tree.get_model()
+				self.tab_queues[jid] = Queue.Queue(50)
+				for i in self.l_contact[jid]['iter']:
+					model.set_value(i, 0, self.pixbufs['message'])
+			tim = time.strftime("[%H:%M:%S]")
+			self.tab_queues[jid].put((msg, tim))
+		else:
+			if not self.tab_messages.has_key(jid):
+				if self.l_contact.has_key(jid):
+					self.tab_messages[jid] = \
+						message_Window(self.l_contact[jid]['user'], self)
+			self.tab_messages[jid].print_conversation(msg)
 
 	def on_prefs(self, widget):
 		"""When preferences is selected :
@@ -1360,12 +1406,12 @@ class roster_Window:
 		self.showOffline = 1 - self.showOffline
 		self.redraw_roster()
 
-	def __init__(self, queueOUT, plug):
+	def __init__(self, plugin):
 		# FIXME : handle no file ...
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim')
-		self.window =  xml.get_widget('Gajim')
-		self.tree = xml.get_widget('treeview')
-		self.plugin = plug
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim')
+		self.window =  self.xml.get_widget('Gajim')
+		self.tree = self.xml.get_widget('treeview')
+		self.plugin = plugin
 		self.connected = 0
 		#(icon, name, jid, editable, background color, show_icon)
 		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, \
@@ -1393,9 +1439,7 @@ class roster_Window:
 #		print st.bg
 #		print self.tree.get_property('expander-column')
 #		self.tree.set_style(st)
-		self.queueOUT = queueOUT
-		self.optionmenu = xml.get_widget('optionmenu')
-		self.optionmenu.set_history(6)
+		self.xml.get_widget('optionmenu').set_history(6)
 		self.tab_messages = {}
 		self.tab_queues = {}
 		self.tab_vcard = {}
@@ -1442,12 +1486,47 @@ class roster_Window:
 		xml.signal_connect('on_quit_activate', self.on_quit)
 		xml.signal_connect('on_treeview_event', self.on_treeview_event)
 		xml.signal_connect('on_status_changed', self.on_status_changed)
+		xml.signal_connect('on_optionmenu_changed', self.on_optionmenu_changed)
 		xml.signal_connect('on_row_activated', self.on_row_activated)
 		xml.signal_connect('on_row_expanded', self.on_row_expanded)
 		xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
 
 class plugin:
 	"""Class called by the core in a new thread"""
+
+	class accounts:
+		"""Class where are stored the accounts and users in them"""
+		def __init__(self):
+			self.__accounts = {}
+
+		def add_account(self, account, users=()):
+			#users must be like (user1, user2)
+			self.__accounts[account] = users
+
+		def add_user_to_account(self, account, user):
+			if self.__accounts.has_key(account):
+				self.__accounts[account].append(user)
+			else :
+				return 1
+
+		def get_accounts(self):
+			return self.__accounts.keys();
+
+		def get_users(self, account):
+			if self.__accounts.has_key(account):
+				return self.__accounts[account]
+			else :
+				return None
+
+		def which_account(self, user):
+			for a in self.__accounts.keys():
+				if user in self.__accounts[a]:
+					return a
+			return None
+
+	def send(self, event, account, data):
+		self.queueOUT.put((event, account, data))
+
 	def wait(self, what):
 		"""Wait for a message from Core"""
 		#TODO: timeout
@@ -1455,12 +1534,12 @@ class plugin:
 		while 1:
 			if not self.queueIN.empty():
 				ev = self.queueIN.get()
-				if ev[0] == what and ev[1][0] == 'GtkGui':
+				if ev[0] == what and ev[2][0] == 'GtkGui':
 					#Restore messages
 					while not temp_q.empty():
 						ev2 = temp_q.get()
 						self.queueIN.put(ev2)
-					return ev[1][1]
+					return ev[2][1]
 				else:
 					#Save messages
 					temp_q.put(ev)
@@ -1469,159 +1548,119 @@ class plugin:
 	def read_queue(self):
 		"""Read queue from the core and execute commands from it"""
 		global browserWindow
-		model = self.r.tree.get_model()
+		model = self.roster.tree.get_model()
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
 			if ev[0] == 'ROSTER':
-				self.r.init_tree()
-				self.r.mklists(ev[1])
-				self.r.draw_roster()
+				self.roster.init_tree()
+				self.roster.mklists(ev[2])
+				self.roster.draw_roster()
 			elif ev[0] == 'WARNING':
-				warning_Window(ev[1])
+				warning_Window(ev[2])
+			#('STATUS', account, status)
 			elif ev[0] == 'STATUS':
-				st = ""
-				for i in range(7):
-					if self.r.optionmenu.get_menu().get_children()[i].name == ev[1]:
-						st = self.r.optionmenu.get_menu().get_children()[i].name
-						self.r.optionmenu.set_history(i)
-						break
-				if st == 'offline':
-					self.r.connected = 0
-					self.sleeper = None
-					for j in self.r.l_contact.keys():
-						self.r.chg_status(j, 'offline', 'Disconnected')
-				elif self.r.connected == 0:
-					self.r.connected = 1
-					self.sleeper = None#common.sleepy.Sleepy(\
-						#self.autoawaytime*60, self.autoxatime*60)
-
+				self.roster.on_status_changed(ev[1], ev[2])
+			#('NOTIFY', account, (jid, status, message, resource))
 			elif ev[0] == 'NOTIFY':
-				jid = string.split(ev[1][0], '/')[0]
-				res = ev[1][3]
-				if not res:
-					res = ''
+				jid = string.split(ev[2][0], '/')[0]
+				resource = ev[2][3]
+				if not resource:
+					resource = ''
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
 					ji = string.replace(jid, '@', '')
 				else:
 					ji = jid
 				#Update user
-				if self.r.l_contact.has_key(ji):
-					u = self.r.l_contact[ji]['user']
-					u.show = ev[1][1]
-					u.status = ev[1][2]
-					u.resource = res
-					#Print status in chat window
-					if self.r.tab_messages.has_key(ji):
-						self.r.tab_messages[ji].print_conversation(\
-							"%s is now %s (%s)" % (u.name, ev[1][1], \
-								ev[1][2]), 'status')
+				if self.roster.l_contact.has_key(ji):
+					user = self.roster.l_contact[ji]['user']
+					user.show = ev[2][1]
+					user.status = ev[2][2]
+					user.resource = resource
 				if string.find(jid, "@") <= 0:
 					#It must be an agent
-					if not self.r.l_contact.has_key(ji):
-						user1 = user(ji, ji, ['Agents'], ev[1][1], \
-							ev[1][2], 'from', res)
-						self.r.add_user(user1)
+					if not self.roster.l_contact.has_key(ji):
+						user1 = user(ji, ji, ['Agents'], ev[2][1], \
+							ev[2][2], 'from', resource)
+						self.roster.add_user(user1)
 					else:
 						#Update existing iter
-						for i in self.r.l_contact[ji]['iter']:
-							if self.r.pixbufs.has_key(ev[1][1]):
-								model.set_value(i, 0, self.r.pixbufs[ev[1][1]])
-				elif self.r.l_contact.has_key(ji):
+						for i in self.roster.l_contact[ji]['iter']:
+							if self.roster.pixbufs.has_key(ev[2][1]):
+								model.set_value(i, 0, self.r.pixbufs[ev[2][1]])
+				elif self.roster.l_contact.has_key(ji):
 					#It isn't an agent
-					self.r.chg_status(jid, ev[1][1], ev[1][2])
+					self.roster.chg_status(user, ev[2][1], ev[2][2], ev[1])
+			#('MSG', account, (user, msg))
 			elif ev[0] == 'MSG':
-				if string.find(ev[1][0], "@") <= 0:
-					jid = string.replace(ev[1][0], '@', '')
+				if string.find(ev[2][0], "@") <= 0:
+					jid = string.replace(ev[2][0], '@', '')
 				else:
-					jid = ev[1][0]
+					jid = ev[2][0]
+				self.roster.on_message(jid, ev[2][1], ev[1])
 				
-				if self.config.has_key('autopopup'):
-					self.autopopup = self.config['autopopup']
-				else:
-					self.autopopup = 0
-				if not self.r.l_contact.has_key(jid):
-					user1 = user(jid, jid, ['not in list'], \
-						'not in list', 'not in list', 'none', '')
-					self.r.add_user(user1)
-				if self.autopopup == 0 and not self.r.tab_messages.has_key(jid):
-					#We save it in a queue
-					if not self.r.tab_queues.has_key(jid):
-						self.r.tab_queues[jid] = Queue.Queue(50)
-						for i in self.r.l_contact[jid]['iter']:
-							model.set_value(i, 0, self.r.pixbufs['message'])
-					tim = time.strftime("[%H:%M:%S]")
-					self.r.tab_queues[jid].put((ev[1][1], tim))
-				else:
-					if not self.r.tab_messages.has_key(jid):
-						if self.r.l_contact.has_key(jid):
-							self.r.tab_messages[jid] = \
-								message_Window(self.r.l_contact[jid]['user'], self.r)
-					if self.r.tab_messages.has_key(jid):
-						self.r.tab_messages[jid].print_conversation(ev[1][1])
-					
 			elif ev[0] == 'SUBSCRIBE':
-				authorize_Window(self.r, ev[1][0], ev[1][1])
+				authorize_Window(self.roster, ev[2][0], ev[2][1])
+			#('SUBSCRIBED', account, (jid, nom, resource))
 			elif ev[0] == 'SUBSCRIBED':
-				jid = ev[1]['jid']
-				if self.r.l_contact.has_key(jid):
-					u = self.r.l_contact[jid]['user']
-					u.name = ev[1]['nom']
-					for i in self.r.l_contact[u.jid]['iter']:
+				if self.roster.l_contact.has_key(ev[2][0]):
+					u = self.roster.l_contact[ev[2][0]]['user']
+					u.name = ev[2][1]
+					u.resource = ev[2][2]
+					for i in self.roster.l_contact[u.jid]['iter']:
 						model.set_value(i, 1, u.name)
 				else:
-					user1 = user(jid, jid, ['general'], 'online', \
-						'online', 'to', ev[1]['ressource'])
-					self.r.add_user(user1)
-				warning_Window("You are now authorized by " + jid)
+					user1 = user(ev[2][0], ev[2][0], ['general'], 'online', \
+						'online', 'to', ev[2][2])
+					self.roster.add_user(user1)
+				warning_Window("You are now authorized by " + ev[2][0])
 			elif ev[0] == 'UNSUBSCRIBED':
 				warning_Window("You are now unsubscribed by " + jid)
 				#TODO: change icon
+			#('AGENTS', account, agents)
 			elif ev[0] == 'AGENTS':
-				if browserWindow:
-					browserWindow.agents(ev[1])
+				if self.windows.has_key('browser'):
+					self.windows['browser'].agents(ev[2])
+			#('AGENTS_INFO', account, (agent, infos))
 			elif ev[0] == 'AGENT_INFO':
-				if not ev[1][1].has_key('instructions'):
-					warning_Window('error contacting %s' % ev[1][0])
+				if not ev[2][1].has_key('instructions'):
+					warning_Window('error contacting %s' % ev[2][0])
 				else:
-					Wreg = agentRegistration_Window(ev[1][0], ev[1][1], self.r)
-			#('ACC_OK', (hostname, login, pasword, name, ressource))
+					agentRegistration_Window(ev[2][0], ev[2][1], self.roster)
+			#('ACC_OK', account, (hostname, login, pasword, name, ressource))
 			elif ev[0] == 'ACC_OK':
-				self.accounts[ev[1][3]] =  {'ressource': ev[1][4], \
-					'password': ev[1][2], 'hostname': ev[1][0], 'name': ev[1][1]}
-				self.r.queueOUT.put(('CONFIG', ('accounts', self.r.plugin.accounts)))
-				if (accountsWindow != 0):
-					accountsWindow.init_accounts()
+				self.accounts[ev[2][3]] =  {'ressource': ev[2][4], \
+					'password': ev[2][2], 'hostname': ev[2][0], 'name': ev[2][1]}
+				self.send('CONFIG', None, ('accounts', self.accounts)))
+				if self.windiws.has_key('accounts'):
+					self.windows['accounts'].init_accounts()
 			elif ev[0] == 'QUIT':
-				self.r.on_quit(self)
+				self.roster.on_quit(self)
 			elif ev[0] == 'VCARD':
-				if self.r.tab_vcard.has_key(ev[1]['jid']):
-					self.r.tab_vcard[ev[1]['jid']].set_values(ev[1])
+				if self.roster.tab_vcard.has_key(ev[2]['jid']):
+					self.roster.tab_vcard[ev[2]['jid']].set_values(ev[2])
 		return 1
 	
 	def read_sleepy(self):	
 		"""Check if we are idle"""
-		if self.sleeper and (self.autoaway or self.autoxa) and \
-			(self.r.optionmenu.get_history()==0 or \
+		if self.sleeper and (self.config['autoaway'] or self.config['autoxa'])\
+			and (self.roster.optionmenu.get_history()==0 or \
 			self.sleeper_state!=common.sleepy.STATE_AWAKE):
 			self.sleeper.poll()
 			state = self.sleeper.getState()
 			if state != self.sleeper_state:
 				if state == common.sleepy.STATE_AWAKE:
 					#we go online
-					self.r.optionmenu.set_history(0)
-					self.r.queueOUT.put(('STATUS',('online', '', \
-						self.accounts.keys()[0])))
+					self.roster.optionmenu.set_history(0)
+					self.send('STATUS', None, ('online', ''))
 				if state == common.sleepy.STATE_AWAY and self.autoaway:
 					#we go away
-					self.r.optionmenu.set_history(1)
-					self.r.queueOUT.put(('STATUS',('away', \
-						'auto away (idle)', self.accounts.keys()[0])))
+					self.roster.optionmenu.set_history(1)
+					self.send('STATUS', None, ('away', 'auto away (idle)'))
 				if state == common.sleepy.STATE_XAWAY and self.autoxa:
 					#we go extanded away
-					self.r.optionmenu.set_history(2)
-					self.r.queueOUT.put(('STATUS',('xa', \
-						'auto away (idel)', self.accounts.keys[0])))
+					self.roster.optionmenu.set_history(2)
+					self.send('STATUS',('xa', 'auto away (idel)'))
 			self.sleeper_state = state
 		return 1
 
@@ -1629,7 +1668,9 @@ class plugin:
 		gtk.threads_init()
 		gtk.threads_enter()
 		self.queueIN = quIN
-		quOUT.put(('ASK_CONFIG', ('GtkGui', 'GtkGui', {'autopopup':1,\
+		self.queueOUT = quOUT
+		self.windows = {}
+		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'showoffline':0,\
 			'autoaway':0,\
 			'autoawaytime':10,\
@@ -1638,28 +1679,28 @@ class plugin:
 			'iconstyle':'sun',\
 			'inmsgcolor':'#ff0000',\
 			'outmsgcolor': '#0000ff',\
-			'statusmsgcolor':'#1eaa1e'})))
+			'statusmsgcolor':'#1eaa1e'}))
 		self.config = self.wait('CONFIG')
-		quOUT.put(('ASK_CONFIG', ('GtkGui', 'accounts')))
+		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
 		self.accounts = self.wait('CONFIG')
-		self.r = roster_Window(quOUT, self)
-		if self.config.has_key('autoaway'):
-			self.autoaway = self.config['autoaway']
-		else:
-			self.autoaway = 1
-		if self.config.has_key('autoawaytime'):
-			self.autoawaytime = self.config['autoawaytime']
-		else:
-			self.autoawaytime = 10
-		if self.config.has_key('autoxa'):
-			self.autoxa = self.config['autoxa']
-		else:
-			self.autoxa = 1
-		if self.config.has_key('autoxatime'):
-			self.autoxatime = self.config['autoxatime']
-		else:
-			self.autoxatime = 20
-		self.time = gtk.timeout_add(200, self.read_queue)
+		self.roster = roster_Window(self)
+#		if self.config.has_key('autoaway'):
+#			self.autoaway = self.config['autoaway']
+#		else:
+#			self.autoaway = 1
+#		if self.config.has_key('autoawaytime'):
+#			self.autoawaytime = self.config['autoawaytime']
+#		else:
+#			self.autoawaytime = 10
+#		if self.config.has_key('autoxa'):
+#			self.autoxa = self.config['autoxa']
+#		else:
+#			self.autoxa = 1
+#		if self.config.has_key('autoxatime'):
+#			self.autoxatime = self.config['autoxatime']
+#		else:
+#			self.autoxatime = 20
+		gtk.timeout_add(200, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
 		self.sleeper = None
 		self.sleeper_state = None

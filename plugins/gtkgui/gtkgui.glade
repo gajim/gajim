@@ -252,6 +252,7 @@
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
 	  <property name="history">0</property>
+	  <signal name="changed" handler="on_optionmenu_changed" last_modification_time="Thu, 11 Mar 2004 18:16:58 GMT"/>
 
 	  <child>
 	    <widget class="GtkMenu" id="menu_status">
@@ -261,7 +262,6 @@
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Online</property>
 		  <property name="use_underline">True</property>
-		  <signal name="activate" handler="on_status_changed" last_modification_time="Thu, 09 Oct 2003 19:59:52 GMT"/>
 		</widget>
 	      </child>
 
@@ -270,7 +270,6 @@
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Away</property>
 		  <property name="use_underline">True</property>
-		  <signal name="activate" handler="on_status_changed" last_modification_time="Thu, 09 Oct 2003 19:59:52 GMT"/>
 		</widget>
 	      </child>
 
@@ -279,7 +278,6 @@
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">NA</property>
 		  <property name="use_underline">True</property>
-		  <signal name="activate" handler="on_status_changed" last_modification_time="Thu, 09 Oct 2003 19:59:52 GMT"/>
 		</widget>
 	      </child>
 
@@ -288,7 +286,6 @@
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">DND</property>
 		  <property name="use_underline">True</property>
-		  <signal name="activate" handler="on_status_changed" last_modification_time="Thu, 09 Oct 2003 19:59:52 GMT"/>
 		</widget>
 	      </child>
 
@@ -297,7 +294,6 @@
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Invisible</property>
 		  <property name="use_underline">True</property>
-		  <signal name="activate" handler="on_status_changed" last_modification_time="Thu, 09 Oct 2003 19:59:52 GMT"/>
 		</widget>
 	      </child>
 
@@ -312,7 +308,6 @@
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Offline</property>
 		  <property name="use_underline">True</property>
-		  <signal name="activate" handler="on_status_changed" last_modification_time="Thu, 09 Oct 2003 20:00:58 GMT"/>
 		</widget>
 	      </child>
 	    </widget>
