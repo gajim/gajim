@@ -2427,6 +2427,14 @@ class plugin:
 				self.sleeper_state[account] = 3
 		return 1
 
+	def autoconnect(self):
+		"""auto connect at startup"""
+		for a in self.accounts.keys():
+			if self.accounts[a].has_key('autoconnect'):
+				if self.accounts[a]['autoconnect']:
+					self.roster.send_status(a, 'online', 'Online')
+		return 0
+
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
 		self.queueIN = quIN
@@ -2505,6 +2513,7 @@ class plugin:
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(100, self.read_sleepy)
+		gtk.timeout_add(100, self.autoconnect)
 		self.sleeper = common.sleepy.Sleepy( \
 			self.config['autoawaytime']*60, \
 			self.config['autoxatime']*60)
@@ -2520,11 +2529,6 @@ class plugin:
 				self.systray = systray(self)
 		else:
 			self.systray = systrayDummy()
-		#auto connect at startup
-		for a in self.accounts.keys():
-			if self.accounts[a].has_key('autoconnect'):
-				if self.accounts[a]['autoconnect']:
-					self.roster.send_status(a, 'online', 'Online')
 		gtk.gdk.threads_enter()
 		gtk.main()
 		gtk.gdk.threads_leave()
