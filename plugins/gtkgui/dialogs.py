@@ -65,7 +65,7 @@ class infoUser_Window:
 			self.user.groups = old_groups
 			self.plugin.roster.remove_user(self.user, self.account)
 			self.user.groups = new_groups
-			self.plugin.roster.add_user_to_roster(self.user, self.account)
+			self.plugin.roster.add_user_to_roster(self.user.jid, self.account)
 		#update user.name if it's not ""
 		entry_name = self.xml.get_widget('entry_name')
 		newName = entry_name.get_text()
