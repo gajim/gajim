@@ -1990,7 +1990,7 @@ class systray:
 		self.set_img()
 
 	def set_cb(self, widget, status):
-		statuss = ['online', 'away', 'xa', 'dnd', 'invisible', 'vide', 'offline']
+		statuss = ['online', 'away', 'xa', 'dnd', 'invisible', 'offline']
 		self.plugin.roster.cb.set_active(statuss.index(status))
 
 	def start_chat(self, widget, account, jid):
