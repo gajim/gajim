@@ -676,6 +676,24 @@ class Groupchat_window:
 					img = self.plugin.roster.pixbufs[show]
 					model.set_value(iter, 0, img)
 	
+	def show_title(self):
+		"""redraw the window's title"""
+		#FIXME when multi tabs will be ok
+		unread = 0
+#		for jid in self.nb_unread:
+#			unread += self.nb_unread[jid]
+		unread = self.nb_unread
+		start = ""
+		if unread > 1:
+			start = "[" + str(unread) + "] "
+		elif unread == 1:
+			start = "* "
+		chat = 'Groupchat in ' + self.jid
+#		if len(self.xmls) > 1:
+		if 0:
+			chat = 'Groupchat'
+		self.window.set_title(start + chat + ' (' + self.account + ')')
+
 	def set_subject(self, subject):
 		self.xml.get_widget('subject_entry').set_text(subject)
 	
@@ -745,6 +763,9 @@ class Groupchat_window:
 		#scroll to the end of the textview
 		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
 			0.1, 0, 0, 0)
+		if not self.window.is_active() and contact != 'status':
+			self.nb_unread += 1
+			self.show_title()
 
 	def kick(self, widget, room_jid, nick):
 		"""kick a user"""
@@ -876,7 +897,10 @@ class Groupchat_window:
 
 	def on_groupchat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
-		self.plugin.systray.remove_jid(self.jid, self.account)
+		if self.nb_unread > 0:
+			self.nb_unread = 0
+			self.show_title()
+			self.plugin.systray.remove_jid(self.jid, self.account)
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
@@ -935,6 +959,7 @@ class Groupchat_window:
 		self.nick = nick
 		self.plugin = plugin
 		self.account = account
+		self.nb_unread = 0
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_window', APP)
 		self.window = self.xml.get_widget('groupchat_window')
 		self.list_treeview = self.xml.get_widget('list_treeview')
