@@ -523,7 +523,6 @@ class roster_Window:
 			if (show == 'offline' or show == 'error') and not showOffline:
 				if len(self.contacts[account][user.jid]) > 1:
 					luser = self.contacts[account][user.jid]
-					user1 = None
 					for u in luser:
 						if u.resource == user.resource:
 							luser.remove(u)
@@ -1264,7 +1263,8 @@ class plugin:
 							break
 					if not user1:
 						user1 = self.roster.contacts[ev[1]][ji][0]
-						if resources != ['']:
+						if resources != [''] and (len(luser) != 1 or 
+							luser[0].show != 'offline'):
 							user1 = user(user1.jid, user1.name, user1.groups, \
 								user1.show, user1.status, user1.sub, user1.resource)
 							luser.append(user1)
