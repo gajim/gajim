@@ -785,30 +785,16 @@ class accounts_Window:
 		self.init_accounts()
 
 class confirm_Window:
-	"""Class for confirmation window :
-	window that appears to confirm the removal of a contact"""
-	def on_cancel(self, widget):
-		"""When Cancel button is clicked"""
-		widget.get_toplevel().destroy()
+	"""Class for confirmation window"""
+	def wait(self):
+		out = self.win.run()
+		self.win.destroy()
+		return out
 
-	def req_usub(self, widget):
-		"""When Ok button is clicked :
-		Send a message to the core to remove the user
-		and remove it from the roster"""
-		self.plugin.send('UNSUB', self.account, self.user.jid)
-		self.plugin.roster.remove_user(self.user, self.account)
-		del self.plugin.roster.contacts[self.account][self.user.jid]
-		widget.get_toplevel().destroy()
-	
-	def __init__(self, plugin, user, account):
+	def __init__(self, label):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'Confirm')
-		self.plugin = plugin
-		self.user = user
-		self.account = account
-		xml.get_widget('label_confirm').set_text(\
-			'Are you sure you want to remove ' + user.name + ' (' + user.jid + ') from your roster ?')
-		xml.signal_connect('on_okbutton_clicked', self.req_usub)
-		xml.signal_connect('on_cancel_clicked', self.on_cancel)
+		xml.get_widget('label_confirm').set_text(label)
+		self.win = xml.get_widget('Confirm')
 
 class authorize_Window:
 	"""Class for authorization window :
@@ -1594,7 +1580,12 @@ class roster_Window:
 
 	def on_req_usub(self, widget, user, account):
 		"""Remove a user"""
-		confirm_Window(self.plugin, user, account)
+		window = confirm_Window('Are you sure you want to remove ' + user.name + \
+			' (' + user.jid + ') from your roster ?')
+		if window.wait() == gtk.RESPONSE_OK:
+			self.plugin.send('UNSUB', account, user.jid)
+			self.remove_user(user, account)
+			del self.contacts[account][user.jid]
 
 	def change_status(self, widget, account, status):
 		if status != 'online' and status != 'offline':
@@ -2052,11 +2043,11 @@ class plugin:
 				authorize_Window(self, ev[2][0], ev[2][1], ev[1])
 			#('SUBSCRIBED', account, (jid, nom, resource))
 			elif ev[0] == 'SUBSCRIBED':
-				if self.roster.l_contact.has_key(ev[2][0]):
-					u = self.roster.l_contact[ev[2][0]]['user']
+				if self.roster.contacts[ev[1]].has_key(ev[2][0]):
+					u = self.roster.contacts[ev[1]][ev[2][0]]['user']
 					u.name = ev[2][1]
 					u.resource = ev[2][2]
-					for i in self.roster.l_contact[u.jid]['iter']:
+					for i in self.roster.contacts[ev[1]][u.jid]['iter']:
 						model.set_value(i, 1, u.name)
 				else:
 					user1 = user(ev[2][0], ev[2][0], ['general'], 'online', \
@@ -2064,7 +2055,7 @@ class plugin:
 					self.roster.add_user(user1)
 				warning_Window("You are now authorized by " + ev[2][0])
 			elif ev[0] == 'UNSUBSCRIBED':
-				warning_Window("You are now unsubscribed by " + jid)
+				warning_Window("You are now unsubscribed by " + ev[2])
 				#TODO: change icon
 			#('AGENTS', account, agents)
 			elif ev[0] == 'AGENTS':
