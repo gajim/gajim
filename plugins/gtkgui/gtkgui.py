@@ -225,7 +225,19 @@ class message_Window:
 		
 		#scroll to the end of the textview
 		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
-	
+		if not self.plugin.windows[self.account]['chats'][self.user.jid].\
+			window.get_property('is-active'):
+			self.nb_unread += 1
+			self.show_title()
+
+	def show_title(self):
+		start = ""
+		if self.nb_unread > 1:
+			start = "[" + str(self.nb_unread) + "] "
+		elif self.nb_unread == 1:
+			start = "* "
+		self.window.set_title(start + self.user.name + " (" + self.account + ")")
+
 	def read_queue(self, q):
 		"""read queue and print messages containted in it"""
 		while not q.empty():
@@ -277,15 +289,19 @@ class message_Window:
 	def on_focus(self, widget, event):
 		"""When window get focus"""
 		self.plugin.systray.remove_jid(self.user.jid, self.account)
+		if self.nb_unread > 0:
+			self.nb_unread = 0
+			self.show_title()
 	
 	def __init__(self, user, plugin, account):
 		self.user = user
 		self.plugin = plugin
 		self.account = account
 		self.keyID = self.user.keyID
+		self.nb_unread = 0
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat', APP)
 		self.window = self.xml.get_widget('Chat')
-		self.window.set_title(user.name + " (" + account + ")")
+		self.show_title()
 		self.img = self.xml.get_widget('image')
 		image = self.plugin.roster.pixbufs[user.show]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
