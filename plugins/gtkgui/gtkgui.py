@@ -67,6 +67,7 @@ from config import *
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
+USE_TABBED_CHAT = 0
 
 class ImageCellRenderer(gtk.GenericCellRenderer):
 
@@ -180,6 +181,297 @@ class user:
 			self.keyID = args[9]
 		else: raise TypeError, _('bad arguments')
 
+class tabbed_chat_Window:
+	"""Class for tabbed chat window"""
+	def __init__(self, user, plugin, account):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat', APP)
+		button = self.xml.get_widget('button_jid')
+		button.set_use_underline(FALSE)
+		conversation = self.xml.get_widget('conversation')
+		buffer_conv = conversation.get_buffer()
+		message = self.xml.get_widget('message')
+		message.grab_focus()
+		buffer_msg = message.get_buffer()
+		end_iter = buffer_conv.get_end_iter()
+		buffer_conv.create_mark('end', end_iter, 0)
+		button_close = self.xml.get_widget('button_close')
+		self.xml.get_widget('hbuttonbox').set_child_secondary(button_close, TRUE)
+
+		self.plugin = plugin
+		self.account = account
+		self.active_button = button
+		self.users = {button: user}
+		self.buffers = {button: [buffer_conv, buffer_msg]}
+		self.nb_unread = {button: 0}
+
+		self.redraw_button(button)
+		self.window = self.xml.get_widget('tabbed_chat')
+		self.show_title()
+		self.redraw_widgets()
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_clear_clicked', self.on_clear)
+		self.xml.signal_connect('on_focus', self.on_focus)
+		self.xml.signal_connect('on_history_clicked', self.on_history)
+		self.xml.signal_connect('on_button_jid_clicked', 
+			self.on_button_jid_clicked)
+		self.xml.signal_connect('on_button_close_clicked', 
+			self.on_button_close_clicked)
+		self.xml.signal_connect('on_msg_key_press_event', \
+			self.on_msg_key_press_event)
+		self.xml.signal_connect('on_chat_key_press_event', \
+			self.on_chat_key_press_event)
+		self.tagIn = buffer_conv.create_tag("incoming")
+		color = self.plugin.config['inmsgcolor']
+		self.tagIn.set_property("foreground", color)
+		self.tagOut = buffer_conv.create_tag("outgoing")
+		color = self.plugin.config['outmsgcolor']
+		self.tagOut.set_property("foreground", color)
+		self.tagStatus = buffer_conv.create_tag("status")
+		color = self.plugin.config['statusmsgcolor']
+		self.tagStatus.set_property("foreground", color)
+		self.tag_table = gtk.TextTagTable()
+		tag = gtk.TextTag("incoming")
+		color = self.plugin.config['inmsgcolor']
+		tag.set_property("foreground", color)
+		self.tag_table.add(tag)
+		tag = gtk.TextTag("outgoing")
+		color = self.plugin.config['outmsgcolor']
+		tag.set_property("foreground", color)
+		self.tag_table.add(tag)
+		tag = gtk.TextTag("status")
+		color = self.plugin.config['statusmsgcolor']
+		tag.set_property("foreground", color)
+		self.tag_table.add(tag)
+		#print queued messages
+		if plugin.queues[account].has_key(user.jid):
+			self.read_queue(plugin.queues[account][user.jid])
+		if user.show != 'online':
+			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
+				user.show, user.status), user.jid, 'status')
+		
+	def show_title(self):
+		unread = 0
+		for button in self.nb_unread:
+			unread += self.nb_unread[button]
+		start = ""
+		if unread > 1:
+			start = "[" + str(unread) + "] "
+		elif unread == 1:
+			start = "* "
+		self.window.set_title(start + "Chat (" + self.account + ")")
+
+	def redraw_widgets(self):
+		user = self.users[self.active_button]
+		widget_img = self.xml.get_widget('image_status')
+		image = self.plugin.roster.pixbufs[user.show]
+		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			widget_img.set_from_animation(image.get_animation())
+		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
+			widget_img.set_from_pixbuf(image.get_pixbuf())
+		self.xml.get_widget('button_contact').set_label(user.name + ' <'\
+		         + user.jid + '>')
+		if not user.keyID:
+			self.xml.get_widget('toggle_gpg').set_sensitive(False)
+		conversation = self.xml.get_widget('conversation')
+		conversation.set_buffer(self.buffers[self.active_button][0])
+		message = self.xml.get_widget('message')
+		message.set_buffer(self.buffers[self.active_button][1])
+
+	def redraw_button(self, button):
+		start = ''
+		if self.nb_unread[button] > 1:
+			start = "[" + str(self.nb_unread[button]) + "] "
+		elif self.nb_unread[button] == 1:
+			start = "* "
+		button.set_label(start + self.users[button].name)
+		#TODO: change button's color
+
+	def delete_event(self, widget):
+		"""close window"""
+		#clean self.plugin.windows[self.account]['chats']
+		for button in self.xml.get_widget('hbuttonbox').get_children():
+			if self.users.has_key(button):
+				del self.plugin.windows[self.account]['chats'][self.users[button]. \
+					jid]
+		del self.plugin.windows[self.account]['chats']['tabbed']
+
+	def on_clear(self, widget):
+		"""When clear button is pressed :
+		clear the conversation"""
+		buffer = self.xml.get_widget('conversation').get_buffer()
+		deb, end = buffer.get_bounds()
+		buffer.delete(deb, end)
+
+	def on_focus(self, widget, event):
+		"""When window get focus"""
+		user = self.users[self.active_button]
+		self.plugin.systray.remove_jid(user.jid, self.account)
+		if self.nb_unread[self.active_button] > 0:
+			self.nb_unread[self.active_button] = 0
+			self.redraw_button(self.active_button)
+			self.show_title()
+
+	def on_history(self, widget):
+		"""When history button is pressed : call log window"""
+		user = self.users[self.active_button]
+		if not self.plugin.windows['logs'].has_key(user.jid):
+			self.plugin.windows['logs'][user.jid] = log_Window(self.plugin, 
+				user.jid)
+
+	def on_button_jid_clicked(self, button):
+		old_active = self.active_button
+		self.active_button = button
+		if self.users.has_key(old_active):
+			self.redraw_button(old_active)
+		if self.nb_unread[button] > 0:
+			self.nb_unread[button] = 0
+			self.show_title()
+			user = self.users[self.active_button]
+			self.plugin.systray.remove_jid(user.jid, self.account)
+		self.redraw_button(button)
+		self.redraw_widgets()
+	
+	def new_user(self, user):
+		button = gtk.Button(user.name, use_underline=FALSE)
+		button.set_relief(gtk.RELIEF_NONE)
+		button.show()
+		button.connect("clicked", self.on_button_jid_clicked)
+		self.xml.get_widget('hbuttonbox').add(button)
+		self.users[button] = user
+		buffer_conv = gtk.TextBuffer(self.tag_table)
+		end_iter = buffer_conv.get_end_iter()
+		buffer_conv.create_mark('end', end_iter, 0)
+		buffer_msg = gtk.TextBuffer()
+		self.buffers[button] = [buffer_conv, buffer_msg]
+		self.nb_unread[button] = 0
+
+	def on_button_close_clicked(self, button):
+		if len(self.xml.get_widget('hbuttonbox').get_children()) == 2:
+			button.get_toplevel().destroy()
+		else:
+			self.xml.get_widget('hbuttonbox').remove(self.active_button)
+			del self.plugin.windows[self.account]['chats'][self.users[\
+				self.active_button].jid]
+			del self.users[self.active_button]
+			del self.buffers[self.active_button]
+			del self.nb_unread[self.active_button]
+			i = 0
+			if self.xml.get_widget('hbuttonbox').get_children()[i] == \
+				self.xml.get_widget('button_close'):
+				i = 1
+			self.on_button_jid_clicked(self.xml.get_widget('hbuttonbox').\
+				get_children()[i])
+		
+	def on_msg_key_press_event(self, widget, event):
+		"""When a key is pressed :
+		if enter is pressed without the shit key, message (if not empty) is sent
+		and printed in the conversation"""
+		user = self.users[self.active_button]
+		if event.keyval == gtk.keysyms.Return:
+			if (event.state & gtk.gdk.SHIFT_MASK):
+				return 0
+			txt_buffer = widget.get_buffer()
+			start_iter = txt_buffer.get_start_iter()
+			end_iter = txt_buffer.get_end_iter()
+			txt = txt_buffer.get_text(start_iter, end_iter, 0)
+			if txt != '':
+				keyID = ''
+				if self.xml.get_widget('toggle_gpg').get_active():
+					keyID = user.keyID
+				self.plugin.send('MSG', self.account, (user.jid, txt, keyID))
+				txt_buffer.set_text('', -1)
+				self.print_conversation(txt, user.jid, user.jid)
+				widget.grab_focus()
+			return 1
+		return 0
+
+	def on_chat_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			widget.get_toplevel().destroy()
+
+	def read_queue(self, q):
+		"""read queue and print messages containted in it"""
+		user = self.users[self.active_button]
+		while not q.empty():
+			evt = q.get()
+			self.print_conversation(evt[0], user.jid, tim = evt[1])
+			self.plugin.roster.nb_unread -= 1
+		self.plugin.roster.show_title()
+		del self.plugin.queues[self.account][user.jid]
+		self.plugin.roster.redraw_jid(user.jid, self.account)
+		self.plugin.systray.remove_jid(user.jid, self.account)
+		showOffline = self.plugin.config['showoffline']
+		if (user.show == 'offline' or user.show == 'error') and \
+			not showOffline:
+			if len(self.plugin.roster.contacts[self.account][user.jid]) == 1:
+				self.plugin.roster.remove_user(user, self.account)
+
+	def print_conversation(self, txt, jid, contact = None, tim = None):
+		"""Print a line in the conversation :
+		if contact is set to status : it's a status message
+		if contact is set to another value : it's an outgoing message
+		if contact is not set : it's an incomming message"""
+		good_button = None
+		for button in self.xml.get_widget('hbuttonbox').get_children():
+			if self.users[button].jid == jid:
+				good_button = button
+				break
+		if not good_button:
+			return
+		user = self.users[good_button]
+		conversation = self.xml.get_widget('conversation')
+		buffer = self.buffers[good_button][0]
+		if not txt:
+			txt = ""
+		end_iter = buffer.get_end_iter()
+		if not tim:
+			tim = time.localtime()
+		tims = time.strftime("[%H:%M:%S]", tim)
+		buffer.insert(end_iter, tims + ' ')
+		
+		otxt = ''
+		ttxt = ''
+		if contact and contact == 'status':
+			tag = 'status'
+			ttxt = txt + '\n'
+		else:
+			if contact:
+				tag = 'outgoing'
+				name = self.plugin.nicks[self.account] 
+			else:
+				tag = 'incoming'
+				name = user.name
+				
+			if string.find(txt, '/me ') == 0:
+				ttxt = name + ' ' + txt[4:] + '\n'
+			else:
+				ttxt = '<' + name + '> '
+				otxt = txt + '\n'
+
+		buffer.insert_with_tags_by_name(end_iter, ttxt, tag)
+		if len(otxt) > 0:
+			beg = 0
+			if self.plugin.config['useemoticons']:
+				index = 0
+				while index < len(otxt):
+					if otxt[index] in self.plugin.roster.begin_emot:
+						for s in self.plugin.roster.emoticons:
+							l = len(s)
+							if s == otxt[index:index+l]:
+								buffer.insert(end_iter, otxt[beg:index])
+								buffer.insert_pixbuf(end_iter, self.plugin.roster.emoticons[s])
+								index+=l
+								beg = index
+					index+=1
+			buffer.insert(end_iter, otxt[beg:])
+		
+		#scroll to the end of the textview
+		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
+		if (good_button != self.active_button or not self.window.is_active()) and contact != 'status':
+			self.nb_unread[good_button] += 1
+			self.redraw_button(good_button)
+			self.show_title()
+
 
 class message_Window:
 	"""Class for chat window"""
@@ -187,7 +479,7 @@ class message_Window:
 		"""close window"""
 		del self.plugin.windows[self.account]['chats'][self.user.jid]
 	
-	def print_conversation(self, txt, contact = None, tim = None):
+	def print_conversation(self, txt, jid, contact = None, tim = None):
 		"""Print a line in the conversation :
 		if contact is set to status : it's a status message
 		if contact is set to another value : it's an outgoing message
@@ -256,7 +548,7 @@ class message_Window:
 		"""read queue and print messages containted in it"""
 		while not q.empty():
 			evt = q.get()
-			self.print_conversation(evt[0], tim = evt[1])
+			self.print_conversation(evt[0], self.user.jid, tim = evt[1])
 			self.plugin.roster.nb_unread -= 1
 		self.plugin.roster.show_title()
 		del self.plugin.queues[self.account][self.user.jid]
@@ -289,7 +581,7 @@ class message_Window:
 					keyID = self.keyID
 				self.plugin.send('MSG', self.account, (self.user.jid, txt, keyID))
 				txt_buffer.set_text('', -1)
-				self.print_conversation(txt, self.user.jid)
+				self.print_conversation(txt, self.user.jid, self.user.jid)
 				widget.grab_focus()
 			return 1
 		return 0
@@ -360,7 +652,7 @@ class message_Window:
 		if plugin.queues[account].has_key(user.jid):
 			self.read_queue(plugin.queues[account][user.jid])
 		if self.user.show != 'online':
-			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
+			self.print_conversation(_("%s is now %s (%s)") % (user.name, user.jid,\
 				user.show, user.status), 'status')
 
 class gc:
@@ -444,7 +736,7 @@ class gc:
 		if show == 'offline' or show == 'error':
 			if statusCode == '307':
 				self.print_conversation(_("%s has been kicked by %s: %s") % (nick, \
-					actor, reason))
+					jid, actor, reason))
 			self.remove_user(nick)
 		else:
 			iter = self.get_user_iter(nick)
@@ -477,7 +769,7 @@ class gc:
 			return 1
 		return 0
 
-	def print_conversation(self, txt, contact = None, tim = None):
+	def print_conversation(self, txt, jid, contact = None, tim = None):
 		"""Print a line in the conversation :
 		if contact is set : it's a message from someone
 		if contact is not set : it's a message from the server"""
@@ -565,9 +857,6 @@ class gc:
 		"""Make user's popup menu"""
 		model = self.tree.get_model()
 		nick = model.get_value(iter, 1)
-#		jid = model.get_value(iter, 3)
-#		path = model.get_path(iter)
-#		user = self.contacts[account][jid][0]
 		
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_("MUC"))
@@ -1160,7 +1449,7 @@ class roster_Window:
 			if user.resource != '':
 				name += '/'+user.resource
 			self.plugin.windows[account]['chats'][user.jid].print_conversation(\
-				_("%s is now %s (%s)") % (name, show, status), 'status')
+				_("%s is now %s (%s)") % (name, show, status), user.jid, 'status')
 
 	def on_info(self, widget, user, account):
 		"""Call infoUser_Window class to display user's information"""
@@ -1529,6 +1818,19 @@ class roster_Window:
 		self.plugin.connected[account] = statuss.index(status)
 		self.set_cb()
 
+	def new_chat(self, user, account):
+		if USE_TABBED_CHAT:
+			if not self.plugin.windows[account]['chats'].has_key('tabbed'):
+				self.plugin.windows[account]['chats']['tabbed'] = \
+					tabbed_chat_Window(user, self.plugin, account)
+			else:
+				self.plugin.windows[account]['chats']['tabbed'].new_user(user)
+			self.plugin.windows[account]['chats'][user.jid] = \
+				self.plugin.windows[account]['chats']['tabbed']
+		else:
+			self.plugin.windows[account]['chats'][user.jid] = \
+				message_Window(user, self.plugin, account)
+
 	def on_message(self, jid, msg, tim, account):
 		"""when we receive a message"""
 		if not self.contacts[account].has_key(jid):
@@ -1566,16 +1868,14 @@ class roster_Window:
 			self.tree.set_cursor(path)
 		else:
 			if not self.plugin.windows[account]['chats'].has_key(jid):
-				self.plugin.windows[account]['chats'][jid] = \
-					message_Window(self.contacts[account][jid][0], self.plugin, \
-						account)
+				self.new_chat(self.contacts[account][jid][0], account)
 				if path:
 					self.tree.expand_row(path[0:1], FALSE)
 					self.tree.expand_row(path[0:2], FALSE)
 					self.tree.scroll_to_cell(path)
 					self.tree.set_cursor(path)
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg, \
-				tim = tim)
+				jid, tim = tim)
 			if not self.plugin.windows[account]['chats'][jid].window.\
 				get_property('is-active'):
 				self.plugin.systray.add_jid(jid, account)
@@ -1662,9 +1962,7 @@ class roster_Window:
 			if self.plugin.windows[account]['chats'].has_key(jid):
 				self.plugin.windows[account]['chats'][jid].window.present()
 			elif self.contacts[account].has_key(jid):
-				self.plugin.windows[account]['chats'][jid] = \
-					message_Window(self.contacts[account][jid][0], self.plugin, \
-						account)
+				self.new_chat(self.contacts[account][jid][0], account)
 
 	def on_row_expanded(self, widget, iter, path):
 		"""When a row is expanded :
@@ -2079,9 +2377,8 @@ class systray:
 		if self.plugin.windows[account]['chats'].has_key(jid):
 			self.plugin.windows[account]['chats'][jid].window.present()
 		elif self.plugin.roster.contacts[account].has_key(jid):
-			self.plugin.windows[account]['chats'][jid] = \
-				message_Window(self.plugin.roster.contacts[account][jid][0], \
-				self.plugin, account)
+			self.plugin.roster.new_chat(
+				self.plugin.roster.contacts[account][jid][0], account)
 
 	def mk_menu(self, event):
 		menu = gtk.Menu()
@@ -2167,9 +2464,8 @@ class systray:
 				if self.plugin.windows[account]['chats'].has_key(jid):
 					self.plugin.windows[account]['chats'][jid].window.present()
 				else:
-					self.plugin.windows[account]['chats'][jid] = message_Window(\
-						self.plugin.roster.contacts[account][jid][0], self.plugin, \
-						account)
+					self.plugin.roster.new_chat(
+						self.plugin.roster.contacts[account][jid][0], account)
 		if event.button == 3:
 			self.mk_menu(event)
 
@@ -2451,11 +2747,11 @@ class plugin:
 			return
 		if len(jids) == 1:
 			#message from server
-			self.windows[account]['gc'][jid].print_conversation(array[1], \
+			self.windows[account]['gc'][jid].print_conversation(array[1], jid, \
 				tim = array[2])
 		else:
 			#message from someone
-			self.windows[account]['gc'][jid].print_conversation(array[1], \
+			self.windows[account]['gc'][jid].print_conversation(array[1], jid, \
 				jids[1], array[2])
 			if not self.windows[account]['gc'][jid].window.\
 				get_property('is-active'):
