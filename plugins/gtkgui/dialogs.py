@@ -423,7 +423,9 @@ class Add_contact_window:
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
 		message = message_buffer.get_text(start_iter, end_iter, 0)
-		self.plugin.roster.req_sub(self, jid, message, self.account, nickname)
+		group = self.group_comboboxentry.child.get_text()
+		self.plugin.roster.req_sub(self, jid, message, self.account, group,\
+			nickname)
 		if self.xml.get_widget('auto_authorize_checkbutton').get_active():
 			self.plugin.send('AUTH', self.account, jid)
 		widget.get_toplevel().destroy()
@@ -512,6 +514,13 @@ class Add_contact_window:
 			self.xml.get_widget('uid_entry').set_text(jid_splited[0])
 			if jid_splited[1] in jid_agents:
 				protocol_combobox.set_active(jid_agents.index(jid_splited[1])+1)
+
+		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
+		liststore = gtk.ListStore(str)
+		self.group_comboboxentry.set_model(liststore)
+		for g in self.plugin.roster.groups[account].keys():
+			self.group_comboboxentry.append_text(g)
+
 		self.xml.signal_autoconnect(self)
 
 class About_dialog:

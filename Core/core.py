@@ -572,7 +572,7 @@ class GajimCore:
 
 	def connect(self, account):
 		"""Connect and authentificate to the Jabber server"""
-		hostname = self.cfgParser.tab[account]["hostname"]
+		hostname = self.cfgParser.tab[account]['hostname']
 		name = self.cfgParser.tab[account]["name"]
 		password = self.passwords[account]
 		if not self.cfgParser.tab[account].has_key('resource'):

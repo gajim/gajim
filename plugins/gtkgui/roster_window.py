@@ -590,13 +590,15 @@ class Roster_window:
 		"""Authorize a user"""
 		self.plugin.send('AUTH', account, jid)
 
-	def req_sub(self, widget, jid, txt, account, pseudo=None):
+	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None):
 		"""Request subscription to a user"""
 		if not pseudo:
 			pseudo = jid
 		self.plugin.send('SUB', account, (jid, txt))
 		if not self.contacts[account].has_key(jid):
-			user1 = User(jid, pseudo, ['General'], 'requested', \
+			if not group:
+				group = 'General'
+			user1 = User(jid, pseudo, [group], 'requested', \
 				'requested', 'none', 'subscribe', '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)

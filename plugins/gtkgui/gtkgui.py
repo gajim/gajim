@@ -585,7 +585,8 @@ class plugin:
 				user.name = name
 			user.sub = array[2]
 			user.ask = array[3]
-			user.groups = array[4]
+			if array[4]:
+				user.groups = array[4]
 		self.roster.redraw_jid(jid, account)
 
 	def read_queue(self):
