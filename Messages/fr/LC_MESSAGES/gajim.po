@@ -776,7 +776,7 @@ msgstr "Connexion au démarrage"
 
 #: plugins/gtkgui/msg.c:37
 msgid "Log history for all contacts in this account"
-msgstr "Logger l'historique pour tous les contacts de ce groupe"
+msgstr "Noter l'historique pour tous les contacts de ce groupe"
 
 #: plugins/gtkgui/msg.c:38
 msgid "Synchronize account status with global status"
@@ -1154,11 +1154,11 @@ msgstr "<b>Liens</b>"
 
 #: plugins/gtkgui/msg.c:134
 msgid "Log presences in _contact's log file"
-msgstr "Logger les présences dans les fichiers de log du _contact"
+msgstr "Noter les présences dans les fichiers de log du _contact"
 
 #: plugins/gtkgui/msg.c:135
 msgid "Log presences in an _external file"
-msgstr "Logger les présences dans un fichier é_xterne"
+msgstr "Noter les présences dans un fichier é_xterne"
 
 #: plugins/gtkgui/msg.c:136
 msgid "<b>Log</b>"
