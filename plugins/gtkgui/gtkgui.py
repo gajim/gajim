@@ -736,6 +736,20 @@ class plugin:
 	def on_launch_browser_mailer(self, widget, url, kind):
 		self.launch_browser_mailer(kind, url)
 
+	def init_regex(self):
+		if self.config['useemoticons']:
+			"""initialize emoticons dictionary"""
+			self.emoticons = dict()
+			split_line = self.config['emoticons'].split('\t')
+			for i in range(0, len(split_line)/2):
+				emot_file = split_line[2*i+1]
+				if not self.image_is_ok(emot_file):
+					continue
+				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
+				self.emoticons[split_line[2*i]] = pix
+
+		self.make_regexps()
+
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
 		if not gtk.check_version(2, 6, 0):
@@ -860,18 +874,7 @@ class plugin:
 		if self.config['trayicon']:
 			self.show_systray()
 			
-		if self.config['useemoticons']:
-			"""initialize emoticons dictionary"""
-			self.emoticons = dict()
-			split_line = self.config['emoticons'].split('\t')
-			for i in range(0, len(split_line)/2):
-				emot_file = split_line[2*i+1]
-				if not self.image_is_ok(emot_file):
-					continue
-				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
-				self.emoticons[split_line[2*i]] = pix
-
-		self.make_regexps()
+		self.init_regex()
 
 		gtk.gdk.threads_enter()
 		self.autoconnect()

@@ -288,7 +288,7 @@ class preferences_window:
 			emots.append(model.get_value(iter, 1))
 			iter = model.iter_next(iter)
 		self.plugin.config['emoticons'] = '\t'.join(emots)
-		self.plugin.roster.mkemoticons()
+		self.plugin.init_regex()
 
 	def on_emoticons_treemodel_row_changed(self, model, path, iter):
 		if model[path][1] != None and len(model[path][1]) != 0:
@@ -299,7 +299,7 @@ class preferences_window:
 				emots.append(model.get_value(iter, 1))
 				iter = model.iter_next(iter)
 			self.plugin.config['emoticons'] = '\t'.join(emots)
-			self.plugin.roster.mkemoticons()
+			self.plugin.init_regex()
 
 	def on_auto_pop_up_checkbox_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopup', None,\
