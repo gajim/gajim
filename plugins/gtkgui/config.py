@@ -320,7 +320,7 @@ class preferences_window:
 	
 	def on_prompt_offline_status_message_checkbutton_toggled(self, widget):
 		"""On Prompt Offline Status Message Checkbutton Toggled"""
-		self.on_checkbutton_toggled(widget, 'ask_ofline_status')
+		self.on_checkbutton_toggled(widget, 'ask_offline_status')
 	
 	def on_sounds_treemodel_row_changed(self, model, path, iter):
 		iter = model.get_iter_first()
