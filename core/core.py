@@ -22,8 +22,6 @@ import sys, os, time, string, logging
 import common.hub, common.optparser
 import common.jabber
 import socket, select, pickle
-import GnuPGInterface
-
 
 from common import i18n
 _ = i18n._
@@ -48,158 +46,164 @@ def XMLunescape(txt):
 	txt = txt.replace("&amp;", "&")
 	return txt
 
-class  MyGnuPG(GnuPGInterface.GnuPG):
-	def __init__(self):
-		GnuPGInterface.GnuPG.__init__(self)
-		self.setup_my_options()
+USE_GPG = 1
+try:
+	import GnuPGInterface
+except:
+	USE_GPG = 0
+else:	
+	class  MyGnuPG(GnuPGInterface.GnuPG):
+		def __init__(self):
+			GnuPGInterface.GnuPG.__init__(self)
+			self.setup_my_options()
 
-	def setup_my_options(self):
-		self.options.armor = 1
-		self.options.meta_interactive = 0
-		self.options.extra_args.append('--no-secmem-warning')
+		def setup_my_options(self):
+			self.options.armor = 1
+			self.options.meta_interactive = 0
+			self.options.extra_args.append('--no-secmem-warning')
 
-	def _read_response(self, child_stdout):
-		# Internal method: reads all the output from GPG, taking notice
-		# only of lines that begin with the magic [GNUPG:] prefix.
-		# (See doc/DETAILS in the GPG distribution for info on GPG's
-		# output when --status-fd is specified.)
-		#
-		# Returns a dictionary, mapping GPG's keywords to the arguments
-		# for that keyword.
+		def _read_response(self, child_stdout):
+			# Internal method: reads all the output from GPG, taking notice
+			# only of lines that begin with the magic [GNUPG:] prefix.
+			# (See doc/DETAILS in the GPG distribution for info on GPG's
+			# output when --status-fd is specified.)
+			#
+			# Returns a dictionary, mapping GPG's keywords to the arguments
+			# for that keyword.
 
-		resp = {}
-		while 1:
-			line = child_stdout.readline()
-			if line == "": break
-			line = string.rstrip( line )
-			if line[0:9] == '[GNUPG:] ':
-				# Chop off the prefix
-				line = line[9:]
-				L = string.split(line, None, 1)
-				keyword = L[0]
-				if len(L) > 1:
-					resp[ keyword ] = L[1]
-				else:
-					resp[ keyword ] = ""
-		return resp
+			resp = {}
+			while 1:
+				line = child_stdout.readline()
+				if line == "": break
+				line = string.rstrip( line )
+				if line[0:9] == '[GNUPG:] ':
+					# Chop off the prefix
+					line = line[9:]
+					L = string.split(line, None, 1)
+					keyword = L[0]
+					if len(L) > 1:
+						resp[ keyword ] = L[1]
+					else:
+						resp[ keyword ] = ""
+			return resp
 
-	def encrypt(self, string, recipients):
-		self.options.recipients = recipients   # a list!
+		def encrypt(self, string, recipients):
+			self.options.recipients = recipients   # a list!
 
-		proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout'])
-		proc.handles['stdin'].write(string)
-		proc.handles['stdin'].close()
+			proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout'])
+			proc.handles['stdin'].write(string)
+			proc.handles['stdin'].close()
 
-		output = proc.handles['stdout'].read()
-		proc.handles['stdout'].close()
+			output = proc.handles['stdout'].read()
+			proc.handles['stdout'].close()
 
-		try: proc.wait()
-		except IOError: pass
-		return self.stripHeaderFooter(output)
-
-	def decrypt(self, string, keyID):
-		proc = self.run(['--decrypt', '-q', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status'])
-		enc = self.addHeaderFooter(string, 'MESSAGE')
-		proc.handles['stdin'].write(enc)
-		proc.handles['stdin'].close()
-		
-		output = proc.handles['stdout'].read()
-		proc.handles['stdout'].close()
-
-		resp = proc.handles['status'].read()
-		proc.handles['status'].close()
-
-		try: proc.wait()
-		except IOError: pass
-		return output
-	
-	def sign(self, string, keyID):
-		proc = self.run(['-b', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status', 'stderr'])
-		proc.handles['stdin'].write(string)
-		proc.handles['stdin'].close()
-
-		output = proc.handles['stdout'].read()
-		proc.handles['stdout'].close()
-		proc.handles['stderr'].close()
-
-		stat = proc.handles['status']
-		resp = self._read_response(stat)
-		proc.handles['status'].close()
-
-		try: proc.wait()
-		except IOError: pass
-		if resp.has_key('BAD_PASSPHRASE'):
-			return 'BAD_PASSPHRASE'
-		elif resp.has_key('GOOD_PASSPHRASE'):
+			try: proc.wait()
+			except IOError: pass
 			return self.stripHeaderFooter(output)
 
-	def verify(self, str, sign):
-		file = open('gpg_data', 'w+r')
-		try: os.remove('gpg_data')
-		except: pass
-		fd = file.fileno()
-		file.write(str)
-		file.seek(0)
+		def decrypt(self, string, keyID):
+			proc = self.run(['--decrypt', '-q', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status'])
+			enc = self.addHeaderFooter(string, 'MESSAGE')
+			proc.handles['stdin'].write(enc)
+			proc.handles['stdin'].close()
 		
-		proc = self.run(['--verify', '--enable-special-filenames', '-', '-&%s'%fd], create_fhs=['stdin', 'status', 'stderr'])
+			output = proc.handles['stdout'].read()
+			proc.handles['stdout'].close()
 
-		file.close
-		sign = self.addHeaderFooter(sign, 'SIGNATURE')
-		proc.handles['stdin'].write(sign)
-		proc.handles['stdin'].close()
-		proc.handles['stderr'].close()
+			resp = proc.handles['status'].read()
+			proc.handles['status'].close()
 
-		stat = proc.handles['status']
-		resp = self._read_response(stat)
-		proc.handles['status'].close()
+			try: proc.wait()
+			except IOError: pass
+			return output
+	
+		def sign(self, string, keyID):
+			proc = self.run(['-b', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status', 'stderr'])
+			proc.handles['stdin'].write(string)
+			proc.handles['stdin'].close()
 
-		try: proc.wait()
-		except IOError: pass
+			output = proc.handles['stdout'].read()
+			proc.handles['stdout'].close()
+			proc.handles['stderr'].close()
 
-		keyid = ''
-		if resp.has_key('GOODSIG'):
-			keyid = string.split(resp['GOODSIG'])[0]
-		return keyid
+			stat = proc.handles['status']
+			resp = self._read_response(stat)
+			proc.handles['status'].close()
 
-	def get_secret_keys(self):
-		proc = self.run(['--with-colons', '--list-secret-keys'], \
-			create_fhs=['stdout'])
-		output = proc.handles['stdout'].read()
-		proc.handles['stdout'].close()
+			try: proc.wait()
+			except IOError: pass
+			if resp.has_key('BAD_PASSPHRASE'):
+				return 'BAD_PASSPHRASE'
+			elif resp.has_key('GOOD_PASSPHRASE'):
+				return self.stripHeaderFooter(output)
 
-		keys = {}
-		lines = string.split(output, '\n')
-		for line in lines:
-			sline = string.split(line, ':')
-			if sline[0] == 'sec':
-				keys[sline[4][8:]] = sline[9]
-		return keys
-		try: proc.wait()
-		except IOError: pass
+		def verify(self, str, sign):
+			file = open('gpg_data', 'w+r')
+			try: os.remove('gpg_data')
+			except: pass
+			fd = file.fileno()
+			file.write(str)
+			file.seek(0)
+		
+			proc = self.run(['--verify', '--enable-special-filenames', '-', '-&%s'%fd], create_fhs=['stdin', 'status', 'stderr'])
 
-	def stripHeaderFooter(self, data):
-		"""Remove header and footer from data"""
-		lines = string.split(data, '\n')
-		while lines[0] != '':
-			lines.remove(lines[0])
-		while lines[0] == '':
-			lines.remove(lines[0])
-		i = 0
-		for line in lines:
-			if line:
-				if line[0] == '-': break
-			i = i+1
-		line = string.join(lines[0:i], '\n')
-		return line
+			file.close
+			sign = self.addHeaderFooter(sign, 'SIGNATURE')
+			proc.handles['stdin'].write(sign)
+			proc.handles['stdin'].close()
+			proc.handles['stderr'].close()
 
-	def addHeaderFooter(self, data, type):
-		"""Add header and footer from data"""
-		out = "-----BEGIN PGP %s-----\n" % type
-		out = out + "Version: PGP\n"
-		out = out + "\n"
-		out = out + data + "\n"
-		out = out + "-----END PGP %s-----\n" % type
-		return out
+			stat = proc.handles['status']
+			resp = self._read_response(stat)
+			proc.handles['status'].close()
+
+			try: proc.wait()
+			except IOError: pass
+
+			keyid = ''
+			if resp.has_key('GOODSIG'):
+				keyid = string.split(resp['GOODSIG'])[0]
+			return keyid
+
+		def get_secret_keys(self):
+			proc = self.run(['--with-colons', '--list-secret-keys'], \
+				create_fhs=['stdout'])
+			output = proc.handles['stdout'].read()
+			proc.handles['stdout'].close()
+
+			keys = {}
+			lines = string.split(output, '\n')
+			for line in lines:
+				sline = string.split(line, ':')
+				if sline[0] == 'sec':
+					keys[sline[4][8:]] = sline[9]
+			return keys
+			try: proc.wait()
+			except IOError: pass
+
+		def stripHeaderFooter(self, data):
+			"""Remove header and footer from data"""
+			lines = string.split(data, '\n')
+			while lines[0] != '':
+				lines.remove(lines[0])
+			while lines[0] == '':
+				lines.remove(lines[0])
+			i = 0
+			for line in lines:
+				if line:
+					if line[0] == '-': break
+				i = i+1
+			line = string.join(lines[0:i], '\n')
+			return line
+
+		def addHeaderFooter(self, data, type):
+			"""Add header and footer from data"""
+			out = "-----BEGIN PGP %s-----\n" % type
+			out = out + "Version: PGP\n"
+			out = out + "\n"
+			out = out + data + "\n"
+			out = out + "-----END PGP %s-----\n" % type
+			return out
 
 class GajimCore:
 	"""Core"""
@@ -220,11 +224,13 @@ class GajimCore:
 			#connexions {con: name, ...}
 			self.connexions = {}
 			self.gpg = {}
-			self.gpg_common = MyGnuPG()
+			if USE_GPG:
+				self.gpg_common = MyGnuPG()
 			for a in self.accounts:
 				self.connected[a] = 0 #0:offline, 1:online, 2:away,
 											 #3:xa, 4:dnd, 5:invisible
-				self.gpg[a] = MyGnuPG()
+				if USE_GPG:
+					self.gpg[a] = MyGnuPG()
 			self.myVCardID = []
 			self.loadPlugins(self.cfgParser.tab['Core']['modules'])
 		else:
@@ -344,7 +350,7 @@ class GajimCore:
 			if xtag.getNamespace() == common.jabber.NS_XENCRYPTED:
 				encTag = xtag
 				break
-		if encTag:
+		if encTag and USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()
 			keyID = ''
@@ -382,7 +388,7 @@ class GajimCore:
 			if xtag.getNamespace() == common.jabber.NS_XSIGNED:
 				sigTag = xtag
 				break
-		if sigTag:
+		if sigTag and USE_GPG:
 			#verify
 			sigmsg = sigTag.getData()
 			keyID = self.gpg[self.connexions[con]].verify(status, sigmsg)
@@ -523,9 +529,8 @@ class GajimCore:
 			self.hub.sendPlugin('WARNING', None, _("Couldn't connect to %s : %s") \
 				% (hostname, e))
 			return 0
-		except:
-			sys.exc_info()[1][0]
-			sys.exc_info()[1][1]
+#		except:
+#			print sys.exc_info()[1]
 		else:
 			log.debug("Connected to server")
 
@@ -567,7 +572,7 @@ class GajimCore:
 	def request_infos(self, account, con, jid):
 		identities, features = con.discoverInfo(jid)
 		if not identities:
-			identities, features, items = con.browseAgent(jid)
+			identities, features, items = con.browseAgents(jid)
 		else:
 			items = con.discoverItems(jid)
 		self.hub.sendPlugin('AGENT_INFO', account, (jid, identities, features, items))
@@ -619,11 +624,12 @@ class GajimCore:
 						for item in ev[2][2].keys():
 							if not config.has_key(item):
 								config[item] = ev[2][2][item]
-						self.hub.sendPlugin('CONFIG', None, (ev[2][0], config))
 					else:
-						self.cfgParser.tab[ev[2][1]] = ev[2][2]
+						config = ev[2][2]
+						self.cfgParser.tab[ev[2][1]] = config
 						self.cfgParser.writeCfgFile()
-						self.hub.sendPlugin('CONFIG', None, (ev[2][0], ev[2][2]))
+					config['usegpg'] = USE_GPG
+					self.hub.sendPlugin('CONFIG', None, (ev[2][0], config))
 			#('CONFIG', account, (section, config))
 			elif ev[0] == 'CONFIG':
 				if ev[2][0] == 'accounts':
@@ -642,7 +648,7 @@ class GajimCore:
 						self.cfgParser.tab[a] = ev[2][1][a]
 						if not a in self.connected.keys():
 							self.connected[a] = 0
-						if not self.gpg.has_key(a):
+						if not self.gpg.has_key(a) and USE_GPG:
 							self.gpg[a] = MyGnuPG()
 				else:
 					self.cfgParser.tab[ev[2][0]] = ev[2][1]
@@ -658,7 +664,7 @@ class GajimCore:
 				keyID = ''
 				if self.cfgParser.tab[ev[1]].has_key("keyid"):
 					keyID = self.cfgParser.tab[ev[1]]["keyid"]
-				if keyID:
+				if keyID and USE_GPG:
 					signed = self.gpg[ev[1]].sign(msg, keyID)
 					if signed == 'BAD_PASSPHRASE':
 						signed = ''
@@ -709,7 +715,7 @@ class GajimCore:
 			elif ev[0] == 'MSG':
 				msgtxt = ev[2][1]
 				msgenc = ''
-				if ev[2][2]:
+				if ev[2][2] and USE_GPG:
 					#encrypt
 					msgenc = self.gpg[ev[1]].encrypt(ev[2][1], [ev[2][2]])
 					if msgenc: msgtxt = '[this message is encrypted]'
@@ -766,7 +772,6 @@ class GajimCore:
 					groups=ev[2][2])
 			#('REQ_AGENTS', account, ())
 			elif ev[0] == 'REQ_AGENTS':
-#				agents = con.requestAgents()
 				#do we need that ?
 				#con.discoverInfo('jabber.lagaule.org')
 				agents = con.discoverItems('jabber.lagaule.org')
@@ -810,8 +815,9 @@ class GajimCore:
 			elif ev[0] == 'ACC_CHG':
 				self.connected[ev[2]] = self.connected[ev[1]]
 				del self.connected[ev[1]]
-				self.gpg[ev[2]] = self.gpg[ev[1]]
-				del self.gpg[ev[1]]
+				if USE_GPG:
+					self.gpg[ev[2]] = self.gpg[ev[1]]
+					del self.gpg[ev[1]]
 				if con:
 					self.connexions[con] = ev[2]
 			#('ASK_VCARD', account, jid)
@@ -891,10 +897,12 @@ class GajimCore:
 						'available', show=ev[2][2], status = ev[2][3]))
 			#('PASSPHRASE', account, passphrase)
 			elif ev[0] == 'PASSPHRASE':
-				self.gpg[ev[1]].passphrase = ev[2]
+				if USE_GPG:
+					self.gpg[ev[1]].passphrase = ev[2]
 			elif ev[0] == 'GPG_SECRETE_KEYS':
-				keys = self.gpg_common.get_secret_keys()
-				self.hub.sendPlugin('GPG_SECRETE_KEYS', ev[1], keys)
+				if USE_GPG:
+					keys = self.gpg_common.get_secret_keys()
+					self.hub.sendPlugin('GPG_SECRETE_KEYS', ev[1], keys)
 			else:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':

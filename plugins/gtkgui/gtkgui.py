@@ -1355,7 +1355,8 @@ class roster_Window:
 				save_gpg_pass = self.plugin.accounts[account]["savegpgpass"]
 			if self.plugin.accounts[account].has_key("keyid"):
 				keyid = self.plugin.accounts[account]["keyid"]
-			if keyid and not self.plugin.connected[account]:
+			if keyid and not self.plugin.connected[account] and \
+				self.plugin.config['usegpg']:
 				if save_gpg_pass:
 					passphrase = self.plugin.accounts[account]['gpgpass']
 				else:
