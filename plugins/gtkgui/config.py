@@ -217,6 +217,15 @@ class preference_Window:
 		else:
 			self.plugin.config['mergeaccounts'] = 0
 		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
+		#Emoticons
+		model = self.emot_tree.get_model()
+		iter = model.get_iter_first()
+		emots = []
+		while iter:
+			emots.append(model.get_value(iter, 0))
+			emots.append(model.get_value(iter, 1))
+			iter = model.iter_next(iter)
+		self.plugin.config['emoticons'] = string.join(emots, '\t')
 		#use emoticons
 		chk = self.xml.get_widget('use_emoticons_checkbutton')
 		if chk.get_active():
@@ -264,15 +273,6 @@ class preference_Window:
 			del self.plugin.config['msg%i_name' % i]
 			del self.plugin.config['msg%i' % i]
 			i += 1
-		#Emoticons
-		model = self.emot_tree.get_model()
-		iter = model.get_iter_first()
-		emots = []
-		while iter:
-			emots.append(model.get_value(iter, 0))
-			emots.append(model.get_value(iter, 1))
-			iter = model.iter_next(iter)
-		self.plugin.config['emoticons'] = string.join(emots, '\t')
 		#trayicon
 		if self.chk_trayicon.get_active():
 			self.plugin.config['trayicon'] = 1
