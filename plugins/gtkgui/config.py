@@ -1221,7 +1221,7 @@ class browseAgent_Window:
 						self.join_button.set_sensitive(True)
 		
 	def __init__(self, plugin, account):
-		if self.plugin.connected[account]:
+		if not plugin.connected[account]:
 			warning_Window(_("You must be connected to view Agents"))
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'browser', APP)
