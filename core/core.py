@@ -462,7 +462,11 @@ class GajimCore:
 				#TODO: tell the changes to other plugins
 			#('STATUS', account, (status, msg))
 			elif ev[0] == 'STATUS':
-				if (ev[2][0] != 'offline') and (self.connected[ev[1]] == 0):
+				activ = 1
+				if self.cfgParser.tab[ev[1]].has_key('active'):
+					activ = self.cfgParser.tab[ev[1]]['active']
+				if (ev[2][0] != 'offline') and (self.connected[ev[1]] == 0) and \
+					activ:
 					con = self.connect(ev[1])
 					if self.connected[ev[1]]:
 						statuss = ['offline', 'online', 'away', 'xa', 'dnd', \

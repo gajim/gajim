@@ -533,9 +533,12 @@ class accounts_Window:
 		model = self.treeview.get_model()
 		model.clear()
 		for account in self.plugin.accounts:
+			activ = 1
+			if self.plugin.accounts[account].has_key("active"):
+				activ = self.plugin.accounts[account]["active"]
 			iter = model.append()
 			model.set(iter, 0, account, 1, \
-				self.plugin.accounts[account]["hostname"])
+				self.plugin.accounts[account]["hostname"], 2, activ)
 
 	def on_row_activated(self, widget):
 		"""Activate delete and modify buttons when a row is selected"""
@@ -594,22 +597,36 @@ class accounts_Window:
 				infos['proxyport'] = self.plugin.accounts[account]["proxyport"]
 			self.plugin.windows['accountPreference'] = \
 				accountPreference_Window(self.plugin, infos)
+
+	def on_toggled(self, cell, path, model=None):
+		iter = model.get_iter(path)
+		model.set_value(iter, 2, not cell.get_active())
+		account = model.get_value(iter, 0)
+		if cell.get_active():
+			self.plugin.accounts[account]["active"] = 0
+		else:
+			self.plugin.accounts[account]["active"] = 1
 		
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Accounts', APP)
 		self.window = self.xml.get_widget("Accounts")
 		self.treeview = self.xml.get_widget("treeview")
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, \
+			gobject.TYPE_BOOLEAN)
 		self.treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
-		renderer.set_data('column', 0)
-		self.treeview.insert_column_with_attributes(-1, _('Name'), renderer, text=0)
+		self.treeview.insert_column_with_attributes(-1, _('Name'), renderer, \
+			text=0)
 		renderer = gtk.CellRendererText()
-		renderer.set_data('column', 1)
 		self.treeview.insert_column_with_attributes(-1, _('Server'), \
 			renderer, text=1)
+		renderer = gtk.CellRendererToggle()
+		renderer.set_property('activatable', True)
+		renderer.connect('toggled', self.on_toggled, model)
+		self.treeview.insert_column_with_attributes(-1, _('Active'), \
+			renderer, active=2)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
 		self.xml.signal_connect('on_new_clicked', self.on_new_clicked)
