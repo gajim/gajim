@@ -429,7 +429,7 @@ class GajimCore:
 		elif typ == 'subscribed':
 			jid = prs.getFrom()
 			self.hub.sendPlugin('SUBSCRIBED', self.connexions[con],\
-				(jid.getStripped(), jid.getNode(), jid.getResource()))
+				(jid.getStripped(), jid.getResource()))
 			self.hub.queueIn.put(('UPDUSER', self.connexions[con], \
 				(jid.getStripped(), jid.getNode(), ['general'])))
 			#BE CAREFUL : no con.updateRosterItem() in a callback

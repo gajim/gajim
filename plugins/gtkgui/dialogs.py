@@ -360,8 +360,8 @@ class addContact_Window:
 	def on_subscribe(self, widget):
 		"""When Subscribe button is clicked"""
 		textview_sub = self.xml.get_widget("textview_sub")
-		entry_who = self.xml.get_widget('entry_who')
-		who = entry_who.get_text()
+		who = self.xml.get_widget('entry_who').get_text()
+		pseudo = self.xml.get_widget('entry_pseudo').get_text()
 		if not who:
 			return
 		if who.find('@') < 0:
@@ -371,7 +371,7 @@ class addContact_Window:
 		start_iter = buf.get_start_iter()
 		end_iter = buf.get_end_iter()
 		txt = buf.get_text(start_iter, end_iter, 0)
-		self.plugin.roster.req_sub(self, who, txt, self.account)
+		self.plugin.roster.req_sub(self, who, txt, self.account, pseudo)
 		widget.get_toplevel().destroy()
 		
 	def fill_who(self):
@@ -379,7 +379,8 @@ class addContact_Window:
 		model = cb.get_model()
 		index = cb.get_active()
 		str = self.xml.get_widget('entry_login').get_text()
-		str = str.replace("@", "%")
+		if index > 0:
+			str = str.replace("@", "%")
 		agent = model[index][1]
 		if agent:
 			str += "@" + agent
@@ -403,15 +404,25 @@ class addContact_Window:
 				cb.set_active(self.agents.index('ICQ'))
 				return
 		cb.set_active(0)
+
+	def set_pseudo(self):
+		login = self.xml.get_widget('entry_login').get_text()
+		pseudo = self.xml.get_widget('entry_pseudo').get_text()
+		if pseudo == self.old_login_value:
+			self.xml.get_widget('entry_pseudo').set_text(login)
 			
 	def on_entry_login_changed(self, widget):
-		self.guess_agent() #It changes the cb so automatically call fill_who()
+		self.guess_agent()
+		self.set_pseudo()
+		self.fill_who()
+		self.old_login_value = self.xml.get_widget('entry_login').get_text()
 		
 	def __init__(self, plugin, account, jid=None):
 		self.plugin = plugin
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Add', APP)
 		self.window = self.xml.get_widget('Add')
+		self.old_login_value = ''
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		liststore.append(['Jabber', ''])
 		self.agents = ['Jabber']

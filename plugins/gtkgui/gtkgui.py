@@ -1681,11 +1681,13 @@ class roster_Window:
 		"""Authorize a user"""
 		self.plugin.send('AUTH', account, jid)
 
-	def req_sub(self, widget, jid, txt, account):
+	def req_sub(self, widget, jid, txt, account, pseudo=None):
 		"""Request subscription to a user"""
+		if not pseudo:
+			pseudo = jid
 		self.plugin.send('SUB', account, (jid, txt))
 		if not self.contacts[account].has_key(jid):
-			user1 = user(jid, jid, ['general'], 'requested', \
+			user1 = user(jid, pseudo, ['general'], 'requested', \
 				'requested', 'none', 'subscribe', '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
@@ -2687,21 +2689,21 @@ class plugin:
 		authorize_Window(self, array[0], array[1], account)
 
 	def handle_event_subscribed(self, account, array):
-		#('SUBSCRIBED', account, (jid, nom, resource))
+		#('SUBSCRIBED', account, (jid, resource))
 		jid = array[0]
 		if self.roster.contacts[account].has_key(jid):
 			u = self.roster.contacts[account][jid][0]
-			u.name = array[1]
-			u.resource = array[2]
+			u.resource = array[1]
 			self.roster.remove_user(u, account)
 			if 'not in list' in u.groups:
 				u.groups.remove('not in list')
 			if len(u.groups) == 0:
 				u.groups = ['general']
 			self.roster.add_user_to_roster(u.jid, account)
+			self.send('UPDUSER', account, (u.jid, u.name, u.groups))
 		else:
 			user1 = user(jid, jid, ['general'], 'online', \
-				'online', 'to', '', array[2], 0, '')
+				'online', 'to', '', array[1], 0, '')
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
 		warning_Window(_("You are now authorized by %s") % jid)
@@ -2823,9 +2825,8 @@ class plugin:
 			return
 		for user in users:
 			name = array[1]
-			if not name:
-				name = jid
-			user.name = name
+			if name:
+				user.name = name
 			user.sub = array[2]
 			user.ask = array[3]
 			user.groups = array[4]
