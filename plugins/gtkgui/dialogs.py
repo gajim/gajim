@@ -1,10 +1,10 @@
 ##	plugins/dialogs.py
 ##
 ## Gajim Team:
-## - Yann Le Boulanger <asterix@lagaule.org>
-## - Vincent Hanquez <tab@snarc.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##	- Alex Podaras <bigpod@gmail.com>
+##		- Yann Le Boulanger <asterix@lagaule.org>
+##		- Vincent Hanquez <tab@snarc.org>
+##		- Nikos Kouremenos <kourem@gmail.com>
+##		- Alex Podaras <bigpod@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -635,11 +635,9 @@ class Join_groupchat_window:
 		password = self.xml.get_widget('password_entry').get_text()
 		jid = '%s@%s' % (room, server)
 		self.plugin.roster.new_group(jid, nickname, self.account)
-		#TODO: verify entries
 		self.plugin.send('GC_JOIN', self.account, (nickname, room, server, \
 			password))
 			
-		#FIXME: call active_tab()
 		widget.get_toplevel().destroy()
 
 	def __init__(self, plugin, account, server='', room = ''):
