@@ -1118,6 +1118,7 @@ class Groupchat_window:
 				model = widget.get_model()
 				iter = model.get_iter(path)
 				if len(path) == 2:
+					room_jid = self.get_active_jid()
 					self.mk_menu(room_jid, event, iter)
 				return True
 			if event.button == 1:
