@@ -32,7 +32,7 @@ import common.optparser
 log = logging.getLogger('core.core')
 log.setLevel(logging.DEBUG)
 
-CONFPATH = "~/.gajimrc"
+CONFPATH = "~/.gajim/config"
 
 class GajimCore:
 	"""Core"""
@@ -117,7 +117,7 @@ class GajimCore:
 		password = self.cfgParser.__getattr__("%s" % account+"_password")
 		ressource = self.cfgParser.__getattr__("%s" % account+"_ressource")
 		self.con = common.jabber.Client(host = \
-			hostname, debug = [common.jabber.DBG_INIT], log = sys.stderr, connection=common.xmlstream.TCP, port=5222)
+			hostname, debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, connection=common.xmlstream.TCP, port=5222)
 #			hostname, debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, connection=common.xmlstream.TCP_SSL, port=5223)
 		try:
 			self.con.connect()
@@ -276,8 +276,8 @@ def start():
 		gc.mainLoop()
 	except KeyboardInterrupt:
 		print "Keyboard Interrupt : Bye!"
-		if self.r.connected:
-			self.r.con.disconnect()
+		if gc.connected:
+			gc.con.disconnect()
 		gc.hub.sendPlugin('QUIT', ())
 		return 0
 # END start

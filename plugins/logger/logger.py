@@ -22,7 +22,7 @@ import os
 import string
 import time
 import common.optparser
-CONFPATH = "~/.gajimrc"
+CONFPATH = "~/.gajim/config"
 LOGPATH = os.path.expanduser("~/.gajim/logs/")
 
 class plugin:
