@@ -172,35 +172,58 @@ class preferences_window:
 	
 	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
 		"""On Use Tabbed Chat Window Checkbutton Toggled"""
+		buf1 = {}
+		buf2 = {}
+		jids = {}
 		if widget.get_active():
-			buf1 = {}
-			buf2 = {}
-			jids = {}
+			#FIXME Does not work
 			#save buffers and close windows
-			for acct in self.plugin.accounts:
-				buf1[acct] = {}
-				buf2[acct] = {}
-				jids[acct] = self.plugin.windows[acct]['chats'].keys()
-				for jid in jids[acct]:
-					buf1[acct][jid] = self.plugin.windows[acct]['chats'][jid].\
-						xmls[jid].get_widget('conversation_textview').get_buffer()
-					buf2[acct][jid] = self.plugin.windows[acct]['chats'][jid].\
-						xmls[jid].get_widget('message_textview').get_buffer()
-					self.plugin.windows[acct]['chats'][jid].window.destroy()
+#			for acct in self.plugin.accounts:
+#				buf1[acct] = {}
+#				buf2[acct] = {}
+#				jids[acct] = self.plugin.windows[acct]['chats'].keys()
+#				for jid in jids[acct]:
+#					buf1[acct][jid] = self.plugin.windows[acct]['chats'][jid].\
+#						xmls[jid].get_widget('conversation_textview').get_buffer()
+#					buf2[acct][jid] = self.plugin.windows[acct]['chats'][jid].\
+#						xmls[jid].get_widget('message_textview').get_buffer()
+#					self.plugin.windows[acct]['chats'][jid].window.destroy()
 			self.plugin.config['usetabbedchat'] = 1
 			#open new tabbed chat windows
-			for acct in self.plugin.accounts:
-				for jid in jids[acct]:
-					user = self.plugin.roster.contacts[acct][jid][0]
-					self.plugin.roster.new_chat(user, acct)
-					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
-						get_widget('conversation_textview').set_buffer(\
-							buf1[acct][jid])
-					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
-						get_widget('message_textview').set_buffer(buf2[acct][jid])
+#			for acct in self.plugin.accounts:
+#				for jid in jids[acct]:
+#					user = self.plugin.roster.contacts[acct][jid][0]
+#					self.plugin.roster.new_chat(user, acct)
+#					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
+#						get_widget('conversation_textview').set_buffer(\
+#							buf1[acct][jid])
+#					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
+#						get_widget('message_textview').set_buffer(buf2[acct][jid])
 		else:
+			#save buffers and close tabbed chat windows
+#			for acct in self.plugin.accounts:
+#				buf1[acct] = {}
+#				buf2[acct] = {}
+#				jids[acct] = self.plugin.windows[acct]['chats'].keys()
+#				if 'tabbed' in jids[acct]:
+#					jids[acct].remove('tabbed')
+#					for jid in jids[acct]:
+#						buf1[acct][jid] = self.plugin.windows[acct]['chats'][jid].\
+#							xmls[jid].get_widget('conversation_textview').get_buffer()
+#						buf2[acct][jid] = self.plugin.windows[acct]['chats'][jid].\
+#							xmls[jid].get_widget('message_textview').get_buffer()
+#					self.plugin.windows[acct]['chats']['tabbed'].window.destroy()
 			self.plugin.config['usetabbedchat'] = 0
-			#TODO: split the tabbed chat window
+			#open new tabbed chat windows
+#			for acct in self.plugin.accounts:
+#				for jid in jids[acct]:
+#					user = self.plugin.roster.contacts[acct][jid][0]
+#					self.plugin.roster.new_chat(user, acct)
+#					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
+#						get_widget('conversation_textview').set_buffer(\
+#							buf1[acct][jid])
+#					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
+#						get_widget('message_textview').set_buffer(buf2[acct][jid])
 	
 	def update_text_tags(self):
 		"""Update Opened Chat Windows"""
