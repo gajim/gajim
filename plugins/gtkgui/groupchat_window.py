@@ -476,7 +476,7 @@ class Groupchat_window(Chat):
 					widget.get_selection().unselect_all()
 		return False
 
-	def on_list_treeview_key_release_event(self, widget, event):
+	def on_list_treeview_key_press_event(self, widget, event):
 		if event.type == gtk.gdk.KEY_RELEASE:
 			if event.keyval == gtk.keysyms.Escape:
 				widget.get_selection().unselect_all()

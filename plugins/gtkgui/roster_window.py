@@ -595,7 +595,7 @@ class Roster_window:
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
 
-	def on_roster_treeview_key_release_event(self, widget, event):
+	def on_roster_treeview_key_press_event(self, widget, event):
 		"""when a key is pressed in the treeviews"""
 		if event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
@@ -625,9 +625,9 @@ class Roster_window:
 		return False
 	
 	def on_roster_treeview_button_press_event(self, widget, event):
-		"""popup user's group's or agent menu"""
+		"""popup contact's , group's or agent's menu"""
 		if event.type == gtk.gdk.BUTTON_PRESS:
-			if event.button == 3:
+			if event.button == 3: # Right click
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
 						int(event.y))
@@ -645,8 +645,9 @@ class Roster_window:
 					self.mk_menu_user(event, iter)
 				elif type == 'account':
 					self.mk_menu_account(event, iter)
-				return True
-			if event.button == 1:
+				#return True
+				return False
+			if event.button == 1: # Left click
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
 						int(event.y))
@@ -893,7 +894,6 @@ class Roster_window:
 	def on_preferences_menuitem_activate(self, widget):
 		"""When preferences is selected :
 		call the preferences_window class"""
-		print self.plugin.windows['preferences'].window.get_property('visible')
 		if self.plugin.windows['preferences'].window.get_property('visible'):
 			self.plugin.windows['preferences'].window.present()
 		else:
