@@ -1365,13 +1365,12 @@ class Account_modification_window:
 
 class Accounts_window:
 	"""Class for accounts window: lists of accounts"""
-	def on_delete_event(self, widget, event):
-		self.window.hide()  
-		return True # do NOT destory the window 
+	def on_accounts_window_destroy(self, widget):
+		del self.plugin.windows['accounts'] 
 
 	def on_close_button_clicked(self, widget):
-		self.window.hide()
-		
+		widget.get_toplevel().destroy()
+
 	def init_accounts(self):
 		"""initialize listStore with existing accounts"""
 		self.modify_button.set_sensitive(False)

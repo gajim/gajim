@@ -908,10 +908,8 @@ class Roster_window:
 		About_dialog(self.plugin)
 
 	def on_accounts_menuitem_activate(self, widget):
-		if	self.plugin.windows['accounts'].window.get_property('visible'):
-			self.plugin.windows['accounts'].window.present() # give focus
-		else:
-			self.plugin.windows['accounts'].window.show_all()
+		if not self.plugin.windows.has_key('accounts'):
+			self.plugin.windows['accounts'] = Accounts_window(self.plugin) 
 
 	def close_all(self, dic):
 		"""close all the windows in the given dictionary"""
