@@ -3,8 +3,8 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
-##		- Nikos Kouremenos <nkour@jabber.org>
-##		- Alex Podaras <bigpod@jabber.org>
+##		- Nikos Kouremenos <kourem@gmail.com>
+##		- Alex Podaras <bigpod@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -59,8 +59,9 @@ import pango
 import gobject
 import os
 import time
-import Queue
 import sys
+import sre
+import Queue
 import common.optparser
 import common.sleepy
 
@@ -414,7 +415,7 @@ class tabbed_chat_window:
 
 	def remove_tab(self, jid):
 		if time.time() - self.last_message_time[jid] < 2:
-			dialog = Confirmation_dialog(_('You received a message from %s in the last two secondes.\nDo you still want to close this tab ?') % jid)
+			dialog = Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this tab ?') % jid)
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 
@@ -666,12 +667,65 @@ class tabbed_chat_window:
 				otext = text + '\n'
 
 		conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
+
+		# regexp meta characters are:  . ^ $ * + ? { [ ] \ | ( )
+		# one escapes the metachars with \
+		# \S matches anything but ' ' '\t' '\n' '\r' '\f' and '\v'
+		# \s matches any whitespace character
+		# \w any alphanumeric character
+		# * means 0 or more times
+		# + means 1 or more times
+		# | means or
+		# [^*] anything but *   (inside [] you don't have to escape metachars)
+		# url_pattern is one string literal. I've put spaces to make the regexp look better
+		url_pattern = r'http://\S*|' 'https://\S*|' 'news://\S*|' 'ftp://\S*|' 'mailto:\S*|' 'ed2k://\S*|' 'www\.\S*|' 'ftp\.\S*|' '\*\w+[^*]*\w+\*|' '/\w+[^/]*\w+/|' '_\w+[^_]*\w+_|' '\w+[^\s]*@\w+\.\w+'
+
+		start = 0
+		end = 0
+		index = 0
+
+		if len(otext) > 0: # is it necessary? maybe that should be above?
+			
+			if self.plugin.config['useemoticons']:
+				emoticons_pattern = ''
+				for emoticon in self.plugin.roster.emoticons: # travel tru emoticons list
+					emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
+					emoticons_pattern += emoticon_escaped + '|'# or is | in regexp
+				emoticons_pattern = emoticons_pattern[0:-1] # remove the last |
+				
+				emoticons_re = sre.compile(emoticons_pattern, sre.IGNORECASE)
+				iterator = emoticons_re.finditer(otext)
+				for match in iterator:
+					emot_start, emot_end = match.span()
+					emot_ascii = otext[emot_start:emot_end]
+					#print 'detected', emot_ascii, 'in (start, end)', '(', emot_start, ',', emot_end, ')'
+					#print 'adding text before emoticon', index, emot_start
+					if emot_start != 0:
+						conversation_buffer.insert(end_iter, otext[index:emot_start])
+					conversation_buffer.insert_pixbuf(end_iter, \
+									self.plugin.roster.emoticons[emot_ascii])
+					index = emot_end # update index
+
+			url_re = sre.compile(url_pattern, sre.IGNORECASE)
+			iterator = url_re.finditer(otext)
+			for match in iterator:
+				url_start, url_end = match.span()
+				url_text = otext[url_start:url_end]
+				#print 'detected', url_text, 'in (start, end)', '(', url_start, ',', url_end, ')'
+				conversation_buffer.insert_with_tags_by_name(end_iter,\
+					 url_text, 'hyperlink')
+				index = url_end # update index
+
+			#conversation_buffer.insert(end_iter, otext[end:])
+			print 'adding the rest of the text in', index, 'and after'
+			conversation_buffer.insert(end_iter, otext[index:])
+
+		'''
 		if len(otext) > 0:
 			beg = 0
 			if self.plugin.config['useemoticons']:
 				index = 0
 				while index < len(otext):
-					if otext[index] in self.plugin.roster.begin_emot:
 						for s in self.plugin.roster.emoticons:
 							l = len(s)
 							if s == otext[index:index+l]:
@@ -683,6 +737,7 @@ class tabbed_chat_window:
 					index+=1
 
 			conversation_buffer.insert(end_iter, otext[beg:])
+		'''
 		
 		#scroll to the end of the textview
 		end_rect = conversation_textview.get_iter_location(end_iter)
@@ -704,7 +759,7 @@ class Groupchat_window:
 		"""close window"""
 		for room_jid in self.xmls:
 			if time.time() - self.last_message_time[room_jid] < 2:
-				dialog = Confirmation_dialog(_('You received a message in the room %s in the last two secondes.\nDo you still want to close this window ?') % \
+				dialog = Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this window ?') % \
 					room_jid.split('@')[0])
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
@@ -1191,7 +1246,7 @@ class Groupchat_window:
 
 	def remove_tab(self, room_jid):
 		if time.time() - self.last_message_time[room_jid] < 2:
-			dialog = Confirmation_dialog(_('You received a message in the room %s in the last two secondes.\nDo you still want to close this tab ?') % \
+			dialog = Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this tab ?') % \
 				room_jid.split('@')[0])
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
@@ -2486,7 +2541,6 @@ class roster_window:
 	def mkemoticons(self):
 		"""initialize emoticons dictionary"""
 		self.emoticons = dict()
-		self.begin_emot = ''
 		split_line = self.plugin.config['emoticons'].split('\t')
 		for i in range(0, len(split_line)/2):
 			# (nk) lost you here. if you remember add some comments about the idea of the algo
@@ -2495,8 +2549,6 @@ class roster_window:
 				continue
 			pix = gtk.gdk.pixbuf_new_from_file(emot_file)
 			self.emoticons[split_line[2*i]] = pix
-			if not split_line[2*i][0] in self.begin_emot:
-				self.begin_emot += split_line[2*i][0]
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
