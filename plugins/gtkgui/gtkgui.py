@@ -1255,6 +1255,14 @@ class systray:
 		statuss = ['online', 'away', 'xa', 'dnd', 'invisible', 'vide', 'offline']
 		optionmenu.set_history(statuss.index(status))
 
+	def start_chat(self, widget, account, jid):
+		if self.plugin.windows[account]['chats'].has_key(jid):
+			self.plugin.windows[account]['chats'][jid].window.present()
+		elif self.plugin.roster.contacts[account].has_key(jid):
+			self.plugin.windows[account]['chats'][jid] = \
+				message_Window(self.plugin.roster.contacts[account][jid][0], \
+				self.plugin, account)
+
 	def mk_menu(self, event):
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_("Status"))
@@ -1283,6 +1291,33 @@ class systray:
 		menu_sub.append(item)
 		item.connect("activate", self.set_optionmenu, 'offline')
 		
+		item = gtk.MenuItem()
+		menu.append(item)
+
+		item = gtk.MenuItem(_("Chat with"))
+		menu.append(item)
+		menu_account = gtk.Menu()
+		item.set_submenu(menu_account)
+		for account in self.plugin.accounts.keys():
+			item = gtk.MenuItem(account)
+			menu_account.append(item)
+			menu_group = gtk.Menu()
+			item.set_submenu(menu_group)
+			for group in self.plugin.roster.groups[account].keys():
+				if group == 'Agents':
+					continue
+				item = gtk.MenuItem(group)
+				menu_group.append(item)
+				menu_user = gtk.Menu()
+				item.set_submenu(menu_user)
+				for users in self.plugin.roster.contacts[account].values():
+					user = users[0]
+					if group in user.groups and user.show != 'offline' and \
+						user.show != 'error':
+						item = gtk.MenuItem(user.name)
+						menu_user.append(item)
+						item.connect("activate", self.start_chat, account, user.jid)
+
 		item = gtk.MenuItem()
 		menu.append(item)
 
