@@ -895,7 +895,7 @@ class plugin:
 		iconset = self.config['iconset']
 		if not iconset:
 			iconset = 'sun'
-		path = 'plugins/gtkgui/icons/' + iconset + '/'
+		path = 'plugins/gtkgui/iconsets/' + iconset + '/'
 		files = [path + 'online.gif', path + 'online.png', path + 'online.xpm']
 		pix = None
 		for fname in files:

@@ -1084,7 +1084,7 @@ class Roster_window:
 		iconset = self.plugin.config['iconset']
 		if not iconset:
 			iconset = 'sun'
-		self.path = 'plugins/gtkgui/icons/' + iconset + '/'
+		self.path = 'plugins/gtkgui/iconsets/' + iconset + '/'
 		self.pixbufs = {}
 		for state in ('connecting', 'online', 'chat', 'away', 'xa', 'dnd', \
 			'invisible', 'offline', 'error', 'requested', 'message', \

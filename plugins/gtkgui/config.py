@@ -737,7 +737,7 @@ class Preferences_window:
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
 		#iconset
-		list_style = os.listdir('plugins/gtkgui/icons/')
+		list_style = os.listdir('plugins/gtkgui/iconsets/')
 		model = gtk.ListStore(gobject.TYPE_STRING)
 		self.iconset_combobox.set_model(model)
 		l = []
