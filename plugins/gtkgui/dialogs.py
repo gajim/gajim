@@ -3,6 +3,7 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
+##  - Nikos Kouremenos <nkour@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -19,8 +20,8 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-from gtk import TRUE, FALSE
-import gtk.glade,gobject
+import gtk.glade
+import gobject
 import string
 from common import i18n
 _ = i18n._
@@ -385,7 +386,7 @@ class warning_Window:
 		xml.get_widget('label').set_text(txt)
 		xml.signal_connect('on_close_clicked', self.on_close)
 
-class about_Window:
+class about_Window: #FIXME: (nk) pygtk2.6 has a built-in window for that
 	"""Class for about window"""
 	def delete_event(self, widget):
 		"""close window"""

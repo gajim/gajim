@@ -3553,7 +3553,7 @@ on the server as a vCard</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="Preferences">
+<widget class="GtkWindow" id="preferences_window">
   <property name="border_width">5</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Preferences</property>

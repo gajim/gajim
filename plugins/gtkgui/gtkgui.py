@@ -3,6 +3,7 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
+##  - Nikos Kouremenos <nkour@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -19,7 +20,7 @@
 def usage():
 	#TODO: use i18n
 	print "usage :", sys.argv[0], ' [OPTION]'
-	print "  -p\tport on whitch the sock plugin listen"
+	print "  -p\tport on which the sock plugin listen"
 	print "  -h, --help\tdisplay this help and exit"
 
 if __name__ == "__main__":
@@ -1052,12 +1053,12 @@ class gc:
 						int(event.y))
 				except TypeError:
 					self.tree.get_selection().unselect_all()
-					return gtk.FALSE
+					return False
 				model = self.tree.get_model()
 				iter = model.get_iter(path)
 				if len(path) == 2:
 					self.mk_menu(event, iter)
-				return gtk.TRUE
+				return True
 			if event.button == 1:
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
@@ -1067,7 +1068,7 @@ class gc:
 		if event.type == gtk.gdk.KEY_RELEASE:
 			if event.keyval == gtk.keysyms.Escape:
 				self.tree.get_selection().unselect_all()
-		return gtk.FALSE
+		return False
 
 	def on_row_activated(self, widget, path, col=0):
 		"""When an iter is dubble clicked :
@@ -1117,7 +1118,7 @@ class gc:
 		render = gtk.CellRendererPixbuf()
 		col.pack_start(render, expand = False)
 		self.tree.append_column(col)
-		col.set_visible(FALSE)
+		col.set_visible(False)
 		self.tree.set_expander_column(col)
 
 		conversation = self.xml.get_widget('conversation')
@@ -1349,7 +1350,7 @@ class roster_Window:
 		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
 		status = statuss[self.plugin.connected[account]]
 		model.append(None, (self.pixbufs[status], account, 'account', account,\
-			account, FALSE))
+			account, False))
 
 	def add_user_to_roster(self, jid, account):
 		"""Add a user to the roster and add groups if they aren't in roster"""
@@ -1376,7 +1377,7 @@ class roster_Window:
 				IterAcct = self.get_account_iter(account)
 				iterG = model.append(IterAcct, \
 					(self.pixbufs['closed'], g, 'group', \
-					g, account, FALSE))
+					g, account, False))
 			if not self.groups[account].has_key(g): #It can probably never append
 				if account+g in self.hidden_lines:
 					self.groups[account][g] = {'expand': False}
@@ -1679,13 +1680,13 @@ class roster_Window:
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_("Log on"))
 		if self.contacts[account][jid][0].show != 'offline':
-			item.set_sensitive(FALSE)
+			item.set_sensitive(False)
 		menu.append(item)
 		item.connect("activate", self.on_agent_logging, jid, 'available', account)
 
 		item = gtk.MenuItem(_("Log off"))
 		if self.contacts[account][jid][0].show == 'offline':
-			item.set_sensitive(FALSE)
+			item.set_sensitive(False)
 		menu.append(item)
 		item.connect("activate", self.on_agent_logging, jid, 'unavailable', \
 			account)
@@ -1780,7 +1781,7 @@ class roster_Window:
 		"""when a key is pressed in the treeviews"""
 		if event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
-		return gtk.FALSE
+		return False
 	
 	def on_roster_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
@@ -1803,14 +1804,14 @@ class roster_Window:
 					self.mk_menu_user(event, iter)
 				elif type == 'account':
 					self.mk_menu_account(event, iter)
-				return gtk.TRUE
+				return True
 			if event.button == 1:
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
 						int(event.y))
 				except TypeError:
 					self.tree.get_selection().unselect_all()
-		return gtk.FALSE
+		return False
 
 	def on_req_usub(self, widget, user, account):
 		"""Remove a user"""
@@ -1994,16 +1995,16 @@ class roster_Window:
 				self.add_user_to_roster(jid, account)
 				iters = self.get_user_iter(jid, account)
 				path = self.tree.get_model().get_path(iters[0])
-			self.tree.expand_row(path[0:1], FALSE)
-			self.tree.expand_row(path[0:2], FALSE)
+			self.tree.expand_row(path[0:1], False)
+			self.tree.expand_row(path[0:2], False)
 			self.tree.scroll_to_cell(path)
 			self.tree.set_cursor(path)
 		else:
 			if not self.plugin.windows[account]['chats'].has_key(jid):
 				self.new_chat(self.contacts[account][jid][0], account)
 				if path:
-					self.tree.expand_row(path[0:1], FALSE)
-					self.tree.expand_row(path[0:2], FALSE)
+					self.tree.expand_row(path[0:1], False)
+					self.tree.expand_row(path[0:2], False)
 					self.tree.scroll_to_cell(path)
 					self.tree.set_cursor(path)
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg, \
@@ -2016,7 +2017,7 @@ class roster_Window:
 		"""When preferences is selected :
 		call the preference_Window class"""
 		if not self.plugin.windows.has_key('preferences'):
-			self.plugin.windows['preferences'] = preference_Window(self.plugin)
+			self.plugin.windows['preferences'] = preferences_window(self.plugin)
 
 	def on_add(self, widget, account):
 		"""When add user is selected :
@@ -2437,7 +2438,7 @@ class roster_Window:
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand = False)
 		self.tree.append_column(col)
-		col.set_visible(FALSE)
+		col.set_visible(False)
 		self.tree.set_expander_column(col)
 
 		#signals

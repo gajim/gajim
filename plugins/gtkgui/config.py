@@ -3,6 +3,7 @@
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
+##  - Nikos Kouremenos <nkour@jabber.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -19,9 +20,10 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-from gtk import TRUE, FALSE
-import gtk.glade,gobject
-import os,string
+import gtk.glade
+import gobject
+import os
+import string
 import common.sleepy
 from common import i18n
 _ = i18n._
@@ -93,7 +95,6 @@ class vCard_Window:
 			vcard['DESC']= txt
 		return vcard
 
-
 	def on_retrieve(self, widget):
 		if self.plugin.connected[self.account]:
 			self.plugin.send('ASK_VCARD', self.account, self.jid)
@@ -125,7 +126,7 @@ class vCard_Window:
 		self.xml.signal_connect('on_retrieve_clicked', self.on_retrieve)
 		self.xml.signal_connect('on_publish_clicked', self.on_publish)
 
-class preference_Window:
+class preferences_window:
 	"""Class for Preferences window"""
 	def delete_event(self, widget):
 		"""close window"""
@@ -135,7 +136,7 @@ class preference_Window:
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
 
-	def write_cfg(self):
+	def write_cfg(self): #FIXME: (nk) instant apply
 		"""Save preferences in config File and apply them"""
 		#Color for incomming messages
 		color = self.xml.get_widget('colorbutton_in').get_color()
@@ -316,7 +317,7 @@ class preference_Window:
 	def on_ok(self, widget):
 		"""When Ok button is clicked"""
 		self.write_cfg()
-		self.xml.get_widget('Preferences').destroy()
+		self.xml.get_widget('preferences_window').destroy()
 
 	def on_apply(self, widget):
 		"""When Apply button is clicked"""
@@ -570,8 +571,8 @@ class preference_Window:
 			
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Preferences', APP)
-		self.window = self.xml.get_widget('Preferences')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
+		self.window = self.xml.get_widget('preferences_window')
 		self.plugin = plugin
 		self.xml.get_widget('image_emoticons').set_from_file(\
 			'plugins/gtkgui/pixmaps/smile.png')
@@ -829,7 +830,7 @@ class preference_Window:
 		st = self.config_logger['lognotsep']
 		self.xml.get_widget('chk_log_pres_ext').set_active(st)
 
-class accountPreference_Window:
+class accountpreferences_window:
 	"""Class for account informations"""
 	def on_account_window_destroy(self, widget):
 		"""close window"""
@@ -1123,7 +1124,7 @@ class accountPreference_Window:
 			self.modify = True
 			self.account = infos['accname']
 			self.init_account(infos)
-			self.xml.get_widget('new_account_checkbutton').set_sensitive(FALSE)
+			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
 
 class accounts_Window:
 	"""Class for accounts window : lists of accounts"""
@@ -1158,7 +1159,7 @@ class accounts_Window:
 		"""When new button is clicked : open an account information window"""
 		if not self.plugin.windows.has_key('accountPreference'):
 			self.plugin.windows['accountPreference'] = \
-				accountPreference_Window(self.plugin)
+				accountpreferences_window(self.plugin)
 
 	def on_delete_clicked(self, widget):
 		"""When delete button is clicked :
@@ -1194,7 +1195,7 @@ class accounts_Window:
 			infos['jid'] = self.plugin.accounts[account]["name"] + \
 				'@' +  self.plugin.accounts[account]["hostname"]
 			self.plugin.windows['accountPreference'] = \
-				accountPreference_Window(self.plugin, infos)
+				accountpreferences_window(self.plugin, infos)
 
 	def on_toggled(self, cell, path, model=None):
 		iter = model.get_iter(path)
