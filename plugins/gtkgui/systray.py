@@ -175,13 +175,12 @@ class systray:
 		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1:
 			if len(self.jids) == 0:
 				win = self.plugin.roster.window
-				if win.iconify_initially:
-					win.deiconify()
+				if win.is_active():
+					win.iconify()
+					win.skip_taskbar_hint = True
 				else:
-					if win.is_active():
-						win.iconify()
-					else:
-						win.present()
+					win.present()
+					win.skip_taskbar_hint = False
 			else:
 				account = self.jids[0][0]
 				jid = self.jids[0][1]
@@ -194,7 +193,7 @@ class systray:
 				else:
 					self.plugin.roster.new_chat(
 						self.plugin.roster.contacts[account][jid][0], account)
-		if event.button == 3:
+		if event.button == 3: # right click
 			self.make_menu(event)
 	
 	def on_online_menuitem_activate(self, widget):
