@@ -1,4 +1,4 @@
-##   xmlstream.py 
+##   xmlstream.py
 ##
 ##   Copyright (C) 2001 Matthew Allum
 ##
@@ -28,7 +28,7 @@ case.
 
 """
 
-# $Id: xmlstream.py,v 1.42 2004/01/08 15:47:40 snakeru Exp $
+# $Id$
 
 import time, sys, re, socket
 from select import select
@@ -37,7 +37,7 @@ import xml.parsers.expat
 import debug
 _debug=debug
 
-VERSION = "0.5-rc1"
+VERSION = "0.5"
 
 False = 0
 True  = 1
@@ -78,7 +78,7 @@ class error:
         self.value = str(value)
     def __str__(self):
         return self.value
-    
+
 class Node:
     """A simple XML DOM like class"""
     def __init__(self, tag=None, parent=None, attrs={}, payload=[], node=None):
@@ -93,7 +93,7 @@ class Node:
 
         if parent: self.parent = parent
 
-#        if self.parent and not self.namespace: self.namespace=self.parent.namespace	# Doesn't checked if this neccessary
+#        if self.parent and not self.namespace: self.namespace=self.parent.namespace   # Doesn't checked if this neccessary
 
         for attr in attrs.keys():
             self.attrs[attr]=attrs[attr]
@@ -101,7 +101,7 @@ class Node:
         for i in payload:
             if type(i)==type(self): self.insertNode(i)
             else: self.insertXML(i)
-#            self.insertNode(Node(node=i))	# Alternative way. Needs perfomance testing.
+#            self.insertNode(Node(node=i))     # Alternative way. Needs perfomance testing.
 
     def setParent(self, node):
         "Set the nodes parent node."
@@ -127,29 +127,29 @@ class Node:
         "Get a value for the nodes named attribute."
         try: return self.attrs[key]
         except: return None
-        
+
     def putData(self, data):
-        "Set the nodes textual data" 
+        "Set the nodes textual data"
         self.data.append(data)
 
     def insertData(self, data):
-        "Set the nodes textual data" 
+        "Set the nodes textual data"
         self.data.append(data)
 
     def getData(self):
-        "Return the nodes textual data" 
+        "Return the nodes textual data"
         return ''.join(self.data)
 
     def getDataAsParts(self):
-        "Return the node data as an array" 
+        "Return the node data as an array"
         return self.data
 
     def getNamespace(self):
-        "Returns the nodes namespace." 
+        "Returns the nodes namespace."
         return self.namespace
 
     def setNamespace(self, namespace):
-        "Set the nodes namespace." 
+        "Set the nodes namespace."
         self.namespace = namespace
 
     def insertTag(self, name=None, attrs={}, payload=[], node=None):
@@ -178,7 +178,7 @@ class Node:
     def _xmlnode2str(self, parent=None):
         """Returns an xml ( string ) representation of the node
          and it children"""
-        s = "<" + self.name  
+        s = "<" + self.name
         if self.namespace:
             if parent and parent.namespace != self.namespace:
                 s = s + " xmlns = '%s' " % self.namespace
@@ -186,7 +186,7 @@ class Node:
             val = ustr(self.attrs[key])
             s = s + " %s='%s'" % ( key, XMLescape(val) )
         s = s + ">"
-        cnt = 0 
+        cnt = 0
         if self.kids != None:
             for a in self.kids:
                 if (len(self.data)-1) >= cnt: s = s + XMLescape(self.data[cnt])
@@ -199,12 +199,13 @@ class Node:
             s = s + "</" + self.name + ">"
         return s
 
-    def getTag(self, name):
+    def getTag(self, name, index=None):
         """Returns a child node with tag name. Returns None
         if not found."""
         for node in self.kids:
             if node.getName() == name:
-               return node
+                if not index: return node
+                if index is not None: index-=1
         return None
 
     def getTags(self, name):
@@ -214,7 +215,7 @@ class Node:
             if node.getName() == name:
                nodes.append(node)
         return nodes
-        
+
     def getChildren(self):
         """Returns a nodes children"""
         return self.kids
@@ -242,7 +243,7 @@ class NodeBuilder:
 
         self.__depth = 0
         self._dispatch_depth = 1
-        
+
         if data: self._parser.Parse(data,1)
 
     def unknown_starttag(self, tag, attrs):
@@ -293,8 +294,8 @@ class NodeBuilder:
 
 
 class Stream(NodeBuilder):
-    """Extention of NodeBuilder class. Handles stream of XML stanzas. 
-       Calls dispatch method for every child of root node 
+    """Extention of NodeBuilder class. Handles stream of XML stanzas.
+       Calls dispatch method for every child of root node
        (stream:stream for jabber stream).
        attributes _read, _write and _reader must be set by external entity
     """
@@ -371,7 +372,7 @@ class Stream(NodeBuilder):
         except:
             self.DEBUG("xmlstream write threw error",DBG_CONN_ERROR)
             self.disconnected(self)
-            
+
     def process(self, timeout=0):
         """Receives incoming data (if any) and processes it.
            Waits for data no more than timeout seconds."""
@@ -379,7 +380,7 @@ class Stream(NodeBuilder):
             data = self.read()
             self._parser.Parse(data)
             return len(data)
-        return '0'	# Zero means that nothing received but link is alive.
+        return '0'     # Zero means that nothing received but link is alive.
 
     def disconnect(self):
         """Close the stream and socket"""
@@ -387,7 +388,7 @@ class Stream(NodeBuilder):
         while self.process(): pass
         self._sock.close()
         self._sock = None
-        
+
     def disconnected(self,conn):
         """Called when a Network Error or disconnection occurs."""
         try: self.disconnectHandler(conn)
@@ -399,7 +400,7 @@ class Stream(NodeBuilder):
         raise error("Standart disconnectionHandler called. Replace it with appropriate for your client.")
 
     def log(self, data, inout=''):
-        """Logs data to the specified filehandle. Data is time stamped 
+        """Logs data to the specified filehandle. Data is time stamped
         and prefixed with inout"""
         if self._logFH is not None:
             if self._timestampLog:
@@ -431,7 +432,7 @@ class Client(Stream):
         Stream.__init__(self, namespace, debug, log, id)
 
         self._host = host
-        self._port = port 
+        self._port = port
         self._sock = sock
         self._connection = connection
         if hostIP: self._hostIP = hostIP
@@ -528,33 +529,33 @@ class Client(Stream):
             self.DEBUG('unknown connection type',DBG_CONN_ERROR)
             raise IOError('unknown connection type')
 
-class Server:    
+class Server:
 
     def now(self): return time.ctime(time.time())
 
     def __init__(self, maxclients=10):
 
-        self.host = ''  
+        self.host = ''
         self.port = 5222
         self.streams = []
-            
+
         # make main sockets for accepting new client requests
         self.mainsocks, self.readsocks, self.writesocks = [], [], []
 
         self.portsock = socket(AF_INET, SOCK_STREAM)
-        self.portsock.bind((self.host, self.port)) 
-        self.portsock.listen(maxclients)           
-                
+        self.portsock.bind((self.host, self.port))
+        self.portsock.listen(maxclients)
+
         self.mainsocks.append(self.portsock)  # add to main list to identify
-        self.readsocks.append(self.portsock)  # add to select inputs list 
-                
+        self.readsocks.append(self.portsock)  # add to select inputs list
+
         # event loop: listen and multiplex until server process killed
 
 
     def serve(self):
-        
+
         print 'select-server loop starting'
-        
+
         while 1:
             print "LOOPING"
             readables, writeables, exceptions = select(self.readsocks,
@@ -562,7 +563,7 @@ class Server:
             for sockobj in readables:
                 if sockobj in self. mainsocks:   # for ready input sockets
                     newsock, address = sockobj.accept() # accept not block
-                    print 'Connect:', address, id(newsock) 
+                    print 'Connect:', address, id(newsock)
                     self.readsocks.append(newsock)
                     self._makeNewStream(newsock)
                     # add to select list, wait
@@ -571,9 +572,9 @@ class Server:
                     data = sockobj.recv(1024)
                     # recv should not block
                     print '\tgot', data, 'on', id(sockobj)
-                    if not data:        # if closed by the clients 
+                    if not data:        # if closed by the clients
                         sockobj.close() # close here and remv from
-                        self.readsocks.remove(sockobj) 
+                        self.readsocks.remove(sockobj)
                     else:
                     # this may block: should really select for writes too
                         sockobj.send('Echo=>%s' % data)
@@ -592,7 +593,7 @@ class Server:
         for s in self.streams:
             socks.append(s.getSocket())
         return socks
-        
+
     def _getStreamFromSocket(self, sock):
         for s in self.streams:
             if s.getSocket() == sock:
