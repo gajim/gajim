@@ -7835,7 +7835,7 @@ Custom</property>
   </child>
 </widget>
 
-<widget class="GtkDialog" id="Choose_gpg_key">
+<widget class="GtkDialog" id="choose_gpg_key_dialog">
   <property name="visible">True</property>
   <property name="title" translatable="yes">Passphrase</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -7936,7 +7936,7 @@ Custom</property>
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkTreeView" id="treeview">
+		<widget class="GtkTreeView" id="keys_treeview">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="headers_visible">True</property>
