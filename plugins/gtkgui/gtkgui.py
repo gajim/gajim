@@ -1947,7 +1947,7 @@ class systray:
 
 	def set_cb(self, widget, status):
 		statuss = ['online', 'away', 'xa', 'dnd', 'invisible', 'vide', 'offline']
-		self.cb.set_active(statuss.index(status))
+		self.plugin.roster.cb.set_active(statuss.index(status))
 
 	def start_chat(self, widget, account, jid):
 		if self.plugin.windows[account]['chats'].has_key(jid):
