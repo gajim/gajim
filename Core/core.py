@@ -147,7 +147,7 @@ else:
 		
 			proc = self.run(['--verify', '--enable-special-filenames', '-', '-&%s'%fd], create_fhs=['stdin', 'status', 'stderr'])
 
-			file.close
+			file.close()
 			sign = self.addHeaderFooter(sign, 'SIGNATURE')
 			proc.handles['stdin'].write(sign)
 			proc.handles['stdin'].close()
@@ -163,6 +163,8 @@ else:
 			keyid = ''
 			if resp.has_key('GOODSIG'):
 				keyid = string.split(resp['GOODSIG'])[0]
+			if resp.has_key('BADSIG'):
+				keyid = string.split(resp['BADSIG'])[0]
 			return keyid
 
 		def get_secret_keys(self):
