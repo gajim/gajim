@@ -635,7 +635,6 @@ class gc:
 	def chg_user_status(self, nick, show, status, role, affiliation, jid, \
 		reason, actor, statusCode, account):
 		"""When a user change his status"""
-		ji = jid.split('/')[0]
 		model = self.tree.get_model()
 		if show == 'offline' or show == 'error':
 			if statusCode == '307':
@@ -644,6 +643,9 @@ class gc:
 			self.remove_user(nick)
 		else:
 			iter = self.get_user_iter(nick)
+			ji = jid
+			if jid:
+				ji = jid.split('/')[0]
 			if not iter:
 				iter = self.add_user_to_roster(nick, show, role, ji)
 			else:
