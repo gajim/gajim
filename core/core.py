@@ -656,7 +656,6 @@ class GajimCore:
 				#TODO: tell the changes to other plugins
 			#('STATUS', account, (status, msg))
 			elif ev[0] == 'STATUS':
-				activ = 1
 				msg = ev[2][1]
 				if not msg:
 					msg = ev[2][0]
@@ -670,10 +669,7 @@ class GajimCore:
 						signed = ''
 						if self.connected[ev[1]] == 0:
 							self.hub.sendPlugin('BAD_PASSPHRASE', ev[1], ())
-				if self.cfgParser.tab[ev[1]].has_key('active'):
-					activ = self.cfgParser.tab[ev[1]]['active']
-				if (ev[2][0] != 'offline') and (self.connected[ev[1]] == 0) and \
-					activ:
+				if (ev[2][0] != 'offline') and (self.connected[ev[1]] == 0):
 					con = self.connect(ev[1])
 					if self.connected[ev[1]]:
 						statuss = ['offline', 'online', 'away', 'xa', 'dnd', \

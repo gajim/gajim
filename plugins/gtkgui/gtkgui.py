@@ -1345,9 +1345,6 @@ class roster_Window:
 			del self.contacts[account][u.jid]
 
 	def send_status(self, account, status, txt):
-		if self.plugin.accounts[account].has_key('active'):
-			if not self.plugin.accounts[account]['active']:
-				return
 		if status != 'offline':
 			keyid = None
 			save_gpg_pass = 0
@@ -1400,6 +1397,9 @@ class roster_Window:
 			warning_Window(_("You must setup an account before connecting to jabber network."))
 			return
 		for acct in accounts:
+			if self.plugin.accounts[acct].has_key('active'):
+				if not self.plugin.accounts[acct]['active']:
+					continue
 			self.send_status(acct, status, txt)
 	
 	def set_optionmenu(self):
