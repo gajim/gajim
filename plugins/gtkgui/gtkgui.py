@@ -417,7 +417,6 @@ class tabbed_chat_Window:
 		tv.set_wrap_mode(gtk.WRAP_WORD)
 		sw.add(tv)
 		self.widgets[user.jid]['message'] = tv
-		tv.grab_focus()
 		tv.connect('key_press_event', self.on_msg_key_press_event)
 
 		vb.show_all()
@@ -426,6 +425,7 @@ class tabbed_chat_Window:
 
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
+		tv.grab_focus()
 
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
