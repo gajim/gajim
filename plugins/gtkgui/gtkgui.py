@@ -283,7 +283,7 @@ class message_Window:
 		self.keyID = self.user.keyID
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat', APP)
 		self.window = self.xml.get_widget('Chat')
-		self.window.set_title('Chat with ' + user.name + " (" + account + ")")
+		self.window.set_title(user.name + " (" + account + ")")
 		self.img = self.xml.get_widget('image')
 		image = self.plugin.roster.pixbufs[user.show]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
