@@ -118,8 +118,13 @@ class GajimCore:
 
 	def messageCB(self, con, msg):
 		"""Called when we recieve a message"""
-		self.hub.sendPlugin('MSG', self.connexions[con], \
-			(str(msg.getFrom()), msg.getBody()))
+		if msg.getType() == 'error':
+			self.hub.sendPlugin('MSGERROR', self.connexions[con], \
+				(str(msg.getFrom()), msg.getErrorCode(), msg.getError(), \
+				msg.getBody()))
+		else:
+			self.hub.sendPlugin('MSG', self.connexions[con], \
+				(str(msg.getFrom()), msg.getBody()))
 	# END messageCB
 
 	def presenceCB(self, con, prs):
@@ -522,6 +527,7 @@ def loadPlugins(gc):
 			gc.hub.register(mod, 'STATUS')
 			gc.hub.register(mod, 'NOTIFY')
 			gc.hub.register(mod, 'MSG')
+			gc.hub.register(mod, 'MSGERROR')
 			gc.hub.register(mod, 'MSGSENT')
 			gc.hub.register(mod, 'SUBSCRIBED')
 			gc.hub.register(mod, 'UNSUBSCRIBED')

@@ -1590,6 +1590,14 @@ class plugin:
 			jid = string.replace(jid, '@', '')
 		self.roster.on_message(jid, array[1], account)
 		
+	def handle_event_msgerror(self, account, array):
+		#('MSG', account, (user, error_code, error_msg, msg))
+		jid = string.split(array[0], '/')[0]
+		if string.find(jid, "@") <= 0:
+			jid = string.replace(jid, '@', '')
+		self.roster.on_message(jid, _("error while sending") + " \"%s\" ( %s )"%\
+			(array[3], array[2]), account)
+		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
 		authorize_Window(self, array[0], array[1], account)
@@ -1695,6 +1703,8 @@ class plugin:
 				self.handle_event_notify(ev[1], ev[2])
 			elif ev[0] == 'MSG':
 				self.handle_event_msg(ev[1], ev[2])
+			elif ev[0] == 'MSGERROR':
+				self.handle_event_msgerror(ev[1], ev[2])
 			elif ev[0] == 'SUBSCRIBE':
 				self.handle_event_subscribe(ev[1], ev[2])
 			elif ev[0] == 'SUBSCRIBED':
