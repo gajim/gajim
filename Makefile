@@ -2,9 +2,11 @@ MODULES = common plugins/gtkgui
 PREFIX = /usr
 DESTDIR = /
 
-FIND= find -regex '.*\.\(\(glade\)\|\(py\)\|\(xpm\)\|\(gif\)\|\(png\)\|\(so\)\|\(mo\)\)'
+FIND= find -regex '.*\.\(\(glade\)\|\(py\)\|\(xpm\)\|\(gif\)\|\(png\)\|\(mo\)\)'
 FILES=`$(FIND)`
 DIRS= `$(FIND) -exec dirname {} \; | sort -u`
+FIND_LIB= find -regex '.*\.\(so\)'
+FILES_LIB=`$(FIND_LIB)`
 
 SCRIPTS = \
 	scripts/gajim
@@ -26,6 +28,11 @@ install:
 	for f in $(FILES) ; do \
 		DST=`dirname "$$f"`; \
 		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
+	done
+	rm "$(DESTDIR)$(PREFIX)/share/gajim/setup_win32.py";
+	mkdir -p "$(DESTDIR)$(PREFIX)/lib/gajim";
+	for f in $(FILES_LIB) ; do \
+		cp "$$f" "$(DESTDIR)$(PREFIX)/lib/gajim/"; \
 	done
 	for s in $(SCRIPTS) ; do \
 		BASE=`basename "$$s"`; \
