@@ -2,7 +2,7 @@ MODULES = common plugins/gtkgui
 PREFIX = /usr
 DESTDIR = /
 
-FIND= find -regex '.*\.\(\(glade\)\|\(py\)\|\(xpm\)\|\(gif\)\|\(so\)\|\(mo\)\)'
+FIND= find -regex '.*\.\(\(glade\)\|\(py\)\|\(xpm\)\|\(gif\)\|\(png\)\|\(so\)\|\(mo\)\)'
 FILES=`$(FIND)`
 DIRS= `$(FIND) -exec dirname {} \; | sort -u`
 
