@@ -7803,7 +7803,7 @@ Custom</property>
 	  <child>
 	    <widget class="GtkLabel" id="message_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">label</property>
+	      <property name="label" translatable="yes"></property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -7845,7 +7845,7 @@ Custom</property>
 	    <widget class="GtkCheckButton" id="save_passphrase_checkbutton">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">checkbutton</property>
+	      <property name="label" translatable="yes">Save passphrase</property>
 	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
@@ -7998,7 +7998,7 @@ Custom</property>
   </child>
 </widget>
 
-<widget class="GtkDialog" id="Away_msg">
+<widget class="GtkDialog" id="away_message_dialog">
   <property name="border_width">5</property>
   <property name="width_request">303</property>
   <property name="height_request">225</property>
@@ -8015,7 +8015,7 @@ Custom</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
-  <signal name="key_press_event" handler="on_key_press_event" last_modification_time="Sat, 08 Jan 2005 14:19:25 GMT"/>
+  <signal name="key_press_event" handler="on_away_message_dialog_key_press_event" last_modification_time="Wed, 02 Mar 2005 12:35:32 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox5">
@@ -8029,7 +8029,7 @@ Custom</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="okbutton3">
+	    <widget class="GtkButton" id="ok_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -8087,7 +8087,7 @@ Custom</property>
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkTextView" id="textview">
+		<widget class="GtkTextView" id="message_textview">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
@@ -8135,9 +8135,9 @@ Custom</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkComboBoxEntry" id="comboboxentry">
+	    <widget class="GtkComboBoxEntry" id="message_comboboxentry">
 	      <property name="visible">True</property>
-	      <signal name="changed" handler="on_comboboxentry_changed" last_modification_time="Mon, 25 Oct 2004 21:43:08 GMT"/>
+	      <signal name="changed" handler="on_message_comboboxentry_changed" last_modification_time="Wed, 02 Mar 2005 12:34:51 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>

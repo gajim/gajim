@@ -1887,7 +1887,7 @@ class roster_window:
 
 	def change_status(self, widget, account, status):
 		if status != 'online' and status != 'offline':
-			w = awayMsg_Window(self.plugin)
+			w = away_message_dialog(self.plugin)
 			txt = w.run()
 			if txt == -1:
 				return
@@ -1908,7 +1908,7 @@ class roster_window:
 			return
 		status = model[active][0]
 		if status != 'online' and status != 'offline':
-			w = awayMsg_Window(self.plugin)
+			w = away_message_dialog(self.plugin)
 			txt = w.run()
 			if txt == -1:
 				self.set_cb()
