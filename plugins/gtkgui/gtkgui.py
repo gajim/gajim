@@ -1969,12 +1969,12 @@ class roster_window:
 				self.plugin.systray.set_status('connecting')
 
 			save_pass = 0
-			if self.plugin.accounts[account].has_key("savepass"):
-				save_pass = self.plugin.accounts[account]["savepass"]
+			if self.plugin.accounts[account].has_key('savepass'):
+				save_pass = self.plugin.accounts[account]['savepass']
 			if not save_pass and not self.plugin.connected[account]:
 				passphrase = ''
-				w = passphrase_dialog('Enter your password for account %s' %account,\
-					'Save password', autoconnect)
+				w = passphrase_dialog('Enter your password for account %s' \
+					% account, 'Save password', autoconnect)
 				if autoconnect:
 					gtk.main()
 					passphrase, save = w.get_pass()
@@ -1992,10 +1992,10 @@ class roster_window:
 
 			keyid = None
 			save_gpg_pass = 0
-			if self.plugin.accounts[account].has_key("savegpgpass"):
-				save_gpg_pass = self.plugin.accounts[account]["savegpgpass"]
-			if self.plugin.accounts[account].has_key("keyid"):
-				keyid = self.plugin.accounts[account]["keyid"]
+			if self.plugin.accounts[account].has_key('savegpgpass'):
+				save_gpg_pass = self.plugin.accounts[account]['savegpgpass']
+			if self.plugin.accounts[account].has_key('keyid'):
+				keyid = self.plugin.accounts[account]['keyid']
 			if keyid and not self.plugin.connected[account] and \
 				self.plugin.config['usegpg']:
 				if save_gpg_pass:
@@ -2022,15 +2022,20 @@ class roster_window:
 		else:
 			self.plugin.sleeper_state[account] = 0
 
+	def get_status_message(self, status):
+		if (status == 'online' and not self.plugin.config['ask_online_status']) \
+			or (status == 'offline' and not \
+			self.plugin.config['ask_offline_status']):
+			return status
+		w = away_message_dialog(self.plugin)
+		message = w.run()
+		return message
+
 	def change_status(self, widget, account, status):
-		if status != 'online' and status != 'offline':
-			w = away_message_dialog(self.plugin)
-			txt = w.run()
-			if txt == -1:
-				return
-		else:
-			txt = status
-		self.send_status(account, status, txt)
+		message = self.get_status_message(status)
+		if message == -1:
+			return
+		self.send_status(account, status, message)
 
 	def on_cb_changed(self, widget):
 		"""When we change our status"""
@@ -2044,19 +2049,15 @@ class roster_window:
 			self.set_cb()
 			return
 		status = model[active][0]
-		if status != 'online' and status != 'offline':
-			w = away_message_dialog(self.plugin)
-			txt = w.run()
-			if txt == -1:
-				self.set_cb()
-				return
-		else:
-			txt = status
+		message = self.get_status_message(status)
+		if message == -1:
+			self.set_cb()
+			return
 		for acct in accounts:
 			if self.plugin.accounts[acct].has_key('active'):
 				if not self.plugin.accounts[acct]['active']:
 					continue
-			self.send_status(acct, status, txt)
+			self.send_status(acct, status, message)
 	
 	def set_cb(self):
 		#table to change index in plugin.connected to index in combobox
@@ -3263,6 +3264,8 @@ class plugin:
 			'autoawaytime':10,\
 			'autoxa':1,\
 			'autoxatime':20,\
+			'ask_online_status':0,\
+			'ask_offline_status':0,\
 			'last_msg':'',\
 			'msg0_name':'Brb',\
 			'msg0':'Back in some minutes.',\
