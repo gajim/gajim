@@ -1,4 +1,4 @@
-gajim (0.3-1) unstable; urgency=low
+gajim (0.3) unstable; urgency=low
 
   * GUI improvements
   * group chat support with MUC (JEP 45)
@@ -9,7 +9,7 @@ gajim (0.3-1) unstable; urgency=low
 
  -- Yann Le Boulanger <asterix@lagaule.org>  Sat, 18 Dec 2004 14:52:07 +0100
 
-gajim (0.2-2) unstable; urgency=low
+gajim (0.2.1) unstable; urgency=low
 
   * bugfixes : when configfile is incomplete
   * icon in systray with popup menu (for linux)
@@ -20,7 +20,7 @@ gajim (0.2-2) unstable; urgency=low
 
  -- Yann Le Boulanger <asterix@lagaule.org>  Thu,  1 Jul 2004 23:45:02 +0200
 
-gajim (0.2-1) unstable; urgency=low
+gajim (0.2) unstable; urgency=low
 
   * bugfix for french translation
   * multi-resource support
@@ -30,7 +30,7 @@ gajim (0.2-1) unstable; urgency=low
 
  -- Yann Le Boulanger <asterix@lagaule.org>  Tue,  8 Jun 2004 04:52:36 +0200
 
-gajim (0.1-1) unstable; urgency=low
+gajim (0.1) unstable; urgency=low
 
   * Initial release.
 
