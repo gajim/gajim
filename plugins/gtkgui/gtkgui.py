@@ -2518,6 +2518,7 @@ class plugin:
 	def handle_event_status(self, account, status):
 		#('STATUS', account, status)
 		self.roster.on_status_changed(account, status)
+		self.roster.window.set_icon(self.roster.pixbufs[status].get_pixbuf())
 	
 	def handle_event_notify(self, account, array):
 		#('NOTIFY', account, (jid, status, message, resource, priority, keyID, 
