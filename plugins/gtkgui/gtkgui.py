@@ -223,7 +223,20 @@ class message_Window:
 
 		buffer.insert_with_tags_by_name(end_iter, ttxt, tag)
 		if len(otxt) > 0:
-			buffer.insert(end_iter, otxt)
+			beg = 0
+			if self.plugin.config['useemoticons']:
+				index = 0
+				while index < len(otxt):
+					if otxt[index] in self.plugin.roster.begin_emot:
+						for s in self.plugin.roster.emoticons:
+							l = len(s)
+							if s == otxt[index:index+l]:
+								buffer.insert(end_iter, otxt[beg:index])
+								buffer.insert_pixbuf(end_iter, self.plugin.roster.emoticons[s])
+								index+=l
+								beg = index
+					index+=1
+			buffer.insert(end_iter, otxt[beg:])
 		
 		#scroll to the end of the textview
 		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
@@ -1721,6 +1734,102 @@ class roster_Window:
 			self.plugin.windows[account]['browser'] = \
 				browseAgent_Window(self.plugin, account)
 
+	def mkemoticons(self):
+		"""initialize emoticons array"""
+		emots = {':-)' : 'smile.png',
+					':)' : 'smile.png',
+					';-)' : 'wink.png',
+					';)' : 'wink.png',
+					':-p' : 'tongue.png',
+					':-P' : 'tongue.png',
+					':p' : 'tongue.png',
+					':P' : 'tongue.png',
+					':d' : 'biggrin.png',
+					':D' : 'biggrin.png',
+					':-d' : 'biggrin.png',
+					':-D' : 'biggrin.png',
+					':>' : 'biggrin.png',
+					':->' : 'biggrin.png',
+					':(' : 'unhappy.png',
+					':-(' : 'unhappy.png',
+					';(' : 'cry.png',
+					';-(' : 'cry.png',
+					':\'(' : 'cry.png',
+					';\'-(' : 'cry.png',
+					':-O' : 'oh.png',
+					':-o' : 'oh.png',
+					':O' : 'oh.png',
+					':o' : 'oh.png',
+					':-@' : 'angry.png',
+					':@' : 'angry.png',
+					':-$' : 'blush.png',
+					':$' : 'blush.png',
+					':-|' : 'stare.png',
+					':|' : 'stare.png',
+					':-S' : 'frowing.png',
+					':-s' : 'frowing.png',
+					':S' : 'frowing.png',
+					':s' : 'frowing.png',
+					'B-)' : 'coolglasses.png',
+					'B)' : 'coolglasses.png',
+					'8-)' : 'coolglasses.png',
+					'8)' : 'coolglasses.png',
+					'(H)' : 'coolglasses.png',
+					'(h)' : 'coolglasses.png',
+					':-[' : 'bat.png',
+					':[' : 'bat.png',
+					'(l)' : 'heart.png',
+					'(L)' : 'heart.png',
+					'(u)' : 'brheart.png',
+					'(U)' : 'brheart.png',
+					'(y)' : 'yes.png',
+					'(Y)' : 'yes.png',
+					'(n)' : 'no.png',
+					'(N)' : 'no.png',
+					'(z)' : 'boy.png',
+					'(Z)' : 'boy.png',
+					'(@)' : 'pussy.png',
+					'(})' : 'hugleft.png',
+					'({)' : 'hugright.png',
+					'(6)' : 'devil.png',
+					'(r)' : 'rainbow.png',
+					'(R)' : 'rainbow.png',
+					'(w)' : 'brflower.png',
+					'(W)' : 'brflower.png',
+					'(f)' : 'flower.png',
+					'(F)' : 'flower.png',
+					'(p)' : 'photo.png',
+					'(P)' : 'photo.png',
+					'(t)' : 'phone.png',
+					'(T)' : 'phone.png',
+					'(*)' : 'star.png',
+					'(8)' : 'music.png',
+					'(i)' : 'lamp.png',
+					'(I)' : 'lamp.png',
+					'(b)' : 'beer.png',
+					'(B)' : 'beer.png',
+					'(d)' : 'drink.png',
+					'(D)' : 'drink.png',
+					'(c)' : 'coffee.png',
+					'(C)' : 'coffee.png',
+					'(%)' : 'cuffs.png',
+					'(e)' : 'mail.png',
+					'(E)' : 'mail.png',
+					'(k)' : 'kiss.png',
+					'(K)' : 'kiss.png'
+					}
+		path = 'plugins/gtkgui/emoticons/'
+		self.emoticons = {}
+		self.begin_emot = ""
+		for e in emots:
+			file = path + emots[e]
+			if not os.path.exists(file):
+				continue
+			pix = gtk.gdk.pixbuf_new_from_file(file)
+			self.emoticons[e] = pix
+			if not e[0] in self.begin_emot:
+				self.begin_emot += e[0]
+
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
 		iconstyle = self.plugin.config['iconstyle']
@@ -1915,6 +2024,8 @@ class roster_Window:
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
 		self.mkpixbufs()
+		if self.plugin.config['useemoticons']:
+			self.mkemoticons()
 
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image)
 		self.cb = gtk.ComboBox()
@@ -2580,6 +2691,7 @@ class plugin:
 			'userfont': 'Sans 10',\
 			'saveposition': 1,\
 			'mergeaccounts': 0,\
+			'useemoticons': 1,\
 			'x-position': 0,\
 			'y-position': 0,\
 			'width': 150,\

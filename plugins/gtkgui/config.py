@@ -217,6 +217,13 @@ class preference_Window:
 		else:
 			self.plugin.config['mergeaccounts'] = 0
 		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
+		#use emoticons
+		chk = self.xml.get_widget('use_emoticons_checkbutton')
+		if chk.get_active():
+			self.plugin.config['useemoticons'] = 1
+			self.plugin.roster.mkemoticons()
+		else:
+			self.plugin.config['useemoticons'] = 0
 		#autopopup
 		if self.chk_autopp.get_active():
 			self.plugin.config['autopopup'] = 1
@@ -356,6 +363,8 @@ class preference_Window:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Preferences', APP)
 		self.window = self.xml.get_widget('Preferences')
 		self.plugin = plugin
+		self.xml.get_widget('image_emoticons').set_from_file(\
+			'plugins/gtkgui/pixmaps/smile.png')
 		self.combo_iconstyle = self.xml.get_widget('combo_iconstyle')
 		self.chk_autopp = self.xml.get_widget('chk_autopopup')
 		self.chk_autoppaway = self.xml.get_widget('chk_autopopupaway')
@@ -400,6 +409,10 @@ class preference_Window:
 		#Merge accounts
 		st = self.plugin.config['mergeaccounts']
 		self.xml.get_widget('merge_checkbutton').set_active(st)
+
+		#Use emoticons
+		st = self.plugin.config['useemoticons']
+		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
 		
 		#Autopopup
 		st = self.plugin.config['autopopup']
