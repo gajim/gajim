@@ -436,7 +436,7 @@ class preference_Window:
 		#trayicon
 		st = self.plugin.config['trayicon']
 		self.chk_trayicon.set_active(st)
-		if self.plugin.sleeper.getState() == common.sleepy.STATE_UNKNOWN:
+		if isinstance(self.plugin.systray, gtkgui.systrayDummy):
 			self.chk_trayicon.set_sensitive(False)
 
 		#Color for account text
