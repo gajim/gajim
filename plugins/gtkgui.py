@@ -104,46 +104,52 @@ class roster:
 		return self.tree.render_icon(stock, size = gtk.ICON_SIZE_MENU, detail = None)
 
 	def mkl_group(self):
-		self.l_group = []
+		""" {name:iter} """
+		self.l_group = {}
 		for u in self.l_contact:
-			if u.group in self.l_group:
-				pass
-			else:
-				self.l_group.append(u.group)
+			if not self.l_group.has_key(u.group):
+				iterG = self.treestore.append(None, (self.pixbufs['online'], u.group, 'group'))
+				self.l_group[u.group]=iterG
 
-	def mkroster(self):
-		self.treestore.clear()
-		for g in self.l_group:
-			iter_g = self.treestore.append(None, (self.pixbufs['online'], g, 'group'))
-			for c in self.l_contact:
-				if c.group == g:
-#					print c.status
-					self.treestore.append(iter_g, (self.pixbufs[c.show], c.name, c.show))
-#					if c.status == 'Online':
-#						self.treestore.append(iter_g, (self.pixbufs['Online'], c.name, 'Online'))
-#					elif c.status == None:
-#						self.treestore.append(iter_g, (self.pixbufs['away'], c.name, 'away'))
-
-	def mkroster2(self, tab):
+	def mkroster(self, tab):
 		self.l_contact = []
 		for jid in tab.keys():
 			user1 = user(jid, 'general', tab[jid]["Show"], tab[jid]["Status"])
 			self.l_contact.append(user1)
+		self.treestore.clear()
 		self.mkl_group()
-		self.mkroster()
-		self.tree.collapse_row((0,3))
+		for g in self.l_group.keys():
+			for c in self.l_contact:
+				if c.group == g:
+					if c.show != 'offline' or self.showOffline:
+						self.treestore.append(self.l_group[g], (self.pixbufs[c.show], c.name, c.show))
 	
 	def update_iter(self, widget, path, iter, data):
 		val = self.treestore.get_value(iter, 1)
 		if val == data[0]:
-			self.treestore.set_value(iter, 0, self.pixbufs[data[1]])
+			if data[1] == 'offline':
+				self.treestore.remove(iter)
+				if not self.showOffline:
+					self.found=1
+			else:
+				self.treestore.set_value(iter, 0, self.pixbufs[data[1]])
+				self.found=1
+			return 1
+		return 0
 	
 	def chg_status(self, jid, show, status):
 		for u in self.l_contact:
 			if u.name == jid:
+				self.found=0
+				self.treestore.foreach(self.update_iter, (jid, show))
+				if self.found==0:
+					if not self.l_group.has_key(u.group):
+						iterG = self.treestore.append(None, (self.pixbufs['online'], u.group, 'group'))
+						self.l_group[u.group]=iterG
+					self.treestore.append(self.l_group[u.group], (self.pixbufs[show], u.name, show))
 				u.show = show
 				u.status = status
-				self.treestore.foreach(self.update_iter, (jid, show))
+				return 1
 	
 	def mk_menu_c(self, event):
 		self.menu_c = gtk.Menu()
@@ -219,6 +225,7 @@ class roster:
 		self.optionmenu = self.xml.get_widget('optionmenu')
 		self.optionmenu.set_history(6)
 		self.tab_messages = {}
+		self.showOffline=1
 
 		#colonnes
 		self.col = gtk.TreeViewColumn()
@@ -246,7 +253,7 @@ class plugin:
 			ev = self.queueIN.get()
 			print ev
 			if ev[0] == 'ROSTER':
-				self.r.mkroster2(ev[1])
+				self.r.mkroster(ev[1])
 			elif ev[0] == 'NOTIFY':
 				self.r.chg_status(ev[1][0], ev[1][1], ev[1][2])
 			elif ev[0] == 'MSG':
@@ -267,4 +274,4 @@ class plugin:
 if __name__ == "__main__":
 	plugin(None, None)
 
-print "plugin gui loaded"
+print "plugin gtkgui loaded"

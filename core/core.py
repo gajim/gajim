@@ -59,6 +59,10 @@ class GajimCore:
 				show = 'online'
 			self.hub.sendPlugin('NOTIFY', \
 			(prs.getFrom().getBasic(), show, prs.getStatus()))
+		if type == 'unavailable':
+			self.hub.sendPlugin('NOTIFY', \
+				(prs.getFrom().getBasic(), 'offline', prs.getStatus()))
+			
 	# END presenceCB
 
 	def disconnectedCB(self, con):
