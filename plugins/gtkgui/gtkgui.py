@@ -1686,24 +1686,21 @@ class roster_Window:
 				self.plugin.config['accounttextcolor'])
 			renderer.set_property('cell-background', \
 				self.plugin.config['accountbgcolor'])
-			renderer.set_property('font', 'Normal')
-			renderer.set_property('weight', 700)
+			renderer.set_property('font', self.plugin.config['accountfont'])
 			renderer.set_property('xpad', 0)
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('foreground', \
 				self.plugin.config['grouptextcolor'])
 			renderer.set_property('cell-background', \
 				self.plugin.config['groupbgcolor'])
-			renderer.set_property('font', 'Italic')
-			renderer.set_property('weight-set', False)
+			renderer.set_property('font', self.plugin.config['groupfont'])
 			renderer.set_property('xpad', 8)
 		else:
 			renderer.set_property('foreground', \
 				self.plugin.config['usertextcolor'])
 			renderer.set_property('cell-background', \
 				self.plugin.config['userbgcolor'])
-			renderer.set_property('font', 'Normal')
-			renderer.set_property('weight-set', False)
+			renderer.set_property('font', self.plugin.config['userfont'])
 			renderer.set_property('xpad', 16)
 
 	def compareIters(self, model, iter1, iter2, data = None):
@@ -1771,7 +1768,6 @@ class roster_Window:
 		parent_i = model.iter_parent(iter_source)
 		if model.iter_n_children(parent_i) == 1: #this was the only child
 			model.remove(parent_i)
-		#TODO: get the good keyID
 		self.add_user_to_roster(data, account)
 		if context.action == gtk.gdk.ACTION_MOVE:
 			context.finish(True, True, etime)
@@ -2375,10 +2371,13 @@ class plugin:
 			'hiddenlines':'',\
 			'accounttextcolor': '#ff0000',\
 			'accountbgcolor': '#9fdfff',\
+			'accountfont': 'Sans Bold 10',\
 			'grouptextcolor': '#0000ff',\
 			'groupbgcolor': '#ffffff',\
+			'groupfont': 'Sans Italic 10',\
 			'usertextcolor': '#000000',\
-			'userbgcolor': '#ffffff'}))
+			'userbgcolor': '#ffffff',\
+			'userfont': 'Sans 10'}))
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
 		self.accounts = self.wait('CONFIG')

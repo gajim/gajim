@@ -183,6 +183,18 @@ class preference_Window:
 		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
 			+(hex(color.blue)+'0')[2:4]
 		self.plugin.config['userbgcolor'] = colSt
+		#Font for account
+		fontStr = self.xml.get_widget('fontbutton_account_text').get_font_name()
+		print fontStr
+		self.plugin.config['accountfont'] = fontStr
+		#Font for group
+		fontStr = self.xml.get_widget('fontbutton_group_text').get_font_name()
+		print fontStr
+		self.plugin.config['groupfont'] = fontStr
+		#Font for user
+		fontStr = self.xml.get_widget('fontbutton_user_text').get_font_name()
+		print fontStr
+		self.plugin.config['userfont'] = fontStr
 		#update opened chat windows
 		for a in self.plugin.accounts.keys():
 			for w in self.plugin.windows[a]['chats'].keys():
@@ -355,6 +367,18 @@ class preference_Window:
 		colSt = self.plugin.config['userbgcolor']
 		self.xml.get_widget('colorbutton_user_bg').set_color(\
 			gtk.gdk.color_parse(colSt))
+
+		#font for account
+		fontStr = self.plugin.config['accountfont']
+		self.xml.get_widget('fontbutton_account_text').set_font_name(fontStr)
+		
+		#font for group
+		fontStr = self.plugin.config['groupfont']
+		self.xml.get_widget('fontbutton_group_text').set_font_name(fontStr)
+		
+		#font for account
+		fontStr = self.plugin.config['userfont']
+		self.xml.get_widget('fontbutton_user_text').set_font_name(fontStr)
 		
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_ok_clicked', self.on_ok)
