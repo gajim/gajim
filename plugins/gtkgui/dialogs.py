@@ -781,17 +781,30 @@ class Popup_window:
 	def __init__(self, plugin=None, account=None):
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_window', APP)
-		self.window = self.xml.get_widget('popup_window')
+		
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_window', APP)
+		self.window = xml.get_widget('popup_window')
+		close_button = xml.get_widget('close_button')
+
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('green'))
 		
 		# position the window to bottom-right of screen
 		gtk.gdk.flush()
 		window_width, window_height = self.window.get_size()
-		self.window.move(gtk.gdk.screen_width() - window_width, gtk.gdk.screen_height() - window_height)
+		self.plugin.roster.popups_height += window_height
+		self.window.move(gtk.gdk.screen_width() - window_width, \
+					gtk.gdk.screen_height() - self.plugin.roster.popups_height)
 		
-		self.xml.signal_autoconnect(self)
+		xml.signal_autoconnect(self)
+		close_button.connect('clicked', self.on_close_button_clicked, window_height)
 		self.window.show_all()
 
-	def on_close_button_clicked(self, widget):
-		self.window.hide()
+		gobject.timeout_add(5000, self.on_timeout, window_height)
+
+	def on_close_button_clicked(self, widget, window_height):
+		self.plugin.roster.popups_height -= window_height
+		widget.get_toplevel().destroy()
+
+	def on_timeout(self, window_height):
+		self.plugin.roster.popups_height -= window_height
+		self.window.destroy()

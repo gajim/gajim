@@ -909,7 +909,9 @@ class Roster_window:
 		Popup_window(self.plugin)
 
 	def on_accounts_menuitem_activate(self, widget):
-		if not self.plugin.windows.has_key('accounts'):
+		if self.plugin.windows.has_key('accounts'):
+			self.plugin.windows['accounts'].present()
+		else:
 			self.plugin.windows['accounts'] = Accounts_window(self.plugin) 
 
 	def close_all(self, dic):
@@ -1305,6 +1307,7 @@ class Roster_window:
 		self.window.show_all()
 		self.groups = {}
 		self.contacts = {}
+		self.popups_height = 0
 		for a in self.plugin.accounts.keys():
 			self.contacts[a] = {}
 			self.groups[a] = {}
