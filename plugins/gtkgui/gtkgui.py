@@ -429,11 +429,10 @@ class tabbed_chat_Window:
 
 		vb.show_all()
 		nb = self.xml.get_widget("notebook")
-		nb.set_current_page(nb.append_page(vb))
+		nb.append_page(vb)
 
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
-		tv.grab_focus()
 
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
@@ -2089,6 +2088,7 @@ class roster_Window:
 				self.plugin.windows[account]['chats'][jid].window.present()
 			elif self.contacts[account].has_key(jid):
 				self.new_chat(self.contacts[account][jid][0], account)
+				self.plugin.windows[account]['chats']['tabbed'].active_tab(jid)
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		"""When a row is expanded :
