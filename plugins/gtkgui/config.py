@@ -1119,6 +1119,9 @@ class Account_modification_window:
 					self.plugin.roster.contacts[self.account]
 				self.plugin.sleeper_state[name] = \
 					self.plugin.sleeper_state[self.account]
+				for kind in ['infos', 'chats', 'gc']:
+					for jid in self.plugin.windows[name][kind]:
+						self.plugin.windows[name][kind][jid].account = name
 				del self.plugin.windows[self.account]
 				del self.plugin.queues[self.account]
 				del self.plugin.connected[self.account]
