@@ -1364,7 +1364,7 @@ class roster_Window:
 				save_pass = self.plugin.accounts[account]["savepass"]
 			if not save_pass and not self.plugin.connected[account]:
 				passphrase = ''
-				w = passphrase_Window('Enter your passphrase for your account %s' % account)
+				w = passphrase_Window('Enter your password for your account %s' % account)
 				passphrase = w.run()
 				if passphrase == -1:
 					return
