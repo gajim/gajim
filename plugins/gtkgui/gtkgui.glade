@@ -4743,7 +4743,6 @@ when NOT online</property>
 				      <property name="right_margin">0</property>
 				      <property name="indent">0</property>
 				      <property name="text" translatable="yes"></property>
-				      <signal name="focus_out_event" handler="on_msg_textview_focus_out_event" last_modification_time="Sun, 24 Oct 2004 21:47:42 GMT"/>
 				    </widget>
 				  </child>
 				</widget>

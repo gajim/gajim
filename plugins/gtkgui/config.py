@@ -311,7 +311,7 @@ class preference_Window:
 		buf.set_text('')
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
 
-	def on_msg_textview_focus_out_event(self, widget, data=None):
+	def on_msg_textview_changed(self, widget, data=None):
 		(model, iter) = self.msg_tree.get_selection().get_selected()
 		if not iter:
 			return
@@ -409,6 +409,8 @@ class preference_Window:
 		renderer.connect('edited', self.on_msg_cell_edited)
 		renderer.set_property('editable', True)
 		self.fill_msg_treeview()
+		buf = self.xml.get_widget('msg_textview').get_buffer()
+		buf.connect('changed', self.on_msg_textview_changed)
 
 		#trayicon
 		st = self.plugin.config['trayicon']
@@ -467,8 +469,6 @@ class preference_Window:
 			self.on_new_msg_button_clicked)
 		self.xml.signal_connect('on_delete_msg_button_clicked', \
 			self.on_delete_msg_button_clicked)
-		self.xml.signal_connect('on_msg_textview_focus_out_event', \
-			self.on_msg_textview_focus_out_event)
 
 class accountPreference_Window:
 	"""Class for account informations"""
