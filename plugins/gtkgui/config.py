@@ -741,7 +741,7 @@ class preferences_window:
 		st = self.config_logger['lognotsep']
 		self.xml.get_widget('chk_log_pres_ext').set_active(st)
 
-class accountpreferences_window:
+class account_window:
 	"""Class for account informations"""
 	def on_account_window_destroy(self, widget):
 		"""close window"""
@@ -961,13 +961,13 @@ class accountpreferences_window:
 			jid = self.xml.get_widget('jid_entry').get_text()
 			if self.plugin.connected[self.account]:
 				self.plugin.windows[self.account]['infos'][jid] = \
-					infoUser_Window(jid, self.plugin, self.account, True)
+					vcard_information_window(jid, self.plugin, self.account, True)
 				self.plugin.send('ASK_VCARD', self.account, jid)
 			else:
 				warning_dialog(_('You must be connected to get your informations'))
 	
 	def on_gpg_choose_button_clicked(self, widget, data=None):
-		w = choose_gpg_Window()
+		w = choose_gpg_key_dialog()
 		self.plugin.windows['gpg_keys'] = w
 		self.plugin.send('GPG_SECRETE_KEYS', None, ())
 		keyID = w.run()
@@ -1070,7 +1070,7 @@ class configure_accounts_window:
 		"""When new button is clicked : open an account information window"""
 		if not self.plugin.windows.has_key('accountPreference'):
 			self.plugin.windows['accountPreference'] = \
-				accountpreferences_window(self.plugin)
+				account_window(self.plugin)
 
 	def on_delete_button_clicked(self, widget):
 		"""When delete button is clicked :
@@ -1106,7 +1106,7 @@ class configure_accounts_window:
 			infos['jid'] = self.plugin.accounts[account]['name'] + \
 				'@' +  self.plugin.accounts[account]['hostname']
 			self.plugin.windows['accountPreference'] = \
-				accountpreferences_window(self.plugin, infos)
+				account_window(self.plugin, infos)
 
 	def on_toggled(self, cell, path, model=None):
 		iter = model.get_iter(path)
@@ -1141,7 +1141,7 @@ class configure_accounts_window:
 		self.init_accounts()
 
 
-class agentRegistration_Window:
+class agent_registration_window:
 	"""Class for agent registration window :
 	window that appears when we want to subscribe to an agent"""
 	def on_cancel(self, widget):

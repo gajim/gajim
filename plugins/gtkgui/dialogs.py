@@ -34,7 +34,7 @@ import gtkgui
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
 
-class infoUser_Window:
+class vcard_information_window:
 	"""Class for user's information window"""
 	def on_user_information_window_destroy(self, widget=None):
 		"""close window"""
@@ -262,7 +262,7 @@ class passphrase_dialog:
 		self.xml.get_widget('save_passphrase_checkbutton').set_label(checkbuttontext)
 		self.xml.signal_autoconnect(self)
 
-class choose_gpg_Window:
+class choose_gpg_key_dialog:
 	"""Class for Away Message Window"""
 	def run(self):
 		"""Wait for Ok button to be pressed and return the selected key"""
@@ -453,7 +453,7 @@ class add_contact_window:
 				agent_combobox.set_active(jid_agents.index(jid_splited[1])+1)
 		self.xml.signal_autoconnect(self)
 
-class about_Window: #FIXME: (nk) pygtk2.6 has a built-in window for that
+class about_window: #FIXME: (nk) pygtk2.6 has a built-in window for that
 	"""Class for about window"""
 	def delete_event(self, widget):
 		"""close window"""
@@ -493,7 +493,7 @@ class warning_dialog:
 		response = self.dialog.run()
 		self.dialog.destroy()
 
-class subscription_request_Window:
+class subscription_request_window:
 	"""Class for authorization window :
 	window that appears when a user wants to add us to his/her roster"""
 	def on_close_button_clicked(self, widget):
@@ -505,7 +505,7 @@ class subscription_request_Window:
 		self.plugin.send('AUTH', self.account, self.jid)
 		widget.get_toplevel().destroy()
 		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
-			addContact_Window(self.plugin, self.account, self.jid)
+			add_contact_window(self.plugin, self.account, self.jid)
 	
 	def on_deny_button_clicked(self, widget):
 		"""refuse the request"""

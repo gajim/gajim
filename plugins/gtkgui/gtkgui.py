@@ -189,7 +189,7 @@ class user:
 			self.keyID = args[9]
 		else: raise TypeError, _('bad arguments')
 
-class tabbed_chat_Window:
+class tabbed_chat_window:
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat', APP)
@@ -307,7 +307,7 @@ class tabbed_chat_Window:
 		"""When history button is pressed : call log window"""
 		jid = self.get_active_jid()
 		if not self.plugin.windows['logs'].has_key(jid):
-			self.plugin.windows['logs'][jid] = log_Window(self.plugin, jid)
+			self.plugin.windows['logs'][jid] = history_window(self.plugin, jid)
 
 	def on_notebook_switch_page(self, nb, page, page_num):
 		child = nb.get_nth_page(page_num)
@@ -580,7 +580,7 @@ class tabbed_chat_Window:
 			self.show_title()
 
 
-class message_Window:
+class chat_window:
 	"""Class for chat window"""
 	def delete_event(self, widget):
 		"""close window"""
@@ -717,7 +717,7 @@ class message_Window:
 	def on_history(self, widget):
 		"""When history button is pressed : call log window"""
 		if not self.plugin.windows['logs'].has_key(self.user.jid):
-			self.plugin.windows['logs'][self.user.jid] = log_Window(self.plugin, self.user.jid)
+			self.plugin.windows['logs'][self.user.jid] = history_window(self.plugin, self.user.jid)
 
 	def on_focus(self, widget, event):
 		"""When window get focus"""
@@ -1139,7 +1139,7 @@ class gc:
 		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
 		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
 
-class log_Window:
+class history_window:
 	"""Class for bowser agent window :
 	to know the agents on the selected server"""
 	def on_history_window_destroy(self, widget):
@@ -1576,10 +1576,10 @@ class roster_window:
 				_("%s is now %s (%s)") % (name, show, status), user.jid, 'status')
 
 	def on_info(self, widget, user, account):
-		"""Call infoUser_Window class to display user's information"""
+		"""Call vcard_information_window class to display user's information"""
 		if not self.plugin.windows[account]['infos'].has_key(user.jid):
 			self.plugin.windows[account]['infos'][user.jid] = \
-				infoUser_Window(user, self.plugin, account)
+				vcard_information_window(user, self.plugin, account)
 
 	def on_agent_logging(self, widget, jid, state, account):
 		"""When an agent is requested to log in or off"""
@@ -1587,7 +1587,7 @@ class roster_window:
 
 	def on_remove_agent(self, widget, jid, account):
 		"""When an agent is requested to log in or off"""
-		window = confirm_window(_("Are you sure you want to remove the agent %s from your roster ?") % jid)
+		window = confirm_dialog(_("Are you sure you want to remove the agent %s from your roster ?") % jid)
 		if window.wait() == gtk.RESPONSE_YES:
 			self.plugin.send('UNSUB_AGENT', account, jid)
 			for u in self.contacts[account][jid]:
@@ -1603,7 +1603,7 @@ class roster_window:
 	def on_history(self, widget, user):
 		"""When history button is pressed : call log window"""
 		if not self.plugin.windows['logs'].has_key(user.jid):
-			self.plugin.windows['logs'][user.jid] = log_Window(self.plugin, \
+			self.plugin.windows['logs'][user.jid] = history_window(self.plugin, \
 				user.jid)
 	
 	def mk_menu_user(self, event, iter):
@@ -1706,7 +1706,7 @@ class roster_window:
 			infos['jid'] = self.plugin.accounts[account]["name"] + \
 				'@' +  self.plugin.accounts[account]["hostname"]
 			self.plugin.windows['accountPreference'] = \
-				accountpreferences_window(self.plugin, infos)
+				account_window(self.plugin, infos)
 
 	def mk_menu_account(self, event, iter):
 		"""Make account's popup menu"""
@@ -1815,7 +1815,7 @@ class roster_window:
 
 	def on_req_usub(self, widget, user, account):
 		"""Remove a user"""
-		window = confirm_window(_("Are you sure you want to remove %s (%s) from your roster ?") % (user.name, user.jid))
+		window = confirm_dialog(_("Are you sure you want to remove %s (%s) from your roster ?") % (user.name, user.jid))
 		if window.wait() == gtk.RESPONSE_YES:
 			self.plugin.send('UNSUB', account, user.jid)
 			for u in self.contacts[account][user.jid]:
@@ -1956,7 +1956,7 @@ class roster_window:
 		if USE_TABBED_CHAT:
 			if not self.plugin.windows[account]['chats'].has_key('tabbed'):
 				self.plugin.windows[account]['chats']['tabbed'] = \
-					tabbed_chat_Window(user, self.plugin, account)
+					tabbed_chat_window(user, self.plugin, account)
 			else:
 				self.plugin.windows[account]['chats']['tabbed'].new_user(user)
 			self.plugin.windows[account]['chats'][user.jid] = \
@@ -1964,7 +1964,7 @@ class roster_window:
 			self.plugin.windows[account]['chats']['tabbed'].window.present()
 		else:
 			self.plugin.windows[account]['chats'][user.jid] = \
-				message_Window(user, self.plugin, account)
+				chat_window(user, self.plugin, account)
 
 	def on_message(self, jid, msg, tim, account):
 		"""when we receive a message"""
@@ -2044,7 +2044,7 @@ class roster_window:
 		"""When about is selected :
 		call the about class"""
 		if not self.plugin.windows.has_key('about'):
-			self.plugin.windows['about'] = about_Window(self.plugin)
+			self.plugin.windows['about'] = about_window(self.plugin)
 
 	def on_accounts_menuitem_activate(self, widget):
 		"""When accounts is seleted :
@@ -2823,7 +2823,7 @@ class plugin:
 		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
-		authorize_Window(self, array[0], array[1], account)
+		subscription_request_window(self, array[0], array[1], account)
 
 	def handle_event_subscribed(self, account, array):
 		#('SUBSCRIBED', account, (jid, resource))
@@ -2864,7 +2864,7 @@ class plugin:
 		if not array[1].has_key('instructions'):
 			warning_dialog(_("error contacting %s") % array[0])
 		else:
-			agentRegistration_Window(array[0], array[1], self, account)
+			agent_registration_window(array[0], array[1], self, account)
 
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (hostname, login, pasword, name, ressource, prio,
