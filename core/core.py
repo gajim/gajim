@@ -226,6 +226,7 @@ class GajimCore:
 			con.setDisconnectHandler(self.disconnectedCB)
 			#BUG in jabberpy library : if hostname is wrong : "boucle"
 			if con.auth(name, password, ressource):
+				self.connexions[con] = account
 				con.requestRoster()
 				roster = con.getRoster().getRaw()
 				if not roster :
@@ -233,7 +234,6 @@ class GajimCore:
 				self.hub.sendPlugin('ROSTER', account, roster)
 				con.sendInitPresence()
 				self.hub.sendPlugin('STATUS', account, 'online')
-				self.connexions[con] = account
 				self.connected[account] = 1
 				iq = common.jabber.Iq(type="get")
 				iq._setTag('vCard', common.jabber.NS_VCARD)
