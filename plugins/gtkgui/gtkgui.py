@@ -53,15 +53,23 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 	def do_get_property(self, pspec):
 		return getattr(self, pspec.name)
 
+	def func(self, model, path, iter, (image, tree)):
+		if model.get_value(iter, 0) == image:
+			self.redraw = 1
+			cell_area = tree.get_cell_area(path, tree.get_column(0))
+			tree.queue_draw_area(cell_area.x, cell_area.y, cell_area.width, cell_area.height)
+
 	def animation_timeout(self, tree, image):
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			self.redraw = 0
 			image.get_data('iter').advance()
-			gobject.timeout_add(image.get_data('iter').get_delay_time(), self.animation_timeout, tree, image)
-		tree.queue_draw()
-#		tree.queue_draw_area(16,32,16,340)
-#		tree.queue_draw_area(draw_rect.x, \
-#			draw_rect.y, pix.get_width(), pix.get_height())
-	
+			model = tree.get_model()
+			model.foreach(self.func, (image, tree))
+			if self.redraw:
+				gobject.timeout_add(image.get_data('iter').get_delay_time(), self.animation_timeout, tree, image)
+			else:
+				image.set_data('iter', None)
+				
 	def on_render(self, window, widget, background_area,cell_area, \
 		expose_area, flags):
 		pix_rect = gtk.gdk.Rectangle()
