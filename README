@@ -24,6 +24,11 @@ gajim
 or if you don't 'make install' you can also run from gajim folder with
 ./gajim.py
 
+TROUBLESHOOTING
+If you have python2.3 please manually edit plugins/gtkgui/Makefile and in
+CFLAGS line replace python2.4 to python2.3
+
+
 Enjoy!
 
 (C) 2005
