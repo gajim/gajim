@@ -1292,6 +1292,58 @@ class roster_Window:
 			return 1
 		return 0
 
+	def drag_data_get_data(self, treeview, context, selection, target_id, etime):
+		treeselection = treeview.get_selection()
+		model, iter = treeselection.get_selected()
+		path = model.get_path(iter)
+		data = ""
+		if len(path) == 3:
+			data = model.get_value(iter, 3)
+		selection.set(selection.target, 8, data)
+
+	def drag_data_received_data(self, treeview, context, x, y, selection, info,
+		etime):
+		model = treeview.get_model()
+		data = selection.data
+		if not data:
+			return
+		drop_info = treeview.get_dest_row_at_pos(x, y)
+		if not drop_info:
+			return
+		path_dest, position = drop_info
+		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2\
+			and path_dest[1] == 0: #droped before the first group
+			return
+		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
+			#droped before a group : we drop it in the previous group
+			path_dest = (path_dest[0], path_dest[1]-1)
+		iter_dest = model.get_iter(path_dest)
+		iter_source = treeview.get_selection().get_selected()[1]
+		path_source = model.get_path(iter_source)
+		if len(path_dest) == 1: #droped on an account
+			return
+		if path_dest[0] != path_source[0]: #droped in another account
+			return
+		grp_source = model.get_value(model.iter_parent(iter_source), 3)
+		account = model.get_value(model.get_iter(path_dest[0]), 3)
+		if len(path_dest) == 2:
+			grp_dest = model.get_value(iter_dest, 3)
+		elif len(path_dest) == 3:
+			grp_dest = model.get_value(model.iter_parent(iter_dest), 3)
+		if grp_source != grp_dest:
+			return
+		for u in self.contacts[account][data]:
+			u.groups.remove(grp_source)
+			u.groups.append(grp_dest)
+		self.plugin.send('UPDUSER', account, (u.jid, u.name, u.groups))
+		parent_i = model.iter_parent(iter_source)
+		if model.iter_n_children(parent_i) == 1: #this was the only child
+			model.remove(parent_i)
+		self.add_user_to_roster(data, account)
+		if context.action == gtk.gdk.ACTION_MOVE:
+			context.finish(True, True, etime)
+		return
+
 	def __init__(self, plugin):
 		# FIXME : handle no file ...
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim', APP)
@@ -1339,6 +1391,12 @@ class roster_Window:
 		self.tree.set_expander_column(col)
 
 		#signals
+		TARGETS = [('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0)]
+		self.tree.enable_model_drag_source( gtk.gdk.BUTTON1_MASK, TARGETS,
+			gtk.gdk.ACTION_DEFAULT| gtk.gdk.ACTION_MOVE)
+		self.tree.enable_model_drag_dest(TARGETS, gtk.gdk.ACTION_DEFAULT)
+		self.tree.connect("drag_data_get", self.drag_data_get_data)
+		self.tree.connect("drag_data_received", self.drag_data_received_data)
 		self.xml.signal_connect('gtk_main_quit', self.on_quit)
 		self.xml.signal_connect('on_preferences_activate', self.on_prefs)
 		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
