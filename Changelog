@@ -1,9 +1,9 @@
 Gajim 0.6.1 (02 April 2005)
 
-  * Rewrite of service discovery. It doen't freeze Gajim anymore.
+  * Rewrite of service discovery. It doesn't freeze Gajim anymore.
   * More HIG Compliant.
   * Gajim is faster (do not redraw preferences_window each time we open it, use
-  of psycho)
+  of psyco if available)
 
 Gajim 0.6 (23 March 2005)
 
