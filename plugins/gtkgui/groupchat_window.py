@@ -517,13 +517,13 @@ class Groupchat_window(Chat):
 
 				model = widget.get_model()
 				iter = model.get_iter(path)
-				type = model.get_value(iter, 2)
-				if (type == 'group' or type == 'account'):
+				status = model.get_value(iter, 3) # if no status: it's a group
+				if not status:
 					if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
-						if (self.tree.row_expanded(path)):
-							self.tree.collapse_row(path)
+						if (widget.row_expanded(path)):
+							widget.collapse_row(path)
 						else:
-							self.tree.expand_row(path, False)
+							widget.expand_row(path, False)
 			
 			#FIXME: should popup chat window for GC contact DOUBLE clicked
 			# also chat [in contect menu]
