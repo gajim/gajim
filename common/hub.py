@@ -28,7 +28,7 @@ class GajimHub:
     def __init__(self):
         self.queues = {}
         """ {event1:[queue1, queue2]} """
-        self.events = {'NOTIFY':[], 'MSG':[], 'ROSTER':[]}
+        self.events = {}
         self.queueIn = self.newQueue('in', 100)
     # END __init__
 
@@ -49,7 +49,10 @@ class GajimHub:
     def register(self, name, event):
         """ Records a plugin from an event """
         qu = self.queues[name]
-        self.events[event].append(qu)
+	if self.events.has_key(event) :
+		self.events[event].append(qu)
+	else :
+		self.events[event] = [qu]
     # END register
 
     def sendPlugin(self, event, data):

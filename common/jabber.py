@@ -62,7 +62,7 @@ An example of usage for a simple client would be ( only psuedo code !)
 
 """
 
-# $Id: jabber.py,v 1.30 2003/02/20 10:22:33 shire Exp $
+# $Id: jabber.py,v 1.1.1.1 2003/10/22 18:45:18 tab Exp $
 
 import xmlstream
 import sha, time
@@ -722,12 +722,16 @@ class Client(Connection):
         """
         iq = Iq(type='set')
         item = iq.setQuery(NS_ROSTER).insertTag('item')
-        item.putAtrr('jid', str(jid))
-        if name != None: item.putAtrr('name', name)
+        item.putAttr('jid', str(jid))
+        if name != None: item.putAttr('name', name)
         if groups != None:
             for group in groups:
                 item.insertTag('group').insertData(group)
-        dummy = self.sendAndWaitForResponse(iq) # Do we need to wait??
+	ID = self.getAnID()
+	iq.setID(ID)
+	ID = str(ID)
+	self.send(iq)
+#        dummy = self.SendAndWaitForResponse(iq) # Do we need to wait??
 
 
     def removeRosterItem(self,jid):

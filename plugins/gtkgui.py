@@ -161,7 +161,13 @@ class roster:
 		""" l_group = {name:iter} """
 		self.l_group = {}
 		for jid in tab.keys():
-			user1 = user(jid, tab[jid]['name'], tab[jid]['groups'], tab[jid]['show'], tab[jid]['status'], tab[jid]['sub'])
+			name = tab[jid]['name']
+			if not name :
+				name = ''
+			show = tab[jid]['show']
+			if not show :
+				show = 'offline'
+			user1 = user(jid, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'])
 			self.l_contact[user1.jid] = {'user':user1, 'iter':[]}
 			if user1.groups == []:
 				user1.groups.append('general')

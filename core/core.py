@@ -70,6 +70,7 @@ class GajimCore:
 			jid = prs.getFrom()
 			self.hub.sendPlugin('SUBSCRIBED', {'jid':jid.getBasic(), \
 				'nom':jid.getNode()})
+			self.con.updateRosterItem(jid=jid.getBasic(), name=jid.getNode())
 			log.debug("we are now subscribed to %s" % who)
 		elif type == 'unsubscribe':
 			log.debug("unsubscribe request from %s" % who)
@@ -81,7 +82,7 @@ class GajimCore:
 	def disconnectedCB(self, con):
 		log.debug("disconnectedCB")
 	# END disconenctedCB
-	
+
 	def connect(self):
 		self.con = common.jabber.Client(host = \
 			self.cfgParser.Server_hostname, \
@@ -103,24 +104,7 @@ class GajimCore:
 
 				self.con.requestRoster()
 				roster = self.con.getRoster().getRaw()
-				for jid in roster.keys():
-					if not roster[jid]['show']:
-						roster[jid]['show'] = roster[jid]['online']
-					if not roster[jid]['name']:
-						roster[jid]['name'] = ''
 				self.hub.sendPlugin('ROSTER', roster)
-#				tab_roster = {}
-#				for jid in roster.getJIDs():
-#					if roster.getShow(jid):
-#						show = roster.getShow(jid)
-#					else:
-#						show = roster.getOnline(jid)
-#					tab_roster[jid.getBasic()] = \
-#						{"Online":roster.getOnline(jid), "nom":jid.getNode(), \
-#						"server":jid.getDomain(), "resource":jid.getResource(), \
-#						"group":'general', "status":roster.getStatus(jid), \
-#						"show":show}
-#				self.hub.sendPlugin('ROSTER', tab_roster)
 				self.con.sendInitPresence()
 				self.connected = 1
 			else:
@@ -180,5 +164,6 @@ def start():
 	gc.hub.register('gtkgui', 'ROSTER')
 	gc.hub.register('gtkgui', 'NOTIFY')
 	gc.hub.register('gtkgui', 'MSG')
+	gc.hub.register('gtkgui', 'SUBSCRIBED')
 	guiPl.load ()
 	gc.mainLoop()
