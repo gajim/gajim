@@ -226,20 +226,6 @@ class tabbed_chat_Window:
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus.set_property("foreground", color)
 
-		self.tag_table = gtk.TextTagTable()
-		tag = gtk.TextTag("incoming")
-		color = self.plugin.config['inmsgcolor']
-		tag.set_property("foreground", color)
-		self.tag_table.add(tag)
-		tag = gtk.TextTag("outgoing")
-		color = self.plugin.config['outmsgcolor']
-		tag.set_property("foreground", color)
-		self.tag_table.add(tag)
-		tag = gtk.TextTag("status")
-		color = self.plugin.config['statusmsgcolor']
-		tag.set_property("foreground", color)
-		self.tag_table.add(tag)
-
 		#print queued messages
 		if plugin.queues[account].has_key(user.jid):
 			self.read_queue(plugin.queues[account][user.jid])
@@ -379,15 +365,15 @@ class tabbed_chat_Window:
 		buffer_msg = message.get_buffer()
 		end_iter = buffer_conv.get_end_iter()
 		buffer_conv.create_mark('end', end_iter, 0)
-		self.tagIn = buffer_conv.create_tag("incoming")
+		tagIn = buffer_conv.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
-		self.tagIn.set_property("foreground", color)
-		self.tagOut = buffer_conv.create_tag("outgoing")
+		tagIn.set_property("foreground", color)
+		tagOut = buffer_conv.create_tag("outgoing")
 		color = self.plugin.config['outmsgcolor']
-		self.tagOut.set_property("foreground", color)
-		self.tagStatus = buffer_conv.create_tag("status")
+		tagOut.set_property("foreground", color)
+		tagStatus = buffer_conv.create_tag("status")
 		color = self.plugin.config['statusmsgcolor']
-		self.tagStatus.set_property("foreground", color)
+		tagStatus.set_property("foreground", color)
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
