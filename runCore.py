@@ -21,7 +21,7 @@ import logging
 logging.basicConfig()
 
 import common
-import core
+import Core
 
 from common import i18n
 i18n.init()
@@ -48,5 +48,5 @@ for o, a in opts:
 		usage()
 		sys.exit()
 
-core.core.start(mode)
+Core.core.start(mode)
 print _("Core Stopped")
