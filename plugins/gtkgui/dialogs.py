@@ -449,7 +449,7 @@ class add_contact_window:
 		if jid:
 			self.xml.get_widget('jid_entry').set_text(jid)
 			jid_splited = jid.split('@')
-			self.xml.get_widget('entry_login').set_text(jid_splited[0])
+			self.xml.get_widget('login_entry').set_text(jid_splited[0])
 			if jid_splited[1] in jid_agents:
 				agent_combobox.set_active(jid_agents.index(jid_splited[1])+1)
 		self.xml.signal_autoconnect(self)

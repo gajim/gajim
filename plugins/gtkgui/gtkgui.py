@@ -1341,7 +1341,7 @@ class roster_window:
 	def on_remove_agent(self, widget, jid, account):
 		"""When an agent is requested to log in or off"""
 		window = confirm_dialog(_("Are you sure you want to remove the agent %s from your roster ?") % jid)
-		if window.wait() == gtk.RESPONSE_YES:
+		if window.get_response() == gtk.RESPONSE_YES:
 			self.plugin.send('UNSUB_AGENT', account, jid)
 			for u in self.contacts[account][jid]:
 				self.remove_user(u, account)
@@ -1525,7 +1525,7 @@ class roster_window:
 			pseudo = jid
 		self.plugin.send('SUB', account, (jid, txt))
 		if not self.contacts[account].has_key(jid):
-			user1 = user(jid, pseudo, ['general'], 'requested', \
+			user1 = User(jid, pseudo, ['general'], 'requested', \
 				'requested', 'none', 'subscribe', '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
@@ -1569,7 +1569,7 @@ class roster_window:
 	def on_req_usub(self, widget, user, account):
 		"""Remove a user"""
 		window = confirm_dialog(_("Are you sure you want to remove %s (%s) from your roster ?") % (user.name, user.jid))
-		if window.wait() == gtk.RESPONSE_YES:
+		if window.get_response() == gtk.RESPONSE_YES:
 			self.plugin.send('UNSUB', account, user.jid)
 			for u in self.contacts[account][user.jid]:
 				self.remove_user(u, account)
