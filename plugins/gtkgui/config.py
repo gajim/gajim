@@ -43,7 +43,7 @@ class preferences_window:
 	
 	def on_tray_icon_checkbutton_toggled(self, widget):
 		"""On Tray Icon Checkbutton Toggled"""
-		if self.widget.get_active():
+		if widget.get_active():
 			self.plugin.config['trayicon'] = 1
 			self.plugin.show_systray()
 		else:
