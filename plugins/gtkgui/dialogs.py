@@ -333,6 +333,11 @@ class addContact_Window:
 		textview_sub = self.xml.get_widget("textview_sub")
 		entry_who = self.xml.get_widget('entry_who')
 		who = entry_who.get_text()
+		if not who:
+			return
+		if who.find('@') < 0:
+			warning_Window(_("The contact's name must be something like login@hostname"))
+			return
 		buf = textview_sub.get_buffer()
 		start_iter = buf.get_start_iter()
 		end_iter = buf.get_end_iter()
