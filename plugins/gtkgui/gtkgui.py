@@ -1780,10 +1780,6 @@ class roster_Window:
 			txt = status
 		self.send_status(account, status, txt)
 
-	def on_cb_clicked(self, widget, event=None):
-		"""When we click on the comboBox"""
-		print "clicked"
-		
 	def on_cb_changed(self, widget):
 		"""When we change our status"""
 		model = self.cb.get_model()
@@ -1850,6 +1846,7 @@ class roster_Window:
 				self.plugin.windows[account]['chats']['tabbed'].new_user(user)
 			self.plugin.windows[account]['chats'][user.jid] = \
 				self.plugin.windows[account]['chats']['tabbed']
+			self.plugin.windows[account]['chats']['tabbed'].window.present()
 		else:
 			self.plugin.windows[account]['chats'][user.jid] = \
 				message_Window(user, self.plugin, account)
@@ -1985,8 +1982,7 @@ class roster_Window:
 			if self.plugin.windows[account]['chats'].has_key(jid):
 				if USE_TABBED_CHAT:
 					self.plugin.windows[account]['chats'][jid].active_tab(jid)
-				else:
-					self.plugin.windows[account]['chats'][jid].window.present()
+				self.plugin.windows[account]['chats'][jid].window.present()
 			elif self.contacts[account].has_key(jid):
 				self.new_chat(self.contacts[account][jid][0], account)
 
@@ -2343,7 +2339,6 @@ class roster_Window:
 		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
 		self.xml.signal_connect('on_status_changed', self.on_status_changed)
 		self.id_signal_cb = self.cb.connect('changed', self.on_cb_changed)
-		self.cb.connect('enter-notify-event', self.on_cb_clicked)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
 		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
 		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
