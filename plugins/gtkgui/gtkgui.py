@@ -785,6 +785,8 @@ class roster_Window:
 		else:
 			txt = status
 			self.plugin.send('STATUS', account, (status, txt))
+			if status == 'online':
+				self.plugin.sleeper_state[account] = 1
 
 	def on_optionmenu_changed(self, widget):
 		"""When we change our status"""
@@ -805,6 +807,8 @@ class roster_Window:
 			return
 		for acct in accounts:
 			self.plugin.send('STATUS', acct, (status, txt))
+			if status == 'online':
+				self.plugin.sleeper_state[acct] = 1
 	
 	def set_optionmenu(self):
 		#table to change index in plugin.connected to index in optionmenu
@@ -833,9 +837,10 @@ class roster_Window:
 				for user in luser:
 					self.chg_user_status(user, 'offline', 'Disconnected', account)
 		elif self.plugin.connected[account] == 0:
-			self.plugin.sleeper = None#common.sleepy.Sleepy(\
-				#self.plugin.config['autoawaytime']*60, \
-				#self.plugin.config['autoxatime']*60)
+			if (self.plugin.config['autoaway'] or self.plugin.config['autoxa']):
+				self.plugin.sleeper = common.sleepy.Sleepy(\
+					self.plugin.config['autoawaytime']*60, \
+					self.plugin.config['autoxatime']*60)
 		self.plugin.connected[account] = statuss.index(status)
 		self.set_optionmenu()
 
@@ -1349,25 +1354,25 @@ class plugin:
 	
 	def read_sleepy(self):	
 		"""Check if we are idle"""
-		if self.sleeper and (self.config['autoaway'] or self.config['autoxa'])\
-			and (self.roster.optionmenu.get_history()==0 or \
-			self.sleeper_state!=common.sleepy.STATE_AWAKE):
+		if self.sleeper:
 			self.sleeper.poll()
 			state = self.sleeper.getState()
-			if state != self.sleeper_state:
-				if state == common.sleepy.STATE_AWAKE:
-					#we go online
-					self.roster.optionmenu.set_history(0)
-					self.send('STATUS', None, ('online', ''))
-				elif state == common.sleepy.STATE_AWAY and self.config['autoaway']:
-					#we go away
-					self.roster.optionmenu.set_history(1)
-					self.send('STATUS', None, ('away', 'auto away (idle)'))
-				elif state == common.sleepy.STATE_XAWAY and self.config['autoxa']:
-					#we go extended away
-					self.roster.optionmenu.set_history(2)
-					self.send('STATUS',('xa', 'auto away (idel)'))
-			self.sleeper_state = state
+			for account in self.accounts.keys():
+				if self.sleeper_state[account]:
+					if state == common.sleepy.STATE_AWAKE and \
+						self.connected[account] > 1:
+						#we go online
+						self.send('STATUS', account, ('online', ''))
+					elif state == common.sleepy.STATE_AWAY and \
+						self.connected[account] == 1 and \
+						self.config['autoaway']:
+						#we go away
+						self.send('STATUS', account, ('away', 'auto away (idle)'))
+					elif state == common.sleepy.STATE_XAWAY and \
+						self.connected[account] == 2 and \
+						self.config['autoxa']:
+						#we go extended away
+						self.send('STATUS', account, ('xa', 'auto away (idle)'))
 		return 1
 
 	def __init__(self, quIN, quOUT):
@@ -1392,6 +1397,7 @@ class plugin:
 		self.queues = {}
 		self.connected = {}
 		self.nicks = {}
+		self.sleeper_state = {} #whether we pass auto away / xa or not
 		for a in self.accounts.keys():
 			self.windows[a] = {}
 			self.windows[a]['infos'] = {}
@@ -1399,11 +1405,11 @@ class plugin:
 			self.queues[a] = {}
 			self.connected[a] = 0
 			self.nicks[a] = self.accounts[a]['name']
+			self.sleeper_state[a] = 0
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
 		self.sleeper = None
-		self.sleeper_state = None
 		gtk.main()
 		gtk.threads_leave()
 
