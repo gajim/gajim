@@ -66,7 +66,6 @@ An example of usage for a simple client would be ( only psuedo code !)
 
 import xmlstream
 import sha, time
-import string
 
 debug=xmlstream.debug
 
@@ -278,11 +277,11 @@ class Connection(xmlstream.Client):
         except: ns=''
         self.DEBUG("dispatch called for: name->%s ns->%s"%(name,ns),DBG_DISPATCH)
 
-        typns=typ+ns
+        if typ and ns: typns=typ+ns
+        else: typns=''
         if not self.handlers[name].has_key(ns): ns=''
         if not self.handlers[name].has_key(typ): typ=''
         if not self.handlers[name].has_key(typns): typns=''
-        if typ and ns and not self.handlers[name].has_key(typns): typns=''
 
         chain=[]
         for key in ['default',typ,ns,typns]: # we will use all handlers: from very common to very particular
@@ -416,7 +415,6 @@ class Connection(xmlstream.Client):
         if time.time() > self._lastIncome + 300:
             self._lastIncome = time.time()
             iq = Iq(type="get", to=self._host, query=NS_LAST)
-            print "iq", iq
             if not self.SendAndWaitForResponse(iq, timeout=30):
                 self.disconnectHandler(self)
         return xmlstream.Client.process(self, timeout)
@@ -629,9 +627,9 @@ class Client(Connection):
     def requestRegInfo(self,agent=''):
         """Requests registration info from the server.
            Returns the Iq object received from the server."""
-        if string.find(agent, self._host) == -1:
-            if agent: agent = agent + '.'
-            agent = + self._host
+        if agent.find('.') == -1:
+            if agent: agent += '.'
+            agent += self._host
         self._reg_info = {}
         reg_iq = Iq(type='get', to = agent)
         reg_iq.setQuery(NS_REGISTER)
@@ -656,9 +654,9 @@ class Client(Connection):
 
     def sendRegInfo(self, agent=''):
         """Sends the populated registration dictionary back to the server"""
-        if string.find(agent, self._host) == -1:
-            if agent: agent = agent + '.'
-            agent = agent + self._host
+        if agent.find('.') == -1:
+            if agent: agent += '.'
+            agent += self._host
         reg_iq = Iq(to = agent, type='set')
         q = reg_iq.setQuery(NS_REGISTER)
         for info in self._reg_info.keys():
@@ -673,8 +671,8 @@ class Client(Connection):
             Note that you must be authorised before attempting to deregister.
         """
         if agent:
-            if string.find(agent, self._host) == -1:
-                agent = agent + '.' + self._host
+            if agent.find('.') == -1:
+                agent += '.' + self._host
             self.send(Presence(to=agent,type='unsubscribed'))       # This is enough f.e. for icqv7t or jit
         else: agent = self._host
         q = self.requestRegInfo()
