@@ -77,6 +77,7 @@ class Preferences_window:
 		icon_string = model[active][0]
 		self.plugin.config['iconstyle'] = icon_string
 		self.plugin.roster.mkpixbufs()
+		self.plugin.roster.draw_roster()
 		
 	def on_account_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The Account Text"""
