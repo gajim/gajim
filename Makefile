@@ -53,6 +53,7 @@ install:
 	for f in $(FILES_LIB) ; do \
 		cp "$$f" "$(DESTDIR)$(PREFIX)/lib/gajim/"; \
 	done
+	mkdir -p "$(DESTDIR)$(PREFIX)/bin";
 	for s in $(SCRIPTS) ; do \
 		BASE=`basename "$$s"`; \
 		F=`cat "$$s" | sed -e 's!PREFIX!$(PREFIX)!g'`; \
