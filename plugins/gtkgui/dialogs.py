@@ -628,3 +628,37 @@ class New_message_window:
 		self.jid_entry.set_activates_default(True)
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows['new_message'] = self # now add us to open windows
+
+class Change_password_dialog:
+	def run(self):
+		"""Wait for Ok button to be pressed and return away messsage"""
+		end = False
+		while not end:
+			rep = self.dialog.run()
+			if rep == gtk.RESPONSE_OK:
+				password1 = self.password1_entry.get_text()
+				if not password1:
+					warning_dialog(_('Your password cannot be empty'))
+					continue
+				password2 = self.password2_entry.get_text()
+				if password1 != password2:
+					warning_dialog(_('Your passwords are not the same'))
+					continue
+				message = password1
+			else:
+				message = -1
+			end = True
+		self.dialog.destroy()
+		return message
+
+	def __init__(self, plugin, account):
+		if not plugin.connected[account]:
+			warning_dialog(_('You must be connected to change your password'))
+			return
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_password_dialog', APP)
+		self.dialog = self.xml.get_widget('change_password_dialog')
+		self.password1_entry = self.xml.get_widget('password1_entry')
+		self.password2_entry = self.xml.get_widget('password2_entry')
+		self.password1_entry.set_activates_default(True)

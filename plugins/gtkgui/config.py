@@ -751,9 +751,6 @@ class account_window:
 		"""When Close button is clicked"""
 		widget.get_toplevel().destroy()
 
-	def destroy(self):
-		self.window.destroy()
-
 	def init_account(self, infos):
 		"""Initialize window with defaults values"""
 		if infos.has_key('accname'):
@@ -939,6 +936,15 @@ class account_window:
 		#refresh roster
 		self.plugin.roster.draw_roster()
 		widget.get_toplevel().destroy()
+
+	def on_change_password_button_clicked(self, widget):
+		dialog = Change_password_dialog(self.plugin, self.account)
+		new_password = dialog.run()
+		if new_password != -1:
+			self.plugin.send('CHANGE_PASSWORD', self.account,\
+				(new_password, self.plugin.nicks[self.account]))
+			if self.xml.get_widget('save_password_checkbutton').get_active():
+				self.xml.get_widget('password_entry').set_text(new_password)
 
 	def account_is_ok(self, acct):
 		"""When the account has been created with sucess"""

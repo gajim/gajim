@@ -924,6 +924,16 @@ class GajimCore:
 					self.hub.sendPlugin('GPG_SECRETE_KEYS', ev[1], keys)
 			elif ev[0] == 'PASSPHRASE':
 				self.passwords[ev[1]] = ev[2]
+			#('CHANGE_PASSWORD', account, (new_password, username))
+			elif ev[0] == 'CHANGE_PASSWORD':
+				hostname = self.cfgParser.tab[ev[1]]['hostname']
+				iq = common.jabber.Iq(type='set', to=hostname)
+				q = iq.setQuery(common.jabber.NS_REGISTER)
+				q.insertTag('username').insertData(ev[2][1])
+				q.insertTag('password').insertData(ev[2][0])
+				id = con.getAnID()
+				iq.setID(id)
+				con.send(iq)
 			else:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':
