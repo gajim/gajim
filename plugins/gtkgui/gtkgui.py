@@ -1666,33 +1666,42 @@ class roster_Window:
 	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
 		"""When a row is added, set properties for icon renderer"""
 		if model.get_value(iter, 2) == 'account':
-			renderer.set_property('cell-background', '#9fdfff')
+			renderer.set_property('cell-background', \
+				self.plugin.config['accountbgcolor'])
 			renderer.set_property('xalign', 0)
 		elif model.get_value(iter, 2) == 'group':
-			renderer.set_property('cell-background-set', False)
+			renderer.set_property('cell-background', \
+				self.plugin.config['groupbgcolor'])
 			renderer.set_property('xalign', 0.3)
 		else:
-			renderer.set_property('cell-background-set', False)
+			renderer.set_property('cell-background', \
+				self.plugin.config['userbgcolor'])
 			renderer.set_property('xalign', 1)
 		renderer.set_property('width', 30)
 	
 	def nameCellDataFunc(self, column, renderer, model, iter, data=None):
 		"""When a row is added, set properties for name renderer"""
 		if model.get_value(iter, 2) == 'account':
-			renderer.set_property('foreground', 'red')
-			renderer.set_property('cell-background', '#9fdfff')
+			renderer.set_property('foreground', \
+				self.plugin.config['accounttextcolor'])
+			renderer.set_property('cell-background', \
+				self.plugin.config['accountbgcolor'])
 			renderer.set_property('font', 'Normal')
 			renderer.set_property('weight', 700)
 			renderer.set_property('xpad', 0)
 		elif model.get_value(iter, 2) == 'group':
-			renderer.set_property('foreground', 'blue')
-			renderer.set_property('cell-background-set', False)
+			renderer.set_property('foreground', \
+				self.plugin.config['grouptextcolor'])
+			renderer.set_property('cell-background', \
+				self.plugin.config['groupbgcolor'])
 			renderer.set_property('font', 'Italic')
 			renderer.set_property('weight-set', False)
 			renderer.set_property('xpad', 8)
 		else:
-			renderer.set_property('foreground-set', False)
-			renderer.set_property('cell-background-set', False)
+			renderer.set_property('foreground', \
+				self.plugin.config['usertextcolor'])
+			renderer.set_property('cell-background', \
+				self.plugin.config['userbgcolor'])
 			renderer.set_property('font', 'Normal')
 			renderer.set_property('weight-set', False)
 			renderer.set_property('xpad', 16)
@@ -2363,7 +2372,13 @@ class plugin:
 			'inmsgcolor':'#ff0000',\
 			'outmsgcolor': '#0000ff',\
 			'statusmsgcolor':'#1eaa1e',\
-			'hiddenlines':''}))
+			'hiddenlines':'',\
+			'accounttextcolor': '#ff0000',\
+			'accountbgcolor': '#9fdfff',\
+			'grouptextcolor': '#0000ff',\
+			'groupbgcolor': '#ffffff',\
+			'usertextcolor': '#000000',\
+			'userbgcolor': '#ffffff'}))
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
 		self.accounts = self.wait('CONFIG')

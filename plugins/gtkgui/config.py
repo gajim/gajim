@@ -136,51 +136,53 @@ class preference_Window:
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
 
-	def on_color_button_clicked(self, widget):
-		"""Open a ColorSelectionDialog and change button's color"""
-		if widget.name == 'colorIn':
-			color = self.colorIn
-			da = self.da_in
-		elif widget.name == 'colorOut':
-			color = self.colorOut
-			da = self.da_out
-		elif widget.name == 'colorStatus':
-			color = self.colorStatus
-			da = self.da_status
-		colorseldlg = gtk.ColorSelectionDialog('Select Color')
-		colorsel = colorseldlg.colorsel
-		colorsel.set_previous_color(color)
-		colorsel.set_current_color(color)
-		colorsel.set_has_palette(gtk.TRUE)
-		response = colorseldlg.run()
-		if response == gtk.RESPONSE_OK:
-			color = colorsel.get_current_color()
-			da.modify_bg(gtk.STATE_NORMAL, color)
-			if widget.name == 'colorIn':
-				self.colorIn = color
-			elif widget.name == 'colorOut':
-				self.colorOut = color
-			elif widget.name == 'colorStatus':
-				self.colorStatus = color
-		colorseldlg.destroy()
-	
 	def write_cfg(self):
 		"""Save preferences in config File and apply them"""
 		#Color for incomming messages
-		colSt_in = '#'+(hex(self.colorIn.red)+'0')[2:4]\
-			+(hex(self.colorIn.green)+'0')[2:4]\
-			+(hex(self.colorIn.blue)+'0')[2:4]
-		self.plugin.config['inmsgcolor'] = colSt_in
+		color = self.xml.get_widget('colorbutton_in').get_color()
+		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['inmsgcolor'] = colSt
 		#Color for outgoing messages
-		colSt_out = '#'+(hex(self.colorOut.red)+'0')[2:4]\
-			+(hex(self.colorOut.green)+'0')[2:4]\
-			+(hex(self.colorOut.blue)+'0')[2:4]
-		self.plugin.config['outmsgcolor'] = colSt_out
+		color = self.xml.get_widget('colorbutton_out').get_color()
+		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['outmsgcolor'] = colSt
 		#Color for status messages
-		colSt_status = '#'+(hex(self.colorStatus.red)+'0')[2:4]\
-			+(hex(self.colorStatus.green)+'0')[2:4]\
-			+(hex(self.colorStatus.blue)+'0')[2:4]
-		self.plugin.config['statusmsgcolor'] = colSt_status
+		color = self.xml.get_widget('colorbutton_status').get_color()
+		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['statusmsgcolor'] = colSt
+		#Color for account text
+		color = self.xml.get_widget('colorbutton_account_text').get_color()
+		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['accounttextcolor'] = colSt
+		#Color for group text
+		color = self.xml.get_widget('colorbutton_group_text').get_color()
+		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['grouptextcolor'] = colSt
+		#Color for user text
+		color = self.xml.get_widget('colorbutton_user_text').get_color()
+		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['usertextcolor'] = colSt
+		#Color for background account
+		color = self.xml.get_widget('colorbutton_account_bg').get_color()
+		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['accountbgcolor'] = colSt
+		#Color for background group
+		color = self.xml.get_widget('colorbutton_group_bg').get_color()
+		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['groupbgcolor'] = colSt
+		#Color for background user
+		color = self.xml.get_widget('colorbutton_user_bg').get_color()
+		colSt = '#'+(hex(color.red)+'0')[2:4] + (hex(color.green)+'0')[2:4]\
+			+(hex(color.blue)+'0')[2:4]
+		self.plugin.config['userbgcolor'] = colSt
 		#update opened chat windows
 		for a in self.plugin.accounts.keys():
 			for w in self.plugin.windows[a]['chats'].keys():
@@ -195,40 +197,35 @@ class preference_Window:
 		self.plugin.config['iconstyle'] = ist
 		self.plugin.roster.mkpixbufs()
 		#autopopup
-		pp = self.chk_autopp.get_active()
-		if pp == True:
+		if self.chk_autopp.get_active():
 			self.plugin.config['autopopup'] = 1
 		else:
 			self.plugin.config['autopopup'] = 0
 		#autopopupaway
-		ppaway = self.chk_autoppaway.get_active()
-		if ppaway == True:
+		if self.chk_autoppaway.get_active():
 			self.plugin.config['autopopupaway'] = 1
 		else:
 			self.plugin.config['autopopupaway'] = 0
 		#autoaway
-		aw = self.chk_autoaway.get_active()
-		if aw == True:
+		if self.chk_autoaway.get_active():
 			self.plugin.config['autoaway'] = 1
 		else:
 			self.plugin.config['autoaway'] = 0
 		aat = self.spin_autoawaytime.get_value_as_int()
 		self.plugin.config['autoawaytime'] = aat
 		#autoxa
-		xa = self.chk_autoxa.get_active()
-		if xa == True:
+		if self.chk_autoxa.get_active():
 			self.plugin.config['autoxa'] = 1
 		else:
 			self.plugin.config['autoxa'] = 0
 		axt = self.spin_autoxatime.get_value_as_int()
 		self.plugin.config['autoxatime'] = axt
-		if aw or xa:
+		if self.chk_autoaway.get_active() or self.chk_autoxa.get_active():
 			self.plugin.sleeper = common.sleepy.Sleepy(\
 				self.plugin.config['autoawaytime']*60, \
 				self.plugin.config['autoxatime']*60)
 		#trayicon
-		trayicon = self.chk_trayicon.get_active()
-		if trayicon:
+		if self.chk_trayicon.get_active():
 			self.plugin.config['trayicon'] = 1
 		else:
 			self.plugin.config['trayicon'] = 0
@@ -257,9 +254,6 @@ class preference_Window:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Preferences', APP)
 		self.window = self.xml.get_widget('Preferences')
 		self.plugin = plugin
-		self.da_in = self.xml.get_widget('drawing_in')
-		self.da_out = self.xml.get_widget('drawing_out')
-		self.da_status = self.xml.get_widget('drawing_status')
 		self.combo_iconstyle = self.xml.get_widget('combo_iconstyle')
 		self.chk_autopp = self.xml.get_widget('chk_autopopup')
 		self.chk_autoppaway = self.xml.get_widget('chk_autopopupaway')
@@ -279,21 +273,18 @@ class preference_Window:
 
 		#Color for incomming messages
 		colSt = self.plugin.config['inmsgcolor']
-		cmapIn = self.da_in.get_colormap()
-		self.colorIn = cmapIn.alloc_color(colSt)
-		self.da_in.window.set_background(self.colorIn)
+		self.xml.get_widget('colorbutton_in').set_color(\
+			gtk.gdk.color_parse(colSt))
 		
 		#Color for outgoing messages
 		colSt = self.plugin.config['outmsgcolor']
-		cmapOut = self.da_out.get_colormap()
-		self.colorOut = cmapOut.alloc_color(colSt)
-		self.da_out.window.set_background(self.colorOut)
+		self.xml.get_widget('colorbutton_out').set_color(\
+			gtk.gdk.color_parse(colSt))
 		
 		#Color for status messages
 		colSt = self.plugin.config['statusmsgcolor']
-		cmapStatus = self.da_status.get_colormap()
-		self.colorStatus = cmapStatus.alloc_color(colSt)
-		self.da_status.window.set_background(self.colorStatus)
+		self.xml.get_widget('colorbutton_status').set_color(\
+			gtk.gdk.color_parse(colSt))
 		
 		#iconStyle
 		list_style = os.listdir('plugins/gtkgui/icons/')
@@ -335,9 +326,37 @@ class preference_Window:
 		st = self.plugin.config['trayicon']
 		self.chk_trayicon.set_active(st)
 
+		#Color for account text
+		colSt = self.plugin.config['accounttextcolor']
+		self.xml.get_widget('colorbutton_account_text').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
+		#Color for group text
+		colSt = self.plugin.config['grouptextcolor']
+		self.xml.get_widget('colorbutton_group_text').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
+		#Color for user text
+		colSt = self.plugin.config['usertextcolor']
+		self.xml.get_widget('colorbutton_user_text').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
+		#Color for background account
+		colSt = self.plugin.config['accountbgcolor']
+		self.xml.get_widget('colorbutton_account_bg').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
+		#Color for background group
+		colSt = self.plugin.config['groupbgcolor']
+		self.xml.get_widget('colorbutton_group_bg').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
+		#Color for background user
+		colSt = self.plugin.config['userbgcolor']
+		self.xml.get_widget('colorbutton_user_bg').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_but_col_clicked', \
-			self.on_color_button_clicked)
 		self.xml.signal_connect('on_ok_clicked', self.on_ok)
 		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
 
