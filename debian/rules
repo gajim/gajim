@@ -42,9 +42,7 @@ binary-arch: checkroot build install
 	$(checkdir)
 # Must have debmake installed for this to work. Otherwise please copy
 # /usr/bin/debstd into the debian directory and change debstd to debian/debstd
-	debstd -m
-	gzip --best -c gajim.1 > debian/tmp/usr/share/man/man1/gajim.1.gz
-	cd debian/tmp; md5sum usr/share/man/man1/gajim.1.gz >> DEBIAN/md5sums
+	debstd
 	dpkg-gencontrol -isp
 	chown -R root:root debian/tmp
 	chmod -R go=rX debian/tmp
