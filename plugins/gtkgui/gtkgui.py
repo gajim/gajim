@@ -2317,7 +2317,7 @@ class plugin:
 			if state == common.sleepy.STATE_AWAKE and \
 				self.sleeper_state[account] > 1:
 				#we go online
-				self.send('STATUS', account, ('online', ''))
+				self.send('STATUS', account, ('online', 'Online'))
 				self.sleeper_state[account] = 1
 			elif state == common.sleepy.STATE_AWAY and \
 				self.sleeper_state[account] == 1 and \

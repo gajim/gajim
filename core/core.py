@@ -631,6 +631,9 @@ class GajimCore:
 			#('STATUS', account, (status, msg))
 			elif ev[0] == 'STATUS':
 				activ = 1
+				msg = ev[2][1]
+				if not msg:
+					msg = ev[2][0]
 				signed = ''
 				keyID = ''
 				if self.cfgParser.tab[ev[1]].has_key("keyid"):
@@ -657,7 +660,7 @@ class GajimCore:
 						prio = 0
 						if self.cfgParser.tab[ev[1]].has_key('priority'):
 							prio = str(self.cfgParser.tab[ev[1]]['priority'])
-						con.sendPresence(typ, prio, ev[2][0], ev[2][1], signed)
+						con.sendPresence(typ, prio, ev[2][0], msg, signed)
 						self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
 						#ask our VCard
 						iq = common.jabber.Iq(type="get")
@@ -680,7 +683,7 @@ class GajimCore:
 					prio = 0
 					if self.cfgParser.tab[ev[1]].has_key('priority'):
 						prio = str(self.cfgParser.tab[ev[1]]['priority'])
-					con.sendPresence(typ, prio, ev[2][0], ev[2][1], signed)
+					con.sendPresence(typ, prio, ev[2][0], msg, signed)
 					self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
 			#('MSG', account, (jid, msg, keyID))
 			elif ev[0] == 'MSG':
