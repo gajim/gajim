@@ -2518,7 +2518,12 @@ class plugin:
 	def handle_event_status(self, account, status):
 		#('STATUS', account, status)
 		self.roster.on_status_changed(account, status)
-		self.roster.window.set_icon(self.roster.pixbufs[status].get_pixbuf())
+		image = self.roster.pixbufs[status]
+		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			pixbuf = image.get_animation().get_static_image()
+			self.roster.window.set_icon(pixbuf)
+		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
+			self.roster.window.set_icon(image.get_pixbuf())
 	
 	def handle_event_notify(self, account, array):
 		#('NOTIFY', account, (jid, status, message, resource, priority, keyID, 
