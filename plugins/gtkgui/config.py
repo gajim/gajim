@@ -1013,6 +1013,8 @@ class browseAgent_Window:
 		"""When we want to join a conference :
 		Ask specific informations about the selected agent and close the window"""
 		model, iter = self.treeview.get_selection().get_selected()
+		if not iter:
+			return
 		service = model.get_value(iter, 1)
 		room = ''
 		if string.find(service, '@') > -1:
@@ -1026,6 +1028,8 @@ class browseAgent_Window:
 		"""When we want to register an agent :
 		Ask specific informations about the selected agent and close the window"""
 		model, iter = self.treeview.get_selection().get_selected()
+		if not iter :
+			return
 		service = model.get_value(iter, 1)
 		self.plugin.send('REG_AGENT_INFO', self.account, service)
 		widget.get_toplevel().destroy()
