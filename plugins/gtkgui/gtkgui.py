@@ -48,27 +48,6 @@ def usage():
 	print "  -p\tport on which the sock plugin listen"
 	print "  -h, --help\tdisplay this help and exit"
 
-def launch_browser_mailer(self, kind, url):
-	#kind = 'url' or 'mail'
-	if self.plugin.config['openwith'] == 'gnome-open':
-		app = 'gnome-open'
-		args = ['gnome-open']
-		args.append(url)
-	elif self.plugin.config['openwith'] == 'kfmclient exec':
-		app = 'kfmclient'
-		args = ['kfmclient', 'exec']
-	elif self.plugin.config['openwith'] == 'custom':
-		if kind == 'url':
-			conf = self.plugin.config['custombrowser']
-		if kind == 'mail':
-			conf = self.plugin.config['custommailapp']
-		if conf == '': # if no app is configured
-			return
-		args = conf.split()
-		app = args[0]
-	args.append(url)
-	os.spawnvp(os.P_NOWAIT, app, args)
-
 
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
@@ -307,7 +286,8 @@ class tabbed_chat_window:
 		#clean self.plugin.windows[self.account]['chats']
 		for jid in self.users:
 			del self.plugin.windows[self.account]['chats'][jid]
-			#TODO: stop all print time timout
+			if self.print_time_timeout_id.has_key(jid):
+				gobject.source_remove(self.print_time_timeout_id[jid])
 		if self.plugin.windows[self.account]['chats'].has_key('tabbed'):
 			del self.plugin.windows[self.account]['chats']['tabbed']
 
@@ -452,10 +432,10 @@ class tabbed_chat_window:
 					tag.set_property('foreground', color)
 				if special == 'mail':
 					tag.set_property('foreground', '#0000ff')
-					#TODO: set it clickable
+					tag.connect('event', self.hyperlink_handler, 'mail')
 				elif special == 'url':
 					tag.set_property('foreground', '#0000ff')
-					#TODO: set it clickable
+					tag.connect('event', self.hyperlink_handler, 'url')
 				elif special == 'italic':
 					tag.set_property('style', pango.STYLE_ITALIC)
 				elif special == 'underline':
@@ -625,6 +605,20 @@ class tabbed_chat_window:
 		if self.print_time_timeout_id.has_key(jid):
 			del self.print_time_timeout_id[jid]
 		return 0
+
+	def hyperlink_handler(self, texttag, widget, event, iter, type):
+		if event.type == gtk.gdk.BUTTON_RELEASE:
+			begin_iter = iter.copy()
+			#we get the begining of the tag
+			while not begin_iter.begins_tag(texttag):
+				begin_iter.backward_word_start()
+			end_iter = iter.copy()
+			#we get the end of the tag
+			while not end_iter.ends_tag(texttag):
+				end_iter.forward_word_end()
+			word = begin_iter.get_text(end_iter)
+			#we launch the correct application
+			self.plugin.launch_browser_mailer(type, word)
 
 	def print_special_word(self, word, jid, contact = ''):
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
@@ -2986,6 +2980,27 @@ class plugin:
 					return a
 			return None
 
+	def launch_browser_mailer(self, kind, url):
+		#kind = 'url' or 'mail'
+		if self.config['openwith'] == 'gnome-open':
+			app = 'gnome-open'
+			args = ['gnome-open']
+			args.append(url)
+		elif self.config['openwith'] == 'kfmclient exec':
+			app = 'kfmclient'
+			args = ['kfmclient', 'exec']
+		elif self.config['openwith'] == 'custom':
+			if kind == 'url':
+				conf = self.config['custombrowser']
+			if kind == 'mail':
+				conf = self.config['custommailapp']
+			if conf == '': # if no app is configured
+				return
+			args = conf.split()
+			app = args[0]
+		args.append(url)
+		os.spawnvp(os.P_NOWAIT, app, args)
+
 	def play_timeout(self, pid):
 		pidp, r = os.waitpid(pid, os.WNOHANG)
 		return 0
@@ -3416,8 +3431,9 @@ class plugin:
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
-		gtk.about_dialog_set_email_hook(launch_browser_mailer, 'mail')
-		gtk.about_dialog_set_url_hook(launch_browser_mailer, 'url')
+		#(asterix) I don't have pygtk 2.6 for the moment, so I cannot test
+#		gtk.about_dialog_set_email_hook(self.launch_browser_mailer, 'mail')
+#		gtk.about_dialog_set_url_hook(self.launch_browser_mailer, 'url')
 		self.queueIN = quIN
 		self.queueOUT = quOUT
 		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'STATUS', \
@@ -3476,7 +3492,7 @@ class plugin:
 			'sound_message_sent_file': 'sounds/sent.wav',\
 			'openwith': 'gnome-open',\
 			'custombrowser' : 'firefox',\
-			'custommailapp' : 'thunderbird',\
+			'custommailapp' : 'mozilla-thunderbird -compose',\
 			'x-position': 0,\
 			'y-position': 0,\
 			'width': 150,\
