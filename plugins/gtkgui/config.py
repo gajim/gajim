@@ -199,6 +199,12 @@ class preference_Window:
 			self.plugin.config['autopopup'] = 1
 		else:
 			self.plugin.config['autopopup'] = 0
+		#autopopupaway
+		ppaway = self.chk_autoppaway.get_active()
+		if ppaway == True:
+			self.plugin.config['autopopupaway'] = 1
+		else:
+			self.plugin.config['autopopupaway'] = 0
 		#autoaway
 		aw = self.chk_autoaway.get_active()
 		if aw == True:
@@ -248,6 +254,7 @@ class preference_Window:
 		self.da_status = self.xml.get_widget('drawing_status')
 		self.combo_iconstyle = self.xml.get_widget('combo_iconstyle')
 		self.chk_autopp = self.xml.get_widget('chk_autopopup')
+		self.chk_autoppaway = self.xml.get_widget('chk_autopopupaway')
 		self.chk_autoaway = self.xml.get_widget('chk_autoaway')
 		self.spin_autoawaytime = self.xml.get_widget('spin_autoawaytime')
 		self.chk_autoxa = self.xml.get_widget('chk_autoxa')
@@ -298,10 +305,16 @@ class preference_Window:
 			self.combo_iconstyle.entry.set_text(self.plugin.config['iconstyle'])
 		
 		#Autopopup
-		st = 0
+		st = 1
 		if self.plugin.config.has_key('autopopup'):
 			st = self.plugin.config['autopopup']
 		self.chk_autopp.set_active(st)
+
+		#Autopopupaway
+		st = 1
+		if self.plugin.config.has_key('autopopupaway'):
+			st = self.plugin.config['autopopupaway']
+		self.chk_autoppaway.set_active(st)
 
 		#Autoaway
 		st = 1

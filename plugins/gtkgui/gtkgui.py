@@ -891,7 +891,9 @@ class roster_Window:
 		else:
 			path = None
 		autopopup = self.plugin.config['autopopup']
-		if autopopup == 0 and not \
+		autopopupaway = self.plugin.config['autopopupaway']
+		if (autopopup == 0 or ( not autopopupaway and \
+			self.plugin.connected[account] > 1)) and not \
 			self.plugin.windows[account]['chats'].has_key(jid):
 			#We save it in a queue
 			if not self.plugin.queues[account].has_key(jid):
@@ -1439,6 +1441,7 @@ class plugin:
 		self.queueIN = quIN
 		self.queueOUT = quOUT
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
+			'autopopupaway':1,\
 			'showoffline':0,\
 			'autoaway':0,\
 			'autoawaytime':10,\
