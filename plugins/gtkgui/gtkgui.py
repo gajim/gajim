@@ -798,7 +798,7 @@ class plugin:
 						user1 = user(jid, jid, ['Agents'], ev[1][1], ev[1][2], 'from')
 						iterU = self.r.treestore.append(self.r.l_group['Agents'], \
 							(self.r.pixbufs[ev[1][1]], jid, 'agent', FALSE, \
-							self.userbgcolor, TRUE))
+							self.r.userbgcolor, TRUE))
 						self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
 					else:
 						#Update existing line
@@ -857,7 +857,10 @@ class plugin:
 				if Wbrowser:
 					Wbrowser.agents(ev[1])
 			elif ev[0] == 'AGENT_INFO':
-				Wreg = agent_reg(ev[1][0], ev[1][1], self.r)
+				if not ev[1][1].has_key('instructions'):
+					warning('error contacting %s' % ev[1][0])
+				else:
+					Wreg = agent_reg(ev[1][0], ev[1][1], self.r)
 			#('ACC_OK', (hostname, login, pasword, name, ressource))
 			elif ev[0] == 'ACC_OK':
 				print "acc_ok"

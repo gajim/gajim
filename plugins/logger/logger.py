@@ -49,6 +49,7 @@ class plugin:
 					return
 				elif ev[0] == 'NOTIFY':
 					status = ev[1][2]
+					jid = string.split(ev[1][0], '/')[0]
 					if not status:
 						status = ""
 					if lognotsep == 1:
@@ -57,16 +58,18 @@ class plugin:
 							ev[1][1], status))
 						fic.close()
 					if lognotusr == 1:
-						fic = open(LOGPATH + ev[1][0], "a")
-						fic.write("%s:%s:%s:%s\n" % (tim, ev[1][0], \
+						fic = open(LOGPATH + jid, "a")
+						fic.write("%s:%s:%s:%s\n" % (tim, jid, \
 							ev[1][1], status))
 						fic.close()
 				elif ev[0] == 'MSG':
-					fic = open(LOGPATH + ev[1][0], "a")
+					jid = string.split(ev[1][0], '/')[0]
+					fic = open(LOGPATH + jid, "a")
 					fic.write("%s:recv:%s\n" % (tim, ev[1][1]))
 					fic.close()
 				elif ev[0] == 'MSGSENT':
-					fic = open(LOGPATH + ev[1][0], "a")
+					jid = string.split(ev[1][0], '/')[0]
+					fic = open(LOGPATH + jid, "a")
 					fic.write("%s:sent:%s\n" % (tim, ev[1][1]))
 					fic.close()
 			time.sleep(0.5)

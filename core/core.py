@@ -66,6 +66,8 @@ class GajimCore:
 			log.debug("subscribe request from %s" % who)
 			if self.cfgParser.Core_alwaysauth == 1 or string.find(who, "@") <= 0:
 				self.con.send(common.jabber.Presence(who, 'subscribed'))
+				if string.find(who, "@") <= 0:
+					self.hub.sendPlugin('NOTIFY', (who, 'offline', 'offline'))
 			else:
 				self.hub.sendPlugin('SUBSCRIBE', who)
 		elif type == 'subscribed':
@@ -205,20 +207,21 @@ class GajimCore:
 
 def loadPlugins(gc):
 	modStr = gc.cfgParser.Core_modules
-	mods = string.split (modStr, ' ')
+	if modStr :
+		mods = string.split (modStr, ' ')
 
-	for mod in mods:
-		modObj = gc.hub.newPlugin(mod)
-		gc.hub.register(mod, 'ROSTER')
-		gc.hub.register(mod, 'NOTIFY')
-		gc.hub.register(mod, 'MSG')
-		gc.hub.register(mod, 'SUBSCRIBED')
-		gc.hub.register(mod, 'SUBSCRIBE')
-		gc.hub.register(mod, 'AGENTS')
-		gc.hub.register(mod, 'AGENT_INFO')
-		gc.hub.register(mod, 'QUIT')
-		gc.hub.register(mod, 'ACC_OK')
-		modObj.load()
+		for mod in mods:
+			modObj = gc.hub.newPlugin(mod)
+			gc.hub.register(mod, 'ROSTER')
+			gc.hub.register(mod, 'NOTIFY')
+			gc.hub.register(mod, 'MSG')
+			gc.hub.register(mod, 'SUBSCRIBED')
+			gc.hub.register(mod, 'SUBSCRIBE')
+			gc.hub.register(mod, 'AGENTS')
+			gc.hub.register(mod, 'AGENT_INFO')
+			gc.hub.register(mod, 'QUIT')
+			gc.hub.register(mod, 'ACC_OK')
+			modObj.load()
 # END loadPLugins
 
 def start():
