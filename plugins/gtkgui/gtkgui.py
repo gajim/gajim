@@ -415,8 +415,13 @@ class tabbed_chat_Window:
 		return 0
 
 	def on_chat_key_press_event(self, widget, event):
+		nb = self.xml.get_widget("notebook")
+		st = "1234567890"
 		if event.keyval == gtk.keysyms.Escape:
 			self.on_close_clicked(widget)
+		elif (event.string in st) \
+			and (event.state & gtk.gdk.MOD1_MASK):
+			nb.set_current_page(st.index(event.string))
 
 	def on_button_contact_clicked(self, widget):
 		"""When button contact is clicked"""
