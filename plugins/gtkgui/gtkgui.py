@@ -216,6 +216,8 @@ class tabbed_chat_Window:
 		self.xml.signal_connect('on_close_clicked', self.on_close_clicked)
 		self.xml.signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
+		self.xml.signal_connect('on_button_contact_clicked', \
+			self.on_button_contact_clicked)
 		self.tagIn = buffer_conv.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn.set_property("foreground", color)
@@ -385,6 +387,8 @@ class tabbed_chat_Window:
 			self.on_close_clicked)
 		self.xmls[user.jid].signal_connect('on_msg_key_press_event', \
 			self.on_msg_key_press_event)
+		self.xmls[user.jid].signal_connect('on_button_contact_clicked', \
+			self.on_button_contact_clicked)
 
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -413,6 +417,12 @@ class tabbed_chat_Window:
 	def on_chat_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
 			self.on_close_clicked(widget)
+
+	def on_button_contact_clicked(self, widget):
+		"""When button contact is clicked"""
+		jid = self.get_active_jid()
+		user = self.users[jid]
+		self.plugin.roster.on_info(widget, user, self.account)
 
 	def read_queue(self, q):
 		"""read queue and print messages containted in it"""
@@ -630,6 +640,10 @@ class message_Window:
 			self.nb_unread = 0
 			self.show_title()
 	
+	def on_button_contact_clicked(self, widget):
+		"""When button contact is clicked"""
+		self.plugin.roster.on_info(widget, self.user, self.account)
+
 	def __init__(self, user, plugin, account):
 		self.user = user
 		self.plugin = plugin
@@ -658,6 +672,8 @@ class message_Window:
 		buffer.create_mark('end', end_iter, 0)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_clear_clicked', self.on_clear)
+		self.xml.signal_connect('on_button_contact_clicked', \
+			self.on_button_contact_clicked)
 		self.xml.signal_connect('on_focus', self.on_focus)
 		self.xml.signal_connect('on_history_clicked', self.on_history)
 		self.xml.signal_connect('on_msg_key_press_event', \
