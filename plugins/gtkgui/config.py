@@ -1001,6 +1001,9 @@ class Account_modification_window:
 		if infos.has_key('autoconnect'):
 			self.xml.get_widget('autoconnect_checkbutton').set_active(\
 				infos['autoconnect'])
+		if infos.has_key('sync_with_global_status'):
+			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(\
+				infos['sync_with_global_status'])
 		if infos.has_key('no_log_for'):
 			list_no_log_for = infos['no_log_for'].split()
 			if infos['accname'] in list_no_log_for:
@@ -1056,14 +1059,7 @@ class Account_modification_window:
 					return 0
 			if proxyhost == '':
 				Warning_dialog(_('You must enter a proxy host to use proxy'))
-		'''FIXME: REMOVE THIS IF we're ok
-		if priority != '':
-			try:
-				priority = int(priority)
-			except ValueError:
-				Warning_dialog(_('Priority must be a number'))
-				return 0
-		'''
+
 		(login, hostname) = jid.split('@')
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
 		if key_name == '': #no key selected
@@ -1310,28 +1306,27 @@ class Accounts_window:
 		
 	def init_accounts(self):
 		"""initialize listStore with existing accounts"""
-		self.xml.get_widget('modify_button').set_sensitive(False)
-		self.xml.get_widget('delete_button').set_sensitive(False)
+		self.modify_button.set_sensitive(False)
+		self.delete_button.set_sensitive(False)
 		model = self.accounts_treeview.get_model()
 		model.clear()
 		for account in self.plugin.accounts:
-			activ = 1
-			if self.plugin.accounts[account].has_key('active'):
-				activ = self.plugin.accounts[account]['active']
 			iter = model.append()
 			model.set(iter, 0, account, 1,\
 				self.plugin.accounts[account]['hostname'])
 
 	def on_accounts_treeview_cursor_changed(self, widget):
 		"""Activate delete and modify buttons when a row is selected"""
-		self.xml.get_widget('modify_button').set_sensitive(True)
-		self.xml.get_widget('delete_button').set_sensitive(True)
+		self.modify_button.set_sensitive(True)
+		self.delete_button.set_sensitive(True)
 
 	def on_new_button_clicked(self, widget):
 		"""When new button is clicked : open an account information window"""
 		if not self.plugin.windows.has_key('account_modification_window'):
 			self.plugin.windows['account_modification_window'] = \
-				Account_modification_window(self.plugin, {})
+				Account_modification_window(self.plugin, {}) #find out what's wrong
+		else:
+			self.plugin.windows[account_modification_window].window.present()
 
 	def on_delete_button_clicked(self, widget):
 		"""When delete button is clicked :
@@ -1366,19 +1361,23 @@ class Accounts_window:
 			infos['jid'] = self.plugin.accounts[account]['name'] + \
 				'@' +  self.plugin.accounts[account]['hostname']
 			self.plugin.windows['account_modification_window'] = \
-				Account_modification_window(self.plugin, infos)
+				Account_modification_window(self.plugin, infos) # may it messes with this one
+		else:
+			self.plugin.windows[account_modification_window].window.present()
 
 	def on_sync_with_global_status_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			self.plugin.accounts[account]['active'] = 0
+			self.plugin.accounts[account]['sync_with_global_status'] = 0
 		else:
-			self.plugin.accounts[account]['active'] = 1
+			self.plugin.accounts[account]['sync_with_global_status'] = 1
 		
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'accounts_window', APP)
 		self.window = self.xml.get_widget('accounts_window')
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
+		self.modify_button = self.xml.get_widget('modify_button')
+		self.delete_button = self.xml.get_widget('delete_button')
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, \
 			gobject.TYPE_BOOLEAN)
 		self.accounts_treeview.set_model(model)
@@ -1391,7 +1390,6 @@ class Accounts_window:
 			renderer, text=1)
 		self.xml.signal_autoconnect(self)
 		self.init_accounts()
-
 
 class agent_registration_window:
 	"""Class for agent registration window :

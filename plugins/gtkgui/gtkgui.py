@@ -3647,9 +3647,9 @@ class plugin:
 		path = 'plugins/gtkgui/icons/' + iconstyle + '/'
 		files = [path + 'online.gif', path + 'online.png', path + 'online.xpm']
 		pix = None
-		for f in files:
-			if os.path.exists(f):
-				pix = gtk.gdk.pixbuf_new_from_file(f)
+		for fname in files:
+			if os.path.exists(fname):
+				pix = gtk.gdk.pixbuf_new_from_file(fname)
 				break
 		if pix:
 			gtk.window_set_default_icon(pix)
