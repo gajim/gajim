@@ -488,8 +488,7 @@ class tabbed_chat_window:
 			else:
 				self.chat_notebook.set_current_page(0)
 		else: # it's a normal key press make sure message_textview has focus
-			message_textview = self.xmls[jid].\
-					get_widget('message_textview')
+			message_textview = self.xmls[jid].get_widget('message_textview')
 			if not message_textview.is_focus():
 				message_textview.grab_focus()
 
@@ -804,12 +803,6 @@ class Groupchat_window:
 	def set_subject(self, room_jid, subject):
 		self.subjects[room_jid] = subject
 		self.xml.get_widget('subject_entry').set_text(subject)
-	
-	def on_subject_entry_key_press_event(self, widget, event):
-		if event.keyval == gtk.keysyms.Return:
-			room_jid = self.get_active_jid()
-			subject = widget.get_text()
-			self.plugin.send('GC_SUBJECT', self.account, (room_jid, subject))
 
 	def on_set_button_clicked(self, widget):
 		room_jid = self.get_active_jid()
@@ -821,10 +814,10 @@ class Groupchat_window:
 		self.remove_tab(room_jid)
 
 	def on_message_textview_key_press_event(self, widget, event):
-		"""When a key is pressed :
+		"""When a key is pressed:
 		if enter is pressed without the shit key, message (if not empty) is sent
-		and printed in the conversation"""
-		if event.keyval == gtk.keysyms.Return:
+		and printed in the conversation. Tab does autocompete in nickames"""
+		if event.keyval == gtk.keysyms.Return: # ENTER
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return 0
 			message_buffer = widget.get_buffer()
@@ -837,7 +830,7 @@ class Groupchat_window:
 				message_buffer.set_text('', -1)
 				widget.grab_focus()
 			return 1
-		elif event.keyval == gtk.keysyms.Tab:
+		elif event.keyval == gtk.keysyms.Tab: # TAB
 			room_jid = self.get_active_jid()
 			list_nick = self.get_user_list(room_jid)
 			message_buffer = widget.get_buffer()
@@ -848,19 +841,19 @@ class Groupchat_window:
 			begin = txt.split()[-1]
 			for nick in list_nick:
 				if nick.find(begin) == 0:
-					message_buffer.insert_at_cursor(nick[len(begin):] + ' ')
+					message_buffer.insert_at_cursor(nick[len(begin):] + ': ')
 					return 1
 		return 0
 
 	def on_groupchat_window_key_press_event(self, widget, event):
-		st = "1234567890"
+		st = "1234567890" # humans count from 1, pc from 0 :P
 		room_jid = self.get_active_jid()
-		if event.keyval == gtk.keysyms.Escape:
+		if event.keyval == gtk.keysyms.Escape: #ESCAPE
 			self.remove_tab(room_jid)
 		elif event.string and event.string in st \
-			and (event.state & gtk.gdk.MOD1_MASK):
+			and (event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3 ...
 			self.chat_notebook.set_current_page(st.index(event.string))
-		elif event.keyval == gtk.keysyms.Page_Down:
+		elif event.keyval == gtk.keysyms.Page_Down: # PAGEDOWN
 			if event.state & gtk.gdk.CONTROL_MASK:
 				current = self.chat_notebook.get_current_page()
 				if current > 0:
@@ -875,7 +868,7 @@ class Groupchat_window:
 				iter = conversation_textview.get_iter_at_location(rect.x,\
 					rect.y + rect.height)
 				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
-		elif event.keyval == gtk.keysyms.Page_Up:
+		elif event.keyval == gtk.keysyms.Page_Up: # PAGEUP
 			if event.state & gtk.gdk.CONTROL_MASK:
 				current = self.chat_notebook.get_current_page()
 				if current < (self.chat_notebook.get_n_pages()-1):
@@ -889,12 +882,21 @@ class Groupchat_window:
 				iter = conversation_textview.get_iter_at_location(rect.x, rect.y)
 				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
 		elif event.keyval == gtk.keysyms.Tab and \
-			(event.state & gtk.gdk.CONTROL_MASK):
+			(event.state & gtk.gdk.CONTROL_MASK): # CTRL+TAB
 			current = self.chat_notebook.get_current_page()
 			if current < (self.chat_notebook.get_n_pages()-1):
 				self.chat_notebook.set_current_page(current+1)
 			else:
 				self.chat_notebook.set_current_page(0)
+		
+		'''FIXME:
+		NOT GOOD steals focus from Subject entry and I cannot find a way to prevent this
+		
+		else: # it's a normal key press make sure message_textview has focus
+			message_textview = self.xmls[room_jid].get_widget('message_textview')
+			if not message_textview.is_focus():
+				message_textview.grab_focus()
+		'''
 
 	def print_conversation(self, txt, room_jid, contact = None, tim = None):
 		"""Print a line in the conversation :
@@ -1237,10 +1239,9 @@ class Groupchat_window:
 			self.on_groupchat_window_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', \
 			self.on_chat_notebook_switch_page)
-		self.xml.signal_connect('on_subject_entry_key_press_event', \
-			self.on_subject_entry_key_press_event)
 		self.xml.signal_connect('on_set_button_clicked', \
 			self.on_set_button_clicked)
+		#FIXME: (nk) WHY AUTOCONNECT segfaults? [haven't test here but looks the same] with tabbed chat window ;P
 
 class history_window:
 	"""Class for bowser agent window :

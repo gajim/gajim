@@ -6833,7 +6833,6 @@ Custom</property>
 </widget>
 
 <widget class="GtkWindow" id="groupchat_window">
-  <property name="border_width">4</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Groupchat</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -6867,7 +6866,7 @@ Custom</property>
 	  <child>
 	    <widget class="GtkLabel" id="label139">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Subject :</property>
+	      <property name="label" translatable="yes">Subject:</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6895,8 +6894,7 @@ Custom</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char">*</property>
-	      <property name="activates_default">False</property>
-	      <signal name="key_press_event" handler="on_subject_entry_key_press_event" last_modification_time="Fri, 04 Mar 2005 20:46:50 GMT"/>
+	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -6908,6 +6906,8 @@ Custom</property>
 	  <child>
 	    <widget class="GtkButton" id="set_button">
 	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label" translatable="yes">Set</property>
 	      <property name="use_underline">True</property>
@@ -6931,9 +6931,7 @@ Custom</property>
 
       <child>
 	<widget class="GtkNotebook" id="chat_notebook">
-	  <property name="border_width">4</property>
 	  <property name="visible">True</property>
-	  <property name="can_focus">True</property>
 	  <property name="show_tabs">True</property>
 	  <property name="show_border">True</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
@@ -6978,7 +6976,6 @@ Custom</property>
 		  <child>
 		    <widget class="GtkButton" id="close_button">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
 		      <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Sat, 05 Mar 2005 10:52:53 GMT"/>
@@ -7012,19 +7009,16 @@ Custom</property>
 	      <child>
 		<widget class="GtkVPaned" id="vpaned4">
 		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
 		  <property name="position">225</property>
 
 		  <child>
 		    <widget class="GtkHPaned" id="hpaned">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
 		      <property name="position">100</property>
 
 		      <child>
 			<widget class="GtkScrolledWindow" id="scrolledwindow17">
 			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
 			  <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
 			  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 			  <property name="shadow_type">GTK_SHADOW_IN</property>
@@ -7055,7 +7049,6 @@ Custom</property>
 		      <child>
 			<widget class="GtkScrolledWindow" id="scrolledwindow18">
 			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
 			  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 			  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 			  <property name="shadow_type">GTK_SHADOW_IN</property>
@@ -7064,7 +7057,6 @@ Custom</property>
 			  <child>
 			    <widget class="GtkTextView" id="conversation_textview">
 			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
 			      <property name="editable">False</property>
 			      <property name="overwrite">False</property>
 			      <property name="accepts_tab">True</property>
@@ -7096,7 +7088,6 @@ Custom</property>
 		  <child>
 		    <widget class="GtkScrolledWindow" id="scrolledwindow19">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		      <property name="shadow_type">GTK_SHADOW_IN</property>
@@ -7106,6 +7097,7 @@ Custom</property>
 			<widget class="GtkTextView" id="message_textview">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
+			  <property name="has_focus">True</property>
 			  <property name="editable">True</property>
 			  <property name="overwrite">False</property>
 			  <property name="accepts_tab">True</property>
