@@ -61,6 +61,8 @@ class systray:
 			self.img_tray.set_from_pixbuf(image.get_pixbuf())
 
 	def add_jid(self, jid, account):
+		if not self.t: # the systray is hidden
+			return
 		list = [account, jid]
 		if not list in self.jids:
 			self.jids.append(list)
@@ -81,6 +83,8 @@ class systray:
 		self.tip.set_tip(self.t, label)
 
 	def remove_jid(self, jid, account):
+		if not self.t: # the systray is hidden
+			return
 		list = [account, jid]
 		if list in self.jids:
 			self.jids.remove(list)
