@@ -210,6 +210,13 @@ class preference_Window:
 			self.plugin.config['saveposition'] = 1
 		else:
 			self.plugin.config['saveposition'] = 0
+		#merge groups
+		chk = self.xml.get_widget('merge_checkbutton')
+		if chk.get_active():
+			self.plugin.config['mergeaccounts'] = 1
+		else:
+			self.plugin.config['mergeaccounts'] = 0
+		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
 		#autopopup
 		if self.chk_autopp.get_active():
 			self.plugin.config['autopopup'] = 1
@@ -389,6 +396,10 @@ class preference_Window:
 		#Save position
 		st = self.plugin.config['saveposition']
 		self.xml.get_widget('save_position_checkbutton').set_active(st)
+		
+		#Merge accounts
+		st = self.plugin.config['mergeaccounts']
+		self.xml.get_widget('merge_checkbutton').set_active(st)
 		
 		#Autopopup
 		st = self.plugin.config['autopopup']

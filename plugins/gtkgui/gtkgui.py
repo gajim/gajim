@@ -1879,6 +1879,8 @@ class roster_Window:
 		self.browse_handler_id = 0
 		self.join_handler_id = 0
 		self.regroup = 0
+		if self.plugin.config.has_key('mergeaccounts'):
+			self.regroup = self.plugin.config['mergeaccounts']
 		window = self.xml.get_widget('Gajim')
 		if self.plugin.config.has_key('saveposition'):
 			window.hide()
@@ -2568,6 +2570,7 @@ class plugin:
 			'userbgcolor': '#ffffff',\
 			'userfont': 'Sans 10',\
 			'saveposition': 1,\
+			'mergeaccounts': 0,\
 			'x-position': 0,\
 			'y-position': 0,\
 			'width': 150,\
