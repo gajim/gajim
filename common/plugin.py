@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ##	common/plugin.py
 ##
 ## Gajim Team:

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ##	common/optparser.py
 ##
 ## Gajim Team:

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """A Quick class to tell if theres any activity on your machine"""
 
 import time

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ##      plugins/sock.py
 ##
 ## Gajim Team:

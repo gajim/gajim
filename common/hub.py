@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ##	common/hub.py
 ##
 ## Gajim Team:

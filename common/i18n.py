@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ##	common/i18n.py
 ##
 ## Gajim Team:

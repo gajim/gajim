@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ##	plugins/dialogs.py
 ##
 ## Gajim Team:

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ##	core/core.py
 ##
 ## Gajim Team:

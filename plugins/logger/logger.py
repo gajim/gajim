@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ##      plugins/logger.py
 ##
 ## Gajim Team:
