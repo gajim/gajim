@@ -2099,11 +2099,11 @@ class plugin:
 					#we go online
 					self.roster.optionmenu.set_history(0)
 					self.send('STATUS', None, ('online', ''))
-				if state == common.sleepy.STATE_AWAY and self.config['autoaway']:
+				elif state == common.sleepy.STATE_AWAY and self.config['autoaway']:
 					#we go away
 					self.roster.optionmenu.set_history(1)
 					self.send('STATUS', None, ('away', 'auto away (idle)'))
-				if state == common.sleepy.STATE_XAWAY and self.config['autoxa']:
+				elif state == common.sleepy.STATE_XAWAY and self.config['autoxa']:
 					#we go extanded away
 					self.roster.optionmenu.set_history(2)
 					self.send('STATUS',('xa', 'auto away (idel)'))
