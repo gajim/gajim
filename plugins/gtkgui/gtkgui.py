@@ -2681,6 +2681,8 @@ class plugin:
 	def handle_event_notify(self, account, array):
 		#('NOTIFY', account, (jid, status, message, resource, priority, keyID, 
 		# role, affiliation, real_jid, reason, actor, statusCode))
+		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
+		old_show = 0
 		jid = string.split(array[0], '/')[0]
 		keyID = array[5]
 		resource = array[3]
@@ -2702,10 +2704,14 @@ class plugin:
 				if u.resource == resource:
 					user1 = u
 					break
-			if not user1:
+			if user1:
+				old_show = statuss.index(user1.show)
+			else:
 				user1 = self.roster.contacts[account][ji][0]
+				old_show = statuss.index(user1.show)
 				if (resources != [''] and (len(luser) != 1 or 
 					luser[0].show != 'offline')) and not string.find(jid, "@") <= 0:
+					old_show = 0
 					user1 = user(user1.jid, user1.name, user1.groups, user1.show, \
 					user1.status, user1.sub, user1.ask, user1.resource, \
 						user1.priority, user1.keyID)
@@ -2723,6 +2729,14 @@ class plugin:
 		elif self.roster.contacts[account].has_key(ji):
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
+			#play sound
+			if old_show == 0 and statuss.index(user1.show) > 0 and \
+				self.config['sound_contact_connected']:
+				self.play_sound('sound_contact_connected')
+			elif old_show > 0 and statuss.index(user1.show) == 0 and \
+				self.config['sound_contact_disconnected']:
+				self.play_sound('sound_contact_disconnected')
+				
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
 			self.windows[account]['gc'][ji].chg_user_status(resource, array[1],\
