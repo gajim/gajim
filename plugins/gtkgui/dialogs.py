@@ -541,7 +541,7 @@ class About_dialog:
 		dlg.set_comments(_('A GTK jabber client'))
 		dlg.set_website('http://www.gajim.org')
 
-		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>']
+		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>', 'Alex Podaras <bigpod@gmail.com>']
 		dlg.set_authors(authors)
 		dlg.set_logo(gtk.gdk.pixbuf_new_from_file('plugins/gtkgui/pixmaps/logo.png'))
 		dlg.set_translator_credits(_('translator_credits'))
@@ -689,6 +689,7 @@ class New_message_dialog:
 			self.plugin.roster.new_chat(user, self.account)
 		self.plugin.windows[self.account]['chats'][jid].active_tab(jid)
 		self.plugin.windows[self.account]['chats'][jid].window.present()
+		#FIXME: PROBLEM WITH FOCUS
 		
 		widget.get_toplevel().destroy()
 

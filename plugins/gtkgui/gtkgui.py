@@ -57,7 +57,7 @@ import Queue
 import sre
 import common.sleepy
 
-class ImageCellRenderer(gtk.GenericCellRenderer):
+class CellRendererImage(gtk.GenericCellRenderer):
 
 	__gproperties__ = {
 		"image": (gobject.TYPE_OBJECT, "Image", 
@@ -149,7 +149,7 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 				calc_height -  self.get_property("ypad"))
 		return x_offset, y_offset, calc_width, calc_height
 
-gobject.type_register(ImageCellRenderer)
+gobject.type_register(CellRendererImage)
 
 class User:
 	"""Information concerning each users"""
@@ -806,8 +806,8 @@ class plugin:
 			'ask_online_status':0,\
 			'ask_offline_status':0,\
 			'last_msg':'',\
-			'msg0_name':'Online',\
-			'msg0':'Yep I\'m online.',\
+			'msg0_name':'Nap',\
+			'msg0':'I\'m taking a nap.',\
 			'msg1_name':'Brb',\
 			'msg1':'Back in some minutes.',\
 			'msg2_name':'Eating',\
@@ -816,10 +816,6 @@ class plugin:
 			'msg3':'I\'m watching a movie.',\
 			'msg4_name':'Working',\
 			'msg4':'I\'m working.',\
-			'msg5_name':'Nap',\
-			'msg5':'I\'m taking a nap.',\
-			'msg6_name':'Offline',\
-			'msg6':'I\'m offline.',\
 			'trayicon':1,\
 			'iconset':'sun',\
 			'inmsgcolor':'#ff0000',\

@@ -25,7 +25,7 @@ import time
 
 from dialogs import *
 from chat import *
-from gtkgui import ImageCellRenderer
+from gtkgui import CellRendererImage
 
 from common import i18n
 
@@ -449,7 +449,7 @@ class Groupchat_window(Chat):
 		#status_image, nickname, real_jid, status
 		store = gtk.TreeStore(gtk.Image, str, str, str)
 		column = gtk.TreeViewColumn('contacts')
-		render_text = ImageCellRenderer()
+		render_text = CellRendererImage()
 		column.pack_start(render_text, expand = False)
 		column.add_attribute(render_text, 'image', 0)
 		render_text = gtk.CellRendererText()

@@ -28,7 +28,7 @@ import common.sleepy
 from tabbed_chat_window import *
 from groupchat_window import *
 from history_window import *
-from gtkgui import ImageCellRenderer, User
+from gtkgui import CellRendererImage, User
 from dialogs import *
 from config import *
 
@@ -651,9 +651,10 @@ class Roster_window:
 				iter = model.get_iter(path)
 				type = model.get_value(iter, 2)
 				if (type == 'group' or type == 'account'):
-					# The integer 30 is the width of the first CellRenderer (see
-					# iconCellDataFunc function)
-					if x <= 30:
+					print self.tree.get_columns()
+					print column
+					#self.tree.get_column(0)
+					if column == self.tree.get_column(0): # if first column (the one that has \/
 						if (self.tree.row_expanded(path)):
 							self.tree.collapse_row(path)
 						else:
@@ -693,7 +694,7 @@ class Roster_window:
 						model.set_value(accountIter, 0, self.pixbufs['offline'])
 					self.plugin.connected[account] = 0
 					self.plugin.systray.set_status('offline')
-					self.set_cb()
+					self.update_status_comboxbox()
 					return
 				self.plugin.send('PASSPHRASE', account, passphrase)
 				if save:
@@ -749,21 +750,21 @@ class Roster_window:
 			return
 		self.send_status(account, status, message)
 
-	def on_cb_changed(self, widget):
+	def on_status_combobox_changed(self, widget):
 		"""When we change our status"""
-		model = self.cb.get_model()
-		active = self.cb.get_active()
+		model = self.status_combobox.get_model()
+		active = self.status_combobox.get_active()
 		if active < 0:
 			return
 		accounts = self.plugin.accounts.keys()
 		if len(accounts) == 0:
-			Error_dialog(_("You must setup an account before connecting to jabber network."))
-			self.set_cb()
+			Error_dialog(_('You must create an account before connecting to jabber network.'))
+			self.update_status_comboxbox()
 			return
 		status = model[active][2]
 		message = self.get_status_message(status)
 		if message == -1:
-			self.set_cb()
+			self.update_status_comboxbox()
 			return
 		for acct in accounts:
 			if self.plugin.accounts[acct].has_key('sync_with_global_status'):
@@ -771,7 +772,7 @@ class Roster_window:
 					continue
 			self.send_status(acct, status, message)
 	
-	def set_cb(self):
+	def update_status_comboxbox(self):
 		#table to change index in plugin.connected to index in combobox
 		table = {0:5, 1:5, 2:0, 3:1, 4:2, 5:3, 6:4}
 		maxi = 0
@@ -779,9 +780,9 @@ class Roster_window:
 			maxi = max(self.plugin.connected.values())
 		#temporarily block signal in order not to send status that we show
 		#in the combobox
-		self.cb.handler_block(self.id_signal_cb)
-		self.cb.set_active(table[maxi])
-		self.cb.handler_unblock(self.id_signal_cb)
+		self.status_combobox.handler_block(self.id_signal_cb)
+		self.status_combobox.set_active(table[maxi])
+		self.status_combobox.handler_unblock(self.id_signal_cb)
 		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',\
 			'invisible']
 		if self.plugin.systray_enabled:
@@ -812,7 +813,7 @@ class Roster_window:
 				for user in luser_copy:
 					self.chg_user_status(user, 'offline', 'Disconnected', account)
 		self.plugin.connected[account] = statuss.index(status)
-		self.set_cb()
+		self.update_status_comboxbox()
 
 	def new_chat(self, user, account):
 		if self.plugin.config['usetabbedchat']:
@@ -1040,7 +1041,7 @@ class Roster_window:
 				self.hidden_lines.append(account)
 
 	def on_editing_canceled (self, cell):
-		"""editing have been canceled"""
+		"""editing has been canceled"""
 		#TODO: get iter
 		#model.set_value(iter, 5, False)
 		pass
@@ -1112,7 +1113,7 @@ class Roster_window:
 		# Update the roster
 		self.draw_roster()
 		# Update the status combobox
-		model = self.cb.get_model()
+		model = self.status_combobox.get_model()
 		iter = model.get_iter_root()
 		while iter:
 			model.set_value(iter, 1, self.pixbufs[model.get_value(iter, 2)])
@@ -1129,11 +1130,6 @@ class Roster_window:
 			for jid in self.plugin.windows[account]['gc']:
 				if jid != 'tabbed':
 					self.plugin.windows[account]['gc'][jid].udpate_pixbufs()
-
-	def sound_is_ok(self, sound):
-		if not os.path.exists(sound):
-			return 0
-		return 1
 
 	def on_show_offline_contacts_menuitem_activate(self, widget):
 		"""when show offline option is changed:
@@ -1156,7 +1152,6 @@ class Roster_window:
 			renderer.set_property('cell-background', \
 				self.plugin.config['userbgcolor'])
 			renderer.set_property('xalign', 1)
-		renderer.set_property('width', 30)
 	
 	def nameCellDataFunc(self, column, renderer, model, iter, data=None):
 		"""When a row is added, set properties for name renderer"""
@@ -1166,21 +1161,20 @@ class Roster_window:
 			renderer.set_property('cell-background', \
 				self.plugin.config['accountbgcolor'])
 			renderer.set_property('font', self.plugin.config['accountfont'])
-			renderer.set_property('xpad', 0)
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('foreground', \
 				self.plugin.config['grouptextcolor'])
 			renderer.set_property('cell-background', \
 				self.plugin.config['groupbgcolor'])
 			renderer.set_property('font', self.plugin.config['groupfont'])
-			renderer.set_property('xpad', 8)
 		else:
 			renderer.set_property('foreground', \
 				self.plugin.config['usertextcolor'])
 			renderer.set_property('cell-background', \
 				self.plugin.config['userbgcolor'])
 			renderer.set_property('font', self.plugin.config['userfont'])
-			renderer.set_property('xpad', 16)
+
+		renderer.set_property('xpad', 5)
 
 	def compareIters(self, model, iter1, iter2, data = None):
 		"""Compare two iters to sort them"""
@@ -1313,15 +1307,16 @@ class Roster_window:
 
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image, \
 			gobject.TYPE_STRING)
-		self.cb = gtk.ComboBox()
-		self.xml.get_widget('vbox1').pack_end(self.cb, False)
-		cell = ImageCellRenderer()
-		self.cb.pack_start(cell, False)
-		self.cb.add_attribute(cell, 'image', 1)
+		self.status_combobox = gtk.ComboBox()
+		self.xml.get_widget('vbox1').pack_end(self.status_combobox, False)
+		cell = CellRendererImage()
+		self.status_combobox.pack_start(cell, False)
+		self.status_combobox.add_attribute(cell, 'image', 1)
 		cell = gtk.CellRendererText()
-		cell.set_property('xpad', 8)
-		self.cb.pack_start(cell, True)
-		self.cb.add_attribute(cell, 'text', 0)
+		cell.set_property('xpad', 5) # padding for status text
+		self.status_combobox.pack_start(cell, True)
+		self.status_combobox.add_attribute(cell, 'text', 0)
+
 		for status in ['online', 'away', 'xa', 'dnd', 'invisible', 'offline']:
 			if status == 'dnd':
 				status_better = 'Busy'
@@ -1330,9 +1325,9 @@ class Roster_window:
 			else:
 				status_better = status.capitalize()
 			iter = liststore.append([status_better, self.pixbufs[status], status])
-		self.cb.show_all()
-		self.cb.set_model(liststore)
-		self.cb.set_active(5)
+		self.status_combobox.show_all()
+		self.status_combobox.set_model(liststore)
+		self.status_combobox.set_active(5)
 
 		showOffline = self.plugin.config['showoffline']
 		self.xml.get_widget('show_offline_contacts_menuitem').set_active(showOffline)
@@ -1340,7 +1335,7 @@ class Roster_window:
 		#columns
 		col = gtk.TreeViewColumn()
 		self.tree.append_column(col)
-		render_pixbuf = ImageCellRenderer()
+		render_pixbuf = CellRendererImage()
 		col.pack_start(render_pixbuf, expand = False)
 		col.add_attribute(render_pixbuf, 'image', 0)
 		col.set_cell_data_func(render_pixbuf, self.iconCellDataFunc, None)
@@ -1369,7 +1364,8 @@ class Roster_window:
 		self.tree.connect("drag_data_get", self.drag_data_get_data)
 		self.tree.connect("drag_data_received", self.drag_data_received_data)
 		self.xml.signal_autoconnect(self)
-		self.id_signal_cb = self.cb.connect('changed', self.on_cb_changed)
+		self.id_signal_cb = self.status_combobox.connect('changed',\
+														self.on_status_combobox_changed)
 
 		self.hidden_lines = self.plugin.config['hiddenlines'].split('\t')
 		self.draw_roster()

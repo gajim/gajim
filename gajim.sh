@@ -1,5 +1,7 @@
-#!/usr/bin/python -tt
-##	gajim.py
+#!/bin/sh
+''':'
+exec python -OOtt "$0" ${1+"$@"}
+' '''
 ##
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>
@@ -55,3 +57,5 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 Core.core.start(mode)
 print _("Core Stopped")
+
+

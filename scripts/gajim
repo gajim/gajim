@@ -4,6 +4,7 @@
 ## Gajim Team:
 ##      - Yann Le Boulanger <asterix@lagaule.org>
 ##      - Vincent Hanquez <tab@snarc.org>
+##	- Nikos Kouremenos <kourem@gmail.com>
 ##
 ##      Copyright (C) 2003-2005 Gajim Team
 ##
@@ -23,4 +24,4 @@ fi
 
 cd PREFIX/share/gajim
 export PYTHONPATH="$PYTHONPATH:PREFIX/lib/gajim"
-python gajim.py
+gajim.sh

@@ -622,11 +622,6 @@ class Preferences_window:
 		if event.keyval == gtk.keysyms.Delete:
 			self.on_button_remove_emoticon_clicked(widget)
 
-	def sound_is_ok(self, sound):
-		if not os.path.exists(sound):
-			return 0
-		return 1
-
 	def sound_toggled_cb(self, cell, path):
 		model = self.sound_tree.get_model()
 		model[path][1] = not model[path][1]
@@ -685,7 +680,7 @@ class Preferences_window:
 			response = dialog.run()
 			if response == gtk.RESPONSE_OK:
 				file = dialog.get_filename()
-				if self.sound_is_ok(file):
+				if os.path.exists(file):
 					ok = 1
 			else:
 				ok = 1
@@ -836,7 +831,7 @@ class Preferences_window:
 
 		col = gtk.TreeViewColumn(_('Image'))
 		self.emot_tree.append_column(col)
-		renderer = gtkgui.ImageCellRenderer()
+		renderer = gtkgui.CellRendererImage()
 		col.pack_start(renderer, expand = False)
 		col.add_attribute(renderer, 'image', 2)
 		

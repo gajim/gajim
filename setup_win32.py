@@ -3,7 +3,7 @@
 ## Gajim Team:
 ##      - Yann Le Boulanger <asterix@lagaule.org>
 ##      - Vincent Hanquez <tab@snarc.org>
-##
+##	- Nikos Kouremenos <kourem@gmail.com>
 ##      Copyright (C) 2003-2005 Gajim Team
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -40,8 +40,8 @@ opts = {
 setup(
     name = "Gajim",
     description = "A jabber client",
-#    console=["gajim.py"],
-    windows = [{"script": "gajim.py",
+#    console=["gajim.sh"],
+    windows = [{"script": "gajim.sh",
                 "icon_resources": [(1, "gajim.ico")]}],
     options=opts,
     data_files=[("plugins/gtkgui", glob.glob("plugins/gtkgui/gtkgui.glade")),

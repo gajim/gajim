@@ -21,8 +21,8 @@ make install # as superuser
 RUN GAJIM
 gajim
 
-or if you don't 'make install' you can also run from gajim folder with
-./gajim.py
+or if you didn't 'make install' you can also run from gajim folder with
+./gajim.sh
 
 TROUBLESHOOTING
 If you have python2.3 please manually edit plugins/gtkgui/Makefile and in
@@ -40,4 +40,3 @@ http://gajim.org
 PS.
 sounds & emoticons taken from Psi
 gossip iconstyle taken from Imendio Gossip
-thanks to Alex Podaras for various code contributions

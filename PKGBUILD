@@ -9,10 +9,22 @@ url="http://www.gajim.org"
 license="GPL"
 depends=(pygtk)
 source=($url/downloads/$pkgname-$pkgver.tar.bz2)
-md5sums=(8175a3ccf93093f23865baebe4fa82f8)
+#md5sums=(8175a3ccf93093f23865baebe4fa82f8)
 
 build() {
   cd $startdir/src/$pkgname-$pkgver
-  make || return 1
+
+  echo "making trayicon..."
+  make trayicon || return 1 #remove this if you have gnome-python-extras
+  echo "done."
+  
+  echo "making idle detection..."
+  make idle || return 1
+  echo "done."
+
+  echo "making translations..."
+  make translation || return 1
+  echo "done."
+
   make DESTDIR=$startdir/pkg install
 }
