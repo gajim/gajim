@@ -67,7 +67,7 @@ from config import *
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-USE_TABBED_CHAT = 0
+USE_TABBED_CHAT = 1
 
 class ImageCellRenderer(gtk.GenericCellRenderer):
 
@@ -182,11 +182,12 @@ class user:
 		else: raise TypeError, _('bad arguments')
 
 class tabbed_chat_Window:
+#TODO: close tabs
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat', APP)
-		button = self.xml.get_widget('button_jid')
-		button.set_use_underline(FALSE)
+		self.xmls = {}
+		self.xmls[user.jid] = self.xml
 		conversation = self.xml.get_widget('conversation')
 		buffer_conv = conversation.get_buffer()
 		message = self.xml.get_widget('message')
@@ -194,32 +195,26 @@ class tabbed_chat_Window:
 		buffer_msg = message.get_buffer()
 		end_iter = buffer_conv.get_end_iter()
 		buffer_conv.create_mark('end', end_iter, 0)
-		button_close = self.xml.get_widget('button_close')
-		self.xml.get_widget('hbuttonbox').set_child_secondary(button_close, TRUE)
 
 		self.plugin = plugin
 		self.account = account
-		self.active_button = button
-		self.users = {button: user}
-		self.buffers = {button: [buffer_conv, buffer_msg]}
-		self.nb_unread = {button: 0}
+		self.users = {user.jid: user}
+		self.nb_unread = {user.jid: 0}
 
-		self.redraw_button(button)
+		self.redraw_tab(user.jid)
 		self.window = self.xml.get_widget('tabbed_chat')
 		self.show_title()
-		self.redraw_widgets()
+		self.draw_widgets(user)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_clear_clicked', self.on_clear)
 		self.xml.signal_connect('on_focus', self.on_focus)
-		self.xml.signal_connect('on_history_clicked', self.on_history)
-		self.xml.signal_connect('on_button_jid_clicked', 
-			self.on_button_jid_clicked)
-		self.xml.signal_connect('on_button_close_clicked', 
-			self.on_button_close_clicked)
-		self.xml.signal_connect('on_msg_key_press_event', \
-			self.on_msg_key_press_event)
 		self.xml.signal_connect('on_chat_key_press_event', \
 			self.on_chat_key_press_event)
+		self.xml.signal_connect('on_notebook_switch_page', \
+			self.on_notebook_switch_page)
+		self.xml.signal_connect('on_history_clicked', self.on_history)
+		self.xml.signal_connect('on_clear_clicked', self.on_clear)
+		self.xml.signal_connect('on_msg_key_press_event', \
+			self.on_msg_key_press_event)
 		self.tagIn = buffer_conv.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn.set_property("foreground", color)
@@ -229,6 +224,7 @@ class tabbed_chat_Window:
 		self.tagStatus = buffer_conv.create_tag("status")
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus.set_property("foreground", color)
+
 		self.tag_table = gtk.TextTagTable()
 		tag = gtk.TextTag("incoming")
 		color = self.plugin.config['inmsgcolor']
@@ -242,6 +238,7 @@ class tabbed_chat_Window:
 		color = self.plugin.config['statusmsgcolor']
 		tag.set_property("foreground", color)
 		self.tag_table.add(tag)
+
 		#print queued messages
 		if plugin.queues[account].has_key(user.jid):
 			self.read_queue(plugin.queues[account][user.jid])
@@ -251,8 +248,8 @@ class tabbed_chat_Window:
 		
 	def show_title(self):
 		unread = 0
-		for button in self.nb_unread:
-			unread += self.nb_unread[button]
+		for jid in self.nb_unread:
+			unread += self.nb_unread[jid]
 		start = ""
 		if unread > 1:
 			start = "[" + str(unread) + "] "
@@ -260,90 +257,114 @@ class tabbed_chat_Window:
 			start = "* "
 		self.window.set_title(start + "Chat (" + self.account + ")")
 
-	def redraw_widgets(self):
-		user = self.users[self.active_button]
-		widget_img = self.xml.get_widget('image_status')
+	def draw_widgets(self, user):
+		widget_img = self.xmls[user.jid].get_widget('image_status')
 		image = self.plugin.roster.pixbufs[user.show]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			widget_img.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			widget_img.set_from_pixbuf(image.get_pixbuf())
-		self.xml.get_widget('button_contact').set_label(user.name + ' <'\
-		         + user.jid + '>')
+		self.xmls[user.jid].get_widget('button_contact').set_label(\
+			user.name + ' <' + user.jid + '>')
 		if not user.keyID:
-			self.xml.get_widget('toggle_gpg').set_sensitive(False)
-		conversation = self.xml.get_widget('conversation')
-		conversation.set_buffer(self.buffers[self.active_button][0])
-		message = self.xml.get_widget('message')
-		message.set_buffer(self.buffers[self.active_button][1])
+			self.xmls[user.jid].get_widget('toggle_gpg').set_sensitive(False)
 
-	def redraw_button(self, button):
+	def redraw_tab(self, jid):
 		start = ''
-		if self.nb_unread[button] > 1:
-			start = "[" + str(self.nb_unread[button]) + "] "
-		elif self.nb_unread[button] == 1:
+		if self.nb_unread[jid] > 1:
+			start = "[" + str(self.nb_unread[jid]) + "] "
+		elif self.nb_unread[jid] == 1:
 			start = "* "
-		button.set_label(start + self.users[button].name)
-		#TODO: change button's color
+		nb = self.xml.get_widget("notebook")
+		child = self.xmls[jid].get_widget("vbox_tab")
+		nb.set_tab_label_text(child, start + self.users[jid].name)
 
 	def delete_event(self, widget):
 		"""close window"""
 		#clean self.plugin.windows[self.account]['chats']
-		for button in self.xml.get_widget('hbuttonbox').get_children():
-			if self.users.has_key(button):
-				del self.plugin.windows[self.account]['chats'][self.users[button]. \
-					jid]
+		for jid in self.users:
+			del self.plugin.windows[self.account]['chats'][jid]
 		del self.plugin.windows[self.account]['chats']['tabbed']
+
+	def get_active_jid(self):
+		nb = self.xml.get_widget("notebook")
+		child = nb.get_nth_page(nb.get_current_page())
+		jid = ''
+		for j in self.xmls:
+			c = self.xmls[j].get_widget("vbox_tab")
+			if c == child:
+				jid = j
+				break
+		return jid
 
 	def on_clear(self, widget):
 		"""When clear button is pressed :
 		clear the conversation"""
-		buffer = self.xml.get_widget('conversation').get_buffer()
+		jid = self.get_active_jid()
+		buffer = self.xmls[jid].get_widget('conversation').get_buffer()
 		deb, end = buffer.get_bounds()
 		buffer.delete(deb, end)
 
 	def on_focus(self, widget, event):
 		"""When window get focus"""
-		user = self.users[self.active_button]
-		self.plugin.systray.remove_jid(user.jid, self.account)
-		if self.nb_unread[self.active_button] > 0:
-			self.nb_unread[self.active_button] = 0
-			self.redraw_button(self.active_button)
+		jid = self.get_active_jid()
+		self.plugin.systray.remove_jid(jid, self.account)
+		if self.nb_unread[jid] > 0:
+			self.nb_unread[jid] = 0
+			self.redraw_tab(jid)
 			self.show_title()
 
 	def on_history(self, widget):
 		"""When history button is pressed : call log window"""
-		user = self.users[self.active_button]
-		if not self.plugin.windows['logs'].has_key(user.jid):
-			self.plugin.windows['logs'][user.jid] = log_Window(self.plugin, 
-				user.jid)
-
-	def on_button_jid_clicked(self, button):
-		old_active = self.active_button
-		self.active_button = button
-		if self.users.has_key(old_active):
-			self.redraw_button(old_active)
-		if self.nb_unread[button] > 0:
-			self.nb_unread[button] = 0
+		jid = self.get_active_jid()
+		if not self.plugin.windows['logs'].has_key(jid):
+			self.plugin.windows['logs'][jid] = log_Window(self.plugin, jid)
+	
+	def on_notebook_switch_page(self, nb, page, page_num):
+		child = nb.get_nth_page(page_num)
+		jid = ''
+		for j in self.xmls:
+			c = self.xmls[j].get_widget("vbox_tab")
+			if c == child:
+				jid = j
+				break
+		if self.nb_unread[jid] > 0:
+			self.nb_unread[jid] = 0
+			self.redraw_tab(jid)
 			self.show_title()
-			user = self.users[self.active_button]
-			self.plugin.systray.remove_jid(user.jid, self.account)
-		self.redraw_button(button)
-		self.redraw_widgets()
+			self.plugin.systray.remove_jid(jid, self.account)
 	
 	def new_user(self, user):
-		button = gtk.Button(user.name, use_underline=FALSE)
-		button.set_relief(gtk.RELIEF_NONE)
-		button.show()
-		button.connect("clicked", self.on_button_jid_clicked)
-		self.xml.get_widget('hbuttonbox').add(button)
-		self.users[button] = user
-		buffer_conv = gtk.TextBuffer(self.tag_table)
+		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, "vbox_tab", APP)
+		vb = self.xmls[user.jid].get_widget("vbox_tab")
+		self.xml.get_widget("notebook").append_page(vb)
+		
+		self.users[user.jid] = user
+
+		conversation = self.xmls[user.jid].get_widget('conversation')
+		buffer_conv = conversation.get_buffer()
+		message = self.xmls[user.jid].get_widget('message')
+		message.grab_focus()
+		buffer_msg = message.get_buffer()
 		end_iter = buffer_conv.get_end_iter()
 		buffer_conv.create_mark('end', end_iter, 0)
-		buffer_msg = gtk.TextBuffer()
-		self.buffers[button] = [buffer_conv, buffer_msg]
-		self.nb_unread[button] = 0
+		self.tagIn = buffer_conv.create_tag("incoming")
+		color = self.plugin.config['inmsgcolor']
+		self.tagIn.set_property("foreground", color)
+		self.tagOut = buffer_conv.create_tag("outgoing")
+		color = self.plugin.config['outmsgcolor']
+		self.tagOut.set_property("foreground", color)
+		self.tagStatus = buffer_conv.create_tag("status")
+		color = self.plugin.config['statusmsgcolor']
+		self.tagStatus.set_property("foreground", color)
+		
+		self.nb_unread[user.jid] = 0
+		self.redraw_tab(user.jid)
+		self.draw_widgets(user)
+		self.xmls[user.jid].signal_connect('on_history_clicked', self.on_history)
+		self.xmls[user.jid].signal_connect('on_clear_clicked', self.on_clear)
+		self.xmls[user.jid].signal_connect('on_msg_key_press_event', \
+			self.on_msg_key_press_event)
 
 	def on_button_close_clicked(self, button):
 		if len(self.xml.get_widget('hbuttonbox').get_children()) == 2:
@@ -366,7 +387,8 @@ class tabbed_chat_Window:
 		"""When a key is pressed :
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation"""
-		user = self.users[self.active_button]
+		jid = self.get_active_jid()
+		user = self.users[jid]
 		if event.keyval == gtk.keysyms.Return:
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return 0
@@ -376,11 +398,11 @@ class tabbed_chat_Window:
 			txt = txt_buffer.get_text(start_iter, end_iter, 0)
 			if txt != '':
 				keyID = ''
-				if self.xml.get_widget('toggle_gpg').get_active():
+				if self.xmls[jid].get_widget('toggle_gpg').get_active():
 					keyID = user.keyID
-				self.plugin.send('MSG', self.account, (user.jid, txt, keyID))
+				self.plugin.send('MSG', self.account, (jid, txt, keyID))
 				txt_buffer.set_text('', -1)
-				self.print_conversation(txt, user.jid, user.jid)
+				self.print_conversation(txt, jid, user.jid)
 				widget.grab_focus()
 			return 1
 		return 0
@@ -391,19 +413,20 @@ class tabbed_chat_Window:
 
 	def read_queue(self, q):
 		"""read queue and print messages containted in it"""
-		user = self.users[self.active_button]
+		jid = self.get_active_jid()
+		user = self.users[jid]
 		while not q.empty():
 			evt = q.get()
-			self.print_conversation(evt[0], user.jid, tim = evt[1])
+			self.print_conversation(evt[0], jid, tim = evt[1])
 			self.plugin.roster.nb_unread -= 1
 		self.plugin.roster.show_title()
-		del self.plugin.queues[self.account][user.jid]
-		self.plugin.roster.redraw_jid(user.jid, self.account)
-		self.plugin.systray.remove_jid(user.jid, self.account)
+		del self.plugin.queues[self.account][jid]
+		self.plugin.roster.redraw_jid(jid, self.account)
+		self.plugin.systray.remove_jid(jid, self.account)
 		showOffline = self.plugin.config['showoffline']
 		if (user.show == 'offline' or user.show == 'error') and \
 			not showOffline:
-			if len(self.plugin.roster.contacts[self.account][user.jid]) == 1:
+			if len(self.plugin.roster.contacts[self.account][jid]) == 1:
 				self.plugin.roster.remove_user(user, self.account)
 
 	def print_conversation(self, txt, jid, contact = None, tim = None):
@@ -411,16 +434,9 @@ class tabbed_chat_Window:
 		if contact is set to status : it's a status message
 		if contact is set to another value : it's an outgoing message
 		if contact is not set : it's an incomming message"""
-		good_button = None
-		for button in self.xml.get_widget('hbuttonbox').get_children():
-			if self.users[button].jid == jid:
-				good_button = button
-				break
-		if not good_button:
-			return
-		user = self.users[good_button]
-		conversation = self.xml.get_widget('conversation')
-		buffer = self.buffers[good_button][0]
+		user = self.users[jid]
+		conversation = self.xmls[jid].get_widget('conversation')
+		buffer = conversation.get_buffer()
 		if not txt:
 			txt = ""
 		end_iter = buffer.get_end_iter()
@@ -467,9 +483,9 @@ class tabbed_chat_Window:
 		
 		#scroll to the end of the textview
 		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
-		if (good_button != self.active_button or not self.window.is_active()) and contact != 'status':
-			self.nb_unread[good_button] += 1
-			self.redraw_button(good_button)
+		if (jid != self.get_active_jid() or not self.window.is_active()) and contact != 'status':
+			self.nb_unread[jid] += 1
+			self.redraw_tab(jid)
 			self.show_title()
 
 
