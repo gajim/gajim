@@ -475,9 +475,6 @@ def start():
 		gc.mainLoop()
 	except KeyboardInterrupt:
 		print "Keyboard Interrupt : Bye!"
-		for con in gc.connexions.keys():
-			if gc.connected[gc.connexions[con]]:
-				con.disconnect()
 		gc.hub.sendPlugin('QUIT', None, ())
 		return 0
 #	except:
