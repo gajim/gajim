@@ -609,8 +609,11 @@ class New_message_window:
 			self.plugin.roster.contacts[self.account][jid] = [user]
 			self.plugin.roster.add_user_to_roster(user.jid, self.account)
 		else:
-			[user] = self.plugin.roster.contacts[self.account][jid]
-		self.plugin.roster.new_chat(user, self.account)
+			user = self.plugin.roster.contacts[self.account][jid][0]
+		if self.plugin.windows[self.account]['chats'].has_key(jid):
+			self.plugin.windows[self.account]['chats'][jid].active_tab(jid)
+		else:
+			self.plugin.roster.new_chat(user, self.account)
 		widget.get_toplevel().destroy()
 
 	def __init__(self, plugin, account):
