@@ -88,7 +88,6 @@ class plugin:
 							ev[2][1], status))
 						fic.close()
 					if lognotusr == 1:
-						print jid
 						fic = open(LOGPATH + jid, "a")
 						fic.write("%s:%s:%s:%s\n" % (tim, ev[2][0] + '/' + ev[2][3], \
 							ev[2][1], status))
