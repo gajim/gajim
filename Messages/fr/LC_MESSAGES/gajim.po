@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-05-19 15:57-0400\n"
+"POT-Creation-Date: 2004-06-09 11:36-0400\n"
 "PO-Revision-Date: 2004-05-16 19:40-0400\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -21,7 +21,258 @@ msgstr ""
 msgid "Core Stopped"
 msgstr "Core arrêté"
 
-#: plugins/gtkgui/messagesGlade.c:7 plugins/gtkgui/messagesGlade.c:35
+#: core/core.py:75
+#, python-format
+msgid "Can't create %s"
+msgstr "Impossible de créer %s"
+
+#: core/core.py:80
+#, python-format
+msgid "creating %s"
+msgstr "crée %s"
+
+#: core/core.py:157 core/core.py:347
+msgid "I would like to add you to my roster."
+msgstr "Je souhaiterai t'ajouter à ma liste de contactes"
+
+#: core/core.py:214
+#, python-format
+msgid "Couldn't connect to %s"
+msgstr "Impossible de se connecter à %s"
+
+#: core/core.py:220
+#, python-format
+msgid "Couldn't connect to %s : %s"
+msgstr "Impossible de se connecter à %s : %s"
+
+#: core/core.py:244
+#, python-format
+msgid "Authentification failed with %s, check your login and password"
+msgstr "Impossible de s'authentifier à %s, vérifiez votre login et votre mot de passe"
+
+#: core/core.py:467
+#, python-format
+msgid "Unknown Command %s"
+msgstr "Commande inconnue %s"
+
+#: core/core.py:521
+msgid "Keyboard Interrupt : Bye!"
+msgstr "Interruption au clavier : Au revoir !"
+
+#: plugins/logger/logger.py:44
+msgid "plugin logger stopped"
+msgstr "Module logger arrêté"
+
+#: plugins/logger/logger.py:97
+msgid "creating ~/.gajim/"
+msgstr "crée ~/.gajim/"
+
+#: plugins/logger/logger.py:102
+msgid "creating ~/.gajim/logs/"
+msgstr "Crée ~/.gajim/logs/"
+
+#: plugins/logger/logger.py:109
+msgid "plugin logger loaded"
+msgstr "Module logger chargé"
+
+#: plugins/gtkgui/config.py:101 plugins/gtkgui/config.py:480
+msgid "You must be connected to get your informations"
+msgstr "Vous devez être connecté pour récupérer vos informations"
+
+#: plugins/gtkgui/config.py:105
+msgid "You must be connected to publish your informations"
+msgstr "Vous devez être connecté pour publier vos informations"
+
+#: plugins/gtkgui/config.py:387
+msgid "You must enter a name for this account"
+msgstr "Vous devez entrer un nom pour ce compte"
+
+#: plugins/gtkgui/config.py:390
+msgid "Spaces are not permited in account name"
+msgstr "Vous ne pouvez pas utiliser d'espace pour le nom du compte"
+
+#: plugins/gtkgui/config.py:393
+msgid ""
+"You must enter a Jabber ID for this account\n"
+"For example : login@hostname"
+msgstr ""
+"Vous devez entrer un identifiant Jabber pour ce compte\n"
+"Par exemple : login@serveur"
+
+#: plugins/gtkgui/config.py:399
+msgid "Proxy Port must be a port number"
+msgstr "Le Port du proxy doivent être un numéro de port"
+
+#: plugins/gtkgui/config.py:405
+msgid "Priority must be a number"
+msgstr "La Priorité doit être un numéro"
+
+#: plugins/gtkgui/config.py:445
+msgid "An account already has this name"
+msgstr "Un autre compte porte déjà ce nom"
+
+#: plugins/gtkgui/config.py:539
+#, python-format
+msgid "Are you sure you want to remove this account (%s) ?"
+msgstr "Etes vous sur de vouloir supprimer ce compte (%s) ?"
+
+#: plugins/gtkgui/config.py:589 plugins/gtkgui/messagesGlade.c:117
+#: plugins/gtkgui/messagesGlade.c:131 plugins/gtkgui/messagesGlade.c:167
+msgid "Name"
+msgstr "Nom"
+
+#: plugins/gtkgui/config.py:592
+msgid "Server"
+msgstr "Serveur"
+
+#: plugins/gtkgui/config.py:641
+#, python-format
+msgid "Register to %s"
+msgstr "S'enregistrer à %s"
+
+#: plugins/gtkgui/config.py:715
+msgid "You must be connected to view Agents"
+msgstr "Vous devez être connecté pour voir les Agents"
+
+#: plugins/gtkgui/dialogs.py:307
+#, python-format
+msgid "Subscription request from %s"
+msgstr "Requête d'inscription de la part de %s"
+
+#: plugins/gtkgui/gtkgui.py:60
+msgid "bad arguments"
+msgstr "Mauvais arguments"
+
+#: plugins/gtkgui/gtkgui.py:284
+msgid "Status is now : "
+msgstr "L'état est maintenant : "
+
+#: plugins/gtkgui/gtkgui.py:580
+#, python-format
+msgid "%s is now %s (%s)"
+msgstr "%s est maintenant %s (%s)"
+
+#: plugins/gtkgui/gtkgui.py:614
+msgid "Start chat"
+msgstr "Envoyer un message"
+
+#: plugins/gtkgui/gtkgui.py:617
+msgid "Rename"
+msgstr "Renomer"
+
+#: plugins/gtkgui/gtkgui.py:622
+msgid "Subscription"
+msgstr "Autorisation"
+
+#: plugins/gtkgui/gtkgui.py:627
+msgid "Resend authorization to"
+msgstr "Renvoyer l'autorisation à"
+
+#: plugins/gtkgui/gtkgui.py:630
+msgid "Rerequest authorization from"
+msgstr "Redemander l'autorisation à"
+
+#: plugins/gtkgui/gtkgui.py:633 plugins/gtkgui/messagesGlade.c:67
+msgid "I would like to add you to my contact list, please."
+msgstr "Je souhaiterai t'ajouter à ma contact list"
+
+#: plugins/gtkgui/gtkgui.py:637
+msgid "Remove"
+msgstr "Supprimer"
+
+#: plugins/gtkgui/gtkgui.py:643
+msgid "Informations"
+msgstr ""
+
+#: plugins/gtkgui/gtkgui.py:646 plugins/gtkgui/messagesGlade.c:23
+msgid "History"
+msgstr "Historique"
+
+#: plugins/gtkgui/gtkgui.py:656
+msgid "grp1"
+msgstr ""
+
+#: plugins/gtkgui/gtkgui.py:658
+msgid "grp2"
+msgstr ""
+
+#: plugins/gtkgui/gtkgui.py:660
+msgid "grp3"
+msgstr ""
+
+#: plugins/gtkgui/gtkgui.py:673
+msgid "Log on"
+msgstr "Connecter"
+
+#: plugins/gtkgui/gtkgui.py:679
+msgid "Log off"
+msgstr "Déconnecter"
+
+#: plugins/gtkgui/gtkgui.py:716 plugins/gtkgui/messagesGlade.c:116
+msgid "Status"
+msgstr "Etat"
+
+#: plugins/gtkgui/gtkgui.py:721 plugins/gtkgui/messagesGlade.c:16
+msgid "Online"
+msgstr "En ligne"
+
+#: plugins/gtkgui/gtkgui.py:724 plugins/gtkgui/messagesGlade.c:17
+msgid "Away"
+msgstr "Absent"
+
+#: plugins/gtkgui/gtkgui.py:727 plugins/gtkgui/messagesGlade.c:18
+msgid "NA"
+msgstr "Non Disponible"
+
+#: plugins/gtkgui/gtkgui.py:730 plugins/gtkgui/messagesGlade.c:19
+msgid "DND"
+msgstr "Ne Pas Déranger"
+
+#: plugins/gtkgui/gtkgui.py:733 plugins/gtkgui/messagesGlade.c:20
+msgid "Invisible"
+msgstr ""
+
+#: plugins/gtkgui/gtkgui.py:738 plugins/gtkgui/messagesGlade.c:21
+msgid "Offline"
+msgstr "Déconnecter"
+
+#: plugins/gtkgui/gtkgui.py:745
+msgid "Edit account"
+msgstr "Editer le compte"
+
+#: plugins/gtkgui/gtkgui.py:800
+#, python-format
+msgid "Are you sure you want to remove %s (%s) from your roster ?"
+msgstr "Etes vous sur de vouloir supprimer %s (%s) de votre liste ?"
+
+#: plugins/gtkgui/gtkgui.py:836
+msgid "You must setup an account before connecting to jabber network."
+msgstr "Vous devez configurer un compte pour pouvoir vous connecter au réseau Jabber"
+
+#: plugins/gtkgui/gtkgui.py:948
+msgid "plugin gtkgui stopped"
+msgstr "Module gtkgui arrêté"
+
+#: plugins/gtkgui/gtkgui.py:1329
+#, python-format
+msgid "You are now authorized by %s"
+msgstr "%s vous a autorisé"
+
+#: plugins/gtkgui/gtkgui.py:1331
+#, python-format
+msgid "You are now unsubscribed by %s"
+msgstr "%s vous a supprimé"
+
+#: plugins/gtkgui/gtkgui.py:1340
+#, python-format
+msgid "error contacting %s"
+msgstr "Erreur survenue pour contacter %s"
+
+#: plugins/gtkgui/gtkgui.py:1488
+msgid "plugin gtkgui loaded"
+msgstr "Module gtkgui chargé"
+
+#: plugins/gtkgui/messagesGlade.c:7 plugins/gtkgui/messagesGlade.c:42
 msgid "Gajim"
 msgstr ""
 
@@ -57,37 +308,9 @@ msgstr "_A Propos"
 msgid "_Quit"
 msgstr "_Quitter"
 
-#: plugins/gtkgui/messagesGlade.c:16 plugins/gtkgui/gtkgui.py:658
-msgid "Online"
-msgstr "En ligne"
-
-#: plugins/gtkgui/messagesGlade.c:17 plugins/gtkgui/gtkgui.py:661
-msgid "Away"
-msgstr "Absent"
-
-#: plugins/gtkgui/messagesGlade.c:18 plugins/gtkgui/gtkgui.py:664
-msgid "NA"
-msgstr "Non Disponible"
-
-#: plugins/gtkgui/messagesGlade.c:19 plugins/gtkgui/gtkgui.py:667
-msgid "DND"
-msgstr "Ne Pas Déranger"
-
-#: plugins/gtkgui/messagesGlade.c:20
-msgid "Invisible"
-msgstr ""
-
-#: plugins/gtkgui/messagesGlade.c:21 plugins/gtkgui/gtkgui.py:672
-msgid "Offline"
-msgstr "Déconnecter"
-
 #: plugins/gtkgui/messagesGlade.c:22
 msgid "Chat"
 msgstr "Discution"
-
-#: plugins/gtkgui/messagesGlade.c:23 plugins/gtkgui/gtkgui.py:585
-msgid "History"
-msgstr "Historique"
 
 #: plugins/gtkgui/messagesGlade.c:24
 msgid "Clear"
@@ -105,629 +328,436 @@ msgstr "Comptes"
 msgid "_Modify"
 msgstr "_Modifier"
 
-#: plugins/gtkgui/messagesGlade.c:28 plugins/gtkgui/messagesGlade.c:152
-#: plugins/gtkgui/messagesGlade.c:188
+#: plugins/gtkgui/messagesGlade.c:28 plugins/gtkgui/messagesGlade.c:165
+#: plugins/gtkgui/messagesGlade.c:201
 msgid "About"
 msgstr "A Propos"
 
 #: plugins/gtkgui/messagesGlade.c:29
+msgid ""
+"<b>Gajim</b>\n"
+"\n"
+"Copyright 2003-2004 Gajim Team\n"
+"\n"
+"<b>Gajim Team</b>\n"
+"Vincent Hanquez (tab@tuxfamily.org)\n"
+"Yann Le Boulanger (asterix@crans.org)"
+msgstr ""
+
+#: plugins/gtkgui/messagesGlade.c:36
 msgid "Account Modification"
 msgstr "Modification du compte"
 
-#: plugins/gtkgui/messagesGlade.c:30
+#: plugins/gtkgui/messagesGlade.c:37
 msgid "Name : "
 msgstr "Nom : "
 
-#: plugins/gtkgui/messagesGlade.c:31 plugins/gtkgui/messagesGlade.c:36
-#: plugins/gtkgui/messagesGlade.c:37 plugins/gtkgui/messagesGlade.c:38
-#: plugins/gtkgui/messagesGlade.c:43 plugins/gtkgui/messagesGlade.c:45
-#: plugins/gtkgui/messagesGlade.c:55 plugins/gtkgui/messagesGlade.c:76
-#: plugins/gtkgui/messagesGlade.c:97 plugins/gtkgui/messagesGlade.c:105
-#: plugins/gtkgui/messagesGlade.c:112 plugins/gtkgui/messagesGlade.c:124
-#: plugins/gtkgui/messagesGlade.c:125 plugins/gtkgui/messagesGlade.c:126
-#: plugins/gtkgui/messagesGlade.c:127 plugins/gtkgui/messagesGlade.c:128
-#: plugins/gtkgui/messagesGlade.c:129 plugins/gtkgui/messagesGlade.c:136
+#: plugins/gtkgui/messagesGlade.c:38 plugins/gtkgui/messagesGlade.c:43
+#: plugins/gtkgui/messagesGlade.c:44 plugins/gtkgui/messagesGlade.c:45
+#: plugins/gtkgui/messagesGlade.c:49 plugins/gtkgui/messagesGlade.c:53
+#: plugins/gtkgui/messagesGlade.c:55 plugins/gtkgui/messagesGlade.c:66
+#: plugins/gtkgui/messagesGlade.c:87 plugins/gtkgui/messagesGlade.c:110
+#: plugins/gtkgui/messagesGlade.c:118 plugins/gtkgui/messagesGlade.c:125
 #: plugins/gtkgui/messagesGlade.c:137 plugins/gtkgui/messagesGlade.c:138
 #: plugins/gtkgui/messagesGlade.c:139 plugins/gtkgui/messagesGlade.c:140
-#: plugins/gtkgui/messagesGlade.c:141 plugins/gtkgui/messagesGlade.c:147
-#: plugins/gtkgui/messagesGlade.c:148 plugins/gtkgui/messagesGlade.c:149
-#: plugins/gtkgui/messagesGlade.c:150 plugins/gtkgui/messagesGlade.c:160
-#: plugins/gtkgui/messagesGlade.c:161 plugins/gtkgui/messagesGlade.c:162
-#: plugins/gtkgui/messagesGlade.c:163 plugins/gtkgui/messagesGlade.c:164
-#: plugins/gtkgui/messagesGlade.c:165 plugins/gtkgui/messagesGlade.c:172
+#: plugins/gtkgui/messagesGlade.c:141 plugins/gtkgui/messagesGlade.c:142
+#: plugins/gtkgui/messagesGlade.c:149 plugins/gtkgui/messagesGlade.c:150
+#: plugins/gtkgui/messagesGlade.c:151 plugins/gtkgui/messagesGlade.c:152
+#: plugins/gtkgui/messagesGlade.c:153 plugins/gtkgui/messagesGlade.c:154
+#: plugins/gtkgui/messagesGlade.c:160 plugins/gtkgui/messagesGlade.c:161
+#: plugins/gtkgui/messagesGlade.c:162 plugins/gtkgui/messagesGlade.c:163
 #: plugins/gtkgui/messagesGlade.c:173 plugins/gtkgui/messagesGlade.c:174
 #: plugins/gtkgui/messagesGlade.c:175 plugins/gtkgui/messagesGlade.c:176
-#: plugins/gtkgui/messagesGlade.c:177 plugins/gtkgui/messagesGlade.c:183
-#: plugins/gtkgui/messagesGlade.c:184 plugins/gtkgui/messagesGlade.c:185
-#: plugins/gtkgui/messagesGlade.c:186
+#: plugins/gtkgui/messagesGlade.c:177 plugins/gtkgui/messagesGlade.c:178
+#: plugins/gtkgui/messagesGlade.c:185 plugins/gtkgui/messagesGlade.c:186
+#: plugins/gtkgui/messagesGlade.c:187 plugins/gtkgui/messagesGlade.c:188
+#: plugins/gtkgui/messagesGlade.c:189 plugins/gtkgui/messagesGlade.c:190
+#: plugins/gtkgui/messagesGlade.c:196 plugins/gtkgui/messagesGlade.c:197
+#: plugins/gtkgui/messagesGlade.c:198 plugins/gtkgui/messagesGlade.c:199
 msgid "*"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:32
+#: plugins/gtkgui/messagesGlade.c:39
 msgid "Ressource: "
 msgstr "Ressource: "
 
-#: plugins/gtkgui/messagesGlade.c:33
+#: plugins/gtkgui/messagesGlade.c:40
 msgid "Password:"
 msgstr "Mot de passe: "
 
-#: plugins/gtkgui/messagesGlade.c:34
+#: plugins/gtkgui/messagesGlade.c:41
 msgid "Jabber ID:"
 msgstr "Identifiant Jabber: "
 
-#: plugins/gtkgui/messagesGlade.c:39
+#: plugins/gtkgui/messagesGlade.c:46
 msgid "Register new account"
 msgstr "Enregistrer un nouveau compte"
 
-#: plugins/gtkgui/messagesGlade.c:40
-msgid "<b>Account</b>"
-msgstr "<b>Compte</b>"
-
-#: plugins/gtkgui/messagesGlade.c:41
-msgid "Empty"
-msgstr "Vide"
-
-#: plugins/gtkgui/messagesGlade.c:42
-msgid "<b>Preferences</b>"
-msgstr "<b>Préférences</b>"
-
-#: plugins/gtkgui/messagesGlade.c:44
-msgid "Port:"
-msgstr "Port:"
-
-#: plugins/gtkgui/messagesGlade.c:46
-msgid "Host:"
-msgstr "Serveur:"
-
 #: plugins/gtkgui/messagesGlade.c:47
-msgid "Use proxy"
-msgstr "Utiliser un proxy"
+msgid "Priority:"
+msgstr "Priorité:"
 
 #: plugins/gtkgui/messagesGlade.c:48
-msgid "Proxy"
-msgstr ""
-
-#: plugins/gtkgui/messagesGlade.c:49
-msgid "<b>Connection</b>"
+msgid "5"
 msgstr ""
 
 #: plugins/gtkgui/messagesGlade.c:50
-msgid "Informations about you are stored\n"
-"on the server."
-msgstr "Les informations vous concernant sont stoquées\n"
-"sur le serveur"
+msgid "<b>Account</b>"
+msgstr "<b>Compte</b>"
 
 #: plugins/gtkgui/messagesGlade.c:51
+msgid "Empty"
+msgstr "Vide"
+
+#: plugins/gtkgui/messagesGlade.c:52
+msgid "<b>Preferences</b>"
+msgstr "<b>Préférences</b>"
+
+#: plugins/gtkgui/messagesGlade.c:54
+msgid "Port:"
+msgstr "Port:"
+
+#: plugins/gtkgui/messagesGlade.c:56
+msgid "Host:"
+msgstr "Serveur:"
+
+#: plugins/gtkgui/messagesGlade.c:57
+msgid "Use proxy"
+msgstr "Utiliser un proxy"
+
+#: plugins/gtkgui/messagesGlade.c:58
+msgid "Proxy"
+msgstr ""
+
+#: plugins/gtkgui/messagesGlade.c:59
+msgid "<b>Connection</b>"
+msgstr ""
+
+#: plugins/gtkgui/messagesGlade.c:60
+msgid ""
+"Informations about you are stored\n"
+"on the server."
+msgstr ""
+"Les informations vous concernant sont stoquées\n"
+"sur le serveur"
+
+#: plugins/gtkgui/messagesGlade.c:62
 msgid "Edit personal details..."
 msgstr "Editer les informationss personnelles"
 
-#: plugins/gtkgui/messagesGlade.c:52
+#: plugins/gtkgui/messagesGlade.c:63
 msgid "<b>Details</b>"
 msgstr "<b>Détails</b>"
 
-#: plugins/gtkgui/messagesGlade.c:53
+#: plugins/gtkgui/messagesGlade.c:64
 msgid "Add user"
 msgstr "Ajouter un contact"
 
-#: plugins/gtkgui/messagesGlade.c:54
+#: plugins/gtkgui/messagesGlade.c:65
 msgid "Send subscription to :"
 msgstr "Demander l'authorisation à : "
 
-#: plugins/gtkgui/messagesGlade.c:56 plugins/gtkgui/gtkgui.py:572
-msgid "I would like to add you to my contact list, please."
-msgstr "Je souhaiterai t'ajouter à ma contact list"
-
-#: plugins/gtkgui/messagesGlade.c:57
+#: plugins/gtkgui/messagesGlade.c:68
 msgid "Subscribe"
 msgstr "Ajouter"
 
-#: plugins/gtkgui/messagesGlade.c:58
+#: plugins/gtkgui/messagesGlade.c:69
 msgid "Sure ?"
 msgstr "Sur ?"
 
-#: plugins/gtkgui/messagesGlade.c:59
+#: plugins/gtkgui/messagesGlade.c:70
 msgid "Subscription request"
 msgstr "Requête d'inscription"
 
-#: plugins/gtkgui/messagesGlade.c:60
+#: plugins/gtkgui/messagesGlade.c:71
 msgid "Subscription request from"
 msgstr "Requête d'inscription de la part de"
 
-#: plugins/gtkgui/messagesGlade.c:61 plugins/gtkgui/messagesGlade.c:66
+#: plugins/gtkgui/messagesGlade.c:72 plugins/gtkgui/messagesGlade.c:77
 msgid "_Close"
 msgstr "_Fermer"
 
-#: plugins/gtkgui/messagesGlade.c:62
+#: plugins/gtkgui/messagesGlade.c:73
 msgid "_Deny"
 msgstr "_Refuser"
 
-#: plugins/gtkgui/messagesGlade.c:63
+#: plugins/gtkgui/messagesGlade.c:74
 msgid "_Authorize"
 msgstr "_Autoriser"
 
-#: plugins/gtkgui/messagesGlade.c:64
+#: plugins/gtkgui/messagesGlade.c:75
 msgid "Agents browser"
 msgstr "Navigateur d'agents"
 
-#: plugins/gtkgui/messagesGlade.c:65
+#: plugins/gtkgui/messagesGlade.c:76
 msgid "_Refresh"
 msgstr "_Rafraîchir"
 
-#: plugins/gtkgui/messagesGlade.c:67
+#: plugins/gtkgui/messagesGlade.c:78
 msgid "Register to"
 msgstr "S'enregistrer à"
 
-#: plugins/gtkgui/messagesGlade.c:68
+#: plugins/gtkgui/messagesGlade.c:79
 msgid "_OK"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:69
+#: plugins/gtkgui/messagesGlade.c:80
 msgid "_Cancel"
 msgstr "_Annuler"
 
-#: plugins/gtkgui/messagesGlade.c:70
+#: plugins/gtkgui/messagesGlade.c:81
 msgid "Warning"
 msgstr "Attention"
 
-#: plugins/gtkgui/messagesGlade.c:71 plugins/gtkgui/messagesGlade.c:94
+#: plugins/gtkgui/messagesGlade.c:82 plugins/gtkgui/messagesGlade.c:107
 msgid "Message"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:72
-#, fuzzy
+#: plugins/gtkgui/messagesGlade.c:83
 msgid "Preferences"
-msgstr "_Pr\xc3\xa9f\xc3\xa9rences"
+msgstr "Préférences>"
 
-#: plugins/gtkgui/messagesGlade.c:73
+#: plugins/gtkgui/messagesGlade.c:84
 msgid "Look&Feel"
 msgstr "Apparence"
 
-#: plugins/gtkgui/messagesGlade.c:74 plugins/gtkgui/messagesGlade.c:87
+#: plugins/gtkgui/messagesGlade.c:85 plugins/gtkgui/messagesGlade.c:100
 msgid "Events"
 msgstr "Evénements"
 
-#: plugins/gtkgui/messagesGlade.c:75 plugins/gtkgui/messagesGlade.c:93
+#: plugins/gtkgui/messagesGlade.c:86 plugins/gtkgui/messagesGlade.c:106
 msgid "Presence"
 msgstr "Présence"
 
-#: plugins/gtkgui/messagesGlade.c:77
+#: plugins/gtkgui/messagesGlade.c:88
 msgid "Icon Style"
 msgstr "Style d'Icône"
 
-#: plugins/gtkgui/messagesGlade.c:78
+#: plugins/gtkgui/messagesGlade.c:89
 msgid "Outgoing Messages"
 msgstr "Messages sortants"
 
-#: plugins/gtkgui/messagesGlade.c:79
+#: plugins/gtkgui/messagesGlade.c:90
 msgid "Status Messages"
 msgstr "Messages d'état"
 
-#: plugins/gtkgui/messagesGlade.c:80
+#: plugins/gtkgui/messagesGlade.c:91
 msgid "Incoming Messages"
 msgstr "Messages entrant"
 
-#: plugins/gtkgui/messagesGlade.c:81
+#: plugins/gtkgui/messagesGlade.c:92
 msgid "Color"
 msgstr "Couleur"
 
-#: plugins/gtkgui/messagesGlade.c:82
+#: plugins/gtkgui/messagesGlade.c:93
 msgid "Look"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:83
-msgid "AutoPopup new\n"
+#: plugins/gtkgui/messagesGlade.c:94
+msgid ""
+"AutoPopup new\n"
 "messages"
-msgstr "ouvrir automatiquement les\n"
-"nouveaux messages"
+msgstr ""
+"ouvrir automatiquement\n"
+"les nouveaux messages"
 
-#: plugins/gtkgui/messagesGlade.c:84
-msgid "Allow AutoPopup \n"
+#: plugins/gtkgui/messagesGlade.c:96
+msgid ""
+"Allow AutoPopup \n"
 "when NOT onlie"
-msgstr "autoriser l'autopopup\n"
+msgstr ""
+"autoriser l'autopopup\n"
 "lorsqu'on est pas en ligne"
 
-#: plugins/gtkgui/messagesGlade.c:85
+#: plugins/gtkgui/messagesGlade.c:98
 msgid "checkbutton5"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:86
+#: plugins/gtkgui/messagesGlade.c:99
 msgid "AutoPopup"
 msgstr "Popup automatique"
 
-#: plugins/gtkgui/messagesGlade.c:88
+#: plugins/gtkgui/messagesGlade.c:101
 msgid "Auto Away After"
 msgstr "Passer absent après"
 
-#: plugins/gtkgui/messagesGlade.c:89 plugins/gtkgui/messagesGlade.c:91
+#: plugins/gtkgui/messagesGlade.c:102 plugins/gtkgui/messagesGlade.c:104
 msgid "Minutes"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:90
+#: plugins/gtkgui/messagesGlade.c:103
 msgid "Auto eXtanded Away After"
 msgstr "Passer Non Disponible après"
 
-#: plugins/gtkgui/messagesGlade.c:92
+#: plugins/gtkgui/messagesGlade.c:105
 msgid "Auto Status"
 msgstr "Etat automatique"
 
-#: plugins/gtkgui/messagesGlade.c:95
+#: plugins/gtkgui/messagesGlade.c:108
 msgid "Enter your message :"
 msgstr "Entrez votre message :"
 
-#: plugins/gtkgui/messagesGlade.c:96
+#: plugins/gtkgui/messagesGlade.c:109
 msgid "Or choose your message :"
 msgstr "Ou choisissez votre message :"
 
-#: plugins/gtkgui/messagesGlade.c:98
+#: plugins/gtkgui/messagesGlade.c:111
 msgid "Information"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:99
+#: plugins/gtkgui/messagesGlade.c:112
 msgid "name"
 msgstr "nom"
 
-#: plugins/gtkgui/messagesGlade.c:100
+#: plugins/gtkgui/messagesGlade.c:113
 msgid "ID"
 msgstr "Identifiant"
 
-#: plugins/gtkgui/messagesGlade.c:101
+#: plugins/gtkgui/messagesGlade.c:114
 msgid "id"
 msgstr "identfiant"
 
-#: plugins/gtkgui/messagesGlade.c:102
+#: plugins/gtkgui/messagesGlade.c:115
 msgid "status"
 msgstr "état"
 
-#: plugins/gtkgui/messagesGlade.c:103 plugins/gtkgui/gtkgui.py:653
-msgid "Status"
-msgstr "Etat"
-
-#: plugins/gtkgui/messagesGlade.c:104 plugins/gtkgui/messagesGlade.c:118
-#: plugins/gtkgui/messagesGlade.c:154 plugins/gtkgui/config.py:580
-msgid "Name"
-msgstr "Nom"
-
-#: plugins/gtkgui/messagesGlade.c:106
+#: plugins/gtkgui/messagesGlade.c:119
 msgid "Resource :"
 msgstr "Ressource :"
 
-#: plugins/gtkgui/messagesGlade.c:107
+#: plugins/gtkgui/messagesGlade.c:120
 msgid "resource"
 msgstr "ressource"
 
-#: plugins/gtkgui/messagesGlade.c:108
+#: plugins/gtkgui/messagesGlade.c:121
 msgid "Subscription :"
 msgstr "Inscription :"
 
-#: plugins/gtkgui/messagesGlade.c:109
+#: plugins/gtkgui/messagesGlade.c:122
 msgid "sub"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:110 plugins/gtkgui/messagesGlade.c:130
-#: plugins/gtkgui/messagesGlade.c:166
+#: plugins/gtkgui/messagesGlade.c:123 plugins/gtkgui/messagesGlade.c:143
+#: plugins/gtkgui/messagesGlade.c:179
 msgid "General"
 msgstr "Général"
 
-#: plugins/gtkgui/messagesGlade.c:111
+#: plugins/gtkgui/messagesGlade.c:124
 msgid "New Group :"
 msgstr "Nouveau Groupe :"
 
-#: plugins/gtkgui/messagesGlade.c:113
+#: plugins/gtkgui/messagesGlade.c:126
 msgid "Available groups"
 msgstr "Groupes possibles"
 
-#: plugins/gtkgui/messagesGlade.c:114
+#: plugins/gtkgui/messagesGlade.c:127
 msgid "Add ->"
 msgstr "Ajouter ->"
 
-#: plugins/gtkgui/messagesGlade.c:115
+#: plugins/gtkgui/messagesGlade.c:128
 msgid "<- Remove"
 msgstr "<- Supprimer"
 
-#: plugins/gtkgui/messagesGlade.c:116
+#: plugins/gtkgui/messagesGlade.c:129
 msgid "Current groups"
 msgstr "Groupes actuels"
 
-#: plugins/gtkgui/messagesGlade.c:117
+#: plugins/gtkgui/messagesGlade.c:130
 msgid "Groups"
 msgstr "Groupes"
 
-#: plugins/gtkgui/messagesGlade.c:119 plugins/gtkgui/messagesGlade.c:155
+#: plugins/gtkgui/messagesGlade.c:132 plugins/gtkgui/messagesGlade.c:168
 msgid "Nickname"
 msgstr "Surnom"
 
-#: plugins/gtkgui/messagesGlade.c:120 plugins/gtkgui/messagesGlade.c:156
+#: plugins/gtkgui/messagesGlade.c:133 plugins/gtkgui/messagesGlade.c:169
 msgid "Birthday"
 msgstr "Anniversaire"
 
-#: plugins/gtkgui/messagesGlade.c:121 plugins/gtkgui/messagesGlade.c:157
+#: plugins/gtkgui/messagesGlade.c:134 plugins/gtkgui/messagesGlade.c:170
 msgid "E-Mail"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:122 plugins/gtkgui/messagesGlade.c:158
+#: plugins/gtkgui/messagesGlade.c:135 plugins/gtkgui/messagesGlade.c:171
 msgid "Homepage"
 msgstr "Page d'accueil"
 
-#: plugins/gtkgui/messagesGlade.c:123 plugins/gtkgui/messagesGlade.c:159
+#: plugins/gtkgui/messagesGlade.c:136 plugins/gtkgui/messagesGlade.c:172
 msgid "Phone #"
 msgstr "Téléphone"
 
-#: plugins/gtkgui/messagesGlade.c:131 plugins/gtkgui/messagesGlade.c:167
+#: plugins/gtkgui/messagesGlade.c:144 plugins/gtkgui/messagesGlade.c:180
 msgid "Street"
 msgstr "Rue"
 
-#: plugins/gtkgui/messagesGlade.c:132 plugins/gtkgui/messagesGlade.c:168
+#: plugins/gtkgui/messagesGlade.c:145 plugins/gtkgui/messagesGlade.c:181
 msgid "City"
 msgstr "Ville"
 
-#: plugins/gtkgui/messagesGlade.c:133 plugins/gtkgui/messagesGlade.c:169
+#: plugins/gtkgui/messagesGlade.c:146 plugins/gtkgui/messagesGlade.c:182
 msgid "State"
 msgstr "Etat"
 
-#: plugins/gtkgui/messagesGlade.c:134 plugins/gtkgui/messagesGlade.c:170
+#: plugins/gtkgui/messagesGlade.c:147 plugins/gtkgui/messagesGlade.c:183
 msgid "Postal Code"
 msgstr "Code postal"
 
-#: plugins/gtkgui/messagesGlade.c:135 plugins/gtkgui/messagesGlade.c:171
+#: plugins/gtkgui/messagesGlade.c:148 plugins/gtkgui/messagesGlade.c:184
 msgid "Country"
 msgstr "Pays"
 
-#: plugins/gtkgui/messagesGlade.c:142 plugins/gtkgui/messagesGlade.c:178
+#: plugins/gtkgui/messagesGlade.c:155 plugins/gtkgui/messagesGlade.c:191
 msgid "Location"
 msgstr "Adresse"
 
-#: plugins/gtkgui/messagesGlade.c:143 plugins/gtkgui/messagesGlade.c:179
+#: plugins/gtkgui/messagesGlade.c:156 plugins/gtkgui/messagesGlade.c:192
 msgid "Company"
 msgstr "Companie"
 
-#: plugins/gtkgui/messagesGlade.c:144 plugins/gtkgui/messagesGlade.c:180
+#: plugins/gtkgui/messagesGlade.c:157 plugins/gtkgui/messagesGlade.c:193
 msgid "Department"
 msgstr "Département"
 
-#: plugins/gtkgui/messagesGlade.c:145 plugins/gtkgui/messagesGlade.c:181
+#: plugins/gtkgui/messagesGlade.c:158 plugins/gtkgui/messagesGlade.c:194
 msgid "Position"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:146 plugins/gtkgui/messagesGlade.c:182
+#: plugins/gtkgui/messagesGlade.c:159 plugins/gtkgui/messagesGlade.c:195
 msgid "Role"
 msgstr "Rôle"
 
-#: plugins/gtkgui/messagesGlade.c:151 plugins/gtkgui/messagesGlade.c:187
+#: plugins/gtkgui/messagesGlade.c:164 plugins/gtkgui/messagesGlade.c:200
 msgid "Work"
 msgstr "Emploi"
 
-#: plugins/gtkgui/messagesGlade.c:153
+#: plugins/gtkgui/messagesGlade.c:166
 msgid "jid"
 msgstr ""
 
-#: plugins/gtkgui/messagesGlade.c:189
+#: plugins/gtkgui/messagesGlade.c:202
 msgid "Publish"
 msgstr "Publier"
 
-#: plugins/gtkgui/messagesGlade.c:190
+#: plugins/gtkgui/messagesGlade.c:203
 msgid "Retrieve"
 msgstr "Récupérer"
 
-#: plugins/gtkgui/messagesGlade.c:191
+#: plugins/gtkgui/messagesGlade.c:204
 msgid "Close"
 msgstr "Fermer"
 
-#: plugins/gtkgui/messagesGlade.c:192
+#: plugins/gtkgui/messagesGlade.c:205
 msgid "Log"
 msgstr "Historique"
 
-#: plugins/gtkgui/messagesGlade.c:193
+#: plugins/gtkgui/messagesGlade.c:206
 msgid "earliest"
 msgstr "premiers"
 
-#: plugins/gtkgui/messagesGlade.c:194
+#: plugins/gtkgui/messagesGlade.c:207
 msgid "Previous"
 msgstr "Précédent"
 
-#: plugins/gtkgui/messagesGlade.c:195
+#: plugins/gtkgui/messagesGlade.c:208
 msgid "latest"
 msgstr "derniers"
-
-#: plugins/gtkgui/config.py:100 plugins/gtkgui/config.py:473
-msgid "You must be connected to get your informations"
-msgstr "Vous devez être connecté pour récupérer vos informations"
-
-#: plugins/gtkgui/config.py:104
-msgid "You must be connected to publish your informations"
-msgstr "Vous devez être connecté pour publier vos informations"
-
-#: plugins/gtkgui/config.py:386
-msgid "You must enter a name for this account"
-msgstr "Vous devez entrer un nom pour ce compte"
-
-#: plugins/gtkgui/config.py:389
-msgid "Spaces are not permited in account name"
-msgstr "Vous ne pouvez pas utiliser d'espace pour le nom du compte"
-
-#: plugins/gtkgui/config.py:392
-msgid "You must enter a Jabber ID for this account\n"
-"For example : login@hostname"
-msgstr "Vous devez entrer un identifiant Jabber pour ce compte\n"
-"Par exemple : login@serveur"
-
-#: plugins/gtkgui/config.py:398
-msgid "Proxy Port must be a port number"
-msgstr "Le Port du proxy doivent être un numéro de port"
-
-#: plugins/gtkgui/config.py:437
-msgid "An account already has this name"
-msgstr "Un autre compte porte déjà ce nom"
-
-#: plugins/gtkgui/config.py:532
-#, python-format
-msgid "Are you sure you want to remove this account (%s) ?"
-msgstr "Etes vous sur de vouloir supprimer ce compte (%s) ?"
-
-#: plugins/gtkgui/config.py:583
-msgid "Server"
-msgstr "Serveur"
-
-#: plugins/gtkgui/config.py:632
-#, python-format
-msgid "Register to %s"
-msgstr "S'enregistrer à %s"
-
-#: plugins/gtkgui/config.py:706
-msgid "You must be connected to view Agents"
-msgstr "Vous devez être connecté pour voir les Agents"
-
-#: plugins/gtkgui/dialogs.py:299
-#, python-format
-msgid "Subscription request from %s"
-msgstr "Requête d'inscription de la part de %s"
-
-#: plugins/gtkgui/gtkgui.py:57
-msgid "bad arguments"
-msgstr "Mauvais arguments"
-
-#: plugins/gtkgui/gtkgui.py:279
-msgid "Status is now : "
-msgstr "L'état est maintenant : "
-
-#: plugins/gtkgui/gtkgui.py:525
-#, python-format
-msgid "%s is now %s (%s)"
-msgstr "%s est maintenant %s (%s)"
-
-#: plugins/gtkgui/gtkgui.py:553
-msgid "Start chat"
-msgstr "Envoyer un message"
-
-#: plugins/gtkgui/gtkgui.py:556
-msgid "Rename"
-msgstr "Renomer"
-
-#: plugins/gtkgui/gtkgui.py:561
-msgid "Subscription"
-msgstr "Autorisation"
-
-#: plugins/gtkgui/gtkgui.py:566
-msgid "Resend authorization to"
-msgstr "Renvoyer l'autorisation à"
-
-#: plugins/gtkgui/gtkgui.py:569
-msgid "Rerequest authorization from"
-msgstr "Redemander l'autorisation à"
-
-#: plugins/gtkgui/gtkgui.py:576
-msgid "Remove"
-msgstr "Supprimer"
-
-#: plugins/gtkgui/gtkgui.py:582
-msgid "Informations"
-msgstr ""
-
-#: plugins/gtkgui/gtkgui.py:595
-msgid "grp1"
-msgstr ""
-
-#: plugins/gtkgui/gtkgui.py:597
-msgid "grp2"
-msgstr ""
-
-#: plugins/gtkgui/gtkgui.py:599
-msgid "grp3"
-msgstr ""
-
-#: plugins/gtkgui/gtkgui.py:612
-msgid "Log on"
-msgstr "Connecter"
-
-#: plugins/gtkgui/gtkgui.py:618
-msgid "Log off"
-msgstr "Déconnecter"
-
-#: plugins/gtkgui/gtkgui.py:679
-msgid "Edit account"
-msgstr "Editer le compte"
-
-#: plugins/gtkgui/gtkgui.py:733
-#, python-format
-msgid "Are you sure you want to remove %s (%s) from your roster ?"
-msgstr "Etes vous sur de vouloir supprimer %s (%s) de votre liste ?"
-
-#: plugins/gtkgui/gtkgui.py:764
-msgid "You must setup an account before connecting to jabber network."
-msgstr "Vous devez configurer un compte pour pouvoir vous connecter au réseau Jabber"
-
-#: plugins/gtkgui/gtkgui.py:861
-msgid "plugin gtkgui stopped"
-msgstr "Module gtkgui arrêté"
-
-#: plugins/gtkgui/gtkgui.py:1236
-#, python-format
-msgid "You are now authorized by %s"
-msgstr "%s vous a autorisé"
-
-#: plugins/gtkgui/gtkgui.py:1238
-#, python-format
-msgid "You are now unsubscribed by %s"
-msgstr "%s vous a supprimé"
-
-#: plugins/gtkgui/gtkgui.py:1247
-#, python-format
-msgid "error contacting %s"
-msgstr "Erreur survenue pour contacter %s"
-
-#: plugins/gtkgui/gtkgui.py:1353
-msgid "plugin gtkgui loaded"
-msgstr "Module gtkgui chargé"
-
-#: plugins/logger/logger.py:44
-msgid "plugin logger stopped"
-msgstr "Module logger arrêté"
-
-#: plugins/logger/logger.py:97
-msgid "creating ~/.gajim/"
-msgstr "crée ~/.gajim/"
-
-#: plugins/logger/logger.py:102
-msgid "creating ~/.gajim/logs/"
-msgstr "Crée ~/.gajim/logs/"
-
-#: plugins/logger/logger.py:109
-msgid "plugin logger loaded"
-msgstr "Module logger chargé"
-
-#: core/core.py:75
-#, python-format
-msgid "Can't create %s"
-msgstr "Impossible de créer %s"
-
-#: core/core.py:80
-#, python-format
-msgid "creating %s"
-msgstr "crée %s"
-
-#: core/core.py:154 core/core.py:334
-msgid "I would like to add you to my roster."
-msgstr "Je souhaiterai t'ajouter à ma liste de contactes"
-
-#: core/core.py:211
-#, python-format
-msgid "Couldn't connect to %s"
-msgstr "Impossible de se connecter à %s"
-
-#: core/core.py:217
-#, python-format
-msgid "Couldn't connect to %s : %s"
-msgstr "Impossible de se connecter à %s : %s"
-
-#: core/core.py:249
-#, python-format
-msgid "Authentification failed with %s, check your login and password"
-msgstr "Impossible de s'authentifier à %s, vérifiez votre login et votre mot de passe"
-
-#: core/core.py:454
-#, python-format
-msgid "Unknown Command %s"
-msgstr "Commande inconnue %s"
-
-#: core/core.py:508
-msgid "Keyboard Interrupt : Bye!"
-msgstr "Interruption au clavier : Au revoir !"
