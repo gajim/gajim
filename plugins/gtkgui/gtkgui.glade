@@ -7648,6 +7648,7 @@ Custom</property>
   <signal name="focus_in_event" handler="on_groupchat_window_focus_in_event" last_modification_time="Sat, 05 Mar 2005 00:34:51 GMT"/>
   <signal name="delete_event" handler="on_groupchat_window_delete_event" last_modification_time="Mon, 07 Mar 2005 11:19:05 GMT"/>
   <signal name="destroy" handler="on_groupchat_window_destroy" last_modification_time="Mon, 07 Mar 2005 16:46:37 GMT"/>
+  <signal name="key_press_event" handler="on_groupchat_window_key_press_event" last_modification_time="Wed, 06 Apr 2005 07:24:19 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox27">

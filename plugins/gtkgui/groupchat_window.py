@@ -57,6 +57,8 @@ class Groupchat_window(Chat):
 			self.on_chat_notebook_switch_page)
 		self.xml.signal_connect('on_set_button_clicked', \
 			self.on_set_button_clicked)
+		self.xml.signal_connect('on_groupchat_window_key_press_event', \
+			self.on_groupchat_window_key_press_event)
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
@@ -486,8 +488,7 @@ class Groupchat_window(Chat):
 		self.redraw_tab(room_jid)
 		self.show_title()
 	
-	def on_join_groupchat_window_key_press_event(self, widget, event):
-		print 'called'
+	def on_groupchat_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
 			widget.get_toplevel().destroy()
 
