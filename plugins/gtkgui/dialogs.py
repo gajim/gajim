@@ -208,6 +208,84 @@ class vcard_information_window:
 
 		self.xml.signal_autoconnect(self)
 
+class Edit_groups_dialog:
+	"""Class for the edit group dialog window"""
+	def __init__(self, user, account, plugin):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'edit_groups_dialog', APP)
+		self.dialog = self.xml.get_widget('edit_groups_dialog')
+		self.plugin = plugin
+		self.account = account
+		self.user = user
+		self.list = self.xml.get_widget('groups_treeview')
+		self.xml.get_widget('nickname_label').set_text(_('<b>Edit groups for %s</b>') % user.name)
+		self.xml.get_widget('jid_label').set_text(user.jid)
+		self.xml.signal_autoconnect(self)
+		self.init_list()
+
+	def run(self):
+		self.dialog.run()
+		self.dialog.destroy()
+		#TODO: send to the core
+
+	def update_user(self):
+		luser = self.plugin.roster.contacts[self.account][self.user.jid]
+		for u in luser:
+			self.plugin.roster.remove_user(u, self.account)
+		self.plugin.roster.add_user_to_roster(self.user.jid, self.account)
+
+	def on_add_button_clicked(self, widget):
+		group = self.xml.get_widget('group_entry').get_text()
+		if not group:
+			return
+		# check if it already exists
+		model = self.list.get_model()
+		iter = model.get_iter_root()
+		while iter:
+			if model.get_value(iter, 0) == group:
+				return
+			iter = model.iter_next(iter)
+		model.append((group, True))
+		self.user.groups.append(group)
+		self.update_user()
+
+	def group_toggled_cb(self, cell, path):
+		model = self.list.get_model()
+		if model[path][1] and len(self.user.groups) == 1: # we try to remove 
+																		  # the latest group
+			Error_dialog(_('There must be at least one group for each contact'))
+			#TODO: re-set the checkbutton
+			return
+		model[path][1] = not model[path][1]
+		if model[path][1]:
+			self.user.groups.append(model[path][0])
+		else:
+			self.user.groups.remove(model[path][0])
+		self.update_user()
+
+	def init_list(self):
+		store = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
+		self.list.set_model(store)
+		for g in self.plugin.roster.groups[self.account].keys():
+			iter = store.append()
+			store.set(iter, 0, g)
+			if g in self.user.groups:
+				store.set(iter, 1, True)
+			else:
+				store.set(iter, 1, False)
+		column = gtk.TreeViewColumn(_('Group'))
+		self.list.append_column(column)
+		renderer = gtk.CellRendererText()
+		column.pack_start(renderer)
+		column.set_attributes(renderer, text=0)
+		
+		column = gtk.TreeViewColumn(_('In the group'))
+		self.list.append_column(column)
+		renderer = gtk.CellRendererToggle()
+		column.pack_start(renderer)
+		renderer.set_property('activatable', True)
+		renderer.connect('toggled', self.group_toggled_cb)
+		column.set_attributes(renderer, active=1)
+
 class Passphrase_dialog:
 	"""Class for Passphrase dialog"""
 	def run(self):

@@ -8376,42 +8376,15 @@ Custom</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="applybutton1">
+	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-apply</property>
+	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <property name="response_id">-10</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="cancelbutton1">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <property name="response_id">-6</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="okbutton1">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="has_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <property name="response_id">-5</property>
+	      <property name="response_id">-7</property>
 	    </widget>
 	  </child>
 	</widget>
@@ -8439,7 +8412,7 @@ Custom</property>
 	      <child>
 		<widget class="GtkLabel" id="nickname_label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">&lt;b&gt;Edit groups for Nickname&lt;/b&gt;</property>
+		  <property name="label" translatable="yes"></property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">True</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -8460,7 +8433,7 @@ Custom</property>
 	      <child>
 		<widget class="GtkLabel" id="jid_label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">jid_label</property>
+		  <property name="label" translatable="yes"></property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -8492,7 +8465,7 @@ Custom</property>
 	      <property name="spacing">5</property>
 
 	      <child>
-		<widget class="GtkEntry" id="entry2">
+		<widget class="GtkEntry" id="group_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
@@ -8511,13 +8484,14 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="button32">
+		<widget class="GtkButton" id="add_button">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label">gtk-add</property>
 		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="on_add_button_clicked" last_modification_time="Thu, 17 Mar 2005 11:40:17 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>

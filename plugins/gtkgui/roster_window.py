@@ -403,6 +403,10 @@ class roster_window:
 		model.set_value(iter, 5, True)
 		self.tree.set_cursor(path, self.tree.get_column(0), True)
 		
+	def on_edit_groups(self, widget, user, account):
+		dlg = Edit_groups_dialog(user, account, self.plugin)
+		dlg.run()
+		
 	def on_history(self, widget, user):
 		"""When history button is pressed : call log window"""
 		if not self.plugin.windows['logs'].has_key(user.jid):
@@ -418,41 +422,44 @@ class roster_window:
 		user = self.contacts[account][jid][0]
 		
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_("Start chat"))
+		item = gtk.MenuItem(_('Start chat'))
 		menu.append(item)
-		item.connect("activate", self.on_roster_treeview_row_activated, path)
-		item = gtk.MenuItem(_("Rename"))
+		item.connect('activate', self.on_roster_treeview_row_activated, path)
+		item = gtk.MenuItem(_('Rename'))
 		menu.append(item)
-		item.connect("activate", self.on_rename, iter, path)
+		item.connect('activate', self.on_rename, iter, path)
+		item = gtk.MenuItem(_('Edit groups'))
+		menu.append(item)
+		item.connect('activate', self.on_edit_groups, user, account)
 		item = gtk.MenuItem()
 		menu.append(item)
-		item = gtk.MenuItem(_("Subscription"))
+		item = gtk.MenuItem(_('Subscription'))
 		menu.append(item)
 		
 		sub_menu = gtk.Menu()
 		item.set_submenu(sub_menu)
-		item = gtk.MenuItem(_("Resend authorization to"))
+		item = gtk.MenuItem(_('Resend authorization to'))
 		sub_menu.append(item)
-		item.connect("activate", self.authorize, jid, account)
-		item = gtk.MenuItem(_("Rerequest authorization from"))
+		item.connect('activate', self.authorize, jid, account)
+		item = gtk.MenuItem(_('Rerequest authorization from'))
 		sub_menu.append(item)
-		item.connect("activate", self.req_sub, jid, \
+		item.connect('activate', self.req_sub, jid, \
 			_('I would like to add you to my contact list, please.'), account)
 		
 		item = gtk.MenuItem()
 		menu.append(item)
-		item = gtk.MenuItem(_("Remove"))
+		item = gtk.MenuItem(_('Remove'))
 		menu.append(item)
-		item.connect("activate", self.on_req_usub, user, account)
+		item.connect('activate', self.on_req_usub, user, account)
 
 		item = gtk.MenuItem()
 		menu.append(item)
-		item = gtk.MenuItem(_("Information"))
+		item = gtk.MenuItem(_('Information'))
 		menu.append(item)
-		item.connect("activate", self.on_info, user, account)
-		item = gtk.MenuItem(_("History"))
+		item.connect('activate', self.on_info, user, account)
+		item = gtk.MenuItem(_('History'))
 		menu.append(item)
-		item.connect("activate", self.on_history, user)
+		item.connect('activate', self.on_history, user)
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
@@ -478,25 +485,25 @@ class roster_window:
 		path = model.get_path(iter)
 		account = model.get_value(iter, 4)
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_("Log on"))
+		item = gtk.MenuItem(_('Log on'))
 		if self.contacts[account][jid][0].show != 'offline':
 			item.set_sensitive(False)
 		menu.append(item)
-		item.connect("activate", self.on_agent_logging, jid, 'available', account)
+		item.connect('activate', self.on_agent_logging, jid, 'available', account)
 
-		item = gtk.MenuItem(_("Log off"))
+		item = gtk.MenuItem(_('Log off'))
 		if self.contacts[account][jid][0].show == 'offline':
 			item.set_sensitive(False)
 		menu.append(item)
-		item.connect("activate", self.on_agent_logging, jid, 'unavailable', \
+		item.connect('activate', self.on_agent_logging, jid, 'unavailable', \
 			account)
 
 		item = gtk.MenuItem()
 		menu.append(item)
 
-		item = gtk.MenuItem(_("Remove"))
+		item = gtk.MenuItem(_('Remove'))
 		menu.append(item)
-		item.connect("activate", self.on_remove_agent, jid, account)
+		item.connect('activate', self.on_remove_agent, jid, account)
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
