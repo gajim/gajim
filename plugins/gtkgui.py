@@ -91,6 +91,26 @@ class accounts:
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Accounts')
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
+class confirm:
+	def delete_event(self, widget):
+		self.window.destroy()
+		
+	def req_usub(self, widget):
+		self.r.queueOUT.put(('UNSUB', self.jid))
+		del self.r.l_contact[self.jid]
+		self.r.treestore.remove(self.iter)
+		self.delete_event(self)
+	
+	def __init__(self, roster, iter):
+		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Confirm')
+		self.window = self.xml.get_widget('Confirm')
+		self.r = roster
+		self.iter = iter
+		self.jid = self.r.treestore.get_value(iter, 2)
+		self.xml.get_widget('label_confirm').set_text('Are you sure you want to remove ' + self.jid + ' from your roster ?')
+		self.xml.signal_connect('on_okbutton_clicked', self.req_usub)
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+
 class message:
 	def delete_event(self, widget):
 		del self.roster.tab_messages[self.user.jid]
@@ -249,16 +269,6 @@ class roster:
 			return gtk.TRUE
 		return gtk.FALSE
 	
-	def destroy_window(self, widget, window):
-		window.destroy()
-
-	def req_usub(self, widget, iter, window):
-		jid = self.treestore.get_value(iter, 2)
-		self.queueOUT.put(('UNSUB', jid))
-		del self.l_contact[jid]
-		self.treestore.remove(iter)
-		self.destroy_window(widget, window)
-	
 	def req_sub(self, jid, txt):
 		self.queueOUT.put(('SUB', (jid, txt)))
 		if not self.l_contact.has_key(jid):
@@ -269,12 +279,7 @@ class roster:
 			self.l_contact[jid] = {'user':user1, 'iter':[iterU]}
 
 	def on_req_usub(self, widget, iter):
-		jid = self.treestore.get_value(iter, 2)
-		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Confirm')
-		self.window = self.xml.get_widget('Confirm')
-		self.xml.get_widget('label_confirm').set_text('Are you sure you want to remove ' + jid + ' from your roster ?')
-		self.xml.signal_connect('gtk_widget_destroy', self.destroy_window, self.window)
-		self.xml.signal_connect('on_okbutton_clicked', self.req_usub, iter, self.window)
+		window_confirm = confirm(self, iter)
 
 	def on_status_changed(self, widget):
 		self.queueOUT.put(('STATUS',widget.name))
@@ -331,8 +336,9 @@ class roster:
 		self.col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
 		self.col.pack_start(render_pixbuf, expand = False)
-		self.col.add_attribute(render_pixbuf, 'pixbuf-expander-closed', 0)
-		self.col.add_attribute(render_pixbuf, 'pixbuf-expander-open', 0)
+		self.col.add_attribute(render_pixbuf, 'pixbuf', 0)
+#		self.col.add_attribute(render_pixbuf, 'pixbuf-expander-closed', 0)
+#		self.col.add_attribute(render_pixbuf, 'pixbuf-expander-open', 0)
 		render_text = gtk.CellRendererText()
 		self.col.pack_start(render_text, expand = True)
 		self.col.add_attribute(render_text, 'text', 1)
