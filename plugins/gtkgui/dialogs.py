@@ -467,6 +467,9 @@ class about_window: #FIXME: (nk) pygtk2.6 has a built-in window for that
 	def __init__(self, plugin):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'about_window', APP)
 		self.window = xml.get_widget('about_window')
+		logo_image = xml.get_widget('logo_image')
+		logo_image.set_from_file('plugins/gtkgui/pixmaps/logo.png')
+		
 		self.plugin = plugin
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_close_clicked', self.on_close)
