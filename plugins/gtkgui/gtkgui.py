@@ -963,7 +963,7 @@ class roster_Window:
 					self.groups[account][g] = {'expand': False}
 				else:
 					self.groups[account][g] = {'expand': True}
-			if not account in self.hidden_lines:
+			if not account in self.hidden_lines and not self.plugin.config['mergeaccounts']:
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
 			typestr = 'user'
