@@ -1,3 +1,11 @@
+gajim (0.6.1-1) unstable; urgency=low
+
+  * Rewrite of service discovery. It doesn't freeze Gajim anymore.
+  * More HIG Compliant.
+  * Gajim is faster (do not redraw preferences_window each time we open it, use of psyco if available)
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Sun,  3 Apr 2005 12:32:49 +0200
+
 gajim (0.6-1) unstable; urgency=low
 
   * GUI improvements
