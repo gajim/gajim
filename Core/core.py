@@ -138,6 +138,8 @@ else:
 				return self.stripHeaderFooter(output)
 
 		def verify(self, str, sign):
+			if not str:
+				return ''
 			file = TemporaryFile(prefix='gajim')
 			fd = file.fileno()
 			file.write(str)
