@@ -9,7 +9,6 @@ url="http://www.gajim.org"
 license="GPL"
 depends=(pygtk)
 source=($url/downloads/$pkgname-$pkgver.tar.bz2)
-md5sums=(ac8bc1a3b67016467835fbd1a4a7982a)
 
 build() {
   cd $startdir/src/$pkgname-$pkgver
@@ -28,3 +27,4 @@ build() {
 
   make DESTDIR=$startdir/pkg install
 }
+md5sums=('4861b308498d7e20d651106a3d46e79d')

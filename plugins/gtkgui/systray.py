@@ -211,22 +211,22 @@ class Systray:
 			self.make_menu(event)
 	
 	def on_online_menuitem_activate(self, widget):
-		self.plugin.roster.cb.set_active(0) # 0 is online
+		self.plugin.roster.status_combobox.set_active(0) # 0 is online
 	
 	def on_away_menuitem_activate(self, widget):
-		self.plugin.roster.cb.set_active(1) # 1 is away
+		self.plugin.roster.status_combobox.set_active(1) # 1 is away
 	
 	def on_xa_menuitem_activate(self, widget):
-		self.plugin.roster.cb.set_active(2) # 2 is xa
+		self.plugin.roster.status_combobox.set_active(2) # 2 is xa
 
 	def on_dnd_menuitem_activate(self, widget):
-		self.plugin.roster.cb.set_active(3) # 3 is dnd
+		self.plugin.roster.status_combobox.set_active(3) # 3 is dnd
 
 	def on_invisible_menuitem_activate(self, widget):
-		self.plugin.roster.cb.set_active(4) # 4 is invisible
+		self.plugin.roster.status_combobox.set_active(4) # 4 is invisible
 		
 	def on_offline_menuitem_activate(self, widget):
-		self.plugin.roster.cb.set_active(5) # 5 is offline
+		self.plugin.roster.status_combobox.set_active(5) # 5 is offline
 
 	def show_icon(self):
 		if not self.t:
