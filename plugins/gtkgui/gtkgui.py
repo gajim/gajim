@@ -67,8 +67,6 @@ from config import *
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-USE_TABBED_CHAT = 0
-
 class ImageCellRenderer(gtk.GenericCellRenderer):
 
 	__gproperties__ = {
@@ -1863,7 +1861,7 @@ class roster_Window:
 		self.set_cb()
 
 	def new_chat(self, user, account):
-		if USE_TABBED_CHAT:
+		if self.plugin.config['usetabbedchat']:
 			if not self.plugin.windows[account]['chats'].has_key('tabbed'):
 				self.plugin.windows[account]['chats']['tabbed'] = \
 					tabbed_chat_Window(user, self.plugin, account)
@@ -2005,7 +2003,7 @@ class roster_Window:
 				self.tree.expand_row(path, False)
 		else:
 			if self.plugin.windows[account]['chats'].has_key(jid):
-				if USE_TABBED_CHAT:
+				if self.plugin.config['usetabbedchat']:
 					self.plugin.windows[account]['chats'][jid].active_tab(jid)
 				self.plugin.windows[account]['chats'][jid].window.present()
 			elif self.contacts[account].has_key(jid):
@@ -3005,9 +3003,6 @@ class plugin:
 				break
 		if pix:
 			gtk.window_set_default_icon(pix)
-		if self.config['usetabbedchat']:
-			global USE_TABBED_CHAT
-			USE_TABBED_CHAT = 1
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(100, self.read_sleepy)
