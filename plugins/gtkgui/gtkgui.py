@@ -828,7 +828,7 @@ class plugin:
 			#9fdfff
 			'accountfont': 'Sans Bold 10',\
 			'grouptextcolor': '#0000ff',\
-			'groupbgcolor': '##eff3e7',\
+			'groupbgcolor': '#eff3e7',\
 			#ffffff
 			'groupfont': 'Sans Italic 10',\
 			'usertextcolor': '#000000',\
