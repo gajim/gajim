@@ -1487,8 +1487,8 @@ class plugin:
 					break
 			if not user1:
 				user1 = self.roster.contacts[account][ji][0]
-				if resources != [''] and (len(luser) != 1 or 
-					luser[0].show != 'offline'):
+				if (resources != [''] and (len(luser) != 1 or 
+					luser[0].show != 'offline')) and not string.find(jid, "@") <= 0:
 					user1 = user(user1.jid, user1.name, user1.groups, \
 						user1.show, user1.status, user1.sub, user1.resource, \
 						user1.priority)
