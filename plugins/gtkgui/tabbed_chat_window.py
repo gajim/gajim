@@ -38,10 +38,10 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-class tabbed_chat_window(chat):
+class tabbed_chat_window(Chat):
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
-		chat.__init__(self, plugin, account, 'tabbed_chat_window')
+		Chat.__init__(self, plugin, account, 'tabbed_chat_window')
 		self.users = {}
 		self.new_user(user)
 		self.show_title()
@@ -89,13 +89,13 @@ class tabbed_chat_window(chat):
 
 	def on_tabbed_chat_window_destroy(self, widget):
 		#clean self.plugin.windows[self.account]['chats']
-		chat.on_window_destroy(self, widget, 'chats')
+		Chat.on_window_destroy(self, widget, 'chats')
 
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
-		chat.on_chat_window_focus_in_event(self, widget, event)
+		Chat.on_chat_window_focus_in_event(self, widget, event)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
-		chat.on_chat_notebook_key_press_event(self, widget, event)
+		Chat.on_chat_notebook_key_press_event(self, widget, event)
 
 	def on_clear_button_clicked(self, widget):
 		"""When clear button is pressed :
@@ -118,7 +118,7 @@ class tabbed_chat_window(chat):
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 
-		chat.remove_tab(self, jid, 'chats')
+		Chat.remove_tab(self, jid, 'chats')
 		if len(self.xmls) > 0:
 			del self.users[jid]
 
@@ -126,7 +126,7 @@ class tabbed_chat_window(chat):
 		self.names[user.jid] = user.name
 		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[user.jid] = self.xmls[user.jid].get_widget('chats_vbox')
-		chat.new_tab(self, user.jid)
+		Chat.new_tab(self, user.jid)
 		self.users[user.jid] = user
 		
 		self.redraw_tab(user.jid)
@@ -235,42 +235,19 @@ class tabbed_chat_window(chat):
 		else:
 			otext = ttext
 
-		start = 0
-		end = 0
-		index = 0
+		# detect urls formatting and if the user has it on emoticons
+		index, other_tag = self.detect_and_print_special_text(otext, jid, tag, print_all_special)
 		
-		if self.plugin.config['useemoticons']: # search for emoticons & urls
-			my_re = sre.compile(self.plugin.emot_and_basic_pattern, sre.IGNORECASE)
-			iterator = my_re.finditer(otext)
-		else: # search for just urls
-			my_re = sre.compile(self.plugin.basic_pattern, sre.IGNORECASE)
-			iterator = my_re.finditer(otext)
-		for match in iterator:
-			start, end = match.span()
-			special_text = otext[start:end]
-			if start != 0:
-				text_before_special_text = otext[index:start]
-				end_iter = conversation_buffer.get_end_iter()
-				if print_all_special:
-					conversation_buffer.insert_with_tags_by_name(end_iter, \
-						text_before_special_text, tag)
-				else:
-					conversation_buffer.insert(end_iter, text_before_special_text)
-			if print_all_special:
-				self.print_special_text(special_text, jid, tag)
-			else:
-				self.print_special_text(special_text, jid, '')
-			index = end # update index
-
-		#add the rest in the index and after
+		# add the rest of text located in the index and after
 		end_iter = conversation_buffer.get_end_iter()
 		if print_all_special:
 			conversation_buffer.insert_with_tags_by_name(end_iter, \
-				otext[index:], tag)
+				otext[index:], other_tag)
 		else:
 			conversation_buffer.insert(end_iter, otext[index:])
 		
 		#scroll to the end of the textview
+		end_iter = conversation_buffer.get_end_iter()
 		end_rect = conversation_textview.get_iter_location(end_iter)
 		visible_rect = conversation_textview.get_visible_rect()
 		end = False

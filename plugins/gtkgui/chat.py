@@ -37,8 +37,8 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-class chat:
-	"""Class for tabbed chat window"""
+class Chat:
+	"""Class for chat/groupchat windows"""
 	def __init__(self, plugin, account, widget_name):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.notebook = self.xml.get_widget('chat_notebook')
@@ -427,51 +427,86 @@ class chat:
 				#we launch the correct application
 				self.plugin.launch_browser_mailer(kind, word)
 
-	def print_special_text(self, text, jid, other_tag):
+	def detect_and_print_special_text(self, otext, jid, other_tag, print_all_special):
+		# nk 2 yann: when doing this in GC you have to pass sth and looks for
+		# xmls[Other-key-here] I believe  :D
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
-		# make it CAPS (emoticons keys are all CAPS)
-		possible_emot_ascii_caps = text.upper()
-		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
-			#it's an emoticon
-			emot_ascii = possible_emot_ascii_caps
-			print 'emoticon:', emot_ascii
-			end_iter = conversation_buffer.get_end_iter()
-			conversation_buffer.insert_pixbuf(end_iter, \
-				self.plugin.emoticons[emot_ascii])
-			return
-		elif text.startswith('mailto:'):
-			#it's a mail
-			tag = 'mail'
-			print tag
-		elif self.plugin.sth_at_sth_dot_sth_re.match(text): #returns match object
-																			#or None
-			#it's a mail
-			tag = 'mail'
-			print tag
-		elif text.startswith('*') and text.endswith('*'):
-			#it's a bold text
-			tag = 'bold'
-			text = text[1:-1] # remove * *
-		elif text.startswith('/') and text.endswith('/'):
-			#it's an italic text
-			tag = 'italic'
-			text = text[1:-1] # remove / /
-			print tag
-		elif text.startswith('_') and text.endswith('_'):
-			#it's an underlined text
-			tag = 'underline'
-			text = text[1:-1] # remove _ _
-			print tag
-		else:
-			#it's a url
-			tag = 'url'
-			print tag
+		# == DETECT SPECIAL TEXT == 
+		start = 0
+		end = 0
+		index = 0
+		#special_text = ''
+		
+		# basic: links + mail + formatting is always checked (we like that)
+		if self.plugin.config['useemoticons']: # search for emoticons & urls
+			iterator = self.plugin.emot_and_basic_re.finditer(otext)
+		else: # search for just urls + mail + formatting
+			iterator = self.plugin.basic_pattern_re.finditer(otext)
+		for match in iterator:
+			start, end = match.span()
+			special_text = otext[start:end]
+			if start != 0:
+				text_before_special_text = otext[index:start]
+				end_iter = conversation_buffer.get_end_iter()
+				if print_all_special:
+					conversation_buffer.insert_with_tags_by_name(end_iter, \
+						text_before_special_text, other_tag)
+				else:
+					conversation_buffer.insert(end_iter, text_before_special_text)
+			if not print_all_special:
+				other_tag = ''
+			index = end # update index
 
-		end_iter = conversation_buffer.get_end_iter()
-		if tag in ['bold', 'italic', 'underline'] and other_tag:
-			conversation_buffer.insert_with_tags_by_name(end_iter, text,\
-				other_tag, tag)
-		else:
-			conversation_buffer.insert_with_tags_by_name(end_iter, text, tag)
+			# == PRINT SPECIAL TEXT ==
+			# make it CAPS (emoticons keys are all CAPS)
+			possible_emot_ascii_caps = special_text.upper()
+			if possible_emot_ascii_caps in self.plugin.emoticons.keys():
+				#it's an emoticon
+				tag = None
+				emot_ascii = possible_emot_ascii_caps
+				print 'emoticon:', emot_ascii
+				end_iter = conversation_buffer.get_end_iter()
+				conversation_buffer.insert_pixbuf(end_iter, \
+					self.plugin.emoticons[emot_ascii])
+				#break # it used to be a return
+			elif special_text.startswith('mailto:'):
+				#it's a mail
+				tag = 'mail'
+				print tag
+			elif self.plugin.sth_at_sth_dot_sth_re.match(special_text):
+				#it's a mail
+				tag = 'mail'
+				print tag
+			elif special_text.startswith('*') and special_text.endswith('*'):
+				#it's a bold text
+				tag = 'bold'
+				special_text = special_text[1:-1] # remove * *
+				print tag
+			elif special_text.startswith('/') and special_text.endswith('/'):
+				#it's an italic text
+				tag = 'italic'
+				special_text = special_text[1:-1] # remove / /
+				print tag
+			elif special_text.startswith('_') and special_text.endswith('_'):
+				#it's an underlined text
+				tag = 'underline'
+				special_text = special_text[1:-1] # remove _ _
+				print tag
+			else:
+				#it's a url
+				tag = 'url'
+				print tag
+
+			end_iter = conversation_buffer.get_end_iter()
+			if tag is not None:
+				if tag in ['bold', 'italic', 'underline'] and other_tag:
+					conversation_buffer.insert_with_tags_by_name(end_iter,\
+						special_text, other_tag, tag)
+				else:
+					conversation_buffer.insert_with_tags_by_name(end_iter,\
+						special_text, tag)
+		
+					
+		return index, other_tag

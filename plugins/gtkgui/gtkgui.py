@@ -692,7 +692,7 @@ class plugin:
 			return False
 		return True
 		
-	def make_pattern(self):
+	def make_regexps(self):
 		# regexp meta characters are:  . ^ $ * + ? { } [ ] \ | ( )
 		# one escapes the metachars with \
 		# \S matches anything but ' ' '\t' '\n' '\r' '\f' and '\v'
@@ -723,7 +723,20 @@ class plugin:
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
 		formatting = r'(?<!\S)\*[^\s*]([^*]*[^\s*])?\*(?!\S)|' r'(?<!\S)/[^\s/]([^/]*[^\s/])?/(?!\S)|' r'(?<!\S)_[^\s_]([^_]*[^\s_])?_(?!\S)'
 
-		self.basic_pattern = links + mail + formatting
+		basic_pattern = links + mail + formatting
+		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
+		
+		emoticons_pattern = ''
+		for emoticon in self.emoticons: # travel tru emoticons list
+			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
+			emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
+
+		emot_and_basic_pattern = emoticons_pattern + basic_pattern
+		self.emot_and_basic_re = sre.compile(emot_and_basic_pattern,\
+															sre.IGNORECASE)
+		
+		# at least one character in 3 parts (before @, after @, after .)
+		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S+')
 
 	def on_launch_browser_mailer(self, widget, url, kind):
 		self.launch_browser_mailer(kind, url)
@@ -857,20 +870,7 @@ class plugin:
 				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
 				self.emoticons[split_line[2*i]] = pix
 
-		self.make_pattern()
-		
-		# at least one character in 3 parts (before @, after @, after .)
-		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S+')
-		
-		emoticons_pattern = ''
-		for emoticon in self.emoticons: # travel tru emoticons list
-			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
-			emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
-
-		self.emot_and_basic_pattern =\
-			emoticons_pattern + self.basic_pattern
-			
-		print self.emot_and_basic_pattern
+		self.make_regexps()
 
 		gtk.gdk.threads_enter()
 		self.autoconnect()

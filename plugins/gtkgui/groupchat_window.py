@@ -38,9 +38,10 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-class Groupchat_window(chat):
+class Groupchat_window(Chat):
+	"""Class for Groupchat window"""
 	def __init__(self, room_jid, nick, plugin, account):
-		chat.__init__(self, plugin, account, 'groupchat_window')
+		Chat.__init__(self, plugin, account, 'groupchat_window')
 		self.nicks = {}
 		self.list_treeview = {}
 		self.subjects = {}
@@ -72,14 +73,14 @@ class Groupchat_window(chat):
 		for room_jid in self.xmls:
 			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
 				room_jid, 'offline', 'offline'))
-		chat.on_window_destroy(self, widget, 'gc')
+		Chat.on_window_destroy(self, widget, 'gc')
 
 	def on_groupchat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
-		chat.on_chat_window_focus_in_event(self, widget, event)
+		Chat.on_chat_window_focus_in_event(self, widget, event)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
-		chat.on_chat_notebook_key_press_event(self, widget, event)
+		Chat.on_chat_notebook_key_press_event(self, widget, event)
 
 	def get_role_iter(self, room_jid, role):
 		model = self.list_treeview[room_jid].get_model()
@@ -429,7 +430,7 @@ class Groupchat_window(chat):
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 
-		chat.remove_tab(self, jid, 'gc')
+		Chat.remove_tab(self, jid, 'gc')
 		if len(self.xmls) > 0:
 			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
 				room_jid, 'offline', 'offline'))
@@ -441,7 +442,7 @@ class Groupchat_window(chat):
 		self.names[room_jid] = room_jid.split('@')[0]
 		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'gc_vbox', APP)
 		self.childs[room_jid] = self.xmls[room_jid].get_widget('gc_vbox')
-		chat.new_tab(self, room_jid)
+		Chat.new_tab(self, room_jid)
 		self.nicks[room_jid] = nick
 		self.subjects[room_jid] = ''
 		self.list_treeview[room_jid] = self.xmls[room_jid].\
