@@ -100,9 +100,9 @@ class plugin:
 						break
 					if ev[1] in self.no_log_for[ev[1]]:
 						break
-					if not msg:
+					if not ev[2][1]:
 						msg = ''
-					msg = ev[2][1].replace('\n', '\\n')
+					msg = msg.replace('\n', '\\n')
 					fic = open(LOGPATH + jid, "a")
 					t = time.mktime(ev[2][2])
 					fic.write("%s:recv:%s\n" % (t, msg))
