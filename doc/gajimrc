@@ -8,6 +8,11 @@ name = LOGIN NAME
 password = PASSWORD
 ressource = gajim
 
+[Core]
+
+delauth = 1
+delroster = 1
+
 [GtkGui]
 
 showoffline = 0

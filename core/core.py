@@ -64,8 +64,13 @@ class GajimCore:
 				(prs.getFrom().getBasic(), 'offline', prs.getStatus()))
 		elif type == 'subscribe':
 			log.debug("subscribe request from %s" % who)
+			self.con.send(common.jabber.Presence(who, 'subscribed'))
 		elif type == 'subscribed':
 			#plein de trucs a faire
+			jid = prs.getFrom()
+			self.hub.sendPlugin('SUBSCRIBED', {'jid':jid.getBasic(), \
+				'nom':jid.getNode(), 'server':jid.getDomain(), \
+				'resource':jid.getResource()})
 			log.debug("we are now subscribed to %s" % who)
 		elif type == 'unsubscribe':
 			log.debug("unsubscribe request from %s" % who)
@@ -106,7 +111,10 @@ class GajimCore:
 					else:
 						show = roster.getOnline(jid)
 					tab_roster[jid.getBasic()] = \
-						{"Online":roster.getOnline(jid), "nom":jid.getNode(), "server":jid.getDomain(), "resource":jid.getResource(), "group":'general', "status":roster.getStatus(jid), "show":show}
+						{"Online":roster.getOnline(jid), "nom":jid.getNode(), \
+						"server":jid.getDomain(), "resource":jid.getResource(), \
+						"group":'general', "status":roster.getStatus(jid), \
+						"show":show}
 				self.hub.sendPlugin('ROSTER', tab_roster)
 				self.con.sendInitPresence()
 				self.connected = 1
@@ -145,7 +153,14 @@ class GajimCore:
 					self.con.send(common.jabber.Presence(ev[1][0], 'subscribe'))
 				#('UNSUB', jid)
 				elif ev[0] == 'UNSUB':
-					self.con.send(common.jabber.Presence(ev[1], 'unsubscribe'))
+					delauth = self.cfgParser.Core_delauth
+					if not delauth: delauth = 1
+					delroster = self.cfgParser.Core_delroster
+					if not delroster: delroster = 1
+					if delauth:
+						self.con.send(common.jabber.Presence(ev[1], 'unsubscribe'))
+					if delroster:
+						self.con.removeRosterItem(ev[1])
 				else:
 					log.debug("Unknown Command")
 			elif self.connected == 1:

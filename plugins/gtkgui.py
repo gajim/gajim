@@ -24,8 +24,6 @@ import gtk
 import gtk.glade
 import gobject
 import string
-import pickle
-import marshal
 import common.optparser
 CONFPATH = "~/.gajimrc"
 
@@ -156,23 +154,27 @@ class roster:
 	def mkl_group(self):
 		""" l_group = {name:iter} """
 		self.l_group = {}
-		for u in self.l_contact.values():
+		for d in self.l_contact.values():
+			u=d['user']
 			if not self.l_group.has_key(u.group):
 				iterG = self.treestore.append(None, (self.pixbufs['online'], u.group, 'group'))
 				self.l_group[u.group]=iterG
 
 	def mkroster(self, tab):
+		""" l_contact = {jid:{'user':_, 'iter':_] """
 		self.l_contact = {}
 		for jid in tab.keys():
 			user1 = user(tab[jid]['nom'], tab[jid]['server'], tab[jid]['resource'], tab[jid]['group'], tab[jid]["show"], tab[jid]["status"])
-			self.l_contact[user1.jid] = user1
+			self.l_contact[user1.jid] = {'user': user1, 'iter': None}
 		self.treestore.clear()
 		self.mkl_group()
 		for g in self.l_group.keys():
-			for c in self.l_contact.values():
+			for d in self.l_contact.values():
+				c=d['user']
 				if c.group == g:
 					if c.show != 'offline' or self.showOffline:
-						self.treestore.append(self.l_group[g], (self.pixbufs[c.show], c.name, c.jid))
+						iterU = self.treestore.append(self.l_group[g], (self.pixbufs[c.show], c.name, c.jid))
+						self.l_contact[c.jid]['iter'] = iterU
 	
 	def update_iter(self, widget, path, iter, data):
 		jid = self.treestore.get_value(iter, 2)
@@ -188,14 +190,15 @@ class roster:
 		return 0
 	
 	def chg_status(self, jid, show, status):
-		u = self.l_contact[jid]
+		u = self.l_contact[jid]['user']
 		self.found = 0
 		self.treestore.foreach(self.update_iter, (jid, show))
 		if self.found == 0:
 			if not self.l_group.has_key(u.group):
 				iterG = self.treestore.append(None, (self.pixbufs['online'], u.group, 'group'))
 				self.l_group[u.group] = iterG
-			self.treestore.append(self.l_group[u.group], (self.pixbufs[show], u.name, u.jid))
+			iterU = self.treestore.append(self.l_group[u.group], (self.pixbufs[show], u.name, u.jid))
+			self.l_contact[u.jid]['iter'] = iterU
 		u.show = show
 		u.status = status
 		return 1
@@ -246,9 +249,9 @@ class roster:
 		self.queueOUT.put(('SUB', (jid, txt)))
 		if not self.l_contact.has_key(jid):
 			user1 = user(jid, jid, jid, 'general', 'requested', 'requested')
-			self.l_contact[jid] = user1
 			#TODO: ajouter un grp si necessaire
-			self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid))
+			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid))
+			self.l_contact[jid] = {'user':user1, 'iter':iterU}
 
 	def on_status_changed(self, widget):
 		self.queueOUT.put(('STATUS',widget.name))
@@ -273,7 +276,7 @@ class roster:
 			#NE FONCTIONNE PAS !
 			self.tab_messages[jid].window.grab_focus()
 		else:
-			self.tab_messages[jid] = message(self.l_contact[jid], self)
+			self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
 		
 	def __init__(self, queueOUT):
 		#initialisation des variables
@@ -330,11 +333,18 @@ class plugin:
 			if ev[0] == 'ROSTER':
 				self.r.mkroster(ev[1])
 			elif ev[0] == 'NOTIFY':
-				self.r.chg_status(ev[1][0], ev[1][1], ev[1][2])
+				if self.r.l_contact.has_key(ev[1][0]):
+					self.r.chg_status(ev[1][0], ev[1][1], ev[1][2])
 			elif ev[0] == 'MSG':
 				if not self.r.tab_messages.has_key(ev[1][0]):
-					self.r.tab_messages[ev[1][0]] = message(self.r.l_contact[ev[1][0]], self.r)
+					self.r.tab_messages[ev[1][0]] = message(self.r.l_contact[ev[1][0]]['user'], self.r)
 				self.r.tab_messages[ev[1][0]].print_conversation(ev[1][1])
+			elif ev[0] == 'SUBSCRIBED':
+				u = self.r.l_contact[ev[1]['jid'][0]]
+				u.name = ev[1]['nom']
+				u.server = ev[1]['server']
+				u.resource = ev[1]['resource']
+				self.r.treestore.set_value(self.r.l_contact[u.jid]['iter'], 1, u.name)
 		return 1
 
 	def __init__(self, quIN, quOUT):
