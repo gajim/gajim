@@ -708,18 +708,6 @@ class tabbed_chat_window:
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
-		removed_spaces = False
-		
-		print text
-		if not text[0] == '*': # workaround until lookbehind regexp is here
-			if text[0] == ' ': # that happens ATM only with formating detection 
-				text = text.lstrip() # remove ALL leading spaces
-				print 'removed spaces'
-				removed_spaces = True
-				#(I add those in the formating detection later)
-		print 'text after'
-		print text
-		
 		# make it CAPS (emoticons keys are are CAPS)
 		possible_emot_ascii_caps = text.upper()
 		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
@@ -742,21 +730,15 @@ class tabbed_chat_window:
 			#it's a bold text
 			tag = 'bold'
 			text = text[1:-1] # remove * *
-			text = ' ' + text # add the first space
 		elif text.startswith('/') and text.endswith('/'):
 			#it's an italic text
 			tag = 'italic'
 			text = text[1:-1] # remove / /
-			text = ' ' + text # add the first space
 			print tag
 		elif text.startswith('_') and text.endswith('_'):
 			#it's an underlined text
 			tag = 'underline'
 			text = text[1:-1] # remove _ _
-			print 'removed_spaces', removed_spaces
-			if removed_spaces:
-				print 'adding one leading space'
-				text = ' ' + text # add the first space
 			print tag
 		else:
 			#it's a url
@@ -3572,6 +3554,9 @@ class plugin:
 		# | means or
 		# [^*] anything but '*'   (inside [] you don't have to escape metachars)
 		# [^\s*] anything but whitespaces and '*'
+		# (?<=\s) is a one char lookbehind assertion and asks for any leading whitespace
+		# and combined with ^ (beginning of lines) we have correct formatting detection
+		# even if the the text is just '*something*'
 		# basic_pattern is one string literal.
 		# I've put spaces to make the regexp look better.
 		links = r'\bhttp://\S+|' r'\bhttps://\S+|' r'\bnews://\S+|' r'\bftp://\S+|' r'\bed2k://\S+|' r'\bwww\.\S+|' r'\bftp\.\S+|'
@@ -3580,7 +3565,7 @@ class plugin:
 
 		#detects eg. *b* *bold* *bold bold* test *bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
-		formatting = r'(\s+|^)\*[^\s*]([^*]*[^\s*])?\*|' r'(\s+|^)/[^\s*]([^/]*[^\s*])?/|' r'(\s+|^)_[^\s*]([^_]*[^\s*])?_'
+		formatting = r'((?<=\s)|^)\*[^\s*]([^*]*[^\s*])?\*|' r'((?<=\s)|^)/[^\s*]([^/]*[^\s*])?/|' r'((?<=\s)|^)_[^\s*]([^_]*[^\s*])?_'
 
 		if formatting_on:
 			self.basic_pattern = links + mail + '|' + formatting
@@ -3717,8 +3702,7 @@ class plugin:
 					continue
 				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
 				self.emoticons[split_line[2*i]] = pix
-			
-		# FIXME: put pref widget code AND check configs (so the user can disable __ // bb)
+
 		self.make_pattern_with_formatting_on(True)
 		
 		# at least one character in 3 parts (before @, after @, after .)
