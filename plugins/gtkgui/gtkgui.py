@@ -208,6 +208,7 @@ class tabbed_chat_window:
 		self.chat_notebook.remove_page(0)
 		self.plugin = plugin
 		self.account = account
+		self.change_cursor = None
 		self.xmls = {}
 		self.tagIn = {}
 		self.tagOut = {}
@@ -602,6 +603,23 @@ class tabbed_chat_window:
 			self.show_title()
 			self.plugin.systray.remove_jid(jid, self.account)
 	
+	def on_conversation_textview_motion_notify_event(self, widget, event):
+		"""change the cursor to a hand when we are on a mail or an url"""
+		x, y, spam = widget.window.get_pointer()
+		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
+		tags = widget.get_iter_at_location(x, y).get_tags()
+		if self.change_cursor:
+			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(None)
+			self.change_cursor = None
+		for tag in tags:
+			if tag == widget.get_buffer().get_tag_table().lookup('url') or \
+				tag == widget.get_buffer().get_tag_table().lookup('mail'):
+				widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(\
+					gtk.gdk.Cursor(gtk.gdk.HAND2))
+				self.change_cursor = tag
+		return False
+			
+	
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
 			return 0
@@ -647,7 +665,8 @@ class tabbed_chat_window:
 		if text in self.plugin.emoticons.keys():
 			#it's a smiley
 			end_iter = conversation_buffer.get_end_iter()
-			conversation_buffer.insert_pixbuf(end_iter, self.plugin.emoticons[text])
+			conversation_buffer.insert_pixbuf(end_iter, \
+				self.plugin.emoticons[text])
 			return
 		elif text.startswith('mailto:'):
 			#it's a mail
