@@ -416,32 +416,31 @@ class confirm_Window:
 		xml.get_widget('label_confirm').set_text(label)
 		self.win = xml.get_widget('Confirm')
 
-class authorize_Window:
+class subscription_request_Window:
 	"""Class for authorization window :
 	window that appears when a user wants to add us to his/her roster"""
-	def on_close(self, widget):
+	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
 		widget.get_toplevel().destroy()
 		
-	def auth(self, widget):
+	def on_authorize_button_clicked(self, widget):
 		"""Accept the request"""
 		self.plugin.send('AUTH', self.account, self.jid)
 		widget.get_toplevel().destroy()
 		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
 			addContact_Window(self.plugin, self.account, self.jid)
 	
-	def deny(self, widget):
+	def on_deny_button_clicked(self, widget):
 		"""refuse the request"""
 		self.plugin.send('DENY', self.account, self.jid)
 		widget.get_toplevel().destroy()
 	
-	def __init__(self, plugin, jid, txt, account):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Sub_req', APP)
+	def __init__(self, plugin, jid, text, account):
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'subscription_request_window', APP)
 		self.plugin = plugin
 		self.jid = jid
 		self.account = account
-		xml.get_widget('label').set_text(_("Subscription request from %s") % self.jid)
-		xml.get_widget("textview").get_buffer().set_text(txt)
-		xml.signal_connect('on_button_auth_clicked', self.auth)
-		xml.signal_connect('on_button_deny_clicked', self.deny)
-		xml.signal_connect('on_button_close_clicked', self.on_close)
+		xml.get_widget('from_label').set_text(\
+			_('Subscription request from %s') % self.jid)
+		xml.get_widget('message_textview').get_buffer().set_text(text)
+		xml.signal_autoconnect(self)
