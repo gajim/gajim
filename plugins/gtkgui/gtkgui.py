@@ -347,6 +347,8 @@ class tabbed_chat_Window:
 		child = self.xmls[jid].get_widget("vbox_tab")
 		nb = self.xml.get_widget("notebook")
 		nb.set_current_page(nb.page_num(child))
+		message = self.xmls[jid].get_widget('message')
+		message.grab_focus()
 	
 	def new_user(self, user):
 		self.nb_unread[user.jid] = 0
