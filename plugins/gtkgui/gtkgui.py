@@ -1936,21 +1936,20 @@ class roster_window:
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
 						int(event.y))
-					model = self.tree.get_model()
-					iter = model.get_iter(path)
-					type = model.get_value(iter, 2)
-					if (type == 'group'):
-						if (self.tree.row_expanded(path)):
-							#The integer 10 is the xoffset
-							if x <= self.pixbufs['opened'].get_pixbuf()\
-								.get_width()+10:
-								self.tree.collapse_row(path)
-						else:
-							if x <= self.pixbufs['closed'].get_pixbuf()\
-								.get_width()+10:
-								self.tree.expand_row(path, False)
 				except TypeError:
 					self.tree.get_selection().unselect_all()
+					return False
+				model = self.tree.get_model()
+				iter = model.get_iter(path)
+				type = model.get_value(iter, 2)
+				if (type == 'group'): #FIXME: what about doing the same with accounts ?
+					# The integer 30 is the width of the first CellRenderer (see
+					# iconCellDataFunc function)
+					if x <= 30:
+						if (self.tree.row_expanded(path)):
+							self.tree.collapse_row(path)
+						else:
+							self.tree.expand_row(path, False)
 		return False
 
 	def on_req_usub(self, widget, user, account):
