@@ -3039,7 +3039,7 @@ on the server as a vCard</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Wed, 17 Mar 2004 01:55:57 GMT"/>
+  <signal name="destroy" handler="delete_event" last_modification_time="Sat, 05 Mar 2005 16:24:38 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox13">
@@ -4780,6 +4780,7 @@ on the server as a vCard</property>
 				  <property name="items" translatable="yes">GNOME default applications
 KDE default applications
 Custom</property>
+				  <signal name="changed" handler="on_links_open_with_combobox_changed" last_modification_time="Sat, 05 Mar 2005 16:44:57 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -5160,7 +5161,7 @@ Custom</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_apply_clicked" last_modification_time="Thu, 28 Oct 2004 11:23:17 GMT"/>
+	      <signal name="clicked" handler="on_apply" last_modification_time="Sat, 05 Mar 2005 16:24:18 GMT"/>
 	    </widget>
 	  </child>
 
@@ -5173,7 +5174,7 @@ Custom</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_cancel_clicked" last_modification_time="Wed, 17 Mar 2004 03:07:18 GMT"/>
+	      <signal name="clicked" handler="on_cancel" last_modification_time="Sat, 05 Mar 2005 16:24:59 GMT"/>
 	    </widget>
 	  </child>
 
@@ -5187,7 +5188,7 @@ Custom</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_ok_clicked" last_modification_time="Mon, 29 Dec 2003 13:48:07 GMT"/>
+	      <signal name="clicked" handler="on_ok" last_modification_time="Sat, 05 Mar 2005 16:25:12 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

@@ -708,18 +708,6 @@ class preferences_window:
 		fontStr = self.plugin.config['userfont']
 		self.xml.get_widget('fontbutton_user_text').set_font_name(fontStr)
 		
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_apply_clicked', self.on_apply)
-		self.xml.signal_connect('on_ok_clicked', self.on_ok)
-		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
-		self.xml.signal_connect('on_msg_treeview_cursor_changed', \
-			self.on_msg_treeview_cursor_changed)
-		self.xml.signal_connect('on_new_msg_button_clicked', \
-			self.on_new_msg_button_clicked)
-		self.xml.signal_connect('on_delete_msg_button_clicked', \
-			self.on_delete_msg_button_clicked)
-		self.xml.signal_connect('on_msg_treeview_key_press_event', \
-			self.on_msg_treeview_key_press_event)
 		self.xml.signal_connect('on_chk_autopopup_toggled', \
 			self.on_chk_toggled, [self.chk_autoppaway])
 		self.xml.signal_connect('on_chk_autoaway_toggled', \
@@ -733,18 +721,6 @@ class preferences_window:
 					self.xml.get_widget('entry_emoticons'),
 					self.xml.get_widget('button_emoticons'),
 					self.xml.get_widget('image_emoticon')])
-		self.xml.signal_connect('on_button_set_image_clicked', \
-			self.on_button_set_image_clicked)
-		self.xml.signal_connect('on_button_new_emoticon_clicked', \
-			self.on_button_new_emoticon_clicked)
-		self.xml.signal_connect('on_button_remove_emoticon_clicked', \
-			self.on_button_remove_emoticon_clicked)
-		self.xml.signal_connect('on_treeview_emoticons_key_press_event', \
-			self.on_treeview_emoticons_key_press_event)
-		self.xml.signal_connect('on_treeview_sounds_cursor_changed', \
-			self.on_treeview_sounds_cursor_changed)
-		self.xml.signal_connect('on_button_sounds_clicked', \
-			self.on_button_sounds_clicked)
 
 		self.plugin.send('ASK_CONFIG', None, ('GtkGui', 'Logger', {'lognotsep':1,\
 			'lognotusr':1}))
@@ -764,9 +740,6 @@ class preferences_window:
 			self.xml.get_widget('custom_mail_app_entry').set_text(\
 				self.plugin.config['custommailapp'])
 				
-		self.links_open_with_combobox.connect('changed', \
-			self.on_links_open_with_combobox_changed)
-
 		#log presences in user file
 		st = self.config_logger['lognotusr']
 		self.xml.get_widget('chk_log_pres_usr').set_active(st)
@@ -774,6 +747,8 @@ class preferences_window:
 		#log presences in external file
 		st = self.config_logger['lognotsep']
 		self.xml.get_widget('chk_log_pres_ext').set_active(st)
+		
+		self.xml.signal_autoconnect(self)
 
 class account_window:
 	"""Class for account informations"""
