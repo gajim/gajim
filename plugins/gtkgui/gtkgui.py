@@ -664,9 +664,23 @@ class tabbed_chat_window:
 			text = word[1:-1]
 		else:
 			#it's an url
-			if word.startswith('http://'):
+			if word.startswith('ftp://'):
+				if len(word) > 6:
+					text = word[6:]
+					tag += '_url'
+				else:
+					text = word
+					tag = None
+			elif word.startswith('http://') or word.startswith('news://'):
 				if len(word) > 7:
 					text = word[7:]
+					tag += '_url'
+				else:
+					text = word
+					tag = None
+			elif word.startswith('https://'):
+				if len(word) > 8:
+					text = word[8:]
 					tag += '_url'
 				else:
 					text = word
