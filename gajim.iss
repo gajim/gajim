@@ -5,7 +5,7 @@
 
 [Setup]
 AppName=Gajim
-AppVerName=Gajim version 0.4.1
+AppVerName=Gajim version 0.5
 DefaultDirName={pf}\Gajim
 DefaultGroupName=Gajim
 UninstallDisplayIcon={app}\Gajim.exe
@@ -28,6 +28,7 @@ Source: "dist\plugins\gtkgui\*.glade"; DestDir: "{app}\plugins\gtkgui"
 Source: "dist\plugins\gtkgui\icons\sun\*"; DestDir: "{app}\plugins\gtkgui\icons\sun"
 Source: "dist\plugins\gtkgui\emoticons\*"; DestDir: "{app}\plugins\gtkgui\emoticons"
 Source: "dist\plugins\gtkgui\pixmaps\*"; DestDir: "{app}\plugins\gtkgui\pixmaps"
+Source: "dist\sounds\*"; DestDir: "{app}\sounds"
 
 [Icons]
 Name: "{group}\Gajim"; Filename: "{app}\Gajim.exe"; WorkingDir: "{app}"; IconFilename: "{app}\gajim.ico"

@@ -48,6 +48,7 @@ setup(
                 ("plugins/gtkgui/icons/sun", glob.glob("plugins/gtkgui/icons/sun/*.*")),
                 ("plugins/gtkgui/emoticons", glob.glob("plugins/gtkgui/emoticons/*.*")),
                 ("plugins/gtkgui/pixmaps", glob.glob("plugins/gtkgui/pixmaps/*.*")),
+                ("sounds", glob.glob("sounds/*.*")),
                 ("Messages/fr/LC_MESSAGES", glob.glob("Messages/fr/LC_MESSAGES/*.mo"))
     ],
 )
