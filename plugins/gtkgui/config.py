@@ -577,10 +577,10 @@ class accounts_Window:
 		#columns
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 0)
-		self.treeview.insert_column_with_attributes(-1, 'Name', renderer, text=0)
+		self.treeview.insert_column_with_attributes(-1, _('Name'), renderer, text=0)
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
-		self.treeview.insert_column_with_attributes(-1, 'Server', \
+		self.treeview.insert_column_with_attributes(-1, _('Server'), \
 			renderer, text=1)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
