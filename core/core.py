@@ -65,6 +65,7 @@ class GajimCore:
 		elif type == 'subscribe':
 			log.debug("subscribe request from %s" % who)
 		elif type == 'subscribed':
+			#plein de trucs a faire
 			log.debug("we are now subscribed to %s" % who)
 		elif type == 'unsubscribe':
 			log.debug("unsubscribe request from %s" % who)
@@ -105,7 +106,7 @@ class GajimCore:
 					else:
 						show = roster.getOnline(jid)
 					tab_roster[jid.getBasic()] = \
-						{"Online":roster.getOnline(jid), "Status":roster.getStatus(jid), "Show":show}
+						{"Online":roster.getOnline(jid), "nom":jid.getNode(), "server":jid.getDomain(), "resource":jid.getResource(), "group":'general', "status":roster.getStatus(jid), "show":show}
 				self.hub.sendPlugin('ROSTER', tab_roster)
 				self.con.sendInitPresence()
 				self.connected = 1
