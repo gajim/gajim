@@ -546,7 +546,7 @@ class accounts_Window:
 		"""initialize listStore with existing accounts"""
 		model = self.treeview.get_model()
 		model.clear()
-		for account in self.r.plugin.accounts.keys():
+		for account in self.r.plugin.accounts.keys():                        
 			iter = model.append()
 			model.set(iter, 0, account, 1, \
 				self.r.plugin.accounts[account]["hostname"])
@@ -1316,7 +1316,7 @@ class plugin:
 					#Restore messages
 					while not temp_q.empty():
 						ev2 = temp_q.get()
-						self.queueIN.put(ev)
+						self.queueIN.put(ev2)
 					return ev[1][1]
 				else:
 					#Save messages

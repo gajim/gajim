@@ -318,7 +318,7 @@ def start():
 	gc = GajimCore()
 	loadPlugins(gc)
 ################ pr des tests ###########
-	gc.hub.sendPlugin('NOTIFY', ('aste@lagaule.org', 'online', 'online', 'oleron'))
+#	gc.hub.sendPlugin('NOTIFY', ('aste@lagaule.org', 'online', 'online', 'oleron'))
 #	gc.hub.sendPlugin('MSG', ('ate@lagaule.org', 'msg'))
 #########################################
 	try:
