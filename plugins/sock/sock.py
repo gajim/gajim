@@ -92,7 +92,6 @@ class plugin:
 	def read_queue(self):
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
-#			print 'sock recieved ', ev, ' from queue'
 			if ev[0] in self.message_types:
 				for sock in self.message_types[ev[0]]:
 					self.send_to_socket(ev, sock)
@@ -109,6 +108,7 @@ class plugin:
 			if sock == self.socket:
 				conn, addr = self.socket.accept()
 				# Connected by  addr
+				print _("Connection from "), addr
 				self.active_socket.append(conn)
 			else:
 				try:
@@ -118,13 +118,13 @@ class plugin:
 					break
 				if not data:
 					# disconnected
+					print _("disconnected")
 					self.active_socket.remove(sock)
 					break
 				while len(data) == 1024:
 					data += sock.recv(1024)
 				list_ev = self.unparse_socket(data)
 				for ev in list_ev:
-#					print 'sock recieved ', ev, ' from socket'
 					if ev[0] == 'REG_MESSAGE':
 						self.handle_socket_reg_message(sock, ev[2])
 						ev = (ev[0], 'sock', ev[2])
@@ -141,6 +141,8 @@ class plugin:
 		self.message_types = {}
 		#create socket
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		if self.config.has_key('host'):
+			HOST = socket.gethostbyname(self.config['host'])
 		self.socket.bind((HOST, self.config['port']))
 		self.socket.listen(5)
 
