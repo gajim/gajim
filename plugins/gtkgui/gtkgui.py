@@ -1120,7 +1120,11 @@ class roster_Window:
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
-		model.append(None, (self.pixbufs['closed'], account, 'account', account, \
+		if self.plugin.connected[account]:
+			status = 'online'
+		else:
+			status = 'offline'
+		model.append(None, (self.pixbufs[status], account, 'account', account,\
 			FALSE))
 
 	def add_user_to_roster(self, user, account):
@@ -1139,7 +1143,7 @@ class roster_Window:
 			for g in user.groups:
 				iterG = self.get_group_iter(g, account)
 				if not iterG:
-					self.groups[account][g] = {'drawn': True, 'expand':True}
+					self.groups[account][g] = {'expand':True}
 					acct = self.get_account_iter(account)
 					iterG = model.append(self.get_account_iter(account), \
 						(self.pixbufs['closed'], g, 'group', g, FALSE))
@@ -1228,7 +1232,7 @@ class roster_Window:
 			self.contacts[account][ji] = user1
 			for g in array[jid]['groups'] :
 				if not g in self.groups[account].keys():
-					self.groups[account][g] = {'drawn':False, 'expand':True}
+					self.groups[account][g] = {'expand':True}
 
 	def chg_user_status(self, user, show, status, account):
 		"""When a user change his status"""
@@ -1401,6 +1405,10 @@ class roster_Window:
 			if optionmenu.get_menu().get_children()[i].name == status:
 				optionmenu.set_history(i)
 				break
+		model = self.tree.get_model()
+		accountIter = self.get_account_iter(account)
+		if accountIter:
+			model.set_value(accountIter, 0, self.pixbufs[status])
 		if status == 'offline':
 			self.plugin.connected[account] = 0
 			self.plugin.sleeper = None
@@ -1479,7 +1487,7 @@ class roster_Window:
 			if (self.tree.row_expanded(path)):
 				self.tree.collapse_row(path)
 			else:
-				self.tree.expand_row(path, FALSE)
+				self.tree.expand_row(path, False)
 		else:
 			if self.plugin.windows[account]['chats'].has_key(jid):
 				self.plugin.windows[account]['chats'][jid].window.present()
@@ -1490,12 +1498,33 @@ class roster_Window:
 	def on_row_expanded(self, widget, iter, path):
 		"""When a row is expanded :
 		change the icon of the arrow"""
-		self.tree.get_model().set_value(iter, 0, self.pixbufs['opened'])
+		model = self.tree.get_model()
+		acct_iter = model.get_iter((path[0]))
+		account = model.get_value(acct_iter, 3)
+		type = model.get_value(iter, 2)
+		if type == 'group':
+			model.set_value(iter, 0, self.pixbufs['opened'])
+			jid = model.get_value(iter, 3)
+			self.groups[account][jid]['expand'] = True
+		elif type == 'account':
+			for g in self.groups[account]:
+				groupIter = self.get_group_iter(g, account)
+				if groupIter and self.groups[account][g]['expand']:
+					pathG = model.get_path(groupIter)
+					self.tree.expand_row(pathG, False)
+			
 	
 	def on_row_collapsed(self, widget, iter, path):
 		"""When a row is collapsed :
 		change the icon of the arrow"""
-		self.tree.get_model().set_value(iter, 0, self.pixbufs['closed'])
+		model = self.tree.get_model()
+		acct_iter = model.get_iter((path[0]))
+		account = model.get_value(acct_iter, 3)
+		type = model.get_value(iter, 2)
+		if type == 'group':
+			model.set_value(iter, 0, self.pixbufs['closed'])
+			jid = model.get_value(iter, 3)
+			self.groups[account][jid]['expand'] = False
 
 	def on_cell_edited (self, cell, row, new_text):
 		"""When an iter is editer :
