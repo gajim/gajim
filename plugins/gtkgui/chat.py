@@ -269,6 +269,18 @@ class Chat:
 
 		self.show_title()
 
+	def on_conversation_textview_key_press_event(self, widget, event):
+		"""Do not black these evnts and send them to the notebook"""
+		if event.keyval == gtk.keysyms.Tab and \
+			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
+			self.notebook.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
+				self.notebook.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
+				self.notebook.emit('key_press_event', event)
+
 	def on_chat_notebook_key_press_event(self, widget, event):
 		st = '1234567890' # zero is here cause humans count from 1, pc from 0 :P
 		jid = self.get_active_jid()
