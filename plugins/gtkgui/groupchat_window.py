@@ -219,7 +219,7 @@ class Groupchat_window(Chat):
 		"""When a key is pressed:
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation. Tab does autocompete in nickames"""
-		if event.keyval == gtk.keysyms.Return or 
+		if event.keyval == gtk.keysyms.Return or \
 		event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return 0

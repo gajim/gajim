@@ -377,7 +377,7 @@ class Change_status_message_dialog:
 		self.message_buffer.set_text(self.values[name])
 	
 	def on_change_status_message_dialog_key_press_event(self, widget, event):
-		if event.keyval == gtk.keysyms.Return or 
+		if event.keyval == gtk.keysyms.Return or \
 		event.keyval == gtk.keysyms.KP_Enter:  # catch CTRL+ENTER
 			if (event.state & gtk.gdk.CONTROL_MASK):
 				self.window.response(gtk.RESPONSE_OK)

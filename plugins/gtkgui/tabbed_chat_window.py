@@ -162,7 +162,7 @@ class Tabbed_chat_window(Chat):
 				self.notebook.emit('key_press_event', event)
 			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
 				conversation_textview.emit('key_press_event', event)
-		elif event.keyval == gtk.keysyms.Return or
+		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return False
