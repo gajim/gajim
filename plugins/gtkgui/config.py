@@ -271,24 +271,18 @@ class preference_Window:
 
 		#Color for incomming messages
 		colSt = self.plugin.config['inmsgcolor']
-		if not colSt:
-			colSt = '#ff0000'
 		cmapIn = self.da_in.get_colormap()
 		self.colorIn = cmapIn.alloc_color(colSt)
 		self.da_in.window.set_background(self.colorIn)
 		
 		#Color for outgoing messages
 		colSt = self.plugin.config['outmsgcolor']
-		if not colSt:
-			colSt = '#0000ff'
 		cmapOut = self.da_out.get_colormap()
 		self.colorOut = cmapOut.alloc_color(colSt)
 		self.da_out.window.set_background(self.colorOut)
 		
 		#Color for status messages
 		colSt = self.plugin.config['statusmsgcolor']
-		if not colSt:
-			colSt = '#00ff00'
 		cmapStatus = self.da_status.get_colormap()
 		self.colorStatus = cmapStatus.alloc_color(colSt)
 		self.da_status.window.set_background(self.colorStatus)
@@ -306,39 +300,27 @@ class preference_Window:
 			self.combo_iconstyle.entry.set_text(self.plugin.config['iconstyle'])
 		
 		#Autopopup
-		st = 1
-		if self.plugin.config.has_key('autopopup'):
-			st = self.plugin.config['autopopup']
+		st = self.plugin.config['autopopup']
 		self.chk_autopp.set_active(st)
 
 		#Autopopupaway
-		st = 1
-		if self.plugin.config.has_key('autopopupaway'):
-			st = self.plugin.config['autopopupaway']
+		st = self.plugin.config['autopopupaway']
 		self.chk_autoppaway.set_active(st)
 
 		#Autoaway
-		st = 1
-		if self.plugin.config.has_key('autoaway'):
-			st = self.plugin.config['autoaway']
+		st = self.plugin.config['autoaway']
 		self.chk_autoaway.set_active(st)
 
 		#Autoawaytime
-		st = 10
-		if self.plugin.config.has_key('autoawaytime'):
-			st = self.plugin.config['autoawaytime']
+		st = self.plugin.config['autoawaytime']
 		self.spin_autoawaytime.set_value(st)
 
 		#Autoxa
-		st = 1
-		if self.plugin.config.has_key('autoxa'):
-			st = self.plugin.config['autoxa']
+		st = self.plugin.config['autoxa']
 		self.chk_autoxa.set_active(st)
 
 		#Autoxatime
-		st = 20
-		if self.plugin.config.has_key('autoxatime'):
-			st = self.plugin.config['autoxatime']
+		st = self.plugin.config['autoxatime']
 		self.spin_autoxatime.set_value(st)
 
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)

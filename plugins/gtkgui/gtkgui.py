@@ -170,18 +170,12 @@ class message_Window:
 			self.on_msg_key_press_event)
 		self.tagIn = buffer.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
-		if not color:
-			color = 'red'
 		self.tagIn.set_property("foreground", color)
 		self.tagOut = buffer.create_tag("outgoing")
 		color = self.plugin.config['outmsgcolor']
-		if not color:
-			color = 'blue'
 		self.tagOut.set_property("foreground", color)
 		self.tagStatus = buffer.create_tag("status")
 		color = self.plugin.config['statusmsgcolor']
-		if not color:
-			color = 'green'
 		self.tagStatus.set_property("foreground", color)
 		#print queued messages
 		if plugin.queues[account].has_key(user.jid):
@@ -1669,9 +1663,9 @@ class plugin:
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'autopopupaway':1,\
 			'showoffline':0,\
-			'autoaway':0,\
+			'autoaway':1,\
 			'autoawaytime':10,\
-			'autoxa':0,\
+			'autoxa':1,\
 			'autoxatime':20,\
 			'iconstyle':'sun',\
 			'inmsgcolor':'#ff0000',\

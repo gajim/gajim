@@ -281,8 +281,11 @@ class GajimCore:
 						self.hub.sendPlugin('CONFIG', None, (ev[2][0], self.accounts))
 					else:
 						if self.cfgParser.tab.has_key(ev[2][1]):
-							self.hub.sendPlugin('CONFIG', None, (ev[2][0], \
-								self.cfgParser.__getattr__(ev[2][1])))
+							config = self.cfgParser.__getattr__(ev[2][1])
+							for item in ev[2][2].keys():
+								if not config.has_key(item):
+									config[item] = ev[2][2][item]
+							self.hub.sendPlugin('CONFIG', None, (ev[2][0], config))
 						else:
 							self.cfgParser.tab[ev[2][1]] = ev[2][2]
 							self.cfgParser.writeCfgFile()
