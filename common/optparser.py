@@ -16,44 +16,49 @@
 ## GNU General Public License for more details.
 ##
 
-import ConfigParser, logging, os, string
+import logging, os, string
 
 log = logging.getLogger('common.options')
 
-class OptionsParser(ConfigParser.ConfigParser):
+class OptionsParser:
 	def __init__(self, fname):
-		ConfigParser.ConfigParser.__init__(self)
 		self.__fname = os.path.expanduser(fname)
 		self.tab = {}
 	# END __init__
 
 	def parseCfgFile(self):
 		try:
-			self.__fd = open(self.__fname)
+			fd = open(self.__fname)
 		except:
 			print 'error cannot open file %s\n' % (self.__fname);
 			return
     
-		self.readfp(self.__fd)
-		self.__sections = self.sections()
-
-		for section in self.__sections:
-			self.tab[section] = {}
-			for option in self.options(section):
-				value = self.get(section, option, 1)
-				#convert to int options than can be
-				if string.find(option, 'password') == -1:
-					try:
-						i = string.atoi(value)
-					except ValueError:
-						self.tab[section][option] = value
-					else:
-						self.tab[section][option] = i
-				else:
+		self.tab = {}
+		section = ''
+		for line in fd.readlines():
+			if line[0] in "#;":
+				continue
+			if line[0] == '[':
+				section = line[1:line.find(']')]
+				self.tab[section] = {}
+				continue
+			index = line.find('=')
+			if index == -1:
+				continue
+			option = line[0:index]
+			option = option.strip()
+			value = line[index+1:]
+			value = value.strip()
+			if string.find(option, 'password') == -1:
+				try:
+					i = string.atoi(value)
+				except ValueError:
 					self.tab[section][option] = value
-
-#				setattr(self, str(section) + '_' + \
-#					str(option), value)
+				else:
+					self.tab[section][option] = i
+			else:
+				self.tab[section][option] = value
+		fd.close()
 	# END parseCfgFile
 
 	def __str__(self):
@@ -73,19 +78,15 @@ class OptionsParser(ConfigParser.ConfigParser):
 	# END __getattr__
 
 	def writeCfgFile(self):
-		#Remove all sections
-		for s in self.sections():
-			self.remove_section(s)
-		#recreate sections
-		for s in self.tab.keys():
-			self.add_section(s)
-			for o in self.tab[s].keys():
-				self.set(s, o, self.tab[s][o])
 		try:
-			self.write(open(self.__fname, 'w'))
+			fd = open(self.__fname, 'w')
 		except:
 			log.debug("Can't write config %s" % self.__fname)
 			return 0
+		for s in self.tab.keys():
+			fd.write('[' + s + ']\n\n')
+			for o in self.tab[s].keys():
+				fd.write(o + ' = ' + str(self.tab[s][o]) + '\n')
 		return 1
 	# END writeCfgFile
 
