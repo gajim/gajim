@@ -54,7 +54,7 @@ class GajimHub:
 		self.events[event] = [qu]
     # END register
 
-    def sendPlugin(self, event, data):
+    def sendPlugin(self, event, con, data):
         """ Sends an event to registered plugins
 		NOTIFY : ('NOTIFY', (user, status, message))
 		MSG : ('MSG', (user, msg))
@@ -63,6 +63,6 @@ class GajimHub:
 
         if self.events.has_key(event):
             for i in self.events[event]:
-                i.put((event, data))
+                i.put((event, con, data))
     # END sendPlugin
 # END GajimHub

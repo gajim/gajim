@@ -36,11 +36,15 @@ CONFPATH = "~/.gajim/config"
 class GajimCore:
 	"""Core"""
 	def __init__(self):
-		self.connected = 0
 		self.init_cfg_file()
 		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
 		self.hub = common.hub.GajimHub()
 		self.parse()
+		self.connected = {}
+		#connexions {con: name, ...}
+		self.connexions = {}
+		for a in self.accounts:
+			self.connected[a] = 0
 	# END __init__
 
 	def init_cfg_file(self):
@@ -89,12 +93,12 @@ class GajimCore:
 					vcard[info.getName()] = {}
 					for c in info.getChildren():
 						 vcard[info.getName()][c.getName()] = c.getData()
-			self.hub.sendPlugin('VCARD', vcard)
+			self.hub.sendPlugin('VCARD', self.connexions[con], vcard)
 
 	def messageCB(self, con, msg):
 		"""Called when we recieve a message"""
-		self.hub.sendPlugin('MSG', (msg.getFrom().getBasic(), \
-			msg.getBody()))
+		self.hub.sendPlugin('MSG', self.connexions[con], \
+			(msg.getFrom().getBasic(), msg.getBody()))
 	# END messageCB
 
 	def presenceCB(self, con, prs):
@@ -108,38 +112,40 @@ class GajimCore:
 				show = prs.getShow()
 			else:
 				show = 'online'
-			self.hub.sendPlugin('NOTIFY', (prs.getFrom().getBasic(), \
-				show, prs.getStatus(), prs.getFrom().getResource()))
+			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
+				(prs.getFrom().getBasic(), show, prs.getStatus(), \
+				prs.getFrom().getResource()))
 		elif type == 'unavailable':
-			self.hub.sendPlugin('NOTIFY', \
+			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 				(prs.getFrom().getBasic(), 'offline', prs.getStatus(), \
 					prs.getFrom().getResource()))
 		elif type == 'subscribe':
 			log.debug("subscribe request from %s" % who)
 			if self.cfgParser.Core['alwaysauth'] == 1 or \
 				string.find(who, "@") <= 0:
-				self.con.send(common.jabber.Presence(who, 'subscribed'))
+				con.send(common.jabber.Presence(who, 'subscribed'))
 				if string.find(who, "@") <= 0:
-					self.hub.sendPlugin('NOTIFY', (who, 'offline', 'offline', \
-						prs.getFrom().getResource()))
+					self.hub.sendPlugin('NOTIFY', self.connexions[con], \
+						(who, 'offline', 'offline', prs.getFrom().getResource()))
 			else:
 				txt = prs.getStatus()
 				if not txt:
 					txt = "I would like to add you to my roster."
-				self.hub.sendPlugin('SUBSCRIBE', (who, 'txt'))
+				self.hub.sendPlugin('SUBSCRIBE', self.connexions[con], (who, 'txt'))
 		elif type == 'subscribed':
 			jid = prs.getFrom()
-			self.hub.sendPlugin('SUBSCRIBED', {'jid':jid.getBasic(), \
-				'nom':jid.getNode(), 'ressource':jid.getResource()})
-			self.hub.queueIn.put(('UPDUSER', (jid.getBasic(), \
-				jid.getNode(), ['general'])))
-			#BE CAREFUL : no self.con.updateRosterItem() in a callback
+			self.hub.sendPlugin('SUBSCRIBED', self.connexions[con],\
+				(jid.getBasic(), jid.getNode(), jid.getResource()))
+			self.hub.queueIn.put(('UPDUSER', self.connexions[con], \
+				(jid.getBasic(), jid.getNode(), ['general'])))
+			#BE CAREFUL : no con.updateRosterItem() in a callback
 			log.debug("we are now subscribed to %s" % who)
 		elif type == 'unsubscribe':
 			log.debug("unsubscribe request from %s" % who)
 		elif type == 'unsubscribed':
 			log.debug("we are now unsubscribed to %s" % who)
-			self.hub.sendPlugin('UNSUBSCRIBED', prs.getFrom().getBasic())
+			self.hub.sendPlugin('UNSUBSCRIBED', self.connexions[con], \
+				prs.getFrom().getBasic())
 		elif type == 'error':
 			print "\n\n******** ERROR *******"
 			#print "From : %s" % prs.getFrom()
@@ -158,10 +164,10 @@ class GajimCore:
 	def disconnectedCB(self, con):
 		"""Called when we are disconnected"""
 		log.debug("disconnectedCB")
-		if self.connected == 1:
-			self.connected = 0
-			self.con.disconnect()
-		self.hub.sendPlugin('STATUS', 'offline')
+		if self.connected[self.connexions[con]] == 1:
+			self.connected[self.connexions[con]] = 0
+			con.disconnect()
+		self.hub.sendPlugin('STATUS', self.connexions[con], 'offline')
 	# END disconenctedCB
 
 	def connect(self, account):
@@ -170,45 +176,49 @@ class GajimCore:
 		name = self.cfgParser.tab[account]["name"]
 		password = self.cfgParser.tab[account]["password"]
 		ressource = self.cfgParser.tab[account]["ressource"]
-		self.con = common.jabber.Client(host = hostname, \
+		con = common.jabber.Client(host = hostname, \
 			debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
 			connection=common.xmlstream.TCP, port=5222)
 			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
 			#connection=common.xmlstream.TCP_SSL, port=5223)
+		self.connexions[con] = account
 		try:
-			self.con.connect()
+			con.connect()
 		except IOError, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
-			self.hub.sendPlugin('STATUS', 'offline')
-			self.hub.sendPlugin('WARNING', "Couldn't connect to %s" % hostname)
+			self.hub.sendPlugin('STATUS', account, 'offline')
+			self.hub.sendPlugin('WARNING', None, "Couldn't connect to %s" \
+				% hostname)
 			return 0
 		except common.xmlstream.socket.error, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
-			self.hub.sendPlugin('STATUS', 'offline')
-			self.hub.sendPlugin('WARNING', "Couldn't connect to %s : %s" % (hostname, e))
+			self.hub.sendPlugin('STATUS', account, 'offline')
+			self.hub.sendPlugin('WARNING', None, "Couldn't connect to %s : %s" \
+				% (hostname, e))
 			return 0
 		else:
 			log.debug("Connected to server")
 
-			self.con.registerHandler('message', self.messageCB)
-			self.con.registerHandler('presence', self.presenceCB)
-			self.con.registerHandler('iq',self.vCardCB,'result')#common.jabber.NS_VCARD)
-			self.con.setDisconnectHandler(self.disconnectedCB)
+			con.registerHandler('message', self.messageCB)
+			con.registerHandler('presence', self.presenceCB)
+			con.registerHandler('iq',self.vCardCB,'result')#common.jabber.NS_VCARD)
+			con.setDisconnectHandler(self.disconnectedCB)
 			#BUG in jabberpy library : if hostname is wrong : "boucle"
-			if self.con.auth(name, password, ressource):
-				self.con.requestRoster()
-				roster = self.con.getRoster().getRaw()
+			if con.auth(name, password, ressource):
+				con.requestRoster()
+				roster = con.getRoster().getRaw()
 				if not roster :
 					roster = {}
-				self.hub.sendPlugin('ROSTER', roster)
-				self.con.sendInitPresence()
-				self.hub.sendPlugin('STATUS', 'online')
-				self.connected = 1
+				self.hub.sendPlugin('ROSTER', account, roster)
+				con.sendInitPresence()
+				self.hub.sendPlugin('STATUS', account, 'online')
+				self.connected[account] = 1
 			else:
 				log.debug("Couldn't authentificate to %s" % hostname)
-				self.hub.sendPlugin('STATUS', 'offline')
-				self.hub.sendPlugin('WARNING', \
-					'Authentification failed, check your login and password')
+				self.hub.sendPlugin('STATUS', account, 'offline')
+				self.hub.sendPlugin('WARNING', None, \
+					'Authentification failed with %s, check your login and password'\
+					% hostname)
 				return 0
 	# END connect
 
@@ -218,27 +228,32 @@ class GajimCore:
 		while 1:
 			if not self.hub.queueIn.empty():
 				ev = self.hub.queueIn.get()
+				for con in self.connexions.keys():
+					if ev[1] == self.connexions[con]:
+						break
+				#('QUIT', account, ())
 				if ev[0] == 'QUIT':
-					if self.connected == 1:
-						self.connected = 0
-						self.con.disconnect()
-					self.hub.sendPlugin('QUIT', ())
+					for con in self.connexions.keys():
+#						if self.connected[a] == 1:
+#							self.connected[a] = 0
+						con.disconnect()
+					self.hub.sendPlugin('QUIT', None, ())
 					return
-				#('ASK_CONFIG', (who_ask, section, default_config))
+				#('ASK_CONFIG', account, (who_ask, section, default_config))
 				elif ev[0] == 'ASK_CONFIG':
-					if ev[1][1] == 'accounts':
-						self.hub.sendPlugin('CONFIG', (ev[1][0], self.accounts))
+					if ev[2][1] == 'accounts':
+						self.hub.sendPlugin('CONFIG', None, (ev[2][0], self.accounts))
 					else:
-						if self.cfgParser.tab.has_key(ev[1][1]):
-							self.hub.sendPlugin('CONFIG', (ev[1][0], \
-								self.cfgParser.__getattr__(ev[1][1])))
+						if self.cfgParser.tab.has_key(ev[2][1]):
+							self.hub.sendPlugin('CONFIG', None, (ev[2][0], \
+								self.cfgParser.__getattr__(ev[2][1])))
 						else:
-							self.cfgParser.tab[ev[1][1]] = ev[1][2]
+							self.cfgParser.tab[ev[2][1]] = ev[2][2]
 							self.cfgParser.writeCfgFile()
-							self.hub.sendPlugin('CONFIG', (ev[1][0], ev[1][2]))
-				#('CONFIG', (section, config))
+							self.hub.sendPlugin('CONFIG', None, (ev[2][0], ev[2][2]))
+				#('CONFIG', account, (section, config))
 				elif ev[0] == 'CONFIG':
-					if ev[1][0] == 'accounts':
+					if ev[2][0] == 'accounts':
 						#Remove all old accounts
 						accts = string.split(self.cfgParser.tab\
 							['Profile']['accounts'], ' ')
@@ -247,51 +262,51 @@ class GajimCore:
 						for a in accts:
 							del self.cfgParser.tab[a]
 						#Write all new accounts
-						accts = ev[1][1].keys()
+						accts = ev[2][1].keys()
 						self.cfgParser.tab['Profile']['accounts'] = \
 							string.join(accts)
 						for a in accts:
-							self.cfgParser.tab[a] = ev[1][1][a]
+							self.cfgParser.tab[a] = ev[2][1][a]
 					else:
-						self.cfgParser.tab[ev[1][0]] = ev[1][1]
+						self.cfgParser.tab[ev[2][0]] = ev[2][1]
 					self.cfgParser.writeCfgFile()
 					#TODO: tell the changes to other plugins
-				#('STATUS', (status, msg, account))
+				#('STATUS', account, (status, msg))
 				elif ev[0] == 'STATUS':
-					if (ev[1][0] != 'offline') and (self.connected == 0):
-						self.connect(ev[1][2])
-					elif (ev[1][0] == 'offline') and (self.connected == 1):
-						self.connected = 0
-						self.con.disconnect()
-						self.hub.sendPlugin('STATUS', 'offline')
-					if ev[1][0] != 'offline' and self.connected == 1:
+					if (ev[2][0] != 'offline') and (self.connected[ev[1]] == 0):
+						self.connect(ev[1])
+					elif (ev[2][0] == 'offline') and (self.connected[ev[1]] == 1):
+						self.connected[ev[1]] = 0
+						con.disconnect()
+						self.hub.sendPlugin('STATUS', ev[1], 'offline')
+					if ev[2][0] != 'offline' and self.connected[ev[1]] == 1:
 						p = common.jabber.Presence()
-						p.setShow(ev[1][0])
-						p.setStatus(ev[1][1])
-						self.con.send(p)
-						self.hub.sendPlugin('STATUS', ev[1][0])
-				#('MSG', (jid, msg))
+						p.setShow(ev[2][0])
+						p.setStatus(ev[2][1])
+						con.send(p)
+						self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
+				#('MSG', account, (jid, msg))
 				elif ev[0] == 'MSG':
-					msg = common.jabber.Message(ev[1][0], ev[1][1])
+					msg = common.jabber.Message(ev[2][0], ev[2][1])
 					msg.setType('chat')
-					self.con.send(msg)
-					self.hub.sendPlugin('MSGSENT', ev[1])
-				#('SUB', (jid, txt))
+					con.send(msg)
+					self.hub.sendPlugin('MSGSENT', ev[1], ev[2])
+				#('SUB', account, (jid, txt))
 				elif ev[0] == 'SUB':
-					log.debug('subscription request for %s' % ev[1][0])
-					pres = common.jabber.Presence(ev[1][0], 'subscribe')
-					if ev[1][1]:
-						pres.setStatus(ev[1][1])
+					log.debug('subscription request for %s' % ev[2][0])
+					pres = common.jabber.Presence(ev[2][0], 'subscribe')
+					if ev[2][1]:
+						pres.setStatus(ev[2][1])
 					else:
 						pres.setStatus("I would like to add you to my roster.")
-					self.con.send(pres)
-				#('REQ', jid)
+					con.send(pres)
+				#('REQ', account, jid)
 				elif ev[0] == 'AUTH':
-					self.con.send(common.jabber.Presence(ev[1], 'subscribed'))
-				#('DENY', jid)
+					con.send(common.jabber.Presence(ev[2], 'subscribed'))
+				#('DENY', account, jid)
 				elif ev[0] == 'DENY':
-					self.con.send(common.jabber.Presence(ev[1], 'unsubscribed'))
-				#('UNSUB', jid)
+					con.send(common.jabber.Presence(ev[2], 'unsubscribed'))
+				#('UNSUB', accountjid)
 				elif ev[0] == 'UNSUB':
 					if self.cfgParser.Core.has_key('delauth'):
 						delauth = self.cfgParser.Core['delauth']
@@ -302,26 +317,29 @@ class GajimCore:
 					else:
 						delroster = 1
 					if delauth:
-						self.con.send(common.jabber.Presence(ev[1], 'unsubscribe'))
+						con.send(common.jabber.Presence(ev[2], 'unsubscribe'))
 					if delroster:
-						self.con.removeRosterItem(ev[1])
-				#('UPDUSER', (jid, name, groups))
+						con.removeRosterItem(ev[2])
+				#('UPDUSER', account, (jid, name, groups))
 				elif ev[0] == 'UPDUSER':
-					self.con.updateRosterItem(jid=ev[1][0], name=ev[1][1], \
-						groups=ev[1][2])
+					con.updateRosterItem(jid=ev[2][0], name=ev[2][1], \
+						groups=ev[2][2])
+				#('REQ_AGENTS', account, ())
 				elif ev[0] == 'REQ_AGENTS':
-					agents = self.con.requestAgents()
-					self.hub.sendPlugin('AGENTS', agents)
+					agents = con.requestAgents()
+					self.hub.sendPlugin('AGENTS', ev[1], agents)
+				#('REQ_AGENT_INFO', account, agent)
 				elif ev[0] == 'REQ_AGENT_INFO':
-					self.con.requestRegInfo(ev[1])
-					agent_info = self.con.getRegInfo()
-					self.hub.sendPlugin('AGENT_INFO', (ev[1], agent_info))
+					con.requestRegInfo(ev[2])
+					agent_info = con.getRegInfo()
+					self.hub.sendPlugin('AGENT_INFO', ev[1], (ev[2], agent_info))
+				#('REG_AGENT', account, infos)
 				elif ev[0] == 'REG_AGENT':
-					self.con.sendRegInfo(ev[1])
+					con.sendRegInfo(ev[2])
 				#('NEW_ACC', (hostname, login, password, name, ressource))
 				elif ev[0] == 'NEW_ACC':
 					c = common.jabber.Client(host = \
-						ev[1][0], debug = False, log = sys.stderr)
+						ev[2][0], debug = False, log = sys.stderr)
 					try:
 						c.connect()
 					except IOError, e:
@@ -331,44 +349,46 @@ class GajimCore:
 						log.debug("Connected to server")
 						c.requestRegInfo()
 						req = c.getRegInfo()
-						c.setRegInfo( 'username', ev[1][1])
-						c.setRegInfo( 'password', ev[1][2])
+						c.setRegInfo( 'username', ev[2][1])
+						c.setRegInfo( 'password', ev[2][2])
 						#FIXME: if users already exist, no error message :(
 						if not c.sendRegInfo():
 							print "error " + c.lastErr
 						else:
-							self.hub.sendPlugin('ACC_OK', ev[1])
-				#('ASK_VCARD', jid)
+							self.hub.sendPlugin('ACC_OK', ev[1], ev[2])
+				#('ASK_VCARD', account, jid)
 				elif ev[0] == 'ASK_VCARD':
-					iq = common.jabber.Iq(to=ev[1], type="get")
+					iq = common.jabber.Iq(to=ev[2], type="get")
 					iq._setTag('vCard', common.jabber.NS_VCARD)
-					iq.setID(self.con.getAnID())
-					self.con.send(iq)
+					iq.setID(con.getAnID())
+					con.send(iq)
 				#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 				elif ev[0] == 'VCARD':
 					iq = common.jabber.Iq(type="set")
-					iq.setID(self.con.getAnID())
+					iq.setID(con.getAnID())
 					iq2 = iq._setTag('vCard', common.jabber.NS_VCARD)
-					for i in ev[1].keys():
+					for i in ev[2].keys():
 						if i != 'jid':
-							if type(ev[1][i]) == type({}):
+							if type(ev[2][i]) == type({}):
 								iq3 = iq2.insertTag(i)
-								for j in ev[1][i].keys():
-									iq3.insertTag(j).putData(ev[1][i][j])
+								for j in ev[2][i].keys():
+									iq3.insertTag(j).putData(ev[2][i][j])
 							else:
-								iq2.insertTag(i).putData(ev[1][i])
-					self.con.send(iq)
-				#('AGENT_LOGGING', (agent, type))
+								iq2.insertTag(i).putData(ev[2][i])
+					con.send(iq)
+				#('AGENT_LOGGING', account, (agent, type))
 				elif ev[0] == 'AGENT_LOGGING':
-					t = ev[1][1];
+					t = ev[2][1];
 					if not t:
 						t='available';
-					p = common.jabber.Presence(to=ev[1][0], type=t)
-					self.con.send(p)
+					p = common.jabber.Presence(to=ev[2][0], type=t)
+					con.send(p)
 				else:
 					log.debug("Unknown Command %s" % ev[0])
-			elif self.connected == 1:
-				self.con.process(1)
+			else:
+				for con in self.connexions:
+					if self.connected[self.connexions[con]] == 1:
+						con.process(1)
 			time.sleep(0.1)
 	# END main
 # END GajimCore
@@ -403,21 +423,16 @@ def start():
 	"""Start the Core"""
 	gc = GajimCore()
 	loadPlugins(gc)
-################ pr des tests ###########
-#	gc.hub.sendPlugin('NOTIFY', ('aste@lagaule.org', 'online', 'online', 'oleron'))
-#	gc.hub.sendPlugin('MSG', ('ate@lagaule.org', 'msg'))
-#########################################
 	try:
 		gc.mainLoop()
 	except KeyboardInterrupt:
 		print "Keyboard Interrupt : Bye!"
-		if gc.connected:
-			gc.con.disconnect()
-		gc.hub.sendPlugin('QUIT', ())
+		for con in gc.connexions:
+			if gc.connected[gc.connexions[con]]:
+				con.disconnect()
+		gc.hub.sendPlugin('QUIT', None, ())
 		return 0
 #	except:
 #		print "Erreur survenue"
-#		if gc.connected:
-#			gc.con.disconnect()
 #		gc.hub.sendPlugin('QUIT', ())
 # END start

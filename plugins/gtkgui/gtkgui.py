@@ -1058,13 +1058,14 @@ class roster_Window:
 	def add_user_to_roster(self, user, account):
 		"""Add a user to the roster and add groups if they aren't in roster"""
 		newgrp = 0
+		showOffline = self.plugin.config['showoffline']
 		self.contacts[account][user.jid] = user
 		if user.groups == []:
 			if string.find(user.jid, "@") <= 0:
 				user.groups.append('Agents')
 			else:
 				user.groups.append('general')
-		if user.show != 'offline' or self.showOffline or 'Agents' in user.groups:
+		if user.show != 'offline' or showOffline or 'Agents' in user.groups:
 			model = self.tree.get_model()
 			for g in user.groups:
 				if not self.groups[account].has_key(g):
@@ -1096,7 +1097,7 @@ class roster_Window:
 	def draw_roster(self):
 		"""Clear and draw roster"""
 		self.tree.get_model().clear()
-		for acct in self.contacts.keys()
+		for acct in self.contacts.keys():
 			self.add_account_to_roster(acct)
 			for user in self.contacts[acct]:
 				self.add_user_to_roster(user, acct)
@@ -1138,40 +1139,39 @@ class roster_Window:
 
 	def chg_user_status(self, user, show, status, account):
 		"""When a user change his status"""
-		if self.l_contact[user.jid]['iter'] == []:
+		iters = self.get_user_iter(user.jid, account)
+		showOffline = self.plugin.config['showoffline']
+		if not iters:
 			self.add_user(user)
 		else:
 			model = self.tree.get_model()
-			if show == 'offline' and not self.showOffline:
+			if show == 'offline' and not showOffline:
 				self.remove_user(user)
 			else:
-				for i in self.l_contact[user.jid]['iter']:
+				for i in iters:
 					if self.pixbufs.has_key(show):
 						model.set_value(i, 0, self.pixbufs[show])
-			#update icon in chat window
-			if self.tab_messages.has_key(user.jid):
-				self.tab_messages[user.jid].img.set_from_pixbuf(self.pixbufs[show])
-		u.show = show
-		u.status = status
+		user.show = show
+		user.status = status
 		#Print status in chat window
-		if self.plugin.windows.has_key("%s_%s" % (user.jid, account)):
-			self.windows["%s_%s" % (user.jid, account)].print_conversation(\
+		if self.plugin.windows[account].has_key(user.jid):
+			self.plugin.windows[account][user.jid].img.set_from_pixbuf(self.pixbufs[show])
+			self.plugin.windows[account][user.jid].print_conversation(\
 				"%s is now %s (%s)" % (user.name, show, status), 'status')
 
-	def on_info(self, widget, jid):
+	def on_info(self, widget, user, account):
 		"""Call infoUser_Window class to display user's information"""
-		jid = self.l_contact[jid]['user'].jid
-		if not self.tab_vcard.has_key(jid):
-			self.tab_vcard[jid] = infoUser_Window(self.l_contact[jid]['user'], self)
+		if not self.plugin.windows[account].has_key('infos'+user.jid):
+			self.plugin.windows[account]['infos'+user.jid] = infoUser_Window(user, self.plugin)
 
-	def on_agent_logging(self, widget, jid, type):
+	def on_agent_logging(self, widget, jid, state, account):
 		"""When an agent is requested to log in or off"""
-		self.queueOUT.put(('AGENT_LOGGING', (jid, type)))
+		self.plugin.send('AGENT_LOGGING', account, (jid, state))
 		
-	def mk_menu_c(self, event, iter):
+	def mk_menu_user(self, event, iter):
 		"""Make user's popup menu"""
 		model = self.tree.get_model()
-		jid = model.get_value(iter, 2)
+		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
 		menu = gtk.Menu()
 		item = gtk.MenuItem("Start chat")
@@ -1225,16 +1225,16 @@ class roster_Window:
 	def mk_menu_agent(self, event, iter):
 		"""Make agent's popup menu"""
 		model = self.tree.get_model()
-		jid = model.get_value(iter, 1)
+		jid = model.get_value(iter, 3)
 		menu = gtk.Menu()
 		item = gtk.MenuItem("Log on")
-		if self.l_contact[jid]['user'].show != 'offline':
+		if self.contacts[jid].show != 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
 		item.connect("activate", self.on_agent_logging, jid, 'available')
 
 		item = gtk.MenuItem("Log off")
-		if self.l_contact[jid]['user'].show == 'offline':
+		if self.contacts[jid].show == 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
 		item.connect("activate", self.on_agent_logging, jid, 'unavailable')
@@ -1242,26 +1242,18 @@ class roster_Window:
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
 	
-	def authorize(self, widget, jid):
+	def authorize(self, widget, jid, account):
 		"""Authorize a user"""
-		self.queueOUT.put(('AUTH', jid))
+		self.plugin.send('AUTH', account, jid)
 
-	def req_sub(self, widget, jid, txt):
+	def req_sub(self, widget, jid, txt, account):
 		"""Request subscription to a user"""
-		self.queueOUT.put(('SUB', (jid, txt)))
-		if not self.l_contact.has_key(jid):
+		self.plugin.send('SUB', account, (jid, txt))
+		if not self.contacts[account].has_key(jid):
 			user1 = user(jid, jid, ['general'], 'requested', \
 				'requested', 'sub', '')
 			self.add_user(user1)
 	
-	def init_tree(self):
-		"""initialize treeview, l_contact and l_group"""
-		self.tree.get_model().clear()
-		#l_contact = {jid:{'user':_, 'iter':[iter1, ...]]
-		self.l_contact = {}
-		#l_group = {name:{'iter':_, 'hide':Bool}
-		self.l_group = {}
-
 	def on_treeview_event(self, widget, event):
 		"""popup user's group's or agent menu"""
 		if (event.button == 3) & (event.type == gtk.gdk.BUTTON_PRESS):
@@ -1272,16 +1264,16 @@ class roster_Window:
 				return
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
-			data = model.get_value(iter, 2)
+			type = model.get_value(iter, 2)
 			if data == 'group':
 				self.mk_menu_g(event)
 			elif data == 'agent':
 				self.mk_menu_agent(event, iter)
-			else:
-				self.mk_menu_c(event, iter)
+			elif data == 'user':
+				self.mk_menu_user(event, iter)
 			return gtk.TRUE
 		return gtk.FALSE
-	
+
 	def on_req_usub(self, widget, iter):
 		"""Remove a user"""
 		window_confirm = confirm_Window(self, iter)
@@ -1296,12 +1288,15 @@ class roster_Window:
 			txt = w.run()
 		else:
 			txt = status
-		if len(self.plugin.accounts) > 0:
-			self.queueOUT.put(('STATUS', None, (status, txt)))
-		else:
+		accounts = self.plugin.accts.get_accounts()
+		if len(accounts) == 0:
 			warning_Window("You must setup an account before connecting to jabber network.")
+			return
+		for acct in accounts:
+			self.plugin.send('STATUS', acct, (status, txt))
 
 	def on_status_changed(self, account, status):
+		"""the core tells us that our status has changed"""
 		optionmenu =  self.xml.get_widget('optionmenu')
 		for i in range(7):
 			if optionmenu.get_menu().get_children()[i].name == status:
@@ -1310,64 +1305,63 @@ class roster_Window:
 		if status == 'offline':
 			self.plugin.connected[account] = 0
 			self.plugin.sleeper = None
-			for jid in self.l_contact.keys():
-				user = self.l_contact[jid]['user']
-#TODO: give account to chg_status
-				self.chg_status(user, 'offline', 'Disconnected', 'account')
-		elif self.plugin.connected[ev[1]] == 0:
-			self.plugin.connected[ev[1]] = 1
+			for jid in self.contacts.keys():
+				user = self.contacts[jid]
+				self.chg_user_status(user, 'offline', 'Disconnected', account)
+		elif self.plugin.connected[account] == 0:
+			self.plugin.connected[account] = 1
 			self.plugin.sleeper = None#common.sleepy.Sleepy(\
 				#self.autoawaytime*60, self.autoxatime*60)
 
 	def on_message(self, jid, msg, account):
 		"""when we receive a message"""
-		if not self.l_contact.has_key(jid):
+		if not self.contacts.has_key(jid):
 			user1 = user(jid, jid, ['not in list'], \
 				'not in list', 'not in list', 'none', '')
 			self.add_user(user1)
 		autopopup = self.plugin.config['autopopup']
-		if autopopup == 0 and not self.tab_messages.has_key(jid):
+		if autopopup == 0 and not self.plugin.windows[account].has_key(jid):
 			#We save it in a queue
-			if not self.tab_queues.has_key(jid):
+			if not self.plugin.queues[account].has_key(jid):
 				model = self.tree.get_model()
-				self.tab_queues[jid] = Queue.Queue(50)
-				for i in self.l_contact[jid]['iter']:
+				self.plugin.queues[account][jid] = Queue.Queue(50)
+				for i in self.get_user_iter(jid, account):
 					model.set_value(i, 0, self.pixbufs['message'])
 			tim = time.strftime("[%H:%M:%S]")
-			self.tab_queues[jid].put((msg, tim))
+			self.plugin.queues[account][jid].put((msg, tim))
 		else:
-			if not self.tab_messages.has_key(jid):
-				if self.l_contact.has_key(jid):
-					self.tab_messages[jid] = \
-						message_Window(self.l_contact[jid]['user'], self)
-			self.tab_messages[jid].print_conversation(msg)
+			if not self.plugin.windows[account].has_key(jid):
+				self.plugin.windows[account][jid] = \
+					message_Window(self.contacts[account][jid], self)
+			self.plugin.windows[account][jid].print_conversation(msg)
 
 	def on_prefs(self, widget):
 		"""When preferences is selected :
 		call the preference_Window class"""
-		window = preference_Window(self)
+		if not self.plugin.windows.has_key('preferences'):
+			self.plugin.windows['preferences'] = preference_Window(self)
 
 	def on_add(self, widget):
 		"""When add user is selected :
 		call the add class"""
-		window_add = addContact_Window(self)
+		addContact_Window(self)
 
 	def on_about(self, widget):
 		"""When about is selected :
 		call the about class"""
-		window_about = about_Window()
+		if not self.plugin.windows.has_key('about'):
+			self.plugin.windows['about'] = about_Window()
 
 	def on_accounts(self, widget):
 		"""When accounts is seleted :
 		call the accounts class to modify accounts"""
-		global accountsWindow
-		if not accountsWindow:
-			accountsWindow = accounts_Window(self)
+		if not self.plugin.windows.has_key('accounts'):
+			self.plugin.windows['accounts'] = accounts_Window(self)
 	
 	def on_quit(self, widget):
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
-		self.queueOUT.put(('QUIT',''))
+		self.plugin.send('QUIT', None, '')
 		print "plugin gtkgui stopped"
 		gtk.mainquit()
 
@@ -1375,20 +1369,25 @@ class roster_Window:
 		"""When an iter is dubble clicked :
 		open the chat window"""
 		model = self.tree.get_model()
+		acct_iter = model.get_iter((path[0]))
+		account = model.get_value(acct_iter, 3)
 		iter = model.get_iter(path)
-		jid = model.get_value(iter, 2)
-		if (jid == 'group'):
+		type = model.get_value(iter, 2)
+		jid = model.get_value(iter, 3)
+		if (type == 'group'):
 			if (self.tree.row_expanded(path)):
 				self.tree.collapse_row(path)
 			else:
 				self.tree.expand_row(path, FALSE)
 		else:
-			if self.tab_messages.has_key(jid):
-				self.tab_messages[jid].window.present()
-			elif self.l_contact.has_key(jid):
-				self.tab_messages[jid] = message_Window(self.l_contact[jid]['user'], self)
-				if self.tab_queues.has_key(jid):
-					self.tab_messages[jid].read_queue(self.tab_queues[jid])
+			if self.plugin.windows[account].has_key(jid):
+				self.plugin.windows[account][jid].window.present()
+			elif self.contacts[account].has_key(jid):
+				self.plugin.windows[account][jid] = \
+					message_Window(self.contacts[account][jid], self)
+				if self.plugin.queues[account].has_key(jid):
+					self.plugin.windows[account][jid].read_queue(\
+						self.plugin.queues[account][jid])
 
 	def on_row_expanded(self, widget, iter, path):
 		"""When a row is expanded :
@@ -1425,13 +1424,15 @@ class roster_Window:
 	def on_browse(self, widget):
 		"""When browse agent is selected :
 		Call browse class"""
-		global browserWindow
-		if not browserWindow:
-			browserWindow = browseAgent_Window(self)
+		if not self.plugin.windows.has_key('browser'):
+			self.plugin.windows['browser'] = browseAgent_Window(self)
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
-		self.path = 'plugins/gtkgui/icons/' + self.iconstyle + '/'
+		iconstyle = self.plugin.config['iconstyle']
+		if not iconstyle:
+			iconstyle = 'sun'
+		self.path = 'plugins/gtkgui/icons/' + iconstyle + '/'
 		self.pixbufs = {}
 		for state in ('online', 'away', 'xa', 'dnd', 'offline', \
 			'requested', 'message', 'opened', 'closed', 'not in list'):
@@ -1454,24 +1455,23 @@ class roster_Window:
 	def on_show_off(self, widget):
 		"""when show offline option is changed :
 		redraw the treeview"""
-		self.showOffline = 1 - self.showOffline
+		self.plugin.config['showoffline'] = 1 - self.plugin.config['showoffline']
 		self.redraw_roster()
 
 	def __init__(self, plugin):
 		# FIXME : handle no file ...
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim')
-		self.window =  self.xml.get_widget('Gajim')
 		self.tree = self.xml.get_widget('treeview')
 		self.plugin = plugin
-		self.connected = 0
+		self.connected = {}
+		self.contacts = {}
+		for a in self.plugin.accounts.keys():
+			self.contacts[a] = {}
+			self.connected[a] = 0
 		#(icon, name, type, jid, editable)
 		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, str, \
 			gobject.TYPE_BOOLEAN)
 		self.tree.set_model(model)
-		self.init_tree()
-		self.iconstyle = self.plugin.config['iconstyle']
-		if not self.iconstyle:
-			self.iconstyle = 'sun'
 		self.mkpixbufs()
 #		map = self.tree.get_colormap()
 #		colour = map.alloc_color("red") # light red
@@ -1491,19 +1491,9 @@ class roster_Window:
 #		print self.tree.get_property('expander-column')
 #		self.tree.set_style(st)
 		self.xml.get_widget('optionmenu').set_history(6)
-		self.tab_messages = {}
-		self.tab_queues = {}
-		self.tab_vcard = {}
 
-		if self.plugin.config.has_key('showoffline'):
-			self.showOffline = self.plugin.config['showoffline']
-		else:
-			self.showOffline = 0
-
-		xml.get_widget('show_offline').set_active(self.showOffline)
-
-		self.grpbgcolor = 'gray50'
-		self.userbgcolor = 'white'
+		showOffline = self.plugin.config['showoffline']
+		self.xml.get_widget('show_offline').set_active(showOffline)
 
 		#columns
 		col = gtk.TreeViewColumn()
@@ -1524,20 +1514,20 @@ class roster_Window:
 		self.tree.set_expander_column(col)
 
 		#signals
-		xml.signal_connect('gtk_main_quit', self.on_quit)
-		xml.signal_connect('on_preferences_activate', self.on_prefs)
-		xml.signal_connect('on_accounts_activate', self.on_accounts)
-		xml.signal_connect('on_browse_agents_activate', self.on_browse)
-		xml.signal_connect('on_add_activate', self.on_add)
-		xml.signal_connect('on_show_offline_activate', self.on_show_off)
-		xml.signal_connect('on_about_activate', self.on_about)
-		xml.signal_connect('on_quit_activate', self.on_quit)
-		xml.signal_connect('on_treeview_event', self.on_treeview_event)
-		xml.signal_connect('on_status_changed', self.on_status_changed)
-		xml.signal_connect('on_optionmenu_changed', self.on_optionmenu_changed)
-		xml.signal_connect('on_row_activated', self.on_row_activated)
-		xml.signal_connect('on_row_expanded', self.on_row_expanded)
-		xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
+		self.xml.signal_connect('gtk_main_quit', self.on_quit)
+		self.xml.signal_connect('on_preferences_activate', self.on_prefs)
+		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
+		self.xml.signal_connect('on_browse_agents_activate', self.on_browse)
+		self.xml.signal_connect('on_add_activate', self.on_add)
+		self.xml.signal_connect('on_show_offline_activate', self.on_show_off)
+		self.xml.signal_connect('on_about_activate', self.on_about)
+		self.xml.signal_connect('on_quit_activate', self.on_quit)
+		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
+		self.xml.signal_connect('on_status_changed', self.on_status_changed)
+		self.xml.signal_connect('on_optionmenu_changed', self.on_optionmenu_changed)
+		self.xml.signal_connect('on_row_activated', self.on_row_activated)
+		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
+		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
 
 class plugin:
 	"""Class called by the core in a new thread"""
@@ -1667,8 +1657,8 @@ class plugin:
 				#TODO: change icon
 			#('AGENTS', account, agents)
 			elif ev[0] == 'AGENTS':
-				if self.windows.has_key('browser'):
-					self.windows['browser'].agents(ev[2])
+				if self.windows[ev[1]].has_key('browser'):
+					self.windows[ev[1]]['browser'].agents(ev[2])
 			#('AGENTS_INFO', account, (agent, infos))
 			elif ev[0] == 'AGENT_INFO':
 				if not ev[2][1].has_key('instructions'):
@@ -1679,8 +1669,8 @@ class plugin:
 			elif ev[0] == 'ACC_OK':
 				self.accounts[ev[2][3]] =  {'ressource': ev[2][4], \
 					'password': ev[2][2], 'hostname': ev[2][0], 'name': ev[2][1]}
-				self.send('CONFIG', None, ('accounts', self.accounts)))
-				if self.windiws.has_key('accounts'):
+				self.send('CONFIG', None, ('accounts', self.accounts))
+				if self.windows.has_key('accounts'):
 					self.windows['accounts'].init_accounts()
 			elif ev[0] == 'QUIT':
 				self.roster.on_quit(self)
@@ -1717,7 +1707,6 @@ class plugin:
 		gtk.threads_enter()
 		self.queueIN = quIN
 		self.queueOUT = quOUT
-		self.windows = {}
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'showoffline':0,\
 			'autoaway':0,\
@@ -1731,6 +1720,11 @@ class plugin:
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
 		self.accounts = self.wait('CONFIG')
+		self.windows = {}
+		self.queues = {}
+		for a in self.accounts.keys():
+			self.windows[a] = {}
+			self.queues[a] = {}
 		self.roster = roster_Window(self)
 #		if self.config.has_key('autoaway'):
 #			self.autoaway = self.config['autoaway']
