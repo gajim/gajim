@@ -1,0 +1,39 @@
+ Gajim 0.6 release is here! (TODO)
+Version 0.6 of Gajim is now Available.
+What's new since 0.5.1:
+
+    * Gajim's user interface is now nicer.
+    * Groupchat just got better.
+    * URL, mailto and ascii formatin (* / _) detection
+    * Better transports detection, group management, and many minor additions/bugfixes
+
+0.5.1 release of Gajim ! (27 february 2005)
+Version 0.5.1 of Gajim is now Available.
+What's new since 0.5:
+
+    * Minor bugfixes.
+
+0.5 release of Gajim ! (26 February 2005)
+Version 0.5 of Gajim is now Available.
+What's new since 0.4.1:
+
+    * Possibility to use tabbed chat window
+    * Sound support under GNU/linux
+    * Autoaway available under Microsoft Windows
+
+0.4.1 release of Gajim ! (23 January 2005)
+Version 0.4.1 of Gajim is now Available.
+What's new since 0.4:
+
+    * Bugfix in config file parser (fix config file parser to handle emoticons)
+    * Bugfix with GPG signatures
+
+0.4 release of Gajim ! (21 January 2005)
+Version 0.4 of Gajim is now Available.
+What's new since 0.3:
+
+    * New option: regroup accounts
+    * Emoticons support with a binder
+    * GUI improvements
+    * Bugfixes
+
