@@ -467,10 +467,10 @@ class Chat:
 		return index
 		
 	def print_special_text(self, special_text, other_tags, conversation_buffer):
-		# make it CAPS (emoticons keys are all CAPS)
 		tags = []
 		use_other_tags = True
-		possible_emot_ascii_caps = special_text.upper()
+
+		possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
 		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
 			#it's an emoticon
 			emot_ascii = possible_emot_ascii_caps
