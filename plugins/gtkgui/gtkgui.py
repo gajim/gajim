@@ -696,16 +696,23 @@ class tabbed_chat_window:
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
+		removed_spaces = False
+		
 		print text
-		if text[0] == ' ': # that happens ATM only with formating detection 
-			text = text.lstrip() # remove ALL leading spaces
-			#(I add those in the formating detection later)
+		if not text[0] == '*': # workaround until lookbehind regexp is here
+			if text[0] == ' ': # that happens ATM only with formating detection 
+				text = text.lstrip() # remove ALL leading spaces
+				print 'removed spaces'
+				removed_spaces = True
+				#(I add those in the formating detection later)
 		print 'text after'
 		print text
 		
-		if text in self.plugin.emoticons.keys():
+		# make it CAPS (emoticons keys are are CAPS)
+		possible_emot_ascii_caps = text.upper()
+		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
 			#it's an emoticon
-			text = text.upper() # make it CAPS (emoticons keys are are CAPS)
+			text = possible_emot_ascii_caps
 			print 'emoticon:', text
 			end_iter = conversation_buffer.get_end_iter()
 			conversation_buffer.insert_pixbuf(end_iter, \
@@ -734,7 +741,10 @@ class tabbed_chat_window:
 			#it's an underlined text
 			tag = 'underline'
 			text = text[1:-1] # remove _ _
-			text = ' ' + text # add the first space
+			print 'removed_spaces', removed_spaces
+			if removed_spaces:
+				print 'adding one leading space'
+				text = ' ' + text # add the first space
 			print tag
 		else:
 			#it's a url
@@ -3556,8 +3566,8 @@ class plugin:
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
 		mail = r'\bmailto:\S+|' r'\b\S+@\S+\.\S+'
 
-		#detects eg. *b* *bold* *bold bold*
-		#doesn't detect (it's a feature :P) * bold* *bold * * bold *
+		#detects eg. *b* *bold* *bold bold* test *bold*
+		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
 		formatting = r'(\s+|^)\*[^\s*]([^*]*[^\s*])?\*|' r'(\s+|^)/[^\s*]([^/]*[^\s*])?/|' r'(\s+|^)_[^\s*]([^_]*[^\s*])?_'
 
 		if formatting_on:
