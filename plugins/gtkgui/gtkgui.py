@@ -557,6 +557,11 @@ class tabbed_chat_window:
 				self.chat_notebook.set_current_page(current+1)
 			else:
 				self.chat_notebook.set_current_page(0)
+		elif (event.state & gtk.gdk.CONTROL_MASK) or (event.keyval ==\
+			gtk.keysyms.Control_L) or (event.keyval == gtk.keysyms.Control_R):
+			# we pressed a control key or ctrl+sth : we don't block the event
+			# in order to let ctrl+c do its work
+			pass
 		else: # it's a normal key press make sure message_textview has focus
 			message_textview = self.xmls[jid].get_widget('message_textview')
 			if not message_textview.is_focus():
