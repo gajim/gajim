@@ -1628,6 +1628,9 @@ class plugin:
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (hostname, login, pasword, name, ressource, prio,
 		#use_proxy, proxyhost, proxyport))
+		if self.windows['accountPreference']:
+			self.windows['accountPreference'].destroy()
+		name = array[3]
 		self.accounts[array[3]] = {'name': array[1], \
 					'hostname': array[0],\
 					'password': array[2],\
@@ -1642,8 +1645,10 @@ class plugin:
 		self.connected[name] = 0
 		self.roster.groups[name] = {}
 		self.roster.contacts[name] = {}
+		self.sleeper_state[a] = 0
 		if self.windows.has_key('accounts'):
 			self.windows['accounts'].init_accounts()
+		self.roster.draw_roster()
 
 	def handle_event_quit(self, p1, p2):
 		self.roster.on_quit(self)

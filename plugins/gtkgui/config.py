@@ -351,6 +351,9 @@ class accountPreference_Window:
 		"""When Close button is clicked"""
 		widget.get_toplevel().destroy()
 
+	def destroy(self):
+		self.xml.get_widget("Account").destroy()
+
 	def init_account(self, infos):
 		"""Initialize window with defaults values"""
 		if infos.has_key('name'):
@@ -388,6 +391,7 @@ class accountPreference_Window:
 		entryProxyhost = self.xml.get_widget("entry_proxyhost")
 		entryProxyport = self.xml.get_widget("entry_proxyport")
 		proxyPort = entryProxyport.get_text()
+		proxyHost = entryProxyhost.get_text()
 		name = entryName.get_text()
 		jid = entryJid.get_text()
 		if (name == ''):
@@ -399,12 +403,15 @@ class accountPreference_Window:
 		if (jid == '') or (string.count(jid, '@') != 1):
 			warning_Window(_("You must enter a Jabber ID for this account\nFor example : login@hostname"))
 			return 0
-		if proxyPort != '':
-			try:
-				proxyPort = string.atoi(proxyPort)
-			except ValueError:
-				warning_Window(_("Proxy Port must be a port number"))
-				return 0
+		if useProxy:
+			if proxyPort != '':
+				try:
+					proxyPort = string.atoi(proxyPort)
+				except ValueError:
+					warning_Window(_("Proxy Port must be a port number"))
+					return 0
+			if proxyHost == '':
+				warning_Window(_("You must enter a proxy host to use proxy"))
 		if prio != '':
 			try:
 				prio = string.atoi(prio)
@@ -455,7 +462,7 @@ class accountPreference_Window:
 			if check.get_active():
 				self.plugin.send('NEW_ACC', None, (hostname, login, \
 					entryPass.get_text(), name, entryRessource.get_text(), prio, \
-					checkProxy.get_active(), entryProxyhost.get_text(), proxyPort))
+					useProxy, proxyHost, proxyPort))
 				check.set_active(FALSE)
 				return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\

@@ -409,11 +409,11 @@ class GajimCore:
 				#('REG_AGENT', account, infos)
 				elif ev[0] == 'REG_AGENT':
 					con.sendRegInfo(ev[2])
-				#('NEW_ACC', (hostname, login, password, name, ressource, use_proxy\
-				#, proxyhost, proxyport))
+				#('NEW_ACC', (hostname, login, password, name, ressource, prio, \
+				# use_proxy, proxyhost, proxyport))
 				elif ev[0] == 'NEW_ACC':
-					if ev[2][5]:
-						proxy = {'host': ev[2][6], 'port': ev[2][7]}
+					if ev[2][6]:
+						proxy = {'host': ev[2][7], 'port': ev[2][8]}
 					else:
 						proxy = None
 					c = common.jabber.Client(host = ev[2][0], debug = [], \
