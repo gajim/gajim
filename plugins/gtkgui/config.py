@@ -849,6 +849,10 @@ class preferences_window:
 		self.auto_pp_away_checkbutton.set_active(st)
 		self.auto_pp_away_checkbutton.set_sensitive(self.plugin.config['autopopup'])
 
+		#Ignore messages from unknown contacts
+		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
+			set_active(self.plugin.config['ignore_unknown_contacts'])
+
 		#sound player
 		self.xml.get_widget('soundplayer_entry').set_text(\
 			self.plugin.config['soundplayer'])
