@@ -261,7 +261,7 @@ class Roster_window:
 			for account in self.plugin.accounts.keys():
 				our_jid = self.plugin.accounts[account]['name'] + '@' +\
 					self.plugin.accounts[account]['hostname']
-				item = gtk.MenuItem(_('as ') + our_jid)
+				item = gtk.MenuItem(_('using ') + account + _(' account'))
 				sub_menu.append(item)
 				item.connect('activate', self.on_service_disco_menuitem_activate, account)
 			sub_menu.show_all()
