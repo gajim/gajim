@@ -22,13 +22,9 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 from gtk import TRUE, FALSE
-import gtk.glade
-import gobject
-import os
-import string
-import time
-import Queue
-import common.optparser
+import gtk.glade,gobject
+import os,string,time,Queue
+import common.optparser,common.sleepy
 CONFPATH = "~/.gajimrc"
 Wbrowser = 0
 Waccounts = 0
@@ -111,6 +107,11 @@ class prefs:
 		self.r.cfgParser.set('GtkGui', 'statusmsgcolor', colSt)
 		for j in self.r.tab_messages.keys():
 			self.r.tab_messages[j].tagStatus.set_property("foreground", colSt)
+		#IconStyle
+		ist = self.combo_iconstyle.entry.get_text()
+		self.r.cfgParser.set('GtkGui', 'iconstyle', ist)
+		self.r.iconstyle = ist
+		self.r.mkpixbufs()
 		#autopopup
 		pp = self.chk_autopp.get_active()
 		if pp == True:
@@ -119,11 +120,18 @@ class prefs:
 		else:
 			self.r.cfgParser.set('GtkGui', 'autopopup', '0')
 			self.r.autopopup = 0
-		#IconStyle
-		ist = self.combo_iconstyle.entry.get_text()
-		self.r.cfgParser.set('GtkGui', 'iconstyle', ist)
-		self.r.iconstyle = ist
-		self.r.mkpixbufs()
+		#autoaway
+		aw = self.chk_autoaway.get_active()
+		if aw == True:
+			self.r.cfgParser.set('GtkGui', 'autoaway', '1')
+			self.r.plugin.autoaway = 1
+		else:
+			self.r.cfgParser.set('GtkGui', 'autoaway', '0')
+			self.r.plugin.autoaway = 0
+		aat = self.spin_autoawaytime.get_value_as_int()
+		self.r.plugin.autoawaytime = aat
+		self.r.cfgParser.set('GtkGui', 'autoawaytime', aat)
+		self.r.plugin.sleeper = common.sleepy.Sleepy(self.r.plugin.autoawaytime*60)
 		
 		self.r.cfgParser.writeCfgFile()
 		self.r.cfgParser.parseCfgFile()
@@ -141,8 +149,10 @@ class prefs:
 		self.da_in = self.xml.get_widget("drawing_in")
 		self.da_out = self.xml.get_widget("drawing_out")
 		self.da_status = self.xml.get_widget("drawing_status")
-		self.chk_autopp = self.xml.get_widget("chk_autopopup")
 		self.combo_iconstyle = self.xml.get_widget("combo_iconstyle")
+		self.chk_autopp = self.xml.get_widget("chk_autopopup")
+		self.chk_autoaway = self.xml.get_widget("chk_autoaway")
+		self.spin_autoawaytime = self.xml.get_widget("spin_autoawaytime")
 
 		#Color for incomming messages
 		colSt = self.r.cfgParser.GtkGui_inmsgcolor
@@ -168,13 +178,6 @@ class prefs:
 		self.colorStatus = cmapStatus.alloc_color(colSt)
 		self.da_status.window.set_background(self.colorStatus)
 		
-		#Autopopup
-		st = self.r.cfgParser.GtkGui_autopopup
-		if not st:
-			st = '0'
-		pp = string.atoi(st)
-		self.chk_autopp.set_active(pp)
-
 		#iconStyle
 		list_style = os.listdir('plugins/gtkgui/icons/')
 		l = []
@@ -187,6 +190,25 @@ class prefs:
 		if self.r.iconstyle in l:
 			self.combo_iconstyle.entry.set_text(self.r.iconstyle)
 		
+		#Autopopup
+		st = self.r.cfgParser.GtkGui_autopopup
+		if not st:
+			st = '0'
+		pp = string.atoi(st)
+		self.chk_autopp.set_active(pp)
+
+		#Autoaway
+		st = self.r.cfgParser.GtkGui_autoaway
+		if not st:
+			st = '1'
+		aw = string.atoi(st)
+		self.chk_autoaway.set_active(aw)
+		st = self.r.cfgParser.GtkGui_autoawaytime
+		if not st:
+			st = '10'
+		ti = string.atoi(st)
+		self.spin_autoawaytime.set_value(ti)
+
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_but_col_clicked', self.on_color_button_clicked)
 		self.xml.signal_connect('on_ok_clicked', self.on_ok)
@@ -638,10 +660,6 @@ class roster:
 			self.add_user(self.l_contact[j]['user'])
 	
 	def mklists(self, tab):
-		""" l_contact = {jid:{'user':_, 'iter':[iter1, ...]] """
-		self.l_contact = {}
-		""" l_group = {name:iter} """
-		self.l_group = {}
 		for jid in tab.keys():
 			#remove ressource from jid string
 			ji = string.split(jid, '/')[0]
@@ -775,8 +793,13 @@ class roster:
 #		if (not self.showOffline) and widget.name == 'offline':
 #			self.treestore.clear()
 		if widget.name == 'offline':
+			self.connected = 0
+			self.plugin.sleeper = None
 			for j in self.l_contact.keys():
 				self.chg_status(j, 'offline', 'Disconnected')
+		else:
+			self.connected = 1
+			self.plugin.sleeper = common.sleepy.Sleepy(self.plugin.autoawaytime*60)
 
 	def on_prefs(self, widget):
 		window = prefs(self)
@@ -795,6 +818,7 @@ class roster:
 	def on_quit(self, widget):
 		self.queueOUT.put(('QUIT',''))
 		gtk.mainquit()
+#		sys.exit(0)
 
 	def on_row_activated(self, widget, path, col=0):
 		iter = self.treestore.get_iter(path)
@@ -862,9 +886,13 @@ class roster:
 		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Gajim')
 		self.window =  self.xml.get_widget('Gajim')
 		self.tree = self.xml.get_widget('treeview')
-		self.plug = plug
+		self.plugin = plug
 		#(icon, name, jid, editable, background color, show_icon)
 		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, gobject.TYPE_BOOLEAN, str, gobject.TYPE_BOOLEAN)
+		#l_contact = {jid:{'user':_, 'iter':[iter1, ...]]
+		self.l_contact = {}
+		#l_group = {name:iter}
+		self.l_group = {}
 		self.iconstyle = self.cfgParser.GtkGui_iconstyle
 		if not self.iconstyle:
 			self.iconstyle = 'sun'
@@ -1046,14 +1074,50 @@ class plugin:
 				if (Waccounts != 0):
 					Waccounts.init_accounts()
 		return 1
+	
+	def read_sleepy(self):
+		if self.sleeper:
+			state_pres = None
+			self.sleeper.poll()
+			state = self.sleeper.getState()
+			if state != self.sleeper_state:
+				accountsStr = self.r.cfgParser.Profile_accounts
+				accounts = string.split(accountsStr, ' ')
+				if state == common.sleepy.STATE_WOKEN:
+					#on repasse online
+					self.r.optionmenu.set_history(0)
+					self.r.queueOUT.put(('STATUS',('online', accounts[0])))
+				if state == common.sleepy.STATE_SLEEPING:
+					#on passe away
+					self.r.optionmenu.set_history(1)
+					self.r.queueOUT.put(('STATUS',('away', accounts[0])))
+				if state_pres: 
+					pass
+					#self.send(state_pres)
+			self.sleeper_state = state
+		return 1
 
 	def __init__(self, quIN, quOUT):
 		gtk.threads_init()
 		gtk.threads_enter()
 		self.queueIN = quIN
 		self.r = roster(quOUT, self)
+		st = self.r.cfgParser.GtkGui_autoaway
+		if not st:
+			st = '1'
+		self.autoaway = string.atoi(st)
+		st = self.r.cfgParser.GtkGui_autoawaytime
+		if not st:
+			st = '10'
+		self.autoawaytime = string.atoi(st)
 		self.time = gtk.timeout_add(200, self.read_queue)
+		gtk.timeout_add(1000, self.read_sleepy)
+		self.sleeper = None
+#		self.sleeper = common.sleepy.Sleepy(10)
+		self.sleeper_state = None
 		gtk.main()
+#		while 1:
+#			while gtk.events_pending(): gtk.mainiteration()
 		gtk.threads_leave()
 
 if __name__ == "__main__":
