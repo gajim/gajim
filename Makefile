@@ -14,14 +14,22 @@ LANGS		= fr pt_BR
 SCRIPTS = \
 	scripts/gajim
 
-all:
+all: translation trayicon idle
+
+translation:
 	for l in $(LANGS) ; do \
 		msgfmt Messages/$$l/LC_MESSAGES/gajim.po -o Messages/$$l/LC_MESSAGES/gajim.mo; \
 	done
-	$(foreach sdir, $(MODULES), make -C $(sdir) all;)
+
+trayicon:
+	make -C plugins/gtkgui all;
+
+idle:
+	make -C common all;
 
 clean:
 	find -name *.pyc -exec rm {} \;
+	find -name *.mo -exec rm {} \;
 	$(foreach sdir, $(MODULES), make -C $(sdir) clean;)
 
 # FIXME -- olé gorito
