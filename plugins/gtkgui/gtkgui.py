@@ -69,9 +69,12 @@ class info_user:
 
 	def on_close(self, widget):
 		"""Save user's informations and update the roster on the Jabber server"""
-		for i in self.r.l_contact[self.user.jid]['iter']:
-			self.r.tree.get_model().remove(i)
-		self.r.l_contact[self.user.jid]['iter'] = []
+		#update user.name if it's not ""
+		newName = self.entry_name.get_text()
+		if newName != '':
+			self.user.name = newName
+		#update user.groups and redraw the user in the roster
+		self.r.remove_user(self.user)
 		self.user.groups = []
 		model = self.list2.get_model()
 		model.foreach(self.add_grp_to_user)
@@ -143,7 +146,8 @@ class info_user:
 		xml.get_widget('label_name').set_text(user.name)
 		xml.get_widget('label_id').set_text(user.jid)
 		xml.get_widget('label_resource').set_text(user.resource)
-		xml.get_widget('entry_name').set_text(user.name)
+		self.entry_name = xml.get_widget('entry_name')
+		self.entry_name.set_text(user.name)
 		if not user.status:
 			user.status = ''
 		xml.get_widget('label_status').set_text(user.show + ' : ' + \
@@ -607,8 +611,8 @@ class confirm:
 		model = self.r.tree.get_model()
 		jid = model.get_value(self.iter, 2)
 		self.r.queueOUT.put(('UNSUB', jid))
+		self.r.remove_user(self.r.l_contact[jid]['user'])
 		del self.r.l_contact[jid]
-		model.remove(self.iter)
 		self.delete_event(self)
 	
 	def __init__(self, roster, iter):
@@ -899,6 +903,20 @@ class roster:
 				if newgrp == 1:
 					#expand new groups
 					self.tree.expand_row(model.get_path(iterG), FALSE)
+	
+	def remove_user(self, u):
+		model = self.tree.get_model()
+		for i in self.l_contact[u.jid]['iter']:
+			parent_i = model.iter_parent(i)
+			if model.iter_n_children(parent_i) == 1:
+				model.remove(i)
+				grp = model.get_value(parent_i, 1)
+				model.remove(parent_i)
+				self.l_group[grp]['iter'] = None
+			else:
+				model.remove(i)
+		self.l_contact[u.jid]['iter'] = []
+		
 
 	def redraw_roster(self):
 		"""clear l_contact and l_group's iter and redraw roster"""
@@ -933,22 +951,11 @@ class roster:
 			for i in tab[jid]['groups'] :
 				if not i in self.l_group.keys():
 					self.l_group[i] = {'iter':None, 'hide':False}
+			#update icon if chat window is oppened
+			if self.tab_messages.has_key(jid):
+				self.tab_messages[jid].user = user1
+				self.tab_messages[jid].img.set_from_pixbuf(self.pixbufs[show])
 
-#	def update_iter(self, widget, path, iter, data):
-#		"""remove or change icon of iter"""
-#		model = self.tree.get_model()
-#		jid = model.get_value(iter, 2)
-#		if jid == data[0]:
-#			if data[1] == 'offline':
-#				model.remove(iter)
-#				if not self.showOffline:
-#					self.found = 1
-#			else:
-#				model.set_value(iter, 0, self.pixbufs[data[1]])
-#				self.found = 1
-#			return 1
-#		return 0
-	
 	def chg_status(self, jid, show, status):
 		"""When a user change his status remove or change its icon"""
 		u = self.l_contact[jid]['user']
@@ -957,16 +964,7 @@ class roster:
 		else:
 			model = self.tree.get_model()
 			if show == 'offline' and not self.showOffline:
-				for i in self.l_contact[jid]['iter']:
-					parent_i = model.iter_parent(i)
-					if model.iter_n_children(parent_i) == 1:
-						model.remove(i)
-						grp = model.get_value(parent_i, 1)
-						model.remove(parent_i)
-						self.l_group[grp]['iter'] = None
-					else:
-						model.remove(i)
-				self.l_contact[jid]['iter'] = []
+				self.remove_user(u)
 			else:
 				for i in self.l_contact[jid]['iter']:
 					if self.pixbufs.has_key(show):
@@ -1303,7 +1301,6 @@ class plugin:
 				self.r.init_tree()
 				self.r.mklists(ev[1])
 				self.r.draw_roster()
-				#TODO: update onpened chat window
 			elif ev[0] == 'WARNING':
 				warning(ev[1])
 			elif ev[0] == 'STATUS':
@@ -1319,7 +1316,6 @@ class plugin:
 					for j in self.r.l_contact.keys():
 						self.r.chg_status(j, 'offline', 'Disconnected')
 				elif self.r.connected == 0:
-#					self.tree
 					self.r.connected = 1
 					self.r.plugin.sleeper = common.sleepy.Sleepy(\
 						self.autoawaytime*60, self.autoxatime*60)
@@ -1396,7 +1392,10 @@ class plugin:
 				else:
 					user1 = user(jid, jid, ['general'], 'online', 'online', 'to', ev[1]['ressource'])
 					self.r.add_user(user1)
-				#TODO: print 'you are now authorized'
+				warning("You are now authorized by " + jid)
+			elif ev[0] == 'UNSUBSCRIBED':
+				warning("You are now unsubscribed by " + jid)
+				#TODO: change icon
 			elif ev[0] == 'AGENTS':
 				if Wbrowser:
 					Wbrowser.agents(ev[1])

@@ -85,6 +85,7 @@ class GajimCore:
 			log.debug("unsubscribe request from %s" % who)
 		elif type == 'unsubscribed':
 			log.debug("we are now unsubscribed to %s" % who)
+			self.hub.sendPlugin('UNSUBSCRIBED', prs.getFrom().getBasic())
 		elif type == 'error':
 #			print "\n\n******** ERROR *******"
 #			print "From : %s" % prs.getFrom()
