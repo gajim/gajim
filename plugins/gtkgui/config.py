@@ -1629,6 +1629,8 @@ class Service_discovery_window:
 		if jid in self.latest_addresses:
 			self.latest_addresses.remove(jid)
 		self.latest_addresses.insert(0, jid)
+		if len(self.latest_addresses) > 10:
+			self.latest_addresses = self.latest_addresses[0:10]
 		self.address_comboboxentry.get_model().clear()
 		for j in self.latest_addresses:
 			self.address_comboboxentry.append_text(j)
@@ -1669,6 +1671,8 @@ class Service_discovery_window:
 		if jid in self.latest_addresses:
 			self.latest_addresses.remove(jid)
 		self.latest_addresses.insert(0, jid)
+		if len(self.latest_addresses) > 10:
+			self.latest_addresses = self.latest_addresses[0:10]
 		for j in self.latest_addresses:
 			self.address_comboboxentry.append_text(j)
 		self.address_comboboxentry.child.set_text(jid)
