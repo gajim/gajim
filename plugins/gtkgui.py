@@ -136,6 +136,58 @@ class authorize:
 		self.xml.signal_connect('on_button_deny_clicked', self.deny)
 		self.xml.signal_connect('on_button_close_clicked', self.delete_event)
 
+class agent_reg:
+	def delete_event(self, widget):
+		self.window.destroy()
+	
+	def draw_table(self):
+		for name in self.infos.keys():
+			if name != 'key' and name != 'instructions' and name != 'x':
+				self.nbrow = self.nbrow + 1
+				self.table.resize(rows=self.nbrow, columns=2)
+				label = gtk.Label(name)
+				self.table.attach(label, 0, 1, self.nbrow-1, self.nbrow, 0, 0, 0, 0)
+				entry = gtk.Entry()
+				entry.set_text(self.infos[name])
+				self.table.attach(entry, 1, 2, self.nbrow-1, self.nbrow, 0, 0, 0, 0)
+				self.entries[name] = entry
+				if self.nbrow == 1:
+					entry.grab_focus()
+		self.table.show_all()
+	
+	def on_ok(self, widget):
+		for name in self.entries.keys():
+			self.infos[name] = self.entries[name].get_text()
+		self.r.queueOUT.put(('REG_AGENT', self.agent))
+		print self.infos
+#		jid = string.replace(jid, '@', '')
+#		if not self.r.l_group.has_key('Agents'):
+#			iterG = self.r.treestore.append(None, (None, \
+#				'Agents', 'group', FALSE))
+#			self.r.l_group['Agent'] = iterG
+#		user1 = user(jid, jid, ['Agent'], 'online', 'online', 'from')
+#		iterU = self.r.treestore.append(self.r.l_group['Agent'], \
+#			(self.r.pixbufs['online'], jid, jid, TRUE))
+#		self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
+		self.delete_event(self)
+	
+	def __init__(self, agent, infos, roster):
+		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'agent_reg')
+		self.infos = infos
+		self.r = roster
+		self.agent = agent
+		self.window = self.xml.get_widget('agent_reg')
+		self.table = self.xml.get_widget('table')
+		self.window.set_title('Register to ' + agent)
+		self.xml.get_widget('label').set_text(infos['instructions'])
+		self.nbrow = 0
+		self.entries = {}
+		self.draw_table()
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_button_cancel_clicked', self.delete_event)
+		self.xml.signal_connect('on_button_ok_clicked', self.on_ok)
+		
+
 class browser:
 	def delete_event(self, widget):
 		global Wbrowser
@@ -148,11 +200,17 @@ class browser:
 	def agents(self, agents):
 		for jid in agents.keys():
 			iter = self.model.append()
-			self.model.set(iter, 0, agents[jid]['name'], 1, jid)
+			self.model.set(iter, 0, agents[jid]['name'], 1, agents[jid]['service'])
 
 	def on_refresh(self, widget):
 		self.model.clear()
 		self.browse()
+
+	def on_row_activated(self, widget, path, col=0):
+		iter = self.model.get_iter(path)
+		service = self.model.get_value(iter, 1)
+		self.r.queueOUT.put(('REQ_AGENT_INFO', service))
+		self.delete_event(self)
 		
 	def __init__(self, roster):
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'browser')
@@ -167,11 +225,12 @@ class browser:
 		self.treeview.insert_column_with_attributes(-1, 'Name', renderer, text=0)
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
-		self.treeview.insert_column_with_attributes(-1, 'JID', renderer, text=1)
-		
+		self.treeview.insert_column_with_attributes(-1, 'Service', renderer, text=1)
+
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_refresh_clicked', self.on_refresh)
-		#TODO: Si connecté
+		self.xml.signal_connect('on_row_activated', self.on_row_activated)
+		#TODO: Si connecte
 		self.browse()
 
 class message:
@@ -245,21 +304,30 @@ class roster:
 		self.l_group = {}
 		self.treestore.clear()
 		for jid in tab.keys():
+			#On enleve la resource
+			ji = string.split(jid, '/')[0]
 			name = tab[jid]['name']
 			if not name:
-				name = ''
+				if string.find(ji, "@") <= 0:
+					name = ji
+				else:
+					name = ''
 			show = tab[jid]['show']
 			if not show:
 				show = 'offline'
-			user1 = user(jid, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'])
+			user1 = user(ji, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'])
 			self.l_contact[user1.jid] = {'user': user1, 'iter': []}
+			print user1.jid
 			if user1.groups == []:
-				user1.groups.append('general')
+				if string.find(ji, "@") <= 0:
+					user1.groups.append('Agents')
+				else:
+					user1.groups.append('general')
 			for g in user1.groups:
 				if not self.l_group.has_key(g):
 					iterG = self.treestore.append(None, (None, g, 'group', FALSE))
 					self.l_group[g] = iterG
-				if user1.show != 'offline' or self.showOffline:
+				if user1.show != 'offline' or self.showOffline or g == 'Agents':
 					iterU = self.treestore.append(self.l_group[g], (self.pixbufs[user1.show], user1.name, user1.jid, TRUE))
 					self.l_contact[user1.jid]['iter'].append(iterU)
 
@@ -292,7 +360,8 @@ class roster:
 				self.l_contact[jid]['iter'] = []
 			else:
 				for i in self.l_contact[jid]['iter']:
-					self.treestore.set_value(i, 0, self.pixbufs[show])
+					if self.pixbufs.has_key(show):
+						self.treestore.set_value(i, 0, self.pixbufs[show])
 		u.show = show
 		u.status = status
 	
@@ -353,7 +422,7 @@ class roster:
 		if not self.l_contact.has_key(jid):
 			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub')
 			if not self.l_group.has_key('general'):
-				iterG = self.treestore.append(None, (None, 'general', 'group'))
+				iterG = self.treestore.append(None, (None, 'general', 'group', FALSE))
 				self.l_group['general'] = iterG
 			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid, TRUE))
 			self.l_contact[jid] = {'user':user1, 'iter':[iterU]}
@@ -487,23 +556,60 @@ class plugin:
 			if ev[0] == 'ROSTER':
 				self.r.mkroster(ev[1])
 			elif ev[0] == 'NOTIFY':
-				if self.r.l_contact.has_key(ev[1][0]):
-					self.r.chg_status(ev[1][0], ev[1][1], ev[1][2])
+				jid = string.split(ev[1][0], '/')[0]
+				print self.r.l_contact
+				print jid
+				if string.find(jid, "@") <= 0:
+					#It must be an agent
+					jid = string.replace(jid, '@', '')
+					if not self.r.l_group.has_key('Agents'):
+						iterG = self.r.treestore.append(None, (None, \
+							'Agents', 'group', FALSE))
+						self.r.l_group['Agents'] = iterG
+					if not self.r.l_contact.has_key(jid):
+						user1 = user(jid, jid, ['Agents'], ev[1][1], ev[1][2], 'from')
+						iterU = self.r.treestore.append(self.r.l_group['Agents'], \
+							(self.r.pixbufs[ev[1][1]], jid, jid, TRUE))
+						self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
+					else:
+						#On mets a jour la ligne ki existe deja
+						for i in self.r.l_contact[jid]['iter']:
+							if self.r.pixbufs.has_key(ev[1][1]):
+								self.r.treestore.set_value(i, 0, self.r.pixbufs[ev[1][1]])
+				elif self.r.l_contact.has_key(jid):
+					#ca n'est pas un agent
+					self.r.chg_status(jid, ev[1][1], ev[1][2])
 			elif ev[0] == 'MSG':
-				if not self.r.tab_messages.has_key(ev[1][0]):
+				if string.find(ev[1][0], "@") <= 0:
+					jid = string.replace(ev[1][0], '@', '')
+				if not self.r.tab_messages.has_key(jid):
 					#FIXME:message d'un inconne
-					self.r.tab_messages[ev[1][0]] = message(self.r.l_contact[ev[1][0]]['user'], self.r)
-				self.r.tab_messages[ev[1][0]].print_conversation(ev[1][1])
+					self.r.tab_messages[jid] = message(self.r.l_contact[jid]['user'], self.r)
+				self.r.tab_messages[jid].print_conversation(ev[1][1])
 			elif ev[0] == 'SUBSCRIBE':
 				authorize(self.r, ev[1])
 			elif ev[0] == 'SUBSCRIBED':
-				u = self.r.l_contact[ev[1]['jid']]['user']
-				u.name = ev[1]['nom']
-				for i in self.r.l_contact[u.jid]['iter']:
-					self.r.treestore.set_value(i, 1, u.name)
+				jid = ev[1]['jid']
+				if self.r.l_contact.has_key(jid):
+					u = self.r.l_contact[jid]['user']
+					u.name = ev[1]['nom']
+					for i in self.r.l_contact[u.jid]['iter']:
+						self.r.treestore.set_value(i, 1, u.name)
+				else:
+					user1 = user(jid, jid, ['general'], 'online', 'online', 'to')
+					if not self.r.l_group.has_key('general'):
+						iterG = self.r.treestore.append(None, (None, \
+							'general', 'group', FALSE))
+						self.r.l_group['general'] = iterG
+					iterU = self.r.treestore.append(self.r.l_group['general'], \
+						(self.r.pixbufs['online'], jid, jid, TRUE))
+					self.r.l_contact[jid] = {'user':user1, 'iter':[iterU]}
+				#TODO: print you are now authorized
 			elif ev[0] == 'AGENTS':
 				if Wbrowser:
 					Wbrowser.agents(ev[1])
+			elif ev[0] == 'AGENT_INFO':
+				Wreg = agent_reg(ev[1][0], ev[1][1], self.r)
 		return 1
 
 	def __init__(self, quIN, quOUT):
