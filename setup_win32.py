@@ -41,10 +41,13 @@ setup(
     name = "Gajim",
     description = "A jabber client",
 #    console=["gajim.py"],
-    windows = [{"script": "gajim.py"}],
+    windows = [{"script": "gajim.py",
+                "icon_resources": [(1, "gajim.ico")]}],
     options=opts,
     data_files=[("plugins/gtkgui", glob.glob("plugins/gtkgui/gtkgui.glade")),
                 ("plugins/gtkgui/icons/sun", glob.glob("plugins/gtkgui/icons/sun/*.*")),
+                ("plugins/gtkgui/emoticons", glob.glob("plugins/gtkgui/emoticons/*.*")),
+                ("plugins/gtkgui/pixmaps", glob.glob("plugins/gtkgui/pixmaps/*.*")),
                 ("Messages/fr/LC_MESSAGES", glob.glob("Messages/fr/LC_MESSAGES/*.mo"))
     ],
 )
