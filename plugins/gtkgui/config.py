@@ -328,11 +328,11 @@ class Preferences_window:
 			self.plugin.config['emoticons'] = '\t'.join(emots)
 			self.plugin.init_regex()
 
-	def on_auto_pop_up_checkbox_toggled(self, widget):
+	def on_auto_pop_up_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopup', None,\
 			[self.auto_pp_away_checkbutton])
 
-	def on_auto_pop_up_away_checkbox_toggled(self, widget):
+	def on_auto_pop_up_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopupaway')
 
 	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):

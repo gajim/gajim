@@ -4076,7 +4076,7 @@
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="on_auto_pop_up_checkbox_toggled" last_modification_time="Sun, 06 Mar 2005 01:20:06 GMT"/>
+		  <signal name="toggled" handler="on_auto_pop_up_checkbutton_toggled" last_modification_time="Mon, 28 Mar 2005 16:08:47 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
