@@ -771,6 +771,8 @@ class GajimCore:
 				con.removeRosterItem(ev[2])
 				con.requestRegInfo(ev[2])
 				agent_info = con.getRegInfo()
+				if not agent_info:
+					return
 				key = agent_info['key']
 				iq = common.jabber.Iq(to=ev[2], type="set")
 				q = iq.setQuery(common.jabber.NS_REGISTER)
