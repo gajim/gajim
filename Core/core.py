@@ -481,7 +481,7 @@ class GajimCore:
 											#									
 				pass
 			elif errcode == '409':	#conflict :	Nick Conflict
-				self.hub.sendPlugin('WARNING', None, errmsg)
+				self.hub.sendPlugin('ERROR', None, errmsg)
 			else:
 				self.hub.sendPlugin('NOTIFY', self.connections[con], \
 					(prs.getFrom().getStripped(), 'error', errmsg, \
@@ -554,19 +554,19 @@ class GajimCore:
 		except IOError, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
 			self.hub.sendPlugin('STATUS', account, 'offline')
-			self.hub.sendPlugin('WARNING', None, _("Couldn't connect to %s") \
+			self.hub.sendPlugin('ERROR', None, _("Couldn't connect to %s") \
 				% hostname)
 			return 0
 		except common.xmlstream.socket.error, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
 			self.hub.sendPlugin('STATUS', account, 'offline')
-			self.hub.sendPlugin('WARNING', None, _("Couldn't connect to %s : %s") \
+			self.hub.sendPlugin('ERROR', None, _("Couldn't connect to %s : %s") \
 				% (hostname, e))
 			return 0
 		except common.xmlstream.error, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
 			self.hub.sendPlugin('STATUS', account, 'offline')
-			self.hub.sendPlugin('WARNING', None, _("Couldn't connect to %s : %s") \
+			self.hub.sendPlugin('ERROR', None, _("Couldn't connect to %s : %s") \
 				% (hostname, e))
 			return 0
 #		except:
@@ -587,7 +587,7 @@ class GajimCore:
 			else:
 				log.debug("Couldn't authentificate to %s" % hostname)
 				self.hub.sendPlugin('STATUS', account, 'offline')
-				self.hub.sendPlugin('WARNING', None, \
+				self.hub.sendPlugin('ERROR', None, \
 					_("Authentification failed with %s, check your login and password") % hostname)
 				return 0
 	# END connect
@@ -852,7 +852,7 @@ class GajimCore:
 					c.setRegInfo( 'username', ev[2][1])
 					c.setRegInfo( 'password', ev[2][2])
 					if not c.sendRegInfo():
-						self.hub.sendPlugin('WARNING', None, _('Error : ')+c.lastErr)
+						self.hub.sendPlugin('ERROR', None, _('Error : ')+c.lastErr)
 					else:
 						self.connected[ev[2][3]] = 0
 						self.passwords[ev[2][3]] = ''

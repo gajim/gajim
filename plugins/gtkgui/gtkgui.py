@@ -312,6 +312,9 @@ class plugin:
 	def handle_event_warning(self, unused, msg):
 		Warning_dialog(msg)
 	
+	def handle_event_error(self, unused, msg):
+		Error_dialog(msg)
+	
 	def handle_event_status(self, account, status):
 		#('STATUS', account, status)
 		self.roster.on_status_changed(account, status)
@@ -581,6 +584,8 @@ class plugin:
 				self.handle_event_roster(ev[1], ev[2])
 			elif ev[0] == 'WARNING':
 				self.handle_event_warning(ev[1], ev[2])
+			elif ev[0] == 'ERROR':
+				self.handle_event_error(ev[1], ev[2])
 			elif ev[0] == 'STATUS':
 				self.handle_event_status(ev[1], ev[2])
 			elif ev[0] == 'NOTIFY':
@@ -767,8 +772,8 @@ class plugin:
 			gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
 		self.queueIN = quIN
 		self.queueOUT = quOUT
-		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'STATUS', \
-			'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
+		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'ERROR', \
+			'STATUS', 'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
 			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'REG_AGENT_INFO', 'QUIT', \
 			'ACC_OK', 'CONFIG', 'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', \
 			'VISUAL', 'GC_MSG', 'GC_SUBJECT', 'BAD_PASSPHRASE', \
