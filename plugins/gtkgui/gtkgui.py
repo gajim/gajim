@@ -1232,6 +1232,7 @@ class plugin:
 		model = self.roster.tree.get_model()
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
+			#('ROSTER', account, array)
 			if ev[0] == 'ROSTER':
 				self.roster.mklists(ev[2], ev[1])
 				self.roster.draw_roster()

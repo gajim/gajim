@@ -159,13 +159,20 @@ class infoUser_Window:
 
 		self.xml.get_widget('label_name').set_text(user.name)
 		self.xml.get_widget('label_id').set_text(user.jid)
-		self.xml.get_widget('label_resource').set_text(user.resource)
 		self.xml.get_widget('label_sub').set_text(user.sub)
 		self.xml.get_widget('entry_name').set_text(user.name)
+		resources = user.resource
 		if not user.status:
 			user.status = ''
-		self.xml.get_widget('label_status').set_text(user.show + ' : ' + \
-			user.status)
+		stats = user.show + ' : ' + user.status
+		for u in self.plugin.roster.contacts[account][user.jid]:
+			if u.resource != user.resource:
+				resources += '\n' + u.resource
+				if not u.status:
+					u.status = ''
+				stats += '\n' + u.show + ' : ' + u.status
+		self.xml.get_widget('label_resource').set_text(resources)
+		self.xml.get_widget('label_status').set_text(stats)
 		self.init_lists()
 		plugin.send('ASK_VCARD', account, self.user.jid)
 		
