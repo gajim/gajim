@@ -587,15 +587,15 @@ class message_Window:
 		if contact is set to status : it's a status message
 		if contact is set to another value : it's an outgoing message
 		if contact is not set : it's an incomming message"""
-		conversation = self.xml.get_widget('conversation')
-		buffer = conversation.get_buffer()
+		conversation_textview = self.xml.get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
 		if not txt:
 			txt = ""
-		end_iter = buffer.get_end_iter()
+		end_iter = conversation_buffer.get_end_iter()
 		if not tim:
 			tim = time.localtime()
 		tims = time.strftime("[%H:%M:%S]", tim)
-		buffer.insert(end_iter, tims + ' ')
+		conversation_buffer.insert(end_iter, tims + ' ')
 		
 		otxt = ''
 		ttxt = ''
@@ -616,7 +616,7 @@ class message_Window:
 				ttxt = '<' + name + '> '
 				otxt = txt + '\n'
 
-		buffer.insert_with_tags_by_name(end_iter, ttxt, tag)
+		conversation_buffer.insert_with_tags_by_name(end_iter, ttxt, tag)
 		if len(otxt) > 0:
 			beg = 0
 			if self.plugin.config['useemoticons']:
@@ -626,15 +626,16 @@ class message_Window:
 						for s in self.plugin.roster.emoticons:
 							l = len(s)
 							if s == otxt[index:index+l]:
-								buffer.insert(end_iter, otxt[beg:index])
-								buffer.insert_pixbuf(end_iter, self.plugin.roster.emoticons[s])
+								conversation_buffer.insert(end_iter, otxt[beg:index])
+								conversation_buffer.insert_pixbuf(end_iter, self.plugin.roster.emoticons[s])
 								index+=l
 								beg = index
 					index+=1
-			buffer.insert(end_iter, otxt[beg:])
+			conversation_buffer.insert(end_iter, otxt[beg:])
 		
 		#scroll to the end of the textview
-		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
+		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
+			0.1, 0, 0, 0)
 		if not self.window.is_active() and contact != 'status':
 			self.nb_unread += 1
 			self.show_title()
@@ -655,9 +656,9 @@ class message_Window:
 
 	def set_image(self, image, jid):
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			self.img.set_from_animation(image.get_animation())
+			self.status_image.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			self.img.set_from_pixbuf(image.get_pixbuf())
+			self.status_image.set_from_pixbuf(image.get_pixbuf())
 
 	def read_queue(self, q):
 		"""read queue and print messages containted in it"""
@@ -686,16 +687,16 @@ class message_Window:
 		if event.keyval == gtk.keysyms.Return:
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return 0
-			txt_buffer = widget.get_buffer()
-			start_iter = txt_buffer.get_start_iter()
-			end_iter = txt_buffer.get_end_iter()
-			txt = txt_buffer.get_text(start_iter, end_iter, 0)
+			message_buffer = widget.get_buffer()
+			start_iter = message_buffer.get_start_iter()
+			end_iter = message_buffer.get_end_iter()
+			txt = message_buffer.get_text(start_iter, end_iter, 0)
 			if txt != '':
 				keyID = ''
-				if self.xml.get_widget('toggle_gpg').get_active():
+				if self.xml.get_widget('gpg_toggle_button').get_active():
 					keyID = self.keyID
 				self.plugin.send('MSG', self.account, (self.user.jid, txt, keyID))
-				txt_buffer.set_text('', -1)
+				message_buffer.set_text('', -1)
 				self.print_conversation(txt, self.user.jid, self.user.jid)
 				widget.grab_focus()
 			return 1
@@ -704,9 +705,10 @@ class message_Window:
 	def on_clear(self, widget):
 		"""When clear button is pressed :
 		clear the conversation"""
-		buffer = self.xml.get_widget('conversation').get_buffer()
-		deb, end = buffer.get_bounds()
-		buffer.delete(deb, end)
+		conversation_buffer = self.xml.get_widget('conversation_textview').\
+			get_buffer()
+		deb, end = conversation_buffer.get_bounds()
+		conversation_buffer.delete(deb, end)
 
 	def on_history(self, widget):
 		"""When history button is pressed : call log window"""
@@ -733,23 +735,22 @@ class message_Window:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat', APP)
 		self.window = self.xml.get_widget('Chat')
 		self.show_title()
-		self.img = self.xml.get_widget('image')
+		self.status_image = self.xml.get_widget('status_image')
 		image = self.plugin.roster.pixbufs[user.show]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			self.img.set_from_animation(image.get_animation())
+			self.status_image.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			self.img.set_from_pixbuf(image.get_pixbuf())
-		self.xml.get_widget('button_contact').set_label(user.name + ' <'\
-			+ user.jid + '>')
-		self.xml.get_widget('button_contact').set_resize_mode(gtk.RESIZE_QUEUE)
+			self.status_image.set_from_pixbuf(image.get_pixbuf())
+		contact_button = self.xml.get_widget('contact_button')
+		contact_button.set_label(user.name + ' <'	+ user.jid + '>')
 		if not self.keyID:
-			self.xml.get_widget('toggle_gpg').set_sensitive(False)
-		message = self.xml.get_widget('message')
-		message.grab_focus()
-		conversation = self.xml.get_widget('conversation')
-		buffer = conversation.get_buffer()
-		end_iter = buffer.get_end_iter()
-		buffer.create_mark('end', end_iter, 0)
+			self.xml.get_widget('gpg_toggle_button').set_sensitive(False)
+		message_textview = self.xml.get_widget('message_textview')
+		message_textview.grab_focus()
+		conversation_textview = self.xml.get_widget('conversation_textview')
+		conversation_buffer = conversation_textview.get_buffer()
+		end_iter = conversation_buffer.get_end_iter()
+		conversation_buffer.create_mark('end', end_iter, 0)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_clear_clicked', self.on_clear)
 		self.xml.signal_connect('on_button_contact_clicked', \
@@ -761,13 +762,13 @@ class message_Window:
 			self.on_msg_key_press_event)
 		self.xml.signal_connect('on_chat_key_press_event', \
 			self.on_chat_key_press_event)
-		self.tagIn = buffer.create_tag("incoming")
+		self.tagIn = conversation_buffer.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn.set_property("foreground", color)
-		self.tagOut = buffer.create_tag("outgoing")
+		self.tagOut = conversation_buffer.create_tag("outgoing")
 		color = self.plugin.config['outmsgcolor']
 		self.tagOut.set_property("foreground", color)
-		self.tagStatus = buffer.create_tag("status")
+		self.tagStatus = conversation_buffer.create_tag("status")
 		color = self.plugin.config['statusmsgcolor']
 		self.tagStatus.set_property("foreground", color)
 		#print queued messages

@@ -304,7 +304,7 @@
   </child>
 </widget>
 
-<widget class="GtkWindow" id="Chat">
+<widget class="GtkWindow" id="chat_window">
   <property name="visible">True</property>
   <property name="title" translatable="yes">Chat</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -488,7 +488,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkImage" id="image">
+	    <widget class="GtkImage" id="status_image">
 	      <property name="visible">True</property>
 	      <property name="stock">gtk-no</property>
 	      <property name="icon_size">4</property>
@@ -505,7 +505,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToggleButton" id="toggle_gpg">
+	    <widget class="GtkToggleButton" id="gpg_toggle_button">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NONE</property>
@@ -538,7 +538,7 @@
 	      <property name="visible">True</property>
 
 	      <child>
-		<widget class="GtkButton" id="button_contact">
+		<widget class="GtkButton" id="contact_button">
 		  <property name="width_request">0</property>
 		  <property name="height_request">0</property>
 		  <property name="visible">True</property>
@@ -586,7 +586,7 @@
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkTextView" id="conversation">
+		<widget class="GtkTextView" id="conversation_textview">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -621,7 +621,7 @@
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkTextView" id="message">
+		<widget class="GtkTextView" id="message_textview">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
