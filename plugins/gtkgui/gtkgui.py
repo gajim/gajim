@@ -225,7 +225,7 @@ class message_Window:
 		
 		#scroll to the end of the textview
 		conversation.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
-		if not self.window.get_property('is-active'):
+		if not self.window.is_active() and contact != 'status':
 			self.nb_unread += 1
 			self.show_title()
 
@@ -242,6 +242,8 @@ class message_Window:
 		while not q.empty():
 			evt = q.get()
 			self.print_conversation(evt[0], tim = evt[1])
+			self.plugin.roster.nb_unread -= 1
+		self.plugin.roster.show_title()
 		del self.plugin.queues[self.account][self.user.jid]
 		self.plugin.roster.redraw_jid(self.user.jid, self.account)
 		self.plugin.systray.remove_jid(self.user.jid, self.account)
@@ -1509,6 +1511,8 @@ class roster_Window:
 				self.plugin.systray.add_jid(jid, account)
 #			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
+			self.nb_unread += 1
+			self.show_title()
 			if not path:
 				self.add_user_to_roster(jid, account)
 				iters = self.get_user_iter(jid, account)
@@ -1830,11 +1834,21 @@ class roster_Window:
 				self.plugin.config['width'], self.plugin.config['height'] = \
 					widget.get_size()
 
+	def show_title(self):
+		start = ""
+		if self.nb_unread > 1:
+			start = "[" + str(self.nb_unread) + "] "
+		elif self.nb_unread == 1:
+			start = "* "
+		window = self.xml.get_widget('Gajim')
+		window.set_title(start + " Gajim")
+
 	def __init__(self, plugin):
 		# FIXME : handle no file ...
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim', APP)
 		self.tree = self.xml.get_widget('treeview')
 		self.plugin = plugin
+		self.nb_unread = 0
 		window = self.xml.get_widget('Gajim')
 		window.hide()
 		if self.plugin.config.has_key('saveposition'):
