@@ -2766,6 +2766,10 @@ class plugin:
 		self.roster.on_message(jid, _("error while sending") + " \"%s\" ( %s )"%\
 			(array[3], array[2]), array[4], account)
 		
+	def handle_event_msgsent(self, account, array):
+		#('MSG', account, (jid, msg, keyID))
+		self.play_sound('sound_message_sent')
+		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
 		authorize_Window(self, array[0], array[1], account)
@@ -2930,6 +2934,8 @@ class plugin:
 				self.handle_event_msg(ev[1], ev[2])
 			elif ev[0] == 'MSGERROR':
 				self.handle_event_msgerror(ev[1], ev[2])
+			elif ev[0] == 'MSGSENT':
+				self.handle_event_msgsent(ev[1], ev[2])
 			elif ev[0] == 'SUBSCRIBE':
 				self.handle_event_subscribe(ev[1], ev[2])
 			elif ev[0] == 'SUBSCRIBED':
@@ -3017,7 +3023,7 @@ class plugin:
 			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'REG_AGENT_INFO', 'QUIT', \
 			'ACC_OK', 'CONFIG', 'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', \
 			'VISUAL', 'GC_MSG', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS', \
-			'ROSTER_INFO'])
+			'ROSTER_INFO', 'MSGSENT'])
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'autopopupaway':1,\
 			'showoffline':0,\
