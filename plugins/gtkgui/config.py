@@ -764,7 +764,7 @@ class agentRegistration_Window:
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
 		user1 = gtkgui.user(self.agent, self.agent, ['Agents'], 'offline', 'offline', \
-			'from', '', 0)
+			'from', '', 0, '')
 		self.plugin.roster.contacts[self.account][self.agent] = [user1]
 		self.plugin.roster.add_user_to_roster(self.agent, self.account)
 		self.plugin.send('REG_AGENT', self.account, self.agent)

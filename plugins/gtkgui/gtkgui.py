@@ -2424,11 +2424,13 @@ class plugin:
 			iconstyle = 'sun'
 		path = 'plugins/gtkgui/icons/' + iconstyle + '/'
 		files = [path + 'online.gif', path + 'online.png', path + 'online.xpm']
+		pix = None
 		for file in files:
 			if os.path.exists(file):
 				pix = gtk.gdk.pixbuf_new_from_file(file)
 				break
-		gtk.window_set_default_icon(pix)
+		if pix:
+			gtk.window_set_default_icon(pix)
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
