@@ -22,7 +22,7 @@ RUN GAJIM
 gajim
 
 or if you didn't 'make install' you can also run from gajim folder with
-./gajim.sh
+./gajim.py
 
 TROUBLESHOOTING
 If you have python2.3 please manually edit plugins/gtkgui/Makefile and in

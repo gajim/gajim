@@ -675,6 +675,9 @@ class New_message_dialog:
 	def on_chat_button_clicked(self, widget):
 		"""When Chat button is clicked"""
 		jid = self.jid_entry.get_text()
+		if jid.find('@') == -1: # if no @ was given
+			Error_dialog(_('User ID is not valid'))
+			return
 		# use User class, new_chat expects it that way
 		# is it in the roster?
 		if self.plugin.roster.contacts[self.account].has_key(jid):

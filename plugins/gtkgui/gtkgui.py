@@ -19,6 +19,13 @@
 
 if __name__ == "__main__":
 	import getopt, pickle, sys, socket
+
+	try: 	# Import Psyco if available
+		import psyco
+		psyco.full()
+	except ImportError:
+		pass
+		
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], "p:h", ["help"])
 	except getopt.GetoptError:

@@ -1,8 +1,8 @@
 ##      setup_win32.py
 ##
 ## Gajim Team:
-##      - Yann Le Boulanger <asterix@lagaule.org>
-##      - Vincent Hanquez <tab@snarc.org>
+## - Yann Le Boulanger <asterix@lagaule.org>
+## - Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##      Copyright (C) 2003-2005 Gajim Team
 ##
@@ -40,8 +40,8 @@ opts = {
 setup(
     name = "Gajim",
     description = "A jabber client",
-#    console=["gajim.sh"],
-    windows = [{"script": "gajim.sh",
+#    console=["gajim.py"],
+    windows = [{"script": "gajim.py",
                 "icon_resources": [(1, "gajim.ico")]}],
     options=opts,
     data_files=[("plugins/gtkgui", glob.glob("plugins/gtkgui/gtkgui.glade")),
