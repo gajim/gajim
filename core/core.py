@@ -666,7 +666,7 @@ class GajimCore:
 						if not self.gpg.has_key(a) and USE_GPG:
 							self.gpg[a] = MyGnuPG()
 						if not self.passwords.keys():
-							self.connected[a] = 0
+							self.passwords[a] = ''
 				else:
 					self.cfgParser.tab[ev[2][0]] = ev[2][1]
 				if ev[2][0] != ev[2][2]:
