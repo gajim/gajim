@@ -1227,20 +1227,25 @@ class roster_window:
 	
 	def makemenu(self):
 		"""create the browse agents, add contact & join groupchat sub menus"""
+		# try to avoid WIDGET_REALIZED_FOR_EVENT failed which freezes gajim
+		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
+		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
+		add_contact_menuitem  = self.xml.get_widget('add_contact_menuitem')
+		browse_agents_menuitem  = self.xml.get_widget('browse_agents_menuitem')
 		if len(self.plugin.accounts.keys()) > 0:
-			self.xml.get_widget('new_message_menuitem').set_sensitive(True)
-			self.xml.get_widget('join_gc_menuitem').set_sensitive(True)
-			self.xml.get_widget('add_contact_menuitem').set_sensitive(True)
-			self.xml.get_widget('browse_agents_menuitem').set_sensitive(True)
+			new_message_menuitem.set_sensitive(True)
+			join_gc_menuitem.set_sensitive(True)
+			add_contact_menuitem.set_sensitive(True)
+			browse_agents_menuitem.set_sensitive(True)
 		else:
-			self.xml.get_widget('new_message_menuitem').set_sensitive(False)
-			self.xml.get_widget('join_gc_menuitem').set_sensitive(False)
-			self.xml.get_widget('add_contact_menuitem').set_sensitive(False)
-			self.xml.get_widget('browse_agents_menuitem').set_sensitive(False)
+			new_message_menuitem.set_sensitive(False)
+			join_gc_menuitem.set_sensitive(False)
+			add_contact_menuitem.set_sensitive(False)
+			browse_agents_menuitem.set_sensitive(False)
 		if len(self.plugin.accounts.keys()) > 1: # 2 or more accounts? make submenus
 			#add
 			menu_sub = gtk.Menu()
-			self.xml.get_widget('add_contact_menuitem').set_submenu(menu_sub)
+			add_contact_menuitem.set_submenu(menu_sub)
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem('using ' + account + ' account')
 				menu_sub.append(item)
@@ -1248,7 +1253,7 @@ class roster_window:
 			menu_sub.show_all()
 			#agents
 			menu_sub = gtk.Menu()
-			self.xml.get_widget('browse_agents_menuitem').set_submenu(menu_sub)
+			browse_agents_menuitem.set_submenu(menu_sub)
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem('using ' + account + ' account')
 				menu_sub.append(item)
@@ -1256,7 +1261,7 @@ class roster_window:
 			menu_sub.show_all()
 			#join gc
 			menu_sub = gtk.Menu()
-			self.xml.get_widget('join_gc_menuitem').set_submenu(menu_sub)
+			join_gc_menuitem.set_submenu(menu_sub)
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem('using ' + account + ' account')
 				menu_sub.append(item)
@@ -1264,7 +1269,7 @@ class roster_window:
 			menu_sub.show_all()
 			#new message
 			menu_sub = gtk.Menu()
-			self.xml.get_widget('new_message_menuitem').set_submenu(menu_sub)
+			new_message_menuitem.set_submenu(menu_sub)
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem('using ' + account + ' account')
 				menu_sub.append(item)
@@ -1553,7 +1558,7 @@ class roster_window:
 		item = gtk.MenuItem(_("_Add contact"))
 		menu.append(item)
 		item.connect("activate", self.on_add_contact, account)
-		item = gtk.MenuItem(_('_New Message'))
+		item = gtk.MenuItem(_('_New message'))
 		menu.append(item)
 		item.connect("activate", self.on_new_message_menuitem_activate, account)
 		if not self.plugin.connected[account]:
