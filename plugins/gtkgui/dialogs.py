@@ -454,11 +454,11 @@ class add_contact_window:
 				agent_combobox.set_active(jid_agents.index(jid_splited[1])+1)
 		self.xml.signal_autoconnect(self)
 
-class about_window: #FIXME: (nk) pygtk2.6 has a built-in window for that
+class about_window: #FIXME REWRITE: (nk) pygtk2.6 has a built-in window for that
 	"""Class for about window"""
 	def delete_event(self, widget):
 		"""close window"""
-		del self.plugin.windows['about']
+		del self.plugin.windows['about'] # remove us from open windows
 		
 	def on_close(self, widget):
 		"""When Close button is clicked"""
@@ -467,13 +467,13 @@ class about_window: #FIXME: (nk) pygtk2.6 has a built-in window for that
 	def __init__(self, plugin):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'about_window', APP)
 		self.window = xml.get_widget('about_window')
-		logo_image = xml.get_widget('logo_image')
-		logo_image.set_from_file('plugins/gtkgui/pixmaps/logo.png')
+		xml.get_widget('logo_image').set_from_file('plugins/gtkgui/pixmaps/logo.png')
 		
 		self.plugin = plugin
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_close_clicked', self.on_close)
-
+		
+		self.plugin.windows['about'] = self # add us to open windows
 
 class confirm_dialog:
 	"""Class for confirmation dialog"""
@@ -529,7 +529,7 @@ class subscription_request_window:
 class join_groupchat_window:
 	def on_join_groupchat_window_destroy(self, widget):
 		"""close window"""
-		del self.plugin.windows['join_gc']
+		del self.plugin.windows['join_gc'] # remove us from open windows
 
 	def on_close_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
@@ -562,43 +562,41 @@ class join_groupchat_window:
 		self.xml.get_widget('nickname_entry').\
 			set_text(self.plugin.nicks[self.account])
 		self.xml.signal_autoconnect(self)
+		self.plugin.windows['join_gc'] = self # now add us to open windows
 
 class new_message_window: #FIXME: NOT READY
-	def delete_event(self, widget):
+	def on_delete_event(self, widget):
 		"""close window"""
-		del self.plugin.windows['join_gc']
+		del self.plugin.windows['new_msg']
 
-	def on_close(self, widget):
+	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
 
-	def on_join(self, widget):
-		"""When Join button is clicked"""
-		nick = self.xml.get_widget('entry_nick').get_text()
-		room = self.xml.get_widget('entry_room').get_text()
-		server = self.xml.get_widget('entry_server').get_text()
-		passw = self.xml.get_widget('entry_pass').get_text()
-		jid = '%s@%s' % (room, server)
-		self.plugin.windows[self.account]['gc'][jid] = gtkgui.gc(jid, nick, \
-			self.plugin, self.account)
-		#TODO: verify entries
-		self.plugin.send('GC_JOIN', self.account, (nick, room, server, passw))
+	def on_chat_button_clicked(self, widget):
+		"""When Chat button is clicked"""
+		print 'chat btn clicked'
+		userid = self.xml.get_widget('userid_comboboxentry').child.get_text()
+		#FIXME: if the user doesn't give jid, but name look in the roster
+		#DO IT WITH AUTOCOMPLETE
+		#SO USER ID SHOULD BECOME JID and sent to new_chat()
+		jid = userid
+		
+		user = gtkgui.user(jid, name .....)
+		
+		# use User class, new_chat expects that
+		user().jid = jid
+		
+		self.plugin.roster.new_chat(jid, self.account)
 		widget.get_toplevel().destroy()
 
-	def __init__(self, plugin, account, server='', room = ''):
-		#FIXME:
-		return True
-		
+	def __init__(self, plugin, account):
 		if not plugin.connected[account]:
-			warning_dialog(_("You must be connected to join a group chat on this server"))
+			warning_dialog(_('You must be connected to send a message to a contact'))
 			return
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Join_gc', APP)
-		self.window = self.xml.get_widget('Join_gc')
-		self.xml.get_widget('entry_server').set_text(server)
-		self.xml.get_widget('entry_room').set_text(room)
-		self.xml.get_widget('entry_nick').set_text(self.plugin.nicks[self.account])
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_cancel_clicked', self.on_close)
-		self.xml.signal_connect('on_join_clicked', self.on_join)
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'new_message_window', APP)
+		self.window = self.xml.get_widget('new_message_window')
+		self.xml.signal_autoconnect(self)
+		self.plugin.windows['new_message'] = self # now add us to open windows

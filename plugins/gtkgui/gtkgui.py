@@ -2028,22 +2028,17 @@ class roster_window:
 	def on_join_gc(self, widget, account):
 		"""When Join Groupchat is selected :
 		call the join_gc class"""
-		if not self.plugin.windows.has_key('join_gc'):
-			self.plugin.windows['join_gc'] = \
-				join_groupchat_window(self.plugin, account)
+		join_groupchat_window(self.plugin, account)
 
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When New Message is activated:
 		call the new_message_window class"""
-		if not self.plugin.windows.has_key('new_message'):
-			self.plugin.windows['new_message'] = \
-				new_message_window(self.plugin, account)
+		new_message_window(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
 		"""When about is selected :
 		call the about class"""
-		if not self.plugin.windows.has_key('about'):
-			self.plugin.windows['about'] = about_window(self.plugin)
+		about_window(self.plugin)
 
 	def on_accounts_menuitem_activate(self, widget):
 		"""When accounts is seleted :
@@ -2366,7 +2361,6 @@ class roster_window:
 		self.window.set_title(start + " Gajim")
 
 	def __init__(self, plugin):
-		# FIXME : handle no file ...
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_window', APP)
 		self.window = self.xml.get_widget('gajim_window')
 		self.tree = self.xml.get_widget('roster_treeview')

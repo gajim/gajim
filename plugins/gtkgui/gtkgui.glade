@@ -8241,6 +8241,7 @@ Custom</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <signal name="delete_event" handler="delete_event" last_modification_time="Wed, 02 Mar 2005 16:14:38 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox47">
@@ -8301,7 +8302,7 @@ send a chat message to</property>
       </child>
 
       <child>
-	<widget class="GtkComboBoxEntry" id="userID_comboboxentry">
+	<widget class="GtkComboBoxEntry" id="userid_comboboxentry">
 	  <property name="visible">True</property>
 	</widget>
 	<packing>
@@ -8315,10 +8316,10 @@ send a chat message to</property>
 	<widget class="GtkHButtonBox" id="hbuttonbox16">
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
-	  <property name="spacing">0</property>
+	  <property name="spacing">5</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button28">
+	    <widget class="GtkButton" id="cancel_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -8326,6 +8327,7 @@ send a chat message to</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Wed, 02 Mar 2005 16:36:13 GMT"/>
 	    </widget>
 	  </child>
 
@@ -8336,6 +8338,7 @@ send a chat message to</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="on_chat_button_clicked" last_modification_time="Wed, 02 Mar 2005 16:16:54 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment40">
