@@ -2466,7 +2466,7 @@ class plugin:
 			gtk.window_set_default_icon(pix)
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
-		gtk.timeout_add(1000, self.read_sleepy)
+		gtk.timeout_add(100, self.read_sleepy)
 		#auto connect at startup
 		for a in self.accounts.keys():
 			if self.accounts[a].has_key('autoconnect'):
