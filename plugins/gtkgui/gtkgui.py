@@ -2710,7 +2710,7 @@ class plugin:
 	def handle_event_notify(self, account, array):
 		#('NOTIFY', account, (jid, status, message, resource, priority, keyID, 
 		# role, affiliation, real_jid, reason, actor, statusCode))
-		statuss = ['offline', 'error', 'online', 'away', 'xa', 'dnd', 'invisible']
+		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd', 'invisible']
 		old_show = 0
 		jid = string.split(array[0], '/')[0]
 		keyID = array[5]
