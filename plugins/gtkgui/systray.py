@@ -248,7 +248,6 @@ class systray:
 			self.t = trayicon.TrayIcon('Gajim')
 			eb = gtk.EventBox()
 			eb.connect('button-press-event', self.on_clicked)
-			self.tip = gtk.Tooltips()
 			self.tip.set_tip(self.t, 'Gajim')
 			self.img_tray = gtk.Image()
 			eb.add(self.img_tray)
@@ -265,6 +264,7 @@ class systray:
 		self.plugin = plugin
 		self.jids = []
 		self.t = None
+		self.tip = gtk.Tooltips()
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
