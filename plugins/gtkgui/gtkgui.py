@@ -266,23 +266,18 @@ class plugin:
 			
 
 	def play_sound(self, event):
-		if not os.name == 'posix':
+		if os.name != 'posix':
+			return
+		if self.config['soundplayer'] == '':
 			return
 		if not self.config[event]:
 			return
 		file = self.config[event + '_file']
 		if not os.path.exists(file):
 			return
-		pid = os.fork()
-		if pid == 0:
-			argv = self.config['soundplayer'].split()
-			argv.append(file)
-			try: 
-				os.execvp(argv[0], argv)
-			except:
-				print _("error while running %s :") % ' '.join(argv), \
-					sys.exc_info()[1]
-				os._exit(1)
+		argv = self.config['soundplayer'].split()
+		argv.append(file)
+		pid = os.spawnvp(os.P_NOWAIT, argv[0], argv)
 		pidp, r = os.waitpid(pid, os.WNOHANG)
 		if pidp == 0:
 			gobject.timeout_add(10000, self.play_timeout, pid)
