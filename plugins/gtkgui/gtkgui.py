@@ -557,6 +557,9 @@ class roster_Window:
 	def on_agent_logging(self, widget, jid, state, account):
 		"""When an agent is requested to log in or off"""
 		self.plugin.send('AGENT_LOGGING', account, (jid, state))
+
+	def on_rename(self, widget, path):
+		self.tree.set_cursor(path, self.tree.get_column(0), True)
 		
 	def on_history(self, widget, user):
 		"""When history button is pressed : call log window"""
@@ -579,7 +582,7 @@ class roster_Window:
 		item.connect("activate", self.on_row_activated, path)
 		item = gtk.MenuItem(_("Rename"))
 		menu.append(item)
-		#item.connect("activate", self.on_rename, iter)
+		item.connect("activate", self.on_rename, path)
 		item = gtk.MenuItem()
 		menu.append(item)
 		item = gtk.MenuItem(_("Subscription"))
