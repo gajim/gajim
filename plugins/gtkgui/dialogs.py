@@ -420,6 +420,9 @@ class addContact_Window:
 		self.old_login_value = self.xml.get_widget('entry_login').get_text()
 		
 	def __init__(self, plugin, account, jid=None):
+		if not plugin.connected[account]:
+			warning_Window(_("You must be connected to add a contact"))
+			return
 		self.plugin = plugin
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Add', APP)
