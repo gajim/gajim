@@ -450,6 +450,17 @@ class roster_Window:
 			if model.iter_n_children(parent_i) == 0:
 				model.remove(parent_i)
 
+	def update_anim(self, iteration, iter, jid, account):
+		"""Update animation in the treeview"""
+		if not self.plugin.queues[account].has_key(jid):
+			return
+		model = self.tree.get_model()
+		iteration.advance()
+		pix = iteration.get_pixbuf()
+		model.set_value(iter, 0, pix)
+		gobject.timeout_add(iteration.get_delay_time(), self.update_anim, \
+			iteration, iter, jid, account)
+
 	def redraw_jid(self, jid, account):
 		"""draw the correct pixbuf and name"""
 		model = self.tree.get_model()
@@ -468,9 +479,15 @@ class roster_Window:
 				show = u.show
 		for iter in iters:
 			if self.plugin.queues[account].has_key(jid):
-				model.set_value(iter, 0, self.pixbufs['message'])
+				pix = self.pixbufs['message']
 			else:
-				model.set_value(iter, 0, self.pixbufs[show])
+				pix = self.pixbufs[show]
+			if isinstance(pix, gtk.gdk.PixbufAnimation):
+				iteration = pix.get_iter()
+				pix = iteration.get_pixbuf()
+				gobject.timeout_add(iteration.get_delay_time(), self.update_anim, \
+					iteration, iter, jid, account)
+			model.set_value(iter, 0, pix)
 			model.set_value(iter, 1, name)
 	
 	def mkmenu(self):
@@ -1151,8 +1168,7 @@ class roster_Window:
 			self.contacts[a] = {}
 			self.groups[a] = {}
 		#(icon, name, type, jid, editable)
-		model = gtk.TreeStore(gobject.GObject, str, str, str, \
-#		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, str, \
+		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, str, \
 			gobject.TYPE_BOOLEAN)
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
