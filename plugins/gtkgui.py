@@ -133,22 +133,22 @@ class roster:
 			if data[1] == 'offline':
 				self.treestore.remove(iter)
 				if not self.showOffline:
-					self.found=1
+					self.found = 1
 			else:
 				self.treestore.set_value(iter, 0, self.pixbufs[data[1]])
-				self.found=1
+				self.found = 1
 			return 1
 		return 0
 	
 	def chg_status(self, jid, show, status):
 		for u in self.l_contact:
 			if u.name == jid:
-				self.found=0
+				self.found = 0
 				self.treestore.foreach(self.update_iter, (jid, show))
-				if self.found==0:
+				if self.found == 0:
 					if not self.l_group.has_key(u.group):
 						iterG = self.treestore.append(None, (self.pixbufs['online'], u.group, 'group'))
-						self.l_group[u.group]=iterG
+						self.l_group[u.group] = iterG
 					self.treestore.append(self.l_group[u.group], (self.pixbufs[show], u.name, show))
 				u.show = show
 				u.status = status
@@ -230,11 +230,12 @@ class roster:
 		self.optionmenu = self.xml.get_widget('optionmenu')
 		self.optionmenu.set_history(6)
 		self.tab_messages = {}
-		showOffline=self.cfgParser.GtkGui_showoffline
+
+		showOffline = self.cfgParser.GtkGui_showoffline
 		if showOffline :
-			self.showOffline=string.atoi(self.cfgParser.GtkGui_showoffline)
+			self.showOffline = string.atoi(showOffline)
 		else :
-			self.showOffline=0
+			self.showOffline = 0
 
 		#colonnes
 		self.col = gtk.TreeViewColumn()
