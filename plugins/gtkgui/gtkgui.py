@@ -708,15 +708,15 @@ class tabbed_chat_window:
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		
-		# make it CAPS (emoticons keys are are CAPS)
+		# make it CAPS (emoticons keys are all CAPS)
 		possible_emot_ascii_caps = text.upper()
 		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
 			#it's an emoticon
-			text = possible_emot_ascii_caps
-			print 'emoticon:', text
+			emot_ascii = possible_emot_ascii_caps
+			print 'emoticon:', emot_ascii
 			end_iter = conversation_buffer.get_end_iter()
 			conversation_buffer.insert_pixbuf(end_iter, \
-				self.plugin.emoticons[text])
+				self.plugin.emoticons[emot_ascii])
 			return
 		elif text.startswith('mailto:'):
 			#it's a mail
@@ -3544,7 +3544,7 @@ class plugin:
 			return False
 		return True
 		
-	def make_pattern_with_formatting_on(self, formatting_on=True):
+	def make_pattern(self):
 		# regexp meta characters are:  . ^ $ * + ? { } [ ] \ | ( )
 		# one escapes the metachars with \
 		# \S matches anything but ' ' '\t' '\n' '\r' '\f' and '\v'
@@ -3561,29 +3561,27 @@ class plugin:
 		# | means or
 		# [^*] anything but '*'   (inside [] you don't have to escape metachars)
 		# [^\s*] anything but whitespaces and '*'
-		# (?<=\s) is a one char lookbehind assertion and asks for any leading whitespace
-		# and combined with ^ (beginning of lines) we have correct formatting detection
+		# (?<!\S) is a one char lookbehind assertion and asks for any leading whitespace
+		# and mathces beginning of lines so we have correct formatting detection
 		# even if the the text is just '*something*'
 		# basic_pattern is one string literal.
 		# I've put spaces to make the regexp look better.
 		links = r'\bhttp://\S+|' r'\bhttps://\S+|' r'\bnews://\S+|' r'\bftp://\S+|' r'\bed2k://\S+|' r'\bwww\.\S+|' r'\bftp\.\S+|'
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
-		mail = r'\bmailto:\S+|' r'\b\S+@\S+\.\S+'
+		mail = r'\bmailto:\S+|' r'\b\S+@\S+\.\S+|'
 
 		#detects eg. *b* *bold* *bold bold* test *bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
-		formatting = r'((?<=\s)|^)\*[^\s*]([^*]*[^\s*])?\*|' r'((?<=\s)|^)/[^\s*]([^/]*[^\s*])?/|' r'((?<=\s)|^)_[^\s*]([^_]*[^\s*])?_'
+		formatting = r'(?<!\S)\*[^\s*]([^*]*[^\s*])?\*|' r'(?<!\S)/[^\s*]([^/]*[^\s*])?/|' r'(?<!\S)_[^\s*]([^_]*[^\s*])?_'
 
-		if formatting_on:
-			self.basic_pattern = links + mail + '|' + formatting
-		else:
-			self.basic_pattern = links + mail
+		self.basic_pattern = links + mail + formatting
+
 
 	def __init__(self, quIN, quOUT):
 		gtk.gdk.threads_init()
 		#(asterix) I don't have pygtk 2.6 for the moment, so I cannot test
-#		gtk.about_dialog_set_email_hook(self.launch_browser_mailer, 'mail')
-#		gtk.about_dialog_set_url_hook(self.launch_browser_mailer, 'url')
+		gtk.about_dialog_set_email_hook(self.launch_browser_mailer, 'mail')
+		gtk.about_dialog_set_url_hook(self.launch_browser_mailer, 'url')
 		self.queueIN = quIN
 		self.queueOUT = quOUT
 		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'STATUS', \
@@ -3710,7 +3708,7 @@ class plugin:
 				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
 				self.emoticons[split_line[2*i]] = pix
 
-		self.make_pattern_with_formatting_on(True)
+		self.make_pattern()
 		
 		# at least one character in 3 parts (before @, after @, after .)
 		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S+')
