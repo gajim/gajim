@@ -171,7 +171,11 @@ class GajimCore:
 			self.hub.sendPlugin('UNSUBSCRIBED', self.connexions[con], \
 				prs.getFrom().getBasic())
 		elif type == 'error':
-			errmsg = prs._node.kids[0].getData()
+			errmsg = ''
+			for child in prs._node.getChildren():
+				if child.getName() == 'error':
+					errmsg = child.getData()
+					break
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 				(prs.getFrom().getBasic(), 'error', errmsg, \
 					prs.getFrom().getResource(), prio))
