@@ -657,13 +657,16 @@ class accountPreference_Window:
 				del self.plugin.roster.contacts[self.account]
 				del self.plugin.accounts[self.account]
 				self.plugin.send('ACC_CHG', self.account, name)
+			active = 1
+			if self.plugin.accounts[self.account].has_key('active'):
+				active = self.plugin.accounts[self.account]['active']
 			self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 				'savepass': savepass, 'password': entryPass.get_text(), \
 				'ressource': entryRessource.get_text(), 'priority' : prio, \
 				'autoconnect': autoconnect, 'use_proxy': useProxy, 'proxyhost': \
 				entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
 				'keyname': keyName, 'savegpgpass': save_gpg_pass, \
-				'gpgpass': gpg_pass}
+				'gpgpass': gpg_pass, 'active': active}
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 				'GtkGui'))
 			#refresh accounts window
@@ -689,7 +692,8 @@ class accountPreference_Window:
 			entryRessource.get_text(), 'priority' : prio, 'autoconnect': \
 			autoconnect, 'use_proxy': useProxy, 'proxyhost': \
 			entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
-			'keyname': keyName, 'savegpgpass': save_gpg_pass, 'gpgpass': gpg_pass}
+			'keyname': keyName, 'savegpgpass': save_gpg_pass, 'gpgpass': gpg_pass,\
+			'active': 1}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 			'GtkGui'))
 		if savepass:
