@@ -1392,12 +1392,15 @@ class roster_Window:
 				w = passphrase_Window('Enter your password for your account %s' % account, autoconnect)
 				if autoconnect:
 					gtk.main()
-					passphrase = w.get_pass()
+					passphrase, save = w.get_pass()
 				else:
-					passphrase = w.run()
+					passphrase, save = w.run()
 				if passphrase == -1:
 					return
 				self.plugin.send('PASSPHRASE', account, passphrase)
+				if save:
+					self.plugin.accounts[account]['savepass'] = 1
+					self.plugin.accounts[account]['password'] = passphrase
 
 			keyid = None
 			save_gpg_pass = 0
@@ -1414,11 +1417,14 @@ class roster_Window:
 					w = passphrase_Window('Enter your passphrase for your the GPG key of your account %s' % account, autoconnect)
 					if autoconnect:
 						gtk.main()
-						passphrase = w.get_pass()
+						passphrase, save = w.get_pass()
 					else:
-						passphrase = w.run()
+						passphrase, save = w.run()
 					if passphrase == -1:
 						passphrase = ''
+					if save:
+						self.plugin.accounts[account]['savegpgpass'] = 1
+						self.plugin.accounts[account]['gpgpassword'] = passphrase
 				self.plugin.send('GPGPASSPHRASE', account, passphrase)
 		self.plugin.send('STATUS', account, (status, txt))
 		if status == 'online' and self.plugin.sleeper.getState() != \

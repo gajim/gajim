@@ -221,8 +221,9 @@ class passphrase_Window:
 			msg = self.entry.get_text()
 		else:
 			msg = -1
+		chk = self.xml.get_widget("save_checkbutton")
 		self.win.destroy()
-		return msg
+		return msg, chk.get_active()
 
 	def on_key_pressed(self, widget, event):
 		if event.keyval == gtk.keysyms.Return:
@@ -242,8 +243,9 @@ class passphrase_Window:
 	
 	def get_pass(self):
 		self.autoconnect = 0
+		chk = self.xml.get_widget("save_checkbutton")
 		self.win.destroy()
-		return self.msg
+		return self.msg, chk.get_active()
 		
 	def delete_event(self, widget=None):
 		"""close window"""
