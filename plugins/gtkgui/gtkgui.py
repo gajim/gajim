@@ -600,26 +600,7 @@ class tabbed_chat_window:
 								beg = index
 					index+=1
 
-			#conversation_buffer.insert(end_iter, otext[beg:])
-
-			linksprefix = ['http://', 'https://', 'news://', 'ftp://', 'mailto:', 'ed2k://', 'www.', 'ftp.']
-			start=0
-			end=0
-			otext_lowered = otext.lower() # make them all small letters
-			for word in otext_lowered.split(): # get each word seperately
-				# word must be larger than the linksprefix items which atm the smaller is 4
-				if len(word) > 4:
-					for travelthru in range(len(linksprefix)): # travel tru linksprefix list
-						# linksprefix[travelthru] is http:// then https:// then news:// etc..
-						if word.startswith(linksprefix[travelthru]):
-							start = otext_lowered.index(word)
-							end = start + len(word)
-							print word, 'is a link and is in otext[%s:%s]' % (start, end)
-							conversation_buffer.insert_with_tags_by_name(end_iter, otext[start:end], 'hyperlink')
-							end_iter = conversation_buffer.get_end_iter()
-							break
-							
-			conversation_buffer.insert(end_iter, otext[end:])
+			conversation_buffer.insert(end_iter, otext[beg:])
 		
 		#scroll to the end of the textview
 		end_rect = conversation_textview.get_iter_location(end_iter)
@@ -1344,7 +1325,7 @@ class history_window:
 			self.history_buffer.insert_with_tags_by_name(start_iter, msg, \
 				'outgoing')
 		else:
-			msg = ':'.join(infos[3][1:], ':')
+			msg = ':'.join(infos[3][1:])
 			msg = msg.replace('\\n', '\n')
 			self.history_buffer.insert_with_tags_by_name(start_iter, \
 				_('Status is now : ') + infos[3][0]+' : ' + msg, 'status')
@@ -2361,10 +2342,11 @@ class roster_window:
 		self.begin_emot = ''
 		split_line = self.plugin.config['emoticons'].split('\t')
 		for i in range(0, len(split_line)/2):
-			file = split_line[2*i+1]
-			if not self.image_is_ok(file):
+			 # (nk) lost you here. if you remember add some comments about the idea of the algo
+			emot_file = split_line[2*i+1]
+			if not self.image_is_ok(emot_file):
 				continue
-			pix = gtk.gdk.pixbuf_new_from_file(file)
+			pix = gtk.gdk.pixbuf_new_from_file(emot_file)
 			self.emoticons[split_line[2*i]] = pix
 			if not split_line[2*i][0] in self.begin_emot:
 				self.begin_emot += split_line[2*i][0]
