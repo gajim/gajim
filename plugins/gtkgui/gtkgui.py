@@ -804,6 +804,8 @@ class roster_Window:
 			user1 = user(jid, jid, ['not in list'], \
 				'not in list', 'not in list', 'none', '')
 			self.add_user_to_roster(user1, account)
+		iter = self.get_user_iter(jid, account)
+		path = self.tree.get_model().get_path(iter[0])
 		autopopup = self.plugin.config['autopopup']
 		if autopopup == 0 and not \
 			self.plugin.windows[account]['chats'].has_key(jid):
@@ -815,8 +817,16 @@ class roster_Window:
 					model.set_value(i, 0, self.pixbufs['message'])
 			tim = time.strftime("[%H:%M:%S]")
 			self.plugin.queues[account][jid].put((msg, tim))
+			self.tree.expand_row(path[0:1], FALSE)
+			self.tree.expand_row(path[0:2], FALSE)
+			self.tree.scroll_to_cell(path)
+			self.tree.set_cursor(path)
 		else:
 			if not self.plugin.windows[account]['chats'].has_key(jid):
+				self.tree.expand_row(path[0:1], FALSE)
+				self.tree.expand_row(path[0:2], FALSE)
+				self.tree.scroll_to_cell(path)
+				self.tree.set_cursor(path)
 				self.plugin.windows[account]['chats'][jid] = \
 					message_Window(self.contacts[account][jid], self.plugin, account)
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg)
