@@ -912,7 +912,7 @@ class accountpreferences_window:
 		#if we neeed to register a new account
 		if new_account_checkbutton.get_active():
 			self.plugin.send('NEW_ACC', None, (hostname, login, password, name, \
-				ressource, prio, use_proxy, proxyhost, proxyport))
+				ressource, priority, use_proxy, proxyhost, proxyport))
 			return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 			'savepass': save_password, 'password': password, 'ressource': \
@@ -1078,7 +1078,7 @@ class configure_accounts_window:
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
-		dialog = confirm_dialog(_('Are you sure you want to remove this account (%s) ?') % account)
+		dialog = confirm_dialog(_('Are you sure you want to remove account (%s) ?') % account)
 		if dialog.get_response() == gtk.RESPONSE_YES:
 			if self.plugin.connected[account]:
 				self.plugin.send('STATUS', account, ('offline', 'offline'))
