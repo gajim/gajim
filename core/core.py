@@ -191,21 +191,21 @@ class GajimCore:
 		prio = prs.getPriority()
 		if not prio:
 			prio = 0
-		type = prs.getType()
-		if type == None: type = 'available'
-		log.debug("PresenceCB : %s" % type)
-		if type == 'available':
+		typ = prs.getType()
+		if typ == None: typ = 'available'
+		log.debug("PresenceCB : %s" % typ)
+		if typ == 'available':
 			show = prs.getShow()
 			if not show:
 				show = 'online'
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 				(prs.getFrom().getBasic(), show, prs.getStatus(), \
 				prs.getFrom().getResource(), prio))
-		elif type == 'unavailable':
+		elif typ == 'unavailable':
 			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
 				(prs.getFrom().getBasic(), 'offline', prs.getStatus(), \
 					prs.getFrom().getResource(), prio))
-		elif type == 'subscribe':
+		elif typ == 'subscribe':
 			log.debug("subscribe request from %s" % who)
 			if self.cfgParser.Core['alwaysauth'] == 1 or \
 				string.find(who, "@") <= 0:
@@ -218,8 +218,8 @@ class GajimCore:
 				txt = prs.getStatus()
 				if not txt:
 					txt = _("I would like to add you to my roster.")
-				self.hub.sendPlugin('SUBSCRIBE', self.connexions[con], (who, 'txt'))
-		elif type == 'subscribed':
+				self.hub.sendPlugin('SUBSCRIBE', self.connexions[con], (who, txt))
+		elif typ == 'subscribed':
 			jid = prs.getFrom()
 			self.hub.sendPlugin('SUBSCRIBED', self.connexions[con],\
 				(jid.getBasic(), jid.getNode(), jid.getResource()))
@@ -227,13 +227,13 @@ class GajimCore:
 				(jid.getBasic(), jid.getNode(), ['general'])))
 			#BE CAREFUL : no con.updateRosterItem() in a callback
 			log.debug("we are now subscribed to %s" % who)
-		elif type == 'unsubscribe':
+		elif typ == 'unsubscribe':
 			log.debug("unsubscribe request from %s" % who)
-		elif type == 'unsubscribed':
+		elif typ == 'unsubscribed':
 			log.debug("we are now unsubscribed to %s" % who)
 			self.hub.sendPlugin('UNSUBSCRIBED', self.connexions[con], \
 				prs.getFrom().getBasic())
-		elif type == 'error':
+		elif typ == 'error':
 			errmsg = ''
 			for child in prs._node.getChildren():
 				if child.getName() == 'error':
@@ -415,13 +415,13 @@ class GajimCore:
 								'invisible']
 						self.connected[ev[1]] = statuss.index(ev[2][0])
 						#send our presence
-						type = 'available'
+						typ = 'available'
 						if ev[2][0] == 'invisible':
-							type = 'invisible'
+							typ = 'invisible'
 						prio = 0
 						if self.cfgParser.tab[ev[1]].has_key('priority'):
 							prio = str(self.cfgParser.tab[ev[1]]['priority'])
-						con.sendPresence(type, prio, ev[2][0], ev[2][1])
+						con.sendPresence(typ, prio, ev[2][0], ev[2][1])
 						self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
 						#ask our VCard
 						iq = common.jabber.Iq(type="get")
@@ -438,13 +438,13 @@ class GajimCore:
 					statuss = ['offline', 'online', 'away', 'xa', 'dnd', \
 							'invisible']
 					self.connected[ev[1]] = statuss.index(ev[2][0])
-					type = 'available'
+					typ = 'available'
 					if ev[2][0] == 'invisible':
-						type = 'invisible'
+						typ = 'invisible'
 					prio = 0
 					if self.cfgParser.tab[ev[1]].has_key('priority'):
 						prio = str(self.cfgParser.tab[ev[1]]['priority'])
-					con.sendPresence(type, prio, ev[2][0], ev[2][1])
+					con.sendPresence(typ, prio, ev[2][0], ev[2][1])
 					self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
 			#('MSG', account, (jid, msg))
 			elif ev[0] == 'MSG':
@@ -560,7 +560,7 @@ class GajimCore:
 						else:
 							iq2.insertTag(i).putData(ev[2][i])
 				con.send(iq)
-			#('AGENT_LOGGING', account, (agent, type))
+			#('AGENT_LOGGING', account, (agent, typ))
 			elif ev[0] == 'AGENT_LOGGING':
 				t = ev[2][1];
 				if not t:
