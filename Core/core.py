@@ -230,7 +230,10 @@ class GajimCore:
 			for a in self.accounts:
 				self.connected[a] = 0 #0:offline, 1:online, 2:away,
 											 #3:xa, 4:dnd, 5:invisible
-				self.passwords[a] = self.cfgParser.tab[a]["password"]
+				if self.cfgParser.tab[a].has_key("password"):
+					self.passwords[a] = self.cfgParser.tab[a]["password"]
+				else:
+					self.passwords[a] = ' '
 				if USE_GPG:
 					self.gpg[a] = MyGnuPG()
 			self.myVCardID = []
