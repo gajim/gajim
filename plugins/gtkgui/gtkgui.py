@@ -930,7 +930,7 @@ class roster_Window:
 			iconstyle = 'sun'
 		self.path = 'plugins/gtkgui/icons/' + iconstyle + '/'
 		self.pixbufs = {}
-		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'error', \
+		for state in ('online', 'chat', 'away', 'xa', 'dnd', 'offline', 'error', \
 			'requested', 'message', 'opened', 'closed', 'not in list'):
 			# try to open a pixfile with the correct method
 			files = []
