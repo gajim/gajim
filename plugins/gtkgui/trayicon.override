@@ -9,6 +9,7 @@ headers
 modulename trayicon
 %%
 import gtk.Plug as PyGtkPlug_Type
+import gtk.gdk.Screen as PyGdkScreen_Type
 %%
 ignore-glob
   *_get_type

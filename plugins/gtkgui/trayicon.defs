@@ -1,4 +1,5 @@
 ;; -*- scheme -*-
+
 ; object definitions ...
 (define-object TrayIcon
   (in-module "Egg")
@@ -17,14 +18,14 @@
   (return-type "GType")
 )
 
-;;(define-function egg_tray_icon_new_for_screen
-;;  (c-name "egg_tray_icon_new_for_screen")
-;;  (return-type "EggTrayIcon*")
-;;  (parameters
-;;    '("GdkScreen*" "screen")
-;;    '("const-gchar*" "name")
-;;  )
-;;)
+(define-function egg_tray_icon_new_for_screen
+  (c-name "egg_tray_icon_new_for_screen")
+  (return-type "EggTrayIcon*")
+  (parameters
+    '("GdkScreen*" "screen")
+    '("const-gchar*" "name")
+  )
+)
 
 (define-function egg_tray_icon_new
   (c-name "egg_tray_icon_new")
