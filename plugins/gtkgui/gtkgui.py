@@ -1640,6 +1640,38 @@ class roster_Window:
 		self.plugin.config['showoffline'] = 1 - self.plugin.config['showoffline']
 		self.draw_roster()
 
+	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
+		if model.get_value(iter, 2) == 'account':
+			renderer.set_property('cell-background', '#9fdfff')
+			renderer.set_property('xalign', 0)
+		elif model.get_value(iter, 2) == 'group':
+			renderer.set_property('cell-background-set', False)
+			renderer.set_property('xalign', 0.3)
+		else:
+			renderer.set_property('cell-background-set', False)
+			renderer.set_property('xalign', 1)
+		renderer.set_property('width', 30)
+	
+	def nameCellDataFunc(self, column, renderer, model, iter, data=None):
+		if model.get_value(iter, 2) == 'account':
+			renderer.set_property('foreground', 'red')
+			renderer.set_property('background', '#9fdfff')
+			renderer.set_property('font', 'Normal')
+			renderer.set_property('weight', 700)
+			renderer.set_property('xpad', 0)
+		elif model.get_value(iter, 2) == 'group':
+			renderer.set_property('foreground', 'blue')
+			renderer.set_property('background-set', False)
+			renderer.set_property('font', 'Italic')
+			renderer.set_property('weight-set', False)
+			renderer.set_property('xpad', 8)
+		else:
+			renderer.set_property('foreground-set', False)
+			renderer.set_property('background-set', False)
+			renderer.set_property('font', 'Normal')
+			renderer.set_property('weight-set', False)
+			renderer.set_property('xpad', 16)
+
 	def __init__(self, plugin):
 		# FIXME : handle no file ...
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim')
@@ -1679,21 +1711,25 @@ class roster_Window:
 
 		#columns
 		col = gtk.TreeViewColumn()
+		self.tree.append_column(col)
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand = False)
 		col.add_attribute(render_pixbuf, 'pixbuf', 0)
+		col.set_cell_data_func(render_pixbuf, self.iconCellDataFunc, None)
+
 		render_text = gtk.CellRendererText()
 		render_text.connect('edited', self.on_cell_edited)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'text', 1)
 		col.add_attribute(render_text, 'editable', 4)
-		self.tree.append_column(col)
+		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
+		
 		col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand = False)
 		self.tree.append_column(col)
 		col.set_visible(FALSE)
-#		self.tree.set_expander_column(col)
+		self.tree.set_expander_column(col)
 
 		#signals
 		self.xml.signal_connect('gtk_main_quit', self.on_quit)
