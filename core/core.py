@@ -656,7 +656,7 @@ class GajimCore:
 				if self.cfgParser.tab[ev[1]].has_key("keyid"):
 					keyID = self.cfgParser.tab[ev[1]]["keyid"]
 				if keyID:
-					signed = self.gpg[ev[1]].sign(ev[2][0], keyID)
+					signed = self.gpg[ev[1]].sign(msg, keyID)
 					if signed == 'BAD_PASSPHRASE':
 						signed = ''
 						if self.connected[ev[1]] == 0:
