@@ -308,7 +308,9 @@ class GajimCore:
 							type = 'available'
 							if ev[2][0] == 'invisible':
 								type = 'invisible'
-							prio = str(self.cfgParser.tab[ev[1]]['priority'])
+							prio = 0
+							if self.cfgParser.tab[ev[1]].has_key('priority'):
+								prio = str(self.cfgParser.tab[ev[1]]['priority'])
 							con.sendPresence(type, prio, ev[2][0], ev[2][1])
 							self.hub.sendPlugin('STATUS', ev[1], ev[2][0])
 							#ask our VCard
