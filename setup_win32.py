@@ -40,8 +40,8 @@ opts = {
 setup(
     name = "Gajim",
     description = "A jabber client",
-#    console=["runCore.py"],
-    windows = [{"script": "runCore.py"}],
+#    console=["gajim.py"],
+    windows = [{"script": "gajim.py"}],
     options=opts,
     data_files=[("plugins/gtkgui", glob.glob("plugins/gtkgui/gtkgui.glade")),
                 ("plugins/gtkgui/icons/sun", glob.glob("plugins/gtkgui/icons/sun/*.*")),

@@ -28,9 +28,9 @@ install-stamp: build-stamp
 	cd debian/tmp && install -d `cat ../dirs`
 	make install PREFIX=/usr DESTDIR=`pwd`/debian/tmp
 	cp gajim.xpm debian/tmp/usr/share/pixmaps
-	chmod -x debian/tmp/usr/share/gajim/runCore.py
-	sed -ne '1d;w debian/tmp/runCore.py.tmp' debian/tmp/usr/share/gajim/runCore.py
-	mv debian/tmp/runCore.py.tmp debian/tmp/usr/share/gajim/runCore.py
+	chmod -x debian/tmp/usr/share/gajim/gajim.py
+	sed -ne '1d;w debian/tmp/gajim.py.tmp' debian/tmp/usr/share/gajim/gajim.py
+	mv debian/tmp/gajim.py.tmp debian/tmp/usr/share/gajim/gajim.py
 
 binary-indep: checkroot build
 	$(checkdir)

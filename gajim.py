@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-##	runCore.py
+##	gajim.py
 ##
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@lagaule.org>

@@ -22,4 +22,4 @@ if [ `id -u` -eq 0 ]; then
 fi
 
 cd PREFIX/share/gajim
-python runCore.py
+python gajim.py
