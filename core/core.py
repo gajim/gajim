@@ -167,7 +167,6 @@ class GajimCore:
 		log.debug("disconnectedCB")
 		if self.connected[self.connexions[con]] == 1:
 			self.connected[self.connexions[con]] = 0
-			con.disconnect()
 		self.hub.sendPlugin('STATUS', self.connexions[con], 'offline')
 		if self.connexions.has_key(con):
 			del self.connexions[con]
