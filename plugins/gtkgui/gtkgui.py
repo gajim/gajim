@@ -899,6 +899,7 @@ class plugin:
 			'width': 150,\
 			'height': 400,\
 			'latest_disco_addresses': '',\
+			'recently_groupchat': '',\
 			'before_time': '[',\
 			'after_time': ']',\
 			'before_nickname': '<',\

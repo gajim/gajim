@@ -7768,6 +7768,7 @@ Custom</property>
 	  <child>
 	    <widget class="GtkComboBox" id="recently_combobox">
 	      <property name="visible">True</property>
+	      <signal name="changed" handler="on_recently_combobox_changed" last_modification_time="Wed, 06 Apr 2005 22:25:35 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>

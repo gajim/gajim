@@ -671,11 +671,30 @@ class Join_groupchat_window:
 			set_text(self.plugin.nicks[self.account])
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows['join_gc'] = self # now add us to open windows
+
+		self.recently_combobox = self.xml.get_widget('recently_combobox')
+		liststore = gtk.ListStore(str)
+		self.recently_combobox.set_model(liststore)
+		cell = gtk.CellRendererText()
+		self.recently_combobox.pack_start(cell, True)
+		self.recently_combobox.add_attribute(cell, 'text', 0)
+#		self.recently_combobox.set_text_column(0)
+		self.recently_groupchat = self.plugin.config['recently_groupchat'].split()
+		for g in self.recently_groupchat:
+			self.recently_combobox.append_text(g)
+
 		self.window.show_all()
 
 	def on_join_groupchat_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows['join_gc'] # remove us from open windows
+
+	def on_recently_combobox_changed(self, widget):
+		model = widget.get_model()
+		iter = widget.get_active_iter()
+		gid = model.get_value(iter, 0)
+		self.xml.get_widget('room_entry').set_text(gid.split('@')[0])
+		self.xml.get_widget('server_entry').set_text(gid.split('@')[1])
 
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
@@ -688,6 +707,13 @@ class Join_groupchat_window:
 		server = self.xml.get_widget('server_entry').get_text()
 		password = self.xml.get_widget('password_entry').get_text()
 		jid = '%s@%s' % (room, server)
+		if jid in self.recently_groupchat:
+			self.recently_groupchat.remove(jid)
+		self.recently_groupchat.insert(0, jid)
+		if len(self.recently_groupchat) > 10:
+			self.recently_groupchat = self.recently_groupchat[0:10]
+		self.plugin.config['recently_groupchat'] = \
+			' '.join(self.recently_groupchat)
 		self.plugin.roster.new_group(jid, nickname, self.account)
 		self.plugin.send('GC_JOIN', self.account, (nickname, room, server, \
 			password))
