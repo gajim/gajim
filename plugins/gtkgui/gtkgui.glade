@@ -3061,7 +3061,7 @@ on the server as a vCard</property>
 
 <widget class="GtkWindow" id="preferences_window">
   <property name="border_width">4</property>
-  <property name="width_request">490</property>
+  <property name="width_request">544</property>
   <property name="height_request">530</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Preferences</property>
@@ -3099,7 +3099,7 @@ on the server as a vCard</property>
 	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">2</property>
+	      <property name="spacing">5</property>
 
 	      <child>
 		<widget class="GtkCheckButton" id="tray_icon_checkbutton">
@@ -3163,17 +3163,6 @@ on the server as a vCard</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHSeparator" id="hseparator12">
-		  <property name="visible">True</property>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
 		<widget class="GtkHBox" id="hbox2901">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">True</property>
@@ -3216,7 +3205,7 @@ on the server as a vCard</property>
 		<packing>
 		  <property name="padding">0</property>
 		  <property name="expand">False</property>
-		  <property name="fill">False</property>
+		  <property name="fill">True</property>
 		</packing>
 	      </child>
 
@@ -5473,7 +5462,7 @@ Custom</property>
 			    <widget class="GtkCheckButton" id="chk_log_pres_usr">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Log presences in _user's log file</property>
+			      <property name="label" translatable="yes">Log presences in _contact's log file</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
