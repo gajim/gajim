@@ -1577,12 +1577,14 @@ class plugin:
 					#Save messages
 					temp_q.put(ev)
 
-	def handle_event_roster(self, account, array):
-		self.roster.mklists(array, account)
+	def handle_event_roster(self, account, data):
+		#('ROSTER', account, (state, array))
+		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
+		self.roster.on_status_changed(account, statuss[data[0]])
+		self.roster.mklists(data[1], account)
 		self.roster.draw_roster()
 	
 	def handle_event_warning(self, unused, msg):
-		#('ROSTER', account, array)
 		warning_Window(msg)
 	
 	def handle_event_status(self, account, status):
@@ -1848,6 +1850,7 @@ class plugin:
 												#1:online and use sleeper
 												#2:autoaway and use sleeper
 												#3:autoxa and use sleeper
+			self.send('ASK_ROSTER', a, self.queueIN)
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)

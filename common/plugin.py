@@ -22,15 +22,15 @@ import common.thread
 """ Plugin definitions """
 
 class GajimPlugin:
-    def __init__(self, name, queueIn, queueOut):
-        """ queueIn is a queue to interact from the hub to the plugin """
-        self.name = name
-        self.queueIn = queueIn
-        self.queueOut= queueOut
-    # END __init__
+	def __init__(self, name, queueIn, queueOut):
+		""" queueIn is a queue to interact from the hub to the plugin """
+		self.name = name
+		self.queueIn = queueIn
+		self.queueOut= queueOut
+	# END __init__
 
-    def load(self):
-        self.thr = common.thread.GajimThread(self.name, self.queueIn, \
-		self.queueOut)
-    # END load
+	def load(self):
+		thr = common.thread.GajimThread(self.name, self.queueIn, self.queueOut)
+		thr.start()
+	# END load
 # END GajimPlugin

@@ -306,7 +306,7 @@ class GajimCore:
 				roster = con.getRoster().getRaw()
 				if not roster :
 					roster = {}
-				self.hub.sendPlugin('ROSTER', account, roster)
+				self.hub.sendPlugin('ROSTER', account, (0, roster))
 				self.connected[account] = 1
 				return con
 			else:
@@ -362,6 +362,13 @@ class GajimCore:
 							con.disconnect()
 					self.hub.sendPlugin('QUIT', None, ())
 					return 1
+			#('ASK_ROSTER', account, queue_for_response)
+			elif ev[0] == 'ASK_ROSTER':
+				roster = {}
+				if con:
+					roster = con.getRoster().getRaw()
+				self.hub.sendPlugin('ROSTER', ev[1], (self.connected[ev[1]], \
+					roster), ev[2])
 			#('ASK_CONFIG', account, (who_ask, section, default_config))
 			elif ev[0] == 'ASK_CONFIG':
 				if ev[2][1] == 'accounts':

@@ -30,7 +30,6 @@ class GajimThread(threading.Thread):
 		self.queueOut = queueOut
 		threading.Thread.__init__(self, target = self.run, \
 			name = name) 
-		self.start() 
 	# END __init__
  
 	def run(self):
