@@ -652,44 +652,44 @@ class Groupchat_window:
 			self.tagStatus[room_jid].set_property('foreground', \
 				self.plugin.config['statusmsgcolor'])
 
-	def get_role_iter(self, room_jid, name):
+	def get_role_iter(self, room_jid, role):
 		model = self.list_treeview[room_jid].get_model()
 		fin = False
 		iter = model.get_iter_root()
 		if not iter:
 			return None
 		while not fin:
-			account_name = model.get_value(iter, 1)
-			if name == account_name:
+			role_name = model.get_value(iter, 2)
+			if role == role_name:
 				return iter
 			iter = model.iter_next(iter)
 			if not iter:
 				fin = True
 		return None
 
-	def get_user_iter(self, room_jid, jid):
+	def get_user_iter(self, room_jid, nick):
 		model = self.list_treeview[room_jid].get_model()
 		fin = False
-		role = model.get_iter_root()
-		if not role:
+		role_iter = model.get_iter_root()
+		if not role_iter:
 			return None
 		while not fin:
 			fin2 = False
-			user = model.iter_children(role)
-			if not user:
+			user_iter = model.iter_children(role_iter)
+			if not user_iter:
 				fin2=True
 			while not fin2:
-				if jid == model.get_value(user, 1):
-					return user
-				user = model.iter_next(user)
-				if not user:
+				if nick == model.get_value(user, 1):
+					return user_iter
+				user_iter = model.iter_next(user_iter)
+				if not user_iter:
 					fin2 = True
-			role = model.iter_next(role)
-			if not role:
+			role_iter = model.iter_next(role_iter)
+			if not role_iter:
 				fin = True
 		return None
 
-	def get_user_list(self, room_jid):
+	def get_nick_list(self, room_jid):
 		model = self.list_treeview[room_jid].get_model()
 		list = []
 		fin = False
@@ -729,7 +729,7 @@ class Groupchat_window:
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None, (self.plugin.roster.pixbufs['closed']\
-				, role, role))
+				, role + 's', role))
 		iter = model.append(role_iter, (img, nick, jid))
 		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)), \
 			False)
@@ -739,7 +739,7 @@ class Groupchat_window:
 		model = self.list_treeview[room_jid].get_model()
 		path = model.get_path(jid_iter)[0]
 		iter = model.get_iter(path)
-		return model.get_value(iter, 1)
+		return model.get_value(iter, 2)
 
 	def chg_user_status(self, room_jid, nick, show, status, role, affiliation, \
 		jid, reason, actor, statusCode, account):
@@ -835,16 +835,23 @@ class Groupchat_window:
 			return 1
 		elif event.keyval == gtk.keysyms.Tab: # TAB
 			room_jid = self.get_active_jid()
-			list_nick = self.get_user_list(room_jid)
+			list_nick = self.get_nick_list(room_jid)
 			message_buffer = widget.get_buffer()
 			start_iter = message_buffer.get_start_iter()
 			cursor_position = message_buffer.get_insert()
 			end_iter = message_buffer.get_iter_at_mark(cursor_position)
-			txt = message_buffer.get_text(start_iter, end_iter, 0)
-			begin = txt.split()[-1]
+			text = message_buffer.get_text(start_iter, end_iter, 0)
+			if not text:
+				return 0
+			splited_text = text.split()
+			begin = splited_text[-1]
 			for nick in list_nick:
 				if nick.find(begin) == 0:
-					message_buffer.insert_at_cursor(nick[len(begin):] + ': ')
+					if len(splited_text) == 1:
+						add = ': '
+					else:
+						add = ' '
+					message_buffer.insert_at_cursor(nick[len(begin):] + add)
 					return 1
 		return 0
 
