@@ -490,12 +490,32 @@ class confirm_dialog:
 class warning_dialog:
 	"""Class for warning dialog"""
 	def __init__(self, label):
-		self.dialog = gtk.MessageDialog(None,\
+		dialog = gtk.MessageDialog(None,\
 			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
 			gtk.MESSAGE_WARNING, gtk.BUTTONS_CLOSE, label)
 
-		response = self.dialog.run()
-		self.dialog.destroy()
+		dialog.run()
+		dialog.destroy()
+
+class information_dialog:
+	"""Class for information dialog"""
+	def __init__(self, label):
+		dialog = gtk.MessageDialog(None,\
+			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
+			gtk.MESSAGE_INFO, gtk.BUTTONS_CLOSE, label)
+
+		dialog.run()
+		dialog.destroy()
+
+class error_dialog:
+	"""Class for error dialog"""
+	def __init__(self, label):
+		dialog = gtk.MessageDialog(None,\
+			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
+			gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE, label)
+
+		dialog.run()
+		dialog.destroy()
 
 class subscription_request_window:
 	"""Class for authorization window :

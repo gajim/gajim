@@ -1656,7 +1656,7 @@ class roster_window:
 			return
 		accounts = self.plugin.accounts.keys()
 		if len(accounts) == 0:
-			warning_dialog(_("You must setup an account before connecting to jabber network."))
+			error_dialog(_("You must setup an account before connecting to jabber network."))
 			self.set_cb()
 			return
 		status = model[active][0]
@@ -2590,10 +2590,10 @@ class plugin:
 				'online', 'to', '', array[1], 0, '')
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
-		warning_dialog(_("You are now authorized by %s") % jid)
+		information_dialog(_("You are now authorized by %s") % jid)
 
 	def handle_event_unsubscribed(self, account, jid):
-		warning_dialog(_("You are now unsubscribed by %s") % jid)
+		information_dialog(_("You are now unsubscribed by %s") % jid)
 
 	def handle_event_agents(self, account, agents):
 		#('AGENTS', account, agents)
@@ -2609,7 +2609,7 @@ class plugin:
 	def handle_event_reg_agent_info(self, account, array):
 		#('REG_AGENTS_INFO', account, (agent, infos))
 		if not array[1].has_key('instructions'):
-			warning_dialog(_("error contacting %s") % array[0])
+			error_dialog(_("error contacting %s") % array[0])
 		else:
 			agent_registration_window(array[0], array[1], self, account)
 
