@@ -885,7 +885,7 @@ class roster_Window:
 		model.append(None, (self.pixbufs[status], account, 'account', account,\
 			FALSE))
 
-	def add_user_to_roster(self, jid, account, keyID):
+	def add_user_to_roster(self, jid, account):
 		"""Add a user to the roster and add groups if they aren't in roster"""
 		showOffline = self.plugin.config['showoffline']
 		if not self.contacts[account].has_key(jid):
@@ -1016,8 +1016,7 @@ class roster_Window:
 		for acct in self.contacts.keys():
 			self.add_account_to_roster(acct)
 			for jid in self.contacts[acct].keys():
-				#TODO: get the good keyID
-				self.add_user_to_roster(jid, acct, '')
+				self.add_user_to_roster(jid, acct)
 	
 	def mklists(self, array, account):
 		"""fill self.contacts and self.groups"""
@@ -1075,7 +1074,7 @@ class roster_Window:
 				iters = []
 		else:
 			if not self.get_user_iter(user.jid, account):
-				self.add_user_to_roster(user.jid, account, user.keyID)
+				self.add_user_to_roster(user.jid, account)
 			self.redraw_jid(user.jid, account)
 		users = self.contacts[account][user.jid]
 		for u in users:
