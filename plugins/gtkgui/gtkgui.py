@@ -2333,6 +2333,8 @@ class roster_window:
 		if path_dest[0] != path_source[0]: #droped in another account
 			return
 		grp_source = model.get_value(model.iter_parent(iter_source), 3)
+		if grp_source == 'Agents':
+			return
 		account = model.get_value(model.get_iter(path_dest[0]), 3)
 		if len(path_dest) == 2:
 			grp_dest = model.get_value(iter_dest, 3)
