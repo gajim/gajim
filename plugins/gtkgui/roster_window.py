@@ -1,4 +1,4 @@
-##	plugins/roster.py
+##	plugins/gtkgui/roster_window.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -42,7 +42,7 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-class roster_window:
+class Roster_window:
 	"""Class for main window of gtkgui plugin"""
 
 	def get_account_iter(self, name):
@@ -893,8 +893,11 @@ class roster_window:
 	def on_preferences_menuitem_activate(self, widget):
 		"""When preferences is selected :
 		call the preferences_window class"""
-		if not self.plugin.windows.has_key('preferences'):
-			self.plugin.windows['preferences'] = preferences_window(self.plugin)
+		print self.plugin.windows['preferences'].window.get_property('visible')
+		if self.plugin.windows['preferences'].window.get_property('visible'):
+			self.plugin.windows['preferences'].window.present()
+		else:
+			self.plugin.windows['preferences'].window.show_all()
 
 	def on_add_contact(self, widget, account):
 		"""When add user is selected :

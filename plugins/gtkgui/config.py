@@ -35,12 +35,16 @@ import gtkgui
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
 
-class preferences_window:
+class Preferences_window:
 	"""Class for Preferences window"""
-	def delete_event(self, widget):
-		"""close window"""
-		del self.plugin.windows['preferences']
 	
+	def on_delete_event(self, widget, event):
+		self.window.hide()
+		return True # do NOT destory the window
+	
+	def on_close_button_clicked(self, widget):
+		self.window.hide()		
+
 	def on_tray_icon_checkbutton_toggled(self, widget):
 		"""On Tray Icon Checkbutton Toggled"""
 		if widget.get_active():
@@ -436,10 +440,6 @@ class preferences_window:
 		else:
 			self.config_logger['lognotsep'] = 0
 		self.plugin.send('CONFIG', None, ('Logger', self.config_logger, 'GtkGui'))
-		
-	def on_close_button_clicked(self, widget):
-		"""When The close button is clicked"""
-		widget.get_toplevel().destroy()
 
 	def fill_msg_treeview(self):
 		i = 0
@@ -969,6 +969,7 @@ class preferences_window:
 			self.on_msg_treemodel_row_deleted)
 		
 		self.xml.signal_autoconnect(self)
+		#self.window.show_all()
 
 class Account_modification_window:
 	"""Class for account informations"""

@@ -790,12 +790,16 @@ class plugin:
 			'ask_online_status':0,\
 			'ask_offline_status':0,\
 			'last_msg':'',\
-			'msg0_name':'Brb',\
-			'msg0':'Back in some minutes.',\
-			'msg1_name':'Eating',\
-			'msg1':'I\'m eating, so leave me a message.',\
-			'msg2_name':'Film',\
-			'msg2':'I\'m watching a film.',\
+			'msg0_name':'Online',\
+			'msg0':'Yep I\'m online',\
+			'msg1_name':'Brb',\
+			'msg1':'Back in some minutes.',\
+			'msg2_name':'Eating',\
+			'msg2':'I\'m eating, so leave me a message.',\
+			'msg3_name':'Film',\
+			'msg3':'I\'m watching a film.',\
+			'msg4_name':'Offline',\
+			'msg4':'I\'m just offline',\
 			'trayicon':1,\
 			'iconstyle':'sun',\
 			'inmsgcolor':'#ff0000',\
@@ -868,7 +872,7 @@ class plugin:
 				break
 		if pix:
 			gtk.window_set_default_icon(pix)
-		self.roster = roster_window(self)
+		self.roster = Roster_window(self)
 		gobject.timeout_add(100, self.read_queue)
 		gobject.timeout_add(100, self.read_sleepy)
 		self.sleeper = common.sleepy.Sleepy( \
@@ -892,6 +896,9 @@ class plugin:
 			self.show_systray()
 			
 		self.init_regex()
+		
+		# get instances for windows/dialogs that will show_all()/hide()
+		self.windows['preferences'] = Preferences_window(self)
 
 		gtk.gdk.threads_enter()
 		gobject.timeout_add(100, self.autoconnect)
