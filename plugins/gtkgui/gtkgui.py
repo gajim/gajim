@@ -1611,7 +1611,7 @@ class roster_Window:
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_("Start chat"))
 		menu.append(item)
-		item.connect("activate", self.on_row_activated, path)
+		item.connect("activate", self.on_roster_treeview_row_activated, path)
 		item = gtk.MenuItem(_("Rename"))
 		menu.append(item)
 		item.connect("activate", self.on_rename, iter, path, user)
