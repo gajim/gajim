@@ -180,6 +180,10 @@ class infoUser_Window:
 		self.xml.get_widget('label_name').set_text(user.name)
 		self.xml.get_widget('label_id').set_text(user.jid)
 		self.xml.get_widget('label_sub').set_text(user.sub)
+		if user.ask:
+			self.xml.get_widget('label_ask').set_text(user.ask)
+		else:
+			self.xml.get_widget('label_ask').set_text('None')
 		self.xml.get_widget('entry_name').set_text(user.name)
 		acct = self.plugin.accounts[account]
 		log = 1

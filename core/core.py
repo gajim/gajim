@@ -480,6 +480,17 @@ class GajimCore:
 			self.hub.sendPlugin('STATUS', self.connexions[con], 'offline')
 	# END disconenctedCB
 
+	def rosterSetCB(self, con, iq_obj):
+		for item in iq_obj.getQueryNode().getChildren():
+			jid  = item.getAttr('jid')
+			name = item.getAttr('name')
+			sub  = item.getAttr('subscription')
+			ask  = item.getAttr('ask')
+			groups = []
+			for group in item.getTags("group"):
+				groups.append(group.getData())
+			self.hub.sendPlugin('ROSTER_INFO', self.connexions[con], (jid, name, sub, ask, groups))
+
 	def connect(self, account):
 		"""Connect and authentificate to the Jabber server"""
 		hostname = self.cfgParser.tab[account]["hostname"]
@@ -511,6 +522,8 @@ class GajimCore:
 			con.registerHandler('message', self.messageCB)
 			con.registerHandler('presence', self.presenceCB)
 			con.registerHandler('iq',self.vCardCB,'result')#common.jabber.NS_VCARD)
+			con.registerHandler('iq',self.rosterSetCB,'set', \
+				common.jabber.NS_ROSTER)
 		try:
 			con.connect()
 		except IOError, e:

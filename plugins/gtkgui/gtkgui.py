@@ -161,19 +161,21 @@ class user:
 			self.show = ''
 			self.status = ''
 			self.sub = ''
+			self.ask = ''
 			self.resource = ''
-			self.priority = 0
+			self.priority = 1
 			self.keyID = ''
-		elif len(args) == 9:
+		elif len(args) == 10:
 			self.jid = args[0]
 			self.name = args[1]
 			self.groups = args[2]
 			self.show = args[3]
 			self.status = args[4]
 			self.sub = args[5]
-			self.resource = args[6]
-			self.priority = args[7]
-			self.keyID = args[8]
+			self.ask = args[6]
+			self.resource = args[7]
+			self.priority = args[8]
+			self.keyID = args[9]
 		else: raise TypeError, _('bad arguments')
 
 
@@ -953,16 +955,22 @@ class roster_Window:
 		if len(users) > 1:
 			name += " (" + str(len(users)) + ")"
 		prio = 0
-		show = users[0].show
+		user = users[0]
 		for u in users:
 			if u.priority > prio:
 				prio = u.priority
-				show = u.show
+				user = u
 		for iter in iters:
 			if self.plugin.queues[account].has_key(jid):
 				img = self.pixbufs['message']
 			else:
-				img = self.pixbufs[show]
+				if user.sub == 'none':
+					if user.ask == 'subscribe':
+						img = self.pixbufs['requested']
+					else:
+						img = self.pixbufs['not in list']
+				else:
+					img = self.pixbufs[user.show]
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
 	
@@ -1048,7 +1056,8 @@ class roster_Window:
 				show = 'offline'
 
 			user1 = user(ji, name, array[jid]['groups'], show, \
-				array[jid]['status'], array[jid]['sub'], resource, 0, '')
+				array[jid]['status'], array[jid]['sub'], array[jid]['ask'], \
+				resource, 0, '')
 			#when we draw the roster, we can't have twice the same user with 
 			# 2 resources
 			self.contacts[account][ji] = [user1]
@@ -1298,7 +1307,7 @@ class roster_Window:
 		self.plugin.send('SUB', account, (jid, txt))
 		if not self.contacts[account].has_key(jid):
 			user1 = user(jid, jid, ['general'], 'requested', \
-				'requested', 'sub', '', 0, '')
+				'requested', 'none', 'subscribe', '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
 	
@@ -1452,7 +1461,7 @@ class roster_Window:
 		"""when we receive a message"""
 		if not self.contacts[account].has_key(jid):
 			user1 = user(jid, jid, ['not in list'], \
-				'not in list', 'not in list', 'none', '', 0, '')
+				'not in list', 'not in list', 'none', None, '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
 		iters = self.get_user_iter(jid, account)
@@ -1544,7 +1553,6 @@ class roster_Window:
 		self.close_all(self.plugin.windows)
 		self.plugin.systray.t.destroy()
 		gtk.main_quit()
-#		gtk.gdk.threads_leave()
 
 	def on_row_activated(self, widget, path, col=0):
 		"""When an iter is dubble clicked :
@@ -2155,8 +2163,8 @@ class plugin:
 				user1 = self.roster.contacts[account][ji][0]
 				if (resources != [''] and (len(luser) != 1 or 
 					luser[0].show != 'offline')) and not string.find(jid, "@") <= 0:
-					user1 = user(user1.jid, user1.name, user1.groups, \
-						user1.show, user1.status, user1.sub, user1.resource, \
+					user1 = user(user1.jid, user1.name, user1.groups, user1.show, \
+					user1.status, user1.sub, user1.ask, user1.resource, \
 						user1.priority, user1.keyID)
 					luser.append(user1)
 				user1.resource = resource
@@ -2207,7 +2215,7 @@ class plugin:
 			self.roster.redraw_jid(u.jid, account)
 		else:
 			user1 = user(jid, jid, ['general'], 'online', \
-				'online', 'to', array[2], 0, '')
+				'online', 'to', '', array[2], 0, '')
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
 		warning_Window(_("You are now authorized by %s") % jid)
@@ -2317,6 +2325,24 @@ class plugin:
 		if self.windows.has_key('gpg_keys'):
 			self.windows['gpg_keys'].fill_tree(keys)
 
+	def handle_event_roster_info(self, account, array):
+		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
+		jid = array[0]
+		if not self.roster.contacts[account].has_key(jid):
+			return
+		users = self.roster.contacts[account][jid]
+		if not (array[2] or array[3]):
+			self.roster.remove_user(users[0], account)
+			del self.roster.contacts[account][jid]
+			#TODO if it was the only one in its group, remove the group
+			return
+		for user in users:
+			user.name = array[1]
+			user.sub = array[2]
+			user.ask = array[3]
+			user.groups = array[4]
+		self.roster.redraw_jid(jid, account)
+
 	def read_queue(self):
 		"""Read queue from the core and execute commands from it"""
 		while self.queueIN.empty() == 0:
@@ -2363,6 +2389,8 @@ class plugin:
 				self.handle_event_bad_passphrase(ev[1], ev[2])
 			elif ev[0] == 'GPG_SECRETE_KEYS':
 				self.handle_event_gpg_secrete_keys(ev[1], ev[2])
+			elif ev[0] == 'ROSTER_INFO':
+				self.handle_event_roster_info(ev[1], ev[2])
 		return 1
 	
 	def read_sleepy(self):	
@@ -2401,7 +2429,8 @@ class plugin:
 			'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
 			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'REG_AGENT_INFO', 'QUIT', \
 			'ACC_OK', 'CONFIG', 'MYVCARD', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', \
-			'VISUAL', 'GC_MSG', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS'])
+			'VISUAL', 'GC_MSG', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS', \
+			'ROSTER_INFO'])
 		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', {'autopopup':1,\
 			'autopopupaway':1,\
 			'showoffline':0,\
