@@ -578,7 +578,7 @@ class tabbed_chat_window:
 				name = user.name
 				
 			if text.startswith('/me'):
-				ttext = name + ' ' + text[4:] + '\n'
+				ttext = name + text[3:] + '\n'
 			else:
 				ttext = '<' + name + '> '
 				otext = text + '\n'
@@ -885,7 +885,7 @@ class Groupchat_window:
 				message_textview.grab_focus()
 		'''
 
-	def print_conversation(self, text, room_jid, contact = None, tim = None):
+	def print_conversation(self, text, room_jid, contact = '', tim = None):
 		"""Print a line in the conversation :
 		if contact is set : it's a message from someone
 		if contact is not set : it's a message from the server"""
@@ -897,19 +897,29 @@ class Groupchat_window:
 		end_iter = conversation_buffer.get_end_iter()
 		if not tim:
 			tim = time.localtime()
-		tim_format = time.strftime('[%H:%M:%S]', time)
+		tim_format = time.strftime('[%H:%M:%S]', tim)
 		conversation_buffer.insert(end_iter, tim_format) # CHECK! in tabbed print_conver you have + ' ' here
+
+		otext = ''
+		ttext = ''
 		if contact:
 			if contact == self.nicks[room_jid]:
-				conversation_buffer.insert_with_tags_by_name(end_iter, '<' + \
-					contact + '> ', 'outgoing')
+				tag = 'outgoing'
 			else:
-				conversation_buffer.insert_with_tags_by_name(end_iter, '<' + \
-					contact + '> ', 'incoming')
-			conversation_buffer.insert(end_iter, text + '\n')
+				tag = 'incoming'
+
+			if text.startswith('/me'):
+				ttext = contact + text[3:] + '\n'
+			else:
+				ttext = '<' + contact + '> '
+				otext = text + '\n'
 		else:
-			conversation_buffer.insert_with_tags_by_name(end_iter, text + '\n', \
-				'status')
+			tag = 'status'
+			ttext = text + '\n'
+
+		conversation_buffer.insert_with_tags_by_name(end_iter, ttext, tag)
+		#TODO: emoticons, url grabber
+		conversation_buffer.insert(end_iter, otext)
 		#scroll to the end of the textview
 		conversation_textview.scroll_to_mark(conversation_buffer.get_mark('end'),\
 			0.1, 0, 0, 0)
