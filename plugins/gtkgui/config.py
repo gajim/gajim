@@ -962,7 +962,6 @@ class accountpreferences_window:
 			if self.plugin.connected[self.account]:
 				self.plugin.windows[self.account]['infos'][jid] = \
 					infoUser_Window(jid, self.plugin, self.account, True)
-#					vCard_Window(jid, self.plugin, self.account)
 				self.plugin.send('ASK_VCARD', self.account, jid)
 			else:
 				warning_dialog(_('You must be connected to get your informations'))
