@@ -115,7 +115,7 @@ class ImageCellRenderer(gtk.GenericCellRenderer):
 
 		draw_rect = cell_area.intersect(pix_rect)
 		draw_rect = expose_area.intersect(draw_rect)
-	
+
 		if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			if not self.image.get_data('iter'):
 				animation = self.image.get_animation()
@@ -1372,7 +1372,7 @@ class roster_Window:
 
 	def change_status(self, widget, account, status):
 		if status != 'online' and status != 'offline':
-			w = awayMsg_Window()
+			w = awayMsg_Window(self.plugin)
 			txt = w.run()
 			if txt == -1:
 				return
@@ -1386,7 +1386,7 @@ class roster_Window:
 		history = optionmenu.get_history()
 		status = optionmenu.get_menu().get_children()[history].name
 		if status != 'online' and status != 'offline':
-			w = awayMsg_Window()
+			w = awayMsg_Window(self.plugin)
 			txt = w.run()
 			if txt == -1:
 				self.set_optionmenu()
@@ -2380,6 +2380,13 @@ class plugin:
 			'autoawaytime':10,\
 			'autoxa':1,\
 			'autoxatime':20,\
+			'last_msg':'',\
+			'msg1_name':'Brb',\
+			'msg1':'Back in some minutes.',\
+			'msg2_name':'Eating',\
+			'msg2':'I\'m eating, so let a message.',\
+			'msg3_name':'Film',\
+			'msg3':'I\'m watching a film.',\
 			'trayicon':1,\
 			'iconstyle':'sun',\
 			'inmsgcolor':'#ff0000',\
@@ -2395,7 +2402,7 @@ class plugin:
 			'usertextcolor': '#000000',\
 			'userbgcolor': '#ffffff',\
 			'userfont': 'Sans 10',\
-			'saveposition': 0,\
+			'saveposition': 1,\
 			'x-position': 0,\
 			'y-position': 0,\
 			'width': 150,\

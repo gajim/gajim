@@ -238,6 +238,19 @@ class preference_Window:
 		self.plugin.sleeper = common.sleepy.Sleepy(\
 			self.plugin.config['autoawaytime']*60, \
 			self.plugin.config['autoxatime']*60)
+		#Status messages
+		model = self.msg_tree.get_model()
+		iter = model.get_iter_first()
+		i = 0
+		while iter:
+			self.plugin.config['msg%i_name' % i] = model.get_value(iter, 0)
+			self.plugin.config['msg%i' % i] = model.get_value(iter, 1)
+			iter = model.iter_next(iter)
+			i += 1
+		while self.plugin.config.has_key('msg%s_name' % i):
+			del self.plugin.config['msg%i_name' % i]
+			del self.plugin.config['msg%i' % i]
+			i += 1
 		#trayicon
 		if self.chk_trayicon.get_active():
 			self.plugin.config['trayicon'] = 1
@@ -262,7 +275,51 @@ class preference_Window:
 		
 	def on_presence_button_clicked(self, widget, data=None):
 		self.change_notebook_page(2)
-	
+
+	def fill_msg_treeview(self):
+		i = 0
+		self.xml.get_widget('delete_msg_button').set_sensitive(False)
+		model = self.msg_tree.get_model()
+		model.clear()
+		while self.plugin.config.has_key('msg%s_name' % i):
+			iter = model.append()
+			model.set(iter, 0, self.plugin.config['msg%s_name' % i], 1, self.plugin.config['msg%s' % i])
+			i += 1
+
+	def on_msg_cell_edited(self, cell, row, new_text):
+		model = self.msg_tree.get_model()
+		iter = model.get_iter_from_string(row)
+		model.set_value(iter, 0, new_text)
+
+	def on_msg_treeview_cursor_changed(self, widget, data=None):
+		self.xml.get_widget('delete_msg_button').set_sensitive(True)
+		buf = self.xml.get_widget('msg_textview').get_buffer()
+		(model, iter) = self.msg_tree.get_selection().get_selected()
+		name = model.get_value(iter, 0)
+		msg = model.get_value(iter, 1)
+		buf.set_text(msg)
+
+	def on_new_msg_button_clicked(self, widget, data=None):
+		model = self.msg_tree.get_model()
+		iter = model.append()
+		model.set(iter, 0, 'msg', 1, 'message')
+
+	def on_delete_msg_button_clicked(self, widget, data=None):
+		(model, iter) = self.msg_tree.get_selection().get_selected()
+		buf = self.xml.get_widget('msg_textview').get_buffer()
+		model.remove(iter)
+		buf.set_text('')
+		self.xml.get_widget('delete_msg_button').set_sensitive(False)
+
+	def on_msg_textview_focus_out_event(self, widget, data=None):
+		(model, iter) = self.msg_tree.get_selection().get_selected()
+		if not iter:
+			return
+		buf = self.xml.get_widget('msg_textview').get_buffer()
+		first_iter, end_iter = buf.get_bounds()
+		name = model.get_value(iter, 0)
+		model.set_value(iter, 1, buf.get_text(first_iter, end_iter))
+
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Preferences', APP)
@@ -340,9 +397,24 @@ class preference_Window:
 		st = self.plugin.config['autoxatime']
 		self.spin_autoxatime.set_value(st)
 
+		#Status messages
+		self.msg_tree = self.xml.get_widget('msg_treeview')
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		self.msg_tree.set_model(model)
+		col = gtk.TreeViewColumn('name')
+		self.msg_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text=0)
+		renderer.connect('edited', self.on_msg_cell_edited)
+		renderer.set_property('editable', True)
+		self.fill_msg_treeview()
+
 		#trayicon
 		st = self.plugin.config['trayicon']
 		self.chk_trayicon.set_active(st)
+		if self.plugin.sleeper.getState() == common.sleepy.STATE_UNKNOWN:
+			self.chk_trayicon.set_sensitive(False)
 
 		#Color for account text
 		colSt = self.plugin.config['accounttextcolor']
@@ -389,6 +461,14 @@ class preference_Window:
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_ok_clicked', self.on_ok)
 		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
+		self.xml.signal_connect('on_msg_treeview_cursor_changed', \
+			self.on_msg_treeview_cursor_changed)
+		self.xml.signal_connect('on_new_msg_button_clicked', \
+			self.on_new_msg_button_clicked)
+		self.xml.signal_connect('on_delete_msg_button_clicked', \
+			self.on_delete_msg_button_clicked)
+		self.xml.signal_connect('on_msg_textview_focus_out_event', \
+			self.on_msg_textview_focus_out_event)
 
 class accountPreference_Window:
 	"""Class for account informations"""

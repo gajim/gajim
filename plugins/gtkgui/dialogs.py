@@ -254,15 +254,39 @@ class awayMsg_Window:
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.txtBuffer.get_bounds()
 			msg = self.txtBuffer.get_text(beg, end, 0)
+			self.plugin.config['last_msg'] = msg
 		else:
 			msg = -1
 		self.xml.get_widget("Away_msg").destroy()
 		return msg
+
+	def on_entry_changed(self, widget, data=None):
+		model = widget.get_model()
+		active = widget.get_active()
+		if active < 0:
+			return None
+		name = model[active][0]
+		self.txtBuffer.set_text(self.values[name])
 	
-	def __init__(self):
+	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Away_msg', APP)
+		self.plugin = plugin
 		txt = self.xml.get_widget("textview")
 		self.txtBuffer = txt.get_buffer()
+		self.txtBuffer.set_text(self.plugin.config['last_msg'])
+		self.values = {'':''}
+		i = 0
+		while self.plugin.config.has_key('msg%s_name' % i):
+			self.values[self.plugin.config['msg%s_name' % i]] = \
+				self.plugin.config['msg%s' % i]
+			i += 1
+		liststore = gtk.ListStore(str, str)
+		cb = self.xml.get_widget('comboboxentry')
+		cb.set_model(liststore)
+		cb.set_text_column(0)
+		for val in self.values.keys():
+			cb.append_text(val)
+		self.xml.signal_connect('on_comboboxentry_changed', self.on_entry_changed)
 
 class addContact_Window:
 	"""Class for Add user window"""
