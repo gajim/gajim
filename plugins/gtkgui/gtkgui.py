@@ -464,24 +464,28 @@ class preference_Window:
 		if self.plugin.config.has_key('autoaway'):
 			st = self.plugin.config['autoaway']
 		self.chk_autoaway.set_active(st)
+		self.chk_autoaway.set_sensitive(0)
 
 		#Autoawaytime
 		st = 10
 		if self.plugin.config.has_key('autoawaytime'):
 			st = self.plugin.config['autoawaytime']
 		self.spin_autoawaytime.set_value(st)
+		self.spin_autoawaytime.set_sensitive(0)
 
 		#Autoxa
 		st = 1
 		if self.plugin.config.has_key('autoxa'):
 			st = self.plugin.config['autoxa']
 		self.chk_autoxa.set_active(st)
+		self.chk_autoxa.set_sensitive(0)
 
 		#Autoxatime
 		st = 20
 		if self.plugin.config.has_key('autoxatime'):
 			st = self.plugin.config['autoxatime']
 		self.spin_autoxatime.set_value(st)
+		self.spin_autoxatime.set_sensitive(0)
 
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_but_col_clicked', \
