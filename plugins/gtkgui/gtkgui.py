@@ -1146,36 +1146,34 @@ class gc:
 class log_Window:
 	"""Class for bowser agent window :
 	to know the agents on the selected server"""
-	def delete_event(self, widget):
+	def on_history_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows['logs'][self.jid]
 
-	def on_close(self, widget):
+	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
 		widget.get_toplevel().destroy()
 
-	def on_earliest(self, widget):
-		buffer = self.xml.get_widget('textview').get_buffer()
-		start, end = buffer.get_bounds()
-		buffer.delete(start, end)
-		self.xml.get_widget('earliest_button').set_sensitive(False)
-		self.xml.get_widget('previous_button').set_sensitive(False)
-		self.xml.get_widget('forward_button').set_sensitive(True)
-		self.xml.get_widget('latest_button').set_sensitive(True)
+	def on_earliest_button_clicked(self, widget):
+		start, end = self.history_buffer.get_bounds()
+		self.history_buffer.delete(start, end)
+		self.earliest_button.set_sensitive(False)
+		self.previous_button.set_sensitive(False)
+		self.forward_button.set_sensitive(True)
+		self.latest_button.set_sensitive(True)
 		end = 50
 		if end > self.nb_line:
 			end = self.nb_line
 		self.plugin.send('LOG_GET_RANGE', None, (self.jid, 0, end))
 		self.num_begin = self.nb_line
 
-	def on_previous(self, widget):
-		buffer = self.xml.get_widget('textview').get_buffer()
-		start, end = buffer.get_bounds()
-		buffer.delete(start, end)
-		self.xml.get_widget('earliest_button').set_sensitive(True)
-		self.xml.get_widget('previous_button').set_sensitive(True)
-		self.xml.get_widget('forward_button').set_sensitive(True)
-		self.xml.get_widget('latest_button').set_sensitive(True)
+	def on_previous_button_clicked(self, widget):
+		start, end = self.history_buffer.get_bounds()
+		self.history_buffer.delete(start, end)
+		self.earliest_button.set_sensitive(True)
+		self.previous_button.set_sensitive(True)
+		self.forward_button.set_sensitive(True)
+		self.latest_button.set_sensitive(True)
 		begin = self.num_begin - 50
 		if begin < 0:
 			begin = 0
@@ -1185,14 +1183,13 @@ class log_Window:
 		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, end))
 		self.num_begin = self.nb_line
 
-	def on_forward(self, widget):
-		buffer = self.xml.get_widget('textview').get_buffer()
-		start, end = buffer.get_bounds()
-		buffer.delete(start, end)
-		self.xml.get_widget('earliest_button').set_sensitive(True)
-		self.xml.get_widget('previous_button').set_sensitive(True)
-		self.xml.get_widget('forward_button').set_sensitive(True)
-		self.xml.get_widget('latest_button').set_sensitive(True)
+	def on_forward_button_clicked(self, widget):
+		start, end = self.history_buffer.get_bounds()
+		self.history_buffer.delete(start, end)
+		self.earliest_button.set_sensitive(True)
+		self.previous_button.set_sensitive(True)
+		self.forward_button.set_sensitive(True)
+		self.latest_button.set_sensitive(True)
 		begin = self.num_begin + 50
 		if begin > self.nb_line:
 			begin = self.nb_line
@@ -1202,14 +1199,13 @@ class log_Window:
 		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, end))
 		self.num_begin = self.nb_line
 
-	def on_latest(self, widget):
-		buffer = self.xml.get_widget('textview').get_buffer()
-		start, end = buffer.get_bounds()
-		buffer.delete(start, end)
-		self.xml.get_widget('earliest_button').set_sensitive(True)
-		self.xml.get_widget('previous_button').set_sensitive(True)
-		self.xml.get_widget('forward_button').set_sensitive(False)
-		self.xml.get_widget('latest_button').set_sensitive(False)
+	def on_latest_button_clicked(self, widget):
+		start, end = self.history_buffer.get_bounds()
+		self.history_buffer.delete(start, end)
+		self.earliest_button.set_sensitive(True)
+		self.previous_button.set_sensitive(True)
+		self.forward_button.set_sensitive(False)
+		self.latest_button.set_sensitive(False)
 		begin = self.nb_line - 50
 		if begin < 0:
 			begin = 0
@@ -1221,30 +1217,31 @@ class log_Window:
 		#infos = [num_line, date, type, data]
 		if infos[0] < self.num_begin:
 			self.num_begin = infos[0]
-		if infos[0] == 0:
-			self.xml.get_widget('earliest_button').set_sensitive(False)
-			self.xml.get_widget('previous_button').set_sensitive(False)
+		if infos[0] == 50:
+			self.earliest_button.set_sensitive(False)
+			self.previous_button.set_sensitive(False)
 		if infos[0] == self.nb_line:
-			self.xml.get_widget('forward_button').set_sensitive(False)
-			self.xml.get_widget('latest_button').set_sensitive(False)
-		buffer = self.xml.get_widget('textview').get_buffer()
-		start_iter = buffer.get_start_iter()
-		end_iter = buffer.get_end_iter()
+			self.forward_button.set_sensitive(False)
+			self.latest_button.set_sensitive(False)
+		start_iter = self.history_buffer.get_start_iter()
+		end_iter = self.history_buffer.get_end_iter()
 		tim = time.strftime("[%x %X] ", time.localtime(float(infos[1])))
-		buffer.insert(start_iter, tim)
+		self.history_buffer.insert(start_iter, tim)
 		if infos[2] == 'recv':
 			msg = string.join(infos[3][0:], ':')
 			msg = string.replace(msg, '\\n', '\n')
-			buffer.insert_with_tags_by_name(start_iter, msg, 'incoming')
+			self.history_buffer.insert_with_tags_by_name(start_iter, msg, \
+				'incoming')
 		elif infos[2] == 'sent':
 			msg = string.join(infos[3][0:], ':')
 			msg = string.replace(msg, '\\n', '\n')
-			buffer.insert_with_tags_by_name(start_iter, msg, 'outgoing')
+			self.history_buffer.insert_with_tags_by_name(start_iter, msg, \
+				'outgoing')
 		else:
 			msg = string.join(infos[3][1:], ':')
 			msg = string.replace(msg, '\\n', '\n')
-			buffer.insert_with_tags_by_name(start_iter, _('Status is now : ') + \
-				infos[3][0]+' : ' + msg, 'status')
+			self.history_buffer.insert_with_tags_by_name(start_iter, \
+				_('Status is now : ') + infos[3][0]+' : ' + msg, 'status')
 	
 	def set_nb_line(self, nb_line):
 		self.nb_line = nb_line
@@ -1255,30 +1252,23 @@ class log_Window:
 		self.jid = jid
 		self.nb_line = 0
 		self.num_begin = 0
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Log', APP)
-		self.window = self.xml.get_widget('Log')
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_close_clicked', self.on_close)
-		self.xml.signal_connect('on_earliest_clicked', self.on_earliest)
-		self.xml.signal_connect('on_previous_clicked', self.on_previous)
-		self.xml.signal_connect('on_forward_clicked', self.on_forward)
-		self.xml.signal_connect('on_latest_clicked', self.on_latest)
-		buffer = self.xml.get_widget('textview').get_buffer()
-		tagIn = buffer.create_tag("incoming")
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
+		self.window = xml.get_widget('history_window')
+		self.history_buffer = xml.get_widget('history_textview').get_buffer()
+		self.earliest_button = xml.get_widget('earliest_button')
+		self.previous_button = xml.get_widget('previous_button')
+		self.forward_button = xml.get_widget('forward_button')
+		self.latest_button = xml.get_widget('latest_button')
+		xml.signal_autoconnect(self)
+		tagIn = self.history_buffer.create_tag('incoming')
 		color = self.plugin.config['inmsgcolor']
-		if not color:
-			color = 'red'
-		tagIn.set_property("foreground", color)
-		tagOut = buffer.create_tag("outgoing")
+		tagIn.set_property('foreground', color)
+		tagOut = self.history_buffer.create_tag('outgoing')
 		color = self.plugin.config['outmsgcolor']
-		if not color:
-			color = 'blue'
-		tagOut.set_property("foreground", color)
-		tagStatus = buffer.create_tag("status")
+		tagOut.set_property('foreground', color)
+		tagStatus = self.history_buffer.create_tag('status')
 		color = self.plugin.config['statusmsgcolor']
-		if not color:
-			color = 'green'
-		tagStatus.set_property("foreground", color)
+		tagStatus.set_property('foreground', color)
 		self.plugin.send('LOG_NB_LINE', None, jid)
 
 class roster_Window:
