@@ -260,7 +260,7 @@ class roster_window:
 			for account in self.plugin.accounts.keys():
 				item = gtk.MenuItem(_('using ') + account + _(' account'))
 				sub_menu.append(item)
-				item.connect("activate", self.on_join_gc, account)
+				item.connect("activate", self.on_join_gc_activate, account)
 			sub_menu.show_all()
 			#new message
 			sub_menu = gtk.Menu()
@@ -282,7 +282,7 @@ class roster_window:
 			#join_gc
 			if not self.join_gc_handler_id:
 				self.join_gc_handler_id = join_gc_menuitem.connect(\
-					'activate', self.on_join_gc, self.plugin.accounts.keys()[0])
+					'activate', self.on_join_gc_activate, self.plugin.accounts.keys()[0])
 			if not self.new_message_menuitem_handler_id:
 				self.new_message_menuitem_handler_id = new_message_menuitem.connect(\
 'activate', self.on_new_message_menuitem_activate, self.plugin.accounts.keys()[0])
@@ -555,12 +555,13 @@ class roster_window:
 		item = gtk.MenuItem(_("_Add contact"))
 		menu.append(item)
 		item.connect("activate", self.on_add_contact, account)
+		item = gtk.MenuItem(_('Join _groupchat'))
+		menu.append(item)
+		item.connect("activate", self.on_join_gc_activate, account)
 		item = gtk.MenuItem(_('_New message'))
 		menu.append(item)
 		item.connect("activate", self.on_new_message_menuitem_activate, account)
-		if self.plugin.connected[account] < 2:
-			item.set_sensitive(False)
-		
+
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
 		menu.reposition()
@@ -804,7 +805,7 @@ class roster_window:
 		if self.plugin.config['usetabbedchat']:
 			if not self.plugin.windows[account]['chats'].has_key('tabbed'):
 				self.plugin.windows[account]['chats']['tabbed'] = \
-					tabbed_chat_window(user, self.plugin, account)
+					Tabbed_chat_window(user, self.plugin, account)
 			else:
 				self.plugin.windows[account]['chats']['tabbed'].new_user(user)
 				
@@ -814,7 +815,7 @@ class roster_window:
 			
 		else:
 			self.plugin.windows[account]['chats'][user.jid] = \
-				tabbed_chat_window(user, self.plugin, account)
+				Tabbed_chat_window(user, self.plugin, account)
 
 	def new_group(self, jid, nick, account):
 		if self.plugin.config['usetabbedchat']:
@@ -889,7 +890,7 @@ class roster_window:
 		call the add_contact_window class"""
 		add_contact_window(self.plugin, account)
 
-	def on_join_gc(self, widget, account):
+	def on_join_gc_activate(self, widget, account):
 		"""When Join Groupchat is selected :
 		call the join_gc class"""
 		join_groupchat_window(self.plugin, account)

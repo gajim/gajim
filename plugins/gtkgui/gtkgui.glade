@@ -7824,7 +7824,7 @@ Custom</property>
   <property name="width_request">303</property>
   <property name="height_request">225</property>
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Status Message for</property>
+  <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -9031,6 +9031,12 @@ send a chat message to</property>
 	  </child>
 
 	  <child>
+	    <widget class="GtkSeparatorMenuItem" id="separator4">
+	      <property name="visible">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
 	    <widget class="GtkMenuItem" id="offline_menuitem">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Offline</property>
@@ -9058,7 +9064,7 @@ send a chat message to</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image472">
+	<widget class="GtkImage" id="image473">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>

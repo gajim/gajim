@@ -38,7 +38,7 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-class tabbed_chat_window(Chat):
+class Tabbed_chat_window(Chat):
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
 		Chat.__init__(self, plugin, account, 'tabbed_chat_window')
@@ -150,10 +150,10 @@ class tabbed_chat_window(Chat):
 		and printed in the conversation"""
 		if event.keyval == gtk.keysyms.Return:
 			if (event.state & gtk.gdk.SHIFT_MASK):
-				return 0
+				return False
 			if self.plugin.connected[self.account] < 2: #we are not connected
 				Error_dialog(_('You are not connected, so you cannot send a message'))
-				return 1
+				return True
 			message_buffer = widget.get_buffer()
 			start_iter = message_buffer.get_start_iter()
 			end_iter = message_buffer.get_end_iter()
@@ -166,8 +166,8 @@ class tabbed_chat_window(Chat):
 				self.plugin.send('MSG', self.account, (jid, message, keyID))
 				message_buffer.set_text('', -1)
 				self.print_conversation(message, jid, jid)
-			return 1
-		return 0
+			return True
+		return False
 
 	def on_contact_button_clicked(self, widget):
 		"""When button contact is clicked"""

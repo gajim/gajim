@@ -458,7 +458,7 @@ class GajimCore:
 		elif typ == 'error':
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
-			if errcode == '400': #Bad Request : JID Malformed or Private message when not allowed
+			if errcode == '400': #Bad Request: JID Malformed or Private message when not allowed
 				pass
 			elif errcode == '401': #No Password Provided
 				pass
@@ -560,13 +560,13 @@ class GajimCore:
 		except common.xmlstream.socket.error, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
 			self.hub.sendPlugin('STATUS', account, 'offline')
-			self.hub.sendPlugin('ERROR', None, _("Couldn't connect to %s : %s") \
+			self.hub.sendPlugin('ERROR', None, _("Couldn't connect to %s: %s") \
 				% (hostname, e))
 			return 0
 		except common.xmlstream.error, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
 			self.hub.sendPlugin('STATUS', account, 'offline')
-			self.hub.sendPlugin('ERROR', None, _("Couldn't connect to %s : %s") \
+			self.hub.sendPlugin('ERROR', None, _("Couldn't connect to %s: %s") \
 				% (hostname, e))
 			return 0
 #		except:
@@ -852,7 +852,7 @@ class GajimCore:
 					c.setRegInfo( 'username', ev[2][1])
 					c.setRegInfo( 'password', ev[2][2])
 					if not c.sendRegInfo():
-						self.hub.sendPlugin('ERROR', None, _('Error : ')+c.lastErr)
+						self.hub.sendPlugin('ERROR', None, _('Error: ')+c.lastErr)
 					else:
 						self.connected[ev[2][3]] = 0
 						self.passwords[ev[2][3]] = ''

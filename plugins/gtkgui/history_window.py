@@ -32,7 +32,7 @@ gtk.glade.textdomain(APP)
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
 class history_window:
-	"""Class for bowser agent window :
+	"""Class for bowser agent window:
 	to know the agents on the selected server"""
 	def on_history_window_destroy(self, widget):
 		"""close window"""
@@ -129,7 +129,7 @@ class history_window:
 			msg = ':'.join(infos[3][1:])
 			msg = msg.replace('\\n', '\n')
 			self.history_buffer.insert_with_tags_by_name(start_iter, \
-				_('Status is now : ') + infos[3][0]+' : ' + msg, 'status')
+				_('Status is now: ') + infos[3][0]+': ' + msg, 'status')
 	
 	def set_nb_line(self, nb_line):
 		self.nb_line = nb_line
