@@ -287,8 +287,8 @@ class tabbed_chat_window:
 	def on_tabbed_chat_window_delete_event(self, widget, event):
 		"""close window"""
 		for jid in self.users:
-			if time.time() - self.last_message_time[jid] < 2:
-				dialog = Confirmation_dialog(_('You received a message from %s in the last two secondes.\nDo you still want to close this window ?') % jid)
+			if time.time() - self.last_message_time[jid] < 2: # 2 seconds
+				dialog = Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this window ?') % jid)
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
 
@@ -1839,13 +1839,13 @@ class roster_window:
 		menu.reposition()
 
 	def on_edit_account(self, widget, account):
-		if not self.plugin.windows.has_key('accountPreference'):
+		if not self.plugin.windows.has_key('account_modification_window'):
 			infos = self.plugin.accounts[account]
 			infos['accname'] = account
 			infos['jid'] = self.plugin.accounts[account]["name"] + \
 				'@' +  self.plugin.accounts[account]["hostname"]
-			self.plugin.windows['accountPreference'] = \
-				account_window(self.plugin, infos)
+			self.plugin.windows['account_modification_window'] = \
+				Account_modification_window(self.plugin, infos)
 
 	def mk_menu_account(self, event, iter):
 		"""Make account's popup menu"""
@@ -2010,8 +2010,8 @@ class roster_window:
 				save_pass = self.plugin.accounts[account]['savepass']
 			if not save_pass and not self.plugin.connected[account]:
 				passphrase = ''
-				w = passphrase_dialog('Enter your password for account %s' \
-					% account, 'Save password', autoconnect)
+				w = Passphrase_dialog(_('Enter your password for account %s' \
+					% account, 'Save password', autoconnect))
 				if autoconnect:
 					gtk.main()
 					passphrase, save = w.get_pass()
@@ -2039,8 +2039,8 @@ class roster_window:
 					passphrase = self.plugin.accounts[account]['gpgpassword']
 				else:
 					passphrase = ''
-					w = passphrase_dialog('Enter GPG key passphrase for account %s'\
-							% account, 'Save passphrase', autoconnect)
+					w = Passphrase_dialog(_('Enter GPG key passphrase for account %s'\
+							% account, 'Save passphrase', autoconnect))
 					if autoconnect:
 						gtk.main()
 						passphrase, save = w.get_pass()
@@ -2069,7 +2069,7 @@ class roster_window:
 			or (status == 'offline' and not \
 			self.plugin.config['ask_offline_status']):
 			return status
-		w = away_message_dialog(self.plugin)
+		w = Away_message_dialog(self.plugin)
 		message = w.run()
 		return message
 
@@ -2238,8 +2238,8 @@ class roster_window:
 	def on_accounts_menuitem_activate(self, widget):
 		"""When accounts is seleted :
 		call the accounts class to modify accounts"""
-		if not self.plugin.windows.has_key('accounts'):
-			self.plugin.windows['accounts'] = configure_accounts_window(self.plugin)
+		if not self.plugin.windows.has_key('accounts_window'):
+			self.plugin.windows['accounts_window'] = Accounts_window(self.plugin)
 
 	def close_all(self, dic):
 		"""close all the windows in the given dictionary"""
@@ -3077,16 +3077,16 @@ class plugin:
 			agent_registration_window(array[0], array[1], self, account)
 
 	def handle_event_acc_ok(self, account, array):
-		#('ACC_OK', account, (hostname, login, pasword, name, ressource, prio,
+		#('ACC_OK', account, (hostname, login, pasword, name, resource, prio,
 		#use_proxy, proxyhost, proxyport))
-		if self.windows['accountPreference']:
-			self.windows['accountPreference'].account_is_ok(array[1])
+		if self.windows['account_modification_window']:
+			self.windows['account_modification_window'].account_is_ok(array[1])
 		name = array[3]
 		#TODO: to be removed and done in account_is_ok function or to be put in else
 		self.accounts[array[3]] = {'name': array[1], \
 					'hostname': array[0],\
 					'password': array[2],\
-					'ressource': array[4],\
+					'resource': array[4],\
 					'priority': array[5],\
 					'use_proxy': array[6],\
 					'proxyhost': array[7], \
@@ -3099,8 +3099,8 @@ class plugin:
 		self.roster.groups[name] = {}
 		self.roster.contacts[name] = {}
 		self.sleeper_state[name] = 0
-		if self.windows.has_key('accounts'):
-			self.windows['accounts'].init_accounts()
+		if self.windows.has_key('accounts_window'):
+			self.windows['accounts_window'].init_accounts()
 		self.roster.draw_roster()
 
 	def handle_event_quit(self, p1, p2):

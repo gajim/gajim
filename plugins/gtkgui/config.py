@@ -862,11 +862,11 @@ class preferences_window:
 		
 		self.xml.signal_autoconnect(self)
 
-class account_window:
+class Account_modification_window:
 	"""Class for account informations"""
-	def on_account_window_destroy(self, widget):
+	def on_account_modification_window_destroy(self, widget):
 		"""close window"""
-		del self.plugin.windows['accountPreference']
+		del self.plugin.windows['account_modification_window']
 	
 	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
@@ -886,10 +886,10 @@ class account_window:
 				password_entry.set_sensitive(True)
 				if infos.has_key('password'):
 					password_entry.set_text(infos['password'])
-		if infos.has_key('ressource'):
-			self.xml.get_widget('ressource_entry').set_text(infos['ressource'])
+		if infos.has_key('resource'):
+			self.xml.get_widget('resource_entry').set_text(infos['resource'])
 		if infos.has_key('priority'):
-			self.xml.get_widget('priority_entry').set_text(str(infos['priority']))
+			self.xml.get_widget('priority_spinbutton').set_value(infos['priority'])
 		if infos.has_key('use_proxy'):
 			self.xml.get_widget('use_proxy_checkbutton').\
 				set_active(infos['use_proxy'])
@@ -931,8 +931,8 @@ class account_window:
 		if self.xml.get_widget('save_password_checkbutton').get_active():
 			save_password = 1
 		password = self.xml.get_widget('password_entry').get_text()
-		ressource = self.xml.get_widget('ressource_entry').get_text()
-		priority = self.xml.get_widget('priority_entry').get_text()
+		resource = self.xml.get_widget('resource_entry').get_text()
+		priority = self.xml.get_widget('priority_spinbutton').get_value_as_int()
 		new_account_checkbutton = self.xml.get_widget('new_account_checkbutton')
 		name = self.xml.get_widget('name_entry').get_text()
 		jid = self.xml.get_widget('jid_entry').get_text()
@@ -977,12 +977,14 @@ class account_window:
 					return 0
 			if proxyhost == '':
 				Warning_dialog(_('You must enter a proxy host to use proxy'))
+		'''FIXME: REMOVE THIS IF we're ok
 		if priority != '':
 			try:
 				priority = int(priority)
 			except ValueError:
 				Warning_dialog(_('Priority must be a number'))
 				return 0
+		'''
 		(login, hostname) = jid.split('@')
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
 		if key_name == '': #no key selected
@@ -1021,7 +1023,7 @@ class account_window:
 				active = self.plugin.accounts[self.account]['active']
 			self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
 				'savepass': save_password, 'password': password, \
-				'ressource': ressource, 'priority' : priority, \
+				'resource': resource, 'priority' : priority, \
 				'autoconnect': autoconnect, 'use_proxy': use_proxy, 'proxyhost': \
 				proxyhost, 'proxyport': proxyport, 'keyid': keyID, \
 				'keyname': key_name, 'savegpgpass': save_gpg_password, \
@@ -1032,8 +1034,8 @@ class account_window:
 			if save_password:
 				self.plugin.send('PASSPHRASE', name, password)
 			#refresh accounts window
-			if self.plugin.windows.has_key('accounts'):
-				self.plugin.windows['accounts'].init_accounts()
+			if self.plugin.windows.has_key('accounts_window'):
+				self.plugin.windows['accounts_window'].init_accounts()
 			#refresh roster
 			self.plugin.roster.draw_roster()
 			widget.get_toplevel().destroy()
@@ -1045,11 +1047,11 @@ class account_window:
 		#if we neeed to register a new account
 		if new_account_checkbutton.get_active():
 			self.plugin.send('NEW_ACC', None, (hostname, login, password, name, \
-				ressource, priority, use_proxy, proxyhost, proxyport))
+				resource, priority, use_proxy, proxyhost, proxyport))
 			return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-			'savepass': save_password, 'password': password, 'ressource': \
-			ressource, 'priority' : priority, 'autoconnect': autoconnect, \
+			'savepass': save_password, 'password': password, 'resource': \
+			resource, 'priority' : priority, 'autoconnect': autoconnect, \
 			'use_proxy': use_proxy, 'proxyhost': proxyhost, \
 			'proxyport': proxyport, 'keyid': keyID, 'keyname': key_name, \
 			'savegpgpass': save_gpg_password, 'gpgpassword': gpg_password,\
@@ -1067,8 +1069,8 @@ class account_window:
 		self.plugin.nicks[name] = login
 		self.plugin.sleeper_state[name] = 0
 		#refresh accounts window
-		if self.plugin.windows.has_key('accounts'):
-			self.plugin.windows['accounts'].init_accounts()
+		if self.plugin.windows.has_key('accounts_window'):
+			self.plugin.windows['accounts_window'].init_accounts()
 		#refresh roster
 		self.plugin.roster.draw_roster()
 		widget.get_toplevel().destroy()
@@ -1089,7 +1091,7 @@ class account_window:
 		self.account = acct
 		#TODO:
 #		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-#			'savepass': savepass, 'password': entryPass.get_text(), 'ressource': \
+#			'savepass': savepass, 'password': entryPass.get_text(), 'resource': \
 #			entryRessource.get_text(), 'priority' : prio, 'autoconnect': \
 #			autoconnect, 'use_proxy': useProxy, 'proxyhost': \
 #			entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
@@ -1160,10 +1162,10 @@ class account_window:
 			password_entry.set_sensitive(False)
 			password_entry.set_text('')
 
-	#info must be a dictionnary
+	#infos must be a dictionnary
 	def __init__(self, plugin, infos = {}):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_window', APP)
-		self.window = self.xml.get_widget('account_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_modification_window', APP)
+		self.window = self.xml.get_widget('account_modification_window')
 		self.plugin = plugin
 		self.account = ''
 		self.modify = False
@@ -1181,11 +1183,11 @@ class account_window:
 			self.init_account(infos)
 			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
 
-class configure_accounts_window:
+class Accounts_window:
 	"""Class for accounts window : lists of accounts"""
-	def on_configure_accounts_window_destroy(self, widget):
+	def on_accounts_window_destroy(self, widget):
 		"""close window"""
-		del self.plugin.windows['accounts']
+		del self.plugin.windows['accounts_window']
 		
 	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
@@ -1212,9 +1214,9 @@ class configure_accounts_window:
 
 	def on_new_button_clicked(self, widget):
 		"""When new button is clicked : open an account information window"""
-		if not self.plugin.windows.has_key('accountPreference'):
-			self.plugin.windows['accountPreference'] = \
-				account_window(self.plugin)
+		if not self.plugin.windows.has_key('account_modification_window'):
+			self.plugin.windows['account_modification_window'] = \
+				Account_modification_window(self.plugin)
 
 	def on_delete_button_clicked(self, widget):
 		"""When delete button is clicked :
@@ -1240,7 +1242,7 @@ class configure_accounts_window:
 	def on_modify_button_clicked(self, widget):
 		"""When modify button is clicked :
 		open the account information window for this account"""
-		if not self.plugin.windows.has_key('accountPreference'):
+		if not self.plugin.windows.has_key('account_modification_window'):
 #			infos = {}
 			sel = self.accounts_treeview.get_selection()
 			(model, iter) = sel.get_selected()
@@ -1249,8 +1251,8 @@ class configure_accounts_window:
 			infos['accname'] = account
 			infos['jid'] = self.plugin.accounts[account]['name'] + \
 				'@' +  self.plugin.accounts[account]['hostname']
-			self.plugin.windows['accountPreference'] = \
-				account_window(self.plugin, infos)
+			self.plugin.windows['account_modification_window'] = \
+				Account_modification_window(self.plugin, infos)
 
 	def on_toggled(self, cell, path, model=None):
 		iter = model.get_iter(path)
@@ -1263,8 +1265,8 @@ class configure_accounts_window:
 		
 	def __init__(self, plugin):
 		self.plugin = plugin
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'configure_accounts_window', APP)
-		self.window = self.xml.get_widget('configure_accounts_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'accounts_window', APP)
+		self.window = self.xml.get_widget('accounts_window')
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, \
 			gobject.TYPE_BOOLEAN)

@@ -208,8 +208,8 @@ class vcard_information_window:
 
 		self.xml.signal_autoconnect(self)
 
-class passphrase_dialog:
-	"""Class for passphrase_dialog"""
+class Passphrase_dialog:
+	"""Class for Passphrase dialog"""
 	def run(self):
 		"""Wait for OK button to be pressed and return passphrase/password"""
 		rep = self.window.run()
@@ -294,8 +294,8 @@ class choose_gpg_key_dialog:
 		self.keys_treeview.insert_column_with_attributes(-1, _('User name'), \
 			renderer, text=1)
 
-class away_message_dialog:
-	"""Class for away_message_dialogWindow"""
+class Away_message_dialog:
+	"""Class for Away message dialog"""
 	def run(self):
 		"""Wait for OK button to be pressed and return away messsage"""
 		rep = self.window.run()
@@ -447,7 +447,7 @@ class add_contact_window:
 		if jid:
 			self.xml.get_widget('jid_entry').set_text(jid)
 			jid_splited = jid.split('@')
-			self.xml.get_widget('login_entry').set_text(jid_splited[0])
+			self.xml.get_widget('uid_entry').set_text(jid_splited[0])
 			if jid_splited[1] in jid_agents:
 				agent_combobox.set_active(jid_agents.index(jid_splited[1])+1)
 		self.xml.signal_autoconnect(self)
@@ -574,7 +574,7 @@ class join_groupchat_window:
 
 	def __init__(self, plugin, account, server='', room = ''):
 		if not plugin.connected[account]:
-			Warning_dialog(_('You must be connected to join a group chat on this server'))
+			Warning_dialog(_('You must be connected to join a group chat'))
 			return
 		self.plugin = plugin
 		self.account = account

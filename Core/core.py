@@ -230,8 +230,8 @@ class GajimCore:
 			log.setLevel(None)
 		if mode == 'server':
 			self.connected = {}
-			#connexions {con: name, ...}
-			self.connexions = {}
+			#connections {con: name, ...}
+			self.connections = {}
 			self.gpg = {}
 			self.passwords = {}
 			if USE_GPG:
@@ -343,9 +343,9 @@ class GajimCore:
 						 vcard[info.getName()][c.getName()] = c.getData()
 			if vc.getID() in self.myVCardID:
 				self.myVCardID.remove(vc.getID())
-				self.hub.sendPlugin('MYVCARD', self.connexions[con], vcard)
+				self.hub.sendPlugin('MYVCARD', self.connections[con], vcard)
 			else:
-				self.hub.sendPlugin('VCARD', self.connexions[con], vcard)
+				self.hub.sendPlugin('VCARD', self.connections[con], vcard)
 
 	def messageCB(self, con, msg):
 		"""Called when we recieve a message"""
@@ -364,25 +364,25 @@ class GajimCore:
 			#decrypt
 			encmsg = encTag.getData()
 			keyID = ''
-			if self.cfgParser.tab[self.connexions[con]].has_key("keyid"):
-				keyID = self.cfgParser.tab[self.connexions[con]]["keyid"]
+			if self.cfgParser.tab[self.connections[con]].has_key("keyid"):
+				keyID = self.cfgParser.tab[self.connections[con]]["keyid"]
 			if keyID:
-				decmsg = self.gpg[self.connexions[con]].decrypt(encmsg, keyID)
+				decmsg = self.gpg[self.connections[con]].decrypt(encmsg, keyID)
 		if decmsg:
 			msgtxt = decmsg
 		if typ == 'error':
-			self.hub.sendPlugin('MSGERROR', self.connexions[con], \
+			self.hub.sendPlugin('MSGERROR', self.connections[con], \
 				(str(msg.getFrom()), msg.getErrorCode(), msg.getError(), msgtxt, tim))
 		elif typ == 'groupchat':
 			subject = msg.getSubject()
 			if subject:
-				self.hub.sendPlugin('GC_SUBJECT', self.connexions[con], \
+				self.hub.sendPlugin('GC_SUBJECT', self.connections[con], \
 					(str(msg.getFrom()), subject))
 			else:
-				self.hub.sendPlugin('GC_MSG', self.connexions[con], \
+				self.hub.sendPlugin('GC_MSG', self.connections[con], \
 					(str(msg.getFrom()), msgtxt, tim))
 		else:
-			self.hub.sendPlugin('MSG', self.connexions[con], \
+			self.hub.sendPlugin('MSG', self.connections[con], \
 				(str(msg.getFrom()), msgtxt, tim))
 	# END messageCB
 
@@ -407,18 +407,18 @@ class GajimCore:
 		if sigTag and USE_GPG:
 			#verify
 			sigmsg = sigTag.getData()
-			keyID = self.gpg[self.connexions[con]].verify(status, sigmsg)
+			keyID = self.gpg[self.connections[con]].verify(status, sigmsg)
 		if typ == 'available':
 			show = prs.getShow()
 			if not show:
 				show = 'online'
-			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
+			self.hub.sendPlugin('NOTIFY', self.connections[con], \
 				(prs.getFrom().getStripped(), show, status, \
 				prs.getFrom().getResource(), prio, keyID, prs.getRole(), \
 				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
 				prs.getActor(), prs.getStatusCode()))
 		elif typ == 'unavailable':
-			self.hub.sendPlugin('NOTIFY', self.connexions[con], \
+			self.hub.sendPlugin('NOTIFY', self.connections[con], \
 				(prs.getFrom().getStripped(), 'offline', status, \
 				prs.getFrom().getResource(), prio, keyID, prs.getRole(), \
 				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
@@ -430,20 +430,20 @@ class GajimCore:
 				if con:
 					con.send(common.jabber.Presence(who, 'subscribed'))
 				if who.find("@") <= 0:
-					self.hub.sendPlugin('NOTIFY', self.connexions[con], \
+					self.hub.sendPlugin('NOTIFY', self.connections[con], \
 						(prs.getFrom().getStripped(), 'offline', 'offline', \
 						prs.getFrom().getResource(), prio, keyID, None, None, None, \
 						None, None, None))
 			else:
 				if not status:
 					status = _("I would like to add you to my roster.")
-				self.hub.sendPlugin('SUBSCRIBE', self.connexions[con], (who, \
+				self.hub.sendPlugin('SUBSCRIBE', self.connections[con], (who, \
 					status))
 		elif typ == 'subscribed':
 			jid = prs.getFrom()
-			self.hub.sendPlugin('SUBSCRIBED', self.connexions[con],\
+			self.hub.sendPlugin('SUBSCRIBED', self.connections[con],\
 				(jid.getStripped(), jid.getResource()))
-			self.hub.queueIn.put(('UPDUSER', self.connexions[con], \
+			self.hub.queueIn.put(('UPDUSER', self.connections[con], \
 				(jid.getStripped(), jid.getNode(), ['general'])))
 			#BE CAREFUL : no con.updateRosterItem() in a callback
 			log.debug("we are now subscribed to %s" % who)
@@ -451,7 +451,7 @@ class GajimCore:
 			log.debug("unsubscribe request from %s" % who)
 		elif typ == 'unsubscribed':
 			log.debug("we are now unsubscribed to %s" % who)
-			self.hub.sendPlugin('UNSUBSCRIBED', self.connexions[con], \
+			self.hub.sendPlugin('UNSUBSCRIBED', self.connections[con], \
 				prs.getFrom().getStripped())
 		elif typ == 'error':
 			errmsg = prs.getError()
@@ -481,7 +481,7 @@ class GajimCore:
 			elif errcode == '409':	#conflict :	Nick Conflict
 				self.hub.sendPlugin('WARNING', None, errmsg)
 			else:
-				self.hub.sendPlugin('NOTIFY', self.connexions[con], \
+				self.hub.sendPlugin('NOTIFY', self.connections[con], \
 					(prs.getFrom().getStripped(), 'error', errmsg, \
 					prs.getFrom().getResource(), prio, keyID, None, None, None, \
 					None, None, None))
@@ -490,9 +490,9 @@ class GajimCore:
 	def disconnectedCB(self, con):
 		"""Called when we are disconnected"""
 		log.debug("disconnectedCB")
-		if self.connexions.has_key(con):
-			self.connected[self.connexions[con]] = 0
-			self.hub.sendPlugin('STATUS', self.connexions[con], 'offline')
+		if self.connections.has_key(con):
+			self.connected[self.connections[con]] = 0
+			self.hub.sendPlugin('STATUS', self.connections[con], 'offline')
 	# END disconenctedCB
 
 	def rosterSetCB(self, con, iq_obj):
@@ -504,7 +504,7 @@ class GajimCore:
 			groups = []
 			for group in item.getTags("group"):
 				groups.append(group.getData())
-			self.hub.sendPlugin('ROSTER_INFO', self.connexions[con], (jid, name, sub, ask, groups))
+			self.hub.sendPlugin('ROSTER_INFO', self.connections[con], (jid, name, sub, ask, groups))
 
 	def connect(self, account):
 		"""Connect and authentificate to the Jabber server"""
@@ -515,8 +515,8 @@ class GajimCore:
 
 		#create connexion if it doesn't already existe
 		con = None
-		for conn in self.connexions:
-			if self.connexions[conn] == account:
+		for conn in self.connections:
+			if self.connections[conn] == account:
 				con = conn
 		if not con:
 			if self.cfgParser.tab[account]["use_proxy"]:
@@ -566,7 +566,7 @@ class GajimCore:
 
 			#BUG in jabberpy library : if hostname is wrong : "boucle"
 			if con.auth(name, password, ressource):
-				self.connexions[con] = account
+				self.connections[con] = account
 				con.requestRoster()
 				roster = con.getRoster().getRaw()
 				if not roster :
@@ -621,9 +621,9 @@ class GajimCore:
 #					[], [self.socket], [])
 				self.send_to_socket(ev, self.socket)
 				return 0
-			if ev[1] and (ev[1] in self.connexions.values()):
-				for con in self.connexions.keys():
-					if ev[1] == self.connexions[con]:
+			if ev[1] and (ev[1] in self.connections.values()):
+				for con in self.connections.keys():
+					if ev[1] == self.connections[con]:
 						break
 			else:
 				con = None
@@ -631,9 +631,9 @@ class GajimCore:
 			if ev[0] == 'QUIT':
 				self.hub.unregister(ev[2][0])
 				if ev[2][1]:
-					for con in self.connexions.keys():
-						if self.connected[self.connexions[con]]:
-							self.connected[self.connexions[con]] = 0
+					for con in self.connections.keys():
+						if self.connected[self.connections[con]]:
+							self.connected[self.connections[con]] = 0
 							con.disconnect('Disconnected')
 					self.hub.sendPlugin('QUIT', None, ())
 					return 1
@@ -859,7 +859,7 @@ class GajimCore:
 					self.gpg[ev[2]] = self.gpg[ev[1]]
 					del self.gpg[ev[1]]
 				if con:
-					self.connexions[con] = ev[2]
+					self.connections[con] = ev[2]
 			#('ASK_VCARD', account, jid)
 			elif ev[0] == 'ASK_VCARD':
 				if con:
@@ -995,16 +995,16 @@ class GajimCore:
 			else:
 				log.debug(_("Unknown Command %s") % ev[0])
 		if self.mode == 'server':
-			for con in self.connexions:
-				if self.connected[self.connexions[con]]:
+			for con in self.connections:
+				if self.connected[self.connections[con]]:
 					con.process(1)
 			#remove connexion that have been broken
 			for acc in self.connected:
 				if self.connected[acc]:
 					break
-				for con in self.connexions:
-						if self.connexions[con] == acc:
-							del self.connexions[con]
+				for con in self.connections:
+						if self.connections[con] == acc:
+							del self.connections[con]
 							break
 			
 			time.sleep(0.1)
