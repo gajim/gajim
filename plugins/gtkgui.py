@@ -73,7 +73,7 @@ class message:
 		if contact:
 			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<moi> ', 'outgoing')
 		else:
-			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<lui> ', 'incomming')
+			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<lui> ', 'incoming')
 		self.convTxtBuffer.insert(end_iter, txt+'\n')
 		self.conversation.scroll_to_mark(\
 			self.convTxtBuffer.get_mark('end'), 0.1, 0, 0, 0)
@@ -104,12 +104,12 @@ class message:
 		self.message = self.xml.get_widget('message')
 		self.conversation = self.xml.get_widget('conversation')
 		self.convTxtBuffer = self.conversation.get_buffer()
-		end_iter=self.convTxtBuffer.get_end_iter()
+		end_iter = self.convTxtBuffer.get_end_iter()
 		self.convTxtBuffer.create_mark('end', end_iter, 0)
 		self.window.show()
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
-		self.tag = self.convTxtBuffer.create_tag("incomming")
+		self.tag = self.convTxtBuffer.create_tag("incoming")
 		color = self.cfgParser.GtkGui_inmsgcolor
 		if not color : color = red
 		self.tag.set_property("foreground", color)
@@ -128,7 +128,7 @@ class roster:
 		for u in self.l_contact:
 			if not self.l_group.has_key(u.group):
 				iterG = self.treestore.append(None, (self.pixbufs['online'], u.group, 'group'))
-				self.l_group[u.group]=iterG
+				self.l_group[u.group] = iterG
 
 	def mkroster(self, tab):
 		self.l_contact = []
