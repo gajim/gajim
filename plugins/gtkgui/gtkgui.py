@@ -428,21 +428,41 @@ class tabbed_chat_window:
 
 	def on_tabbed_chat_window_key_press_event(self, widget, event):
 		st = "1234567890"
+		jid = self.get_active_jid()
 		if event.keyval == gtk.keysyms.Escape:
-			jid = self.get_active_jid()
 			self.remove_tab(jid)
 		elif event.string and event.string in st \
 			and (event.state & gtk.gdk.MOD1_MASK):
 			self.chat_notebook.set_current_page(st.index(event.string))
-		elif event.keyval == gtk.keysyms.Page_Down and \
-			(event.state & gtk.gdk.CONTROL_MASK):
-			current = self.chat_notebook.get_current_page()
-			if current > 0:
-				self.chat_notebook.set_current_page(current-1)
-			else:
-				self.chat_notebook.set_current_page(\
-					self.chat_notebook.get_n_pages()-1)
-		elif event.keyval == gtk.keysyms.Page_Up and \
+		elif event.keyval == gtk.keysyms.Page_Down:
+			if event.state & gtk.gdk.CONTROL_MASK:
+				current = self.chat_notebook.get_current_page()
+				if current > 0:
+					self.chat_notebook.set_current_page(current-1)
+#				else:
+#					self.chat_notebook.set_current_page(\
+#						self.chat_notebook.get_n_pages()-1)
+			elif event.state & gtk.gdk.SHIFT_MASK:
+				conversation_textview = self.xmls[jid].\
+					get_widget('conversation_textview')
+				rect = conversation_textview.get_visible_rect()
+				iter = conversation_textview.get_iter_at_location(rect.x,\
+					rect.y + rect.height)
+				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
+		elif event.keyval == gtk.keysyms.Page_Up:
+			if event.state & gtk.gdk.CONTROL_MASK:
+				current = self.chat_notebook.get_current_page()
+				if current < (self.chat_notebook.get_n_pages()-1):
+					self.chat_notebook.set_current_page(current+1)
+#				else:
+#					self.chat_notebook.set_current_page(0)
+			elif event.state & gtk.gdk.SHIFT_MASK:
+				conversation_textview = self.xmls[jid].\
+					get_widget('conversation_textview')
+				rect = conversation_textview.get_visible_rect()
+				iter = conversation_textview.get_iter_at_location(rect.x, rect.y)
+				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
+		elif event.keyval == gtk.keysyms.Tab and \
 			(event.state & gtk.gdk.CONTROL_MASK):
 			current = self.chat_notebook.get_current_page()
 			if current < (self.chat_notebook.get_n_pages()-1):
@@ -1534,6 +1554,16 @@ class roster_window:
 		"""when a key is pressed in the treeviews"""
 		if event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
+		if event.keyval == gtk.keysyms.F2:
+			treeselection = self.tree.get_selection()
+			model, iter = treeselection.get_selected()
+			if not iter:
+				return
+			type = model.get_value(iter, 2)
+			if type == 'user':
+				path = model.get_path(iter)
+				model.set_value(iter, 5, True)
+				self.tree.set_cursor(path, self.tree.get_column(0), True)
 		return False
 	
 	def on_roster_treeview_button_press_event(self, widget, event):
