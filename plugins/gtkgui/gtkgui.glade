@@ -8736,6 +8736,7 @@ on the server.</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
+  <signal name="key_press_event" handler="on_key_press_event" last_modification_time="Sat, 08 Jan 2005 14:19:25 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox5">

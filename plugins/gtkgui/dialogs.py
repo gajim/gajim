@@ -301,12 +301,6 @@ class choose_gpg_Window:
 
 class awayMsg_Window:
 	"""Class for Away Message Window"""
-	def on_ok(self):
-		"""When Ok button is clicked"""
-		beg, end = self.txtBuffer.get_bounds()
-		self.msg = self.txtBuffer.get_text(beg, end, 0)
-		self.xml.get_widget("Away_msg").destroy()
-	
 	def run(self):
 		"""Wait for Ok button to be pressed and return away messsage"""
 		rep = self.xml.get_widget("Away_msg").run()
@@ -327,6 +321,11 @@ class awayMsg_Window:
 		name = model[active][0]
 		self.txtBuffer.set_text(self.values[name])
 	
+	def on_key_pressed(self, widget, event):
+		if event.keyval == gtk.keysyms.Return:
+			if (event.state & gtk.gdk.CONTROL_MASK):
+				self.xml.get_widget("Away_msg").response(gtk.RESPONSE_OK)
+	
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Away_msg', APP)
 		self.plugin = plugin
@@ -346,6 +345,7 @@ class awayMsg_Window:
 		for val in self.values.keys():
 			cb.append_text(val)
 		self.xml.signal_connect('on_comboboxentry_changed', self.on_entry_changed)
+		self.xml.signal_connect('on_key_press_event', self.on_key_pressed)
 
 class addContact_Window:
 	"""Class for Add user window"""
