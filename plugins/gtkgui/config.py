@@ -213,6 +213,17 @@ class preferences_window:
 			self.plugin.hide_systray()
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.roster.draw_roster()
+		#open links with
+		if self.links_open_with_combobox.get_active() == 0:
+			self.plugin.config['openwith'] = 'gnome-open'
+		elif self.links_open_with_combobox.get_active() == 1:
+			self.plugin.config['openwith'] = 'kfmclient exec'
+		elif self.links_open_with_combobox.get_active() == 2:
+			self.plugin.config['openwith'] = 'custom'
+			self.plugin.config['custombrowser'] = \
+				self.xml.get_widget('custom_browser_entry').get_text()
+			self.plugin.config['custommailapp'] = \
+				self.xml.get_widget('custom_mail_app_entry').get_text()
 		#log presences in user file
 		if self.xml.get_widget('chk_log_pres_usr').get_active():
 			self.config_logger['lognotusr'] = 1
@@ -479,7 +490,13 @@ class preferences_window:
 			self.xml.get_widget('entry_sounds').set_text(file)
 			model.set_value(iter, 2, file)
 			model.set_value(iter, 1, 1)
-			
+
+	def on_links_open_with_combobox_changed(self, widget):
+		if widget.get_active() == 2:
+			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
+		else:
+			self.xml.get_widget('custom_apps_frame').set_sensitive(False)
+
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
@@ -732,6 +749,23 @@ class preferences_window:
 		self.plugin.send('ASK_CONFIG', None, ('GtkGui', 'Logger', {'lognotsep':1,\
 			'lognotusr':1}))
 		self.config_logger = self.plugin.wait('CONFIG')
+		
+		#open links with
+		self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
+		if self.plugin.config['openwith'] == 'gnome-open':
+			self.links_open_with_combobox.set_active(0)
+		elif self.plugin.config['openwith'] == 'kfmclient exec':
+			self.links_open_with_combobox.set_active(1)
+		elif self.plugin.config['openwith'] == 'custom':
+			self.links_open_with_combobox.set_active(2)
+			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
+			self.xml.get_widget('custom_browser_entry').set_text(\
+				self.plugin.config['custombrowser'])
+			self.xml.get_widget('custom_mail_app_entry').set_text(\
+				self.plugin.config['custommailapp'])
+				
+		self.links_open_with_combobox.connect('changed', \
+			self.on_links_open_with_combobox_changed)
 
 		#log presences in user file
 		st = self.config_logger['lognotusr']

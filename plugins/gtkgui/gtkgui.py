@@ -3000,6 +3000,9 @@ class plugin:
 			'sound_contact_disconnected_file': 'sounds/disconnected.wav',\
 			'sound_message_sent': 1,\
 			'sound_message_sent_file': 'sounds/sent.wav',\
+			'openwith': 'gnome-open', \
+			'custombrowser' : '', \
+			'custommailapp' : '', \
 			'x-position': 0,\
 			'y-position': 0,\
 			'width': 150,\

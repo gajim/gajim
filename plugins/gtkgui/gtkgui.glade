@@ -4776,8 +4776,8 @@ on the server as a vCard</property>
 			      <child>
 				<widget class="GtkComboBox" id="links_open_with_combobox">
 				  <property name="visible">True</property>
-				  <property name="items" translatable="yes">KDE default applications
-GNOME default applications
+				  <property name="items" translatable="yes">GNOME default applications
+KDE default applications
 Custom</property>
 				</widget>
 				<packing>
@@ -4795,7 +4795,7 @@ Custom</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkFrame" id="frame22">
+			    <widget class="GtkFrame" id="custom_apps_frame">
 			      <property name="visible">True</property>
 			      <property name="sensitive">False</property>
 			      <property name="label_xalign">0</property>
