@@ -24,4 +24,4 @@ fi
 
 cd PREFIX/share/gajim
 export PYTHONPATH="$PYTHONPATH:PREFIX/lib/gajim"
-gajim.py
+./gajim.py

@@ -9,7 +9,7 @@ url="http://www.gajim.org"
 license="GPL"
 depends=(pygtk)
 source=($url/downloads/$pkgname-$pkgver.tar.bz2)
-#md5sums=(8175a3ccf93093f23865baebe4fa82f8)
+md5sums=(ac8bc1a3b67016467835fbd1a4a7982a)
 
 build() {
   cd $startdir/src/$pkgname-$pkgver
