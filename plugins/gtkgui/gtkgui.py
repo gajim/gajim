@@ -222,7 +222,7 @@ class tabbed_chat_window:
 			self.on_tabbed_chat_window_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', \
 			self.on_chat_notebook_switch_page)
-		#self.xml.signal_autoconnect(self) #FIXME: (nk) THIS SEGFAULTS GAJIM. WHY?
+		#self.xml.signal_autoconnect(self) #FIXME: (nk) THIS SEGFAULTS GAJIM. WHY? -> (asterix) we delete the first page, so we delete the widgets, so we don't want to connect associated signals.
 		
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -404,6 +404,10 @@ class tabbed_chat_window:
 		
 		self.link_tag = conversation_buffer.create_tag('hyperlink', foreground='blue')
 		self.xmls[user.jid].signal_autoconnect(self)
+		conversation_scrolledwindow = self.xmls[user.jid].\
+			get_widget('conversation_scrolledwindow')
+		conversation_scrolledwindow.get_vadjustment().connect('value-changed', \
+			self.on_conversation_vadjustment_value_changed)
 		
 		self.chat_notebook.append_page(self.xmls[user.jid].\
 			get_widget('chat_vbox'))
@@ -490,13 +494,6 @@ class tabbed_chat_window:
 			message_textview = self.xmls[jid].get_widget('message_textview')
 			if not message_textview.is_focus():
 				message_textview.grab_focus()
-			'''FIXME: DOES NOT WORK
-			# remove * or [n] from title of tab/window
-			self.nb_unread[jid] = 0
-			self.redraw_tab(jid)
-			self.show_title()
-			self.plugin.systray.remove_jid(jid, self.account)
-			'''
 
 	def on_contact_button_clicked(self, widget):
 		"""When button contact is clicked"""
@@ -522,33 +519,24 @@ class tabbed_chat_window:
 			if len(self.plugin.roster.contacts[self.account][jid]) == 1:
 				self.plugin.roster.remove_user(user, self.account)
 
-	def on_conversation_textview_set_scroll_adjustments(self, widget, scrollstep, count):
-		print "toto"
-	
-	def on_conversation_scrolledwindow_scroll_child(self, widget, scrolltype, \
-		horizontal):
-		print "scrolled"
-		if horizontal:
-			return
+	def on_conversation_vadjustment_value_changed(self, widget):
 		jid = self.get_active_jid()
 		if not self.nb_unread[jid]:
 			return
-		print "scrolled2"
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		end_iter = conversation_buffer.get_end_iter()
 		end_rect = conversation_textview.get_iter_location(end_iter)
-		print end_rect.x, end_rect.y, end_rect.width, end_rect.height
 		visible_rect = conversation_textview.get_visible_rect()
-		print visible_rect.x, visible_rect.y, visible_rect.width, visible_rect.height
-		if end_rect.y <= (visible_rect.y + visible_rect.height):
+		if end_rect.y <= (visible_rect.y + visible_rect.height) and \
+			self.window.is_active():
 			#we are at the end
 			self.nb_unread[jid] = 0
 			self.redraw_tab(jid)
 			self.show_title()
 			self.plugin.systray.remove_jid(jid, self.account)
 
-	def print_conversation(self, text, jid, contact = None, tim = None):
+	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :
 		if contact is set to status : it's a status message
 		if contact is set to another value : it's an outgoing message
@@ -611,8 +599,8 @@ class tabbed_chat_window:
 			end = True
 			conversation_textview.scroll_to_mark(conversation_buffer.\
 				get_mark('end'), 0.1, 0, 0, 0)
-		if (jid != self.get_active_jid() or not self.window.is_active() or \
-			not end) and contact != 'status':
+		if ((jid != self.get_active_jid()) or (not self.window.is_active()) or \
+			(not end)) and contact == '':
 			self.nb_unread[jid] += 1
 			self.redraw_tab(jid)
 			self.show_title()
