@@ -135,7 +135,8 @@ class  MyGnuPG(GnuPGInterface.GnuPG):
 
 	def verify(self, str, sign):
 		file = open('gpg_data', 'w+r')
-		os.remove('gpg_data')
+		try: os.remove('gpg_data')
+		except: pass
 		fd = file.fileno()
 		file.write(str)
 		file.seek(0)
@@ -641,6 +642,8 @@ class GajimCore:
 						self.cfgParser.tab[a] = ev[2][1][a]
 						if not a in self.connected.keys():
 							self.connected[a] = 0
+						if not self.gpg.has_key(a):
+							self.gpg[a] = MyGnuPG()
 				else:
 					self.cfgParser.tab[ev[2][0]] = ev[2][1]
 				self.cfgParser.writeCfgFile()
@@ -807,6 +810,8 @@ class GajimCore:
 			elif ev[0] == 'ACC_CHG':
 				self.connected[ev[2]] = self.connected[ev[1]]
 				del self.connected[ev[1]]
+				self.gpg[ev[2]] = self.gpg[ev[1]]
+				del self.gpg[ev[1]]
 				if con:
 					self.connexions[con] = ev[2]
 			#('ASK_VCARD', account, jid)
