@@ -124,7 +124,7 @@ class roster_window:
 		if user.groups == []:
 			if user.jid.find("@") <= 0:
 				user.groups.append('Agents')
-			else:
+			elif user.groups == []:
 				user.groups.append('general')
 
 		if (user.show == 'offline' or user.show == 'error') and not showOffline\
@@ -922,8 +922,7 @@ class roster_window:
 	def on_gajim_window_delete_event(self, widget, event):
 		"""When we want to close the window"""
 		if self.plugin.systray_visible:
-			self.window.iconify()
-			win.skip_taskbar_hint = True
+			self.window.hide()
 		else:
 			self.quit_gtkgui_plugin()
 		return 1
