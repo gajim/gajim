@@ -646,7 +646,7 @@ class GajimCore:
 		if qp.getTag('name'):
 			client_info += qp.getTag('name').getData()
 		if qp.getTag('version'):
-			client_info += qp.getTag('version').getData()
+			client_info += ' ' + qp.getTag('version').getData()
 		if qp.getTag('os'):
 			os_info += qp.getTag('os').getData()
 		jid = iq_obj.getFrom().getStripped()
