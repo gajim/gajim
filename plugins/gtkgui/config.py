@@ -181,11 +181,21 @@ class preferences_window:
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.roster.draw_roster()
 	
-	def on_reset_colors_and_fonts_button_clicked(self, widget):
+	def on_reset_colors_button_clicked(self, widget):
 		defaults = self.plugin.default_config
 		self.plugin.config['inmsgcolor'] = defaults['inmsgcolor']
 		self.plugin.config['outmsgcolor'] = defaults['outmsgcolor']
 		self.plugin.config['statusmsgcolor'] = defaults['statusmsgcolor']
+		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['inmsgcolor']))		
+		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['outmsgcolor']))		
+		self.xml.get_widget('status_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(defaults['statusmsgcolor']))		
+		self.update_text_tags()
+
+	def on_reset_colors_and_fonts_button_clicked(self, widget):
+		defaults = self.plugin.default_config
 		self.plugin.config['accounttextcolor'] = defaults['accounttextcolor']
 		self.plugin.config['grouptextcolor'] = defaults['grouptextcolor']
 		self.plugin.config['usertextcolor'] = defaults['usertextcolor']
@@ -195,12 +205,6 @@ class preferences_window:
 		self.plugin.config['accountfont'] = defaults['accountfont']
 		self.plugin.config['groupfont'] = defaults['groupfont']
 		self.plugin.config['userfont'] = defaults['userfont']
-		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['inmsgcolor']))		
-		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['outmsgcolor']))		
-		self.xml.get_widget('status_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['statusmsgcolor']))		
 		self.xml.get_widget('account_text_colorbutton').set_color(\
 			gtk.gdk.color_parse(defaults['accounttextcolor']))		
 		self.xml.get_widget('group_text_colorbutton').set_color(\
@@ -219,7 +223,6 @@ class preferences_window:
 			defaults['groupfont'])
 		self.xml.get_widget('user_text_fontbutton').set_font_name(\
 			defaults['userfont'])
-		self.update_text_tags()
 		self.plugin.roster.draw_roster()
 	
 	def on_use_emoticons_checkbutton_function(self):
