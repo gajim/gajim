@@ -18,6 +18,33 @@
 ## GNU General Public License for more details.
 ##
 
+if __name__ == "__main__":
+	import getopt, pickle, sys, socket
+	try:
+		opts, args = getopt.getopt(sys.argv[1:], "p:h", ["help"])
+	except getopt.GetoptError:
+		# print help information and exit:
+		usage()
+		sys.exit(2)
+	port = 8255
+	for o, a in opts:
+		if o == '-p':
+			port = a
+		if o in ("-h", "--help"):
+			usage()
+			sys.exit()
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	try:
+		sock.connect(('', 8255))
+	except:
+		#TODO: use i18n
+		print "unable to connect to localhost on port ", port
+	else:
+		evp = pickle.dumps(('EXEC_PLUGIN', '', 'gtkgui'))
+		sock.send('<'+evp+'>')
+		sock.close()
+	sys.exit()
+
 import pygtk
 pygtk.require('2.0')
 import gtk
@@ -3549,13 +3576,16 @@ class plugin:
 		# * means 0 or more times
 		# + means 1 or more times
 		# | means or
-		# [^*] anything but *   (inside [] you don't have to escape metachars)
+		# [^*] anything but '*'   (inside [] you don't have to escape metachars)
+		# [^\s*] anything but whitespaces and '*'
 		# formatting_and_url_pattern is one string literal.
 		# I've put spaces to make the regexp look better
-		self.formatting_and_url_pattern = r'http://\S+*|' 'https://\S+*|' 'news://\S+*|' 'ftp://\S+*|' 'mailto:\S+|' 'ed2k://\S+*|' 'www\.\S+|' 'ftp\.\S+|' '\*\S+[^*]*[^\s]\*|' '/\S+[^/]*[^\s]/|' '_\S+[^_]*[^\s]_|' '\S+[^\s]*@\S+\.\S+'
+		self.formatting_and_url_pattern = r'http://\S+|' 'https://\S+|' 'news://\S+|' 'ftp://\S+|' 'mailto:\S+|' 'ed2k://\S+|' 'www\.\S+|' 'ftp\.\S+|' '\*\S+[^*]*[^\s*]\*|' '/\S+[^/]*[^\s*]/|' '_\S+[^_]*[^\s*]_|' '\S+[^\s]*@\S+\.\S+'
+		
+		#self.formatting_and_url_pattern = r'http://\S+|' 'https://\S+|' 'news://\S+|' 'ftp://\S+|' 'mailto:\S+|' 'ed2k://\S+|' 'www\.\S+|' 'ftp\.\S+|' '\S+[^\s]*@\S+\.\S+'
 		
 		# at least one letter in 3 parts (before @, after @, after .)
-		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+[^\s]*@\S+\.\S+')
+		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+[^\s*]@\S+\.\S+')
 		
 		emoticons_pattern = ''
 		for emoticon in self.emoticons: # travel tru emoticons list
@@ -3565,36 +3595,10 @@ class plugin:
 		self.emot_and_formatting_and_url_pattern =\
 			emoticons_pattern + self.formatting_and_url_pattern
 		
+		print 'self.emot_and_formatting_and_url_pattern', self.emot_and_formatting_and_url_pattern
 		gtk.gdk.threads_enter()
 		self.autoconnect()
 		gtk.main()
 		gtk.gdk.threads_leave()
 
-if __name__ == "__main__":
-	import getopt, pickle, sys, socket
-	try:
-		opts, args = getopt.getopt(sys.argv[1:], "p:h", ["help"])
-	except getopt.GetoptError:
-		# print help information and exit:
-		usage()
-		sys.exit(2)
-	port = 8255
-	for o, a in opts:
-		if o == '-p':
-			port = a
-		if o in ("-h", "--help"):
-			usage()
-			sys.exit()
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	try:
-		sock.connect(('', 8255))
-	except:
-		#TODO: use i18n
-		print "unable to connect to localhost on port ", port
-	else:
-		evp = pickle.dumps(('EXEC_PLUGIN', '', 'gtkgui'))
-		sock.send('<'+evp+'>')
-		sock.close()
-	sys.exit()
-
-print _("plugin gtkgui loaded")
+print _('plugin gtkgui loaded')
