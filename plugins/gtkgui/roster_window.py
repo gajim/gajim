@@ -353,7 +353,7 @@ class Roster_window:
 		"""When a user change his status"""
 		showOffline = self.plugin.config['showoffline']
 		model = self.tree.get_model()
-		if (show == 'offline' or show == 'error') and not showOffline and \
+		if (show == 'offline' or show == 'error') and \
 			not self.plugin.queues[account].has_key(user.jid):
 			if len(self.contacts[account][user.jid]) > 1:
 				luser = self.contacts[account][user.jid]
@@ -362,9 +362,11 @@ class Roster_window:
 						luser.remove(u)
 						self.redraw_jid(user.jid, account)
 						break
-			else:
+			elif not showOffline:
 				self.remove_user(user, account)
 				iters = []
+			else:
+				self.redraw_jid(user.jid, account)
 		else:
 			if not self.get_user_iter(user.jid, account):
 				self.add_user_to_roster(user.jid, account)
