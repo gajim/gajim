@@ -47,22 +47,11 @@ class Preferences_window:
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
 
-	def on_before_time_entry_focus_out_event(self, widget, event):
-		self.plugin.config['before_time'] = widget.get_text()
-	
-	def on_after_time_entry_focus_out_event(self, widget, event):
-		self.plugin.config['after_time'] = widget.get_text()
-
-	def on_before_nickname_entry_focus_out_event(self, widget, event):
-		self.plugin.config['before_nickname'] = widget.get_text()
-
-	def on_after_nickname_entry_focus_out_event(self, widget, event):
-		self.plugin.config['after_nickname'] = widget.get_text()
-
 	def on_tray_icon_checkbutton_toggled(self, widget):
 		if widget.get_active():
 			self.plugin.config['trayicon'] = 1
 			self.plugin.show_systray()
+			self.plugin.roster.update_status_comboxbox()
 		else:
 			self.plugin.config['trayicon'] = 0
 			self.plugin.hide_systray()
@@ -241,15 +230,6 @@ class Preferences_window:
 #					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
 #						get_widget('message_textview').set_buffer(buf2[acct][jid])
 	
-	def update_text_tags(self):
-		"""Update color tags in Opened Chat Windows"""
-		for a in self.plugin.accounts.keys():
-			if self.plugin.windows[a]['chats'].has_key('tabbed'):
-				self.plugin.windows[a]['chats']['tabbed'].update_tags()
-			else:
-				for jid in self.plugin.windows[a]['chats'].keys():
-					self.plugin.windows[a]['chats'][jid].update_tags()
-	
 	def update_print_time(self):
 		"""Update time in Opened Chat Windows"""
 		for a in self.plugin.accounts.keys():
@@ -258,6 +238,42 @@ class Preferences_window:
 			else:
 				for jid in self.plugin.windows[a]['chats'].keys():
 					self.plugin.windows[a]['chats'][jid].update_print_time()
+	
+	def on_time_never_radiobutton_toggled(self, widget):
+		if widget.get_active():
+			self.plugin.config['print_time'] = 'never'
+		self.update_print_time()
+
+	def on_time_sometimes_radiobutton_toggled(self, widget):
+		if widget.get_active():
+			self.plugin.config['print_time'] = 'sometimes'
+		self.update_print_time()
+
+	def on_time_always_radiobutton_toggled(self, widget):
+		if widget.get_active():
+			self.plugin.config['print_time'] = 'always'
+		self.update_print_time()
+
+	def on_before_time_entry_focus_out_event(self, widget, event):
+		self.plugin.config['before_time'] = widget.get_text()
+	
+	def on_after_time_entry_focus_out_event(self, widget, event):
+		self.plugin.config['after_time'] = widget.get_text()
+
+	def on_before_nickname_entry_focus_out_event(self, widget, event):
+		self.plugin.config['before_nickname'] = widget.get_text()
+
+	def on_after_nickname_entry_focus_out_event(self, widget, event):
+		self.plugin.config['after_nickname'] = widget.get_text()
+
+	def update_text_tags(self):
+		"""Update color tags in Opened Chat Windows"""
+		for a in self.plugin.accounts.keys():
+			if self.plugin.windows[a]['chats'].has_key('tabbed'):
+				self.plugin.windows[a]['chats']['tabbed'].update_tags()
+			else:
+				for jid in self.plugin.windows[a]['chats'].keys():
+					self.plugin.windows[a]['chats'][jid].update_tags()
 	
 	def on_incoming_msg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Incoming Messages"""
@@ -295,21 +311,6 @@ class Preferences_window:
 		self.xml.get_widget('status_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(defaults['statusmsgcolor']))		
 		self.update_text_tags()
-
-	def on_time_never_radiobutton_toggled(self, widget):
-		if widget.get_active():
-			self.plugin.config['print_time'] = 'never'
-		self.update_print_time()
-
-	def on_time_sometimes_radiobutton_toggled(self, widget):
-		if widget.get_active():
-			self.plugin.config['print_time'] = 'sometimes'
-		self.update_print_time()
-
-	def on_time_always_radiobutton_toggled(self, widget):
-		if widget.get_active():
-			self.plugin.config['print_time'] = 'always'
-		self.update_print_time()
 
 	def on_use_emoticons_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'useemoticons',\
