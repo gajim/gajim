@@ -7398,7 +7398,7 @@ Custom</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="Join_gc">
+<widget class="GtkWindow" id="join_groupchat_window">
   <property name="border_width">5</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Join Groupchat</property>
@@ -7412,7 +7412,7 @@ Custom</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Tue, 03 Aug 2004 22:05:29 GMT"/>
+  <signal name="destroy" handler="on_join_groupchat_window_destroy" last_modification_time="Wed, 02 Mar 2005 12:20:14 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox28">
@@ -7527,7 +7527,7 @@ Custom</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="entry_nick">
+	    <widget class="GtkEntry" id="nickname_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
@@ -7548,7 +7548,7 @@ Custom</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="entry_room">
+	    <widget class="GtkEntry" id="room_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
@@ -7569,7 +7569,7 @@ Custom</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="entry_server">
+	    <widget class="GtkEntry" id="server_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
@@ -7590,7 +7590,7 @@ Custom</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="entry_pass">
+	    <widget class="GtkEntry" id="password_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
@@ -7636,7 +7636,7 @@ Custom</property>
 	  <property name="spacing">20</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button23">
+	    <widget class="GtkButton" id="cancel_utton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -7644,18 +7644,18 @@ Custom</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_cancel_clicked" last_modification_time="Tue, 03 Aug 2004 22:06:07 GMT"/>
+	      <signal name="clicked" handler="on_cancel_utton_clicked" last_modification_time="Wed, 02 Mar 2005 12:19:37 GMT"/>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button24">
+	    <widget class="GtkButton" id="join_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_join_clicked" last_modification_time="Tue, 03 Aug 2004 22:06:23 GMT"/>
+	      <signal name="clicked" handler="on_join_button_clicked" last_modification_time="Wed, 02 Mar 2005 12:19:22 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment25">

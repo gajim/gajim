@@ -2028,13 +2028,15 @@ class roster_window:
 		"""When Join Groupchat is selected :
 		call the join_gc class"""
 		if not self.plugin.windows.has_key('join_gc'):
-			self.plugin.windows['join_gc'] = join_gc(self.plugin, account)
+			self.plugin.windows['join_gc'] = \
+				join_groupchat_window(self.plugin, account)
 
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When New Message is activated:
 		call the new_message_window class"""
 		if not self.plugin.windows.has_key('new_message'):
-			self.plugin.windows['new_message'] = new_message_window(self.plugin, account)
+			self.plugin.windows['new_message'] = \
+				new_message_window(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
 		"""When about is selected :
