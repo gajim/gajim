@@ -1001,8 +1001,6 @@ class Account_modification_window:
 		if infos.has_key('autoconnect'):
 			self.xml.get_widget('autoconnect_checkbutton').set_active(\
 				infos['autoconnect'])
-		#default is checked
-		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(True)
 		if infos.has_key('sync_with_global_status'):
 			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(\
 				infos['sync_with_global_status'])
@@ -1286,6 +1284,8 @@ class Account_modification_window:
 		self.xml.get_widget('gpg_password_entry').set_sensitive(False)
 		self.xml.get_widget('password_entry').set_sensitive(False)
 		self.xml.get_widget('log_history_checkbutton').set_active(1)
+		#default is checked
+		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(1)
 		self.xml.signal_autoconnect(self)
 		if infos:
 			self.modify = True
