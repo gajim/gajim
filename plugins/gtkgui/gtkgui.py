@@ -79,6 +79,16 @@ class add:
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
 
+class warning:
+	def delete_event(self, widget):
+		self.window.destroy()
+	
+	def __init__(self, txt):
+		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Warning')
+		self.window = self.xml.get_widget("Warning")
+		self.xml.get_widget('label').set_text(txt)
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+
 class about:
 	def delete_event(self, widget):
 		self.Wabout.destroy()
@@ -103,12 +113,19 @@ class account_pref:
 			self.xml.get_widget("entry_ressource").set_text(infos['ressource'])
 
 	def on_save_clicked(self, widget):
-#		accountsStr = self.cfgParser.Profile_accounts
-#		accounts = string.split(accountsStr, ' ')
 		name = self.xml.get_widget("entry_name").get_text()
+		jid = self.xml.get_widget('entry_jid').get_text()
 		if (name == ''):
+			warning('You must enter a name for this account')
 			return 0
+		if (jid == '') or (string.count(jid, '@') != 1):
+			warning('You must enter a Jabber ID for this account\nFor example : login@hostname')
+			return 0
+		else:
+			(login, hostname) = string.split(jid, '@')
+		#if we are modifying an account
 		if self.mod:
+			#if we modify the name of the account
 			if name != self.acc:
 				self.cfgParser.remove_section(self.acc)
 				self.accs.accounts.remove(self.acc)
@@ -116,15 +133,22 @@ class account_pref:
 				self.accs.accounts.append(name)
 				accountsStr = string.join(self.accs.accounts)
 				self.cfgParser.set('Profile', 'accounts', accountsStr)
+		#if it's a new account
 		else:
 			if name in self.accs.accounts:
+				warning('An account already has this name')
 				return 0
-			else:
-				self.cfgParser.add_section(name)
-				self.accs.accounts.append(name)
-				accountsStr = string.join(self.accs.accounts)
-				self.cfgParser.set('Profile', 'accounts', accountsStr)
-		(login, hostname) = string.split(self.xml.get_widget("entry_jid").get_text(), '@')
+			#if we neeed to register a new account
+			if self.xml.get_widget('checkbutton').get_active():
+				self.accs.r.queueOUT.put(('NEW_ACC', (hostname, login, \
+					self.xml.get_widget('entry_password').get_text(), name, \
+					self.xml.get_widget('entry_ressource').get_text())))
+				self.xml.get_widget('checkbutton').set_active(FALSE)
+				return 1
+			self.cfgParser.add_section(name)
+			self.accs.accounts.append(name)
+			accountsStr = string.join(self.accs.accounts)
+			self.cfgParser.set('Profile', 'accounts', accountsStr)
 		self.cfgParser.set(name, 'name', login)
 		self.cfgParser.set(name, 'hostname', hostname)
 		self.cfgParser.set(name, 'password', self.xml.get_widget("entry_password").get_text())
@@ -145,6 +169,8 @@ class account_pref:
 			self.init_account(infos)
 		else:
 			self.mod = FALSE
+		if self.mod:
+			self.xml.get_widget("checkbutton").set_sensitive(FALSE)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_save_clicked', self.on_save_clicked)
 
@@ -191,9 +217,9 @@ class accounts:
 		infos['ressource'] = self.cfgParser.__getattr__("%s" % account+"_ressource")
 		account_pref(self, infos)
 		
-	def __init__(self, accounts):
-		self.cfgParser = common.optparser.OptionsParser(CONFPATH)
-		self.cfgParser.parseCfgFile()
+	def __init__(self, roster):
+		self.r = roster
+		self.cfgParser = self.r.cfgParser
 		self.xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Accounts')
 		self.window = self.xml.get_widget("Accounts")
 		self.treeview = self.xml.get_widget("treeview")
@@ -208,7 +234,7 @@ class accounts:
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
 		self.treeview.insert_column_with_attributes(-1, 'Server', renderer, text=1)
-		self.accounts = accounts
+		self.accounts = self.r.accounts
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
 		self.xml.signal_connect('on_new_clicked', self.on_new_clicked)
@@ -603,7 +629,7 @@ class roster:
 	def on_accounts(self, widget):
 		global Waccounts
 		if not Waccounts:
-			Waccounts = accounts(self.accounts)
+			Waccounts = accounts(self)
 	
 	def on_quit(self, widget):
 		self.queueOUT.put(('QUIT',''))
@@ -832,6 +858,22 @@ class plugin:
 					Wbrowser.agents(ev[1])
 			elif ev[0] == 'AGENT_INFO':
 				Wreg = agent_reg(ev[1][0], ev[1][1], self.r)
+			#('ACC_OK', (hostname, login, pasword, name, ressource))
+			elif ev[0] == 'ACC_OK':
+				print "acc_ok"
+				print ev[1]
+				self.r.cfgParser.add_section(ev[1][3])
+				self.r.accounts.append(ev[1][3])
+				accountsStr = string.join(self.r.accounts)
+				self.r.cfgParser.set('Profile', 'accounts', accountsStr)
+				self.r.cfgParser.set(ev[1][3], 'name', ev[1][1])
+				self.r.cfgParser.set(ev[1][3], 'hostname', ev[1][0])
+				self.r.cfgParser.set(ev[1][3], 'password', ev[1][2])
+				self.r.cfgParser.set(ev[1][3], 'ressource', ev[1][4])
+				self.r.cfgParser.writeCfgFile()
+				self.r.cfgParser.parseCfgFile()
+				if (Waccounts != 0):
+					Waccounts.init_accounts()
 		return 1
 
 	def __init__(self, quIN, quOUT):

@@ -175,6 +175,26 @@ class GajimCore:
 					self.hub.sendPlugin('AGENT_INFO', (ev[1], agent_info))
 				elif ev[0] == 'REG_AGENT':
 					self.con.sendRegInfo(ev[1])
+				#('NEW_ACC', (hostname, login, password, name, ressource))
+				elif ev[0] == 'NEW_ACC':
+					c = common.jabber.Client(host = \
+						ev[1][0], debug = False, log = sys.stderr)
+					try:
+						c.connect()
+					except IOError, e:
+						log.debug("Couldn't connect to %s %s" % (hostname, e))
+						return 0
+					else:
+						log.debug("Connected to server")
+						c.requestRegInfo()
+						req = c.getRegInfo()
+						c.setRegInfo( 'username', ev[1][1])
+						c.setRegInfo( 'password', ev[1][2])
+						#FIXME: if users already exist, no error message :(
+						if not c.sendRegInfo():
+							print "error " + c.lastErr
+						else:
+							self.hub.sendPlugin('ACC_OK', ev[1])
 				else:
 					log.debug("Unknown Command")
 			elif self.connected == 1:
@@ -197,6 +217,7 @@ def loadPlugins(gc):
 		gc.hub.register(mod, 'AGENTS')
 		gc.hub.register(mod, 'AGENT_INFO')
 		gc.hub.register(mod, 'QUIT')
+		gc.hub.register(mod, 'ACC_OK')
 		modObj.load()
 # END loadPLugins
 
