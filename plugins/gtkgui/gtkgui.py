@@ -1640,16 +1640,15 @@ class roster_Window:
 			model.set_value(accountIter, 0, self.pixbufs[status])
 		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
 		if status == 'offline':
-			self.plugin.connected[account] = 0
 			self.plugin.sleeper = None
 			for jid in self.contacts[account]:
 				user = self.contacts[account][jid]
 				self.chg_user_status(user, 'offline', 'Disconnected', account)
 		elif self.plugin.connected[account] == 0:
-			self.plugin.connected[account] = statuss.index(status)
 			self.plugin.sleeper = None#common.sleepy.Sleepy(\
 				#self.plugin.config['autoawaytime']*60, \
 				#self.plugin.config['autoxatime']*60)
+		self.plugin.connected[account] = statuss.index(status)
 		self.set_optionmenu()
 
 	def on_message(self, jid, msg, account):
