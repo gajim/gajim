@@ -966,9 +966,8 @@ class browseAgent_Window:
 		"""When we recieve informations about an agent"""
 		model = self.treeview.get_model()
 		iter = model.get_iter_root()
-		if not iter:
-			return
-		while (1):
+		expand = 0
+		while (iter):
 			if agent == model.get_value(iter, 1):
 				break
 			if model.iter_has_child(iter):
@@ -977,8 +976,10 @@ class browseAgent_Window:
 				if not model.iter_next(iter):
 					iter = model.iter_parent(iter)
 				iter = model.iter_next(iter)
-			if not iter:
-				return
+		if not iter:
+			iter = model.append(None, (agent, agent))
+			self.agent_infos[agent] = {'features' : []}
+			expand = 1
 		self.agent_infos[agent]['features'] = features
 		if len(identities):
 			self.agent_infos[agent]['identities'] = identities
@@ -987,6 +988,8 @@ class browseAgent_Window:
 		for item in items:
 			model.append(iter, (item['name'], item['jid']))
 			self.agent_infos[item['jid']] = {'identities': [item]}
+		if expand:
+			self.treeview.expand_row((model.get_path(iter)), False)
 
 	def on_refresh(self, widget):
 		"""When refresh button is clicked :
