@@ -662,7 +662,7 @@ class Roster_window:
 				model = self.tree.get_model()
 				iter = model.get_iter(path)
 				type = model.get_value(iter, 2)
-				if (type == 'group' or type == 'account'):
+				if (type == 'group'):
 					if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 						if (self.tree.row_expanded(path)):
 							self.tree.collapse_row(path)
@@ -918,7 +918,7 @@ class Roster_window:
 			
 	def on_about_menuitem_activate(self, widget):
 		#About_dialog()
-		Popup_window(self.plugin)
+		self.popup_windows.append( Popup_window(self.plugin) )
 
 	def on_accounts_menuitem_activate(self, widget):
 		if self.plugin.windows.has_key('accounts'):
@@ -1338,6 +1338,7 @@ class Roster_window:
 		self.newly_added = {}
 		self.to_be_removed = {}
 		self.popups_height = 0
+		self.popup_windows = []
 		for a in self.plugin.accounts.keys():
 			self.contacts[a] = {}
 			self.groups[a] = {}

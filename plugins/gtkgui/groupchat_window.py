@@ -62,7 +62,7 @@ class Groupchat_window(Chat):
 		"""close window"""
 		for room_jid in self.xmls:
 			if time.time() - self.last_message_time[room_jid] < 2:
-				dialog = Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this window ?') % \
+				dialog = Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this window?') % \
 					room_jid.split('@')[0])
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
@@ -438,7 +438,7 @@ class Groupchat_window(Chat):
 
 	def remove_tab(self, room_jid):
 		if time.time() - self.last_message_time[room_jid] < 2:
-			dialog = Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this tab ?') % \
+			dialog = Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this tab?') % \
 				room_jid.split('@')[0])
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
@@ -464,30 +464,36 @@ class Groupchat_window(Chat):
 		#status_image, nickname, real_jid, status
 		store = gtk.TreeStore(gtk.Image, str, str, str)
 		column = gtk.TreeViewColumn('contacts')
-		render_text = CellRendererImage()
-		column.pack_start(render_text, expand = False)
-		column.add_attribute(render_text, 'image', 0)
-		render_text = gtk.CellRendererText()
-		column.pack_start(render_text, expand = True)
-		column.add_attribute(render_text, 'text', 1)
+		renderer_image = CellRendererImage()
+		renderer_image.set_property('width', 20)
+		column.pack_start(renderer_image, expand = False)
+		column.add_attribute(renderer_image, 'image', 0)
+		renderer_text = gtk.CellRendererText()
+		column.pack_start(renderer_text, expand = True)
+		column.add_attribute(renderer_text, 'text', 1)
 
 		self.list_treeview[room_jid].append_column(column)
 		self.list_treeview[room_jid].set_model(store)
-
-		column = gtk.TreeViewColumn()
-		render = gtk.CellRendererPixbuf()
-		column.pack_start(render, expand = False)
+		
+		# workaround to avoid gtk arrows to be shown
+		column = gtk.TreeViewColumn() # 2nd COLUMN
+		renderer = gtk.CellRendererPixbuf()
+		column.pack_start(renderer, expand = False)
 		self.list_treeview[room_jid].append_column(column)
 		column.set_visible(False)
 		self.list_treeview[room_jid].set_expander_column(column)
 
 		self.redraw_tab(room_jid)
 		self.show_title()
+	
+	def on_join_groupchat_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			widget.get_toplevel().destroy()
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
 		if event.type == gtk.gdk.BUTTON_PRESS:
-			if event.button == 3:
+			if event.button == 3: # right click
 				try:
 					path, column, x, y = widget.get_path_at_pos(int(event.x), \
 						int(event.y))
@@ -500,12 +506,26 @@ class Groupchat_window(Chat):
 					room_jid = self.get_active_jid()
 					self.mk_menu(room_jid, event, iter)
 				return True
-			if event.button == 1:
+			if event.button == 1: # left click
 				try:
 					path, column, x, y = widget.get_path_at_pos(int(event.x), \
 						int(event.y))
 				except TypeError:
 					widget.get_selection().unselect_all()
+					return False
+
+				model = self.tree.get_model()
+				iter = model.get_iter(path)
+				type = model.get_value(iter, 2)
+				if (type == 'group' or type == 'account'):
+					if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
+						if (self.tree.row_expanded(path)):
+							self.tree.collapse_row(path)
+						else:
+							self.tree.expand_row(path, False)
+			
+			#FIXME: should popup chat window for GC contact DOUBLE clicked
+			# also chat [in contect menu]
 		return False
 
 	def on_list_treeview_key_press_event(self, widget, event):
@@ -515,8 +535,7 @@ class Groupchat_window(Chat):
 		return False
 
 	def on_list_treeview_row_activated(self, widget, path, col=0):
-		"""When an iter is dubble clicked :
-		open the chat window"""
+		"""When an iter is double clicked: open the chat window"""
 		model = widget.get_model()
 		iter = model.get_iter(path)
 		if len(path) == 1:
@@ -526,13 +545,11 @@ class Groupchat_window(Chat):
 				widget.expand_row(path, False)
 
 	def on_list_treeview_row_expanded(self, widget, iter, path):
-		"""When a row is expanded :
-		change the icon of the arrow"""
+		"""When a row is expanded: change the icon of the arrow"""
 		model = widget.get_model()
 		model.set_value(iter, 0, self.plugin.roster.pixbufs['opened'])
 	
 	def on_list_treeview_row_collapsed(self, widget, iter, path):
-		"""When a row is collapsed :
-		change the icon of the arrow"""
+		"""When a row is collapsed: change the icon of the arrow"""
 		model = widget.get_model()
 		model.set_value(iter, 0, self.plugin.roster.pixbufs['closed'])

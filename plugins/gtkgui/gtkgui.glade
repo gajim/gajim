@@ -7930,6 +7930,7 @@ Custom</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
   <signal name="destroy" handler="on_join_groupchat_window_destroy" last_modification_time="Wed, 02 Mar 2005 12:20:14 GMT"/>
+  <signal name="key_press_event" handler="on_join_groupchat_window_key_press_event" last_modification_time="Tue, 05 Apr 2005 13:13:40 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox28">

@@ -785,6 +785,9 @@ class Popup_window:
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_window', APP)
 		self.window = xml.get_widget('popup_window')
 		close_button = xml.get_widget('close_button')
+		event_label = xml.get_widget('event_label')
+		
+		event_label.set_text(str(len(self.plugin.roster.popup_windows)))
 
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('green'))
 		
@@ -802,9 +805,29 @@ class Popup_window:
 		gobject.timeout_add(5000, self.on_timeout, window_height)
 
 	def on_close_button_clicked(self, widget, window_height):
-		self.plugin.roster.popups_height -= window_height
-		widget.get_toplevel().destroy()
+		print 'window h', window_height
+		self.adjust_height_and_move_popup_windows(window_height)
 
 	def on_timeout(self, window_height):
+		self.adjust_height_and_move_popup_windows(window_height)
+		print 'window h', window_height
+		
+	def adjust_height_and_move_popup_windows(self, window_height):
+		#remove
+		print 'self.plugin.roster.popups_height before', self.plugin.roster.popups_height
 		self.plugin.roster.popups_height -= window_height
+		print 'self.plugin.roster.popups_height now', self.plugin.roster.popups_height
+		print 'removing', self.window
 		self.window.destroy()
+		
+		if len(self.plugin.roster.popup_windows) > 0:
+			# we want to remove the first window added in the list
+			self.plugin.roster.popup_windows.pop(0) # remove
+		
+		# move the rest of popup windows
+		self.plugin.roster.popups_height = 0
+		for window_instance in self.plugin.roster.popup_windows:
+			window_width, window_height = window_instance.window.get_size()
+			self.plugin.roster.popups_height += window_height
+			window_instance.window.move(gtk.gdk.screen_width() - window_width, \
+					gtk.gdk.screen_height() - self.plugin.roster.popups_height)
