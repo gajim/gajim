@@ -381,6 +381,9 @@ class accountPreference_Window:
 		if (name == ''):
 			warning_Window('You must enter a name for this account')
 			return 0
+		if name.find(' ') != -1:
+			warning_Window('Spaces are not permited in account name')
+			return 0
 		if (jid == '') or (string.count(jid, '@') != 1):
 			warning_Window('You must enter a Jabber ID for this account\n\
 				For example : login@hostname')

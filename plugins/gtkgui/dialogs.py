@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-##	plugins/gtkgui.py
+##	plugins/dialogs.py
 ##
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@crans.org>
