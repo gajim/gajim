@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-25 17:35+0200\n"
+"POT-Creation-Date: 2004-10-07 16:50+0200\n"
 "PO-Revision-Date: 2004-05-16 19:40-0400\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -26,52 +26,52 @@ msgstr "Core arrêté"
 msgid "plugin %s cannot be launched : "
 msgstr "Le plugin %s ne peut pas être lancé : "
 
-#: core/core.py:87
+#: core/core.py:226
 #, python-format
 msgid "The plugin %s cannot be launched"
 msgstr "Le plugin %s ne peut pas être lancé"
 
-#: core/core.py:89
+#: core/core.py:228
 #, python-format
 msgid "The plugin %s is already launched"
 msgstr "Le plugin %s est déjà lancé"
 
-#: core/core.py:122
+#: core/core.py:261
 #, python-format
 msgid "Can't create %s"
 msgstr "Impossible de créer %s"
 
-#: core/core.py:127
+#: core/core.py:266
 #, python-format
 msgid "creating %s"
 msgstr "crée %s"
 
-#: core/core.py:229 core/core.py:514
+#: core/core.py:398 core/core.py:706
 msgid "I would like to add you to my roster."
 msgstr "Je souhaiterai t'ajouter à ma liste de contactes"
 
-#: core/core.py:323
+#: core/core.py:493
 #, python-format
 msgid "Couldn't connect to %s"
 msgstr "Impossible de se connecter à %s"
 
-#: core/core.py:329 core/core.py:335
+#: core/core.py:499 core/core.py:505
 #, python-format
 msgid "Couldn't connect to %s : %s"
 msgstr "Impossible de se connecter à %s : %s"
 
-#: core/core.py:358
+#: core/core.py:528
 #, python-format
 msgid "Authentification failed with %s, check your login and password"
 msgstr ""
 "Impossible de s'authentifier à %s, vérifiez votre login et votre mot de passe"
 
-#: core/core.py:676
+#: core/core.py:871
 #, python-format
 msgid "Unknown Command %s"
 msgstr "Commande inconnue %s"
 
-#: core/core.py:731
+#: core/core.py:926
 msgid "Keyboard Interrupt : Bye!"
 msgstr "Interruption au clavier : Au revoir !"
 
@@ -79,15 +79,15 @@ msgstr "Interruption au clavier : Au revoir !"
 msgid "plugin logger stopped"
 msgstr "Module logger arrêté"
 
-#: plugins/logger/logger.py:132
+#: plugins/logger/logger.py:144
 msgid "creating ~/.gajim/"
 msgstr "crée ~/.gajim/"
 
-#: plugins/logger/logger.py:137
+#: plugins/logger/logger.py:149
 msgid "creating ~/.gajim/logs/"
 msgstr "Crée ~/.gajim/logs/"
 
-#: plugins/logger/logger.py:140
+#: plugins/logger/logger.py:152
 msgid "plugin logger loaded"
 msgstr "Module logger chargé"
 
@@ -131,250 +131,254 @@ msgstr "La Priorité doit être un numéro"
 msgid "An account already has this name"
 msgstr "Un autre compte porte déjà ce nom"
 
-#: plugins/gtkgui/config.py:557
+#: plugins/gtkgui/config.py:560
 #, python-format
 msgid "Are you sure you want to remove this account (%s) ?"
 msgstr "Etes vous sur de vouloir supprimer ce compte (%s) ?"
 
-#: plugins/gtkgui/config.py:608 plugins/gtkgui/messagesGlade.c:121
+#: plugins/gtkgui/config.py:620 plugins/gtkgui/messagesGlade.c:121
 #: plugins/gtkgui/messagesGlade.c:135 plugins/gtkgui/messagesGlade.c:171
 msgid "Name"
 msgstr "Nom"
 
-#: plugins/gtkgui/config.py:611 plugins/gtkgui/messagesGlade.c:220
+#: plugins/gtkgui/config.py:623 plugins/gtkgui/messagesGlade.c:220
 msgid "Server"
 msgstr "Serveur"
 
-#: plugins/gtkgui/config.py:664
+#: plugins/gtkgui/config.py:628
+msgid "Active"
+msgstr ""
+
+#: plugins/gtkgui/config.py:681
 #, python-format
 msgid "Register to %s"
 msgstr "S'enregistrer à %s"
 
-#: plugins/gtkgui/config.py:806
+#: plugins/gtkgui/config.py:823
 msgid "You must be connected to view Agents"
 msgstr "Vous devez être connecté pour voir les Agents"
 
-#: plugins/gtkgui/dialogs.py:310
+#: plugins/gtkgui/dialogs.py:331
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Requête d'inscription de la part de %s"
 
-#: plugins/gtkgui/gtkgui.py:175
+#: plugins/gtkgui/gtkgui.py:177
 msgid "bad arguments"
 msgstr "Mauvais arguments"
 
-#: plugins/gtkgui/gtkgui.py:381
+#: plugins/gtkgui/gtkgui.py:403
 #, python-format
 msgid "%s has been kicked by %s: %s"
 msgstr "%s a été éjecté par %s : %s"
 
-#: plugins/gtkgui/gtkgui.py:508
+#: plugins/gtkgui/gtkgui.py:530
 msgid "MUC"
 msgstr ""
 
-#: plugins/gtkgui/gtkgui.py:513
+#: plugins/gtkgui/gtkgui.py:535
 msgid "Kick"
 msgstr "Ejecter"
 
-#: plugins/gtkgui/gtkgui.py:516
+#: plugins/gtkgui/gtkgui.py:538
 msgid "Grant voice"
 msgstr "Donner la voix"
 
-#: plugins/gtkgui/gtkgui.py:519
+#: plugins/gtkgui/gtkgui.py:541
 msgid "Revoke voice"
 msgstr "Retirer la voix"
 
-#: plugins/gtkgui/gtkgui.py:522
+#: plugins/gtkgui/gtkgui.py:544
 msgid "Grant moderator"
 msgstr "Donner la modération"
 
-#: plugins/gtkgui/gtkgui.py:525
+#: plugins/gtkgui/gtkgui.py:547
 msgid "Revoke moderator"
 msgstr "Retirer la modération"
 
-#: plugins/gtkgui/gtkgui.py:532
+#: plugins/gtkgui/gtkgui.py:554
 msgid "Ban"
 msgstr "Bannir"
 
-#: plugins/gtkgui/gtkgui.py:535
+#: plugins/gtkgui/gtkgui.py:557
 msgid "Grant membership"
 msgstr "Donner l'adhésion"
 
-#: plugins/gtkgui/gtkgui.py:538
+#: plugins/gtkgui/gtkgui.py:560
 msgid "Revoke membership"
 msgstr "Retirer l'adhésion"
 
-#: plugins/gtkgui/gtkgui.py:541
+#: plugins/gtkgui/gtkgui.py:563
 msgid "Grant admin"
 msgstr "Donner l'administration"
 
-#: plugins/gtkgui/gtkgui.py:544
+#: plugins/gtkgui/gtkgui.py:566
 msgid "Revoke admin"
 msgstr "Retirer l'administration"
 
-#: plugins/gtkgui/gtkgui.py:547
+#: plugins/gtkgui/gtkgui.py:569
 msgid "Grant owner"
 msgstr "Donner la possession"
 
-#: plugins/gtkgui/gtkgui.py:550
+#: plugins/gtkgui/gtkgui.py:572
 msgid "Revoke owner"
 msgstr "Retirer la possession"
 
-#: plugins/gtkgui/gtkgui.py:761
+#: plugins/gtkgui/gtkgui.py:783
 msgid "Status is now : "
 msgstr "L'état est maintenant : "
 
-#: plugins/gtkgui/gtkgui.py:1082
+#: plugins/gtkgui/gtkgui.py:1106
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s est maintenant %s (%s)"
 
-#: plugins/gtkgui/gtkgui.py:1096
+#: plugins/gtkgui/gtkgui.py:1120
 #, python-format
 msgid "Are you sure you want to remove the agent %s from your roster ?"
 msgstr "Etes vous sur de vouloir supprimer %s de votre liste ?"
 
-#: plugins/gtkgui/gtkgui.py:1125
+#: plugins/gtkgui/gtkgui.py:1149
 msgid "Start chat"
 msgstr "Envoyer un message"
 
-#: plugins/gtkgui/gtkgui.py:1128
+#: plugins/gtkgui/gtkgui.py:1152
 msgid "Rename"
 msgstr "Renomer"
 
-#: plugins/gtkgui/gtkgui.py:1133
+#: plugins/gtkgui/gtkgui.py:1157
 msgid "Subscription"
 msgstr "Autorisation"
 
-#: plugins/gtkgui/gtkgui.py:1138
+#: plugins/gtkgui/gtkgui.py:1162
 msgid "Resend authorization to"
 msgstr "Renvoyer l'autorisation à"
 
-#: plugins/gtkgui/gtkgui.py:1141
+#: plugins/gtkgui/gtkgui.py:1165
 msgid "Rerequest authorization from"
 msgstr "Redemander l'autorisation à"
 
-#: plugins/gtkgui/gtkgui.py:1144 plugins/gtkgui/messagesGlade.c:68
+#: plugins/gtkgui/gtkgui.py:1168 plugins/gtkgui/messagesGlade.c:68
 msgid "I would like to add you to my contact list, please."
 msgstr "Je souhaiterai t'ajouter à ma contact list"
 
-#: plugins/gtkgui/gtkgui.py:1148 plugins/gtkgui/gtkgui.py:1202
+#: plugins/gtkgui/gtkgui.py:1172 plugins/gtkgui/gtkgui.py:1226
 msgid "Remove"
 msgstr "Supprimer"
 
-#: plugins/gtkgui/gtkgui.py:1154
+#: plugins/gtkgui/gtkgui.py:1178
 msgid "Informations"
 msgstr ""
 
-#: plugins/gtkgui/gtkgui.py:1157 plugins/gtkgui/messagesGlade.c:24
+#: plugins/gtkgui/gtkgui.py:1181 plugins/gtkgui/messagesGlade.c:24
 msgid "History"
 msgstr "Historique"
 
-#: plugins/gtkgui/gtkgui.py:1168
+#: plugins/gtkgui/gtkgui.py:1192
 msgid "grp1"
 msgstr ""
 
-#: plugins/gtkgui/gtkgui.py:1170
+#: plugins/gtkgui/gtkgui.py:1194
 msgid "grp2"
 msgstr ""
 
-#: plugins/gtkgui/gtkgui.py:1172
+#: plugins/gtkgui/gtkgui.py:1196
 msgid "grp3"
 msgstr ""
 
-#: plugins/gtkgui/gtkgui.py:1186
+#: plugins/gtkgui/gtkgui.py:1210
 msgid "Log on"
 msgstr "Connecter"
 
-#: plugins/gtkgui/gtkgui.py:1192
+#: plugins/gtkgui/gtkgui.py:1216
 msgid "Log off"
 msgstr "Déconnecter"
 
-#: plugins/gtkgui/gtkgui.py:1238 plugins/gtkgui/gtkgui.py:1869
+#: plugins/gtkgui/gtkgui.py:1262 plugins/gtkgui/gtkgui.py:1906
 #: plugins/gtkgui/messagesGlade.c:120
 msgid "Status"
 msgstr "Etat"
 
-#: plugins/gtkgui/gtkgui.py:1243 plugins/gtkgui/gtkgui.py:1873
+#: plugins/gtkgui/gtkgui.py:1267 plugins/gtkgui/gtkgui.py:1910
 #: plugins/gtkgui/messagesGlade.c:17
 msgid "Online"
 msgstr "En ligne"
 
-#: plugins/gtkgui/gtkgui.py:1246 plugins/gtkgui/gtkgui.py:1876
+#: plugins/gtkgui/gtkgui.py:1270 plugins/gtkgui/gtkgui.py:1913
 #: plugins/gtkgui/messagesGlade.c:18
 msgid "Away"
 msgstr "Absent"
 
-#: plugins/gtkgui/gtkgui.py:1249 plugins/gtkgui/gtkgui.py:1879
+#: plugins/gtkgui/gtkgui.py:1273 plugins/gtkgui/gtkgui.py:1916
 #: plugins/gtkgui/messagesGlade.c:19
 msgid "NA"
 msgstr "Non Disponible"
 
-#: plugins/gtkgui/gtkgui.py:1252 plugins/gtkgui/gtkgui.py:1882
+#: plugins/gtkgui/gtkgui.py:1276 plugins/gtkgui/gtkgui.py:1919
 #: plugins/gtkgui/messagesGlade.c:20
 msgid "DND"
 msgstr "Ne Pas Déranger"
 
-#: plugins/gtkgui/gtkgui.py:1255 plugins/gtkgui/gtkgui.py:1885
+#: plugins/gtkgui/gtkgui.py:1279 plugins/gtkgui/gtkgui.py:1922
 #: plugins/gtkgui/messagesGlade.c:21
 msgid "Invisible"
 msgstr ""
 
-#: plugins/gtkgui/gtkgui.py:1260 plugins/gtkgui/gtkgui.py:1890
+#: plugins/gtkgui/gtkgui.py:1284 plugins/gtkgui/gtkgui.py:1927
 #: plugins/gtkgui/messagesGlade.c:22
 msgid "Offline"
 msgstr "Déconnecter"
 
-#: plugins/gtkgui/gtkgui.py:1267
+#: plugins/gtkgui/gtkgui.py:1291
 msgid "Edit account"
 msgstr "Editer le compte"
 
-#: plugins/gtkgui/gtkgui.py:1270 plugins/gtkgui/messagesGlade.c:11
+#: plugins/gtkgui/gtkgui.py:1294 plugins/gtkgui/messagesGlade.c:11
 msgid "_Browse agents"
 msgstr "A_gents"
 
-#: plugins/gtkgui/gtkgui.py:1326
+#: plugins/gtkgui/gtkgui.py:1350
 #, python-format
 msgid "Are you sure you want to remove %s (%s) from your roster ?"
 msgstr "Etes vous sur de vouloir supprimer %s (%s) de votre liste ?"
 
-#: plugins/gtkgui/gtkgui.py:1362
+#: plugins/gtkgui/gtkgui.py:1401
 msgid "You must setup an account before connecting to jabber network."
 msgstr ""
 "Vous devez configurer un compte pour pouvoir vous connecter au réseau Jabber"
 
-#: plugins/gtkgui/gtkgui.py:1498
+#: plugins/gtkgui/gtkgui.py:1534
 msgid "plugin gtkgui stopped"
 msgstr "Module gtkgui arrêté"
 
-#: plugins/gtkgui/gtkgui.py:1897
+#: plugins/gtkgui/gtkgui.py:1934
 msgid "Chat with"
 msgstr "Discution avec"
 
-#: plugins/gtkgui/gtkgui.py:1924
+#: plugins/gtkgui/gtkgui.py:1961
 msgid "Quit"
 msgstr "Quitter"
 
-#: plugins/gtkgui/gtkgui.py:2109
+#: plugins/gtkgui/gtkgui.py:2146
 msgid "error while sending"
-msgstr ""
+msgstr "erreur en envoyant"
 
-#: plugins/gtkgui/gtkgui.py:2129
+#: plugins/gtkgui/gtkgui.py:2166
 #, python-format
 msgid "You are now authorized by %s"
 msgstr "%s vous a autorisé"
 
-#: plugins/gtkgui/gtkgui.py:2133
+#: plugins/gtkgui/gtkgui.py:2170
 #, python-format
 msgid "You are now unsubscribed by %s"
 msgstr "%s vous a supprimé"
 
-#: plugins/gtkgui/gtkgui.py:2149
+#: plugins/gtkgui/gtkgui.py:2186
 #, python-format
 msgid "error contacting %s"
 msgstr "Erreur survenue pour contacter %s"
 
-#: plugins/gtkgui/gtkgui.py:2360
+#: plugins/gtkgui/gtkgui.py:2398
 msgid "plugin gtkgui loaded"
 msgstr "Module gtkgui chargé"
 
@@ -420,7 +424,7 @@ msgstr "Montrer les déconnectés"
 
 #: plugins/gtkgui/messagesGlade.c:14
 msgid "_Join Groupchat"
-msgstr ""
+msgstr "Re_joindre un group de discution"
 
 #: plugins/gtkgui/messagesGlade.c:15
 msgid "_About"
@@ -459,7 +463,7 @@ msgstr "A Propos"
 msgid ""
 "<b>Gajim</b>\n"
 "\n"
-"Copyright c 2003-2004 Gajim Team\n"
+"Copyright (c) 2003-2004 Gajim Team\n"
 "\n"
 "<b>Gajim Team</b>\n"
 "Vincent Hanquez (tab@snarc.org)\n"
@@ -498,7 +502,7 @@ msgstr "Nom : "
 #: plugins/gtkgui/messagesGlade.c:202 plugins/gtkgui/messagesGlade.c:203
 #: plugins/gtkgui/messagesGlade.c:215 plugins/gtkgui/messagesGlade.c:222
 #: plugins/gtkgui/messagesGlade.c:223 plugins/gtkgui/messagesGlade.c:224
-#: plugins/gtkgui/messagesGlade.c:225
+#: plugins/gtkgui/messagesGlade.c:225 plugins/gtkgui/messagesGlade.c:229
 msgid "*"
 msgstr ""
 
@@ -923,3 +927,11 @@ msgstr "Salon"
 #: plugins/gtkgui/messagesGlade.c:221
 msgid "Password"
 msgstr "Mot de passe: "
+
+#: plugins/gtkgui/messagesGlade.c:227
+msgid "Passphrase"
+msgstr "Phrase de passe"
+
+#: plugins/gtkgui/messagesGlade.c:228
+msgid "Enter your passphrase"
+msgstr "Entrez votre phrase de passe :"
