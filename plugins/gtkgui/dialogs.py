@@ -34,42 +34,37 @@ GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
 class infoUser_Window:
 	"""Class for user's information window"""
-	def delete_event(self, widget=None):
+	def on_user_information_window_destroy(self, widget=None):
 		"""close window"""
 		del self.plugin.windows[self.account]['infos'][self.user.jid]
 
-	def on_close(self, widget):
+	def on_close_button_clicked(self, widget):
 		"""Save user's informations and update the roster on the Jabber server"""
-		#update: to know if things have changed to send things 
-		# to server only if changes are done
-		update = 0
 		#update user.name if it's not ""
-		entry_name = self.xml.get_widget('entry_name')
-		newName = entry_name.get_text()
-		if newName != self.user.name and newName != '':
-			update = 1
-			self.user.name = newName
+		name_entry = self.xml.get_widget('nickname_entry')
+		new_name = name_entry.get_text()
+		if new_name != self.user.name and new_name != '':
+			self.user.name = new_name
 			for i in self.plugin.roster.get_user_iter(self.user.jid, self.account):
-				self.plugin.roster.tree.get_model().set_value(i, 1, newName)
-		if update:
+				self.plugin.roster.tree.get_model().set_value(i, 1, new_name)
 			self.plugin.send('UPDUSER', self.account, (self.user.jid, \
 				self.user.name, self.user.groups))
 		#log history ?
-		acct = self.plugin.accounts[self.account]
+		account_info = self.plugin.accounts[self.account]
 		oldlog = 1
 		no_log_for = []
-		if acct.has_key('no_log_for'):
-			no_log_for = acct['no_log_for'].split(' ')
+		if account_info.has_key('no_log_for'):
+			no_log_for = account_info['no_log_for'].split()
 			if self.user.jid in no_log_for:
 				oldlog = 0
-		log = self.xml.get_widget('chk_log').get_active()
+		log = self.xml.get_widget('log_checkbutton').get_active()
 		if not log and not self.user.jid in no_log_for:
 			no_log_for.append(self.user.jid)
 		if log and self.user.jid in no_log_for:
 			no_log_for.remove(self.user.jid)
 		if oldlog != log:
-			acct['no_log_for'] = string.join(no_log_for, ' ')
-			self.plugin.accounts[self.account] = acct
+			account_info['no_log_for'] = string.join(no_log_for, ' ')
+			self.plugin.accounts[self.account] = account_info
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 				'Gtkgui'))
 		widget.get_toplevel().destroy()
@@ -84,35 +79,35 @@ class infoUser_Window:
 		for i in vcard.keys():
 			if type(vcard[i]) == type({}):
 				for j in vcard[i].keys():
-					self.set_value('entry_'+i+'_'+j, vcard[i][j])
+					self.set_value(i+'_'+j+'_entry', vcard[i][j])
 			else:
 				if i == 'DESC':
-					self.xml.get_widget('textview_DESC').get_buffer().\
+					self.xml.get_widget('DESC_textview').get_buffer().\
 						set_text(vcard[i], 0)
 				else:
-					self.set_value('entry_'+i, vcard[i])
+					self.set_value(i+'_entry', vcard[i])
 
 	def __init__(self, user, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Info_user', APP)
-		self.window = self.xml.get_widget("Info_user")
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'user_information_window', APP)
+		self.window = self.xml.get_widget('user_information_window')
 		self.plugin = plugin
 		self.user = user
 		self.account = account
 
-		self.xml.get_widget('label_name').set_text(user.name)
-		self.xml.get_widget('label_id').set_text(user.jid)
-		self.xml.get_widget('label_sub').set_text(user.sub)
+		self.xml.get_widget('nickname_label').set_text(user.name)
+		self.xml.get_widget('jid_label').set_text(user.jid)
+		self.xml.get_widget('subscription_label').set_text(user.sub)
 		if user.ask:
-			self.xml.get_widget('label_ask').set_text(user.ask)
+			self.xml.get_widget('ask_label').set_text(user.ask)
 		else:
-			self.xml.get_widget('label_ask').set_text('None')
-		self.xml.get_widget('entry_name').set_text(user.name)
-		acct = self.plugin.accounts[account]
+			self.xml.get_widget('ask_label').set_text('None')
+		self.xml.get_widget('nickname_entry').set_text(user.name)
+		account_info = self.plugin.accounts[account]
 		log = 1
-		if acct.has_key('no_log_for'):
-			if user.jid in acct['no_log_for'].split(' '):
+		if account_info.has_key('no_log_for'):
+			if user.jid in account_info['no_log_for'].split(' '):
 				log = 0
-		self.xml.get_widget('chk_log').set_active(log)
+		self.xml.get_widget('log_checkbutton').set_active(log)
 		resources = user.resource + ' (' + str(user.priority) + ')'
 		if not user.status:
 			user.status = ''
@@ -123,12 +118,11 @@ class infoUser_Window:
 				if not u.status:
 					u.status = ''
 				stats += '\n' + u.show + ' : ' + u.status
-		self.xml.get_widget('label_resource').set_text(resources)
-		self.xml.get_widget('label_status').set_text(stats)
+		self.xml.get_widget('resource_label').set_text(resources)
+		self.xml.get_widget('status_label').set_text(stats)
 		plugin.send('ASK_VCARD', account, self.user.jid)
 		
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_close_clicked', self.on_close)
+		self.xml.signal_autoconnect(self)
 
 class passphrase_Window:
 	"""Class for Passphrase Window"""

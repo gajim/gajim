@@ -1991,7 +1991,7 @@ Nikos Kouremenos (nkour@jabber.org)</property>
 	    <widget class="GtkTable" id="table7">
 	      <property name="border_width">2</property>
 	      <property name="visible">True</property>
-	      <property name="n_rows">2</property>
+	      <property name="n_rows">1</property>
 	      <property name="n_columns">2</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">3</property>
@@ -5670,7 +5670,7 @@ Custom</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="Info_user">
+<widget class="GtkWindow" id="user_information_window">
   <property name="border_width">5</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Information</property>
@@ -5684,7 +5684,7 @@ Custom</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Wed, 17 Mar 2004 18:52:36 GMT"/>
+  <signal name="destroy" handler="on_user_information_window_destroy" last_modification_time="Tue, 01 Mar 2005 15:40:50 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox17">
@@ -5693,9 +5693,9 @@ Custom</property>
       <property name="spacing">0</property>
 
       <child>
-	<widget class="GtkLabel" id="label_name">
+	<widget class="GtkLabel" id="nickname_label">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">name</property>
+	  <property name="label" translatable="yes"></property>
 	  <property name="use_underline">False</property>
 	  <property name="use_markup">False</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5736,7 +5736,7 @@ Custom</property>
 	      <child>
 		<widget class="GtkLabel" id="label56">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Jabber ID</property>
+		  <property name="label" translatable="yes">Jabber ID:</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5758,9 +5758,9 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="label_id">
+		<widget class="GtkLabel" id="jid_label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">id</property>
+		  <property name="label" translatable="yes"></property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5782,9 +5782,9 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="label_status">
+		<widget class="GtkLabel" id="status_label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">status</property>
+		  <property name="label" translatable="yes"></property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5808,7 +5808,7 @@ Custom</property>
 	      <child>
 		<widget class="GtkLabel" id="label59">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Status</property>
+		  <property name="label" translatable="yes">Status:</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5832,7 +5832,7 @@ Custom</property>
 	      <child>
 		<widget class="GtkLabel" id="label58">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Name</property>
+		  <property name="label" translatable="yes">Nickname:</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5854,7 +5854,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_name">
+		<widget class="GtkEntry" id="nickname_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
@@ -5877,7 +5877,7 @@ Custom</property>
 	      <child>
 		<widget class="GtkLabel" id="label62">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Resource :</property>
+		  <property name="label" translatable="yes">Resource:</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5899,9 +5899,9 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="label_resource">
+		<widget class="GtkLabel" id="resource_label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">resource</property>
+		  <property name="label" translatable="yes"></property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5925,7 +5925,7 @@ Custom</property>
 	      <child>
 		<widget class="GtkLabel" id="label66">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Subscription :</property>
+		  <property name="label" translatable="yes">Subscription:</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5947,7 +5947,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkCheckButton" id="chk_log">
+		<widget class="GtkCheckButton" id="log_checkbutton">
 		  <property name="border_width">5</property>
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
@@ -5976,7 +5976,7 @@ Custom</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkLabel" id="label_sub">
+		    <widget class="GtkLabel" id="subscription_label">
 		      <property name="width_request">100</property>
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes"></property>
@@ -6000,7 +6000,7 @@ Custom</property>
 		  <child>
 		    <widget class="GtkLabel" id="label172">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Ask :</property>
+		      <property name="label" translatable="yes">Ask:</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6019,7 +6019,7 @@ Custom</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkLabel" id="label_ask">
+		    <widget class="GtkLabel" id="ask_label">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes"></property>
 		      <property name="use_underline">False</property>
@@ -6058,7 +6058,7 @@ Custom</property>
 	  <child>
 	    <widget class="GtkLabel" id="label54">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">General</property>
+	      <property name="label" translatable="yes">Jabber</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6229,7 +6229,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_FN">
+		<widget class="GtkEntry" id="FN_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6250,28 +6250,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_BDAY">
-		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="editable">False</property>
-		  <property name="visibility">True</property>
-		  <property name="max_length">0</property>
-		  <property name="text" translatable="yes"></property>
-		  <property name="has_frame">True</property>
-		  <property name="invisible_char">*</property>
-		  <property name="activates_default">False</property>
-		</widget>
-		<packing>
-		  <property name="left_attach">1</property>
-		  <property name="right_attach">2</property>
-		  <property name="top_attach">2</property>
-		  <property name="bottom_attach">3</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkEntry" id="entry_EMAIL_USERID">
+		<widget class="GtkEntry" id="EMAIL_USERID_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6292,7 +6271,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_URL">
+		<widget class="GtkEntry" id="URL_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6313,7 +6292,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_TEL_NUMBER">
+		<widget class="GtkEntry" id="TEL_NUMBER_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6334,7 +6313,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_NICKNAME">
+		<widget class="GtkEntry" id="NICKNAME_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6350,6 +6329,27 @@ Custom</property>
 		  <property name="right_attach">2</property>
 		  <property name="top_attach">1</property>
 		  <property name="bottom_attach">2</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkEntry" id="BDAY_entry">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="editable">False</property>
+		  <property name="visibility">True</property>
+		  <property name="max_length">0</property>
+		  <property name="text" translatable="yes"></property>
+		  <property name="has_frame">True</property>
+		  <property name="invisible_char">*</property>
+		  <property name="activates_default">False</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">2</property>
+		  <property name="top_attach">2</property>
+		  <property name="bottom_attach">3</property>
 		  <property name="y_options"></property>
 		</packing>
 	      </child>
@@ -6534,7 +6534,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry9">
+		<widget class="GtkEntry" id="ADR_STREET_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6555,7 +6555,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_ADR_EXTADR">
+		<widget class="GtkEntry" id="ADR_EXTADR_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6576,7 +6576,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_ADR_LOCALITY">
+		<widget class="GtkEntry" id="ADR_LOCALITY_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6597,7 +6597,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_ADR_REGION">
+		<widget class="GtkEntry" id="ADR_REGION_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6618,7 +6618,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_ADR_PCODE">
+		<widget class="GtkEntry" id="ADR_PCODE_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6639,7 +6639,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_ADR_CTRY">
+		<widget class="GtkEntry" id="ADR_CTRY_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6791,7 +6791,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_ORG_ORGNAME">
+		<widget class="GtkEntry" id="ORG_ORGNAME_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6812,7 +6812,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_ORG_ORGUNIT">
+		<widget class="GtkEntry" id="ORG_ORGUNIT_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6833,7 +6833,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_TITLE">
+		<widget class="GtkEntry" id="TITLE_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6854,7 +6854,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEntry" id="entry_ROLE">
+		<widget class="GtkEntry" id="ROLE_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -6900,7 +6900,7 @@ Custom</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkTextView" id="textview_DESC">
+	    <widget class="GtkTextView" id="DESC_textview">
 	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
@@ -6908,7 +6908,7 @@ Custom</property>
 	      <property name="overwrite">False</property>
 	      <property name="accepts_tab">True</property>
 	      <property name="justification">GTK_JUSTIFY_LEFT</property>
-	      <property name="wrap_mode">GTK_WRAP_NONE</property>
+	      <property name="wrap_mode">GTK_WRAP_WORD</property>
 	      <property name="cursor_visible">False</property>
 	      <property name="pixels_above_lines">0</property>
 	      <property name="pixels_below_lines">0</property>
@@ -6958,7 +6958,7 @@ Custom</property>
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button13">
+	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -6966,7 +6966,7 @@ Custom</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_close_clicked" last_modification_time="Sat, 10 Jan 2004 02:34:46 GMT"/>
+	      <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Tue, 01 Mar 2005 15:03:12 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -6980,7 +6980,7 @@ Custom</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="jid">
+<widget class="GtkWindow" id="vcard">
   <property name="border_width">5</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Personal Details</property>

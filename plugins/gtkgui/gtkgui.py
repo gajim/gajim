@@ -1709,7 +1709,7 @@ class roster_Window:
 			infos['jid'] = self.plugin.accounts[account]["name"] + \
 				'@' +  self.plugin.accounts[account]["hostname"]
 			self.plugin.windows['accountPreference'] = \
-				accountPreference_Window(self.plugin, infos)
+				accountpreferences_window(self.plugin, infos)
 
 	def mk_menu_account(self, event, iter):
 		"""Make account's popup menu"""
