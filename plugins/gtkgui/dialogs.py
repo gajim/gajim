@@ -217,23 +217,50 @@ class passphrase_Window:
 	"""Class for Passphrase Window"""
 	def run(self):
 		"""Wait for Ok button to be pressed and return passphrase"""
-		win = self.xml.get_widget("Passphrase")
-		rep = win.run()
+		rep = self.win.run()
 		if rep == gtk.RESPONSE_OK:
 			msg = self.entry.get_text()
 		else:
 			msg = -1
-		win.destroy()
+		self.win.destroy()
 		return msg
 
 	def on_key_pressed(self, widget, event):
 		if event.keyval == gtk.keysyms.Return:
-			self.xml.get_widget("Passphrase").response(gtk.RESPONSE_OK)
+			if self.autoconnect:
+				self.on_ok_clicked(widget)
+			else:
+				self.win.response(gtk.RESPONSE_OK)
+
+	def on_ok_clicked(self, widget):
+		if self.autoconnect:
+			self.msg = self.entry.get_text()
+			gtk.main_quit()
 	
-	def __init__(self, txt):
+	def on_cancel_clicked(self, widget):
+		if self.autoconnect:
+			gtk.main_quit()
+	
+	def get_pass(self):
+		self.autoconnect = 0
+		self.win.destroy()
+		return self.msg
+		
+	def delete_event(self, widget=None):
+		"""close window"""
+		if self.autoconnect:
+			gtk.main_quit()
+
+	def __init__(self, txt, autoconnect=0):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Passphrase', APP)
+		self.win = self.xml.get_widget("Passphrase")
 		self.entry = self.xml.get_widget("entry")
+		self.msg = -1
+		self.autoconnect = autoconnect
 		self.xml.get_widget("label").set_text(txt)
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_ok_clicked', self.on_ok_clicked)
+		self.xml.signal_connect('on_cancel_clicked', self.on_cancel_clicked)
 		self.xml.signal_connect('on_Passphrase_key_press_event', \
 			self.on_key_pressed)
 

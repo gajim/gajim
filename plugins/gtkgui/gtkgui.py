@@ -1357,15 +1357,19 @@ class roster_Window:
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
 
-	def send_status(self, account, status, txt):
+	def send_status(self, account, status, txt, autoconnect=0):
 		if status != 'offline':
 			save_pass = 0
 			if self.plugin.accounts[account].has_key("savepass"):
 				save_pass = self.plugin.accounts[account]["savepass"]
 			if not save_pass and not self.plugin.connected[account]:
 				passphrase = ''
-				w = passphrase_Window('Enter your password for your account %s' % account)
-				passphrase = w.run()
+				w = passphrase_Window('Enter your password for your account %s' % account, autoconnect)
+				if autoconnect:
+					gtk.main()
+					passphrase = w.get_pass()
+				else:
+					passphrase = w.run()
 				if passphrase == -1:
 					return
 				self.plugin.send('PASSPHRASE', account, passphrase)
@@ -1382,8 +1386,12 @@ class roster_Window:
 					passphrase = self.plugin.accounts[account]['gpgpass']
 				else:
 					passphrase = ''
-					w = passphrase_Window('Enter your passphrase for your the GPG key of your account %s' % account)
-					passphrase = w.run()
+					w = passphrase_Window('Enter your passphrase for your the GPG key of your account %s' % account, autoconnect)
+					if autoconnect:
+						gtk.main()
+						passphrase = w.get_pass()
+					else:
+						passphrase = w.run()
 					if passphrase == -1:
 						passphrase = ''
 				self.plugin.send('GPGPASSPHRASE', account, passphrase)
@@ -2432,7 +2440,7 @@ class plugin:
 		for a in self.accounts.keys():
 			if self.accounts[a].has_key('autoconnect'):
 				if self.accounts[a]['autoconnect']:
-					self.roster.send_status(a, 'online', 'Online')
+					self.roster.send_status(a, 'online', 'Online', 1)
 		return 0
 
 	def __init__(self, quIN, quOUT):
@@ -2513,7 +2521,6 @@ class plugin:
 		self.roster = roster_Window(self)
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(100, self.read_sleepy)
-		gtk.timeout_add(100, self.autoconnect)
 		self.sleeper = common.sleepy.Sleepy( \
 			self.config['autoawaytime']*60, \
 			self.config['autoxatime']*60)
@@ -2530,6 +2537,7 @@ class plugin:
 		else:
 			self.systray = systrayDummy()
 		gtk.gdk.threads_enter()
+		self.autoconnect()
 		gtk.main()
 		gtk.gdk.threads_leave()
 
