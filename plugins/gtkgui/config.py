@@ -1679,7 +1679,6 @@ class Service_discovery_window:
 		self.browse(jid)
 	
 	def on_address_comboboxentry_changed(self, widget):
-		print 'be'
 		self.on_go_button_clicked(widget)
 		
 	def __init__(self, plugin, account):
