@@ -310,7 +310,6 @@
   <property name="border_width">4</property>
   <property name="width_request">450</property>
   <property name="height_request">200</property>
-  <property name="visible">True</property>
   <property name="title" translatable="yes">Accounts</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -322,7 +321,7 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy" handler="on_accounts_window_destroy" last_modification_time="Mon, 07 Mar 2005 15:10:45 GMT"/>
+  <signal name="delete_event" handler="on_delete_event" last_modification_time="Sun, 27 Mar 2005 18:58:04 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox5">
@@ -8735,7 +8734,7 @@ Custom</property>
   <property name="width_request">460</property>
   <property name="height_request">160</property>
   <property name="visible">True</property>
-  <property name="title" translatable="yes">New Message</property>
+  <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>

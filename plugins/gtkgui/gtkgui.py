@@ -413,8 +413,8 @@ class plugin:
 		jid = array[0].split('/')[0]
 		if jid.find("@") <= 0:
 			jid = jid.replace('@', '')
-		self.roster.on_message(jid, _("error while sending") + " \"%s\" ( %s )"%\
-			(array[3], array[2]), array[4], account)
+		self.roster.on_message(jid, _("error while sending") + \
+			' \"%s\" ( %s )' % (array[3], array[2]), array[4], account)
 		
 	def handle_event_msgsent(self, account, array):
 		#('MSG', account, (jid, msg, keyID))
@@ -919,6 +919,8 @@ class plugin:
 		
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.windows['preferences'] = Preferences_window(self)
+		self.windows['roster'] = self.roster
+		self.windows['accounts'] = Accounts_window(self)
 
 		gtk.gdk.threads_enter()
 		gobject.timeout_add(100, self.autoconnect)

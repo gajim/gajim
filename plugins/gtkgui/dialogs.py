@@ -694,7 +694,11 @@ class New_message_dialog:
 		self.window = self.xml.get_widget('new_message_dialog')
 		self.jid_entry = self.xml.get_widget('jid_entry')
 		self.xml.signal_autoconnect(self)
-		self.plugin.windows['new_message'] = self # now add us to open windows
+		if len(self.plugin.accounts) > 1:
+			title = 'New Message as %s' % self.plugin.accounts[account]['jid']
+		else:
+			title = 'New Message'
+		self.window.set_title(title)
 
 class Change_password_dialog:
 	def run(self):

@@ -142,18 +142,18 @@ class systray:
 
 			for account in self.plugin.accounts.keys():
 				#for chat_with
-				item = gtk.MenuItem(_('using ') + account + _(' account'))
+				item = gtk.MenuItem(_('as ') + plugin.accounts[account]['jid'])
 				account_menu_for_chat_with.append(item)
 				group_menu = self.make_groups_submenus_for_chat_with(account)
 				item.set_submenu(group_menu)
 				#for new_message
-				item = gtk.MenuItem(_('using ') + account + _(' account'))
+				item = gtk.MenuItem(_('as ') + plugin.accounts[account]['jid'])
 				item.connect('activate',\
 					self.on_new_message_menuitem_activate, account)
 				account_menu_for_new_message.append(item)
 				
 		elif len(self.plugin.accounts.keys()) == 1: # one account
-			#one account, no need to show 'using foo account'
+			#one account, no need to show 'as jid
 			#for chat_with
 			account = self.plugin.accounts.keys()[0]
 			

@@ -251,15 +251,15 @@ class Roster_window:
 			sub_menu = gtk.Menu()
 			add_contact_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem(_('using ') + account + _(' account'))
+				item = gtk.MenuItem(_('to ') + account + _(' account'))
 				sub_menu.append(item)
 				item.connect("activate", self.on_add_contact, account)
 			sub_menu.show_all()
-			#agents
+			#disco
 			sub_menu = gtk.Menu()
 			service_disco_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem(_('using ') + account + _(' account'))
+				item = gtk.MenuItem(_('as ') + self.plugin.accounts[account]['jid'])
 				sub_menu.append(item)
 				item.connect('activate', self.on_service_disco_menuitem_activate, account)
 			sub_menu.show_all()
@@ -267,7 +267,7 @@ class Roster_window:
 			sub_menu = gtk.Menu()
 			join_gc_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem(_('using ') + account + _(' account'))
+				item = gtk.MenuItem(_('as ') + self.plugin.accounts[account]['jid'])
 				sub_menu.append(item)
 				item.connect("activate", self.on_join_gc_activate, account)
 			sub_menu.show_all()
@@ -275,16 +275,16 @@ class Roster_window:
 			sub_menu = gtk.Menu()
 			new_message_menuitem.set_submenu(sub_menu)
 			for account in self.plugin.accounts.keys():
-				item = gtk.MenuItem(_('using ') + account + _(' account'))
+				item = gtk.MenuItem(_('as ') + self.plugin.accounts[account]['jid'])
 				sub_menu.append(item)
-				item.connect("activate", self.on_new_message_menuitem_activate, account)
+				item.connect('activate', self.on_new_message_menuitem_activate, account)
 			sub_menu.show_all()
 		elif len(self.plugin.accounts.keys()) == 1: # one account
 			#add
 			if not self.add_contact_handler_id:
 				self.add_contact_handler_id = add_contact_menuitem.connect(\
 				'activate', self.on_add_contact, self.plugin.accounts.keys()[0])
-			#agents
+			#disco
 			if not self.service_disco_handler_id:
 				self.service_disco_handler_id = service_disco_menuitem.connect(\
 'activate', self.on_service_disco_menuitem_activate, self.plugin.accounts.keys()[0])
@@ -893,38 +893,28 @@ class Roster_window:
 				jid, tim = tim)
 
 	def on_preferences_menuitem_activate(self, widget):
-		"""When preferences is selected :
-		call the preferences_window class"""
 		if self.plugin.windows['preferences'].window.get_property('visible'):
-			self.plugin.windows['preferences'].window.present()
+			self.plugin.windows['preferences'].window.present() # give focus
 		else:
 			self.plugin.windows['preferences'].window.show_all()
 
 	def on_add_contact(self, widget, account):
-		"""When add user is selected :
-		call the add_contact_window class"""
 		Add_contact_window(self.plugin, account)
 
 	def on_join_gc_activate(self, widget, account):
-		"""When Join Groupchat is selected :
-		call the join_gc class"""
 		Join_groupchat_window(self.plugin, account)
 
 	def on_new_message_menuitem_activate(self, widget, account):
-		"""When new message menuitem is activated:
-		call the New_message_dialog class"""
 		New_message_dialog(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
-		"""When about is selected :
-		call the about class"""
 		About_dialog(self.plugin)
 
 	def on_accounts_menuitem_activate(self, widget):
-		"""When accounts is seleted :
-		call the accounts class to modify accounts"""
-		if not self.plugin.windows.has_key('accounts_window'):
-			self.plugin.windows['accounts_window'] = Accounts_window(self.plugin)
+		if	self.plugin.windows['accounts'].window.get_property('visible'):
+			self.plugin.windows['accounts'].window.present() # give focus
+		else:
+			self.plugin.windows['accounts'].window.show_all()
 
 	def close_all(self, dic):
 		"""close all the windows in the given dictionary"""
@@ -953,7 +943,7 @@ class Roster_window:
 					if self.plugin.connected[acct]:
 						self.send_status(acct, 'offline', message)
 			self.quit_gtkgui_plugin()
-		return 1
+		return True # do NOT destory the window
 
 	def quit_gtkgui_plugin(self):
 		"""When we quit the gtk plugin :

@@ -969,7 +969,6 @@ class Preferences_window:
 			self.on_msg_treemodel_row_deleted)
 		
 		self.xml.signal_autoconnect(self)
-		#self.window.show_all()
 
 class Account_modification_window:
 	"""Class for account informations"""
@@ -1337,13 +1336,12 @@ class Account_modification_window:
 
 class Accounts_window:
 	"""Class for accounts window: lists of accounts"""
-	def on_accounts_window_destroy(self, widget):
-		"""close window"""
-		del self.plugin.windows['accounts_window']
+	def on_delete_event(self, widget, event):
+  		self.window.hide()  
+		return True # do NOT destory the window 
 		
 	def on_close_button_clicked(self, widget):
-		"""When Close button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.hide()
 		
 	def init_accounts(self):
 		"""initialize listStore with existing accounts"""
