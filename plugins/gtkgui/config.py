@@ -1494,6 +1494,11 @@ class Service_discovery_window:
 		
 	def browse(self, jid):
 		"""Send a request to the core to know the available agents"""
+		model = self.agents_treeview.get_model()
+		if not model.get_iter_first():
+			# we begin to fill the treevier with the first line
+			iter = model.append(None, (jid, jid))
+			self.agent_infos[jid] = {'features' : []}
 		self.plugin.send('REQ_AGENTS', self.account, jid)
 	
 	def agents(self, agents):
@@ -1571,7 +1576,6 @@ class Service_discovery_window:
 		"""When we recieve informations about an agent"""
 		model = self.agents_treeview.get_model()
 		iter = model.get_iter_root()
-		expand = False
 		# We look if this agent is in the treeview
 		while (iter):
 			if agent == model.get_value(iter, 1):
@@ -1583,10 +1587,8 @@ class Service_discovery_window:
 					iter = model.iter_parent(iter)
 				if iter:
 					iter = model.iter_next(iter)
-		if not iter: #If it is not we add it
-			iter = model.append(None, (agent, agent))
-			self.agent_infos[agent] = {'features' : []}
-			expand = True
+		if not iter: #If it is not we stop
+			return
 		self.agent_infos[agent]['features'] = features
 		if len(identities):
 			self.agent_infos[agent]['identities'] = identities
@@ -1604,10 +1606,8 @@ class Service_discovery_window:
 			if not iter_child: # If it is not we add it
 				iter_child = model.append(iter, (item['name'], item['jid']))
 			self.agent_infos[item['jid']] = {'identities': [item]}
-			if self.iter_is_visible(iter_child) or expand:
+			if self.iter_is_visible(iter_child):
 				self.browse(item['jid'])
-		if expand:
-			self.agents_treeview.expand_row((model.get_path(iter)), False)
 
 	def on_refresh_button_clicked(self, widget):
 		"""When refresh button is clicked :
