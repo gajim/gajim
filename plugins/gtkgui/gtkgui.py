@@ -182,7 +182,6 @@ class user:
 		else: raise TypeError, _('bad arguments')
 
 class tabbed_chat_Window:
-#TODO: close tabs
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat', APP)
@@ -218,6 +217,7 @@ class tabbed_chat_Window:
 			self.on_msg_key_press_event)
 		self.xml.signal_connect('on_button_contact_clicked', \
 			self.on_button_contact_clicked)
+		self.xml.get_widget('button_contact').set_use_underline(False)
 		self.tagIn = buffer_conv.create_tag("incoming")
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn.set_property("foreground", color)
@@ -389,6 +389,7 @@ class tabbed_chat_Window:
 			self.on_msg_key_press_event)
 		self.xmls[user.jid].signal_connect('on_button_contact_clicked', \
 			self.on_button_contact_clicked)
+		self.xmls[user.jid].get_widget('button_contact').set_use_underline(False)
 
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
@@ -679,6 +680,7 @@ class message_Window:
 		self.xml.signal_connect('on_clear_clicked', self.on_clear)
 		self.xml.signal_connect('on_button_contact_clicked', \
 			self.on_button_contact_clicked)
+		self.xml.get_widget('button_contact').set_use_underline(False)
 		self.xml.signal_connect('on_focus', self.on_focus)
 		self.xml.signal_connect('on_history_clicked', self.on_history)
 		self.xml.signal_connect('on_msg_key_press_event', \
