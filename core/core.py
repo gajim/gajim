@@ -174,11 +174,10 @@ class GajimCore:
 	def disconnectedCB(self, con):
 		"""Called when we are disconnected"""
 		log.debug("disconnectedCB")
-		if self.connected[self.connexions[con]] == 1:
-			self.connected[self.connexions[con]] = 0
-		self.hub.sendPlugin('STATUS', self.connexions[con], 'offline')
 		if self.connexions.has_key(con):
-			del self.connexions[con]
+			if self.connected[self.connexions[con]] == 1:
+				self.connected[self.connexions[con]] = 0
+			self.hub.sendPlugin('STATUS', self.connexions[con], 'offline')
 	# END disconenctedCB
 
 	def connect(self, account):
@@ -455,6 +454,14 @@ class GajimCore:
 				for con in self.connexions:
 					if self.connected[self.connexions[con]] == 1:
 						con.process(1)
+				#remove connexion that have been broken
+				for acc in self.connected:
+					if self.connected[acc]:
+						break
+					for con in self.connexions:
+							if self.connexions[con] == acc:
+								del self.connexions[con]
+								break
 			time.sleep(0.1)
 	# END main
 # END GajimCore
