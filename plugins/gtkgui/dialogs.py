@@ -22,8 +22,11 @@ pygtk.require('2.0')
 import gtk
 from gtk import TRUE, FALSE
 import gtk.glade,gobject
-#import os,string,time,Queue
-#import common.optparser,common.sleepy
+from common import i18n
+_ = i18n._
+APP = i18n.APP
+gtk.glade.bindtextdomain (APP, i18n.DIR)
+gtk.glade.textdomain (APP)
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
@@ -146,7 +149,7 @@ class infoUser_Window:
 		self.list2.append_column(column)
 
 	def __init__(self, user, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Info_user')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Info_user', APP)
 		self.plugin = plugin
 		self.user = user
 		self.account = account
@@ -193,7 +196,7 @@ class awayMsg_Window:
 		return msg
 	
 	def __init__(self):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Away_msg')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Away_msg', APP)
 		txt = self.xml.get_widget("textview")
 		self.txtBuffer = txt.get_buffer()
 
@@ -222,7 +225,7 @@ class addContact_Window:
 	def __init__(self, plugin, account, jid=None):
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Add')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Add', APP)
 		if jid:
 			self.xml.get_widget('entry_who').set_text(jid)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
@@ -236,7 +239,7 @@ class warning_Window:
 		widget.get_toplevel().destroy()
 
 	def __init__(self, txt):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Warning')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Warning', APP)
 		xml.get_widget('label').set_text(txt)
 		xml.signal_connect('on_close_clicked', self.on_close)
 
@@ -251,7 +254,7 @@ class about_Window:
 		widget.get_toplevel().destroy()
 
 	def __init__(self, plugin):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'About')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'About', APP)
 		self.plugin = plugin
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_close_clicked', self.on_close)
@@ -265,7 +268,7 @@ class confirm_Window:
 		return out
 
 	def __init__(self, label):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Confirm')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Confirm', APP)
 		xml.get_widget('label_confirm').set_text(label)
 		self.win = xml.get_widget('Confirm')
 
@@ -289,11 +292,11 @@ class authorize_Window:
 		widget.get_toplevel().destroy()
 	
 	def __init__(self, plugin, jid, txt, account):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'Sub_req')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Sub_req', APP)
 		self.plugin = plugin
 		self.jid = jid
 		self.account = account
-		xml.get_widget('label').set_text('Subscription request from ' + self.jid)
+		xml.get_widget('label').set_text(_("Subscription request from %s") % self.jid)
 		xml.get_widget("textview").get_buffer().set_text(txt)
 		xml.signal_connect('on_button_auth_clicked', self.auth)
 		xml.signal_connect('on_button_deny_clicked', self.deny)

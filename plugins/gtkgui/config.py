@@ -22,8 +22,12 @@ pygtk.require('2.0')
 import gtk
 from gtk import TRUE, FALSE
 import gtk.glade,gobject
-import os,string#,time,Queue
-#import common.optparser,common.sleepy
+import os,string
+from common import i18n
+_ = i18n._
+APP = i18n.APP
+gtk.glade.bindtextdomain (APP, i18n.DIR)
+gtk.glade.textdomain (APP)
 
 from dialogs import *
 
@@ -93,11 +97,11 @@ class vCard_Window:
 		if self.plugin.connected[self.account]:
 			self.plugin.send('ASK_VCARD', self.account, self.jid)
 		else:
-			warning_Window("You must be connected to get your informations")
+			warning_Window(_("You must be connected to get your informations"))
 
 	def on_publish(self, widget):
 		if not self.plugin.connected[self.account]:
-			warning_Window("You must be connected to publish your informations")
+			warning_Window(_("You must be connected to publish your informations"))
 			return
 		vcard = self.make_vcard()
 		nick = ''
@@ -109,7 +113,7 @@ class vCard_Window:
 		self.plugin.send('VCARD', self.account, vcard)
 
 	def __init__(self, jid, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard', APP)
 		self.jid = jid
 		self.plugin = plugin
 		self.account = account
@@ -235,7 +239,7 @@ class preference_Window:
 
 	def __init__(self, plugin):
 		"""Initialize Preference window"""
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Preferences')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Preferences', APP)
 		self.plugin = plugin
 		self.da_in = self.xml.get_widget('drawing_in')
 		self.da_out = self.xml.get_widget('drawing_out')
@@ -379,20 +383,19 @@ class accountPreference_Window:
 		name = entryName.get_text()
 		jid = entryJid.get_text()
 		if (name == ''):
-			warning_Window('You must enter a name for this account')
+			warning_Window(_("You must enter a name for this account"))
 			return 0
 		if name.find(' ') != -1:
-			warning_Window('Spaces are not permited in account name')
+			warning_Window(_("Spaces are not permited in account name"))
 			return 0
 		if (jid == '') or (string.count(jid, '@') != 1):
-			warning_Window('You must enter a Jabber ID for this account\n\
-				For example : login@hostname')
+			warning_Window(_("You must enter a Jabber ID for this account\nFor example : login@hostname"))
 			return 0
 		if proxyPort != '':
 			try:
 				proxyPort = string.atoi(proxyPort)
 			except ValueError:
-				warning_Window('Proxy Port must be a port number')
+				warning_Window(_("Proxy Port must be a port number"))
 				return 0
 		(login, hostname) = string.split(jid, '@')
 		#if we are modifying an account
@@ -431,7 +434,7 @@ class accountPreference_Window:
 		#if it's a new account
 		else:
 			if name in self.plugin.accounts.keys():
-				warning_Window('An account already has this name')
+				warning_Window(_("An account already has this name"))
 				return
 			#if we neeed to register a new account
 			if check.get_active():
@@ -467,11 +470,11 @@ class accountPreference_Window:
 			if self.plugin.connected[self.account]:
 				self.plugin.send('ASK_VCARD', self.account, entryJid.get_text())
 			else:
-				warning_Window("You must be connected to get your informations")
+				warning_Window(_("You must be connected to get your informations"))
 	
 	#info must be a dictionnary
 	def __init__(self, plugin, infos = {}):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Account')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Account', APP)
 		self.plugin = plugin
 		self.account = ''
 		self.modify = False
@@ -526,8 +529,7 @@ class accounts_Window:
 		sel = self.treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
-		window = confirm_Window('Are you sure you want to remove this account (' \
-			+ account + ') ?')
+		window = confirm_Window(_("Are you sure you want to remove this account (%s) ?") % account)
 		if window.wait() == gtk.RESPONSE_OK:
 			if self.plugin.connected[account]:
 				self.plugin.send('STATUS', account, ('offline', 'offline'))
@@ -568,7 +570,7 @@ class accounts_Window:
 		
 	def __init__(self, plugin):
 		self.plugin = plugin
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Accounts')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Accounts', APP)
 		self.treeview = self.xml.get_widget("treeview")
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		self.treeview.set_model(model)
@@ -622,12 +624,12 @@ class agentRegistration_Window:
 		widget.get_toplevel().destroy()
 	
 	def __init__(self, agent, infos, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_reg')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_reg', APP)
 		self.agent = agent
 		self.infos = infos
 		self.plugin = plugin
 		self.account = account
-		self.xml.get_widget('agent_reg').set_title('Register to ' + agent)
+		self.xml.get_widget('agent_reg').set_title(_("Register to %s") % agent)
 		self.xml.get_widget('label').set_text(infos['instructions'])
 		self.entries = {}
 		self.draw_table()
@@ -679,7 +681,7 @@ class browseAgent_Window:
 		widget.get_toplevel().destroy()
 		
 	def __init__(self, plugin, account):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'browser')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'browser', APP)
 		self.treeview = xml.get_widget('treeview')
 		self.plugin = plugin
 		self.account = account
@@ -701,4 +703,4 @@ class browseAgent_Window:
 		if self.plugin.connected[account]:
 			self.browse()
 		else:
-			warning_Window("You must be connected to view Agents")
+			warning_Window(_("You must be connected to view Agents"))

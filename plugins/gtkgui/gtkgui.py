@@ -24,6 +24,11 @@ from gtk import TRUE, FALSE
 import gtk.glade,gobject
 import os,string,time,Queue
 import common.optparser,common.sleepy
+from common import i18n
+_ = i18n._
+APP = i18n.APP
+gtk.glade.bindtextdomain (APP, i18n.DIR)
+gtk.glade.textdomain (APP)
 
 from config import *
 from dialogs import *
@@ -49,7 +54,7 @@ class user:
 			self.status = args[4]
 			self.sub = args[5]
 			self.resource = args[6]
-		else: raise TypeError, 'bad arguments'
+		else: raise TypeError, _('bad arguments')
 
 
 class message_Window:
@@ -131,7 +136,7 @@ class message_Window:
 		self.user = user
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat', APP)
 		self.window = self.xml.get_widget('Chat')
 #		hbox = xml.get_widget('hbox1')
 #		hbox.set_property('resize-mode', 2)
@@ -271,7 +276,7 @@ class log_Window:
 		else:
 			msg = string.join(infos[3][1:], ':')
 			msg = string.replace(msg, '\\n', '\n')
-			buffer.insert_with_tags_by_name(start_iter, 'Status is now : ' + \
+			buffer.insert_with_tags_by_name(start_iter, _('Status is now : ') + \
 				infos[3][0]+' : ' + msg, 'status')
 	
 	def set_nb_line(self, nb_line):
@@ -283,7 +288,7 @@ class log_Window:
 		self.jid = jid
 		self.nb_line = 0
 		self.num_begin = 0
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Log')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Log', APP)
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_close_clicked', self.on_close)
 		self.xml.signal_connect('on_earliest_clicked', self.on_earliest)
@@ -517,7 +522,7 @@ class roster_Window:
 			self.plugin.windows[account]['chats'][user.jid].\
 				img.set_from_pixbuf(self.pixbufs[show])
 			self.plugin.windows[account]['chats'][user.jid].print_conversation(\
-				"%s is now %s (%s)" % (user.name, show, status), 'status')
+				_("%s is now %s (%s)") % (user.name, show, status), 'status')
 
 	def on_info(self, widget, user, account):
 		"""Call infoUser_Window class to display user's information"""
@@ -545,39 +550,39 @@ class roster_Window:
 		user = self.contacts[account][jid]
 		
 		menu = gtk.Menu()
-		item = gtk.MenuItem("Start chat")
+		item = gtk.MenuItem(_("Start chat"))
 		menu.append(item)
 		item.connect("activate", self.on_row_activated, path)
-		item = gtk.MenuItem("Rename")
+		item = gtk.MenuItem(_("Rename"))
 		menu.append(item)
 		#item.connect("activate", self.on_rename, iter)
 		item = gtk.MenuItem()
 		menu.append(item)
-		item = gtk.MenuItem("Subscription")
+		item = gtk.MenuItem(_("Subscription"))
 		menu.append(item)
 		
 		menu_sub = gtk.Menu()
 		item.set_submenu(menu_sub)
-		item = gtk.MenuItem("Resend authorization to")
+		item = gtk.MenuItem(_("Resend authorization to"))
 		menu_sub.append(item)
 		item.connect("activate", self.authorize, jid, account)
-		item = gtk.MenuItem("Rerequest authorization from")
+		item = gtk.MenuItem(_("Rerequest authorization from"))
 		menu_sub.append(item)
 		item.connect("activate", self.req_sub, jid, \
-			'I would like to add you to my contact list, please.', account)
+			_('I would like to add you to my contact list, please.'), account)
 		
 		item = gtk.MenuItem()
 		menu.append(item)
-		item = gtk.MenuItem("Remove")
+		item = gtk.MenuItem(_("Remove"))
 		menu.append(item)
 		item.connect("activate", self.on_req_usub, user, account)
 
 		item = gtk.MenuItem()
 		menu.append(item)
-		item = gtk.MenuItem("Informations")
+		item = gtk.MenuItem(_("Informations"))
 		menu.append(item)
 		item.connect("activate", self.on_info, user, account)
-		item = gtk.MenuItem("History")
+		item = gtk.MenuItem(_("History"))
 		menu.append(item)
 		item.connect("activate", self.on_history, user)
 
@@ -587,11 +592,11 @@ class roster_Window:
 	def mk_menu_g(self, event):
 		"""Make group's popup menu"""
 		menu = gtk.Menu()
-		item = gtk.MenuItem("grp1")
+		item = gtk.MenuItem(_("grp1"))
 #		menu.append(item)
-		item = gtk.MenuItem("grp2")
+		item = gtk.MenuItem(_("grp2"))
 #		menu.append(item)
-		item = gtk.MenuItem("grp3")
+		item = gtk.MenuItem(_("grp3"))
 #		menu.append(item)
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
@@ -604,13 +609,13 @@ class roster_Window:
 		acct_iter = model.get_iter((path[0]))
 		account = model.get_value(acct_iter, 3)
 		menu = gtk.Menu()
-		item = gtk.MenuItem("Log on")
+		item = gtk.MenuItem(_("Log on"))
 		if self.contacts[account][jid].show != 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
 		item.connect("activate", self.on_agent_logging, jid, 'available', account)
 
-		item = gtk.MenuItem("Log off")
+		item = gtk.MenuItem(_("Log off"))
 		if self.contacts[account][jid].show == 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
@@ -645,33 +650,33 @@ class roster_Window:
 		account = model.get_value(iter, 3)
 		
 		menu = gtk.Menu()
-		item = gtk.MenuItem("Status")
+		item = gtk.MenuItem(_("Status"))
 		menu.append(item)
 		
 		menu_sub = gtk.Menu()
 		item.set_submenu(menu_sub)
-		item = gtk.MenuItem("Online")
+		item = gtk.MenuItem(_("Online"))
 		menu_sub.append(item)
 		item.connect("activate", self.change_status, account, 'online')
-		item = gtk.MenuItem("Away")
+		item = gtk.MenuItem(_("Away"))
 		menu_sub.append(item)
 		item.connect("activate", self.change_status, account, 'away')
-		item = gtk.MenuItem("NA")
+		item = gtk.MenuItem(_("NA"))
 		menu_sub.append(item)
 		item.connect("activate", self.change_status, account, 'na')
-		item = gtk.MenuItem("DND")
+		item = gtk.MenuItem(_("DND"))
 		menu_sub.append(item)
 		item.connect("activate", self.change_status, account, 'dnd')
 		item = gtk.MenuItem()
 		menu_sub.append(item)
-		item = gtk.MenuItem("Offline")
+		item = gtk.MenuItem(_("Offline"))
 		menu_sub.append(item)
 		item.connect("activate", self.change_status, account, 'offline')
 		
 		item = gtk.MenuItem()
 		menu.append(item)
 
-		item = gtk.MenuItem("Edit account")
+		item = gtk.MenuItem(_("Edit account"))
 		menu.append(item)
 		item.connect("activate", self.on_edit_account, account)
 		
@@ -714,8 +719,7 @@ class roster_Window:
 
 	def on_req_usub(self, widget, user, account):
 		"""Remove a user"""
-		window = confirm_Window('Are you sure you want to remove ' + user.name + \
-			' (' + user.jid + ') from your roster ?')
+		window = confirm_Window(_("Are you sure you want to remove %s (%s) from your roster ?") % (user.name, user.jid))
 		if window.wait() == gtk.RESPONSE_OK:
 			self.plugin.send('UNSUB', account, user.jid)
 			self.remove_user(user, account)
@@ -746,7 +750,7 @@ class roster_Window:
 			txt = status
 		accounts = self.plugin.accounts.keys()
 		if len(accounts) == 0:
-			warning_Window("You must setup an account before connecting to jabber network.")
+			warning_Window(_("You must setup an account before connecting to jabber network."))
 			return
 		for acct in accounts:
 			self.plugin.send('STATUS', acct, (status, txt))
@@ -833,7 +837,7 @@ class roster_Window:
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
 		self.plugin.send('QUIT', None, '')
-		print "plugin gtkgui stopped"
+		print _("plugin gtkgui stopped")
 		gtk.mainquit()
 
 	def on_row_activated(self, widget, path, col=0):
@@ -1011,7 +1015,7 @@ class roster_Window:
 
 	def __init__(self, plugin):
 		# FIXME : handle no file ...
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim', APP)
 		self.tree = self.xml.get_widget('treeview')
 		self.plugin = plugin
 		self.groups = {}
@@ -1208,9 +1212,9 @@ class plugin:
 					user1 = user(ev[2][0], ev[2][0], ['general'], 'online', \
 						'online', 'to', ev[2][2])
 					self.roster.add_user(user1)
-				warning_Window("You are now authorized by " + ev[2][0])
+				warning_Window(_("You are now authorized by %s") % ev[2][0])
 			elif ev[0] == 'UNSUBSCRIBED':
-				warning_Window("You are now unsubscribed by " + ev[2])
+				warning_Window(_("You are now unsubscribed by %s") % ev[2])
 				#TODO: change icon
 			#('AGENTS', account, agents)
 			elif ev[0] == 'AGENTS':
@@ -1219,7 +1223,7 @@ class plugin:
 			#('AGENTS_INFO', account, (agent, infos))
 			elif ev[0] == 'AGENT_INFO':
 				if not ev[2][1].has_key('instructions'):
-					warning_Window('error contacting %s' % ev[2][0])
+					warning_Window(_("error contacting %s") % ev[2][0])
 				else:
 					agentRegistration_Window(ev[2][0], ev[2][1], self, ev[1])
 			#('ACC_OK', account, (hostname, login, pasword, name, ressource))
@@ -1325,4 +1329,4 @@ class plugin:
 if __name__ == "__main__":
 	plugin(None, None)
 
-print "plugin gtkgui loaded"
+print _("plugin gtkgui loaded")

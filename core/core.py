@@ -28,6 +28,9 @@ import common.hub
 import common.jabber
 import common.optparser
 
+from common import i18n
+_ = i18n._
+
 log = logging.getLogger('core.core')
 log.setLevel(logging.DEBUG)
 
@@ -69,12 +72,12 @@ class GajimCore:
 				try:
 					os.mkdir(os.path.expanduser(path))
 				except:
-					print "Can't create %s" % path
+					print _("Can't create %s") % path
 					sys.exit
 		try:
 			os.stat(fname)
 		except:
-			print "creating %s" % fname
+			print _("creating %s") % fname
 			fic = open(fname, "w")
 			fic.write("[Profile]\naccounts = \nlog = 0\n\n[Core]\ndelauth = 1\nalwaysauth = 0\nmodules = logger gtkgui\ndelroster = 1\n")
 			fic.close()
@@ -148,7 +151,7 @@ class GajimCore:
 			else:
 				txt = prs.getStatus()
 				if not txt:
-					txt = "I would like to add you to my roster."
+					txt = _("I would like to add you to my roster.")
 				self.hub.sendPlugin('SUBSCRIBE', self.connexions[con], (who, 'txt'))
 		elif type == 'subscribed':
 			jid = prs.getFrom()
@@ -205,13 +208,13 @@ class GajimCore:
 		except IOError, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
 			self.hub.sendPlugin('STATUS', account, 'offline')
-			self.hub.sendPlugin('WARNING', None, "Couldn't connect to %s" \
+			self.hub.sendPlugin('WARNING', None, _("Couldn't connect to %s") \
 				% hostname)
 			return 0
 		except common.xmlstream.socket.error, e:
 			log.debug("Couldn't connect to %s %s" % (hostname, e))
 			self.hub.sendPlugin('STATUS', account, 'offline')
-			self.hub.sendPlugin('WARNING', None, "Couldn't connect to %s : %s" \
+			self.hub.sendPlugin('WARNING', None, _("Couldn't connect to %s : %s") \
 				% (hostname, e))
 			return 0
 		else:
@@ -243,8 +246,7 @@ class GajimCore:
 				log.debug("Couldn't authentificate to %s" % hostname)
 				self.hub.sendPlugin('STATUS', account, 'offline')
 				self.hub.sendPlugin('WARNING', None, \
-					'Authentification failed with %s, check your login and password'\
-					% hostname)
+					_("Authentification failed with %s, check your login and password") % hostname)
 				return 0
 	# END connect
 
@@ -329,7 +331,7 @@ class GajimCore:
 					if ev[2][1]:
 						pres.setStatus(ev[2][1])
 					else:
-						pres.setStatus("I would like to add you to my roster.")
+						pres.setStatus(_("I would like to add you to my roster."))
 					con.send(pres)
 				#('REQ', account, jid)
 				elif ev[0] == 'AUTH':
@@ -449,7 +451,7 @@ class GajimCore:
 									lineSplited[0], lineSplited[1], lineSplited[2:]))
 					fic.close()
 				else:
-					log.debug("Unknown Command %s" % ev[0])
+					log.debug(_("Unknown Command %s") % ev[0])
 			else:
 				for con in self.connexions:
 					if self.connected[self.connexions[con]] == 1:
@@ -503,7 +505,7 @@ def start():
 	try:
 		gc.mainLoop()
 	except KeyboardInterrupt:
-		print "Keyboard Interrupt : Bye!"
+		print _("Keyboard Interrupt : Bye!")
 		gc.hub.sendPlugin('QUIT', None, ())
 		return 0
 #	except:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-##	runCore.py
+##	common/i18n.py
 ##
 ## Gajim Team:
 ## 	- Yann Le Boulanger <asterix@crans.org>
@@ -17,18 +17,22 @@
 ## GNU General Public License for more details.
 ##
 
-import logging
-logging.basicConfig()
-import sys
+APP='gajim'
+DIR='Messages'
 
-sys.path.append("..")
+import locale, gettext
 
-import common
-import core
+_translation = None
 
-from common import i18n
-i18n.init()
-_ = i18n._
+def init():
+	global _translation
+	try:
+		_translation = gettext.translation(APP, DIR)
+	except IOError:
+		_translation = gettext.NullTranslations()
 
-core.core.start()
-print _("Core Stopped")
+def _(s):
+	if s == '':
+		return s
+	assert s
+	return _translation.gettext(s)

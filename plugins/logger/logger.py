@@ -21,7 +21,9 @@ import os
 import string
 import time
 import common.optparser
+from common import i18n
 LOGPATH = os.path.expanduser("~/.gajim/logs/")
+_ = i18n._
 
 class plugin:
 	def read_queue(self):
@@ -39,7 +41,7 @@ class plugin:
 				
 				ev = self.queueIN.get()
 				if ev[0] == 'QUIT':
-					print "plugin logger stopped"
+					print _("plugin logger stopped")
 					return
 				elif ev[0] == 'NOTIFY':
 					status = ev[2][2]
@@ -92,16 +94,16 @@ class plugin:
 			os.stat(os.path.expanduser("~/.gajim"))
 		except OSError:
 			os.mkdir(os.path.expanduser("~/.gajim"))
-			print "creating ~/.gajim/"
+			print _("creating ~/.gajim/")
 		try:
 			os.stat(LOGPATH)
 		except OSError:
 			os.mkdir(LOGPATH)
-			print "creating ~/.gajim/logs/"
+			print _("creating ~/.gajim/logs/")
 		self.read_queue()
 		
 
 if __name__ == "__main__":
 	plugin(None, None)
 
-print "plugin logger loaded"
+print _("plugin logger loaded")
