@@ -47,12 +47,33 @@ class user:
 			self.status = args[0].status
 		else: raise TypeError, 'bad arguments'
 
+class add:
+	def delete_event(self, widget):
+		self.Wadd.destroy()
+
+	def on_subscribe(self, widget):
+		who=self.xml.get_widget("entry_who").get_text()
+		buf=self.xml.get_widget("textview_sub").get_buffer()
+		start_iter = buf.get_start_iter()
+		end_iter = buf.get_end_iter()
+		txt = buf.get_text(start_iter, end_iter, 0)
+		self.r.req_sub(who, txt)
+		self.delete_event(self)
+		
+	def __init__(self, roster):
+		self.r=roster
+		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'Add')
+		self.Wadd=self.xml.get_widget("Add")
+		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
+		self.xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
+
 class about:
 	def delete_event(self, widget):
-		self.window.destroy()
+		self.Wabout.destroy()
 		
 	def __init__(self):
 		self.xml = gtk.glade.XML('plugins/gtkgui.glade', 'About')
+		self.Wabout=self.xml.get_widget("About")
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
 class accounts:
@@ -73,7 +94,7 @@ class message:
 		if contact:
 			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<moi> ', 'outgoing')
 		else:
-			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<lui> ', 'incoming')
+			self.convTxtBuffer.insert_with_tags_by_name(end_iter, '<lui> ', 'incomming')
 		self.convTxtBuffer.insert(end_iter, txt+'\n')
 		self.conversation.scroll_to_mark(\
 			self.convTxtBuffer.get_mark('end'), 0.1, 0, 0, 0)
@@ -104,12 +125,12 @@ class message:
 		self.message = self.xml.get_widget('message')
 		self.conversation = self.xml.get_widget('conversation')
 		self.convTxtBuffer = self.conversation.get_buffer()
-		end_iter = self.convTxtBuffer.get_end_iter()
+		end_iter=self.convTxtBuffer.get_end_iter()
 		self.convTxtBuffer.create_mark('end', end_iter, 0)
 		self.window.show()
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_msg_key_press_event', self.on_msg_key_press_event)
-		self.tag = self.convTxtBuffer.create_tag("incoming")
+		self.tag = self.convTxtBuffer.create_tag("incomming")
 		color = self.cfgParser.GtkGui_inmsgcolor
 		if not color : color = red
 		self.tag.set_property("foreground", color)
@@ -128,7 +149,7 @@ class roster:
 		for u in self.l_contact:
 			if not self.l_group.has_key(u.group):
 				iterG = self.treestore.append(None, (self.pixbufs['online'], u.group, 'group'))
-				self.l_group[u.group] = iterG
+				self.l_group[u.group]=iterG
 
 	def mkroster(self, tab):
 		self.l_contact = []
@@ -170,14 +191,13 @@ class roster:
 				u.status = status
 				return 1
 	
-	def mk_menu_c(self, event):
+	def mk_menu_c(self, event, iter):
 		self.menu_c = gtk.Menu()
-		item = gtk.MenuItem("user1")
+		item = gtk.MenuItem("Remove")
 		self.menu_c.append(item)
-		item = gtk.MenuItem("user2")
-		self.menu_c.append(item)
-		item = gtk.MenuItem("user3")
-		self.menu_c.append(item)
+		item.connect("activate", self.on_req_usub, iter)
+#		item = gtk.MenuItem("user2")
+#		self.menu_c.append(item)
 		self.menu_c.popup(None, None, None, event.button, event.time)
 		self.menu_c.show_all()
 
@@ -196,7 +216,6 @@ class roster:
 		if (event.button == 3) & (event.type == gtk.gdk.BUTTON_PRESS):
 			try:
 				path, column, x, y = self.tree.get_path_at_pos(int(event.x), int(event.y))
-				
 			except TypeError:
 				return
 			iter = self.treestore.get_iter(path)
@@ -204,12 +223,36 @@ class roster:
 			if data == 'group':
 				self.mk_menu_g(event)
 			else:
-				self.mk_menu_c(event)
+				self.mk_menu_c(event, iter)
 			return gtk.TRUE
 		return gtk.FALSE
 
+	def on_req_usub(self, widget, iter):
+		who = self.treestore.get_value(iter, 1)
+		print "on vire %s" % who
+		self.queueOUT.put(('UNSUB', who))
+		for u in self.l_contact:
+			if u.name == who:
+				self.l_contact.remove(u)
+		self.treestore.remove(iter)
+	
+	def req_sub(self, who, txt):
+		self.queueOUT.put(('SUB', (who, txt)))
+		found=0
+		for u in self.l_contact:
+			if u.name == who:
+				found=1
+		if found == 0:
+			user1 = user(who, 'general', 'requested', 'requested')
+			self.l_contact.append(user1)
+			#TODO: ajouter un grp si necessaire
+			self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], who, 'requested'))
+
 	def on_status_changed(self, widget):
 		self.queueOUT.put(('STATUS',widget.name))
+
+	def on_add(self, widget):
+		window_add = add(self)
 
 	def on_about(self, widget):
 		window_about = about()
@@ -240,7 +283,10 @@ class roster:
 		self.treestore = gtk.TreeStore(gtk.gdk.Pixbuf, str, str)
 		add_pixbuf = self.get_icon_pixbuf(gtk.STOCK_ADD)
 		remove_pixbuf = self.get_icon_pixbuf(gtk.STOCK_REMOVE)
-		self.pixbufs = {"online":add_pixbuf, "away":remove_pixbuf, "xa":remove_pixbuf, "dnd":remove_pixbuf, "offline":remove_pixbuf}
+		requested_pixbuf = self.get_icon_pixbuf(gtk.STOCK_QUIT)
+		self.pixbufs = {"online":add_pixbuf, "away":remove_pixbuf, \
+			"xa":remove_pixbuf, "dnd":remove_pixbuf, "offline":remove_pixbuf, \
+			"requested":requested_pixbuf}
 		self.tree.set_model(self.treestore)
 		self.queueOUT = queueOUT
 		self.optionmenu = self.xml.get_widget('optionmenu')
@@ -266,6 +312,7 @@ class roster:
 		#signals
 		self.xml.signal_connect('gtk_main_quit', self.on_quit)
 		self.xml.signal_connect('on_accounts_activate', self.on_accounts)
+		self.xml.signal_connect('on_add_activate', self.on_add)
 		self.xml.signal_connect('on_about_activate', self.on_about)
 		self.xml.signal_connect('on_quit_activate', self.on_quit)
 		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
@@ -277,7 +324,7 @@ class plugin:
 	def read_queue(self):
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
-			print ev
+#			print ev
 			if ev[0] == 'ROSTER':
 				self.r.mkroster(ev[1])
 			elif ev[0] == 'NOTIFY':

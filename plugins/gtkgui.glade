@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+<requires lib="gnome"/>
 
 <widget class="GtkWindow" id="Gajim">
   <property name="visible">True</property>
@@ -39,7 +40,7 @@
 		  <property name="use_underline">True</property>
 
 		  <child internal-child="image">
-		    <widget class="GtkImage" id="image23">
+		    <widget class="GtkImage" id="image51">
 		      <property name="visible">True</property>
 		      <property name="stock">gtk-convert</property>
 		      <property name="icon_size">1</property>
@@ -54,10 +55,10 @@
 		    <widget class="GtkMenu" id="gajim_menu_menu">
 
 		      <child>
-			<widget class="GtkImageMenuItem" id="preferences">
+			<widget class="GtkMenuItem" id="preferences">
 			  <property name="visible">True</property>
-			  <property name="label">gtk-preferences</property>
-			  <property name="use_stock">True</property>
+			  <property name="label" translatable="yes">gtk-preferences</property>
+			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="on_preferences_activate" last_modification_time="Wed, 22 Oct 2003 21:18:29 GMT"/>
 			</widget>
 		      </child>
@@ -70,7 +71,7 @@
 			  <signal name="activate" handler="on_accounts_activate" last_modification_time="Wed, 22 Oct 2003 21:18:21 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image24">
+			    <widget class="GtkImage" id="image52">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-select-color</property>
 			      <property name="icon_size">1</property>
@@ -90,6 +91,33 @@
 		      </child>
 
 		      <child>
+			<widget class="GtkImageMenuItem" id="add">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Add</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_add_activate" last_modification_time="Sun, 26 Oct 2003 17:26:34 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image53">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-add</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="separator1">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
 			<widget class="GtkImageMenuItem" id="about">
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">_About</property>
@@ -97,7 +125,7 @@
 			  <signal name="activate" handler="on_about_activate" last_modification_time="Fri, 03 Oct 2003 12:49:50 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image25">
+			    <widget class="GtkImage" id="image54">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-help</property>
 			      <property name="icon_size">1</property>
@@ -113,9 +141,22 @@
 		      <child>
 			<widget class="GtkImageMenuItem" id="quit">
 			  <property name="visible">True</property>
-			  <property name="label">gtk-quit</property>
-			  <property name="use_stock">True</property>
+			  <property name="label" translatable="yes">_Quit</property>
+			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="on_quit_activate" last_modification_time="Fri, 03 Oct 2003 12:49:50 GMT"/>
+			  <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image55">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-quit</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 			</widget>
 		      </child>
 		    </widget>
@@ -816,6 +857,7 @@ David Ferlier (david@yazzy.org)</property>
 	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <signal name="clicked" handler="gtk_widget_destroy" last_modification_time="Sun, 26 Oct 2003 20:45:42 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -1230,6 +1272,216 @@ David Ferlier (david@yazzy.org)</property>
 	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkWindow" id="Add">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Add user</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+
+  <child>
+    <widget class="GtkVBox" id="vbox8">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">0</property>
+
+      <child>
+	<widget class="GtkHBox" id="hbox11">
+	  <property name="visible">True</property>
+	  <property name="homogeneous">False</property>
+	  <property name="spacing">0</property>
+
+	  <child>
+	    <widget class="GtkLabel" id="label17">
+	      <property name="width_request">145</property>
+	      <property name="height_request">8</property>
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Send subscription to : </property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_RIGHT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkEntry" id="entry_who">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="editable">True</property>
+	      <property name="visibility">True</property>
+	      <property name="max_length">0</property>
+	      <property name="text" translatable="yes"></property>
+	      <property name="has_frame">True</property>
+	      <property name="invisible_char" translatable="yes">*</property>
+	      <property name="activates_default">False</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">True</property>
+	      <property name="fill">True</property>
+	    </packing>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">10</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkScrolledWindow" id="scrolledwindow6">
+	  <property name="visible">True</property>
+	  <property name="can_focus">True</property>
+	  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	  <property name="shadow_type">GTK_SHADOW_NONE</property>
+	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+	  <child>
+	    <widget class="GtkTextView" id="textview_sub">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="editable">True</property>
+	      <property name="justification">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap_mode">GTK_WRAP_NONE</property>
+	      <property name="cursor_visible">True</property>
+	      <property name="pixels_above_lines">0</property>
+	      <property name="pixels_below_lines">0</property>
+	      <property name="pixels_inside_wrap">0</property>
+	      <property name="left_margin">0</property>
+	      <property name="right_margin">0</property>
+	      <property name="indent">0</property>
+	      <property name="text" translatable="yes">I would like to add you to my contact list, please</property>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkHSeparator" id="hseparator4">
+	  <property name="visible">True</property>
+	</widget>
+	<packing>
+	  <property name="padding">10</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkHButtonBox" id="hbuttonbox1">
+	  <property name="border_width">10</property>
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+	  <property name="spacing">30</property>
+
+	  <child>
+	    <widget class="GtkButton" id="button_sub">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <signal name="clicked" handler="on_button_sub_clicked" last_modification_time="Sun, 26 Oct 2003 21:38:59 GMT"/>
+
+	      <child>
+		<widget class="GtkAlignment" id="alignment7">
+		  <property name="visible">True</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xscale">0</property>
+		  <property name="yscale">0</property>
+
+		  <child>
+		    <widget class="GtkHBox" id="hbox10">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">2</property>
+
+		      <child>
+			<widget class="GtkImage" id="image32">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-apply</property>
+			  <property name="icon_size">4</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label16">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Subscribe</property>
+			  <property name="use_underline">True</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="button11">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <signal name="clicked" handler="gtk_widget_destroy" last_modification_time="Sun, 26 Oct 2003 20:52:16 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

@@ -48,10 +48,10 @@ class GajimCore:
 	# END messageCB
 
 	def presenceCB(self, con, prs):
-		log.debug("PresenceCB")
 		who = str(prs.getFrom())
 		type = prs.getType()
 		if type == None: type = 'available'
+		log.debug("PresenceCB : %s" % type)
 		if type == 'available':
 			if prs.getShow():
 				show = prs.getShow()
@@ -59,9 +59,17 @@ class GajimCore:
 				show = 'online'
 			self.hub.sendPlugin('NOTIFY', \
 			(prs.getFrom().getBasic(), show, prs.getStatus()))
-		if type == 'unavailable':
+		elif type == 'unavailable':
 			self.hub.sendPlugin('NOTIFY', \
 				(prs.getFrom().getBasic(), 'offline', prs.getStatus()))
+		elif type == 'subscribe':
+			log.debug("subscribe request from %s" % who)
+		elif type == 'subscribed':
+			log.debug("we are now subscribed to %s" % who)
+		elif type == 'unsubscribe':
+			log.debug("unsubscribe request from %s" % who)
+		elif type == 'unsubscribed':
+			log.debug("we are now unsubscribed to %s" % who)
 			
 	# END presenceCB
 
@@ -113,6 +121,7 @@ class GajimCore:
 					if self.connected == 1:
 						self.con.disconnect()
 					return
+				#('STATUS', status)
 				elif ev[0] == 'STATUS':
 					if (ev[1] != 'offline') and (self.connected == 0):
 						self.connect()
@@ -124,10 +133,20 @@ class GajimCore:
 						p = common.jabber.Presence()
 						p.setShow(ev[1])
 						self.con.send(p)
+				#('MSG', (jid, msg))
 				elif ev[0] == 'MSG':
 					msg = common.jabber.Message(ev[1][0], ev[1][1])
 					msg.setType('chat')
 					self.con.send(msg)
+				#('SUB', (jid, txt))
+				elif ev[0] == 'SUB':
+					log.debug('subscription request for %s' % ev[1][0])
+					self.con.send(common.jabber.Presence(ev[1][0], 'subscribe'))
+				#('UNSUB', jid)
+				elif ev[0] == 'UNSUB':
+					self.con.send(common.jabber.Presence(ev[1], 'unsubscribe'))
+				else:
+					log.debug("Unknown Command")
 			elif self.connected == 1:
 				self.con.process(1)
 			time.sleep(0.1)
