@@ -475,6 +475,20 @@ class tabbed_chat_Window:
 		elif event.string and event.string in st \
 			and (event.state & gtk.gdk.MOD1_MASK):
 			nb.set_current_page(st.index(event.string))
+		elif event.keyval == gtk.keysyms.Page_Down and \
+			(event.state & gtk.gdk.CONTROL_MASK):
+			current = nb.get_current_page()
+			if current > 0:
+				nb.set_current_page(current-1)
+			else:
+				nb.set_current_page(nb.get_n_pages()-1)
+		elif event.keyval == gtk.keysyms.Page_Up and \
+			(event.state & gtk.gdk.CONTROL_MASK):
+			current = nb.get_current_page()
+			if current < (nb.get_n_pages()-1):
+				nb.set_current_page(current+1)
+			else:
+				nb.set_current_page(0)
 
 	def on_button_contact_clicked(self, widget):
 		"""When button contact is clicked"""
