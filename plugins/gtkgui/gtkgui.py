@@ -3083,7 +3083,7 @@ class plugin:
 		if self.windows['account_modification_window']:
 			self.windows['account_modification_window'].account_is_ok(array[1])
 		else:
-			self.accounts[array[3]] = {'name': array[1], \
+			self.accounts[name] = {'name': array[1], \
 				'hostname': array[0],\
 				'password': array[2],\
 				'resource': array[4],\
