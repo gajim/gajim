@@ -1,5 +1,6 @@
 MODULES = common plugins/gtkgui
 PREFIX = /usr
+DESTDIR = /
 
 FIND= find -regex '.*\.\(\(glade\)\|\(py\)\|\(xpm\)\)'
 FILES=`$(FIND)`
@@ -18,17 +19,17 @@ clean:
 
 install:
 	for d in $(DIRS) ; do \
-		if [ ! -d $(PREFIX)/share/gajim/$$d ] ; then \
-			mkdir -p "$(PREFIX)/share/gajim/$$d"; \
+		if [ ! -d $(DESTDIR)$(PREFIX)/share/gajim/$$d ] ; then \
+			mkdir -p "$(DESTDIR)$(PREFIX)/share/gajim/$$d"; \
 		fi; \
 	done
 	for f in $(FILES) ; do \
 		DST=`dirname "$$f"`; \
-		cp "$$f" "$(PREFIX)/share/gajim/$$DST/"; \
+		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
 	done
 	for s in $(SCRIPTS) ; do \
 		BASE=`basename "$$s"`; \
 		F=`cat "$$s" | sed -e 's!PREFIX!$(PREFIX)!g'`; \
-		echo "$$F" > "$(PREFIX)/bin/$$BASE"; \
-		chmod +x "$(PREFIX)/bin/$$BASE"; \
+		echo "$$F" > "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
+		chmod +x "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 	done
