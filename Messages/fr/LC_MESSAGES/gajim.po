@@ -460,11 +460,11 @@ msgstr ""
 msgid ""
 "<b>Gajim</b> (http://www.gajim.org)\n"
 "\n"
-"Copyright © 2003-2004 Gajim Team\n"
+"Copyright © 2003-2005 Gajim Team\n"
 "\n"
 "<b>Gajim Team</b>\n"
 "Vincent Hanquez (tab@snarc.org)\n"
-"Yann Le Boulanger (asterix@crans.org)"
+"Yann Le Boulanger (asterix@lagaule.org)"
 msgstr ""
 
 #: plugins/gtkgui/msg.c:31

@@ -872,11 +872,11 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">&lt;b&gt;Gajim&lt;/b&gt; (http://www.gajim.org)
 
-Copyright © 2003-2004 Gajim Team
+Copyright © 2003-2005 Gajim Team
 
 &lt;b&gt;Gajim Team&lt;/b&gt;
 Vincent Hanquez (tab@snarc.org)
-Yann Le Boulanger (asterix@crans.org)</property>
+Yann Le Boulanger (asterix@lagaule.org)</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">True</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>

@@ -1,10 +1,10 @@
 ##	plugins/dialogs.py
 ##
 ## Gajim Team:
-## 	- Yann Le Boulanger <asterix@crans.org>
+## 	- Yann Le Boulanger <asterix@lagaule.org>
 ## 	- Vincent Hanquez <tab@snarc.org>
 ##
-##	Copyright (C) 2003 Gajim Team
+##	Copyright (C) 2003-2005 Gajim Team
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
