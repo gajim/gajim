@@ -1228,14 +1228,66 @@ class systray:
 		self.status = status
 		self.set_img()
 
+	def set_optionmenu(self, widget, status):
+		optionmenu = self.plugin.roster.xml.get_widget('optionmenu')
+		statuss = ['online', 'away', 'xa', 'dnd', 'invisible', 'vide', 'offline']
+		optionmenu.set_history(statuss.index(status))
+
+	def mk_menu(self, event):
+		menu = gtk.Menu()
+		item = gtk.MenuItem(_("Status"))
+		menu.append(item)
+
+		menu_sub = gtk.Menu()
+		item.set_submenu(menu_sub)
+		item = gtk.MenuItem(_("Online"))
+		menu_sub.append(item)
+		item.connect("activate", self.set_optionmenu, 'online')
+		item = gtk.MenuItem(_("Away"))
+		menu_sub.append(item)
+		item.connect("activate", self.set_optionmenu, 'away')
+		item = gtk.MenuItem(_("NA"))
+		menu_sub.append(item)
+		item.connect("activate", self.set_optionmenu, 'na')
+		item = gtk.MenuItem(_("DND"))
+		menu_sub.append(item)
+		item.connect("activate", self.set_optionmenu, 'dnd')
+		item = gtk.MenuItem(_("Invisible"))
+		menu_sub.append(item)
+		item.connect("activate", self.set_optionmenu, 'invisible')
+		item = gtk.MenuItem()
+		menu_sub.append(item)
+		item = gtk.MenuItem(_("Offline"))
+		menu_sub.append(item)
+		item.connect("activate", self.set_optionmenu, 'offline')
+		
+		item = gtk.MenuItem()
+		menu.append(item)
+
+		item = gtk.MenuItem(_("Quit"))
+		menu.append(item)
+		item.connect("activate", self.plugin.roster.on_quit)
+		
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
+		menu.reposition()
+
+
+	def on_clicked(self, widget, event):
+		if event.button == 3:
+			self.mk_menu(event)
+
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.jids = []
 		t = trayicon.TrayIcon("Gajim")
+		eb = gtk.EventBox()
+		eb.connect("button-press-event", self.on_clicked)
 		self.tip = gtk.Tooltips()
 		self.tip.set_tip(t, 'Gajim')
 		self.img_tray = gtk.Image()
-		t.add(self.img_tray)
+		eb.add(self.img_tray)
+		t.add(eb)
 		t.show_all()
 		self.status = 'offline'
 		self.set_img()
