@@ -2253,12 +2253,12 @@ class roster_window:
 		self.cb.handler_unblock(self.id_signal_cb)
 		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
 		self.plugin.systray.set_status(statuss[maxi])
-		image = self.roster.pixbufs[statuss[maxi]]
+		image = self.pixbufs[statuss[maxi]]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			pixbuf = image.get_animation().get_static_image()
-			self.roster.window.set_icon(pixbuf)
+			self.window.set_icon(pixbuf)
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			self.roster.window.set_icon(image.get_pixbuf())
+			self.window.set_icon(image.get_pixbuf())
 
 	def on_status_changed(self, account, status):
 		"""the core tells us that our status has changed"""
