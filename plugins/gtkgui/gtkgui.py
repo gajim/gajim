@@ -35,6 +35,81 @@ from dialogs import *
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
+
+class ImageCellRenderer(gtk.GenericCellRenderer):
+
+	__gproperties__ = {
+		"image": (gobject.TYPE_OBJECT, "Image", 
+		"Image", gobject.PARAM_READWRITE),
+	}
+                     
+	def __init__(self):
+		self.__gobject_init__()
+		self.image = None
+
+	def do_set_property(self, pspec, value):
+		setattr(self, pspec.name, value)
+
+	def do_get_property(self, pspec):
+		return getattr(self, pspec.name)
+
+	def animation_timeout(self, tree, image):
+		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			image.get_data('iter').advance()
+			gobject.timeout_add(image.get_data('iter').get_delay_time(), self.animation_timeout, tree, image)
+		tree.queue_draw()
+#		tree.queue_draw_area(16,32,16,340)
+#		tree.queue_draw_area(draw_rect.x, \
+#			draw_rect.y, pix.get_width(), pix.get_height())
+	
+	def on_render(self, window, widget, background_area,cell_area, \
+		expose_area, flags):
+		pix_rect = gtk.gdk.Rectangle()
+		pix_rect.x, pix_rect.y, pix_rect.width, pix_rect.height = self.on_get_size(widget, cell_area)
+
+		pix_rect.x += cell_area.x
+		pix_rect.y += cell_area.y
+		pix_rect.width  -= 2 * self.get_property("xpad")
+		pix_rect.height -= 2 * self.get_property("ypad")
+
+		draw_rect = cell_area.intersect(pix_rect)
+		draw_rect = expose_area.intersect(draw_rect)
+	
+		if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			if not self.image.get_data('iter'):
+				animation = self.image.get_animation()
+				self.image.set_data('iter', animation.get_iter())
+				gobject.timeout_add(self.image.get_data('iter').get_delay_time(), self.animation_timeout, widget, self.image)
+
+			pix = self.image.get_data('iter').get_pixbuf()
+		elif self.image.get_storage_type() == gtk.IMAGE_PIXBUF:
+			pix = self.image.get_pixbuf()
+		if pix:
+			window.draw_pixbuf(widget.style.black_gc, pix, \
+				draw_rect.x-pix_rect.x, draw_rect.y-pix_rect.y, draw_rect.x, \
+				draw_rect.y+2, draw_rect.width, draw_rect.height, \
+            gtk.gdk.RGB_DITHER_NONE, 0, 0)
+
+	def on_get_size(self, widget, cell_area):
+		if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			animation = self.image.get_animation()
+			pix = animation.get_iter().get_pixbuf()
+		elif self.image.get_storage_type() == gtk.IMAGE_PIXBUF:
+			pix = self.image.get_pixbuf()
+		pixbuf_width  = pix.get_width()
+		pixbuf_height = pix.get_height()
+		calc_width  = self.get_property("xpad") * 2 + pixbuf_width
+		calc_height = self.get_property("ypad") * 2 + pixbuf_height
+		x_offset = 0
+		y_offset = 0
+		if cell_area and pixbuf_width > 0 and pixbuf_height > 0:
+			x_offset = self.get_property("xalign") * (cell_area.width - calc_width -  self.get_property("xpad"))
+			y_offset = self.get_property("yalign") * (cell_area.height - calc_height -  self.get_property("ypad"))
+		return x_offset, y_offset, calc_width, calc_height
+
+gobject.type_register(ImageCellRenderer)
+
+
 class user:
 	"""Informations concerning each users"""
 	def __init__(self, *args):
@@ -147,11 +222,13 @@ class message_Window:
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat', APP)
 		self.window = self.xml.get_widget('Chat')
-#		hbox = xml.get_widget('hbox1')
-#		hbox.set_property('resize-mode', 2)
 		self.window.set_title('Chat with ' + user.name)
 		self.img = self.xml.get_widget('image')
-		self.img.set_from_pixbuf(self.plugin.roster.pixbufs[user.show])
+		image = self.plugin.roster.pixbufs[user.show]
+		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			self.img.set_from_animation(image.get_animation())
+		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
+			self.img.set_from_pixbuf(image.get_pixbuf())
 		self.xml.get_widget('button_contact').set_label(user.name + ' <'\
 			+ user.jid + '>')
 		self.xml.get_widget('button_contact').set_resize_mode(gtk.RESIZE_QUEUE)
@@ -443,17 +520,6 @@ class roster_Window:
 			if model.iter_n_children(parent_i) == 0:
 				model.remove(parent_i)
 
-	def update_anim(self, iteration, iter, jid, account):
-		"""Update animation in the treeview"""
-		if not self.plugin.queues[account].has_key(jid):
-			return
-		model = self.tree.get_model()
-		iteration.advance()
-		pix = iteration.get_pixbuf()
-		model.set_value(iter, 0, pix)
-		gobject.timeout_add(iteration.get_delay_time(), self.update_anim, \
-			iteration, iter, jid, account)
-
 	def redraw_jid(self, jid, account):
 		"""draw the correct pixbuf and name"""
 		model = self.tree.get_model()
@@ -472,15 +538,10 @@ class roster_Window:
 				show = u.show
 		for iter in iters:
 			if self.plugin.queues[account].has_key(jid):
-				pix = self.pixbufs['message']
+				img = self.pixbufs['message']
 			else:
-				pix = self.pixbufs[show]
-			if isinstance(pix, gtk.gdk.PixbufAnimation):
-				iteration = pix.get_iter()
-				pix = iteration.get_pixbuf()
-				gobject.timeout_add(iteration.get_delay_time(), self.update_anim, \
-					iteration, iter, jid, account)
-			model.set_value(iter, 0, pix)
+				img = self.pixbufs[show]
+			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
 	
 	def mkmenu(self):
@@ -589,8 +650,13 @@ class roster_Window:
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
 			#TODO: should show pibuf of the prioritest resource
 			if len(self.contacts[account][user.jid]) < 2:
-				self.plugin.windows[account]['chats'][user.jid].\
-					img.set_from_pixbuf(self.pixbufs[show])
+				img = self.pixbufs[show]
+				if img.get_storage_type() == gtk.IMAGE_ANIMATION:
+					self.plugin.windows[account]['chats'][user.jid].\
+						img = set_from_animation(img.get_animation())
+				elif img.get_storage_type() == gtk.IMAGE_PIXBUF:
+					self.plugin.windows[account]['chats'][user.jid].\
+						img = set_from_pixbuf(img.get_pixbuf())
 			name = user.name
 			if user.resource != '':
 				name += '/'+user.resource
@@ -1092,21 +1158,24 @@ class roster_Window:
 			files.append(self.path + state + '.gif')
 			files.append(self.path + state + '.png')
 			files.append(self.path + state + '.xpm')
-			self.pixbufs[state] = None
+			image = gtk.Image()
+			image.show()
+			self.pixbufs[state] = image
 			for file in files:
 				if not os.path.exists(file):
 					continue
-				fct = gtk.gdk.pixbuf_new_from_file
 				if file.find('.gif') != -1:
-					fct = gtk.gdk.PixbufAnimation
-				pix = fct(file)
-				self.pixbufs[state] = pix
+					pix = gtk.gdk.PixbufAnimation(file)
+					image.set_from_animation(pix)
+				else:
+					pix = gtk.gdk.pixbuf_new_from_file(file)
+					image.set_from_pixbuf(pix)
 				break
 		for state in ('online', 'away', 'xa', 'dnd', 'invisible', 'offline'):
-			image = gtk.Image()
-			image.set_from_pixbuf(self.pixbufs[state])
-			image.show()
-			self.xml.get_widget(state).set_image(image)
+#			image = gtk.Image()
+#			image.set_from_pixbuf(self.pixbufs[state])
+#			image.show()
+			self.xml.get_widget(state).set_image(self.pixbufs[state])
 
 	def on_show_off(self, widget):
 		"""when show offline option is changed :
@@ -1178,7 +1247,7 @@ class roster_Window:
 			self.contacts[a] = {}
 			self.groups[a] = {}
 		#(icon, name, type, jid, editable)
-		model = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, str, \
+		model = gtk.TreeStore(gtk.Image, str, str, str, \
 			gobject.TYPE_BOOLEAN)
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -1192,9 +1261,9 @@ class roster_Window:
 		#columns
 		col = gtk.TreeViewColumn()
 		self.tree.append_column(col)
-		render_pixbuf = gtk.CellRendererPixbuf()
+		render_pixbuf = ImageCellRenderer()
 		col.pack_start(render_pixbuf, expand = False)
-		col.add_attribute(render_pixbuf, 'pixbuf', 0)
+		col.add_attribute(render_pixbuf, 'image', 0)
 		col.set_cell_data_func(render_pixbuf, self.iconCellDataFunc, None)
 
 		render_text = gtk.CellRendererText()
@@ -1250,11 +1319,11 @@ class systray:
 			status = 'message'
 		else:
 			status = self.status
-		pix = self.plugin.roster.pixbufs[status]
-		if isinstance(pix, gtk.gdk.PixbufAnimation):
-			self.img_tray.set_from_animation(pix)
-		else:
-			self.img_tray.set_from_pixbuf(pix)
+		image = self.plugin.roster.pixbufs[status]
+		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			self.img_tray.set_from_animation(image.get_animation())
+		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
+			self.img_tray.set_from_pixbuf(image.get_pixbuf())
 
 	def add_jid(self, jid, account):
 		list = [account, jid]
