@@ -194,6 +194,7 @@ def loadPlugins(gc):
 		gc.hub.register(mod, 'SUBSCRIBE')
 		gc.hub.register(mod, 'AGENTS')
 		gc.hub.register(mod, 'AGENT_INFO')
+		gc.hub.register(mod, 'QUIT')
 		modObj.load()
 # END loadPLugins
 
