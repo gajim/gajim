@@ -24,7 +24,6 @@ import Queue
 from common import i18n
 _ = i18n._
 
-HOST = socket.gethostbyname(socket.gethostname())
 
 def XMLescape(txt):
 	"Escape XML entities"
@@ -141,6 +140,7 @@ class plugin:
 		self.message_types = {}
 		#create socket
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		HOST = socket.gethostbyname(socket.gethostname())
 		if self.config.has_key('host'):
 			HOST = socket.gethostbyname(self.config['host'])
 		self.socket.bind((HOST, self.config['port']))

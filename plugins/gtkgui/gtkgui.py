@@ -1103,7 +1103,7 @@ class roster_Window:
 		tell that to the core and exit gtk"""
 		self.plugin.config['hiddenlines'] = string.join(self.hidden_lines, '\t')
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
-		self.plugin.send('QUIT', None, '')
+		self.plugin.send('QUIT', None, ('gtkgui', 0))
 		print _("plugin gtkgui stopped")
 		gtk.mainquit()
 

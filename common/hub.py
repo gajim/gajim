@@ -49,6 +49,8 @@ class GajimHub:
 
 	def register(self, name, event):
 		""" Records a plugin from an event """
+		if not self.queues.has_key(name):
+			return
 		qu = self.queues[name]
 		if self.events.has_key(event) :
 			if not qu in self.events[event]:
@@ -56,6 +58,26 @@ class GajimHub:
 		else :
 			self.events[event] = [qu]
 	# END register
+
+	def unregisterEvents(self, name, event):
+		""" Records a plugin from an event """
+		if not self.queues.has_key(name):
+			return
+		qu = self.queues[name]
+		if self.events.has_key(event) :
+			if qu in self.events[event]:
+				self.events[event].remove(qu)
+	# END register
+
+	def unregister(self, name):
+		if not self.queues.has_key(name):
+			return
+		qu = self.queues[name]
+		for event in self.events:
+			if qu in self.events[event]:
+				self.events[event].remove(qu)
+		del self.queues[name]
+	# END unregister
 
 	def sendPlugin(self, event, con, data):
 		""" Sends an event to registered plugins"""

@@ -352,14 +352,16 @@ class GajimCore:
 						break
 			else:
 				con = None
-			#('QUIT', account, ())
+			#('QUIT', None, (plugin, kill_core ?))   kill core : 0 or 1
 			if ev[0] == 'QUIT':
-				for con in self.connexions.keys():
-					if self.connected[self.connexions[con]] == 1:
-						self.connected[self.connexions[con]] = 0
-						con.disconnect()
-				self.hub.sendPlugin('QUIT', None, ())
-				return 1
+				self.hub.unregister(ev[2][0])
+				if ev[2][1]:
+					for con in self.connexions.keys():
+						if self.connected[self.connexions[con]] == 1:
+							self.connected[self.connexions[con]] = 0
+							con.disconnect()
+					self.hub.sendPlugin('QUIT', None, ())
+					return 1
 			#('ASK_CONFIG', account, (who_ask, section, default_config))
 			elif ev[0] == 'ASK_CONFIG':
 				if ev[2][1] == 'accounts':

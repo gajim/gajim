@@ -29,7 +29,7 @@ class GajimThread(threading.Thread):
 		self.queueIn = queueIn
 		self.queueOut = queueOut
 		threading.Thread.__init__(self, target = self.run, \
-			name = name, args = () ) 
+			name = name) 
 		self.start() 
 	# END __init__
  
@@ -42,6 +42,6 @@ class GajimThread(threading.Thread):
 			res = eval(mod)
 		except:
 			print _("plugin %s cannot be launched : ") % self.getName() + \
-				sys.exc_info()[1][1]
+				sys.exc_info()[1][0]
 	# END run
 # END GajimThread
