@@ -216,9 +216,9 @@ class systray:
 
 	def show_icon(self):
 		if not self.t:
-			self.t = trayicon.TrayIcon("Gajim")
+			self.t = trayicon.TrayIcon('Gajim')
 			eb = gtk.EventBox()
-			eb.connect("button-press-event", self.on_clicked)
+			eb.connect('button-press-event', self.on_clicked)
 			self.tip = gtk.Tooltips()
 			self.tip.set_tip(self.t, 'Gajim')
 			self.img_tray = gtk.Image()

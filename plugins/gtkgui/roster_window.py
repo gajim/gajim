@@ -923,6 +923,7 @@ class roster_window:
 		"""When we want to close the window"""
 		if self.plugin.systray_visible:
 			self.window.iconify()
+			win.skip_taskbar_hint = True
 		else:
 			self.quit_gtkgui_plugin()
 		return 1
