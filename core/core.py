@@ -247,10 +247,10 @@ class GajimCore:
 					con = None
 				#('QUIT', account, ())
 				if ev[0] == 'QUIT':
-#					for con in self.connexions.keys():
-#						if self.connected[a] == 1:
-#							self.connected[a] = 0
-#						con.disconnect()
+					for con in self.connexions.keys():
+						if self.connected[self.connexions[con]] == 1:
+							self.connected[self.connexions[con]] = 0
+							con.disconnect()
 					self.hub.sendPlugin('QUIT', None, ())
 					return
 				#('ASK_CONFIG', account, (who_ask, section, default_config))
