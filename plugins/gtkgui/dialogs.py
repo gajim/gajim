@@ -653,7 +653,7 @@ class subscription_request_window:
 class Join_groupchat_window:
 	def __init__(self, plugin, account, server='', room = ''):
 		if plugin.connected[account] < 2:
-			Error_dialog(_('You must be connected to join a group chat'))
+			Error_dialog(_('You must be connected to join a groupchat'))
 			return
 		self.plugin = plugin
 		self.account = account

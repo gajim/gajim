@@ -7759,6 +7759,7 @@ Custom</property>
 
 		      <child>
 			<widget class="GtkScrolledWindow" id="scrolledwindow17">
+			  <property name="width_request">100</property>
 			  <property name="visible">True</property>
 			  <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
 			  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>

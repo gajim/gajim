@@ -487,6 +487,7 @@ class Groupchat_window(Chat):
 		self.show_title()
 	
 	def on_join_groupchat_window_key_press_event(self, widget, event):
+		print 'called'
 		if event.keyval == gtk.keysyms.Escape:
 			widget.get_toplevel().destroy()
 
@@ -514,7 +515,7 @@ class Groupchat_window(Chat):
 					widget.get_selection().unselect_all()
 					return False
 
-				model = self.tree.get_model()
+				model = widget.get_model()
 				iter = model.get_iter(path)
 				type = model.get_value(iter, 2)
 				if (type == 'group' or type == 'account'):
