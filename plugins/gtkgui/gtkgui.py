@@ -336,7 +336,7 @@ class roster:
 					user1.groups.append('general')
 			for g in user1.groups:
 				if not self.l_group.has_key(g):
-					iterG = self.treestore.append(None, (None, g, 'group', FALSE, self.grpbgcolor, FALSE))
+					iterG = self.treestore.append(None, (self.pixbufs['closed'], g, 'group', FALSE, self.grpbgcolor, TRUE))
 					self.l_group[g] = iterG
 				if user1.show != 'offline' or self.showOffline or g == 'Agents':
 					if g == 'Agents':
@@ -364,7 +364,7 @@ class roster:
 		if self.l_contact[jid]['iter'] == []:
 			for g in u.groups:
 				if not self.l_group.has_key(g):
-					iterG = self.treestore.append(None, (None, g, 'group', FALSE, self.grpbgcolor, FALSE))
+					iterG = self.treestore.append(None, (self.pixbufs['closed'], g, 'group', FALSE, self.grpbgcolor, TRUE))
 					self.l_group[u.group] = iterG
 				iterU = self.treestore.append(self.l_group[g], (self.pixbufs[show], u.name, u.jid, TRUE, self.userbgcolor, TRUE))
 				self.l_contact[u.jid]['iter'].append(iterU)
@@ -440,7 +440,7 @@ class roster:
 		if not self.l_contact.has_key(jid):
 			user1 = user(jid, jid, ['general'], 'requested', 'requested', 'sub')
 			if not self.l_group.has_key('general'):
-				iterG = self.treestore.append(None, (None, 'general', 'group', FALSE, self.grpbgcolor, FALSE))
+				iterG = self.treestore.append(None, (self.pixbufs['closed'], 'general', 'group', FALSE, self.grpbgcolor, TRUE))
 				self.l_group['general'] = iterG
 			iterU = self.treestore.append(self.l_group['general'], (self.pixbufs['requested'], jid, jid, TRUE, self.userbgcolor, TRUE))
 			self.l_contact[jid] = {'user':user1, 'iter':[iterU]}
@@ -487,12 +487,24 @@ class roster:
 	def on_row_activated(self, widget, path, col=0):
 		iter = self.treestore.get_iter(path)
 		jid = self.treestore.get_value(iter, 2)
-		if self.tab_messages.has_key(jid):
-			self.tab_messages[jid].window.present()
-		elif self.l_contact.has_key(jid):
-			self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
-			if self.tab_queues.has_key(jid):
-				self.tab_messages[jid].read_queue(self.tab_queues[jid])
+		if (jid == 'group'):
+			if (self.tree.row_expanded(path)):
+				self.tree.collapse_row(path)
+			else:
+				self.tree.expand_row(path, FALSE)
+		else:
+			if self.tab_messages.has_key(jid):
+				self.tab_messages[jid].window.present()
+			elif self.l_contact.has_key(jid):
+				self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
+				if self.tab_queues.has_key(jid):
+					self.tab_messages[jid].read_queue(self.tab_queues[jid])
+
+	def on_row_expanded(self, widget, iter, path):
+		self.treestore.set_value(iter, 0, self.pixbufs['opened'])
+	
+	def on_row_collapsed(self, widget, iter, path):
+		self.treestore.set_value(iter, 0, self.pixbufs['closed'])
 
 	def on_cell_edited (self, cell, row, new_text):
 		iter = self.treestore.get_iter_from_string(row)
@@ -530,7 +542,7 @@ class roster:
 			iconstyle = 'sun'
 		self.path = 'plugins/gtkgui/icons/' + iconstyle + '/'
 		self.pixbufs = {}
-		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'requested', 'message'):
+		for state in ('online', 'away', 'xa', 'dnd', 'offline', 'requested', 'message', 'opened', 'closed'):
 			if not os.path.exists(self.path + state + '.xpm'):
 				print 'No such file : ' + self.path + state + '.xpm'
 				self.pixbufs[state] = None
@@ -584,6 +596,12 @@ class roster:
 		self.col.add_attribute(render_text, 'cell-background', 4)
 		self.col.add_attribute(render_text, 'editable', 3)
 		self.tree.append_column(self.col)
+		col2 = gtk.TreeViewColumn()
+		render_pixbuf = gtk.CellRendererPixbuf()
+		col2.pack_start(render_pixbuf, expand = False)
+		self.tree.append_column(col2)
+		col2.set_visible(FALSE)
+		self.tree.set_expander_column(col2)
 
 		#signals
 		self.xml.signal_connect('gtk_main_quit', self.on_quit)
@@ -595,6 +613,8 @@ class roster:
 		self.xml.signal_connect('on_treeview_event', self.on_treeview_event)
 		self.xml.signal_connect('on_status_changed', self.on_status_changed)
 		self.xml.signal_connect('on_row_activated', self.on_row_activated)
+		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
+		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
 
 class plugin:
 	def read_queue(self):
@@ -618,8 +638,8 @@ class plugin:
 					#It must be an agent
 					jid = string.replace(jid, '@', '')
 					if not self.r.l_group.has_key('Agents'):
-						iterG = self.r.treestore.append(None, (None, \
-							'Agents', 'group', FALSE, self.r.grpbgcolor, FALSE))
+						iterG = self.r.treestore.append(None, (self.pixbufs['closed'], \
+							'Agents', 'group', FALSE, self.r.grpbgcolor, TRUE))
 						self.r.l_group['Agents'] = iterG
 					if not self.r.l_contact.has_key(jid):
 						user1 = user(jid, jid, ['Agents'], ev[1][1], ev[1][2], 'from')
@@ -656,8 +676,10 @@ class plugin:
 				else:
 					if not self.r.tab_messages.has_key(jid):
 						#FIXME:message from unknown
-						self.r.tab_messages[jid] = message(self.r.l_contact[jid]['user'], self.r)
-					self.r.tab_messages[jid].print_conversation(ev[1][1])
+						if self.r.l_contact.has_key(jid):
+							self.r.tab_messages[jid] = message(self.r.l_contact[jid]['user'], self.r)
+					if self.r.tab_messages.has_key(jid):
+						self.r.tab_messages[jid].print_conversation(ev[1][1])
 					
 			elif ev[0] == 'SUBSCRIBE':
 				authorize(self.r, ev[1])
@@ -671,8 +693,8 @@ class plugin:
 				else:
 					user1 = user(jid, jid, ['general'], 'online', 'online', 'to')
 					if not self.r.l_group.has_key('general'):
-						iterG = self.r.treestore.append(None, (None, \
-							'general', 'group', FALSE, self.r.grpbgcolor, FALSE))
+						iterG = self.r.treestore.append(None, (self.pixbufs['closed'], \
+							'general', 'group', FALSE, self.r.grpbgcolor, TRUE))
 						self.r.l_group['general'] = iterG
 					iterU = self.r.treestore.append(self.r.l_group['general'], \
 						(self.r.pixbufs['online'], jid, jid, TRUE, self.userbgcolor, TRUE))
