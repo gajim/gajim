@@ -24,9 +24,10 @@ from gtk import TRUE, FALSE
 import gtk.glade,gobject
 import os,string,time,Queue
 import common.optparser,common.sleepy
-#CONFPATH = "~/.gajim/config"
-Wbrowser = 0
-Waccounts = 0
+browserWindow = 0
+accountsWindow = 0
+
+GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
 class user:
 	"""Informations concerning each users"""
@@ -49,7 +50,7 @@ class user:
 			self.resource = args[6]
 		else: raise TypeError, 'bad arguments'
 
-class info_user:
+class infoUser_Window:
 	"""Class for user's information window"""
 	def delete_event(self, widget):
 		"""close window"""
@@ -61,19 +62,34 @@ class info_user:
 
 	def on_close(self, widget):
 		"""Save user's informations and update the roster on the Jabber server"""
-		#TODO: send things to server only if changes are done
+		#update: to know if things have changed to send things 
+		# to server only if changes are done
+		update = 0
 		#update user.name if it's not ""
 		newName = self.entry_name.get_text()
-		if newName != '':
-			self.user.name = newName
+		if newName != self.user.name:
+			update = 1
+			if newName != '':
+				self.user.name = newName
 		#update user.groups and redraw the user in the roster
+		old_groups = self.user.groups
 		self.r.remove_user(self.user)
 		self.user.groups = []
 		model = self.list2.get_model()
 		model.foreach(self.add_grp_to_user)
 		self.r.add_user(self.user)
-		self.r.queueOUT.put(('UPDUSER', (self.user.jid, self.user.name, \
-			self.user.groups)))
+		for g in old_groups:
+			if not g in self.user.groups:
+				update = 1
+				break
+		if not update:
+			for g in self.user.groups:
+				if not g in old_groups:
+					update = 1
+					break
+		if update:
+			self.r.queueOUT.put(('UPDUSER', (self.user.jid, self.user.name, \
+				self.user.groups)))
 		self.delete_event(self)
 
 	def add_grp(self, model, path, iter, stors):
@@ -110,25 +126,25 @@ class info_user:
 		"""Initialize both available and current listStores"""
 		#list available
 		store = gtk.ListStore(gobject.TYPE_STRING)
-		for i in self.r.l_group.keys():
-			if i != 'Agents' and i not in self.user.groups:
+		for g in self.r.l_group.keys():
+			if g != 'Agents' and g not in self.user.groups:
 				iter = store.append()
-				store.set(iter, 0, i)
+				store.set(iter, 0, g)
 		self.list1.set_model(store)
 		column = gtk.TreeViewColumn('Available', gtk.CellRendererText(), text=0)
 		self.list1.append_column(column)
 
 		#list_current
 		store = gtk.ListStore(gobject.TYPE_STRING)
-		for i in self.user.groups:
+		for g in self.user.groups:
 			iter = store.append()
-			store.set(iter, 0, i)
+			store.set(iter, 0, g)
 		self.list2.set_model(store)
 		column = gtk.TreeViewColumn('Available', gtk.CellRendererText(), text=0)
 		self.list2.append_column(column)
 
 	def __init__(self, user, roster):
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Info_user')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Info_user')
 		self.window = xml.get_widget("Info_user")
 		self.r = roster
 		self.user = user
@@ -155,7 +171,7 @@ class info_user:
 			self.on_new_key_pressed)
 		
 
-class prefs:
+class preference_Window:
 	"""Class for Preferences window"""
 	def delete_event(self, widget):
 		"""close window"""
@@ -259,20 +275,40 @@ class prefs:
 		self.write_cfg()
 		self.window.destroy()
 
+	def change_notebook_page(self, number):
+		self.notebook.set_current_page(number)
+
+	def on_lookfeel_button_clicked(self, widget, data=None):
+		self.change_notebook_page(0)
+		
+	def on_events_button_clicked(self, widget, data=None):
+		self.change_notebook_page(1)
+		
+	def on_presence_button_clicked(self, widget, data=None):
+		self.change_notebook_page(2)
+
 	def __init__(self, roster):
 		"""Initialize Preference window"""
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Prefs')
-		self.window = xml.get_widget("Prefs")
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window')
+		self.window = xml.get_widget('preferences_window')
 		self.r = roster
-		self.da_in = xml.get_widget("drawing_in")
-		self.da_out = xml.get_widget("drawing_out")
-		self.da_status = xml.get_widget("drawing_status")
-		self.combo_iconstyle = xml.get_widget("combo_iconstyle")
-		self.chk_autopp = xml.get_widget("chk_autopopup")
-		self.chk_autoaway = xml.get_widget("chk_autoaway")
-		self.spin_autoawaytime = xml.get_widget("spin_autoawaytime")
-		self.chk_autoxa = xml.get_widget("chk_autoxa")
-		self.spin_autoxatime = xml.get_widget("spin_autoxatime")
+		self.da_in = xml.get_widget('drawing_in')
+		self.da_out = xml.get_widget('drawing_out')
+		self.da_status = xml.get_widget('drawing_status')
+		self.combo_iconstyle = xml.get_widget('combo_iconstyle')
+		self.chk_autopp = xml.get_widget('chk_autopopup')
+		self.chk_autoaway = xml.get_widget('chk_autoaway')
+		self.spin_autoawaytime = xml.get_widget('spin_autoawaytime')
+		self.chk_autoxa = xml.get_widget('chk_autoxa')
+		self.spin_autoxatime = xml.get_widget('spin_autoxatime')
+		self.notebook = xml.get_widget('preferences_notebook')
+		
+		button = xml.get_widget('lookfeel_button')
+		button.connect('clicked', self.on_lookfeel_button_clicked)
+		button = xml.get_widget('events_button')
+		button.connect('clicked', self.on_events_button_clicked)
+		button = xml.get_widget('presence_button')
+		button.connect('clicked', self.on_presence_button_clicked)
 
 		#Color for incomming messages
 		colSt = self.r.plugin.config['inmsgcolor']
@@ -311,34 +347,33 @@ class prefs:
 			self.combo_iconstyle.entry.set_text(self.r.iconstyle)
 		
 		#Autopopup
+		st = 0
 		if self.r.plugin.config.has_key('autopopup'):
 			st = self.r.plugin.config['autopopup']
-		else:
-			st = 0
 		self.chk_autopp.set_active(st)
 
 		#Autoaway
+		st = 1
 		if self.r.plugin.config.has_key('autoaway'):
 			st = self.r.plugin.config['autoaway']
-		else:
-			st = 1
 		self.chk_autoaway.set_active(st)
+
+		#Autoawaytime
+		st = 10
 		if self.r.plugin.config.has_key('autoawaytime'):
 			st = self.r.plugin.config['autoawaytime']
-		else:
-			st = 10
 		self.spin_autoawaytime.set_value(st)
 
 		#Autoxa
+		st = 1
 		if self.r.plugin.config.has_key('autoxa'):
 			st = self.r.plugin.config['autoxa']
-		else:
-			st = 1
 		self.chk_autoxa.set_active(st)
+
+		#Autoxatime
+		st = 20
 		if self.r.plugin.config.has_key('autoxatime'):
 			st = self.r.plugin.config['autoxatime']
-		else:
-			st = 20
 		self.spin_autoxatime.set_value(st)
 
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
@@ -346,7 +381,7 @@ class prefs:
 			self.on_color_button_clicked)
 		xml.signal_connect('on_ok_clicked', self.on_ok)
 
-class away_msg:
+class awayMsg_Window:
 	"""Class for Away Message Window"""
 	def delete_event(self, widget):
 		"""close window"""
@@ -361,22 +396,21 @@ class away_msg:
 	def run(self):
 		"""Wait for Ok button to be pressed and return away messsage"""
 		rep = self.window.run()
+		msg = ''
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.txtBuffer.get_bounds()
 			msg = self.txtBuffer.get_text(beg, end, 0)
 			self.window.destroy()
-		if not msg:
-			msg = ""
 		return msg
 	
 	def __init__(self):
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Away_msg')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Away_msg')
 		self.window = xml.get_widget("Away_msg")
 		txt = xml.get_widget("textview")
 		self.txtBuffer = txt.get_buffer()
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
-class add:
+class addContact_Window:
 	"""Class for Add user window"""
 	def delete_event(self, widget):
 		"""close window"""
@@ -394,7 +428,7 @@ class add:
 		
 	def __init__(self, roster, jid=None):
 		self.r = roster
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Add')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Add')
 		self.entry_who = xml.get_widget('entry_who')
 		self.textview_sub = xml.get_widget("textview_sub")
 		if jid:
@@ -403,30 +437,30 @@ class add:
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
 
-class warning:
+class warning_Window:
 	"""Class for warning window : print a warning message"""
 	def delete_event(self, widget):
 		"""close window"""
 		self.window.destroy()
 	
 	def __init__(self, txt):
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Warning')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Warning')
 		self.window = xml.get_widget("Warning")
 		xml.get_widget('label').set_text(txt)
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
-class about:
+class about_Window:
 	"""Class for about window"""
 	def delete_event(self, widget):
 		"""close window"""
 		self.Wabout.destroy()
 		
 	def __init__(self):
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'About')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'About')
 		self.Wabout = xml.get_widget("About")
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
-class account_pref:
+class accountPreference_Window:
 	"""Class for account informations"""
 	def delete_event(self, widget):
 		"""close window"""
@@ -448,10 +482,10 @@ class account_pref:
 		name = self.entryName.get_text()
 		jid = self.entryJid.get_text()
 		if (name == ''):
-			warning('You must enter a name for this account')
+			warning_Window('You must enter a name for this account')
 			return 0
 		if (jid == '') or (string.count(jid, '@') != 1):
-			warning('You must enter a Jabber ID for this account\n\
+			warning_Window('You must enter a Jabber ID for this account\n\
 				For example : login@hostname')
 			return 0
 		else:
@@ -464,7 +498,7 @@ class account_pref:
 		#if it's a new account
 		else:
 			if name in self.accs.r.accounts:
-				warning('An account already has this name')
+				warning_Window('An account already has this name')
 				return 0
 			#if we neeed to register a new account
 			if self.check.get_active():
@@ -483,7 +517,7 @@ class account_pref:
 	
 	#info must be a dictionnary
 	def __init__(self, accs, infos = {}):
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Account')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Account')
 		self.window = xml.get_widget("Account")
 		self.entryPass = xml.get_widget("entry_password")
 		self.entryRessource = xml.get_widget("entry_ressource")
@@ -491,22 +525,21 @@ class account_pref:
 		self.entryName = xml.get_widget("entry_name")
 		self.entryJid = xml.get_widget("entry_jid")
 		self.accs = accs
+		self.mod = FALSE
 		if infos:
 			self.mod = TRUE
 			self.acc = infos['name']
 			self.init_account(infos)
 			self.check.set_sensitive(FALSE)
-		else:
-			self.mod = FALSE
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		xml.signal_connect('on_save_clicked', self.on_save_clicked)
 
-class accounts:
+class accounts_Window:
 	"""Class for accounts window : lists of accounts"""
 	def delete_event(self, widget):
 		"""close window"""
-		global Waccounts
-		Waccounts = 0
+		global accountsWindow
+		accountsWindow = 0
 		self.window.destroy()
 		
 	def init_accounts(self):
@@ -525,7 +558,7 @@ class accounts:
 
 	def on_new_clicked(self, widget):
 		"""When new button is clicked : open an account information window"""
-		account_pref(self)
+		accountPreference_Window(self)
 
 	def on_delete_clicked(self, widget):
 		"""When delete button is clicked :
@@ -551,11 +584,11 @@ class accounts:
 			'@' +  self.r.plugin.accounts[account]["hostname"]
 		infos['password'] = self.r.plugin.accounts[account]["password"]
 		infos['ressource'] = self.r.plugin.accounts[account]["ressource"]
-		account_pref(self, infos)
+		accountPreference_Window(self, infos)
 		
 	def __init__(self, roster):
 		self.r = roster
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Accounts')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Accounts')
 		self.window = xml.get_widget("Accounts")
 		self.treeview = xml.get_widget("treeview")
 		self.modButt = xml.get_widget("modify_button")
@@ -577,7 +610,7 @@ class accounts:
 		xml.signal_connect('on_modify_clicked', self.on_modify_clicked)
 		self.init_accounts()
 
-class confirm:
+class confirm_Window:
 	"""Class for confirmation window :
 	window that appears to confirm the removal of a contact"""
 	def delete_event(self, widget):
@@ -596,7 +629,7 @@ class confirm:
 		self.delete_event(self)
 	
 	def __init__(self, roster, iter):
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Confirm')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Confirm')
 		self.window = xml.get_widget('Confirm')
 		self.r = roster
 		self.iter = iter
@@ -606,7 +639,7 @@ class confirm:
 		xml.signal_connect('on_okbutton_clicked', self.req_usub)
 		xml.signal_connect('gtk_widget_destroy', self.delete_event)
 
-class authorize:
+class authorize_Window:
 	"""Class for authorization window :
 	window that appears when a user wants to add us to his/her roster"""
 	def delete_event(self, widget):
@@ -618,7 +651,7 @@ class authorize:
 		self.r.queueOUT.put(('AUTH', self.jid))
 		self.delete_event(self)
 		if not self.r.l_contact.has_key(self.jid):
-			add(self.r, self.jid)
+			addContact_Window(self.r, self.jid)
 	
 	def deny(self, widget):
 		"""refuse the request"""
@@ -626,7 +659,7 @@ class authorize:
 		self.delete_event(self)
 	
 	def __init__(self, roster, jid):
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Sub_req')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Sub_req')
 		self.window = xml.get_widget('Sub_req')
 		self.r = roster
 		self.jid = jid
@@ -635,7 +668,7 @@ class authorize:
 		xml.signal_connect('on_button_deny_clicked', self.deny)
 		xml.signal_connect('on_button_close_clicked', self.delete_event)
 
-class agent_reg:
+class agentRegistration_Window:
 	"""Class for agent registration window :
 	window that appears when we want to subscribe to an agent"""
 	def delete_event(self, widget):
@@ -668,7 +701,7 @@ class agent_reg:
 		self.delete_event(self)
 	
 	def __init__(self, agent, infos, roster):
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'agent_reg')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'agent_reg')
 		self.agent = agent
 		self.infos = infos
 		self.r = roster
@@ -682,13 +715,13 @@ class agent_reg:
 		xml.signal_connect('on_button_cancel_clicked', self.delete_event)
 		xml.signal_connect('on_button_ok_clicked', self.on_ok)
 
-class browser:
-	"""Class for rbowser agent window :
+class browseAgent_Window:
+	"""Class for bowser agent window :
 	to know the agents on the selected server"""
 	def delete_event(self, widget):
 		"""close window"""
-		global Wbrowser
-		Wbrowser = 0
+		global browserWindow
+		browserWindow = 0
 		self.window.destroy()
 
 	def browse(self):
@@ -719,7 +752,7 @@ class browser:
 		self.delete_event(self)
 		
 	def __init__(self, roster):
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'browser')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'browser')
 		self.window = xml.get_widget('browser')
 		self.treeview = xml.get_widget('treeview')
 		self.r = roster
@@ -740,9 +773,9 @@ class browser:
 		if self.r.connected:
 			self.browse()
 		else:
-			warning("You must be connected to view Agents")
+			warning_Window("You must be connected to view Agents")
 
-class message:
+class message_Window:
 	"""Class for chat window"""
 	def delete_event(self, widget):
 		"""close window"""
@@ -816,15 +849,16 @@ class message:
 	def __init__(self, user, roster):
 		self.user = user
 		self.r = roster
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Chat')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Chat')
 		self.hbox = xml.get_widget('hbox1')
 		self.hbox.set_property('resize-mode', 2)
 		self.window = xml.get_widget('Chat')
 		self.window.set_title('Chat with ' + user.name)
 		self.img = xml.get_widget('image')
 		self.img.set_from_pixbuf(self.r.pixbufs[user.show])
-		xml.get_widget('label_contact').set_text(user.name + ' <'\
+		xml.get_widget('button_contact').set_label(user.name + ' <'\
 			+ user.jid + '>')
+		xml.get_widget('button_contact').set_resize_mode(gtk.RESIZE_QUEUE)
 		self.message = xml.get_widget('message')
 		self.message.grab_focus()
 		self.conversation = xml.get_widget('conversation')
@@ -850,7 +884,7 @@ class message:
 			color = '#00ff00' #green
 		self.tagStatus.set_property("foreground", color)
 
-class roster:
+class roster_Window:
 	"""Class for main gtk window"""
 	def add_user(self, u):
 		"""Add a user to the roster and add groups if they aren't in roster"""
@@ -957,8 +991,8 @@ class roster:
 		u.status = status
 
 	def on_info(self, widget, jid):
-		"""Call info_user class to display user's information"""
-		info_user(self.l_contact[jid]['user'], self)
+		"""Call infoUser_Window class to display user's information"""
+		infoUser_Window(self.l_contact[jid]['user'], self)
 	
 	def mk_menu_c(self, event, iter):
 		"""Make user's popup menu"""
@@ -1057,12 +1091,12 @@ class roster:
 	
 	def on_req_usub(self, widget, iter):
 		"""Remove a user"""
-		window_confirm = confirm(self, iter)
+		window_confirm = confirm_Window(self, iter)
 
 	def on_status_changed(self, widget):
 		"""When we change our status"""
 		if widget.name != 'online' and widget.name != 'offline':
-			w = away_msg()
+			w = awayMsg_Window()
 			txt = w.run()
 		else:
 			txt = widget.name
@@ -1071,30 +1105,31 @@ class roster:
 
 	def on_prefs(self, widget):
 		"""When preferences is selected :
-		call the prefs class"""
-		window = prefs(self)
+		call the preference_Window class"""
+		window = preference_Window(self)
 
 	def on_add(self, widget):
 		"""When add user is selected :
 		call the add class"""
-		window_add = add(self)
+		window_add = addContact_Window(self)
 
 	def on_about(self, widget):
 		"""When about is selected :
 		call the about class"""
-		window_about = about()
+		window_about = about_Window()
 
 	def on_accounts(self, widget):
 		"""When accounts is seleted :
 		call the accounts class to modify accounts"""
-		global Waccounts
-		if not Waccounts:
-			Waccounts = accounts(self)
+		global accountsWindow
+		if not accountsWindow:
+			accountsWindow = accounts_Window(self)
 	
 	def on_quit(self, widget):
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
 		self.queueOUT.put(('QUIT',''))
+		print "plugin gtkgui stopped"
 		gtk.mainquit()
 
 	def on_row_activated(self, widget, path, col=0):
@@ -1112,7 +1147,7 @@ class roster:
 			if self.tab_messages.has_key(jid):
 				self.tab_messages[jid].window.present()
 			elif self.l_contact.has_key(jid):
-				self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
+				self.tab_messages[jid] = message_Window(self.l_contact[jid]['user'], self)
 				if self.tab_queues.has_key(jid):
 					self.tab_messages[jid].read_queue(self.tab_queues[jid])
 
@@ -1139,7 +1174,7 @@ class roster:
 			if self.tab_messages.has_key(jid):
 				self.tab_messages[jid].window.present()
 			elif self.l_contact.has_key(jid):
-				self.tab_messages[jid] = message(self.l_contact[jid]['user'], self)
+				self.tab_messages[jid] = message_Window(self.l_contact[jid]['user'], self)
 				if self.tab_queues.has_key(jid):
 					self.tab_messages[jid].read_queue(self.tab_queues[jid])
 		else:
@@ -1151,9 +1186,9 @@ class roster:
 	def on_browse(self, widget):
 		"""When browse agent is selected :
 		Call browse class"""
-		global Wbrowser
-		if not Wbrowser:
-			Wbrowser = browser(self)
+		global browserWindow
+		if not browserWindow:
+			browserWindow = browseAgent_Window(self)
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
@@ -1161,17 +1196,21 @@ class roster:
 		self.pixbufs = {}
 		for state in ('online', 'away', 'xa', 'dnd', 'offline', \
 			'requested', 'message', 'opened', 'closed', 'not in list'):
-			#open an animated gif file if it exists oterelse a xpm file
-			if not os.path.exists(self.path + state + '.gif'):
-				if not os.path.exists(self.path + state + '.xpm'):
-					print 'No such file : ' + self.path + state + '.gif / xpm'
-					self.pixbufs[state] = None
-				else:
-					pix = gtk.gdk.pixbuf_new_from_file(self.path + state + '.xpm')
-					self.pixbufs[state] = pix
-			else:
-				pix = gtk.gdk.pixbufAnimation(self.path + state + '.gif')
+			# try to open a pixfile with the correct method
+			files = []
+			files.append(self.path + state + '.gif')
+			files.append(self.path + state + '.png')
+			files.append(self.path + state + '.xpm')
+			self.pixbufs[state] = None
+			for file in files:
+				if not os.path.exists(file):
+					continue
+				fct = gtk.gdk.pixbuf_new_from_file
+				if file.find('.gif') != -1:
+					fct = gtk.gdk.pixbufAnimation
+				pix = fct(file)
 				self.pixbufs[state] = pix
+				break
 
 	def on_show_off(self, widget):
 		"""when show offline option is changed :
@@ -1181,7 +1220,7 @@ class roster:
 
 	def __init__(self, queueOUT, plug):
 		# FIXME : handle no file ...
-		xml = gtk.glade.XML('plugins/gtkgui/gtkgui.glade', 'Gajim')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'Gajim')
 		self.window =  xml.get_widget('Gajim')
 		self.tree = xml.get_widget('treeview')
 		self.plugin = plug
@@ -1268,17 +1307,25 @@ class plugin:
 	"""Class called by the core in a new thread"""
 	def wait(self, what):
 		"""Wait for a message from Core"""
-		#TODO: timeout, save messages that don't fit
+		#TODO: timeout
+		temp_q = Queue.Queue(50)
 		while 1:
 			if not self.queueIN.empty():
 				ev = self.queueIN.get()
-				if ev[0] == what:
-					return ev[1]
+				if ev[0] == what and ev[1][0] == 'GtkGui':
+					#Restore messages
+					while not temp_q.empty():
+						ev2 = temp_q.get()
+						self.queueIN.put(ev)
+					return ev[1][1]
+				else:
+					#Save messages
+					temp_q.put(ev)
 			time.sleep(0.1)
 		
 	def read_queue(self):
 		"""Read queue from the core and execute commands from it"""
-		global Wbrowser
+		global browserWindow
 		model = self.r.tree.get_model()
 		while self.queueIN.empty() == 0:
 			ev = self.queueIN.get()
@@ -1287,7 +1334,7 @@ class plugin:
 				self.r.mklists(ev[1])
 				self.r.draw_roster()
 			elif ev[0] == 'WARNING':
-				warning(ev[1])
+				warning_Window(ev[1])
 			elif ev[0] == 'STATUS':
 				st = ""
 				for i in range(7):
@@ -1302,8 +1349,8 @@ class plugin:
 						self.r.chg_status(j, 'offline', 'Disconnected')
 				elif self.r.connected == 0:
 					self.r.connected = 1
-					self.sleeper = common.sleepy.Sleepy(\
-						self.autoawaytime*60, self.autoxatime*60)
+					self.sleeper = None#common.sleepy.Sleepy(\
+						#self.autoawaytime*60, self.autoxatime*60)
 
 			elif ev[0] == 'NOTIFY':
 				jid = string.split(ev[1][0], '/')[0]
@@ -1366,12 +1413,12 @@ class plugin:
 					if not self.r.tab_messages.has_key(jid):
 						if self.r.l_contact.has_key(jid):
 							self.r.tab_messages[jid] = \
-								message(self.r.l_contact[jid]['user'], self.r)
+								message_Window(self.r.l_contact[jid]['user'], self.r)
 					if self.r.tab_messages.has_key(jid):
 						self.r.tab_messages[jid].print_conversation(ev[1][1])
 					
 			elif ev[0] == 'SUBSCRIBE':
-				authorize(self.r, ev[1])
+				authorize_Window(self.r, ev[1])
 			elif ev[0] == 'SUBSCRIBED':
 				jid = ev[1]['jid']
 				if self.r.l_contact.has_key(jid):
@@ -1383,25 +1430,25 @@ class plugin:
 					user1 = user(jid, jid, ['general'], 'online', \
 						'online', 'to', ev[1]['ressource'])
 					self.r.add_user(user1)
-				warning("You are now authorized by " + jid)
+				warning_Window("You are now authorized by " + jid)
 			elif ev[0] == 'UNSUBSCRIBED':
-				warning("You are now unsubscribed by " + jid)
+				warning_Window("You are now unsubscribed by " + jid)
 				#TODO: change icon
 			elif ev[0] == 'AGENTS':
-				if Wbrowser:
-					Wbrowser.agents(ev[1])
+				if browserWindow:
+					browserWindow.agents(ev[1])
 			elif ev[0] == 'AGENT_INFO':
 				if not ev[1][1].has_key('instructions'):
-					warning('error contacting %s' % ev[1][0])
+					warning_Window('error contacting %s' % ev[1][0])
 				else:
-					Wreg = agent_reg(ev[1][0], ev[1][1], self.r)
+					Wreg = agentRegistration_Window(ev[1][0], ev[1][1], self.r)
 			#('ACC_OK', (hostname, login, pasword, name, ressource))
 			elif ev[0] == 'ACC_OK':
 				self.accounts[ev[1][3]] =  {'ressource': ev[1][4], \
 					'password': ev[1][2], 'hostname': ev[1][0], 'name': ev[1][1]}
 				self.r.queueOUT.put(('CONFIG', ('accounts', self.r.plugin.accounts)))
-				if (Waccounts != 0):
-					Waccounts.init_accounts()
+				if (accountsWindow != 0):
+					accountsWindow.init_accounts()
 			elif ev[0] == 'QUIT':
 				self.r.on_quit(self)
 		return 1
@@ -1436,12 +1483,12 @@ class plugin:
 		gtk.threads_init()
 		gtk.threads_enter()
 		self.queueIN = quIN
-		quOUT.put(('ASK_CONFIG', 'GtkGui'))
+		quOUT.put(('ASK_CONFIG', ('GtkGui', 'GtkGui')))
 		self.config = self.wait('CONFIG')
-		quOUT.put(('ASK_CONFIG', 'accounts'))
+		quOUT.put(('ASK_CONFIG', ('GtkGui', 'accounts')))
 		self.accounts = self.wait('CONFIG')
 		#TODO: if no config : default config and save it
-		self.r = roster(quOUT, self)
+		self.r = roster_Window(quOUT, self)
 		if self.config.has_key('autoaway'):
 			self.autoaway = self.config['autoaway']
 		else:
