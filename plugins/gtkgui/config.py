@@ -1001,6 +1001,8 @@ class Account_modification_window:
 		if infos.has_key('autoconnect'):
 			self.xml.get_widget('autoconnect_checkbutton').set_active(\
 				infos['autoconnect'])
+		#default is checked
+		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(1)
 		if infos.has_key('sync_with_global_status'):
 			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(\
 				infos['sync_with_global_status'])
@@ -1032,6 +1034,13 @@ class Account_modification_window:
 		if not self.xml.get_widget('log_history_checkbutton').get_active():
 			list_no_log_for.append(name)
 		self.infos['no_log_for'] = ' '.join(list_no_log_for)
+
+		sync_with_global_status = 0
+		if self.xml.get_widget('sync_with_global_status_checkbutton').\
+			get_active():
+			sync_with_global_status = 1
+		self.plugin.accounts[self.account]['sync_with_global_status'] =\
+			sync_with_global_status
 
 		use_proxy = 0
 		if self.xml.get_widget('use_proxy_checkbutton').get_active():
@@ -1074,9 +1083,6 @@ class Account_modification_window:
 			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
 		#if we are modifying an account
 		if self.modify:
-			active = 1
-			if self.plugin.accounts[self.account].has_key('active'):
-				active = self.plugin.accounts[self.account]['active']
 			#if we modify the name of the account
 			if name != self.account:
 				#update variables
@@ -1105,8 +1111,8 @@ class Account_modification_window:
 				'autoconnect': autoconnect, 'use_proxy': use_proxy, 'proxyhost': \
 				proxyhost, 'proxyport': proxyport, 'keyid': keyID, \
 				'keyname': key_name, 'savegpgpass': save_gpg_password, \
-				'gpgpassword': gpg_password, 'active': active, 'no_log_for': \
-				self.infos['no_log_for']}
+				'gpgpassword': gpg_password, 'sync_with_global_status':\
+				sync_with_global_status, 'no_log_for': self.infos['no_log_for']}
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 				'GtkGui'))
 			if save_password:
@@ -1133,7 +1139,7 @@ class Account_modification_window:
 			'use_proxy': use_proxy, 'proxyhost': proxyhost, \
 			'proxyport': proxyport, 'keyid': keyID, 'keyname': key_name, \
 			'savegpgpass': save_gpg_password, 'gpgpassword': gpg_password,\
-			'active': 1, 'no_log_for': self.infos['no_log_for']}
+			'sync_with_global_status': 1, 'no_log_for': self.infos['no_log_for']}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 			'GtkGui'))
 		if save_password:
@@ -1203,7 +1209,7 @@ class Account_modification_window:
 			'use_proxy': use_proxy, 'proxyhost': proxyhost, \
 			'proxyport': proxyport, 'keyid': keyID, 'keyname': key_name, \
 			'savegpgpass': save_gpg_password, 'gpgpassword': gpg_password,\
-			'active': 1, 'no_log_for': no_log_for}
+			'sync_with_global_status': 1, 'no_log_for': no_log_for}
 		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 			'GtkGui'))
 

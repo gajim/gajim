@@ -2334,8 +2334,8 @@ class roster_window:
 			self.set_cb()
 			return
 		for acct in accounts:
-			if self.plugin.accounts[acct].has_key('active'):
-				if not self.plugin.accounts[acct]['active']:
+			if self.plugin.accounts[acct].has_key('sync_with_global_status'):
+				if not self.plugin.accounts[acct]['sync_with_global_status']:
 					continue
 			self.send_status(acct, status, message)
 	
