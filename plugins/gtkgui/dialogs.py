@@ -217,12 +217,13 @@ class passphrase_Window:
 	"""Class for Passphrase Window"""
 	def run(self):
 		"""Wait for Ok button to be pressed and return passphrase"""
-		rep = self.xml.get_widget("Passphrase").run()
+		win = self.xml.get_widget("Passphrase")
+		rep = win.run()
 		if rep == gtk.RESPONSE_OK:
 			msg = self.entry.get_text()
 		else:
 			msg = -1
-		self.xml.get_widget("Passphrase").destroy()
+		win.destroy()
 		return msg
 
 	def on_key_pressed(self, widget, event):
