@@ -21,7 +21,6 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 from gtk import TRUE, FALSE
-import trayicon
 import gtk.glade,gobject
 import os,string,time,Queue
 import common.optparser,common.sleepy
@@ -1232,6 +1231,18 @@ class roster_Window:
 
 		self.draw_roster()
 
+class systrayDummy:
+	"""Class when we don't want icon in the systray"""
+	def add_jid(self, jid, account):
+		pass
+	def remove_jid(self, jid, account):
+		pass
+	def set_status(self, status):
+		pass
+	def __init__(self):
+		pass
+	
+
 class systray:
 	"""Class for icon in the systray"""
 	def set_img(self):
@@ -1667,6 +1678,7 @@ class plugin:
 			'autoawaytime':10,\
 			'autoxa':1,\
 			'autoxatime':20,\
+			'trayicon':1,\
 			'iconstyle':'sun',\
 			'inmsgcolor':'#ff0000',\
 			'outmsgcolor': '#0000ff',\
@@ -1694,7 +1706,18 @@ class plugin:
 		gtk.timeout_add(100, self.read_queue)
 		gtk.timeout_add(1000, self.read_sleepy)
 		self.sleeper = None
-		self.systray = systray(self)
+		if self.config['trayicon']:
+			try:
+				global trayicon
+				import trayicon
+			except:
+				self.config['trayicon'] = 0
+				self.send('CONFIG', None, ('GtkGui', self.config))
+				self.systray = systrayDummy()
+			else:
+				self.systray = systray(self)
+		else:
+			self.systray = systrayDummy()
 		gtk.main()
 		gtk.threads_leave()
 

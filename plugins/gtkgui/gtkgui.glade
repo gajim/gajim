@@ -3274,72 +3274,6 @@ on the server.</property>
 		  <property name="visible">True</property>
 
 		  <child>
-		    <widget class="GtkFrame" id="frame7">
-		      <property name="width_request">150</property>
-		      <property name="height_request">70</property>
-		      <property name="visible">True</property>
-		      <property name="label_xalign">0</property>
-		      <property name="label_yalign">0.5</property>
-		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-		      <child>
-			<widget class="GtkCombo" id="combo_iconstyle">
-			  <property name="visible">True</property>
-			  <property name="value_in_list">True</property>
-			  <property name="allow_empty">False</property>
-			  <property name="case_sensitive">False</property>
-			  <property name="enable_arrow_keys">True</property>
-			  <property name="enable_arrows_always">False</property>
-
-			  <child internal-child="entry">
-			    <widget class="GtkEntry" id="entry2">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="editable">True</property>
-			      <property name="visibility">True</property>
-			      <property name="max_length">0</property>
-			      <property name="text" translatable="yes"></property>
-			      <property name="has_frame">True</property>
-			      <property name="invisible_char" translatable="yes">*</property>
-			      <property name="activates_default">False</property>
-			    </widget>
-			  </child>
-
-			  <child internal-child="list">
-			    <widget class="GtkList" id="list2">
-			      <property name="visible">True</property>
-			      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label69">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Icon Style</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="type">label_item</property>
-			</packing>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="x">210</property>
-		      <property name="y">0</property>
-		    </packing>
-		  </child>
-
-		  <child>
 		    <widget class="GtkFrame" id="frame8">
 		      <property name="width_request">200</property>
 		      <property name="height_request">200</property>
@@ -3533,6 +3467,137 @@ on the server.</property>
 		    </widget>
 		    <packing>
 		      <property name="x">0</property>
+		      <property name="y">0</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkFrame" id="frame13">
+		      <property name="width_request">144</property>
+		      <property name="height_request">112</property>
+		      <property name="visible">True</property>
+		      <property name="label_xalign">0</property>
+		      <property name="label_yalign">0.5</property>
+		      <property name="shadow_type">GTK_SHADOW_NONE</property>
+
+		      <child>
+			<widget class="GtkVBox" id="vbox26">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">0</property>
+
+			  <child>
+			    <widget class="GtkCheckButton" id="chk_trayicon">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Icon in systray</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <placeholder/>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label138">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Systray</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">True</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="type">label_item</property>
+			</packing>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="x">208</property>
+		      <property name="y">72</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkFrame" id="frame7">
+		      <property name="width_request">142</property>
+		      <property name="height_request">64</property>
+		      <property name="visible">True</property>
+		      <property name="label_xalign">0</property>
+		      <property name="label_yalign">0.5</property>
+		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+		      <child>
+			<widget class="GtkCombo" id="combo_iconstyle">
+			  <property name="visible">True</property>
+			  <property name="value_in_list">True</property>
+			  <property name="allow_empty">False</property>
+			  <property name="case_sensitive">False</property>
+			  <property name="enable_arrow_keys">True</property>
+			  <property name="enable_arrows_always">False</property>
+
+			  <child internal-child="entry">
+			    <widget class="GtkEntry" id="entry2">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="editable">True</property>
+			      <property name="visibility">True</property>
+			      <property name="max_length">0</property>
+			      <property name="text" translatable="yes"></property>
+			      <property name="has_frame">True</property>
+			      <property name="invisible_char" translatable="yes">*</property>
+			      <property name="activates_default">False</property>
+			    </widget>
+			  </child>
+
+			  <child internal-child="list">
+			    <widget class="GtkList" id="list2">
+			      <property name="visible">True</property>
+			      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label69">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Icon Style</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="type">label_item</property>
+			</packing>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="x">210</property>
 		      <property name="y">0</property>
 		    </packing>
 		  </child>

@@ -226,6 +226,12 @@ class preference_Window:
 			self.plugin.sleeper = common.sleepy.Sleepy(\
 				self.plugin.config['autoawaytime']*60, \
 				self.plugin.config['autoxatime']*60)
+		#trayicon
+		trayicon = self.chk_trayicon.get_active()
+		if trayicon:
+			self.plugin.config['trayicon'] = 1
+		else:
+			self.plugin.config['trayicon'] = 0
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
 		self.plugin.roster.draw_roster()
 		
@@ -260,6 +266,7 @@ class preference_Window:
 		self.spin_autoawaytime = self.xml.get_widget('spin_autoawaytime')
 		self.chk_autoxa = self.xml.get_widget('chk_autoxa')
 		self.spin_autoxatime = self.xml.get_widget('spin_autoxatime')
+		self.chk_trayicon = self.xml.get_widget('chk_trayicon')
 		self.notebook = self.xml.get_widget('preferences_notebook')
 		
 		button = self.xml.get_widget('lookfeel_button')
@@ -322,6 +329,10 @@ class preference_Window:
 		#Autoxatime
 		st = self.plugin.config['autoxatime']
 		self.spin_autoxatime.set_value(st)
+
+		#trayicon
+		st = self.plugin.config['trayicon']
+		self.chk_trayicon.set_active(st)
 
 		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
 		self.xml.signal_connect('on_but_col_clicked', \
