@@ -648,13 +648,13 @@ class roster_Window:
 		acct_iter = model.get_iter((path[0]))
 		account = model.get_value(acct_iter, 3)
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_(u"Log on"))
+		item = gtk.MenuItem(_("Log on"))
 		if self.contacts[account][jid][0].show != 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
 		item.connect("activate", self.on_agent_logging, jid, 'available', account)
 
-		item = gtk.MenuItem(_(u"Log off"))
+		item = gtk.MenuItem(_("Log off"))
 		if self.contacts[account][jid][0].show == 'offline':
 			item.set_sensitive(FALSE)
 		menu.append(item)
