@@ -609,7 +609,8 @@ class tabbed_chat_window:
 		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
 		tags = widget.get_iter_at_location(x, y).get_tags()
 		if self.change_cursor:
-			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(gtk.gdk.XTERM)
+			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(\
+				gtk.gdk.Cursor(gtk.gdk.XTERM))
 			self.change_cursor = None
 		for tag in tags:
 			if tag == widget.get_buffer().get_tag_table().lookup('url') or \
@@ -794,8 +795,9 @@ class tabbed_chat_window:
 		end_rect = conversation_textview.get_iter_location(end_iter)
 		visible_rect = conversation_textview.get_visible_rect()
 		end = False
-		if end_rect.y <= (visible_rect.y + visible_rect.height):
-			#we are at the end
+		if end_rect.y <= (visible_rect.y + visible_rect.height) or \
+			(contact and contact != 'status'):
+			#we are at the end or we are sending something
 			end = True
 			conversation_textview.scroll_to_mark(conversation_buffer.\
 				get_mark('end'), 0.1, 0, 0, 0)
