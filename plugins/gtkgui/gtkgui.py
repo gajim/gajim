@@ -319,6 +319,9 @@ class message_Window:
 		#print queued messages
 		if plugin.queues[account].has_key(user.jid):
 			self.read_queue(plugin.queues[account][user.jid])
+		if self.user.show != 'online':
+			self.print_conversation(_("%s is now %s (%s)") % (user.name, \
+				user.show, user.status), 'status')
 
 class gc:
 	def delete_event(self, widget):
