@@ -582,12 +582,12 @@ class new_message_window: #FIXME: NOT READY
 		#SO USER ID SHOULD BECOME JID and sent to new_chat()
 		jid = userid
 		
-		# use User class, new_chat expects it that way
-		user = gtkgui.User(jid, jid, ['not in the roster'], \
+		if not self.contacts[account].has_key(jid):
+			# use User class, new_chat expects it that way
+			user = gtkgui.User(jid, jid, ['not in the roster'], \
 				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
-		self.plugin.roster.contacts[self.account][jid] = [user]
-		#FIXME: don't add him if we already have him (see on_message code on gtkgui.py)
-		self.plugin.roster.add_user_to_roster(user.jid, self.account)
+			self.plugin.roster.contacts[self.account][jid] = [user]
+			self.plugin.roster.add_user_to_roster(user.jid, self.account)
 		self.plugin.roster.new_chat(user, self.account)
 		widget.get_toplevel().destroy()
 
