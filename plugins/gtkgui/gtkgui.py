@@ -805,7 +805,7 @@ class roster_Window:
 				'not in list', 'not in list', 'none', '')
 			self.add_user_to_roster(user1, account)
 		iter = self.get_user_iter(jid, account)
-		path = self.tree.get_model().get_path(iter[0])
+		path = self.tree.get_model().get_path(iter)
 		autopopup = self.plugin.config['autopopup']
 		if autopopup == 0 and not \
 			self.plugin.windows[account]['chats'].has_key(jid):
