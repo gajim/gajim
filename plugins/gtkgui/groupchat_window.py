@@ -88,8 +88,9 @@ class Groupchat_window(Chat):
 			if self.childs[jid] == new_child: 
 				new_jid = jid
 				break
-		self.set_subject(self, new_jid, subject)
-		Chat.on_chat_notebook_switch_page(notebook, page, page_num)
+		self.xml.get_widget('subject_entry').set_text(\
+			self.subjects[new_jid])
+		Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
 		model = self.list_treeview[room_jid].get_model()
