@@ -1842,6 +1842,19 @@ class roster_window:
 				path = model.get_path(iter)
 				model.set_value(iter, 5, True)
 				self.tree.set_cursor(path, self.tree.get_column(0), True)
+		if event.keyval == gtk.keysyms.Delete:
+			treeselection = self.tree.get_selection()
+			model, iter = treeselection.get_selected()
+			if not iter:
+				return
+			jid = model.get_value(iter, 3)
+			account = model.get_value(iter, 4)
+			type = model.get_value(iter, 2)
+			if type == 'user':
+				user = self.contacts[account][jid][0]
+				self.on_req_usub(widget, user, account)
+			elif type == 'agent':
+				self.on_remove_agent(widget, jid, account)
 		return False
 	
 	def on_roster_treeview_button_press_event(self, widget, event):
