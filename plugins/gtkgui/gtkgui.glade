@@ -2163,7 +2163,7 @@ on the server as a vCard</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="Add">
+<widget class="GtkWindow" id="add_window">
   <property name="border_width">5</property>
   <property name="width_request">400</property>
   <property name="height_request">334</property>
@@ -2292,7 +2292,7 @@ on the server as a vCard</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="entry_login">
+	    <widget class="GtkEntry" id="uid_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
@@ -2302,7 +2302,7 @@ on the server as a vCard</property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char">*</property>
 	      <property name="activates_default">False</property>
-	      <signal name="changed" handler="on_entry_login_changed" last_modification_time="Wed, 02 Feb 2005 22:34:32 GMT"/>
+	      <signal name="changed" handler="on_uid_entry_changed" last_modification_time="Mon, 28 Feb 2005 23:05:24 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -2314,10 +2314,10 @@ on the server as a vCard</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkComboBox" id="combobox_agent">
+	    <widget class="GtkComboBox" id="agent_combobox">
 	      <property name="visible">True</property>
 	      <property name="items" translatable="yes"></property>
-	      <signal name="changed" handler="on_cb_changed" last_modification_time="Wed, 02 Feb 2005 22:32:45 GMT"/>
+	      <signal name="changed" handler="on_agent_combobox_changed" last_modification_time="Mon, 28 Feb 2005 22:56:52 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -2330,7 +2330,7 @@ on the server as a vCard</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="entry_who">
+	    <widget class="GtkEntry" id="jid_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">False</property>
@@ -2351,7 +2351,7 @@ on the server as a vCard</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="entry_pseudo">
+	    <widget class="GtkEntry" id="nickname_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
@@ -2372,7 +2372,7 @@ on the server as a vCard</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkCheckButton" id="checkbutton_auth">
+	    <widget class="GtkCheckButton" id="auto_authorize_checkbutton">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label" translatable="yes">Automatically authorize contact</property>
@@ -2406,11 +2406,11 @@ on the server as a vCard</property>
 	  <property name="can_focus">True</property>
 	  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 	  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-	  <property name="shadow_type">GTK_SHADOW_NONE</property>
+	  <property name="shadow_type">GTK_SHADOW_IN</property>
 	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	  <child>
-	    <widget class="GtkTextView" id="textview_sub">
+	    <widget class="GtkTextView" id="message_textview">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
@@ -2455,7 +2455,7 @@ on the server as a vCard</property>
 	  <property name="spacing">10</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button11">
+	    <widget class="GtkButton" id="cancel_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -2463,18 +2463,18 @@ on the server as a vCard</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_cancel_clicked" last_modification_time="Wed, 17 Mar 2004 19:44:15 GMT"/>
+	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Mon, 28 Feb 2005 22:46:06 GMT"/>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button_sub">
+	    <widget class="GtkButton" id="subscribe_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_button_sub_clicked" last_modification_time="Sun, 26 Oct 2003 21:38:59 GMT"/>
+	      <signal name="clicked" handler="on_subscribe_button_clicked" last_modification_time="Mon, 28 Feb 2005 22:46:16 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment39">

@@ -266,85 +266,81 @@ class awayMsg_Window:
 
 class addContact_Window:
 	"""Class for Add user window"""
-	def delete_event(self, widget):
-		"""close window"""
-		del self.plugin.windows['add']
-
-	def on_cancel(self, widget):
+	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
 		widget.get_toplevel().destroy()
 
-	def on_subscribe(self, widget):
+	def on_subscribe_button_clicked(self, widget):
 		"""When Subscribe button is clicked"""
-		textview_sub = self.xml.get_widget("textview_sub")
-		who = self.xml.get_widget('entry_who').get_text()
-		pseudo = self.xml.get_widget('entry_pseudo').get_text()
-		if not who:
+		jid = self.xml.get_widget('jid_entry').get_text()
+		nickname = self.xml.get_widget('nickname_entry').get_text()
+		if not jid:
 			return
-		if who.find('@') < 0:
+		if jid.find('@') < 0:
 			warning_Window(_("The contact's name must be something like login@hostname"))
 			return
-		buf = textview_sub.get_buffer()
-		start_iter = buf.get_start_iter()
-		end_iter = buf.get_end_iter()
-		txt = buf.get_text(start_iter, end_iter, 0)
-		self.plugin.roster.req_sub(self, who, txt, self.account, pseudo)
-		if self.xml.get_widget('checkbutton_auth').get_active():
-			self.plugin.send('AUTH', self.account, who)
+		message_buffer = self.xml.get_widget('message_textview').get_buffer()
+		start_iter = message_buffer.get_start_iter()
+		end_iter = message_buffer.get_end_iter()
+		message = message_buffer.get_text(start_iter, end_iter, 0)
+		self.plugin.roster.req_sub(self, jid, message, self.account, nickname)
+		if self.xml.get_widget('auto_authorize_checkbutton').get_active():
+			self.plugin.send('AUTH', self.account, jid)
 		widget.get_toplevel().destroy()
 		
-	def fill_who(self):
-		cb = self.xml.get_widget('combobox_agent')
-		model = cb.get_model()
-		index = cb.get_active()
-		str = self.xml.get_widget('entry_login').get_text()
+	def fill_jid(self):
+		agent_combobox = self.xml.get_widget('agent_combobox')
+		model = agent_combobox.get_model()
+		index = agent_combobox.get_active()
+		jid = self.xml.get_widget('uid_entry').get_text()
 		if index > 0:
-			str = str.replace("@", "%")
+			jid = jid.replace('@', '%')
 		agent = model[index][1]
 		if agent:
-			str += "@" + agent
-		self.xml.get_widget('entry_who').set_text(str)
+			jid += '@' + agent
+		self.xml.get_widget('jid_entry').set_text(jid)
 
-	def on_cb_changed(self, widget):
-		self.fill_who()
+	def on_agent_combobox_changed(self, widget):
+		self.fill_jid()
 
 	def guess_agent(self):
-		login = self.xml.get_widget('entry_login').get_text()
-		cb = self.xml.get_widget('combobox_agent')
-		model = cb.get_model()
+		uid = self.xml.get_widget('uid_entry').get_text()
+		agent_combobox = self.xml.get_widget('agent_combobox')
+		model = agent_combobox.get_model()
 		
 		#If login contains only numbers, it's probably an ICQ number
 		try:
-			string.atoi(login)
+			string.atoi(uid)
 		except:
 			pass
 		else:
 			if 'ICQ' in self.agents:
-				cb.set_active(self.agents.index('ICQ'))
+				agent_combobox.set_active(self.agents.index('ICQ'))
 				return
-		cb.set_active(0)
+		agent_combobox.set_active(0)
 
-	def set_pseudo(self):
-		login = self.xml.get_widget('entry_login').get_text()
-		pseudo = self.xml.get_widget('entry_pseudo').get_text()
-		if pseudo == self.old_login_value:
-			self.xml.get_widget('entry_pseudo').set_text(login)
+	def set_nickname(self):
+		uid = self.xml.get_widget('uid_entry').get_text()
+		nickname = self.xml.get_widget('nickname_entry').get_text()
+		if nickname == self.old_uid_value:
+			self.xml.get_widget('nickname_entry').set_text(uid.split('@')[0])
 			
-	def on_entry_login_changed(self, widget):
+	def on_uid_entry_changed(self, widget):
 		self.guess_agent()
-		self.set_pseudo()
-		self.fill_who()
-		self.old_login_value = self.xml.get_widget('entry_login').get_text()
+		self.set_nickname()
+		self.fill_jid()
+		uid = self.xml.get_widget('uid_entry').get_text()
+		self.old_uid_value = uid.split('@')[0]
 		
 	def __init__(self, plugin, account, jid=None):
 		if not plugin.connected[account]:
-			warning_Window(_("You must be connected to add a contact"))
+			warning_Window(_('You must be connected to add a contact'))
 			return
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'Add', APP)
-		self.window = self.xml.get_widget('Add')
-		self.old_login_value = ''
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_window', APP)
+		self.window = self.xml.get_widget('add_window')
+		self.old_uid_value = ''
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		liststore.append(['Jabber', ''])
 		self.agents = ['Jabber']
@@ -354,34 +350,29 @@ class addContact_Window:
 			if 'Agents' in user.groups:
 				jid_agents.append(j)
 		for a in jid_agents:
-			if a.find("aim") > -1:
-				name = "AIM"
-			elif a.find("icq") > -1:
-				name = "ICQ"
-			elif a.find("msn") > -1:
-				name = "MSN"
-			elif a.find("yahoo") > -1:
-				name = "Yahoo!"
+			if a.find('aim') > -1:
+				name = 'AIM'
+			elif a.find('icq') > -1:
+				name = 'ICQ'
+			elif a.find('msn') > -1:
+				name = 'MSN'
+			elif a.find('yahoo') > -1:
+				name = 'Yahoo!'
 			else:
 				name = a
 			iter = liststore.append([name, a])
 			self.agents.append(name)
-		cb = self.xml.get_widget('combobox_agent')
-		cb.set_model(liststore)
-		cb.set_active(0)
-		self.fill_who()
+		agent_combobox = self.xml.get_widget('agent_combobox')
+		agent_combobox.set_model(liststore)
+		agent_combobox.set_active(0)
+		self.fill_jid()
 		if jid:
-			self.xml.get_widget('entry_who').set_text(jid)
-			jida = jid.split("@")
-			self.xml.get_widget('entry_login').set_text(jida[0])
-			if jida[1] in jid_agents:
-				cb.set_active(jid_agents.index(jida[1])+1)
-		self.xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		self.xml.signal_connect('on_button_sub_clicked', self.on_subscribe)
-		self.xml.signal_connect('on_cancel_clicked', self.on_cancel)
-		self.xml.signal_connect('on_cb_changed', self.on_cb_changed)
-		self.xml.signal_connect('on_entry_login_changed', \
-			self.on_entry_login_changed)
+			self.xml.get_widget('jid_entry').set_text(jid)
+			jid_splited = jid.split('@')
+			self.xml.get_widget('entry_login').set_text(jid_splited[0])
+			if jid_splited[1] in jid_agents:
+				agent_combobox.set_active(jid_agents.index(jid_splited[1])+1)
+		self.xml.signal_autoconnect(self)
 
 class warning_Window:
 	"""Class for warning window : print a warning message"""
