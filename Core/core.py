@@ -511,6 +511,7 @@ class GajimCore:
 			self.hub.sendPlugin('ROSTER_INFO', self.connections[con], (jid, name, sub, ask, groups))
 
 	def BrowseResultCB(self, con, iq_obj):
+		print "*************** ICI ************"
 		identities, features, items = [], [], []
 		q = iq_obj.getTag('service')
 		if not q:
@@ -545,6 +546,11 @@ class GajimCore:
 		jid = str(iq_obj.getFrom())
 		self.hub.sendPlugin('AGENT_INFO_ITEMS', self.connections[con],\
 			(jid, items))
+
+	def DiscoverInfoErrorCB(self, con, iq_obj):
+		print "           ERROR                      *************"
+		jid = str(iq_obj.getFrom())
+		con.browseAgents(jid)
 
 	def DiscoverInfoCB(self, con, iq_obj):
 		# According to JEP-0030:
@@ -616,6 +622,8 @@ class GajimCore:
 			con.registerHandler('iq',self.DiscoverItemsCB,'result', \
 				common.jabber.NS_P_DISC_ITEMS)
 			con.registerHandler('iq',self.DiscoverInfoCB,'result', \
+				common.jabber.NS_P_DISC_INFO)
+			con.registerHandler('iq',self.DiscoverInfoErrorCB,'error', \
 				common.jabber.NS_P_DISC_INFO)
 		try:
 			con.connect()
@@ -903,8 +911,10 @@ class GajimCore:
 					log = None, proxy = proxy)
 				try:
 					c.connect()
-				except IOError, e:
-					log.debug("Couldn't connect to %s %s" % (hostname, e))
+				except:
+					log.debug("Couldn't connect to %s" % ev[2][0])
+					self.hub.sendPlugin('ERROR', None, \
+						_('Couldn\'t connect to ')+ev[2][0])
 					return 0
 				else:
 					log.debug("Connected to server")
