@@ -361,9 +361,8 @@ class accountPreference_Window:
 		if infos.has_key('proxyhost'):
 			self.xml.get_widget("entry_proxyhost").set_text(infos['proxyhost'])
 		if infos.has_key('proxyport'):
-#			self.xml.get_widget("entry_proxyport").set_text('%i'%\
-			self.xml.get_widget("entry_proxyport").set_text(\
-				infos['proxyport'])
+			self.xml.get_widget("entry_proxyport").set_text(str(\
+				infos['proxyport']))
 
 	def on_save_clicked(self, widget):
 		"""When save button is clicked : Save informations in config file"""
@@ -427,19 +426,19 @@ class accountPreference_Window:
 				del self.plugin.roster.contacts[self.account]
 				del self.plugin.accounts[self.account]
 				self.plugin.send('ACC_CHG', self.account, name)
-				self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-					'password': entryPass.get_text(), 'ressource': \
-					entryRessource.get_text(), 'priority' : prio, 'use_proxy': \
-					useProxy, 'proxyhost': entryProxyhost.get_text(), 'proxyport': \
-					proxyPort}
-				self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
-				#refresh accounts window
-				if self.plugin.windows.has_key('accounts'):
-					self.plugin.windows['accounts'].init_accounts()
-				#refresh roster
-				self.plugin.roster.draw_roster()
-				widget.get_toplevel().destroy()
-				return
+			self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
+				'password': entryPass.get_text(), 'ressource': \
+				entryRessource.get_text(), 'priority' : prio, 'use_proxy': \
+				useProxy, 'proxyhost': entryProxyhost.get_text(), 'proxyport': \
+				proxyPort}
+			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
+			#refresh accounts window
+			if self.plugin.windows.has_key('accounts'):
+				self.plugin.windows['accounts'].init_accounts()
+			#refresh roster
+			self.plugin.roster.draw_roster()
+			widget.get_toplevel().destroy()
+			return
 		#if it's a new account
 		else:
 			if name in self.plugin.accounts.keys():
@@ -449,8 +448,7 @@ class accountPreference_Window:
 			if check.get_active():
 				self.plugin.send('NEW_ACC', None, (hostname, login, \
 					entryPass.get_text(), name, entryRessource.get_text(), prio, \
-					checkProxy.get_active(), entryProxyhost.get_text(), \
-					entryProxyport.get_text()))
+					checkProxy.get_active(), entryProxyhost.get_text(), proxyPort))
 				check.set_active(FALSE)
 				return
 		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
