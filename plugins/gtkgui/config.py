@@ -1393,7 +1393,7 @@ class Accounts_window:
 			self.plugin.windows['account_modification_window'] = \
 				Account_modification_window(self.plugin, {}) #find out what's wrong
 		else:
-			self.plugin.windows[account_modification_window].window.present()
+			self.plugin.windows['account_modification_window'].window.present()
 
 	def on_delete_button_clicked(self, widget):
 		"""When delete button is clicked :
