@@ -85,10 +85,13 @@ class GajimCore:
 		log.debug("disconnectedCB")
 	# END disconenctedCB
 
-	def connect(self):
+	def connect(self, account):
+		hostname = self.cfgParser.__getattr__("%s" % account+"_hostname")
+		name = self.cfgParser.__getattr__("%s" % account+"_name")
+		password = self.cfgParser.__getattr__("%s" % account+"_password")
+		ressource = self.cfgParser.__getattr__("%s" % account+"_ressource")
 		self.con = common.jabber.Client(host = \
-			self.cfgParser.Server_hostname, \
-			debug = False, log = sys.stderr)
+			hostname, debug = False, log = sys.stderr)
 		try:
 			self.con.connect()
 		except IOError, e:
@@ -100,10 +103,7 @@ class GajimCore:
 			self.con.setMessageHandler(self.messageCB)
 			self.con.setPresenceHandler(self.presenceCB)
 			self.con.setDisconnectHandler(self.disconnectedCB)
-			if self.con.auth(self.cfgParser.Profile_name,
-					self.cfgParser.Profile_password, 
-					self.cfgParser.Profile_ressource):
-
+			if self.con.auth(name, password, ressource):
 				self.con.requestRoster()
 				roster = self.con.getRoster().getRaw()
 				if not roster :
@@ -124,14 +124,14 @@ class GajimCore:
 						self.con.disconnect()
 					self.hub.sendPlugin('QUIT', ())
 					return
-				#('STATUS', status)
+				#('STATUS', (status, account))
 				elif ev[0] == 'STATUS':
-					if (ev[1] != 'offline') and (self.connected == 0):
-						self.connect()
-					elif (ev[1] == 'offline') and (self.connected == 1):
+					if (ev[1][0] != 'offline') and (self.connected == 0):
+						self.connect(ev[1][1])
+					elif (ev[1][0] == 'offline') and (self.connected == 1):
 						self.con.disconnect()
 						self.connected = 0
-					if ev[1] != 'offline':
+					if ev[1][0] != 'offline':
 						p = common.jabber.Presence()
 						p.setShow(ev[1])
 						self.con.send(p)

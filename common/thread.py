@@ -25,8 +25,6 @@ import time
 
 sys.path.append("..")
 
-import plugins.sock
-
 class GajimThread(threading.Thread): 
 	def __init__(self, name = None, queueIn = None, queueOut = None): 
 		self.queueIn = queueIn
@@ -37,8 +35,12 @@ class GajimThread(threading.Thread):
 	# END __init__
  
 	def run(self):
+		print "import plugins.%s" % self.getName()
 		mod = compile("import plugins.%s" % self.getName(), \
 			self.getName(), "exec")
+		res = eval(mod)
+		print "plugins.%s.plugin(self.queueIn, self.queueOut)" % self.getName()
+		mod = compile("plugins.%s.%s.plugin(self.queueIn, self.queueOut)" % (self.getName(),self.getName()), self.getName(), "exec")
 		res = eval(mod)
 	# END run
 # END GajimThread
