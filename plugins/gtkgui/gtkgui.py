@@ -3079,19 +3079,19 @@ class plugin:
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (hostname, login, pasword, name, resource, prio,
 		#use_proxy, proxyhost, proxyport))
+		name = array[3]
 		if self.windows['account_modification_window']:
 			self.windows['account_modification_window'].account_is_ok(array[1])
-		name = array[3]
-		#TODO: to be removed and done in account_is_ok function or to be put in else
-		self.accounts[array[3]] = {'name': array[1], \
-					'hostname': array[0],\
-					'password': array[2],\
-					'resource': array[4],\
-					'priority': array[5],\
-					'use_proxy': array[6],\
-					'proxyhost': array[7], \
-					'proxyport': array[8]}
-		self.send('CONFIG', None, ('accounts', self.accounts, 'GtkGui'))
+		else:
+			self.accounts[array[3]] = {'name': array[1], \
+				'hostname': array[0],\
+				'password': array[2],\
+				'resource': array[4],\
+				'priority': array[5],\
+				'use_proxy': array[6],\
+				'proxyhost': array[7], \
+				'proxyport': array[8]}
+			self.send('CONFIG', None, ('accounts', self.accounts, 'GtkGui'))
 		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.queues[name] = {}
 		self.connected[name] = 0

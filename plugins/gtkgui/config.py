@@ -949,11 +949,9 @@ class Account_modification_window:
 			list_no_log_for.append(name)
 		self.infos['no_log_for'] = ' '.join(list_no_log_for)
 
-		use_proxy_checkbutton = self.xml.get_widget('use_proxy_checkbutton')
-		if use_proxy_checkbutton.get_active():
+		use_proxy = 0
+		if self.xml.get_widget('use_proxy_checkbutton').get_active():
 			use_proxy = 1
-		else:
-			use_proxy = 0
 		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
 		proxyport = self.xml.get_widget('proxyport_entry').get_text()
 		if (name == ''):
@@ -1090,15 +1088,45 @@ class Account_modification_window:
 		self.modify = True
 		self.account = acct
 		#TODO:
-#		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-#			'savepass': savepass, 'password': entryPass.get_text(), 'resource': \
-#			entryRessource.get_text(), 'priority' : prio, 'autoconnect': \
-#			autoconnect, 'use_proxy': useProxy, 'proxyhost': \
-#			entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
-#			'keyname': keyName, 'savegpgpass': save_gpg_pass, 'gpgpassword': gpg_pass,\
-#			'active': 1}
-#		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
-#			'GtkGui'))
+		jid = self.xml.get_widget('jid_entry').get_text()
+		(login, hostname) = jid.split('@')
+		save_password = 0
+		password = self.xml.get_widget('password_entry').get_text()
+		resource = self.xml.get_widget('resource_entry').get_text()
+		priority = self.xml.get_widget('priority_spinbutton').get_value_as_int()
+		autoconnect = 0
+		if self.xml.get_widget('autoconnect_checkbutton').get_active():
+			autoconnect = 1
+		use_proxy = 0
+		if self.xml.get_widget('use_proxy_checkbutton').get_active():
+			use_proxy = 1
+		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
+		proxyport = self.xml.get_widget('proxyport_entry').get_text()
+		key_name = self.xml.get_widget('gpg_name_label').get_text()
+		if self.xml.get_widget('save_password_checkbutton').get_active():
+			save_password = 1
+		if key_name == '': #no key selected
+			keyID = ''
+			save_gpg_password = 0
+			gpg_password = ''
+		else:
+			keyID = self.xml.get_widget('gpg_key_label').get_text()
+			save_gpg_password = 0
+			if self.xml.get_widget('gpg_save_password_checkbutton').get_active():
+				save_gpg_password = 1
+			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
+		no_log_for = ''
+		if self.xml.get_widget('log_history_checkbutton').get_active():
+			no_log_for = acct
+		self.plugin.accounts[acct] = {'name': login, 'hostname': hostname,\
+			'savepass': save_password, 'password': password, 'resource': \
+			resource, 'priority' : priority, 'autoconnect': autoconnect, \
+			'use_proxy': use_proxy, 'proxyhost': proxyhost, \
+			'proxyport': proxyport, 'keyid': keyID, 'keyname': key_name, \
+			'savegpgpass': save_gpg_password, 'gpgpassword': gpg_password,\
+			'active': 1, 'no_log_for': no_log_for}
+		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
+			'GtkGui'))
 
 	def on_edit_details_button_clicked(self, widget):
 		if not self.plugin.windows.has_key('vcard'):
