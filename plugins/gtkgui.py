@@ -182,13 +182,13 @@ class roster:
 		self.l_group = {}
 		for jid in tab.keys():
 			name = tab[jid]['name']
-			if not name :
+			if not name:
 				name = ''
 			show = tab[jid]['show']
-			if not show :
+			if not show:
 				show = 'offline'
 			user1 = user(jid, name, tab[jid]['groups'], show, tab[jid]['status'], tab[jid]['sub'])
-			self.l_contact[user1.jid] = {'user':user1, 'iter':[]}
+			self.l_contact[user1.jid] = {'user': user1, 'iter': []}
 			if user1.groups == []:
 				user1.groups.append('general')
 			for g in user1.groups:
@@ -317,9 +317,12 @@ class roster:
 		add_pixbuf = self.get_icon_pixbuf(gtk.STOCK_ADD)
 		remove_pixbuf = self.get_icon_pixbuf(gtk.STOCK_REMOVE)
 		requested_pixbuf = self.get_icon_pixbuf(gtk.STOCK_QUIT)
-		self.pixbufs = {"online":add_pixbuf, "away":remove_pixbuf, \
-			"xa":remove_pixbuf, "dnd":remove_pixbuf, "offline":remove_pixbuf, \
-			"requested":requested_pixbuf}
+		self.pixbufs = { "online": add_pixbuf, \
+				"away": remove_pixbuf, \
+				"xa": remove_pixbuf, \
+				"dnd": remove_pixbuf, \
+				"offline": remove_pixbuf, \
+				"requested": requested_pixbuf}
 		self.tree.set_model(self.treestore)
 		self.queueOUT = queueOUT
 		self.optionmenu = self.xml.get_widget('optionmenu')
@@ -327,9 +330,9 @@ class roster:
 		self.tab_messages = {}
 
 		showOffline = self.cfgParser.GtkGui_showoffline
-		if showOffline :
+		if showOffline:
 			self.showOffline = string.atoi(showOffline)
-		else :
+		else:
 			self.showOffline = 0
 
 		#colonnes
