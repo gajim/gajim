@@ -1191,6 +1191,9 @@ class roster_Window:
 			#agents
 			self.xml.get_widget('browse_agents').connect("activate", \
 				self.on_browse, self.plugin.accounts.keys()[0])
+		else:
+			self.xml.get_widget('add').set_sensitive(False)
+			self.xml.get_widget('browse_agents').set_sensitive(False)
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
