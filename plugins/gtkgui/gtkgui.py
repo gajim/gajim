@@ -944,7 +944,7 @@ class roster:
 			w = away_msg()
 			txt = w.run()
 		else:
-			txt = ""
+			txt = widget.name
 		self.queueOUT.put(('STATUS',(widget.name, txt, accounts[0])))
 
 	def on_prefs(self, widget):
