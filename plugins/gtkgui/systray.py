@@ -205,13 +205,13 @@ class systray:
 	def on_xa_menuitem_activate(self, widget):
 		self.plugin.roster.cb.set_active(2) # 2 is xa
 
-	def on_away_menuitem_activate(self, widget):
+	def on_dnd_menuitem_activate(self, widget):
 		self.plugin.roster.cb.set_active(3) # 3 is dnd
 
-	def on_away_menuitem_activate(self, widget):
+	def on_invisible_menuitem_activate(self, widget):
 		self.plugin.roster.cb.set_active(4) # 4 is invisible
 		
-	def on_away_menuitem_activate(self, widget):
+	def on_offline_menuitem_activate(self, widget):
 		self.plugin.roster.cb.set_active(5) # 5 is offline
 
 	def show_icon(self):
