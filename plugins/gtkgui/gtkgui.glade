@@ -2742,7 +2742,7 @@ on the server as a vCard</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_button_close_clicked" last_modification_time="Mon, 03 Nov 2003 19:01:49 GMT"/>
+	      <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Tue, 01 Mar 2005 13:56:50 GMT"/>
 	    </widget>
 	  </child>
 
@@ -2753,7 +2753,7 @@ on the server as a vCard</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_button_deny_clicked" last_modification_time="Mon, 03 Nov 2003 19:01:54 GMT"/>
+	      <signal name="clicked" handler="on_deny_button_clicked" last_modification_time="Tue, 01 Mar 2005 13:57:29 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment12">
@@ -2824,7 +2824,7 @@ on the server as a vCard</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_button_auth_clicked" last_modification_time="Mon, 03 Nov 2003 19:02:02 GMT"/>
+	      <signal name="clicked" handler="on_authorize_button_clicked" last_modification_time="Tue, 01 Mar 2005 13:57:14 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment13">
@@ -2898,7 +2898,7 @@ on the server as a vCard</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="browser">
+<widget class="GtkWindow" id="agent_browser_window">
   <property name="visible">True</property>
   <property name="title" translatable="yes">Agents browser</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -2913,7 +2913,7 @@ on the server as a vCard</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy" handler="gtk_widget_destroy" last_modification_time="Fri, 14 Nov 2003 11:08:36 GMT"/>
+  <signal name="destroy" handler="on_agent_browser_window_destroy" last_modification_time="Tue, 01 Mar 2005 14:19:07 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox11">
@@ -2972,15 +2972,15 @@ on the server as a vCard</property>
 	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	  <child>
-	    <widget class="GtkTreeView" id="treeview">
+	    <widget class="GtkTreeView" id="agents_treeview">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="headers_visible">True</property>
 	      <property name="rules_hint">False</property>
 	      <property name="reorderable">False</property>
 	      <property name="enable_search">True</property>
-	      <signal name="row_activated" handler="on_row_activated" last_modification_time="Thu, 13 Nov 2003 18:19:02 GMT"/>
-	      <signal name="cursor_changed" handler="on_cursor_changed" last_modification_time="Wed, 01 Sep 2004 21:00:56 GMT"/>
+	      <signal name="row_activated" handler="on_agents_treeview_row_activated" last_modification_time="Tue, 01 Mar 2005 14:20:15 GMT"/>
+	      <signal name="cursor_changed" handler="on_agents_treeview_cursor_changed" last_modification_time="Tue, 01 Mar 2005 14:20:21 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -3009,13 +3009,13 @@ on the server as a vCard</property>
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkButton" id="refresh">
+	    <widget class="GtkButton" id="refresh_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_refresh_clicked" last_modification_time="Wed, 12 Nov 2003 18:20:25 GMT"/>
+	      <signal name="clicked" handler="on_refresh_button_clicked" last_modification_time="Tue, 01 Mar 2005 14:17:42 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment16">
@@ -3080,13 +3080,13 @@ on the server as a vCard</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button12">
+	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_close_clicked" last_modification_time="Thu, 18 Mar 2004 14:42:04 GMT"/>
+	      <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Tue, 01 Mar 2005 14:17:35 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment15">

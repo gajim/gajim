@@ -2166,7 +2166,7 @@ class roster_Window:
 		Call browse class"""
 		if not self.plugin.windows[account].has_key('browser'):
 			self.plugin.windows[account]['browser'] = \
-				browseAgent_Window(self.plugin, account)
+				agent_browser_window(self.plugin, account)
 
 	def image_is_ok(self, image):
 		if not os.path.exists(image):
