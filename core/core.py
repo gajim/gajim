@@ -272,6 +272,8 @@ class GajimCore:
 							string.join(accts)
 						for a in accts:
 							self.cfgParser.tab[a] = ev[2][1][a]
+							if not a in self.connected.keys():
+								self.connected[a]= 0
 					else:
 						self.cfgParser.tab[ev[2][0]] = ev[2][1]
 					self.cfgParser.writeCfgFile()
