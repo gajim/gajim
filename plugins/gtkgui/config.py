@@ -1341,9 +1341,9 @@ class Account_modification_window:
 class Accounts_window:
 	"""Class for accounts window: lists of accounts"""
 	def on_delete_event(self, widget, event):
-  		self.window.hide()  
+		self.window.hide()  
 		return True # do NOT destory the window 
-		
+
 	def on_close_button_clicked(self, widget):
 		self.window.hide()
 		
