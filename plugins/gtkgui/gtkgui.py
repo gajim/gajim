@@ -1345,6 +1345,9 @@ class roster_Window:
 			del self.contacts[account][u.jid]
 
 	def send_status(self, account, status, txt):
+		if self.plugin.accounts[account].has_key('active'):
+			if not self.plugin.accounts[account]['active']:
+				return
 		if status != 'offline':
 			keyid = None
 			save_gpg_pass = 0
