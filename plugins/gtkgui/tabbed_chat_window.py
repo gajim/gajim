@@ -528,11 +528,11 @@ class tabbed_chat_window:
 			begin_iter = iter.copy()
 			#we get the begining of the tag
 			while not begin_iter.begins_tag(texttag):
-				begin_iter.backward_word_start()
+				begin_iter.backward_char()
 			end_iter = iter.copy()
 			#we get the end of the tag
 			while not end_iter.ends_tag(texttag):
-				end_iter.forward_word_end()
+				end_iter.forward_char()
 			word = begin_iter.get_text(end_iter)
 			if event.button == 3:
 				self.make_link_menu(event, kind, word)
