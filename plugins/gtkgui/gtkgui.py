@@ -401,6 +401,9 @@ class tabbed_chat_Window:
 			self.on_button_contact_clicked)
 		self.xmls[user.jid].get_widget('button_contact').set_use_underline(False)
 
+		if self.plugin.queues[self.account].has_key(user.jid):
+			self.read_queue(self.plugin.queues[self.account][user.jid])
+
 	def on_msg_key_press_event(self, widget, event):
 		"""When a key is pressed :
 		if enter is pressed without the shit key, message (if not empty) is sent
