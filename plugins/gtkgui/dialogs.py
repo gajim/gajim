@@ -454,16 +454,6 @@ class add_contact_window:
 
 class About_dialog:
 	"""Class for about dialog"""
-	def delete_event(self, widget):
-		"""close window"""
-		#del self.plugin.windows['about'] # remove us from open windows
-		pass
-		
-	def on_close(self, widget):
-		"""When Close button is clicked"""
-		#widget.get_toplevel().destroy()
-		pass
-
 	def __init__(self, plugin):
 		self.plugin = plugin
 		#xml.get_widget('logo_image').set_from_file('plugins/gtkgui/pixmaps/logo.png')
@@ -487,16 +477,12 @@ GNU General Public License for more details.''')
 
 		dlg.set_logo(gtk.gdk.pixbuf_new_from_file('plugins/gtkgui/pixmaps/logo.png'))
 
-		dlg.run()
-		#dlg.show_all()
+		rep = dlg.run()
+		dlg.destroy()
 		'''
 		, version='0.6', 'Nikos Kouremenos', 'The best GTK jabber-only client', 'http://www.gajim.org', 'Official Page', 'GPL', 'Yann')
 		dlg.run()
 		'''
-		#xml.signal_connect('gtk_widget_destroy', self.delete_event)
-		#xml.signal_connect('on_close_clicked', self.on_close)
-		
-		#self.plugin.windows['about'] = self # add us to open windows
 
 class Confirmation_dialog:
 	"""Class for confirmation dialog"""
