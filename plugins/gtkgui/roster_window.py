@@ -774,7 +774,7 @@ class Roster_window:
 			Error_dialog(_("You must setup an account before connecting to jabber network."))
 			self.set_cb()
 			return
-		status = model[active][0]
+		status = model[active][2]
 		message = self.get_status_message(status)
 		if message == -1:
 			self.set_cb()
@@ -1300,7 +1300,8 @@ class Roster_window:
 		self.tree.set_model(model)
 		self.mkpixbufs()
 
-		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image)
+		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image, \
+			gobject.TYPE_STRING)
 		self.cb = gtk.ComboBox()
 		self.xml.get_widget('vbox1').pack_end(self.cb, False)
 		cell = ImageCellRenderer()
@@ -1310,20 +1311,13 @@ class Roster_window:
 		self.cb.pack_start(cell, True)
 		self.cb.add_attribute(cell, 'text', 0)
 		for status in ['online', 'away', 'xa', 'dnd', 'invisible', 'offline']:
-			''' GIVES ERROR in core.py line: 805
-			First I like status to be Online and not online
-			and jargon word as dnd and xa should be as I have them
-			that means either this code, or changing 'xa' and 'dnd' all over
-			you know the core better yann so let us talk on this
 			if status == 'dnd':
 				status_better = 'Busy'
 			elif status == 'xa':
 				status_better = 'Extended Away'
 			else:
 				status_better = status.capitalize()
-			iter = liststore.append([status_better, self.pixbufs[status]])
-			'''
-			iter = liststore.append([status, self.pixbufs[status]])
+			iter = liststore.append([status_better, self.pixbufs[status], status])
 		self.cb.show_all()
 		self.cb.set_model(liststore)
 		self.cb.set_active(5)
