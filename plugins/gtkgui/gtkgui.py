@@ -476,15 +476,6 @@ class roster_Window:
 			return
 		users = self.contacts[account][jid]
 		user = users[0]
-#		else:
-#			resources = []
-#			for u in self.contacts[account][user.jid]:
-#				resources.append(u.resource)
-#			if resources == ['']:
-#				self.contacts[account][user.jid][0].resource = user.resource
-#			else:
-#				if not user.resource in resources:
-#					self.contacts[account][user.jid].append(user)
 		if user.groups == []:
 			if string.find(user.jid, "@") <= 0:
 				user.groups.append('Agents')
@@ -504,9 +495,13 @@ class roster_Window:
 				iterG = model.append(IterAcct, \
 					(self.pixbufs['closed'], g, 'group', \
 					g, FALSE))
-			if not self.groups[account].has_key(g):
-				self.groups[account][g] = {'expand': True}
-			self.tree.expand_row((model.get_path(iterG)[0]), False)
+			if not self.groups[account].has_key(g): #It can probably never append
+				if account+g in self.hidden_lines:
+					self.groups[account][g] = {'expand': False}
+				else:
+					self.groups[account][g] = {'expand': True}
+			if not account in self.hidden_lines:
+				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
 			typestr = 'user'
 			if g == 'Agents':
@@ -627,7 +622,10 @@ class roster_Window:
 			self.contacts[account][ji] = [user1]
 			for g in array[jid]['groups'] :
 				if not g in self.groups[account].keys():
-					self.groups[account][g] = {'expand':True}
+					if account+g in self.hidden_lines:
+						self.groups[account][g] = {'expand': False}
+					else:
+						self.groups[account][g] = {'expand': True}
 
 	def chg_user_status(self, user, show, status, account):
 		"""When a user change his status"""
@@ -1065,6 +1063,8 @@ class roster_Window:
 	def on_quit(self, widget):
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
+		self.plugin.config['hiddenlines'] = string.join(self.hidden_lines, '\t')
+		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
 		self.plugin.send('QUIT', None, '')
 		print _("plugin gtkgui stopped")
 		gtk.mainquit()
@@ -1101,7 +1101,11 @@ class roster_Window:
 			model.set_value(iter, 0, self.pixbufs['opened'])
 			jid = model.get_value(iter, 3)
 			self.groups[account][jid]['expand'] = True
+			if account+jid in self.hidden_lines:
+				self.hidden_lines.remove(account+jid)
 		elif type == 'account':
+			if account in self.hidden_lines:
+				self.hidden_lines.remove(account)
 			for g in self.groups[account]:
 				groupIter = self.get_group_iter(g, account)
 				if groupIter and self.groups[account][g]['expand']:
@@ -1120,6 +1124,11 @@ class roster_Window:
 			model.set_value(iter, 0, self.pixbufs['closed'])
 			jid = model.get_value(iter, 3)
 			self.groups[account][jid]['expand'] = False
+			if not account+jid in self.hidden_lines:
+				self.hidden_lines.append(account+jid)
+		elif type == 'account':
+			if not account in self.hidden_lines:
+				self.hidden_lines.append(account)
 
 	def on_editing_canceled (self, cell):
 		"""editing have been canceled"""
@@ -1306,6 +1315,7 @@ class roster_Window:
 		self.xml.signal_connect('on_row_expanded', self.on_row_expanded)
 		self.xml.signal_connect('on_row_collapsed', self.on_row_collapsed)
 
+		self.hidden_lines = string.split(self.plugin.config['hiddenlines'], '\t')
 		self.draw_roster()
 
 class systrayDummy:
@@ -1778,7 +1788,8 @@ class plugin:
 			'iconstyle':'sun',\
 			'inmsgcolor':'#ff0000',\
 			'outmsgcolor': '#0000ff',\
-			'statusmsgcolor':'#1eaa1e'}))
+			'statusmsgcolor':'#1eaa1e',\
+			'hiddenlines':''}))
 		self.config = self.wait('CONFIG')
 		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
 		self.accounts = self.wait('CONFIG')
