@@ -617,11 +617,13 @@ class Groupchat_window:
 
 	def update_tags(self):
 		for room_jid in self.tagIn:
-			self.tagIn[room_jid].set_property("foreground", \
+			self.tagIn[room_jid].set_property('foreground', \
 				self.plugin.config['inmsgcolor'])
-			self.tagOut[room_jid].set_property("foreground", \
+			self.tagInBold[room_jid].set_property('foreground', \
+				self.plugin.config['inmsgcolor'])
+			self.tagOut[room_jid].set_property('foreground', \
 				self.plugin.config['outmsgcolor'])
-			self.tagStatus[room_jid].set_property("foreground", \
+			self.tagStatus[room_jid].set_property('foreground', \
 				self.plugin.config['statusmsgcolor'])
 
 	def get_role_iter(self, room_jid, name):
@@ -894,7 +896,10 @@ class Groupchat_window:
 			if contact == self.nicks[room_jid]:
 				tag = 'outgoing'
 			else:
-				tag = 'incoming'
+				if self.nicks[room_jid].lower() in text.lower().split():
+					tag = 'incoming_bold'
+				else:
+					tag = 'incoming'
 
 			if text.startswith('/me'):
 				ttext = contact + text[3:] + '\n'
@@ -1085,6 +1090,7 @@ class Groupchat_window:
 			del self.nb_unread[room_jid]
 			del self.xmls[room_jid]
 			del self.tagIn[room_jid]
+			del self.tagInBold[room_jid]
 			del self.tagOut[room_jid]
 			del self.tagStatus[room_jid]
 			del self.list_treeview[room_jid]
@@ -1127,8 +1133,11 @@ class Groupchat_window:
 		end_iter = conversation_buffer.get_end_iter()
 		conversation_buffer.create_mark('end', end_iter, 0)
 		self.tagIn[room_jid] = conversation_buffer.create_tag('incoming')
+		self.tagInBold[room_jid] = conversation_buffer.create_tag('incoming_bold')
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn[room_jid].set_property('foreground', color)
+		self.tagInBold[room_jid].set_property('foreground', color)
+		self.tagInBold[room_jid].set_property('weight', 700)
 		self.tagOut[room_jid] = conversation_buffer.create_tag('outgoing')
 		color = self.plugin.config['outmsgcolor']
 		self.tagOut[room_jid].set_property('foreground', color)
@@ -1207,6 +1216,7 @@ class Groupchat_window:
 		self.account = account
 		self.xmls = {}
 		self.tagIn = {}
+		self.tagInBold = {}
 		self.tagOut = {}
 		self.tagStatus = {}
 		self.nicks = {}
