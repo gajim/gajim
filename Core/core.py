@@ -511,7 +511,6 @@ class GajimCore:
 			self.hub.sendPlugin('ROSTER_INFO', self.connections[con], (jid, name, sub, ask, groups))
 
 	def BrowseResultCB(self, con, iq_obj):
-		print "*************** ICI ************"
 		identities, features, items = [], [], []
 		q = iq_obj.getTag('service')
 		if not q:
@@ -548,7 +547,6 @@ class GajimCore:
 			(jid, items))
 
 	def DiscoverInfoErrorCB(self, con, iq_obj):
-		print "           ERROR                      *************"
 		jid = str(iq_obj.getFrom())
 		con.browseAgents(jid)
 
