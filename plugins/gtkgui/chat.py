@@ -437,7 +437,6 @@ class Chat:
 		start = 0
 		end = 0
 		index = 0
-		#special_text = ''
 		
 		# basic: links + mail + formatting is always checked (we like that)
 		if self.plugin.config['useemoticons']: # search for emoticons & urls
