@@ -511,8 +511,8 @@ class GajimCore:
 		hostname = self.cfgParser.tab[account]["hostname"]
 		name = self.cfgParser.tab[account]["name"]
 		password = self.passwords[account]
-		if not self.cfgParser.tab[account].has_key('resource']:
-			if not self.cfgParser.tab[account].has_key('ressource']:		
+		if not self.cfgParser.tab[account].has_key('resource'):
+			if not self.cfgParser.tab[account].has_key('ressource'):
 				resource = 'Gajim'
 			else:
 				resource = self.cfgParser.tab[account]['ressource']
