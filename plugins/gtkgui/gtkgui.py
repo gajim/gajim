@@ -737,15 +737,20 @@ class accounts_Window:
 		sel = self.treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
-		del self.plugin.accounts[account]
-		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
-		del self.plugin.windows[account]
-		del self.plugin.queues[account]
-		del self.plugin.connected[account]
-		del self.plugin.roster.groups[account]
-		del self.plugin.roster.contacts[account]
-		self.plugin.roster.draw_roster()
-		self.init_accounts()
+		window = confirm_Window('Are you sure you want to remove this account (' \
+			+ account + ') ?')
+		if window.wait() == gtk.RESPONSE_OK:
+			if self.plugin.connected[account]:
+				self.plugin.send('STATUS', account, ('offline', 'offline'))
+			del self.plugin.accounts[account]
+			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
+			del self.plugin.windows[account]
+			del self.plugin.queues[account]
+			del self.plugin.connected[account]
+			del self.plugin.roster.groups[account]
+			del self.plugin.roster.contacts[account]
+			self.plugin.roster.draw_roster()
+			self.init_accounts()
 
 	def on_modify_clicked(self, widget):
 		"""When modify button is clicked :
@@ -1594,7 +1599,6 @@ class roster_Window:
 		else:
 			txt = status
 		self.plugin.send('STATUS', account, (status, txt))
-		
 
 	def on_optionmenu_changed(self, widget):
 		"""When we change our status"""
