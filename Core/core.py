@@ -511,7 +511,15 @@ class GajimCore:
 		hostname = self.cfgParser.tab[account]["hostname"]
 		name = self.cfgParser.tab[account]["name"]
 		password = self.passwords[account]
-		resource = self.cfgParser.tab[account]["resource"]
+		if not self.cfgParser.tab[account].has_key('resource']:
+			if not self.cfgParser.tab[account].has_key('ressource']:		
+				resource = 'Gajim'
+			else:
+				resource = self.cfgParser.tab[account]['ressource']
+				self.cfgParser.tab[account]['resource'] = resource
+				del self.cfgParser.tab[account]['ressource']
+		else:
+			resource = self.cfgParser.tab[account]['resource']
 
 		#create connexion if it doesn't already existe
 		con = None
