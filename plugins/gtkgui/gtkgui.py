@@ -1535,7 +1535,7 @@ class roster_Window:
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
 		self.plugin.config['hiddenlines'] = string.join(self.hidden_lines, '\t')
-		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
+		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.send('QUIT', None, ('gtkgui', 1))
 		print _("plugin gtkgui stopped")
 		self.close_all(self.plugin.windows)
@@ -1671,7 +1671,7 @@ class roster_Window:
 		"""when show offline option is changed :
 		redraw the treeview"""
 		self.plugin.config['showoffline'] = 1 - self.plugin.config['showoffline']
-		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
+		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.draw_roster()
 
 	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
@@ -2243,7 +2243,7 @@ class plugin:
 					'use_proxy': array[6],\
 					'proxyhost': array[7], \
 					'proxyport': array[8]}
-		self.send('CONFIG', None, ('accounts', self.accounts))
+		self.send('CONFIG', None, ('accounts', self.accounts, 'GtkGui'))
 		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.queues[name] = {}
 		self.connected[name] = 0
@@ -2478,7 +2478,7 @@ class plugin:
 				import trayicon
 			except:
 				self.config['trayicon'] = 0
-				self.send('CONFIG', None, ('GtkGui', self.config))
+				self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
 				self.systray = systrayDummy()
 			else:
 				self.systray = systray(self)

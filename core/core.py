@@ -631,7 +631,7 @@ class GajimCore:
 						self.cfgParser.writeCfgFile()
 					config['usegpg'] = USE_GPG
 					self.hub.sendPlugin('CONFIG', None, (ev[2][0], config))
-			#('CONFIG', account, (section, config))
+			#('CONFIG', account, (section, config, who_sent))
 			elif ev[0] == 'CONFIG':
 				if ev[2][0] == 'accounts':
 					#Remove all old accounts
@@ -653,6 +653,8 @@ class GajimCore:
 							self.gpg[a] = MyGnuPG()
 				else:
 					self.cfgParser.tab[ev[2][0]] = ev[2][1]
+					if ev[2][0] != ev[2][2]:
+						self.hub.sendPlugin('CONFIG', None, (ev[2][0], ev[2][1]))
 				self.cfgParser.writeCfgFile()
 				#TODO: tell the changes to other plugins
 			#('STATUS', account, (status, msg))

@@ -116,6 +116,9 @@ class plugin:
 					t = time.mktime(ev[2][2])
 					fic.write("%s:recv:%s:%s\n" % (t, nick, msg))
 					fic.close()
+				elif ev[0] == 'CONFIG':
+					if ev[2][0] == 'Logger':
+						self.config = ev[2][1]
 			time.sleep(0.1)
 
 	def wait(self, what):

@@ -256,8 +256,19 @@ class preference_Window:
 			self.plugin.config['trayicon'] = 1
 		else:
 			self.plugin.config['trayicon'] = 0
-		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config))
+		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.roster.draw_roster()
+		#log presences in user file
+		if self.xml.get_widget('chk_log_pres_usr').get_active():
+			self.config_logger['lognotusr'] = 1
+		else:
+			self.config_logger['lognotusr'] = 0
+		#log presences in external file
+		if self.xml.get_widget('chk_log_pres_ext').get_active():
+			self.config_logger['lognotsep'] = 1
+		else:
+			self.config_logger['lognotsep'] = 0
+		self.plugin.send('CONFIG', None, ('Logger', self.config_logger, 'GtkGui'))
 		
 	def on_ok(self, widget):
 		"""When Ok button is clicked"""
@@ -279,6 +290,9 @@ class preference_Window:
 		
 	def on_presence_button_clicked(self, widget, data=None):
 		self.change_notebook_page(2)
+
+	def on_log_button_clicked(self, widget, data=None):
+		self.change_notebook_page(3)
 
 	def fill_msg_treeview(self):
 		i = 0
@@ -344,13 +358,6 @@ class preference_Window:
 		self.chk_trayicon = self.xml.get_widget('chk_trayicon')
 		self.notebook = self.xml.get_widget('preferences_notebook')
 		
-		button = self.xml.get_widget('lookfeel_button')
-		button.connect('clicked', self.on_lookfeel_button_clicked)
-		button = self.xml.get_widget('events_button')
-		button.connect('clicked', self.on_events_button_clicked)
-		button = self.xml.get_widget('presence_button')
-		button.connect('clicked', self.on_presence_button_clicked)
-
 		#Color for incomming messages
 		colSt = self.plugin.config['inmsgcolor']
 		self.xml.get_widget('colorbutton_in').set_color(\
@@ -488,6 +495,26 @@ class preference_Window:
 			self.on_chk_toggled, [self.spin_autoawaytime])
 		self.xml.signal_connect('on_chk_autoxa_toggled', \
 			self.on_chk_toggled, [self.spin_autoxatime])
+		self.xml.signal_connect('on_lookfeel_button_clicked', \
+			self.on_lookfeel_button_clicked)
+		self.xml.signal_connect('on_events_button_clicked', \
+			self.on_events_button_clicked)
+		self.xml.signal_connect('on_presence_button_clicked', \
+			self.on_presence_button_clicked)
+		self.xml.signal_connect('on_log_button_clicked', \
+			self.on_log_button_clicked)
+
+		self.plugin.send('ASK_CONFIG', None, ('GtkGui', 'Logger', {'lognotsep':1,\
+			'lognotusr':1}))
+		self.config_logger = self.plugin.wait('CONFIG')
+
+		#log presences in user file
+		st = self.config_logger['lognotusr']
+		self.xml.get_widget('chk_log_pres_usr').set_active(st)
+
+		#log presences in external file
+		st = self.config_logger['lognotsep']
+		self.xml.get_widget('chk_log_pres_ext').set_active(st)
 
 class accountPreference_Window:
 	"""Class for account informations"""
@@ -637,7 +664,8 @@ class accountPreference_Window:
 				entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
 				'keyname': keyName, 'savegpgpass': save_gpg_pass, \
 				'gpgpass': gpg_pass}
-			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
+			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
+				'GtkGui'))
 			#refresh accounts window
 			if self.plugin.windows.has_key('accounts'):
 				self.plugin.windows['accounts'].init_accounts()
@@ -662,7 +690,8 @@ class accountPreference_Window:
 			autoconnect, 'use_proxy': useProxy, 'proxyhost': \
 			entryProxyhost.get_text(), 'proxyport': proxyPort, 'keyid': keyID, \
 			'keyname': keyName, 'savegpgpass': save_gpg_pass, 'gpgpass': gpg_pass}
-		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
+		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
+			'GtkGui'))
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.plugin.queues[name] = {}
@@ -792,7 +821,8 @@ class accounts_Window:
 			if self.plugin.connected[account]:
 				self.plugin.send('STATUS', account, ('offline', 'offline'))
 			del self.plugin.accounts[account]
-			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts))
+			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
+				'GtkGui'))
 			del self.plugin.windows[account]
 			del self.plugin.queues[account]
 			del self.plugin.connected[account]
