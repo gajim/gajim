@@ -37,6 +37,10 @@ class vcard_information_window:
 		"""close window"""
 		del self.plugin.windows[self.account]['infos'][self.jid]
 
+	def on_vcard_information_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			widget.destroy()
+
 	def on_close_button_clicked(self, widget):
 		"""Save user's informations and update the roster on the Jabber server"""
 		if self.vcard:
