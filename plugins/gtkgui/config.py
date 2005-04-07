@@ -1720,8 +1720,10 @@ class Service_discovery_window:
 			services = service.split('@')
 			room = services[0]
 			service = services[1]
-		if not self.plugin.windows.has_key('join_gc'):
+		if not self.plugin.windows[self.account].has_key('join_gc'):
 			Join_groupchat_window(self.plugin, self.account, service, room)
+		else:
+			self.plugin.windows[self.account]['join_gc'].window.present()
 
 	def on_register_button_clicked(self, widget):
 		"""When we want to register an agent :

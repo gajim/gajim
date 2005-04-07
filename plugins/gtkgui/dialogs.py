@@ -674,7 +674,7 @@ class Join_groupchat_window:
 		self.xml.get_widget('nickname_entry').\
 			set_text(self.plugin.nicks[self.account])
 		self.xml.signal_autoconnect(self)
-		self.plugin.windows['join_gc'] = self # now add us to open windows
+		self.plugin.windows[account]['join_gc'] = self #now add us to open windows
 
 		self.recently_combobox = self.xml.get_widget('recently_combobox')
 		liststore = gtk.ListStore(str)
@@ -690,7 +690,7 @@ class Join_groupchat_window:
 
 	def on_join_groupchat_window_destroy(self, widget):
 		"""close window"""
-		del self.plugin.windows['join_gc'] # remove us from open windows
+		del self.plugin.windows[self.account]['join_gc'] # remove us from open windows
 
 	def on_join_groupchat_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE

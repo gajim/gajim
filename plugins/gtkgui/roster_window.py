@@ -911,7 +911,10 @@ class Roster_window:
 		Add_new_contact_window(self.plugin, account)
 
 	def on_join_gc_activate(self, widget, account):
-		Join_groupchat_window(self.plugin, account)
+		if not self.plugin.windows[account].has_key('join_gc'):
+			Join_groupchat_window(self.plugin, account)
+		else:
+			self.plugin.windows[account]['join_gc'].window.present()
 
 	def on_new_message_menuitem_activate(self, widget, account):
 		New_message_dialog(self.plugin, account)
