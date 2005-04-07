@@ -48,11 +48,9 @@ class Preferences_window:
 		self.notebook.set_current_page(0)
 		
 	def on_checkbutton_toggled(self, widget, config_name, \
-		extra_function = None, change_sensitivity_widgets = None):
+		change_sensitivity_widgets = None):
 		if widget.get_active():
 			self.plugin.config[config_name] = 1
-			if extra_function != None:
-				apply(extra_function)
 		else:
 			self.plugin.config[config_name] = 0
 		if change_sensitivity_widgets != None:
@@ -325,7 +323,7 @@ class Preferences_window:
 		self.update_text_tags()
 
 	def on_use_emoticons_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'useemoticons', None, \
+		self.on_checkbutton_toggled(widget, 'useemoticons', \
 			[self.xml.get_widget('add_remove_emoticons_button')])
 	
 	def on_add_remove_emoticons_button_clicked(self, widget):
@@ -336,7 +334,7 @@ class Preferences_window:
 			window.show_all()
 
 	def on_auto_popup_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'autopopup', None,\
+		self.on_checkbutton_toggled(widget, 'autopopup', \
 			[self.auto_popup_away_checkbutton])
 
 	def on_auto_popup_away_checkbutton_toggled(self, widget):
@@ -346,7 +344,10 @@ class Preferences_window:
 		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
+		self.on_checkbutton_toggled(widget, 'sounds_on',\
+										[self.xml.get_widget('sound_player_hbox'),\
+										self.xml.get_widget('sounds_scrolledwindow'),\
+										self.xml.get_widget('browse_sounds_hbox')])
 		
 	
 	def on_soundplayer_entry_changed(self, widget):
@@ -372,7 +373,7 @@ class Preferences_window:
 			iter = model.iter_next(iter)
 
 	def on_auto_away_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'autoaway', None,\
+		self.on_checkbutton_toggled(widget, 'autoaway', \
 			[self.auto_away_time_spinbutton])
 
 	def on_auto_away_time_spinbutton_value_changed(self, widget):
@@ -383,7 +384,7 @@ class Preferences_window:
 			self.plugin.config['autoxatime']*60)
 
 	def on_auto_xa_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'autoxa', None,\
+		self.on_checkbutton_toggled(widget, 'autoxa', \
 			[self.auto_xa_time_spinbutton])
 
 	def on_auto_xa_time_spinbutton_value_changed(self, widget):
@@ -725,6 +726,12 @@ class Preferences_window:
 		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
 			set_active(self.plugin.config['ignore_unknown_contacts'])
 
+		if not self.plugin.config['sounds_on']:
+			self.xml.get_widget('sound_player_hbox').set_sensitive(False)
+			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
+			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
+			#FIXME:
+		
 		#sound player
 		self.xml.get_widget('soundplayer_entry').set_text(\
 			self.plugin.config['soundplayer'])

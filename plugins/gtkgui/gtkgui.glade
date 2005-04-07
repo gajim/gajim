@@ -4198,7 +4198,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkFrame" id="frame26">
+		<widget class="GtkFrame" id="sounds_frame">
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
@@ -4249,7 +4249,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkHBox" id="hbox2911">
+				<widget class="GtkHBox" id="sound_player_hbox">
 				  <property name="visible">True</property>
 				  <property name="homogeneous">False</property>
 				  <property name="spacing">5</property>
@@ -4311,7 +4311,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkScrolledWindow" id="scrolledwindow29">
+			    <widget class="GtkScrolledWindow" id="sounds_scrolledwindow">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -4339,7 +4339,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkHBox" id="hbox2910">
+			    <widget class="GtkHBox" id="browse_sounds_hbox">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">5</property>
@@ -9512,7 +9512,7 @@ send a chat message to</property>
       <property name="spacing">0</property>
 
       <child>
-	<widget class="GtkScrolledWindow" id="scrolledwindow25">
+	<widget class="GtkScrolledWindow" id="emoticons_scrolledwindow">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
