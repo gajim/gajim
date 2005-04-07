@@ -688,6 +688,10 @@ class Join_groupchat_window:
 		"""close window"""
 		del self.plugin.windows['join_gc'] # remove us from open windows
 
+	def on_join_groupchat_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			widget.destroy()
+
 	def on_recently_combobox_changed(self, widget):
 		model = widget.get_model()
 		iter = widget.get_active_iter()
