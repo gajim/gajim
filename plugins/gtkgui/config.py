@@ -868,6 +868,11 @@ class Account_modification_window:
 		for w in widgets:
 			w.set_sensitive(widget.get_active())
 
+	def on_use_proxy_checkbutton_toggled(self, widget):
+		proxyhost_entry = self.xml.get_widget('proxyhost_entry')
+		proxyport_entry = self.xml.get_widget('proxyport_entry')
+		self.on_checkbutton_toggled(widget, [proxyhost_entry, proxyport_entry])
+
 	def init_account(self, infos):
 		"""Initialize window with defaults values"""
 		if infos.has_key('accname'):
@@ -886,14 +891,25 @@ class Account_modification_window:
 			self.xml.get_widget('resource_entry').set_text(infos['resource'])
 		if infos.has_key('priority'):
 			self.xml.get_widget('priority_spinbutton').set_value(infos['priority'])
+		
+		use_proxy = False
 		if infos.has_key('use_proxy'):
+			if infos['use_proxy'] != 0:
+				use_proxy = True
 			self.xml.get_widget('use_proxy_checkbutton').\
 				set_active(infos['use_proxy'])
+		
+		self.xml.get_widget('proxyhost_entry').set_sensitive(use_proxy)
+		self.xml.get_widget('proxyport_entry').set_sensitive(use_proxy)
+				
 		if infos.has_key('proxyhost'):
 			self.xml.get_widget('proxyhost_entry').set_text(infos['proxyhost'])
+
 		if infos.has_key('proxyport'):
 			self.xml.get_widget('proxyport_entry').set_text(str(\
 				infos['proxyport']))
+
+			
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if not self.plugin.config.has_key('usegpg'):
 			gpg_key_label.set_text('GPG is not usable on this computer')
@@ -925,7 +941,7 @@ class Account_modification_window:
 				self.xml.get_widget('log_history_checkbutton').set_active(0)
 
 	def on_save_button_clicked(self, widget):
-		"""When save button is clicked : Save informations in config file"""
+		"""When save button is clicked: Save information in config file"""
 		save_password = 0
 		if self.xml.get_widget('save_password_checkbutton').get_active():
 			save_password = 1
@@ -981,8 +997,12 @@ class Account_modification_window:
 				except ValueError:
 					Error_dialog(_('Proxy Port must be a port number'))
 					return
+			else:
+				Error_dialog(_('You must enter a proxy port to use proxy'))
+				return
 			if proxyhost == '':
 				Error_dialog(_('You must enter a proxy host to use proxy'))
+				return
 
 		(login, hostname) = jid.split('@')
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
@@ -1217,6 +1237,7 @@ class Account_modification_window:
 		self.xml.get_widget('gpg_password_entry').set_sensitive(False)
 		self.xml.get_widget('password_entry').set_sensitive(False)
 		self.xml.get_widget('log_history_checkbutton').set_active(1)
+		
 		#default is checked
 		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(1)
 		self.xml.signal_autoconnect(self)
