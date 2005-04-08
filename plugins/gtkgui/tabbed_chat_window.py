@@ -150,10 +150,11 @@ class Tabbed_chat_window(Chat):
 				self.print_time_timeout, user.jid)
 
 	def on_message_textview_key_press_event(self, widget, event):
-		"""When a key is pressed :
+		"""When a key is pressed:
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation"""
 		jid = self.get_active_jid()
+		print 'jid', jid
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		if event.keyval == gtk.keysyms.Tab and \
          (event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB

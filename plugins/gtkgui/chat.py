@@ -270,59 +270,83 @@ class Chat:
 		self.show_title()
 
 	def on_conversation_textview_key_press_event(self, widget, event):
-		"""Do not black these evnts and send them to the notebook"""
-		if event.keyval == gtk.keysyms.Tab and \
-			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
-			self.notebook.emit('key_press_event', event)
-		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
-			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
+		"""Do not block these events and send them to the notebook"""
+		'''
+		if event.state & (gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK):
+			if event.keyval == gtk.keysyms.Tab: # CTRL + SHIFT + TAB
 				self.notebook.emit('key_press_event', event)
-		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
-			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
+		'''
+		if event.state & gtk.gdk.CONTROL_MASK:
+			if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
-
+			elif event.keyval == gtk.keysyms.Page_Down: # CTRL + PAGE DOWN
+				self.notebook.emit('key_press_event', event)
+			elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
+				self.notebook.emit('key_press_event', event)
+				
 	def on_chat_notebook_key_press_event(self, widget, event):
 		st = '1234567890' # zero is here cause humans count from 1, pc from 0 :P
 		jid = self.get_active_jid()
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
 			self.remove_tab(jid)
+		elif event.keyval == gtk.keysyms.F4 and \
+			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
+				self.remove_tab(jid)
 		elif event.string and event.string in st \
 			and (event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
 			self.notebook.set_current_page(st.index(event.string))
-		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
-			if event.state & gtk.gdk.CONTROL_MASK:
+		elif event.keyval == gtk.keysyms.Page_Down:
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				current = self.notebook.get_current_page()
 				if current > 0:
 					self.notebook.set_current_page(current-1)
-			elif event.state & gtk.gdk.SHIFT_MASK:
+			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
 				conversation_textview = self.xmls[jid].\
 					get_widget('conversation_textview')
 				rect = conversation_textview.get_visible_rect()
 				iter = conversation_textview.get_iter_at_location(rect.x,\
 					rect.y + rect.height)
 				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
-		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
-			if event.state & gtk.gdk.CONTROL_MASK:
+		elif event.keyval == gtk.keysyms.Page_Up: 
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
 				current = self.notebook.get_current_page()
 				if current < (self.notebook.get_n_pages()-1):
 					self.notebook.set_current_page(current+1)
-			elif event.state & gtk.gdk.SHIFT_MASK:
+			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
 				conversation_textview = self.xmls[jid].\
 					get_widget('conversation_textview')
 				rect = conversation_textview.get_visible_rect()
 				iter = conversation_textview.get_iter_at_location(rect.x, rect.y)
 				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
-		elif event.keyval == gtk.keysyms.Tab and \
-			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
-			current = self.notebook.get_current_page()
-			if current < (self.notebook.get_n_pages()-1):
-				self.notebook.set_current_page(current+1)
-			else:
-				self.notebook.set_current_page(0)
+				# or event.keyval == gtk.keysyms.KP_Up
+		'''
+		elif event.keyval == gtk.keysyms.Up: 
+			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + UP
+				print 'be' # FIXME: find a way to to keyUP in scrolledwindow
+				conversation_scrolledwindow = self.xml.get_widget('conversation_scrolledwindow')
+				conversation_scrolledwindow.emit('scroll-child', gtk.SCROLL_PAGE_BACKWARD, False)
+		'''		
+		if event.keyval == gtk.keysyms.Tab:
+			'''
+			if event.state & (gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK):
+				print '^shift+tab'
+				# CTRL + SHIFT + TAB
+				current = self.notebook.get_current_page()
+				if current > 0:
+					self.notebook.set_current_page(current-1)
+				else:
+					self.notebook.set_current_page(0)
+			'''
+			if	event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
+				current = self.notebook.get_current_page()
+				if current < (self.notebook.get_n_pages()-1):
+					self.notebook.set_current_page(current+1)
+				else:
+					self.notebook.set_current_page(0)
 		elif (event.state & gtk.gdk.CONTROL_MASK) or (event.keyval ==\
 			gtk.keysyms.Control_L) or (event.keyval == gtk.keysyms.Control_R):
-			# we pressed a control key or ctrl+sth : we don't block the event
-			# in order to let ctrl+c do its work
+			# we pressed a control key or ctrl+sth: we don't block the event
+			# in order to let ctrl+c (copy text) and others do their default work
 			pass
 		else: # it's a normal key press make sure message_textview has focus
 			message_textview = self.xmls[jid].get_widget('message_textview')
@@ -375,6 +399,7 @@ class Chat:
 			iter = widget.get_iter_at_location(x, y)
 			tags = iter.get_tags()
 			if tags:
+				print tags
 				return True
 	
 	def print_time_timeout(self, jid):
