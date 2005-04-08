@@ -852,8 +852,6 @@ class Popup_window:
 		xml.signal_autoconnect(self)
 		close_button.connect('clicked', self.on_close_button_clicked, window_height)
 		
-		#FIXME: don't steal focus. not sure how to do ti
-		# set_focus_on_map(False) [pygtk26 only doesn't solve it!]
 		self.window.show_all()
 
 		gobject.timeout_add(5000, self.on_timeout, window_height)
