@@ -399,8 +399,10 @@ class Chat:
 			iter = widget.get_iter_at_location(x, y)
 			tags = iter.get_tags()
 			if tags:
-				print tags
-				return True
+				for tag in tags:
+					tag_name = tag.get_property('name')
+					if 'url' in tag_name or 'mail' in tag_name:
+						return True
 	
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
@@ -463,7 +465,7 @@ class Chat:
 			while not end_iter.ends_tag(texttag):
 				end_iter.forward_char()
 			word = begin_iter.get_text(end_iter)
-			if event.button == 3:
+			if event.button == 3: # right click
 				self.make_link_menu(event, kind, word)
 			else:
 				#we launch the correct application
