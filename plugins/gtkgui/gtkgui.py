@@ -401,6 +401,13 @@ class plugin:
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
 											not self.config['autopopup']:
+					#DOES NOT ALWAYS WORK WHY?
+					#I control nkour@lagaule in jabber
+					# have nkour@lagaul in nkour@jabber.org
+					#go online from psi in lagaule
+					#gajim doesn't give a shit
+					# WHY? same with offline
+					# new message works
 					instance = Popup_window(self, 'Contact Online', jid )
 					self.roster.popup_windows.append(instance)
 			elif old_show > 1 and statuss.index(user1.show) < 2 and \
@@ -927,7 +934,7 @@ class plugin:
 												#2:autoaway and use sleeper
 												#3:autoxa and use sleeper
 			self.send('ASK_ROSTER', a, self.queueIN)
-		#in pygtk2.4 FIXME: (nk) WHAT DO YOU MEAN?
+
 		iconset = self.config['iconset']
 		if not iconset:
 			iconset = 'sun'

@@ -39,12 +39,12 @@ class vcard_information_window:
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
-			widget.destroy()
+			self.window.destroy()
 
 	def on_close_button_clicked(self, widget):
 		"""Save user's informations and update the roster on the Jabber server"""
 		if self.vcard:
-			widget.get_toplevel().destroy()
+			self.window.destroy()
 			return
 		#update user.name if it's not ""
 		name_entry = self.xml.get_widget('nickname_entry')
@@ -73,7 +73,7 @@ class vcard_information_window:
 			self.plugin.accounts[self.account] = account_info
 			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
 				'Gtkgui'))
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def set_value(self, entry_name, value):
 		try:
@@ -490,7 +490,7 @@ class Add_new_contact_window:
 
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def on_subscribe_button_clicked(self, widget):
 		"""When Subscribe button is clicked"""
@@ -510,7 +510,7 @@ class Add_new_contact_window:
 			nickname)
 		if self.xml.get_widget('auto_authorize_checkbutton').get_active():
 			self.plugin.send('AUTH', self.account, jid)
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 		
 	def fill_jid(self):
 		protocol_combobox = self.xml.get_widget('protocol_combobox')
@@ -633,6 +633,7 @@ class Error_dialog:
 class subscription_request_window:
 	def __init__(self, plugin, jid, text, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'subscription_request_window', APP)
+		self.window = xml.get_widget('subscription_request_window')
 		self.plugin = plugin
 		self.jid = jid
 		self.account = account
@@ -646,19 +647,19 @@ class subscription_request_window:
 	window that appears when a user wants to add us to his/her roster"""
 	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 		
 	def on_authorize_button_clicked(self, widget):
 		"""Accept the request"""
 		self.plugin.send('AUTH', self.account, self.jid)
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
 			Add_new_contact_window(self.plugin, self.account, self.jid)
 	
 	def on_deny_button_clicked(self, widget):
 		"""refuse the request"""
 		self.plugin.send('DENY', self.account, self.jid)
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 class Join_groupchat_window:
 	def __init__(self, plugin, account, server='', room = ''):
@@ -705,7 +706,7 @@ class Join_groupchat_window:
 
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def on_join_button_clicked(self, widget):
 		"""When Join button is clicked"""
@@ -725,7 +726,7 @@ class Join_groupchat_window:
 		self.plugin.send('GC_JOIN', self.account, (nickname, room, server, \
 			password))
 			
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 class New_message_dialog:
 	def __init__(self, plugin, account):
@@ -755,7 +756,7 @@ class New_message_dialog:
 
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def on_chat_button_clicked(self, widget):
 		"""When Chat button is clicked"""
@@ -779,7 +780,7 @@ class New_message_dialog:
 		self.plugin.windows[self.account]['chats'][jid].window.present()
 		#FIXME: PROBLEM WITH FOCUS
 		
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 class Change_password_dialog:
 	def __init__(self, plugin, account):
@@ -850,6 +851,9 @@ class Popup_window:
 		
 		xml.signal_autoconnect(self)
 		close_button.connect('clicked', self.on_close_button_clicked, window_height)
+		
+		#FIXME: don't steal focus. not sure how to do ti
+		# set_focus_on_map(False) [pygtk26 only doesn't solve it!]
 		self.window.show_all()
 
 		gobject.timeout_add(5000, self.on_timeout, window_height)

@@ -42,11 +42,15 @@ class Preferences_window:
 		return True # do NOT destroy the window
 	
 	def on_close_button_clicked(self, widget):
-		self.window.hide()	
+		self.window.hide()
 
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
-		
+
+	def on_preferences_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			self.window.hide()
+
 	def on_checkbutton_toggled(self, widget, config_name, \
 		change_sensitivity_widgets = None):
 		if widget.get_active():
@@ -857,7 +861,7 @@ class Account_modification_window:
 	
 	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def on_checkbutton_toggled(self, widget, widgets):
 		"""set or unset sensitivity of widgets when widget is toggled"""
@@ -1045,7 +1049,7 @@ class Account_modification_window:
 				self.plugin.windows['accounts'].init_accounts()
 			#refresh roster
 			self.plugin.roster.draw_roster()
-			widget.get_toplevel().destroy()
+			self.window.destroy()
 			return
 		#if it's a new account
 		if name in self.plugin.accounts.keys():
@@ -1082,7 +1086,7 @@ class Account_modification_window:
 			self.plugin.windows['accounts'].init_accounts()
 		#refresh roster
 		self.plugin.roster.draw_roster()
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def on_change_password_button_clicked(self, widget):
 		dialog = Change_password_dialog(self.plugin, self.account)
@@ -1230,7 +1234,7 @@ class Accounts_window:
 		del self.plugin.windows['accounts'] 
 
 	def on_close_button_clicked(self, widget):
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def init_accounts(self):
 		"""initialize listStore with existing accounts"""
@@ -1325,7 +1329,7 @@ class Service_registration_window:
 	Window that appears when we want to subscribe to a service"""
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 		
 	def draw_table(self):
 		"""Draw the table in the window"""
@@ -1355,7 +1359,7 @@ class Service_registration_window:
 		self.plugin.roster.contacts[self.account][self.service] = [user1]
 		self.plugin.roster.add_user_to_roster(self.service, self.account)
 		self.plugin.send('REG_AGENT', self.account, self.service)
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 	
 	def __init__(self, service, infos, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'service_registration_window', APP)
@@ -1563,7 +1567,7 @@ class Service_discovery_window:
 
 	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 		
 	def browse(self, jid):
 		"""Send a request to the core to know the available services"""
@@ -1733,7 +1737,7 @@ class Service_discovery_window:
 			return
 		service = model.get_value(iter, 1)
 		self.plugin.send('REG_AGENT_INFO', self.account, service)
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 	
 	def on_services_treeview_cursor_changed(self, widget):
 		"""When we select a row :
