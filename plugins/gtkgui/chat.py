@@ -271,12 +271,11 @@ class Chat:
 
 	def on_conversation_textview_key_press_event(self, widget, event):
 		"""Do not block these events and send them to the notebook"""
-		'''
-		if event.state & (gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK):
-			if event.keyval == gtk.keysyms.Tab: # CTRL + SHIFT + TAB
+		if (event.state & gtk.gdk.CONTROL_MASK) and \
+			(event.state & gtk.gdk.SHIFT_MASK):
+			if event.hardware_keycode == 23: # CTRL + SHIFT + TAB
 				self.notebook.emit('key_press_event', event)
-		'''
-		if event.state & gtk.gdk.CONTROL_MASK:
+		elif event.state & gtk.gdk.CONTROL_MASK:
 			if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
 			elif event.keyval == gtk.keysyms.Page_Down: # CTRL + PAGE DOWN
@@ -319,25 +318,23 @@ class Chat:
 				iter = conversation_textview.get_iter_at_location(rect.x, rect.y)
 				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
 				# or event.keyval == gtk.keysyms.KP_Up
-		'''
 		elif event.keyval == gtk.keysyms.Up: 
 			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + UP
 				print 'be' # FIXME: find a way to to keyUP in scrolledwindow
-				conversation_scrolledwindow = self.xml.get_widget('conversation_scrolledwindow')
-				conversation_scrolledwindow.emit('scroll-child', gtk.SCROLL_PAGE_BACKWARD, False)
-		'''		
-		if event.keyval == gtk.keysyms.Tab:
-			'''
-			if event.state & (gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK):
-				print '^shift+tab'
+				conversation_scrolledwindow = self.xml.get_widget\
+					('conversation_scrolledwindow')
+				conversation_scrolledwindow.emit('scroll-child', \
+					gtk.SCROLL_PAGE_BACKWARD, False)
+		elif event.hardware_keycode == 23: # TAB
+			if (event.state & gtk.gdk.CONTROL_MASK) and \
+				(event.state & gtk.gdk.SHIFT_MASK):
 				# CTRL + SHIFT + TAB
 				current = self.notebook.get_current_page()
 				if current > 0:
 					self.notebook.set_current_page(current-1)
 				else:
-					self.notebook.set_current_page(0)
-			'''
-			if	event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
+					self.notebook.set_current_page(self.notebook.get_n_pages()-1)
+			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				current = self.notebook.get_current_page()
 				if current < (self.notebook.get_n_pages()-1):
 					self.notebook.set_current_page(current+1)

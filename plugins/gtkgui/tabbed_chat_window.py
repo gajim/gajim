@@ -154,11 +154,13 @@ class Tabbed_chat_window(Chat):
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation"""
 		jid = self.get_active_jid()
-		print 'jid', jid
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		if event.keyval == gtk.keysyms.Tab and \
-         (event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
-			self.notebook.emit('key_press_event', event)
+		if event.hardware_keycode == 23: # TAB
+			if (event.state & gtk.gdk.CONTROL_MASK) and \
+				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + TAB
+				self.notebook.emit('key_press_event', event)
+			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
+				self.notebook.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				self.notebook.emit('key_press_event', event)
