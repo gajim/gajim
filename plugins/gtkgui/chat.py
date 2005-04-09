@@ -327,8 +327,7 @@ class Chat:
 					gtk.SCROLL_PAGE_BACKWARD, False)
 		elif event.hardware_keycode == 23: # TAB
 			if (event.state & gtk.gdk.CONTROL_MASK) and \
-				(event.state & gtk.gdk.SHIFT_MASK):
-				# CTRL + SHIFT + TAB
+				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB
 				current = self.notebook.get_current_page()
 				if current > 0:
 					self.notebook.set_current_page(current-1)
@@ -572,6 +571,11 @@ class Chat:
 			self.print_with_tag_list(conversation_buffer, special_text, end_iter, \
 				all_tags)
 
+	def scroll_to_end(self, textview):
+		buffer = textview.get_buffer()
+		textview.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
+		return False
+
 	def print_conversation_line(self, text, jid, kind, name, tim, \
 		other_tags_for_name = []):
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
@@ -629,8 +633,8 @@ class Chat:
 			(kind == 'outgoing'):
 			#we are at the end or we are sending something
 			end = True
-			conversation_textview.scroll_to_mark(conversation_buffer.\
-				get_mark('end'), 0.1, 0, 0, 0)
+			# We scroll to the end after the scrollbar has appeared
+			gobject.timeout_add(100, self.scroll_to_end, conversation_textview)
 		if ((jid != self.get_active_jid()) or (not self.window.is_active()) or \
 			(not end)) and kind == 'incoming':
 			self.nb_unread[jid] += 1
