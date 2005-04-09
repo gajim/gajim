@@ -282,10 +282,10 @@ class Groupchat_window(Chat):
 			if not text:
 				return False
 			splitted_text = text.split()
-			begin = splitted_text[-1] #how is this the begin? This is the end! NO?
+			begin = splitted_text[-1] # begining of the latest word we typed
 			for nick in list_nick:
-				if nick.find(begin) != -1:
-					if len(splitted_text) == 1:
+				if nick.find(begin) == 0: # the word is the begining of a nick
+					if len(splitted_text) == 1: # This is the 1st word of the line ?
 						add = ': '
 					else:
 						add = ' '
