@@ -215,7 +215,9 @@ class Chat:
 			self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		end_iter = conversation_buffer.get_end_iter()
-		conversation_buffer.create_mark('end', end_iter, 0)
+		
+		conversation_buffer.create_mark('end', end_iter, False)
+		
 		self.tagIn[jid] = conversation_buffer.create_tag('incoming')
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn[jid].set_property('foreground', color)
@@ -573,7 +575,11 @@ class Chat:
 
 	def scroll_to_end(self, textview):
 		buffer = textview.get_buffer()
-		textview.scroll_to_mark(buffer.get_mark('end'), 0.1, 0, 0, 0)
+		end_iter = buffer.get_end_iter()
+		# go before \n (which is always the last char in a message)
+		end_iter.backward_line() # FIXME: doesn't work as it should
+		buffer.create_mark('end_before_newline', end_iter, True)
+		textview.scroll_to_mark(buffer.get_mark('end_before_newline'), 0.1, 0, 0, 0)
 		return False
 
 	def print_conversation_line(self, text, jid, kind, name, tim, \
@@ -634,7 +640,7 @@ class Chat:
 			#we are at the end or we are sending something
 			end = True
 			# We scroll to the end after the scrollbar has appeared
-			gobject.timeout_add(100, self.scroll_to_end, conversation_textview)
+			gobject.timeout_add(1000, self.scroll_to_end, conversation_textview)
 		if ((jid != self.get_active_jid()) or (not self.window.is_active()) or \
 			(not end)) and kind == 'incoming':
 			self.nb_unread[jid] += 1
