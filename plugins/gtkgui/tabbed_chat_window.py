@@ -157,7 +157,7 @@ class Tabbed_chat_window(Chat):
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		if event.hardware_keycode == 23: # TAB
 			if (event.state & gtk.gdk.CONTROL_MASK) and \
-				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + TAB
+				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB
 				self.notebook.emit('key_press_event', event)
 			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
