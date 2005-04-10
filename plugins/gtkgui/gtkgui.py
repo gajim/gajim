@@ -334,6 +334,7 @@ class plugin:
 		# role, affiliation, real_jid, reason, actor, statusCode))
 		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd', 'invisible']
 		old_show = 0
+		new_show = statuss.index(array[1])
 		jid = array[0].split('/')[0]
 		keyID = array[5]
 		resource = array[3]
@@ -370,18 +371,21 @@ class plugin:
 						user1.priority, user1.keyID)
 					luser.append(user1)
 				user1.resource = resource
-			if old_show == 0 and statuss.index(array[1]) > 1:
+			if old_show == 0 and new_show > 1:
 				if not user1.jid in self.roster.newly_added[account]:
 					self.roster.newly_added[account].append(user1.jid)
 				if user1.jid in self.roster.to_be_removed[account]:
 					self.roster.to_be_removed[account].remove(user1.jid)
-				gobject.timeout_add(5000, self.roster.remove_newly_added, user1.jid, account)
-			if old_show > 1 and statuss.index(array[1]) == 0 and self.connected[account] > 1:
+				gobject.timeout_add(5000, self.roster.remove_newly_added, \
+					user1.jid, account)
+			if old_show > 1 and new_show == 0 and self.connected[account] > 1:
 				if not user1.jid in self.roster.to_be_removed[account]:
 					self.roster.to_be_removed[account].append(user1.jid)
 				if user1.jid in self.roster.newly_added[account]:
 					self.roster.newly_added[account].remove(user1.jid)
-				gobject.timeout_add(5000, self.roster.really_remove_user, user1, account)
+				if not self.queues[account].has_key(jid):
+					gobject.timeout_add(5000, self.roster.really_remove_user, user1,\
+						account)
 			user1.show = array[1]
 			user1.status = array[2]
 			user1.priority = priority
@@ -395,7 +399,7 @@ class plugin:
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
 			#play sound
-			if old_show < 2 and statuss.index(user1.show) > 1 and \
+			if old_show < 2 and new_show > 1 and \
 				self.config['sound_contact_connected']:
 				self.play_sound('sound_contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
@@ -410,7 +414,7 @@ class plugin:
 					# new message works
 					instance = Popup_window(self, 'Contact Online', jid )
 					self.roster.popup_windows.append(instance)
-			elif old_show > 1 and statuss.index(user1.show) < 2 and \
+			elif old_show > 1 and new_show < 2 and \
 				self.config['sound_contact_disconnected']:
 				self.play_sound('sound_contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \

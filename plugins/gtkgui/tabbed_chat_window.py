@@ -215,7 +215,7 @@ class Tabbed_chat_window(Chat):
 		if (user.show == 'offline' or user.show == 'error') and \
 			not showOffline:
 			if len(self.plugin.roster.contacts[self.account][jid]) == 1:
-				self.plugin.roster.remove_user(user, self.account)
+				self.plugin.roster.really_remove_user(user, self.account)
 
 	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :
