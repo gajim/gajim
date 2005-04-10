@@ -730,17 +730,22 @@ class Preferences_window:
 		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
 			set_active(self.plugin.config['ignore_unknown_contacts'])
 
-		if not self.plugin.config['sounds_on']:
+		#sounds
+		if self.plugin.config['sounds_on']:
+			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
+		else:
 			self.xml.get_widget('sound_player_hbox').set_sensitive(False)
 			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
 			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
-			#FIXME:
-		
+
+		if os.name == 'nt': # if windows, player must not be changeable
+			self.xml.get_widget('sound_player_hbox').set_visible(False)
+
 		#sound player
 		self.xml.get_widget('soundplayer_entry').set_text(\
 			self.plugin.config['soundplayer'])
 
-		#sounds
+		#sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, \
 			gobject.TYPE_STRING)
@@ -766,12 +771,6 @@ class Preferences_window:
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text=2)
 		self.fill_sound_treeview()
-
-		if not os.name == 'posix':
-			self.xml.get_widget('soundplayer_entry').set_sensitive(False)
-			self.sound_tree.set_sensitive(False)
-			self.xml.get_widget('sounds_entry').set_sensitive(False)
-			self.xml.get_widget('sounds_button').set_sensitive(False)
 		
 		#Autoaway
 		st = self.plugin.config['autoaway']

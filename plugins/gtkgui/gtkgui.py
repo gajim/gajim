@@ -64,6 +64,11 @@ import Queue
 import sre
 import common.sleepy
 
+try:
+	import winsound # windows-only built-in module for playing wav
+except ImportError:
+	pass
+
 class CellRendererImage(gtk.GenericCellRenderer):
 
 	__gproperties__ = {
@@ -276,21 +281,25 @@ class plugin:
 			
 
 	def play_sound(self, event):
-		if os.name != 'posix':
+		if not self.config['sounds_on']:
 			return
-		if self.config['soundplayer'] == '':
+		if not self.config[event]: # FIXME: CAN THIS EVER HAPPEN?
 			return
-		if not self.config[event]:
+		path_to_soundfile = self.config[event + '_file']
+		if not os.path.exists(path_to_soundfile):
 			return
-		file = self.config[event + '_file']
-		if not os.path.exists(file):
-			return
-		argv = self.config['soundplayer'].split()
-		argv.append(file)
-		pid = os.spawnvp(os.P_NOWAIT, argv[0], argv)
-		pidp, r = os.waitpid(pid, os.WNOHANG)
-		if pidp == 0:
-			gobject.timeout_add(10000, self.play_timeout, pid)
+		if os.name  == 'nt':
+			winsound.PlaySound(path_to_soundfile, \
+									winsound.SND_FILENAME|winsound.SND_ASYNC)
+		elif os.name == 'posix':
+			if self.config['soundplayer'] == '':
+				return
+			argv = self.config['soundplayer'].split()
+			argv.append(path_to_soundfile)
+			pid = os.spawnvp(os.P_NOWAIT, argv[0], argv)
+			pidp, r = os.waitpid(pid, os.WNOHANG)
+			if pidp == 0:
+				gobject.timeout_add(10000, self.play_timeout, pid)
 
 	def send(self, event, account, data):
 		self.queueOUT.put((event, account, data))
