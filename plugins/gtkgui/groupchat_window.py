@@ -375,8 +375,10 @@ class Groupchat_window(Chat):
 		"""Call vcard_information_window class to display user's information"""
 		if not self.plugin.windows[self.account]['infos'].has_key(jid):
 			self.plugin.windows[self.account]['infos'][jid] = \
-				vcard_information_window(jid, self.plugin, self.account, True)
+				Vcard_information_window(jid, self.plugin, self.account, True)
 			self.plugin.send('ASK_VCARD', self.account, jid)
+			#FIXME: maybe use roster.on_info above?
+			
 			#FIXME: we need the resource but it's not saved
 			#self.plugin.send('ASK_OS_INFO', self.account, jid, resource)
 

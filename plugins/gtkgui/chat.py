@@ -637,7 +637,7 @@ class Chat:
 			#we are at the end or we are sending something
 			end = True
 			# We scroll to the end after the scrollbar has appeared
-			gobject.timeout_add(100, self.scroll_to_end, conversation_textview)
+			gobject.timeout_add(50, self.scroll_to_end, conversation_textview)
 		if ((jid != self.get_active_jid()) or (not self.window.is_active()) or \
 			(not end)) and kind == 'incoming':
 			self.nb_unread[jid] += 1

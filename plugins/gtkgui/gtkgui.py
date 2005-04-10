@@ -283,8 +283,6 @@ class plugin:
 	def play_sound(self, event):
 		if not self.config['sounds_on']:
 			return
-		if not self.config[event]: # FIXME: CAN THIS EVER HAPPEN?
-			return
 		path_to_soundfile = self.config[event + '_file']
 		if not os.path.exists(path_to_soundfile):
 			return
@@ -452,6 +450,9 @@ class plugin:
 						not self.queues[account].has_key(jid):
 			first = True
 			if	not self.config['autopopup']:
+				#FIXME: check if the new msg was from contact in the roster or not
+				# and display the name or the jid [if not]
+				#if 
 				instance = Popup_window(self, 'New Message', 'From '+ jid )
 				self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)

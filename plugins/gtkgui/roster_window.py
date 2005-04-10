@@ -392,9 +392,11 @@ class Roster_window:
 
 	def on_info(self, widget, user, account):
 		"""Call vcard_information_window class to display user's information"""
-		if not self.plugin.windows[account]['infos'].has_key(user.jid):
+		if self.plugin.windows[account]['infos'].has_key(user.jid):
+			self.plugin.windows[account]['infos'][user.jid].window.present()
+		else:
 			self.plugin.windows[account]['infos'][user.jid] = \
-				vcard_information_window(user, self.plugin, account)
+				Vcard_information_window(user, self.plugin, account)
 
 	def on_agent_logging(self, widget, jid, state, account):
 		"""When an agent is requested to log in or off"""
@@ -920,9 +922,8 @@ class Roster_window:
 		New_message_dialog(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
-		About_dialog()
-		#inst = Popup_window(self.plugin, 'Fake Message', 'nkour@')
-		#self.popup_windows.append( inst )
+		print self.get_contacts_list()
+		#About_dialog()
 
 	def on_accounts_menuitem_activate(self, widget):
 		if self.plugin.windows.has_key('accounts'):
@@ -1163,6 +1164,65 @@ class Roster_window:
 		self.plugin.config['showoffline'] = 1 - self.plugin.config['showoffline']
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.draw_roster()
+
+	def get_groups_list(self):
+		model = self.tree.get_model()
+		list = []
+		fin = False
+		role = model.get_iter_root()
+		if not role:
+			return list
+		while not fin:
+			fin2 = False
+			user = model.iter_children(role)
+			if not user:
+				fin2 = True
+			while not fin2:
+				group_name = model.get_value(user, 1)
+				list.append(group_name)
+				user = model.iter_next(user)
+				if not user:
+					fin2 = True
+			role = model.iter_next(role)
+			if not role:
+				fin = True
+		return list
+
+	def get_contacts_list(self):
+		'''
+		groups = self.get_groups_list()
+		for g in groups:
+			bla bla
+		'''	
+		#OR TEST WITH CHAT --> ABOUT [freeze atm] 
+		'''
+		model = self.tree.get_model()
+		list = []
+		fin = False
+		role = model.get_iter_root()
+		if not role:
+			return list
+		while not fin:
+			fin2 = False
+			group = model.iter_children(role)
+			if not group:
+				fin2 = True
+			while not fin2:
+				fin3 = False
+				user = model.iter_children(group)
+				if not user:
+					fin3 = True
+				while not fin3:
+					contact_nick = model.get_value(user, 1)
+					list.append(contact_nick)
+					user = model.iter_next(user)
+					if not user:
+						fin3 = True
+			role = model.iter_next(role)
+			if not role:
+				fin = True
+			'''
+		return list
 
 	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
 		"""When a row is added, set properties for icon renderer"""

@@ -31,7 +31,7 @@ import version
 
 GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 
-class vcard_information_window:
+class Vcard_information_window:
 	"""Class for user's information window"""
 	def on_user_information_window_destroy(self, widget=None):
 		"""close window"""
