@@ -575,11 +575,7 @@ class Chat:
 
 	def scroll_to_end(self, textview):
 		buffer = textview.get_buffer()
-		end_iter = buffer.get_end_iter()
-		# go before \n (which is always the last char in a message)
-		end_iter.backward_line() # FIXME: doesn't work as it should
-		buffer.create_mark('end_before_newline', end_iter, True)
-		textview.scroll_to_mark(buffer.get_mark('end_before_newline'), 0.1, 0, 0, 0)
+		textview.scroll_to_mark(buffer.get_mark('end'), 0, True, 0, 1)
 		return False
 
 	def print_conversation_line(self, text, jid, kind, name, tim, \
@@ -590,6 +586,8 @@ class Chat:
 		if not text:
 			text = ''
 		end_iter = conversation_buffer.get_end_iter()
+		if conversation_buffer.get_char_count() > 0:
+			conversation_buffer.insert(end_iter, '\n')
 		if self.plugin.config['print_time'] == 'always':
 			if not tim:
 				tim = time.localtime()
@@ -617,7 +615,6 @@ class Chat:
 				 + self.after_nickname_symbols + ' ' 
 			self.print_with_tag_list(conversation_buffer, format, end_iter, tags)
 				
-		text += '\n'
 		# detect urls formatting and if the user has it on emoticons
 		index = self.detect_and_print_special_text(text, jid, \
 			tags, print_all_special)
@@ -640,7 +637,7 @@ class Chat:
 			#we are at the end or we are sending something
 			end = True
 			# We scroll to the end after the scrollbar has appeared
-			gobject.timeout_add(1000, self.scroll_to_end, conversation_textview)
+			gobject.timeout_add(100, self.scroll_to_end, conversation_textview)
 		if ((jid != self.get_active_jid()) or (not self.window.is_active()) or \
 			(not end)) and kind == 'incoming':
 			self.nb_unread[jid] += 1
