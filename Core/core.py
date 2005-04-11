@@ -64,6 +64,7 @@ distro_info = {
 
 def get_os_info():
 	if os.name =='nt':
+		import platform
 		win_version = platform.release()
 		return 'Windows' + ' ' + win_version
 	elif os.name =='posix':
