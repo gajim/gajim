@@ -739,7 +739,7 @@ class Preferences_window:
 			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
 
 		if os.name == 'nt': # if windows, player must not be changeable
-			self.xml.get_widget('sound_player_hbox').set_visible(False)
+			self.xml.get_widget('sound_player_hbox').set_sensitive(False)
 
 		#sound player
 		self.xml.get_widget('soundplayer_entry').set_text(\
