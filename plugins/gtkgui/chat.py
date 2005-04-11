@@ -583,9 +583,14 @@ class Chat:
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		print_all_special = False
+		at_the_end = False
+		end_iter = conversation_buffer.get_end_iter()
+		end_rect = conversation_textview.get_iter_location(end_iter)
+		visible_rect = conversation_textview.get_visible_rect()
+		if end_rect.y <= (visible_rect.y + visible_rect.height):
+			at_the_end = True
 		if not text:
 			text = ''
-		end_iter = conversation_buffer.get_end_iter()
 		if conversation_buffer.get_char_count() > 0:
 			conversation_buffer.insert(end_iter, '\n')
 		if self.plugin.config['print_time'] == 'always':
@@ -628,12 +633,8 @@ class Chat:
 			conversation_buffer.insert(end_iter, text[index:])
 
 		#scroll to the end of the textview
-		end_iter = conversation_buffer.get_end_iter()
-		end_rect = conversation_textview.get_iter_location(end_iter)
-		visible_rect = conversation_textview.get_visible_rect()
 		end = False
-		if end_rect.y <= (visible_rect.y + visible_rect.height) or \
-			(kind == 'outgoing'):
+		if at_the_end or (kind == 'outgoing'):
 			#we are at the end or we are sending something
 			end = True
 			# We scroll to the end after the scrollbar has appeared
