@@ -389,6 +389,7 @@ class plugin:
 					self.roster.to_be_removed[account].append(user1.jid)
 				if user1.jid in self.roster.newly_added[account]:
 					self.roster.newly_added[account].remove(user1.jid)
+				self.roster.redraw_jid(user1.jid, account)
 				if not self.queues[account].has_key(jid):
 					gobject.timeout_add(5000, self.roster.really_remove_user, user1,\
 						account)
