@@ -60,6 +60,7 @@ class Preferences_window:
 		if change_sensitivity_widgets != None:
 			for w in change_sensitivity_widgets:
 				w.set_sensitive(widget.get_active())
+		self.plugin.save_config()
 
 	def on_tray_icon_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -71,12 +72,14 @@ class Preferences_window:
 			self.plugin.hide_systray()
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_save_position_checkbutton_toggled(self, widget):
 		if widget.get_active():
 			self.plugin.config['saveposition'] = 1
 		else:
 			self.plugin.config['saveposition'] = 0
+		self.plugin.save_config()
 	
 	def on_merge_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -85,6 +88,7 @@ class Preferences_window:
 			self.plugin.config['mergeaccounts'] = 0
 		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_iconset_combobox_changed(self, widget):
 		model = widget.get_model()
@@ -92,6 +96,7 @@ class Preferences_window:
 		icon_string = model[active][0]
 		self.plugin.config['iconset'] = icon_string
 		self.plugin.roster.reload_pixbufs()
+		self.plugin.save_config()
 		
 	def on_account_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The Account Text"""
@@ -100,6 +105,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['accounttextcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_group_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The Group Text"""
@@ -108,6 +114,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['grouptextcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 
 	def on_user_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The User Text"""
@@ -116,6 +123,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['usertextcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 
 	def on_account_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of Account Text"""
@@ -124,6 +132,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['accountbgcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_group_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of Group Text"""
@@ -132,6 +141,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['groupbgcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_user_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of User Text"""
@@ -140,24 +150,28 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['userbgcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_account_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The User Text"""
 		font_string = widget.get_font_name()
 		self.plugin.config['accountfont'] = font_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 
 	def on_group_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The Group Text"""
 		font_string = widget.get_font_name()
 		self.plugin.config['groupfont'] = font_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_user_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The User Text"""
 		font_string = widget.get_font_name()
 		self.plugin.config['userfont'] = font_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_reset_colors_and_fonts_button_clicked(self, widget):
 		defaults = self.plugin.default_config
@@ -189,6 +203,7 @@ class Preferences_window:
 		self.xml.get_widget('user_text_fontbutton').set_font_name(\
 			defaults['userfont'])
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
 		buf1 = {}
@@ -243,6 +258,7 @@ class Preferences_window:
 #							buf1[acct][jid])
 #					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
 #						get_widget('message_textview').set_buffer(buf2[acct][jid])
+		self.plugin.save_config()
 	
 	def update_print_time(self):
 		"""Update time in Opened Chat Windows"""
@@ -257,28 +273,35 @@ class Preferences_window:
 		if widget.get_active():
 			self.plugin.config['print_time'] = 'never'
 		self.update_print_time()
+		self.plugin.save_config()
 
 	def on_time_sometimes_radiobutton_toggled(self, widget):
 		if widget.get_active():
 			self.plugin.config['print_time'] = 'sometimes'
 		self.update_print_time()
+		self.plugin.save_config()
 
 	def on_time_always_radiobutton_toggled(self, widget):
 		if widget.get_active():
 			self.plugin.config['print_time'] = 'always'
 		self.update_print_time()
+		self.plugin.save_config()
 
 	def on_before_time_entry_focus_out_event(self, widget, event):
 		self.plugin.config['before_time'] = widget.get_text()
+		self.plugin.save_config()
 	
 	def on_after_time_entry_focus_out_event(self, widget, event):
 		self.plugin.config['after_time'] = widget.get_text()
+		self.plugin.save_config()
 
 	def on_before_nickname_entry_focus_out_event(self, widget, event):
 		self.plugin.config['before_nickname'] = widget.get_text()
+		self.plugin.save_config()
 
 	def on_after_nickname_entry_focus_out_event(self, widget, event):
 		self.plugin.config['after_nickname'] = widget.get_text()
+		self.plugin.save_config()
 
 	def update_text_tags(self):
 		"""Update color tags in Opened Chat Windows"""
@@ -296,6 +319,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['inmsgcolor'] = color_string
 		self.update_text_tags()
+		self.plugin.save_config()
 		
 	def on_outgoing_msg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Outgoing Messages"""
@@ -304,6 +328,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['outmsgcolor'] = color_string
 		self.update_text_tags()
+		self.plugin.save_config()
 	
 	def on_status_msg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Status Messages"""
@@ -312,6 +337,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['statusmsgcolor'] = color_string
 		self.update_text_tags()
+		self.plugin.save_config()
 	
 	def on_reset_colors_button_clicked(self, widget):
 		defaults = self.plugin.default_config
@@ -325,6 +351,7 @@ class Preferences_window:
 		self.xml.get_widget('status_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(defaults['statusmsgcolor']))		
 		self.update_text_tags()
+		self.plugin.save_config()
 
 	def on_use_emoticons_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'useemoticons', \
@@ -349,13 +376,13 @@ class Preferences_window:
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',\
-										[self.xml.get_widget('sound_player_hbox'),\
+										[self.xml.get_widget('soundplayer_hbox'),\
 										self.xml.get_widget('sounds_scrolledwindow'),\
 										self.xml.get_widget('browse_sounds_hbox')])
-		
 	
 	def on_soundplayer_entry_changed(self, widget):
 		self.plugin.config['soundplayer'] = widget.get_text()
+		self.plugin.save_config()
 		
 	def on_prompt_online_status_message_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ask_online_status')
@@ -375,6 +402,7 @@ class Preferences_window:
 			self.plugin.config['sound_' + sound_event + '_file'] = \
 				model.get_value(iter, 2)
 			iter = model.iter_next(iter)
+		self.plugin.save_config()
 
 	def on_auto_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autoaway', \
@@ -386,6 +414,7 @@ class Preferences_window:
 		self.plugin.sleeper = common.sleepy.Sleepy(\
 			self.plugin.config['autoawaytime']*60, \
 			self.plugin.config['autoxatime']*60)
+		self.plugin.save_config()
 
 	def on_auto_xa_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autoxa', \
@@ -397,6 +426,7 @@ class Preferences_window:
 		self.plugin.sleeper = common.sleepy.Sleepy(\
 			self.plugin.config['autoawaytime']*60, \
 			self.plugin.config['autoxatime']*60)
+		self.plugin.save_config()
 
 	def on_msg_treemodel_row_changed(self, model, path, iter):
 		iter = model.get_iter_first()
@@ -410,6 +440,7 @@ class Preferences_window:
 			del self.plugin.config['msg%i_name' % i]
 			del self.plugin.config['msg%i' % i]
 			i += 1
+		self.plugin.save_config()
 
 	def on_msg_treemodel_row_deleted(self, model, path, iter):
 		iter = model.get_iter_first()
@@ -423,6 +454,7 @@ class Preferences_window:
 			del self.plugin.config['msg%i_name' % i]
 			del self.plugin.config['msg%i' % i]
 			i += 1
+		self.plugin.save_config()
 
 	def on_links_open_with_combobox_changed(self, widget):
 		if widget.get_active() == 2:
@@ -434,12 +466,15 @@ class Preferences_window:
 			if widget.get_active() == 1:
 				self.plugin.config['openwith'] = 'kfmclient exec'
 			self.xml.get_widget('custom_apps_frame').set_sensitive(False)
+		self.plugin.save_config()
 
 	def on_custom_browser_entry_changed(self, widget):
 		self.plugin.config['custombrowser'] = widget.get_text()
+		self.plugin.save_config()
 
 	def on_custom_mail_client_entry_changed(self, widget):
 		self.plugin.config['custommailapp'] = widget.get_text()
+		self.plugin.save_config()
 
 	def on_log_in_contact_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -447,6 +482,7 @@ class Preferences_window:
 		else:
 			self.config_logger['lognotusr'] = 0
 		self.plugin.send('CONFIG', None, ('Logger', self.config_logger, 'GtkGui'))
+		self.plugin.save_config()
 
 	def on_log_in_extern_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -454,6 +490,7 @@ class Preferences_window:
 		else:
 			self.config_logger['lognotsep'] = 0
 		self.plugin.send('CONFIG', None, ('Logger', self.config_logger, 'GtkGui'))
+		self.plugin.save_config()
 
 	def on_do_not_send_os_info_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -461,6 +498,7 @@ class Preferences_window:
 			self.plugin.config['do_not_send_os_info'] = 1
 		else:
 			self.plugin.config['do_not_send_os_info'] = 0
+		self.plugin.save_config()
 
 
 	def fill_msg_treeview(self):
@@ -734,12 +772,12 @@ class Preferences_window:
 		if self.plugin.config['sounds_on']:
 			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
 		else:
-			self.xml.get_widget('sound_player_hbox').set_sensitive(False)
+			self.xml.get_widget('soundplayer_hbox').set_sensitive(False)
 			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
 			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
 
 		if os.name == 'nt': # if windows, player must not be changeable
-			self.xml.get_widget('sound_player_hbox').set_sensitive(False)
+			self.xml.get_widget('soundplayer_hbox').set_sensitive(False)
 
 		#sound player
 		self.xml.get_widget('soundplayer_entry').set_text(\
@@ -1445,6 +1483,7 @@ class Add_remove_emoticons_window:
 			iter = model.iter_next(iter)
 		self.plugin.config['emoticons'] = '\t'.join(emots)
 		self.plugin.init_regexp()
+		self.plugin.save_config()
 
 	def on_emoticons_treemodel_row_changed(self, model, path, iter):
 		if model[path][1] != None and len(model[path][1]) != 0:
@@ -1455,7 +1494,8 @@ class Add_remove_emoticons_window:
 				emots.append(model.get_value(iter, 1))
 				iter = model.iter_next(iter)
 			self.plugin.config['emoticons'] = '\t'.join(emots)
-			self.plugin.init_regexp()			
+			self.plugin.init_regexp()
+		self.plugin.save_config()
 
 	def image_is_ok(self, image):
 		if not os.path.exists(image):
@@ -1789,6 +1829,7 @@ class Service_discovery_window:
 			' '.join(self.latest_addresses)
 		self.services_treeview.get_model().clear()
 		self.browse(server_address)
+		self.plugin.save_config()
 	
 	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:

@@ -64,15 +64,7 @@ distro_info = {
 
 def get_os_info():
 	if os.name =='nt':
-		win_version = {
-			(1, 4, 0): "95",\
-			(1, 4, 10): "98",\
-			(1, 4, 90): "ME",\
-			(2, 4, 0): "NT",\
-			(2, 5, 0): "2000",\
-			(2, 5, 1): "XP"
-		}[os.sys.getwindowsversion()[3], os.sys.getwindowsversion()[0],\
-													os.sys.getwindowsversion()[1]]
+		win_version = platform.release()
 		return 'Windows' + ' ' + win_version
 	elif os.name =='posix':
 		executable = 'lsb_release'

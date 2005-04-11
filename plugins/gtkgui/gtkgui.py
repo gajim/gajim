@@ -278,7 +278,6 @@ class plugin:
 	def play_timeout(self, pid):
 		pidp, r = os.waitpid(pid, os.WNOHANG)
 		return 0
-			
 
 	def play_sound(self, event):
 		if not self.config['sounds_on']:
@@ -471,7 +470,8 @@ class plugin:
 		
 	def handle_event_msgsent(self, account, array):
 		#('MSG', account, (jid, msg, keyID))
-		self.play_sound('sound_message_sent')
+		if self.config['sound_message_sent']:
+			self.play_sound('sound_message_sent')
 		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
@@ -557,7 +557,12 @@ class plugin:
 		self.roster.draw_roster()
 
 	def handle_event_quit(self, p1, p2):
-		self.roster.on_quit()
+		self.roster.on_quit() # SUCH FUNCTION DOES NOT EXIST!!
+
+	def save_config(self):
+		hidden_lines = self.config['hiddenlines'].split('\t')
+		self.config['hiddenlines'] = '\t'.join(hidden_lines)
+		self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
 
 	def handle_event_myvcard(self, account, array):
 		nick = ''

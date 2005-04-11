@@ -4458,7 +4458,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkHBox" id="sound_player_hbox">
+				<widget class="GtkHBox" id="soundplayer_hbox">
 				  <property name="visible">True</property>
 				  <property name="homogeneous">False</property>
 				  <property name="spacing">5</property>

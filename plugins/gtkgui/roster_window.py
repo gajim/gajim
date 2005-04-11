@@ -970,8 +970,7 @@ class Roster_window:
 				self.plugin.config['width'], self.plugin.config['height'] = \
 					self.window.get_size()
 
-		self.plugin.config['hiddenlines'] = '\t'.join(self.hidden_lines)
-		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
+		self.plugin.save_config()
 		self.plugin.send('QUIT', None, ('gtkgui', 1))
 		print _("plugin gtkgui stopped")
 		self.close_all(self.plugin.windows)
@@ -1165,64 +1164,10 @@ class Roster_window:
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.draw_roster()
 
-	def get_groups_list(self):
-		model = self.tree.get_model()
-		list = []
-		fin = False
-		role = model.get_iter_root()
-		if not role:
-			return list
-		while not fin:
-			fin2 = False
-			user = model.iter_children(role)
-			if not user:
-				fin2 = True
-			while not fin2:
-				group_name = model.get_value(user, 1)
-				list.append(group_name)
-				user = model.iter_next(user)
-				if not user:
-					fin2 = True
-			role = model.iter_next(role)
-			if not role:
-				fin = True
-		return list
-
 	def get_contacts_list(self):
-		'''
-		groups = self.get_groups_list()
-		for g in groups:
-			bla bla
-		'''	
-		#OR TEST WITH CHAT --> ABOUT [freeze atm] 
-		'''
-		model = self.tree.get_model()
-		list = []
-		fin = False
-		role = model.get_iter_root()
-		if not role:
-			return list
-		while not fin:
-			fin2 = False
-			group = model.iter_children(role)
-			if not group:
-				fin2 = True
-			while not fin2:
-				fin3 = False
-				user = model.iter_children(group)
-				if not user:
-					fin3 = True
-				while not fin3:
-					contact_nick = model.get_value(user, 1)
-					list.append(contact_nick)
-					user = model.iter_next(user)
-					if not user:
-						fin3 = True
-			role = model.iter_next(role)
-			if not role:
-				fin = True
-			'''
-		return list
+		for acc in self.plugin.accounts.keys():
+			print self.contacts[acc]
+		
 
 	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
 		"""When a row is added, set properties for icon renderer"""
