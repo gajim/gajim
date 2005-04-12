@@ -115,7 +115,7 @@ class Vcard_information_window:
 		resources = self.user.resource + ' (' + str(self.user.priority) + ')'
 		if not self.user.status:
 			self.user.status = ''
-		stats = self.user.show + ' : ' + self.user.status
+		stats = self.user.show + ': ' + self.user.status
 		for u in self.plugin.roster.contacts[self.account][self.user.jid]:
 			if u.resource != self.user.resource:
 				resources += '\n' + u.resource + ' (' + str(u.priority) + ')'
