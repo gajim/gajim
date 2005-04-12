@@ -28,7 +28,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
+GTKGUI_GLADE='gtkgui.glade'
 
 class Systray:
 	"""Class for icon in the systray"""

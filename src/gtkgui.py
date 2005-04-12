@@ -1,4 +1,4 @@
-##	plugins/gtkgui.py
+##	gtkgui.py
 ##
 ## Gajim Team:
 ## - Yann Le Boulanger <asterix@lagaule.org>
@@ -16,41 +16,7 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
-
-if __name__ == "__main__":
-	import getopt, pickle, sys, socket
-
-	try: 	# Import Psyco if available
-		import psyco
-		psyco.full()
-	except ImportError:
-		pass
 		
-	try:
-		opts, args = getopt.getopt(sys.argv[1:], "p:h", ["help"])
-	except getopt.GetoptError:
-		# print help information and exit:
-		usage()
-		sys.exit(2)
-	port = 8255
-	for o, a in opts:
-		if o == '-p':
-			port = a
-		if o in ("-h", "--help"):
-			usage()
-			sys.exit()
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	try:
-		sock.connect(('', 8255))
-	except:
-		#TODO: use i18n
-		print "unable to connect to localhost on port ", port
-	else:
-		evp = pickle.dumps(('EXEC_PLUGIN', '', 'gtkgui'))
-		sock.send('<'+evp+'>')
-		sock.close()
-	sys.exit()
-
 import pygtk
 pygtk.require('2.0')
 import gtk
@@ -58,10 +24,9 @@ import gtk.glade
 import pango
 import gobject
 import os
-import time
-import sys
-import Queue
 import sre
+global gajim
+import common.gajim as gajim
 import common.sleepy
 
 try:
@@ -72,8 +37,8 @@ except ImportError:
 class CellRendererImage(gtk.GenericCellRenderer):
 
 	__gproperties__ = {
-		"image": (gobject.TYPE_OBJECT, "Image", 
-		"Image", gobject.PARAM_READWRITE),
+		'image': (gobject.TYPE_OBJECT, 'Image', 
+		'Image', gobject.PARAM_READWRITE),
 	}
 
 	def __init__(self):
@@ -115,8 +80,8 @@ class CellRendererImage(gtk.GenericCellRenderer):
 
 		pix_rect.x += cell_area.x
 		pix_rect.y += cell_area.y
-		pix_rect.width  -= 2 * self.get_property("xpad")
-		pix_rect.height -= 2 * self.get_property("ypad")
+		pix_rect.width  -= 2 * self.get_property('xpad')
+		pix_rect.height -= 2 * self.get_property('ypad')
 
 		draw_rect = cell_area.intersect(pix_rect)
 		draw_rect = expose_area.intersect(draw_rect)
@@ -150,15 +115,15 @@ class CellRendererImage(gtk.GenericCellRenderer):
 			return 0, 0, 0, 0
 		pixbuf_width  = pix.get_width()
 		pixbuf_height = pix.get_height()
-		calc_width  = self.get_property("xpad") * 2 + pixbuf_width
-		calc_height = self.get_property("ypad") * 2 + pixbuf_height
+		calc_width  = self.get_property('xpad') * 2 + pixbuf_width
+		calc_height = self.get_property('ypad') * 2 + pixbuf_height
 		x_offset = 0
 		y_offset = 0
 		if cell_area and pixbuf_width > 0 and pixbuf_height > 0:
-			x_offset = self.get_property("xalign") * (cell_area.width - \
-				calc_width -  self.get_property("xpad"))
-			y_offset = self.get_property("yalign") * (cell_area.height - \
-				calc_height -  self.get_property("ypad"))
+			x_offset = self.get_property('xalign') * (cell_area.width - \
+				calc_width -  self.get_property('xpad'))
+			y_offset = self.get_property('yalign') * (cell_area.height - \
+				calc_height -  self.get_property('ypad'))
 		return x_offset, y_offset, calc_width, calc_height
 
 gobject.type_register(CellRendererImage)
@@ -205,63 +170,24 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-def usage():
-	#TODO: use i18n
-	print 'usage :', sys.argv[0], ' [OPTION]'
-	print '  -p\tport on which the sock plugin listen'
-	print '  -h, --help\tdisplay this help and exit'
+GTKGUI_GLADE='gtkgui.glade'
 
 
-GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
-
-
-class plugin:
-	"""Class called by the core in a new thread"""
-
-	class accounts:
-		"""Class where are stored the accounts and users in them"""
-		def __init__(self):
-			self.__accounts = {}
-
-		def add_account(self, account, users=()):
-			#users must be like (user1, user2)
-			self.__accounts[account] = users
-
-		def add_user_to_account(self, account, user):
-			if self.__accounts.has_key(account):
-				self.__accounts[account].append(user)
-			else :
-				return 1
-
-		def get_accounts(self):
-			return self.__accounts.keys();
-
-		def get_users(self, account):
-			if self.__accounts.has_key(account):
-				return self.__accounts[account]
-			else :
-				return None
-
-		def which_account(self, user):
-			for a in self.__accounts.keys():
-				if user in self.__accounts[a]:
-					return a
-			return None
-
+class interface:
 	def launch_browser_mailer(self, kind, url):
 		#kind = 'url' or 'mail'
-		if self.config['openwith'] == 'gnome-open':
+		if gajim.config.get('openwith') == 'gnome-open':
 			app = 'gnome-open'
 			args = ['gnome-open']
 			args.append(url)
-		elif self.config['openwith'] == 'kfmclient exec':
+		elif gajim.config.get('openwith') == 'kfmclient exec':
 			app = 'kfmclient'
 			args = ['kfmclient', 'exec']
-		elif self.config['openwith'] == 'custom':
+		elif gajim.config.get('openwith') == 'custom':
 			if kind == 'url':
-				conf = self.config['custombrowser']
+				conf = gajim.config.get('custombrowser')
 			if kind == 'mail':
-				conf = self.config['custommailapp']
+				conf = gajim.config.get('custommailapp')
 			if conf == '': # if no app is configured
 				return
 			args = conf.split()
@@ -280,43 +206,23 @@ class plugin:
 		return 0
 
 	def play_sound(self, event):
-		if not self.config['sounds_on']:
+		if not gajim.config.get('sounds_on'):
 			return
-		path_to_soundfile = self.config[event + '_file']
+		path_to_soundfile = gajim.config.get(event + '_file')
 		if not os.path.exists(path_to_soundfile):
 			return
 		if os.name  == 'nt':
 			winsound.PlaySound(path_to_soundfile, \
 									winsound.SND_FILENAME|winsound.SND_ASYNC)
 		elif os.name == 'posix':
-			if self.config['soundplayer'] == '':
+			if gajim.config.get('soundplayer') == '':
 				return
-			argv = self.config['soundplayer'].split()
+			argv = gajim.config.get('soundplayer').split()
 			argv.append(path_to_soundfile)
 			pid = os.spawnvp(os.P_NOWAIT, argv[0], argv)
 			pidp, r = os.waitpid(pid, os.WNOHANG)
 			if pidp == 0:
 				gobject.timeout_add(10000, self.play_timeout, pid)
-
-	def send(self, event, account, data):
-		self.queueOUT.put((event, account, data))
-
-	def wait(self, what):
-		"""Wait for a message from Core"""
-		#TODO: timeout
-		temp_q = Queue.Queue(50)
-		while 1:
-			if not self.queueIN.empty():
-				ev = self.queueIN.get()
-				if ev[0] == what and ev[2][0] == 'GtkGui':
-					#Restore messages
-					while not temp_q.empty():
-						ev2 = temp_q.get()
-						self.queueIN.put(ev2)
-					return ev[2][1]
-				else:
-					#Save messages
-					temp_q.put(ev)
 
 	def handle_event_roster(self, account, data):
 		#('ROSTER', account, (state, array))
@@ -500,11 +406,6 @@ class plugin:
 	def handle_event_unsubscribed(self, account, jid):
 		Information_dialog(_("You are now unsubscribed by %s") % jid)
 
-	def handle_event_agents(self, account, agents):
-		#('AGENTS', account, agents)
-		if self.windows[account].has_key('disco'):
-			self.windows[account]['disco'].agents(agents)
-
 	def handle_event_agent_info(self, account, array):
 		#('AGENT_INFO', account, (agent, identities, features, items))
 		if self.windows[account].has_key('disco'):
@@ -521,13 +422,6 @@ class plugin:
 		if self.windows[account].has_key('disco'):
 			self.windows[account]['disco'].agent_info_info(array[0], array[1], \
 				array[2])
-
-	def handle_event_reg_agent_info(self, account, array):
-		#('REG_AGENTS_INFO', account, (agent, infos))
-		if not array[1].has_key('instructions'):
-			Error_dialog(_("error contacting %s") % array[0])
-		else:
-			Service_registration_window(array[0], array[1], self, account)
 
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (hostname, login, pasword, name, resource, prio,
@@ -559,11 +453,6 @@ class plugin:
 	def handle_event_quit(self, p1, p2):
 		self.roster.on_quit() # SUCH FUNCTION DOES NOT EXIST!!
 
-	def save_config(self):
-		hidden_lines = self.config['hiddenlines'].split('\t')
-		self.config['hiddenlines'] = '\t'.join(hidden_lines)
-		self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
-
 	def handle_event_myvcard(self, account, array):
 		nick = ''
 		if array.has_key('NICKNAME'):
@@ -580,22 +469,6 @@ class plugin:
 		if self.windows[account]['infos'].has_key(array[0]):
 			self.windows[account]['infos'][array[0]].set_os_info(array[1], \
 				array[2])
-
-	def handle_event_log_nb_line(self, account, array):
-		#('LOG_NB_LINE', account, (jid, nb_line))
-		if self.windows['logs'].has_key(array[0]):
-			self.windows['logs'][array[0]].set_nb_line(array[1])
-			begin = 0
-			if array[1] > 50:
-				begin = array[1] - 50
-			self.send('LOG_GET_RANGE', None, (array[0], begin, array[1]))
-
-	def handle_event_log_line(self, account, array):
-		#('LOG_LINE', account, (jid, num_line, date, type, data))
-		# if type = 'recv' or 'sent' data = [msg]
-		# else type = jid and data = [status, away_msg]
-		if self.windows['logs'].has_key(array[0]):
-			self.windows['logs'][array[0]].new_line(array[1:])
 
 	def handle_event_gc_msg(self, account, array):
 		#('GC_MSG', account, (jid, msg, time))
@@ -626,11 +499,6 @@ class plugin:
 	def handle_event_bad_passphrase(self, account, array):
 		Warning_dialog(_("Your GPG passphrase is wrong, so you are connected without your GPG key."))
 
-	def handle_event_gpg_secrete_keys(self, account, keys):
-		keys['None'] = 'None'
-		if self.windows.has_key('gpg_keys'):
-			self.windows['gpg_keys'].fill_tree(keys)
-
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
 		jid = array[0]
@@ -652,68 +520,6 @@ class plugin:
 				user.groups = array[4]
 		self.roster.redraw_jid(jid, account)
 
-	def read_queue(self):
-		"""Read queue from the core and execute commands from it"""
-		while self.queueIN.empty() == 0:
-			ev = self.queueIN.get()
-			if ev[0] == 'ROSTER':
-				self.handle_event_roster(ev[1], ev[2])
-			elif ev[0] == 'WARNING':
-				self.handle_event_warning(ev[1], ev[2])
-			elif ev[0] == 'ERROR':
-				self.handle_event_error(ev[1], ev[2])
-			elif ev[0] == 'STATUS':
-				self.handle_event_status(ev[1], ev[2])
-			elif ev[0] == 'NOTIFY':
-				self.handle_event_notify(ev[1], ev[2])
-			elif ev[0] == 'MSG':
-				self.handle_event_msg(ev[1], ev[2])
-			elif ev[0] == 'MSGERROR':
-				self.handle_event_msgerror(ev[1], ev[2])
-			elif ev[0] == 'MSGSENT':
-				self.handle_event_msgsent(ev[1], ev[2])
-			elif ev[0] == 'SUBSCRIBE':
-				self.handle_event_subscribe(ev[1], ev[2])
-			elif ev[0] == 'SUBSCRIBED':
-				self.handle_event_subscribed(ev[1], ev[2])
-			elif ev[0] == 'UNSUBSCRIBED':
-				self.handle_event_unsubscribed(ev[1], ev[2])
-			elif ev[0] == 'AGENTS':
-				self.handle_event_agents(ev[1], ev[2])
-			elif ev[0] == 'AGENT_INFO':
-				self.handle_event_agent_info(ev[1], ev[2])
-			elif ev[0] == 'AGENT_INFO_ITEMS':
-				self.handle_event_agent_info_items(ev[1], ev[2])
-			elif ev[0] == 'AGENT_INFO_INFO':
-				self.handle_event_agent_info_info(ev[1], ev[2])
-			elif ev[0] == 'REG_AGENT_INFO':
-				self.handle_event_reg_agent_info(ev[1], ev[2])
-			elif ev[0] == 'ACC_OK':
-				self.handle_event_acc_ok(ev[1], ev[2])
-			elif ev[0] == 'QUIT':
-				self.handle_event_quit(ev[1], ev[2])
-			elif ev[0] == 'MYVCARD':
-				self.handle_event_myvcard(ev[1], ev[2])
-			elif ev[0] == 'OS_INFO':
-				self.handle_event_os_info(ev[1], ev[2])
-			elif ev[0] == 'VCARD':
-				self.handle_event_vcard(ev[1], ev[2])
-			elif ev[0] == 'LOG_NB_LINE':
-				self.handle_event_log_nb_line(ev[1], ev[2])
-			elif ev[0] == 'LOG_LINE':
-				self.handle_event_log_line(ev[1], ev[2])
-			elif ev[0] == 'GC_MSG':
-				self.handle_event_gc_msg(ev[1], ev[2])
-			elif ev[0] == 'GC_SUBJECT':
-				self.handle_event_gc_subject(ev[1], ev[2])
-			elif ev[0] == 'BAD_PASSPHRASE':
-				self.handle_event_bad_passphrase(ev[1], ev[2])
-			elif ev[0] == 'GPG_SECRETE_KEYS':
-				self.handle_event_gpg_secrete_keys(ev[1], ev[2])
-			elif ev[0] == 'ROSTER_INFO':
-				self.handle_event_roster_info(ev[1], ev[2])
-		return 1
-	
 	def read_sleepy(self):	
 		"""Check if we are idle"""
 		if not self.sleeper.poll():
@@ -847,117 +653,25 @@ class plugin:
 		# update regular expressions
 		self.make_regexps()
 
-	def __init__(self, quIN, quOUT):
-		gtk.gdk.threads_init()
+	def __init__(self):
 		if gtk.pygtk_version >= (2, 6, 0):
 			gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 			gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
-		self.queueIN = quIN
-		self.queueOUT = quOUT
-		self.send('REG_MESSAGE', 'gtkgui', ['ROSTER', 'WARNING', 'ERROR', \
-			'STATUS', 'NOTIFY', 'MSG', 'MSGERROR', 'SUBSCRIBED', 'UNSUBSCRIBED', \
-			'SUBSCRIBE', 'AGENTS', 'AGENT_INFO', 'AGENT_INFO_ITEMS', \
-			'AGENT_INFO_INFO', 'REG_AGENT_INFO', 'QUIT', 'ACC_OK', 'CONFIG', \
-			'MYVCARD', 'OS_INFO', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', 'VISUAL', \
-			'GC_MSG', 'GC_SUBJECT', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS', \
-			'ROSTER_INFO', 'MSGSENT'])
-		self.default_config = {'autopopup':0,\
-			'autopopupaway':0,\
-			'ignore_unknown_contacts':0,\
-			'showoffline':0,\
-			'autoaway':1,\
-			'autoawaytime':10,\
-			'autoxa':1,\
-			'autoxatime':20,\
-			'ask_online_status':0,\
-			'ask_offline_status':0,\
-			'last_msg':'',\
-			'msg0_name':'Nap',\
-			'msg0':'I\'m taking a nap.',\
-			'msg1_name':'Brb',\
-			'msg1':'Back in some minutes.',\
-			'msg2_name':'Eating',\
-			'msg2':'I\'m eating, so leave me a message.',\
-			'msg3_name':'Movie',\
-			'msg3':'I\'m watching a movie.',\
-			'msg4_name':'Working',\
-			'msg4':'I\'m working.',\
-			'trayicon':1,\
-			'iconset':'sun',\
-			'inmsgcolor':'#ff0000',\
-			'outmsgcolor': '#0000ff',\
-			'statusmsgcolor':'#1eaa1e',\
-			'hiddenlines':'',\
-			'accounttextcolor': '#ffffff',\
-			#ff0000
-			'accountbgcolor': '#94aa8c',\
-			#9fdfff
-			'accountfont': 'Sans Bold 10',\
-			'grouptextcolor': '#0000ff',\
-			'groupbgcolor': '#eff3e7',\
-			#ffffff
-			'groupfont': 'Sans Italic 10',\
-			'usertextcolor': '#000000',\
-			'userbgcolor': '#ffffff',\
-			'userfont': 'Sans 10',\
-			'saveposition': 1,\
-			'mergeaccounts': 0,\
-			'usetabbedchat': 1,\
-			'print_time': 'always',\
-			'useemoticons': 1,\
-			'emoticons': ':-)\tplugins/gtkgui/emoticons/smile.png\t(@)\tplugins/gtkgui/emoticons/pussy.png\t8)\tplugins/gtkgui/emoticons/coolglasses.png\t:(\tplugins/gtkgui/emoticons/unhappy.png\t:)\tplugins/gtkgui/emoticons/smile.png\t(})\tplugins/gtkgui/emoticons/hugleft.png\t:$\tplugins/gtkgui/emoticons/blush.png\t(Y)\tplugins/gtkgui/emoticons/yes.png\t:-@\tplugins/gtkgui/emoticons/angry.png\t:-D\tplugins/gtkgui/emoticons/biggrin.png\t(U)\tplugins/gtkgui/emoticons/brheart.png\t(F)\tplugins/gtkgui/emoticons/flower.png\t:-[\tplugins/gtkgui/emoticons/bat.png\t:>\tplugins/gtkgui/emoticons/biggrin.png\t(T)\tplugins/gtkgui/emoticons/phone.png\t:-S\tplugins/gtkgui/emoticons/frowing.png\t:-P\tplugins/gtkgui/emoticons/tongue.png\t(H)\tplugins/gtkgui/emoticons/coolglasses.png\t(D)\tplugins/gtkgui/emoticons/drink.png\t:-O\tplugins/gtkgui/emoticons/oh.png\t(C)\tplugins/gtkgui/emoticons/coffee.png\t({)\tplugins/gtkgui/emoticons/hugright.png\t(*)\tplugins/gtkgui/emoticons/star.png\tB-)\tplugins/gtkgui/emoticons/coolglasses.png\t(Z)\tplugins/gtkgui/emoticons/boy.png\t(E)\tplugins/gtkgui/emoticons/mail.png\t(N)\tplugins/gtkgui/emoticons/no.png\t(P)\tplugins/gtkgui/emoticons/photo.png\t(K)\tplugins/gtkgui/emoticons/kiss.png\t(R)\tplugins/gtkgui/emoticons/rainbow.png\t:-|\tplugins/gtkgui/emoticons/stare.png\t;-)\tplugins/gtkgui/emoticons/wink.png\t;-(\tplugins/gtkgui/emoticons/cry.png\t(6)\tplugins/gtkgui/emoticons/devil.png\t(L)\tplugins/gtkgui/emoticons/heart.png\t(W)\tplugins/gtkgui/emoticons/brflower.png\t:|\tplugins/gtkgui/emoticons/stare.png\t:O\tplugins/gtkgui/emoticons/oh.png\t;)\tplugins/gtkgui/emoticons/wink.png\t;(\tplugins/gtkgui/emoticons/cry.png\t:S\tplugins/gtkgui/emoticons/frowing.png\t;\'-(\tplugins/gtkgui/emoticons/cry.png\t:-(\tplugins/gtkgui/emoticons/unhappy.png\t8-)\tplugins/gtkgui/emoticons/coolglasses.png\t(B)\tplugins/gtkgui/emoticons/beer.png\t:D\tplugins/gtkgui/emoticons/biggrin.png\t(8)\tplugins/gtkgui/emoticons/music.png\t:@\tplugins/gtkgui/emoticons/angry.png\tB)\tplugins/gtkgui/emoticons/coolglasses.png\t:-$\tplugins/gtkgui/emoticons/blush.png\t:\'(\tplugins/gtkgui/emoticons/cry.png\t:->\tplugins/gtkgui/emoticons/biggrin.png\t:[\tplugins/gtkgui/emoticons/bat.png\t(I)\tplugins/gtkgui/emoticons/lamp.png\t:P\tplugins/gtkgui/emoticons/tongue.png\t(%)\tplugins/gtkgui/emoticons/cuffs.png\t(S)\tplugins/gtkgui/emoticons/moon.png',\
-			'sounds_on': 1,\
-			'soundplayer': 'play',\
-			'sound_first_message_received': 1,\
-			'sound_first_message_received_file': 'sounds/message1.wav',\
-			'sound_next_message_received': 0,\
-			'sound_next_message_received_file': 'sounds/message2.wav',\
-			'sound_contact_connected': 1,\
-			'sound_contact_connected_file': 'sounds/connected.wav',\
-			'sound_contact_disconnected': 1,\
-			'sound_contact_disconnected_file': 'sounds/disconnected.wav',\
-			'sound_message_sent': 1,\
-			'sound_message_sent_file': 'sounds/sent.wav',\
-			'openwith': 'gnome-open',\
-			'custombrowser' : 'firefox',\
-			'custommailapp' : 'mozilla-thunderbird -compose',\
-			'x-position': 0,\
-			'y-position': 0,\
-			'width': 150,\
-			'height': 400,\
-			'latest_disco_addresses': '',\
-			'recently_groupchat': '',\
-			'before_time': '[',\
-			'after_time': ']',\
-			'before_nickname': '<',\
-			'after_nickname': '>',\
-			'do_not_send_os_info': 0,\
-			}
-		self.send('ASK_CONFIG', None, ('GtkGui', 'GtkGui', self.default_config))
-		self.config = self.wait('CONFIG')
-		self.send('ASK_CONFIG', None, ('GtkGui', 'accounts'))
-		self.accounts = self.wait('CONFIG')
 		self.windows = {'logs':{}}
 		self.queues = {}
-		self.connected = {}
 		self.nicks = {}
 		self.sleeper_state = {} #whether we pass auto away / xa or not
-		for a in self.accounts.keys():
+		for a in gajim.connections:
 			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}}
 			self.queues[a] = {}
-			self.connected[a] = 0 #0->offline 1->connecting 2->online 3->away
-										#4->xa 5->dnd 6->invisible
-			self.nicks[a] = self.accounts[a]['name']
+			self.nicks[a] = gajim.config.get_per('accounts', a, 'name')
 			self.sleeper_state[a] = 0	#0:don't use sleeper for this account
 												#1:online and use sleeper
 												#2:autoaway and use sleeper
 												#3:autoxa and use sleeper
-			self.send('ASK_ROSTER', a, self.queueIN)
 
-		iconset = self.config['iconset']
-		if not iconset:
-			iconset = 'sun'
-		path = 'plugins/gtkgui/iconsets/' + iconset + '/'
+		iconset = gajim.config.get('iconset')
+		path = 'data/iconsets/' + iconset + '/'
 		files = [path + 'online.gif', path + 'online.png', path + 'online.xpm']
 		pix = None
 		for fname in files:
@@ -967,11 +681,10 @@ class plugin:
 		if pix:
 			gtk.window_set_default_icon(pix)
 		self.roster = Roster_window(self)
-		gobject.timeout_add(100, self.read_queue)
 		gobject.timeout_add(100, self.read_sleepy)
 		self.sleeper = common.sleepy.Sleepy( \
-			self.config['autoawaytime']*60, \
-			self.config['autoxatime']*60)
+			gajim.config.get('autoawaytime')*60, \
+			gajim.config.get('autoxatime')*60)
 		self.systray_enabled = False
 		try:
 			import egg.trayicon as trayicon # use gnomepythonextras trayicon
@@ -979,8 +692,6 @@ class plugin:
 			try:
 				import trayicon # use yann's
 			except: # user doesn't have trayicon capabilities
-				self.config['trayicon'] = 0
-				self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
 				self.systray_capabilities = False
 			else:
 				self.systray_capabilities = True
@@ -988,20 +699,25 @@ class plugin:
 		else:
 			self.systray_capabilities = True
 			self.systray = Systray(self)
-		if self.config['trayicon']:
+		if self.systray_capabilities:
 			self.show_systray()
-			
+
 		self.init_regexp()
 		
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.windows['preferences'] = Preferences_window(self)
 		self.windows['add_remove_emoticons_window'] = \
-														Add_remove_emoticons_window(self)
+			Add_remove_emoticons_window(self)
 		self.windows['roster'] = self.roster
 
-		gtk.gdk.threads_enter()
 		gobject.timeout_add(100, self.autoconnect)
-		gtk.main()
-		gtk.gdk.threads_leave()
 
-print _('plugin gtkgui loaded')
+if __name__ == '__main__':
+	try: 	# Import Psyco if available
+		import psyco
+		psyco.full()
+	except ImportError:
+		pass
+	
+	interface()
+	gtk.main()

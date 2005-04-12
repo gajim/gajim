@@ -31,7 +31,7 @@ gtk.glade.textdomain (APP)
 from dialogs import *
 import gtkgui
 
-GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
+GTKGUI_GLADE='gtkgui.glade'
 
 
 class Preferences_window:
@@ -1213,9 +1213,13 @@ class Account_modification_window:
 			self.plugin.send('ASK_VCARD', self.account, jid)
 	
 	def on_gpg_choose_button_clicked(self, widget, data=None):
-		w = choose_gpg_key_dialog()
-		self.plugin.windows['gpg_keys'] = w
-		self.plugin.send('GPG_SECRETE_KEYS', None, ())
+		#FIXME:
+		secret_keys = connection.ask_gpg_secrete_keys()
+		if not secret_keys:
+			Error_dialog(_('error contacting %s') % service)
+			return
+		secret_keys['None'] = 'None'
+		w = choose_gpg_key_dialog(secret_keys)
 		keyID = w.run()
 		if keyID == -1:
 			return
@@ -1796,7 +1800,12 @@ class Service_discovery_window:
 		if not iter :
 			return
 		service = model.get_value(iter, 1)
-		self.plugin.send('REG_AGENT_INFO', self.account, service)
+		#FIXME:
+		infos = connection.ask_register_agent_info(service)
+		if not infos.has_key('instructions'):
+			Error_dialog(_('error contacting %s') % service)
+		else:
+			Service_registration_window(service, infos, self.plugin, self.account)
 		self.window.destroy()
 	
 	def on_services_treeview_cursor_changed(self, widget):

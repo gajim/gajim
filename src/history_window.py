@@ -28,7 +28,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
+GTKGUI_GLADE='gtkgui.glade'
 
 class history_window:
 	"""Class for bowser agent window:
@@ -148,13 +148,13 @@ class history_window:
 		self.latest_button = xml.get_widget('latest_button')
 		xml.signal_autoconnect(self)
 		tagIn = self.history_buffer.create_tag('incoming')
-		color = self.plugin.config['inmsgcolor']
+		color = gajim.config.get('inmsgcolor')
 		tagIn.set_property('foreground', color)
 		tagOut = self.history_buffer.create_tag('outgoing')
-		color = self.plugin.config['outmsgcolor']
+		color = gajim.config.get('outmsgcolor')
 		tagOut.set_property('foreground', color)
 		tagStatus = self.history_buffer.create_tag('status')
-		color = self.plugin.config['statusmsgcolor']
+		color = gajim.config.get('statusmsgcolor')
 		tagStatus.set_property('foreground', color)
 		self.window.show_all()
 		self.plugin.send('LOG_NB_LINE', None, jid)

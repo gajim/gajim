@@ -1,4 +1,4 @@
-##	Core/connection.py
+##	common/connection.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -86,13 +86,12 @@ class connection:
 	def __init__(self, name = None):
 		# dict of function to be calledfor each event
 		self.handlers = {'ROSTER': [], 'WARNING': [], 'ERROR': [], 'STATUS': [], \
-			'NOTIFY': [], 'MSG': [], 'MSGERROR': [], 'SUBSCRIBED': [], \
-			'UNSUBSCRIBED': [], 'SUBSCRIBE': [], 'AGENTS': [], 'AGENT_INFO': [], \
-			'AGENT_INFO_ITEMS': [], 'AGENT_INFO_INFO': [], 'REG_AGENT_INFO': [], \
-			'QUIT': [], 'ACC_OK': [], 'CONFIG': [], 'MYVCARD': [], 'OS_INFO': [], \
-			'VCARD': [], 'LOG_NB_LINE': [], 'LOG_LINE': [], 'VISUAL': [], \
+			'NOTIFY': [], 'MSG': [], 'MSGERROR': [], 'MSGSENT': [] , \
+			'SUBSCRIBED': [], 'UNSUBSCRIBED': [], 'SUBSCRIBE': [], \
+			'AGENT_INFO': [], 'AGENT_INFO_ITEMS': [], 'AGENT_INFO_INFO': [], \
+			'QUIT': [], 'ACC_OK': [], 'MYVCARD': [], 'OS_INFO': [], 'VCARD': [], \
 			'GC_MSG': [], 'GC_SUBJECT': [], 'BAD_PASSPHRASE': [], \
-			'GPG_SECRETE_KEYS': [], 'ROSTER_INFO': [], 'MSGSENT': []}
+			'ROSTER_INFO': []}
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None # Jabber.py instance

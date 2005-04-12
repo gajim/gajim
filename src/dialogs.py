@@ -27,9 +27,8 @@ gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
 import gtkgui
-import version
 
-GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
+GTKGUI_GLADE='gtkgui.glade'
 
 class Vcard_information_window:
 	"""Class for user's information window"""
@@ -363,7 +362,7 @@ class choose_gpg_key_dialog:
 		for keyID in list.keys():
 			model.append((keyID, list[keyID]))
 	
-	def __init__(self):
+	def __init__(self, secret_keys):
 		#list : {keyID: userName, ...}
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'choose_gpg_key_dialog', APP)
 		self.window = xml.get_widget('choose_gpg_key_dialog')
@@ -377,6 +376,7 @@ class choose_gpg_key_dialog:
 		renderer = gtk.CellRendererText()
 		self.keys_treeview.insert_column_with_attributes(-1, _('User name'), \
 			renderer, text=1)
+		self.fill_tree(secret_keys)
 
 		self.window.show_all()
 
@@ -389,12 +389,12 @@ class Change_status_message_dialog:
 		self.autoconnect = autoconnect
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
-		self.message_buffer.set_text(self.plugin.config['last_msg'])
+		self.message_buffer.set_text(gajim.config.get('last_msg'))
 		self.values = {'':''}
 		i = 0
-		while self.plugin.config.has_key('msg%s_name' % i):
-			self.values[self.plugin.config['msg%s_name' % i]] = \
-				self.plugin.config['msg%s' % i]
+		while gajim.config.exist('msg%s_name' % i):
+			self.values[gajim.config.get('msg%s_name' % i)] = \
+				gajim.config.get('msg%s' % i)
 			i += 1
 		liststore = gtk.ListStore(str, str)
 		message_comboboxentry = self.xml.get_widget('message_comboboxentry')
@@ -413,7 +413,7 @@ class Change_status_message_dialog:
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
 			message = self.message_buffer.get_text(beg, end, 0)
-			self.plugin.config['last_msg'] = message
+			gajim.config.set('last_msg', message)
 		else:
 			message = -1
 		self.window.destroy()
@@ -565,7 +565,7 @@ class About_dialog:
 
 		dlg = gtk.AboutDialog()
 		dlg.set_name('Gajim')
-		dlg.set_version(version.version)
+		dlg.set_version(gajim.version.version)
 		s = u'Copyright \xa9 2003-2005 Gajim Team'
 		dlg.set_copyright(s)
 		text = open('COPYING').read()
@@ -683,7 +683,7 @@ class Join_groupchat_window:
 		cell = gtk.CellRendererText()
 		self.recently_combobox.pack_start(cell, True)
 		self.recently_combobox.add_attribute(cell, 'text', 0)
-		self.recently_groupchat = self.plugin.config['recently_groupchat'].split()
+		self.recently_groupchat = gajim.config.get('recently_groupchat').split()
 		for g in self.recently_groupchat:
 			self.recently_combobox.append_text(g)
 
@@ -720,8 +720,7 @@ class Join_groupchat_window:
 		self.recently_groupchat.insert(0, jid)
 		if len(self.recently_groupchat) > 10:
 			self.recently_groupchat = self.recently_groupchat[0:10]
-		self.plugin.config['recently_groupchat'] = \
-			' '.join(self.recently_groupchat)
+		gajim.config.set('recently_groupchat', ' '.join(self.recently_groupchat))
 		self.plugin.roster.new_group(jid, nickname, self.account)
 		self.plugin.send('GC_JOIN', self.account, (nickname, room, server, \
 			password))

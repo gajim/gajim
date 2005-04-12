@@ -34,7 +34,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
+GTKGUI_GLADE='gtkgui.glade'
 
 class Tabbed_chat_window(Chat):
 	"""Class for tabbed chat window"""
@@ -144,7 +144,7 @@ class Tabbed_chat_window(Chat):
 		if self.plugin.queues[self.account].has_key(user.jid):
 			self.read_queue(user.jid)
 
-		if self.plugin.config['print_time'] == 'sometimes':
+		if gajim.config.get('print_time') == 'sometimes':
 			self.print_time_timeout(user.jid)
 			self.print_time_timeout_id[user.jid] = gobject.timeout_add(300000, \
 				self.print_time_timeout, user.jid)
@@ -211,7 +211,7 @@ class Tabbed_chat_window(Chat):
 		self.plugin.roster.redraw_jid(jid, self.account)
 		if self.plugin.systray_enabled:
 			self.plugin.systray.remove_jid(jid, self.account)
-		showOffline = self.plugin.config['showoffline']
+		showOffline = gajim.config.get('showoffline')
 		if (user.show == 'offline' or user.show == 'error') and \
 			not showOffline:
 			if len(self.plugin.roster.contacts[self.account][jid]) == 1:

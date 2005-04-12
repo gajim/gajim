@@ -33,7 +33,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
+GTKGUI_GLADE='gtkgui.glade'
 
 class Chat:
 	"""Class for chat/groupchat windows"""
@@ -58,15 +58,15 @@ class Chat:
 
 	def update_tags(self):
 		for jid in self.tagIn:
-			self.tagIn[jid].set_property("foreground", \
-				self.plugin.config['inmsgcolor'])
-			self.tagOut[jid].set_property("foreground", \
-				self.plugin.config['outmsgcolor'])
-			self.tagStatus[jid].set_property("foreground", \
-				self.plugin.config['statusmsgcolor'])
+			self.tagIn[jid].set_property('foreground', \
+				gajim.config.get('inmsgcolor'))
+			self.tagOut[jid].set_property('foreground', \
+				gajim.config.get('outmsgcolor'))
+			self.tagStatus[jid].set_property('foreground', \
+				gajim.config.get('statusmsgcolor'))
 
 	def update_print_time(self):
-		if self.plugin.config['print_time'] != 'sometimes':
+		if gajim.config.get('print_time') != 'sometimes':
 			list_jid = self.print_time_timeout_id.keys()
 			for jid in list_jid:
 				gobject.source_remove(self.print_time_timeout_id[jid])
@@ -85,9 +85,9 @@ class Chat:
 			unread += self.nb_unread[jid]
 		start = ""
 		if unread > 1:
-			start = "[" + str(unread) + "] "
+			start = '[' + str(unread) + '] '
 		elif unread == 1:
-			start = "* "
+			start = '* '
 		chat = self.names[jid]
 		if len(self.xmls) > 1: # if more than one tabs in the same window
 			if self.widget_name == 'tabbed_chat_window':
@@ -105,9 +105,9 @@ class Chat:
 		"""redraw the label of the tab"""
 		start = ''
 		if self.nb_unread[jid] > 1:
-			start = "[" + str(self.nb_unread[jid]) + "] "
+			start = '[' + str(self.nb_unread[jid]) + '] '
 		elif self.nb_unread[jid] == 1:
-			start = "* "
+			start = '* '
 		child = self.childs[jid]
 		tab_label = self.notebook.get_tab_label(child).get_children()[0]
 		tab_label.set_text(start + self.names[jid])
@@ -134,8 +134,7 @@ class Chat:
 		return active_jid
 
 	def on_close_button_clicked(self, button, jid):
-		"""When close button is pressed :
-		close a tab"""
+		"""When close button is pressed : close a tab"""
 		self.remove_tab(jid)
 
 	def on_chat_window_focus_in_event(self, widget, event):
@@ -219,13 +218,13 @@ class Chat:
 		conversation_buffer.create_mark('end', end_iter, False)
 		
 		self.tagIn[jid] = conversation_buffer.create_tag('incoming')
-		color = self.plugin.config['inmsgcolor']
+		color = gajim.config.get('inmsgcolor')
 		self.tagIn[jid].set_property('foreground', color)
 		self.tagOut[jid] = conversation_buffer.create_tag('outgoing')
-		color = self.plugin.config['outmsgcolor']
+		color = gajim.config.get('outmsgcolor')
 		self.tagOut[jid].set_property('foreground', color)
 		self.tagStatus[jid] = conversation_buffer.create_tag('status')
-		color = self.plugin.config['statusmsgcolor']
+		color = gajim.config.get('statusmsgcolor')
 		self.tagStatus[jid].set_property('foreground', color)
 		
 		tag = conversation_buffer.create_tag('time_sometimes')
@@ -405,7 +404,7 @@ class Chat:
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
 			return 0
-		if self.plugin.config['print_time'] == 'sometimes':
+		if gajim.config.get('print_time') == 'sometimes':
 			conversation_textview = self.xmls[jid].\
 				get_widget('conversation_textview')
 			conversation_buffer = conversation_textview.get_buffer()
@@ -487,7 +486,7 @@ class Chat:
 		index = 0
 		
 		# basic: links + mail + formatting is always checked (we like that)
-		if self.plugin.config['useemoticons']: # search for emoticons & urls
+		if gajim.config.get('useemoticons'): # search for emoticons & urls
 			iterator = self.plugin.emot_and_basic_re.finditer(otext)
 		else: # search for just urls + mail + formatting
 			iterator = self.plugin.basic_pattern_re.finditer(otext)
@@ -593,11 +592,11 @@ class Chat:
 			text = ''
 		if conversation_buffer.get_char_count() > 0:
 			conversation_buffer.insert(end_iter, '\n')
-		if self.plugin.config['print_time'] == 'always':
+		if gajim.config.get('print_time') == 'always':
 			if not tim:
 				tim = time.localtime()
-			self.before_time_symbols = self.plugin.config['before_time']
-			self.after_time_symbols = self.plugin.config['after_time']
+			self.before_time_symbols = gajim.config.get('before_time')
+			self.after_time_symbols = gajim.config.get('after_time')
 			format = self.before_time_symbols + '%H:%M:%S' + self.after_time_symbols
 			tim_format = time.strftime(format, tim)
 			conversation_buffer.insert(end_iter, tim_format + ' ')
@@ -614,8 +613,8 @@ class Chat:
 		tags = other_tags_for_name[:] #create a new list
 		tags.append(kind)
 		if name and not print_all_special:
-			self.before_nickname_symbols = self.plugin.config['before_nickname']
-			self.after_nickname_symbols = self.plugin.config['after_nickname']
+			self.before_nickname_symbols = gajim.config.get('before_nickname')
+			self.after_nickname_symbols = gajim.config.get('after_nickname')
 			format = self.before_nickname_symbols + name\
 				 + self.after_nickname_symbols + ' ' 
 			self.print_with_tag_list(conversation_buffer, format, end_iter, tags)

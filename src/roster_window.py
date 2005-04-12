@@ -39,7 +39,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
+GTKGUI_GLADE='gtkgui.glade'
 
 class Roster_window:
 	"""Class for main window of gtkgui plugin"""
@@ -120,7 +120,7 @@ class Roster_window:
 
 	def add_user_to_roster(self, jid, account):
 		"""Add a user to the roster and add groups if they aren't in roster"""
-		showOffline = self.plugin.config['showoffline']
+		showOffline = gajim.config.get('showoffline')
 		if not self.contacts[account].has_key(jid):
 			return
 		users = self.contacts[account][jid]
@@ -148,7 +148,8 @@ class Roster_window:
 					self.groups[account][g] = {'expand': False}
 				else:
 					self.groups[account][g] = {'expand': True}
-			if not account in self.hidden_lines and not self.plugin.config['mergeaccounts']:
+			if not account in self.hidden_lines and not gajim.config.get(\
+				'mergeaccounts'):
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
 			typestr = 'user'
@@ -365,7 +366,7 @@ class Roster_window:
 
 	def chg_user_status(self, user, show, status, account):
 		"""When a user change his status"""
-		showOffline = self.plugin.config['showoffline']
+		showOffline = gajim.config.get('showoffline')
 		model = self.tree.get_model()
 		luser = self.contacts[account][user.jid]
 		user.show = show
@@ -721,7 +722,7 @@ class Roster_window:
 			if self.plugin.accounts[account].has_key('keyid'):
 				keyid = self.plugin.accounts[account]['keyid']
 			if keyid and self.plugin.connected[account] < 2 and \
-				self.plugin.config['usegpg']:
+				gajim.config.get('usegpg'):
 				if save_gpg_pass:
 					passphrase = self.plugin.accounts[account]['gpgpassword']
 				else:
@@ -749,9 +750,8 @@ class Roster_window:
 			self.plugin.sleeper_state[account] = 0
 
 	def get_status_message(self, status, autoconnect = 0):
-		if (status == 'online' and not self.plugin.config['ask_online_status']) \
-			or (status == 'offline' and not \
-			self.plugin.config['ask_offline_status']):
+		if (status == 'online' and not gajim.config.get('ask_online_status')) or \
+			(status == 'offline' and not gajim.config.get('ask_offline_status')):
 			return status
 		dlg = Change_status_message_dialog(self.plugin, status, autoconnect)
 		message = dlg.run()
@@ -829,7 +829,7 @@ class Roster_window:
 		self.update_status_comboxbox()
 
 	def new_chat(self, user, account):
-		if self.plugin.config['usetabbedchat']:
+		if gajim.config.get('usetabbedchat'):
 			if not self.plugin.windows[account]['chats'].has_key('tabbed'):
 				self.plugin.windows[account]['chats']['tabbed'] = \
 					Tabbed_chat_window(user, self.plugin, account)
@@ -845,7 +845,7 @@ class Roster_window:
 				Tabbed_chat_window(user, self.plugin, account)
 
 	def new_group(self, jid, nick, account):
-		if self.plugin.config['usetabbedchat']:
+		if gajim.config.get('usetabbedchat'):
 			if not self.plugin.windows[account]['gc'].has_key('tabbed'):
 				self.plugin.windows[account]['gc']['tabbed'] = \
 					Groupchat_window(jid, nick, self.plugin, account)
@@ -871,8 +871,8 @@ class Roster_window:
 			path = self.tree.get_model().get_path(iters[0])
 		else:
 			path = None
-		autopopup = self.plugin.config['autopopup']
-		autopopupaway = self.plugin.config['autopopupaway']
+		autopopup = gajim.config.get('autopopup')
+		autopopupaway = gajim.config.get('autopopupaway')
 		if (autopopup == 0 or ( not autopopupaway and \
 			self.plugin.connected[account] > 2)) and not \
 			self.plugin.windows[account]['chats'].has_key(jid):
@@ -964,16 +964,17 @@ class Roster_window:
 	def quit_gtkgui_plugin(self):
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
-		if self.plugin.config.has_key('saveposition'):
-			if self.plugin.config['saveposition']:
-				self.plugin.config['x-position'], self.plugin.config['y-position']=\
-					self.window.get_position()
-				self.plugin.config['width'], self.plugin.config['height'] = \
-					self.window.get_size()
+		if gajim.config.exist('saveposition'):
+			if gajim.config.get('saveposition'):
+				x, y = self.window.get_position()
+				gajim.config.set('x-position', x)
+				gajim.config.set('y-position', y)
+				width, height = self.window.get_size()
+				gajim.config.set('width', width)
+				gajim.config.set('height', height)
 
 		self.plugin.save_config()
 		self.plugin.send('QUIT', None, ('gtkgui', 1))
-		print _("plugin gtkgui stopped")
 		self.close_all(self.plugin.windows)
 		if self.plugin.systray_enabled:
 			self.plugin.hide_systray()
@@ -1010,7 +1011,7 @@ class Roster_window:
 				self.tree.expand_row(path, False)
 		else:
 			if self.plugin.windows[account]['chats'].has_key(jid):
-				if self.plugin.config['usetabbedchat']:
+				if gajim.config.get('usetabbedchat'):
 					self.plugin.windows[account]['chats'][jid].active_tab(jid)
 				self.plugin.windows[account]['chats'][jid].window.present()
 			elif self.contacts[account].has_key(jid):
@@ -1103,7 +1104,7 @@ class Roster_window:
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
-		iconset = self.plugin.config['iconset']
+		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
 		self.path = 'plugins/gtkgui/iconsets/' + iconset + '/'
@@ -1161,19 +1162,18 @@ class Roster_window:
 	def on_show_offline_contacts_menuitem_activate(self, widget):
 		"""when show offline option is changed:
 		redraw the treeview"""
-		self.plugin.config['showoffline'] = 1 - self.plugin.config['showoffline']
-		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
+		gajim.config.set('showoffline', 1 - gajim.config.get('showoffline'))
 		self.draw_roster()
 
 	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
 		"""When a row is added, set properties for icon renderer"""
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('cell-background', \
-				self.plugin.config['accountbgcolor'])
+				gajim.config.get('accountbgcolor'))
 			renderer.set_property('xalign', 0)
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('cell-background', \
-				self.plugin.config['groupbgcolor'])
+				gajim.config.get('groupbgcolor'))
 			renderer.set_property('xalign', 0.5)
 		else:
 			jid = model.get_value(iter, 3)
@@ -1184,7 +1184,7 @@ class Roster_window:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
 				renderer.set_property('cell-background', \
-					self.plugin.config['userbgcolor'])
+					gajim.config.get('userbgcolor'))
 			renderer.set_property('xalign', 1)
 		renderer.set_property('width', 20)
 	
@@ -1192,31 +1192,31 @@ class Roster_window:
 		"""When a row is added, set properties for name renderer"""
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('foreground', \
-				self.plugin.config['accounttextcolor'])
+				gajim.config.get('accounttextcolor'))
 			renderer.set_property('cell-background', \
-				self.plugin.config['accountbgcolor'])
-			renderer.set_property('font', self.plugin.config['accountfont'])
+				gajim.config.get('accountbgcolor'))
+			renderer.set_property('font', gajim.config.get('accountfont'))
 			renderer.set_property('xpad', 0)
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('foreground', \
-				self.plugin.config['grouptextcolor'])
+				gajim.config.get('grouptextcolor'))
 			renderer.set_property('cell-background', \
-				self.plugin.config['groupbgcolor'])
-			renderer.set_property('font', self.plugin.config['groupfont'])
+				gajim.config.get('groupbgcolor'))
+			renderer.set_property('font', gajim.config.get('groupfont'))
 			renderer.set_property('xpad', 4)
 		else:
 			jid = model.get_value(iter, 3)
 			account = model.get_value(iter, 4)
 			renderer.set_property('foreground', \
-				self.plugin.config['usertextcolor'])
+				gajim.config.get('usertextcolor'))
 			if jid in self.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in self.to_be_removed[account]:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
 				renderer.set_property('cell-background', \
-					self.plugin.config['userbgcolor'])
-			renderer.set_property('font', self.plugin.config['userfont'])
+					gajim.config.get('userbgcolor'))
+			renderer.set_property('font', gajim.config.get('userfont'))
 			renderer.set_property('xpad', 8)
 
 	def compareIters(self, model, iter1, iter2, data = None):
@@ -1249,7 +1249,7 @@ class Roster_window:
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
 		etime):
 		merge = 0
-		if self.plugin.config['mergeaccounts']:
+		if gajim.config.get('mergeaccounts'):
 			merge = 1
 		model = treeview.get_model()
 		data = selection.data
@@ -1325,18 +1325,12 @@ class Roster_window:
 		self.join_gc_handler_id = False
 		self.new_message_menuitem_handler_id = False
 		self.regroup = 0
-		if self.plugin.config.has_key('mergeaccounts'):
-			self.regroup = self.plugin.config['mergeaccounts']
-		if self.plugin.config.has_key('saveposition'):
-			if self.plugin.config['saveposition']:
-				if self.plugin.config.has_key('x-position') and \
-					self.plugin.config.has_key('y-position'):
-					self.window.move(self.plugin.config['x-position'], \
-						self.plugin.config['y-position'])
-				if self.plugin.config.has_key('width') and \
-					self.plugin.config.has_key('height'):
-					self.window.resize(self.plugin.config['width'], \
-						self.plugin.config['height'])
+		self.regroup = gajim.config.get('mergeaccounts')
+		if gajim.config.get('saveposition'):
+			self.window.move(gajim.config.get('x-position'), \
+				gajim.config.get('y-position'))
+			self.window.resize(gajim.config.get('width'), \
+				gajim.config.get('height'))
 		self.window.show_all()
 		self.groups = {}
 		self.contacts = {}
@@ -1380,7 +1374,7 @@ class Roster_window:
 		self.status_combobox.set_model(liststore)
 		self.status_combobox.set_active(5)
 
-		showOffline = self.plugin.config['showoffline']
+		showOffline = gajim.config.get('showoffline')
 		self.xml.get_widget('show_offline_contacts_menuitem').set_active(showOffline)
 
 		#columns
@@ -1420,7 +1414,7 @@ class Roster_window:
 		self.id_signal_cb = self.status_combobox.connect('changed',\
 														self.on_status_combobox_changed)
 
-		self.hidden_lines = self.plugin.config['hiddenlines'].split('\t')
+		self.hidden_lines = gajim.config.get('hiddenlines').split('\t')
 		self.draw_roster()
 		if len(self.plugin.accounts) == 0: # if no account
 			self.plugin.windows['account_modification'] = \
