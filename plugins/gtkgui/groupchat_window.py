@@ -45,6 +45,7 @@ class Groupchat_window(Chat):
 		self.subjects = {}
 		self.new_group(room_jid, nick)
 		self.show_title()
+		print "self.xml.get_widget('message_textview') is", self.xml.get_widget('message_textview'), "!!"
 		self.xml.signal_connect('on_groupchat_window_destroy', \
 			self.on_groupchat_window_destroy)
 		self.xml.signal_connect('on_groupchat_window_delete_event', \
@@ -240,9 +241,12 @@ class Groupchat_window(Chat):
 		and printed in the conversation. Tab does autocompete in nickames"""
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		if event.keyval == gtk.keysyms.Tab and \
-			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
-			self.notebook.emit('key_press_event', event)
+		if event.hardware_keycode == 23: # TAB
+			if (event.state & gtk.gdk.CONTROL_MASK) and \
+				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB  
+				self.notebook.emit('key_press_event', event)
+			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
+				self.notebook.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				self.notebook.emit('key_press_event', event)
@@ -256,7 +260,7 @@ class Groupchat_window(Chat):
 		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			if (event.state & gtk.gdk.SHIFT_MASK):
-				return 0
+				return False
 			message_buffer = widget.get_buffer()
 			start_iter = message_buffer.get_start_iter()
 			end_iter = message_buffer.get_end_iter()
@@ -266,7 +270,7 @@ class Groupchat_window(Chat):
 				self.plugin.send('GC_MSG', self.account, (room_jid, txt))
 				message_buffer.set_text('', -1)
 				widget.grab_focus()
-			return 1
+			return True
 		elif event.keyval == gtk.keysyms.Tab: # TAB
 			room_jid = self.get_active_jid()
 			list_nick = self.get_nick_list(room_jid)
@@ -276,18 +280,18 @@ class Groupchat_window(Chat):
 			end_iter = message_buffer.get_iter_at_mark(cursor_position)
 			text = message_buffer.get_text(start_iter, end_iter, 0)
 			if not text:
-				return 0
-			splited_text = text.split()
-			begin = splited_text[-1]
+				return False
+			splitted_text = text.split()
+			begin = splitted_text[-1] # begining of the latest word we typed
 			for nick in list_nick:
-				if nick.find(begin) == 0:
-					if len(splited_text) == 1:
+				if nick.find(begin) == 0: # the word is the begining of a nick
+					if len(splitted_text) == 1: # This is the 1st word of the line ?
 						add = ': '
 					else:
 						add = ' '
 					message_buffer.insert_at_cursor(nick[len(begin):] + add)
-					return 1
-		return 0
+					return True
+		return False
 
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
 		"""Print a line in the conversation :
@@ -371,8 +375,10 @@ class Groupchat_window(Chat):
 		"""Call vcard_information_window class to display user's information"""
 		if not self.plugin.windows[self.account]['infos'].has_key(jid):
 			self.plugin.windows[self.account]['infos'][jid] = \
-				vcard_information_window(jid, self.plugin, self.account, True)
+				Vcard_information_window(jid, self.plugin, self.account, True)
 			self.plugin.send('ASK_VCARD', self.account, jid)
+			#FIXME: maybe use roster.on_info above?
+			
 			#FIXME: we need the resource but it's not saved
 			#self.plugin.send('ASK_OS_INFO', self.account, jid, resource)
 

@@ -42,11 +42,18 @@ class Preferences_window:
 		return True # do NOT destroy the window
 	
 	def on_close_button_clicked(self, widget):
-		self.window.hide()	
+		self.window.hide()
 
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
-		
+		if os.name == 'nt': # if windows, player must not be visible
+			self.xml.get_widget('soundplayer_hbox').set_property('visible', False)
+			self.trayicon_checkbutton.set_property('visible', False)
+
+	def on_preferences_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			self.window.hide()
+
 	def on_checkbutton_toggled(self, widget, config_name, \
 		change_sensitivity_widgets = None):
 		if widget.get_active():
@@ -56,8 +63,9 @@ class Preferences_window:
 		if change_sensitivity_widgets != None:
 			for w in change_sensitivity_widgets:
 				w.set_sensitive(widget.get_active())
+		self.plugin.save_config()
 
-	def on_tray_icon_checkbutton_toggled(self, widget):
+	def on_trayicon_checkbutton_toggled(self, widget):
 		if widget.get_active():
 			self.plugin.config['trayicon'] = 1
 			self.plugin.show_systray()
@@ -67,12 +75,14 @@ class Preferences_window:
 			self.plugin.hide_systray()
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_save_position_checkbutton_toggled(self, widget):
 		if widget.get_active():
 			self.plugin.config['saveposition'] = 1
 		else:
 			self.plugin.config['saveposition'] = 0
+		self.plugin.save_config()
 	
 	def on_merge_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -81,6 +91,7 @@ class Preferences_window:
 			self.plugin.config['mergeaccounts'] = 0
 		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_iconset_combobox_changed(self, widget):
 		model = widget.get_model()
@@ -88,6 +99,7 @@ class Preferences_window:
 		icon_string = model[active][0]
 		self.plugin.config['iconset'] = icon_string
 		self.plugin.roster.reload_pixbufs()
+		self.plugin.save_config()
 		
 	def on_account_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The Account Text"""
@@ -96,6 +108,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['accounttextcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_group_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The Group Text"""
@@ -104,6 +117,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['grouptextcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 
 	def on_user_text_colorbutton_color_set(self, widget):
 		"""Take The Color For The User Text"""
@@ -112,6 +126,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['usertextcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 
 	def on_account_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of Account Text"""
@@ -120,6 +135,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['accountbgcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_group_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of Group Text"""
@@ -128,6 +144,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['groupbgcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_user_text_bg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Background Of User Text"""
@@ -136,24 +153,28 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['userbgcolor'] = color_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_account_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The User Text"""
 		font_string = widget.get_font_name()
 		self.plugin.config['accountfont'] = font_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 
 	def on_group_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The Group Text"""
 		font_string = widget.get_font_name()
 		self.plugin.config['groupfont'] = font_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_user_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The User Text"""
 		font_string = widget.get_font_name()
 		self.plugin.config['userfont'] = font_string
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_reset_colors_and_fonts_button_clicked(self, widget):
 		defaults = self.plugin.default_config
@@ -185,6 +206,7 @@ class Preferences_window:
 		self.xml.get_widget('user_text_fontbutton').set_font_name(\
 			defaults['userfont'])
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 	
 	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
 		buf1 = {}
@@ -239,6 +261,7 @@ class Preferences_window:
 #							buf1[acct][jid])
 #					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
 #						get_widget('message_textview').set_buffer(buf2[acct][jid])
+		self.plugin.save_config()
 	
 	def update_print_time(self):
 		"""Update time in Opened Chat Windows"""
@@ -253,28 +276,35 @@ class Preferences_window:
 		if widget.get_active():
 			self.plugin.config['print_time'] = 'never'
 		self.update_print_time()
+		self.plugin.save_config()
 
 	def on_time_sometimes_radiobutton_toggled(self, widget):
 		if widget.get_active():
 			self.plugin.config['print_time'] = 'sometimes'
 		self.update_print_time()
+		self.plugin.save_config()
 
 	def on_time_always_radiobutton_toggled(self, widget):
 		if widget.get_active():
 			self.plugin.config['print_time'] = 'always'
 		self.update_print_time()
+		self.plugin.save_config()
 
 	def on_before_time_entry_focus_out_event(self, widget, event):
 		self.plugin.config['before_time'] = widget.get_text()
+		self.plugin.save_config()
 	
 	def on_after_time_entry_focus_out_event(self, widget, event):
 		self.plugin.config['after_time'] = widget.get_text()
+		self.plugin.save_config()
 
 	def on_before_nickname_entry_focus_out_event(self, widget, event):
 		self.plugin.config['before_nickname'] = widget.get_text()
+		self.plugin.save_config()
 
 	def on_after_nickname_entry_focus_out_event(self, widget, event):
 		self.plugin.config['after_nickname'] = widget.get_text()
+		self.plugin.save_config()
 
 	def update_text_tags(self):
 		"""Update color tags in Opened Chat Windows"""
@@ -292,6 +322,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['inmsgcolor'] = color_string
 		self.update_text_tags()
+		self.plugin.save_config()
 		
 	def on_outgoing_msg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Outgoing Messages"""
@@ -300,6 +331,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['outmsgcolor'] = color_string
 		self.update_text_tags()
+		self.plugin.save_config()
 	
 	def on_status_msg_colorbutton_color_set(self, widget):
 		"""Take The Color For The Status Messages"""
@@ -308,6 +340,7 @@ class Preferences_window:
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
 		self.plugin.config['statusmsgcolor'] = color_string
 		self.update_text_tags()
+		self.plugin.save_config()
 	
 	def on_reset_colors_button_clicked(self, widget):
 		defaults = self.plugin.default_config
@@ -321,6 +354,7 @@ class Preferences_window:
 		self.xml.get_widget('status_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(defaults['statusmsgcolor']))		
 		self.update_text_tags()
+		self.plugin.save_config()
 
 	def on_use_emoticons_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'useemoticons', \
@@ -345,13 +379,13 @@ class Preferences_window:
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',\
-										[self.xml.get_widget('sound_player_hbox'),\
+										[self.xml.get_widget('soundplayer_hbox'),\
 										self.xml.get_widget('sounds_scrolledwindow'),\
 										self.xml.get_widget('browse_sounds_hbox')])
-		
 	
 	def on_soundplayer_entry_changed(self, widget):
 		self.plugin.config['soundplayer'] = widget.get_text()
+		self.plugin.save_config()
 		
 	def on_prompt_online_status_message_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ask_online_status')
@@ -371,6 +405,7 @@ class Preferences_window:
 			self.plugin.config['sound_' + sound_event + '_file'] = \
 				model.get_value(iter, 2)
 			iter = model.iter_next(iter)
+		self.plugin.save_config()
 
 	def on_auto_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autoaway', \
@@ -382,6 +417,7 @@ class Preferences_window:
 		self.plugin.sleeper = common.sleepy.Sleepy(\
 			self.plugin.config['autoawaytime']*60, \
 			self.plugin.config['autoxatime']*60)
+		self.plugin.save_config()
 
 	def on_auto_xa_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autoxa', \
@@ -393,6 +429,7 @@ class Preferences_window:
 		self.plugin.sleeper = common.sleepy.Sleepy(\
 			self.plugin.config['autoawaytime']*60, \
 			self.plugin.config['autoxatime']*60)
+		self.plugin.save_config()
 
 	def on_msg_treemodel_row_changed(self, model, path, iter):
 		iter = model.get_iter_first()
@@ -406,6 +443,7 @@ class Preferences_window:
 			del self.plugin.config['msg%i_name' % i]
 			del self.plugin.config['msg%i' % i]
 			i += 1
+		self.plugin.save_config()
 
 	def on_msg_treemodel_row_deleted(self, model, path, iter):
 		iter = model.get_iter_first()
@@ -419,6 +457,7 @@ class Preferences_window:
 			del self.plugin.config['msg%i_name' % i]
 			del self.plugin.config['msg%i' % i]
 			i += 1
+		self.plugin.save_config()
 
 	def on_links_open_with_combobox_changed(self, widget):
 		if widget.get_active() == 2:
@@ -430,12 +469,15 @@ class Preferences_window:
 			if widget.get_active() == 1:
 				self.plugin.config['openwith'] = 'kfmclient exec'
 			self.xml.get_widget('custom_apps_frame').set_sensitive(False)
+		self.plugin.save_config()
 
 	def on_custom_browser_entry_changed(self, widget):
 		self.plugin.config['custombrowser'] = widget.get_text()
+		self.plugin.save_config()
 
 	def on_custom_mail_client_entry_changed(self, widget):
 		self.plugin.config['custommailapp'] = widget.get_text()
+		self.plugin.save_config()
 
 	def on_log_in_contact_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -443,6 +485,7 @@ class Preferences_window:
 		else:
 			self.config_logger['lognotusr'] = 0
 		self.plugin.send('CONFIG', None, ('Logger', self.config_logger, 'GtkGui'))
+		self.plugin.save_config()
 
 	def on_log_in_extern_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -450,6 +493,7 @@ class Preferences_window:
 		else:
 			self.config_logger['lognotsep'] = 0
 		self.plugin.send('CONFIG', None, ('Logger', self.config_logger, 'GtkGui'))
+		self.plugin.save_config()
 
 	def on_do_not_send_os_info_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -457,6 +501,7 @@ class Preferences_window:
 			self.plugin.config['do_not_send_os_info'] = 1
 		else:
 			self.plugin.config['do_not_send_os_info'] = 0
+		self.plugin.save_config()
 
 
 	def fill_msg_treeview(self):
@@ -590,15 +635,15 @@ class Preferences_window:
 		self.auto_xa_checkbutton = self.xml.get_widget('auto_xa_checkbutton')
 		self.auto_xa_time_spinbutton = self.xml.get_widget \
 			('auto_xa_time_spinbutton')
-		self.tray_icon_checkbutton = self.xml.get_widget('tray_icon_checkbutton')
+		self.trayicon_checkbutton = self.xml.get_widget('trayicon_checkbutton')
 		self.notebook = self.xml.get_widget('preferences_notebook')
 		
 		#trayicon
 		if self.plugin.systray_capabilities:
 			st = self.plugin.config['trayicon']
-			self.tray_icon_checkbutton.set_active(st)
+			self.trayicon_checkbutton.set_active(st)
 		else:
-			self.tray_icon_checkbutton.set_sensitive(False)
+			self.trayicon_checkbutton.set_sensitive(False)
 
 		#Save position
 		st = self.plugin.config['saveposition']
@@ -726,17 +771,19 @@ class Preferences_window:
 		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
 			set_active(self.plugin.config['ignore_unknown_contacts'])
 
-		if not self.plugin.config['sounds_on']:
-			self.xml.get_widget('sound_player_hbox').set_sensitive(False)
+		#sounds
+		if self.plugin.config['sounds_on']:
+			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
+		else:
+			self.xml.get_widget('soundplayer_hbox').set_sensitive(False)
 			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
 			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
-			#FIXME:
-		
+
 		#sound player
 		self.xml.get_widget('soundplayer_entry').set_text(\
 			self.plugin.config['soundplayer'])
 
-		#sounds
+		#sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, \
 			gobject.TYPE_STRING)
@@ -762,12 +809,6 @@ class Preferences_window:
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text=2)
 		self.fill_sound_treeview()
-
-		if not os.name == 'posix':
-			self.xml.get_widget('soundplayer_entry').set_sensitive(False)
-			self.sound_tree.set_sensitive(False)
-			self.xml.get_widget('sounds_entry').set_sensitive(False)
-			self.xml.get_widget('sounds_button').set_sensitive(False)
 		
 		#Autoaway
 		st = self.plugin.config['autoaway']
@@ -857,12 +898,17 @@ class Account_modification_window:
 	
 	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def on_checkbutton_toggled(self, widget, widgets):
 		"""set or unset sensitivity of widgets when widget is toggled"""
 		for w in widgets:
 			w.set_sensitive(widget.get_active())
+
+	def on_use_proxy_checkbutton_toggled(self, widget):
+		proxyhost_entry = self.xml.get_widget('proxyhost_entry')
+		proxyport_entry = self.xml.get_widget('proxyport_entry')
+		self.on_checkbutton_toggled(widget, [proxyhost_entry, proxyport_entry])
 
 	def init_account(self, infos):
 		"""Initialize window with defaults values"""
@@ -882,14 +928,25 @@ class Account_modification_window:
 			self.xml.get_widget('resource_entry').set_text(infos['resource'])
 		if infos.has_key('priority'):
 			self.xml.get_widget('priority_spinbutton').set_value(infos['priority'])
+		
+		use_proxy = False
 		if infos.has_key('use_proxy'):
+			if infos['use_proxy'] != 0:
+				use_proxy = True
 			self.xml.get_widget('use_proxy_checkbutton').\
 				set_active(infos['use_proxy'])
+		
+		self.xml.get_widget('proxyhost_entry').set_sensitive(use_proxy)
+		self.xml.get_widget('proxyport_entry').set_sensitive(use_proxy)
+				
 		if infos.has_key('proxyhost'):
 			self.xml.get_widget('proxyhost_entry').set_text(infos['proxyhost'])
+
 		if infos.has_key('proxyport'):
 			self.xml.get_widget('proxyport_entry').set_text(str(\
 				infos['proxyport']))
+
+			
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if not self.plugin.config.has_key('usegpg'):
 			gpg_key_label.set_text('GPG is not usable on this computer')
@@ -921,7 +978,7 @@ class Account_modification_window:
 				self.xml.get_widget('log_history_checkbutton').set_active(0)
 
 	def on_save_button_clicked(self, widget):
-		"""When save button is clicked : Save informations in config file"""
+		"""When save button is clicked: Save information in config file"""
 		save_password = 0
 		if self.xml.get_widget('save_password_checkbutton').get_active():
 			save_password = 1
@@ -977,8 +1034,12 @@ class Account_modification_window:
 				except ValueError:
 					Error_dialog(_('Proxy Port must be a port number'))
 					return
+			else:
+				Error_dialog(_('You must enter a proxy port to use proxy'))
+				return
 			if proxyhost == '':
 				Error_dialog(_('You must enter a proxy host to use proxy'))
+				return
 
 		(login, hostname) = jid.split('@')
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
@@ -1045,7 +1106,7 @@ class Account_modification_window:
 				self.plugin.windows['accounts'].init_accounts()
 			#refresh roster
 			self.plugin.roster.draw_roster()
-			widget.get_toplevel().destroy()
+			self.window.destroy()
 			return
 		#if it's a new account
 		if name in self.plugin.accounts.keys():
@@ -1082,7 +1143,7 @@ class Account_modification_window:
 			self.plugin.windows['accounts'].init_accounts()
 		#refresh roster
 		self.plugin.roster.draw_roster()
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def on_change_password_button_clicked(self, widget):
 		dialog = Change_password_dialog(self.plugin, self.account)
@@ -1213,6 +1274,7 @@ class Account_modification_window:
 		self.xml.get_widget('gpg_password_entry').set_sensitive(False)
 		self.xml.get_widget('password_entry').set_sensitive(False)
 		self.xml.get_widget('log_history_checkbutton').set_active(1)
+		
 		#default is checked
 		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(1)
 		self.xml.signal_autoconnect(self)
@@ -1230,7 +1292,7 @@ class Accounts_window:
 		del self.plugin.windows['accounts'] 
 
 	def on_close_button_clicked(self, widget):
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def init_accounts(self):
 		"""initialize listStore with existing accounts"""
@@ -1325,7 +1387,7 @@ class Service_registration_window:
 	Window that appears when we want to subscribe to a service"""
 	def on_cancel_button_clicked(self, widget):
 		"""When Cancel button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 		
 	def draw_table(self):
 		"""Draw the table in the window"""
@@ -1355,7 +1417,7 @@ class Service_registration_window:
 		self.plugin.roster.contacts[self.account][self.service] = [user1]
 		self.plugin.roster.add_user_to_roster(self.service, self.account)
 		self.plugin.send('REG_AGENT', self.account, self.service)
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 	
 	def __init__(self, service, infos, plugin, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'service_registration_window', APP)
@@ -1421,6 +1483,7 @@ class Add_remove_emoticons_window:
 			iter = model.iter_next(iter)
 		self.plugin.config['emoticons'] = '\t'.join(emots)
 		self.plugin.init_regexp()
+		self.plugin.save_config()
 
 	def on_emoticons_treemodel_row_changed(self, model, path, iter):
 		if model[path][1] != None and len(model[path][1]) != 0:
@@ -1431,7 +1494,8 @@ class Add_remove_emoticons_window:
 				emots.append(model.get_value(iter, 1))
 				iter = model.iter_next(iter)
 			self.plugin.config['emoticons'] = '\t'.join(emots)
-			self.plugin.init_regexp()			
+			self.plugin.init_regexp()
+		self.plugin.save_config()
 
 	def image_is_ok(self, image):
 		if not os.path.exists(image):
@@ -1563,7 +1627,7 @@ class Service_discovery_window:
 
 	def on_close_button_clicked(self, widget):
 		"""When Close button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 		
 	def browse(self, jid):
 		"""Send a request to the core to know the available services"""
@@ -1733,7 +1797,7 @@ class Service_discovery_window:
 			return
 		service = model.get_value(iter, 1)
 		self.plugin.send('REG_AGENT_INFO', self.account, service)
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 	
 	def on_services_treeview_cursor_changed(self, widget):
 		"""When we select a row :
@@ -1765,6 +1829,7 @@ class Service_discovery_window:
 			' '.join(self.latest_addresses)
 		self.services_treeview.get_model().clear()
 		self.browse(server_address)
+		self.plugin.save_config()
 	
 	def __init__(self, plugin, account):
 		if plugin.connected[account] < 2:

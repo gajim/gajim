@@ -150,14 +150,17 @@ class Tabbed_chat_window(Chat):
 				self.print_time_timeout, user.jid)
 
 	def on_message_textview_key_press_event(self, widget, event):
-		"""When a key is pressed :
+		"""When a key is pressed:
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation"""
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		if event.keyval == gtk.keysyms.Tab and \
-         (event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
-			self.notebook.emit('key_press_event', event)
+		if event.hardware_keycode == 23: # TAB
+			if (event.state & gtk.gdk.CONTROL_MASK) and \
+				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB
+				self.notebook.emit('key_press_event', event)
+			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
+				self.notebook.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				self.notebook.emit('key_press_event', event)
@@ -212,7 +215,7 @@ class Tabbed_chat_window(Chat):
 		if (user.show == 'offline' or user.show == 'error') and \
 			not showOffline:
 			if len(self.plugin.roster.contacts[self.account][jid]) == 1:
-				self.plugin.roster.remove_user(user, self.account)
+				self.plugin.roster.really_remove_user(user, self.account)
 
 	def print_conversation(self, text, jid, contact = '', tim = None):
 		"""Print a line in the conversation :

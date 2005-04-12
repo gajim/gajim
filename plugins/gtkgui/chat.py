@@ -215,7 +215,9 @@ class Chat:
 			self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		end_iter = conversation_buffer.get_end_iter()
-		conversation_buffer.create_mark('end', end_iter, 0)
+		
+		conversation_buffer.create_mark('end', end_iter, False)
+		
 		self.tagIn[jid] = conversation_buffer.create_tag('incoming')
 		color = self.plugin.config['inmsgcolor']
 		self.tagIn[jid].set_property('foreground', color)
@@ -270,59 +272,79 @@ class Chat:
 		self.show_title()
 
 	def on_conversation_textview_key_press_event(self, widget, event):
-		"""Do not black these evnts and send them to the notebook"""
-		if event.keyval == gtk.keysyms.Tab and \
-			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
-			self.notebook.emit('key_press_event', event)
-		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
-			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
+		"""Do not block these events and send them to the notebook"""
+		if (event.state & gtk.gdk.CONTROL_MASK) and \
+			(event.state & gtk.gdk.SHIFT_MASK):
+			if event.hardware_keycode == 23: # CTRL + SHIFT + TAB
 				self.notebook.emit('key_press_event', event)
-		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
-			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
+		elif event.state & gtk.gdk.CONTROL_MASK:
+			if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
-
+			elif event.keyval == gtk.keysyms.Page_Down: # CTRL + PAGE DOWN
+				self.notebook.emit('key_press_event', event)
+			elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
+				self.notebook.emit('key_press_event', event)
+				
 	def on_chat_notebook_key_press_event(self, widget, event):
 		st = '1234567890' # zero is here cause humans count from 1, pc from 0 :P
 		jid = self.get_active_jid()
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
 			self.remove_tab(jid)
+		elif event.keyval == gtk.keysyms.F4 and \
+			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
+				self.remove_tab(jid)
 		elif event.string and event.string in st \
 			and (event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
 			self.notebook.set_current_page(st.index(event.string))
-		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
-			if event.state & gtk.gdk.CONTROL_MASK:
+		elif event.keyval == gtk.keysyms.Page_Down:
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				current = self.notebook.get_current_page()
 				if current > 0:
 					self.notebook.set_current_page(current-1)
-			elif event.state & gtk.gdk.SHIFT_MASK:
+			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
 				conversation_textview = self.xmls[jid].\
 					get_widget('conversation_textview')
 				rect = conversation_textview.get_visible_rect()
 				iter = conversation_textview.get_iter_at_location(rect.x,\
 					rect.y + rect.height)
 				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
-		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
-			if event.state & gtk.gdk.CONTROL_MASK:
+		elif event.keyval == gtk.keysyms.Page_Up: 
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
 				current = self.notebook.get_current_page()
 				if current < (self.notebook.get_n_pages()-1):
 					self.notebook.set_current_page(current+1)
-			elif event.state & gtk.gdk.SHIFT_MASK:
+			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
 				conversation_textview = self.xmls[jid].\
 					get_widget('conversation_textview')
 				rect = conversation_textview.get_visible_rect()
 				iter = conversation_textview.get_iter_at_location(rect.x, rect.y)
 				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
-		elif event.keyval == gtk.keysyms.Tab and \
-			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + TAB
-			current = self.notebook.get_current_page()
-			if current < (self.notebook.get_n_pages()-1):
-				self.notebook.set_current_page(current+1)
-			else:
-				self.notebook.set_current_page(0)
+				# or event.keyval == gtk.keysyms.KP_Up
+		elif event.keyval == gtk.keysyms.Up: 
+			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + UP
+				print 'be' # FIXME: find a way to to keyUP in scrolledwindow
+				conversation_scrolledwindow = self.xml.get_widget\
+					('conversation_scrolledwindow')
+				conversation_scrolledwindow.emit('scroll-child', \
+					gtk.SCROLL_PAGE_BACKWARD, False)
+		elif event.hardware_keycode == 23: # TAB
+			if (event.state & gtk.gdk.CONTROL_MASK) and \
+				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB
+				current = self.notebook.get_current_page()
+				if current > 0:
+					self.notebook.set_current_page(current-1)
+				else:
+					self.notebook.set_current_page(self.notebook.get_n_pages()-1)
+			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
+				current = self.notebook.get_current_page()
+				if current < (self.notebook.get_n_pages()-1):
+					self.notebook.set_current_page(current+1)
+				else:
+					self.notebook.set_current_page(0)
 		elif (event.state & gtk.gdk.CONTROL_MASK) or (event.keyval ==\
 			gtk.keysyms.Control_L) or (event.keyval == gtk.keysyms.Control_R):
-			# we pressed a control key or ctrl+sth : we don't block the event
-			# in order to let ctrl+c do its work
+			# we pressed a control key or ctrl+sth: we don't block the event
+			# in order to let ctrl+c (copy text) and others do their default work
 			pass
 		else: # it's a normal key press make sure message_textview has focus
 			message_textview = self.xmls[jid].get_widget('message_textview')
@@ -375,7 +397,10 @@ class Chat:
 			iter = widget.get_iter_at_location(x, y)
 			tags = iter.get_tags()
 			if tags:
-				return True
+				for tag in tags:
+					tag_name = tag.get_property('name')
+					if 'url' in tag_name or 'mail' in tag_name:
+						return True
 	
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
@@ -438,7 +463,7 @@ class Chat:
 			while not end_iter.ends_tag(texttag):
 				end_iter.forward_char()
 			word = begin_iter.get_text(end_iter)
-			if event.button == 3:
+			if event.button == 3: # right click
 				self.make_link_menu(event, kind, word)
 			else:
 				#we launch the correct application
@@ -548,14 +573,26 @@ class Chat:
 			self.print_with_tag_list(conversation_buffer, special_text, end_iter, \
 				all_tags)
 
+	def scroll_to_end(self, textview):
+		buffer = textview.get_buffer()
+		textview.scroll_to_mark(buffer.get_mark('end'), 0, True, 0, 1)
+		return False
+
 	def print_conversation_line(self, text, jid, kind, name, tim, \
 		other_tags_for_name = []):
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		print_all_special = False
+		at_the_end = False
+		end_iter = conversation_buffer.get_end_iter()
+		end_rect = conversation_textview.get_iter_location(end_iter)
+		visible_rect = conversation_textview.get_visible_rect()
+		if end_rect.y <= (visible_rect.y + visible_rect.height):
+			at_the_end = True
 		if not text:
 			text = ''
-		end_iter = conversation_buffer.get_end_iter()
+		if conversation_buffer.get_char_count() > 0:
+			conversation_buffer.insert(end_iter, '\n')
 		if self.plugin.config['print_time'] == 'always':
 			if not tim:
 				tim = time.localtime()
@@ -583,7 +620,6 @@ class Chat:
 				 + self.after_nickname_symbols + ' ' 
 			self.print_with_tag_list(conversation_buffer, format, end_iter, tags)
 				
-		text += '\n'
 		# detect urls formatting and if the user has it on emoticons
 		index = self.detect_and_print_special_text(text, jid, \
 			tags, print_all_special)
@@ -597,16 +633,12 @@ class Chat:
 			conversation_buffer.insert(end_iter, text[index:])
 
 		#scroll to the end of the textview
-		end_iter = conversation_buffer.get_end_iter()
-		end_rect = conversation_textview.get_iter_location(end_iter)
-		visible_rect = conversation_textview.get_visible_rect()
 		end = False
-		if end_rect.y <= (visible_rect.y + visible_rect.height) or \
-			(kind == 'outgoing'):
+		if at_the_end or (kind == 'outgoing'):
 			#we are at the end or we are sending something
 			end = True
-			conversation_textview.scroll_to_mark(conversation_buffer.\
-				get_mark('end'), 0.1, 0, 0, 0)
+			# We scroll to the end after the scrollbar has appeared
+			gobject.timeout_add(50, self.scroll_to_end, conversation_textview)
 		if ((jid != self.get_active_jid()) or (not self.window.is_active()) or \
 			(not end)) and kind == 'incoming':
 			self.nb_unread[jid] += 1

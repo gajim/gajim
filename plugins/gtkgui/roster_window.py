@@ -204,7 +204,9 @@ class Roster_window:
 				prio = u.priority
 				user = u
 		for iter in iters:
-			if self.plugin.queues[account].has_key(jid):
+			if jid.find("@") <= 0: # It's an agent
+				img = self.pixbufs[user.show]
+			elif self.plugin.queues[account].has_key(jid):
 				img = self.pixbufs['message']
 			else:
 				if user.sub != 'both':
@@ -392,9 +394,11 @@ class Roster_window:
 
 	def on_info(self, widget, user, account):
 		"""Call vcard_information_window class to display user's information"""
-		if not self.plugin.windows[account]['infos'].has_key(user.jid):
+		if self.plugin.windows[account]['infos'].has_key(user.jid):
+			self.plugin.windows[account]['infos'][user.jid].window.present()
+		else:
 			self.plugin.windows[account]['infos'][user.jid] = \
-				vcard_information_window(user, self.plugin, account)
+				Vcard_information_window(user, self.plugin, account)
 
 	def on_agent_logging(self, widget, jid, state, account):
 		"""When an agent is requested to log in or off"""
@@ -921,8 +925,6 @@ class Roster_window:
 			
 	def on_about_menuitem_activate(self, widget):
 		About_dialog()
-		#inst = Popup_window(self.plugin, 'Fake Message', 'nkour@')
-		#self.popup_windows.append( inst )
 
 	def on_accounts_menuitem_activate(self, widget):
 		if self.plugin.windows.has_key('accounts'):
@@ -969,8 +971,7 @@ class Roster_window:
 				self.plugin.config['width'], self.plugin.config['height'] = \
 					self.window.get_size()
 
-		self.plugin.config['hiddenlines'] = '\t'.join(self.hidden_lines)
-		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
+		self.plugin.save_config()
 		self.plugin.send('QUIT', None, ('gtkgui', 1))
 		print _("plugin gtkgui stopped")
 		self.close_all(self.plugin.windows)

@@ -64,6 +64,11 @@ import Queue
 import sre
 import common.sleepy
 
+try:
+	import winsound # windows-only built-in module for playing wav
+except ImportError:
+	pass
+
 class CellRendererImage(gtk.GenericCellRenderer):
 
 	__gproperties__ = {
@@ -273,24 +278,25 @@ class plugin:
 	def play_timeout(self, pid):
 		pidp, r = os.waitpid(pid, os.WNOHANG)
 		return 0
-			
 
 	def play_sound(self, event):
-		if os.name != 'posix':
+		if not self.config['sounds_on']:
 			return
-		if self.config['soundplayer'] == '':
+		path_to_soundfile = self.config[event + '_file']
+		if not os.path.exists(path_to_soundfile):
 			return
-		if not self.config[event]:
-			return
-		file = self.config[event + '_file']
-		if not os.path.exists(file):
-			return
-		argv = self.config['soundplayer'].split()
-		argv.append(file)
-		pid = os.spawnvp(os.P_NOWAIT, argv[0], argv)
-		pidp, r = os.waitpid(pid, os.WNOHANG)
-		if pidp == 0:
-			gobject.timeout_add(10000, self.play_timeout, pid)
+		if os.name  == 'nt':
+			winsound.PlaySound(path_to_soundfile, \
+									winsound.SND_FILENAME|winsound.SND_ASYNC)
+		elif os.name == 'posix':
+			if self.config['soundplayer'] == '':
+				return
+			argv = self.config['soundplayer'].split()
+			argv.append(path_to_soundfile)
+			pid = os.spawnvp(os.P_NOWAIT, argv[0], argv)
+			pidp, r = os.waitpid(pid, os.WNOHANG)
+			if pidp == 0:
+				gobject.timeout_add(10000, self.play_timeout, pid)
 
 	def send(self, event, account, data):
 		self.queueOUT.put((event, account, data))
@@ -334,6 +340,7 @@ class plugin:
 		# role, affiliation, real_jid, reason, actor, statusCode))
 		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd', 'invisible']
 		old_show = 0
+		new_show = statuss.index(array[1])
 		jid = array[0].split('/')[0]
 		keyID = array[5]
 		resource = array[3]
@@ -370,18 +377,23 @@ class plugin:
 						user1.priority, user1.keyID)
 					luser.append(user1)
 				user1.resource = resource
-			if old_show == 0 and statuss.index(array[1]) > 1:
-				if not user1.jid in self.roster.newly_added[account]:
-					self.roster.newly_added[account].append(user1.jid)
-				if user1.jid in self.roster.to_be_removed[account]:
-					self.roster.to_be_removed[account].remove(user1.jid)
-				gobject.timeout_add(5000, self.roster.remove_newly_added, user1.jid, account)
-			if old_show > 1 and statuss.index(array[1]) == 0 and self.connected[account] > 1:
-				if not user1.jid in self.roster.to_be_removed[account]:
-					self.roster.to_be_removed[account].append(user1.jid)
-				if user1.jid in self.roster.newly_added[account]:
-					self.roster.newly_added[account].remove(user1.jid)
-				gobject.timeout_add(5000, self.roster.really_remove_user, user1, account)
+			if user1.jid.find('@') > 0: # It's not an agent
+				if old_show == 0 and new_show > 1:
+					if not user1.jid in self.roster.newly_added[account]:
+						self.roster.newly_added[account].append(user1.jid)
+					if user1.jid in self.roster.to_be_removed[account]:
+						self.roster.to_be_removed[account].remove(user1.jid)
+					gobject.timeout_add(5000, self.roster.remove_newly_added, \
+						user1.jid, account)
+				if old_show > 1 and new_show == 0 and self.connected[account] > 1:
+					if not user1.jid in self.roster.to_be_removed[account]:
+						self.roster.to_be_removed[account].append(user1.jid)
+					if user1.jid in self.roster.newly_added[account]:
+						self.roster.newly_added[account].remove(user1.jid)
+					self.roster.redraw_jid(user1.jid, account)
+					if not self.queues[account].has_key(jid):
+						gobject.timeout_add(5000, self.roster.really_remove_user, \
+							user1, account)
 			user1.show = array[1]
 			user1.status = array[2]
 			user1.priority = priority
@@ -395,21 +407,29 @@ class plugin:
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
 			#play sound
-			if old_show < 2 and statuss.index(user1.show) > 1 and \
+			if old_show < 2 and new_show > 1 and \
 				self.config['sound_contact_connected']:
 				self.play_sound('sound_contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
 											not self.config['autopopup']:
-					instance = Popup_window(self, 'Contact Online', jid )
+					#FIXME:
+					#DOES NOT ALWAYS WORK WHY?
+					#I control nkour@lagaule in jabber
+					# have nkour@lagaul in nkour@jabber.org
+					#go online from psi in lagaule
+					#gajim doesn't give a shit
+					# WHY? same with offline
+					# new message works
+					instance = Popup_window(self, 'Contact Online', jid, account)
 					self.roster.popup_windows.append(instance)
-			elif old_show > 1 and statuss.index(user1.show) < 2 and \
+			elif old_show > 1 and new_show < 2 and \
 				self.config['sound_contact_disconnected']:
 				self.play_sound('sound_contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 							not self.queues[account].has_key(jid) and \
 											not self.config['autopopup']:
-					instance = Popup_window(self, 'Contact Offline', jid )
+					instance = Popup_window(self, 'Contact Offline', jid, account)
 					self.roster.popup_windows.append(instance)
 				
 		elif self.windows[account]['gc'].has_key(ji):
@@ -432,7 +452,7 @@ class plugin:
 						not self.queues[account].has_key(jid):
 			first = True
 			if	not self.config['autopopup']:
-				instance = Popup_window(self, 'New Message', 'From '+ jid )
+				instance = Popup_window(self, 'New Message', jid, account)
 				self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
 		if self.config['sound_first_message_received'] and first:
@@ -450,7 +470,8 @@ class plugin:
 		
 	def handle_event_msgsent(self, account, array):
 		#('MSG', account, (jid, msg, keyID))
-		self.play_sound('sound_message_sent')
+		if self.config['sound_message_sent']:
+			self.play_sound('sound_message_sent')
 		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
@@ -536,7 +557,12 @@ class plugin:
 		self.roster.draw_roster()
 
 	def handle_event_quit(self, p1, p2):
-		self.roster.on_quit()
+		self.roster.on_quit() # SUCH FUNCTION DOES NOT EXIST!!
+
+	def save_config(self):
+		hidden_lines = self.config['hiddenlines'].split('\t')
+		self.config['hiddenlines'] = '\t'.join(hidden_lines)
+		self.send('CONFIG', None, ('GtkGui', self.config, 'GtkGui'))
 
 	def handle_event_myvcard(self, account, array):
 		nick = ''
@@ -927,7 +953,7 @@ class plugin:
 												#2:autoaway and use sleeper
 												#3:autoxa and use sleeper
 			self.send('ASK_ROSTER', a, self.queueIN)
-		#in pygtk2.4 FIXME: (nk) WHAT DO YOU MEAN?
+
 		iconset = self.config['iconset']
 		if not iconset:
 			iconset = 'sun'
