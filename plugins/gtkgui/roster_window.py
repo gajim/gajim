@@ -922,8 +922,7 @@ class Roster_window:
 		New_message_dialog(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
-		print self.get_contacts_list()
-		#About_dialog()
+		About_dialog()
 
 	def on_accounts_menuitem_activate(self, widget):
 		if self.plugin.windows.has_key('accounts'):
@@ -1163,11 +1162,6 @@ class Roster_window:
 		self.plugin.config['showoffline'] = 1 - self.plugin.config['showoffline']
 		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.draw_roster()
-
-	def get_contacts_list(self):
-		for acc in self.plugin.accounts.keys():
-			print self.contacts[acc]
-		
 
 	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
 		"""When a row is added, set properties for icon renderer"""

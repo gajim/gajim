@@ -121,7 +121,7 @@ class Vcard_information_window:
 				resources += '\n' + u.resource + ' (' + str(u.priority) + ')'
 				if not u.status:
 					u.status = ''
-				stats += '\n' + u.show + ' : ' + u.status
+				stats += '\n' + u.show + ': ' + u.status
 		self.xml.get_widget('resource_label').set_text(resources)
 		self.xml.get_widget('status_label').set_text(stats)
 		self.plugin.send('ASK_VCARD', self.account, self.user.jid)
@@ -764,6 +764,7 @@ class New_message_dialog:
 		if jid.find('@') == -1: # if no @ was given
 			Error_dialog(_('User ID is not valid'))
 			return
+		self.window.destroy()
 		# use User class, new_chat expects it that way
 		# is it in the roster?
 		if self.plugin.roster.contacts[self.account].has_key(jid):
@@ -779,8 +780,6 @@ class New_message_dialog:
 		self.plugin.windows[self.account]['chats'][jid].active_tab(jid)
 		self.plugin.windows[self.account]['chats'][jid].window.present()
 		#FIXME: PROBLEM WITH FOCUS
-		
-		self.window.destroy()
 
 class Change_password_dialog:
 	def __init__(self, plugin, account):
@@ -818,8 +817,10 @@ class Change_password_dialog:
 		return message
 
 class Popup_window:
-	def __init__(self, plugin, event_type, event_desc):
+	def __init__(self, plugin, event_type, jid, account):
 		self.plugin = plugin
+		self.account = account
+		self.jid = jid
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_window', APP)
 		self.window = xml.get_widget('popup_window')
@@ -829,7 +830,13 @@ class Popup_window:
 		eventbox = xml.get_widget('eventbox')
 		
 		event_type_label.set_markup('<b>'+event_type+'</b>')
-		event_description_label.set_text(event_desc)
+
+		if self.jid in self.plugin.roster.contacts[account]:
+			txt = self.plugin.roster.contacts[account][self.jid][0].name
+		else:
+			txt = self.jid
+
+		event_description_label.set_text(txt)
 		
 		# set colors [ http://www.w3schools.com/html/html_colornames.asp ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
@@ -842,29 +849,27 @@ class Popup_window:
 		elif event_type == 'New Message':
 			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('dodgerblue'))
 			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('dodgerblue'))
+			txt = 'From ' + txt
 	
 		# position the window to bottom-right of screen
-		window_width, window_height = self.window.get_size()
-		self.plugin.roster.popups_height += window_height
+		window_width, self.window_height = self.window.get_size()
+		self.plugin.roster.popups_height += self.window_height
 		self.window.move(gtk.gdk.screen_width() - window_width, \
 					gtk.gdk.screen_height() - self.plugin.roster.popups_height)
 		
 		xml.signal_autoconnect(self)
-		close_button.connect('clicked', self.on_close_button_clicked, window_height)
-		
 		self.window.show_all()
+		gobject.timeout_add(5000, self.on_timeout)
 
-		gobject.timeout_add(5000, self.on_timeout, window_height)
+	def on_close_button_clicked(self, widget):
+		self.adjust_height_and_move_popup_windows()
 
-	def on_close_button_clicked(self, widget, window_height):
-		self.adjust_height_and_move_popup_windows(window_height)
-
-	def on_timeout(self, window_height):
-		self.adjust_height_and_move_popup_windows(window_height)
+	def on_timeout(self):
+		self.adjust_height_and_move_popup_windows()
 		
-	def adjust_height_and_move_popup_windows(self, window_height):
+	def adjust_height_and_move_popup_windows(self):
 		#remove
-		self.plugin.roster.popups_height -= window_height
+		self.plugin.roster.popups_height -= self.window_height
 		self.window.destroy()
 		
 		if len(self.plugin.roster.popup_windows) > 0:
@@ -880,4 +885,17 @@ class Popup_window:
 					gtk.gdk.screen_height() - self.plugin.roster.popups_height)
 
 	def on_popup_window_button_press_event(self, widget, event):
-		print 'IN YOUR DREAMS ONLY..'
+		# use User class, new_chat expects it that way
+		# is it in the roster?
+		if self.plugin.roster.contacts[self.account].has_key(self.jid):
+			user = self.plugin.roster.contacts[self.account][self.jid][0]
+		else:
+			user = gtkgui.User(self.jid, self.jid, ['not in the roster'], \
+				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
+			self.plugin.roster.contacts[self.account][self.jid] = [user]
+			self.plugin.roster.add_user_to_roster(user.self.jid, self.account)			
+
+		self.plugin.roster.new_chat(user, self.account)
+		self.plugin.windows[self.account]['chats'][self.jid].active_tab(self.jid)
+		self.plugin.windows[self.account]['chats'][self.jid].window.present()
+		self.adjust_height_and_move_popup_windows()

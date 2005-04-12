@@ -46,6 +46,9 @@ class Preferences_window:
 
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
+		if os.name == 'nt': # if windows, player must not be visible
+			self.xml.get_widget('soundplayer_hbox').set_property('visible', False)
+			self.trayicon_checkbutton.set_property('visible', False)
 
 	def on_preferences_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
@@ -62,7 +65,7 @@ class Preferences_window:
 				w.set_sensitive(widget.get_active())
 		self.plugin.save_config()
 
-	def on_tray_icon_checkbutton_toggled(self, widget):
+	def on_trayicon_checkbutton_toggled(self, widget):
 		if widget.get_active():
 			self.plugin.config['trayicon'] = 1
 			self.plugin.show_systray()
@@ -632,15 +635,15 @@ class Preferences_window:
 		self.auto_xa_checkbutton = self.xml.get_widget('auto_xa_checkbutton')
 		self.auto_xa_time_spinbutton = self.xml.get_widget \
 			('auto_xa_time_spinbutton')
-		self.tray_icon_checkbutton = self.xml.get_widget('tray_icon_checkbutton')
+		self.trayicon_checkbutton = self.xml.get_widget('trayicon_checkbutton')
 		self.notebook = self.xml.get_widget('preferences_notebook')
 		
 		#trayicon
 		if self.plugin.systray_capabilities:
 			st = self.plugin.config['trayicon']
-			self.tray_icon_checkbutton.set_active(st)
+			self.trayicon_checkbutton.set_active(st)
 		else:
-			self.tray_icon_checkbutton.set_sensitive(False)
+			self.trayicon_checkbutton.set_sensitive(False)
 
 		#Save position
 		st = self.plugin.config['saveposition']
@@ -775,9 +778,6 @@ class Preferences_window:
 			self.xml.get_widget('soundplayer_hbox').set_sensitive(False)
 			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
 			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
-
-		if os.name == 'nt': # if windows, player must not be changeable
-			self.xml.get_widget('soundplayer_hbox').set_sensitive(False)
 
 		#sound player
 		self.xml.get_widget('soundplayer_entry').set_text(\

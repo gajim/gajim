@@ -412,6 +412,7 @@ class plugin:
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
 											not self.config['autopopup']:
+					#FIXME:
 					#DOES NOT ALWAYS WORK WHY?
 					#I control nkour@lagaule in jabber
 					# have nkour@lagaul in nkour@jabber.org
@@ -419,7 +420,7 @@ class plugin:
 					#gajim doesn't give a shit
 					# WHY? same with offline
 					# new message works
-					instance = Popup_window(self, 'Contact Online', jid )
+					instance = Popup_window(self, 'Contact Online', jid, account)
 					self.roster.popup_windows.append(instance)
 			elif old_show > 1 and new_show < 2 and \
 				self.config['sound_contact_disconnected']:
@@ -427,7 +428,7 @@ class plugin:
 				if not self.windows[account]['chats'].has_key(jid) and \
 							not self.queues[account].has_key(jid) and \
 											not self.config['autopopup']:
-					instance = Popup_window(self, 'Contact Offline', jid )
+					instance = Popup_window(self, 'Contact Offline', jid, account)
 					self.roster.popup_windows.append(instance)
 				
 		elif self.windows[account]['gc'].has_key(ji):
@@ -450,10 +451,7 @@ class plugin:
 						not self.queues[account].has_key(jid):
 			first = True
 			if	not self.config['autopopup']:
-				#FIXME: check if the new msg was from contact in the roster or not
-				# and display the name or the jid [if not]
-				#if 
-				instance = Popup_window(self, 'New Message', 'From '+ jid )
+				instance = Popup_window(self, 'New Message', jid, account)
 				self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
 		if self.config['sound_first_message_received'] and first:
