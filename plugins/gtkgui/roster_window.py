@@ -204,7 +204,9 @@ class Roster_window:
 				prio = u.priority
 				user = u
 		for iter in iters:
-			if self.plugin.queues[account].has_key(jid):
+			if jid.find("@") <= 0: # It's an agent
+				img = self.pixbufs[user.show]
+			elif self.plugin.queues[account].has_key(jid):
 				img = self.pixbufs['message']
 			else:
 				if user.sub != 'both':

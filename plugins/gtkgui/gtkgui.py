@@ -377,22 +377,23 @@ class plugin:
 						user1.priority, user1.keyID)
 					luser.append(user1)
 				user1.resource = resource
-			if old_show == 0 and new_show > 1:
-				if not user1.jid in self.roster.newly_added[account]:
-					self.roster.newly_added[account].append(user1.jid)
-				if user1.jid in self.roster.to_be_removed[account]:
-					self.roster.to_be_removed[account].remove(user1.jid)
-				gobject.timeout_add(5000, self.roster.remove_newly_added, \
-					user1.jid, account)
-			if old_show > 1 and new_show == 0 and self.connected[account] > 1:
-				if not user1.jid in self.roster.to_be_removed[account]:
-					self.roster.to_be_removed[account].append(user1.jid)
-				if user1.jid in self.roster.newly_added[account]:
-					self.roster.newly_added[account].remove(user1.jid)
-				self.roster.redraw_jid(user1.jid, account)
-				if not self.queues[account].has_key(jid):
-					gobject.timeout_add(5000, self.roster.really_remove_user, user1,\
-						account)
+			if user1.jid.find('@') > 0: # It's not an agent
+				if old_show == 0 and new_show > 1:
+					if not user1.jid in self.roster.newly_added[account]:
+						self.roster.newly_added[account].append(user1.jid)
+					if user1.jid in self.roster.to_be_removed[account]:
+						self.roster.to_be_removed[account].remove(user1.jid)
+					gobject.timeout_add(5000, self.roster.remove_newly_added, \
+						user1.jid, account)
+				if old_show > 1 and new_show == 0 and self.connected[account] > 1:
+					if not user1.jid in self.roster.to_be_removed[account]:
+						self.roster.to_be_removed[account].append(user1.jid)
+					if user1.jid in self.roster.newly_added[account]:
+						self.roster.newly_added[account].remove(user1.jid)
+					self.roster.redraw_jid(user1.jid, account)
+					if not self.queues[account].has_key(jid):
+						gobject.timeout_add(5000, self.roster.really_remove_user, \
+							user1, account)
 			user1.show = array[1]
 			user1.status = array[2]
 			user1.priority = priority
