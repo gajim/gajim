@@ -131,7 +131,7 @@ class connection:
 
 	def _messageCB(self, con, msg):
 		"""Called when we recieve a message"""
-		typ = msg.getType()
+		mtype = msg.getType()
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		msgtxt = msg.getBody()
@@ -151,10 +151,10 @@ class connection:
 				decmsg = self.gpg.decrypt(encmsg, keyID)
 		if decmsg:
 			msgtxt = decmsg
-		if typ == 'error':
+		if mtype == 'error':
 			self.dispatch('MSGERROR', (str(msg.getFrom()), \
 				msg.getErrorCode(), msg.getError(), msgtxt, tim))
-		elif typ == 'groupchat':
+		elif mtype == 'groupchat':
 			subject = msg.getSubject()
 			if subject:
 				self.dispatch('GC_SUBJECT', (str(msg.getFrom()), subject))
@@ -171,9 +171,9 @@ class connection:
 		prio = prs.getPriority()
 		if not prio:
 			prio = 0
-		typ = prs.getType()
-		if typ == None: typ = 'available'
-		gajim.log.debug('PresenceCB : %s' % typ)
+		ptype = prs.getType()
+		if ptype == None: ptype = 'available'
+		gajim.log.debug('PresenceCB : %s' % ptype)
 		xtags = prs.getXNodes()
 		sigTag = None
 		keyID = ''
@@ -186,7 +186,7 @@ class connection:
 			#verify
 			sigmsg = sigTag.getData()
 			keyID = self.gpg.verify(status, sigmsg)
-		if typ == 'available':
+		if ptype == 'available':
 			show = prs.getShow()
 			if not show:
 				show = 'online'
@@ -194,12 +194,12 @@ class connection:
 				prs.getFrom().getResource(), prio, keyID, prs.getRole(), \
 				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
 				prs.getActor(), prs.getStatusCode()))
-		elif typ == 'unavailable':
+		elif ptype == 'unavailable':
 			self.dispatch('NOTIFY', (prs.getFrom().getStripped(), 'offline', \
 				status, prs.getFrom().getResource(), prio, keyID, prs.getRole(), \
 				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
 				prs.getActor(), prs.getStatusCode()))
-		elif typ == 'subscribe':
+		elif ptype == 'subscribe':
 			gajim.log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0:
 				if self.connection:
@@ -212,19 +212,19 @@ class connection:
 				if not status:
 					status = _('I would like to add you to my roster.')
 				self.dispatch('SUBSCRIBE', (who, status))
-		elif typ == 'subscribed':
+		elif ptype == 'subscribed':
 			jid = prs.getFrom()
 			self.dispatch('SUBSCRIBED', (jid.getStripped(), jid.getResource()))
 			self.dispatch('UPDUSER', (jid.getStripped(), jid.getNode(), \
 				['General'])))
 			#BE CAREFUL : no con.updateRosterItem() in a callback
 			gajim.log.debug('we are now subscribed to %s' % who)
-		elif typ == 'unsubscribe':
+		elif ptype == 'unsubscribe':
 			gajim.log.debug('unsubscribe request from %s' % who)
-		elif typ == 'unsubscribed':
+		elif ptype == 'unsubscribed':
 			gajim.log.debug('we are now unsubscribed to %s' % who)
 			self.dispatch('UNSUBSCRIBED', prs.getFrom().getStripped())
-		elif typ == 'error':
+		elif ptype == 'error':
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
 			if errcode == '400': #Bad Request: JID Malformed or Private message when not allowed
@@ -474,11 +474,11 @@ class connection:
 			if self.connected == 2:
 				self.connected = STATUS_LIST.index(status)
 				#send our presence
-				typ = 'available'
+				ptype = 'available'
 				if status == 'invisible':
-					typ = 'invisible'
+					ptype = 'invisible'
 				prio = gajim.config.get_per('accounts', self.name, 'priority')
-				self.connection.sendPresence(typ, prio, status, msg, signed)
+				self.connection.sendPresence(ptype, prio, status, msg, signed)
 				self.dispatch('STATUS', status)
 				#ask our VCard
 				iq = common.jabber.Iq(type='get')
@@ -493,11 +493,11 @@ class connection:
 			self.dispatch('STATUS', 'offline')
 		elif status != 'offline' and self.connected:
 			self.connected = STATUS_LIST.index(status)
-			typ = 'available'
+			ptype = 'available'
 			if status == 'invisible':
-				typ = 'invisible'
+				ptype = 'invisible'
 			prio = gajim.config.get_per('accounts', self.name, 'priority')
-			self.connection.sendPresence(typ, prio, status, msg, signed)
+			self.connection.sendPresence(ptype, prio, status, msg, signed)
 			self.dispatch('STATUS', status)
 
 	def send_message(jid, msg, keyID)
@@ -653,12 +653,12 @@ class connection:
 					iq2.insertTag(i).putData(vcard[i])
 		self.connection.send(iq)
 
-	def send_agent_status(self, agent, typ):
+	def send_agent_status(self, agent, ptype):
 		if not self.connection:
 			return
-		if not typ:
-			typ = 'available';
-		p = common.jabber.Presence(to = agent, type = typ)
+		if not ptype:
+			ptype = 'available';
+		p = common.jabber.Presence(to = agent, type = ptype)
 		self.connection.send(p)
 
 	def join_gc(self, nick, room, server, passwd):
@@ -687,12 +687,12 @@ class connection:
 		if not self.connection:
 			return
 		if show == 'offline':
-			typ = 'unavailable'
+			ptype = 'unavailable'
 			show = None
 		else:
-			typ = 'available'
+			ptype = 'available'
 		self.connection.send(common.jabber.Presence(to = '%s/%s' % (jid, nick), \
-			type = typ, show = show, status = status))
+			type = ptype, show = show, status = status))
 
 	def gc_set_role(self, room_jid, nick, role):
 		if not self.connection:
