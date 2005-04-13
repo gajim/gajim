@@ -1,4 +1,4 @@
-##	plugins/config.py
+##	config.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -57,9 +57,9 @@ class Preferences_window:
 	def on_checkbutton_toggled(self, widget, config_name, \
 		change_sensitivity_widgets = None):
 		if widget.get_active():
-			self.plugin.config[config_name] = 1
+			gajim.config.set(config_name, True)
 		else:
-			self.plugin.config[config_name] = 0
+			gajim.config.set(config_name, False)
 		if change_sensitivity_widgets != None:
 			for w in change_sensitivity_widgets:
 				w.set_sensitive(widget.get_active())
@@ -67,37 +67,28 @@ class Preferences_window:
 
 	def on_trayicon_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			self.plugin.config['trayicon'] = 1
+			gajim.config.set('trayicon', True)
 			self.plugin.show_systray()
 			self.plugin.roster.update_status_comboxbox()
 		else:
-			self.plugin.config['trayicon'] = 0
+			gajim.config.set('trayicon', False)
 			self.plugin.hide_systray()
-		self.plugin.send('CONFIG', None, ('GtkGui', self.plugin.config, 'GtkGui'))
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
 	def on_save_position_checkbutton_toggled(self, widget):
-		if widget.get_active():
-			self.plugin.config['saveposition'] = 1
-		else:
-			self.plugin.config['saveposition'] = 0
-		self.plugin.save_config()
+		self.on_checkbutton_toggled(widget, 'saveposition')
 	
 	def on_merge_checkbutton_toggled(self, widget):
-		if widget.get_active():
-			self.plugin.config['mergeaccounts'] = 1
-		else:
-			self.plugin.config['mergeaccounts'] = 0
-		self.plugin.roster.regroup = self.plugin.config['mergeaccounts']
+		self.on_checkbutton_toggled(widget, 'mergeaccounts')
+		self.plugin.roster.regroup = gajim.config.get('mergeaccounts')
 		self.plugin.roster.draw_roster()
-		self.plugin.save_config()
 	
 	def on_iconset_combobox_changed(self, widget):
 		model = widget.get_model()
 		active = widget.get_active()
 		icon_string = model[active][0]
-		self.plugin.config['iconset'] = icon_string
+		gajim.config.set('iconset', icon_string)
 		self.plugin.roster.reload_pixbufs()
 		self.plugin.save_config()
 		
@@ -106,7 +97,7 @@ class Preferences_window:
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
-		self.plugin.config['accounttextcolor'] = color_string
+		gajim.config.set('accounttextcolor', color_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
@@ -115,7 +106,7 @@ class Preferences_window:
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
-		self.plugin.config['grouptextcolor'] = color_string
+		gajim.config.set('grouptextcolor', color_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 
@@ -124,7 +115,7 @@ class Preferences_window:
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
-		self.plugin.config['usertextcolor'] = color_string
+		gajim.config.set('usertextcolor', color_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 
@@ -133,7 +124,7 @@ class Preferences_window:
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
-		self.plugin.config['accountbgcolor'] = color_string
+		gajim.config.set('accountbgcolor', color_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
@@ -142,7 +133,7 @@ class Preferences_window:
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
-		self.plugin.config['groupbgcolor'] = color_string
+		gajim.config.set('groupbgcolor', color_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
@@ -151,60 +142,63 @@ class Preferences_window:
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
-		self.plugin.config['userbgcolor'] = color_string
+		gajim.config.set('userbgcolor', color_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
 	def on_account_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The User Text"""
 		font_string = widget.get_font_name()
-		self.plugin.config['accountfont'] = font_string
+		gajim.config.set('accountfont', font_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 
 	def on_group_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The Group Text"""
 		font_string = widget.get_font_name()
-		self.plugin.config['groupfont'] = font_string
+		gajim.config.set('groupfont', font_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
 	def on_user_text_fontbutton_font_set(self, widget):
 		"""Take The Font For The User Text"""
 		font_string = widget.get_font_name()
-		self.plugin.config['userfont'] = font_string
+		gajim.config.set('userfont', font_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
 	def on_reset_colors_and_fonts_button_clicked(self, widget):
-		defaults = self.plugin.default_config
-		self.plugin.config['accounttextcolor'] = defaults['accounttextcolor']
-		self.plugin.config['grouptextcolor'] = defaults['grouptextcolor']
-		self.plugin.config['usertextcolor'] = defaults['usertextcolor']
-		self.plugin.config['accountbgcolor'] = defaults['accountbgcolor']
-		self.plugin.config['groupbgcolor'] = defaults['groupbgcolor']
-		self.plugin.config['userbgcolor'] = defaults['userbgcolor']
-		self.plugin.config['accountfont'] = defaults['accountfont']
-		self.plugin.config['groupfont'] = defaults['groupfont']
-		self.plugin.config['userfont'] = defaults['userfont']
+		gajim.config.set('accounttextcolor', \
+			gajim.config.get_default('accounttextcolor'))
+		gajim.config.set('grouptextcolor' \
+			gajim.config.get_default('grouptextcolor'))
+		gajim.config.set('usertextcolor', \
+			gajim.config.get_default('usertextcolor']
+		gajim.config.set('accountbgcolor', \
+			gajim.config.get_default('accountbgcolor'))
+		gajim.config.set('groupbgcolor', gajim.config.get_default('groupbgcolor'))
+		gajim.config.set('userbgcolor', gajim.config.get_default('userbgcolor'))
+		gajim.config.set('accountfont', gajim.config.get_default('accountfont'))
+		gajim.config.set('groupfont', gajim.config.get_default('groupfont'))
+		gajim.config.set('userfont', gajim.config.get_default('userfont'))
 		self.xml.get_widget('account_text_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['accounttextcolor']))		
+			gtk.gdk.color_parse(gajim.config.get_default('accounttextcolor')))
 		self.xml.get_widget('group_text_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['grouptextcolor']))		
+			gtk.gdk.color_parse(gajim.config.get_default('grouptextcolor')))
 		self.xml.get_widget('user_text_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['usertextcolor']))	
+			gtk.gdk.color_parse(gajim.config.get_default('usertextcolor')))
 		self.xml.get_widget('account_text_bg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['accountbgcolor']))		
+			gtk.gdk.color_parse(gajim.config.get_default('accountbgcolor')))
 		self.xml.get_widget('group_text_bg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['groupbgcolor']))		
+			gtk.gdk.color_parse(gajim.config.get_default('groupbgcolor')))
 		self.xml.get_widget('user_text_bg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['userbgcolor']))
+			gtk.gdk.color_parse(gajim.config.get_default('userbgcolor')))
 		self.xml.get_widget('account_text_fontbutton').set_font_name(\
-			defaults['accountfont'])		
+			gajim.config.get_default('accountfont'))
 		self.xml.get_widget('group_text_fontbutton').set_font_name(\
-			defaults['groupfont'])
+			gajim.config.get_default('groupfont'))
 		self.xml.get_widget('user_text_fontbutton').set_font_name(\
-			defaults['userfont'])
+			gajim.config.get_default('userfont'))
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
@@ -225,7 +219,7 @@ class Preferences_window:
 #					buf2[acct][jid] = self.plugin.windows[acct]['chats'][jid].\
 #						xmls[jid].get_widget('message_textview').get_buffer()
 #					self.plugin.windows[acct]['chats'][jid].window.destroy()
-			self.plugin.config['usetabbedchat'] = 1
+			gajim.config.set('usetabbedchat', True)
 			#open new tabbed chat windows
 #			for acct in self.plugin.accounts:
 #				for jid in jids[acct]:
@@ -250,7 +244,7 @@ class Preferences_window:
 #						buf2[acct][jid] = self.plugin.windows[acct]['chats'][jid].\
 #							xmls[jid].get_widget('message_textview').get_buffer()
 #					self.plugin.windows[acct]['chats']['tabbed'].window.destroy()
-			self.plugin.config['usetabbedchat'] = 0
+			gajim.config.set('usetabbedchat', False)
 			#open new tabbed chat windows
 #			for acct in self.plugin.accounts:
 #				for jid in jids[acct]:
@@ -274,36 +268,36 @@ class Preferences_window:
 	
 	def on_time_never_radiobutton_toggled(self, widget):
 		if widget.get_active():
-			self.plugin.config['print_time'] = 'never'
+			gajim.config.set('print_time', 'never')
 		self.update_print_time()
 		self.plugin.save_config()
 
 	def on_time_sometimes_radiobutton_toggled(self, widget):
 		if widget.get_active():
-			self.plugin.config['print_time'] = 'sometimes'
+			gajim.config.set('print_time', 'sometimes')
 		self.update_print_time()
 		self.plugin.save_config()
 
 	def on_time_always_radiobutton_toggled(self, widget):
 		if widget.get_active():
-			self.plugin.config['print_time'] = 'always'
+			gajim.config.set('print_time', 'always')
 		self.update_print_time()
 		self.plugin.save_config()
 
 	def on_before_time_entry_focus_out_event(self, widget, event):
-		self.plugin.config['before_time'] = widget.get_text()
+		gajim.config.set('before_time', widget.get_text())
 		self.plugin.save_config()
 	
 	def on_after_time_entry_focus_out_event(self, widget, event):
-		self.plugin.config['after_time'] = widget.get_text()
+		gajim.config.set('after_time', widget.get_text())
 		self.plugin.save_config()
 
 	def on_before_nickname_entry_focus_out_event(self, widget, event):
-		self.plugin.config['before_nickname'] = widget.get_text()
+		gajim.config.set('before_nickname', widget.get_text())
 		self.plugin.save_config()
 
 	def on_after_nickname_entry_focus_out_event(self, widget, event):
-		self.plugin.config['after_nickname'] = widget.get_text()
+		gajim.config.set('after_nickname', widget.get_text())
 		self.plugin.save_config()
 
 	def update_text_tags(self):
@@ -320,7 +314,7 @@ class Preferences_window:
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
-		self.plugin.config['inmsgcolor'] = color_string
+		gajim.config.set('inmsgcolor', color_string)
 		self.update_text_tags()
 		self.plugin.save_config()
 		
@@ -329,7 +323,7 @@ class Preferences_window:
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
-		self.plugin.config['outmsgcolor'] = color_string
+		gajim.config.set('outmsgcolor', color_string)
 		self.update_text_tags()
 		self.plugin.save_config()
 	
@@ -338,21 +332,21 @@ class Preferences_window:
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
-		self.plugin.config['statusmsgcolor'] = color_string
+		gajim.config.set('statusmsgcolor', color_string)
 		self.update_text_tags()
 		self.plugin.save_config()
 	
 	def on_reset_colors_button_clicked(self, widget):
-		defaults = self.plugin.default_config
-		self.plugin.config['inmsgcolor'] = defaults['inmsgcolor']
-		self.plugin.config['outmsgcolor'] = defaults['outmsgcolor']
-		self.plugin.config['statusmsgcolor'] = defaults['statusmsgcolor']
+		gajim.config.set('inmsgcolor', gajim.config.get_default('inmsgcolor'))
+		gajim.config.set('outmsgcolor', gajim.config.get_default('outmsgcolor'))
+		gajim.config.set('statusmsgcolor', \
+			gajim.config.get_default('statusmsgcolor'))
 		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['inmsgcolor']))		
+			gtk.gdk.color_parse(gajim.config.get_default('inmsgcolor')))
 		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['outmsgcolor']))		
+			gtk.gdk.color_parse(gajim.config.get_default('outmsgcolor')))
 		self.xml.get_widget('status_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(defaults['statusmsgcolor']))		
+			gtk.gdk.color_parse(gajim.config.get_default('statusmsgcolor')))
 		self.update_text_tags()
 		self.plugin.save_config()
 
@@ -384,7 +378,7 @@ class Preferences_window:
 										self.xml.get_widget('browse_sounds_hbox')])
 	
 	def on_soundplayer_entry_changed(self, widget):
-		self.plugin.config['soundplayer'] = widget.get_text()
+		gajim.config.set('soundplayer', widget.get_text())
 		self.plugin.save_config()
 		
 	def on_prompt_online_status_message_checkbutton_toggled(self, widget):
@@ -399,10 +393,10 @@ class Preferences_window:
 			path = model.get_path(iter)
 			sound_event = model.get_value(iter, 0)
 			if model[path][1]:
-				self.plugin.config['sound_' + sound_event] = 1
+				gajim.config.set('sound_' + sound_event, True)
 			else:
-				self.plugin.config['sound_' + sound_event] = 0
-			self.plugin.config['sound_' + sound_event + '_file'] = \
+				gajim.config.set('sound_' + sound_event, False)
+			gajim.config.set('sound_' + sound_event + '_file', \
 				model.get_value(iter, 2)
 			iter = model.iter_next(iter)
 		self.plugin.save_config()
@@ -413,10 +407,10 @@ class Preferences_window:
 
 	def on_auto_away_time_spinbutton_value_changed(self, widget):
 		aat = widget.get_value_as_int()
-		self.plugin.config['autoawaytime'] = aat
+		gajim.config.set('autoawaytime', aat)
 		self.plugin.sleeper = common.sleepy.Sleepy(\
-			self.plugin.config['autoawaytime']*60, \
-			self.plugin.config['autoxatime']*60)
+			gajim.config.get('autoawaytime')*60, \
+			gajim.config.get('autoxatime')*60)
 		self.plugin.save_config()
 
 	def on_auto_xa_checkbutton_toggled(self, widget):
@@ -425,23 +419,25 @@ class Preferences_window:
 
 	def on_auto_xa_time_spinbutton_value_changed(self, widget):
 		axt = widget.get_value_as_int()
-		self.plugin.config['autoxatime'] = axt
+		gajim.config.set('autoxatime', axt)
 		self.plugin.sleeper = common.sleepy.Sleepy(\
-			self.plugin.config['autoawaytime']*60, \
-			self.plugin.config['autoxatime']*60)
+			gajim.config.get('autoawaytime')*60, \
+			gajim.config.get('autoxatime')*60)
 		self.plugin.save_config()
 
 	def on_msg_treemodel_row_changed(self, model, path, iter):
 		iter = model.get_iter_first()
 		i = 0
 		while iter:
-			self.plugin.config['msg%i_name' % i] = model.get_value(iter, 0)
-			self.plugin.config['msg%i' % i] = model.get_value(iter, 1)
+			# FIXME: we need to add options
+			gajim.config.set('msg%i_name' % i, model.get_value(iter, 0))
+			gajim.config.set('msg%i' % i, model.get_value(iter, 1))
 			iter = model.iter_next(iter)
 			i += 1
+			#FIXME: we need to remove options
 		while self.plugin.config.has_key('msg%s_name' % i):
-			del self.plugin.config['msg%i_name' % i]
-			del self.plugin.config['msg%i' % i]
+			del gajim.config.set('msg%i_name' % i]
+			del gajim.config.set('msg%i' % i]
 			i += 1
 		self.plugin.save_config()
 
@@ -449,58 +445,57 @@ class Preferences_window:
 		iter = model.get_iter_first()
 		i = 0
 		while iter:
-			self.plugin.config['msg%i_name' % i] = model.get_value(iter, 0)
-			self.plugin.config['msg%i' % i] = model.get_value(iter, 1)
+			# FIXME: we need to add options
+			gajim.config.set('msg%i_name' % i, model.get_value(iter, 0))
+			gajim.config.set('msg%i' % i, model.get_value(iter, 1))
 			iter = model.iter_next(iter)
 			i += 1
+			#FIXME: we need to remove options
 		while self.plugin.config.has_key('msg%s_name' % i):
-			del self.plugin.config['msg%i_name' % i]
-			del self.plugin.config['msg%i' % i]
+			del gajim.config.set('msg%i_name' % i]
+			del gajim.config.set('msg%i' % i]
 			i += 1
 		self.plugin.save_config()
 
 	def on_links_open_with_combobox_changed(self, widget):
 		if widget.get_active() == 2:
 			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
-			self.plugin.config['openwith'] = 'custom'
+			gajim.config.set('openwith', 'custom')
 		else:
 			if widget.get_active() == 0:
-				self.plugin.config['openwith'] = 'gnome-open'
+				gajim.config.set('openwith', 'gnome-open')
 			if widget.get_active() == 1:
-				self.plugin.config['openwith'] = 'kfmclient exec'
+				gajim.config.set('openwith', 'kfmclient exec')
 			self.xml.get_widget('custom_apps_frame').set_sensitive(False)
 		self.plugin.save_config()
 
 	def on_custom_browser_entry_changed(self, widget):
-		self.plugin.config['custombrowser'] = widget.get_text()
+		gajim.config.set('custombrowser', widget.get_text())
 		self.plugin.save_config()
 
 	def on_custom_mail_client_entry_changed(self, widget):
-		self.plugin.config['custommailapp'] = widget.get_text()
+		gajim.config.set('custommailapp', widget.get_text())
 		self.plugin.save_config()
 
 	def on_log_in_contact_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			self.config_logger['lognotusr'] = 1
+			gajim.config.set('lognotusr', True)
 		else:
-			self.config_logger['lognotusr'] = 0
-		self.plugin.send('CONFIG', None, ('Logger', self.config_logger, 'GtkGui'))
+			gajim.config.set('lognotusr', False)
 		self.plugin.save_config()
 
 	def on_log_in_extern_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			self.config_logger['lognotsep'] = 1
+			gajim.config.set('lognotsep', True)
 		else:
-			self.config_logger['lognotsep'] = 0
-		self.plugin.send('CONFIG', None, ('Logger', self.config_logger, 'GtkGui'))
+			gajim.config.set('lognotsep', False)
 		self.plugin.save_config()
 
 	def on_do_not_send_os_info_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			#FIXME: when threads are removed, make sure this work
-			self.plugin.config['do_not_send_os_info'] = 1
+			gajim.config.set('do_not_send_os_info', True)
 		else:
-			self.plugin.config['do_not_send_os_info'] = 0
+			gajim.config.set('do_not_send_os_info', False)
 		self.plugin.save_config()
 
 
@@ -509,9 +504,11 @@ class Preferences_window:
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
 		model = self.msg_tree.get_model()
 		model.clear()
-		while self.plugin.config.has_key('msg%s_name' % i):
+		#FIXME:
+		while gajim.config.exist('msg%s_name' % i):
 			iter = model.append()
-			model.set(iter, 0, self.plugin.config['msg%s_name' % i], 1, self.plugin.config['msg%s' % i])
+			model.set(iter, 0, gajim.config.get('msg%s_name' % i), 1, \
+				gajim.config.get('msg%s' % i))
 			i += 1
 
 	def on_msg_cell_edited(self, cell, row, new_text):
@@ -560,13 +557,14 @@ class Preferences_window:
 	def fill_sound_treeview(self):
 		events = {}
 		#events = {name : [use_it, file], name2 : [., .], ...}
+		#FIXME:
 		for key in self.plugin.config.keys():
 			if key.find('sound_') == 0:
 				if not self.plugin.config.has_key(key + '_file'):
 					continue
 				ev = key.replace('sound_', '')
-				events[ev] = [self.plugin.config[key], self.plugin.config[key + \
-					'_file']]
+				events[ev] = [gajim.config.get(key), \
+					gajim.config.get(key + '_file')]
 		model = self.sound_tree.get_model()
 		model.clear()
 		for ev in events:
@@ -640,17 +638,17 @@ class Preferences_window:
 		
 		#trayicon
 		if self.plugin.systray_capabilities:
-			st = self.plugin.config['trayicon']
+			st = gajim.config.get('trayicon')
 			self.trayicon_checkbutton.set_active(st)
 		else:
 			self.trayicon_checkbutton.set_sensitive(False)
 
 		#Save position
-		st = self.plugin.config['saveposition']
+		st = gajim.config.get('saveposition')
 		self.xml.get_widget('save_position_checkbutton').set_active(st)
 		
 		#Merge accounts
-		st = self.plugin.config['mergeaccounts']
+		st = gajim.config.set('mergeaccounts')
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
 		#iconset
@@ -665,114 +663,114 @@ class Preferences_window:
 			l.append(' ')
 		for i in range(len(l)):
 			model.append([l[i]])
-			if self.plugin.config['iconset'] == l[i]:
+			if gajim.config.get('iconset') == l[i]:
 				self.iconset_combobox.set_active(i)
 
 		#Color for account text
-		colSt = self.plugin.config['accounttextcolor']
+		colSt = gajim.config.get('accounttextcolor')
 		self.xml.get_widget('account_text_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for group text
-		colSt = self.plugin.config['grouptextcolor']
+		colSt = gajim.config.get('grouptextcolor')
 		self.xml.get_widget('group_text_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for user text
-		colSt = self.plugin.config['usertextcolor']
+		colSt = gajim.config.get('usertextcolor')
 		self.xml.get_widget('user_text_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for background account
-		colSt = self.plugin.config['accountbgcolor']
+		colSt = gajim.config.get('accountbgcolor')
 		self.xml.get_widget('account_text_bg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for background group
-		colSt = self.plugin.config['groupbgcolor']
+		colSt = gajim.config.get('groupbgcolor')
 		self.xml.get_widget('group_text_bg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for background user
-		colSt = self.plugin.config['userbgcolor']
+		colSt = gajim.config.get('userbgcolor')
 		self.xml.get_widget('user_text_bg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 
 		#font for account
-		fontStr = self.plugin.config['accountfont']
+		fontStr = gajim.config.get('accountfont')
 		self.xml.get_widget('account_text_fontbutton').set_font_name(fontStr)
 		
 		#font for group
-		fontStr = self.plugin.config['groupfont']
+		fontStr = gajim.config.get('groupfont')
 		self.xml.get_widget('group_text_fontbutton').set_font_name(fontStr)
 		
 		#font for account
-		fontStr = self.plugin.config['userfont']
+		fontStr = gajim.config.get('userfont')
 		self.xml.get_widget('user_text_fontbutton').set_font_name(fontStr)
 		
 		#use tabbed chat window
-		st = self.plugin.config['usetabbedchat']
+		st = gajim.config.get('usetabbedchat')
 		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
 		
 		#Print time
-		if self.plugin.config['print_time'] == 'never':
+		if gajim.config.get('print_time') == 'never':
 			self.xml.get_widget('time_never_radiobutton').set_active(1)
-		elif self.plugin.config['print_time'] == 'sometimes':
+		elif gajim.config.get('print_time') == 'sometimes':
 			self.xml.get_widget('time_sometimes_radiobutton').set_active(1)
 		else:
 			self.xml.get_widget('time_always_radiobutton').set_active(1)
 
 		#before time
-		st = self.plugin.config['before_time']
+		st = gajim.config.get('before_time')
 		self.xml.get_widget('before_time_entry').set_text(st)
 		
 		#after time
-		st = self.plugin.config['after_time']
+		st = gajim.config.get('after_time')
 		self.xml.get_widget('after_time_entry').set_text(st)
 
 		#before nickname
-		st = self.plugin.config['before_nickname']
+		st = gajim.config.get('before_nickname')
 		self.xml.get_widget('before_nickname_entry').set_text(st)
 
 		#after nickanme
-		st = self.plugin.config['after_nickname']
+		st = gajim.config.get('after_nickname')
 		self.xml.get_widget('after_nickname_entry').set_text(st)
 
 		#Color for incomming messages
-		colSt = self.plugin.config['inmsgcolor']
+		colSt = gajim.config.get('inmsgcolor')
 		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for outgoing messages
-		colSt = self.plugin.config['outmsgcolor']
+		colSt = gajim.config.get('outmsgcolor')
 		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for status messages
-		colSt = self.plugin.config['statusmsgcolor']
+		colSt = gajim.config.get('statusmsgcolor')
 		self.xml.get_widget('status_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 
 		#Use emoticons
-		st = self.plugin.config['useemoticons']
+		st = gajim.config.get('useemoticons')
 		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
 		self.xml.get_widget('add_remove_emoticons_button').set_sensitive(st)
 
 		#autopopup
-		st = self.plugin.config['autopopup']
+		st = gajim.config.get('autopopup')
 		self.auto_popup_checkbutton.set_active(st)
 
 		#autopopupaway
-		st = self.plugin.config['autopopupaway']
+		st = gajim.config.get('autopopupaway')
 		self.auto_popup_away_checkbutton.set_active(st)
-		self.auto_popup_away_checkbutton.set_sensitive(self.plugin.config['autopopup'])
+		self.auto_popup_away_checkbutton.set_sensitive(gajim.config.set('autopopup'])
 
 		#Ignore messages from unknown contacts
 		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
-			set_active(self.plugin.config['ignore_unknown_contacts'])
+			set_active(gajim.config.get('ignore_unknown_contacts'))
 
 		#sounds
-		if self.plugin.config['sounds_on']:
+		if gajim.config.get('sounds_on'):
 			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
 		else:
 			self.xml.get_widget('soundplayer_hbox').set_sensitive(False)
@@ -781,7 +779,7 @@ class Preferences_window:
 
 		#sound player
 		self.xml.get_widget('soundplayer_entry').set_text(\
-			self.plugin.config['soundplayer'])
+			gajim.config.get('soundplayer'))
 
 		#sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
@@ -811,28 +809,28 @@ class Preferences_window:
 		self.fill_sound_treeview()
 		
 		#Autoaway
-		st = self.plugin.config['autoaway']
+		st = gajim.config.get('autoaway')
 		self.auto_away_checkbutton.set_active(st)
 
 		#Autoawaytime
-		st = self.plugin.config['autoawaytime']
+		st = gajim.config.get('autoawaytime')
 		self.auto_away_time_spinbutton.set_value(st)
-		self.auto_away_time_spinbutton.set_sensitive(self.plugin.config['autoaway'])
+		self.auto_away_time_spinbutton.set_sensitive(gajim.config.get('autoaway'))
 
 		#Autoxa
-		st = self.plugin.config['autoxa']
+		st = gajim.config.get('autoxa')
 		self.auto_xa_checkbutton.set_active(st)
 
 		#Autoxatime
-		st = self.plugin.config['autoxatime']
+		st = gajim.config.get('autoxatime')
 		self.auto_xa_time_spinbutton.set_value(st)
-		self.auto_xa_time_spinbutton.set_sensitive(self.plugin.config['autoxa'])
+		self.auto_xa_time_spinbutton.set_sensitive(gajim.config.get('autoxa'))
 
 		#ask_status when online / offline
-		st = self.plugin.config['ask_online_status']
+		st = gajim.config.get('ask_online_status')
 		self.xml.get_widget('prompt_online_status_message_checkbutton').\
 			set_active(st)
-		st = self.plugin.config['ask_offline_status']
+		st = gajim.config.get('ask_offline_status')
 		self.xml.get_widget('prompt_offline_status_message_checkbutton').\
 			set_active(st)
 
@@ -851,34 +849,30 @@ class Preferences_window:
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		buf.connect('changed', self.on_msg_textview_changed)
 
-		self.plugin.send('ASK_CONFIG', None, ('GtkGui', 'Logger', {'lognotsep':1,\
-			'lognotusr':1}))
-		self.config_logger = self.plugin.wait('CONFIG')
-		
 		#open links with
 		self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
-		if self.plugin.config['openwith'] == 'gnome-open':
+		if gajim.config.get('openwith') == 'gnome-open':
 			self.links_open_with_combobox.set_active(0)
-		elif self.plugin.config['openwith'] == 'kfmclient exec':
+		elif gajim.config.get('openwith') == 'kfmclient exec':
 			self.links_open_with_combobox.set_active(1)
-		elif self.plugin.config['openwith'] == 'custom':
+		elif gajim.config.get('openwith') == 'custom':
 			self.links_open_with_combobox.set_active(2)
 			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
 		self.xml.get_widget('custom_browser_entry').set_text(\
-			self.plugin.config['custombrowser'])
+			gajim.config.get('custombrowser'))
 		self.xml.get_widget('custom_mail_client_entry').set_text(\
-			self.plugin.config['custommailapp'])
+			gajim.config.get('custommailapp'))
 				
 		#log presences in user file
-		st = self.config_logger['lognotusr']
+		st = gajim.config.get('lognotusr')
 		self.xml.get_widget('log_in_contact_checkbutton').set_active(st)
 
 		#log presences in external file
-		st = self.config_logger['lognotsep']
+		st = gajim.config.get('lognotsep')
 		self.xml.get_widget('log_in_extern_checkbutton').set_active(st)
 		
 		# don't send os info
-		st = self.plugin.config['do_not_send_os_info']
+		st = gajim.config.get('do_not_send_os_info')
 		self.xml.get_widget('do_not_send_os_info_checkbutton').set_active(st)
 		self.xml.signal_autoconnect(self)
 		
@@ -948,11 +942,12 @@ class Account_modification_window:
 
 			
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
-		if not self.plugin.config.has_key('usegpg'):
+		if not gajim.config.get('usegpg'):
 			gpg_key_label.set_text('GPG is not usable on this computer')
 			self.xml.get_widget('gpg_choose_button').set_sensitive(False)
-		if infos.has_key('keyid') and self.plugin.config.has_key('usegpg'):
-			if infos['keyid'] and self.plugin.config['usegpg']:
+		else:
+			if infos.has_key('keyid'):
+			if infos['keyid'] and gajim.config.get('usegpg'):
 				gpg_key_label.set_text(infos['keyid'])
 				if infos.has_key('keyname'):
 					self.xml.get_widget('gpg_name_label').set_text(infos['keyname'])
@@ -1485,7 +1480,7 @@ class Add_remove_emoticons_window:
 			emots.append(model.get_value(iter, 0))
 			emots.append(model.get_value(iter, 1))
 			iter = model.iter_next(iter)
-		self.plugin.config['emoticons'] = '\t'.join(emots)
+		gajim.config.set('emoticons', '\t'.join(emots))
 		self.plugin.init_regexp()
 		self.plugin.save_config()
 
@@ -1497,7 +1492,7 @@ class Add_remove_emoticons_window:
 				emots.append(model.get_value(iter, 0))
 				emots.append(model.get_value(iter, 1))
 				iter = model.iter_next(iter)
-			self.plugin.config['emoticons'] = '\t'.join(emots)
+			gajim.config.set('emoticons', '\t'.join(emots))
 			self.plugin.init_regexp()
 		self.plugin.save_config()
 
@@ -1519,7 +1514,7 @@ class Add_remove_emoticons_window:
 
 	def load_emots(self):
 		emots = {}
-		split_line = self.plugin.config['emoticons'].split('\t')
+		split_line = gajim.config.get('emoticons').split('\t')
 		for i in range(0, len(split_line)/2):
 			if not self.image_is_ok(split_line[2*i+1]):
 				continue
@@ -1834,8 +1829,8 @@ class Service_discovery_window:
 		self.address_comboboxentry.get_model().clear()
 		for j in self.latest_addresses:
 			self.address_comboboxentry.append_text(j)
-		self.plugin.config['latest_disco_addresses'] = \
-			' '.join(self.latest_addresses)
+		gajim.config.set('latest_disco_addresses', \
+			' '.join(self.latest_addresses))
 		self.services_treeview.get_model().clear()
 		self.browse(server_address)
 		self.plugin.save_config()
@@ -1871,8 +1866,7 @@ class Service_discovery_window:
 		liststore = gtk.ListStore(str)
 		self.address_comboboxentry.set_model(liststore)
 		self.address_comboboxentry.set_text_column(0)
-		self.latest_addresses = \
-			self.plugin.config['latest_disco_addresses'].split()
+		self.latest_addresses = gajim.config.get('latest_disco_addresses').split()
 		server_address = self.plugin.accounts[self.account]['hostname']
 		if server_address in self.latest_addresses:
 			self.latest_addresses.remove(server_address)

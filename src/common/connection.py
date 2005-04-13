@@ -24,6 +24,7 @@ import time
 import common.jabber
 
 from Core import GnuPG
+USE_GPG = GnuPG.USE_GPG
 
 from common import i18n
 _ = i18n._
@@ -101,6 +102,9 @@ class connection:
 			self.password = gajim.config.get_per('accounts', name, 'hostname')
 			if USE_GPG:
 				self.gpg = GnuPG.GnuPG()
+				gajim.config.set('usegpg', True)
+			else:
+				gajim.config.set('usegpg', False)
 	# END __init__
 
 	def dispatch(self, event, data):
@@ -612,7 +616,10 @@ class connection:
 				self.connected = 0
 				self.password = ''
 				if USE_GPG:
-					self.gpg = Core.GnuPG()
+					self.gpg = GnuPG.GnuPG()
+					gajim.config.set('usegpg', True)
+				else:
+					gajim.config.set('usegpg', False)
 				self.dispatch('ACC_OK', (hostname, login, password, name, \
 					resource, prio, use_proxy, proxyhost, proxyport))
 

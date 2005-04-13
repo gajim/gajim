@@ -166,7 +166,7 @@ class Roster_window:
 	def really_remove_user(self, user, account):
 		if user.jid in self.to_be_removed[account]:
 			self.to_be_removed[account].remove(user.jid)
-			self.remove_user(user, account)
+		self.remove_user(user, account)
 	
 	def remove_user(self, user, account):
 		"""Remove a user from the roster"""
