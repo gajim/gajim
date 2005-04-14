@@ -19,7 +19,7 @@
 
 import gtk
 import gtk.glade
-from dialogs import *
+import dialogs
 
 from common import i18n
 
@@ -99,7 +99,7 @@ class Systray:
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When new message menuitem is activated:
 		call the New_message_dialog class"""
-		New_message_dialog(self.plugin, account)
+		dialogs.New_message_dialog(self.plugin, account)
 
 	def make_menu(self, event):
 		"""create chat with and new message (sub) menus/menuitems"""

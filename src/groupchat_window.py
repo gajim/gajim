@@ -23,8 +23,8 @@ import pango
 import gobject
 import time
 from common import gajim
-from dialogs import *
-from chat import *
+import dialogs
+import chat
 from gtkgui import CellRendererImage
 
 from common import i18n
@@ -36,16 +36,15 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='gtkgui.glade'
 
-class Groupchat_window(Chat):
+class Groupchat_window(chat.Chat):
 	"""Class for Groupchat window"""
 	def __init__(self, room_jid, nick, plugin, account):
-		Chat.__init__(self, plugin, account, 'groupchat_window')
+		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
 		self.nicks = {}
 		self.list_treeview = {}
 		self.subjects = {}
 		self.new_group(room_jid, nick)
 		self.show_title()
-		print "self.xml.get_widget('message_textview') is", self.xml.get_widget('message_textview'), "!!"
 		self.xml.signal_connect('on_groupchat_window_destroy', \
 			self.on_groupchat_window_destroy)
 		self.xml.signal_connect('on_groupchat_window_delete_event', \
@@ -65,7 +64,7 @@ class Groupchat_window(Chat):
 		"""close window"""
 		for room_jid in self.xmls:
 			if time.time() - self.last_message_time[room_jid] < 2:
-				dialog = Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this window?') % \
+				dialog = dialogs.Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this window?') % \
 					room_jid.split('@')[0])
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
@@ -74,14 +73,14 @@ class Groupchat_window(Chat):
 		for room_jid in self.xmls:
 			gajim.connections[self.account].send_gc_status(self.nicks[room_jid], \
 				room_jid, 'offline', 'offline')
-		Chat.on_window_destroy(self, widget, 'gc')
+		chat.Chat.on_window_destroy(self, widget, 'gc')
 
 	def on_groupchat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
-		Chat.on_chat_window_focus_in_event(self, widget, event)
+		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
-		Chat.on_chat_notebook_key_press_event(self, widget, event)
+		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 	
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
 		new_child = notebook.get_nth_page(page_num)
@@ -92,7 +91,7 @@ class Groupchat_window(Chat):
 				break
 		self.xml.get_widget('subject_entry').set_text(\
 			self.subjects[new_jid])
-		Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
+		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
 		model = self.list_treeview[room_jid].get_model()
@@ -310,7 +309,7 @@ class Groupchat_window(Chat):
 			text.lower().split():
 			other_tags_for_name.append('bold')
 
-		Chat.print_conversation_line(self, text, room_jid, kind, contact, tim, \
+		chat.Chat.print_conversation_line(self, text, room_jid, kind, contact, tim, \
 			other_tags_for_name)
 
 	def kick(self, widget, room_jid, nick):
@@ -369,7 +368,8 @@ class Groupchat_window(Chat):
 		"""Call vcard_information_window class to display user's information"""
 		if not self.plugin.windows[self.account]['infos'].has_key(jid):
 			self.plugin.windows[self.account]['infos'][jid] = \
-				Vcard_information_window(jid, self.plugin, self.account, True)
+				dialogs.Vcard_information_window(jid, self.plugin, self.account, \
+					True)
 			gajim.connections[self.account].request_vcard(jid)
 			#FIXME: maybe use roster.on_info above?
 			
@@ -442,12 +442,12 @@ class Groupchat_window(Chat):
 
 	def remove_tab(self, room_jid):
 		if time.time() - self.last_message_time[room_jid] < 2:
-			dialog = Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this tab?') % \
+			dialog = dialogs.Confirmation_dialog(_('You received a message in the room %s in the last two seconds.\nDo you still want to close this tab?') % \
 				room_jid.split('@')[0])
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 
-		Chat.remove_tab(self, room_jid, 'gc')
+		chat.Chat.remove_tab(self, room_jid, 'gc')
 		if len(self.xmls) > 0:
 			gajim.connections[self.account].send_gc_status(self.nicks[room_jid], \
 				room_jid, 'offline', 'offline')
@@ -459,7 +459,7 @@ class Groupchat_window(Chat):
 		self.names[room_jid] = room_jid.split('@')[0]
 		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'gc_vbox', APP)
 		self.childs[room_jid] = self.xmls[room_jid].get_widget('gc_vbox')
-		Chat.new_tab(self, room_jid)
+		chat.Chat.new_tab(self, room_jid)
 		self.nicks[room_jid] = nick
 		self.subjects[room_jid] = ''
 		self.list_treeview[room_jid] = self.xmls[room_jid].\

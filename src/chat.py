@@ -23,9 +23,7 @@ import pango
 import gobject
 import time
 
-from dialogs import *
-from history_window import *
-
+from common import gajim
 from common import i18n
 
 _ = i18n._

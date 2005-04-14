@@ -162,13 +162,10 @@ class User:
 			self.keyID = args[9]
 		else: raise TypeError, _('bad arguments')
 
-from tabbed_chat_window import *
-from groupchat_window import *
-from history_window import *
-from roster_window import *
-from systray import *
-from dialogs import *
-from config import *
+import roster_window
+import systray
+import dialogs
+import config
 
 GTKGUI_GLADE='gtkgui.glade'
 
@@ -232,10 +229,10 @@ class interface:
 		self.roster.draw_roster()
 	
 	def handle_event_warning(self, unused, msg):
-		Warning_dialog(msg)
+		dialogs.Warning_dialog(msg)
 	
 	def handle_event_error(self, unused, msg):
-		Error_dialog(msg)
+		dialogs.Error_dialog(msg)
 	
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
@@ -328,7 +325,8 @@ class interface:
 					#gajim doesn't give a shit
 					# WHY? same with offline
 					# new message works
-					instance = Popup_window(self, 'Contact Online', jid, account)
+					instance = dialogs.Popup_window(self, 'Contact Online', jid, \
+						account)
 					self.roster.popup_windows.append(instance)
 			elif old_show > 1 and new_show < 2 and gajim.config.get( \
 				'sound_contact_disconnected'):
@@ -336,7 +334,8 @@ class interface:
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and not gajim.config.get( \
 					'autopopup'):
-					instance = Popup_window(self, 'Contact Offline', jid, account)
+					instance = dialogs.Popup_window(self, 'Contact Offline', jid, \
+						account)
 					self.roster.popup_windows.append(instance)
 				
 		elif self.windows[account]['gc'].has_key(ji):
@@ -359,7 +358,7 @@ class interface:
 						not self.queues[account].has_key(jid):
 			first = True
 			if	not gajim.config.get('autopopup'):
-				instance = Popup_window(self, 'New Message', jid, account)
+				instance = dialogs.Popup_window(self, 'New Message', jid, account)
 				self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
 		if gajim.config.get('sound_first_message_received') and first:
@@ -382,7 +381,7 @@ class interface:
 		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
-		subscription_request_window(self, array[0], array[1], account)
+		dialogs.subscription_request_window(self, array[0], array[1], account)
 
 	def handle_event_subscribed(self, account, array):
 		#('SUBSCRIBED', account, (jid, resource))
@@ -402,10 +401,10 @@ class interface:
 				'online', 'to', '', array[1], 0, '')
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
-		Information_dialog(_("You are now authorized by %s") % jid)
+		dialogs.Information_dialog(_('You are now authorized by %s') % jid)
 
 	def handle_event_unsubscribed(self, account, jid):
-		Information_dialog(_("You are now unsubscribed by %s") % jid)
+		dialogs.Information_dialog(_('You are now unsubscribed by %s') % jid)
 
 	def handle_event_agent_info(self, account, array):
 		#('AGENT_INFO', account, (agent, identities, features, items))
@@ -445,8 +444,9 @@ class interface:
 		self.nicks[name] = array[1]
 		self.roster.groups[name] = {}
 		self.roster.contacts[name] = {}
+		self.roster.newly_added[name] = []
+		self.roster.to_be_removed[name] = []
 		self.sleeper_state[name] = 0
-		#FIXME: add missing to_be_deleted for ex
 		if self.windows.has_key('accounts'):
 			self.windows['accounts'].init_accounts()
 		self.roster.draw_roster()
@@ -498,7 +498,7 @@ class interface:
 				'%s has set the subject to %s' % (jids[1], array[1]), jid)
 
 	def handle_event_bad_passphrase(self, account, array):
-		Warning_dialog(_("Your GPG passphrase is wrong, so you are connected without your GPG key."))
+		dialogs.Warning_dialog(_('Your GPG passphrase is wrong, so you are connected without your GPG key.'))
 
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
@@ -682,7 +682,7 @@ class interface:
 	def process_connections(self):
 		for account in gajim.connections:
 			if gajim.connections[account].connected:
-				gajim.connections[account].connection.process(1)
+				gajim.connections[account].connection.process(0.01)
 		return True
 
 	def __init__(self):
@@ -712,7 +712,7 @@ class interface:
 				break
 		if pix:
 			gtk.window_set_default_icon(pix)
-		self.roster = Roster_window(self)
+		self.roster = roster_window.Roster_window(self)
 		self.sleeper = common.sleepy.Sleepy( \
 			gajim.config.get('autoawaytime')*60, \
 			gajim.config.get('autoxatime')*60)
@@ -726,19 +726,19 @@ class interface:
 				self.systray_capabilities = False
 			else:
 				self.systray_capabilities = True
-				self.systray = Systray(self)
+				self.systray = systray.Systray(self)
 		else:
 			self.systray_capabilities = True
-			self.systray = Systray(self)
+			self.systray = systray.Systray(self)
 		if self.systray_capabilities:
 			self.show_systray()
 
 		self.init_regexp()
 		
 		# get instances for windows/dialogs that will show_all()/hide()
-		self.windows['preferences'] = Preferences_window(self)
+		self.windows['preferences'] = config.Preferences_window(self)
 		self.windows['add_remove_emoticons_window'] = \
-			Add_remove_emoticons_window(self)
+			config.Add_remove_emoticons_window(self)
 		self.windows['roster'] = self.roster
 		
 		for account in gajim.connections:
@@ -746,7 +746,7 @@ class interface:
 
 		gobject.timeout_add(100, self.autoconnect)
 		gobject.timeout_add(500, self.read_sleepy)
-		gobject.timeout_add(50, self.process_connections)
+		gobject.timeout_add(200, self.process_connections)
 
 if __name__ == '__main__':
 	try: 	# Import Psyco if available

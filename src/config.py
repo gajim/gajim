@@ -22,6 +22,7 @@ import gtk.glade
 import gobject
 import os
 import common.sleepy
+from common import gajim
 from common import connection
 from common import i18n
 _ = i18n._
@@ -29,7 +30,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
-from dialogs import *
+import dialogs
 import gtkgui
 
 GTKGUI_GLADE='gtkgui.glade'
@@ -374,9 +375,9 @@ class Preferences_window:
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',\
-										[self.xml.get_widget('soundplayer_hbox'),\
-										self.xml.get_widget('sounds_scrolledwindow'),\
-										self.xml.get_widget('browse_sounds_hbox')])
+			[self.xml.get_widget('soundplayer_hbox'),\
+			self.xml.get_widget('sounds_scrolledwindow'),\
+			self.xml.get_widget('browse_sounds_hbox')])
 	
 	def on_soundplayer_entry_changed(self, widget):
 		gajim.config.set('soundplayer', widget.get_text())
@@ -592,12 +593,12 @@ class Preferences_window:
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		filter = gtk.FileFilter()
 		filter.set_name(_('All files'))
-		filter.add_pattern("*")
+		filter.add_pattern('*')
 		dialog.add_filter(filter)
 
 		filter = gtk.FileFilter()
 		filter.set_name(_('Wav Sounds'))
-		filter.add_pattern("*.wav")
+		filter.add_pattern('*.wav')
 		dialog.add_filter(filter)
 		dialog.set_filter(filter)
 
@@ -988,7 +989,7 @@ class Account_modification_window:
 		if gajim.connections.has_key(self.account):
 			if name != self.account and gajim.connections[self.account].connected \
 				!= 0:
-				Error_dialog(_('You must be offline to change the account\'s name'))
+				dialogs.Error_dialog(_('You must be offline to change the account\'s name'))
 				return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		autoconnect = 0
@@ -1015,29 +1016,29 @@ class Account_modification_window:
 		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
 		proxyport = self.xml.get_widget('proxyport_entry').get_text()
 		if (name == ''):
-			Error_dialog(_('You must enter a name for this account'))
+			dialogs.Error_dialog(_('You must enter a name for this account'))
 			return
 		if name.find(' ') != -1:
-			Error_dialog(_('Spaces are not permited in account name'))
+			dialogs.Error_dialog(_('Spaces are not permited in account name'))
 			return
 		if (jid == '') or (jid.count('@') != 1):
-			Error_dialog(_('You must enter a Jabber ID for this account\nFor example: someone@someserver.org'))
+			dialogs.Error_dialog(_('You must enter a Jabber ID for this account\nFor example: someone@someserver.org'))
 			return
 		if new_account_checkbutton.get_active() and password == '':
-			Error_dialog(_('You must enter a password to register a new account'))
+			dialogs.Error_dialog(_('You must enter a password to register a new account'))
 			return
 		if use_proxy:
 			if proxyport != '':
 				try:
 					proxyport = int(proxyport)
 				except ValueError:
-					Error_dialog(_('Proxy Port must be a port number'))
+					dialogs.Error_dialog(_('Proxy Port must be a port number'))
 					return
 			else:
-				Error_dialog(_('You must enter a proxy port to use proxy'))
+				dialogs.Error_dialog(_('You must enter a proxy port to use proxy'))
 				return
 			if proxyhost == '':
-				Error_dialog(_('You must enter a proxy host to use proxy'))
+				dialogs.Error_dialog(_('You must enter a proxy host to use proxy'))
 				return
 
 		(login, hostname) = jid.split('@')
@@ -1120,7 +1121,7 @@ class Account_modification_window:
 			return
 		#if it's a new account
 		if name in gajim.connections:
-			Error_dialog(_('An account already has this name'))
+			dialogs.Error_dialog(_('An account already has this name'))
 			return
 		gajim.config.add_per('accounts', name)
 		gajim.connections[name] = connection.connection(name)
@@ -1168,7 +1169,7 @@ class Account_modification_window:
 		self.window.destroy()
 
 	def on_change_password_button_clicked(self, widget):
-		dialog = Change_password_dialog(self.plugin, self.account)
+		dialog = dialogs.Change_password_dialog(self.plugin, self.account)
 		new_password = dialog.run()
 		if new_password != -1:
 			gajim.connections[self.account].change_password(new_password, \
@@ -1231,24 +1232,24 @@ class Account_modification_window:
 
 	def on_edit_details_button_clicked(self, widget):
 		if not self.plugin.windows.has_key(self.account):
-			Error_dialog(_('You must first create your account before editing your information'))
+			dialogs.Error_dialog(_('You must first create your account before editing your information'))
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		if gajim.connections[self.account].connected < 2:
-			Error_dialog(_('You must be connected to edit your information'))
+			dialogs.Error_dialog(_('You must be connected to edit your information'))
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
 			self.plugin.windows[self.account]['infos'][jid] = \
-				vcard_information_window(jid, self.plugin, self.account, True)
+				dialogs.Vcard_information_window(jid, self.plugin, self.account, True)
 			gajim.connections[self.account].request_vcard(jid)
 	
 	def on_gpg_choose_button_clicked(self, widget, data=None):
 		secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
 		if not secret_keys:
-			Error_dialog(_('error contacting %s') % service)
+			dialogs.Error_dialog(_('error contacting %s') % service)
 			return
 		secret_keys['None'] = 'None'
-		w = choose_gpg_key_dialog(secret_keys)
+		w = dialogs.choose_gpg_key_dialog(secret_keys)
 		keyID = w.run()
 		if keyID == -1:
 			return
@@ -1347,7 +1348,7 @@ class Accounts_window:
 		"""When new button is clicked : open an account information window"""
 		if not self.plugin.windows.has_key('account_modification_window'):
 			self.plugin.windows['account_modification'] = \
-				Account_modification_window(self.plugin, {}) #find out what's wrong
+				Account_modification_window(self.plugin, {})
 		else:
 			self.plugin.windows['account_modification'].window.present()
 
@@ -1357,7 +1358,7 @@ class Accounts_window:
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
-		dialog = Confirmation_dialog(_('Are you sure you want to remove account (%s) ?') % account)
+		dialog = dialogs.Confirmation_dialog(_('Are you sure you want to remove account (%s) ?') % account)
 		if dialog.get_response() == gtk.RESPONSE_YES:
 			if gajim.connections[account].connected:
 				gajim.connections[account].change_status('offline', 'offline')
@@ -1819,7 +1820,7 @@ class Service_discovery_window:
 			room = services[0]
 			service = services[1]
 		if not self.plugin.windows[self.account].has_key('join_gc'):
-			Join_groupchat_window(self.plugin, self.account, service, room)
+			dialog.Join_groupchat_window(self.plugin, self.account, service, room)
 		else:
 			self.plugin.windows[self.account]['join_gc'].window.present()
 
@@ -1832,7 +1833,7 @@ class Service_discovery_window:
 		service = model.get_value(iter, 1)
 		infos = gajim.connections[self.account].ask_register_agent_info(service)
 		if not infos.has_key('instructions'):
-			Error_dialog(_('error contacting %s') % service)
+			dialog.Error_dialog(_('error contacting %s') % service)
 		else:
 			Service_registration_window(service, infos, self.plugin, self.account)
 		self.window.destroy()
@@ -1871,7 +1872,7 @@ class Service_discovery_window:
 	
 	def __init__(self, plugin, account):
 		if gajim.connections[account].connected < 2:
-			Error_dialog(_('You must be connected to browse services'))
+			dialog.Error_dialog(_('You must be connected to browse services'))
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')

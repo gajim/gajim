@@ -24,9 +24,9 @@ import gobject
 import time
 
 from common import gajim
-from dialogs import *
-from history_window import *
-from chat import *
+import dialogs
+import history_window
+import chat
 
 from common import i18n
 
@@ -37,10 +37,10 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='gtkgui.glade'
 
-class Tabbed_chat_window(Chat):
+class Tabbed_chat_window(chat.Chat):
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
-		Chat.__init__(self, plugin, account, 'tabbed_chat_window')
+		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
 		self.users = {}
 		self.new_user(user)
 		self.show_title()
@@ -90,19 +90,19 @@ class Tabbed_chat_window(Chat):
 		"""close window"""
 		for jid in self.users:
 			if time.time() - self.last_message_time[jid] < 2: # 2 seconds
-				dialog = Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this window ?') % jid)
+				dialog = dialogs.Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this window ?') % jid)
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
 
 	def on_tabbed_chat_window_destroy(self, widget):
 		#clean self.plugin.windows[self.account]['chats']
-		Chat.on_window_destroy(self, widget, 'chats')
+		chat.Chat.on_window_destroy(self, widget, 'chats')
 
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
-		Chat.on_chat_window_focus_in_event(self, widget, event)
+		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
-		Chat.on_chat_notebook_key_press_event(self, widget, event)
+		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
 	def on_clear_button_clicked(self, widget):
 		"""When clear button is pressed :
@@ -117,15 +117,16 @@ class Tabbed_chat_window(Chat):
 		"""When history button is pressed : call history window"""
 		jid = self.get_active_jid()
 		if not self.plugin.windows['logs'].has_key(jid):
-			self.plugin.windows['logs'][jid] = history_window(self.plugin, jid)
+			self.plugin.windows['logs'][jid] = history_window.\
+				History_window(self.plugin, jid)
 
 	def remove_tab(self, jid):
 		if time.time() - self.last_message_time[jid] < 2:
-			dialog = Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this tab?') % jid)
+			dialog = dialogs.Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this tab?') % jid)
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 
-		Chat.remove_tab(self, jid, 'chats')
+		chat.Chat.remove_tab(self, jid, 'chats')
 		if len(self.xmls) > 0:
 			del self.users[jid]
 
@@ -133,7 +134,7 @@ class Tabbed_chat_window(Chat):
 		self.names[user.jid] = user.name
 		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[user.jid] = self.xmls[user.jid].get_widget('chats_vbox')
-		Chat.new_tab(self, user.jid)
+		chat.Chat.new_tab(self, user.jid)
 		self.users[user.jid] = user
 		
 		self.redraw_tab(user.jid)
@@ -177,7 +178,7 @@ class Tabbed_chat_window(Chat):
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return False
 			if gajim.connections[self.account].connected < 2: #we are not connected
-				Error_dialog(_('You are not connected, so you cannot send a message'))
+				dialogs.Error_dialog(_('You are not connected, so you cannot send a message'))
 				return True
 			message_buffer = widget.get_buffer()
 			start_iter = message_buffer.get_start_iter()
@@ -235,4 +236,4 @@ class Tabbed_chat_window(Chat):
 				kind = 'incoming'
 				name = user.name
 
-		Chat.print_conversation_line(self, text, jid, kind, name, tim)
+		chat.Chat.print_conversation_line(self, text, jid, kind, name, tim)

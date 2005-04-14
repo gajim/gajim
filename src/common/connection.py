@@ -505,7 +505,7 @@ class connection:
 			self.connection.sendPresence(ptype, prio, status, msg, signed)
 			self.dispatch('STATUS', status)
 
-	def send_message(jid, msg, keyID):
+	def send_message(self, jid, msg, keyID):
 		if not self.connection:
 			return
 		msgtxt = msg

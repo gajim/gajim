@@ -26,12 +26,12 @@ import Queue
 import common.sleepy
 
 from common import gajim
-from tabbed_chat_window import *
-from groupchat_window import *
-from history_window import *
+import tabbed_chat_window
+import groupchat_window
+import history_window
 from gtkgui import CellRendererImage, User
 import dialogs
-from config import *
+import config
 
 from common import i18n
 
@@ -404,7 +404,7 @@ class Roster_window:
 			self.plugin.windows[account]['infos'][user.jid].window.present()
 		else:
 			self.plugin.windows[account]['infos'][user.jid] = \
-				Vcard_information_window(user, self.plugin, account)
+				dialogs.Vcard_information_window(user, self.plugin, account)
 
 	def on_agent_logging(self, widget, jid, state, account):
 		"""When an agent is requested to log in or off"""
@@ -412,7 +412,7 @@ class Roster_window:
 
 	def on_remove_agent(self, widget, jid, account):
 		"""When an agent is requested to log in or off"""
-		window = Confirmation_dialog(_('Are you sure you want to remove the agent %s from your roster?') % jid)
+		window = dialogs.Confirmation_dialog(_('Are you sure you want to remove the agent %s from your roster?') % jid)
 		if window.get_response() == gtk.RESPONSE_YES:
 			gajim.connections[account].unsubscribe_agent(jid)
 			for u in self.contacts[account][jid]:
@@ -425,14 +425,14 @@ class Roster_window:
 		self.tree.set_cursor(path, self.tree.get_column(0), True)
 		
 	def on_edit_groups(self, widget, user, account):
-		dlg = Edit_groups_dialog(user, account, self.plugin)
+		dlg = dialogs.Edit_groups_dialog(user, account, self.plugin)
 		dlg.run()
 		
 	def on_history(self, widget, user):
 		"""When history button is pressed : call log window"""
 		if not self.plugin.windows['logs'].has_key(user.jid):
-			self.plugin.windows['logs'][user.jid] = history_window(self.plugin, \
-				user.jid)
+			self.plugin.windows['logs'][user.jid] = history_window.\
+				History_window(self.plugin, user.jid)
 	
 	def mk_menu_user(self, event, iter):
 		"""Make user's popup menu"""
@@ -537,7 +537,7 @@ class Roster_window:
 			infos['jid'] = self.plugin.accounts[account]["name"] + \
 				'@' +  self.plugin.accounts[account]["hostname"]
 			self.plugin.windows['account_modification'] = \
-				Account_modification_window(self.plugin, infos)
+				config.Account_modification_window(self.plugin, infos)
 
 	def mk_menu_account(self, event, iter):
 		"""Make account's popup menu"""
@@ -683,7 +683,7 @@ class Roster_window:
 
 	def on_req_usub(self, widget, user, account):
 		"""Remove a user"""
-		window = Confirmation_dialog(_("Are you sure you want to remove %s (%s) from your roster?") % (user.name, user.jid))
+		window = dialogs.Confirmation_dialog(_("Are you sure you want to remove %s (%s) from your roster?") % (user.name, user.jid))
 		if window.get_response() == gtk.RESPONSE_YES:
 			gajim.connections[account].unsubscribe(user.jid)
 			for u in self.contacts[account][user.jid]:
@@ -759,7 +759,8 @@ class Roster_window:
 		if (status == 'online' and not gajim.config.get('ask_online_status')) or \
 			(status == 'offline' and not gajim.config.get('ask_offline_status')):
 			return status
-		dlg = Change_status_message_dialog(self.plugin, status, autoconnect)
+		dlg = dialogs.Change_status_message_dialog(self.plugin, status, \
+			autoconnect)
 		message = dlg.run()
 		return message
 
@@ -777,7 +778,7 @@ class Roster_window:
 			return
 		accounts = gajim.connections.keys()
 		if len(accounts) == 0:
-			Error_dialog(_('You must create an account before connecting to jabber network.'))
+			dialogs.Error_dialog(_('You must create an account before connecting to jabber network.'))
 			self.update_status_comboxbox()
 			return
 		status = model[active][2]
@@ -839,7 +840,7 @@ class Roster_window:
 		if gajim.config.get('usetabbedchat'):
 			if not self.plugin.windows[account]['chats'].has_key('tabbed'):
 				self.plugin.windows[account]['chats']['tabbed'] = \
-					Tabbed_chat_window(user, self.plugin, account)
+					tabbed_chat_window.Tabbed_chat_window(user, self.plugin, account)
 			else:
 				self.plugin.windows[account]['chats']['tabbed'].new_user(user)
 				
@@ -849,13 +850,14 @@ class Roster_window:
 			
 		else:
 			self.plugin.windows[account]['chats'][user.jid] = \
-				Tabbed_chat_window(user, self.plugin, account)
+				tabbed_chat_window.Tabbed_chat_window(user, self.plugin, account)
 
 	def new_group(self, jid, nick, account):
 		if gajim.config.get('usetabbedchat'):
 			if not self.plugin.windows[account]['gc'].has_key('tabbed'):
 				self.plugin.windows[account]['gc']['tabbed'] = \
-					Groupchat_window(jid, nick, self.plugin, account)
+					groupchat_window.Groupchat_window(jid, nick, self.plugin, \
+						account)
 			else:
 				self.plugin.windows[account]['gc']['tabbed'].new_group(jid, nick)
 			self.plugin.windows[account]['gc'][jid] = \
@@ -864,7 +866,7 @@ class Roster_window:
 			self.plugin.windows[account]['gc']['tabbed'].active_tab(jid)
 		else:
 			self.plugin.windows[account]['gc'][jid] = \
-				Groupchat_window(jid, nick, self.plugin, account)
+				groupchat_window.Groupchat_window(jid, nick, self.plugin, account)
 
 	def on_message(self, jid, msg, tim, account):
 		"""when we receive a message"""
@@ -919,25 +921,25 @@ class Roster_window:
 			self.plugin.windows['preferences'].window.show_all()
 
 	def on_add_new_contact(self, widget, account):
-		Add_new_contact_window(self.plugin, account)
+		dialogs.Add_new_contact_window(self.plugin, account)
 
 	def on_join_gc_activate(self, widget, account):
 		if not self.plugin.windows[account].has_key('join_gc'):
-			Join_groupchat_window(self.plugin, account)
+			dialogs.Join_groupchat_window(self.plugin, account)
 		else:
 			self.plugin.windows[account]['join_gc'].window.present()
 
 	def on_new_message_menuitem_activate(self, widget, account):
-		New_message_dialog(self.plugin, account)
+		dialogs.New_message_dialog(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
-		About_dialog()
+		dialogs.About_dialog()
 
 	def on_accounts_menuitem_activate(self, widget):
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].present()
 		else:
-			self.plugin.windows['accounts'] = Accounts_window(self.plugin) 
+			self.plugin.windows['accounts'] = config.Accounts_window(self.plugin) 
 
 	def close_all(self, dic):
 		"""close all the windows in the given dictionary"""
@@ -1107,7 +1109,7 @@ class Roster_window:
 			self.plugin.windows[account]['disco'].present()
 		else:
 			self.plugin.windows[account]['disco'] = \
-				Service_discovery_window(self.plugin, account)
+				config.Service_discovery_window(self.plugin, account)
 
 	def mkpixbufs(self):
 		"""initialise pixbufs array"""
@@ -1425,4 +1427,4 @@ class Roster_window:
 		self.draw_roster()
 		if len(gajim.connections) == 0: # if no account
 			self.plugin.windows['account_modification'] = \
-				Account_modification_window(self.plugin, {})
+				config.Account_modification_window(self.plugin, {})
