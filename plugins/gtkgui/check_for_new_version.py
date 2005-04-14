@@ -14,13 +14,14 @@ GTKGUI_GLADE='plugins/gtkgui/gtkgui.glade'
 class Check_for_new_version_dialog:
 	def __init__(self, plugin):
 		self.plugin = plugin
+		self.check_for_new_version()
+
+	def parse_glade(self):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'new_version_available_dialog', APP)
 		self.window = xml.get_widget('new_version_available_dialog')
 		self.information_label = xml.get_widget('information_label')
 		self.changes_textview = xml.get_widget('changes_textview')
 		xml.signal_autoconnect(self)
-		self.check_for_new_version()
-		
 
 	def on_new_version_available_dialog_delete_event(self, widget, event):
 		self.window.destroy()
@@ -28,6 +29,7 @@ class Check_for_new_version_dialog:
 	def on_open_download_page_button_clicked(self, widget):
 		url = 'http://www.gajim.org/downloads.php?lang='
 		self.plugin.launch_browser_mailer('url', url)
+		self.window.destroy()
 
 	def check_for_new_version(self):
 		'''parse online Changelog to find out last version
@@ -46,8 +48,7 @@ class Check_for_new_version_dialog:
 			if latest_version > version.version:
 				start_date = finish_version + 2 # one space and one (
 				date = first_line[start_date:-2] # remove the last ) and \n
-				text = 'Gajim ' + latest_version + ' was released in ' + date + '!'
-				self.information_label.set_text(text)
+				info = 'Gajim ' + latest_version + ' was released in ' + date + '!'
 				changes = ''
 				while True:
 					line = changelog.readline()
@@ -57,6 +58,8 @@ class Check_for_new_version_dialog:
 						if line != '\n':
 							changes += line
 				
+				self.parse_glade()
+				self.information_label.set_text(info)
 				buf = self.changes_textview.get_buffer()
 				buf.set_text(changes)
 				self.window.show_all()
