@@ -22,6 +22,7 @@ import gtk.glade
 import gobject
 import os
 import common.sleepy
+from common import connection
 from common import i18n
 _ = i18n._
 APP = i18n.APP
@@ -1121,6 +1122,7 @@ class Account_modification_window:
 		if name in gajim.connections:
 			Error_dialog(_('An account already has this name'))
 			return
+		gajim.connections[name] = connection.connection(name)
 		#if we neeed to register a new account
 		if new_account_checkbutton.get_active():
 			self.plugin.send('NEW_ACC', None, (hostname, login, password, name, \
@@ -1149,7 +1151,7 @@ class Account_modification_window:
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.plugin.queues[name] = {}
-		gajim.config.connections[name].connected = 0
+		gajim.connections[name].connected = 0
 		self.plugin.roster.groups[name] = {}
 		self.plugin.roster.contacts[name] = {}
 		self.plugin.roster.newly_added[name] = []

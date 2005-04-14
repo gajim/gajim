@@ -23,7 +23,8 @@ import time
 
 import common.jabber
 
-from Core import GnuPG
+from common import gajim
+from common import GnuPG
 USE_GPG = GnuPG.USE_GPG
 
 from common import i18n
@@ -219,7 +220,7 @@ class connection:
 			jid = prs.getFrom()
 			self.dispatch('SUBSCRIBED', (jid.getStripped(), jid.getResource()))
 			self.dispatch('UPDUSER', (jid.getStripped(), jid.getNode(), \
-				['General'])))
+				['General']))
 			#BE CAREFUL : no con.updateRosterItem() in a callback
 			gajim.log.debug('we are now subscribed to %s' % who)
 		elif ptype == 'unsubscribe':
@@ -374,9 +375,9 @@ class connection:
 
 		#create connexion if it doesn't already existe
 		if not self.connection:
-			if gajim.config.get_per('accounts', self.name, 'use_proxy')
+			if gajim.config.get_per('accounts', self.name, 'use_proxy'):
 				proxy = {'host': gajim.config.get_per('accounts', self.name, \
-					'proxyhost')
+					'proxyhost')}
 				proxy['port'] = gajim.config.get_per('accounts', self.name, \
 					'proxyport')
 			else:
@@ -503,8 +504,8 @@ class connection:
 			self.connection.sendPresence(ptype, prio, status, msg, signed)
 			self.dispatch('STATUS', status)
 
-	def send_message(jid, msg, keyID)
-		if inot self.connection:
+	def send_message(jid, msg, keyID):
+		if not self.connection:
 			return
 		msgtxt = msg
 		msgenc = ''
@@ -518,7 +519,7 @@ class connection:
 		self.connection.send(msg_iq)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 
-	def request_subscription(self, jid, msg)
+	def request_subscription(self, jid, msg):
 		if not self.connection:
 			return
 		gajim.log.debug('subscription request for %s' % jid)
@@ -528,12 +529,12 @@ class connection:
 		pres.setStatus(msg)
 		self.connection.send(pres)
 
-	def send_authorization(self, jid)
+	def send_authorization(self, jid):
 		if not self.connection:
 			return
 		self.connection.send(common.jabber.Presence(jid, 'subscribed'))
 
-	def refuse_authorization(self, jid)
+	def refuse_authorization(self, jid):
 		if not self.connection:
 			return
 		self.connection.send(common.jabber.Presence(jid, 'unsubscribed'))

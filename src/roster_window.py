@@ -964,7 +964,7 @@ class Roster_window:
 				if message == -1:
 					message = ''
 				for acct in accounts:
-				if gajim.connections[acct].connected:
+					if gajim.connections[acct].connected:
 						self.send_status(acct, 'offline', message)
 			self.quit_gtkgui_plugin()
 		return True # do NOT destory the window

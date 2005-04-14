@@ -228,9 +228,9 @@ class Config:
 		return 0
 		
 	def get_per(self, optname, key = None, subname = None):
-		if not self.__options_per_key.has_key(typename):
+		if not self.__options_per_key.has_key(optname):
 			return None
-		dict = self.__options_per_key[typename][1]
+		dict = self.__options_per_key[optname][1]
 		if not key:
 			return dict.keys()
 		if not dict.has_key(key):
