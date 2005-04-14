@@ -437,11 +437,11 @@ class connection:
 			return -1
 # END connect
 
-	def register_handler(self, event, funtion):
+	def register_handler(self, event, function):
 		if event in self.handlers:
 			self.handlers[event].append(function)
 
-	def unregister_handler(self, event, funtion):
+	def unregister_handler(self, event, function):
 		if event in self.handlers:
 			if function in self.handlers[event]:
 				self.handlers[event].remove(function)

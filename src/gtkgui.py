@@ -652,6 +652,33 @@ class interface:
 		# update regular expressions
 		self.make_regexps()
 
+	def register_handlers(self, conn):
+		conn.register_handler('ROSTER', self.handle_event_roster)
+		conn.register_handler('WARNING', self.handle_event_warning)
+		conn.register_handler('ERROR', self.handle_event_error)
+		conn.register_handler('STATUS', self.handle_event_status)
+		conn.register_handler('NOTIFY', self.handle_event_notify)
+		conn.register_handler('MSG', self.handle_event_msg)
+		conn.register_handler('MSGERROR', self.handle_event_msgerror)
+		conn.register_handler('MSGSENT', self.handle_event_msgsent)
+		conn.register_handler('SUBSCRIBED', self.handle_event_subscribed)
+		conn.register_handler('UNSUBSCRIBED', self.handle_event_unsubscribed)
+		conn.register_handler('SUBSCRIBE', self.handle_event_subscribe)
+		conn.register_handler('AGENT_INFO', self.handle_event_agent_info)
+		conn.register_handler('AGENT_INFO_ITEMS', \
+			self.handle_event_agent_info_items)
+		conn.register_handler('AGENT_INFO_INFO', \
+			self.handle_event_agent_info_info)
+		conn.register_handler('QUIT', self.handle_event_quit)
+		conn.register_handler('ACC_OK', self.handle_event_acc_ok)
+		conn.register_handler('MYVCARD', self.handle_event_myvcard)
+		conn.register_handler('VCARD', self.handle_event_vcard)
+		conn.register_handler('OS_INFO', self.handle_event_os_info)
+		conn.register_handler('GC_MSG', self.handle_event_gc_msg)
+		conn.register_handler('GC_SUBJECT', self.handle_event_gc_subject)
+		conn.register_handler('BAD_PASSPHRASE', self.handle_event_bad_passphrase)
+		conn.register_handler('ROSTER_INFO', self.handle_event_roster_info)
+
 	def __init__(self):
 		if gtk.pygtk_version >= (2, 6, 0):
 			gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
@@ -680,7 +707,6 @@ class interface:
 		if pix:
 			gtk.window_set_default_icon(pix)
 		self.roster = Roster_window(self)
-		gobject.timeout_add(100, self.read_sleepy)
 		self.sleeper = common.sleepy.Sleepy( \
 			gajim.config.get('autoawaytime')*60, \
 			gajim.config.get('autoxatime')*60)
@@ -708,8 +734,12 @@ class interface:
 		self.windows['add_remove_emoticons_window'] = \
 			Add_remove_emoticons_window(self)
 		self.windows['roster'] = self.roster
+		
+		for account in gajim.connections:
+			self.register_handlers(gajim.connections[account])
 
 		gobject.timeout_add(100, self.autoconnect)
+		gobject.timeout_add(100, self.read_sleepy)
 
 if __name__ == '__main__':
 	try: 	# Import Psyco if available

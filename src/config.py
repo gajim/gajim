@@ -1123,6 +1123,7 @@ class Account_modification_window:
 			Error_dialog(_('An account already has this name'))
 			return
 		gajim.connections[name] = connection.connection(name)
+		self.plugin.register_handlers(gajim.connections[name])
 		#if we neeed to register a new account
 		if new_account_checkbutton.get_active():
 			self.plugin.send('NEW_ACC', None, (hostname, login, password, name, \
