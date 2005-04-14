@@ -53,8 +53,8 @@ class Vcard_information_window:
 			self.user.name = new_name
 			for i in self.plugin.roster.get_user_iter(self.user.jid, self.account):
 				self.plugin.roster.tree.get_model().set_value(i, 1, new_name)
-			self.plugin.send('UPDUSER', self.account, (self.user.jid, \
-				self.user.name, self.user.groups))
+			gajim.connections[self.account].update_user(self.user.jid, \
+				self.user.name, self.user.groups)
 		#log history ?
 		oldlog = 1
 		no_log_for = gajim.config.get_per('accounts', self.account, 'no_log_for')\
@@ -119,8 +119,9 @@ class Vcard_information_window:
 				stats += '\n' + u.show + ': ' + u.status
 		self.xml.get_widget('resource_label').set_text(resources)
 		self.xml.get_widget('status_label').set_text(stats)
-		self.plugin.send('ASK_VCARD', self.account, self.user.jid)
-		self.plugin.send('ASK_OS_INFO', self.account, (self.user.jid, self.user.resource))
+		gajim.connections[self.account].request_vcard(self.user.jid)
+		gajim.connections[self.account].request_os_info(self.user.jid, \
+			self.user.resource)
 
 	def add_to_vcard(self, vcard, entry, txt):
 		"""Add an information to the vCard dictionary"""
@@ -163,7 +164,7 @@ class Vcard_information_window:
 		if nick == '':
 			nick = gajim.config.get_per('accounts', self.account, 'name')
 		self.plugin.nicks[self.account] = nick
-		self.plugin.send('VCARD', self.account, vcard)
+		gajim.connections[self.account].send_vcard(vcard)
 
 	def on_retrieve_button_clicked(self, widget):
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
@@ -174,7 +175,7 @@ class Vcard_information_window:
 			for e in entries:
 				self.xml.get_widget(e + '_entry').set_text('')
 			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
-			self.plugin.send('ASK_VCARD', self.account, self.jid)
+			gajim.connections[self.account].request_vcard(self.jid)
 		else:
 			Error_dialog(_('You must be connected to get your informations'))
 
@@ -251,8 +252,8 @@ class Edit_groups_dialog:
 		self.dialog.run()
 		self.dialog.destroy()
 		#TODO: do not send if unnecesary
-		self.plugin.send('UPDUSER', self.account, (self.user.jid, \
-			self.user.name, self.user.groups))
+		gajim.connections[self.account].update_user(self.user.jid, \
+			self.user.name, self.user.groups)
 
 	def update_user(self):
 		self.plugin.roster.remove_user(self.user, self.account)
@@ -505,7 +506,7 @@ class Add_new_contact_window:
 		self.plugin.roster.req_sub(self, jid, message, self.account, group,\
 			nickname)
 		if self.xml.get_widget('auto_authorize_checkbutton').get_active():
-			self.plugin.send('AUTH', self.account, jid)
+			gajim.connections[self.account].send_authorization(jid)
 		self.window.destroy()
 		
 	def fill_jid(self):
@@ -647,14 +648,14 @@ class subscription_request_window:
 		
 	def on_authorize_button_clicked(self, widget):
 		"""Accept the request"""
-		self.plugin.send('AUTH', self.account, self.jid)
+		gajim.connections[self.account].send_authorization(self.jid)
 		self.window.destroy()
 		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
 			Add_new_contact_window(self.plugin, self.account, self.jid)
 	
 	def on_deny_button_clicked(self, widget):
 		"""refuse the request"""
-		self.plugin.send('DENY', self.account, self.jid)
+		gajim.connections[self.account].refuse_authorization(self.jid)
 		self.window.destroy()
 
 class Join_groupchat_window:
@@ -718,8 +719,7 @@ class Join_groupchat_window:
 			self.recently_groupchat = self.recently_groupchat[0:10]
 		gajim.config.set('recently_groupchat', ' '.join(self.recently_groupchat))
 		self.plugin.roster.new_group(jid, nickname, self.account)
-		self.plugin.send('GC_JOIN', self.account, (nickname, room, server, \
-			password))
+		gajim.connections[self.account].join_gc(nickname, room, server, password)
 			
 		self.window.destroy()
 

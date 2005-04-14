@@ -52,7 +52,8 @@ class history_window:
 		end = 50
 		if end > self.nb_line:
 			end = self.nb_line
-		self.plugin.send('LOG_GET_RANGE', None, (self.jid, 0, end))
+		#FIXME:
+#		self.plugin.send('LOG_GET_RANGE', None, (self.jid, 0, end))
 		self.num_begin = self.nb_line
 
 	def on_previous_button_clicked(self, widget):
@@ -68,7 +69,8 @@ class history_window:
 		end = begin + 50
 		if end > self.nb_line:
 			end = self.nb_line
-		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, end))
+		#FIXME:
+#		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, end))
 		self.num_begin = self.nb_line
 
 	def on_forward_button_clicked(self, widget):
@@ -84,7 +86,8 @@ class history_window:
 		end = begin + 50
 		if end > self.nb_line:
 			end = self.nb_line
-		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, end))
+		#FIXME:
+#		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, end))
 		self.num_begin = self.nb_line
 
 	def on_latest_button_clicked(self, widget):
@@ -97,7 +100,8 @@ class history_window:
 		begin = self.nb_line - 50
 		if begin < 0:
 			begin = 0
-		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, self.nb_line))
+		#FIXME:
+#		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, self.nb_line))
 		self.num_begin = self.nb_line
 
 	def new_line(self, infos):
@@ -158,4 +162,5 @@ class history_window:
 		color = gajim.config.get('statusmsgcolor')
 		tagStatus.set_property('foreground', color)
 		self.window.show_all()
-		self.plugin.send('LOG_NB_LINE', None, jid)
+		#FIXME:
+#		self.plugin.send('LOG_NB_LINE', None, jid)

@@ -72,8 +72,8 @@ class Groupchat_window(Chat):
 	
 	def on_groupchat_window_destroy(self, widget):
 		for room_jid in self.xmls:
-			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
-				room_jid, 'offline', 'offline'))
+			gajim.connections[self.account].send_gc_status(self.nicks[room_jid], \
+				room_jid, 'offline', 'offline')
 		Chat.on_window_destroy(self, widget, 'gc')
 
 	def on_groupchat_window_focus_in_event(self, widget, event):
@@ -233,7 +233,7 @@ class Groupchat_window(Chat):
 	def on_set_button_clicked(self, widget):
 		room_jid = self.get_active_jid()
 		subject = self.xml.get_widget('subject_entry').get_text()
-		self.plugin.send('GC_SUBJECT', self.account, (room_jid, subject))
+		gajim.connections[self.account].send_gc_subject(room_jid, subject)
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
@@ -267,7 +267,7 @@ class Groupchat_window(Chat):
 			txt = message_buffer.get_text(start_iter, end_iter, 0)
 			if txt != '':
 				room_jid = self.get_active_jid()
-				self.plugin.send('GC_MSG', self.account, (room_jid, txt))
+				gajim.connections[self.account].send_gc_message(room_jid, txt)
 				message_buffer.set_text('', -1)
 				widget.grab_focus()
 			return True
@@ -315,68 +315,62 @@ class Groupchat_window(Chat):
 
 	def kick(self, widget, room_jid, nick):
 		"""kick a user"""
-		self.plugin.send('GC_SET_ROLE', self.account, (room_jid, nick, 'none'))
+		gajim.connections[self.account].gc_set_role(room_jid, nick, 'none')
 
 	def grant_voice(self, widget, room_jid, nick):
 		"""grant voice privilege to a user"""
-		self.plugin.send('GC_SET_ROLE', self.account, (room_jid, nick, \
-			'participant'))
+		gajim.connections[self.account].gc_set_role(room_jid, nick, 'participant')
 
 	def revoke_voice(self, widget, room_jid, nick):
 		"""revoke voice privilege to a user"""
-		self.plugin.send('GC_SET_ROLE', self.account, (room_jid, nick, 'visitor'))
+		gajim.connections[self.account].gc_set_role(room_jid, nick, 'visitor')
 
 	def grant_moderator(self, widget, room_jid, nick):
 		"""grant moderator privilege to a user"""
-		self.plugin.send('GC_SET_ROLE', self.account, (room_jid, nick,\
-			'moderator'))
+		gajim.connections[self.account].gc_set_role(room_jid, nick, 'moderator')
 
 	def revoke_moderator(self, widget, room_jid, nick):
 		"""revoke moderator privilege to a user"""
-		self.plugin.send('GC_SET_ROLE', self.account, (room_jid, nick, \
-			'participant'))
+		gajim.connections[self.account].gc_set_role(room_jid, nick, 'participant')
 
 	def ban(self, widget, room_jid, jid):
 		"""ban a user"""
-		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
-			'outcast'))
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, \
+			'outcast')
 
 	def grant_membership(self, widget, room_jid, jid):
 		"""grant membership privilege to a user"""
-		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
-			'member'))
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, \
+			'member')
 
 	def revoke_membership(self, widget, room_jid, jid):
 		"""revoke membership privilege to a user"""
-		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
-			'none'))
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, \
+			'none')
 
 	def grant_admin(self, widget, room_jid, jid):
 		"""grant administrative privilege to a user"""
-		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
-			'admin'))
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, 'admin')
 
 	def revoke_admin(self, widget, room_jid, jid):
 		"""revoke administrative privilege to a user"""
-		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
-			'member'))
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, \
+			'member')
 
 	def grant_owner(self, widget, room_jid, jid):
 		"""grant owner privilege to a user"""
-		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
-			'owner'))
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, 'owner')
 
 	def revoke_owner(self, widget, room_jid, jid):
 		"""revoke owner privilege to a user"""
-		self.plugin.send('GC_SET_AFFILIATION', self.account, (room_jid, jid, \
-			'admin'))
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, 'admin')
 
 	def on_info(self, widget, jid):
 		"""Call vcard_information_window class to display user's information"""
 		if not self.plugin.windows[self.account]['infos'].has_key(jid):
 			self.plugin.windows[self.account]['infos'][jid] = \
 				Vcard_information_window(jid, self.plugin, self.account, True)
-			self.plugin.send('ASK_VCARD', self.account, jid)
+			gajim.connections[self.account].request_vcard(jid)
 			#FIXME: maybe use roster.on_info above?
 			
 			#FIXME: we need the resource but it's not saved
@@ -455,8 +449,8 @@ class Groupchat_window(Chat):
 
 		Chat.remove_tab(self, room_jid, 'gc')
 		if len(self.xmls) > 0:
-			self.plugin.send('GC_STATUS', self.account, (self.nicks[room_jid], \
-				room_jid, 'offline', 'offline'))
+			gajim.connections[self.account].send_gc_status(self.nicks[room_jid], \
+				room_jid, 'offline', 'offline')
 			del self.nicks[room_jid]
 			del self.list_treeview[room_jid]
 			del self.subjects[room_jid]

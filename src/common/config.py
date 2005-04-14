@@ -33,7 +33,7 @@ class Config:
 
 	__options = {
 		# name: [ type, value ]
-		'log': [ opt_bool, 'False' ],
+		'log': [ opt_bool, 'True' ],
 		'delauth': [ opt_bool, 'True' ],
 		'delroster': [ opt_bool, 'True' ],
 		'alwaysauth': [ opt_bool, 'False' ],

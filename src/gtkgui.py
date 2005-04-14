@@ -372,7 +372,7 @@ class interface:
 		jid = array[0].split('/')[0]
 		if jid.find("@") <= 0:
 			jid = jid.replace('@', '')
-		self.roster.on_message(jid, _("error while sending") + \
+		self.roster.on_message(jid, _('error while sending') + \
 			' \"%s\" ( %s )' % (array[3], array[2]), array[4], account)
 		
 	def handle_event_msgsent(self, account, array):
@@ -396,7 +396,7 @@ class interface:
 			if len(u.groups) == 0:
 				u.groups = ['General']
 			self.roster.add_user_to_roster(u.jid, account)
-			self.send('UPDUSER', account, (u.jid, u.name, u.groups))
+			gajim.connections[account].update_user(u.jid, u.name, u.groups)
 		else:
 			user1 = User(jid, jid, ['General'], 'online', \
 				'online', 'to', '', array[1], 0, '')
@@ -532,20 +532,20 @@ class interface:
 			if state == common.sleepy.STATE_AWAKE and \
 				self.sleeper_state[account] > 1:
 				#we go online
-				self.send('STATUS', account, ('online', 'Online'))
+				gajim.connections[account].change_status('online', 'Online')
 				self.sleeper_state[account] = 1
 			elif state == common.sleepy.STATE_AWAY and \
 				self.sleeper_state[account] == 1 and \
 				gajim.config.get('autoaway'):
 				#we go away
-				self.send('STATUS', account, ('away', 'auto away (idle)'))
+				gajim.connections[account].change_status('away', 'auto away (idle)')
 				self.sleeper_state[account] = 2
 			elif state == common.sleepy.STATE_XAWAY and (\
 				self.sleeper_state[account] == 2 or \
 				self.sleeper_state[account] == 1) and \
 				gajim.config.get('autoxa'):
 				#we go extended away
-				self.send('STATUS', account, ('xa', 'auto away (idle)'))
+				gajim.connections[account].change_status('xa', 'auto away (idle)')
 				self.sleeper_state[account] = 3
 		return 1
 

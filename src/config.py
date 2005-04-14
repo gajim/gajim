@@ -1110,7 +1110,7 @@ class Account_modification_window:
 			gajim.config.set_per('accounts', name, 'no_log_for', \
 				self.infos['no_log_for'])
 			if save_password:
-				self.plugin.send('PASSPHRASE', name, password)
+				gajim.connections[name].password = password
 			#refresh accounts window
 			if self.plugin.windows.has_key('accounts'):
 				self.plugin.windows['accounts'].init_accounts()
@@ -1126,8 +1126,8 @@ class Account_modification_window:
 		self.plugin.register_handlers(gajim.connections[name])
 		#if we neeed to register a new account
 		if new_account_checkbutton.get_active():
-			self.plugin.send('NEW_ACC', None, (hostname, login, password, name, \
-				resource, priority, use_proxy, proxyhost, proxyport))
+			gajim.connections[name].new_account(hostname, login, password, name, \
+				resource, priority, use_proxy, proxyhost, proxyport)
 			return
 		gajim.config.set_per('accounts', name, 'name', login)
 		gajim.config.set_per('accounts', name, 'hostname', hostname)
@@ -1148,7 +1148,7 @@ class Account_modification_window:
 		gajim.config.set_per('accounts', name, 'no_log_for', \
 			self.infos['no_log_for'])
 		if save_password:
-			self.plugin.send('PASSPHRASE', name, password)
+			gajim.connections[name].password = password
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.plugin.queues[name] = {}
@@ -1170,8 +1170,8 @@ class Account_modification_window:
 		dialog = Change_password_dialog(self.plugin, self.account)
 		new_password = dialog.run()
 		if new_password != -1:
-			self.plugin.send('CHANGE_PASSWORD', self.account,\
-				(new_password, self.plugin.nicks[self.account]))
+			gajim.connections[self.account].change_password(new_password, \
+				self.plugin.nicks[self.account])
 			if self.xml.get_widget('save_password_checkbutton').get_active():
 				self.xml.get_widget('password_entry').set_text(new_password)
 
@@ -1239,7 +1239,7 @@ class Account_modification_window:
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
 			self.plugin.windows[self.account]['infos'][jid] = \
 				vcard_information_window(jid, self.plugin, self.account, True)
-			self.plugin.send('ASK_VCARD', self.account, jid)
+			gajim.connections[self.account].request_vcard(jid)
 	
 	def on_gpg_choose_button_clicked(self, widget, data=None):
 		secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
@@ -1359,7 +1359,7 @@ class Accounts_window:
 		dialog = Confirmation_dialog(_('Are you sure you want to remove account (%s) ?') % account)
 		if dialog.get_response() == gtk.RESPONSE_YES:
 			if gajim.connections[account].connected:
-				self.plugin.send('STATUS', account, ('offline', 'offline'))
+				gajim.connections[account].change_status('offline', 'offline')
 			del gajim.connections[account]
 			del self.plugin.windows[account]
 			del self.plugin.queues[account]
@@ -1449,7 +1449,7 @@ class Service_registration_window:
 			'offline', 'from', '', '', 0, '')
 		self.plugin.roster.contacts[self.account][self.service] = [user1]
 		self.plugin.roster.add_user_to_roster(self.service, self.account)
-		self.plugin.send('REG_AGENT', self.account, self.service)
+		gajim.connections[self.account].register_agent(self.service)
 		self.window.destroy()
 	
 	def __init__(self, service, infos, plugin, account):
@@ -1669,7 +1669,7 @@ class Service_discovery_window:
 			# we begin to fill the treevier with the first line
 			iter = model.append(None, (jid, jid))
 			self.agent_infos[jid] = {'features' : []}
-		self.plugin.send('REQ_AGENTS', self.account, jid)
+		gajim.connections[self.account].request_agents(jid)
 	
 	def agents(self, agents):
 		"""When list of available agent arrive :

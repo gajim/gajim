@@ -187,7 +187,7 @@ class Tabbed_chat_window(Chat):
 				keyID = ''
 				if self.xmls[jid].get_widget('gpg_togglebutton').get_active():
 					keyID = self.users[jid].keyID
-				self.plugin.send('MSG', self.account, (jid, message, keyID))
+				gajim.connections[self.account].send_message(jid, message, keyID)
 				message_buffer.set_text('', -1)
 				self.print_conversation(message, jid, jid)
 			return True

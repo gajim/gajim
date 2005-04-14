@@ -30,7 +30,7 @@ from tabbed_chat_window import *
 from groupchat_window import *
 from history_window import *
 from gtkgui import CellRendererImage, User
-from dialogs import *
+import dialogs
 from config import *
 
 from common import i18n
@@ -408,13 +408,13 @@ class Roster_window:
 
 	def on_agent_logging(self, widget, jid, state, account):
 		"""When an agent is requested to log in or off"""
-		self.plugin.send('AGENT_LOGGING', account, (jid, state))
+		gajim.connections[account].send_agent_status(jid, state)
 
 	def on_remove_agent(self, widget, jid, account):
 		"""When an agent is requested to log in or off"""
 		window = Confirmation_dialog(_('Are you sure you want to remove the agent %s from your roster?') % jid)
 		if window.get_response() == gtk.RESPONSE_YES:
-			self.plugin.send('UNSUB_AGENT', account, jid)
+			gajim.connections[account].unsubscribe_agent(jid)
 			for u in self.contacts[account][jid]:
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
@@ -596,13 +596,13 @@ class Roster_window:
 	
 	def authorize(self, widget, jid, account):
 		"""Authorize a user"""
-		self.plugin.send('AUTH', account, jid)
+		gajim.connections[account].send_authorization(jid)
 
 	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None):
 		"""Request subscription to a user"""
 		if not pseudo:
 			pseudo = jid
-		self.plugin.send('SUB', account, (jid, txt))
+		gajim.connections[account].request_subscription(jid, txt)
 		if not self.contacts[account].has_key(jid):
 			if not group:
 				group = 'General'
@@ -685,7 +685,7 @@ class Roster_window:
 		"""Remove a user"""
 		window = Confirmation_dialog(_("Are you sure you want to remove %s (%s) from your roster?") % (user.name, user.jid))
 		if window.get_response() == gtk.RESPONSE_YES:
-			self.plugin.send('UNSUB', account, user.jid)
+			gajim.connections[account].unsubscribe(user.jid)
 			for u in self.contacts[account][user.jid]:
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
@@ -705,7 +705,7 @@ class Roster_window:
 			save_pass = gajim.config.get_per('accounts', account, 'savepass')
 			if not save_pass and gajim.connections[account].connected < 2:
 				passphrase = ''
-				w = Passphrase_dialog(_('Enter your password for account %s') \
+				w = dialogs.Passphrase_dialog(_('Enter your password for account %s') \
 					% account, 'Save password', autoconnect)
 				passphrase, save = w.run()
 				if passphrase == -1:
@@ -715,7 +715,7 @@ class Roster_window:
 					self.plugin.systray.set_status('offline')
 					self.update_status_comboxbox()
 					return
-				self.plugin.send('PASSPHRASE', account, passphrase)
+				gajim.connections[account].password = passphrase
 				if save:
 					gajim.config.set_per('accounts', account, 'savepass', True)
 					gajim.config.set_per('accounts', account, 'password', passphrase)
@@ -732,7 +732,7 @@ class Roster_window:
 						'gpgpassword')
 				else:
 					passphrase = ''
-					w = Passphrase_dialog(\
+					w = dialogs.Passphrase_dialog(\
 						_('Enter GPG key passphrase for account %s') % account, \
 						'Save passphrase', autoconnect)
 					passphrase, save = w.run()
@@ -742,14 +742,13 @@ class Roster_window:
 						gajim.config.set_per('accounts', account, 'savegpgpass', True)
 						gajim.config.set_per('accounts', account, 'gpgpassword', \
 							passphrase)
-				#FIXME:
-				self.plugin.send('GPGPASSPHRASE', account, passphrase)
-		self.plugin.send('STATUS', account, (status, txt))
+				gajim.connections[account].gpg_passphrase(passphrase)
+		gajim.connections[account].change_status(status, txt)
 		for room_jid in self.plugin.windows[account]['gc']:
 			if room_jid != 'tabbed':
 				nick = self.plugin.windows[account]['gc'][room_jid].nicks[room_jid]
-				self.plugin.send('GC_STATUS', account, (nick, room_jid, status, \
-					txt))
+				gajim.connections[account].send_gc_status(nick, room_jid, status, \
+					txt)
 		if status == 'online' and self.plugin.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
 			self.plugin.sleeper_state[account] = 1
@@ -982,7 +981,8 @@ class Roster_window:
 				gajim.config.set('height', height)
 
 		self.plugin.save_config()
-		self.plugin.send('QUIT', None, ('gtkgui', 1))
+		for account in gajim.connections:
+			gajim.connections[account].quit(True)
 		self.close_all(self.plugin.windows)
 		if self.plugin.systray_enabled:
 			self.plugin.hide_systray()
@@ -1083,8 +1083,7 @@ class Roster_window:
 			if old_text != new_text:
 				for u in self.contacts[account][jid]:
 					u.name = new_text
-				self.plugin.send('UPDUSER', account, (jid, new_text, \
-					self.contacts[account][jid][0].groups))
+				gajim.connections[account].update_user(jid, new_text, u.groups)
 			self.redraw_jid(jid, account)
 		elif type == 'group':
 			old_name = model.get_value(iter, 1)
@@ -1097,8 +1096,8 @@ class Roster_window:
 					user.groups.remove(old_name)
 					user.groups.append(new_text)
 					self.add_user_to_roster(user.jid, account)
-					self.plugin.send('UPDUSER', account, (user.jid, user.name, \
-						user.groups))
+					gajim.connections[account].update_user(user.jid, user.name, \
+						user.groups)
 		model.set_value(iter, 5, False)
 		
 	def on_service_disco_menuitem_activate(self, widget, account):
@@ -1298,7 +1297,7 @@ class Roster_window:
 		u = self.contacts[account][data][0]
 		u.groups.remove(grp_source)
 		u.groups.append(grp_dest)
-		self.plugin.send('UPDUSER', account, (u.jid, u.name, u.groups))
+		gajim.connections[account].update_user(u.jid, u.name, u.groups)
 		if model.iter_n_children(iter_group_source) == 1: #this was the only child
 			model.remove(iter_group_source)
 		#delete the group if it is empty (need to look for offline users too)

@@ -85,7 +85,7 @@ def get_os_info():
 
 class connection:
 	"""connection"""
-	def __init__(self, name = None):
+	def __init__(self, name):
 		# dict of function to be calledfor each event
 		self.handlers = {'ROSTER': [], 'WARNING': [], 'ERROR': [], 'STATUS': [], \
 			'NOTIFY': [], 'MSG': [], 'MSGERROR': [], 'MSGSENT': [] , \
@@ -99,13 +99,12 @@ class connection:
 		self.connection = None # Jabber.py instance
 		self.gpg = None
 		self.myVCardID = []
-		if name:
-			self.password = gajim.config.get_per('accounts', name, 'hostname')
-			if USE_GPG:
-				self.gpg = GnuPG.GnuPG()
-				gajim.config.set('usegpg', True)
-			else:
-				gajim.config.set('usegpg', False)
+		self.password = gajim.config.get_per('accounts', name, 'hostname')
+		if USE_GPG:
+			self.gpg = GnuPG.GnuPG()
+			gajim.config.set('usegpg', True)
+		else:
+			gajim.config.set('usegpg', False)
 	# END __init__
 
 	def dispatch(self, event, data):
