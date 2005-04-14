@@ -99,7 +99,7 @@ class connection:
 		self.connection = None # Jabber.py instance
 		self.gpg = None
 		self.myVCardID = []
-		self.password = gajim.config.get_per('accounts', name, 'hostname')
+		self.password = gajim.config.get_per('accounts', name, 'password')
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
 			gajim.config.set('usegpg', True)
@@ -369,71 +369,73 @@ class connection:
 	def connect(self):
 		"""Connect and authentificate to the Jabber server"""
 		self.connected = 1
+		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
 
 		#create connexion if it doesn't already existe
-		if not self.connection:
-			if gajim.config.get_per('accounts', self.name, 'use_proxy'):
-				proxy = {'host': gajim.config.get_per('accounts', self.name, \
-					'proxyhost')}
-				proxy['port'] = gajim.config.get_per('accounts', self.name, \
-					'proxyport')
-			else:
-				proxy = None
-			if gajim.log:
-				self.connection = common.jabber.Client(host = hostname, debug = [],\
-				log = sys.stderr, connection=common.xmlstream.TCP, port=5222, \
-				proxy = proxy)
-			else:
-				con = common.jabber.Client(host = hostname, debug = [], log = None,\
-				connection=common.xmlstream.TCP, port=5222, proxy = proxy)
-				#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
-				#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
-			self.connection.setDisconnectHandler(self.disconnectedCB)
-			self.connection.registerHandler('message', self.messageCB)
-			self.connection.registerHandler('presence', self.presenceCB)
-			self.connection.registerHandler('iq',self.vCardCB,'result')
-			self.connection.registerHandler('iq',self.rosterSetCB,'set', \
-				common.jabber.NS_ROSTER)
-			self.connection.registerHandler('iq',self.BrowseResultCB,'result', \
-				common.jabber.NS_BROWSE)
-			self.connection.registerHandler('iq',self.DiscoverItemsCB,'result', \
-				common.jabber.NS_P_DISC_ITEMS)
-			self.connection.registerHandler('iq',self.DiscoverInfoCB,'result', \
-				common.jabber.NS_P_DISC_INFO)
-			self.connection.registerHandler('iq',self.DiscoverInfoErrorCB,'error',\
-				common.jabber.NS_P_DISC_INFO)
-			self.connection.registerHandler('iq',self.VersionCB,'get', \
-				common.jabber.NS_VERSION)
-			self.connection.registerHandler('iq',self.VersionResultCB,'result', \
-				common.jabber.NS_VERSION)
+		if self.connection:
+			return self.connection
+		if gajim.config.get_per('accounts', self.name, 'use_proxy'):
+			proxy = {'host': gajim.config.get_per('accounts', self.name, \
+				'proxyhost')}
+			proxy['port'] = gajim.config.get_per('accounts', self.name, \
+				'proxyport')
+		else:
+			proxy = None
+		if gajim.config.get('log'):
+			con = common.jabber.Client(host = hostname, debug = [],\
+			log = sys.stderr, connection=common.xmlstream.TCP, port=5222, \
+			proxy = proxy)
+		else:
+			con = common.jabber.Client(host = hostname, debug = [], log = None,\
+			connection=common.xmlstream.TCP, port=5222, proxy = proxy)
+			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
+			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
+		con.setDisconnectHandler(self._disconnectedCB)
+		con.registerHandler('message', self._messageCB)
+		con.registerHandler('presence', self._presenceCB)
+		con.registerHandler('iq',self._vCardCB,'result')
+		con.registerHandler('iq',self._rosterSetCB,'set', \
+			common.jabber.NS_ROSTER)
+		con.registerHandler('iq',self._BrowseResultCB,'result', \
+			common.jabber.NS_BROWSE)
+		con.registerHandler('iq',self._DiscoverItemsCB,'result', \
+			common.jabber.NS_P_DISC_ITEMS)
+		con.registerHandler('iq',self._DiscoverInfoCB,'result', \
+			common.jabber.NS_P_DISC_INFO)
+		con.registerHandler('iq',self._DiscoverInfoErrorCB,'error',\
+			common.jabber.NS_P_DISC_INFO)
+		con.registerHandler('iq',self._VersionCB,'get', \
+			common.jabber.NS_VERSION)
+		con.registerHandler('iq',self._VersionResultCB,'result', \
+			common.jabber.NS_VERSION)
 		try:
-			self.connection.connect()
+			con.connect()
 		except:
-			gajim.log.debug("Couldn't connect to %s %s" % (hostname, e))
+			gajim.log.debug('Couldn\'t connect to %s' % hostname)
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', _('Couldn\'t connect to %s') \
 				% hostname)
 			self.connected = 0
-			return -1
+			return None
 
 		gajim.log.debug('Connected to server')
 
-		if self.connection.auth(self.name, self.password, resource):
-			self.connection.requestRoster()
-			roster = self.connection.getRoster().getRaw()
+		if con.auth(name, self.password, resource):
+			con.requestRoster()
+			roster = con.getRoster().getRaw()
 			if not roster :
 				roster = {}
 			self.dispatch('ROSTER', (0, roster))
 			self.connected = 2
-			return 0
+			return con
 		else:
-			log.debug('Couldn\'t authentificate to %s' % hostname)
+			gajim.log.debug('Couldn\'t authentificate to %s' % hostname)
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', _('Authentification failed with %s, check your login and password') % hostname)
 			self.connected = 0
-			return -1
+			return None
 # END connect
 
 	def register_handler(self, event, function):
@@ -473,7 +475,7 @@ class connection:
 				if self.connected < 2:
 					self.dispatch('BAD_PASSPHRASE', ())
 		if (status != 'offline') and (self.connected == 0):
-			self.connect()
+			self.connection = self.connect()
 			if self.connected == 2:
 				self.connected = STATUS_LIST.index(status)
 				#send our presence
@@ -481,14 +483,14 @@ class connection:
 				if status == 'invisible':
 					ptype = 'invisible'
 				prio = gajim.config.get_per('accounts', self.name, 'priority')
-				self.connection.sendPresence(ptype, prio, status, msg, signed)
+				self.connection.sendPresence(ptype, str(prio), status, msg, signed)
 				self.dispatch('STATUS', status)
 				#ask our VCard
 				iq = common.jabber.Iq(type='get')
 				iq._setTag('vCard', common.jabber.NS_VCARD)
-				id = con.getAnID()
+				id = self.connection.getAnID()
 				iq.setID(id)
-				con.send(iq)
+				self.connection.send(iq)
 				self.myVCardID.append(id)
 		elif (status == 'offline') and self.connected:
 			self.connected = 0
@@ -614,7 +616,7 @@ class connection:
 			else:
 				self.name = name
 				self.connected = 0
-				self.password = ''
+				self.password = password
 				if USE_GPG:
 					self.gpg = GnuPG.GnuPG()
 					gajim.config.set('usegpg', True)

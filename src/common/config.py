@@ -185,14 +185,14 @@ class Config:
 	def get(self, optname):
 		if not self.exist(optname):
 			return None
-		val = self.__options[optname][OPT_VAL]
-		if val == 'True': return True
-		if val == 'False': return False
-		try:
-			val = int(val)
-		except ValueError:
-			pass
-		return val
+		opt = self.__options[optname]
+		if opt[OPT_TYPE] == opt_bool:
+			if opt[OPT_VAL] == 'False': return False
+			return True
+		elif opt[OPT_TYPE] == opt_int:
+			return int(opt[OPT_VAL])
+		else:
+			return opt[OPT_VAL]
 
 	def add_per(self, typename, name):
 		if not self.__options_per_key.has_key(typename):
@@ -240,7 +240,7 @@ class Config:
 			return obj
 		if not obj.has_key(subname):
 			return None
-		return obj[subname]
+		return obj[subname][OPT_VAL]
 
 	def exist(self, optname):
 		return self.__options.has_key(optname)

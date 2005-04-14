@@ -679,6 +679,12 @@ class interface:
 		conn.register_handler('BAD_PASSPHRASE', self.handle_event_bad_passphrase)
 		conn.register_handler('ROSTER_INFO', self.handle_event_roster_info)
 
+	def process_connections(self):
+		for account in gajim.connections:
+			if gajim.connections[account].connected:
+				gajim.connections[account].connection.process(1)
+		return True
+
 	def __init__(self):
 		if gtk.pygtk_version >= (2, 6, 0):
 			gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
@@ -739,7 +745,8 @@ class interface:
 			self.register_handlers(gajim.connections[account])
 
 		gobject.timeout_add(100, self.autoconnect)
-		gobject.timeout_add(100, self.read_sleepy)
+		gobject.timeout_add(500, self.read_sleepy)
+		gobject.timeout_add(50, self.process_connections)
 
 if __name__ == '__main__':
 	try: 	# Import Psyco if available

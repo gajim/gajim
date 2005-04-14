@@ -1122,6 +1122,7 @@ class Account_modification_window:
 		if name in gajim.connections:
 			Error_dialog(_('An account already has this name'))
 			return
+		gajim.config.add_per('accounts', name)
 		gajim.connections[name] = connection.connection(name)
 		self.plugin.register_handlers(gajim.connections[name])
 		#if we neeed to register a new account

@@ -325,7 +325,7 @@ class Roster_window:
 		"""Clear and draw roster"""
 		self.make_menu()
 		self.tree.get_model().clear()
-		for acct in self.contacts.keys():
+		for acct in gajim.connections:
 			self.add_account_to_roster(acct)
 			for jid in self.contacts[acct].keys():
 				self.add_user_to_roster(jid, acct)
@@ -697,7 +697,7 @@ class Roster_window:
 				accountIter = self.get_account_iter(account)
 				if accountIter:
 					model.set_value(accountIter, 0, self.pixbufs['connecting'])
-				gajim.connections[account].connected = 1
+#				gajim.connections[account].connected = 1
 				if self.plugin.systray_enabled:
 					self.plugin.systray.set_status('connecting')
 
@@ -711,7 +711,7 @@ class Roster_window:
 				if passphrase == -1:
 					if accountIter:
 						model.set_value(accountIter, 0, self.pixbufs['offline'])
-					gajim.connections[account].connected = 0
+#					gajim.connections[account].connected = 0
 					self.plugin.systray.set_status('offline')
 					self.update_status_comboxbox()
 					return
@@ -832,7 +832,7 @@ class Roster_window:
 					luser_copy.append(user)
 				for user in luser_copy:
 					self.chg_user_status(user, 'offline', 'Disconnected', account)
-		gajim.connections[account].connected = statuss.index(status)
+#		gajim.connections[account].connected = statuss.index(status)
 		self.update_status_comboxbox()
 
 	def new_chat(self, user, account):
