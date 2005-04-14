@@ -63,9 +63,25 @@ distro_info = {
 }
 
 def get_os_info():
-	if os.name =='nt':
-		import platform
-		win_version = platform.release()
+	if os.name == 'nt':
+		#import platform
+		#win_version = platform.release()
+		#if win_version == '':
+			# unimport platform module
+			#del sys.modules['platform']
+			#print sys.getrefcount(platform) # must be 2 to be safe!
+			#del platform  # but also del all refs to its internals!
+
+		win_version = {(1, 4, 0): '95',\
+                        (1, 4, 10): '98',\
+                        (1, 4, 90): 'ME',\
+                        (2, 4, 0): 'NT',\
+                        (2, 5, 0): '2000',\
+                        (2, 5, 1): 'XP'
+     	}[ os.sys.getwindowsversion()[3],\
+     		os.sys.getwindowsversion()[0],\
+			os.sys.getwindowsversion()[1] ]
+
 		return 'Windows' + ' ' + win_version
 	elif os.name =='posix':
 		executable = 'lsb_release'
