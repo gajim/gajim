@@ -531,13 +531,8 @@ class Roster_window:
 
 	def on_edit_account(self, widget, account):
 		if not self.plugin.windows.has_key('account_modification_window'):
-			#FIXME:
-			infos = self.plugin.accounts[account]
-			infos['accname'] = account
-			infos['jid'] = self.plugin.accounts[account]["name"] + \
-				'@' +  self.plugin.accounts[account]["hostname"]
 			self.plugin.windows['account_modification'] = \
-				config.Account_modification_window(self.plugin, infos)
+				config.Account_modification_window(self.plugin, account)
 
 	def mk_menu_account(self, event, iter):
 		"""Make account's popup menu"""
@@ -1116,7 +1111,7 @@ class Roster_window:
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
-		self.path = 'plugins/gtkgui/iconsets/' + iconset + '/'
+		self.path = '../data/iconsets/' + iconset + '/'
 		self.pixbufs = {}
 		for state in ('connecting', 'online', 'chat', 'away', 'xa', 'dnd', \
 			'invisible', 'offline', 'error', 'requested', 'message', \
@@ -1427,4 +1422,4 @@ class Roster_window:
 		self.draw_roster()
 		if len(gajim.connections) == 0: # if no account
 			self.plugin.windows['account_modification'] = \
-				config.Account_modification_window(self.plugin, {})
+				config.Account_modification_window(self.plugin)

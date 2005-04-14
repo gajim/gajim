@@ -908,41 +908,35 @@ class Account_modification_window:
 		proxyport_entry = self.xml.get_widget('proxyport_entry')
 		self.on_checkbutton_toggled(widget, [proxyhost_entry, proxyport_entry])
 
-	def init_account(self, infos):
+	def init_account(self):
 		"""Initialize window with defaults values"""
-		if infos.has_key('accname'):
-			self.xml.get_widget('name_entry').set_text(infos['accname'])
-		if infos.has_key('jid'):
-			self.xml.get_widget('jid_entry').set_text(infos['jid'])
-		if infos.has_key('savepass'):
-			self.xml.get_widget('save_password_checkbutton').set_active(\
-				infos['savepass'])
-			if infos['savepass']:
-				password_entry = self.xml.get_widget('password_entry')
-				password_entry.set_sensitive(True)
-				if infos.has_key('password'):
-					password_entry.set_text(infos['password'])
-		if infos.has_key('resource'):
-			self.xml.get_widget('resource_entry').set_text(infos['resource'])
-		if infos.has_key('priority'):
-			self.xml.get_widget('priority_spinbutton').set_value(infos['priority'])
+		self.xml.get_widget('name_entry').set_text(self.account)
+		jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
+			gajim.config.get_per('accounts', self.account, 'hostname')
+		self.xml.get_widget('jid_entry').set_text(jid)
+		self.xml.get_widget('save_password_checkbutton').set_active( \
+			gajim.config.get_per('accounts', self.account, 'savepass'))
+		if gajim.config.get_per('accounts', self.account, 'savepass'):
+			password_entry = self.xml.get_widget('password_entry')
+			password_entry.set_sensitive(True)
+			password_entry.set_text(gajim.config.get_per('accounts', self.account,\
+				'password'))
+		self.xml.get_widget('resource_entry').set_text(gajim.config.get_per( \
+			'accounts', self.account, 'resource'))
+		self.xml.get_widget('priority_spinbutton').set_value(gajim.config.\
+			get_per('accounts', self.account, 'priority'))
 		
-		use_proxy = False
-		if infos.has_key('use_proxy'):
-			if infos['use_proxy'] != 0:
-				use_proxy = True
-			self.xml.get_widget('use_proxy_checkbutton').\
-				set_active(infos['use_proxy'])
+		use_proxy = gajim.config.get_per('accounts', self.account, 'use_proxy')
+		self.xml.get_widget('use_proxy_checkbutton').set_active(use_proxy)
 		
 		self.xml.get_widget('proxyhost_entry').set_sensitive(use_proxy)
 		self.xml.get_widget('proxyport_entry').set_sensitive(use_proxy)
 				
-		if infos.has_key('proxyhost'):
-			self.xml.get_widget('proxyhost_entry').set_text(infos['proxyhost'])
+		self.xml.get_widget('proxyhost_entry').set_text(gajim.config.get_per( \
+			'accounts', self.account, 'proxyhost'))
 
-		if infos.has_key('proxyport'):
-			self.xml.get_widget('proxyport_entry').set_text(str(\
-				infos['proxyport']))
+		self.xml.get_widget('proxyport_entry').set_text(str(gajim.config.get_per(\
+			'accounts', self.account, 'proxyport')))
 
 			
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
@@ -950,31 +944,31 @@ class Account_modification_window:
 			gpg_key_label.set_text('GPG is not usable on this computer')
 			self.xml.get_widget('gpg_choose_button').set_sensitive(False)
 		else:
-			if infos.has_key('keyid'):
-				if infos['keyid'] and gajim.config.get('usegpg'):
-					gpg_key_label.set_text(infos['keyid'])
-					if infos.has_key('keyname'):
-						self.xml.get_widget('gpg_name_label').set_text(infos['keyname'])
-					gpg_save_password_checkbutton = \
-						self.xml.get_widget('gpg_save_password_checkbutton')
-					gpg_save_password_checkbutton.set_sensitive(True)
-					if infos.has_key('savegpgpass'):
-						gpg_save_password_checkbutton.set_active(infos['savegpgpass'])
-						if infos['savegpgpass']:
-							gpg_password_entry = self.xml.get_widget('gpg_password_entry')
-							gpg_password_entry.set_sensitive(True)
-							if infos.has_key('gpgpassword'):
-								gpg_password_entry.set_text(infos['gpgpassword'])
-		if infos.has_key('autoconnect'):
-			self.xml.get_widget('autoconnect_checkbutton').set_active(\
-				infos['autoconnect'])
-		if infos.has_key('sync_with_global_status'):
-			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(\
-				infos['sync_with_global_status'])
-		if infos.has_key('no_log_for'):
-			list_no_log_for = infos['no_log_for'].split()
-			if infos['accname'] in list_no_log_for:
-				self.xml.get_widget('log_history_checkbutton').set_active(0)
+			if gajim.config.get_per('accounts', self.account, 'keyid') and \
+				gajim.config.get('usegpg'):
+				gpg_key_label.set_text(gajim.config.get_per('accounts', \
+					self.account, 'keyid'))
+				self.xml.get_widget('gpg_name_label').set_text(gajim.config.\
+					get_per('accounts', self.account, 'keyname'))
+				gpg_save_password_checkbutton = \
+					self.xml.get_widget('gpg_save_password_checkbutton')
+				gpg_save_password_checkbutton.set_sensitive(True)
+				gpg_save_password_checkbutton.set_active(gajim.config.get_per( \
+					'accounts', self.account, 'savegpgpass'))
+				if gajim.config.get_per('accounts', self.account, 'savegpgpass'):
+					gpg_password_entry = self.xml.get_widget('gpg_password_entry')
+					gpg_password_entry.set_sensitive(True)
+					gpg_password_entry.set_text(gajim.config.get_per('accounts', \
+						self.account, 'gpgpassword'))
+		self.xml.get_widget('autoconnect_checkbutton').set_active(gajim.config.\
+			get_per('accounts', self.account, 'autoconnect'))
+		self.xml.get_widget('sync_with_global_status_checkbutton').set_active( \
+			gajim.config.get_per('accounts', self.account, \
+			'sync_with_global_status'))
+		list_no_log_for = gajim.config.get_per('accounts', self.account, \
+			'no_log_for').split()
+		if self.account in list_no_log_for:
+			self.xml.get_widget('log_history_checkbutton').set_active(0)
 
 	def on_save_button_clicked(self, widget):
 		"""When save button is clicked: Save information in config file"""
@@ -996,14 +990,15 @@ class Account_modification_window:
 		if self.xml.get_widget('autoconnect_checkbutton').get_active():
 			autoconnect = 1
 
-		if not self.infos.has_key('no_log_for'):
-			self.infos['no_log_for'] = ''
-		list_no_log_for = self.infos['no_log_for'].split()
+		if self.account:
+			list_no_log_for = gajim.config.get_per('accounts', self.account, \
+				'no_log_for').split()
+		else:
+			list_no_log_for = []
 		if self.account in list_no_log_for:
 			list_no_log_for.remove(self.account)
 		if not self.xml.get_widget('log_history_checkbutton').get_active():
 			list_no_log_for.append(name)
-		self.infos['no_log_for'] = ' '.join(list_no_log_for)
 
 		sync_with_global_status = 0
 		if self.xml.get_widget('sync_with_global_status_checkbutton').\
@@ -1109,7 +1104,7 @@ class Account_modification_window:
 			gajim.config.set_per('accounts', name, 'sync_with_global_status', \
 				sync_with_global_status)
 			gajim.config.set_per('accounts', name, 'no_log_for', \
-				self.infos['no_log_for'])
+				' '.join(list_no_log_for))
 			if save_password:
 				gajim.connections[name].password = password
 			#refresh accounts window
@@ -1148,7 +1143,7 @@ class Account_modification_window:
 		gajim.config.set_per('accounts', name, 'gpgpassword', gpg_password)
 		gajim.config.set_per('accounts', name, 'sync_with_global_status', True)
 		gajim.config.set_per('accounts', name, 'no_log_for', \
-			self.infos['no_log_for'])
+			' '.join(list_no_log_for))
 		if save_password:
 			gajim.connections[name].password = password
 		#update variables
@@ -1294,14 +1289,12 @@ class Account_modification_window:
 			password_entry.set_sensitive(False)
 			password_entry.set_text('')
 
-	#infos must be a dictionnary
-	def __init__(self, plugin, infos):
+	def __init__(self, plugin, account = ''):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_modification_window', APP)
 		self.window = self.xml.get_widget('account_modification_window')
 		self.plugin = plugin
-		self.account = ''
+		self.account = account
 		self.modify = False
-		self.infos = infos
 		self.xml.get_widget('gpg_key_label').set_text('No key selected')
 		self.xml.get_widget('gpg_name_label').set_text('')
 		self.xml.get_widget('gpg_save_password_checkbutton').set_sensitive(False)
@@ -1312,10 +1305,9 @@ class Account_modification_window:
 		#default is checked
 		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(1)
 		self.xml.signal_autoconnect(self)
-		if infos:
+		if account:
 			self.modify = True
-			self.account = infos['accname']
-			self.init_account(infos)
+			self.init_account()
 			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
 			self.xml.get_widget('save_button').grab_focus()
 		self.window.show_all()
@@ -1348,7 +1340,7 @@ class Accounts_window:
 		"""When new button is clicked : open an account information window"""
 		if not self.plugin.windows.has_key('account_modification_window'):
 			self.plugin.windows['account_modification'] = \
-				Account_modification_window(self.plugin, {})
+				Account_modification_window(self.plugin, '')
 		else:
 			self.plugin.windows['account_modification'].window.present()
 
@@ -1367,7 +1359,8 @@ class Accounts_window:
 			del self.plugin.queues[account]
 			del self.plugin.roster.groups[account]
 			del self.plugin.roster.contacts[account]
-			#FIXME: missing things: to_be_deleted for ex
+			del self.plugin.roster.to_be_removed[account]
+			del self.plugin.roster.newlt_added[account]
 			self.plugin.roster.draw_roster()
 			self.init_accounts()
 
@@ -1378,13 +1371,8 @@ class Accounts_window:
 			sel = self.accounts_treeview.get_selection()
 			(model, iter) = sel.get_selected()
 			account = model.get_value(iter, 0)
-			#FIXME:
-			infos = self.plugin.accounts[account]
-			infos['accname'] = account
-			infos['jid'] = self.plugin.accounts[account]['name'] + \
-				'@' +  self.plugin.accounts[account]['hostname']
 			self.plugin.windows['account_modification'] = \
-				Account_modification_window(self.plugin, infos) # may it messes with this one
+				Account_modification_window(self.plugin, account) # may it messes with this one
 		else:
 			self.plugin.windows['account_modification'].window.present()
 
