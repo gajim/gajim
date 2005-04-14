@@ -63,6 +63,7 @@ import sys
 import Queue
 import sre
 import common.sleepy
+import check_for_new_version
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -990,7 +991,8 @@ class plugin:
 			self.systray = Systray(self)
 		if self.config['trayicon']:
 			self.show_systray()
-			
+
+		check_for_new_version.Check_for_new_version_dialog(self)
 		self.init_regexp()
 		
 		# get instances for windows/dialogs that will show_all()/hide()
