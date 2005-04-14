@@ -642,8 +642,6 @@ class Preferences_window:
 		if self.plugin.systray_capabilities:
 			st = self.plugin.config['trayicon']
 			self.trayicon_checkbutton.set_active(st)
-		else:
-			self.trayicon_checkbutton.set_sensitive(False)
 
 		#Save position
 		st = self.plugin.config['saveposition']
