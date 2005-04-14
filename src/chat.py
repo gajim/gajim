@@ -94,7 +94,7 @@ class Chat:
 				chat = 'Chat'
 			elif self.widget_name == 'groupchat_window':
 				chat = 'Groupchat'
-		if len(self.plugin.accounts.keys()) >= 2: # if we have 2 or more accounts
+		if len(gajim.connections) >= 2: # if we have 2 or more accounts
 			title = start + chat + ' (account: ' + self.account + ')'
 		else:
 			title = start + chat

@@ -22,7 +22,7 @@ import gtk.glade
 import pango
 import gobject
 import time
-
+from common import gajim
 from dialogs import *
 from chat import *
 from gtkgui import CellRendererImage

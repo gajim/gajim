@@ -25,9 +25,16 @@ import pango
 import gobject
 import os
 import sre
-global gajim
-import common.gajim as gajim
+from common import gajim
 import common.sleepy
+
+from common import i18n
+i18n.init()
+_ = i18n._
+APP = i18n.APP
+gtk.glade.bindtextdomain(APP, i18n.DIR)
+gtk.glade.textdomain(APP)
+
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -162,13 +169,6 @@ from roster_window import *
 from systray import *
 from dialogs import *
 from config import *
-
-from common import i18n
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE='gtkgui.glade'
 
@@ -313,12 +313,12 @@ class interface:
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
 			#play sound
-			if old_show < 2 and new_show > 1 and \
-				self.config['sound_contact_connected']:
+			if old_show < 2 and new_show > 1 and gajim.config.get( \
+				'sound_contact_connected'):
 				self.play_sound('sound_contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
-					not self.queues[account].has_key(jid) and \
-											not self.config['autopopup']:
+					not self.queues[account].has_key(jid) and not gajim.config.get( \
+						'autopopup'):
 					#FIXME:
 					#DOES NOT ALWAYS WORK WHY?
 					#I control nkour@lagaule in jabber
@@ -329,12 +329,12 @@ class interface:
 					# new message works
 					instance = Popup_window(self, 'Contact Online', jid, account)
 					self.roster.popup_windows.append(instance)
-			elif old_show > 1 and new_show < 2 and \
-				self.config['sound_contact_disconnected']:
+			elif old_show > 1 and new_show < 2 and gajim.config.get( \
+				'sound_contact_disconnected'):
 				self.play_sound('sound_contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
-							not self.queues[account].has_key(jid) and \
-											not self.config['autopopup']:
+					not self.queues[account].has_key(jid) and not gajim.config.get( \
+					'autopopup'):
 					instance = Popup_window(self, 'Contact Offline', jid, account)
 					self.roster.popup_windows.append(instance)
 				
@@ -349,7 +349,7 @@ class interface:
 		jid = array[0].split('/')[0]
 		if jid.find("@") <= 0:
 			jid = jid.replace('@', '')
-		if self.config['ignore_unknown_contacts'] and \
+		if gajim.config.get('ignore_unknown_contacts') and \
 			not self.roster.contacts[account].has_key(jid):
 			return
 
@@ -357,13 +357,13 @@ class interface:
 		if not self.windows[account]['chats'].has_key(jid) and \
 						not self.queues[account].has_key(jid):
 			first = True
-			if	not self.config['autopopup']:
+			if	not gajim.config.get('autopopup'):
 				instance = Popup_window(self, 'New Message', jid, account)
 				self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
-		if self.config['sound_first_message_received'] and first:
+		if gajim.config.get('sound_first_message_received') and first:
 			self.play_sound('sound_first_message_received')
-		if self.config['sound_next_message_received'] and not first:
+		if gajim.config.get('sound_next_message_received') and not first:
 			self.play_sound('sound_next_message_received')
 		
 	def handle_event_msgerror(self, account, array):
@@ -376,7 +376,7 @@ class interface:
 		
 	def handle_event_msgsent(self, account, array):
 		#('MSG', account, (jid, msg, keyID))
-		if self.config['sound_message_sent']:
+		if gajim.config.get('sound_message_sent'):
 			self.play_sound('sound_message_sent')
 		
 	def handle_event_subscribe(self, account, array):
@@ -430,22 +430,22 @@ class interface:
 		if self.windows['account_modification']:
 			self.windows['account_modification'].account_is_ok(array[1])
 		else:
-			self.accounts[name] = {'name': array[1], \
-				'hostname': array[0],\
-				'password': array[2],\
-				'resource': array[4],\
-				'priority': array[5],\
-				'use_proxy': array[6],\
-				'proxyhost': array[7], \
-				'proxyport': array[8]}
-			self.send('CONFIG', None, ('accounts', self.accounts, 'GtkGui'))
+			gajim.config.set_per('accounts', name, 'name', array[1])
+			gajim.config.set_per('accounts', name, 'hostname', array[0])
+			gajim.config.set_per('accounts', name, 'password', array[2])
+			gajim.config.set_per('accounts', name, 'resource', array[4])
+			gajim.config.set_per('accounts', name, 'priority', array[5])
+			gajim.config.set_per('accounts', name, 'use_proxy', array[6])
+			gajim.config.set_per('accounts', name, 'proxyhost', array[7])
+			gajim.config.set_per('accounts', name, 'proxyport', array[8])
 		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.queues[name] = {}
-		self.connected[name] = 0
+		gajim.connections[name].connected = 0
 		self.nicks[name] = array[1]
 		self.roster.groups[name] = {}
 		self.roster.contacts[name] = {}
 		self.sleeper_state[name] = 0
+		#FIXME: add missing to_be_deleted for ex
 		if self.windows.has_key('accounts'):
 			self.windows['accounts'].init_accounts()
 		self.roster.draw_roster()
@@ -458,7 +458,7 @@ class interface:
 		if array.has_key('NICKNAME'):
 			nick = array['NICKNAME']
 		if nick == '':
-			nick = self.accounts[account]['name']
+			nick = gajim.config.get_per('accounts', account, 'name')
 		self.nicks[account] = nick
 
 	def handle_event_vcard(self, account, array):
@@ -525,7 +525,7 @@ class interface:
 		if not self.sleeper.poll():
 			return 1
 		state = self.sleeper.getState()
-		for account in self.accounts.keys():
+		for account in gajim.connections:
 			if not self.sleeper_state[account]:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
@@ -535,14 +535,14 @@ class interface:
 				self.sleeper_state[account] = 1
 			elif state == common.sleepy.STATE_AWAY and \
 				self.sleeper_state[account] == 1 and \
-				self.config['autoaway']:
+				gajim.config.get('autoaway'):
 				#we go away
 				self.send('STATUS', account, ('away', 'auto away (idle)'))
 				self.sleeper_state[account] = 2
 			elif state == common.sleepy.STATE_XAWAY and (\
 				self.sleeper_state[account] == 2 or \
 				self.sleeper_state[account] == 1) and \
-				self.config['autoxa']:
+				gajim.config.get('autoxa'):
 				#we go extended away
 				self.send('STATUS', account, ('xa', 'auto away (idle)'))
 				self.sleeper_state[account] = 3
@@ -551,19 +551,17 @@ class interface:
 	def autoconnect(self):
 		"""auto connect at startup"""
 		ask_message = 0
-		for a in self.accounts.keys():
-			if self.accounts[a].has_key('autoconnect'):
-				if self.accounts[a]['autoconnect']:
-					ask_message = 1
-					break
+		for a in gajim.connections:
+			if gajim.config.get_per('accounts', a, 'autoconnect'):
+				ask_message = 1
+				break
 		if ask_message:
 			message = self.roster.get_status_message('online', 1)
 			if message == -1:
 				return
-			for a in self.accounts.keys():
-				if self.accounts[a].has_key('autoconnect'):
-					if self.accounts[a]['autoconnect']:
-						self.roster.send_status(a, 'online', message, 1)
+			for a in gajim.connections:
+				if gajim.config.get_per('accounts', a, 'autoconnect'):
+					self.roster.send_status(a, 'online', message, 1)
 		return 0
 
 	def show_systray(self):
@@ -642,7 +640,7 @@ class interface:
 	def init_regexp(self):
 		#initialize emoticons dictionary
 		self.emoticons = dict()
-		split_line = self.config['emoticons'].split('\t')
+		split_line = gajim.config.get('emoticons').split('\t')
 		for i in range(0, len(split_line)/2):
 			emot_file = split_line[2*i+1]
 			if not self.image_is_ok(emot_file):

@@ -25,6 +25,7 @@ import os
 import Queue
 import common.sleepy
 
+from common import gajim
 from tabbed_chat_window import *
 from groupchat_window import *
 from history_window import *
@@ -250,7 +251,7 @@ class Roster_window:
 			join_gc_menuitem.remove_submenu()
 		if new_message_menuitem.get_submenu():
 			new_message_menuitem.remove_submenu()
-		if len(self.plugin.accounts.keys()) > 0:
+		if len(gajim.connections) > 0:
 			new_message_menuitem.set_sensitive(True)
 			join_gc_menuitem.set_sensitive(True)
 			add_new_contact_menuitem.set_sensitive(True)
@@ -260,21 +261,21 @@ class Roster_window:
 			join_gc_menuitem.set_sensitive(False)
 			add_new_contact_menuitem.set_sensitive(False)
 			service_disco_menuitem.set_sensitive(False)
-		if len(self.plugin.accounts.keys()) >= 2: # 2 or more accounts? make submenus
+		if len(gajim.connections) >= 2: # 2 or more accounts? make submenus
 			#add
 			sub_menu = gtk.Menu()
 			add_new_contact_menuitem.set_submenu(sub_menu)
-			for account in self.plugin.accounts.keys():
+			for account in gajim.connections:
 				item = gtk.MenuItem(_('to ') + account + _(' account'))
 				sub_menu.append(item)
-				item.connect("activate", self.on_add_new_contact, account)
+				item.connect('activate', self.on_add_new_contact, account)
 			sub_menu.show_all()
 			#disco
 			sub_menu = gtk.Menu()
 			service_disco_menuitem.set_submenu(sub_menu)
-			for account in self.plugin.accounts.keys():
-				our_jid = self.plugin.accounts[account]['name'] + '@' +\
-					self.plugin.accounts[account]['hostname']
+			for account in gajim.connections:
+				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
+					gajim.config.get_per('accounts', account, 'hostname')
 				item = gtk.MenuItem(_('using ') + account + _(' account'))
 				sub_menu.append(item)
 				item.connect('activate', self.on_service_disco_menuitem_activate, account)
@@ -282,39 +283,43 @@ class Roster_window:
 			#join gc
 			sub_menu = gtk.Menu()
 			join_gc_menuitem.set_submenu(sub_menu)
-			for account in self.plugin.accounts.keys():
-				our_jid = self.plugin.accounts[account]['name'] + '@' +\
-					self.plugin.accounts[account]['hostname']
+			for account in gajim.connections:
+				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
+					gajim.config.get_per('accounts', account, 'hostname')
 				item = gtk.MenuItem(_('as ') + our_jid)
 				sub_menu.append(item)
-				item.connect("activate", self.on_join_gc_activate, account)
+				item.connect('activate', self.on_join_gc_activate, account)
 			sub_menu.show_all()
 			#new message
 			sub_menu = gtk.Menu()
 			new_message_menuitem.set_submenu(sub_menu)
-			for account in self.plugin.accounts.keys():
-				our_jid = self.plugin.accounts[account]['name'] + '@' +\
-					self.plugin.accounts[account]['hostname']
+			for account in gajim.connections:
+				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
+					gajim.config.get_per('accounts', account, 'hostname')
 				item = gtk.MenuItem(_('as ') + our_jid)
 				sub_menu.append(item)
-				item.connect('activate', self.on_new_message_menuitem_activate, account)
+				item.connect('activate', self.on_new_message_menuitem_activate, \
+					account)
 			sub_menu.show_all()
-		elif len(self.plugin.accounts.keys()) == 1: # one account
+		elif len(gajim.connections) == 1: # one account
 			#add
 			if not self.add_new_contact_handler_id:
 				self.add_new_contact_handler_id = add_new_contact_menuitem.connect(\
-				'activate', self.on_add_new_contact, self.plugin.accounts.keys()[0])
+				'activate', self.on_add_new_contact, gajim.connections.keys()[0])
 			#disco
 			if not self.service_disco_handler_id:
-				self.service_disco_handler_id = service_disco_menuitem.connect(\
-'activate', self.on_service_disco_menuitem_activate, self.plugin.accounts.keys()[0])
+				self.service_disco_handler_id = service_disco_menuitem.connect( \
+					'activate', self.on_service_disco_menuitem_activate, \
+					gajim.connections.keys()[0])
 			#join_gc
 			if not self.join_gc_handler_id:
-				self.join_gc_handler_id = join_gc_menuitem.connect(\
-					'activate', self.on_join_gc_activate, self.plugin.accounts.keys()[0])
+				self.join_gc_handler_id = join_gc_menuitem.connect( \
+					'activate', self.on_join_gc_activate, gajim.connections.keys()\
+					[0])
 			if not self.new_message_menuitem_handler_id:
-				self.new_message_menuitem_handler_id = new_message_menuitem.connect(\
-'activate', self.on_new_message_menuitem_activate, self.plugin.accounts.keys()[0])
+				self.new_message_menuitem_handler_id = new_message_menuitem. \
+					connect('activate', self.on_new_message_menuitem_activate, \
+					gajim.connections.keys()[0])
 
 	def draw_roster(self):
 		"""Clear and draw roster"""
@@ -526,6 +531,7 @@ class Roster_window:
 
 	def on_edit_account(self, widget, account):
 		if not self.plugin.windows.has_key('account_modification_window'):
+			#FIXME:
 			infos = self.plugin.accounts[account]
 			infos['accname'] = account
 			infos['jid'] = self.plugin.accounts[account]["name"] + \
@@ -696,8 +702,7 @@ class Roster_window:
 					self.plugin.systray.set_status('connecting')
 
 			save_pass = 0
-			if self.plugin.accounts[account].has_key('savepass'):
-				save_pass = self.plugin.accounts[account]['savepass']
+			save_pass = gajim.config.get_per('accounts', account, 'savepass')
 			if not save_pass and self.plugin.connected[account] < 2:
 				passphrase = ''
 				w = Passphrase_dialog(_('Enter your password for account %s') \
@@ -712,19 +717,19 @@ class Roster_window:
 					return
 				self.plugin.send('PASSPHRASE', account, passphrase)
 				if save:
-					self.plugin.accounts[account]['savepass'] = 1
-					self.plugin.accounts[account]['password'] = passphrase
+					gajim.config.set_per('accounts', account, 'savepass', True)
+					gajim.config.set_per('accounts', account, 'password', passphrase)
 
 			keyid = None
 			save_gpg_pass = 0
-			if self.plugin.accounts[account].has_key('savegpgpass'):
-				save_gpg_pass = self.plugin.accounts[account]['savegpgpass']
-			if self.plugin.accounts[account].has_key('keyid'):
-				keyid = self.plugin.accounts[account]['keyid']
+			save_gpg_pass = gajim.config.get_per('accounts', account, \
+				'savegpgpass')
+			keyid = gajim.config.get_per('accounts', account, 'keyid')
 			if keyid and self.plugin.connected[account] < 2 and \
 				gajim.config.get('usegpg'):
 				if save_gpg_pass:
-					passphrase = self.plugin.accounts[account]['gpgpassword']
+					passphrase = gajim.config.get_per('accounts', account, \
+						'gpgpassword')
 				else:
 					passphrase = ''
 					w = Passphrase_dialog(\
@@ -734,8 +739,10 @@ class Roster_window:
 					if passphrase == -1:
 						passphrase = ''
 					if save:
-						self.plugin.accounts[account]['savegpgpass'] = 1
-						self.plugin.accounts[account]['gpgpassword'] = passphrase
+						gajim.config.set_per('accounts', account, 'savegpgpass', True)
+						gajim.config.set_per('accounts', account, 'gpgpassword', \
+							passphrase)
+				#FIXME:
 				self.plugin.send('GPGPASSPHRASE', account, passphrase)
 		self.plugin.send('STATUS', account, (status, txt))
 		for room_jid in self.plugin.windows[account]['gc']:
@@ -769,7 +776,7 @@ class Roster_window:
 		active = self.status_combobox.get_active()
 		if active < 0:
 			return
-		accounts = self.plugin.accounts.keys()
+		accounts = gajim.connections.keys()
 		if len(accounts) == 0:
 			Error_dialog(_('You must create an account before connecting to jabber network.'))
 			self.update_status_comboxbox()
@@ -780,9 +787,9 @@ class Roster_window:
 			self.update_status_comboxbox()
 			return
 		for acct in accounts:
-			if self.plugin.accounts[acct].has_key('sync_with_global_status'):
-				if not self.plugin.accounts[acct]['sync_with_global_status']:
-					continue
+			if not gajim.config.get_per('accounts', acct, \
+				'sync_with_global_status'):
+				continue
 			self.send_status(acct, status, message)
 	
 	def update_status_comboxbox(self):
@@ -945,7 +952,7 @@ class Roster_window:
 		if self.plugin.systray_enabled:
 			self.window.hide()
 		else:
-			accounts = self.plugin.accounts.keys()
+			accounts = gajim.connections.keys()
 			get_msg = False
 			for acct in accounts:
 				if self.plugin.connected[acct]:
@@ -981,7 +988,7 @@ class Roster_window:
 		gtk.main_quit()
 
 	def on_quit_menuitem_activate(self, widget):
-		accounts = self.plugin.accounts.keys()
+		accounts = gajim.connections.keys()
 		get_msg = False
 		for acct in accounts:
 			if self.plugin.connected[acct]:
@@ -1139,7 +1146,7 @@ class Roster_window:
 		# Update the systray
 		if self.plugin.systray_enabled:
 			self.plugin.systray.set_img()
-		for account in self.plugin.accounts.keys():
+		for account in gajim.connected:
 			# Update opened chat windows
 			for jid in self.plugin.windows[account]['chats']:
 				if jid != 'tabbed':
@@ -1338,7 +1345,7 @@ class Roster_window:
 		self.to_be_removed = {}
 		self.popups_height = 0
 		self.popup_windows = []
-		for a in self.plugin.accounts.keys():
+		for a in gajim.connections:
 			self.contacts[a] = {}
 			self.groups[a] = {}
 			self.newly_added[a] = []
@@ -1416,6 +1423,6 @@ class Roster_window:
 
 		self.hidden_lines = gajim.config.get('hiddenlines').split('\t')
 		self.draw_roster()
-		if len(self.plugin.accounts) == 0: # if no account
+		if len(gajim.connections) == 0: # if no account
 			self.plugin.windows['account_modification'] = \
 				Account_modification_window(self.plugin, {})

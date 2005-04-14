@@ -170,10 +170,10 @@ class Preferences_window:
 	def on_reset_colors_and_fonts_button_clicked(self, widget):
 		gajim.config.set('accounttextcolor', \
 			gajim.config.get_default('accounttextcolor'))
-		gajim.config.set('grouptextcolor' \
+		gajim.config.set('grouptextcolor', \
 			gajim.config.get_default('grouptextcolor'))
 		gajim.config.set('usertextcolor', \
-			gajim.config.get_default('usertextcolor']
+			gajim.config.get_default('usertextcolor'))
 		gajim.config.set('accountbgcolor', \
 			gajim.config.get_default('accountbgcolor'))
 		gajim.config.set('groupbgcolor', gajim.config.get_default('groupbgcolor'))
@@ -259,7 +259,7 @@ class Preferences_window:
 	
 	def update_print_time(self):
 		"""Update time in Opened Chat Windows"""
-		for a in self.plugin.accounts.keys():
+		for a in gajim.connections:
 			if self.plugin.windows[a]['chats'].has_key('tabbed'):
 				self.plugin.windows[a]['chats']['tabbed'].update_print_time()
 			else:
@@ -302,7 +302,7 @@ class Preferences_window:
 
 	def update_text_tags(self):
 		"""Update color tags in Opened Chat Windows"""
-		for a in self.plugin.accounts.keys():
+		for a in gajim.connections:
 			if self.plugin.windows[a]['chats'].has_key('tabbed'):
 				self.plugin.windows[a]['chats']['tabbed'].update_tags()
 			else:
@@ -397,7 +397,7 @@ class Preferences_window:
 			else:
 				gajim.config.set('sound_' + sound_event, False)
 			gajim.config.set('sound_' + sound_event + '_file', \
-				model.get_value(iter, 2)
+				model.get_value(iter, 2))
 			iter = model.iter_next(iter)
 		self.plugin.save_config()
 
@@ -435,9 +435,9 @@ class Preferences_window:
 			iter = model.iter_next(iter)
 			i += 1
 			#FIXME: we need to remove options
-		while self.plugin.config.has_key('msg%s_name' % i):
-			del gajim.config.set('msg%i_name' % i]
-			del gajim.config.set('msg%i' % i]
+#		while self.plugin.config.has_key('msg%s_name' % i):
+#			del gajim.config.set('msg%i_name' % i)
+#			del gajim.config.set('msg%i' % i)
 			i += 1
 		self.plugin.save_config()
 
@@ -451,9 +451,9 @@ class Preferences_window:
 			iter = model.iter_next(iter)
 			i += 1
 			#FIXME: we need to remove options
-		while self.plugin.config.has_key('msg%s_name' % i):
-			del gajim.config.set('msg%i_name' % i]
-			del gajim.config.set('msg%i' % i]
+#		while self.plugin.config.has_key('msg%s_name' % i):
+#			del gajim.config.set('msg%i_name' % i)
+#			del gajim.config.set('msg%i' % i)
 			i += 1
 		self.plugin.save_config()
 
@@ -558,13 +558,13 @@ class Preferences_window:
 		events = {}
 		#events = {name : [use_it, file], name2 : [., .], ...}
 		#FIXME:
-		for key in self.plugin.config.keys():
-			if key.find('sound_') == 0:
-				if not self.plugin.config.has_key(key + '_file'):
-					continue
-				ev = key.replace('sound_', '')
-				events[ev] = [gajim.config.get(key), \
-					gajim.config.get(key + '_file')]
+#		for key in self.plugin.config.keys():
+#			if key.find('sound_') == 0:
+#				if not self.plugin.config.has_key(key + '_file'):
+#					continue
+#				ev = key.replace('sound_', '')
+#				events[ev] = [gajim.config.get(key), \
+#					gajim.config.get(key + '_file')]
 		model = self.sound_tree.get_model()
 		model.clear()
 		for ev in events:
@@ -648,11 +648,12 @@ class Preferences_window:
 		self.xml.get_widget('save_position_checkbutton').set_active(st)
 		
 		#Merge accounts
-		st = gajim.config.set('mergeaccounts')
+		st = gajim.config.get('mergeaccounts')
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
 		#iconset
-		list_style = os.listdir('plugins/gtkgui/iconsets/')
+		#FIXME: path
+		list_style = os.listdir('../data/iconsets/')
 		model = gtk.ListStore(gobject.TYPE_STRING)
 		self.iconset_combobox.set_model(model)
 		l = []
@@ -763,7 +764,8 @@ class Preferences_window:
 		#autopopupaway
 		st = gajim.config.get('autopopupaway')
 		self.auto_popup_away_checkbutton.set_active(st)
-		self.auto_popup_away_checkbutton.set_sensitive(gajim.config.set('autopopup'])
+		self.auto_popup_away_checkbutton.set_sensitive(gajim.config.get(\
+			'autopopup'))
 
 		#Ignore messages from unknown contacts
 		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
@@ -947,20 +949,20 @@ class Account_modification_window:
 			self.xml.get_widget('gpg_choose_button').set_sensitive(False)
 		else:
 			if infos.has_key('keyid'):
-			if infos['keyid'] and gajim.config.get('usegpg'):
-				gpg_key_label.set_text(infos['keyid'])
-				if infos.has_key('keyname'):
-					self.xml.get_widget('gpg_name_label').set_text(infos['keyname'])
-				gpg_save_password_checkbutton = \
-					self.xml.get_widget('gpg_save_password_checkbutton')
-				gpg_save_password_checkbutton.set_sensitive(True)
-				if infos.has_key('savegpgpass'):
-					gpg_save_password_checkbutton.set_active(infos['savegpgpass'])
-					if infos['savegpgpass']:
-						gpg_password_entry = self.xml.get_widget('gpg_password_entry')
-						gpg_password_entry.set_sensitive(True)
-						if infos.has_key('gpgpassword'):
-							gpg_password_entry.set_text(infos['gpgpassword'])
+				if infos['keyid'] and gajim.config.get('usegpg'):
+					gpg_key_label.set_text(infos['keyid'])
+					if infos.has_key('keyname'):
+						self.xml.get_widget('gpg_name_label').set_text(infos['keyname'])
+					gpg_save_password_checkbutton = \
+						self.xml.get_widget('gpg_save_password_checkbutton')
+					gpg_save_password_checkbutton.set_sensitive(True)
+					if infos.has_key('savegpgpass'):
+						gpg_save_password_checkbutton.set_active(infos['savegpgpass'])
+						if infos['savegpgpass']:
+							gpg_password_entry = self.xml.get_widget('gpg_password_entry')
+							gpg_password_entry.set_sensitive(True)
+							if infos.has_key('gpgpassword'):
+								gpg_password_entry.set_text(infos['gpgpassword'])
 		if infos.has_key('autoconnect'):
 			self.xml.get_widget('autoconnect_checkbutton').set_active(\
 				infos['autoconnect'])
@@ -1055,7 +1057,6 @@ class Account_modification_window:
 				#update variables
 				self.plugin.windows[name] = self.plugin.windows[self.account]
 				self.plugin.queues[name] = self.plugin.queues[self.account]
-				self.plugin.connected[name] = self.plugin.connected[self.account]
 				self.plugin.nicks[name] = self.plugin.nicks[self.account]
 				self.plugin.roster.groups[name] = \
 					self.plugin.roster.groups[self.account]
@@ -1081,19 +1082,32 @@ class Account_modification_window:
 				del self.plugin.nicks[self.account]
 				del self.plugin.roster.groups[self.account]
 				del self.plugin.roster.contacts[self.account]
-				del self.plugin.accounts[self.account]
 				del self.plugin.sleeper_state[self.account]
-				self.plugin.send('ACC_CHG', self.account, name)
-			self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-				'savepass': save_password, 'password': password, \
-				'resource': resource, 'priority' : priority, \
-				'autoconnect': autoconnect, 'use_proxy': use_proxy, 'proxyhost': \
-				proxyhost, 'proxyport': proxyport, 'keyid': keyID, \
-				'keyname': key_name, 'savegpgpass': save_gpg_password, \
-				'gpgpassword': gpg_password, 'sync_with_global_status': \
-				sync_with_global_status, 'no_log_for': self.infos['no_log_for']}
-			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
-				'GtkGui'))
+				gajim.connections[self.account].name = name
+				gajim.connections[name] = gajim.connections[self.account]
+				del gajim.connections[self.account]
+				gajim.config.del_per('accounts', self.account)
+				gajim.config.add_per('accounts', name)
+			
+			gajim.config.set_per('accounts', name, 'name', login)
+			gajim.config.set_per('accounts', name, 'hostname', hostname)
+			gajim.config.set_per('accounts', name, 'savepass', save_password)
+			gajim.config.set_per('accounts', name, 'password', password)
+			gajim.config.set_per('accounts', name, 'resource', resource)
+			gajim.config.set_per('accounts', name, 'priority', priority)
+			gajim.config.set_per('accounts', name, 'autoconnect', autoconnect)
+			gajim.config.set_per('accounts', name, 'use_proxy', use_proxy)
+			gajim.config.set_per('accounts', name, 'proxyhost', proxyhost)
+			gajim.config.set_per('accounts', name, 'proxyport', proxyport)
+			gajim.config.set_per('accounts', name, 'keyid', keyID)
+			gajim.config.set_per('accounts', name, 'keyname', key_name)
+			gajim.config.set_per('accounts', name, 'savegpgpass', \
+				save_gpg_password)
+			gajim.config.set_per('accounts', name, 'gpgpassword', gpg_password)
+			gajim.config.set_per('accounts', name, 'sync_with_global_status', \
+				sync_with_global_status)
+			gajim.config.set_per('accounts', name, 'no_log_for', \
+				self.infos['no_log_for'])
 			if save_password:
 				self.plugin.send('PASSPHRASE', name, password)
 			#refresh accounts window
@@ -1104,7 +1118,7 @@ class Account_modification_window:
 			self.window.destroy()
 			return
 		#if it's a new account
-		if name in self.plugin.accounts.keys():
+		if name in gajim.connections:
 			Error_dialog(_('An account already has this name'))
 			return
 		#if we neeed to register a new account
@@ -1112,21 +1126,30 @@ class Account_modification_window:
 			self.plugin.send('NEW_ACC', None, (hostname, login, password, name, \
 				resource, priority, use_proxy, proxyhost, proxyport))
 			return
-		self.plugin.accounts[name] = {'name': login, 'hostname': hostname,\
-			'savepass': save_password, 'password': password, 'resource': \
-			resource, 'priority' : priority, 'autoconnect': autoconnect, \
-			'use_proxy': use_proxy, 'proxyhost': proxyhost, \
-			'proxyport': proxyport, 'keyid': keyID, 'keyname': key_name, \
-			'savegpgpass': save_gpg_password, 'gpgpassword': gpg_password,\
-			'sync_with_global_status': 1, 'no_log_for': self.infos['no_log_for']}
-		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
-			'GtkGui'))
+		gajim.config.set_per('accounts', name, 'name', login)
+		gajim.config.set_per('accounts', name, 'hostname', hostname)
+		gajim.config.set_per('accounts', name, 'savepass', save_password)
+		gajim.config.set_per('accounts', name, 'password', password)
+		gajim.config.set_per('accounts', name, 'resource', resource)
+		gajim.config.set_per('accounts', name, 'priority', priority)
+		gajim.config.set_per('accounts', name, 'autoconnect', autoconnect)
+		gajim.config.set_per('accounts', name, 'use_proxy', use_proxy)
+		gajim.config.set_per('accounts', name, 'proxyhost', proxyhost)
+		gajim.config.set_per('accounts', name, 'proxyport', proxyport)
+		gajim.config.set_per('accounts', name, 'keyid', keyID)
+		gajim.config.set_per('accounts', name, 'keyname', key_name)
+		gajim.config.set_per('accounts', name, 'savegpgpass', \
+			save_gpg_password)
+		gajim.config.set_per('accounts', name, 'gpgpassword', gpg_password)
+		gajim.config.set_per('accounts', name, 'sync_with_global_status', True)
+		gajim.config.set_per('accounts', name, 'no_log_for', \
+			self.infos['no_log_for'])
 		if save_password:
 			self.plugin.send('PASSPHRASE', name, password)
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
 		self.plugin.queues[name] = {}
-		self.plugin.connected[name] = 0
+		gajim.config.connections[name].connected = 0
 		self.plugin.roster.groups[name] = {}
 		self.plugin.roster.contacts[name] = {}
 		self.plugin.roster.newly_added[name] = []
@@ -1184,15 +1207,23 @@ class Account_modification_window:
 		no_log_for = ''
 		if self.xml.get_widget('log_history_checkbutton').get_active():
 			no_log_for = acct
-		self.plugin.accounts[acct] = {'name': login, 'hostname': hostname,\
-			'savepass': save_password, 'password': password, 'resource': \
-			resource, 'priority' : priority, 'autoconnect': autoconnect, \
-			'use_proxy': use_proxy, 'proxyhost': proxyhost, \
-			'proxyport': proxyport, 'keyid': keyID, 'keyname': key_name, \
-			'savegpgpass': save_gpg_password, 'gpgpassword': gpg_password,\
-			'sync_with_global_status': 1, 'no_log_for': no_log_for}
-		self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
-			'GtkGui'))
+		gajim.config.set_per('accounts', name, 'name', login)
+		gajim.config.set_per('accounts', name, 'hostname', hostname)
+		gajim.config.set_per('accounts', name, 'savepass', save_password)
+		gajim.config.set_per('accounts', name, 'password', password)
+		gajim.config.set_per('accounts', name, 'resource', resource)
+		gajim.config.set_per('accounts', name, 'priority', priority)
+		gajim.config.set_per('accounts', name, 'autoconnect', autoconnect)
+		gajim.config.set_per('accounts', name, 'use_proxy', use_proxy)
+		gajim.config.set_per('accounts', name, 'proxyhost', proxyhost)
+		gajim.config.set_per('accounts', name, 'proxyport', proxyport)
+		gajim.config.set_per('accounts', name, 'keyid', keyID)
+		gajim.config.set_per('accounts', name, 'keyname', key_name)
+		gajim.config.set_per('accounts', name, 'savegpgpass', \
+			save_gpg_password)
+		gajim.config.set_per('accounts', name, 'gpgpassword', gpg_password)
+		gajim.config.set_per('accounts', name, 'sync_with_global_status', True)
+		gajim.config.set_per('accounts', name, 'no_log_for', no_log_for)
 
 	def on_edit_details_button_clicked(self, widget):
 		if not self.plugin.windows.has_key(self.account):
@@ -1208,8 +1239,7 @@ class Account_modification_window:
 			self.plugin.send('ASK_VCARD', self.account, jid)
 	
 	def on_gpg_choose_button_clicked(self, widget, data=None):
-		#FIXME:
-		secret_keys = connection.ask_gpg_secrete_keys()
+		secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
 		if not secret_keys:
 			Error_dialog(_('error contacting %s') % service)
 			return
@@ -1299,10 +1329,10 @@ class Accounts_window:
 		self.delete_button.set_sensitive(False)
 		model = self.accounts_treeview.get_model()
 		model.clear()
-		for account in self.plugin.accounts:
+		for account in gajim.connections:
 			iter = model.append()
-			model.set(iter, 0, account, 1,\
-				self.plugin.accounts[account]['hostname'])
+			model.set(iter, 0, account, 1, gajim.config.get_per('accounts', \
+				account, 'hostname'))
 
 	def on_accounts_treeview_cursor_changed(self, widget):
 		"""Activate delete and modify buttons when a row is selected"""
@@ -1327,14 +1357,12 @@ class Accounts_window:
 		if dialog.get_response() == gtk.RESPONSE_YES:
 			if self.plugin.connected[account]:
 				self.plugin.send('STATUS', account, ('offline', 'offline'))
-			del self.plugin.accounts[account]
-			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
-				'GtkGui'))
+			del gajim.connections[account]
 			del self.plugin.windows[account]
 			del self.plugin.queues[account]
-			del self.plugin.connected[account]
 			del self.plugin.roster.groups[account]
 			del self.plugin.roster.contacts[account]
+			#FIXME: missing things: to_be_deleted for ex
 			self.plugin.roster.draw_roster()
 			self.init_accounts()
 
@@ -1345,6 +1373,7 @@ class Accounts_window:
 			sel = self.accounts_treeview.get_selection()
 			(model, iter) = sel.get_selected()
 			account = model.get_value(iter, 0)
+			#FIXME:
 			infos = self.plugin.accounts[account]
 			infos['accname'] = account
 			infos['jid'] = self.plugin.accounts[account]['name'] + \
@@ -1356,9 +1385,11 @@ class Accounts_window:
 
 	def on_sync_with_global_status_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			self.plugin.accounts[account]['sync_with_global_status'] = 0
+			gajim.config.set_per('accounts', account, 'sync_with_global_status', \
+				False)
 		else:
-			self.plugin.accounts[account]['sync_with_global_status'] = 1
+			gajim.config.set_per('accounts', account, 'sync_with_global_status', \
+				True)
 		
 	def __init__(self, plugin):
 		self.plugin = plugin
@@ -1795,8 +1826,7 @@ class Service_discovery_window:
 		if not iter :
 			return
 		service = model.get_value(iter, 1)
-		#FIXME:
-		infos = connection.ask_register_agent_info(service)
+		infos = gajim.connections[self.account].ask_register_agent_info(service)
 		if not infos.has_key('instructions'):
 			Error_dialog(_('error contacting %s') % service)
 		else:
@@ -1867,7 +1897,8 @@ class Service_discovery_window:
 		self.address_comboboxentry.set_model(liststore)
 		self.address_comboboxentry.set_text_column(0)
 		self.latest_addresses = gajim.config.get('latest_disco_addresses').split()
-		server_address = self.plugin.accounts[self.account]['hostname']
+		server_address = gajim.config.get_per('accounts', self.account, \
+			'hostname')
 		if server_address in self.latest_addresses:
 			self.latest_addresses.remove(server_address)
 		self.latest_addresses.insert(0, server_address)

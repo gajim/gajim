@@ -23,6 +23,7 @@ import pango
 import gobject
 import time
 
+from common import gajim
 from dialogs import *
 from history_window import *
 from chat import *

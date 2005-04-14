@@ -17,7 +17,7 @@
 ##
 
 APP='gajim'
-DIR='po'
+DIR='../po'
 
 import locale, gettext
 

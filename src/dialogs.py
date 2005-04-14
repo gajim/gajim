@@ -20,6 +20,7 @@
 import gtk
 import gtk.glade
 import gobject
+from common import gajim
 from common import i18n
 _ = i18n._
 APP = i18n.APP
@@ -55,23 +56,19 @@ class Vcard_information_window:
 			self.plugin.send('UPDUSER', self.account, (self.user.jid, \
 				self.user.name, self.user.groups))
 		#log history ?
-		account_info = self.plugin.accounts[self.account]
 		oldlog = 1
-		no_log_for = []
-		if account_info.has_key('no_log_for'):
-			no_log_for = account_info['no_log_for'].split()
-			if self.user.jid in no_log_for:
-				oldlog = 0
+		no_log_for = gajim.config.get_per('accounts', self.account, 'no_log_for')\
+			.split()
+		if self.user.jid in no_log_for:
+			oldlog = 0
 		log = self.xml.get_widget('log_checkbutton').get_active()
 		if not log and not self.user.jid in no_log_for:
 			no_log_for.append(self.user.jid)
 		if log and self.user.jid in no_log_for:
 			no_log_for.remove(self.user.jid)
 		if oldlog != log:
-			account_info['no_log_for'] = ' '.join(no_log_for)
-			self.plugin.accounts[self.account] = account_info
-			self.plugin.send('CONFIG', None, ('accounts', self.plugin.accounts, \
-				'Gtkgui'))
+			gajim.config.set_per('accounts', self.account, 'no_log_for', \
+				' '.join(no_log_for))
 		self.window.destroy()
 
 	def set_value(self, entry_name, value):
@@ -105,11 +102,10 @@ class Vcard_information_window:
 		else:
 			self.xml.get_widget('ask_label').set_text('None')
 		self.xml.get_widget('nickname_entry').set_text(self.user.name)
-		account_info = self.plugin.accounts[self.account]
 		log = 1
-		if account_info.has_key('no_log_for'):
-			if self.user.jid in account_info['no_log_for'].split(' '):
-				log = 0
+		if self.user.jid in gajim.config.get_per('accounts', account, \
+			'no_log_for').split(' '):
+			log = 0
 		self.xml.get_widget('log_checkbutton').set_active(log)
 		resources = self.user.resource + ' (' + str(self.user.priority) + ')'
 		if not self.user.status:
@@ -165,7 +161,7 @@ class Vcard_information_window:
 		if vcard.has_key('NICKNAME'):
 			nick = vcard['NICKNAME']
 		if nick == '':
-			nick = self.plugin.accounts[self.account]['name']
+			nick = gajim.config.get_per('accounts', self.account, 'name')
 		self.plugin.nicks[self.account] = nick
 		self.plugin.send('VCARD', self.account, vcard)
 
@@ -738,9 +734,9 @@ class New_message_dialog:
 		self.window = self.xml.get_widget('new_message_dialog')
 		self.jid_entry = self.xml.get_widget('jid_entry')
 
-		our_jid = self.plugin.accounts[account]['name'] + '@' +\
-					self.plugin.accounts[account]['hostname']
-		if len(self.plugin.accounts) > 1:
+		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
+			gajim.config.get_per('accounts', self.account, 'hostname')
+		if len(gajim.config.connections) > 1:
 			title = 'New Message as ' + our_jid
 		else:
 			title = 'New Message'

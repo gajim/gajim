@@ -21,6 +21,7 @@ import gtk
 import gtk.glade
 import time
 
+from common import gajim
 from common import i18n
 
 _ = i18n._
