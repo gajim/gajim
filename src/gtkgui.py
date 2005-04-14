@@ -291,7 +291,8 @@ class interface:
 						self.roster.to_be_removed[account].remove(user1.jid)
 					gobject.timeout_add(5000, self.roster.remove_newly_added, \
 						user1.jid, account)
-				if old_show > 1 and new_show == 0 and self.connected[account] > 1:
+				if old_show > 1 and new_show == 0 and gajim.connections[account].\
+					connected > 1:
 					if not user1.jid in self.roster.to_be_removed[account]:
 						self.roster.to_be_removed[account].append(user1.jid)
 					if user1.jid in self.roster.newly_added[account]:

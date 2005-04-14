@@ -153,8 +153,8 @@ class Vcard_information_window:
 		return vcard
 
 	def on_publish_button_clicked(self, widget):
-		if self.plugin.connected[self.account] < 2:
-			Error_dialog(_("You must be connected to publish your informations"))
+		if gajim.connections[self.account].connected < 2:
+			Error_dialog(_('You must be connected to publish your informations'))
 			return
 		vcard = self.make_vcard()
 		nick = ''
@@ -169,7 +169,7 @@ class Vcard_information_window:
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
 			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
 			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
-		if self.plugin.connected[self.account] > 1:
+		if gajim.connections[self.account].connected > 1:
 			# clear all entries
 			for e in entries:
 				self.xml.get_widget(e + '_entry').set_text('')
@@ -434,7 +434,7 @@ class Change_status_message_dialog:
 class Add_new_contact_window:
 	"""Class for Add_new_contact_window"""
 	def __init__(self, plugin, account, jid=None):
-		if plugin.connected[account] < 2:
+		if gajim.connections[account].connected < 2:
 			Error_dialog(_('You must be connected to add a contact'))
 			return
 		self.plugin = plugin
@@ -659,7 +659,7 @@ class subscription_request_window:
 
 class Join_groupchat_window:
 	def __init__(self, plugin, account, server='', room = ''):
-		if plugin.connected[account] < 2:
+		if gajim.connections[account].connected < 2:
 			Error_dialog(_('You must be connected to join a groupchat'))
 			return
 		self.plugin = plugin
@@ -725,7 +725,7 @@ class Join_groupchat_window:
 
 class New_message_dialog:
 	def __init__(self, plugin, account):
-		if plugin.connected[account] < 2:
+		if gajim.connections[account].connected < 2:
 			Error_dialog(_('You must be connected to send a message to a contact'))
 			return
 		self.plugin = plugin
@@ -778,7 +778,7 @@ class New_message_dialog:
 
 class Change_password_dialog:
 	def __init__(self, plugin, account):
-		if plugin.connected[account] < 2:
+		if gajim.connections[account].connected < 2:
 			Error_dialog(_('You must be connected to change your password'))
 			return
 		self.plugin = plugin

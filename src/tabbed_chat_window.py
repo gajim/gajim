@@ -176,7 +176,7 @@ class Tabbed_chat_window(Chat):
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return False
-			if self.plugin.connected[self.account] < 2: #we are not connected
+			if gajim.connections[self.account].connected < 2: #we are not connected
 				Error_dialog(_('You are not connected, so you cannot send a message'))
 				return True
 			message_buffer = widget.get_buffer()

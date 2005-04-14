@@ -110,7 +110,7 @@ class Roster_window:
 			return
 		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',\
 			'invisible']
-		status = statuss[self.plugin.connected[account]]
+		status = statuss[gajim.connections[account].connected]
 		model.append(None, (self.pixbufs[status], account, 'account', account,\
 			account, False))
 
@@ -692,18 +692,18 @@ class Roster_window:
 
 	def send_status(self, account, status, txt, autoconnect=0):
 		if status != 'offline':
-			if self.plugin.connected[account] < 2:
+			if gajim.connections[account].connected < 2:
 				model = self.tree.get_model()
 				accountIter = self.get_account_iter(account)
 				if accountIter:
 					model.set_value(accountIter, 0, self.pixbufs['connecting'])
-				self.plugin.connected[account] = 1
+				gajim.connections[account].connected = 1
 				if self.plugin.systray_enabled:
 					self.plugin.systray.set_status('connecting')
 
 			save_pass = 0
 			save_pass = gajim.config.get_per('accounts', account, 'savepass')
-			if not save_pass and self.plugin.connected[account] < 2:
+			if not save_pass and gajim.connections[account].connected < 2:
 				passphrase = ''
 				w = Passphrase_dialog(_('Enter your password for account %s') \
 					% account, 'Save password', autoconnect)
@@ -711,7 +711,7 @@ class Roster_window:
 				if passphrase == -1:
 					if accountIter:
 						model.set_value(accountIter, 0, self.pixbufs['offline'])
-					self.plugin.connected[account] = 0
+					gajim.connections[account].connected = 0
 					self.plugin.systray.set_status('offline')
 					self.update_status_comboxbox()
 					return
@@ -725,7 +725,7 @@ class Roster_window:
 			save_gpg_pass = gajim.config.get_per('accounts', account, \
 				'savegpgpass')
 			keyid = gajim.config.get_per('accounts', account, 'keyid')
-			if keyid and self.plugin.connected[account] < 2 and \
+			if keyid and gajim.connections[account].connected < 2 and \
 				gajim.config.get('usegpg'):
 				if save_gpg_pass:
 					passphrase = gajim.config.get_per('accounts', account, \
@@ -796,8 +796,9 @@ class Roster_window:
 		#table to change index in plugin.connected to index in combobox
 		table = {0:5, 1:5, 2:0, 3:1, 4:2, 5:3, 6:4}
 		maxi = 0
-		if len(self.plugin.connected.values()):
-			maxi = max(self.plugin.connected.values())
+		for account in gajim.connections:
+			if gajim.connections[account].connected > maxi:
+				maxi = gajim.connections[account].connected
 		#temporarily block signal in order not to send status that we show
 		#in the combobox
 		self.status_combobox.handler_block(self.id_signal_cb)
@@ -832,7 +833,7 @@ class Roster_window:
 					luser_copy.append(user)
 				for user in luser_copy:
 					self.chg_user_status(user, 'offline', 'Disconnected', account)
-		self.plugin.connected[account] = statuss.index(status)
+		gajim.connections[account].connected = statuss.index(status)
 		self.update_status_comboxbox()
 
 	def new_chat(self, user, account):
@@ -881,7 +882,7 @@ class Roster_window:
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
 		if (autopopup == 0 or ( not autopopupaway and \
-			self.plugin.connected[account] > 2)) and not \
+			gajim.connections[account].connected > 2)) and not \
 			self.plugin.windows[account]['chats'].has_key(jid):
 			#We save it in a queue
 			if not self.plugin.queues[account].has_key(jid):
@@ -955,7 +956,7 @@ class Roster_window:
 			accounts = gajim.connections.keys()
 			get_msg = False
 			for acct in accounts:
-				if self.plugin.connected[acct]:
+				if gajim.connections[acct].connected:
 					get_msg = True
 					break
 			if get_msg:
@@ -963,7 +964,7 @@ class Roster_window:
 				if message == -1:
 					message = ''
 				for acct in accounts:
-					if self.plugin.connected[acct]:
+				if gajim.connections[acct].connected:
 						self.send_status(acct, 'offline', message)
 			self.quit_gtkgui_plugin()
 		return True # do NOT destory the window
@@ -991,7 +992,7 @@ class Roster_window:
 		accounts = gajim.connections.keys()
 		get_msg = False
 		for acct in accounts:
-			if self.plugin.connected[acct]:
+			if gajim.connections[acct].connected:
 				get_msg = True
 				break
 		if get_msg:
@@ -999,7 +1000,7 @@ class Roster_window:
 			if message == -1:
 				return
 			for acct in accounts:
-				if self.plugin.connected[acct]:
+				if gajim.connections[acct].connected:
 					self.send_status(acct, 'offline', message)
 		self.quit_gtkgui_plugin()
 
@@ -1146,7 +1147,7 @@ class Roster_window:
 		# Update the systray
 		if self.plugin.systray_enabled:
 			self.plugin.systray.set_img()
-		for account in gajim.connected:
+		for account in gajim.connections:
 			# Update opened chat windows
 			for jid in self.plugin.windows[account]['chats']:
 				if jid != 'tabbed':

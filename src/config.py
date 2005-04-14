@@ -984,8 +984,9 @@ class Account_modification_window:
 		priority = self.xml.get_widget('priority_spinbutton').get_value_as_int()
 		new_account_checkbutton = self.xml.get_widget('new_account_checkbutton')
 		name = self.xml.get_widget('name_entry').get_text()
-		if self.plugin.connected.has_key(self.account):
-			if name != self.account and self.plugin.connected[self.account] != 0:
+		if gajim.connections.has_key(self.account):
+			if name != self.account and gajim.connections[self.account].connected \
+				!= 0:
 				Error_dialog(_('You must be offline to change the account\'s name'))
 				return
 		jid = self.xml.get_widget('jid_entry').get_text()
@@ -1078,7 +1079,6 @@ class Account_modification_window:
 						list[0] = name
 				del self.plugin.windows[self.account]
 				del self.plugin.queues[self.account]
-				del self.plugin.connected[self.account]
 				del self.plugin.nicks[self.account]
 				del self.plugin.roster.groups[self.account]
 				del self.plugin.roster.contacts[self.account]
@@ -1230,7 +1230,7 @@ class Account_modification_window:
 			Error_dialog(_('You must first create your account before editing your information'))
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
-		if self.plugin.connected[self.account] < 2:
+		if gajim.connections[self.account].connected < 2:
 			Error_dialog(_('You must be connected to edit your information'))
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
@@ -1355,7 +1355,7 @@ class Accounts_window:
 		account = model.get_value(iter, 0)
 		dialog = Confirmation_dialog(_('Are you sure you want to remove account (%s) ?') % account)
 		if dialog.get_response() == gtk.RESPONSE_YES:
-			if self.plugin.connected[account]:
+			if gajim.connections[account].connected:
 				self.plugin.send('STATUS', account, ('offline', 'offline'))
 			del gajim.connections[account]
 			del self.plugin.windows[account]
@@ -1866,8 +1866,8 @@ class Service_discovery_window:
 		self.plugin.save_config()
 	
 	def __init__(self, plugin, account):
-		if plugin.connected[account] < 2:
-			Error_dialog(_("You must be connected to browse services"))
+		if gajim.connections[account].connected < 2:
+			Error_dialog(_('You must be connected to browse services'))
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')
