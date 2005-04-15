@@ -128,7 +128,10 @@ class Config:
 			'gpgpassword': [ opt_str, '' ],
 			'sync_with_global_status': [ opt_bool, 'True' ],
 			'no_log_for': [ opt_str, '' ],
-			} , {}),
+		}, {}),
+		'statusmsg': ({
+			'message': [ opt_str, '' ],
+		}, {}),
 	}
 	
 	def foreach(self, func):

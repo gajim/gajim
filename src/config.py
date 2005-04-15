@@ -427,37 +427,22 @@ class Preferences_window:
 			gajim.config.get('autoxatime')*60)
 		self.plugin.save_config()
 
-	def on_msg_treemodel_row_changed(self, model, path, iter):
+	def save_status_messages(self, model):
+		for msg in gajim.config.get_per('statusmsg'):
+			gajim.config.del_per('statusmsg', msg)
 		iter = model.get_iter_first()
-		i = 0
 		while iter:
-			# FIXME: we need to add options
-			gajim.config.set('msg%i_name' % i, model.get_value(iter, 0))
-			gajim.config.set('msg%i' % i, model.get_value(iter, 1))
+			gajim.config.add_per('statusmsg', model.get_value(iter, 0))
+			gajim.config.set_per('statusmsg', model.get_value(iter, 0), 'message',\
+				model.get_value(iter, 1))
 			iter = model.iter_next(iter)
-			i += 1
-			#FIXME: we need to remove options
-#		while self.plugin.config.has_key('msg%s_name' % i):
-#			del gajim.config.set('msg%i_name' % i)
-#			del gajim.config.set('msg%i' % i)
-			i += 1
 		self.plugin.save_config()
 
+	def on_msg_treemodel_row_changed(self, model, path, iter):
+		self.save_status_messages(model)
+
 	def on_msg_treemodel_row_deleted(self, model, path, iter):
-		iter = model.get_iter_first()
-		i = 0
-		while iter:
-			# FIXME: we need to add options
-			gajim.config.set('msg%i_name' % i, model.get_value(iter, 0))
-			gajim.config.set('msg%i' % i, model.get_value(iter, 1))
-			iter = model.iter_next(iter)
-			i += 1
-			#FIXME: we need to remove options
-#		while self.plugin.config.has_key('msg%s_name' % i):
-#			del gajim.config.set('msg%i_name' % i)
-#			del gajim.config.set('msg%i' % i)
-			i += 1
-		self.plugin.save_config()
+		self.save_status_messages(model)
 
 	def on_links_open_with_combobox_changed(self, widget):
 		if widget.get_active() == 2:
@@ -502,16 +487,13 @@ class Preferences_window:
 
 
 	def fill_msg_treeview(self):
-		i = 0
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
 		model = self.msg_tree.get_model()
 		model.clear()
-		#FIXME:
-		while gajim.config.exist('msg%s_name' % i):
+		for msg in gajim.config.get_per('statusmsg'):
 			iter = model.append()
-			model.set(iter, 0, gajim.config.get('msg%s_name' % i), 1, \
-				gajim.config.get('msg%s' % i))
-			i += 1
+			model.set(iter, 0, msg, 1, gajim.config.get_per('statusmsg', msg, \
+				'message'))
 
 	def on_msg_cell_edited(self, cell, row, new_text):
 		model = self.msg_tree.get_model()
