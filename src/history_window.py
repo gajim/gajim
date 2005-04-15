@@ -52,9 +52,11 @@ class History_window:
 		end = 50
 		if end > self.nb_line:
 			end = self.nb_line
-		#FIXME:
-#		self.plugin.send('LOG_GET_RANGE', None, (self.jid, 0, end))
-		self.num_begin = self.nb_line
+		nb, lines = gajim.logger.read(self.jid, 0, end)
+		self.set_buttons_sensitivity(nb)
+		for line in lines:
+			self.new_line(line[0], line[1], line[2:])
+		self.num_begin = 0
 
 	def on_previous_button_clicked(self, widget):
 		start, end = self.history_buffer.get_bounds()
@@ -69,9 +71,11 @@ class History_window:
 		end = begin + 50
 		if end > self.nb_line:
 			end = self.nb_line
-		#FIXME:
-#		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, end))
-		self.num_begin = self.nb_line
+		nb, lines = gajim.logger.read(self.jid, begin, end)
+		self.set_buttons_sensitivity(nb)
+		for line in lines:
+			self.new_line(line[0], line[1], line[2:])
+		self.num_begin = begin
 
 	def on_forward_button_clicked(self, widget):
 		start, end = self.history_buffer.get_bounds()
@@ -86,9 +90,11 @@ class History_window:
 		end = begin + 50
 		if end > self.nb_line:
 			end = self.nb_line
-		#FIXME:
-#		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, end))
-		self.num_begin = self.nb_line
+		nb, lines = gajim.logger.read(self.jid, begin, end)
+		self.set_buttons_sensitivity(nb)
+		for line in lines:
+			self.new_line(line[0], line[1], line[2:])
+		self.num_begin = begin
 
 	def on_latest_button_clicked(self, widget):
 		start, end = self.history_buffer.get_bounds()
@@ -100,50 +106,46 @@ class History_window:
 		begin = self.nb_line - 50
 		if begin < 0:
 			begin = 0
-		#FIXME:
-#		self.plugin.send('LOG_GET_RANGE', None, (self.jid, begin, self.nb_line))
-		self.num_begin = self.nb_line
+		nb, lines = gajim.logger.read(self.jid, begin, self.nb_line)
+		self.set_buttons_sensitivity(nb)
+		for line in lines:
+			self.new_line(line[0], line[1], line[2:])
+		self.num_begin = begin
 
-	def new_line(self, infos):
-		"""write a new line"""
-		#infos = [num_line, date, type, data]
-		if infos[0] < self.num_begin:
-			self.num_begin = infos[0]
-		if infos[0] == 50:
+	def set_buttons_sensitivity(self, nb):
+		if nb == 50:
 			self.earliest_button.set_sensitive(False)
 			self.previous_button.set_sensitive(False)
-		if infos[0] == self.nb_line:
+		if nb == self.nb_line:
 			self.forward_button.set_sensitive(False)
 			self.latest_button.set_sensitive(False)
+
+	def new_line(self, date, type, data):
+		"""write a new line"""
 		start_iter = self.history_buffer.get_start_iter()
 		end_iter = self.history_buffer.get_end_iter()
-		tim = time.strftime("[%x %X] ", time.localtime(float(infos[1])))
+		tim = time.strftime('[%x %X] ', time.localtime(float(date)))
 		self.history_buffer.insert(start_iter, tim)
-		if infos[2] == 'recv':
-			msg = ':'.join(infos[3][0:])
+		if type == 'recv':
+			msg = ':'.join(data[0:])
 			msg = msg.replace('\\n', '\n')
 			self.history_buffer.insert_with_tags_by_name(start_iter, msg, \
 				'incoming')
-		elif infos[2] == 'sent':
-			msg = ':'.join(infos[3][0:])
+		elif type == 'sent':
+			msg = ':'.join(data[0:])
 			msg = msg.replace('\\n', '\n')
 			self.history_buffer.insert_with_tags_by_name(start_iter, msg, \
 				'outgoing')
 		else:
-			msg = ':'.join(infos[3][1:])
+			msg = ':'.join(data[1:])
 			msg = msg.replace('\\n', '\n')
 			self.history_buffer.insert_with_tags_by_name(start_iter, \
-				_('Status is now: ') + infos[3][0]+': ' + msg, 'status')
+				_('Status is now: ') + data[0]+': ' + msg, 'status')
 	
-	def set_nb_line(self, nb_line):
-		self.nb_line = nb_line
-		self.num_begin = nb_line
-
 	def __init__(self, plugin, jid):
 		self.plugin = plugin
 		self.jid = jid
-		self.nb_line = 0
-		self.num_begin = 0
+		self.nb_line = gajim.logger.get_nb_line(jid)
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
 		self.history_buffer = xml.get_widget('history_textview').get_buffer()
@@ -161,6 +163,12 @@ class History_window:
 		tagStatus = self.history_buffer.create_tag('status')
 		color = gajim.config.get('statusmsgcolor')
 		tagStatus.set_property('foreground', color)
+		begin = 0
+		if self.nb_line > 50:
+			begin = self.nb_line - 50
+		nb, lines = gajim.logger.read(self.jid, begin, self.nb_line)
+		self.set_buttons_sensitivity(nb)
+		for line in lines:
+			self.new_line(line[0], line[1], line[2:])
+		self.num_begin = begin
 		self.window.show_all()
-		#FIXME:
-#		self.plugin.send('LOG_NB_LINE', None, jid)

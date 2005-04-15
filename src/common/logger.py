@@ -16,169 +16,87 @@
 ## GNU General Public License for more details.
 ##
 
-def usage():
-	#TODO: use i18n
-	print "usage :", sys.argv[0], ' [OPTION]'
-	print "  -p\tport on whitch the sock plugin listen"
-	print "  -h, --help\tdisplay this help and exit"
-
-if __name__ == "__main__":
-	import getopt, sys, pickle, socket
-	try:
-		opts, args = getopt.getopt(sys.argv[1:], "p:h", ["help"])
-	except getopt.GetoptError:
-		# print help information and exit:
-		usage()
-		sys.exit(2)
-	port = 8255
-	for o, a in opts:
-		if o == '-p':
-			port = a
-		if o in ("-h", "--help"):
-			usage()
-			sys.exit()
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	try:
-		sock.connect(('', 8255))
-	except:
-		#TODO: use i18n
-		print "unable to connect to localhost on port "+str(port)
-	else:
-		evp = pickle.dumps(('EXEC_PLUGIN', '', 'logger'))
-		sock.send('<'+evp+'>')
-		sock.close()
-	sys.exit()
-
 import os
 import time
-import common.optparser
+import common.gajim
 from common import i18n
-LOGPATH = os.path.expanduser("~/.gajim/logs/")
+LOGPATH = os.path.expanduser('~/.gajim/logs/')
 _ = i18n._
 
-class plugin:
-	def read_queue(self):
-		while 1:
-			while self.queueIN.empty() == 0:
-				if self.config.has_key('lognotsep'):
-					lognotsep = self.config['lognotsep']
-				else:
-					lognotsep = 1
-				if self.config.has_key('lognotusr'):
-					lognotusr = self.config['lognotusr']
-				else:
-					lognotusr = 1
-				tim = time.time()
-				
-				ev = self.queueIN.get()
-				if ev[0] == 'QUIT':
-					print _("plugin logger stopped")
-					return
-				elif ev[0] == 'NOTIFY':
-					jid = ev[2][0].split('/')[0]
-					if jid in self.no_log_for[ev[1]]:
-						break
-					if ev[1] in self.no_log_for[ev[1]]:
-						break
-					status = ev[2][2]
-					if not status:
-						status = ""
-					status = status.replace('\n', '\\n')
-					if lognotsep == 1:
-						fic = open(LOGPATH + "notify.log", "a")
-						fic.write("%s:%s:%s:%s\n" % (tim, ev[2][0] + '/' + ev[2][3], \
-							ev[2][1], status))
-						fic.close()
-					if lognotusr == 1:
-						fic = open(LOGPATH + jid, "a")
-						fic.write("%s:%s:%s:%s\n" % (tim, ev[2][0] + '/' + ev[2][3], \
-							ev[2][1], status))
-						fic.close()
-				elif ev[0] == 'MSG':
-					jid = ev[2][0].split('/')[0]
-					if jid in self.no_log_for[ev[1]]:
-						break
-					if ev[1] in self.no_log_for[ev[1]]:
-						break
-					if not ev[2][1]:
-						msg = ''
-					else:
-						msg = ev[2][1].replace('\n', '\\n')
-					fic = open(LOGPATH + jid, "a")
-					t = time.mktime(ev[2][2])
-					fic.write("%s:recv:%s\n" % (t, msg))
-					fic.close()
-				elif ev[0] == 'MSGSENT':
-					jid = ev[2][0].split('/')[0]
-					if jid in self.no_log_for[ev[1]]:
-						break
-					if ev[1] in self.no_log_for[ev[1]]:
-						break
-					msg = ev[2][1].replace('\n', '\\n')
-					fic = open(LOGPATH + jid, "a")
-					fic.write("%s:sent:%s\n" % (tim, msg))
-					fic.close()
-				elif ev[0] == 'GC_MSG':
-					msg = ev[2][1].replace('\n', '\\n')
-					jids = ev[2][0].split('/')
-					jid = jids[0]
-					nick = ''
-					if len(jids) > 1:
-						nick = ev[2][0].split('/')[1]
-					fic = open(LOGPATH + jid, "a")
-					t = time.mktime(ev[2][2])
-					fic.write("%s:recv:%s:%s\n" % (t, nick, msg))
-					fic.close()
-				elif ev[0] == 'CONFIG':
-					if ev[2][0] == 'Logger':
-						self.config = ev[2][1]
-					if ev[2][0] == 'accounts':
-						accounts = ev[2][1]
-						self.no_log_for = {}
-						for acct in accounts.keys():
-							self.no_log_for[acct] = []
-							if accounts[acct].has_key('no_log_for'):
-								self.no_log_for[acct] = \
-									accounts[acct]['no_log_for'].split()
-			time.sleep(0.1)
-
-	def wait(self, what):
-		"""Wait for a message from Core"""
-		#TODO: timeout, save messages that don't fit
-		while 1:
-			if not self.queueIN.empty():
-				ev = self.queueIN.get()
-				if ev[0] == what and ev[2][0] == 'Logger':
-					return ev[2][1]
-			time.sleep(0.1)
-
-	def __init__(self, quIN, quOUT):
-		self.queueIN = quIN
-		self.queueOUT = quOUT
-		quOUT.put(('REG_MESSAGE', 'logger', ['CONFIG', 'NOTIFY', 'MSG', \
-			'MSGSENT', 'GC_MSG', 'QUIT']))
-		quOUT.put(('ASK_CONFIG', None, ('Logger', 'Logger', {\
-			'lognotsep':1, 'lognotusr':1})))
-		self.config = self.wait('CONFIG')
-		quOUT.put(('ASK_CONFIG', None, ('Logger', 'accounts')))
-		accounts = self.wait('CONFIG')
-		self.no_log_for = {}
-		for acct in accounts.keys():
-			self.no_log_for[acct] = []
-			if accounts[acct].has_key('no_log_for'):
-				self.no_log_for[acct] = \
-					accounts[acct]['no_log_for'].split()
+class Logger:
+	def __init__(self):
 		#create ~/.gajim/logs/ if it doesn't exist
 		try:
-			os.stat(os.path.expanduser("~/.gajim"))
+			os.stat(os.path.expanduser('~/.gajim'))
 		except OSError:
-			os.mkdir(os.path.expanduser("~/.gajim"))
-			print _("creating ~/.gajim/")
+			os.mkdir(os.path.expanduser('~/.gajim'))
+			print _('creating ~/.gajim/')
 		try:
 			os.stat(LOGPATH)
 		except OSError:
 			os.mkdir(LOGPATH)
-			print _("creating ~/.gajim/logs/")
-		self.read_queue()
-		
-print _("plugin logger loaded")
+			print _('creating ~/.gajim/logs/')
+
+	def write(self, kind, msg, jid, show = None, tim = None):
+		if not tim:
+			tim = time.time()
+		else:
+			tim = time.mktime(tim)
+
+		if not msg:
+			msg = ''
+		msg = msg.replace('\n', '\\n')
+		ji = jid.split('/')[0]
+		files = []
+		if kind == 'status': #we save time:jid:show:msg
+			if not show:
+				show = 'online'
+			if common.gajim.config.get('lognotusr'):
+				files.append(ji)
+			if common.gajim.config.get('lognotsep'):
+				files.append('notify.log')
+		elif kind == 'incoming': # we save time:recv:message:
+			files.append(ji)
+			jid = 'recv'
+			show = msg
+			msg = ''
+		elif kind == 'outgoing': # we save time:sent:message:
+			files.append(ji)
+			jid = 'sent'
+			show = msg
+			msg = ''
+		elif kind == 'gc':
+			files.append(ji)
+			jid = 'recv'
+			jids = jid.split('/')
+			nick = ''
+			if len(jids) > 1:
+				nick = jids[1]
+			show = nick
+		for f in files:
+			fic = open(LOGPATH + f, 'a')
+			fic.write('%s:%s:%s:%s\n' % (tim, jid, show, msg))
+			fic.close()
+
+	def get_nb_line(self, jid):
+		fic = open(LOGPATH + jid.split('/')[0], 'r')
+		nb = 0
+		while (fic.readline()):
+			nb += 1
+		fic.close()
+		return nb
+
+	def read(self, jid, begin_line, end_line):
+		fic = open(LOGPATH + jid.split('/')[0], 'r')
+		nb = 0
+		lines = []
+		while (nb < begin_line and fic.readline()):
+			nb += 1
+		while nb < end_line:
+			line = fic.readline()
+			if line:
+				lineSplited = line.split(':')
+				if len(lineSplited) > 2:
+					lines.append(lineSplited)
+			nb += 1
+		return nb, lines
