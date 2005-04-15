@@ -557,16 +557,17 @@ class Preferences_window:
 		return
 
 	def fill_sound_treeview(self):
+		sounds = ['contact_disconnected', 'message_sent', 'contact_connected', \
+			'first_message_received', 'next_message_received']
 		events = {}
+		# config file MUST have sound_event AND sound_enevt_file
 		#events = {name : [use_it, file], name2 : [., .], ...}
-		#FIXME:
-#		for key in self.plugin.config.keys():
-#			if key.find('sound_') == 0:
-#				if not self.plugin.config.has_key(key + '_file'):
-#					continue
-#				ev = key.replace('sound_', '')
-#				events[ev] = [gajim.config.get(key), \
-#					gajim.config.get(key + '_file')]
+		for key in sounds:
+			if not (gajim.config.exist('sound_' + key) and gajim.config.exist(\
+				'sound_' + key + '_file')):
+				continue
+			events[key] = [gajim.config.get('sound_' + key), \
+				gajim.config.get('sound_' + key + '_file')]
 		model = self.sound_tree.get_model()
 		model.clear()
 		for ev in events:
@@ -654,7 +655,6 @@ class Preferences_window:
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
 		#iconset
-		#FIXME: path
 		list_style = os.listdir('../data/iconsets/')
 		model = gtk.ListStore(gobject.TYPE_STRING)
 		self.iconset_combobox.set_model(model)
@@ -1355,6 +1355,7 @@ class Accounts_window:
 			if gajim.connections[account].connected:
 				gajim.connections[account].change_status('offline', 'offline')
 			del gajim.connections[account]
+			gajim.config.del_per('accounts', account)
 			del self.plugin.windows[account]
 			del self.plugin.queues[account]
 			del self.plugin.roster.groups[account]
