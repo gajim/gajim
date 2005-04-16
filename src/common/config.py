@@ -237,7 +237,7 @@ class Config:
 
 	def set(self, optname, value):
 		if not self.__options.has_key(optname):
-			print 'error: option %s doesn\'t exist' % (optname)
+#			print 'error: option %s doesn\'t exist' % (optname)
 			return -1
 		opt = self.__options[optname]
 
@@ -253,7 +253,7 @@ class Config:
 
 	def add_per(self, typename, name):
 		if not self.__options_per_key.has_key(typename):
-			print 'error: option %s doesn\'t exist' % (typename)
+#			print 'error: option %s doesn\'t exist' % (typename)
 			return -1
 		
 		opt = self.__options_per_key[typename]
@@ -262,7 +262,7 @@ class Config:
 
 	def del_per(self, typename, name):
 		if not self.__options_per_key.has_key(typename):
-			print 'error: option %s doesn\'t exist' % (typename)
+#			print 'error: option %s doesn\'t exist' % (typename)
 			return -1
 		
 		opt = self.__options_per_key[typename]
@@ -270,7 +270,7 @@ class Config:
 
 	def set_per(self, optname, key, subname, value):
 		if not self.__options_per_key.has_key(optname):
-			print 'error: option %s doesn\'t exist' % (optname)
+#			print 'error: option %s doesn\'t exist' % (optname)
 			return -1
 		dict = self.__options_per_key[optname][1]
 		if not dict.has_key(key):

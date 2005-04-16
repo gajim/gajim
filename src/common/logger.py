@@ -55,12 +55,12 @@ class Logger:
 				files.append(ji)
 			if common.gajim.config.get('lognotsep'):
 				files.append('notify.log')
-		elif kind == 'incoming': # we save time:recv:message:
+		elif kind == 'incoming': # we save time:recv:message
 			files.append(ji)
 			jid = 'recv'
 			show = msg
 			msg = ''
-		elif kind == 'outgoing': # we save time:sent:message:
+		elif kind == 'outgoing': # we save time:sent:message
 			files.append(ji)
 			jid = 'sent'
 			show = msg

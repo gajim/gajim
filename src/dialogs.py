@@ -562,10 +562,10 @@ class About_dialog:
 
 		dlg = gtk.AboutDialog()
 		dlg.set_name('Gajim')
-		dlg.set_version(gajim.version.version)
+		dlg.set_version(gajim.version)
 		s = u'Copyright \xa9 2003-2005 Gajim Team'
 		dlg.set_copyright(s)
-		text = open('COPYING').read()
+		text = open('../COPYING').read()
 		dlg.set_license(text)
 
 		dlg.set_comments(_('A GTK jabber client'))
@@ -573,7 +573,7 @@ class About_dialog:
 
 		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>', 'Alex Podaras <bigpod@gmail.com>']
 		dlg.set_authors(authors)
-		dlg.set_logo(gtk.gdk.pixbuf_new_from_file('plugins/gtkgui/pixmaps/logo.png'))
+		dlg.set_logo(gtk.gdk.pixbuf_new_from_file('../data/pixmaps/logo.png'))
 		dlg.set_translator_credits(_('translator_credits'))
 
 		rep = dlg.run() # this run doesn't crash threads.. interesting.. 

@@ -25,6 +25,7 @@ import pango
 import gobject
 import os
 import sre
+from common import optparser
 from common import gajim
 import common.sleepy
 
@@ -687,6 +688,10 @@ class interface:
 				gajim.connections[account].connection.process(0.01)
 		return True
 
+	def save_config(self):
+		pass
+		#common.optparser.write()
+
 	def __init__(self):
 		if gtk.pygtk_version >= (2, 6, 0):
 			gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
@@ -757,5 +762,8 @@ if __name__ == '__main__':
 	except ImportError:
 		pass
 	
+	parser = optparser.OptionsParser('~/.gajim/config')
+	parser.parseCfgFile()
+	parser.fill_config()
 	interface()
 	gtk.main()
