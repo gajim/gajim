@@ -10437,7 +10437,7 @@ send a chat message to</property>
 
       <child>
 	<widget class="GtkFrame" id="frame28">
-	  <property name="border_width">5</property>
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="label_xalign">0</property>
 	  <property name="label_yalign">0.5</property>
@@ -10450,10 +10450,10 @@ send a chat message to</property>
 	      <property name="yalign">0.5</property>
 	      <property name="xscale">1</property>
 	      <property name="yscale">1</property>
-	      <property name="top_padding">0</property>
-	      <property name="bottom_padding">0</property>
-	      <property name="left_padding">12</property>
-	      <property name="right_padding">0</property>
+	      <property name="top_padding">5</property>
+	      <property name="bottom_padding">5</property>
+	      <property name="left_padding">5</property>
+	      <property name="right_padding">5</property>
 
 	      <child>
 		<widget class="GtkScrolledWindow" id="scrolledwindow34">

@@ -51,11 +51,18 @@ class Check_for_new_version_dialog:
 				info = 'Gajim ' + latest_version + ' was released in ' + date + '!'
 				changes = ''
 				while True:
-					line = changelog.readline()
+					line = changelog.readline().lstrip()
 					if line.startswith('Gajim'):
 						break
 					else:
-						if line != '\n':
+						if line != '\n' or line !='': # line has some content
+							print 'line', repr(line)
+							if not line.startswith('*'):
+								# the is not a new *real* line
+								# but a continuation from previous line.
+								# So remove \n from previous 'line' beforing adding it
+								changes = changes[:-1]
+
 							changes += line
 				
 				self.parse_glade()
