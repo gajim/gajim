@@ -121,71 +121,72 @@ class Config:
 	}
 
 	emoticons_default = {
-		':-)': 'plugins/gtkgui/emoticons/smile.png',
-		'(@)': 'plugins/gtkgui/emoticons/pussy.png',
-		'8)': 'plugins/gtkgui/emoticons/coolglasses.png',
-		':(': 'plugins/gtkgui/emoticons/unhappy.png',
-		':)': 'plugins/gtkgui/emoticons/smile.png',
-		'(})': 'plugins/gtkgui/emoticons/hugleft.png',
-		':$': 'plugins/gtkgui/emoticons/blush.png',
-		'(Y)': 'plugins/gtkgui/emoticons/yes.png',
-		':-@': 'plugins/gtkgui/emoticons/angry.png',
-		':-D': 'plugins/gtkgui/emoticons/biggrin.png',
-		'(U)': 'plugins/gtkgui/emoticons/brheart.png',
-		'(F)': 'plugins/gtkgui/emoticons/flower.png',
-		':-[': 'plugins/gtkgui/emoticons/bat.png',
-		':>': 'plugins/gtkgui/emoticons/biggrin.png',
-		'(T)': 'plugins/gtkgui/emoticons/phone.png',
-		':-S': 'plugins/gtkgui/emoticons/frowing.png',
-		':-P': 'plugins/gtkgui/emoticons/tongue.png',
-		'(H)': 'plugins/gtkgui/emoticons/coolglasses.png',
-		'(D)': 'plugins/gtkgui/emoticons/drink.png',
-		':-O': 'plugins/gtkgui/emoticons/oh.png',
-		'(C)': 'plugins/gtkgui/emoticons/coffee.png',
-		'({)': 'plugins/gtkgui/emoticons/hugright.png',
-		'(*)': 'plugins/gtkgui/emoticons/star.png',
-		'B-)': 'plugins/gtkgui/emoticons/coolglasses.png',
-		'(Z)': 'plugins/gtkgui/emoticons/boy.png',
-		'(E)': 'plugins/gtkgui/emoticons/mail.png',
-		'(N)': 'plugins/gtkgui/emoticons/no.png',
-		'(P)': 'plugins/gtkgui/emoticons/photo.png',
-		'(K)': 'plugins/gtkgui/emoticons/kiss.png',
-		'(R)': 'plugins/gtkgui/emoticons/rainbow.png',
-		':-|': 'plugins/gtkgui/emoticons/stare.png',
-		';-)': 'plugins/gtkgui/emoticons/wink.png',
-		';-(': 'plugins/gtkgui/emoticons/cry.png',
-		'(6)': 'plugins/gtkgui/emoticons/devil.png',
-		'(L)': 'plugins/gtkgui/emoticons/heart.png',
-		'(W)': 'plugins/gtkgui/emoticons/brflower.png',
-		':|': 'plugins/gtkgui/emoticons/stare.png',
-		':O': 'plugins/gtkgui/emoticons/oh.png',
-		';)': 'plugins/gtkgui/emoticons/wink.png',
-		';(': 'plugins/gtkgui/emoticons/cry.png',
-		':S': 'plugins/gtkgui/emoticons/frowing.png',
-		';\'-(': 'plugins/gtkgui/emoticons/cry.png',
-		':-(': 'plugins/gtkgui/emoticons/unhappy.png',
-		'8-)': 'plugins/gtkgui/emoticons/coolglasses.png',
-		'(B)': 'plugins/gtkgui/emoticons/beer.png',
-		':D': 'plugins/gtkgui/emoticons/biggrin.png',
-		'(8)': 'plugins/gtkgui/emoticons/music.png',
-		':@': 'plugins/gtkgui/emoticons/angry.png',
-		'B)': 'plugins/gtkgui/emoticons/coolglasses.png',
-		':-$': 'plugins/gtkgui/emoticons/blush.png',
-		':\'(': 'plugins/gtkgui/emoticons/cry.png',
-		':->': 'plugins/gtkgui/emoticons/biggrin.png',
-		':[': 'plugins/gtkgui/emoticons/bat.png',
-		'(I)': 'plugins/gtkgui/emoticons/lamp.png',
-		':P': 'plugins/gtkgui/emoticons/tongue.png',
-		'(%)': 'plugins/gtkgui/emoticons/cuffs.png',
-		'(S)': 'plugins/gtkgui/emoticons/moon.png',
+		':-)': '../data/emoticons/smile.png',
+		'(@)': '../data/emoticons/pussy.png',
+		'8)': '../data/emoticons/coolglasses.png',
+		':(': '../data/emoticons/unhappy.png',
+		':)': '../data/emoticons/smile.png',
+		':/': '../data/emoticons/frowning.png',
+		'(})': '../data/emoticons/hugleft.png',
+		':$': '../data/emoticons/blush.png',
+		'(Y)': '../data/emoticons/yes.png',
+		':-@': '../data/emoticons/angry.png',
+		':-D': '../data/emoticons/biggrin.png',
+		'(U)': '../data/emoticons/brheart.png',
+		'(F)': '../data/emoticons/flower.png',
+		':-[': '../data/emoticons/bat.png',
+		':>': '../data/emoticons/biggrin.png',
+		'(T)': '../data/emoticons/phone.png',
+		':-S': '../data/emoticons/frowning.png',
+		':-P': '../data/emoticons/tongue.png',
+		'(H)': '../data/emoticons/coolglasses.png',
+		'(D)': '../data/emoticons/drink.png',
+		':-O': '../data/emoticons/oh.png',
+		'(C)': '../data/emoticons/coffee.png',
+		'({)': '../data/emoticons/hugright.png',
+		'(*)': '../data/emoticons/star.png',
+		'B-)': '../data/emoticons/coolglasses.png',
+		'(Z)': '../data/emoticons/boy.png',
+		'(E)': '../data/emoticons/mail.png',
+		'(N)': '../data/emoticons/no.png',
+		'(P)': '../data/emoticons/photo.png',
+		'(K)': '../data/emoticons/kiss.png',
+		'(R)': '../data/emoticons/rainbow.png',
+		':-|': '../data/emoticons/stare.png',
+		';-)': '../data/emoticons/wink.png',
+		';-(': '../data/emoticons/cry.png',
+		'(6)': '../data/emoticons/devil.png',
+		'(L)': '../data/emoticons/heart.png',
+		'(W)': '../data/emoticons/brflower.png',
+		':|': '../data/emoticons/stare.png',
+		':O': '../data/emoticons/oh.png',
+		';)': '../data/emoticons/wink.png',
+		';(': '../data/emoticons/cry.png',
+		':S': '../data/emoticons/frowning.png',
+		';\'-(': '../data/emoticons/cry.png',
+		':-(': '../data/emoticons/unhappy.png',
+		'8-)': '../data/emoticons/coolglasses.png',
+		'(B)': '../data/emoticons/beer.png',
+		':D': '../data/emoticons/biggrin.png',
+		'(8)': '../data/emoticons/music.png',
+		':@': '../data/emoticons/angry.png',
+		'B)': '../data/emoticons/coolglasses.png',
+		':-$': '../data/emoticons/blush.png',
+		':\'(': '../data/emoticons/cry.png',
+		':->': '../data/emoticons/biggrin.png',
+		':[': '../data/emoticons/bat.png',
+		'(I)': '../data/emoticons/lamp.png',
+		':P': '../data/emoticons/tongue.png',
+		'(%)': '../data/emoticons/cuffs.png',
+		'(S)': '../data/emoticons/moon.png',
 	}
 
 	statusmsg_default = {
-		'Nap': 'I\'m taking a nap.'
-		'Brb': 'Back in some minutes.'
-		'Eating': 'so leave me a message.'
-		'Movie' : 'I\'m watching a movie.' 
-		'Working': 'I\'m working.'
+		'Nap': 'I\'m taking a nap.',
+		'Brb': 'Back in some minutes.',
+		'Eating': 'so leave me a message.',
+		'Movie' : 'I\'m watching a movie.' ,
+		'Working': 'I\'m working.',
 	}
 
 	soundevents_default = {
@@ -300,15 +301,15 @@ class Config:
 
 	def __init__(self):
 		#init default values
-		for event in soundevents_default:
-			default = soundevents_default[o]
-			config.add_per('soundevents', event)
-			config.set_per('soundevents', event, 'enable', default[0])
-			config.set_per('soundevents', event, 'path', default[1])
-		for emot in emoticons_default:
-			config.add_per('emoticons', emot)
-			config.set_per('emoticons', emot, 'path', emoticons_default[emot])
-		for msg in statusmsg_default:
-			config.add_per('statusmsg', msg)
-			config.set_per('statusmsg', msg, 'message', statusmsg_default[msg])
+		for event in self.soundevents_default:
+			default = self.soundevents_default[event]
+			self.add_per('soundevents', event)
+			self.set_per('soundevents', event, 'enable', default[0])
+			self.set_per('soundevents', event, 'path', default[1])
+		for emot in self.emoticons_default:
+			self.add_per('emoticons', emot)
+			self.set_per('emoticons', emot, 'path', self.emoticons_default[emot])
+		for msg in self.statusmsg_default:
+			self.add_per('statusmsg', msg)
+			self.set_per('statusmsg', msg, 'message', self.statusmsg_default[msg])
 		return
