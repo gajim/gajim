@@ -4287,14 +4287,14 @@
 	      <property name="spacing">5</property>
 
 	      <child>
-		<widget class="GtkFrame" id="frame25">
+		<widget class="GtkFrame" id="frame29">
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 		  <child>
-		    <widget class="GtkAlignment" id="alignment54">
+		    <widget class="GtkAlignment" id="alignment58">
 		      <property name="visible">True</property>
 		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
@@ -4306,24 +4306,128 @@
 		      <property name="right_padding">0</property>
 
 		      <child>
-			<widget class="GtkVBox" id="vbox64">
+			<widget class="GtkVBox" id="vbox67">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="auto_popup_checkbutton">
+			    <widget class="GtkFrame" id="frame25">
+			      <property name="border_width">2</property>
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">If checked, Gajim will automatically show the new received message in a new chat window or tab in an existing chat window. If not checked, Gajim will notify you for new message via popups in the bottom right of the screen</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Automatically _popup new message</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">True</property>
-			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
-			      <property name="draw_indicator">True</property>
-			      <signal name="toggled" handler="on_auto_popup_checkbutton_toggled" last_modification_time="Wed, 06 Apr 2005 12:46:37 GMT"/>
+			      <property name="label_xalign">0</property>
+			      <property name="label_yalign">0.5</property>
+			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+			      <child>
+				<widget class="GtkAlignment" id="alignment54">
+				  <property name="visible">True</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xscale">1</property>
+				  <property name="yscale">1</property>
+				  <property name="top_padding">0</property>
+				  <property name="bottom_padding">0</property>
+				  <property name="left_padding">12</property>
+				  <property name="right_padding">0</property>
+
+				  <child>
+				    <widget class="GtkHBox" id="hbox2949">
+				      <property name="visible">True</property>
+				      <property name="homogeneous">False</property>
+				      <property name="spacing">5</property>
+
+				      <child>
+					<widget class="GtkRadioButton" id="notify_on_new_message_radiobutton">
+					  <property name="visible">True</property>
+					  <property name="tooltip" translatable="yes">Gajim will notify you for new message via a popup in the bottom right of the screen</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">_Notify me about it</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <signal name="toggled" handler="on_notify_on_new_message_radiobutton_toggled" last_modification_time="Sat, 16 Apr 2005 11:10:09 GMT"/>
+					</widget>
+					<packing>
+					  <property name="padding">0</property>
+					  <property name="expand">False</property>
+					  <property name="fill">False</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkRadioButton" id="popup_new_message_radiobutton">
+					  <property name="visible">True</property>
+					  <property name="tooltip" translatable="yes">Gajim will automatically show the new received message in a new chat window or tab in an existing chat window</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">_Pop it up</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <property name="group">notify_on_new_message_radiobutton</property>
+					  <signal name="toggled" handler="on_popup_new_message_radiobutton_toggled" last_modification_time="Sat, 16 Apr 2005 10:32:05 GMT"/>
+					</widget>
+					<packing>
+					  <property name="padding">0</property>
+					  <property name="expand">False</property>
+					  <property name="fill">False</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkRadioButton" id="only_in_roster_radiobutton">
+					  <property name="visible">True</property>
+					  <property name="tooltip" translatable="yes">Gajim will only change the icon of the contact that sent the new message</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">Show only in _roster</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <property name="group">notify_on_new_message_radiobutton</property>
+					  <signal name="toggled" handler="on_only_in_roster_radiobutton_toggled" last_modification_time="Sat, 16 Apr 2005 11:24:29 GMT"/>
+					</widget>
+					<packing>
+					  <property name="padding">0</property>
+					  <property name="expand">False</property>
+					  <property name="fill">False</property>
+					</packing>
+				      </child>
+				    </widget>
+				  </child>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="label233">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">When new chat nessage is received</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="type">label_item</property>
+				</packing>
+			      </child>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -4333,10 +4437,90 @@
 			  </child>
 
 			  <child>
+			    <widget class="GtkHBox" id="hbox2950">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">5</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label241">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Notify me about contacts going: </property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkCheckButton" id="notify_on_online_checkbutton">
+				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Gajim will notify you via a popup window in the bottom right of the screen about contacts that just went online</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">_Online</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				  <signal name="toggled" handler="on_notify_on_online_checkbutton_toggled" last_modification_time="Sat, 16 Apr 2005 13:44:52 GMT"/>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkCheckButton" id="notify_on_offline_checkbutton">
+				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Gajim will notify you via a popup window in the bottom right of the screen about contacts that just went offline</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Of_fline</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				  <signal name="toggled" handler="on_notify_on_offline_checkbutton_toggled" last_modification_time="Sat, 16 Apr 2005 13:44:48 GMT"/>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
 			    <widget class="GtkCheckButton" id="auto_popup_away_checkbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Allow automatically popup new message when _away/DND</property>
+			      <property name="label" translatable="yes">Allow popup/notifications even when I'm _away/busy</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -4357,9 +4541,9 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkLabel" id="label233">
+		    <widget class="GtkLabel" id="label240">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">&lt;b&gt;When new chat nessage is received&lt;/b&gt;</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Notifications&lt;/b&gt;</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -4390,7 +4574,7 @@
 		<widget class="GtkCheckButton" id="ignore_events_from_unknown_contacts_checkbutton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Ignore events from contacts not in your roster</property>
+		  <property name="label" translatable="yes">_Ignore events from contacts not in the roster</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -4717,7 +4901,7 @@
 		    <widget class="GtkCheckButton" id="auto_away_checkbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Auto _away after</property>
+		      <property name="label" translatable="yes">Auto _away after:</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -4740,7 +4924,7 @@
 		    <widget class="GtkCheckButton" id="auto_xa_checkbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Auto e_Xtended Away after</property>
+		      <property name="label" translatable="yes">Auto e_Xtended Away after:</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -5621,7 +5805,7 @@ Custom</property>
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
-		  <property name="shadow_type">GTK_SHADOW_NONE</property>
+		  <property name="shadow_type">GTK_SHADOW_IN</property>
 
 		  <child>
 		    <widget class="GtkAlignment" id="alignment56">
@@ -10049,7 +10233,7 @@ send a chat message to</property>
 </widget>
 
 <widget class="GtkWindow" id="add_remove_emoticons_window">
-  <property name="border_width">5</property>
+  <property name="border_width">4</property>
   <property name="width_request">300</property>
   <property name="height_request">350</property>
   <property name="title" translatable="yes">Add/Remove Emoticons</property>
@@ -10165,6 +10349,170 @@ send a chat message to</property>
 	<packing>
 	  <property name="padding">0</property>
 	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkDialog" id="new_version_available_dialog">
+  <property name="border_width">4</property>
+  <property name="width_request">490</property>
+  <property name="height_request">250</property>
+  <property name="title" translatable="yes">New version of Gajim available</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="focus_on_map">True</property>
+  <property name="has_separator">False</property>
+  <signal name="delete_event" handler="on_new_version_available_dialog_delete_event" last_modification_time="Thu, 14 Apr 2005 17:45:18 GMT"/>
+
+  <child internal-child="vbox">
+    <widget class="GtkVBox" id="dialog-vbox9">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">5</property>
+
+      <child internal-child="action_area">
+	<widget class="GtkHButtonBox" id="dialog-action_area8">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+
+	  <child>
+	    <widget class="GtkButton" id="open_download_page_button">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="has_focus">True</property>
+	      <property name="label" translatable="yes">Open Download Page</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">0</property>
+	      <signal name="clicked" handler="on_open_download_page_button_clicked" last_modification_time="Thu, 14 Apr 2005 17:51:56 GMT"/>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	  <property name="pack_type">GTK_PACK_END</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="information_label">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes"></property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	  <property name="width_chars">-1</property>
+	  <property name="single_line_mode">False</property>
+	  <property name="angle">0</property>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkFrame" id="frame28">
+	  <property name="border_width">6</property>
+	  <property name="visible">True</property>
+	  <property name="label_xalign">0</property>
+	  <property name="label_yalign">0.5</property>
+	  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+	  <child>
+	    <widget class="GtkAlignment" id="alignment57">
+	      <property name="visible">True</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xscale">1</property>
+	      <property name="yscale">1</property>
+	      <property name="top_padding">5</property>
+	      <property name="bottom_padding">5</property>
+	      <property name="left_padding">5</property>
+	      <property name="right_padding">5</property>
+
+	      <child>
+		<widget class="GtkScrolledWindow" id="scrolledwindow34">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="shadow_type">GTK_SHADOW_NONE</property>
+		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+		  <child>
+		    <widget class="GtkTextView" id="changes_textview">
+		      <property name="visible">True</property>
+		      <property name="editable">False</property>
+		      <property name="overwrite">False</property>
+		      <property name="accepts_tab">True</property>
+		      <property name="justification">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap_mode">GTK_WRAP_WORD</property>
+		      <property name="cursor_visible">False</property>
+		      <property name="pixels_above_lines">0</property>
+		      <property name="pixels_below_lines">0</property>
+		      <property name="pixels_inside_wrap">0</property>
+		      <property name="left_margin">0</property>
+		      <property name="right_margin">0</property>
+		      <property name="indent">0</property>
+		      <property name="text" translatable="yes"></property>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkLabel" id="label239">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">&lt;b&gt;Changes in latest version&lt;/b&gt;</property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">True</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	      <property name="width_chars">-1</property>
+	      <property name="single_line_mode">False</property>
+	      <property name="angle">0</property>
+	    </widget>
+	    <packing>
+	      <property name="type">label_item</property>
+	    </packing>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
 	  <property name="fill">True</property>
 	</packing>
       </child>

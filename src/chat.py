@@ -49,7 +49,7 @@ class Chat:
 		self.nb_unread = {}
 		self.last_message_time = {}
 		self.print_time_timeout_id = {}
-		self.names = {} # what is printed in the tab : user.name for example
+		self.names = {} # what is printed in the tab (eg. user.name)
 		self.childs = {}
 		self.window = self.xml.get_widget(widget_name)
 		self.widget_name = widget_name

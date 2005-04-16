@@ -363,9 +363,23 @@ class Preferences_window:
 		else:
 			window.show_all()
 
-	def on_auto_popup_checkbutton_toggled(self, widget):
+	def on_notify_on_new_message_radiobutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'notify_on_new_message', \
+			[self.auto_popup_away_checkbutton])
+
+	def on_popup_new_message_radiobutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopup', \
 			[self.auto_popup_away_checkbutton])
+
+	def on_only_in_roster_radiobutton_toggled(self, widget):
+		if widget.get_active():
+			self.auto_popup_away_checkbutton.set_sensitive(False)
+
+	def on_notify_on_online_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'notify_on_online')
+
+	def on_notify_on_offline_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'notify_on_offline')
 
 	def on_auto_popup_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopupaway')
@@ -596,7 +610,14 @@ class Preferences_window:
 		self.window = self.xml.get_widget('preferences_window')
 		self.plugin = plugin
 		self.iconset_combobox = self.xml.get_widget('iconset_combobox')
-		self.auto_popup_checkbutton = self.xml.get_widget('auto_popup_checkbutton')
+		self.notify_on_new_message_radiobutton = self.xml.get_widget \
+			('notify_on_new_message_radiobutton')
+		self.popup_new_message_radiobutton = self.xml.get_widget \
+			('popup_new_message_radiobutton')
+		self.notify_on_online_checkbutton = self.xml.get_widget \
+			('notify_on_online_checkbutton')
+		self.notify_on_offline_checkbutton = self.xml.get_widget \
+			('notify_on_offline_checkbutton')
 		self.auto_popup_away_checkbutton = self.xml.get_widget \
 			('auto_popup_away_checkbutton')
 		self.auto_away_checkbutton = self.xml.get_widget('auto_away_checkbutton')
@@ -728,15 +749,25 @@ class Preferences_window:
 		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
 		self.xml.get_widget('add_remove_emoticons_button').set_sensitive(st)
 
+		#notify on new message
+		st = gajim.config.get('notify_on_new_message')
+		self.notify_on_new_message_radiobutton.set_active(st)
+
 		#autopopup
 		st = gajim.config.get('autopopup')
-		self.auto_popup_checkbutton.set_active(st)
+		self.notify_on_online_checkbutton.set_active(st)
+
+		#notify on online statuses
+		st = gajim.config.get('notify_on_online')
+		self.notify_on_online_checkbutton.set_active(st)
+
+		#notify on offline statuses
+		st = gajim.config.get('notify_on_offline')
+		self.notify_on_offline_checkbutton.set_active(st)
 
 		#autopopupaway
 		st = gajim.config.get('autopopupaway')
 		self.auto_popup_away_checkbutton.set_active(st)
-		self.auto_popup_away_checkbutton.set_sensitive(gajim.config.get(\
-			'autopopup'))
 
 		#Ignore messages from unknown contacts
 		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\

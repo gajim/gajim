@@ -27,6 +27,7 @@ import os
 import sre
 from common import gajim
 import common.sleepy
+import common.check_for_new_version
 
 from common import i18n
 i18n.init()
@@ -317,16 +318,8 @@ class interface:
 				'soundevents', 'contact_connected', 'enabled'):
 				self.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
-					not self.queues[account].has_key(jid) and not gajim.config.get( \
-						'autopopup'):
-					#FIXME:
-					#DOES NOT ALWAYS WORK WHY?
-					#I control nkour@lagaule in jabber
-					# have nkour@lagaul in nkour@jabber.org
-					#go online from psi in lagaule
-					#gajim doesn't give a shit
-					# WHY? same with offline
-					# new message works
+					not self.queues[account].has_key(jid) and \
+					gajim.config.get('notify_on_online'):
 					instance = dialogs.Popup_window(self, 'Contact Online', jid, \
 						account)
 					self.roster.popup_windows.append(instance)
@@ -334,8 +327,8 @@ class interface:
 				'soundevents', 'contact_disconnected', 'enabled'):
 				self.play_sound('contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
-					not self.queues[account].has_key(jid) and not gajim.config.get( \
-					'autopopup'):
+					not self.queues[account].has_key(jid) and \
+					gajim.config.get('notify_on_offline'):
 					instance = dialogs.Popup_window(self, 'Contact Offline', jid, \
 						account)
 					self.roster.popup_windows.append(instance)
@@ -359,7 +352,7 @@ class interface:
 		if not self.windows[account]['chats'].has_key(jid) and \
 						not self.queues[account].has_key(jid):
 			first = True
-			if	not gajim.config.get('autopopup'):
+			if gajim.config.get('notify_on_new_message'):
 				instance = dialogs.Popup_window(self, 'New Message', jid, account)
 				self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
@@ -740,6 +733,8 @@ class interface:
 			self.systray = systray.Systray(self)
 		if self.systray_capabilities:
 			self.show_systray()
+
+		common.check_for_new_version.Check_for_new_version_dialog(self)
 
 		self.init_regexp()
 		
