@@ -246,7 +246,9 @@ class Config:
 		opt[OPT_VAL] = value
 		return 0
 	
-	def get(self, optname):
+	def get(self, optname = None):
+		if not optname:
+			return self.__options.keys()
 		if not self.__options.has_key(optname):
 			return None
 		return self.__options[optname][OPT_VAL]

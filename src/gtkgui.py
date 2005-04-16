@@ -25,7 +25,6 @@ import pango
 import gobject
 import os
 import sre
-from common import optparser
 from common import gajim
 import common.sleepy
 
@@ -36,6 +35,8 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
+from common import optparser
+parser = optparser.OptionsParser('~/.gajim/config')
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -689,8 +690,8 @@ class interface:
 		return True
 
 	def save_config(self):
-		pass
-		#common.optparser.write()
+		parser.read_config()
+		parser.writeCfgFile()
 
 	def __init__(self):
 		if gtk.pygtk_version >= (2, 6, 0):
@@ -762,7 +763,6 @@ if __name__ == '__main__':
 	except ImportError:
 		pass
 	
-	parser = optparser.OptionsParser('~/.gajim/config')
 	parser.parseCfgFile()
 	parser.fill_config()
 	interface()

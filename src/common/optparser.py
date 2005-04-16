@@ -75,6 +75,7 @@ class OptionsParser:
 		self._fill_config_key('Profile', 'log', 'log')
 		self._fill_config_key('Core', 'delauth', 'delauth')
 		self._fill_config_key('Core', 'delroster', 'delroster')
+		self._fill_config_key('Core', 'alwaysauth', 'alwaysauth')
 		self._fill_config_key('Logger', 'lognotsep', 'lognotsep')
 		self._fill_config_key('Logger', 'lognotusr', 'lognotusr')
 
@@ -131,23 +132,66 @@ class OptionsParser:
 				gajim.connections[account].password = gajim.config.get_per( \
 					'accounts', account, 'password')
 
-	def __getattr__(self, attr):
-		if attr.startswith('__') and attr in self.__dict__.keys():
-			return self.__dict__[attr]
-		elif self.tab.has_key(attr):
-			return self.tab[attr]
-		else:
-#			for key in self.__dict__.keys():
-#				if key == attr:
-#					return self.__dict__[attr]
-			return None
-	# END __getattr__
+	def read_config(self):
+		self.tab = {}
+		self.tab['Profile'] = {}
+		self.tab['Profile']['log'] = gajim.config.get('log')
+		
+		self.tab['Core'] = {}
+		self.tab['Core']['delauth'] = gajim.config.get('delauth')
+		self.tab['Core']['delroster'] = gajim.config.get('delroster')
+		self.tab['Core']['alwaysauth'] = gajim.config.get('alwaysauth')
+		
+		self.tab['Logger'] = {}
+		self.tab['Logger']['lognotsep'] = gajim.config.get('lognotsep')
+		self.tab['Logger']['lognotusr'] = gajim.config.get('lognotusr')
+
+		self.tab['GtkGui'] = {}
+		for key in gajim.config.get(None):
+			if key in self.tab['Profile']:
+				continue
+			if key in self.tab['Core']:
+				continue
+			if key in self.tab['Logger']:
+				continue
+			self.tab['GtkGui'][key] = gajim.config.get(key)
+
+		# status messages
+		i = 0
+		for msg in gajim.config.get_per('statusmsg'):
+			self.tab['GtkGui']['msg%s_name' % i] = msg
+			self.tab['GtkGui']['msg%s' % i] = gajim.config.get_per('statusmsg', \
+				msg, 'message')
+			i += 1
+
+		# sounds
+		for event in gajim.config.get_per('soundevents'):
+			self.tab['GtkGui']['sound_' + event] = gajim.config.get_per( \
+				'soundevents', event, 'enabled')
+			self.tab['GtkGui']['sound_' + event + '_file'] = gajim.config.get_per(\
+				'soundevents', event, 'path')
+
+		# emoticons
+		emots = []
+		for emot in gajim.config.get_per('emoticons'):
+			emots.append(emot)
+			emots.append(gajim.config.get_per('emoticons', emot, 'path'))
+		self.tab['GtkGui']['emoticons'] = '\t'.join(emots)
+
+		# accounts
+		accounts = gajim.config.get_per('accounts')
+		self.tab['Profile']['accounts'] = ' '.join(accounts)
+		for account in accounts:
+			self.tab[account] = {}
+			for key in gajim.config.get_per('accounts', account):
+				self.tab[account][key] = gajim.config.get_per('accounts', account, \
+					key)
 
 	def writeCfgFile(self):
 		try:
 			fd = open(self.__fname, 'w')
 		except:
-			log.debug("Can't write config %s" % self.__fname)
+			log.debug('Can\'t write config %s' % self.__fname)
 			return 0
 		index = 0
 		for s in self.tab.keys():
