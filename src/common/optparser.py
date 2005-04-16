@@ -127,6 +127,9 @@ class OptionsParser:
 			for key in self.tab[account]:	
 				gajim.config.set_per('accounts', account, key, \
 					self.tab[account][key])
+			if gajim.config.get_per('accounts', account, 'savepass'):
+				gajim.connections[account].password = gajim.config.get_per( \
+					'accounts', account, 'password')
 
 	def __getattr__(self, attr):
 		if attr.startswith('__') and attr in self.__dict__.keys():

@@ -968,14 +968,13 @@ class Roster_window:
 	def quit_gtkgui_plugin(self):
 		"""When we quit the gtk plugin :
 		tell that to the core and exit gtk"""
-		if gajim.config.exist('saveposition'):
-			if gajim.config.get('saveposition'):
-				x, y = self.window.get_position()
-				gajim.config.set('x-position', x)
-				gajim.config.set('y-position', y)
-				width, height = self.window.get_size()
-				gajim.config.set('width', width)
-				gajim.config.set('height', height)
+		if gajim.config.get('saveposition'):
+			x, y = self.window.get_position()
+			gajim.config.set('x-position', x)
+			gajim.config.set('y-position', y)
+			width, height = self.window.get_size()
+			gajim.config.set('width', width)
+			gajim.config.set('height', height)
 
 		self.plugin.save_config()
 		for account in gajim.connections:

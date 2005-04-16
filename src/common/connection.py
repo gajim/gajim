@@ -453,7 +453,6 @@ class connection:
 			if self.connected > 1:
 				self.connected = 0
 				self.connection.disconnect('Disconnected')
-			self.dispatch('QUIT', ())
 			return
 
 	def ask_roster(self):

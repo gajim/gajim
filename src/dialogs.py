@@ -388,11 +388,8 @@ class Change_status_message_dialog:
 		self.message_buffer = message_textview.get_buffer()
 		self.message_buffer.set_text(gajim.config.get('last_msg'))
 		self.values = {'':''}
-		i = 0
-		while gajim.config.exist('msg%s_name' % i):
-			self.values[gajim.config.get('msg%s_name' % i)] = \
-				gajim.config.get('msg%s' % i)
-			i += 1
+		for msg in gajim.config.get_per('statusmsg'):
+			self.values[msg] = gajim.config.get_per('statusmsg', msg, 'message')
 		liststore = gtk.ListStore(str, str)
 		message_comboboxentry = self.xml.get_widget('message_comboboxentry')
 		message_comboboxentry.set_model(liststore)

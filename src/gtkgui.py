@@ -206,7 +206,7 @@ class interface:
 	def play_sound(self, event):
 		if not gajim.config.get('sounds_on'):
 			return
-		path_to_soundfile = gajim.config.get(event + '_file')
+		path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
 		if not os.path.exists(path_to_soundfile):
 			return
 		if os.name  == 'nt':
@@ -455,7 +455,7 @@ class interface:
 		self.roster.draw_roster()
 
 	def handle_event_quit(self, p1, p2):
-		self.roster.on_quit() # SUCH FUNCTION DOES NOT EXIST!!
+		self.roster.quit_gtkgui_plugin()
 
 	def handle_event_myvcard(self, account, array):
 		nick = ''
