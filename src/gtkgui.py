@@ -311,9 +311,9 @@ class interface:
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
 			#play sound
-			if old_show < 2 and new_show > 1 and gajim.config.get( \
-				'sound_contact_connected'):
-				self.play_sound('sound_contact_connected')
+			if old_show < 2 and new_show > 1 and gajim.config.get_per( \
+				'soundevents', 'contact_connected', 'enabled'):
+				self.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and not gajim.config.get( \
 						'autopopup'):
@@ -328,9 +328,9 @@ class interface:
 					instance = dialogs.Popup_window(self, 'Contact Online', jid, \
 						account)
 					self.roster.popup_windows.append(instance)
-			elif old_show > 1 and new_show < 2 and gajim.config.get( \
-				'sound_contact_disconnected'):
-				self.play_sound('sound_contact_disconnected')
+			elif old_show > 1 and new_show < 2 and gajim.config.get_per( \
+				'soundevents', 'contact_disconnected', 'enabled'):
+				self.play_sound('contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and not gajim.config.get( \
 					'autopopup'):
@@ -361,10 +361,12 @@ class interface:
 				instance = dialogs.Popup_window(self, 'New Message', jid, account)
 				self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
-		if gajim.config.get('sound_first_message_received') and first:
-			self.play_sound('sound_first_message_received')
-		if gajim.config.get('sound_next_message_received') and not first:
-			self.play_sound('sound_next_message_received')
+		if gajim.config.get_per('soundevents', 'first_message_received', \
+			'enabled') and first:
+			self.play_sound('first_message_received')
+		if gajim.config.get_per('soundevents', 'next_message_received', \
+			'enabled') and not first:
+			self.play_sound('next_message_received')
 		
 	def handle_event_msgerror(self, account, array):
 		#('MSGERROR', account, (user, error_code, error_msg, msg, time))
@@ -376,8 +378,8 @@ class interface:
 		
 	def handle_event_msgsent(self, account, array):
 		#('MSG', account, (jid, msg, keyID))
-		if gajim.config.get('sound_message_sent'):
-			self.play_sound('sound_message_sent')
+		if gajim.config.get_per('soundevents', 'message_sent', 'enabled'):
+			self.play_sound('message_sent')
 		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
@@ -641,13 +643,13 @@ class interface:
 	def init_regexp(self):
 		#initialize emoticons dictionary
 		self.emoticons = dict()
-		split_line = gajim.config.get('emoticons').split('\t')
-		for i in range(0, len(split_line)/2):
-			emot_file = split_line[2*i+1]
+		emots = gajim.config.get_per('emoticons')
+		for emot in emots:
+			emot_file = gajim.config.get_per('emoticons', emot, 'path')
 			if not self.image_is_ok(emot_file):
 				continue
 			pix = gtk.gdk.pixbuf_new_from_file(emot_file)
-			self.emoticons[split_line[2*i]] = pix
+			self.emoticons[emot] = pix
 		
 		# update regular expressions
 		self.make_regexps()

@@ -390,17 +390,13 @@ class Preferences_window:
 		self.on_checkbutton_toggled(widget, 'ask_offline_status')
 	
 	def on_sounds_treemodel_row_changed(self, model, path, iter):
-		iter = model.get_iter_first()
-		while iter:
-			path = model.get_path(iter)
-			sound_event = model.get_value(iter, 0)
-			if model[path][1]:
-				gajim.config.set('sound_' + sound_event, True)
-			else:
-				gajim.config.set('sound_' + sound_event, False)
-			gajim.config.set('sound_' + sound_event + '_file', \
-				model.get_value(iter, 2))
-			iter = model.iter_next(iter)
+		sound_event = model.get_value(iter, 0)
+		if model[path][1]:
+			gajim.config.set_per('soundevents', sound_event, 'enabled', True)
+		else:
+			gajim.config.set_per('soundevents', sound_event, 'enabled', False)
+		gajim.config.set_per('soundevents', sound_event, 'path', \
+			model.get_value(iter, 2))
 		self.plugin.save_config()
 
 	def on_auto_away_checkbutton_toggled(self, widget):
@@ -539,21 +535,12 @@ class Preferences_window:
 		return
 
 	def fill_sound_treeview(self):
-		sounds = ['contact_disconnected', 'message_sent', 'contact_connected', \
-			'first_message_received', 'next_message_received']
-		events = {}
-		# config file MUST have sound_event AND sound_enevt_file
-		#events = {name : [use_it, file], name2 : [., .], ...}
-		for key in sounds:
-			if not (gajim.config.exist('sound_' + key) and gajim.config.exist(\
-				'sound_' + key + '_file')):
-				continue
-			events[key] = [gajim.config.get('sound_' + key), \
-				gajim.config.get('sound_' + key + '_file')]
+		sounds = gajim.config.get_per('soundevents')
 		model = self.sound_tree.get_model()
 		model.clear()
-		for ev in events:
-			iter = model.append((ev, events[ev][0], events[ev][1]))
+		for sound in sounds:
+			iter = model.append((sound, gajim.config.get_per('soundevents', sound,\
+				'enabled'), gajim.config.get_per('soundevents', sound, 'path')))
 
 	def on_treeview_sounds_cursor_changed(self, widget, data=None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
@@ -642,7 +629,7 @@ class Preferences_window:
 		self.iconset_combobox.set_model(model)
 		l = []
 		for i in list_style:
-			if i != 'CVS' and i[0] != '.':
+			if i[0] != '.':
 				l.append(i)
 		if l.count == 0:
 			l.append(' ')
@@ -1481,26 +1468,16 @@ class Add_remove_emoticons_window:
 		self.window.hide()
 
 	def on_emoticons_treemodel_row_deleted(self, model, path):
-		iter = model.get_iter_first()
-		emots = []
-		while iter:
-			emots.append(model.get_value(iter, 0))
-			emots.append(model.get_value(iter, 1))
-			iter = model.iter_next(iter)
-		gajim.config.set('emoticons', '\t'.join(emots))
-		self.plugin.init_regexp()
+		iter = model.get_iter(path)
+		gajim.config.get_per('emoticons', model.get_value(iter, 0))
 		self.plugin.save_config()
 
 	def on_emoticons_treemodel_row_changed(self, model, path, iter):
-		if model[path][1] != None and len(model[path][1]) != 0:
-			iter = model.get_iter_first()
-			emots = []
-			while iter:
-				emots.append(model.get_value(iter, 0))
-				emots.append(model.get_value(iter, 1))
-				iter = model.iter_next(iter)
-			gajim.config.set('emoticons', '\t'.join(emots))
-			self.plugin.init_regexp()
+		emots = gajim.config.get_per('emoticons')
+		emot = model.get_value(iter, 0)
+		if not emot in emots:
+			gajim.config.add_per('emoticons', emot)
+		gajim.config.set_per('emoticons', emot, 'path', model.get_value(iter, 1))
 		self.plugin.save_config()
 
 	def image_is_ok(self, image):
@@ -1519,22 +1496,13 @@ class Add_remove_emoticons_window:
 			return 0
 		return 1
 
-	def load_emots(self):
-		emots = {}
-		split_line = gajim.config.get('emoticons').split('\t')
-		for i in range(0, len(split_line)/2):
-			if not self.image_is_ok(split_line[2*i+1]):
-				continue
-			emots[split_line[2*i]] = split_line[2*i+1]
-		return emots
-
 	def fill_emot_treeview(self):
 		model = self.emot_tree.get_model()
 		model.clear()
-		emots = self.load_emots()
-		for i in emots:
-			file = emots[i]
-			iter = model.append((i, file, None))
+		emots = gajim.config.get_per('emoticons')
+		for emot in emots:
+			file = gajim.config.get_per('emoticons', emot, 'path')
+			iter = model.append((emot, file, None))
 			if not os.path.exists(file):
 				continue
 			img = gtk.Image()

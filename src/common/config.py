@@ -33,32 +33,22 @@ class Config:
 
 	__options = {
 		# name: [ type, value ]
-		'log': [ opt_bool, 'True' ],
-		'delauth': [ opt_bool, 'True' ],
-		'delroster': [ opt_bool, 'True' ],
-		'alwaysauth': [ opt_bool, 'False' ],
-		'autopopup': [ opt_bool, 'False' ],
-		'autopopupaway': [ opt_bool, 'False' ],
-		'ignore_unknown_contacts': [ opt_bool, 'False' ],
-		'showoffline': [ opt_bool, 'False' ],
-		'autoaway': [ opt_bool, 'True' ],
+		'log': [ opt_bool, True ],
+		'delauth': [ opt_bool, True ],
+		'delroster': [ opt_bool, True ],
+		'alwaysauth': [ opt_bool, False ],
+		'autopopup': [ opt_bool, False ],
+		'autopopupaway': [ opt_bool, False ],
+		'ignore_unknown_contacts': [ opt_bool, False ],
+		'showoffline': [ opt_bool, False ],
+		'autoaway': [ opt_bool, True ],
 		'autoawaytime': [ opt_int, 10 ],
-		'autoxa': [ opt_bool, 'True' ],
+		'autoxa': [ opt_bool, True ],
 		'autoxatime': [ opt_int, 20 ],
-		'ask_online_status': [ opt_bool, 'False' ],
-		'ask_offline_status': [ opt_bool, 'False' ],
+		'ask_online_status': [ opt_bool, False ],
+		'ask_offline_status': [ opt_bool, False ],
 		'last_msg': [ opt_str, '' ],
-		'msg0_name': [ opt_str, 'Nap' ],
-		'msg0': [ opt_str, 'I\'m taking a nap.' ],
-		'msg1_name': [ opt_str, 'Brb' ],
-		'msg1': [ opt_str, 'Back in some minutes.' ],
-		'msg2_name': [ opt_str, 'Eating' ],
-		'msg2': [ opt_str, 'I\'m eating, so leave me a message.' ],
-		'msg3_name': [ opt_str, 'Movie' ],
-		'msg3': [ opt_str, 'I\'m watching a movie.' ],
-		'msg4_name': [ opt_str, 'Working' ],
-		'msg4': [ opt_str, 'I\'m working.' ],
-		'trayicon': [ opt_bool, 'True' ],
+		'trayicon': [ opt_bool, True ],
 		'iconset': [ opt_str, 'sun' ],
 		'inmsgcolor': [ opt_color, '#ff0000' ],
 		'outmsgcolor': [ opt_color, '#0000ff' ],
@@ -73,24 +63,13 @@ class Config:
 		'usertextcolor': [ opt_color, '#000000' ],
 		'userbgcolor': [ opt_color, '#ffffff' ],
 		'userfont': [ opt_str, 'Sans 10' ],
-		'saveposition': [ opt_bool, 'True' ],
-		'mergeaccounts': [ opt_bool, 'False' ],
-		'usetabbedchat': [ opt_bool, 'True' ],
+		'saveposition': [ opt_bool, True ],
+		'mergeaccounts': [ opt_bool, False ],
+		'usetabbedchat': [ opt_bool, True ],
 		'print_time': [ opt_str, 'always' ],
-		'useemoticons': [ opt_bool, 'True' ],
-		'emoticons': [ opt_str, ':-)\tplugins/gtkgui/emoticons/smile.png\t(@)\tplugins/gtkgui/emoticons/pussy.png\t8)\tplugins/gtkgui/emoticons/coolglasses.png\t:(\tplugins/gtkgui/emoticons/unhappy.png\t:)\tplugins/gtkgui/emoticons/smile.png\t(})\tplugins/gtkgui/emoticons/hugleft.png\t:$\tplugins/gtkgui/emoticons/blush.png\t(Y)\tplugins/gtkgui/emoticons/yes.png\t:-@\tplugins/gtkgui/emoticons/angry.png\t:-D\tplugins/gtkgui/emoticons/biggrin.png\t(U)\tplugins/gtkgui/emoticons/brheart.png\t(F)\tplugins/gtkgui/emoticons/flower.png\t:-[\tplugins/gtkgui/emoticons/bat.png\t:>\tplugins/gtkgui/emoticons/biggrin.png\t(T)\tplugins/gtkgui/emoticons/phone.png\t:-S\tplugins/gtkgui/emoticons/frowing.png\t:-P\tplugins/gtkgui/emoticons/tongue.png\t(H)\tplugins/gtkgui/emoticons/coolglasses.png\t(D)\tplugins/gtkgui/emoticons/drink.png\t:-O\tplugins/gtkgui/emoticons/oh.png\t(C)\tplugins/gtkgui/emoticons/coffee.png\t({)\tplugins/gtkgui/emoticons/hugright.png\t(*)\tplugins/gtkgui/emoticons/star.png\tB-)\tplugins/gtkgui/emoticons/coolglasses.png\t(Z)\tplugins/gtkgui/emoticons/boy.png\t(E)\tplugins/gtkgui/emoticons/mail.png\t(N)\tplugins/gtkgui/emoticons/no.png\t(P)\tplugins/gtkgui/emoticons/photo.png\t(K)\tplugins/gtkgui/emoticons/kiss.png\t(R)\tplugins/gtkgui/emoticons/rainbow.png\t:-|\tplugins/gtkgui/emoticons/stare.png\t;-)\tplugins/gtkgui/emoticons/wink.png\t;-(\tplugins/gtkgui/emoticons/cry.png\t(6)\tplugins/gtkgui/emoticons/devil.png\t(L)\tplugins/gtkgui/emoticons/heart.png\t(W)\tplugins/gtkgui/emoticons/brflower.png\t:|\tplugins/gtkgui/emoticons/stare.png\t:O\tplugins/gtkgui/emoticons/oh.png\t;)\tplugins/gtkgui/emoticons/wink.png\t;(\tplugins/gtkgui/emoticons/cry.png\t:S\tplugins/gtkgui/emoticons/frowing.png\t;\'-(\tplugins/gtkgui/emoticons/cry.png\t:-(\tplugins/gtkgui/emoticons/unhappy.png\t8-)\tplugins/gtkgui/emoticons/coolglasses.png\t(B)\tplugins/gtkgui/emoticons/beer.png\t:D\tplugins/gtkgui/emoticons/biggrin.png\t(8)\tplugins/gtkgui/emoticons/music.png\t:@\tplugins/gtkgui/emoticons/angry.png\tB)\tplugins/gtkgui/emoticons/coolglasses.png\t:-$\tplugins/gtkgui/emoticons/blush.png\t:\'(\tplugins/gtkgui/emoticons/cry.png\t:->\tplugins/gtkgui/emoticons/biggrin.png\t:[\tplugins/gtkgui/emoticons/bat.png\t(I)\tplugins/gtkgui/emoticons/lamp.png\t:P\tplugins/gtkgui/emoticons/tongue.png\t(%)\tplugins/gtkgui/emoticons/cuffs.png\t(S)\tplugins/gtkgui/emoticons/moon.png' ],
-		'sounds_on': [ opt_bool, 'True' ],
+		'useemoticons': [ opt_bool, True ],
+		'sounds_on': [ opt_bool, True ],
 		'soundplayer': [ opt_str, 'play' ],
-		'sound_first_message_received': [ opt_bool, 'True' ],
-		'sound_first_message_received_file': [ opt_str, 'sounds/message1.wav' ],
-		'sound_next_message_received': [ opt_bool, 'True' ],
-		'sound_next_message_received_file': [ opt_str, 'sounds/message2.wav' ],
-		'sound_contact_connected': [ opt_bool, 'True' ],
-		'sound_contact_connected_file': [ opt_str, 'sounds/connected.wav' ],
-		'sound_contact_disconnected': [ opt_bool, 'True' ],
-		'sound_contact_disconnected_file': [ opt_str, 'sounds/disconnected.wav' ],
-		'sound_message_sent': [ opt_bool, 'True' ],
-		'sound_message_sent_file': [ opt_str, 'sounds/sent.wav' ],
 		'openwith': [ opt_str, 'gnome-open' ],
 		'custombrowser': [ opt_str, 'firefox' ],
 		'custommailapp': [ opt_str, 'mozilla-thunderbird -compose' ],
@@ -104,36 +83,119 @@ class Config:
 		'after_time': [ opt_str, ']' ],
 		'before_nickname': [ opt_str, '<' ],
 		'after_nickname': [ opt_str, '>' ],
-		'do_not_send_os_info': [ opt_bool, 'False' ],
-		'usegpg': [ opt_bool, 'False' ],
-		'lognotusr': [ opt_bool, 'True' ],
-		'lognotsep': [ opt_bool, 'True' ],
+		'do_not_send_os_info': [ opt_bool, False ],
+		'usegpg': [ opt_bool, False ],
+		'lognotusr': [ opt_bool, True ],
+		'lognotsep': [ opt_bool, True ],
 	}
 
 	__options_per_key = {
 		'accounts': ({
-			'name':		[ opt_str, '' ],
-			'hostname':	[ opt_str, '' ],
-			'savepass': [ opt_bool, 'False' ],
+			'name': [ opt_str, '' ],
+			'hostname': [ opt_str, '' ],
+			'savepass': [ opt_bool, False ],
 			'password': [ opt_str, '' ],
-			'resource':	[ opt_str, 'gajim' ],
+			'resource': [ opt_str, 'gajim' ],
 			'priority': [ opt_int, 5 ],
-			'autoconnect': [ opt_bool, 'False' ],
-			'use_proxy': [ opt_bool, 'False' ],
+			'autoconnect': [ opt_bool, False ],
+			'use_proxy': [ opt_bool, False ],
 			'proxyhost': [ opt_str, '' ],
 			'proxyport': [ opt_int, 3128 ],
 			'keyid': [ opt_str, '' ],
 			'keyname': [ opt_str, '' ],
-			'savegpgpass': [ opt_bool, 'False' ],
+			'savegpgpass': [ opt_bool, False ],
 			'gpgpassword': [ opt_str, '' ],
-			'sync_with_global_status': [ opt_bool, 'True' ],
+			'sync_with_global_status': [ opt_bool, True ],
 			'no_log_for': [ opt_str, '' ],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
 		}, {}),
+		'emoticons': ({
+			'path': [ opt_str, '' ],
+		}, {}),
+		'soundevents': ({
+			'enabled': [ opt_bool, True ],
+			'path': [ opt_str, '' ],
+		}, {}),
 	}
-	
+
+	emoticons_default = {
+		':-)': 'plugins/gtkgui/emoticons/smile.png',
+		'(@)': 'plugins/gtkgui/emoticons/pussy.png',
+		'8)': 'plugins/gtkgui/emoticons/coolglasses.png',
+		':(': 'plugins/gtkgui/emoticons/unhappy.png',
+		':)': 'plugins/gtkgui/emoticons/smile.png',
+		'(})': 'plugins/gtkgui/emoticons/hugleft.png',
+		':$': 'plugins/gtkgui/emoticons/blush.png',
+		'(Y)': 'plugins/gtkgui/emoticons/yes.png',
+		':-@': 'plugins/gtkgui/emoticons/angry.png',
+		':-D': 'plugins/gtkgui/emoticons/biggrin.png',
+		'(U)': 'plugins/gtkgui/emoticons/brheart.png',
+		'(F)': 'plugins/gtkgui/emoticons/flower.png',
+		':-[': 'plugins/gtkgui/emoticons/bat.png',
+		':>': 'plugins/gtkgui/emoticons/biggrin.png',
+		'(T)': 'plugins/gtkgui/emoticons/phone.png',
+		':-S': 'plugins/gtkgui/emoticons/frowing.png',
+		':-P': 'plugins/gtkgui/emoticons/tongue.png',
+		'(H)': 'plugins/gtkgui/emoticons/coolglasses.png',
+		'(D)': 'plugins/gtkgui/emoticons/drink.png',
+		':-O': 'plugins/gtkgui/emoticons/oh.png',
+		'(C)': 'plugins/gtkgui/emoticons/coffee.png',
+		'({)': 'plugins/gtkgui/emoticons/hugright.png',
+		'(*)': 'plugins/gtkgui/emoticons/star.png',
+		'B-)': 'plugins/gtkgui/emoticons/coolglasses.png',
+		'(Z)': 'plugins/gtkgui/emoticons/boy.png',
+		'(E)': 'plugins/gtkgui/emoticons/mail.png',
+		'(N)': 'plugins/gtkgui/emoticons/no.png',
+		'(P)': 'plugins/gtkgui/emoticons/photo.png',
+		'(K)': 'plugins/gtkgui/emoticons/kiss.png',
+		'(R)': 'plugins/gtkgui/emoticons/rainbow.png',
+		':-|': 'plugins/gtkgui/emoticons/stare.png',
+		';-)': 'plugins/gtkgui/emoticons/wink.png',
+		';-(': 'plugins/gtkgui/emoticons/cry.png',
+		'(6)': 'plugins/gtkgui/emoticons/devil.png',
+		'(L)': 'plugins/gtkgui/emoticons/heart.png',
+		'(W)': 'plugins/gtkgui/emoticons/brflower.png',
+		':|': 'plugins/gtkgui/emoticons/stare.png',
+		':O': 'plugins/gtkgui/emoticons/oh.png',
+		';)': 'plugins/gtkgui/emoticons/wink.png',
+		';(': 'plugins/gtkgui/emoticons/cry.png',
+		':S': 'plugins/gtkgui/emoticons/frowing.png',
+		';\'-(': 'plugins/gtkgui/emoticons/cry.png',
+		':-(': 'plugins/gtkgui/emoticons/unhappy.png',
+		'8-)': 'plugins/gtkgui/emoticons/coolglasses.png',
+		'(B)': 'plugins/gtkgui/emoticons/beer.png',
+		':D': 'plugins/gtkgui/emoticons/biggrin.png',
+		'(8)': 'plugins/gtkgui/emoticons/music.png',
+		':@': 'plugins/gtkgui/emoticons/angry.png',
+		'B)': 'plugins/gtkgui/emoticons/coolglasses.png',
+		':-$': 'plugins/gtkgui/emoticons/blush.png',
+		':\'(': 'plugins/gtkgui/emoticons/cry.png',
+		':->': 'plugins/gtkgui/emoticons/biggrin.png',
+		':[': 'plugins/gtkgui/emoticons/bat.png',
+		'(I)': 'plugins/gtkgui/emoticons/lamp.png',
+		':P': 'plugins/gtkgui/emoticons/tongue.png',
+		'(%)': 'plugins/gtkgui/emoticons/cuffs.png',
+		'(S)': 'plugins/gtkgui/emoticons/moon.png',
+	}
+
+	statusmsg_default = {
+		'Nap': 'I\'m taking a nap.'
+		'Brb': 'Back in some minutes.'
+		'Eating': 'so leave me a message.'
+		'Movie' : 'I\'m watching a movie.' 
+		'Working': 'I\'m working.'
+	}
+
+	soundevents_default = {
+		'first_message_received': [ True, 'sounds/message1.wav' ],
+		'next_message_received': [ True, 'sounds/message2.wav' ],
+		'contact_connected': [ True, 'sounds/connected.wav' ],
+		'contact_disconnected': [ True, 'sounds/disconnected.wav' ],
+		'message_sent': [ True, 'sounds/sent.wav' ],
+	}
+
 	def foreach(self, func):
 		for opt in self.__options:
 			func(opt, None, self.__options[opt])
@@ -157,8 +219,6 @@ class Config:
 			if int(val) == 0 or int(val) == 1:
 				return 1
 			return 0
-		if val == 'True' or val == 'False':
-			return 1
 		return 0
 
 	def is_valid_string(self, val):
@@ -186,16 +246,9 @@ class Config:
 		return 0
 	
 	def get(self, optname):
-		if not self.exist(optname):
+		if not self.__options.has_key(optname):
 			return None
-		opt = self.__options[optname]
-		if opt[OPT_TYPE] == opt_bool:
-			if opt[OPT_VAL] == 'False': return False
-			return True
-		elif opt[OPT_TYPE] == opt_int:
-			return int(opt[OPT_VAL])
-		else:
-			return opt[OPT_VAL]
+		return self.__options[optname][OPT_VAL]
 
 	def add_per(self, typename, name):
 		if not self.__options_per_key.has_key(typename):
@@ -245,8 +298,17 @@ class Config:
 			return None
 		return obj[subname][OPT_VAL]
 
-	def exist(self, optname):
-		return self.__options.has_key(optname)
-
 	def __init__(self):
+		#init default values
+		for event in soundevents_default:
+			default = soundevents_default[o]
+			config.add_per('soundevents', event)
+			config.set_per('soundevents', event, 'enable', default[0])
+			config.set_per('soundevents', event, 'path', default[1])
+		for emot in emoticons_default:
+			config.add_per('emoticons', emot)
+			config.set_per('emoticons', emot, 'path', emoticons_default[emot])
+		for msg in statusmsg_default:
+			config.add_per('statusmsg', msg)
+			config.set_per('statusmsg', msg, 'message', statusmsg_default[msg])
 		return
