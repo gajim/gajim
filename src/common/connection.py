@@ -163,7 +163,9 @@ class connection:
 				self.dispatch('GC_SUBJECT', (str(msg.getFrom()), subject))
 			else:
 				self.dispatch('GC_MSG', (str(msg.getFrom()), msgtxt, tim))
+				gajim.logger.write('gc', msgtxt, str(msg.getFrom()), tim = tim)
 		else:
+			gajim.logger.write('incoming', msgtxt, str(msg.getFrom()), tim = tim)
 			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim))
 	# END messageCB
 
@@ -193,15 +195,8 @@ class connection:
 			show = prs.getShow()
 			if not show:
 				show = 'online'
-			self.dispatch('NOTIFY', (prs.getFrom().getStripped(), show, status, \
-				prs.getFrom().getResource(), prio, keyID, prs.getRole(), \
-				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
-				prs.getActor(), prs.getStatusCode()))
 		elif ptype == 'unavailable':
-			self.dispatch('NOTIFY', (prs.getFrom().getStripped(), 'offline', \
-				status, prs.getFrom().getResource(), prio, keyID, prs.getRole(), \
-				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
-				prs.getActor(), prs.getStatusCode()))
+			show = 'offline'
 		elif ptype == 'subscribe':
 			gajim.log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0:
@@ -258,6 +253,12 @@ class connection:
 				self.dispatch('NOTIFY', (prs.getFrom().getStripped(), 'error', \
 					errmsg, prs.getFrom().getResource(), prio, keyID, None, None, \
 					None,  None, None, None))
+		if ptype == 'available' or ptype == 'unavailable':
+			gajim.logger.write('status', status, prs.getFrom().getStripped(), show)
+			self.dispatch('NOTIFY', (prs.getFrom().getStripped(), show, status, \
+				prs.getFrom().getResource(), prio, keyID, prs.getRole(), \
+				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
+				prs.getActor(), prs.getStatusCode()))
 	# END presenceCB
 
 	def _disconnectedCB(self, con):
@@ -518,6 +519,7 @@ class connection:
 		if msgenc:
 			msg_iq.setX(common.jabber.NS_XENCRYPTED).insertData(msgenc)
 		self.connection.send(msg_iq)
+		gajim.logger.write('outgoing', msg, jid)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 
 	def request_subscription(self, jid, msg):

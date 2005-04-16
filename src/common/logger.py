@@ -75,7 +75,10 @@ class Logger:
 			show = nick
 		for f in files:
 			fic = open(LOGPATH + f, 'a')
-			fic.write('%s:%s:%s:%s\n' % (tim, jid, show, msg))
+			fic.write('%s:%s:%s' % (tim, jid, show))
+			if msg:
+				fic.write(':' + msg)
+			fic.write('\n')
 			fic.close()
 
 	def get_nb_line(self, jid):
