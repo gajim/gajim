@@ -413,15 +413,7 @@ class plugin:
 				self.play_sound('sound_contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
-											not self.config['autopopup']:
-					#FIXME:
-					#DOES NOT ALWAYS WORK WHY?
-					#I control nkour@lagaule in jabber
-					# have nkour@lagaul in nkour@jabber.org
-					#go online from psi in lagaule
-					#gajim doesn't give a shit
-					# WHY? same with offline
-					# new message works
+											self.config['notify_on_online']:
 					instance = Popup_window(self, 'Contact Online', jid, account)
 					self.roster.popup_windows.append(instance)
 			elif old_show > 1 and new_show < 2 and \
@@ -429,7 +421,7 @@ class plugin:
 				self.play_sound('sound_contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 							not self.queues[account].has_key(jid) and \
-											not self.config['autopopup']:
+											self.config['notify_on_offline']:
 					instance = Popup_window(self, 'Contact Offline', jid, account)
 					self.roster.popup_windows.append(instance)
 				
@@ -452,7 +444,7 @@ class plugin:
 		if not self.windows[account]['chats'].has_key(jid) and \
 						not self.queues[account].has_key(jid):
 			first = True
-			if	not self.config['autopopup']:
+			if	self.config['notify_on_new_message']:
 				instance = Popup_window(self, 'New Message', jid, account)
 				self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
@@ -862,7 +854,11 @@ class plugin:
 			'MYVCARD', 'OS_INFO', 'VCARD', 'LOG_NB_LINE', 'LOG_LINE', 'VISUAL', \
 			'GC_MSG', 'GC_SUBJECT', 'BAD_PASSPHRASE', 'GPG_SECRETE_KEYS', \
 			'ROSTER_INFO', 'MSGSENT'])
-		self.default_config = {'autopopup':0,\
+		self.default_config = {\
+			'notify_on_new_message': 1,\
+			'autopopup':0,\
+			'notify_on_online': 1,\
+			'notify_on_offline': 0,\
 			'autopopupaway':0,\
 			'ignore_unknown_contacts':0,\
 			'showoffline':0,\
