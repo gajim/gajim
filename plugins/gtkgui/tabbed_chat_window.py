@@ -65,6 +65,7 @@ class Tabbed_chat_window(Chat):
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			status_image.set_from_pixbuf(image.get_pixbuf())
 		contact_button = self.xmls[jid].get_widget('contact_button')
+		contact_button.set_use_underline(False)
 		contact_button.set_label(user.name + ' <' + jid + '>')
 		if not user.keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
