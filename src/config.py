@@ -1340,11 +1340,12 @@ class Accounts_window:
 
 	def on_new_button_clicked(self, widget):
 		"""When new button is clicked : open an account information window"""
-		if not self.plugin.windows.has_key('account_modification_window'):
+		if self.plugin.windows.has_key('account_modification_window'):
+			self.plugin.windows['account_modification'].window.present()			
+		else:
 			self.plugin.windows['account_modification'] = \
 				Account_modification_window(self.plugin, '')
-		else:
-			self.plugin.windows['account_modification'].window.present()
+
 
 	def on_delete_button_clicked(self, widget):
 		"""When delete button is clicked :
@@ -1368,16 +1369,16 @@ class Accounts_window:
 			self.init_accounts()
 
 	def on_modify_button_clicked(self, widget):
-		"""When modify button is clicked :
-		open the account information window for this account"""
-		if not self.plugin.windows.has_key('account_modification_window'):
-			sel = self.accounts_treeview.get_selection()
-			(model, iter) = sel.get_selected()
-			account = model.get_value(iter, 0)
-			self.plugin.windows['account_modification'] = \
-				Account_modification_window(self.plugin, account) # may it messes with this one
+		"""When modify button is clicked:
+		open/show the account modification window for this account"""
+		sel = self.accounts_treeview.get_selection()
+		(model, iter) = sel.get_selected()
+		account = model.get_value(iter, 0)
+		if self.plugin.windows[account].has_key('account_modification_window'):
+			self.plugin.windows[account]['account_modification'].window.present()
 		else:
-			self.plugin.windows['account_modification'].window.present()
+			self.plugin.windows[account]['account_modification'] = \
+				Account_modification_window(self.plugin, account)
 
 	def on_sync_with_global_status_checkbutton_toggled(self, widget):
 		if widget.get_active():

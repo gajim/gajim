@@ -2026,7 +2026,7 @@
 		      <child>
 			<widget class="GtkLabel" id="label192">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Subscribe</property>
+			  <property name="label" translatable="yes">_Subscribe</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
