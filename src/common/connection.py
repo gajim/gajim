@@ -357,7 +357,7 @@ class connection:
 		iq_obj.setType('result')
 		qp = iq_obj.getTag('query')
 		qp.insertTag('name').insertData('Gajim')
-		qp.insertTag('version').insertData(version.version)
+		qp.insertTag('version').insertData(gajim.version)
 		no_send_os = gajim.config.get('do_not_send_os_info')
 		if not no_send_os:
 			qp.insertTag('os').insertData(get_os_info())
