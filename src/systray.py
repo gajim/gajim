@@ -51,7 +51,7 @@ class Systray:
 		#we look for the number of unread messages
 		#in roster
 		nb = self.plugin.roster.nb_unread
-		for acct in self.plugin.accounts:
+		for acct in gajim.connections:
 			#in chat / groupchat windows
 			for kind in ['chats', 'gc']:
 				for jid in self.plugin.windows[acct][kind]:
@@ -71,7 +71,7 @@ class Systray:
 		#we look for the number of unread messages
 		#in roster
 		nb = self.plugin.roster.nb_unread
-		for acct in self.plugin.accounts:
+		for acct in gajim.connections:
 			#in chat / groupchat windows
 			for kind in ['chats', 'gc']:
 				for jid in self.plugin.windows[acct][kind]:
@@ -109,23 +109,23 @@ class Systray:
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		#menu.append(new_message_menuitem)
 		
-		if len(self.plugin.accounts.keys()) > 0:
+		if len(gajim.connections.keys()) > 0:
 			chat_with_menuitem.set_sensitive(True)
 			new_message_menuitem.set_sensitive(True)
 		else:
 			chat_with_menuitem.set_sensitive(False)
 			new_message_menuitem.set_sensitive(False)
 		
-		if len(self.plugin.accounts.keys()) >= 2: # 2 or more accounts? make submenus
+		if len(gajim.connections.keys()) >= 2: # 2 or more accounts? make submenus
 			account_menu_for_chat_with = gtk.Menu()
 			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
 
 			account_menu_for_new_message = gtk.Menu()
 			new_message_menuitem.set_submenu(account_menu_for_new_message)
 
-			for account in self.plugin.accounts.keys():
-				our_jid = self.plugin.accounts[account]['name'] + '@' +\
-					self.plugin.accounts[account]['hostname']
+			for account in gajim.connections:
+				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
+					gajim.config.get_per('accounts', account, 'hostname')
 				#for chat_with
 				item = gtk.MenuItem(_('as ') + our_jid)
 				account_menu_for_chat_with.append(item)
@@ -137,10 +137,10 @@ class Systray:
 					self.on_new_message_menuitem_activate, account)
 				account_menu_for_new_message.append(item)
 				
-		elif len(self.plugin.accounts.keys()) == 1: # one account
+		elif len(gajim.connections) == 1: # one account
 			#one account, no need to show 'as jid
 			#for chat_with
-			account = self.plugin.accounts.keys()[0]
+			account = gajim.connections.keys()[0]
 			
 			group_menu = self.make_groups_submenus_for_chat_with(account)
 			chat_with_menuitem.set_submenu(group_menu)
