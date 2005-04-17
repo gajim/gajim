@@ -25,6 +25,7 @@ try:
 	import GnuPGInterface
 except:
 	USE_GPG = 0
+	return
 
 class  GnuPG(GnuPGInterface.GnuPG):
 	def __init__(self):
