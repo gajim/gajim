@@ -733,7 +733,7 @@ class New_message_dialog:
 
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
-		if len(gajim.config.connections) > 1:
+		if len(gajim.connections) > 1:
 			title = 'New Message as ' + our_jid
 		else:
 			title = 'New Message'
