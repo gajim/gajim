@@ -27,7 +27,7 @@ STATE_AWAKE    = "awake"
 
 SUPPORTED = 1
 try:
-	import idle
+	import common.idle
 except:
 	SUPPORTED = 0
 
@@ -39,7 +39,7 @@ class Sleepy:
 		self.interval2 = interval2
 		self.state         = STATE_AWAKE ## assume were awake to stake with
 		try:
-			idle.init()
+			common.idle.init()
 		except:
 			SUPPORTED = 0
 			self.state = STATE_UNKNOWN
@@ -47,7 +47,7 @@ class Sleepy:
 	def poll(self):
 		if not SUPPORTED: return 0
 
-		idleTime = idle.getIdleSec()
+		idleTime = common.idle.getIdleSec()
 		if idleTime > self.interval2:
 			self.state = STATE_XAWAY
 		elif idleTime > self.interval1:

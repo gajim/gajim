@@ -491,8 +491,8 @@ class connection:
 				ptype = 'available'
 				if status == 'invisible':
 					ptype = 'invisible'
-				prio = gajim.config.get_per('accounts', self.name, 'priority')
-				self.connection.sendPresence(ptype, str(prio), status, msg, signed)
+				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
+				self.connection.sendPresence(ptype, prio, status, msg, signed)
 				self.dispatch('STATUS', status)
 				#ask our VCard
 				iq = common.jabber.Iq(type='get')
@@ -510,7 +510,7 @@ class connection:
 			ptype = 'available'
 			if status == 'invisible':
 				ptype = 'invisible'
-			prio = gajim.config.get_per('accounts', self.name, 'priority')
+			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
 			self.connection.sendPresence(ptype, prio, status, msg, signed)
 			self.dispatch('STATUS', status)
 
