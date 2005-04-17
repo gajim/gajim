@@ -86,6 +86,17 @@ class Preferences_window:
 		self.plugin.roster.regroup = gajim.config.get('mergeaccounts')
 		self.plugin.roster.draw_roster()
 	
+	def on_use_emoticons_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'useemoticons', \
+			[self.xml.get_widget('add_remove_emoticons_button')])
+	
+	def on_add_remove_emoticons_button_clicked(self, widget):
+		window = self.plugin.windows['add_remove_emoticons_window'].window
+		if window.get_property('visible'):
+			window.present()
+		else:
+			window.show_all()
+
 	def on_iconset_combobox_changed(self, widget):
 		model = widget.get_model()
 		active = widget.get_active()
@@ -351,17 +362,6 @@ class Preferences_window:
 			gtk.gdk.color_parse(gajim.config.get_default('statusmsgcolor')))
 		self.update_text_tags()
 		self.plugin.save_config()
-
-	def on_use_emoticons_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'useemoticons', \
-			[self.xml.get_widget('add_remove_emoticons_button')])
-	
-	def on_add_remove_emoticons_button_clicked(self, widget):
-		window = self.plugin.windows['add_remove_emoticons_window'].window
-		if window.get_property('visible'):
-			window.present()
-		else:
-			window.show_all()
 
 	def on_notify_on_new_message_radiobutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'notify_on_new_message', \
@@ -644,6 +644,11 @@ class Preferences_window:
 		st = gajim.config.get('mergeaccounts')
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
+		#Use emoticons
+		st = gajim.config.get('useemoticons')
+		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
+		self.xml.get_widget('add_remove_emoticons_button').set_sensitive(st)
+
 		#iconset
 		list_style = os.listdir('../data/iconsets/')
 		model = gtk.ListStore(gobject.TYPE_STRING)
@@ -744,18 +749,13 @@ class Preferences_window:
 		self.xml.get_widget('status_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(colSt))
 
-		#Use emoticons
-		st = gajim.config.get('useemoticons')
-		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
-		self.xml.get_widget('add_remove_emoticons_button').set_sensitive(st)
-
-		#notify on new message
-		st = gajim.config.get('notify_on_new_message')
-		self.notify_on_new_message_radiobutton.set_active(st)
-
-		#autopopup
-		st = gajim.config.get('autopopup')
-		self.notify_on_online_checkbutton.set_active(st)
+		# on new message
+		if gajim.config.get('notify_on_new_message'):
+			self.xml.get_widget('notify_on_new_message_radiobutton').set_active(1)
+		elif gajim.config.get('autopopup'):
+			self.xml.get_widget('popup_new_message_radiobutton').set_active(1)
+		else:
+			self.xml.get_widget('only_in_roster_radiobutton').set_active(1)
 
 		#notify on online statuses
 		st = gajim.config.get('notify_on_online')
