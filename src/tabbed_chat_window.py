@@ -66,6 +66,7 @@ class Tabbed_chat_window(chat.Chat):
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			status_image.set_from_pixbuf(image.get_pixbuf())
 		contact_button = self.xmls[jid].get_widget('contact_button')
+		contact_button.set_use_underline(False)
 		contact_button.set_label(user.name + ' <' + jid + '>')
 		if not user.keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
@@ -139,7 +140,7 @@ class Tabbed_chat_window(chat.Chat):
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
-		self.print_conversation(_("%s is %s (%s)") % (user.name, \
+		self.print_conversation(_('%s is %s (%s)') % (user.name, \
 										user.show, user.status), user.jid, 'status')
 
 		#print queued messages
