@@ -103,7 +103,7 @@ class Vcard_information_window:
 			self.xml.get_widget('ask_label').set_text('None')
 		self.xml.get_widget('nickname_entry').set_text(self.user.name)
 		log = 1
-		if self.user.jid in gajim.config.get_per('accounts', account, \
+		if self.user.jid in gajim.config.get_per('accounts', self.account, \
 			'no_log_for').split(' '):
 			log = 0
 		self.xml.get_widget('log_checkbutton').set_active(log)
