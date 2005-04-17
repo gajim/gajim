@@ -750,12 +750,15 @@ class Preferences_window:
 			gtk.gdk.color_parse(colSt))
 
 		# on new message
+		only_in_roster = True
 		if gajim.config.get('notify_on_new_message'):
 			self.xml.get_widget('notify_on_new_message_radiobutton').set_active(1)
-		elif gajim.config.get('autopopup'):
-			self.xml.get_widget('popup_new_message_radiobutton').set_active(1)
-		else:
-			self.xml.get_widget('only_in_roster_radiobutton').set_active(1)
+			only_in_roster = False
+		if gajim.config.get('autopopup'):
+			self.xml.get_widget('popup_new_message_radiobutton').set_active(True)
+			only_in_roster = False
+		if only_in_roster:
+			self.xml.get_widget('only_in_roster_radiobutton').set_active(True)
 
 		#notify on online statuses
 		st = gajim.config.get('notify_on_online')
