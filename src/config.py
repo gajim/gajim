@@ -897,8 +897,7 @@ class Account_modification_window:
 		"""close window"""
 		del self.plugin.windows['account_modification']
 	
-	def on_close_button_clicked(self, widget):
-		"""When Close button is clicked"""
+	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
 
 	def on_checkbutton_toggled(self, widget, widgets):

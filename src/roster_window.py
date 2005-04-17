@@ -530,7 +530,9 @@ class Roster_window:
 		menu.reposition()
 
 	def on_edit_account(self, widget, account):
-		if not self.plugin.windows.has_key('account_modification_window'):
+		if self.plugin.windows.has_key('account_modification_window'):
+			self.plugin.windows['account_modification'].window.present()
+		else:
 			self.plugin.windows['account_modification'] = \
 				config.Account_modification_window(self.plugin, account)
 
@@ -932,7 +934,7 @@ class Roster_window:
 
 	def on_accounts_menuitem_activate(self, widget):
 		if self.plugin.windows.has_key('accounts'):
-			self.plugin.windows['accounts'].present()
+			self.plugin.windows['accounts'].window.present()
 		else:
 			self.plugin.windows['accounts'] = config.Accounts_window(self.plugin) 
 
@@ -1100,7 +1102,7 @@ class Roster_window:
 		"""When Service Discovery is selected:
 		Call browse class"""
 		if self.plugin.windows[account].has_key('disco'):
-			self.plugin.windows[account]['disco'].present()
+			self.plugin.windows[account]['disco'].window.present()
 		else:
 			self.plugin.windows[account]['disco'] = \
 				config.Service_discovery_window(self.plugin, account)
