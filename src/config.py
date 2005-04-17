@@ -91,7 +91,7 @@ class Preferences_window:
 			[self.xml.get_widget('add_remove_emoticons_button')])
 	
 	def on_add_remove_emoticons_button_clicked(self, widget):
-		window = self.plugin.windows['add_remove_emoticons_window'].window
+		window = self.plugin.windows['add_remove_emoticons'].window
 		if window.get_property('visible'):
 			window.present()
 		else:
