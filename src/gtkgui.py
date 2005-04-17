@@ -319,7 +319,8 @@ class interface:
 				self.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
-					gajim.config.get('notify_on_online'):
+					gajim.config.get('notify_on_online') and \
+					gajim.config.get('autopopupaway'):
 					instance = dialogs.Popup_window(self, 'Contact Online', jid, \
 						account)
 					self.roster.popup_windows.append(instance)
@@ -328,7 +329,8 @@ class interface:
 				self.play_sound('contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
-					gajim.config.get('notify_on_offline'):
+					gajim.config.get('notify_on_offline') and \
+					gajim.config.get('autopopupaway'):
 					instance = dialogs.Popup_window(self, 'Contact Offline', jid, \
 						account)
 					self.roster.popup_windows.append(instance)
@@ -352,7 +354,8 @@ class interface:
 		if not self.windows[account]['chats'].has_key(jid) and \
 						not self.queues[account].has_key(jid):
 			first = True
-			if gajim.config.get('notify_on_new_message'):
+			if gajim.config.get('notify_on_new_message') and \
+					gajim.config.get('autopopupaway'):
 				instance = dialogs.Popup_window(self, 'New Message', jid, account)
 				self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
