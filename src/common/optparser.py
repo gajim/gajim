@@ -120,6 +120,8 @@ class OptionsParser:
 		if self.tab.has_key('Profile'):
 			if self.tab['Profile'].has_key('accounts'):
 				accounts = self.tab['Profile']['accounts'].split()
+		if not accounts:
+			return
 		for account in accounts:
 			if not self.tab.has_key(account):
 				continue
