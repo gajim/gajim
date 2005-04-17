@@ -530,7 +530,7 @@ class Roster_window:
 		menu.reposition()
 
 	def on_edit_account(self, widget, account):
-		if self.plugin.windows.has_key('account_modification_window'):
+		if self.plugin.windows.has_key('account_modification'):
 			self.plugin.windows['account_modification'].window.present()
 		else:
 			self.plugin.windows['account_modification'] = \
@@ -879,7 +879,7 @@ class Roster_window:
 			path = None
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
-		if (autopopup == 0 or ( not autopopupaway and \
+		if (not autopopup or ( not autopopupaway and \
 			gajim.connections[account].connected > 2)) and not \
 			self.plugin.windows[account]['chats'].has_key(jid):
 			#We save it in a queue

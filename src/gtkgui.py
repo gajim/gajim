@@ -313,27 +313,31 @@ class interface:
 		elif self.roster.contacts[account].has_key(ji):
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
-			#play sound
-			if old_show < 2 and new_show > 1 and gajim.config.get_per( \
-				'soundevents', 'contact_connected', 'enabled'):
-				self.play_sound('contact_connected')
+			#inform the user about new contact online
+			if old_show < 2 and new_show > 1:
+				if gajim.config.get_per('soundevents', 'contact_connected', \
+					 'enabled'):
+					self.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
-					gajim.config.get('notify_on_online') and \
-					gajim.config.get('autopopupaway'):
-					instance = dialogs.Popup_window(self, 'Contact Online', jid, \
-						account)
-					self.roster.popup_windows.append(instance)
-			elif old_show > 1 and new_show < 2 and gajim.config.get_per( \
-				'soundevents', 'contact_disconnected', 'enabled'):
-				self.play_sound('contact_disconnected')
-				if not self.windows[account]['chats'].has_key(jid) and \
-					not self.queues[account].has_key(jid) and \
-					gajim.config.get('notify_on_offline') and \
-					gajim.config.get('autopopupaway'):
-					instance = dialogs.Popup_window(self, 'Contact Offline', jid, \
-						account)
-					self.roster.popup_windows.append(instance)
+					gajim.config.get('notify_on_online'):
+						#FIXME: check what is OUR STATUS and do the rest
+						if gajim.config.get('autopopupaway'):
+							instance = dialogs.Popup_window(self, 'Contact Online', jid, \
+								account)
+							self.roster.popup_windows.append(instance)
+			elif old_show > 1 and new_show < 2:
+				if gajim.config.get_per('soundevents', 'contact_disconnected', \
+					'enabled'):
+					self.play_sound('contact_disconnected')
+					if not self.windows[account]['chats'].has_key(jid) and \
+						not self.queues[account].has_key(jid) and \
+						gajim.config.get('notify_on_offline'):
+						#FIXME: check what is OUR STATUS and do the rest						
+						if	gajim.config.get('autopopupaway'):
+							instance = dialogs.Popup_window(self, 'Contact Offline', jid, \
+								account)
+							self.roster.popup_windows.append(instance)
 				
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
@@ -354,10 +358,11 @@ class interface:
 		if not self.windows[account]['chats'].has_key(jid) and \
 						not self.queues[account].has_key(jid):
 			first = True
-			if gajim.config.get('notify_on_new_message') and \
-					gajim.config.get('autopopupaway'):
-				instance = dialogs.Popup_window(self, 'New Message', jid, account)
-				self.roster.popup_windows.append(instance)
+			if gajim.config.get('notify_on_new_message'):
+				#FIXME: check what is OUR STATUS (if we're online) and do the rest
+				if gajim.config.get('autopopupaway'):
+					instance = dialogs.Popup_window(self, 'New Message', jid, account)
+					self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
 		if gajim.config.get_per('soundevents', 'first_message_received', \
 			'enabled') and first:
@@ -743,7 +748,7 @@ class interface:
 		
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.windows['preferences'] = config.Preferences_window(self)
-		self.windows['add_remove_emoticons_window'] = \
+		self.windows['add_remove_emoticons'] = \
 			config.Add_remove_emoticons_window(self)
 		self.windows['roster'] = self.roster
 		

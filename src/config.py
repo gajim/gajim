@@ -895,7 +895,7 @@ class Account_modification_window:
 	"""Class for account informations"""
 	def on_account_modification_window_destroy(self, widget):
 		"""close window"""
-		del self.plugin.windows['account_modification']
+		del self.plugin.windows[self.account]['account_modification']
 	
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
@@ -1340,7 +1340,7 @@ class Accounts_window:
 
 	def on_new_button_clicked(self, widget):
 		"""When new button is clicked : open an account information window"""
-		if self.plugin.windows.has_key('account_modification_window'):
+		if self.plugin.windows.has_key('account_modification'):
 			self.plugin.windows['account_modification'].window.present()			
 		else:
 			self.plugin.windows['account_modification'] = \
@@ -1374,7 +1374,7 @@ class Accounts_window:
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		account = model.get_value(iter, 0)
-		if self.plugin.windows[account].has_key('account_modification_window'):
+		if self.plugin.windows[account].has_key('account_modification'):
 			self.plugin.windows[account]['account_modification'].window.present()
 		else:
 			self.plugin.windows[account]['account_modification'] = \
@@ -1628,14 +1628,64 @@ class Add_remove_emoticons_window:
 
 class Service_discovery_window:
 	"""Class for Service Discovery Window:
-	to know the services on the selected server"""
+	to know the services on a server"""
 	def on_service_discovery_window_destroy(self, widget):
 		"""close window"""
 		del self.plugin.windows[self.account]['disco']
 
 	def on_close_button_clicked(self, widget):
-		"""When Close button is clicked"""
 		self.window.destroy()
+
+	def __init__(self, plugin, account):
+		if gajim.connections[account].connected < 2:
+			dialog.Error_dialog(_('You must be connected to browse services'))
+			return
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
+		self.window = xml.get_widget('service_discovery_window')
+		self.services_treeview = xml.get_widget('services_treeview')
+		self.join_button = xml.get_widget('join_button')
+		self.register_button = xml.get_widget('register_button')
+		self.address_comboboxentry = xml.get_widget('address_comboboxentry')
+		self.address_comboboxentry_entry = self.address_comboboxentry.child
+		self.address_comboboxentry_entry.set_activates_default(True)
+		self.plugin = plugin
+		self.account = account
+		self.agent_infos = {}
+		model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		self.services_treeview.set_model(model)
+		#columns
+		renderer = gtk.CellRendererText()
+		renderer.set_data('column', 0)
+		self.services_treeview.insert_column_with_attributes(-1, 'Name', \
+			renderer, text=0)
+		renderer = gtk.CellRendererText()
+		renderer.set_data('column', 1)
+		self.services_treeview.insert_column_with_attributes(-1, 'Service', \
+			renderer, text=1)
+
+		self.address_comboboxentry = xml.get_widget('address_comboboxentry')
+		liststore = gtk.ListStore(str)
+		self.address_comboboxentry.set_model(liststore)
+		self.address_comboboxentry.set_text_column(0)
+		self.latest_addresses = gajim.config.get('latest_disco_addresses').split()
+		server_address = gajim.config.get_per('accounts', self.account, \
+			'hostname')
+		if server_address in self.latest_addresses:
+			self.latest_addresses.remove(server_address)
+		self.latest_addresses.insert(0, server_address)
+		if len(self.latest_addresses) > 10:
+			self.latest_addresses = self.latest_addresses[0:10]
+		for j in self.latest_addresses:
+			self.address_comboboxentry.append_text(j)
+		self.address_comboboxentry.child.set_text(server_address)
+
+		self.register_button = xml.get_widget('register_button')
+		self.register_button.set_sensitive(False)
+		self.join_button = xml.get_widget('join_button')
+		self.join_button.set_sensitive(False)
+		xml.signal_autoconnect(self)
+		self.browse(server_address)
+		self.window.show_all()
 		
 	def browse(self, jid):
 		"""Send a request to the core to know the available services"""
@@ -1842,54 +1892,3 @@ class Service_discovery_window:
 		self.services_treeview.get_model().clear()
 		self.browse(server_address)
 		self.plugin.save_config()
-	
-	def __init__(self, plugin, account):
-		if gajim.connections[account].connected < 2:
-			dialog.Error_dialog(_('You must be connected to browse services'))
-			return
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
-		self.window = xml.get_widget('service_discovery_window')
-		self.services_treeview = xml.get_widget('services_treeview')
-		self.join_button = xml.get_widget('join_button')
-		self.register_button = xml.get_widget('register_button')
-		self.address_comboboxentry = xml.get_widget('address_comboboxentry')
-		self.address_comboboxentry_entry = self.address_comboboxentry.child
-		self.address_comboboxentry_entry.set_activates_default(True)
-		self.plugin = plugin
-		self.account = account
-		self.agent_infos = {}
-		model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
-		self.services_treeview.set_model(model)
-		#columns
-		renderer = gtk.CellRendererText()
-		renderer.set_data('column', 0)
-		self.services_treeview.insert_column_with_attributes(-1, 'Name', \
-			renderer, text=0)
-		renderer = gtk.CellRendererText()
-		renderer.set_data('column', 1)
-		self.services_treeview.insert_column_with_attributes(-1, 'Service', \
-			renderer, text=1)
-
-		self.address_comboboxentry = xml.get_widget('address_comboboxentry')
-		liststore = gtk.ListStore(str)
-		self.address_comboboxentry.set_model(liststore)
-		self.address_comboboxentry.set_text_column(0)
-		self.latest_addresses = gajim.config.get('latest_disco_addresses').split()
-		server_address = gajim.config.get_per('accounts', self.account, \
-			'hostname')
-		if server_address in self.latest_addresses:
-			self.latest_addresses.remove(server_address)
-		self.latest_addresses.insert(0, server_address)
-		if len(self.latest_addresses) > 10:
-			self.latest_addresses = self.latest_addresses[0:10]
-		for j in self.latest_addresses:
-			self.address_comboboxentry.append_text(j)
-		self.address_comboboxentry.child.set_text(server_address)
-
-		self.register_button = xml.get_widget('register_button')
-		self.register_button.set_sensitive(False)
-		self.join_button = xml.get_widget('join_button')
-		self.join_button.set_sensitive(False)
-		xml.signal_autoconnect(self)
-		self.browse(server_address)
-		self.window.show_all()

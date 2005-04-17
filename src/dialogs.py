@@ -239,6 +239,7 @@ class Edit_groups_dialog:
 		self.plugin = plugin
 		self.account = account
 		self.user = user
+		self.changes_made = False
 		self.list = self.xml.get_widget('groups_treeview')
 		self.xml.get_widget('nickname_label').set_markup(\
 			_('Contact\'s name: <i>%s</i>') % user.name)
@@ -251,9 +252,9 @@ class Edit_groups_dialog:
 	def run(self):
 		self.dialog.run()
 		self.dialog.destroy()
-		#TODO: do not send if unnecesary
-		gajim.connections[self.account].update_user(self.user.jid, \
-			self.user.name, self.user.groups)
+		if self.changes_made:
+			gajim.connections[self.account].update_user(self.user.jid, \
+				self.user.name, self.user.groups)
 
 	def update_user(self):
 		self.plugin.roster.remove_user(self.user, self.account)
@@ -275,6 +276,7 @@ class Edit_groups_dialog:
 		self.update_user()
 
 	def group_toggled_cb(self, cell, path):
+		self.changes_made = True
 		model = self.list.get_model()
 		if model[path][1] and len(self.user.groups) == 1: # we try to remove 
 																		  # the latest group

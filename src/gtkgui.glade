@@ -9204,7 +9204,7 @@ Custom</property>
 		      <property name="height_request">0</property>
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Click for contact's extented information</property>
-		      <property name="label" translatable="yes">Anonymous &lt;id@server/res&gt;</property>
+		      <property name="label" translatable="yes">Anonymous &lt;nick@server/res&gt;</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NONE</property>
 		      <property name="focus_on_click">True</property>
