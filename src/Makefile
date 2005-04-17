@@ -1,5 +1,5 @@
 # Set the C flags to include the GTK+ and Python libraries
-PYTHONVER = `python -V 2>&1 | awk '{print $2}' | cut -f1,2 -d.`
+PYTHONVER = `python -V 2>&1 | awk '{print $$2}' | cut -f1,2 -d.`
 CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -I/usr/include/python$(PYTHONVER) -I.
 LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0`
 

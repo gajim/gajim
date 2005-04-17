@@ -1,6 +1,6 @@
 VERSION		?= 0.6.1
 
-MODULES		= common plugins/gtkgui
+MODULES		= src src/common
 PREFIX		= /usr
 DESTDIR		= /
 
@@ -20,14 +20,14 @@ all: translation trayicon idle pyo
 
 translation:
 	for l in $(LANGS) ; do \
-		msgfmt Messages/$$l/LC_MESSAGES/gajim.po -o Messages/$$l/LC_MESSAGES/gajim.mo; \
+		msgfmt po/$$l/LC_MESSAGES/gajim.po -o po/$$l/LC_MESSAGES/gajim.mo; \
 	done
 
 trayicon:
-	make -C plugins/gtkgui all;
+	make -C src all;
 
 idle:
-	make -C common all;
+	make -C src/common all;
 
 pyo:
 	ST="import py_compile\n py_compile.compile('$$f')"
@@ -43,14 +43,14 @@ clean:
 dist:
 	-rm -rf gajim-$(VERSION)
 	mkdir gajim-$(VERSION)
-	cp -r plugins scripts common Core doc Messages sounds gajim-$(VERSION)/
-	cp setup_win32.py gajim.iss AUTHORS gajim.1 gajim.xpm gajim.ico COPYING Makefile Changelog README gajim.py gajim-$(VERSION)
+	cp -r data src doc po gajim-$(VERSION)/
+	cp AUTHORS gajim.1 gajim.xpm gajim.ico COPYING Makefile Changelog README gajim.py gajim-$(VERSION)
 	-find gajim-$(VERSION) -name '.svn' -exec rm -rf {} \; 2> /dev/null
 	find gajim-$(VERSION) -name '*.pyc' -exec rm {} \;
 	find gajim-$(VERSION) -name '*.pyo' -exec rm {} \;
 	find gajim-$(VERSION) -name '.*' -exec rm {} \;
 	@echo tarring gajim-$(VERSION) ...
-	@tar cjf gajim-$(VERSION).tar.bz2 gajim-$(VERSION)/
+	@tar czf gajim-$(VERSION).tar.gz gajim-$(VERSION)/
 	rm -rf gajim-$(VERSION)
 
 install:
