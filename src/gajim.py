@@ -194,7 +194,7 @@ class Interface:
 						user1.priority, user1.keyID)
 					luser.append(user1)
 				user1.resource = resource
-			if user1.jid.find('@') > 0: # It's not an agent
+			if user1.jid.find('@') > 0 and len(luser) == 1: # It's not an agent
 				if old_show == 0 and new_show > 1:
 					if not user1.jid in self.roster.newly_added[account]:
 						self.roster.newly_added[account].append(user1.jid)
