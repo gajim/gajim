@@ -830,7 +830,6 @@ class Roster_window:
 					luser_copy.append(user)
 				for user in luser_copy:
 					self.chg_user_status(user, 'offline', 'Disconnected', account)
-#		gajim.connections[account].connected = statuss.index(status)
 		self.update_status_comboxbox()
 
 	def new_chat(self, user, account):
