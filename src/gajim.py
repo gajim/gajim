@@ -277,6 +277,10 @@ class Interface:
 	def handle_event_msgerror(self, account, array):
 		#('MSGERROR', account, (user, error_code, error_msg, msg, time))
 		jid = array[0].split('/')[0]
+		if jid in self.windows[account]['gc']:
+			self.windows[account]['gc'][jid].print_conversation('Error %s: %s' % \
+				(array[1], array[2]), jid, tim = array[4])
+			return
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
 		self.roster.on_message(jid, _('error while sending') + \
