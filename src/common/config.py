@@ -188,7 +188,7 @@ class Config:
 	statusmsg_default = {
 		'Nap': 'I\'m taking a nap.',
 		'Brb': 'Back in some minutes.',
-		'Eating': 'so leave me a message.',
+		'Eating': 'I\'m eating, so leave me a message.',
 		'Movie' : 'I\'m watching a movie.' ,
 		'Working': 'I\'m working.',
 	}
