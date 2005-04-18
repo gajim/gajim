@@ -698,7 +698,6 @@ class Roster_window:
 				if self.plugin.systray_enabled:
 					self.plugin.systray.set_status('connecting')
 
-			save_pass = 0
 			save_pass = gajim.config.get_per('accounts', account, 'savepass')
 			if not save_pass and gajim.connections[account].connected < 2:
 				passphrase = ''

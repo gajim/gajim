@@ -276,6 +276,7 @@ class connection:
 		if self.connection:
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
+			self.connection = None
 	# END disconenctedCB
 
 	def _rosterSetCB(self, con, iq_obj):
@@ -378,7 +379,6 @@ class connection:
 
 	def connect(self):
 		"""Connect and authentificate to the Jabber server"""
-		self.connected = 1
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
@@ -386,6 +386,7 @@ class connection:
 		#create connexion if it doesn't already existe
 		if self.connection:
 			return self.connection
+		self.connected = 1
 		if gajim.config.get_per('accounts', self.name, 'use_proxy'):
 			proxy = {'host': gajim.config.get_per('accounts', self.name, \
 				'proxyhost')}
@@ -505,6 +506,7 @@ class connection:
 			self.connected = 0
 			self.connection.disconnect(msg)
 			self.dispatch('STATUS', 'offline')
+			self.connection = None
 		elif status != 'offline' and self.connected:
 			self.connected = STATUS_LIST.index(status)
 			ptype = 'available'
@@ -756,9 +758,9 @@ class connection:
 		iq.setID(id)
 		self.connection.send(iq)
 
-	def process(self):
+	def process(self, timeout):
 		if not self.connection:
 			return
 		if self.connected:
-			self.connection.process(1)
+			self.connection.process(timeout)
 # END GajimCore

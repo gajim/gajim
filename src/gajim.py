@@ -683,7 +683,7 @@ class interface:
 	def process_connections(self):
 		for account in gajim.connections:
 			if gajim.connections[account].connected:
-				gajim.connections[account].connection.process(0.01)
+				gajim.connections[account].process(0.01)
 		return True
 
 	def save_config(self):
