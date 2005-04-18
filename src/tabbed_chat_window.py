@@ -91,7 +91,7 @@ class Tabbed_chat_window(chat.Chat):
 		"""close window"""
 		for jid in self.users:
 			if time.time() - self.last_message_time[jid] < 2: # 2 seconds
-				dialog = dialogs.Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this window ?') % jid)
+				dialog = dialogs.Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this window?') % jid)
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
 

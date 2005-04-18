@@ -231,18 +231,33 @@ class Interface:
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
 					gajim.config.get('notify_on_online'):
-					instance = dialogs.Popup_window(self, 'Contact Online', jid, \
-						account)
-					self.roster.popup_windows.append(instance)
+					show_notification = False
+					# check OUR status and if we allow notifications for that status
+					if gajim.config.get('autopopupaway'): # always notify
+						show_notification = True
+					elif gajim.connections[account].connected in (1, 2): #online or chat
+						show_notification = True
+					if show_notification:
+						instance = dialogs.Popup_window(self, 'Contact Online', jid, \
+							account)
+						self.roster.popup_windows.append(instance)
+						
 			elif old_show > 1 and new_show < 2 and gajim.config.get_per( \
 				'soundevents', 'contact_disconnected', 'enabled'):
 				self.play_sound('contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
 					gajim.config.get('notify_on_offline'):
-					instance = dialogs.Popup_window(self, 'Contact Offline', jid, \
-						account)
-					self.roster.popup_windows.append(instance)
+					show_notification = False
+					# check OUR status and if we allow notifications for that status
+					if gajim.config.get('autopopupaway'): # always notify
+						show_notification = True
+					elif gajim.connections[account].connected in (1, 2): #online or chat
+						show_notification = True
+					if show_notification:
+						instance = dialogs.Popup_window(self, 'Contact Offline', jid, \
+							account)
+						self.roster.popup_windows.append(instance)
 				
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
@@ -264,8 +279,15 @@ class Interface:
 						not self.queues[account].has_key(jid):
 			first = True
 			if gajim.config.get('notify_on_new_message'):
-				instance = dialogs.Popup_window(self, 'New Message', jid, account)
-				self.roster.popup_windows.append(instance)
+				show_notification = False
+				# check OUR status and if we allow notifications for that status
+				if gajim.config.get('autopopupaway'): # always show notification
+					show_notification = True
+				elif gajim.connections[account].connected in (1, 2): #online or chat
+					show_notification = True
+				if show_notification:
+					instance = dialogs.Popup_window(self, 'New Message', jid, account)
+					self.roster.popup_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
 		if gajim.config.get_per('soundevents', 'first_message_received', \
 			'enabled') and first:

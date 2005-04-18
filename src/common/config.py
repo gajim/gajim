@@ -257,7 +257,7 @@ class Config:
 			return None
 		return self.__options[optname][OPT_VAL]
 
-	def add_per(self, typename, name):
+	def add_per(self, typename, name): # per_group_of_option
 		if not self.__options_per_key.has_key(typename):
 #			print 'error: option %s doesn\'t exist' % (typename)
 			return -1
@@ -266,7 +266,7 @@ class Config:
 		
 		opt[1][name] = copy.deepcopy(opt[0])
 
-	def del_per(self, typename, name):
+	def del_per(self, typename, name): # per_group_of_option
 		if not self.__options_per_key.has_key(typename):
 #			print 'error: option %s doesn\'t exist' % (typename)
 			return -1
@@ -274,7 +274,7 @@ class Config:
 		opt = self.__options_per_key[typename]
 		del opt[1][name]
 
-	def set_per(self, optname, key, subname, value):
+	def set_per(self, optname, key, subname, value): # per_group_of_option
 		if not self.__options_per_key.has_key(optname):
 #			print 'error: option %s doesn\'t exist' % (optname)
 			return -1
@@ -290,7 +290,7 @@ class Config:
 		subobj[OPT_VAL] = value
 		return 0
 		
-	def get_per(self, optname, key = None, subname = None):
+	def get_per(self, optname, key = None, subname = None): # per_group_of_option
 		if not self.__options_per_key.has_key(optname):
 			return None
 		dict = self.__options_per_key[optname][1]

@@ -552,13 +552,16 @@ class Roster_window:
 		item = gtk.MenuItem(_('Online'))
 		sub_menu.append(item)
 		item.connect('activate', self.change_status, account, 'online')
+		item = gtk.MenuItem(_('Free for chat'))
+		sub_menu.append(item)
+		item.connect('activate', self.change_status, account, 'chat')
 		item = gtk.MenuItem(_('Away'))
 		sub_menu.append(item)
 		item.connect('activate', self.change_status, account, 'away')
-		item = gtk.MenuItem(_('NA'))
+		item = gtk.MenuItem(_('XA'))
 		sub_menu.append(item)
 		item.connect('activate', self.change_status, account, 'xa')
-		item = gtk.MenuItem(_('DND'))
+		item = gtk.MenuItem(_('Busy'))
 		sub_menu.append(item)
 		item.connect('activate', self.change_status, account, 'dnd')
 		item = gtk.MenuItem(_('Invisible'))
@@ -1010,11 +1013,11 @@ class Roster_window:
 						recent = True
 						break
 		if unread:
-			dialog = dialogs.Confirmation_dialog(_('You have unread messages, do you still want to quit Gajim ?'))
+			dialog = dialogs.Confirmation_dialog(_('You have unread messages.\nAre you sure you want to quit Gajim?'))
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 		if recent:
-			dialog = dialogs.Confirmation_dialog(_('You received a message in the last two seconds. Do you still want to quit Gajim ?'))
+			dialog = dialogs.Confirmation_dialog(_('You received a message in the last two seconds.\nAre you sure you want to quit Gajim?'))
 			if dialog.get_response() != gtk.RESPONSE_YES:
 				return
 		get_msg = False
@@ -1409,7 +1412,7 @@ class Roster_window:
 			iter = liststore.append([status_better, self.pixbufs[status], status])
 		self.status_combobox.show_all()
 		self.status_combobox.set_model(liststore)
-		self.status_combobox.set_active(5)
+		self.status_combobox.set_active(6) # default to offline
 
 		showOffline = gajim.config.get('showoffline')
 		self.xml.get_widget('show_offline_contacts_menuitem').set_active(showOffline)
