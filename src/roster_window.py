@@ -1002,8 +1002,7 @@ class Roster_window:
 		self.quit_gtkgui_plugin()
 
 	def on_roster_treeview_row_activated(self, widget, path, col=0):
-		'''When an iter is dubble clicked :
-		open the chat window'''
+		'''When an iter is double clicked: open the chat window'''
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
 		account = model.get_value(iter, 4)
@@ -1311,12 +1310,14 @@ class Roster_window:
 		return
 
 	def show_title(self):
-		start = ''
-		if self.nb_unread > 1:
-			start = '[' + str(self.nb_unread) + ']  '
-		elif self.nb_unread == 1:
-			start = '*  '
-		self.window.set_title(start + 'Gajim')
+		change_title_allowed = True # FIXME: add in expert settings
+		if change_title_allowed:
+			start = ''
+			if self.nb_unread > 1:
+				start = '[' + str(self.nb_unread) + ']  '
+			elif self.nb_unread == 1:
+				start = '*  '
+			self.window.set_title(start + 'Gajim')
 
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
