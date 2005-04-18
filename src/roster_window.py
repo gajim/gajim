@@ -30,10 +30,10 @@ import groupchat_window
 import history_window
 import dialogs
 import config
+import cell_renderer_image
 
 from gtkgui import User
 from common import gajim
-from common import cell_renderer_image
 from common import i18n
 
 _ = i18n._

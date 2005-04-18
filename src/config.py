@@ -24,11 +24,10 @@ import os
 import common.sleepy
 
 import dialogs
-import gtkgui
+import cell_renderer_image
 from common import gajim
 from common import connection
 from common import i18n
-from common import cell_renderer_image
 
 _ = i18n._
 APP = i18n.APP

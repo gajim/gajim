@@ -24,9 +24,9 @@ import gobject
 import time
 import dialogs
 import chat
+import cell_renderer_image
 from common import gajim
 from common import i18n
-from common import cell_renderer_image
 
 _ = i18n._
 APP = i18n.APP
