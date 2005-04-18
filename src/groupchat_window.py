@@ -22,12 +22,11 @@ import gtk.glade
 import pango
 import gobject
 import time
-from common import gajim
 import dialogs
 import chat
-from gtkgui import CellRendererImage
-
+from common import gajim
 from common import i18n
+from common import cell_renderer_image
 
 _ = i18n._
 APP = i18n.APP
@@ -468,7 +467,7 @@ class Groupchat_window(chat.Chat):
 		#status_image, nickname, real_jid, status
 		store = gtk.TreeStore(gtk.Image, str, str, str)
 		column = gtk.TreeViewColumn('contacts')
-		renderer_image = CellRendererImage()
+		renderer_image = cell_renderer_image.CellRendererImage()
 		renderer_image.set_property('width', 20)
 		column.pack_start(renderer_image, expand = False)
 		column.add_attribute(renderer_image, 'image', 0)

@@ -29,10 +29,11 @@ import pango
 import gobject
 import os
 import sre
-from common import gajim
+import signal
 import common.sleepy
 import common.check_for_new_version
 
+from common import gajim
 from common import i18n
 i18n.init()
 _ = i18n._
@@ -48,102 +49,8 @@ try:
 except ImportError:
 	pass
 
-class CellRendererImage(gtk.GenericCellRenderer):
-
-	__gproperties__ = {
-		'image': (gobject.TYPE_OBJECT, 'Image', 
-		'Image', gobject.PARAM_READWRITE),
-	}
-
-	def __init__(self):
-		self.__gobject_init__()
-		self.image = None
-
-	def do_set_property(self, pspec, value):
-		setattr(self, pspec.name, value)
-
-	def do_get_property(self, pspec):
-		return getattr(self, pspec.name)
-
-	def func(self, model, path, iter, (image, tree)):
-		if model.get_value(iter, 0) == image:
-			self.redraw = 1
-			cell_area = tree.get_cell_area(path, tree.get_column(0))
-			tree.queue_draw_area(cell_area.x, cell_area.y, cell_area.width, \
-				cell_area.height)
-
-	def animation_timeout(self, tree, image):
-		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			self.redraw = 0
-			image.get_data('iter').advance()
-			model = tree.get_model()
-			model.foreach(self.func, (image, tree))
-			if self.redraw:
-				gobject.timeout_add(image.get_data('iter').get_delay_time(), \
-					self.animation_timeout, tree, image)
-			else:
-				image.set_data('iter', None)
-				
-	def on_render(self, window, widget, background_area,cell_area, \
-		expose_area, flags):
-		if not self.image:
-			return
-		pix_rect = gtk.gdk.Rectangle()
-		pix_rect.x, pix_rect.y, pix_rect.width, pix_rect.height = \
-			self.on_get_size(widget, cell_area)
-
-		pix_rect.x += cell_area.x
-		pix_rect.y += cell_area.y
-		pix_rect.width  -= 2 * self.get_property('xpad')
-		pix_rect.height -= 2 * self.get_property('ypad')
-
-		draw_rect = cell_area.intersect(pix_rect)
-		draw_rect = expose_area.intersect(draw_rect)
-
-		if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			if not self.image.get_data('iter'):
-				animation = self.image.get_animation()
-				self.image.set_data('iter', animation.get_iter())
-				gobject.timeout_add(self.image.get_data('iter').get_delay_time(), \
-					self.animation_timeout, widget, self.image)
-
-			pix = self.image.get_data('iter').get_pixbuf()
-		elif self.image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			pix = self.image.get_pixbuf()
-		else:
-			return
-		window.draw_pixbuf(widget.style.black_gc, pix, \
-			draw_rect.x-pix_rect.x, draw_rect.y-pix_rect.y, draw_rect.x, \
-			draw_rect.y+2, draw_rect.width, draw_rect.height, \
-			gtk.gdk.RGB_DITHER_NONE, 0, 0)
-
-	def on_get_size(self, widget, cell_area):
-		if not self.image:
-			return 0, 0, 0, 0
-		if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			animation = self.image.get_animation()
-			pix = animation.get_iter().get_pixbuf()
-		elif self.image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			pix = self.image.get_pixbuf()
-		else:
-			return 0, 0, 0, 0
-		pixbuf_width  = pix.get_width()
-		pixbuf_height = pix.get_height()
-		calc_width  = self.get_property('xpad') * 2 + pixbuf_width
-		calc_height = self.get_property('ypad') * 2 + pixbuf_height
-		x_offset = 0
-		y_offset = 0
-		if cell_area and pixbuf_width > 0 and pixbuf_height > 0:
-			x_offset = self.get_property('xalign') * (cell_area.width - \
-				calc_width -  self.get_property('xpad'))
-			y_offset = self.get_property('yalign') * (cell_area.height - \
-				calc_height -  self.get_property('ypad'))
-		return x_offset, y_offset, calc_width, calc_height
-
-gobject.type_register(CellRendererImage)
-
 class User:
-	"""Information concerning each users"""
+	'''Information concerning each users'''
 	def __init__(self, *args):
 		if len(args) == 0:
 			self.jid = ''
@@ -177,7 +84,7 @@ import config
 GTKGUI_GLADE='gtkgui.glade'
 
 
-class interface:
+class Interface:
 	def launch_browser_mailer(self, kind, url):
 		#kind = 'url' or 'mail'
 		if gajim.config.get('openwith') == 'gnome-open':
@@ -207,7 +114,7 @@ class interface:
 
 	def play_timeout(self, pid):
 		pidp, r = os.waitpid(pid, os.WNOHANG)
-		return 0
+		return False
 
 	def play_sound(self, event):
 		if not gajim.config.get('sounds_on'):
@@ -257,7 +164,7 @@ class interface:
 		if not resource:
 			resource = ''
 		priority = array[4]
-		if jid.find("@") <= 0:
+		if jid.find('@') <= 0:
 			#It must be an agent
 			ji = jid.replace('@', '')
 		else:
@@ -280,7 +187,7 @@ class interface:
 				if user1.show in statuss:
 					old_show = statuss.index(user1.show)
 				if (resources != [''] and (len(luser) != 1 or 
-					luser[0].show != 'offline')) and not jid.find("@") <= 0:
+					luser[0].show != 'offline')) and not jid.find('@') <= 0:
 					old_show = 0
 					user1 = User(user1.jid, user1.name, user1.groups, user1.show, \
 					user1.status, user1.sub, user1.ask, user1.resource, \
@@ -309,7 +216,7 @@ class interface:
 			user1.status = array[2]
 			user1.priority = priority
 			user1.keyID = keyID
-		if jid.find("@") <= 0:
+		if jid.find('@') <= 0:
 			#It must be an agent
 			if self.roster.contacts[account].has_key(ji):
 				#Update existing iter
@@ -346,7 +253,7 @@ class interface:
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (user, msg, time))
 		jid = array[0].split('/')[0]
-		if jid.find("@") <= 0:
+		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
 		if gajim.config.get('ignore_unknown_contacts') and \
 			not self.roster.contacts[account].has_key(jid):
@@ -370,7 +277,7 @@ class interface:
 	def handle_event_msgerror(self, account, array):
 		#('MSGERROR', account, (user, error_code, error_msg, msg, time))
 		jid = array[0].split('/')[0]
-		if jid.find("@") <= 0:
+		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
 		self.roster.on_message(jid, _('error while sending') + \
 			' \"%s\" ( %s )' % (array[3], array[2]), array[4], account)
@@ -523,9 +430,9 @@ class interface:
 		self.roster.redraw_jid(jid, account)
 
 	def read_sleepy(self):	
-		"""Check if we are idle"""
+		'''Check if we are idle'''
 		if not self.sleeper.poll():
-			return 1
+			return True # renew timeout (loop for ever)
 		state = self.sleeper.getState()
 		for account in gajim.connections:
 			if not self.sleeper_state[account]:
@@ -548,10 +455,10 @@ class interface:
 				#we go extended away
 				gajim.connections[account].change_status('xa', 'auto away (idle)')
 				self.sleeper_state[account] = 3
-		return 1
+		return True # renew timeout (loop for ever)
 
 	def autoconnect(self):
-		"""auto connect at startup"""
+		'''auto connect at startup'''
 		ask_message = 0
 		for a in gajim.connections:
 			if gajim.config.get_per('accounts', a, 'autoconnect'):
@@ -564,7 +471,7 @@ class interface:
 			for a in gajim.connections:
 				if gajim.config.get_per('accounts', a, 'autoconnect'):
 					self.roster.send_status(a, 'online', message, 1)
-		return 0
+		return False
 
 	def show_systray(self):
 		self.systray.show_icon()
@@ -681,10 +588,13 @@ class interface:
 		conn.register_handler('ROSTER_INFO', self.handle_event_roster_info)
 
 	def process_connections(self):
-		for account in gajim.connections:
-			if gajim.connections[account].connected:
-				gajim.connections[account].process(0.01)
-		return True
+		try:
+			for account in gajim.connections:
+				if gajim.connections[account].connected:
+					gajim.connections[account].process(0.01)
+			return True # renew timeout (loop for ever)
+		except KeyboardInterrupt:
+			sys.exit()
 
 	def save_config(self):
 		parser.read_config()
@@ -738,7 +648,8 @@ class interface:
 		if self.systray_capabilities:
 			self.show_systray()
 
-		common.check_for_new_version.Check_for_new_version_dialog(self)
+		if not gajim.config.get('do_not_check_for_new_version'):
+			common.check_for_new_version.Check_for_new_version_dialog(self)
 
 		self.init_regexp()
 		
@@ -752,10 +663,12 @@ class interface:
 			self.register_handlers(gajim.connections[account])
 
 		gobject.timeout_add(100, self.autoconnect)
-		gobject.timeout_add(500, self.read_sleepy)
 		gobject.timeout_add(200, self.process_connections)
+		gobject.timeout_add(500, self.read_sleepy)
 
 if __name__ == '__main__':
+	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
+
 	try: 	# Import Psyco if available
 		import psyco
 		psyco.full()
@@ -764,5 +677,5 @@ if __name__ == '__main__':
 	
 	parser.parseCfgFile()
 	parser.fill_config()
-	interface()
+	Interface()
 	gtk.main()

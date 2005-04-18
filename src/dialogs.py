@@ -1,4 +1,4 @@
-##	plugins/dialogs.py
+##	dialogs.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>

@@ -1,4 +1,4 @@
-##	plugins/gtkgui/roster_window.py
+##	roster_window.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -25,14 +25,15 @@ import os
 import Queue
 import common.sleepy
 
-from common import gajim
 import tabbed_chat_window
 import groupchat_window
 import history_window
-from gtkgui import CellRendererImage, User
 import dialogs
 import config
 
+from gtkgui import User
+from common import gajim
+from common import cell_renderer_image
 from common import i18n
 
 _ = i18n._
@@ -1359,7 +1360,7 @@ class Roster_window:
 			gobject.TYPE_STRING)
 		self.status_combobox = gtk.ComboBox()
 		self.xml.get_widget('vbox1').pack_end(self.status_combobox, False)
-		cell = CellRendererImage()
+		cell = cell_renderer_image.CellRendererImage()
 		self.status_combobox.pack_start(cell, False)
 		self.status_combobox.add_attribute(cell, 'image', 1)
 		cell = gtk.CellRendererText()
@@ -1386,7 +1387,7 @@ class Roster_window:
 		
 		#this col has two cells: first one img, second one text
 		col = gtk.TreeViewColumn()
-		render_pixbuf = CellRendererImage()
+		render_pixbuf = cell_renderer_image.CellRendererImage()
 		col.pack_start(render_pixbuf, expand = False)
 		col.add_attribute(render_pixbuf, 'image', 0)
 		col.set_cell_data_func(render_pixbuf, self.iconCellDataFunc, None)

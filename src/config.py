@@ -22,16 +22,18 @@ import gtk.glade
 import gobject
 import os
 import common.sleepy
+
+import dialogs
+import gtkgui
 from common import gajim
 from common import connection
 from common import i18n
+from common import cell_renderer_image
+
 _ = i18n._
 APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
-
-import dialogs
-import gtkgui
 
 GTKGUI_GLADE='gtkgui.glade'
 
@@ -495,6 +497,12 @@ class Preferences_window:
 			gajim.config.set('do_not_send_os_info', False)
 		self.plugin.save_config()
 
+	def on_do_not_check_for_new_version_checkbutton_toggled(self, widget):
+		if widget.get_active():
+			gajim.config.set('do_not_check_for_new_version', True)
+		else:
+			gajim.config.set('do_not_check_for_new_version', False)
+		self.plugin.save_config()
 
 	def fill_msg_treeview(self):
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
@@ -883,6 +891,12 @@ class Preferences_window:
 		# don't send os info
 		st = gajim.config.get('do_not_send_os_info')
 		self.xml.get_widget('do_not_send_os_info_checkbutton').set_active(st)
+		
+		# don't check for new version
+		st = gajim.config.get('do_not_check_for_new_version')
+		btn = self.xml.get_widget('do_not_check_for_new_version_checkbutton')
+		btn.set_active(st)
+		
 		self.xml.signal_autoconnect(self)
 		
 		self.sound_tree.get_model().connect('row-changed', \
@@ -1485,7 +1499,7 @@ class Add_remove_emoticons_window:
 
 		col = gtk.TreeViewColumn(_('Image'))
 		self.emot_tree.append_column(col)
-		renderer = gtkgui.CellRendererImage()
+		renderer = cell_renderer_image.CellRendererImage()
 		col.pack_start(renderer, expand = False)
 		col.add_attribute(renderer, 'image', 2)
 		

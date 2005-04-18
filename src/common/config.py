@@ -18,7 +18,7 @@
 ##
 
 
-import re
+import sre
 import copy
 
 OPT_TYPE = 0
@@ -87,6 +87,7 @@ class Config:
 		'before_nickname': [ opt_str, '<' ],
 		'after_nickname': [ opt_str, '>' ],
 		'do_not_send_os_info': [ opt_bool, False ],
+		'do_not_check_for_new_version': [ opt_bool, False ],
 		'usegpg': [ opt_bool, False ],
 		'lognotusr': [ opt_bool, True ],
 		'lognotsep': [ opt_bool, True ],
@@ -236,7 +237,7 @@ class Config:
 		elif type[0] == 'string':
 			return self.is_valid_string(val)
 		else:
-			return re.match(type[1], val)
+			return sre.match(type[1], val)
 
 	def set(self, optname, value):
 		if not self.__options.has_key(optname):
