@@ -245,6 +245,26 @@ class Groupchat_window(chat.Chat):
 				self.notebook.emit('key_press_event', event)
 			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
+			else:
+				room_jid = self.get_active_jid()
+				list_nick = self.get_nick_list(room_jid)
+				message_buffer = widget.get_buffer()
+				start_iter = message_buffer.get_start_iter()
+				cursor_position = message_buffer.get_insert()
+				end_iter = message_buffer.get_iter_at_mark(cursor_position)
+				text = message_buffer.get_text(start_iter, end_iter, 0)
+				if not text:
+					return False
+				splitted_text = text.split()
+				begin = splitted_text[-1] # begining of the latest word we typed
+				for nick in list_nick:
+					if nick.find(begin) == 0: # the word is the begining of a nick
+						if len(splitted_text) == 1: # This is the 1st word of the line
+							add = ': '
+						else:
+							add = ' '
+						message_buffer.insert_at_cursor(nick[len(begin):] + add)
+						return True
 		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				self.notebook.emit('key_press_event', event)
@@ -269,26 +289,6 @@ class Groupchat_window(chat.Chat):
 				message_buffer.set_text('', -1)
 				widget.grab_focus()
 			return True
-		elif event.keyval == gtk.keysyms.Tab: # TAB
-			room_jid = self.get_active_jid()
-			list_nick = self.get_nick_list(room_jid)
-			message_buffer = widget.get_buffer()
-			start_iter = message_buffer.get_start_iter()
-			cursor_position = message_buffer.get_insert()
-			end_iter = message_buffer.get_iter_at_mark(cursor_position)
-			text = message_buffer.get_text(start_iter, end_iter, 0)
-			if not text:
-				return False
-			splitted_text = text.split()
-			begin = splitted_text[-1] # begining of the latest word we typed
-			for nick in list_nick:
-				if nick.find(begin) == 0: # the word is the begining of a nick
-					if len(splitted_text) == 1: # This is the 1st word of the line ?
-						add = ': '
-					else:
-						add = ' '
-					message_buffer.insert_at_cursor(nick[len(begin):] + add)
-					return True
 		return False
 
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
