@@ -26,6 +26,7 @@ import common.sleepy
 import dialogs
 import cell_renderer_image
 from gajim import User
+import cell_renderer_image
 from common import gajim
 from common import connection
 from common import i18n
