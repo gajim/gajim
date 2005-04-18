@@ -31,7 +31,7 @@ from common import i18n
 _ = i18n._
 
 
-STATUS_LIST = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd', \
+STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd', \
 	'invisible']
 
 distro_info = {

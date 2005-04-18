@@ -792,7 +792,7 @@ class Roster_window:
 	
 	def update_status_comboxbox(self):
 		#table to change index in plugin.connected to index in combobox
-		table = {0:5, 1:5, 2:0, 3:1, 4:2, 5:3, 6:4}
+		table = {0:6, 1:6, 2:0, 3:1, 4:2, 5:3, 6:4, 7:5}
 		maxi = 0
 		for account in gajim.connections:
 			if gajim.connections[account].connected > maxi:
@@ -802,7 +802,7 @@ class Roster_window:
 		self.status_combobox.handler_block(self.id_signal_cb)
 		self.status_combobox.set_active(table[maxi])
 		self.status_combobox.handler_unblock(self.id_signal_cb)
-		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',\
+		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 			'invisible']
 		if self.plugin.systray_enabled:
 			self.plugin.systray.set_status(statuss[maxi])
@@ -821,7 +821,7 @@ class Roster_window:
 		accountIter = self.get_account_iter(account)
 		if accountIter:
 			model.set_value(accountIter, 0, self.pixbufs[status])
-		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',\
+		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 			'invisible']
 		if status == 'offline':
 			for jid in self.contacts[account]:
@@ -1397,11 +1397,13 @@ class Roster_window:
 		self.status_combobox.pack_start(cell, True)
 		self.status_combobox.add_attribute(cell, 'text', 0)
 
-		for status in ['online', 'away', 'xa', 'dnd', 'invisible', 'offline']:
+		for status in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'offline']:
 			if status == 'dnd':
 				status_better = 'Busy'
 			elif status == 'xa':
 				status_better = 'Extended Away'
+			elif status == 'chat':
+				status_better = 'Free for chat'
 			else:
 				status_better = status.capitalize()
 			iter = liststore.append([status_better, self.pixbufs[status], status])
