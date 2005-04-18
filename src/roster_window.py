@@ -43,7 +43,7 @@ gtk.glade.textdomain(APP)
 GTKGUI_GLADE='gtkgui.glade'
 
 class Roster_window:
-	"""Class for main window of gtkgui plugin"""
+	'''Class for main window of gtkgui plugin'''
 
 	def get_account_iter(self, name):
 		if self.regroup:
@@ -120,13 +120,13 @@ class Roster_window:
 			self.redraw_jid(jid, account)
 
 	def add_user_to_roster(self, jid, account):
-		"""Add a user to the roster and add groups if they aren't in roster"""
+		'''Add a user to the roster and add groups if they aren't in roster'''
 		showOffline = gajim.config.get('showoffline')
 		if not self.contacts[account].has_key(jid):
 			return
 		users = self.contacts[account][jid]
 		user = users[0]
-		if user.jid.find("@") <= 0:
+		if user.jid.find('@') <= 0:
 			user.groups = ['Agents']
 		elif user.groups == []:
 			user.groups.append('General')
@@ -170,7 +170,7 @@ class Roster_window:
 		self.remove_user(user, account)
 	
 	def remove_user(self, user, account):
-		"""Remove a user from the roster"""
+		'''Remove a user from the roster'''
 		if user.jid in self.to_be_removed[account]:
 			return
 		model = self.tree.get_model()
@@ -190,7 +190,7 @@ class Roster_window:
 					del self.groups[account][group]
 
 	def redraw_jid(self, jid, account):
-		"""draw the correct pixbuf and name"""
+		'''draw the correct pixbuf and name'''
 		model = self.tree.get_model()
 		iters = self.get_user_iter(jid, account)
 		if len(iters) == 0:
@@ -198,7 +198,7 @@ class Roster_window:
 		users = self.contacts[account][jid]
 		name = users[0].name
 		if len(users) > 1:
-			name += " (" + str(len(users)) + ")"
+			name += ' (' + str(len(users)) + ')'
 		prio = 0
 		user = users[0]
 		for u in users:
@@ -206,7 +206,7 @@ class Roster_window:
 				prio = u.priority
 				user = u
 		for iter in iters:
-			if jid.find("@") <= 0: # It's an agent
+			if jid.find('@') <= 0: # It's an agent
 				img = self.pixbufs[user.show]
 			elif self.plugin.queues[account].has_key(jid):
 				img = self.pixbufs['message']
@@ -222,7 +222,7 @@ class Roster_window:
 			model.set_value(iter, 1, name)
 	
 	def make_menu(self):
-		"""create the main_window's menus"""
+		'''create the main_window's menus'''
 		# try to avoid WIDGET_REALIZED_FOR_EVENT failed which freezes gajim
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
@@ -322,7 +322,7 @@ class Roster_window:
 					gajim.connections.keys()[0])
 
 	def draw_roster(self):
-		"""Clear and draw roster"""
+		'''Clear and draw roster'''
 		self.make_menu()
 		self.tree.get_model().clear()
 		for acct in gajim.connections:
@@ -331,7 +331,7 @@ class Roster_window:
 				self.add_user_to_roster(jid, acct)
 	
 	def mklists(self, array, account):
-		"""fill self.contacts and self.groups"""
+		'''fill self.contacts and self.groups'''
 		if not self.contacts.has_key(account):
 			self.contacts[account] = {}
 		if not self.groups.has_key(account):
@@ -347,7 +347,7 @@ class Roster_window:
 			#get name
 			name = array[jid]['name']
 			if not name:
-				if ji.find("@") <= 0:
+				if ji.find('@') <= 0:
 					name = ji
 				else:
 					name = jid.split('@')[0]
@@ -370,7 +370,7 @@ class Roster_window:
 						self.groups[account][g] = {'expand': True}
 
 	def chg_user_status(self, user, show, status, account):
-		"""When a user change his status"""
+		'''When a user change his status'''
 		showOffline = gajim.config.get('showoffline')
 		model = self.tree.get_model()
 		luser = self.contacts[account][user.jid]
@@ -396,10 +396,10 @@ class Roster_window:
 			if user.resource != '':
 				name += '/'+user.resource
 			self.plugin.windows[account]['chats'][user.jid].print_conversation(\
-				_("%s is now %s (%s)") % (name, show, status), user.jid, 'status')
+				_('%s is now %s (%s)') % (name, show, status), user.jid, 'status')
 
 	def on_info(self, widget, user, account):
-		"""Call vcard_information_window class to display user's information"""
+		'''Call vcard_information_window class to display user's information'''
 		if self.plugin.windows[account]['infos'].has_key(user.jid):
 			self.plugin.windows[account]['infos'][user.jid].window.present()
 		else:
@@ -407,11 +407,11 @@ class Roster_window:
 				dialogs.Vcard_information_window(user, self.plugin, account)
 
 	def on_agent_logging(self, widget, jid, state, account):
-		"""When an agent is requested to log in or off"""
+		'''When an agent is requested to log in or off'''
 		gajim.connections[account].send_agent_status(jid, state)
 
 	def on_remove_agent(self, widget, jid, account):
-		"""When an agent is requested to log in or off"""
+		'''When an agent is requested to log in or off'''
 		window = dialogs.Confirmation_dialog(_('Are you sure you want to remove the agent %s from your roster?') % jid)
 		if window.get_response() == gtk.RESPONSE_YES:
 			gajim.connections[account].unsubscribe_agent(jid)
@@ -429,13 +429,13 @@ class Roster_window:
 		dlg.run()
 		
 	def on_history(self, widget, user):
-		"""When history button is pressed : call log window"""
+		'''When history button is pressed : call log window'''
 		if not self.plugin.windows['logs'].has_key(user.jid):
 			self.plugin.windows['logs'][user.jid] = history_window.\
 				History_window(self.plugin, user.jid)
 	
 	def mk_menu_user(self, event, iter):
-		"""Make user's popup menu"""
+		'''Make user's popup menu'''
 		model = self.tree.get_model()
 		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
@@ -486,7 +486,7 @@ class Roster_window:
 		menu.reposition()
 
 	def mk_menu_g(self, event, iter):
-		"""Make group's popup menu"""
+		'''Make group's popup menu'''
 		model = self.tree.get_model()
 		path = model.get_path(iter)
 
@@ -499,7 +499,7 @@ class Roster_window:
 		menu.reposition()
 	
 	def mk_menu_agent(self, event, iter):
-		"""Make agent's popup menu"""
+		'''Make agent's popup menu'''
 		model = self.tree.get_model()
 		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
@@ -537,7 +537,7 @@ class Roster_window:
 				config.Account_modification_window(self.plugin, account)
 
 	def mk_menu_account(self, event, iter):
-		"""Make account's popup menu"""
+		'''Make account's popup menu'''
 		model = self.tree.get_model()
 		account = model.get_value(iter, 3)
 		
@@ -592,11 +592,11 @@ class Roster_window:
 		menu.reposition()
 	
 	def authorize(self, widget, jid, account):
-		"""Authorize a user"""
+		'''Authorize a user'''
 		gajim.connections[account].send_authorization(jid)
 
 	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None):
-		"""Request subscription to a user"""
+		'''Request subscription to a user'''
 		if not pseudo:
 			pseudo = jid
 		gajim.connections[account].request_subscription(jid, txt)
@@ -609,7 +609,7 @@ class Roster_window:
 			self.add_user_to_roster(jid, account)
 
 	def on_roster_treeview_key_press_event(self, widget, event):
-		"""when a key is pressed in the treeviews"""
+		'''when a key is pressed in the treeviews'''
 		if event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
 		if event.keyval == gtk.keysyms.F2:
@@ -638,7 +638,7 @@ class Roster_window:
 		return False
 	
 	def on_roster_treeview_button_press_event(self, widget, event):
-		"""popup contact's , group's or agent's menu"""
+		'''popup contact's , group's or agent's menu'''
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			if event.button == 3: # Right click
 				try:
@@ -679,8 +679,8 @@ class Roster_window:
 		return False
 
 	def on_req_usub(self, widget, user, account):
-		"""Remove a user"""
-		window = dialogs.Confirmation_dialog(_("Are you sure you want to remove %s (%s) from your roster?") % (user.name, user.jid))
+		'''Remove a user'''
+		window = dialogs.Confirmation_dialog(_('Are you sure you want to remove %s (%s) from your roster?') % (user.name, user.jid))
 		if window.get_response() == gtk.RESPONSE_YES:
 			gajim.connections[account].unsubscribe(user.jid)
 			for u in self.contacts[account][user.jid]:
@@ -767,7 +767,7 @@ class Roster_window:
 		self.send_status(account, status, message)
 
 	def on_status_combobox_changed(self, widget):
-		"""When we change our status"""
+		'''When we change our status'''
 		model = self.status_combobox.get_model()
 		active = self.status_combobox.get_active()
 		if active < 0:
@@ -812,7 +812,7 @@ class Roster_window:
 			self.window.set_icon(image.get_pixbuf())
 
 	def on_status_changed(self, account, status):
-		"""the core tells us that our status has changed"""
+		'''the core tells us that our status has changed'''
 		if not self.contacts.has_key(account):
 			return
 		model = self.tree.get_model()
@@ -865,7 +865,7 @@ class Roster_window:
 				groupchat_window.Groupchat_window(jid, nick, self.plugin, account)
 
 	def on_message(self, jid, msg, tim, account):
-		"""when we receive a message"""
+		'''when we receive a message'''
 		if not self.contacts[account].has_key(jid):
 			user1 = User(jid, jid, ['not in the roster'], \
 				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
@@ -938,7 +938,7 @@ class Roster_window:
 			self.plugin.windows['accounts'] = config.Accounts_window(self.plugin) 
 
 	def close_all(self, dic):
-		"""close all the windows in the given dictionary"""
+		'''close all the windows in the given dictionary'''
 		for w in dic.values():
 			if type(w) == type({}):
 				self.close_all(w)
@@ -946,7 +946,7 @@ class Roster_window:
 				w.window.destroy()
 	
 	def on_roster_window_delete_event(self, widget, event):
-		"""When we want to close the window"""
+		'''When we want to close the window'''
 		if self.plugin.systray_enabled:
 			self.window.hide()
 		else:
@@ -967,8 +967,8 @@ class Roster_window:
 		return True # do NOT destory the window
 
 	def quit_gtkgui_plugin(self):
-		"""When we quit the gtk plugin :
-		tell that to the core and exit gtk"""
+		'''When we quit the gtk plugin :
+		tell that to the core and exit gtk'''
 		if gajim.config.get('saveposition'):
 			x, y = self.window.get_position()
 			gajim.config.set('x-position', x)
@@ -1002,8 +1002,8 @@ class Roster_window:
 		self.quit_gtkgui_plugin()
 
 	def on_roster_treeview_row_activated(self, widget, path, col=0):
-		"""When an iter is dubble clicked :
-		open the chat window"""
+		'''When an iter is dubble clicked :
+		open the chat window'''
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
 		account = model.get_value(iter, 4)
@@ -1024,7 +1024,7 @@ class Roster_window:
 				self.plugin.windows[account]['chats'][jid].active_tab(jid)
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
-		"""When a row is expanded change the icon of the arrow"""
+		'''When a row is expanded change the icon of the arrow'''
 		model = self.tree.get_model()
 		account = model.get_value(iter, 4)
 		type = model.get_value(iter, 2)
@@ -1045,8 +1045,8 @@ class Roster_window:
 			
 	
 	def on_roster_treeview_row_collapsed(self, widget, iter, path):
-		"""When a row is collapsed :
-		change the icon of the arrow"""
+		'''When a row is collapsed :
+		change the icon of the arrow'''
 		model = self.tree.get_model()
 		account = model.get_value(iter, 4)
 		type = model.get_value(iter, 2)
@@ -1061,14 +1061,14 @@ class Roster_window:
 				self.hidden_lines.append(account)
 
 	def on_editing_canceled (self, cell):
-		"""editing has been canceled"""
+		'''editing has been canceled'''
 		#TODO: get iter
 		#model.set_value(iter, 5, False)
 		pass
 
 	def on_cell_edited (self, cell, row, new_text):
-		"""When an iter is editer :
-		if text has changed, rename the user"""
+		'''When an iter is editer :
+		if text has changed, rename the user'''
 		model = self.tree.get_model()
 		iter = model.get_iter_from_string(row)
 		path = model.get_path(iter)
@@ -1098,8 +1098,8 @@ class Roster_window:
 		model.set_value(iter, 5, False)
 		
 	def on_service_disco_menuitem_activate(self, widget, account):
-		"""When Service Discovery is selected:
-		Call browse class"""
+		'''When Service Discovery is selected:
+		Call browse class'''
 		if self.plugin.windows[account].has_key('disco'):
 			self.plugin.windows[account]['disco'].window.present()
 		else:
@@ -1107,7 +1107,7 @@ class Roster_window:
 				config.Service_discovery_window(self.plugin, account)
 
 	def mkpixbufs(self):
-		"""initialise pixbufs array"""
+		'''initialise pixbufs array'''
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
@@ -1164,13 +1164,13 @@ class Roster_window:
 		self.update_status_comboxbox()
 
 	def on_show_offline_contacts_menuitem_activate(self, widget):
-		"""when show offline option is changed:
-		redraw the treeview"""
+		'''when show offline option is changed:
+		redraw the treeview'''
 		gajim.config.set('showoffline', 1 - gajim.config.get('showoffline'))
 		self.draw_roster()
 
 	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
-		"""When a row is added, set properties for icon renderer"""
+		'''When a row is added, set properties for icon renderer'''
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('cell-background', \
 				gajim.config.get('accountbgcolor'))
@@ -1193,7 +1193,7 @@ class Roster_window:
 		renderer.set_property('width', 20)
 	
 	def nameCellDataFunc(self, column, renderer, model, iter, data=None):
-		"""When a row is added, set properties for name renderer"""
+		'''When a row is added, set properties for name renderer'''
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('foreground', \
 				gajim.config.get('accounttextcolor'))
@@ -1224,7 +1224,7 @@ class Roster_window:
 			renderer.set_property('xpad', 8)
 
 	def compareIters(self, model, iter1, iter2, data = None):
-		"""Compare two iters to sort them"""
+		'''Compare two iters to sort them'''
 		name1 = model.get_value(iter1, 1)
 		name2 = model.get_value(iter2, 1)
 		if not name1 or not name2:
@@ -1245,7 +1245,7 @@ class Roster_window:
 		treeselection = treeview.get_selection()
 		model, iter = treeselection.get_selected()
 		path = model.get_path(iter)
-		data = ""
+		data = ''
 		if len(path) == 3:
 			data = model.get_value(iter, 3)
 		selection.set(selection.target, 8, data)
@@ -1311,12 +1311,12 @@ class Roster_window:
 		return
 
 	def show_title(self):
-		start = ""
+		start = ''
 		if self.nb_unread > 1:
-			start = "[" + str(self.nb_unread) + "] "
+			start = '[' + str(self.nb_unread) + ']  '
 		elif self.nb_unread == 1:
-			start = "* "
-		self.window.set_title(start + " Gajim")
+			start = '*  '
+		self.window.set_title(start + 'Gajim')
 
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
@@ -1412,8 +1412,8 @@ class Roster_window:
 		self.tree.enable_model_drag_source( gtk.gdk.BUTTON1_MASK, TARGETS,
 			gtk.gdk.ACTION_DEFAULT| gtk.gdk.ACTION_MOVE)
 		self.tree.enable_model_drag_dest(TARGETS, gtk.gdk.ACTION_DEFAULT)
-		self.tree.connect("drag_data_get", self.drag_data_get_data)
-		self.tree.connect("drag_data_received", self.drag_data_received_data)
+		self.tree.connect('drag_data_get', self.drag_data_get_data)
+		self.tree.connect('drag_data_received', self.drag_data_received_data)
 		self.xml.signal_autoconnect(self)
 		self.id_signal_cb = self.status_combobox.connect('changed',\
 														self.on_status_combobox_changed)

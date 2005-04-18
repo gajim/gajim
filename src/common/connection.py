@@ -681,7 +681,7 @@ class connection:
 		p = common.jabber.Presence(to = agent, type = ptype)
 		self.connection.send(p)
 
-	def join_gc(self, nick, room, server, passwd):
+	def join_gc(self, nick, room, server, password):
 		if not self.connection:
 			return
 		p = common.jabber.Presence(to = '%s@%s/%s' % (room, server, password))

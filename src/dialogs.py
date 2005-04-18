@@ -32,9 +32,9 @@ import gtkgui
 GTKGUI_GLADE='gtkgui.glade'
 
 class Vcard_information_window:
-	"""Class for user's information window"""
+	'''Class for user's information window'''
 	def on_user_information_window_destroy(self, widget=None):
-		"""close window"""
+		'''close window'''
 		del self.plugin.windows[self.account]['infos'][self.jid]
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
@@ -42,11 +42,11 @@ class Vcard_information_window:
 			self.window.destroy()
 
 	def on_close_button_clicked(self, widget):
-		"""Save user's informations and update the roster on the Jabber server"""
+		'''Save user's informations and update the roster on the Jabber server'''
 		if self.vcard:
 			self.window.destroy()
 			return
-		#update user.name if it's not ""
+		#update user.name if it's not ''
 		name_entry = self.xml.get_widget('nickname_entry')
 		new_name = name_entry.get_text()
 		if new_name != self.user.name and new_name != '':
@@ -124,7 +124,7 @@ class Vcard_information_window:
 			self.user.resource)
 
 	def add_to_vcard(self, vcard, entry, txt):
-		"""Add an information to the vCard dictionary"""
+		'''Add an information to the vCard dictionary'''
 		entries = entry.split('_')
 		loc = vcard
 		while len(entries) > 1:
@@ -136,7 +136,7 @@ class Vcard_information_window:
 		return vcard
 
 	def make_vcard(self):
-		"""make the vCard dictionary"""
+		'''make the vCard dictionary'''
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
 			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
 			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
@@ -232,7 +232,7 @@ class Vcard_information_window:
 		self.window.show_all()
 
 class Edit_groups_dialog:
-	"""Class for the edit group dialog window"""
+	'''Class for the edit group dialog window'''
 	def __init__(self, user, account, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'edit_groups_dialog', APP)
 		self.dialog = self.xml.get_widget('edit_groups_dialog')
@@ -314,9 +314,9 @@ class Edit_groups_dialog:
 		column.set_attributes(renderer, active=1)
 
 class Passphrase_dialog:
-	"""Class for Passphrase dialog"""
+	'''Class for Passphrase dialog'''
 	def run(self):
-		"""Wait for OK button to be pressed and return passphrase/password"""
+		'''Wait for OK button to be pressed and return passphrase/password'''
 		if self.autoconnect:
 			gtk.gdk.threads_enter()
 		rep = self.window.run()
@@ -343,9 +343,9 @@ class Passphrase_dialog:
 		self.window.show_all()
 
 class choose_gpg_key_dialog:
-	"""Class for GPG key dialog"""
+	'''Class for GPG key dialog'''
 	def run(self):
-		"""Wait for Ok button to be pressed and return the selected key"""
+		'''Wait for Ok button to be pressed and return the selected key'''
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			selection = self.keys_treeview.get_selection()
@@ -402,7 +402,7 @@ class Change_status_message_dialog:
 		self.window.show_all()
 
 	def run(self):
-		"""Wait for OK button to be pressed and return away messsage"""
+		'''Wait for OK button to be pressed and return away messsage'''
 		if self.autoconnect:
 			gtk.gdk.threads_enter()
 		rep = self.window.run()
@@ -432,7 +432,7 @@ class Change_status_message_dialog:
 				self.window.response(gtk.RESPONSE_OK)
 
 class Add_new_contact_window:
-	"""Class for Add_new_contact_window"""
+	'''Class for Add_new_contact_window'''
 	def __init__(self, plugin, account, jid=None):
 		if gajim.connections[account].connected < 2:
 			Error_dialog(_('You must be connected to add a contact'))
@@ -485,17 +485,17 @@ class Add_new_contact_window:
 		self.window.show_all()
 
 	def on_cancel_button_clicked(self, widget):
-		"""When Cancel button is clicked"""
+		'''When Cancel button is clicked'''
 		self.window.destroy()
 
 	def on_subscribe_button_clicked(self, widget):
-		"""When Subscribe button is clicked"""
+		'''When Subscribe button is clicked'''
 		jid = self.xml.get_widget('jid_entry').get_text()
 		nickname = self.xml.get_widget('nickname_entry').get_text()
 		if not jid:
 			return
 		if jid.find('@') < 0:
-			Error_dialog(_("The contact's name must be something like login@hostname"))
+			Error_dialog(_('The contact\'s name must be something like login@hostname'))
 			return
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
@@ -553,7 +553,7 @@ class Add_new_contact_window:
 		self.old_uid_value = uid.split('@')[0]
 
 class About_dialog:
-	"""Class for about dialog"""
+	'''Class for about dialog'''
 	def __init__(self):
 		if gtk.pygtk_version < (2, 6, 0):
 			Information_dialog(_('Gajim - A GTK jabber client'))
@@ -579,7 +579,7 @@ class About_dialog:
 		dlg.destroy()
 
 class Confirmation_dialog:
-	"""Class for confirmation dialog"""
+	'''Class for confirmation dialog'''
 	def get_response(self):
 		response = self.dialog.run()
 		self.dialog.destroy()
@@ -591,7 +591,7 @@ class Confirmation_dialog:
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, label)
 
 class Warning_dialog:
-	"""Class for warning dialog"""
+	'''Class for warning dialog'''
 	def on_response(self, dialog, response_id):
 		dialog.destroy()
 
@@ -603,7 +603,7 @@ class Warning_dialog:
 		dialog.show()
 
 class Information_dialog:
-	"""Class for information dialog"""
+	'''Class for information dialog'''
 	def on_response(self, dialog, response_id):
 		dialog.destroy()
 
@@ -615,7 +615,7 @@ class Information_dialog:
 		dialog.show()
 
 class Error_dialog:
-	"""Class for error dialog"""
+	'''Class for error dialog'''
 	def on_response(self, dialog, response_id):
 		dialog.destroy()
 
@@ -639,21 +639,21 @@ class subscription_request_window:
 		xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	"""Class for authorization window :
-	window that appears when a user wants to add us to his/her roster"""
+	'''Class for authorization window :
+	window that appears when a user wants to add us to his/her roster'''
 	def on_close_button_clicked(self, widget):
-		"""When Close button is clicked"""
+		'''When Close button is clicked'''
 		self.window.destroy()
 		
 	def on_authorize_button_clicked(self, widget):
-		"""Accept the request"""
+		'''Accept the request'''
 		gajim.connections[self.account].send_authorization(self.jid)
 		self.window.destroy()
 		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
 			Add_new_contact_window(self.plugin, self.account, self.jid)
 	
 	def on_deny_button_clicked(self, widget):
-		"""refuse the request"""
+		'''refuse the request'''
 		gajim.connections[self.account].refuse_authorization(self.jid)
 		self.window.destroy()
 
@@ -686,7 +686,7 @@ class Join_groupchat_window:
 		self.window.show_all()
 
 	def on_join_groupchat_window_destroy(self, widget):
-		"""close window"""
+		'''close window'''
 		del self.plugin.windows[self.account]['join_gc'] # remove us from open windows
 
 	def on_join_groupchat_window_key_press_event(self, widget, event):
@@ -701,11 +701,11 @@ class Join_groupchat_window:
 		self.xml.get_widget('server_entry').set_text(gid.split('@')[1])
 
 	def on_cancel_button_clicked(self, widget):
-		"""When Cancel button is clicked"""
+		'''When Cancel button is clicked'''
 		self.window.destroy()
 
 	def on_join_button_clicked(self, widget):
-		"""When Join button is clicked"""
+		'''When Join button is clicked'''
 		nickname = self.xml.get_widget('nickname_entry').get_text()
 		room = self.xml.get_widget('room_entry').get_text()
 		server = self.xml.get_widget('server_entry').get_text()
@@ -745,15 +745,15 @@ class New_message_dialog:
 		self.window.show_all()
 
 	def on_delete_event(self, widget, event):
-		"""close window"""
+		'''close window'''
 		del self.plugin.windows['new_message']
 
 	def on_cancel_button_clicked(self, widget):
-		"""When Cancel button is clicked"""
+		'''When Cancel button is clicked'''
 		self.window.destroy()
 
 	def on_chat_button_clicked(self, widget):
-		"""When Chat button is clicked"""
+		'''When Chat button is clicked'''
 		jid = self.jid_entry.get_text()
 		if jid.find('@') == -1: # if no @ was given
 			Error_dialog(_('User ID is not valid'))
@@ -790,7 +790,7 @@ class Change_password_dialog:
 		self.window.show_all()
 
 	def run(self):
-		"""Wait for OK button to be pressed and return new password"""
+		'''Wait for OK button to be pressed and return new password'''
 		end = False
 		while not end:
 			rep = self.dialog.run()

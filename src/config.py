@@ -37,7 +37,7 @@ GTKGUI_GLADE='gtkgui.glade'
 
 
 class Preferences_window:
-	"""Class for Preferences window"""
+	'''Class for Preferences window'''
 	
 	def on_preferences_window_delete_event(self, widget, event):
 		self.window.hide()
@@ -106,7 +106,7 @@ class Preferences_window:
 		self.plugin.save_config()
 		
 	def on_account_text_colorbutton_color_set(self, widget):
-		"""Take The Color For The Account Text"""
+		'''Take The Color For The Account Text'''
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
@@ -115,7 +115,7 @@ class Preferences_window:
 		self.plugin.save_config()
 	
 	def on_group_text_colorbutton_color_set(self, widget):
-		"""Take The Color For The Group Text"""
+		'''Take The Color For The Group Text'''
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
@@ -124,7 +124,7 @@ class Preferences_window:
 		self.plugin.save_config()
 
 	def on_user_text_colorbutton_color_set(self, widget):
-		"""Take The Color For The User Text"""
+		'''Take The Color For The User Text'''
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
@@ -133,7 +133,7 @@ class Preferences_window:
 		self.plugin.save_config()
 
 	def on_account_text_bg_colorbutton_color_set(self, widget):
-		"""Take The Color For The Background Of Account Text"""
+		'''Take The Color For The Background Of Account Text'''
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
@@ -142,7 +142,7 @@ class Preferences_window:
 		self.plugin.save_config()
 	
 	def on_group_text_bg_colorbutton_color_set(self, widget):
-		"""Take The Color For The Background Of Group Text"""
+		'''Take The Color For The Background Of Group Text'''
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
@@ -151,7 +151,7 @@ class Preferences_window:
 		self.plugin.save_config()
 	
 	def on_user_text_bg_colorbutton_color_set(self, widget):
-		"""Take The Color For The Background Of User Text"""
+		'''Take The Color For The Background Of User Text'''
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
@@ -160,21 +160,21 @@ class Preferences_window:
 		self.plugin.save_config()
 	
 	def on_account_text_fontbutton_font_set(self, widget):
-		"""Take The Font For The User Text"""
+		'''Take The Font For The User Text'''
 		font_string = widget.get_font_name()
 		gajim.config.set('accountfont', font_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 
 	def on_group_text_fontbutton_font_set(self, widget):
-		"""Take The Font For The Group Text"""
+		'''Take The Font For The Group Text'''
 		font_string = widget.get_font_name()
 		gajim.config.set('groupfont', font_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
 	def on_user_text_fontbutton_font_set(self, widget):
-		"""Take The Font For The User Text"""
+		'''Take The Font For The User Text'''
 		font_string = widget.get_font_name()
 		gajim.config.set('userfont', font_string)
 		self.plugin.roster.draw_roster()
@@ -271,7 +271,7 @@ class Preferences_window:
 		self.plugin.save_config()
 	
 	def update_print_time(self):
-		"""Update time in Opened Chat Windows"""
+		'''Update time in Opened Chat Windows'''
 		for a in gajim.connections:
 			if self.plugin.windows[a]['chats'].has_key('tabbed'):
 				self.plugin.windows[a]['chats']['tabbed'].update_print_time()
@@ -314,7 +314,7 @@ class Preferences_window:
 		self.plugin.save_config()
 
 	def update_text_tags(self):
-		"""Update color tags in Opened Chat Windows"""
+		'''Update color tags in Opened Chat Windows'''
 		for a in gajim.connections:
 			if self.plugin.windows[a]['chats'].has_key('tabbed'):
 				self.plugin.windows[a]['chats']['tabbed'].update_tags()
@@ -323,7 +323,7 @@ class Preferences_window:
 					self.plugin.windows[a]['chats'][jid].update_tags()
 	
 	def on_incoming_msg_colorbutton_color_set(self, widget):
-		"""Take The Color For The Incoming Messages"""
+		'''Take The Color For The Incoming Messages'''
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
@@ -332,7 +332,7 @@ class Preferences_window:
 		self.plugin.save_config()
 		
 	def on_outgoing_msg_colorbutton_color_set(self, widget):
-		"""Take The Color For The Outgoing Messages"""
+		'''Take The Color For The Outgoing Messages'''
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
@@ -341,7 +341,7 @@ class Preferences_window:
 		self.plugin.save_config()
 	
 	def on_status_msg_colorbutton_color_set(self, widget):
-		"""Take The Color For The Status Messages"""
+		'''Take The Color For The Status Messages'''
 		color = widget.get_color()
 		color_string = '#' + (hex(color.red) + '0')[2:4] + \
 			(hex(color.green) + '0')[2:4] + (hex(color.blue) + '0')[2:4]
@@ -607,7 +607,7 @@ class Preferences_window:
 			model.set_value(iter, 1, 1)
 
 	def __init__(self, plugin):
-		"""Initialize Preferences window"""
+		'''Initialize Preferences window'''
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
 		self.window = self.xml.get_widget('preferences_window')
 		self.plugin = plugin
@@ -894,16 +894,16 @@ class Preferences_window:
 
 
 class Account_modification_window:
-	"""Class for account informations"""
+	'''Class for account informations'''
 	def on_account_modification_window_destroy(self, widget):
-		"""close window"""
+		'''close window'''
 		del self.plugin.windows[self.account]['account_modification']
 	
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
 
 	def on_checkbutton_toggled(self, widget, widgets):
-		"""set or unset sensitivity of widgets when widget is toggled"""
+		'''set or unset sensitivity of widgets when widget is toggled'''
 		for w in widgets:
 			w.set_sensitive(widget.get_active())
 
@@ -913,7 +913,7 @@ class Account_modification_window:
 		self.on_checkbutton_toggled(widget, [proxyhost_entry, proxyport_entry])
 
 	def init_account(self):
-		"""Initialize window with defaults values"""
+		'''Initialize window with defaults values'''
 		self.xml.get_widget('name_entry').set_text(self.account)
 		jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
@@ -975,7 +975,7 @@ class Account_modification_window:
 			self.xml.get_widget('log_history_checkbutton').set_active(0)
 
 	def on_save_button_clicked(self, widget):
-		"""When save button is clicked: Save information in config file"""
+		'''When save button is clicked: Save information in config file'''
 		save_password = 0
 		if self.xml.get_widget('save_password_checkbutton').get_active():
 			save_password = 1
@@ -1177,7 +1177,7 @@ class Account_modification_window:
 				self.xml.get_widget('password_entry').set_text(new_password)
 
 	def account_is_ok(self, acct):
-		"""When the account has been created with sucess"""
+		'''When the account has been created with sucess'''
 		self.xml.get_widget('new_account_checkbutton').set_active(False)
 		self.modify = True
 		self.account = acct
@@ -1317,7 +1317,7 @@ class Account_modification_window:
 		self.window.show_all()
 
 class Accounts_window:
-	"""Class for accounts window: lists of accounts"""
+	'''Class for accounts window: lists of accounts'''
 	def on_accounts_window_destroy(self, widget):
 		del self.plugin.windows['accounts'] 
 
@@ -1325,7 +1325,7 @@ class Accounts_window:
 		self.window.destroy()
 
 	def init_accounts(self):
-		"""initialize listStore with existing accounts"""
+		'''initialize listStore with existing accounts'''
 		self.modify_button.set_sensitive(False)
 		self.delete_button.set_sensitive(False)
 		model = self.accounts_treeview.get_model()
@@ -1336,12 +1336,12 @@ class Accounts_window:
 				account, 'hostname'))
 
 	def on_accounts_treeview_cursor_changed(self, widget):
-		"""Activate delete and modify buttons when a row is selected"""
+		'''Activate delete and modify buttons when a row is selected'''
 		self.modify_button.set_sensitive(True)
 		self.delete_button.set_sensitive(True)
 
 	def on_new_button_clicked(self, widget):
-		"""When new button is clicked : open an account information window"""
+		'''When new button is clicked : open an account information window'''
 		if self.plugin.windows.has_key('account_modification'):
 			self.plugin.windows['account_modification'].window.present()			
 		else:
@@ -1350,8 +1350,8 @@ class Accounts_window:
 
 
 	def on_delete_button_clicked(self, widget):
-		"""When delete button is clicked :
-		Remove an account from the listStore and from the config file"""
+		'''When delete button is clicked :
+		Remove an account from the listStore and from the config file'''
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		if not iter: return
@@ -1372,8 +1372,8 @@ class Accounts_window:
 			self.init_accounts()
 
 	def on_modify_button_clicked(self, widget):
-		"""When modify button is clicked:
-		open/show the account modification window for this account"""
+		'''When modify button is clicked:
+		open/show the account modification window for this account'''
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		if not iter: return
@@ -1414,14 +1414,14 @@ class Accounts_window:
 		self.window.show_all()
 
 class Service_registration_window:
-	"""Class for Service registration window:
-	Window that appears when we want to subscribe to a service"""
+	'''Class for Service registration window:
+	Window that appears when we want to subscribe to a service'''
 	def on_cancel_button_clicked(self, widget):
-		"""When Cancel button is clicked"""
+		'''When Cancel button is clicked'''
 		self.window.destroy()
 		
 	def draw_table(self):
-		"""Draw the table in the window"""
+		'''Draw the table in the window'''
 		nbrow = 0
 		table = self.xml.get_widget('table')
 		for name in self.infos.keys():
@@ -1439,8 +1439,8 @@ class Service_registration_window:
 		table.show_all()
 	
 	def on_ok_button_clicked(self, widget):
-		"""When Ok button is clicked :
-		send registration info to the core"""
+		'''When Ok button is clicked :
+		send registration info to the core'''
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
 		user1 = gtkgui.User(self.service, self.service, ['Agents'], 'offline', \
@@ -1456,8 +1456,8 @@ class Service_registration_window:
 		self.infos = infos
 		self.plugin = plugin
 		self.account = account
-		window = self.xml.get_widget('service_registration_window')
-		window.set_title(_('Register to %s') % service)
+		self.window = self.xml.get_widget('service_registration_window')
+		self.window.set_title(_('Register to %s') % service)
 		self.xml.get_widget('label').set_text(infos['instructions'])
 		self.entries = {}
 		self.draw_table()
@@ -1563,27 +1563,27 @@ class Add_remove_emoticons_window:
 		if not iter:
 			return
 		file = model.get_value(iter, 1)
-		dialog = gtk.FileChooserDialog("Choose image",
+		dialog = gtk.FileChooserDialog('Choose image',
 							None,
 							gtk.FILE_CHOOSER_ACTION_OPEN,
 							(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 							gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		filter = gtk.FileFilter()
-		filter.set_name("All files")
-		filter.add_pattern("*")
+		filter.set_name('All files')
+		filter.add_pattern('*')
 		dialog.add_filter(filter)
 
 		filter = gtk.FileFilter()
-		filter.set_name("Images")
-		filter.add_mime_type("image/png")
-		filter.add_mime_type("image/jpeg")
-		filter.add_mime_type("image/gif")
-		filter.add_pattern("*.png")
-		filter.add_pattern("*.jpg")
-		filter.add_pattern("*.gif")
-		filter.add_pattern("*.tif")
-		filter.add_pattern("*.xpm")
+		filter.set_name('Images')
+		filter.add_mime_type('image/png')
+		filter.add_mime_type('image/jpeg')
+		filter.add_mime_type('image/gif')
+		filter.add_pattern('*.png')
+		filter.add_pattern('*.jpg')
+		filter.add_pattern('*.gif')
+		filter.add_pattern('*.tif')
+		filter.add_pattern('*.xpm')
 		dialog.add_filter(filter)
 		dialog.set_filter(filter)
 
@@ -1631,10 +1631,10 @@ class Add_remove_emoticons_window:
 
 
 class Service_discovery_window:
-	"""Class for Service Discovery Window:
-	to know the services on a server"""
+	'''Class for Service Discovery Window:
+	to know the services on a server'''
 	def on_service_discovery_window_destroy(self, widget):
-		"""close window"""
+		'''close window'''
 		del self.plugin.windows[self.account]['disco']
 
 	def on_close_button_clicked(self, widget):
@@ -1642,7 +1642,7 @@ class Service_discovery_window:
 
 	def __init__(self, plugin, account):
 		if gajim.connections[account].connected < 2:
-			dialog.Error_dialog(_('You must be connected to browse services'))
+			dialogs.Error_dialog(_('You must be connected to browse services'))
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')
@@ -1692,7 +1692,7 @@ class Service_discovery_window:
 		self.window.show_all()
 		
 	def browse(self, jid):
-		"""Send a request to the core to know the available services"""
+		'''Send a request to the core to know the available services'''
 		model = self.services_treeview.get_model()
 		if not model.get_iter_first():
 			# we begin to fill the treevier with the first line
@@ -1701,8 +1701,8 @@ class Service_discovery_window:
 		gajim.connections[self.account].request_agents(jid)
 	
 	def agents(self, agents):
-		"""When list of available agent arrive :
-		Fill the treeview with it"""
+		'''When list of available agent arrive :
+		Fill the treeview with it'''
 		model = self.services_treeview.get_model()
 		for agent in agents:
 			iter = model.append(None, (agent['name'], agent['jid']))
@@ -1731,11 +1731,11 @@ class Service_discovery_window:
 			child = model.iter_next(child)
 	
 	def agent_info_info(self, agent, identities, features):
-		"""When we recieve informations about an agent, but not its items"""
+		'''When we recieve informations about an agent, but not its items'''
 		self.agent_info(agent, identities, features, [])
 
 	def agent_info_items(self, agent, items):
-		"""When we recieve items about an agent"""
+		'''When we recieve items about an agent'''
 		model = self.services_treeview.get_model()
 		iter = model.get_iter_root()
 		# We look if this agent is in the treeview
@@ -1773,7 +1773,7 @@ class Service_discovery_window:
 			self.services_treeview.expand_row((model.get_path(iter)), False)
 
 	def agent_info(self, agent, identities, features, items):
-		"""When we recieve informations about an agent"""
+		'''When we recieve informations about an agent'''
 		model = self.services_treeview.get_model()
 		iter = model.get_iter_root()
 		# We look if this agent is in the treeview
@@ -1810,7 +1810,7 @@ class Service_discovery_window:
 				self.browse(item['jid'])
 
 	def on_refresh_button_clicked(self, widget):
-		"""When refresh button is clicked: refresh list: clear and rerequest it"""
+		'''When refresh button is clicked: refresh list: clear and rerequest it'''
 		self.services_treeview.get_model().clear()
 		jid = self.address_comboboxentry.child.get_text()
 		self.browse(jid)
@@ -1827,7 +1827,7 @@ class Service_discovery_window:
 			pass
 
 	def on_services_treeview_row_activated(self, widget, path, col=0):
-		"""When a row is activated: Register or join the selected agent"""
+		'''When a row is activated: Register or join the selected agent'''
 		#if both buttons are sensitive, it will register [default]
 		if self.register_button.get_property('sensitive'):
 			self.on_register_button_clicked(widget)
@@ -1835,8 +1835,8 @@ class Service_discovery_window:
 			self.on_join_button_clicked(widget)
 
 	def on_join_button_clicked(self, widget):
-		"""When we want to join a conference:
-		Ask specific informations about the selected agent and close the window"""
+		'''When we want to join a conference:
+		Ask specific informations about the selected agent and close the window'''
 		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter:
 			return
@@ -1847,27 +1847,27 @@ class Service_discovery_window:
 			room = services[0]
 			service = services[1]
 		if not self.plugin.windows[self.account].has_key('join_gc'):
-			dialog.Join_groupchat_window(self.plugin, self.account, service, room)
+			dialogs.Join_groupchat_window(self.plugin, self.account, service, room)
 		else:
 			self.plugin.windows[self.account]['join_gc'].window.present()
 
 	def on_register_button_clicked(self, widget):
-		"""When we want to register an agent :
-		Ask specific informations about the selected agent and close the window"""
+		'''When we want to register an agent :
+		Ask specific informations about the selected agent and close the window'''
 		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter :
 			return
 		service = model.get_value(iter, 1)
 		infos = gajim.connections[self.account].ask_register_agent_info(service)
 		if not infos.has_key('instructions'):
-			dialog.Error_dialog(_('error contacting %s') % service)
+			dialogs.Error_dialog(_('error contacting %s') % service)
 		else:
 			Service_registration_window(service, infos, self.plugin, self.account)
 		self.window.destroy()
 	
 	def on_services_treeview_cursor_changed(self, widget):
-		"""When we select a row :
-		activate buttons if needed"""
+		'''When we select a row :
+		activate buttons if needed'''
 		self.join_button.set_sensitive(False)
 		self.register_button.set_sensitive(False)
 		model, iter = self.services_treeview.get_selection().get_selected()
