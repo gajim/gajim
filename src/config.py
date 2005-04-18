@@ -511,9 +511,10 @@ class Preferences_window:
 		model.set_value(iter, 0, new_text)
 
 	def on_msg_treeview_cursor_changed(self, widget, data=None):
+		(model, iter) = self.msg_tree.get_selection().get_selected()
+		if not iter: return
 		self.xml.get_widget('delete_msg_button').set_sensitive(True)
 		buf = self.xml.get_widget('msg_textview').get_buffer()
-		(model, iter) = self.msg_tree.get_selection().get_selected()
 		name = model.get_value(iter, 0)
 		msg = model.get_value(iter, 1)
 		buf.set_text(msg)
@@ -525,6 +526,7 @@ class Preferences_window:
 
 	def on_delete_msg_button_clicked(self, widget, data=None):
 		(model, iter) = self.msg_tree.get_selection().get_selected()
+		if not iter: return
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		model.remove(iter)
 		buf.set_text('')
@@ -1352,6 +1354,7 @@ class Accounts_window:
 		Remove an account from the listStore and from the config file"""
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
+		if not iter: return
 		account = model.get_value(iter, 0)
 		dialog = dialogs.Confirmation_dialog(_('Are you sure you want to remove account (%s) ?') % account)
 		if dialog.get_response() == gtk.RESPONSE_YES:
@@ -1373,6 +1376,7 @@ class Accounts_window:
 		open/show the account modification window for this account"""
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
+		if not iter: return
 		account = model.get_value(iter, 0)
 		if self.plugin.windows[account].has_key('account_modification'):
 			self.plugin.windows[account]['account_modification'].window.present()
@@ -1864,13 +1868,14 @@ class Service_discovery_window:
 	def on_services_treeview_cursor_changed(self, widget):
 		"""When we select a row :
 		activate buttons if needed"""
-		model, iter = self.services_treeview.get_selection().get_selected()
-		jid = model.get_value(iter, 1)
+		self.join_button.set_sensitive(False)
 		self.register_button.set_sensitive(False)
+		model, iter = self.services_treeview.get_selection().get_selected()
+		if not iter: return
+		jid = model.get_value(iter, 1)
 		if self.agent_infos[jid].has_key('features'):
 			if common.jabber.NS_REGISTER in self.agent_infos[jid]['features']:
 				self.register_button.set_sensitive(True)
-		self.join_button.set_sensitive(False)
 		if self.agent_infos[jid].has_key('identities'):
 			if len(self.agent_infos[jid]['identities']):
 				if self.agent_infos[jid]['identities'][0].has_key('category'):
