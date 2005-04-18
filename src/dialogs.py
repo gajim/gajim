@@ -20,6 +20,7 @@
 import gtk
 import gtk.glade
 import gobject
+from gajim import User
 from common import gajim
 from common import i18n
 _ = i18n._
@@ -762,7 +763,7 @@ class New_message_dialog:
 		if self.plugin.roster.contacts[self.account].has_key(jid):
 			user = self.plugin.roster.contacts[self.account][jid][0]
 		else:
-			user = gtkgui.User(jid, jid, ['not in the roster'], \
+			user = User(jid, jid, ['not in the roster'], \
 				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
 			self.plugin.roster.contacts[self.account][jid] = [user]
 			self.plugin.roster.add_user_to_roster(user.jid, self.account)			
@@ -882,7 +883,7 @@ class Popup_window:
 		if self.plugin.roster.contacts[self.account].has_key(self.jid):
 			user = self.plugin.roster.contacts[self.account][self.jid][0]
 		else:
-			user = gtkgui.User(self.jid, self.jid, ['not in the roster'], \
+			user = User(self.jid, self.jid, ['not in the roster'], \
 				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
 			self.plugin.roster.contacts[self.account][self.jid] = [user]
 			self.plugin.roster.add_user_to_roster(user.self.jid, self.account)			

@@ -32,7 +32,7 @@ import dialogs
 import config
 import cell_renderer_image
 
-from gtkgui import User
+from gajim import User
 from common import gajim
 from common import i18n
 

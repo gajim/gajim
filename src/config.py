@@ -25,6 +25,7 @@ import common.sleepy
 
 import dialogs
 import cell_renderer_image
+from gajim import User
 from common import gajim
 from common import connection
 from common import i18n
@@ -1456,7 +1457,7 @@ class Service_registration_window:
 		send registration info to the core'''
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
-		user1 = gtkgui.User(self.service, self.service, ['Agents'], 'offline', \
+		user1 = User(self.service, self.service, ['Agents'], 'offline', \
 			'offline', 'from', '', '', 0, '')
 		self.plugin.roster.contacts[self.account][self.service] = [user1]
 		self.plugin.roster.add_user_to_roster(self.service, self.account)
