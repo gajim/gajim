@@ -26,6 +26,7 @@ import dialogs
 import chat
 import cell_renderer_image
 from common import gajim
+from vcard_information_window import Vcard_information_window
 from common import i18n
 
 _ = i18n._
@@ -368,7 +369,7 @@ class Groupchat_window(chat.Chat):
 		"""Call vcard_information_window class to display user's information"""
 		if not self.plugin.windows[self.account]['infos'].has_key(jid):
 			self.plugin.windows[self.account]['infos'][jid] = \
-				dialogs.Vcard_information_window(jid, self.plugin, self.account, \
+				Vcard_information_window(jid, self.plugin, self.account, \
 					True)
 			gajim.connections[self.account].request_vcard(jid)
 			#FIXME: maybe use roster.on_info above?

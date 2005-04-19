@@ -35,6 +35,7 @@ import cell_renderer_image
 
 from gajim import User
 from common import gajim
+from vcard_information_window import Vcard_information_window
 from common import i18n
 
 _ = i18n._
@@ -406,7 +407,7 @@ class Roster_window:
 			self.plugin.windows[account]['infos'][user.jid].window.present()
 		else:
 			self.plugin.windows[account]['infos'][user.jid] = \
-				dialogs.Vcard_information_window(user, self.plugin, account)
+				Vcard_information_window(user, self.plugin, account)
 
 	def on_agent_logging(self, widget, jid, state, account):
 		'''When an agent is requested to log in or off'''
