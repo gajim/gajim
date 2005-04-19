@@ -683,7 +683,7 @@ class Interface:
 		
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.windows['preferences'] = config.Preferences_window(self)
-		self.windows['add_remove_emoticons_window'] = \
+		self.windows['add_remove_emoticons'] = \
 			config.Add_remove_emoticons_window(self)
 		self.windows['roster'] = self.roster
 		

@@ -1364,36 +1364,18 @@ class Accounts_window:
 			self.plugin.windows['account_modification'] = \
 				Account_modification_window(self.plugin, '')
 
-
 	def on_remove_button_clicked(self, widget):
-		'''When remove button is clicked:
+		'''When delete button is clicked :
 		Remove an account from the listStore and from the config file'''
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		if not iter: return
-		dialog = self.xml.get_widget('remove_account_dialog')
-		remove_and_unregister_radiobutton = self.xml.get_widget(\
-														'remove_and_unregister_radiobutton')
 		account = model.get_value(iter, 0)
-		dialog.set_title(_('Removing (%s) account') % account)
-		if dialog.get_response() == gtk.RESPONSE_YES:
-			if gajim.connections[account].connected: #FIXME: WHAT? user doesn't know this does he?
-				gajim.connections[account].change_status('offline', 'offline')
-			unregister = False
-			if remove_and_unregister_radiobutton.get_active():
-				unregister = True
-			del gajim.connections[account]
-			gajim.config.del_per('accounts', account)
-			del self.plugin.windows[account]
-			del self.plugin.queues[account]
-			del self.plugin.roster.groups[account]
-			del self.plugin.roster.contacts[account]
-			del self.plugin.roster.to_be_removed[account]
-			del self.plugin.roster.newlt_added[account]
-			self.plugin.roster.draw_roster()
-			self.init_accounts()
-			if unregister:
-				pass #FIXME: call Connection.remove_account(account)
+		if self.plugin.windows[account].has_key('remove_account'):
+			self.plugin.windows[account]['remove_account'].window.present()
+		else:
+			self.plugin.windows[account]['remove_account'] = \
+												Remove_account_window(self.plugin, account)
 
 	def on_modify_button_clicked(self, widget):
 		'''When modify button is clicked:
@@ -1921,3 +1903,47 @@ class Service_discovery_window:
 		self.services_treeview.get_model().clear()
 		self.browse(server_address)
 		self.plugin.save_config()
+
+class Remove_account_window:
+	'''ask for removing from gajim only or from gajim and server too
+	and do removing of the account given'''
+	
+	def on_remove_account_window_destroy(self, widget):
+		'''close window'''
+		del self.plugin.windows[self.account]['remove_account']
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+	
+	def __init__(self, plugin, account):
+		self.plugin = plugin
+		self.account = account
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'remove_account_window', APP)
+		self.window = xml.get_widget('remove_account_window')
+		self.remove_and_unregister_radiobutton = xml.get_widget(\
+														'remove_and_unregister_radiobutton')
+		self.window.set_title(_('Removing %s account') % self.account)
+		xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_remove_button_clicked(self, widget):
+		if gajim.connections[self.account].connected: #FIXME: user unfriendly??
+			gajim.connections[self.account].change_status('offline', 'offline')
+		
+		unregister = False  
+		if self.remove_and_unregister_radiobutton.get_active():  
+			unregister = True
+		return #FIXME: remove me when ready
+		del gajim.connections[self.account]
+		gajim.config.del_per('accounts', self.account)
+		del self.plugin.windows[self.account]
+		del self.plugin.queues[self.account]
+		del self.plugin.roster.groups[self.account]
+		del self.plugin.roster.contacts[self.account]
+		del self.plugin.roster.to_be_removed[self.account]
+		del self.plugin.roster.newlt_added[self.account]
+		self.plugin.roster.draw_roster()
+		self.init_accounts()
+		if unregister:
+			pass #FIXME: call Connection.remove_account(self.account)
+		self.window.destroy()
