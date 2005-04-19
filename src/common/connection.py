@@ -764,6 +764,9 @@ class Connection:
 		iq.setID(id)
 		self.connection.send(iq)
 
+	def unregister_account(self, account_name)
+		pass #FIXME: WRITE THE CODE
+
 	def process(self, timeout):
 		if not self.connection:
 			return

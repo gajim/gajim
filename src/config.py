@@ -1343,7 +1343,7 @@ class Accounts_window:
 	def init_accounts(self):
 		'''initialize listStore with existing accounts'''
 		self.modify_button.set_sensitive(False)
-		self.delete_button.set_sensitive(False)
+		self.remove_button.set_sensitive(False)
 		model = self.accounts_treeview.get_model()
 		model.clear()
 		for account in gajim.connections:
@@ -1354,7 +1354,7 @@ class Accounts_window:
 	def on_accounts_treeview_cursor_changed(self, widget):
 		'''Activate delete and modify buttons when a row is selected'''
 		self.modify_button.set_sensitive(True)
-		self.delete_button.set_sensitive(True)
+		self.remove_button.set_sensitive(True)
 
 	def on_new_button_clicked(self, widget):
 		'''When new button is clicked : open an account information window'''
@@ -1365,17 +1365,23 @@ class Accounts_window:
 				Account_modification_window(self.plugin, '')
 
 
-	def on_delete_button_clicked(self, widget):
-		'''When delete button is clicked :
+	def on_remove_button_clicked(self, widget):
+		'''When remove button is clicked:
 		Remove an account from the listStore and from the config file'''
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
 		if not iter: return
+		dialog = self.xml.get_widget('remove_account_dialog')
+		remove_and_unregister_radiobutton = self.xml.get_widget(\
+														'remove_and_unregister_radiobutton')
 		account = model.get_value(iter, 0)
-		dialog = dialogs.Confirmation_dialog(_('Are you sure you want to remove account (%s) ?') % account)
+		dialog.set_title(_('Removing (%s) account') % account)
 		if dialog.get_response() == gtk.RESPONSE_YES:
-			if gajim.connections[account].connected:
+			if gajim.connections[account].connected: #FIXME: WHAT? user doesn't know this does he?
 				gajim.connections[account].change_status('offline', 'offline')
+			unregister = False
+			if remove_and_unregister_radiobutton.get_active():
+				unregister = True
 			del gajim.connections[account]
 			gajim.config.del_per('accounts', account)
 			del self.plugin.windows[account]
@@ -1386,6 +1392,8 @@ class Accounts_window:
 			del self.plugin.roster.newlt_added[account]
 			self.plugin.roster.draw_roster()
 			self.init_accounts()
+			if unregister:
+				pass #FIXME: call Connection.remove_account(account)
 
 	def on_modify_button_clicked(self, widget):
 		'''When modify button is clicked:
@@ -1414,7 +1422,7 @@ class Accounts_window:
 		self.window = self.xml.get_widget('accounts_window')
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
 		self.modify_button = self.xml.get_widget('modify_button')
-		self.delete_button = self.xml.get_widget('delete_button')
+		self.remove_button = self.xml.get_widget('remove_button')
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, \
 			gobject.TYPE_BOOLEAN)
 		self.accounts_treeview.set_model(model)
