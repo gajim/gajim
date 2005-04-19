@@ -302,6 +302,8 @@ class Interface:
 		if jid in self.windows[account]['gc']:
 			self.windows[account]['gc'][jid].print_conversation('Error %s: %s' % \
 				(array[1], array[2]), jid, tim = array[4])
+			self.windows[account]['gc'][jid].set_subject(jid, \
+				self.windows[account]['gc'][jid].subjects[jid])
 			return
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
