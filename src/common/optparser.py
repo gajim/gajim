@@ -125,7 +125,7 @@ class OptionsParser:
 		for account in accounts:
 			if not self.tab.has_key(account):
 				continue
-			gajim.connections[account] = connection.connection(account)
+			gajim.connections[account] = connection.Connection(account)
 			gajim.config.add_per('accounts', account)
 			for key in self.tab[account]:	
 				gajim.config.set_per('accounts', account, key, \

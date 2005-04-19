@@ -1138,7 +1138,7 @@ class Account_modification_window:
 			dialogs.Error_dialog(_('An account already has this name'))
 			return
 		gajim.config.add_per('accounts', name)
-		gajim.connections[name] = connection.connection(name)
+		gajim.connections[name] = connection.Connection(name)
 		self.plugin.register_handlers(gajim.connections[name])
 		#if we neeed to register a new account
 		if new_account_checkbutton.get_active():

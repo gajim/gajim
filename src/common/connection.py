@@ -35,37 +35,39 @@ STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd', \
 	'invisible']
 
 distro_info = {
-	'Arch Linux': '/etc/arch-release',\
-	'Aurox Linux': '/etc/aurox-release',\
-	'Conectiva Linux': '/etc/conectiva-release',\
-	'Debian GNU/Linux': '/etc/debian_release',\
-	'Debian GNU/Linux': '/etc/debian_version',\
-	'Fedora Linux': '/etc/fedora-release',\
-	'Gentoo Linux': '/etc/gentoo-release',\
-	'Mandrake Linux': '/etc/mandrake-release',\
-	'Slackware Linux': '/etc/slackware-release',\
-	'Slackware Linux': '/etc/slackware-version',\
-	'Solaris/Sparc': '/etc/release',\
-	'Sun JDS': '/etc/sun-release',\
-	'Novell SUSE Linux': '/etc/SuSE-release',\
-	'PLD Linux': '/etc/pld-release',\
-	'SUSE Linux': '/etc/SuSE-release',\
-	'Yellow Dog Linux': '/etc/yellowdog-release',\
+	'Arch Linux': '/etc/arch-release',
+	'Aurox Linux': '/etc/aurox-release',
+	'Conectiva Linux': '/etc/conectiva-release',
+	'Debian GNU/Linux': '/etc/debian_release',
+	'Debian GNU/Linux': '/etc/debian_version',
+	'Fedora Linux': '/etc/fedora-release',
+	'Gentoo Linux': '/etc/gentoo-release',
+	'Linux from Scratch': '/etc/lfs-release',
+	'Mandrake Linux': '/etc/mandrake-release',
+	'Slackware Linux': '/etc/slackware-release',
+	'Slackware Linux': '/etc/slackware-version',
+	'Solaris/Sparc': '/etc/release',
+	'Sun JDS': '/etc/sun-release',
+	'Novell SUSE Linux': '/etc/SuSE-release',
+	'PLD Linux': '/etc/pld-release',
+	'SUSE Linux': '/etc/SuSE-release',
+	'Yellow Dog Linux': '/etc/yellowdog-release',
 	# many distros use the /etc/redhat-release for compatibility
 	# so Redhat is the last
-	'Redhat Linux': '/etc/redhat-release'\
+	'Redhat Linux': '/etc/redhat-release'
 }
 
 def get_os_info():
 	if os.name == 'nt':
-		win_version = {(1, 4, 0): '95',\
-			(1, 4, 10): '98',\
-			(1, 4, 90): 'ME',\
-			(2, 4, 0): 'NT',\
-			(2, 5, 0): '2000',\
+		win_version = {
+			(1, 4, 0): '95',
+			(1, 4, 10): '98',
+			(1, 4, 90): 'ME',
+			(2, 4, 0): 'NT',
+			(2, 5, 0): '2000',
 			(2, 5, 1): 'XP'
-		}[ os.sys.getwindowsversion()[3],\
-			os.sys.getwindowsversion()[0],\
+		}[	os.sys.getwindowsversion()[3],
+			os.sys.getwindowsversion()[0],
 			os.sys.getwindowsversion()[1] ]
 		return 'Windows' + ' ' + win_version
 	elif os.name =='posix':
@@ -81,19 +83,23 @@ def get_os_info():
 				child_stdin.close()
 				return output
 		# lsb_release executable not available, so parse files
-		for distro in distro_info:
-			path_to_file = distro_info[distro]
+		for distro_name in distro_info:
+			path_to_file = distro_info[distro_name]
 			if os.path.exists(path_to_file):
 				fd = open(path_to_file)
 				text = fd.read().strip()
 				fd.close()
 				if path_to_file.endswith('version'):
-					text = distro + ' ' + text
+					text = distro_name + ' ' + text
+				elif path_to_file.endswith('aurox-release'): # file doesn't have version
+					text = distro_name
+				elif path_to_file.endswith('lfs-release'): # file just has version
+					text = distro_name + ' ' + text
 				return text
 	return ''
 
-class connection:
-	"""connection"""
+class Connection:
+	"""Connection class"""
 	def __init__(self, name):
 		# dict of function to be calledfor each event
 		self.handlers = {'ROSTER': [], 'WARNING': [], 'ERROR': [], 'STATUS': [], \
