@@ -304,8 +304,9 @@ class Groupchat_window(chat.Chat):
 		else:
 			kind = 'status'
 
-		if kind == 'incoming' and self.nicks[room_jid].lower() in\
-			text.lower().split():
+		if kind == 'incoming' and (self.nicks[room_jid].lower() in \
+			text.lower().split() or self.nicks[room_jid].lower() + ':' in \
+			text.lower().split()):
 			other_tags_for_name.append('bold')
 
 		chat.Chat.print_conversation_line(self, text, room_jid, kind, contact, tim, \
