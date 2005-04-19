@@ -215,22 +215,22 @@ class Systray:
 		self.plugin.roster.status_combobox.set_active(0) # 0 is online
 
 	def on_free_for_chat_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(0) # 1 is free for chat
+		self.plugin.roster.status_combobox.set_active(1) # 1 is free for chat
 
 	def on_away_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(1) # 2 is away
+		self.plugin.roster.status_combobox.set_active(2) # 2 is away
 	
 	def on_xa_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(2) # 3 is xa
+		self.plugin.roster.status_combobox.set_active(3) # 3 is xa
 
 	def on_dnd_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(3) # 4 is dnd
+		self.plugin.roster.status_combobox.set_active(4) # 4 is dnd
 
 	def on_invisible_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(4) # 5 is invisible
+		self.plugin.roster.status_combobox.set_active(5) # 5 is invisible
 		
 	def on_offline_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(5) # 6 is offline
+		self.plugin.roster.status_combobox.set_active(6) # 6 is offline
 
 	def show_icon(self):
 		if not self.t:
