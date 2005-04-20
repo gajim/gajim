@@ -954,15 +954,14 @@ class Account_modification_window:
 		use_proxy = gajim.config.get_per('accounts', self.account, 'use_proxy')
 		self.xml.get_widget('use_proxy_checkbutton').set_active(use_proxy)
 		
-		self.xml.get_widget('proxyhost_entry').set_sensitive(use_proxy)
-		self.xml.get_widget('proxyport_entry').set_sensitive(use_proxy)
-				
-		self.xml.get_widget('proxyhost_entry').set_text(gajim.config.get_per( \
-			'accounts', self.account, 'proxyhost'))
-
-		self.xml.get_widget('proxyport_entry').set_text(str(gajim.config.get_per(\
-			'accounts', self.account, 'proxyport')))
-
+		entry = self.xml.get_widget('proxyhost_entry')
+		entry.set_sensitive(use_proxy)
+		entry.set_text(gajim.config.get_per('accounts', self.account,
+							'proxyhost'))
+		entry = self.xml.get_widget('proxyport_entry')
+		entry.set_sensitive(use_proxy)
+		entry.set_text(str(gajim.config.get_per('accounts',
+						self.account, 'proxyport')))
 			
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if not gajim.config.get('usegpg'):
