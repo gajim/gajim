@@ -407,7 +407,7 @@ class Preferences_window:
 	def on_sounds_treemodel_row_changed(self, model, path, iter):
 		sound_event = model.get_value(iter, 0)
 		gajim.config.set_per('soundevents', sound_event, 'enabled',
-					model[path][1] == True)
+					bool(model[path][1]))
 		gajim.config.set_per('soundevents', sound_event, 'path', \
 			model.get_value(iter, 2))
 		self.plugin.save_config()
