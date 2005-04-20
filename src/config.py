@@ -646,13 +646,13 @@ class Preferences_window:
 		self.xml.get_widget('add_remove_emoticons_button').set_sensitive(st)
 
 		#iconset
-		list_style = os.listdir('../data/iconsets/')
+		iconsets_list = os.listdir('../data/iconsets/')
 		model = gtk.ListStore(gobject.TYPE_STRING)
 		self.iconset_combobox.set_model(model)
 		l = []
-		for i in list_style:
-			if i[0] != '.':
-				l.append(i)
+		for dir in iconsets_list:
+			if dir != '.svn' or dir != 'transports': #FIXME: this is crazy!!
+				l.append(dir)
 		if l.count == 0:
 			l.append(' ')
 		for i in range(len(l)):
@@ -1337,7 +1337,7 @@ class Accounts_window:
 		model.clear()
 		for account in gajim.connections:
 			iter = model.append()
-			model.set(iter, 0, account, 1, gajim.config.get_per('accounts', \
+			model.set(iter, 0, account, 1, gajim.config.get_per('accounts',
 				account, 'hostname'))
 
 	def on_accounts_treeview_cursor_changed(self, widget):
@@ -1364,7 +1364,7 @@ class Accounts_window:
 			self.plugin.windows[account]['remove_account'].window.present()
 		else:
 			self.plugin.windows[account]['remove_account'] = \
-												Remove_account_window(self.plugin, account)
+				Remove_account_window(self.plugin, account)
 
 	def on_modify_button_clicked(self, widget):
 		'''When modify button is clicked:
@@ -1383,6 +1383,7 @@ class Accounts_window:
 		gajim.config.set_per('accounts', account,
 				'sync_with_global_status',
 				not widget.get_active())
+		self.plugin.save_config()
 		
 	def __init__(self, plugin):
 		self.plugin = plugin
@@ -1637,6 +1638,7 @@ class Service_discovery_window:
 	def __init__(self, plugin, account):
 		if gajim.connections[account].connected < 2:
 			dialogs.Error_dialog(_('You must be connected to browse services'))
+			del self.plugin.windows[self.account]['disco']
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')
@@ -1908,10 +1910,10 @@ class Groupchat_config_window:
 	def on_groupchat_config_window_destroy(self, widget):
 		del self.plugin.windows[self.account]['gc_config'][self.room_jid]
 
-	def on_cancel_button_clicked(self, widget):
+	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 	
-	def on_apply_button_clicked(self, widget):
+	def on_change_button_clicked(self, widget):
 		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
 
 	def on_checkbutton_toggled(self, widget, index):
