@@ -111,10 +111,10 @@ class Roster_window:
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
-		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',\
+		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',
 			'invisible']
 		status = statuss[gajim.connections[account].connected]
-		model.append(None, (self.pixbufs[status], account, 'account', account,\
+		model.append(None, (self.pixbufs[status], account, 'account', account,
 			account, False))
 
 	def remove_newly_added(self, jid, account):
@@ -144,15 +144,15 @@ class Roster_window:
 			iterG = self.get_group_iter(g, account)
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
-				iterG = model.append(IterAcct, \
-					(self.pixbufs['closed'], g, 'group', \
+				iterG = model.append(IterAcct, 
+					(self.pixbufs['closed'], g, 'group', 
 					g, account, False))
 			if not self.groups[account].has_key(g): #It can probably never append
 				if account+g in self.hidden_lines:
 					self.groups[account][g] = {'expand': False}
 				else:
 					self.groups[account][g] = {'expand': True}
-			if not account in self.hidden_lines and not gajim.config.get(\
+			if not account in self.hidden_lines and not gajim.config.get(
 				'mergeaccounts'):
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
@@ -160,7 +160,7 @@ class Roster_window:
 			if g == 'Agents':
 				typestr = 'agent'
 
-			model.append(iterG, (self.pixbufs[user.show], \
+			model.append(iterG, (self.pixbufs[user.show], 
 				user.name, typestr, user.jid, account, False))
 			
 			if self.groups[account][g]['expand']:
@@ -226,7 +226,6 @@ class Roster_window:
 	
 	def make_menu(self):
 		'''create the main_window's menus'''
-		# try to avoid WIDGET_REALIZED_FOR_EVENT failed which freezes gajim
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		add_new_contact_menuitem  = self.xml.get_widget('add_new_contact_menuitem')
@@ -235,14 +234,14 @@ class Roster_window:
 			add_new_contact_menuitem.handler_disconnect(self.add_new_contact_handler_id)
 			self.add_new_contact_handler_id = None
 		if self.service_disco_handler_id:
-			service_disco_menuitem.handler_disconnect(\
+			service_disco_menuitem.handler_disconnect(
 				self.service_disco_handler_id)
 			self.service_disco_handler_id = None
 		if self.join_gc_handler_id:
 			join_gc_menuitem.handler_disconnect(self.join_gc_handler_id)
 			self.join_gc_handler_id = None
 		if self.new_message_menuitem_handler_id:
-			new_message_menuitem.handler_disconnect(\
+			new_message_menuitem.handler_disconnect(
 				self.new_message_menuitem_handler_id)
 			self.new_message_menuitem_handler_id = None
 		#remove the existing submenus
@@ -301,27 +300,27 @@ class Roster_window:
 					gajim.config.get_per('accounts', account, 'hostname')
 				item = gtk.MenuItem(_('as ') + our_jid)
 				sub_menu.append(item)
-				item.connect('activate', self.on_new_message_menuitem_activate, \
+				item.connect('activate', self.on_new_message_menuitem_activate, 
 					account)
 			sub_menu.show_all()
 		elif len(gajim.connections) == 1: # one account
 			#add
 			if not self.add_new_contact_handler_id:
-				self.add_new_contact_handler_id = add_new_contact_menuitem.connect(\
+				self.add_new_contact_handler_id = add_new_contact_menuitem.connect(
 				'activate', self.on_add_new_contact, gajim.connections.keys()[0])
 			#disco
 			if not self.service_disco_handler_id:
-				self.service_disco_handler_id = service_disco_menuitem.connect( \
-					'activate', self.on_service_disco_menuitem_activate, \
+				self.service_disco_handler_id = service_disco_menuitem.connect( 
+					'activate', self.on_service_disco_menuitem_activate, 
 					gajim.connections.keys()[0])
 			#join_gc
 			if not self.join_gc_handler_id:
-				self.join_gc_handler_id = join_gc_menuitem.connect( \
-					'activate', self.on_join_gc_activate, gajim.connections.keys()\
+				self.join_gc_handler_id = join_gc_menuitem.connect( 
+					'activate', self.on_join_gc_activate, gajim.connections.keys()
 					[0])
 			if not self.new_message_menuitem_handler_id:
-				self.new_message_menuitem_handler_id = new_message_menuitem. \
-					connect('activate', self.on_new_message_menuitem_activate, \
+				self.new_message_menuitem_handler_id = new_message_menuitem.\
+					connect('activate', self.on_new_message_menuitem_activate, 
 					gajim.connections.keys()[0])
 
 	def draw_roster(self):
@@ -359,8 +358,8 @@ class Roster_window:
 			if not show:
 				show = 'offline'
 
-			user1 = User(ji, name, array[jid]['groups'], show, \
-				array[jid]['status'], array[jid]['sub'], array[jid]['ask'], \
+			user1 = User(ji, name, array[jid]['groups'], show, 
+				array[jid]['status'], array[jid]['sub'], array[jid]['ask'], 
 				resource, 0, '')
 			#when we draw the roster, we can't have twice the same user with 
 			# 2 resources
@@ -398,7 +397,7 @@ class Roster_window:
 			name = user.name
 			if user.resource != '':
 				name += '/'+user.resource
-			self.plugin.windows[account]['chats'][user.jid].print_conversation(\
+			self.plugin.windows[account]['chats'][user.jid].print_conversation(
 				_('%s is now %s (%s)') % (name, show, status), user.jid, 'status')
 
 	def on_info(self, widget, user, account):
@@ -468,7 +467,7 @@ class Roster_window:
 		item.connect('activate', self.authorize, jid, account)
 		item = gtk.MenuItem(_('Rerequest authorization from'))
 		sub_menu.append(item)
-		item.connect('activate', self.req_sub, jid, \
+		item.connect('activate', self.req_sub, jid, 
 			_('I would like to add you to my contact list.'), account)
 		
 		item = gtk.MenuItem(_('Remove'))
@@ -518,7 +517,7 @@ class Roster_window:
 		if self.contacts[account][jid][0].show == 'offline':
 			item.set_sensitive(False)
 		menu.append(item)
-		item.connect('activate', self.on_agent_logging, jid, 'unavailable', \
+		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
 			account)
 
 		item = gtk.MenuItem()
@@ -609,7 +608,7 @@ class Roster_window:
 		if not self.contacts[account].has_key(jid):
 			if not group:
 				group = 'General'
-			user1 = User(jid, pseudo, [group], 'requested', \
+			user1 = User(jid, pseudo, [group], 'requested', 
 				'requested', 'none', 'subscribe', '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
@@ -648,7 +647,7 @@ class Roster_window:
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			if event.button == 3: # Right click
 				try:
-					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
+					path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
 						int(event.y))
 				except TypeError:
 					self.tree.get_selection().unselect_all()
@@ -668,7 +667,7 @@ class Roster_window:
 				return False
 			if event.button == 1: # Left click
 				try:
-					path, column, x, y = self.tree.get_path_at_pos(int(event.x), \
+					path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
 						int(event.y))
 				except TypeError:
 					self.tree.get_selection().unselect_all()
@@ -707,7 +706,7 @@ class Roster_window:
 			save_pass = gajim.config.get_per('accounts', account, 'savepass')
 			if not save_pass and gajim.connections[account].connected < 2:
 				passphrase = ''
-				w = dialogs.Passphrase_dialog(_('Enter your password for account %s') \
+				w = dialogs.Passphrase_dialog(_('Enter your password for account %s') 
 					% account, 'Save password', autoconnect)
 				passphrase, save = w.run()
 				if passphrase == -1:
@@ -724,32 +723,32 @@ class Roster_window:
 
 			keyid = None
 			save_gpg_pass = 0
-			save_gpg_pass = gajim.config.get_per('accounts', account, \
+			save_gpg_pass = gajim.config.get_per('accounts', account, 
 				'savegpgpass')
 			keyid = gajim.config.get_per('accounts', account, 'keyid')
 			if keyid and gajim.connections[account].connected < 2 and \
 				gajim.config.get('usegpg'):
 				if save_gpg_pass:
-					passphrase = gajim.config.get_per('accounts', account, \
+					passphrase = gajim.config.get_per('accounts', account, 
 						'gpgpassword')
 				else:
 					passphrase = ''
-					w = dialogs.Passphrase_dialog(\
-						_('Enter GPG key passphrase for account %s') % account, \
+					w = dialogs.Passphrase_dialog(
+						_('Enter GPG key passphrase for account %s') % account, 
 						'Save passphrase', autoconnect)
 					passphrase, save = w.run()
 					if passphrase == -1:
 						passphrase = ''
 					if save:
 						gajim.config.set_per('accounts', account, 'savegpgpass', True)
-						gajim.config.set_per('accounts', account, 'gpgpassword', \
+						gajim.config.set_per('accounts', account, 'gpgpassword', 
 							passphrase)
 				gajim.connections[account].gpg_passphrase(passphrase)
 		gajim.connections[account].change_status(status, txt)
 		for room_jid in self.plugin.windows[account]['gc']:
 			if room_jid != 'tabbed':
 				nick = self.plugin.windows[account]['gc'][room_jid].nicks[room_jid]
-				gajim.connections[account].send_gc_status(nick, room_jid, status, \
+				gajim.connections[account].send_gc_status(nick, room_jid, status, 
 					txt)
 		if status == 'online' and self.plugin.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
@@ -761,7 +760,7 @@ class Roster_window:
 		if (status == 'online' and not gajim.config.get('ask_online_status')) or \
 			(status == 'offline' and not gajim.config.get('ask_offline_status')):
 			return status
-		dlg = dialogs.Change_status_message_dialog(self.plugin, status, \
+		dlg = dialogs.Change_status_message_dialog(self.plugin, status, 
 			autoconnect)
 		message = dlg.run()
 		return message
@@ -789,7 +788,7 @@ class Roster_window:
 			self.update_status_comboxbox()
 			return
 		for acct in accounts:
-			if not gajim.config.get_per('accounts', acct, \
+			if not gajim.config.get_per('accounts', acct, 
 				'sync_with_global_status'):
 				continue
 			self.send_status(acct, status, message)
@@ -857,7 +856,7 @@ class Roster_window:
 		if gajim.config.get('usetabbedchat'):
 			if not self.plugin.windows[account]['gc'].has_key('tabbed'):
 				self.plugin.windows[account]['gc']['tabbed'] = \
-					groupchat_window.Groupchat_window(jid, nick, self.plugin, \
+					groupchat_window.Groupchat_window(jid, nick, self.plugin, 
 						account)
 			else:
 				self.plugin.windows[account]['gc']['tabbed'].new_group(jid, nick)
@@ -872,7 +871,7 @@ class Roster_window:
 	def on_message(self, jid, msg, tim, account):
 		'''when we receive a message'''
 		if not self.contacts[account].has_key(jid):
-			user1 = User(jid, jid, ['not in the roster'], \
+			user1 = User(jid, jid, ['not in the roster'], 
 				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
@@ -912,7 +911,7 @@ class Roster_window:
 					self.tree.expand_row(path[0:2], False)
 					self.tree.scroll_to_cell(path)
 					self.tree.set_cursor(path)
-			self.plugin.windows[account]['chats'][jid].print_conversation(msg, \
+			self.plugin.windows[account]['chats'][jid].print_conversation(msg, 
 				jid, tim = tim)
 
 	def on_preferences_menuitem_activate(self, widget):
@@ -1126,7 +1125,7 @@ class Roster_window:
 					user.groups.remove(old_name)
 					user.groups.append(new_text)
 					self.add_user_to_roster(user.jid, account)
-					gajim.connections[account].update_user(user.jid, user.name, \
+					gajim.connections[account].update_user(user.jid, user.name, 
 						user.groups)
 		model.set_value(iter, 5, False)
 		
@@ -1146,8 +1145,8 @@ class Roster_window:
 			iconset = 'sun'
 		self.path = '../data/iconsets/' + iconset + '/'
 		self.pixbufs = {}
-		for state in ('connecting', 'online', 'chat', 'away', 'xa', 'dnd', \
-			'invisible', 'offline', 'error', 'requested', 'message', \
+		for state in ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
+			'invisible', 'offline', 'error', 'requested', 'message', 
 			'opened', 'closed', 'not in the roster'):
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
@@ -1162,6 +1161,18 @@ class Roster_window:
 				if os.path.exists(file):
 					image.set_from_file(file)
 					break
+
+	def init_transports_pixbufs(self, arg, dirname, fnames):
+		name_only = os.path.basename(dirname)
+		print name_only
+		print name_only != 'transports'
+		if name_only != 'transports' or not name_only.startswith('.svn'):
+			for fname in fnames: # fname is not abs
+				print 'fname', fname, 'in dir', dirname
+				transport_kind = name_only
+				return
+				self.transports_pixbufs[transport_kind][fname] = 'be'
+		
 
 	def reload_pixbufs(self):
 		self.mkpixbufs()
@@ -1205,11 +1216,11 @@ class Roster_window:
 	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
 		'''When a row is added, set properties for icon renderer'''
 		if model.get_value(iter, 2) == 'account':
-			renderer.set_property('cell-background', \
+			renderer.set_property('cell-background', 
 				gajim.config.get('accountbgcolor'))
 			renderer.set_property('xalign', 0)
 		elif model.get_value(iter, 2) == 'group':
-			renderer.set_property('cell-background', \
+			renderer.set_property('cell-background', 
 				gajim.config.get('groupbgcolor'))
 			renderer.set_property('xalign', 0.5)
 		else:
@@ -1220,7 +1231,7 @@ class Roster_window:
 			elif jid in self.to_be_removed[account]:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
-				renderer.set_property('cell-background', \
+				renderer.set_property('cell-background', 
 					gajim.config.get('userbgcolor'))
 			renderer.set_property('xalign', 1)
 		renderer.set_property('width', 20)
@@ -1228,30 +1239,30 @@ class Roster_window:
 	def nameCellDataFunc(self, column, renderer, model, iter, data=None):
 		'''When a row is added, set properties for name renderer'''
 		if model.get_value(iter, 2) == 'account':
-			renderer.set_property('foreground', \
+			renderer.set_property('foreground', 
 				gajim.config.get('accounttextcolor'))
-			renderer.set_property('cell-background', \
+			renderer.set_property('cell-background', 
 				gajim.config.get('accountbgcolor'))
 			renderer.set_property('font', gajim.config.get('accountfont'))
 			renderer.set_property('xpad', 0)
 		elif model.get_value(iter, 2) == 'group':
-			renderer.set_property('foreground', \
+			renderer.set_property('foreground', 
 				gajim.config.get('grouptextcolor'))
-			renderer.set_property('cell-background', \
+			renderer.set_property('cell-background', 
 				gajim.config.get('groupbgcolor'))
 			renderer.set_property('font', gajim.config.get('groupfont'))
 			renderer.set_property('xpad', 4)
 		else:
 			jid = model.get_value(iter, 3)
 			account = model.get_value(iter, 4)
-			renderer.set_property('foreground', \
+			renderer.set_property('foreground', 
 				gajim.config.get('usertextcolor'))
 			if jid in self.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in self.to_be_removed[account]:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
-				renderer.set_property('cell-background', \
+				renderer.set_property('cell-background', 
 					gajim.config.get('userbgcolor'))
 			renderer.set_property('font', gajim.config.get('userfont'))
 			renderer.set_property('xpad', 8)
@@ -1388,8 +1399,10 @@ class Roster_window:
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
 		self.mkpixbufs()
+		self.transports_pixbufs = { 'aim': {}, 'gadugadu': {}, 'icq': {}, 'msn': {}, 'yahoo': {} }
+		os.path.walk('../data/iconsets/transports', self.init_transports_pixbufs, None) # arg is None
 
-		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image, \
+		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image, 
 			gobject.TYPE_STRING)
 		self.status_combobox = gtk.ComboBox()
 		self.xml.get_widget('vbox1').pack_end(self.status_combobox, False)
@@ -1452,7 +1465,7 @@ class Roster_window:
 		self.tree.connect('drag_data_get', self.drag_data_get_data)
 		self.tree.connect('drag_data_received', self.drag_data_received_data)
 		self.xml.signal_autoconnect(self)
-		self.id_signal_cb = self.status_combobox.connect('changed',\
+		self.id_signal_cb = self.status_combobox.connect('changed',
 														self.on_status_combobox_changed)
 
 		self.hidden_lines = gajim.config.get('hiddenlines').split('\t')
