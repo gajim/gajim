@@ -281,12 +281,16 @@ class Chat:
 				self.notebook.emit('key_press_event', event)
 			elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
 				self.notebook.emit('key_press_event', event)
+			elif event.keyval == gtk.keysyms.v: # CTRL + V
+				self.notebook.emit('key_press_event', event)
 				
 	def on_chat_notebook_key_press_event(self, widget, event):
 		st = '1234567890' # zero is here cause humans count from 1, pc from 0 :P
 		jid = self.get_active_jid()
-		if event.keyval == gtk.keysyms.Escape: # ESCAPE
-			self.remove_tab(jid)
+		if self.widget_name == 'tabbed_chat_window':
+			if event.keyval == gtk.keysyms.Escape: # ESCAPE
+				print 'adding escape' #FIXME: doesn't get printed for GC as it should but Escape quits it still
+				self.remove_tab(jid)
 		elif event.keyval == gtk.keysyms.F4 and \
 			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
 				self.remove_tab(jid)
@@ -342,7 +346,9 @@ class Chat:
 			gtk.keysyms.Control_L) or (event.keyval == gtk.keysyms.Control_R):
 			# we pressed a control key or ctrl+sth: we don't block the event
 			# in order to let ctrl+c (copy text) and others do their default work
-			pass
+			print 'ctrl+sth' # FIXME: gets printed, but Ctrl+V doesn't paste
+			#possible because Ctrl+V doesn't do anything to *NOTEBOOK*
+			#so we should pass it somehow to the TEXTVIEW
 		else: # it's a normal key press make sure message_textview has focus
 			message_textview = self.xmls[jid].get_widget('message_textview')
 			if not message_textview.is_focus():
