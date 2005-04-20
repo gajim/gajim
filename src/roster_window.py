@@ -533,10 +533,10 @@ class Roster_window:
 		menu.reposition()
 
 	def on_edit_account(self, widget, account):
-		if self.plugin.windows.has_key('account_modification'):
-			self.plugin.windows['account_modification'].window.present()
+		if self.plugin.windows[account].has_key('account_modification'):
+			self.plugin.windows[account]['account_modification'].window.present()
 		else:
-			self.plugin.windows['account_modification'] = \
+			self.plugin.windows[account]['account_modification'] = \
 				config.Account_modification_window(self.plugin, account)
 
 	def mk_menu_account(self, event, iter):

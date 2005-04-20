@@ -913,7 +913,12 @@ class Account_modification_window:
 	'''Class for account informations'''
 	def on_account_modification_window_destroy(self, widget):
 		'''close window'''
-		del self.plugin.windows[self.account]['account_modification']
+		if self.plugin.windows.has_key(self.account):
+			if self.plugin.windows[self.account].has_key('account_modification')
+				del self.plugin.windows[self.account]['account_modification']
+				return
+		if self.plugin.windows.has_key('account_modification'):
+			del self.plugin.windows['account_modification']
 	
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
