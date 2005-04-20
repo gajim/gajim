@@ -62,10 +62,7 @@ class Preferences_window:
 
 	def on_checkbutton_toggled(self, widget, config_name, \
 		change_sensitivity_widgets = None):
-		if widget.get_active():
-			gajim.config.set(config_name, True)
-		else:
-			gajim.config.set(config_name, False)
+		gajim.config.set(config_name, widget.get_active())
 		if change_sensitivity_widgets != None:
 			for w in change_sensitivity_widgets:
 				w.set_sensitive(widget.get_active())
@@ -479,31 +476,20 @@ class Preferences_window:
 		self.plugin.save_config()
 
 	def on_log_in_contact_checkbutton_toggled(self, widget):
-		if widget.get_active():
-			gajim.config.set('lognotusr', True)
-		else:
-			gajim.config.set('lognotusr', False)
+		gajim.config.set('lognotusr', widget.get_active())
 		self.plugin.save_config()
 
 	def on_log_in_extern_checkbutton_toggled(self, widget):
-		if widget.get_active():
-			gajim.config.set('lognotsep', True)
-		else:
-			gajim.config.set('lognotsep', False)
+		gajim.config.set('lognotsep', widget.get_active())
 		self.plugin.save_config()
 
 	def on_do_not_send_os_info_checkbutton_toggled(self, widget):
-		if widget.get_active():
-			gajim.config.set('do_not_send_os_info', True)
-		else:
-			gajim.config.set('do_not_send_os_info', False)
+		gajim.config.set('do_not_send_os_info', widget.get_active())
 		self.plugin.save_config()
 
 	def on_do_not_check_for_new_version_checkbutton_toggled(self, widget):
-		if widget.get_active():
-			gajim.config.set('do_not_check_for_new_version', True)
-		else:
-			gajim.config.set('do_not_check_for_new_version', False)
+		gajim.config.set('do_not_check_for_new_version',
+							widget.get_active())
 		self.plugin.save_config()
 
 	def fill_msg_treeview(self):
@@ -1396,12 +1382,9 @@ class Accounts_window:
 				Account_modification_window(self.plugin, account)
 
 	def on_sync_with_global_status_checkbutton_toggled(self, widget):
-		if widget.get_active():
-			gajim.config.set_per('accounts', account, 'sync_with_global_status', \
-				False)
-		else:
-			gajim.config.set_per('accounts', account, 'sync_with_global_status', \
-				True)
+		gajim.config.set_per('accounts', account,
+				'sync_with_global_status',
+				not widget.get_active())
 		
 	def __init__(self, plugin):
 		self.plugin = plugin
