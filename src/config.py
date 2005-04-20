@@ -980,9 +980,8 @@ class Account_modification_window:
 
 	def on_save_button_clicked(self, widget):
 		'''When save button is clicked: Save information in config file'''
-		save_password = 0
-		if self.xml.get_widget('save_password_checkbutton').get_active():
-			save_password = 1
+		save_password =
+		self.xml.get_widget('save_password_checkbutton').get_active()
 		password = self.xml.get_widget('password_entry').get_text()
 		resource = self.xml.get_widget('resource_entry').get_text()
 		priority = self.xml.get_widget('priority_spinbutton').get_value_as_int()
@@ -994,12 +993,10 @@ class Account_modification_window:
 				dialogs.Error_dialog(_('You must be offline to change the account\'s name'))
 				return
 		jid = self.xml.get_widget('jid_entry').get_text()
-		autoconnect = 0
-		if self.xml.get_widget('autoconnect_checkbutton').get_active():
-			autoconnect = 1
+		autoconnect = self.xml.get_widget('autoconnect_checkbutton').get_active()
 
 		if self.account:
-			list_no_log_for = gajim.config.get_per('accounts', self.account, \
+			list_no_log_for = gajim.config.get_per('accounts', self.account,
 				'no_log_for').split()
 		else:
 			list_no_log_for = []
@@ -1008,14 +1005,10 @@ class Account_modification_window:
 		if not self.xml.get_widget('log_history_checkbutton').get_active():
 			list_no_log_for.append(name)
 
-		sync_with_global_status = 0
-		if self.xml.get_widget('sync_with_global_status_checkbutton').\
-			get_active():
-			sync_with_global_status = 1
-
-		use_proxy = 0
-		if self.xml.get_widget('use_proxy_checkbutton').get_active():
-			use_proxy = 1
+		sync_with_global_status_checkbutton =
+		self.xml.get_widget('sync_with_global_status_checkbutton').get_active()
+		
+		use_proxy = self.xml.get_widget('use_proxy_checkbutton').get_active()
 		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
 		proxyport = self.xml.get_widget('proxyport_entry').get_text()
 		if (name == ''):
@@ -1048,13 +1041,12 @@ class Account_modification_window:
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
 		if key_name == '': #no key selected
 			keyID = ''
-			save_gpg_password = 0
+			save_gpg_password = False
 			gpg_password = ''
 		else:
 			keyID = self.xml.get_widget('gpg_key_label').get_text()
-			save_gpg_password = 0
-			if self.xml.get_widget('gpg_save_password_checkbutton').get_active():
-				save_gpg_password = 1
+			save_gpg_password =
+			self.xml.get_widget('gpg_save_password_checkbutton').get_active()
 			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
 		#if we are modifying an account
 		if self.modify:
@@ -1120,6 +1112,7 @@ class Account_modification_window:
 				self.plugin.windows['accounts'].init_accounts()
 			#refresh roster
 			self.plugin.roster.draw_roster()
+			self.plugin.save_config()
 			self.window.destroy()
 			return
 		#if it's a new account
@@ -1170,6 +1163,7 @@ class Account_modification_window:
 			self.plugin.windows['accounts'].init_accounts()
 		#refresh roster
 		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
 		self.window.destroy()
 
 	def on_change_password_button_clicked(self, widget):
@@ -1188,30 +1182,24 @@ class Account_modification_window:
 		self.account = acct
 		jid = self.xml.get_widget('jid_entry').get_text()
 		(login, hostname) = jid.split('@')
-		save_password = 0
 		password = self.xml.get_widget('password_entry').get_text()
 		resource = self.xml.get_widget('resource_entry').get_text()
 		priority = self.xml.get_widget('priority_spinbutton').get_value_as_int()
-		autoconnect = 0
-		if self.xml.get_widget('autoconnect_checkbutton').get_active():
-			autoconnect = 1
-		use_proxy = 0
-		if self.xml.get_widget('use_proxy_checkbutton').get_active():
-			use_proxy = 1
+		autoconnect = self.xml.get_widget('autoconnect_checkbutton').get_active()
+		use_proxy = self.xml.get_widget('use_proxy_checkbutton').get_active()
 		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
 		proxyport = self.xml.get_widget('proxyport_entry').get_text()
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
-		if self.xml.get_widget('save_password_checkbutton').get_active():
-			save_password = 1
+		save_password = 
+		self.xml.get_widget('save_password_checkbutton').get_active()
 		if key_name == '': #no key selected
 			keyID = ''
-			save_gpg_password = 0
+			save_gpg_password = False
 			gpg_password = ''
 		else:
 			keyID = self.xml.get_widget('gpg_key_label').get_text()
-			save_gpg_password = 0
-			if self.xml.get_widget('gpg_save_password_checkbutton').get_active():
-				save_gpg_password = 1
+			save_gpg_password = 
+			self.xml.get_widget('gpg_save_password_checkbutton').get_active()
 			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
 		no_log_for = ''
 		if self.xml.get_widget('log_history_checkbutton').get_active():
@@ -1378,12 +1366,6 @@ class Accounts_window:
 		else:
 			self.plugin.windows[account]['account_modification'] = \
 				Account_modification_window(self.plugin, account)
-
-	def on_sync_with_global_status_checkbutton_toggled(self, widget):
-		gajim.config.set_per('accounts', account,
-				'sync_with_global_status',
-				not widget.get_active())
-		self.plugin.save_config()
 		
 	def __init__(self, plugin):
 		self.plugin = plugin
@@ -1636,6 +1618,9 @@ class Service_discovery_window:
 		self.window.destroy()
 
 	def __init__(self, plugin, account):
+		self.plugin = plugin
+		self.account = account
+		self.agent_infos = {}
 		if gajim.connections[account].connected < 2:
 			dialogs.Error_dialog(_('You must be connected to browse services'))
 			del self.plugin.windows[self.account]['disco']
@@ -1648,9 +1633,7 @@ class Service_discovery_window:
 		self.address_comboboxentry = xml.get_widget('address_comboboxentry')
 		self.address_comboboxentry_entry = self.address_comboboxentry.child
 		self.address_comboboxentry_entry.set_activates_default(True)
-		self.plugin = plugin
-		self.account = account
-		self.agent_infos = {}
+		
 		model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		self.services_treeview.set_model(model)
 		#columns
