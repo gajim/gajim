@@ -1436,17 +1436,19 @@ class Service_registration_window:
 		nbrow = 0
 		table = self.xml.get_widget('table')
 		for name in self.infos.keys():
-			if name != 'key' and name != 'instructions' and name != 'x':
-				nbrow = nbrow + 1
-				table.resize(rows=nbrow, columns=2)
-				label = gtk.Label(name.capitalize() + ':')
-				table.attach(label, 0, 1, nbrow-1, nbrow, 0, 0, 0, 0)
-				entry = gtk.Entry()
-				entry.set_text(self.infos[name])
-				table.attach(entry, 1, 2, nbrow-1, nbrow, 0, 0, 0, 0)
-				self.entries[name] = entry
-				if nbrow == 1:
-					entry.grab_focus()
+			if name == 'key' or name == 'instructions' or name == 'x':
+				continue
+
+			nbrow = nbrow + 1
+			table.resize(rows = nbrow, columns = 2)
+			label = gtk.Label(name.capitalize() + ':')
+			table.attach(label, 0, 1, nbrow - 1, nbrow, 0, 0, 0, 0)
+			entry = gtk.Entry()
+			entry.set_text(self.infos[name])
+			table.attach(entry, 1, 2, nbrow - 1, nbrow, 0, 0, 0, 0)
+			self.entries[name] = entry
+			if nbrow == 1:
+				entry.grab_focus()
 		table.show_all()
 	
 	def on_ok_button_clicked(self, widget):
