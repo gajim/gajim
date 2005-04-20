@@ -886,8 +886,17 @@ class Connection:
 		iq.setID(id)
 		self.connection.send(iq)
 
-	def unregister_account(self, account_name):
-		pass #FIXME: WRITE THE CODE
+	def unregister_account(self):
+		if self.connected == 0:
+			self.connection = self.connect()
+		if self.connected > 1:
+			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+			iq = common.jabber.Iq(type = 'set', to = hostname)
+			q = iq.setQuery(common.jabber.NS_REGISTER)
+			q.insertTag('remove')
+			id = self.connection.getAnID()
+			iq.setID(id)
+			self.connection.send(iq)
 
 	def process(self, timeout):
 		if not self.connection:

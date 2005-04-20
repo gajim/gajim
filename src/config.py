@@ -1228,23 +1228,23 @@ class Account_modification_window:
 		no_log_for = ''
 		if self.xml.get_widget('log_history_checkbutton').get_active():
 			no_log_for = acct
-		gajim.config.set_per('accounts', name, 'name', login)
-		gajim.config.set_per('accounts', name, 'hostname', hostname)
-		gajim.config.set_per('accounts', name, 'savepass', save_password)
-		gajim.config.set_per('accounts', name, 'password', password)
-		gajim.config.set_per('accounts', name, 'resource', resource)
-		gajim.config.set_per('accounts', name, 'priority', priority)
-		gajim.config.set_per('accounts', name, 'autoconnect', autoconnect)
-		gajim.config.set_per('accounts', name, 'use_proxy', use_proxy)
-		gajim.config.set_per('accounts', name, 'proxyhost', proxyhost)
-		gajim.config.set_per('accounts', name, 'proxyport', proxyport)
-		gajim.config.set_per('accounts', name, 'keyid', keyID)
-		gajim.config.set_per('accounts', name, 'keyname', key_name)
-		gajim.config.set_per('accounts', name, 'savegpgpass', \
+		gajim.config.set_per('accounts', acct, 'name', login)
+		gajim.config.set_per('accounts', acct, 'hostname', hostname)
+		gajim.config.set_per('accounts', acct, 'savepass', save_password)
+		gajim.config.set_per('accounts', acct, 'password', password)
+		gajim.config.set_per('accounts', acct, 'resource', resource)
+		gajim.config.set_per('accounts', acct, 'priority', priority)
+		gajim.config.set_per('accounts', acct, 'autoconnect', autoconnect)
+		gajim.config.set_per('accounts', acct, 'use_proxy', use_proxy)
+		gajim.config.set_per('accounts', acct, 'proxyhost', proxyhost)
+		gajim.config.set_per('accounts', acct, 'proxyport', proxyport)
+		gajim.config.set_per('accounts', acct, 'keyid', keyID)
+		gajim.config.set_per('accounts', acct, 'keyname', key_name)
+		gajim.config.set_per('accounts', acct, 'savegpgpass', \
 			save_gpg_password)
-		gajim.config.set_per('accounts', name, 'gpgpassword', gpg_password)
-		gajim.config.set_per('accounts', name, 'sync_with_global_status', True)
-		gajim.config.set_per('accounts', name, 'no_log_for', no_log_for)
+		gajim.config.set_per('accounts', acct, 'gpgpassword', gpg_password)
+		gajim.config.set_per('accounts', acct, 'sync_with_global_status', True)
+		gajim.config.set_per('accounts', acct, 'no_log_for', no_log_for)
 
 	def on_edit_details_button_clicked(self, widget):
 		if not self.plugin.windows.has_key(self.account):
@@ -2054,7 +2054,6 @@ class Remove_account_window:
 		unregister = False  
 		if self.remove_and_unregister_radiobutton.get_active():  
 			unregister = True
-		return #FIXME: remove me when ready
 		del gajim.connections[self.account]
 		gajim.config.del_per('accounts', self.account)
 		del self.plugin.windows[self.account]
@@ -2062,9 +2061,10 @@ class Remove_account_window:
 		del self.plugin.roster.groups[self.account]
 		del self.plugin.roster.contacts[self.account]
 		del self.plugin.roster.to_be_removed[self.account]
-		del self.plugin.roster.newlt_added[self.account]
+		del self.plugin.roster.newly_added[self.account]
 		self.plugin.roster.draw_roster()
-		self.init_accounts()
+		if self.plugin.windows.has_key('accounts'):
+			self.plugin.windows['accounts'].init_accounts()
 		if unregister:
-			pass #FIXME: call Connection.remove_account(self.account)
+			gajim.connections[self.account].remove_account()
 		self.window.destroy()
