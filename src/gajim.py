@@ -374,7 +374,7 @@ class Interface:
 			gajim.config.set_per('accounts', name, 'use_proxy', array[6])
 			gajim.config.set_per('accounts', name, 'proxyhost', array[7])
 			gajim.config.set_per('accounts', name, 'proxyport', array[8])
-		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
+		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
 		self.queues[name] = {}
 		gajim.connections[name].connected = 0
 		self.nicks[name] = array[1]
@@ -432,6 +432,13 @@ class Interface:
 		if len(jids) > 1:
 			self.windows[account]['gc'][jid].print_conversation(\
 				'%s has set the subject to %s' % (jids[1], array[1]), jid)
+
+	def handle_event_gc_config(self, account, array):
+		#('GC_CONFIG', account, (jid, config))  config is a dict
+		jid = array[0].split('/')[0]
+		if not self.windows[account]['gc_config'].has_key(jid):
+			self.windows[account]['gc_config'][jid] = \
+			config.Groupchat_config_window(self, account, jid, array[1])
 
 	def handle_event_bad_passphrase(self, account, array):
 		dialogs.Warning_dialog(_('Your GPG passphrase is wrong, so you are connected without your GPG key.'))
@@ -612,6 +619,7 @@ class Interface:
 		conn.register_handler('OS_INFO', self.handle_event_os_info)
 		conn.register_handler('GC_MSG', self.handle_event_gc_msg)
 		conn.register_handler('GC_SUBJECT', self.handle_event_gc_subject)
+		conn.register_handler('GC_CONFIG', self.handle_event_gc_config)
 		conn.register_handler('BAD_PASSPHRASE', self.handle_event_bad_passphrase)
 		conn.register_handler('ROSTER_INFO', self.handle_event_roster_info)
 
@@ -637,7 +645,7 @@ class Interface:
 		self.nicks = {}
 		self.sleeper_state = {} #whether we pass auto away / xa or not
 		for a in gajim.connections:
-			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}}
+			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
 			self.queues[a] = {}
 			self.nicks[a] = gajim.config.get_per('accounts', a, 'name')
 			self.sleeper_state[a] = 0	#0:don't use sleeper for this account

@@ -1087,7 +1087,7 @@ class Account_modification_window:
 				self.plugin.sleeper_state[name] = \
 					self.plugin.sleeper_state[self.account]
 				#upgrade account variable in opened windows
-				for kind in ['infos', 'chats', 'gc']:
+				for kind in ['infos', 'chats', 'gc', 'gc_config']:
 					for j in self.plugin.windows[name][kind]:
 						self.plugin.windows[name][kind][j].account = name
 				#upgrade account in systray
@@ -1167,7 +1167,8 @@ class Account_modification_window:
 		if save_password:
 			gajim.connections[name].password = password
 		#update variables
-		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}}
+		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, \
+			'gc_config': {}}
 		self.plugin.queues[name] = {}
 		gajim.connections[name].connected = 0
 		self.plugin.roster.groups[name] = {}
@@ -1903,6 +1904,126 @@ class Service_discovery_window:
 		self.services_treeview.get_model().clear()
 		self.browse(server_address)
 		self.plugin.save_config()
+
+class Groupchat_config_window:
+	'''Groupchat_config_window class'''
+	def __init__(self, plugin, account, room_jid, config):
+		self.plugin = plugin
+		self.account = account
+		self.room_jid = room_jid
+		self.config = config
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_config_window', APP)
+		self.window = self.xml.get_widget('groupchat_config_window')
+		self.config_table = self.xml.get_widget('config_table')
+		self.fill_table()
+		self.xml.signal_autoconnect(self)
+
+	def on_groupchat_config_window_destroy(self, widget):
+		del self.plugin.windows[self.account]['gc_config'][self.room_jid]
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+	
+	def on_apply_button_clicked(self, widget):
+		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
+
+	def on_checkbutton_toggled(self, widget, index):
+		self.config[index]['values'][0] = widget.get_active()
+
+	def on_combobox_changed(self, widget, index):
+		self.config[index]['values'][0] = self.config[index]['options'][ \
+			widget.get_active()]['values'][0]
+
+	def on_entry_changed(self, widget, index):
+		self.config[index]['values'][0] = widget.get_text()
+
+	def on_textbuffer_changed(self, widget, index):
+		begin, end = widget.get_bounds()
+		self.config[index]['values'][0] = widget.get_text(begin, end)
+		
+	def fill_table(self):
+		if self.config.has_key('title'):
+			self.window.set_title(self.config['title'])
+		if self.config.has_key('instructions'):
+			self.xml.get_widget('instructions_label').set_text(\
+				self.config['instructions'])
+		i = 0
+		while self.config.has_key(i):
+			if not self.config[i].has_key('type'):
+				i += 1
+				continue
+			ctype = self.config[i]['type']
+			if ctype == 'hidden':
+				i += 1
+				continue
+			nbrows = self.config_table.get_property('n-rows')
+			self.config_table.resize(nbrows + 1, 2)
+			if self.config[i].has_key('label'):
+				label = gtk.Label(self.config[i]['label'])
+				label.set_alignment(0.0, 0.5)
+				self.config_table.attach(label, 0, 1, nbrows, nbrows + 1, gtk.FILL \
+					| gtk.SHRINK)
+			desc = None
+			if self.config[i].has_key('desc'):
+				desc = self.config[i]['desc']
+			max = 1
+			if ctype == 'boolean':
+				widget = gtk.CheckButton(desc, False)
+				widget.set_active(self.config[i]['values'][0])
+				widget.connect('toggled', self.on_checkbutton_toggled, i)
+				max = 2
+			elif ctype == 'fixed':
+				widget = gtk.Label('\n'.join(self.config[i]['values']))
+				widget.set_alignment(0.0, 0.5)
+				max = 4
+			elif ctype == 'jid-multi':
+				#TODO
+				widget = gtk.Label('')
+			elif ctype == 'jid-single':
+				#TODO
+				widget = gtk.Label('')
+			elif ctype == 'list-multi':
+				#TODO
+				widget = gtk.Label('')
+			elif ctype == 'list-single':
+				widget = gtk.combo_box_new_text()
+				widget.connect('changed', self.on_combobox_changed, i)
+				index = 0
+				j = 0
+				while self.config[i]['options'].has_key(j):
+					if self.config[i]['options'][j]['values'][0] == \
+						self.config[i]['values'][0]:
+						index = j
+					widget.append_text(self.config[i]['options'][j]['label'])
+					j += 1
+				widget.set_active(index)
+				max = 3
+			elif ctype == 'text-multi':
+				widget = gtk.TextView()
+				widget.get_buffer().connect('changed', self.on_textbuffer_changed, \
+					i)
+				widget.get_buffer().set_text('\n'.join(self.config[i]['values']))
+				max = 4
+			elif ctype == 'text-private':
+				widget = gtk.Entry()
+				widget.connect('changed', self.on_entry_changed, i)
+				widget.set_text(self.config[i]['values'][0])
+				widget.set_visibility(False)
+				max = 3
+			elif ctype == 'text-single':
+				widget = gtk.Entry()
+				widget.connect('changed', self.on_entry_changed, i)
+				widget.set_text(self.config[i]['values'][0])
+				max = 3
+			i += 1
+			if max < 4:
+				self.config_table.attach(widget, 1, max, nbrows, nbrows + 1, \
+					gtk.FILL | gtk.SHRINK)
+				widget = gtk.Label()
+				self.config_table.attach(widget, max, 4, nbrows, nbrows + 1)
+			else:
+				self.config_table.attach(widget, 1, max, nbrows, nbrows + 1)
+		self.config_table.show_all()
 
 class Remove_account_window:
 	'''ask for removing from gajim only or from gajim and server too

@@ -107,7 +107,7 @@ class Connection:
 			'SUBSCRIBED': [], 'UNSUBSCRIBED': [], 'SUBSCRIBE': [], \
 			'AGENT_INFO': [], 'AGENT_INFO_ITEMS': [], 'AGENT_INFO_INFO': [], \
 			'QUIT': [], 'ACC_OK': [], 'MYVCARD': [], 'OS_INFO': [], 'VCARD': [], \
-			'GC_MSG': [], 'GC_SUBJECT': [], 'BAD_PASSPHRASE': [], \
+			'GC_MSG': [], 'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],\
 			'ROSTER_INFO': []}
 		self.name = name
 		self.connected = 0 # offline
@@ -286,6 +286,7 @@ class Connection:
 	# END disconenctedCB
 
 	def _rosterSetCB(self, con, iq_obj):
+		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getQueryNode().getChildren():
 			jid  = item.getAttr('jid')
 			name = item.getAttr('name')
@@ -297,6 +298,7 @@ class Connection:
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
 
 	def _BrowseResultCB(self, con, iq_obj):
+		gajim.log.debug('BrowseResultCB')
 		identities, features, items = [], [], []
 		q = iq_obj.getTag('service')
 		if not q:
@@ -318,6 +320,7 @@ class Connection:
 		self.dispatch('AGENT_INFO', (jid, identities, features, items))
 
 	def _DiscoverItemsCB(self, con, iq_obj):
+		gajim.log.debug('DiscoverItemsCB')
 		qp = iq_obj.getQueryPayload()
 		items = []
 		if not qp:
@@ -331,10 +334,12 @@ class Connection:
 		self.dispatch('AGENT_INFO_ITEMS', (jid, items))
 
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
+		gajim.log.debug('DiscoverInfoErrorCB')
 		jid = str(iq_obj.getFrom())
 		con.browseAgents(jid)
 
 	def _DiscoverInfoCB(self, con, iq_obj):
+		gajim.log.debug('DiscoverInfoCB')
 		# According to JEP-0030:
 		# For identity: category, name is mandatory, type is optional.
 		# For feature: var is mandatory
@@ -358,6 +363,7 @@ class Connection:
 			self.connection.discoverItems(jid)
 
 	def _VersionCB(self, con, iq_obj):
+		gajim.log.debug('VersionCB')
 		f = iq_obj.getFrom()
 		iq_obj.setFrom(iq_obj.getTo())
 		iq_obj.setTo(f)
@@ -371,6 +377,7 @@ class Connection:
 		self.connection.send(iq_obj)
 
 	def _VersionResultCB(self, con, iq_obj):
+		gajim.log.debug('VersionResultCB')
 		client_info = ''
 		os_info = ''
 		qp = iq_obj.getTag('query')
@@ -382,6 +389,70 @@ class Connection:
 			os_info += qp.getTag('os').getData()
 		jid = iq_obj.getFrom().getStripped()
 		self.dispatch('OS_INFO', (jid, client_info, os_info))
+	
+	def _MucOwnerCB(self, con, iq_obj):
+		gajim.log.debug('MucOwnerCB')
+		qp = iq_obj.getQueryPayload()
+		node = None
+		for q in qp:
+			if q.getNamespace() == common.jabber.NS_XDATA:
+				node = q
+		if not node:
+			return
+		# Parse the form
+		dic = {}
+		tag = node.getTag('title')
+		if tag:
+			dic['title'] = tag.getData()
+		tag = node.getTag('instructions')
+		if tag:
+			dic['instructions'] = tag.getData()
+		i = 0
+		for child in node.getChildren():
+			if child.getName() != 'field':
+				continue
+			var = child.getAttr('var')
+			ctype = child.getAttr('type')
+			label = child.getAttr('label')
+			if not var and ctype != 'fixed': # We must have var if type != fixed
+				continue
+			dic[i] = {}
+			if var:
+				dic[i]['var'] = var
+			if ctype:
+				dic[i]['type'] = ctype
+			if label:
+				dic[i]['label'] = label
+			tags = child.getTags('value')
+			if len(tags):
+				dic[i]['values'] = []
+				for tag in tags:
+					data = tag.getData()
+					if ctype == 'boolean':
+						if data in ['yes', 'true', 'assent']:
+							data = True
+						else:
+							data = False
+					dic[i]['values'].append(data)
+			tag = child.getTag('desc')
+			if tag:
+				dic[i]['desc'] = tag.getData()
+			option_tags = child.getTags('option')
+			if len(option_tags):
+				dic[i]['options'] = {}
+				j = 0
+				for option_tag in option_tags:
+					dic[i]['options'][j] = {}
+					label = option_tag.getAttr('label')
+					if label:
+						dic[i]['options'][j]['label'] = label
+					tags = option_tag.getTags('value')
+					dic[i]['options'][j]['values'] = []
+					for tag in tags:
+						dic[i]['options'][j]['values'].append(tag.getData())
+					j += 1
+			i += 1
+		self.dispatch('GC_CONFIG', (str(iq_obj.getFrom()), dic))
 
 	def connect(self):
 		"""Connect and authentificate to the Jabber server"""
@@ -427,6 +498,8 @@ class Connection:
 			common.jabber.NS_VERSION)
 		con.registerHandler('iq',self._VersionResultCB,'result', \
 			common.jabber.NS_VERSION)
+		con.registerHandler('iq',self._MucOwnerCB,'result', \
+			common.jabber.NS_P_MUC_OWNER)
 		try:
 			con.connect()
 		except:
@@ -691,6 +764,7 @@ class Connection:
 		if not self.connection:
 			return
 		p = common.jabber.Presence(to = '%s@%s/%s' % (room, server, nick))
+		p.setX(common.jabber.NS_P_MUC)
 		self.connection.send(p)
 
 	def send_gc_message(self, jid, msg):
@@ -708,6 +782,13 @@ class Connection:
 		msg_iq.setType('groupchat')
 		msg_iq.setSubject(subject)
 		self.connection.send(msg_iq)
+
+	def request_gc_config(self, room_jid):
+		iq = common.jabber.Iq(type = 'get', to = room_jid)
+		iq.setQuery(common.jabber.NS_P_MUC_OWNER)
+		id = self.connection.getAnID()
+		iq.setID(id)
+		self.connection.send(iq)
 
 	def send_gc_status(self, nick, jid, show, status):
 		if not self.connection:
@@ -738,6 +819,47 @@ class Connection:
 		item = iq.setQuery(common.jabber.NS_P_MUC_ADMIN).insertTag('item')
 		item.putAttr('jid', jid)
 		item.putAttr('affiliation', affiliation)
+		id = self.connection.getAnID()
+		iq.setID(id)
+		self.connection.send(iq)
+
+	def send_gc_config(self, room_jid, config):
+		iq = common.jabber.Iq(type = 'set', to = room_jid)
+		query = iq.setQuery(common.jabber.NS_P_MUC_OWNER)
+		x = query.insertTag('x', attrs = {'xmlns': common.jabber.NS_XDATA, \
+			'type': 'submit'})
+		if config.has_key('title'):
+			x.insertTag('title').insertData(config['title'])
+		if config.has_key('instructions'):
+			x.insertTag('instructions').insertData(config['instructions'])
+		i = 0
+		while config.has_key(i):
+			tag = x.insertTag('field')
+			if config[i].has_key('type'):
+				tag.putAttr('type', config[i]['type'])
+			if config[i].has_key('var'):
+				tag.putAttr('var', config[i]['var'])
+			if config[i].has_key('label'):
+				tag.putAttr('label', config[i]['label'])
+			if config[i].has_key('values'):
+				for val in  config[i]['values']:
+					if val == False:
+						val = 'false'
+					elif val == True:
+						val = 'true'
+					tag.insertTag('value').insertData(val)
+			if config[i].has_key('desc'):
+				tag.insertTag('desc').insertData(config[i]['desc'])
+			if config[i].has_key('options'):
+				j = 0
+				while config[i]['options'].has_key(j):
+					opt_tag = tag.insertTag('option')
+					if config[i]['options'][j].has_key('label'):
+						opt_tag.putAttr('label', config[i]['options'][j]['label'])
+					for val in config[i]['options'][j]['values']:
+						opt_tag.insertTag('value').insertData(val)
+					j += 1
+			i += 1
 		id = self.connection.getAnID()
 		iq.setID(id)
 		self.connection.send(iq)

@@ -57,6 +57,8 @@ class Groupchat_window(chat.Chat):
 			self.on_chat_notebook_switch_page)
 		self.xml.signal_connect('on_set_button_clicked', \
 			self.on_set_button_clicked)
+		self.xml.signal_connect('on_configure_button_clicked', \
+			self.on_configure_button_clicked)
 		self.xml.signal_connect('on_groupchat_window_key_press_event', \
 			self.on_groupchat_window_key_press_event)
 
@@ -233,6 +235,10 @@ class Groupchat_window(chat.Chat):
 		room_jid = self.get_active_jid()
 		subject = self.xml.get_widget('subject_entry').get_text()
 		gajim.connections[self.account].send_gc_subject(room_jid, subject)
+
+	def on_configure_button_clicked(self, widget):
+		room_jid = self.get_active_jid()
+		gajim.connections[self.account].request_gc_config(room_jid)
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
