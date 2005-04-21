@@ -1165,15 +1165,12 @@ class Roster_window:
 
 	def init_transports_pixbufs(self, arg, dirname, fnames):
 		name_only = os.path.basename(dirname)
-		print name_only
-		print name_only != 'transports'
-		if name_only != 'transports' or not name_only.startswith('.svn'):
-			for fname in fnames: # fname is not abs
-				print 'fname', fname, 'in dir', dirname
-				transport_kind = name_only
-				return
-				self.transports_pixbufs[transport_kind][fname] = 'be'
-		
+		if name_only == 'transports' or name_only == '.svn':
+			return
+		for fname in fnames:
+			transport_kind = name_only
+			return
+			self.transports_pixbufs[transport_kind][fname] = 'be'
 
 	def reload_pixbufs(self):
 		self.mkpixbufs()
