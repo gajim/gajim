@@ -113,11 +113,11 @@ class CellRendererImage(gtk.GenericCellRenderer):
 		x_offset = 0
 		y_offset = 0
 		if cell_area and pixbuf_width > 0 and pixbuf_height > 0:
-			x_offset = self.get_property('xalign') *
-					(cell_area.width - calc_width -
+			x_offset = self.get_property('xalign') * \
+					(cell_area.width - calc_width - \
 					self.get_property('xpad'))
-			y_offset = self.get_property('yalign') *
-					(cell_area.height - calc_height -
+			y_offset = self.get_property('yalign') * \
+					(cell_area.height - calc_height - \
 					self.get_property('ypad'))
 		return x_offset, y_offset, calc_width, calc_height
 
