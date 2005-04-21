@@ -981,7 +981,7 @@ class Account_modification_window:
 	def on_save_button_clicked(self, widget):
 		'''When save button is clicked: Save information in config file'''
 		save_password =	self.xml.get_widget(
-		'save_password_checkbutton').get_active()
+				'save_password_checkbutton').get_active()
 		password = self.xml.get_widget('password_entry').get_text()
 		resource = self.xml.get_widget('resource_entry').get_text()
 		priority = self.xml.get_widget('priority_spinbutton').get_value_as_int()
@@ -997,7 +997,7 @@ class Account_modification_window:
 
 		if self.account:
 			list_no_log_for = gajim.config.get_per('accounts', self.account,
-				'no_log_for').split()
+																'no_log_for').split()
 		else:
 			list_no_log_for = []
 		if self.account in list_no_log_for:
@@ -1006,7 +1006,7 @@ class Account_modification_window:
 			list_no_log_for.append(name)
 
 		sync_with_global_status_checkbutton =self.xml.get_widget(
-		'sync_with_global_status_checkbutton').get_active()
+				'sync_with_global_status_checkbutton').get_active()
 		
 		use_proxy = self.xml.get_widget('use_proxy_checkbutton').get_active()
 		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
@@ -1046,7 +1046,7 @@ class Account_modification_window:
 		else:
 			keyID = self.xml.get_widget('gpg_key_label').get_text()
 			save_gpg_password =self.xml.get_widget(
-			'gpg_save_password_checkbutton').get_active()
+					'gpg_save_password_checkbutton').get_active()
 			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
 		#if we are modifying an account
 		if self.modify:
@@ -1191,7 +1191,7 @@ class Account_modification_window:
 		proxyport = self.xml.get_widget('proxyport_entry').get_text()
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
 		save_password = self.xml.get_widget(
-		'save_password_checkbutton').get_active()
+				'save_password_checkbutton').get_active()
 		if key_name == '': #no key selected
 			keyID = ''
 			save_gpg_password = False
@@ -1199,7 +1199,7 @@ class Account_modification_window:
 		else:
 			keyID = self.xml.get_widget('gpg_key_label').get_text()
 			save_gpg_password =self.xml.get_widget(
-			'gpg_save_password_checkbutton').get_active()
+					'gpg_save_password_checkbutton').get_active()
 			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
 		no_log_for = ''
 		if self.xml.get_widget('log_history_checkbutton').get_active():

@@ -145,23 +145,22 @@ class Roster_window:
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
 				iterG = model.append(IterAcct, 
-					(self.pixbufs['closed'], g, 'group', 
-					g, account, False))
+					(self.pixbufs['closed'], g, 'group', g, account, False))
 			if not self.groups[account].has_key(g): #It can probably never append
 				if account+g in self.hidden_lines:
 					self.groups[account][g] = {'expand': False}
 				else:
 					self.groups[account][g] = {'expand': True}
 			if not account in self.hidden_lines and not gajim.config.get(
-				'mergeaccounts'):
+					'mergeaccounts'):
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
 			typestr = 'user'
 			if g == 'Agents':
 				typestr = 'agent'
 
-			model.append(iterG, (self.pixbufs[user.show], 
-				user.name, typestr, user.jid, account, False))
+			model.append(iterG, (self.pixbufs[user.show], user.name,
+										typestr, user.jid, account, False))
 			
 			if self.groups[account][g]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)
@@ -235,14 +234,14 @@ class Roster_window:
 			self.add_new_contact_handler_id = None
 		if self.service_disco_handler_id:
 			service_disco_menuitem.handler_disconnect(
-				self.service_disco_handler_id)
+					self.service_disco_handler_id)
 			self.service_disco_handler_id = None
 		if self.join_gc_handler_id:
 			join_gc_menuitem.handler_disconnect(self.join_gc_handler_id)
 			self.join_gc_handler_id = None
 		if self.new_message_menuitem_handler_id:
 			new_message_menuitem.handler_disconnect(
-				self.new_message_menuitem_handler_id)
+					self.new_message_menuitem_handler_id)
 			self.new_message_menuitem_handler_id = None
 		#remove the existing submenus
 		if add_new_contact_menuitem.get_submenu():
@@ -301,13 +300,13 @@ class Roster_window:
 				item = gtk.MenuItem(_('as ') + our_jid)
 				sub_menu.append(item)
 				item.connect('activate', self.on_new_message_menuitem_activate, 
-					account)
+									account)
 			sub_menu.show_all()
 		elif len(gajim.connections) == 1: # one account
 			#add
 			if not self.add_new_contact_handler_id:
 				self.add_new_contact_handler_id = add_new_contact_menuitem.connect(
-				'activate', self.on_add_new_contact, gajim.connections.keys()[0])
+					'activate', self.on_add_new_contact, gajim.connections.keys()[0])
 			#disco
 			if not self.service_disco_handler_id:
 				self.service_disco_handler_id = service_disco_menuitem.connect( 
@@ -316,8 +315,8 @@ class Roster_window:
 			#join_gc
 			if not self.join_gc_handler_id:
 				self.join_gc_handler_id = join_gc_menuitem.connect( 
-					'activate', self.on_join_gc_activate, gajim.connections.keys()
-					[0])
+					'activate', self.on_join_gc_activate, 
+					gajim.connections.keys()[0])
 			if not self.new_message_menuitem_handler_id:
 				self.new_message_menuitem_handler_id = new_message_menuitem.\
 					connect('activate', self.on_new_message_menuitem_activate, 
@@ -359,8 +358,8 @@ class Roster_window:
 				show = 'offline'
 
 			user1 = User(ji, name, array[jid]['groups'], show, 
-				array[jid]['status'], array[jid]['sub'], array[jid]['ask'], 
-				resource, 0, '')
+								array[jid]['status'], array[jid]['sub'], 
+								array[jid]['ask'], resource, 0, '')
 			#when we draw the roster, we can't have twice the same user with 
 			# 2 resources
 			self.contacts[account][ji] = [user1]
@@ -518,7 +517,7 @@ class Roster_window:
 			item.set_sensitive(False)
 		menu.append(item)
 		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
-			account)
+							account)
 
 		item = gtk.MenuItem()
 		menu.append(item)
@@ -608,8 +607,8 @@ class Roster_window:
 		if not self.contacts[account].has_key(jid):
 			if not group:
 				group = 'General'
-			user1 = User(jid, pseudo, [group], 'requested', 
-				'requested', 'none', 'subscribe', '', 0, '')
+			user1 = User(jid, pseudo, [group], 'requested', 'requested', 
+								'none', 'subscribe', '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
 
@@ -648,7 +647,7 @@ class Roster_window:
 			if event.button == 3: # Right click
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
-						int(event.y))
+																					int(event.y))
 				except TypeError:
 					self.tree.get_selection().unselect_all()
 					return
@@ -668,7 +667,7 @@ class Roster_window:
 			if event.button == 1: # Left click
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
-						int(event.y))
+																					int(event.y))
 				except TypeError:
 					self.tree.get_selection().unselect_all()
 					return False
@@ -706,8 +705,9 @@ class Roster_window:
 			save_pass = gajim.config.get_per('accounts', account, 'savepass')
 			if not save_pass and gajim.connections[account].connected < 2:
 				passphrase = ''
-				w = dialogs.Passphrase_dialog(_('Enter your password for account %s') 
-					% account, 'Save password', autoconnect)
+				w = dialogs.Passphrase_dialog(
+					_('Enter your password for account %s') % account, 
+					'Save password', autoconnect)
 				passphrase, save = w.run()
 				if passphrase == -1:
 					if accountIter:
@@ -730,7 +730,7 @@ class Roster_window:
 				gajim.config.get('usegpg'):
 				if save_gpg_pass:
 					passphrase = gajim.config.get_per('accounts', account, 
-						'gpgpassword')
+																	'gpgpassword')
 				else:
 					passphrase = ''
 					w = dialogs.Passphrase_dialog(
@@ -742,14 +742,14 @@ class Roster_window:
 					if save:
 						gajim.config.set_per('accounts', account, 'savegpgpass', True)
 						gajim.config.set_per('accounts', account, 'gpgpassword', 
-							passphrase)
+													passphrase)
 				gajim.connections[account].gpg_passphrase(passphrase)
 		gajim.connections[account].change_status(status, txt)
 		for room_jid in self.plugin.windows[account]['gc']:
 			if room_jid != 'tabbed':
 				nick = self.plugin.windows[account]['gc'][room_jid].nicks[room_jid]
 				gajim.connections[account].send_gc_status(nick, room_jid, status, 
-					txt)
+																		txt)
 		if status == 'online' and self.plugin.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
 			self.plugin.sleeper_state[account] = 1
@@ -761,7 +761,7 @@ class Roster_window:
 			(status == 'offline' and not gajim.config.get('ask_offline_status')):
 			return status
 		dlg = dialogs.Change_status_message_dialog(self.plugin, status, 
-			autoconnect)
+																	autoconnect)
 		message = dlg.run()
 		return message
 
@@ -789,7 +789,7 @@ class Roster_window:
 			return
 		for acct in accounts:
 			if not gajim.config.get_per('accounts', acct, 
-				'sync_with_global_status'):
+													'sync_with_global_status'):
 				continue
 			self.send_status(acct, status, message)
 	
@@ -805,8 +805,8 @@ class Roster_window:
 		self.status_combobox.handler_block(self.id_signal_cb)
 		self.status_combobox.set_active(table[maxi])
 		self.status_combobox.handler_unblock(self.id_signal_cb)
-		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-			'invisible']
+		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 
+						'xa', 'dnd', 'invisible']
 		if self.plugin.systray_enabled:
 			self.plugin.systray.set_status(statuss[maxi])
 		image = self.pixbufs[statuss[maxi]]
@@ -824,8 +824,8 @@ class Roster_window:
 		accountIter = self.get_account_iter(account)
 		if accountIter:
 			model.set_value(accountIter, 0, self.pixbufs[status])
-		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-			'invisible']
+		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 
+						'xa', 'dnd', 'invisible']
 		if status == 'offline':
 			for jid in self.contacts[account]:
 				luser = self.contacts[account][jid]
@@ -857,7 +857,7 @@ class Roster_window:
 			if not self.plugin.windows[account]['gc'].has_key('tabbed'):
 				self.plugin.windows[account]['gc']['tabbed'] = \
 					groupchat_window.Groupchat_window(jid, nick, self.plugin, 
-						account)
+																	account)
 			else:
 				self.plugin.windows[account]['gc']['tabbed'].new_group(jid, nick)
 			self.plugin.windows[account]['gc'][jid] = \
@@ -871,8 +871,8 @@ class Roster_window:
 	def on_message(self, jid, msg, tim, account):
 		'''when we receive a message'''
 		if not self.contacts[account].has_key(jid):
-			user1 = User(jid, jid, ['not in the roster'], 
-				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
+			user1 = User(jid, jid, ['not in the roster'], 'not in the roster', 
+								'not in the roster', 'none', None, '', 0, '')
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
 		iters = self.get_user_iter(jid, account)
@@ -912,7 +912,7 @@ class Roster_window:
 					self.tree.scroll_to_cell(path)
 					self.tree.set_cursor(path)
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg, 
-				jid, tim = tim)
+																					jid, tim = tim)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if self.plugin.windows['preferences'].window.get_property('visible'):
@@ -1126,7 +1126,7 @@ class Roster_window:
 					user.groups.append(new_text)
 					self.add_user_to_roster(user.jid, account)
 					gajim.connections[account].update_user(user.jid, user.name, 
-						user.groups)
+																		user.groups)
 		model.set_value(iter, 5, False)
 		
 	def on_service_disco_menuitem_activate(self, widget, account):
