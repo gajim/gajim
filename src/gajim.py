@@ -81,7 +81,7 @@ import systray
 import dialogs
 import config
 
-GTKGUI_GLADE='gtkgui.glade'
+GTKGUI_GLADE = 'gtkgui.glade'
 
 
 class Interface:
@@ -666,8 +666,8 @@ class Interface:
 			gtk.window_set_default_icon(pix)
 		self.roster = roster_window.Roster_window(self)
 		self.sleeper = common.sleepy.Sleepy( \
-			gajim.config.get('autoawaytime')*60, \
-			gajim.config.get('autoxatime')*60)
+			gajim.config.get('autoawaytime') * 60, \
+			gajim.config.get('autoxatime') * 60)
 		self.systray_enabled = False
 		try:
 			import egg.trayicon as trayicon # use gnomepythonextras trayicon

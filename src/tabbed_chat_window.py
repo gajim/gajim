@@ -35,7 +35,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE='gtkgui.glade'
+GTKGUI_GLADE = 'gtkgui.glade'
 
 class Tabbed_chat_window(chat.Chat):
 	"""Class for tabbed chat window"""

@@ -26,11 +26,11 @@ APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
-GTKGUI_GLADE='gtkgui.glade'
+GTKGUI_GLADE = 'gtkgui.glade'
 
 class Vcard_information_window:
 	'''Class for user's information window'''
-	def on_user_information_window_destroy(self, widget=None):
+	def on_user_information_window_destroy(self, widget = None):
 		'''close window'''
 		del self.plugin.windows[self.account]['infos'][self.jid]
 
@@ -78,13 +78,14 @@ class Vcard_information_window:
 		for i in vcard.keys():
 			if type(vcard[i]) == type({}):
 				for j in vcard[i].keys():
-					self.set_value(i+'_'+j+'_entry', vcard[i][j])
+					self.set_value(i + '_' + j +
+							'_entry', vcard[i][j])
 			else:
 				if i == 'DESC':
 					self.xml.get_widget('DESC_textview').get_buffer().\
 						set_text(vcard[i], 0)
 				else:
-					self.set_value(i+'_entry', vcard[i])
+					self.set_value(i + '_entry', vcard[i])
 	
 	def set_os_info(self, client_info, os_info):
 		self.xml.get_widget('client_name_version_label').set_text(client_info)
@@ -139,7 +140,7 @@ class Vcard_information_window:
 			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
 		vcard = {}
 		for e in entries: 
-			txt = self.xml.get_widget(e+'_entry').get_text()
+			txt = self.xml.get_widget(e + '_entry').get_text()
 			if txt != '':
 				vcard = self.add_to_vcard(vcard, e, txt)
 		buffer = self.xml.get_widget('DESC_textview').get_buffer()
@@ -181,14 +182,14 @@ class Vcard_information_window:
 		self.xml.get_widget('nickname_label').set_text('Personal details')
 		information_hbuttonbox = self.xml.get_widget('information_hbuttonbox')
 		#publish button
-		button = gtk.Button(stock=gtk.STOCK_GOTO_TOP)
+		button = gtk.Button(stock = gtk.STOCK_GOTO_TOP)
 		button.get_children()[0].get_children()[0].get_children()[1].\
 			set_text('Publish')
 		button.connect('clicked', self.on_publish_button_clicked)
 		button.show_all()
 		information_hbuttonbox.pack_start(button)
 		#retrieve button
-		button = gtk.Button(stock=gtk.STOCK_GOTO_BOTTOM)
+		button = gtk.Button(stock = gtk.STOCK_GOTO_BOTTOM)
 		button.get_children()[0].get_children()[0].get_children()[1].\
 			set_text('Retrieve')
 		button.connect('clicked', self.on_retrieve_button_clicked)
@@ -210,7 +211,7 @@ class Vcard_information_window:
 		description_textview.set_cursor_visible(True)
 
 	#the user variable is the jid if vcard is true
-	def __init__(self, user, plugin, account, vcard=False):
+	def __init__(self, user, plugin, account, vcard = False):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
 		self.window = self.xml.get_widget('vcard_information_window')
 		self.plugin = plugin

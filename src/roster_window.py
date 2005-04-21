@@ -43,7 +43,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE='gtkgui.glade'
+GTKGUI_GLADE = 'gtkgui.glade'
 
 class Roster_window:
 	'''Class for main window of gtkgui plugin'''
@@ -93,7 +93,7 @@ class Roster_window:
 			fin2 = False
 			user = model.iter_children(group)
 			if not user:
-				fin2=True
+				fin2 = True
 			while not fin2:
 				if jid == model.get_value(user, 3):
 					found.append(user)
@@ -147,7 +147,7 @@ class Roster_window:
 				iterG = model.append(IterAcct, 
 					(self.pixbufs['closed'], g, 'group', g, account, False))
 			if not self.groups[account].has_key(g): #It can probably never append
-				if account+g in self.hidden_lines:
+				if account + g in self.hidden_lines:
 					self.groups[account][g] = {'expand': False}
 				else:
 					self.groups[account][g] = {'expand': True}
@@ -365,7 +365,7 @@ class Roster_window:
 			self.contacts[account][ji] = [user1]
 			for g in array[jid]['groups'] :
 				if not g in self.groups[account].keys():
-					if account+g in self.hidden_lines:
+					if account + g in self.hidden_lines:
 						self.groups[account][g] = {'expand': False}
 					else:
 						self.groups[account][g] = {'expand': True}
@@ -395,7 +395,7 @@ class Roster_window:
 			self.plugin.windows[account]['chats'][user.jid].set_image(user.jid)
 			name = user.name
 			if user.resource != '':
-				name += '/'+user.resource
+				name += '/' + user.resource
 			self.plugin.windows[account]['chats'][user.jid].print_conversation(
 				_('%s is now %s (%s)') % (name, show, status), user.jid, 'status')
 
@@ -599,7 +599,7 @@ class Roster_window:
 		'''Authorize a user'''
 		gajim.connections[account].send_authorization(jid)
 
-	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None):
+	def req_sub(self, widget, jid, txt, account, group = None, pseudo = None):
 		'''Request subscription to a user'''
 		if not pseudo:
 			pseudo = jid
@@ -691,7 +691,7 @@ class Roster_window:
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
 
-	def send_status(self, account, status, txt, autoconnect=0):
+	def send_status(self, account, status, txt, autoconnect = 0):
 		if status != 'offline':
 			if gajim.connections[account].connected < 2:
 				model = self.tree.get_model()
@@ -1035,7 +1035,7 @@ class Roster_window:
 					self.send_status(acct, 'offline', message)
 		self.quit_gtkgui_plugin()
 
-	def on_roster_treeview_row_activated(self, widget, path, col=0):
+	def on_roster_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the chat window'''
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
@@ -1065,8 +1065,8 @@ class Roster_window:
 			model.set_value(iter, 0, self.pixbufs['opened'])
 			jid = model.get_value(iter, 3)
 			self.groups[account][jid]['expand'] = True
-			if account+jid in self.hidden_lines:
-				self.hidden_lines.remove(account+jid)
+			if account + jid in self.hidden_lines:
+				self.hidden_lines.remove(account + jid)
 		elif type == 'account':
 			if account in self.hidden_lines:
 				self.hidden_lines.remove(account)
@@ -1087,8 +1087,8 @@ class Roster_window:
 			model.set_value(iter, 0, self.pixbufs['closed'])
 			jid = model.get_value(iter, 3)
 			self.groups[account][jid]['expand'] = False
-			if not account+jid in self.hidden_lines:
-				self.hidden_lines.append(account+jid)
+			if not account + jid in self.hidden_lines:
+				self.hidden_lines.append(account + jid)
 		elif type == 'account':
 			if not account in self.hidden_lines:
 				self.hidden_lines.append(account)
@@ -1211,7 +1211,7 @@ class Roster_window:
 		gajim.config.set('showoffline', 1 - gajim.config.get('showoffline'))
 		self.draw_roster()
 
-	def iconCellDataFunc(self, column, renderer, model, iter, data=None):
+	def iconCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for icon renderer'''
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('cell-background', 
@@ -1234,7 +1234,7 @@ class Roster_window:
 			renderer.set_property('xalign', 1)
 		renderer.set_property('width', 20)
 	
-	def nameCellDataFunc(self, column, renderer, model, iter, data=None):
+	def nameCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for name renderer'''
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('foreground', 

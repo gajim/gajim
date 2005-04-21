@@ -34,7 +34,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE='gtkgui.glade'
+GTKGUI_GLADE = 'gtkgui.glade'
 
 class Groupchat_window(chat.Chat):
 	"""Class for Groupchat window"""
@@ -120,7 +120,7 @@ class Groupchat_window(chat.Chat):
 			fin2 = False
 			user_iter = model.iter_children(role_iter)
 			if not user_iter:
-				fin2=True
+				fin2 = True
 			while not fin2:
 				if nick == model.get_value(user_iter, 1):
 					return user_iter
@@ -143,7 +143,7 @@ class Groupchat_window(chat.Chat):
 			fin2 = False
 			user = model.iter_children(role)
 			if not user:
-				fin2=True
+				fin2 = True
 			while not fin2:
 				nick = model.get_value(user, 1)
 				list.append(nick)
@@ -545,7 +545,7 @@ class Groupchat_window(chat.Chat):
 				widget.get_selection().unselect_all()
 		return False
 
-	def on_list_treeview_row_activated(self, widget, path, col=0):
+	def on_list_treeview_row_activated(self, widget, path, col = 0):
 		"""When an iter is double clicked: open the chat window"""
 		model = widget.get_model()
 		iter = model.get_iter(path)

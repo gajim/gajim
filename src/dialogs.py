@@ -28,7 +28,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
-GTKGUI_GLADE='gtkgui.glade'
+GTKGUI_GLADE = 'gtkgui.glade'
 
 class Edit_groups_dialog:
 	'''Class for the edit group dialog window'''
@@ -102,7 +102,7 @@ class Edit_groups_dialog:
 		self.list.append_column(column)
 		renderer = gtk.CellRendererText()
 		column.pack_start(renderer)
-		column.set_attributes(renderer, text=0)
+		column.set_attributes(renderer, text = 0)
 		
 		column = gtk.TreeViewColumn(_('In the group'))
 		self.list.append_column(column)
@@ -110,7 +110,7 @@ class Edit_groups_dialog:
 		column.pack_start(renderer)
 		renderer.set_property('activatable', True)
 		renderer.connect('toggled', self.group_toggled_cb)
-		column.set_attributes(renderer, active=1)
+		column.set_attributes(renderer, active = 1)
 
 class Passphrase_dialog:
 	'''Class for Passphrase dialog'''
@@ -130,7 +130,7 @@ class Passphrase_dialog:
 			gtk.gdk.threads_leave()
 		return passphrase, save_passphrase_checkbutton.get_active()
 
-	def __init__(self, labeltext, checkbuttontext, autoconnect=0):
+	def __init__(self, labeltext, checkbuttontext, autoconnect = 0):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'passphrase_dialog', APP)
 		self.window = self.xml.get_widget('passphrase_dialog')
 		self.passphrase_entry = self.xml.get_widget('passphrase_entry')
@@ -170,10 +170,10 @@ class choose_gpg_key_dialog:
 		#columns
 		renderer = gtk.CellRendererText()
 		self.keys_treeview.insert_column_with_attributes(-1, _('KeyID'), \
-			renderer, text=0)
+			renderer, text = 0)
 		renderer = gtk.CellRendererText()
 		self.keys_treeview.insert_column_with_attributes(-1, _('User name'), \
-			renderer, text=1)
+			renderer, text = 1)
 		self.fill_tree(secret_keys)
 
 		self.window.show_all()
@@ -216,7 +216,7 @@ class Change_status_message_dialog:
 			gtk.gdk.threads_leave()
 		return message
 
-	def on_message_comboboxentry_changed(self, widget, data=None):
+	def on_message_comboboxentry_changed(self, widget, data = None):
 		model = widget.get_model()
 		active = widget.get_active()
 		if active < 0:
@@ -232,7 +232,7 @@ class Change_status_message_dialog:
 
 class Add_new_contact_window:
 	'''Class for Add_new_contact_window'''
-	def __init__(self, plugin, account, jid=None):
+	def __init__(self, plugin, account, jid = None):
 		if gajim.connections[account].connected < 2:
 			Error_dialog(_('You must be connected to add a contact'))
 			return
@@ -271,7 +271,7 @@ class Add_new_contact_window:
 			jid_splited = jid.split('@')
 			self.xml.get_widget('uid_entry').set_text(jid_splited[0])
 			if jid_splited[1] in jid_agents:
-				protocol_combobox.set_active(jid_agents.index(jid_splited[1])+1)
+				protocol_combobox.set_active(jid_agents.index(jid_splited[1]) + 1)
 
 		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
 		liststore = gtk.ListStore(str)
@@ -457,7 +457,7 @@ class subscription_request_window:
 		self.window.destroy()
 
 class Join_groupchat_window:
-	def __init__(self, plugin, account, server='', room = ''):
+	def __init__(self, plugin, account, server = '', room = ''):
 		self.plugin = plugin
 		self.account = account
 		if gajim.connections[account].connected < 2:
@@ -628,7 +628,7 @@ class Popup_notification_window:
 		event_description_label = xml.get_widget('event_description_label')
 		eventbox = xml.get_widget('eventbox')
 		
-		event_type_label.set_markup('<b>'+event_type+'</b>')
+		event_type_label.set_markup('<b>' + event_type + '</b>')
 
 		if self.jid in self.plugin.roster.contacts[account]:
 			txt = self.plugin.roster.contacts[account][self.jid][0].name

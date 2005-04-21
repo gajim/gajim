@@ -37,7 +37,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
-GTKGUI_GLADE='gtkgui.glade'
+GTKGUI_GLADE = 'gtkgui.glade'
 
 
 class Preferences_window:
@@ -420,8 +420,8 @@ class Preferences_window:
 		aat = widget.get_value_as_int()
 		gajim.config.set('autoawaytime', aat)
 		self.plugin.sleeper = common.sleepy.Sleepy(\
-			gajim.config.get('autoawaytime')*60, \
-			gajim.config.get('autoxatime')*60)
+			gajim.config.get('autoawaytime') * 60, \
+			gajim.config.get('autoxatime') * 60)
 		self.plugin.save_config()
 
 	def on_auto_xa_checkbutton_toggled(self, widget):
@@ -432,8 +432,8 @@ class Preferences_window:
 		axt = widget.get_value_as_int()
 		gajim.config.set('autoxatime', axt)
 		self.plugin.sleeper = common.sleepy.Sleepy(\
-			gajim.config.get('autoawaytime')*60, \
-			gajim.config.get('autoxatime')*60)
+			gajim.config.get('autoawaytime') * 60, \
+			gajim.config.get('autoxatime') * 60)
 		self.plugin.save_config()
 
 	def save_status_messages(self, model):
@@ -504,7 +504,7 @@ class Preferences_window:
 		iter = model.get_iter_from_string(row)
 		model.set_value(iter, 0, new_text)
 
-	def on_msg_treeview_cursor_changed(self, widget, data=None):
+	def on_msg_treeview_cursor_changed(self, widget, data = None):
 		(model, iter) = self.msg_tree.get_selection().get_selected()
 		if not iter: return
 		self.xml.get_widget('delete_msg_button').set_sensitive(True)
@@ -513,12 +513,12 @@ class Preferences_window:
 		msg = model.get_value(iter, 1)
 		buf.set_text(msg)
 
-	def on_new_msg_button_clicked(self, widget, data=None):
+	def on_new_msg_button_clicked(self, widget, data = None):
 		model = self.msg_tree.get_model()
 		iter = model.append()
 		model.set(iter, 0, 'msg', 1, 'message')
 
-	def on_delete_msg_button_clicked(self, widget, data=None):
+	def on_delete_msg_button_clicked(self, widget, data = None):
 		(model, iter) = self.msg_tree.get_selection().get_selected()
 		if not iter: return
 		buf = self.xml.get_widget('msg_textview').get_buffer()
@@ -526,7 +526,7 @@ class Preferences_window:
 		buf.set_text('')
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
 			
-	def on_msg_textview_changed(self, widget, data=None):
+	def on_msg_textview_changed(self, widget, data = None):
 		(model, iter) = self.msg_tree.get_selection().get_selected()
 		if not iter:
 			return
@@ -552,7 +552,7 @@ class Preferences_window:
 			iter = model.append((sound, gajim.config.get_per('soundevents', sound,\
 				'enabled'), gajim.config.get_per('soundevents', sound, 'path')))
 
-	def on_treeview_sounds_cursor_changed(self, widget, data=None):
+	def on_treeview_sounds_cursor_changed(self, widget, data = None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
 		if not iter:
 			self.xml.get_widget('sounds_entry').set_text('')
@@ -560,7 +560,7 @@ class Preferences_window:
 		str = model.get_value(iter, 2)
 		self.xml.get_widget('sounds_entry').set_text(str)
 
-	def on_button_sounds_clicked(self, widget, data=None):
+	def on_button_sounds_clicked(self, widget, data = None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
 		if not iter:
 			return
@@ -796,19 +796,19 @@ class Preferences_window:
 		renderer.set_property('activatable', True)
 		renderer.connect('toggled', self.sound_toggled_cb)
 		col.pack_start(renderer)
-		col.set_attributes(renderer, active=1)
+		col.set_attributes(renderer, active = 1)
 
 		col = gtk.TreeViewColumn(_('Event'))
 		self.sound_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
-		col.set_attributes(renderer, text=0)
+		col.set_attributes(renderer, text = 0)
 
 		col = gtk.TreeViewColumn(_('Sound'))
 		self.sound_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
-		col.set_attributes(renderer, text=2)
+		col.set_attributes(renderer, text = 2)
 		self.fill_sound_treeview()
 		
 		#Autoaway
@@ -845,7 +845,7 @@ class Preferences_window:
 		self.msg_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer, True)
-		col.set_attributes(renderer, text=0)
+		col.set_attributes(renderer, text = 0)
 		renderer.connect('edited', self.on_msg_cell_edited)
 		renderer.set_property('editable', True)
 		self.fill_msg_treeview()
@@ -1005,7 +1005,7 @@ class Account_modification_window:
 		if not self.xml.get_widget('log_history_checkbutton').get_active():
 			list_no_log_for.append(name)
 
-		sync_with_global_status_checkbutton =self.xml.get_widget(
+		sync_with_global_status_checkbutton = self.xml.get_widget(
 				'sync_with_global_status_checkbutton').get_active()
 		
 		use_proxy = self.xml.get_widget('use_proxy_checkbutton').get_active()
@@ -1045,7 +1045,7 @@ class Account_modification_window:
 			gpg_password = ''
 		else:
 			keyID = self.xml.get_widget('gpg_key_label').get_text()
-			save_gpg_password =self.xml.get_widget(
+			save_gpg_password = self.xml.get_widget(
 					'gpg_save_password_checkbutton').get_active()
 			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
 		#if we are modifying an account
@@ -1198,7 +1198,7 @@ class Account_modification_window:
 			gpg_password = ''
 		else:
 			keyID = self.xml.get_widget('gpg_key_label').get_text()
-			save_gpg_password =self.xml.get_widget(
+			save_gpg_password = self.xml.get_widget(
 					'gpg_save_password_checkbutton').get_active()
 			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
 		no_log_for = ''
@@ -1235,7 +1235,7 @@ class Account_modification_window:
 				Vcard_information_window(jid, self.plugin, self.account, True)
 			gajim.connections[self.account].request_vcard(jid)
 	
-	def on_gpg_choose_button_clicked(self, widget, data=None):
+	def on_gpg_choose_button_clicked(self, widget, data = None):
 		secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
 		if not secret_keys:
 			dialogs.Error_dialog(_('error contacting %s') % service)
@@ -1380,10 +1380,10 @@ class Accounts_window:
 		#columns
 		renderer = gtk.CellRendererText()
 		self.accounts_treeview.insert_column_with_attributes(-1, _('Name'), renderer, \
-			text=0)
+			text = 0)
 		renderer = gtk.CellRendererText()
 		self.accounts_treeview.insert_column_with_attributes(-1, _('Server'), \
-			renderer, text=1)
+			renderer, text = 1)
 		self.xml.signal_autoconnect(self)
 		self.init_accounts()
 		self.window.show_all()
@@ -1458,7 +1458,7 @@ class Add_remove_emoticons_window:
 		renderer.connect('edited', self.on_emot_cell_edited)
 		renderer.set_property('editable', True)
 		col.pack_start(renderer, True)
-		col.set_attributes(renderer, text=0)
+		col.set_attributes(renderer, text = 0)
 
 		col = gtk.TreeViewColumn(_('Image'))
 		self.emot_tree.append_column(col)
@@ -1535,7 +1535,7 @@ class Add_remove_emoticons_window:
 		iter = model.get_iter_from_string(row)
 		model.set_value(iter, 0, new_text)
 
-	def on_set_image_button_clicked(self, widget, data=None):
+	def on_set_image_button_clicked(self, widget, data = None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
@@ -1589,14 +1589,14 @@ class Add_remove_emoticons_window:
 				img.set_from_pixbuf(pix)
 			model.set(iter, 2, img)
 			
-	def on_button_new_emoticon_clicked(self, widget, data=None):
+	def on_button_new_emoticon_clicked(self, widget, data = None):
 		model = self.emot_tree.get_model()
 		iter = model.append()
 		model.set(iter, 0, 'emoticon', 1, '')
 		col = self.emot_tree.get_column(0)
 		self.emot_tree.set_cursor(model.get_path(iter), col, True)
 
-	def on_button_remove_emoticon_clicked(self, widget, data=None):
+	def on_button_remove_emoticon_clicked(self, widget, data = None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
@@ -1639,11 +1639,11 @@ class Service_discovery_window:
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 0)
 		self.services_treeview.insert_column_with_attributes(-1, 'Name', \
-			renderer, text=0)
+			renderer, text = 0)
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
 		self.services_treeview.insert_column_with_attributes(-1, 'Service', \
-			renderer, text=1)
+			renderer, text = 1)
 
 		self.address_comboboxentry = xml.get_widget('address_comboboxentry')
 		liststore = gtk.ListStore(str)
@@ -1804,7 +1804,7 @@ class Service_discovery_window:
 		if event.click == 1: #Left click (user possibly selected sth)
 			pass
 
-	def on_services_treeview_row_activated(self, widget, path, col=0):
+	def on_services_treeview_row_activated(self, widget, path, col = 0):
 		'''When a row is activated: Register or join the selected agent'''
 		#if both buttons are sensitive, it will register [default]
 		if self.register_button.get_property('sensitive'):

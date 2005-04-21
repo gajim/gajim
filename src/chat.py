@@ -31,7 +31,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE='gtkgui.glade'
+GTKGUI_GLADE = 'gtkgui.glade'
 
 class Chat:
 	"""Class for chat/groupchat windows"""
@@ -316,7 +316,7 @@ class Chat:
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
 				current = self.notebook.get_current_page()
 				if current < (self.notebook.get_n_pages()-1):
-					self.notebook.set_current_page(current+1)
+					self.notebook.set_current_page(current + 1)
 			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
 				conversation_textview = self.xmls[jid].\
 					get_widget('conversation_textview')
@@ -342,7 +342,7 @@ class Chat:
 			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				current = self.notebook.get_current_page()
 				if current < (self.notebook.get_n_pages()-1):
-					self.notebook.set_current_page(current+1)
+					self.notebook.set_current_page(current + 1)
 				else:
 					self.notebook.set_current_page(0)
 		elif (event.state & gtk.gdk.CONTROL_MASK) or (event.keyval ==\
