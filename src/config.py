@@ -651,7 +651,7 @@ class Preferences_window:
 		self.iconset_combobox.set_model(model)
 		l = []
 		for dir in iconsets_list:
-			if dir != '.svn' or dir != 'transports': #FIXME: this is crazy!!
+			if dir != '.svn' and dir != 'transports':
 				l.append(dir)
 		if l.count == 0:
 			l.append(' ')
