@@ -1898,6 +1898,7 @@ class Groupchat_config_window:
 	
 	def on_change_button_clicked(self, widget):
 		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
+		self.window.destroy()
 
 	def on_checkbutton_toggled(self, widget, index):
 		self.config[index]['values'][0] = widget.get_active()
