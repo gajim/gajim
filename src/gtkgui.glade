@@ -8129,6 +8129,7 @@ Custom</property>
 			<widget class="GtkScrolledWindow" id="conversation_scrolledwindow">
 			  <property name="width_request">200</property>
 			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
 			  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 			  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 			  <property name="shadow_type">GTK_SHADOW_IN</property>
@@ -8137,6 +8138,7 @@ Custom</property>
 			  <child>
 			    <widget class="GtkTextView" id="conversation_textview">
 			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
 			      <property name="editable">False</property>
 			      <property name="overwrite">False</property>
 			      <property name="accepts_tab">True</property>
@@ -8172,6 +8174,7 @@ Custom</property>
 		    <widget class="GtkScrolledWindow" id="scrolledwindow19">
 		      <property name="height_request">55</property>
 		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		      <property name="shadow_type">GTK_SHADOW_IN</property>
@@ -8181,7 +8184,6 @@ Custom</property>
 			<widget class="GtkTextView" id="message_textview">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="has_focus">True</property>
 			  <property name="editable">True</property>
 			  <property name="overwrite">False</property>
 			  <property name="accepts_tab">False</property>
@@ -10202,7 +10204,7 @@ send a chat message to</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="popup_window">
+<widget class="GtkWindow" id="popup_notification_window">
   <property name="border_width">4</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_POPUP</property>
@@ -10216,7 +10218,7 @@ send a chat message to</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_SOUTH_EAST</property>
   <property name="focus_on_map">True</property>
-  <signal name="button_press_event" handler="on_popup_window_button_press_event" last_modification_time="Tue, 05 Apr 2005 21:39:57 GMT"/>
+  <signal name="button_press_event" handler="on_popup_notification_window_button_press_event" last_modification_time="Thu, 21 Apr 2005 21:20:43 GMT"/>
 
   <child>
     <widget class="GtkEventBox" id="eventbox">

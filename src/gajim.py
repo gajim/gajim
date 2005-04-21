@@ -238,9 +238,9 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): #online or chat
 						show_notification = True
 					if show_notification:
-						instance = dialogs.Popup_window(self, 'Contact Online', jid, \
-							account)
-						self.roster.popup_windows.append(instance)
+						instance = dialogs.Popup_notification_window(self,
+														'Contact Online', jid, account)
+						self.roster.popup_notification_windows.append(instance)
 						
 			elif old_show > 1 and new_show < 2 and gajim.config.get_per( \
 				'soundevents', 'contact_disconnected', 'enabled'):
@@ -255,9 +255,9 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): #online or chat
 						show_notification = True
 					if show_notification:
-						instance = dialogs.Popup_window(self, 'Contact Offline', jid, \
-							account)
-						self.roster.popup_windows.append(instance)
+						instance = dialogs.Popup_notification_window(self,
+											 		'Contact Offline', jid, account)
+						self.roster.popup_notification_windows.append(instance)
 				
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
@@ -286,8 +286,9 @@ class Interface:
 				elif gajim.connections[account].connected in (2, 3): #online or chat
 					show_notification = True
 				if show_notification:
-					instance = dialogs.Popup_window(self, 'New Message', jid, account)
-					self.roster.popup_windows.append(instance)
+					instance = dialogs.Popup_notification_window(self,
+																	'New Message', jid, account)
+					self.roster.popup_notification_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account)
 		if gajim.config.get_per('soundevents', 'first_message_received', \
 			'enabled') and first:

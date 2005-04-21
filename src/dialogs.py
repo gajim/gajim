@@ -615,14 +615,14 @@ class Change_password_dialog:
 		self.dialog.destroy()
 		return message
 
-class Popup_window:
+class Popup_notification_window:
 	def __init__(self, plugin, event_type, jid, account):
 		self.plugin = plugin
 		self.account = account
 		self.jid = jid
 		
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_window', APP)
-		self.window = xml.get_widget('popup_window')
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_notification_window', APP)
+		self.window = xml.get_widget('popup_notification_window')
 		close_button = xml.get_widget('close_button')
 		event_type_label = xml.get_widget('event_type_label')
 		event_description_label = xml.get_widget('event_description_label')
@@ -661,29 +661,29 @@ class Popup_window:
 		gobject.timeout_add(5000, self.on_timeout)
 
 	def on_close_button_clicked(self, widget):
-		self.adjust_height_and_move_popup_windows()
+		self.adjust_height_and_move_popup_notification_windows()
 
 	def on_timeout(self):
-		self.adjust_height_and_move_popup_windows()
+		self.adjust_height_and_move_popup_notification_windows()
 		
-	def adjust_height_and_move_popup_windows(self):
+	def adjust_height_and_move_popup_notification_windows(self):
 		#remove
 		self.plugin.roster.popups_height -= self.window_height
 		self.window.destroy()
 		
-		if len(self.plugin.roster.popup_windows) > 0:
+		if len(self.plugin.roster.popup_notification_windows) > 0:
 			# we want to remove the first window added in the list
-			self.plugin.roster.popup_windows.pop(0) # remove first item
+			self.plugin.roster.popup_notification_windows.pop(0) # remove 1st item
 		
 		# move the rest of popup windows
 		self.plugin.roster.popups_height = 0
-		for window_instance in self.plugin.roster.popup_windows:
+		for window_instance in self.plugin.roster.popup_notification_windows:
 			window_width, window_height = window_instance.window.get_size()
 			self.plugin.roster.popups_height += window_height
 			window_instance.window.move(gtk.gdk.screen_width() - window_width, \
 					gtk.gdk.screen_height() - self.plugin.roster.popups_height)
 
-	def on_popup_window_button_press_event(self, widget, event):
+	def on_popup_notification_window_button_press_event(self, widget, event):
 		# use User class, new_chat expects it that way
 		# is it in the roster?
 		if self.plugin.roster.contacts[self.account].has_key(self.jid):
@@ -697,4 +697,4 @@ class Popup_window:
 		self.plugin.roster.new_chat(user, self.account)
 		self.plugin.windows[self.account]['chats'][self.jid].active_tab(self.jid)
 		self.plugin.windows[self.account]['chats'][self.jid].window.present()
-		self.adjust_height_and_move_popup_windows()
+		self.adjust_height_and_move_popup_notification_windows()
