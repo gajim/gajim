@@ -30,12 +30,12 @@ class Logger:
 			os.stat(os.path.expanduser('~/.gajim'))
 		except OSError:
 			os.mkdir(os.path.expanduser('~/.gajim'))
-			print _('creating ~/.gajim/')
+			print 'creating ~/.gajim/'
 		try:
 			os.stat(LOGPATH)
 		except OSError:
 			os.mkdir(LOGPATH)
-			print _('creating ~/.gajim/logs/')
+			print 'creating ~/.gajim/logs/'
 
 	def write(self, kind, msg, jid, show = None, tim = None):
 		if not tim:
