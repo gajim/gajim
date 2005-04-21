@@ -1838,7 +1838,7 @@ class Service_discovery_window:
 		service = model.get_value(iter, 1)
 		infos = gajim.connections[self.account].ask_register_agent_info(service)
 		if infos.has_key('instructions'):
-						Service_registration_window(service, infos, self.plugin, self.account)
+			Service_registration_window(service, infos, self.plugin, self.account)
 		else:
 			dialogs.Error_dialog(_('error contacting %s') % service)
 
