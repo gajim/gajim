@@ -458,19 +458,28 @@ class subscription_request_window:
 
 class Join_groupchat_window:
 	def __init__(self, plugin, account, server='', room = ''):
-		if gajim.connections[account].connected < 2:
-			Error_dialog(_('You must be connected to join a groupchat'))
-			return
 		self.plugin = plugin
 		self.account = account
+		if gajim.connections[account].connected < 2:
+			Error_dialog(_('You must be connected to join a groupchat'))
+			# remove us from open windows
+			del self.plugin.windows[self.account]['join_gc']
+			return
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'join_groupchat_window', APP)
 		self.window = self.xml.get_widget('join_groupchat_window')
 		self.xml.get_widget('server_entry').set_text(server)
 		self.xml.get_widget('room_entry').set_text(room)
-		self.xml.get_widget('nickname_entry').\
-			set_text(self.plugin.nicks[self.account])
+		self.xml.get_widget('nickname_entry').set_text(
+						self.plugin.nicks[self.account])
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows[account]['join_gc'] = self #now add us to open windows
+		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
+			gajim.config.get_per('accounts', self.account, 'hostname')
+		if len(gajim.connections) > 1:
+			title = 'Join Groupchat as ' + our_jid
+		else:
+			title = 'Join Groupchat'
+		self.window.set_title(title)
 
 		self.recently_combobox = self.xml.get_widget('recently_combobox')
 		liststore = gtk.ListStore(str)
