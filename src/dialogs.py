@@ -652,9 +652,9 @@ class Popup_notification_window:
 	
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
-		self.plugin.roster.popups_height += self.window_height
+		self.plugin.roster.popups_notification_height += self.window_height
 		self.window.move(gtk.gdk.screen_width() - window_width, \
-					gtk.gdk.screen_height() - self.plugin.roster.popups_height)
+					gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
 		
 		xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -668,7 +668,7 @@ class Popup_notification_window:
 		
 	def adjust_height_and_move_popup_notification_windows(self):
 		#remove
-		self.plugin.roster.popups_height -= self.window_height
+		self.plugin.roster.popups_notification_height -= self.window_height
 		self.window.destroy()
 		
 		if len(self.plugin.roster.popup_notification_windows) > 0:
@@ -676,12 +676,12 @@ class Popup_notification_window:
 			self.plugin.roster.popup_notification_windows.pop(0) # remove 1st item
 		
 		# move the rest of popup windows
-		self.plugin.roster.popups_height = 0
+		self.plugin.roster.popups_notification_height = 0
 		for window_instance in self.plugin.roster.popup_notification_windows:
 			window_width, window_height = window_instance.window.get_size()
-			self.plugin.roster.popups_height += window_height
+			self.plugin.roster.popups_notification_height += window_height
 			window_instance.window.move(gtk.gdk.screen_width() - window_width, \
-					gtk.gdk.screen_height() - self.plugin.roster.popups_height)
+					gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
 
 	def on_popup_notification_window_button_press_event(self, widget, event):
 		# use User class, new_chat expects it that way

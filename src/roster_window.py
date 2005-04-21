@@ -1387,8 +1387,8 @@ class Roster_window:
 		self.contacts = {}
 		self.newly_added = {}
 		self.to_be_removed = {}
-		self.popups_height = 0
-		self.popup_windows = []
+		self.popups_notification_height = 0
+		self.popup_notification_windows = []
 		for a in gajim.connections:
 			self.contacts[a] = {}
 			self.groups[a] = {}
