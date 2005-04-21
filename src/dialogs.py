@@ -581,7 +581,6 @@ class New_message_dialog:
 			self.plugin.roster.new_chat(user, self.account)
 		self.plugin.windows[self.account]['chats'][jid].active_tab(jid)
 		self.plugin.windows[self.account]['chats'][jid].window.present()
-		#FIXME: PROBLEM WITH FOCUS
 
 class Change_password_dialog:
 	def __init__(self, plugin, account):
