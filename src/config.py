@@ -1623,7 +1623,6 @@ class Service_discovery_window:
 		self.agent_infos = {}
 		if gajim.connections[account].connected < 2:
 			dialogs.Error_dialog(_('You must be connected to browse services'))
-			del self.plugin.windows[self.account]['disco']
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')
@@ -1838,10 +1837,11 @@ class Service_discovery_window:
 			return
 		service = model.get_value(iter, 1)
 		infos = gajim.connections[self.account].ask_register_agent_info(service)
-		if not infos.has_key('instructions'):
-			dialogs.Error_dialog(_('error contacting %s') % service)
+		if infos.has_key('instructions'):
+						Service_registration_window(service, infos, self.plugin, self.account)
 		else:
-			Service_registration_window(service, infos, self.plugin, self.account)
+			dialogs.Error_dialog(_('error contacting %s') % service)
+
 		self.window.destroy()
 	
 	def on_services_treeview_cursor_changed(self, widget):

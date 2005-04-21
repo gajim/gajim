@@ -462,8 +462,6 @@ class Join_groupchat_window:
 		self.account = account
 		if gajim.connections[account].connected < 2:
 			Error_dialog(_('You must be connected to join a groupchat'))
-			# remove us from open windows
-			del self.plugin.windows[self.account]['join_gc']
 			return
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'join_groupchat_window', APP)
 		self.window = self.xml.get_widget('join_groupchat_window')
