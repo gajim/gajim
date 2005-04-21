@@ -293,7 +293,6 @@ class Chat:
 		jid = self.get_active_jid()
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
 			if self.widget_name == 'tabbed_chat_window':
-				print 'adding escape' #FIXME: doesn't get printed for GC as it should but Escape quits it still
 				self.remove_tab(jid)
 		elif event.keyval == gtk.keysyms.F4 and \
 			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
