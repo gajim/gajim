@@ -22,6 +22,6 @@ if [ `id -u` -eq 0 ]; then
 	exit 0
 fi
 
-cd PREFIX/share/gajim
+cd PREFIX/share/gajim/src
 export PYTHONPATH="$PYTHONPATH:PREFIX/lib/gajim"
-python gajim.py
+python -OO gajim.pyo

@@ -64,7 +64,6 @@ install:
 		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
 	done
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
-	rm "$(DESTDIR)$(PREFIX)/share/gajim/setup_win32.py";
 	mkdir -p "$(DESTDIR)$(PREFIX)/lib/gajim";
 	for f in $(FILES_LIB) ; do \
 		cp "$$f" "$(DESTDIR)$(PREFIX)/lib/gajim/"; \
