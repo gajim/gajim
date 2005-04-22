@@ -53,11 +53,6 @@ class Chat:
 		self.print_time_timeout_id = {}
 		self.names = {} # what is printed in the tab (eg. user.name)
 		self.childs = {}
-		if self.widget_name == 'groupchat_window':
-			self.subject_entry = self.xml.get_widget('subject_entry')
-			self.conversation_textview = self.xml.get_widget(
-															'conversation_textview')
-			print 'FIXME: this is None!!', self.conversation_textview
 
 	def update_tags(self):
 		for jid in self.tagIn:

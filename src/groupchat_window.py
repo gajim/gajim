@@ -60,7 +60,6 @@ class Groupchat_window(chat.Chat):
 			self.on_configure_button_clicked)
 		self.xml.signal_connect('on_groupchat_window_key_press_event', \
 			self.on_groupchat_window_key_press_event)
-		self.conversation_textview.grab_focus() #FIXME: so this tracebacks
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
