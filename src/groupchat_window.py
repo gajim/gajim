@@ -42,6 +42,7 @@ class Groupchat_window(chat.Chat):
 		self.nicks = {}
 		self.list_treeview = {}
 		self.subjects = {}
+		self.subject_entry = self.xml.get_widget('subject_entry')
 		self.new_group(room_jid, nick)
 		self.show_title()
 		self.xml.signal_connect('on_groupchat_window_destroy', \
@@ -231,7 +232,7 @@ class Groupchat_window(chat.Chat):
 
 	def on_set_button_clicked(self, widget):
 		room_jid = self.get_active_jid()
-		subject = self.xml.get_widget('subject_entry').get_text()
+		subject = self.subject_entry.get_text()
 		gajim.connections[self.account].send_gc_subject(room_jid, subject)
 
 	def on_configure_button_clicked(self, widget):
