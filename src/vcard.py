@@ -28,7 +28,7 @@ gtk.glade.textdomain (APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class Vcard_information_window:
+class Vcard_window:
 	'''Class for user's information window'''
 	def on_user_information_window_destroy(self, widget = None):
 		'''close window'''

@@ -23,6 +23,7 @@ import gobject
 from gajim import User
 from common import gajim
 from common import i18n
+from vcard import Vcard_window
 _ = i18n._
 APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)

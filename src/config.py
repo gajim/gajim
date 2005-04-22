@@ -29,7 +29,6 @@ from gajim import User
 import cell_renderer_image
 from common import gajim
 from common import connection
-from vcard_information_window import Vcard_information_window
 from common import i18n
 
 _ = i18n._
@@ -1145,7 +1144,8 @@ class Account_modification_window:
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
 			self.plugin.windows[self.account]['infos'][jid] = \
-				Vcard_information_window(jid, self.plugin, self.account, True)
+				dialogs.Vcard_window(jid, self.plugin,
+						self.account, True)
 			gajim.connections[self.account].request_vcard(jid)
 	
 	def on_gpg_choose_button_clicked(self, widget, data = None):
