@@ -55,9 +55,10 @@ class Systray:
 		for acct in gajim.connections:
 			#in chat / groupchat windows
 			for kind in ['chats', 'gc']:
-				for jid in self.plugin.windows[acct][kind]:
+				jids = self.plugin.windows[acct][kind]
+				for jid in jids:
 					if jid != 'tabbed':
-						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
+						nb += jids[jid].nb_unread[jid]
 		if nb > 1:
 			label = _('Gajim - %s unread messages') % nb
 		else:
@@ -110,12 +111,9 @@ class Systray:
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		#menu.append(new_message_menuitem)
 		
-		if len(gajim.connections.keys()) > 0:
-			chat_with_menuitem.set_sensitive(True)
-			new_message_menuitem.set_sensitive(True)
-		else:
-			chat_with_menuitem.set_sensitive(False)
-			new_message_menuitem.set_sensitive(False)
+		iskey = len(gajim.connections.keys()) > 0
+		chat_with_menuitem.set_sensitive(iskey)
+		new_message_menuitem.set_sensitive(iskey)
 		
 		if len(gajim.connections.keys()) >= 2: # 2 or more accounts? make submenus
 			account_menu_for_chat_with = gtk.Menu()
@@ -199,12 +197,13 @@ class Systray:
 			else:
 				account = self.jids[0][0]
 				jid = self.jids[0][1]
-				if self.plugin.windows[account]['gc'].has_key(jid):
-					self.plugin.windows[account]['gc'][jid].active_tab(jid)
-					self.plugin.windows[account]['gc'][jid].window.present()
-				elif self.plugin.windows[account]['chats'].has_key(jid):
-					self.plugin.windows[account]['chats'][jid].active_tab(jid)
-					self.plugin.windows[account]['chats'][jid].window.present()
+				acc = self.plugin.windows[account]
+				if acc['gc'].has_key(jid):
+					acc['gc'][jid].active_tab(jid)
+					acc['gc'][jid].window.present()
+				elif acc['chats'].has_key(jid):
+					acc['chats'][jid].active_tab(jid)
+					acc['chats'][jid].window.present()
 				else:
 					self.plugin.roster.new_chat(
 						self.plugin.roster.contacts[account][jid][0], account)

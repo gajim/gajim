@@ -52,34 +52,24 @@ class Roster_window:
 		if self.regroup:
 			return None
 		model = self.tree.get_model()
-		fin = False
 		account = model.get_iter_root()
-		if not account:
-			return None
-		while not fin:
+		while account:
 			account_name = model.get_value(account, 3)
 			if name == account_name:
-				return account
+				break
 			account = model.iter_next(account)
-			if not account:
-				fin = True
-		return None
+		return account
 
 	def get_group_iter(self, name, account):
 		model = self.tree.get_model()
 		root = self.get_account_iter(account)
-		fin = False
 		group = model.iter_children(root)
-		if not group:
-			fin = True
-		while not fin:
+		while group:
 			group_name = model.get_value(group, 3)
 			if name == group_name:
-				return group
+				break
 			group = model.iter_next(group)
-			if not group:
-				fin = True
-		return None
+		return group
 
 	def get_user_iter(self, jid, account):
 		model = self.tree.get_model()
@@ -87,22 +77,13 @@ class Roster_window:
 		found = []
 		fin = False
 		group = model.iter_children(acct)
-		if not group:
-			return found
-		while not fin:
-			fin2 = False
+		while group:
 			user = model.iter_children(group)
-			if not user:
-				fin2 = True
-			while not fin2:
+			while user:
 				if jid == model.get_value(user, 3):
 					found.append(user)
 				user = model.iter_next(user)
-				if not user:
-					fin2 = True
 			group = model.iter_next(group)
-			if not group:
-				fin = True
 		return found
 
 	def add_account_to_roster(self, account):
@@ -111,11 +92,11 @@ class Roster_window:
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
-		statuss = ['offline', 'connecting', 'online', 'away', 'xa', 'dnd',
-			'invisible']
+		statuss = ['offline', 'connecting', 'online',
+			'away', 'xa', 'dnd', 'invisible']
 		status = statuss[gajim.connections[account].connected]
-		model.append(None, (self.pixbufs[status], account, 'account', account,
-			account, False))
+		model.append(None, (self.pixbufs[status], account,
+				'account', account, account, False))
 
 	def remove_newly_added(self, jid, account):
 		if jid in self.newly_added[account]:
@@ -134,9 +115,9 @@ class Roster_window:
 		elif user.groups == []:
 			user.groups.append('General')
 
-		if (user.show == 'offline' or user.show == 'error') and not showOffline\
-			and not 'Agents' in user.groups and \
-			not self.plugin.queues[account].has_key(user.jid):
+		if (user.show == 'offline' or user.show == 'error') and \
+		   not showOffline and not 'Agents' in user.groups and \
+		   not self.plugin.queues[account].has_key(user.jid):
 			return
 
 		model = self.tree.get_model()
@@ -148,11 +129,12 @@ class Roster_window:
 					(self.pixbufs['closed'], g, 'group', g, account, False))
 			if not self.groups[account].has_key(g): #It can probably never append
 				if account + g in self.hidden_lines:
-					self.groups[account][g] = {'expand': False}
+					ishidden = False
 				else:
-					self.groups[account][g] = {'expand': True}
-			if not account in self.hidden_lines and not gajim.config.get(
-					'mergeaccounts'):
+					ishidden = True
+				self.groups[account][g] = { 'expand': ishidden }
+			if not account in self.hidden_lines and \
+			   not gajim.config.get('mergeaccounts'):
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
 			typestr = 'user'
@@ -160,10 +142,11 @@ class Roster_window:
 				typestr = 'agent'
 
 			model.append(iterG, (self.pixbufs[user.show], user.name,
-										typestr, user.jid, account, False))
+					typestr, user.jid, account, False))
 			
 			if self.groups[account][g]['expand']:
-				self.tree.expand_row(model.get_path(iterG), False)
+				self.tree.expand_row(model.get_path(iterG),
+							False)
 		self.redraw_jid(jid, account)
 	
 	def really_remove_user(self, user, account):
@@ -357,18 +340,23 @@ class Roster_window:
 			if not show:
 				show = 'offline'
 
-			user1 = User(ji, name, array[jid]['groups'], show, 
-								array[jid]['status'], array[jid]['sub'], 
-								array[jid]['ask'], resource, 0, '')
-			#when we draw the roster, we can't have twice the same user with 
-			# 2 resources
+			user1 = User(ji, name, array[jid]['groups'],
+					show, array[jid]['status'],
+					array[jid]['sub'], array[jid]['ask'],
+					resource, 0, '')
+
+			# when we draw the roster, we can't have twice the same
+			# user with 2 resources
 			self.contacts[account][ji] = [user1]
 			for g in array[jid]['groups'] :
-				if not g in self.groups[account].keys():
-					if account + g in self.hidden_lines:
-						self.groups[account][g] = {'expand': False}
-					else:
-						self.groups[account][g] = {'expand': True}
+				if g in self.groups[account].keys():
+					continue
+
+				if account + g in self.hidden_lines:
+					ishidden = False
+				else:
+					ishidden = True
+				self.groups[account][g] = { 'expand': ishidden }
 
 	def chg_user_status(self, user, show, status, account):
 		'''When a user change his status'''
@@ -378,7 +366,7 @@ class Roster_window:
 		user.show = show
 		user.status = status
 		if (show == 'offline' or show == 'error') and \
-			not self.plugin.queues[account].has_key(user.jid):
+		   not self.plugin.queues[account].has_key(user.jid):
 			if len(luser) > 1:
 				luser.remove(user)
 				self.redraw_jid(user.jid, account)
@@ -401,11 +389,12 @@ class Roster_window:
 
 	def on_info(self, widget, user, account):
 		'''Call vcard_information_window class to display user's information'''
-		if self.plugin.windows[account]['infos'].has_key(user.jid):
-			self.plugin.windows[account]['infos'][user.jid].window.present()
+		info = self.plugin.windows[account]['infos']
+		if info.has_key(user.jid):
+			info[user.jid].window.present()
 		else:
-			self.plugin.windows[account]['infos'][user.jid] = \
-				Vcard_information_window(user, self.plugin, account)
+			info[user.jid] = Vcard_information_window(user,
+							self.plugin, account)
 
 	def on_agent_logging(self, widget, jid, state, account):
 		'''When an agent is requested to log in or off'''
@@ -1146,9 +1135,11 @@ class Roster_window:
 			iconset = 'sun'
 		self.path = '../data/iconsets/' + iconset + '/'
 		self.pixbufs = {}
-		for state in ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-			'invisible', 'offline', 'error', 'requested', 'message', 
-			'opened', 'closed', 'not in the roster'):
+		for state in ('connecting', 'online', 'chat', 'away', 'xa',
+			      'dnd', 'invisible', 'offline', 'error',
+			      'requested', 'message', 'opened', 'closed',
+			      'not in the roster'):
+
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
 			files = []

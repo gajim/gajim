@@ -122,25 +122,27 @@ class History_window:
 
 	def new_line(self, date, type, data):
 		"""write a new line"""
-		start_iter = self.history_buffer.get_start_iter()
-		end_iter = self.history_buffer.get_end_iter()
+		buffer = self.history_buffer
+		start_iter = buffer.get_start_iter()
+		end_iter = buffer.get_end_iter()
 		tim = time.strftime('[%x %X] ', time.localtime(float(date)))
-		self.history_buffer.insert(start_iter, tim)
+		buffer.insert(start_iter, tim)
 		if type == 'recv':
 			msg = ':'.join(data[0:])
 			msg = msg.replace('\\n', '\n')
-			self.history_buffer.insert_with_tags_by_name(start_iter, msg, \
-				'incoming')
+			buffer.insert_with_tags_by_name(start_iter, msg,
+							'incoming')
 		elif type == 'sent':
 			msg = ':'.join(data[0:])
 			msg = msg.replace('\\n', '\n')
-			self.history_buffer.insert_with_tags_by_name(start_iter, msg, \
-				'outgoing')
+			buffer.insert_with_tags_by_name(start_iter, msg,
+							'outgoing')
 		else:
 			msg = ':'.join(data[1:])
 			msg = msg.replace('\\n', '\n')
-			self.history_buffer.insert_with_tags_by_name(start_iter, \
-				_('Status is now: ') + data[0]+': ' + msg, 'status')
+			buffer.insert_with_tags_by_name(start_iter,
+						_('Status is now: ') + data[0]
+						+ ': ' + msg, 'status')
 	
 	def __init__(self, plugin, jid):
 		self.plugin = plugin
@@ -154,15 +156,19 @@ class History_window:
 		self.forward_button = xml.get_widget('forward_button')
 		self.latest_button = xml.get_widget('latest_button')
 		xml.signal_autoconnect(self)
-		tagIn = self.history_buffer.create_tag('incoming')
+
+		tag = self.history_buffer.create_tag('incoming')
 		color = gajim.config.get('inmsgcolor')
-		tagIn.set_property('foreground', color)
-		tagOut = self.history_buffer.create_tag('outgoing')
+		tag.set_property('foreground', color)
+
+		tag = self.history_buffer.create_tag('outgoing')
 		color = gajim.config.get('outmsgcolor')
-		tagOut.set_property('foreground', color)
-		tagStatus = self.history_buffer.create_tag('status')
+		tag.set_property('foreground', color)
+
+		tag = self.history_buffer.create_tag('status')
 		color = gajim.config.get('statusmsgcolor')
-		tagStatus.set_property('foreground', color)
+		tag.set_property('foreground', color)
+
 		begin = 0
 		if self.nb_line > 50:
 			begin = self.nb_line - 50
