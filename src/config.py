@@ -38,6 +38,7 @@ gtk.glade.textdomain (APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
+
 # helper function to create #aabbcc color string
 def mk_color_string(color):
 	return '#' + (hex(color.red) + '0')[2:4] + \
@@ -498,15 +499,15 @@ class Preferences_window:
 		file = os.path.join(os.getcwd(), file)
 		dialog.set_filename(file)
 		file = ''
-		ok = 0
-		while ok == 0:
+		ok = False
+		while not ok:
 			response = dialog.run()
 			if response == gtk.RESPONSE_OK:
 				file = dialog.get_filename()
 				if os.path.exists(file):
-					ok = 1
+					ok = True
 			else:
-				ok = 1
+				ok = True
 		dialog.destroy()
 		if file:
 			self.xml.get_widget('sounds_entry').set_text(file)
@@ -1476,15 +1477,15 @@ class Add_remove_emoticons_window:
 		file = os.path.join(os.getcwd(), file)
 		dialog.set_filename(file)
 		file = ''	
-		ok = 0
-		while ok == 0:
+		ok = False
+		while not ok:
 			response = dialog.run()
 			if response == gtk.RESPONSE_OK:
 				file = dialog.get_filename()
 				if self.image_is_ok(file):
-					ok = 1
+					ok = True
 			else:
-				ok = 1
+				ok = True
 		dialog.destroy()
 		if file:
 			model.set_value(iter, 1, file)
