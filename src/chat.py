@@ -387,7 +387,7 @@ class Chat:
 			self.change_cursor = None
 		tag_table = widget.get_buffer().get_tag_table()
 		for tag in tags:
-			if tag_table.lookup('url') or tag_table.lookup('mail'):
+			if tag == tag_table.lookup('url') or tag == tag_table.lookup('mail'):
 				widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(\
 					gtk.gdk.Cursor(gtk.gdk.HAND2))
 				self.change_cursor = tag
