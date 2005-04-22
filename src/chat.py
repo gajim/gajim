@@ -37,6 +37,8 @@ class Chat:
 	"""Class for chat/groupchat windows"""
 	def __init__(self, plugin, account, widget_name):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
+		self.window = self.xml.get_widget(widget_name)
+		self.widget_name = widget_name
 		self.notebook = self.xml.get_widget('chat_notebook')
 		self.notebook.remove_page(0)
 		self.plugin = plugin
@@ -51,8 +53,11 @@ class Chat:
 		self.print_time_timeout_id = {}
 		self.names = {} # what is printed in the tab (eg. user.name)
 		self.childs = {}
-		self.window = self.xml.get_widget(widget_name)
-		self.widget_name = widget_name
+		if self.widget_name == 'groupchat_window':
+			self.subject_entry = self.xml.get_widget('subject_entry')
+			self.conversation_textview = self.xml.get_widget(
+															'conversation_textview')
+			print 'FIXME: this is None!!', self.conversation_textview
 
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -634,7 +639,7 @@ class Chat:
 			self.after_nickname_symbols = gajim.config.get('after_nickname')
 			format = self.before_nickname_symbols + name \
 				+ self.after_nickname_symbols + ' ' 
-			self.print_with_tag_list(conversation_buffer, format, end_iter, tags)
+			self.print_with_tag_list(buffer, format, end_iter, tags)
 				
 		# detect urls formatting and if the user has it on emoticons
 		index = self.detect_and_print_special_text(text, jid,

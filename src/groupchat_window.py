@@ -60,6 +60,7 @@ class Groupchat_window(chat.Chat):
 			self.on_configure_button_clicked)
 		self.xml.signal_connect('on_groupchat_window_key_press_event', \
 			self.on_groupchat_window_key_press_event)
+		self.conversation_textview.grab_focus() #FIXME: so this tracebacks
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
@@ -90,8 +91,7 @@ class Groupchat_window(chat.Chat):
 			if self.childs[jid] == new_child: 
 				new_jid = jid
 				break
-		self.xml.get_widget('subject_entry').set_text(\
-			self.subjects[new_jid])
+		self.subject_entry.set_text(self.subjects[new_jid])
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
@@ -183,7 +183,7 @@ class Groupchat_window(chat.Chat):
 		iter = model.get_iter(path)
 		return model.get_value(iter, 2)
 
-	def udpate_pixbufs(self):
+	def update_pixbufs(self):
 		for room_jid in self.list_treeview:
 			model = self.list_treeview[room_jid].get_model()
 			role_iter = model.get_iter_root()
@@ -228,7 +228,7 @@ class Groupchat_window(chat.Chat):
 	
 	def set_subject(self, room_jid, subject):
 		self.subjects[room_jid] = subject
-		self.xml.get_widget('subject_entry').set_text(subject)
+		self.subject_entry.set_text(subject)
 
 	def on_set_button_clicked(self, widget):
 		room_jid = self.get_active_jid()
