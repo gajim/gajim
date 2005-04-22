@@ -113,9 +113,6 @@ class Preferences_window:
 	def on_roster_widget_color_set(self, widget, text):
 		color = widget.get_color()
 		color_string = mk_color_string(color)
-		color_string = '#' + (hex(color.red) + '0')[2:4] + \
-				(hex(color.green) + '0')[2:4] + \
-				(hex(color.blue) + '0')[2:4]
 		gajim.config.set(text, color_string)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
@@ -247,9 +244,7 @@ class Preferences_window:
 	
 	def on_preference_widget_color_set(self, widget, text):
 		color = widget.get_color()
-		color_string = '#' + (hex(color.red) + '0')[2:4] + \
-				(hex(color.green) + '0')[2:4] + \
-				(hex(color.blue) + '0')[2:4]
+		color_string = mk_color_string(color)
 		gajim.config.set(text, color_string)
 		self.update_text_tags()
 		self.plugin.save_config()
