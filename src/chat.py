@@ -56,12 +56,12 @@ class Chat:
 
 	def update_tags(self):
 		for jid in self.tagIn:
-			self.tagIn[jid].set_property('foreground', \
-				gajim.config.get('inmsgcolor'))
-			self.tagOut[jid].set_property('foreground', \
-				gajim.config.get('outmsgcolor'))
-			self.tagStatus[jid].set_property('foreground', \
-				gajim.config.get('statusmsgcolor'))
+			self.tagIn[jid].set_property('foreground',
+					gajim.config.get('inmsgcolor'))
+			self.tagOut[jid].set_property('foreground',
+					gajim.config.get('outmsgcolor'))
+			self.tagStatus[jid].set_property('foreground',
+					gajim.config.get('statusmsgcolor'))
 
 	def update_print_time(self):
 		if gajim.config.get('print_time') != 'sometimes':
@@ -71,10 +71,13 @@ class Chat:
 				del self.print_time_timeout_id[jid]
 		else:
 			for jid in self.xmls:
-				if not self.print_time_timeout_id.has_key(jid):
-					self.print_time_timeout(jid)
-					self.print_time_timeout_id[jid] = gobject.timeout_add(300000, \
-						self.print_time_timeout, jid)
+				if self.print_time_timeout_id.has_key(jid):
+					continue
+				self.print_time_timeout(jid)
+				self.print_time_timeout_id[jid] = \
+						gobject.timeout_add(300000,
+							self.print_time_timeout,
+							jid)
 
 	def show_title(self):
 		"""redraw the window's title"""
@@ -87,16 +90,15 @@ class Chat:
 		elif unread == 1:
 			start = '* '
 		chat = self.names[jid]
-		if len(self.xmls) > 1: # if more than one tabs in the same window
+		if len(self.xmls) > 1: # if more than one tab in the same window
 			if self.widget_name == 'tabbed_chat_window':
 				chat = 'Chat'
 			elif self.widget_name == 'groupchat_window':
 				chat = 'Groupchat'
+		title = start + chat
 		if len(gajim.connections) >= 2: # if we have 2 or more accounts
-			title = start + chat + ' (account: ' + self.account + ')'
-		else:
-			title = start + chat
-			
+			title = title + ' (account: ' + self.account + ')'
+
 		self.window.set_title(title)
 
 	def redraw_tab(self, jid):
@@ -122,8 +124,8 @@ class Chat:
 			del self.plugin.windows[self.account][kind]['tabbed']
 
 	def get_active_jid(self):
-		active_child = self.notebook.get_nth_page(\
-			self.notebook.get_current_page())
+		notebook = self.notebook
+		active_child = notebook.get_nth_page(notebook.get_current_page())
 		active_jid = ''
 		for jid in self.xmls:
 			if self.childs[jid] == active_child:
@@ -138,12 +140,11 @@ class Chat:
 	def on_chat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
 		jid = self.get_active_jid()
-		conversation_textview = self.xmls[jid].\
-			get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		end_iter = conversation_buffer.get_end_iter()
-		end_rect = conversation_textview.get_iter_location(end_iter)
-		visible_rect = conversation_textview.get_visible_rect()
+		textview = self.xmls[jid].get_widget('conversation_textview')
+		buffer = textview.get_buffer()
+		end_iter = buffer.get_end_iter()
+		end_rect = textview.get_iter_location(end_iter)
+		visible_rect = textview.get_visible_rect()
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			#we are at the end
 			if self.nb_unread[jid] > 0:
@@ -160,6 +161,7 @@ class Chat:
 			if self.childs[jid] == new_child:
 				new_jid = jid
 				break
+
 		conversation_textview = self.xmls[new_jid].\
 			get_widget('conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
@@ -182,27 +184,27 @@ class Chat:
 	def remove_tab(self, jid, kind): #kind is 'chats' or 'gc'
 		if len(self.xmls) == 1:
 			self.window.destroy()
-		else:
-			if self.nb_unread[jid] > 0:
-				self.nb_unread[jid] = 0
-				self.show_title()
-				if self.plugin.systray_enabled:
-					self.plugin.systray.remove_jid(jid, self.account)
-			if self.print_time_timeout_id.has_key(jid):
-				gobject.source_remove(self.print_time_timeout_id[jid])
-				del self.print_time_timeout_id[jid]
-			self.notebook.remove_page(\
-				self.notebook.page_num(self.childs[jid]))
-			del self.plugin.windows[self.account][kind][jid]
-			del self.nb_unread[jid]
-			del self.last_message_time[jid]
-			del self.xmls[jid]
-			del self.tagIn[jid]
-			del self.tagOut[jid]
-			del self.tagStatus[jid]
-			if len(self.xmls) == 1:
-				self.notebook.set_show_tabs(False)
+			return
+		if self.nb_unread[jid] > 0:
+			self.nb_unread[jid] = 0
 			self.show_title()
+			if self.plugin.systray_enabled:
+				self.plugin.systray.remove_jid(jid, self.account)
+		if self.print_time_timeout_id.has_key(jid):
+			gobject.source_remove(self.print_time_timeout_id[jid])
+			del self.print_time_timeout_id[jid]
+		self.notebook.remove_page(\
+			self.notebook.page_num(self.childs[jid]))
+		del self.plugin.windows[self.account][kind][jid]
+		del self.nb_unread[jid]
+		del self.last_message_time[jid]
+		del self.xmls[jid]
+		del self.tagIn[jid]
+		del self.tagOut[jid]
+		del self.tagStatus[jid]
+		if len(self.xmls) == 1:
+			self.notebook.set_show_tabs(False)
+		self.show_title()
 
 	def new_tab(self, jid):
 		self.nb_unread[jid] = 0
@@ -271,7 +273,7 @@ class Chat:
 	def on_conversation_textview_key_press_event(self, widget, event):
 		"""Do not block these events and send them to the notebook"""
 		if (event.state & gtk.gdk.CONTROL_MASK) and \
-			(event.state & gtk.gdk.SHIFT_MASK):
+		   (event.state & gtk.gdk.SHIFT_MASK):
 			if event.hardware_keycode == 23: # CTRL + SHIFT + TAB
 				self.notebook.emit('key_press_event', event)
 		elif event.state & gtk.gdk.CONTROL_MASK:
@@ -295,10 +297,10 @@ class Chat:
 			if self.widget_name == 'tabbed_chat_window':
 				self.remove_tab(jid)
 		elif event.keyval == gtk.keysyms.F4 and \
-			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
+		     (event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
 				self.remove_tab(jid)
-		elif event.string and event.string in st \
-			and (event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
+		elif event.string and event.string in st and \
+		     (event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
 			self.notebook.set_current_page(st.index(event.string))
 		elif event.keyval == gtk.keysyms.Page_Down:
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
@@ -326,17 +328,15 @@ class Chat:
 				# or event.keyval == gtk.keysyms.KP_Up
 		elif event.keyval == gtk.keysyms.Up: 
 			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + UP
-				print 'be' # FIXME: find a way to to keyUP in scrolledwindow
-				conversation_scrolledwindow = self.xml.get_widget\
-					('conversation_scrolledwindow')
-				conversation_scrolledwindow.emit('scroll-child', \
+				conversation_scrolledwindow = self.xml.get_widget('conversation_scrolledwindow')
+				conversation_scrolledwindow.emit('scroll-child',
 					gtk.SCROLL_PAGE_BACKWARD, False)
 		elif event.hardware_keycode == 23: # TAB
 			if (event.state & gtk.gdk.CONTROL_MASK) and \
 				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB
 				current = self.notebook.get_current_page()
 				if current > 0:
-					self.notebook.set_current_page(current-1)
+					self.notebook.set_current_page(current - 1)
 				else:
 					self.notebook.set_current_page(self.notebook.get_n_pages()-1)
 			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
@@ -345,10 +345,12 @@ class Chat:
 					self.notebook.set_current_page(current + 1)
 				else:
 					self.notebook.set_current_page(0)
-		elif (event.state & gtk.gdk.CONTROL_MASK) or (event.keyval ==\
-			gtk.keysyms.Control_L) or (event.keyval == gtk.keysyms.Control_R):
-			# we pressed a control key or ctrl+sth: we don't block the event
-			# in order to let ctrl+c (copy text) and others do their default work
+		elif (event.state & gtk.gdk.CONTROL_MASK) or \
+		     (event.keyval == gtk.keysyms.Control_L) or \
+		     (event.keyval == gtk.keysyms.Control_R):
+			# we pressed a control key or ctrl+sth: we don't block
+			# the event in order to let ctrl+c (copy text) and
+			# others do their default work
 			pass
 		else: # it's a normal key press make sure message_textview has focus
 			message_textview = self.xmls[jid].get_widget('message_textview')
@@ -360,13 +362,13 @@ class Chat:
 		jid = self.get_active_jid()
 		if not self.nb_unread[jid]:
 			return
-		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
-		end_iter = conversation_buffer.get_end_iter()
-		end_rect = conversation_textview.get_iter_location(end_iter)
-		visible_rect = conversation_textview.get_visible_rect()
+		textview = self.xmls[jid].get_widget('conversation_textview')
+		buffer = textview.get_buffer()
+		end_iter = buffer.get_end_iter()
+		end_rect = textview.get_iter_location(end_iter)
+		visible_rect = textview.get_visible_rect()
 		if end_rect.y <= (visible_rect.y + visible_rect.height) and \
-			self.window.is_active():
+		   self.window.is_active():
 			#we are at the end
 			self.nb_unread[jid] = 0
 			self.redraw_tab(jid)
@@ -383,48 +385,54 @@ class Chat:
 			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(\
 				gtk.gdk.Cursor(gtk.gdk.XTERM))
 			self.change_cursor = None
+		tag_table = widget.get_buffer().get_tag_table()
 		for tag in tags:
-			if tag == widget.get_buffer().get_tag_table().lookup('url') or \
-				tag == widget.get_buffer().get_tag_table().lookup('mail'):
+			if tag_table.lookup('url') or tag_table.lookup('mail'):
 				widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(\
 					gtk.gdk.Cursor(gtk.gdk.HAND2))
 				self.change_cursor = tag
 		return False
 			
 	def on_conversation_textview_button_press_event(self, widget, event):
-		# Do not open the standard popup menu, so we block right button click
-		# on a taged text
-		if event.button == 3:
-			win = widget.get_window(gtk.TEXT_WINDOW_TEXT)
-			x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,\
-				int(event.x), int(event.y))
-			iter = widget.get_iter_at_location(x, y)
-			tags = iter.get_tags()
-			if tags:
-				for tag in tags:
-					tag_name = tag.get_property('name')
-					if 'url' in tag_name or 'mail' in tag_name:
-						return True
+		# Do not open the standard popup menu, so we block right button
+		# click on a taged text
+
+		if event.button != 3:
+			return False
+
+		win = widget.get_window(gtk.TEXT_WINDOW_TEXT)
+		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,\
+			int(event.x), int(event.y))
+		iter = widget.get_iter_at_location(x, y)
+		tags = iter.get_tags()
+
+		if not tags:
+			return False
+
+		for tag in tags:
+			tag_name = tag.get_property('name')
+			if 'url' in tag_name or 'mail' in tag_name:
+				return True
 	
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
 			return 0
 		if gajim.config.get('print_time') == 'sometimes':
-			conversation_textview = self.xmls[jid].\
-				get_widget('conversation_textview')
-			conversation_buffer = conversation_textview.get_buffer()
-			end_iter = conversation_buffer.get_end_iter()
+			textview = self.xmls[jid].get_widget('conversation_textview')
+			buffer = textview.get_buffer()
+			end_iter = buffer.get_end_iter()
 			tim = time.localtime()
 			tim_format = time.strftime('%H:%M', tim)
-			conversation_buffer.insert_with_tags_by_name(end_iter, tim_format + \
-				'\n', 'time_sometimes')
+			buffer.insert_with_tags_by_name(end_iter,
+						tim_format + '\n',
+						'time_sometimes')
 			#scroll to the end of the textview
-			end_rect = conversation_textview.get_iter_location(end_iter)
-			visible_rect = conversation_textview.get_visible_rect()
+			end_rect = textview.get_iter_location(end_iter)
+			visible_rect = textview.get_visible_rect()
 			if end_rect.y <= (visible_rect.y + visible_rect.height):
 				#we are at the end
-				conversation_textview.scroll_to_mark(conversation_buffer.\
-					get_mark('end'), 0.1, 0, 0, 0)
+				textview.scroll_to_mark(buffer.get_mark('end'),
+							0.1, 0, 0, 0)
 			return 1
 		if self.print_time_timeout_id.has_key(jid):
 			del self.print_time_timeout_id[jid]
@@ -481,10 +489,10 @@ class Chat:
 			buffer.apply_tag_by_name(tag, begin_tagged, iter)
 		buffer.delete_mark(begin_mark)
 
-	def detect_and_print_special_text(self, otext, jid, other_tags, \
-		print_all_special):
-		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
+	def detect_and_print_special_text(self, otext, jid, other_tags,
+						print_all_special):
+		textview = self.xmls[jid].get_widget('conversation_textview')
+		buffer = textview.get_buffer()
 		
 		start = 0
 		end = 0
@@ -500,22 +508,25 @@ class Chat:
 			special_text = otext[start:end]
 			if start != 0:
 				text_before_special_text = otext[index:start]
-				end_iter = conversation_buffer.get_end_iter()
+				end_iter = buffer.get_end_iter()
 				if print_all_special:
-					self.print_with_tag_list(conversation_buffer, \
-						text_before_special_text, end_iter, other_tags)
+					self.print_with_tag_list(buffer,
+						text_before_special_text,
+						end_iter, other_tags)
 				else:
-					conversation_buffer.insert(end_iter, text_before_special_text)
+					buffer.insert(end_iter,
+						text_before_special_text)
 			if not print_all_special:
 				other_tags = []
 			index = end # update index
 			
 			#now print it
-			self.print_special_text(special_text, other_tags, conversation_buffer)
+			self.print_special_text(special_text, other_tags,
+								buffer)
 					
 		return index
 		
-	def print_special_text(self, special_text, other_tags, conversation_buffer):
+	def print_special_text(self, special_text, other_tags, buffer):
 		tags = []
 		use_other_tags = True
 
@@ -523,9 +534,9 @@ class Chat:
 		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
 			#it's an emoticon
 			emot_ascii = possible_emot_ascii_caps
-			end_iter = conversation_buffer.get_end_iter()
-			conversation_buffer.insert_pixbuf(end_iter, \
-				self.plugin.emoticons[emot_ascii])
+			end_iter = buffer.get_end_iter()
+			buffer.insert_pixbuf(end_iter,
+					self.plugin.emoticons[emot_ascii])
 		elif special_text.startswith('mailto:'):
 			#it's a mail
 			tags.append('mail')
@@ -570,41 +581,42 @@ class Chat:
 			use_other_tags = False
 
 		if len(tags) > 0:
-			end_iter = conversation_buffer.get_end_iter()
+			end_iter = buffer.get_end_iter()
 			all_tags = tags[:]
 			if use_other_tags:
 				all_tags += other_tags
-			self.print_with_tag_list(conversation_buffer, special_text, end_iter, \
-				all_tags)
+			self.print_with_tag_list(buffer, special_text,
+						end_iter, all_tags)
 
 	def scroll_to_end(self, textview):
 		buffer = textview.get_buffer()
 		textview.scroll_to_mark(buffer.get_mark('end'), 0, True, 0, 1)
 		return False
 
-	def print_conversation_line(self, text, jid, kind, name, tim, \
-		other_tags_for_name = []):
-		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		conversation_buffer = conversation_textview.get_buffer()
+	def print_conversation_line(self, text, jid, kind, name, tim,
+						other_tags_for_name = []):
+		textview = self.xmls[jid].get_widget('conversation_textview')
+		buffer = textview.get_buffer()
 		print_all_special = False
 		at_the_end = False
-		end_iter = conversation_buffer.get_end_iter()
-		end_rect = conversation_textview.get_iter_location(end_iter)
-		visible_rect = conversation_textview.get_visible_rect()
+		end_iter = buffer.get_end_iter()
+		end_rect = textview.get_iter_location(end_iter)
+		visible_rect = textview.get_visible_rect()
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			at_the_end = True
 		if not text:
 			text = ''
-		if conversation_buffer.get_char_count() > 0:
-			conversation_buffer.insert(end_iter, '\n')
+		if buffer.get_char_count() > 0:
+			buffer.insert(end_iter, '\n')
 		if gajim.config.get('print_time') == 'always':
 			if not tim:
 				tim = time.localtime()
 			self.before_time_symbols = gajim.config.get('before_time')
 			self.after_time_symbols = gajim.config.get('after_time')
-			format = self.before_time_symbols + '%H:%M:%S' + self.after_time_symbols
+			format = self.before_time_symbols + '%H:%M:%S' + \
+						self.after_time_symbols
 			tim_format = time.strftime(format, tim)
-			conversation_buffer.insert(end_iter, tim_format + ' ')
+			buffer.insert(end_iter, tim_format + ' ')
 
 		if kind == 'status':
 			print_all_special = True
@@ -620,21 +632,21 @@ class Chat:
 		if name and not print_all_special:
 			self.before_nickname_symbols = gajim.config.get('before_nickname')
 			self.after_nickname_symbols = gajim.config.get('after_nickname')
-			format = self.before_nickname_symbols + name\
-				 + self.after_nickname_symbols + ' ' 
+			format = self.before_nickname_symbols + name \
+				+ self.after_nickname_symbols + ' ' 
 			self.print_with_tag_list(conversation_buffer, format, end_iter, tags)
 				
 		# detect urls formatting and if the user has it on emoticons
-		index = self.detect_and_print_special_text(text, jid, \
-			tags, print_all_special)
+		index = self.detect_and_print_special_text(text, jid,
+						tags, print_all_special)
 
 		# add the rest of text located in the index and after
-		end_iter = conversation_buffer.get_end_iter()
+		end_iter = buffer.get_end_iter()
 		if print_all_special:
-			conversation_buffer.insert_with_tags_by_name(end_iter, text[index:], \
-				kind)
+			buffer.insert_with_tags_by_name(end_iter,
+							text[index:], kind)
 		else:
-			conversation_buffer.insert(end_iter, text[index:])
+			buffer.insert(end_iter, text[index:])
 
 		#scroll to the end of the textview
 		end = False
@@ -642,9 +654,10 @@ class Chat:
 			#we are at the end or we are sending something
 			end = True
 			# We scroll to the end after the scrollbar has appeared
-			gobject.timeout_add(50, self.scroll_to_end, conversation_textview)
-		if ((jid != self.get_active_jid()) or (not self.window.is_active()) or \
-			(not end)) and kind == 'incoming':
+			gobject.timeout_add(50, self.scroll_to_end, textview)
+		if ((jid != self.get_active_jid()) or \
+		   (not self.window.is_active()) or \
+		   (not end)) and kind == 'incoming':
 			self.nb_unread[jid] += 1
 			if self.plugin.systray_enabled:
 				self.plugin.systray.add_jid(jid, self.account)
