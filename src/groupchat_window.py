@@ -562,13 +562,11 @@ class Groupchat_window(chat.Chat):
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		"""When a row is expanded: change the icon of the arrow"""
 		model = widget.get_model()
-		state_images = self.plugin.roster.get_appropriate_state_images(jid)
-		image = state_images['opened']
+		image = self.plugin.roster.jabber_state_images['opened']
 		model.set_value(iter, 0, image)
 	
 	def on_list_treeview_row_collapsed(self, widget, iter, path):
 		"""When a row is collapsed: change the icon of the arrow"""
 		model = widget.get_model()
-		state_images = self.plugin.roster.get_appropriate_state_images(jid)
-		image = state_images['closed']
+		image = self.plugin.roster.jabber_state_images['closed']
 		model.set_value(iter, 0, image)
