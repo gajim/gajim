@@ -870,7 +870,7 @@ class Account_modification_window:
 			
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if gajim.config.get('usegpg'):
-			self.init_account()
+			self.init_account_gpg()
 		else:
 			gpg_key_label.set_text('GPG is not usable on this computer')
 			self.xml.get_widget('gpg_choose_button').set_sensitive(False)
@@ -911,7 +911,7 @@ class Account_modification_window:
 		if not self.xml.get_widget('log_history_checkbutton').get_active():
 			list_no_log_for.append(name)
 
-		sync_with_global_status_checkbutton = self.xml.get_widget(
+		sync_with_global_status = self.xml.get_widget(
 				'sync_with_global_status_checkbutton').get_active()
 		
 		use_proxy = self.xml.get_widget('use_proxy_checkbutton').get_active()
