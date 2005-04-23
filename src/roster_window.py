@@ -410,7 +410,7 @@ class Roster_window:
 			self.draw_contact(user.jid, account)
 		#Print status in chat window
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
-			self.plugin.windows[account]['chats'][user.jid].set_image(user.jid)
+			self.plugin.windows[account]['chats'][user.jid].set_state_image(user.jid)
 			name = user.name
 			if user.resource != '':
 				name += '/' + user.resource
