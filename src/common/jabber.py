@@ -716,7 +716,7 @@ class Client(Connection):
 
     def _discover(self,ns,jid,node=None):
         iq=Iq(to=jid,type='get',query=ns)
-        if node: iq.putAttr('node',node)
+        if node: iq.getQueryNode().putAttr('node',node)
         self.send(iq)
 
     def discoverItems(self,jid,node=None):

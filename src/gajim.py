@@ -350,9 +350,10 @@ class Interface:
 				array[2], array[3])
 
 	def handle_event_agent_info_items(self, account, array):
-		#('AGENT_INFO_ITEMS', account, (agent, items))
+		#('AGENT_INFO_ITEMS', account, (agent, node, items))
 		if self.windows[account].has_key('disco'):
-			self.windows[account]['disco'].agent_info_items(array[0], array[1])
+			self.windows[account]['disco'].agent_info_items(array[0], array[1], 
+				array[2])
 
 	def handle_event_agent_info_info(self, account, array):
 		#('AGENT_INFO_INFO', account, (agent, identities, features))

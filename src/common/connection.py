@@ -321,6 +321,10 @@ class Connection:
 
 	def _DiscoverItemsCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsCB')
+		q = iq_obj.getQueryNode()
+		node = q.getAttr('node')
+		if not node:
+			node = ''
 		qp = iq_obj.getQueryPayload()
 		items = []
 		if not qp:
@@ -331,12 +335,16 @@ class Connection:
 				attr[key.encode('utf8')] = i.attrs[key].encode('utf8')
 			items.append(attr)
 		jid = str(iq_obj.getFrom())
-		self.dispatch('AGENT_INFO_ITEMS', (jid, items))
+		self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoErrorCB')
 		jid = str(iq_obj.getFrom())
-		con.browseAgents(jid)
+		q = iq_obj.getQueryNode()
+		node = q.getAttr('node')
+		if not node:
+			node = ''
+		con.browseAgents(jid, node)
 
 	def _DiscoverInfoCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoCB')
@@ -344,6 +352,10 @@ class Connection:
 		# For identity: category, name is mandatory, type is optional.
 		# For feature: var is mandatory
 		identities, features = [], []
+		q = iq_obj.getQueryNode()
+		node = q.getAttr('node')
+		if not node:
+			node = ''
 		qp = iq_obj.getQueryPayload()
 		if not qp:
 			qp = []
@@ -357,10 +369,10 @@ class Connection:
 				features.append(i.getAttr('var'))
 		jid = str(iq_obj.getFrom())
 		if not identities:
-			self.connection.browseAgents(jid)
+			self.connection.browseAgents(jid, node)
 		else:
 			self.dispatch('AGENT_INFO_INFO', (jid, identities, features))
-			self.connection.discoverItems(jid)
+			self.connection.discoverItems(jid, node)
 
 	def _VersionCB(self, con, iq_obj):
 		gajim.log.debug('VersionCB')
@@ -663,9 +675,9 @@ class Connection:
 		if self.connection:
 			self.connection.updateRosterItem(jid=jid, name=name, groups=groups)
 
-	def request_agents(self, jid):
+	def request_agents(self, jid, node):
 		if self.connection:
-			self.connection.discoverInfo(jid)
+			self.connection.discoverInfo(jid, node)
 
 	def ask_register_agent_info(self, agent):
 		if not self.connection:

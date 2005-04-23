@@ -1541,17 +1541,22 @@ class Service_discovery_window:
 		self.address_comboboxentry_entry = self.address_comboboxentry.child
 		self.address_comboboxentry_entry.set_activates_default(True)
 		
-		model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING,
+			gobject.TYPE_STRING)
 		self.services_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 0)
-		self.services_treeview.insert_column_with_attributes(-1, 'Name', \
+		self.services_treeview.insert_column_with_attributes(-1, _('Name'), \
 			renderer, text = 0)
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
-		self.services_treeview.insert_column_with_attributes(-1, 'Service', \
+		self.services_treeview.insert_column_with_attributes(-1, _('Service'), \
 			renderer, text = 1)
+		renderer = gtk.CellRendererText()
+		renderer.set_data('column', 1)
+		self.services_treeview.insert_column_with_attributes(-1, _('Node'), \
+			renderer, text = 2)
 
 		self.address_comboboxentry = xml.get_widget('address_comboboxentry')
 		liststore = gtk.ListStore(str)
@@ -1577,22 +1582,25 @@ class Service_discovery_window:
 		self.browse(server_address)
 		self.window.show_all()
 		
-	def browse(self, jid):
+	def browse(self, jid, node = ''):
 		'''Send a request to the core to know the available services'''
 		model = self.services_treeview.get_model()
 		if not model.get_iter_first():
 			# we begin to fill the treevier with the first line
-			iter = model.append(None, (jid, jid))
+			iter = model.append(None, (jid, jid, node))
 			self.agent_infos[jid] = {'features' : []}
-		gajim.connections[self.account].request_agents(jid)
+		gajim.connections[self.account].request_agents(jid, node)
 	
 	def agents(self, agents):
 		'''When list of available agent arrive :
 		Fill the treeview with it'''
 		model = self.services_treeview.get_model()
 		for agent in agents:
-			iter = model.append(None, (agent['name'], agent['jid']))
-			self.agent_infos[agent['jid']] = {'features' : []}
+			node = ''
+			if agent.has_key('node'):
+				node = agent['node']
+			iter = model.append(None, (agent['name'], agent['jid'], node))
+			self.agent_infos[agent['jid'] + node] = {'features' : []}
 
 	def iter_is_visible(self, iter):
 		if not iter:
@@ -1611,22 +1619,24 @@ class Service_discovery_window:
 		child = model.iter_children(iter)
 		while child:
 			child_jid = model.get_value(child, 1)
+			child_node = model.get_value(child, 2)
 			# We never requested its infos
-			if not self.agent_infos[child_jid].has_key('features'):
-				self.browse(child_jid)
+			if not self.agent_infos[child_jid + child_node].has_key('features'):
+				self.browse(child_jid, child_node)
 			child = model.iter_next(child)
 	
 	def agent_info_info(self, agent, identities, features):
 		'''When we recieve informations about an agent, but not its items'''
 		self.agent_info(agent, identities, features, [])
 
-	def agent_info_items(self, agent, items):
+	def agent_info_items(self, agent, node, items):
 		'''When we recieve items about an agent'''
 		model = self.services_treeview.get_model()
 		iter = model.get_iter_root()
 		# We look if this agent is in the treeview
 		while (iter):
-			if agent == model.get_value(iter, 1):
+			if agent == model.get_value(iter, 1) and node == model.get_value(
+					iter, 2):
 				break
 			if model.iter_has_child(iter):
 				iter = model.iter_children(iter)
@@ -1644,17 +1654,21 @@ class Service_discovery_window:
 			name = ''
 			if item.has_key('name'):
 				name = item['name']
+			node = ''
+			if item.has_key('node'):
+				node = item['node']
 			# We look if this item is already in the treeview
 			iter_child = model.iter_children(iter)
 			while iter_child:
-				if item['jid'] == model.get_value(iter_child, 1):
+				if item['jid'] == model.get_value(iter_child, 1) and \
+						node == model.get_value(iter_child, 2):
 					break
 				iter_child = model.iter_next(iter_child)
 			if not iter_child: # If it is not we add it
-				iter_child = model.append(iter, (name, item['jid']))
-			self.agent_infos[item['jid']] = {'identities': [item]}
+				iter_child = model.append(iter, (name, item['jid'], node))
+			self.agent_infos[item['jid'] + node] = {'identities': [item]}
 			if self.iter_is_visible(iter_child) or expand:
-				self.browse(item['jid'])
+				self.browse(item['jid'], node)
 		if expand:
 			self.services_treeview.expand_row((model.get_path(iter)), False)
 
@@ -1662,9 +1676,14 @@ class Service_discovery_window:
 		'''When we recieve informations about an agent'''
 		model = self.services_treeview.get_model()
 		iter = model.get_iter_root()
+		node = ''
+		if len(identities):
+			if identities[0].has_key('node'):
+				node = identities[0]['node']
 		# We look if this agent is in the treeview
 		while (iter):
-			if agent == model.get_value(iter, 1):
+			if agent == model.get_value(iter, 1) and node == model.get_value(
+					iter, 2):
 				break
 			if model.iter_has_child(iter):
 				iter = model.iter_children(iter)
@@ -1675,25 +1694,12 @@ class Service_discovery_window:
 					iter = model.iter_next(iter)
 		if not iter: #If it is not we stop
 			return
-		self.agent_infos[agent]['features'] = features
+		self.agent_infos[agent + node]['features'] = features
 		if len(identities):
-			self.agent_infos[agent]['identities'] = identities
+			self.agent_infos[agent + node]['identities'] = identities
 			if identities[0].has_key('name'):
 				model.set_value(iter, 0, identities[0]['name'])
-		for item in items:
-			if not item.has_key('name'):
-				continue
-			# We look if this item is already in the treeview
-			iter_child = model.iter_children(iter)
-			while iter_child:
-				if item['jid'] == model.get_value(iter_child, 1):
-					break
-				iter_child = model.iter_next(iter_child)
-			if not iter_child: # If it is not we add it
-				iter_child = model.append(iter, (item['name'], item['jid']))
-			self.agent_infos[item['jid']] = {'identities': [item]}
-			if self.iter_is_visible(iter_child):
-				self.browse(item['jid'])
+		self.agent_info_items(agent, node, items)
 
 	def on_refresh_button_clicked(self, widget):
 		'''When refresh button is clicked: refresh list: clear and rerequest it'''
@@ -1760,13 +1766,17 @@ class Service_discovery_window:
 		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter: return
 		jid = model.get_value(iter, 1)
-		if self.agent_infos[jid].has_key('features'):
-			if common.jabber.NS_REGISTER in self.agent_infos[jid]['features']:
+		node = model.get_value(iter, 2)
+		if self.agent_infos[jid + node].has_key('features'):
+			if common.jabber.NS_REGISTER in self.agent_infos[jid + node] \
+					['features']:
 				self.register_button.set_sensitive(True)
-		if self.agent_infos[jid].has_key('identities'):
-			if len(self.agent_infos[jid]['identities']):
-				if self.agent_infos[jid]['identities'][0].has_key('category'):
-					if self.agent_infos[jid]['identities'][0]['category'] == 'conference':
+		if self.agent_infos[jid + node].has_key('identities'):
+			if len(self.agent_infos[jid + node]['identities']):
+				if self.agent_infos[jid + node]['identities'][0].has_key(
+						'category'):
+					if self.agent_infos[jid + node]['identities'][0]['category'] == \
+							'conference':
 						self.join_button.set_sensitive(True)
 	
 	def on_go_button_clicked(self, widget):
