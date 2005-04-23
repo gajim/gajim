@@ -167,12 +167,13 @@ class Groupchat_window(chat.Chat):
 	
 	def add_user_to_roster(self, room_jid, nick, show, role, jid):
 		model = self.list_treeview[room_jid].get_model()
-		img = self.plugin.roster.pixbufs[show]
+		image = self.plugin.roster.jabber_state_images[show]
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
-			role_iter = model.append(None, (self.plugin.roster.pixbufs['closed']\
-				, role + 's', role, ''))
-		iter = model.append(role_iter, (img, nick, jid, show))
+			role_iter = model.append(None,
+				(self.plugin.roster.jabber_state_images['closed'], role + 's',\
+				 role, ''))
+		iter = model.append(role_iter, (image, nick, jid, show))
 		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)), \
 			False)
 		return iter
@@ -183,7 +184,8 @@ class Groupchat_window(chat.Chat):
 		iter = model.get_iter(path)
 		return model.get_value(iter, 2)
 
-	def update_pixbufs(self):
+	def update_state_images(self):
+		roster = self.plugin.roster
 		for room_jid in self.list_treeview:
 			model = self.list_treeview[room_jid].get_model()
 			role_iter = model.get_iter_root()
@@ -195,8 +197,9 @@ class Groupchat_window(chat.Chat):
 					continue
 				while user_iter:
 					show = model.get_value(user_iter, 3)
-					img = self.plugin.roster.pixbufs[show]
-					model.set_value(user_iter, 0, img)
+					state_images = roster.get_appropriate_state_images(room_jid)
+					image = state_images[show] #FIXME: always Jabber why?
+					model.set_value(user_iter, 0, image)
 					user_iter = model.iter_next(user_iter)
 				role_iter = model.iter_next(role_iter)
 
@@ -222,8 +225,10 @@ class Groupchat_window(chat.Chat):
 					self.remove_user(room_jid, nick)
 					self.add_user_to_roster(room_jid, nick, show, role, ji)
 				else:
-					img = self.plugin.roster.pixbufs[show]
-					model.set_value(iter, 0, img)
+					roster = self.plugin.roster
+					state_images = roster.get_appropriate_state_images(jid)
+					image = state_images[user.show]
+					model.set_value(iter, 0, image)
 					model.set_value(iter, 3, show)
 	
 	def set_subject(self, room_jid, subject):
@@ -557,9 +562,13 @@ class Groupchat_window(chat.Chat):
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		"""When a row is expanded: change the icon of the arrow"""
 		model = widget.get_model()
-		model.set_value(iter, 0, self.plugin.roster.pixbufs['opened'])
+		state_images = self.plugin.roster.get_appropriate_state_images(jid)
+		image = state_images['opened']
+		model.set_value(iter, 0, image)
 	
 	def on_list_treeview_row_collapsed(self, widget, iter, path):
 		"""When a row is collapsed: change the icon of the arrow"""
 		model = widget.get_model()
-		model.set_value(iter, 0, self.plugin.roster.pixbufs['closed'])
+		state_images = self.plugin.roster.get_appropriate_state_images(jid)
+		image = state_images['closed']
+		model.set_value(iter, 0, image)

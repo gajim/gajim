@@ -108,7 +108,7 @@ class Preferences_window:
 		active = widget.get_active()
 		icon_string = model[active][0]
 		gajim.config.set('iconset', icon_string)
-		self.plugin.roster.reload_pixbufs()
+		self.plugin.roster.reload_jabber_state_images()
 		self.plugin.save_config()
 	
 	def on_roster_widget_color_set(self, widget, text):

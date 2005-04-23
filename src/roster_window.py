@@ -94,7 +94,7 @@ class Roster_window:
 		statuss = ['offline', 'connecting', 'online',
 			'away', 'xa', 'dnd', 'invisible']
 		status = statuss[gajim.connections[account].connected]
-		model.append(None, (self.pixbufs[status], account,
+		model.append(None, (self.jabber_state_images[status], account,
 				'account', account, account, False))
 
 	def remove_newly_added(self, jid, account):
@@ -125,7 +125,7 @@ class Roster_window:
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
 				iterG = model.append(IterAcct, 
-					(self.pixbufs['closed'], g, 'group', g, account, False))
+					(self.jabber_state_images['closed'], g, 'group', g, account, False))
 			if not self.groups[account].has_key(g): #It can probably never append
 				if account + g in self.hidden_lines:
 					ishidden = False
@@ -140,7 +140,7 @@ class Roster_window:
 			if g == 'Agents':
 				typestr = 'agent'
 
-			model.append(iterG, (self.pixbufs[user.show], user.name,
+			model.append(iterG, (self.jabber_state_images[user.show], user.name,
 					typestr, user.jid, account, False))
 			
 			if self.groups[account][g]['expand']:
@@ -173,6 +173,23 @@ class Roster_window:
 				if group_empty:
 					del self.groups[account][group]
 
+	def get_appropriate_state_images(self, jid):
+		'''check jid and return the appropriate state images dict'''
+		if jid.find('@aim.') != -1:
+			state_images = self.transports_state_images['aim']
+		elif jid.find('@gadugadu.') != -1:
+			state_images = self.transports_state_images['gadugadu']
+		elif jid.find('@icq.') != -1:
+			state_images = self.transports_state_images['icq']
+		elif jid.find('@msn.') != -1:
+			state_images = self.transports_state_images['msn']
+		elif jid.find('@yahoo.') != -1:
+			state_images = self.transports_state_images['yahoo']
+		else: #jabber
+			state_images = self.jabber_state_images
+
+		return state_images
+
 	def draw_contact(self, jid, account):
 		'''draw the correct state image and name'''
 		model = self.tree.get_model()
@@ -189,20 +206,9 @@ class Roster_window:
 			if u.priority > prio:
 				prio = u.priority
 				user = u
-		jabber_state_images = self.pixbufs
+
 		for iter in iters:
-			if jid.find('@aim.') != -1:
-				state_images = self.transports_state_images['aim']
-			elif jid.find('@gadugadu.') != -1:
-				state_images = self.transports_state_images['gadugadu']
-			elif jid.find('@icq.') != -1:
-				state_images = self.transports_state_images['icq']
-			elif jid.find('@msn.') != -1:
-				state_images = self.transports_state_images['msn']
-			elif jid.find('@yahoo.') != -1:
-				state_images = self.transports_state_images['yahoo']
-			else:
-				state_images = jabber_state_images
+			state_images = self.get_appropriate_state_images(jid)
 
 			if jid.find('@') == -1: # if not '@' it's an agent
 				if name.find('aim.') != -1:
@@ -215,8 +221,6 @@ class Roster_window:
 					state_images = self.transports_state_images['msn']
 				elif name.find('yahoo.') != -1:
 					state_images = self.transports_state_images['yahoo']
-				else:
-					state_images = jabber_state_images
 				
 				img = state_images[user.show]					
 			elif self.plugin.queues[account].has_key(jid):
@@ -712,7 +716,7 @@ class Roster_window:
 				model = self.tree.get_model()
 				accountIter = self.get_account_iter(account)
 				if accountIter:
-					model.set_value(accountIter, 0, self.pixbufs['connecting'])
+					model.set_value(accountIter, 0, self.jabber_state_images['connecting'])
 #				gajim.connections[account].connected = 1
 				if self.plugin.systray_enabled:
 					self.plugin.systray.set_status('connecting')
@@ -726,7 +730,7 @@ class Roster_window:
 				passphrase, save = w.run()
 				if passphrase == -1:
 					if accountIter:
-						model.set_value(accountIter, 0, self.pixbufs['offline'])
+						model.set_value(accountIter, 0, self.jabber_state_images['offline'])
 #					gajim.connections[account].connected = 0
 					self.plugin.systray.set_status('offline')
 					self.update_status_comboxbox()
@@ -824,7 +828,7 @@ class Roster_window:
 						'xa', 'dnd', 'invisible']
 		if self.plugin.systray_enabled:
 			self.plugin.systray.set_status(statuss[maxi])
-		image = self.pixbufs[statuss[maxi]]
+		image = self.jabber_state_images[statuss[maxi]]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			pixbuf = image.get_animation().get_static_image()
 			self.window.set_icon(pixbuf)
@@ -838,7 +842,7 @@ class Roster_window:
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
 		if accountIter:
-			model.set_value(accountIter, 0, self.pixbufs[status])
+			model.set_value(accountIter, 0, self.jabber_state_images[status])
 		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 
 						'xa', 'dnd', 'invisible']
 		if status == 'offline':
@@ -1077,7 +1081,7 @@ class Roster_window:
 		account = model.get_value(iter, 4)
 		type = model.get_value(iter, 2)
 		if type == 'group':
-			model.set_value(iter, 0, self.pixbufs['opened'])
+			model.set_value(iter, 0, self.jabber_state_images['opened'])
 			jid = model.get_value(iter, 3)
 			self.groups[account][jid]['expand'] = True
 			if account + jid in self.hidden_lines:
@@ -1099,7 +1103,7 @@ class Roster_window:
 		account = model.get_value(iter, 4)
 		type = model.get_value(iter, 2)
 		if type == 'group':
-			model.set_value(iter, 0, self.pixbufs['closed'])
+			model.set_value(iter, 0, self.jabber_state_images['closed'])
 			jid = model.get_value(iter, 3)
 			self.groups[account][jid]['expand'] = False
 			if not account + jid in self.hidden_lines:
@@ -1154,13 +1158,13 @@ class Roster_window:
 			self.plugin.windows[account]['disco'] = \
 				config.Service_discovery_window(self.plugin, account)
 
-	def mkpixbufs(self):
-		'''initialise pixbufs array'''
+	def make_jabber_state_images(self):
+		'''initialise jabber_state_images dict'''
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
 		self.path = '../data/iconsets/' + iconset + '/'
-		self.pixbufs = {}
+		self.jabber_state_images = {}
 		for state in ('connecting', 'online', 'chat', 'away', 'xa',
 			      'dnd', 'invisible', 'offline', 'error',
 			      'requested', 'message', 'opened', 'closed',
@@ -1174,7 +1178,7 @@ class Roster_window:
 			files.append(self.path + state_file + '.xpm')
 			image = gtk.Image()
 			image.show()
-			self.pixbufs[state] = image
+			self.jabber_state_images[state] = image
 			for file in files:
 				if os.path.exists(file):
 					image.set_from_file(file)
@@ -1193,15 +1197,15 @@ class Roster_window:
 			image.show()
 			self.transports_state_images[name_only][state] = image
 
-	def reload_pixbufs(self):
-		self.mkpixbufs()
+	def reload_jabber_state_images(self):
+		self.make_jabber_state_images()
 		# Update the roster
 		self.draw_roster()
 		# Update the status combobox
 		model = self.status_combobox.get_model()
 		iter = model.get_iter_root()
 		while iter:
-			model.set_value(iter, 1, self.pixbufs[model.get_value(iter, 2)])
+			model.set_value(iter, 1, self.jabber_state_images[model.get_value(iter, 2)])
 			iter = model.iter_next(iter)
 		# Update the systray
 		if self.plugin.systray_enabled:
@@ -1210,13 +1214,13 @@ class Roster_window:
 			# Update opened chat windows
 			for jid in self.plugin.windows[account]['chats']:
 				if jid != 'tabbed':
-					self.plugin.windows[account]['chats'][jid].set_image(jid)
+					self.plugin.windows[account]['chats'][jid].set_state_image(jid)
 			# Update opened groupchat windows
 			for jid in self.plugin.windows[account]['gc']:
 				if jid != 'tabbed':
-					self.plugin.windows[account]['gc'][jid].udpate_pixbufs()
+					self.plugin.windows[account]['gc'][jid].update_state_images(jid)
 		# Update windows icons
-		image = self.pixbufs['online']
+		image = self.jabber_state_images['online'] # FIXME: we need an icon
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			pixbuf = image.get_animation().get_static_image()
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
@@ -1417,7 +1421,7 @@ class Roster_window:
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
-		self.mkpixbufs()
+		self.make_jabber_state_images()
 		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'icq': {}, 'msn': {}, 'yahoo': {} }
 		
 		path = '../data/iconsets/transports'
@@ -1450,7 +1454,7 @@ class Roster_window:
 				status_better = 'Free for chat'
 			else:
 				status_better = status.capitalize()
-			iter = liststore.append([status_better, self.pixbufs[status], status])
+			iter = liststore.append([status_better, self.jabber_state_images[status], status])
 		self.status_combobox.show_all()
 		self.status_combobox.set_model(liststore)
 		self.status_combobox.set_active(6) # default to offline

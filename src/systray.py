@@ -38,7 +38,7 @@ class Systray:
 			status = 'message'
 		else:
 			status = self.status
-		image = self.plugin.roster.pixbufs[status]
+		image = self.plugin.roster.jabber_state_images[status]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			self.img_tray.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
