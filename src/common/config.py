@@ -244,6 +244,11 @@ class Config:
 #			print 'error: option %s doesn\'t exist' % (optname)
 			return -1
 		opt = self.__options[optname]
+		if opt[OPT_TYPE][0] == 'boolean':
+			if value == 'True':
+				value = True
+			elif value == 'False':
+				value = False
 
 		if not self.is_valid(opt[OPT_TYPE], value):
 			return -1

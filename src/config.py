@@ -512,6 +512,9 @@ class Preferences_window:
 			model.set_value(iter, 2, file)
 			model.set_value(iter, 1, 1)
 
+	def on_open_advanced_editor_button_clicked(self, widget, data = None):
+		dialogs.Advanced_window()
+
 	def __init__(self, plugin):
 		'''Initialize Preferences window'''
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
