@@ -526,6 +526,7 @@ class Roster_window:
 		account = model.get_value(iter, 4)
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_('Log on'))
+		#FIXME: what about error?
 		if self.contacts[account][jid][0].show != 'offline':
 			item.set_sensitive(False)
 		menu.append(item)
