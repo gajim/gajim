@@ -175,6 +175,8 @@ class Roster_window:
 
 	def get_appropriate_state_images(self, jid):
 		'''check jid and return the appropriate state images dict'''
+		if not jid: # we don't have the jid of the contact (in gc)
+			state_images = self.jabber_state_images
 		if jid.find('@aim.') != -1:
 			state_images = self.transports_state_images['aim']
 		elif jid.find('@gadugadu.') != -1:
