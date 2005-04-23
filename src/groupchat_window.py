@@ -250,8 +250,9 @@ class Groupchat_window(chat.Chat):
 		"""When a key is pressed:
 		if enter is pressed without the shit key, message (if not empty) is sent
 		and printed in the conversation. Tab does autocompete in nickames"""
-		jid = self.get_active_jid()
-		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		room_jid = self.get_active_jid()
+		conversation_textview = self.xmls[room_jid].get_widget(
+			'conversation_textview')
 		if event.hardware_keycode == 23: # TAB
 			if (event.state & gtk.gdk.CONTROL_MASK) and \
 				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB  
@@ -259,7 +260,6 @@ class Groupchat_window(chat.Chat):
 			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
 			else:
-				room_jid = self.get_active_jid()
 				list_nick = self.get_nick_list(room_jid)
 				message_buffer = widget.get_buffer()
 				start_iter = message_buffer.get_start_iter()
@@ -297,7 +297,6 @@ class Groupchat_window(chat.Chat):
 			end_iter = message_buffer.get_end_iter()
 			txt = message_buffer.get_text(start_iter, end_iter, 0)
 			if txt != '':
-				room_jid = self.get_active_jid()
 				gajim.connections[self.account].send_gc_message(room_jid, txt)
 				message_buffer.set_text('', -1)
 				widget.grab_focus()
