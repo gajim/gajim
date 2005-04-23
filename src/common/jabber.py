@@ -612,7 +612,6 @@ class Client(Connection):
         if groups != None:
             for group in groups:
                 item.insertTag('group').insertData(group)
-        dummy = self.SendAndWaitForResponse(iq) # Do we need to wait??
 
 
     def removeRosterItem(self,jid):
