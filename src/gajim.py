@@ -208,7 +208,7 @@ class Interface:
 						self.roster.to_be_removed[account].append(user1.jid)
 					if user1.jid in self.roster.newly_added[account]:
 						self.roster.newly_added[account].remove(user1.jid)
-					self.roster.redraw_jid(user1.jid, account)
+					self.roster.draw_contact(user1.jid, account)
 					if not self.queues[account].has_key(jid):
 						gobject.timeout_add(5000, self.roster.really_remove_user, \
 							user1, account)
@@ -220,7 +220,7 @@ class Interface:
 			#It must be an agent
 			if self.roster.contacts[account].has_key(ji):
 				#Update existing iter
-				self.roster.redraw_jid(ji, account)
+				self.roster.draw_contact(ji, account)
 		elif self.roster.contacts[account].has_key(ji):
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
@@ -463,7 +463,7 @@ class Interface:
 			user.ask = array[3]
 			if array[4]:
 				user.groups = array[4]
-		self.roster.redraw_jid(jid, account)
+		self.roster.draw_contact(jid, account)
 
 	def read_sleepy(self):	
 		'''Check if we are idle'''

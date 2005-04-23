@@ -100,7 +100,7 @@ class Roster_window:
 	def remove_newly_added(self, jid, account):
 		if jid in self.newly_added[account]:
 			self.newly_added[account].remove(jid)
-			self.redraw_jid(jid, account)
+			self.draw_contact(jid, account)
 
 	def add_user_to_roster(self, jid, account):
 		'''Add a user to the roster and add groups if they aren't in roster'''
@@ -109,7 +109,7 @@ class Roster_window:
 			return
 		users = self.contacts[account][jid]
 		user = users[0]
-		if user.jid.find('@') <= 0:
+		if user.jid.find('@') == -1: # if not '@' it's an agent
 			user.groups = ['Agents']
 		elif user.groups == []:
 			user.groups.append('General')
@@ -146,7 +146,7 @@ class Roster_window:
 			if self.groups[account][g]['expand']:
 				self.tree.expand_row(model.get_path(iterG),
 							False)
-		self.redraw_jid(jid, account)
+		self.draw_contact(jid, account)
 	
 	def really_remove_user(self, user, account):
 		if user.jid in self.to_be_removed[account]:
@@ -173,8 +173,8 @@ class Roster_window:
 				if group_empty:
 					del self.groups[account][group]
 
-	def redraw_jid(self, jid, account):
-		'''draw the correct pixbuf and name'''
+	def draw_contact(self, jid, account):
+		'''draw the correct state image and name'''
 		model = self.tree.get_model()
 		iters = self.get_user_iter(jid, account)
 		if len(iters) == 0:
@@ -189,19 +189,46 @@ class Roster_window:
 			if u.priority > prio:
 				prio = u.priority
 				user = u
+		jabber_state_images = self.pixbufs
 		for iter in iters:
-			if jid.find('@') <= 0: # It's an agent
-				img = self.pixbufs[user.show]
+			if jid.find('@aim.') != -1:
+				state_images = self.transports_state_images['aim']
+			elif jid.find('@gadugadu.') != -1:
+				state_images = self.transports_state_images['gadugadu']
+			elif jid.find('@icq.') != -1:
+				state_images = self.transports_state_images['icq']
+			elif jid.find('@msn.') != -1:
+				state_images = self.transports_state_images['msn']
+			elif jid.find('@yahoo.') != -1:
+				state_images = self.transports_state_images['yahoo']
+			else:
+				state_images = jabber_state_images
+
+			if jid.find('@') == -1: # if not '@' it's an agent
+				if name.find('aim.') != -1:
+					state_images = self.transports_state_images['aim']
+				elif name.find('gadugadu.') != -1:
+					state_images = self.transports_state_images['gadugadu']
+				elif name.find('icq.') != -1:
+					state_images = self.transports_state_images['icq']
+				elif name.find('msn.') != -1:
+					state_images = self.transports_state_images['msn']
+				elif name.find('yahoo.') != -1:
+					state_images = self.transports_state_images['yahoo']
+				else:
+					state_images = jabber_state_images
+				
+				img = state_images[user.show]					
 			elif self.plugin.queues[account].has_key(jid):
-				img = self.pixbufs['message']
+				img = state_images['message']
 			else:
 				if user.sub != 'both':
 					if user.ask == 'subscribe':
-						img = self.pixbufs['requested']
+						img = state_images['requested']
 					else:
-						img = self.pixbufs['not in the roster']
+						img = state_images['not in the roster']
 				else:
-					img = self.pixbufs[user.show]
+					img = state_images[user.show]
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
 	
@@ -368,15 +395,15 @@ class Roster_window:
 		   not self.plugin.queues[account].has_key(user.jid):
 			if len(luser) > 1:
 				luser.remove(user)
-				self.redraw_jid(user.jid, account)
+				self.draw_contact(user.jid, account)
 			elif not showOffline:
 				self.remove_user(user, account)
 			else:
-				self.redraw_jid(user.jid, account)
+				self.draw_contact(user.jid, account)
 		else:
 			if not self.get_user_iter(user.jid, account):
 				self.add_user_to_roster(user.jid, account)
-			self.redraw_jid(user.jid, account)
+			self.draw_contact(user.jid, account)
 		#Print status in chat window
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
 			self.plugin.windows[account]['chats'][user.jid].set_image(user.jid)
@@ -877,7 +904,7 @@ class Roster_window:
 			if not self.plugin.queues[account].has_key(jid):
 				model = self.tree.get_model()
 				self.plugin.queues[account][jid] = Queue.Queue(50)
-				self.redraw_jid(jid, account)
+				self.draw_contact(jid, account)
 				if self.plugin.systray_enabled:
 					self.plugin.systray.add_jid(jid, account)
 			self.plugin.queues[account][jid].put((msg, tim))
@@ -1102,7 +1129,7 @@ class Roster_window:
 				for u in self.contacts[account][jid]:
 					u.name = new_text
 				gajim.connections[account].update_user(jid, new_text, u.groups)
-			self.redraw_jid(jid, account)
+			self.draw_contact(jid, account)
 		elif type == 'group':
 			old_name = model.get_value(iter, 1)
 			#get all users in that group
@@ -1153,14 +1180,18 @@ class Roster_window:
 					image.set_from_file(file)
 					break
 
-	def init_transports_pixbufs(self, arg, dirname, fnames):
+	def init_transports_state_images(self, dirname, fnames):
 		name_only = os.path.basename(dirname)
-		if name_only == 'transports' or name_only == '.svn':
-			return
-		for fname in fnames:
-			transport_kind = name_only
-			return
-			self.transports_pixbufs[transport_kind][fname] = 'be'
+		for fname in fnames: # fname is abs
+			if fname == '.svn':
+				continue
+			state = unicode(fname[:-4]) # without extension
+			state = state.replace('_', ' ') # make '_' a space for dict key
+			path_to_fname = os.path.join(dirname, fname)
+			image = gtk.Image()
+			image.set_from_file(path_to_fname)
+			image.show()
+			self.transports_state_images[name_only][state] = image
 
 	def reload_pixbufs(self):
 		self.mkpixbufs()
@@ -1387,8 +1418,16 @@ class Roster_window:
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
 		self.mkpixbufs()
-		self.transports_pixbufs = { 'aim': {}, 'gadugadu': {}, 'icq': {}, 'msn': {}, 'yahoo': {} }
-		os.path.walk('../data/iconsets/transports', self.init_transports_pixbufs, None) # arg is None
+		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'icq': {}, 'msn': {}, 'yahoo': {} }
+		
+		path = '../data/iconsets/transports'
+		folders = os.listdir('../data/iconsets/transports')
+		for folder in folders:
+			if folder == '.svn':
+				continue
+			folder = os.path.join(path, folder)
+			image_files = os.listdir(folder)
+			self.init_transports_state_images(folder, image_files)
 
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image, 
 			gobject.TYPE_STRING)

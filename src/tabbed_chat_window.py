@@ -211,7 +211,7 @@ class Tabbed_chat_window(chat.Chat):
 			self.plugin.roster.nb_unread -= 1
 		self.plugin.roster.show_title()
 		del self.plugin.queues[self.account][jid]
-		self.plugin.roster.redraw_jid(jid, self.account)
+		self.plugin.roster.draw_contact(jid, self.account)
 		if self.plugin.systray_enabled:
 			self.plugin.systray.remove_jid(jid, self.account)
 		showOffline = gajim.config.get('showoffline')
