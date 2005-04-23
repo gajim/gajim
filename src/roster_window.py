@@ -871,14 +871,14 @@ class Roster_window:
 			self.plugin.windows[account]['chats'][user.jid] = \
 				tabbed_chat_window.Tabbed_chat_window(user, self.plugin, account)
 
-	def new_group(self, jid, nick, account):
+	def new_room(self, jid, nick, account):
 		if gajim.config.get('usetabbedchat'):
 			if not self.plugin.windows[account]['gc'].has_key('tabbed'):
 				self.plugin.windows[account]['gc']['tabbed'] = \
 					groupchat_window.Groupchat_window(jid, nick, self.plugin, 
 																	account)
 			else:
-				self.plugin.windows[account]['gc']['tabbed'].new_group(jid, nick)
+				self.plugin.windows[account]['gc']['tabbed'].new_room(jid, nick)
 			self.plugin.windows[account]['gc'][jid] = \
 				self.plugin.windows[account]['gc']['tabbed']
 			self.plugin.windows[account]['gc']['tabbed'].window.present()

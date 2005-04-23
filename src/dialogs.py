@@ -524,7 +524,7 @@ class Join_groupchat_window:
 		if len(self.recently_groupchat) > 10:
 			self.recently_groupchat = self.recently_groupchat[0:10]
 		gajim.config.set('recently_groupchat', ' '.join(self.recently_groupchat))
-		self.plugin.roster.new_group(jid, nickname, self.account)
+		self.plugin.roster.new_room(jid, nickname, self.account)
 		gajim.connections[self.account].join_gc(nickname, room, server, password)
 			
 		self.window.destroy()

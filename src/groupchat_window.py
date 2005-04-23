@@ -43,8 +43,9 @@ class Groupchat_window(chat.Chat):
 		self.list_treeview = {}
 		self.subjects = {}
 		self.subject_entry = self.xml.get_widget('subject_entry')
-		self.new_group(room_jid, nick)
+		self.new_room(room_jid, nick)
 		self.show_title()
+		self.subject_entry_tooltip = gtk.Tooltips()
 		self.xml.signal_connect('on_groupchat_window_destroy', \
 			self.on_groupchat_window_destroy)
 		self.xml.signal_connect('on_groupchat_window_delete_event', \
@@ -89,7 +90,9 @@ class Groupchat_window(chat.Chat):
 			if self.childs[jid] == new_child: 
 				new_jid = jid
 				break
-		self.subject_entry.set_text(self.subjects[new_jid])
+		subject = self.subjects[new_jid]
+		self.subject_entry.set_text(subject)
+		self.subject_entry_tooltip.set_tip(self.subject_entry, subject)
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
@@ -224,7 +227,7 @@ class Groupchat_window(chat.Chat):
 					self.add_user_to_roster(room_jid, nick, show, role, ji)
 				else:
 					roster = self.plugin.roster
-					state_images = roster.get_appropriate_state_images(jid)
+					state_images = roster.get_appropriate_state_images(ji)
 					image = state_images[show]
 					model.set_value(iter, 0, image)
 					model.set_value(iter, 3, show)
@@ -232,6 +235,7 @@ class Groupchat_window(chat.Chat):
 	def set_subject(self, room_jid, subject):
 		self.subjects[room_jid] = subject
 		self.subject_entry.set_text(subject)
+		self.subject_entry_tooltip.set_tip(self.subject_entry, subject)
 
 	def on_set_button_clicked(self, widget):
 		room_jid = self.get_active_jid()
@@ -463,15 +467,17 @@ class Groupchat_window(chat.Chat):
 			del self.list_treeview[room_jid]
 			del self.subjects[room_jid]
 
-	def new_group(self, room_jid, nick):
+	def new_room(self, room_jid, nick):
 		self.names[room_jid] = room_jid.split('@')[0]
 		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'gc_vbox', APP)
 		self.childs[room_jid] = self.xmls[room_jid].get_widget('gc_vbox')
 		chat.Chat.new_tab(self, room_jid)
 		self.nicks[room_jid] = nick
 		self.subjects[room_jid] = ''
-		self.list_treeview[room_jid] = self.xmls[room_jid].\
-			get_widget('list_treeview')
+		self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
+																			'list_treeview')
+		conversation_textview = self.xmls[room_jid].get_widget(
+																'conversation_textview')
 
 		#status_image, nickname, real_jid, status
 		store = gtk.TreeStore(gtk.Image, str, str, str)
@@ -497,6 +503,7 @@ class Groupchat_window(chat.Chat):
 
 		self.redraw_tab(room_jid)
 		self.show_title()
+		conversation_textview.grab_focus() # remove focus from subject entry
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
