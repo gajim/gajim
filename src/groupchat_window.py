@@ -59,8 +59,6 @@ class Groupchat_window(chat.Chat):
 			self.on_set_button_clicked)
 		self.xml.signal_connect('on_configure_button_clicked', \
 			self.on_configure_button_clicked)
-		self.xml.signal_connect('on_groupchat_window_key_press_event', \
-			self.on_groupchat_window_key_press_event)
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
@@ -227,7 +225,7 @@ class Groupchat_window(chat.Chat):
 				else:
 					roster = self.plugin.roster
 					state_images = roster.get_appropriate_state_images(jid)
-					image = state_images[user.show]
+					image = state_images[show]
 					model.set_value(iter, 0, image)
 					model.set_value(iter, 3, show)
 	
@@ -382,7 +380,6 @@ class Groupchat_window(chat.Chat):
 				dialogs.Vcard_window(jid, self.plugin,
 						self.account, True)
 			gajim.connections[self.account].request_vcard(jid)
-			#FIXME: maybe use roster.on_info above?
 			
 			#FIXME: we need the resource but it's not saved
 			#self.plugin.send('ASK_OS_INFO', self.account, jid, resource)
@@ -500,10 +497,6 @@ class Groupchat_window(chat.Chat):
 
 		self.redraw_tab(room_jid)
 		self.show_title()
-	
-	def on_groupchat_window_key_press_event(self, widget, event):
-		if event.keyval == gtk.keysyms.Escape:
-			widget.get_toplevel().destroy()
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
