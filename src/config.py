@@ -499,15 +499,13 @@ class Preferences_window:
 		file = os.path.join(os.getcwd(), file)
 		dialog.set_filename(file)
 		file = ''
-		ok = False
-		while not ok:
+		while 1:
 			response = dialog.run()
-			if response == gtk.RESPONSE_OK:
-				file = dialog.get_filename()
-				if os.path.exists(file):
-					ok = True
-			else:
-				ok = True
+			if response != gtk.RESPONSE_OK:
+				break
+			file = dialog.get_filename()
+			if os.path.exists(file):
+				break
 		dialog.destroy()
 		if file:
 			self.xml.get_widget('sounds_entry').set_text(file)
