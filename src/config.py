@@ -1543,6 +1543,7 @@ class Service_discovery_window:
 		
 		model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING,
 			gobject.TYPE_STRING)
+		model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 		self.services_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
