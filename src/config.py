@@ -499,7 +499,7 @@ class Preferences_window:
 		file = os.path.join(os.getcwd(), file)
 		dialog.set_filename(file)
 		file = ''
-		while 1:
+		while True:
 			response = dialog.run()
 			if response != gtk.RESPONSE_OK:
 				break
