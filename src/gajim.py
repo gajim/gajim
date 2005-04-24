@@ -686,7 +686,7 @@ class Interface:
 		if self.systray_capabilities:
 			self.show_systray()
 
-		if not gajim.config.get('do_not_check_for_new_version'):
+		if not gajim.config.get('check_for_new_version'):
 			common.check_for_new_version.Check_for_new_version_dialog(self)
 
 		self.init_regexp()

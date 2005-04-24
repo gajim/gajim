@@ -383,8 +383,8 @@ class Connection:
 		qp = iq_obj.getTag('query')
 		qp.insertTag('name').insertData('Gajim')
 		qp.insertTag('version').insertData(gajim.version)
-		no_send_os = gajim.config.get('do_not_send_os_info')
-		if not no_send_os:
+		send_os = gajim.config.get('send_os_info')
+		if send_os:
 			qp.insertTag('os').insertData(get_os_info())
 		self.connection.send(iq_obj)
 

@@ -5548,17 +5548,17 @@ Custom</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="do_not_send_os_info_checkbutton">
+			    <widget class="GtkCheckButton" id="send_os_info_checkbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Do not send _OS information</property>
+			      <property name="label" translatable="yes">Allow _OS information to be sent</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
-			      <signal name="toggled" handler="on_do_not_send_os_info_checkbutton_toggled" last_modification_time="Wed, 06 Apr 2005 14:43:56 GMT"/>
+			      <signal name="toggled" handler="on_send_os_info_checkbutton_toggled" last_modification_time="Wed, 06 Apr 2005 14:43:56 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -5568,17 +5568,17 @@ Custom</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="do_not_check_for_new_version_checkbutton">
+			    <widget class="GtkCheckButton" id="check_for_new_version_checkbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Do not check for new _version at startup</property>
+			      <property name="label" translatable="yes">Check for new _version at startup</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
-			      <signal name="toggled" handler="on_do_not_check_for_new_version_checkbutton_toggled" last_modification_time="Mon, 18 Apr 2005 12:41:51 GMT"/>
+			      <signal name="toggled" handler="on_check_for_new_version_checkbutton_toggled" last_modification_time="Mon, 18 Apr 2005 12:41:51 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>

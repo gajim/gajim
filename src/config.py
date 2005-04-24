@@ -390,13 +390,12 @@ class Preferences_window:
 		gajim.config.set('lognotsep', widget.get_active())
 		self.plugin.save_config()
 
-	def on_do_not_send_os_info_checkbutton_toggled(self, widget):
-		gajim.config.set('do_not_send_os_info', widget.get_active())
+	def on_send_os_info_checkbutton_toggled(self, widget):
+		gajim.config.set('send_os_info', widget.get_active())
 		self.plugin.save_config()
 
-	def on_do_not_check_for_new_version_checkbutton_toggled(self, widget):
-		gajim.config.set('do_not_check_for_new_version',
-							widget.get_active())
+	def on_check_for_new_version_checkbutton_toggled(self, widget):
+		gajim.config.set('check_for_new_version', widget.get_active())
 		self.plugin.save_config()
 
 	def fill_msg_treeview(self):
@@ -771,12 +770,12 @@ class Preferences_window:
 		self.xml.get_widget('log_in_extern_checkbutton').set_active(st)
 		
 		# don't send os info
-		st = gajim.config.get('do_not_send_os_info')
-		self.xml.get_widget('do_not_send_os_info_checkbutton').set_active(st)
+		st = gajim.config.get('send_os_info')
+		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
 		
 		# don't check for new version
-		st = gajim.config.get('do_not_check_for_new_version')
-		btn = self.xml.get_widget('do_not_check_for_new_version_checkbutton')
+		st = gajim.config.get('check_for_new_version')
+		btn = self.xml.get_widget('check_for_new_version_checkbutton')
 		btn.set_active(st)
 		
 		self.xml.signal_autoconnect(self)
