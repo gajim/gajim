@@ -613,7 +613,7 @@ class Chat:
 				tim = time.localtime()
 			before_str = gajim.config.get('before_time')
 			after_str = gajim.config.get('after_time')
-			format = self.before_str + '%H:%M:%S' + self.after_str
+			format = before_str + '%H:%M:%S' + after_str
 			tim_format = time.strftime(format, tim)
 			buffer.insert(end_iter, tim_format + ' ')
 
