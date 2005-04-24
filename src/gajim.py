@@ -407,7 +407,7 @@ class Interface:
 	def handle_event_os_info(self, account, array):
 		if self.windows[account]['infos'].has_key(array[0]):
 			self.windows[account]['infos'][array[0]].set_os_info(array[1], \
-				array[2])
+				array[2], array[3])
 
 	def handle_event_gc_msg(self, account, array):
 		#('GC_MSG', account, (jid, msg, time))

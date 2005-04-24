@@ -400,7 +400,8 @@ class Connection:
 		if qp.getTag('os'):
 			os_info += qp.getTag('os').getData()
 		jid = iq_obj.getFrom().getStripped()
-		self.dispatch('OS_INFO', (jid, client_info, os_info))
+		resource = iq_obj.getFrom().getResource()
+		self.dispatch('OS_INFO', (jid, resource, client_info, os_info))
 	
 	def _MucOwnerCB(self, con, iq_obj):
 		gajim.log.debug('MucOwnerCB')

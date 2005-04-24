@@ -87,9 +87,23 @@ class Vcard_window:
 				else:
 					self.set_value(i + '_entry', vcard[i])
 	
-	def set_os_info(self, client_info, os_info):
-		self.xml.get_widget('client_name_version_label').set_text(client_info)
-		self.xml.get_widget('platform_label').set_text(os_info)
+	def set_os_info(self, resource, client_info, os_info):
+		i = 0
+		client = ''
+		platform = ''
+		while self.os_info.has_key(i):
+			if self.os_info[i]['resource'] == resource:
+				self.os_info[i]['client'] = client_info
+				self.os_info[i]['platform'] = os_info
+			if i > 0:
+				client += '\n'
+				platform += '\n'
+			client += self.os_info[i]['client']
+			platform += self.os_info[i]['platform']
+			i += 1
+			
+		self.xml.get_widget('client_name_version_label').set_text(client)
+		self.xml.get_widget('platform_label').set_text(platform)
 
 	def fill_jabber_page(self):
 		self.xml.get_widget('nickname_label').set_text(self.user.name)
@@ -110,17 +124,25 @@ class Vcard_window:
 		if not self.user.status:
 			self.user.status = ''
 		stats = self.user.show + ': ' + self.user.status
+		gajim.connections[self.account].request_os_info(self.user.jid, \
+			self.user.resource)
+		self.os_info = {0: {'resource': self.user.resource, 'client': '',
+			'platform': ''}}
+		i = 1
 		for u in self.plugin.roster.contacts[self.account][self.user.jid]:
 			if u.resource != self.user.resource:
 				resources += '\n' + u.resource + ' (' + str(u.priority) + ')'
 				if not u.status:
 					u.status = ''
 				stats += '\n' + u.show + ': ' + u.status
+				gajim.connections[self.account].request_os_info(self.user.jid, \
+					u.resource)
+				self.os_info[i] = {'resource': u.resource, 'client': '',
+					'platform': ''}
+				i += 1
 		self.xml.get_widget('resource_label').set_text(resources)
 		self.xml.get_widget('status_label').set_text(stats)
 		gajim.connections[self.account].request_vcard(self.user.jid)
-		gajim.connections[self.account].request_os_info(self.user.jid, \
-			self.user.resource)
 
 	def add_to_vcard(self, vcard, entry, txt):
 		'''Add an information to the vCard dictionary'''
