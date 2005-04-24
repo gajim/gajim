@@ -629,10 +629,9 @@ class Chat:
 		tags = other_tags_for_name[:] #create a new list
 		tags.append(kind)
 		if name and not print_all_special:
-			self.before_nickname_symbols = gajim.config.get('before_nickname')
-			self.after_nickname_symbols = gajim.config.get('after_nickname')
-			format = self.before_nickname_symbols + name \
-				+ self.after_nickname_symbols + ' ' 
+			before_str = gajim.config.get('before_nickname')
+			after_str = gajim.config.get('after_nickname')
+			format = before_str + name + after_str + ' ' 
 			self.print_with_tag_list(buffer, format, end_iter, tags)
 				
 		# detect urls formatting and if the user has it on emoticons
