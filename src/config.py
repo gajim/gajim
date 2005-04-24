@@ -1628,9 +1628,29 @@ class Service_discovery_window:
 				self.browse(child_jid, child_node)
 			child = model.iter_next(child)
 	
-	def agent_info_info(self, agent, identities, features):
+	def agent_info_info(self, agent, node, identities, features):
 		'''When we recieve informations about an agent, but not its items'''
-		self.agent_info(agent, identities, features, [])
+		model = self.services_treeview.get_model()
+		iter = model.get_iter_root()
+		# We look if this agent is in the treeview
+		while (iter):
+			if agent == model.get_value(iter, 1) and node == model.get_value(
+					iter, 2):
+				break
+			if model.iter_has_child(iter):
+				iter = model.iter_children(iter)
+			else:
+				if not model.iter_next(iter):
+					iter = model.iter_parent(iter)
+				if iter:
+					iter = model.iter_next(iter)
+		if not iter: #If it is not we stop
+			return
+		self.agent_infos[agent + node]['features'] = features
+		if len(identities):
+			self.agent_infos[agent + node]['identities'] = identities
+			if identities[0].has_key('name'):
+				model.set_value(iter, 0, identities[0]['name'])
 
 	def agent_info_items(self, agent, node, items):
 		'''When we recieve items about an agent'''
@@ -1677,32 +1697,8 @@ class Service_discovery_window:
 
 	def agent_info(self, agent, identities, features, items):
 		'''When we recieve informations about an agent'''
-		model = self.services_treeview.get_model()
-		iter = model.get_iter_root()
-		node = ''
-		if len(identities):
-			if identities[0].has_key('node'):
-				node = identities[0]['node']
-		# We look if this agent is in the treeview
-		while (iter):
-			if agent == model.get_value(iter, 1) and node == model.get_value(
-					iter, 2):
-				break
-			if model.iter_has_child(iter):
-				iter = model.iter_children(iter)
-			else:
-				if not model.iter_next(iter):
-					iter = model.iter_parent(iter)
-				if iter:
-					iter = model.iter_next(iter)
-		if not iter: #If it is not we stop
-			return
-		self.agent_infos[agent + node]['features'] = features
-		if len(identities):
-			self.agent_infos[agent + node]['identities'] = identities
-			if identities[0].has_key('name'):
-				model.set_value(iter, 0, identities[0]['name'])
-		self.agent_info_items(agent, node, items)
+		self.agent_info_info(agent, '', identities, features)
+		self.agent_info_items(agent, '', items)
 
 	def on_refresh_button_clicked(self, widget):
 		'''When refresh button is clicked: refresh list: clear and rerequest it'''

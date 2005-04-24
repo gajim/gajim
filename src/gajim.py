@@ -356,10 +356,10 @@ class Interface:
 				array[2])
 
 	def handle_event_agent_info_info(self, account, array):
-		#('AGENT_INFO_INFO', account, (agent, identities, features))
+		#('AGENT_INFO_INFO', account, (agent, node, identities, features))
 		if self.windows[account].has_key('disco'):
 			self.windows[account]['disco'].agent_info_info(array[0], array[1], \
-				array[2])
+				array[2], array[3])
 
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (hostname, login, pasword, name, resource, prio,

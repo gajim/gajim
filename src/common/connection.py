@@ -371,7 +371,7 @@ class Connection:
 		if not identities:
 			self.connection.browseAgents(jid, node)
 		else:
-			self.dispatch('AGENT_INFO_INFO', (jid, identities, features))
+			self.dispatch('AGENT_INFO_INFO', (jid, node, identities, features))
 			self.connection.discoverItems(jid, node)
 
 	def _VersionCB(self, con, iq_obj):
