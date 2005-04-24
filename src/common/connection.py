@@ -441,7 +441,7 @@ class Connection:
 				for tag in tags:
 					data = tag.getData()
 					if ctype == 'boolean':
-						if data in ['yes', 'true', 'assent']:
+						if data in ['yes', 'true', 'assent', '1']:
 							data = True
 						else:
 							data = False
