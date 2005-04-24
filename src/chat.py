@@ -611,10 +611,9 @@ class Chat:
 		if gajim.config.get('print_time') == 'always':
 			if not tim:
 				tim = time.localtime()
-			self.before_time_symbols = gajim.config.get('before_time')
-			self.after_time_symbols = gajim.config.get('after_time')
-			format = self.before_time_symbols + '%H:%M:%S' + \
-						self.after_time_symbols
+			before_str = gajim.config.get('before_time')
+			after_str = gajim.config.get('after_time')
+			format = self.before_str + '%H:%M:%S' + self.after_str
 			tim_format = time.strftime(format, tim)
 			buffer.insert(end_iter, tim_format + ' ')
 
