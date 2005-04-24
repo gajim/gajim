@@ -823,7 +823,7 @@ class Account_modification_window:
 		if not keyid or not gajim.config.get('usegpg'):
 			return
 
-		gpg_key_label.set_text(keyid)
+		self.xml.get_widget('gpg_key_label').set_text(keyid)
 		self.xml.get_widget('gpg_name_label').set_text(keyname)
 		gpg_save_password_checkbutton = \
 			self.xml.get_widget('gpg_save_password_checkbutton')
