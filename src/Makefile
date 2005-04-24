@@ -4,9 +4,8 @@ CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -fpic -I/usr/include/python$(P
 LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0`
 
 # Build the shared object
-#trayicon.so: trayicon.o eggtrayicon.o trayiconmodule.o
-all: trayicon.o eggtrayicon.o trayiconmodule.o
-	$(CC) $(LDFLAGS) -shared $^ -o trayicon.so
+trayicon.so: trayicon.o eggtrayicon.o trayiconmodule.o
+	$(CC) $(LDFLAGS) -shared $^ -o $@
 
 
 # The path to the GTK+ python types
