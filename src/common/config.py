@@ -91,6 +91,7 @@ class Config:
 		'usegpg': [ opt_bool, False ],
 		'lognotusr': [ opt_bool, True ],
 		'lognotsep': [ opt_bool, True ],
+		'change_title': [ opt_bool, True ],
 	}
 
 	__options_per_key = {

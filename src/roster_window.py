@@ -1381,7 +1381,7 @@ class Roster_window:
 		return
 
 	def show_title(self):
-		change_title_allowed = True # FIXME: add in expert settings
+		change_title_allowed = gajim.config.get('change_title')
 		if change_title_allowed:
 			start = ''
 			if self.nb_unread > 1:
