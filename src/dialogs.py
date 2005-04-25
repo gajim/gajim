@@ -271,9 +271,14 @@ class Add_new_contact_window:
 		if jid:
 			self.xml.get_widget('jid_entry').set_text(jid)
 			jid_splited = jid.split('@')
-			self.xml.get_widget('uid_entry').set_text(jid_splited[0])
 			if jid_splited[1] in jid_agents:
+				uid = jid_splited[0].replace('%', '@')
+				self.xml.get_widget('uid_entry').set_text(uid)
 				protocol_combobox.set_active(jid_agents.index(jid_splited[1]) + 1)
+			else:
+				self.xml.get_widget('uid_entry').set_text(jid)
+				protocol_combobox.set_active(0)
+			self.set_nickname()
 
 		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
 		liststore = gtk.ListStore(str)
