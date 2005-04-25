@@ -1,6 +1,6 @@
 VERSION		?= 0.6.1
 
-MODULES		= src src/common
+MODULES		= src src/common po
 PREFIX		= /usr
 DESTDIR		= /
 
@@ -19,9 +19,7 @@ SCRIPTS = \
 all: translation trayicon idle pyo
 
 translation:
-	for l in $(LANGS) ; do \
-		msgfmt po/$$l/LC_MESSAGES/gajim.po -o po/$$l/LC_MESSAGES/gajim.mo; \
-	done
+	make -C po all
 
 trayicon:
 	make -C src all;
