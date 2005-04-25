@@ -612,6 +612,7 @@ class Client(Connection):
         if groups != None:
             for group in groups:
                 item.insertTag('group').insertData(group)
+        self.send(iq)
 
 
     def removeRosterItem(self,jid):
