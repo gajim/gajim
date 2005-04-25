@@ -92,20 +92,21 @@ class Advanced_window:
 		self.model = gtk.TreeStore(gobject.TYPE_STRING,
 					gobject.TYPE_STRING,
 					gobject.TYPE_STRING)
+		self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 		treeview.set_model(self.model)
 
 		renderer_text = gtk.CellRendererText()
-		treeview.insert_column_with_attributes(-1, "Preference Name",
+		treeview.insert_column_with_attributes(-1, 'Preference Name',
 						renderer_text, text = 0)
 					
 		renderer_text = gtk.CellRendererText()
-		renderer_text.set_property("editable", 1)
+		renderer_text.set_property('editable', 1)
 		renderer_text.connect('edited', self.on_config_edited)
-		treeview.insert_column_with_attributes(-1, "Value",
+		treeview.insert_column_with_attributes(-1, 'Value',
 						renderer_text, text = 1)
 
 		renderer_text = gtk.CellRendererText()
-		treeview.insert_column_with_attributes(-1, "Type",
+		treeview.insert_column_with_attributes(-1, 'Type',
 						renderer_text, text = 2)
 
 		# add data to model
