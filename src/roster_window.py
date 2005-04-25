@@ -475,21 +475,27 @@ class Roster_window:
 			item = gtk.MenuItem(_('Edit groups'))
 			menu.append(item)
 			item.connect('activate', self.on_edit_groups, user, account)
-		item = gtk.MenuItem()
-		menu.append(item)
-		item = gtk.MenuItem(_('Subscription'))
-		menu.append(item)
-		
-		sub_menu = gtk.Menu()
-		item.set_submenu(sub_menu)
-		item = gtk.MenuItem(_('Resend authorization to'))
-		sub_menu.append(item)
-		item.connect('activate', self.authorize, jid, account)
-		item = gtk.MenuItem(_('Rerequest authorization from'))
-		sub_menu.append(item)
-		item.connect('activate', self.req_sub, jid, 
-			_('I would like to add you to my contact list.'), account)
-		
+			item = gtk.MenuItem()
+			menu.append(item)
+			item = gtk.MenuItem(_('Subscription'))
+			menu.append(item)
+
+			sub_menu = gtk.Menu()
+			item.set_submenu(sub_menu)
+			item = gtk.MenuItem(_('Resend authorization to'))
+			sub_menu.append(item)
+			item.connect('activate', self.authorize, jid, account)
+			item = gtk.MenuItem(_('Rerequest authorization from'))
+			sub_menu.append(item)
+			item.connect('activate', self.req_sub, jid, 
+				_('I would like to add you to my contact list.'), account)
+		else:
+			item = gtk.MenuItem()
+			menu.append(item)
+			item = gtk.MenuItem(_('Add to roster'))
+			menu.append(item)
+			item.connect('activate', self.on_add_to_roster, user, account)
+
 		item = gtk.MenuItem(_('Remove'))
 		menu.append(item)
 		item.connect('activate', self.on_req_usub, user, account)
@@ -616,6 +622,9 @@ class Roster_window:
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
 		menu.reposition()
+
+	def on_add_to_roster(self, widget, user, account):
+		dialogs.Add_new_contact_window(self.plugin, account, user.jid)
 	
 	def authorize(self, widget, jid, account):
 		'''Authorize a user'''
@@ -626,13 +635,20 @@ class Roster_window:
 		if not pseudo:
 			pseudo = jid
 		gajim.connections[account].request_subscription(jid, txt)
+		if not group:
+			group = 'General'
 		if not self.contacts[account].has_key(jid):
-			if not group:
-				group = 'General'
 			user1 = User(jid, pseudo, [group], 'requested', 'requested', 
 								'none', 'subscribe', '', 0, '')
 			self.contacts[account][jid] = [user1]
-			self.add_user_to_roster(jid, account)
+		else:
+			user1 = self.contacts[account][jid][0]
+			if not 'not in the roster' in user1.groups:
+				return
+			user1.groups = [group]
+			user1.name = pseudo
+			self.remove_user(user1, account)
+		self.add_user_to_roster(jid, account)
 
 	def on_roster_treeview_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''
