@@ -467,6 +467,13 @@ class Connection:
 			i += 1
 		self.dispatch('GC_CONFIG', (str(iq_obj.getFrom()), dic))
 
+	def _MucErrorCB(self, con, iq_obj):
+		gajim.log.debug('MucErrorCB')
+		jid = str(iq_obj.getFrom())
+		errmsg = iq_obj.getError()
+		errcode = iq_obj.getErrorCode()
+		self.dispatch('MSGERROR', (jid, errcode, errmsg))
+
 	def connect(self):
 		"""Connect and authentificate to the Jabber server"""
 		name = gajim.config.get_per('accounts', self.name, 'name')
@@ -512,6 +519,8 @@ class Connection:
 		con.registerHandler('iq',self._VersionResultCB,'result', \
 			common.jabber.NS_VERSION)
 		con.registerHandler('iq',self._MucOwnerCB,'result', \
+			common.jabber.NS_P_MUC_OWNER)
+		con.registerHandler('iq',self._MucErrorCB,'error',\
 			common.jabber.NS_P_MUC_OWNER)
 		try:
 			con.connect()

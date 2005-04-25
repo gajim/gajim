@@ -298,12 +298,12 @@ class Interface:
 			self.play_sound('next_message_received')
 		
 	def handle_event_msgerror(self, account, array):
-		#('MSGERROR', account, (user, error_code, error_msg, msg, time))
+		#('MSGERROR', account, (jid, error_code, error_msg, msg, time))
 		jid = array[0].split('/')[0]
 		if jid in self.windows[account]['gc']:
 			self.windows[account]['gc'][jid].print_conversation('Error %s: %s' % \
-				(array[1], array[2]), jid, tim = array[4])
-			if self.windows[account]['gc'][jid].get_active() == jid:
+				(array[1], array[2]), jid)
+			if self.windows[account]['gc'][jid].get_active_jid() == jid:
 				self.windows[account]['gc'][jid].set_subject(jid, \
 					self.windows[account]['gc'][jid].subjects[jid])
 			return
