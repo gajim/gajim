@@ -431,8 +431,7 @@ class Chat:
 			visible_rect = textview.get_visible_rect()
 			if end_rect.y <= (visible_rect.y + visible_rect.height):
 				#we are at the end
-				textview.scroll_to_mark(buffer.get_mark('end'),
-							0.1, 0, 0, 0)
+				self.scroll_to_end(textview)
 			return 1
 		if self.print_time_timeout_id.has_key(jid):
 			del self.print_time_timeout_id[jid]
@@ -589,8 +588,11 @@ class Chat:
 						end_iter, all_tags)
 
 	def scroll_to_end(self, textview):
+		parent = textview.get_parent()
 		buffer = textview.get_buffer()
 		textview.scroll_to_mark(buffer.get_mark('end'), 0, True, 0, 1)
+		adjustment = parent.get_hadjustment()
+		adjustment.set_value(0)
 		return False
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
