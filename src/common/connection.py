@@ -841,37 +841,24 @@ class Connection:
 		query = iq.setQuery(common.jabber.NS_P_MUC_OWNER)
 		x = query.insertTag('x', attrs = {'xmlns': common.jabber.NS_XDATA, \
 			'type': 'submit'})
-		if config.has_key('title'):
-			x.insertTag('title').insertData(config['title'])
-		if config.has_key('instructions'):
-			x.insertTag('instructions').insertData(config['instructions'])
 		i = 0
 		while config.has_key(i):
+			if not config[i].has_key('type'):
+				i += 1
+				continue
+			if config[i]['type'] == 'fixed':
+				i += 1
+				continue
 			tag = x.insertTag('field')
-			if config[i].has_key('type'):
-				tag.putAttr('type', config[i]['type'])
 			if config[i].has_key('var'):
 				tag.putAttr('var', config[i]['var'])
-			if config[i].has_key('label'):
-				tag.putAttr('label', config[i]['label'])
 			if config[i].has_key('values'):
 				for val in  config[i]['values']:
 					if val == False:
-						val = 'false'
+						val = '0'
 					elif val == True:
-						val = 'true'
+						val = '1'
 					tag.insertTag('value').insertData(val)
-			if config[i].has_key('desc'):
-				tag.insertTag('desc').insertData(config[i]['desc'])
-			if config[i].has_key('options'):
-				j = 0
-				while config[i]['options'].has_key(j):
-					opt_tag = tag.insertTag('option')
-					if config[i]['options'][j].has_key('label'):
-						opt_tag.putAttr('label', config[i]['options'][j]['label'])
-					for val in config[i]['options'][j]['values']:
-						opt_tag.insertTag('value').insertData(val)
-					j += 1
 			i += 1
 		id = self.connection.getAnID()
 		iq.setID(id)
