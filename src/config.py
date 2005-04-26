@@ -1334,7 +1334,7 @@ class Service_registration_window:
 					'offline', 'from', '', '', 0, '')
 		self.plugin.roster.contacts[self.account][self.service] = [user1]
 		self.plugin.roster.add_user_to_roster(self.service, self.account)
-		gajim.connections[self.account].register_agent(self.service)
+		gajim.connections[self.account].register_agent(self.service, self.infos)
 		self.window.destroy()
 	
 	def __init__(self, service, infos, plugin, account):
@@ -1767,7 +1767,7 @@ class Service_discovery_window:
 		jid = model.get_value(iter, 1)
 		node = model.get_value(iter, 2)
 		if self.agent_infos[jid + node].has_key('features'):
-			if common.jabber.NS_REGISTER in self.agent_infos[jid + node] \
+			if common.xmpp.NS_REGISTER in self.agent_infos[jid + node] \
 					['features']:
 				self.register_button.set_sensitive(True)
 		if self.agent_infos[jid + node].has_key('identities'):

@@ -21,7 +21,7 @@ import sys
 import os
 import time
 
-import common.jabber
+import common.xmpp
 
 from common import gajim
 from common import GnuPG
@@ -70,7 +70,7 @@ def get_os_info():
 			os.sys.getwindowsversion()[0],
 			os.sys.getwindowsversion()[1] ]
 		return 'Windows' + ' ' + win_version
-	elif os.name =='posix':
+	elif os.name == 'posix':
 		executable = 'lsb_release'
 		params = ' --id --codename --release --short'
 		for path in os.environ['PATH'].split(':'):
@@ -111,7 +111,7 @@ class Connection:
 			'ROSTER_INFO': []}
 		self.name = name
 		self.connected = 0 # offline
-		self.connection = None # Jabber.py instance
+		self.connection = None # xmpppy instance
 		self.gpg = None
 		self.myVCardID = []
 		self.password = gajim.config.get_per('accounts', name, 'password')
@@ -128,11 +128,28 @@ class Connection:
 		for handler in self.handlers[event]:
 			handler(self.name, data)
 
+	def _discover(self, ns, jid, node = None): #FIXME: this is in features.py but it is blocking
+		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = ns)
+		if node:
+			iq.setQuerynode(node)
+		self.connection.send(iq)
+
+	def discoverItems(self, jid, node = None):
+		'''According to JEP-0030: jid is mandatory, 
+											name, node, action is optional.'''
+		self._discover(common.xmpp.NS_DISCO_ITEMS, jid, node)
+	
+	def discoverInfo(self, jid, node = None):
+		'''According to JEP-0030:
+			For identity: category, name is mandatory, type is optional.
+			For feature: var is mandatory'''
+		self._discover(common.xmpp.NS_DISCO_INFO, jid, node)
+
 	def _vCardCB(self, con, vc):
 		"""Called when we recieve a vCard
 		Parse the vCard and send it to plugins"""
 		vcard = {'jid': vc.getFrom().getStripped()}
-		if vc._getTag('vCard') == common.jabber.NS_VCARD:
+		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
 			for info in card.getChildren():
 				if info.getChildren() == []:
@@ -147,17 +164,19 @@ class Connection:
 			else:
 				self.dispatch('VCARD', vcard)
 
+
 	def _messageCB(self, con, msg):
 		"""Called when we recieve a message"""
 		mtype = msg.getType()
 		tim = msg.getTimestamp()
+		print tim
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		msgtxt = msg.getBody()
-		xtags = msg.getXNodes()
+		xtags = msg.getTags('x')
 		encTag = None
 		decmsg = ''
 		for xtag in xtags:
-			if xtag.getNamespace() == common.jabber.NS_XENCRYPTED:
+			if xtag.getNamespace() == common.xmpp.NS_ENCRYPTED:
 				encTag = xtag
 				break
 		if encTag and USE_GPG:
@@ -186,7 +205,7 @@ class Connection:
 
 	def _presenceCB(self, con, prs):
 		"""Called when we recieve a presence"""
-#		if prs.getXNode(common.jabber.NS_DELAY): return
+#		if prs.getXNode(common.xmpp.NS_DELAY): return
 		who = str(prs.getFrom())
 		prio = prs.getPriority()
 		if not prio:
@@ -194,12 +213,12 @@ class Connection:
 		ptype = prs.getType()
 		if ptype == None: ptype = 'available'
 		gajim.log.debug('PresenceCB : %s' % ptype)
-		xtags = prs.getXNodes()
+		xtags = prs.getTags('x')
 		sigTag = None
 		keyID = ''
 		status = prs.getStatus()
 		for xtag in xtags:
-			if xtag.getNamespace() == common.jabber.NS_XSIGNED:
+			if xtag.getNamespace() == common.xmpp.NS_SIGNED:
 				sigTag = xtag
 				break
 		if sigTag and USE_GPG:
@@ -216,7 +235,7 @@ class Connection:
 			gajim.log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0:
 				if self.connection:
-					self.connection.send(common.jabber.Presence(who, 'subscribed'))
+					self.connection.send(common.xmpp.Presence(who, 'subscribed'))
 				if who.find("@") <= 0:
 					self.dispatch('NOTIFY', (prs.getFrom().getStripped(), \
 						'offline', 'offline', prs.getFrom().getResource(), prio, \
@@ -238,6 +257,7 @@ class Connection:
 			gajim.log.debug('we are now unsubscribed to %s' % who)
 			self.dispatch('UNSUBSCRIBED', prs.getFrom().getStripped())
 		elif ptype == 'error':
+                        # Error stuff differs in xmpppy. So this part may require more adapting
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
 			if errcode == '400': #Bad Request: JID Malformed or Private message when not allowed
@@ -276,7 +296,7 @@ class Connection:
 				prs.getActor(), prs.getStatusCode()))
 	# END presenceCB
 
-	def _disconnectedCB(self, con):
+	def _disconnectedCB(self):
 		"""Called when we are disconnected"""
 		gajim.log.debug('disconnectedCB')
 		if self.connection:
@@ -287,7 +307,7 @@ class Connection:
 
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
-		for item in iq_obj.getQueryNode().getChildren():
+		for item in iq_obj.getTag('query').getChildren():
 			jid  = item.getAttr('jid')
 			name = item.getAttr('name')
 			sub  = item.getAttr('subscription')
@@ -304,16 +324,16 @@ class Connection:
 		if not q:
 			return identities, features, items
 		attr = {}
-		for key in q.attrs:
-			attr[key.encode('utf8')] = q.attrs[key].encode('utf8')
+		for key in q.getAttrs().keys():
+			attr[key.encode('utf8')] = q.getAttr(key).encode('utf8')
 		identities = [attr]
-		for node in q.kids:
+		for node in q.getTags():
 			if node.getName() == 'ns':
 				features.append(node.getData())
 			else:
 				infos = {}
-				for key in node.attrs:
-					infos[key.encode('utf8')] = node.attrs[key].encode('utf8')
+				for key in node.getAttrs().keys():
+					infos[key.encode('utf8')] = node.getAttr(key).encode('utf8')
 				infos['category'] = node.getName()
 				items.append(infos)
 		jid = str(iq_obj.getFrom())
@@ -321,7 +341,7 @@ class Connection:
 
 	def _DiscoverItemsCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsCB')
-		q = iq_obj.getQueryNode()
+		q = iq_obj.getTag('query')
 		node = q.getAttr('node')
 		if not node:
 			node = ''
@@ -331,20 +351,17 @@ class Connection:
 			qp = []
 		for i in qp:
 			attr = {}
-			for key in i.attrs:
-				attr[key.encode('utf8')] = i.attrs[key].encode('utf8')
+			for key in i.getAttrs():
+				attr[key.encode('utf8')] = i.getAttrs()[key].encode('utf8')
 			items.append(attr)
 		jid = str(iq_obj.getFrom())
 		self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoErrorCB')
-		jid = str(iq_obj.getFrom())
-		q = iq_obj.getQueryNode()
-		node = q.getAttr('node')
-		if not node:
-			node = ''
-		con.browseAgents(jid, node)
+		iq = common.xmpp.Iq(to = iq_obj.getFrom(), typ = 'get', queryNS =\
+			common.xmpp.NS_AGENTS)
+		con.send(iq)
 
 	def _DiscoverInfoCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoCB')
@@ -352,18 +369,18 @@ class Connection:
 		# For identity: category, name is mandatory, type is optional.
 		# For feature: var is mandatory
 		identities, features = [], []
-		q = iq_obj.getQueryNode()
+		q = iq_obj.getTag('query')
 		node = q.getAttr('node')
 		if not node:
 			node = ''
-		qp = iq_obj.getQueryPayload()
-		if not qp:
-			qp = []
-		for i in qp:
+		qc = iq_obj.getQueryChildren()
+		if not qc:
+			qc = []
+		for i in qc:
 			if i.getName() == 'identity':
 				attr = {}
-				for key in i.attrs:
-					attr[key.encode('utf8')] = i.attrs[key].encode('utf8')
+				for key in i.getAttrs().keys():
+					attr[key.encode('utf8')] = i.getAttr(key).encode('utf8')
 				identities.append(attr)
 			elif i.getName() == 'feature':
 				features.append(i.getAttr('var'))
@@ -372,7 +389,7 @@ class Connection:
 			self.connection.browseAgents(jid, node)
 		else:
 			self.dispatch('AGENT_INFO_INFO', (jid, node, identities, features))
-			self.connection.discoverItems(jid, node)
+			self.discoverItems(jid, node)
 
 	def _VersionCB(self, con, iq_obj):
 		gajim.log.debug('VersionCB')
@@ -408,7 +425,7 @@ class Connection:
 		qp = iq_obj.getQueryPayload()
 		node = None
 		for q in qp:
-			if q.getNamespace() == common.jabber.NS_XDATA:
+			if q.getNamespace() == common.xmpp.NS_DATA:
 				node = q
 		if not node:
 			return
@@ -492,38 +509,14 @@ class Connection:
 		else:
 			proxy = None
 		if gajim.config.get('log'):
-			con = common.jabber.Client(host = hostname, debug = [],\
-			log = sys.stderr, connection=common.xmlstream.TCP, port=5222, \
-			proxy = proxy)
+			con = common.xmpp.Client(hostname)#, debug = [])
 		else:
-			con = common.jabber.Client(host = hostname, debug = [], log = None,\
-			connection=common.xmlstream.TCP, port=5222, proxy = proxy)
+			con = common.xmpp.Client(hostname)#, debug = [])
 			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
 			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
-		con.setDisconnectHandler(self._disconnectedCB)
-		con.registerHandler('message', self._messageCB)
-		con.registerHandler('presence', self._presenceCB)
-		con.registerHandler('iq',self._vCardCB,'result')
-		con.registerHandler('iq',self._rosterSetCB,'set', \
-			common.jabber.NS_ROSTER)
-		con.registerHandler('iq',self._BrowseResultCB,'result', \
-			common.jabber.NS_BROWSE)
-		con.registerHandler('iq',self._DiscoverItemsCB,'result', \
-			common.jabber.NS_P_DISC_ITEMS)
-		con.registerHandler('iq',self._DiscoverInfoCB,'result', \
-			common.jabber.NS_P_DISC_INFO)
-		con.registerHandler('iq',self._DiscoverInfoErrorCB,'error',\
-			common.jabber.NS_P_DISC_INFO)
-		con.registerHandler('iq',self._VersionCB,'get', \
-			common.jabber.NS_VERSION)
-		con.registerHandler('iq',self._VersionResultCB,'result', \
-			common.jabber.NS_VERSION)
-		con.registerHandler('iq',self._MucOwnerCB,'result', \
-			common.jabber.NS_P_MUC_OWNER)
-		con.registerHandler('iq',self._MucErrorCB,'error',\
-			common.jabber.NS_P_MUC_OWNER)
+		con.RegisterDisconnectHandler(self._disconnectedCB)
 		try:
-			con.connect()
+			con.connect(proxy=proxy) #FIXME: blocking
 		except:
 			gajim.log.debug('Couldn\'t connect to %s' % hostname)
 			self.dispatch('STATUS', 'offline')
@@ -532,14 +525,36 @@ class Connection:
 			self.connected = 0
 			return None
 
+		con.RegisterHandler('message', self._messageCB)
+		con.RegisterHandler('presence', self._presenceCB)
+		con.RegisterHandler('iq', self._vCardCB, 'result',\
+			common.xmpp.NS_VCARD)
+		con.RegisterHandler('iq', self._rosterSetCB, 'set',\
+			common.xmpp.NS_ROSTER)
+		con.RegisterHandler('iq', self._BrowseResultCB, 'result',\
+			common.xmpp.NS_BROWSE)
+		con.RegisterHandler('iq', self._DiscoverItemsCB, 'result',\
+			common.xmpp.NS_DISCO_ITEMS)
+		con.RegisterHandler('iq', self._DiscoverInfoCB, 'result',\
+			common.xmpp.NS_DISCO_INFO)
+		con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',\
+			common.xmpp.NS_DISCO_INFO)
+		con.RegisterHandler('iq', self._VersionCB, 'get',\
+			common.xmpp.NS_VERSION)
+		con.RegisterHandler('iq', self._VersionResultCB, 'result',\
+			common.xmpp.NS_VERSION)
+		con.RegisterHandler('iq', self._MucOwnerCB, 'result',\
+			common.xmpp.NS_MUC_OWNER)
+
 		gajim.log.debug('Connected to server')
 
-		if con.auth(name, self.password, resource):
-			con.requestRoster()
-			roster = con.getRoster().getRaw()
+		if con.auth(name, self.password, resource): #FIXME: blocking
+			roster = con.getRoster().getRaw() #FIXME: blocking
 			if not roster :
 				roster = {}
-			self.dispatch('ROSTER', (0, roster))
+			if roster.has_key(name + '@' + hostname):
+				del roster[name + '@' + hostname]
+			self.dispatch('ROSTER', roster)
 			self.connected = 2
 			return con
 		else:
@@ -594,18 +609,23 @@ class Connection:
 				if status == 'invisible':
 					ptype = 'invisible'
 				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
-				self.connection.sendPresence(ptype, prio, status, msg, signed)
+				p = common.xmpp.Presence(typ = ptype, priority = prio, show =\
+					status, status=msg)
+				if signed:
+				    presence.setTag(common.xmpp.NS_SIGNED + ' x').insertData(signed)
+
+				self.connection.send(p)
 				self.dispatch('STATUS', status)
 				#ask our VCard
-				iq = common.jabber.Iq(type='get')
-				iq._setTag('vCard', common.jabber.NS_VCARD)
-				id = self.connection.getAnID()
-				iq.setID(id)
+				iq = common.xmpp.Iq('get')
+				iq.setTag(common.xmpp.NS_VCARD + ' vCard')
 				self.connection.send(iq)
-				self.myVCardID.append(id)
+				self.myVCardID.append(iq.getID())
 		elif (status == 'offline') and self.connected:
 			self.connected = 0
-			self.connection.disconnect(msg)
+			self.connection.send(common.xmpp.Presence(typ = 'unavailable',\
+				status = msg))
+			self.connection.disconnect()
 			self.dispatch('STATUS', 'offline')
 			self.connection = None
 		elif status != 'offline' and self.connected:
@@ -614,7 +634,11 @@ class Connection:
 			if status == 'invisible':
 				ptype = 'invisible'
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
-			self.connection.sendPresence(ptype, prio, status, msg, signed)
+			p = common.xmpp.Presence(typ = ptype, priority = prio, show = status,\
+				status = msg)
+			if signed: presence.setTag(common.xmpp.NS_SIGNED + ' x').insertData(
+				signed)
+			self.connection.send(p)
 			self.dispatch('STATUS', status)
 
 	def send_message(self, jid, msg, keyID):
@@ -626,9 +650,9 @@ class Connection:
 			#encrypt
 			msgenc = self.gpg.encrypt(msg, keyID)
 			if msgenc: msgtxt = _('[this message is encrypted]')
-		msg_iq = common.jabber.Message(to = jid, body = msgtxt, type = 'chat')
+		msg_iq = common.xmpp.Message(to = jid, body = msgtxt, typ = 'chat')
 		if msgenc:
-			msg_iq.setX(common.jabber.NS_XENCRYPTED).insertData(msgenc)
+			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 		self.connection.send(msg_iq)
 		gajim.logger.write('outgoing', msg, jid)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
@@ -637,7 +661,7 @@ class Connection:
 		if not self.connection:
 			return
 		gajim.log.debug('subscription request for %s' % jid)
-		pres = common.jabber.Presence(jid, 'subscribe')
+		pres = common.xmpp.Presence(jid, 'subscribe')
 		if not msg:
 			msg = _('I would like to add you to my roster.')
 		pres.setStatus(msg)
@@ -646,12 +670,12 @@ class Connection:
 	def send_authorization(self, jid):
 		if not self.connection:
 			return
-		self.connection.send(common.jabber.Presence(jid, 'subscribed'))
+		self.connection.send(common.xmpp.Presence(jid, 'subscribed'))
 
 	def refuse_authorization(self, jid):
 		if not self.connection:
 			return
-		self.connection.send(common.jabber.Presence(jid, 'unsubscribed'))
+		self.connection.send(common.xmpp.Presence(jid, 'unsubscribed'))
 
 	def unsubscribe(self, jid):
 		if not self.connection:
@@ -659,47 +683,50 @@ class Connection:
 		delauth = gajim.config.get('delauth')
 		delroster = gajim.config.get('delroster')
 		if delauth:
-			self.connection.send(common.jabber.Presence(jid, 'unsubscribe'))
+			self.connection.getRoster().Unsubscribe(jid)
 		if delroster:
-			self.connection.removeRosterItem(jid)
+			self.connection.getRoster().delItem(jid)
 
 	def unsubscribe_agent(self, agent):
 		if not self.connection:
 			return
-		self.connection.removeRosterItem(agent)
-		self.connection.requestRegInfo(agent)
-		agent_info = self.connection.getRegInfo()
+		self.connection.getRoster().delItem(agent)
+		iq = common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to = agent)
+		agent_info = self.connection.SendAndWaitForResponse(iq) # FIXME: This blocks!
 		if not agent_info:
 			return
-		key = agent_info['key']
-		iq = common.jabber.Iq(to=agent, type='set')
-		q = iq.setQuery(common.jabber.NS_REGISTER)
-		q.insertTag('remove')
-		q.insertTag('key').insertData(key)
-		id = self.connection.getAnID()
-		iq.setID(id)
+		key = agent_info.getTag('query').getTagData('key')
+		iq = common.xmpp.Iq(to = agent, typ = 'set', queryNS =\
+			common.xmpp.NS_REGISTER)
+		iq.getTag('query').setTag('remove')
+		iq.getTag('query').setTagData('key',key)
 		self.connection.send(iq)
 		self.dispatch('AGENT_REMOVED', agent)
 
 	def update_user(self, jid, name, groups):
 		if self.connection:
-			self.connection.updateRosterItem(jid=jid, name=name, groups=groups)
+			self.connection.getRoster().setItem(jid = jid, name = name,\
+				groups = groups)
 
 	def request_agents(self, jid, node):
 		if self.connection:
-			self.connection.discoverInfo(jid, node)
+			self.discoverInfo(jid, node)
 
 	def ask_register_agent_info(self, agent):
 		if not self.connection:
 			return None
-		self.connection.requestRegInfo(agent)
-		agent_info = self.connection.getRegInfo()
-		return agent_info
+		data = common.xmpp.features.getRegInfo(self.connection,agent) # FIXME: blocking
+		info = data.asDict()
+		instructions = data.getInstructions()
+		if instructions:
+			info['instructions'] = instructions
+		print info
+		return info
 
-	def register_agent(self, info):
+	def register_agent(self, agent, info):
 		if not self.connection:
 			return
-		self.connection.sendRegInfo(info)
+		common.xmpp.features.register(self.connection, agent, info) # FIXME: Blocking
 
 	def new_account(self, hostname, login, password, name, resource, prio, \
 		use_proxy, proxyhost, proxyport):
@@ -710,21 +737,19 @@ class Connection:
 			proxy = {'host': proxyhost, 'port': proxyport}
 		else:
 			proxy = None
-		c = common.jabber.Client(host = hostname, debug = [], \
-			log = None, proxy = proxy)
+		c = common.xmpp.Client(server = hostname, debug = [])
 		try:
-			c.connect()
+			c.connect(proxy = proxy)
 		except:
 			gajim.log.debug('Couldn\'t connect to %s' % hostname)
 			self.dispatch('ERROR', _('Couldn\'t connect to ') + hostname)
 			return 0
 		else:
 			gajim.log.debug(_('Connected to server'))
-			c.requestRegInfo()
-			req = c.getRegInfo()
-			c.setRegInfo( 'username', login)
-			c.setRegInfo( 'password', password)
-			if not c.sendRegInfo():
+			req = c.getRegInfo(c, hostname).asDict() # FIXME! This blocks!
+			req['username'] = login
+			req['password'] = password
+			if not register(c, hostname,req):
 				self.dispatch('ERROR', _('Error: ') + c.lastErr)
 			else:
 				self.name = name
@@ -744,34 +769,31 @@ class Connection:
 	def request_os_info(self, jid, resource):
 		if not self.connection:
 			return
-		iq = common.jabber.Iq(to=jid + '/' + resource, type = 'get', \
-			query = common.jabber.NS_VERSION)
-		iq.setID(self.connection.getAnID())
+		iq = common.xmpp.Iq(to=jid + '/' + resource, typ = 'get', queryNS =\
+			common.xmpp.NS_VERSION)
 		self.connection.send(iq)
 
 	def request_vcard(self, jid):
 		if not self.connection:
 			return
-		iq = common.jabber.Iq(to = jid, type = 'get')
-		iq._setTag('vCard', common.jabber.NS_VCARD)
-		iq.setID(self.connection.getAnID())
+		iq = common.xmpp.Iq(to = jid, typ = 'get')
+		iq.setTag(common.xmpp.NS_VCARD + ' vCard')
 		self.connection.send(iq)
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 	
 	def send_vcard(self, vcard):
 		if not self.connection:
 			return
-		iq = common.jabber.Iq(type = 'set')
-		iq.setID(self.connection.getAnID())
-		iq2 = iq._setTag('vCard', common.jabber.NS_VCARD)
+		iq = common.xmpp.Iq(typ = 'set')
+		iq2 = iq.setTag(common.xmpp.NS_VCARD + ' vCard')
 		for i in vcard.keys():
 			if i != 'jid':
 				if type(vcard[i]) == type({}):
-					iq3 = iq2.insertTag(i)
+					iq3 = iq2.addChild(i)
 					for j in vcard[i].keys():
-						iq3.insertTag(j).putData(vcard[i][j])
+						iq3.addChild(j).setData(vcard[i][j])
 				else:
-					iq2.insertTag(i).putData(vcard[i])
+					iq2.addChild(i).setData(vcard[i])
 		self.connection.send(iq)
 
 	def send_agent_status(self, agent, ptype):
@@ -779,37 +801,32 @@ class Connection:
 			return
 		if not ptype:
 			ptype = 'available';
-		p = common.jabber.Presence(to = agent, type = ptype)
+		p = common.xmpp.Presence(to = agent, typ = ptype)
 		self.connection.send(p)
 
 	def join_gc(self, nick, room, server, password):
 		if not self.connection:
 			return
-		p = common.jabber.Presence(to = '%s@%s/%s' % (room, server, nick))
-		p.setX(common.jabber.NS_P_MUC)
+		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick))
+		p.setTag(common.xmpp.NS_MUC + ' x')
 		self.connection.send(p)
 
 	def send_gc_message(self, jid, msg):
 		if not self.connection:
 			return
-		msg_iq = common.jabber.Message(jid, msg)
-		msg_iq.setType('groupchat')
+		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat')
 		self.connection.send(msg_iq)
 		self.dispatch('MSGSENT', (jid, msg))
 
 	def send_gc_subject(self, jid, subject):
 		if not self.connection:
 			return
-		msg_iq = common.jabber.Message(jid)
-		msg_iq.setType('groupchat')
-		msg_iq.setSubject(subject)
+		msg_iq = common.xmpp.Message(jid,typ = 'groupchat', subject = subject)
 		self.connection.send(msg_iq)
 
 	def request_gc_config(self, room_jid):
-		iq = common.jabber.Iq(type = 'get', to = room_jid)
-		iq.setQuery(common.jabber.NS_P_MUC_OWNER)
-		id = self.connection.getAnID()
-		iq.setID(id)
+		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,\
+			to = room_jid)
 		self.connection.send(iq)
 
 	def send_gc_status(self, nick, jid, show, status):
@@ -820,36 +837,34 @@ class Connection:
 			show = None
 		else:
 			ptype = 'available'
-		self.connection.send(common.jabber.Presence(to = '%s/%s' % (jid, nick), \
-			type = ptype, show = show, status = status))
+		self.connection.send(common.xmpp.Presence(to = '%s/%s' % (jid, nick), \
+			typ = ptype, show = show, status = status))
 
 	def gc_set_role(self, room_jid, nick, role):
 		if not self.connection:
 			return
-		iq = common.jabber.Iq(type = 'set', to = room_jid)
-		item = iq.setQuery(common.jabber.NS_P_MUC_ADMIN).insertTag('item')
-		item.putAttr('nick', nick)
-		item.putAttr('role', role)
-		id = self.connection.getAnID()
-		iq.setID(id)
+		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
+			common.xmpp.NS_MUC_ADMIN)
+		item = iq.getTag('query').setTag('item')
+		item.setAttr('nick', nick)
+		item.setAttr('role', role)
 		self.connection.send(iq)
 
 	def gc_set_affiliation(self, room_jid, jid, affiliation):
 		if not self.connection:
 			return
-		iq = common.jabber.Iq(type = 'set', to = room_jid)
-		item = iq.setQuery(common.jabber.NS_P_MUC_ADMIN).insertTag('item')
-		item.putAttr('jid', jid)
-		item.putAttr('affiliation', affiliation)
-		id = self.connection.getAnID()
-		iq.setID(id)
+		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
+			common.xmpp.NS_MUC_ADMIN)
+		item = iq.getTag('query').setTag('item')
+		item.setAttr('jid', jid)
+		item.setAttr('affiliation', affiliation)
 		self.connection.send(iq)
 
 	def send_gc_config(self, room_jid, config):
-		iq = common.jabber.Iq(type = 'set', to = room_jid)
-		query = iq.setQuery(common.jabber.NS_P_MUC_OWNER)
-		x = query.insertTag('x', attrs = {'xmlns': common.jabber.NS_XDATA, \
-			'type': 'submit'})
+		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
+			common.xmpp.NS_MUC_OWNER)
+		query = iq.getTag('query')
+		x = query.setTag(common.xmpp.NS_DATA + ' x', attrs = {'type': 'submit'}) # FIXME: should really use XData class
 		i = 0
 		while config.has_key(i):
 			if not config[i].has_key('type'):
@@ -858,19 +873,17 @@ class Connection:
 			if config[i]['type'] == 'fixed':
 				i += 1
 				continue
-			tag = x.insertTag('field')
+			tag = x.setTag('field')
 			if config[i].has_key('var'):
-				tag.putAttr('var', config[i]['var'])
+				tag.setAttr('var', config[i]['var'])
 			if config[i].has_key('values'):
 				for val in  config[i]['values']:
 					if val == False:
 						val = '0'
 					elif val == True:
 						val = '1'
-					tag.insertTag('value').insertData(val)
+					tag.setTagData('value', val)
 			i += 1
-		id = self.connection.getAnID()
-		iq.setID(id)
 		self.connection.send(iq)
 
 	def gpg_passphrase(self, passphrase):
@@ -887,12 +900,10 @@ class Connection:
 		if not self.connection:
 			return
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-		iq = common.jabber.Iq(type = 'set', to = hostname)
-		q = iq.setQuery(common.jabber.NS_REGISTER)
-		q.insertTag('username').insertData(username)
-		q.insertTag('password').insertData(password)
-		id = self.connection.getAnID()
-		iq.setID(id)
+		iq = common.xmpp.Iq(typ = 'set', to = hostname)
+		q = iq.setTag(common.xmpp.NS_REGISTER + ' query')
+		q.setTagData('username',username)
+		q.setTagData('password',password)
 		self.connection.send(iq)
 
 	def unregister_account(self):
@@ -900,16 +911,13 @@ class Connection:
 			self.connection = self.connect()
 		if self.connected > 1:
 			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-			iq = common.jabber.Iq(type = 'set', to = hostname)
-			q = iq.setQuery(common.jabber.NS_REGISTER)
-			q.insertTag('remove')
-			id = self.connection.getAnID()
-			iq.setID(id)
+			iq = common.xmpp.Iq(typ = 'set', to = hostname)
+			q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
 			self.connection.send(iq)
 
 	def process(self, timeout):
 		if not self.connection:
 			return
 		if self.connected:
-			self.connection.process(timeout)
+			self.connection.Process(timeout)
 # END GajimCore

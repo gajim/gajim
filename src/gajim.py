@@ -136,10 +136,8 @@ class Interface:
 				gobject.timeout_add(10000, self.play_timeout, pid)
 
 	def handle_event_roster(self, account, data):
-		#('ROSTER', account, (state, array))
-		statuss = ['offline', 'online', 'away', 'xa', 'dnd', 'invisible']
-		self.roster.on_status_changed(account, statuss[data[0]])
-		self.roster.mklists(data[1], account)
+		#('ROSTER', account, array)
+		self.roster.mklists(data, account)
 		self.roster.draw_roster()
 	
 	def handle_event_warning(self, unused, msg):
