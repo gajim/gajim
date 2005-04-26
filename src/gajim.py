@@ -634,8 +634,8 @@ class Interface:
 			sys.exit()
 
 	def save_config(self):
-		parser.read_config()
-		parser.writeCfgFile()
+		parser.read()
+		parser.write()
 
 	def __init__(self):
 		if gtk.pygtk_version >= (2, 6, 0):
@@ -712,7 +712,6 @@ if __name__ == '__main__':
 	except ImportError:
 		pass
 	
-	parser.parseCfgFile()
-	parser.fill_config()
+	parser.read()
 	Interface()
 	gtk.main()
