@@ -217,18 +217,23 @@ class Config:
 		try:
 			ival = int(val)
 		except:
-			return 0
-		return 1
+			return None
+		return ival
 
 	def is_valid_bool(self, val):
-		if self.is_valid_int(val):
-			if int(val) == 0 or int(val) == 1:
-				return 1
-			return 0
-		return 0
+		if val == 'True':
+			return True
+		elif val == 'False':
+			return False
+		else:
+			ival = self.is_valid_int(val)
+			if ival:
+				return True
+			return False
+		return None	
 
 	def is_valid_string(self, val):
-		return 1
+		return val
 		
 	def is_valid(self, type, val):
 		if type[0] == 'boolean':
@@ -238,21 +243,20 @@ class Config:
 		elif type[0] == 'string':
 			return self.is_valid_string(val)
 		else:
-			return sre.match(type[1], val)
+			if sre.match(type[1], val):
+				return val
+			else:
+				return None
 
 	def set(self, optname, value):
 		if not self.__options.has_key(optname):
 #			print 'error: option %s doesn\'t exist' % (optname)
 			return -1
 		opt = self.__options[optname]
-		if opt[OPT_TYPE][0] == 'boolean':
-			if value == 'True':
-				value = True
-			elif value == 'False':
-				value = False
-
-		if not self.is_valid(opt[OPT_TYPE], value):
+		value = self.is_valid(opt[OPT_TYPE], value)
+		if value == None:
 			return -1
+		
 		opt[OPT_VAL] = value
 		return 0
 	
@@ -269,8 +273,10 @@ class Config:
 			return -1
 		
 		opt = self.__options_per_key[typename]
-		
+		if opt[1].has_key(name):
+			return -2
 		opt[1][name] = copy.deepcopy(opt[0])
+		return 0
 
 	def del_per(self, typename, name): # per_group_of_option
 		if not self.__options_per_key.has_key(typename):
@@ -291,7 +297,8 @@ class Config:
 		if not obj.has_key(subname):
 			return -1
 		subobj = obj[subname]
-		if not self.is_valid(subobj[OPT_TYPE], value):
+		value = self.is_valid(subobj[OPT_TYPE], value)
+		if value == None:
 			return -1
 		subobj[OPT_VAL] = value
 		return 0
