@@ -367,16 +367,11 @@ class Roster_window:
 					name = ji
 				else:
 					name = jid.split('@')[0]
-			#get show
-#			show = array[jid]['show']
-#			if not show:
-			show = 'offline'
-			status = ''
+			show = 'offline' # show is offline by default
+			status = '' #no status message by default
 
-			user1 = User(ji, name, array[jid]['groups'],
-					show, status,
-					array[jid]['subscription'], array[jid]['ask'],
-					resource, 0, '')
+			user1 = User(ji, name, array[jid]['groups'], show, status,\
+					array[jid]['subscription'], array[jid]['ask'], resource, 0, '')
 
 			# when we draw the roster, we can't have twice the same
 			# user with 2 resources
