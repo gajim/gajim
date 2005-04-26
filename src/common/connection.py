@@ -398,11 +398,11 @@ class Connection:
 		iq_obj.setTo(f)
 		iq_obj.setType('result')
 		qp = iq_obj.getTag('query')
-		qp.insertTag('name').insertData('Gajim')
-		qp.insertTag('version').insertData(gajim.version)
+		qp.setTagData('name', 'Gajim')
+		qp.setTagData('version', gajim.version)
 		send_os = gajim.config.get('send_os_info')
 		if send_os:
-			qp.insertTag('os').insertData(get_os_info())
+			qp.setTagData('os', get_os_info())
 		self.connection.send(iq_obj)
 
 	def _VersionResultCB(self, con, iq_obj):
@@ -612,7 +612,7 @@ class Connection:
 				p = common.xmpp.Presence(typ = ptype, priority = prio, show =\
 					status, status=msg)
 				if signed:
-				    presence.setTag(common.xmpp.NS_SIGNED + ' x').insertData(signed)
+				    p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 
 				self.connection.send(p)
 				self.dispatch('STATUS', status)
@@ -636,7 +636,7 @@ class Connection:
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
 			p = common.xmpp.Presence(typ = ptype, priority = prio, show = status,\
 				status = msg)
-			if signed: presence.setTag(common.xmpp.NS_SIGNED + ' x').insertData(
+			if signed: presence.setTag(common.xmpp.NS_SIGNED + ' x').setData(
 				signed)
 			self.connection.send(p)
 			self.dispatch('STATUS', status)

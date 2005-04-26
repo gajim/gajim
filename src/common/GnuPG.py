@@ -171,6 +171,7 @@ else:
 
 		def _stripHeaderFooter(self, data):
 			"""Remove header and footer from data"""
+			if not data: return ''
 			lines = data.split('\n')
 			while lines[0] != '':
 				lines.remove(lines[0])
