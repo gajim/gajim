@@ -202,16 +202,16 @@ class Config:
 		'message_sent': [ True, 'sounds/sent.wav' ],
 	}
 
-	def foreach(self, func):
+	def foreach(self, cb, data):
 		for opt in self.__options:
-			func(opt, None, self.__options[opt])
+			cb(data, opt, None, self.__options[opt])
 		for opt in self.__options_per_key:
-			func(opt, None, None)
+			cb(data, opt, None, None)
 			dict = self.__options_per_key[opt][1]
 			for opt2 in dict.keys():
-				func(opt2, [opt], None)
+				cb(data, opt2, [opt], None)
 				for opt3 in dict[opt2]:
-					func(opt3, [opt, opt2], dict[opt2][opt3])
+					cb(data, opt3, [opt, opt2], dict[opt2][opt3])
 
 	def is_valid_int(self, val):
 		try:

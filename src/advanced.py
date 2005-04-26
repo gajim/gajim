@@ -58,7 +58,7 @@ class Advanced_window:
 			iter = self.model.iter_next(iter)
 		return iter
 		
-	def fill(self, name, parents, val):
+	def fill(self, data, name, parents, val):
 		iter = None
 		if parents:
 			for p in parents:
@@ -110,5 +110,5 @@ class Advanced_window:
 						renderer_text, text = 2)
 
 		# add data to model
-		gajim.config.foreach(self.fill)
+		gajim.config.foreach(self.fill, None)
 
