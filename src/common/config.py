@@ -202,7 +202,7 @@ class Config:
 		'message_sent': [ True, 'sounds/sent.wav' ],
 	}
 
-	def foreach(self, cb, data):
+	def foreach(self, cb, data = None):
 		for opt in self.__options:
 			cb(data, opt, None, self.__options[opt])
 		for opt in self.__options_per_key:
