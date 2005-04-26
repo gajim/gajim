@@ -636,7 +636,7 @@ class Connection:
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
 			p = common.xmpp.Presence(typ = ptype, priority = prio, show = status,\
 				status = msg)
-			if signed: presence.setTag(common.xmpp.NS_SIGNED + ' x').setData(
+			if signed: p.setTag(common.xmpp.NS_SIGNED + ' x').setData(
 				signed)
 			self.connection.send(p)
 			self.dispatch('STATUS', status)
