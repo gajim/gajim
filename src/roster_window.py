@@ -1173,44 +1173,34 @@ class Roster_window:
 			self.plugin.windows[account]['disco'] = \
 				config.Service_discovery_window(self.plugin, account)
 
+	def load_iconset(self, path):
+		imgs = {}
+		for state in ('connecting', 'online', 'chat', 'away', 'xa',
+							'dnd', 'invisible', 'offline', 'error', 'requested',
+							'message', 'opened', 'closed', 'not in the roster'):
+			
+			# try to open a pixfile with the correct method
+			state_file = state.replace(' ', '_')
+			files = []
+			files.append(path + state_file + '.gif')
+			files.append(path + state_file + '.png')
+			files.append(path + state_file + '.xpm')
+			image = gtk.Image()
+			image.show()
+			imgs[state] = image
+			for file in files:
+				if os.path.exists(file):
+					image.set_from_file(file)
+					break
+		return imgs
+
 	def make_jabber_state_images(self):
 		'''initialise jabber_state_images dict'''
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
 		self.path = '../data/iconsets/' + iconset + '/'
-		self.jabber_state_images = {}
-		for state in ('connecting', 'online', 'chat', 'away', 'xa',
-			      'dnd', 'invisible', 'offline', 'error',
-			      'requested', 'message', 'opened', 'closed',
-			      'not in the roster'):
-
-			# try to open a pixfile with the correct method
-			state_file = state.replace(' ', '_')
-			files = []
-			files.append(self.path + state_file + '.gif')
-			files.append(self.path + state_file + '.png')
-			files.append(self.path + state_file + '.xpm')
-			image = gtk.Image()
-			image.show()
-			self.jabber_state_images[state] = image
-			for file in files:
-				if os.path.exists(file):
-					image.set_from_file(file)
-					break
-
-	def init_transports_state_images(self, dirname, fnames):
-		name_only = os.path.basename(dirname)
-		for fname in fnames: # fname is abs
-			if fname == '.svn':
-				continue
-			state = unicode(fname[:-4]) # without extension
-			state = state.replace('_', ' ') # make '_' a space for dict key
-			path_to_fname = os.path.join(dirname, fname)
-			image = gtk.Image()
-			image.set_from_file(path_to_fname)
-			image.show()
-			self.transports_state_images[name_only][state] = image
+		self.jabber_state_images = self.load_iconset(self.path)
 
 	def reload_jabber_state_images(self):
 		self.make_jabber_state_images()
@@ -1441,12 +1431,12 @@ class Roster_window:
 		
 		path = '../data/iconsets/transports'
 		folders = os.listdir('../data/iconsets/transports')
-		for folder in folders:
-			if folder == '.svn':
+		for transport in folders:
+			if transport == '.svn':
 				continue
-			folder = os.path.join(path, folder)
-			image_files = os.listdir(folder)
-			self.init_transports_state_images(folder, image_files)
+			folder = os.path.join(path, transport)
+			self.transports_state_images[transport] = self.load_iconset(folder + \
+				'/')
 
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image, 
 			gobject.TYPE_STRING)
