@@ -894,8 +894,6 @@ class Roster_window:
 				self.plugin.windows[account]['gc']['tabbed'].new_room(jid, nick)
 			self.plugin.windows[account]['gc'][jid] = \
 				self.plugin.windows[account]['gc']['tabbed']
-			self.plugin.windows[account]['gc']['tabbed'].window.present()
-			self.plugin.windows[account]['gc']['tabbed'].active_tab(jid)
 		else:
 			self.plugin.windows[account]['gc'][jid] = \
 				groupchat_window.Groupchat_window(jid, nick, self.plugin, account)
@@ -1081,12 +1079,11 @@ class Roster_window:
 				self.tree.expand_row(path, False)
 		else:
 			if self.plugin.windows[account]['chats'].has_key(jid):
-				if gajim.config.get('usetabbedchat'):
-					self.plugin.windows[account]['chats'][jid].active_tab(jid)
-				self.plugin.windows[account]['chats'][jid].window.present()
+				self.plugin.windows[account]['chats'][jid].active_tab(jid)
 			elif self.contacts[account].has_key(jid):
 				self.new_chat(self.contacts[account][jid][0], account)
 				self.plugin.windows[account]['chats'][jid].active_tab(jid)
+			self.plugin.windows[account]['chats'][jid].window.present()
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''

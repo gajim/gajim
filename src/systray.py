@@ -207,6 +207,7 @@ class Systray:
 				else:
 					self.plugin.roster.new_chat(
 						self.plugin.roster.contacts[account][jid][0], account)
+					acc['chats'][jid].window.present()
 		if event.button == 3: # right click
 			self.make_menu(event)
 	
