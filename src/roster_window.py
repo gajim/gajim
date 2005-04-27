@@ -91,7 +91,7 @@ class Roster_window:
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
-		statuss = ['offline', 'connecting', 'online',
+		statuss = ['offline', 'connecting', 'online', 'chat'
 			'away', 'xa', 'dnd', 'invisible']
 		status = statuss[gajim.connections[account].connected]
 		model.append(None, (self.jabber_state_images[status], account,
