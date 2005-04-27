@@ -858,8 +858,6 @@ class Roster_window:
 		accountIter = self.get_account_iter(account)
 		if accountIter:
 			model.set_value(accountIter, 0, self.jabber_state_images[status])
-		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 
-						'xa', 'dnd', 'invisible']
 		if status == 'offline':
 			for jid in self.contacts[account]:
 				luser = self.contacts[account][jid]
