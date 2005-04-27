@@ -1012,6 +1012,7 @@ class Roster_window:
 			gajim.config.set('width', width)
 			gajim.config.set('height', height)
 
+		gajim.config.set('hiddenlines', '\t'.join(self.hidden_lines))
 		self.plugin.save_config()
 		for account in gajim.connections:
 			gajim.connections[account].quit(True)
