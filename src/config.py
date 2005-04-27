@@ -383,11 +383,11 @@ class Preferences_window:
 		self.plugin.save_config()
 
 	def on_log_in_contact_checkbutton_toggled(self, widget):
-		gajim.config.set('lognotusr', widget.get_active())
+		gajim.config.set('log_notif_in_user_file', widget.get_active())
 		self.plugin.save_config()
 
 	def on_log_in_extern_checkbutton_toggled(self, widget):
-		gajim.config.set('lognotsep', widget.get_active())
+		gajim.config.set('log_notif_in_sep_file', widget.get_active())
 		self.plugin.save_config()
 
 	def on_send_os_info_checkbutton_toggled(self, widget):
@@ -512,7 +512,11 @@ class Preferences_window:
 			model.set_value(iter, 1, 1)
 
 	def on_open_advanced_editor_button_clicked(self, widget, data = None):
-		dialogs.Advanced_window()
+		if self.plugin.windows.has_key('advanced_config'):
+			self.plugin.windows['advanced_config'].window.present()
+		else:
+			self.plugin.windows['advanced_config'] = dialogs.Advanced_window(
+																						self.plugin)
 
 	def __init__(self, plugin):
 		'''Initialize Preferences window'''
@@ -762,11 +766,11 @@ class Preferences_window:
 			gajim.config.get('custommailapp'))
 				
 		#log presences in user file
-		st = gajim.config.get('lognotusr')
+		st = gajim.config.get('log_notif_in_user_file')
 		self.xml.get_widget('log_in_contact_checkbutton').set_active(st)
 
 		#log presences in external file
-		st = gajim.config.get('lognotsep')
+		st = gajim.config.get('log_notif_in_sep_file')
 		self.xml.get_widget('log_in_extern_checkbutton').set_active(st)
 		
 		# don't send os info
