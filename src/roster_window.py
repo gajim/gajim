@@ -880,8 +880,6 @@ class Roster_window:
 				
 			self.plugin.windows[account]['chats'][user.jid] = \
 				self.plugin.windows[account]['chats']['tabbed']
-			self.plugin.windows[account]['chats']['tabbed'].window.present()
-			
 		else:
 			self.plugin.windows[account]['chats'][user.jid] = \
 				tabbed_chat_window.Tabbed_chat_window(user, self.plugin, account)

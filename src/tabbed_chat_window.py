@@ -54,6 +54,7 @@ class Tabbed_chat_window(chat.Chat):
 			self.on_chat_notebook_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', \
 			self.on_chat_notebook_switch_page)
+		self.window.show_all()
 		
 	def draw_widgets(self, user):
 		"""draw the widgets in a tab (status_image, contact_button ...)
@@ -155,6 +156,7 @@ class Tabbed_chat_window(chat.Chat):
 			self.print_time_timeout(user.jid)
 			self.print_time_timeout_id[user.jid] = gobject.timeout_add(300000, \
 				self.print_time_timeout, user.jid)
+		self.childs[user.jid].show_all()
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
