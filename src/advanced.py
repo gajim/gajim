@@ -41,46 +41,40 @@ class Advanced_window:
 	def on_advanced_close_button_clicked(self, widget):
 		self.window.destroy()
 
-	def find_iter(self, parent_iter, name):
+	def find_iter(self, model, parent_iter, name):
 		if not parent_iter:
-			iter = self.model.get_iter_root()
+			iter = model.get_iter_root()
 		else:
-			iter = self.model.iter_children(parent_iter)
+			iter = model.iter_children(parent_iter)
 		while iter:
-			if self.model.get_value(iter, 0) == name:
+			if model.get_value(iter, 0) == name:
 				break
-			iter = self.model.iter_next(iter)
+			iter = model.iter_next(iter)
 		return iter
 		
-	def fill(self, data, name, parents, val):
+	def fill(self, model, name, parents, val):
 		iter = None
 		if parents:
 			for p in parents:
-				iter2 = self.find_iter(iter, p)
+				iter2 = self.find_iter(model, iter, p)
 				if iter2:
 					iter = iter2
 		
 		if not val:
-			self.model.append(iter, [name, '', ''])
+			model.append(iter, [name, '', ''])
 			return
-		self.model.append(iter, [name, val[OPT_VAL], val[OPT_TYPE][0]])
+		model.append(iter, [name, val[OPT_VAL], val[OPT_TYPE][0]])
 
 	def visible_func(self, model, iter, str):
 		if str is None or str == '':
-			return True #show all
+			return True
 		name = model.get_value(iter, 0)
-		if name.find(str) != -1: #was found
-			#print 'show', name
+		if name.find(str) != -1:
 			return True
 		return False
 		
 	def on_advanced_entry_changed(self, widget):
-		#print 'refilter starts'
-		#FIXME: maybe some gobject timeout is better
 		text = widget.get_text()
-		self.filterstr = text
-		#print self.filterstr
-		self.modelfilter.refilter() #FIXME: does not work!
 
 	def __init__(self, plugin):
 		self.plugin = plugin
@@ -113,12 +107,9 @@ class Advanced_window:
 						renderer_text, text = 2)
 
 		# add data to model
-		gajim.config.foreach(self.fill, None)
+		gajim.config.foreach(self.fill, self.model)
 		
-		self.modelfilter = self.model.filter_new()
-		self.filterstr = 'account'
-		self.modelfilter.set_visible_func(self.visible_func, self.filterstr)
-		treeview.set_model(self.modelfilter)
+		treeview.set_model(self.model)
 		
 		self.plugin.windows['advanced_config'] = self
 		self.window.show_all()
