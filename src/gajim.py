@@ -34,6 +34,7 @@ import common.sleepy
 import common.check_for_new_version
 
 from common import gajim
+from common import connection
 from common import i18n
 i18n.init()
 _ = i18n._
@@ -713,5 +714,9 @@ if __name__ == '__main__':
 		pass
 	
 	parser.read()
+
+	for account in gajim.config.get_per('accounts'):
+		gajim.connections[account] = common.connection.Connection(account)
+	
 	Interface()
 	gtk.main()
