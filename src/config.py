@@ -512,11 +512,7 @@ class Preferences_window:
 			model.set_value(iter, 1, 1)
 
 	def on_open_advanced_editor_button_clicked(self, widget, data = None):
-		if self.plugin.windows.has_key('advanced_config'):
-			self.plugin.windows['advanced_config'].window.present()
-		else:
-			self.plugin.windows['advanced_config'] = dialogs.Advanced_window(
-																						self.plugin)
+		dialogs.Advanced_window()
 
 	def __init__(self, plugin):
 		'''Initialize Preferences window'''
