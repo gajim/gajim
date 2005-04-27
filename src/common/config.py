@@ -89,8 +89,8 @@ class Config:
 		'send_os_info': [ opt_bool, True ],
 		'check_for_new_version': [ opt_bool, True ],
 		'usegpg': [ opt_bool, False ],
-		'lognotusr': [ opt_bool, True ],
-		'lognotsep': [ opt_bool, True ],
+		'log_notif_in_user_file': [ opt_bool, True ],
+		'log_notif_in_sep_file': [ opt_bool, True ],
 		'change_title': [ opt_bool, True ],
 	}
 
