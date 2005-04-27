@@ -635,7 +635,6 @@ class Interface:
 			sys.exit()
 
 	def save_config(self):
-		parser.read()
 		parser.write()
 
 	def __init__(self):
