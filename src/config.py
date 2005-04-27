@@ -121,19 +121,19 @@ class Preferences_window:
 	def on_account_text_colorbutton_color_set(self, widget):
 		self.on_roster_widget_color_set(widget, 'accounttextcolor')
 	
-	def on_group_text_colorbutton_color_set(self, roster_widget):
+	def on_group_text_colorbutton_color_set(self, widget):
 		self.on_roster_widget_color_set(widget, 'grouptextcolor')
 
-	def on_user_text_colorbutton_color_set(self, roster_widget):
+	def on_user_text_colorbutton_color_set(self, widget):
 		self.on_roster_widget_color_set(widget, 'usertextcolor')
 
-	def on_account_text_bg_colorbutton_color_set(self, roster_widget):
+	def on_account_text_bg_colorbutton_color_set(self, widget):
 		self.on_roster_widget_color_set(widget, 'accountbgcolor')
 	
-	def on_group_text_bg_colorbutton_color_set(self, roster_widget):
+	def on_group_text_bg_colorbutton_color_set(self, widget):
 		self.on_roster_widget_color_set(widget, 'groupbgcolor')
 	
-	def on_user_text_bg_colorbutton_color_set(self, roster_widget):
+	def on_user_text_bg_colorbutton_color_set(self, widget):
 		self.on_roster_widget_color_set(widget, 'userbgcolor')
 	
 	def on_widget_font_set(self, widget, text):
