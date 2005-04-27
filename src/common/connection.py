@@ -721,7 +721,6 @@ class Connection:
 		instructions = data.getInstructions()
 		if instructions:
 			info['instructions'] = instructions
-		print info
 		return info
 
 	def register_agent(self, agent, info):
@@ -874,7 +873,7 @@ class Connection:
 			if config[i]['type'] == 'fixed':
 				i += 1
 				continue
-			tag = x.setTag('field')
+			tag = x.addChild('field')
 			if config[i].has_key('var'):
 				tag.setAttr('var', config[i]['var'])
 			if config[i].has_key('values'):
