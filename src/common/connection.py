@@ -20,6 +20,7 @@
 import sys
 import os
 import time
+from calendar import timegm
 
 import common.xmpp
 
@@ -169,8 +170,8 @@ class Connection:
 		"""Called when we recieve a message"""
 		mtype = msg.getType()
 		tim = msg.getTimestamp()
-		print tim
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
+		tim = time.localtime(timegm(tim))
 		msgtxt = msg.getBody()
 		xtags = msg.getTags('x')
 		encTag = None

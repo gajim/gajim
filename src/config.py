@@ -184,7 +184,28 @@ class Preferences_window:
 		buf2 = {}
 		jids = {}
 		if widget.get_active():
+			#save buffers and close windows
+			for acct in gajim.connections:
+				buf1[acct] = {}
+				buf2[acct] = {}
+				jids[acct] = self.plugin.windows[acct]['chats'].keys()
+				for jid in jids[acct]:
+					buf1[acct][jid] = self.plugin.windows[acct]['chats'][jid].\
+						xmls[jid].get_widget('conversation_textview').get_buffer()
+					buf2[acct][jid] = self.plugin.windows[acct]['chats'][jid].\
+						xmls[jid].get_widget('message_textview').get_buffer()
+					self.plugin.windows[acct]['chats'][jid].window.destroy()
 			gajim.config.set('usetabbedchat', True)
+			#open new tabbed chat windows
+			for acct in gajim.connections:
+				for jid in jids[acct]:
+					user = self.plugin.roster.contacts[acct][jid][0]
+					self.plugin.roster.new_chat(user, acct)
+					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
+						get_widget('conversation_textview').set_buffer(\
+						buf1[acct][jid])
+					self.plugin.windows[acct]['chats'][jid].xmls[jid].\
+						get_widget('message_textview').set_buffer(buf2[acct][jid])
 		else:
 			gajim.config.set('usetabbedchat', False)
 		self.plugin.save_config()
