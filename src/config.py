@@ -197,9 +197,11 @@ class Preferences_window:
 				window.window.destroy()
 			#open new tabbed chat windows
 			for jid in jids:
-				user = self.plugin.roster.contacts[acct][jid][0]
 				if kind == 'chats':
+					user = self.plugin.roster.contacts[acct][jid][0]
 					self.plugin.roster.new_chat(user, acct)
+				if kind == 'gc':
+					self.plugin.roster.new_room(jid, saved_var[jid]['nick'], acct)
 				window = windows[jid]
 				window.xmls[jid].get_widget('conversation_textview').set_buffer(\
 					buf1[jid])
@@ -228,9 +230,11 @@ class Preferences_window:
 			windows['tabbed'].window.destroy()
 			#open new tabbed chat windows
 			for jid in jids:
-				user = self.plugin.roster.contacts[acct][jid][0]
 				if kind == 'chats':
+					user = self.plugin.roster.contacts[acct][jid][0]
 					self.plugin.roster.new_chat(user, acct)
+				if kind == 'gc':
+					self.plugin.roster.new_room(jid, saved_var[jid]['nick'], acct)
 				window = windows[jid]
 				window.xmls[jid].get_widget('conversation_textview').set_buffer(\
 					buf1[jid])
@@ -242,9 +246,11 @@ class Preferences_window:
 		if widget.get_active():
 			gajim.config.set('usetabbedchat', True)
 			self.merge_windows('chats')
+			self.merge_windows('gc')
 		else:
 			gajim.config.set('usetabbedchat', False)
 			self.split_windows('chats')
+			self.split_windows('gc')
 		self.plugin.save_config()
 	
 	def update_print_time(self):

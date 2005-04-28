@@ -60,6 +60,24 @@ class Groupchat_window(chat.Chat):
 			self.on_set_button_clicked)
 		self.xml.signal_connect('on_configure_button_clicked', \
 			self.on_configure_button_clicked)
+		self.window.show_all()
+
+	def save_var(self, jid):
+		if not jid in self.nicks:
+			return {}
+		return {
+			'nick': self.nicks[jid],
+			'model': self.list_treeview[jid].get_model(),
+			'subject': self.subjects[jid],
+		}
+		
+
+	def load_var(self, jid, var):
+		if not self.xmls.has_key(jid):
+			return
+		self.list_treeview[jid].set_model(var['model'])
+		self.list_treeview[jid].expand_all()
+		self.set_subject(jid, var['subject'])
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
@@ -69,11 +87,11 @@ class Groupchat_window(chat.Chat):
 					room_jid.split('@')[0])
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return True #stop the propagation of the event
-	
-	def on_groupchat_window_destroy(self, widget):
 		for room_jid in self.xmls:
 			gajim.connections[self.account].send_gc_status(self.nicks[room_jid], \
 				room_jid, 'offline', 'offline')
+	
+	def on_groupchat_window_destroy(self, widget):
 		chat.Chat.on_window_destroy(self, widget, 'gc')
 
 	def on_groupchat_window_focus_in_event(self, widget, event):
