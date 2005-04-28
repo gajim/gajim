@@ -55,6 +55,18 @@ class Tabbed_chat_window(chat.Chat):
 		self.xml.signal_connect('on_chat_notebook_switch_page', \
 			self.on_chat_notebook_switch_page)
 		self.window.show_all()
+
+	def save_var(self, jid):
+		'''return the specific variable of a jid, like gpg_enabled
+		the return value have to be compatible with wthe one given to load_var'''
+		gpg_enabled = self.xmls[jid].get_widget('gpg_togglebutton').get_active()
+		return {'gpg_enabled': gpg_enabled}
+	
+	def load_var(self, jid, var):
+		if not self.xmls.has_key(jid):
+			return
+		self.xmls[jid].get_widget('gpg_togglebutton').set_active(\
+			var['gpg_enabled'])
 		
 	def draw_widgets(self, user):
 		"""draw the widgets in a tab (status_image, contact_button ...)
