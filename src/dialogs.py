@@ -290,6 +290,10 @@ class Add_new_contact_window:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def on_add_new_contact_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			self.window.destroy()
+
 	def on_cancel_button_clicked(self, widget):
 		'''When Cancel button is clicked'''
 		self.window.destroy()
