@@ -185,23 +185,27 @@ class Preferences_window:
 			buf1 = {}
 			buf2 = {}
 			saved_var = {}
-			jids = self.plugin.windows[acct][kind].keys()
+			windows = self.plugin.windows[acct][kind]
+			jids = windows.keys()
 			for jid in jids:
-				buf1[jid] = self.plugin.windows[acct][kind][jid].\
-					xmls[jid].get_widget('conversation_textview').get_buffer()
-				buf2[jid] = self.plugin.windows[acct][kind][jid].\
-					xmls[jid].get_widget('message_textview').get_buffer()
-				saved_var[jid] = self.plugin.windows[acct][kind][jid].save_var(jid)
-				self.plugin.windows[acct][kind][jid].window.destroy()
+				window = windows[jid]
+				buf1[jid] = window.xmls[jid].get_widget('conversation_textview').\
+					get_buffer()
+				buf2[jid] = window.xmls[jid].get_widget('message_textview').\
+					get_buffer()
+				saved_var[jid] = window.save_var(jid)
+				window.window.destroy()
 			#open new tabbed chat windows
 			for jid in jids:
 				user = self.plugin.roster.contacts[acct][jid][0]
-				self.plugin.roster.new_chat(user, acct)
-				self.plugin.windows[acct][kind][jid].xmls[jid].\
-					get_widget('conversation_textview').set_buffer(buf1[jid])
-				self.plugin.windows[acct][kind][jid].xmls[jid].\
-					get_widget('message_textview').set_buffer(buf2[jid])
-				self.plugin.windows[acct][kind][jid].load_var(jid, saved_var[jid])
+				if kind == 'chats':
+					self.plugin.roster.new_chat(user, acct)
+				window = windows[jid]
+				window.xmls[jid].get_widget('conversation_textview').set_buffer(\
+					buf1[jid])
+				window.xmls[jid].get_widget('message_textview').set_buffer(\
+					buf2[jid])
+				window.load_var(jid, saved_var[jid])
 
 	def split_windows(self, kind):
 		for acct in gajim.connections:
@@ -209,26 +213,30 @@ class Preferences_window:
 			buf1 = {}
 			buf2 = {}
 			saved_var = {}
-			jids = self.plugin.windows[acct][kind].keys()
+			windows = self.plugin.windows[acct][kind]
+			jids = windows.keys()
 			if not 'tabbed' in jids:
 				continue
 			jids.remove('tabbed')
 			for jid in jids:
-				buf1[jid] = self.plugin.windows[acct][kind][jid].\
-					xmls[jid].get_widget('conversation_textview').get_buffer()
-				buf2[jid] = self.plugin.windows[acct][kind][jid].\
-					xmls[jid].get_widget('message_textview').get_buffer()
-				saved_var[jid] = self.plugin.windows[acct][kind][jid].save_var(jid)
-			self.plugin.windows[acct][kind]['tabbed'].window.destroy()
+				window = windows[jid]
+				buf1[jid] = window.xmls[jid].get_widget('conversation_textview').\
+					get_buffer()
+				buf2[jid] = window.xmls[jid].get_widget('message_textview').\
+					get_buffer()
+				saved_var[jid] = window.save_var(jid)
+			windows['tabbed'].window.destroy()
 			#open new tabbed chat windows
 			for jid in jids:
 				user = self.plugin.roster.contacts[acct][jid][0]
-				self.plugin.roster.new_chat(user, acct)
-				self.plugin.windows[acct][kind][jid].xmls[jid].\
-					get_widget('conversation_textview').set_buffer(buf1[jid])
-				self.plugin.windows[acct][kind][jid].xmls[jid].\
-					get_widget('message_textview').set_buffer(buf2[jid])
-				self.plugin.windows[acct][kind][jid].load_var(jid, saved_var[jid])
+				if kind == 'chats':
+					self.plugin.roster.new_chat(user, acct)
+				window = windows[jid]
+				window.xmls[jid].get_widget('conversation_textview').set_buffer(\
+					buf1[jid])
+				window.xmls[jid].get_widget('message_textview').set_buffer(\
+					buf2[jid])
+				window.load_var(jid, saved_var[jid])
 
 	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
 		if widget.get_active():
