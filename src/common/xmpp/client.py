@@ -123,7 +123,7 @@ class CommonClient:
         self.disconnect_handlers.reverse()
         for i in self.disconnect_handlers: i()
         self.disconnect_handlers.reverse()
-        if self.__dict__.has_key('TLS'): self.TLS.PlugOut()
+#        if self.__dict__.has_key('TLS'): self.TLS.PlugOut()
 
     def DisconnectHandler(self):
         """ Default disconnect handler. Just raises an IOError.
@@ -156,9 +156,9 @@ class CommonClient:
         if not connected: return
         self._Server,self._Proxy=server,proxy
         self.connected='tcp'
-        if self.Connection.getPort()==5223:
-            transports.TLS().PlugIn(self,now=1)
-            self.connected='tls'
+#        if self.Connection.getPort()==5223:
+#            transports.TLS().PlugIn(self,now=1)
+#            self.connected='tls'
         dispatcher.Dispatcher().PlugIn(self)
         while self.Dispatcher.Stream._document_attrs is None: self.Process(1)
         if self.Dispatcher.Stream._document_attrs.has_key('version') and self.Dispatcher.Stream._document_attrs['version']=='1.0':
@@ -173,13 +173,13 @@ class Client(CommonClient):
             specify it's address and credentials (if needed) in the second argument.
             Example: connect(('192.168.5.5':5222),{'host':'proxy.my.net','port':8080,'user':'me','password':'secret'})"""
         if not CommonClient.connect(self,server,proxy): return self.connected
-        transports.TLS().PlugIn(self)
+#        transports.TLS().PlugIn(self)
         if not self.Dispatcher.Stream._document_attrs.has_key('version') or not self.Dispatcher.Stream._document_attrs['version']=='1.0': return self.connected
         while not self.Dispatcher.Stream.features and self.Process(): pass      # If we get version 1.0 stream the features tag MUST BE presented
-        if not self.Dispatcher.Stream.features.getTag('starttls'): return self.connected       # TLS not supported by server
-        while not self.TLS.starttls and self.Process(): pass
-        if self.TLS.starttls<>'success': self.event('tls_failed'); return self.connected
-        self.connected='tls'
+#        if not self.Dispatcher.Stream.features.getTag('starttls'): return self.connected       # TLS not supported by server
+#        while not self.TLS.starttls and self.Process(): pass
+#        if self.TLS.starttls<>'success': self.event('tls_failed'); return self.connected
+#        self.connected='tls'
         return self.connected
 
     def auth(self,user,password,resource=''):
