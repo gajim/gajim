@@ -67,7 +67,7 @@ class Advanced_window:
 
 	def visible_func(self, model, iter, str):
 		if str is None or str == '':
-			return True
+			return True # show all
 		name = model.get_value(iter, 0)
 		if name.find(str) != -1:
 			return True
@@ -99,7 +99,6 @@ class Advanced_window:
 		col = treeview.insert_column_with_attributes(-1, 'Value',
 						renderer_text, text = 1)
 		
-		#col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
 		col.set_max_width(250)
 
 		renderer_text = gtk.CellRendererText()
