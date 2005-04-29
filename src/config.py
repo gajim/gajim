@@ -151,31 +151,43 @@ class Preferences_window:
 	def on_user_text_fontbutton_font_set(self, widget):
 		self.on_widget_font_set(widget, 'userfont')
 	
-	def on_reset_colors_and_fonts_button_clicked(self, widget):
-		for i in ['accounttextcolor', 'grouptextcolor', \
-			'usertextcolor', 'accountbgcolor', 'groupbgcolor', \
-			'userbgcolor', 'accountfont', 'groupfont','userfont' ]:
-
-			gajim.config.set(i, gajim.config.get_default(i))
-		
-		self.xml.get_widget('account_text_colorbutton').set_color(\
-			gtk.gdk.color_parse(gajim.config.get_default('accounttextcolor')))
-		self.xml.get_widget('group_text_colorbutton').set_color(\
-			gtk.gdk.color_parse(gajim.config.get_default('grouptextcolor')))
-		self.xml.get_widget('user_text_colorbutton').set_color(\
-			gtk.gdk.color_parse(gajim.config.get_default('usertextcolor')))
-		self.xml.get_widget('account_text_bg_colorbutton').set_color(\
-			gtk.gdk.color_parse(gajim.config.get_default('accountbgcolor')))
-		self.xml.get_widget('group_text_bg_colorbutton').set_color(\
-			gtk.gdk.color_parse(gajim.config.get_default('groupbgcolor')))
-		self.xml.get_widget('user_text_bg_colorbutton').set_color(\
-			gtk.gdk.color_parse(gajim.config.get_default('userbgcolor')))
-		self.xml.get_widget('account_text_fontbutton').set_font_name(\
-			gajim.config.get_default('accountfont'))
-		self.xml.get_widget('group_text_fontbutton').set_font_name(\
-			gajim.config.get_default('groupfont'))
-		self.xml.get_widget('user_text_fontbutton').set_font_name(\
-			gajim.config.get_default('userfont'))
+	def on_theme_combobox_changed(self, widget):
+		color_widgets = {
+			'account_text_colorbutton': 'accounttextcolor',
+			'group_text_colorbutton': 'grouptextcolor',
+			'user_text_colorbutton': 'usertextcolor',
+			'account_text_bg_colorbutton': 'accountbgcolor',
+			'group_text_bg_colorbutton': 'groupbgcolor',
+			'user_text_bg_colorbutton': 'userbgcolor'
+		}
+		font_widgets = {
+			'account_text_fontbutton': 'accountfont',
+			'group_text_fontbutton': 'groupfont',
+			'user_text_fontbutton': 'userfont'
+		}
+		model = widget.get_model()
+		active = widget.get_active()
+		theme = model[active][0]
+		for w in color_widgets:
+			widg = self.xml.get_widget(w)
+			if theme == 'Custom':
+				widg.set_color(gtk.gdk.color_parse(gajim.config.get(
+					color_widgets[w])))
+				widg.set_sensitive(True)
+			else:
+				widg.set_color(gtk.gdk.color_parse(self.theme_default[theme]\
+					[color_widgets[w]]))
+				widg.set_sensitive(False)
+		for w in font_widgets:
+			widg = self.xml.get_widget(w)
+			if theme == 'Custom':
+				widg.set_font_name(gajim.config.get(font_widgets[w]))
+				widg.set_sensitive(True)
+			else:
+				widg.set_font_name(self.theme_default[theme][font_widgets[w]])
+				widg.set_sensitive(False)
+				
+		gajim.config.set('roster_theme', theme)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 
@@ -642,28 +654,38 @@ class Preferences_window:
 			if gajim.config.get('iconset') == l[i]:
 				self.iconset_combobox.set_active(i)
 
-		# update color widget(%2) = color(%1)
-		tab = { 'accounttextcolor': 'account_text_colorbutton', \
-			'grouptextcolor': 'group_text_colorbutton', \
-			'usertextcolor': 'user_text_colorbutton', \
-			'accountbgcolor': 'account_text_bg_colorbutton', \
-			'groupbgcolor': 'group_text_bg_colorbutton', \
-			'userbgcolor': 'user_text_bg_colorbutton', }
-		for i in tab:
-			col = gtk.gdk.color_parse(gajim.config.get(i))
-			self.xml.get_widget(tab[i]).set_color(col)
-		
-		
-		# update font widget(%2) = font(%1)
-		tab = { 'accountfont': 'account_text_fontbutton', \
-			'groupfont': 'group_text_fontbutton', \
-			'userfont': 'user_text_fontbutton', }
+		# Roster colors / font
+		self.theme_default = {
+			'Green': {
+				'accounttextcolor': '#ffffff',
+				'grouptextcolor': '#0000ff',
+				'usertextcolor': '#000000',
+				'accountbgcolor': '#94aa8c',
+				'groupbgcolor': '#eff3e7',
+				'userbgcolor': '#ffffff',
+				'accountfont': 'Sans Bold 10',
+				'groupfont': 'Sans Italic 10',
+				'userfont': 'Sans 10',
+			},
+		}
 
-		for i in tab:
-			font = gajim.config.get(i)
-			self.xml.get_widget(tab[i]).set_font_name(font)
-			   
-		
+		theme_combobox = self.xml.get_widget('theme_combobox')
+		cell = gtk.CellRendererText()
+		theme_combobox.pack_start(cell, True)
+		theme_combobox.add_attribute(cell, 'text', 0)  
+		model = gtk.ListStore(gobject.TYPE_STRING)
+		theme_combobox.set_model(model)
+		i = 0
+		for t in self.theme_default:
+			model.append([t])
+			if gajim.config.get('roster_theme') == t:
+				theme_combobox.set_active(i)
+			i += 1
+		model.append(['Custom'])
+		if gajim.config.get('roster_theme') == 'Custom':
+			theme_combobox.set_active(i)
+		self.on_theme_combobox_changed(theme_combobox)
+
 		#use tabbed chat window
 		st = gajim.config.get('usetabbedchat')
 		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
