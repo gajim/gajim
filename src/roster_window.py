@@ -213,15 +213,15 @@ class Roster_window:
 			state_images = self.get_appropriate_state_images(jid)
 
 			if jid.find('@') == -1: # if not '@' it's an agent
-				if name.find('aim.') != -1:
+				if jid.find('aim.') != -1:
 					state_images = self.transports_state_images['aim']
-				elif name.find('gadugadu.') != -1:
+				elif jid.find('gadugadu.') != -1:
 					state_images = self.transports_state_images['gadugadu']
-				elif name.find('icq.') != -1:
+				elif jid.find('icq.') != -1:
 					state_images = self.transports_state_images['icq']
-				elif name.find('msn.') != -1:
+				elif jid.find('msn.') != -1:
 					state_images = self.transports_state_images['msn']
-				elif name.find('yahoo.') != -1:
+				elif jid.find('yahoo.') != -1:
 					state_images = self.transports_state_images['yahoo']
 				
 				img = state_images[user.show]					
