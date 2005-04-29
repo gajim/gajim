@@ -109,7 +109,7 @@ class Roster_window:
 			return
 		users = self.contacts[account][jid]
 		user = users[0]
-		if user.jid.find('@') == -1: # if not '@' it's an agent
+		if user.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 			user.groups = ['Agents']
 		elif user.groups == []:
 			user.groups.append('General')
@@ -212,7 +212,7 @@ class Roster_window:
 		for iter in iters:
 			state_images = self.get_appropriate_state_images(jid)
 
-			if jid.find('@') == -1: # if not '@' it's an agent
+			if jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 				if jid.find('aim.') != -1:
 					state_images = self.transports_state_images['aim']
 				elif jid.find('gadugadu.') != -1:
