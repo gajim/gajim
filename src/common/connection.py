@@ -716,7 +716,7 @@ class Connection:
 	def ask_register_agent_info(self, agent):
 		if not self.connection:
 			return None
-		data = common.xmpp.features.getRegInfo(self.connection,agent) # FIXME: blocking
+		data = common.xmpp.features.getRegInfo(self.connection, agent) # FIXME: blocking
 		info = data.asDict()
 		instructions = data.getInstructions()
 		if instructions:
@@ -746,10 +746,10 @@ class Connection:
 			return 0
 		else:
 			gajim.log.debug(_('Connected to server'))
-			req = c.getRegInfo(c, hostname).asDict() # FIXME! This blocks!
+			req = common.xmpp.features.getRegInfo(c, hostname).asDict() # FIXME! This blocks!
 			req['username'] = login
 			req['password'] = password
-			if not register(c, hostname,req):
+			if not common.xmpp.features.register(c, hostname,req): #FIXME: error
 				self.dispatch('ERROR', _('Error: ') + c.lastErr)
 			else:
 				self.name = name
