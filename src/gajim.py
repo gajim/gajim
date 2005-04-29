@@ -638,6 +638,16 @@ class Interface:
 		parser.write()
 
 	def __init__(self):
+		self.default_values = {
+			'inmsgcolor': gajim.config.get('inmsgcolor'),
+			'outmsgcolor': gajim.config.get('outmsgcolor'),
+			'statusmsgcolor': gajim.config.get('statusmsgcolor'),
+		}
+		parser.read()
+
+		for account in gajim.config.get_per('accounts'):
+			gajim.connections[account] = common.connection.Connection(account)
+	
 		if gtk.pygtk_version >= (2, 6, 0):
 			gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 			gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
@@ -711,11 +721,6 @@ if __name__ == '__main__':
 		psyco.full()
 	except ImportError:
 		pass
-	
-	parser.read()
-
-	for account in gajim.config.get_per('accounts'):
-		gajim.connections[account] = common.connection.Connection(account)
 	
 	Interface()
 	gtk.main()
