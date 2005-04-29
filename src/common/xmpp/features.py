@@ -88,8 +88,10 @@ def getRegInfo(disp,host,info={}):
     if df: return DataForm(node=df)
     df=DataForm(typ='form')
     for i in resp.getQueryPayload():
-        if i.getName()=='instructions': df.addInstructions(i.getData())
-        else: df.setField(i.getName()).setValue(i.getData())
+        try: #FIXME: temporary patch by Alexey to make it work :|
+            if i.getName()=='instructions': df.addInstructions(i.getData())
+            else: df.setField(i.getName()).setValue(i.getData())
+        except: pass
     return df
 
 def register(disp,host,info):
