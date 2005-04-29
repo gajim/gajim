@@ -60,6 +60,18 @@ class Preferences_window:
 		if os.name == 'nt': # if windows, player must not be visible
 			self.xml.get_widget('soundplayer_hbox').set_property('visible', False)
 			self.trayicon_checkbutton.set_property('visible', False)
+		
+		theme_combobox = self.xml.get_widget('theme_combobox')
+		model = theme_combobox.get_model()
+		active = theme_combobox.get_active()
+		theme = model[active][0]
+		fonts_colors_table = self.xml.get_widget('fonts_colors_table')
+		if theme == 'Custom':
+			#fonts_colors_table.set_sensitive(True)
+			fonts_colors_table.set_property('visible', True)
+		else:
+			#fonts_colors_table.set_sensitive(False)
+			fonts_colors_table.set_property('visible', False)
 
 	def on_preferences_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
@@ -165,31 +177,35 @@ class Preferences_window:
 			'group_text_fontbutton': 'groupfont',
 			'user_text_fontbutton': 'userfont'
 		}
+
 		model = widget.get_model()
 		active = widget.get_active()
 		theme = model[active][0]
+		fonts_colors_table = self.xml.get_widget('fonts_colors_table')
+		if theme == 'Custom':
+			#fonts_colors_table.set_sensitive(True)
+			fonts_colors_table.set_property('visible', True)
+		else:
+			#fonts_colors_table.set_sensitive(False)
+			fonts_colors_table.set_property('visible', False)
 		for w in color_widgets:
 			widg = self.xml.get_widget(w)
 			if theme == 'Custom':
 				widg.set_color(gtk.gdk.color_parse(gajim.config.get(
 					color_widgets[w])))
-				widg.set_sensitive(True)
 			else:
 				widg.set_color(gtk.gdk.color_parse(self.theme_default[theme]\
 					[color_widgets[w]]))
-				widg.set_sensitive(False)
 		for w in font_widgets:
 			widg = self.xml.get_widget(w)
 			if theme == 'Custom':
 				widg.set_font_name(gajim.config.get(font_widgets[w]))
-				widg.set_sensitive(True)
 			else:
 				widg.set_font_name(self.theme_default[theme][font_widgets[w]])
-				widg.set_sensitive(False)
 				
 		gajim.config.set('roster_theme', theme)
-		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
+		self.plugin.roster.draw_roster()
 
 	def merge_windows(self, kind):
 		for acct in gajim.connections:
