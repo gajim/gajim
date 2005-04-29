@@ -1667,9 +1667,7 @@ class Service_discovery_window:
 			self.address_comboboxentry.append_text(j)
 		self.address_comboboxentry.child.set_text(server_address)
 
-		self.register_button = xml.get_widget('register_button')
 		self.register_button.set_sensitive(False)
-		self.join_button = xml.get_widget('join_button')
 		self.join_button.set_sensitive(False)
 		xml.signal_autoconnect(self)
 		self.browse(server_address)
@@ -1823,7 +1821,7 @@ class Service_discovery_window:
 			return
 		service = model.get_value(iter, 1)
 		room = ''
-		if service.find('@') > -1:
+		if service.find('@') != -1:
 			services = service.split('@')
 			room = services[0]
 			service = services[1]
