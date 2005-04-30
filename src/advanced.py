@@ -63,7 +63,10 @@ class Advanced_window:
 		if not val:
 			model.append(iter, [name, '', ''])
 			return
-		model.append(iter, [name, val[OPT_VAL], val[OPT_TYPE][0]])
+		type = ''
+		if val[OPT_TYPE]:
+			type = val[OPT_TYPE][0]
+		model.append(iter, [name, val[OPT_VAL], type])
 
 	def visible_func(self, model, iter, str):
 		if str is None or str == '':

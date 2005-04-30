@@ -93,6 +93,7 @@ class Config:
 		'log_notif_in_user_file': [ opt_bool, True ],
 		'log_notif_in_sep_file': [ opt_bool, True ],
 		'change_title': [ opt_bool, True ],
+		'version': [ None, '0.7' ],
 	}
 
 	__options_per_key = {
@@ -237,6 +238,8 @@ class Config:
 		return val
 		
 	def is_valid(self, type, val):
+		if not type:
+			return None
 		if type[0] == 'boolean':
 			return self.is_valid_bool(val)
 		elif type[0] == 'integer':
