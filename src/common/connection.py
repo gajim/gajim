@@ -32,7 +32,7 @@ from common import i18n
 _ = i18n._
 
 
-STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd', \
+STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
 
 distro_info = {
@@ -624,7 +624,7 @@ class Connection:
 				self.myVCardID.append(iq.getID())
 		elif (status == 'offline') and self.connected:
 			self.connected = 0
-			self.connection.send(common.xmpp.Presence(typ = 'unavailable',\
+			self.connection.send(common.xmpp.Presence(typ = 'unavailable',
 				status = msg))
 			self.connection.disconnect()
 			self.dispatch('STATUS', 'offline')
@@ -635,7 +635,7 @@ class Connection:
 			if status == 'invisible':
 				ptype = 'invisible'
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
-			p = common.xmpp.Presence(typ = ptype, priority = prio, show = status,\
+			p = common.xmpp.Presence(typ = ptype, priority = prio, show = status,
 				status = msg)
 			if signed: p.setTag(common.xmpp.NS_SIGNED + ' x').setData(
 				signed)
@@ -706,7 +706,7 @@ class Connection:
 
 	def update_user(self, jid, name, groups):
 		if self.connection:
-			self.connection.getRoster().setItem(jid = jid, name = name,\
+			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
 
 	def request_agents(self, jid, node):
@@ -760,7 +760,7 @@ class Connection:
 					gajim.config.set('usegpg', True)
 				else:
 					gajim.config.set('usegpg', False)
-				self.dispatch('ACC_OK', (hostname, login, password, name, \
+				self.dispatch('ACC_OK', (hostname, login, password, name,
 					resource, prio, use_proxy, proxyhost, proxyport))
 
 	def account_changed(self, new_name):
