@@ -196,12 +196,14 @@ class Preferences_window:
 			else:
 				widg.set_color(gtk.gdk.color_parse(self.theme_default[theme]\
 					[color_widgets[w]]))
+				self.on_roster_widget_color_set(widg, color_widgets[w])
 		for w in font_widgets:
 			widg = self.xml.get_widget(w)
 			if theme == 'Custom':
 				widg.set_font_name(gajim.config.get(font_widgets[w]))
 			else:
 				widg.set_font_name(self.theme_default[theme][font_widgets[w]])
+				self.on_widget_font_set(widg, font_widgets[w])
 				
 		gajim.config.set('roster_theme', theme)
 		self.plugin.save_config()
