@@ -1320,7 +1320,7 @@ class Account_modification_window:
 			self.modify = True
 			self.init_account()
 			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
-			self.xml.get_widget('save_button').grab_focus()
+			self.xml.get_widget('name_entry').grab_focus()
 		self.window.show_all()
 
 class Accounts_window:
