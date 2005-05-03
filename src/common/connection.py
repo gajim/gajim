@@ -509,7 +509,7 @@ class Connection:
 				'proxyport')
 		else:
 			proxy = None
-		if gajim.config.get('log'):
+		if gajim.config.get('verbose'):
 			con = common.xmpp.Client(hostname)#, debug = [])
 		else:
 			con = common.xmpp.Client(hostname, debug = [])
