@@ -512,7 +512,7 @@ class Connection:
 		if gajim.config.get('log'):
 			con = common.xmpp.Client(hostname)#, debug = [])
 		else:
-			con = common.xmpp.Client(hostname)#, debug = [])
+			con = common.xmpp.Client(hostname, debug = [])
 			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
 			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
 		con.RegisterDisconnectHandler(self._disconnectedCB)
