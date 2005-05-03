@@ -406,14 +406,15 @@ class Roster_window:
 			if not self.get_user_iter(user.jid, account):
 				self.add_user_to_roster(user.jid, account)
 			self.draw_contact(user.jid, account)
-		#Print status in chat window
+		#print status in chat window and update status image
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
-			self.plugin.windows[account]['chats'][user.jid].set_state_image(user.jid)
+			jid = user.jid
+			self.plugin.windows[account]['chats'][jid].set_state_image(jid)
 			name = user.name
 			if user.resource != '':
 				name += '/' + user.resource
-			self.plugin.windows[account]['chats'][user.jid].print_conversation(
-				_('%s is now %s (%s)') % (name, show, status), user.jid, 'status')
+			self.plugin.windows[account]['chats'][jid].print_conversation(
+				_('%s is now %s (%s)') % (name, show, status), jid, 'status')
 
 	def on_info(self, widget, user, account):
 		'''Call vcard_information_window class to display user's information'''
@@ -1078,10 +1079,10 @@ class Roster_window:
 				self.tree.expand_row(path, False)
 		else:
 			if self.plugin.windows[account]['chats'].has_key(jid):
-				self.plugin.windows[account]['chats'][jid].active_tab(jid)
+				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 			elif self.contacts[account].has_key(jid):
 				self.new_chat(self.contacts[account][jid][0], account)
-				self.plugin.windows[account]['chats'][jid].active_tab(jid)
+				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 			self.plugin.windows[account]['chats'][jid].window.present()
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):

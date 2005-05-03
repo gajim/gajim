@@ -199,10 +199,10 @@ class Systray:
 				jid = self.jids[0][1]
 				acc = self.plugin.windows[account]
 				if acc['gc'].has_key(jid):
-					acc['gc'][jid].active_tab(jid)
+					acc['gc'][jid].set_active_tab(jid)
 					acc['gc'][jid].window.present()
 				elif acc['chats'].has_key(jid):
-					acc['chats'][jid].active_tab(jid)
+					acc['chats'][jid].set_active_tab(jid)
 					acc['chats'][jid].window.present()
 				else:
 					self.plugin.roster.new_chat(

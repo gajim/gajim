@@ -535,7 +535,7 @@ class Join_groupchat_window:
 			self.recently_groupchat = self.recently_groupchat[0:10]
 		gajim.config.set('recently_groupchat', ' '.join(self.recently_groupchat))
 		self.plugin.roster.new_room(jid, nickname, self.account)
-		self.plugin.windows[self.account]['gc'][jid].active_tab(jid)
+		self.plugin.windows[self.account]['gc'][jid].set_active_tab(jid)
 		self.plugin.windows[self.account]['gc'][jid].window.present()
 		gajim.connections[self.account].join_gc(nickname, room, server, password)
 			
@@ -590,7 +590,7 @@ class New_message_dialog:
 
 		if not self.plugin.windows[self.account]['chats'].has_key(jid):
 			self.plugin.roster.new_chat(user, self.account)
-		self.plugin.windows[self.account]['chats'][jid].active_tab(jid)
+		self.plugin.windows[self.account]['chats'][jid].set_active_tab(jid)
 		self.plugin.windows[self.account]['chats'][jid].window.present()
 
 class Change_password_dialog:
@@ -708,6 +708,7 @@ class Popup_notification_window:
 			self.plugin.roster.add_user_to_roster(user.self.jid, self.account)			
 
 		self.plugin.roster.new_chat(user, self.account)
-		self.plugin.windows[self.account]['chats'][self.jid].active_tab(self.jid)
-		self.plugin.windows[self.account]['chats'][self.jid].window.present()
+		chats_window = self.plugin.windows[self.account]['chats'][self.jid]
+		chats_window.set_active_tab(self.jid)
+		chats_window.window.present()
 		self.adjust_height_and_move_popup_notification_windows()
