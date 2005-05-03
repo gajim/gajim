@@ -58,8 +58,8 @@ class Preferences_window:
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
 		if os.name == 'nt': # if windows, player must not be visible
-			self.xml.get_widget('soundplayer_hbox').set_property('visible', False)
-			self.trayicon_checkbutton.set_property('visible', False)
+			self.xml.get_widget('soundplayer_hbox').hide()
+			self.trayicon_checkbutton.hide()
 		
 		theme_combobox = self.xml.get_widget('theme_combobox')
 		model = theme_combobox.get_model()
@@ -67,11 +67,9 @@ class Preferences_window:
 		theme = model[active][0]
 		fonts_colors_table = self.xml.get_widget('fonts_colors_table')
 		if theme == 'Custom':
-			#fonts_colors_table.set_sensitive(True)
-			fonts_colors_table.set_property('visible', True)
+			fonts_colors_table.show()
 		else:
-			#fonts_colors_table.set_sensitive(False)
-			fonts_colors_table.set_property('visible', False)
+			fonts_colors_table.hide()
 
 	def on_preferences_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
@@ -183,11 +181,9 @@ class Preferences_window:
 		theme = model[active][0]
 		fonts_colors_table = self.xml.get_widget('fonts_colors_table')
 		if theme == 'Custom':
-			#fonts_colors_table.set_sensitive(True)
-			fonts_colors_table.set_property('visible', True)
+			fonts_colors_table.show()
 		else:
-			#fonts_colors_table.set_sensitive(False)
-			fonts_colors_table.set_property('visible', False)
+			fonts_colors_table.hide()
 		for w in color_widgets:
 			widg = self.xml.get_widget(w)
 			if theme == 'Custom':
