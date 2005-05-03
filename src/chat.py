@@ -108,9 +108,11 @@ class Chat:
 			start = '[' + str(self.nb_unread[jid]) + '] '
 		elif self.nb_unread[jid] == 1:
 			start = '* '
+
 		child = self.childs[jid]
-		tab_label = self.notebook.get_tab_label(child).get_children()[0]
-		tab_label.set_text(start + self.names[jid])
+		children = self.notebook.get_tab_label(child).get_children()
+		nickname = children[1]
+		nickname.set_text(start + self.names[jid])
 
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
 		#clean self.plugin.windows[self.account][kind]
@@ -176,10 +178,18 @@ class Chat:
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(new_jid, self.account)
+		
+		nontabbed_status_image = self.xmls[jid].get_widget(
+																	'nontabbed_status_image')
+		if len(self.xmls) > 1:
+			nontabbed_status_image.hide()
+		else:
+			nontabbed_status_image.show()
+		
+		conversation_textview.grab_focus()
 
-	def active_tab(self, jid):
-		self.notebook.set_current_page(\
-			self.notebook.page_num(self.childs[jid]))
+	def set_active_tab(self, jid):
+		self.notebook.set_current_page( self.notebook.page_num(self.childs[jid]) )
 
 	def remove_tab(self, jid, kind): #kind is 'chats' or 'gc'
 		if len(self.xmls) == 1:
@@ -193,8 +203,11 @@ class Chat:
 		if self.print_time_timeout_id.has_key(jid):
 			gobject.source_remove(self.print_time_timeout_id[jid])
 			del self.print_time_timeout_id[jid]
-		self.notebook.remove_page(\
-			self.notebook.page_num(self.childs[jid]))
+		self.notebook.remove_page(self.notebook.page_num(self.childs[jid]))
+		if len(self.xmls) == 2:
+			# one that remains and one that we'll remove, 1 tab remains
+			self.notebook.set_show_tabs(False)
+
 		del self.plugin.windows[self.account][kind][jid]
 		del self.nb_unread[jid]
 		del self.last_message_time[jid]
@@ -202,8 +215,6 @@ class Chat:
 		del self.tagIn[jid]
 		del self.tagOut[jid]
 		del self.tagStatus[jid]
-		if len(self.xmls) == 1:
-			self.notebook.set_show_tabs(False)
 		self.show_title()
 
 	def new_tab(self, jid):
@@ -252,15 +263,20 @@ class Chat:
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 		
 		self.xmls[jid].signal_autoconnect(self)
-		conversation_scrolledwindow = self.xmls[jid].\
-			get_widget('conversation_scrolledwindow')
-		conversation_scrolledwindow.get_vadjustment().connect('value-changed', \
+		conversation_scrolledwindow = self.xmls[jid].get_widget(
+															'conversation_scrolledwindow')
+		conversation_scrolledwindow.get_vadjustment().connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
 		
 		child = self.childs[jid]
 		self.notebook.append_page(child)
+		nontabbed_status_image = self.xmls[jid].get_widget(
+																	'nontabbed_status_image')
 		if len(self.xmls) > 1:
 			self.notebook.set_show_tabs(True)
+			nontabbed_status_image.hide()
+		else:
+			nontabbed_status_image.show()
 
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'tab_hbox', APP)
 		tab_hbox = xm.get_widget('tab_hbox')
@@ -288,6 +304,7 @@ class Chat:
 				message_textview = self.xmls[jid].get_widget('message_textview')
 				if not message_textview.is_focus():
 					message_textview.grab_focus()
+				#FIXME: isn't it on_chat_notebook_key_press enough for this??
 				message_textview.emit('key_press_event', event)
 				
 	def on_chat_notebook_key_press_event(self, widget, event):

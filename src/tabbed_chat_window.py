@@ -72,13 +72,7 @@ class Tabbed_chat_window(chat.Chat):
 		"""draw the widgets in a tab (status_image, contact_button ...)
 		according to the the information in the user variable"""
 		jid = user.jid
-		status_image = self.xmls[jid].get_widget('status_image')
-		state_images = self.plugin.roster.get_appropriate_state_images(jid)
-		image = state_images[user.show]
-		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			status_image.set_from_animation(image.get_animation())
-		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			status_image.set_from_pixbuf(image.get_pixbuf())
+		self.set_state_image(jid)
 		contact_button = self.xmls[jid].get_widget('contact_button')
 		contact_button.set_use_underline(False)
 		contact_button.set_label(user.name + ' <' + jid + '>')
@@ -95,14 +89,18 @@ class Tabbed_chat_window(chat.Chat):
 			if u.priority > prio:
 				prio = u.priority
 				show = u.show
+		child = self.childs[jid]
+		status_image = self.notebook.get_tab_label(child).get_children()[0]
 		state_images = self.plugin.roster.get_appropriate_state_images(jid)
 		image = state_images[show]
+		non_tabbed_status_image = self.xmls[jid].get_widget(
+																	'nontabbed_status_image')
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			self.xmls[jid].get_widget('status_image').\
-				set_from_animation(image.get_animation())
+			non_tabbed_status_image.set_from_animation(image.get_animation())
+			status_image.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			self.xmls[jid].get_widget('status_image').\
-				set_from_pixbuf(image.get_pixbuf())
+			non_tabbed_status_image.set_from_pixbuf(image.get_pixbuf())
+			status_image.set_from_pixbuf(image.get_pixbuf())
 
 	def on_tabbed_chat_window_delete_event(self, widget, event):
 		"""close window"""
@@ -123,7 +121,7 @@ class Tabbed_chat_window(chat.Chat):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
 	def on_clear_button_clicked(self, widget):
-		"""When clear button is pressed :
+		"""When clear button is pressed:
 		clear the conversation"""
 		jid = self.get_active_jid()
 		conversation_buffer = self.xmls[jid].get_widget('conversation_textview').\
@@ -147,6 +145,14 @@ class Tabbed_chat_window(chat.Chat):
 		chat.Chat.remove_tab(self, jid, 'chats')
 		if len(self.xmls) > 0:
 			del self.users[jid]
+		
+		jid = self.get_active_jid() # get the new active jid
+		nontabbed_status_image = self.xmls[jid].get_widget(
+																	'nontabbed_status_image')
+		if len(self.xmls) > 1:
+			nontabbed_status_image.hide()
+		else:
+			nontabbed_status_image.show()
 
 	def new_user(self, user):
 		self.names[user.jid] = user.name
@@ -168,7 +174,8 @@ class Tabbed_chat_window(chat.Chat):
 			self.print_time_timeout(user.jid)
 			self.print_time_timeout_id[user.jid] = gobject.timeout_add(300000, \
 				self.print_time_timeout, user.jid)
-		self.childs[user.jid].show_all()
+		#FIXME: why show if already visible from glade?
+		#self.childs[user.jid].show_all() 
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:

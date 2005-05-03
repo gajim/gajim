@@ -8425,7 +8425,7 @@ Custom</property>
 
       <child>
 	<widget class="GtkVBox" id="vbox36">
-	  <property name="border_width">4</property>
+	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">5</property>
@@ -8439,7 +8439,7 @@ Custom</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
 	      <property name="wrap">False</property>
 	      <property name="selectable">False</property>
-	      <property name="xalign">0.019999999553</property>
+	      <property name="xalign">0</property>
 	      <property name="yalign">0.5</property>
 	      <property name="xpad">0</property>
 	      <property name="ypad">0</property>
@@ -8496,7 +8496,7 @@ Custom</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
 	      <property name="wrap">False</property>
 	      <property name="selectable">False</property>
-	      <property name="xalign">0.019999999553</property>
+	      <property name="xalign">0</property>
 	      <property name="yalign">0.5</property>
 	      <property name="xpad">0</property>
 	      <property name="ypad">0</property>
@@ -8565,11 +8565,10 @@ Custom</property>
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">0</property>
+	  <property name="spacing">1</property>
 
 	  <child>
-	    <widget class="GtkHBox" id="hbox2921">
-	      <property name="border_width">5</property>
+	    <widget class="GtkHBox" id="actions_hbox">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">5</property>
@@ -8578,7 +8577,7 @@ Custom</property>
 		<widget class="GtkButton" id="history_button">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Click to see past conversations with this contact</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="relief">GTK_RELIEF_NONE</property>
 		  <property name="focus_on_click">True</property>
 		  <signal name="clicked" handler="on_history_button_clicked" last_modification_time="Wed, 02 Mar 2005 17:03:17 GMT"/>
 
@@ -8655,7 +8654,7 @@ Custom</property>
 		  <property name="tooltip" translatable="yes">Click to clear conversation (won't delete it from history)</property>
 		  <property name="label">gtk-clear</property>
 		  <property name="use_stock">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="relief">GTK_RELIEF_NONE</property>
 		  <property name="focus_on_click">True</property>
 		  <signal name="clicked" handler="on_clear_button_clicked" last_modification_time="Wed, 02 Mar 2005 17:03:09 GMT"/>
 		</widget>
@@ -8667,8 +8666,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkImage" id="status_image">
-		  <property name="visible">True</property>
+		<widget class="GtkImage" id="nontabbed_status_image">
 		  <property name="stock">gtk-no</property>
 		  <property name="icon_size">4</property>
 		  <property name="xalign">0.5</property>
@@ -8729,7 +8727,7 @@ Custom</property>
 		    </widget>
 		    <packing>
 		      <property name="x">0</property>
-		      <property name="y">0</property>
+		      <property name="y">2</property>
 		    </packing>
 		  </child>
 		</widget>
@@ -8755,6 +8753,7 @@ Custom</property>
 	      <child>
 		<widget class="GtkScrolledWindow" id="conversation_scrolledwindow">
 		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
 		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="shadow_type">GTK_SHADOW_IN</property>
@@ -8763,6 +8762,7 @@ Custom</property>
 		  <child>
 		    <widget class="GtkTextView" id="conversation_textview">
 		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
 		      <property name="editable">False</property>
 		      <property name="overwrite">False</property>
 		      <property name="accepts_tab">True</property>
@@ -8789,35 +8789,62 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkScrolledWindow" id="scrolledwindow31">
-		  <property name="height_request">55</property>
+		<widget class="GtkHBox" id="hbox2957">
 		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-		  <property name="shadow_type">GTK_SHADOW_IN</property>
-		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkTextView" id="message_textview">
+		    <widget class="GtkImage" id="avatar_image">
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkScrolledWindow" id="scrolledwindow31">
+		      <property name="height_request">55</property>
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="has_focus">True</property>
-		      <property name="editable">True</property>
-		      <property name="overwrite">False</property>
-		      <property name="accepts_tab">True</property>
-		      <property name="justification">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap_mode">GTK_WRAP_WORD</property>
-		      <property name="cursor_visible">True</property>
-		      <property name="pixels_above_lines">0</property>
-		      <property name="pixels_below_lines">0</property>
-		      <property name="pixels_inside_wrap">0</property>
-		      <property name="left_margin">0</property>
-		      <property name="right_margin">0</property>
-		      <property name="indent">0</property>
-		      <property name="text" translatable="yes"></property>
-		      <signal name="key_press_event" handler="on_message_textview_key_press_event" last_modification_time="Wed, 02 Mar 2005 21:05:35 GMT"/>
+		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
+		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+		      <child>
+			<widget class="GtkTextView" id="message_textview">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="has_focus">True</property>
+			  <property name="editable">True</property>
+			  <property name="overwrite">False</property>
+			  <property name="accepts_tab">True</property>
+			  <property name="justification">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap_mode">GTK_WRAP_WORD</property>
+			  <property name="cursor_visible">True</property>
+			  <property name="pixels_above_lines">0</property>
+			  <property name="pixels_below_lines">0</property>
+			  <property name="pixels_inside_wrap">0</property>
+			  <property name="left_margin">0</property>
+			  <property name="right_margin">0</property>
+			  <property name="indent">0</property>
+			  <property name="text" translatable="yes"></property>
+			  <signal name="key_press_event" handler="on_message_textview_key_press_event" last_modification_time="Wed, 02 Mar 2005 21:05:35 GMT"/>
+			</widget>
+		      </child>
 		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
 		  </child>
 		</widget>
 		<packing>
@@ -8843,7 +8870,24 @@ Custom</property>
 	<widget class="GtkHBox" id="tab_hbox">
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">3</property>
+	  <property name="spacing">5</property>
+
+	  <child>
+	    <widget class="GtkImage" id="status_image">
+	      <property name="visible">True</property>
+	      <property name="stock">gtk-no</property>
+	      <property name="icon_size">4</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">True</property>
+	      <property name="fill">True</property>
+	    </packing>
+	  </child>
 
 	  <child>
 	    <widget class="GtkLabel" id="label221">
