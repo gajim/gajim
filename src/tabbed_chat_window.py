@@ -44,15 +44,15 @@ class Tabbed_chat_window(chat.Chat):
 		self.users = {}
 		self.new_user(user)
 		self.show_title()
-		self.xml.signal_connect('on_tabbed_chat_window_destroy', \
+		self.xml.signal_connect('on_tabbed_chat_window_destroy', 
 			self.on_tabbed_chat_window_destroy)
-		self.xml.signal_connect('on_tabbed_chat_window_delete_event', \
+		self.xml.signal_connect('on_tabbed_chat_window_delete_event', 
 			self.on_tabbed_chat_window_delete_event)
-		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event', \
+		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event', 
 			self.on_tabbed_chat_window_focus_in_event)
-		self.xml.signal_connect('on_chat_notebook_key_press_event', \
+		self.xml.signal_connect('on_chat_notebook_key_press_event', 
 			self.on_chat_notebook_key_press_event)
-		self.xml.signal_connect('on_chat_notebook_switch_page', \
+		self.xml.signal_connect('on_chat_notebook_switch_page', 
 			self.on_chat_notebook_switch_page)
 		self.window.show_all()
 
@@ -65,7 +65,7 @@ class Tabbed_chat_window(chat.Chat):
 	def load_var(self, jid, var):
 		if not self.xmls.has_key(jid):
 			return
-		self.xmls[jid].get_widget('gpg_togglebutton').set_active(\
+		self.xmls[jid].get_widget('gpg_togglebutton').set_active(
 			var['gpg_enabled'])
 		
 	def draw_widgets(self, user):
@@ -78,6 +78,13 @@ class Tabbed_chat_window(chat.Chat):
 		contact_button.set_label(user.name + ' <' + jid + '>')
 		if not user.keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
+
+		nontabbed_status_image = self.xmls[jid].get_widget(
+																	'nontabbed_status_image')
+		if len(self.xmls) > 1:
+			nontabbed_status_image.hide()
+		else:
+			nontabbed_status_image.show()
 
 	def set_state_image(self, jid):
 		prio = 0
@@ -145,14 +152,6 @@ class Tabbed_chat_window(chat.Chat):
 		chat.Chat.remove_tab(self, jid, 'chats')
 		if len(self.xmls) > 0:
 			del self.users[jid]
-		
-		jid = self.get_active_jid() # get the new active jid
-		nontabbed_status_image = self.xmls[jid].get_widget(
-																	'nontabbed_status_image')
-		if len(self.xmls) > 1:
-			nontabbed_status_image.hide()
-		else:
-			nontabbed_status_image.show()
 
 	def new_user(self, user):
 		self.names[user.jid] = user.name

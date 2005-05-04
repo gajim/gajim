@@ -110,8 +110,11 @@ class Chat:
 			start = '* '
 
 		child = self.childs[jid]
-		children = self.notebook.get_tab_label(child).get_children()
-		nickname = children[1]
+		if self.widget_name == 'tabbed_chat_window':
+			nickname = self.notebook.get_tab_label(child).get_children()[1]
+		elif self.widget_name == 'groupchat_window':
+			nickname = self.notebook.get_tab_label(child).get_children()[0]
+
 		nickname.set_text(start + self.names[jid])
 
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
@@ -179,12 +182,13 @@ class Chat:
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(new_jid, self.account)
 		
-		nontabbed_status_image = self.xmls[jid].get_widget(
-																	'nontabbed_status_image')
-		if len(self.xmls) > 1:
-			nontabbed_status_image.hide()
-		else:
-			nontabbed_status_image.show()
+		if self.widget_name == 'tabbed_chat_window':
+			nontabbed_status_image = self.xmls[jid].get_widget(
+																		'nontabbed_status_image')
+			if len(self.xmls) > 1:
+				nontabbed_status_image.hide()
+			else:
+				nontabbed_status_image.show()
 		
 		conversation_textview.grab_focus()
 
@@ -270,17 +274,19 @@ class Chat:
 		
 		child = self.childs[jid]
 		self.notebook.append_page(child)
-		nontabbed_status_image = self.xmls[jid].get_widget(
-																	'nontabbed_status_image')
+		
+
 		if len(self.xmls) > 1:
 			self.notebook.set_show_tabs(True)
-			nontabbed_status_image.hide()
-		else:
-			nontabbed_status_image.show()
 
-		xm = gtk.glade.XML(GTKGUI_GLADE, 'tab_hbox', APP)
-		tab_hbox = xm.get_widget('tab_hbox')
-		xm.signal_connect('on_close_button_clicked', \
+		if self.widget_name == 'tabbed_chat_window':
+			xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_hbox', APP)
+			tab_hbox = xm.get_widget('chat_tab_hbox')
+		elif self.widget_name == 'groupchat_window':
+			xm = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_tab_hbox', APP)
+			tab_hbox = xm.get_widget('groupchat_tab_hbox')
+
+		xm.signal_connect('on_close_button_clicked', 
 			self.on_close_button_clicked, jid)
 		self.notebook.set_tab_label(child, tab_hbox)
 
