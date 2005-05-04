@@ -35,6 +35,7 @@ class Dispatcher(PlugIn):
         PlugIn.__init__(self)
         DBG_LINE='dispatcher'
         self.handlers={}
+        self._lastIncome = time.time()
         self._expected={}
         self._defaultHandler=None
         self._eventHandler=None
@@ -99,10 +100,16 @@ class Dispatcher(PlugIn):
             1) length of processed data if some data were processed;
             2) '0' string if no data were processed but link is alive;
             3) 0 (zero) if underlying connection is closed."""
+        if time.time() > self._lastIncome + 60: #1 min
+            iq = Iq('get', NS_LAST, to=self._owner.Server)
+            self.send(iq)
+        if time.time() > self._lastIncome + 90: #1 min + 30 sec pr rep
+            self.disconnected()
         for handler in self._cycleHandlers: handler(self)
         if self._owner.Connection.pending_data(timeout):
             data=self._owner.Connection.receive()
             self.Stream.Parse(data)
+            self._lastIncome = time.time()
             return len(data)
         return '0'      # It means that nothing is received but link is alive.
         

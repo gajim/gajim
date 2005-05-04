@@ -624,9 +624,10 @@ class Connection:
 				self.myVCardID.append(iq.getID())
 		elif (status == 'offline') and self.connected:
 			self.connected = 0
-			self.connection.send(common.xmpp.Presence(typ = 'unavailable',
-				status = msg))
-			self.connection.disconnect()
+			if self.connection:
+				self.connection.send(common.xmpp.Presence(typ = 'unavailable',
+					status = msg))
+				self.connection.disconnect()
 			self.dispatch('STATUS', 'offline')
 			self.connection = None
 		elif status != 'offline' and self.connected:
