@@ -177,18 +177,19 @@ class Roster_window:
 		'''check jid and return the appropriate state images dict'''
 		if not jid: # we don't have the jid of the contact (in gc)
 			state_images = self.jabber_state_images
-		if jid.find('@aim.') != -1:
-			state_images = self.transports_state_images['aim']
-		elif jid.find('@gadugadu.') != -1:
-			state_images = self.transports_state_images['gadugadu']
-		elif jid.find('@icq.') != -1:
-			state_images = self.transports_state_images['icq']
-		elif jid.find('@msn.') != -1:
-			state_images = self.transports_state_images['msn']
-		elif jid.find('@yahoo.') != -1:
-			state_images = self.transports_state_images['yahoo']
-		else: #jabber
-			state_images = self.jabber_state_images
+		else: # it's not GC so we have the jid
+			if jid.find('@aim.') != -1:
+				state_images = self.transports_state_images['aim']
+			elif jid.find('@gadugadu.') != -1:
+				state_images = self.transports_state_images['gadugadu']
+			elif jid.find('@icq.') != -1:
+				state_images = self.transports_state_images['icq']
+			elif jid.find('@msn.') != -1:
+				state_images = self.transports_state_images['msn']
+			elif jid.find('@yahoo.') != -1:
+				state_images = self.transports_state_images['yahoo']
+			else: #jabber
+				state_images = self.jabber_state_images
 
 		return state_images
 
