@@ -242,6 +242,10 @@ class Add_new_contact_window:
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_new_contact_window', APP)
 		self.window = self.xml.get_widget('add_new_contact_window')
+		self.uid_entry = self.xml.get_widget('uid_entry')
+		self.protocol_combobox = self.xml.get_widget('protocol_combobox')
+		self.jid_entry = self.xml.get_widget('jid_entry')
+		self.nickname_entry = self.xml.get_widget('nickname_entry')
 		self.old_uid_value = ''
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		liststore.append(['Jabber', ''])
@@ -264,20 +268,20 @@ class Add_new_contact_window:
 				name = a
 			iter = liststore.append([name, a])
 			self.agents.append(name)
-		protocol_combobox = self.xml.get_widget('protocol_combobox')
-		protocol_combobox.set_model(liststore)
-		protocol_combobox.set_active(0)
+		
+		self.protocol_combobox.set_model(liststore)
+		self.protocol_combobox.set_active(0)
 		self.fill_jid()
 		if jid:
-			self.xml.get_widget('jid_entry').set_text(jid)
+			self.jid_entry.set_text(jid)
 			jid_splited = jid.split('@')
 			if jid_splited[1] in jid_agents:
 				uid = jid_splited[0].replace('%', '@')
-				self.xml.get_widget('uid_entry').set_text(uid)
-				protocol_combobox.set_active(jid_agents.index(jid_splited[1]) + 1)
+				self.uid_entry.set_text(uid)
+				self.protocol_combobox.set_active(jid_agents.index(jid_splited[1]) + 1)
 			else:
-				self.xml.get_widget('uid_entry').set_text(jid)
-				protocol_combobox.set_active(0)
+				self.uid_entry.set_text(jid)
+				self.protocol_combobox.set_active(0)
 			self.set_nickname()
 
 		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
@@ -300,8 +304,8 @@ class Add_new_contact_window:
 
 	def on_subscribe_button_clicked(self, widget):
 		'''When Subscribe button is clicked'''
-		jid = self.xml.get_widget('jid_entry').get_text()
-		nickname = self.xml.get_widget('nickname_entry').get_text()
+		jid = self.jid_entry.get_text()
+		nickname = self.nickname_entry.get_text()
 		if not jid:
 			return
 		if jid.find('@') < 0:
@@ -319,47 +323,44 @@ class Add_new_contact_window:
 		self.window.destroy()
 		
 	def fill_jid(self):
-		protocol_combobox = self.xml.get_widget('protocol_combobox')
-		model = protocol_combobox.get_model()
-		index = protocol_combobox.get_active()
-		jid = self.xml.get_widget('uid_entry').get_text()
-		if index > 0:
+		model = self.protocol_combobox.get_model()
+		index = self.protocol_combobox.get_active()
+		jid = self.uid_entry.get_text()
+		if index > 0: # it's not jabber but a transport
 			jid = jid.replace('@', '%')
 		agent = model[index][1]
 		if agent:
 			jid += '@' + agent
-		self.xml.get_widget('jid_entry').set_text(jid)
+		self.jid_entry.set_text(jid)
 
 	def on_protocol_combobox_changed(self, widget):
 		self.fill_jid()
 
 	def guess_agent(self):
-		uid = self.xml.get_widget('uid_entry').get_text()
-		protocol_combobox = self.xml.get_widget('protocol_combobox')
-		model = protocol_combobox.get_model()
+		uid = self.uid_entry.get_text()
+		model = self.protocol_combobox.get_model()
 		
 		#If login contains only numbers, it's probably an ICQ number
-		try:
-			int(uid) # will raise ValueError if not all numbers
-		except:
-			pass
-		else:
+		if uid.isdigit():
 			if 'ICQ' in self.agents:
-				protocol_combobox.set_active(self.agents.index('ICQ'))
+				self.protocol_combobox.set_active(self.agents.index('ICQ'))
 				return
-		protocol_combobox.set_active(0)
 
 	def set_nickname(self):
-		uid = self.xml.get_widget('uid_entry').get_text()
-		nickname = self.xml.get_widget('nickname_entry').get_text()
+		uid = self.uid_entry.get_text()
+		nickname = self.nickname_entry.get_text()
 		if nickname == self.old_uid_value:
-			self.xml.get_widget('nickname_entry').set_text(uid.split('@')[0])
+			self.nickname_entry.set_text(uid.split('@')[0])
 			
 	def on_uid_entry_changed(self, widget):
+		uid = self.uid_entry.get_text()
+		if len(uid) == 0:
+			self.protocol_combobox.set_sensitive(False)
+		else:
+			self.protocol_combobox.set_sensitive(True)
 		self.guess_agent()
 		self.set_nickname()
 		self.fill_jid()
-		uid = self.xml.get_widget('uid_entry').get_text()
 		self.old_uid_value = uid.split('@')[0]
 
 class About_dialog:
