@@ -184,7 +184,7 @@ class Chat:
 		
 		if self.widget_name == 'tabbed_chat_window':
 			nontabbed_status_image = self.xmls[jid].get_widget(
-																		'nontabbed_status_image')
+				'nontabbed_status_image')
 			if len(self.xmls) > 1:
 				nontabbed_status_image.hide()
 			else:
@@ -193,7 +193,7 @@ class Chat:
 		conversation_textview.grab_focus()
 
 	def set_active_tab(self, jid):
-		self.notebook.set_current_page( self.notebook.page_num(self.childs[jid]) )
+		self.notebook.set_current_page(self.notebook.page_num(self.childs[jid]))
 
 	def remove_tab(self, jid, kind): #kind is 'chats' or 'gc'
 		if len(self.xmls) == 1:
