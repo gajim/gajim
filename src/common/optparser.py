@@ -44,7 +44,7 @@ class OptionsParser:
 		try:
 			fd = open(self.__filename)
 		except:
-			print "error: cannot open %s\n" % (self.__filename)
+			print "error: cannot open %s for reading\n" % (self.__filename)
 			return
 
 		for line in fd.readlines():
@@ -68,7 +68,7 @@ class OptionsParser:
 		try:
 			fd = open(self.__filename, 'w')
 		except:
-			print "error: cannot open %s\n" % (self.__filename)
+			print "error: cannot open %s for writing\n" % (self.__filename)
 			return
 		gajim.config.foreach(self.write_line, fd)
 		fd.close()

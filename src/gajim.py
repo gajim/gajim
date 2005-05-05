@@ -644,6 +644,9 @@ class Interface:
 			'statusmsgcolor': gajim.config.get('statusmsgcolor'),
 		}
 		parser.read()
+		
+		#create the config
+		self.save_config()
 
 		for account in gajim.config.get_per('accounts'):
 			gajim.connections[account] = common.connection.Connection(account)
