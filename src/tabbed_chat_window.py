@@ -154,12 +154,13 @@ class Tabbed_chat_window(chat.Chat):
 			del self.users[jid]
 
 		jid = self.get_active_jid() # get the new active jid  
-		nontabbed_status_image = self.xmls[jid].get_widget(
-			'nontabbed_status_image')  
-		if len(self.xmls) > 1:  
-			nontabbed_status_image.hide()  
-		else:  
-			nontabbed_status_image.show()  
+		if jid != '':
+			nontabbed_status_image = self.xmls[jid].get_widget(
+				'nontabbed_status_image')  
+			if len(self.xmls) > 1:  
+				nontabbed_status_image.hide()  
+			else:
+				nontabbed_status_image.show()
 
 	def new_user(self, user):
 		self.names[user.jid] = user.name
