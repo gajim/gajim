@@ -90,20 +90,20 @@ class Vcard_window:
 	def set_os_info(self, resource, client_info, os_info):
 		i = 0
 		client = ''
-		platform = ''
+		os = ''
 		while self.os_info.has_key(i):
 			if self.os_info[i]['resource'] == resource:
 				self.os_info[i]['client'] = client_info
-				self.os_info[i]['platform'] = os_info
+				self.os_info[i]['os'] = os_info
 			if i > 0:
 				client += '\n'
-				platform += '\n'
+				os += '\n'
 			client += self.os_info[i]['client']
-			platform += self.os_info[i]['platform']
+			os += self.os_info[i]['os']
 			i += 1
 			
 		self.xml.get_widget('client_name_version_label').set_text(client)
-		self.xml.get_widget('platform_label').set_text(platform)
+		self.xml.get_widget('os_label').set_text(os)
 
 	def fill_jabber_page(self):
 		self.xml.get_widget('nickname_label').set_text(self.user.name)
@@ -127,7 +127,7 @@ class Vcard_window:
 		gajim.connections[self.account].request_os_info(self.user.jid, \
 			self.user.resource)
 		self.os_info = {0: {'resource': self.user.resource, 'client': '',
-			'platform': ''}}
+			'os': ''}}
 		i = 1
 		for u in self.plugin.roster.contacts[self.account][self.user.jid]:
 			if u.resource != self.user.resource:
@@ -138,7 +138,7 @@ class Vcard_window:
 				gajim.connections[self.account].request_os_info(self.user.jid, \
 					u.resource)
 				self.os_info[i] = {'resource': u.resource, 'client': '',
-					'platform': ''}
+					'os': ''}
 				i += 1
 		self.xml.get_widget('resource_label').set_text(resources)
 		self.xml.get_widget('status_label').set_text(stats)
