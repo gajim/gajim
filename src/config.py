@@ -670,7 +670,7 @@ class Preferences_window:
 
 		# Roster colors / font
 		self.theme_default = {
-			'Green': {
+			'green': {
 				'accounttextcolor': '#ffffff',
 				'grouptextcolor': '#0000ff',
 				'usertextcolor': '#000000',
@@ -681,7 +681,7 @@ class Preferences_window:
 				'groupfont': 'Sans Italic 10',
 				'userfont': 'Sans 10',
 			},
-			'Cyan': {
+			'cyan': {
 				'accounttextcolor': '#ff0000',
 				'grouptextcolor': '#0000ff',
 				'usertextcolor': '#000000',
@@ -706,8 +706,8 @@ class Preferences_window:
 			if gajim.config.get('roster_theme') == t:
 				theme_combobox.set_active(i)
 			i += 1
-		model.append(['Custom'])
-		if gajim.config.get('roster_theme') == 'Custom':
+		model.append(['custom'])
+		if gajim.config.get('roster_theme') == 'custom':
 			theme_combobox.set_active(i)
 		self.on_theme_combobox_changed(theme_combobox)
 
