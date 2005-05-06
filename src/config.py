@@ -66,7 +66,7 @@ class Preferences_window:
 		active = theme_combobox.get_active()
 		theme = model[active][0]
 		fonts_colors_table = self.xml.get_widget('fonts_colors_table')
-		if theme == 'Custom':
+		if theme == 'custom':
 			fonts_colors_table.show()
 		else:
 			fonts_colors_table.hide()
@@ -183,13 +183,13 @@ class Preferences_window:
 		active = widget.get_active()
 		theme = model[active][0]
 		fonts_colors_table = self.xml.get_widget('fonts_colors_table')
-		if theme == 'Custom':
+		if theme == 'custom':
 			fonts_colors_table.show()
 		else:
 			fonts_colors_table.hide()
 		for w in color_widgets:
 			widg = self.xml.get_widget(w)
-			if theme == 'Custom':
+			if theme == 'custom':
 				widg.set_color(gtk.gdk.color_parse(gajim.config.get(
 					color_widgets[w])))
 			else:
@@ -198,7 +198,7 @@ class Preferences_window:
 				self.on_roster_widget_color_set(widg, color_widgets[w])
 		for w in font_widgets:
 			widg = self.xml.get_widget(w)
-			if theme == 'Custom':
+			if theme == 'custom':
 				widg.set_font_name(gajim.config.get(font_widgets[w]))
 			else:
 				widg.set_font_name(self.theme_default[theme][font_widgets[w]])
