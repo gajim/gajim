@@ -119,7 +119,7 @@ class Preferences_window:
 		icon_string = model[active][0]
 		gajim.config.set('iconset', icon_string)
 		self.plugin.roster.reload_jabber_state_images()
-		for a in gajim.connections:
+		for a in gajim.connections: # FIXME: so this can be removed?? [see roster_window.py update_state_images call in reload_jabber_state_images()]
 			for w in self.plugin.windows[a]['gc'].values():
 				w.update_state_images()
 		self.plugin.save_config()

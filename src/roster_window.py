@@ -1219,7 +1219,7 @@ class Roster_window:
 			# Update opened groupchat windows
 			for jid in self.plugin.windows[account]['gc']:
 				if jid != 'tabbed':
-					self.plugin.windows[account]['gc'][jid].update_state_images(jid)
+					self.plugin.windows[account]['gc'][jid].update_state_images()
 		# Update windows icons
 		image = self.jabber_state_images['online'] # FIXME: we need an icon
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
