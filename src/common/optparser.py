@@ -3,6 +3,7 @@
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
+## - Nikos Kouremenos <kourem@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -24,7 +25,7 @@ class OptionsParser:
 		self.__filename = os.path.expanduser(filename)
 
 	def read_line(self, line):
-		index = line.find(" = ")
+		index = line.find(' = ')
 		var_str = line[0:index]
 		value_str = line[index + 3:-1]
 		
@@ -44,7 +45,8 @@ class OptionsParser:
 		try:
 			fd = open(self.__filename)
 		except:
-			print "error: cannot open %s for reading\n" % (self.__filename)
+			if os.path.exists(self.__filename):
+				print 'error: cannot open %s for reading\n' % (self.__filename)
 			return
 
 		for line in fd.readlines():
@@ -53,12 +55,12 @@ class OptionsParser:
 		fd.close()
 
 	def write_line(self, fd, opt, parents, value):
-		s = ""
+		s = ''
 		if parents:
 			if len(parents) == 1:
 				return
 			for p in parents:
-				s += p + "."
+				s += p + '.'
 		if value == None:
 			return
 		s += opt
@@ -68,7 +70,7 @@ class OptionsParser:
 		try:
 			fd = open(self.__filename, 'w')
 		except:
-			print "error: cannot open %s for writing\n" % (self.__filename)
+			print 'error: cannot open %s for writing\n' % (self.__filename)
 			return
 		gajim.config.foreach(self.write_line, fd)
 		fd.close()
