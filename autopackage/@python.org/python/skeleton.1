@@ -1,0 +1,22 @@
+[Meta]
+RootName: @python.org/python
+DisplayName: Python language runtime
+ShortName: python
+Skeleton-Author: Mike Hearn <mike@theoretic.com>
+Skeleton-Version: 1
+
+[Notes]
+INTERFACE_VERSIONS are set to match the currently installed version using the "python" executable name.
+For instance, python 2.2 causes INTERFACE_VERSIONS to contain "2.2 2.1 2.0". This skeleton assumes python1 and python2 are not parallel installed.
+SOFTWARE_VERSIONS is set to the result of python -V
+
+[Test]
+SOFTWARE_VERSIONS=$( locateCommand python -V 2>&1 )
+if [[ "$?" != "0" ]]; then
+    INTERFACE_VERSIONS=""
+else
+    local v
+    v=$( echo $SOFTWARE_VERSIONS | awk '{print $2}' | awk -F. '{print $1 "." $2}' )
+    INTERFACE_VERSIONS=$( countDownVersions $v )
+fi
+
