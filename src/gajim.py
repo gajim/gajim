@@ -31,7 +31,7 @@ import os
 import sre
 import signal
 import common.sleepy
-import common.check_for_new_version
+import check_for_new_version
 
 from common import gajim
 from common import connection
@@ -696,7 +696,7 @@ class Interface:
 			self.show_systray()
 
 		if not gajim.config.get('check_for_new_version'):
-			common.check_for_new_version.Check_for_new_version_dialog(self)
+			check_for_new_version.Check_for_new_version_dialog(self)
 
 		self.init_regexp()
 		
