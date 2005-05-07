@@ -194,14 +194,15 @@ class Config:
 		'Eating': 'I\'m eating, so leave me a message.',
 		'Movie' : 'I\'m watching a movie.' ,
 		'Working': 'I\'m working.',
+		'Phone': 'I\'m on the phone.',
 	}
 
 	soundevents_default = {
-		'first_message_received': [ True, 'sounds/message1.wav' ],
-		'next_message_received': [ True, 'sounds/message2.wav' ],
-		'contact_connected': [ True, 'sounds/connected.wav' ],
-		'contact_disconnected': [ True, 'sounds/disconnected.wav' ],
-		'message_sent': [ True, 'sounds/sent.wav' ],
+		'first_message_received': [ True, '../data/sounds/message1.wav' ],
+		'next_message_received': [ True, '../data/sounds/message2.wav' ],
+		'contact_connected': [ True, '../data/sounds/connected.wav' ],
+		'contact_disconnected': [ True, '../data/sounds/disconnected.wav' ],
+		'message_sent': [ True, '../data/sounds/sent.wav' ],
 	}
 
 	def foreach(self, cb, data = None):
