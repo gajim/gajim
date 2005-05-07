@@ -224,9 +224,10 @@ class Interface:
 			#It isn't an agent
 			self.roster.chg_user_status(user1, array[1], array[2], account)
 			#play sound
-			if old_show < 2 and new_show > 1 and gajim.config.get_per( \
-				'soundevents', 'contact_connected', 'enabled'):
-				self.play_sound('contact_connected')
+			if old_show < 2 and new_show > 1:
+				if gajim.config.get_per('soundevents', 'contact_connected',
+												'enabled'):
+					self.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
 					gajim.config.get('notify_on_online'):
