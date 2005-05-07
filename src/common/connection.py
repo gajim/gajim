@@ -321,24 +321,24 @@ class Connection:
 	def _BrowseResultCB(self, con, iq_obj):
 		gajim.log.debug('BrowseResultCB')
 		identities, features, items = [], [], []
-		q = iq_obj.getTag('service')
-		if not q:
-			return identities, features, items
-		attr = {}
-		for key in q.getAttrs().keys():
-			attr[key.encode('utf8')] = q.getAttr(key).encode('utf8')
-		identities = [attr]
-		for node in q.getChildren():
-			if node.getName() == 'ns':
-				features.append(node.getData())
-			else:
-				infos = {}
-				for key in node.getAttrs().keys():
-					infos[key.encode('utf8')] = node.getAttr(key).encode('utf8')
-				infos['category'] = node.getName()
-				items.append(infos)
-		jid = str(iq_obj.getFrom())
-		self.dispatch('AGENT_INFO', (jid, identities, features, items))
+		for q in iq_obj.getChildren():
+			if q.getNamespace() != common.xmpp.NS_BROWSE:
+				continue
+			attr = {}
+			for key in q.getAttrs().keys():
+				attr[key.encode('utf8')] = q.getAttr(key).encode('utf8')
+			identities = [attr]
+			for node in q.getChildren():
+				if node.getName() == 'ns':
+					features.append(node.getData())
+				else:
+					infos = {}
+					for key in node.getAttrs().keys():
+						infos[key.encode('utf8')] = node.getAttr(key).encode('utf8')
+					infos['category'] = node.getName()
+					items.append(infos)
+			jid = str(iq_obj.getFrom())
+			self.dispatch('AGENT_INFO', (jid, identities, features, items))
 
 	def _DiscoverItemsCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsCB')
