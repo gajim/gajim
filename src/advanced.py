@@ -33,6 +33,7 @@ class Advanced_window:
 		modelrow = self.model[row]
 		if gajim.config.set(modelrow[0], text):
 			return
+		self.plugin.save_config()
 		modelrow[1] = text
 	
 	def on_advanced_window_destroy(self, widget):
