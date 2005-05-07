@@ -149,6 +149,8 @@ class Roster_window:
 		self.draw_contact(jid, account)
 	
 	def really_remove_user(self, user, account):
+		if user.jid in self.newly_added[account]:
+			return
 		if user.jid in self.to_be_removed[account]:
 			self.to_be_removed[account].remove(user.jid)
 		self.remove_user(user, account)
