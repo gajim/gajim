@@ -26,10 +26,10 @@ GPG support, Multiple accounts support and more!
 
 [BuildPrepare]
 echo "-------==========$USER i am making the package...===============------"
-export APKG_BUILD_SKIP_CONFIGURE=1
 export build_root="/tmp/build-root.$$"
 echo "Build root is $build_root"
 mkdir "$build_root"
+make PREFIX=$build_root CC=apgcc CXX=apg++ || exit 1
 make install PREFIX=$build_root CC=apgcc CXX=apg++ || exit 1
 
 
@@ -39,7 +39,6 @@ unprepareBuild
 
 
 [Imports]
-##################make install PREFIX=$build_root CC=apgcc CXX=apg++ || exit 1
 echo '*' | import
 import <<EOF
 $source_dir/gajim.desktop
@@ -49,17 +48,25 @@ EOF
 
 [Prepare]
 # Dependency checking
-require @python.org/python 2.2
-recommend @python.org/python 2.3
+#PyGTK 2.4 requires python 2.3
+
+require @python.org/python 2.3
+require @gtk.org/gtk 2.4
+require @pygtk.org/pygtk 2.4
+require @glade.gnome.org/libglade 2
+
 
 [Install]
 # Put your installation script here
-installExe bin/*
+
 copyFiles  lib/gajim "$PREFIX/lib"
 copyFiles  share/gajim "$PREFIX/share/"
 installIcon share/gajim/gajim.xpm
-installDesktop "Networking/Instant Messaging" gajim.desktop
+installDesktop "Network/Instant Messaging" gajim.desktop
 installMan 1 gajim.1
+installExe bin/*
+safeSed "$PREFIX/bin/gajim" "s!PREFIX!$PREFIX!g"
+chmod +x "$PREFIX/bin/gajim"
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything
