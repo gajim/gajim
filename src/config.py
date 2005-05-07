@@ -2037,7 +2037,8 @@ class Remove_account_window:
 	
 	def on_remove_account_window_destroy(self, widget):
 		'''close window'''
-		del self.plugin.windows[self.account]['remove_account']
+		if self.plugin.windows.has_key(self.account):
+			del self.plugin.windows[self.account]['remove_account']
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
@@ -2058,9 +2059,10 @@ class Remove_account_window:
 			gajim.connections[self.account].change_status('offline', 'offline')
 		
 		if self.remove_and_unregister_radiobutton.get_active():  
-			gajim.connections[self.account].remove_account()
+			gajim.connections[self.account].unregister_account()
 		del gajim.connections[self.account]
 		gajim.config.del_per('accounts', self.account)
+		self.plugin.save_config()
 		del self.plugin.windows[self.account]
 		del self.plugin.queues[self.account]
 		del self.plugin.roster.groups[self.account]
