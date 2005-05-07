@@ -36,6 +36,7 @@ class Dispatcher(PlugIn):
         DBG_LINE='dispatcher'
         self.handlers={}
         self._lastIncome = time.time()
+        self._natSent = False
         self._expected={}
         self._defaultHandler=None
         self._eventHandler=None
@@ -106,9 +107,10 @@ class Dispatcher(PlugIn):
             Take note that in case of disconnection detect during Process() call
             disconnect handlers are called automatically.
         """
-        if time.time() > self._lastIncome + 60: #1 min
+        if (time.time() > self._lastIncome + 60) and not self._natSent: #1 min
             iq = Iq('get', NS_LAST, to=self._owner.Server)
             self.send(iq)
+            self._natSent = True
         if time.time() > self._lastIncome + 90: #1 min + 30 sec pr rep
             self.disconnected()
         for handler in self._cycleHandlers: handler(self)
@@ -118,6 +120,7 @@ class Dispatcher(PlugIn):
             self.Stream.Parse(data)
             if data:
                 self._lastIncome = time.time()
+                self._natSent = False
                 return len(data)
         return '0'      # It means that nothing is received but link is alive.
         
