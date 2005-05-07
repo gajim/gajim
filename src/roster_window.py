@@ -159,6 +159,9 @@ class Roster_window:
 		'''Remove a user from the roster'''
 		if user.jid in self.to_be_removed[account]:
 			return
+		if gajim.config.get('showoffline'):
+			self.draw_contact(user.jid, account)
+			return
 		model = self.tree.get_model()
 		for i in self.get_user_iter(user.jid, account):
 			parent_i = model.iter_parent(i)
