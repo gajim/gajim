@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: auth.py,v 1.27 2005/04/30 10:17:20 snakeru Exp $
+# $Id: auth.py,v 1.28 2005/05/07 02:42:04 snakeru Exp $
 
 """
 Provides library with all Non-SASL and SASL authentication mechanisms.

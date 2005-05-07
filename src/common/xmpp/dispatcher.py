@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: dispatcher.py,v 1.34 2005/05/02 08:36:41 snakeru Exp $
+# $Id: dispatcher.py,v 1.35 2005/05/07 03:26:51 snakeru Exp $
 
 """
 Main xmpppy mechanism. Provides library with methods to assign different handlers
@@ -44,7 +44,8 @@ class Dispatcher(PlugIn):
         self._exported_methods=[self.Process,self.RegisterHandler,self.RegisterDefaultHandler,\
         self.RegisterEventHandler,self.UnregisterCycleHandler,self.RegisterCycleHandler,\
         self.RegisterHandlerOnce,self.UnregisterHandler,self.RegisterProtocol,\
-        self.WaitForResponse,self.SendAndWaitForResponse,self.send,self.disconnect]
+        self.WaitForResponse,self.SendAndWaitForResponse,self.send,self.disconnect,\
+        self.SendAndCallForResponse, ]
 
     def dumpHandlers(self):
         """ Return set of user-registered callbacks in it's internal format.
@@ -266,9 +267,16 @@ class Dispatcher(PlugIn):
 
         output=''
         if session._expected.has_key(ID):
-            session._expected[ID]=stanza
             user=0
-            session.DEBUG("Expected stanza arrived!",'ok')
+            if type(session._expected[ID])==type(()):
+                cb,args=session._expected[ID]
+                session.DEBUG("Expected stanza arrived. Callback %s(%s) found!"%(cb,args),'ok')
+                try: cb(session,stanza,**args)
+                except Exception, typ:
+                    if typ.__class__.__name__<>'NodeProcessed': raise
+            else:
+                session.DEBUG("Expected stanza arrived!",'ok')
+                session._expected[ID]=stanza
         else: user=1
         for handler in chain:
             if user or handler['system']:
@@ -306,6 +314,11 @@ class Dispatcher(PlugIn):
     def SendAndWaitForResponse(self, stanza, timeout=DefaultTimeout):
         """ Put stanza on the wire and wait for recipient's response to it. """
         return self.WaitForResponse(self.send(stanza),timeout)
+
+    def SendAndCallForResponse(self, stanza, func, args={}):
+        """ Put stanza on the wire and call back when recipient replies.
+            Additional callback arguments can be specified in args. """
+        self._expected[self.send(stanza)]=(func,args)
 
     def send(self,stanza):
         """ Serialise stanza and put it on the wire. Assign an unique ID to it before send.
