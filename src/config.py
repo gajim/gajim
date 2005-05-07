@@ -2057,9 +2057,8 @@ class Remove_account_window:
 		if gajim.connections[self.account].connected: #FIXME: user unfriendly??
 			gajim.connections[self.account].change_status('offline', 'offline')
 		
-		unregister = False  
 		if self.remove_and_unregister_radiobutton.get_active():  
-			unregister = True
+			gajim.connections[self.account].remove_account()
 		del gajim.connections[self.account]
 		gajim.config.del_per('accounts', self.account)
 		del self.plugin.windows[self.account]
@@ -2071,6 +2070,4 @@ class Remove_account_window:
 		self.plugin.roster.draw_roster()
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].init_accounts()
-		if unregister:
-			gajim.connections[self.account].remove_account()
 		self.window.destroy()
