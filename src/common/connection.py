@@ -328,7 +328,7 @@ class Connection:
 		for key in q.getAttrs().keys():
 			attr[key.encode('utf8')] = q.getAttr(key).encode('utf8')
 		identities = [attr]
-		for node in q.getTags():
+		for node in q.getChildren():
 			if node.getName() == 'ns':
 				features.append(node.getData())
 			else:
@@ -387,24 +387,22 @@ class Connection:
 				features.append(i.getAttr('var'))
 		jid = str(iq_obj.getFrom())
 		if not identities:
-			self.connection.browseAgents(jid, node)
+			self.connection.send(common.xmpp.Iq(typ = 'get', queryNS = \
+				common.xmpp.NS_AGENTS))
 		else:
 			self.dispatch('AGENT_INFO_INFO', (jid, node, identities, features))
 			self.discoverItems(jid, node)
 
 	def _VersionCB(self, con, iq_obj):
 		gajim.log.debug('VersionCB')
-		f = iq_obj.getFrom()
-		iq_obj.setFrom(iq_obj.getTo())
-		iq_obj.setTo(f)
-		iq_obj.setType('result')
+		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
 		qp.setTagData('name', 'Gajim')
 		qp.setTagData('version', gajim.version)
 		send_os = gajim.config.get('send_os_info')
 		if send_os:
 			qp.setTagData('os', get_os_info())
-		self.connection.send(iq_obj)
+		con.send(iq_obj)
 
 	def _VersionResultCB(self, con, iq_obj):
 		gajim.log.debug('VersionResultCB')
@@ -638,8 +636,7 @@ class Connection:
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
 			p = common.xmpp.Presence(typ = ptype, priority = prio, show = status,
 				status = msg)
-			if signed: p.setTag(common.xmpp.NS_SIGNED + ' x').setData(
-				signed)
+			if signed: p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			self.connection.send(p)
 			self.dispatch('STATUS', status)
 
@@ -712,17 +709,14 @@ class Connection:
 
 	def request_agents(self, jid, node):
 		if self.connection:
+			self.connection.send(common.xmpp.Iq(to = jid, typ = 'get', 
+				queryNS = common.xmpp.NS_BROWSE))
 			self.discoverInfo(jid, node)
 
 	def ask_register_agent_info(self, agent):
 		if not self.connection:
 			return None
-		data = common.xmpp.features.getRegInfo(self.connection, agent) # FIXME: blocking
-		info = data.asDict()
-		instructions = data.getInstructions()
-		if instructions:
-			info['instructions'] = instructions
-		return info
+		return common.xmpp.features.getRegInfo(self.connection, agent).asDict() # FIXME: blocking
 
 	def register_agent(self, agent, info):
 		if not self.connection:

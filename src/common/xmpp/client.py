@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: client.py,v 1.33 2005/04/10 08:09:23 snakeru Exp $
+# $Id: client.py,v 1.35 2005/04/30 10:17:19 snakeru Exp $
 
 """
 Provides PlugIn class functionality to develop extentions for xmpppy.
@@ -105,7 +105,7 @@ class CommonClient:
         self.debug_flags.append(self.DBG)
         self._owner=self
         self._registered_name=None
-#        self.RegisterDisconnectHandler(self.DisconnectHandler)
+        self.RegisterDisconnectHandler(self.DisconnectHandler)
         self.connected=''
 
     def RegisterDisconnectHandler(self,handler):
@@ -123,7 +123,7 @@ class CommonClient:
         self.disconnect_handlers.reverse()
         for i in self.disconnect_handlers: i()
         self.disconnect_handlers.reverse()
-#        if self.__dict__.has_key('TLS'): self.TLS.PlugOut()
+        if self.__dict__.has_key('TLS'): self.TLS.PlugOut()
 
     def DisconnectHandler(self):
         """ Default disconnect handler. Just raises an IOError.
@@ -156,9 +156,9 @@ class CommonClient:
         if not connected: return
         self._Server,self._Proxy=server,proxy
         self.connected='tcp'
-#        if self.Connection.getPort()==5223:
-#            transports.TLS().PlugIn(self,now=1)
-#            self.connected='tls'
+        if self.Connection.getPort()==5223:
+            transports.TLS().PlugIn(self,now=1)
+            self.connected='tls'
         dispatcher.Dispatcher().PlugIn(self)
         while self.Dispatcher.Stream._document_attrs is None: self.Process(1)
         if self.Dispatcher.Stream._document_attrs.has_key('version') and self.Dispatcher.Stream._document_attrs['version']=='1.0':
@@ -173,32 +173,32 @@ class Client(CommonClient):
             specify it's address and credentials (if needed) in the second argument.
             Example: connect(('192.168.5.5':5222),{'host':'proxy.my.net','port':8080,'user':'me','password':'secret'})"""
         if not CommonClient.connect(self,server,proxy): return self.connected
-#        transports.TLS().PlugIn(self)
+        transports.TLS().PlugIn(self)
         if not self.Dispatcher.Stream._document_attrs.has_key('version') or not self.Dispatcher.Stream._document_attrs['version']=='1.0': return self.connected
         while not self.Dispatcher.Stream.features and self.Process(): pass      # If we get version 1.0 stream the features tag MUST BE presented
-#        if not self.Dispatcher.Stream.features.getTag('starttls'): return self.connected       # TLS not supported by server
-#        while not self.TLS.starttls and self.Process(): pass
-#        if self.TLS.starttls<>'success': self.event('tls_failed'); return self.connected
-#        self.connected='tls'
+        if not self.Dispatcher.Stream.features.getTag('starttls'): return self.connected       # TLS not supported by server
+        while not self.TLS.starttls and self.Process(): pass
+        if self.TLS.starttls<>'success': self.event('tls_failed'); return self.connected
+        self.connected='tls'
         return self.connected
 
     def auth(self,user,password,resource=''):
         """ Authenticate connnection and bind resource. If resource is not provided
             random one or library name used. """
         self._User,self._Password,self._Resource=user,password,resource
-        auth.SASL().PlugIn(self)
-        self.SASL.auth(user,password)
         while not self.Dispatcher.Stream._document_attrs and self.Process(): pass
         if self.Dispatcher.Stream._document_attrs.has_key('version') and self.Dispatcher.Stream._document_attrs['version']=='1.0':
             while not self.Dispatcher.Stream.features and self.Process(): pass      # If we get version 1.0 stream the features tag MUST BE presented
-            while self.SASL.startsasl=='in-process' and self.Process(): pass
-        else: self.SASL.startsasl='failure'
-        if self.SASL.startsasl=='failure':
+        auth.SASL().PlugIn(self)
+        if self.SASL.startsasl=='not-supported':
             if not resource: resource='xmpppy'
             if auth.NonSASL(user,password,resource).PlugIn(self):
                 self.connected+='+old_auth'
                 return 'old_auth'
-        else:
+            return
+        self.SASL.auth(user,password)
+        while self.SASL.startsasl=='in-process' and self.Process(): pass
+        if self.SASL.startsasl=='success':
             auth.Bind().PlugIn(self)
             while self.Bind.bound is None: self.Process()
             if self.Bind.Bind(resource):

@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: auth.py,v 1.25 2005/03/08 19:36:29 snakeru Exp $
+# $Id: auth.py,v 1.27 2005/04/30 10:17:20 snakeru Exp $
 
 """
 Provides library with all Non-SASL and SASL authentication mechanisms.
@@ -97,7 +97,8 @@ class NonSASL(PlugIn):
 class SASL(PlugIn):
     """ Implements SASL authentication. """
     def plugin(self,owner):
-        self.startsasl=None
+        if not self._owner.Dispatcher.Stream._document_attrs.has_key('version'): self.startsasl='not-supported'
+        else: self.startsasl=None
 
     def auth(self,username,password):
         """ Start authentication. Result can be obtained via "SASL.startsasl" attribute and will be
@@ -120,7 +121,7 @@ class SASL(PlugIn):
     def FeaturesHandler(self,conn,feats):
         """ Used to determine if server supports SASL auth. Used internally. """
         if not feats.getTag('mechanisms',namespace=NS_SASL):
-            self.startsasl='failure'
+            self.startsasl='not-supported'
             self.DEBUG('SASL not supported by server','error')
             return
         mecs=[]
@@ -213,7 +214,7 @@ class Bind(PlugIn):
             except NodeProcessed: pass
         else: self._owner.RegisterHandler('features',self.FeaturesHandler,xmlns=NS_STREAMS)
 
-    def plugout(self,owner):
+    def plugout(self):
         """ Remove Bind handler from owner's dispatcher. Used internally. """
         self._owner.UnregisterHandler('features',self.FeaturesHandler,xmlns=NS_STREAMS)
 

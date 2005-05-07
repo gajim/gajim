@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: protocol.py,v 1.39 2005/03/08 19:36:29 snakeru Exp $
+# $Id: protocol.py,v 1.41 2005/05/02 08:36:41 snakeru Exp $
 
 """
 Protocol module contains tools that is needed for processing of 
@@ -28,13 +28,13 @@ NS_AUTH         ='jabber:iq:auth'
 NS_BIND         ='urn:ietf:params:xml:ns:xmpp-bind'
 NS_BROWSE       ='jabber:iq:browse'
 NS_CLIENT       ='jabber:client'
+NS_COMMANDS     ='http://jabber.org/protocol/commands'
 NS_COMPONENT_ACCEPT='jabber:component:accept'
 NS_DATA         ='jabber:x:data'                                # JEP-0004
 NS_DELAY        ='jabber:x:delay'
 NS_DIALBACK     ='jabber:server:dialback'
 NS_DISCO_INFO   ='http://jabber.org/protocol/disco#info'
 NS_DISCO_ITEMS  ='http://jabber.org/protocol/disco#items'
-NS_ENCRYPTED    ='jabber:x:encrypted'                           # JEP-0027
 NS_GROUPCHAT    ='gc-1.0'
 NS_IBB          ='http://jabber.org/protocol/ibb'
 NS_INVISIBLE    ='presence-invisible'                           # jabberd2
@@ -42,8 +42,9 @@ NS_IQ           ='iq'                                           # jabberd2
 NS_LAST         ='jabber:iq:last'
 NS_MESSAGE      ='message'                                      # jabberd2
 NS_MUC          ='http://jabber.org/protocol/muc'
-NS_MUC_OWNER    ='http://jabber.org/protocol/muc#owner'
+NS_MUC_USER     ='http://jabber.org/protocol/muc#user'
 NS_MUC_ADMIN    ='http://jabber.org/protocol/muc#admin'
+NS_MUC_OWNER    ='http://jabber.org/protocol/muc#owner'
 NS_OFFLINE      ='http://www.jabber.org/jeps/jep-0030.html'     # JEP-0013   
 NS_PRESENCE     ='presence'                                     # jabberd2
 NS_PRIVACY      ='jabber:iq:privacy'
@@ -55,7 +56,6 @@ NS_SASL         ='urn:ietf:params:xml:ns:xmpp-sasl'
 NS_SEARCH       ='jabber:iq:search'
 NS_SERVER       ='jabber:server'
 NS_SESSION      ='urn:ietf:params:xml:ns:xmpp-session'
-NS_SIGNED       ='jabber:x:signed'                              # JEP-0027
 NS_STANZAS      ='urn:ietf:params:xml:ns:xmpp-stanzas'
 NS_STREAMS      ='http://etherx.jabber.org/streams'
 NS_TIME         ='jabber:iq:time'
@@ -63,7 +63,9 @@ NS_TLS          ='urn:ietf:params:xml:ns:xmpp-tls'
 NS_VACATION     ='http://jabber.org/protocol/vacation'
 NS_VCARD        ='vcard-temp'
 NS_VERSION      ='jabber:iq:version'
+NS_ENCRYPTED    ='jabber:x:encrypted'                           # JEP-0027
 NS_XMPP_STREAMS ='urn:ietf:params:xml:ns:xmpp-streams'
+NS_SIGNED       ='jabber:x:signed'                              # JEP-0027
 
 xmpp_stream_error_conditions="""
 bad-format --  --  -- The entity has sent XML that cannot be processed.
@@ -140,8 +142,60 @@ def isResultNode(node):
 def isErrorNode(node):
     """ Returns true if the node is a negative reply. """
     return node and node.getType()=='error'
+
 class NodeProcessed(Exception):
     """ Exception that should be raised by handler when the handling should be stopped. """
+class StreamError(Exception):
+    """ Base exception class for stream errors."""
+class BadFormat(StreamError): pass
+class BadNamespacePrefix(StreamError): pass
+class Conflict(StreamError): pass
+class ConnectionTimeout(StreamError): pass
+class HostGone(StreamError): pass
+class HostUnknown(StreamError): pass
+class ImproperAddressing(StreamError): pass
+class InternalServerError(StreamError): pass
+class InvalidFrom(StreamError): pass
+class InvalidID(StreamError): pass
+class InvalidNamespace(StreamError): pass
+class InvalidXML(StreamError): pass
+class NotAuthorized(StreamError): pass
+class PolicyViolation(StreamError): pass
+class RemoteConnectionFailed(StreamError): pass
+class ResourceConstraint(StreamError): pass
+class RestrictedXML(StreamError): pass
+class SeeOtherHost(StreamError): pass
+class SystemShutdown(StreamError): pass
+class UndefinedCondition(StreamError): pass
+class UnsupportedEncoding(StreamError): pass
+class UnsupportedStanzaType(StreamError): pass
+class UnsupportedVersion(StreamError): pass
+class XMLNotWellFormed(StreamError): pass
+
+stream_exceptions = {'bad-format': BadFormat,
+                     'bad-namespace-prefix': BadNamespacePrefix,
+                     'conflict': Conflict,
+                     'connection-timeout': ConnectionTimeout,
+                     'host-gone': HostGone,
+                     'host-unknown': HostUnknown,
+                     'improper-addressing': ImproperAddressing,
+                     'internal-server-error': InternalServerError,
+                     'invalid-from': InvalidFrom,
+                     'invalid-id': InvalidID,
+                     'invalid-namespace': InvalidNamespace,
+                     'invalid-xml': InvalidXML,
+                     'not-authorized': NotAuthorized,
+                     'policy-violation': PolicyViolation,
+                     'remote-connection-failed': RemoteConnectionFailed,
+                     'resource-constraint': ResourceConstraint,
+                     'restricted-xml': RestrictedXML,
+                     'see-other-host': SeeOtherHost,
+                     'system-shutdown': SystemShutdown,
+                     'undefined-condition': UndefinedCondition,
+                     'unsupported-encoding': UnsupportedEncoding,
+                     'unsupported-stanza-type': UnsupportedStanzaType,
+                     'unsupported-version': UnsupportedVersion,
+                     'xml-not-well-formed': XMLNotWellFormed}
 
 class JID:
     """ JID object. JID can be built from string, modified, compared, serialised into string. """
@@ -345,6 +399,16 @@ class Presence(Protocol):
     def getStatus(self):
         """ Returns the status string of the message. """
         return self.getTagData('status')
+    def setPriority(self,val):
+        """ Sets the priority of the message. """
+        self.setTagData('priority',val)
+    def setShow(self,val):
+        """ Sets the show value of the message. """
+        self.setTagData('show',val)
+    def setStatus(self,val):
+        """ Sets the status string of the message. """
+        self.setTagData('status',val)
+
     def _muc_getItemAttr(self,tag,attr):
         for xtag in self.getTags('x'):
             for child in xtag.getTags(tag):
@@ -373,15 +437,6 @@ class Presence(Protocol):
     def getStatusCode(self):
         """Returns the status code of the presence (for groupchat)"""
         return self._muc_getItemAttr('status','code')
-    def setPriority(self,val):
-        """ Sets the priority of the message. """
-        self.setTagData('priority',val)
-    def setShow(self,val):
-        """ Sets the show value of the message. """
-        self.setTagData('show',val)
-    def setStatus(self,val):
-        """ Sets the status string of the message. """
-        self.setTagData('status',val)
 
 class Iq(Protocol): 
     """ XMPP Iq object - get/set dialog mechanism. """
@@ -613,6 +668,7 @@ class DataForm(Node):
                 for i in field.getTags('value'): val.append(i.getData())
             else: val=field.getTagData('value')
             ret[name]=val
+        if self.getTag('instructions'): ret['instructions']=self.getInstructions()
         return ret
     def __getitem__(self,name):
         """ Simple dictionary interface for getting datafields values by their names."""

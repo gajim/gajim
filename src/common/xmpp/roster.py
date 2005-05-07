@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: roster.py,v 1.16 2005/02/25 05:49:03 snakeru Exp $
+# $Id: roster.py,v 1.17 2005/05/02 08:38:49 snakeru Exp $
 
 """
 Simple roster implementation. Can be used though for different tasks like
@@ -98,7 +98,7 @@ class Roster(PlugIn):
             if not pres.getTimestamp(): pres.setTimestamp()
             res['timestamp']=pres.getTimestamp()
         elif typ=='unavailable' and item['resources'].has_key(jid.getResource()): del item['resources'][jid.getResource()]
-# Need to handle type='error' also
+        # Need to handle type='error' also
 
     def _getItemData(self,jid,dataname):
         """ Return specific jid's representation in internal format. Used internally. """
@@ -159,9 +159,6 @@ class Roster(PlugIn):
     def getItems(self):
         """ Return list of all [bare] JIDs that the roster is currently tracks."""
         return self._data.keys()
-    def getRaw(self):
-        """ Returns internal representation of roster."""
-        return self._data
     def keys(self):
         """ Same as getItems. Provided for the sake of dictionary interface."""
         return self._data.keys()
@@ -184,3 +181,6 @@ class Roster(PlugIn):
         """ Unauthorise JID 'jid'. Use for declining authorisation request 
             or for removing existing authorization. """
         self._owner.send(Presence(jid,'unsubscribed'))
+    def getRaw(self):
+        """Returns the internal data representation of the roster."""
+        return self._data

@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: features.py,v 1.19 2004/12/25 20:06:59 snakeru Exp $
+# $Id: features.py,v 1.20 2005/04/30 07:43:01 snakeru Exp $
 
 """
 This module contains variable stuff that is not worth splitting into separate modules.
@@ -88,10 +88,9 @@ def getRegInfo(disp,host,info={}):
     if df: return DataForm(node=df)
     df=DataForm(typ='form')
     for i in resp.getQueryPayload():
-        try: #FIXME: temporary patch by Alexey to make it work :|
-            if i.getName()=='instructions': df.addInstructions(i.getData())
-            else: df.setField(i.getName()).setValue(i.getData())
-        except: pass
+        if type(i)<>type(iq): pass
+        elif i.getName()=='instructions': df.addInstructions(i.getData())
+        else: df.setField(i.getName()).setValue(i.getData())
     return df
 
 def register(disp,host,info):

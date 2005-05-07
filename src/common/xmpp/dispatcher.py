@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: dispatcher.py,v 1.31 2005/03/08 19:36:29 snakeru Exp $
+# $Id: dispatcher.py,v 1.34 2005/05/02 08:36:41 snakeru Exp $
 
 """
 Main xmpppy mechanism. Provides library with methods to assign different handlers
@@ -55,6 +55,7 @@ class Dispatcher(PlugIn):
         self.handlers=handlers
 
     def _init(self):
+        """ Registers default namespaces/protocols/handlers. Used internally.  """
         self.RegisterNamespace('unknown')
         self.RegisterNamespace(NS_STREAMS)
         self.RegisterNamespace(self._owner.defaultNamespace)
@@ -62,6 +63,7 @@ class Dispatcher(PlugIn):
         self.RegisterProtocol('presence',Presence)
         self.RegisterProtocol('message',Message)
         self.RegisterDefaultHandler(self.returnStanzaHandler)
+#        self.RegisterHandler('error',self.streamErrorHandler,xmlns=NS_STREAMS)
 
     def plugin(self, owner):
         """ Plug the Dispatcher instance into Client class instance and send initial stream header. Used internally."""
@@ -74,6 +76,7 @@ class Dispatcher(PlugIn):
         self.StreamInit()
 
     def plugout(self):
+        """ Prepares instance to be destructed. """
         self.Stream.dispatch=None
         self.Stream.DEBUG=None
         self.Stream.features=None
@@ -99,7 +102,10 @@ class Dispatcher(PlugIn):
             Returns:
             1) length of processed data if some data were processed;
             2) '0' string if no data were processed but link is alive;
-            3) 0 (zero) if underlying connection is closed."""
+            3) 0 (zero) if underlying connection is closed.
+            Take note that in case of disconnection detect during Process() call
+            disconnect handlers are called automatically.
+        """
         if time.time() > self._lastIncome + 60: #1 min
             iq = Iq('get', NS_LAST, to=self._owner.Server)
             self.send(iq)
@@ -107,10 +113,12 @@ class Dispatcher(PlugIn):
             self.disconnected()
         for handler in self._cycleHandlers: handler(self)
         if self._owner.Connection.pending_data(timeout):
-            data=self._owner.Connection.receive()
+            try: data=self._owner.Connection.receive()
+            except IOError: return
             self.Stream.Parse(data)
-            self._lastIncome = time.time()
-            return len(data)
+            if data:
+                self._lastIncome = time.time()
+                return len(data)
         return '0'      # It means that nothing is received but link is alive.
         
     def RegisterNamespace(self,xmlns,order='info'):
@@ -189,6 +197,16 @@ class Dispatcher(PlugIn):
         """ Return stanza back to the sender with <feature-not-implemennted/> error set. """
         if stanza.getType() in ['get','set']:
             conn.send(Error(stanza,ERR_FEATURE_NOT_IMPLEMENTED))
+
+    def streamErrorHandler(self,conn,error):
+        name,text='error',error.getData()
+        for tag in error.getChildren():
+            if tag.getNamespace()==NS_XMPP_STREAMS:
+                if tag.getName()=='text': text=tag.getData()
+                else: name=tag.getName()
+        if name in stream_exceptions.keys(): exc=stream_exceptions[name]
+        else: exc=StreamError
+        raise exc((name,text))
 
     def RegisterCycleHandler(self,handler):
         """ Register handler that will be called on every Dispatcher.Process() call. """
