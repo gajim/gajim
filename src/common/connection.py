@@ -693,21 +693,26 @@ class Connection:
 		if delroster:
 			self.connection.getRoster().delItem(jid)
 
-	def unsubscribe_agent(self, agent):
-		if not self.connection:
+	def _receive_agent_info(self, con, iq_obj, agent):
+		if not iq_obj:
 			return
-		self.connection.getRoster().delItem(agent)
-		iq = common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to = agent)
-		agent_info = self.connection.SendAndWaitForResponse(iq) # FIXME: This blocks!
-		if not agent_info:
-			return
-		key = agent_info.getTag('query').getTagData('key')
+		key = iq_obj.getTag('query').getTagData('key')
 		iq = common.xmpp.Iq(to = agent, typ = 'set', queryNS =\
 			common.xmpp.NS_REGISTER)
 		iq.getTag('query').setTag('remove')
 		iq.getTag('query').setTagData('key',key)
 		self.connection.send(iq)
 		self.dispatch('AGENT_REMOVED', agent)
+
+	def unsubscribe_agent(self, agent):
+		if not self.connection:
+			return
+		self.connection.getRoster().delItem(agent)
+		iq = common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to = agent)
+		self.connection.SendAndCallForResponse(iq, self._receive_agent_info,
+			{'agent': agent})
+		return
+		agent_info = self.connection.SendAndWaitForResponse(iq) # FIXME: This blocks!
 
 	def update_user(self, jid, name, groups):
 		if self.connection:
