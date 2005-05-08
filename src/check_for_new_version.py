@@ -33,10 +33,7 @@ GTKGUI_GLADE='gtkgui.glade'
 class Check_for_new_version_dialog:
 	def __init__(self, plugin):
 		self.plugin = plugin
-		try:
-			self.check_for_new_version()
-		except:
-			pass
+		self.check_for_new_version()
 
 	def parse_glade(self):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'new_version_available_dialog', APP)
@@ -56,37 +53,44 @@ class Check_for_new_version_dialog:
 	def check_for_new_version(self):
 		'''parse online Changelog to find out last version
 		and the changes for that latest version'''
-		check_for_new_version_available = True # Why that ?
-		if check_for_new_version_available:
-			import urllib
+		import urllib2
+		import socket
+		dto = socket.getdefaulttimeout()
+		socket.setdefaulttimeout(5)
 
-			url = 'http://trac.gajim.org/file/trunk/Changelog?rev=latest&format=txt'
-			changelog = urllib.urlopen(url)
-			# format is Gajim version (date)
-			first_line = changelog.readline()
-			finish_version = first_line.find(' ', 6) # start search after 'Gajim'
-			latest_version = first_line[6:finish_version]
-			if latest_version > gajim.version:
-				start_date = finish_version + 2 # one space and one (
-				date = first_line[start_date:-2] # remove the last ) and \n
-				info = 'Gajim ' + latest_version + ' was released in ' + date + '!'
-				changes = ''
-				while True:
-					line = changelog.readline().lstrip()
-					if line.startswith('Gajim'):
-						break
-					else:
-						if line != '\n' or line !='': # line has some content
-							if not line.startswith('*'):
-								# the is not a new *real* line
-								# but a continuation from previous line.
-								# So remove \n from previous 'line' beforing adding it
-								changes = changes[:-1]
+		url = 'http://trac.gajim.org/file/trunk/Changelog?rev=latest&format=txt'
+		try:
+			changelog = urllib2.urlopen(url)
+		except:
+			pass
 
-							changes += line
-				
-				self.parse_glade()
-				self.information_label.set_text(info)
-				buf = self.changes_textview.get_buffer()
-				buf.set_text(changes)
-				self.window.show_all()
+		socket.setdefaulttimeout(dto)
+
+		# format is 'Gajim version (date)'
+		first_line = changelog.readline()
+		finish_version = first_line.find(' ', 6) # start search after 'Gajim'
+		latest_version = first_line[6:finish_version]
+		if latest_version > gajim.version:
+			start_date = finish_version + 2 # one space and one (
+			date = first_line[start_date:-2] # remove the last ) and \n
+			info = 'Gajim ' + latest_version + ' was released in ' + date + '!'
+			changes = ''
+			while True:
+				line = changelog.readline().lstrip()
+				if line.startswith('Gajim'):
+					break
+				else:
+					if line != '\n' or line !='': # line has some content
+						if not line.startswith('*'):
+							# the is not a new *real* line
+							# but a continuation from previous line.
+							# So remove \n from previous 'line' beforing adding it
+							changes = changes[:-1]
+
+						changes += line
+			
+			self.parse_glade()
+			self.information_label.set_text(info)
+			buf = self.changes_textview.get_buffer()
+			buf.set_text(changes)
+			self.window.show_all()
