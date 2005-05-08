@@ -205,10 +205,14 @@ class Client(CommonClient):
                 self.connected+='+sasl'
                 return 'sasl'
 
+    def initRoster(self):
+        """ Plug in the roster. """
+        if not self.__dict__.has_key('Roster'): roster.Roster().PlugIn(self)
+
     def getRoster(self):
         """ Return the Roster instance, previously plugging it in and
             requesting roster from server if needed. """
-        if not self.__dict__.has_key('Roster'): roster.Roster().PlugIn(self)
+        self.initRoster()
         return self.Roster.getRoster()
 
     def sendInitPresence(self,requestRoster=1):

@@ -490,6 +490,16 @@ class Connection:
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('MSGERROR', (jid, errcode, errmsg))
 
+	def _getRosterCB(self, con, iq_obj):
+		roster = self.connection.getRoster().getRaw()
+		if not roster :
+			roster = {}
+		name = gajim.config.get_per('accounts', self.name, 'name')
+		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+		if roster.has_key(name + '@' + hostname):
+			del roster[name + '@' + hostname]
+		self.dispatch('ROSTER', roster)
+
 	def connect(self):
 		"""Connect and authentificate to the Jabber server"""
 		name = gajim.config.get_per('accounts', self.name, 'name')
@@ -508,7 +518,7 @@ class Connection:
 		else:
 			proxy = None
 		if gajim.config.get('verbose'):
-			con = common.xmpp.Client(hostname)#, debug = [])
+			con = common.xmpp.Client(hostname)
 		else:
 			con = common.xmpp.Client(hostname, debug = [])
 			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
@@ -544,16 +554,13 @@ class Connection:
 			common.xmpp.NS_VERSION)
 		con.RegisterHandler('iq', self._MucOwnerCB, 'result',\
 			common.xmpp.NS_MUC_OWNER)
+		con.RegisterHandler('iq', self._getRosterCB, 'result',\
+			common.xmpp.NS_ROSTER)
 
 		gajim.log.debug('Connected to server')
 
 		if con.auth(name, self.password, resource): #FIXME: blocking
-			roster = con.getRoster().getRaw() #FIXME: blocking
-			if not roster :
-				roster = {}
-			if roster.has_key(name + '@' + hostname):
-				del roster[name + '@' + hostname]
-			self.dispatch('ROSTER', roster)
+			con.initRoster()
 			self.connected = 2
 			return con
 		else:
