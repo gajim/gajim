@@ -712,7 +712,6 @@ class Connection:
 		self.connection.SendAndCallForResponse(iq, self._receive_agent_info,
 			{'agent': agent})
 		return
-		agent_info = self.connection.SendAndWaitForResponse(iq) # FIXME: This blocks!
 
 	def update_user(self, jid, name, groups):
 		if self.connection:
