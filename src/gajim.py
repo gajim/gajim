@@ -350,6 +350,13 @@ class Interface:
 			self.windows[account]['disco'].agent_info(array[0], array[1], \
 				array[2], array[3])
 
+	def handle_event_register_agent_info(self, account, array):
+		#('AGENT_INFO', account, (agent, infos))
+		if array[1].has_key('instructions'):
+			config.Service_registration_window(array[0], array[1], self, account)
+		else:
+			dialogs.Error_dialog(_('error contacting %s') % array[0])
+
 	def handle_event_agent_info_items(self, account, array):
 		#('AGENT_INFO_ITEMS', account, (agent, node, items))
 		if self.windows[account].has_key('disco'):
@@ -611,9 +618,11 @@ class Interface:
 		conn.register_handler('UNSUBSCRIBED', self.handle_event_unsubscribed)
 		conn.register_handler('SUBSCRIBE', self.handle_event_subscribe)
 		conn.register_handler('AGENT_INFO', self.handle_event_agent_info)
-		conn.register_handler('AGENT_INFO_ITEMS', \
+		conn.register_handler('REGISTER_AGENT_INFO',
+			self.handle_event_register_agent_info)
+		conn.register_handler('AGENT_INFO_ITEMS',
 			self.handle_event_agent_info_items)
-		conn.register_handler('AGENT_INFO_INFO', \
+		conn.register_handler('AGENT_INFO_INFO',
 			self.handle_event_agent_info_info)
 		conn.register_handler('QUIT', self.handle_event_quit)
 		conn.register_handler('ACC_OK', self.handle_event_acc_ok)

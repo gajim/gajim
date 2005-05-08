@@ -103,13 +103,13 @@ class Connection:
 	"""Connection class"""
 	def __init__(self, name):
 		# dict of function to be calledfor each event
-		self.handlers = {'ROSTER': [], 'WARNING': [], 'ERROR': [], 'STATUS': [], \
-			'NOTIFY': [], 'MSG': [], 'MSGERROR': [], 'MSGSENT': [] , \
-			'SUBSCRIBED': [], 'UNSUBSCRIBED': [], 'SUBSCRIBE': [], \
-			'AGENT_INFO': [], 'AGENT_INFO_ITEMS': [], 'AGENT_INFO_INFO': [], \
-			'QUIT': [], 'ACC_OK': [], 'MYVCARD': [], 'OS_INFO': [], 'VCARD': [], \
-			'GC_MSG': [], 'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],\
-			'ROSTER_INFO': []}
+		self.handlers = {'ROSTER': [], 'WARNING': [], 'ERROR': [], 'STATUS': [],
+			'NOTIFY': [], 'MSG': [], 'MSGERROR': [], 'MSGSENT': [] ,
+			'SUBSCRIBED': [], 'UNSUBSCRIBED': [], 'SUBSCRIBE': [],
+			'AGENT_INFO': [], 'REGISTER_AGENT_INFO': [], 'AGENT_INFO_ITEMS': [],
+			'AGENT_INFO_INFO': [], 'QUIT': [], 'ACC_OK': [], 'MYVCARD': [],
+			'OS_INFO': [], 'VCARD': [], 'GC_MSG': [], 'GC_SUBJECT': [],
+			'GC_CONFIG': [], 'BAD_PASSPHRASE': [], 'ROSTER_INFO': []}
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
@@ -724,10 +724,38 @@ class Connection:
 				queryNS = common.xmpp.NS_BROWSE))
 			self.discoverInfo(jid, node)
 
-	def ask_register_agent_info(self, agent):
+	def _receive_register_agent_info(self, con, iq_obj, agent):
+		if not common.xmpp.isResultNode(iq_obj):
+			return
+		iq = common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to = agent)
+		df = iq_obj.getTag('query', namespace = common.xmpp.NS_REGISTER).\
+			getTag('x', namespace = common.xmpp.NS_DATA)
+		if df:
+			df = common.xmpp.DataForm(node = df)
+			self.dispatch('REGISTER_AGENT_INFO', (agent, df.asDict()))
+			return
+		df = common.xmpp.DataForm(typ = 'form')
+		for i in iq_obj.getQueryPayload():
+			if type(i) != type(iq):
+				pass
+			elif i.getName() == 'instructions':
+				df.addInstructions(i.getData())
+			else:
+				df.setField(i.getName()).setValue(i.getData())
+		self.dispatch('REGISTER_AGENT_INFO', (agent, df.asDict()))
+		return
+
+	def request_register_agent_info(self, agent):
 		if not self.connection:
 			return None
-		return common.xmpp.features.getRegInfo(self.connection, agent).asDict() # FIXME: blocking
+		iq = common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to = agent)
+		self.connection.SendAndCallForResponse(iq,
+			self._receive_register_agent_info, {'agent': agent})
+		return
+		rep = common.xmpp.features.getRegInfo(self.connection, agent).asDict() # FIXME: blocking
+		print '\n\nTOTO\n\n'
+		print rep
+		return rep
 
 	def register_agent(self, agent, info):
 		if not self.connection:
