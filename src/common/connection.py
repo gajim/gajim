@@ -752,10 +752,6 @@ class Connection:
 		self.connection.SendAndCallForResponse(iq,
 			self._receive_register_agent_info, {'agent': agent})
 		return
-		rep = common.xmpp.features.getRegInfo(self.connection, agent).asDict() # FIXME: blocking
-		print '\n\nTOTO\n\n'
-		print rep
-		return rep
 
 	def register_agent(self, agent, info):
 		if not self.connection:
