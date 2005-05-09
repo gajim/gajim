@@ -25,5 +25,4 @@ version = '0.7'
 config = common.config.Config()
 connections = {}
 log = logging.getLogger('Gajim')
-log.setLevel(logging.DEBUG)
 logger = common.logger.Logger()

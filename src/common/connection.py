@@ -767,31 +767,31 @@ class Connection:
 			proxy = {'host': proxyhost, 'port': proxyport}
 		else:
 			proxy = None
-		c = common.xmpp.Client(server = hostname)
-#		try:
-		c.connect(proxy = proxy)
-#		except:
-#			gajim.log.debug('Couldn\'t connect to %s' % hostname)
-#			self.dispatch('ERROR', _('Couldn\'t connect to ') + hostname)
-#			return 0
-#		else:
-		gajim.log.debug('Connected to server')
-		req = common.xmpp.features.getRegInfo(c, hostname).asDict() # FIXME! This blocks!
-		req['username'] = login
-		req['password'] = password
-		if not common.xmpp.features.register(c, hostname,req): #FIXME: error
-			self.dispatch('ERROR', _('Error: ') + c.lastErr)
+		c = common.xmpp.Client(server = hostname, debug = [])
+		try:
+			c.connect(proxy = proxy)
+		except:
+			gajim.log.debug('Couldn\'t connect to %s' % hostname)
+			self.dispatch('ERROR', _('Couldn\'t connect to ') + hostname)
+			return 0
 		else:
-			self.name = name
-			self.connected = 0
-			self.password = password
-			if USE_GPG:
-				self.gpg = GnuPG.GnuPG()
-				gajim.config.set('usegpg', True)
+			gajim.log.debug(_('Connected to server'))
+			req = common.xmpp.features.getRegInfo(c, hostname).asDict() # FIXME! This blocks!
+			req['username'] = login
+			req['password'] = password
+			if not common.xmpp.features.register(c, hostname,req): #FIXME: error
+				self.dispatch('ERROR', _('Error: ') + c.lastErr)
 			else:
-				gajim.config.set('usegpg', False)
-			self.dispatch('ACC_OK', (hostname, login, password, name,
-				resource, prio, use_proxy, proxyhost, proxyport))
+				self.name = name
+				self.connected = 0
+				self.password = password
+				if USE_GPG:
+					self.gpg = GnuPG.GnuPG()
+					gajim.config.set('usegpg', True)
+				else:
+					gajim.config.set('usegpg', False)
+				self.dispatch('ACC_OK', (hostname, login, password, name,
+					resource, prio, use_proxy, proxyhost, proxyport))
 
 	def account_changed(self, new_name):
 		self.name = new_name
