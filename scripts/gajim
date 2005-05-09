@@ -18,8 +18,7 @@
 ## GNU General Public License for more details.
 
 if [ `id -u` -eq 0 ]; then
-	echo "You must not launch Gajim as root, it is DANGEROUS"
-	exit 0
+	echo "You must not launch Gajim as root, it is INSECURE"
 fi
 
 cd PREFIX/share/gajim/src
