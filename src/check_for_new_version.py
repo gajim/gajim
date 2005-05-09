@@ -33,7 +33,10 @@ GTKGUI_GLADE='gtkgui.glade'
 class Check_for_new_version_dialog:
 	def __init__(self, plugin):
 		self.plugin = plugin
-		self.check_for_new_version()
+		try:
+			self.check_for_new_version()
+		except:
+			pass
 
 	def parse_glade(self):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'new_version_available_dialog', APP)
@@ -59,10 +62,7 @@ class Check_for_new_version_dialog:
 		socket.setdefaulttimeout(5)
 
 		url = 'http://trac.gajim.org/file/trunk/Changelog?rev=latest&format=txt'
-		try:
-			changelog = urllib2.urlopen(url)
-		except:
-			pass
+		changelog = urllib2.urlopen(url)
 
 		socket.setdefaulttimeout(dto)
 
