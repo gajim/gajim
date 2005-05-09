@@ -2844,6 +2844,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="save_position_checkbutton">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">If checked, Gajim will remember the main window position after you quit</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Save roster _position</property>
 		  <property name="use_underline">True</property>
@@ -2864,7 +2865,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="merge_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If you have 2 or more accounts and you enable it, Gajim will list all contacts as if you had one account</property>
+		  <property name="tooltip" translatable="yes">If you have 2 or more accounts and it is checked, Gajim will list all contacts as if you had one account</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Merge accounts</property>
 		  <property name="use_underline">True</property>
@@ -4370,6 +4371,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="ignore_events_from_unknown_contacts_checkbutton">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Check this option, only if someone you don't have in the roster spams/annoys you. Use with caution, cause it blocks all messags from every contact you don't have in the roster and might want to sent you a message</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Ignore events from contacts not in the roster</property>
 		  <property name="use_underline">True</property>
@@ -7590,6 +7592,7 @@ Custom</property>
 	  <child>
 	    <widget class="GtkButton" id="set_button">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Click to set the subject</property>
 	      <property name="can_default">True</property>
 	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
@@ -7609,6 +7612,7 @@ Custom</property>
 	  <child>
 	    <widget class="GtkButton" id="configure_button">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Click to configure the room options</property>
 	      <property name="can_focus">True</property>
 	      <property name="label" translatable="yes">_Configure</property>
 	      <property name="use_underline">True</property>
