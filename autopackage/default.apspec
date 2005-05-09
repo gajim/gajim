@@ -11,7 +11,7 @@ URL: http://www.gajim.org/
 License: GNU General Public License, Version 2
 SoftwareVersion: 0.6.1
 AutopackageTarget: 1.0
-PackageVersion: 1
+PackageVersion: 2
 
 # Only uncomment InterfaceVersion if your package exposes interfaces to other software,
 # for instance if it includes DSOs or python/perl modules. See the developer guide for more info,
@@ -52,7 +52,7 @@ EOF
 
 require @python.org/python 2.3
 require @gtk.org/gtk 2.4
-require @pygtk.org/pygtk 2.4
+require @gnome.org/pygtk 2.4
 require @glade.gnome.org/libglade 2
 
 
@@ -64,8 +64,8 @@ copyFiles  share/gajim "$PREFIX/share/"
 installIcon share/gajim/gajim.xpm
 installDesktop "Network/Instant Messaging" gajim.desktop
 installMan 1 gajim.1
+safeSed bin/gajim "s!PREFIX!$PREFIX!g"
 installExe bin/*
-safeSed "$PREFIX/bin/gajim" "s!PREFIX!$PREFIX!g"
 chmod +x "$PREFIX/bin/gajim"
 
 [Uninstall]
