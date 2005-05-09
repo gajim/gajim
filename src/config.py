@@ -1295,13 +1295,9 @@ class Account_modification_window:
 			if not widget.get_active():
 				w.set_text('')
 
-	def on_use_tls_checkbutton_toggled(self, widget):
-		pass # FIXME: yann add your code here :)
-
 	def on_gpg_save_password_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled_and_clear(widget, [\
 			self.xml.get_widget('gpg_password_entry')])
-		#FIXME: so it doesn't save it??
 
 	def on_save_password_checkbutton_toggled(self, widget):
 		if self.xml.get_widget('new_account_checkbutton').get_active():
