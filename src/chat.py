@@ -644,7 +644,7 @@ class Chat:
 
 		if kind == 'status':
 			print_all_special = True
-		elif text.split()[0] == '/me':
+		elif text.startswith('/me '):
 			text = name + text[3:]
 			print_all_special = True
 
