@@ -8677,7 +8677,7 @@ Custom</property>
 
       <child>
 	<widget class="GtkVBox" id="chats_vbox">
-	  <property name="border_width">5</property>
+	  <property name="border_width">4</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
 	  <property name="homogeneous">False</property>
