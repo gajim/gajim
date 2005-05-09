@@ -110,6 +110,7 @@ class Config:
 			'proxyport': [ opt_int, 3128 ],
 			'keyid': [ opt_str, '' ],
 			'keyname': [ opt_str, '' ],
+			'usetls': [ opt_bool, True ],
 			'savegpgpass': [ opt_bool, False ],
 			'gpgpassword': [ opt_str, '' ],
 			'sync_with_global_status': [ opt_bool, True ],

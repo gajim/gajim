@@ -930,10 +930,9 @@ class Account_modification_window:
 
 	def init_account_gpg(self):
 		keyid = gajim.config.get_per('accounts', self.account, 'keyid')
-		keyname = gajim.config.get_per('accounts', self.account,
-								'keyname')
+		keyname = gajim.config.get_per('accounts', self.account, 'keyname')
 		savegpgpass = gajim.config.get_per('accounts', self.account,
-								'savegpgpass')
+																'savegpgpass')
 
 		if not keyid or not gajim.config.get('usegpg'):
 			return
@@ -985,6 +984,9 @@ class Account_modification_window:
 		entry.set_text(str(gajim.config.get_per('accounts',
 						self.account, 'proxyport')))
 			
+		usetls = gajim.config.get_per('accounts', self.account, 'usetls')
+		self.xml.get_widget('use_tls_checkbutton').set_active(usetls)
+
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if gajim.config.get('usegpg'):
 			self.init_account_gpg()
@@ -1060,6 +1062,7 @@ class Account_modification_window:
 				dialogs.Error_dialog(_('You must enter a proxy host to use proxy'))
 				return
 
+		usetls = self.xml.get_widget('use_tls_checkbutton').get_active()
 		(login, hostname) = jid.split('@')
 		key_name = self.xml.get_widget('gpg_name_label').get_text()
 		if key_name == '': #no key selected
@@ -1119,6 +1122,7 @@ class Account_modification_window:
 			gajim.config.set_per('accounts', name, 'use_proxy', use_proxy)
 			gajim.config.set_per('accounts', name, 'proxyhost', proxyhost)
 			gajim.config.set_per('accounts', name, 'proxyport', proxyport)
+			gajim.config.set_per('accounts', name, 'usetls', usetls)
 			gajim.config.set_per('accounts', name, 'keyid', keyID)
 			gajim.config.set_per('accounts', name, 'keyname', key_name)
 			gajim.config.set_per('accounts', name, 'savegpgpass', \
@@ -1160,6 +1164,7 @@ class Account_modification_window:
 		gajim.config.set_per('accounts', name, 'use_proxy', use_proxy)
 		gajim.config.set_per('accounts', name, 'proxyhost', proxyhost)
 		gajim.config.set_per('accounts', name, 'proxyport', proxyport)
+		gajim.config.set_per('accounts', name, 'usetls', usetls)
 		gajim.config.set_per('accounts', name, 'keyid', keyID)
 		gajim.config.set_per('accounts', name, 'keyname', key_name)
 		gajim.config.set_per('accounts', name, 'savegpgpass', \

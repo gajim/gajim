@@ -1082,7 +1082,6 @@
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
-			  <signal name="toggled" handler="on_use_tls_checkbutton_toggled" last_modification_time="Sun, 08 May 2005 21:50:57 GMT"/>
 			</widget>
 		      </child>
 		    </widget>

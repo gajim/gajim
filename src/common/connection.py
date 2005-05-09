@@ -505,6 +505,7 @@ class Connection:
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
+		usetls = gajim.config.get_per('accounts', self.name, 'usetls')
 
 		#create connexion if it doesn't already existe
 		if self.connection:
@@ -525,7 +526,7 @@ class Connection:
 			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
 		con.RegisterDisconnectHandler(self._disconnectedCB)
 		try:
-			con.connect(proxy=proxy) #FIXME: blocking
+			con.connect(proxy=proxy, tls=usetls) #FIXME: blocking
 		except:
 			gajim.log.debug('Couldn\'t connect to %s' % hostname)
 			self.dispatch('STATUS', 'offline')
