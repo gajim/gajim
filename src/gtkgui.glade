@@ -1459,7 +1459,6 @@
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">proxyusername_entry</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">0</property>
@@ -1497,7 +1496,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="proxyusername_entry">
+			    <widget class="GtkEntry" id="proxyuser_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -1518,7 +1517,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="proxypassword_entry">
+			    <widget class="GtkEntry" id="proxypass_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
