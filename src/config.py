@@ -1016,7 +1016,7 @@ class Account_modification_window:
 		entry = self.xml.get_widget('proxypass_entry')
 		entry.set_sensitive(use_proxy)
 		entry.set_text(gajim.config.get_per('accounts', self.account,
-							'proxypass')))
+							'proxypass'))
 			
 		usetls = gajim.config.get_per('accounts', self.account, 'usetls')
 		self.xml.get_widget('use_tls_checkbutton').set_active(usetls)
