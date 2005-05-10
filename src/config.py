@@ -44,7 +44,9 @@ def mk_color_string(color):
 	return '#' + (hex(color.red) + '0')[2:4] + \
 		(hex(color.green) + '0')[2:4] + \
 		(hex(color.blue) + '0')[2:4]
-	
+
+
+#---------- Preferences_window class -------------#
 class Preferences_window:
 	'''Class for Preferences window'''
 	
@@ -54,6 +56,300 @@ class Preferences_window:
 	
 	def on_close_button_clicked(self, widget):
 		self.window.hide()
+
+	def __init__(self, plugin):
+		'''Initialize Preferences window'''
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
+		self.window = self.xml.get_widget('preferences_window')
+		self.plugin = plugin
+		self.iconset_combobox = self.xml.get_widget('iconset_combobox')
+		self.notify_on_new_message_radiobutton = self.xml.get_widget \
+			('notify_on_new_message_radiobutton')
+		self.popup_new_message_radiobutton = self.xml.get_widget \
+			('popup_new_message_radiobutton')
+		self.notify_on_online_checkbutton = self.xml.get_widget \
+			('notify_on_online_checkbutton')
+		self.notify_on_offline_checkbutton = self.xml.get_widget \
+			('notify_on_offline_checkbutton')
+		self.auto_popup_away_checkbutton = self.xml.get_widget \
+			('auto_popup_away_checkbutton')
+		self.auto_away_checkbutton = self.xml.get_widget('auto_away_checkbutton')
+		self.auto_away_time_spinbutton = self.xml.get_widget \
+			('auto_away_time_spinbutton')
+		self.auto_xa_checkbutton = self.xml.get_widget('auto_xa_checkbutton')
+		self.auto_xa_time_spinbutton = self.xml.get_widget \
+			('auto_xa_time_spinbutton')
+		self.trayicon_checkbutton = self.xml.get_widget('trayicon_checkbutton')
+		self.notebook = self.xml.get_widget('preferences_notebook')
+		
+		#trayicon
+		if self.plugin.systray_capabilities:
+			st = gajim.config.get('trayicon')
+			self.trayicon_checkbutton.set_active(st)
+		else:
+			self.trayicon_checkbutton.set_sensitive(False)
+
+		#Save position
+		st = gajim.config.get('saveposition')
+		self.xml.get_widget('save_position_checkbutton').set_active(st)
+		
+		#Merge accounts
+		st = gajim.config.get('mergeaccounts')
+		self.xml.get_widget('merge_checkbutton').set_active(st)
+
+		#Use emoticons
+		st = gajim.config.get('useemoticons')
+		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
+		self.xml.get_widget('add_remove_emoticons_button').set_sensitive(st)
+
+		#iconset
+		iconsets_list = os.listdir('../data/iconsets/')
+		model = gtk.ListStore(gobject.TYPE_STRING)
+		self.iconset_combobox.set_model(model)
+		l = []
+		for dir in iconsets_list:
+			if dir != '.svn' and dir != 'transports':
+				l.append(dir)
+		if l.count == 0:
+			l.append(' ')
+		for i in range(len(l)):
+			model.append([l[i]])
+			if gajim.config.get('iconset') == l[i]:
+				self.iconset_combobox.set_active(i)
+
+		# Roster colors / font
+		self.theme_default = {
+			'green': {
+				'accounttextcolor': '#ffffff',
+				'grouptextcolor': '#0000ff',
+				'usertextcolor': '#000000',
+				'accountbgcolor': '#94aa8c',
+				'groupbgcolor': '#eff3e7',
+				'userbgcolor': '#ffffff',
+				'accountfont': 'Sans Bold 10',
+				'groupfont': 'Sans Italic 10',
+				'userfont': 'Sans 10',
+			},
+			'cyan': {
+				'accounttextcolor': '#ff0000',
+				'grouptextcolor': '#0000ff',
+				'usertextcolor': '#000000',
+				'accountbgcolor': '#9fdfff',
+				'groupbgcolor': '#ffffff',
+				'userbgcolor': '#ffffff',
+				'accountfont': 'Sans Bold 10',
+				'groupfont': 'Sans Italic 10',
+				'userfont': 'Sans 10'
+			}
+		}
+
+		theme_combobox = self.xml.get_widget('theme_combobox')
+		cell = gtk.CellRendererText()
+		theme_combobox.pack_start(cell, True)
+		theme_combobox.add_attribute(cell, 'text', 0)  
+		model = gtk.ListStore(gobject.TYPE_STRING)
+		theme_combobox.set_model(model)
+		i = 0
+		for t in self.theme_default:
+			model.append([t])
+			if gajim.config.get('roster_theme') == t:
+				theme_combobox.set_active(i)
+			i += 1
+		model.append(['custom'])
+		if gajim.config.get('roster_theme') == 'custom':
+			theme_combobox.set_active(i)
+		self.on_theme_combobox_changed(theme_combobox)
+
+		#use tabbed chat window
+		st = gajim.config.get('usetabbedchat')
+		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
+		
+		#Print time
+		if gajim.config.get('print_time') == 'never':
+			self.xml.get_widget('time_never_radiobutton').set_active(True)
+		elif gajim.config.get('print_time') == 'sometimes':
+			self.xml.get_widget('time_sometimes_radiobutton').set_active(True)
+		else:
+			self.xml.get_widget('time_always_radiobutton').set_active(True)
+
+		#before time
+		st = gajim.config.get('before_time')
+		self.xml.get_widget('before_time_entry').set_text(st)
+		
+		#after time
+		st = gajim.config.get('after_time')
+		self.xml.get_widget('after_time_entry').set_text(st)
+
+		#before nickname
+		st = gajim.config.get('before_nickname')
+		self.xml.get_widget('before_nickname_entry').set_text(st)
+
+		#after nickanme
+		st = gajim.config.get('after_nickname')
+		self.xml.get_widget('after_nickname_entry').set_text(st)
+
+		#Color for incomming messages
+		colSt = gajim.config.get('inmsgcolor')
+		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
+		#Color for outgoing messages
+		colSt = gajim.config.get('outmsgcolor')
+		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(colSt))
+		
+		#Color for status messages
+		colSt = gajim.config.get('statusmsgcolor')
+		self.xml.get_widget('status_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(colSt))
+
+		# on new message
+		only_in_roster = True
+		if gajim.config.get('notify_on_new_message'):
+			self.xml.get_widget('notify_on_new_message_radiobutton').set_active(1)
+			only_in_roster = False
+		if gajim.config.get('autopopup'):
+			self.xml.get_widget('popup_new_message_radiobutton').set_active(True)
+			only_in_roster = False
+		if only_in_roster:
+			self.xml.get_widget('only_in_roster_radiobutton').set_active(True)
+
+		#notify on online statuses
+		st = gajim.config.get('notify_on_online')
+		self.notify_on_online_checkbutton.set_active(st)
+
+		#notify on offline statuses
+		st = gajim.config.get('notify_on_offline')
+		self.notify_on_offline_checkbutton.set_active(st)
+
+		#autopopupaway
+		st = gajim.config.get('autopopupaway')
+		self.auto_popup_away_checkbutton.set_active(st)
+
+		#Ignore messages from unknown contacts
+		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
+			set_active(gajim.config.get('ignore_unknown_contacts'))
+
+		#sounds
+		if gajim.config.get('sounds_on'):
+			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
+		else:
+			self.xml.get_widget('soundplayer_hbox').set_sensitive(False)
+			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
+			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
+
+		#sound player
+		self.xml.get_widget('soundplayer_entry').set_text(\
+			gajim.config.get('soundplayer'))
+
+		#sounds treeview
+		self.sound_tree = self.xml.get_widget('sounds_treeview')
+		model = gtk.ListStore(gobject.TYPE_STRING,
+					gobject.TYPE_BOOLEAN,
+					gobject.TYPE_STRING)
+		self.sound_tree.set_model(model)
+
+		col = gtk.TreeViewColumn(_('Active'))
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererToggle()
+		renderer.set_property('activatable', True)
+		renderer.connect('toggled', self.sound_toggled_cb)
+		col.pack_start(renderer)
+		col.set_attributes(renderer, active = 1)
+
+		col = gtk.TreeViewColumn(_('Event'))
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text = 0)
+
+		col = gtk.TreeViewColumn(_('Sound'))
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text = 2)
+		self.fill_sound_treeview()
+		
+		#Autoaway
+		st = gajim.config.get('autoaway')
+		self.auto_away_checkbutton.set_active(st)
+
+		#Autoawaytime
+		st = gajim.config.get('autoawaytime')
+		self.auto_away_time_spinbutton.set_value(st)
+		self.auto_away_time_spinbutton.set_sensitive(gajim.config.get('autoaway'))
+
+		#Autoxa
+		st = gajim.config.get('autoxa')
+		self.auto_xa_checkbutton.set_active(st)
+
+		#Autoxatime
+		st = gajim.config.get('autoxatime')
+		self.auto_xa_time_spinbutton.set_value(st)
+		self.auto_xa_time_spinbutton.set_sensitive(gajim.config.get('autoxa'))
+
+		#ask_status when online / offline
+		st = gajim.config.get('ask_online_status')
+		self.xml.get_widget('prompt_online_status_message_checkbutton').\
+			set_active(st)
+		st = gajim.config.get('ask_offline_status')
+		self.xml.get_widget('prompt_offline_status_message_checkbutton').\
+			set_active(st)
+
+		#Status messages
+		self.msg_tree = self.xml.get_widget('msg_treeview')
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		self.msg_tree.set_model(model)
+		col = gtk.TreeViewColumn('name')
+		self.msg_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text = 0)
+		renderer.connect('edited', self.on_msg_cell_edited)
+		renderer.set_property('editable', True)
+		self.fill_msg_treeview()
+		buf = self.xml.get_widget('msg_textview').get_buffer()
+		buf.connect('changed', self.on_msg_textview_changed)
+
+		#open links with
+		self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
+		if gajim.config.get('openwith') == 'gnome-open':
+			self.links_open_with_combobox.set_active(0)
+		elif gajim.config.get('openwith') == 'kfmclient exec':
+			self.links_open_with_combobox.set_active(True)
+		elif gajim.config.get('openwith') == 'custom':
+			self.links_open_with_combobox.set_active(2)
+			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
+		self.xml.get_widget('custom_browser_entry').set_text(\
+			gajim.config.get('custombrowser'))
+		self.xml.get_widget('custom_mail_client_entry').set_text(\
+			gajim.config.get('custommailapp'))
+				
+		#log presences in user file
+		st = gajim.config.get('log_notif_in_user_file')
+		self.xml.get_widget('log_in_contact_checkbutton').set_active(st)
+
+		#log presences in external file
+		st = gajim.config.get('log_notif_in_sep_file')
+		self.xml.get_widget('log_in_extern_checkbutton').set_active(st)
+		
+		# don't send os info
+		st = gajim.config.get('send_os_info')
+		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
+		
+		# don't check for new version
+		st = gajim.config.get('check_for_new_version')
+		btn = self.xml.get_widget('check_for_new_version_checkbutton')
+		btn.set_active(st)
+		
+		self.xml.signal_autoconnect(self)
+		
+		self.sound_tree.get_model().connect('row-changed',
+					self.on_sounds_treemodel_row_changed)
+		self.msg_tree.get_model().connect('row-changed',
+					self.on_msg_treemodel_row_changed)
+		self.msg_tree.get_model().connect('row-deleted',
+					self.on_msg_treemodel_row_deleted)
 
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
@@ -608,301 +904,7 @@ class Preferences_window:
 			self.plugin.windows['advanced_config'] = dialogs.Advanced_window(
 																						self.plugin)
 
-	def __init__(self, plugin):
-		'''Initialize Preferences window'''
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
-		self.window = self.xml.get_widget('preferences_window')
-		self.plugin = plugin
-		self.iconset_combobox = self.xml.get_widget('iconset_combobox')
-		self.notify_on_new_message_radiobutton = self.xml.get_widget \
-			('notify_on_new_message_radiobutton')
-		self.popup_new_message_radiobutton = self.xml.get_widget \
-			('popup_new_message_radiobutton')
-		self.notify_on_online_checkbutton = self.xml.get_widget \
-			('notify_on_online_checkbutton')
-		self.notify_on_offline_checkbutton = self.xml.get_widget \
-			('notify_on_offline_checkbutton')
-		self.auto_popup_away_checkbutton = self.xml.get_widget \
-			('auto_popup_away_checkbutton')
-		self.auto_away_checkbutton = self.xml.get_widget('auto_away_checkbutton')
-		self.auto_away_time_spinbutton = self.xml.get_widget \
-			('auto_away_time_spinbutton')
-		self.auto_xa_checkbutton = self.xml.get_widget('auto_xa_checkbutton')
-		self.auto_xa_time_spinbutton = self.xml.get_widget \
-			('auto_xa_time_spinbutton')
-		self.trayicon_checkbutton = self.xml.get_widget('trayicon_checkbutton')
-		self.notebook = self.xml.get_widget('preferences_notebook')
-		
-		#trayicon
-		if self.plugin.systray_capabilities:
-			st = gajim.config.get('trayicon')
-			self.trayicon_checkbutton.set_active(st)
-		else:
-			self.trayicon_checkbutton.set_sensitive(False)
-
-		#Save position
-		st = gajim.config.get('saveposition')
-		self.xml.get_widget('save_position_checkbutton').set_active(st)
-		
-		#Merge accounts
-		st = gajim.config.get('mergeaccounts')
-		self.xml.get_widget('merge_checkbutton').set_active(st)
-
-		#Use emoticons
-		st = gajim.config.get('useemoticons')
-		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
-		self.xml.get_widget('add_remove_emoticons_button').set_sensitive(st)
-
-		#iconset
-		iconsets_list = os.listdir('../data/iconsets/')
-		model = gtk.ListStore(gobject.TYPE_STRING)
-		self.iconset_combobox.set_model(model)
-		l = []
-		for dir in iconsets_list:
-			if dir != '.svn' and dir != 'transports':
-				l.append(dir)
-		if l.count == 0:
-			l.append(' ')
-		for i in range(len(l)):
-			model.append([l[i]])
-			if gajim.config.get('iconset') == l[i]:
-				self.iconset_combobox.set_active(i)
-
-		# Roster colors / font
-		self.theme_default = {
-			'green': {
-				'accounttextcolor': '#ffffff',
-				'grouptextcolor': '#0000ff',
-				'usertextcolor': '#000000',
-				'accountbgcolor': '#94aa8c',
-				'groupbgcolor': '#eff3e7',
-				'userbgcolor': '#ffffff',
-				'accountfont': 'Sans Bold 10',
-				'groupfont': 'Sans Italic 10',
-				'userfont': 'Sans 10',
-			},
-			'cyan': {
-				'accounttextcolor': '#ff0000',
-				'grouptextcolor': '#0000ff',
-				'usertextcolor': '#000000',
-				'accountbgcolor': '#9fdfff',
-				'groupbgcolor': '#ffffff',
-				'userbgcolor': '#ffffff',
-				'accountfont': 'Sans Bold 10',
-				'groupfont': 'Sans Italic 10',
-				'userfont': 'Sans 10'
-			}
-		}
-
-		theme_combobox = self.xml.get_widget('theme_combobox')
-		cell = gtk.CellRendererText()
-		theme_combobox.pack_start(cell, True)
-		theme_combobox.add_attribute(cell, 'text', 0)  
-		model = gtk.ListStore(gobject.TYPE_STRING)
-		theme_combobox.set_model(model)
-		i = 0
-		for t in self.theme_default:
-			model.append([t])
-			if gajim.config.get('roster_theme') == t:
-				theme_combobox.set_active(i)
-			i += 1
-		model.append(['custom'])
-		if gajim.config.get('roster_theme') == 'custom':
-			theme_combobox.set_active(i)
-		self.on_theme_combobox_changed(theme_combobox)
-
-		#use tabbed chat window
-		st = gajim.config.get('usetabbedchat')
-		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
-		
-		#Print time
-		if gajim.config.get('print_time') == 'never':
-			self.xml.get_widget('time_never_radiobutton').set_active(1)
-		elif gajim.config.get('print_time') == 'sometimes':
-			self.xml.get_widget('time_sometimes_radiobutton').set_active(1)
-		else:
-			self.xml.get_widget('time_always_radiobutton').set_active(1)
-
-		#before time
-		st = gajim.config.get('before_time')
-		self.xml.get_widget('before_time_entry').set_text(st)
-		
-		#after time
-		st = gajim.config.get('after_time')
-		self.xml.get_widget('after_time_entry').set_text(st)
-
-		#before nickname
-		st = gajim.config.get('before_nickname')
-		self.xml.get_widget('before_nickname_entry').set_text(st)
-
-		#after nickanme
-		st = gajim.config.get('after_nickname')
-		self.xml.get_widget('after_nickname_entry').set_text(st)
-
-		#Color for incomming messages
-		colSt = gajim.config.get('inmsgcolor')
-		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(colSt))
-		
-		#Color for outgoing messages
-		colSt = gajim.config.get('outmsgcolor')
-		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(colSt))
-		
-		#Color for status messages
-		colSt = gajim.config.get('statusmsgcolor')
-		self.xml.get_widget('status_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(colSt))
-
-		# on new message
-		only_in_roster = True
-		if gajim.config.get('notify_on_new_message'):
-			self.xml.get_widget('notify_on_new_message_radiobutton').set_active(1)
-			only_in_roster = False
-		if gajim.config.get('autopopup'):
-			self.xml.get_widget('popup_new_message_radiobutton').set_active(True)
-			only_in_roster = False
-		if only_in_roster:
-			self.xml.get_widget('only_in_roster_radiobutton').set_active(True)
-
-		#notify on online statuses
-		st = gajim.config.get('notify_on_online')
-		self.notify_on_online_checkbutton.set_active(st)
-
-		#notify on offline statuses
-		st = gajim.config.get('notify_on_offline')
-		self.notify_on_offline_checkbutton.set_active(st)
-
-		#autopopupaway
-		st = gajim.config.get('autopopupaway')
-		self.auto_popup_away_checkbutton.set_active(st)
-
-		#Ignore messages from unknown contacts
-		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
-			set_active(gajim.config.get('ignore_unknown_contacts'))
-
-		#sounds
-		if gajim.config.get('sounds_on'):
-			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
-		else:
-			self.xml.get_widget('soundplayer_hbox').set_sensitive(False)
-			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
-			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
-
-		#sound player
-		self.xml.get_widget('soundplayer_entry').set_text(\
-			gajim.config.get('soundplayer'))
-
-		#sounds treeview
-		self.sound_tree = self.xml.get_widget('sounds_treeview')
-		model = gtk.ListStore(gobject.TYPE_STRING,
-					gobject.TYPE_BOOLEAN,
-					gobject.TYPE_STRING)
-		self.sound_tree.set_model(model)
-
-		col = gtk.TreeViewColumn(_('Active'))
-		self.sound_tree.append_column(col)
-		renderer = gtk.CellRendererToggle()
-		renderer.set_property('activatable', True)
-		renderer.connect('toggled', self.sound_toggled_cb)
-		col.pack_start(renderer)
-		col.set_attributes(renderer, active = 1)
-
-		col = gtk.TreeViewColumn(_('Event'))
-		self.sound_tree.append_column(col)
-		renderer = gtk.CellRendererText()
-		col.pack_start(renderer)
-		col.set_attributes(renderer, text = 0)
-
-		col = gtk.TreeViewColumn(_('Sound'))
-		self.sound_tree.append_column(col)
-		renderer = gtk.CellRendererText()
-		col.pack_start(renderer)
-		col.set_attributes(renderer, text = 2)
-		self.fill_sound_treeview()
-		
-		#Autoaway
-		st = gajim.config.get('autoaway')
-		self.auto_away_checkbutton.set_active(st)
-
-		#Autoawaytime
-		st = gajim.config.get('autoawaytime')
-		self.auto_away_time_spinbutton.set_value(st)
-		self.auto_away_time_spinbutton.set_sensitive(gajim.config.get('autoaway'))
-
-		#Autoxa
-		st = gajim.config.get('autoxa')
-		self.auto_xa_checkbutton.set_active(st)
-
-		#Autoxatime
-		st = gajim.config.get('autoxatime')
-		self.auto_xa_time_spinbutton.set_value(st)
-		self.auto_xa_time_spinbutton.set_sensitive(gajim.config.get('autoxa'))
-
-		#ask_status when online / offline
-		st = gajim.config.get('ask_online_status')
-		self.xml.get_widget('prompt_online_status_message_checkbutton').\
-			set_active(st)
-		st = gajim.config.get('ask_offline_status')
-		self.xml.get_widget('prompt_offline_status_message_checkbutton').\
-			set_active(st)
-
-		#Status messages
-		self.msg_tree = self.xml.get_widget('msg_treeview')
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
-		self.msg_tree.set_model(model)
-		col = gtk.TreeViewColumn('name')
-		self.msg_tree.append_column(col)
-		renderer = gtk.CellRendererText()
-		col.pack_start(renderer, True)
-		col.set_attributes(renderer, text = 0)
-		renderer.connect('edited', self.on_msg_cell_edited)
-		renderer.set_property('editable', True)
-		self.fill_msg_treeview()
-		buf = self.xml.get_widget('msg_textview').get_buffer()
-		buf.connect('changed', self.on_msg_textview_changed)
-
-		#open links with
-		self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
-		if gajim.config.get('openwith') == 'gnome-open':
-			self.links_open_with_combobox.set_active(0)
-		elif gajim.config.get('openwith') == 'kfmclient exec':
-			self.links_open_with_combobox.set_active(1)
-		elif gajim.config.get('openwith') == 'custom':
-			self.links_open_with_combobox.set_active(2)
-			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
-		self.xml.get_widget('custom_browser_entry').set_text(\
-			gajim.config.get('custombrowser'))
-		self.xml.get_widget('custom_mail_client_entry').set_text(\
-			gajim.config.get('custommailapp'))
-				
-		#log presences in user file
-		st = gajim.config.get('log_notif_in_user_file')
-		self.xml.get_widget('log_in_contact_checkbutton').set_active(st)
-
-		#log presences in external file
-		st = gajim.config.get('log_notif_in_sep_file')
-		self.xml.get_widget('log_in_extern_checkbutton').set_active(st)
-		
-		# don't send os info
-		st = gajim.config.get('send_os_info')
-		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
-		
-		# don't check for new version
-		st = gajim.config.get('check_for_new_version')
-		btn = self.xml.get_widget('check_for_new_version_checkbutton')
-		btn.set_active(st)
-		
-		self.xml.signal_autoconnect(self)
-		
-		self.sound_tree.get_model().connect('row-changed',
-					self.on_sounds_treemodel_row_changed)
-		self.msg_tree.get_model().connect('row-changed',
-					self.on_msg_treemodel_row_changed)
-		self.msg_tree.get_model().connect('row-deleted',
-					self.on_msg_treemodel_row_deleted)
-
-
+#---------- Account_modification_window class -------------#
 class Account_modification_window:
 	'''Class for account informations'''
 	def on_account_modification_window_destroy(self, widget):
@@ -916,6 +918,30 @@ class Account_modification_window:
 	
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
+
+	def __init__(self, plugin, account = ''):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_modification_window', APP)
+		self.window = self.xml.get_widget('account_modification_window')
+		self.plugin = plugin
+		self.account = account
+		self.modify = False
+		self.xml.get_widget('gpg_key_label').set_text('No key selected')
+		self.xml.get_widget('gpg_name_label').set_text('')
+		self.xml.get_widget('gpg_save_password_checkbutton').set_sensitive(False)
+		self.xml.get_widget('gpg_password_entry').set_sensitive(False)
+		self.xml.get_widget('password_entry').set_sensitive(False)
+		self.xml.get_widget('log_history_checkbutton').set_active(True)
+		self.xml.get_widget('use_tls_checkbutton').set_active(True)
+		
+		#default is checked
+		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(1)
+		self.xml.signal_autoconnect(self)
+		if account:
+			self.modify = True
+			self.init_account()
+			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
+			self.xml.get_widget('name_entry').grab_focus()
+		self.window.show_all()
 
 	def on_checkbutton_toggled(self, widget, widgets):
 		'''set or unset sensitivity of widgets when widget is toggled'''
@@ -1255,29 +1281,7 @@ class Account_modification_window:
 			password_entry.set_sensitive(False)
 			password_entry.set_text('')
 
-	def __init__(self, plugin, account = ''):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_modification_window', APP)
-		self.window = self.xml.get_widget('account_modification_window')
-		self.plugin = plugin
-		self.account = account
-		self.modify = False
-		self.xml.get_widget('gpg_key_label').set_text('No key selected')
-		self.xml.get_widget('gpg_name_label').set_text('')
-		self.xml.get_widget('gpg_save_password_checkbutton').set_sensitive(False)
-		self.xml.get_widget('gpg_password_entry').set_sensitive(False)
-		self.xml.get_widget('password_entry').set_sensitive(False)
-		self.xml.get_widget('log_history_checkbutton').set_active(1)
-		
-		#default is checked
-		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(1)
-		self.xml.signal_autoconnect(self)
-		if account:
-			self.modify = True
-			self.init_account()
-			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
-			self.xml.get_widget('name_entry').grab_focus()
-		self.window.show_all()
-
+#---------- Accounts_window class -------------#
 class Accounts_window:
 	'''Class for accounts window: lists of accounts'''
 	def on_accounts_window_destroy(self, widget):
@@ -1359,6 +1363,7 @@ class Accounts_window:
 		self.init_accounts()
 		self.window.show_all()
 
+#---------- Service_registration_window class -------------#
 class Service_registration_window:
 	'''Class for Service registration window:
 	Window that appears when we want to subscribe to a service'''
@@ -1414,6 +1419,7 @@ class Service_registration_window:
 		self.window.show_all()
 
 
+#---------- Add_remove_emoticons_window class -------------#
 class Add_remove_emoticons_window:
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_remove_emoticons_window', APP)
@@ -1578,6 +1584,7 @@ class Add_remove_emoticons_window:
 			self.on_button_remove_emoticon_clicked(widget)
 
 
+#---------- Service_discovery_window class -------------#
 class Service_discovery_window:
 	'''Class for Service Discovery Window:
 	to know the services on a server'''
@@ -1849,6 +1856,7 @@ class Service_discovery_window:
 		self.browse(server_address)
 		self.plugin.save_config()
 
+#---------- Groupchat_config_window class -------------#
 class Groupchat_config_window:
 	'''Groupchat_config_window class'''
 	def __init__(self, plugin, account, room_jid, config):
@@ -1973,6 +1981,7 @@ class Groupchat_config_window:
 							nbrows, nbrows + 1)
 		self.config_table.show_all()
 
+#---------- Remove_account_window class -------------#
 class Remove_account_window:
 	'''ask for removing from gajim only or from gajim and server too
 	and do removing of the account given'''
