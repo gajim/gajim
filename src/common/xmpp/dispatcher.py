@@ -118,7 +118,7 @@ class Dispatcher(PlugIn):
             self.send(iq)
             self._natSent = True
         if time.time() > self._lastIncome + 90: #1 min + 30 sec pr rep
-            self.disconnected()
+            self._owner.disconnected()
         for handler in self._cycleHandlers: handler(self)
         if self._owner.Connection.pending_data(timeout):
             try: data=self._owner.Connection.receive()
