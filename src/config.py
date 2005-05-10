@@ -979,8 +979,18 @@ class Account_modification_window:
 							'proxyhost'))
 		entry = self.xml.get_widget('proxyport_entry')
 		entry.set_sensitive(use_proxy)
-		entry.set_text(str(gajim.config.get_per('accounts',
-						self.account, 'proxyport')))
+		entry.set_text(gajim.config.get_per('accounts', self.account,
+							'proxyport'))
+			
+		entry = self.xml.get_widget('proxyuser_entry')
+		entry.set_sensitive(use_proxy)
+		entry.set_text(gajim.config.get_per('accounts', self.account,
+							'proxyuser'))
+			
+		entry = self.xml.get_widget('proxypass_entry')
+		entry.set_sensitive(use_proxy)
+		entry.set_text(gajim.config.get_per('accounts', self.account,
+							'proxypass')))
 			
 		usetls = gajim.config.get_per('accounts', self.account, 'usetls')
 		self.xml.get_widget('use_tls_checkbutton').set_active(usetls)
@@ -1051,6 +1061,8 @@ class Account_modification_window:
 																					get_active()
 		config['proxyhost'] = self.xml.get_widget('proxyhost_entry').get_text()
 		config['proxyport'] = self.xml.get_widget('proxyport_entry').get_text()
+		config['proxyuser'] = self.xml.get_widget('proxyuser_entry').get_text()
+		config['proxypass'] = self.xml.get_widget('proxypass_entry').get_text()
 		if config['use_proxy']:
 			if config['proxyport'] != '':
 				try:

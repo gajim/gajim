@@ -108,6 +108,8 @@ class Config:
 			'use_proxy': [ opt_bool, False ],
 			'proxyhost': [ opt_str, '' ],
 			'proxyport': [ opt_int, 3128 ],
+			'proxyuser': [ opt_str, '' ],
+			'proxypass': [ opt_str, '' ],
 			'keyid': [ opt_str, '' ],
 			'keyname': [ opt_str, '' ],
 			'usetls': [ opt_bool, True ],

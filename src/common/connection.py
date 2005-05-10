@@ -512,10 +512,14 @@ class Connection:
 			return self.connection
 		self.connected = 1
 		if gajim.config.get_per('accounts', self.name, 'use_proxy'):
-			proxy = {'host': gajim.config.get_per('accounts', self.name, \
+			proxy = {'host': gajim.config.get_per('accounts', self.name,
 				'proxyhost')}
-			proxy['port'] = gajim.config.get_per('accounts', self.name, \
+			proxy['port'] = gajim.config.get_per('accounts', self.name,
 				'proxyport')
+			proxy['user'] = gajim.config.get_per('accounts', self.name,
+				'proxyuser')
+			proxy['password'] = gajim.config.get_per('accounts', self.name,
+				'proxypass')
 		else:
 			proxy = None
 		if gajim.config.get('verbose'):
@@ -764,7 +768,8 @@ class Connection:
 		if self.connection:
 			return
 		if config['use_proxy']:
-			proxy = {'host': config['proxyhost'], 'port': config['proxyport']}
+			proxy = {'host': config['proxyhost'], 'port': config['proxyport'],
+				'user': config['proxyuser'], 'password': config['proxypass']}
 		else:
 			proxy = None
 		c = common.xmpp.Client(server = config['hostname'], debug = [])
