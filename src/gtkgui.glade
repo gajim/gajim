@@ -808,6 +808,7 @@
 	      <child>
 		<widget class="GtkEntry" id="password_entry">
 		  <property name="visible">True</property>
+		  <property name="sensitive">False</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
 		  <property name="visibility">False</property>
@@ -983,7 +984,7 @@
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
-		      <property name="active">False</property>
+		      <property name="active">True</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
 		    </widget>
@@ -1079,7 +1080,7 @@
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <property name="active">False</property>
+			  <property name="active">True</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			</widget>
@@ -1219,6 +1220,7 @@
 			      <child>
 				<widget class="GtkCheckButton" id="gpg_save_password_checkbutton">
 				  <property name="visible">True</property>
+				  <property name="sensitive">False</property>
 				  <property name="tooltip" translatable="yes">If checked Gajim will store the password in ~/.gajim/config with 'read' permission only for only you and of course the superuser</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Save _passphrase (insecure)</property>
@@ -1240,6 +1242,7 @@
 			      <child>
 				<widget class="GtkEntry" id="gpg_password_entry">
 				  <property name="visible">True</property>
+				  <property name="sensitive">False</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">True</property>
 				  <property name="visibility">True</property>

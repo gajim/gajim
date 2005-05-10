@@ -925,13 +925,6 @@ class Account_modification_window:
 		self.plugin = plugin
 		self.account = account
 		self.modify = False
-		self.xml.get_widget('gpg_key_label').set_text('No key selected')
-		self.xml.get_widget('gpg_name_label').set_text('')
-		self.xml.get_widget('gpg_save_password_checkbutton').set_sensitive(False)
-		self.xml.get_widget('gpg_password_entry').set_sensitive(False)
-		self.xml.get_widget('password_entry').set_sensitive(False)
-		self.xml.get_widget('log_history_checkbutton').set_active(True)
-		self.xml.get_widget('use_tls_checkbutton').set_active(True)
 		
 		#default is checked
 		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(1)
