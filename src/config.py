@@ -923,10 +923,8 @@ class Account_modification_window:
 			w.set_sensitive(widget.get_active())
 
 	def on_use_proxy_checkbutton_toggled(self, widget):
-		proxyhost_entry = self.xml.get_widget('proxyhost_entry')
-		proxyport_entry = self.xml.get_widget('proxyport_entry')
-		self.on_checkbutton_toggled(widget, [proxyhost_entry,
-							proxyport_entry])
+		proxy_table = self.xml.get_widget('proxy_table')
+		self.on_checkbutton_toggled(widget, [proxy_table])
 
 	def init_account_gpg(self):
 		keyid = gajim.config.get_per('accounts', self.account, 'keyid')
