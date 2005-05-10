@@ -1120,8 +1120,8 @@ class Account_modification_window:
 			
 			for opt in config:
 				gajim.config.set_per('accounts', name, opt, config[opt])
-			if save_password:
-				gajim.connections[name].password = password
+			if config['savepass']:
+				gajim.connections[name].password = config['password']
 			#refresh accounts window
 			if self.plugin.windows.has_key('accounts'):
 				self.plugin.windows['accounts'].init_accounts()
