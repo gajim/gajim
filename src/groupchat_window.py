@@ -559,13 +559,12 @@ class Groupchat_window(chat.Chat):
 							widget.expand_row(path, False)
 			
 			#FIXME: should popup chat window for GC contact DOUBLE clicked
-			# also chat [in contect menu]
+			# also chat [in context menu]
 		return False
 
 	def on_list_treeview_key_press_event(self, widget, event):
-		if event.type == gtk.gdk.KEY_RELEASE:
-			if event.keyval == gtk.keysyms.Escape:
-				widget.get_selection().unselect_all()
+		if event.keyval == gtk.keysyms.Escape:
+			widget.get_selection().unselect_all()
 		return False
 
 	def on_list_treeview_row_activated(self, widget, path, col = 0):
