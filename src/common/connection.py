@@ -759,40 +759,39 @@ class Connection:
 			return
 		common.xmpp.features.register(self.connection, agent, info) # FIXME: Blocking
 
-	def new_account(self, hostname, login, password, name, resource, prio, \
-		use_proxy, proxyhost, proxyport):
+	def new_account(self, name, config):
 		# If a connection already exist we cannot create a new account
 		if self.connection:
 			return
-		if use_proxy:
-			proxy = {'host': proxyhost, 'port': proxyport}
+		if config['use_proxy']:
+			proxy = {'host': config['proxyhost'], 'port': config['proxyport']}
 		else:
 			proxy = None
-		c = common.xmpp.Client(server = hostname, debug = [])
+		c = common.xmpp.Client(server = config['hostname'], debug = [])
 		try:
 			c.connect(proxy = proxy)
 		except:
-			gajim.log.debug('Couldn\'t connect to %s' % hostname)
-			self.dispatch('ERROR', _('Couldn\'t connect to ') + hostname)
+			gajim.log.debug('Couldn\'t connect to %s' % config['hostname'])
+			self.dispatch('ERROR', _('Couldn\'t connect to ') + config['hostname'])
 			return 0
 		else:
 			gajim.log.debug(_('Connected to server'))
-			req = common.xmpp.features.getRegInfo(c, hostname).asDict() # FIXME! This blocks!
-			req['username'] = login
-			req['password'] = password
-			if not common.xmpp.features.register(c, hostname,req): #FIXME: error
+			req = common.xmpp.features.getRegInfo(c, config['hostname']).asDict() # FIXME! This blocks!
+			req['username'] = config['name']
+			req['password'] = config['password']
+			if not common.xmpp.features.register(c, config['hostname'], req): #FIXME: error
 				self.dispatch('ERROR', _('Error: ') + c.lastErr)
 			else:
 				self.name = name
 				self.connected = 0
-				self.password = password
+				self.password = config['password']
 				if USE_GPG:
 					self.gpg = GnuPG.GnuPG()
 					gajim.config.set('usegpg', True)
 				else:
 					gajim.config.set('usegpg', False)
-				self.dispatch('ACC_OK', (hostname, login, password, name,
-					resource, prio, use_proxy, proxyhost, proxyport))
+				gajim.connections[name] = self
+				self.dispatch('ACC_OK', (name, config))
 
 	def account_changed(self, new_name):
 		self.name = new_name

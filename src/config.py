@@ -1005,20 +1005,35 @@ class Account_modification_window:
 
 	def on_save_button_clicked(self, widget):
 		'''When save button is clicked: Save information in config file'''
-		save_password =	self.xml.get_widget(
-				'save_password_checkbutton').get_active()
-		password = self.xml.get_widget('password_entry').get_text()
-		resource = self.xml.get_widget('resource_entry').get_text()
-		priority = self.xml.get_widget('priority_spinbutton').get_value_as_int()
-		new_account_checkbutton = self.xml.get_widget('new_account_checkbutton')
+		config = {}
 		name = self.xml.get_widget('name_entry').get_text()
 		if gajim.connections.has_key(self.account):
 			if name != self.account and \
 			   gajim.connections[self.account].connected != 0:
 				dialogs.Error_dialog(_('You must be offline to change the account\'s name'))
 				return
+		if (name == ''):
+			dialogs.Error_dialog(_('You must enter a name for this account'))
+			return
+		if name.find(' ') != -1:
+			dialogs.Error_dialog(_('Spaces are not permited in account name'))
+			return
 		jid = self.xml.get_widget('jid_entry').get_text()
-		autoconnect = self.xml.get_widget('autoconnect_checkbutton').get_active()
+		if jid == '' or jid.count('@') != 1:
+			dialogs.Error_dialog(_('You must enter a Jabber ID for this account\nFor example: someone@someserver.org'))
+			return
+		new_account = self.xml.get_widget('new_account_checkbutton').get_active()
+		config['savepass'] = self.xml.get_widget(
+				'save_password_checkbutton').get_active()
+		config['password'] = self.xml.get_widget('password_entry').get_text()
+		if new_account and config['password'] == '':
+			dialogs.Error_dialog(_('You must enter a password to register a new account'))
+			return
+		config['resource'] = self.xml.get_widget('resource_entry').get_text()
+		config['priority'] = self.xml.get_widget('priority_spinbutton').\
+																			get_value_as_int()
+		config['autoconnect'] = self.xml.get_widget('autoconnect_checkbutton').\
+																					get_active()
 
 		if self.account:
 			list_no_log_for = gajim.config.get_per('accounts',
@@ -1029,51 +1044,42 @@ class Account_modification_window:
 			list_no_log_for.remove(self.account)
 		if not self.xml.get_widget('log_history_checkbutton').get_active():
 			list_no_log_for.append(name)
-
-		sync_with_global_status = self.xml.get_widget(
+		config['no_log_for'] = ' '.join(list_no_log_for)
+		
+		config['sync_with_global_status'] = self.xml.get_widget(
 				'sync_with_global_status_checkbutton').get_active()
 		
-		use_proxy = self.xml.get_widget('use_proxy_checkbutton').get_active()
-		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
-		proxyport = self.xml.get_widget('proxyport_entry').get_text()
-		if (name == ''):
-			dialogs.Error_dialog(_('You must enter a name for this account'))
-			return
-		if name.find(' ') != -1:
-			dialogs.Error_dialog(_('Spaces are not permited in account name'))
-			return
-		if jid == '' or jid.count('@') != 1:
-			dialogs.Error_dialog(_('You must enter a Jabber ID for this account\nFor example: someone@someserver.org'))
-			return
-		if new_account_checkbutton.get_active() and password == '':
-			dialogs.Error_dialog(_('You must enter a password to register a new account'))
-			return
-		if use_proxy:
-			if proxyport != '':
+		config['use_proxy'] = self.xml.get_widget('use_proxy_checkbutton').\
+																					get_active()
+		config['proxyhost'] = self.xml.get_widget('proxyhost_entry').get_text()
+		config['proxyport'] = self.xml.get_widget('proxyport_entry').get_text()
+		if config['use_proxy']:
+			if config['proxyport'] != '':
 				try:
-					proxyport = int(proxyport)
+					config['proxyport'] = int(config['proxyport'])
 				except ValueError:
 					dialogs.Error_dialog(_('Proxy Port must be a port number'))
 					return
 			else:
 				dialogs.Error_dialog(_('You must enter a proxy port to use proxy'))
 				return
-			if proxyhost == '':
+			if config['proxyhost'] == '':
 				dialogs.Error_dialog(_('You must enter a proxy host to use proxy'))
 				return
 
-		usetls = self.xml.get_widget('use_tls_checkbutton').get_active()
-		(login, hostname) = jid.split('@')
-		key_name = self.xml.get_widget('gpg_name_label').get_text()
-		if key_name == '': #no key selected
-			keyID = ''
-			save_gpg_password = False
-			gpg_password = ''
+		config['usetls'] = self.xml.get_widget('use_tls_checkbutton').get_active()
+		(config['name'], config['hostname']) = jid.split('@')
+		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text()
+		if config['keyname'] == '': #no key selected
+			config['keyid'] = ''
+			config['savegpgpass'] = False
+			config['gpgpassword'] = ''
 		else:
-			keyID = self.xml.get_widget('gpg_key_label').get_text()
-			save_gpg_password = self.xml.get_widget(
+			config['keyid'] = self.xml.get_widget('gpg_key_label').get_text()
+			config['savegpgpass'] = self.xml.get_widget(
 					'gpg_save_password_checkbutton').get_active()
-			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
+			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry').\
+																						get_text()
 		#if we are modifying an account
 		if self.modify:
 			#if we modify the name of the account
@@ -1112,26 +1118,8 @@ class Account_modification_window:
 				gajim.config.del_per('accounts', self.account)
 				gajim.config.add_per('accounts', name)
 			
-			gajim.config.set_per('accounts', name, 'name', login)
-			gajim.config.set_per('accounts', name, 'hostname', hostname)
-			gajim.config.set_per('accounts', name, 'savepass', save_password)
-			gajim.config.set_per('accounts', name, 'password', password)
-			gajim.config.set_per('accounts', name, 'resource', resource)
-			gajim.config.set_per('accounts', name, 'priority', priority)
-			gajim.config.set_per('accounts', name, 'autoconnect', autoconnect)
-			gajim.config.set_per('accounts', name, 'use_proxy', use_proxy)
-			gajim.config.set_per('accounts', name, 'proxyhost', proxyhost)
-			gajim.config.set_per('accounts', name, 'proxyport', proxyport)
-			gajim.config.set_per('accounts', name, 'usetls', usetls)
-			gajim.config.set_per('accounts', name, 'keyid', keyID)
-			gajim.config.set_per('accounts', name, 'keyname', key_name)
-			gajim.config.set_per('accounts', name, 'savegpgpass', \
-				save_gpg_password)
-			gajim.config.set_per('accounts', name, 'gpgpassword', gpg_password)
-			gajim.config.set_per('accounts', name, 'sync_with_global_status', \
-				sync_with_global_status)
-			gajim.config.set_per('accounts', name, 'no_log_for', \
-				' '.join(list_no_log_for))
+			for opt in config:
+				gajim.config.set_per('accounts', name, opt, config[opt])
 			if save_password:
 				gajim.connections[name].password = password
 			#refresh accounts window
@@ -1146,35 +1134,19 @@ class Account_modification_window:
 		if name in gajim.connections:
 			dialogs.Error_dialog(_('An account already has this name'))
 			return
-		gajim.config.add_per('accounts', name)
-		gajim.connections[name] = connection.Connection(name)
-		self.plugin.register_handlers(gajim.connections[name])
+		con = connection.Connection(name)
+		self.plugin.register_handlers(con)
 		#if we neeed to register a new account
-		if new_account_checkbutton.get_active():
-			gajim.connections[name].new_account(hostname, login, password, name, \
-				resource, priority, use_proxy, proxyhost, proxyport)
+		if new_account:
+			con.new_account(name, config)
 			return
-		gajim.config.set_per('accounts', name, 'name', login)
-		gajim.config.set_per('accounts', name, 'hostname', hostname)
-		gajim.config.set_per('accounts', name, 'savepass', save_password)
-		gajim.config.set_per('accounts', name, 'password', password)
-		gajim.config.set_per('accounts', name, 'resource', resource)
-		gajim.config.set_per('accounts', name, 'priority', priority)
-		gajim.config.set_per('accounts', name, 'autoconnect', autoconnect)
-		gajim.config.set_per('accounts', name, 'use_proxy', use_proxy)
-		gajim.config.set_per('accounts', name, 'proxyhost', proxyhost)
-		gajim.config.set_per('accounts', name, 'proxyport', proxyport)
-		gajim.config.set_per('accounts', name, 'usetls', usetls)
-		gajim.config.set_per('accounts', name, 'keyid', keyID)
-		gajim.config.set_per('accounts', name, 'keyname', key_name)
-		gajim.config.set_per('accounts', name, 'savegpgpass', \
-			save_gpg_password)
-		gajim.config.set_per('accounts', name, 'gpgpassword', gpg_password)
-		gajim.config.set_per('accounts', name, 'sync_with_global_status', True)
-		gajim.config.set_per('accounts', name, 'no_log_for', \
-			' '.join(list_no_log_for))
-		if save_password:
-			gajim.connections[name].password = password
+		# The account we add already exists on the server
+		gajim.connections[name] = con
+		gajim.config.add_per('accounts', name)
+		for opt in config:
+			gajim.config.set_per('accounts', name, opt, config[opt])
+		if config['savepass']:
+			gajim.connections[name].password = config['password']
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, \
 			'gc_config': {}}
@@ -1184,7 +1156,7 @@ class Account_modification_window:
 		self.plugin.roster.contacts[name] = {}
 		self.plugin.roster.newly_added[name] = []
 		self.plugin.roster.to_be_removed[name] = []
-		self.plugin.nicks[name] = login
+		self.plugin.nicks[name] = config['name']
 		self.plugin.sleeper_state[name] = 0
 		#refresh accounts window
 		if self.plugin.windows.has_key('accounts'):
@@ -1208,47 +1180,6 @@ class Account_modification_window:
 		self.xml.get_widget('new_account_checkbutton').set_active(False)
 		self.modify = True
 		self.account = acct
-		jid = self.xml.get_widget('jid_entry').get_text()
-		(login, hostname) = jid.split('@')
-		password = self.xml.get_widget('password_entry').get_text()
-		resource = self.xml.get_widget('resource_entry').get_text()
-		priority = self.xml.get_widget('priority_spinbutton').get_value_as_int()
-		autoconnect = self.xml.get_widget('autoconnect_checkbutton').get_active()
-		use_proxy = self.xml.get_widget('use_proxy_checkbutton').get_active()
-		proxyhost = self.xml.get_widget('proxyhost_entry').get_text()
-		proxyport = self.xml.get_widget('proxyport_entry').get_text()
-		key_name = self.xml.get_widget('gpg_name_label').get_text()
-		save_password = self.xml.get_widget(
-				'save_password_checkbutton').get_active()
-		if key_name == '': #no key selected
-			keyID = ''
-			save_gpg_password = False
-			gpg_password = ''
-		else:
-			keyID = self.xml.get_widget('gpg_key_label').get_text()
-			save_gpg_password = self.xml.get_widget(
-					'gpg_save_password_checkbutton').get_active()
-			gpg_password = self.xml.get_widget('gpg_password_entry').get_text()
-		no_log_for = ''
-		if self.xml.get_widget('log_history_checkbutton').get_active():
-			no_log_for = acct
-		gajim.config.set_per('accounts', acct, 'name', login)
-		gajim.config.set_per('accounts', acct, 'hostname', hostname)
-		gajim.config.set_per('accounts', acct, 'savepass', save_password)
-		gajim.config.set_per('accounts', acct, 'password', password)
-		gajim.config.set_per('accounts', acct, 'resource', resource)
-		gajim.config.set_per('accounts', acct, 'priority', priority)
-		gajim.config.set_per('accounts', acct, 'autoconnect', autoconnect)
-		gajim.config.set_per('accounts', acct, 'use_proxy', use_proxy)
-		gajim.config.set_per('accounts', acct, 'proxyhost', proxyhost)
-		gajim.config.set_per('accounts', acct, 'proxyport', proxyport)
-		gajim.config.set_per('accounts', acct, 'keyid', keyID)
-		gajim.config.set_per('accounts', acct, 'keyname', key_name)
-		gajim.config.set_per('accounts', acct, 'savegpgpass', \
-			save_gpg_password)
-		gajim.config.set_per('accounts', acct, 'gpgpassword', gpg_password)
-		gajim.config.set_per('accounts', acct, 'sync_with_global_status', True)
-		gajim.config.set_per('accounts', acct, 'no_log_for', no_log_for)
 
 	def on_edit_details_button_clicked(self, widget):
 		if not self.plugin.windows.has_key(self.account):

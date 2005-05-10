@@ -370,24 +370,17 @@ class Interface:
 				array[2], array[3])
 
 	def handle_event_acc_ok(self, account, array):
-		#('ACC_OK', account, (hostname, login, pasword, name, resource, prio,
-		#use_proxy, proxyhost, proxyport))
-		name = array[3]
+		#('ACC_OK', account, (name, config))
+		name = array[0]
+		gajim.config.add_per('accounts', name)
+		for opt in array[1]:
+			gajim.config.set_per('accounts', name, opt, array[1][opt])
 		if self.windows['account_modification']:
-			self.windows['account_modification'].account_is_ok(array[1])
-		else:
-			gajim.config.set_per('accounts', name, 'name', array[1])
-			gajim.config.set_per('accounts', name, 'hostname', array[0])
-			gajim.config.set_per('accounts', name, 'password', array[2])
-			gajim.config.set_per('accounts', name, 'resource', array[4])
-			gajim.config.set_per('accounts', name, 'priority', array[5])
-			gajim.config.set_per('accounts', name, 'use_proxy', array[6])
-			gajim.config.set_per('accounts', name, 'proxyhost', array[7])
-			gajim.config.set_per('accounts', name, 'proxyport', array[8])
+			self.windows['account_modification'].account_is_ok(array[0])
 		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
 		self.queues[name] = {}
 		gajim.connections[name].connected = 0
-		self.nicks[name] = array[1]
+		self.nicks[name] = array[1]['name']
 		self.roster.groups[name] = {}
 		self.roster.contacts[name] = {}
 		self.roster.newly_added[name] = []
