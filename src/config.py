@@ -926,8 +926,6 @@ class Account_modification_window:
 		self.account = account
 		self.modify = False
 		
-		#default is checked
-		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(1)
 		self.xml.signal_autoconnect(self)
 		if account:
 			self.modify = True
