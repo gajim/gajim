@@ -147,6 +147,13 @@ class Interface:
 	def handle_event_error(self, unused, msg):
 		dialogs.Error_dialog(msg)
 	
+	def handle_event_error_answer(self, account, array):
+		#('ERROR_ANSWER', account, (jid_from. errmsg, errcode))
+		jid_from = array[0]
+		if jid_from in self.windows[account]['gc']:
+			self.windows[account]['gc'][jid_from].print_conversation(
+				'Error %s: %s' % (array[2], array[1]), jid_from)
+
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
 		self.roster.on_status_changed(account, status)
@@ -602,6 +609,7 @@ class Interface:
 		conn.register_handler('ROSTER', self.handle_event_roster)
 		conn.register_handler('WARNING', self.handle_event_warning)
 		conn.register_handler('ERROR', self.handle_event_error)
+		conn.register_handler('ERROR_ANSWER', self.handle_event_error_answer)
 		conn.register_handler('STATUS', self.handle_event_status)
 		conn.register_handler('NOTIFY', self.handle_event_notify)
 		conn.register_handler('MSG', self.handle_event_msg)

@@ -109,7 +109,8 @@ class Connection:
 			'AGENT_INFO': [], 'REGISTER_AGENT_INFO': [], 'AGENT_INFO_ITEMS': [],
 			'AGENT_INFO_INFO': [], 'QUIT': [], 'ACC_OK': [], 'MYVCARD': [],
 			'OS_INFO': [], 'VCARD': [], 'GC_MSG': [], 'GC_SUBJECT': [],
-			'GC_CONFIG': [], 'BAD_PASSPHRASE': [], 'ROSTER_INFO': []}
+			'GC_CONFIG': [], 'BAD_PASSPHRASE': [], 'ROSTER_INFO': [],
+			'ERROR_ANSWER': []}
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
@@ -500,6 +501,12 @@ class Connection:
 			del roster[name + '@' + hostname]
 		self.dispatch('ROSTER', roster)
 
+	def _ErrorCB(self, con, iq_obj):
+		errmsg = iq_obj.getError()
+		errcode = iq_obj.getErrorCode()
+		jid_from = str(iq_obj.getFrom())
+		self.dispatch('ERROR_ANSWER', (jid_from, errmsg, errcode))
+
 	def connect(self):
 		"""Connect and authentificate to the Jabber server"""
 		name = gajim.config.get_per('accounts', self.name, 'name')
@@ -561,6 +568,7 @@ class Connection:
 			common.xmpp.NS_MUC_OWNER)
 		con.RegisterHandler('iq', self._getRosterCB, 'result',\
 			common.xmpp.NS_ROSTER)
+		con.RegisterHandler('iq', self._ErrorCB, 'error')
 
 		gajim.log.debug('Connected to server')
 
