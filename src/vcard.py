@@ -101,7 +101,11 @@ class Vcard_window:
 			client += self.os_info[i]['client']
 			os += self.os_info[i]['os']
 			i += 1
-			
+
+		if client == '':
+			client = 'N/A'
+		if os == '':
+			os = 'N/A'
 		self.xml.get_widget('client_name_version_label').set_text(client)
 		self.xml.get_widget('os_label').set_text(os)
 

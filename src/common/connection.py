@@ -97,7 +97,7 @@ def get_os_info():
 				elif path_to_file.endswith('lfs-release'): # file just has version
 					text = distro_name + ' ' + text
 				return text
-	return ''
+	return 'N/A'
 
 class Connection:
 	"""Connection class"""
