@@ -129,17 +129,14 @@ class History_window:
 		buffer.insert(start_iter, tim)
 		if type == 'recv':
 			msg = ':'.join(data[0:])
-			msg = msg.replace('\\n', '\n')
 			buffer.insert_with_tags_by_name(start_iter, msg,
 							'incoming')
 		elif type == 'sent':
 			msg = ':'.join(data[0:])
-			msg = msg.replace('\\n', '\n')
 			buffer.insert_with_tags_by_name(start_iter, msg,
 							'outgoing')
 		else:
 			msg = ':'.join(data[1:])
-			msg = msg.replace('\\n', '\n')
 			buffer.insert_with_tags_by_name(start_iter,
 						_('Status is now: ') + data[0]
 						+ ': ' + msg, 'status')

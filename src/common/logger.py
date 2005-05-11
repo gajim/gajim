@@ -98,6 +98,7 @@ class Logger:
 		while nb < end_line:
 			line = fic.readline()
 			if line:
+				line = line.replace('\\n', '\n')
 				lineSplited = line.split(':')
 				if len(lineSplited) > 2:
 					lines.append(lineSplited)
