@@ -318,6 +318,7 @@ class Connection:
 			for group in item.getTags('group'):
 				groups.append(group.getData())
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
+		raise common.xmpp.NodeProcessed
 
 	def _BrowseResultCB(self, con, iq_obj):
 		gajim.log.debug('BrowseResultCB')
