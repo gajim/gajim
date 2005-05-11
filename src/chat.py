@@ -415,6 +415,19 @@ class Chat:
 					gtk.gdk.Cursor(gtk.gdk.HAND2))
 				self.change_cursor = tag
 		return False
+
+	def on_clear(self, widget, textview):
+		buffer = textview.get_buffer()
+		start, end = buffer.get_bounds()
+		buffer.delete(start, end)
+
+	def on_conversation_textview_populate_popup(self, textview, menu):
+		item = gtk.MenuItem()
+		menu.append(item)
+		item = gtk.MenuItem(_('Clear'))
+		menu.append(item)
+		item.connect('activate', self.on_clear, textview)
+		menu.show_all()
 			
 	def on_conversation_textview_button_press_event(self, widget, event):
 		# Do not open the standard popup menu, so we block right button
