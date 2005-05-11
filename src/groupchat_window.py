@@ -402,6 +402,14 @@ class Groupchat_window(chat.Chat):
 			self.plugin.windows[self.account]['infos'][jid] = \
 				dialogs.Vcard_window(jid, self.plugin,
 						self.account, True)
+			# FIXME: when we'll have a user for each contact, this won't be needed
+			# cause we'll user real information window
+			vcard_xml = self.plugin.windows[self.account]['infos'][jid].xml
+			hbuttonbox = vcard_xml.get_widget('information_hbuttonbox')
+			children = hbuttonbox.get_children()
+			hbuttonbox.remove(children[0])
+			hbuttonbox.remove(children[1])
+			vcard_xml.get_widget('nickname_label').set_text(jid)
 			gajim.connections[self.account].request_vcard(jid)
 			
 			#FIXME: we need the resource but it's not saved
