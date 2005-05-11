@@ -249,9 +249,10 @@ class Interface:
 														'Contact Online', jid, account)
 						self.roster.popup_notification_windows.append(instance)
 						
-			elif old_show > 1 and new_show < 2 and gajim.config.get_per( \
-				'soundevents', 'contact_disconnected', 'enabled'):
-				self.play_sound('contact_disconnected')
+			elif old_show > 1 and new_show < 2:
+				if gajim.config.get_per('soundevents', 'contact_disconnected',
+												'enabled'):
+					self.play_sound('contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
 					gajim.config.get('notify_on_offline'):
