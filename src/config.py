@@ -1708,6 +1708,7 @@ class Service_discovery_window:
 			self.agent_infos[agent + node]['identities'] = identities
 			if identities[0].has_key('name'):
 				model.set_value(iter, 0, identities[0]['name'])
+		self.on_services_treeview_cursor_changed(self.services_treeview)
 
 	def agent_info_items(self, agent, node, items):
 		'''When we recieve items about an agent'''
