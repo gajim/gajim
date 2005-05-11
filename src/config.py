@@ -996,8 +996,8 @@ class Account_modification_window:
 							'proxyhost'))
 		entry = self.xml.get_widget('proxyport_entry')
 		entry.set_sensitive(use_proxy)
-		entry.set_text(gajim.config.get_per('accounts', self.account,
-							'proxyport'))
+		entry.set_text(str(gajim.config.get_per('accounts', self.account,
+							'proxyport')))
 			
 		entry = self.xml.get_widget('proxyuser_entry')
 		entry.set_sensitive(use_proxy)
