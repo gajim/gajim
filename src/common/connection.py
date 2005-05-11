@@ -514,12 +514,13 @@ class Connection:
 			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
 		con.RegisterDisconnectHandler(self._disconnectedCB)
 		try:
-			con.connect(proxy=proxy, tls=usetls) #FIXME: blocking
+			c = con.connect(proxy=proxy, tls=usetls) #FIXME: blocking
 		except:
+			c = None
+		if not c:
 			gajim.log.debug('Couldn\'t connect to %s' % hostname)
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', _('Couldn\'t connect to %s') \
-				% hostname)
+			self.dispatch('ERROR', _('Couldn\'t connect to %s') % hostname)
 			self.connected = 0
 			return None
 
@@ -549,7 +550,14 @@ class Connection:
 
 		gajim.log.debug('Connected to server')
 
-		if con.auth(name, self.password, resource): #FIXME: blocking
+		try:
+			auth = con.auth(name, self.password, resource) #FIXME: blocking
+		except IOError: #probably a timeout
+			self.dispatch('STATUS', 'offline')
+			self.dispatch('ERROR', _('Couldn\'t connect to %s') % hostname)
+			self.connected = 0
+			return None
+		if auth:
 			con.initRoster()
 			self.connected = 2
 			return con
