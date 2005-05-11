@@ -653,10 +653,10 @@ class Popup_notification_window:
 		
 		# set colors [ http://www.w3schools.com/html/html_colornames.asp ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
-		if event_type == 'Contact Online':
+		if event_type == 'Contact signed in':
 			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('forestgreen'))
 			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('forestgreen'))
-		elif event_type == 'Contact Offline':
+		elif event_type == 'Contact signed out':
 			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('firebrick'))
 			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('firebrick'))
 		elif event_type == 'New Message':

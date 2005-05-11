@@ -242,11 +242,11 @@ class Interface:
 					# check OUR status and if we allow notifications for that status
 					if gajim.config.get('autopopupaway'): # always notify
 						show_notification = True
-					elif gajim.connections[account].connected in (2, 3): #online or chat
+					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
 						instance = dialogs.Popup_notification_window(self,
-														'Contact Online', jid, account)
+														'Contact signed in', jid, account)
 						self.roster.popup_notification_windows.append(instance)
 						
 			elif old_show > 1 and new_show < 2:
@@ -260,11 +260,11 @@ class Interface:
 					# check OUR status and if we allow notifications for that status
 					if gajim.config.get('autopopupaway'): # always notify
 						show_notification = True
-					elif gajim.connections[account].connected in (2, 3): #online or chat
+					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
 						instance = dialogs.Popup_notification_window(self,
-											 		'Contact Offline', jid, account)
+											 		'Contact signed out', jid, account)
 						self.roster.popup_notification_windows.append(instance)
 				
 		elif self.windows[account]['gc'].has_key(ji):
@@ -291,7 +291,7 @@ class Interface:
 				# check OUR status and if we allow notifications for that status
 				if gajim.config.get('autopopupaway'): # always show notification
 					show_notification = True
-				elif gajim.connections[account].connected in (2, 3): #online or chat
+				elif gajim.connections[account].connected in (2, 3): # we're online or chat
 					show_notification = True
 				if show_notification:
 					instance = dialogs.Popup_notification_window(self,
