@@ -707,23 +707,16 @@ class Connection:
 		if delroster:
 			self.connection.getRoster().delItem(jid)
 
-	def _receive_agent_info(self, con, iq_obj, agent):
-		if not iq_obj:
-			return
-		key = iq_obj.getTag('query').getTagData('key')
-		iq = common.xmpp.Iq(to = agent, typ = 'set', queryNS =\
-			common.xmpp.NS_REGISTER)
-		iq.getTag('query').setTag('remove')
-		iq.getTag('query').setTagData('key',key)
-		self.connection.send(iq)
+	def _continue_unsubscribe(self, con, iq_obj, agent):
+		self.connection.getRoster().delItem(agent)
 		self.dispatch('AGENT_REMOVED', agent)
 
 	def unsubscribe_agent(self, agent):
 		if not self.connection:
 			return
-		self.connection.getRoster().delItem(agent)
-		iq = common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to = agent)
-		self.connection.SendAndCallForResponse(iq, self._receive_agent_info,
+		iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
+		iq.getTag('query').setTag('remove')
+		self.connection.SendAndCallForResponse(iq, self._continue_unsubscribe,
 			{'agent': agent})
 		return
 
