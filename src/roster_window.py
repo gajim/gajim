@@ -365,7 +365,7 @@ class Roster_window:
 			#get resource
 			resource = ''
 			if len(jids) > 1:
-				resource = jids[1:]
+				resource = '/'.join(jids[1:])
 			#get name
 			name = array[jid]['name']
 			if not name:
@@ -435,14 +435,14 @@ class Roster_window:
 		'''When an agent is requested to log in or off'''
 		gajim.connections[account].send_agent_status(jid, state)
 
-	def on_remove_agent(self, widget, jid, account):
+	def on_remove_agent(self, widget, user, account):
 		'''When an agent is requested to log in or off'''
-		window = dialogs.Confirmation_dialog(_('Are you sure you want to remove the agent %s from your roster?') % jid)
+		window = dialogs.Confirmation_dialog(_('Are you sure you want to remove the agent %s from your roster?') % user.jid)
 		if window.get_response() == gtk.RESPONSE_YES:
-			gajim.connections[account].unsubscribe_agent(jid)
-			for u in self.contacts[account][jid]:
-				self.remove_user(u, account)
-			del self.contacts[account][u.jid]
+			gajim.connections[account].unsubscribe_agent(user.jid + '/' \
+																		+ user.resource)
+			self.remove_user(user, account)
+			del self.contacts[account][user.jid]
 
 	def on_rename(self, widget, iter, path):
 		model = self.tree.get_model()
@@ -535,6 +535,7 @@ class Roster_window:
 		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
 		account = model.get_value(iter, 4)
+		user = self.contacts[account][jid][0]
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_('Log on'))
 		#FIXME: what about error?
@@ -555,7 +556,7 @@ class Roster_window:
 
 		item = gtk.MenuItem(_('Remove'))
 		menu.append(item)
-		item.connect('activate', self.on_remove_agent, jid, account)
+		item.connect('activate', self.on_remove_agent, user, account)
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
