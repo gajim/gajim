@@ -941,7 +941,10 @@ class Account_modification_window:
 
 	def on_use_proxy_checkbutton_toggled(self, widget):
 		proxy_table = self.xml.get_widget('proxy_table')
-		self.on_checkbutton_toggled(widget, [proxy_table])
+		widgets = proxy_table.get_children()
+		widgets.append(proxy_table)
+		self.on_checkbutton_toggled(widget, widgets)
+
 
 	def init_account_gpg(self):
 		keyid = gajim.config.get_per('accounts', self.account, 'keyid')
