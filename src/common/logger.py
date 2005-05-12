@@ -63,9 +63,9 @@ class Logger:
 		if kind == 'status': #we save time:jid:show:msg
 			if not show:
 				show = 'online'
-			if common.gajim.config.get('lognotusr'):
+			if common.gajim.config.get('log_notif_in_user_file'):
 				files.append(ji)
-			if common.gajim.config.get('lognotsep'):
+			if common.gajim.config.get('log_notif_in_sep_file'):
 				files.append('notify.log')
 		elif kind == 'incoming': # we save time:recv:message
 			files.append(ji)
