@@ -1,4 +1,4 @@
-##	plugins/systray.py
+##	systray.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -159,7 +159,7 @@ class Systray:
 		groups_menu = gtk.Menu()
 		
 		for group in self.plugin.roster.groups[account].keys():
-			if group == 'Agents':
+			if group == 'Transports':
 				continue
 			# at least one not offline or with errors in this group
 			at_least_one = False

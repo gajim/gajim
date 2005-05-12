@@ -110,12 +110,12 @@ class Roster_window:
 		users = self.contacts[account][jid]
 		user = users[0]
 		if user.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
-			user.groups = ['Agents']
+			user.groups = ['Transports']
 		elif user.groups == []:
 			user.groups.append('General')
 
 		if (user.show == 'offline' or user.show == 'error') and \
-		   not showOffline and not 'Agents' in user.groups and \
+		   not showOffline and not 'Transports' in user.groups and \
 		   not self.plugin.queues[account].has_key(user.jid):
 			return
 
@@ -137,7 +137,7 @@ class Roster_window:
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
 			typestr = 'user'
-			if g == 'Agents':
+			if g == 'Transports':
 				typestr = 'agent'
 
 			model.append(iterG, (self.jabber_state_images[user.show], user.name,
@@ -1307,9 +1307,9 @@ class Roster_window:
 			return 0
 		type = model.get_value(iter1, 2)
 		if type == 'group':
-			if name1 == 'Agents':
+			if name1 == 'Transports':
 				return 1
-			if name2 == 'Agents':
+			if name2 == 'Transports':
 				return -1
 		if name1.lower() < name2.lower():
 			return -1
@@ -1355,7 +1355,7 @@ class Roster_window:
 			return
 		iter_group_source = model.iter_parent(iter_source)
 		grp_source = model.get_value(iter_group_source, 3)
-		if grp_source == 'Agents' or grp_source == 'not in the roster':
+		if grp_source == 'Transports' or grp_source == 'not in the roster':
 			return
 		account = model.get_value(iter_dest, 4)
 		type_dest = model.get_value(iter_dest, 2)

@@ -244,7 +244,7 @@ class Add_new_contact_window:
 		jid_agents = []
 		for j in self.plugin.roster.contacts[account]:
 			user = self.plugin.roster.contacts[account][j][0]
-			if 'Agents' in user.groups:
+			if 'Transports' in user.groups:
 				jid_agents.append(j)
 		for a in jid_agents:
 			if a.find('aim') > -1:
@@ -279,7 +279,7 @@ class Add_new_contact_window:
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
 		for g in self.plugin.roster.groups[account].keys():
-			if g != 'not in the roster' and g != 'Agents':
+			if g != 'not in the roster' and g != 'Transports':
 				self.group_comboboxentry.append_text(g)
 
 		self.xml.signal_autoconnect(self)
