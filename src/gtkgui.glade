@@ -7758,7 +7758,7 @@ Custom</property>
 	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkVPaned" id="vpaned4">
+		<widget class="GtkVPaned" id="vpaned">
 		  <property name="border_width">4</property>
 		  <property name="visible">True</property>
 
@@ -9791,7 +9791,7 @@ send a chat message to</property>
 	  <child>
 	    <widget class="GtkMenuItem" id="xa_menuitem">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">XA</property>
+	      <property name="label" translatable="yes">Not Available</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_xa_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
 	    </widget>
@@ -9849,7 +9849,7 @@ send a chat message to</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image497">
+	<widget class="GtkImage" id="image505">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
