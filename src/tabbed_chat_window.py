@@ -137,9 +137,11 @@ class Tabbed_chat_window(chat.Chat):
 		conversation_buffer.delete(start, end)
 
 	def on_history_button_clicked(self, widget):
-		"""When history button is pressed : call history window"""
+		"""When history button is pressed: call history window"""
 		jid = self.get_active_jid()
-		if not self.plugin.windows['logs'].has_key(jid):
+		if self.plugin.windows['logs'].has_key(jid):
+			self.plugin.windows['logs'][jid].present()
+		else:
 			self.plugin.windows['logs'][jid] = history_window.\
 				History_window(self.plugin, jid)
 
