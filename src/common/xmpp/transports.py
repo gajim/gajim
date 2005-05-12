@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: transports.py,v 1.18 2005/04/30 08:56:36 snakeru Exp $
+# $Id: transports.py,v 1.20 2005/05/12 07:35:55 snakeru Exp $
 
 """
 This module contains the low-level implementations of xmpppy connect methods or
@@ -93,9 +93,12 @@ class TCPsocket(PlugIn):
         """ Reads all pending incoming data.
             In case of disconnection calls owner's disconnected() method and then raises IOError exception."""
         try: received = self._recv(BUFLEN)
-        except socket.sslerror:
+        except socket.sslerror,e:
             self._seen_data=0
-            return ''
+            if e[0]==2: return ''
+            self.DEBUG('Socket error while receiving data','error')
+            self._owner.disconnected()
+            raise IOError("Disconnected from server")
         except: received = ''
 
         while self.pending_data(0):
