@@ -160,7 +160,7 @@ class Interface:
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
 		if status != 'offline':
-			gobject.timeout_add(30000, self.allow_notif, account)
+			gobject.timeout_add(15000, self.allow_notif, account)
 		self.roster.on_status_changed(account, status)
 	
 	def handle_event_notify(self, account, array):
