@@ -143,7 +143,7 @@ class Tabbed_chat_window(chat.Chat):
 			self.plugin.windows['logs'][jid].present()
 		else:
 			self.plugin.windows['logs'][jid] = history_window.\
-				History_window(self.plugin, jid)
+				History_window(self.plugin, self.account, jid)
 
 	def remove_tab(self, jid):
 		if time.time() - self.last_message_time[jid] < 2:

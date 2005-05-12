@@ -454,10 +454,10 @@ class Roster_window:
 		dlg.run()
 		
 	def on_history(self, widget, user):
-		'''When history button is pressed : call log window'''
+		'''When history button is pressed: call log window'''
 		if not self.plugin.windows['logs'].has_key(user.jid):
 			self.plugin.windows['logs'][user.jid] = history_window.\
-				History_window(self.plugin, user.jid)
+				History_window(self.plugin, self.account, user.jid)
 	
 	def mk_menu_user(self, event, iter):
 		'''Make user's popup menu'''

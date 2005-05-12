@@ -1,4 +1,4 @@
-##	plugins/history_window.py
+##	history_window.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -35,12 +35,10 @@ class History_window:
 	"""Class for bowser agent window:
 	to know the agents on the selected server"""
 	def on_history_window_destroy(self, widget):
-		"""close window"""
 		del self.plugin.windows['logs'][self.jid]
 
 	def on_close_button_clicked(self, widget):
-		"""When Close button is clicked"""
-		widget.get_toplevel().destroy()
+		self.window.destroy()
 
 	def on_earliest_button_clicked(self, widget):
 		start, end = self.history_buffer.get_bounds()
@@ -141,12 +139,16 @@ class History_window:
 						_('Status is now: ') + data[0]
 						+ ': ' + msg, 'status')
 	
-	def __init__(self, plugin, jid):
+	def __init__(self, plugin, account, jid):
 		self.plugin = plugin
 		self.jid = jid
 		self.nb_line = gajim.logger.get_nb_line(jid)
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
+		list_users = self.plugin.roster.contacts[account][self.jid]
+		user = list_users[0]
+		title = 'Conversation History with ' + user.name
+		self.window.set_title(title)
 		self.history_buffer = xml.get_widget('history_textview').get_buffer()
 		self.earliest_button = xml.get_widget('earliest_button')
 		self.previous_button = xml.get_widget('previous_button')
