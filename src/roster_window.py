@@ -1396,6 +1396,17 @@ class Roster_window:
 				start = '*  '
 			self.window.set_title(start + 'Gajim')
 
+	def get_ui_status(self, status):
+		if status == 'dnd':
+			ui_status = 'Busy'
+		elif status == 'xa':
+			ui_status = 'Extended Away'
+		elif status == 'chat':
+			ui_status = 'Free for chat'
+		else:
+			ui_status = status.capitalize()
+		return ui_status
+
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
 		self.window = self.xml.get_widget('roster_window')
@@ -1454,16 +1465,10 @@ class Roster_window:
 		self.status_combobox.pack_start(cell, True)
 		self.status_combobox.add_attribute(cell, 'text', 0)
 
-		for status in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'offline']:
-			if status == 'dnd':
-				status_better = 'Busy'
-			elif status == 'xa':
-				status_better = 'Extended Away'
-			elif status == 'chat':
-				status_better = 'Free for chat'
-			else:
-				status_better = status.capitalize()
-			iter = liststore.append([status_better, self.jabber_state_images[status], status])
+		for status in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
+			'offline']:
+			ui_status = self.get_ui_status(status)
+			iter = liststore.append([ui_status, self.jabber_state_images[status], status])
 		self.status_combobox.show_all()
 		self.status_combobox.set_model(liststore)
 		self.status_combobox.set_active(6) # default to offline
