@@ -386,7 +386,7 @@ class About_dialog:
 		dlg.set_logo(gtk.gdk.pixbuf_new_from_file('../data/pixmaps/logo.png'))
 		dlg.set_translator_credits(_('translator_credits'))
 
-		rep = dlg.run() # this run doesn't crash threads.. interesting.. 
+		rep = dlg.run()
 		dlg.destroy()
 
 class Confirmation_dialog:
@@ -474,7 +474,8 @@ class Join_groupchat_window:
 		self.account = account
 		if gajim.connections[account].connected < 2:
 			Error_dialog(_('You must be connected to join a groupchat'))
-			return
+			raise RuntimeError, 'You must be connected to join a groupchat'
+
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'join_groupchat_window', APP)
 		self.window = self.xml.get_widget('join_groupchat_window')
 		self.xml.get_widget('server_entry').set_text(server)
@@ -506,6 +507,7 @@ class Join_groupchat_window:
 	def on_join_groupchat_window_destroy(self, widget):
 		'''close window'''
 		del self.plugin.windows[self.account]['join_gc'] # remove us from open windows
+		print 'destory'
 
 	def on_join_groupchat_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
@@ -563,10 +565,6 @@ class New_message_dialog:
 		
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
-
-	def on_delete_event(self, widget, event):
-		'''close window'''
-		del self.plugin.windows['new_message']
 
 	def on_cancel_button_clicked(self, widget):
 		'''When Cancel button is clicked'''

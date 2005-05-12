@@ -963,7 +963,10 @@ class Roster_window:
 		if self.plugin.windows[account].has_key('join_gc'):
 			self.plugin.windows[account]['join_gc'].window.present()		
 		else:
-			self.plugin.windows[account]['join_gc'] = dialogs.Join_groupchat_window(self.plugin, account)
+			try:
+				self.plugin.windows[account]['join_gc'] = dialogs.Join_groupchat_window(self.plugin, account)
+			except RuntimeError:
+				pass
 
 
 	def on_new_message_menuitem_activate(self, widget, account):

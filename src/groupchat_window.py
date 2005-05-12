@@ -266,6 +266,19 @@ class Groupchat_window(chat.Chat):
 		room_jid = self.get_active_jid()
 		gajim.connections[self.account].request_gc_config(room_jid)
 
+	def on_subject_entry_focus_out_event(self, widget):
+		print 'FIXME: focus out'
+		return
+		new_child = notebook.get_nth_page(page_num)
+		new_jid = ''
+		for jid in self.xmls:
+			if self.childs[jid] == new_child: 
+				new_jid = jid
+				break
+		subject = self.subjects[new_jid]
+		self.subject_entry.set_text(subject)
+		self.subject_entry_tooltip.set_tip(self.subject_entry, subject)
+
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
 		if enter is pressed without the shit key, message (if not empty) is sent

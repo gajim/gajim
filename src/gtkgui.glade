@@ -7687,6 +7687,7 @@ Custom</property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char">*</property>
 	      <property name="activates_default">True</property>
+	      <signal name="focus_out_event" handler="on_subject_entry_focus_out_event" last_modification_time="Wed, 11 May 2005 22:06:14 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -9548,7 +9549,6 @@ Custom</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">False</property>
-  <signal name="delete_event" handler="on_delete_event" last_modification_time="Sat, 05 Mar 2005 18:18:47 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox8">
