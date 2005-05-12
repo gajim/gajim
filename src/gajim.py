@@ -154,8 +154,13 @@ class Interface:
 			self.windows[account]['gc'][jid_from].print_conversation(
 				'Error %s: %s' % (array[2], array[1]), jid_from)
 
+	def allow_notif(self, account):
+		self.allow_notifications[account] = True
+
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
+		if status != 'offline':
+			gobject.timeout_add(30000, self.allow_notif, account)
 		self.roster.on_status_changed(account, status)
 	
 	def handle_event_notify(self, account, array):
@@ -237,7 +242,8 @@ class Interface:
 					self.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
-					gajim.config.get('notify_on_online'):
+					gajim.config.get('notify_on_online') and \
+					self.allow_notifications[account]:
 					show_notification = False
 					# check OUR status and if we allow notifications for that status
 					if gajim.config.get('autopopupaway'): # always notify
@@ -389,6 +395,7 @@ class Interface:
 		self.queues[name] = {}
 		gajim.connections[name].connected = 0
 		self.nicks[name] = array[1]['name']
+		self.allow_notifications[name] = False
 		self.roster.groups[name] = {}
 		self.roster.contacts[name] = {}
 		self.roster.newly_added[name] = []
@@ -666,11 +673,13 @@ class Interface:
 		self.windows = {'logs':{}}
 		self.queues = {}
 		self.nicks = {}
+		self.allow_notifications = {}
 		self.sleeper_state = {} #whether we pass auto away / xa or not
 		for a in gajim.connections:
 			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
 			self.queues[a] = {}
 			self.nicks[a] = gajim.config.get_per('accounts', a, 'name')
+			self.allow_notifications[a] = False
 			self.sleeper_state[a] = 0	#0:don't use sleeper for this account
 												#1:online and use sleeper
 												#2:autoaway and use sleeper

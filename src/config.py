@@ -1118,6 +1118,8 @@ class Account_modification_window:
 				self.plugin.windows[name] = self.plugin.windows[self.account]
 				self.plugin.queues[name] = self.plugin.queues[self.account]
 				self.plugin.nicks[name] = self.plugin.nicks[self.account]
+				self.plugin.allow_notifications[name] = \
+					self.plugin.allow_notifications[self.account]
 				self.plugin.roster.groups[name] = \
 					self.plugin.roster.groups[self.account]
 				self.plugin.roster.contacts[name] = \
@@ -1139,6 +1141,7 @@ class Account_modification_window:
 				del self.plugin.windows[self.account]
 				del self.plugin.queues[self.account]
 				del self.plugin.nicks[self.account]
+				del self.plugin.allow_notifications[self.account]
 				del self.plugin.roster.groups[self.account]
 				del self.plugin.roster.contacts[self.account]
 				del self.plugin.sleeper_state[self.account]
@@ -1187,6 +1190,7 @@ class Account_modification_window:
 		self.plugin.roster.newly_added[name] = []
 		self.plugin.roster.to_be_removed[name] = []
 		self.plugin.nicks[name] = config['name']
+		self.plugin.allow_notifications[name] = False
 		self.plugin.sleeper_state[name] = 0
 		#refresh accounts window
 		if self.plugin.windows.has_key('accounts'):
@@ -2011,6 +2015,8 @@ class Remove_account_window:
 		self.plugin.save_config()
 		del self.plugin.windows[self.account]
 		del self.plugin.queues[self.account]
+		del self.plugin.nicks[self.account]
+		del self.plugin.allow_notifications[self.account]
 		del self.plugin.roster.groups[self.account]
 		del self.plugin.roster.contacts[self.account]
 		del self.plugin.roster.to_be_removed[self.account]

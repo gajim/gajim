@@ -740,7 +740,6 @@ class Roster_window:
 				accountIter = self.get_account_iter(account)
 				if accountIter:
 					model.set_value(accountIter, 0, self.jabber_state_images['connecting'])
-#				gajim.connections[account].connected = 1
 				if self.plugin.systray_enabled:
 					self.plugin.systray.set_status('connecting')
 
