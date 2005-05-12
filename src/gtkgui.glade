@@ -5889,7 +5889,7 @@ Custom</property>
 
 <widget class="GtkWindow" id="vcard_information_window">
   <property name="border_width">4</property>
-  <property name="title" translatable="yes">Information</property>
+  <property name="title" translatable="yes">Contact Information</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -7315,7 +7315,7 @@ Custom</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_width">555</property>
+  <property name="default_width">560</property>
   <property name="default_height">350</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -7330,14 +7330,13 @@ Custom</property>
     <widget class="GtkVBox" id="vbox24">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">5</property>
 
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox11">
-	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
-	  <property name="spacing">0</property>
+	  <property name="layout_style">GTK_BUTTONBOX_START</property>
+	  <property name="spacing">5</property>
 
 	  <child>
 	    <widget class="GtkButton" id="earliest_button">
