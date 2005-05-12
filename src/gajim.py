@@ -511,12 +511,12 @@ class Interface:
 				ask_message = 1
 				break
 		if ask_message:
-			message = self.roster.get_status_message('online', 1)
+			message = self.roster.get_status_message('online')
 			if message == -1:
 				return
 			for a in gajim.connections:
 				if gajim.config.get_per('accounts', a, 'autoconnect'):
-					self.roster.send_status(a, 'online', message, 1)
+					self.roster.send_status(a, 'online', message)
 		return False
 
 	def show_systray(self):

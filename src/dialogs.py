@@ -118,8 +118,6 @@ class Passphrase_dialog:
 	'''Class for Passphrase dialog'''
 	def run(self):
 		'''Wait for OK button to be pressed and return passphrase/password'''
-		if self.autoconnect:
-			gtk.gdk.threads_enter()
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			passphrase = self.passphrase_entry.get_text()
@@ -128,8 +126,6 @@ class Passphrase_dialog:
 		save_passphrase_checkbutton = self.xml.\
 			get_widget('save_passphrase_checkbutton')
 		self.window.destroy()
-		if self.autoconnect:
-			gtk.gdk.threads_leave()
 		return passphrase, save_passphrase_checkbutton.get_active()
 
 	def __init__(self, labeltext, checkbuttontext, autoconnect = 0):
@@ -186,7 +182,6 @@ class Change_status_message_dialog:
 		self.window = self.xml.get_widget('change_status_message_dialog')
 		self.window.set_title(status.capitalize() + ' Status Message')
 		self.plugin = plugin
-		self.autoconnect = autoconnect
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
 		self.message_buffer.set_text(gajim.config.get('last_msg'))
@@ -204,8 +199,6 @@ class Change_status_message_dialog:
 
 	def run(self):
 		'''Wait for OK button to be pressed and return away messsage'''
-		if self.autoconnect:
-			gtk.gdk.threads_enter()
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
@@ -214,8 +207,6 @@ class Change_status_message_dialog:
 		else:
 			message = -1
 		self.window.destroy()
-		if self.autoconnect:
-			gtk.gdk.threads_leave()
 		return message
 
 	def on_message_comboboxentry_changed(self, widget, data = None):
@@ -507,7 +498,6 @@ class Join_groupchat_window:
 	def on_join_groupchat_window_destroy(self, widget):
 		'''close window'''
 		del self.plugin.windows[self.account]['join_gc'] # remove us from open windows
-		print 'destory'
 
 	def on_join_groupchat_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE

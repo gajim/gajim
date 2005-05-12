@@ -733,7 +733,7 @@ class Roster_window:
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
 
-	def send_status(self, account, status, txt, autoconnect = 0):
+	def send_status(self, account, status, txt):
 		if status != 'offline':
 			if gajim.connections[account].connected < 2:
 				model = self.tree.get_model()
@@ -749,7 +749,7 @@ class Roster_window:
 				passphrase = ''
 				w = dialogs.Passphrase_dialog(
 					_('Enter your password for account %s') % account, 
-					'Save password', autoconnect)
+					'Save password')
 				passphrase, save = w.run()
 				if passphrase == -1:
 					if accountIter:
@@ -777,7 +777,7 @@ class Roster_window:
 					passphrase = ''
 					w = dialogs.Passphrase_dialog(
 						_('Enter GPG key passphrase for account %s') % account, 
-						'Save passphrase', autoconnect)
+						'Save passphrase')
 					passphrase, save = w.run()
 					if passphrase == -1:
 						passphrase = ''
@@ -798,12 +798,11 @@ class Roster_window:
 		else:
 			self.plugin.sleeper_state[account] = 0
 
-	def get_status_message(self, status, autoconnect = 0):
+	def get_status_message(self, status):
 		if (status == 'online' and not gajim.config.get('ask_online_status')) or \
 			(status == 'offline' and not gajim.config.get('ask_offline_status')):
 			return status
-		dlg = dialogs.Change_status_message_dialog(self.plugin, status, 
-																	autoconnect)
+		dlg = dialogs.Change_status_message_dialog(self.plugin, status)
 		message = dlg.run()
 		return message
 
