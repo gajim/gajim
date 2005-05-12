@@ -22,8 +22,14 @@ import sys
 import time
 import common.gajim
 from common import i18n
-LOGPATH = os.path.expanduser('~/.gajim/logs')
 _ = i18n._
+
+LOGPATH = os.path.expanduser('~/.gajim/logs')
+if os.name == 'nt':
+	try:
+		LOGPATH = os.environ['appdata']
+	except KeyError:
+		pass
 
 class Logger:
 	def __init__(self):
@@ -37,12 +43,11 @@ class Logger:
 				print '~/.gajim/logs is file but it should be a directory'
 				print 'Gajim will now exit'
 				sys.exit()
-		else: #create ~/.gajim/logs/ if it doesn't exist
-			os.mkdir(os.path.expanduser('~/.gajim'))
+		else: #create ~/.gajim/logs if it doesn't exist
+			os.mkdir(dot_gajim)
 			print 'creating ~/.gajim directory'
 			os.mkdir(LOGPATH)
 			print 'creating ~/.gajim/logs directory'
-			
 
 	def write(self, kind, msg, jid, show = None, tim = None):
 		if not tim:
