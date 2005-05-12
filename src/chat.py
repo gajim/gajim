@@ -310,7 +310,6 @@ class Chat:
 				message_textview = self.xmls[jid].get_widget('message_textview')
 				if not message_textview.is_focus():
 					message_textview.grab_focus()
-				#FIXME: isn't it on_chat_notebook_key_press enough for this??
 				message_textview.emit('key_press_event', event)
 				
 	def on_chat_notebook_key_press_event(self, widget, event):
@@ -368,6 +367,13 @@ class Chat:
 					self.notebook.set_current_page(current + 1)
 				else:
 					self.notebook.set_current_page(0)
+		elif event.keyval == gtk.keysyms.v:
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + V
+				jid = self.get_active_jid()
+				message_textview = self.xmls[jid].get_widget('message_textview')
+				if not message_textview.is_focus():
+					message_textview.grab_focus()
+				message_textview.emit('key_press_event', event)
 		elif (event.state & gtk.gdk.CONTROL_MASK) or \
 		     (event.keyval == gtk.keysyms.Control_L) or \
 		     (event.keyval == gtk.keysyms.Control_R):
