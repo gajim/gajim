@@ -411,7 +411,9 @@ class Groupchat_window(chat.Chat):
 
 	def on_info(self, widget, jid):
 		"""Call vcard_information_window class to display user's information"""
-		if not self.plugin.windows[self.account]['infos'].has_key(jid):
+		if self.plugin.windows[self.account]['infos'].has_key(jid):
+			self.plugin.windows[self.account]['infos'][jid].present()
+		else:
 			self.plugin.windows[self.account]['infos'][jid] = \
 				dialogs.Vcard_window(jid, self.plugin,
 						self.account, True)
