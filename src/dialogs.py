@@ -128,12 +128,11 @@ class Passphrase_dialog:
 		self.window.destroy()
 		return passphrase, save_passphrase_checkbutton.get_active()
 
-	def __init__(self, labeltext, checkbuttontext, autoconnect = 0):
+	def __init__(self, labeltext, checkbuttontext):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'passphrase_dialog', APP)
 		self.window = self.xml.get_widget('passphrase_dialog')
 		self.passphrase_entry = self.xml.get_widget('passphrase_entry')
 		self.passphrase = -1
-		self.autoconnect = autoconnect
 		self.xml.get_widget('message_label').set_text(labeltext)
 		self.xml.get_widget('save_passphrase_checkbutton').set_label(checkbuttontext)
 		self.xml.signal_autoconnect(self)
@@ -177,7 +176,7 @@ class choose_gpg_key_dialog:
 		self.window.show_all()
 
 class Change_status_message_dialog:
-	def __init__(self, plugin, status, autoconnect = 0):
+	def __init__(self, plugin, status):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
 		self.window = self.xml.get_widget('change_status_message_dialog')
 		ui_status = plugin.roster.get_ui_status(status)
