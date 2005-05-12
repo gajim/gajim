@@ -1,8 +1,9 @@
-##      plugins/logger.py
+## logger.py
 ##
 ## Gajim Team:
-##      - Yann Le Boulanger <asterix@lagaule.org>
-##      - Vincent Hanquez <tab@snarc.org>
+## - Yann Le Boulanger <asterix@lagaule.org>
+## - Vincent Hanquez <tab@snarc.org>
+##	- Nikos Kouremenos <kourem@gmail.com>
 ##
 ##      Copyright (C) 2003-2005 Gajim Team
 ##
@@ -17,25 +18,31 @@
 ##
 
 import os
+import sys
 import time
 import common.gajim
 from common import i18n
-LOGPATH = os.path.expanduser('~/.gajim/logs/')
+LOGPATH = os.path.expanduser('~/.gajim/logs')
 _ = i18n._
 
 class Logger:
 	def __init__(self):
-		#create ~/.gajim/logs/ if it doesn't exist
-		try:
-			os.stat(os.path.expanduser('~/.gajim'))
-		except OSError:
+		dot_gajim = os.path.expanduser('~/.gajim')
+		if os.path.isfile(dot_gajim):
+			print '~/.gajim is file but it should be a directory'
+			print 'Gajim will now exit'
+			sys.exit()
+		if os.path.isdir(dot_gajim):
+			if os.path.isfile(LOGPATH):
+				print '~/.gajim/logs is file but it should be a directory'
+				print 'Gajim will now exit'
+				sys.exit()
+		else: #create ~/.gajim/logs/ if it doesn't exist
 			os.mkdir(os.path.expanduser('~/.gajim'))
-			print 'creating ~/.gajim/'
-		try:
-			os.stat(LOGPATH)
-		except OSError:
+			print 'creating ~/.gajim directory'
 			os.mkdir(LOGPATH)
-			print 'creating ~/.gajim/logs/'
+			print 'creating ~/.gajim/logs directory'
+			
 
 	def write(self, kind, msg, jid, show = None, tim = None):
 		if not tim:
@@ -74,7 +81,8 @@ class Logger:
 				nick = jids[1]
 			show = nick
 		for f in files:
-			fic = open(LOGPATH + f, 'a')
+			path_to_file = os.path.join(LOGPATH, f)
+			fic = open(path_to_file, 'a')
 			fic.write('%s:%s:%s' % (tim, jid, show))
 			if msg:
 				fic.write(':' + msg)
@@ -82,7 +90,8 @@ class Logger:
 			fic.close()
 
 	def get_nb_line(self, jid):
-		fic = open(LOGPATH + jid.split('/')[0], 'r')
+		path_to_file = os.path.join(LOGPATH, jid.split('/')[0])
+		fic = open(path_to_file, 'r')
 		nb = 0
 		while (fic.readline()):
 			nb += 1
@@ -90,7 +99,8 @@ class Logger:
 		return nb
 
 	def read(self, jid, begin_line, end_line):
-		fic = open(LOGPATH + jid.split('/')[0], 'r')
+		path_to_file = os.path.join(LOGPATH, jid.split('/')[0])
+		fic = open(path_to_file, 'r')
 		nb = 0
 		lines = []
 		while (nb < begin_line and fic.readline()):
