@@ -115,6 +115,7 @@ class Connection:
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
 		self.gpg = None
+		self.status = ''
 		self.myVCardID = []
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		if USE_GPG:
@@ -592,11 +593,12 @@ class Connection:
 			roster = self.connection.getRoster().getRaw()
 		return roster
 	
-	def change_status(self, status, msg):
-		if not status in STATUS_LIST:
+	def change_status(self, show, msg):
+		if not show in STATUS_LIST:
 			return -1
 		if not msg:
-			msg = status
+			msg = show
+		self.status = msg
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if keyID and USE_GPG:
@@ -605,28 +607,28 @@ class Connection:
 				signed = ''
 				if self.connected < 2:
 					self.dispatch('BAD_PASSPHRASE', ())
-		if (status != 'offline') and (self.connected == 0):
+		if (show != 'offline') and (self.connected == 0):
 			self.connection = self.connect()
 			if self.connected == 2:
-				self.connected = STATUS_LIST.index(status)
+				self.connected = STATUS_LIST.index(show)
 				#send our presence
 				ptype = 'available'
-				if status == 'invisible':
+				if show == 'invisible':
 					ptype = 'invisible'
 				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
 				p = common.xmpp.Presence(typ = ptype, priority = prio, show =\
-					status, status=msg)
+					show, status=msg)
 				if signed:
 				    p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 
 				self.connection.send(p)
-				self.dispatch('STATUS', status)
+				self.dispatch('STATUS', show)
 				#ask our VCard
 				iq = common.xmpp.Iq('get')
 				iq.setTag(common.xmpp.NS_VCARD + ' vCard')
 				self.connection.send(iq)
 				self.myVCardID.append(iq.getID())
-		elif (status == 'offline') and self.connected:
+		elif (show == 'offline') and self.connected:
 			self.connected = 0
 			if self.connection:
 				self.connection.send(common.xmpp.Presence(typ = 'unavailable',
@@ -634,17 +636,17 @@ class Connection:
 				self.connection.disconnect()
 			self.dispatch('STATUS', 'offline')
 			self.connection = None
-		elif status != 'offline' and self.connected:
-			self.connected = STATUS_LIST.index(status)
+		elif show != 'offline' and self.connected:
+			self.connected = STATUS_LIST.index(show)
 			ptype = 'available'
-			if status == 'invisible':
+			if show == 'invisible':
 				ptype = 'invisible'
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
-			p = common.xmpp.Presence(typ = ptype, priority = prio, show = status,
+			p = common.xmpp.Presence(typ = ptype, priority = prio, show = show,
 				status = msg)
 			if signed: p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			self.connection.send(p)
-			self.dispatch('STATUS', status)
+			self.dispatch('STATUS', show)
 
 	def send_message(self, jid, msg, keyID):
 		if not self.connection:
@@ -829,7 +831,8 @@ class Connection:
 	def join_gc(self, nick, room, server, password):
 		if not self.connection:
 			return
-		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick))
+		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
+			show = STATUS_LIST[self.connected], status = self.status)
 		p.setTag(common.xmpp.NS_MUC + ' x')
 		self.connection.send(p)
 
