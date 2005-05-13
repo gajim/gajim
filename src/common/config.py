@@ -50,7 +50,7 @@ class Config:
 		'autoxatime': [ opt_int, 20 ],
 		'ask_online_status': [ opt_bool, False ],
 		'ask_offline_status': [ opt_bool, False ],
-		'last_msg': [ opt_str, '' ],
+		'last_status_msg': [ opt_str, '' ],
 		'trayicon': [ opt_bool, True ],
 		'iconset': [ opt_str, 'sun' ],
 		'inmsgcolor': [ opt_color, '#ff0000' ],
@@ -92,7 +92,7 @@ class Config:
 		'usegpg': [ opt_bool, False ],
 		'log_notif_in_user_file': [ opt_bool, True ],
 		'log_notif_in_sep_file': [ opt_bool, True ],
-		'change_title': [ opt_bool, True ],
+		'change_roster_title': [ opt_bool, True ],
 		'version': [ None, '0.7' ],
 	}
 

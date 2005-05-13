@@ -1386,7 +1386,7 @@ class Roster_window:
 		return
 
 	def show_title(self):
-		change_title_allowed = gajim.config.get('change_title')
+		change_title_allowed = gajim.config.get('change_roster_title')
 		if change_title_allowed:
 			start = ''
 			if self.nb_unread > 1:
@@ -1403,7 +1403,7 @@ class Roster_window:
 		elif status == 'xa':
 			uf_status = 'Not Available'
 		elif status == 'chat':
-			uf_status = 'Free or Chat'
+			uf_status = 'Free for Chat'
 		else:
 			uf_status = status.capitalize()
 		return uf_status

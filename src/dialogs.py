@@ -184,7 +184,7 @@ class Change_status_message_dialog:
 		
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
-		self.message_buffer.set_text(gajim.config.get('last_msg'))
+		self.message_buffer.set_text(gajim.config.get('last_status_msg'))
 		self.values = {'':''}
 		for msg in gajim.config.get_per('statusmsg'):
 			self.values[msg] = gajim.config.get_per('statusmsg', msg, 'message')
@@ -203,7 +203,8 @@ class Change_status_message_dialog:
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
 			message = self.message_buffer.get_text(beg, end, 0)
-			gajim.config.set('last_msg', message)
+			#FIXME: support more than one line
+			gajim.config.set('last_status_msg', message)
 		else:
 			message = -1
 		self.window.destroy()
