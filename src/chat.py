@@ -423,7 +423,7 @@ class Chat:
 		return False
 
 	def on_clear(self, widget, textview):
-		'''clear text found in the given textview'''
+		'''clear text in the given textview'''
 		buffer = textview.get_buffer()
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
@@ -467,7 +467,7 @@ class Chat:
 			tim = time.localtime()
 			tim_format = time.strftime('%H:%M', tim)
 			buffer.insert_with_tags_by_name(end_iter,
-						tim_format + '\n',
+						'\n' + tim_format,
 						'time_sometimes')
 			#scroll to the end of the textview
 			end_rect = textview.get_iter_location(end_iter)
