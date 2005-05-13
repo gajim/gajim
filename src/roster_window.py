@@ -454,10 +454,12 @@ class Roster_window:
 		dlg.run()
 		
 	def on_history(self, widget, user):
-		'''When history button is pressed: call log window'''
-		if not self.plugin.windows['logs'].has_key(user.jid):
+		'''When history menuitem is activated: call log window'''
+		if self.plugin.windows['logs'].has_key(user.jid):
+			self.plugin.windows['logs'][user.jid].window.present()
+		else:
 			self.plugin.windows['logs'][user.jid] = history_window.\
-				History_window(self.plugin, self.account, user.jid)
+				History_window(self.plugin, user.jid)
 	
 	def mk_menu_user(self, event, iter):
 		'''Make user's popup menu'''
@@ -475,7 +477,7 @@ class Roster_window:
 		menu.append(item)
 		item.connect('activate', self.on_rename, iter, path)
 		if not 'not in the roster' in user.groups:
-			item = gtk.MenuItem(_('Edit groups'))
+			item = gtk.MenuItem(_('Edit Groups'))
 			menu.append(item)
 			item.connect('activate', self.on_edit_groups, user, account)
 			item = gtk.MenuItem()
@@ -485,17 +487,17 @@ class Roster_window:
 
 			sub_menu = gtk.Menu()
 			item.set_submenu(sub_menu)
-			item = gtk.MenuItem(_('Resend authorization to'))
+			item = gtk.MenuItem(_('Resend Authorization to'))
 			sub_menu.append(item)
 			item.connect('activate', self.authorize, jid, account)
-			item = gtk.MenuItem(_('Rerequest authorization from'))
+			item = gtk.MenuItem(_('Rerequest Authorization from'))
 			sub_menu.append(item)
 			item.connect('activate', self.req_sub, jid, 
 				_('I would like to add you to my contact list.'), account)
 		else:
 			item = gtk.MenuItem()
 			menu.append(item)
-			item = gtk.MenuItem(_('Add to roster'))
+			item = gtk.MenuItem(_('Add to Roster'))
 			menu.append(item)
 			item.connect('activate', self.on_add_to_roster, user, account)
 
@@ -589,7 +591,7 @@ class Roster_window:
 		item = gtk.MenuItem(_('Away'))
 		sub_menu.append(item)
 		item.connect('activate', self.change_status, account, 'away')
-		item = gtk.MenuItem(_('XA'))
+		item = gtk.MenuItem(_('Not Available'))
 		sub_menu.append(item)
 		item.connect('activate', self.change_status, account, 'xa')
 		item = gtk.MenuItem(_('Busy'))
@@ -607,19 +609,19 @@ class Roster_window:
 		item = gtk.MenuItem()
 		menu.append(item)
 
-		item = gtk.MenuItem(_('_Edit account'))
+		item = gtk.MenuItem(_('_Edit Account'))
 		menu.append(item)
 		item.connect('activate', self.on_edit_account, account)
-		item = gtk.MenuItem(_('_Service discovery'))
+		item = gtk.MenuItem(_('_Service Discovery'))
 		menu.append(item)
 		item.connect('activate', self.on_service_disco_menuitem_activate, account)
-		item = gtk.MenuItem(_('_Add contact'))
+		item = gtk.MenuItem(_('_Add Contact'))
 		menu.append(item)
 		item.connect('activate', self.on_add_new_contact, account)
-		item = gtk.MenuItem(_('Join _groupchat'))
+		item = gtk.MenuItem(_('Join _Groupchat'))
 		menu.append(item)
 		item.connect('activate', self.on_join_gc_activate, account)
-		item = gtk.MenuItem(_('_New message'))
+		item = gtk.MenuItem(_('_New Message'))
 		menu.append(item)
 		item.connect('activate', self.on_new_message_menuitem_activate, account)
 
@@ -1168,8 +1170,6 @@ class Roster_window:
 		model.set_value(iter, 5, False)
 		
 	def on_service_disco_menuitem_activate(self, widget, account):
-		'''When Service Discovery is selected:
-		Call browse class'''
 		if self.plugin.windows[account].has_key('disco'):
 			self.plugin.windows[account]['disco'].window.present()
 		else:
@@ -1395,16 +1395,18 @@ class Roster_window:
 				start = '*  '
 			self.window.set_title(start + 'Gajim')
 
-	def get_ui_status(self, status):
+	def get_uf_status(self, status, capitalize=True):
+		'''returns a userfriendly string for dnd/xa/chat
+		and capitalize()s the rest'''
 		if status == 'dnd':
-			ui_status = 'Busy'
+			uf_status = 'Busy'
 		elif status == 'xa':
-			ui_status = 'Extended Away'
+			uf_status = 'Not Available'
 		elif status == 'chat':
-			ui_status = 'Free for chat'
+			uf_status = 'Free or Chat'
 		else:
-			ui_status = status.capitalize()
-		return ui_status
+			uf_status = status.capitalize()
+		return uf_status
 
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
@@ -1466,8 +1468,8 @@ class Roster_window:
 
 		for status in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
 			'offline']:
-			ui_status = self.get_ui_status(status)
-			iter = liststore.append([ui_status, self.jabber_state_images[status], status])
+			uf_status = self.get_uf_status(status)
+			iter = liststore.append([uf_status, self.jabber_state_images[status], status])
 		self.status_combobox.show_all()
 		self.status_combobox.set_model(liststore)
 		self.status_combobox.set_active(6) # default to offline

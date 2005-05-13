@@ -139,7 +139,7 @@ class Chat:
 		return active_jid
 
 	def on_close_button_clicked(self, button, jid):
-		"""When close button is pressed : close a tab"""
+		"""When close button is pressed: close a tab"""
 		self.remove_tab(jid)
 
 	def on_chat_window_focus_in_event(self, widget, event):
@@ -167,8 +167,8 @@ class Chat:
 				new_jid = jid
 				break
 
-		conversation_textview = self.xmls[new_jid].\
-			get_widget('conversation_textview')
+		conversation_textview = self.xmls[new_jid].get_widget(
+			'conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		end_iter = conversation_buffer.get_end_iter()
 		end_rect = conversation_textview.get_iter_location(end_iter)
@@ -225,8 +225,8 @@ class Chat:
 		self.nb_unread[jid] = 0
 		self.last_message_time[jid] = 0
 		
-		conversation_textview = \
-			self.xmls[jid].get_widget('conversation_textview')
+		conversation_textview = self.xmls[jid].get_widget(
+			'conversation_textview')
 		conversation_buffer = conversation_textview.get_buffer()
 		end_iter = conversation_buffer.get_end_iter()
 		
@@ -268,7 +268,7 @@ class Chat:
 		
 		self.xmls[jid].signal_autoconnect(self)
 		conversation_scrolledwindow = self.xmls[jid].get_widget(
-															'conversation_scrolledwindow')
+			'conversation_scrolledwindow')
 		conversation_scrolledwindow.get_vadjustment().connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
 		
@@ -411,18 +411,19 @@ class Chat:
 		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
 		tags = widget.get_iter_at_location(x, y).get_tags()
 		if self.change_cursor:
-			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(\
+			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 				gtk.gdk.Cursor(gtk.gdk.XTERM))
 			self.change_cursor = None
 		tag_table = widget.get_buffer().get_tag_table()
 		for tag in tags:
 			if tag == tag_table.lookup('url') or tag == tag_table.lookup('mail'):
-				widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(\
+				widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 					gtk.gdk.Cursor(gtk.gdk.HAND2))
 				self.change_cursor = tag
 		return False
 
 	def on_clear(self, widget, textview):
+		'''clear text found in the given textview'''
 		buffer = textview.get_buffer()
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
@@ -489,15 +490,15 @@ class Chat:
 	def make_link_menu(self, event, kind, text):
 		menu = gtk.Menu()
 		if kind == 'mail':
-			item = gtk.MenuItem(_('_Open email composer'))
+			item = gtk.MenuItem(_('_Open Email Composer'))
 		else:
-			item = gtk.MenuItem(_('_Open link'))
+			item = gtk.MenuItem(_('_Open Link'))
 		item.connect('activate', self.on_open_link_activated, kind, text)
 		menu.append(item)
 		if kind == 'mail':
-			item = gtk.MenuItem(_('_Copy email address'))
+			item = gtk.MenuItem(_('_Copy Email Address'))
 		else: # It's an url
-			item = gtk.MenuItem(_('_Copy link address'))
+			item = gtk.MenuItem(_('_Copy Link Address'))
 		item.connect('activate', self.on_copy_link_activated, text)
 		menu.append(item)
 

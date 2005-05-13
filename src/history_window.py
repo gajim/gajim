@@ -139,15 +139,18 @@ class History_window:
 						_('Status is now: ') + data[0]
 						+ ': ' + msg, 'status')
 	
-	def __init__(self, plugin, account, jid):
+	def __init__(self, plugin, jid, account=None):
 		self.plugin = plugin
 		self.jid = jid
 		self.nb_line = gajim.logger.get_nb_line(jid)
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
-		list_users = self.plugin.roster.contacts[account][self.jid]
-		user = list_users[0]
-		title = 'Conversation History with ' + user.name
+		if account:
+			list_users = self.plugin.roster.contacts[account][self.jid]
+			user = list_users[0]
+			title = 'Conversation History with ' + user.name
+		else:
+			title = 'Conversation History with ' + jid
 		self.window.set_title(title)
 		self.history_buffer = xml.get_widget('history_textview').get_buffer()
 		self.earliest_button = xml.get_widget('earliest_button')

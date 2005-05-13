@@ -337,9 +337,9 @@ class Groupchat_window(chat.Chat):
 		return False
 
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
-		"""Print a line in the conversation :
-		if contact is set : it's a message from someone
-		if contact is not set : it's a message from the server"""
+		"""Print a line in the conversation:
+		if contact is set: it's a message from someone
+		if contact is not set: it's a message from the server"""
 		other_tags_for_name = []
 		if contact:
 			if contact == self.nicks[room_jid]:
@@ -412,11 +412,10 @@ class Groupchat_window(chat.Chat):
 	def on_info(self, widget, jid):
 		"""Call vcard_information_window class to display user's information"""
 		if self.plugin.windows[self.account]['infos'].has_key(jid):
-			self.plugin.windows[self.account]['infos'][jid].present()
+			self.plugin.windows[self.account]['infos'][jid].window.present()
 		else:
 			self.plugin.windows[self.account]['infos'][jid] = \
-				dialogs.Vcard_window(jid, self.plugin,
-						self.account, True)
+				dialogs.Vcard_window(jid, self.plugin, self.account, True)
 			# FIXME: when we'll have a user for each contact, this won't be needed
 			# cause we'll user real information window
 			vcard_xml = self.plugin.windows[self.account]['infos'][jid].xml

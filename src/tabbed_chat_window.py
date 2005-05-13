@@ -128,22 +128,19 @@ class Tabbed_chat_window(chat.Chat):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
 	def on_clear_button_clicked(self, widget):
-		"""When clear button is pressed:
-		clear the conversation"""
+		"""When clear button is pressed:	clear the conversation"""
 		jid = self.get_active_jid()
-		conversation_buffer = self.xmls[jid].get_widget('conversation_textview').\
-			get_buffer()
-		start, end = conversation_buffer.get_bounds()
-		conversation_buffer.delete(start, end)
+		textview = self.xmls[jid].get_widget('conversation_textview')
+		self.on_clear(None, textview)
 
 	def on_history_button_clicked(self, widget):
 		"""When history button is pressed: call history window"""
 		jid = self.get_active_jid()
 		if self.plugin.windows['logs'].has_key(jid):
-			self.plugin.windows['logs'][jid].present()
+			self.plugin.windows['logs'][jid].window.present()
 		else:
 			self.plugin.windows['logs'][jid] = history_window.\
-				History_window(self.plugin, self.account, jid)
+				History_window(self.plugin, jid, self.account)
 
 	def remove_tab(self, jid):
 		if time.time() - self.last_message_time[jid] < 2:
@@ -193,7 +190,7 @@ class Tabbed_chat_window(chat.Chat):
 		and printed in the conversation"""
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		if event.hardware_keycode == 23: # TAB
+		if event.hardware_keycode == 23: # TAB (do not make it .Tab ==> fails)
 			if (event.state & gtk.gdk.CONTROL_MASK) and \
 				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB
 				self.notebook.emit('key_press_event', event)
@@ -221,6 +218,10 @@ class Tabbed_chat_window(chat.Chat):
 			end_iter = message_buffer.get_end_iter()
 			message = message_buffer.get_text(start_iter, end_iter, 0)
 			if message != '':
+				if message == '/clear':
+					self.on_clear(None, conversation_textview) # clear conversation
+					self.on_clear(None, widget) # clear message textview too
+					return True
 				keyID = ''
 				if self.xmls[jid].get_widget('gpg_togglebutton').get_active():
 					keyID = self.users[jid].keyID
@@ -231,7 +232,6 @@ class Tabbed_chat_window(chat.Chat):
 		return False
 
 	def on_contact_button_clicked(self, widget):
-		"""When button contact is clicked"""
 		jid = self.get_active_jid()
 		user = self.users[jid]
 		self.plugin.roster.on_info(widget, user, self.account)
@@ -256,10 +256,10 @@ class Tabbed_chat_window(chat.Chat):
 				self.plugin.roster.really_remove_user(user, self.account)
 
 	def print_conversation(self, text, jid, contact = '', tim = None):
-		"""Print a line in the conversation :
-		if contact is set to status : it's a status message
-		if contact is set to another value : it's an outgoing message
-		if contact is not set : it's an incomming message"""
+		"""Print a line in the conversation:
+		if contact is set to status: it's a status message
+		if contact is set to another value: it's an outgoing message
+		if contact is not set: it's an incomming message"""
 		user = self.users[jid]
 		if contact == 'status':
 			kind = 'status'

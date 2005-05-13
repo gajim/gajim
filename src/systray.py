@@ -161,7 +161,7 @@ class Systray:
 		for group in self.plugin.roster.groups[account].keys():
 			if group == 'Transports':
 				continue
-			# at least one not offline or with errors in this group
+			# at least one 'not offline' or 'without errors' in this group
 			at_least_one = False
 			item = gtk.MenuItem(group)
 			groups_menu.append(item)
@@ -172,7 +172,8 @@ class Systray:
 				if group in user.groups and user.show != 'offline' and \
 						user.show != 'error':
 					at_least_one = True
-					s = user.name.replace('_', '__') + ' (' + user.show + ')'
+					status = self.plugin.roster.get_uf_status(user.show)
+					s = user.name.replace('_', '__') + ' (' + status + ')'
 					item = gtk.MenuItem(s)
 					item.connect('activate', self.start_chat, account,\
 							user.jid)

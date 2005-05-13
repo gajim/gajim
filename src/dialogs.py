@@ -179,8 +179,8 @@ class Change_status_message_dialog:
 	def __init__(self, plugin, status):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
 		self.window = self.xml.get_widget('change_status_message_dialog')
-		ui_status = plugin.roster.get_ui_status(status)
-		self.window.set_title(ui_status + ' Status Message')
+		uf_status = plugin.roster.get_uf_status(status)
+		self.window.set_title(uf_status + ' Status Message')
 		
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
