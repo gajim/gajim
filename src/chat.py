@@ -431,7 +431,7 @@ class Chat:
 	def on_conversation_textview_populate_popup(self, textview, menu):
 		item = gtk.MenuItem() # seperator
 		menu.prepend(item)
-		item = gtk.MenuItem(_('C_lear'))
+		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
 		menu.prepend(item)
 		item.connect('activate', self.on_clear, textview)
 		menu.show_all()
