@@ -381,6 +381,7 @@ class Connection:
 		if send_os:
 			qp.setTagData('os', get_os_info())
 		con.send(iq_obj)
+		raise common.xmpp.NodeProcessed
 
 	def _VersionResultCB(self, con, iq_obj):
 		gajim.log.debug('VersionResultCB')
