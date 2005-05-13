@@ -32,6 +32,8 @@ import sre
 import signal
 import common.sleepy
 import check_for_new_version
+import sys
+import getopt
 
 from common import gajim
 from common import connection
@@ -44,6 +46,27 @@ gtk.glade.textdomain(APP)
 
 from common import optparser
 parser = optparser.OptionsParser('~/.gajim/config')
+
+# gajim --profile devel
+profile = ''
+try:
+       opts, args = getopt.getopt(sys.argv[1:], "hp:", [ "help", "profile=" ])
+except getopt.error, msg:
+       print msg
+       print "for help use --help"
+       sys.exit(2)
+for o, a in opts:
+       if o in ("-h", "--help"):
+               print "gajim [--help] [--profile name]"
+               sys.exit(0)
+       elif o in ("-p", "--profile"):
+               profile = a
+
+config_name = "~/.gajim/config"
+if profile:
+       config_name += ".%s" % profile
+
+parser = common.optparser.OptionsParser(config_name)
 
 try:
 	import winsound # windows-only built-in module for playing wav
