@@ -1032,35 +1032,6 @@ class Roster_window:
 
 	def on_quit_menuitem_activate(self, widget):
 		accounts = gajim.connections.keys()
-		# check if we have unread or recent mesages
-		unread = False
-		recent = False
-		if self.nb_unread > 0:
-			unread = True
-		for account in accounts:
-			if self.plugin.windows[account]['chats'].has_key('tabbed'):
-				wins = [self.plugin.windows[account]['chats']['tabbed']]
-			else:
-				wins = self.plugin.windows[account]['chats'].values()
-			for win in wins:
-				unrd = 0
-				for jid in win.nb_unread:
-					unrd += win.nb_unread[jid]
-				if unrd:
-					unread = True
-					break
-				for jid in win.users:
-					if time.time() - win.last_message_time[jid] < 2:
-						recent = True
-						break
-		if unread:
-			dialog = dialogs.Confirmation_dialog(_('You have unread messages.\nAre you sure you want to quit Gajim?'))
-			if dialog.get_response() != gtk.RESPONSE_YES:
-				return
-		if recent:
-			dialog = dialogs.Confirmation_dialog(_('You received a message in the last two seconds.\nAre you sure you want to quit Gajim?'))
-			if dialog.get_response() != gtk.RESPONSE_YES:
-				return
 		get_msg = False
 		for acct in accounts:
 			if gajim.connections[acct].connected:
@@ -1070,6 +1041,36 @@ class Roster_window:
 			message = self.get_status_message('offline')
 			if message == -1:
 				return
+			# check if we have unread or recent mesages
+			unread = False
+			recent = False
+			if self.nb_unread > 0:
+				unread = True
+			for account in accounts:
+				if self.plugin.windows[account]['chats'].has_key('tabbed'):
+					wins = [self.plugin.windows[account]['chats']['tabbed']]
+				else:
+					wins = self.plugin.windows[account]['chats'].values()
+				for win in wins:
+					unrd = 0
+					for jid in win.nb_unread:
+						unrd += win.nb_unread[jid]
+					if unrd:
+						unread = True
+						break
+					for jid in win.users:
+						if time.time() - win.last_message_time[jid] < 2:
+							recent = True
+							break
+			if unread:
+				dialog = dialogs.Confirmation_dialog(_('You have unread messages.\nAre you sure you want to quit Gajim?'))
+				if dialog.get_response() != gtk.RESPONSE_YES:
+					return
+			#FIXME: do we keep that ?
+			if recent:
+				dialog = dialogs.Confirmation_dialog(_('You received a message in the last two seconds.\nAre you sure you want to quit Gajim?'))
+				if dialog.get_response() != gtk.RESPONSE_YES:
+					return
 			for acct in accounts:
 				if gajim.connections[acct].connected:
 					self.send_status(acct, 'offline', message)
