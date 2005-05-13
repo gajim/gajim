@@ -3611,17 +3611,17 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkRadioButton" id="time_never_radiobutton">
+				<widget class="GtkRadioButton" id="time_always_radiobutton">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Never</property>
+				  <property name="label" translatable="yes">On every line</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <signal name="toggled" handler="on_time_never_radiobutton_toggled" last_modification_time="Tue, 08 Mar 2005 12:58:31 GMT"/>
+				  <signal name="toggled" handler="on_time_always_radiobutton_toggled" last_modification_time="Tue, 08 Mar 2005 13:00:42 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -3641,7 +3641,7 @@
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <property name="group">time_never_radiobutton</property>
+				  <property name="group">time_always_radiobutton</property>
 				  <signal name="toggled" handler="on_time_sometimes_radiobutton_toggled" last_modification_time="Tue, 08 Mar 2005 13:00:36 GMT"/>
 				</widget>
 				<packing>
@@ -3652,18 +3652,18 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkRadioButton" id="time_always_radiobutton">
+				<widget class="GtkRadioButton" id="time_never_radiobutton">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">On every line</property>
+				  <property name="label" translatable="yes">Never</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <property name="group">time_never_radiobutton</property>
-				  <signal name="toggled" handler="on_time_always_radiobutton_toggled" last_modification_time="Tue, 08 Mar 2005 13:00:42 GMT"/>
+				  <property name="group">time_always_radiobutton</property>
+				  <signal name="toggled" handler="on_time_never_radiobutton_toggled" last_modification_time="Tue, 08 Mar 2005 12:58:31 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -10758,10 +10758,9 @@ send a chat message to</property>
 
   <child>
     <widget class="GtkVBox" id="vbox70">
-      <property name="border_width">5</property>
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">10</property>
+      <property name="spacing">5</property>
 
       <child>
 	<widget class="GtkTable" id="table26">
@@ -10850,17 +10849,6 @@ send a chat message to</property>
 	<packing>
 	  <property name="padding">0</property>
 	  <property name="expand">True</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkHSeparator" id="hseparator14">
-	  <property name="visible">True</property>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">False</property>
 	  <property name="fill">True</property>
 	</packing>
       </child>

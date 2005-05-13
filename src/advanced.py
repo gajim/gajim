@@ -69,7 +69,8 @@ class Advanced_window:
 			type = val[OPT_TYPE][0]
 		model.append(iter, [name, val[OPT_VAL], type])
 
-	def visible_func(self, model, iter, str):
+	def visible_func(self, model, iter):
+		str = self.entry.get_text()
 		if str is None or str == '':
 			return True # show all
 		name = model.get_value(iter, 0)
@@ -79,12 +80,15 @@ class Advanced_window:
 		
 	def on_advanced_entry_changed(self, widget):
 		text = widget.get_text()
+		self.modelfilter.refilter()
 
 	def __init__(self, plugin):
 		self.plugin = plugin
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_window', None)
 		self.window = self.xml.get_widget('advanced_window')
+		self.entry = self.xml.get_widget('advanced_entry')
+
 		self.xml.signal_autoconnect(self)
 
 		treeview = self.xml.get_widget('advanced_treeview')
@@ -92,6 +96,8 @@ class Advanced_window:
 					gobject.TYPE_STRING,
 					gobject.TYPE_STRING)
 		self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+		self.modelfilter = self.model.filter_new()
+		self.modelfilter.set_visible_func(self.visible_func)
 
 		renderer_text = gtk.CellRendererText()
 		treeview.insert_column_with_attributes(-1, 'Preference Name',
@@ -112,7 +118,7 @@ class Advanced_window:
 		# add data to model
 		gajim.config.foreach(self.fill, self.model)
 		
-		treeview.set_model(self.model)
+		treeview.set_model(self.modelfilter)
 		
 		self.plugin.windows['advanced_config'] = self
 		self.window.show_all()
