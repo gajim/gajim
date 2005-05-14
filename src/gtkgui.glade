@@ -1191,7 +1191,7 @@
 				<widget class="GtkButton" id="gpg_choose_button">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Choose _key</property>
+				  <property name="label" translatable="yes">Choose _Key</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -1662,7 +1662,7 @@
 		<widget class="GtkButton" id="edit_details_button">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Edit personal details...</property>
+		  <property name="label" translatable="yes">_Edit Personal Details...</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -3020,7 +3020,7 @@
 		    <widget class="GtkButton" id="add_remove_emoticons_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Add/Remove emoticons...</property>
+		      <property name="label" translatable="yes">Add/Remove Emoticons...</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -4071,7 +4071,7 @@
 					  <child>
 					    <widget class="GtkLabel" id="label217">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Reset to default colors</property>
+					      <property name="label" translatable="yes">Reset to Default Colors</property>
 					      <property name="use_underline">True</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
