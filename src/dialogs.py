@@ -417,6 +417,16 @@ class Information_dialog:
 		dialog.connect('response', self.on_response)
 		dialog.show()
 
+class Input_dialog:
+	'''Class for Input dialog'''
+	def __init__(self, title, label_str):
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'input_dialog', APP)
+		self.dialog = xml.get_widget('input_dialog')
+		label = xml.get_widget('label')
+		self.input_entry = xml.get_widget('input_entry')
+		self.dialog.set_title(title)
+		label.set_text(label_str)
+	
 class Error_dialog:
 	'''Class for error dialog'''
 	def on_response(self, dialog, response_id):

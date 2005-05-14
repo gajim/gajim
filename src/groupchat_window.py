@@ -42,24 +42,26 @@ class Groupchat_window(chat.Chat):
 		self.nicks = {}
 		self.list_treeview = {}
 		self.subjects = {}
-		self.subject_entry = self.xml.get_widget('subject_entry')
+		self.subject_entry = {}
+		self.subject_entry_tooltip = {}
 		self.new_room(room_jid, nick)
 		self.show_title()
-		self.subject_entry_tooltip = gtk.Tooltips()
-		self.xml.signal_connect('on_groupchat_window_destroy', \
+		self.xml.signal_connect('on_groupchat_window_destroy', 
 			self.on_groupchat_window_destroy)
-		self.xml.signal_connect('on_groupchat_window_delete_event', \
+		self.xml.signal_connect('on_groupchat_window_delete_event', 
 			self.on_groupchat_window_delete_event)
-		self.xml.signal_connect('on_groupchat_window_focus_in_event', \
+		self.xml.signal_connect('on_groupchat_window_focus_in_event', 
 			self.on_groupchat_window_focus_in_event)
-		self.xml.signal_connect('on_chat_notebook_key_press_event', \
+		self.xml.signal_connect('on_chat_notebook_key_press_event', 
 			self.on_chat_notebook_key_press_event)
-		self.xml.signal_connect('on_chat_notebook_switch_page', \
+		self.xml.signal_connect('on_chat_notebook_switch_page', 
 			self.on_chat_notebook_switch_page)
-		self.xml.signal_connect('on_set_button_clicked', \
-			self.on_set_button_clicked)
-		self.xml.signal_connect('on_configure_button_clicked', \
-			self.on_configure_button_clicked)
+		self.xml.signal_connect('on_change_subject_menuitem_activate', 
+			self.on_change_subject_menuitem_activate)
+		self.xml.signal_connect('on_configure_room_menuitem_activate', 
+			self.on_configure_room_menuitem_activate)
+		self.xml.signal_connect('on_close_window_activate',
+			self.on_close_window_activate)
 		self.window.show_all()
 
 	def save_var(self, jid):
@@ -78,6 +80,10 @@ class Groupchat_window(chat.Chat):
 		self.list_treeview[jid].set_model(var['model'])
 		self.list_treeview[jid].expand_all()
 		self.set_subject(jid, var['subject'])
+
+	def on_close_window_activate(self, widget):
+		#FIXME: does not work as it should
+		self.on_groupchat_window_delete_event(widget, None)
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
@@ -109,8 +115,9 @@ class Groupchat_window(chat.Chat):
 				new_jid = jid
 				break
 		subject = self.subjects[new_jid]
-		self.subject_entry.set_text(subject)
-		self.subject_entry_tooltip.set_tip(self.subject_entry, subject)
+		subject_entry = self.subject_entry[new_jid]
+		subject_entry.set_text(subject)
+		self.subject_entry_tooltip[new_jid].set_tip(subject_entry, subject)
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
@@ -174,7 +181,7 @@ class Groupchat_window(chat.Chat):
 		return list
 
 	def remove_user(self, room_jid, nick):
-		"""Remove a user from the roster"""
+		"""Remove a user from the list_users"""
 		model = self.list_treeview[room_jid].get_model()
 		iter = self.get_user_iter(room_jid, nick)
 		if not iter:
@@ -224,7 +231,7 @@ class Groupchat_window(chat.Chat):
 
 	def chg_user_status(self, room_jid, nick, show, status, role, affiliation, \
 		jid, reason, actor, statusCode, account):
-		"""When a user change his status"""
+		"""When a user changes his status"""
 		if not role:
 			role = 'None'
 		model = self.list_treeview[room_jid].get_model()
@@ -254,30 +261,23 @@ class Groupchat_window(chat.Chat):
 	
 	def set_subject(self, room_jid, subject):
 		self.subjects[room_jid] = subject
-		self.subject_entry.set_text(subject)
-		self.subject_entry_tooltip.set_tip(self.subject_entry, subject)
+		subject_entry = self.subject_entry[room_jid]
+		subject_entry.set_text(subject)
+		self.subject_entry_tooltip[room_jid].set_tip(subject_entry, subject)
 
-	def on_set_button_clicked(self, widget):
+	def on_change_subject_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
-		subject = self.subject_entry.get_text()
-		gajim.connections[self.account].send_gc_subject(room_jid, subject)
+		instance = dialogs.Input_dialog('Changing the Subject',
+			'Please specify the new subject:')
+		response = instance.dialog.run()
+		instance.dialog.destroy()
+		if response == gtk.RESPONSE_OK:
+			subject = instance.input_entry.get_text()
+			gajim.connections[self.account].send_gc_subject(room_jid, subject)
 
-	def on_configure_button_clicked(self, widget):
+	def on_configure_room_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
 		gajim.connections[self.account].request_gc_config(room_jid)
-
-	def on_subject_entry_focus_out_event(self, widget):
-		print 'FIXME: focus out'
-		return
-		new_child = notebook.get_nth_page(page_num)
-		new_jid = ''
-		for jid in self.xmls:
-			if self.childs[jid] == new_child: 
-				new_jid = jid
-				break
-		subject = self.subjects[new_jid]
-		self.subject_entry.set_text(subject)
-		self.subject_entry_tooltip.set_tip(self.subject_entry, subject)
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
@@ -519,6 +519,9 @@ class Groupchat_window(chat.Chat):
 			'list_treeview')
 		conversation_textview = self.xmls[room_jid].get_widget(
 			'conversation_textview')
+		self.subject_entry[room_jid] = self.xmls[room_jid].get_widget(
+			'subject_entry')
+		self.subject_entry_tooltip[room_jid] = gtk.Tooltips()
 
 		#status_image, nickname, real_jid, status
 		store = gtk.TreeStore(gtk.Image, str, str, str)
