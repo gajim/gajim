@@ -92,28 +92,28 @@ class Advanced_configuration_window:
 		self.xml.signal_autoconnect(self)
 
 		treeview = self.xml.get_widget('advanced_treeview')
-		self.model = gtk.TreeStore(gobject.TYPE_STRING,
-					gobject.TYPE_STRING,
-					gobject.TYPE_STRING)
+		self.model = gtk.TreeStore(str, str, str)
 		self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 		self.modelfilter = self.model.filter_new()
 		self.modelfilter.set_visible_func(self.visible_func)
 
 		renderer_text = gtk.CellRendererText()
-		treeview.insert_column_with_attributes(-1, 'Preference Name',
-						renderer_text, text = 0)
+		col = treeview.insert_column_with_attributes(-1, 'Preference Name',
+			renderer_text, text = 0)
+		col.set_resizable(True)
 					
 		renderer_text = gtk.CellRendererText()
 		renderer_text.set_property('editable', 1)
 		renderer_text.connect('edited', self.on_config_edited)
 		col = treeview.insert_column_with_attributes(-1, 'Value',
-						renderer_text, text = 1)
-		
+			renderer_text, text = 1)
+
+		#col.set_resizable(True) seems like a GTK+ bug DO NOT REMOVE
 		col.set_max_width(250)
 
 		renderer_text = gtk.CellRendererText()
 		treeview.insert_column_with_attributes(-1, 'Type',
-						renderer_text, text = 2)
+			renderer_text, text = 2)
 
 		# add data to model
 		gajim.config.foreach(self.fill, self.model)
