@@ -1150,6 +1150,7 @@ class Account_modification_window:
 				del gajim.connections[self.account]
 				gajim.config.del_per('accounts', self.account)
 				gajim.config.add_per('accounts', name)
+				self.account = name
 			
 			for opt in config:
 				gajim.config.set_per('accounts', name, opt, config[opt])
