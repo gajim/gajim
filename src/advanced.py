@@ -28,7 +28,7 @@ OPT_VAL = 1
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class Advanced_window:
+class Advanced_configuration_window:
 	def on_config_edited(self, cell, row, text):
 		modelrow = self.model[row]
 		if gajim.config.set(modelrow[0], text):
@@ -36,7 +36,7 @@ class Advanced_window:
 		self.plugin.save_config()
 		modelrow[1] = text
 	
-	def on_advanced_window_destroy(self, widget):
+	def on_advanced_configuration_window_destroy(self, widget):
 		del self.plugin.windows['advanced_config']
 
 	def on_advanced_close_button_clicked(self, widget):
@@ -85,8 +85,8 @@ class Advanced_window:
 	def __init__(self, plugin):
 		self.plugin = plugin
 
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_window', None)
-		self.window = self.xml.get_widget('advanced_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_configuration_window', None)
+		self.window = self.xml.get_widget('advanced_configuration_window')
 		self.entry = self.xml.get_widget('advanced_entry')
 
 		self.xml.signal_autoconnect(self)

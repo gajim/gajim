@@ -10809,7 +10809,7 @@ send a chat message to</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="advanced_window">
+<widget class="GtkWindow" id="advanced_configuration_window">
   <property name="border_width">4</property>
   <property name="width_request">600</property>
   <property name="height_request">480</property>
@@ -10824,7 +10824,7 @@ send a chat message to</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy" handler="on_advanced_window_destroy" last_modification_time="Wed, 27 Apr 2005 11:52:39 GMT"/>
+  <signal name="destroy" handler="on_advanced_configuration_window_destroy" last_modification_time="Sat, 14 May 2005 01:39:26 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox70">

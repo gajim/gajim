@@ -901,8 +901,8 @@ class Preferences_window:
 		if self.plugin.windows.has_key('advanced_config'):
 			self.plugin.windows['advanced_config'].window.present()
 		else:
-			self.plugin.windows['advanced_config'] = dialogs.Advanced_window(
-																						self.plugin)
+			self.plugin.windows['advanced_config'] = \
+				dialogs.Advanced_configuration_window(self.plugin)
 
 #---------- Account_modification_window class -------------#
 class Account_modification_window:
