@@ -82,7 +82,7 @@ class Groupchat_window(chat.Chat):
 		self.set_subject(jid, var['subject'])
 
 	def on_close_window_activate(self, widget):
-		if self.on_groupchat_window_delete_event(widget, None) != True:
+		if not self.on_groupchat_window_delete_event(widget, None):
 			self.window.destroy()
 
 	def on_groupchat_window_delete_event(self, widget, event):
@@ -267,8 +267,9 @@ class Groupchat_window(chat.Chat):
 
 	def on_change_subject_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
+		subject = self.subject_entry[room_jid].get_text()
 		instance = dialogs.Input_dialog('Changing the Subject',
-			'Please specify the new subject:')
+			'Please specify the new subject:', subject)
 		response = instance.dialog.run()
 		instance.dialog.destroy()
 		if response == gtk.RESPONSE_OK:
@@ -547,7 +548,7 @@ class Groupchat_window(chat.Chat):
 
 		self.redraw_tab(room_jid)
 		self.show_title()
-		conversation_textview.grab_focus() # remove focus from subject entry
+		conversation_textview.grab_focus()
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
