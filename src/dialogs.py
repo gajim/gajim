@@ -428,6 +428,7 @@ class Input_dialog:
 		label.set_text(label_str)
 		if input_str:
 			self.input_entry.set_text(input_str)
+			self.input_entry.select_region(0, -1) # select all
 			
 	
 class Error_dialog:
