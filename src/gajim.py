@@ -45,9 +45,7 @@ gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
 from common import optparser
-parser = optparser.OptionsParser('~/.gajim/config')
 
-# gajim --profile devel
 profile = ''
 try:
        opts, args = getopt.getopt(sys.argv[1:], "hp:", [ "help", "profile=" ])
@@ -59,14 +57,14 @@ for o, a in opts:
        if o in ("-h", "--help"):
                print "gajim [--help] [--profile name]"
                sys.exit(0)
-       elif o in ("-p", "--profile"):
+       elif o in ("-p", "--profile"): # gajim --profile name
                profile = a
 
 config_name = "~/.gajim/config"
 if profile:
        config_name += ".%s" % profile
 
-parser = common.optparser.OptionsParser(config_name)
+parser = optparser.OptionsParser(config_name)
 
 try:
 	import winsound # windows-only built-in module for playing wav
