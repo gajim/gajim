@@ -82,8 +82,8 @@ class Groupchat_window(chat.Chat):
 		self.set_subject(jid, var['subject'])
 
 	def on_close_window_activate(self, widget):
-		#FIXME: does not work as it should
-		self.on_groupchat_window_delete_event(widget, None)
+		if self.on_groupchat_window_delete_event(widget, None) != True:
+			self.window.destroy()
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
