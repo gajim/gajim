@@ -312,6 +312,7 @@ class Groupchat_window(chat.Chat):
 							add = ' '
 						message_buffer.insert_at_cursor(nick[len(begin):] + add)
 						return True
+				return False
 		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				self.notebook.emit('key_press_event', event)
