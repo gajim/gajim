@@ -1174,8 +1174,12 @@ class Roster_window:
 		if self.plugin.windows[account].has_key('disco'):
 			self.plugin.windows[account]['disco'].window.present()
 		else:
-			self.plugin.windows[account]['disco'] = \
-				config.Service_discovery_window(self.plugin, account)
+			try:
+				self.plugin.windows[account]['disco'] = \
+					config.Service_discovery_window(self.plugin, account)
+			except RuntimeError:
+				pass
+				
 
 	def load_iconset(self, path):
 		imgs = {}

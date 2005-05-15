@@ -1600,6 +1600,7 @@ class Service_discovery_window:
 		self.agent_infos = {}
 		if gajim.connections[account].connected < 2:
 			dialogs.Error_dialog(_('You must be connected to browse services'))
+			raise RuntimeError, 'You must be connected to browse services'
 			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')
