@@ -1,6 +1,6 @@
 #!/bin/sh
 ''':'
-exec python -OOtt "$0" ${1+"$@"}
+exec python -OOt "$0" ${1+"$@"}
 ' '''
 ##	gajim.py
 ##
