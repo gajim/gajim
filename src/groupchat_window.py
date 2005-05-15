@@ -233,7 +233,7 @@ class Groupchat_window(chat.Chat):
 		jid, reason, actor, statusCode, account):
 		"""When a user changes his status"""
 		if not role:
-			role = 'None'
+			role = 'visitor'
 		model = self.list_treeview[room_jid].get_model()
 		if show == 'offline' or show == 'error':
 			if statusCode == '307':
