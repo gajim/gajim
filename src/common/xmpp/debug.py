@@ -42,10 +42,15 @@ in this code
 import sys
 import time
 from string import join
+import os
 
 import types
 
 
+
+colornames = ['none', 'black', 'red', 'green', 'brown', 'blue', 'magenta',
+'cyan', 'light_gray', 'dark_gray', 'bright_red', 'bright_green', 'yellow',
+'bright_blue', 'purple', 'bright_cyan', 'white']
 
 color_none         = chr(27) + "[0m"
 color_black        = chr(27) + "[30m"
@@ -65,7 +70,10 @@ color_purple       = chr(27) + "[35;1m"
 color_bright_cyan  = chr(27) + "[36;1m"
 color_white        = chr(27) + "[37;1m"
 
-
+if os.name == 'nt':
+    for colorname in colornames:
+        name = 'color_' + colorname
+        name = ''
 """
 Define your flags in yor modules like this:
 
