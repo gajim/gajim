@@ -1601,7 +1601,6 @@ class Service_discovery_window:
 		if gajim.connections[account].connected < 2:
 			dialogs.Error_dialog(_('You must be connected to browse services'))
 			raise RuntimeError, 'You must be connected to browse services'
-			return
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')
 		self.services_treeview = xml.get_widget('services_treeview')
@@ -1618,23 +1617,26 @@ class Service_discovery_window:
 		#columns
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 0)
-		self.services_treeview.insert_column_with_attributes(-1, _('Name'), \
-			renderer, text = 0)
+		col = self.services_treeview.insert_column_with_attributes(-1, 
+			_('Name'), renderer, text = 0)
+		col.set_resizable(True)
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
-		self.services_treeview.insert_column_with_attributes(-1, _('Service'), \
-			renderer, text = 1)
+		col = self.services_treeview.insert_column_with_attributes(-1, 
+			_('Service'), renderer, text = 1)
+		col.set_resizable(True)
 		renderer = gtk.CellRendererText()
 		renderer.set_data('column', 1)
-		self.services_treeview.insert_column_with_attributes(-1, _('Node'), \
-			renderer, text = 2)
+		col = self.services_treeview.insert_column_with_attributes(-1,
+			_('Node'), renderer, text = 2)
+		col.set_resizable(True)
 
 		self.address_comboboxentry = xml.get_widget('address_comboboxentry')
 		liststore = gtk.ListStore(str)
 		self.address_comboboxentry.set_model(liststore)
 		self.address_comboboxentry.set_text_column(0)
 		self.latest_addresses = gajim.config.get('latest_disco_addresses').split()
-		server_address = gajim.config.get_per('accounts', self.account, \
+		server_address = gajim.config.get_per('accounts', self.account,
 			'hostname')
 		if server_address in self.latest_addresses:
 			self.latest_addresses.remove(server_address)
