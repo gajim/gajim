@@ -182,6 +182,8 @@ class Interface:
 		#('STATUS', account, status)
 		if status != 'offline':
 			gobject.timeout_add(30000, self.allow_notif, account)
+		else:
+			self.allow_notifications[account] = False
 		self.roster.on_status_changed(account, status)
 	
 	def handle_event_notify(self, account, array):
