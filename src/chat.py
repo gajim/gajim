@@ -294,12 +294,10 @@ class Chat:
 
 	def on_conversation_textview_key_press_event(self, widget, event):
 		"""Do not block these events and send them to the notebook"""
-		if (event.state & gtk.gdk.CONTROL_MASK) and \
-		   (event.state & gtk.gdk.SHIFT_MASK):
-			if event.hardware_keycode == 23: # CTRL + SHIFT + TAB
-				self.notebook.emit('key_press_event', event)
-		elif event.state & gtk.gdk.CONTROL_MASK:
+		if event.state & gtk.gdk.CONTROL_MASK:
 			if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
+				self.notebook.emit('key_press_event', event)
+			elif event.keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
 				self.notebook.emit('key_press_event', event)
 			elif event.keyval == gtk.keysyms.Page_Down: # CTRL + PAGE DOWN
 				self.notebook.emit('key_press_event', event)
@@ -353,15 +351,15 @@ class Chat:
 				conversation_scrolledwindow = self.xml.get_widget('conversation_scrolledwindow')
 				conversation_scrolledwindow.emit('scroll-child',
 					gtk.SCROLL_PAGE_BACKWARD, False)
-		elif event.hardware_keycode == 23: # TAB
-			if (event.state & gtk.gdk.CONTROL_MASK) and \
-				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB
+		elif event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
+			if (event.state & gtk.gdk.CONTROL_MASK): # CTRL + SHIFT + TAB
 				current = self.notebook.get_current_page()
 				if current > 0:
 					self.notebook.set_current_page(current - 1)
 				else:
 					self.notebook.set_current_page(self.notebook.get_n_pages()-1)
-			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
+		elif event.keyval == gtk.keysyms.Tab: # TAB
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				current = self.notebook.get_current_page()
 				if current < (self.notebook.get_n_pages()-1):
 					self.notebook.set_current_page(current + 1)

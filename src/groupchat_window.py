@@ -287,11 +287,11 @@ class Groupchat_window(chat.Chat):
 		room_jid = self.get_active_jid()
 		conversation_textview = self.xmls[room_jid].get_widget(
 			'conversation_textview')
-		if event.hardware_keycode == 23: # TAB
-			if (event.state & gtk.gdk.CONTROL_MASK) and \
-				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB  
+		if event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
+			if (event.state & gtk.gdk.CONTROL_MASK): # CTRL + SHIFT + TAB  
 				self.notebook.emit('key_press_event', event)
-			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
+		elif event.keyval == gtk.keysyms.Tab: # TAB
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
 			else:
 				list_nick = self.get_nick_list(room_jid)

@@ -190,11 +190,11 @@ class Tabbed_chat_window(chat.Chat):
 		and printed in the conversation"""
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		if event.hardware_keycode == 23: # TAB (do not make it .Tab ==> fails)
-			if (event.state & gtk.gdk.CONTROL_MASK) and \
-				(event.state & gtk.gdk.SHIFT_MASK): # CTRL + SHIFT + TAB
+		if event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + SHIFT + TAB
 				self.notebook.emit('key_press_event', event)
-			elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
+		if event.keyval == gtk.keysyms.Tab:
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
