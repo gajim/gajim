@@ -72,7 +72,9 @@ color_white        = chr(27) + "[37;1m"
 if os.name == 'nt':
     for colorname in colornames:
         name = 'color_' + colorname
-        name = ''
+        mod = compile('%s = \'\'' % name, 'gajim', 'exec')
+        res = eval(mod)
+        print res
 """
 Define your flags in yor modules like this:
 
