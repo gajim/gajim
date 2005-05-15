@@ -1,4 +1,4 @@
-VERSION		?= 0.6.1
+VERSION		?= 0.7
 
 MODULES		= src src/common po
 PREFIX		= /usr
@@ -28,27 +28,28 @@ idle:
 	make -C src/common all;
 
 pyo:
-	ST="import py_compile\n py_compile.compile('$$f')"
 	for f in $(FILES_PY) ; do \
-		python -OO -c "$$ST"; \
+		python -OO -c "import py_compile; py_compile.compile('$$f')"; \
 	done
 
 clean:
 	find -name *.pyc -exec rm {} \;
+	find -name *.pyo -exec rm {} \;
 	find -name *.mo -exec rm {} \;
 	$(foreach sdir, $(MODULES), make -C $(sdir) clean;)
 
 dist:
 	-rm -rf gajim-$(VERSION)
 	mkdir gajim-$(VERSION)
-	cp -r data src doc po gajim-$(VERSION)/
-	cp AUTHORS gajim.1 gajim.xpm gajim.ico COPYING Makefile Changelog README gajim.py gajim-$(VERSION)
+	cp -r data src doc po scripts gajim-$(VERSION)/
+	cp AUTHORS gajim.1 gajim.xpm gajim.ico gajim.desktop COPYING Makefile Changelog README launch.sh gajim-$(VERSION)
 	-find gajim-$(VERSION) -name '.svn' -exec rm -rf {} \; 2> /dev/null
 	find gajim-$(VERSION) -name '*.pyc' -exec rm {} \;
 	find gajim-$(VERSION) -name '*.pyo' -exec rm {} \;
 	find gajim-$(VERSION) -name '.*' -exec rm {} \;
 	@echo tarring gajim-$(VERSION) ...
 	@tar czf gajim-$(VERSION).tar.gz gajim-$(VERSION)/
+	@tar cjf gajim-$(VERSION).tar.bz2 gajim-$(VERSION)/
 	rm -rf gajim-$(VERSION)
 
 install:
