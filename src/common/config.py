@@ -56,7 +56,7 @@ class Config:
 		'inmsgcolor': [ opt_color, '#ff0000' ],
 		'outmsgcolor': [ opt_color, '#0000ff' ],
 		'statusmsgcolor': [ opt_color, '#1eaa1e' ],
-		'hiddenlines': [ opt_str, '' ],
+		'hidden_rows': [ opt_str, '' ],
 		'roster_theme': [ opt_str, 'green' ],
 		'accounttextcolor': [ opt_color, '#ffffff' ],
 		'accountbgcolor': [ opt_color, '#94aa8c' ],
