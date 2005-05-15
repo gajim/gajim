@@ -526,6 +526,7 @@ class Groupchat_window(chat.Chat):
 
 		#status_image, nickname, real_jid, status
 		store = gtk.TreeStore(gtk.Image, str, str, str)
+		store.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		column = gtk.TreeViewColumn('contacts')
 		renderer_image = cell_renderer_image.CellRendererImage()
 		renderer_image.set_property('width', 20)
