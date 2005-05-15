@@ -112,7 +112,7 @@ class Config:
 			'proxypass': [ opt_str, '' ],
 			'keyid': [ opt_str, '' ],
 			'keyname': [ opt_str, '' ],
-			'usetls': [ opt_bool, True ],
+			'usetls': [ opt_bool, False ],
 			'savegpgpass': [ opt_bool, False ],
 			'gpgpassword': [ opt_str, '' ],
 			'sync_with_global_status': [ opt_bool, True ],
