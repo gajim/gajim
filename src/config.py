@@ -1085,11 +1085,11 @@ class Account_modification_window:
 		config['proxypass'] = self.xml.get_widget('proxypass_entry').get_text()
 		if config['use_proxy']:
 			if config['proxyport'] != '':
-				try:
-					config['proxyport'] = int(config['proxyport'])
-				except ValueError:
-					dialogs.Error_dialog(_('Proxy Port must be a port number'))
+				if not config['proxyport'].isdigit():
+					dialogs.Error_dialog(_('Proxy port must be a port number'))
 					return
+				config['proxyport'] = int(config['proxyport'])
+
 			else:
 				dialogs.Error_dialog(_('You must enter a proxy port to use proxy'))
 				return
