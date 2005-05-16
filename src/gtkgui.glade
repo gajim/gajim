@@ -7768,6 +7768,7 @@ Custom</property>
 
 		  <child>
 		    <widget class="GtkVBox" id="vbox74">
+		      <property name="width_request">150</property>
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">0</property>
@@ -7915,7 +7916,7 @@ Custom</property>
 		      </child>
 		    </widget>
 		    <packing>
-		      <property name="shrink">True</property>
+		      <property name="shrink">False</property>
 		      <property name="resize">False</property>
 		    </packing>
 		  </child>
