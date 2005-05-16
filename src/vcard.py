@@ -1,4 +1,4 @@
-##	vcard_information_window.py
+##	vcard.py (has Vcard_window class)
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -29,9 +29,8 @@ gtk.glade.textdomain (APP)
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class Vcard_window:
-	'''Class for user's information window'''
+	'''Class for contact's information window'''
 	def on_user_information_window_destroy(self, widget = None):
-		'''close window'''
 		del self.plugin.windows[self.account]['infos'][self.jid]
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
@@ -50,12 +49,12 @@ class Vcard_window:
 			self.user.name = new_name
 			for i in self.plugin.roster.get_user_iter(self.user.jid, self.account):
 				self.plugin.roster.tree.get_model().set_value(i, 1, new_name)
-			gajim.connections[self.account].update_user(self.user.jid, \
+			gajim.connections[self.account].update_user(self.user.jid,
 				self.user.name, self.user.groups)
 		#log history ?
 		oldlog = 1
-		no_log_for = gajim.config.get_per('accounts', self.account, 'no_log_for')\
-			.split()
+		no_log_for = gajim.config.get_per('accounts', self.account,
+			'no_log_for').split()
 		if self.user.jid in no_log_for:
 			oldlog = 0
 		log = self.xml.get_widget('log_checkbutton').get_active()
@@ -64,7 +63,7 @@ class Vcard_window:
 		if log and self.user.jid in no_log_for:
 			no_log_for.remove(self.user.jid)
 		if oldlog != log:
-			gajim.config.set_per('accounts', self.account, 'no_log_for', \
+			gajim.config.set_per('accounts', self.account, 'no_log_for',
 				' '.join(no_log_for))
 		self.window.destroy()
 
@@ -82,8 +81,8 @@ class Vcard_window:
 							'_entry', vcard[i][j])
 			else:
 				if i == 'DESC':
-					self.xml.get_widget('DESC_textview').get_buffer().\
-						set_text(vcard[i], 0)
+					self.xml.get_widget('DESC_textview').get_buffer().set_text(
+						vcard[i], 0)
 				else:
 					self.set_value(i + '_entry', vcard[i])
 	
@@ -120,7 +119,7 @@ class Vcard_window:
 			label.set_text('None')
 		self.xml.get_widget('nickname_entry').set_text(self.user.name)
 		log = 1
-		if self.user.jid in gajim.config.get_per('accounts', self.account, \
+		if self.user.jid in gajim.config.get_per('accounts', self.account,
 			'no_log_for').split(' '):
 			log = 0
 		self.xml.get_widget('log_checkbutton').set_active(log)
@@ -128,7 +127,7 @@ class Vcard_window:
 		if not self.user.status:
 			self.user.status = ''
 		stats = self.user.show + ': ' + self.user.status
-		gajim.connections[self.account].request_os_info(self.user.jid, \
+		gajim.connections[self.account].request_os_info(self.user.jid,
 			self.user.resource)
 		self.os_info = {0: {'resource': self.user.resource, 'client': '',
 			'os': ''}}
@@ -139,7 +138,7 @@ class Vcard_window:
 				if not u.status:
 					u.status = ''
 				stats += '\n' + u.show + ': ' + u.status
-				gajim.connections[self.account].request_os_info(self.user.jid, \
+				gajim.connections[self.account].request_os_info(self.user.jid,
 					u.resource)
 				self.os_info[i] = {'resource': u.resource, 'client': '',
 					'os': ''}
@@ -162,8 +161,8 @@ class Vcard_window:
 
 	def make_vcard(self):
 		'''make the vCard dictionary'''
-		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
-			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
+		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',
+			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',
 			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
 		vcard = {}
 		for e in entries: 
@@ -180,7 +179,7 @@ class Vcard_window:
 
 	def on_publish_button_clicked(self, widget):
 		if gajim.connections[self.account].connected < 2:
-			Error_dialog(_('You must be connected to publish your informations'))
+			Error_dialog(_('You must be connected to publish your contact information'))
 			return
 		vcard = self.make_vcard()
 		nick = ''
@@ -192,9 +191,9 @@ class Vcard_window:
 		gajim.connections[self.account].send_vcard(vcard)
 
 	def on_retrieve_button_clicked(self, widget):
-		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
-			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
-			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
+		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',
+			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',
+			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE']
 		if gajim.connections[self.account].connected > 1:
 			# clear all entries
 			for e in entries:
@@ -202,7 +201,7 @@ class Vcard_window:
 			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
-			Error_dialog(_('You must be connected to get your informations'))
+			Error_dialog(_('You must be connected to get your contact information'))
 
 	def change_to_vcard(self):
 		self.xml.get_widget('information_notebook').remove_page(0)
@@ -210,15 +209,15 @@ class Vcard_window:
 		information_hbuttonbox = self.xml.get_widget('information_hbuttonbox')
 		#publish button
 		button = gtk.Button(stock = gtk.STOCK_GOTO_TOP)
-		button.get_children()[0].get_children()[0].get_children()[1].\
-			set_text('Publish')
+		button.get_children()[0].get_children()[0].get_children()[1].set_text(
+			'Publish')
 		button.connect('clicked', self.on_publish_button_clicked)
 		button.show_all()
 		information_hbuttonbox.pack_start(button)
 		#retrieve button
 		button = gtk.Button(stock = gtk.STOCK_GOTO_BOTTOM)
-		button.get_children()[0].get_children()[0].get_children()[1].\
-			set_text('Retrieve')
+		button.get_children()[0].get_children()[0].get_children()[1].set_text(
+			'Retrieve')
 		button.connect('clicked', self.on_retrieve_button_clicked)
 		button.show_all()
 		information_hbuttonbox.pack_start(button)
@@ -227,8 +226,8 @@ class Vcard_window:
 		information_hbuttonbox.reorder_child(button, 2)
 		
 		#make all entries editable
-		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',\
-			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',\
+		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',
+			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',
 			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
 		for e in entries:
 			self.xml.get_widget(e + '_entry').set_property('editable', True)
