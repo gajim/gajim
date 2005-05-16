@@ -428,8 +428,7 @@ class Input_dialog:
 		label.set_text(label_str)
 		if input_str:
 			self.input_entry.set_text(input_str)
-			self.input_entry.select_region(0, -1) # select all
-			
+			self.input_entry.select_region(0, -1) # select all	
 	
 class Error_dialog:
 	'''Class for error dialog'''
@@ -443,7 +442,7 @@ class Error_dialog:
 		dialog.connect('response', self.on_response)
 		dialog.show()
 
-class subscription_request_window:
+class Subscription_request_window:
 	def __init__(self, plugin, jid, text, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'subscription_request_window', APP)
 		self.window = xml.get_widget('subscription_request_window')
@@ -456,14 +455,11 @@ class subscription_request_window:
 		xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	'''Class for authorization window :
-	window that appears when a user wants to add us to his/her roster'''
 	def on_close_button_clicked(self, widget):
-		'''When Close button is clicked'''
 		self.window.destroy()
 		
 	def on_authorize_button_clicked(self, widget):
-		'''Accept the request'''
+		'''accept the request'''
 		gajim.connections[self.account].send_authorization(self.jid)
 		self.window.destroy()
 		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
