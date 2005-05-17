@@ -24,6 +24,13 @@ import common.logger
 version = '0.7'
 config = common.config.Config()
 connections = {}
+
+h = logging.StreamHandler()
+f = logging.Formatter('%(asctime)s %(name)s: %(message)s', '%d %b %Y %H:%M:%S')
+h.setFormatter(f)
 log = logging.getLogger('Gajim')
+log.addHandler(h)
+log.setLevel(logging.DEBUG)
+
 logger = common.logger.Logger()
 DATA_DIR = '../data'

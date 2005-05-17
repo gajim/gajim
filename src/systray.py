@@ -24,6 +24,15 @@ import dialogs
 from common import gajim
 from common import i18n
 
+try:
+	import egg.trayicon as trayicon	# gnomepythonextras trayicon
+except:
+	try:
+		import trayicon # our trayicon
+	except:
+		gajim.log.debug('No trayicon module available')
+		pass
+
 _ = i18n._
 APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
@@ -261,8 +270,3 @@ class Systray:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
 		self.xml.signal_autoconnect(self)
-		global trayicon
-		try:
-			import egg.trayicon as trayicon	# gnomepythonextras trayicon
-		except:
-			import trayicon # our trayicon
