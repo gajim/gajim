@@ -17,33 +17,17 @@
 ## GNU General Public License for more details.
 ##
 
-'''
-import sys
-
-try:
-    import modulefinder
-    import win32com
-    for p in win32com.__path__[1:]:
-        modulefinder.AddPackagePath("win32com", p)
-    for extra in ["win32com.shell"]: #,"win32com.mapi"
-        __import__(extra)
-        m = sys.modules[extra]
-        for p in m.__path__[1:]:
-            modulefinder.AddPackagePath(extra, p)
-except ImportError:
-    # no build path setup, no worries.
-    pass
-'''
-
 from distutils.core import setup
 import py2exe
 import glob
+import sys
 
+sys.path.append('src')
 includes = ['encodings', 'encodings.utf-8',]
 
 opts = {
     'py2exe': {
-        'includes': 'pango,atk,gobject,plugins,plugins.gtkgui,plugins.logger,encodings,encodings.*',
+        'includes': 'pango,atk,gobject,encodings,encodings.*',
         'dll_excludes': [
             'iconv.dll','intl.dll','libatk-1.0-0.dll',
             'libgdk_pixbuf-2.0-0.dll','libgdk-win32-2.0-0.dll',
@@ -64,12 +48,17 @@ setup(
                 'icon_resources': [(1, 'gajim.ico')]}],
     options=opts,
 
-# one can just copy src and data folder in the target_dir so one doesn't have to hack this
-#    data_files=[('src/', glob.glob('src/gtkgui.glade')),
-#                ('data/icons/sun', glob.glob('data/icons/sun/*.*')),
-#                ('data/emoticons', glob.glob('data/emoticons/*.*')),
-#                ('data/pixmaps', glob.glob('data/pixmaps/*.*')),
-#                ('sounds', glob.glob('data/sounds/*.*')),
-#                ('Messages/fr/LC_MESSAGES', glob.glob('Messages/fr/LC_MESSAGES/*.mo'))
-#    ],
+    data_files=[('.', glob.glob('src/gtkgui.glade')),
+                ('data/iconsets/sun', glob.glob('data/iconsets/sun/*.*')),
+                ('data/iconsets/stellar', glob.glob('data/iconsets/stellar/*.*')),
+                ('data/iconsets/gossip', glob.glob('data/iconsets/gossip/*.*')),
+                ('data/iconsets/transports/aim', glob.glob('data/iconsets/transports/aim/*.*')),
+                ('data/iconsets/transports/gadugadu', glob.glob('data/iconsets/transports/gadugadu/*.*')),
+                ('data/iconsets/transports/icq', glob.glob('data/iconsets/transports/icq/*.*')),
+                ('data/iconsets/transports/msn', glob.glob('data/iconsets/transports/msn/*.*')),
+                ('data/iconsets/transports/yahoo', glob.glob('data/iconsets/transports/yahoo/*.*')),
+                ('data/emoticons', glob.glob('data/emoticons/*.*')),
+                ('data/pixmaps', glob.glob('data/pixmaps/*.*')),
+                ('data/sounds', glob.glob('data/sounds/*.*'))
+    ],
 )
