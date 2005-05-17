@@ -145,8 +145,11 @@ class Interface:
 		if not os.path.exists(path_to_soundfile):
 			return
 		if os.name  == 'nt':
-			winsound.PlaySound(path_to_soundfile, \
+			try:
+				winsound.PlaySound(path_to_soundfile, \
 									winsound.SND_FILENAME|winsound.SND_ASYNC)
+			except:
+				pass
 		elif os.name == 'posix':
 			if gajim.config.get('soundplayer') == '':
 				return
