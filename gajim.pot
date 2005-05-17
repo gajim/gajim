@@ -1,0 +1,1481 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-05-18 00:23+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/chat.py:491
+msgid "_Open Email Composer"
+msgstr ""
+
+#: src/chat.py:493
+msgid "_Open Link"
+msgstr ""
+
+#: src/chat.py:497
+msgid "_Copy Email Address"
+msgstr ""
+
+#: src/chat.py:499
+msgid "_Copy Link Address"
+msgstr ""
+
+#: src/config.py:258
+msgid "Active"
+msgstr ""
+
+#: src/config.py:266
+msgid "Event"
+msgstr ""
+
+#: src/config.py:272
+msgid "Sound"
+msgstr ""
+
+#: src/config.py:877
+msgid "Choose Sound"
+msgstr ""
+
+#: src/config.py:884
+msgid "All files"
+msgstr ""
+
+#: src/config.py:889
+msgid "Wav Sounds"
+msgstr ""
+
+#: src/config.py:1054
+msgid "You must be offline to change the account's name"
+msgstr ""
+
+#: src/config.py:1057
+msgid "You must enter a name for this account"
+msgstr ""
+
+#: src/config.py:1060
+msgid "Spaces are not permited in account name"
+msgstr ""
+
+#: src/config.py:1064
+msgid ""
+"You must enter a Jabber ID for this account\n"
+"For example: someone@someserver.org"
+msgstr ""
+
+#: src/config.py:1071
+msgid "You must enter a password to register a new account"
+msgstr ""
+
+#: src/config.py:1102
+msgid "Proxy port must be a port number"
+msgstr ""
+
+#: src/config.py:1107
+msgid "You must enter a proxy port to use proxy"
+msgstr ""
+
+#: src/config.py:1110
+msgid "You must enter a proxy host to use proxy"
+msgstr ""
+
+#: src/config.py:1182
+msgid "This name is taken by an another account of yours"
+msgstr ""
+
+#: src/config.py:1234
+msgid ""
+"You must first create your account before editing your personal information"
+msgstr ""
+
+#: src/config.py:1238
+msgid "You must be connected to edit your personal  information"
+msgstr ""
+
+#: src/config.py:1249 src/gajim.py:404
+#, python-format
+msgid "error contacting %s"
+msgstr ""
+
+#: src/config.py:1260 src/msg.c:45
+msgid "No key selected"
+msgstr ""
+
+#: src/config.py:1370 src/config.py:1634
+msgid "Name"
+msgstr ""
+
+#: src/config.py:1373
+msgid "Server"
+msgstr ""
+
+#: src/config.py:1426
+#, python-format
+msgid "Register to %s"
+msgstr ""
+
+#: src/config.py:1445
+msgid "Text"
+msgstr ""
+
+#: src/config.py:1453
+msgid "Image"
+msgstr ""
+
+#: src/config.py:1615
+msgid "You must be connected to browse services"
+msgstr ""
+
+#: src/config.py:1639
+msgid "Service"
+msgstr ""
+
+#: src/config.py:1644
+msgid "Node"
+msgstr ""
+
+#: src/config.py:2020
+#, python-format
+msgid "Removing %s account"
+msgstr ""
+
+#: src/dialogs.py:47
+#, python-format
+msgid "Contact's name: <i>%s</i>"
+msgstr ""
+
+#: src/dialogs.py:49
+#, python-format
+msgid "JID: <i>%s</i>"
+msgstr ""
+
+#: src/dialogs.py:85
+msgid "There must be at least one group for each contact"
+msgstr ""
+
+#: src/dialogs.py:104
+msgid "Group"
+msgstr ""
+
+#: src/dialogs.py:110
+msgid "In the group"
+msgstr ""
+
+#: src/dialogs.py:170
+msgid "KeyID"
+msgstr ""
+
+#: src/dialogs.py:173
+msgid "User name"
+msgstr ""
+
+#: src/dialogs.py:232
+msgid "You must be connected to add a contact"
+msgstr ""
+
+#: src/dialogs.py:305
+msgid "The contact's name must be something like login@hostname"
+msgstr ""
+
+#: src/dialogs.py:363
+msgid "Gajim - A GTK jabber client"
+msgstr ""
+
+#: src/dialogs.py:374
+msgid "A GTK jabber client"
+msgstr ""
+
+#: src/dialogs.py:381
+msgid "translator_credits"
+msgstr ""
+
+#: src/dialogs.py:455
+#, python-format
+msgid "Subscription request from %s"
+msgstr ""
+
+#: src/dialogs.py:480
+msgid "You must be connected to join a groupchat"
+msgstr ""
+
+#: src/dialogs.py:553
+msgid "You must be connected to send a message to a contact"
+msgstr ""
+
+#: src/dialogs.py:580
+msgid "User ID is not valid"
+msgstr ""
+
+#: src/dialogs.py:601
+msgid "You must be connected to change your password"
+msgstr ""
+
+#: src/dialogs.py:620
+msgid "Your password cannot be empty"
+msgstr ""
+
+#: src/dialogs.py:624
+msgid "Confirmation password is not the same"
+msgstr ""
+
+#: src/gajim.py:99
+msgid "bad arguments"
+msgstr ""
+
+#: src/gajim.py:358
+msgid "error while sending"
+msgstr ""
+
+#: src/gajim.py:388
+#, python-format
+msgid "You are now authorized by %s"
+msgstr ""
+
+#: src/gajim.py:391
+#, python-format
+msgid "You are now unsubscribed by %s"
+msgstr ""
+
+#: src/gajim.py:494
+msgid "Your GPG passphrase is wrong, so you are connected without your GPG key"
+msgstr ""
+
+#: src/groupchat_window.py:92
+#, python-format
+msgid ""
+"You received a message in the room %s in the last two seconds.\n"
+"Do you still want to close this window?"
+msgstr ""
+
+#: src/groupchat_window.py:240
+#, python-format
+msgid "%s has been kicked by %s: %s"
+msgstr ""
+
+#: src/groupchat_window.py:441
+msgid "_Privileges"
+msgstr ""
+
+#: src/groupchat_window.py:446
+msgid "_Kick"
+msgstr ""
+
+#: src/groupchat_window.py:449
+msgid "_Grant Voice"
+msgstr ""
+
+#: src/groupchat_window.py:452
+msgid "_Revoke Voice"
+msgstr ""
+
+#: src/groupchat_window.py:455
+msgid "_Grant Moderator"
+msgstr ""
+
+#: src/groupchat_window.py:458
+msgid "_Revoke Moderator"
+msgstr ""
+
+#: src/groupchat_window.py:465
+msgid "_Ban"
+msgstr ""
+
+#: src/groupchat_window.py:468
+msgid "_Grant Membership"
+msgstr ""
+
+#: src/groupchat_window.py:471
+msgid "_Revoke Membership"
+msgstr ""
+
+#: src/groupchat_window.py:474
+msgid "_Grant Admin"
+msgstr ""
+
+#: src/groupchat_window.py:477
+msgid "_Revoke Admin"
+msgstr ""
+
+#: src/groupchat_window.py:480
+msgid "_Grant Owner"
+msgstr ""
+
+#: src/groupchat_window.py:483
+msgid "_Revoke Owner"
+msgstr ""
+
+#: src/groupchat_window.py:490
+msgid "_Information"
+msgstr ""
+
+#: src/groupchat_window.py:500
+#, python-format
+msgid ""
+"You received a message in the room %s in the last two seconds.\n"
+"Do you still want to close this tab?"
+msgstr ""
+
+#: src/history_window.py:139
+msgid "Status is now: "
+msgstr ""
+
+#: src/roster_window.py:291
+msgid "to "
+msgstr ""
+
+#: src/roster_window.py:291 src/roster_window.py:301
+msgid " account"
+msgstr ""
+
+#: src/roster_window.py:301
+msgid "using "
+msgstr ""
+
+#: src/roster_window.py:311 src/roster_window.py:321 src/systray.py:138
+#: src/systray.py:143
+msgid "as "
+msgstr ""
+
+#: src/roster_window.py:423
+#, python-format
+msgid "%s is now %s (%s)"
+msgstr ""
+
+#: src/roster_window.py:440
+#, python-format
+msgid "Are you sure you want to remove the agent %s from your roster?"
+msgstr ""
+
+#: src/roster_window.py:473
+msgid "Start chat"
+msgstr ""
+
+#: src/roster_window.py:476 src/roster_window.py:527
+msgid "Rename"
+msgstr ""
+
+#: src/roster_window.py:480 src/msg.c:226
+msgid "Edit Groups"
+msgstr ""
+
+#: src/roster_window.py:485
+msgid "Subscription"
+msgstr ""
+
+#: src/roster_window.py:490
+msgid "Resend Authorization to"
+msgstr ""
+
+#: src/roster_window.py:493
+msgid "Rerequest Authorization from"
+msgstr ""
+
+#: src/roster_window.py:496
+msgid "I would like to add you to my roster"
+msgstr ""
+
+#: src/roster_window.py:500
+msgid "Add to Roster"
+msgstr ""
+
+#: src/roster_window.py:504 src/roster_window.py:559
+msgid "Remove"
+msgstr ""
+
+#: src/roster_window.py:510
+msgid "Information"
+msgstr ""
+
+#: src/roster_window.py:513
+msgid "History"
+msgstr ""
+
+#: src/roster_window.py:542
+msgid "Log on"
+msgstr ""
+
+#: src/roster_window.py:549
+msgid "Log off"
+msgstr ""
+
+#: src/roster_window.py:580 src/msg.c:147 src/msg.c:233
+msgid "Status"
+msgstr ""
+
+#: src/roster_window.py:585 src/msg.c:234
+msgid "Online"
+msgstr ""
+
+#: src/roster_window.py:588
+msgid "Free for chat"
+msgstr ""
+
+#: src/roster_window.py:591 src/msg.c:236
+msgid "Away"
+msgstr ""
+
+#: src/roster_window.py:594 src/msg.c:237
+msgid "Not Available"
+msgstr ""
+
+#: src/roster_window.py:597 src/msg.c:238
+msgid "Busy"
+msgstr ""
+
+#: src/roster_window.py:600 src/msg.c:239
+msgid "Invisible"
+msgstr ""
+
+#: src/roster_window.py:605 src/msg.c:240
+msgid "Offline"
+msgstr ""
+
+#: src/roster_window.py:612
+msgid "_Edit Account"
+msgstr ""
+
+#: src/roster_window.py:615 src/msg.c:12
+msgid "_Service Discovery"
+msgstr ""
+
+#: src/roster_window.py:618
+msgid "_Add Contact"
+msgstr ""
+
+#: src/roster_window.py:621
+msgid "Join _Groupchat"
+msgstr ""
+
+#: src/roster_window.py:624 src/msg.c:9
+msgid "_New Message"
+msgstr ""
+
+#: src/roster_window.py:731
+#, python-format
+msgid "Are you sure you want to remove %s (%s) from your roster?"
+msgstr ""
+
+#: src/roster_window.py:752
+#, python-format
+msgid "Enter your password for account %s"
+msgstr ""
+
+#: src/roster_window.py:780
+#, python-format
+msgid "Enter GPG key passphrase for account %s"
+msgstr ""
+
+#: src/roster_window.py:824
+msgid "You must create an account before connecting to jabber network."
+msgstr ""
+
+#: src/roster_window.py:1066
+msgid ""
+"You have unread messages.\n"
+"Are you sure you want to quit Gajim?"
+msgstr ""
+
+#: src/roster_window.py:1071
+msgid ""
+"You received a message in the last two seconds.\n"
+"Are you sure you want to quit Gajim?"
+msgstr ""
+
+#: src/systray.py:72 src/systray.py:92
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr ""
+
+#: src/systray.py:74 src/systray.py:94
+msgid "Gajim - 1 unread message"
+msgstr ""
+
+#: src/systray.py:192
+msgid "All contacts in this group are offline or have errors"
+msgstr ""
+
+#: src/tabbed_chat_window.py:116
+#, python-format
+msgid ""
+"You received a message from %s in the last two seconds.\n"
+"Do you still want to close this window?"
+msgstr ""
+
+#: src/tabbed_chat_window.py:147
+#, python-format
+msgid ""
+"You received a message from %s in the last two seconds.\n"
+"Do you still want to close this tab?"
+msgstr ""
+
+#: src/tabbed_chat_window.py:173
+#, python-format
+msgid "%s is %s (%s)"
+msgstr ""
+
+#: src/tabbed_chat_window.py:214
+msgid "You are not connected, so you cannot send a message"
+msgstr ""
+
+#: src/vcard.py:182
+msgid "You must be connected to publish your contact information"
+msgstr ""
+
+#: src/vcard.py:204
+msgid "You must be connected to get your contact information"
+msgstr ""
+
+#: src/common/connection.py:248 src/common/connection.py:673
+msgid "I would like to add you to my roster."
+msgstr ""
+
+#: src/common/connection.py:525 src/common/connection.py:559
+#, python-format
+msgid "Couldn't connect to %s"
+msgstr ""
+
+#: src/common/connection.py:569
+#, python-format
+msgid "Authentification failed with %s, check your login and password"
+msgstr ""
+
+#: src/common/connection.py:659
+msgid "[this message is encrypted]"
+msgstr ""
+
+#: src/common/connection.py:769
+msgid "Couldn't connect to "
+msgstr ""
+
+#: src/common/connection.py:772
+msgid "Connected to server"
+msgstr ""
+
+#: src/common/connection.py:777
+msgid "Error: "
+msgstr ""
+
+#: src/msg.c:7 src/msg.c:35
+msgid "Gajim"
+msgstr ""
+
+#: src/msg.c:8 src/msg.c:201
+msgid "_Actions"
+msgstr ""
+
+#: src/msg.c:10
+msgid "_Join Groupchat"
+msgstr ""
+
+#: src/msg.c:11
+msgid "Add _Contact"
+msgstr ""
+
+#: src/msg.c:13
+msgid "Show _Offline Contacts"
+msgstr ""
+
+#: src/msg.c:14
+msgid "_About"
+msgstr ""
+
+#: src/msg.c:15
+msgid "_Quit"
+msgstr ""
+
+#: src/msg.c:16
+msgid "_Edit"
+msgstr ""
+
+#: src/msg.c:17
+msgid "A_ccounts"
+msgstr ""
+
+#: src/msg.c:18
+msgid "_Preferences"
+msgstr ""
+
+#: src/msg.c:19
+msgid "Accounts"
+msgstr ""
+
+#: src/msg.c:20
+msgid "_Modify"
+msgstr ""
+
+#: src/msg.c:21 src/msg.c:255
+msgid "_Remove"
+msgstr ""
+
+#: src/msg.c:22
+msgid "Account Modification"
+msgstr ""
+
+#: src/msg.c:23
+msgid "_Name: "
+msgstr ""
+
+#: src/msg.c:24
+msgid "_Jabber ID:"
+msgstr ""
+
+#: src/msg.c:25
+msgid "_Password:"
+msgstr ""
+
+#: src/msg.c:26
+msgid "Resour_ce: "
+msgstr ""
+
+#: src/msg.c:27
+msgid "Priori_ty:"
+msgstr ""
+
+#: src/msg.c:28
+msgid "Enable if you want to register for a new jabber account"
+msgstr ""
+
+#: src/msg.c:29
+msgid "_Register new account"
+msgstr ""
+
+#: src/msg.c:30
+msgid "Click to change account's password"
+msgstr ""
+
+#: src/msg.c:31 src/msg.c:251
+msgid "Chan_ge"
+msgstr ""
+
+#: src/msg.c:32
+msgid "If enabled, Gajim will remember the password for this account"
+msgstr ""
+
+#: src/msg.c:33
+msgid "Save pass_word"
+msgstr ""
+
+#: src/msg.c:34
+msgid ""
+"Resource is sent to the jabber server in order to 'seperate' the same JID in "
+"two or more parts depending on the number of the clients connected in the "
+"same server with the same account. So you might be connected in the same "
+"account with resource 'Home' and 'Work' at the same time. The resource which "
+"has the highest priority will get the messages. (see below)"
+msgstr ""
+
+#: src/msg.c:36
+msgid ""
+"Priority is used in Jabber to determine who gets the events from the jabber "
+"server when two or more clients are connected using the same account; The "
+"client with the highest priority gets the events"
+msgstr ""
+
+#: src/msg.c:37
+msgid "Account"
+msgstr ""
+
+#: src/msg.c:38
+msgid ""
+"If enabled, Gajim, when launched, will automatically connect to jabber using "
+"this account"
+msgstr ""
+
+#: src/msg.c:39
+msgid "C_onnect at startup"
+msgstr ""
+
+#: src/msg.c:40
+msgid "Conversation _history for all contacts in this account"
+msgstr ""
+
+#: src/msg.c:41
+msgid "Synch_ronize account status with global status"
+msgstr ""
+
+#: src/msg.c:42 src/msg.c:102 src/msg.c:182
+msgid "General"
+msgstr ""
+
+#: src/msg.c:43
+msgid "Use _TLS"
+msgstr ""
+
+#: src/msg.c:44
+msgid "<b>TLS</b>"
+msgstr ""
+
+#: src/msg.c:46
+msgid "Choose _Key"
+msgstr ""
+
+#: src/msg.c:47
+msgid ""
+"If checked Gajim will store the password in ~/.gajim/config with 'read' "
+"permission only for only you and of course the superuser"
+msgstr ""
+
+#: src/msg.c:48
+msgid "Save _passphrase (insecure)"
+msgstr ""
+
+#: src/msg.c:49
+msgid "<b>OpenGPG</b>"
+msgstr ""
+
+#: src/msg.c:50
+msgid "Security"
+msgstr ""
+
+#: src/msg.c:51
+msgid "_Use proxy"
+msgstr ""
+
+#: src/msg.c:52
+msgid "_Host:"
+msgstr ""
+
+#: src/msg.c:53
+msgid "_Port:"
+msgstr ""
+
+#: src/msg.c:54
+msgid "_Username:"
+msgstr ""
+
+#: src/msg.c:55
+msgid "Pass_word:"
+msgstr ""
+
+#: src/msg.c:56
+msgid "3128"
+msgstr ""
+
+#: src/msg.c:57
+msgid "<b>Proxy</b>"
+msgstr ""
+
+#: src/msg.c:58
+msgid "Proxy"
+msgstr ""
+
+#: src/msg.c:59
+msgid "Information about you are stored on the server as vCard"
+msgstr ""
+
+#: src/msg.c:60
+msgid "_Edit Personal Details..."
+msgstr ""
+
+#: src/msg.c:61
+msgid "Personal Details"
+msgstr ""
+
+#: src/msg.c:62
+msgid "Add New Contact"
+msgstr ""
+
+#: src/msg.c:63
+msgid "User ID:"
+msgstr ""
+
+#: src/msg.c:64
+msgid "Protocol:"
+msgstr ""
+
+#: src/msg.c:65 src/msg.c:166
+msgid "Jabber ID:"
+msgstr ""
+
+#: src/msg.c:66 src/msg.c:168 src/msg.c:177 src/msg.c:212
+msgid "Nickname:"
+msgstr ""
+
+#: src/msg.c:67
+msgid "Automatically authorize contact"
+msgstr ""
+
+#: src/msg.c:68 src/msg.c:97
+msgid "Group:"
+msgstr ""
+
+#: src/msg.c:69
+msgid "I would like to add you to my contact list."
+msgstr ""
+
+#: src/msg.c:70
+msgid "_Subscribe"
+msgstr ""
+
+#: src/msg.c:71
+msgid "Subscription Request"
+msgstr ""
+
+#: src/msg.c:72
+msgid "Subscription request from"
+msgstr ""
+
+#: src/msg.c:73
+msgid "_Deny"
+msgstr ""
+
+#: src/msg.c:74
+msgid "_Authorize"
+msgstr ""
+
+#: src/msg.c:75
+msgid "Service Discovery"
+msgstr ""
+
+#: src/msg.c:76
+msgid "_Address:"
+msgstr ""
+
+#: src/msg.c:77
+msgid "Go"
+msgstr ""
+
+#: src/msg.c:78
+msgid "_Refresh"
+msgstr ""
+
+#: src/msg.c:79
+msgid "Re_gister"
+msgstr ""
+
+#: src/msg.c:80 src/msg.c:214
+msgid "_Join"
+msgstr ""
+
+#: src/msg.c:81
+msgid "Register to"
+msgstr ""
+
+#: src/msg.c:82
+msgid "_Cancel"
+msgstr ""
+
+#: src/msg.c:83
+msgid "_OK"
+msgstr ""
+
+#: src/msg.c:84
+msgid "Preferences"
+msgstr ""
+
+#: src/msg.c:85
+msgid "If checked, Gajim will also have a trayicon"
+msgstr ""
+
+#: src/msg.c:86
+msgid "_Icon in systray (aka. notification area)"
+msgstr ""
+
+#: src/msg.c:87
+msgid "If checked, Gajim will remember the main window position after you quit"
+msgstr ""
+
+#: src/msg.c:88
+msgid "Save roster _position"
+msgstr ""
+
+#: src/msg.c:89
+msgid ""
+"If you have 2 or more accounts and it is checked, Gajim will list all "
+"contacts as if you had one account"
+msgstr ""
+
+#: src/msg.c:90
+msgid "_Merge accounts"
+msgstr ""
+
+#: src/msg.c:91
+msgid ""
+"If checked, Gajim will replace ascii smilies like ':)' with equivalent "
+"graphical emoticons"
+msgstr ""
+
+#: src/msg.c:92
+msgid "Use _emoticons"
+msgstr ""
+
+#: src/msg.c:93
+msgid "Add/Remove Emoticons..."
+msgstr ""
+
+#: src/msg.c:94
+msgid "_Status iconset:"
+msgstr ""
+
+#: src/msg.c:95
+msgid "Roster theme:"
+msgstr ""
+
+#: src/msg.c:96
+msgid "Account:"
+msgstr ""
+
+#: src/msg.c:98
+msgid "User:"
+msgstr ""
+
+#: src/msg.c:99
+msgid "Text color"
+msgstr ""
+
+#: src/msg.c:100
+msgid "Text font"
+msgstr ""
+
+#: src/msg.c:101
+msgid "Background color"
+msgstr ""
+
+#: src/msg.c:103
+msgid "Use a single chat window with _tabs"
+msgstr ""
+
+#: src/msg.c:104
+msgid "Print time:"
+msgstr ""
+
+#: src/msg.c:105
+msgid "On every line"
+msgstr ""
+
+#: src/msg.c:106
+msgid "Every 5 minutes"
+msgstr ""
+
+#: src/msg.c:107
+msgid "Never"
+msgstr ""
+
+#: src/msg.c:108
+msgid "After time:"
+msgstr ""
+
+#: src/msg.c:109
+msgid "After nickname:"
+msgstr ""
+
+#: src/msg.c:110
+msgid "Before nickname:"
+msgstr ""
+
+#: src/msg.c:111
+msgid "Before time:"
+msgstr ""
+
+#: src/msg.c:112
+msgid "Incoming message:"
+msgstr ""
+
+#: src/msg.c:113
+msgid "Outgoing message:"
+msgstr ""
+
+#: src/msg.c:114
+msgid "Status message:"
+msgstr ""
+
+#: src/msg.c:115
+msgid "Reset to Default Colors"
+msgstr ""
+
+#: src/msg.c:116
+msgid "<b>Format of a chat line</b>"
+msgstr ""
+
+#: src/msg.c:117 src/msg.c:220
+msgid "Chat"
+msgstr ""
+
+#: src/msg.c:118
+msgid ""
+"Gajim will notify you for new message via a popup in the bottom right of the "
+"screen"
+msgstr ""
+
+#: src/msg.c:119
+msgid "_Notify me about it"
+msgstr ""
+
+#: src/msg.c:120
+msgid ""
+"Gajim will automatically show the new received message in a new chat window "
+"or tab in an existing chat window"
+msgstr ""
+
+#: src/msg.c:121
+msgid "_Pop it up"
+msgstr ""
+
+#: src/msg.c:122
+msgid ""
+"Gajim will only change the icon of the contact that sent the new message"
+msgstr ""
+
+#: src/msg.c:123
+msgid "Show only in _roster"
+msgstr ""
+
+#: src/msg.c:124
+msgid "When new chat nessage is received"
+msgstr ""
+
+#: src/msg.c:125
+msgid "Notify me about contacts going: "
+msgstr ""
+
+#: src/msg.c:126
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just went online"
+msgstr ""
+
+#: src/msg.c:127 src/msg.c:144
+msgid "_Online"
+msgstr ""
+
+#: src/msg.c:128
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just went offline"
+msgstr ""
+
+#: src/msg.c:129 src/msg.c:145
+msgid "Of_fline"
+msgstr ""
+
+#: src/msg.c:130
+msgid "Allow popup/notifications when I'm _away/xa/busy/invisible"
+msgstr ""
+
+#: src/msg.c:131
+msgid "<b>Notifications</b>"
+msgstr ""
+
+#: src/msg.c:132
+msgid ""
+"Check this option, only if someone you don't have in the roster spams/annoys "
+"you. Use with caution, cause it blocks all messags from every contact you "
+"don't have in the roster and might want to sent you a message"
+msgstr ""
+
+#: src/msg.c:133
+msgid "_Ignore events from contacts not in the roster"
+msgstr ""
+
+#: src/msg.c:134
+msgid "Play _sounds"
+msgstr ""
+
+#: src/msg.c:135
+msgid "_Player:"
+msgstr ""
+
+#: src/msg.c:136
+msgid "..."
+msgstr ""
+
+#: src/msg.c:137
+msgid "<b>Sounds</b>"
+msgstr ""
+
+#: src/msg.c:138
+msgid "Events"
+msgstr ""
+
+#: src/msg.c:139
+msgid "Auto _away after:"
+msgstr ""
+
+#: src/msg.c:140
+msgid "Auto e_Xtended Away after:"
+msgstr ""
+
+#: src/msg.c:141 src/msg.c:142
+msgid "minutes"
+msgstr ""
+
+#: src/msg.c:143
+msgid "Ask status message when going: "
+msgstr ""
+
+#: src/msg.c:146
+msgid "<b>Preset Status Messages</b>"
+msgstr ""
+
+#: src/msg.c:148
+msgid "Open _with:"
+msgstr ""
+
+#: src/msg.c:149
+msgid "GNOME default applications"
+msgstr ""
+
+#: src/msg.c:150
+msgid "KDE default applications"
+msgstr ""
+
+#: src/msg.c:151
+msgid "Custom"
+msgstr ""
+
+#: src/msg.c:152
+msgid "_Browser:"
+msgstr ""
+
+#: src/msg.c:153
+msgid "_Mail client:"
+msgstr ""
+
+#: src/msg.c:154
+msgid "<b>Custom Applications</b>"
+msgstr ""
+
+#: src/msg.c:155
+msgid "<b>Links</b>"
+msgstr ""
+
+#: src/msg.c:156
+msgid "Log presences in _contact's log file"
+msgstr ""
+
+#: src/msg.c:157
+msgid "Log presences in an _external file"
+msgstr ""
+
+#: src/msg.c:158
+msgid "<b>Log</b>"
+msgstr ""
+
+#: src/msg.c:159
+msgid "Allow _OS information to be sent"
+msgstr ""
+
+#: src/msg.c:160
+msgid "Check for new _version at startup"
+msgstr ""
+
+#: src/msg.c:161
+msgid "<b>Miscellaneous</b>"
+msgstr ""
+
+#: src/msg.c:162
+msgid "Open..."
+msgstr ""
+
+#: src/msg.c:163
+msgid "<b>Advanced  Configuration Editor</b>"
+msgstr ""
+
+#: src/msg.c:164
+msgid "Advanced"
+msgstr ""
+
+#: src/msg.c:165
+msgid "Contact Information"
+msgstr ""
+
+#: src/msg.c:167
+msgid "Status:"
+msgstr ""
+
+#: src/msg.c:169
+msgid "Resource:"
+msgstr ""
+
+#: src/msg.c:170
+msgid "Subscription:"
+msgstr ""
+
+#: src/msg.c:171
+msgid "Ask:"
+msgstr ""
+
+#: src/msg.c:172
+msgid "Client:"
+msgstr ""
+
+#: src/msg.c:173
+msgid "Log history"
+msgstr ""
+
+#: src/msg.c:174
+msgid "OS:"
+msgstr ""
+
+#: src/msg.c:175
+msgid "Jabber"
+msgstr ""
+
+#: src/msg.c:176
+msgid "Name:"
+msgstr ""
+
+#: src/msg.c:178
+msgid "Birthday:"
+msgstr ""
+
+#: src/msg.c:179
+msgid "E-Mail:"
+msgstr ""
+
+#: src/msg.c:180
+msgid "Homepage:"
+msgstr ""
+
+#: src/msg.c:181
+msgid "Phone No.:"
+msgstr ""
+
+#: src/msg.c:183
+msgid "Street:"
+msgstr ""
+
+#: src/msg.c:184
+msgid "Extra Address:"
+msgstr ""
+
+#: src/msg.c:185
+msgid "City:"
+msgstr ""
+
+#: src/msg.c:186
+msgid "State:"
+msgstr ""
+
+#: src/msg.c:187
+msgid "Postal Code:"
+msgstr ""
+
+#: src/msg.c:188
+msgid "Country:"
+msgstr ""
+
+#: src/msg.c:189
+msgid "Location"
+msgstr ""
+
+#: src/msg.c:190
+msgid "Company:"
+msgstr ""
+
+#: src/msg.c:191
+msgid "Department:"
+msgstr ""
+
+#: src/msg.c:192
+msgid "Position:"
+msgstr ""
+
+#: src/msg.c:193
+msgid "Role:"
+msgstr ""
+
+#: src/msg.c:194
+msgid "Work"
+msgstr ""
+
+#: src/msg.c:195
+msgid "About"
+msgstr ""
+
+#: src/msg.c:196
+msgid "Conversation History"
+msgstr ""
+
+#: src/msg.c:197
+msgid "_Earliest"
+msgstr ""
+
+#: src/msg.c:198
+msgid "_Previous"
+msgstr ""
+
+#: src/msg.c:199
+msgid "_Latest"
+msgstr ""
+
+#: src/msg.c:200
+msgid "Groupchat"
+msgstr ""
+
+#: src/msg.c:202
+msgid "Click to change the subject of the room"
+msgstr ""
+
+#: src/msg.c:203
+msgid "Change _Subject"
+msgstr ""
+
+#: src/msg.c:204
+msgid "Click to configure the room options"
+msgstr ""
+
+#: src/msg.c:205
+msgid "Configure _Room"
+msgstr ""
+
+#: src/msg.c:206
+msgid "Close _Window"
+msgstr ""
+
+#: src/msg.c:207
+msgid "Subject:"
+msgstr ""
+
+#: src/msg.c:208
+msgid "Join Groupchat"
+msgstr ""
+
+#: src/msg.c:209
+msgid "Password:"
+msgstr ""
+
+#: src/msg.c:210
+msgid "Server:"
+msgstr ""
+
+#: src/msg.c:211
+msgid "Room:"
+msgstr ""
+
+#: src/msg.c:213
+msgid "Recently:"
+msgstr ""
+
+#: src/msg.c:215 src/msg.c:216
+msgid "Passphrase"
+msgstr ""
+
+#: src/msg.c:217
+msgid "<b>Choose your OpenGPG key</b>"
+msgstr ""
+
+#: src/msg.c:218
+msgid "Enter your message:"
+msgstr ""
+
+#: src/msg.c:219
+msgid "Or choose a preset message:"
+msgstr ""
+
+#: src/msg.c:221
+msgid "Click to see past conversations with this contact"
+msgstr ""
+
+#: src/msg.c:222
+msgid "_History"
+msgstr ""
+
+#: src/msg.c:223
+msgid "Click to clear conversation (won't delete it from history)"
+msgstr ""
+
+#: src/msg.c:224
+msgid "Click for contact's extented information"
+msgstr ""
+
+#: src/msg.c:225
+msgid "Anonymous <nick@server/res>"
+msgstr ""
+
+#: src/msg.c:227
+msgid "Change Password"
+msgstr ""
+
+#: src/msg.c:228
+msgid "Enter new password:"
+msgstr ""
+
+#: src/msg.c:229
+msgid "Enter it again for confirmation:"
+msgstr ""
+
+#: src/msg.c:230
+msgid "_Chat"
+msgstr ""
+
+#: src/msg.c:231
+msgid ""
+"Enter the user ID of the contact you would like to\n"
+"send a chat message to"
+msgstr ""
+
+#: src/msg.c:235
+msgid "Free for Chat"
+msgstr ""
+
+#: src/msg.c:241
+msgid "Chat with"
+msgstr ""
+
+#: src/msg.c:242
+msgid "New Message"
+msgstr ""
+
+#: src/msg.c:243
+msgid "<b>event_type_label</b>"
+msgstr ""
+
+#: src/msg.c:244
+msgid "event_description_label"
+msgstr ""
+
+#: src/msg.c:245
+msgid "Add/Remove Emoticons"
+msgstr ""
+
+#: src/msg.c:246
+msgid "Set Image"
+msgstr ""
+
+#: src/msg.c:247
+msgid "New version of Gajim available"
+msgstr ""
+
+#: src/msg.c:248
+msgid "Open Download Page"
+msgstr ""
+
+#: src/msg.c:249
+msgid "<b>Changes in latest version</b>"
+msgstr ""
+
+#: src/msg.c:250
+msgid "Groupchat Configuration"
+msgstr ""
+
+#: src/msg.c:252
+msgid "Remove account only from Gajim"
+msgstr ""
+
+#: src/msg.c:253
+msgid "Remove account from Gajim and from server"
+msgstr ""
+
+#: src/msg.c:254
+msgid "<b>What do you want to do?</b>"
+msgstr ""
+
+#: src/msg.c:256
+msgid "Advanced Configuration Editor"
+msgstr ""
+
+#: src/msg.c:257
+msgid "Filter:"
+msgstr ""
