@@ -103,7 +103,7 @@ class Systray:
 		call the New_message_dialog class"""
 		dialogs.New_message_dialog(self.plugin, account)
 
-	def make_menu(self, event):
+	def make_menu(self):
 		"""create chat with and new message (sub) menus/menuitems"""
 		
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
@@ -115,7 +115,7 @@ class Systray:
 		chat_with_menuitem.set_sensitive(iskey)
 		new_message_menuitem.set_sensitive(iskey)
 		
-		if len(gajim.connections.keys()) >= 2: # 2 or more accounts? make submenus
+		if len(gajim.connections.keys()) >= 2: # 2 or more connections? make submenus
 			account_menu_for_chat_with = gtk.Menu()
 			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
 
@@ -145,7 +145,7 @@ class Systray:
 			chat_with_menuitem.set_submenu(group_menu)
 					
 			#for new message
-			self.new_message_handler_id = new_message_menuitem.connect(\
+			self.new_message_handler_id = new_message_menuitem.connect(
 				'activate', self.on_new_message_menuitem_activate, account)
 
 		self.systray_context_menu.popup(None, None, None, event.button, event.time)
@@ -211,7 +211,7 @@ class Systray:
 					acc['chats'][jid].set_active_tab(jid)
 					acc['chats'][jid].window.present()
 		if event.button == 3: # right click
-			self.make_menu(event)
+			self.make_menu()
 	
 	def on_online_menuitem_activate(self, widget):
 		self.plugin.roster.status_combobox.set_active(0) # 0 is online
@@ -265,4 +265,4 @@ class Systray:
 		try:
 			import egg.trayicon as trayicon	# gnomepythonextras trayicon
 		except:
-			import trayicon # yann's trayicon
+			import trayicon # our trayicon
