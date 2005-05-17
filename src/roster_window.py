@@ -1207,7 +1207,7 @@ class Roster_window:
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
-		self.path = '../data/iconsets/' + iconset + '/'
+		self.path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/')
 		self.jabber_state_images = self.load_iconset(self.path)
 
 	def reload_jabber_state_images(self):
@@ -1450,8 +1450,8 @@ class Roster_window:
 		self.make_jabber_state_images()
 		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'icq': {}, 'msn': {}, 'yahoo': {} }
 		
-		path = '../data/iconsets/transports'
-		folders = os.listdir('../data/iconsets/transports')
+		path = os.path.join(gajim.DATA_DIR, 'iconsets/transports')
+		folders = os.listdir(path)
 		for transport in folders:
 			if transport == '.svn':
 				continue

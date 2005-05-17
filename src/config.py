@@ -107,7 +107,7 @@ class Preferences_window:
 		self.xml.get_widget('add_remove_emoticons_button').set_sensitive(st)
 
 		#iconset
-		iconsets_list = os.listdir('../data/iconsets/')
+		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets/'))
 		model = gtk.ListStore(gobject.TYPE_STRING)
 		self.iconset_combobox.set_model(model)
 		l = []

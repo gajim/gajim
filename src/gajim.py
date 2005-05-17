@@ -718,7 +718,7 @@ class Interface:
 												#3:autoxa and use sleeper
 
 		iconset = gajim.config.get('iconset')
-		path = '../data/iconsets/' + iconset + '/'
+		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/')
 		files = [path + 'online.gif', path + 'online.png', path + 'online.xpm']
 		pix = None
 		for fname in files:

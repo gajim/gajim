@@ -26,3 +26,4 @@ config = common.config.Config()
 connections = {}
 log = logging.getLogger('Gajim')
 logger = common.logger.Logger()
+DATA_DIR = '../data'

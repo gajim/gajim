@@ -20,6 +20,7 @@
 import gtk
 import gtk.glade
 import gobject
+import os
 from gajim import User
 from common import gajim
 from common import i18n
@@ -375,7 +376,8 @@ class About_dialog:
 
 		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>', 'Alex Podaras <bigpod@gmail.com>']
 		dlg.set_authors(authors)
-		dlg.set_logo(gtk.gdk.pixbuf_new_from_file('../data/pixmaps/logo.png'))
+		dlg.set_logo(gtk.gdk.pixbuf_new_from_file(os.path.join(gajim.DATA_DIR,
+			'pixmaps/logo.png')))
 		dlg.set_translator_credits(_('translator_credits'))
 
 		rep = dlg.run()
