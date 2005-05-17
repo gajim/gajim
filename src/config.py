@@ -87,7 +87,11 @@ class Preferences_window:
 			st = gajim.config.get('trayicon')
 			self.trayicon_checkbutton.set_active(st)
 		else:
-			self.trayicon_checkbutton.set_sensitive(False)
+			if os.name == 'nt':
+				self.trayicon_checkbutton.hide()
+				self.trayicon_checkbutton.set_no_show_all(True)
+			else:
+				self.trayicon_checkbutton.set_sensitive(False)
 
 		#Save position
 		st = gajim.config.get('saveposition')
@@ -231,6 +235,8 @@ class Preferences_window:
 			set_active(gajim.config.get('ignore_unknown_contacts'))
 
 		#sounds
+		if os.name == 'nt': # if windows, player must not become visible on show_all
+			self.xml.get_widget('soundplayer_hbox').set_no_show_all(True)
 		if gajim.config.get('sounds_on'):
 			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
 		else:
@@ -312,18 +318,25 @@ class Preferences_window:
 		buf.connect('changed', self.on_msg_textview_changed)
 
 		#open links with
-		self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
-		if gajim.config.get('openwith') == 'gnome-open':
-			self.links_open_with_combobox.set_active(0)
-		elif gajim.config.get('openwith') == 'kfmclient exec':
-			self.links_open_with_combobox.set_active(True)
-		elif gajim.config.get('openwith') == 'custom':
-			self.links_open_with_combobox.set_active(2)
-			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
-		self.xml.get_widget('custom_browser_entry').set_text(\
-			gajim.config.get('custombrowser'))
-		self.xml.get_widget('custom_mail_client_entry').set_text(\
-			gajim.config.get('custommailapp'))
+		if os.name == 'nt':
+			self.links_frame = self.xml.get_widget('links_frame')
+			self.links_frame.hide()
+			self.links_frame.set_no_show_all(True)
+		else:
+			self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
+			self.links_open_with_combobox.hide()
+			self.links_open_with_combobox.set_no_show_all(True)
+			if gajim.config.get('openwith') == 'gnome-open':
+				self.links_open_with_combobox.set_active(0)
+			elif gajim.config.get('openwith') == 'kfmclient exec':
+				self.links_open_with_combobox.set_active(True)
+			elif gajim.config.get('openwith') == 'custom':
+				self.links_open_with_combobox.set_active(2)
+				self.xml.get_widget('custom_apps_frame').set_sensitive(True)
+			self.xml.get_widget('custom_browser_entry').set_text(\
+				gajim.config.get('custombrowser'))
+			self.xml.get_widget('custom_mail_client_entry').set_text(\
+				gajim.config.get('custommailapp'))
 				
 		#log presences in user file
 		st = gajim.config.get('log_notif_in_user_file')
@@ -353,9 +366,6 @@ class Preferences_window:
 
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
-		if os.name == 'nt': # if windows, player must not be visible
-			self.xml.get_widget('soundplayer_hbox').hide()
-			self.trayicon_checkbutton.hide()
 		
 		theme_combobox = self.xml.get_widget('theme_combobox')
 		model = theme_combobox.get_model()

@@ -5290,7 +5290,7 @@
 	      <property name="spacing">5</property>
 
 	      <child>
-		<widget class="GtkFrame" id="frame21">
+		<widget class="GtkFrame" id="links_frame">
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>

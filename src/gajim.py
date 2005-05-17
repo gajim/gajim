@@ -109,6 +109,12 @@ GTKGUI_GLADE = 'gtkgui.glade'
 class Interface:
 	def launch_browser_mailer(self, kind, url):
 		#kind = 'url' or 'mail'
+		if os.name == 'nt':
+			try:
+				os.startfile(url) # if pywin32 is installed we open
+			except:
+				pass
+			return
 		if gajim.config.get('openwith') == 'gnome-open':
 			app = 'gnome-open'
 			args = ['gnome-open']
