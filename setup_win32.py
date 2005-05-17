@@ -1,4 +1,4 @@
-##      setup_win32.py
+## setup_win32.py (run me as python setup_win32.py py2exe)
 ##
 ## Gajim Team:
 ## - Yann Le Boulanger <asterix@lagaule.org>
@@ -17,12 +17,29 @@
 ## GNU General Public License for more details.
 ##
 
+'''
+import sys
+
+try:
+    import modulefinder
+    import win32com
+    for p in win32com.__path__[1:]:
+        modulefinder.AddPackagePath("win32com", p)
+    for extra in ["win32com.shell"]: #,"win32com.mapi"
+        __import__(extra)
+        m = sys.modules[extra]
+        for p in m.__path__[1:]:
+            modulefinder.AddPackagePath(extra, p)
+except ImportError:
+    # no build path setup, no worries.
+    pass
+'''
+
 from distutils.core import setup
 import py2exe
 import glob
 
-includes = ['encodings',
-            'encodings.utf-8',]
+includes = ['encodings', 'encodings.utf-8',]
 
 opts = {
     'py2exe': {
@@ -35,21 +52,24 @@ opts = {
             'libgtk-win32-2.0-0.dll','libpango-1.0-0.dll',
             'libpangowin32-1.0-0.dll'
         ],
+        'optimize': '2', # python -OO
     }
 }
 
 setup(
     name = 'Gajim',
-    description = 'A jabber client',
-#    console=['gajim.py'],
-    windows = [{'script': 'gajim.py',
+    version = '0.7',
+    description = 'A Jabber client written in PyGTK',
+    windows = [{'script': 'src/gajim.py',
                 'icon_resources': [(1, 'gajim.ico')]}],
     options=opts,
-    data_files=[('plugins/gtkgui', glob.glob('plugins/gtkgui/gtkgui.glade')),
-                ('plugins/gtkgui/icons/sun', glob.glob('plugins/gtkgui/icons/sun/*.*')),
-                ('plugins/gtkgui/emoticons', glob.glob('plugins/gtkgui/emoticons/*.*')),
-                ('plugins/gtkgui/pixmaps', glob.glob('plugins/gtkgui/pixmaps/*.*')),
-                ('sounds', glob.glob('data/sounds/*.*')),
-                ('Messages/fr/LC_MESSAGES', glob.glob('Messages/fr/LC_MESSAGES/*.mo'))
-    ],
+
+# one can just copy src and data folder in the target_dir so one doesn't have to hack this
+#    data_files=[('src/', glob.glob('src/gtkgui.glade')),
+#                ('data/icons/sun', glob.glob('data/icons/sun/*.*')),
+#                ('data/emoticons', glob.glob('data/emoticons/*.*')),
+#                ('data/pixmaps', glob.glob('data/pixmaps/*.*')),
+#                ('sounds', glob.glob('data/sounds/*.*')),
+#                ('Messages/fr/LC_MESSAGES', glob.glob('Messages/fr/LC_MESSAGES/*.mo'))
+#    ],
 )
