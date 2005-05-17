@@ -5,7 +5,7 @@
 
 [Setup]
 AppName=Gajim
-AppVerName=Gajim version 0.6.1
+AppVerName=Gajim version 0.7
 DefaultDirName={pf}\Gajim
 DefaultGroupName=Gajim
 UninstallDisplayIcon={app}\Gajim.exe
@@ -24,11 +24,18 @@ Source: "dist\*.dll"; DestDir: "{app}"
 Source: "dist\*.zip"; DestDir: "{app}"
 Source: "dist\gajim.exe"; DestDir: "{app}"; components: main
 Source: "*.ico"; DestDir: "{app}"
-Source: "dist\plugins\gtkgui\*.glade"; DestDir: "{app}\plugins\gtkgui"
-Source: "dist\plugins\gtkgui\icons\sun\*"; DestDir: "{app}\plugins\gtkgui\icons\sun"
-Source: "dist\plugins\gtkgui\emoticons\*"; DestDir: "{app}\plugins\gtkgui\emoticons"
-Source: "dist\plugins\gtkgui\pixmaps\*"; DestDir: "{app}\plugins\gtkgui\pixmaps"
-Source: "dist\sounds\*"; DestDir: "{app}\sounds"
+Source: "dist\*.glade"; DestDir: "{app}"
+Source: "dist\data\iconsets\sun\*"; DestDir: "{app}\data\iconsets\sun"
+Source: "dist\data\iconsets\stellar\*"; DestDir: "{app}\data\iconsets\stellar"
+Source: "dist\data\iconsets\gossip\*"; DestDir: "{app}\data\iconsets\gossip"
+Source: "dist\data\iconsets\transports\aim\*"; DestDir: "{app}\data\iconsets\transports\aim"
+Source: "dist\data\iconsets\transports\gadugadu\*"; DestDir: "{app}\data\iconsets\transports\gadugadu"
+Source: "dist\data\iconsets\transports\icq\*"; DestDir: "{app}\data\iconsets\transports\icq"
+Source: "dist\data\iconsets\transports\msn\*"; DestDir: "{app}\data\iconsets\transports\msn"
+Source: "dist\data\iconsets\transports\yahoo\*"; DestDir: "{app}\data\iconsets\transports\yahoo"
+Source: "dist\data\emoticons\*"; DestDir: "{app}\data\emoticons"
+Source: "dist\data\pixmaps\*"; DestDir: "{app}\data\pixmaps"
+Source: "dist\data\sounds\*"; DestDir: "{app}\data\sounds"
 
 [Icons]
 Name: "{group}\Gajim"; Filename: "{app}\Gajim.exe"; WorkingDir: "{app}"; IconFilename: "{app}\gajim.ico"
