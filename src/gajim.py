@@ -485,7 +485,7 @@ class Interface:
 			config.Groupchat_config_window(self, account, jid, array[1])
 
 	def handle_event_bad_passphrase(self, account, array):
-		dialogs.Warning_dialog(_('Your GPG passphrase is wrong, so you are connected without your GPG key.'))
+		dialogs.Warning_dialog(_('Your GPG passphrase is wrong, so you are connected without your GPG key'))
 
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))

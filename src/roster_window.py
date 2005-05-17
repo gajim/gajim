@@ -493,7 +493,7 @@ class Roster_window:
 			item = gtk.MenuItem(_('Rerequest Authorization from'))
 			sub_menu.append(item)
 			item.connect('activate', self.req_sub, jid, 
-				_('I would like to add you to my contact list.'), account)
+				_('I would like to add you to my roster'), account)
 		else:
 			item = gtk.MenuItem()
 			menu.append(item)

@@ -864,7 +864,7 @@ class Preferences_window:
 		if not iter:
 			return
 		file = model.get_value(iter, 2)
-		dialog = gtk.FileChooserDialog(_('Choose sound'), None,
+		dialog = gtk.FileChooserDialog(_('Choose Sound'), None,
 					gtk.FILE_CHOOSER_ACTION_OPEN,
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 					gtk.STOCK_OPEN, gtk.RESPONSE_OK))
@@ -1169,7 +1169,7 @@ class Account_modification_window:
 			return
 		#if it's a new account
 		if name in gajim.connections:
-			dialogs.Error_dialog(_('An account already has this name'))
+			dialogs.Error_dialog(_('This name is taken by an another account of yours'))
 			return
 		con = connection.Connection(name)
 		self.plugin.register_handlers(con)
@@ -1221,11 +1221,11 @@ class Account_modification_window:
 
 	def on_edit_details_button_clicked(self, widget):
 		if not self.plugin.windows.has_key(self.account):
-			dialogs.Error_dialog(_('You must first create your account before editing your information'))
+			dialogs.Error_dialog(_('You must first create your account before editing your personal information'))
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		if gajim.connections[self.account].connected < 2:
-			dialogs.Error_dialog(_('You must be connected to edit your information'))
+			dialogs.Error_dialog(_('You must be connected to edit your personal  information'))
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
 			self.plugin.windows[self.account]['infos'][jid] = \

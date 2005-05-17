@@ -465,7 +465,7 @@ class Groupchat_window(chat.Chat):
 			item = gtk.MenuItem(_('_Ban'))
 			sub_menu.append(item)
 			item.connect('activate', self.ban, room_jid, jid)
-			item = gtk.MenuItem(_('_Grant Mem_bership'))
+			item = gtk.MenuItem(_('_Grant Membership'))
 			sub_menu.append(item)
 			item.connect('activate', self.grant_membership, room_jid, jid)
 			item = gtk.MenuItem(_('_Revoke Membership'))
