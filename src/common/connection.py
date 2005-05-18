@@ -49,6 +49,7 @@ distro_info = {
 	'Slackware Linux': '/etc/slackware-release',
 	'Slackware Linux': '/etc/slackware-version',
 	'Solaris/Sparc': '/etc/release',
+	'SUSE Linux': '/etc/SuSE-release',
 	'Sun JDS': '/etc/sun-release',
 	'PLD Linux': '/etc/pld-release',
 	'Yellow Dog Linux': '/etc/yellowdog-release',
