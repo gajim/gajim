@@ -127,12 +127,12 @@ class Roster_window:
 				iterG = model.append(IterAcct, 
 					(self.jabber_state_images['closed'], g, 'group', g, account, False))
 			if not self.groups[account].has_key(g): #It can probably never append
-				if account + g in self.hidden_rows:
+				if account + g in self.collapsed_rows:
 					ishidden = False
 				else:
 					ishidden = True
 				self.groups[account][g] = { 'expand': ishidden }
-			if not account in self.hidden_rows and \
+			if not account in self.collapsed_rows and \
 			   not gajim.config.get('mergeaccounts'):
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
@@ -386,7 +386,7 @@ class Roster_window:
 				if g in self.groups[account].keys():
 					continue
 
-				if account + g in self.hidden_rows:
+				if account + g in self.collapsed_rows:
 					ishidden = False
 				else:
 					ishidden = True
@@ -1020,7 +1020,7 @@ class Roster_window:
 			gajim.config.set('width', width)
 			gajim.config.set('height', height)
 
-		gajim.config.set('hidden_rows', '\t'.join(self.hidden_rows))
+		gajim.config.set('collapsed_rows', '\t'.join(self.collapsed_rows))
 		self.plugin.save_config()
 		for account in gajim.connections:
 			gajim.connections[account].quit(True)
@@ -1104,11 +1104,11 @@ class Roster_window:
 			model.set_value(iter, 0, self.jabber_state_images['opened'])
 			jid = model.get_value(iter, 3)
 			self.groups[account][jid]['expand'] = True
-			if account + jid in self.hidden_rows:
-				self.hidden_rows.remove(account + jid)
+			if account + jid in self.collapsed_rows:
+				self.collapsed_rows.remove(account + jid)
 		elif type == 'account':
-			if account in self.hidden_rows:
-				self.hidden_rows.remove(account)
+			if account in self.collapsed_rows:
+				self.collapsed_rows.remove(account)
 			for g in self.groups[account]:
 				groupIter = self.get_group_iter(g, account)
 				if groupIter and self.groups[account][g]['expand']:
@@ -1126,11 +1126,11 @@ class Roster_window:
 			model.set_value(iter, 0, self.jabber_state_images['closed'])
 			jid = model.get_value(iter, 3)
 			self.groups[account][jid]['expand'] = False
-			if not account + jid in self.hidden_rows:
-				self.hidden_rows.append(account + jid)
+			if not account + jid in self.collapsed_rows:
+				self.collapsed_rows.append(account + jid)
 		elif type == 'account':
-			if not account in self.hidden_rows:
-				self.hidden_rows.append(account)
+			if not account in self.collapsed_rows:
+				self.collapsed_rows.append(account)
 
 	def on_editing_canceled (self, cell):
 		'''editing has been canceled'''
@@ -1518,7 +1518,7 @@ class Roster_window:
 		self.id_signal_cb = self.status_combobox.connect('changed',
 			self.on_status_combobox_changed)
 
-		self.hidden_rows = gajim.config.get('hidden_rows').split('\t')
+		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
 		self.draw_roster()
 		if len(gajim.connections) == 0: # if no account
 			self.plugin.windows['account_modification'] = \
