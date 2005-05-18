@@ -695,6 +695,11 @@ class Interface:
 			'statusmsgcolor': gajim.config.get('statusmsgcolor'),
 		}
 		parser.read()
+
+		if gajim.config.get('verbose'):
+			log.setLevel(logging.DEBUG)
+		else:
+			gajim.log.setLevel(None)
 		
 		for account in gajim.config.get_per('accounts'):
 			gajim.connections[account] = common.connection.Connection(account)

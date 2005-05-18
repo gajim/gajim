@@ -30,10 +30,6 @@ f = logging.Formatter('%(asctime)s %(name)s: %(message)s', '%d %b %Y %H:%M:%S')
 h.setFormatter(f)
 log = logging.getLogger('Gajim')
 log.addHandler(h)
-if config.get('verbose'):
-	log.setLevel(logging.DEBUG)
-else:
-	log.setLevel(None)
 
 logger = common.logger.Logger()
 DATA_DIR = '../data'
