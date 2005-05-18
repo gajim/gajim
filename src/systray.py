@@ -112,7 +112,7 @@ class Systray:
 		call the New_message_dialog class"""
 		dialogs.New_message_dialog(self.plugin, account)
 
-	def make_menu(self):
+	def make_menu(self, event):
 		"""create chat with and new message (sub) menus/menuitems"""
 		
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
@@ -220,7 +220,7 @@ class Systray:
 					acc['chats'][jid].set_active_tab(jid)
 					acc['chats'][jid].window.present()
 		if event.button == 3: # right click
-			self.make_menu()
+			self.make_menu(event)
 	
 	def on_online_menuitem_activate(self, widget):
 		self.plugin.roster.status_combobox.set_active(0) # 0 is online
