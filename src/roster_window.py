@@ -1399,7 +1399,7 @@ class Roster_window:
 				start = '*  '
 			self.window.set_title(start + 'Gajim')
 
-	def get_uf_status(self, status, capitalize=True):
+	def get_uf_status(self, status):
 		'''returns a userfriendly string for dnd/xa/chat
 		and capitalize()s the rest'''
 		if status == 'dnd':

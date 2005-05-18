@@ -170,8 +170,9 @@ class Tabbed_chat_window(chat.Chat):
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
-		self.print_conversation(_('%s is %s (%s)') % (user.name, \
-										user.show, user.status), user.jid, 'status')
+		uf_status = self.plugin.roster.get_uf_status(user.show)
+		self.print_conversation(_('%s is %s (%s)') % (user.name, 
+										uf_status, user.status), user.jid, 'status')
 
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
@@ -179,10 +180,8 @@ class Tabbed_chat_window(chat.Chat):
 
 		if gajim.config.get('print_time') == 'sometimes':
 			self.print_time_timeout(user.jid)
-			self.print_time_timeout_id[user.jid] = gobject.timeout_add(300000, \
+			self.print_time_timeout_id[user.jid] = gobject.timeout_add(300000,
 				self.print_time_timeout, user.jid)
-		#FIXME: why show if already visible from glade?
-		#self.childs[user.jid].show_all() 
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
@@ -229,7 +228,6 @@ class Tabbed_chat_window(chat.Chat):
 				message_buffer.set_text('', -1)
 				self.print_conversation(message, jid, jid)
 			return True
-		return False
 
 	def on_contact_button_clicked(self, widget):
 		jid = self.get_active_jid()
