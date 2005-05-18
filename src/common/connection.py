@@ -769,7 +769,7 @@ class Connection:
 			self.dispatch('ERROR', _('Couldn\'t connect to ') + config['hostname'])
 			return 0
 		else:
-			gajim.log.debug(_('Connected to server'))
+			gajim.log.debug('Connected to server')
 			req = common.xmpp.features.getRegInfo(c, config['hostname']).asDict() # FIXME! This blocks!
 			req['username'] = config['name']
 			req['password'] = config['password']
