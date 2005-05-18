@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-18 14:05+0200\n"
+"POT-Creation-Date: 2005-05-18 15:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,15 +16,15 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/advanced.py:106
+#: src/advanced.py:107
 msgid "Preference Name"
 msgstr ""
 
-#: src/advanced.py:113
+#: src/advanced.py:114
 msgid "Value"
 msgstr ""
 
-#: src/advanced.py:120
+#: src/advanced.py:121
 msgid "Type"
 msgstr ""
 
@@ -173,7 +173,7 @@ msgid "JID: <i>%s</i>"
 msgstr ""
 
 #: src/dialogs.py:85
-msgid "There must be at least one group for each contact"
+msgid "A contact must belong at least to one group"
 msgstr ""
 
 #: src/dialogs.py:104
@@ -201,7 +201,7 @@ msgid "The contact's name must be something like login@hostname"
 msgstr ""
 
 #: src/dialogs.py:363
-msgid "Gajim - A GTK jabber client"
+msgid "Gajim - a GTK+ Jabber client"
 msgstr ""
 
 #: src/dialogs.py:374
@@ -696,7 +696,7 @@ msgstr ""
 
 #: src/msg.c:38
 msgid ""
-"If enabled, Gajim, when launched, will automatically connect to jabber using "
+"If checked, Gajim, when launched, will automatically connect to jabber using "
 "this account"
 msgstr ""
 
@@ -731,7 +731,7 @@ msgstr ""
 #: src/msg.c:47
 msgid ""
 "If checked Gajim will store the password in ~/.gajim/config with 'read' "
-"permission only for only you and of course the superuser"
+"permission only for only you and of course the administrator"
 msgstr ""
 
 #: src/msg.c:48
@@ -903,7 +903,8 @@ msgid "_Icon in systray (aka. notification area)"
 msgstr ""
 
 #: src/msg.c:90
-msgid "If checked, Gajim will remember the main window position after you quit"
+msgid ""
+"If checked, Gajim will remember the main window position next time you run it"
 msgstr ""
 
 #: src/msg.c:91
@@ -912,7 +913,7 @@ msgstr ""
 
 #: src/msg.c:92
 msgid ""
-"If you have 2 or more accounts and it is checked, Gajim will list all "
+"If you have 2 or more accounts and this is checked, Gajim will list all "
 "contacts as if you had one account"
 msgstr ""
 
@@ -1123,7 +1124,7 @@ msgid "Auto _away after:"
 msgstr ""
 
 #: src/msg.c:143
-msgid "Auto e_Xtended Away after:"
+msgid "Auto _Not Available after:"
 msgstr ""
 
 #: src/msg.c:144 src/msg.c:145
