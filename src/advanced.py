@@ -23,6 +23,11 @@ import gobject
 
 from common import gajim
 
+_ = i18n._
+APP = i18n.APP
+gtk.glade.bindtextdomain(APP, i18n.DIR)
+gtk.glade.textdomain(APP)
+
 OPT_TYPE = 0
 OPT_VAL = 1
 
@@ -98,21 +103,21 @@ class Advanced_configuration_window:
 		self.modelfilter.set_visible_func(self.visible_func)
 
 		renderer_text = gtk.CellRendererText()
-		col = treeview.insert_column_with_attributes(-1, 'Preference Name',
+		col = treeview.insert_column_with_attributes(-1, _('Preference Name'),
 			renderer_text, text = 0)
 		col.set_resizable(True)
 					
 		renderer_text = gtk.CellRendererText()
 		renderer_text.set_property('editable', 1)
 		renderer_text.connect('edited', self.on_config_edited)
-		col = treeview.insert_column_with_attributes(-1, 'Value',
+		col = treeview.insert_column_with_attributes(-1, _('Value'),
 			renderer_text, text = 1)
 
 		#col.set_resizable(True) seems like a GTK+ bug DO NOT REMOVE
 		col.set_max_width(250)
 
 		renderer_text = gtk.CellRendererText()
-		treeview.insert_column_with_attributes(-1, 'Type',
+		treeview.insert_column_with_attributes(-1, _('Type'),
 			renderer_text, text = 2)
 
 		# add data to model
