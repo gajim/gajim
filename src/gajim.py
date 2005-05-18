@@ -697,7 +697,7 @@ class Interface:
 		parser.read()
 
 		if gajim.config.get('verbose'):
-			log.setLevel(logging.DEBUG)
+			gajim.log.setLevel(gajim.logging.DEBUG)
 		else:
 			gajim.log.setLevel(None)
 		
