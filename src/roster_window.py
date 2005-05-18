@@ -686,7 +686,7 @@ class Roster_window:
 		return False
 	
 	def on_roster_treeview_button_press_event(self, widget, event):
-		'''popup contact's , group's or agent's menu'''
+		'''popup contact's, group's or agent's menu'''
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			if event.button == 3: # Right click
 				try:
@@ -711,7 +711,7 @@ class Roster_window:
 			if event.button == 1: # Left click
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
-						nt(event.y))
+						int(event.y))
 				except TypeError:
 					self.tree.get_selection().unselect_all()
 					return False
