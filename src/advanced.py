@@ -22,6 +22,7 @@ import gtk.glade
 import gobject
 
 from common import gajim
+from common import i18n
 
 _ = i18n._
 APP = i18n.APP
