@@ -951,13 +951,15 @@ class Connection:
 		if self.connected:
 			try:
 				self.connection.Process(timeout)
-			except e, msg:
-				gajim.log.debug('error appeared while processing xmpp: %s' % msg)
+			except:
+				gajim.log.debug('error appeared while processing xmpp: ' + \
+					str(sys.exc_info()[1]))
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
 				try:
 					self.connection.disconnect()
 				except:
-					gajim.log.debug('error appeared while processing xmpp: %s' % msg)
+					gajim.log.debug('error appeared while processing xmpp: ' + \
+						str(sys.exc_info()[1]))
 				self.connection = None
 # END GajimCore
