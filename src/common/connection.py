@@ -521,9 +521,9 @@ class Connection:
 			c = None
 		if not c:
 			gajim.log.debug('Couldn\'t connect to %s' % hostname)
+			self.connected = 0
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', _('Couldn\'t connect to %s') % hostname)
-			self.connected = 0
 			return None
 
 		con.RegisterHandler('message', self._messageCB)
@@ -555,9 +555,9 @@ class Connection:
 		try:
 			auth = con.auth(name, self.password, resource) #FIXME: blocking
 		except IOError: #probably a timeout
+			self.connected = 0
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', _('Couldn\'t connect to %s') % hostname)
-			self.connected = 0
 			return None
 		if auth:
 			con.initRoster()
@@ -565,9 +565,9 @@ class Connection:
 			return con
 		else:
 			gajim.log.debug('Couldn\'t authentificate to %s' % hostname)
+			self.connected = 0
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', _('Authentification failed with %s, check your login and password') % hostname)
-			self.connected = 0
 			return None
 # END connect
 
