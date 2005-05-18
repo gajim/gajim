@@ -20,6 +20,7 @@
 import sys
 import os
 import time
+import sre
 from calendar import timegm
 
 import common.xmpp
@@ -49,9 +50,7 @@ distro_info = {
 	'Slackware Linux': '/etc/slackware-version',
 	'Solaris/Sparc': '/etc/release',
 	'Sun JDS': '/etc/sun-release',
-	'Novell SUSE Linux': '/etc/SuSE-release',
 	'PLD Linux': '/etc/pld-release',
-	'SUSE Linux': '/etc/SuSE-release',
 	'Yellow Dog Linux': '/etc/yellowdog-release',
 	# many distros use the /etc/redhat-release for compatibility
 	# so Redhat is the last
@@ -82,6 +81,9 @@ def get_os_info():
 				output = child_stdout.readline().strip()
 				child_stdout.close()
 				child_stdin.close()
+				# some distros put n/a in places so remove them
+				pattern = sre.compile(r' n/a', sre.IGNORE_CASE)
+				output = sre.sub(pattern, '', output)
 				return output
 		# lsb_release executable not available, so parse files
 		for distro_name in distro_info:
