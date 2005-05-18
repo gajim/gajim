@@ -332,11 +332,14 @@ class Groupchat_window(chat.Chat):
 			end_iter = message_buffer.get_end_iter()
 			txt = message_buffer.get_text(start_iter, end_iter, 0)
 			if txt != '':
+				if txt == '/clear':
+					self.on_clear(None, conversation_textview) # clear conversation
+					self.on_clear(None, widget) # clear message textview too
+					return True
 				gajim.connections[self.account].send_gc_message(room_jid, txt)
 				message_buffer.set_text('', -1)
 				widget.grab_focus()
 			return True
-		return False
 
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
 		"""Print a line in the conversation:
