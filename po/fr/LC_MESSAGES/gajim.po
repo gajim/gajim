@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-18 14:20+0200\n"
+"POT-Creation-Date: 2005-05-18 15:52+0200\n"
 "PO-Revision-Date: 2004-05-16 19:40-0400\n"
 "Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
 "Language-Team: none\n"
@@ -176,8 +176,8 @@ msgid "JID: <i>%s</i>"
 msgstr "JID : <i>%s</i>"
 
 #: src/dialogs.py:85
-msgid "There must be at least one group for each contact"
-msgstr "Il doit y avoir au moins un groupe pour chaque contacte"
+msgid "A contact must belong at least to one group"
+msgstr "Un contacte doit appartenir à au moins un groupe"
 
 #: src/dialogs.py:104
 msgid "Group"
@@ -204,8 +204,8 @@ msgid "The contact's name must be something like login@hostname"
 msgstr "Le nom du contact doit être de la forme : login@hostname"
 
 #: src/dialogs.py:363
-msgid "Gajim - A GTK jabber client"
-msgstr "Gajim - Un client Jabber en GTK"
+msgid "Gajim - a GTK+ Jabber client"
+msgstr "Gajim - Un client Jabber en GTK+"
 
 #: src/dialogs.py:374
 msgid "A GTK jabber client"
@@ -722,7 +722,7 @@ msgstr "Compte"
 
 #: src/msg.c:38
 msgid ""
-"If enabled, Gajim, when launched, will automatically connect to jabber using "
+"If checked, Gajim, when launched, will automatically connect to jabber using "
 "this account"
 msgstr ""
 "Si cette case est cochée, au démarrage, Gajim se connectera automatiquement "
@@ -759,10 +759,10 @@ msgstr "Choisissez une _clé"
 #: src/msg.c:47
 msgid ""
 "If checked Gajim will store the password in ~/.gajim/config with 'read' "
-"permission only for only you and of course the superuser"
+"permission only for only you and of course the administrator"
 msgstr ""
 "Si cette case est cochée, Gajim va sauvegarder le mot de passe dans ~/.gajim/"
-"config avec accès en lecture pour vous et le superutilisateur uniquement"
+"config avec accès en lecture pour vous et l'administrateur uniquement"
 
 #: src/msg.c:48
 msgid "Save _passphrase (insecure)"
@@ -937,7 +937,8 @@ msgid "_Icon in systray (aka. notification area)"
 msgstr "_Icône dans la barre système"
 
 #: src/msg.c:90
-msgid "If checked, Gajim will remember the main window position after you quit"
+msgid ""
+"If checked, Gajim will remember the main window position next time you run it"
 msgstr ""
 "Si cette case est cochée, Gajim va retenir la position de la fenêtre "
 "principal après que vous ayez quitté"
@@ -948,7 +949,7 @@ msgstr "Enregistrer la _position de la fenêtre"
 
 #: src/msg.c:92
 msgid ""
-"If you have 2 or more accounts and it is checked, Gajim will list all "
+"If you have 2 or more accounts and this is checked, Gajim will list all "
 "contacts as if you had one account"
 msgstr ""
 "Si vous avez au moins 2 comptes et que cette case est cochée, Gajim va "
@@ -1147,8 +1148,8 @@ msgid ""
 msgstr ""
 "Cochez cette option seulement si quelqu'un n'appartenant pas à votre liste "
 "vous spam/ennuie. Utilisez avec précaution, car cette option bloque tous les "
-"messages des contactes qui ne sont pas dans votre liste et qui souhaiteraient "
-"vous envoyer un message"
+"messages des contactes qui ne sont pas dans votre liste et qui "
+"souhaiteraient vous envoyer un message"
 
 #: src/msg.c:136
 msgid "_Ignore events from contacts not in the roster"
@@ -1179,8 +1180,8 @@ msgid "Auto _away after:"
 msgstr "Passer _absent après :"
 
 #: src/msg.c:143
-msgid "Auto e_Xtended Away after:"
-msgstr "Passer Non _Disponible après :"
+msgid "Auto _Not Available after:"
+msgstr "Passer _absent après :"
 
 #: src/msg.c:144 src/msg.c:145
 msgid "minutes"
@@ -1557,6 +1558,12 @@ msgstr "Éditeur de Configuration Avancé"
 #: src/msg.c:260
 msgid "Filter:"
 msgstr "Filtre :"
+
+#~ msgid "There must be at least one group for each contact"
+#~ msgstr "Il doit y avoir au moins un groupe pour chaque contacte"
+
+#~ msgid "Auto e_Xtended Away after:"
+#~ msgstr "Passer Non _Disponible après :"
 
 #~ msgid "Connected to server"
 #~ msgstr "Connecté au serveur"
