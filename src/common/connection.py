@@ -833,7 +833,9 @@ class Connection:
 			return
 		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
 			show = STATUS_LIST[self.connected], status = self.status)
-		p.setTag(common.xmpp.NS_MUC + ' x')
+		t = p.setTag(common.xmpp.NS_MUC + ' x')
+		if password:
+			t.setTagData('password', password)
 		self.connection.send(p)
 
 	def send_gc_message(self, jid, msg):
