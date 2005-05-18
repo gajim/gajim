@@ -959,7 +959,7 @@
 		  <child>
 		    <widget class="GtkCheckButton" id="autoconnect_checkbutton">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">If enabled, Gajim, when launched, will automatically connect to jabber using this account</property>
+		      <property name="tooltip" translatable="yes">If checked, Gajim, when launched, will automatically connect to jabber using this account</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">C_onnect at startup</property>
 		      <property name="use_underline">True</property>
@@ -1221,7 +1221,7 @@
 				<widget class="GtkCheckButton" id="gpg_save_password_checkbutton">
 				  <property name="visible">True</property>
 				  <property name="sensitive">False</property>
-				  <property name="tooltip" translatable="yes">If checked Gajim will store the password in ~/.gajim/config with 'read' permission only for only you and of course the superuser</property>
+				  <property name="tooltip" translatable="yes">If checked Gajim will store the password in ~/.gajim/config with 'read' permission only for only you and of course the administrator</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Save _passphrase (insecure)</property>
 				  <property name="use_underline">True</property>
@@ -3023,7 +3023,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="save_position_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If checked, Gajim will remember the main window position after you quit</property>
+		  <property name="tooltip" translatable="yes">If checked, Gajim will remember the main window position next time you run it</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Save roster _position</property>
 		  <property name="use_underline">True</property>
@@ -3044,7 +3044,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="merge_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If you have 2 or more accounts and it is checked, Gajim will list all contacts as if you had one account</property>
+		  <property name="tooltip" translatable="yes">If you have 2 or more accounts and this is checked, Gajim will list all contacts as if you had one account</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Merge accounts</property>
 		  <property name="use_underline">True</property>
@@ -4887,7 +4887,7 @@
 		    <widget class="GtkCheckButton" id="auto_xa_checkbutton">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Auto e_Xtended Away after:</property>
+		      <property name="label" translatable="yes">Auto _Not Available after:</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
