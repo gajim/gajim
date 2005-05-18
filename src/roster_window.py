@@ -691,10 +691,11 @@ class Roster_window:
 			if event.button == 3: # Right click
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
-																					int(event.y))
+						int(event.y))
 				except TypeError:
 					self.tree.get_selection().unselect_all()
 					return
+				self.tree.get_selection().select_path(path)
 				model = self.tree.get_model()
 				iter = model.get_iter(path)
 				type = model.get_value(iter, 2)
@@ -706,12 +707,11 @@ class Roster_window:
 					self.mk_menu_user(event, iter)
 				elif type == 'account':
 					self.mk_menu_account(event, iter)
-				#return True
-				return False
+				return True
 			if event.button == 1: # Left click
 				try:
 					path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
-																					int(event.y))
+						nt(event.y))
 				except TypeError:
 					self.tree.get_selection().unselect_all()
 					return False
@@ -724,7 +724,6 @@ class Roster_window:
 							self.tree.collapse_row(path)
 						else:
 							self.tree.expand_row(path, False)
-		return False
 
 	def on_req_usub(self, widget, user, account):
 		'''Remove a user'''
@@ -1496,7 +1495,7 @@ class Roster_window:
 		render_text.connect('editing-canceled', self.on_editing_canceled)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'text', 1)
-		col.add_attribute(render_text, 'editable', 5) #5th column?? I don't understand :(
+		col.add_attribute(render_text, 'editable', 5)
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
 		self.tree.append_column(col)
 		
@@ -1517,7 +1516,7 @@ class Roster_window:
 		self.tree.connect('drag_data_received', self.drag_data_received_data)
 		self.xml.signal_autoconnect(self)
 		self.id_signal_cb = self.status_combobox.connect('changed',
-														self.on_status_combobox_changed)
+			self.on_status_combobox_changed)
 
 		self.hidden_rows = gajim.config.get('hidden_rows').split('\t')
 		self.draw_roster()
