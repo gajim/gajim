@@ -81,8 +81,8 @@ class Edit_groups_dialog:
 		self.changes_made = True
 		model = self.list.get_model()
 		if model[path][1] and len(self.user.groups) == 1: # we try to remove 
-																		  # the latest group
-			Error_dialog(_('There must be at least one group for each contact'))
+																		  # the last group
+			Error_dialog(_('A contact must belong at least to one group'))
 			return
 		model[path][1] = not model[path][1]
 		if model[path][1]:
@@ -360,7 +360,7 @@ class About_dialog:
 	'''Class for about dialog'''
 	def __init__(self):
 		if gtk.pygtk_version < (2, 6, 0):
-			Information_dialog(_('Gajim - A GTK jabber client'))
+			Information_dialog(_('Gajim - a GTK+ Jabber client'))
 			return
 
 		dlg = gtk.AboutDialog()
