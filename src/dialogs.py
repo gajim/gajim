@@ -451,7 +451,7 @@ class Subscription_request_window:
 		self.plugin = plugin
 		self.jid = jid
 		self.account = account
-		xml.get_widget('from_label').set_text(\
+		xml.get_widget('from_label').set_text(
 			_('Subscription request from %s') % self.jid)
 		xml.get_widget('message_textview').get_buffer().set_text(text)
 		xml.signal_autoconnect(self)
@@ -466,6 +466,22 @@ class Subscription_request_window:
 		self.window.destroy()
 		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
 			Add_new_contact_window(self.plugin, self.account, self.jid)
+
+	def on_contact_info_button_clicked(self, widget):
+		'''ask vcard'''
+		if self.plugin.windows[self.account]['infos'].has_key(self.jid):
+			self.plugin.windows[self.account]['infos'][self.jid].window.present()
+		else:
+			self.plugin.windows[self.account]['infos'][self.jid] = \
+				Vcard_window(self.jid, self.plugin, self.account, True)
+			#remove the publish / retrieve buttons
+			vcard_xml = self.plugin.windows[self.account]['infos'][self.jid].xml
+			hbuttonbox = vcard_xml.get_widget('information_hbuttonbox')
+			children = hbuttonbox.get_children()
+			hbuttonbox.remove(children[0])
+			hbuttonbox.remove(children[1])
+			vcard_xml.get_widget('nickname_label').set_text(self.jid)
+			gajim.connections[self.account].request_vcard(self.jid)
 	
 	def on_deny_button_clicked(self, widget):
 		'''refuse the request'''
