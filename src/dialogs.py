@@ -43,9 +43,9 @@ class Edit_groups_dialog:
 		self.user = user
 		self.changes_made = False
 		self.list = self.xml.get_widget('groups_treeview')
-		self.xml.get_widget('nickname_label').set_markup(\
-			_('Contact\'s name: <i>%s</i>') % user.name)
-		self.xml.get_widget('jid_label').set_markup(\
+		self.xml.get_widget('nickname_label').set_markup(
+			_("Contact's name: <i>%s</i>") % user.name)
+		self.xml.get_widget('jid_label').set_markup(
 			_('JID: <i>%s</i>') % user.jid)
 		self.xml.signal_autoconnect(self)
 		self.dialog.show_all()
@@ -55,7 +55,7 @@ class Edit_groups_dialog:
 		self.dialog.run()
 		self.dialog.destroy()
 		if self.changes_made:
-			gajim.connections[self.account].update_user(self.user.jid, \
+			gajim.connections[self.account].update_user(self.user.jid,
 				self.user.name, self.user.groups)
 
 	def update_user(self):
@@ -167,10 +167,10 @@ class choose_gpg_key_dialog:
 		self.keys_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
-		self.keys_treeview.insert_column_with_attributes(-1, _('KeyID'), \
+		self.keys_treeview.insert_column_with_attributes(-1, _('KeyID'),
 			renderer, text = 0)
 		renderer = gtk.CellRendererText()
-		self.keys_treeview.insert_column_with_attributes(-1, _('User name'), \
+		self.keys_treeview.insert_column_with_attributes(-1, _('User name'),
 			renderer, text = 1)
 		self.fill_tree(secret_keys)
 
@@ -199,7 +199,7 @@ class Change_status_message_dialog:
 		self.window.show_all()
 
 	def run(self):
-		'''Wait for OK button to be pressed and return away messsage'''
+		'''Wait for OK button to be pressed and return status messsage'''
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
@@ -302,14 +302,14 @@ class Add_new_contact_window:
 		if not jid:
 			return
 		if jid.find('@') < 0:
-			Error_dialog(_('The contact\'s name must be something like login@hostname'))
+			Error_dialog(_("The contact's name must be something like login@hostname"))
 			return
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
 		message = message_buffer.get_text(start_iter, end_iter, 0)
 		group = self.group_comboboxentry.child.get_text()
-		self.plugin.roster.req_sub(self, jid, message, self.account, group,\
+		self.plugin.roster.req_sub(self, jid, message, self.account, group,
 			nickname)
 		if self.xml.get_widget('auto_authorize_checkbutton').get_active():
 			gajim.connections[self.account].send_authorization(jid)
@@ -391,8 +391,8 @@ class Confirmation_dialog:
 		return response
 
 	def __init__(self, label):
-		self.dialog = gtk.MessageDialog(None,\
-			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
+		self.dialog = gtk.MessageDialog(None,
+			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, label)
 
 class Warning_dialog:
@@ -401,8 +401,8 @@ class Warning_dialog:
 		dialog.destroy()
 
 	def __init__(self, label):
-		dialog = gtk.MessageDialog(None,\
-			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
+		dialog = gtk.MessageDialog(None,
+			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 			gtk.MESSAGE_WARNING, gtk.BUTTONS_CLOSE, label)
 		dialog.connect('response', self.on_response)
 		dialog.show()
@@ -413,8 +413,8 @@ class Information_dialog:
 		dialog.destroy()
 
 	def __init__(self, label):
-		dialog = gtk.MessageDialog(None,\
-			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
+		dialog = gtk.MessageDialog(None,
+			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 			gtk.MESSAGE_INFO, gtk.BUTTONS_CLOSE, label)
 		dialog.connect('response', self.on_response)
 		dialog.show()
@@ -438,8 +438,8 @@ class Error_dialog:
 		dialog.destroy()
 
 	def __init__(self, label):
-		dialog = gtk.MessageDialog(None,\
-			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,\
+		dialog = gtk.MessageDialog(None,
+			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 			gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE, label)
 		dialog.connect('response', self.on_response)
 		dialog.show()
@@ -601,7 +601,7 @@ class New_message_dialog:
 		if self.plugin.roster.contacts[self.account].has_key(jid):
 			user = self.plugin.roster.contacts[self.account][jid][0]
 		else:
-			user = User(jid, jid, ['not in the roster'], \
+			user = User(jid, jid, ['not in the roster'],
 				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
 			self.plugin.roster.contacts[self.account][jid] = [user]
 			self.plugin.roster.add_user_to_roster(user.jid, self.account)			
@@ -684,7 +684,7 @@ class Popup_notification_window:
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
 		self.plugin.roster.popups_notification_height += self.window_height
-		self.window.move(gtk.gdk.screen_width() - window_width, \
+		self.window.move(gtk.gdk.screen_width() - window_width,
 					gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
 		
 		xml.signal_autoconnect(self)
@@ -711,7 +711,7 @@ class Popup_notification_window:
 		for window_instance in self.plugin.roster.popup_notification_windows:
 			window_width, window_height = window_instance.window.get_size()
 			self.plugin.roster.popups_notification_height += window_height
-			window_instance.window.move(gtk.gdk.screen_width() - window_width, \
+			window_instance.window.move(gtk.gdk.screen_width() - window_width,
 					gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
 
 	def on_popup_notification_window_button_press_event(self, widget, event):
@@ -720,7 +720,7 @@ class Popup_notification_window:
 		if self.plugin.roster.contacts[self.account].has_key(self.jid):
 			user = self.plugin.roster.contacts[self.account][self.jid][0]
 		else:
-			user = User(self.jid, self.jid, ['not in the roster'], \
+			user = User(self.jid, self.jid, ['not in the roster'],
 				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
 			self.plugin.roster.contacts[self.account][self.jid] = [user]
 			self.plugin.roster.add_user_to_roster(user.self.jid, self.account)			
