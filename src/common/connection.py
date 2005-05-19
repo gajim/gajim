@@ -610,7 +610,7 @@ class Connection:
 				signed = ''
 				if self.connected < 2:
 					self.dispatch('BAD_PASSPHRASE', ())
-		if (show != 'offline') and (self.connected == 0):
+		if show != 'offline' and not self.connected:
 			self.connection = self.connect()
 			if self.connected == 2:
 				self.connected = STATUS_LIST.index(show)
@@ -631,7 +631,7 @@ class Connection:
 				iq.setTag(common.xmpp.NS_VCARD + ' vCard')
 				self.connection.send(iq)
 				self.myVCardID.append(iq.getID())
-		elif (show == 'offline') and self.connected:
+		elif show == 'offline' and self.connected:
 			self.connected = 0
 			if self.connection:
 				self.connection.send(common.xmpp.Presence(typ = 'unavailable',
