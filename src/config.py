@@ -324,8 +324,6 @@ class Preferences_window:
 			self.links_frame.set_no_show_all(True)
 		else:
 			self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
-			self.links_open_with_combobox.hide()
-			self.links_open_with_combobox.set_no_show_all(True)
 			if gajim.config.get('openwith') == 'gnome-open':
 				self.links_open_with_combobox.set_active(0)
 			elif gajim.config.get('openwith') == 'kfmclient exec':
