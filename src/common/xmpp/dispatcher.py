@@ -109,10 +109,7 @@ class Dispatcher(PlugIn):
             Returns:
             1) length of processed data if some data were processed;
             2) '0' string if no data were processed but link is alive;
-            3) 0 (zero) if underlying connection is closed.
-            Take note that in case of disconnection detect during Process() call
-            disconnect handlers are called automatically.
-        """
+            3) 0 (zero) if underlying connection is closed."""
         if (time.time() > self._lastIncome + 60) and not self._natSent: #1 min
             iq = Iq('get', NS_LAST, to=self._owner.Server)
             self.send(iq)
@@ -121,13 +118,11 @@ class Dispatcher(PlugIn):
             self._owner.disconnected()
         for handler in self._cycleHandlers: handler(self)
         if self._owner.Connection.pending_data(timeout):
-            try: data=self._owner.Connection.receive()
-            except IOError: return
+            data=self._owner.Connection.receive()
             self.Stream.Parse(data)
-            if data:
-                self._lastIncome = time.time()
-                self._natSent = False
-                return len(data)
+            self._lastIncome = time.time()
+            self._natSent = False
+            return len(data)
         return '0'      # It means that nothing is received but link is alive.
         
     def RegisterNamespace(self,xmlns,order='info'):
