@@ -71,8 +71,8 @@ if os.name == 'nt':
 		# Documents and Settings\[User Name]\Application Data\Gajim\logs
 		config_filename = os.environ['appdata'] + '/Gajim/config'
 	except KeyError:
-		# win9x, so use ~/Gajim/logs which is WINDOWS\Application Data\Gajim\logs
-		config_filename = os.path.expanduser('~/Gajim/config')
+		# win9x so ./config
+		config_filename = 'config'
 	if do_move:
 		os.renames(old_path, config_filename)
 

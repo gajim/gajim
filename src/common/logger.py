@@ -30,8 +30,8 @@ if os.name == 'nt':
 		# Documents and Settings\[User Name]\Application Data\Gajim\logs
 		LOGPATH = os.environ['appdata'] + '/Gajim/logs'
 	except KeyError:
-		# win9x, so use ~/Gajim/logs which is WINDOWS\Application Data\Gajim\logs
-		LOGPATH = os.path.expanduser('~/Gajim/logs')
+		# win9x, ./logs
+		LOGPATH = 'logs'
 
 class Logger:
 	def __init__(self):
