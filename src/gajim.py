@@ -63,18 +63,12 @@ for o, a in opts:
 
 config_filename = os.path.expanduser('~/.gajim/config')
 if os.name == 'nt':
-	do_move = False
-	if os.path.isfile(config_filename):
-		do_move = True
-		old_path = config_filename
 	try:
 		# Documents and Settings\[User Name]\Application Data\Gajim\logs
 		config_filename = os.environ['appdata'] + '/Gajim/config'
 	except KeyError:
 		# win9x so ./config
 		config_filename = 'config'
-	if do_move:
-		os.renames(old_path, config_filename)
 
 if profile:
        config_filename += '.%s' % profile
