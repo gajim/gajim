@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-18 15:56+0200\n"
+"POT-Creation-Date: 2005-05-20 22:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,210 +56,221 @@ msgstr ""
 msgid "Sound"
 msgstr ""
 
-#: src/config.py:877
+#: src/config.py:875
 msgid "Choose Sound"
 msgstr ""
 
-#: src/config.py:884
+#: src/config.py:882
 msgid "All files"
 msgstr ""
 
-#: src/config.py:889
+#: src/config.py:887
 msgid "Wav Sounds"
 msgstr ""
 
-#: src/config.py:1054
+#: src/config.py:1052
 msgid "You must be offline to change the account's name"
 msgstr ""
 
-#: src/config.py:1057
+#: src/config.py:1055
 msgid "You must enter a name for this account"
 msgstr ""
 
-#: src/config.py:1060
+#: src/config.py:1058
 msgid "Spaces are not permited in account name"
 msgstr ""
 
-#: src/config.py:1064
+#: src/config.py:1062
 msgid ""
 "You must enter a Jabber ID for this account\n"
 "For example: someone@someserver.org"
 msgstr ""
 
-#: src/config.py:1071
+#: src/config.py:1069
 msgid "You must enter a password to register a new account"
 msgstr ""
 
-#: src/config.py:1102
+#: src/config.py:1100
 msgid "Proxy port must be a port number"
 msgstr ""
 
-#: src/config.py:1107
+#: src/config.py:1105
 msgid "You must enter a proxy port to use proxy"
 msgstr ""
 
-#: src/config.py:1110
+#: src/config.py:1108
 msgid "You must enter a proxy host to use proxy"
 msgstr ""
 
-#: src/config.py:1182
+#: src/config.py:1180
 msgid "This name is taken by an another account of yours"
 msgstr ""
 
-#: src/config.py:1234
+#: src/config.py:1232
 msgid ""
 "You must first create your account before editing your personal information"
 msgstr ""
 
-#: src/config.py:1238
+#: src/config.py:1236
 msgid "You must be connected to edit your personal  information"
 msgstr ""
 
-#: src/config.py:1249 src/gajim.py:404
+#: src/config.py:1246 src/gajim.py:413
 #, python-format
 msgid "error contacting %s"
 msgstr ""
 
-#: src/config.py:1260 src/msg.c:45
+#: src/config.py:1257 src/msg.c:45
 msgid "No key selected"
 msgstr ""
 
-#: src/config.py:1370 src/config.py:1634
+#: src/config.py:1367 src/config.py:1629
 msgid "Name"
 msgstr ""
 
-#: src/config.py:1373
+#: src/config.py:1370
 msgid "Server"
 msgstr ""
 
-#: src/config.py:1426
+#: src/config.py:1422
 #, python-format
 msgid "Register to %s"
 msgstr ""
 
-#: src/config.py:1445
+#: src/config.py:1441
 msgid "Text"
 msgstr ""
 
-#: src/config.py:1453
+#: src/config.py:1449
 msgid "Image"
 msgstr ""
 
-#: src/config.py:1615
+#: src/config.py:1610
 msgid "You must be connected to browse services"
 msgstr ""
 
-#: src/config.py:1639
+#: src/config.py:1634
 msgid "Service"
 msgstr ""
 
-#: src/config.py:1644
+#: src/config.py:1639
 msgid "Node"
 msgstr ""
 
-#: src/config.py:2020
+#: src/config.py:2014
 #, python-format
 msgid "Removing %s account"
 msgstr ""
 
-#: src/dialogs.py:47
+#: src/config.py:2020
+#, python-format
+msgid ""
+"You're currently connected with %s.\n"
+"Are you sure you want to remove this account?"
+msgstr ""
+
+#: src/dialogs.py:50
 #, python-format
 msgid "Contact's name: <i>%s</i>"
 msgstr ""
 
-#: src/dialogs.py:49
+#: src/dialogs.py:52
 #, python-format
 msgid "JID: <i>%s</i>"
 msgstr ""
 
-#: src/dialogs.py:85
+#: src/dialogs.py:88
 msgid "A contact must belong at least to one group"
 msgstr ""
 
-#: src/dialogs.py:104
+#: src/dialogs.py:107
 msgid "Group"
 msgstr ""
 
-#: src/dialogs.py:110
+#: src/dialogs.py:113
 msgid "In the group"
 msgstr ""
 
-#: src/dialogs.py:170
+#: src/dialogs.py:173
 msgid "KeyID"
 msgstr ""
 
-#: src/dialogs.py:173
+#: src/dialogs.py:176
 msgid "User name"
 msgstr ""
 
-#: src/dialogs.py:232
+#: src/dialogs.py:235
 msgid "You must be connected to add a contact"
 msgstr ""
 
-#: src/dialogs.py:305
+#: src/dialogs.py:308
 msgid "The contact's name must be something like login@hostname"
 msgstr ""
 
-#: src/dialogs.py:363
+#: src/dialogs.py:366
 msgid "Gajim - a GTK+ Jabber client"
 msgstr ""
 
-#: src/dialogs.py:374
+#: src/dialogs.py:377
 msgid "A GTK jabber client"
 msgstr ""
 
-#: src/dialogs.py:381
+#: src/dialogs.py:384
 msgid "translator_credits"
 msgstr ""
 
-#: src/dialogs.py:455
+#: src/dialogs.py:458
 #, python-format
 msgid "Subscription request from %s"
 msgstr ""
 
-#: src/dialogs.py:496
+#: src/dialogs.py:499
 msgid "You must be connected to join a groupchat"
 msgstr ""
 
-#: src/dialogs.py:569
+#: src/dialogs.py:557
+msgid "You are already in room "
+msgstr ""
+
+#: src/dialogs.py:575
 msgid "You must be connected to send a message to a contact"
 msgstr ""
 
-#: src/dialogs.py:596
+#: src/dialogs.py:602
 msgid "User ID is not valid"
 msgstr ""
 
-#: src/dialogs.py:617
+#: src/dialogs.py:623
 msgid "You must be connected to change your password"
 msgstr ""
 
-#: src/dialogs.py:636
+#: src/dialogs.py:642
 msgid "Your password cannot be empty"
 msgstr ""
 
-#: src/dialogs.py:640
+#: src/dialogs.py:646
 msgid "Confirmation password is not the same"
 msgstr ""
 
-#: src/gajim.py:99
+#: src/gajim.py:108
 msgid "bad arguments"
 msgstr ""
 
-#: src/gajim.py:358
+#: src/gajim.py:367
 msgid "error while sending"
 msgstr ""
 
-#: src/gajim.py:388
+#: src/gajim.py:397
 #, python-format
 msgid "You are now authorized by %s"
 msgstr ""
 
-#: src/gajim.py:391
+#: src/gajim.py:400
 #, python-format
 msgid "You are now unsubscribed by %s"
 msgstr ""
 
-#: src/gajim.py:494
+#: src/gajim.py:503
 msgid "Your GPG passphrase is wrong, so you are connected without your GPG key"
 msgstr ""
 
@@ -342,196 +353,196 @@ msgstr ""
 msgid "Status is now: "
 msgstr ""
 
-#: src/roster_window.py:291
+#: src/roster_window.py:292
 msgid "to "
 msgstr ""
 
-#: src/roster_window.py:291 src/roster_window.py:301
+#: src/roster_window.py:292 src/roster_window.py:302
 msgid " account"
 msgstr ""
 
-#: src/roster_window.py:301
+#: src/roster_window.py:302
 msgid "using "
 msgstr ""
 
-#: src/roster_window.py:311 src/roster_window.py:321 src/systray.py:138
-#: src/systray.py:143
+#: src/roster_window.py:312 src/roster_window.py:322 src/systray.py:139
+#: src/systray.py:144
 msgid "as "
 msgstr ""
 
-#: src/roster_window.py:423
+#: src/roster_window.py:425
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr ""
 
-#: src/roster_window.py:440
+#: src/roster_window.py:442
 #, python-format
 msgid "Are you sure you want to remove the agent %s from your roster?"
 msgstr ""
 
-#: src/roster_window.py:473
+#: src/roster_window.py:475
 msgid "Start chat"
 msgstr ""
 
-#: src/roster_window.py:476 src/roster_window.py:527
+#: src/roster_window.py:478 src/roster_window.py:529
 msgid "Rename"
 msgstr ""
 
-#: src/roster_window.py:480 src/msg.c:229
+#: src/roster_window.py:482 src/msg.c:229
 msgid "Edit Groups"
 msgstr ""
 
-#: src/roster_window.py:485
+#: src/roster_window.py:487
 msgid "Subscription"
 msgstr ""
 
-#: src/roster_window.py:490
+#: src/roster_window.py:492
 msgid "Resend Authorization to"
 msgstr ""
 
-#: src/roster_window.py:493
+#: src/roster_window.py:495
 msgid "Rerequest Authorization from"
 msgstr ""
 
-#: src/roster_window.py:496
+#: src/roster_window.py:498
 msgid "I would like to add you to my roster"
 msgstr ""
 
-#: src/roster_window.py:500
+#: src/roster_window.py:502
 msgid "Add to Roster"
 msgstr ""
 
-#: src/roster_window.py:504 src/roster_window.py:559
+#: src/roster_window.py:506 src/roster_window.py:561
 msgid "Remove"
 msgstr ""
 
-#: src/roster_window.py:510
+#: src/roster_window.py:512
 msgid "Information"
 msgstr ""
 
-#: src/roster_window.py:513
+#: src/roster_window.py:515
 msgid "History"
 msgstr ""
 
-#: src/roster_window.py:542
+#: src/roster_window.py:544
 msgid "Log on"
 msgstr ""
 
-#: src/roster_window.py:549
+#: src/roster_window.py:551
 msgid "Log off"
 msgstr ""
 
-#: src/roster_window.py:580 src/msg.c:150 src/msg.c:236
+#: src/roster_window.py:582 src/msg.c:150 src/msg.c:236
 msgid "Status"
 msgstr ""
 
-#: src/roster_window.py:585 src/msg.c:237
+#: src/roster_window.py:587 src/msg.c:237
 msgid "Online"
 msgstr ""
 
-#: src/roster_window.py:588
+#: src/roster_window.py:590
 msgid "Free for chat"
 msgstr ""
 
-#: src/roster_window.py:591 src/msg.c:239
+#: src/roster_window.py:593 src/msg.c:239
 msgid "Away"
 msgstr ""
 
-#: src/roster_window.py:594 src/msg.c:240
+#: src/roster_window.py:596 src/msg.c:240
 msgid "Not Available"
 msgstr ""
 
-#: src/roster_window.py:597 src/msg.c:241
+#: src/roster_window.py:599 src/msg.c:241
 msgid "Busy"
 msgstr ""
 
-#: src/roster_window.py:600 src/msg.c:242
+#: src/roster_window.py:602 src/msg.c:242
 msgid "Invisible"
 msgstr ""
 
-#: src/roster_window.py:605 src/msg.c:243
+#: src/roster_window.py:607 src/msg.c:243
 msgid "Offline"
 msgstr ""
 
-#: src/roster_window.py:612
+#: src/roster_window.py:614
 msgid "_Edit Account"
 msgstr ""
 
-#: src/roster_window.py:615 src/msg.c:12
+#: src/roster_window.py:617 src/msg.c:12
 msgid "_Service Discovery"
 msgstr ""
 
-#: src/roster_window.py:618
+#: src/roster_window.py:620
 msgid "_Add Contact"
 msgstr ""
 
-#: src/roster_window.py:621
+#: src/roster_window.py:623
 msgid "Join _Groupchat"
 msgstr ""
 
-#: src/roster_window.py:624 src/msg.c:9
+#: src/roster_window.py:626 src/msg.c:9
 msgid "_New Message"
 msgstr ""
 
-#: src/roster_window.py:730
+#: src/roster_window.py:732
 #, python-format
 msgid "Are you sure you want to remove %s (%s) from your roster?"
 msgstr ""
 
-#: src/roster_window.py:751
+#: src/roster_window.py:753
 #, python-format
 msgid "Enter your password for account %s"
 msgstr ""
 
-#: src/roster_window.py:779
+#: src/roster_window.py:781
 #, python-format
 msgid "Enter GPG key passphrase for account %s"
 msgstr ""
 
-#: src/roster_window.py:823
+#: src/roster_window.py:825
 msgid "You must create an account before connecting to jabber network."
 msgstr ""
 
-#: src/roster_window.py:1065
+#: src/roster_window.py:1067
 msgid ""
 "You have unread messages.\n"
 "Are you sure you want to quit Gajim?"
 msgstr ""
 
-#: src/roster_window.py:1070
+#: src/roster_window.py:1072
 msgid ""
 "You received a message in the last two seconds.\n"
 "Are you sure you want to quit Gajim?"
 msgstr ""
 
-#: src/systray.py:72 src/systray.py:92
+#: src/systray.py:73 src/systray.py:93
 #, python-format
 msgid "Gajim - %s unread messages"
 msgstr ""
 
-#: src/systray.py:74 src/systray.py:94
+#: src/systray.py:75 src/systray.py:95
 msgid "Gajim - 1 unread message"
 msgstr ""
 
-#: src/systray.py:192
+#: src/systray.py:193
 msgid "All contacts in this group are offline or have errors"
 msgstr ""
 
-#: src/tabbed_chat_window.py:116
+#: src/tabbed_chat_window.py:117
 #, python-format
 msgid ""
 "You received a message from %s in the last two seconds.\n"
 "Do you still want to close this window?"
 msgstr ""
 
-#: src/tabbed_chat_window.py:147
+#: src/tabbed_chat_window.py:148
 #, python-format
 msgid ""
 "You received a message from %s in the last two seconds.\n"
 "Do you still want to close this tab?"
 msgstr ""
 
-#: src/tabbed_chat_window.py:173
+#: src/tabbed_chat_window.py:175
 #, python-format
 msgid "%s is %s (%s)"
 msgstr ""
@@ -540,37 +551,37 @@ msgstr ""
 msgid "You are not connected, so you cannot send a message"
 msgstr ""
 
-#: src/vcard.py:182
+#: src/vcard.py:184
 msgid "You must be connected to publish your contact information"
 msgstr ""
 
-#: src/vcard.py:204
+#: src/vcard.py:206
 msgid "You must be connected to get your contact information"
 msgstr ""
 
-#: src/common/connection.py:248 src/common/connection.py:673
+#: src/common/connection.py:254 src/common/connection.py:685
 msgid "I would like to add you to my roster."
 msgstr ""
 
-#: src/common/connection.py:525 src/common/connection.py:559
+#: src/common/connection.py:533 src/common/connection.py:567
 #, python-format
 msgid "Couldn't connect to %s"
 msgstr ""
 
-#: src/common/connection.py:569
+#: src/common/connection.py:577
 #, python-format
 msgid "Authentification failed with %s, check your login and password"
 msgstr ""
 
-#: src/common/connection.py:659
+#: src/common/connection.py:671
 msgid "[this message is encrypted]"
 msgstr ""
 
-#: src/common/connection.py:769
+#: src/common/connection.py:781
 msgid "Couldn't connect to "
 msgstr ""
 
-#: src/common/connection.py:777
+#: src/common/connection.py:789
 msgid "Error: "
 msgstr ""
 
