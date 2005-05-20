@@ -1,11 +1,11 @@
-##	plugins/groupchat_window.py
+## plugins/groupchat_window.py
 ##
 ## Gajim Team:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Vincent Hanquez <tab@snarc.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
+## - Yann Le Boulanger <asterix@lagaule.org>
+## - Vincent Hanquez <tab@snarc.org>
+## - Nikos Kouremenos <kourem@gmail.com>
 ##
-##	Copyright (C) 2003-2005 Gajim Team
+## Copyright (C) 2003-2005 Gajim Team
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -283,7 +283,7 @@ class Groupchat_window(chat.Chat):
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
 		if enter is pressed without the shit key, message (if not empty) is sent
-		and printed in the conversation. Tab does autocompete in nickames"""
+		and printed in the conversation. Tab does autocomplete in nickames"""
 		room_jid = self.get_active_jid()
 		conversation_textview = self.xmls[room_jid].get_widget(
 			'conversation_textview')
@@ -300,10 +300,10 @@ class Groupchat_window(chat.Chat):
 				cursor_position = message_buffer.get_insert()
 				end_iter = message_buffer.get_iter_at_mark(cursor_position)
 				text = message_buffer.get_text(start_iter, end_iter, 0)
-				if not text:
+				if not text or text.endswith(' '):
 					return False
 				splitted_text = text.split()
-				begin = splitted_text[-1] # begining of the latest word we typed
+				begin = splitted_text[-1] # last word we typed
 				for nick in list_nick:
 					if nick.find(begin) == 0: # the word is the begining of a nick
 						if len(splitted_text) == 1: # This is the 1st word of the line
