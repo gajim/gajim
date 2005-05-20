@@ -27,9 +27,12 @@ STATE_AWAKE    = "awake"
 
 SUPPORTED = 1
 try:
-	import common.idle
+	import common.idle as idle # when we launch gajim from sources
 except:
-	SUPPORTED = 0
+	try:
+		import idle # when Gajim is installed
+	except:
+		SUPPORTED = 0
 
 class Sleepy:
 
@@ -39,7 +42,7 @@ class Sleepy:
 		self.interval2 = interval2
 		self.state         = STATE_AWAKE ## assume were awake to stake with
 		try:
-			common.idle.init()
+			idle.init()
 		except:
 			SUPPORTED = 0
 			self.state = STATE_UNKNOWN
@@ -47,7 +50,7 @@ class Sleepy:
 	def poll(self):
 		if not SUPPORTED: return 0
 
-		idleTime = common.idle.getIdleSec()
+		idleTime = idle.getIdleSec()
 		if idleTime > self.interval2:
 			self.state = STATE_XAWAY
 		elif idleTime > self.interval1:
