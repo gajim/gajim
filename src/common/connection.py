@@ -173,11 +173,13 @@ class Connection:
 
 	def _messageCB(self, con, msg):
 		"""Called when we recieve a message"""
+		msgtxt = msg.getBody()
+		if not msgtxt: # empty message
+			return
 		mtype = msg.getType()
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
-		msgtxt = msg.getBody()
 		xtags = msg.getTags('x')
 		encTag = None
 		decmsg = ''
