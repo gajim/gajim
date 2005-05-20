@@ -245,7 +245,7 @@ class Preferences_window:
 			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
 
 		#sound player
-		self.xml.get_widget('soundplayer_entry').set_text(\
+		self.xml.get_widget('soundplayer_entry').set_text(
 			gajim.config.get('soundplayer'))
 
 		#sounds treeview
@@ -331,9 +331,9 @@ class Preferences_window:
 			elif gajim.config.get('openwith') == 'custom':
 				self.links_open_with_combobox.set_active(2)
 				self.xml.get_widget('custom_apps_frame').set_sensitive(True)
-			self.xml.get_widget('custom_browser_entry').set_text(\
+			self.xml.get_widget('custom_browser_entry').set_text(
 				gajim.config.get('custombrowser'))
-			self.xml.get_widget('custom_mail_client_entry').set_text(\
+			self.xml.get_widget('custom_mail_client_entry').set_text(
 				gajim.config.get('custommailapp'))
 				
 		#log presences in user file
@@ -407,7 +407,7 @@ class Preferences_window:
 		self.plugin.roster.draw_roster()
 	
 	def on_use_emoticons_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'useemoticons', \
+		self.on_checkbutton_toggled(widget, 'useemoticons', 
 			[self.xml.get_widget('add_remove_emoticons_button')])
 	
 	def on_add_remove_emoticons_button_clicked(self, widget):
@@ -1237,8 +1237,7 @@ class Account_modification_window:
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
 			self.plugin.windows[self.account]['infos'][jid] = \
-				dialogs.Vcard_window(jid, self.plugin,
-						self.account, True)
+				dialogs.Vcard_window(jid, self.plugin,	self.account, True)
 			gajim.connections[self.account].request_vcard(jid)
 	
 	def on_gpg_choose_button_clicked(self, widget, data = None):
@@ -1378,7 +1377,6 @@ class Service_registration_window:
 	'''Class for Service registration window:
 	Window that appears when we want to subscribe to a service'''
 	def on_cancel_button_clicked(self, widget):
-		'''When Cancel button is clicked'''
 		self.window.destroy()
 		
 	def draw_table(self):
@@ -1402,7 +1400,7 @@ class Service_registration_window:
 		table.show_all()
 	
 	def on_ok_button_clicked(self, widget):
-		'''When Ok button is clicked :
+		'''When Ok button is clicked:
 		send registration info to the core'''
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
@@ -1455,9 +1453,9 @@ class Add_remove_emoticons_window:
 		col.add_attribute(renderer, 'image', 2)
 		
 		self.fill_emot_treeview()
-		self.emot_tree.get_model().connect('row-changed', \
+		self.emot_tree.get_model().connect('row-changed', 
 				self.on_emoticons_treemodel_row_changed)
-		self.emot_tree.get_model().connect('row-deleted', \
+		self.emot_tree.get_model().connect('row-deleted', 
 				self.on_emoticons_treemodel_row_deleted)
 
 		self.plugin = plugin
@@ -1599,7 +1597,6 @@ class Service_discovery_window:
 	'''Class for Service Discovery Window:
 	to know the services on a server'''
 	def on_service_discovery_window_destroy(self, widget):
-		'''close window'''
 		del self.plugin.windows[self.account]['disco']
 
 	def on_close_button_clicked(self, widget):
@@ -1674,7 +1671,7 @@ class Service_discovery_window:
 		gajim.connections[self.account].request_agents(jid, node)
 	
 	def agents(self, agents):
-		'''When list of available agent arrive :
+		'''When list of available agent arrive:
 		Fill the treeview with it'''
 		model = self.services_treeview.get_model()
 		for agent in agents:
@@ -1823,7 +1820,7 @@ class Service_discovery_window:
 			self.plugin.windows[self.account]['join_gc'].window.present()
 
 	def on_register_button_clicked(self, widget):
-		'''When we want to register an agent :
+		'''When we want to register an agent:
 		Ask specific informations about the selected agent and close the window'''
 		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter :
@@ -1864,7 +1861,7 @@ class Service_discovery_window:
 		self.address_comboboxentry.get_model().clear()
 		for j in self.latest_addresses:
 			self.address_comboboxentry.append_text(j)
-		gajim.config.set('latest_disco_addresses', \
+		gajim.config.set('latest_disco_addresses',
 			' '.join(self.latest_addresses))
 		self.services_treeview.get_model().clear()
 		self.browse(server_address)
@@ -1912,7 +1909,7 @@ class Groupchat_config_window:
 		if self.config.has_key('title'):
 			self.window.set_title(self.config['title'])
 		if self.config.has_key('instructions'):
-			self.xml.get_widget('instructions_label').set_text(\
+			self.xml.get_widget('instructions_label').set_text(
 				self.config['instructions'])
 		i = 0
 		while self.config.has_key(i):
@@ -1928,8 +1925,8 @@ class Groupchat_config_window:
 			if self.config[i].has_key('label'):
 				label = gtk.Label(self.config[i]['label'])
 				label.set_alignment(0.0, 0.5)
-				self.config_table.attach(label, 0, 1, nbrows, nbrows + 1, gtk.FILL \
-					| gtk.SHRINK)
+				self.config_table.attach(label, 0, 1, nbrows, nbrows + 1, 
+					gtk.FILL	| gtk.SHRINK)
 			desc = None
 			if self.config[i].has_key('desc'):
 				desc = self.config[i]['desc']
@@ -2001,7 +1998,6 @@ class Remove_account_window:
 	and do removing of the account given'''
 	
 	def on_remove_account_window_destroy(self, widget):
-		'''close window'''
 		if self.plugin.windows.has_key(self.account):
 			del self.plugin.windows[self.account]['remove_account']
 
@@ -2013,14 +2009,18 @@ class Remove_account_window:
 		self.account = account
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'remove_account_window', APP)
 		self.window = xml.get_widget('remove_account_window')
-		self.remove_and_unregister_radiobutton = xml.get_widget(\
+		self.remove_and_unregister_radiobutton = xml.get_widget(
 														'remove_and_unregister_radiobutton')
 		self.window.set_title(_('Removing %s account') % self.account)
 		xml.signal_autoconnect(self)
 		self.window.show_all()
 
 	def on_remove_button_clicked(self, widget):
-		if gajim.connections[self.account].connected: #FIXME: user unfriendly??
+		if gajim.connections[self.account].connected:
+			message = _("You're currently connected with %s.\nAre you sure you want to remove this account?") % self.account
+			dialog = dialogs.Confirmation_dialog(message)
+			if dialog.get_response() != gtk.RESPONSE_YES:
+				return
 			gajim.connections[self.account].change_status('offline', 'offline')
 		
 		if self.remove_and_unregister_radiobutton.get_active():  
