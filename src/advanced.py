@@ -1,9 +1,9 @@
-##	Advanced configuration window
+##	src/advanced.py
 ##
 ## Gajim Team:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Vincent Hanquez <tab@snarc.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
+## - Yann Le Boulanger <asterix@lagaule.org>
+## - Vincent Hanquez <tab@snarc.org>
+## - Nikos Kouremenos <kourem@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -114,7 +114,8 @@ class Advanced_configuration_window:
 		col = treeview.insert_column_with_attributes(-1, _('Value'),
 			renderer_text, text = 1)
 
-		#col.set_resizable(True) seems like a GTK+ bug DO NOT REMOVE
+		#col.set_resizable(True) DO NOT REMOVE
+		# GTK+ bug http://bugzilla.gnome.org/show_bug.cgi?id=304139
 		col.set_max_width(250)
 
 		renderer_text = gtk.CellRendererText()
