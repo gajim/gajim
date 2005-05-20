@@ -23,11 +23,12 @@ import pango
 import gobject
 import time
 
-from common import gajim
 import dialogs
 import history_window
 import chat
 
+from common import gajim
+from common import helpers
 from common import i18n
 
 _ = i18n._
@@ -170,7 +171,7 @@ class Tabbed_chat_window(chat.Chat):
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
-		uf_status = self.plugin.roster.get_uf_status(user.show)
+		uf_status = helpers.get_uf_status(user.show)
 		self.print_conversation(_('%s is %s (%s)') % (user.name, 
 										uf_status, user.status), user.jid, 'status')
 

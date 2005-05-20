@@ -22,6 +22,7 @@ import gtk.glade
 import dialogs
 
 from common import gajim
+from common import helpers
 from common import i18n
 
 try:
@@ -181,7 +182,7 @@ class Systray:
 				if group in user.groups and user.show != 'offline' and \
 						user.show != 'error':
 					at_least_one = True
-					status = self.plugin.roster.get_uf_status(user.show)
+					status = helpers.get_uf_status(user.show)
 					s = user.name.replace('_', '__') + ' (' + status + ')'
 					item = gtk.MenuItem(s)
 					item.connect('activate', self.start_chat, account,\

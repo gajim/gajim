@@ -21,11 +21,14 @@ import gtk
 import gtk.glade
 import gobject
 import os
-from gajim import User
-from common import gajim
-from common import i18n
+
 from vcard import Vcard_window
 from advanced import Advanced_configuration_window
+from gajim import User
+from common import gajim
+from common import helpers
+from common import i18n
+
 _ = i18n._
 APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
@@ -180,7 +183,7 @@ class Change_status_message_dialog:
 	def __init__(self, plugin, status):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
 		self.window = self.xml.get_widget('change_status_message_dialog')
-		uf_status = plugin.roster.get_uf_status(status)
+		uf_status = helpers.get_uf_status(status)
 		self.window.set_title(uf_status + ' Status Message')
 		
 		message_textview = self.xml.get_widget('message_textview')

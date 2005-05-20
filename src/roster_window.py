@@ -35,6 +35,7 @@ import cell_renderer_image
 
 from gajim import User
 from common import gajim
+from common import helpers
 from common import i18n
 
 _ = i18n._
@@ -1399,19 +1400,6 @@ class Roster_window:
 				start = '*  '
 			self.window.set_title(start + 'Gajim')
 
-	def get_uf_status(self, status):
-		'''returns a userfriendly string for dnd/xa/chat
-		and capitalize()s the rest'''
-		if status == 'dnd':
-			uf_status = 'Busy'
-		elif status == 'xa':
-			uf_status = 'Not Available'
-		elif status == 'chat':
-			uf_status = 'Free for Chat'
-		else:
-			uf_status = status.capitalize()
-		return uf_status
-
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
 		self.window = self.xml.get_widget('roster_window')
@@ -1472,7 +1460,7 @@ class Roster_window:
 
 		for status in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
 			'offline']:
-			uf_status = self.get_uf_status(status)
+			uf_status = helpers.get_uf_status(status)
 			iter = liststore.append([uf_status, self.jabber_state_images[status], status])
 		self.status_combobox.show_all()
 		self.status_combobox.set_model(liststore)
