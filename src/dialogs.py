@@ -180,11 +180,11 @@ class choose_gpg_key_dialog:
 		self.window.show_all()
 
 class Change_status_message_dialog:
-	def __init__(self, plugin, status):
+	def __init__(self, plugin, show):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
 		self.window = self.xml.get_widget('change_status_message_dialog')
-		uf_status = helpers.get_uf_status(status)
-		self.window.set_title(uf_status + ' Status Message')
+		uf_show = helpers.get_uf_show(show)
+		self.window.set_title(uf_show + ' Status Message')
 		
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
@@ -553,6 +553,9 @@ class Join_groupchat_window:
 		server = self.xml.get_widget('server_entry').get_text()
 		password = self.xml.get_widget('password_entry').get_text()
 		jid = '%s@%s' % (room, server)
+		if jid in self.plugin.windows[self.account]['gc']:
+			Error_dialog(_('You are already in room ' + jid))
+			return
 		if jid in self.recently_groupchat:
 			self.recently_groupchat.remove(jid)
 		self.recently_groupchat.insert(0, jid)

@@ -17,15 +17,15 @@
 ## GNU General Public License for more details.
 ##
 
-def get_uf_status(self, status):
+def get_uf_show(show):
 	'''returns a userfriendly string for dnd/xa/chat
 	and capitalize()s the rest'''
-	if status == 'dnd':
-		uf_status = 'Busy'
-	elif status == 'xa':
-		uf_status = 'Not Available'
-	elif status == 'chat':
-		uf_status = 'Free for Chat'
+	if show == 'dnd':
+		uf_show = 'Busy'
+	elif show == 'xa':
+		uf_show = 'Not Available'
+	elif show == 'chat':
+		uf_show = 'Free for Chat'
 	else:
-		uf_status = status.capitalize()
-	return uf_status
+		uf_show = show.capitalize()
+	return uf_show

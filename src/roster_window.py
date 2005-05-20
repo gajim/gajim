@@ -420,7 +420,7 @@ class Roster_window:
 			name = user.name
 			if user.resource != '':
 				name += '/' + user.resource
-			uf_show = helpers.get_uf_status(show)
+			uf_show = helpers.get_uf_show(show)
 			self.plugin.windows[account]['chats'][jid].print_conversation(
 				_('%s is now %s (%s)') % (name, uf_show, status), jid, 'status')
 
@@ -1459,10 +1459,11 @@ class Roster_window:
 		self.status_combobox.pack_start(cell, True)
 		self.status_combobox.add_attribute(cell, 'text', 0)
 
-		for status in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
+		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
 			'offline']:
-			uf_status = helpers.get_uf_status(status)
-			iter = liststore.append([uf_status, self.jabber_state_images[status], status])
+			uf_show = helpers.get_uf_show(show)
+			iter = liststore.append([uf_show, self.jabber_state_images[show],
+				show])
 		self.status_combobox.show_all()
 		self.status_combobox.set_model(liststore)
 		self.status_combobox.set_active(6) # default to offline

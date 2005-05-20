@@ -182,8 +182,8 @@ class Systray:
 				if group in user.groups and user.show != 'offline' and \
 						user.show != 'error':
 					at_least_one = True
-					status = helpers.get_uf_status(user.show)
-					s = user.name.replace('_', '__') + ' (' + status + ')'
+					show = helpers.get_uf_show(user.show)
+					s = user.name.replace('_', '__') + ' (' + show + ')'
 					item = gtk.MenuItem(s)
 					item.connect('activate', self.start_chat, account,\
 							user.jid)
