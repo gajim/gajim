@@ -602,17 +602,17 @@ class Connection:
 	def change_status(self, show, msg):
 		if not show in STATUS_LIST:
 			return -1
-		if not msg:
-			msg = show
-		self.status = msg
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if keyID and USE_GPG:
+			if not msg:
+				msg = show
 			signed = self.gpg.sign(msg, keyID)
 			if signed == 'BAD_PASSPHRASE':
 				signed = ''
 				if self.connected < 2:
 					self.dispatch('BAD_PASSPHRASE', ())
+		self.status = msg
 		if show != 'offline' and not self.connected:
 			self.connection = self.connect()
 			if self.connected == 2:
@@ -622,8 +622,9 @@ class Connection:
 				if show == 'invisible':
 					ptype = 'invisible'
 				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
-				p = common.xmpp.Presence(typ = ptype, priority = prio, show =\
-					show, status=msg)
+				p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
+				if msg:
+					p.setStatus(msg)
 				if signed:
 				    p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 
@@ -637,8 +638,10 @@ class Connection:
 		elif show == 'offline' and self.connected:
 			self.connected = 0
 			if self.connection:
-				self.connection.send(common.xmpp.Presence(typ = 'unavailable',
-					status = msg))
+				p = common.xmpp.Presence(typ = 'unavailable')
+				if msg:
+					p.setStatus(msg)
+				self.connection.send(p)
 				self.connection.disconnect()
 			self.dispatch('STATUS', 'offline')
 			self.connection = None
@@ -648,9 +651,11 @@ class Connection:
 			if show == 'invisible':
 				ptype = 'invisible'
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
-			p = common.xmpp.Presence(typ = ptype, priority = prio, show = show,
-				status = msg)
-			if signed: p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+			p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
+			if msg:
+				p.setStatus(msg)
+			if signed:
+				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			self.connection.send(p)
 			self.dispatch('STATUS', show)
 
