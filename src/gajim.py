@@ -48,23 +48,38 @@ from common import optparser
 
 profile = ''
 try:
-       opts, args = getopt.getopt(sys.argv[1:], "hp:", [ "help", "profile=" ])
+       opts, args = getopt.getopt(sys.argv[1:], 'hp:', [ 'help', 'profile=' ])
 except getopt.error, msg:
        print msg
-       print "for help use --help"
+       print 'for help use --help'
        sys.exit(2)
 for o, a in opts:
-       if o in ("-h", "--help"):
-               print "gajim [--help] [--profile name]"
+       if o in ('-h', '--help'):
+               print 'gajim [--help] [--profile name]'
                sys.exit(0)
-       elif o in ("-p", "--profile"): # gajim --profile name
+       elif o in ('-p', '--profile'): # gajim --profile name
                profile = a
 
-config_name = "~/.gajim/config"
-if profile:
-       config_name += ".%s" % profile
 
-parser = optparser.OptionsParser(config_name)
+config_filename = os.path.expanduser('~/.gajim/config')
+if os.name == 'nt':
+	do_move = False
+	if os.path.isfile(config_filename):
+		do_move = True
+		old_path = config_filename
+	try:
+		# Documents and Settings\[User Name]\Application Data\Gajim\logs
+		config_filename = os.environ['appdata'] + '/Gajim/config'
+	except KeyError:
+		# win9x, so use ~/Gajim/logs which is WINDOWS\Application Data\Gajim\logs
+		config_filename = os.path.expanduser('~/Gajim/config')
+	if do_move:
+		os.renames(old_path, config_filename)
+
+if profile:
+       config_filename += '.%s' % profile
+
+parser = optparser.OptionsParser(config_filename)
 
 try:
 	import winsound # windows-only built-in module for playing wav

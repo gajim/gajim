@@ -22,7 +22,7 @@ from common import gajim
 
 class OptionsParser:
 	def __init__(self, filename):
-		self.__filename = os.path.expanduser(filename)
+		self.__filename = filename
 
 	def read_line(self, line):
 		index = line.find(' = ')
