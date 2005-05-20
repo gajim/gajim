@@ -420,8 +420,9 @@ class Roster_window:
 			name = user.name
 			if user.resource != '':
 				name += '/' + user.resource
+			uf_show = helpers.get_uf_status(show)
 			self.plugin.windows[account]['chats'][jid].print_conversation(
-				_('%s is now %s (%s)') % (name, show, status), jid, 'status')
+				_('%s is now %s (%s)') % (name, uf_show, status), jid, 'status')
 
 	def on_info(self, widget, user, account):
 		'''Call vcard_information_window class to display user's information'''
