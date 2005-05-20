@@ -18,12 +18,13 @@
 
 import time
 from string import find, lower
+from common import gajim
 
 
-STATE_UNKNOWN  = "OS probably not supported"
-STATE_XAWAY   = "extanted away"
-STATE_AWAY   = "away"
-STATE_AWAKE    = "awake"
+STATE_UNKNOWN  = 'OS probably not supported'
+STATE_XAWAY   = 'extanted away'
+STATE_AWAY   = 'away'
+STATE_AWAKE    = 'awake'
 
 SUPPORTED = 1
 try:
@@ -32,6 +33,7 @@ except:
 	try:
 		import idle # when Gajim is installed
 	except:
+		gajim.log.debug('Unable to load idle module')
 		SUPPORTED = 0
 
 class Sleepy:
@@ -64,9 +66,3 @@ class Sleepy:
 
 	def setState(self,val):
 		self.state = val
-            
-if __name__ == '__main__':
-	s = Sleepy(10)
-	while s.poll():
-		print "state is %s" % s.getState() 
-		time.sleep(5)
