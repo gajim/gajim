@@ -30,7 +30,7 @@ if os.name == 'nt':
 		# Documents and Settings\[User Name]\Application Data\Gajim\logs
 		LOGPATH = os.environ['appdata'] + '/Gajim/logs'
 	except KeyError:
-		# win9x, so use ~/gajim/logs which is WINDOWS\Application Data\Gajim\logs
+		# win9x, so use ~/Gajim/logs which is WINDOWS\Application Data\Gajim\logs
 		LOGPATH = os.path.expanduser('~/Gajim/logs')
 
 class Logger:
@@ -42,8 +42,7 @@ class Logger:
 			sys.exit()
 		if os.path.isdir(dot_gajim):
 			if os.path.isfile(LOGPATH):
-				if os.name == 'nt':
-					print LOGPATH, 'is file but it should be a directory'
+				print LOGPATH, 'is file but it should be a directory'
 				print 'Gajim will now exit'
 				sys.exit()
 		else: #create ~/.gajim/logs if it doesn't exist
