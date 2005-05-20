@@ -3,7 +3,7 @@
 ## Gajim Team:
 ## - Yann Le Boulanger <asterix@lagaule.org>
 ## - Vincent Hanquez <tab@snarc.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
+## - Nikos Kouremenos <kourem@gmail.com>
 ##
 ##      Copyright (C) 2003-2005 Gajim Team
 ##
@@ -27,27 +27,29 @@ _ = i18n._
 LOGPATH = os.path.expanduser('~/.gajim/logs')
 if os.name == 'nt':
 	try:
-		LOGPATH = os.environ['appdata']
-	except KeyError:
+		# Documents and Settings\[User Name]\Application Data\gajim\logs
+		LOGPATH = os.environ['appdata'] + '/gajim/logs'
+	except KeyError: # win9x, so use ~/.gajim/logs
 		pass
 
 class Logger:
 	def __init__(self):
-		dot_gajim = os.path.expanduser('~/.gajim')
+		dot_gajim = os.path.dirname(LOGPATH)
 		if os.path.isfile(dot_gajim):
-			print '~/.gajim is file but it should be a directory'
+			print dot_gajim, 'is file but it should be a directory'
 			print 'Gajim will now exit'
 			sys.exit()
 		if os.path.isdir(dot_gajim):
 			if os.path.isfile(LOGPATH):
-				print '~/.gajim/logs is file but it should be a directory'
+				if os.name == 'nt':
+					print LOGPATH, 'is file but it should be a directory'
 				print 'Gajim will now exit'
 				sys.exit()
 		else: #create ~/.gajim/logs if it doesn't exist
 			os.mkdir(dot_gajim)
-			print 'creating ~/.gajim directory'
+			print 'creating', dot_gajim , 'directory'
 			os.mkdir(LOGPATH)
-			print 'creating ~/.gajim/logs directory'
+			print 'creating', LOGPATH, 'directory'
 
 	def write(self, kind, msg, jid, show = None, tim = None):
 		if not tim:
