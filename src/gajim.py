@@ -534,20 +534,20 @@ class Interface:
 			if state == common.sleepy.STATE_AWAKE and \
 				self.sleeper_state[account] > 1:
 				#we go online
-				gajim.connections[account].change_status('online', 'Online')
+				self.roster.send_status(account, 'online', 'Online')
 				self.sleeper_state[account] = 1
 			elif state == common.sleepy.STATE_AWAY and \
 				self.sleeper_state[account] == 1 and \
 				gajim.config.get('autoaway'):
 				#we go away
-				gajim.connections[account].change_status('away', 'auto away (idle)')
+				self.roster.send_status(account, 'away', 'auto away (idle)')
 				self.sleeper_state[account] = 2
 			elif state == common.sleepy.STATE_XAWAY and (\
 				self.sleeper_state[account] == 2 or \
 				self.sleeper_state[account] == 1) and \
 				gajim.config.get('autoxa'):
 				#we go extended away
-				gajim.connections[account].change_status('xa', 'auto away (idle)')
+				self.roster.send_status(account, 'xa', 'auto away (idle)')
 				self.sleeper_state[account] = 3
 		return True # renew timeout (loop for ever)
 
