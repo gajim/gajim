@@ -21,6 +21,7 @@ import sys
 import os
 import time
 import sre
+import traceback
 from calendar import timegm
 
 import common.xmpp
@@ -960,14 +961,14 @@ class Connection:
 			try:
 				self.connection.Process(timeout)
 			except:
-				gajim.log.debug('error appeared while processing xmpp: ' + \
-					str(sys.exc_info()[1]))
+				gajim.log.debug('error appeared while processing xmpp:')
+				traceback.print_exc()
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
 				try:
 					self.connection.disconnect()
 				except:
-					gajim.log.debug('error appeared while processing xmpp: ' + \
-						str(sys.exc_info()[1]))
+					gajim.log.debug('error appeared while processing xmpp:')
+					traceback.print_exc()
 				self.connection = None
 # END GajimCore
