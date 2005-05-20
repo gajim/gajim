@@ -83,7 +83,7 @@ def get_os_info():
 				child_stdout.close()
 				child_stdin.close()
 				# some distros put n/a in places so remove them
-				pattern = sre.compile(r' n/a', sre.IGNORE_CASE)
+				pattern = sre.compile(r' n/a', sre.IGNORECASE)
 				output = sre.sub(pattern, '', output)
 				return output
 		# lsb_release executable not available, so parse files
