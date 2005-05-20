@@ -126,7 +126,9 @@ class Vcard_window:
 		resources = self.user.resource + ' (' + str(self.user.priority) + ')'
 		if not self.user.status:
 			self.user.status = ''
-		stats = self.user.show + ': ' + self.user.status
+		stats = self.user.show
+		if self.user.status:
+			stats += ': ' + self.user.status
 		gajim.connections[self.account].request_os_info(self.user.jid,
 			self.user.resource)
 		self.os_info = {0: {'resource': self.user.resource, 'client': '',
