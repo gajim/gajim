@@ -515,7 +515,7 @@ msgstr "_Επεξεργασία Λογαριασμού"
 
 #: src/roster_window.py:617 src/msg.c:12
 msgid "_Service Discovery"
-msgstr "_Ανακάλυψη Υπηρεσιών"
+msgstr "Ανακάλυψη _Υπηρεσιών"
 
 #: src/roster_window.py:620
 msgid "_Add Contact"
@@ -734,7 +734,7 @@ msgstr "_Έξοδος"
 
 #: src/msg.c:16
 msgid "_Edit"
-msgstr "_Επεξεργασία"
+msgstr "Επε_ξεργασία"
 
 #: src/msg.c:17
 msgid "A_ccounts"
