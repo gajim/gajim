@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-21 12:45+0300\n"
+"POT-Creation-Date: 2005-05-21 17:03+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -199,6 +199,10 @@ msgstr ""
 msgid "User name"
 msgstr ""
 
+#: src/dialogs.py:187
+msgid " Status Message"
+msgstr ""
+
 #: src/dialogs.py:235
 msgid "You must be connected to add a contact"
 msgstr ""
@@ -228,12 +232,28 @@ msgstr ""
 msgid "You must be connected to join a groupchat"
 msgstr ""
 
+#: src/dialogs.py:513
+msgid "Join Groupchat as "
+msgstr ""
+
+#: src/dialogs.py:515 src/msg.c:211
+msgid "Join Groupchat"
+msgstr ""
+
 #: src/dialogs.py:557
 msgid "You are already in room "
 msgstr ""
 
 #: src/dialogs.py:575
 msgid "You must be connected to send a message to a contact"
+msgstr ""
+
+#: src/dialogs.py:586
+msgid "New Message as "
+msgstr ""
+
+#: src/dialogs.py:588 src/msg.c:245
+msgid "New Message"
 msgstr ""
 
 #: src/dialogs.py:602
@@ -436,7 +456,7 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: src/roster_window.py:587 src/msg.c:237
+#: src/roster_window.py:587 src/common/helpers.py:33 src/msg.c:237
 msgid "Online"
 msgstr ""
 
@@ -444,23 +464,23 @@ msgstr ""
 msgid "Free for chat"
 msgstr ""
 
-#: src/roster_window.py:593 src/msg.c:239
+#: src/roster_window.py:593 src/common/helpers.py:37 src/msg.c:239
 msgid "Away"
 msgstr ""
 
-#: src/roster_window.py:596 src/msg.c:240
+#: src/roster_window.py:596 src/common/helpers.py:29 src/msg.c:240
 msgid "Not Available"
 msgstr ""
 
-#: src/roster_window.py:599 src/msg.c:241
+#: src/roster_window.py:599 src/common/helpers.py:27 src/msg.c:241
 msgid "Busy"
 msgstr ""
 
-#: src/roster_window.py:602 src/msg.c:242
+#: src/roster_window.py:602 src/common/helpers.py:41 src/msg.c:242
 msgid "Invisible"
 msgstr ""
 
-#: src/roster_window.py:607 src/msg.c:243
+#: src/roster_window.py:607 src/common/helpers.py:39 src/msg.c:243
 msgid "Offline"
 msgstr ""
 
@@ -544,10 +564,10 @@ msgstr ""
 
 #: src/tabbed_chat_window.py:175
 #, python-format
-msgid "%s is %s (%s)"
+msgid "%s is %s"
 msgstr ""
 
-#: src/tabbed_chat_window.py:214
+#: src/tabbed_chat_window.py:216
 msgid "You are not connected, so you cannot send a message"
 msgstr ""
 
@@ -583,6 +603,14 @@ msgstr ""
 
 #: src/common/connection.py:789
 msgid "Error: "
+msgstr ""
+
+#: src/common/helpers.py:31 src/msg.c:238
+msgid "Free for Chat"
+msgstr ""
+
+#: src/common/helpers.py:35
+msgid "Connecting"
 msgstr ""
 
 #: src/msg.c:7 src/msg.c:35
@@ -687,11 +715,11 @@ msgstr ""
 
 #: src/msg.c:34
 msgid ""
-"Resource is sent to the jabber server in order to 'seperate' the same JID in "
+"Resource is sent to the Jabber server in order to 'seperate' the same JID in "
 "two or more parts depending on the number of the clients connected in the "
 "same server with the same account. So you might be connected in the same "
 "account with resource 'Home' and 'Work' at the same time. The resource which "
-"has the highest priority will get the messages. (see below)"
+"has the highest priority will get the events. (see below)"
 msgstr ""
 
 #: src/msg.c:36
@@ -1068,27 +1096,27 @@ msgid "When new chat message is received"
 msgstr ""
 
 #: src/msg.c:128
-msgid "Notify me about contacts going: "
+msgid "Notify me about contacts that: "
 msgstr ""
 
 #: src/msg.c:129
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just went online"
+"about contacts that just signed in"
 msgstr ""
 
-#: src/msg.c:130 src/msg.c:147
-msgid "_Online"
+#: src/msg.c:130
+msgid "Sign _in"
 msgstr ""
 
 #: src/msg.c:131
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just went offline"
+"about contacts that just signed out"
 msgstr ""
 
-#: src/msg.c:132 src/msg.c:148
-msgid "Of_fline"
+#: src/msg.c:132
+msgid "Sign _out"
 msgstr ""
 
 #: src/msg.c:133
@@ -1102,8 +1130,8 @@ msgstr ""
 #: src/msg.c:135
 msgid ""
 "Check this option, only if someone you don't have in the roster spams/annoys "
-"you. Use with caution, cause it blocks all messags from every contact you "
-"don't have in the roster and might want to sent you a message"
+"you. Use with caution, cause it blocks all messages from any contact that is "
+"not in the roster."
 msgstr ""
 
 #: src/msg.c:136
@@ -1144,6 +1172,14 @@ msgstr ""
 
 #: src/msg.c:146
 msgid "Ask status message when going: "
+msgstr ""
+
+#: src/msg.c:147
+msgid "_Online"
+msgstr ""
+
+#: src/msg.c:148
+msgid "Of_fline"
 msgstr ""
 
 #: src/msg.c:149
@@ -1370,10 +1406,6 @@ msgstr ""
 msgid "Subject:"
 msgstr ""
 
-#: src/msg.c:211
-msgid "Join Groupchat"
-msgstr ""
-
 #: src/msg.c:212
 msgid "Password:"
 msgstr ""
@@ -1448,16 +1480,8 @@ msgid ""
 "send a chat message to"
 msgstr ""
 
-#: src/msg.c:238
-msgid "Free for Chat"
-msgstr ""
-
 #: src/msg.c:244
 msgid "Chat with"
-msgstr ""
-
-#: src/msg.c:245
-msgid "New Message"
 msgstr ""
 
 #: src/msg.c:246

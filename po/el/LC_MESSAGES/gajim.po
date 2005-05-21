@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-21 12:45+0300\n"
+"POT-Creation-Date: 2005-05-21 17:03+0300\n"
 "PO-Revision-Date: 2005-05-17 12:19+0300\n"
 "Last-Translator: Nikos Kouremenos <kourem@gmail.com>\n"
 "Language-Team: \n"
@@ -207,6 +207,10 @@ msgstr "Ταυτότητα Κλειδιού"
 msgid "User name"
 msgstr "Όνομα χρήστη"
 
+#: src/dialogs.py:187
+msgid " Status Message"
+msgstr " Μήνυμα κατάστασης"
+
 #: src/dialogs.py:235
 msgid "You must be connected to add a contact"
 msgstr "Πρέπει να είστε συνδεδεμένος για να προσθέτε μια επαφή"
@@ -230,11 +234,19 @@ msgstr "Νίκος Κουρεμένος <kourem@gmail.com>"
 #: src/dialogs.py:458
 #, python-format
 msgid "Subscription request from %s"
-msgstr ""
+msgstr "Αίτηση εγγραφής από %s"
 
 #: src/dialogs.py:499
 msgid "You must be connected to join a groupchat"
 msgstr "Πρέπει να είστε συνδεδεμένος για να συμμετάσχετε σε ομαδική συζήτηση"
+
+#: src/dialogs.py:513
+msgid "Join Groupchat as "
+msgstr "Συμμετοχή σε Ομαδική Συζήτηση ως "
+
+#: src/dialogs.py:515 src/msg.c:211
+msgid "Join Groupchat"
+msgstr "Συμμετοχή σε Ομαδική Συζήτηση"
 
 #: src/dialogs.py:557
 msgid "You are already in room "
@@ -243,6 +255,14 @@ msgstr "Είστε ήδη στον δωμάτιο "
 #: src/dialogs.py:575
 msgid "You must be connected to send a message to a contact"
 msgstr "Πρέπει να είστε συνδεδεμένος για να στείλετε ένα μήνυμα σε μια επαφή"
+
+#: src/dialogs.py:586
+msgid "New Message as "
+msgstr "Νέο μήνυμα ως "
+
+#: src/dialogs.py:588 src/msg.c:245
+msgid "New Message"
+msgstr "Νέο μήνυμα"
 
 #: src/dialogs.py:602
 msgid "User ID is not valid"
@@ -410,7 +430,7 @@ msgstr "Τροποποίηση Ομάδων"
 
 #: src/roster_window.py:487
 msgid "Subscription"
-msgstr ""
+msgstr "Εγγραφή"
 
 #: src/roster_window.py:492
 msgid "Resend Authorization to"
@@ -452,7 +472,7 @@ msgstr "Αποσύνδεση"
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: src/roster_window.py:587 src/msg.c:237
+#: src/roster_window.py:587 src/common/helpers.py:33 src/msg.c:237
 msgid "Online"
 msgstr "Συνδεδεμένος"
 
@@ -460,23 +480,23 @@ msgstr "Συνδεδεμένος"
 msgid "Free for chat"
 msgstr "Ελεύθερος για κουβέντα"
 
-#: src/roster_window.py:593 src/msg.c:239
+#: src/roster_window.py:593 src/common/helpers.py:37 src/msg.c:239
 msgid "Away"
 msgstr "Απομακρυσμένος"
 
-#: src/roster_window.py:596 src/msg.c:240
+#: src/roster_window.py:596 src/common/helpers.py:29 src/msg.c:240
 msgid "Not Available"
 msgstr "Μη διαθέσιμος"
 
-#: src/roster_window.py:599 src/msg.c:241
+#: src/roster_window.py:599 src/common/helpers.py:27 src/msg.c:241
 msgid "Busy"
 msgstr "Απασχολημένος"
 
-#: src/roster_window.py:602 src/msg.c:242
+#: src/roster_window.py:602 src/common/helpers.py:41 src/msg.c:242
 msgid "Invisible"
 msgstr "Αφανής"
 
-#: src/roster_window.py:607 src/msg.c:243
+#: src/roster_window.py:607 src/common/helpers.py:39 src/msg.c:243
 msgid "Offline"
 msgstr "Αποσυνδεδεμένος"
 
@@ -573,10 +593,10 @@ msgstr ""
 
 #: src/tabbed_chat_window.py:175
 #, python-format
-msgid "%s is %s (%s)"
-msgstr "%s είναι %s (%s)"
+msgid "%s is %s"
+msgstr "%s είναι %s"
 
-#: src/tabbed_chat_window.py:214
+#: src/tabbed_chat_window.py:216
 msgid "You are not connected, so you cannot send a message"
 msgstr ""
 "Δεν είστε συνδεδεμένος κι επομένως δεν μπορείτε να στείλετε κανένα μήνυμα"
@@ -618,6 +638,14 @@ msgstr "Στάθηκε αδύνατη η σύνδεση με "
 #: src/common/connection.py:789
 msgid "Error: "
 msgstr "Σφάλμα: "
+
+#: src/common/helpers.py:31 src/msg.c:238
+msgid "Free for Chat"
+msgstr "Διαθέσιμος για Κουβέντα"
+
+#: src/common/helpers.py:35
+msgid "Connecting"
+msgstr "Συνδέεται"
 
 #: src/msg.c:7 src/msg.c:35
 msgid "Gajim"
@@ -705,7 +733,7 @@ msgstr "_Καταχώριση νέου λογαριασμού"
 
 #: src/msg.c:30
 msgid "Click to change account's password"
-msgstr ""
+msgstr "Πατήστε για να αλλάξετε τον κωδικό του λογαριασμού"
 
 #: src/msg.c:31 src/msg.c:254
 msgid "Chan_ge"
@@ -713,7 +741,7 @@ msgstr "Α_λλαγή"
 
 #: src/msg.c:32
 msgid "If checked, Gajim will remember the password for this account"
-msgstr ""
+msgstr "Εάν επιλεγεί, το Gajim θα θυμάται τον κωδικό για αυτόν το λογαριασμό"
 
 #: src/msg.c:33
 msgid "Save pass_word"
@@ -721,12 +749,18 @@ msgstr "_Αποθήκευση"
 
 #: src/msg.c:34
 msgid ""
-"Resource is sent to the jabber server in order to 'seperate' the same JID in "
+"Resource is sent to the Jabber server in order to 'seperate' the same JID in "
 "two or more parts depending on the number of the clients connected in the "
 "same server with the same account. So you might be connected in the same "
 "account with resource 'Home' and 'Work' at the same time. The resource which "
-"has the highest priority will get the messages. (see below)"
+"has the highest priority will get the events. (see below)"
 msgstr ""
+"Ο πόρος στέλνεται στον jabber διακομιστή ώστε να 'διαχωριστεί' το ίδιο JID "
+"σε δύο ή περισσότερα μέρη ανάλογα με τον αριθμό των εφαρμογών που είναι "
+"συνδεδεμένες στον ίδιο διακομιστή με τον ίδιο λαγαριασμό. Έτσι μπορείτε να "
+"είστε συνδεδεμένος με τον ίδιο λαγαριασμό με πόρο 'Σπίτι' και 'Δουλειά' την "
+"ίδια στιγμή. Ο πόρος με την μεγαλύτερη προταιρεότητα θα λαμβάνει τα "
+"γεγονότα. (δείτε πιο κάτω)"
 
 #: src/msg.c:36
 msgid ""
@@ -734,6 +768,10 @@ msgid ""
 "server when two or more clients are connected using the same account; The "
 "client with the highest priority gets the events"
 msgstr ""
+"Η προταιρεότητα χρησιμοποιείται στο Jabber για να καθορίσει ποιος λαμβάνει "
+"τα γεγονότα από τον jabber διακομιστή όταν δύο ή περισσότερες εφαρμογές "
+"είναι συνδεδεμένες χρησιμοποιώντας τον ίδιο λογαριασμό· Η εφαρμογή με την "
+"μεγαλύτερη προτεραιότητα λαμβάνει τα γεγονότα"
 
 #: src/msg.c:37
 msgid "Account"
@@ -744,6 +782,8 @@ msgid ""
 "If checked, Gajim, when launched, will automatically connect to jabber using "
 "this account"
 msgstr ""
+"Εάν επιλεγεί, το Gajim, όταν εκτελεστεί, θα συνδεθεί αυτόματα στο Jabber "
+"χρησιμοποιώντας αυτόν το λογαριασμό"
 
 #: src/msg.c:39
 msgid "C_onnect at startup"
@@ -778,6 +818,8 @@ msgid ""
 "If checked, Gajim will store the password in ~/.gajim/config with 'read' "
 "permission only for only you and of course the administrator"
 msgstr ""
+"Εάν επιλεγεί, το Gajim θα αποθηκεύσει τον κωδικό στο ~/.gajim/config με "
+"δικαίωμα ανάγνωσης μόνο για εσάς και φυσικά τον διαχειριστή του Η/Υ σας"
 
 #: src/msg.c:48
 msgid "Save _passphrase (insecure)"
@@ -869,15 +911,15 @@ msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφ�
 
 #: src/msg.c:70
 msgid "_Subscribe"
-msgstr ""
+msgstr "_Εγγραφή"
 
 #: src/msg.c:71
 msgid "Subscription Request"
-msgstr ""
+msgstr "Αίτηση Εγγραφής"
 
 #: src/msg.c:72
 msgid "Subscription request from"
-msgstr ""
+msgstr "Αίτηση εγγραφής από"
 
 #: src/msg.c:73
 msgid "Deny authorization from contact so he cannot know when you're connected"
@@ -944,7 +986,8 @@ msgstr "Προτιμήσεις"
 
 #: src/msg.c:88
 msgid "If checked, Gajim will also have a trayicon"
-msgstr "Αν επιλεγεγεί, το Gajim θα έχει δικό του ειδονίδιο στην περιοχή γνωστοποίησης"
+msgstr ""
+"Αν επιλεγεγεί, το Gajim θα έχει δικό του ειδονίδιο στην περιοχή γνωστοποίησης"
 
 #: src/msg.c:89
 msgid "_Icon in systray (aka. notification area)"
@@ -954,6 +997,8 @@ msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
 msgid ""
 "If checked, Gajim will remember the main window position next time you run it"
 msgstr ""
+"Αν επιλεγεί, το Gajim θα θυμάται την θέση του κύριου παραθύρου την επόμενη "
+"φορά που θα εκτελεστεί"
 
 #: src/msg.c:91
 msgid "Save roster _position"
@@ -964,6 +1009,8 @@ msgid ""
 "If you have 2 or more accounts and this is checked, Gajim will list all "
 "contacts as if you had one account"
 msgstr ""
+"Εάν έχετε 2 ή περισσότερους λογαριασμούς και έχει επιλεγεί, το Gajim θα "
+"εμφανίζει τις επαφές σας σαν να είχατε ένα λογαριασμό"
 
 #: src/msg.c:93
 msgid "_Merge accounts"
@@ -974,6 +1021,8 @@ msgid ""
 "If checked, Gajim will replace ascii smilies like ':)' with equivalent "
 "graphical emoticons"
 msgstr ""
+"Αν επιλεγεί, το Gajim θα μετατρέπει όλα ascii σύμβολα όπως το ':)' με τα "
+"αντίστοιχα γραφικά σύμβολα"
 
 #: src/msg.c:95
 msgid "Use _emoticons"
@@ -1076,6 +1125,8 @@ msgid ""
 "Gajim will notify you for new message via a popup in the bottom right of the "
 "screen"
 msgstr ""
+"Το Gajim θα σας ειδοποιήσει για το νέο μήνυμα μέσω ενός αναδυόμενου "
+"παραθύρου στο κάτω δεξιά μέρος της οθόνης"
 
 #: src/msg.c:122
 msgid "_Notify me about it"
@@ -1086,6 +1137,8 @@ msgid ""
 "Gajim will automatically show the new received message in a new chat window "
 "or tab in an existing chat window"
 msgstr ""
+"Το Gajim θα εμφανίσει αυτόματα το νέο εισερχόμενο μήνυμα σε ένα νέο παράθυρο "
+"κουβέντας ή σε μια καρτέλα ενός ήδη υπάρχοντος παραθύρου κουβέντας"
 
 #: src/msg.c:124
 msgid "_Pop it up"
@@ -1094,7 +1147,7 @@ msgstr "_Εμφάνισε το"
 #: src/msg.c:125
 msgid ""
 "Gajim will only change the icon of the contact that sent the new message"
-msgstr ""
+msgstr "Το Gajim θα αλλάξει μόνο το εικονίδιο της επαφής που έστειλε το μήνυμα"
 
 #: src/msg.c:126
 msgid "Show only in _roster"
@@ -1105,28 +1158,32 @@ msgid "When new chat message is received"
 msgstr "Όταν ένα νέο μήνυμα κουβέντας ληφθεί"
 
 #: src/msg.c:128
-msgid "Notify me about contacts going: "
-msgstr "Ειδοποίηση όταν μια επαφή παίρνει κατάσταση:"
+msgid "Notify me about contacts that: "
+msgstr "Ειδοποίηση όταν μια επαφή:"
 
 #: src/msg.c:129
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just went online"
+"about contacts that just signed in"
 msgstr ""
+"Το Gajim θα σας ειδοποιήσει μέσω ενός αναδυόμενου παραθύρου στο κάτω δεξιά "
+"μέρος της οθόνης για τις επαφές που μόλις συνδέθηκαν στο Jabber"
 
-#: src/msg.c:130 src/msg.c:147
-msgid "_Online"
-msgstr "_Συνδεδεμένος"
+#: src/msg.c:130
+msgid "Sign _in"
+msgstr "Συνδέεται"
 
 #: src/msg.c:131
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just went offline"
+"about contacts that just signed out"
 msgstr ""
+"Το Gajim θα σας ειδοποιήσει μέσω ενός αναδυόμενου παραθύρου στο κάτω δεξιά "
+"μέρος της οθόνης για τις επαφές που μόλις αποσυνδέθηκαν στο Jabber"
 
-#: src/msg.c:132 src/msg.c:148
-msgid "Of_fline"
-msgstr "_Αποσυνδεδεμένος"
+#: src/msg.c:132
+msgid "Sign _out"
+msgstr "Αποσυνδέεται"
 
 #: src/msg.c:133
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
@@ -1141,9 +1198,12 @@ msgstr "<b>Γνωστοποιήσεις</b>"
 #: src/msg.c:135
 msgid ""
 "Check this option, only if someone you don't have in the roster spams/annoys "
-"you. Use with caution, cause it blocks all messags from every contact you "
-"don't have in the roster and might want to sent you a message"
+"you. Use with caution, cause it blocks all messages from any contact that is "
+"not in the roster."
 msgstr ""
+"Επιλέξτε το, μόνο αν κάποιος που δεν έχει στην λίστα επαφών στα στέλνει "
+"spamή άλλα ενοχλητικά μηνύματα. Χρησιμοποιήστε το με προσοχή, γιατί "
+"μπλοκάρει όλα τα μηνύματα από κάθε επαφή που δεν έχετε στην λίστα επαφών σας"
 
 #: src/msg.c:136
 msgid "_Ignore events from contacts not in the roster"
@@ -1185,6 +1245,14 @@ msgstr "λεπτά"
 msgid "Ask status message when going: "
 msgstr "Ερώτηση μηνύμηματος κατάστασης όταν γίνομαι:"
 
+#: src/msg.c:147
+msgid "_Online"
+msgstr "_Συνδεδεμένος"
+
+#: src/msg.c:148
+msgid "Of_fline"
+msgstr "_Αποσυνδεδεμένος"
+
 #: src/msg.c:149
 msgid "<b>Preset Status Messages</b>"
 msgstr "<b>Προκαθορισμένα Μηνύματα Καταστάσης</b>"
@@ -1195,11 +1263,11 @@ msgstr "Άνοιμα _με"
 
 #: src/msg.c:152
 msgid "GNOME default applications"
-msgstr "Προεπιλεγμένες εφαρμογές από το GNOME"
+msgstr "Προεπιλεγμένες από το GNOME εφαρμογές"
 
 #: src/msg.c:153
 msgid "KDE default applications"
-msgstr "Προεπιλεγμένες εφαρμογές από το KDE"
+msgstr "Προεπιλεγμένες από το KDE εφαρμογές"
 
 #: src/msg.c:154
 msgid "Custom"
@@ -1211,7 +1279,7 @@ msgstr "_Περιηγητής:"
 
 #: src/msg.c:156
 msgid "_Mail client:"
-msgstr "_Εφαρμογή Ηλ. Αλληλογραφίας"
+msgstr "_Εφαρμογή Αλληλογραφίας"
 
 #: src/msg.c:157
 msgid "<b>Custom Applications</b>"
@@ -1409,10 +1477,6 @@ msgstr "Κλείσιμο _Παραθύρου"
 msgid "Subject:"
 msgstr "Θέμα:"
 
-#: src/msg.c:211
-msgid "Join Groupchat"
-msgstr "Συμμετοχή σε Ομαδική Συζήτηση"
-
 #: src/msg.c:212
 msgid "Password:"
 msgstr "Κωδικός:"
@@ -1439,11 +1503,11 @@ msgstr "<b>Επιλέξτε το OpenGPG κλειδί σου</b>"
 
 #: src/msg.c:221
 msgid "Enter your message:"
-msgstr "Πληκτρολόγηστε το μήνυμα σου:"
+msgstr "Πληκτρολογήστε το μήνυμα σας:"
 
 #: src/msg.c:222
 msgid "Or choose a preset message:"
-msgstr "Ή διάλεξτε από τα προκαθορισμένα μηνύματα:"
+msgstr "Ή διαλέξτε από τα προκαθορισμένα μηνύματα:"
 
 #: src/msg.c:224
 msgid "Click to see past conversations with this contact"
@@ -1487,18 +1551,12 @@ msgid ""
 "Enter the user ID of the contact you would like to\n"
 "send a chat message to"
 msgstr ""
-
-#: src/msg.c:238
-msgid "Free for Chat"
-msgstr "Διαθέσιμος για Κουβέντα"
+"Πληκτρολογήστε την ταυτότητα χρήστη της επαφής στην οποία\n"
+"θέλετε να στείλετε μήνυμα"
 
 #: src/msg.c:244
 msgid "Chat with"
 msgstr "Κουβέντα με"
-
-#: src/msg.c:245
-msgid "New Message"
-msgstr "Νέο μήνυμα"
 
 #: src/msg.c:246
 msgid "<b>event_type_label</b>"

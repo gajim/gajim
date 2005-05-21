@@ -184,7 +184,7 @@ class Change_status_message_dialog:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
 		self.window = self.xml.get_widget('change_status_message_dialog')
 		uf_show = helpers.get_uf_show(show)
-		self.window.set_title(uf_show + ' Status Message')
+		self.window.set_title(uf_show + _(' Status Message'))
 		
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
@@ -510,9 +510,9 @@ class Join_groupchat_window:
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
-			title = 'Join Groupchat as ' + our_jid
+			title = _('Join Groupchat as ') + our_jid
 		else:
-			title = 'Join Groupchat'
+			title = _('Join Groupchat')
 		self.window.set_title(title)
 
 		self.recently_combobox = self.xml.get_widget('recently_combobox')
@@ -583,9 +583,9 @@ class New_message_dialog:
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
-			title = 'New Message as ' + our_jid
+			title = _('New Message as ') + our_jid
 		else:
-			title = 'New Message'
+			title = _('New Message')
 		self.window.set_title(title)
 		
 		self.xml.signal_autoconnect(self)
