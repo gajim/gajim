@@ -116,7 +116,6 @@ msgstr ""
 "τροποποιείτε τις προσωπικές σας πληροφορίες"
 
 #: src/config.py:1236
-#, fuzzy
 msgid "You must be connected to edit your personal information"
 msgstr ""
 "Πρέπει να είστε συνδεδεμένος για να τροποποιήσετε τις προσωπικές σας "
@@ -603,7 +602,6 @@ msgid "Couldn't connect to %s"
 msgstr "Η σύνδεση με %s στάθηκε αδύνατη."
 
 #: src/common/connection.py:577
-#, fuzzy, python-format
 msgid "Authentication failed with %s, check your login and password"
 msgstr ""
 "Η πιστοποίηση ταυτότητας με %s απέτυχε, παρακαλώ ελέγξτε το συνθηματικό σας"
@@ -697,9 +695,8 @@ msgid "Priori_ty:"
 msgstr "Π_ροτεραιότητα:"
 
 #: src/msg.c:28
-#, fuzzy
 msgid "Check if you want to register for a new jabber account"
-msgstr "_Τσεκάρετε εάν επιθυμείτε να καταχωρήσετε νέα jabber λογαρισμό"
+msgstr "_Τσεκάρετε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαρισμό"
 
 #: src/msg.c:29
 msgid "_Register new account"
@@ -866,7 +863,6 @@ msgid "Group:"
 msgstr "Ομάδα:"
 
 #: src/msg.c:69
-#, fuzzy
 msgid "I would like to add you to my contact list."
 msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφών μου."
 
@@ -1104,7 +1100,6 @@ msgid "Show only in _roster"
 msgstr "Εμφάνισε το μόνο στο κύριο παράθυρο"
 
 #: src/msg.c:127
-#, fuzzy
 msgid "When new chat message is received"
 msgstr "Όταν ένα νέο μήνυμα κουβέντας ληφθεί"
 
@@ -1133,7 +1128,6 @@ msgid "Of_fline"
 msgstr "_Αποσυνδεδεμένος"
 
 #: src/msg.c:133
-#, fuzzy
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
 "Επίτρεψη εμφανίσεων/γνωστοποιήσεων όταν είμαι απομακρ./μη διαθ./απασχολ./"
