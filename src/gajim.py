@@ -30,19 +30,20 @@ import gobject
 import os
 import sre
 import signal
-import common.sleepy
-import check_for_new_version
 import sys
 import getopt
 
-from common import gajim
-from common import connection
 from common import i18n
 i18n.init()
 _ = i18n._
 APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
+
+import common.sleepy
+import check_for_new_version
+from common import gajim
+from common import connection
 
 from common import optparser
 

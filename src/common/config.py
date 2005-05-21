@@ -20,6 +20,8 @@
 
 import sre
 import copy
+from common import i18n
+_ = i18n._
 
 OPT_TYPE = 0
 OPT_VAL = 1
@@ -192,12 +194,12 @@ class Config:
 	}
 
 	statusmsg_default = {
-		'Nap': 'I\'m taking a nap.',
-		'Brb': 'Back in some minutes.',
-		'Eating': 'I\'m eating, so leave me a message.',
-		'Movie' : 'I\'m watching a movie.' ,
-		'Working': 'I\'m working.',
-		'Phone': 'I\'m on the phone.',
+		_('Nap'): _('I\'m taking a nap.'),
+		_('Brb'): _('Back in some minutes.'),
+		_('Eating'): _('I\'m eating, so leave me a message.'),
+		_('Movie'): _('I\'m watching a movie.'),
+		_('Working'): _('I\'m working.'),
+		_('Phone'): _('I\'m on the phone.'),
 	}
 
 	soundevents_default = {
