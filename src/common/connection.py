@@ -493,7 +493,7 @@ class Connection:
 		self.dispatch('ERROR_ANSWER', (jid_from, errmsg, errcode))
 
 	def connect(self):
-		"""Connect and authentificate to the Jabber server"""
+		"""Connect and authenticate to the Jabber server"""
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
@@ -571,10 +571,10 @@ class Connection:
 			self.connected = 2
 			return con
 		else:
-			gajim.log.debug('Couldn\'t authentificate to %s' % hostname)
+			gajim.log.debug('Couldn\'t authenticate to %s' % hostname)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', _('Authentification failed with %s, check your login and password') % hostname)
+			self.dispatch('ERROR', _('Authentication failed with %s, check your login and password') % hostname)
 			return None
 # END connect
 

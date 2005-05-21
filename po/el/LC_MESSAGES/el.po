@@ -1,0 +1,1566 @@
+# Greek translation for Gajim Project.
+# Copyright (C) 2005 Nikos Kouremenos
+# This file is distributed under the same license as the Gajim Project.
+# Nikos Kouremenos <kourem@gmail.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Gajim 0.7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-05-20 22:19+0200\n"
+"PO-Revision-Date: 2005-05-17 12:19+0300\n"
+"Last-Translator: Nikos Kouremenos <kourem@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/advanced.py:107
+msgid "Preference Name"
+msgstr "Όνομα προτίμησης"
+
+#: src/advanced.py:114
+msgid "Value"
+msgstr "Τιμή"
+
+#: src/advanced.py:121
+msgid "Type"
+msgstr "Είδος"
+
+#: src/chat.py:491
+msgid "_Open Email Composer"
+msgstr "_Άνοιγμα Προγράμματος Αλληλογραφίας"
+
+#: src/chat.py:493
+msgid "_Open Link"
+msgstr "_Άνοιγμα Δεσμού"
+
+#: src/chat.py:497
+msgid "_Copy Email Address"
+msgstr "_Αντιγραφή Διεύθυνσης Ηλ. Αλληλογραφίας"
+
+#: src/chat.py:499
+msgid "_Copy Link Address"
+msgstr "_Αντιγραφή Διεύθυνσης Δεσμού"
+
+#: src/config.py:258
+msgid "Active"
+msgstr "Ενεργοποιημένο"
+
+#: src/config.py:266
+msgid "Event"
+msgstr "Γεγονός"
+
+#: src/config.py:272
+msgid "Sound"
+msgstr "Ήχος"
+
+#: src/config.py:875
+msgid "Choose Sound"
+msgstr "Επιλογή Ήχου"
+
+#: src/config.py:882
+msgid "All files"
+msgstr "Όλα τα αρχεία"
+
+#: src/config.py:887
+msgid "Wav Sounds"
+msgstr "Αρχεία Wav"
+
+#: src/config.py:1052
+msgid "You must be offline to change the account's name"
+msgstr "Πρέπει να αποσυνδεδεθείτε για να αλλάξετε το όνομα του λογαριασμού"
+
+#: src/config.py:1055
+msgid "You must enter a name for this account"
+msgstr "Πρέπει να δώσετε ένα όνομα για αυτόν το λογαριασμό"
+
+#: src/config.py:1058
+msgid "Spaces are not permited in account name"
+msgstr "Τα κενά δεν επιτρέπονται στο όνομα του λογαριασμού"
+
+#: src/config.py:1062
+msgid ""
+"You must enter a Jabber ID for this account\n"
+"For example: someone@someserver.org"
+msgstr ""
+"Πρέπει να δώσετε ένα Jabber ID για αυτόν το λογαριασμό\n"
+"Για παράδειγμα: someone@someserver.org"
+
+#: src/config.py:1069
+msgid "You must enter a password to register a new account"
+msgstr "Πρέπει να δώσετε ένα κωδικό για να καταχωρήσετε νέο λογαριασμό"
+
+#: src/config.py:1100
+msgid "Proxy port must be a port number"
+msgstr "Ο αριθμός θύρας του μεσολαβητή πρέπει να είναι αριθμός"
+
+#: src/config.py:1105
+msgid "You must enter a proxy port to use proxy"
+msgstr "Πρέπει να δώσετε αριθμό θύρας για την χρήση του μεσολαβητή"
+
+#: src/config.py:1108
+msgid "You must enter a proxy host to use proxy"
+msgstr "Πρέπει να δώσετε ένα κεντρικό υπολογιστή για την χρήση του μεσολαβητή"
+
+#: src/config.py:1180
+msgid "This name is taken by an another account of yours"
+msgstr "Αυτό το όνομα είναι πιασμένο από έναν άλλο λογαριασμό σας"
+
+#: src/config.py:1232
+msgid ""
+"You must first create your account before editing your personal information"
+msgstr ""
+"Πρέπει πρώτα να δημιουργήσετε τον λογαριασμό προτού ξεκινήσετε να "
+"τροποποιείτε τις προσωπικές σας πληροφορίες"
+
+#: src/config.py:1236
+#, fuzzy
+msgid "You must be connected to edit your personal  information"
+msgstr ""
+"Πρέπει να είστε συνδεδεμένος για να τροποποιήσετε τις προσωπικές σας "
+"πληροφορίες"
+
+#: src/config.py:1246 src/gajim.py:413
+#, python-format
+msgid "error contacting %s"
+msgstr "πρόβλημα στην επικοινωνία με τον %s"
+
+#: src/config.py:1257 src/msg.c:45
+msgid "No key selected"
+msgstr "Καμία επιλογή κλειδιού"
+
+#: src/config.py:1367 src/config.py:1629
+msgid "Name"
+msgstr "Όνομα"
+
+#: src/config.py:1370
+msgid "Server"
+msgstr "Διακομιστής"
+
+#: src/config.py:1422
+#, python-format
+msgid "Register to %s"
+msgstr "Εγγραφή στο %s"
+
+#: src/config.py:1441
+msgid "Text"
+msgstr "Κείμενο"
+
+#: src/config.py:1449
+msgid "Image"
+msgstr "Φωτογραφία"
+
+#: src/config.py:1610
+msgid "You must be connected to browse services"
+msgstr "Πρέπει να συνδεθείτε γα να περιηγηθείτε στις υπηρεσίες"
+
+#: src/config.py:1634
+msgid "Service"
+msgstr "Υπηρεσία"
+
+#: src/config.py:1639
+msgid "Node"
+msgstr "Κόμβος"
+
+#: src/config.py:2014
+#, python-format
+msgid "Removing %s account"
+msgstr "Aφαιρώντας τον λογαριασμό %s"
+
+#: src/config.py:2020
+#, python-format
+msgid ""
+"You're currently connected with %s.\n"
+"Are you sure you want to remove this account?"
+msgstr ""
+"Είστε συνδεδεμένος με %s.\n"
+"Είστε σίγουρος ότι θέλετε να αφαιρέσετε αυτόν το λογαριασμό;"
+
+#: src/dialogs.py:50
+#, python-format
+msgid "Contact's name: <i>%s</i>"
+msgstr "Όνομα επαφής: <i>%s</i>"
+
+#: src/dialogs.py:52
+#, python-format
+msgid "JID: <i>%s</i>"
+msgstr "JID: <i>%s</i>"
+
+#: src/dialogs.py:88
+msgid "A contact must belong at least to one group"
+msgstr "Μια επαφή πρέπει να ανήκει τουλάχιστον σε μία ομάδα"
+
+#: src/dialogs.py:107
+msgid "Group"
+msgstr "Ομάδα"
+
+#: src/dialogs.py:113
+msgid "In the group"
+msgstr "Στην ομάδα"
+
+#: src/dialogs.py:173
+msgid "KeyID"
+msgstr "Ταυτότητα Κλειδιού"
+
+#: src/dialogs.py:176
+msgid "User name"
+msgstr "Όνομα χρήστη"
+
+#: src/dialogs.py:235
+msgid "You must be connected to add a contact"
+msgstr "Πρέπει να είστε συνδεδεμένος για να προσθέτε μια επαφή"
+
+#: src/dialogs.py:308
+msgid "The contact's name must be something like login@hostname"
+msgstr "Το όνομα της επαφής πρέπει να είναι κάτι σαν login@hostname"
+
+#: src/dialogs.py:366
+msgid "Gajim - a GTK+ Jabber client"
+msgstr "Gajim - ένα πρόγραμμα για το Jabber γραμμένο σε GTK+"
+
+#: src/dialogs.py:377
+msgid "A GTK jabber client"
+msgstr "Ένα πρόγραμμα για το Jabber γραμμένο σε GTK+"
+
+#: src/dialogs.py:384
+msgid "translator_credits"
+msgstr "Νίκος Κουρεμένος <kourem@gmail.com>"
+
+#: src/dialogs.py:458
+#, python-format
+msgid "Subscription request from %s"
+msgstr ""
+
+#: src/dialogs.py:499
+msgid "You must be connected to join a groupchat"
+msgstr "Πρέπει να είστε συνδεδεμένος για να συμμετάσχετε σε ομαδική συζήτηση"
+
+#: src/dialogs.py:557
+msgid "You are already in room "
+msgstr "Είστε ήδη στον δωμάτιο "
+
+#: src/dialogs.py:575
+msgid "You must be connected to send a message to a contact"
+msgstr "Πρέπει να είστε συνδεδεμένος για να στείλετε ένα μήνυμα σε μια επαφή"
+
+#: src/dialogs.py:602
+msgid "User ID is not valid"
+msgstr "Η ταυτότητα χρήστη δεν είναι έγκυρη"
+
+#: src/dialogs.py:623
+msgid "You must be connected to change your password"
+msgstr "Πρέπει να είστε συνδεδεμένος για να αλλάξετε τον κωδικό σας"
+
+#: src/dialogs.py:642
+msgid "Your password cannot be empty"
+msgstr "Ο κωδικός σας δεν μπορεί να είναι κενός"
+
+#: src/dialogs.py:646
+msgid "Confirmation password is not the same"
+msgstr "Ο κωδικός στην επαλήθευση δεν είναι ο ίδιος"
+
+#: src/gajim.py:108
+msgid "bad arguments"
+msgstr "προβληματικές παράμετροι"
+
+#: src/gajim.py:367
+msgid "error while sending"
+msgstr "σφάλμα κατά την αποστολή"
+
+#: src/gajim.py:397
+#, python-format
+msgid "You are now authorized by %s"
+msgstr "Ο %s μόλις σας εξουσιοδότησε"
+
+#: src/gajim.py:400
+#, python-format
+msgid "You are now unsubscribed by %s"
+msgstr "Ο %s μόλις σας αφαίρεσε την εξουσιοδότηση"
+
+#: src/gajim.py:503
+msgid "Your GPG passphrase is wrong, so you are connected without your GPG key"
+msgstr ""
+"Η κωδική φράση για το GPG είναι λανθασμένη, έγινε σύνδεση χωρίς την χρήση "
+"του GPG κλειδιού σας"
+
+#: src/groupchat_window.py:92
+#, python-format
+msgid ""
+"You received a message in the room %s in the last two seconds.\n"
+"Do you still want to close this window?"
+msgstr ""
+"Λάβατε ένα μήνυμα στο δωμάτιο %s τα τελευταία δυο δευτερόλεπτα.\n"
+"Είστε σίγουρος ότι θέλετε να κλείσετε αυτό το παράθυρο;"
+
+#: src/groupchat_window.py:240
+#, python-format
+msgid "%s has been kicked by %s: %s"
+msgstr "Ο %s πετάχθηκε έξω από τον %s: %s"
+
+#: src/groupchat_window.py:444
+msgid "_Privileges"
+msgstr "_Προνόμια"
+
+#: src/groupchat_window.py:449
+msgid "_Kick"
+msgstr "_Πέταγμα έξω"
+
+#: src/groupchat_window.py:452
+msgid "_Grant Voice"
+msgstr "_Παροχή Δικαιώματος Έκφρασης Γνώμης"
+
+#: src/groupchat_window.py:455
+msgid "_Revoke Voice"
+msgstr "_Ανάκληση Δικαιώματος Έκφρασης Γνώμης"
+
+#: src/groupchat_window.py:458
+msgid "_Grant Moderator"
+msgstr "_Παροχή Δικαιώματος Συντονισμού"
+
+#: src/groupchat_window.py:461
+msgid "_Revoke Moderator"
+msgstr "_Ανάκληση Δικαιώματος Συντονισμού"
+
+#: src/groupchat_window.py:468
+msgid "_Ban"
+msgstr "_Απαγόρευση"
+
+#: src/groupchat_window.py:471
+msgid "_Grant Membership"
+msgstr "_Παροχή Ιδιότητας Μέλους"
+
+#: src/groupchat_window.py:474
+msgid "_Revoke Membership"
+msgstr "_Ανάκληση Ιδιότητας Μέλους"
+
+#: src/groupchat_window.py:477
+msgid "_Grant Admin"
+msgstr "_Παροχή Δικαιώματος Διαχειριστή"
+
+#: src/groupchat_window.py:480
+msgid "_Revoke Admin"
+msgstr "_Ανάκληση Δικαιώματος Διαχειριστή"
+
+#: src/groupchat_window.py:483
+msgid "_Grant Owner"
+msgstr "_Παροχή Δικαιώματος Κατοχής"
+
+#: src/groupchat_window.py:486
+msgid "_Revoke Owner"
+msgstr "_Ανάκληση Δικαιώματος Κατοχής"
+
+#: src/groupchat_window.py:493
+msgid "_Information"
+msgstr "_Πληροφορίες"
+
+#: src/groupchat_window.py:503
+#, python-format
+msgid ""
+"You received a message in the room %s in the last two seconds.\n"
+"Do you still want to close this tab?"
+msgstr ""
+"Λάβατε ένα μήνυμα στο δωμάτιο %s τα τελευταία δυο δευτερόλεπτα.\n"
+"Είστε σίγουρος ότι θέλετε να κλείσετε αυτή την καρτέλα;"
+
+#: src/history_window.py:139
+msgid "Status is now: "
+msgstr "Η κατάσταση είναι τώρα: "
+
+#: src/roster_window.py:292
+msgid "to "
+msgstr "σε "
+
+#: src/roster_window.py:292 src/roster_window.py:302
+msgid " account"
+msgstr " λογαριασμό"
+
+#: src/roster_window.py:302
+msgid "using "
+msgstr "χρησιμοποιώντας "
+
+#: src/roster_window.py:312 src/roster_window.py:322 src/systray.py:139
+#: src/systray.py:144
+msgid "as "
+msgstr "ως "
+
+#: src/roster_window.py:425
+#, python-format
+msgid "%s is now %s (%s)"
+msgstr "%s είναι τώρα %s (%s)"
+
+#: src/roster_window.py:442
+#, fuzzy, python-format
+msgid "Are you sure you want to remove the agent %s from your roster?"
+msgstr ""
+"Είστε σίγουρος ότι θέλετε να αφαιρέσετε την επαφή %s (%s) από την λίστα "
+"επαφών σας;"
+
+#: src/roster_window.py:475
+msgid "Start chat"
+msgstr "Έναρξη κουβέντας"
+
+#: src/roster_window.py:478 src/roster_window.py:529
+msgid "Rename"
+msgstr "Μετονομασία"
+
+#: src/roster_window.py:482 src/msg.c:229
+msgid "Edit Groups"
+msgstr "Τροποποίηση Ομάδων"
+
+#: src/roster_window.py:487
+msgid "Subscription"
+msgstr ""
+
+#: src/roster_window.py:492
+msgid "Resend Authorization to"
+msgstr "Εκ νέου Αποστολή Εξουσιοδότησης προς"
+
+#: src/roster_window.py:495
+msgid "Rerequest Authorization from"
+msgstr "Εκ νέου Αίτηση Εξουσιοδότησης από"
+
+#: src/roster_window.py:498
+msgid "I would like to add you to my roster"
+msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφών μου"
+
+#: src/roster_window.py:502
+msgid "Add to Roster"
+msgstr "Προσθήκη στην Λίστα Επαφών"
+
+#: src/roster_window.py:506 src/roster_window.py:561
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#: src/roster_window.py:512
+msgid "Information"
+msgstr "Πληροφορίες"
+
+#: src/roster_window.py:515
+msgid "History"
+msgstr "Ιστορικό"
+
+#: src/roster_window.py:544
+msgid "Log on"
+msgstr "Σύνδεση"
+
+#: src/roster_window.py:551
+msgid "Log off"
+msgstr "Αποσύνδεση"
+
+#: src/roster_window.py:582 src/msg.c:150 src/msg.c:236
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: src/roster_window.py:587 src/msg.c:237
+msgid "Online"
+msgstr "Συνδεδεμένος"
+
+#: src/roster_window.py:590
+msgid "Free for chat"
+msgstr "Ελεύθερος για κουβέντα"
+
+#: src/roster_window.py:593 src/msg.c:239
+msgid "Away"
+msgstr "Απομακρυσμένος"
+
+#: src/roster_window.py:596 src/msg.c:240
+msgid "Not Available"
+msgstr "Μη διαθέσιμος"
+
+#: src/roster_window.py:599 src/msg.c:241
+msgid "Busy"
+msgstr "Απασχολημένος"
+
+#: src/roster_window.py:602 src/msg.c:242
+msgid "Invisible"
+msgstr "Αφανής"
+
+#: src/roster_window.py:607 src/msg.c:243
+msgid "Offline"
+msgstr "Αποσυνδεδεμένος"
+
+#: src/roster_window.py:614
+msgid "_Edit Account"
+msgstr "_Επεξεργασία Λογαριασμού"
+
+#: src/roster_window.py:617 src/msg.c:12
+msgid "_Service Discovery"
+msgstr "_Ανακάλυψη Υπηρεσιών"
+
+#: src/roster_window.py:620
+msgid "_Add Contact"
+msgstr "_Προσθήκη Επαφής"
+
+#: src/roster_window.py:623
+msgid "Join _Groupchat"
+msgstr "Συμμετοχή σε Ομαδική Συζήτηση"
+
+#: src/roster_window.py:626 src/msg.c:9
+msgid "_New Message"
+msgstr "_Νέο Μήνυμα"
+
+#: src/roster_window.py:732
+#, python-format
+msgid "Are you sure you want to remove %s (%s) from your roster?"
+msgstr ""
+"Είστε σίγουρος ότι θέλετε να αφαιρέσετε την επαφή %s (%s) από την λίστα "
+"επαφών σας;"
+
+#: src/roster_window.py:753
+#, python-format
+msgid "Enter your password for account %s"
+msgstr "Πληκτρολογήστε τον κωδικό σας για το λογαριασμό %s"
+
+#: src/roster_window.py:781
+#, python-format
+msgid "Enter GPG key passphrase for account %s"
+msgstr "Πληκτρολογήστε την GPG κωδικοφράση για το λογαριασμό %s"
+
+#: src/roster_window.py:825
+msgid "You must create an account before connecting to jabber network."
+msgstr ""
+"Πρέπει να δημιουργήσετε ένα λογαριασμό προτού μπορέτε να συνδεθείτε στο "
+"Jabber"
+
+#: src/roster_window.py:1067
+msgid ""
+"You have unread messages.\n"
+"Are you sure you want to quit Gajim?"
+msgstr ""
+"Έχετε μη αναγνωσμένα μηνύματα.\n"
+"Είστε σίγουρος ότι θέλετε να κλείσετε το Gajim;"
+
+#: src/roster_window.py:1072
+msgid ""
+"You received a message in the last two seconds.\n"
+"Are you sure you want to quit Gajim?"
+msgstr ""
+"Λάβατε μήνυμα μέσα στα δύο τελευταία δευτερόλεπτα.\n"
+"Είστε σίγουρος ότι θέλετε να κλείσετε το Gajim;"
+
+#: src/systray.py:73 src/systray.py:93
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr "Gajim - %s μη αναγνωσμένα μηνύματα"
+
+#: src/systray.py:75 src/systray.py:95
+msgid "Gajim - 1 unread message"
+msgstr "Gajim - 1 μη αναγνωσμένο μήνυμα"
+
+#: src/systray.py:193
+msgid "All contacts in this group are offline or have errors"
+msgstr ""
+"Όλες οι επαφές σε αυτή την ομάδα είναι αποσυνδεδέμενες ή έχουν πρόβλημα"
+
+#: src/tabbed_chat_window.py:117
+#, python-format
+msgid ""
+"You received a message from %s in the last two seconds.\n"
+"Do you still want to close this window?"
+msgstr ""
+"Λάβατε μήνυμα από την επαφή %s μέσα στα δύο τελευταία δευτερόλεπτα.\n"
+"Είστε σίγουρος ότι θέλετε να κλείσετε αυτό το παράθυρο;"
+
+#: src/tabbed_chat_window.py:148
+#, python-format
+msgid ""
+"You received a message from %s in the last two seconds.\n"
+"Do you still want to close this tab?"
+msgstr ""
+"Λάβατε μήνυμα από την επαφή %s μέσα στα δύο τελευταία δευτερόλεπτα.\n"
+"Είστε σίγουρος ότι θέλετε να κλείσετε αυτή την καρτέλα;"
+
+#: src/tabbed_chat_window.py:175
+#, python-format
+msgid "%s is %s (%s)"
+msgstr "%s είναι %s (%s)"
+
+#: src/tabbed_chat_window.py:214
+msgid "You are not connected, so you cannot send a message"
+msgstr ""
+"Δεν είστε συνδεδεμένος κι επομένως δεν μπορείτε να στείλετε κανένα μήνυμα"
+
+#: src/vcard.py:184
+msgid "You must be connected to publish your contact information"
+msgstr ""
+"Πρέπει να είστε συνδεδεμένος για να δημοσιεύσετε τις πληροφορίες της επαφής "
+"σας"
+
+#: src/vcard.py:206
+msgid "You must be connected to get your contact information"
+msgstr ""
+"Πρέπει να είστε συνδεδεμένος για να λάβετε τις πληροφορίες της επαφής σας"
+
+#: src/common/connection.py:254 src/common/connection.py:685
+msgid "I would like to add you to my roster."
+msgstr "Επιθυμώ να σε προσθέσω στην λίστα επαφών μου."
+
+#: src/common/connection.py:533 src/common/connection.py:567
+#, python-format
+msgid "Couldn't connect to %s"
+msgstr "Η σύνδεση με %s στάθηκε αδύνατη."
+
+#: src/common/connection.py:577
+#, fuzzy, python-format
+msgid "Authentification failed with %s, check your login and password"
+msgstr ""
+"Η πιστοποίηση ταυτότητας με %s απέτυχε, παρακαλώ ελέγξτε το συνθηματικό σας"
+
+#: src/common/connection.py:671
+msgid "[this message is encrypted]"
+msgstr "[αυτό το μήνυμα είναι κρυπογραφημένο]"
+
+#: src/common/connection.py:781
+msgid "Couldn't connect to "
+msgstr "Στάθηκε αδύνατη η σύνδεση με "
+
+#: src/common/connection.py:789
+msgid "Error: "
+msgstr "Σφάλμα: "
+
+#: src/msg.c:7 src/msg.c:35
+msgid "Gajim"
+msgstr "Gajim"
+
+#: src/msg.c:8 src/msg.c:204
+msgid "_Actions"
+msgstr "_Ενέργειες"
+
+#: src/msg.c:10
+msgid "_Join Groupchat"
+msgstr "_Συμμετοχή σε Ομαδική Κουβέντα"
+
+#: src/msg.c:11
+msgid "Add _Contact"
+msgstr "Προσθήκη _Επαφής"
+
+#: src/msg.c:13
+msgid "Show _Offline Contacts"
+msgstr "Εμφάνιση _Αποσυνδεδεμένων Χρηστών"
+
+#: src/msg.c:14
+msgid "_About"
+msgstr "_Περί"
+
+#: src/msg.c:15
+msgid "_Quit"
+msgstr "_Έξοδος"
+
+#: src/msg.c:16
+msgid "_Edit"
+msgstr "_Επεξεργασία"
+
+#: src/msg.c:17
+msgid "A_ccounts"
+msgstr "_Λογαριασμοί"
+
+#: src/msg.c:18
+msgid "_Preferences"
+msgstr "_Προτιμήσεις"
+
+#: src/msg.c:19
+msgid "Accounts"
+msgstr "Λογαριασμοί"
+
+#: src/msg.c:20
+msgid "_Modify"
+msgstr "_Τροποποίηση"
+
+#: src/msg.c:21 src/msg.c:258
+msgid "_Remove"
+msgstr "_Αφαίρεση"
+
+#: src/msg.c:22
+msgid "Account Modification"
+msgstr "Τροποποίηση Λογαριασμού"
+
+#: src/msg.c:23
+msgid "_Name: "
+msgstr "_Όνομα: "
+
+#: src/msg.c:24
+msgid "_Jabber ID:"
+msgstr "_Jabber ID:"
+
+#: src/msg.c:25
+msgid "_Password:"
+msgstr "_Κωδικός:"
+
+#: src/msg.c:26
+msgid "Resour_ce: "
+msgstr "_Πόρος: "
+
+#: src/msg.c:27
+msgid "Priori_ty:"
+msgstr "Π_ροτεραιότητα:"
+
+#: src/msg.c:28
+#, fuzzy
+msgid "Enable if you want to register for a new jabber account"
+msgstr "_Τσεκάρετε εάν επιθυμείτε να καταχωρήσετε νέα jabber λογαρισμό"
+
+#: src/msg.c:29
+msgid "_Register new account"
+msgstr "_Καταχώριση νέου λογαριασμού"
+
+#: src/msg.c:30
+msgid "Click to change account's password"
+msgstr ""
+
+#: src/msg.c:31 src/msg.c:254
+msgid "Chan_ge"
+msgstr "Α_λλαγή"
+
+#: src/msg.c:32
+msgid "If enabled, Gajim will remember the password for this account"
+msgstr ""
+
+#: src/msg.c:33
+msgid "Save pass_word"
+msgstr "_Αποθήκευση"
+
+#: src/msg.c:34
+msgid ""
+"Resource is sent to the jabber server in order to 'seperate' the same JID in "
+"two or more parts depending on the number of the clients connected in the "
+"same server with the same account. So you might be connected in the same "
+"account with resource 'Home' and 'Work' at the same time. The resource which "
+"has the highest priority will get the messages. (see below)"
+msgstr ""
+
+#: src/msg.c:36
+msgid ""
+"Priority is used in Jabber to determine who gets the events from the jabber "
+"server when two or more clients are connected using the same account; The "
+"client with the highest priority gets the events"
+msgstr ""
+
+#: src/msg.c:37
+msgid "Account"
+msgstr "Λογαριασμός"
+
+#: src/msg.c:38
+msgid ""
+"If checked, Gajim, when launched, will automatically connect to jabber using "
+"this account"
+msgstr ""
+
+#: src/msg.c:39
+msgid "C_onnect at startup"
+msgstr "Σύνδεση κατά την ε_κκίνηση"
+
+#: src/msg.c:40
+msgid "Conversation _history for all contacts in this account"
+msgstr "Ιστορικό συζητήσεων για όλες τις επαφές σε αυτόν το λογαριασμό"
+
+#: src/msg.c:41
+msgid "Synch_ronize account status with global status"
+msgstr "Συγχρονισμός κατάστασης λογαριασμού με την γενική κατάσταση"
+
+#: src/msg.c:42 src/msg.c:105 src/msg.c:185
+msgid "General"
+msgstr "Γενικά"
+
+#: src/msg.c:43
+msgid "Use _TLS"
+msgstr "Χρήση του _TLS"
+
+#: src/msg.c:44
+msgid "<b>TLS</b>"
+msgstr "<b>TLS</b>"
+
+#: src/msg.c:46
+msgid "Choose _Key"
+msgstr "Επιλογή _Κλειδιού"
+
+#: src/msg.c:47
+msgid ""
+"If checked Gajim will store the password in ~/.gajim/config with 'read' "
+"permission only for only you and of course the administrator"
+msgstr ""
+
+#: src/msg.c:48
+msgid "Save _passphrase (insecure)"
+msgstr "Αποθήκευση _κωδικοφράσης (περιορισμένη ασφάλεια)"
+
+#: src/msg.c:49
+msgid "<b>OpenGPG</b>"
+msgstr "<b>OpenGPG</b>"
+
+#: src/msg.c:50
+msgid "Security"
+msgstr "Ασφάλεια"
+
+#: src/msg.c:51
+msgid "_Use proxy"
+msgstr "_Χρήση μεσολαβητή"
+
+#: src/msg.c:52
+msgid "_Host:"
+msgstr "_Κεντρικός υπολογιστής:"
+
+#: src/msg.c:53
+msgid "_Port:"
+msgstr "_Θύρα:"
+
+#: src/msg.c:54
+msgid "_Username:"
+msgstr "_Όνομα χρήστη:"
+
+#: src/msg.c:55
+msgid "Pass_word:"
+msgstr "_Κωδικός:"
+
+#: src/msg.c:56
+msgid "3128"
+msgstr ""
+
+#: src/msg.c:57
+msgid "<b>Proxy</b>"
+msgstr "<b>Μεσολαβητής</b>"
+
+#: src/msg.c:58
+msgid "Proxy"
+msgstr "Μεσολαβητής"
+
+#: src/msg.c:59
+msgid "Information about you are stored on the server as vCard"
+msgstr "Οι πληροφορίες για εσάς αποθηκεύονται στον διακομιστή ως vCard"
+
+#: src/msg.c:60
+msgid "_Edit Personal Details..."
+msgstr "_Τροποποίηση Προσωπικών Πληροφοριών..."
+
+#: src/msg.c:61
+msgid "Personal Details"
+msgstr "Προσωπικές Πληροφορίες"
+
+#: src/msg.c:62
+msgid "Add New Contact"
+msgstr "Προσθήκη Νέας Επαφής"
+
+#: src/msg.c:63
+msgid "User ID:"
+msgstr "Ταυτότητα Χρήστη:"
+
+#: src/msg.c:64
+msgid "Protocol:"
+msgstr "Πρωτόκολλο:"
+
+#: src/msg.c:65 src/msg.c:169
+msgid "Jabber ID:"
+msgstr ""
+
+#: src/msg.c:66 src/msg.c:171 src/msg.c:180 src/msg.c:215
+msgid "Nickname:"
+msgstr "Όνομα χρήστη:"
+
+#: src/msg.c:67
+msgid "Automatically authorize contact"
+msgstr "Αυτόματη εξουσιοδότηση επαφής"
+
+#: src/msg.c:68 src/msg.c:100
+msgid "Group:"
+msgstr "Ομάδα:"
+
+#: src/msg.c:69
+#, fuzzy
+msgid "I would like to add you to my contact list."
+msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφών μου."
+
+#: src/msg.c:70
+msgid "_Subscribe"
+msgstr ""
+
+#: src/msg.c:71
+msgid "Subscription Request"
+msgstr ""
+
+#: src/msg.c:72
+msgid "Subscription request from"
+msgstr ""
+
+#: src/msg.c:73
+msgid "Deny authorization from contact so he cannot know when you're connected"
+msgstr ""
+"Αρνηθείτε εξουσιοδότηση σε μια επαφή ώστε να μην μπορεί να γνωρίζει πότε "
+"είστε συνδεδεμένος"
+
+#: src/msg.c:74
+msgid "_Deny"
+msgstr "_Άρνηση"
+
+#: src/msg.c:75
+msgid "Contact _Info"
+msgstr "Πληροφορίες Επαφής"
+
+#: src/msg.c:76
+msgid "Authorize contact so he can know when you're connected"
+msgstr ""
+"Εξουσιοδοτήστε μια επαφή ώστε να μπορεί να ξέρει πότε είστε συνδεδεμένος"
+
+#: src/msg.c:77
+msgid "_Authorize"
+msgstr "_Εξουσιοδότηση"
+
+#: src/msg.c:78
+msgid "Service Discovery"
+msgstr "Ανακάλυψη Υπηρεσιών"
+
+#: src/msg.c:79
+msgid "_Address:"
+msgstr "_Διεύθυνση:"
+
+#: src/msg.c:80
+msgid "Go"
+msgstr "Πάμε"
+
+#: src/msg.c:81
+msgid "_Refresh"
+msgstr "_Ανανέωση"
+
+#: src/msg.c:82
+msgid "Re_gister"
+msgstr "_Καταχώρηση"
+
+#: src/msg.c:83 src/msg.c:217
+msgid "_Join"
+msgstr "_Συμμετοχή"
+
+#: src/msg.c:84
+msgid "Register to"
+msgstr "Εγγραφή σε"
+
+#: src/msg.c:85
+msgid "_Cancel"
+msgstr "_Ακύρωση"
+
+#: src/msg.c:86
+msgid "_OK"
+msgstr ""
+
+#: src/msg.c:87
+msgid "Preferences"
+msgstr "Προτιμήσεις"
+
+#: src/msg.c:88
+msgid "If checked, Gajim will also have a trayicon"
+msgstr ""
+
+#: src/msg.c:89
+msgid "_Icon in systray (aka. notification area)"
+msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
+
+#: src/msg.c:90
+msgid ""
+"If checked, Gajim will remember the main window position next time you run it"
+msgstr ""
+
+#: src/msg.c:91
+msgid "Save roster _position"
+msgstr "Αποθήκευση τοποθεσίας κύριου παραθύρου"
+
+#: src/msg.c:92
+msgid ""
+"If you have 2 or more accounts and this is checked, Gajim will list all "
+"contacts as if you had one account"
+msgstr ""
+
+#: src/msg.c:93
+msgid "_Merge accounts"
+msgstr "_Συνένωση λογαριασμών"
+
+#: src/msg.c:94
+msgid ""
+"If checked, Gajim will replace ascii smilies like ':)' with equivalent "
+"graphical emoticons"
+msgstr ""
+
+#: src/msg.c:95
+msgid "Use _emoticons"
+msgstr "Χρήση "
+
+#: src/msg.c:96
+msgid "Add/Remove Emoticons..."
+msgstr "Προσθαφαίρεση "
+
+#: src/msg.c:97
+msgid "_Status iconset:"
+msgstr "_Σετ εικονιδίων κατάστασης:"
+
+#: src/msg.c:98
+msgid "Roster theme:"
+msgstr "Θέμα κύριου παραθύρου:"
+
+#: src/msg.c:99
+msgid "Account:"
+msgstr "Λογαριασμός:"
+
+#: src/msg.c:101
+msgid "User:"
+msgstr "Χρήστης:"
+
+#: src/msg.c:102
+msgid "Text color"
+msgstr "Χρώμα κειμένου"
+
+#: src/msg.c:103
+msgid "Text font"
+msgstr "Γραμματοσειρά Κειμένου"
+
+#: src/msg.c:104
+msgid "Background color"
+msgstr "Χρώμα φόντου"
+
+#: src/msg.c:106
+msgid "Use a single chat window with _tabs"
+msgstr "Χρήση ενός παραθύρου για κουβέντες με καρτέλες"
+
+#: src/msg.c:107
+msgid "Print time:"
+msgstr "Εμφάνιση χρόνου:"
+
+#: src/msg.c:108
+msgid "On every line"
+msgstr "Σε κάθε γραμμή"
+
+#: src/msg.c:109
+msgid "Every 5 minutes"
+msgstr "Κάθε 5 λεπτά"
+
+#: src/msg.c:110
+msgid "Never"
+msgstr "Ποτέ"
+
+#: src/msg.c:111
+msgid "After time:"
+msgstr "Μετά από χρόνο:"
+
+#: src/msg.c:112
+msgid "After nickname:"
+msgstr "Μετά από ψευδώνυμο:"
+
+#: src/msg.c:113
+msgid "Before nickname:"
+msgstr "Πριν το ψευδώνυμο:"
+
+#: src/msg.c:114
+msgid "Before time:"
+msgstr "Πριν από χρόνο:"
+
+#: src/msg.c:115
+msgid "Incoming message:"
+msgstr "Εισερχόμενο μήνυμα:"
+
+#: src/msg.c:116
+msgid "Outgoing message:"
+msgstr "Εξερχόμενο μήνυμα:"
+
+#: src/msg.c:117
+msgid "Status message:"
+msgstr "Μήνυμα κατάστασης:"
+
+#: src/msg.c:118
+msgid "Reset to Default Colors"
+msgstr "Επαφορά Προεπιλεγμένων Χρωμάτων"
+
+#: src/msg.c:119
+msgid "<b>Format of a chat line</b>"
+msgstr "<b>Μορφή μια γραμμής κουβέντας</b>"
+
+#: src/msg.c:120 src/msg.c:223
+msgid "Chat"
+msgstr "Κουβέντα"
+
+#: src/msg.c:121
+msgid ""
+"Gajim will notify you for new message via a popup in the bottom right of the "
+"screen"
+msgstr ""
+
+#: src/msg.c:122
+msgid "_Notify me about it"
+msgstr "_Ειδοποίησε με"
+
+#: src/msg.c:123
+msgid ""
+"Gajim will automatically show the new received message in a new chat window "
+"or tab in an existing chat window"
+msgstr ""
+
+#: src/msg.c:124
+msgid "_Pop it up"
+msgstr "_Εμφάνισε το"
+
+#: src/msg.c:125
+msgid ""
+"Gajim will only change the icon of the contact that sent the new message"
+msgstr ""
+
+#: src/msg.c:126
+msgid "Show only in _roster"
+msgstr "Εμφάνισε το μόνο στο κύριο παράθυρο"
+
+#: src/msg.c:127
+#, fuzzy
+msgid "When new chat nessage is received"
+msgstr "Όταν ένα νέο μήνυμα κουβέντας ληφθεί"
+
+#: src/msg.c:128
+msgid "Notify me about contacts going: "
+msgstr "Ειδοποίηση όταν μια επαφή παίρνει κατάσταση:"
+
+#: src/msg.c:129
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just went online"
+msgstr ""
+
+#: src/msg.c:130 src/msg.c:147
+msgid "_Online"
+msgstr "_Συνδεδεμένος"
+
+#: src/msg.c:131
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just went offline"
+msgstr ""
+
+#: src/msg.c:132 src/msg.c:148
+msgid "Of_fline"
+msgstr "_Αποσυνδεδεμένος"
+
+#: src/msg.c:133
+#, fuzzy
+msgid "Allow popup/notifications when I'm _away/xa/busy/invisible"
+msgstr ""
+"Επίτρεψη εμφανίσεων/γνωστοποιήσεων όταν είμαι απομακρ./μη διαθ./απασχολ./"
+"αφανής"
+
+#: src/msg.c:134
+msgid "<b>Notifications</b>"
+msgstr "<b>Γνωστοποιήσεις</b>"
+
+#: src/msg.c:135
+msgid ""
+"Check this option, only if someone you don't have in the roster spams/annoys "
+"you. Use with caution, cause it blocks all messags from every contact you "
+"don't have in the roster and might want to sent you a message"
+msgstr ""
+
+#: src/msg.c:136
+msgid "_Ignore events from contacts not in the roster"
+msgstr "_Αγνόησε γεγονότα από επαφές που δεν είναι στη λίστα επαφών"
+
+#: src/msg.c:137
+msgid "Play _sounds"
+msgstr "Αναπαραγωγή ήχων"
+
+#: src/msg.c:138
+msgid "_Player:"
+msgstr "_Εφαρμογή:"
+
+#: src/msg.c:139
+msgid "..."
+msgstr ""
+
+#: src/msg.c:140
+msgid "<b>Sounds</b>"
+msgstr "<b>Ήχοι</b>"
+
+#: src/msg.c:141
+msgid "Events"
+msgstr "Γεγονότα"
+
+#: src/msg.c:142
+msgid "Auto _away after:"
+msgstr "Αυτόματα _απομακρυσμένος μετά:"
+
+#: src/msg.c:143
+#, fuzzy
+msgid "Auto _Not Available after:"
+msgstr "Αυτόματα _μη διαθέσιμος μετά:"
+
+#: src/msg.c:144 src/msg.c:145
+msgid "minutes"
+msgstr "λεπτά"
+
+#: src/msg.c:146
+msgid "Ask status message when going: "
+msgstr "Ερώτηση μηνύμ. κατάστ. όταν γίνομαι:"
+
+#: src/msg.c:149
+msgid "<b>Preset Status Messages</b>"
+msgstr "<b>Προκαθορισμένα Μηνύματα Καταστάσης</b>"
+
+#: src/msg.c:151
+msgid "Open _with:"
+msgstr "Άνοιμα _με"
+
+#: src/msg.c:152
+msgid "GNOME default applications"
+msgstr "Προεπιλεγμένες εφαρμογές από το GNOME"
+
+#: src/msg.c:153
+msgid "KDE default applications"
+msgstr "Προεπιλεγμένες εφαρμογές από το KDE"
+
+#: src/msg.c:154
+msgid "Custom"
+msgstr "Χρήση δικών μου εφαρμογών"
+
+#: src/msg.c:155
+msgid "_Browser:"
+msgstr "_Περιηγητής:"
+
+#: src/msg.c:156
+msgid "_Mail client:"
+msgstr "_Εφαρμογή Ηλ. Αλληλογραφίας"
+
+#: src/msg.c:157
+msgid "<b>Custom Applications</b>"
+msgstr "<b>Δικές μου Εφαρμογές</b>"
+
+#: src/msg.c:158
+msgid "<b>Links</b>"
+msgstr "<b>Δεσμοί</b>"
+
+#: src/msg.c:159
+msgid "Log presences in _contact's log file"
+msgstr "Αποθήκευση παρουσιών στο αρχείο με το ιστορικό της επαφής"
+
+#: src/msg.c:160
+msgid "Log presences in an _external file"
+msgstr "Αποθήκευση παρουσιών σε εξωτερικό αρχείο"
+
+#: src/msg.c:161
+msgid "<b>Log</b>"
+msgstr "<b>Ιστορικό</b>"
+
+#: src/msg.c:162
+msgid "Allow _OS information to be sent"
+msgstr "Επίτρεψη αποστολής πληροφοριών για το Λειτ. Σύστημα"
+
+#: src/msg.c:163
+msgid "Check for new _version at startup"
+msgstr "Έλεγχος για νέα έκδοση κατά την εκκίνηση"
+
+#: src/msg.c:164
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>Διάφορα</b>"
+
+#: src/msg.c:165
+msgid "Open..."
+msgstr "Άνοιγμα..."
+
+#: src/msg.c:166
+#, fuzzy
+msgid "<b>Advanced  Configuration Editor</b>"
+msgstr "<b>Επεξεργασία Ρυθμίσεων για Προχωρημένους</b>"
+
+#: src/msg.c:167
+msgid "Advanced"
+msgstr "Προχωρημένοι"
+
+#: src/msg.c:168
+msgid "Contact Information"
+msgstr "Πληροφορίες Επαφής"
+
+#: src/msg.c:170
+msgid "Status:"
+msgstr "Κατάσταση:"
+
+#: src/msg.c:172
+msgid "Resource:"
+msgstr "Πόρος:"
+
+#: src/msg.c:173
+msgid "Subscription:"
+msgstr "Εγγραφή:"
+
+#: src/msg.c:174
+msgid "Ask:"
+msgstr "Ζήτα:"
+
+#: src/msg.c:175
+msgid "Client:"
+msgstr "Εφαρμογή:"
+
+#: src/msg.c:176
+msgid "Log history"
+msgstr "Καταγραφή ιστορικού"
+
+#: src/msg.c:177
+msgid "OS:"
+msgstr "Λειτ. Σύστημα:"
+
+#: src/msg.c:178
+msgid "Jabber"
+msgstr ""
+
+#: src/msg.c:179
+msgid "Name:"
+msgstr "Όνομα:"
+
+#: src/msg.c:181
+msgid "Birthday:"
+msgstr "Γενέθλια:"
+
+#: src/msg.c:182
+msgid "E-Mail:"
+msgstr ""
+
+#: src/msg.c:183
+msgid "Homepage:"
+msgstr "Προσωπ. Σελίδα:"
+
+#: src/msg.c:184
+msgid "Phone No.:"
+msgstr "Τηλέφωνο:"
+
+#: src/msg.c:186
+msgid "Street:"
+msgstr "Οδός:"
+
+#: src/msg.c:187
+msgid "Extra Address:"
+msgstr "Επιπλέον Οδός:"
+
+#: src/msg.c:188
+msgid "City:"
+msgstr "Πόλη:"
+
+#: src/msg.c:189
+msgid "State:"
+msgstr "Νομός:"
+
+#: src/msg.c:190
+msgid "Postal Code:"
+msgstr "Τ.Κ."
+
+#: src/msg.c:191
+msgid "Country:"
+msgstr "Χώρα:"
+
+#: src/msg.c:192
+msgid "Location"
+msgstr "Περιοχή"
+
+#: src/msg.c:193
+msgid "Company:"
+msgstr "Εταιρία:"
+
+#: src/msg.c:194
+msgid "Department:"
+msgstr "Τμήμα"
+
+#: src/msg.c:195
+msgid "Position:"
+msgstr "Θέση:"
+
+#: src/msg.c:196
+msgid "Role:"
+msgstr "Ρόλος:"
+
+#: src/msg.c:197
+msgid "Work"
+msgstr "Δουλειά"
+
+#: src/msg.c:198
+msgid "About"
+msgstr "Περί"
+
+#: src/msg.c:199
+msgid "Conversation History"
+msgstr "Ιστορικό Κουβέντας"
+
+#: src/msg.c:200
+msgid "_Earliest"
+msgstr "_Αρχή"
+
+#: src/msg.c:201
+msgid "_Previous"
+msgstr "_Πίσω"
+
+#: src/msg.c:202
+msgid "_Latest"
+msgstr "_Τέλος"
+
+#: src/msg.c:203
+msgid "Groupchat"
+msgstr "Ομαδική Κουβέντα"
+
+#: src/msg.c:205
+msgid "Click to change the subject of the room"
+msgstr "Πατήστε για να αλλάξετε το θέμα του δωματίου"
+
+#: src/msg.c:206
+msgid "Change _Subject"
+msgstr "Αλλαγή _Θέματος"
+
+#: src/msg.c:207
+msgid "Click to configure the room options"
+msgstr "Πατήστε για να τροποποιήσετε τις παραμέτρους για το δωμάτιο"
+
+#: src/msg.c:208
+msgid "Configure _Room"
+msgstr "Τροποποίηση _Δωματίου"
+
+#: src/msg.c:209
+msgid "Close _Window"
+msgstr "Κλείσιμο _Παραθύρου"
+
+#: src/msg.c:210
+msgid "Subject:"
+msgstr "Θέμα:"
+
+#: src/msg.c:211
+msgid "Join Groupchat"
+msgstr "Συμμετοχή σε Ομαδική Συζήτηση"
+
+#: src/msg.c:212
+msgid "Password:"
+msgstr "Κωδικός:"
+
+#: src/msg.c:213
+msgid "Server:"
+msgstr "Διακομιστής:"
+
+#: src/msg.c:214
+msgid "Room:"
+msgstr "Δωμάτιο:"
+
+#: src/msg.c:216
+msgid "Recently:"
+msgstr "Πρόσφατα:"
+
+#: src/msg.c:218 src/msg.c:219
+msgid "Passphrase"
+msgstr "Κωδικοφράση"
+
+#: src/msg.c:220
+msgid "<b>Choose your OpenGPG key</b>"
+msgstr "<b>Επιλέξτε το OpenGPG κλειδί σου</b>"
+
+#: src/msg.c:221
+msgid "Enter your message:"
+msgstr "Πληκτρολόγηστε το μήνυμα σου:"
+
+#: src/msg.c:222
+msgid "Or choose a preset message:"
+msgstr "Ή διάλεξτε από τα προκαθορισμένα μηνύματα:"
+
+#: src/msg.c:224
+msgid "Click to see past conversations with this contact"
+msgstr "Πατήστε για να δείτε παλιότερες συζητήσεις με αυτή την επαφή"
+
+#: src/msg.c:225
+msgid "_History"
+msgstr "_Ιστορικό"
+
+#: src/msg.c:226
+msgid "Click to clear conversation (won't delete it from history)"
+msgstr ""
+"Πατήστε για να καθαρίσετε την συζήτηση (δεν θα σβηστεί από το ιστορικό)"
+
+#: src/msg.c:227
+msgid "Click for contact's extented information"
+msgstr "Πατήστε για να έχετε περισσότερες πληροφορίες για αυτή την επαφή"
+
+#: src/msg.c:228
+msgid "Anonymous <nick@server/res>"
+msgstr ""
+
+#: src/msg.c:230
+msgid "Change Password"
+msgstr "Αλλαγή Κωδικού"
+
+#: src/msg.c:231
+msgid "Enter new password:"
+msgstr "Πληκτρολογήστε νέο κωδικό:"
+
+#: src/msg.c:232
+msgid "Enter it again for confirmation:"
+msgstr "Επαναπληκτρολογήστε για επιβεβαίωση:"
+
+#: src/msg.c:233
+msgid "_Chat"
+msgstr "_Κουβέντα"
+
+#: src/msg.c:234
+msgid ""
+"Enter the user ID of the contact you would like to\n"
+"send a chat message to"
+msgstr ""
+
+#: src/msg.c:238
+msgid "Free for Chat"
+msgstr "Διαθέσιμος για Κουβέντα"
+
+#: src/msg.c:244
+msgid "Chat with"
+msgstr "Κουβέντα με"
+
+#: src/msg.c:245
+msgid "New Message"
+msgstr "Νέο μήνυμα"
+
+#: src/msg.c:246
+msgid "<b>event_type_label</b>"
+msgstr ""
+
+#: src/msg.c:247
+msgid "event_description_label"
+msgstr ""
+
+#: src/msg.c:248
+msgid "Add/Remove Emoticons"
+msgstr "Προσθαφαίρεση "
+
+#: src/msg.c:249
+msgid "Set Image"
+msgstr "Ανάθεση Φωτογραφίας"
+
+#: src/msg.c:250
+msgid "New version of Gajim available"
+msgstr "Μια νέα έκδοση του Gajim είναι διαθέσιμη"
+
+#: src/msg.c:251
+msgid "Open Download Page"
+msgstr "Άνοιγμα Σελίδας για Μεταφόρτωση"
+
+#: src/msg.c:252
+msgid "<b>Changes in latest version</b>"
+msgstr "<b>Αλλαγές στην τελευταία έκδοση</b>"
+
+#: src/msg.c:253
+#, fuzzy
+msgid "Groupchat Configuration"
+msgstr "Ρυθμίσεις Δωματίου"
+
+#: src/msg.c:255
+msgid "Remove account only from Gajim"
+msgstr "Αφαίρεση λογαριασμού μόνο από το Gajim"
+
+#: src/msg.c:256
+msgid "Remove account from Gajim and from server"
+msgstr "Αφαίρεση λογαριασμού από το Gajim και από τον διακομιστή"
+
+#: src/msg.c:257
+msgid "<b>What do you want to do?</b>"
+msgstr "<b>Παρακαλώ επιλέξτε την ακριβή ενέργεια</b>"
+
+#: src/msg.c:259
+msgid "Advanced Configuration Editor"
+msgstr "Επεξεργασία Ρυθμίσεων για Προχωρημένους"
+
+#: src/msg.c:260
+msgid "Filter:"
+msgstr "Φιλτράρισμα:"
+
+#~ msgid "Are you sure you want to remove %s transport from your roster?"
+#~ msgstr ""
+#~ "Είστε σίγουρος ότι θέλετε να αφαιρέσετε την μεταφορά %s από την λίστα "
+#~ "επαφών σας;"

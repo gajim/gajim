@@ -439,7 +439,7 @@ class Roster_window:
 
 	def on_remove_agent(self, widget, user, account):
 		'''When an agent is requested to log in or off'''
-		window = dialogs.Confirmation_dialog(_('Are you sure you want to remove the agent %s from your roster?') % user.jid)
+		window = dialogs.Confirmation_dialog(_('Are you sure you want to remove %s transport from your roster?') % user.jid)
 		if window.get_response() == gtk.RESPONSE_YES:
 			gajim.connections[account].unsubscribe_agent(user.jid + '/' \
 																		+ user.resource)

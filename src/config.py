@@ -1233,7 +1233,7 @@ class Account_modification_window:
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		if gajim.connections[self.account].connected < 2:
-			dialogs.Error_dialog(_('You must be connected to edit your personal  information'))
+			dialogs.Error_dialog(_('You must be connected to edit your personal information'))
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
 			self.plugin.windows[self.account]['infos'][jid] = \
