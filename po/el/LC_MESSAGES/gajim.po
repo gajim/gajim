@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-21 17:59+0300\n"
+"POT-Creation-Date: 2005-05-21 18:56+0300\n"
 "PO-Revision-Date: 2005-05-17 12:19+0300\n"
 "Last-Translator: Nikos Kouremenos <kourem@gmail.com>\n"
 "Language-Team: \n"
@@ -72,23 +72,23 @@ msgstr "Όλα τα αρχεία"
 msgid "Wav Sounds"
 msgstr "Αρχεία Wav"
 
-#: src/config.py:1033
+#: src/config.py:1030
 msgid "GPG is not usable on this computer"
 msgstr "Το GPG δεν είναι διαθέσιμος σε αυτόν τον Η/Υ"
 
-#: src/config.py:1052
+#: src/config.py:1049
 msgid "You must be offline to change the account's name"
 msgstr "Πρέπει να αποσυνδεδεθείτε για να αλλάξετε το όνομα του λογαριασμού"
 
-#: src/config.py:1055
+#: src/config.py:1052
 msgid "You must enter a name for this account"
 msgstr "Πρέπει να δώσετε ένα όνομα για αυτόν το λογαριασμό"
 
-#: src/config.py:1058
+#: src/config.py:1055
 msgid "Spaces are not permited in account name"
 msgstr "Τα κενά δεν επιτρέπονται στο όνομα του λογαριασμού"
 
-#: src/config.py:1062
+#: src/config.py:1059
 msgid ""
 "You must enter a Jabber ID for this account\n"
 "For example: someone@someserver.org"
@@ -96,87 +96,87 @@ msgstr ""
 "Πρέπει να δώσετε ένα Jabber ID για αυτόν το λογαριασμό\n"
 "Για παράδειγμα: someone@someserver.org"
 
-#: src/config.py:1069
+#: src/config.py:1066
 msgid "You must enter a password to register a new account"
 msgstr "Πρέπει να δώσετε ένα κωδικό για να καταχωρήσετε νέο λογαριασμό"
 
-#: src/config.py:1100
+#: src/config.py:1097
 msgid "Proxy port must be a port number"
 msgstr "Ο αριθμός θύρας του μεσολαβητή πρέπει να είναι αριθμός"
 
-#: src/config.py:1105
+#: src/config.py:1102
 msgid "You must enter a proxy port to use proxy"
 msgstr "Πρέπει να δώσετε αριθμό θύρας για την χρήση του μεσολαβητή"
 
-#: src/config.py:1108
+#: src/config.py:1105
 msgid "You must enter a proxy host to use proxy"
 msgstr "Πρέπει να δώσετε ένα κεντρικό υπολογιστή για την χρήση του μεσολαβητή"
 
-#: src/config.py:1180
+#: src/config.py:1177
 msgid "This name is taken by an another account of yours"
 msgstr "Αυτό το όνομα είναι πιασμένο από έναν άλλο λογαριασμό σας"
 
-#: src/config.py:1232
+#: src/config.py:1229
 msgid ""
 "You must first create your account before editing your personal information"
 msgstr ""
 "Πρέπει πρώτα να δημιουργήσετε τον λογαριασμό προτού ξεκινήσετε να "
 "τροποποιείτε τις προσωπικές σας πληροφορίες"
 
-#: src/config.py:1236
+#: src/config.py:1233
 msgid "You must be connected to edit your personal information"
 msgstr ""
 "Πρέπει να είστε συνδεδεμένος για να τροποποιήσετε τις προσωπικές σας "
 "πληροφορίες"
 
-#: src/config.py:1246 src/gajim.py:413
+#: src/config.py:1243 src/gajim.py:413
 #, python-format
 msgid "error contacting %s"
 msgstr "πρόβλημα στην επικοινωνία με τον %s"
 
-#: src/config.py:1257 src/msg.c:45
+#: src/config.py:1254 src/msg.c:45
 msgid "No key selected"
 msgstr "Καμία επιλογή κλειδιού"
 
-#: src/config.py:1367 src/config.py:1629
+#: src/config.py:1364 src/config.py:1626
 msgid "Name"
 msgstr "Όνομα"
 
-#: src/config.py:1370
+#: src/config.py:1367
 msgid "Server"
 msgstr "Διακομιστής"
 
-#: src/config.py:1422
+#: src/config.py:1419
 #, python-format
 msgid "Register to %s"
 msgstr "Εγγραφή στο %s"
 
-#: src/config.py:1441
+#: src/config.py:1438
 msgid "Text"
 msgstr "Κείμενο"
 
-#: src/config.py:1449
+#: src/config.py:1446
 msgid "Image"
 msgstr "Φωτογραφία"
 
-#: src/config.py:1610
+#: src/config.py:1607
 msgid "You must be connected to browse services"
 msgstr "Πρέπει να συνδεθείτε γα να περιηγηθείτε στις υπηρεσίες"
 
-#: src/config.py:1634
+#: src/config.py:1631
 msgid "Service"
 msgstr "Υπηρεσία"
 
-#: src/config.py:1639
+#: src/config.py:1636
 msgid "Node"
 msgstr "Κόμβος"
 
-#: src/config.py:2014
+#: src/config.py:2011
 #, python-format
 msgid "Removing %s account"
 msgstr "Aφαιρώντας τον λογαριασμό %s"
 
-#: src/config.py:2020
+#: src/config.py:2017
 #, python-format
 msgid ""
 "You're currently connected with %s.\n"
@@ -1004,14 +1004,15 @@ msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
 
 #: src/msg.c:90
 msgid ""
-"If checked, Gajim will remember the main window position next time you run it"
+"If checked, Gajim will remember the roster window position in the screen and "
+"the size of it next time you run it"
 msgstr ""
-"Αν επιλεγεί, το Gajim θα θυμάται την θέση του κύριου παραθύρου την επόμενη "
+"Αν επιλεγεί, το Gajim θα θυμάται την θέση και το μέγεθος του κύριου παραθύρου την επόμενη "
 "φορά που θα εκτελεστεί"
 
 #: src/msg.c:91
-msgid "Save roster _position"
-msgstr "Αποθήκευση τοποθεσίας κύριου παραθύρου"
+msgid "Save roster _position and size"
+msgstr "Αποθήκευση τοποθεσίας και μεγέθους κύριου παραθύρου"
 
 #: src/msg.c:92
 msgid ""
