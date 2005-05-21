@@ -16,8 +16,6 @@
 ## GNU General Public License for more details.
 ##
 
-import time
-from string import find, lower
 from common import gajim
 
 
