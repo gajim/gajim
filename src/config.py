@@ -1020,11 +1020,8 @@ class Account_modification_window:
 		entry.set_text(gajim.config.get_per('accounts', self.account,
 							'proxypass'))
 
-		#FIXME: Alexey to re-write so TLS is fixed
-#		usetls = gajim.config.get_per('accounts', self.account, 'usetls')
-#		self.xml.get_widget('use_tls_checkbutton').set_active(usetls)
-		self.xml.get_widget('tls_frame').hide()
-		self.xml.get_widget('tls_frame').set_no_show_all(True)
+		usetls = gajim.config.get_per('accounts', self.account, 'usetls')
+		self.xml.get_widget('use_tls_checkbutton').set_active(usetls)
 
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if gajim.config.get('usegpg'):
