@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-20 22:19+0200\n"
+"POT-Creation-Date: 2005-05-21 12:45+0300\n"
 "PO-Revision-Date: 2005-05-17 12:19+0300\n"
 "Last-Translator: Nikos Kouremenos <kourem@gmail.com>\n"
 "Language-Team: \n"
@@ -24,7 +24,7 @@ msgstr "Όνομα προτίμησης"
 msgid "Value"
 msgstr "Τιμή"
 
-#: src/advanced.py:121
+#: src/advanced.py:122
 msgid "Type"
 msgstr "Είδος"
 
@@ -117,7 +117,7 @@ msgstr ""
 
 #: src/config.py:1236
 #, fuzzy
-msgid "You must be connected to edit your personal  information"
+msgid "You must be connected to edit your personal information"
 msgstr ""
 "Πρέπει να είστε συνδεδεμένος για να τροποποιήσετε τις προσωπικές σας "
 "πληροφορίες"
@@ -391,11 +391,11 @@ msgid "%s is now %s (%s)"
 msgstr "%s είναι τώρα %s (%s)"
 
 #: src/roster_window.py:442
-#, fuzzy, python-format
-msgid "Are you sure you want to remove the agent %s from your roster?"
+#, python-format
+msgid "Are you sure you want to remove %s transport from your roster?"
 msgstr ""
-"Είστε σίγουρος ότι θέλετε να αφαιρέσετε την επαφή %s (%s) από την λίστα "
-"επαφών σας;"
+"Είστε σίγουρος ότι θέλετε να αφαιρέσετε την μεταφορά %s από την λίστα επαφών "
+"σας;"
 
 #: src/roster_window.py:475
 msgid "Start chat"
@@ -604,7 +604,7 @@ msgstr "Η σύνδεση με %s στάθηκε αδύνατη."
 
 #: src/common/connection.py:577
 #, fuzzy, python-format
-msgid "Authentification failed with %s, check your login and password"
+msgid "Authentication failed with %s, check your login and password"
 msgstr ""
 "Η πιστοποίηση ταυτότητας με %s απέτυχε, παρακαλώ ελέγξτε το συνθηματικό σας"
 
@@ -698,7 +698,7 @@ msgstr "Π_ροτεραιότητα:"
 
 #: src/msg.c:28
 #, fuzzy
-msgid "Enable if you want to register for a new jabber account"
+msgid "Check if you want to register for a new jabber account"
 msgstr "_Τσεκάρετε εάν επιθυμείτε να καταχωρήσετε νέα jabber λογαρισμό"
 
 #: src/msg.c:29
@@ -714,7 +714,7 @@ msgid "Chan_ge"
 msgstr "Α_λλαγή"
 
 #: src/msg.c:32
-msgid "If enabled, Gajim will remember the password for this account"
+msgid "If checked, Gajim will remember the password for this account"
 msgstr ""
 
 #: src/msg.c:33
@@ -777,7 +777,7 @@ msgstr "Επιλογή _Κλειδιού"
 
 #: src/msg.c:47
 msgid ""
-"If checked Gajim will store the password in ~/.gajim/config with 'read' "
+"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
 "permission only for only you and of course the administrator"
 msgstr ""
 
@@ -1105,7 +1105,7 @@ msgstr "Εμφάνισε το μόνο στο κύριο παράθυρο"
 
 #: src/msg.c:127
 #, fuzzy
-msgid "When new chat nessage is received"
+msgid "When new chat message is received"
 msgstr "Όταν ένα νέο μήνυμα κουβέντας ληφθεί"
 
 #: src/msg.c:128
@@ -1134,7 +1134,7 @@ msgstr "_Αποσυνδεδεμένος"
 
 #: src/msg.c:133
 #, fuzzy
-msgid "Allow popup/notifications when I'm _away/xa/busy/invisible"
+msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
 "Επίτρεψη εμφανίσεων/γνωστοποιήσεων όταν είμαι απομακρ./μη διαθ./απασχολ./"
 "αφανής"
@@ -1179,8 +1179,7 @@ msgid "Auto _away after:"
 msgstr "Αυτόματα _απομακρυσμένος μετά:"
 
 #: src/msg.c:143
-#, fuzzy
-msgid "Auto _Not Available after:"
+msgid "Auto _not available after:"
 msgstr "Αυτόματα _μη διαθέσιμος μετά:"
 
 #: src/msg.c:144 src/msg.c:145
@@ -1189,7 +1188,7 @@ msgstr "λεπτά"
 
 #: src/msg.c:146
 msgid "Ask status message when going: "
-msgstr "Ερώτηση μηνύμ. κατάστ. όταν γίνομαι:"
+msgstr "Ερώτηση μηνύμηματος κατάστασης όταν γίνομαι:"
 
 #: src/msg.c:149
 msgid "<b>Preset Status Messages</b>"
@@ -1256,8 +1255,7 @@ msgid "Open..."
 msgstr "Άνοιγμα..."
 
 #: src/msg.c:166
-#, fuzzy
-msgid "<b>Advanced  Configuration Editor</b>"
+msgid "<b>Advanced Configuration Editor</b>"
 msgstr "<b>Επεξεργασία Ρυθμίσεων για Προχωρημένους</b>"
 
 #: src/msg.c:167
@@ -1536,8 +1534,7 @@ msgid "<b>Changes in latest version</b>"
 msgstr "<b>Αλλαγές στην τελευταία έκδοση</b>"
 
 #: src/msg.c:253
-#, fuzzy
-msgid "Groupchat Configuration"
+msgid "Room Configuration"
 msgstr "Ρυθμίσεις Δωματίου"
 
 #: src/msg.c:255
@@ -1559,8 +1556,3 @@ msgstr "Επεξεργασία Ρυθμίσεων για Προχωρημένο�
 #: src/msg.c:260
 msgid "Filter:"
 msgstr "Φιλτράρισμα:"
-
-#~ msgid "Are you sure you want to remove %s transport from your roster?"
-#~ msgstr ""
-#~ "Είστε σίγουρος ότι θέλετε να αφαιρέσετε την μεταφορά %s από την λίστα "
-#~ "επαφών σας;"

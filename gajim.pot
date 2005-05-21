@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-20 22:19+0200\n"
+"POT-Creation-Date: 2005-05-21 12:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: src/advanced.py:121
+#: src/advanced.py:122
 msgid "Type"
 msgstr ""
 
@@ -112,7 +112,7 @@ msgid ""
 msgstr ""
 
 #: src/config.py:1236
-msgid "You must be connected to edit your personal  information"
+msgid "You must be connected to edit your personal information"
 msgstr ""
 
 #: src/config.py:1246 src/gajim.py:413
@@ -377,7 +377,7 @@ msgstr ""
 
 #: src/roster_window.py:442
 #, python-format
-msgid "Are you sure you want to remove the agent %s from your roster?"
+msgid "Are you sure you want to remove %s transport from your roster?"
 msgstr ""
 
 #: src/roster_window.py:475
@@ -570,7 +570,7 @@ msgstr ""
 
 #: src/common/connection.py:577
 #, python-format
-msgid "Authentification failed with %s, check your login and password"
+msgid "Authentication failed with %s, check your login and password"
 msgstr ""
 
 #: src/common/connection.py:671
@@ -662,7 +662,7 @@ msgid "Priori_ty:"
 msgstr ""
 
 #: src/msg.c:28
-msgid "Enable if you want to register for a new jabber account"
+msgid "Check if you want to register for a new jabber account"
 msgstr ""
 
 #: src/msg.c:29
@@ -678,7 +678,7 @@ msgid "Chan_ge"
 msgstr ""
 
 #: src/msg.c:32
-msgid "If enabled, Gajim will remember the password for this account"
+msgid "If checked, Gajim will remember the password for this account"
 msgstr ""
 
 #: src/msg.c:33
@@ -741,7 +741,7 @@ msgstr ""
 
 #: src/msg.c:47
 msgid ""
-"If checked Gajim will store the password in ~/.gajim/config with 'read' "
+"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
 "permission only for only you and of course the administrator"
 msgstr ""
 
@@ -1064,7 +1064,7 @@ msgid "Show only in _roster"
 msgstr ""
 
 #: src/msg.c:127
-msgid "When new chat nessage is received"
+msgid "When new chat message is received"
 msgstr ""
 
 #: src/msg.c:128
@@ -1092,7 +1092,7 @@ msgid "Of_fline"
 msgstr ""
 
 #: src/msg.c:133
-msgid "Allow popup/notifications when I'm _away/xa/busy/invisible"
+msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
 
 #: src/msg.c:134
@@ -1135,7 +1135,7 @@ msgid "Auto _away after:"
 msgstr ""
 
 #: src/msg.c:143
-msgid "Auto _Not Available after:"
+msgid "Auto _not available after:"
 msgstr ""
 
 #: src/msg.c:144 src/msg.c:145
@@ -1211,7 +1211,7 @@ msgid "Open..."
 msgstr ""
 
 #: src/msg.c:166
-msgid "<b>Advanced  Configuration Editor</b>"
+msgid "<b>Advanced Configuration Editor</b>"
 msgstr ""
 
 #: src/msg.c:167
@@ -1489,7 +1489,7 @@ msgid "<b>Changes in latest version</b>"
 msgstr ""
 
 #: src/msg.c:253
-msgid "Groupchat Configuration"
+msgid "Room Configuration"
 msgstr ""
 
 #: src/msg.c:255
