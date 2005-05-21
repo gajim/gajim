@@ -17,15 +17,24 @@
 ## GNU General Public License for more details.
 ##
 
+from common import i18n
+_ = i18n._
+
 def get_uf_show(show):
 	'''returns a userfriendly string for dnd/xa/chat
 	and capitalize()s the rest'''
 	if show == 'dnd':
-		uf_show = 'Busy'
+		uf_show = _('Busy')
 	elif show == 'xa':
-		uf_show = 'Not Available'
+		uf_show = _('Not Available')
 	elif show == 'chat':
-		uf_show = 'Free for Chat'
-	else:
-		uf_show = show.capitalize()
+		uf_show = _('Free for Chat')
+	elif show == 'online':
+		uf_show = _('Online')
+	elif show == 'connecting':
+		uf_show = _('Connecting')
+	elif show == 'away':
+		uf_show = _('Away')
+	elif show == 'away':
+		uf_show = _('Away')
 	return uf_show
