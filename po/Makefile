@@ -1,4 +1,4 @@
-LANGS   := fr pt_BR
+LANGS   := fr pt_BR el
 LANGDIR := $(foreach lang, $(LANGS), $(subst ,/LC_MESSAGES/gajim.mo, $(lang)))
 
 all: $(LANGDIR)
