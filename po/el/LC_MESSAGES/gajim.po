@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-21 18:56+0300\n"
+"POT-Creation-Date: 2005-05-21 19:07+0300\n"
 "PO-Revision-Date: 2005-05-17 12:19+0300\n"
 "Last-Translator: Nikos Kouremenos <kourem@gmail.com>\n"
 "Language-Team: \n"
@@ -129,7 +129,7 @@ msgstr ""
 "Πρέπει να είστε συνδεδεμένος για να τροποποιήσετε τις προσωπικές σας "
 "πληροφορίες"
 
-#: src/config.py:1243 src/gajim.py:413
+#: src/config.py:1243 src/gajim.py:414
 #, python-format
 msgid "error contacting %s"
 msgstr "πρόβλημα στην επικοινωνία με τον %s"
@@ -289,25 +289,25 @@ msgstr "Ο κωδικός σας δεν μπορεί να είναι κενός"
 msgid "Confirmation password is not the same"
 msgstr "Ο κωδικός στην επαλήθευση δεν είναι ο ίδιος"
 
-#: src/gajim.py:108
+#: src/gajim.py:109
 msgid "bad arguments"
 msgstr "προβληματικές παράμετροι"
 
-#: src/gajim.py:367
+#: src/gajim.py:368
 msgid "error while sending"
 msgstr "σφάλμα κατά την αποστολή"
 
-#: src/gajim.py:397
+#: src/gajim.py:398
 #, python-format
 msgid "You are now authorized by %s"
 msgstr "Ο %s μόλις σας εξουσιοδότησε"
 
-#: src/gajim.py:400
+#: src/gajim.py:401
 #, python-format
 msgid "You are now unsubscribed by %s"
 msgstr "Ο %s μόλις σας αφαίρεσε την εξουσιοδότηση"
 
-#: src/gajim.py:503
+#: src/gajim.py:504
 msgid "Your GPG passphrase is wrong, so you are connected without your GPG key"
 msgstr ""
 "Η κωδική φράση για το GPG είναι λανθασμένη, έγινε σύνδεση χωρίς την χρήση "
@@ -620,6 +620,54 @@ msgstr ""
 msgid "You must be connected to get your contact information"
 msgstr ""
 "Πρέπει να είστε συνδεδεμένος για να λάβετε τις πληροφορίες της επαφής σας"
+
+#: src/common/config.py:197
+msgid "Nap"
+msgstr "Υπνάκος"
+
+#: src/common/config.py:197
+msgid "I'm taking a nap."
+msgstr "Παίρνω έναν υπνάκο."
+
+#: src/common/config.py:198
+msgid "Brb"
+msgstr ""
+
+#: src/common/config.py:198
+msgid "Back in some minutes."
+msgstr "Πίσω σε λίγα λεπτά."
+
+#: src/common/config.py:199
+msgid "Eating"
+msgstr "Τρώω"
+
+#: src/common/config.py:199
+msgid "I'm eating, so leave me a message."
+msgstr "Τώρα τρώω, οπότε άφηστε μήνυμα."
+
+#: src/common/config.py:200
+msgid "Movie"
+msgstr "Ταινία"
+
+#: src/common/config.py:200
+msgid "I'm watching a movie."
+msgstr "Βλέπω μια ταινία."
+
+#: src/common/config.py:201
+msgid "Working"
+msgstr "Δουλειά"
+
+#: src/common/config.py:201
+msgid "I'm working."
+msgstr "Δουλεύω."
+
+#: src/common/config.py:202
+msgid "Phone"
+msgstr "Τηλέφωνο"
+
+#: src/common/config.py:202
+msgid "I'm on the phone."
+msgstr "Είμαι στο τηλέφωνο."
 
 #: src/common/connection.py:254 src/common/connection.py:685
 msgid "I would like to add you to my roster."
@@ -1007,8 +1055,8 @@ msgid ""
 "If checked, Gajim will remember the roster window position in the screen and "
 "the size of it next time you run it"
 msgstr ""
-"Αν επιλεγεί, το Gajim θα θυμάται την θέση και το μέγεθος του κύριου παραθύρου την επόμενη "
-"φορά που θα εκτελεστεί"
+"Αν επιλεγεί, το Gajim θα θυμάται την θέση και το μέγεθος του κύριου "
+"παραθύρου την επόμενη φορά που θα εκτελεστεί"
 
 #: src/msg.c:91
 msgid "Save roster _position and size"
