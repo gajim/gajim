@@ -39,4 +39,6 @@ def get_uf_show(show):
 		uf_show = _('Offline')
 	elif show == 'invisible':
 		uf_show = _('Invisible')
+	elif show == 'not in the roster'
+		uf_show = _('Not in the roster')
 	return uf_show
