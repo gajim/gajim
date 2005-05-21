@@ -97,7 +97,7 @@ class Chat:
 				chat = 'Groupchat'
 		title = start + chat
 		if len(gajim.connections) >= 2: # if we have 2 or more accounts
-			title = title + ' (account: ' + self.account + ')'
+			title = title + _(' (account: ') + self.account + ')'
 
 		self.window.set_title(title)
 

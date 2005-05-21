@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-21 17:03+0300\n"
+"POT-Creation-Date: 2005-05-21 17:59+0300\n"
 "PO-Revision-Date: 2005-05-17 12:19+0300\n"
 "Last-Translator: Nikos Kouremenos <kourem@gmail.com>\n"
 "Language-Team: \n"
@@ -27,6 +27,10 @@ msgstr "Τιμή"
 #: src/advanced.py:122
 msgid "Type"
 msgstr "Είδος"
+
+#: src/chat.py:100
+msgid " (account: "
+msgstr " (λογαριασμός: "
 
 #: src/chat.py:491
 msgid "_Open Email Composer"
@@ -67,6 +71,10 @@ msgstr "Όλα τα αρχεία"
 #: src/config.py:887
 msgid "Wav Sounds"
 msgstr "Αρχεία Wav"
+
+#: src/config.py:1033
+msgid "GPG is not usable on this computer"
+msgstr "Το GPG δεν είναι διαθέσιμος σε αυτόν τον Η/Υ"
 
 #: src/config.py:1052
 msgid "You must be offline to change the account's name"
@@ -208,12 +216,13 @@ msgid "User name"
 msgstr "Όνομα χρήστη"
 
 #: src/dialogs.py:187
-msgid " Status Message"
-msgstr " Μήνυμα κατάστασης"
+#, python-format
+msgid "%s Status Message"
+msgstr "Μήνυμα για Κατάσταση %s"
 
 #: src/dialogs.py:235
 msgid "You must be connected to add a contact"
-msgstr "Πρέπει να είστε συνδεδεμένος για να προσθέτε μια επαφή"
+msgstr "Πρέπει να είστε συνδεδεμένος για να προσθέσετε μια επαφή"
 
 #: src/dialogs.py:308
 msgid "The contact's name must be something like login@hostname"
@@ -324,7 +333,7 @@ msgstr "_Προνόμια"
 
 #: src/groupchat_window.py:449
 msgid "_Kick"
-msgstr "_Πέταγμα έξω"
+msgstr "_Ξεφορτώσου τον"
 
 #: src/groupchat_window.py:452
 msgid "_Grant Voice"
@@ -729,7 +738,7 @@ msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσε�
 
 #: src/msg.c:29
 msgid "_Register new account"
-msgstr "_Καταχώριση νέου λογαριασμού"
+msgstr "_Καταχώρηση νέου λογαριασμού"
 
 #: src/msg.c:30
 msgid "Click to change account's password"
@@ -1243,7 +1252,7 @@ msgstr "λεπτά"
 
 #: src/msg.c:146
 msgid "Ask status message when going: "
-msgstr "Ερώτηση μηνύμηματος κατάστασης όταν γίνομαι:"
+msgstr "Ερώτηση μηνύματος κατάστασης όταν γίνομαι:"
 
 #: src/msg.c:147
 msgid "_Online"
@@ -1259,7 +1268,7 @@ msgstr "<b>Προκαθορισμένα Μηνύματα Καταστάσης</b
 
 #: src/msg.c:151
 msgid "Open _with:"
-msgstr "Άνοιμα _με"
+msgstr "Άνοιγμα _με:"
 
 #: src/msg.c:152
 msgid "GNOME default applications"
@@ -1279,7 +1288,7 @@ msgstr "_Περιηγητής:"
 
 #: src/msg.c:156
 msgid "_Mail client:"
-msgstr "_Εφαρμογή Αλληλογραφίας"
+msgstr "_Εφαρμογή Αλληλογραφίας:"
 
 #: src/msg.c:157
 msgid "<b>Custom Applications</b>"
@@ -1303,7 +1312,7 @@ msgstr "<b>Ιστορικό</b>"
 
 #: src/msg.c:162
 msgid "Allow _OS information to be sent"
-msgstr "Επίτρεψη αποστολής πληροφοριών για το Λειτ. Σύστημα"
+msgstr "Επίτρεψη αποστολής πληροφοριών για το λειτ. σύστημα"
 
 #: src/msg.c:163
 msgid "Check for new _version at startup"

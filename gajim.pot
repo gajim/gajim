@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-21 17:03+0300\n"
+"POT-Creation-Date: 2005-05-21 17:59+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,10 @@ msgstr ""
 
 #: src/advanced.py:122
 msgid "Type"
+msgstr ""
+
+#: src/chat.py:100
+msgid " (account: "
 msgstr ""
 
 #: src/chat.py:491
@@ -66,6 +70,10 @@ msgstr ""
 
 #: src/config.py:887
 msgid "Wav Sounds"
+msgstr ""
+
+#: src/config.py:1033
+msgid "GPG is not usable on this computer"
 msgstr ""
 
 #: src/config.py:1052
@@ -200,7 +208,8 @@ msgid "User name"
 msgstr ""
 
 #: src/dialogs.py:187
-msgid " Status Message"
+#, python-format
+msgid "%s Status Message"
 msgstr ""
 
 #: src/dialogs.py:235
