@@ -172,8 +172,10 @@ class Tabbed_chat_window(chat.Chat):
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
 		uf_show = helpers.get_uf_show(user.show)
-		self.print_conversation(_('%s is %s (%s)') % (user.name, 
-			uf_show, user.status), user.jid, 'status')
+		s = _('%s is %s') % (user.name, uf_show)
+		if user.status:
+			s += ' (' + user.status + ')'
+		self.print_conversation(s, user.jid, 'status')
 
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
