@@ -602,6 +602,7 @@ msgid "Couldn't connect to %s"
 msgstr "Η σύνδεση με %s στάθηκε αδύνατη."
 
 #: src/common/connection.py:577
+#, python-format
 msgid "Authentication failed with %s, check your login and password"
 msgstr ""
 "Η πιστοποίηση ταυτότητας με %s απέτυχε, παρακαλώ ελέγξτε το συνθηματικό σας"
@@ -696,7 +697,7 @@ msgstr "Π_ροτεραιότητα:"
 
 #: src/msg.c:28
 msgid "Check if you want to register for a new jabber account"
-msgstr "_Τσεκάρετε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαρισμό"
+msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαρισμό"
 
 #: src/msg.c:29
 msgid "_Register new account"
@@ -943,7 +944,7 @@ msgstr "Προτιμήσεις"
 
 #: src/msg.c:88
 msgid "If checked, Gajim will also have a trayicon"
-msgstr ""
+msgstr "Αν επιλεγεγεί, το Gajim θα έχει δικό του ειδονίδιο στην περιοχή γνωστοποίησης"
 
 #: src/msg.c:89
 msgid "_Icon in systray (aka. notification area)"
@@ -976,11 +977,11 @@ msgstr ""
 
 #: src/msg.c:95
 msgid "Use _emoticons"
-msgstr "Χρήση "
+msgstr "Χρήση Συμβόλων"
 
 #: src/msg.c:96
 msgid "Add/Remove Emoticons..."
-msgstr "Προσθαφαίρεση "
+msgstr "Προσθαφαίρεση Συμβόλων..."
 
 #: src/msg.c:97
 msgid "_Status iconset:"
