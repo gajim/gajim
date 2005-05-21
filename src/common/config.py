@@ -88,7 +88,7 @@ class Config:
 		'before_nickname': [ opt_str, '<' ],
 		'after_nickname': [ opt_str, '>' ],
 		'send_os_info': [ opt_bool, True ],
-		'check_for_new_version': [ opt_bool, True ],
+		'check_for_new_version': [ opt_bool, False ],
 		'usegpg': [ opt_bool, False ],
 		'log_notif_in_user_file': [ opt_bool, True ],
 		'log_notif_in_sep_file': [ opt_bool, True ],
