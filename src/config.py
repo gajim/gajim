@@ -67,10 +67,10 @@ class Preferences_window:
 			('notify_on_new_message_radiobutton')
 		self.popup_new_message_radiobutton = self.xml.get_widget \
 			('popup_new_message_radiobutton')
-		self.notify_on_online_checkbutton = self.xml.get_widget \
-			('notify_on_online_checkbutton')
-		self.notify_on_offline_checkbutton = self.xml.get_widget \
-			('notify_on_offline_checkbutton')
+		self.notify_on_signin_checkbutton = self.xml.get_widget \
+			('notify_on_signin_checkbutton')
+		self.notify_on_signout_checkbutton = self.xml.get_widget \
+			('notify_on_signout_checkbutton')
 		self.auto_popup_away_checkbutton = self.xml.get_widget \
 			('auto_popup_away_checkbutton')
 		self.auto_away_checkbutton = self.xml.get_widget('auto_away_checkbutton')
@@ -219,12 +219,12 @@ class Preferences_window:
 			self.xml.get_widget('only_in_roster_radiobutton').set_active(True)
 
 		#notify on online statuses
-		st = gajim.config.get('notify_on_online')
-		self.notify_on_online_checkbutton.set_active(st)
+		st = gajim.config.get('notify_on_signin')
+		self.notify_on_signin_checkbutton.set_active(st)
 
 		#notify on offline statuses
-		st = gajim.config.get('notify_on_offline')
-		self.notify_on_offline_checkbutton.set_active(st)
+		st = gajim.config.get('notify_on_signout')
+		self.notify_on_signout_checkbutton.set_active(st)
 
 		#autopopupaway
 		st = gajim.config.get('autopopupaway')
@@ -678,11 +678,11 @@ class Preferences_window:
 		if widget.get_active():
 			self.auto_popup_away_checkbutton.set_sensitive(False)
 
-	def on_notify_on_online_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'notify_on_online')
+	def on_notify_on_signin_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'notify_on_signin')
 
-	def on_notify_on_offline_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'notify_on_offline')
+	def on_notify_on_signout_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'notify_on_signout')
 
 	def on_auto_popup_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopupaway')

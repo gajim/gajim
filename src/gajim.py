@@ -283,7 +283,7 @@ class Interface:
 					self.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
-					gajim.config.get('notify_on_online') and \
+					gajim.config.get('notify_on_signin') and \
 					self.allow_notifications[account]:
 					show_notification = False
 					# check OUR status and if we allow notifications for that status
@@ -302,7 +302,7 @@ class Interface:
 					self.play_sound('contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not self.queues[account].has_key(jid) and \
-					gajim.config.get('notify_on_offline'):
+					gajim.config.get('notify_on_signout'):
 					show_notification = False
 					# check OUR status and if we allow notifications for that status
 					if gajim.config.get('autopopupaway'): # always notify
