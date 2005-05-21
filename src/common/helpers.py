@@ -22,7 +22,7 @@ _ = i18n._
 
 def get_uf_show(show):
 	'''returns a userfriendly string for dnd/xa/chat
-	and capitalize()s the rest'''
+	and capitalize()s the rest and make translatable'''
 	if show == 'dnd':
 		uf_show = _('Busy')
 	elif show == 'xa':
@@ -35,6 +35,8 @@ def get_uf_show(show):
 		uf_show = _('Connecting')
 	elif show == 'away':
 		uf_show = _('Away')
-	elif show == 'away':
-		uf_show = _('Away')
+	elif show == 'offline':
+		uf_show = _('Offline')
+	elif show == 'invisible':
+		uf_show = _('Invisible')
 	return uf_show
