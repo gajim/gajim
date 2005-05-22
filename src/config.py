@@ -1391,6 +1391,8 @@ class Service_registration_window:
 			entry = gtk.Entry()
 			entry.set_activates_default(True)
 			entry.set_text(self.infos[name])
+			if name == 'password':
+				entry.set_visibility(False)
 			table.attach(entry, 1, 2, nbrow - 1, nbrow, 0, 0, 0, 0)
 			self.entries[name] = entry
 			if nbrow == 1:
