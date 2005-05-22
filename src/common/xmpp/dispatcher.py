@@ -182,6 +182,8 @@ class Dispatcher(PlugIn):
         """ Unregister handler. "typ" and "ns" must be specified exactly the same as with registering."""
         if not xmlns: xmlns=self._owner.defaultNamespace
         if not typ and not ns: typ='default'
+        if not self.handlers[xmlns].has_key(name): return
+        if not self.handlers[xmlns][name].has_key(typ+ns): return
         for pack in self.handlers[xmlns][name][typ+ns]:
             if handler==pack['func']: break
         else: pack=None
