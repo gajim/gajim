@@ -3,7 +3,7 @@ Categories=Network;InstantMessaging;Application;
 Name=Gajim
 GenericName=Jabber IM Client
 Comment=A GTK+ Jabber client
-Version=0.6.1
+Version=0.7
 Encoding=UTF-8
 Exec=gajim
 Icon=gajim.xpm
@@ -12,7 +12,7 @@ StartupNotify=true
 StartupWMClass=Gajim
 Terminal=false
 Type=Application
-ServiceTypes=DCOP/InstantMessenger
+X-ServiceTypes=DCOP/InstantMessenger
 X-DCOP-ServiceType=Unique
 X-DCOP-ServiceName=Gajim
 
