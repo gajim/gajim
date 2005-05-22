@@ -114,7 +114,7 @@ class Dispatcher(PlugIn):
             iq = Iq('get', NS_LAST, to=self._owner.Server)
             self.send(iq)
             self._natSent = True
-        if time.time() > self._lastIncome + 90: #1 min + 30 sec pr rep
+        if time.time() > self._lastIncome + 105: #1 min + 45 sec for answer
             self._owner.disconnected()
         for handler in self._cycleHandlers: handler(self)
         if self._owner.Connection.pending_data(timeout):
