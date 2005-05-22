@@ -1389,6 +1389,7 @@ class Service_registration_window:
 			label = gtk.Label(name.capitalize() + ':')
 			table.attach(label, 0, 1, nbrow - 1, nbrow, 0, 0, 0, 0)
 			entry = gtk.Entry()
+			entry.set_activates_default(True)
 			entry.set_text(self.infos[name])
 			table.attach(entry, 1, 2, nbrow - 1, nbrow, 0, 0, 0, 0)
 			self.entries[name] = entry
