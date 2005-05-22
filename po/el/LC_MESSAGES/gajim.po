@@ -1019,7 +1019,7 @@ msgstr "_Ανανέωση"
 
 #: src/msg.c:82
 msgid "Re_gister"
-msgstr "_Καταχώρηση"
+msgstr "_Εγγραφή"
 
 #: src/msg.c:83 src/msg.c:217
 msgid "_Join"
