@@ -12,7 +12,6 @@ FILES_LIB	= `$(FIND_LIB)`
 FIND_PY		= find -regex '.*\.\(py\)'
 FILES_PY	= `$(FIND_PY)`
 
-LANGS		= fr pt_BR
 SCRIPTS = \
 	scripts/gajim
 
