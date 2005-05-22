@@ -64,6 +64,8 @@ install:
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/applications";
 	cp gajim.desktop "$(DESTDIR)$(PREFIX)/share/applications/";
+	mkdir -p "$(DESTDIR)$(PREFIX)/man/man1";
+	cp gajim.1 "$(DESTDIR)$(PREFIX)/man/man1";
 	mkdir -p "$(DESTDIR)$(PREFIX)/lib/gajim";
 	for f in $(FILES_LIB) ; do \
 		cp "$$f" "$(DESTDIR)$(PREFIX)/lib/gajim/"; \
