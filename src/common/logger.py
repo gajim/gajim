@@ -45,13 +45,13 @@ class Logger:
 				print LOGPATH, 'is file but it should be a directory'
 				print 'Gajim will now exit'
 				sys.exit()
-		else: #create ~/.gajim/logs if it doesn't exist
-			if dot_gajim:
-				os.mkdir(dot_gajim)
+		else: # dot_gajim doesn't exist
+			if dot_gajim: # is '' on win9x so avoid that
 				print 'creating', dot_gajim , 'directory'
+				os.mkdir(dot_gajim)
 			if not os.path.isdir(LOGPATH):
-				os.mkdir(LOGPATH)
 				print 'creating', LOGPATH, 'directory'
+				os.mkdir(LOGPATH)
 
 	def write(self, kind, msg, jid, show = None, tim = None):
 		if not tim:
