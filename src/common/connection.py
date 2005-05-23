@@ -136,6 +136,8 @@ class Connection:
 			handler(self.name, data)
 
 	def _discover(self, ns, jid, node = None): #FIXME: this is in features.py but it is blocking
+		if not self.connection:
+			return
 		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = ns)
 		if node:
 			iq.setQuerynode(node)
@@ -966,6 +968,8 @@ class Connection:
 				traceback.print_exc()
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
+				if not self.connection:
+					return
 				try:
 					self.connection.disconnect()
 				except:
