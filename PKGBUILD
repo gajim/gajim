@@ -2,7 +2,7 @@
 #################
 
 pkgname=gajim
-pkgver=0.6.1
+pkgver=0.7
 pkgrel=1
 pkgdesc="Gajim is a GTK Jabber client"
 url="http://www.gajim.org"
@@ -27,4 +27,4 @@ build() {
 
   make DESTDIR=$startdir/pkg install
 }
-md5sums=('03e95969c68ffdbe34f7a4173f8fd4db')
+md5sums=('70d6b882c496ea7fbacc4222da49b125')
