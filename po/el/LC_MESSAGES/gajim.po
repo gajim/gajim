@@ -643,7 +643,7 @@ msgstr "Τρώω"
 
 #: src/common/config.py:199
 msgid "I'm eating, so leave me a message."
-msgstr "Τώρα τρώω, οπότε άφηστε μήνυμα."
+msgstr "Τώρα τρώω, οπότε αφήστε μήνυμα."
 
 #: src/common/config.py:200
 msgid "Movie"
