@@ -289,11 +289,12 @@ class Dispatcher(PlugIn):
                     user=0
         if user and self._defaultHandler: self._defaultHandler(session,stanza)
 
-    def WaitForResponse(self, ID, timeout=DefaultTimeout):
+    def WaitForResponse(self, ID, timeout=None):
         """ Block and wait until stanza with specific "id" attribute will come.
             If no such stanza is arrived within timeout, return None.
             If operation failed for some reason then owner's attributes
             lastErrNode, lastErr and lastErrCode are set accordingly. """
+        if timeout is None: timeout=DefaultTimeout
         self._expected[ID]=None
         has_timed_out=0
         abort_time=time.time() + timeout
@@ -313,8 +314,9 @@ class Dispatcher(PlugIn):
             self._owner.lastErrCode=response.getErrorCode()
         return response
 
-    def SendAndWaitForResponse(self, stanza, timeout=DefaultTimeout):
+    def SendAndWaitForResponse(self, stanza, timeout=None):
         """ Put stanza on the wire and wait for recipient's response to it. """
+        if timeout is None: timeout=DefaultTimeout
         return self.WaitForResponse(self.send(stanza),timeout)
 
     def SendAndCallForResponse(self, stanza, func, args={}):

@@ -520,6 +520,7 @@ class Connection:
 			con = common.xmpp.Client(hostname, debug = [])
 			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
 			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
+		common.xmpp.dispatcher.DefaultTimeout = 45
 		con.UnregisterDisconnectHandler(con.DisconnectHandler)
 		con.RegisterDisconnectHandler(self._disconnectedCB)
 		try:
