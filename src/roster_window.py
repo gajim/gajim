@@ -1374,8 +1374,6 @@ class Roster_window:
 		# user1.groups
 		u = self.contacts[account][data][0]
 		u.groups.remove(grp_source)
-		u.groups.append(grp_dest)
-		gajim.connections[account].update_user(u.jid, u.name, u.groups)
 		if model.iter_n_children(iter_group_source) == 1: #this was the only child
 			model.remove(iter_group_source)
 		#delete the group if it is empty (need to look for offline users too)
@@ -1386,7 +1384,10 @@ class Roster_window:
 				break
 		if group_empty:
 			del self.groups[account][grp_source]
-		self.add_user_to_roster(data, account)
+		if not grp_dest in u.groups:
+			u.groups.append(grp_dest)
+			self.add_user_to_roster(data, account)
+		gajim.connections[account].update_user(u.jid, u.name, u.groups)
 		if context.action == gtk.gdk.ACTION_MOVE:
 			context.finish(True, True, etime)
 		return
