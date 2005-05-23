@@ -76,6 +76,7 @@ class Edit_groups_dialog:
 			if model.get_value(iter, 0) == group:
 				return
 			iter = model.iter_next(iter)
+		self.changes_made = True
 		model.append((group, True))
 		self.user.groups.append(group)
 		self.update_user()
