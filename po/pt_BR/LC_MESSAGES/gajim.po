@@ -771,6 +771,8 @@ msgid ""
 "If checked Gajim will store the password in ~/.gajim/config with 'read' "
 "permission only for only you and of course the administrator"
 msgstr ""
+"Se checado o Gajim gravará sua senha em ~/.gajim/config com permissão de "
+"'leitura' somente para você e claro, o administrador"
 
 #: src/msg.c:48
 msgid "Save _passphrase (insecure)"
@@ -955,6 +957,8 @@ msgid ""
 "If you have 2 or more accounts and this is checked, Gajim will list all "
 "contacts as if you had one account"
 msgstr ""
+"Se você tem duas ou mais contas e isto é marcado, Gajim listará todos "
+"os contatos como se você tivesse somente uma conta"
 
 #: src/msg.c:93
 msgid "_Merge accounts"
@@ -974,7 +978,7 @@ msgstr "Usar _emoticons"
 
 #: src/msg.c:96
 msgid "Add/Remove Emoticons..."
-msgstr ""
+msgstr "Adicionar/Remover Emoticons..."
 
 #: src/msg.c:97
 msgid "_Status iconset:"
@@ -1111,6 +1115,8 @@ msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just went online"
 msgstr ""
+"Gajim notificará você através de uma janela popup na parte inferior direita "
+"da tela sobre os contatos que se conectaram"
 
 #: src/msg.c:130 src/msg.c:147
 msgid "_Online"
@@ -1121,6 +1127,8 @@ msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just went offline"
 msgstr ""
+"Gajim notificará você através de uma janela popup na parte inferior direita "
+"da tela sobre os contatos que se desconectaram"
 
 #: src/msg.c:132 src/msg.c:148
 msgid "Of_fline"
@@ -1140,6 +1148,9 @@ msgid ""
 "you. Use with caution, cause it blocks all messags from every contact you "
 "don't have in the roster and might want to sent you a message"
 msgstr ""
+"Marque esta opção somente se alguém que não está na sua lista de spams/annoys"
+"Use com cuidado, porque isto bloqueia todas as mensagens de qualquer contato "
+"que você não possui em sua lista e queria lhe enviar uma mensagem"
 
 #: src/msg.c:136
 msgid "_Ignore events from contacts not in the roster"
