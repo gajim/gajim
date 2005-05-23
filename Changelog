@@ -1,3 +1,17 @@
+Gajim 0.7 (23 May 2005)
+
+  * Ability for groupchat reserved rooms with full affiliations and roles support
+  * Popup notification for incoming events
+  * Protocol icons for contacts from transports
+  * Gajim's user interface is now more HIG compliant
+  * Gajim now detects and can send operating system information
+  * Gajim now can inform the user about new version availability
+  * Gajim jabber library migration from jabberpy to xmpppy
+  * Rewrite the plugin system to remove threads and improve latency
+  * Gajim now supports Nodes in Service Discovery
+  * Greek and Polish translations
+
+
 Gajim 0.6.1 (03 April 2005)
 
   * Rewrite of service discovery. It doesn't freeze Gajim anymore.
