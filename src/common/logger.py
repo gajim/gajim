@@ -46,8 +46,9 @@ class Logger:
 				print 'Gajim will now exit'
 				sys.exit()
 		else: #create ~/.gajim/logs if it doesn't exist
-			os.mkdir(dot_gajim)
-			print 'creating', dot_gajim , 'directory'
+			if dot_gajim:
+				os.mkdir(dot_gajim)
+				print 'creating', dot_gajim , 'directory'
 			os.mkdir(LOGPATH)
 			print 'creating', LOGPATH, 'directory'
 
