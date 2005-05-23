@@ -49,8 +49,9 @@ class Logger:
 			if dot_gajim:
 				os.mkdir(dot_gajim)
 				print 'creating', dot_gajim , 'directory'
-			os.mkdir(LOGPATH)
-			print 'creating', LOGPATH, 'directory'
+			if not os.path.isdir(LOGPATH):
+				os.mkdir(LOGPATH)
+				print 'creating', LOGPATH, 'directory'
 
 	def write(self, kind, msg, jid, show = None, tim = None):
 		if not tim:
