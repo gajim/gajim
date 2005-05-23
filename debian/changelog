@@ -1,3 +1,17 @@
+gajim (0.7-1) unstable; urgency=low
+
+  * Ability for groupchat reserved rooms with full affiliations and roles support
+  * Popup notification for incoming events
+  * Protocol icons for contacts from transports
+  * Gajim's user interface is now more HIG compliant
+  * Gajim now detects and can send operating system information
+  * Gajim can now inform the user about new version availability
+  * Gajim jabber library migration from jabberpy to xmpppy
+  * Rewrite of the plugin system to remove threads and improve latency
+  * Gajim now supports Nodes in Service Discovery
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Mon, 23 May 2005 10:28:40 +0200
+
 gajim (0.6.1-1) unstable; urgency=low
 
   * Rewrite of service discovery. It doesn't freeze Gajim anymore.
