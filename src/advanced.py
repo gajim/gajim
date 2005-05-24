@@ -35,6 +35,47 @@ OPT_VAL = 1
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class Advanced_configuration_window:
+	def __init__(self, plugin):
+		self.plugin = plugin
+
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_configuration_window', None)
+		self.window = self.xml.get_widget('advanced_configuration_window')
+		self.entry = self.xml.get_widget('advanced_entry')
+
+		treeview = self.xml.get_widget('advanced_treeview')
+		self.model = gtk.TreeStore(str, str, str)
+		self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+		self.modelfilter = self.model.filter_new()
+		self.modelfilter.set_visible_func(self.visible_func)
+
+		renderer_text = gtk.CellRendererText()
+		col = treeview.insert_column_with_attributes(-1, _('Preference Name'),
+			renderer_text, text = 0)
+		col.set_resizable(True)
+					
+		renderer_text = gtk.CellRendererText()
+		renderer_text.set_property('editable', 1)
+		renderer_text.connect('edited', self.on_config_edited)
+		col = treeview.insert_column_with_attributes(-1, _('Value'),
+			renderer_text, text = 1)
+
+		#col.set_resizable(True) DO NOT REMOVE
+		# GTK+ bug http://bugzilla.gnome.org/show_bug.cgi?id=304139
+		col.set_max_width(250)
+
+		renderer_text = gtk.CellRendererText()
+		treeview.insert_column_with_attributes(-1, _('Type'),
+			renderer_text, text = 2)
+
+		# add data to model
+		gajim.config.foreach(self.fill, self.model)
+		
+		treeview.set_model(self.modelfilter)
+		
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+		self.plugin.windows['advanced_config'] = self
+
 	def on_config_edited(self, cell, row, text):
 		modelrow = self.model[row]
 		if gajim.config.set(modelrow[0], text):
@@ -88,44 +129,6 @@ class Advanced_configuration_window:
 		text = widget.get_text()
 		self.modelfilter.refilter()
 
-	def __init__(self, plugin):
-		self.plugin = plugin
-
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_configuration_window', None)
-		self.window = self.xml.get_widget('advanced_configuration_window')
-		self.entry = self.xml.get_widget('advanced_entry')
-
-		self.xml.signal_autoconnect(self)
-
-		treeview = self.xml.get_widget('advanced_treeview')
-		self.model = gtk.TreeStore(str, str, str)
-		self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
-		self.modelfilter = self.model.filter_new()
-		self.modelfilter.set_visible_func(self.visible_func)
-
-		renderer_text = gtk.CellRendererText()
-		col = treeview.insert_column_with_attributes(-1, _('Preference Name'),
-			renderer_text, text = 0)
-		col.set_resizable(True)
-					
-		renderer_text = gtk.CellRendererText()
-		renderer_text.set_property('editable', 1)
-		renderer_text.connect('edited', self.on_config_edited)
-		col = treeview.insert_column_with_attributes(-1, _('Value'),
-			renderer_text, text = 1)
-
-		#col.set_resizable(True) DO NOT REMOVE
-		# GTK+ bug http://bugzilla.gnome.org/show_bug.cgi?id=304139
-		col.set_max_width(250)
-
-		renderer_text = gtk.CellRendererText()
-		treeview.insert_column_with_attributes(-1, _('Type'),
-			renderer_text, text = 2)
-
-		# add data to model
-		gajim.config.foreach(self.fill, self.model)
-		
-		treeview.set_model(self.modelfilter)
-		
-		self.plugin.windows['advanced_config'] = self
-		self.window.show_all()
+	def on_advanced_configuration_window_key_press_event(self, widget, event)
+		if event.keyval == gtk.keysyms.Escape:
+			self.window.hide()
