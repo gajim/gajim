@@ -281,14 +281,19 @@ class Connection:
 			errcode = prs.getErrorCode()
 			if errcode == '409':	#conflict :	Nick Conflict
 				self.dispatch('ERROR', errmsg)
+			elif errcode == '502': # Internal Timeout:
+				self.dispatch('NOTIFY', (prs.getFrom().getStripped(),
+					'error', errmsg, prs.getFrom().getResource(), prio, keyID,
+					prs.getRole(), prs.getAffiliation(), prs.getJid(),
+					prs.getReason(), prs.getActor(), prs.getStatusCode()))
 			else:
 				self.dispatch('ERROR_ANSWER', (prs.getFrom().getStripped(), errmsg,
 																					errcode))
 		if ptype == 'available' or ptype == 'unavailable':
 			gajim.logger.write('status', status, prs.getFrom().getStripped(), show)
-			self.dispatch('NOTIFY', (prs.getFrom().getStripped(), show, status, \
-				prs.getFrom().getResource(), prio, keyID, prs.getRole(), \
-				prs.getAffiliation(), prs.getJid(), prs.getReason(), \
+			self.dispatch('NOTIFY', (prs.getFrom().getStripped(), show, status,
+				prs.getFrom().getResource(), prio, keyID, prs.getRole(),
+				prs.getAffiliation(), prs.getJid(), prs.getReason(),
 				prs.getActor(), prs.getStatusCode()))
 	# END presenceCB
 
