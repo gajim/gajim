@@ -157,7 +157,14 @@ class Connection:
 	def _vCardCB(self, con, vc):
 		"""Called when we recieve a vCard
 		Parse the vCard and send it to plugins"""
-		vcard = {'jid': vc.getFrom().getStripped()}
+		frm = vc.getFrom()
+		if frm:
+			frm = frm.getStripped()
+		else:
+			name = gajim.config.get_per('accounts', self.name, 'name')
+			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+			frm = name + '@' + hostname
+		vcard = {'jid': frm}
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
 			for info in card.getChildren():
@@ -638,9 +645,7 @@ class Connection:
 				self.connection.send(p)
 				self.dispatch('STATUS', show)
 				#ask our VCard
-				iq = common.xmpp.Iq('get')
-				iq.setTag(common.xmpp.NS_VCARD + ' vCard')
-				self.connection.send(iq)
+				iq = self.request_vcard(None)
 				self.myVCardID.append(iq.getID())
 		elif show == 'offline' and self.connected:
 			self.connected = 0
@@ -815,12 +820,16 @@ class Connection:
 			common.xmpp.NS_VERSION)
 		self.connection.send(iq)
 
-	def request_vcard(self, jid):
+	def request_vcard(self, jid = None):
+		'''request the VCARD and return the iq'''
 		if not self.connection:
 			return
-		iq = common.xmpp.Iq(to = jid, typ = 'get')
+		iq = common.xmpp.Iq(typ = 'get')
+		if jid:
+			iq.setTo(jid)
 		iq.setTag(common.xmpp.NS_VCARD + ' vCard')
 		self.connection.send(iq)
+		return iq
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 	
 	def send_vcard(self, vcard):
