@@ -565,7 +565,8 @@ class Connection:
 		gajim.log.debug('Connected to server')
 
 		try:
-			auth = con.auth(name, self.password, resource) #FIXME: blocking
+			auth = con.auth(name, self.password, resource,
+				not gajim.config.get_per('accounts', self.name, 'force_nonSASL')) #FIXME: blocking
 		except IOError: #probably a timeout
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
