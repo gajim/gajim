@@ -1784,15 +1784,12 @@ class Service_discovery_window:
 		self.browse(jid)
 
 	def on_address_comboboxentry_changed(self, widget):
-		return # not ready
 		'is executed on each keypress'
-		text = self.comboboxentry_entry.get_text()
-		self.on_go_button_clicked(widget)
-		
-	def on_address_comboboxentry_button_press_event(self, widget, event):
-		return # not ready
-		if event.click == 1: #Left click (user possibly selected sth)
-			pass
+		if self.address_comboboxentry.get_active() != -1:
+			# user selected one of the entries so do auto-visit
+			self.services_treeview.get_model().clear()
+			server_address = self.address_comboboxentry.child.get_text()
+			self.browse(server_address)
 
 	def on_services_treeview_row_activated(self, widget, path, col = 0):
 		'''When a row is activated: Register or join the selected agent'''
