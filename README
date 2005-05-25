@@ -1,16 +1,19 @@
 Welcome and thanks for trying out Gajim.
 
-REQUIREMENTS
+Runtime Requirements:
 python2.4 (python2.3 should work too)
 pygtk2.6 (pytgtk 2.4 should work too)
 python-libglade
 
-Optionally:
-GnomePythonExtras 2.10 or above
+Compile-time Requirements:
+python-dev
+libgtk2.0-dev
+libxss-dev (for idle)
 
-If you have GnomePythonExtras then you don't need to 'make' for trayicon support.
-You still have to 'make' if you want auto-away detection.
-Luckily most of the requirements are met by any modern distro.
+Optionally:
+GnomePythonExtras 2.10 or above (so you can avoid compliling trayicon and gtkspell)
+
+Luckily most of the runtime requirements are met by any modern distro.
 
 INSTALL PROCEDURE
 tar jxvf gajim-version.tar.bz2
@@ -22,11 +25,7 @@ RUN GAJIM
 gajim
 
 or if you didn't 'make install' you can also run from gajim folder with
-./gajim.py
-
-TROUBLESHOOTING
-If you have python2.3 please manually edit plugins/gtkgui/Makefile and in
-CFLAGS line replace python2.4 to python2.3
+./launch.sh
 
 
 Enjoy!
@@ -34,7 +33,6 @@ Enjoy!
 (C) 2005
 The Gajim Team
 http://gajim.org
-
 
 
 PS.
