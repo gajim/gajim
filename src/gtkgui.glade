@@ -3146,7 +3146,7 @@
 		  <child>
 		    <widget class="GtkCheckButton" id="transports_iconsets_checkbutton">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">If checked, Gajim will show contacts from other protocols with icons specific to this transport.</property>
+		      <property name="tooltip" translatable="yes">If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Use _transports iconsets</property>
 		      <property name="use_underline">True</property>
