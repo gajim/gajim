@@ -181,20 +181,22 @@ class Roster_window:
 
 	def get_appropriate_state_images(self, jid):
 		'''check jid and return the appropriate state images dict'''
-		if jid:
-			if jid.find('@aim.') != -1:
-				state_images = self.transports_state_images['aim']
-			elif jid.find('@gadugadu.') != -1:
-				state_images = self.transports_state_images['gadugadu']
-			elif jid.find('@icq.') != -1:
-				state_images = self.transports_state_images['icq']
-			elif jid.find('@msn.') != -1:
-				state_images = self.transports_state_images['msn']
-			elif jid.find('@yahoo.') != -1:
-				state_images = self.transports_state_images['yahoo']
-			else: #jabber
-				state_images = self.jabber_state_images
-		else: # in GC we don't have a jid
+		if not jid:
+			return self.jabber_state_images
+
+		host = jid.split('@')[-1]
+
+		if host.find('aim.') != -1:
+			state_images = self.transports_state_images['aim']
+		elif host.find('gadugadu.') != -1:
+			state_images = self.transports_state_images['gadugadu']
+		elif host.find('icq.') != -1:
+			state_images = self.transports_state_images['icq']
+		elif host.find('msn.') != -1:
+			state_images = self.transports_state_images['msn']
+		elif host.find('yahoo.') != -1:
+			state_images = self.transports_state_images['yahoo']
+		else:
 			state_images = self.jabber_state_images
 
 		return state_images
@@ -216,32 +218,20 @@ class Roster_window:
 				prio = u.priority
 				user = u
 
-		for iter in iters:
-			state_images = self.get_appropriate_state_images(jid)
-
-			if jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
-				if jid.find('aim.') != -1:
-					state_images = self.transports_state_images['aim']
-				elif jid.find('gadugadu.') != -1:
-					state_images = self.transports_state_images['gadugadu']
-				elif jid.find('icq.') != -1:
-					state_images = self.transports_state_images['icq']
-				elif jid.find('msn.') != -1:
-					state_images = self.transports_state_images['msn']
-				elif jid.find('yahoo.') != -1:
-					state_images = self.transports_state_images['yahoo']
-				
-				img = state_images[user.show]					
-			elif self.plugin.queues[account].has_key(jid):
-				img = state_images['message']
+		state_images = self.get_appropriate_state_images(jid)
+		if self.plugin.queues[account].has_key(jid):
+			img = state_images['message']
+		elif jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
+			img = state_images[user.show]					
+		else:
+			if user.sub == 'both':
+				img = state_images[user.show]
 			else:
-				if user.sub != 'both':
-					if user.ask == 'subscribe':
-						img = state_images['requested']
-					else:
-						img = state_images['not in the roster']
+				if user.ask == 'subscribe':
+					img = state_images['requested']
 				else:
-					img = state_images[user.show]
+					img = state_images['not in the roster']
+		for iter in iters:
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
 	
@@ -542,14 +532,14 @@ class Roster_window:
 		user = self.contacts[account][jid][0]
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_('Log on'))
-		#FIXME: what about error?
-		if self.contacts[account][jid][0].show != 'offline':
+		show = self.contacts[account][jid][0].show
+		if show != 'offline' and show != 'error':
 			item.set_sensitive(False)
 		menu.append(item)
 		item.connect('activate', self.on_agent_logging, jid, 'available', account)
 
 		item = gtk.MenuItem(_('Log off'))
-		if self.contacts[account][jid][0].show == 'offline':
+		if show == 'offline' or show == 'error':
 			item.set_sensitive(False)
 		menu.append(item)
 		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
