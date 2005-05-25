@@ -1432,7 +1432,10 @@ class Service_registration_window:
 		self.plugin = plugin
 		self.account = account
 		self.window = self.xml.get_widget('service_registration_window')
-		self.window.set_title(_('Register to %s') % service)
+		if infos.has_key('registered'):
+			self.window.set_title(_('Edit ' + service)
+		else:
+			self.window.set_title(_('Register to ' + service)
 		self.xml.get_widget('label').set_text(infos['instructions'])
 		self.entries = {}
 		self.draw_table()
