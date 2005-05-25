@@ -116,7 +116,8 @@ class Roster_window:
 			user.groups.append('General')
 
 		if (user.show == 'offline' or user.show == 'error') and \
-		   not showOffline and not 'Transports' in user.groups and \
+		   not showOffline and (not 'Transports' in user.groups or \
+			gajim.connections[account].connected < 2) and \
 		   not self.plugin.queues[account].has_key(user.jid):
 			return
 
@@ -151,6 +152,8 @@ class Roster_window:
 	
 	def really_remove_user(self, user, account):
 		if user.jid in self.newly_added[account]:
+			return
+		if user.jid.find('@') < 1 and gajim.connections[account].connected > 1: # It's an agent
 			return
 		if user.jid in self.to_be_removed[account]:
 			self.to_be_removed[account].remove(user.jid)
