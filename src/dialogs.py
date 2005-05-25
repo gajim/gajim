@@ -351,10 +351,6 @@ class Add_new_contact_window:
 			
 	def on_uid_entry_changed(self, widget):
 		uid = self.uid_entry.get_text()
-		if len(uid) == 0:
-			self.protocol_combobox.set_sensitive(False)
-		else:
-			self.protocol_combobox.set_sensitive(True)
 		self.guess_agent()
 		self.set_nickname()
 		self.fill_jid()

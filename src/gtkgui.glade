@@ -1898,7 +1898,6 @@
 	  <child>
 	    <widget class="GtkComboBox" id="protocol_combobox">
 	      <property name="visible">True</property>
-	      <property name="sensitive">False</property>
 	      <property name="items" translatable="yes"></property>
 	      <signal name="changed" handler="on_protocol_combobox_changed" last_modification_time="Wed, 23 Mar 2005 13:13:12 GMT"/>
 	    </widget>
