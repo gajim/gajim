@@ -250,7 +250,8 @@ class Add_new_contact_window:
 		jid_agents = []
 		for j in self.plugin.roster.contacts[account]:
 			user = self.plugin.roster.contacts[account][j][0]
-			if 'Transports' in user.groups:
+			if 'Transports' in user.groups and user.show != 'offline' and \
+					user.show != 'error':
 				jid_agents.append(j)
 		for a in jid_agents:
 			if a.find('aim') > -1:
