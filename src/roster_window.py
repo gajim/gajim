@@ -430,6 +430,10 @@ class Roster_window:
 		'''When an agent is requested to log in or off'''
 		gajim.connections[account].send_agent_status(jid, state)
 
+	def on_edit_agent(self, widget, user, account):
+		'''When we want to modify the agent registration'''
+		gajim.connections[account].request_register_agent_info(user.jid)
+
 	def on_remove_agent(self, widget, user, account):
 		'''When an agent is requested to log in or off'''
 		window = dialogs.Confirmation_dialog(_('Are you sure you want to remove %s transport from your roster?') % user.jid)
@@ -534,14 +538,14 @@ class Roster_window:
 		account = model.get_value(iter, 4)
 		user = self.contacts[account][jid][0]
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_('Log on'))
+		item = gtk.MenuItem(_('_Log on'))
 		show = self.contacts[account][jid][0].show
 		if show != 'offline' and show != 'error':
 			item.set_sensitive(False)
 		menu.append(item)
 		item.connect('activate', self.on_agent_logging, jid, 'available', account)
 
-		item = gtk.MenuItem(_('Log off'))
+		item = gtk.MenuItem(_('Log _off'))
 		if show == 'offline' or show == 'error':
 			item.set_sensitive(False)
 		menu.append(item)
@@ -551,7 +555,11 @@ class Roster_window:
 		item = gtk.MenuItem()
 		menu.append(item)
 
-		item = gtk.MenuItem(_('Remove'))
+		item = gtk.MenuItem(_('_Edit'))
+		menu.append(item)
+		item.connect('activate', self.on_edit_agent, user, account)
+
+		item = gtk.MenuItem(_('_Remove'))
 		menu.append(item)
 		item.connect('activate', self.on_remove_agent, user, account)
 

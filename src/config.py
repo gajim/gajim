@@ -1389,7 +1389,7 @@ class Service_registration_window:
 		nbrow = 0
 		table = self.xml.get_widget('table')
 		for name in self.infos.keys():
-			if name == 'key' or name == 'instructions' or name == 'x':
+			if name in ['key', 'instructions', 'x', 'registered']:
 				continue
 
 			nbrow = nbrow + 1
@@ -1412,10 +1412,15 @@ class Service_registration_window:
 		send registration info to the core'''
 		for name in self.entries.keys():
 			self.infos[name] = self.entries[name].get_text()
-		user1 = User(self.service, self.service, ['Transports'], 'offline',
+		if self.infos.has_key('instructions'):
+			del self.infos['instructions']
+		if self.infos.has_key('registered'):
+			del self.infos['registered']
+		else:
+			user1 = User(self.service, self.service, ['Transports'], 'offline',
 					'offline', 'from', '', '', 0, '')
-		self.plugin.roster.contacts[self.account][self.service] = [user1]
-		self.plugin.roster.add_user_to_roster(self.service, self.account)
+			self.plugin.roster.contacts[self.account][self.service] = [user1]
+			self.plugin.roster.add_user_to_roster(self.service, self.account)
 		gajim.connections[self.account].register_agent(self.service, self.infos)
 		self.window.destroy()
 	
