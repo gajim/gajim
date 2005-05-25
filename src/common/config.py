@@ -55,6 +55,7 @@ class Config:
 		'last_status_msg': [ opt_str, '' ],
 		'trayicon': [ opt_bool, True ],
 		'iconset': [ opt_str, 'sun' ],
+		'use_transports_iconsets': [ opt_bool, True ],
 		'inmsgcolor': [ opt_color, '#ff0000' ],
 		'outmsgcolor': [ opt_color, '#0000ff' ],
 		'statusmsgcolor': [ opt_color, '#1eaa1e' ],

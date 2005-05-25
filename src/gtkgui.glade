@@ -3142,6 +3142,27 @@
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>
+
+		  <child>
+		    <widget class="GtkCheckButton" id="transports_iconsets_checkbutton">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">If checked, Gajim will show contacts from other protocols with icons specific to this transport.</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Use _transports iconsets</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled" last_modification_time="Wed, 25 May 2005 17:03:55 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>

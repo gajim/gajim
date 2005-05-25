@@ -181,7 +181,7 @@ class Roster_window:
 
 	def get_appropriate_state_images(self, jid):
 		'''check jid and return the appropriate state images dict'''
-		if not jid:
+		if not jid or not gajim.config.get('use_transports_iconsets'):
 			return self.jabber_state_images
 
 		host = jid.split('@')[-1]

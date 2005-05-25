@@ -121,6 +121,10 @@ class Preferences_window:
 			if gajim.config.get('iconset') == l[i]:
 				self.iconset_combobox.set_active(i)
 
+		# Use transports iconsets
+		st = gajim.config.get('use_transports_iconsets')
+		self.xml.get_widget('transports_iconsets_checkbutton').set_active(st)
+
 		# Roster colors / font
 		self.theme_default = {
 			'green': {
@@ -424,6 +428,10 @@ class Preferences_window:
 		gajim.config.set('iconset', icon_string)
 		self.plugin.roster.reload_jabber_state_images()
 		self.plugin.save_config()
+	
+	def on_transports_iconsets_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
+		self.plugin.roster.draw_roster()
 	
 	def on_roster_widget_color_set(self, widget, text):
 		color = widget.get_color()
