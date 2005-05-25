@@ -23,6 +23,11 @@ import pango
 import gobject
 import time
 
+try:
+	import gtkspell
+except:
+	pass
+
 from common import gajim
 from common import i18n
 
@@ -143,7 +148,7 @@ class Chat:
 		self.remove_tab(jid)
 
 	def on_chat_window_focus_in_event(self, widget, event):
-		"""When window get focus"""
+		"""When window gets focus"""
 		jid = self.get_active_jid()
 		textview = self.xmls[jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
@@ -224,6 +229,10 @@ class Chat:
 	def new_tab(self, jid):
 		self.nb_unread[jid] = 0
 		self.last_message_time[jid] = 0
+		
+		if gajim.config.get('use_speller') and 'gtk' in locals():
+			message_textview = self.xmls[jid].get_widget('message_textview')
+			gtkspell.Spell(message_textview)
 		
 		conversation_textview = self.xmls[jid].get_widget(
 			'conversation_textview')
@@ -478,30 +487,29 @@ class Chat:
 			del self.print_time_timeout_id[jid]
 		return 0
 
-	def on_open_link_activated(self, widget, kind, text):
+	def on_open_link_activate(self, widget, kind, text):
 		self.plugin.launch_browser_mailer(kind, text)
 
-	def on_copy_link_activated(self, widget, text):
+	def on_copy_link_activate(self, widget, text):
 		clip = gtk.clipboard_get()
 		clip.set_text(text)
 
 	def make_link_menu(self, event, kind, text):
-		menu = gtk.Menu()
-		if kind == 'mail':
-			item = gtk.MenuItem(_('_Open Email Composer'))
-		else:
-			item = gtk.MenuItem(_('_Open Link'))
-		item.connect('activate', self.on_open_link_activated, kind, text)
-		menu.append(item)
-		if kind == 'mail':
-			item = gtk.MenuItem(_('_Copy Email Address'))
-		else: # It's an url
-			item = gtk.MenuItem(_('_Copy Link Address'))
-		item.connect('activate', self.on_copy_link_activated, text)
-		menu.append(item)
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_context_menu', APP)
+		menu = xml.get_widget('chat_context_menu')
+		childs = menu.get_children()
+		if kind == 'url':
+			childs[0].connect('activate', self.on_copy_link_activate, text)
+			childs[1].connect('activate', self.on_open_link_activate, kind, text)
+			childs[2].hide() # copy mail address
+			childs[3].hide() # open mail composer
+		else: # It's a mail
+			childs[2].connect('activate', self.on_copy_link_activate, text)
+			childs[3].connect('activate', self.on_open_link_activate, kind, text)
+			childs[0].hide() # copy link location
+			childs[1].hide() # open link in browser
 
 		menu.popup(None, None, None, event.button, event.time)
-		menu.show_all()
 		menu.reposition()
 
 	def hyperlink_handler(self, texttag, widget, event, iter, kind):

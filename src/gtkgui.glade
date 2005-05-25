@@ -321,6 +321,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <signal name="destroy" handler="on_accounts_window_destroy" last_modification_time="Sat, 02 Apr 2005 20:34:04 GMT"/>
+  <signal name="key_press_event" handler="on_accounts_window_key_press_event" last_modification_time="Wed, 25 May 2005 23:19:56 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox5">
@@ -3109,6 +3110,27 @@
 		  <property name="spacing">10</property>
 
 		  <child>
+		    <widget class="GtkCheckButton" id="transports_iconsets_checkbutton">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Use _transports iconsets</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled" last_modification_time="Wed, 25 May 2005 17:03:55 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
 		    <widget class="GtkLabel" id="label174">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Status iconset:</property>
@@ -3139,27 +3161,6 @@
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkCheckButton" id="transports_iconsets_checkbutton">
-		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
-		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Use _transports iconsets</property>
-		      <property name="use_underline">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">True</property>
-		      <property name="active">False</property>
-		      <property name="inconsistent">False</property>
-		      <property name="draw_indicator">True</property>
-		      <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled" last_modification_time="Wed, 25 May 2005 17:03:55 GMT"/>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>
@@ -11196,6 +11197,89 @@ send a chat message to</property>
 	  <property name="expand">True</property>
 	  <property name="fill">True</property>
 	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkMenu" id="chat_context_menu">
+
+  <child>
+    <widget class="GtkImageMenuItem" id="copy_link_location_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Copy Link Location</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image593">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-copy</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="open_link_in_browser_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Open Link in Browser</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image594">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-jump-to</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="copy_email_address_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Copy Email Address</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image595">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-copy</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="open_email_composer_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Open Email Composer</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image596">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-jump-to</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
       </child>
     </widget>
   </child>
