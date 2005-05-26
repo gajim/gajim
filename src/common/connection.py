@@ -22,6 +22,7 @@ import os
 import time
 import sre
 import traceback
+import helpers
 from calendar import timegm
 
 import common.xmpp
@@ -622,7 +623,8 @@ class Connection:
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if keyID and USE_GPG:
 			if not msg:
-				msg = show
+				lowered_uf_status_msg = helpers.get_uf_show(show).lower()
+				msg = "I'm %s" % lowered_uf_status_msg
 			signed = self.gpg.sign(msg, keyID)
 			if signed == 'BAD_PASSPHRASE':
 				signed = ''
