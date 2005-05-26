@@ -106,7 +106,7 @@ def get_os_info():
 class Connection:
 	"""Connection class"""
 	def __init__(self, name):
-		# dict of function to be calledfor each event
+		# dict of function to be called for each event
 		self.handlers = {'ROSTER': [], 'WARNING': [], 'ERROR': [], 'STATUS': [],
 			'NOTIFY': [], 'MSG': [], 'MSGERROR': [], 'MSGSENT': [] ,
 			'SUBSCRIBED': [], 'UNSUBSCRIBED': [], 'SUBSCRIBE': [],
@@ -515,7 +515,7 @@ class Connection:
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
 		usetls = gajim.config.get_per('accounts', self.name, 'usetls')
 
-		#create connexion if it doesn't already existe
+		#create connection if it doesn't already exist
 		if self.connection:
 			return self.connection
 		self.connected = 1
@@ -539,11 +539,8 @@ class Connection:
 		common.xmpp.dispatcher.DefaultTimeout = 45
 		con.UnregisterDisconnectHandler(con.DisconnectHandler)
 		con.RegisterDisconnectHandler(self._disconnectedCB)
-		try:
-			c = con.connect(proxy=proxy, tls=usetls) #FIXME: blocking
-		except:
-			c = None
-		if not c:
+		con_type = con.connect(proxy=proxy, tls=usetls) #FIXME: blocking
+		if not con_type:
 			gajim.log.debug('Couldn\'t connect to %s' % hostname)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
@@ -790,12 +787,11 @@ class Connection:
 		else:
 			proxy = None
 		c = common.xmpp.Client(server = config['hostname'], debug = [])
-		try:
-			c.connect(proxy = proxy)
-		except:
+		con_type = c.connect(proxy = proxy)
+		if not con_type:
 			gajim.log.debug('Couldn\'t connect to %s' % config['hostname'])
 			self.dispatch('ERROR', _('Couldn\'t connect to ') + config['hostname'])
-			return 0
+			return False
 		else:
 			gajim.log.debug('Connected to server')
 			req = common.xmpp.features.getRegInfo(c, config['hostname']).asDict() # FIXME! This blocks!

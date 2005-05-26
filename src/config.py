@@ -1234,7 +1234,7 @@ class Account_modification_window:
 			return
 		con = connection.Connection(name)
 		self.plugin.register_handlers(con)
-		#if we neeed to register a new account
+		#if we need to register a new account
 		if new_account:
 			con.new_account(name, config)
 			return
