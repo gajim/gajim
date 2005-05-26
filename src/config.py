@@ -25,8 +25,14 @@ import common.sleepy
 
 import dialogs
 import cell_renderer_image
-from gajim import User
 import cell_renderer_image
+
+try:
+	import gtkspell
+except:
+	pass
+
+from gajim import User
 from common import gajim
 from common import connection
 from common import i18n
@@ -171,6 +177,13 @@ class Preferences_window:
 		#use tabbed chat window
 		st = gajim.config.get('usetabbedchat')
 		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
+		
+		#use speller
+		if 'gtkspell' in locals():
+			st = gajim.config.get('use_speller')
+			self.xml.get_widget('speller_checkbutton').set_active(st)
+		else:
+			self.xml.get_widget('speller_checkbutton').set_sensitive(False)
 		
 		#Print time
 		if gajim.config.get('print_time') == 'never':
@@ -380,13 +393,13 @@ class Preferences_window:
 			fonts_colors_table.hide()
 
 	def on_preferences_window_key_press_event(self, widget, event):
-		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+		if event.keyval == gtk.keysyms.Escape:
 			self.window.hide()
 
 	def on_checkbutton_toggled(self, widget, config_name, \
 		change_sensitivity_widgets = None):
 		gajim.config.set(config_name, widget.get_active())
-		if change_sensitivity_widgets != None:
+		if change_sensitivity_widgets:
 			for w in change_sensitivity_widgets:
 				w.set_sensitive(widget.get_active())
 		self.plugin.save_config()
@@ -541,9 +554,9 @@ class Preferences_window:
 				if kind == 'gc':
 					self.plugin.roster.new_room(jid, saved_var[jid]['nick'], acct)
 				window = windows[jid]
-				window.xmls[jid].get_widget('conversation_textview').set_buffer(\
+				window.xmls[jid].get_widget('conversation_textview').set_buffer(
 					buf1[jid])
-				window.xmls[jid].get_widget('message_textview').set_buffer(\
+				window.xmls[jid].get_widget('message_textview').set_buffer(
 					buf2[jid])
 				window.load_var(jid, saved_var[jid])
 
@@ -574,9 +587,9 @@ class Preferences_window:
 				if kind == 'gc':
 					self.plugin.roster.new_room(jid, saved_var[jid]['nick'], acct)
 				window = windows[jid]
-				window.xmls[jid].get_widget('conversation_textview').set_buffer(\
+				window.xmls[jid].get_widget('conversation_textview').set_buffer(
 					buf1[jid])
-				window.xmls[jid].get_widget('message_textview').set_buffer(\
+				window.xmls[jid].get_widget('message_textview').set_buffer(
 					buf2[jid])
 				window.load_var(jid, saved_var[jid])
 
@@ -590,7 +603,45 @@ class Preferences_window:
 			self.split_windows('chats')
 			self.split_windows('gc')
 		self.plugin.save_config()
-	
+
+	def apply_speller(self, kind):
+		for acct in gajim.connections:
+			windows = self.plugin.windows[acct][kind]
+			jids = windows.keys()
+			if not 'tabbed' in jids:
+				continue
+			jids.remove('tabbed')
+			for jid in jids:
+				print jid
+				window = windows[jid]
+				textview = window.xmls[jid].get_widget('message_textview')
+				gtkspell.Spell(textview)
+
+	def remove_speller(self, kind):
+		for acct in gajim.connections:
+			windows = self.plugin.windows[acct][kind]
+			jids = windows.keys()
+			if not 'tabbed' in jids:
+				continue
+			jids.remove('tabbed')
+			for jid in jids:
+				window = windows[jid]
+				textview = window.xmls[jid].get_widget('message_textview')
+				spell_obj = gtkspell.get_from_text_view(textview)
+				if spell_obj:
+					spell_obj.detach()
+
+	def on_speller_checkbutton_toggled(self, widget):
+		active = widget.get_active()
+		gajim.config.set('use_speller', active)
+		self.plugin.save_config()
+		if active:
+			self.apply_speller('chats')
+			self.apply_speller('gc')
+		else:
+			self.remove_speller('chats')
+			self.remove_speller('gc')
+
 	def update_print_time(self):
 		'''Update time in Opened Chat Windows'''
 		for a in gajim.connections:
@@ -1297,12 +1348,37 @@ class Account_modification_window:
 
 #---------- Accounts_window class -------------#
 class Accounts_window:
-	'''Class for accounts window: lists of accounts'''
+	'''Class for accounts window: list of accounts'''
 	def on_accounts_window_destroy(self, widget):
 		del self.plugin.windows['accounts'] 
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+
+	def __init__(self, plugin):
+		self.plugin = plugin
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'accounts_window', APP)
+		self.window = self.xml.get_widget('accounts_window')
+		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
+		self.modify_button = self.xml.get_widget('modify_button')
+		self.remove_button = self.xml.get_widget('remove_button')
+		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING,
+					gobject.TYPE_BOOLEAN)
+		self.accounts_treeview.set_model(model)
+		#columns
+		renderer = gtk.CellRendererText()
+		self.accounts_treeview.insert_column_with_attributes(-1,
+					_('Name'), renderer, text = 0)
+		renderer = gtk.CellRendererText()
+		self.accounts_treeview.insert_column_with_attributes(-1,
+					_('Server'), renderer, text = 1)
+		self.xml.signal_autoconnect(self)
+		self.init_accounts()
+		self.window.show_all()
+
+	def on_accounts_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			self.window.destroy()	
 
 	def init_accounts(self):
 		'''initialize listStore with existing accounts'''
@@ -1321,7 +1397,7 @@ class Accounts_window:
 		self.remove_button.set_sensitive(True)
 
 	def on_new_button_clicked(self, widget):
-		'''When new button is clicked : open an account information window'''
+		'''When new button is clicked: open an account information window'''
 		if self.plugin.windows.has_key('account_modification'):
 			self.plugin.windows['account_modification'].window.present()			
 		else:
@@ -1329,7 +1405,7 @@ class Accounts_window:
 				Account_modification_window(self.plugin, '')
 
 	def on_remove_button_clicked(self, widget):
-		'''When delete button is clicked :
+		'''When delete button is clicked:
 		Remove an account from the listStore and from the config file'''
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
@@ -1355,27 +1431,6 @@ class Accounts_window:
 		else:
 			self.plugin.windows[account]['account_modification'] = \
 				Account_modification_window(self.plugin, account)
-		
-	def __init__(self, plugin):
-		self.plugin = plugin
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'accounts_window', APP)
-		self.window = self.xml.get_widget('accounts_window')
-		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
-		self.modify_button = self.xml.get_widget('modify_button')
-		self.remove_button = self.xml.get_widget('remove_button')
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING,
-					gobject.TYPE_BOOLEAN)
-		self.accounts_treeview.set_model(model)
-		#columns
-		renderer = gtk.CellRendererText()
-		self.accounts_treeview.insert_column_with_attributes(-1,
-					_('Name'), renderer, text = 0)
-		renderer = gtk.CellRendererText()
-		self.accounts_treeview.insert_column_with_attributes(-1,
-					_('Server'), renderer, text = 1)
-		self.xml.signal_autoconnect(self)
-		self.init_accounts()
-		self.window.show_all()
 
 #---------- Service_registration_window class -------------#
 class Service_registration_window:
@@ -1418,24 +1473,23 @@ class Service_registration_window:
 			del self.infos['registered']
 		else:
 			user1 = User(self.service, self.service, ['Transports'], 'offline',
-					'offline', 'from', '', '', 0, '')
+				'offline', 'from', '', '', 0, '')
 			self.plugin.roster.contacts[self.account][self.service] = [user1]
 			self.plugin.roster.add_user_to_roster(self.service, self.account)
 		gajim.connections[self.account].register_agent(self.service, self.infos)
 		self.window.destroy()
 	
 	def __init__(self, service, infos, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE,
-					'service_registration_window', APP)
+		self.xml = gtk.glade.XML(GTKGUI_GLADE,	'service_registration_window', APP)
 		self.service = service
 		self.infos = infos
 		self.plugin = plugin
 		self.account = account
 		self.window = self.xml.get_widget('service_registration_window')
 		if infos.has_key('registered'):
-			self.window.set_title(_('Edit ' + service)
+			self.window.set_title(_('Edit %s' % service))
 		else:
-			self.window.set_title(_('Register to ' + service)
+			self.window.set_title(_('Register to %s' % service))
 		self.xml.get_widget('label').set_text(infos['instructions'])
 		self.entries = {}
 		self.draw_table()

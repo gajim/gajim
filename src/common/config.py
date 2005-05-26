@@ -73,6 +73,7 @@ class Config:
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False ],
 		'usetabbedchat': [ opt_bool, True ],
+		'use_speller': [ opt_bool, False ],
 		'print_time': [ opt_str, 'always' ],
 		'useemoticons': [ opt_bool, True ],
 		'sounds_on': [ opt_bool, True ],
