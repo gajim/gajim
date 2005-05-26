@@ -238,7 +238,7 @@ class Groupchat_window(chat.Chat):
 		if show == 'offline' or show == 'error':
 			if statusCode == '307':
 				self.print_conversation(_('%s has been kicked by %s: %s') % (nick,
-					actor, reason))
+					actor, reason), room_jid)
 			self.remove_user(room_jid, nick)
 		else:
 			iter = self.get_user_iter(room_jid, nick)
