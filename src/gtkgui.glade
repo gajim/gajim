@@ -3110,30 +3110,9 @@
 		  <property name="spacing">10</property>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="transports_iconsets_checkbutton">
-		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
-		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Use _transports iconsets</property>
-		      <property name="use_underline">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">True</property>
-		      <property name="active">False</property>
-		      <property name="inconsistent">False</property>
-		      <property name="draw_indicator">True</property>
-		      <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled" last_modification_time="Wed, 25 May 2005 17:03:55 GMT"/>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
 		    <widget class="GtkLabel" id="label174">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Status iconset:</property>
+		      <property name="label" translatable="yes">Default _status iconset:</property>
 		      <property name="use_underline">True</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3157,6 +3136,27 @@
 		      <property name="visible">True</property>
 		      <property name="items" translatable="yes"></property>
 		      <signal name="changed" handler="on_iconset_combobox_changed" last_modification_time="Wed, 30 Mar 2005 12:19:34 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkCheckButton" id="transports_iconsets_checkbutton">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Use _transports iconsets</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled" last_modification_time="Wed, 25 May 2005 17:03:55 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
