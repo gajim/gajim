@@ -179,7 +179,7 @@ class Preferences_window:
 		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
 		
 		#use speller
-		if 'gtkspell' in locals():
+		if 'gtkspell' in globals():
 			st = gajim.config.get('use_speller')
 			self.xml.get_widget('speller_checkbutton').set_active(st)
 		else:
@@ -609,7 +609,8 @@ class Preferences_window:
 			windows = self.plugin.windows[acct][kind]
 			jids = windows.keys()
 			for jid in jids:
-				print jid
+				if jid == 'tabbed':
+					continue
 				window = windows[jid]
 				textview = window.xmls[jid].get_widget('message_textview')
 				gtkspell.Spell(textview)
@@ -619,6 +620,8 @@ class Preferences_window:
 			windows = self.plugin.windows[acct][kind]
 			jids = windows.keys()
 			for jid in jids:
+				if jid == 'tabbed':
+					continue
 				window = windows[jid]
 				textview = window.xmls[jid].get_widget('message_textview')
 				spell_obj = gtkspell.get_from_text_view(textview)

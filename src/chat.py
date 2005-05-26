@@ -230,7 +230,7 @@ class Chat:
 		self.nb_unread[jid] = 0
 		self.last_message_time[jid] = 0
 		
-		if gajim.config.get('use_speller') and 'gtkspell' in locals():
+		if gajim.config.get('use_speller') and 'gtkspell' in globals():
 			message_textview = self.xmls[jid].get_widget('message_textview')
 			gtkspell.Spell(message_textview)
 		
