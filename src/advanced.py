@@ -78,8 +78,18 @@ class Advanced_configuration_window:
 
 	def on_config_edited(self, cell, row, text):
 		modelrow = self.model[row]
-		if gajim.config.set(modelrow[0], text):
-			return
+		option = modelrow[0]
+		if row.find(':') > 0:
+			row_splitted = row.split(':')
+			optnamerow = self.model[row_splitted[0]]
+			optname = optnamerow[0]
+			keyrow = self.model[':'.join(row_splitted[:2])]
+			key = keyrow[0]
+			if gajim.config.set_per(optname, key, option, text):
+				return
+		else:
+			if gajim.config.set(option, text):
+				return
 		self.plugin.save_config()
 		modelrow[1] = text
 	

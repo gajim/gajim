@@ -240,6 +240,8 @@ class Config:
 			ival = self.is_valid_int(val)
 			if ival:
 				return True
+			elif ival == None:
+				return None
 			return False
 		return None	
 
