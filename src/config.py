@@ -608,9 +608,6 @@ class Preferences_window:
 		for acct in gajim.connections:
 			windows = self.plugin.windows[acct][kind]
 			jids = windows.keys()
-			if not 'tabbed' in jids:
-				continue
-			jids.remove('tabbed')
 			for jid in jids:
 				print jid
 				window = windows[jid]
@@ -621,9 +618,6 @@ class Preferences_window:
 		for acct in gajim.connections:
 			windows = self.plugin.windows[acct][kind]
 			jids = windows.keys()
-			if not 'tabbed' in jids:
-				continue
-			jids.remove('tabbed')
 			for jid in jids:
 				window = windows[jid]
 				textview = window.xmls[jid].get_widget('message_textview')
