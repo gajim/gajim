@@ -193,10 +193,14 @@ class Roster_window:
 			state_images = self.transports_state_images['aim']
 		elif host.find('gadugadu.') == 0:
 			state_images = self.transports_state_images['gadugadu']
+		elif host.find('irc.') == 0:
+			state_images = self.transports_state_images['irc']
 		elif host.find('icq.') == 0:
 			state_images = self.transports_state_images['icq']
 		elif host.find('msn.') == 0:
 			state_images = self.transports_state_images['msn']
+		elif host.find('sms.') == 0:
+			state_images = self.transports_state_images['sms']
 		elif host.find('yahoo.') == 0:
 			state_images = self.transports_state_images['yahoo']
 		else:
@@ -1439,7 +1443,7 @@ class Roster_window:
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
 		self.make_jabber_state_images()
-		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'icq': {}, 'msn': {}, 'yahoo': {} }
+		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'irc': {}, 'icq': {}, 'msn': {}, 'sms': {}, 'yahoo': {} }
 		
 		path = os.path.join(gajim.DATA_DIR, 'iconsets/transports')
 		folders = os.listdir(path)
