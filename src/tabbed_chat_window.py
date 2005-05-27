@@ -93,6 +93,7 @@ class Tabbed_chat_window(chat.Chat):
 		user = list_users[0]
 		show = user.show
 		jid = user.jid
+		keyID = user.keyID
 		for u in list_users:
 			if u.priority > prio:
 				prio = u.priority
