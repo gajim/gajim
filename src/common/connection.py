@@ -22,11 +22,11 @@ import os
 import time
 import sre
 import traceback
-import helpers
 from calendar import timegm
 
 import common.xmpp
 
+from common import helpers
 from common import gajim
 from common import GnuPG
 USE_GPG = GnuPG.USE_GPG

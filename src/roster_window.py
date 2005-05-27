@@ -801,11 +801,12 @@ class Roster_window:
 		else:
 			self.plugin.sleeper_state[account] = 0
 
-	def get_status_message(self, status):
-		if (status == 'online' and not gajim.config.get('ask_online_status')) or \
-			(status == 'offline' and not gajim.config.get('ask_offline_status')):
-			return status
-		dlg = dialogs.Change_status_message_dialog(self.plugin, status)
+	def get_status_message(self, show):
+		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
+			(show == 'offline' and not gajim.config.get('ask_offline_status')):
+			lowered_uf_status_msg = helpers.get_uf_show(show).lower()
+			return "I'm %s" % lowered_uf_status_msg
+		dlg = dialogs.Change_status_message_dialog(self.plugin, show)
 		message = dlg.run()
 		return message
 
