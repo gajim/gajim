@@ -122,6 +122,7 @@ class Connection:
 		self.gpg = None
 		self.status = ''
 		self.myVCardID = []
+		self.on_purpose = False
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
@@ -301,10 +302,14 @@ class Connection:
 	def _disconnectedCB(self):
 		"""Called when we are disconnected"""
 		gajim.log.debug('disconnectedCB')
-		if self.connection:
-			self.connected = 0
-			self.dispatch('STATUS', 'offline')
-			self.connection = None
+		if not self.connection:
+			return
+		self.connected = 0
+		self.dispatch('STATUS', 'offline')
+		self.connection = None
+		if not self.on_purpose:
+			self.dispatch('ERROR', 'You have been disconected from %s' & self.name)
+		self.on_purpose = False
 	# END disconenctedCB
 
 	def _rosterSetCB(self, con, iq_obj):
@@ -654,6 +659,7 @@ class Connection:
 		elif show == 'offline' and self.connected:
 			self.connected = 0
 			if self.connection:
+				self.on_purpose = True
 				p = common.xmpp.Presence(typ = 'unavailable')
 				if msg:
 					p.setStatus(msg)
