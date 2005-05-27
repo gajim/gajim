@@ -545,33 +545,33 @@ class Connection:
 		con.RegisterDisconnectHandler(self._disconnectedCB)
 		con_type = con.connect(proxy=proxy, tls=usetls) #FIXME: blocking
 		if not con_type:
-			gajim.log.debug('Couldn\'t connect to %s' % hostname)
+			gajim.log.debug("Couldn't connect to %s" % name)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', _('Couldn\'t connect to %s') % hostname)
+			self.dispatch('ERROR', _("Couldn't connect to %s") % name)
 			return None
 
 		con.RegisterHandler('message', self._messageCB)
 		con.RegisterHandler('presence', self._presenceCB)
-		con.RegisterHandler('iq', self._vCardCB, 'result',\
+		con.RegisterHandler('iq', self._vCardCB, 'result',
 			common.xmpp.NS_VCARD)
-		con.RegisterHandler('iq', self._rosterSetCB, 'set',\
+		con.RegisterHandler('iq', self._rosterSetCB, 'set',
 			common.xmpp.NS_ROSTER)
-		con.RegisterHandler('iq', self._BrowseResultCB, 'result',\
+		con.RegisterHandler('iq', self._BrowseResultCB, 'result',
 			common.xmpp.NS_BROWSE)
-		con.RegisterHandler('iq', self._DiscoverItemsCB, 'result',\
+		con.RegisterHandler('iq', self._DiscoverItemsCB, 'result',
 			common.xmpp.NS_DISCO_ITEMS)
-		con.RegisterHandler('iq', self._DiscoverInfoCB, 'result',\
+		con.RegisterHandler('iq', self._DiscoverInfoCB, 'result',
 			common.xmpp.NS_DISCO_INFO)
-		con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',\
+		con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',
 			common.xmpp.NS_DISCO_INFO)
-		con.RegisterHandler('iq', self._VersionCB, 'get',\
+		con.RegisterHandler('iq', self._VersionCB, 'get',
 			common.xmpp.NS_VERSION)
-		con.RegisterHandler('iq', self._VersionResultCB, 'result',\
+		con.RegisterHandler('iq', self._VersionResultCB, 'result',
 			common.xmpp.NS_VERSION)
-		con.RegisterHandler('iq', self._MucOwnerCB, 'result',\
+		con.RegisterHandler('iq', self._MucOwnerCB, 'result',
 			common.xmpp.NS_MUC_OWNER)
-		con.RegisterHandler('iq', self._getRosterCB, 'result',\
+		con.RegisterHandler('iq', self._getRosterCB, 'result',
 			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 
@@ -583,17 +583,17 @@ class Connection:
 		except IOError: #probably a timeout
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', _('Couldn\'t connect to %s') % hostname)
+			self.dispatch('ERROR', _("Couldn't connect to %s") % name)
 			return None
 		if auth:
 			con.initRoster()
 			self.connected = 2
 			return con
 		else:
-			gajim.log.debug('Couldn\'t authenticate to %s' % hostname)
+			gajim.log.debug("Couldn't authenticate to %s" % name)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', _('Authentication failed with %s, check your login and password') % hostname)
+			self.dispatch('ERROR', _('Authentication failed with %s, check your login and password') % name)
 			return None
 # END connect
 
@@ -795,8 +795,8 @@ class Connection:
 		c = common.xmpp.Client(server = config['hostname'], debug = [])
 		con_type = c.connect(proxy = proxy)
 		if not con_type:
-			gajim.log.debug('Couldn\'t connect to %s' % config['hostname'])
-			self.dispatch('ERROR', _('Couldn\'t connect to ') + config['hostname'])
+			gajim.log.debug("Couldn't connect to %s" % config['hostname'])
+			self.dispatch('ERROR', _("Couldn't connect to ") + config['hostname'])
 			return False
 		else:
 			gajim.log.debug('Connected to server')
@@ -886,7 +886,7 @@ class Connection:
 		self.connection.send(msg_iq)
 
 	def request_gc_config(self, room_jid):
-		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,\
+		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
 			to = room_jid)
 		self.connection.send(iq)
 
@@ -898,7 +898,7 @@ class Connection:
 			show = None
 		else:
 			ptype = 'available'
-		self.connection.send(common.xmpp.Presence(to = '%s/%s' % (jid, nick), \
+		self.connection.send(common.xmpp.Presence(to = '%s/%s' % (jid, nick),
 			typ = ptype, show = show, status = status))
 
 	def gc_set_role(self, room_jid, nick, role):
