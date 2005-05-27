@@ -189,15 +189,15 @@ class Roster_window:
 
 		host = jid.split('@')[-1]
 
-		if host.find('aim.') != -1:
+		if host.find('aim.') == 0:
 			state_images = self.transports_state_images['aim']
-		elif host.find('gadugadu.') != -1:
+		elif host.find('gadugadu.') == 0:
 			state_images = self.transports_state_images['gadugadu']
-		elif host.find('icq.') != -1:
+		elif host.find('icq.') == 0:
 			state_images = self.transports_state_images['icq']
-		elif host.find('msn.') != -1:
+		elif host.find('msn.') == 0:
 			state_images = self.transports_state_images['msn']
-		elif host.find('yahoo.') != -1:
+		elif host.find('yahoo.') == 0:
 			state_images = self.transports_state_images['yahoo']
 		else:
 			state_images = self.jabber_state_images
