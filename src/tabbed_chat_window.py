@@ -97,12 +97,17 @@ class Tabbed_chat_window(chat.Chat):
 			if u.priority > prio:
 				prio = u.priority
 				show = u.show
+				keyID = u.keyID
 		child = self.childs[jid]
 		status_image = self.notebook.get_tab_label(child).get_children()[0]
 		state_images = self.plugin.roster.get_appropriate_state_images(jid)
 		image = state_images[show]
 		non_tabbed_status_image = self.xmls[jid].get_widget(
 																	'nontabbed_status_image')
+		if keyID:
+			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(True)
+		else:
+			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			non_tabbed_status_image.set_from_animation(image.get_animation())
 			status_image.set_from_animation(image.get_animation())

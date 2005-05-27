@@ -406,7 +406,7 @@ class Roster_window:
 			if not self.get_user_iter(user.jid, account):
 				self.add_user_to_roster(user.jid, account)
 			self.draw_contact(user.jid, account)
-		#print status in chat window and update status image
+		#print status in chat window and update status/GPG image
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
 			jid = user.jid
 			self.plugin.windows[account]['chats'][jid].set_state_image(jid)
