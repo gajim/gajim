@@ -186,6 +186,8 @@ class Connection:
 	def _messageCB(self, con, msg):
 		"""Called when we recieve a message"""
 		msgtxt = msg.getBody()
+		if not msg.getTag('body'): #no <body>
+			return
 		mtype = msg.getType()
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
@@ -214,13 +216,9 @@ class Connection:
 			if subject:
 				self.dispatch('GC_SUBJECT', (str(msg.getFrom()), subject))
 			else:
-				if not msgtxt: # empty message
-					return
 				self.dispatch('GC_MSG', (str(msg.getFrom()), msgtxt, tim))
 				gajim.logger.write('gc', msgtxt, str(msg.getFrom()), tim = tim)
 		else:
-			if not msgtxt: # empty message
-				return
 			gajim.logger.write('incoming', msgtxt, str(msg.getFrom()), tim = tim)
 			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim))
 	# END messageCB
