@@ -240,6 +240,8 @@ class Groupchat_window(chat.Chat):
 				self.print_conversation(_('%s has been kicked by %s: %s') % (nick,
 					actor, reason), room_jid)
 			self.remove_user(room_jid, nick)
+			if nick == self.nicks[room_jid]: # We became offline
+				model.clear()
 		else:
 			iter = self.get_user_iter(room_jid, nick)
 			ji = jid
