@@ -49,16 +49,16 @@ setup(
     options=opts,
 
     data_files=[('.', glob.glob('src/gtkgui.glade')),
-                ('data/iconsets/sun', glob.glob('data/iconsets/sun/*.*')),
-                ('data/iconsets/stellar', glob.glob('data/iconsets/stellar/*.*')),
-                ('data/iconsets/gossip', glob.glob('data/iconsets/gossip/*.*')),
-                ('data/iconsets/transports/aim', glob.glob('data/iconsets/transports/aim/*.*')),
-                ('data/iconsets/transports/gadugadu', glob.glob('data/iconsets/transports/gadugadu/*.*')),
-                ('data/iconsets/transports/icq', glob.glob('data/iconsets/transports/icq/*.*')),
-                ('data/iconsets/transports/msn', glob.glob('data/iconsets/transports/msn/*.*')),
-                ('data/iconsets/transports/yahoo', glob.glob('data/iconsets/transports/yahoo/*.*')),
-                ('data/emoticons', glob.glob('data/emoticons/*.*')),
-                ('data/pixmaps', glob.glob('data/pixmaps/*.*')),
-                ('data/sounds', glob.glob('data/sounds/*.*'))
+#                ('data/iconsets/sun', glob.glob('data/iconsets/sun/*.*')),
+#                ('data/iconsets/stellar', glob.glob('data/iconsets/stellar/*.*')),
+#                ('data/iconsets/gossip', glob.glob('data/iconsets/gossip/*.*')),
+#                ('data/iconsets/transports/aim', glob.glob('data/iconsets/transports/aim/*.*')),
+#                ('data/iconsets/transports/gadugadu', glob.glob('data/iconsets/transports/gadugadu/*.*')),
+#                ('data/iconsets/transports/icq', glob.glob('data/iconsets/transports/icq/*.*')),
+#                ('data/iconsets/transports/msn', glob.glob('data/iconsets/transports/msn/*.*')),
+#                ('data/iconsets/transports/yahoo', glob.glob('data/iconsets/transports/yahoo/*.*')),
+#                ('data/emoticons', glob.glob('data/emoticons/*.*')),
+#                ('data/pixmaps', glob.glob('data/pixmaps/*.*')),
+#                ('data/sounds', glob.glob('data/sounds/*.*'))
     ],
 )
