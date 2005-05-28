@@ -35,7 +35,7 @@ class Config:
 
 	__options = {
 		# name: [ type, value ]
-		'verbose': [ opt_bool, True ],
+		'verbose': [ opt_bool, False ],
 		'delauth': [ opt_bool, True ],
 		'delroster': [ opt_bool, True ],
 		'alwaysauth': [ opt_bool, False ],

@@ -49,17 +49,20 @@ from common import optparser
 
 profile = ''
 try:
-       opts, args = getopt.getopt(sys.argv[1:], 'hp:', [ 'help', 'profile=' ])
+	opts, args = getopt.getopt(sys.argv[1:], 'hvp:', [ 'help', 'verbose',
+		'profile='])
 except getopt.error, msg:
-       print msg
-       print 'for help use --help'
-       sys.exit(2)
+	print msg
+	print 'for help use --help'
+	sys.exit(2)
 for o, a in opts:
-       if o in ('-h', '--help'):
-               print 'gajim [--help] [--profile name]'
-               sys.exit(0)
-       elif o in ('-p', '--profile'): # gajim --profile name
-               profile = a
+	if o in ('-h', '--help'):
+		print 'gajim [--help] [--profile name]'
+		sys.exit(0)
+	elif o in ('-v', '--verbose'):
+		gajim.verbose = True
+	elif o in ('-p', '--profile'): # gajim --profile name
+		profile = a
 
 
 config_filename = os.path.expanduser('~/.gajim/config')
@@ -72,7 +75,7 @@ if os.name == 'nt':
 		config_filename = 'config'
 
 if profile:
-       config_filename += '.%s' % profile
+	config_filename += '.%s' % profile
 
 parser = optparser.OptionsParser(config_filename)
 
@@ -706,7 +709,7 @@ class Interface:
 		}
 		parser.read()
 
-		if gajim.config.get('verbose'):
+		if gajim.verbose:
 			gajim.log.setLevel(gajim.logging.DEBUG)
 		else:
 			gajim.log.setLevel(None)

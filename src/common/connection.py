@@ -534,7 +534,7 @@ class Connection:
 				'proxypass')
 		else:
 			proxy = None
-		if gajim.config.get('verbose'):
+		if gajim.verbose:
 			con = common.xmpp.Client(hostname)
 		else:
 			con = common.xmpp.Client(hostname, debug = [])
