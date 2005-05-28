@@ -94,7 +94,6 @@ class Preferences_window:
 			self.trayicon_checkbutton.set_active(st)
 		else:
 			if os.name == 'nt':
-				self.trayicon_checkbutton.hide()
 				self.trayicon_checkbutton.set_no_show_all(True)
 			else:
 				self.trayicon_checkbutton.set_sensitive(False)
@@ -253,7 +252,8 @@ class Preferences_window:
 
 		#sounds
 		if os.name == 'nt': # if windows, player must not become visible on show_all
-			self.xml.get_widget('soundplayer_hbox').set_no_show_all(True)
+			soundplayer_hbox = self.xml.get_widget('soundplayer_hbox')
+			soundplayer_hbox.set_no_show_all(True)
 		if gajim.config.get('sounds_on'):
 			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
 		else:
@@ -337,7 +337,6 @@ class Preferences_window:
 		#open links with
 		if os.name == 'nt':
 			self.links_frame = self.xml.get_widget('links_frame')
-			self.links_frame.hide()
 			self.links_frame.set_no_show_all(True)
 		else:
 			self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
