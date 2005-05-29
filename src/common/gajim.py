@@ -24,7 +24,7 @@ import common.logger
 version = '0.7.1'
 config = common.config.Config()
 connections = {}
-verbose = config.get('verbose')
+verbose = False
 
 h = logging.StreamHandler()
 f = logging.Formatter('%(asctime)s %(name)s: %(message)s', '%d %b %Y %H:%M:%S')

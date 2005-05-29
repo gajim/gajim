@@ -708,6 +708,7 @@ class Interface:
 			'statusmsgcolor': gajim.config.get('statusmsgcolor'),
 		}
 		parser.read()
+		gajim.verbose = gajim.config.get('verbose')
 
 		if gajim.verbose:
 			gajim.log.setLevel(gajim.logging.DEBUG)
