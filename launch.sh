@@ -1,2 +1,2 @@
 cd src
-./gajim.py
+./gajim.py $@

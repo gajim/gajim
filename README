@@ -24,7 +24,7 @@ RUN GAJIM
 gajim
 
 or if you didn't 'make install' you can also run from gajim folder with
-./launch.sh (or if you want to pass extra parameters cd src/; gajim.py)
+./launch.sh
 
 
 If you want to see the xml stanzas and/or help us debugging 
