@@ -1,7 +1,7 @@
 # Set the C flags to include the GTK+ and Python libraries
 PYTHONVER = `python -V 2>&1 | awk '{print $$2}' | cut -f1,2 -d.`
-CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0 gtkspell-2.0` -fpic -I/usr/include/python$(PYTHONVER) -I.
-LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0 gtkspell-2.0`
+CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -fPIC -I/usr/include/python$(PYTHONVER) -I.
+LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0`
 
 all: trayicon.so gtkspell.so
 
@@ -10,7 +10,7 @@ trayicon.so: trayicon.o eggtrayicon.o trayiconmodule.o
 	$(CC) $(LDFLAGS) -shared $^ -o $@
 
 gtkspell.so:
-	$(CC) $(CFLAGS) $(LDFLAGS) -shared gtkspellmodule.c $^ -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) `pkg-config --libs --cflags gtkspell-2.0` -shared gtkspellmodule.c $^ -o $@
 
 # The path to the GTK+ python types
 DEFS=`pkg-config --variable=defsdir pygtk-2.0`
