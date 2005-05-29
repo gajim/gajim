@@ -1,14 +1,16 @@
 # Set the C flags to include the GTK+ and Python libraries
 PYTHONVER = `python -V 2>&1 | awk '{print $$2}' | cut -f1,2 -d.`
-CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -fpic -I/usr/include/python$(PYTHONVER) -I.
-LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0`
+CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0 gtkspell-2.0` -fpic -I/usr/include/python$(PYTHONVER) -I.
+LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0 gtkspell-2.0`
 
-all: trayicon.so
+all: trayicon.so gtkspell.so
 
-# Build the shared object
+# Build the shared objects
 trayicon.so: trayicon.o eggtrayicon.o trayiconmodule.o
 	$(CC) $(LDFLAGS) -shared $^ -o $@
 
+gtkspell.so:
+	$(CC) $(CFLAGS) $(LDFLAGS) -shared gtkspellmodule.c $^ -o $@
 
 # The path to the GTK+ python types
 DEFS=`pkg-config --variable=defsdir pygtk-2.0`
@@ -21,8 +23,9 @@ trayicon.c: trayicon.defs trayicon.override
 	--override trayicon.override \
 	trayicon.defs > $@
 
+
 # A rule to clean the generated files
 clean:
-	rm -f trayicon.so *.o trayicon.c *~ 
+	rm -f trayicon.so *.o trayicon.c gtkspell.so *~  
 
 .PHONY: clean
