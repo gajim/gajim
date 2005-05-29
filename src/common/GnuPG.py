@@ -151,10 +151,14 @@ else:
 				keyid = resp['BADSIG'].split()[0]
 			return keyid
 
-		def get_secret_keys(self):
+		def get_keys(self, secret = False):
 			if not USE_GPG:
 				return
-			proc = self.run(['--with-colons', '--list-secret-keys'], \
+			if secret:
+				opt = '--list-secret-keys'
+			else:
+				opt = '--list-keys'
+			proc = self.run(['--with-colons', opt], \
 				create_fhs=['stdout'])
 			output = proc.handles['stdout'].read()
 			proc.handles['stdout'].close()
@@ -163,11 +167,15 @@ else:
 			lines = output.split('\n')
 			for line in lines:
 				sline = line.split(':')
-				if sline[0] == 'sec':
+				if (sline[0] == 'sec' and secret) or \
+						(sline[0] == 'pub' and not secret):
 					keys[sline[4][8:]] = sline[9]
 			return keys
 			try: proc.wait()
 			except IOError: pass
+
+		def get_secret_keys(self):
+			return self.get_keys(True)
 
 		def _stripHeaderFooter(self, data):
 			"""Remove header and footer from data"""

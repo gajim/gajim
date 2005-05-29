@@ -1303,7 +1303,7 @@ class Account_modification_window:
 	def on_gpg_choose_button_clicked(self, widget, data = None):
 		secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
 		if not secret_keys:
-			dialogs.Error_dialog(_('error contacting %s') % service)
+			dialogs.Error_dialog(_('Error while getting secret keys'))
 			return
 		secret_keys['None'] = 'None'
 		w = dialogs.choose_gpg_key_dialog(secret_keys)

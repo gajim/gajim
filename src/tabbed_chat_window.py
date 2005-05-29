@@ -79,6 +79,8 @@ class Tabbed_chat_window(chat.Chat):
 		contact_button.set_label(user.name + ' <' + jid + '>')
 		if not user.keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
+		else:
+			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(True)
 
 		nontabbed_status_image = self.xmls[jid].get_widget(
 																	'nontabbed_status_image')

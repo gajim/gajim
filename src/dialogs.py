@@ -157,12 +157,15 @@ class choose_gpg_key_dialog:
 		self.window.destroy()
 		return keyID
 
-	def fill_tree(self, list):
+	def fill_tree(self, list, selected):
 		model = self.keys_treeview.get_model()
 		for keyID in list.keys():
-			model.append((keyID, list[keyID]))
+			iter = model.append((keyID, list[keyID]))
+			if keyID == selected:
+				path = model.get_path(iter)
+				self.keys_treeview.set_cursor(path)
 	
-	def __init__(self, secret_keys):
+	def __init__(self, secret_keys, selected = None):
 		#list : {keyID: userName, ...}
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'choose_gpg_key_dialog', APP)
 		self.window = xml.get_widget('choose_gpg_key_dialog')
@@ -176,7 +179,7 @@ class choose_gpg_key_dialog:
 		renderer = gtk.CellRendererText()
 		self.keys_treeview.insert_column_with_attributes(-1, _('User name'),
 			renderer, text = 1)
-		self.fill_tree(secret_keys)
+		self.fill_tree(secret_keys, selected)
 
 		self.window.show_all()
 
@@ -605,8 +608,13 @@ class New_message_dialog:
 		if self.plugin.roster.contacts[self.account].has_key(jid):
 			user = self.plugin.roster.contacts[self.account][jid][0]
 		else:
-			user = User(jid, jid, ['not in the roster'],
-				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
+			keyID = ''
+			attached_keys = gajim.config.get_per('accounts', self.account,
+				'attached_gpg_keys').split()
+			if jid in attached_keys:
+				keyID = attached_keys[attached_keys.index(jid) + 1]
+			user = User(jid, jid, ['not in the roster'], 'not in the roster',
+				'not in the roster', 'none', None, '', 0, keyID)
 			self.plugin.roster.contacts[self.account][jid] = [user]
 			self.plugin.roster.add_user_to_roster(user.jid, self.account)			
 
@@ -724,8 +732,14 @@ class Popup_notification_window:
 		if self.plugin.roster.contacts[self.account].has_key(self.jid):
 			user = self.plugin.roster.contacts[self.account][self.jid][0]
 		else:
+			keyID = ''
+			attached_keys = gajim.config.get_per('accounts', self.account,
+				'attached_gpg_keys').split()
+			if jid in attached_keys:
+				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user = User(self.jid, self.jid, ['not in the roster'],
-				'not in the roster', 'not in the roster', 'none', None, '', 0, '')
+				'not in the roster', 'not in the roster', 'none', None, '', 0,
+				keyID)
 			self.plugin.roster.contacts[self.account][self.jid] = [user]
 			self.plugin.roster.add_user_to_roster(user.self.jid, self.account)			
 

@@ -374,8 +374,14 @@ class Roster_window:
 			show = 'offline' # show is offline by default
 			status = '' #no status message by default
 
+			keyID = ''
+			attached_keys = gajim.config.get_per('accounts', account,
+				'attached_gpg_keys').split()
+			if jid in attached_keys:
+				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = User(ji, name, array[jid]['groups'], show, status,\
-					array[jid]['subscription'], array[jid]['ask'], resource, 0, '')
+					array[jid]['subscription'], array[jid]['ask'], resource, 0,
+					keyID)
 
 			# when we draw the roster, we can't have twice the same
 			# user with 2 resources
@@ -452,6 +458,34 @@ class Roster_window:
 		model.set_value(iter, 5, True)
 		self.tree.set_cursor(path, self.tree.get_column(0), True)
 		
+	def on_assign_pgp_key(self, widget, user, account):
+		attached_keys = gajim.config.get_per('accounts', account,
+			'attached_gpg_keys').split()
+		keys = {}
+		keyID = 'None'
+		for i in range(0, len(attached_keys)/2):
+			keys[attached_keys[2*i]] = attached_keys[2*i+1]
+			if attached_keys[2*i] == user.jid:
+				keyID = attached_keys[2*i+1]
+		public_keys = gajim.connections[account].ask_gpg_keys()
+		public_keys['None'] = 'None'
+		w = dialogs.choose_gpg_key_dialog(public_keys, keyID)
+		keyID = w.run()
+		if keyID == -1:
+			return
+		if keyID[0] == 'None' and user.jid in keys:
+			del keys[user.jid]
+		else:
+			keys[user.jid] = keyID[0]
+			for u in self.contacts[account][user.jid]:
+				u.keyID = keyID[0]
+			if self.plugin.windows[account]['chats'].has_key(user.jid):
+				self.plugin.windows[account]['chats'][user.jid].draw_widgets(user)
+		keys_str = ''
+		for jid in keys:
+			keys_str += jid + ' ' + keys[jid]
+		gajim.config.set_per('accounts', account, 'attached_gpg_keys', keys_str)
+
 	def on_edit_groups(self, widget, user, account):
 		dlg = dialogs.Edit_groups_dialog(user, account, self.plugin)
 		dlg.run()
@@ -485,6 +519,12 @@ class Roster_window:
 			item.connect('activate', self.on_edit_groups, user, account)
 			item = gtk.MenuItem()
 			menu.append(item)
+			if gajim.config.get('usegpg'):
+				item = gtk.MenuItem(_('Assign OpenPGP key'))
+				menu.append(item)
+				item.connect('activate', self.on_assign_pgp_key, user, account)
+				item = gtk.MenuItem()
+				menu.append(item)
 			item = gtk.MenuItem(_('Subscription'))
 			menu.append(item)
 
@@ -651,8 +691,13 @@ class Roster_window:
 		if not group:
 			group = 'General'
 		if not self.contacts[account].has_key(jid):
+			keyID = ''
+			attached_keys = gajim.config.get_per('accounts', account,
+				'attached_gpg_keys').split()
+			if jid in attached_keys:
+				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = User(jid, pseudo, [group], 'requested', 'requested', 
-								'none', 'subscribe', '', 0, '')
+								'none', 'subscribe', '', 0, keyID)
 			self.contacts[account][jid] = [user1]
 		else:
 			user1 = self.contacts[account][jid][0]
@@ -914,8 +959,13 @@ class Roster_window:
 	def on_message(self, jid, msg, tim, account):
 		'''when we receive a message'''
 		if not self.contacts[account].has_key(jid):
+			keyID = ''
+			attached_keys = gajim.config.get_per('accounts', account,
+				'attached_gpg_keys').split()
+			if jid in attached_keys:
+				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = User(jid, jid, ['not in the roster'], 'not in the roster', 
-								'not in the roster', 'none', None, '', 0, '')
+								'not in the roster', 'none', None, '', 0, keyID)
 			self.contacts[account][jid] = [user1]
 			self.add_user_to_roster(jid, account)
 		iters = self.get_user_iter(jid, account)

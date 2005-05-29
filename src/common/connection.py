@@ -543,7 +543,7 @@ class Connection:
 		common.xmpp.dispatcher.DefaultTimeout = 45
 		con.UnregisterDisconnectHandler(con.DisconnectHandler)
 		con.RegisterDisconnectHandler(self._disconnectedCB)
-		con_type = con.connect(proxy=proxy, tls=usetls) #FIXME: blocking
+		con_type = con.connect((hostname,5222), proxy=proxy, tls=usetls) #FIXME: blocking
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % name)
 			self.connected = 0
@@ -950,6 +950,12 @@ class Connection:
 	def gpg_passphrase(self, passphrase):
 		if USE_GPG:
 			self.gpg.passphrase = passphrase
+
+	def ask_gpg_keys(self):
+		if USE_GPG:
+			keys = self.gpg.get_keys()
+			return keys
+		return None
 
 	def ask_gpg_secrete_keys(self):
 		if USE_GPG:

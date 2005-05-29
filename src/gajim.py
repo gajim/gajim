@@ -216,6 +216,10 @@ class Interface:
 		new_show = statuss.index(array[1])
 		jid = array[0].split('/')[0]
 		keyID = array[5]
+		attached_keys = gajim.config.get_per('accounts', account,
+			'attached_gpg_keys').split()
+		if jid in attached_keys:
+			keyID = attached_keys[attached_keys.index(jid) + 1]
 		resource = array[3]
 		if not resource:
 			resource = ''
@@ -394,8 +398,13 @@ class Interface:
 			self.roster.add_user_to_roster(u.jid, account)
 			gajim.connections[account].update_user(u.jid, u.name, u.groups)
 		else:
+			keyID = ''
+			attached_keys = gajim.config.get_per('accounts', account,
+				'attached_gpg_keys').split()
+			if jid in attached_keys:
+				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = User(jid, jid, ['General'], 'online', \
-				'online', 'to', '', array[1], 0, '')
+				'online', 'to', '', array[1], 0, keyID)
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
 		dialogs.Information_dialog(_('You are now authorized by %s') % jid)
