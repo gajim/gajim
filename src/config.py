@@ -106,6 +106,10 @@ class Preferences_window:
 		st = gajim.config.get('mergeaccounts')
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
+		# Sort contacts by show
+		st = gajim.config.get('sort_by_show')
+		self.xml.get_widget('sort_by_show_checkbutton').set_active(st)
+
 		#Use emoticons
 		st = gajim.config.get('useemoticons')
 		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
@@ -420,6 +424,10 @@ class Preferences_window:
 	def on_merge_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'mergeaccounts')
 		self.plugin.roster.regroup = gajim.config.get('mergeaccounts')
+		self.plugin.roster.draw_roster()
+	
+	def on_sort_by_show_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'sort_by_show')
 		self.plugin.roster.draw_roster()
 	
 	def on_use_emoticons_checkbutton_toggled(self, widget):

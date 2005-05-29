@@ -2968,7 +2968,6 @@
 
 	      <child>
 		<widget class="GtkCheckButton" id="trayicon_checkbutton">
-		  <property name="visible">False</property>
 		  <property name="tooltip" translatable="yes">If checked, Gajim will also have a trayicon</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Icon in systray (aka. notification area)</property>
@@ -3021,6 +3020,26 @@
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
 		  <signal name="toggled" handler="on_merge_checkbutton_toggled" last_modification_time="Sun, 06 Mar 2005 15:07:26 GMT"/>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCheckButton" id="sort_by_show_checkbutton">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Sort contacts by status</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="on_sort_by_show_checkbutton_toggled" last_modification_time="Sun, 29 May 2005 18:26:18 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -4629,7 +4648,6 @@
 
 			      <child>
 				<widget class="GtkHBox" id="soundplayer_hbox">
-				  <property name="visible">False</property>
 				  <property name="homogeneous">False</property>
 				  <property name="spacing">5</property>
 
@@ -5372,7 +5390,6 @@
 
 	      <child>
 		<widget class="GtkFrame" id="links_frame">
-		  <property name="visible">False</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>

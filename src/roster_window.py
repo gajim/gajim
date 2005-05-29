@@ -1310,18 +1310,44 @@ class Roster_window:
 			renderer.set_property('font', gajim.config.get('userfont'))
 			renderer.set_property('xpad', 8)
 
+	def get_show(self, luser):
+		prio = luser[0].priority
+		show = luser[0].show
+		for u in luser:
+			if u.priority > prio:
+				prio = u.priority
+				show = u.show
+		return show
+
 	def compareIters(self, model, iter1, iter2, data = None):
 		'''Compare two iters to sort them'''
 		name1 = model.get_value(iter1, 1)
 		name2 = model.get_value(iter2, 1)
 		if not name1 or not name2:
 			return 0
-		type = model.get_value(iter1, 2)
-		if type == 'group':
+		type1 = model.get_value(iter1, 2)
+		type2 = model.get_value(iter2, 2)
+		if type1 == 'group':
 			if name1 == 'Transports':
 				return 1
 			if name2 == 'Transports':
 				return -1
+		if type1 == 'user' and type2 == 'user' and \
+				gajim.config.get('sort_by_show'):
+			account = model.get_value(iter1, 4)
+			if account and model.get_value(iter2, 4) == account:
+				jid1 = model.get_value(iter1, 3)
+				jid2 = model.get_value(iter2, 3)
+				luser1 = self.contacts[account][jid1]
+				luser2 = self.contacts[account][jid2]
+				cshow = {'online':0, 'free': 1, 'away':2, 'xa':3, 'dnd':4,
+					'invisible':5, 'offline':6, 'error':7}
+				show1 = cshow[self.get_show(luser1)]
+				show2 = cshow[self.get_show(luser2)]
+				if show1 < show2:
+					return -1
+				elif show1 > show2:
+					return 1
 		if name1.lower() < name2.lower():
 			return -1
 		if name2.lower < name1.lower():

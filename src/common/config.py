@@ -72,6 +72,7 @@ class Config:
 		'userfont': [ opt_str, 'Sans 10' ],
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False ],
+		'sort_by_show': [ opt_bool, True ],
 		'usetabbedchat': [ opt_bool, True ],
 		'use_speller': [ opt_bool, False ],
 		'print_time': [ opt_str, 'always' ],
