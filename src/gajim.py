@@ -29,7 +29,7 @@ try:
 except RuntimeError, msg:
 	if str(msg) == 'could not open display':
 		print 'Gajim needs Xserver to run. Exiting...'
-		sys.exit(0)
+		sys.exit()
 import gtk.glade
 import pango
 import gobject
@@ -63,7 +63,7 @@ except getopt.error, msg:
 for o, a in opts:
 	if o in ('-h', '--help'):
 		print 'gajim [--help] [--verbose] [--profile name]'
-		sys.exit(0)
+		sys.exit()
 	elif o in ('-v', '--verbose'):
 		gajim.verbose = True
 	elif o in ('-p', '--profile'): # gajim --profile name
