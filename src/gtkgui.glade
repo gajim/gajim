@@ -1029,7 +1029,7 @@
 	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkFrame" id="tls_frame">
+		<widget class="GtkFrame" id="ssl_frame">
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
@@ -1048,10 +1048,11 @@
 		      <property name="right_padding">0</property>
 
 		      <child>
-			<widget class="GtkCheckButton" id="use_tls_checkbutton">
+			<widget class="GtkCheckButton" id="use_ssl_checkbutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim use TLS encryption by default if broadcasted by the server, and with this option on you disable TLS</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Use _TLS</property>
+			  <property name="label" translatable="yes">Use _SSL</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -1066,7 +1067,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="label252">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">&lt;b&gt;TLS&lt;/b&gt;</property>
+		      <property name="label" translatable="yes">&lt;b&gt;SSL&lt;/b&gt;</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>

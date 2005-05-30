@@ -1083,8 +1083,8 @@ class Account_modification_window:
 		entry.set_text(gajim.config.get_per('accounts', self.account,
 							'proxypass'))
 
-		usetls = gajim.config.get_per('accounts', self.account, 'usetls')
-		self.xml.get_widget('use_tls_checkbutton').set_active(usetls)
+		usessl = gajim.config.get_per('accounts', self.account, 'usessl')
+		self.xml.get_widget('use_ssl_checkbutton').set_active(usessl)
 
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if gajim.config.get('usegpg'):
@@ -1168,7 +1168,7 @@ class Account_modification_window:
 				dialogs.Error_dialog(_('You must enter a proxy host to use proxy'))
 				return
 
-		config['usetls'] = self.xml.get_widget('use_tls_checkbutton').get_active()
+		config['usessl'] = self.xml.get_widget('use_ssl_checkbutton').get_active()
 		(config['name'], config['hostname']) = jid.split('@')
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text()
 		if config['keyname'] == '': #no key selected

@@ -519,7 +519,7 @@ class Connection:
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
-		usetls = gajim.config.get_per('accounts', self.name, 'usetls')
+		usessl = gajim.config.get_per('accounts', self.name, 'usessl')
 
 		#create connection if it doesn't already exist
 		if self.connection:
@@ -545,7 +545,10 @@ class Connection:
 		common.xmpp.dispatcher.DefaultTimeout = 45
 		con.UnregisterDisconnectHandler(con.DisconnectHandler)
 		con.RegisterDisconnectHandler(self._disconnectedCB)
-		con_type = con.connect((hostname,5222), proxy=proxy, tls=usetls) #FIXME: blocking
+		port = 5222
+		if usessl:
+			port = 5223
+		con_type = con.connect((hostname, port), proxy = proxy) #FIXME: blocking
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % name)
 			self.connected = 0

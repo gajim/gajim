@@ -117,7 +117,7 @@ class Config:
 			'proxypass': [ opt_str, '' ],
 			'keyid': [ opt_str, '' ],
 			'keyname': [ opt_str, '' ],
-			'usetls': [ opt_bool, False ],
+			'usessl': [ opt_bool, False ],
 			'force_nonSASL': [ opt_bool, False ],
 			'savegpgpass': [ opt_bool, False ],
 			'gpgpassword': [ opt_str, '' ],
