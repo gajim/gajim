@@ -785,6 +785,11 @@ class Roster_window:
 			for u in self.contacts[account][user.jid]:
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
+			
+	def forget_gpg_passphrase(self, keyid):
+		if self.gpg_passphrase.has_key(keyid):
+			del self.gpg_passphrase[keyid]
+		return False
 
 	def send_status(self, account, status, txt):
 		if status != 'offline':
@@ -826,13 +831,19 @@ class Roster_window:
 					passphrase = gajim.config.get_per('accounts', account, 
 																	'gpgpassword')
 				else:
-					passphrase = ''
-					w = dialogs.Passphrase_dialog(
-						_('Enter GPG key passphrase for account %s') % account, 
-						'Save passphrase')
-					passphrase, save = w.run()
+					if self.gpg_passphrase.has_key(keyid):
+						passphrase = self.gpg_passphrase[keyid]
+						save = False
+					else:
+						w = dialogs.Passphrase_dialog(
+							_('Enter GPG key passphrase for account %s') % account, 
+							'Save passphrase')
+						passphrase, save = w.run()
 					if passphrase == -1:
 						passphrase = ''
+					else:
+						self.gpg_passphrase[keyid] = passphrase
+						gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
 					if save:
 						gajim.config.set_per('accounts', account, 'savegpgpass', True)
 						gajim.config.set_per('accounts', account, 'gpgpassword', 
@@ -1508,6 +1519,7 @@ class Roster_window:
 		self.to_be_removed = {}
 		self.popups_notification_height = 0
 		self.popup_notification_windows = []
+		self.gpg_passphrase = {}
 		for a in gajim.connections:
 			self.contacts[a] = {}
 			self.groups[a] = {}
