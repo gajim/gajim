@@ -298,3 +298,53 @@ class Tabbed_chat_window(chat.Chat):
 				name = user.name
 
 		chat.Chat.print_conversation_line(self, text, jid, kind, name, tim)
+
+	def restore_conversation(self, jid):
+		is_transport = bool(
+			jid.startswith('aim.') or jid.startswith('gadugadu.') or\
+			jid.startswith('irc.') or jid.startswith('icq.') or\
+			jid.startswith('msn.') or jid.startswith('sms.') or\
+			jid.startswith('yahoo.')
+			)
+		if is_transport:
+			return
+
+		#How many lines to restore
+		restore = gajim.config.get('restore_lines')
+		pos		= 0	#position, while reading from history
+		size		= 0	#how many lines we alreay retreived
+		lines		= []	#we'll need to reverse the lines from history
+		count		= gajim.logger.get_nb_line(jid)
+
+		while size <= restore:
+			if pos == count or size > restore - 1:
+				#don't try to read beyond history, not read more than required
+				break
+			
+			nb, line = gajim.logger.read(jid, count - 1 - pos, count - pos)
+			pos = pos + 1
+
+			if line[0][1] != 'sent' and line[0][1] != 'recv':
+				# we don't want to display status lines, do we?
+				continue
+
+			lines.append(line[0])
+			size = size + 1
+
+		lines.reverse()
+
+		for msg in lines:
+			if msg[1] == 'sent':
+				kind = 'outgoing'
+				name = self.plugin.nicks[self.account]
+			elif msg[1] == 'recv':
+				kind = 'incoming'
+				# self.users is not initialized here yet
+				name = self.plugin.roster.contacts[self.account][jid][0].name
+
+			tim = time.gmtime(float(msg[0]))
+			if msg[2][-1] == '\n':
+				text = msg[2][:-1]
+			else:
+				text = msg[2]
+			self.print_conversation_line(text, jid, kind, name, tim)
