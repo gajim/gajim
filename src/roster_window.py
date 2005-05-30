@@ -1390,7 +1390,7 @@ class Roster_window:
 				jid2 = model.get_value(iter2, 3)
 				luser1 = self.contacts[account][jid1]
 				luser2 = self.contacts[account][jid2]
-				cshow = {'online':0, 'free': 1, 'away':2, 'xa':3, 'dnd':4,
+				cshow = {'online':0, 'chat': 1, 'away':2, 'xa':3, 'dnd':4,
 					'invisible':5, 'offline':6, 'error':7}
 				show1 = cshow[self.get_show(luser1)]
 				show2 = cshow[self.get_show(luser2)]
