@@ -4,32 +4,28 @@ MODULES		= src src/common po
 PREFIX		= /usr
 DESTDIR		= /
 
-FIND		= find -regex '.*\.\(\(glade\)\|\(pyo\)\|\(xpm\)\|\(gif\)\|\(png\)\|\(mo\)\|\(wav\)\)'
+FIND		= find -regex '.*\.\(\(glade\)\|\(py\)\|\(xpm\)\|\(gif\)\|\(png\)\|\(mo\)\|\(wav\)\)'
 FILES		= `$(FIND)`
 DIRS		= `$(FIND) -exec dirname {} \; | sort -u`
 FIND_LIB	= find -regex '.*\.\(so\)'
 FILES_LIB	= `$(FIND_LIB)`
-FIND_PY		= find -regex '.*\.\(py\)'
-FILES_PY	= `$(FIND_PY)`
 
 SCRIPTS = \
 	scripts/gajim
 
-all: translation trayicon idle pyo
+all: translation trayicon gtkspell idle
 
 translation:
 	make -C po all
 
 trayicon:
-	make -C src all;
+	make -C src trayicon.so;
+
+gtkspell:
+	make -C src gtkspell.so;
 
 idle:
 	make -C src/common all;
-
-pyo:
-	for f in $(FILES_PY) ; do \
-		python -OO -c "import py_compile; py_compile.compile('$$f')"; \
-	done
 
 clean:
 	find -name *.pyc -exec rm {} \;
@@ -61,6 +57,7 @@ install:
 		DST=`dirname "$$f"`; \
 		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
 	done
+	rm "$(DESTDIR)$(PREFIX)/share/gajim/setup_win32.py";
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/applications";
 	cp gajim.desktop "$(DESTDIR)$(PREFIX)/share/applications/";
