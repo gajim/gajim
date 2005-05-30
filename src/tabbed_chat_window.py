@@ -300,12 +300,11 @@ class Tabbed_chat_window(chat.Chat):
 		chat.Chat.print_conversation_line(self, text, jid, kind, name, tim)
 
 	def restore_conversation(self, jid):
-		is_transport = bool(
-			jid.startswith('aim.') or jid.startswith('gadugadu.') or\
+		is_transport = jid.startswith('aim.') or jid.startswith('gadugadu.') or\
 			jid.startswith('irc.') or jid.startswith('icq.') or\
 			jid.startswith('msn.') or jid.startswith('sms.') or\
 			jid.startswith('yahoo.')
-			)
+
 		if is_transport:
 			return
 
