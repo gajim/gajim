@@ -550,10 +550,10 @@ class Connection:
 			port = 5223
 		con_type = con.connect((hostname, port), proxy = proxy) #FIXME: blocking
 		if not con_type:
-			gajim.log.debug("Couldn't connect to %s" % name)
+			gajim.log.debug("Couldn't connect to %s" % self.name)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', _("Couldn't connect to %s") % name)
+			self.dispatch('ERROR', _("Couldn't connect to %s") % self.name)
 			return None
 
 		con.RegisterHandler('message', self._messageCB)
@@ -588,14 +588,14 @@ class Connection:
 		except IOError: #probably a timeout
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', _("Couldn't connect to %s") % name)
+			self.dispatch('ERROR', _("Couldn't connect to %s") % self.name)
 			return None
 		if auth:
 			con.initRoster()
 			self.connected = 2
 			return con
 		else:
-			gajim.log.debug("Couldn't authenticate to %s" % name)
+			gajim.log.debug("Couldn't authenticate to %s" % self.name)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', _('Authentication failed with %s, check your login and password') % name)
@@ -800,8 +800,8 @@ class Connection:
 		c = common.xmpp.Client(server = config['hostname'], debug = [])
 		con_type = c.connect(proxy = proxy)
 		if not con_type:
-			gajim.log.debug("Couldn't connect to %s" % config['hostname'])
-			self.dispatch('ERROR', _("Couldn't connect to ") + config['hostname'])
+			gajim.log.debug("Couldn't connect to %s" % name)
+			self.dispatch('ERROR', _("Couldn't connect to %s") % name)
 			return False
 		else:
 			gajim.log.debug('Connected to server')
