@@ -21,16 +21,21 @@ exec python -OOt "$0" ${1+"$@"}
 ## GNU General Public License for more details.
 ##
 		
+import sys
 import pygtk
 pygtk.require('2.0')
-import gtk
+try:
+	import gtk
+except RuntimeError, msg:
+	if str(msg) == 'could not open display':
+		print 'Gajim needs Xserver to run. Exiting...'
+		sys.exit(0)
 import gtk.glade
 import pango
 import gobject
 import os
 import sre
 import signal
-import sys
 import getopt
 
 from common import i18n
@@ -57,7 +62,7 @@ except getopt.error, msg:
 	sys.exit(2)
 for o, a in opts:
 	if o in ('-h', '--help'):
-		print 'gajim [--help] [--profile name]'
+		print 'gajim [--help] [--verbose] [--profile name]'
 		sys.exit(0)
 	elif o in ('-v', '--verbose'):
 		gajim.verbose = True
