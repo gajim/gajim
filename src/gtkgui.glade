@@ -25,7 +25,7 @@
     <widget class="GtkVBox" id="vbox1">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">2</property>
+      <property name="spacing">0</property>
 
       <child>
 	<widget class="GtkMenuBar" id="menubar">
@@ -307,7 +307,7 @@
 </widget>
 
 <widget class="GtkWindow" id="accounts_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Accounts</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -327,7 +327,7 @@
     <widget class="GtkVBox" id="vbox5">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkScrolledWindow" id="scrolledwindow5">
@@ -359,9 +359,8 @@
 
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox15">
-	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+	  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
 	  <property name="spacing">10</property>
 
 	  <child>
@@ -529,7 +528,7 @@
 	  </child>
 	</widget>
 	<packing>
-	  <property name="padding">0</property>
+	  <property name="padding">5</property>
 	  <property name="expand">False</property>
 	  <property name="fill">True</property>
 	</packing>
@@ -539,7 +538,7 @@
 </widget>
 
 <widget class="GtkWindow" id="account_modification_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Account Modification</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -557,7 +556,7 @@
     <widget class="GtkVBox" id="vbox7">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkHBox" id="hbox23">
@@ -626,13 +625,13 @@
 
 	  <child>
 	    <widget class="GtkTable" id="table24">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="n_rows">5</property>
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
-	      <property name="row_spacing">5</property>
-	      <property name="column_spacing">5</property>
+	      <property name="row_spacing">6</property>
+	      <property name="column_spacing">6</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label9">
@@ -926,10 +925,10 @@
 
 	      <child>
 		<widget class="GtkVBox" id="vbox38">
-		  <property name="border_width">5</property>
+		  <property name="border_width">6</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">5</property>
+		  <property name="spacing">6</property>
 
 		  <child>
 		    <widget class="GtkCheckButton" id="autoconnect_checkbutton">
@@ -1023,10 +1022,10 @@
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox31">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">0</property>
+	      <property name="spacing">12</property>
 
 	      <child>
 		<widget class="GtkFrame" id="ssl_frame">
@@ -1049,6 +1048,7 @@
 
 		      <child>
 			<widget class="GtkCheckButton" id="use_ssl_checkbutton">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim use TLS encryption by default if broadcasted by the server, and with this option on you disable TLS</property>
 			  <property name="can_focus">True</property>
@@ -1111,9 +1111,10 @@
 
 		      <child>
 			<widget class="GtkVBox" id="vbox32">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">7</property>
+			  <property name="spacing">6</property>
 
 			  <child>
 			    <widget class="GtkHBox" id="hbox39">
@@ -1191,7 +1192,7 @@
 			    <widget class="GtkHBox" id="hbox40">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
-			      <property name="spacing">0</property>
+			      <property name="spacing">6</property>
 
 			      <child>
 				<widget class="GtkCheckButton" id="gpg_save_password_checkbutton">
@@ -1305,7 +1306,7 @@
 
 	      <child>
 		<widget class="GtkFrame" id="frame23">
-		  <property name="border_width">5</property>
+		  <property name="border_width">6</property>
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
@@ -1313,6 +1314,7 @@
 
 		  <child>
 		    <widget class="GtkAlignment" id="alignment51">
+		      <property name="border_width">6</property>
 		      <property name="visible">True</property>
 		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
@@ -1327,20 +1329,34 @@
 			<widget class="GtkVBox" id="vbox71">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">0</property>
+			  <property name="spacing">6</property>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="use_proxy_checkbutton">
+			    <widget class="GtkAlignment" id="alignment69">
 			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">_Use proxy</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">True</property>
-			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
-			      <property name="draw_indicator">True</property>
-			      <signal name="toggled" handler="on_use_proxy_checkbutton_toggled" last_modification_time="Fri, 08 Apr 2005 21:12:47 GMT"/>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xscale">1</property>
+			      <property name="yscale">1</property>
+			      <property name="top_padding">0</property>
+			      <property name="bottom_padding">0</property>
+			      <property name="left_padding">0</property>
+			      <property name="right_padding">0</property>
+
+			      <child>
+				<widget class="GtkCheckButton" id="use_proxy_checkbutton">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">_Use proxy</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				  <signal name="toggled" handler="on_use_proxy_checkbutton_toggled" last_modification_time="Fri, 08 Apr 2005 21:12:47 GMT"/>
+				</widget>
+			      </child>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -1351,14 +1367,13 @@
 
 			  <child>
 			    <widget class="GtkTable" id="proxy_table">
-			      <property name="border_width">5</property>
 			      <property name="visible">True</property>
 			      <property name="sensitive">False</property>
 			      <property name="n_rows">4</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">5</property>
-			      <property name="column_spacing">5</property>
+			      <property name="row_spacing">6</property>
+			      <property name="column_spacing">6</property>
 
 			      <child>
 				<widget class="GtkLabel" id="label135">
@@ -1611,7 +1626,7 @@
 	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">6</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label87">
@@ -1687,7 +1702,7 @@
 	<widget class="GtkHButtonBox" id="hbuttonbox6">
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
-	  <property name="spacing">10</property>
+	  <property name="spacing">12</property>
 
 	  <child>
 	    <widget class="GtkButton" id="cancel_button">
@@ -1717,7 +1732,7 @@
 	  </child>
 	</widget>
 	<packing>
-	  <property name="padding">0</property>
+	  <property name="padding">6</property>
 	  <property name="expand">True</property>
 	  <property name="fill">True</property>
 	</packing>
@@ -1727,7 +1742,7 @@
 </widget>
 
 <widget class="GtkWindow" id="add_new_contact_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Add New Contact</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -1745,16 +1760,17 @@
     <widget class="GtkVBox" id="vbox8">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkTable" id="table21">
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="n_rows">6</property>
 	  <property name="n_columns">2</property>
 	  <property name="homogeneous">False</property>
-	  <property name="row_spacing">5</property>
-	  <property name="column_spacing">5</property>
+	  <property name="row_spacing">6</property>
+	  <property name="column_spacing">6</property>
 
 	  <child>
 	    <widget class="GtkLabel" id="label185">
@@ -1994,7 +2010,7 @@
 	  </child>
 	</widget>
 	<packing>
-	  <property name="padding">10</property>
+	  <property name="padding">0</property>
 	  <property name="expand">False</property>
 	  <property name="fill">True</property>
 	</packing>
@@ -2002,6 +2018,7 @@
 
       <child>
 	<widget class="GtkScrolledWindow" id="scrolledwindow6">
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
 	  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -2038,9 +2055,10 @@
 
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox1">
+	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
-	  <property name="spacing">10</property>
+	  <property name="spacing">12</property>
 
 	  <child>
 	    <widget class="GtkButton" id="cancel_button">
@@ -2128,7 +2146,7 @@
 	  </child>
 	</widget>
 	<packing>
-	  <property name="padding">8</property>
+	  <property name="padding">0</property>
 	  <property name="expand">False</property>
 	  <property name="fill">False</property>
 	</packing>
@@ -2138,7 +2156,7 @@
 </widget>
 
 <widget class="GtkWindow" id="subscription_request_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Subscription Request</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -2462,7 +2480,7 @@
 </widget>
 
 <widget class="GtkWindow" id="service_discovery_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Service Discovery</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -2482,13 +2500,13 @@
     <widget class="GtkVBox" id="vbox11">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">12</property>
 
       <child>
 	<widget class="GtkHBox" id="hbox2942">
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">5</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkLabel" id="label224">
@@ -2585,7 +2603,7 @@
 	<widget class="GtkHButtonBox" id="hbuttonbox4">
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
-	  <property name="spacing">0</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkButton" id="refresh_button">
@@ -2708,7 +2726,7 @@
 </widget>
 
 <widget class="GtkWindow" id="service_registration_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Register to</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -2727,7 +2745,7 @@
     <widget class="GtkVBox" id="vbox12">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkLabel" id="label">
@@ -2927,7 +2945,7 @@
 </widget>
 
 <widget class="GtkWindow" id="preferences_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Preferences</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -2962,10 +2980,10 @@
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox41">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">6</property>
 
 	      <child>
 		<widget class="GtkCheckButton" id="trayicon_checkbutton">
@@ -3053,7 +3071,7 @@
 		<widget class="GtkHBox" id="hbox2947">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">10</property>
+		  <property name="spacing">12</property>
 
 		  <child>
 		    <widget class="GtkCheckButton" id="use_emoticons_checkbutton">
@@ -3104,7 +3122,7 @@
 		<widget class="GtkHBox" id="hbox2901">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">10</property>
+		  <property name="spacing">12</property>
 
 		  <child>
 		    <widget class="GtkLabel" id="label174">
@@ -3184,7 +3202,7 @@
 		<widget class="GtkHBox" id="hbox2956">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">10</property>
+		  <property name="spacing">12</property>
 
 		  <child>
 		    <widget class="GtkLabel" id="label249">
@@ -3232,8 +3250,8 @@
 		  <property name="n_rows">4</property>
 		  <property name="n_columns">4</property>
 		  <property name="homogeneous">False</property>
-		  <property name="row_spacing">5</property>
-		  <property name="column_spacing">10</property>
+		  <property name="row_spacing">6</property>
+		  <property name="column_spacing">12</property>
 
 		  <child>
 		    <widget class="GtkLabel" id="label158">
@@ -3614,10 +3632,10 @@
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox58">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">6</property>
 
 	      <child>
 		<widget class="GtkCheckButton" id="use_tabbed_chat_window_checkbutton">
@@ -3680,15 +3698,16 @@
 
 		      <child>
 			<widget class="GtkVBox" id="vbox62">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">10</property>
+			  <property name="spacing">12</property>
 
 			  <child>
 			    <widget class="GtkHBox" id="hbox2944">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
-			      <property name="spacing">2</property>
+			      <property name="spacing">6</property>
 
 			      <child>
 				<widget class="GtkLabel" id="label219">
@@ -3786,8 +3805,8 @@
 			      <property name="n_rows">2</property>
 			      <property name="n_columns">4</property>
 			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">2</property>
-			      <property name="column_spacing">5</property>
+			      <property name="row_spacing">6</property>
+			      <property name="column_spacing">12</property>
 
 			      <child>
 				<widget class="GtkLabel" id="label229">
@@ -3994,7 +4013,7 @@
 			      <property name="n_rows">4</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">5</property>
+			      <property name="row_spacing">6</property>
 			      <property name="column_spacing">20</property>
 
 			      <child>
@@ -4298,10 +4317,10 @@
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox42">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">12</property>
 
 	      <child>
 		<widget class="GtkFrame" id="frame29">
@@ -4324,9 +4343,10 @@
 
 		      <child>
 			<widget class="GtkVBox" id="vbox67">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">0</property>
+			  <property name="spacing">6</property>
 
 			  <child>
 			    <widget class="GtkFrame" id="frame25">
@@ -4350,6 +4370,7 @@
 
 				  <child>
 				    <widget class="GtkHBox" id="hbox2949">
+				      <property name="border_width">6</property>
 				      <property name="visible">True</property>
 				      <property name="homogeneous">False</property>
 				      <property name="spacing">5</property>
@@ -4451,9 +4472,10 @@
 
 			  <child>
 			    <widget class="GtkHBox" id="hbox2950">
+			      <property name="border_width">6</property>
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
-			      <property name="spacing">5</property>
+			      <property name="spacing">6</property>
 
 			      <child>
 				<widget class="GtkLabel" id="label241">
@@ -4617,15 +4639,16 @@
 
 		      <child>
 			<widget class="GtkVBox" id="vbox65">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">0</property>
+			  <property name="spacing">6</property>
 
 			  <child>
 			    <widget class="GtkHBox" id="hbox2946">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">True</property>
-			      <property name="spacing">0</property>
+			      <property name="spacing">6</property>
 
 			      <child>
 				<widget class="GtkCheckButton" id="play_sounds_checkbutton">
@@ -4740,7 +4763,7 @@
 			    <widget class="GtkHBox" id="browse_sounds_hbox">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
-			      <property name="spacing">5</property>
+			      <property name="spacing">6</property>
 
 			      <child>
 				<widget class="GtkEntry" id="sounds_entry">
@@ -4873,10 +4896,10 @@
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox43">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">12</property>
 
 	      <child>
 		<widget class="GtkTable" id="table19">
@@ -4884,8 +4907,8 @@
 		  <property name="n_rows">2</property>
 		  <property name="n_columns">3</property>
 		  <property name="homogeneous">False</property>
-		  <property name="row_spacing">5</property>
-		  <property name="column_spacing">15</property>
+		  <property name="row_spacing">6</property>
+		  <property name="column_spacing">12</property>
 
 		  <child>
 		    <widget class="GtkCheckButton" id="auto_away_checkbutton">
@@ -5068,7 +5091,7 @@
 		<widget class="GtkHBox" id="hbox2934">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">5</property>
+		  <property name="spacing">6</property>
 
 		  <child>
 		    <widget class="GtkLabel" id="label214">
@@ -5172,15 +5195,16 @@
 
 		      <child>
 			<widget class="GtkVBox" id="vbox56">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">0</property>
+			  <property name="spacing">6</property>
 
 			  <child>
 			    <widget class="GtkHBox" id="hbox2933">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
-			      <property name="spacing">0</property>
+			      <property name="spacing">6</property>
 
 			      <child>
 				<widget class="GtkScrolledWindow" id="scrolledwindow22">
@@ -5384,10 +5408,10 @@
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox45">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">6</property>
 
 	      <child>
 		<widget class="GtkFrame" id="links_frame">
@@ -5409,15 +5433,16 @@
 
 		      <child>
 			<widget class="GtkVBox" id="vbox50">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">5</property>
+			  <property name="spacing">6</property>
 
 			  <child>
 			    <widget class="GtkHBox" id="hbox2918">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
-			      <property name="spacing">5</property>
+			      <property name="spacing">6</property>
 
 			      <child>
 				<widget class="GtkLabel" id="label197">
@@ -5488,8 +5513,8 @@ Custom</property>
 				      <property name="n_rows">2</property>
 				      <property name="n_columns">2</property>
 				      <property name="homogeneous">False</property>
-				      <property name="row_spacing">5</property>
-				      <property name="column_spacing">5</property>
+				      <property name="row_spacing">6</property>
+				      <property name="column_spacing">12</property>
 
 				      <child>
 					<widget class="GtkLabel" id="label199">
@@ -5666,9 +5691,10 @@ Custom</property>
 
 		      <child>
 			<widget class="GtkVBox" id="vbox48">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">0</property>
+			  <property name="spacing">6</property>
 
 			  <child>
 			    <widget class="GtkCheckButton" id="log_in_contact_checkbutton">
@@ -5761,9 +5787,10 @@ Custom</property>
 
 		      <child>
 			<widget class="GtkVBox" id="vbox66">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">0</property>
+			  <property name="spacing">6</property>
 
 			  <child>
 			    <widget class="GtkCheckButton" id="send_os_info_checkbutton">
@@ -5856,13 +5883,72 @@ Custom</property>
 
 		      <child>
 			<widget class="GtkButton" id="open_advanced_editor_button">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Open...</property>
-			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
 			  <signal name="clicked" handler="on_open_advanced_editor_button_clicked" last_modification_time="Sat, 23 Apr 2005 12:14:06 GMT"/>
+
+			  <child>
+			    <widget class="GtkAlignment" id="alignment70">
+			      <property name="visible">True</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xscale">0</property>
+			      <property name="yscale">0</property>
+			      <property name="top_padding">0</property>
+			      <property name="bottom_padding">0</property>
+			      <property name="left_padding">0</property>
+			      <property name="right_padding">0</property>
+
+			      <child>
+				<widget class="GtkHBox" id="hbox2962">
+				  <property name="visible">True</property>
+				  <property name="homogeneous">False</property>
+				  <property name="spacing">2</property>
+
+				  <child>
+				    <widget class="GtkImage" id="image597">
+				      <property name="visible">True</property>
+				      <property name="stock">gtk-open</property>
+				      <property name="icon_size">4</property>
+				      <property name="xalign">0.5</property>
+				      <property name="yalign">0.5</property>
+				      <property name="xpad">0</property>
+				      <property name="ypad">0</property>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">False</property>
+				      <property name="fill">False</property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkLabel" id="label296">
+				      <property name="visible">True</property>
+				      <property name="label" translatable="yes">Open...</property>
+				      <property name="use_underline">True</property>
+				      <property name="use_markup">False</property>
+				      <property name="justify">GTK_JUSTIFY_LEFT</property>
+				      <property name="wrap">False</property>
+				      <property name="selectable">False</property>
+				      <property name="xalign">0.5</property>
+				      <property name="yalign">0.5</property>
+				      <property name="xpad">0</property>
+				      <property name="ypad">0</property>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">False</property>
+				      <property name="fill">False</property>
+				    </packing>
+				  </child>
+				</widget>
+			      </child>
+			    </widget>
+			  </child>
 			</widget>
 		      </child>
 		    </widget>
@@ -5987,7 +6073,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkWindow" id="vcard_information_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Contact Information</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -6006,7 +6092,7 @@ Custom</property>
     <widget class="GtkVBox" id="vbox17">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkLabel" id="nickname_label">
@@ -6041,7 +6127,7 @@ Custom</property>
 
 	  <child>
 	    <widget class="GtkTable" id="table4">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="n_rows">8</property>
 	      <property name="n_columns">2</property>
@@ -6493,13 +6579,13 @@ Custom</property>
 
 	  <child>
 	    <widget class="GtkTable" id="table11">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="n_rows">6</property>
 	      <property name="n_columns">2</property>
 	      <property name="homogeneous">False</property>
-	      <property name="row_spacing">5</property>
-	      <property name="column_spacing">5</property>
+	      <property name="row_spacing">6</property>
+	      <property name="column_spacing">12</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label115">
@@ -6798,7 +6884,7 @@ Custom</property>
 
 	  <child>
 	    <widget class="GtkTable" id="table_ADR_STREET">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="n_rows">6</property>
 	      <property name="n_columns">2</property>
@@ -7103,13 +7189,13 @@ Custom</property>
 
 	  <child>
 	    <widget class="GtkTable" id="table13">
-	      <property name="border_width">5</property>
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="n_rows">4</property>
 	      <property name="n_columns">2</property>
 	      <property name="homogeneous">False</property>
-	      <property name="row_spacing">5</property>
-	      <property name="column_spacing">5</property>
+	      <property name="row_spacing">6</property>
+	      <property name="column_spacing">12</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label127">
@@ -7327,7 +7413,7 @@ Custom</property>
 
 	      <child>
 		<widget class="GtkTextView" id="DESC_textview">
-		  <property name="border_width">5</property>
+		  <property name="border_width">6</property>
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -7409,7 +7495,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkWindow" id="history_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Conversation History</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -7429,13 +7515,14 @@ Custom</property>
     <widget class="GtkVBox" id="vbox24">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox11">
+	  <property name="border_width">4</property>
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_START</property>
-	  <property name="spacing">5</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkButton" id="earliest_button">
@@ -7744,7 +7831,7 @@ Custom</property>
     <widget class="GtkVBox" id="vbox73">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkMenuBar" id="gc_menubar">
@@ -7815,7 +7902,6 @@ Custom</property>
 		      <property name="label" translatable="yes">Close _Window</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_close_window_activate" last_modification_time="Sat, 14 May 2005 01:19:18 GMT"/>
-		      <accelerator key="F4" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
 			<widget class="GtkImage" id="image527">
@@ -7870,13 +7956,13 @@ Custom</property>
 		      <property name="width_request">150</property>
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
-		      <property name="spacing">0</property>
+		      <property name="spacing">6</property>
 
 		      <child>
 			<widget class="GtkHBox" id="hbox36">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">5</property>
+			  <property name="spacing">6</property>
 
 			  <child>
 			    <widget class="GtkLabel" id="label139">
@@ -8066,9 +8152,10 @@ Custom</property>
 
 	  <child>
 	    <widget class="GtkHBox" id="groupchat_tab_hbox">
+	      <property name="border_width">2</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">6</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label250">
@@ -8136,7 +8223,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkWindow" id="join_groupchat_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Join Groupchat</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -8155,7 +8242,7 @@ Custom</property>
     <widget class="GtkVBox" id="vbox28">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">15</property>
+      <property name="spacing">12</property>
 
       <child>
 	<widget class="GtkTable" id="table15">
@@ -8163,8 +8250,8 @@ Custom</property>
 	  <property name="n_rows">5</property>
 	  <property name="n_columns">2</property>
 	  <property name="homogeneous">False</property>
-	  <property name="row_spacing">5</property>
-	  <property name="column_spacing">10</property>
+	  <property name="row_spacing">6</property>
+	  <property name="column_spacing">12</property>
 
 	  <child>
 	    <widget class="GtkEntry" id="password_entry">
@@ -8397,7 +8484,7 @@ Custom</property>
 	<widget class="GtkHButtonBox" id="hbuttonbox12">
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
-	  <property name="spacing">10</property>
+	  <property name="spacing">12</property>
 
 	  <child>
 	    <widget class="GtkButton" id="cancel_button">
@@ -8495,7 +8582,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkDialog" id="passphrase_dialog">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Passphrase</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -8513,7 +8600,7 @@ Custom</property>
     <widget class="GtkVBox" id="dialog-vbox4">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area3">
@@ -8557,9 +8644,10 @@ Custom</property>
 
       <child>
 	<widget class="GtkVBox" id="vbox30">
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">0</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkLabel" id="message_label">
@@ -8632,7 +8720,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkDialog" id="choose_gpg_key_dialog">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Passphrase</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -8653,7 +8741,7 @@ Custom</property>
     <widget class="GtkVBox" id="vbox33">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="hbuttonbox14">
@@ -8768,7 +8856,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkDialog" id="change_status_message_dialog">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -8789,7 +8877,7 @@ Custom</property>
     <widget class="GtkVBox" id="dialog-vbox5">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">6</property>
 
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area4">
@@ -8926,6 +9014,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkWindow" id="tabbed_chat_window">
+  <property name="border_width">6</property>
   <property name="can_focus">True</property>
   <property name="title" translatable="yes">Chat</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -9345,7 +9434,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkDialog" id="edit_groups_dialog">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Edit Groups</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -9364,7 +9453,7 @@ Custom</property>
     <widget class="GtkVBox" id="dialog-vbox6">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area5">
@@ -9438,7 +9527,7 @@ Custom</property>
 	<widget class="GtkHBox" id="hbox2926">
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">5</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkEntry" id="group_entry">
@@ -9516,7 +9605,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkDialog" id="change_password_dialog">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Change Password</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -9534,7 +9623,7 @@ Custom</property>
     <widget class="GtkVBox" id="dialog-vbox7">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">6</property>
 
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area6">
@@ -9580,7 +9669,7 @@ Custom</property>
 	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">5</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkImage" id="image416">
@@ -9603,7 +9692,7 @@ Custom</property>
 	    <widget class="GtkVBox" id="vbox54">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">6</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label208">
@@ -9703,7 +9792,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkDialog" id="new_message_dialog">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -10047,7 +10136,7 @@ send a chat message to</property>
 </widget>
 
 <widget class="GtkWindow" id="popup_notification_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_POPUP</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -10072,7 +10161,7 @@ send a chat message to</property>
 	  <property name="border_width">2</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">5</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkHBox" id="hbox2945">
@@ -10161,7 +10250,7 @@ send a chat message to</property>
 </widget>
 
 <widget class="GtkWindow" id="add_remove_emoticons_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Add/Remove Emoticons</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -10179,13 +10268,13 @@ send a chat message to</property>
 
   <child>
     <widget class="GtkHBox" id="hbox2948">
+      <property name="border_width">6</property>
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkScrolledWindow" id="emoticons_scrolledwindow">
-	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
 	  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -10216,7 +10305,7 @@ send a chat message to</property>
 	<widget class="GtkVButtonBox" id="vbuttonbox4">
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_START</property>
-	  <property name="spacing">5</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkButton" id="button_new_emoticon">
@@ -10281,7 +10370,7 @@ send a chat message to</property>
 </widget>
 
 <widget class="GtkDialog" id="new_version_available_dialog">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">New version of Gajim available</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -10302,7 +10391,7 @@ send a chat message to</property>
     <widget class="GtkVBox" id="dialog-vbox9">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area8">
@@ -10337,7 +10426,7 @@ send a chat message to</property>
 	<widget class="GtkHBox" id="hbox2959">
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">0</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkImage" id="image506">
@@ -10466,7 +10555,7 @@ send a chat message to</property>
 </widget>
 
 <widget class="GtkWindow" id="groupchat_config_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Room Configuration</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -10487,7 +10576,7 @@ send a chat message to</property>
     <widget class="GtkVBox" id="vbox68">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkScrolledWindow" id="scrolledwindow35">
@@ -10663,7 +10752,7 @@ send a chat message to</property>
 </widget>
 
 <widget class="GtkWindow" id="remove_account_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -10679,15 +10768,16 @@ send a chat message to</property>
 
   <child>
     <widget class="GtkVBox" id="vbox69">
+      <property name="border_width">3</property>
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkHBox" id="hbox2951">
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">5</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkImage" id="image498">
@@ -10711,7 +10801,7 @@ send a chat message to</property>
 	      <property name="visible">True</property>
 	      <property name="label_xalign">0</property>
 	      <property name="label_yalign">0.5</property>
-	      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+	      <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment59">
@@ -10727,9 +10817,10 @@ send a chat message to</property>
 
 		  <child>
 		    <widget class="GtkVBox" id="vbox69">
+		      <property name="border_width">6</property>
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
-		      <property name="spacing">5</property>
+		      <property name="spacing">6</property>
 
 		      <child>
 			<widget class="GtkRadioButton" id="remove_only_radiobutton">
@@ -10809,9 +10900,10 @@ send a chat message to</property>
 
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox16">
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
-	  <property name="spacing">10</property>
+	  <property name="spacing">12</property>
 
 	  <child>
 	    <widget class="GtkButton" id="cancel_button">
@@ -10927,9 +11019,10 @@ send a chat message to</property>
 
   <child>
     <widget class="GtkVBox" id="vbox70">
+      <property name="border_width">6</property>
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkTable" id="table26">
@@ -10937,8 +11030,8 @@ send a chat message to</property>
 	  <property name="n_rows">2</property>
 	  <property name="n_columns">2</property>
 	  <property name="homogeneous">False</property>
-	  <property name="row_spacing">5</property>
-	  <property name="column_spacing">5</property>
+	  <property name="row_spacing">7</property>
+	  <property name="column_spacing">12</property>
 
 	  <child>
 	    <widget class="GtkLabel" id="label248">
@@ -11026,7 +11119,7 @@ send a chat message to</property>
 	<widget class="GtkHButtonBox" id="hbuttonbox18">
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
-	  <property name="spacing">0</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkButton" id="advanced_close_button">
@@ -11070,7 +11163,7 @@ send a chat message to</property>
     <widget class="GtkVBox" id="dialog-vbox10">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">6</property>
 
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area9">
@@ -11114,16 +11207,16 @@ send a chat message to</property>
 
       <child>
 	<widget class="GtkVBox" id="vbox76">
-	  <property name="border_width">5</property>
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">0</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkHBox" id="hbox2960">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">10</property>
+	      <property name="spacing">12</property>
 
 	      <child>
 		<widget class="GtkImage" id="image507">
@@ -11283,6 +11376,7 @@ send a chat message to</property>
 </widget>
 
 <widget class="GtkWindow" id="wizard_window">
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Gajim: First Time Wizard</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -11299,7 +11393,7 @@ send a chat message to</property>
     <widget class="GtkVBox" id="vbox77">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkNotebook" id="notebook2">
@@ -11314,7 +11408,7 @@ send a chat message to</property>
 	    <widget class="GtkVBox" id="vbox78">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">10</property>
+	      <property name="spacing">12</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label256">
@@ -11361,7 +11455,7 @@ the Jabber network.</property>
 			<widget class="GtkVBox" id="vbox83">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
-			  <property name="spacing">2</property>
+			  <property name="spacing">6</property>
 
 			  <child>
 			    <widget class="GtkRadioButton" id="use_existing_account_radiobutton">
@@ -11490,8 +11584,8 @@ the Jabber network.</property>
 		  <property name="n_rows">5</property>
 		  <property name="n_columns">3</property>
 		  <property name="homogeneous">False</property>
-		  <property name="row_spacing">5</property>
-		  <property name="column_spacing">5</property>
+		  <property name="row_spacing">6</property>
+		  <property name="column_spacing">12</property>
 
 		  <child>
 		    <widget class="GtkEntry" id="nick_entry">
@@ -11994,8 +12088,8 @@ the Jabber network.</property>
 		  <property name="n_rows">5</property>
 		  <property name="n_columns">3</property>
 		  <property name="homogeneous">False</property>
-		  <property name="row_spacing">5</property>
-		  <property name="column_spacing">5</property>
+		  <property name="row_spacing">6</property>
+		  <property name="column_spacing">12</property>
 
 		  <child>
 		    <widget class="GtkEntry" id="entry3">
@@ -12518,9 +12612,10 @@ the Jabber network.</property>
 
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox19">
+	  <property name="border_width">2</property>
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
-	  <property name="spacing">10</property>
+	  <property name="spacing">12</property>
 
 	  <child>
 	    <widget class="GtkButton" id="cancel_button">
