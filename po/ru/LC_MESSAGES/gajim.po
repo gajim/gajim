@@ -1,0 +1,1645 @@
+# Russian translations for gajim package
+# Русский перевод для пакета gajim.
+# Copyright (C) 2005 THE gajim'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gajim package.
+# <nebulam51@gmail.com>, 2005.
+#  <nebulam51@gmail.com>, 2005.
+# 
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: gajim 0.7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-05-21 19:07+0300\n"
+"PO-Revision-Date: 2005-05-30 11:27+0700\n"
+"Last-Translator: Yakov Bezrukov <nebulam51@gmail.com>\n"
+"Language-Team: Russian <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+
+#: src/advanced.py:107
+msgid "Preference Name"
+msgstr "Название Опции"
+
+#: src/advanced.py:114
+msgid "Value"
+msgstr "Значение"
+
+#: src/advanced.py:122
+msgid "Type"
+msgstr "Тип"
+
+#: src/chat.py:100
+msgid " (account: "
+msgstr " (аккаунт: "
+
+#: src/chat.py:491
+msgid "_Open Email Composer"
+msgstr "_Отправить Письмо"
+
+#: src/chat.py:493
+msgid "_Open Link"
+msgstr "_Просмотреть в Браузере"
+
+#: src/chat.py:497
+msgid "_Copy Email Address"
+msgstr "_Скопировать Почтовый Адрес"
+
+#: src/chat.py:499
+msgid "_Copy Link Address"
+msgstr "_Копировать Ссылку"
+
+#: src/config.py:258
+msgid "Active"
+msgstr "Активен"
+
+#: src/config.py:266
+msgid "Event"
+msgstr "Событие"
+
+#: src/config.py:272
+msgid "Sound"
+msgstr "Звук"
+
+#: src/config.py:875
+msgid "Choose Sound"
+msgstr "Выберите Звуковой Файл"
+
+#: src/config.py:882
+msgid "All files"
+msgstr "Все файлы"
+
+#: src/config.py:887
+msgid "Wav Sounds"
+msgstr "В Формате Wav"
+
+#: src/config.py:1030
+msgid "GPG is not usable on this computer"
+msgstr "Невозможно использовать GPG"
+
+#: src/config.py:1049
+msgid "You must be offline to change the account's name"
+msgstr "Необходимо быть в оффлайне для изменения имени аккаунта"
+
+#: src/config.py:1052
+msgid "You must enter a name for this account"
+msgstr "Необходимо ввести имя аккаунта"
+
+#: src/config.py:1055
+msgid "Spaces are not permited in account name"
+msgstr "Недопустимо использовать пробелы в имени аккаунта"
+
+#: src/config.py:1059
+msgid ""
+"You must enter a Jabber ID for this account\n"
+"For example: someone@someserver.org"
+msgstr ""
+"Необходимо ввести Jabber ID для этого аккаунта\n"
+"Например: someone@someserver.org"
+
+#: src/config.py:1066
+msgid "You must enter a password to register a new account"
+msgstr "Необходимо ввести пароль для регистрации аккаунта"
+
+#: src/config.py:1097
+msgid "Proxy port must be a port number"
+msgstr "В качестве номера порта прокси должно выступать число"
+
+#: src/config.py:1102
+msgid "You must enter a proxy port to use proxy"
+msgstr "Необходимо ввести порт прокси"
+
+#: src/config.py:1105
+msgid "You must enter a proxy host to use proxy"
+msgstr "Необходимо ввести хост прокси"
+
+#: src/config.py:1177
+msgid "This name is taken by an another account of yours"
+msgstr "Это имя уже используется"
+
+#: src/config.py:1229
+msgid ""
+"You must first create your account before editing your personal information"
+msgstr "Перед редактированием личных данных необходимо сначала создать аккаунт"
+
+#: src/config.py:1233
+msgid "You must be connected to edit your personal information"
+msgstr "Чтобы отредактировать личную информацию нужно подсоединиться к серверу"
+
+#: src/config.py:1243 src/gajim.py:414
+#, python-format
+msgid "error contacting %s"
+msgstr "ошибка соединения с %s"
+
+#: src/config.py:1254 src/msg.c:45
+msgid "No key selected"
+msgstr "Не выбран ключ"
+
+#: src/config.py:1364 src/config.py:1626
+msgid "Name"
+msgstr "Имя"
+
+#: src/config.py:1367
+msgid "Server"
+msgstr "Сервер"
+
+#: src/config.py:1419
+#, python-format
+msgid "Register to %s"
+msgstr "Зарегистрировать %s"
+
+#: src/config.py:1438
+msgid "Text"
+msgstr "Текст"
+
+#: src/config.py:1446
+msgid "Image"
+msgstr "Картинка"
+
+#: src/config.py:1607
+msgid "You must be connected to browse services"
+msgstr "Для просмотра сервисов необходимо сначала подсоединиться к серверу"
+
+#: src/config.py:1631
+msgid "Service"
+msgstr "Сервис"
+
+#: src/config.py:1636
+msgid "Node"
+msgstr "Узел"
+
+#: src/config.py:2011
+#, python-format
+msgid "Removing %s account"
+msgstr "Удаление аккаунта %s"
+
+#: src/config.py:2017
+#, python-format
+msgid ""
+"You're currently connected with %s.\n"
+"Are you sure you want to remove this account?"
+msgstr ""
+"%s сейчас подключен\n"
+"Вы точно хотите его удалить?"
+
+#: src/dialogs.py:50
+#, python-format
+msgid "Contact's name: <i>%s</i>"
+msgstr "Имя контакта: <i>%s</i>"
+
+#: src/dialogs.py:52
+#, python-format
+msgid "JID: <i>%s</i>"
+msgstr "JID: <i>%s</i>"
+
+#: src/dialogs.py:88
+msgid "A contact must belong at least to one group"
+msgstr "Контакт должен принадлежать как минимум одной группе"
+
+#: src/dialogs.py:107
+msgid "Group"
+msgstr "Группа"
+
+#: src/dialogs.py:113
+msgid "In the group"
+msgstr "В группе"
+
+#: src/dialogs.py:173
+msgid "KeyID"
+msgstr "KeyID"
+
+#: src/dialogs.py:176
+msgid "User name"
+msgstr "Имя пользователя"
+
+#: src/dialogs.py:187
+#, python-format
+msgid "%s Status Message"
+msgstr "Сообщение о статусе %s"
+
+#: src/dialogs.py:235
+msgid "You must be connected to add a contact"
+msgstr "Для добавления контакта необходимо быть подключенным к серверу"
+
+#: src/dialogs.py:308
+msgid "The contact's name must be something like login@hostname"
+msgstr "Имя контакта должно выглядеть как login@hostname"
+
+#: src/dialogs.py:366
+msgid "Gajim - a GTK+ Jabber client"
+msgstr "Gajim - jabber-клиент на GTK"
+
+#: src/dialogs.py:377
+msgid "A GTK jabber client"
+msgstr "Jabber-клиент на GTK"
+
+#: src/dialogs.py:384
+msgid "translator_credits"
+msgstr "Переводчики"
+
+#: src/dialogs.py:458
+#, python-format
+msgid "Subscription request from %s"
+msgstr "Запрос на подписку от %s"
+
+#: src/dialogs.py:499
+msgid "You must be connected to join a groupchat"
+msgstr "Для присоединеия к комнате необходимо подсоединиться к серверу"
+
+#: src/dialogs.py:513
+msgid "Join Groupchat as "
+msgstr "Войти в Комнату как "
+
+#: src/dialogs.py:515 src/msg.c:211
+msgid "Join Groupchat"
+msgstr "Войти в Комнату"
+
+#: src/dialogs.py:557
+msgid "You are already in room "
+msgstr "Вы уже в комнате"
+
+#: src/dialogs.py:575
+msgid "You must be connected to send a message to a contact"
+msgstr "Для отправки сообщения необходимо соединиться с сервером"
+
+#: src/dialogs.py:586
+msgid "New Message as "
+msgstr "Новое Сообщение как "
+
+#: src/dialogs.py:588 src/msg.c:245
+msgid "New Message"
+msgstr "Новое Сообшение"
+
+#: src/dialogs.py:602
+msgid "User ID is not valid"
+msgstr "Неверный ID пользователя"
+
+#: src/dialogs.py:623
+msgid "You must be connected to change your password"
+msgstr "Для изменения пароль необходимо подсоединиться к серверу"
+
+#: src/dialogs.py:642
+msgid "Your password cannot be empty"
+msgstr "Пароль не может быть пустым"
+
+#: src/dialogs.py:646
+msgid "Confirmation password is not the same"
+msgstr "Пароли не совпадвют"
+
+#: src/gajim.py:109
+msgid "bad arguments"
+msgstr "неверный аргумент"
+
+#: src/gajim.py:368
+msgid "error while sending"
+msgstr "ошибка при отправке"
+
+#: src/gajim.py:398
+#, python-format
+msgid "You are now authorized by %s"
+msgstr "%s авторизовал вас"
+
+#: src/gajim.py:401
+#, python-format
+msgid "You are now unsubscribed by %s"
+msgstr "%s отменил подписку с вами"
+
+#: src/gajim.py:504
+msgid "Your GPG passphrase is wrong, so you are connected without your GPG key"
+msgstr "Неверный пароль GPG, так что соединяемся без GPG ключа"
+
+#: src/groupchat_window.py:92
+#, python-format
+msgid ""
+"You received a message in the room %s in the last two seconds.\n"
+"Do you still want to close this window?"
+msgstr ""
+"Вы получили сообщения в комнате %s в течение последних двух секунд\n"
+"Вы точно хотите закрыть это окно?"
+
+#: src/groupchat_window.py:240
+#, python-format
+msgid "%s has been kicked by %s: %s"
+msgstr "%s выгнал %s: %s"
+
+#: src/groupchat_window.py:444
+msgid "_Privileges"
+msgstr "_Права"
+
+#: src/groupchat_window.py:449
+msgid "_Kick"
+msgstr "_Выгнать"
+
+#: src/groupchat_window.py:452
+msgid "_Grant Voice"
+msgstr "_Предоставить Право Говорить"
+
+#: src/groupchat_window.py:455
+msgid "_Revoke Voice"
+msgstr "_Отозвать Право Говорить"
+
+#: src/groupchat_window.py:458
+msgid "_Grant Moderator"
+msgstr "_Дать Права Модератора"
+
+#: src/groupchat_window.py:461
+msgid "_Revoke Moderator"
+msgstr "_Отозвать Права Модератора"
+
+#: src/groupchat_window.py:468
+msgid "_Ban"
+msgstr "_Забанить"
+
+#: src/groupchat_window.py:471
+msgid "_Grant Membership"
+msgstr "_Предоставить Членство"
+
+#: src/groupchat_window.py:474
+msgid "_Revoke Membership"
+msgstr "_Отозвать Членство"
+
+#: src/groupchat_window.py:477
+msgid "_Grant Admin"
+msgstr "_Предоставить Права Админа"
+
+#: src/groupchat_window.py:480
+msgid "_Revoke Admin"
+msgstr "_Отозвать Права Админа"
+
+#: src/groupchat_window.py:483
+msgid "_Grant Owner"
+msgstr "_Дать Права Владельца"
+
+#: src/groupchat_window.py:486
+msgid "_Revoke Owner"
+msgstr "_Отозвать Права Владельца"
+
+#: src/groupchat_window.py:493
+msgid "_Information"
+msgstr "_Информация"
+
+#: src/groupchat_window.py:503
+#, python-format
+msgid ""
+"You received a message in the room %s in the last two seconds.\n"
+"Do you still want to close this tab?"
+msgstr ""
+"Вы получили сообщения в комнате %s в течение последних двух секунд\n"
+"Вы точно хотите закрыть это окно?"
+
+#: src/history_window.py:139
+msgid "Status is now: "
+msgstr "Статус установлен в:"
+
+#: src/roster_window.py:292
+msgid "to "
+msgstr "к "
+
+#: src/roster_window.py:292 src/roster_window.py:302
+msgid " account"
+msgstr " аккаунт"
+
+#: src/roster_window.py:302
+msgid "using "
+msgstr "используя "
+
+#: src/roster_window.py:312 src/roster_window.py:322 src/systray.py:139
+#: src/systray.py:144
+msgid "as "
+msgstr "как "
+
+#: src/roster_window.py:425
+#, python-format
+msgid "%s is now %s (%s)"
+msgstr "%s теперь известен как %s (%s)"
+
+#: src/roster_window.py:442
+#, python-format
+msgid "Are you sure you want to remove %s transport from your roster?"
+msgstr "Вы точно хотите удалить транспорт %s из ростера?"
+
+#: src/roster_window.py:475
+msgid "Start chat"
+msgstr "Начать чат"
+
+#: src/roster_window.py:478 src/roster_window.py:529
+msgid "Rename"
+msgstr "Переименовать"
+
+#: src/roster_window.py:482 src/msg.c:229
+msgid "Edit Groups"
+msgstr "Редактировать Группы"
+
+#: src/roster_window.py:487
+msgid "Subscription"
+msgstr "Подписка"
+
+#: src/roster_window.py:492
+msgid "Resend Authorization to"
+msgstr "Переслать Авторизацию к"
+
+#: src/roster_window.py:495
+msgid "Rerequest Authorization from"
+msgstr "Запросить Авторизацию от"
+
+#: src/roster_window.py:498
+msgid "I would like to add you to my roster"
+msgstr "Вы не против если я добавлю Вас себе в ростер?"
+
+#: src/roster_window.py:502
+msgid "Add to Roster"
+msgstr "Добавить в Ростер"
+
+#: src/roster_window.py:506 src/roster_window.py:561
+msgid "Remove"
+msgstr "Удалить"
+
+#: src/roster_window.py:512
+msgid "Information"
+msgstr "Информация"
+
+#: src/roster_window.py:515
+msgid "History"
+msgstr "История"
+
+#: src/roster_window.py:544
+msgid "Log on"
+msgstr "Соединиться"
+
+#: src/roster_window.py:551
+msgid "Log off"
+msgstr "Отключиться"
+
+#: src/roster_window.py:582 src/msg.c:150 src/msg.c:236
+msgid "Status"
+msgstr "Статус"
+
+#: src/roster_window.py:587 src/common/helpers.py:33 src/msg.c:237
+msgid "Online"
+msgstr "В сети"
+
+#: src/roster_window.py:590
+msgid "Free for chat"
+msgstr "Готов поболтать"
+
+#: src/roster_window.py:593 src/common/helpers.py:37 src/msg.c:239
+msgid "Away"
+msgstr "Ушел"
+
+#: src/roster_window.py:596 src/common/helpers.py:29 src/msg.c:240
+msgid "Not Available"
+msgstr "Недоступен"
+
+#: src/roster_window.py:599 src/common/helpers.py:27 src/msg.c:241
+msgid "Busy"
+msgstr "Занят"
+
+#: src/roster_window.py:602 src/common/helpers.py:41 src/msg.c:242
+msgid "Invisible"
+msgstr "Невидимка"
+
+#: src/roster_window.py:607 src/common/helpers.py:39 src/msg.c:243
+msgid "Offline"
+msgstr "Отключен"
+
+#: src/roster_window.py:614
+msgid "_Edit Account"
+msgstr "_Редактировать Аккаунт"
+
+#: src/roster_window.py:617 src/msg.c:12
+msgid "_Service Discovery"
+msgstr "_Просмотр Сервисов"
+
+#: src/roster_window.py:620
+msgid "_Add Contact"
+msgstr "_Добавить Контакт"
+
+#: src/roster_window.py:623
+msgid "Join _Groupchat"
+msgstr "Войти в _Комнату"
+
+#: src/roster_window.py:626 src/msg.c:9
+msgid "_New Message"
+msgstr "_Новое Сообщение"
+
+#: src/roster_window.py:732
+#, python-format
+msgid "Are you sure you want to remove %s (%s) from your roster?"
+msgstr "Вы точно хотите удалить %s (%s) из ростера?"
+
+#: src/roster_window.py:753
+#, python-format
+msgid "Enter your password for account %s"
+msgstr "Введите пароль для аккаунта %s"
+
+#: src/roster_window.py:781
+#, python-format
+msgid "Enter GPG key passphrase for account %s"
+msgstr "Введите парольную фразу GPG ключа для %s"
+
+#: src/roster_window.py:825
+msgid "You must create an account before connecting to jabber network."
+msgstr "Необходимо создать аккаунт до подсоединения к сети"
+
+#: src/roster_window.py:1067
+msgid ""
+"You have unread messages.\n"
+"Are you sure you want to quit Gajim?"
+msgstr ""
+"У вас есть непрочитанные сообщения.\n"
+"Вы точно хотите выйти?"
+
+#: src/roster_window.py:1072
+msgid ""
+"You received a message in the last two seconds.\n"
+"Are you sure you want to quit Gajim?"
+msgstr ""
+"Вы получили сообщения в течение последних двух секунд.\n"
+"Вы точно хотите выйти?"
+
+#: src/systray.py:73 src/systray.py:93
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr "Gajim - %s непрочитанных сообщений"
+
+#: src/systray.py:75 src/systray.py:95
+msgid "Gajim - 1 unread message"
+msgstr "Gajim - 1 непрочитанное сообщение"
+
+#: src/systray.py:193
+msgid "All contacts in this group are offline or have errors"
+msgstr "Все контакты в это группе отключены или имеют ошибки"
+
+#: src/tabbed_chat_window.py:117
+#, python-format
+msgid ""
+"You received a message from %s in the last two seconds.\n"
+"Do you still want to close this window?"
+msgstr ""
+"Вы получили сообщения в течение последних двух секунд.\n"
+"Вы точно хотите закрыть это окно?"
+
+#: src/tabbed_chat_window.py:148
+#, python-format
+msgid ""
+"You received a message from %s in the last two seconds.\n"
+"Do you still want to close this tab?"
+msgstr ""
+"Вы получили сообщения в течение последних двух секунд.\n"
+"Вы точно хотите закрыть эту вкладку?"
+
+#: src/tabbed_chat_window.py:175
+#, python-format
+msgid "%s is %s"
+msgstr "%s теперь %s"
+
+#: src/tabbed_chat_window.py:216
+msgid "You are not connected, so you cannot send a message"
+msgstr "Вы не можете отсылать сообщения так как не присоединены"
+
+#: src/vcard.py:184
+msgid "You must be connected to publish your contact information"
+msgstr "Необходимо присоединиться к серверу для обновления личной информации"
+
+#: src/vcard.py:206
+msgid "You must be connected to get your contact information"
+msgstr "Необходимо присоединиться к серверу для получения информации о контакте"
+
+#: src/common/config.py:197
+msgid "Nap"
+msgstr ""
+
+#: src/common/config.py:197
+msgid "I'm taking a nap."
+msgstr ""
+
+#: src/common/config.py:198
+msgid "Brb"
+msgstr "Скоро буду"
+
+#: src/common/config.py:198
+msgid "Back in some minutes."
+msgstr "Вернусь через несколько минут"
+
+#: src/common/config.py:199
+msgid "Eating"
+msgstr "Ем"
+
+#: src/common/config.py:199
+msgid "I'm eating, so leave me a message."
+msgstr "Я вкушаю пищу, так что оставьте сообщение секретарю."
+
+#: src/common/config.py:200
+msgid "Movie"
+msgstr "Я в кино"
+
+#: src/common/config.py:200
+msgid "I'm watching a movie."
+msgstr "Я смотрю кино"
+
+#: src/common/config.py:201
+msgid "Working"
+msgstr "Работа"
+
+#: src/common/config.py:201
+msgid "I'm working."
+msgstr "Я работаю"
+
+#: src/common/config.py:202
+msgid "Phone"
+msgstr "Телефон"
+
+#: src/common/config.py:202
+msgid "I'm on the phone."
+msgstr "Я говорю по телефону"
+
+#: src/common/connection.py:254 src/common/connection.py:685
+msgid "I would like to add you to my roster."
+msgstr "Вы не возражаете, если я добавлю Вас в свой ростер?"
+
+#: src/common/connection.py:533 src/common/connection.py:567
+#, python-format
+msgid "Couldn't connect to %s"
+msgstr "Не могу соединиться с %s"
+
+#: src/common/connection.py:577
+#, python-format
+msgid "Authentication failed with %s, check your login and password"
+msgstr "Не удалось соединиться с %s, проверьте логин и пароль"
+
+#: src/common/connection.py:671
+msgid "[this message is encrypted]"
+msgstr "[это сообщения зашифровано]"
+
+#: src/common/connection.py:781
+msgid "Couldn't connect to "
+msgstr "Не могу соединиться с "
+
+#: src/common/connection.py:789
+msgid "Error: "
+msgstr "Ошибка: "
+
+#: src/common/helpers.py:31 src/msg.c:238
+msgid "Free for Chat"
+msgstr "Готов Поболтать"
+
+#: src/common/helpers.py:35
+msgid "Connecting"
+msgstr "Соединяюсь"
+
+#: src/msg.c:7 src/msg.c:35
+msgid "Gajim"
+msgstr "Gajim"
+
+#: src/msg.c:8 src/msg.c:204
+msgid "_Actions"
+msgstr "_Действия"
+
+#: src/msg.c:10
+msgid "_Join Groupchat"
+msgstr "_Войти в Уомнату "
+
+#: src/msg.c:11
+msgid "Add _Contact"
+msgstr "Добавить _Контакт"
+
+#: src/msg.c:13
+msgid "Show _Offline Contacts"
+msgstr "Показывать _Отключенные контакты"
+
+#: src/msg.c:14
+msgid "_About"
+msgstr "_Информация О..."
+
+#: src/msg.c:15
+msgid "_Quit"
+msgstr "_Выйти"
+
+#: src/msg.c:16
+msgid "_Edit"
+msgstr "_Редактировать"
+
+#: src/msg.c:17
+msgid "A_ccounts"
+msgstr "А_ккаунты"
+
+#: src/msg.c:18
+msgid "_Preferences"
+msgstr "_Настройки"
+
+#: src/msg.c:19
+msgid "Accounts"
+msgstr "Аккаунты"
+
+#: src/msg.c:20
+msgid "_Modify"
+msgstr "_Изменить"
+
+#: src/msg.c:21 src/msg.c:258
+msgid "_Remove"
+msgstr "_Удалить"
+
+#: src/msg.c:22
+msgid "Account Modification"
+msgstr "Изменение Контакта"
+
+#: src/msg.c:23
+msgid "_Name: "
+msgstr "_Имя: "
+
+#: src/msg.c:24
+msgid "_Jabber ID:"
+msgstr "_Jabber ID:"
+
+#: src/msg.c:25
+msgid "_Password:"
+msgstr "_Пароль:"
+
+#: src/msg.c:26
+msgid "Resour_ce: "
+msgstr "Ресу_рс: "
+
+#: src/msg.c:27
+msgid "Priori_ty:"
+msgstr "Приори_тет:"
+
+#: src/msg.c:28
+msgid "Check if you want to register for a new jabber account"
+msgstr "Отметьте чтобы зарегистрировать новый jabber-аккаунт"
+
+#: src/msg.c:29
+msgid "_Register new account"
+msgstr "_Зарегистрировать новый аккаунт"
+
+#: src/msg.c:30
+msgid "Click to change account's password"
+msgstr "Щелкните для изменения пароль"
+
+#: src/msg.c:31 src/msg.c:254
+msgid "Chan_ge"
+msgstr "_Изменить"
+
+#: src/msg.c:32
+msgid "If checked, Gajim will remember the password for this account"
+msgstr "Если отмечено, Gajim запомнит пароль аккаунта"
+
+#: src/msg.c:33
+msgid "Save pass_word"
+msgstr "Сохранить _пароль"
+
+#: src/msg.c:34
+msgid ""
+"Resource is sent to the Jabber server in order to 'seperate' the same JID in "
+"two or more parts depending on the number of the clients connected in the "
+"same server with the same account. So you might be connected in the same "
+"account with resource 'Home' and 'Work' at the same time. The resource which "
+"has the highest priority will get the events. (see below)"
+msgstr ""
+"Ресурс отправляется Jabber серверу для того, чтобы 'разделить' один и тот же JID "
+"на две и более части в зависимости от числа клиентов присоединенных к одному серверу "
+"с тем же самым вккаунтом. Так что вы можете быть подсоединены с ресурсами "
+"'Дом' или 'Работа' на одном аккаунте одновременно. Ресурс, который имеет "
+"больший приоритет будет получать все события. (См. ниже)"
+
+#: src/msg.c:36
+msgid ""
+"Priority is used in Jabber to determine who gets the events from the jabber "
+"server when two or more clients are connected using the same account; The "
+"client with the highest priority gets the events"
+msgstr ""
+"Приоритет используется в Jabber для определения того, кто будет получать события "
+"от jabber сервера когда подсоединены два и более клиента с одним и тем же аккаунтом. "
+"Клиент с наибольшим приоритетом будет получать события"
+
+#: src/msg.c:37
+msgid "Account"
+msgstr "Аккаунты"
+
+#: src/msg.c:38
+msgid ""
+"If checked, Gajim, when launched, will automatically connect to jabber using "
+"this account"
+msgstr ""
+"Если отмечено, Gajim, после запуска, будет автоматически подсоединяться к jabber серверу "
+"с использование этого аккаунта"
+
+#: src/msg.c:39
+msgid "C_onnect at startup"
+msgstr "_Соединяться при старте"
+
+#: src/msg.c:40
+msgid "Conversation _history for all contacts in this account"
+msgstr "_История всех контактов для этого аккаунта"
+
+#: src/msg.c:41
+msgid "Synch_ronize account status with global status"
+msgstr "Син_хронизировать статус аккаунта с глобальным статусом"
+
+#: src/msg.c:42 src/msg.c:105 src/msg.c:185
+msgid "General"
+msgstr "Общие"
+
+#: src/msg.c:43
+msgid "Use _TLS"
+msgstr "Использовать _TLS"
+
+#: src/msg.c:44
+msgid "<b>TLS</b>"
+msgstr "<b>TLS</b>"
+
+#: src/msg.c:46
+msgid "Choose _Key"
+msgstr "Использовать _ключ"
+
+#: src/msg.c:47
+msgid ""
+"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
+"permission only for only you and of course the administrator"
+msgstr ""
+"Если отмечено, то Gajim сохранит пароль в ~/.gajim/config с доступом на чтение "
+"только для вас. И администратора системы, конечно же. "
+
+#: src/msg.c:48
+msgid "Save _passphrase (insecure)"
+msgstr "Сохранить _паротную фразу (небезопасно)"
+
+#: src/msg.c:49
+msgid "<b>OpenGPG</b>"
+msgstr "<b>OpenGPG</b>"
+
+#: src/msg.c:50
+msgid "Security"
+msgstr "Безопасность"
+
+#: src/msg.c:51
+msgid "_Use proxy"
+msgstr "_Использовать прокси"
+
+#: src/msg.c:52
+msgid "_Host:"
+msgstr "_Хост: "
+
+#: src/msg.c:53
+msgid "_Port:"
+msgstr "_Порт"
+
+#: src/msg.c:54
+msgid "_Username:"
+msgstr "_Имя пользователя"
+
+#: src/msg.c:55
+msgid "Pass_word:"
+msgstr "П_ароль"
+
+#: src/msg.c:56
+msgid "3128"
+msgstr "3128"
+
+#: src/msg.c:57
+msgid "<b>Proxy</b>"
+msgstr "<b>Прокси</b>"
+
+#: src/msg.c:58
+msgid "Proxy"
+msgstr "Прокси"
+
+#: src/msg.c:59
+msgid "Information about you are stored on the server as vCard"
+msgstr "Информация о вас хранится на сервере как vCard"
+
+#: src/msg.c:60
+msgid "_Edit Personal Details..."
+msgstr "_Редактировать Личную Информацию..."
+
+#: src/msg.c:61
+msgid "Personal Details"
+msgstr "Личная Информация"
+
+#: src/msg.c:62
+msgid "Add New Contact"
+msgstr "Добавить Новый Контакт"
+
+#: src/msg.c:63
+msgid "User ID:"
+msgstr "ID пользователя:"
+
+#: src/msg.c:64
+msgid "Protocol:"
+msgstr "Протокол:"
+
+#: src/msg.c:65 src/msg.c:169
+msgid "Jabber ID:"
+msgstr "Jabber ID:"
+
+#: src/msg.c:66 src/msg.c:171 src/msg.c:180 src/msg.c:215
+msgid "Nickname:"
+msgstr "Ник:"
+
+#: src/msg.c:67
+msgid "Automatically authorize contact"
+msgstr "Автоматически авторизовать контакт"
+
+#: src/msg.c:68 src/msg.c:100
+msgid "Group:"
+msgstr "Группа:"
+
+#: src/msg.c:69
+msgid "I would like to add you to my contact list."
+msgstr "Вы не возражаете, если я добавлю Вас в контакт лист?"
+
+#: src/msg.c:70
+msgid "_Subscribe"
+msgstr "_Подписаться"
+
+#: src/msg.c:71
+msgid "Subscription Request"
+msgstr "Запрос Подписки"
+
+#: src/msg.c:72
+msgid "Subscription request from"
+msgstr "Заппрос подписки от"
+
+#: src/msg.c:73
+msgid "Deny authorization from contact so he cannot know when you're connected"
+msgstr "Отклонить авторизацию от контакта (Он не сможет видеть ваш статус)"
+
+#: src/msg.c:74
+msgid "_Deny"
+msgstr "_Отклонить"
+
+#: src/msg.c:75
+msgid "Contact _Info"
+msgstr "_Информация о Контакте"
+
+#: src/msg.c:76
+msgid "Authorize contact so he can know when you're connected"
+msgstr "Авторизовать контакт (Он будет видеть ваш статус)"
+
+#: src/msg.c:77
+msgid "_Authorize"
+msgstr "_Авторизовать"
+
+#: src/msg.c:78
+msgid "Service Discovery"
+msgstr "Обзор Сервисов"
+
+#: src/msg.c:79
+msgid "_Address:"
+msgstr "_Адрес:"
+
+#: src/msg.c:80
+msgid "Go"
+msgstr "Вперед"
+
+#: src/msg.c:81
+msgid "_Refresh"
+msgstr "_Обновить"
+
+#: src/msg.c:82
+msgid "Re_gister"
+msgstr "Пере_регистрировать"
+
+#: src/msg.c:83 src/msg.c:217
+msgid "_Join"
+msgstr "_Присоединиться"
+
+#: src/msg.c:84
+msgid "Register to"
+msgstr "Зарегистрировать в"
+
+#: src/msg.c:85
+msgid "_Cancel"
+msgstr "О_тменить"
+
+#: src/msg.c:86
+msgid "_OK"
+msgstr "_ОК"
+
+#: src/msg.c:87
+msgid "Preferences"
+msgstr "Настройки"
+
+#: src/msg.c:88
+msgid "If checked, Gajim will also have a trayicon"
+msgstr "Если отмечено, Gajim будет прятаться а трей"
+
+#: src/msg.c:89
+msgid "_Icon in systray (aka. notification area)"
+msgstr "_Иконка в трее (или в области уведомления)"
+
+#: src/msg.c:90
+msgid ""
+"If checked, Gajim will remember the roster window position in the screen and "
+"the size of it next time you run it"
+msgstr ""
+"Если отмечено, Gajim запомнит позицию и размер окна ростера"
+
+#: src/msg.c:91
+msgid "Save roster _position and size"
+msgstr "Сохранить _позицию ростера и размер"
+
+#: src/msg.c:92
+msgid ""
+"If you have 2 or more accounts and this is checked, Gajim will list all "
+"contacts as if you had one account"
+msgstr ""
+"Если у вас 2 и более аккаунтов, то отметив здесь, вы заставите Gajim выводить "
+"вместе контакты из всех аккаунтов"
+
+#: src/msg.c:93
+msgid "_Merge accounts"
+msgstr "_Объединить аккаунты"
+
+#: src/msg.c:94
+msgid ""
+"If checked, Gajim will replace ascii smilies like ':)' with equivalent "
+"graphical emoticons"
+msgstr ""
+"Если отмечено, Gajim будет заменять текстовые смайлики, например ':)' их графическим "
+"эквивалентом"
+
+#: src/msg.c:95
+msgid "Use _emoticons"
+msgstr "Использовать _иконки"
+
+#: src/msg.c:96
+msgid "Add/Remove Emoticons..."
+msgstr "Добавить/Удалить иконки..."
+
+#: src/msg.c:97
+msgid "_Status iconset:"
+msgstr "Иконуи для _статуса"
+
+#: src/msg.c:98
+msgid "Roster theme:"
+msgstr "Тема ростера:"
+
+#: src/msg.c:99
+msgid "Account:"
+msgstr "Аккаунты:"
+
+#: src/msg.c:101
+msgid "User:"
+msgstr "Пользователь:"
+
+#: src/msg.c:102
+msgid "Text color"
+msgstr "Цвет текста"
+
+#: src/msg.c:103
+msgid "Text font"
+msgstr "Цвет шрифта"
+
+#: src/msg.c:104
+msgid "Background color"
+msgstr "Цвет фона"
+
+#: src/msg.c:106
+msgid "Use a single chat window with _tabs"
+msgstr "Использовать единое окно чата с _табами"
+
+#: src/msg.c:107
+msgid "Print time:"
+msgstr "Выводить время:"
+
+#: src/msg.c:108
+msgid "On every line"
+msgstr "В каждой строке"
+
+#: src/msg.c:109
+msgid "Every 5 minutes"
+msgstr "Каждые пять минут"
+
+#: src/msg.c:110
+msgid "Never"
+msgstr "Никогда"
+
+#: src/msg.c:111
+msgid "After time:"
+msgstr "После времени:"
+
+#: src/msg.c:112
+msgid "After nickname:"
+msgstr "После ника:"
+
+#: src/msg.c:113
+msgid "Before nickname:"
+msgstr "До ника:"
+
+#: src/msg.c:114
+msgid "Before time:"
+msgstr "До времени:"
+
+#: src/msg.c:115
+msgid "Incoming message:"
+msgstr "Входящее сообщение:"
+
+#: src/msg.c:116
+msgid "Outgoing message:"
+msgstr "Исходящее сообщение:"
+
+#: src/msg.c:117
+msgid "Status message:"
+msgstr "Сообщение сервера:"
+
+#: src/msg.c:118
+msgid "Reset to Default Colors"
+msgstr "Вернуться к Цветам по Умолчанию"
+
+#: src/msg.c:119
+msgid "<b>Format of a chat line</b>"
+msgstr "<b>Формат строки в чате</b>"
+
+#: src/msg.c:120 src/msg.c:223
+msgid "Chat"
+msgstr "Чат"
+
+#: src/msg.c:121
+msgid ""
+"Gajim will notify you for new message via a popup in the bottom right of the "
+"screen"
+msgstr ""
+"Gajim будет уведомлять вас о новом сообщении с помощью сообщения "
+"в правом нижнем углу экрана"
+
+#: src/msg.c:122
+msgid "_Notify me about it"
+msgstr "_Сообщать об этом"
+
+#: src/msg.c:123
+msgid ""
+"Gajim will automatically show the new received message in a new chat window "
+"or tab in an existing chat window"
+msgstr ""
+"Gajim будет автоматически показывать новое полученное соощение в новом окне чата "
+"или табе в существующем окне чата"
+
+#: src/msg.c:124
+msgid "_Pop it up"
+msgstr "Вывести окно"
+
+#: src/msg.c:125
+msgid ""
+"Gajim will only change the icon of the contact that sent the new message"
+msgstr ""
+"Gajim будет лишь менять иконку у контакта, от которого пришло сообщение"
+
+#: src/msg.c:126
+msgid "Show only in _roster"
+msgstr "Показывать только в _ростере"
+
+#: src/msg.c:127
+msgid "When new chat message is received"
+msgstr "Когда получено новое сообщение"
+
+#: src/msg.c:128
+msgid "Notify me about contacts that: "
+msgstr "Уведомлять о контактах которые: "
+
+#: src/msg.c:129
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed in"
+msgstr ""
+"Gajim будет уведомлять вас о присоединившемся контакте с помощью сообщения "
+"в правом нижнем углу экрана"
+
+#: src/msg.c:130
+msgid "Sign _in"
+msgstr "_Вошли"
+
+#: src/msg.c:131
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed out"
+msgstr ""
+"Gajim будет уведомлять вас о отсоединившемся контакте с помощью сообщения "
+"в правом нижнем углу экрана"
+
+#: src/msg.c:132
+msgid "Sign _out"
+msgstr "В_ышли"
+
+#: src/msg.c:133
+msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
+msgstr "Позволять уведомления в режиме _ушел/недоступен/занят/невидимка"
+
+#: src/msg.c:134
+msgid "<b>Notifications</b>"
+msgstr "<b>Невидимка</b>"
+
+#: src/msg.c:135
+msgid ""
+"Check this option, only if someone you don't have in the roster spams/annoys "
+"you. Use with caution, cause it blocks all messages from any contact that is "
+"not in the roster."
+msgstr ""
+"Отметьте эту опцию, только если кто-то не из вашего ростера спамит/достает вас. "
+"Используйте с осторожностью, потому что это заблокирует все сообщения от контактов "
+"не из вашего ротера."
+
+#: src/msg.c:136
+msgid "_Ignore events from contacts not in the roster"
+msgstr "_Игнорировать события от контактов не из ростера"
+
+#: src/msg.c:137
+msgid "Play _sounds"
+msgstr "Проигрывать _звук"
+
+#: src/msg.c:138
+msgid "_Player:"
+msgstr "_Проигрыватель:"
+
+#: src/msg.c:139
+msgid "..."
+msgstr "..."
+
+#: src/msg.c:140
+msgid "<b>Sounds</b>"
+msgstr "<b>Звуки</b>"
+
+#: src/msg.c:141
+msgid "Events"
+msgstr "События"
+
+#: src/msg.c:142
+msgid "Auto _away after:"
+msgstr "_Ушел посе:"
+
+#: src/msg.c:143
+msgid "Auto _not available after:"
+msgstr "_Недоступен после:"
+
+#: src/msg.c:144 src/msg.c:145
+msgid "minutes"
+msgstr "минут"
+
+#: src/msg.c:146
+msgid "Ask status message when going: "
+msgstr "Запрашивать сообщение о статусе в момент: "
+
+#: src/msg.c:147
+msgid "_Online"
+msgstr "_В сети"
+
+#: src/msg.c:148
+msgid "Of_fline"
+msgstr "_Отключен"
+
+#: src/msg.c:149
+msgid "<b>Preset Status Messages</b>"
+msgstr "<b>Предустановленные Сообщения о Статусе</b>"
+
+#: src/msg.c:151
+msgid "Open _with:"
+msgstr "_Открыть с помощью:"
+
+#: src/msg.c:152
+msgid "GNOME default applications"
+msgstr "Приложение GNOME по умолчанию"
+
+#: src/msg.c:153
+msgid "KDE default applications"
+msgstr "Приложение KDE по умолчанию"
+
+#: src/msg.c:154
+msgid "Custom"
+msgstr "Другое"
+
+#: src/msg.c:155
+msgid "_Browser:"
+msgstr "_Браузер:"
+
+#: src/msg.c:156
+msgid "_Mail client:"
+msgstr "_Почтовый клиент:"
+
+#: src/msg.c:157
+msgid "<b>Custom Applications</b>"
+msgstr "<b>Приложения Позователея</b>"
+
+#: src/msg.c:158
+msgid "<b>Links</b>"
+msgstr "<b>Ссылки</b>"
+
+#: src/msg.c:159
+msgid "Log presences in _contact's log file"
+msgstr "Вести лог состояний в логе _контакта"
+
+#: src/msg.c:160
+msgid "Log presences in an _external file"
+msgstr "Вести лог состояний во внешнем файле"
+
+#: src/msg.c:161
+msgid "<b>Log</b>"
+msgstr "<b>Лог</b>"
+
+#: src/msg.c:162
+msgid "Allow _OS information to be sent"
+msgstr "Отсылать информацию об _ОС"
+
+#: src/msg.c:163
+msgid "Check for new _version at startup"
+msgstr "Проверять на обновление при _старте"
+
+#: src/msg.c:164
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>Прочее</b>"
+
+#: src/msg.c:165
+msgid "Open..."
+msgstr "Открыть..."
+
+#: src/msg.c:166
+msgid "<b>Advanced Configuration Editor</b>"
+msgstr "<b>Расширенный редактор настроек</b>"
+
+#: src/msg.c:167
+msgid "Advanced"
+msgstr "Расширенный"
+
+#: src/msg.c:168
+msgid "Contact Information"
+msgstr "Информация о контакте"
+
+#: src/msg.c:170
+msgid "Status:"
+msgstr "Статус:"
+
+#: src/msg.c:172
+msgid "Resource:"
+msgstr "Ресурс:"
+
+#: src/msg.c:173
+msgid "Subscription:"
+msgstr "Подписка:"
+
+#: src/msg.c:174
+msgid "Ask:"
+msgstr ""
+
+#: src/msg.c:175
+msgid "Client:"
+msgstr "Клиент:"
+
+#: src/msg.c:176
+msgid "Log history"
+msgstr "История:"
+
+#: src/msg.c:177
+msgid "OS:"
+msgstr "ОС:"
+
+#: src/msg.c:178
+msgid "Jabber"
+msgstr "Jabber"
+
+#: src/msg.c:179
+msgid "Name:"
+msgstr "Имя:"
+
+#: src/msg.c:181
+msgid "Birthday:"
+msgstr "День рождения:"
+
+#: src/msg.c:182
+msgid "E-Mail:"
+msgstr "Почта:"
+
+#: src/msg.c:183
+msgid "Homepage:"
+msgstr "Веб-страница"
+
+#: src/msg.c:184
+msgid "Phone No.:"
+msgstr "Телефон:"
+
+#: src/msg.c:186
+msgid "Street:"
+msgstr "Улица:"
+
+#: src/msg.c:187
+msgid "Extra Address:"
+msgstr "Дополнительный Адрес:"
+
+#: src/msg.c:188
+msgid "City:"
+msgstr "Город:"
+
+#: src/msg.c:189
+msgid "State:"
+msgstr "Штат:"
+
+#: src/msg.c:190
+msgid "Postal Code:"
+msgstr "Индекс:"
+
+#: src/msg.c:191
+msgid "Country:"
+msgstr "Страна:"
+
+#: src/msg.c:192
+msgid "Location"
+msgstr "Положение:"
+
+#: src/msg.c:193
+msgid "Company:"
+msgstr "Компания:"
+
+#: src/msg.c:194
+msgid "Department:"
+msgstr "Отделение:"
+
+#: src/msg.c:195
+msgid "Position:"
+msgstr "Позиция:"
+
+#: src/msg.c:196
+msgid "Role:"
+msgstr "Должность:"
+
+#: src/msg.c:197
+msgid "Work"
+msgstr "Работа:"
+
+#: src/msg.c:198
+msgid "About"
+msgstr "Подробнее"
+
+#: src/msg.c:199
+msgid "Conversation History"
+msgstr "История"
+
+#: src/msg.c:200
+msgid "_Earliest"
+msgstr "_Первый"
+
+#: src/msg.c:201
+msgid "_Previous"
+msgstr "П_редыдущий"
+
+#: src/msg.c:202
+msgid "_Latest"
+msgstr "П_оследний"
+
+#: src/msg.c:203
+msgid "Groupchat"
+msgstr "Комната"
+
+#: src/msg.c:205
+msgid "Click to change the subject of the room"
+msgstr "Изменить тему комнаты"
+
+#: src/msg.c:206
+msgid "Change _Subject"
+msgstr "Изменить _Тему"
+
+#: src/msg.c:207
+msgid "Click to configure the room options"
+msgstr "Настройки комнаты"
+
+#: src/msg.c:208
+msgid "Configure _Room"
+msgstr "Настроить _Комнату"
+
+#: src/msg.c:209
+msgid "Close _Window"
+msgstr "Закрыть _Окно"
+
+#: src/msg.c:210
+msgid "Subject:"
+msgstr "Тема:"
+
+#: src/msg.c:212
+msgid "Password:"
+msgstr "Пароль:"
+
+#: src/msg.c:213
+msgid "Server:"
+msgstr "Сервер:"
+
+#: src/msg.c:214
+msgid "Room:"
+msgstr "Комната:"
+
+#: src/msg.c:216
+msgid "Recently:"
+msgstr "Недавно:"
+
+#: src/msg.c:218 src/msg.c:219
+msgid "Passphrase"
+msgstr "Парольная фраза:"
+
+#: src/msg.c:220
+msgid "<b>Choose your OpenGPG key</b>"
+msgstr "<b>Выбрать ключ OpenPGP</b>"
+
+#: src/msg.c:221
+msgid "Enter your message:"
+msgstr "Введите сообщение:"
+
+#: src/msg.c:222
+msgid "Or choose a preset message:"
+msgstr "Или выберите сохраненное сообщение:"
+
+#: src/msg.c:224
+msgid "Click to see past conversations with this contact"
+msgstr "Щелкните для просмотра бесед с этим человеком"
+
+#: src/msg.c:225
+msgid "_History"
+msgstr "_История"
+
+#: src/msg.c:226
+msgid "Click to clear conversation (won't delete it from history)"
+msgstr "Очистить разговор (не удаляет из истории)"
+
+#: src/msg.c:227
+msgid "Click for contact's extented information"
+msgstr "Расширенная информация о контакте"
+
+#: src/msg.c:228
+msgid "Anonymous <nick@server/res>"
+msgstr "Anonymous <nick@server/res>"
+
+#: src/msg.c:230
+msgid "Change Password"
+msgstr "Изменить Пароль"
+
+#: src/msg.c:231
+msgid "Enter new password:"
+msgstr "Введине новый пароль"
+
+#: src/msg.c:232
+msgid "Enter it again for confirmation:"
+msgstr "Введите опять для подтверждения:"
+
+#: src/msg.c:233
+msgid "_Chat"
+msgstr "_Чат"
+
+#: src/msg.c:234
+msgid ""
+"Enter the user ID of the contact you would like to\n"
+"send a chat message to"
+msgstr ""
+"Введите ID пользователя которому вы хотите отправить сообщени"
+
+#: src/msg.c:244
+msgid "Chat with"
+msgstr "Чат с"
+
+#: src/msg.c:246
+msgid "<b>event_type_label</b>"
+msgstr "<b>event_type_label</b>"
+
+#: src/msg.c:247
+msgid "event_description_label"
+msgstr "event_description_label"
+
+#: src/msg.c:248
+msgid "Add/Remove Emoticons"
+msgstr "Добавить/Удалить Иконку"
+
+#: src/msg.c:249
+msgid "Set Image"
+msgstr "Установить Картинку"
+
+#: src/msg.c:250
+msgid "New version of Gajim available"
+msgstr "Доступна новая версия Gajim"
+
+#: src/msg.c:251
+msgid "Open Download Page"
+msgstr "Открыть Страницу Загрузки"
+
+#: src/msg.c:252
+msgid "<b>Changes in latest version</b>"
+msgstr "<b>Изменения в последней версии</b>"
+
+#: src/msg.c:253
+msgid "Room Configuration"
+msgstr "Настройки Комнаты"
+
+#: src/msg.c:255
+msgid "Remove account only from Gajim"
+msgstr "Удалит аккаунт из Gajim"
+
+#: src/msg.c:256
+msgid "Remove account from Gajim and from server"
+msgstr "Удалить аккаунт из Gajim и с сервера"
+
+#: src/msg.c:257
+msgid "<b>What do you want to do?</b>"
+msgstr "<b>Что вы хотите сделать?</b>"
+
+#: src/msg.c:259
+msgid "Advanced Configuration Editor"
+msgstr "Расширенный Редактор Настроек"
+
+#: src/msg.c:260
+msgid "Filter:"
+msgstr "Фильтр:"
+
