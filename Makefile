@@ -1,4 +1,4 @@
-VERSION		?= 0.7
+VERSION		?= 0.7.1
 
 MODULES		= src src/common po
 PREFIX		= /usr
