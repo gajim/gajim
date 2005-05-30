@@ -196,6 +196,8 @@ class Tabbed_chat_window(chat.Chat):
 			self.print_time_timeout_id[user.jid] = gobject.timeout_add(300000,
 				self.print_time_timeout, user.jid)
 
+		self.restore_conversation(user.jid)
+
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
 		if enter is pressed without the shit key, message (if not empty) is sent

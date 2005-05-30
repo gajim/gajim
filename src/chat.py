@@ -22,6 +22,7 @@ import gtk.glade
 import pango
 import gobject
 import time
+import dialogs
 
 try:
 	import gtkspell
@@ -232,7 +233,12 @@ class Chat:
 		
 		if gajim.config.get('use_speller') and 'gtkspell' in globals():
 			message_textview = self.xmls[jid].get_widget('message_textview')
-			gtkspell.Spell(message_textview)
+			try:
+				gtkspell.Spell(message_textview)
+			except gobject.GError, msg:
+				print msg
+				dialogs.Error_dialog(str(msg) + '\n\n' + _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words will not be used'))	
+				gajim.config.set('use_speller', False)
 		
 		conversation_textview = self.xmls[jid].get_widget(
 			'conversation_textview')
@@ -326,10 +332,10 @@ class Chat:
 			if self.widget_name == 'tabbed_chat_window':
 				self.remove_tab(jid)
 		elif event.keyval == gtk.keysyms.F4 and \
-		     (event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
+			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
 				self.remove_tab(jid)
 		elif event.string and event.string in st and \
-		     (event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
+			(event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
 			self.notebook.set_current_page(st.index(event.string))
 		elif event.keyval == gtk.keysyms.Page_Down:
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
@@ -361,7 +367,7 @@ class Chat:
 				conversation_scrolledwindow.emit('scroll-child',
 					gtk.SCROLL_PAGE_BACKWARD, False)
 		elif event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
-			if (event.state & gtk.gdk.CONTROL_MASK): # CTRL + SHIFT + TAB
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + SHIFT + TAB
 				current = self.notebook.get_current_page()
 				if current > 0:
 					self.notebook.set_current_page(current - 1)
@@ -381,9 +387,9 @@ class Chat:
 				if not message_textview.is_focus():
 					message_textview.grab_focus()
 				message_textview.emit('key_press_event', event)
-		elif (event.state & gtk.gdk.CONTROL_MASK) or \
-		     (event.keyval == gtk.keysyms.Control_L) or \
-		     (event.keyval == gtk.keysyms.Control_R):
+		elif event.state & gtk.gdk.CONTROL_MASK or \
+			  (event.keyval == gtk.keysyms.Control_L) or \
+			  (event.keyval == gtk.keysyms.Control_R):
 			# we pressed a control key or ctrl+sth: we don't block
 			# the event in order to let ctrl+c (copy text) and
 			# others do their default work
@@ -704,11 +710,53 @@ class Chat:
 			end = True
 			# We scroll to the end after the scrollbar has appeared
 			gobject.idle_add(self.scroll_to_end, textview)
-		if ((jid != self.get_active_jid()) or \
-		   (not self.window.is_active()) or \
-		   (not end)) and kind == 'incoming':
+		if (jid != self.get_active_jid() or \
+		   not self.window.is_active() or \
+		   not end) and kind == 'incoming':
 			self.nb_unread[jid] += 1
 			if self.plugin.systray_enabled:
 				self.plugin.systray.add_jid(jid, self.account)
 			self.redraw_tab(jid)
 			self.show_title()
+
+
+	def restore_conversation(self, jid):
+		#How many lines to restore
+		restore = gajim.config.get('restore_lines')
+		pos		= 0	#position, while reading from history
+		size		= 0	#how many lines we alreay retreived
+		lines		= []	#we'll need to reverse the lines from history
+		count		= gajim.logger.get_nb_line(jid)
+
+		while size <= restore:
+			if pos == count or size > restore - 1:
+				#don't try to read beyond history, not read more than required
+				break
+			
+			nb, line = gajim.logger.read(jid, count - 1 - pos, count - pos)
+			pos = pos + 1
+
+			if line[0][1] != 'sent' and line[0][1] != 'recv':
+				# we don't want to display status lines, do we?
+				continue
+
+			lines.append(line[0])
+			size = size + 1
+
+		lines.reverse()
+
+		for msg in lines:
+			if msg[1] == 'sent':
+				kind = 'outgoing'
+				name = self.plugin.nicks[self.account]
+			elif msg[1] == 'recv':
+				kind = 'incoming'
+				# self.users is not initialized here yet
+				name = self.plugin.roster.contacts[self.account][jid][0].name
+
+			tim = time.gmtime(float(msg[0]))
+			if msg[2][-1] == '\n':
+				text = msg[2][:-1]
+			else:
+				text = msg[2]
+			self.print_conversation_line(text, jid, kind, name, tim)

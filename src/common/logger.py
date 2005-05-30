@@ -99,18 +99,26 @@ class Logger:
 			fic.close()
 
 	def get_nb_line(self, jid):
+		'''return total number of lines in a log file
+		return 0 if log file does not exist'''
 		path_to_file = os.path.join(LOGPATH, jid.split('/')[0])
+		if not os.path.exists(path_to_file):
+			return 0
 		fic = open(path_to_file, 'r')
-		nb = 0
-		while (fic.readline()):
+		nb = 0 # number of lines
+		while fic.readline():
 			nb += 1
 		fic.close()
 		return nb
 
 	def read(self, jid, begin_line, end_line):
+		'''return number of lines read and the text in the lines
+		return 0 and empty respectively if log file does not exist'''
 		path_to_file = os.path.join(LOGPATH, jid.split('/')[0])
+		if not os.path.exists(path_to_file):
+			return 0, []
 		fic = open(path_to_file, 'r')
-		nb = 0
+		nb = 0 # number of lines
 		lines = []
 		while (nb < begin_line and fic.readline()):
 			nb += 1

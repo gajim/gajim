@@ -98,6 +98,7 @@ class Config:
 		'log_notif_in_user_file': [ opt_bool, True ],
 		'log_notif_in_sep_file': [ opt_bool, True ],
 		'change_roster_title': [ opt_bool, True ],
+		'restore_lines': [opt_int, 4],
 		'version': [ None, '0.7' ],
 	}
 
