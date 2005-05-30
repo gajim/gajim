@@ -1090,7 +1090,7 @@ class Account_modification_window:
 		if gajim.config.get('usegpg'):
 			self.init_account_gpg()
 		else:
-			gpg_key_label.set_text(_('GPG is not usable on this computer'))
+			gpg_key_label.set_text(_('OpenPGP is not usable in this computer'))
 			self.xml.get_widget('gpg_choose_button').set_sensitive(False)
 		self.xml.get_widget('autoconnect_checkbutton').set_active(gajim.config.\
 			get_per('accounts', self.account, 'autoconnect'))
