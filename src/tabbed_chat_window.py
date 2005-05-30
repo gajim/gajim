@@ -43,6 +43,7 @@ class Tabbed_chat_window(chat.Chat):
 	def __init__(self, user, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
 		self.users = {}
+		self.encrypted = {}
 		self.new_user(user)
 		self.show_title()
 		self.xml.signal_connect('on_tabbed_chat_window_destroy', 
@@ -176,6 +177,7 @@ class Tabbed_chat_window(chat.Chat):
 		self.childs[user.jid] = self.xmls[user.jid].get_widget('chats_vbox')
 		chat.Chat.new_tab(self, user.jid)
 		self.users[user.jid] = user
+		self.encrypted[user.jid] = False
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
@@ -233,11 +235,13 @@ class Tabbed_chat_window(chat.Chat):
 					self.on_clear(None, widget) # clear message textview too
 					return True
 				keyID = ''
+				encrypted = False
 				if self.xmls[jid].get_widget('gpg_togglebutton').get_active():
 					keyID = self.users[jid].keyID
+					encrypted = True
 				gajim.connections[self.account].send_message(jid, message, keyID)
 				message_buffer.set_text('', -1)
-				self.print_conversation(message, jid, jid)
+				self.print_conversation(message, jid, jid, encrypted = encrypted)
 			return True
 
 	def on_contact_button_clicked(self, widget):
@@ -251,7 +255,8 @@ class Tabbed_chat_window(chat.Chat):
 		user = self.users[jid]
 		while not q.empty():
 			event = q.get()
-			self.print_conversation(event[0], jid, tim = event[1])
+			self.print_conversation(event[0], jid, tim = event[1],
+				encrypted = event[2])
 			self.plugin.roster.nb_unread -= 1
 		self.plugin.roster.show_title()
 		del self.plugin.queues[self.account][jid]
@@ -264,7 +269,8 @@ class Tabbed_chat_window(chat.Chat):
 			if len(self.plugin.roster.contacts[self.account][jid]) == 1:
 				self.plugin.roster.really_remove_user(user, self.account)
 
-	def print_conversation(self, text, jid, contact = '', tim = None):
+	def print_conversation(self, text, jid, contact = '', tim = None,
+		encrypted = False):
 		"""Print a line in the conversation:
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message
@@ -274,6 +280,14 @@ class Tabbed_chat_window(chat.Chat):
 			kind = 'status'
 			name = ''
 		else:
+			if encrypted and not self.encrypted[jid]:
+				chat.Chat.print_conversation_line(self, 'Encryption enabled', jid,
+					'status', '', tim)
+			if not encrypted and self.encrypted[jid]:
+				chat.Chat.print_conversation_line(self, 'Encryption disabled', jid,
+					'status', '', tim)
+			self.encrypted[jid] = encrypted
+			self.xmls[jid].get_widget('gpg_togglebutton').set_active(encrypted)
 			if contact:
 				kind = 'outgoing'
 				name = self.plugin.nicks[self.account] 

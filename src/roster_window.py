@@ -956,7 +956,7 @@ class Roster_window:
 			self.plugin.windows[account]['gc'][jid] = \
 				groupchat_window.Groupchat_window(jid, nick, self.plugin, account)
 
-	def on_message(self, jid, msg, tim, account):
+	def on_message(self, jid, msg, tim, account, encrypted = False):
 		'''when we receive a message'''
 		if not self.contacts[account].has_key(jid):
 			keyID = ''
@@ -985,7 +985,7 @@ class Roster_window:
 				self.draw_contact(jid, account)
 				if self.plugin.systray_enabled:
 					self.plugin.systray.add_jid(jid, account)
-			self.plugin.queues[account][jid].put((msg, tim))
+			self.plugin.queues[account][jid].put((msg, tim, encrypted))
 			self.nb_unread += 1
 			self.show_title()
 			if not path:
@@ -1005,7 +1005,7 @@ class Roster_window:
 					self.tree.scroll_to_cell(path)
 					self.tree.set_cursor(path)
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg, 
-																					jid, tim = tim)
+				jid, tim = tim, encrypted = encrypted)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if self.plugin.windows['preferences'].window.get_property('visible'):

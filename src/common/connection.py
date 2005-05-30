@@ -192,6 +192,7 @@ class Connection:
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
+		encrypted = False
 		xtags = msg.getTags('x')
 		encTag = None
 		decmsg = ''
@@ -208,6 +209,7 @@ class Connection:
 				decmsg = self.gpg.decrypt(encmsg, keyID)
 		if decmsg:
 			msgtxt = decmsg
+			encrypted = True
 		if mtype == 'error':
 			self.dispatch('MSGERROR', (str(msg.getFrom()), \
 				msg.getErrorCode(), msg.getError(), msgtxt, tim))
@@ -220,7 +222,7 @@ class Connection:
 				gajim.logger.write('gc', msgtxt, str(msg.getFrom()), tim = tim)
 		else:
 			gajim.logger.write('incoming', msgtxt, str(msg.getFrom()), tim = tim)
-			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim))
+			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
