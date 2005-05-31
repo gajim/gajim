@@ -40,7 +40,8 @@ msgid ""
 "global in /etc/profile.\n"
 "\n"
 "Highlighting misspelled words will not be used"
-msgstr ""
+msgstr "Αν αυτή δεν είναι η γλώσσα για την οποία επιθυμείτε να έχετε υπογράμμιση τυπογραφικών λαθών, τότε παρακαλείστε να καθορίσετε την $LANG όπως της αρμόζει. Πχ. για Ελληνικά κάντε export LANG=el_GR ή export LANG=el_GR.UTF-8 στο ~/.bash_profile ή για όλους τους χρήστες στο /etc/profile.\n"
+"\n"
 
 #: src/config.py:279
 msgid "Active"
@@ -67,9 +68,8 @@ msgid "Wav Sounds"
 msgstr "Αρχεία Wav"
 
 #: src/config.py:1093
-#, fuzzy
 msgid "OpenPGP is not usable in this computer"
-msgstr "Το GPG δεν είναι διαθέσιμος σε αυτόν τον Η/Υ"
+msgstr "Το OpenPGP δεν είναι διαθέσιμο σε αυτόν τον Η/Υ"
 
 #: src/config.py:1112
 msgid "You must be offline to change the account's name"
@@ -125,9 +125,8 @@ msgstr ""
 "πληροφορίες"
 
 #: src/config.py:1306
-#, fuzzy
 msgid "Error while getting secret keys"
-msgstr "σφάλμα κατά την αποστολή"
+msgstr "Σφάλμα κατά την λήψη μυστικών κλειδιών"
 
 #: src/config.py:1317 src/msg.c:46
 msgid "No key selected"
@@ -142,9 +141,9 @@ msgid "Server"
 msgstr "Διακομιστής"
 
 #: src/config.py:1494
-#, fuzzy, python-format
+#, python-format
 msgid "Edit %s"
-msgstr "Επε_ξεργασία"
+msgstr "Επεξεργασία %s"
 
 #: src/config.py:1496
 #, python-format
@@ -444,7 +443,7 @@ msgstr "Τροποποίηση Ομάδων"
 
 #: src/roster_window.py:523
 msgid "Assign OpenPGP key"
-msgstr ""
+msgstr "Ανάθεση OpenPGP κλειδιού"
 
 #: src/roster_window.py:528
 msgid "Subscription"
@@ -479,14 +478,12 @@ msgid "History"
 msgstr "Ιστορικό"
 
 #: src/roster_window.py:585
-#, fuzzy
 msgid "_Log on"
-msgstr "Σύνδεση"
+msgstr "_Σύνδεση"
 
 #: src/roster_window.py:592
-#, fuzzy
 msgid "Log _off"
-msgstr "Αποσύνδεση"
+msgstr "_Αποσύνδεση"
 
 #: src/roster_window.py:602 src/msg.c:16
 msgid "_Edit"
@@ -717,9 +714,8 @@ msgid "Free for Chat"
 msgstr "Διαθέσιμος για Κουβέντα"
 
 #: src/common/helpers.py:33
-#, fuzzy
 msgid "Available"
-msgstr "Μη διαθέσιμος"
+msgstr "Διαθέσιμος"
 
 #: src/common/helpers.py:35
 msgid "Connecting"
@@ -727,11 +723,11 @@ msgstr "Συνδέεται"
 
 #: src/common/helpers.py:43
 msgid "Not in the roster"
-msgstr ""
+msgstr "Εκτός λίστας επαφών"
 
 #: src/common/helpers.py:45
 msgid "Has errors"
-msgstr ""
+msgstr "Έχει προβλήματα"
 
 #: src/msg.c:7 src/msg.c:30
 msgid "Gajim"
@@ -885,16 +881,15 @@ msgid ""
 "expected to have SSL capabilities. Note that Gajim use TLS encryption by "
 "default if broadcasted by the server, and with this option on you disable TLS"
 msgstr ""
+"Επιλέξτε το ώστε το Gajim να συνδεθεί στην θύρα 5223 όπου οι παλαιότεροι διακομιστές αναμένουν SSL σύνδεση. Σημειώστε ότι το gajim χρησιμοποιεί κρυπτογράφηση TLS αυτόματα αν αυτή η δυνατότητα του γνωστοποιηθεί από τον διακομιστή, και ότι με αυτή την επιλογή απενεργοποιήτε το TLS"
 
 #: src/msg.c:44
-#, fuzzy
 msgid "Use _SSL"
-msgstr "Χρήση του _TLS"
+msgstr "Χρήση του _SSL"
 
 #: src/msg.c:45
-#, fuzzy
 msgid "<b>SSL</b>"
-msgstr "<b>TLS</b>"
+msgstr "<b>SSL</b>"
 
 #: src/msg.c:47
 msgid "Choose _Key"
@@ -913,9 +908,8 @@ msgid "Save _passphrase (insecure)"
 msgstr "Αποθήκευση _κωδικοφράσης (περιορισμένη ασφάλεια)"
 
 #: src/msg.c:50
-#, fuzzy
 msgid "<b>OpenPGP</b>"
-msgstr "<b>OpenGPG</b>"
+msgstr "<b>OpenPGP</b>"
 
 #: src/msg.c:51
 msgid "Security"
@@ -943,7 +937,7 @@ msgstr "_Κωδικός:"
 
 #: src/msg.c:57 src/msg.c:284 src/msg.c:302
 msgid "3128"
-msgstr ""
+msgstr "3128"
 
 #: src/msg.c:58
 msgid "<b>Proxy</b>"
@@ -1107,7 +1101,7 @@ msgstr "_Συνένωση λογαριασμών"
 
 #: src/msg.c:95
 msgid "Sort contacts by status"
-msgstr ""
+msgstr "Ταξινόμηση επαφών βάσει κατάστασης"
 
 #: src/msg.c:96
 msgid ""
@@ -1126,7 +1120,6 @@ msgid "Add/Remove Emoticons..."
 msgstr "Προσθαφαίρεση Συμβόλων..."
 
 #: src/msg.c:99
-#, fuzzy
 msgid "Default _status iconset:"
 msgstr "_Σετ εικονιδίων κατάστασης:"
 
@@ -1135,12 +1128,11 @@ msgid ""
 "If checked, Gajim will use protocol-specific status icons. (eg. A contact "
 "from MSN will have the equivalent msn icon for status online, away, busy, "
 "etc...)"
-msgstr ""
+msgstr "Αν επιλεγεί, το Gajim θα χρησιμοποιήσει εικονίδια κατάστασης σχετικά με το πρωτόκολλο της επαφής. (πχ. Μια επαφή από το MSN θα έχει το αντίστοιχο msn εικονίδιο για τις καταστάσεις διαθέσιμος, απομακρυσμένος κλπ..)"
 
 #: src/msg.c:101
-#, fuzzy
 msgid "Use _transports iconsets"
-msgstr "_Σετ εικονιδίων κατάστασης:"
+msgstr "Χρήση Σετ _εικονιδίων κατάστασης:"
 
 #: src/msg.c:102
 msgid "Roster theme:"
@@ -1172,26 +1164,23 @@ msgstr "Χρήση ενός παραθύρου για κουβέντες με κ
 
 #: src/msg.c:111
 msgid "_Highlight misspelled words"
-msgstr ""
+msgstr "_Υπογράμμιση λέξεων με τυπογραφικά λάθη"
 
 #: src/msg.c:112
 msgid "Print time:"
 msgstr "Εμφάνιση χρόνου:"
 
 #: src/msg.c:113
-#, fuzzy
 msgid "On every _line"
-msgstr "Σε κάθε γραμμή"
+msgstr "Σε κάθε _γραμμή"
 
 #: src/msg.c:114
-#, fuzzy
 msgid "Every 5 _minutes"
-msgstr "Κάθε 5 λεπτά"
+msgstr "Κάθε 5 _λεπτά"
 
 #: src/msg.c:115
-#, fuzzy
 msgid "_Never"
-msgstr "Ποτέ"
+msgstr "_Ποτέ"
 
 #: src/msg.c:116
 msgid "After time:"
@@ -1611,9 +1600,8 @@ msgid "Passphrase"
 msgstr "Κωδικοφράση"
 
 #: src/msg.c:225
-#, fuzzy
 msgid "<b>Choose your OpenPGP key</b>"
-msgstr "<b>Επιλέξτε το OpenGPG κλειδί σου</b>"
+msgstr "<b>Επιλέξτε το OpenPGP κλειδί σας</b>"
 
 #: src/msg.c:226
 msgid "Enter your message:"
@@ -1718,10 +1706,9 @@ msgstr "Φιλτράρισμα:"
 
 #: src/msg.c:264
 msgid "_Copy Link Location"
-msgstr ""
+msgstr "_Αντιγραφή Τοποθεσίας Δεσμού"
 
 #: src/msg.c:265
-#, fuzzy
 msgid "_Open Link in Browser"
 msgstr "_Άνοιγμα Δεσμού"
 
@@ -1738,20 +1725,18 @@ msgid "Gajim: First Time Wizard"
 msgstr ""
 
 #: src/msg.c:269
-#, fuzzy
 msgid ""
 "You need to have an account in order to connect to\n"
 "the Jabber network."
 msgstr ""
-"Πρέπει να δημιουργήσετε ένα λογαριασμό προτού μπορέτε να συνδεθείτε στο "
+"Πρέπει να δημιουργήσετε ένα λογαριασμό προτού μπορέσετε να συνδεθείτε στο "
 "Jabber"
 
 #: src/msg.c:271
 msgid "I already have an account I want to use"
-msgstr ""
+msgstr "Έχω ήδη ένα λογαριασμό που θέλω να χρησιμοποιήσω"
 
 #: src/msg.c:272
-#, fuzzy
 msgid "I want to _register for a new account"
 msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαρισμό"
 
@@ -1764,14 +1749,12 @@ msgid "Please fill in the data for your existing account"
 msgstr ""
 
 #: src/msg.c:275 src/msg.c:289
-#, fuzzy
 msgid "_Server:"
-msgstr "Διακομιστής:"
+msgstr "_Διακομιστής:"
 
 #: src/msg.c:279 src/msg.c:295
-#, fuzzy
 msgid "_Nickname:"
-msgstr "Όνομα χρήστη:"
+msgstr "_Όνομα χρήστη:"
 
 #: src/msg.c:286 src/msg.c:297
 msgid "<span background=\"lightyellow\"></span>"
