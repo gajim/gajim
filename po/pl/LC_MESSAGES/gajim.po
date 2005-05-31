@@ -1648,7 +1648,7 @@ msgid ""
 "send a chat message to"
 msgstr ""
 "Wpisz nazwę użytkownika kontaktu, któremu chcesz\n"
-" wysłać wiadomość"
+"wysłać wiadomość"
 
 #: src/msg.c:249
 msgid "Chat with"
