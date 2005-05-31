@@ -8,14 +8,13 @@ def get_output(app, param=None):
 	else:
 		command = app
 	try:
-		child_stdin, child_stdout = os.popen2(command)
-	except ValueError:
+		child_stdout = os.popen(command)
+	except:
 		print 'Plz relax, and let python do the job. Exiting.. :('
 		sys.exit()
 
 	output = child_stdout.readlines()
 	child_stdout.close()
-	child_stdin.close()
 	
 	return output
 
@@ -28,7 +27,7 @@ def visit(arg, dirname, names):
 			path_to_po = os.path.join(dirname, 'gajim.po')
 			param = '--statistics ' + path_to_po
 			print path_to_po, 'has:'
-			get_output('msgfmt', param)
+			get_output('msgfmt', param) # msgfmt doesn't use stdout?!
 
 
 if __name__ == '__main__':
