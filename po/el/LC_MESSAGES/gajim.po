@@ -40,8 +40,12 @@ msgid ""
 "global in /etc/profile.\n"
 "\n"
 "Highlighting misspelled words will not be used"
-msgstr "Αν αυτή δεν είναι η γλώσσα για την οποία επιθυμείτε να έχετε υπογράμμιση τυπογραφικών λαθών, τότε παρακαλείστε να καθορίσετε την $LANG όπως της αρμόζει. Πχ. για Ελληνικά κάντε export LANG=el_GR ή export LANG=el_GR.UTF-8 στο ~/.bash_profile ή για όλους τους χρήστες στο /etc/profile.\n"
+msgstr ""
+"Αν αυτή δεν είναι η γλώσσα για την οποία επιθυμείτε να έχετε " "υπογράμμιση τυπογραφικών λαθών, τότε παρακαλείστε να καθορίσετε την $LANG "
+"όπως της αρμόζει. Πχ. για Ελληνικά κάντε export LANG=el_GR ή export " "LANG=el_GR.UTF-8 στο ~/.bash_profile ή για όλους τους χρήστες στο "
+"/etc/profile.\n"
 "\n"
+"Η υπογράμμιση τυπογραφικών λαθών απενεργοποιήθηκε"
 
 #: src/config.py:279
 msgid "Active"
