@@ -338,12 +338,8 @@ class Tabbed_chat_window(chat.Chat):
 				name = self.plugin.nicks[self.account]
 			elif msg[1] == 'recv':
 				kind = 'incoming'
-				# self.users is not initialized here yet
-				name = self.plugin.roster.contacts[self.account][jid][0].name
+				name = self.users[jid].name
 
 			tim = time.gmtime(float(msg[0]))
-			if msg[2][-1] == '\n':
-				text = msg[2][:-1]
-			else:
-				text = msg[2]
+			text = ':'.join(msg[2:])[0:-1] #remove the latest \n
 			self.print_conversation_line(text, jid, kind, name, tim)
