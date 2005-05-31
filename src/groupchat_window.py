@@ -567,6 +567,7 @@ class Groupchat_window(chat.Chat):
 				except TypeError:
 					widget.get_selection().unselect_all()
 					return False
+				widget.get_selection().select_path(path)
 				model = widget.get_model()
 				iter = model.get_iter(path)
 				if len(path) == 2:
