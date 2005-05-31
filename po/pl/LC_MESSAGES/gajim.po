@@ -1,4 +1,5 @@
 # Polish translations for gajim package
+# Polska wersja językowa pakietu gajim
 # Copyright (C) 2005 THE gajim'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gajim package.
 # Automatically generated, 2005.
@@ -41,6 +42,12 @@ msgid ""
 "\n"
 "Highlighting misspelled words will not be used"
 msgstr ""
+"Jeśli podświetlanie błędów w pisowni działa na niewłaściwego języka "
+"to ustaw odpowiednio zmienną środowiskową $LANG. Np. dla języka polskiego "
+"wpisz export LANG=pl_PL do pliku ~/.bash_profile lub globalnie"
+"do pliku in /etc/profile.\n"
+"\n"
+"Podświedlanie błędów w pisowni nie będzie używane"
 
 #: src/config.py:279
 msgid "Active"
@@ -67,9 +74,8 @@ msgid "Wav Sounds"
 msgstr "Dźwięki w Wav"
 
 #: src/config.py:1093
-#, fuzzy
 msgid "OpenPGP is not usable in this computer"
-msgstr "Nie można używać GPG na tym komputerze"
+msgstr "Nie można używać OpenPGP na tym komputerze"
 
 #: src/config.py:1112
 msgid "You must be offline to change the account's name"
@@ -121,9 +127,8 @@ msgid "You must be connected to edit your personal information"
 msgstr "Musisz być połączony, aby móc zmieniać informacje o sobie"
 
 #: src/config.py:1306
-#, fuzzy
 msgid "Error while getting secret keys"
-msgstr "błąd przy wysyłaniu"
+msgstr "Błąd przy pobieraniu klucza prywatnego"
 
 #: src/config.py:1317 src/msg.c:46
 msgid "No key selected"
@@ -138,9 +143,9 @@ msgid "Server"
 msgstr "Serwer"
 
 #: src/config.py:1494
-#, fuzzy, python-format
+#, python-format
 msgid "Edit %s"
-msgstr "Edycja"
+msgstr "Edytuj %s"
 
 #: src/config.py:1496
 #, python-format
@@ -212,9 +217,9 @@ msgid "User name"
 msgstr "Nazwa użytkownika"
 
 #: src/dialogs.py:191
-#, fuzzy, python-format
+#, python-format
 msgid "%s Status Message"
-msgstr "Informacja o statusie:"
+msgstr "Informacja o statusie %s"
 
 #: src/dialogs.py:239
 msgid "You must be connected to add a contact"
@@ -234,12 +239,12 @@ msgstr "Klienta jabbera w GTK"
 
 #: src/dialogs.py:385
 msgid "translator_credits"
-msgstr "tłumaczenie na język polski: Witek Kieraś"
+msgstr "Tłumaczenie na język polski: Witold Kieraś"
 
 #: src/dialogs.py:459
 #, python-format
 msgid "Subscription request from %s"
-msgstr "Subscription request from %s"
+msgstr "Prośba o autoryzację od %s"
 
 #: src/dialogs.py:500
 msgid "You must be connected to join a groupchat"
@@ -247,11 +252,11 @@ msgstr "Musisz być połączony, aby móc dołączyć do grupy"
 
 #: src/dialogs.py:514
 msgid "Join Groupchat as "
-msgstr "Dołącz do grupy jako "
+msgstr "Dołącz do chatu jako "
 
 #: src/dialogs.py:516 src/msg.c:216
 msgid "Join Groupchat"
-msgstr "Dołącz do grupy"
+msgstr "Dołącz do chatu"
 
 #: src/dialogs.py:558
 msgid "You are already in room "
@@ -436,11 +441,11 @@ msgstr "Edytuj Grupy"
 
 #: src/roster_window.py:523
 msgid "Assign OpenPGP key"
-msgstr ""
+msgstr "Przyporządkuj klucz OpenPGP"
 
 #: src/roster_window.py:528
 msgid "Subscription"
-msgstr "Subskrypcja"
+msgstr "Autoryzacja"
 
 #: src/roster_window.py:533
 msgid "Resend Authorization to"
@@ -471,18 +476,16 @@ msgid "History"
 msgstr "Historia"
 
 #: src/roster_window.py:585
-#, fuzzy
 msgid "_Log on"
 msgstr "Połącz"
 
 #: src/roster_window.py:592
-#, fuzzy
 msgid "Log _off"
-msgstr "Rozłącz"
+msgstr "R_ozłącz"
 
 #: src/roster_window.py:602 src/msg.c:16
 msgid "_Edit"
-msgstr "Edycja"
+msgstr "_Edycja"
 
 #: src/roster_window.py:606 src/msg.c:21 src/msg.c:261
 msgid "_Remove"
@@ -526,15 +529,15 @@ msgstr "_Edytuj konto"
 
 #: src/roster_window.py:662 src/msg.c:12
 msgid "_Service Discovery"
-msgstr "Przeglądanie Usług"
+msgstr "Przeglądanie U_sług"
 
 #: src/roster_window.py:665
 msgid "_Add Contact"
-msgstr "Dodaj kontakt"
+msgstr "Dod_aj kontakt"
 
 #: src/roster_window.py:668
 msgid "Join _Groupchat"
-msgstr "Dołącz do grupy"
+msgstr "Dołącz do chatu"
 
 #: src/roster_window.py:671 src/msg.c:9
 msgid "_New Message"
@@ -702,21 +705,20 @@ msgid "Free for Chat"
 msgstr "Chętny do rozmowy"
 
 #: src/common/helpers.py:33
-#, fuzzy
 msgid "Available"
-msgstr "Nieobecny"
+msgstr "Dostępny"
 
 #: src/common/helpers.py:35
 msgid "Connecting"
-msgstr "Połączony"
+msgstr "Łączę się"
 
 #: src/common/helpers.py:43
 msgid "Not in the roster"
-msgstr ""
+msgstr "Spoza listy kontaktów"
 
 #: src/common/helpers.py:45
 msgid "Has errors"
-msgstr ""
+msgstr "Błąd"
 
 #: src/msg.c:7 src/msg.c:30
 msgid "Gajim"
@@ -724,11 +726,11 @@ msgstr "Gajim"
 
 #: src/msg.c:8 src/msg.c:209
 msgid "_Actions"
-msgstr "Działania"
+msgstr "Dzi_ałania"
 
 #: src/msg.c:10
 msgid "_Join Groupchat"
-msgstr "Dołącz do grupy"
+msgstr "Dołącz do chatu"
 
 #: src/msg.c:11
 msgid "Add _Contact"
@@ -736,7 +738,7 @@ msgstr "Dodaj Kontakt"
 
 #: src/msg.c:13
 msgid "Show _Offline Contacts"
-msgstr "Pokaż kontakty niepołączone"
+msgstr "Pokaż kontakty niep_ołączone"
 
 #: src/msg.c:14
 msgid "_About"
@@ -776,7 +778,7 @@ msgstr "_Jabber ID:"
 
 #: src/msg.c:25 src/msg.c:276 src/msg.c:292
 msgid "_Password:"
-msgstr "Hasło: "
+msgstr "Hasło:"
 
 #: src/msg.c:26
 msgid "Resour_ce: "
@@ -848,7 +850,7 @@ msgstr ""
 
 #: src/msg.c:39
 msgid "C_onnect at startup"
-msgstr "Połącz przy starcie programu"
+msgstr "P_ołącz przy starcie programu"
 
 #: src/msg.c:40
 msgid "Conversation _history for all contacts in this account"
@@ -868,16 +870,17 @@ msgid ""
 "expected to have SSL capabilities. Note that Gajim use TLS encryption by "
 "default if broadcasted by the server, and with this option on you disable TLS"
 msgstr ""
+"Zaznaczenie tej opcji spowoduje łączenia na porcie 5223 gdzie większość serwerów"
+"udostępnia usługę SSL. Gajim używa szyfrowania TLS domyślnie jeśli tylko serwer"
+"daje taką możliwość. Ta opcja wyłącza TLS."
 
 #: src/msg.c:44
-#, fuzzy
 msgid "Use _SSL"
-msgstr "Korzystaj z _TLS"
+msgstr "Korzystaj z _SSL"
 
 #: src/msg.c:45
-#, fuzzy
 msgid "<b>SSL</b>"
-msgstr "<b>TLS</b>"
+msgstr "<b>SSL</b>"
 
 #: src/msg.c:47
 msgid "Choose _Key"
@@ -896,9 +899,8 @@ msgid "Save _passphrase (insecure)"
 msgstr "Zapisz hasło (nie jest to bezpieczne)"
 
 #: src/msg.c:50
-#, fuzzy
 msgid "<b>OpenPGP</b>"
-msgstr "<b>OpenGPG</b>"
+msgstr "<b>OpenPGP</b>"
 
 #: src/msg.c:51
 msgid "Security"
@@ -984,7 +986,7 @@ msgstr "Chciałbym dodać Cię do listy kontaktów."
 
 #: src/msg.c:71
 msgid "_Subscribe"
-msgstr "_Autoryzuj"
+msgstr "Autoryzuj"
 
 #: src/msg.c:72
 msgid "Subscription Request"
@@ -1090,7 +1092,7 @@ msgstr "Połącz konta"
 
 #: src/msg.c:95
 msgid "Sort contacts by status"
-msgstr ""
+msgstr "Sortuj kontakty wydług statusu"
 
 #: src/msg.c:96
 msgid ""
@@ -1109,9 +1111,8 @@ msgid "Add/Remove Emoticons..."
 msgstr "Dodaj/Usuń Emotki..."
 
 #: src/msg.c:99
-#, fuzzy
 msgid "Default _status iconset:"
-msgstr "Ikony Statusu:"
+msgstr "Domyślny zestaw ikon _statusu:"
 
 #: src/msg.c:100
 msgid ""
@@ -1119,11 +1120,13 @@ msgid ""
 "from MSN will have the equivalent msn icon for status online, away, busy, "
 "etc...)"
 msgstr ""
+"Dzięki tej opcji Gajim będzie używał zestawów ikon charakterystycznych "
+"dla trasportu, np. kontakt z MSN będzie miał odpowiednie ikony statusu "
+"dostępny, zaraz wracam, zajęty, itd."
 
 #: src/msg.c:101
-#, fuzzy
 msgid "Use _transports iconsets"
-msgstr "Ikony Statusu:"
+msgstr "Używaj zestawu ikon transportu"
 
 #: src/msg.c:102
 msgid "Roster theme:"
@@ -1155,26 +1158,23 @@ msgstr "Używaj jednego okna rozmowy z zakładkami"
 
 #: src/msg.c:111
 msgid "_Highlight misspelled words"
-msgstr ""
+msgstr "Podświetlaj błędy w pisowni"
 
 #: src/msg.c:112
 msgid "Print time:"
 msgstr "Wyświetlaj czas:"
 
 #: src/msg.c:113
-#, fuzzy
 msgid "On every _line"
-msgstr "W każdej linii"
+msgstr "W każdej _linii"
 
 #: src/msg.c:114
-#, fuzzy
 msgid "Every 5 _minutes"
-msgstr "Co 5 minut"
+msgstr "Co 5 _minut"
 
 #: src/msg.c:115
-#, fuzzy
 msgid "_Never"
-msgstr "Nigdy"
+msgstr "_Nigdy"
 
 #: src/msg.c:116
 msgid "After time:"
@@ -1279,12 +1279,11 @@ msgstr ""
 
 #: src/msg.c:137
 msgid "Sign _out"
-msgstr "Rozłączony"
+msgstr "R_ozłączony"
 
 #: src/msg.c:138
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
-msgstr ""
-"Pokazuj powiadomienia gdy mam status zaraz wracam/xa/zajęty/niewidoczny"
+msgstr "Pokazuj powiadomienia gdy mam status zaraz wracam/xa/zajęty/niewidoczny"
 
 #: src/msg.c:139
 msgid "<b>Notifications</b>"
@@ -1355,7 +1354,7 @@ msgstr "<b>Predefiniowane opisy</b>"
 
 #: src/msg.c:156
 msgid "Open _with:"
-msgstr "Otwórz przy pomocy:"
+msgstr "Ot_wórz przy pomocy:"
 
 #: src/msg.c:157
 msgid "GNOME default applications"
@@ -1379,7 +1378,7 @@ msgstr "Klient poczty:"
 
 #: src/msg.c:162
 msgid "<b>Custom Applications</b>"
-msgstr "<b>Inne aplikacje</b>"
+msgstr "<b>Własne aplikacje</b>"
 
 #: src/msg.c:163
 msgid "<b>Links</b>"
@@ -1435,7 +1434,7 @@ msgstr "Zasoby:"
 
 #: src/msg.c:178
 msgid "Subscription:"
-msgstr "Subskrypcja:"
+msgstr "Autoryzacja:"
 
 #: src/msg.c:179
 msgid "Ask:"
@@ -1547,7 +1546,7 @@ msgstr "Najpóźniejsze"
 
 #: src/msg.c:208
 msgid "Groupchat"
-msgstr "Czat"
+msgstr "Chat"
 
 #: src/msg.c:210
 msgid "Click to change the subject of the room"
@@ -1594,7 +1593,6 @@ msgid "Passphrase"
 msgstr "Hasło"
 
 #: src/msg.c:225
-#, fuzzy
 msgid "<b>Choose your OpenPGP key</b>"
 msgstr "<b>Wybierz klucz OpenPGP</b>"
 
@@ -1642,7 +1640,7 @@ msgstr "Wpisz ponownie nowe hasło:"
 
 #: src/msg.c:238
 msgid "_Chat"
-msgstr "_Rozmowa"
+msgstr "Rozmowa"
 
 #: src/msg.c:239
 msgid ""
@@ -1702,12 +1700,11 @@ msgstr "Filtr:"
 
 #: src/msg.c:264
 msgid "_Copy Link Location"
-msgstr ""
+msgstr "Kopiuj adres odnośnika"
 
 #: src/msg.c:265
-#, fuzzy
 msgid "_Open Link in Browser"
-msgstr "_Otwórz Link"
+msgstr "_Otwórz Link w przeglądarce"
 
 #: src/msg.c:266
 msgid "_Copy Email Address"
@@ -1719,74 +1716,60 @@ msgstr "_Otwórz Klienta Poczty"
 
 #: src/msg.c:268
 msgid "Gajim: First Time Wizard"
-msgstr ""
+msgstr "Gajim: Pierwsze uruchomienie programu"
 
 #: src/msg.c:269
-#, fuzzy
 msgid ""
 "You need to have an account in order to connect to\n"
 "the Jabber network."
-msgstr "Musisz założyć konto zanim połączysz się z siecią Jabber."
+msgstr "Musisz założyć konto zanim połączysz się\n"
+" z siecią Jabber."
 
 #: src/msg.c:271
 msgid "I already have an account I want to use"
-msgstr ""
+msgstr "Mam już konto i chcę z niego korzystać"
 
 #: src/msg.c:272
-#, fuzzy
 msgid "I want to _register for a new account"
-msgstr "Włącz jeśli chcesz zarejestrować nowe konto Jabbera"
+msgstr "Chcę zarejestrować nowe konto Jabbera"
 
 #: src/msg.c:273
 msgid "<b>Please choose on of the options below:</b>"
-msgstr ""
+msgstr "<b>Wybierz jedną z poniższych opcji:</b>"
 
 #: src/msg.c:274
 msgid "Please fill in the data for your existing account"
-msgstr ""
+msgstr "Wpisz informacje o swoim koncie"
 
 #: src/msg.c:275 src/msg.c:289
-#, fuzzy
 msgid "_Server:"
-msgstr "Serwer:"
+msgstr "_Serwer:"
 
 #: src/msg.c:279 src/msg.c:295
-#, fuzzy
 msgid "_Nickname:"
-msgstr "Pseudonim:"
+msgstr "Pseudo_nim:"
 
 #: src/msg.c:286 src/msg.c:297
 msgid "<span background=\"lightyellow\"></span>"
-msgstr ""
+msgstr "<span background=\"jasnożółty\"></span>"
 
 #: src/msg.c:287 src/msg.c:296
 msgid "Your JID:"
-msgstr ""
+msgstr "Twój JID:"
 
 #: src/msg.c:288
 msgid "Please fill in the data for your new account"
-msgstr ""
+msgstr "Wpisz dane do swojego nowego konta"
 
 #: src/msg.c:290
 msgid "Click to see features like on jabber servers"
-msgstr ""
+msgstr "Kliknij by zobaczyć możliwości serwerów jabbera"
 
 #: src/msg.c:291
 msgid "Servers Features"
-msgstr ""
+msgstr "Możliwości serwerów"
 
 #: src/msg.c:304
 msgid "label286"
-msgstr ""
+msgstr "label286"
 
-#~ msgid "_Copy Link Address"
-#~ msgstr "Kopiuj Link"
-
-#~ msgid "Couldn't connect to "
-#~ msgstr "Nie można połączyć się z "
-
-#~ msgid "<b>event_type_label</b>"
-#~ msgstr "<b>event_type_label</b>"
-
-#~ msgid "event_description_label"
-#~ msgstr "event_description_label"
