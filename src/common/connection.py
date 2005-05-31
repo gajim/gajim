@@ -668,7 +668,10 @@ class Connection:
 				if msg:
 					p.setStatus(msg)
 				self.connection.send(p)
-				self.connection.disconnect()
+				try:
+					self.connection.disconnect()
+				except:
+					pass
 			self.dispatch('STATUS', 'offline')
 			self.connection = None
 		elif show != 'offline' and self.connected:
