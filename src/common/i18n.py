@@ -1,8 +1,9 @@
 ##	common/i18n.py
 ##
 ## Gajim Team:
-## 	- Yann Le Boulanger <asterix@lagaule.org>
-## 	- Vincent Hanquez <tab@snarc.org>
+##  - Yann Le Boulanger <asterix@lagaule.org>
+##  - Vincent Hanquez <tab@snarc.org>
+##  - Nikos Kouremenos <kourem@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -19,7 +20,8 @@
 APP='gajim'
 DIR='../po'
 
-import locale, gettext
+import locale
+import gettext
 
 locale.setlocale(locale.LC_ALL, '')
 _translation = None
