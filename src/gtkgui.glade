@@ -22,7 +22,7 @@
   <signal name="delete_event" handler="on_roster_window_delete_event" last_modification_time="Mon, 21 Mar 2005 12:34:59 GMT"/>
 
   <child>
-    <widget class="GtkVBox" id="vbox1">
+    <widget class="GtkVBox" id="roster_vbox">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
       <property name="spacing">0</property>

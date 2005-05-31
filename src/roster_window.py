@@ -383,8 +383,8 @@ class Roster_window:
 					array[jid]['subscription'], array[jid]['ask'], resource, 0,
 					keyID)
 
-			# when we draw the roster, we can't have twice the same
-			# user with 2 resources
+			# when we draw the roster, we avoid having the same contact
+			# more than once (eg. we avoid showing it twice with 2 resources)
 			self.contacts[account][ji] = [user1]
 			for g in array[jid]['groups'] :
 				if g in self.groups[account].keys():
@@ -977,7 +977,7 @@ class Roster_window:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = User(jid, jid, ['not in the roster'], 'not in the roster', 
 								'not in the roster', 'none', None, '', 0, keyID)
-			self.contacts[account][jid] = [user1]
+			self.contacts[account][jid] = [user1] 
 			self.add_user_to_roster(jid, account)
 		iters = self.get_user_iter(jid, account)
 		if iters:
@@ -1207,7 +1207,7 @@ class Roster_window:
 		#model.set_value(iter, 5, False)
 		pass
 
-	def on_cell_edited (self, cell, row, new_text):
+	def on_cell_edited(self, cell, row, new_text):
 		'''When an iter is editer :
 		if text has changed, rename the user'''
 		model = self.tree.get_model()
@@ -1545,7 +1545,8 @@ class Roster_window:
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image, 
 			gobject.TYPE_STRING)
 		self.status_combobox = gtk.ComboBox()
-		self.xml.get_widget('vbox1').pack_end(self.status_combobox, False)
+		roster_vbox = self.xml.get_widget('roster_vbox')
+		roster_vbox.pack_end(self.status_combobox, False)
 		cell = cell_renderer_image.CellRendererImage()
 		self.status_combobox.pack_start(cell, False)
 		self.status_combobox.add_attribute(cell, 'image', 1)
