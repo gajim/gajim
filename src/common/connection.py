@@ -137,7 +137,8 @@ class Connection:
 		for handler in self.handlers[event]:
 			handler(self.name, data)
 
-	def _discover(self, ns, jid, node = None): #FIXME: this is in features.py but it is blocking
+	# this is in features.py but it is blocking
+	def _discover(self, ns, jid, node = None): 
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = ns)
@@ -227,7 +228,6 @@ class Connection:
 
 	def _presenceCB(self, con, prs):
 		"""Called when we recieve a presence"""
-#		if prs.getXNode(common.xmpp.NS_DELAY): return
 		who = str(prs.getFrom())
 		prio = prs.getPriority()
 		if not prio:
@@ -583,8 +583,9 @@ class Connection:
 		gajim.log.debug('Connected to server')
 
 		try:
-			auth = con.auth(name, self.password, resource,
-				not gajim.config.get_per('accounts', self.name, 'force_nonSASL')) #FIXME: blocking
+			#FIXME: blocking
+			auth = con.auth(name, self.password, resource, 1) #FIXME: non SASL doesn't work currently
+#				not gajim.config.get_per('accounts', self.name, 'force_nonSASL'))
 		except IOError: #probably a timeout
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
@@ -600,7 +601,7 @@ class Connection:
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', _('Authentication failed with %s, check your login and password') % name)
 			return None
-# END connect
+	# END connect
 
 	def register_handler(self, event, function):
 		if event in self.handlers:
@@ -786,7 +787,8 @@ class Connection:
 	def register_agent(self, agent, info):
 		if not self.connection:
 			return
-		common.xmpp.features.register(self.connection, agent, info) # FIXME: Blocking
+		# FIXME: Blocking
+		common.xmpp.features.register(self.connection, agent, info)
 
 	def new_account(self, name, config):
 		# If a connection already exist we cannot create a new account
@@ -797,30 +799,40 @@ class Connection:
 				'user': config['proxyuser'], 'password': config['proxypass']}
 		else:
 			proxy = None
-		c = common.xmpp.Client(server = config['hostname'], debug = [])
-		con_type = c.connect(proxy = proxy)
+		if gajim.verbose:
+			c = common.xmpp.Client(server = config['hostname'])
+		else:
+			c = common.xmpp.Client(server = config['hostname'], debug = [])
+		common.xmpp.dispatcher.DefaultTimeout = 45
+		c.UnregisterDisconnectHandler(c.DisconnectHandler)
+		c.RegisterDisconnectHandler(self._disconnectedCB)
+		port = 5222
+#		if usessl:
+#			port = 5223
+		#FIXME: blocking
+		con_type = c.connect((config['hostname'], port), proxy = proxy)
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % name)
 			self.dispatch('ERROR', _("Couldn't connect to %s") % name)
 			return False
+		gajim.log.debug('Connected to server')
+		# FIXME! This blocks!
+		req = common.xmpp.features.getRegInfo(c, config['hostname']).asDict()
+		req['username'] = config['name']
+		req['password'] = config['password']
+		if not common.xmpp.features.register(c, config['hostname'], req):
+			self.dispatch('ERROR', _('Error: ') + c.lastErr)
+			return False
+		self.name = name
+		self.connected = 0
+		self.password = config['password']
+		if USE_GPG:
+			self.gpg = GnuPG.GnuPG()
+			gajim.config.set('usegpg', True)
 		else:
-			gajim.log.debug('Connected to server')
-			req = common.xmpp.features.getRegInfo(c, config['hostname']).asDict() # FIXME! This blocks!
-			req['username'] = config['name']
-			req['password'] = config['password']
-			if not common.xmpp.features.register(c, config['hostname'], req): #FIXME: error
-				self.dispatch('ERROR', _('Error: ') + c.lastErr)
-			else:
-				self.name = name
-				self.connected = 0
-				self.password = config['password']
-				if USE_GPG:
-					self.gpg = GnuPG.GnuPG()
-					gajim.config.set('usegpg', True)
-				else:
-					gajim.config.set('usegpg', False)
-				gajim.connections[name] = self
-				self.dispatch('ACC_OK', (name, config))
+			gajim.config.set('usegpg', False)
+		gajim.connections[name] = self
+		self.dispatch('ACC_OK', (name, config))
 
 	def account_changed(self, new_name):
 		self.name = new_name
@@ -930,7 +942,8 @@ class Connection:
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
 			common.xmpp.NS_MUC_OWNER)
 		query = iq.getTag('query')
-		x = query.setTag(common.xmpp.NS_DATA + ' x', attrs = {'type': 'submit'}) # FIXME: should really use XData class
+		# FIXME: should really use XData class
+		x = query.setTag(common.xmpp.NS_DATA + ' x', attrs = {'type': 'submit'})
 		i = 0
 		while config.has_key(i):
 			if not config[i].has_key('type'):
@@ -1006,4 +1019,4 @@ class Connection:
 					gajim.log.debug('error appeared while processing xmpp:')
 					traceback.print_exc()
 				self.connection = None
-# END GajimCore
+# END Connection
