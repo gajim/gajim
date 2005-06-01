@@ -99,6 +99,8 @@ class Edit_groups_dialog:
 		store = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
 		self.list.set_model(store)
 		for g in self.plugin.roster.groups[self.account].keys():
+			if g in ['Transports', 'not in the roster']:
+				continue
 			iter = store.append()
 			store.set(iter, 0, g)
 			if g in self.user.groups:
