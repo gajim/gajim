@@ -57,7 +57,6 @@ install:
 		DST=`dirname "$$f"`; \
 		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
 	done
-	rm "$(DESTDIR)$(PREFIX)/share/gajim/setup_win32.py";
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/applications";
 	cp gajim.desktop "$(DESTDIR)$(PREFIX)/share/applications/";
