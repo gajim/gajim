@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-30 23:17+0200\n"
+"POT-Creation-Date: 2005-06-01 23:29+0200\n"
 "PO-Revision-Date: 2005-06-01 18:52+0300\n"
 "Last-Translator: Yavor Doganov <yavor@doganov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -202,44 +202,44 @@ msgstr "JID: <i>%s</i>"
 msgid "A contact must belong at least to one group"
 msgstr "Контактът трябва да принадлежи поне към една група"
 
-#: src/dialogs.py:108
+#: src/dialogs.py:110
 msgid "Group"
 msgstr "Група"
 
-#: src/dialogs.py:114
+#: src/dialogs.py:116
 msgid "In the group"
 msgstr "В групата"
 
-#: src/dialogs.py:177
+#: src/dialogs.py:179
 msgid "KeyID"
 msgstr "Номер на ключ"
 
-#: src/dialogs.py:180
+#: src/dialogs.py:182
 msgid "User name"
 msgstr "Име на потребител"
 
-#: src/dialogs.py:191
+#: src/dialogs.py:193
 #, python-format
 msgid "%s Status Message"
 msgstr "%s Съобщение за състояние"
 
-#: src/dialogs.py:239
+#: src/dialogs.py:241
 msgid "You must be connected to add a contact"
 msgstr "Трябва да сте свързани, за да добавите контакт"
 
-#: src/dialogs.py:313
+#: src/dialogs.py:315
 msgid "The contact's name must be something like login@hostname"
 msgstr "Името на контакта трябва да е нещо като login@hostname"
 
-#: src/dialogs.py:367
+#: src/dialogs.py:369
 msgid "Gajim - a GTK+ Jabber client"
 msgstr "Gajim - GTK+ Jabber клиент"
 
-#: src/dialogs.py:378
+#: src/dialogs.py:380
 msgid "A GTK jabber client"
 msgstr "GTK Jabber клиент"
 
-#: src/dialogs.py:385
+#: src/dialogs.py:387
 msgid "translator_credits"
 msgstr ""
 "Явор Доганов <yavor@doganov.org>\n"
@@ -248,52 +248,52 @@ msgstr ""
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на https://gnome.cult.bg/bugs"
 
-#: src/dialogs.py:459
+#: src/dialogs.py:461
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Искане за записване от %s"
 
-#: src/dialogs.py:500
+#: src/dialogs.py:502
 msgid "You must be connected to join a groupchat"
 msgstr "Трябва да сте свързани, за да влезете в стая"
 
-#: src/dialogs.py:514
+#: src/dialogs.py:516
 msgid "Join Groupchat as "
 msgstr "Влизане в стая като "
 
-#: src/dialogs.py:516 src/msg.c:216
+#: src/dialogs.py:518 src/msg.c:215
 msgid "Join Groupchat"
 msgstr "Влизане в стая"
 
-#: src/dialogs.py:558
+#: src/dialogs.py:560
 msgid "You are already in room "
 msgstr "Вече сте в стая "
 
-#: src/dialogs.py:576
+#: src/dialogs.py:578
 msgid "You must be connected to send a message to a contact"
 msgstr "Трябва да сте свързани, за да изпратите съобщение на контакт"
 
-#: src/dialogs.py:587
+#: src/dialogs.py:589
 msgid "New Message as "
 msgstr "Ново съобщение като "
 
-#: src/dialogs.py:589 src/msg.c:250
+#: src/dialogs.py:591 src/msg.c:249
 msgid "New Message"
 msgstr "Ново съобщение"
 
-#: src/dialogs.py:603
+#: src/dialogs.py:605
 msgid "User ID is not valid"
 msgstr "Идентификаторът на потребителя не е валиден"
 
-#: src/dialogs.py:629
+#: src/dialogs.py:631
 msgid "You must be connected to change your password"
 msgstr "Трябва да сте свързани, за да променяте паролата"
 
-#: src/dialogs.py:648
+#: src/dialogs.py:650
 msgid "Your password cannot be empty"
 msgstr "Паролата трябва да съдържа символи"
 
-#: src/dialogs.py:652
+#: src/dialogs.py:654
 msgid "Confirmation password is not the same"
 msgstr "Паролите не съвпадат"
 
@@ -442,7 +442,7 @@ msgstr "Започване на разговор"
 msgid "Rename"
 msgstr "Преименуване"
 
-#: src/roster_window.py:517 src/msg.c:234
+#: src/roster_window.py:517 src/msg.c:233
 msgid "Edit Groups"
 msgstr "Редактиране на групи"
 
@@ -494,15 +494,15 @@ msgstr "Изкл_ючване"
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: src/roster_window.py:606 src/msg.c:21 src/msg.c:261
+#: src/roster_window.py:606 src/msg.c:21 src/msg.c:260
 msgid "_Remove"
 msgstr "_Премахване"
 
-#: src/roster_window.py:627 src/msg.c:155 src/msg.c:241
+#: src/roster_window.py:627 src/msg.c:154 src/msg.c:240
 msgid "Status"
 msgstr "Състояние"
 
-#: src/roster_window.py:632 src/msg.c:242
+#: src/roster_window.py:632 src/msg.c:241
 msgid "Online"
 msgstr "На линия"
 
@@ -510,23 +510,23 @@ msgstr "На линия"
 msgid "Free for chat"
 msgstr "Свободен за разговор"
 
-#: src/roster_window.py:638 src/common/helpers.py:37 src/msg.c:244
+#: src/roster_window.py:638 src/common/helpers.py:37 src/msg.c:243
 msgid "Away"
 msgstr "Отсъствам"
 
-#: src/roster_window.py:641 src/common/helpers.py:29 src/msg.c:245
+#: src/roster_window.py:641 src/common/helpers.py:29 src/msg.c:244
 msgid "Not Available"
 msgstr "Не съм на разположение"
 
-#: src/roster_window.py:644 src/common/helpers.py:27 src/msg.c:246
+#: src/roster_window.py:644 src/common/helpers.py:27 src/msg.c:245
 msgid "Busy"
 msgstr "Зает"
 
-#: src/roster_window.py:647 src/common/helpers.py:41 src/msg.c:247
+#: src/roster_window.py:647 src/common/helpers.py:41 src/msg.c:246
 msgid "Invisible"
 msgstr "Невидим"
 
-#: src/roster_window.py:652 src/common/helpers.py:39 src/msg.c:248
+#: src/roster_window.py:652 src/common/helpers.py:39 src/msg.c:247
 msgid "Offline"
 msgstr "Изключен"
 
@@ -633,60 +633,68 @@ msgstr "Трябва да сте свързани, за да публикува�
 msgid "You must be connected to get your contact information"
 msgstr "Трябва да сте свързани, за да изтеглите визитката"
 
-#: src/common/config.py:203
+#: src/vcard.py:215
+msgid "Publish"
+msgstr ""
+
+#: src/vcard.py:222
+msgid "Retrieve"
+msgstr ""
+
+#: src/common/config.py:202
 msgid "Nap"
 msgstr "Дрямка"
 
-#: src/common/config.py:203
+#: src/common/config.py:202
 msgid "I'm taking a nap."
 msgstr "Спинкам."
 
-#: src/common/config.py:204
+#: src/common/config.py:203
 msgid "Brb"
 msgstr "Кратко отсъствие"
 
-#: src/common/config.py:204
+#: src/common/config.py:203
 msgid "Back in some minutes."
 msgstr "Ще се върна след малко."
 
-#: src/common/config.py:205
+#: src/common/config.py:204
 msgid "Eating"
 msgstr "Хапвам"
 
-#: src/common/config.py:205
+#: src/common/config.py:204
 msgid "I'm eating, so leave me a message."
 msgstr "Хапвам, оставете съобщение."
 
-#: src/common/config.py:206
+#: src/common/config.py:205
 msgid "Movie"
 msgstr "Филм"
 
-#: src/common/config.py:206
+#: src/common/config.py:205
 msgid "I'm watching a movie."
 msgstr "Гледам филм."
 
-#: src/common/config.py:207
+#: src/common/config.py:206
 msgid "Working"
 msgstr "Работя"
 
-#: src/common/config.py:207
+#: src/common/config.py:206
 msgid "I'm working."
 msgstr "Работя."
 
-#: src/common/config.py:208
+#: src/common/config.py:207
 msgid "Phone"
 msgstr "Телефон"
 
-#: src/common/config.py:208
+#: src/common/config.py:207
 msgid "I'm on the phone."
 msgstr "Говоря по телефона."
 
-#: src/common/connection.py:267 src/common/connection.py:709
+#: src/common/connection.py:267 src/common/connection.py:712
 msgid "I would like to add you to my roster."
 msgstr "Бих искал(а) да ви добавя към списъка си."
 
 #: src/common/connection.py:556 src/common/connection.py:591
-#: src/common/connection.py:804
+#: src/common/connection.py:818
 #, python-format
 msgid "Couldn't connect to %s"
 msgstr "Не може да се осъществи свързване с %s"
@@ -696,15 +704,15 @@ msgstr "Не може да се осъществи свързване с %s"
 msgid "Authentication failed with %s, check your login and password"
 msgstr "Удостоверяването с %s пропадна, проверете името и паролата"
 
-#: src/common/connection.py:695
+#: src/common/connection.py:698
 msgid "[this message is encrypted]"
 msgstr "[това съобщение е криптирано]"
 
-#: src/common/connection.py:812
+#: src/common/connection.py:826
 msgid "Error: "
 msgstr "Грешка: "
 
-#: src/common/helpers.py:31 src/msg.c:243
+#: src/common/helpers.py:31 src/msg.c:242
 msgid "Free for Chat"
 msgstr "Свободен за разговор"
 
@@ -728,7 +736,7 @@ msgstr "Има грешки"
 msgid "Gajim"
 msgstr "Gajim"
 
-#: src/msg.c:8 src/msg.c:209
+#: src/msg.c:8 src/msg.c:208
 msgid "_Actions"
 msgstr "_Действия"
 
@@ -780,7 +788,7 @@ msgstr "_Име: "
 msgid "_Jabber ID:"
 msgstr "_Jabber ID:"
 
-#: src/msg.c:25 src/msg.c:276 src/msg.c:292
+#: src/msg.c:25 src/msg.c:275 src/msg.c:290
 msgid "_Password:"
 msgstr "_Парола:"
 
@@ -816,11 +824,11 @@ msgstr ""
 "ресурси \"Вкъщи\" и \"На работа\" по едно и също време. Ресурсът с най-голям "
 "приоритет ще получава събитията. (вижте по-долу)"
 
-#: src/msg.c:31 src/msg.c:277 src/msg.c:293
+#: src/msg.c:31 src/msg.c:276 src/msg.c:291
 msgid "If checked, Gajim will remember the password for this account"
 msgstr "Ако е избрано, ще се запомни паролата за този акаунт"
 
-#: src/msg.c:32 src/msg.c:278 src/msg.c:294
+#: src/msg.c:32 src/msg.c:277 src/msg.c:292
 msgid "Save pass_word"
 msgstr "Запазване на паро_ла"
 
@@ -828,7 +836,7 @@ msgstr "Запазване на паро_ла"
 msgid "Click to change account's password"
 msgstr "Натиснете, за да смените паролата на акаунта"
 
-#: src/msg.c:34 src/msg.c:257
+#: src/msg.c:34 src/msg.c:256
 msgid "Chan_ge"
 msgstr "Пром_яна"
 
@@ -864,7 +872,7 @@ msgstr "История на _разговорите за всички конта
 msgid "Synch_ronize account status with global status"
 msgstr "Син_хронизиране на състоянието на акаунта с общото състояние"
 
-#: src/msg.c:42 src/msg.c:109 src/msg.c:190
+#: src/msg.c:42 src/msg.c:108 src/msg.c:189
 msgid "General"
 msgstr "Общи"
 
@@ -910,164 +918,160 @@ msgstr "<b>OpenPGP</b>"
 msgid "Security"
 msgstr "Сигурност"
 
-#: src/msg.c:52 src/msg.c:285 src/msg.c:303
+#: src/msg.c:52 src/msg.c:283 src/msg.c:299
 msgid "_Use proxy"
 msgstr "_Използване на сървър-посредник"
 
-#: src/msg.c:53 src/msg.c:280 src/msg.c:298
+#: src/msg.c:53 src/msg.c:279 src/msg.c:295
 msgid "_Host:"
 msgstr "_Хост:"
 
-#: src/msg.c:54 src/msg.c:281 src/msg.c:299
+#: src/msg.c:54 src/msg.c:280 src/msg.c:296
 msgid "_Port:"
 msgstr "По_рт:"
 
-#: src/msg.c:55 src/msg.c:282 src/msg.c:300
+#: src/msg.c:55 src/msg.c:281 src/msg.c:297
 msgid "_Username:"
 msgstr "И_ме на потребител:"
 
-#: src/msg.c:56 src/msg.c:283 src/msg.c:301
+#: src/msg.c:56 src/msg.c:282 src/msg.c:298
 msgid "Pass_word:"
 msgstr "_Парола:"
 
-#: src/msg.c:57 src/msg.c:284 src/msg.c:302
-msgid "3128"
-msgstr "3128"
-
-#: src/msg.c:58
+#: src/msg.c:57
 msgid "<b>Proxy</b>"
 msgstr "<b>Сървър-посредник</b>"
 
-#: src/msg.c:59
+#: src/msg.c:58
 msgid "Proxy"
 msgstr "Сървър-посредник"
 
-#: src/msg.c:60
+#: src/msg.c:59
 msgid "Information about you are stored on the server as vCard"
 msgstr "Личните данни се запазват на сървъра като vCard"
 
-#: src/msg.c:61
+#: src/msg.c:60
 msgid "_Edit Personal Details..."
 msgstr "_Редактиране на личните данни..."
 
-#: src/msg.c:62
+#: src/msg.c:61
 msgid "Personal Details"
 msgstr "Лични данни"
 
-#: src/msg.c:63
+#: src/msg.c:62
 msgid "Add New Contact"
 msgstr "Добавяне на нов контакт"
 
-#: src/msg.c:64
+#: src/msg.c:63
 msgid "User ID:"
 msgstr "Идентификатор на потребител:"
 
-#: src/msg.c:65
+#: src/msg.c:64
 msgid "Protocol:"
 msgstr "Протокол:"
 
-#: src/msg.c:66 src/msg.c:174
+#: src/msg.c:65 src/msg.c:173
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
 
-#: src/msg.c:67 src/msg.c:176 src/msg.c:185 src/msg.c:220
+#: src/msg.c:66 src/msg.c:175 src/msg.c:184 src/msg.c:219
 msgid "Nickname:"
 msgstr "Псевдоним:"
 
-#: src/msg.c:68
+#: src/msg.c:67
 msgid "Automatically authorize contact"
 msgstr "Автоматично упълномощаване на контакта"
 
-#: src/msg.c:69 src/msg.c:104
+#: src/msg.c:68 src/msg.c:103
 msgid "Group:"
 msgstr "Група:"
 
-#: src/msg.c:70
+#: src/msg.c:69
 msgid "I would like to add you to my contact list."
 msgstr "Бих искал(а) да ви добавя към списъка си."
 
-#: src/msg.c:71
+#: src/msg.c:70
 msgid "_Subscribe"
 msgstr "_Записване"
 
-#: src/msg.c:72
+#: src/msg.c:71
 msgid "Subscription Request"
 msgstr "Искане за записване"
 
-#: src/msg.c:73
+#: src/msg.c:72
 msgid "Subscription request from"
 msgstr "Искане за записване от"
 
-#: src/msg.c:74
+#: src/msg.c:73
 msgid "Deny authorization from contact so he cannot know when you're connected"
 msgstr ""
 "Отказване на упълномощаване на контакт, така че да не знае кога сте свързани"
 
-#: src/msg.c:75
+#: src/msg.c:74
 msgid "_Deny"
 msgstr "_Отказване"
 
-#: src/msg.c:76
+#: src/msg.c:75
 msgid "Contact _Info"
 msgstr "_Данни за контакта"
 
-#: src/msg.c:77
+#: src/msg.c:76
 msgid "Authorize contact so he can know when you're connected"
 msgstr "Упълномощаване на контакта, така че да знае кога сте свързани"
 
-#: src/msg.c:78
+#: src/msg.c:77
 msgid "_Authorize"
 msgstr "_Упълномощаване"
 
-#: src/msg.c:79
+#: src/msg.c:78
 msgid "Service Discovery"
 msgstr "Откриване на услуги"
 
-#: src/msg.c:80
+#: src/msg.c:79
 msgid "_Address:"
 msgstr "_Адрес:"
 
-#: src/msg.c:81
+#: src/msg.c:80
 msgid "Go"
 msgstr "Отиване"
 
-#: src/msg.c:82
+#: src/msg.c:81
 msgid "_Refresh"
 msgstr "_Актуализиране"
 
-#: src/msg.c:83
+#: src/msg.c:82
 msgid "Re_gister"
 msgstr "_Регистриране"
 
-#: src/msg.c:84 src/msg.c:222
+#: src/msg.c:83 src/msg.c:221
 msgid "_Join"
 msgstr "_Влизане"
 
-#: src/msg.c:85
+#: src/msg.c:84
 msgid "Register to"
 msgstr "Регистриране към"
 
-#: src/msg.c:86
+#: src/msg.c:85
 msgid "_Cancel"
 msgstr "_Отказ"
 
-#: src/msg.c:87
+#: src/msg.c:86
 msgid "_OK"
 msgstr "_Да"
 
-#: src/msg.c:88
+#: src/msg.c:87
 msgid "Preferences"
 msgstr "Настройки"
 
-#: src/msg.c:89
+#: src/msg.c:88
 msgid "If checked, Gajim will also have a trayicon"
 msgstr "Ако е избрано, Gajim ще има и икона в областта за уведомяване"
 
-#: src/msg.c:90
+#: src/msg.c:89
 msgid "_Icon in systray (aka. notification area)"
 msgstr "_Икона в областта за уведомяване"
 
-#: src/msg.c:91
+#: src/msg.c:90
 msgid ""
 "If checked, Gajim will remember the roster window position in the screen and "
 "the size of it next time you run it"
@@ -1075,11 +1079,11 @@ msgstr ""
 "Ако е избрано, ще се запомни размера на списъка и позицията му на екрана за "
 "следващото стартиране на програмата"
 
-#: src/msg.c:92
+#: src/msg.c:91
 msgid "Save roster _position and size"
 msgstr "Запазване на по_зицията и размера на списъка"
 
-#: src/msg.c:93
+#: src/msg.c:92
 msgid ""
 "If you have 2 or more accounts and this is checked, Gajim will list all "
 "contacts as if you had one account"
@@ -1087,15 +1091,15 @@ msgstr ""
 "Ако имате 2 или повече акаунта и тази опция е избрана, Gajim ще изобразява "
 "всички контакти като от един акаунт"
 
-#: src/msg.c:94
+#: src/msg.c:93
 msgid "_Merge accounts"
 msgstr "_Смесване на акаунти"
 
-#: src/msg.c:95
+#: src/msg.c:94
 msgid "Sort contacts by status"
 msgstr "Подреждане на контактите по състояние"
 
-#: src/msg.c:96
+#: src/msg.c:95
 msgid ""
 "If checked, Gajim will replace ascii smilies like ':)' with equivalent "
 "graphical emoticons"
@@ -1103,19 +1107,19 @@ msgstr ""
 "Ако е избрано, усмивките в ASCII като \":)\" ще се изобразяват със "
 "съответните графични емотикони"
 
-#: src/msg.c:97
+#: src/msg.c:96
 msgid "Use _emoticons"
 msgstr "Използване на _емотикони"
 
-#: src/msg.c:98
+#: src/msg.c:97
 msgid "Add/Remove Emoticons..."
 msgstr "Добавяне/премахване на емотикони..."
 
-#: src/msg.c:99
+#: src/msg.c:98
 msgid "Default _status iconset:"
 msgstr "Стандартен _набор икони за състояние:"
 
-#: src/msg.c:100
+#: src/msg.c:99
 msgid ""
 "If checked, Gajim will use protocol-specific status icons. (eg. A contact "
 "from MSN will have the equivalent msn icon for status online, away, busy, "
@@ -1125,109 +1129,109 @@ msgstr ""
 "е. контакт от MSN ще има еквивалентната за MSN икона за състоянията \"На "
 "линия\", \"Отсъства\", \"Зает\" и т.н.)."
 
-#: src/msg.c:101
+#: src/msg.c:100
 msgid "Use _transports iconsets"
 msgstr "Използване на _набор икони на транспортите"
 
-#: src/msg.c:102
+#: src/msg.c:101
 msgid "Roster theme:"
 msgstr "Тема на списъка:"
 
-#: src/msg.c:103
+#: src/msg.c:102
 msgid "Account:"
 msgstr "Акаунт:"
 
-#: src/msg.c:105
+#: src/msg.c:104
 msgid "User:"
 msgstr "Потребител:"
 
-#: src/msg.c:106
+#: src/msg.c:105
 msgid "Text color"
 msgstr "Цвят на текста"
 
-#: src/msg.c:107
+#: src/msg.c:106
 msgid "Text font"
 msgstr "Шрифт на текста"
 
-#: src/msg.c:108
+#: src/msg.c:107
 msgid "Background color"
 msgstr "Цвят на фона"
 
-#: src/msg.c:110
+#: src/msg.c:109
 msgid "Use a single chat window with _tabs"
 msgstr "Използване на един прозорец за разговор със _страници"
 
-#: src/msg.c:111
+#: src/msg.c:110
 msgid "_Highlight misspelled words"
 msgstr "_Осветяване на неправилно изписаните думи"
 
-#: src/msg.c:112
+#: src/msg.c:111
 msgid "Print time:"
 msgstr "Изписване на времето:"
 
-#: src/msg.c:113
+#: src/msg.c:112
 msgid "On every _line"
 msgstr "На _всеки ред"
 
-#: src/msg.c:114
+#: src/msg.c:113
 msgid "Every 5 _minutes"
 msgstr "Всеки 5 _минути"
 
-#: src/msg.c:115
+#: src/msg.c:114
 msgid "_Never"
 msgstr "_Никога"
 
-#: src/msg.c:116
+#: src/msg.c:115
 msgid "After time:"
 msgstr "След времето:"
 
-#: src/msg.c:117
+#: src/msg.c:116
 msgid "After nickname:"
 msgstr "След псевдонима:"
 
-#: src/msg.c:118
+#: src/msg.c:117
 msgid "Before nickname:"
 msgstr "Преди псевдонима:"
 
-#: src/msg.c:119
+#: src/msg.c:118
 msgid "Before time:"
 msgstr "Преди времето:"
 
-#: src/msg.c:120
+#: src/msg.c:119
 msgid "Incoming message:"
 msgstr "Входящо съобщение:"
 
-#: src/msg.c:121
+#: src/msg.c:120
 msgid "Outgoing message:"
 msgstr "Изходящо съобщение:"
 
-#: src/msg.c:122
+#: src/msg.c:121
 msgid "Status message:"
 msgstr "Съобщение за състояние:"
 
-#: src/msg.c:123
+#: src/msg.c:122
 msgid "Reset to Default Colors"
 msgstr "Възстановяване на стандартните цветове"
 
-#: src/msg.c:124
+#: src/msg.c:123
 msgid "<b>Format of a chat line</b>"
 msgstr "<b>Формат на реда в разговор</b>"
 
-#: src/msg.c:125 src/msg.c:228
+#: src/msg.c:124 src/msg.c:227
 msgid "Chat"
 msgstr "Разговор"
 
-#: src/msg.c:126
+#: src/msg.c:125
 msgid ""
 "Gajim will notify you for new message via a popup in the bottom right of the "
 "screen"
 msgstr "Ще се появява съобщение за уведомяване в долния десен ъгъл на екрана"
 
-#: src/msg.c:127
+#: src/msg.c:126
 msgid "_Notify me about it"
 msgstr "_Уведомяване"
 
-#: src/msg.c:128
+#: src/msg.c:127
 msgid ""
 "Gajim will automatically show the new received message in a new chat window "
 "or tab in an existing chat window"
@@ -1235,28 +1239,28 @@ msgstr ""
 "Автоматично ще се показва новото съобщение в нов прозорец за разговор или "
 "страница в съществуващ прозорец"
 
-#: src/msg.c:129
+#: src/msg.c:128
 msgid "_Pop it up"
 msgstr "_Показване"
 
-#: src/msg.c:130
+#: src/msg.c:129
 msgid ""
 "Gajim will only change the icon of the contact that sent the new message"
 msgstr "Само ще се променя иконата на контакта, който е изпратил съобщението"
 
-#: src/msg.c:131
+#: src/msg.c:130
 msgid "Show only in _roster"
 msgstr "Показване само в спис_ъка"
 
-#: src/msg.c:132
+#: src/msg.c:131
 msgid "When new chat message is received"
 msgstr "При получаване на ново съобщение"
 
-#: src/msg.c:133
+#: src/msg.c:132
 msgid "Notify me about contacts that: "
 msgstr "Уведомяване за контакти при: "
 
-#: src/msg.c:134
+#: src/msg.c:133
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed in"
@@ -1264,11 +1268,11 @@ msgstr ""
 "Ще се появява съобщение за уведомяване в долния десен ъгъл на екрана при "
 "свързване на контакти"
 
-#: src/msg.c:135
+#: src/msg.c:134
 msgid "Sign _in"
 msgstr "_Свързване"
 
-#: src/msg.c:136
+#: src/msg.c:135
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed out"
@@ -1276,21 +1280,21 @@ msgstr ""
 "Ще се появява съобщение за уведомяване в долния десен ъгъл на екрана при "
 "изключване на контакти"
 
-#: src/msg.c:137
+#: src/msg.c:136
 msgid "Sign _out"
 msgstr "_Изключване"
 
-#: src/msg.c:138
+#: src/msg.c:137
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
 "Позволяване на прозорци/уведомления при Отсъствам/Не съм на разположение/"
 "Зает/Невидим"
 
-#: src/msg.c:139
+#: src/msg.c:138
 msgid "<b>Notifications</b>"
 msgstr "<b>Уведомяване</b>"
 
-#: src/msg.c:140
+#: src/msg.c:139
 msgid ""
 "Check this option, only if someone you don't have in the roster spams/annoys "
 "you. Use with caution, cause it blocks all messages from any contact that is "
@@ -1300,347 +1304,347 @@ msgstr ""
 "дразни. Използвайте я внимателно, тъй като блокира всички съобщения от всеки "
 "контакт, който не е в списъка."
 
-#: src/msg.c:141
+#: src/msg.c:140
 msgid "_Ignore events from contacts not in the roster"
 msgstr "Прене_брегване на събития от контакти, които не са в списъка"
 
-#: src/msg.c:142
+#: src/msg.c:141
 msgid "Play _sounds"
 msgstr "Изпълнение на _звуци"
 
-#: src/msg.c:143
+#: src/msg.c:142
 msgid "_Player:"
 msgstr "_Плейър:"
 
-#: src/msg.c:144
+#: src/msg.c:143
 msgid "..."
 msgstr "..."
 
-#: src/msg.c:145
+#: src/msg.c:144
 msgid "<b>Sounds</b>"
 msgstr "<b>Звуци</b>"
 
-#: src/msg.c:146
+#: src/msg.c:145
 msgid "Events"
 msgstr "Събития"
 
-#: src/msg.c:147
+#: src/msg.c:146
 msgid "Auto _away after:"
 msgstr "Автоматично \"_Отсъствам\" след:"
 
-#: src/msg.c:148
+#: src/msg.c:147
 msgid "Auto _not available after:"
 msgstr "Автоматично \"_Не съм на разположение\" след:"
 
-#: src/msg.c:149 src/msg.c:150
+#: src/msg.c:148 src/msg.c:149
 msgid "minutes"
 msgstr "минути"
 
-#: src/msg.c:151
+#: src/msg.c:150
 msgid "Ask status message when going: "
 msgstr "Питане за съобщение за състояние при преминаване в режим: "
 
-#: src/msg.c:152
+#: src/msg.c:151
 msgid "_Online"
 msgstr "_Свързан"
 
-#: src/msg.c:153
+#: src/msg.c:152
 msgid "Of_fline"
 msgstr "_Изключен"
 
-#: src/msg.c:154
+#: src/msg.c:153
 msgid "<b>Preset Status Messages</b>"
 msgstr "<b>Настроени съобщения за състояние</b>"
 
-#: src/msg.c:156
+#: src/msg.c:155
 msgid "Open _with:"
 msgstr "От_варяне с:"
 
-#: src/msg.c:157
+#: src/msg.c:156
 msgid "GNOME default applications"
 msgstr "Стандартни програми на GNOME"
 
-#: src/msg.c:158
+#: src/msg.c:157
 msgid "KDE default applications"
 msgstr "Стандартни програми на KDE"
 
-#: src/msg.c:159
+#: src/msg.c:158
 msgid "Custom"
 msgstr "Други програми"
 
-#: src/msg.c:160
+#: src/msg.c:159
 msgid "_Browser:"
 msgstr "_Браузър:"
 
-#: src/msg.c:161
+#: src/msg.c:160
 msgid "_Mail client:"
 msgstr "_Пощенска програма:"
 
-#: src/msg.c:162
+#: src/msg.c:161
 msgid "<b>Custom Applications</b>"
 msgstr "<b>Други програми</b>"
 
-#: src/msg.c:163
+#: src/msg.c:162
 msgid "<b>Links</b>"
 msgstr "<b>Връзки</b>"
 
-#: src/msg.c:164
+#: src/msg.c:163
 msgid "Log presences in _contact's log file"
 msgstr "Запазване на състоянията в дневника на _контакта"
 
-#: src/msg.c:165
+#: src/msg.c:164
 msgid "Log presences in an _external file"
 msgstr "Запазване на състоянията във външен _файл"
 
-#: src/msg.c:166
+#: src/msg.c:165
 msgid "<b>Log</b>"
 msgstr "<b>Дневник</b>"
 
-#: src/msg.c:167
+#: src/msg.c:166
 msgid "Allow _OS information to be sent"
 msgstr "Позволяване изпращането на информация за _ОС"
 
-#: src/msg.c:168
+#: src/msg.c:167
 msgid "Check for new _version at startup"
 msgstr "Проверка за нова в_ерсия при стартиране"
 
-#: src/msg.c:169
+#: src/msg.c:168
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Разни</b>"
 
-#: src/msg.c:170
+#: src/msg.c:169
 msgid "Open..."
 msgstr "Отваряне..."
 
-#: src/msg.c:171
+#: src/msg.c:170
 msgid "<b>Advanced Configuration Editor</b>"
 msgstr "<b>Редактор на настройките за напреднали</b>"
 
-#: src/msg.c:172
+#: src/msg.c:171
 msgid "Advanced"
 msgstr "Напреднали"
 
-#: src/msg.c:173
+#: src/msg.c:172
 msgid "Contact Information"
 msgstr "Данни за контакта"
 
-#: src/msg.c:175
+#: src/msg.c:174
 msgid "Status:"
 msgstr "Състояние:"
 
-#: src/msg.c:177
+#: src/msg.c:176
 msgid "Resource:"
 msgstr "Ресурс:"
 
-#: src/msg.c:178
+#: src/msg.c:177
 msgid "Subscription:"
 msgstr "Записване:"
 
-#: src/msg.c:179
+#: src/msg.c:178
 msgid "Ask:"
 msgstr "Питане за:"
 
-#: src/msg.c:180
+#: src/msg.c:179
 msgid "Client:"
 msgstr "Клиент:"
 
-#: src/msg.c:181
+#: src/msg.c:180
 msgid "Log history"
 msgstr "Запазване на разговорите"
 
-#: src/msg.c:182
+#: src/msg.c:181
 msgid "OS:"
 msgstr "ОС:"
 
-#: src/msg.c:183
+#: src/msg.c:182
 msgid "Jabber"
 msgstr "Jabber"
 
-#: src/msg.c:184
+#: src/msg.c:183
 msgid "Name:"
 msgstr "Име:"
 
-#: src/msg.c:186
+#: src/msg.c:185
 msgid "Birthday:"
 msgstr "Рожден ден:"
 
-#: src/msg.c:187
+#: src/msg.c:186
 msgid "E-Mail:"
 msgstr "Е-поща:"
 
-#: src/msg.c:188
+#: src/msg.c:187
 msgid "Homepage:"
 msgstr "Уеб страница:"
 
-#: src/msg.c:189
+#: src/msg.c:188
 msgid "Phone No.:"
 msgstr "Телефон:"
 
-#: src/msg.c:191
+#: src/msg.c:190
 msgid "Street:"
 msgstr "Улица:"
 
-#: src/msg.c:192
+#: src/msg.c:191
 msgid "Extra Address:"
 msgstr "Допълнителен адрес:"
 
-#: src/msg.c:193
+#: src/msg.c:192
 msgid "City:"
 msgstr "Град:"
 
-#: src/msg.c:194
+#: src/msg.c:193
 msgid "State:"
 msgstr "Щат:"
 
-#: src/msg.c:195
+#: src/msg.c:194
 msgid "Postal Code:"
 msgstr "Пощенски код:"
 
-#: src/msg.c:196
+#: src/msg.c:195
 msgid "Country:"
 msgstr "Държава:"
 
-#: src/msg.c:197
+#: src/msg.c:196
 msgid "Location"
 msgstr "Местонахождение"
 
-#: src/msg.c:198
+#: src/msg.c:197
 msgid "Company:"
 msgstr "Компания:"
 
-#: src/msg.c:199
+#: src/msg.c:198
 msgid "Department:"
 msgstr "Отдел:"
 
-#: src/msg.c:200
+#: src/msg.c:199
 msgid "Position:"
 msgstr "Длъжност:"
 
-#: src/msg.c:201
+#: src/msg.c:200
 msgid "Role:"
 msgstr "Роля:"
 
-#: src/msg.c:202
+#: src/msg.c:201
 msgid "Work"
 msgstr "Работа"
 
-#: src/msg.c:203
+#: src/msg.c:202
 msgid "About"
 msgstr "Относно"
 
-#: src/msg.c:204
+#: src/msg.c:203
 msgid "Conversation History"
 msgstr "История на разговорите"
 
-#: src/msg.c:205
+#: src/msg.c:204
 msgid "_Earliest"
 msgstr "_Най-стара"
 
-#: src/msg.c:206
+#: src/msg.c:205
 msgid "_Previous"
 msgstr "_Предишна"
 
-#: src/msg.c:207
+#: src/msg.c:206
 msgid "_Latest"
 msgstr "По_следна"
 
-#: src/msg.c:208
+#: src/msg.c:207
 msgid "Groupchat"
 msgstr "Стая"
 
-#: src/msg.c:210
+#: src/msg.c:209
 msgid "Click to change the subject of the room"
 msgstr "Натиснете, за да промените темата на стаята"
 
-#: src/msg.c:211
+#: src/msg.c:210
 msgid "Change _Subject"
 msgstr "Промяна на _темата"
 
-#: src/msg.c:212
+#: src/msg.c:211
 msgid "Click to configure the room options"
 msgstr "Натиснете, за да конфигурирате стаята"
 
-#: src/msg.c:213
+#: src/msg.c:212
 msgid "Configure _Room"
 msgstr "Настройки на _стаята"
 
-#: src/msg.c:214
+#: src/msg.c:213
 msgid "Close _Window"
 msgstr "Затваряне на _прозореца"
 
-#: src/msg.c:215
+#: src/msg.c:214
 msgid "Subject:"
 msgstr "Тема:"
 
-#: src/msg.c:217
+#: src/msg.c:216
 msgid "Password:"
 msgstr "Парола:"
 
-#: src/msg.c:218
+#: src/msg.c:217
 msgid "Server:"
 msgstr "Сървър:"
 
-#: src/msg.c:219
+#: src/msg.c:218
 msgid "Room:"
 msgstr "Стая:"
 
-#: src/msg.c:221
+#: src/msg.c:220
 msgid "Recently:"
 msgstr "Скоро посетени:"
 
-#: src/msg.c:223 src/msg.c:224
+#: src/msg.c:222 src/msg.c:223
 msgid "Passphrase"
 msgstr "Парола"
 
-#: src/msg.c:225
+#: src/msg.c:224
 msgid "<b>Choose your OpenPGP key</b>"
 msgstr "<b>Изберете вашия OpenPGP ключ</b>"
 
-#: src/msg.c:226
+#: src/msg.c:225
 msgid "Enter your message:"
 msgstr "Въведете съобщение за състояние:"
 
-#: src/msg.c:227
+#: src/msg.c:226
 msgid "Or choose a preset message:"
 msgstr "Или изберете настроено съобщение:"
 
-#: src/msg.c:229
+#: src/msg.c:228
 msgid "Click to see past conversations with this contact"
 msgstr "Натиснете, за да видите стари разговори с този контакт"
 
-#: src/msg.c:230
+#: src/msg.c:229
 msgid "_History"
 msgstr "_История"
 
-#: src/msg.c:231
+#: src/msg.c:230
 msgid "Click to clear conversation (won't delete it from history)"
 msgstr "Натиснете, за да изчистите разговора (няма да се изтрие от историята)"
 
-#: src/msg.c:232
+#: src/msg.c:231
 msgid "Click for contact's extented information"
 msgstr "Натиснете за допълнителна информация за контакта"
 
-#: src/msg.c:233
+#: src/msg.c:232
 msgid "Anonymous <nick@server/res>"
 msgstr "Анонимен <nick@server/res>"
 
-#: src/msg.c:235
+#: src/msg.c:234
 msgid "Change Password"
 msgstr "Промяна на парола"
 
-#: src/msg.c:236
+#: src/msg.c:235
 msgid "Enter new password:"
 msgstr "Въведете нова парола:"
 
-#: src/msg.c:237
+#: src/msg.c:236
 msgid "Enter it again for confirmation:"
 msgstr "Въведете я отново за потвърждение:"
 
-#: src/msg.c:238
+#: src/msg.c:237
 msgid "_Chat"
 msgstr "_Разговор"
 
-#: src/msg.c:239
+#: src/msg.c:238
 msgid ""
 "Enter the user ID of the contact you would like to\n"
 "send a chat message to"
@@ -1648,75 +1652,75 @@ msgstr ""
 "Въведете идентификатора на контакта, до който\n"
 "искате да изпратите съобщение"
 
-#: src/msg.c:249
+#: src/msg.c:248
 msgid "Chat with"
 msgstr "Разговор с"
 
-#: src/msg.c:251
+#: src/msg.c:250
 msgid "Add/Remove Emoticons"
 msgstr "Добавяне/премахване на емотикони"
 
-#: src/msg.c:252
+#: src/msg.c:251
 msgid "Set Image"
 msgstr "Избор на изображение"
 
-#: src/msg.c:253
+#: src/msg.c:252
 msgid "New version of Gajim available"
 msgstr "Има нова версия на Gajim"
 
-#: src/msg.c:254
+#: src/msg.c:253
 msgid "Open Download Page"
 msgstr "Отваряне на страницата за изтегляне"
 
-#: src/msg.c:255
+#: src/msg.c:254
 msgid "<b>Changes in latest version</b>"
 msgstr "<b>Промени в последната версия</b>"
 
-#: src/msg.c:256
+#: src/msg.c:255
 msgid "Room Configuration"
 msgstr "Настройки на стаята"
 
-#: src/msg.c:258
+#: src/msg.c:257
 msgid "Remove account only from Gajim"
 msgstr "Премахване на акаунт само от Gajim"
 
-#: src/msg.c:259
+#: src/msg.c:258
 msgid "Remove account from Gajim and from server"
 msgstr "Премахване на акаунт от Gajim и от сървъра"
 
-#: src/msg.c:260
+#: src/msg.c:259
 msgid "<b>What do you want to do?</b>"
 msgstr "<b>Какво искате да направите?</b>"
 
-#: src/msg.c:262
+#: src/msg.c:261
 msgid "Advanced Configuration Editor"
 msgstr "Редактор на настройки за напреднали"
 
-#: src/msg.c:263
+#: src/msg.c:262
 msgid "Filter:"
 msgstr "Филтър:"
 
-#: src/msg.c:264
+#: src/msg.c:263
 msgid "_Copy Link Location"
 msgstr "_Копиране на адреса на връзката"
 
-#: src/msg.c:265
+#: src/msg.c:264
 msgid "_Open Link in Browser"
 msgstr "_Отваряне на връзката в браузър"
 
-#: src/msg.c:266
+#: src/msg.c:265
 msgid "_Copy Email Address"
 msgstr "_Копиране на адреса"
 
-#: src/msg.c:267
+#: src/msg.c:266
 msgid "_Open Email Composer"
 msgstr "_Отваряне на пощенската програма"
 
-#: src/msg.c:268
+#: src/msg.c:267
 msgid "Gajim: First Time Wizard"
 msgstr "Gajim: Помощник при първоначално стартиране"
 
-#: src/msg.c:269
+#: src/msg.c:268
 msgid ""
 "You need to have an account in order to connect to\n"
 "the Jabber network."
@@ -1724,53 +1728,55 @@ msgstr ""
 "Трябва да създадете акаунт, за да се свържете с\n"
 "Jabber сървър."
 
-#: src/msg.c:271
+#: src/msg.c:270
 msgid "I already have an account I want to use"
 msgstr "Вече има регистриран акаунт"
 
-#: src/msg.c:272
+#: src/msg.c:271
 msgid "I want to _register for a new account"
 msgstr "Искате да _регистрирате нов Jabber акаунт"
 
-#: src/msg.c:273
+#: src/msg.c:272
 msgid "<b>Please choose on of the options below:</b>"
 msgstr "<b>Изберете една от опциите по-долу:</b>"
 
-#: src/msg.c:274
+#: src/msg.c:273
 msgid "Please fill in the data for your existing account"
 msgstr "Попълнете данните за съществуващия акаунт"
 
-#: src/msg.c:275 src/msg.c:289
+#: src/msg.c:274 src/msg.c:287
 msgid "_Server:"
 msgstr "С_ървър:"
 
-#: src/msg.c:279 src/msg.c:295
+#: src/msg.c:278 src/msg.c:293
 msgid "_Nickname:"
 msgstr "Псе_вдоним:"
 
-#: src/msg.c:286 src/msg.c:297
+#: src/msg.c:284
 msgid "<span background=\"lightyellow\"></span>"
 msgstr "<span background=\"светложълто\"></span>"
 
-#: src/msg.c:287 src/msg.c:296
+#: src/msg.c:285 src/msg.c:294
 msgid "Your JID:"
 msgstr "Вашия JID:"
 
-#: src/msg.c:288
+#: src/msg.c:286
 msgid "Please fill in the data for your new account"
 msgstr "Попълнете данните за нов акаунт"
 
-#: src/msg.c:290
+#: src/msg.c:288
 msgid "Click to see features like on jabber servers"
 msgstr "Натиснете, за да видите функционалностите на Jabber сървърите"
 
-#: src/msg.c:291
+#: src/msg.c:289
 msgid "Servers Features"
 msgstr "Функционалности на сървърите"
 
-#: src/msg.c:304
-msgid "label286"
-msgstr "label286"
+#~ msgid "3128"
+#~ msgstr "3128"
+
+#~ msgid "label286"
+#~ msgstr "label286"
 
 #~ msgid "_Copy Link Address"
 #~ msgstr "_Копиране на адреса на връзката"

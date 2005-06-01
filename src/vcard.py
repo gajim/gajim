@@ -212,14 +212,14 @@ class Vcard_window:
 		#publish button
 		button = gtk.Button(stock = gtk.STOCK_GOTO_TOP)
 		button.get_children()[0].get_children()[0].get_children()[1].set_text(
-			'Publish')
+			_('Publish'))
 		button.connect('clicked', self.on_publish_button_clicked)
 		button.show_all()
 		information_hbuttonbox.pack_start(button)
 		#retrieve button
 		button = gtk.Button(stock = gtk.STOCK_GOTO_BOTTOM)
 		button.get_children()[0].get_children()[0].get_children()[1].set_text(
-			'Retrieve')
+			_('Retrieve'))
 		button.connect('clicked', self.on_retrieve_button_clicked)
 		button.show_all()
 		information_hbuttonbox.pack_start(button)
