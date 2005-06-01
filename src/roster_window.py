@@ -1393,6 +1393,10 @@ class Roster_window:
 				return 1
 			if name2 == 'Transports':
 				return -1
+			if name1 == 'not in the roster':
+				return 1
+			if name2 == 'not in the roster':
+				return -1
 		if type1 == 'user' and type2 == 'user' and \
 				gajim.config.get('sort_by_show'):
 			account = model.get_value(iter1, 4)
