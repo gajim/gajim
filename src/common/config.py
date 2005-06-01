@@ -342,10 +342,4 @@ class Config:
 			self.add_per('soundevents', event)
 			self.set_per('soundevents', event, 'enable', default[0])
 			self.set_per('soundevents', event, 'path', default[1])
-		for emot in self.emoticons_default:
-			self.add_per('emoticons', emot)
-			self.set_per('emoticons', emot, 'path', self.emoticons_default[emot])
-		for msg in self.statusmsg_default:
-			self.add_per('statusmsg', msg)
-			self.set_per('statusmsg', msg, 'message', self.statusmsg_default[msg])
 		return
