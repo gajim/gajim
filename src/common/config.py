@@ -119,7 +119,6 @@ class Config:
 			'keyid': [ opt_str, '' ],
 			'keyname': [ opt_str, '' ],
 			'usessl': [ opt_bool, False ],
-			'force_nonSASL': [ opt_bool, False ],
 			'savegpgpass': [ opt_bool, False ],
 			'gpgpassword': [ opt_str, '' ],
 			'sync_with_global_status': [ opt_bool, True ],

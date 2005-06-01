@@ -584,8 +584,7 @@ class Connection:
 
 		try:
 			#FIXME: blocking
-			auth = con.auth(name, self.password, resource, 1) #FIXME: non SASL doesn't work currently
-#				not gajim.config.get_per('accounts', self.name, 'force_nonSASL'))
+			auth = con.auth(name, self.password, resource, 1)
 		except IOError: #probably a timeout
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
