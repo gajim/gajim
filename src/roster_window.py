@@ -1403,8 +1403,16 @@ class Roster_window:
 				luser2 = self.contacts[account][jid2]
 				cshow = {'online':0, 'chat': 1, 'away':2, 'xa':3, 'dnd':4,
 					'invisible':5, 'offline':6, 'not in the roster':7, 'error':8}
-				show1 = cshow[self.get_show(luser1)]
-				show2 = cshow[self.get_show(luser2)]
+				s = self.get_show(luser1)
+				if s in cshow:
+					show1 = cshow[s]
+				else:
+					show1 = 9
+				s = self.get_show(luser2)
+				if s in cshow:
+					show2 = cshow[s]
+				else:
+					show2 = 9
 				if show1 < show2:
 					return -1
 				elif show1 > show2:
