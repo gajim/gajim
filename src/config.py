@@ -816,7 +816,7 @@ class Preferences_window:
 	def on_msg_treemodel_row_changed(self, model, path, iter):
 		self.save_status_messages(model)
 
-	def on_msg_treemodel_row_deleted(self, model, path, iter):
+	def on_msg_treemodel_row_deleted(self, model, path):
 		self.save_status_messages(model)
 
 	def on_links_open_with_combobox_changed(self, widget):
