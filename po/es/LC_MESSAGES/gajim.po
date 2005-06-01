@@ -42,6 +42,12 @@ msgid ""
 "\n"
 "Highlighting misspelled words will not be used"
 msgstr ""
+"Si este no es el idioma para el quieres resaltar las palabras mal escritas "
+"debes definir la variable $LANG con el valor apropiado. P. ej, para el Francés "
+"haz export LANG=fr_FR o export LANG=fr_FR.UTF-8 en ~/.bash_profile o hazlo "
+"globalmente en /etc/profile.\n"
+"\n"
+"El resalto de palabras mal escritas no será usado"
 
 #: src/config.py:279
 msgid "Active"
@@ -437,7 +443,7 @@ msgstr "Editar grupos"
 
 #: src/roster_window.py:523
 msgid "Assign OpenPGP key"
-msgstr ""
+msgstr "Asignar clave OpenPGP"
 
 #: src/roster_window.py:528
 msgid "Subscription"
@@ -634,7 +640,7 @@ msgstr "Estoy durmiendo la siesta"
 
 #: src/common/config.py:204
 msgid "Brb"
-msgstr ""
+msgstr "Vuelvo enseguida"
 
 #: src/common/config.py:204
 msgid "Back in some minutes."
@@ -711,11 +717,11 @@ msgstr "Conexión"
 
 #: src/common/helpers.py:43
 msgid "Not in the roster"
-msgstr ""
+msgstr "No está en el roster"
 
 #: src/common/helpers.py:45
 msgid "Has errors"
-msgstr ""
+msgstr "Tiene errores"
 
 #: src/msg.c:7 src/msg.c:30
 msgid "Gajim"
@@ -868,6 +874,9 @@ msgid ""
 "expected to have SSL capabilities. Note that Gajim use TLS encryption by "
 "default if broadcasted by the server, and with this option on you disable TLS"
 msgstr ""
+"Marcando esta opcón, Gajim conectará al puerto 5223 cuando un servidor "
+"viejo use SSL. Observa que Gajim usa encripatdo TLS por defecto si está"
+"disponible en el servidor, y que con esta opción se desactiva el TLS"
 
 #: src/msg.c:44
 #, fuzzy
@@ -1090,7 +1099,7 @@ msgstr "_Combinar las cuentas"
 
 #: src/msg.c:95
 msgid "Sort contacts by status"
-msgstr ""
+msgstr "Ordenar contactos por estado"
 
 #: src/msg.c:96
 msgid ""
@@ -1119,6 +1128,9 @@ msgid ""
 "from MSN will have the equivalent msn icon for status online, away, busy, "
 "etc...)"
 msgstr ""
+"Si está marcado, Gajim usará iconos específicos para el protocolo- (p. ej. un "
+"contacto de MSN tendrá el icono de msn equivalente para su estado en línea, ausente, "
+"ocupado, etc...)"
 
 #: src/msg.c:101
 #, fuzzy
@@ -1155,7 +1167,7 @@ msgstr "Usar una sola ventana de conversación con pestañas"
 
 #: src/msg.c:111
 msgid "_Highlight misspelled words"
-msgstr ""
+msgstr "_Resaltar errores ortográficos"
 
 #: src/msg.c:112
 msgid "Print time:"
@@ -1700,7 +1712,7 @@ msgstr "Filtro:"
 
 #: src/msg.c:264
 msgid "_Copy Link Location"
-msgstr ""
+msgstr "_Copiar la dirección del enlace"
 
 #: src/msg.c:265
 #, fuzzy
@@ -1717,7 +1729,7 @@ msgstr "_Abrir el compositor de correo"
 
 #: src/msg.c:268
 msgid "Gajim: First Time Wizard"
-msgstr ""
+msgstr "Gajim: Asistente para la primera vez"
 
 #: src/msg.c:269
 #, fuzzy
@@ -1728,7 +1740,7 @@ msgstr "Debes crear una cuenta antes de conectar a la red Jabber"
 
 #: src/msg.c:271
 msgid "I already have an account I want to use"
-msgstr ""
+msgstr "Ya tengo una cuenta y quiero usarla"
 
 #: src/msg.c:272
 #, fuzzy
@@ -1737,11 +1749,11 @@ msgstr "Comprueba si quieres registrar una nueva cuenta de Jabber"
 
 #: src/msg.c:273
 msgid "<b>Please choose on of the options below:</b>"
-msgstr ""
+msgstr "<b>Por favor, elige en las opciones de abajo:</b>"
 
 #: src/msg.c:274
 msgid "Please fill in the data for your existing account"
-msgstr ""
+msgstr "Por favor, introduce los datos de tu cuenta actual"
 
 #: src/msg.c:275 src/msg.c:289
 #, fuzzy
@@ -1755,23 +1767,23 @@ msgstr "Alias:"
 
 #: src/msg.c:286 src/msg.c:297
 msgid "<span background=\"lightyellow\"></span>"
-msgstr ""
+msgstr "<span background=\"lightyellow\"></span>"
 
 #: src/msg.c:287 src/msg.c:296
 msgid "Your JID:"
-msgstr ""
+msgstr "Tu JID"
 
 #: src/msg.c:288
 msgid "Please fill in the data for your new account"
-msgstr ""
+msgstr "Por favor, introduce los datos para tu nueva cuenta"
 
 #: src/msg.c:290
 msgid "Click to see features like on jabber servers"
-msgstr ""
+msgstr "Click para ver características de los servidores de Jabber"
 
 #: src/msg.c:291
 msgid "Servers Features"
-msgstr ""
+msgstr "Características de los servidores"
 
 #: src/msg.c:304
 msgid "label286"
