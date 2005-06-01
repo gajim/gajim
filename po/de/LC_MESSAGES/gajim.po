@@ -244,7 +244,7 @@ msgstr "Ein GTK Jabber-Client"
 
 #: src/dialogs.py:387
 msgid "translator_credits"
-msgstr ""
+msgstr "Ins Deutsche übersetzt von Christoph Neuroth"
 
 #: src/dialogs.py:461
 #, python-format
@@ -640,11 +640,11 @@ msgstr "Sie müssen angemeldet sein, um Kontakt-Informationen abzurufen"
 
 #: src/vcard.py:215
 msgid "Publish"
-msgstr ""
+msgstr "Veröffentlichen"
 
 #: src/vcard.py:222
 msgid "Retrieve"
-msgstr ""
+msgstr "Abrufen"
 
 #: src/common/config.py:202
 msgid "Nap"
@@ -1782,11 +1782,8 @@ msgstr "Bitte füllen Sie die Daten für Ihr neues Konto aus"
 
 #: src/msg.c:288
 msgid "Click to see features like on jabber servers"
-msgstr ""
+msgstr "Klicken, um die Fähigkeiten auf Jabber-Servern zu sehen."
 
 #: src/msg.c:289
 msgid "Servers Features"
 msgstr "Fähigkeiten des Servers"
-
-#~ msgid "label286"
-#~ msgstr "."

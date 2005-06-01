@@ -633,11 +633,11 @@ msgstr "Vous devez être connecté pour récupérer vos informations"
 
 #: src/vcard.py:215
 msgid "Publish"
-msgstr ""
+msgstr "Publier"
 
 #: src/vcard.py:222
 msgid "Retrieve"
-msgstr ""
+msgstr "Récupérer"
 
 #: src/common/config.py:202
 msgid "Nap"
@@ -1785,9 +1785,3 @@ msgstr "Cliquez pour voir les fonctionnalités du serveur jabber"
 #: src/msg.c:289
 msgid "Servers Features"
 msgstr "Fonctionalités des Serveurs"
-
-#~ msgid "3128"
-#~ msgstr "3128"
-
-#~ msgid "label286"
-#~ msgstr "label286"
