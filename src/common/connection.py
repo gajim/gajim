@@ -632,7 +632,7 @@ class Connection:
 		if keyID and USE_GPG:
 			if not msg:
 				lowered_uf_status_msg = helpers.get_uf_show(show).lower()
-				msg = "I'm %s" % lowered_uf_status_msg
+				msg = _("I'm %s") % lowered_uf_status_msg
 			signed = self.gpg.sign(msg, keyID)
 			if signed == 'BAD_PASSPHRASE':
 				signed = ''

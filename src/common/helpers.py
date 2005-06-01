@@ -43,4 +43,4 @@ def get_uf_show(show):
 		uf_show = _('Not in the roster')
 	else:
 		uf_show = _('Has errors')
-	return uf_show
+	return unicode(uf_show)
