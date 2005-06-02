@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-06-01 23:29+0200\n"
-"PO-Revision-Date: 2005-05-30 11:27+0700\n"
+"PO-Revision-Date: 2005-06-01 14:36+0700\n"
 "Last-Translator: Yakov Bezrukov <nebulam51@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -44,6 +44,13 @@ msgid ""
 "\n"
 "Highlighting misspelled words will not be used"
 msgstr ""
+"Если этот язык не является тем языком, для которого вы хотели бы видеть "
+"проверку орфографии, то установите нужное значение в переменную окружения "
+"$LANG. Например для русского: export LANG=ru_RU или expoert LANG=ru_RU.UTF-"
+"8в ~/.bash_profile, либо же, если вы хотите сделать эту установку "
+"общесистемной, то сдобасьте тоже самое в /etc/profile \n"
+"\n"
+"Выделение слов с опечатками выключено"
 
 #: src/config.py:279
 msgid "Active"
@@ -70,9 +77,8 @@ msgid "Wav Sounds"
 msgstr "В Формате Wav"
 
 #: src/config.py:1093
-#, fuzzy
 msgid "OpenPGP is not usable in this computer"
-msgstr "Невозможно использовать GPG"
+msgstr "Невозможно использовать OpenPGP"
 
 #: src/config.py:1112
 msgid "You must be offline to change the account's name"
@@ -124,9 +130,8 @@ msgid "You must be connected to edit your personal information"
 msgstr "Чтобы отредактировать личную информацию нужно подсоединиться к серверу"
 
 #: src/config.py:1306
-#, fuzzy
 msgid "Error while getting secret keys"
-msgstr "ошибка при отправке"
+msgstr "ошибка при использовании секретного ключа"
 
 #: src/config.py:1317 src/msg.c:46
 msgid "No key selected"
@@ -141,9 +146,9 @@ msgid "Server"
 msgstr "Сервер"
 
 #: src/config.py:1494
-#, fuzzy, python-format
+#, python-format
 msgid "Edit %s"
-msgstr "_Редактировать"
+msgstr "Редактировать %s"
 
 #: src/config.py:1496
 #, python-format
@@ -439,7 +444,7 @@ msgstr "Редактировать Группы"
 
 #: src/roster_window.py:523
 msgid "Assign OpenPGP key"
-msgstr ""
+msgstr "Назначить OpenPGP ключ"
 
 #: src/roster_window.py:528
 msgid "Subscription"
@@ -474,14 +479,12 @@ msgid "History"
 msgstr "История"
 
 #: src/roster_window.py:585
-#, fuzzy
 msgid "_Log on"
-msgstr "Соединиться"
+msgstr "_Соединиться"
 
 #: src/roster_window.py:592
-#, fuzzy
 msgid "Log _off"
-msgstr "Отключиться"
+msgstr "_Отключиться"
 
 #: src/roster_window.py:602 src/msg.c:16
 msgid "_Edit"
@@ -637,11 +640,11 @@ msgstr ""
 
 #: src/common/config.py:202
 msgid "Nap"
-msgstr ""
+msgstr "Задремал"
 
 #: src/common/config.py:202
 msgid "I'm taking a nap."
-msgstr ""
+msgstr "Пошел подремать"
 
 #: src/common/config.py:203
 msgid "Brb"
@@ -711,9 +714,8 @@ msgid "Free for Chat"
 msgstr "Готов Поболтать"
 
 #: src/common/helpers.py:33
-#, fuzzy
 msgid "Available"
-msgstr "Недоступен"
+msgstr "Доступен"
 
 #: src/common/helpers.py:35
 msgid "Connecting"
@@ -721,11 +723,11 @@ msgstr "Соединяюсь"
 
 #: src/common/helpers.py:43
 msgid "Not in the roster"
-msgstr ""
+msgstr "Не в ростере"
 
 #: src/common/helpers.py:45
 msgid "Has errors"
-msgstr ""
+msgstr "Есть ошибка"
 
 #: src/msg.c:7 src/msg.c:30
 msgid "Gajim"
@@ -877,16 +879,18 @@ msgid ""
 "expected to have SSL capabilities. Note that Gajim use TLS encryption by "
 "default if broadcasted by the server, and with this option on you disable TLS"
 msgstr ""
+"Если отмечено, то Gajim будет соединяться с портом 5223 на котором "
+"правильные сервераобычно ожидают подключения по SSL. Заметьте, что Gajim "
+"использует TLS шифрование по умолчаниюесли сервер использует "
+"широковещательную передачу, с этой опцией TLS отключется"
 
 #: src/msg.c:44
-#, fuzzy
 msgid "Use _SSL"
-msgstr "Использовать _TLS"
+msgstr "Использовать _SSL"
 
 #: src/msg.c:45
-#, fuzzy
 msgid "<b>SSL</b>"
-msgstr "<b>TLS</b>"
+msgstr "<b>SSL</b>"
 
 #: src/msg.c:47
 msgid "Choose _Key"
@@ -905,9 +909,8 @@ msgid "Save _passphrase (insecure)"
 msgstr "Сохранить _паротную фразу (небезопасно)"
 
 #: src/msg.c:50
-#, fuzzy
 msgid "<b>OpenPGP</b>"
-msgstr "<b>OpenGPG</b>"
+msgstr "<b>OpenPGP</b>"
 
 #: src/msg.c:51
 msgid "Security"
@@ -1089,7 +1092,7 @@ msgstr "_Объединить аккаунты"
 
 #: src/msg.c:94
 msgid "Sort contacts by status"
-msgstr ""
+msgstr "Сортировать контакты по статусу"
 
 #: src/msg.c:95
 msgid ""
@@ -1108,9 +1111,8 @@ msgid "Add/Remove Emoticons..."
 msgstr "Добавить/Удалить иконки..."
 
 #: src/msg.c:98
-#, fuzzy
 msgid "Default _status iconset:"
-msgstr "Иконуи для _статуса"
+msgstr "Иконки по умолчанию для _статуса"
 
 #: src/msg.c:99
 msgid ""
@@ -1118,11 +1120,13 @@ msgid ""
 "from MSN will have the equivalent msn icon for status online, away, busy, "
 "etc...)"
 msgstr ""
+"Если отмечено, Gajim будет использовать для каждого протокола свои иконки "
+"(например: Контакты с MSN будут иметь соответствующие иконки msn для "
+"статусов в сети, ушел, занят и т.д....)"
 
 #: src/msg.c:100
-#, fuzzy
 msgid "Use _transports iconsets"
-msgstr "Иконуи для _статуса"
+msgstr "Использовать иконки для _транспортов"
 
 #: src/msg.c:101
 msgid "Roster theme:"
@@ -1154,26 +1158,23 @@ msgstr "Использовать единое окно чата с _табами
 
 #: src/msg.c:110
 msgid "_Highlight misspelled words"
-msgstr ""
+msgstr "_Выделять слова с опечатками"
 
 #: src/msg.c:111
 msgid "Print time:"
 msgstr "Выводить время:"
 
 #: src/msg.c:112
-#, fuzzy
 msgid "On every _line"
-msgstr "В каждой строке"
+msgstr "В _каждой строке"
 
 #: src/msg.c:113
-#, fuzzy
 msgid "Every 5 _minutes"
-msgstr "Каждые пять минут"
+msgstr "Каждые пять _минут"
 
 #: src/msg.c:114
-#, fuzzy
 msgid "_Never"
-msgstr "Никогда"
+msgstr "_Никогда"
 
 #: src/msg.c:115
 msgid "After time:"
@@ -1592,9 +1593,8 @@ msgid "Passphrase"
 msgstr "Парольная фраза:"
 
 #: src/msg.c:224
-#, fuzzy
 msgid "<b>Choose your OpenPGP key</b>"
-msgstr "<b>Выбрать ключ OpenPGP</b>"
+msgstr "<b>Выберите свой OpenPGP ключ</b>"
 
 #: src/msg.c:225
 msgid "Enter your message:"
@@ -1696,12 +1696,11 @@ msgstr "Фильтр:"
 
 #: src/msg.c:263
 msgid "_Copy Link Location"
-msgstr ""
+msgstr "_Копировать адрес ссылки"
 
 #: src/msg.c:264
-#, fuzzy
 msgid "_Open Link in Browser"
-msgstr "_Просмотреть в Браузере"
+msgstr "_Просмотреть ссылку в Браузере"
 
 #: src/msg.c:265
 msgid "_Copy Email Address"
@@ -1713,53 +1712,49 @@ msgstr "_Отправить Письмо"
 
 #: src/msg.c:267
 msgid "Gajim: First Time Wizard"
-msgstr ""
+msgstr "Gajim: Мастер первого запуска"
 
 #: src/msg.c:268
-#, fuzzy
 msgid ""
 "You need to have an account in order to connect to\n"
 "the Jabber network."
-msgstr "Необходимо создать аккаунт до подсоединения к сети"
+msgstr "Необходимо создать аккаунт для присоединения к jabber сети"
 
 #: src/msg.c:270
 msgid "I already have an account I want to use"
-msgstr ""
+msgstr "У меня уже есть аккаунт, который я хочу использовать"
 
 #: src/msg.c:271
-#, fuzzy
 msgid "I want to _register for a new account"
-msgstr "Отметьте чтобы зарегистрировать новый jabber-аккаунт"
+msgstr "Я хочу зарегистрировать новый jabber-аккаунт"
 
 #: src/msg.c:272
 msgid "<b>Please choose on of the options below:</b>"
-msgstr ""
+msgstr "<b>Пожалуйста, выберите одну из опиц в списке ниже:</b>"
 
 #: src/msg.c:273
 msgid "Please fill in the data for your existing account"
-msgstr ""
+msgstr "Пожалуйста, заполните данные о вашем уже существующем аккаунте"
 
 #: src/msg.c:274 src/msg.c:287
-#, fuzzy
 msgid "_Server:"
-msgstr "Сервер:"
+msgstr "_Сервер:"
 
 #: src/msg.c:278 src/msg.c:293
-#, fuzzy
 msgid "_Nickname:"
-msgstr "Ник:"
+msgstr "_Ник:"
 
 #: src/msg.c:284
 msgid "<span background=\"lightyellow\"></span>"
-msgstr ""
+msgstr "<span background=\"lightyellow\"></span>"
 
 #: src/msg.c:285 src/msg.c:294
 msgid "Your JID:"
-msgstr ""
+msgstr "Ваш JID:"
 
 #: src/msg.c:286
 msgid "Please fill in the data for your new account"
-msgstr ""
+msgstr "Пожалуйста, заполните данные для вашего нового аккаунта"
 
 #: src/msg.c:288
 msgid "Click to see features like on jabber servers"
@@ -1767,19 +1762,4 @@ msgstr ""
 
 #: src/msg.c:289
 msgid "Servers Features"
-msgstr ""
-
-#~ msgid "3128"
-#~ msgstr "3128"
-
-#~ msgid "_Copy Link Address"
-#~ msgstr "_Копировать Ссылку"
-
-#~ msgid "Couldn't connect to "
-#~ msgstr "Не могу соединиться с "
-
-#~ msgid "<b>event_type_label</b>"
-#~ msgstr "<b>event_type_label</b>"
-
-#~ msgid "event_description_label"
-#~ msgstr "event_description_label"
+msgstr "Параметры сервера"
