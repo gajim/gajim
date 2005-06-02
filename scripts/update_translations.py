@@ -9,7 +9,7 @@ def visit(arg, dirname, names):
 			path_to_po = os.path.join(dirname, 'gajim.po')
 			pos = path_to_po.find('po/') + 3 #3 = len('po/')
 			name = path_to_po[pos:pos+2]
-			os.system('msgmerge -U ../po/'+name+'/LC_MESSAGES/gajim.po ../gajim.pot')
+			os.system('msgmerge -q -U ../po/'+name+'/LC_MESSAGES/gajim.po ../gajim.pot')
 			print name, 'has now:'
 			os.system('msgfmt --statistics ' + path_to_po)
 
