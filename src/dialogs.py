@@ -366,7 +366,8 @@ class About_dialog:
 	'''Class for about dialog'''
 	def __init__(self):
 		if gtk.pygtk_version < (2, 6, 0):
-			Information_dialog(_('Gajim - a GTK+ Jabber client'))
+			Information_dialog(_('Gajim - a GTK+ Jabber client') + '\nVersion %s' \
+			% gajim.version)
 			return
 
 		dlg = gtk.AboutDialog()
