@@ -322,7 +322,6 @@ class Tabbed_chat_window(chat.Chat):
 
 
 		if self.plugin.queues[self.account].has_key(jid):
-			#TODO: python docs clai that qsize() can be unreliable
 			pos = self.plugin.queues[self.account][jid].qsize()
 		else:
 			pos = 0
