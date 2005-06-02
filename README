@@ -13,6 +13,7 @@ gtkspell (for gtkspell)
 
 Optionally:
 GnomePythonExtras 2.10 or above (so you can avoid compliling trayicon and gtkspell)
+possible package name for your distro: python-gnome2-extras
 
 INSTALL PROCEDURE
 tar jxvf gajim-version.tar.bz2
