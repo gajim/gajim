@@ -4,10 +4,11 @@ MODULES		= src src/common po
 PREFIX		= /usr
 DESTDIR		= /
 
-FIND		= find -regex '.*\.\(\(glade\)\|\(py\)\|\(xpm\)\|\(gif\)\|\(png\)\|\(mo\)\|\(wav\)\)'
+FIND		= find . \( -name '*.glade' -o -name '*.py' -o -name '*.xpm' -o -name '*.gif' -o -name '*.png' -o -name '*.mo' -o -name '*.wav' \)
+
 FILES		= `$(FIND)`
 DIRS		= `$(FIND) -exec dirname {} \; | sort -u`
-FIND_LIB	= find -regex '.*\.\(so\)'
+FIND_LIB	= find . -name '*.so'
 FILES_LIB	= `$(FIND_LIB)`
 
 SCRIPTS = \
@@ -16,29 +17,29 @@ SCRIPTS = \
 all: translation trayicon gtkspell idle
 
 translation:
-	make -C po all
+	${MAKE} -C po all
 
 trayicon:
-	make -C src trayicon.so;
+	${MAKE} -C src trayicon.so;
 
 gtkspell:
-	make -C src gtkspell.so;
+	${MAKE} -C src gtkspell.so;
 
 idle:
-	make -C src/common all;
+	${MAKE} -C src/common all;
 
 clean:
-	find -name *.pyc -exec rm {} \;
-	find -name *.pyo -exec rm {} \;
-	find -name *.mo -exec rm {} \;
-	$(foreach sdir, $(MODULES), make -C $(sdir) clean;)
+	find . -name *.pyc -exec rm {} \;
+	find . -name *.pyo -exec rm {} \;
+	find . -name *.mo -exec rm {} \;
+	$(foreach sdir, $(MODULES), ${MAKE} -C $(sdir) clean;)
 
 dist:
-	-rm -rf gajim-$(VERSION)
+	rm -rf gajim-$(VERSION)
 	mkdir gajim-$(VERSION)
 	cp -r data src doc po scripts gajim-$(VERSION)/
 	cp AUTHORS gajim.1 gajim.xpm gajim.ico gajim.desktop gajim.pot COPYING Makefile Changelog README launch.sh gajim-$(VERSION)
-	-find gajim-$(VERSION) -name '.svn' -exec rm -rf {} \; 2> /dev/null
+	find gajim-$(VERSION) -name '.svn' -exec rm -rf {} \; 2> /dev/null
 	find gajim-$(VERSION) -name '*.pyc' -exec rm {} \;
 	find gajim-$(VERSION) -name '*.pyo' -exec rm {} \;
 	find gajim-$(VERSION) -name '.*' -exec rm {} \;

@@ -7,4 +7,4 @@ all: $(LANGDIR)
 	msgfmt $< -o $@
 
 clean:
-	find -name '*.mo' -exec rm {} \;
+	find . -name '*.mo' -exec rm {} \;
