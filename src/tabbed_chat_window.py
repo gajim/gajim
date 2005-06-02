@@ -359,4 +359,5 @@ class Tabbed_chat_window(chat.Chat):
 			tim = time.gmtime(float(msg[0]))
 
 			text = ':'.join(msg[2:])[0:-1] #remove the latest \n
-			self.print_conversation_line(text, jid, kind, name, tim)
+			self.print_conversation_line(text, jid, kind, name, tim,
+				['small'], ['small'], ['small'])

@@ -265,6 +265,9 @@ class Chat:
 		tag.set_property('scale', pango.SCALE_SMALL)
 		tag.set_property('justification', gtk.JUSTIFY_CENTER)
 		
+		tag = conversation_buffer.create_tag('small')
+		tag.set_property('scale', pango.SCALE_SMALL)
+		
 		tag = conversation_buffer.create_tag('url')
 		tag.set_property('foreground', '#0000ff')
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
@@ -546,8 +549,7 @@ class Chat:
 			buffer.apply_tag_by_name(tag, begin_tagged, iter)
 		buffer.delete_mark(begin_mark)
 
-	def detect_and_print_special_text(self, otext, jid, other_tags,
-						print_all_special):
+	def detect_and_print_special_text(self, otext, jid, other_tags):
 		textview = self.xmls[jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
 		
@@ -566,15 +568,8 @@ class Chat:
 			if start != 0:
 				text_before_special_text = otext[index:start]
 				end_iter = buffer.get_end_iter()
-				if print_all_special:
-					self.print_with_tag_list(buffer,
-						text_before_special_text,
-						end_iter, other_tags)
-				else:
-					buffer.insert(end_iter,
-						text_before_special_text)
-			if not print_all_special:
-				other_tags = []
+				self.print_with_tag_list(buffer, text_before_special_text,
+					end_iter, other_tags)
 			index = end # update index
 			
 			#now print it
@@ -654,10 +649,10 @@ class Chat:
 		return False
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
-						other_tags_for_name = []):
+			other_tags_for_name = [], other_tags_for_time = [], 
+			other_tags_for_text = []):
 		textview = self.xmls[jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
-		print_all_special = False
 		at_the_end = False
 		end_iter = buffer.get_end_iter()
 		end_rect = textview.get_iter_location(end_iter)
@@ -675,36 +670,34 @@ class Chat:
 			after_str = gajim.config.get('after_time')
 			format = before_str + '%H:%M:%S' + after_str
 			tim_format = time.strftime(format, tim)
-			buffer.insert(end_iter, tim_format + ' ')
+			self.print_with_tag_list(buffer, tim_format + ' ', end_iter,
+				other_tags_for_time)
 
+		text_tags = other_tags_for_text[:]
 		if kind == 'status':
-			print_all_special = True
+			text_tags.append(kind)
 		elif text.startswith('/me ') or text.startswith('/me\n'):
 			text = name + text[3:]
-			print_all_special = True
+			text_tags.append(kind)
 
 		if kind == 'incoming':
 			self.last_message_time[jid] = time.time()
 
-		tags = other_tags_for_name[:] #create a new list
-		tags.append(kind)
-		if name and not print_all_special:
+		if name and len(text_tags) == len(other_tags_for_text):
+			# not status nor /me
+			name_tags = other_tags_for_name[:] #create a new list
+			name_tags.append(kind)
 			before_str = gajim.config.get('before_nickname')
 			after_str = gajim.config.get('after_nickname')
 			format = before_str + name + after_str + ' ' 
-			self.print_with_tag_list(buffer, format, end_iter, tags)
+			self.print_with_tag_list(buffer, format, end_iter, name_tags)
 				
 		# detect urls formatting and if the user has it on emoticons
-		index = self.detect_and_print_special_text(text, jid,
-						tags, print_all_special)
+		index = self.detect_and_print_special_text(text, jid, text_tags)
 
 		# add the rest of text located in the index and after
 		end_iter = buffer.get_end_iter()
-		if print_all_special:
-			buffer.insert_with_tags_by_name(end_iter,
-							text[index:], kind)
-		else:
-			buffer.insert(end_iter, text[index:])
+		self.print_with_tag_list(buffer, text[index:], end_iter, text_tags)
 
 		#scroll to the end of the textview
 		end = False

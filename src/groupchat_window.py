@@ -361,8 +361,8 @@ class Groupchat_window(chat.Chat):
 			text.lower().split()):
 			other_tags_for_name.append('bold')
 
-		chat.Chat.print_conversation_line(self, text, room_jid, kind, contact, tim, \
-			other_tags_for_name)
+		chat.Chat.print_conversation_line(self, text, room_jid, kind, contact,
+			tim, other_tags_for_name)
 
 	def kick(self, widget, room_jid, nick):
 		"""kick a user"""
