@@ -187,6 +187,10 @@ class Tabbed_chat_window(chat.Chat):
 			s += ' (' + user.status + ')'
 		self.print_conversation(s, user.jid, 'status')
 
+
+		#restore previous conversation
+		self.restore_conversation(user.jid)
+
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
 			self.read_queue(user.jid)
@@ -196,7 +200,6 @@ class Tabbed_chat_window(chat.Chat):
 			self.print_time_timeout_id[user.jid] = gobject.timeout_add(300000,
 				self.print_time_timeout, user.jid)
 
-		self.restore_conversation(user.jid)
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
@@ -307,15 +310,24 @@ class Tabbed_chat_window(chat.Chat):
 			jid.startswith('yahoo.')
 
 		if is_transport:
-			return
+			return	
 
-		#How many lines to restore
-		restore = gajim.config.get('restore_lines')
+		#How many lines to restore and when to time them out
+		restore	= gajim.config.get('restore_lines')
+		time_out = gajim.config.get('restore_timeout')
 		pos		= 0	#position, while reading from history
 		size		= 0	#how many lines we alreay retreived
 		lines		= []	#we'll need to reverse the lines from history
 		count		= gajim.logger.get_nb_line(jid)
 
+
+		if self.plugin.queues[self.account].has_key(jid):
+			#TODO: python docs clai that qsize() can be unreliable
+			pos = self.plugin.queues[self.account][jid].qsize()
+		else:
+			pos = 0
+
+		now = time.time()
 		while size <= restore:
 			if pos == count or size > restore - 1:
 				#don't try to read beyond history, not read more than required
@@ -323,6 +335,10 @@ class Tabbed_chat_window(chat.Chat):
 			
 			nb, line = gajim.logger.read(jid, count - 1 - pos, count - pos)
 			pos = pos + 1
+
+			if (now - float(line[0][0]))/60 >= time_out:
+				#stop looking for messages if we found something too old
+				break
 
 			if line[0][1] != 'sent' and line[0][1] != 'recv':
 				# we don't want to display status lines, do we?
@@ -342,5 +358,6 @@ class Tabbed_chat_window(chat.Chat):
 				name = self.users[jid].name
 
 			tim = time.gmtime(float(msg[0]))
+
 			text = ':'.join(msg[2:])[0:-1] #remove the latest \n
 			self.print_conversation_line(text, jid, kind, name, tim)

@@ -99,6 +99,7 @@ class Config:
 		'log_notif_in_sep_file': [ opt_bool, True ],
 		'change_roster_title': [ opt_bool, True ],
 		'restore_lines': [opt_int, 4],
+		'restore_timeout': [opt_int, 60],
 		'version': [ None, '0.7' ],
 	}
 
