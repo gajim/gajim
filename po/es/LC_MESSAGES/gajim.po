@@ -74,7 +74,6 @@ msgid "Wav Sounds"
 msgstr "Sonidos Wav"
 
 #: src/config.py:1093
-#, fuzzy
 msgid "OpenPGP is not usable in this computer"
 msgstr "GPG no es usable en este ordenador"
 
@@ -128,9 +127,8 @@ msgid "You must be connected to edit your personal information"
 msgstr "Debes estar conectado para editar tu información personal"
 
 #: src/config.py:1306
-#, fuzzy
 msgid "Error while getting secret keys"
-msgstr "error durante el envío"
+msgstr "Error obteniendo las claves secretas"
 
 #: src/config.py:1317 src/msg.c:46
 msgid "No key selected"
@@ -145,9 +143,8 @@ msgid "Server"
 msgstr "Servidor"
 
 #: src/config.py:1494
-#, fuzzy, python-format
 msgid "Edit %s"
-msgstr "_Editar"
+msgstr "_Editar %s"
 
 #: src/config.py:1496
 #, python-format
@@ -478,14 +475,12 @@ msgid "History"
 msgstr "Histórico"
 
 #: src/roster_window.py:585
-#, fuzzy
 msgid "_Log on"
-msgstr "Conectar"
+msgstr "_Conectar"
 
 #: src/roster_window.py:592
-#, fuzzy
 msgid "Log _off"
-msgstr "Desconectar"
+msgstr "_Desconectar"
 
 #: src/roster_window.py:602 src/msg.c:16
 msgid "_Edit"
@@ -715,9 +710,8 @@ msgid "Free for Chat"
 msgstr "Libre para hablar"
 
 #: src/common/helpers.py:33
-#, fuzzy
 msgid "Available"
-msgstr "No disponible"
+msgstr "En línea"
 
 #: src/common/helpers.py:35
 msgid "Connecting"
@@ -887,14 +881,12 @@ msgstr ""
 "en el servidor, y que con esta opción se desactiva el TLS"
 
 #: src/msg.c:44
-#, fuzzy
 msgid "Use _SSL"
 msgstr "Usar _TLS"
 
 #: src/msg.c:45
-#, fuzzy
 msgid "<b>SSL</b>"
-msgstr "<b>TLS</b>"
+msgstr "<b>SSL</b>"
 
 #: src/msg.c:47
 msgid "Choose _Key"
@@ -913,7 +905,6 @@ msgid "Save _passphrase (insecure)"
 msgstr "Guardar contraseña (inseguro)"
 
 #: src/msg.c:50
-#, fuzzy
 msgid "<b>OpenPGP</b>"
 msgstr "<b>OpenPGP</b>"
 
@@ -1122,9 +1113,8 @@ msgid "Add/Remove Emoticons..."
 msgstr "Añadir/Eliminar Emoticonos..."
 
 #: src/msg.c:98
-#, fuzzy
 msgid "Default _status iconset:"
-msgstr "_Iconos de estado:"
+msgstr "_Iconos de estado por defecto:"
 
 #: src/msg.c:99
 msgid ""
@@ -1137,9 +1127,8 @@ msgstr ""
 "línea, ausente, ocupado, etc...)"
 
 #: src/msg.c:100
-#, fuzzy
 msgid "Use _transports iconsets"
-msgstr "_Iconos de estado:"
+msgstr "_Usar los iconos del transporte"
 
 #: src/msg.c:101
 msgid "Roster theme:"
@@ -1178,19 +1167,16 @@ msgid "Print time:"
 msgstr "Insertar la hora:"
 
 #: src/msg.c:112
-#, fuzzy
 msgid "On every _line"
-msgstr "En cada línea"
+msgstr "En cada _línea"
 
 #: src/msg.c:113
-#, fuzzy
 msgid "Every 5 _minutes"
-msgstr "Cada 5 minutos"
+msgstr "Cada 5 _minutos"
 
 #: src/msg.c:114
-#, fuzzy
 msgid "_Never"
-msgstr "Nunca"
+msgstr "_Nunca"
 
 #: src/msg.c:115
 msgid "After time:"
@@ -1610,7 +1596,6 @@ msgid "Passphrase"
 msgstr "Contraseña"
 
 #: src/msg.c:224
-#, fuzzy
 msgid "<b>Choose your OpenPGP key</b>"
 msgstr "<b>Elegir clave OpenPGP</b>"
 
@@ -1719,9 +1704,8 @@ msgid "_Copy Link Location"
 msgstr "_Copiar la dirección del enlace"
 
 #: src/msg.c:264
-#, fuzzy
 msgid "_Open Link in Browser"
-msgstr "_Abrir enlace"
+msgstr "_Abrir enlace en navegador"
 
 #: src/msg.c:265
 msgid "_Copy Email Address"
@@ -1736,20 +1720,20 @@ msgid "Gajim: First Time Wizard"
 msgstr "Gajim: Asistente para la primera vez"
 
 #: src/msg.c:268
-#, fuzzy
+
 msgid ""
 "You need to have an account in order to connect to\n"
 "the Jabber network."
-msgstr "Debes crear una cuenta antes de conectar a la red Jabber"
+msgstr ""
+"Debes tener una cuenta antes de conectar a la red Jabber"
 
 #: src/msg.c:270
 msgid "I already have an account I want to use"
 msgstr "Ya tengo una cuenta y quiero usarla"
 
 #: src/msg.c:271
-#, fuzzy
 msgid "I want to _register for a new account"
-msgstr "Comprueba si quieres registrar una nueva cuenta de Jabber"
+msgstr "Quiero _registrar una nueva cuenta de Jabber"
 
 #: src/msg.c:272
 msgid "<b>Please choose on of the options below:</b>"
@@ -1760,14 +1744,12 @@ msgid "Please fill in the data for your existing account"
 msgstr "Por favor, introduce los datos de tu cuenta actual"
 
 #: src/msg.c:274 src/msg.c:287
-#, fuzzy
 msgid "_Server:"
-msgstr "Servidor:"
+msgstr "_Servidor:"
 
 #: src/msg.c:278 src/msg.c:293
-#, fuzzy
 msgid "_Nickname:"
-msgstr "Alias:"
+msgstr "_Alias:"
 
 #: src/msg.c:284
 msgid "<span background=\"lightyellow\"></span>"
