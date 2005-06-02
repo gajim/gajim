@@ -121,6 +121,10 @@ class Chat:
 		elif self.widget_name == 'groupchat_window':
 			nickname = self.notebook.get_tab_label(child).get_children()[0]
 
+		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+
+		if gtk.pygtk_version > (2, 6, 0) and gtk.gtk_version > (2, 6, 0):
+			nickname.set_max_width_chars(15)
+
 		nickname.set_text(start + self.names[jid])
 
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
