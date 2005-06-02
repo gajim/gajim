@@ -45,7 +45,7 @@ msgstr ""
 ""
 ""
 ""
-"\n"
+""
 ""
 #: src/config.py:279
 msgid "Active"
