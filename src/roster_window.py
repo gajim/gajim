@@ -587,7 +587,7 @@ class Roster_window:
 		if show != 'offline' and show != 'error':
 			item.set_sensitive(False)
 		menu.append(item)
-		item.connect('activate', self.on_agent_logging, jid, 'available', account)
+		item.connect('activate', self.on_agent_logging, jid, None, account)
 
 		item = gtk.MenuItem(_('Log _off'))
 		if show == 'offline' or show == 'error':

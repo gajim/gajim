@@ -233,7 +233,7 @@ class Connection:
 		if not prio:
 			prio = 0
 		ptype = prs.getType()
-		if ptype == None: ptype = 'available'
+		if ptype == 'available': ptype = None
 		gajim.log.debug('PresenceCB : %s' % ptype)
 		xtags = prs.getTags('x')
 		sigTag = None
@@ -247,7 +247,7 @@ class Connection:
 			#verify
 			sigmsg = sigTag.getData()
 			keyID = self.gpg.verify(status, sigmsg)
-		if ptype == 'available':
+		if not ptype:
 			show = prs.getShow()
 			if not show:
 				show = 'online'
@@ -291,7 +291,7 @@ class Connection:
 			else:
 				self.dispatch('ERROR_ANSWER', (prs.getFrom().getStripped(), errmsg,
 																					errcode))
-		if ptype == 'available' or ptype == 'unavailable':
+		if not ptype or ptype == 'unavailable':
 			gajim.logger.write('status', status, prs.getFrom().getStripped(), show)
 			self.dispatch('NOTIFY', (prs.getFrom().getStripped(), show, status,
 				prs.getFrom().getResource(), prio, keyID, prs.getRole(),
@@ -644,7 +644,7 @@ class Connection:
 			if self.connected == 2:
 				self.connected = STATUS_LIST.index(show)
 				#send our presence
-				ptype = 'available'
+				ptype = None
 				if show == 'invisible':
 					ptype = 'invisible'
 				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
@@ -675,7 +675,7 @@ class Connection:
 			self.connection = None
 		elif show != 'offline' and self.connected:
 			self.connected = STATUS_LIST.index(show)
-			ptype = 'available'
+			ptype = None
 			if show == 'invisible':
 				ptype = 'invisible'
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
@@ -876,8 +876,6 @@ class Connection:
 	def send_agent_status(self, agent, ptype):
 		if not self.connection:
 			return
-		if not ptype:
-			ptype = 'available';
 		p = common.xmpp.Presence(to = agent, typ = ptype)
 		self.connection.send(p)
 
@@ -912,11 +910,10 @@ class Connection:
 	def send_gc_status(self, nick, jid, show, status):
 		if not self.connection:
 			return
+		ptype = None
 		if show == 'offline':
 			ptype = 'unavailable'
 			show = None
-		else:
-			ptype = 'available'
 		self.connection.send(common.xmpp.Presence(to = '%s/%s' % (jid, nick),
 			typ = ptype, show = show, status = status))
 
