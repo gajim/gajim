@@ -190,7 +190,6 @@ class Tabbed_chat_window(chat.Chat):
 
 		#restore previous conversation
 		self.restore_conversation(user.jid)
-		self.print_empty_line(user.jid)
 
 
 		#print queued messages
@@ -363,3 +362,6 @@ class Tabbed_chat_window(chat.Chat):
 			text = ':'.join(msg[2:])[0:-1] #remove the latest \n
 			self.print_conversation_line(text, jid, kind, name, tim,
 				['small'], ['small', 'grey'], ['small', 'grey'])
+
+		if len(lines):
+			self.print_empty_line(jid)
