@@ -760,19 +760,13 @@ class Interface:
 												#2:autoaway and use sleeper
 												#3:autoxa and use sleeper
 
-		iconset = gajim.config.get('iconset')
-		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/')
-		files = [path + 'online.gif', path + 'online.png', path + 'online.xpm']
-		pix = None
-		for fname in files:
-			if os.path.exists(fname):
-				pix = gtk.gdk.pixbuf_new_from_file(fname)
-				break
-		if pix:
-			gtk.window_set_default_icon(pix)
 		self.roster = roster_window.Roster_window(self)
-		self.sleeper = common.sleepy.Sleepy( \
-			gajim.config.get('autoawaytime') * 60, \
+		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
+		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+		gtk.window_set_default_icon(pix) # set the icon to all newly opened windows
+		self.roster.window.set_icon_from_file(path_to_file) # and to roster window
+		self.sleeper = common.sleepy.Sleepy(
+			gajim.config.get('autoawaytime') * 60,
 			gajim.config.get('autoxatime') * 60)
 		self.systray_enabled = False
 		try:

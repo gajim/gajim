@@ -813,8 +813,8 @@ class Roster_window:
 					if accountIter:
 						model.set_value(accountIter, 0, self.jabber_state_images['offline'])
 #					gajim.connections[account].connected = 0
-					#FIXME: what if no systray? this TBs!!
-					self.plugin.systray.set_status('offline')
+					if self.plugin.systray_enabled:
+						self.plugin.systray.set_status('offline')
 					self.update_status_comboxbox()
 					return
 				gajim.connections[account].password = passphrase
@@ -917,12 +917,6 @@ class Roster_window:
 						'xa', 'dnd', 'invisible']
 		if self.plugin.systray_enabled:
 			self.plugin.systray.set_status(statuss[maxi])
-		image = self.jabber_state_images[statuss[maxi]]
-		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			pixbuf = image.get_animation().get_static_image()
-			self.window.set_icon(pixbuf)
-		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			self.window.set_icon(image.get_pixbuf())
 
 	def on_status_changed(self, account, status):
 		'''the core tells us that our status has changed'''
@@ -1137,7 +1131,7 @@ class Roster_window:
 				dialog = dialogs.Confirmation_dialog(_('You have unread messages.\nAre you sure you want to quit Gajim?'))
 				if dialog.get_response() != gtk.RESPONSE_YES:
 					return
-			#FIXME: do we keep that ?
+
 			if recent:
 				dialog = dialogs.Confirmation_dialog(_('You received a message in the last two seconds.\nAre you sure you want to quit Gajim?'))
 				if dialog.get_response() != gtk.RESPONSE_YES:
@@ -1303,15 +1297,6 @@ class Roster_window:
 			for jid in self.plugin.windows[account]['gc']:
 				if jid != 'tabbed':
 					self.plugin.windows[account]['gc'][jid].update_state_images()
-		# Update windows icons
-		image = self.jabber_state_images['online'] # FIXME: we need an icon
-		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			pixbuf = image.get_animation().get_static_image()
-		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			pixbuf = image.get_pixbuf()
-		for win in gtk.window_list_toplevels():
-			win.set_icon(pixbuf)
-		# Update roster_window icon with the status image
 		self.update_status_comboxbox()
 
 	def on_show_offline_contacts_menuitem_activate(self, widget):
