@@ -274,14 +274,14 @@ class GnuPG:
         self.options = Options()
     
     def run(self, gnupg_commands, args=None, create_fhs=None, attach_fhs=None):
-	"""Calls GnuPG with the list of string commands gnupg_commands,
-	complete with prefixing dashes.
-	For example, gnupg_commands could be
-	'["--sign", "--encrypt"]'
-	Returns a GnuPGInterface.Process object.
-	
-	args is an optional list of GnuPG command arguments (not options),
-	such as keyID's to export, filenames to process, etc.
+        """Calls GnuPG with the list of string commands gnupg_commands,
+        complete with prefixing dashes.
+        For example, gnupg_commands could be
+        '["--sign", "--encrypt"]'
+        Returns a GnuPGInterface.Process object.
+        
+        args is an optional list of GnuPG command arguments (not options),
+        such as keyID's to export, filenames to process, etc.
 
         create_fhs is an optional list of GnuPG filehandle
         names that will be set as keys of the returned Process object's
@@ -307,9 +307,9 @@ class GnuPG:
         opened file and 'attach_fhs[stdin] is my_file', then GnuPG
         will read its standard input from my_file. This is useful
         if you want GnuPG to read/write to/from an existing file.
-	For instance:
+        For instance:
         
-	    f = open("encrypted.gpg")
+            f = open("encrypted.gpg")
             gnupg.run(["--decrypt"], attach_fhs={'stdin': f})
 
         Using attach_fhs also helps avoid system buffering
@@ -317,29 +317,29 @@ class GnuPG:
         can cause the process to deadlock.
         
         If not mentioned in create_fhs or attach_fhs,
-	GnuPG filehandles which are a std* (stdin, stdout, stderr)
+        GnuPG filehandles which are a std* (stdin, stdout, stderr)
         are defaulted to the running process' version of handle.
-	Otherwise, that type of handle is simply not used when calling GnuPG.
-	For example, if you do not care about getting data from GnuPG's
-	status filehandle, simply do not specify it.
-	
-	run() returns a Process() object which has a 'handles'
+        Otherwise, that type of handle is simply not used when calling GnuPG.
+        For example, if you do not care about getting data from GnuPG's
+        status filehandle, simply do not specify it.
+        
+        run() returns a Process() object which has a 'handles'
         which is a dictionary mapping from the handle name
         (such as 'stdin' or 'stdout') to the respective
         newly-created FileObject connected to the running GnuPG process.
-	For instance, if the call was
+        For instance, if the call was
 
           process = gnupg.run(["--decrypt"], stdin=1)
           
-	after run returns 'process.handles["stdin"]'
+        after run returns 'process.handles["stdin"]'
         is a FileObject connected to GnuPG's standard input,
-	and can be written to.
+        and can be written to.
         """
         
-	if args == None: args = []
+        if args == None: args = []
         if create_fhs == None: create_fhs = []
         if attach_fhs == None: attach_fhs = {}
-	
+        
         for std in _stds:
             if not attach_fhs.has_key(std) \
                and std not in create_fhs:
@@ -367,9 +367,9 @@ class GnuPG:
     
     def _attach_fork_exec(self, gnupg_commands, args, create_fhs, attach_fhs):
         """This is like run(), but without the passphrase-helping
-	(note that run() calls this)."""
-	
-	process = Process()
+        (note that run() calls this)."""
+        
+        process = Process()
         
         for fh_name in create_fhs + attach_fhs.keys():
             if not _fd_modes.has_key(fh_name):
@@ -557,12 +557,12 @@ class Options:
         self.extra_args = []
     
     def get_args( self ):
-	"""Generate a list of GnuPG arguments based upon attributes."""
-	
+        """Generate a list of GnuPG arguments based upon attributes."""
+        
         return self.get_meta_args() + self.get_standard_args() + self.extra_args
 
     def get_standard_args( self ):
-	"""Generate a list of standard, non-meta or extra arguments"""
+        """Generate a list of standard, non-meta or extra arguments"""
         args = []
         if self.homedir != None: args.extend( [ '--homedir', self.homedir ] )
         if self.options != None: args.extend( [ '--options', self.options ] )
@@ -589,7 +589,7 @@ class Options:
         return args
 
     def get_meta_args( self ):
-	"""Get a list of generated meta-arguments"""
+        """Get a list of generated meta-arguments"""
         args = []
 
         if self.meta_pgp_5_compatible: args.extend( [ '--compress-algo', '1',
