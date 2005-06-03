@@ -445,6 +445,7 @@ class Interface:
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (name, config))
 		name = array[0]
+		dialogs.Information_dialog(_('The account %s has been successfully registered') % name)
 		gajim.config.add_per('accounts', name)
 		for opt in array[1]:
 			gajim.config.set_per('accounts', name, opt, array[1][opt])
