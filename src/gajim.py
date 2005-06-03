@@ -306,7 +306,7 @@ class Interface:
 						show_notification = True
 					if show_notification:
 						instance = dialogs.Popup_notification_window(self,
-														'Contact signed in', jid, account)
+														_('Contact Signed In'), jid, account)
 						self.roster.popup_notification_windows.append(instance)
 						
 			elif old_show > 1 and new_show < 2:
@@ -324,13 +324,13 @@ class Interface:
 						show_notification = True
 					if show_notification:
 						instance = dialogs.Popup_notification_window(self,
-											 		'Contact signed out', jid, account)
+											 		_('Contact Signed Out'), jid, account)
 						self.roster.popup_notification_windows.append(instance)
 				
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
-			self.windows[account]['gc'][ji].chg_user_status(ji, resource, \
-				array[1], array[2], array[6], array[7], array[8], array[9], \
+			self.windows[account]['gc'][ji].chg_user_status(ji, resource,
+				array[1], array[2], array[6], array[7], array[8], array[9],
 				array[10], array[11], account)
 
 	def handle_event_msg(self, account, array):
@@ -355,13 +355,13 @@ class Interface:
 					show_notification = True
 				if show_notification:
 					instance = dialogs.Popup_notification_window(self,
-																	'New Message', jid, account)
+																_('New Message'), jid, account)
 					self.roster.popup_notification_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account, array[3])
-		if gajim.config.get_per('soundevents', 'first_message_received', \
+		if gajim.config.get_per('soundevents', 'first_message_received',
 			'enabled') and first:
 			self.play_sound('first_message_received')
-		if gajim.config.get_per('soundevents', 'next_message_received', \
+		if gajim.config.get_per('soundevents', 'next_message_received',
 			'enabled') and not first:
 			self.play_sound('next_message_received')
 		
@@ -372,7 +372,7 @@ class Interface:
 			self.windows[account]['gc'][jid].print_conversation('Error %s: %s' % \
 				(array[1], array[2]), jid)
 			if self.windows[account]['gc'][jid].get_active_jid() == jid:
-				self.windows[account]['gc'][jid].set_subject(jid, \
+				self.windows[account]['gc'][jid].set_subject(jid,
 					self.windows[account]['gc'][jid].subjects[jid])
 			return
 		if jid.find('@') <= 0:

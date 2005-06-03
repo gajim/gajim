@@ -689,16 +689,16 @@ class Popup_notification_window:
 		
 		# set colors [ http://www.w3schools.com/html/html_colornames.asp ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
-		if event_type == 'Contact signed in':
+		if event_type == _('Contact Signed In'):
 			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('limegreen'))
 			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('limegreen'))
-		elif event_type == 'Contact signed out':
+		elif event_type == _('Contact Signed Out'):
 			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('red'))
 			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('red'))
-		elif event_type == 'New Message':
+		elif event_type == _('New Message'):
 			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('dodgerblue'))
 			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('dodgerblue'))
-			txt = 'From ' + txt
+			txt = _('From %s') % txt
 	
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
