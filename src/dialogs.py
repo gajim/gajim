@@ -191,7 +191,7 @@ class Change_status_message_dialog:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
 		self.window = self.xml.get_widget('change_status_message_dialog')
 		uf_show = helpers.get_uf_show(show)
-		self.window.set_title(_('%s Status Message') %uf_show)
+		self.window.set_title(_('%s Status Message') % uf_show)
 		
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
@@ -696,8 +696,8 @@ class Popup_notification_window:
 			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('limegreen'))
 			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('limegreen'))
 		elif event_type == 'Contact signed out':
-			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('firebrick'))
-			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('firebrick'))
+			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('red'))
+			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('red'))
 		elif event_type == 'New Message':
 			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('dodgerblue'))
 			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('dodgerblue'))
