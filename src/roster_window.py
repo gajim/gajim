@@ -983,19 +983,24 @@ class Roster_window:
 			path = None
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
+		# Do we have a queue ?
+		no_queue = True
+		if self.plugin.queues[account].has_key(jid):
+			no_queue = False
+		#We save it in a queue
+		if not self.plugin.queues[account].has_key(jid):
+			self.plugin.queues[account][jid] = Queue.Queue(50)
+		self.plugin.queues[account][jid].put((msg, tim, encrypted))
+		self.nb_unread += 1
 		if (not autopopup or ( not autopopupaway and \
 			gajim.connections[account].connected > 2)) and not \
 			self.plugin.windows[account]['chats'].has_key(jid):
-			#We save it in a queue
-			if not self.plugin.queues[account].has_key(jid):
+			if no_queue: #We didn't have a queue: we change icons
 				model = self.tree.get_model()
-				self.plugin.queues[account][jid] = Queue.Queue(50)
 				self.draw_contact(jid, account)
 				if self.plugin.systray_enabled:
 					self.plugin.systray.add_jid(jid, account)
-			self.plugin.queues[account][jid].put((msg, tim, encrypted))
-			self.nb_unread += 1
-			self.show_title()
+			self.show_title() # we show the * or [n]
 			if not path:
 				self.add_user_to_roster(jid, account)
 				iters = self.get_user_iter(jid, account)
@@ -1012,8 +1017,6 @@ class Roster_window:
 					self.tree.expand_row(path[0:2], False)
 					self.tree.scroll_to_cell(path)
 					self.tree.set_cursor(path)
-			self.plugin.windows[account]['chats'][jid].print_conversation(msg, 
-				jid, tim = tim, encrypted = encrypted)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if self.plugin.windows['preferences'].window.get_property('visible'):
