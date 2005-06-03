@@ -268,6 +268,9 @@ class Chat:
 		tag = conversation_buffer.create_tag('small')
 		tag.set_property('scale', pango.SCALE_SMALL)
 		
+		tag = conversation_buffer.create_tag('grey')
+		tag.set_property('foreground', '#9e9e9e')
+		
 		tag = conversation_buffer.create_tag('url')
 		tag.set_property('foreground', '#0000ff')
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
@@ -651,6 +654,12 @@ class Chat:
 		adjustment = parent.get_hadjustment()
 		adjustment.set_value(0)
 		return False
+
+	def print_empty_line(self, jid):
+		textview = self.xmls[jid].get_widget('conversation_textview')
+		buffer = textview.get_buffer()
+		end_iter = buffer.get_end_iter()
+		buffer.insert(end_iter, '\n')
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
 			other_tags_for_name = [], other_tags_for_time = [], 
