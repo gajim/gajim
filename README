@@ -4,12 +4,13 @@ Runtime Requirements:
 python2.4 (python2.3 should work too)
 pygtk2.6 (pytgtk 2.4 should work too)
 python-libglade
+gtkspell and gtkspell-LANG (where lang is your locale eg. en, fr etc)
 
 Compile-time Requirements:
 python-dev
 libgtk2.0-dev
-libxss-dev (for idle)
-gtkspell (for gtkspell)
+libxss-dev (for idle module)
+gtkspell (for gtkspell module)
 
 Optionally:
 GnomePythonExtras 2.10 or above (so you can avoid compliling trayicon and gtkspell)
