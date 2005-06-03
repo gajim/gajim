@@ -7934,7 +7934,7 @@ Custom</property>
 	  <property name="show_border">False</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
 	  <property name="scrollable">True</property>
-	  <property name="enable_popup">False</property>
+	  <property name="enable_popup">True</property>
 	  <signal name="switch_page" handler="on_chat_notebook_switch_page" last_modification_time="Wed, 16 Mar 2005 20:58:25 GMT"/>
 	  <signal name="key_press_event" handler="on_chat_notebook_key_press_event" last_modification_time="Wed, 16 Mar 2005 20:58:38 GMT"/>
 
@@ -8154,7 +8154,7 @@ Custom</property>
 	      <property name="border_width">2</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">6</property>
+	      <property name="spacing">4</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label250">

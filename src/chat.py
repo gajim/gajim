@@ -123,7 +123,7 @@ class Chat:
 
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+
 		if gtk.pygtk_version > (2, 6, 0) and gtk.gtk_version > (2, 6, 0):
-			nickname.set_max_width_chars(15)
+			nickname.set_max_width_chars(10)
 
 		nickname.set_text(start + self.names[jid])
 
@@ -294,8 +294,6 @@ class Chat:
 			self.on_conversation_vadjustment_value_changed)
 		
 		child = self.childs[jid]
-		self.notebook.append_page(child)
-		
 
 		if len(self.xmls) > 1:
 			self.notebook.set_show_tabs(True)
@@ -303,13 +301,19 @@ class Chat:
 		if self.widget_name == 'tabbed_chat_window':
 			xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_hbox', APP)
 			tab_hbox = xm.get_widget('chat_tab_hbox')
+			user = self.plugin.roster.contacts[self.account][jid][0]
+			gtklabel = gtk.Label(user.name)
+			gtklabel.set_property('xalign', 0)
 		elif self.widget_name == 'groupchat_window':
 			xm = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_tab_hbox', APP)
 			tab_hbox = xm.get_widget('groupchat_tab_hbox')
+			gtklabel = gtk.Label(jid.split('@')[0])
+			gtklabel.set_property('xalign', 0)
 
 		xm.signal_connect('on_close_button_clicked', 
 			self.on_close_button_clicked, jid)
-		self.notebook.set_tab_label(child, tab_hbox)
+
+		self.notebook.append_page_menu(child, tab_hbox, gtklabel)
 
 		self.show_title()
 
