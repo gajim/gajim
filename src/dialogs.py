@@ -385,8 +385,13 @@ class About_dialog:
 
 		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>', 'Alex Podaras <bigpod@gmail.com>']
 		dlg.set_authors(authors)
-		dlg.set_logo(gtk.gdk.pixbuf_new_from_file(os.path.join(gajim.DATA_DIR,
-			'pixmaps/logo.png')))
+
+		try:
+			pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.svg'))			
+		except gobject.GError: # svg loader not available, fallback to png [scales worse]
+			pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png'))
+
+		dlg.set_logo(pixbuf)
 		dlg.set_translator_credits(_('translator_credits'))
 
 		rep = dlg.run()
