@@ -10,9 +10,9 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="111.40000pt"
-   height="123.39000pt"
-   id="svg2345"
+   width="181.72000px"
+   height="201.41000px"
+   id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.41"
    sodipodi:docbase="/home/nk/gajim/data/pixmaps"
@@ -20,35 +20,48 @@
   <defs
      id="defs3">
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient15340"
-       id="linearGradient1614"
+       y2="-1.5475000"
+       x2="23.675800"
+       y1="44.796902"
+       x1="23.675800"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(3.723761,0.000000,0.000000,0.235209,45.66081,-4.924494)"
-       x1="82.313927"
-       y1="690.85364"
-       x2="84.372620"
-       y2="690.85364" />
+       id="linearGradient2348">
+      <stop
+         id="stop2350"
+         style="stop-color:#0035ED"
+         offset="0" />
+      <stop
+         id="stop2360"
+         style="stop-color:#0000b1;stop-opacity:1.0000000;"
+         offset="0.50000000" />
+      <stop
+         id="stop2352"
+         style="stop-color:#0035ed;stop-opacity:1.0000000;"
+         offset="1.0000000" />
+      <a:midPointStop
+         id="midPointStop2354"
+         style="stop-color:#0035ED"
+         offset="0" />
+      <a:midPointStop
+         id="midPointStop2356"
+         style="stop-color:#0035ED"
+         offset="0.5" />
+      <a:midPointStop
+         id="midPointStop2358"
+         style="stop-color:#00008D"
+         offset="1" />
+    </linearGradient>
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient15340"
-       id="linearGradient1612"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(3.723761,0.000000,0.000000,0.235209,45.66081,-4.924494)"
-       x1="82.313927"
-       y1="690.85364"
-       x2="84.372620"
-       y2="690.85364" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient15340"
-       id="linearGradient1610"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(3.723761,0.000000,0.000000,0.235209,45.66081,-4.924494)"
-       x1="82.313927"
-       y1="690.85364"
-       x2="84.372620"
-       y2="690.85364" />
+       id="linearGradient2342">
+      <stop
+         id="stop2344"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:1;" />
+      <stop
+         id="stop2346"
+         offset="1"
+         style="stop-color:#000000;stop-opacity:0;" />
+    </linearGradient>
     <linearGradient
        id="linearGradient15340">
       <stop
@@ -60,80 +73,6 @@
          offset="1.0000000"
          style="stop-color:#fffcff;stop-opacity:1.0000000;" />
     </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient15340"
-       id="linearGradient1608"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(3.723761,0.000000,0.000000,0.235209,45.66081,-4.924494)"
-       x1="82.313927"
-       y1="690.85364"
-       x2="84.372620"
-       y2="690.85364" />
-    <linearGradient
-       id="linearGradient847">
-      <stop
-         id="stop848"
-         offset="0.0000000"
-         style="stop-color:#ffff00;stop-opacity:1.0000000;" />
-      <stop
-         id="stop849"
-         offset="1.0000000"
-         style="stop-color:#ffffff;stop-opacity:1.0000000;" />
-    </linearGradient>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient847"
-       id="radialGradient1606"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="scale(0.975196,1.025435)"
-       cx="72.171936"
-       cy="43.931011"
-       fx="72.171936"
-       fy="43.931011"
-       r="42.357494" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#XMLID_13_"
-       id="linearGradient1604"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.963714,0.000000,0.000000,1.037652,289.7047,73.07670)"
-       spreadMethod="reflect"
-       x1="117.32243"
-       y1="147.58760"
-       x2="76.339676"
-       y2="96.123863" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient858"
-       id="linearGradient1602"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.963267,0.000000,0.000000,1.038133,289.7047,73.07670)"
-       x1="76.435921"
-       y1="113.68366"
-       x2="42.188190"
-       y2="62.289630" />
-    <linearGradient
-       id="linearGradient858">
-      <stop
-         id="stop859"
-         offset="0.0000000"
-         style="stop-color:#ffab00;stop-opacity:1.0000000;" />
-      <stop
-         id="stop860"
-         offset="1.0000000"
-         style="stop-color:#ffe500;stop-opacity:1.0000000;" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient858"
-       id="linearGradient1600"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.963267,0.000000,0.000000,1.038133,289.7047,73.07670)"
-       x1="76.435921"
-       y1="113.68366"
-       x2="42.188190"
-       y2="62.289630" />
     <linearGradient
        y2="-1.5475000"
        x2="23.675800"
@@ -163,15 +102,157 @@
          offset="1" />
     </linearGradient>
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#XMLID_13_"
-       id="linearGradient1598"
+       id="linearGradient847">
+      <stop
+         id="stop848"
+         offset="0.0000000"
+         style="stop-color:#ffff00;stop-opacity:1.0000000;" />
+      <stop
+         id="stop849"
+         offset="1.0000000"
+         style="stop-color:#ffffff;stop-opacity:1.0000000;" />
+    </linearGradient>
+    <linearGradient
+       y2="874.00348"
+       x2="277.68552"
+       y1="603.04590"
+       x1="279.04819"
+       gradientTransform="matrix(0.650521,0.000000,0.000000,0.367384,-84.15654,-142.5606)"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="scale(1.330671,0.751501)"
-       x1="274.64377"
-       y1="182.36183"
-       x2="272.86807"
-       y2="283.68805" />
+       id="linearGradient1547"
+       xlink:href="#XMLID_13_"
+       inkscape:collect="always" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="540.96204"
+       x2="534.87335"
+       y1="540.96204"
+       x1="207.55409"
+       gradientTransform="matrix(0.471128,0.000000,0.000000,0.507274,-84.15654,-142.5606)"
+       id="linearGradient2340"
+       xlink:href="#linearGradient2348"
+       inkscape:collect="always" />
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       r="39.846954"
+       fy="40.248341"
+       fx="72.325935"
+       cy="40.248341"
+       cx="72.325935"
+       gradientTransform="scale(0.974555,1.026110)"
+       id="radialGradient3126"
+       xlink:href="#linearGradient847"
+       inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15340"
+       id="linearGradient2114"
+       gradientTransform="matrix(2.555850,0.000000,0.000000,0.251325,127.9395,0.000000)"
+       x1="79.334000"
+       y1="2017.2728"
+       x2="84.873917"
+       y2="2017.2728"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15340"
+       id="linearGradient2116"
+       gradientTransform="matrix(2.555850,0.000000,0.000000,0.251325,127.9395,0.000000)"
+       x1="79.334000"
+       y1="2017.2728"
+       x2="84.873917"
+       y2="2017.2728"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15340"
+       id="linearGradient2118"
+       gradientTransform="matrix(2.555850,0.000000,0.000000,0.251325,127.9395,0.000000)"
+       x1="79.334000"
+       y1="2017.2728"
+       x2="84.873917"
+       y2="2017.2728"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15340"
+       id="linearGradient2120"
+       gradientTransform="scale(3.978911,0.251325)"
+       x1="79.334000"
+       y1="2017.2728"
+       x2="84.873917"
+       y2="2017.2728"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2348"
+       id="linearGradient2892"
+       gradientTransform="matrix(0.470909,0.000000,0.000000,0.507509,-84.15654,-142.5606)"
+       x1="236.03015"
+       y1="534.70038"
+       x2="505.18582"
+       y2="534.70038"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15340"
+       id="linearGradient2904"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.647871,0.000000,0.000000,0.122864,25.96280,-142.5606)"
+       x1="79.334000"
+       y1="2017.2728"
+       x2="84.873917"
+       y2="2017.2728" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15340"
+       id="linearGradient2906"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.647871,0.000000,0.000000,0.122864,25.96280,-142.5606)"
+       x1="79.334000"
+       y1="2017.2728"
+       x2="84.873917"
+       y2="2017.2728" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15340"
+       id="linearGradient2908"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.647871,0.000000,0.000000,0.122864,25.96280,-142.5606)"
+       x1="79.334000"
+       y1="2017.2728"
+       x2="84.873917"
+       y2="2017.2728" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15340"
+       id="linearGradient2916"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.647871,0.000000,0.000000,0.122864,154.7700,-142.5606)"
+       x1="79.334000"
+       y1="2017.2728"
+       x2="84.873917"
+       y2="2017.2728" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15340"
+       id="linearGradient2918"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.647871,0.000000,0.000000,0.122864,154.7700,-142.5606)"
+       x1="79.334000"
+       y1="2017.2728"
+       x2="84.873917"
+       y2="2017.2728" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15340"
+       id="linearGradient2920"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.647871,0.000000,0.000000,0.122864,154.7700,-142.5606)"
+       x1="79.334000"
+       y1="2017.2728"
+       x2="84.873917"
+       y2="2017.2728" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -180,15 +261,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.0000000"
-     inkscape:cx="137.10811"
-     inkscape:cy="96.265167"
+     inkscape:zoom="3.7933463"
+     inkscape:cx="92.721600"
+     inkscape:cy="105.21175"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     inkscape:window-width="640"
-     inkscape:window-height="541"
-     inkscape:window-x="380"
-     inkscape:window-y="201" />
+     inkscape:window-width="1187"
+     inkscape:window-height="941"
+     inkscape:window-x="10"
+     inkscape:window-y="24"
+     showguides="true"
+     inkscape:guide-bbox="true" />
   <metadata
      id="metadata4">
     <rdf:RDF
@@ -201,121 +284,139 @@
         <dc:type
            id="type9"
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/GPL/2.0/"
+           id="license1568" />
+        <dc:title
+           id="title1584">Gajim SVG candidate icons</dc:title>
+        <dc:date
+           id="date1586">2 Junio 2005</dc:date>
+        <dc:creator
+           id="creator1588">
+          <cc:Agent
+             id="Agent1590">
+            <dc:title
+               id="title1592">Membris Khan</dc:title>
+          </cc:Agent>
+        </dc:creator>
       </cc:Work>
+      <cc:License
+         id="License1570"
+         rdf:about="http://creativecommons.org/licenses/GPL/2.0/">
+        <cc:permits
+           id="permits1572"
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           id="permits1574"
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:requires
+           id="requires1576"
+           rdf:resource="http://web.resource.org/cc/Notice" />
+        <cc:permits
+           id="permits1578"
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+        <cc:requires
+           id="requires1580"
+           rdf:resource="http://web.resource.org/cc/ShareAlike" />
+        <cc:requires
+           id="requires1582"
+           rdf:resource="http://web.resource.org/cc/SourceCode" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <g
-       id="g1585"
-       transform="translate(-297.5375,-75.98561)">
-      <path
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         sodipodi:nodetypes="cccc"
-         id="path849"
-         d="M 300.50038,213.32949 C 300.50038,213.32949 307.58700,138.92005 367.82322,138.92005 C 428.05944,138.92005 435.14606,213.32949 435.14606,213.32949 L 300.50038,213.32949 z "
-         style="fill:url(#linearGradient1598);fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:3.7500000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1.0000000" />
-      <path
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         id="path848"
-         d="M 321.77759,227.96911 C 321.77759,227.96911 318.21692,128.29013 367.82322,128.29013 C 417.42952,128.29013 413.88621,227.50272 413.88621,227.50272 L 321.77759,227.96911 z "
-         style="fill:url(#linearGradient1600);fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:3.7500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000" />
-      <path
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         id="path850"
-         d="M 321.77759,227.96911 C 321.77759,227.96911 318.21692,128.29013 367.82322,128.29013 C 417.42952,128.29013 413.88621,227.50272 413.88621,227.50272 L 321.77759,227.96911 z "
-         style="fill:url(#linearGradient1602);fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:3.7500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000" />
-      <path
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         id="path851"
-         d="M 321.77759,227.96911 C 321.77759,227.96911 318.21692,128.29013 367.82322,128.29013 C 417.42952,128.29013 413.88621,227.50272 413.88621,227.50272 L 321.77759,227.96911 z "
-         style="fill:url(#linearGradient1604);fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:5.0000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000" />
-      <path
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         transform="matrix(0.387659,0.000000,0.000000,0.187126,340.3513,158.4777)"
-         d="M 102.75591 41.299213 A 31.889763 33.661419 0 1 1  38.976379,41.299213 A 31.889763 33.661419 0 1 1  102.75591 41.299213 z"
-         sodipodi:ry="33.661419"
-         sodipodi:rx="31.889763"
-         sodipodi:cy="41.299213"
-         sodipodi:cx="70.866142"
-         id="path16896"
-         style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:3.2000000;stroke-miterlimit:4.0000000"
-         sodipodi:type="arc" />
-      <rect
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         y="130.59892"
-         x="352.75323"
-         height="35.858517"
-         width="30.140009"
-         id="rect13060"
-         style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.0919340;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
-      <path
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         transform="translate(296.9571,71.04603)"
-         d="M 102.75591 41.299213 A 31.889763 33.661419 0 1 1  38.976379,41.299213 A 31.889763 33.661419 0 1 1  102.75591 41.299213 z"
-         sodipodi:ry="33.661419"
-         sodipodi:rx="31.889763"
-         sodipodi:cy="41.299213"
-         sodipodi:cx="70.866142"
-         id="path847"
-         style="fill:url(#radialGradient1606);fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:3.2000000;stroke-miterlimit:4.0000000"
-         sodipodi:type="arc" />
-      <rect
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         y="162.66754"
-         x="351.78708"
-         height="2.0258281"
-         width="32.072346"
-         id="rect16886"
-         style="fill:url(#linearGradient1608);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.82332879;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
-      <rect
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         y="157.61679"
-         x="351.78708"
-         height="2.0258281"
-         width="32.072346"
-         id="rect16888"
-         style="fill:url(#linearGradient1610);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.82332879;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
-      <rect
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         y="152.56601"
-         x="351.78708"
-         height="2.0258281"
-         width="32.072346"
-         id="rect16890"
-         style="fill:url(#linearGradient1612);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.82332879;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
-      <rect
-         inkscape:export-ydpi="458.00000"
-         inkscape:export-xdpi="458.00000"
-         inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
-         y="147.51524"
-         x="351.78708"
-         height="2.0258281"
-         width="32.072346"
-         id="rect16892"
-         style="fill:url(#linearGradient1614);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.82332879;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000" />
-    </g>
+    <path
+       inkscape:export-ydpi="458.00000"
+       inkscape:export-xdpi="458.00000"
+       inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
+       sodipodi:nodetypes="cccc"
+       id="path849"
+       d="M 2.3221500,178.71473 C 2.3221500,178.71473 11.627360,81.010100 90.721600,81.010100 C 169.81584,81.010100 179.12105,178.71473 179.12105,178.71473 L 2.3221500,178.71473 z "
+       style="fill:url(#linearGradient1547);fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:4.9240046;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1.0000000" />
+    <path
+       inkscape:export-ydpi="458.00000"
+       inkscape:export-xdpi="458.00000"
+       inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
+       id="path851"
+       d="M 30.260570,197.93755 C 30.260570,197.93755 25.585170,67.052290 90.721600,67.052290 C 155.85804,67.052290 151.20543,197.32514 151.20543,197.32514 L 30.260570,197.93755 z "
+       style="fill:url(#linearGradient2340);fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:6.5653391;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000" />
+    <path
+       inkscape:export-ydpi="458.00000"
+       inkscape:export-xdpi="458.00000"
+       inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
+       id="path848"
+       d="M 30.260570,197.93755 C 30.260570,197.93755 25.585170,67.052290 90.721600,67.052290 C 155.85804,67.052290 151.20543,197.32514 151.20543,197.32514 L 30.260570,197.93755 z "
+       style="fill:url(#linearGradient2892);fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:4.9240046;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000" />
+    <path
+       inkscape:export-ydpi="458.00000"
+       inkscape:export-xdpi="458.00000"
+       inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
+       transform="matrix(0.307010,0.000000,0.000000,0.148196,68.96500,104.9614)"
+       d="M 102.75591 41.299213 A 31.889763 33.661419 0 1 1  38.976379,41.299213 A 31.889763 33.661419 0 1 1  102.75591 41.299213 z"
+       sodipodi:ry="33.661419"
+       sodipodi:rx="31.889763"
+       sodipodi:cy="41.299213"
+       sodipodi:cx="70.866142"
+       id="path16896"
+       style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:3.2000000;stroke-miterlimit:4.0000000"
+       sodipodi:type="arc" />
+    <path
+       style="fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.5392334;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
+       d="M 70.933690,69.880460 L 110.50956,69.880460 L 103.34903,110.11644 L 77.723850,110.11644 L 70.933690,69.880460 z "
+       id="rect13060"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       inkscape:export-ydpi="458.00000"
+       inkscape:export-xdpi="458.00000"
+       inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
+       id="path850"
+       d="M 30.260570,197.93755 C 30.260570,197.93755 25.585170,67.052290 90.721600,67.052290 C 155.85804,67.052290 151.20543,197.32514 151.20543,197.32514 L 30.260570,197.93755 z "
+       style="fill:url(#linearGradient1541);fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:4.9240046;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000" />
+    <path
+       inkscape:export-ydpi="458.00000"
+       inkscape:export-xdpi="458.00000"
+       inkscape:export-filename="/home/membris/Gajim-icons/candidato10v2.png"
+       transform="matrix(1.313068,0.000000,0.000000,1.313068,-2.330400,-8.113100)"
+       d="M 102.75591 41.299213 A 31.889763 33.661419 0 1 1  38.976379,41.299213 A 31.889763 33.661419 0 1 1  102.75591 41.299213 z"
+       sodipodi:ry="33.661419"
+       sodipodi:rx="31.889763"
+       sodipodi:cy="41.299213"
+       sodipodi:cx="70.866142"
+       id="path847"
+       style="fill:url(#radialGradient3126);fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:3.2000000;stroke-miterlimit:4.0000000"
+       sodipodi:type="arc" />
+    <path
+       style="fill:url(#linearGradient2904);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.82332879;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
+       d="M 76.578680,105.56018 L 91.222560,105.56018 L 91.222560,108.22023 L 77.195960,108.22023 L 76.578680,105.56018 z "
+       id="rect16888"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:url(#linearGradient2906);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.82332879;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
+       d="M 75.776200,98.928170 L 91.222560,98.928170 L 91.222560,101.58822 L 76.455220,101.58822 L 75.776200,98.928170 z "
+       id="rect16890"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:url(#linearGradient2908);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.82332879;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
+       d="M 74.603360,92.296170 L 91.222560,92.296170 L 91.222560,94.956220 L 75.035460,94.956220 L 74.603360,92.296170 z "
+       id="rect16892"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:url(#linearGradient2920);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.82332879;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
+       d="M 104.03058,105.56018 L 89.510150,105.56018 L 89.510150,108.22023 L 103.16638,108.22023 L 104.03058,105.56018 z "
+       id="path2910"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:url(#linearGradient2918);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.82332879;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
+       d="M 105.07997,98.928170 L 89.510150,98.928170 L 89.510150,101.58822 L 104.33922,101.58822 L 105.07997,98.928170 z "
+       id="path2912"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:url(#linearGradient2916);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.82332879;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
+       d="M 106.37627,92.296170 L 89.510150,92.296170 L 89.510150,94.956220 L 105.63553,94.956220 L 106.37627,92.296170 z "
+       id="path2914"
+       sodipodi:nodetypes="ccccc" />
   </g>
 </svg>
