@@ -135,11 +135,12 @@ class Passphrase_dialog:
 		self.window.destroy()
 		return passphrase, save_passphrase_checkbutton.get_active()
 
-	def __init__(self, labeltext, checkbuttontext):
+	def __init__(self, titletext, labeltext, checkbuttontext):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'passphrase_dialog', APP)
 		self.window = self.xml.get_widget('passphrase_dialog')
 		self.passphrase_entry = self.xml.get_widget('passphrase_entry')
 		self.passphrase = -1
+		self.window.set_title(titletext)
 		self.xml.get_widget('message_label').set_text(labeltext)
 		self.xml.get_widget('save_passphrase_checkbutton').set_label(checkbuttontext)
 		self.xml.signal_autoconnect(self)

@@ -582,14 +582,14 @@ class Roster_window:
 		account = model.get_value(iter, 4)
 		user = self.contacts[account][jid][0]
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_('_Log on'))
+		item = gtk.MenuItem(_('Log _on'))
 		show = self.contacts[account][jid][0].show
 		if show != 'offline' and show != 'error':
 			item.set_sensitive(False)
 		menu.append(item)
 		item.connect('activate', self.on_agent_logging, jid, 'available', account)
 
-		item = gtk.MenuItem(_('Log _off'))
+		item = gtk.MenuItem(_('Log o_ff'))
 		if show == 'offline' or show == 'error':
 			item.set_sensitive(False)
 		menu.append(item)
@@ -805,13 +805,15 @@ class Roster_window:
 			if not save_pass and gajim.connections[account].connected < 2:
 				passphrase = ''
 				w = dialogs.Passphrase_dialog(
+					_('Password Required'),
 					_('Enter your password for account %s') % account, 
-					'Save password')
+					_('Save password'))
 				passphrase, save = w.run()
 				if passphrase == -1:
 					if accountIter:
 						model.set_value(accountIter, 0, self.jabber_state_images['offline'])
 #					gajim.connections[account].connected = 0
+					#FIXME: what if no systray? this TBs!!
 					self.plugin.systray.set_status('offline')
 					self.update_status_comboxbox()
 					return
@@ -836,8 +838,9 @@ class Roster_window:
 						save = False
 					else:
 						w = dialogs.Passphrase_dialog(
+							_('Passphrase Required'),
 							_('Enter GPG key passphrase for account %s') % account, 
-							'Save passphrase')
+							_('Save passphrase'))
 						passphrase, save = w.run()
 					if passphrase == -1:
 						passphrase = ''
