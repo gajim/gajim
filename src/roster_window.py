@@ -987,6 +987,10 @@ class Roster_window:
 		no_queue = True
 		if self.plugin.queues[account].has_key(jid):
 			no_queue = False
+		if self.plugin.windows[account]['chats'].has_key(jid):
+			self.plugin.windows[account]['chats'][jid].print_conversation(msg, 
+				jid, tim = tim, encrypted = encrypted)
+			return
 		#We save it in a queue
 		if not self.plugin.queues[account].has_key(jid):
 			self.plugin.queues[account][jid] = Queue.Queue(50)
