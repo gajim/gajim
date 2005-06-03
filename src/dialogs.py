@@ -366,7 +366,7 @@ class Add_new_contact_window:
 class About_dialog:
 	'''Class for about dialog'''
 	def __init__(self):
-		if gtk.pygtk_version < (2, 6, 0):
+		if gtk.pygtk_version < (2, 6, 0) or gtk.gtk_version < (2, 6, 0):
 			#FIXME: when 0.7.1 is out fix this [add version in _]
 			Information_dialog(_('Gajim - a GTK+ Jabber client') + '\nVersion %s' \
 			% gajim.version)
