@@ -582,14 +582,14 @@ class Roster_window:
 		account = model.get_value(iter, 4)
 		user = self.contacts[account][jid][0]
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_('Log _on'))
+		item = gtk.MenuItem(_('_Log on'))
 		show = self.contacts[account][jid][0].show
 		if show != 'offline' and show != 'error':
 			item.set_sensitive(False)
 		menu.append(item)
 		item.connect('activate', self.on_agent_logging, jid, 'available', account)
 
-		item = gtk.MenuItem(_('Log o_ff'))
+		item = gtk.MenuItem(_('Log _off'))
 		if show == 'offline' or show == 'error':
 			item.set_sensitive(False)
 		menu.append(item)
