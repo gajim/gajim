@@ -172,6 +172,7 @@ class Tabbed_chat_window(chat.Chat):
 				nontabbed_status_image.show()
 
 	def new_user(self, user):
+		'''when new tab is created'''
 		self.names[user.jid] = user.name
 		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[user.jid] = self.xmls[user.jid].get_widget('chats_vbox')
@@ -181,6 +182,7 @@ class Tabbed_chat_window(chat.Chat):
 		
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
+		
 		uf_show = helpers.get_uf_show(user.show)
 		s = _('%s is %s') % (user.name, uf_show)
 		if user.status:
@@ -195,12 +197,6 @@ class Tabbed_chat_window(chat.Chat):
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
 			self.read_queue(user.jid)
-
-		if gajim.config.get('print_time') == 'sometimes':
-			self.print_time_timeout(user.jid)
-			self.print_time_timeout_id[user.jid] = gobject.timeout_add(300000,
-				self.print_time_timeout, user.jid)
-
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:

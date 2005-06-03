@@ -56,6 +56,7 @@ class Chat:
 		self.tagStatus = {}
 		self.nb_unread = {}
 		self.last_message_time = {}
+		self.last_time_printout = {}
 		self.print_time_timeout_id = {}
 		self.names = {} # what is printed in the tab (eg. user.name)
 		self.childs = {}
@@ -225,6 +226,7 @@ class Chat:
 		del self.plugin.windows[self.account][kind][jid]
 		del self.nb_unread[jid]
 		del self.last_message_time[jid]
+		del self.last_time_printout[jid]
 		del self.xmls[jid]
 		del self.tagIn[jid]
 		del self.tagOut[jid]
@@ -234,6 +236,7 @@ class Chat:
 	def new_tab(self, jid):
 		self.nb_unread[jid] = 0
 		self.last_message_time[jid] = 0
+		self.last_time_printout[jid] = float(0.0)
 		
 		if gajim.config.get('use_speller') and 'gtkspell' in globals():
 			message_textview = self.xmls[jid].get_widget('message_textview')
@@ -485,7 +488,7 @@ class Chat:
 	
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
-			return 0
+			return False
 		if gajim.config.get('print_time') == 'sometimes':
 			textview = self.xmls[jid].get_widget('conversation_textview')
 			buffer = textview.get_buffer()
@@ -501,10 +504,10 @@ class Chat:
 			if end_rect.y <= (visible_rect.y + visible_rect.height):
 				#we are at the end
 				self.scroll_to_end(textview)
-			return 1
+			return True # loop again
 		if self.print_time_timeout_id.has_key(jid):
 			del self.print_time_timeout_id[jid]
-		return 0
+		return False
 
 	def on_open_link_activate(self, widget, kind, text):
 		self.plugin.launch_browser_mailer(kind, text)
@@ -685,6 +688,18 @@ class Chat:
 			tim_format = time.strftime(format, tim)
 			self.print_with_tag_list(buffer, tim_format + ' ', end_iter,
 				other_tags_for_time)
+		elif gajim.config.get('print_time') == 'sometimes':
+			if (time.time() - self.last_time_printout[jid]) > (5*60):
+				self.last_time_printout[jid] = time.time()
+				end_iter = buffer.get_end_iter()
+				tim = time.localtime()
+				tim_format = time.strftime('%H:%M', tim)
+				buffer.insert_with_tags_by_name(end_iter,
+							tim_format + '\n',
+							'time_sometimes')
+				#scroll to the end of the textview
+				end_rect = textview.get_iter_location(end_iter)
+				visible_rect = textview.get_visible_rect()
 
 		text_tags = other_tags_for_text[:]
 		if kind == 'status':
