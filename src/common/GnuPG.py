@@ -1,4 +1,4 @@
-##	Core/GnuPG.py
+##	common/GnuPG.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -22,11 +22,12 @@ from tempfile import *
 USE_GPG = 1
 
 try:
-	import GnuPGInterface
+	from common import GnuPGInterface
 except:
 	USE_GPG = 0
+	
 else:
-	class  GnuPG(GnuPGInterface.GnuPG):
+	class GnuPG(GnuPGInterface.GnuPG):
 		def __init__(self):
 			GnuPGInterface.GnuPG.__init__(self)
 			self._setup_my_options()
