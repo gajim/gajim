@@ -1,3 +1,19 @@
+gajim (0.7.1-1) unstable; urgency=low
+
+  * Transports icon as an option and error/mesage icon for transports
+  * Gajim is more HIG compatible
+  * Editing registration information on transports
+  * Messages stanza without <body> element are not printed
+  * SASL bugfix
+  * GtkSpell capabilities
+  * Support SSL (legacy) connection
+  * Assign gpg key to specific contact
+  * Contacts are sortable by status
+  * Gajim remembers last lines when reopening chat
+  * New translations available: German, Russian, Spanish, Bulgarian
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Sat,  4 Jun 2005 17:24:05 +0200
+
 gajim (0.7-1) unstable; urgency=low
 
   * Ability for groupchat reserved rooms with full affiliations and roles support
