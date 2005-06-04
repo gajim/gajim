@@ -25,7 +25,6 @@ install-stamp: build-stamp
 	install -d debian/tmp
 	cd debian/tmp && install -d `cat ../dirs`
 	make install PREFIX=/usr DESTDIR=`pwd`/debian/tmp
-	cp gajim.xpm debian/tmp/usr/share/pixmaps
 
 binary-indep: checkroot build
 	$(checkdir)
