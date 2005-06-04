@@ -329,7 +329,7 @@ class Add_new_contact_window:
 	def fill_jid(self):
 		model = self.protocol_combobox.get_model()
 		index = self.protocol_combobox.get_active()
-		jid = self.uid_entry.get_text()
+		jid = self.uid_entry.get_text().strip()
 		if index > 0: # it's not jabber but a transport
 			jid = jid.replace('@', '%')
 		agent = model[index][1]
