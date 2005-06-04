@@ -1,17 +1,3 @@
-Gajim 0.7.1 (5 Jun 2005)
-
-  * Transports icon as an option and error/mesage icon for transports
-  * Gajim is more HIG compatible
-  * Editing registration information on transports
-  * Messages stanza without <body> element are not printed
-  * SASL bugfix
-  * GtkSpell capabilities
-  * Support SSL (legacy) connection
-  * Assign gpg key to specific contact
-  * Contacts are sortable by status
-  * Gajim remembers last lines when reopening chat
-  * New translations available: German, Russian, Spanish, Bulgarian
-
 Gajim 0.7 (23 May 2005)
 
   * Ability for groupchat reserved rooms with full affiliations and roles support
