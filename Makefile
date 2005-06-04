@@ -59,6 +59,8 @@ install:
 		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
 	done
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
+	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
+	cp data/pixmaps/gajim.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/applications";
 	cp gajim.desktop "$(DESTDIR)$(PREFIX)/share/applications/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/man/man1";
