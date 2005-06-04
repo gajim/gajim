@@ -311,7 +311,7 @@ class Connection:
 		self.dispatch('STATUS', 'offline')
 		self.connection = None
 		if not self.on_purpose:
-			self.dispatch('ERROR', 'You have been disconected from %s' % self.name)
+			self.dispatch('ERROR', _('You have been disconnected from %s') % self.name)
 		self.on_purpose = False
 	# END disconenctedCB
 
