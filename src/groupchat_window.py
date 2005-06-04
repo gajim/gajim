@@ -44,6 +44,7 @@ class Groupchat_window(chat.Chat):
 		self.subjects = {}
 		self.subject_entry = {}
 		self.subject_entry_tooltip = {}
+		self.room_creation = {}
 		self.new_room(room_jid, nick)
 		self.show_title()
 		self.xml.signal_connect('on_groupchat_window_destroy', 
@@ -260,6 +261,11 @@ class Groupchat_window(chat.Chat):
 					image = state_images[show]
 					model.set_value(iter, 0, image)
 					model.set_value(iter, 3, show)
+		if (time.time() - self.room_creation[room_jid]) > 30 and \
+				nick != self.nicks[room_jid]:
+			self.print_conversation(_('%s is now %s (%s)') % (nick,
+				show, status), room_jid)
+
 	
 	def set_subject(self, room_jid, subject):
 		self.subjects[room_jid] = subject
@@ -522,6 +528,7 @@ class Groupchat_window(chat.Chat):
 		chat.Chat.new_tab(self, room_jid)
 		self.nicks[room_jid] = nick
 		self.subjects[room_jid] = ''
+		self.room_creation[room_jid] = time.time()
 		self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
 			'list_treeview')
 		conversation_textview = self.xmls[room_jid].get_widget(
