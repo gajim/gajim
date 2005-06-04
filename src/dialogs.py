@@ -213,7 +213,7 @@ class Change_status_message_dialog:
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
-			message = self.message_buffer.get_text(beg, end, 0)
+			message = self.message_buffer.get_text(beg, end, 0).strip()
 			#FIXME: support more than one line
 			gajim.config.set('last_status_msg', message)
 		else:
