@@ -646,6 +646,9 @@ class Connection:
 	def change_status(self, show, msg):
 		if not show in STATUS_LIST:
 			return -1
+		sshow = show # show to be send
+		if show == 'online':
+			sshow = None
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if keyID and USE_GPG:
@@ -667,7 +670,7 @@ class Connection:
 				if show == 'invisible':
 					ptype = 'invisible'
 				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
-				p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
+				p = common.xmpp.Presence(typ = ptype, priority = prio, show = sshow)
 				if msg:
 					p.setStatus(msg)
 				if signed:
@@ -698,7 +701,7 @@ class Connection:
 			if show == 'invisible':
 				ptype = 'invisible'
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
-			p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
+			p = common.xmpp.Presence(typ = ptype, priority = prio, show = sshow)
 			if msg:
 				p.setStatus(msg)
 			if signed:
@@ -901,8 +904,12 @@ class Connection:
 	def join_gc(self, nick, room, server, password):
 		if not self.connection:
 			return
+		show = STATUS_LIST[self.connected]
+		ptype = None
+		if show == 'online':
+			show = None
 		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
-			show = STATUS_LIST[self.connected], status = self.status)
+			show = show, status = self.status)
 		t = p.setTag(common.xmpp.NS_MUC + ' x')
 		if password:
 			t.setTagData('password', password)
@@ -932,6 +939,8 @@ class Connection:
 		ptype = None
 		if show == 'offline':
 			ptype = 'unavailable'
+			show = None
+		if show == 'online':
 			show = None
 		self.connection.send(common.xmpp.Presence(to = '%s/%s' % (jid, nick),
 			typ = ptype, show = show, status = status))
