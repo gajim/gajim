@@ -51,6 +51,7 @@ distro_info = {
 	'Slackware Linux': '/etc/slackware-release',
 	'Slackware Linux': '/etc/slackware-version',
 	'Solaris/Sparc': '/etc/release',
+	'Source Mage': '/etc/sourcemage_version',
 	'SUSE Linux': '/etc/SuSE-release',
 	'Sun JDS': '/etc/sun-release',
 	'PLD Linux': '/etc/pld-release',
@@ -96,7 +97,9 @@ def get_os_info():
 				text = fd.read().strip()
 				fd.close()
 				if path_to_file.endswith('version'):
-					text = distro_name + ' ' + text
+					# sourcemage_version has all the info we need
+					if not path_to_file.startswith('sourcemage'):
+						text = distro_name + ' ' + text
 				elif path_to_file.endswith('aurox-release'): # file doesn't have version
 					text = distro_name
 				elif path_to_file.endswith('lfs-release'): # file just has version
