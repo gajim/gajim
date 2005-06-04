@@ -182,11 +182,14 @@ class Preferences_window:
 		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
 		
 		#use speller
-		if 'gtkspell' in globals():
-			st = gajim.config.get('use_speller')
-			self.xml.get_widget('speller_checkbutton').set_active(st)
+		if os.name == 'nt':
+			self.xml.get_widget('speller_checkbutton').set_no_show_all(True)
 		else:
-			self.xml.get_widget('speller_checkbutton').set_sensitive(False)
+			if 'gtkspell' in globals():
+				st = gajim.config.get('use_speller')
+				self.xml.get_widget('speller_checkbutton').set_active(st)
+			else:
+				self.xml.get_widget('speller_checkbutton').set_sensitive(False)
 		
 		#Print time
 		if gajim.config.get('print_time') == 'never':
@@ -214,17 +217,17 @@ class Preferences_window:
 
 		#Color for incomming messages
 		colSt = gajim.config.get('inmsgcolor')
-		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
+		self.xml.get_widget('incoming_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for outgoing messages
 		colSt = gajim.config.get('outmsgcolor')
-		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
+		self.xml.get_widget('outgoing_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
 		
 		#Color for status messages
 		colSt = gajim.config.get('statusmsgcolor')
-		self.xml.get_widget('status_msg_colorbutton').set_color(\
+		self.xml.get_widget('status_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
 
 		# on new message

@@ -3661,7 +3661,6 @@
 
 	      <child>
 		<widget class="GtkCheckButton" id="speller_checkbutton">
-		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Highlight misspelled words</property>
 		  <property name="use_underline">True</property>
