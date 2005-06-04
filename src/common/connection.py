@@ -259,8 +259,8 @@ class Connection:
 				if self.connection:
 					self.connection.send(common.xmpp.Presence(who, 'subscribed'))
 				if who.find("@") <= 0:
-					self.dispatch('NOTIFY', (prs.getFrom().getStripped(), \
-						'offline', 'offline', prs.getFrom().getResource(), prio, \
+					self.dispatch('NOTIFY', (prs.getFrom().getStripped().encode('utf8'), \
+						'offline', 'offline', prs.getFrom().getResource().encode('utf8'), prio, \
 						keyID, None, None, None, None, None, None))
 			else:
 				if not status:
@@ -268,8 +268,8 @@ class Connection:
 				self.dispatch('SUBSCRIBE', (who, status))
 		elif ptype == 'subscribed':
 			jid = prs.getFrom()
-			self.dispatch('SUBSCRIBED', (jid.getStripped(), jid.getResource()))
-			self.dispatch('UPDUSER', (jid.getStripped(), jid.getNode(), \
+			self.dispatch('SUBSCRIBED', (jid.getStripped().encode('utf8'), jid.getResource().encode('utf8')))
+			self.dispatch('UPDUSER', (jid.getStripped().encode('utf8'), jid.getNode(), \
 				['General']))
 			#BE CAREFUL : no con.updateRosterItem() in a callback
 			gajim.log.debug('we are now subscribed to %s' % who)
@@ -284,17 +284,20 @@ class Connection:
 			if errcode == '409':	#conflict :	Nick Conflict
 				self.dispatch('ERROR', errmsg)
 			elif errcode == '502': # Internal Timeout:
-				self.dispatch('NOTIFY', (prs.getFrom().getStripped(),
-					'error', errmsg, prs.getFrom().getResource(), prio, keyID,
+				self.dispatch('NOTIFY', (prs.getFrom().getStripped().encode('utf8'),
+					'error', errmsg, prs.getFrom().getResource().encode('utf8'), prio, keyID,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
 					prs.getReason(), prs.getActor(), prs.getStatusCode()))
 			else:
 				self.dispatch('ERROR_ANSWER', (prs.getFrom().getStripped(), errmsg,
 																					errcode))
 		if not ptype or ptype == 'unavailable':
-			gajim.logger.write('status', status, prs.getFrom().getStripped(), show)
-			self.dispatch('NOTIFY', (prs.getFrom().getStripped(), show, status,
-				prs.getFrom().getResource(), prio, keyID, prs.getRole(),
+			jid = prs.getFrom()
+			gajim.logger.write('status', status, jid.getStripped().encode('utf8'), show)
+			account = prs.getFrom().getStripped().encode('utf8')
+			resource =  prs.getFrom().getResource().encode('utf8')
+			self.dispatch('NOTIFY', ( account, show, status,
+				resource, prio, keyID, prs.getRole(),
 				prs.getAffiliation(), prs.getJid(), prs.getReason(),
 				prs.getActor(), prs.getStatusCode()))
 	# END presenceCB
@@ -315,13 +318,17 @@ class Connection:
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
-			jid  = item.getAttr('jid')
+			jid  = item.getAttr('jid').encode('utf8')
 			name = item.getAttr('name')
-			sub  = item.getAttr('subscription')
+			if name:
+				name = name.encode('utf8')
+			sub  = item.getAttr('subscription').encode('utf8')
 			ask  = item.getAttr('ask')
+			if ask:
+				ask = ask.encode('utf8')
 			groups = []
 			for group in item.getTags('group'):
-				groups.append(group.getData())
+				groups.append(group.getData().encode('utf8'))
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
 		raise common.xmpp.NodeProcessed
 
@@ -502,6 +509,18 @@ class Connection:
 		roster = self.connection.getRoster().getRaw()
 		if not roster :
 			roster = {}
+		else:
+			for i in roster.keys():
+				props = roster[i]
+				if props.has_key('name') and props['name']:
+					props['name']=props['name'].encode('utf8')
+				if props.has_key('groups') and props['groups']:
+					props['groups']= map(lambda e:e.encode('utf8'),props['groups'])
+				if props.has_key('resources') and props['resources']:
+					props['resources']= map(lambda e:e.encode('utf8'),props['resources'])
+				del roster[i]
+				roster[i.encode('utf8')] = props
+				
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		if roster.has_key(name + '@' + hostname):
