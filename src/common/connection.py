@@ -94,7 +94,7 @@ def get_os_info():
 			path_to_file = distro_info[distro_name]
 			if os.path.exists(path_to_file):
 				fd = open(path_to_file)
-				text = fd.read().strip()
+				text = fd.readline().strip() #get only first line
 				fd.close()
 				if path_to_file.endswith('version'):
 					# sourcemage_version has all the info we need
