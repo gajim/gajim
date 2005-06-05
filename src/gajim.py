@@ -54,7 +54,7 @@ from common import optparser
 
 profile = ''
 try:
-	opts, args = getopt.getopt(sys.argv[1:], 'hvp:', [ 'help', 'verbose',
+	opts, args = getopt.getopt(sys.argv[1:], 'hvp:', ['help', 'verbose',
 		'profile='])
 except getopt.error, msg:
 	print msg
@@ -783,7 +783,7 @@ class Interface:
 		else:
 			self.systray_capabilities = True
 			self.systray = systray.Systray(self)
-		if self.systray_capabilities:
+		if self.systray_capabilities and gajim.config.get('trayicon'):
 			self.show_systray()
 
 		if gajim.config.get('check_for_new_version'):

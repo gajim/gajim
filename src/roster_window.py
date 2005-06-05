@@ -868,7 +868,7 @@ class Roster_window:
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
 			(show == 'offline' and not gajim.config.get('ask_offline_status')):
 			lowered_uf_status_msg = helpers.get_uf_show(show).lower()
-			return "I'm %s" % lowered_uf_status_msg
+			return _("I'm %s") % lowered_uf_status_msg
 		dlg = dialogs.Change_status_message_dialog(self.plugin, show)
 		message = dlg.run()
 		return message
@@ -1519,7 +1519,13 @@ class Roster_window:
 				gajim.config.get('y-position'))
 			self.window.resize(gajim.config.get('width'), \
 				gajim.config.get('height'))
-		self.window.show_all()
+		if gajim.config.get('show_roster_on_startup'):
+			self.window.show_all()
+		else:
+			if not gajim.config.get('trayicon'):
+				# cannot happen via GUI, but I put this incase user touches config
+				self.window.show_all() # without trayicon, he should see the roster!
+			
 		self.groups = {}
 		self.contacts = {}
 		self.newly_added = {}

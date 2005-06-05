@@ -35,6 +35,7 @@ class Config:
 
 	__options = {
 		# name: [ type, value ]
+		'show_roster_on_startup': [opt_bool, True],
 		'verbose': [ opt_bool, False ],
 		'delauth': [ opt_bool, True ],
 		'delroster': [ opt_bool, True ],

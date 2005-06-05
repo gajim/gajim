@@ -98,6 +98,16 @@ class Preferences_window:
 			else:
 				self.trayicon_checkbutton.set_sensitive(False)
 
+		#Show roster on Gajim startup
+		st = gajim.config.get('show_roster_on_startup')
+		show_roster_on_startup_checkbutton = self.xml.get_widget(
+			'show_roster_on_startup_checkbutton')
+		if gajim.config.get('trayicon'): # allow it only when trayicon ON
+			show_roster_on_startup_checkbutton.set_active(st)
+		else:
+			show_roster_on_startup_checkbutton.set_sensitive(False)
+			show_roster_on_startup_checkbutton.set_active(st)
+
 		#Save position
 		st = gajim.config.get('saveposition')
 		self.xml.get_widget('save_position_checkbutton').set_active(st)
@@ -426,9 +436,17 @@ class Preferences_window:
 			gajim.config.set('trayicon', True)
 			self.plugin.show_systray()
 			self.plugin.roster.update_status_comboxbox()
+
+			self.xml.get_widget(
+				'show_roster_on_startup_checkbutton').set_sensitive(True)
 		else:
 			gajim.config.set('trayicon', False)
 			self.plugin.hide_systray()
+			show_roster_on_startup_checkbutton = self.xml.get_widget(
+				'show_roster_on_startup_checkbutton')
+			gajim.config.set('show_roster_on_startup', True) # no tray, show roster!
+			show_roster_on_startup_checkbutton.set_active(True)
+			show_roster_on_startup_checkbutton.set_sensitive(False)
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
@@ -613,6 +631,11 @@ class Preferences_window:
 				window.xmls[jid].get_widget('message_textview').set_buffer(
 					buf2[jid])
 				window.load_var(jid, saved_var[jid])
+
+	def on_show_roster_on_startup_checkbutton_toggled(self, widget):
+		active = widget.get_active()
+		gajim.config.set('show_roster_on_startup', active)
+		self.plugin.save_config()
 
 	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
 		if widget.get_active():
