@@ -222,8 +222,11 @@ class Tabbed_chat_window(chat.Chat):
 				conversation_textview.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
-			if (event.state & gtk.gdk.SHIFT_MASK):
-				return False
+			if gajim.config.get('send_on_ctrl_enter'): 
+				if not (event.state & gtk.gdk.CONTROL_MASK):
+					return False
+			elif (event.state & gtk.gdk.SHIFT_MASK):
+					return False
 			if gajim.connections[self.account].connected < 2: #we are not connected
 				dialogs.Error_dialog(_('You are not connected, so you cannot send a message'))
 				return True

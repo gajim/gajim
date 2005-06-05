@@ -35,6 +35,7 @@ class Config:
 
 	__options = {
 		# name: [ type, value ]
+		'send_on_ctrl_enter': [opt_bool, False], # #Send on CTRL-Enter (Enter alone for newline)
 		'verbose': [ opt_bool, False ],
 		'delauth': [ opt_bool, True ],
 		'delroster': [ opt_bool, True ],
