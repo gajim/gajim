@@ -36,13 +36,12 @@ opts = {
             'libgtk-win32-2.0-0.dll','libpango-1.0-0.dll',
             'libpangowin32-1.0-0.dll'
         ],
-        'optimize': '2', # python -OO
     }
 }
 
 setup(
     name = 'Gajim',
-    version = '0.7',
+    version = '0.7.1',
     description = 'A Jabber client written in PyGTK',
     windows = [{'script': 'src/gajim.py',
                 'icon_resources': [(1, 'gajim.ico')]}],
