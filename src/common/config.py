@@ -35,7 +35,6 @@ class Config:
 
 	__options = {
 		# name: [ type, value ]
-		'show_roster_on_startup': [opt_bool, True],
 		'verbose': [ opt_bool, False ],
 		'delauth': [ opt_bool, True ],
 		'delroster': [ opt_bool, True ],
@@ -102,6 +101,7 @@ class Config:
 		'restore_lines': [opt_int, 4],
 		'restore_timeout': [opt_int, 60],
 		'send_on_ctrl_enter': [opt_bool, False], # send on ctrl+enter
+		'show_roster_on_startup': [opt_bool, True],
 		'version': [ None, '0.7' ],
 	}
 
