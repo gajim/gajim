@@ -139,10 +139,10 @@ class Preferences_window:
 			'green': {
 				'accounttextcolor': '#ffffff',
 				'grouptextcolor': '#0000ff',
-				'usertextcolor': '#000000',
+				'contacttextcolor': '#000000',
 				'accountbgcolor': '#94aa8c',
 				'groupbgcolor': '#eff3e7',
-				'userbgcolor': '#ffffff',
+				'contactbgcolor': '#ffffff',
 				'accountfont': 'Sans Bold 10',
 				'groupfont': 'Sans Italic 10',
 				'userfont': 'Sans 10',
@@ -150,14 +150,25 @@ class Preferences_window:
 			'cyan': {
 				'accounttextcolor': '#ff0000',
 				'grouptextcolor': '#0000ff',
-				'usertextcolor': '#000000',
+				'contacttextcolor': '#000000',
 				'accountbgcolor': '#9fdfff',
 				'groupbgcolor': '#ffffff',
-				'userbgcolor': '#ffffff',
+				'contactbgcolor': '#ffffff',
 				'accountfont': 'Sans Bold 10',
 				'groupfont': 'Sans Italic 10',
 				'userfont': 'Sans 10'
-			}
+			},
+			'marine': {
+				'accounttextcolor': '#ffffff',
+				'grouptextcolor': '#0000ff',
+				'contacttextcolor': '#000000',
+				'accountbgcolor': '#918caa',
+				'groupbgcolor': '#e9e7f3',
+				'contactbgcolor': '#ffffff',
+				'accountfont': 'Sans Bold 10',
+				'groupfont': 'Sans Italic 10',
+				'userfont': 'Sans 10'
+			},
 		}
 
 		theme_combobox = self.xml.get_widget('theme_combobox')
@@ -470,7 +481,7 @@ class Preferences_window:
 		self.on_roster_widget_color_set(widget, 'grouptextcolor')
 
 	def on_user_text_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'usertextcolor')
+		self.on_roster_widget_color_set(widget, 'contacttextcolor')
 
 	def on_account_text_bg_colorbutton_color_set(self, widget):
 		self.on_roster_widget_color_set(widget, 'accountbgcolor')
@@ -479,7 +490,7 @@ class Preferences_window:
 		self.on_roster_widget_color_set(widget, 'groupbgcolor')
 	
 	def on_user_text_bg_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'userbgcolor')
+		self.on_roster_widget_color_set(widget, 'contactbgcolor')
 	
 	def on_widget_font_set(self, widget, text):
 		font_string = widget.get_font_name()
@@ -500,10 +511,10 @@ class Preferences_window:
 		color_widgets = {
 			'account_text_colorbutton': 'accounttextcolor',
 			'group_text_colorbutton': 'grouptextcolor',
-			'user_text_colorbutton': 'usertextcolor',
+			'user_text_colorbutton': 'contacttextcolor',
 			'account_text_bg_colorbutton': 'accountbgcolor',
 			'group_text_bg_colorbutton': 'groupbgcolor',
-			'user_text_bg_colorbutton': 'userbgcolor'
+			'user_text_bg_colorbutton': 'contactbgcolor'
 		}
 		font_widgets = {
 			'account_text_fontbutton': 'accountfont',
