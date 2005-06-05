@@ -22,6 +22,7 @@ Name: desktopicon; Description: "Create a &desktop icon"; GroupDescription: "Add
 Source: "dist\*.pyd"; DestDir: "{app}\src"
 Source: "dist\*.dll"; DestDir: "{app}\src"
 Source: "dist\*.zip"; DestDir: "{app}\src"
+Source: "COPYING"; DestDir: "{app}"
 Source: "dist\gajim.exe"; DestDir: "{app}\src"; components: main
 Source: "*.ico"; DestDir: "{app}"
 Source: "dist\*.glade"; DestDir: "{app}\src"
