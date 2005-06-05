@@ -31,4 +31,4 @@ build() {
 
   make DESTDIR=$startdir/pkg install
 }
-#md5sums=('')
+md5sums=('4f1c4351ee67d54d16021465bdf0e8c5')
