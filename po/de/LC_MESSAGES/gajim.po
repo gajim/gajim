@@ -537,11 +537,11 @@ msgstr "Konto _bearbeiten"
 
 #: src/roster_window.py:662 src/msg.c:12
 msgid "_Service Discovery"
-msgstr "_Dienste entdecken"
+msgstr "_Dienste Durchsuchen"
 
 #: src/roster_window.py:665
 msgid "_Add Contact"
-msgstr "Kontakt _hinzufügen"
+msgstr "Kontakt _Hinzufügen"
 
 #: src/roster_window.py:668
 msgid "Join _Groupchat"
@@ -1036,7 +1036,7 @@ msgstr "_Autorisieren"
 
 #: src/msg.c:78
 msgid "Service Discovery"
-msgstr "Dienst-Erkennung"
+msgstr "Dienste Durchsuchen"
 
 #: src/msg.c:79
 msgid "_Address:"
@@ -1044,7 +1044,7 @@ msgstr "_Adresse:"
 
 #: src/msg.c:80
 msgid "Go"
-msgstr "Gehe"
+msgstr "Los"
 
 #: src/msg.c:81
 msgid "_Refresh"
