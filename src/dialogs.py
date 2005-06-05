@@ -642,7 +642,7 @@ class Change_password_dialog:
 		self.password1_entry = self.xml.get_widget('password1_entry')
 		self.password2_entry = self.xml.get_widget('password2_entry')
 
-		self.window.show_all()
+		self.dialog.show_all()
 
 	def run(self):
 		'''Wait for OK button to be pressed and return new password'''
