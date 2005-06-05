@@ -35,7 +35,6 @@ class Config:
 
 	__options = {
 		# name: [ type, value ]
-		'send_on_ctrl_enter': [opt_bool, False], # #Send on CTRL-Enter (Enter alone for newline)
 		'verbose': [ opt_bool, False ],
 		'delauth': [ opt_bool, True ],
 		'delroster': [ opt_bool, True ],
@@ -101,6 +100,7 @@ class Config:
 		'change_roster_title': [ opt_bool, True ],
 		'restore_lines': [opt_int, 4],
 		'restore_timeout': [opt_int, 60],
+		'send_on_ctrl_enter': [opt_bool, False], # send on ctrl+enter
 		'version': [ None, '0.7' ],
 	}
 
