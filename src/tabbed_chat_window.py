@@ -84,7 +84,7 @@ class Tabbed_chat_window(chat.Chat):
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(True)
 
 		nontabbed_status_image = self.xmls[jid].get_widget(
-																	'nontabbed_status_image')
+			'nontabbed_status_image')
 		if len(self.xmls) > 1:
 			nontabbed_status_image.hide()
 		else:
@@ -107,7 +107,7 @@ class Tabbed_chat_window(chat.Chat):
 		state_images = self.plugin.roster.get_appropriate_state_images(jid)
 		image = state_images[show]
 		non_tabbed_status_image = self.xmls[jid].get_widget(
-																	'nontabbed_status_image')
+			'nontabbed_status_image')
 		if keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(True)
 		else:
@@ -234,7 +234,7 @@ class Tabbed_chat_window(chat.Chat):
 			start_iter = message_buffer.get_start_iter()
 			end_iter = message_buffer.get_end_iter()
 			message = message_buffer.get_text(start_iter, end_iter, 0)
-			if message != '':
+			if message != '' or message != '\n':
 				if message == '/clear':
 					self.on_clear(None, conversation_textview) # clear conversation
 					self.on_clear(None, widget) # clear message textview too

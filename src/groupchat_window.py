@@ -338,13 +338,13 @@ class Groupchat_window(chat.Chat):
 			message_buffer = widget.get_buffer()
 			start_iter = message_buffer.get_start_iter()
 			end_iter = message_buffer.get_end_iter()
-			txt = message_buffer.get_text(start_iter, end_iter, 0)
-			if txt != '':
-				if txt == '/clear':
+			message = message_buffer.get_text(start_iter, end_iter, 0)
+			if message != '' or message != '\n':
+				if message == '/clear':
 					self.on_clear(None, conversation_textview) # clear conversation
 					self.on_clear(None, widget) # clear message textview too
 					return True
-				gajim.connections[self.account].send_gc_message(room_jid, txt)
+				gajim.connections[self.account].send_gc_message(room_jid, message)
 				message_buffer.set_text('', -1)
 				widget.grab_focus()
 			return True
