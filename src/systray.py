@@ -220,6 +220,11 @@ class Systray:
 						self.plugin.roster.contacts[account][jid][0], account)
 					acc['chats'][jid].set_active_tab(jid)
 					acc['chats'][jid].window.present()
+		if event.button == 2: # middle click
+			if win.flags() & gtk.VISIBLE:
+				self.plugin.roster.window.hide()
+			else:
+				self.plugin.roster.window.present()
 		if event.button == 3: # right click
 			self.make_menu(event)
 	
