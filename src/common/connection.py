@@ -887,6 +887,7 @@ class Connection:
 	def send_vcard(self, vcard):
 		if not self.connection:
 			return
+		print vcard
 		iq = common.xmpp.Iq(typ = 'set')
 		iq2 = iq.setTag(common.xmpp.NS_VCARD + ' vCard')
 		for i in vcard.keys():

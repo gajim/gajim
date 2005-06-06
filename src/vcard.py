@@ -21,6 +21,8 @@ import gtk
 import gtk.glade
 import urllib
 import base64
+import mimetypes
+import os
 from common import gajim
 from common import i18n
 _ = i18n._
@@ -69,6 +71,62 @@ class Vcard_window:
 				' '.join(no_log_for))
 		self.window.destroy()
 
+	def on_clear_button_clicked(self, widget):
+		# empty the image
+		self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
+
+	def image_is_ok(self, image):
+		if not os.path.exists(image):
+			return False
+		return True
+
+	def on_set_avatar_button_clicked(self, widget):
+		dialog = gtk.FileChooserDialog('Choose avatar', None,
+			gtk.FILE_CHOOSER_ACTION_OPEN,
+			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+			gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		dialog.set_default_response(gtk.RESPONSE_OK)
+		filter = gtk.FileFilter()
+		filter.set_name('All files')
+		filter.add_pattern('*')
+		dialog.add_filter(filter)
+
+		filter = gtk.FileFilter()
+		filter.set_name('Images')
+		filter.add_mime_type('image/png')
+		filter.add_mime_type('image/jpeg')
+		filter.add_mime_type('image/gif')
+		filter.add_pattern('*.png')
+		filter.add_pattern('*.jpg')
+		filter.add_pattern('*.gif')
+		filter.add_pattern('*.tif')
+		filter.add_pattern('*.xpm')
+		dialog.add_filter(filter)
+		dialog.set_filter(filter)
+
+		ok = False
+		while not ok:
+			response = dialog.run()
+			if response == gtk.RESPONSE_OK:
+				file = dialog.get_filename()
+				if self.image_is_ok(file):
+					ok = True
+			else:
+				ok = True
+		dialog.destroy()
+
+		if file:
+			fd = open(file)
+			data = fd.read()
+			pixbufloader = gtk.gdk.PixbufLoader()
+			pixbufloader.write(data)
+			pixbufloader.close()
+			pixbuf = pixbufloader.get_pixbuf()
+			image = self.xml.get_widget('PHOTO_image')
+			image.set_from_pixbuf(pixbuf)
+			self.avatar_encoded = base64.encodestring(data)
+			self.avatar_mime_type = mimetypes.guess_type(file)[0]
+
 	def set_value(self, entry_name, value):
 		try:
 			self.xml.get_widget(entry_name).set_text(value)
@@ -81,8 +139,10 @@ class Vcard_window:
 				if i == 'PHOTO':
 					img_decoded = None
 					if vcard[i].has_key('BINVAL'):
+						img_encoded = vcard[i]['BINVAL']
+						self.avatar_encoded = img_encoded
+						self.avatar_mime_type = vcard[i]['TYPE']
 						try:
-							img_encoded = vcard[i]['BINVAL']
 							img_decoded = base64.decodestring(img_encoded)
 						except:
 							pass
@@ -204,12 +264,19 @@ class Vcard_window:
 			txt = self.xml.get_widget(e + '_entry').get_text()
 			if txt != '':
 				vcard = self.add_to_vcard(vcard, e, txt)
+
+		# DESC textview
 		buffer = self.xml.get_widget('DESC_textview').get_buffer()
 		start_iter = buffer.get_start_iter()
 		end_iter = buffer.get_end_iter()
 		txt = buffer.get_text(start_iter, end_iter, 0)
 		if txt != '':
 			vcard['DESC'] = txt
+
+		# Avatar
+		if self.avatar_encoded:
+			vcard['PHOTO'] = {'TYPE': self.avatar_mime_type,
+				'BINVAL': self.avatar_encoded}
 		return vcard
 
 	def on_publish_button_clicked(self, widget):
@@ -263,6 +330,8 @@ class Vcard_window:
 		#close button at the end
 		button = self.xml.get_widget('close_button')
 		information_hbuttonbox.reorder_child(button, 2)
+		#photo_vbuttonbox visible
+		self.xml.get_widget('photo_vbuttonbox').show()
 		
 		#make all entries editable
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
@@ -283,10 +352,13 @@ class Vcard_window:
 	def __init__(self, user, plugin, account, vcard = False):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
 		self.window = self.xml.get_widget('vcard_information_window')
+		self.xml.get_widget('photo_vbuttonbox').set_no_show_all(True)
 		self.plugin = plugin
 		self.user = user #don't use it if vcard is true
 		self.account = account
 		self.vcard = vcard
+		self.avatar_mime_type = None
+		self.avatar_encoded = None
 
 		if vcard:
 			self.jid = user
