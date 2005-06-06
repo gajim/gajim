@@ -19,6 +19,8 @@
 
 import gtk
 import gtk.glade
+import urllib
+import base64
 from common import gajim
 from common import i18n
 _ = i18n._
@@ -76,6 +78,29 @@ class Vcard_window:
 	def set_values(self, vcard):
 		for i in vcard.keys():
 			if type(vcard[i]) == type({}):
+				if i == 'PHOTO':
+					img_decoded = None
+					if vcard[i].has_key('BINVAL'):
+						try:
+							img_encoded = vcard[i]['BINVAL']
+							img_decoded = base64.decodestring(img_encoded)
+						except:
+							pass
+					elif vcard[i].has_key('EXTVAL'):
+						url = vcard[i]['EXTVAL']
+						try:
+							fd = urllib.urlopen(url)
+							img_decoded = fd.read()
+						except:
+							pass
+					if img_decoded:
+						pixbufloader = gtk.gdk.PixbufLoader()
+						pixbufloader.write(img_decoded)
+						pixbufloader.close()
+						pixbuf = pixbufloader.get_pixbuf()
+						image = self.xml.get_widget('PHOTO_image')
+						image.set_from_pixbuf(pixbuf)
+					continue
 				add_on = ''
 				if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
 					add_on = '_HOME'
