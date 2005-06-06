@@ -450,9 +450,9 @@ class Roster_window:
 		if window.get_response() == gtk.RESPONSE_YES:
 			gajim.connections[account].unsubscribe_agent(user.jid + '/' \
 																		+ user.resource)
-			# remove transport from listview
+			# remove transport from treeview
 			self.remove_user(user, account)
-			# remove transport's contacts from listview
+			# remove transport's contacts from treeview
 			for jid, contacts in self.contacts[account].items():
 				contact = contacts[0]
 				if jid.endswith('@' + user.jid):
