@@ -76,9 +76,13 @@ class Vcard_window:
 	def set_values(self, vcard):
 		for i in vcard.keys():
 			if type(vcard[i]) == type({}):
+				add_on = ''
+				if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
+					add_on = '_HOME'
+					if 'WORK' in vcard[i]:
+						add_on = '_WORK'
 				for j in vcard[i].keys():
-					self.set_value(i + '_' + j +
-							'_entry', vcard[i][j])
+					self.set_value(i + add_on + '_' + j + '_entry', vcard[i][j])
 			else:
 				if i == 'DESC':
 					self.xml.get_widget('DESC_textview').get_buffer().set_text(
@@ -163,9 +167,13 @@ class Vcard_window:
 
 	def make_vcard(self):
 		'''make the vCard dictionary'''
-		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',
-			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',
-			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
+		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
+			'TEL_HOME_NUMBER', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE', 'N_PREFIX',
+			'N_SUFFIX', 'ADR_HOME_STREET', 'ADR_HOME_EXTADR', 'ADR_HOME_LOCALITY',
+			'ADR_HOME_REGION', 'ADR_HOME_PCODE', 'ADR_HOME_CTRY', 'ORG_ORGNAME',
+			'ORG_ORGUNIT', 'TITLE', 'ROLE', 'ADR_WORK_STREET', 'ADR_WORK_EXTADR',
+			'ADR_WORK_LOCALITY', 'ADR_WORK_REGION', 'ADR_WORK_PCODE',
+			'ADR_WORK_CTRY']
 		vcard = {}
 		for e in entries: 
 			txt = self.xml.get_widget(e + '_entry').get_text()
@@ -193,9 +201,13 @@ class Vcard_window:
 		gajim.connections[self.account].send_vcard(vcard)
 
 	def on_retrieve_button_clicked(self, widget):
-		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',
-			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',
-			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE']
+		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
+			'TEL_HOME_NUMBER', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE', 'N_PREFIX',
+			'N_SUFFIX', 'ADR_HOME_STREET', 'ADR_HOME_EXTADR', 'ADR_HOME_LOCALITY',
+			'ADR_HOME_REGION', 'ADR_HOME_PCODE', 'ADR_HOME_CTRY', 'ORG_ORGNAME',
+			'ORG_ORGUNIT', 'TITLE', 'ROLE', 'ADR_WORK_STREET', 'ADR_WORK_EXTADR',
+			'ADR_WORK_LOCALITY', 'ADR_WORK_REGION', 'ADR_WORK_PCODE',
+			'ADR_WORK_CTRY']
 		if gajim.connections[self.account].connected > 1:
 			# clear all entries
 			for e in entries:
@@ -228,9 +240,13 @@ class Vcard_window:
 		information_hbuttonbox.reorder_child(button, 2)
 		
 		#make all entries editable
-		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_USERID', 'URL', 'TEL_NUMBER',
-			'ADR_STREET', 'ADR_EXTADR', 'ADR_LOCALITY', 'ADR_REGION', 'ADR_PCODE',
-			'ADR_CTRY', 'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE'] 
+		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
+			'TEL_HOME_NUMBER', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE', 'N_PREFIX',
+			'N_SUFFIX', 'ADR_HOME_STREET', 'ADR_HOME_EXTADR', 'ADR_HOME_LOCALITY',
+			'ADR_HOME_REGION', 'ADR_HOME_PCODE', 'ADR_HOME_CTRY', 'ORG_ORGNAME',
+			'ORG_ORGUNIT', 'TITLE', 'ROLE', 'ADR_WORK_STREET', 'ADR_WORK_EXTADR',
+			'ADR_WORK_LOCALITY', 'ADR_WORK_REGION', 'ADR_WORK_PCODE',
+			'ADR_WORK_CTRY']
 		for e in entries:
 			self.xml.get_widget(e + '_entry').set_property('editable', True)
 

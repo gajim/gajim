@@ -881,6 +881,7 @@ class Connection:
 		iq.setTag(common.xmpp.NS_VCARD + ' vCard')
 		self.connection.send(iq)
 		return iq
+
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 	
 	def send_vcard(self, vcard):
@@ -889,13 +890,20 @@ class Connection:
 		iq = common.xmpp.Iq(typ = 'set')
 		iq2 = iq.setTag(common.xmpp.NS_VCARD + ' vCard')
 		for i in vcard.keys():
-			if i != 'jid':
-				if type(vcard[i]) == type({}):
-					iq3 = iq2.addChild(i)
-					for j in vcard[i].keys():
+			if i == 'jid':
+				continue
+			if type(vcard[i]) == type({}):
+				for j in vcard[i].keys():
+					if type(vcard[i][j]) == type({}):
+						iq3 = iq2.addChild(i)
+						iq3.addChild(j)
+						for k in vcard[i][j]:
+							iq3.addChild(k).setData(vcard[i][j][k])
+					else:
+						iq3 = iq2.addChild(i)
 						iq3.addChild(j).setData(vcard[i][j])
-				else:
-					iq2.addChild(i).setData(vcard[i])
+			else:
+				iq2.addChild(i).setData(vcard[i])
 		self.connection.send(iq)
 
 	def send_agent_status(self, agent, ptype):
