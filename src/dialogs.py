@@ -367,9 +367,8 @@ class About_dialog:
 	'''Class for about dialog'''
 	def __init__(self):
 		if gtk.pygtk_version < (2, 6, 0) or gtk.gtk_version < (2, 6, 0):
-			#FIXME: when 0.7.1 is out fix this [add version in _]
-			Information_dialog(_('Gajim - a GTK+ Jabber client') + '\nVersion %s' \
-			% gajim.version)
+			Information_dialog(_('Gajim - a GTK+ Jabber client\nVersion %s') \
+				% gajim.version)
 			return
 
 		dlg = gtk.AboutDialog()
@@ -383,7 +382,7 @@ class About_dialog:
 		dlg.set_comments(_('A GTK jabber client'))
 		dlg.set_website('http://www.gajim.org')
 
-		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>', 'Alex Podaras <bigpod@gmail.com>']
+		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>', 'Alex Podaras <bigpod@gmail.com>', 'Gajim patchers <http://www.gajim.org/dev.php>']
 		dlg.set_authors(authors)
 
 		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png'))			
