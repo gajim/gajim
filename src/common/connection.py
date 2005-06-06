@@ -98,7 +98,7 @@ def get_os_info():
 				fd.close()
 				if path_to_file.endswith('version'):
 					# sourcemage_version has all the info we need
-					if not path_to_file.startswith('sourcemage'):
+					if not os.path.basename(path_to_file).startswith('sourcemage'):
 						text = distro_name + ' ' + text
 				elif path_to_file.endswith('aurox-release'): # file doesn't have version
 					text = distro_name
