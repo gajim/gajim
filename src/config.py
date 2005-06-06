@@ -1008,6 +1008,12 @@ class Preferences_window:
 			model.set_value(iter, 2, file)
 			model.set_value(iter, 1, 1)
 
+	def on_sounds_entry_changed(self, widget):
+		path_to_file = widget.get_text()
+		model, iter = self.sound_tree.get_selection().get_selected()
+		model.set_value(iter, 2, path_to_file)
+		model.set_value(iter, 1, 1)
+
 	def on_open_advanced_editor_button_clicked(self, widget, data = None):
 		if self.plugin.windows.has_key('advanced_config'):
 			self.plugin.windows['advanced_config'].window.present()

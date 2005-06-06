@@ -4775,6 +4775,7 @@
 				  <property name="has_frame">True</property>
 				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
+                  <signal name="changed" handler="on_sounds_entry_changed" last_modification_time="Tue, 06 Jun 2005 19:59:41 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
