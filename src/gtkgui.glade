@@ -8723,7 +8723,7 @@ Custom</property>
 
 			  <child>
 			    <widget class="GtkScrolledWindow" id="scrolledwindow19">
-			      <property name="height_request">55</property>
+			      <property name="height_request">45</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -9961,7 +9961,7 @@ Custom</property>
 
 		  <child>
 		    <widget class="GtkScrolledWindow" id="scrolledwindow31">
-		      <property name="height_request">55</property>
+		      <property name="height_request">45</property>
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
