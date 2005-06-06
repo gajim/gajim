@@ -5794,7 +5794,6 @@ Custom</property>
 
 			  <child>
 			    <widget class="GtkCheckButton" id="show_roster_on_startup_checkbutton">
-			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show roster window on startup</property>
 			      <property name="use_underline">True</property>

@@ -1519,12 +1519,14 @@ class Roster_window:
 				gajim.config.get('y-position'))
 			self.window.resize(gajim.config.get('width'), \
 				gajim.config.get('height'))
+		
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
 		else:
 			if not gajim.config.get('trayicon'):
 				# cannot happen via GUI, but I put this incase user touches config
 				self.window.show_all() # without trayicon, he should see the roster!
+				gajim.config.set('show_roster_on_startup', True)
 			
 		self.groups = {}
 		self.contacts = {}

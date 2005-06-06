@@ -102,11 +102,14 @@ class Preferences_window:
 		st = gajim.config.get('show_roster_on_startup')
 		show_roster_on_startup_checkbutton = self.xml.get_widget(
 			'show_roster_on_startup_checkbutton')
-		if gajim.config.get('trayicon'): # allow it only when trayicon ON
-			show_roster_on_startup_checkbutton.set_active(st)
+		if os.name == 'nt':
+			show_roster_on_startup_checkbutton.set_no_show_all(True)
 		else:
-			show_roster_on_startup_checkbutton.set_sensitive(False)
-			show_roster_on_startup_checkbutton.set_active(st)
+			if gajim.config.get('trayicon'): # allow it only when trayicon ON
+				show_roster_on_startup_checkbutton.set_active(st)
+			else:
+				show_roster_on_startup_checkbutton.set_sensitive(False)
+				show_roster_on_startup_checkbutton.set_active(st)
 
 		#Save position
 		st = gajim.config.get('saveposition')
