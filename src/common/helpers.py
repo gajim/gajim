@@ -44,3 +44,9 @@ def get_uf_show(show):
 	else:
 		uf_show = _('Has errors')
 	return unicode(uf_show)
+
+def get_sorted_keys(adict):
+	keys = adict.keys()
+	keys.sort()
+	return keys
+		

@@ -28,6 +28,7 @@ from gajim import User
 from common import gajim
 from common import helpers
 from common import i18n
+from common import helpers
 
 _ = i18n._
 APP = i18n.APP
@@ -196,14 +197,15 @@ class Change_status_message_dialog:
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
 		self.message_buffer.set_text(gajim.config.get('last_status_msg'))
-		self.values = {'':''}
+		self.values = {'':''} # have an empty string selectable, so user can clear msg
 		for msg in gajim.config.get_per('statusmsg'):
 			self.values[msg] = gajim.config.get_per('statusmsg', msg, 'message')
+		sorted_keys_list = helpers.get_sorted_keys(self.values)
 		liststore = gtk.ListStore(str, str)
 		message_comboboxentry = self.xml.get_widget('message_comboboxentry')
 		message_comboboxentry.set_model(liststore)
 		message_comboboxentry.set_text_column(0)
-		for val in self.values.keys():
+		for val in sorted_keys_list:
 			message_comboboxentry.append_text(val)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
