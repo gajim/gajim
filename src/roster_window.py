@@ -446,11 +446,18 @@ class Roster_window:
 
 	def on_remove_agent(self, widget, user, account):
 		'''When an agent is requested to log in or off'''
-		window = dialogs.Confirmation_dialog(_('Are you sure you want to remove %s transport from your roster?') % user.jid)
+		window = dialogs.Confirmation_dialog(_('Are you sure you want to unregister from "%s" transport?\nContacts from that transport will also be removed') % user.jid)
 		if window.get_response() == gtk.RESPONSE_YES:
 			gajim.connections[account].unsubscribe_agent(user.jid + '/' \
 																		+ user.resource)
+			# remove transport from listview
 			self.remove_user(user, account)
+			# remove transport's contacts from listview
+			for jid, contacts in self.contacts[account].items():
+				contact = contacts[0]
+				if jid.endswith('@' + user.jid):
+					gajim.log.debug('REMOVE user %s due to unregistered transport %s' % (contact.jid, user.name))
+					self.remove_user(contact, account)
 			del self.contacts[account][user.jid]
 
 	def on_rename(self, widget, iter, path):
