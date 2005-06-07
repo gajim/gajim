@@ -93,8 +93,8 @@ class Groupchat_window(chat.Chat):
 		"""close window"""
 		for room_jid in self.xmls:
 			if time.time() - self.last_message_time[room_jid] < 2:
-				dialog = dialogs.Confirmation_dialog(_('You have unread messages in room "%s".'), \
-					_('If you close this window, these messages will be lost.') % \
+				dialog = dialogs.Confirmation_dialog(_('You just received a new message in room "%s".'), \
+					_('If you close this window, this message will be lost.') % \
 					room_jid.split('@')[0])
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return True #stop the propagation of the event
@@ -540,8 +540,8 @@ class Groupchat_window(chat.Chat):
 	def remove_tab(self, room_jid):
 		if time.time() - self.last_message_time[room_jid] < 2:
 			dialog = dialogs.Confirmation_dialog(
-				_('You have unread messages in room "%s"'),
-				_('If you close this tab, the messages will be lost.') % \
+				_('You just received a new message in room "%s"'),
+				_('If you close this tab, the message will be lost.') % \
 				room_jid.split('@')[0])
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
