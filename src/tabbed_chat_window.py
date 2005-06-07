@@ -92,7 +92,10 @@ class Tabbed_chat_window(chat.Chat):
 
 	def set_state_image(self, jid):
 		prio = 0
-		list_users = self.plugin.roster.contacts[self.account][jid]
+		if self.plugin.roster.contacts[self.account].has_key(jid):
+			list_users = self.plugin.roster.contacts[self.account][jid]
+		else:
+			list_users = [self.users[jid]]
 		user = list_users[0]
 		show = user.show
 		jid = user.jid
@@ -180,10 +183,10 @@ class Tabbed_chat_window(chat.Chat):
 		self.names[user.jid] = user.name
 		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[user.jid] = self.xmls[user.jid].get_widget('chats_vbox')
-		chat.Chat.new_tab(self, user.jid)
 		self.users[user.jid] = user
 		self.encrypted[user.jid] = False
 		
+		chat.Chat.new_tab(self, user.jid)
 		self.redraw_tab(user.jid)
 		self.draw_widgets(user)
 		

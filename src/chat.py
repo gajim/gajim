@@ -313,7 +313,8 @@ class Chat:
 		if self.widget_name == 'tabbed_chat_window':
 			xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_hbox', APP)
 			tab_hbox = xm.get_widget('chat_tab_hbox')
-			user = self.plugin.roster.contacts[self.account][jid][0]
+#			user = self.plugin.roster.contacts[self.account][jid][0]
+			user = self.users[jid]
 			gtklabel = gtk.Label(user.name)
 			gtklabel.set_property('xalign', 0)
 		elif self.widget_name == 'groupchat_window':

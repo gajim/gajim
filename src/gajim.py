@@ -331,6 +331,8 @@ class Interface:
 				
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
+			#TODO: upgrade the chat instavces (for pm)
+			fjid = array[0] + '/' + array[3]
 			self.windows[account]['gc'][ji].chg_user_status(ji, resource,
 				array[1], array[2], array[6], array[7], array[8], array[9],
 				array[10], array[11], account)
@@ -340,6 +342,24 @@ class Interface:
 		jid = array[0].split('/')[0]
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
+
+		if self.windows[account]['gc'].has_key(jid): # it's a Private Message
+			nick = array[0].split('/', 1)[1]
+			fjid = jid + '/' + nick
+			if not self.windows[account]['chats'].has_key(fjid):
+				gc = self.windows[account]['gc'][jid]
+				tv = gc.list_treeview[jid]
+				model = tv.get_model()
+				iter = gc.get_user_iter(jid, nick)
+				show = model.get_value(iter, 3)
+				u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0,
+					'')
+				self.roster.new_chat(u, account)
+			chat_win = self.windows[account]['chats'][fjid]
+			chat_win.print_conversation(array[1], fjid, tim = array[2])
+			return
+
+				
 		if gajim.config.get('ignore_unknown_contacts') and \
 			not self.roster.contacts[account].has_key(jid):
 			return

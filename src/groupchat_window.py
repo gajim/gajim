@@ -25,6 +25,7 @@ import time
 import dialogs
 import chat
 import cell_renderer_image
+from gajim import User
 from common import gajim
 from common import i18n
 
@@ -545,7 +546,7 @@ class Groupchat_window(chat.Chat):
 			'subject_entry')
 		self.subject_entry_tooltip[room_jid] = gtk.Tooltips()
 
-		#status_image, nickname, real_jid, status
+		#status_image, nickname, real_jid, show
 		store = gtk.TreeStore(gtk.Image, str, str, str)
 		store.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		column = gtk.TreeViewColumn('contacts')
@@ -620,11 +621,22 @@ class Groupchat_window(chat.Chat):
 		"""When an iter is double clicked: open the chat window"""
 		model = widget.get_model()
 		iter = model.get_iter(path)
-		if len(path) == 1:
+		if len(path) == 1: # It's a group
 			if (widget.row_expanded(path)):
 				widget.collapse_row(path)
 			else:
 				widget.expand_row(path, False)
+		else: # We want to send a private message
+			room_jid = self.get_active_jid()
+			nick = model.get_value(iter, 1)
+			fjid = room_jid + '/' + nick
+			if not self.plugin.windows[self.account]['chats'].has_key(fjid):
+				show = model.get_value(iter, 3)
+				u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0, 
+					'')
+				self.plugin.roster.new_chat(u, self.account)
+			self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
+			self.plugin.windows[self.account]['chats'][fjid].window.present()
 
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		"""When a row is expanded: change the icon of the arrow"""
