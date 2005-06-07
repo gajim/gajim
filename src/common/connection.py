@@ -118,13 +118,14 @@ class Connection:
 			'AGENT_INFO_INFO': [], 'QUIT': [], 'ACC_OK': [], 'MYVCARD': [],
 			'OS_INFO': [], 'VCARD': [], 'GC_MSG': [], 'GC_SUBJECT': [],
 			'GC_CONFIG': [], 'BAD_PASSPHRASE': [], 'ROSTER_INFO': [],
-			'ERROR_ANSWER': []}
+			'ERROR_ANSWER': [], 'JOIN_GC': [],}
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
 		self.gpg = None
 		self.status = ''
 		self.myVCardID = []
+		self.bookmarks = []
 		self.on_purpose = False
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		if USE_GPG:
@@ -542,6 +543,43 @@ class Connection:
 			del roster[name + '@' + hostname]
 		self.dispatch('ROSTER', roster)
 
+	def _PrivateCB(self, con, iq_obj):
+		"""
+		Private Data (JEP 048 and 049)
+		"""
+		gajim.log.debug("PrivateCB")
+		storage = iq_obj.getTag("query").getTag("storage")
+		try:
+			ns = storage.getNamespace() 
+		except AttributeError:
+			#Its a result for a 'set' Iq, so we don't do anything here
+			return		
+		
+		if ns=="storage:bookmarks":
+			#Bookmarked URLs and Conferences
+			#http://www.jabber.org/jeps/jep-0048.html
+			confs = storage.getTags("conference")
+			urls = storage.getTags("url")
+			for conf in confs:
+				bm = { 'name':conf.getAttr('name'),
+				       'jid':conf.getAttr('jid'),
+				       'autojoin':conf.getAttr('autojoin'),
+				       'password':conf.getTagData('password'),
+				       'nick':conf.getTagData('nick') }
+
+				if bm['autojoin']=="1":
+					jid = common.xmpp.protocol.JID(conf.getAttr("jid"))
+					server = jid.getDomain()
+					room = jid.getNode()
+					gc = self.join_gc(bm['nick'], room, server, bm['password'])
+					self.dispatch("JOIN_GC", [jid.getStripped(), bm['nick']])
+				self.bookmarks.append(bm)
+		elif ns=="gajim:prefs":
+			#Preferences data
+			#http://www.jabber.org/jeps/jep-0049.html
+			#TODO: implement this
+			pass 
+
 	def _ErrorCB(self, con, iq_obj):
 		errmsg = iq_obj.getError()
 		errcode = iq_obj.getErrorCode()
@@ -613,6 +651,8 @@ class Connection:
 			common.xmpp.NS_MUC_OWNER)
 		con.RegisterHandler('iq', self._getRosterCB, 'result',
 			common.xmpp.NS_ROSTER)
+		con.RegisterHandler('iq', self._PrivateCB, 'result',
+			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 
 		gajim.log.debug('Connected to server')
@@ -635,7 +675,7 @@ class Connection:
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Authentication failed with "%s"' % name),
-                    _('Please check your login and password for correctness.')))
+				('Please check your login and password for correctness.')))
 			return None
 	# END connect
 
@@ -699,6 +739,10 @@ class Connection:
 				#ask our VCard
 				iq = self.request_vcard(None)
 				self.myVCardID.append(iq.getID())
+
+				#Get bookmarks from private namespace
+				self.get_bookmarks()
+				
 		elif show == 'offline' and self.connected:
 			self.connected = 0
 			if self.connection:
@@ -897,7 +941,6 @@ class Connection:
 		iq.setTag(common.xmpp.NS_VCARD + ' vCard')
 		self.connection.send(iq)
 		return iq
-
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 	
 	def send_vcard(self, vcard):
@@ -920,6 +963,39 @@ class Connection:
 			else:
 				iq2.addChild(i).setData(vcard[i])
 		self.connection.send(iq)
+
+	def get_settings(self):
+		''' Get Gajim settings as described in JEP 0049 '''
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq(typ='get')
+		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq3 = iq2.addChild(name='gajim', namespace='gajim:prefs')
+		self.connection.send(iq)
+
+	def get_bookmarks(self):
+		''' Get Bookmarks from storage as described in JEP 0048 '''
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq(typ='get')
+		iq2 = iq.addChild(name="query", namespace="jabber:iq:private")
+		iq3 = iq2.addChild(name="storage", namespace="storage:bookmarks")
+		self.connection.send(iq)
+
+	def store_bookmarks(self):
+		''' Send bookmarks to the storage namespace '''
+		iq = common.xmpp.Iq(typ='set')
+		iq2 = iq.addChild(name="query", namespace="jabber:iq:private")
+		iq3 = iq2.addChild(name="storage", namespace="storage:bookmarks")
+		for bm in self.bookmarks:
+			iq4 = iq3.addChild(name="conference")
+			iq4.setAttr('jid',bm['jid'])
+			iq4.setAttr('autojoin',bm['autojoin'])
+			iq4.setAttr('name',bm['name'])
+			iq5 = iq4.setTagData('nick',bm['nick'])
+			iq5 = iq4.setTagData('password',bm['password'])
+		self.connection.send(iq)
+
 
 	def send_agent_status(self, agent, ptype):
 		if not self.connection:

@@ -62,6 +62,8 @@ class Groupchat_window(chat.Chat):
 			self.on_change_subject_menuitem_activate)
 		self.xml.signal_connect('on_configure_room_menuitem_activate', 
 			self.on_configure_room_menuitem_activate)
+		self.xml.signal_connect('on_add_bookmark_menuitem_activate',
+			self.on_add_bookmark_menuitem_activate)
 		self.xml.signal_connect('on_close_window_activate',
 			self.on_close_window_activate)
 		self.window.show_all()
@@ -289,6 +291,28 @@ class Groupchat_window(chat.Chat):
 	def on_configure_room_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
 		gajim.connections[self.account].request_gc_config(room_jid)
+
+	def on_add_bookmark_menuitem_activate(self, widget):
+		room_jid = self.get_active_jid()
+		bm = { 'name':"",
+		       'jid':self.get_active_jid(),
+		       'autojoin':"1",
+		       'password':"",
+		       'nick':self.nicks[self.get_active_jid()]
+		     }
+		
+		gajim.connections[self.account].bookmarks.append(bm)
+		gajim.connections[self.account].store_bookmarks()
+		
+		#FIXME: add code to add to Bookmarks group (should be account-specific)
+
+		#FIXME: use join_gc_window [where user can put password] and change the
+		#name of the boookmark [default: fill with room's 'name']
+		dialogs.Information_dialog(
+				_('Bookmark has been added successfully'),
+				_('You can find the bookmark for room "%s" in your roster.') % \
+				room_jid.split('@')[0]).get_response()
+		
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
