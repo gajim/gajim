@@ -243,7 +243,7 @@ class Chat:
 			try:
 				gtkspell.Spell(message_textview)
 			except gobject.GError, msg:
-				dialogs.Error_dialog(str(msg) + '\n\n' + _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words will not be used'))	
+				dialogs.Error_dialog(str(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
 				gajim.config.set('use_speller', False)
 		
 		conversation_textview = self.xmls[jid].get_widget(

@@ -446,7 +446,7 @@ class Roster_window:
 
 	def on_remove_agent(self, widget, user, account):
 		'''When an agent is requested to log in or off'''
-		window = dialogs.Confirmation_dialog(_('Are you sure you want to unregister from "%s" transport?\nContacts from that transport will also be removed') % user.jid)
+		window = dialogs.Confirmation_dialog(_('Transport "%s" will be removed') % user.jid, _('You will no longer be able to send and receive messages to contacts from %s.' % user.jid))
 		if window.get_response() == gtk.RESPONSE_YES:
 			gajim.connections[account].unsubscribe_agent(user.jid + '/' \
 																		+ user.resource)
@@ -786,8 +786,10 @@ class Roster_window:
 
 	def on_req_usub(self, widget, user, account):
 		'''Remove a user'''
-		window = dialogs.Confirmation_dialog(_('Are you sure you want to remove %s (%s) from your roster?') % (user.name, user.jid))
-		if window.get_response() == gtk.RESPONSE_YES:
+		window = dialogs.Confirmation_dialog(\
+			_('Contact "%s" will be removed from your roster') % (user.name),
+			_('By removing this contact you also remove authorization. Contact "%s" will always see you as offline.') % user.name)
+		if window.get_response() == gtk.RESPONSE_OK:
 			gajim.connections[account].unsubscribe(user.jid)
 			for u in self.contacts[account][user.jid]:
 				self.remove_user(u, account)
@@ -894,7 +896,8 @@ class Roster_window:
 			return
 		accounts = gajim.connections.keys()
 		if len(accounts) == 0:
-			dialogs.Error_dialog(_('You must create an account before connecting to jabber network.'))
+			dialogs.Error_dialog(_('No accounts created'),
+				_('You must create Jabber account before connecting the server.')).get_response()
 			self.update_status_comboxbox()
 			return
 		status = model[active][2]
@@ -1142,13 +1145,13 @@ class Roster_window:
 							recent = True
 							break
 			if unread:
-				dialog = dialogs.Confirmation_dialog(_('You have unread messages.\nAre you sure you want to quit Gajim?'))
-				if dialog.get_response() != gtk.RESPONSE_YES:
+				dialog = dialogs.Confirmation_dialog(_('You have unread messages'), _('If you exit Gajim these messages will be lost.'))
+				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 
 			if recent:
-				dialog = dialogs.Confirmation_dialog(_('You received a message in the last two seconds.\nAre you sure you want to quit Gajim?'))
-				if dialog.get_response() != gtk.RESPONSE_YES:
+				dialog = dialogs.Confirmation_dialog(_('You have unread messages'), _('If you exit Gajim these messages will be lost.'))
+				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 			for acct in accounts:
 				if gajim.connections[acct].connected:

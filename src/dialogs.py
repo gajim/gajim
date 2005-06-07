@@ -87,7 +87,8 @@ class Edit_groups_dialog:
 		model = self.list.get_model()
 		if model[path][1] and len(self.user.groups) == 1: # we try to remove 
 																		  # the last group
-			Error_dialog(_('A contact must belong at least to one group'))
+			Error_dialog(_("Can't remove last group"),
+					_('At least one contact group must be present.')).get_response()
 			return
 		model[path][1] = not model[path][1]
 		if model[path][1]:
@@ -241,7 +242,8 @@ class Add_new_contact_window:
 	'''Class for Add_new_contact_window'''
 	def __init__(self, plugin, account, jid = None):
 		if gajim.connections[account].connected < 2:
-			Error_dialog(_('You must be connected to add a contact'))
+			Error_dialog(_('You are not connected to the server.'), \
+					_('Without a connection, you can not add a contact')).get_response()
 			return
 		self.plugin = plugin
 		self.account = account
@@ -315,7 +317,8 @@ class Add_new_contact_window:
 		if not jid:
 			return
 		if jid.find('@') < 0:
-			Error_dialog(_("The contact's name must be something like login@hostname"))
+			Error_dialog(_("Invalid user name"),
+_('User names must be of the form "user@servername".')).get_response()
 			return
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
@@ -369,8 +372,8 @@ class About_dialog:
 	'''Class for about dialog'''
 	def __init__(self):
 		if gtk.pygtk_version < (2, 6, 0) or gtk.gtk_version < (2, 6, 0):
-			Information_dialog(_('Gajim - a GTK+ Jabber client\nVersion %s') \
-				% gajim.version)
+			Information_dialog(_('Gajim - a GTK+ Jabber client'),
+				'Version %s' % gajim.version).get_response()
 			return
 
 		dlg = gtk.AboutDialog()
@@ -395,41 +398,86 @@ class About_dialog:
 		rep = dlg.run()
 		dlg.destroy()
 
-class Confirmation_dialog:
-	'''Class for confirmation dialog'''
-	def get_response(self):
-		response = self.dialog.run()
-		self.dialog.destroy()
-		return response
+class Dialog(gtk.Dialog):
+    def __init__(self, parent, title, buttons, default = None):
+        gtk.Dialog.__init__(self, title, parent, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL | gtk.DIALOG_NO_SEPARATOR)
 
-	def __init__(self, label):
-		self.dialog = gtk.MessageDialog(None,
-			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-			gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, label)
+        self.set_border_width(6)
+        self.vbox.set_spacing(12)
+        self.set_resizable(False)
 
-class Warning_dialog:
-	'''Class for warning dialog'''
-	def on_response(self, dialog, response_id):
-		dialog.destroy()
+        for stock, response in buttons:
+            self.add_button(stock, response)
 
-	def __init__(self, label):
-		dialog = gtk.MessageDialog(None,
-			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-			gtk.MESSAGE_WARNING, gtk.BUTTONS_CLOSE, label)
-		dialog.connect('response', self.on_response)
-		dialog.show()
+        if default is not None:
+            self.set_default_response(default)
+        else:
+            self.set_default_response(buttons[-1][1])
 
-class Information_dialog:
-	'''Class for information dialog'''
-	def on_response(self, dialog, response_id):
-		dialog.destroy()
+    def get_button(self, index):
+        buttons = self.action_area.get_children()
+        return index < len(buttons) and buttons[index] or None
 
-	def __init__(self, label):
-		dialog = gtk.MessageDialog(None,
-			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-			gtk.MESSAGE_INFO, gtk.BUTTONS_CLOSE, label)
-		dialog.connect('response', self.on_response)
-		dialog.show()
+class HigDialog(Dialog):
+    def __init__(self, parent, pritext, sectext, stockimage, buttons, default = None):
+        """GNOME higified version of the Dialog object. Inherit
+        from here if possible when you need a new dialog."""
+        Dialog.__init__(self, parent, "", buttons, default)
+
+        # hbox separating dialog image and contents
+        hbox = gtk.HBox()
+        hbox.set_spacing(12)
+        hbox.set_border_width(6)
+        self.vbox.pack_start(hbox)
+
+        # set up image
+        if stockimage is not None:
+            image = gtk.Image()
+            image.set_from_stock(stockimage, gtk.ICON_SIZE_DIALOG)
+            image.set_alignment(0.5, 0)
+            hbox.pack_start(image, False, False)
+
+        # set up main content area
+        self.contents = gtk.VBox()
+        self.contents.set_spacing(10)
+        hbox.pack_start(self.contents)
+
+        label = gtk.Label()
+        label.set_markup("<span size=\"larger\" weight=\"bold\">" + pritext + "</span>\n\n" + sectext)
+        label.set_line_wrap(True)
+        label.set_alignment(0, 0)
+        label.set_selectable(True)
+        self.contents.pack_start(label)
+
+    def get_response(self):
+        self.show_all()
+        response = gtk.Dialog.run(self)
+        self.destroy()
+        return response
+
+class Confirmation_dialog(HigDialog):
+    def __init__(self, pritext, sectext=''):
+        """HIG compliant confirmation dialog."""
+        HigDialog.__init__(
+            self, None, pritext, sectext, gtk.STOCK_DIALOG_WARNING,
+            [ [gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL], [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
+        )
+
+class Warning_dialog(HigDialog):
+    def __init__(self, pritext, sectext=''):
+        """HIG compliant warning dialog."""
+        HigDialog.__init__(
+            self, None, pritext, sectext, gtk.STOCK_DIALOG_WARNING,
+            [ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
+        )
+
+class Information_dialog(HigDialog):
+    def __init__(self, pritext, sectext=''):
+        """HIG compliant info dialog."""
+        HigDialog.__init__(
+            self, None, pritext, sectext, gtk.STOCK_DIALOG_INFO,
+            [ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
+        )
 
 class Input_dialog:
 	'''Class for Input dialog'''
@@ -444,17 +492,13 @@ class Input_dialog:
 			self.input_entry.set_text(input_str)
 			self.input_entry.select_region(0, -1) # select all	
 	
-class Error_dialog:
-	'''Class for error dialog'''
-	def on_response(self, dialog, response_id):
-		dialog.destroy()
-
-	def __init__(self, label):
-		dialog = gtk.MessageDialog(None,
-			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-			gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE, label)
-		dialog.connect('response', self.on_response)
-		dialog.show()
+class Error_dialog(HigDialog):
+    def __init__(self, pritext, sectext=''):
+        """HIG compliant error dialog."""
+        HigDialog.__init__(
+            self, None, pritext, sectext, gtk.STOCK_DIALOG_ERROR,
+            [ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
+        )
 
 class Subscription_request_window:
 	def __init__(self, plugin, jid, text, account):
@@ -505,7 +549,8 @@ class Join_groupchat_window:
 		self.plugin = plugin
 		self.account = account
 		if gajim.connections[account].connected < 2:
-			Error_dialog(_('You must be connected to join a groupchat'))
+			Error_dialog(_('You are not connected to the server'),
+_('You can not join a group chat unless you are connected.')).get_response()
 			raise RuntimeError, 'You must be connected to join a groupchat'
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'join_groupchat_window', APP)
@@ -563,7 +608,7 @@ class Join_groupchat_window:
 		password = self.xml.get_widget('password_entry').get_text()
 		jid = '%s@%s' % (room, server)
 		if jid in self.plugin.windows[self.account]['gc']:
-			Error_dialog(_('You are already in room ' + jid))
+			Error_dialog(_('You are already in room ' + jid)).get_response()
 			return
 		if jid in self.recently_groupchat:
 			self.recently_groupchat.remove(jid)
@@ -581,7 +626,8 @@ class Join_groupchat_window:
 class New_message_dialog:
 	def __init__(self, plugin, account):
 		if gajim.connections[account].connected < 2:
-			Error_dialog(_('You must be connected to send a message to a contact'))
+			Error_dialog(_('You are not connected to the server'),
+				_('Without a connection, you can not send messages.')).get_response()
 			return
 		self.plugin = plugin
 		self.account = account
@@ -608,7 +654,8 @@ class New_message_dialog:
 		'''When Chat button is clicked'''
 		jid = self.jid_entry.get_text()
 		if jid.find('@') == -1: # if no @ was given
-			Error_dialog(_('User ID is not valid'))
+			Error_dialog(_('Invalid user ID'),
+_('User ID must be of the form "username@servername".')).get_response()
 			return
 		self.window.destroy()
 		# use User class, new_chat expects it that way
@@ -634,7 +681,8 @@ class New_message_dialog:
 class Change_password_dialog:
 	def __init__(self, plugin, account):
 		if gajim.connections[account].connected < 2:
-			Error_dialog(_('You must be connected to change your password'))
+			Error_dialog(_('You are not connected to the server'),
+_('Without a connection, you can not change your password.')).get_response()
 			return
 		self.plugin = plugin
 		self.account = account
@@ -653,11 +701,13 @@ class Change_password_dialog:
 			if rep == gtk.RESPONSE_OK:
 				password1 = self.password1_entry.get_text()
 				if not password1:
-					Error_dialog(_('Your password cannot be empty'))
+					Error_dialog(_('Invalid password.'), \
+							_('You must enter a password.')).get_response()
 					continue
 				password2 = self.password2_entry.get_text()
 				if password1 != password2:
-					Error_dialog(_('Confirmation password is not the same'))
+					Error_dialog(_("Passwords don't match."), \
+							_('The passwords typed in both fields must be identical.')).get_response()
 					continue
 				message = password1
 			else:

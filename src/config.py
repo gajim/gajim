@@ -1140,10 +1140,10 @@ class Account_modification_window:
 			self.xml.get_widget('gpg_choose_button').set_sensitive(False)
 		self.xml.get_widget('autoconnect_checkbutton').set_active(gajim.config.\
 			get_per('accounts', self.account, 'autoconnect'))
-		self.xml.get_widget('sync_with_global_status_checkbutton').set_active( \
+		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(
 			gajim.config.get_per('accounts', self.account, \
 			'sync_with_global_status'))
-		list_no_log_for = gajim.config.get_per('accounts', self.account, \
+		list_no_log_for = gajim.config.get_per('accounts', self.account,
 			'no_log_for').split()
 		if self.account in list_no_log_for:
 			self.xml.get_widget('log_history_checkbutton').set_active(0)
@@ -1155,24 +1155,29 @@ class Account_modification_window:
 		if gajim.connections.has_key(self.account):
 			if name != self.account and \
 			   gajim.connections[self.account].connected != 0:
-				dialogs.Error_dialog(_('You must be offline to change the account\'s name'))
+				dialogs.Error_dialog(_('You are connected to the server'),
+_('To change the account name, it must be disconnected.')).get_response()
 				return
 		if (name == ''):
-			dialogs.Error_dialog(_('You must enter a name for this account'))
+			dialogs.Error_dialog(_('Invalid account name'),
+				_('Account names cannot be empty.')).get_response()
 			return
 		if name.find(' ') != -1:
-			dialogs.Error_dialog(_('Spaces are not permited in account name'))
+			dialogs.Error_dialog(_('Invalid account name'),
+				_('Account names cannot contain spaces.')).get_response()
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		if jid == '' or jid.count('@') != 1:
-			dialogs.Error_dialog(_('You must enter a Jabber ID for this account\nFor example: someone@someserver.org'))
+			dialogs.Error_dialog(_('Invalid Jabber ID'),
+           _('A Jabber ID must be in the form "user@servername".')).get_response()
 			return
 		new_account = self.xml.get_widget('new_account_checkbutton').get_active()
 		config['savepass'] = self.xml.get_widget(
 				'save_password_checkbutton').get_active()
 		config['password'] = self.xml.get_widget('password_entry').get_text()
 		if new_account and config['password'] == '':
-			dialogs.Error_dialog(_('You must enter a password to register a new account'))
+			dialogs.Error_dialog(_('Invalid password'),
+				_('You must enter a password for the new account.')).get_response()
 			return
 		config['resource'] = self.xml.get_widget('resource_entry').get_text()
 		config['priority'] = self.xml.get_widget('priority_spinbutton').\
@@ -1203,15 +1208,18 @@ class Account_modification_window:
 		if config['use_proxy']:
 			if config['proxyport'] != '':
 				if not config['proxyport'].isdigit():
-					dialogs.Error_dialog(_('Proxy port must be a port number'))
+					dialogs.Error_dialog(_('Invalid proxy port'),
+						_('Port numbers must contain digits only.')).get_response()
 					return
 				config['proxyport'] = int(config['proxyport'])
 
 			else:
-				dialogs.Error_dialog(_('You must enter a proxy port to use proxy'))
+				dialogs.Error_dialog(_('Invalid proxy port'),
+					_('You must enter a port number to use a proxy.')).get_response()
 				return
 			if config['proxyhost'] == '':
-				dialogs.Error_dialog(_('You must enter a proxy host to use proxy'))
+				dialogs.Error_dialog(_('Invalid proxy host'),
+					_('You must enter a proxy host to use a proxy.')).get_response()
 				return
 
 		config['usessl'] = self.xml.get_widget('use_ssl_checkbutton').get_active()
@@ -1283,7 +1291,8 @@ class Account_modification_window:
 			return
 		#if it's a new account
 		if name in gajim.connections:
-			dialogs.Error_dialog(_('This name is taken by an another account of yours'))
+			dialogs.Error_dialog(_('Account name is in use'),
+				_('You already have an account using this name.')).get_response()
 			return
 		con = connection.Connection(name)
 		self.plugin.register_handlers(con)
@@ -1335,11 +1344,13 @@ class Account_modification_window:
 
 	def on_edit_details_button_clicked(self, widget):
 		if not self.plugin.windows.has_key(self.account):
-			dialogs.Error_dialog(_('You must first create your account before editing your personal information'))
+			dialogs.Error_dialog(_('No such account available'),
+				_('You must create your account before editing your personal information.')).get_response()
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		if gajim.connections[self.account].connected < 2:
-			dialogs.Error_dialog(_('You must be connected to edit your personal information'))
+			dialogs.Error_dialog(_('You are not connected to the server'),
+				_('Without a connection, you can not edit your personal information.')).get_response()
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
 			self.plugin.windows[self.account]['infos'][jid] = \
@@ -1349,7 +1360,8 @@ class Account_modification_window:
 	def on_gpg_choose_button_clicked(self, widget, data = None):
 		secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
 		if not secret_keys:
-			dialogs.Error_dialog(_('Error while getting secret keys'))
+			dialogs.Error_dialog(_('Failed to get secret keys'),
+_('There was a problem retrieving your GPG secret keys.')).get_response()
 			return
 		secret_keys['None'] = 'None'
 		w = dialogs.choose_gpg_key_dialog(secret_keys)
@@ -1727,7 +1739,8 @@ class Service_discovery_window:
 		self.account = account
 		self.agent_infos = {}
 		if gajim.connections[account].connected < 2:
-			dialogs.Error_dialog(_('You must be connected to browse services'))
+			dialogs.Error_dialog(_('You are not connected to the server'),
+_('Without a connection, you can not browse available services')).get_response()
 			raise RuntimeError, 'You must be connected to browse services'
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')
@@ -2134,9 +2147,10 @@ class Remove_account_window:
 
 	def on_remove_button_clicked(self, widget):
 		if gajim.connections[self.account].connected:
-			message = _("You're currently connected with %s.\nAre you sure you want to remove this account?") % self.account
-			dialog = dialogs.Confirmation_dialog(message)
-			if dialog.get_response() != gtk.RESPONSE_YES:
+			dialog = dialogs.Confirmation_dialog(
+				_('Account "%s" is connected to the server' % self.account),
+				_('If you remove it, the connection will be lost.'))
+			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 			gajim.connections[self.account].change_status('offline', 'offline')
 		

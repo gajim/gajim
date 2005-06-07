@@ -281,7 +281,8 @@ class Vcard_window:
 
 	def on_publish_button_clicked(self, widget):
 		if gajim.connections[self.account].connected < 2:
-			Error_dialog(_('You must be connected to publish your contact information'))
+			Error_dialog(_('You are not connected to the server'),
+                    _('Without a connection you can not publish your contact information.')).get_response()
 			return
 		vcard = self.make_vcard()
 		nick = ''
@@ -307,7 +308,8 @@ class Vcard_window:
 			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
-			Error_dialog(_('You must be connected to get your contact information'))
+			Error_dialog(_('You are not connected to the server'),
+						_('Without a connection, you can not get your contact information.')).get_response()
 
 	def change_to_vcard(self):
 		self.xml.get_widget('information_notebook').remove_page(0)

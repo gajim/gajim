@@ -189,11 +189,11 @@ class Interface:
 		self.roster.mklists(data, account)
 		self.roster.draw_roster()
 	
-	def handle_event_warning(self, unused, msg):
-		dialogs.Warning_dialog(msg)
+	def handle_event_warning(self, unused, msg, sectext=''):
+		dialogs.Warning_dialog(msg, sectext).get_response()
 	
-	def handle_event_error(self, unused, msg):
-		dialogs.Error_dialog(msg)
+	def handle_event_error(self, unused, msg, sectext=''):
+		dialogs.Error_dialog(msg, sectext).get_response()
 	
 	def handle_event_error_answer(self, account, array):
 		#('ERROR_ANSWER', account, (jid_from. errmsg, errcode))
@@ -412,10 +412,13 @@ class Interface:
 				'online', 'to', '', array[1], 0, keyID)
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
-		dialogs.Information_dialog(_('You are now authorized by %s') % jid)
+		dialogs.Information_dialog(_('Authorization accepted'),
+				_('The contact "%s" has authorized you to see his status.')
+				% jid).get_response()
 
 	def handle_event_unsubscribed(self, account, jid):
-		dialogs.Information_dialog(_('You are now unsubscribed by %s') % jid)
+		dialogs.Information_dialog(_('Contact "%s" removed subscription' % jid),
+				_('You will always see contact "%s" as offline.')).get_response()
 
 	def handle_event_agent_info(self, account, array):
 		#('AGENT_INFO', account, (agent, identities, features, items))
@@ -428,7 +431,8 @@ class Interface:
 		if array[1].has_key('instructions'):
 			config.Service_registration_window(array[0], array[1], self, account)
 		else:
-			dialogs.Error_dialog(_('error contacting %s') % array[0])
+			dialogs.Error_dialog(_('Contact with "%s" cannot be established'\
+% array[0]), _('Check your connection or try again later.')).get_response()
 
 	def handle_event_agent_info_items(self, account, array):
 		#('AGENT_INFO_ITEMS', account, (agent, node, items))
@@ -445,7 +449,8 @@ class Interface:
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (name, config))
 		name = array[0]
-		dialogs.Information_dialog(_('The account %s has been successfully registered') % name)
+		dialogs.Information_dialog(_('Account registration successful'),
+			_('The account "%s" has been registered with the Jabber server.') % name).get_response()
 		gajim.config.add_per('accounts', name)
 		for opt in array[1]:
 			gajim.config.set_per('accounts', name, opt, array[1][opt])
@@ -519,7 +524,8 @@ class Interface:
 			config.Groupchat_config_window(self, account, jid, array[1])
 
 	def handle_event_bad_passphrase(self, account, array):
-		dialogs.Warning_dialog(_('Your GPG passphrase is wrong, so you are connected without your GPG key'))
+		dialogs.Warning_dialog(_('Your GPG passphrase is incorrect'),
+			_('You are currently connected without your GPG key.')).get_response()
 
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))

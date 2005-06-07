@@ -123,8 +123,10 @@ class Tabbed_chat_window(chat.Chat):
 		"""close window"""
 		for jid in self.users:
 			if time.time() - self.last_message_time[jid] < 2: # 2 seconds
-				dialog = dialogs.Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this window?') % jid)
-				if dialog.get_response() != gtk.RESPONSE_YES:
+				dialog = dialogs.Confirmation_dialog(
+					_('You have an unread message from "%s"' % jid),
+					_('If you close the window, this message will be lost.'))
+				if dialog.get_response() != gtk.RESPONSE_OK:
 					return True #stop the propagation of the event
 
 	def on_tabbed_chat_window_destroy(self, widget):
@@ -154,8 +156,10 @@ class Tabbed_chat_window(chat.Chat):
 
 	def remove_tab(self, jid):
 		if time.time() - self.last_message_time[jid] < 2:
-			dialog = dialogs.Confirmation_dialog(_('You received a message from %s in the last two seconds.\nDo you still want to close this tab?') % jid)
-			if dialog.get_response() != gtk.RESPONSE_YES:
+			dialog = dialogs.Confirmation_dialog(
+				_('You have an unread message from "%s"' % jid),
+				_('If you close this tab, the message will be lost.'))
+			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 
 		chat.Chat.remove_tab(self, jid, 'chats')
@@ -228,7 +232,8 @@ class Tabbed_chat_window(chat.Chat):
 			elif (event.state & gtk.gdk.SHIFT_MASK):
 					return False
 			if gajim.connections[self.account].connected < 2: #we are not connected
-				dialogs.Error_dialog(_('You are not connected, so you cannot send a message'))
+				dialogs.Error_dialog(_("You're connection has been lost."), \
+                        _("Your message can't be sent until you reconnect.")).get_response()
 				return True
 			message_buffer = widget.get_buffer()
 			start_iter = message_buffer.get_start_iter()
@@ -304,10 +309,10 @@ class Tabbed_chat_window(chat.Chat):
 
 	def restore_conversation(self, jid):
 		# don't restore lines if it's a transport
-		is_transport = jid.startswith('aim.') or jid.startswith('gadugadu.') or\
-			jid.startswith('irc.') or jid.startswith('icq.') or\
-			jid.startswith('msn.') or jid.startswith('sms.') or\
-			jid.startswith('yahoo.')
+		is_transport = jid.startswith('aim') or jid.startswith('gadugadu') or\
+			jid.startswith('irc') or jid.startswith('icq') or\
+			jid.startswith('msn') or jid.startswith('sms') or\
+			jid.startswith('yahoo')
 
 		if is_transport:
 			return	
