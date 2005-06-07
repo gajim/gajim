@@ -189,11 +189,13 @@ class Interface:
 		self.roster.mklists(data, account)
 		self.roster.draw_roster()
 	
-	def handle_event_warning(self, unused, msg, sectext=''):
-		dialogs.Warning_dialog(msg, sectext).get_response()
+	def handle_event_warning(self, unused, data):
+		#('WARNING', account, (title_text, section_text))
+		dialogs.Warning_dialog(data[0], data[1]).get_response()
 	
-	def handle_event_error(self, unused, msg, sectext=''):
-		dialogs.Error_dialog(msg, sectext).get_response()
+	def handle_event_error(self, unused, data):
+		#('ERROR', account, (title_text, section_text))
+		dialogs.Error_dialog(data[0], data[1]).get_response()
 	
 	def handle_event_error_answer(self, account, array):
 		#('ERROR_ANSWER', account, (jid_from. errmsg, errcode))

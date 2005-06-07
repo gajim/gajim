@@ -134,14 +134,11 @@ class Connection:
 			gajim.config.set('usegpg', False)
 	# END __init__
 
-	def dispatch(self, event, pritext, sectext=''):
+	def dispatch(self, event, data):
 		if not event in self.handlers:
 			return
 		for handler in self.handlers[event]:
-			if len(sectext):
-				handler(self.name, pritext, sectext)
-			else:
-				handler(self.name, pritext)
+			handler(self.name, data)
 
 	# this is in features.py but it is blocking
 	def _discover(self, ns, jid, node = None): 
@@ -288,7 +285,7 @@ class Connection:
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
 			if errcode == '409':	#conflict :	Nick Conflict
-				self.dispatch('ERROR', errmsg)
+				self.dispatch('ERROR', (errmsg, ''))
 			elif errcode == '502': # Internal Timeout:
 				self.dispatch('NOTIFY', (prs.getFrom().getStripped().encode('utf8'),
 					'error', errmsg, prs.getFrom().getResource().encode('utf8'), prio, keyID,
@@ -318,8 +315,8 @@ class Connection:
 		self.connection = None
 		if not self.on_purpose:
 			self.dispatch('ERROR', 
-			_('Connection with account "%s" has been lost') % self.name,
-			_('To continue sending and receiving messages, you will need to reconnect.'))
+			(_('Connection with account "%s" has been lost') % self.name,
+			_('To continue sending and receiving messages, you will need to reconnect.')))
 		self.on_purpose = False
 	# END disconenctedCB
 
@@ -580,7 +577,8 @@ class Connection:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', _('Could not connect to "%s"') % self.name)
+			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
+				''))
 			return None
 
 		con.RegisterHandler('message', self._messageCB)
@@ -615,7 +613,8 @@ class Connection:
 		except IOError: #probably a timeout
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', _('Could not connect to "%s"') % self.name)
+			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
+				''))
 			return None
 		if auth:
 			con.initRoster()
@@ -625,8 +624,8 @@ class Connection:
 			gajim.log.debug("Couldn't authenticate to %s" % self.name)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', _('Authentication failed with "%s"' % name), \
-                    _('Please check your login and password for correctness.'))
+			self.dispatch('ERROR', (_('Authentication failed with "%s"' % name),
+                    _('Please check your login and password for correctness.')))
 			return None
 	# END connect
 
@@ -846,8 +845,8 @@ class Connection:
 		con_type = c.connect((config['hostname'], port), proxy = proxy)
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % name)
-			self.dispatch('ERROR', _('Could not connect to "%s"') % name,
-				_('Check your connection or try again later'))
+			self.dispatch('ERROR', (_('Could not connect to "%s"') % name,
+				_('Check your connection or try again later')))
 			return False
 		gajim.log.debug('Connected to server')
 		# FIXME! This blocks!
@@ -855,7 +854,7 @@ class Connection:
 		req['username'] = config['name']
 		req['password'] = config['password']
 		if not common.xmpp.features.register(c, config['hostname'], req):
-			self.dispatch('ERROR', _('Error: ') + c.lastErr)
+			self.dispatch('ERROR', (_('Error:'), c.lastErr))
 			return False
 		self.name = name
 		self.connected = 0
