@@ -267,8 +267,13 @@ class Groupchat_window(chat.Chat):
 					model.set_value(iter, 3, show)
 		if (time.time() - self.room_creation[room_jid]) > 30 and \
 				nick != self.nicks[room_jid]:
-			self.print_conversation(_('%s is now %s (%s)') % (nick,
-				show, status), room_jid)
+			if show == 'offline':
+				st = _('%s has left') % nick
+			else:
+				st = _('%s is now %s') % (nick, show)
+			if status:
+				st += ' (' + status + ')'
+			self.print_conversation(st, room_jid)
 
 	
 	def set_subject(self, room_jid, subject):
