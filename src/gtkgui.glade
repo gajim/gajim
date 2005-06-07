@@ -9971,7 +9971,7 @@ JID: whatever@jabber.org</property>
 		  <property name="above_child">False</property>
 
 		  <child>
-		    <widget class="GtkImage" id="image614">
+		    <widget class="GtkImage" id="avatar_image">
 		      <property name="visible">True</property>
 		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
@@ -10002,6 +10002,7 @@ JID: whatever@jabber.org</property>
 	      <child>
 		<widget class="GtkScrolledWindow" id="conversation_scrolledwindow">
 		  <property name="border_width">3</property>
+		  <property name="height_request">40</property>
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
