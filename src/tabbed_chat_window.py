@@ -186,8 +186,6 @@ class Tabbed_chat_window(chat.Chat):
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
-# clear button is no longer: function removed
-
 	def on_history_button_clicked(self, widget):
 		"""When history button is pressed: call history window"""
 		jid = self.get_active_jid()
