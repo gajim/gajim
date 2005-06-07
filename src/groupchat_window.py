@@ -296,6 +296,10 @@ class Groupchat_window(chat.Chat):
 		room_jid = self.get_active_jid()
 		conversation_textview = self.xmls[room_jid].get_widget(
 			'conversation_textview')
+		message_buffer = widget.get_buffer()
+		start_iter, end_iter = message_buffer.get_bounds()
+		message = message_buffer.get_text(start_iter, end_iter, False)
+
 		if event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
 			if (event.state & gtk.gdk.CONTROL_MASK): # CTRL + SHIFT + TAB  
 				self.notebook.emit('key_press_event', event)
@@ -304,11 +308,9 @@ class Groupchat_window(chat.Chat):
 				self.notebook.emit('key_press_event', event)
 			else:
 				list_nick = self.get_nick_list(room_jid)
-				message_buffer = widget.get_buffer()
-				start_iter = message_buffer.get_start_iter()
 				cursor_position = message_buffer.get_insert()
 				end_iter = message_buffer.get_iter_at_mark(cursor_position)
-				text = message_buffer.get_text(start_iter, end_iter, 0)
+				text = message_buffer.get_text(start_iter, end_iter, False)
 				if not text or text.endswith(' '):
 					return False
 				splitted_text = text.split()
@@ -336,11 +338,8 @@ class Groupchat_window(chat.Chat):
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				return False
-			message_buffer = widget.get_buffer()
-			start_iter = message_buffer.get_start_iter()
-			end_iter = message_buffer.get_end_iter()
-			message = message_buffer.get_text(start_iter, end_iter, 0)
 			if message != '' or message != '\n':
+				self.save_sent_message(room_jid, message)
 				if message == '/clear':
 					self.on_clear(None, conversation_textview) # clear conversation
 					self.on_clear(None, widget) # clear message textview too
@@ -349,6 +348,12 @@ class Groupchat_window(chat.Chat):
 				message_buffer.set_text('', -1)
 				widget.grab_focus()
 			return True
+		elif event.keyval == gtk.keysyms.Up:
+			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
+				self.sent_messages_scroll(room_jid, 'up', widget.get_buffer())
+		elif event.keyval == gtk.keysyms.Down:
+			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+Down
+				self.sent_messages_scroll(room_jid, 'down', widget.get_buffer())
 
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
 		"""Print a line in the conversation:

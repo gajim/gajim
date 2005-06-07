@@ -193,10 +193,8 @@ class Tabbed_chat_window(chat.Chat):
 			s += ' (' + user.status + ')'
 		self.print_conversation(s, user.jid, 'status')
 
-
 		#restore previous conversation
 		self.restore_conversation(user.jid)
-
 
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
@@ -208,6 +206,10 @@ class Tabbed_chat_window(chat.Chat):
 		and printed in the conversation"""
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		message_buffer = widget.get_buffer()
+		start_iter, end_iter = message_buffer.get_bounds()
+		message = message_buffer.get_text(start_iter, end_iter, False)
+
 		if event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + SHIFT + TAB
 				self.notebook.emit('key_press_event', event)
@@ -235,11 +237,8 @@ class Tabbed_chat_window(chat.Chat):
 				dialogs.Error_dialog(_("You're connection has been lost."), \
                         _("Your message can't be sent until you reconnect.")).get_response()
 				return True
-			message_buffer = widget.get_buffer()
-			start_iter = message_buffer.get_start_iter()
-			end_iter = message_buffer.get_end_iter()
-			message = message_buffer.get_text(start_iter, end_iter, 0)
 			if message != '' or message != '\n':
+				self.save_sent_message(jid, message)
 				if message == '/clear':
 					self.on_clear(None, conversation_textview) # clear conversation
 					self.on_clear(None, widget) # clear message textview too
@@ -253,6 +252,12 @@ class Tabbed_chat_window(chat.Chat):
 				message_buffer.set_text('', -1)
 				self.print_conversation(message, jid, jid, encrypted = encrypted)
 			return True
+		elif event.keyval == gtk.keysyms.Up:
+			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
+				self.sent_messages_scroll(jid, 'up', widget.get_buffer())
+		elif event.keyval == gtk.keysyms.Down:
+			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+Down
+				self.sent_messages_scroll(jid, 'down', widget.get_buffer())
 
 	def on_contact_button_clicked(self, widget):
 		jid = self.get_active_jid()
@@ -352,7 +357,7 @@ class Tabbed_chat_window(chat.Chat):
 			size = size + 1
 
 		lines.reverse()
-
+		
 		for msg in lines:
 			if msg[1] == 'sent':
 				kind = 'outgoing'
@@ -369,3 +374,4 @@ class Tabbed_chat_window(chat.Chat):
 
 		if len(lines):
 			self.print_empty_line(jid)
+

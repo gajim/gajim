@@ -615,6 +615,7 @@ class Interface:
 		else:
 			return False
 		if pix.get_width() > 24 or pix.get_height() > 24:
+			#FIXME: inform the user why you don't accept it
 			return False
 		return True
 		

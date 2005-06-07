@@ -102,6 +102,7 @@ class Config:
 		'restore_timeout': [opt_int, 60],
 		'send_on_ctrl_enter': [opt_bool, False], # send on ctrl+enter
 		'show_roster_on_startup': [opt_bool, True],
+		'key_up_lines': [opt_int, 25],  # how many lines to store for key up
 		'version': [ None, '0.7' ],
 	}
 

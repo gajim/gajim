@@ -61,6 +61,12 @@ class Chat:
 		self.names = {} # what is printed in the tab (eg. user.name)
 		self.childs = {}
 
+		#The following vars are used to keep history of user's messages
+		self.sent_history = {}
+		self.sent_history_pos = {}
+		self.typing_new = {}
+		self.orig_msg = {}
+
 	def update_tags(self):
 		for jid in self.tagIn:
 			self.tagIn[jid].set_property('foreground',
@@ -320,6 +326,12 @@ class Chat:
 			self.on_close_button_clicked, jid)
 
 		self.notebook.append_page_menu(child, tab_hbox, gtklabel)
+
+		#init new sent history for this conversation
+		self.sent_history[jid] = []
+		self.sent_history_pos[jid] = 0
+		self.typing_new[jid] = True
+		self.orig_msg[jid] = ''
 
 		self.show_title()
 
@@ -742,3 +754,46 @@ class Chat:
 				self.plugin.systray.add_jid(jid, self.account)
 			self.redraw_tab(jid)
 			self.show_title()
+
+	def save_sent_message(self, jid, message):
+		#save the message, so user can scroll though the list with key up/down
+		size = len(self.sent_history[jid])
+		#we don't want size of the buffer to grow indefinately
+		max_size = gajim.config.get('key_up_lines')
+		if size >= max_size:
+			for i in range(0, size - 1): 
+				self.sent_history[jid][i] = self.sent_history[jid][i+1]
+			self.sent_history[jid][max_size - 1] = message
+		else:
+			self.sent_history[jid].append(message)
+
+		self.sent_history_pos[jid] = size + 1
+		self.typing_new[jid] = True
+		self.orig_msg[jid] = ''
+	
+	def sent_messages_scroll(self, jid, direction, conv_buf):
+		size = len(self.sent_history[jid]) 
+		if direction == 'up':
+			if self.sent_history_pos[jid] == 0:
+				return
+	
+			if self.typing_new[jid]:
+				#user was typing something and then went into history, so save
+				#whatever is already typed
+				start_iter = conv_buf.get_start_iter()
+				end_iter = conv_buf.get_end_iter()
+				self.orig_msg[jid] = conv_buf.get_text(start_iter, end_iter, 0)
+				self.typing_new[jid] = False
+
+			self.sent_history_pos[jid] = self.sent_history_pos[jid] - 1
+			conv_buf.set_text(self.sent_history[jid][self.sent_history_pos[jid]])
+
+		elif direction == 'down':
+			if self.sent_history_pos[jid] >= size - 1:
+				conv_buf.set_text(self.orig_msg[jid]);
+				self.typing_new[jid] = True
+				self.sent_history_pos[jid] = size
+				return
+
+			self.sent_history_pos[jid] = self.sent_history_pos[jid] + 1
+			conv_buf.set_text(self.sent_history[jid][self.sent_history_pos[jid]])
