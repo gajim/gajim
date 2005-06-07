@@ -580,6 +580,8 @@ class Preferences_window:
 				self.on_widget_font_set(widg, font_widgets[w])
 				
 		gajim.config.set('roster_theme', theme)
+		# begin repainting themed widgets throughout
+		self.plugin.roster.repaint_themed_widgets()
 		self.plugin.save_config()
 		self.plugin.roster.draw_roster()
 

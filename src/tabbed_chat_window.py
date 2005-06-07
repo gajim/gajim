@@ -77,18 +77,46 @@ class Tabbed_chat_window(chat.Chat):
 		self.set_state_image(jid)
 		contact_button = self.xmls[jid].get_widget('contact_button')
 		contact_button.set_use_underline(False)
-		contact_button.set_label(user.name + ' <' + jid + '>')
 		if not user.keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
 		else:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(True)
 
-		nontabbed_status_image = self.xmls[jid].get_widget(
-			'nontabbed_status_image')
-		if len(self.xmls) > 1:
-			nontabbed_status_image.hide()
-		else:
-			nontabbed_status_image.show()
+		# add the fat line at the top
+		self.draw_name_banner(user.name, jid)
+
+	def draw_name_banner(self, name, jid):
+		'''Draw the fat line at the top of the window that 
+		houses the status icon, name, jid, and avatar'''
+
+		# this is the text for the big brown bar
+		label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
+			% (name, jid)
+
+		# get the bg color of the bar from the current theme colors
+		bgcolor = gajim.config.get('accountbgcolor')
+
+		# the backgrounds are colored by using eventboxes and 
+		# setting the bg color of the eventboxes. There is a
+		# separate event box for each component (name label and
+		# status icon). The avatar has one too in the glade file.
+
+		# setup the label that holds name and jid
+		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
+		banner_name_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse("white"))
+		banner_name_label.set_markup(label_text)
+		# setup the eventbox that holds the above label, and colour it
+		banner_name_eventbox = self.xmls[jid].get_widget('banner_name_eventbox')
+		banner_name_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
+
+		# setup the eventbox that holds the status icon and colour it
+		banner_status_eventbox = self.xmls[jid].get_widget('banner_status_eventbox')
+		banner_status_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
+
+		# setup the eventbox that holds the avatar and colour it
+		banner_avatar_eventbox = self.xmls[jid].get_widget('banner_avatar_eventbox')
+		banner_avatar_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
+
 
 	def set_state_image(self, jid):
 		prio = 0
@@ -109,18 +137,34 @@ class Tabbed_chat_window(chat.Chat):
 		status_image = self.notebook.get_tab_label(child).get_children()[0]
 		state_images = self.plugin.roster.get_appropriate_state_images(jid)
 		image = state_images[show]
-		non_tabbed_status_image = self.xmls[jid].get_widget(
-			'nontabbed_status_image')
+		banner_status_image = self.xmls[jid].get_widget('banner_status_image')
 		if keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(True)
 		else:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			non_tabbed_status_image.set_from_animation(image.get_animation())
+			banner_status_image.set_from_animation(image.get_animation())
 			status_image.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			non_tabbed_status_image.set_from_pixbuf(image.get_pixbuf())
-			status_image.set_from_pixbuf(image.get_pixbuf())
+            # make a copy because one will be scaled, one not (tab icon)
+			pix = image.get_pixbuf()
+			scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
+			banner_status_image.set_from_pixbuf(scaled_pix)
+			status_image.set_from_pixbuf(pix)
+
+	def repaint_colored_widgets(self):
+		"""Repaint widgets (banner) in the window/tab with theme color"""
+		# get the bg color of the bar from the current theme colors
+		bgcolor = gajim.config.get('accountbgcolor')
+
+		# iterate through tabs/windows and repaint
+		for jid in self.xmls:
+			banner_status_eventbox = self.xmls[jid].get_widget('banner_status_eventbox')
+			banner_status_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
+			banner_name_eventbox = self.xmls[jid].get_widget('banner_name_eventbox')
+			banner_name_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
+			banner_avatar_eventbox = self.xmls[jid].get_widget('banner_avatar_eventbox')
+			banner_avatar_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
 
 	def on_tabbed_chat_window_delete_event(self, widget, event):
 		"""close window"""
@@ -142,11 +186,7 @@ class Tabbed_chat_window(chat.Chat):
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
-	def on_clear_button_clicked(self, widget):
-		"""When clear button is pressed:	clear the conversation"""
-		jid = self.get_active_jid()
-		textview = self.xmls[jid].get_widget('conversation_textview')
-		self.on_clear(None, textview)
+# clear button is no longer: function removed
 
 	def on_history_button_clicked(self, widget):
 		"""When history button is pressed: call history window"""
@@ -156,6 +196,20 @@ class Tabbed_chat_window(chat.Chat):
 		else:
 			self.plugin.windows['logs'][jid] = history_window.\
 				History_window(self.plugin, jid, self.account)
+
+	def on_send_button_clicked(self, widget):
+		"""When send button is pressed: send the current message"""
+		jid = self.get_active_jid()
+		message_textview = self.xmls[jid].get_widget('message_textview')
+		message_buffer = message_textview.get_buffer()
+		start_iter = message_buffer.get_start_iter()
+		end_iter = message_buffer.get_end_iter()
+		message = message_buffer.get_text(start_iter, end_iter, 0)
+
+		# send the message
+		self.send_message(message)
+
+		message_buffer.set_text('', -1)
 
 	def remove_tab(self, jid):
 		if time.time() - self.last_message_time[jid] < 2:
@@ -168,15 +222,6 @@ class Tabbed_chat_window(chat.Chat):
 		chat.Chat.remove_tab(self, jid, 'chats')
 		if len(self.xmls) > 0:
 			del self.users[jid]
-
-		jid = self.get_active_jid() # get the new active jid  
-		if jid != '':
-			nontabbed_status_image = self.xmls[jid].get_widget(
-				'nontabbed_status_image')  
-			if len(self.xmls) > 1:  
-				nontabbed_status_image.hide()  
-			else:
-				nontabbed_status_image.show()
 
 	def new_user(self, user):
 		'''when new tab is created'''
@@ -240,20 +285,11 @@ class Tabbed_chat_window(chat.Chat):
 				dialogs.Error_dialog(_("A connection is not available"),
                         _("Your message can't be sent until you reconnect.")).get_response()
 				return True
-			if message != '' or message != '\n':
-				self.save_sent_message(jid, message)
-				if message == '/clear':
-					self.on_clear(None, conversation_textview) # clear conversation
-					self.on_clear(None, widget) # clear message textview too
-					return True
-				keyID = ''
-				encrypted = False
-				if self.xmls[jid].get_widget('gpg_togglebutton').get_active():
-					keyID = self.users[jid].keyID
-					encrypted = True
-				gajim.connections[self.account].send_message(jid, message, keyID)
-				message_buffer.set_text('', -1)
-				self.print_conversation(message, jid, jid, encrypted = encrypted)
+
+			# send the message
+			self.send_message(message)
+
+			message_buffer.set_text('', -1)
 			return True
 		elif event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
@@ -261,6 +297,27 @@ class Tabbed_chat_window(chat.Chat):
 		elif event.keyval == gtk.keysyms.Down:
 			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+Down
 				self.sent_messages_scroll(jid, 'down', widget.get_buffer())
+
+	def send_message(self, message):
+		"""Send the message given in the args"""
+		jid = self.get_active_jid()
+		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		message_textview = self.xmls[jid].get_widget('message_textview')
+		message_buffer = message_textview.get_buffer()
+		if message != '' or message != '\n':
+			self.save_sent_message(jid, message)
+			if message == '/clear':
+				self.on_clear(None, conversation_textview) # clear conversation
+				self.on_clear(None, widget) # clear message textview too
+				return True
+			keyID = ''
+			encrypted = False
+			if self.xmls[jid].get_widget('gpg_togglebutton').get_active():
+				keyID = self.users[jid].keyID
+				encrypted = True
+			gajim.connections[self.account].send_message(jid, message, keyID)
+			message_buffer.set_text('', -1)
+			self.print_conversation(message, jid, jid, encrypted = encrypted)
 
 	def on_contact_button_clicked(self, widget):
 		jid = self.get_active_jid()

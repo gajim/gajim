@@ -44,6 +44,7 @@ class Chat:
 	def __init__(self, plugin, account, widget_name):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.window = self.xml.get_widget(widget_name)
+
 		self.widget_name = widget_name
 		self.notebook = self.xml.get_widget('chat_notebook')
 		self.notebook.remove_page(0)
@@ -198,14 +199,6 @@ class Chat:
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(new_jid, self.account)
-		
-		if self.widget_name == 'tabbed_chat_window':
-			nontabbed_status_image = self.xmls[jid].get_widget(
-				'nontabbed_status_image')
-			if len(self.xmls) > 1:
-				nontabbed_status_image.hide()
-			else:
-				nontabbed_status_image.show()
 		
 		conversation_textview.grab_focus()
 

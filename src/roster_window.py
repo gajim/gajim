@@ -1316,6 +1316,13 @@ class Roster_window:
 					self.plugin.windows[account]['gc'][jid].update_state_images()
 		self.update_status_comboxbox()
 
+	def repaint_themed_widgets(self):
+		"""Notify windows that contain themed widgets to repaint them"""
+		for account in gajim.connections:
+			# Update opened chat windows/tabs
+			for jid in self.plugin.windows[account]['chats']:
+				self.plugin.windows[account]['chats'][jid].repaint_colored_widgets()
+
 	def on_show_offline_contacts_menuitem_activate(self, widget):
 		'''when show offline option is changed:
 		redraw the treeview'''
