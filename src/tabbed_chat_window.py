@@ -124,7 +124,7 @@ class Tabbed_chat_window(chat.Chat):
 		for jid in self.users:
 			if time.time() - self.last_message_time[jid] < 2: # 2 seconds
 				dialog = dialogs.Confirmation_dialog(
-					_('You have an unread message from "%s"' % jid),
+	_('You have an unread message from "%s" in the last two seconds' % jid),
 					_('If you close the window, this message will be lost.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return True #stop the propagation of the event
