@@ -317,7 +317,9 @@ class Connection:
 		self.dispatch('STATUS', 'offline')
 		self.connection = None
 		if not self.on_purpose:
-			self.dispatch('ERROR', _('Connection with account "%s" has been lost') %\ self.name, _('To continue sending and receiving messages, you will need to reconnect.'))
+			self.dispatch('ERROR', 
+			_('Connection with account "%s" has been lost') % self.name,
+			_('To continue sending and receiving messages, you will need to reconnect.'))
 		self.on_purpose = False
 	# END disconenctedCB
 
