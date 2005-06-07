@@ -198,10 +198,10 @@ class Systray:
 		return groups_menu
 
 	def on_clicked(self, widget, event):
-		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1:
+		win = self.plugin.roster.window
+		if event.button == 1: # Left click
 			if len(self.jids) == 0:
-				win = self.plugin.roster.window
-				if win.is_active():
+				if win.flags() & gtk.VISIBLE:
 					win.hide()
 				else:
 					win.present()
@@ -221,8 +221,7 @@ class Systray:
 					acc['chats'][jid].set_active_tab(jid)
 					acc['chats'][jid].window.present()
 		if event.button == 2: # middle click
-			win = self.plugin.roster.window
-			if win.flags() & gtk.VISIBLE:
+			if win.is_active():
 				win.hide()
 			else:
 				win.present()
