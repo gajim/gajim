@@ -480,6 +480,17 @@ class Groupchat_window(chat.Chat):
 			#FIXME: we need the resource but it's not saved
 			#self.plugin.send('ASK_OS_INFO', self.account, jid, resource)
 
+	def on_send_pm(self, widget, model, iter):
+		room_jid = self.get_active_jid()
+		nick = model.get_value(iter, 1)
+		fjid = room_jid + '/' + nick
+		if not self.plugin.windows[self.account]['chats'].has_key(fjid):
+			show = model.get_value(iter, 3)
+			u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0, '')
+			self.plugin.roster.new_chat(u, self.account)
+		self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
+		self.plugin.windows[self.account]['chats'][fjid].window.present()
+
 	def mk_menu(self, room_jid, event, iter):
 		"""Make user's popup menu"""
 		model = self.list_treeview[room_jid].get_model()
@@ -539,6 +550,13 @@ class Groupchat_window(chat.Chat):
 			item = gtk.MenuItem(_('_Information'))
 			menu.append(item)
 			item.connect('activate', self.on_info, jid)
+		
+			item = gtk.MenuItem()
+			menu.append(item)
+
+			item = gtk.MenuItem(_('Send _Priate Message'))
+			menu.append(item)
+			item.connect('activate', self.on_send_pm, model, iter)
 		
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
