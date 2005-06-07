@@ -301,6 +301,14 @@ class Groupchat_window(chat.Chat):
 		       'nick':self.nicks[self.get_active_jid()]
 		     }
 		
+		for bookmark in gajim.connections[self.account].bookmarks:
+			if bookmark['jid'] == bm['jid']:
+				dialogs.Error_dialog(
+						_('Bookmark already set.'),
+						_('The bookmark is already in your roster.')).get_response()
+				return
+
+		
 		gajim.connections[self.account].bookmarks.append(bm)
 		gajim.connections[self.account].store_bookmarks()
 		
