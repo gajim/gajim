@@ -182,6 +182,17 @@ class Preferences_window:
 				'groupfont': 'Sans Italic 10',
 				'userfont': 'Sans 10'
 			},
+            'human': {
+				'accounttextcolor': '#ffffff',
+				'grouptextcolor': '#ab5920',
+				'contacttextcolor': '#000000',
+				'accountbgcolor': '#996442',
+				'groupbgcolor': '#e3ca94',
+				'contactbgcolor': '#ffffff',
+				'accountfont': 'Sans Bold 10',
+				'groupfont': 'Sans Italic 10',
+				'userfont': 'Sans 10'
+            },
 		}
 
 		theme_combobox = self.xml.get_widget('theme_combobox')
