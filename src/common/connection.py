@@ -174,12 +174,20 @@ class Connection:
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
 			for info in card.getChildren():
-				if info.getChildren() == []:
-					vcard[info.getName()] = info.getData()
-				else:
-					vcard[info.getName()] = {}
+				name = info.getName()
+				if name in ['ADR', 'TEL', 'EMAIL']: # we can have several
+					if not vcard.has_key(name):
+						vcard[name] = []
+					entry = {}
 					for c in info.getChildren():
-						 vcard[info.getName()][c.getName()] = c.getData()
+						 entry[c.getName()] = c.getData()
+					vcard[name].append(entry)
+				elif info.getChildren() == []:
+					vcard[name] = info.getData()
+				else:
+					vcard[name] = {}
+					for c in info.getChildren():
+						 vcard[name][c.getName()] = c.getData()
 			if vc.getID() in self.myVCardID:
 				self.myVCardID.remove(vc.getID())
 				self.dispatch('MYVCARD', vcard)
@@ -893,22 +901,20 @@ class Connection:
 	def send_vcard(self, vcard):
 		if not self.connection:
 			return
-		print vcard
 		iq = common.xmpp.Iq(typ = 'set')
 		iq2 = iq.setTag(common.xmpp.NS_VCARD + ' vCard')
-		for i in vcard.keys():
+		for i in vcard:
 			if i == 'jid':
 				continue
 			if type(vcard[i]) == type({}):
-				for j in vcard[i].keys():
-					if type(vcard[i][j]) == type({}):
-						iq3 = iq2.addChild(i)
-						iq3.addChild(j)
-						for k in vcard[i][j]:
-							iq3.addChild(k).setData(vcard[i][j][k])
-					else:
-						iq3 = iq2.addChild(i)
-						iq3.addChild(j).setData(vcard[i][j])
+				iq3 = iq2.addChild(i)
+				for j in vcard[i]:
+					iq3.addChild(j).setData(vcard[i][j])
+			elif type(vcard[i]) == type([]):
+				for j in vcard[i]:
+					iq3 = iq2.addChild(i)
+					for k in j:
+						iq3.addChild(k).setData(j[k])
 			else:
 				iq2.addChild(i).setData(vcard[i])
 		self.connection.send(iq)

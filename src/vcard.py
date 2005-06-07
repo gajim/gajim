@@ -135,39 +135,41 @@ class Vcard_window:
 
 	def set_values(self, vcard):
 		for i in vcard.keys():
-			if type(vcard[i]) == type({}):
-				if i == 'PHOTO':
-					img_decoded = None
-					if vcard[i].has_key('BINVAL'):
-						img_encoded = vcard[i]['BINVAL']
-						self.avatar_encoded = img_encoded
-						self.avatar_mime_type = vcard[i]['TYPE']
-						try:
-							img_decoded = base64.decodestring(img_encoded)
-						except:
-							pass
-					elif vcard[i].has_key('EXTVAL'):
-						url = vcard[i]['EXTVAL']
-						try:
-							fd = urllib.urlopen(url)
-							img_decoded = fd.read()
-						except:
-							pass
-					if img_decoded:
-						pixbufloader = gtk.gdk.PixbufLoader()
-						pixbufloader.write(img_decoded)
-						pixbufloader.close()
-						pixbuf = pixbufloader.get_pixbuf()
-						image = self.xml.get_widget('PHOTO_image')
-						image.set_from_pixbuf(pixbuf)
-					continue
-				add_on = ''
-				if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
+			if i == 'PHOTO':
+				img_decoded = None
+				if vcard[i].has_key('BINVAL'):
+					img_encoded = vcard[i]['BINVAL']
+					self.avatar_encoded = img_encoded
+					self.avatar_mime_type = vcard[i]['TYPE']
+					try:
+						img_decoded = base64.decodestring(img_encoded)
+					except:
+						pass
+				elif vcard[i].has_key('EXTVAL'):
+					url = vcard[i]['EXTVAL']
+					try:
+						fd = urllib.urlopen(url)
+						img_decoded = fd.read()
+					except:
+						pass
+				if img_decoded:
+					pixbufloader = gtk.gdk.PixbufLoader()
+					pixbufloader.write(img_decoded)
+					pixbufloader.close()
+					pixbuf = pixbufloader.get_pixbuf()
+					image = self.xml.get_widget('PHOTO_image')
+					image.set_from_pixbuf(pixbuf)
+				continue
+			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
+				for entry in vcard[i]:
 					add_on = '_HOME'
-					if 'WORK' in vcard[i]:
+					if 'WORK' in entry:
 						add_on = '_WORK'
+					for j in entry.keys():
+						self.set_value(i + add_on + '_' + j + '_entry', entry[j])
+			if type(vcard[i]) == type({}):
 				for j in vcard[i].keys():
-					self.set_value(i + add_on + '_' + j + '_entry', vcard[i][j])
+					self.set_value(i + '_' + j + '_entry', vcard[i][j])
 			else:
 				if i == 'DESC':
 					self.xml.get_widget('DESC_textview').get_buffer().set_text(
@@ -242,6 +244,19 @@ class Vcard_window:
 		'''Add an information to the vCard dictionary'''
 		entries = entry.split('_')
 		loc = vcard
+		if len(entries) == 3: # We need to use lists
+			if not loc.has_key(entries[0]):
+				loc[entries[0]] = []
+			found = False
+			for e in loc[entries[0]]:
+				if entries[1] in e:
+					found = True
+					break
+			if found:
+				e[entries[2]] = txt
+			else:
+				loc[entries[0]].append({entries[1]: '', entries[2]: txt})
+			return vcard
 		while len(entries) > 1:
 			if not loc.has_key(entries[0]):
 				loc[entries[0]] = {}
@@ -306,6 +321,7 @@ class Vcard_window:
 			for e in entries:
 				self.xml.get_widget(e + '_entry').set_text('')
 			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
+			self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
 			Error_dialog(_('You are not connected to the server'),
