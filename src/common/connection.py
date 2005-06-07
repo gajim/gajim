@@ -845,7 +845,7 @@ class Connection:
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % name)
 			self.dispatch('ERROR', _('Could not connect to "%s"') % name,
-				_('Please try again later'))
+				_('Check your connection or try again later'))
 			return False
 		gajim.log.debug('Connected to server')
 		# FIXME! This blocks!
