@@ -8177,7 +8177,6 @@ Custom</property>
 		      <child>
 			<widget class="GtkVButtonBox" id="photo_vbuttonbox">
 			  <property name="border_width">6</property>
-			  <property name="visible">True</property>
 			  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
 			  <property name="spacing">0</property>
 
