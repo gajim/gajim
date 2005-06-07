@@ -137,7 +137,7 @@ class Vcard_window:
 		for i in vcard.keys():
 			if i == 'PHOTO':
 				img_decoded = None
-				if vcard[i].has_key('BINVAL'):
+				if vcard[i].has_key('BINVAL') and vcard[i].has_key('TYPE'):
 					img_encoded = vcard[i]['BINVAL']
 					self.avatar_encoded = img_encoded
 					self.avatar_mime_type = vcard[i]['TYPE']
