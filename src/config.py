@@ -21,6 +21,7 @@ import gtk
 import gtk.glade
 import gobject
 import os
+import common.config
 import common.sleepy
 
 import dialogs
@@ -1095,6 +1096,20 @@ class Account_modification_window:
 						self.account, 'gpgpassword')
 			entry.set_text(gpgpassword)
 
+	def update_proxy_list(self):
+		our_proxy = gajim.config.get_per('accounts', self.account, 'proxy')
+		if not our_proxy:
+			our_proxy = 'None'
+		self.proxy_combobox = self.xml.get_widget('proxies_combobox')
+		model = gtk.ListStore(gobject.TYPE_STRING)
+		self.proxy_combobox.set_model(model)
+		l = gajim.config.get_per('proxies')
+		l.insert(0, 'None')
+		for i in range(len(l)):
+			model.append([l[i]])
+			if our_proxy == l[i]:
+				self.proxy_combobox.set_active(i)
+
 	def init_account(self):
 		'''Initialize window with defaults values'''
 		self.xml.get_widget('name_entry').set_text(self.account)
@@ -1117,18 +1132,7 @@ class Account_modification_window:
 			get_per('accounts', self.account, 'priority'))
 
 		# init proxy list
-		our_proxy = gajim.config.get_per('accounts', self.account, 'proxy')
-		if not our_proxy:
-			our_proxy = 'None'
-		self.proxy_combobox = self.xml.get_widget('proxies_combobox')
-		model = gtk.ListStore(gobject.TYPE_STRING)
-		self.proxy_combobox.set_model(model)
-		l = gajim.config.get_per('proxies')
-		l.insert(0, 'None')
-		for i in range(len(l)):
-			model.append([l[i]])
-			if our_proxy == l[i]:
-				self.proxy_combobox.set_active(i)
+		self.update_proxy_list()
 
 		usessl = gajim.config.get_per('accounts', self.account, 'usessl')
 		self.xml.get_widget('use_ssl_checkbutton').set_active(usessl)
@@ -1340,7 +1344,14 @@ _('To change the account name, it must be disconnected.')).get_response()
 			self.plugin.windows[self.account]['infos'][jid] = \
 				dialogs.Vcard_window(jid, self.plugin,	self.account, True)
 			gajim.connections[self.account].request_vcard(jid)
-	
+
+	def on_manage_proxies_button_clicked(self, widget):
+		if self.plugin.windows.has_key('manage_proxies'):
+			self.plugin.windows['manage_proxies'].window.present()
+		else:
+			self.plugin.windows['manage_proxies'] = \
+				Manage_proxies_window(self.plugin)
+
 	def on_gpg_choose_button_clicked(self, widget, data = None):
 		secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
 		if not secret_keys:
@@ -1391,6 +1402,163 @@ _('There was a problem retrieving your GPG secret keys.')).get_response()
 		elif not self.xml.get_widget('save_password_checkbutton').get_active():
 			password_entry.set_sensitive(False)
 			password_entry.set_text('')
+
+#---------- Manage_proxies_window class -------------#
+class Manage_proxies_window:
+	def __init__(self, plugin):
+		self.plugin = plugin
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'manage_proxies_window', APP)
+		self.window = self.xml.get_widget('manage_proxies_window')
+		self.proxies_treeview = self.xml.get_widget('proxies_treeview')
+		self.proxyname_entry = self.xml.get_widget('proxyname_entry')
+		self.init_list()
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def fill_proxies_treeview(self):
+		model = self.proxies_treeview.get_model()
+		model.clear()
+		iter = model.append()
+		model.set(iter, 0, 'None')
+		for p in gajim.config.get_per('proxies'):
+			iter = model.append()
+			model.set(iter, 0, p)
+
+	def init_list(self):
+		self.xml.get_widget('remove_proxy_button').set_sensitive(False)
+		self.xml.get_widget('proxytype_combobox').set_sensitive(False)
+		self.xml.get_widget('proxy_table').set_sensitive(False)
+		model = gtk.ListStore(gobject.TYPE_STRING)
+		self.proxies_treeview.set_model(model)
+		col = gtk.TreeViewColumn('Proxies')
+		self.proxies_treeview.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text = 0)
+		self.fill_proxies_treeview()
+		self.xml.get_widget('proxytype_combobox').set_active(0)
+
+	def on_manage_proxies_window_destroy(self, widget):
+		for account in gajim.connections:
+			if self.plugin.windows[account].has_key('account_modification'):
+				self.plugin.windows[account]['account_modification'].\
+					update_proxy_list()
+		if self.plugin.windows.has_key('account_modification'):
+			self.plugin.windows['account_modification'].update_proxy_list()
+		del self.plugin.windows['manage_proxies'] 
+
+	def on_add_proxy_button_clicked(self, widget):
+		model = self.proxies_treeview.get_model()
+		proxies = gajim.config.get_per('proxies')
+		i = 1
+		while ('proxy' + str(i)) in proxies:
+			i += 1
+		iter = model.append()
+		model.set(iter, 0, 'proxy' + str(i))
+		gajim.config.add_per('proxies', 'proxy' + str(i))
+
+	def on_remove_proxy_button_clicked(self, widget):
+		(model, iter) = self.proxies_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		proxy = model.get_value(iter, 0)
+		model.remove(iter)
+		gajim.config.del_per('proxies', proxy)
+		self.xml.get_widget('remove_proxy_button').set_sensitive(False)
+
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()
+	
+	def on_useauth_checkbutton_toggled(self, widget):
+		act = widget.get_active()
+		self.xml.get_widget('proxyuser_entry').set_sensitive(act)
+		self.xml.get_widget('proxypass_entry').set_sensitive(act)
+
+	def on_proxies_treeview_cursor_changed(self, widget):
+		#TODO: check if off proxy settings are correct (see http://trac.gajim.org/changeset/1921#file2 line 1221
+		(model, iter) = widget.get_selection().get_selected()
+		if not iter:
+			return
+		self.xml.get_widget('remove_proxy_button').set_sensitive(True)
+		proxy = model.get_value(iter, 0)
+		self.xml.get_widget('proxyname_entry').set_text(proxy)
+		proxyhost_entry = self.xml.get_widget('proxyhost_entry')
+		proxyport_entry = self.xml.get_widget('proxyport_entry')
+		proxyuser_entry = self.xml.get_widget('proxyuser_entry')
+		proxypass_entry = self.xml.get_widget('proxypass_entry')
+		useauth_checkbutton = self.xml.get_widget('useauth_checkbutton')
+		proxyhost_entry.set_text('')
+		proxyport_entry.set_text('')
+		proxyuser_entry.set_text('')
+		proxypass_entry.set_text('')
+		useauth_checkbutton.set_active(False)
+		self.on_useauth_checkbutton_toggled(useauth_checkbutton)
+		if proxy == 'None':
+			self.proxyname_entry.set_editable(False)
+			self.xml.get_widget('proxytype_combobox').set_sensitive(False)
+			self.xml.get_widget('proxy_table').set_sensitive(False)
+		else:
+			self.proxyname_entry.set_editable(True)
+			self.xml.get_widget('proxytype_combobox').set_sensitive(True)
+			self.xml.get_widget('proxy_table').set_sensitive(True)
+			proxyhost_entry.set_text(gajim.config.get_per('proxies', proxy,
+				'host'))
+			proxyport_entry.set_text(str(gajim.config.get_per('proxies', proxy,
+				'port')))
+			proxyuser_entry.set_text(gajim.config.get_per('proxies', proxy,
+				'user'))
+			proxypass_entry.set_text(gajim.config.get_per('proxies', proxy,
+				'pass'))
+			#TODO: if we have several proxy type, set the combobox
+			if gajim.config.get_per('proxies', proxy, 'user'):
+				useauth_checkbutton.set_active(True)
+
+	def on_proxies_treeview_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Delete:
+			self.on_remove_proxy_button_clicked(widget)
+
+	def on_proxyname_entry_changed(self, widget):
+		(model, iter) = self.proxies_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		old_name = model.get_value(iter, 0)
+		new_name = widget.get_text()
+		if new_name == '':
+			return
+		if new_name == old_name:
+			return
+		config = gajim.config.get_per('proxies', old_name)
+		gajim.config.del_per('proxies', old_name)
+		gajim.config.add_per('proxies', new_name)
+		for option in config:
+			gajim.config.set_per('proxies', new_name, option,
+				config[option][common.config.OPT_VAL])
+		model.set_value(iter, 0, new_name)
+
+	def on_proxytype_combobox_changed(self, widget):
+		#TODO: if we have several proxy type
+		pass
+
+	def on_proxyhost_entry_changed(self, widget):
+		value = widget.get_text()
+		proxy = self.proxyname_entry.get_text()
+		gajim.config.set_per('proxies', proxy, 'host', value)
+
+	def on_proxyport_entry_changed(self, widget):
+		value = widget.get_text()
+		proxy = self.proxyname_entry.get_text()
+		gajim.config.set_per('proxies', proxy, 'port', value)
+
+	def on_proxyuser_entry_changed(self, widget):
+		value = widget.get_text()
+		proxy = self.proxyname_entry.get_text()
+		gajim.config.set_per('proxies', proxy, 'user', value)
+
+	def on_proxypass_entry_changed(self, widget):
+		value = widget.get_text()
+		proxy = self.proxyname_entry.get_text()
+		gajim.config.set_per('proxies', proxy, 'pass', value)
+
 
 #---------- Accounts_window class -------------#
 class Accounts_window:

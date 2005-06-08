@@ -140,7 +140,7 @@ class Config:
 			'host': [ opt_str, '' ],
 			'port': [ opt_int, 3128 ],
 			'user': [ opt_str, '' ],
-			'password': [ opt_str, '' ],
+			'pass': [ opt_str, '' ],
 		}, {}),
 	}
 

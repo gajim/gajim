@@ -11037,7 +11037,6 @@ send a chat message to</property>
 
 <widget class="GtkWindow" id="groupchat_config_window">
   <property name="border_width">6</property>
-  <property name="visible">True</property>
   <property name="title" translatable="yes">Room Configuration</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -13149,7 +13148,6 @@ the Jabber network.</property>
 
 <widget class="GtkWindow" id="manage_bookmarks_window">
   <property name="border_width">6</property>
-  <property name="visible">True</property>
   <property name="title" translatable="yes">Manage Bookmarks</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -13524,7 +13522,6 @@ the Jabber network.</property>
 
 <widget class="GtkWindow" id="manage_proxies_window">
   <property name="border_width">6</property>
-  <property name="visible">True</property>
   <property name="title" translatable="yes">Manage Proxy Profiles</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -13536,6 +13533,7 @@ the Jabber network.</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <signal name="destroy" handler="on_manage_proxies_window_destroy" last_modification_time="Wed, 08 Jun 2005 17:33:08 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox87">
@@ -13565,13 +13563,15 @@ the Jabber network.</property>
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkTreeView" id="treeview1">
+		    <widget class="GtkTreeView" id="proxies_treeview">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="headers_visible">False</property>
 		      <property name="rules_hint">False</property>
 		      <property name="reorderable">False</property>
 		      <property name="enable_search">True</property>
+		      <signal name="cursor_changed" handler="on_proxies_treeview_cursor_changed" last_modification_time="Wed, 08 Jun 2005 17:53:49 GMT"/>
+		      <signal name="key_press_event" handler="on_proxies_treeview_key_press_event" last_modification_time="Wed, 08 Jun 2005 17:53:56 GMT"/>
 		    </widget>
 		  </child>
 		</widget>
@@ -13715,6 +13715,7 @@ the Jabber network.</property>
 			    <widget class="GtkComboBox" id="proxytype_combobox">
 			      <property name="visible">True</property>
 			      <property name="items" translatable="yes">HTTP Connect</property>
+			      <signal name="changed" handler="on_proxytype_combobox_changed" last_modification_time="Wed, 08 Jun 2005 17:45:26 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -13736,6 +13737,7 @@ the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxyname_entry_changed" last_modification_time="Wed, 08 Jun 2005 17:43:44 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -13842,6 +13844,7 @@ the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxyhost_entry_changed" last_modification_time="Wed, 08 Jun 2005 20:56:20 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -13859,10 +13862,11 @@ the Jabber network.</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
 			      <property name="max_length">0</property>
-			      <property name="text">3128</property>
+			      <property name="text"></property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxyport_entry_changed" last_modification_time="Wed, 08 Jun 2005 20:57:45 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -13959,6 +13963,7 @@ the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxypass_entry_changed" last_modification_time="Wed, 08 Jun 2005 20:58:01 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -13980,6 +13985,7 @@ the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxyuser_entry_changed" last_modification_time="Wed, 08 Jun 2005 20:57:53 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
