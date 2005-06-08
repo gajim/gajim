@@ -500,6 +500,10 @@ class Preferences_window:
 	def on_transports_iconsets_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
 		self.plugin.roster.draw_roster()
+
+	def on_edit_theme_button_clicked(self, widget):
+		GajimThemesWindow(self.plugin)
+		
 	
 	def on_roster_widget_color_set(self, widget, text):
 		color = widget.get_color()
@@ -1037,6 +1041,18 @@ class Preferences_window:
 		else:
 			self.plugin.windows['advanced_config'] = \
 				dialogs.Advanced_configuration_window(self.plugin)
+
+#---------- GajimThemesWindow class -------------#
+class GajimThemesWindow:
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()
+
+	def __init__(self, plugin):
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_themes_window', APP)
+		self.window = self.xml.get_widget('gajim_themes_window')
+		self.plugin = plugin
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
 #---------- Account_modification_window class -------------#
 class Account_modification_window:

@@ -2939,7 +2939,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="label249">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Roster theme:</property>
+		      <property name="label" translatable="yes">Gajim theme:</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2990,7 +2990,7 @@
 			  <property name="right_padding">0</property>
 
 			  <child>
-			    <widget class="GtkHBox" id="hbox2968">
+			    <widget class="GtkHBox" id="hbox2970">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">2</property>
@@ -2998,7 +2998,7 @@
 			      <child>
 				<widget class="GtkImage" id="image613">
 				  <property name="visible">True</property>
-				  <property name="stock">gtk-edit</property>
+				  <property name="stock">gtk-select-color</property>
 				  <property name="icon_size">4</property>
 				  <property name="xalign">0.5</property>
 				  <property name="yalign">0.5</property>
@@ -3013,7 +3013,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="label323">
+				<widget class="GtkLabel" id="label326">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Edit...</property>
 				  <property name="use_underline">True</property>
@@ -14139,10 +14139,10 @@ the Jabber network.</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="roster_themes_window">
-  <property name="border_width">6</property>
+<widget class="GtkWindow" id="gajim_themes_window">
+  <property name="border_width">12</property>
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Roster Themes Customization</property>
+  <property name="title" translatable="yes">Gajim Themes Customization</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -14158,10 +14158,11 @@ the Jabber network.</property>
     <widget class="GtkVBox" id="vbox92">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">12</property>
 
       <child>
 	<widget class="GtkHBox" id="hbox2969">
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">12</property>
@@ -14673,12 +14674,13 @@ the Jabber network.</property>
 
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox23">
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button37">
+	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -14686,6 +14688,7 @@ the Jabber network.</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Wed, 08 Jun 2005 23:15:48 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
