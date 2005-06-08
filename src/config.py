@@ -131,7 +131,7 @@ class Preferences_window:
 
 		#iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets/'))
-		model = gtk.ListStore(gobject.TYPE_STRING)
+		model = gtk.ListStore(str)
 		self.iconset_combobox.set_model(model)
 		l = []
 		for dir in iconsets_list:
