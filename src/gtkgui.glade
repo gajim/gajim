@@ -13565,7 +13565,7 @@ the Jabber network.</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="manage_proxy_profiles_window">
+<widget class="GtkWindow" id="manage_proxies_window">
   <property name="border_width">6</property>
   <property name="title" translatable="yes">Manage Proxy Profiles</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -14138,7 +14138,7 @@ the Jabber network.</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="window1">
+<widget class="GtkWindow" id="roster_themes_window">
   <property name="border_width">6</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Roster Themes Customization</property>
