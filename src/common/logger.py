@@ -62,32 +62,52 @@ class Logger:
 		if not msg:
 			msg = ''
 		msg = msg.replace('\n', '\\n')
-		ji = jid.split('/')[0]
+		if len(jid.split('/')) > 1:
+			ji, nick = jid.split('/', 1)
+		else:
+			ji = jid
+			nick = ''
 		files = []
 		if kind == 'status': #we save time:jid:show:msg
 			if not show:
 				show = 'online'
 			if common.gajim.config.get('log_notif_in_user_file'):
-				files.append(ji)
+				path_to_file = os.path.join(LOGPATH, ji)
+				if os.path.isdir(path_to_file):
+					files.append(ji + '/' + ji)
+					if os.path.isfile(jid):
+						files.append(jid)
+				else:
+					files.append(ji)
 			if common.gajim.config.get('log_notif_in_sep_file'):
 				files.append('notify.log')
 		elif kind == 'incoming': # we save time:recv:message
-			files.append(ji)
+			path_to_file = os.path.join(LOGPATH, ji)
+			if os.path.isdir(path_to_file):
+				files.append(jid)
+			else:
+				files.append(ji)
 			jid = 'recv'
 			show = msg
 			msg = ''
 		elif kind == 'outgoing': # we save time:sent:message
-			files.append(ji)
+			path_to_file = os.path.join(LOGPATH, ji)
+			if os.path.isdir(path_to_file):
+				files.append(jid)
+			else:
+				files.append(ji)
 			jid = 'sent'
 			show = msg
 			msg = ''
-		elif kind == 'gc':
-			files.append(ji)
-			jid = 'recv'
-			jids = jid.split('/')
-			nick = ''
-			if len(jids) > 1:
-				nick = jids[1]
+		elif kind == 'gc': # we save time:gc:nick:message
+			# create the folder if needed
+			ji_fn = os.path.join(LOGPATH, ji)
+			if os.path.isfile(ji_fn):
+				os.remove(ji_fn)
+			if not os.path.isdir(ji_fn):
+				os.mkdir(ji_fn)
+			files.append(ji + '/' + ji)
+			jid = 'gc'
 			show = nick
 		for f in files:
 			path_to_file = os.path.join(LOGPATH, f)
@@ -102,6 +122,8 @@ class Logger:
 		'''return total number of lines in a log file
 		return 0 if log file does not exist'''
 		path_to_file = os.path.join(LOGPATH, jid.split('/')[0])
+		if os.path.isdir(path_to_file):
+			path_to_file = os.path.join(LOGPATH, jid)
 		if not os.path.exists(path_to_file):
 			return 0
 		fic = open(path_to_file, 'r')
@@ -115,6 +137,8 @@ class Logger:
 		'''return number of lines read and the text in the lines
 		return 0 and empty respectively if log file does not exist'''
 		path_to_file = os.path.join(LOGPATH, jid.split('/')[0])
+		if os.path.isdir(path_to_file):
+			path_to_file = os.path.join(LOGPATH, jid)
 		if not os.path.exists(path_to_file):
 			return 0, []
 		fic = open(path_to_file, 'r')
