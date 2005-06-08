@@ -145,7 +145,7 @@ class History_window:
 		self.nb_line = gajim.logger.get_nb_line(jid)
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
-		if account:
+		if account and self.plugin.roster.contacts[account].has_key(jid):
 			list_users = self.plugin.roster.contacts[account][self.jid]
 			user = list_users[0]
 			title = 'Conversation History with ' + user.name
