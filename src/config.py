@@ -422,7 +422,7 @@ class Preferences_window:
 
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
-		
+		'''
 		theme_combobox = self.xml.get_widget('theme_combobox')
 		model = theme_combobox.get_model()
 		active = theme_combobox.get_active()
@@ -432,6 +432,7 @@ class Preferences_window:
 			fonts_colors_table.show()
 		else:
 			fonts_colors_table.hide()
+		'''
 
 	def on_preferences_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
@@ -557,6 +558,7 @@ class Preferences_window:
 		model = widget.get_model()
 		active = widget.get_active()
 		theme = model[active][0]
+		'''
 		fonts_colors_table = self.xml.get_widget('fonts_colors_table')
 		if theme == 'custom':
 			fonts_colors_table.show()
@@ -578,6 +580,7 @@ class Preferences_window:
 			else:
 				widg.set_font_name(self.theme_default[theme][font_widgets[w]])
 				self.on_widget_font_set(widg, font_widgets[w])
+		'''
 				
 		gajim.config.set('roster_theme', theme)
 		# begin repainting themed widgets throughout
