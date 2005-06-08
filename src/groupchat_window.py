@@ -556,10 +556,7 @@ class Groupchat_window(chat.Chat):
 			menu.append(item)
 			item.connect('activate', self.on_info, jid)
 		
-		item = gtk.MenuItem()
-		menu.append(item)
-
-		item = gtk.MenuItem(_('Send _Priate Message'))
+		item = gtk.MenuItem(_('Send _Private Message'))
 		menu.append(item)
 		item.connect('activate', self.on_send_pm, model, iter)
 		
