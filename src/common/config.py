@@ -115,11 +115,7 @@ class Config:
 			'resource': [ opt_str, 'gajim' ],
 			'priority': [ opt_int, 5 ],
 			'autoconnect': [ opt_bool, False ],
-			'use_proxy': [ opt_bool, False ],
-			'proxyhost': [ opt_str, '' ],
-			'proxyport': [ opt_int, 3128 ],
-			'proxyuser': [ opt_str, '' ],
-			'proxypass': [ opt_str, '' ],
+			'proxy': [ opt_str, '' ],
 			'keyid': [ opt_str, '' ],
 			'keyname': [ opt_str, '' ],
 			'usessl': [ opt_bool, False ],
@@ -138,6 +134,13 @@ class Config:
 		'soundevents': ({
 			'enabled': [ opt_bool, True ],
 			'path': [ opt_str, '' ],
+		}, {}),
+		'proxies': ({
+			'type': [ opt_str, 'http' ],
+			'host': [ opt_str, '' ],
+			'port': [ opt_int, 3128 ],
+			'user': [ opt_str, '' ],
+			'password': [ opt_str, '' ],
 		}, {}),
 	}
 

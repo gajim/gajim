@@ -1058,7 +1058,7 @@
 		  <child>
 		    <widget class="GtkComboBox" id="proxies_combobox">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">None</property>
+		      <property name="items" translatable="yes"></property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -13724,7 +13724,7 @@ the Jabber network.</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="manage_proxy_profiles_window">
+<widget class="GtkWindow" id="manage_proxies_window">
   <property name="border_width">6</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Manage Proxy Profiles</property>

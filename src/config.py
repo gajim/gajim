@@ -1069,13 +1069,6 @@ class Account_modification_window:
 		for w in widgets:
 			w.set_sensitive(widget.get_active())
 
-	def on_use_proxy_checkbutton_toggled(self, widget):
-		proxy_table = self.xml.get_widget('proxy_table')
-		widgets = proxy_table.get_children()
-		widgets.append(proxy_table)
-		self.on_checkbutton_toggled(widget, widgets)
-
-
 	def init_account_gpg(self):
 		keyid = gajim.config.get_per('accounts', self.account, 'keyid')
 		keyname = gajim.config.get_per('accounts', self.account, 'keyname')
@@ -1119,28 +1112,20 @@ class Account_modification_window:
 			'accounts', self.account, 'resource'))
 		self.xml.get_widget('priority_spinbutton').set_value(gajim.config.\
 			get_per('accounts', self.account, 'priority'))
-		
-		use_proxy = gajim.config.get_per('accounts', self.account, 'use_proxy')
-		self.xml.get_widget('use_proxy_checkbutton').set_active(use_proxy)
-		
-		entry = self.xml.get_widget('proxyhost_entry')
-		entry.set_sensitive(use_proxy)
-		entry.set_text(gajim.config.get_per('accounts', self.account,
-							'proxyhost'))
-		entry = self.xml.get_widget('proxyport_entry')
-		entry.set_sensitive(use_proxy)
-		entry.set_text(str(gajim.config.get_per('accounts', self.account,
-							'proxyport')))
-			
-		entry = self.xml.get_widget('proxyuser_entry')
-		entry.set_sensitive(use_proxy)
-		entry.set_text(gajim.config.get_per('accounts', self.account,
-							'proxyuser'))
-			
-		entry = self.xml.get_widget('proxypass_entry')
-		entry.set_sensitive(use_proxy)
-		entry.set_text(gajim.config.get_per('accounts', self.account,
-							'proxypass'))
+
+		# init proxy list
+		our_proxy = gajim.config.get_per('accounts', self.account, 'proxy')
+		if not our_proxy:
+			our_proxy = 'None'
+		self.proxy_combobox = self.xml.get_widget('proxies_combobox')
+		model = gtk.ListStore(gobject.TYPE_STRING)
+		self.proxy_combobox.set_model(model)
+		l = gajim.config.get_per('proxies')
+		l.insert(0, 'None')
+		for i in range(len(l)):
+			model.append([l[i]])
+			if our_proxy == l[i]:
+				self.proxy_combobox.set_active(i)
 
 		usessl = gajim.config.get_per('accounts', self.account, 'usessl')
 		self.xml.get_widget('use_ssl_checkbutton').set_active(usessl)
@@ -1212,28 +1197,11 @@ _('To change the account name, it must be disconnected.')).get_response()
 		config['sync_with_global_status'] = self.xml.get_widget(
 				'sync_with_global_status_checkbutton').get_active()
 		
-		config['use_proxy'] = self.xml.get_widget('use_proxy_checkbutton').\
-																					get_active()
-		config['proxyhost'] = self.xml.get_widget('proxyhost_entry').get_text()
-		config['proxyport'] = self.xml.get_widget('proxyport_entry').get_text()
-		config['proxyuser'] = self.xml.get_widget('proxyuser_entry').get_text()
-		config['proxypass'] = self.xml.get_widget('proxypass_entry').get_text()
-		if config['use_proxy']:
-			if config['proxyport'] != '':
-				if not config['proxyport'].isdigit():
-					dialogs.Error_dialog(_('Invalid proxy port'),
-						_('Port numbers must contain digits only.')).get_response()
-					return
-				config['proxyport'] = int(config['proxyport'])
-
-			else:
-				dialogs.Error_dialog(_('Invalid proxy port'),
-					_('You must enter a port number to use a proxy.')).get_response()
-				return
-			if config['proxyhost'] == '':
-				dialogs.Error_dialog(_('Invalid proxy host'),
-					_('You must enter a proxy host to use a proxy.')).get_response()
-				return
+		active = self.proxy_combobox.get_active()
+		proxy = self.proxy_combobox.get_model()[active][0]
+		if proxy == 'None':
+			proxy = ''
+		config['proxy'] = proxy
 
 		config['usessl'] = self.xml.get_widget('use_ssl_checkbutton').get_active()
 		(config['name'], config['hostname']) = jid.split('@')

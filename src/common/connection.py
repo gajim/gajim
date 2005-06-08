@@ -597,15 +597,12 @@ class Connection:
 		if self.connection:
 			return self.connection
 		self.connected = 1
-		if gajim.config.get_per('accounts', self.name, 'use_proxy'):
-			proxy = {'host': gajim.config.get_per('accounts', self.name,
-				'proxyhost')}
-			proxy['port'] = gajim.config.get_per('accounts', self.name,
-				'proxyport')
-			proxy['user'] = gajim.config.get_per('accounts', self.name,
-				'proxyuser')
-			proxy['password'] = gajim.config.get_per('accounts', self.name,
-				'proxypass')
+		p = gajim.config.get_per('accounts', self.name, 'proxy')
+		if p and gajim.config.get_per('proxies').has_key(p):
+			proxy = {'host': gajim.config.get_per('proxies', p, 'host')}
+			proxy['port'] = gajim.config.get_per('proxies', p, 'port')
+			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
+			proxy['password'] = gajim.config.get_per('proxies', p, 'pass')
 		else:
 			proxy = None
 		if gajim.verbose:
@@ -880,9 +877,12 @@ class Connection:
 		# If a connection already exist we cannot create a new account
 		if self.connection:
 			return
-		if config['use_proxy']:
-			proxy = {'host': config['proxyhost'], 'port': config['proxyport'],
-				'user': config['proxyuser'], 'password': config['proxypass']}
+		p = config['proxy']
+		if p and gajim.config.get_per('proxies').has_key(p):
+			proxy = {'host': gajim.config.get_per('proxies', p, 'host')}
+			proxy['port'] = gajim.config.get_per('proxies', p, 'port')
+			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
+			proxy['password'] = gajim.config.get_per('proxies', p, 'pass')
 		else:
 			proxy = None
 		if gajim.verbose:
