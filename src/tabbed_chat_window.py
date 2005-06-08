@@ -324,10 +324,9 @@ class Tabbed_chat_window(chat.Chat):
 
 	def read_queue(self, jid):
 		"""read queue and print messages containted in it"""
-		q = self.plugin.queues[self.account][jid]
+		l = self.plugin.queues[self.account][jid]
 		user = self.users[jid]
-		while not q.empty():
-			event = q.get()
+		for event in l:
 			self.print_conversation(event[0], jid, tim = event[1],
 				encrypted = event[2])
 			self.plugin.roster.nb_unread -= 1
@@ -390,7 +389,7 @@ class Tabbed_chat_window(chat.Chat):
 
 
 		if self.plugin.queues[self.account].has_key(jid):
-			pos = self.plugin.queues[self.account][jid].qsize()
+			pos = len(self.plugin.queues[self.account][jid])
 		else:
 			pos = 0
 

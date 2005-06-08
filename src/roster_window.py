@@ -23,7 +23,6 @@ import pango
 import gobject
 import os
 import time
-import Queue
 import common.sleepy
 
 import tabbed_chat_window
@@ -1003,8 +1002,8 @@ class Roster_window:
 			return
 		#We save it in a queue
 		if not self.plugin.queues[account].has_key(jid):
-			self.plugin.queues[account][jid] = Queue.Queue(50)
-		self.plugin.queues[account][jid].put((msg, tim, encrypted))
+			self.plugin.queues[account][jid] = []
+		self.plugin.queues[account][jid].append((msg, tim, encrypted))
 		self.nb_unread += 1
 		if (not autopopup or ( not autopopupaway and \
 			gajim.connections[account].connected > 2)) and not \
