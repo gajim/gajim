@@ -485,6 +485,9 @@ class Groupchat_window(chat.Chat):
 			#FIXME: we need the resource but it's not saved
 			#self.plugin.send('ASK_OS_INFO', self.account, jid, resource)
 
+	def on_add_to_roster(self, widget, jid):
+		dialogs.Add_new_contact_window(self.plugin, self.account, jid)
+
 	def on_send_pm(self, widget, model, iter):
 		room_jid = self.get_active_jid()
 		nick = model.get_value(iter, 1)
@@ -549,12 +552,13 @@ class Groupchat_window(chat.Chat):
 			sub_menu.append(item)
 			item.connect('activate', self.revoke_owner, room_jid, jid)
 
-			item = gtk.MenuItem()
-			menu.append(item)
-
 			item = gtk.MenuItem(_('_Information'))
 			menu.append(item)
 			item.connect('activate', self.on_info, jid)
+
+			item = gtk.MenuItem(_('_Add to roster'))
+			menu.append(item)
+			item.connect('activate', self.on_add_to_roster, jid)
 		
 		item = gtk.MenuItem(_('Send _Private Message'))
 		menu.append(item)
