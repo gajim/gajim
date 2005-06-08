@@ -9310,7 +9310,7 @@ Custom</property>
 
 <widget class="GtkDialog" id="choose_gpg_key_dialog">
   <property name="border_width">6</property>
-  <property name="title" translatable="yes">Passphrase</property>
+  <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -9380,9 +9380,9 @@ Custom</property>
 	  <property name="spacing">6</property>
 
 	  <child>
-	    <widget class="GtkLabel" id="label251">
+	    <widget class="GtkLabel" id="prompt_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Choose your OpenPGP key</property>
+	      <property name="label" translatable="yes"></property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>

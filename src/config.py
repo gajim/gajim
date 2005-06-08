@@ -1377,7 +1377,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 _('There was a problem retrieving your GPG secret keys.')).get_response()
 			return
 		secret_keys['None'] = 'None'
-		w = dialogs.choose_gpg_key_dialog(secret_keys)
+		w = dialogs.ChooseGPGKeyDialog(_('Passphrase'), _('Choose your OpenPGP key'), secret_keys)
 		keyID = w.run()
 		if keyID == -1:
 			return
@@ -1403,13 +1403,13 @@ _('There was a problem retrieving your GPG secret keys.')).get_response()
 				w.set_text('')
 
 	def on_gpg_save_password_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled_and_clear(widget, [\
+		self.on_checkbutton_toggled_and_clear(widget, [
 			self.xml.get_widget('gpg_password_entry')])
 
 	def on_save_password_checkbutton_toggled(self, widget):
 		if self.xml.get_widget('new_account_checkbutton').get_active():
 			return
-		self.on_checkbutton_toggled_and_clear(widget, \
+		self.on_checkbutton_toggled_and_clear(widget,
 			[self.xml.get_widget('password_entry')])
 		self.xml.get_widget('password_entry').grab_focus()
 

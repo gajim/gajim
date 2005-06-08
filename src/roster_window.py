@@ -475,7 +475,8 @@ class Roster_window:
 				keyID = attached_keys[2*i+1]
 		public_keys = gajim.connections[account].ask_gpg_keys()
 		public_keys['None'] = 'None'
-		w = dialogs.choose_gpg_key_dialog(public_keys, keyID)
+		w = dialogs.ChooseGPGKeyDialog(_('Assign PGP Key'), _('Select a key to apply to the contact'), 
+			public_keys, keyID)
 		keyID = w.run()
 		if keyID == -1:
 			return

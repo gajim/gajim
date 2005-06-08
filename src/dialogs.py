@@ -148,7 +148,7 @@ class Passphrase_dialog:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-class choose_gpg_key_dialog:
+class ChooseGPGKeyDialog:
 	'''Class for GPG key dialog'''
 	def run(self):
 		'''Wait for Ok button to be pressed and return the selected key'''
@@ -170,11 +170,14 @@ class choose_gpg_key_dialog:
 				path = model.get_path(iter)
 				self.keys_treeview.set_cursor(path)
 	
-	def __init__(self, secret_keys, selected = None):
+	def __init__(self, title_text, prompt_text, secret_keys, selected = None):
 		#list : {keyID: userName, ...}
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'choose_gpg_key_dialog', APP)
 		self.window = xml.get_widget('choose_gpg_key_dialog')
+		self.window.set_title(title_text)
 		self.keys_treeview = xml.get_widget('keys_treeview')
+		prompt_label = xml.get_widget('prompt_label')
+		prompt_label.set_text(prompt_text)
 		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		self.keys_treeview.set_model(model)
 		#columns
