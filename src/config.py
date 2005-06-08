@@ -1660,6 +1660,8 @@ class Service_registration_window:
 		for name in self.infos.keys():
 			if name in ['key', 'instructions', 'x', 'registered']:
 				continue
+			if not name:
+				continue
 
 			nbrow = nbrow + 1
 			table.resize(rows = nbrow, columns = 2)
