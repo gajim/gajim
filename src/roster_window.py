@@ -306,10 +306,7 @@ class Roster_window:
 				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
 					gajim.config.get_per('accounts', account, 'hostname')
 				lbl = gtk.Label()
-				lbl.set_markup('<b>abc</b>')
-				item = gtk.MenuItem()
-				item.add(lbl)
-				#item = gtk.MenuItem(_('as ') + our_jid)
+				item = gtk.MenuItem(_('as ') + our_jid)
 				sub_menu.append(item)
 				item.connect('activate', self.on_join_gc_activate, account)
 			sub_menu.show_all()
