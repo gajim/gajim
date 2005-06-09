@@ -1075,7 +1075,10 @@ class Account_modification_window:
 		self.plugin = plugin
 		self.account = account
 		self.modify = False
-		
+
+		# init proxy list
+		self.update_proxy_list()
+
 		self.xml.signal_autoconnect(self)
 		if account:
 			self.modify = True
@@ -1113,7 +1116,10 @@ class Account_modification_window:
 			entry.set_text(gpgpassword)
 
 	def update_proxy_list(self):
-		our_proxy = gajim.config.get_per('accounts', self.account, 'proxy')
+		if self.account:
+			our_proxy = gajim.config.get_per('accounts', self.account, 'proxy')
+		else:
+			our_proxy = ''
 		if not our_proxy:
 			our_proxy = 'None'
 		self.proxy_combobox = self.xml.get_widget('proxies_combobox')
@@ -1146,9 +1152,6 @@ class Account_modification_window:
 			'accounts', self.account, 'resource'))
 		self.xml.get_widget('priority_spinbutton').set_value(gajim.config.\
 			get_per('accounts', self.account, 'priority'))
-
-		# init proxy list
-		self.update_proxy_list()
 
 		usessl = gajim.config.get_per('accounts', self.account, 'usessl')
 		self.xml.get_widget('use_ssl_checkbutton').set_active(usessl)
