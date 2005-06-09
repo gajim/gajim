@@ -2411,7 +2411,7 @@ class ManageBookmarksWindow:
 		(model, iter) = self.selection.get_selected()
 		if not iter:
 			#Nothing selected, do nothing
-			pass
+			return
 			#FIXME: ErrorDialog
 
 		parent = model.iter_parent(iter)
@@ -2435,7 +2435,7 @@ class ManageBookmarksWindow:
 		if not iter:
 			#Nothing selected
 			return
-		elif not model.iter_parent(iter):
+		if not model.iter_parent(iter):
 			#Don't remove account iters
 			return
 
@@ -2493,4 +2493,4 @@ class ManageBookmarksWindow:
 		self.server_entry.set_text('')
 		self.pass_entry.set_text('')
 		self.nick_entry.set_text('')
-
+		self.autojoin_checkbutton.set_active(False)
