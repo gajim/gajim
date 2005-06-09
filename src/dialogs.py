@@ -372,12 +372,12 @@ _('User names must be of the form "user@servername".')).get_response()
 		self.fill_jid()
 		self.old_uid_value = uid.split('@')[0]
 
-class About_dialog:
+class AboutDialog:
 	'''Class for about dialog'''
 	def __init__(self):
 		if gtk.pygtk_version < (2, 6, 0) or gtk.gtk_version < (2, 6, 0):
 			Information_dialog(_('Gajim - a GTK+ Jabber client'),
-				'Version %s' % gajim.version).get_response()
+				_('Version %s') % gajim.version).get_response()
 			return
 
 		dlg = gtk.AboutDialog()
@@ -394,7 +394,7 @@ class About_dialog:
 		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>', 'Alex Podaras <bigpod@gmail.com>', 'Gajim patchers <http://www.gajim.org/dev.php>']
 		dlg.set_authors(authors)
 
-		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png'))			
+		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps/gajim_about.png'))			
 
 		dlg.set_logo(pixbuf)
 		dlg.set_translator_credits(_('translator_credits'))

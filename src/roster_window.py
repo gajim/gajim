@@ -1073,7 +1073,7 @@ class Roster_window:
 		dialogs.New_message_dialog(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
-		dialogs.About_dialog()
+		dialogs.AboutDialog()
 
 	def on_accounts_menuitem_activate(self, widget):
 		if self.plugin.windows.has_key('accounts'):
