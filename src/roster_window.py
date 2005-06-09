@@ -316,11 +316,13 @@ class Roster_window:
 			for account in gajim.connections:
 				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
 					gajim.config.get_per('accounts', account, 'hostname')
-				lbl = gtk.Label()
-				lbl.set_markup('<b>abc</b>')
-				item = gtk.MenuItem()
-				item.add(lbl)
-				#item = gtk.MenuItem(_('as ') + our_jid)
+				
+				#FIXME: delmonico hack here
+				#lbl = gtk.Label()
+				#lbl.set_markup('<b>' + _('abc') +'</b>')
+				#item = gtk.MenuItem()
+				#item.add(lbl)
+				
 				item = gtk.MenuItem(_('as ') + our_jid)
 				sub_menu.append(item)
 				item.connect('activate', self.on_join_gc_activate, account)
@@ -1293,7 +1295,6 @@ class Roster_window:
 			files = []
 			files.append(path + state_file + '.gif')
 			files.append(path + state_file + '.png')
-			files.append(path + state_file + '.xpm')
 			image = gtk.Image()
 			image.show()
 			imgs[state] = image
@@ -1308,7 +1309,7 @@ class Roster_window:
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
-		self.path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/')
+		self.path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
 		self.jabber_state_images = self.load_iconset(self.path)
 
 	def reload_jabber_state_images(self):
@@ -1591,7 +1592,7 @@ class Roster_window:
 				continue
 			folder = os.path.join(path, transport)
 			self.transports_state_images[transport] = self.load_iconset(folder + \
-				'/')
+				'/16x16/')
 
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image, 
 			gobject.TYPE_STRING)

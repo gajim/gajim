@@ -130,7 +130,7 @@ class Preferences_window:
 		self.xml.get_widget('add_remove_emoticons_button').set_sensitive(st)
 
 		#iconset
-		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets/'))
+		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
 		model = gtk.ListStore(str)
 		self.iconset_combobox.set_model(model)
 		l = []
@@ -423,17 +423,6 @@ class Preferences_window:
 
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
-		'''
-		theme_combobox = self.xml.get_widget('theme_combobox')
-		model = theme_combobox.get_model()
-		active = theme_combobox.get_active()
-		theme = model[active][0]
-		fonts_colors_table = self.xml.get_widget('fonts_colors_table')
-		if theme == 'custom':
-			fonts_colors_table.show()
-		else:
-			fonts_colors_table.hide()
-		'''
 
 	def on_preferences_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
@@ -501,8 +490,8 @@ class Preferences_window:
 		self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
 		self.plugin.roster.draw_roster()
 
-	def on_edit_theme_button_clicked(self, widget):
-		GajimThemesWindow(self.plugin)
+	def on_manage_theme_button_clicked(self, widget):
+		dialogs.GajimThemesWindow(self.plugin)
 		
 	
 	def on_roster_widget_color_set(self, widget, text):
@@ -563,29 +552,6 @@ class Preferences_window:
 		model = widget.get_model()
 		active = widget.get_active()
 		theme = model[active][0]
-		'''
-		fonts_colors_table = self.xml.get_widget('fonts_colors_table')
-		if theme == 'custom':
-			fonts_colors_table.show()
-		else:
-			fonts_colors_table.hide()
-		for w in color_widgets:
-			widg = self.xml.get_widget(w)
-			if theme == 'custom':
-				widg.set_color(gtk.gdk.color_parse(gajim.config.get(
-					color_widgets[w])))
-			else:
-				widg.set_color(gtk.gdk.color_parse(self.theme_default[theme]\
-					[color_widgets[w]]))
-				self.on_roster_widget_color_set(widg, color_widgets[w])
-		for w in font_widgets:
-			widg = self.xml.get_widget(w)
-			if theme == 'custom':
-				widg.set_font_name(gajim.config.get(font_widgets[w]))
-			else:
-				widg.set_font_name(self.theme_default[theme][font_widgets[w]])
-				self.on_widget_font_set(widg, font_widgets[w])
-		'''
 				
 		gajim.config.set('roster_theme', theme)
 		# begin repainting themed widgets throughout
@@ -1041,18 +1007,6 @@ class Preferences_window:
 		else:
 			self.plugin.windows['advanced_config'] = \
 				dialogs.Advanced_configuration_window(self.plugin)
-
-#---------- GajimThemesWindow class -------------#
-class GajimThemesWindow:
-	def on_close_button_clicked(self, widget):
-		self.window.destroy()
-
-	def __init__(self, plugin):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_themes_window', APP)
-		self.window = self.xml.get_widget('gajim_themes_window')
-		self.plugin = plugin
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
 
 #---------- Account_modification_window class -------------#
 class Account_modification_window:

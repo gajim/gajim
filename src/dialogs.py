@@ -23,6 +23,7 @@ import gobject
 import os
 
 from vcard import Vcard_window
+from gajim_themes_window import GajimThemesWindow
 from advanced import Advanced_configuration_window
 from gajim import User
 from common import gajim
@@ -421,6 +422,7 @@ class Dialog(gtk.Dialog):
         buttons = self.action_area.get_children()
         return index < len(buttons) and buttons[index] or None
 
+
 class HigDialog(Dialog):
     def __init__(self, parent, pritext, sectext, stockimage, buttons, default = None):
         """GNOME higified version of the Dialog object. Inherit
@@ -502,6 +504,7 @@ class Error_dialog(HigDialog):
             self, None, pritext, sectext, gtk.STOCK_DIALOG_ERROR,
             [ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
         )
+
 
 class Subscription_request_window:
 	def __init__(self, plugin, jid, text, account):
@@ -718,6 +721,7 @@ _('Without a connection, you can not change your password.')).get_response()
 			end = True
 		self.dialog.destroy()
 		return message
+
 
 class Popup_notification_window:
 	def __init__(self, plugin, event_type, jid, account):
