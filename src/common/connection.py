@@ -118,7 +118,7 @@ class Connection:
 			'AGENT_INFO_INFO': [], 'QUIT': [], 'ACC_OK': [], 'MYVCARD': [],
 			'OS_INFO': [], 'VCARD': [], 'GC_MSG': [], 'GC_SUBJECT': [],
 			'GC_CONFIG': [], 'BAD_PASSPHRASE': [], 'ROSTER_INFO': [],
-			'ERROR_ANSWER': [], 'JOIN_GC': [],}
+			'ERROR_ANSWER': [], 'BOOKMARK': [],}
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
@@ -567,13 +567,15 @@ class Connection:
 				       'password':conf.getTagData('password'),
 				       'nick':conf.getTagData('nick') }
 
+				self.dispatch("BOOKMARK", bm)
+				self.bookmarks.append(bm)
+
 				if bm['autojoin']=="1":
 					jid = common.xmpp.protocol.JID(conf.getAttr("jid"))
 					server = jid.getDomain()
 					room = jid.getNode()
 					gc = self.join_gc(bm['nick'], room, server, bm['password'])
-					self.dispatch("JOIN_GC", [jid.getStripped(), bm['nick']])
-				self.bookmarks.append(bm)
+                                
 		elif ns=="gajim:prefs":
 			#Preferences data
 			#http://www.jabber.org/jeps/jep-0049.html

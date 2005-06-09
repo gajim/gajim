@@ -2344,3 +2344,153 @@ class Remove_account_window:
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].init_accounts()
 		self.window.destroy()
+
+#---------- ManageBookmarksWindow class -------------#
+class ManageBookmarksWindow:
+	def __init__(self, plugin):
+		self.plugin = plugin
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'manage_bookmarks_window', APP)
+		self.window = self.xml.get_widget('manage_bookmarks_window')
+
+		#Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick
+		self.treestore = gtk.TreeStore(str, str, str, str, str, str)
+
+		#Store bookmarks in treeview.
+		for account in gajim.connections:
+			iter = self.treestore.append(None, [None, account,None,
+							    None, None, None])
+
+			for bookmark in gajim.connections[account].bookmarks:
+				if bookmark['name']=="":
+					#No name was given for this bookmark.
+					#Use the first part of JID instead...
+					name = bookmark['jid'].split("@")[0]
+					bookmark['name'] = name
+				self.treestore.append( iter, [
+						account,
+						bookmark['name'],
+						bookmark['jid'],
+						bookmark['autojoin'],
+						bookmark['password'],
+						bookmark['nick'] ])
+
+
+		self.view = self.xml.get_widget('bookmarks_treeview')
+		self.view.set_model(self.treestore)
+		
+		renderer = gtk.CellRendererText()
+		column = gtk.TreeViewColumn("Bookmarks", renderer, text=1)
+		self.view.append_column(column)
+	
+		self.selection = self.view.get_selection()
+		self.selection.connect("changed", self.bookmark_selected)
+
+		
+		#Prepare input fields
+		self.title_entry = self.xml.get_widget('title_entry')
+		self.nick_entry = self.xml.get_widget('nick_entry')
+		self.server_entry = self.xml.get_widget('server_entry')
+		self.room_entry = self.xml.get_widget('room_entry')
+		self.pass_entry = self.xml.get_widget('pass_entry')
+		self.autojoin_checkbutton = self.xml.get_widget('autojoin_checkbutton')
+		
+		
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+	
+	def on_manage_bookmarks_window_destroy(self, widget):
+		del self.plugin.windows['manage_bookmarks']
+
+	def on_add_bookmark_button_clicked(self,widget):
+		"""
+		Add a new bookmark.
+		"""
+		#Get the account that is currently used 
+		#(the parent of the currently selected item)
+
+		(model, iter) = self.selection.get_selected()
+		if not iter:
+			#Nothing selected, do nothing
+			pass
+			#FIXME: ErrorDialog
+
+		parent = model.iter_parent(iter)
+
+		if not parent:
+			#No parent, so we got an account -> add to this.
+			add_to = iter
+		else:
+			#We got a bookmark selected, so we add_to the parent:
+			add_to = parent
+
+		account = model.get_value(add_to,1)
+		self.treestore.append(add_to, [account,_('New Room'),'','','',''])
+		
+
+	def on_remove_bookmark_button_clicked(self, widget):
+		"""
+		Remove selected bookmark.
+		"""
+		(model, iter) = self.selection.get_selected()
+		if not iter:
+			#Nothing selected
+			return
+		elif not model.iter_parent(iter):
+			#Don't remove account iters
+			return
+
+		model.remove(iter)
+		self.clear_fields()
+
+	def on_ok_button_clicked(self, widget):
+		"""
+		Parse the treestore data into our new bookmarks array,
+		then send the new bookmarks to the server.
+		"""
+		pass
+
+	def on_cancel_button_clicked(self, widget):
+		""" Just close the window... """
+		self.window.destroy()	
+
+	def bookmark_selected(self, selection):
+		"""
+		Fill in the bookmark's data into the fields.
+		"""
+		(model, iter) = selection.get_selected()
+
+		if not iter:
+			#After removing the last bookmark for one account
+			#this will be None, so we will just:
+			return
+		
+		if not model.iter_parent(iter):
+			#Top-level has no data (it's the account fields)
+			self.clear_fields()
+			return
+		
+		#Fill in the data for childs
+		self.title_entry.set_text(model.get_value(iter, 1))
+		room_jid = model.get_value(iter, 2)
+		try:
+			(room, server) = room_jid.split("@")
+		except ValueError:
+			#We just added this one
+			room = ''
+			server = ''
+		self.room_entry.set_text(room)
+		self.server_entry.set_text(server)
+		if model.get_value(iter,3):
+			self.autojoin_checkbutton.set_active(True)
+		else:
+			self.autojoin_checkbutton.set_active(False)
+		self.pass_entry.set_text(model.get_value(iter,4))
+		self.nick_entry.set_text(model.get_value(iter,5))
+
+	def clear_fields(self):
+		self.title_entry.set_text('')
+		self.room_entry.set_text('')
+		self.server_entry.set_text('')
+		self.pass_entry.set_text('')
+		self.nick_entry.set_text('')
+

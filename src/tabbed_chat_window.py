@@ -22,6 +22,8 @@ import gtk.glade
 import pango
 import gobject
 import time
+import urllib
+import base64
 
 import dialogs
 import history_window
@@ -117,6 +119,31 @@ class Tabbed_chat_window(chat.Chat):
 		banner_avatar_eventbox = self.xmls[jid].get_widget('banner_avatar_eventbox')
 		banner_avatar_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
 
+	def set_avatar(self, vcard):
+		if not vcard.has_key('PHOTO'):
+			return
+		img_decoded = None
+		if vcard['PHOTO'].has_key('BINVAL'):
+			try:
+				img_decoded = base64.decodestring(vcard['PHOTO']['BINVAL'])
+			except:
+				pass
+		elif vcard[i].has_key('EXTVAL'):
+			url = vcard[i]['EXTVAL']
+			try:
+				fd = urllib.urlopen(url)
+				img_decoded = fd.read()
+			except:
+				pass
+		if img_decoded:
+			pixbufloader = gtk.gdk.PixbufLoader()
+			pixbufloader.write(img_decoded)
+			pixbuf = pixbufloader.get_pixbuf()
+			pixbufloader.close()
+			scaled_buf = pixbuf.scale_simple(46, 46, gtk.gdk.INTERP_HYPER)
+			image = self.xmls[vcard['jid']].get_widget('avatar_image')
+			image.set_from_pixbuf(scaled_buf)
+			image.show_all()
 
 	def set_state_image(self, jid):
 		prio = 0
@@ -245,6 +272,8 @@ class Tabbed_chat_window(chat.Chat):
 		#print queued messages
 		if self.plugin.queues[self.account].has_key(user.jid):
 			self.read_queue(user.jid)
+
+		gajim.connections[self.account].request_vcard(user.jid)
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:

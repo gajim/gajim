@@ -316,8 +316,6 @@ class Groupchat_window(chat.Chat):
 		gajim.connections[self.account].bookmarks.append(bm)
 		gajim.connections[self.account].store_bookmarks()
 		
-		#FIXME: add code to add to Bookmarks group (should be account-specific)
-
 		#FIXME: use join_gc_window [where user can put password] and change the
 		#name of the boookmark [default: fill with room's 'name']
 		dialogs.Information_dialog(

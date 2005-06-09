@@ -243,6 +243,17 @@ class Roster_window:
 	
 	def make_menu(self):
 		'''create the main_window's menus'''
+		
+		
+		#FIXME: do with glade (didn't want to touch it because of possible conflicts)
+		editmenu = self.xml.get_widget('edit_menu_menu')
+		newitem = gtk.MenuItem('Bookmarks')
+		editmenu.append(newitem)
+		editmenu.show_all()
+		newitem.connect('activate', self.on_bookmarks_menuitem_activate)
+		
+		
+		
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		add_new_contact_menuitem  = self.xml.get_widget('add_new_contact_menuitem')
@@ -306,6 +317,10 @@ class Roster_window:
 				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
 					gajim.config.get_per('accounts', account, 'hostname')
 				lbl = gtk.Label()
+				lbl.set_markup('<b>abc</b>')
+				item = gtk.MenuItem()
+				item.add(lbl)
+				#item = gtk.MenuItem(_('as ') + our_jid)
 				item = gtk.MenuItem(_('as ') + our_jid)
 				sub_menu.append(item)
 				item.connect('activate', self.on_join_gc_activate, account)
@@ -1063,6 +1078,9 @@ class Roster_window:
 			self.plugin.windows['accounts'].window.present()
 		else:
 			self.plugin.windows['accounts'] = config.Accounts_window(self.plugin) 
+
+	def on_bookmarks_menuitem_activate(self, widget):
+		config.ManageBookmarksWindow(self.plugin)
 
 	def close_all(self, dic):
 		'''close all the windows in the given dictionary'''

@@ -506,6 +506,8 @@ class Interface:
 	def handle_event_vcard(self, account, array):
 		if self.windows[account]['infos'].has_key(array['jid']):
 			self.windows[account]['infos'][array['jid']].set_values(array)
+		if self.windows[account]['chats'].has_key(array['jid']):
+			self.windows[account]['chats'][array['jid']].set_avatar(array)
 
 	def handle_event_os_info(self, account, array):
 		if self.windows[account]['infos'].has_key(array[0]):
@@ -570,13 +572,19 @@ class Interface:
 				user.groups = array[4]
 		self.roster.draw_contact(jid, account)
 
-	def handle_event_join_gc(self, account, array):
-		#('JOIN_GC', account, (jid, nick))
-		jid = array[0]
-		nickname = array[1]
-		self.roster.new_room(jid, nickname, account)
-		self.windows[account]['gc'][jid].set_active_tab(jid)
-		self.windows[account]['gc'][jid].window.present()
+	def handle_event_bookmark(self, account, bm):
+		#('BOOKMARK', account, {name,jid,autojoin,password,nick})
+		#We received a bookmark item from the server (JEP48)
+
+		#Open GC window if neccessary
+		if bm['autojoin'] == "1":
+			jid = bm['jid']
+			self.roster.new_room(jid, bm['nick'], account)
+			self.windows[account]['gc'][jid].set_active_tab(jid)
+			self.windows[account]['gc'][jid].window.present()
+
+		##FIXME: Add a menuitem
+		
 
 	def read_sleepy(self):	
 		'''Check if we are idle'''
@@ -740,7 +748,7 @@ class Interface:
 		conn.register_handler('GC_CONFIG', self.handle_event_gc_config)
 		conn.register_handler('BAD_PASSPHRASE', self.handle_event_bad_passphrase)
 		conn.register_handler('ROSTER_INFO', self.handle_event_roster_info)
-		conn.register_handler('JOIN_GC', self.handle_event_join_gc)
+		conn.register_handler('BOOKMARK', self.handle_event_bookmark)
 
 	def process_connections(self):
 		try:
