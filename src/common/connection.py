@@ -663,7 +663,7 @@ class Connection:
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
-				''))
+				_('Please check that you have an internet connection available')))
 			return None
 		if auth:
 			con.initRoster()
@@ -673,8 +673,8 @@ class Connection:
 			gajim.log.debug("Couldn't authenticate to %s" % self.name)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Authentication failed with "%s"' % name),
-				('Please check your login and password for correctness.')))
+			self.dispatch('ERROR', (_('Authentication failed with "%s"') % self.name,
+				_('Please check your login and password for correctness.')))
 			return None
 	# END connect
 
