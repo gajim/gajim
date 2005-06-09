@@ -556,7 +556,7 @@ class Groupchat_window(chat.Chat):
 			menu.append(item)
 			item.connect('activate', self.on_info, jid)
 
-			item = gtk.MenuItem(_('_Add to roster'))
+			item = gtk.MenuItem(_('_Add to Roster'))
 			menu.append(item)
 			item.connect('activate', self.on_add_to_roster, jid)
 		
