@@ -92,7 +92,7 @@ class Advanced_configuration_window:
 				return
 		self.plugin.save_config()
 		modelrow[1] = text
-	
+
 	def on_advanced_configuration_window_destroy(self, widget):
 		del self.plugin.windows['advanced_config']
 

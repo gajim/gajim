@@ -253,11 +253,11 @@ class Config:
 			elif ival == None:
 				return None
 			return False
-		return None	
+		return None
 
 	def is_valid_string(self, val):
 		return val
-		
+
 	def is_valid(self, type, val):
 		if not type:
 			return None
@@ -275,16 +275,16 @@ class Config:
 
 	def set(self, optname, value):
 		if not self.__options.has_key(optname):
-#			print 'error: option %s doesn\'t exist' % (optname)
+#			print 'error: option %s does not exist' % optname
 			return -1
 		opt = self.__options[optname]
 		value = self.is_valid(opt[OPT_TYPE], value)
 		if value == None:
 			return -1
-		
+
 		opt[OPT_VAL] = value
 		return 0
-	
+
 	def get(self, optname = None):
 		if not optname:
 			return self.__options.keys()
@@ -327,7 +327,7 @@ class Config:
 			return -1
 		subobj[OPT_VAL] = value
 		return 0
-		
+
 	def get_per(self, optname, key = None, subname = None): # per_group_of_option
 		if not self.__options_per_key.has_key(optname):
 			return None
