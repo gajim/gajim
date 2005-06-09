@@ -1,5 +1,6 @@
 VERSION		?= 0.7.1
 
+GAJIM_AP	= 0
 MODULES		= src src/common po
 PREFIX		= /usr
 DESTDIR		= /
@@ -74,7 +75,11 @@ install:
 	mkdir -p "$(DESTDIR)$(PREFIX)/bin";
 	for s in $(SCRIPTS) ; do \
 		BASE=`basename "$$s"`; \
-		F=`cat "$$s" | sed -e 's!PREFIX!$(PREFIX)!g'`; \
+		if [ $(GAJIM_AP) -ne 0 ] ; then \
+			F=`cat "$$s"`; \
+		else \
+			F=`cat "$$s" | sed -e 's!PREFIX!$(PREFIX)!g'`; \
+		fi; \
 		echo "$$F" > "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 		chmod +x "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 	done
