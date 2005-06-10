@@ -584,6 +584,9 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		self.recently_groupchat = gajim.config.get('recently_groupchat').split()
 		for g in self.recently_groupchat:
 			self.recently_combobox.append_text(g)
+		if len(self.recently_groupchat):
+			self.recently_combobox.set_active(0)
+			self.xml.get_widget('room_entry').select_region(0, -1)
 
 		self.window.show_all()
 
