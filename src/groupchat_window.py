@@ -46,6 +46,8 @@ class Groupchat_window(chat.Chat):
 		self.subject_entry = {}
 		self.subject_entry_tooltip = {}
 		self.room_creation = {}
+		self.nick_hits = {}
+		self.last_key_tabs = {}
 		self.new_room(room_jid, nick)
 		self.show_title()
 		self.xml.signal_connect('on_groupchat_window_destroy', 
@@ -175,8 +177,8 @@ class Groupchat_window(chat.Chat):
 			if not user:
 				fin2 = True
 			while not fin2:
-				nick = unicode(model.get_value(user, 1)).lower()
-				list.append()
+				nick = unicode(model.get_value(user, 1))
+				list.append(nick)
 				user = model.iter_next(user)
 				if not user:
 					fin2 = True
@@ -347,20 +349,38 @@ class Groupchat_window(chat.Chat):
 				end_iter = message_buffer.get_iter_at_mark(cursor_position)
 				text = message_buffer.get_text(start_iter, end_iter, False)
 				if not text or text.endswith(' '):
-					return False
+					if not self.last_key_tabs[room_jid]: # if we are nick cycling, last char will always be space
+						return False
 				splitted_text = text.split()
-				begin = splitted_text[-1].lower() # last word we typed
-				for nick in list_nick:
-					if nick.find(begin) == 0: # the word is the begining of a nick
-						if len(splitted_text) == 1: # This is the 1st word of the line
-							add = ': '
-						else:
-							add = ' '
-						start_iter = end_iter.copy()
+				begin = splitted_text[-1] # last word we typed
+
+				if len(self.nick_hits[room_jid]) and self.nick_hits[room_jid][0].startswith(begin.replace(':', '')) \
+						and self.last_key_tabs[room_jid]: # we should cycle
+					self.nick_hits[room_jid].append(self.nick_hits[room_jid][0])
+					self.nick_hits[room_jid].pop(0)
+				else:
+					self.nick_hits[room_jid] = [] # clear the hit list
+					for nick in list_nick: 
+						if nick.lower().startswith(begin.lower()): # the word is the begining of a nick
+							self.nick_hits[room_jid].append(nick)
+				if len(self.nick_hits[room_jid]):
+					if len(splitted_text) == 1: # This is the 1st word of the line
+						add = ': '
+					else:
+						add = ' '
+					start_iter = end_iter.copy()
+					if self.last_key_tabs[room_jid] and begin.endswith(': '):
+						start_iter.backward_chars(len(begin) + 2) # have to accomodate for the added space from last completion
+					elif self.last_key_tabs[room_jid]:
+						start_iter.backward_chars(len(begin) + 1) # have to accomodate for the added space from last completion
+					else:
 						start_iter.backward_chars(len(begin))
-						message_buffer.delete(start_iter, end_iter)
-						message_buffer.insert_at_cursor(nick + add)
-						return True
+
+					message_buffer.delete(start_iter, end_iter)
+					message_buffer.insert_at_cursor(self.nick_hits[room_jid][0] + add)
+					self.last_key_tabs[room_jid] = True
+					return True
+				self.last_key_tabs[room_jid] = False
 				return False
 		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
@@ -375,6 +395,7 @@ class Groupchat_window(chat.Chat):
 		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			if (event.state & gtk.gdk.SHIFT_MASK):
+				self.last_key_tabs[room_jid] = False
 				return False
 			if message != '' or message != '\n':
 				self.save_sent_message(room_jid, message)
@@ -392,6 +413,8 @@ class Groupchat_window(chat.Chat):
 		elif event.keyval == gtk.keysyms.Down:
 			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+Down
 				self.sent_messages_scroll(room_jid, 'down', widget.get_buffer())
+		else:
+			self.last_key_tabs[room_jid] = False
 
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
 		"""Print a line in the conversation:
@@ -594,6 +617,8 @@ class Groupchat_window(chat.Chat):
 		self.nicks[room_jid] = nick
 		self.subjects[room_jid] = ''
 		self.room_creation[room_jid] = time.time()
+		self.nick_hits[room_jid] = []
+		self.last_key_tabs[room_jid] = False
 		self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
 			'list_treeview')
 		conversation_textview = self.xmls[room_jid].get_widget(
