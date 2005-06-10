@@ -989,7 +989,6 @@ class Connection:
 	def store_bookmarks(self):
 		''' Send bookmarks to the storage namespace '''
 		if not self.connection:
-			print 'non', self.name
 			return
 		iq = common.xmpp.Iq(typ='set')
 		iq2 = iq.addChild(name="query", namespace="jabber:iq:private")
