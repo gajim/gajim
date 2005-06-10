@@ -726,7 +726,7 @@ _('Without a connection, you can not change your password.')).get_response()
 		return message
 
 
-class Popup_notification_window:
+class PopupNotificationWindow:
 	def __init__(self, plugin, event_type, jid, account):
 		self.plugin = plugin
 		self.account = account
@@ -765,7 +765,7 @@ class Popup_notification_window:
 		window_width, self.window_height = self.window.get_size()
 		self.plugin.roster.popups_notification_height += self.window_height
 		self.window.move(gtk.gdk.screen_width() - window_width,
-					gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
+			gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
 		
 		xml.signal_autoconnect(self)
 		self.window.show_all()

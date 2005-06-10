@@ -307,7 +307,7 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
-						instance = dialogs.Popup_notification_window(self,
+						instance = dialogs.PopupNotificationWindow(self,
 														_('Contact Signed In'), jid, account)
 						self.roster.popup_notification_windows.append(instance)
 						
@@ -325,7 +325,7 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
-						instance = dialogs.Popup_notification_window(self,
+						instance = dialogs.PopupNotificationWindow(self,
 											 		_('Contact Signed Out'), jid, account)
 						self.roster.popup_notification_windows.append(instance)
 				
@@ -376,7 +376,7 @@ class Interface:
 				elif gajim.connections[account].connected in (2, 3): # we're online or chat
 					show_notification = True
 				if show_notification:
-					instance = dialogs.Popup_notification_window(self,
+					instance = dialogs.PopupNotificationWindow(self,
 																_('New Message'), jid, account)
 					self.roster.popup_notification_windows.append(instance)
 		self.roster.on_message(jid, array[1], array[2], account, array[3])
@@ -577,7 +577,7 @@ class Interface:
 		#We received a bookmark item from the server (JEP48)
 
 		#Open GC window if neccessary
-		if bm['autojoin'] == "1":
+		if bm['autojoin']:
 			jid = bm['jid']
 			self.roster.new_room(jid, bm['nick'], account)
 			self.windows[account]['gc'][jid].set_active_tab(jid)
