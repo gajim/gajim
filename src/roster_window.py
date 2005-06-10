@@ -812,6 +812,12 @@ class Roster_window:
 			for u in self.contacts[account][user.jid]:
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
+			if user.jid in self.plugin.windows[account]['chats']:
+				user1 = User(user.jid, user.name, ['not in the roster'],
+					'not in the roster', 'not in the roster', 'none', None, '', 0,
+					user.keyID)
+				self.contacts[account][user.jid] = [user1] 
+				self.add_user_to_roster(user.jid, account)	
 			
 	def forget_gpg_passphrase(self, keyid):
 		if self.gpg_passphrase.has_key(keyid):
