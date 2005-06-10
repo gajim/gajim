@@ -2137,6 +2137,7 @@ class Groupchat_config_window:
 		self.config_table = self.xml.get_widget('config_table')
 		self.fill_table()
 		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
 	def on_groupchat_config_window_destroy(self, widget):
 		del self.plugin.windows[self.account]['gc_config'][self.room_jid]
