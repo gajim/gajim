@@ -22,9 +22,9 @@ import gtk.glade
 import gobject
 import os
 
-from vcard import Vcard_window
+from vcard import VcardWindow
 from gajim_themes_window import GajimThemesWindow
-from advanced import Advanced_configuration_window
+from advanced import AdvancedConfigurationWindow
 from gajim import User
 from common import gajim
 from common import helpers
@@ -535,7 +535,7 @@ class Subscription_request_window:
 			self.plugin.windows[self.account]['infos'][self.jid].window.present()
 		else:
 			self.plugin.windows[self.account]['infos'][self.jid] = \
-				Vcard_window(self.jid, self.plugin, self.account, True)
+				VcardWindow(self.jid, self.plugin, self.account, True)
 			#remove the publish / retrieve buttons
 			vcard_xml = self.plugin.windows[self.account]['infos'][self.jid].xml
 			hbuttonbox = vcard_xml.get_widget('information_hbuttonbox')

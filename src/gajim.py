@@ -807,7 +807,7 @@ class Interface:
 												#2:autoaway and use sleeper
 												#3:autoxa and use sleeper
 
-		self.roster = roster_window.Roster_window(self)
+		self.roster = roster_window.RosterWindow(self)
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
 		gtk.window_set_default_icon(pix) # set the icon to all newly opened windows

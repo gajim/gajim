@@ -40,7 +40,7 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class Tabbed_chat_window(chat.Chat):
+class TabbedChatWindow(chat.Chat):
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
@@ -102,22 +102,12 @@ class Tabbed_chat_window(chat.Chat):
 		# setting the bg color of the eventboxes. There is a
 		# separate event box for each component (name label and
 		# status icon). The avatar has one too in the glade file.
-
+		self.xmls[jid].get_widget('banner_eventbox').modify_bg(
+					gtk.STATE_NORMAL,	gtk.gdk.color_parse(bgcolor))
 		# setup the label that holds name and jid
 		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
-		banner_name_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse("white"))
+		banner_name_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse('white'))
 		banner_name_label.set_markup(label_text)
-		# setup the eventbox that holds the above label, and colour it
-		banner_name_eventbox = self.xmls[jid].get_widget('banner_name_eventbox')
-		banner_name_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
-
-		# setup the eventbox that holds the status icon and colour it
-		banner_status_eventbox = self.xmls[jid].get_widget('banner_status_eventbox')
-		banner_status_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
-
-		# setup the eventbox that holds the avatar and colour it
-		banner_avatar_eventbox = self.xmls[jid].get_widget('banner_avatar_eventbox')
-		banner_avatar_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
 
 	def set_avatar(self, vcard):
 		if not vcard.has_key('PHOTO'):
@@ -208,7 +198,7 @@ class Tabbed_chat_window(chat.Chat):
 			self.plugin.windows['logs'][jid].window.present()
 		else:
 			self.plugin.windows['logs'][jid] = history_window.\
-				History_window(self.plugin, jid, self.account)
+				HistoryWindow(self.plugin, jid, self.account)
 
 	def on_send_button_clicked(self, widget):
 		"""When send button is pressed: send the current message"""

@@ -952,7 +952,7 @@ class PreferencesWindow:
 			self.plugin.windows['advanced_config'].window.present()
 		else:
 			self.plugin.windows['advanced_config'] = \
-				dialogs.Advanced_configuration_window(self.plugin)
+				dialogs.AdvancedConfigurationWindow(self.plugin)
 
 #---------- AccountModificationWindow class -------------#
 class AccountModificationWindow:
@@ -1261,7 +1261,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
 			self.plugin.windows[self.account]['infos'][jid] = \
-				dialogs.Vcard_window(jid, self.plugin,	self.account, True)
+				dialogs.VcardWindow(jid, self.plugin,	self.account, True)
 			gajim.connections[self.account].request_vcard(jid)
 
 	def on_manage_proxies_button_clicked(self, widget):

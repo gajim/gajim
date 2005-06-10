@@ -44,7 +44,7 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class Roster_window:
+class RosterWindow:
 	'''Class for main window of gtkgui plugin'''
 
 	def get_account_iter(self, name):
@@ -450,7 +450,7 @@ class Roster_window:
 		if info.has_key(user.jid):
 			info[user.jid].window.present()
 		else:
-			info[user.jid] = dialogs.Vcard_window(user, self.plugin,
+			info[user.jid] = dialogs.VcardWindow(user, self.plugin,
 								account)
 
 	def on_agent_logging(self, widget, jid, state, account):
@@ -521,7 +521,7 @@ class Roster_window:
 			self.plugin.windows['logs'][user.jid].window.present()
 		else:
 			self.plugin.windows['logs'][user.jid] = history_window.\
-				History_window(self.plugin, user.jid)
+				HistoryWindow(self.plugin, user.jid)
 	
 	def mk_menu_user(self, event, iter):
 		'''Make user's popup menu'''
@@ -974,7 +974,7 @@ class Roster_window:
 		if gajim.config.get('usetabbedchat'):
 			if not self.plugin.windows[account]['chats'].has_key('tabbed'):
 				self.plugin.windows[account]['chats']['tabbed'] = \
-					tabbed_chat_window.Tabbed_chat_window(user, self.plugin, account)
+					tabbed_chat_window.TabbedChatWindow(user, self.plugin, account)
 			else:
 				self.plugin.windows[account]['chats']['tabbed'].new_user(user)
 				
@@ -982,13 +982,13 @@ class Roster_window:
 				self.plugin.windows[account]['chats']['tabbed']
 		else:
 			self.plugin.windows[account]['chats'][user.jid] = \
-				tabbed_chat_window.Tabbed_chat_window(user, self.plugin, account)
+				tabbed_chat_window.TabbedChatWindow(user, self.plugin, account)
 
 	def new_room(self, jid, nick, account):
 		if gajim.config.get('usetabbedchat'):
 			if not self.plugin.windows[account]['gc'].has_key('tabbed'):
 				self.plugin.windows[account]['gc']['tabbed'] = \
-					groupchat_window.Groupchat_window(jid, nick, self.plugin, 
+					groupchat_window.GroupchatWindow(jid, nick, self.plugin, 
 																	account)
 			else:
 				self.plugin.windows[account]['gc']['tabbed'].new_room(jid, nick)
@@ -996,7 +996,7 @@ class Roster_window:
 				self.plugin.windows[account]['gc']['tabbed']
 		else:
 			self.plugin.windows[account]['gc'][jid] = \
-				groupchat_window.Groupchat_window(jid, nick, self.plugin, account)
+				groupchat_window.GroupchatWindow(jid, nick, self.plugin, account)
 
 	def on_message(self, jid, msg, tim, account, encrypted = False):
 		'''when we receive a message'''

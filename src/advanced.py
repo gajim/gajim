@@ -34,7 +34,7 @@ OPT_VAL = 1
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class Advanced_configuration_window:
+class AdvancedConfigurationWindow:
 	def __init__(self, plugin):
 		self.plugin = plugin
 

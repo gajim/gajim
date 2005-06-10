@@ -1,4 +1,4 @@
-##	vcard.py (has Vcard_window class)
+##	vcard.py (has VcardWindow class)
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -33,7 +33,7 @@ gtk.glade.textdomain (APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class Vcard_window:
+class VcardWindow:
 	'''Class for contact's information window'''
 	def on_user_information_window_destroy(self, widget = None):
 		del self.plugin.windows[self.account]['infos'][self.jid]

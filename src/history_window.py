@@ -31,7 +31,7 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class History_window:
+class HistoryWindow:
 	"""Class for bowser agent window:
 	to know the agents on the selected server"""
 	def on_history_window_destroy(self, widget):

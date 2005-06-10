@@ -799,15 +799,5 @@ class Chat:
 
 		# iterate through tabs/windows and repaint
 		for jid in self.xmls:
-			if self.widget_name == 'tabbed_chat_window':
-				self.xmls[jid].get_widget('banner_status_eventbox').modify_bg(
-					gtk.STATE_NORMAL,	gtk.gdk.color_parse(bgcolor))
-				self.xmls[jid].get_widget('banner_typing_eventbox').modify_bg(
-					gtk.STATE_NORMAL,	gtk.gdk.color_parse(bgcolor))
-				self.xmls[jid].get_widget('banner_name_eventbox').modify_bg(
-					gtk.STATE_NORMAL,	gtk.gdk.color_parse(bgcolor))
-				self.xmls[jid].get_widget('banner_avatar_eventbox').modify_bg(
-					gtk.STATE_NORMAL,	gtk.gdk.color_parse(bgcolor))
-			elif self.widget_name == 'groupchat_window':
-				self.xmls[jid].get_widget('banner_name_eventbox').modify_bg(
+			self.xmls[jid].get_widget('banner_eventbox').modify_bg(
 					gtk.STATE_NORMAL,	gtk.gdk.color_parse(bgcolor))

@@ -37,7 +37,7 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class Groupchat_window(chat.Chat):
+class GroupchatWindow(chat.Chat):
 	"""Class for Groupchat window"""
 	def __init__(self, room_jid, nick, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
@@ -513,7 +513,7 @@ class Groupchat_window(chat.Chat):
 			self.plugin.windows[self.account]['infos'][jid].window.present()
 		else:
 			self.plugin.windows[self.account]['infos'][jid] = \
-				dialogs.Vcard_window(jid, self.plugin, self.account, True)
+				dialogs.VcardWindow(jid, self.plugin, self.account, True)
 			# FIXME: when we'll have a user for each contact, this won't be needed
 			# cause we'll user real information window
 			vcard_xml = self.plugin.windows[self.account]['infos'][jid].xml
