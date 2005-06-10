@@ -463,7 +463,7 @@ class Roster_window:
 
 	def on_remove_agent(self, widget, user, account):
 		'''When an agent is requested to log in or off'''
-		window = dialogs.Confirmation_dialog(_('Transport "%s" will be removed') % user.jid, _('You will no longer be able to send and receive messages to contacts from %s.' % user.jid))
+		window = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % user.jid, _('You will no longer be able to send and receive messages to contacts from %s.' % user.jid))
 		if window.get_response() == gtk.RESPONSE_YES:
 			gajim.connections[account].unsubscribe_agent(user.jid + '/' \
 																		+ user.resource)
@@ -512,7 +512,7 @@ class Roster_window:
 		gajim.config.set_per('accounts', account, 'attached_gpg_keys', keys_str)
 
 	def on_edit_groups(self, widget, user, account):
-		dlg = dialogs.Edit_groups_dialog(user, account, self.plugin)
+		dlg = dialogs.EditGroupsDialog(user, account, self.plugin)
 		dlg.run()
 		
 	def on_history(self, widget, user):
@@ -641,7 +641,7 @@ class Roster_window:
 			self.plugin.windows[account]['account_modification'].window.present()
 		else:
 			self.plugin.windows[account]['account_modification'] = \
-				config.Account_modification_window(self.plugin, account)
+				config.AccountModificationWindow(self.plugin, account)
 
 	def mk_menu_account(self, event, iter):
 		'''Make account's popup menu'''
@@ -702,7 +702,7 @@ class Roster_window:
 		menu.reposition()
 
 	def on_add_to_roster(self, widget, user, account):
-		dialogs.Add_new_contact_window(self.plugin, account, user.jid)
+		dialogs.AddNewContactWindow(self.plugin, account, user.jid)
 	
 	def authorize(self, widget, jid, account):
 		'''Authorize a user'''
@@ -804,7 +804,7 @@ class Roster_window:
 
 	def on_req_usub(self, widget, user, account):
 		'''Remove a user'''
-		window = dialogs.Confirmation_dialog(\
+		window = dialogs.ConfirmationDialog(\
 			_('Contact "%s" will be removed from your roster') % (user.name),
 			_('By removing this contact you also remove authorization. Contact "%s" will always see you as offline.') % user.name)
 		if window.get_response() == gtk.RESPONSE_OK:
@@ -837,7 +837,7 @@ class Roster_window:
 			save_pass = gajim.config.get_per('accounts', account, 'savepass')
 			if not save_pass and gajim.connections[account].connected < 2:
 				passphrase = ''
-				w = dialogs.Passphrase_dialog(
+				w = dialogs.PassphraseDialog(
 					_('Password Required'),
 					_('Enter your password for account %s') % account, 
 					_('Save password'))
@@ -870,7 +870,7 @@ class Roster_window:
 						passphrase = self.gpg_passphrase[keyid]
 						save = False
 					else:
-						w = dialogs.Passphrase_dialog(
+						w = dialogs.PassphraseDialog(
 							_('Passphrase Required'),
 							_('Enter GPG key passphrase for account %s') % account, 
 							_('Save passphrase'))
@@ -902,7 +902,7 @@ class Roster_window:
 			(show == 'offline' and not gajim.config.get('ask_offline_status')):
 			lowered_uf_status_msg = helpers.get_uf_show(show).lower()
 			return _("I'm %s") % lowered_uf_status_msg
-		dlg = dialogs.Change_status_message_dialog(self.plugin, show)
+		dlg = dialogs.ChangeStatusMessageDialog(self.plugin, show)
 		message = dlg.run()
 		return message
 
@@ -920,7 +920,7 @@ class Roster_window:
 			return
 		accounts = gajim.connections.keys()
 		if len(accounts) == 0:
-			dialogs.Error_dialog(_('No accounts created'),
+			dialogs.ErrorDialog(_('No accounts created'),
 				_('You must create Jabber account before connecting the server.')).get_response()
 			self.update_status_comboxbox()
 			return
@@ -1063,20 +1063,20 @@ class Roster_window:
 			self.plugin.windows['preferences'].window.show_all()
 
 	def on_add_new_contact(self, widget, account):
-		dialogs.Add_new_contact_window(self.plugin, account)
+		dialogs.AddNewContactWindow(self.plugin, account)
 
 	def on_join_gc_activate(self, widget, account):
 		if self.plugin.windows[account].has_key('join_gc'):
 			self.plugin.windows[account]['join_gc'].window.present()		
 		else:
 			try:
-				self.plugin.windows[account]['join_gc'] = dialogs.Join_groupchat_window(self.plugin, account)
+				self.plugin.windows[account]['join_gc'] = dialogs.JoinGroupchatWindow(self.plugin, account)
 			except RuntimeError:
 				pass
 
 
 	def on_new_message_menuitem_activate(self, widget, account):
-		dialogs.New_message_dialog(self.plugin, account)
+		dialogs.NewMessageDialog(self.plugin, account)
 			
 	def on_about_menuitem_activate(self, widget):
 		dialogs.AboutDialog()
@@ -1085,7 +1085,7 @@ class Roster_window:
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].window.present()
 		else:
-			self.plugin.windows['accounts'] = config.Accounts_window(self.plugin) 
+			self.plugin.windows['accounts'] = config.AccountsWindow(self.plugin) 
 
 	def on_bookmarks_menuitem_activate(self, widget):
 		config.ManageBookmarksWindow(self.plugin)
@@ -1172,12 +1172,12 @@ class Roster_window:
 							recent = True
 							break
 			if unread:
-				dialog = dialogs.Confirmation_dialog(_('You have unread messages'), _('If you exit Gajim these messages will be lost.'))
+				dialog = dialogs.ConfirmationDialog(_('You have unread messages'), _('If you exit Gajim these messages will be lost.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 
 			if recent:
-				dialog = dialogs.Confirmation_dialog(_('You have unread messages'), _('If you exit Gajim these messages will be lost.'))
+				dialog = dialogs.ConfirmationDialog(_('You have unread messages'), _('If you exit Gajim these messages will be lost.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 			for acct in accounts:
@@ -1285,7 +1285,7 @@ class Roster_window:
 		else:
 			try:
 				self.plugin.windows[account]['disco'] = \
-					config.Service_discovery_window(self.plugin, account)
+					config.ServiceDiscoveryWindow(self.plugin, account)
 			except RuntimeError:
 				pass
 				
@@ -1668,4 +1668,4 @@ class Roster_window:
 		self.draw_roster()
 		if len(gajim.connections) == 0: # if no account
 			self.plugin.windows['account_modification'] = \
-				config.Account_modification_window(self.plugin)
+				config.AccountModificationWindow(self.plugin)

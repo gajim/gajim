@@ -110,8 +110,8 @@ class Systray:
 	
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When new message menuitem is activated:
-		call the New_message_dialog class"""
-		dialogs.New_message_dialog(self.plugin, account)
+		call the NewMessageDialog class"""
+		dialogs.NewMessageDialog(self.plugin, account)
 
 	def make_menu(self, event):
 		"""create chat with and new message (sub) menus/menuitems"""

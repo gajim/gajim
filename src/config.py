@@ -53,8 +53,8 @@ def mk_color_string(color):
 		(hex(color.blue) + '0')[2:4]
 
 
-#---------- Preferences_window class -------------#
-class Preferences_window:
+#---------- PreferencesWindow class -------------#
+class PreferencesWindow:
 	'''Class for Preferences window'''
 	
 	def on_preferences_window_delete_event(self, widget, event):
@@ -954,8 +954,8 @@ class Preferences_window:
 			self.plugin.windows['advanced_config'] = \
 				dialogs.Advanced_configuration_window(self.plugin)
 
-#---------- Account_modification_window class -------------#
-class Account_modification_window:
+#---------- AccountModificationWindow class -------------#
+class AccountModificationWindow:
 	'''Class for account informations'''
 	def on_account_modification_window_destroy(self, widget):
 		'''close window'''
@@ -1079,20 +1079,20 @@ class Account_modification_window:
 		if gajim.connections.has_key(self.account):
 			if name != self.account and \
 			   gajim.connections[self.account].connected != 0:
-				dialogs.Error_dialog(_('You are connected to the server'),
+				dialogs.ErrorDialog(_('You are connected to the server'),
 _('To change the account name, it must be disconnected.')).get_response()
 				return
 		if (name == ''):
-			dialogs.Error_dialog(_('Invalid account name'),
+			dialogs.ErrorDialog(_('Invalid account name'),
 				_('Account names cannot be empty.')).get_response()
 			return
 		if name.find(' ') != -1:
-			dialogs.Error_dialog(_('Invalid account name'),
+			dialogs.ErrorDialog(_('Invalid account name'),
 				_('Account names cannot contain spaces.')).get_response()
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		if jid == '' or jid.count('@') != 1:
-			dialogs.Error_dialog(_('Invalid Jabber ID'),
+			dialogs.ErrorDialog(_('Invalid Jabber ID'),
            _('A Jabber ID must be in the form "user@servername".')).get_response()
 			return
 		new_account = self.xml.get_widget('new_account_checkbutton').get_active()
@@ -1100,7 +1100,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 				'save_password_checkbutton').get_active()
 		config['password'] = self.xml.get_widget('password_entry').get_text()
 		if new_account and config['password'] == '':
-			dialogs.Error_dialog(_('Invalid password'),
+			dialogs.ErrorDialog(_('Invalid password'),
 				_('You must enter a password for the new account.')).get_response()
 			return
 		config['resource'] = self.xml.get_widget('resource_entry').get_text()
@@ -1198,7 +1198,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 			return
 		#if it's a new account
 		if name in gajim.connections:
-			dialogs.Error_dialog(_('Account name is in use'),
+			dialogs.ErrorDialog(_('Account name is in use'),
 				_('You already have an account using this name.')).get_response()
 			return
 		con = connection.Connection(name)
@@ -1235,7 +1235,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 		self.window.destroy()
 
 	def on_change_password_button_clicked(self, widget):
-		dialog = dialogs.Change_password_dialog(self.plugin, self.account)
+		dialog = dialogs.ChangePasswordDialog(self.plugin, self.account)
 		new_password = dialog.run()
 		if new_password != -1:
 			gajim.connections[self.account].change_password(new_password, \
@@ -1251,12 +1251,12 @@ _('To change the account name, it must be disconnected.')).get_response()
 
 	def on_edit_details_button_clicked(self, widget):
 		if not self.plugin.windows.has_key(self.account):
-			dialogs.Error_dialog(_('No such account available'),
+			dialogs.ErrorDialog(_('No such account available'),
 				_('You must create your account before editing your personal information.')).get_response()
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		if gajim.connections[self.account].connected < 2:
-			dialogs.Error_dialog(_('You are not connected to the server'),
+			dialogs.ErrorDialog(_('You are not connected to the server'),
 				_('Without a connection, you can not edit your personal information.')).get_response()
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
@@ -1269,12 +1269,12 @@ _('To change the account name, it must be disconnected.')).get_response()
 			self.plugin.windows['manage_proxies'].window.present()
 		else:
 			self.plugin.windows['manage_proxies'] = \
-				Manage_proxies_window(self.plugin)
+				ManageProxiesWindow(self.plugin)
 
 	def on_gpg_choose_button_clicked(self, widget, data = None):
 		secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
 		if not secret_keys:
-			dialogs.Error_dialog(_('Failed to get secret keys'),
+			dialogs.ErrorDialog(_('Failed to get secret keys'),
 _('There was a problem retrieving your GPG secret keys.')).get_response()
 			return
 		secret_keys['None'] = 'None'
@@ -1322,8 +1322,8 @@ _('There was a problem retrieving your GPG secret keys.')).get_response()
 			password_entry.set_sensitive(False)
 			password_entry.set_text('')
 
-#---------- Manage_proxies_window class -------------#
-class Manage_proxies_window:
+#---------- ManageProxiesWindow class -------------#
+class ManageProxiesWindow:
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'manage_proxies_window', APP)
@@ -1479,8 +1479,8 @@ class Manage_proxies_window:
 		gajim.config.set_per('proxies', proxy, 'pass', value)
 
 
-#---------- Accounts_window class -------------#
-class Accounts_window:
+#---------- AccountsWindow class -------------#
+class AccountsWindow:
 	'''Class for accounts window: list of accounts'''
 	def on_accounts_window_destroy(self, widget):
 		del self.plugin.windows['accounts'] 
@@ -1535,7 +1535,7 @@ class Accounts_window:
 			self.plugin.windows['account_modification'].window.present()			
 		else:
 			self.plugin.windows['account_modification'] = \
-				Account_modification_window(self.plugin, '')
+				AccountModificationWindow(self.plugin, '')
 
 	def on_remove_button_clicked(self, widget):
 		'''When delete button is clicked:
@@ -1549,7 +1549,7 @@ class Accounts_window:
 			self.plugin.windows[account]['remove_account'].window.present()
 		else:
 			self.plugin.windows[account]['remove_account'] = \
-				Remove_account_window(self.plugin, account)
+				RemoveAccountWindow(self.plugin, account)
 
 	def on_modify_button_clicked(self, widget):
 		'''When modify button is clicked:
@@ -1563,10 +1563,10 @@ class Accounts_window:
 			self.plugin.windows[account]['account_modification'].window.present()
 		else:
 			self.plugin.windows[account]['account_modification'] = \
-				Account_modification_window(self.plugin, account)
+				AccountModificationWindow(self.plugin, account)
 
-#---------- Service_registration_window class -------------#
-class Service_registration_window:
+#---------- ServiceRegistrationWindow class -------------#
+class ServiceRegistrationWindow:
 	'''Class for Service registration window:
 	Window that appears when we want to subscribe to a service'''
 	def on_cancel_button_clicked(self, widget):
@@ -1632,8 +1632,8 @@ class Service_registration_window:
 		self.window.show_all()
 
 
-#---------- Add_remove_emoticons_window class -------------#
-class Add_remove_emoticons_window:
+#---------- ManageEmoticonsWindow class -------------#
+class ManageEmoticonsWindow:
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_remove_emoticons_window', APP)
 		self.window = self.xml.get_widget('add_remove_emoticons_window')
@@ -1804,8 +1804,8 @@ class Add_remove_emoticons_window:
 			self.on_button_remove_emoticon_clicked(widget)
 
 
-#---------- Service_discovery_window class -------------#
-class Service_discovery_window:
+#---------- ServiceDiscoveryWindow class -------------#
+class ServiceDiscoveryWindow:
 	'''Class for Service Discovery Window:
 	to know the services on a server'''
 	def on_service_discovery_window_destroy(self, widget):
@@ -1819,7 +1819,7 @@ class Service_discovery_window:
 		self.account = account
 		self.agent_infos = {}
 		if gajim.connections[account].connected < 2:
-			dialogs.Error_dialog(_('You are not connected to the server'),
+			dialogs.ErrorDialog(_('You are not connected to the server'),
 _('Without a connection, you can not browse available services')).get_response()
 			raise RuntimeError, 'You must be connected to browse services'
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
@@ -2025,7 +2025,7 @@ _('Without a connection, you can not browse available services')).get_response()
 			room = services[0]
 			service = services[1]
 		if not self.plugin.windows[self.account].has_key('join_gc'):
-			dialogs.Join_groupchat_window(self.plugin, self.account, service, room)
+			dialogs.JoinGroupchatWindow(self.plugin, self.account, service, room)
 		else:
 			self.plugin.windows[self.account]['join_gc'].window.present()
 
@@ -2077,9 +2077,9 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.browse(server_address)
 		self.plugin.save_config()
 
-#---------- Groupchat_config_window class -------------#
-class Groupchat_config_window:
-	'''Groupchat_config_window class'''
+#---------- GroupchatConfigWindow class -------------#
+class GroupchatConfigWindow:
+	'''GroupchatConfigWindow class'''
 	def __init__(self, plugin, account, room_jid, config):
 		self.plugin = plugin
 		self.account = account
@@ -2203,8 +2203,8 @@ class Groupchat_config_window:
 							nbrows, nbrows + 1)
 		self.config_table.show_all()
 
-#---------- Remove_account_window class -------------#
-class Remove_account_window:
+#---------- RemoveAccountWindow class -------------#
+class RemoveAccountWindow:
 	'''ask for removing from gajim only or from gajim and server too
 	and do removing of the account given'''
 	
@@ -2228,7 +2228,7 @@ class Remove_account_window:
 
 	def on_remove_button_clicked(self, widget):
 		if gajim.connections[self.account].connected:
-			dialog = dialogs.Confirmation_dialog(
+			dialog = dialogs.ConfirmationDialog(
 				_('Account "%s" is connected to the server' % self.account),
 				_('If you remove it, the connection will be lost.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:

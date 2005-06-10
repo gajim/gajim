@@ -94,7 +94,7 @@ class Groupchat_window(chat.Chat):
 		"""close window"""
 		for room_jid in self.xmls:
 			if time.time() - self.last_message_time[room_jid] < 2:
-				dialog = dialogs.Confirmation_dialog(_('You just received a new message in room "%s".'), \
+				dialog = dialogs.ConfirmationDialog(_('You just received a new message in room "%s".'), \
 					_('If you close this window, this message will be lost.') % \
 					room_jid.split('@')[0])
 				if dialog.get_response() != gtk.RESPONSE_OK:
@@ -286,7 +286,7 @@ class Groupchat_window(chat.Chat):
 		# I don't know how this works with markup... Let's find out!
 		label_text = self.name_labels[room_jid].get_text() # whole text (including JID)
 		subject = label_text[label_text.find('\n') + 1:] # just the text after the newline *shrug*
-		instance = dialogs.Input_dialog('Changing the Subject',
+		instance = dialogs.InputDialog('Changing the Subject',
 			'Please specify the new subject:', subject)
 		response = instance.dialog.run()
 		instance.dialog.destroy()
@@ -309,7 +309,7 @@ class Groupchat_window(chat.Chat):
 		
 		for bookmark in gajim.connections[self.account].bookmarks:
 			if bookmark['jid'] == bm['jid']:
-				dialogs.Error_dialog(
+				dialogs.ErrorDialog(
 						_('Bookmark already set'),
 						_('The bookmark is already in your roster.')).get_response()
 				return
@@ -319,7 +319,7 @@ class Groupchat_window(chat.Chat):
 		
 		#FIXME: use join_gc_window [where user can put password] and change the
 		#name of the boookmark [default: fill with room's 'name']
-		dialogs.Information_dialog(
+		dialogs.InformationDialog(
 				_('Bookmark has been added successfully'),
 				_('You can find the bookmark for room "%s" in your roster.') % \
 				room_jid.split('@')[0]).get_response()
@@ -509,7 +509,7 @@ class Groupchat_window(chat.Chat):
 			#self.plugin.send('ASK_OS_INFO', self.account, jid, resource)
 
 	def on_add_to_roster(self, widget, jid):
-		dialogs.Add_new_contact_window(self.plugin, self.account, jid)
+		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
 
 	def on_send_pm(self, widget, model, iter):
 		room_jid = self.get_active_jid()
@@ -593,7 +593,7 @@ class Groupchat_window(chat.Chat):
 
 	def remove_tab(self, room_jid):
 		if time.time() - self.last_message_time[room_jid] < 2:
-			dialog = dialogs.Confirmation_dialog(
+			dialog = dialogs.ConfirmationDialog(
 				_('You just received a new message in room "%s"'),
 				_('If you close this tab, the message will be lost.') % \
 				room_jid.split('@')[0])

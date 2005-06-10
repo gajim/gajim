@@ -185,7 +185,7 @@ class Tabbed_chat_window(chat.Chat):
 		"""close window"""
 		for jid in self.users:
 			if time.time() - self.last_message_time[jid] < 2: # 2 seconds
-				dialog = dialogs.Confirmation_dialog(
+				dialog = dialogs.ConfirmationDialog(
 					_('You just received a new message from "%s"' % jid),
 					_('If you close the window, this message will be lost.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
@@ -226,7 +226,7 @@ class Tabbed_chat_window(chat.Chat):
 
 	def remove_tab(self, jid):
 		if time.time() - self.last_message_time[jid] < 2:
-			dialog = dialogs.Confirmation_dialog(
+			dialog = dialogs.ConfirmationDialog(
 				_('You just received a new message from "%s"' % jid),
 				_('If you close this tab, the message will be lost.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:
@@ -297,7 +297,7 @@ class Tabbed_chat_window(chat.Chat):
 			elif (event.state & gtk.gdk.SHIFT_MASK):
 					return False
 			if gajim.connections[self.account].connected < 2: #we are not connected
-				dialogs.Error_dialog(_("A connection is not available"),
+				dialogs.ErrorDialog(_("A connection is not available"),
                         _("Your message can't be sent until you reconnect.")).get_response()
 				return True
 

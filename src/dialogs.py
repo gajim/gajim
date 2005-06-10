@@ -38,7 +38,7 @@ gtk.glade.textdomain (APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class Edit_groups_dialog:
+class EditGroupsDialog:
 	'''Class for the edit group dialog window'''
 	def __init__(self, user, account, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'edit_groups_dialog', APP)
@@ -88,7 +88,7 @@ class Edit_groups_dialog:
 		model = self.list.get_model()
 		if model[path][1] and len(self.user.groups) == 1: # we try to remove 
 																		  # the last group
-			Error_dialog(_("Can't remove last group"),
+			ErrorDialog(_("Can't remove last group"),
 					_('At least one contact group must be present.')).get_response()
 			return
 		model[path][1] = not model[path][1]
@@ -124,7 +124,7 @@ class Edit_groups_dialog:
 		renderer.connect('toggled', self.group_toggled_cb)
 		column.set_attributes(renderer, active = 1)
 
-class Passphrase_dialog:
+class PassphraseDialog:
 	'''Class for Passphrase dialog'''
 	def run(self):
 		'''Wait for OK button to be pressed and return passphrase/password'''
@@ -192,7 +192,7 @@ class ChooseGPGKeyDialog:
 
 		self.window.show_all()
 
-class Change_status_message_dialog:
+class ChangeStatusMessageDialog:
 	def __init__(self, plugin, show):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
 		self.window = self.xml.get_widget('change_status_message_dialog')
@@ -242,11 +242,11 @@ class Change_status_message_dialog:
 			if (event.state & gtk.gdk.CONTROL_MASK):
 				self.window.response(gtk.RESPONSE_OK)
 
-class Add_new_contact_window:
-	'''Class for Add_new_contact_window'''
+class AddNewContactWindow:
+	'''Class for AddNewContactWindow'''
 	def __init__(self, plugin, account, jid = None):
 		if gajim.connections[account].connected < 2:
-			Error_dialog(_('You are not connected to the server.'), \
+			ErrorDialog(_('You are not connected to the server.'), \
 					_('Without a connection, you can not add a contact')).get_response()
 			return
 		self.plugin = plugin
@@ -321,7 +321,7 @@ class Add_new_contact_window:
 		if not jid:
 			return
 		if jid.find('@') < 0:
-			Error_dialog(_("Invalid user name"),
+			ErrorDialog(_("Invalid user name"),
 _('User names must be of the form "user@servername".')).get_response()
 			return
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
@@ -376,7 +376,7 @@ class AboutDialog:
 	'''Class for about dialog'''
 	def __init__(self):
 		if gtk.pygtk_version < (2, 6, 0) or gtk.gtk_version < (2, 6, 0):
-			Information_dialog(_('Gajim - a GTK+ Jabber client'),
+			InformationDialog(_('Gajim - a GTK+ Jabber client'),
 				_('Version %s') % gajim.version).get_response()
 			return
 
@@ -460,7 +460,7 @@ class HigDialog(Dialog):
         self.destroy()
         return response
 
-class Confirmation_dialog(HigDialog):
+class ConfirmationDialog(HigDialog):
     def __init__(self, pritext, sectext=''):
         """HIG compliant confirmation dialog."""
         HigDialog.__init__(
@@ -468,7 +468,7 @@ class Confirmation_dialog(HigDialog):
             [ [gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL], [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
         )
 
-class Warning_dialog(HigDialog):
+class WarningDialog(HigDialog):
     def __init__(self, pritext, sectext=''):
         """HIG compliant warning dialog."""
         HigDialog.__init__(
@@ -476,7 +476,7 @@ class Warning_dialog(HigDialog):
             [ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
         )
 
-class Information_dialog(HigDialog):
+class InformationDialog(HigDialog):
     def __init__(self, pritext, sectext=''):
         """HIG compliant info dialog."""
         HigDialog.__init__(
@@ -484,7 +484,7 @@ class Information_dialog(HigDialog):
             [ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
         )
 
-class Input_dialog:
+class InputDialog:
 	'''Class for Input dialog'''
 	def __init__(self, title, label_str, input_str = None):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'input_dialog', APP)
@@ -497,7 +497,7 @@ class Input_dialog:
 			self.input_entry.set_text(input_str)
 			self.input_entry.select_region(0, -1) # select all	
 	
-class Error_dialog(HigDialog):
+class ErrorDialog(HigDialog):
     def __init__(self, pritext, sectext=''):
         """HIG compliant error dialog."""
         HigDialog.__init__(
@@ -527,7 +527,7 @@ class Subscription_request_window:
 		gajim.connections[self.account].send_authorization(self.jid)
 		self.window.destroy()
 		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
-			Add_new_contact_window(self.plugin, self.account, self.jid)
+			AddNewContactWindow(self.plugin, self.account, self.jid)
 
 	def on_contact_info_button_clicked(self, widget):
 		'''ask vcard'''
@@ -550,12 +550,12 @@ class Subscription_request_window:
 		gajim.connections[self.account].refuse_authorization(self.jid)
 		self.window.destroy()
 
-class Join_groupchat_window:
+class JoinGroupchatWindow:
 	def __init__(self, plugin, account, server = '', room = ''):
 		self.plugin = plugin
 		self.account = account
 		if gajim.connections[account].connected < 2:
-			Error_dialog(_('You are not connected to the server'),
+			ErrorDialog(_('You are not connected to the server'),
 _('You can not join a group chat unless you are connected.')).get_response()
 			raise RuntimeError, 'You must be connected to join a groupchat'
 
@@ -617,7 +617,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		password = self.xml.get_widget('password_entry').get_text()
 		jid = '%s@%s' % (room, server)
 		if jid in self.plugin.windows[self.account]['gc']:
-			Error_dialog(_('You are already in room ' + jid)).get_response()
+			ErrorDialog(_('You are already in room ' + jid)).get_response()
 			return
 		if jid in self.recently_groupchat:
 			self.recently_groupchat.remove(jid)
@@ -632,10 +632,10 @@ _('You can not join a group chat unless you are connected.')).get_response()
 			
 		self.window.destroy()
 
-class New_message_dialog:
+class NewMessageDialog:
 	def __init__(self, plugin, account):
 		if gajim.connections[account].connected < 2:
-			Error_dialog(_('You are not connected to the server'),
+			ErrorDialog(_('You are not connected to the server'),
 				_('Without a connection, you can not send messages.')).get_response()
 			return
 		self.plugin = plugin
@@ -663,7 +663,7 @@ class New_message_dialog:
 		'''When Chat button is clicked'''
 		jid = self.jid_entry.get_text()
 		if jid.find('@') == -1: # if no @ was given
-			Error_dialog(_('Invalid user ID'),
+			ErrorDialog(_('Invalid user ID'),
 _('User ID must be of the form "username@servername".')).get_response()
 			return
 		self.window.destroy()
@@ -687,10 +687,10 @@ _('User ID must be of the form "username@servername".')).get_response()
 		self.plugin.windows[self.account]['chats'][jid].set_active_tab(jid)
 		self.plugin.windows[self.account]['chats'][jid].window.present()
 
-class Change_password_dialog:
+class ChangePasswordDialog:
 	def __init__(self, plugin, account):
 		if gajim.connections[account].connected < 2:
-			Error_dialog(_('You are not connected to the server'),
+			ErrorDialog(_('You are not connected to the server'),
 _('Without a connection, you can not change your password.')).get_response()
 			return
 		self.plugin = plugin
@@ -710,12 +710,12 @@ _('Without a connection, you can not change your password.')).get_response()
 			if rep == gtk.RESPONSE_OK:
 				password1 = self.password1_entry.get_text()
 				if not password1:
-					Error_dialog(_('Invalid password.'), \
+					ErrorDialog(_('Invalid password.'), \
 							_('You must enter a password.')).get_response()
 					continue
 				password2 = self.password2_entry.get_text()
 				if password1 != password2:
-					Error_dialog(_("Passwords don't match."), \
+					ErrorDialog(_("Passwords don't match."), \
 							_('The passwords typed in both fields must be identical.')).get_response()
 					continue
 				message = password1

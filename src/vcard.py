@@ -23,6 +23,7 @@ import urllib
 import base64
 import mimetypes
 import os
+import dialogs
 from common import gajim
 from common import i18n
 _ = i18n._
@@ -126,6 +127,10 @@ class Vcard_window:
 		dialog.destroy()
 
 		if file:
+			filesize = os.path.getsize(file) # in bytes
+			if filesize > 8192:
+				dialogs.ErrorDialog(_('The filesize of image "%s" is too large') % file, _('The file must not be more than 8 kilobytes'))
+				return
 			fd = open(file)
 			data = fd.read()
 			pixbufloader = gtk.gdk.PixbufLoader()
@@ -308,7 +313,7 @@ class Vcard_window:
 
 	def on_publish_button_clicked(self, widget):
 		if gajim.connections[self.account].connected < 2:
-			Error_dialog(_('You are not connected to the server'),
+			ErrorDialog(_('You are not connected to the server'),
                     _('Without a connection you can not publish your contact information.')).get_response()
 			return
 		vcard = self.make_vcard()
@@ -336,7 +341,7 @@ class Vcard_window:
 			self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
-			Error_dialog(_('You are not connected to the server'),
+			ErrorDialog(_('You are not connected to the server'),
 						_('Without a connection, you can not get your contact information.')).get_response()
 
 	def change_to_vcard(self):
