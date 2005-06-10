@@ -135,7 +135,7 @@ class Vcard_window:
 			pass
 
 	def set_values(self, vcard):
-		if not type(vcard[i]) == type({})
+		if not type(vcard[i]) == type({}):
 			return
 		for i in vcard.keys():
 			if i == 'PHOTO':
