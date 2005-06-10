@@ -74,6 +74,7 @@ class Vcard_window:
 	def on_clear_button_clicked(self, widget):
 		# empty the image
 		self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
+		self.avatar_encoded = None
 
 	def image_is_ok(self, image):
 		if not os.path.exists(image):
