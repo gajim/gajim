@@ -175,8 +175,8 @@ class Groupchat_window(chat.Chat):
 			if not user:
 				fin2 = True
 			while not fin2:
-				nick = model.get_value(user, 1)
-				list.append(nick)
+				nick = unicode(model.get_value(user, 1)).lower()
+				list.append()
 				user = model.iter_next(user)
 				if not user:
 					fin2 = True
@@ -202,10 +202,10 @@ class Groupchat_window(chat.Chat):
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(self.plugin.roster.jabber_state_images['closed'], role + 's',\
+				(self.plugin.roster.jabber_state_images['closed'], role + 's',
 				 role, ''))
 		iter = model.append(role_iter, (image, nick, jid, show))
-		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)), \
+		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)),
 			False)
 		return iter
 	
@@ -326,8 +326,8 @@ class Groupchat_window(chat.Chat):
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
-		if enter is pressed without the shit key, message (if not empty) is sent
-		and printed in the conversation. Tab does autocomplete in nickames"""
+		if enter is pressed without the shift key, message (if not empty) is sent
+		and printed in the conversation. Tab does autocomplete in nicknames"""
 		room_jid = self.get_active_jid()
 		conversation_textview = self.xmls[room_jid].get_widget(
 			'conversation_textview')
@@ -349,14 +349,17 @@ class Groupchat_window(chat.Chat):
 				if not text or text.endswith(' '):
 					return False
 				splitted_text = text.split()
-				begin = splitted_text[-1] # last word we typed
+				begin = splitted_text[-1].lower() # last word we typed
 				for nick in list_nick:
 					if nick.find(begin) == 0: # the word is the begining of a nick
 						if len(splitted_text) == 1: # This is the 1st word of the line
 							add = ': '
 						else:
 							add = ' '
-						message_buffer.insert_at_cursor(nick[len(begin):] + add)
+						start_iter = end_iter.copy()
+						start_iter.backward_chars(len(begin))
+						message_buffer.delete(start_iter, end_iter)
+						message_buffer.insert_at_cursor(nick + add)
 						return True
 				return False
 		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
