@@ -27,6 +27,7 @@ import chat
 import cell_renderer_image
 from gajim import User
 from common import gajim
+from common import helpers
 from common import i18n
 
 _ = i18n._
@@ -272,7 +273,7 @@ class Groupchat_window(chat.Chat):
 			if show == 'offline':
 				st = _('%s has left') % nick
 			else:
-				st = _('%s is now %s') % (nick, show)
+				st = _('%s is now %s') % (nick, helpers.get_uf_show(show))
 			if status:
 				st += ' (' + status + ')'
 			self.print_conversation(st, room_jid)
