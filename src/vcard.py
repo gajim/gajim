@@ -135,10 +135,10 @@ class Vcard_window:
 			pass
 
 	def set_values(self, vcard):
-		if not type(vcard[i]) == type({}):
-			return
 		for i in vcard.keys():
 			if i == 'PHOTO':
+				if not type(vcard[i]) == type({}):
+					continue
 				img_decoded = None
 				if vcard[i].has_key('BINVAL') and vcard[i].has_key('TYPE'):
 					img_encoded = vcard[i]['BINVAL']

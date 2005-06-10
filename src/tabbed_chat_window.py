@@ -122,6 +122,8 @@ class Tabbed_chat_window(chat.Chat):
 	def set_avatar(self, vcard):
 		if not vcard.has_key('PHOTO'):
 			return
+		if type(vcard['PHOTO']) != type({}):
+			return
 		img_decoded = None
 		if vcard['PHOTO'].has_key('BINVAL'):
 			try:
