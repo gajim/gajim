@@ -1780,23 +1780,27 @@ class Add_remove_emoticons_window:
 		iter = model.get_iter_from_string(row)
 		model.set_value(iter, 0, new_text)
 
+	def update_preview(self, widget):
+		path_to_file = widget.get_preview_filename()
+		widget.get_preview_widget().set_from_file(path_to_file)
+
 	def on_set_image_button_clicked(self, widget, data = None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
 		file = model.get_value(iter, 1)
-		dialog = gtk.FileChooserDialog('Choose image', None,
+		dialog = gtk.FileChooserDialog(_('Choose image'), None,
 					gtk.FILE_CHOOSER_ACTION_OPEN,
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 					gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		filter = gtk.FileFilter()
-		filter.set_name('All files')
+		filter.set_name(_('All files'))
 		filter.add_pattern('*')
 		dialog.add_filter(filter)
 
 		filter = gtk.FileFilter()
-		filter.set_name('Images')
+		filter.set_name(_('Images'))
 		filter.add_mime_type('image/png')
 		filter.add_mime_type('image/jpeg')
 		filter.add_mime_type('image/gif')
@@ -1807,6 +1811,9 @@ class Add_remove_emoticons_window:
 		filter.add_pattern('*.xpm')
 		dialog.add_filter(filter)
 		dialog.set_filter(filter)
+		dialog.set_use_preview_label(False)
+		dialog.set_preview_widget(gtk.Image())
+		dialog.connect('selection-changed', self.update_preview)
 
 		file = os.path.join(os.getcwd(), file)
 		dialog.set_filename(file)

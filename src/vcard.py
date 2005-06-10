@@ -56,11 +56,11 @@ class Vcard_window:
 			gajim.connections[self.account].update_user(self.user.jid,
 				self.user.name, self.user.groups)
 		#log history ?
-		oldlog = 1
+		oldlog = True
 		no_log_for = gajim.config.get_per('accounts', self.account,
 			'no_log_for').split()
 		if self.user.jid in no_log_for:
-			oldlog = 0
+			oldlog = False
 		log = self.xml.get_widget('log_checkbutton').get_active()
 		if not log and not self.user.jid in no_log_for:
 			no_log_for.append(self.user.jid)
@@ -80,20 +80,24 @@ class Vcard_window:
 			return False
 		return True
 
+	def update_preview(self, widget):
+		path_to_file = widget.get_preview_filename()
+		widget.get_preview_widget().set_from_file(path_to_file)
+
 	def on_set_avatar_button_clicked(self, widget):
 		file = None
-		dialog = gtk.FileChooserDialog('Choose avatar', None,
+		dialog = gtk.FileChooserDialog(_('Choose avatar'), None,
 			gtk.FILE_CHOOSER_ACTION_OPEN,
 			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 			gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		filter = gtk.FileFilter()
-		filter.set_name('All files')
+		filter.set_name(_('All files'))
 		filter.add_pattern('*')
 		dialog.add_filter(filter)
 
 		filter = gtk.FileFilter()
-		filter.set_name('Images')
+		filter.set_name(_('Images'))
 		filter.add_mime_type('image/png')
 		filter.add_mime_type('image/jpeg')
 		filter.add_mime_type('image/gif')
@@ -104,6 +108,10 @@ class Vcard_window:
 		filter.add_pattern('*.xpm')
 		dialog.add_filter(filter)
 		dialog.set_filter(filter)
+		dialog.set_use_preview_label(False)
+		dialog.set_preview_widget(gtk.Image())
+		dialog.set_preview_widget(True)
+		dialog.connect('selection-changed', self.update_preview)
 
 		ok = False
 		while not ok:
