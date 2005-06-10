@@ -2334,11 +2334,11 @@ class ManageBookmarksWindow:
 		self.view.set_model(self.treestore)
 		
 		renderer = gtk.CellRendererText()
-		column = gtk.TreeViewColumn("Bookmarks", renderer, text=1)
+		column = gtk.TreeViewColumn('Bookmarks', renderer, text=1)
 		self.view.append_column(column)
 	
 		self.selection = self.view.get_selection()
-		self.selection.connect("changed", self.bookmark_selected)
+		self.selection.connect('changed', self.bookmark_selected)
 
 		
 		#Prepare input fields
@@ -2356,10 +2356,25 @@ class ManageBookmarksWindow:
 	def on_manage_bookmarks_window_destroy(self, widget):
 		del self.plugin.windows['manage_bookmarks']
 
+	def on_bookmarks_treeview_button_press_event(self, widget, event):
+		try:
+			path, column, x, y = widget.get_path_at_pos(int(event.x),
+				int(event.y))
+		except TypeError:
+			widget.get_selection().unselect_all()
+			return False
+		
+		#if IS ACCOUNT NODE:
+		#   return True
+		#else #DO THE JOB
+			#widget.get_selection().select_path(path)
+			#model = widget.get_model()
+			#iter = model.get_iter(path)
+	
 	def on_add_bookmark_button_clicked(self,widget):
-		"""
+		'''
 		Add a new bookmark.
-		"""
+		'''
 		#Get the account that is currently used 
 		#(the parent of the currently selected item)
 
@@ -2378,14 +2393,14 @@ class ManageBookmarksWindow:
 			#We got a bookmark selected, so we add_to the parent:
 			add_to = parent
 
-		account = model.get_value(add_to,1)
-		self.treestore.append(add_to, [account,_('New Room'),'','','',''])
+		account = model.get_value(add_to, 1)
+		self.treestore.append(add_to, [account,_('New Room'), '', '', '', ''])
 		
 
 	def on_remove_bookmark_button_clicked(self, widget):
-		"""
+		'''
 		Remove selected bookmark.
-		"""
+		'''
 		(model, iter) = self.selection.get_selected()
 		if not iter:
 			#Nothing selected
@@ -2398,20 +2413,19 @@ class ManageBookmarksWindow:
 		self.clear_fields()
 
 	def on_ok_button_clicked(self, widget):
-		"""
+		'''
 		Parse the treestore data into our new bookmarks array,
 		then send the new bookmarks to the server.
-		"""
+		'''
 		pass
 
 	def on_cancel_button_clicked(self, widget):
-		""" Just close the window... """
 		self.window.destroy()	
 
 	def bookmark_selected(self, selection):
-		"""
+		'''
 		Fill in the bookmark's data into the fields.
-		"""
+		'''
 		(model, iter) = selection.get_selected()
 
 		if not iter:
@@ -2428,7 +2442,7 @@ class ManageBookmarksWindow:
 		self.title_entry.set_text(model.get_value(iter, 1))
 		room_jid = model.get_value(iter, 2)
 		try:
-			(room, server) = room_jid.split("@")
+			(room, server) = room_jid.split('@')
 		except ValueError:
 			#We just added this one
 			room = ''
