@@ -1348,6 +1348,8 @@ class Roster_window:
 			# Update opened chat windows/tabs
 			for jid in self.plugin.windows[account]['chats']:
 				self.plugin.windows[account]['chats'][jid].repaint_colored_widgets()
+			for jid in self.plugin.windows[account]['gc']:
+				self.plugin.windows[account]['gc'][jid].repaint_colored_widgets()
 
 	def on_show_offline_contacts_menuitem_activate(self, widget):
 		'''when show offline option is changed:

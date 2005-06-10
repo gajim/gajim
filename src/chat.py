@@ -791,3 +791,29 @@ class Chat:
 
 			self.sent_history_pos[jid] = self.sent_history_pos[jid] + 1
 			conv_buf.set_text(self.sent_history[jid][self.sent_history_pos[jid]])
+
+	def repaint_colored_widgets(self):
+		"""Repaint widgets (banner) in the window/tab with theme color"""
+		# get the bg color of the bar from the current theme colors
+		bgcolor = gajim.config.get('accountbgcolor')
+
+		# iterate through tabs/windows and repaint
+		for jid in self.xmls:
+			if self.widget_name == 'tabbed_chat_window':
+				banner_status_eventbox = self.xmls[jid].get_widget(
+					'banner_status_eventbox')
+				banner_status_eventbox.modify_bg(gtk.STATE_NORMAL,
+					gtk.gdk.color_parse(bgcolor))
+				banner_name_eventbox = self.xmls[jid].get_widget(
+					'banner_name_eventbox')
+				banner_name_eventbox.modify_bg(gtk.STATE_NORMAL,
+					gtk.gdk.color_parse(bgcolor))
+				banner_avatar_eventbox = self.xmls[jid].get_widget(
+					'banner_avatar_eventbox')
+				banner_avatar_eventbox.modify_bg(gtk.STATE_NORMAL,
+					gtk.gdk.color_parse(bgcolor))
+			elif self.widget_name == 'groupchat_window':
+				banner_name_eventbox = self.xmls[jid].get_widget(
+					'banner_name_eventbox')
+				banner_name_eventbox.modify_bg(gtk.STATE_NORMAL,
+					gtk.gdk.color_parse(bgcolor))

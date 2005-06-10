@@ -181,20 +181,6 @@ class Tabbed_chat_window(chat.Chat):
 			banner_status_image.set_from_pixbuf(scaled_pix)
 			status_image.set_from_pixbuf(pix)
 
-	def repaint_colored_widgets(self):
-		"""Repaint widgets (banner) in the window/tab with theme color"""
-		# get the bg color of the bar from the current theme colors
-		bgcolor = gajim.config.get('accountbgcolor')
-
-		# iterate through tabs/windows and repaint
-		for jid in self.xmls:
-			banner_status_eventbox = self.xmls[jid].get_widget('banner_status_eventbox')
-			banner_status_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
-			banner_name_eventbox = self.xmls[jid].get_widget('banner_name_eventbox')
-			banner_name_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
-			banner_avatar_eventbox = self.xmls[jid].get_widget('banner_avatar_eventbox')
-			banner_avatar_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
-
 	def on_tabbed_chat_window_delete_event(self, widget, event):
 		"""close window"""
 		for jid in self.users:
