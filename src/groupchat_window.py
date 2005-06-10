@@ -45,7 +45,6 @@ class Groupchat_window(chat.Chat):
 		self.list_treeview = {}
 		self.subjects = {}
 		self.name_labels = {}
-#		self.subject_entry_tooltip = {}
 		self.room_creation = {}
 		self.nick_hits = {}
 		self.last_key_tabs = {}
@@ -124,7 +123,6 @@ class Groupchat_window(chat.Chat):
 		subject = self.subjects[new_jid]
 		name_label = self.name_labels[new_jid]
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (new_jid, subject))
-#		self.subject_entry_tooltip[new_jid].set_tip(subject_entry, subject)
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
@@ -282,7 +280,6 @@ class Groupchat_window(chat.Chat):
 		self.subjects[room_jid] = subject
 		name_label = self.name_labels[room_jid]
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (room_jid, subject))
-		#self.subject_entry_tooltip[room_jid].set_tip(subject_entry, subject)
 
 	def on_change_subject_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
@@ -636,8 +633,6 @@ class Groupchat_window(chat.Chat):
 		# get the background color from the current theme
 		bgcolor = gajim.config.get('accountbgcolor')
 		banner_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
-
-#		self.subject_entry_tooltip[room_jid] = gtk.Tooltips()
 
 		#status_image, nickname, real_jid, show
 		store = gtk.TreeStore(gtk.Image, str, str, str)
