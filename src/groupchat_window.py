@@ -60,12 +60,6 @@ class Groupchat_window(chat.Chat):
 			self.on_chat_notebook_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', 
 			self.on_chat_notebook_switch_page)
-		self.xml.signal_connect('on_change_subject_menuitem_activate', 
-			self.on_change_subject_menuitem_activate)
-		self.xml.signal_connect('on_configure_room_menuitem_activate', 
-			self.on_configure_room_menuitem_activate)
-		self.xml.signal_connect('on_add_bookmark_menuitem_activate',
-			self.on_add_bookmark_menuitem_activate)
 		self.xml.signal_connect('on_close_window_activate',
 			self.on_close_window_activate)
 		self.window.show_all()
@@ -351,7 +345,9 @@ class Groupchat_window(chat.Chat):
 					if not self.last_key_tabs[room_jid]: # if we are nick cycling, last char will always be space
 						return False
 				splitted_text = text.split()
-				begin = splitted_text[-1] # last word we typed
+				# check if tab is pressed with empty message
+				if len(splitted_text): # if there are any words
+					begin = splitted_text[-1] # last word we typed
 
 				if len(self.nick_hits[room_jid]) and self.nick_hits[room_jid][0].startswith(begin.replace(':', '')) \
 						and self.last_key_tabs[room_jid]: # we should cycle
@@ -396,15 +392,8 @@ class Groupchat_window(chat.Chat):
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				self.last_key_tabs[room_jid] = False
 				return False
-			if message != '' or message != '\n':
-				self.save_sent_message(room_jid, message)
-				if message == '/clear':
-					self.on_clear(None, conversation_textview) # clear conversation
-					self.on_clear(None, widget) # clear message textview too
-					return True
-				gajim.connections[self.account].send_gc_message(room_jid, message)
-				message_buffer.set_text('', -1)
-				widget.grab_focus()
+			self.send_gc_message(message)
+			message_buffer.set_text('', -1)
 			return True
 		elif event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
@@ -414,6 +403,36 @@ class Groupchat_window(chat.Chat):
 				self.sent_messages_scroll(room_jid, 'down', widget.get_buffer())
 		else:
 			self.last_key_tabs[room_jid] = False
+
+	def on_send_button_clicked(self, widget):
+		"""When send button is pressed: send the current message"""
+		room_jid = self.get_active_jid()
+		message_textview = self.xmls[room_jid].get_widget(
+			'message_textview')
+		message_buffer = message_textview.get_buffer()
+		start_iter = message_buffer.get_start_iter()
+		end_iter = message_buffer.get_end_iter()
+		message = message_buffer.get_text(start_iter, end_iter, 0)
+
+		# send the message
+		self.send_gc_message(message)
+
+		message_buffer.set_text('', -1)
+
+	def send_gc_message(self, message):
+		room_jid = self.get_active_jid()
+		message_textview = self.xmls[room_jid].get_widget(
+			'message_textview')
+		message_buffer = message_textview.get_buffer()
+		if message != '' or message != '\n':
+			self.save_sent_message(room_jid, message)
+			if message == '/clear':
+				self.on_clear(None, conversation_textview) # clear conversation
+				self.on_clear(None, widget) # clear message textview too
+				return True
+		gajim.connections[self.account].send_gc_message(room_jid, message)
+		message_buffer.set_text('', -1)
+		message_textview.grab_focus()
 
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
 		"""Print a line in the conversation:
@@ -634,6 +653,27 @@ class Groupchat_window(chat.Chat):
 		bgcolor = gajim.config.get('accountbgcolor')
 		banner_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
 
+		# connect the menuitems to their respective functions
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_actions_menu', APP)
+		self.gc_actions_menu = xm.get_widget('gc_actions_menu')
+
+		configure_menuitem, change_subject_menuitem, add_bookmark_menuitem = self.gc_actions_menu.get_children()
+
+		configure_menuitem.connect('activate',
+			self.on_configure_room_menuitem_activate)
+		change_subject_menuitem.connect('activate',
+			self.on_change_subject_menuitem_activate)
+		add_bookmark_menuitem.connect('activate',
+			self.on_add_bookmark_menuitem_activate)
+
+		# connect the buttons to their respective functions
+		actions_button = self.xmls[room_jid].get_widget(
+			'actions_button')
+		actions_button.connect('clicked', self.on_actions_button_clicked)
+		send_button = self.xmls[room_jid].get_widget(
+			'send_button')
+		send_button.connect('clicked', self.on_send_button_clicked)
+		
 		#status_image, nickname, real_jid, show
 		store = gtk.TreeStore(gtk.Image, str, str, str)
 		store.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -660,6 +700,11 @@ class Groupchat_window(chat.Chat):
 		self.redraw_tab(room_jid)
 		self.show_title()
 		conversation_textview.grab_focus()
+
+	def on_actions_button_clicked(self, button):
+		"""popup action menu"""
+		self.gc_actions_menu.popup(None, None, None, 1, 0)
+		self.gc_actions_menu.show_all()
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""

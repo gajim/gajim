@@ -112,7 +112,6 @@ class Vcard_window:
 		dialog.set_filter(filter)
 		dialog.set_use_preview_label(False)
 		dialog.set_preview_widget(gtk.Image())
-		dialog.set_preview_widget(True)
 		dialog.connect('selection-changed', self.update_preview)
 
 		ok = False
@@ -129,7 +128,7 @@ class Vcard_window:
 		if file:
 			filesize = os.path.getsize(file) # in bytes
 			if filesize > 8192:
-				dialogs.ErrorDialog(_('The filesize of image "%s" is too large') % file, _('The file must not be more than 8 kilobytes'))
+				dialogs.ErrorDialog(_('The filesize of image "%s" is too large') % file, _('The file must not be more than 8 kilobytes')).get_response()
 				return
 			fd = open(file)
 			data = fd.read()
