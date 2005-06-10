@@ -522,6 +522,8 @@ class Connection:
 		self.dispatch('MSGERROR', (jid, errcode, errmsg))
 
 	def _getRosterCB(self, con, iq_obj):
+		if not self.connection:
+			return
 		roster = self.connection.getRoster().getRaw()
 		if not roster :
 			roster = {}
