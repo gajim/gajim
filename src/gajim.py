@@ -170,7 +170,7 @@ class Interface:
 			return
 		if os.name  == 'nt':
 			try:
-				winsound.PlaySound(path_to_soundfile, \
+				winsound.PlaySound(path_to_soundfile,
 									winsound.SND_FILENAME|winsound.SND_ASYNC)
 			except:
 				pass

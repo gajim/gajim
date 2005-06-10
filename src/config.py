@@ -2333,6 +2333,7 @@ class ManageBookmarksWindow:
 
 		self.view = self.xml.get_widget('bookmarks_treeview')
 		self.view.set_model(self.treestore)
+		self.view.expand_all()
 		
 		renderer = gtk.CellRendererText()
 		column = gtk.TreeViewColumn('Bookmarks', renderer, text=1)
@@ -2385,6 +2386,8 @@ class ManageBookmarksWindow:
 
 		account = model.get_value(add_to, 1)
 		self.treestore.append(add_to, [account,_('New Room'), '', '', '', ''])
+
+		self.view.expand_row(model.get_path(add_to), True)
 		
 
 	def on_remove_bookmark_button_clicked(self, widget):
@@ -2480,7 +2483,9 @@ class ManageBookmarksWindow:
 	def on_title_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter: #After removing a bookmark, we got nothing selected
-			model.set_value(iter, 1, self.title_entry.get_text())
+			if model.iter_parent(iter):
+				#Don't clear the title field for account nodes
+				model.set_value(iter, 1, self.title_entry.get_text())
 
 	def on_nick_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()

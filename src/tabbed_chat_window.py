@@ -279,7 +279,7 @@ class Tabbed_chat_window(chat.Chat):
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
-		if enter is pressed without the shit key, message (if not empty) is sent
+		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation"""
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')

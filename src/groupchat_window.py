@@ -657,41 +657,38 @@ class Groupchat_window(chat.Chat):
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
-		if event.type == gtk.gdk.BUTTON_PRESS:
-			if event.button == 3: # right click
-				try:
-					path, column, x, y = widget.get_path_at_pos(int(event.x), \
-						int(event.y))
-				except TypeError:
-					widget.get_selection().unselect_all()
-					return False
-				widget.get_selection().select_path(path)
-				model = widget.get_model()
-				iter = model.get_iter(path)
-				if len(path) == 2:
-					room_jid = self.get_active_jid()
-					self.mk_menu(room_jid, event, iter)
-				return True
-			if event.button == 1: # left click
-				try:
-					path, column, x, y = widget.get_path_at_pos(int(event.x), \
-						int(event.y))
-				except TypeError:
-					widget.get_selection().unselect_all()
-					return False
+		if event.button == 3: # right click
+			try:
+				path, column, x, y = widget.get_path_at_pos(int(event.x),
+					int(event.y))
+			except TypeError:
+				widget.get_selection().unselect_all()
+				return False
+			widget.get_selection().select_path(path)
+			model = widget.get_model()
+			iter = model.get_iter(path)
+			if len(path) == 2:
+				room_jid = self.get_active_jid()
+				self.mk_menu(room_jid, event, iter)
+			return True
+		if event.button == 1: # left click
+			try:
+				path, column, x, y = widget.get_path_at_pos(int(event.x),
+					int(event.y))
+			except TypeError:
+				widget.get_selection().unselect_all()
+				return False
 
-				model = widget.get_model()
-				iter = model.get_iter(path)
-				status = model.get_value(iter, 3) # if no status: it's a group
-				if not status:
-					if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
-						if (widget.row_expanded(path)):
-							widget.collapse_row(path)
-						else:
-							widget.expand_row(path, False)
-			
-			#FIXME: should popup chat window for GC contact DOUBLE clicked
-			# also chat [in context menu]
+			model = widget.get_model()
+			iter = model.get_iter(path)
+			status = model.get_value(iter, 3) # if no status: it's a group
+			if not status:
+				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
+					if (widget.row_expanded(path)):
+						widget.collapse_row(path)
+					else:
+						widget.expand_row(path, False)
+		
 		return False
 
 	def on_list_treeview_key_press_event(self, widget, event):
