@@ -39,6 +39,21 @@ class GajimThemesWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 		
+		
+		color_widgets = {
+			'account_text_colorbutton': 'accounttextcolor',
+			'group_text_colorbutton': 'grouptextcolor',
+			'user_text_colorbutton': 'contacttextcolor',
+			'account_text_bg_colorbutton': 'accountbgcolor',
+			'group_text_bg_colorbutton': 'groupbgcolor',
+			'user_text_bg_colorbutton': 'contactbgcolor'
+		}
+		font_widgets = {
+			'account_text_fontbutton': 'accountfont',
+			'group_text_fontbutton': 'groupfont',
+			'user_text_fontbutton': 'userfont'
+		}
+		
 		'''
 		fonts_colors_table = self.xml.get_widget('fonts_colors_table')
 		if theme == 'custom':
@@ -62,3 +77,43 @@ class GajimThemesWindow:
 				widg.set_font_name(self.theme_default[theme][font_widgets[w]])
 				self.on_widget_font_set(widg, font_widgets[w])
 		'''
+	
+	def on_roster_widget_color_set(self, widget, text):
+		color = widget.get_color()
+		color_string = mk_color_string(color)
+		gajim.config.set(text, color_string)
+		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
+	
+	def on_account_text_colorbutton_color_set(self, widget):
+		self.on_roster_widget_color_set(widget, 'accounttextcolor')
+	
+	def on_group_text_colorbutton_color_set(self, widget):
+		self.on_roster_widget_color_set(widget, 'grouptextcolor')
+
+	def on_user_text_colorbutton_color_set(self, widget):
+		self.on_roster_widget_color_set(widget, 'contacttextcolor')
+
+	def on_account_text_bg_colorbutton_color_set(self, widget):
+		self.on_roster_widget_color_set(widget, 'accountbgcolor')
+	
+	def on_group_text_bg_colorbutton_color_set(self, widget):
+		self.on_roster_widget_color_set(widget, 'groupbgcolor')
+	
+	def on_user_text_bg_colorbutton_color_set(self, widget):
+		self.on_roster_widget_color_set(widget, 'contactbgcolor')
+	
+	def on_widget_font_set(self, widget, text):
+		font_string = widget.get_font_name()
+		gajim.config.set(text, font_string)
+		self.plugin.roster.draw_roster()
+		self.plugin.save_config()
+
+	def on_account_text_fontbutton_font_set(self, widget):
+		self.on_widget_font_set(widget, 'accountfont')
+
+	def on_group_text_fontbutton_font_set(self, widget):
+		self.on_widget_font_set(widget, 'groupfont')
+	
+	def on_user_text_fontbutton_font_set(self, widget):
+		self.on_widget_font_set(widget, 'userfont')

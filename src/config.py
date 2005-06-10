@@ -492,68 +492,14 @@ class Preferences_window:
 
 	def on_manage_theme_button_clicked(self, widget):
 		dialogs.GajimThemesWindow(self.plugin)
-		
-	
-	def on_roster_widget_color_set(self, widget, text):
-		color = widget.get_color()
-		color_string = mk_color_string(color)
-		gajim.config.set(text, color_string)
-		self.plugin.roster.draw_roster()
-		self.plugin.save_config()
-	
-	def on_account_text_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'accounttextcolor')
-	
-	def on_group_text_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'grouptextcolor')
-
-	def on_user_text_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'contacttextcolor')
-
-	def on_account_text_bg_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'accountbgcolor')
-	
-	def on_group_text_bg_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'groupbgcolor')
-	
-	def on_user_text_bg_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'contactbgcolor')
-	
-	def on_widget_font_set(self, widget, text):
-		font_string = widget.get_font_name()
-		gajim.config.set(text, font_string)
-		self.plugin.roster.draw_roster()
-		self.plugin.save_config()
-
-	def on_account_text_fontbutton_font_set(self, widget):
-		self.on_widget_font_set(widget, 'accountfont')
-
-	def on_group_text_fontbutton_font_set(self, widget):
-		self.on_widget_font_set(widget, 'groupfont')
-	
-	def on_user_text_fontbutton_font_set(self, widget):
-		self.on_widget_font_set(widget, 'userfont')
 	
 	def on_theme_combobox_changed(self, widget):
-		color_widgets = {
-			'account_text_colorbutton': 'accounttextcolor',
-			'group_text_colorbutton': 'grouptextcolor',
-			'user_text_colorbutton': 'contacttextcolor',
-			'account_text_bg_colorbutton': 'accountbgcolor',
-			'group_text_bg_colorbutton': 'groupbgcolor',
-			'user_text_bg_colorbutton': 'contactbgcolor'
-		}
-		font_widgets = {
-			'account_text_fontbutton': 'accountfont',
-			'group_text_fontbutton': 'groupfont',
-			'user_text_fontbutton': 'userfont'
-		}
-
 		model = widget.get_model()
 		active = widget.get_active()
 		theme = model[active][0]
 				
 		gajim.config.set('roster_theme', theme)
+
 		# begin repainting themed widgets throughout
 		self.plugin.roster.repaint_themed_widgets()
 		self.plugin.save_config()

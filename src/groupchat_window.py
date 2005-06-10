@@ -80,7 +80,6 @@ class Groupchat_window(chat.Chat):
 			'subject': self.subjects[jid],
 		}
 		
-
 	def load_var(self, jid, var):
 		if not self.xmls.has_key(jid):
 			return
