@@ -2301,6 +2301,7 @@ class Remove_account_window:
 		self.window.destroy()
 
 #---------- ManageBookmarksWindow class -------------#
+#TODO: Find a good place to check if the input is valid (all neccessary fields filled out?)
 class ManageBookmarksWindow:
 	def __init__(self, plugin):
 		self.plugin = plugin
@@ -2343,12 +2344,16 @@ class ManageBookmarksWindow:
 		
 		#Prepare input fields
 		self.title_entry = self.xml.get_widget('title_entry')
+		self.title_entry.connect('changed', self.on_title_entry_changed)
 		self.nick_entry = self.xml.get_widget('nick_entry')
+		self.nick_entry.connect('changed', self.on_nick_entry_changed)
 		self.server_entry = self.xml.get_widget('server_entry')
+		self.server_entry.connect('changed', self.on_server_entry_changed)
 		self.room_entry = self.xml.get_widget('room_entry')
+		self.room_entry.connect('changed', self.on_room_entry_changed)
 		self.pass_entry = self.xml.get_widget('pass_entry')
+		self.pass_entry.connect('changed', self.on_pass_entry_changed)
 		self.autojoin_checkbutton = self.xml.get_widget('autojoin_checkbutton')
-		
 		
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -2356,21 +2361,6 @@ class ManageBookmarksWindow:
 	def on_manage_bookmarks_window_destroy(self, widget):
 		del self.plugin.windows['manage_bookmarks']
 
-	def on_bookmarks_treeview_button_press_event(self, widget, event):
-		try:
-			path, column, x, y = widget.get_path_at_pos(int(event.x),
-				int(event.y))
-		except TypeError:
-			widget.get_selection().unselect_all()
-			return False
-		
-		#if IS ACCOUNT NODE:
-		#   return True
-		#else #DO THE JOB
-			#widget.get_selection().select_path(path)
-			#model = widget.get_model()
-			#iter = model.get_iter(path)
-	
 	def on_add_bookmark_button_clicked(self,widget):
 		'''
 		Add a new bookmark.
@@ -2417,10 +2407,26 @@ class ManageBookmarksWindow:
 		Parse the treestore data into our new bookmarks array,
 		then send the new bookmarks to the server.
 		'''
-		pass
+		for account in self.treestore:
+			gajim.connections[account[1]].bookmarks=[]
+			for bm in account.iterchildren():
+				#Covnert True/False to 0/1 string
+				if bm[3]:
+					bm[3]='1'
+				else:
+					bm[3]='0'
+
+				#Build and append the bookmark-dict
+				bmdict = { 'name':bm[1], 'jid':bm[2],
+					'autojoin':bm[3], 'password':bm[4],
+					'nick':bm[5] }
+				if gajim.connections[account[1]].status > 1:
+					gajim.connections[account[1]].bookmarks.append(bmdict)
+			gajim.connections[account[1]].store_bookmarks()
+		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):
-		self.window.destroy()	
+		self.window.destroy()
 
 	def bookmark_selected(self, selection):
 		'''
@@ -2436,7 +2442,22 @@ class ManageBookmarksWindow:
 		if not model.iter_parent(iter):
 			#Top-level has no data (it's the account fields)
 			self.clear_fields()
+			self.title_entry.set_sensitive(False)
+			self.nick_entry.set_sensitive(False)
+			self.room_entry.set_sensitive(False)
+			self.server_entry.set_sensitive(False)
+			self.pass_entry.set_sensitive(False)
+			self.autojoin_checkbutton.set_sensitive(False)
 			return
+		else:
+			#Show the fields
+			self.title_entry.set_sensitive(True)
+			self.nick_entry.set_sensitive(True)
+			self.room_entry.set_sensitive(True)
+			self.server_entry.set_sensitive(True)
+			self.pass_entry.set_sensitive(True)
+			self.autojoin_checkbutton.set_sensitive(True)
+			
 		
 		#Fill in the data for childs
 		self.title_entry.set_text(model.get_value(iter, 1))
@@ -2449,12 +2470,46 @@ class ManageBookmarksWindow:
 			server = ''
 		self.room_entry.set_text(room)
 		self.server_entry.set_text(server)
-		if model.get_value(iter,3):
+		if model.get_value(iter,3)=='1':
 			self.autojoin_checkbutton.set_active(True)
 		else:
 			self.autojoin_checkbutton.set_active(False)
 		self.pass_entry.set_text(model.get_value(iter,4))
 		self.nick_entry.set_text(model.get_value(iter,5))
+
+	def on_title_entry_changed(self, widget):
+		(model, iter) = self.selection.get_selected()
+		if iter: #After removing a bookmark, we got nothing selected
+			model.set_value(iter, 1, self.title_entry.get_text())
+
+	def on_nick_entry_changed(self, widget):
+		(model, iter) = self.selection.get_selected()
+		if iter:
+			model.set_value(iter, 5, self.nick_entry.get_text())
+	
+	def on_server_entry_changed(self, widget):
+		(model, iter) = self.selection.get_selected()
+		if iter:
+			room_jid = self.room_entry.get_text() + '@' + \
+				self.server_entry.get_text()
+			model.set_value(iter, 2, room_jid)
+
+	def on_room_entry_changed(self, widget):
+		(model, iter) = self.selection.get_selected()
+		if iter:
+			room_jid = self.room_entry.get_text() + '@' + \
+				self.server_entry.get_text()
+			model.set_value(iter, 2, room_jid)
+
+	def on_pass_entry_changed(self, widget):
+		(model, iter) = self.selection.get_selected()
+		if iter:
+			model.set_value(iter, 4, self.pass_entry.get_text())
+
+	def on_autojoin_checkbutton_toggled(self, widget):
+		(model, iter) = self.selection.get_selected()
+		if iter:
+			model.set_value(iter, 3, self.autojoin_checkbutton.get_active())
 
 	def clear_fields(self):
 		self.title_entry.set_text('')
