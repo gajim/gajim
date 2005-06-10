@@ -60,7 +60,7 @@ recommend @gtkspell.sourceforge.net/gtkspell 0
 
 copyFiles  lib/gajim "$PREFIX/lib"
 copyFiles  share/gajim "$PREFIX/share/"
-installIcon share/gajim/gajim.png
+installIcon share/pixmaps/gajim.png
 installDesktop "Network/Instant Messaging" gajim.desktop
 installMan 1 gajim.1
 #In the following safeSed we assume that the original Makefile is a bit modified so that to be relocatable by AP
