@@ -8167,7 +8167,7 @@ Custom</property>
 	  <signal name="key_press_event" handler="on_chat_notebook_key_press_event" last_modification_time="Wed, 16 Mar 2005 20:58:38 GMT"/>
 
 	  <child>
-	    <widget class="GtkEventBox" id="banner_name_eventbox">
+	    <widget class="GtkEventBox" id="gc_banner_eventbox">
 	      <property name="visible">True</property>
 	      <property name="visible_window">True</property>
 	      <property name="above_child">False</property>
