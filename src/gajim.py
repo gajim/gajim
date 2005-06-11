@@ -577,7 +577,7 @@ class Interface:
 		#We received a bookmark item from the server (JEP48)
 
 		#Open GC window if neccessary
-		if bm['autojoin']:
+		if bm['autojoin'] == '1':
 			jid = bm['jid']
 			self.roster.new_room(jid, bm['nick'], account)
 			self.windows[account]['gc'][jid].set_active_tab(jid)
