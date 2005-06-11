@@ -340,6 +340,9 @@ class Chat:
 				self.notebook.emit('key_press_event', event)
 			elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
 				self.notebook.emit('key_press_event', event)
+			elif event.keyval == gtk.keysyms.l or \
+				 event.keyval == gtk.keysyms.L: # CTRL + L
+				conversation_textview.get_buffer().set_text('')
 			elif event.keyval == gtk.keysyms.v: # CTRL + V
 				jid = self.get_active_jid()
 				message_textview = self.xmls[jid].get_widget('message_textview')
@@ -402,6 +405,12 @@ class Chat:
 					self.notebook.set_current_page(current + 1)
 				else:
 					self.notebook.set_current_page(0)
+		elif event.keyval == gtk.keysyms.l or \
+			 event.keyval == gtk.keysyms.L:
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + L
+				conversation_textview = self.xmls[jid].\
+					get_widget('conversation_textview')
+				conversation_textview.get_buffer().set_text('')
 		elif event.keyval == gtk.keysyms.v:
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + V
 				jid = self.get_active_jid()
