@@ -578,13 +578,7 @@ class Interface:
 
 		#Open GC window if neccessary
 		if bm['autojoin'] == '1':
-			jid = bm['jid']
-			self.roster.new_room(jid, bm['nick'], account)
-			self.windows[account]['gc'][jid].set_active_tab(jid)
-			self.windows[account]['gc'][jid].window.present()
-
-		##FIXME: Add a menuitem
-		
+			self.roster.join_gc_room(account, bm)
 
 	def read_sleepy(self):	
 		'''Check if we are idle'''

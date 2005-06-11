@@ -240,7 +240,16 @@ class RosterWindow:
 		for iter in iters:
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
-	
+
+	def join_gc_room(self, account, bm):
+		jid = bm['jid']
+		self.new_room(jid, bm['nick'], account)
+		self.plugin.windows[account]['gc'][jid].set_active_tab(jid)
+		self.plugin.windows[account]['gc'][jid].window.present()
+
+	def on_bm_header_changed_state(self, widget, event):
+		widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
+
 	def make_menu(self):
 		'''create the main_window's menus'''
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
@@ -285,13 +294,11 @@ class RosterWindow:
 		sub_menu = gtk.Menu()
 		join_gc_menuitem.set_submenu(sub_menu)
 		for account in gajim.connections:
-			our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
-				gajim.config.get_per('accounts', account, 'hostname')
-			
 			label = gtk.Label()
-			label.set_markup('<b>' + account +'</b>')
+			label.set_markup('<u>' + account.upper() +'</u>')
 			item = gtk.MenuItem()
 			item.add(label)
+			item.connect('state-changed', self.on_bm_header_changed_state)
 			sub_menu.append(item)
 			
 			item = gtk.MenuItem(_('New Room'))
@@ -299,7 +306,14 @@ class RosterWindow:
 			item.connect('activate', self.on_join_gc_activate, account)
 			
 			#FIXME: delmonico hack here [get bookmakrs and add them]
-		
+			if gajim.connections[account].connected <= 1:
+				continue
+				for bookmark in gajim.connections[account].bookmarks:
+					print bookmark['name']
+					item = gtk.MenuItem(bookmark['name'])
+					sub_menu.append(item)
+					item.connect('activate', self.join_gc_room, account, bookmark)
+
 		newitem = gtk.MenuItem() # seperator
 		sub_menu.append(newitem)
 		

@@ -303,9 +303,10 @@ class GroupchatWindow(chat.Chat):
 		
 		for bookmark in gajim.connections[self.account].bookmarks:
 			if bookmark['jid'] == bm['jid']:
+				room_name = bm['jid'].split('@')[0]
 				dialogs.ErrorDialog(
-						_('Bookmark already set'),
-						_('The bookmark is already in your roster.')).get_response()
+					_('Bookmark already set'),
+					_('Room "%s" is already in your bookmarks.') %bm['jid']).get_response()
 				return
 
 		gajim.connections[self.account].bookmarks.append(bm)

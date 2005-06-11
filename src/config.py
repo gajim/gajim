@@ -1635,8 +1635,8 @@ class ServiceRegistrationWindow:
 #---------- ManageEmoticonsWindow class -------------#
 class ManageEmoticonsWindow:
 	def __init__(self, plugin):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_remove_emoticons_window', APP)
-		self.window = self.xml.get_widget('add_remove_emoticons_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'manage_emoticons_window', APP)
+		self.window = self.xml.get_widget('manage_emoticons_window')
 		self.plugin = plugin
 
 		#emoticons
@@ -2272,7 +2272,7 @@ class ManageBookmarksWindow:
 							    None, None, None])
 
 			for bookmark in gajim.connections[account].bookmarks:
-				if bookmark['name']=="":
+				if bookmark['name'] == '':
 					#No name was given for this bookmark.
 					#Use the first part of JID instead...
 					name = bookmark['jid'].split("@")[0]
@@ -2375,12 +2375,6 @@ class ManageBookmarksWindow:
 				#create the bookmark-dict
 				bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
 					'password': bm[4], 'nick': bm[5] }
-
-				#FIXME: shouldnt this be .connected?
-				#However we don't even list not-connected accounts now, so
-				#i think this can just go away?
-				#if gajim.connections[account[1]].status > 1: #if we're connected
-					#gajim.connections[account[1]].bookmarks.append(bmdict)
 
 			gajim.connections[account[1]].store_bookmarks()
 
