@@ -196,7 +196,7 @@ class GroupchatWindow(chat.Chat):
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(self.plugin.roster.jabber_state_images['closed'], role + 's',
+				(self.plugin.roster.jabber_state_images['closed'], '<b>%ss</b>' % role.capitalize(),
 				 role, ''))
 		iter = model.append(role_iter, (image, nick, jid, show))
 		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)),
@@ -683,7 +683,9 @@ class GroupchatWindow(chat.Chat):
 		column.add_attribute(renderer_image, 'image', 0)
 		renderer_text = gtk.CellRendererText()
 		column.pack_start(renderer_text, expand = True)
-		column.add_attribute(renderer_text, 'text', 1)
+		column.set_attributes(renderer_text, markup=1)
+		column.set_cell_data_func(renderer_image, self.tree_cell_data_func, None)
+		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
 
 		self.list_treeview[room_jid].append_column(column)
 		self.list_treeview[room_jid].set_model(store)
@@ -699,6 +701,15 @@ class GroupchatWindow(chat.Chat):
 		self.redraw_tab(room_jid)
 		self.show_title()
 		conversation_textview.grab_focus()
+
+	def tree_cell_data_func(self, column, renderer, model, iter, data=None):
+		if not model.iter_parent(iter): # is iter toplevel? (ie. group)
+			bgcolor = gajim.config.get('groupbgcolor')
+			renderer.set_property('cell-background', bgcolor)
+			renderer.set_property('cell-background', bgcolor)
+		else: # iter is a user, background is white
+			renderer.set_property('cell-background', '#FFFFFF')
+			renderer.set_property('cell-background', '#FFFFFF')
 
 	def on_actions_button_clicked(self, button):
 		"""popup action menu"""
