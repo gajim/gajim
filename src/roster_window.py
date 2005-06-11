@@ -263,9 +263,6 @@ class RosterWindow:
 			service_disco_menuitem.handler_disconnect(
 					self.service_disco_handler_id)
 			self.service_disco_handler_id = None
-		if self.join_gc_handler_id:
-			join_gc_menuitem.handler_disconnect(self.join_gc_handler_id)
-			self.join_gc_handler_id = None
 		if self.new_message_menuitem_handler_id:
 			new_message_menuitem.handler_disconnect(
 					self.new_message_menuitem_handler_id)
@@ -275,8 +272,7 @@ class RosterWindow:
 			add_new_contact_menuitem.remove_submenu()
 		if service_disco_menuitem.get_submenu():
 			service_disco_menuitem.remove_submenu()
-		if join_gc_menuitem.get_submenu():
-			join_gc_menuitem.remove_submenu()
+		join_gc_menuitem.remove_submenu()
 		if new_message_menuitem.get_submenu():
 			new_message_menuitem.remove_submenu()
 		if len(gajim.connections) > 0:
@@ -308,11 +304,10 @@ class RosterWindow:
 			#FIXME: delmonico hack here [get bookmakrs and add them]
 			if gajim.connections[account].connected <= 1:
 				continue
-				for bookmark in gajim.connections[account].bookmarks:
-					print bookmark['name']
-					item = gtk.MenuItem(bookmark['name'])
-					sub_menu.append(item)
-					item.connect('activate', self.join_gc_room, account, bookmark)
+			for bookmark in gajim.connections[account].bookmarks:
+				item = gtk.MenuItem(bookmark['name'])
+				sub_menu.append(item)
+				item.connect('activate', self.join_gc_room, account, bookmark)
 
 		newitem = gtk.MenuItem() # seperator
 		sub_menu.append(newitem)
@@ -360,11 +355,6 @@ class RosterWindow:
 			if not self.service_disco_handler_id:
 				self.service_disco_handler_id = service_disco_menuitem.connect( 
 					'activate', self.on_service_disco_menuitem_activate, 
-					gajim.connections.keys()[0])
-			#join_gc
-			if not self.join_gc_handler_id:
-				self.join_gc_handler_id = join_gc_menuitem.connect( 
-					'activate', self.on_join_gc_activate, 
 					gajim.connections.keys()[0])
 			if not self.new_message_menuitem_handler_id:
 				self.new_message_menuitem_handler_id = new_message_menuitem.\
@@ -1568,7 +1558,6 @@ class RosterWindow:
 		self.nb_unread = 0
 		self.add_new_contact_handler_id = False
 		self.service_disco_handler_id = False
-		self.join_gc_handler_id = False
 		self.new_message_menuitem_handler_id = False
 		self.regroup = 0
 		self.regroup = gajim.config.get('mergeaccounts')
