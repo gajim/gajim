@@ -2262,10 +2262,12 @@ class ManageBookmarksWindow:
 		self.window = self.xml.get_widget('manage_bookmarks_window')
 
 		#Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick
-		self.treestore = gtk.TreeStore(str, str, str, str, str, str)
+		self.treestore = gtk.TreeStore(str, str, str, bool, str, str)
 
 		#Store bookmarks in treeview.
 		for account in gajim.connections:
+			if gajim.connections[account].connected <= 1:
+				continue
 			iter = self.treestore.append(None, [None, account,None,
 							    None, None, None])
 
@@ -2275,11 +2277,15 @@ class ManageBookmarksWindow:
 					#Use the first part of JID instead...
 					name = bookmark['jid'].split("@")[0]
 					bookmark['name'] = name
+
+				#Convert '1'/'0' to True/False
+				autojoin = bool(int(bookmark['autojoin']))
+				
 				self.treestore.append( iter, [
 						account,
 						bookmark['name'],
 						bookmark['jid'],
-						bookmark['autojoin'],
+						autojoin,
 						bookmark['password'],
 						bookmark['nick'] ])
 
@@ -2335,7 +2341,7 @@ class ManageBookmarksWindow:
 			add_to = iter
 
 		account = model.get_value(add_to, 1)
-		self.treestore.append(add_to, [account,_('New Room'), '', '', '', ''])
+		self.treestore.append(add_to, [account,_('New Room'), '', False, '', ''])
 
 		self.view.expand_row(model.get_path(add_to), True)
 
@@ -2363,19 +2369,18 @@ class ManageBookmarksWindow:
 			gajim.connections[account[1]].bookmarks = []
 
 			for bm in account.iterchildren():
-				print bm[0], bm[1], bm[2], bm[3], bm[4], bm[5]
 				#Convert True/False/None to '1' or '0'
-				if bm[3]: #autojoin
-					bm[3] = '1'
-				else:
-					bm[3] = '0'
+				autojoin = str(int(bm[3]))
 				
 				#create the bookmark-dict
-				bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': bm[3],
+				bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
 					'password': bm[4], 'nick': bm[5] }
 
-				if gajim.connections[account[1]].status > 1: #if we're connected
-					gajim.connections[account[1]].bookmarks.append(bmdict)
+				#FIXME: shouldnt this be .connected?
+				#However we don't even list not-connected accounts now, so
+				#i think this can just go away?
+				#if gajim.connections[account[1]].status > 1: #if we're connected
+					#gajim.connections[account[1]].bookmarks.append(bmdict)
 
 			gajim.connections[account[1]].store_bookmarks()
 
@@ -2421,10 +2426,8 @@ class ManageBookmarksWindow:
 			server = ''
 		self.room_entry.set_text(room)
 		self.server_entry.set_text(server)
-		if model.get_value(iter, 3) == '1':
-			self.autojoin_checkbutton.set_active(True)
-		else:
-			self.autojoin_checkbutton.set_active(False)
+	
+		self.autojoin_checkbutton.set_active(model.get_value(iter, 3))
 		self.pass_entry.set_text(model.get_value(iter, 4))
 		self.nick_entry.set_text(model.get_value(iter, 5))
 

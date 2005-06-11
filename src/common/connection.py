@@ -979,6 +979,7 @@ class Connection:
 
 	def get_bookmarks(self):
 		''' Get Bookmarks from storage as described in JEP 0048 '''
+		self.bookmarks = [] #avoid multiple bookmarks when re-connecting
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
