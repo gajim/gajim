@@ -8159,7 +8159,7 @@ Custom</property>
 	<widget class="GtkNotebook" id="chat_notebook">
 	  <property name="visible">True</property>
 	  <property name="show_tabs">False</property>
-	  <property name="show_border">True</property>
+	  <property name="show_border">False</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
 	  <property name="scrollable">True</property>
 	  <property name="enable_popup">True</property>
@@ -8353,7 +8353,6 @@ This is the subject.</property>
 
 	      <child>
 		<widget class="GtkHBox" id="hbox2972">
-		  <property name="border_width">2</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
@@ -8362,7 +8361,7 @@ This is the subject.</property>
 		    <widget class="GtkHBox" id="input_hbox">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
-		      <property name="spacing">0</property>
+		      <property name="spacing">1</property>
 
 		      <child>
 			<widget class="GtkEventBox" id="eventbox4">
@@ -8723,7 +8722,7 @@ This is the subject.</property>
 		  </child>
 		</widget>
 		<packing>
-		  <property name="padding">0</property>
+		  <property name="padding">2</property>
 		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
@@ -9835,7 +9834,7 @@ JID: whatever@jabber.org</property>
 		<widget class="GtkHBox" id="hbox2971">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
+		  <property name="spacing">1</property>
 
 		  <child>
 		    <widget class="GtkEventBox" id="gpg_eventbox">
@@ -9865,6 +9864,17 @@ JID: whatever@jabber.org</property>
 			  </child>
 			</widget>
 		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkVSeparator" id="vseparator3">
+		      <property name="visible">True</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -15060,7 +15070,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image664">
+	<widget class="GtkImage" id="image678">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-properties</property>
 	  <property name="icon_size">1</property>
@@ -15080,9 +15090,9 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image665">
+	<widget class="GtkImage" id="image679">
 	  <property name="visible">True</property>
-	  <property name="stock">gtk-refresh</property>
+	  <property name="stock">gtk-edit</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
 	  <property name="yalign">0.5</property>
@@ -15100,7 +15110,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image666">
+	<widget class="GtkImage" id="image680">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
