@@ -303,7 +303,6 @@ class GroupchatWindow(chat.Chat):
 		
 		for bookmark in gajim.connections[self.account].bookmarks:
 			if bookmark['jid'] == bm['jid']:
-				room_name = bm['jid'].split('@')[0]
 				dialogs.ErrorDialog(
 					_('Bookmark already set'),
 					_('Room "%s" is already in your bookmarks.') %bm['jid']).get_response()
@@ -350,7 +349,7 @@ class GroupchatWindow(chat.Chat):
 				if len(splitted_text): # if there are any words
 					begin = splitted_text[-1] # last word we typed
 
-				if len(self.nick_hits[room_jid]) and self.nick_hits[room_jid][0].startswith(begin.replace(':', '')) \
+				if len(self.nick_hits[room_jid]) and self.nick_hits[room_jid][0].startswith(begin.replace(',', '')) \
 						and self.last_key_tabs[room_jid]: # we should cycle
 					self.nick_hits[room_jid].append(self.nick_hits[room_jid][0])
 					self.nick_hits[room_jid].pop(0)
@@ -361,11 +360,11 @@ class GroupchatWindow(chat.Chat):
 							self.nick_hits[room_jid].append(nick)
 				if len(self.nick_hits[room_jid]):
 					if len(splitted_text) == 1: # This is the 1st word of the line
-						add = ': '
+						add = ', '
 					else:
 						add = ' '
 					start_iter = end_iter.copy()
-					if self.last_key_tabs[room_jid] and begin.endswith(': '):
+					if self.last_key_tabs[room_jid] and begin.endswith(', '):
 						start_iter.backward_chars(len(begin) + 2) # have to accomodate for the added space from last completion
 					elif self.last_key_tabs[room_jid]:
 						start_iter.backward_chars(len(begin) + 1) # have to accomodate for the added space from last completion
@@ -449,7 +448,7 @@ class GroupchatWindow(chat.Chat):
 			kind = 'status'
 
 		if kind == 'incoming' and (self.nicks[room_jid].lower() in \
-			text.lower().split() or self.nicks[room_jid].lower() + ':' in \
+			text.lower().split() or self.nicks[room_jid].lower() + ',' in \
 			text.lower().split()):
 			other_tags_for_name.append('bold')
 
