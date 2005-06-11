@@ -243,17 +243,6 @@ class RosterWindow:
 	
 	def make_menu(self):
 		'''create the main_window's menus'''
-		
-		
-		#FIXME: do with glade (didn't want to touch it because of possible conflicts)
-		editmenu = self.xml.get_widget('edit_menu_menu')
-		newitem = gtk.MenuItem('Bookmarks')
-		editmenu.append(newitem)
-		editmenu.show_all()
-		newitem.connect('activate', self.on_bookmarks_menuitem_activate)
-		
-		
-		
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		add_new_contact_menuitem  = self.xml.get_widget('add_new_contact_menuitem')
@@ -291,6 +280,34 @@ class RosterWindow:
 			join_gc_menuitem.set_sensitive(False)
 			add_new_contact_menuitem.set_sensitive(False)
 			service_disco_menuitem.set_sensitive(False)
+
+		#join gc
+		sub_menu = gtk.Menu()
+		join_gc_menuitem.set_submenu(sub_menu)
+		for account in gajim.connections:
+			our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
+				gajim.config.get_per('accounts', account, 'hostname')
+			
+			label = gtk.Label()
+			label.set_markup('<b>' + account +'</b>')
+			item = gtk.MenuItem()
+			item.add(label)
+			sub_menu.append(item)
+			
+			item = gtk.MenuItem(_('New Room'))
+			sub_menu.append(item)
+			item.connect('activate', self.on_join_gc_activate, account)
+			
+			#FIXME: delmonico hack here [get bookmakrs and add them]
+		
+		newitem = gtk.MenuItem() # seperator
+		sub_menu.append(newitem)
+		
+		newitem = gtk.MenuItem('Bookmarks')
+		sub_menu.append(newitem)
+		newitem.connect('activate', self.on_bookmarks_menuitem_activate)
+		sub_menu.show_all()
+
 		if len(gajim.connections) >= 2: # 2 or more accounts? make submenus
 			#add
 			sub_menu = gtk.Menu()
@@ -304,29 +321,11 @@ class RosterWindow:
 			sub_menu = gtk.Menu()
 			service_disco_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
-				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
-					gajim.config.get_per('accounts', account, 'hostname')
 				item = gtk.MenuItem(_('using ') + account + _(' account'))
 				sub_menu.append(item)
 				item.connect('activate', self.on_service_disco_menuitem_activate, account)
 			sub_menu.show_all()
-			#join gc
-			sub_menu = gtk.Menu()
-			join_gc_menuitem.set_submenu(sub_menu)
-			for account in gajim.connections:
-				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
-					gajim.config.get_per('accounts', account, 'hostname')
-				
-				#FIXME: delmonico hack here
-				#lbl = gtk.Label()
-				#lbl.set_markup('<b>' + _('abc') +'</b>')
-				#item = gtk.MenuItem()
-				#item.add(lbl)
-				
-				item = gtk.MenuItem(_('as ') + our_jid)
-				sub_menu.append(item)
-				item.connect('activate', self.on_join_gc_activate, account)
-			sub_menu.show_all()
+			
 			#new message
 			sub_menu = gtk.Menu()
 			new_message_menuitem.set_submenu(sub_menu)
