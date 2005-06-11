@@ -280,8 +280,8 @@ class GroupchatWindow(chat.Chat):
 		# I don't know how this works with markup... Let's find out!
 		label_text = self.name_labels[room_jid].get_text() # whole text (including JID)
 		subject = label_text[label_text.find('\n') + 1:] # just the text after the newline *shrug*
-		instance = dialogs.InputDialog('Changing the Subject',
-			'Please specify the new subject:', subject)
+		instance = dialogs.InputDialog(_('Changing the Subject'),
+			_('Please specify the new subject:'), subject)
 		response = instance.dialog.run()
 		instance.dialog.destroy()
 		if response == gtk.RESPONSE_OK:
@@ -294,11 +294,11 @@ class GroupchatWindow(chat.Chat):
 
 	def on_add_bookmark_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
-		bm = { 'name':"",
-			   'jid':self.get_active_jid(),
-			   'autojoin':"1",
-			   'password':"",
-			   'nick':self.nicks[self.get_active_jid()]
+		bm = { 'name': '',
+			   'jid': self.get_active_jid(),
+			   'autojoin': '0',
+			   'password': '',
+			   'nick': self.nicks[self.get_active_jid()]
 			 }
 		
 		for bookmark in gajim.connections[self.account].bookmarks:
