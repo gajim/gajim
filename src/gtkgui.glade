@@ -8196,7 +8196,7 @@ This is the subject.</property>
 		  </child>
 		</widget>
 		<packing>
-		  <property name="padding">3</property>
+		  <property name="padding">0</property>
 		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
@@ -8359,71 +8359,113 @@ This is the subject.</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkToolbar" id="input_toolbar">
+		    <widget class="GtkHBox" id="input_hbox">
 		      <property name="visible">True</property>
-		      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-		      <property name="toolbar_style">GTK_TOOLBAR_ICONS</property>
-		      <property name="tooltips">True</property>
-		      <property name="show_arrow">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">0</property>
 
 		      <child>
-			<widget class="GtkSeparatorToolItem" id="separatortoolitem2">
+			<widget class="GtkEventBox" id="eventbox4">
 			  <property name="visible">True</property>
-			  <property name="draw">True</property>
-			  <property name="visible_horizontal">True</property>
-			  <property name="visible_vertical">True</property>
+			  <property name="tooltip" translatable="yes">Click to toggle OpenPGP encryption</property>
+			  <property name="visible_window">True</property>
+			  <property name="above_child">False</property>
+
+			  <child>
+			    <placeholder/>
+			  </child>
 			</widget>
 			<packing>
+			  <property name="padding">0</property>
 			  <property name="expand">False</property>
-			  <property name="homogeneous">False</property>
+			  <property name="fill">True</property>
 			</packing>
 		      </child>
 
 		      <child>
-			<widget class="GtkToggleToolButton" id="bold_toolbutton">
+			<widget class="GtkToggleButton" id="bold_togglebutton">
 			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Bold</property>
-			  <property name="stock_id">gtk-bold</property>
-			  <property name="visible_horizontal">True</property>
-			  <property name="visible_vertical">True</property>
-			  <property name="is_important">False</property>
+			  <property name="can_focus">True</property>
+			  <property name="relief">GTK_RELIEF_NONE</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
+			  <property name="inconsistent">False</property>
+
+			  <child>
+			    <widget class="GtkImage" id="image671">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-bold</property>
+			      <property name="icon_size">3</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 			</widget>
 			<packing>
+			  <property name="padding">0</property>
 			  <property name="expand">False</property>
-			  <property name="homogeneous">True</property>
+			  <property name="fill">False</property>
 			</packing>
 		      </child>
 
 		      <child>
-			<widget class="GtkToggleToolButton" id="italic_toolbutton">
+			<widget class="GtkToggleButton" id="italic_togglebutton">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Italics</property>
-			  <property name="stock_id">gtk-italic</property>
-			  <property name="visible_horizontal">True</property>
-			  <property name="visible_vertical">True</property>
-			  <property name="is_important">False</property>
+			  <property name="tooltip" translatable="yes">Italic</property>
+			  <property name="can_focus">True</property>
+			  <property name="relief">GTK_RELIEF_NONE</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
+			  <property name="inconsistent">False</property>
+
+			  <child>
+			    <widget class="GtkImage" id="image672">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-italic</property>
+			      <property name="icon_size">3</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 			</widget>
 			<packing>
+			  <property name="padding">0</property>
 			  <property name="expand">False</property>
-			  <property name="homogeneous">True</property>
+			  <property name="fill">False</property>
 			</packing>
 		      </child>
 
 		      <child>
-			<widget class="GtkToggleToolButton" id="underline_toolbutton">
+			<widget class="GtkToggleButton" id="underline_togglebutton">
 			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Underline</property>
-			  <property name="stock_id">gtk-underline</property>
-			  <property name="visible_horizontal">True</property>
-			  <property name="visible_vertical">True</property>
-			  <property name="is_important">False</property>
+			  <property name="can_focus">True</property>
+			  <property name="relief">GTK_RELIEF_NONE</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
+			  <property name="inconsistent">False</property>
+
+			  <child>
+			    <widget class="GtkImage" id="image673">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-underline</property>
+			      <property name="icon_size">3</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 			</widget>
 			<packing>
+			  <property name="padding">0</property>
 			  <property name="expand">False</property>
-			  <property name="homogeneous">True</property>
+			  <property name="fill">False</property>
 			</packing>
 		      </child>
 		    </widget>
@@ -9596,7 +9638,6 @@ This is the subject.</property>
 
 	      <child>
 		<widget class="GtkHBox" id="banner_hbox">
-		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
@@ -9833,78 +9874,89 @@ JID: whatever@jabber.org</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkToolbar" id="message_toolbar">
+		    <widget class="GtkToggleButton" id="bold_togglebutton">
 		      <property name="visible">True</property>
-		      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-		      <property name="toolbar_style">GTK_TOOLBAR_ICONS</property>
-		      <property name="tooltips">True</property>
-		      <property name="show_arrow">True</property>
+		      <property name="tooltip" translatable="yes">Bold</property>
+		      <property name="can_focus">True</property>
+		      <property name="relief">GTK_RELIEF_NONE</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
 
 		      <child>
-			<widget class="GtkSeparatorToolItem" id="separatortoolitem1">
+			<widget class="GtkImage" id="image667">
 			  <property name="visible">True</property>
-			  <property name="draw">True</property>
-			  <property name="visible_horizontal">True</property>
-			  <property name="visible_vertical">True</property>
+			  <property name="stock">gtk-bold</property>
+			  <property name="icon_size">3</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
 			</widget>
-			<packing>
-			  <property name="expand">False</property>
-			  <property name="homogeneous">False</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkToggleToolButton" id="bold_toobutton">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Bold</property>
-			  <property name="stock_id">gtk-bold</property>
-			  <property name="visible_horizontal">True</property>
-			  <property name="visible_vertical">True</property>
-			  <property name="is_important">False</property>
-			  <property name="active">False</property>
-			</widget>
-			<packing>
-			  <property name="expand">False</property>
-			  <property name="homogeneous">True</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkToggleToolButton" id="italic_toolbutton">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Italics</property>
-			  <property name="stock_id">gtk-italic</property>
-			  <property name="visible_horizontal">True</property>
-			  <property name="visible_vertical">True</property>
-			  <property name="is_important">False</property>
-			  <property name="active">False</property>
-			</widget>
-			<packing>
-			  <property name="expand">False</property>
-			  <property name="homogeneous">True</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkToggleToolButton" id="underline_toolbutton">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Underine</property>
-			  <property name="stock_id">gtk-underline</property>
-			  <property name="visible_horizontal">True</property>
-			  <property name="visible_vertical">True</property>
-			  <property name="is_important">False</property>
-			  <property name="active">False</property>
-			</widget>
-			<packing>
-			  <property name="expand">False</property>
-			  <property name="homogeneous">True</property>
-			</packing>
 		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkToggleButton" id="italic_togglebutton">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Italic</property>
+		      <property name="can_focus">True</property>
+		      <property name="relief">GTK_RELIEF_NONE</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+
+		      <child>
+			<widget class="GtkImage" id="image668">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-italic</property>
+			  <property name="icon_size">3</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkToggleButton" id="underline_togglebutton">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Underline</property>
+		      <property name="can_focus">True</property>
+		      <property name="relief">GTK_RELIEF_NONE</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+
+		      <child>
+			<widget class="GtkImage" id="image669">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-underline</property>
+			  <property name="icon_size">3</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 		</widget>
