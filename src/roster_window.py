@@ -463,7 +463,7 @@ class RosterWindow:
 	def on_remove_agent(self, widget, user, account):
 		'''When an agent is requested to log in or off'''
 		window = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % user.jid, _('You will no longer be able to send and receive messages to contacts from %s.' % user.jid))
-		if window.get_response() == gtk.RESPONSE_YES:
+		if window.get_response() == gtk.RESPONSE_OK:
 			gajim.connections[account].unsubscribe_agent(user.jid + '/' \
 																		+ user.resource)
 			# remove transport from treeview
@@ -754,11 +754,11 @@ class RosterWindow:
 			jid = model.get_value(iter, 3)
 			account = model.get_value(iter, 4)
 			type = model.get_value(iter, 2)
+			user = self.contacts[account][jid][0]
 			if type == 'user':
-				user = self.contacts[account][jid][0]
 				self.on_req_usub(widget, user, account)
 			elif type == 'agent':
-				self.on_remove_agent(widget, jid, account)
+				self.on_remove_agent(widget, user, account)
 		return False
 	
 	def on_roster_treeview_button_press_event(self, widget, event):
