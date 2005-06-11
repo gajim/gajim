@@ -707,9 +707,6 @@ class GroupchatWindow(chat.Chat):
 			bgcolor = gajim.config.get('groupbgcolor')
 			renderer.set_property('cell-background', bgcolor)
 			renderer.set_property('cell-background', bgcolor)
-		else: # iter is a user, background is white
-			renderer.set_property('cell-background', '#FFFFFF')
-			renderer.set_property('cell-background', '#FFFFFF')
 
 	def on_actions_button_clicked(self, button):
 		"""popup action menu"""
