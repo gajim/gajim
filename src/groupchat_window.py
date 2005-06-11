@@ -647,10 +647,10 @@ class GroupchatWindow(chat.Chat):
 		# set the fg colour of the label to white
 		self.name_labels[room_jid].modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse('white'))
 		
-		gc_banner_eventbox = self.xmls[room_jid].get_widget('gc_banner_eventbox')
+		banner_eventbox = self.xmls[room_jid].get_widget('banner_eventbox')
 		# get the background color from the current theme
 		bgcolor = gajim.config.get('accountbgcolor')
-		gc_banner_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
+		banner_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
 
 		# connect the menuitems to their respective functions
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_actions_menu', APP)
@@ -703,10 +703,13 @@ class GroupchatWindow(chat.Chat):
 		conversation_textview.grab_focus()
 
 	def tree_cell_data_func(self, column, renderer, model, iter, data=None):
-		if not model.iter_parent(iter): # is iter toplevel? (ie. group)
+		if model.iter_parent(iter):
+			bgcolor = gajim.config.get('userbgcolor')
+			renderer.set_property('cell-background', bgcolor)
+		else: # it is root (eg. group)
 			bgcolor = gajim.config.get('groupbgcolor')
 			renderer.set_property('cell-background', bgcolor)
-			renderer.set_property('cell-background', bgcolor)
+			
 
 	def on_actions_button_clicked(self, button):
 		"""popup action menu"""

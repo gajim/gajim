@@ -795,7 +795,7 @@ class RosterWindow:
 				model = self.tree.get_model()
 				iter = model.get_iter(path)
 				type = model.get_value(iter, 2)
-				if (type == 'group'):
+				if type == 'group':
 					if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 						if (self.tree.row_expanded(path)):
 							self.tree.collapse_row(path)
@@ -1192,8 +1192,8 @@ class RosterWindow:
 		account = model.get_value(iter, 4)
 		type = model.get_value(iter, 2)
 		jid = model.get_value(iter, 3)
-		if (type == 'group') or (type == 'account'):
-			if (self.tree.row_expanded(path)):
+		if type == 'group' or type == 'account':
+			if self.tree.row_expanded(path):
 				self.tree.collapse_row(path)
 			else:
 				self.tree.expand_row(path, False)

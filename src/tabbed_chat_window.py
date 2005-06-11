@@ -132,7 +132,7 @@ class TabbedChatWindow(chat.Chat):
 			pixbufloader.write(img_decoded)
 			pixbuf = pixbufloader.get_pixbuf()
 			pixbufloader.close()
-			scaled_buf = pixbuf.scale_simple(46, 46, gtk.gdk.INTERP_HYPER)
+			scaled_buf = pixbuf.scale_simple(52, 52, gtk.gdk.INTERP_HYPER)
 			image = self.xmls[vcard['jid']].get_widget('avatar_image')
 			image.set_from_pixbuf(scaled_buf)
 			image.show_all()
@@ -165,7 +165,7 @@ class TabbedChatWindow(chat.Chat):
 			banner_status_image.set_from_animation(image.get_animation())
 			status_image.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-            # make a copy because one will be scaled, one not (tab icon)
+			# make a copy because one will be scaled, one not (tab icon)
 			pix = image.get_pixbuf()
 			scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
 			banner_status_image.set_from_pixbuf(scaled_pix)

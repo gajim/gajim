@@ -8173,7 +8173,7 @@ Custom</property>
 	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkEventBox" id="gc_banner_eventbox">
+		<widget class="GtkEventBox" id="banner_eventbox">
 		  <property name="visible">True</property>
 		  <property name="visible_window">True</property>
 		  <property name="above_child">False</property>
@@ -9650,7 +9650,7 @@ This is the subject.</property>
 		      <property name="ypad">0</property>
 		    </widget>
 		    <packing>
-		      <property name="padding">0</property>
+		      <property name="padding">3</property>
 		      <property name="expand">False</property>
 		      <property name="fill">False</property>
 		    </packing>
@@ -9702,7 +9702,7 @@ JID: whatever@jabber.org</property>
 		      <property name="ypad">0</property>
 		    </widget>
 		    <packing>
-		      <property name="padding">5</property>
+		      <property name="padding">3</property>
 		      <property name="expand">False</property>
 		      <property name="fill">False</property>
 		    </packing>
