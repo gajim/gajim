@@ -118,7 +118,7 @@ class Connection:
 			'AGENT_INFO_INFO': [], 'QUIT': [], 'ACC_OK': [], 'MYVCARD': [],
 			'OS_INFO': [], 'VCARD': [], 'GC_MSG': [], 'GC_SUBJECT': [],
 			'GC_CONFIG': [], 'BAD_PASSPHRASE': [], 'ROSTER_INFO': [],
-			'ERROR_ANSWER': [], 'BOOKMARK': [],}
+			'ERROR_ANSWER': [], 'BOOKMARKS': [],}
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
@@ -546,39 +546,39 @@ class Connection:
 		self.dispatch('ROSTER', roster)
 
 	def _PrivateCB(self, con, iq_obj):
-		"""
+		'''
 		Private Data (JEP 048 and 049)
-		"""
-		gajim.log.debug("PrivateCB")
-		storage = iq_obj.getTag("query").getTag("storage")
+		'''
+		gajim.log.debug('PrivateCB')
+		storage = iq_obj.getTag('query').getTag('storage')
 		try:
 			ns = storage.getNamespace() 
 		except AttributeError:
 			#Its a result for a 'set' Iq, so we don't do anything here
-			return		
+			return
 		
-		if ns=="storage:bookmarks":
+		if ns == 'storage:bookmarks':
 			#Bookmarked URLs and Conferences
 			#http://www.jabber.org/jeps/jep-0048.html
-			confs = storage.getTags("conference")
-			urls = storage.getTags("url")
+			confs = storage.getTags('conference')
+			urls = storage.getTags('url')
 			for conf in confs:
-				bm = { 'name':conf.getAttr('name'),
-				       'jid':conf.getAttr('jid'),
-				       'autojoin':conf.getAttr('autojoin'),
-				       'password':conf.getTagData('password'),
-				       'nick':conf.getTagData('nick') }
+				bm = { 'name': conf.getAttr('name'),
+				       'jid': conf.getAttr('jid'),
+				       'autojoin': conf.getAttr('autojoin'),
+				       'password': conf.getTagData('password'),
+				       'nick': conf.getTagData('nick') }
 
-				self.dispatch("BOOKMARK", bm)
 				self.bookmarks.append(bm)
+			self.dispatch('BOOKMARKS', self.bookmarks)
 
-				if bm['autojoin']=="1":
-					jid = common.xmpp.protocol.JID(conf.getAttr("jid"))
-					server = jid.getDomain()
-					room = jid.getNode()
-					gc = self.join_gc(bm['nick'], room, server, bm['password'])
-                                
-		elif ns=="gajim:prefs":
+#				if bm['autojoin'] == '1':
+#					jid = common.xmpp.protocol.JID(conf.getAttr('jid'))
+#					server = jid.getDomain()
+#					room = jid.getNode()
+#					gc = self.join_gc(bm['nick'], room, server, bm['password'])
+
+		elif ns == 'gajim:prefs':
 			#Preferences data
 			#http://www.jabber.org/jeps/jep-0049.html
 			#TODO: implement this

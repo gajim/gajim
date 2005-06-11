@@ -572,13 +572,19 @@ class Interface:
 				user.groups = array[4]
 		self.roster.draw_contact(jid, account)
 
-	def handle_event_bookmark(self, account, bm):
-		#('BOOKMARK', account, {name,jid,autojoin,password,nick})
+	def handle_event_bookmarks(self, account, bms):
+		#('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
 		#We received a bookmark item from the server (JEP48)
 
-		#Open GC window if neccessary
-		if bm['autojoin'] == '1':
-			self.roster.join_gc_room(account, bm)
+		#Auto join GC windows if neccessary
+		for bm in bms:
+			if bm['autojoin'] == '1':
+				self.roster.join_gc_room(account, bm)
+				room, server = bm['jid'].split('@')
+				gajim.connections[account].join_gc(bm['nick'], room, server,
+					bm['password'])
+		self.roster.make_menu()
+										
 
 	def read_sleepy(self):	
 		'''Check if we are idle'''
@@ -742,7 +748,7 @@ class Interface:
 		conn.register_handler('GC_CONFIG', self.handle_event_gc_config)
 		conn.register_handler('BAD_PASSPHRASE', self.handle_event_bad_passphrase)
 		conn.register_handler('ROSTER_INFO', self.handle_event_roster_info)
-		conn.register_handler('BOOKMARK', self.handle_event_bookmark)
+		conn.register_handler('BOOKMARKS', self.handle_event_bookmarks)
 
 	def process_connections(self):
 		try:
