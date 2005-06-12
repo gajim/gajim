@@ -2325,7 +2325,7 @@ class ManageBookmarksWindow:
 
 		if model.iter_parent(iter):
 			#The currently selected node is a bookmark
-			return not self.check_valid_bookmark():
+			return not self.check_valid_bookmark()
 
 	def on_manage_bookmarks_window_destroy(self, widget, event):
 		del self.plugin.windows['manage_bookmarks']
