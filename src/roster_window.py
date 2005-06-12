@@ -785,43 +785,42 @@ class RosterWindow:
 	
 	def on_roster_treeview_button_press_event(self, widget, event):
 		'''popup contact's, group's or agent's menu'''
-		if event.type == gtk.gdk.BUTTON_PRESS:
-			if event.button == 3: # Right click
-				try:
-					path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
-						int(event.y))
-				except TypeError:
-					self.tree.get_selection().unselect_all()
-					return
-				self.tree.get_selection().select_path(path)
-				model = self.tree.get_model()
-				iter = model.get_iter(path)
-				type = model.get_value(iter, 2)
-				if type == 'group':
-					self.mk_menu_g(event, iter)
-				elif type == 'agent':
-					self.mk_menu_agent(event, iter)
-				elif type == 'user':
-					self.mk_menu_user(event, iter)
-				elif type == 'account':
-					self.mk_menu_account(event, iter)
-				return True
-			if event.button == 1: # Left click
-				try:
-					path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
-						int(event.y))
-				except TypeError:
-					self.tree.get_selection().unselect_all()
-					return False
-				model = self.tree.get_model()
-				iter = model.get_iter(path)
-				type = model.get_value(iter, 2)
-				if type == 'group':
-					if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
-						if (self.tree.row_expanded(path)):
-							self.tree.collapse_row(path)
-						else:
-							self.tree.expand_row(path, False)
+		if event.button == 3: # Right click
+			try:
+				path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
+					int(event.y))
+			except TypeError:
+				self.tree.get_selection().unselect_all()
+				return
+			self.tree.get_selection().select_path(path)
+			model = self.tree.get_model()
+			iter = model.get_iter(path)
+			type = model.get_value(iter, 2)
+			if type == 'group':
+				self.mk_menu_g(event, iter)
+			elif type == 'agent':
+				self.mk_menu_agent(event, iter)
+			elif type == 'user':
+				self.mk_menu_user(event, iter)
+			elif type == 'account':
+				self.mk_menu_account(event, iter)
+			return True
+		if event.button == 1: # Left click
+			try:
+				path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
+					int(event.y))
+			except TypeError:
+				self.tree.get_selection().unselect_all()
+				return False
+			model = self.tree.get_model()
+			iter = model.get_iter(path)
+			type = model.get_value(iter, 2)
+			if type == 'group':
+				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
+					if (self.tree.row_expanded(path)):
+						self.tree.collapse_row(path)
+					else:
+						self.tree.expand_row(path, False)
 
 	def on_req_usub(self, widget, user, account):
 		'''Remove a user'''
