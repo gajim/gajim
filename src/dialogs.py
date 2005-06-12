@@ -404,62 +404,62 @@ class AboutDialog:
 		dlg.destroy()
 
 class Dialog(gtk.Dialog):
-    def __init__(self, parent, title, buttons, default = None):
-        gtk.Dialog.__init__(self, title, parent, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL | gtk.DIALOG_NO_SEPARATOR)
+	def __init__(self, parent, title, buttons, default = None):
+		gtk.Dialog.__init__(self, title, parent, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL | gtk.DIALOG_NO_SEPARATOR)
 
-        self.set_border_width(6)
-        self.vbox.set_spacing(12)
-        self.set_resizable(False)
+		self.set_border_width(6)
+		self.vbox.set_spacing(12)
+		self.set_resizable(False)
 
-        for stock, response in buttons:
-            self.add_button(stock, response)
+		for stock, response in buttons:
+			self.add_button(stock, response)
 
-        if default is not None:
-            self.set_default_response(default)
-        else:
-            self.set_default_response(buttons[-1][1])
+		if default is not None:
+			self.set_default_response(default)
+		else:
+			self.set_default_response(buttons[-1][1])
 
-    def get_button(self, index):
-        buttons = self.action_area.get_children()
-        return index < len(buttons) and buttons[index] or None
+	def get_button(self, index):
+		buttons = self.action_area.get_children()
+		return index < len(buttons) and buttons[index] or None
 
 
 class HigDialog(Dialog):
-    def __init__(self, parent, pritext, sectext, stockimage, buttons, default = None):
-        """GNOME higified version of the Dialog object. Inherit
-        from here if possible when you need a new dialog."""
-        Dialog.__init__(self, parent, "", buttons, default)
+	def __init__(self, parent, pritext, sectext, stockimage, buttons, default = None):
+		"""GNOME higified version of the Dialog object. Inherit
+		from here if possible when you need a new dialog."""
+		Dialog.__init__(self, parent, "", buttons, default)
 
-        # hbox separating dialog image and contents
-        hbox = gtk.HBox()
-        hbox.set_spacing(12)
-        hbox.set_border_width(6)
-        self.vbox.pack_start(hbox)
+		# hbox separating dialog image and contents
+		hbox = gtk.HBox()
+		hbox.set_spacing(12)
+		hbox.set_border_width(6)
+		self.vbox.pack_start(hbox)
 
-        # set up image
-        if stockimage is not None:
-            image = gtk.Image()
-            image.set_from_stock(stockimage, gtk.ICON_SIZE_DIALOG)
-            image.set_alignment(0.5, 0)
-            hbox.pack_start(image, False, False)
+		# set up image
+		if stockimage is not None:
+			image = gtk.Image()
+			image.set_from_stock(stockimage, gtk.ICON_SIZE_DIALOG)
+			image.set_alignment(0.5, 0)
+			hbox.pack_start(image, False, False)
 
-        # set up main content area
-        self.contents = gtk.VBox()
-        self.contents.set_spacing(10)
-        hbox.pack_start(self.contents)
+		# set up main content area
+		self.contents = gtk.VBox()
+		self.contents.set_spacing(10)
+		hbox.pack_start(self.contents)
 
-        label = gtk.Label()
-        label.set_markup("<span size=\"larger\" weight=\"bold\">" + pritext + "</span>\n\n" + sectext)
-        label.set_line_wrap(True)
-        label.set_alignment(0, 0)
-        label.set_selectable(True)
-        self.contents.pack_start(label)
+		label = gtk.Label()
+		label.set_markup("<span size=\"larger\" weight=\"bold\">" + pritext + "</span>\n\n" + sectext)
+		label.set_line_wrap(True)
+		label.set_alignment(0, 0)
+		label.set_selectable(True)
+		self.contents.pack_start(label)
 
-    def get_response(self):
-        self.show_all()
-        response = gtk.Dialog.run(self)
-        self.destroy()
-        return response
+	def get_response(self):
+		self.show_all()
+		response = gtk.Dialog.run(self)
+		self.destroy()
+		return response
 
 class ConfirmationDialog(HigDialog):
 	"""HIG compliant confirmation dialog."""
@@ -469,20 +469,20 @@ class ConfirmationDialog(HigDialog):
 			[ gtk.STOCK_OK, gtk.RESPONSE_OK ] ])
 
 class WarningDialog(HigDialog):
-    def __init__(self, pritext, sectext=''):
-        """HIG compliant warning dialog."""
-        HigDialog.__init__(
-            self, None, pritext, sectext, gtk.STOCK_DIALOG_WARNING,
-            [ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
-        )
+	def __init__(self, pritext, sectext=''):
+		"""HIG compliant warning dialog."""
+		HigDialog.__init__(
+			self, None, pritext, sectext, gtk.STOCK_DIALOG_WARNING,
+			[ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
+		)
 
 class InformationDialog(HigDialog):
-    def __init__(self, pritext, sectext=''):
-        """HIG compliant info dialog."""
-        HigDialog.__init__(
-            self, None, pritext, sectext, gtk.STOCK_DIALOG_INFO,
-            [ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
-        )
+	def __init__(self, pritext, sectext=''):
+		"""HIG compliant info dialog."""
+		HigDialog.__init__(
+			self, None, pritext, sectext, gtk.STOCK_DIALOG_INFO,
+			[ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
+		)
 
 class InputDialog:
 	'''Class for Input dialog'''
@@ -498,12 +498,12 @@ class InputDialog:
 			self.input_entry.select_region(0, -1) # select all	
 	
 class ErrorDialog(HigDialog):
-    def __init__(self, pritext, sectext=''):
-        """HIG compliant error dialog."""
-        HigDialog.__init__(
-            self, None, pritext, sectext, gtk.STOCK_DIALOG_ERROR,
-            [ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
-        )
+	def __init__(self, pritext, sectext=''):
+		"""HIG compliant error dialog."""
+		HigDialog.__init__(
+			self, None, pritext, sectext, gtk.STOCK_DIALOG_ERROR,
+			[ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
+		)
 
 
 class Subscription_request_window:
