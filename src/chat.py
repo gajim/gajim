@@ -722,6 +722,9 @@ class Chat:
 		elif text.startswith('/me ') or text.startswith('/me\n'):
 			text = name + text[3:]
 			text_tags.append(kind)
+		elif text.startswith('/chat '):
+			text = name + text[4:]
+			text_tags.append(kind)
 
 		if kind == 'incoming':
 			self.last_message_time[jid] = time.time()

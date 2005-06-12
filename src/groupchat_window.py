@@ -528,7 +528,7 @@ class GroupchatWindow(chat.Chat):
 	def on_add_to_roster(self, widget, jid):
 		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
 
-	def on_send_pm(self, widget, model, iter):
+	def on_send_pm(self, widget, model=None, iter=None):
 		room_jid = self.get_active_jid()
 		nick = model.get_value(iter, 1)
 		fjid = room_jid + '/' + nick
