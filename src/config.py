@@ -2254,7 +2254,6 @@ class RemoveAccountWindow:
 		self.window.destroy()
 
 #---------- ManageBookmarksWindow class -------------#
-#TODO: Find a good place to check if the input is valid (all neccessary fields filled out?)
 class ManageBookmarksWindow:
 	def __init__(self, plugin):
 		self.plugin = plugin
@@ -2297,7 +2296,7 @@ class ManageBookmarksWindow:
 		renderer = gtk.CellRendererText()
 		column = gtk.TreeViewColumn('Bookmarks', renderer, text=1)
 		self.view.append_column(column)
-	
+
 		self.selection = self.view.get_selection()
 		self.selection.connect('changed', self.bookmark_selected)
 
@@ -2318,7 +2317,17 @@ class ManageBookmarksWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 	
-	def on_manage_bookmarks_window_destroy(self, widget):
+	def on_bookmarks_treeview_button_press_event(self, widget, event):
+		(model, iter) = self.selection.get_selected()
+		if not iter:
+			#Removed a bookmark before
+			return
+
+		if model.iter_parent(iter):
+			#The currently selected node is a bookmark
+			return not self.check_valid_bookmark():
+
+	def on_manage_bookmarks_window_destroy(self, widget, event):
 		del self.plugin.windows['manage_bookmarks']
 
 	def on_add_bookmark_button_clicked(self,widget):
@@ -2360,11 +2369,35 @@ class ManageBookmarksWindow:
 		model.remove(iter)
 		self.clear_fields()
 
+	def check_valid_bookmark(self):
+		'''
+		Check if all neccessary fields are entered correctly.
+		'''
+		(model, iter) = self.selection.get_selected()
+
+		if not model.iter_parent(iter):
+			#Account data can't be changed
+			return
+
+		if self.server_entry.get_text() == '' or self.room_entry.get_text() == '':
+			dialogs.ErrorDialog(_('This bookmark has invalid data.'),
+					_('Please be sure to fill out server and room fields \
+					or remove this bookmark.')).get_response()
+			return False
+
+		return True
+
 	def on_ok_button_clicked(self, widget):
 		'''
 		Parse the treestore data into our new bookmarks array,
 		then send the new bookmarks to the server.
 		'''
+		(model, iter) = self.selection.get_selected()
+		if iter and model.iter_parent(iter):
+			#bookmark selected, check it
+			if not self.check_valid_bookmark():
+				return
+
 		for account in self.treestore:
 			gajim.connections[account[1]].bookmarks = []
 
@@ -2379,7 +2412,6 @@ class ManageBookmarksWindow:
 				gajim.connections[account[1]].bookmarks.append(bmdict)
 
 			gajim.connections[account[1]].store_bookmarks()
-
 		self.plugin.roster.make_menu()
 		self.window.destroy()
 
@@ -2396,7 +2428,7 @@ class ManageBookmarksWindow:
 			#After removing the last bookmark for one account
 			#this will be None, so we will just:
 			return
-		
+
 		widgets = [ self.title_entry, self.nick_entry, self.room_entry,
 			self.server_entry, self.pass_entry, self.autojoin_checkbutton ]
 
@@ -2411,7 +2443,7 @@ class ManageBookmarksWindow:
 			for field in widgets:
 				field.set_sensitive(False)
 			return
-		
+
 		#Fill in the data for childs
 		self.title_entry.set_text(model.get_value(iter, 1))
 		room_jid = model.get_value(iter, 2)
