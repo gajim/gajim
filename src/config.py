@@ -2046,20 +2046,23 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.join_button.set_sensitive(False)
 		self.register_button.set_sensitive(False)
 		model, iter = self.services_treeview.get_selection().get_selected()
-		if not iter: return
+		if not iter:
+			return
+		path = model.get_path(iter)
+		if len(path) == 1: # we selected the jabber server
+			return
 		jid = model.get_value(iter, 1)
 		node = model.get_value(iter, 2)
 		if self.agent_infos[jid + node].has_key('features'):
 			if common.xmpp.NS_REGISTER in self.agent_infos[jid + node] \
 					['features']:
 				self.register_button.set_sensitive(True)
-		if self.agent_infos[jid + node].has_key('identities'):
-			if len(self.agent_infos[jid + node]['identities']):
-				if self.agent_infos[jid + node]['identities'][0].has_key(
-						'category'):
-					if self.agent_infos[jid + node]['identities'][0]['category'] == \
-							'conference':
-						self.join_button.set_sensitive(True)
+		if self.agent_infos[jid + node].has_key('identities') and \
+				len(self.agent_infos[jid + node]['identities']):
+			if self.agent_infos[jid + node]['identities'][0].has_key('category'):
+				if self.agent_infos[jid + node]['identities'][0]['category'] == \
+						'conference':
+					self.join_button.set_sensitive(True)
 	
 	def on_go_button_clicked(self, widget):
 		server_address = self.address_comboboxentry.child.get_text()
