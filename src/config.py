@@ -2383,9 +2383,8 @@ class ManageBookmarksWindow:
 			return
 
 		if self.server_entry.get_text() == '' or self.room_entry.get_text() == '':
-			dialogs.ErrorDialog(_('This bookmark has invalid data.'),
-					_('Please be sure to fill out server and room fields \
-					or remove this bookmark.')).get_response()
+			dialogs.ErrorDialog(_('This bookmark has invalid data'),
+_('Please be sure to fill out server and room fields or remove this bookmark.')).get_response()
 			return False
 
 		return True
