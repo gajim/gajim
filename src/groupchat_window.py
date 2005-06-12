@@ -315,8 +315,7 @@ class GroupchatWindow(chat.Chat):
 
 		dialogs.InformationDialog(
 				_('Bookmark has been added successfully'),
-				_('You can manage your bookmarks via Actions menu in your roster.') % \
-				room_jid).get_response()
+				_('You can manage your bookmarks via Actions menu in your roster.')).get_response()
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:

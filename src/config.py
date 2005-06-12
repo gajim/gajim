@@ -2375,6 +2375,8 @@ class ManageBookmarksWindow:
 				#create the bookmark-dict
 				bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
 					'password': bm[4], 'nick': bm[5] }
+				
+				gajim.connections[account[1]].bookmarks.append(bmdict)
 
 			gajim.connections[account[1]].store_bookmarks()
 
