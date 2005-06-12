@@ -313,6 +313,11 @@ class GroupchatWindow(chat.Chat):
 		
 		self.plugin.roster.make_menu()
 
+		dialogs.InformationDialog(
+				_('Bookmark has been added successfully'),
+				_('You can find the bookmark for room "%s" in your roster.') % \
+				room_jid).get_response()
+
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
