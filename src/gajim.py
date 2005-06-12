@@ -389,13 +389,33 @@ class Interface:
 		
 	def handle_event_msgerror(self, account, array):
 		#('MSGERROR', account, (jid, error_code, error_msg, msg, time))
-		jid = array[0].split('/')[0]
-		if jid in self.windows[account]['gc']:
-			self.windows[account]['gc'][jid].print_conversation('Error %s: %s' % \
+		fjid = array[0]
+		jids = fjid.split('/')
+		jid = jids[0]
+		gcs = self.windows[account]['gc']
+		if jid in gcs:
+			if len(jid) > 1: # it's a pm
+				nick = jids[1]
+				if not self.windows[account]['chats'].has_key(fjid):
+					gc = gcs[jid]
+					tv = gc.list_treeview[jid]
+					model = tv.get_model()
+					iter = gc.get_user_iter(jid, nick)
+					if iter:
+						show = model.get_value(iter, 3)
+					else:
+						show = 'offline'
+					u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0,
+						'')
+					self.roster.new_chat(u, account)
+				self.windows[account]['chats'][fjid].print_conversation(
+					'Error %s: %s' % (array[1], array[2]), fjid, 'status')
+				return
+			gcs[jid].print_conversation('Error %s: %s' % \
 				(array[1], array[2]), jid)
-			if self.windows[account]['gc'][jid].get_active_jid() == jid:
-				self.windows[account]['gc'][jid].set_subject(jid,
-					self.windows[account]['gc'][jid].subjects[jid])
+			if gcs[jid].get_active_jid() == jid:
+				gcs[jid].set_subject(jid,
+					gcs[jid].subjects[jid])
 			return
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
