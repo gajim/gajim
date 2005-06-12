@@ -128,7 +128,8 @@ class VcardWindow:
 		if file:
 			filesize = os.path.getsize(file) # in bytes
 			if filesize > 8192:
-				dialogs.ErrorDialog(_('The filesize of image "%s" is too large') % file, _('The file must not be more than 8 kilobytes')).get_response()
+				dialogs.ErrorDialog(_('The filesize of image "%s" is too large') % file,
+				_('The file must not be more than 8 kilobytes.')).get_response()
 				return
 			fd = open(file)
 			data = fd.read()
