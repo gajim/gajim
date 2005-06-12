@@ -462,12 +462,11 @@ class HigDialog(Dialog):
         return response
 
 class ConfirmationDialog(HigDialog):
-    def __init__(self, pritext, sectext=''):
-        """HIG compliant confirmation dialog."""
-        HigDialog.__init__(
-            self, None, pritext, sectext, gtk.STOCK_DIALOG_WARNING,
-            [ [gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL], [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
-        )
+	"""HIG compliant confirmation dialog."""
+	def __init__(self, pritext, sectext=''):
+		HigDialog.__init__(self, None, pritext, sectext,
+			gtk.STOCK_DIALOG_WARNING, [ [gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL],
+			[ gtk.STOCK_OK, gtk.RESPONSE_OK ] ])
 
 class WarningDialog(HigDialog):
     def __init__(self, pritext, sectext=''):
@@ -515,7 +514,7 @@ class Subscription_request_window:
 		self.jid = jid
 		self.account = account
 		xml.get_widget('from_label').set_text(
-			_('Subscription request from %s') % self.jid)
+			_('Subscription request for account %s from %s') % (account, self.jid))
 		xml.get_widget('message_textview').get_buffer().set_text(text)
 		xml.signal_autoconnect(self)
 		self.window.show_all()
