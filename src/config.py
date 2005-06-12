@@ -2378,6 +2378,7 @@ class ManageBookmarksWindow:
 
 			gajim.connections[account[1]].store_bookmarks()
 
+		self.plugin.roster.make_menu()
 		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):

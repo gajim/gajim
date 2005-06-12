@@ -292,9 +292,12 @@ class RosterWindow:
 		#join gc
 		sub_menu = gtk.Menu()
 		join_gc_menuitem.set_submenu(sub_menu)
+		at_least_one_account_connected = False
 		for account in gajim.connections:
 			if gajim.connections[account].connected <= 1:
 				continue
+			if not at_least_one_account_connected:
+				at_least_one_account_connected = True
 			label = gtk.Label()
 			label.set_markup('<u>' + account.upper() +'</u>')
 			item = gtk.MenuItem()
@@ -312,13 +315,14 @@ class RosterWindow:
 				item.connect('activate', self.on_bookmark_menuitem_activate,
 					account, bookmark)
 
-		newitem = gtk.MenuItem() # seperator
-		sub_menu.append(newitem)
+		if at_least_one_account_connected:
+			newitem = gtk.MenuItem() # seperator
+			sub_menu.append(newitem)
 		
-		newitem = gtk.MenuItem('Bookmarks')
-		sub_menu.append(newitem)
-		newitem.connect('activate', self.on_bookmarks_menuitem_activate)
-		sub_menu.show_all()
+			newitem = gtk.MenuItem('Bookmarks')
+			sub_menu.append(newitem)
+			newitem.connect('activate', self.on_bookmarks_menuitem_activate)
+			sub_menu.show_all()
 
 		if len(gajim.connections) >= 2: # 2 or more accounts? make submenus
 			#add

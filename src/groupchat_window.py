@@ -294,11 +294,11 @@ class GroupchatWindow(chat.Chat):
 
 	def on_add_bookmark_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
-		bm = { 'name': '',
-			   'jid': self.get_active_jid(),
+		bm = { 'name': room_jid,
+			   'jid': room_jid,
 			   'autojoin': '0',
 			   'password': '',
-			   'nick': self.nicks[self.get_active_jid()]
+			   'nick': self.nicks[room_jid]
 			 }
 		
 		for bookmark in gajim.connections[self.account].bookmarks:
@@ -311,13 +311,7 @@ class GroupchatWindow(chat.Chat):
 		gajim.connections[self.account].bookmarks.append(bm)
 		gajim.connections[self.account].store_bookmarks()
 		
-		#FIXME: use join_gc_window [where user can put password] and change the
-		#name of the boookmark [default: fill with room's 'name']
-		dialogs.InformationDialog(
-				_('Bookmark has been added successfully'),
-				_('You can find the bookmark for room "%s" in your roster.') % \
-				room_jid.split('@')[0]).get_response()
-		
+		self.plugin.roster.make_menu()
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
