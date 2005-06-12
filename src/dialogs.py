@@ -257,6 +257,7 @@ class AddNewContactWindow:
 		self.protocol_combobox = self.xml.get_widget('protocol_combobox')
 		self.jid_entry = self.xml.get_widget('jid_entry')
 		self.nickname_entry = self.xml.get_widget('nickname_entry')
+		self.xml.get_widget('title_label').set_text('Fill in the data for the contact you want to add in contact ' + account)
 		self.old_uid_value = ''
 		liststore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
 		liststore.append(['Jabber', ''])
