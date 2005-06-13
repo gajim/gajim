@@ -787,7 +787,9 @@ class Interface:
 			'statusmsgcolor': gajim.config.get('statusmsgcolor'),
 		}
 		parser.read()
-		gajim.verbose = gajim.config.get('verbose')
+		# Do not set gajim.verbose to False if -v option was given
+		if gajim.config.get('verbose'):
+			gajim.verbose = True
 		#add default emoticons is there is not in the config file
 		if len(gajim.config.get_per('emoticons')) == 0:
 			for emot in gajim.config.emoticons_default:
