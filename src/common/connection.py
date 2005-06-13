@@ -627,7 +627,7 @@ class Connection:
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
-				''))
+				_('Check your connection or try again later')))
 			return None
 
 		con.RegisterHandler('message', self._messageCB)
@@ -665,7 +665,7 @@ class Connection:
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
-				_('Please check that you have an internet connection available')))
+				_('Check your connection or try again later')))
 			return None
 		if auth:
 			con.initRoster()
