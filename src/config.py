@@ -1303,6 +1303,10 @@ _('There was a problem retrieving your GPG secret keys.')).get_response()
 			if not widget.get_active():
 				w.set_text('')
 
+	def on_custom_host_port_checkbutton_toggled(self, widget):
+		isactive = widget.get_active()
+		self.xml.get_widget('custom_host_port_hbox').set_sensitive(isactive)
+
 	def on_gpg_save_password_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled_and_clear(widget, [
 			self.xml.get_widget('gpg_password_entry')])
