@@ -518,7 +518,7 @@ class RosterWindow:
 				keyID = attached_keys[2*i+1]
 		public_keys = gajim.connections[account].ask_gpg_keys()
 		public_keys['None'] = 'None'
-		w = dialogs.ChooseGPGKeyDialog(_('Assign PGP Key'), _('Select a key to apply to the contact'), 
+		w = dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'), _('Select a key to apply to the contact'), 
 			public_keys, keyID)
 		keyID = w.run()
 		if keyID == -1:
@@ -557,7 +557,7 @@ class RosterWindow:
 		user = self.contacts[account][jid][0]
 		
 		menu = gtk.Menu()
-		item = gtk.MenuItem(_('Start chat'))
+		item = gtk.MenuItem(_('Start Chat'))
 		menu.append(item)
 		item.connect('activate', self.on_roster_treeview_row_activated, path)
 		item = gtk.MenuItem(_('Rename'))
@@ -570,7 +570,7 @@ class RosterWindow:
 			item = gtk.MenuItem()
 			menu.append(item)
 			if gajim.config.get('usegpg'):
-				item = gtk.MenuItem(_('Assign OpenPGP key'))
+				item = gtk.MenuItem(_('Assign OpenPGP Key'))
 				menu.append(item)
 				item.connect('activate', self.on_assign_pgp_key, user, account)
 				item = gtk.MenuItem()
