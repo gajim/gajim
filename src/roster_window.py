@@ -241,14 +241,19 @@ class RosterWindow:
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
 
-	def join_gc_room(self, account, bookmark):
-		jid = bookmark['jid']
-		self.new_room(jid, bookmark['nick'], account)
-		self.plugin.windows[account]['gc'][jid].set_active_tab(jid)
-		self.plugin.windows[account]['gc'][jid].window.present()
+	def join_gc_room(self, account, room_jid, nick, password):
+		if room_jid in self.plugin.windows[account]['gc']:
+			ErrorDialog(_('You are already in room ' + room_jid)).get_response()
+			return
+		room, server = room_jid.split('@')
+		self.new_room(room_jid, nick, account)
+		self.plugin.windows[account]['gc'][room_jid].set_active_tab(room_jid)
+		self.plugin.windows[account]['gc'][room_jid].window.present()
+		gajim.connections[account].join_gc(nick, room, server, password)
 
 	def on_bookmark_menuitem_activate(self, widget, account, bookmark):
-		self.join_gc_room(account, bookmark)
+		self.join_gc_room(account, bookmark['jid'], bookmark['nick'],
+			bookmark['password'])
 
 	def on_bm_header_changed_state(self, widget, event):
 		widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state

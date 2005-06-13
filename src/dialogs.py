@@ -616,20 +616,15 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		server = self.xml.get_widget('server_entry').get_text()
 		password = self.xml.get_widget('password_entry').get_text()
 		jid = '%s@%s' % (room, server)
-		if jid in self.plugin.windows[self.account]['gc']:
-			ErrorDialog(_('You are already in room ' + jid)).get_response()
-			return
 		if jid in self.recently_groupchat:
 			self.recently_groupchat.remove(jid)
 		self.recently_groupchat.insert(0, jid)
 		if len(self.recently_groupchat) > 10:
 			self.recently_groupchat = self.recently_groupchat[0:10]
 		gajim.config.set('recently_groupchat', ' '.join(self.recently_groupchat))
-		self.plugin.roster.new_room(jid, nickname, self.account)
-		self.plugin.windows[self.account]['gc'][jid].set_active_tab(jid)
-		self.plugin.windows[self.account]['gc'][jid].window.present()
-		gajim.connections[self.account].join_gc(nickname, room, server, password)
-			
+		
+		self.plugin.roster.join_gc_room(self.account, jid, nickname, password)
+
 		self.window.destroy()
 
 class NewMessageDialog:

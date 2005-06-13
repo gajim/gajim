@@ -599,9 +599,7 @@ class Interface:
 		#Auto join GC windows if neccessary
 		for bm in bms:
 			if bm['autojoin'] == '1':
-				self.roster.join_gc_room(account, bm)
-				room, server = bm['jid'].split('@')
-				gajim.connections[account].join_gc(bm['nick'], room, server,
+				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
 					bm['password'])
 		self.roster.make_menu()
 										
