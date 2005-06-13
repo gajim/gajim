@@ -681,23 +681,6 @@ class GroupchatWindow(chat.Chat):
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_actions_menu', APP)
 		self.gc_actions_menu = xm.get_widget('gc_actions_menu')
 
-		configure_menuitem, change_subject_menuitem, bookmark_room_menuitem = self.gc_actions_menu.get_children()
-
-		configure_menuitem.connect('activate',
-			self.on_configure_room_menuitem_activate)
-		change_subject_menuitem.connect('activate',
-			self.on_change_subject_menuitem_activate)
-		bookmark_room_menuitem.connect('activate',
-			self.on_bookmark_room_menuitem_activate)
-
-		# connect the buttons to their respective functions
-		actions_button = self.xmls[room_jid].get_widget(
-			'actions_button')
-		actions_button.connect('clicked', self.on_actions_button_clicked)
-		send_button = self.xmls[room_jid].get_widget(
-			'send_button')
-		send_button.connect('clicked', self.on_send_button_clicked)
-		
 		#status_image, nickname, real_jid, show
 		store = gtk.TreeStore(gtk.Image, str, str, str)
 		store.set_sort_column_id(1, gtk.SORT_ASCENDING)
