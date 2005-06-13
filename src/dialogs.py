@@ -245,10 +245,6 @@ class ChangeStatusMessageDialog:
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
 	def __init__(self, plugin, account, jid = None):
-		if gajim.connections[account].connected < 2:
-			ErrorDialog(_('You are not connected to the server.'), \
-					_('Without a connection, you can not add a contact')).get_response()
-			return
 		self.plugin = plugin
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_new_contact_window', APP)
@@ -257,9 +253,14 @@ class AddNewContactWindow:
 		self.protocol_combobox = self.xml.get_widget('protocol_combobox')
 		self.jid_entry = self.xml.get_widget('jid_entry')
 		self.nickname_entry = self.xml.get_widget('nickname_entry')
-		self.xml.get_widget('title_label').set_text('Fill in the data for the contact you want to add in contact ' + account)
+		if len(gajim.connections) >= 2:
+			prompt_text =\
+_('Please fill in the data of the contact you want to add in account %s') %account
+		else:
+			prompt_text = _('Please fill in the data of the contact you want to add')
+		self.xml.get_widget('prompt_label').set_text(prompt_text)
 		self.old_uid_value = ''
-		liststore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		liststore = gtk.ListStore(str, str)
 		liststore.append(['Jabber', ''])
 		self.agents = ['Jabber']
 		jid_agents = []
