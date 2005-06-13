@@ -810,12 +810,22 @@ class Chat:
 			self.sent_history_pos[jid] = self.sent_history_pos[jid] + 1
 			conv_buf.set_text(self.sent_history[jid][self.sent_history_pos[jid]])
 
+	def paint_banner(self, jid):
+		theme = gajim.config.get('roster_theme')
+		bgcolor = gajim.config.get_per('themes', theme, 'bannerbgcolor')
+		textcolor = gajim.config.get_per('themes', theme, 'bannertextcolor')
+		# the backgrounds are colored by using eventboxes and
+		# setting the bg color of the eventboxes. There is a
+		# separate event box for each component (name label and
+		# status icon). The avatar has one too in the glade file.
+		self.xmls[jid].get_widget('banner_eventbox').modify_bg(
+			gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
+		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
+		banner_name_label.modify_fg(gtk.STATE_NORMAL,
+			gtk.gdk.color_parse(textcolor))
+
 	def repaint_colored_widgets(self):
 		"""Repaint widgets (banner) in the window/tab with theme color"""
-		# get the bg color of the bar from the current theme colors
-		bgcolor = gajim.config.get('accountbgcolor') #FIXME: use uniq color
-
 		# iterate through tabs/windows and repaint
 		for jid in self.xmls:
-			self.xmls[jid].get_widget('banner_eventbox').modify_bg(
-					gtk.STATE_NORMAL,	gtk.gdk.color_parse(bgcolor))
+			self.paint_banner(jid)

@@ -1387,13 +1387,14 @@ class RosterWindow:
 
 	def iconCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for icon renderer'''
+		theme = gajim.config.get('roster_theme')
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('cell-background', 
-				gajim.config.get('accountbgcolor'))
+				gajim.config.get_per('themes', theme, 'accountbgcolor'))
 			renderer.set_property('xalign', 0)
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('cell-background', 
-				gajim.config.get('groupbgcolor'))
+				gajim.config.get_per('themes', theme, 'groupbgcolor'))
 			renderer.set_property('xalign', 0.5)
 		else:
 			jid = model.get_value(iter, 3)
@@ -1404,39 +1405,43 @@ class RosterWindow:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
 				renderer.set_property('cell-background', 
-					gajim.config.get('userbgcolor'))
+					gajim.config.get_per('themes', theme, 'contactbgcolor'))
 			renderer.set_property('xalign', 1)
 		renderer.set_property('width', 20)
 	
 	def nameCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for name renderer'''
+		theme = gajim.config.get('roster_theme')
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('foreground', 
-				gajim.config.get('accounttextcolor'))
+				gajim.config.get_per('themes', theme, 'accounttextcolor'))
 			renderer.set_property('cell-background', 
-				gajim.config.get('accountbgcolor'))
-			renderer.set_property('font', gajim.config.get('accountfont'))
+				gajim.config.get_per('themes', theme, 'accountbgcolor'))
+			renderer.set_property('font',
+				gajim.config.get_per('themes', theme, 'accountfont'))
 			renderer.set_property('xpad', 0)
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('foreground', 
-				gajim.config.get('grouptextcolor'))
+				gajim.config.get_per('themes', theme, 'grouptextcolor'))
 			renderer.set_property('cell-background', 
-				gajim.config.get('groupbgcolor'))
-			renderer.set_property('font', gajim.config.get('groupfont'))
+				gajim.config.get_per('themes', theme, 'groupbgcolor'))
+			renderer.set_property('font',
+				gajim.config.get_per('themes', theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
 		else:
 			jid = model.get_value(iter, 3)
 			account = model.get_value(iter, 4)
 			renderer.set_property('foreground', 
-				gajim.config.get('usertextcolor'))
+				gajim.config.get_per('themes', theme, 'contacttextcolor'))
 			if jid in self.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in self.to_be_removed[account]:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
 				renderer.set_property('cell-background', 
-					gajim.config.get('userbgcolor'))
-			renderer.set_property('font', gajim.config.get('userfont'))
+					gajim.config.get_per('themes', theme, 'contactbgcolor'))
+			renderer.set_property('font',
+				gajim.config.get_per('themes', theme, 'contactfont'))
 			renderer.set_property('xpad', 8)
 
 	def get_show(self, luser):

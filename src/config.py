@@ -148,54 +148,6 @@ class PreferencesWindow:
 		st = gajim.config.get('use_transports_iconsets')
 		self.xml.get_widget('transports_iconsets_checkbutton').set_active(st)
 
-		# Roster colors / font
-		self.theme_default = {
-			'green': {
-				'accounttextcolor': '#ffffff',
-				'grouptextcolor': '#0000ff',
-				'contacttextcolor': '#000000',
-				'accountbgcolor': '#94aa8c',
-				'groupbgcolor': '#eff3e7',
-				'contactbgcolor': '#ffffff',
-				'accountfont': 'Sans Bold 10',
-				'groupfont': 'Sans Italic 10',
-				'userfont': 'Sans 10',
-			},
-			'cyan': {
-				'accounttextcolor': '#ff0000',
-				'grouptextcolor': '#0000ff',
-				'contacttextcolor': '#000000',
-				'accountbgcolor': '#9fdfff',
-				'groupbgcolor': '#ffffff',
-				'contactbgcolor': '#ffffff',
-				'accountfont': 'Sans Bold 10',
-				'groupfont': 'Sans Italic 10',
-				'userfont': 'Sans 10'
-			},
-			'marine': {
-				'accounttextcolor': '#ffffff',
-				'grouptextcolor': '#0000ff',
-				'contacttextcolor': '#000000',
-				'accountbgcolor': '#918caa',
-				'groupbgcolor': '#e9e7f3',
-				'contactbgcolor': '#ffffff',
-				'accountfont': 'Sans Bold 10',
-				'groupfont': 'Sans Italic 10',
-				'userfont': 'Sans 10'
-			},
-            'human': {
-				'accounttextcolor': '#ffffff',
-				'grouptextcolor': '#ab5920',
-				'contacttextcolor': '#000000',
-				'accountbgcolor': '#996442',
-				'groupbgcolor': '#e3ca94',
-				'contactbgcolor': '#ffffff',
-				'accountfont': 'Sans Bold 10',
-				'groupfont': 'Sans Italic 10',
-				'userfont': 'Sans 10'
-            },
-		}
-
 		theme_combobox = self.xml.get_widget('theme_combobox')
 		cell = gtk.CellRendererText()
 		theme_combobox.pack_start(cell, True)
@@ -203,14 +155,11 @@ class PreferencesWindow:
 		model = gtk.ListStore(gobject.TYPE_STRING)
 		theme_combobox.set_model(model)
 		i = 0
-		for t in self.theme_default:
+		for t in gajim.config.get_per('themes'):
 			model.append([t])
 			if gajim.config.get('roster_theme') == t:
 				theme_combobox.set_active(i)
 			i += 1
-		model.append(['custom'])
-		if gajim.config.get('roster_theme') == 'custom':
-			theme_combobox.set_active(i)
 		self.on_theme_combobox_changed(theme_combobox)
 
 		#use tabbed chat window

@@ -97,24 +97,14 @@ class TabbedChatWindow(chat.Chat):
 	def draw_name_banner(self, name, jid):
 		'''Draw the fat line at the top of the window that 
 		houses the status icon, name, jid, and avatar'''
-
 		# this is the text for the big brown bar
 		label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
 			% (name, jid)
 
-		# get the bg color of the bar from the current theme colors
-		bgcolor = gajim.config.get('accountbgcolor')
-
-		# the backgrounds are colored by using eventboxes and 
-		# setting the bg color of the eventboxes. There is a
-		# separate event box for each component (name label and
-		# status icon). The avatar has one too in the glade file.
-		self.xmls[jid].get_widget('banner_eventbox').modify_bg(
-					gtk.STATE_NORMAL,	gtk.gdk.color_parse(bgcolor))
 		# setup the label that holds name and jid
 		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
-		banner_name_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse('white'))
 		banner_name_label.set_markup(label_text)
+		self.paint_banner(jid)
 
 	def set_avatar(self, vcard):
 		if not vcard.has_key('PHOTO'):

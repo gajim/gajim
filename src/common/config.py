@@ -61,15 +61,6 @@ class Config:
 		'statusmsgcolor': [ opt_color, '#1eaa1e' ],
 		'collapsed_rows': [ opt_str, '' ],
 		'roster_theme': [ opt_str, 'green' ],
-		'accounttextcolor': [ opt_color, '#ffffff' ],
-		'accountbgcolor': [ opt_color, '#94aa8c' ],
-		'accountfont': [ opt_str, 'Sans Bold 10' ],
-		'grouptextcolor': [ opt_color, '#0000ff' ],
-		'groupbgcolor': [ opt_color, '#eff3e7' ],
-		'groupfont': [ opt_str, 'Sans Italic 10' ],
-		'contacttextcolor': [ opt_color, '#000000' ],
-		'contactbgcolor': [ opt_color, '#ffffff' ],
-		'userfont': [ opt_str, 'Sans 10' ],
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False ],
 		'sort_by_show': [ opt_bool, True ],
@@ -152,6 +143,19 @@ class Config:
 			'user': [ opt_str, '' ],
 			'pass': [ opt_str, '' ],
 		}, {}),
+		'themes': ({
+			'accounttextcolor': [ opt_color, '' ],
+			'accountbgcolor': [ opt_color, '' ],
+			'accountfont': [ opt_str, '' ],
+			'grouptextcolor': [ opt_color, '' ],
+			'groupbgcolor': [ opt_color, '' ],
+			'groupfont': [ opt_str, '' ],
+			'contacttextcolor': [ opt_color, '' ],
+			'contactbgcolor': [ opt_color, '' ],
+			'contactfont': [ opt_str, '' ],
+			'bannertextcolor': [ opt_color, '' ],
+			'bannerbgcolor': [ opt_color, '' ],
+		}, {}),
 	}
 
 	emoticons_default = {
@@ -231,6 +235,21 @@ class Config:
 		'contact_connected': [ True, '../data/sounds/connected.wav' ],
 		'contact_disconnected': [ True, '../data/sounds/disconnected.wav' ],
 		'message_sent': [ True, '../data/sounds/sent.wav' ],
+	}
+
+	themes_default = {
+		'green': [ '#ffffff', '#94aa8c', 'Sans Bold 10', '#0000ff', '#eff3e7',
+					'Sans Italic 10', '#000000', '#ffffff', 'Sans 10', '#ffffff',
+					'#94aa8c' ],
+		'cyan': [ '#ff0000', '#9fdfff', 'Sans Bold 10', '#0000ff', '#ffffff',
+					'Sans Italic 10', '#000000', '#ffffff', 'Sans 10', '#ffffff',
+					'#9fdfff' ],
+		'marine': [ '#ffffff', '#918caa', 'Sans Bold 10', '#0000ff', '#e9e7f3',
+					'Sans Italic 10', '#000000', '#ffffff', 'Sans 10', '#ffffff',
+					'#918caa' ],
+		'human': [ '#ffffff', '#996442', 'Sans Bold 10', '#ab5920', '#e3ca94',
+					'Sans Italic 10', '#000000', '#ffffff', 'Sans 10', '#ffffff',
+					'#996442' ],
 	}
 
 	def foreach(self, cb, data = None):

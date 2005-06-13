@@ -669,14 +669,8 @@ class GroupchatWindow(chat.Chat):
 			'conversation_textview')
 		self.name_labels[room_jid] = self.xmls[room_jid].get_widget(
 			'banner_name_label')
-		# set the fg colour of the label to white
-		self.name_labels[room_jid].modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse('white'))
+		self.paint_banner(room_jid)
 		
-		banner_eventbox = self.xmls[room_jid].get_widget('banner_eventbox')
-		# get the background color from the current theme
-		bgcolor = gajim.config.get('accountbgcolor')
-		banner_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
-
 		# connect the menuitems to their respective functions
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_actions_menu', APP)
 		xm.signal_autoconnect(self)

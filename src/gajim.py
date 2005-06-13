@@ -790,16 +790,27 @@ class Interface:
 		# Do not set gajim.verbose to False if -v option was given
 		if gajim.config.get('verbose'):
 			gajim.verbose = True
-		#add default emoticons is there is not in the config file
+		#add default emoticons if there is not in the config file
 		if len(gajim.config.get_per('emoticons')) == 0:
 			for emot in gajim.config.emoticons_default:
 				gajim.config.add_per('emoticons', emot)
 				gajim.config.set_per('emoticons', emot, 'path', gajim.config.emoticons_default[emot])
-		#add default status messages is there is not in the config file
+		#add default status messages if there is not in the config file
 		if len(gajim.config.get_per('statusmsg')) == 0:
 			for msg in gajim.config.statusmsg_default:
 				gajim.config.add_per('statusmsg', msg)
 				gajim.config.set_per('statusmsg', msg, 'message', gajim.config.statusmsg_default[msg])
+		#add default themes if there is not in the config file
+		if len(gajim.config.get_per('themes')) == 0:
+			d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
+				'grouptextcolor', 'groupbgcolor', 'groupfont', 'contacttextcolor',
+				'contactbgcolor', 'contactfont', 'bannertextcolor', 'bannerbgcolor']
+			default = gajim.config.themes_default
+			for theme in default:
+				gajim.config.add_per('themes', theme)
+				for o in d:
+					gajim.config.set_per('themes', theme, o,
+						default[theme][d.index(o)])
 
 		if gajim.verbose:
 			gajim.log.setLevel(gajim.logging.DEBUG)
