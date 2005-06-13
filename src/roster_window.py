@@ -243,7 +243,8 @@ class RosterWindow:
 
 	def join_gc_room(self, account, room_jid, nick, password):
 		if room_jid in self.plugin.windows[account]['gc']:
-			ErrorDialog(_('You are already in room ' + room_jid)).get_response()
+			dialogs.ErrorDialog(_('You are already in room ' + room_jid)
+					).get_response()
 			return
 		room, server = room_jid.split('@')
 		self.new_room(room_jid, nick, account)
@@ -935,7 +936,6 @@ class RosterWindow:
 		if message == -1:
 			return
 		self.send_status(account, status, message)
-		self.make_menu()
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status'''
@@ -959,7 +959,6 @@ class RosterWindow:
 													'sync_with_global_status'):
 				continue
 			self.send_status(acct, status, message)
-		self.make_menu()
 	
 	def update_status_comboxbox(self):
 		#table to change index in plugin.connected to index in combobox
@@ -995,6 +994,7 @@ class RosterWindow:
 				for user in luser_copy:
 					self.chg_user_status(user, 'offline', 'Disconnected', account)
 		self.update_status_comboxbox()
+		self.make_menu()
 
 	def new_chat(self, user, account):
 		if gajim.config.get('usetabbedchat'):
