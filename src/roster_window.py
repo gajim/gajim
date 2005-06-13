@@ -301,7 +301,6 @@ class RosterWindow:
 
 			for bookmark in gajim.connections[account].bookmarks:
 				item = gtk.MenuItem(bookmark['name'])
-				print bookmark['name']
 				sub_menu.append(item)
 				item.connect('activate', self.on_bookmark_menuitem_activate,
 					account, bookmark)
