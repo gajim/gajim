@@ -307,7 +307,7 @@ class Connection:
 																					errcode))
 		if not ptype or ptype == 'unavailable':
 			jid = prs.getFrom()
-			gajim.logger.write('status', status, jid.getStripped().encode('utf8'), show)
+			gajim.logger.write('status', status, str(jid).encode('utf8'), show)
 			account = prs.getFrom().getStripped().encode('utf8')
 			resource =  prs.getFrom().getResource().encode('utf8')
 			self.dispatch('NOTIFY', ( account, show, status,

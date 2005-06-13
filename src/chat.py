@@ -23,6 +23,7 @@ import pango
 import gobject
 import time
 import dialogs
+import history_window
 
 try:
 	import gtkspell
@@ -159,6 +160,15 @@ class Chat:
 	def on_close_button_clicked(self, button, jid):
 		"""When close button is pressed: close a tab"""
 		self.remove_tab(jid)
+
+	def on_history_button_clicked(self, widget):
+		"""When history button is pressed: call history window"""
+		jid = self.get_active_jid()
+		if self.plugin.windows['logs'].has_key(jid):
+			self.plugin.windows['logs'][jid].window.present()
+		else:
+			self.plugin.windows['logs'][jid] = history_window.\
+				HistoryWindow(self.plugin, jid, self.account)
 
 	def on_chat_window_focus_in_event(self, widget, event):
 		"""When window gets focus"""

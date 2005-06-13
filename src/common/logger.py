@@ -74,6 +74,9 @@ class Logger:
 			if common.gajim.config.get('log_notif_in_user_file'):
 				path_to_file = os.path.join(LOGPATH, ji)
 				if os.path.isdir(path_to_file):
+					jid = 'gcstatus'
+					msg = show + ':' + msg
+					show = nick
 					files.append(ji + '/' + ji)
 					if os.path.isfile(jid):
 						files.append(jid)
@@ -118,12 +121,20 @@ class Logger:
 			fic.write('\n')
 			fic.close()
 
-	def get_nb_line(self, jid):
+	def __get_path_to_file(self, fjid):
+		jid = fjid.split('/')[0]
+		path_to_file = os.path.join(LOGPATH, jid)
+		if os.path.isdir(path_to_file):
+			if fjid == jid: # we want to read the gc history
+				path_to_file = os.path.join(LOGPATH, jid + '/' + jid)
+			else: #we want to read pm history
+				path_to_file = os.path.join(LOGPATH, fjid)
+		return path_to_file
+
+	def get_nb_line(self, fjid):
 		'''return total number of lines in a log file
 		return 0 if log file does not exist'''
-		path_to_file = os.path.join(LOGPATH, jid.split('/')[0])
-		if os.path.isdir(path_to_file):
-			path_to_file = os.path.join(LOGPATH, jid)
+		path_to_file = self.__get_path_to_file(fjid)
 		if not os.path.exists(path_to_file):
 			return 0
 		fic = open(path_to_file, 'r')
@@ -133,12 +144,10 @@ class Logger:
 		fic.close()
 		return nb
 
-	def read(self, jid, begin_line, end_line):
+	def read(self, fjid, begin_line, end_line):
 		'''return number of lines read and the text in the lines
 		return 0 and empty respectively if log file does not exist'''
-		path_to_file = os.path.join(LOGPATH, jid.split('/')[0])
-		if os.path.isdir(path_to_file):
-			path_to_file = os.path.join(LOGPATH, jid)
+		path_to_file = self.__get_path_to_file(fjid)
 		if not os.path.exists(path_to_file):
 			return 0, []
 		fic = open(path_to_file, 'r')

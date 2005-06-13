@@ -26,7 +26,6 @@ import urllib
 import base64
 
 import dialogs
-import history_window
 import chat
 
 from common import gajim
@@ -207,15 +206,6 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
-
-	def on_history_button_clicked(self, widget):
-		"""When history button is pressed: call history window"""
-		jid = self.get_active_jid()
-		if self.plugin.windows['logs'].has_key(jid):
-			self.plugin.windows['logs'][jid].window.present()
-		else:
-			self.plugin.windows['logs'][jid] = history_window.\
-				HistoryWindow(self.plugin, jid, self.account)
 
 	def on_send_button_clicked(self, widget):
 		"""When send button is pressed: send the current message"""

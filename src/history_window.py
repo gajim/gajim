@@ -125,7 +125,17 @@ class HistoryWindow:
 		end_iter = buffer.get_end_iter()
 		tim = time.strftime('[%x %X] ', time.localtime(float(date)))
 		buffer.insert(start_iter, tim)
-		if type == 'recv':
+		if type == 'gc':
+			msg = ':'.join(data[1:])
+			buffer.insert_with_tags_by_name(start_iter, msg,
+							'incoming')
+		elif type == 'gcstatus':
+			nick = data[0]
+			show = data[1]
+			msg = ':'.join(data[2:])
+			buffer.insert_with_tags_by_name(start_iter,
+						_('%s is now %s: %s') % (nick, show, msg), 'status')
+		elif type == 'recv':
 			msg = ':'.join(data[0:])
 			buffer.insert_with_tags_by_name(start_iter, msg,
 							'incoming')
