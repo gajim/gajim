@@ -8,11 +8,12 @@ gtkspell and aspell-LANG (where lang is your locale eg. en, fr etc)
 
 Compile-time Requirements:
 python-dev
-libgtk2.0-dev
-libxss-dev (for idle module)
+libgtk2.0-dev (aka gtk2-devel)
+libxss-dev (for idle detection module) [Debian splits xscreensaver hopefully your distro does not]
 libgtkspell-dev (for gtkspell module)
 
 Optionally:
+dnspython (for SRV support; if you don't know what that is you don't need it)
 GnomePythonExtras 2.10 or above (so you can avoid compliling trayicon and gtkspell)
 possible package name for your distro: python-gnome2-extras
 
