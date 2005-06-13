@@ -2058,6 +2058,15 @@ _('Without a connection, you can not browse available services')).get_response()
 			return
 		jid = model.get_value(iter, 1)
 		node = model.get_value(iter, 2)
+		registered_transports = []
+		contacts = self.plugin.roster.contacts[self.account]
+		for j in contacts:
+			if 'Transports' in contacts[j][0].groups:
+				registered_transports.append(j)
+		if jid in registered_transports:
+			self.register_button.set_label('_Edit')
+		else:
+			self.register_button.set_label('Re_gister')
 		if self.agent_infos[jid + node].has_key('features'):
 			if common.xmpp.NS_REGISTER in self.agent_infos[jid + node] \
 					['features']:
