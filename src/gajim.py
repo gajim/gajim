@@ -429,7 +429,7 @@ class Interface:
 		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
-		dialogs.Subscription_request_window(self, array[0], array[1], account)
+		dialogs.SubscriptionRequestWindow(self, array[0], array[1], account)
 
 	def handle_event_subscribed(self, account, array):
 		#('SUBSCRIBED', account, (jid, resource))

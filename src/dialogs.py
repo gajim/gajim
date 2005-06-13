@@ -506,7 +506,7 @@ class ErrorDialog(HigDialog):
 		)
 
 
-class Subscription_request_window:
+class SubscriptionRequestWindow:
 	def __init__(self, plugin, jid, text, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'subscription_request_window', APP)
 		self.window = xml.get_widget('subscription_request_window')
