@@ -2066,7 +2066,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		if jid in registered_transports:
 			self.register_button.set_label(_('_Edit'))
 		else:
-			self.register_button.set_label('Re_gister')
+			self.register_button.set_label(_('Re_gister'))
 		if self.agent_infos[jid + node].has_key('features'):
 			if common.xmpp.NS_REGISTER in self.agent_infos[jid + node] \
 					['features']:
