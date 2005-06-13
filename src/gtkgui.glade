@@ -15208,7 +15208,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image678">
+	<widget class="GtkImage" id="image684">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-properties</property>
 	  <property name="icon_size">1</property>
@@ -15228,7 +15228,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image679">
+	<widget class="GtkImage" id="image685">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-edit</property>
 	  <property name="icon_size">1</property>
@@ -15242,13 +15242,13 @@ the Jabber network.</property>
   </child>
 
   <child>
-    <widget class="GtkImageMenuItem" id="add_bookmark1">
+    <widget class="GtkImageMenuItem" id="bookmark_room_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Add _Bookmark</property>
+      <property name="label" translatable="yes">_Bookmark This Room</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image680">
+	<widget class="GtkImage" id="image686">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>

@@ -48,6 +48,8 @@ class GroupchatWindow(chat.Chat):
 		self.room_creation = {}
 		self.nick_hits = {}
 		self.last_key_tabs = {}
+		self.hpaneds = {} # used for auto positioning
+		self.hpaned_position = gajim.config.get('gc-hpaned-position')
 		self.new_room(room_jid, nick)
 		self.show_title()
 		self.xml.signal_connect('on_groupchat_window_destroy', 
@@ -62,6 +64,14 @@ class GroupchatWindow(chat.Chat):
 			self.on_chat_notebook_switch_page)
 		self.xml.signal_connect('on_close_window_activate',
 			self.on_close_window_activate)
+
+		# get size and position from config
+		if gajim.config.get('saveposition'):
+			self.window.move(gajim.config.get('gc-x-position'),
+					gajim.config.get('gc-y-position'))
+			self.window.resize(gajim.config.get('gc-width'),
+					gajim.config.get('gc-height'))
+
 		self.window.show_all()
 
 	def save_var(self, jid):
@@ -88,14 +98,25 @@ class GroupchatWindow(chat.Chat):
 		"""close window"""
 		for room_jid in self.xmls:
 			if time.time() - self.last_message_time[room_jid] < 2:
-				dialog = dialogs.ConfirmationDialog(_('You just received a new message in room "%s".'), \
-					_('If you close this window, this message will be lost.') % \
-					room_jid.split('@')[0])
+				dialog = dialogs.ConfirmationDialog(
+		_('You just received a new message in room "%s"') %room_jid.split('@')[0],
+			_('If you close this window, this message will be lost.')
+					)
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return True #stop the propagation of the event
 		for room_jid in self.xmls:
-			gajim.connections[self.account].send_gc_status(self.nicks[room_jid], \
+			gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
 				room_jid, 'offline', 'offline')
+
+		if gajim.config.get('saveposition'):
+		# save window position and size
+			gajim.config.set('gc-hpaned-position', self.hpaned_position)
+			x, y = self.window.get_position()
+			gajim.config.set('gc-x-position', x)
+			gajim.config.set('gc-y-position', y)
+			width, height = self.window.get_size()
+			gajim.config.set('gc-width', width)
+			gajim.config.set('gc-height', height)
 	
 	def on_groupchat_window_destroy(self, widget):
 		chat.Chat.on_window_destroy(self, widget, 'gc')
@@ -292,7 +313,7 @@ class GroupchatWindow(chat.Chat):
 		room_jid = self.get_active_jid()
 		gajim.connections[self.account].request_gc_config(room_jid)
 
-	def on_add_bookmark_menuitem_activate(self, widget):
+	def on_bookmark_room_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
 		bm = { 'name': room_jid,
 			   'jid': room_jid,
@@ -475,17 +496,17 @@ class GroupchatWindow(chat.Chat):
 
 	def ban(self, widget, room_jid, jid):
 		"""ban a user"""
-		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, \
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid,
 			'outcast')
 
 	def grant_membership(self, widget, room_jid, jid):
 		"""grant membership privilege to a user"""
-		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, \
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid,
 			'member')
 
 	def revoke_membership(self, widget, room_jid, jid):
 		"""revoke membership privilege to a user"""
-		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, \
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid,
 			'none')
 
 	def grant_admin(self, widget, room_jid, jid):
@@ -494,7 +515,7 @@ class GroupchatWindow(chat.Chat):
 
 	def revoke_admin(self, widget, room_jid, jid):
 		"""revoke administrative privilege to a user"""
-		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, \
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid,
 			'member')
 
 	def grant_owner(self, widget, room_jid, jid):
@@ -619,12 +640,13 @@ class GroupchatWindow(chat.Chat):
 
 		chat.Chat.remove_tab(self, room_jid, 'gc')
 		if len(self.xmls) > 0:
-			gajim.connections[self.account].send_gc_status(self.nicks[room_jid], \
+			gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
 				room_jid, 'offline', 'offline')
 			del self.nicks[room_jid]
 			del self.list_treeview[room_jid]
 			del self.subjects[room_jid]
 			del self.name_labels[room_jid]
+			del self.hpaneds[room_jid]
 
 	def new_room(self, room_jid, nick):
 		self.names[room_jid] = room_jid.split('@')[0]
@@ -636,8 +658,13 @@ class GroupchatWindow(chat.Chat):
 		self.room_creation[room_jid] = time.time()
 		self.nick_hits[room_jid] = []
 		self.last_key_tabs[room_jid] = False
+		self.hpaneds[room_jid] = self.xmls[room_jid].get_widget('hpaned')
 		self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
 			'list_treeview')
+		# we want to know when the the widget resizes, because that is
+		# an indication that the hpaned has moved...
+		# TODO: Find a better indicator that the hpaned has moved.
+		self.list_treeview[room_jid].connect('size-allocate', self.on_treeview_size_allocate)
 		conversation_textview = self.xmls[room_jid].get_widget(
 			'conversation_textview')
 		self.name_labels[room_jid] = self.xmls[room_jid].get_widget(
@@ -654,14 +681,14 @@ class GroupchatWindow(chat.Chat):
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_actions_menu', APP)
 		self.gc_actions_menu = xm.get_widget('gc_actions_menu')
 
-		configure_menuitem, change_subject_menuitem, add_bookmark_menuitem = self.gc_actions_menu.get_children()
+		configure_menuitem, change_subject_menuitem, bookmark_room_menuitem = self.gc_actions_menu.get_children()
 
 		configure_menuitem.connect('activate',
 			self.on_configure_room_menuitem_activate)
 		change_subject_menuitem.connect('activate',
 			self.on_change_subject_menuitem_activate)
-		add_bookmark_menuitem.connect('activate',
-			self.on_add_bookmark_menuitem_activate)
+		bookmark_room_menuitem.connect('activate',
+			self.on_bookmark_room_menuitem_activate)
 
 		# connect the buttons to their respective functions
 		actions_button = self.xmls[room_jid].get_widget(
@@ -696,9 +723,21 @@ class GroupchatWindow(chat.Chat):
 		column.set_visible(False)
 		self.list_treeview[room_jid].set_expander_column(column)
 
+		# set the position of the current hpaned
+		self.hpaneds[room_jid] = self.xmls[room_jid].get_widget(
+			'hpaned')
+		self.hpaneds[room_jid].set_position(self.hpaned_position)
+
 		self.redraw_tab(room_jid)
 		self.show_title()
 		conversation_textview.grab_focus()
+
+	def on_treeview_size_allocate(self, widget, allocation):
+		"""The MUC treeview has resized. Move the hpaneds in all tabs to match"""
+		thisroom_jid = self.get_active_jid()
+		self.hpaned_position = self.hpaneds[thisroom_jid].get_position()
+		for room_jid in self.xmls:
+			self.hpaneds[room_jid].set_position(self.hpaned_position)
 
 	def tree_cell_data_func(self, column, renderer, model, iter, data=None):
 		if model.iter_parent(iter):
@@ -708,7 +747,6 @@ class GroupchatWindow(chat.Chat):
 			bgcolor = gajim.config.get('groupbgcolor')
 			renderer.set_property('cell-background', bgcolor)
 			
-
 	def on_actions_button_clicked(self, button):
 		"""popup action menu"""
 		self.gc_actions_menu.popup(None, None, None, 1, 0)

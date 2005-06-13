@@ -58,6 +58,14 @@ class TabbedChatWindow(chat.Chat):
 			self.on_chat_notebook_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', 
 			self.on_chat_notebook_switch_page)
+
+		if gajim.config.get('saveposition'):
+		# get window position and size from config
+			self.window.move(gajim.config.get('chat-x-position'),
+					gajim.config.get('chat-y-position'))
+			self.window.resize(gajim.config.get('chat-width'),
+					gajim.config.get('chat-height'))
+
 		self.window.show_all()
 
 	def save_var(self, jid):
@@ -180,6 +188,15 @@ class TabbedChatWindow(chat.Chat):
 					_('If you close the window, this message will be lost.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return True #stop the propagation of the event
+
+		if gajim.config.get('saveposition'):
+		# save the window size and position
+			x, y = self.window.get_position()
+			gajim.config.set('chat-x-position', x)
+			gajim.config.set('chat-y-position', y)
+			width, height = self.window.get_size()
+			gajim.config.set('chat-width', width)
+			gajim.config.set('chat-height', height)
 
 	def on_tabbed_chat_window_destroy(self, widget):
 		#clean self.plugin.windows[self.account]['chats']
