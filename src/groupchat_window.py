@@ -679,6 +679,7 @@ class GroupchatWindow(chat.Chat):
 
 		# connect the menuitems to their respective functions
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_actions_menu', APP)
+		xm.signal_autoconnect(self)
 		self.gc_actions_menu = xm.get_widget('gc_actions_menu')
 
 		#status_image, nickname, real_jid, show
