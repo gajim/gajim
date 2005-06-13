@@ -514,8 +514,12 @@ class SubscriptionRequestWindow:
 		self.plugin = plugin
 		self.jid = jid
 		self.account = account
-		xml.get_widget('from_label').set_text(
-			_('Subscription request for account %s from %s') % (account, self.jid))
+		if len(gajim.connections) >= 2:
+			prompt_text = _('Subscription request for account %s from %s')\
+				% (account, self.jid)
+		else:
+			prompt_text = _('Subscription request from %s') % self.jid
+		xml.get_widget('from_label').set_text(prompt_text)
 		xml.get_widget('message_textview').get_buffer().set_text(text)
 		xml.signal_autoconnect(self)
 		self.window.show_all()
