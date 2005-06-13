@@ -594,6 +594,7 @@ class Connection:
 		"""Connect and authenticate to the Jabber server"""
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+		port = gajim.config.get_per('accounts', self.name, 'port')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
 		usessl = gajim.config.get_per('accounts', self.name, 'usessl')
 
@@ -613,14 +614,11 @@ class Connection:
 			con = common.xmpp.Client(hostname)
 		else:
 			con = common.xmpp.Client(hostname, debug = [])
-			#debug = [common.jabber.DBG_ALWAYS], log = sys.stderr, \
-			#connection=common.xmlstream.TCP_SSL, port=5223, proxy = proxy)
-		common.xmpp.dispatcher.DefaultTimeout = 45
+		common.xmpp.dispatcher.DefaultTimeout = 45 # wait 45 seconds until you timeout connection
 		con.UnregisterDisconnectHandler(con.DisconnectHandler)
 		con.RegisterDisconnectHandler(self._disconnectedCB)
-		port = 5222
-		if usessl:
-			port = 5223
+
+		#pass ssl optional arg if neccessary when client.py is patched
 		con_type = con.connect((hostname, port), proxy = proxy) #FIXME: blocking
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
@@ -896,9 +894,10 @@ class Connection:
 		common.xmpp.dispatcher.DefaultTimeout = 45
 		c.UnregisterDisconnectHandler(c.DisconnectHandler)
 		c.RegisterDisconnectHandler(self._disconnectedCB)
-		port = 5222
-#		if usessl:
-#			port = 5223
+		port = gajim.config.get_per('accounts', self.name, 'port')
+		#FIXME: use ssl
+		#if usessl:
+			#port = 5223
 		#FIXME: blocking
 		con_type = c.connect((config['hostname'], port), proxy = proxy)
 		if not con_type:

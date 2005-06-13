@@ -119,6 +119,7 @@ class Config:
 		'accounts': ({
 			'name': [ opt_str, '' ],
 			'hostname': [ opt_str, '' ],
+			'port': [ opt_int, 5222 ],
 			'savepass': [ opt_bool, False ],
 			'password': [ opt_str, '' ],
 			'resource': [ opt_str, 'gajim' ],

@@ -1056,6 +1056,9 @@ class AccountModificationWindow:
 		usessl = gajim.config.get_per('accounts', self.account, 'usessl')
 		self.xml.get_widget('use_ssl_checkbutton').set_active(usessl)
 
+		port = gajim.config.get_per('accounts', self.account, 'port')
+		self.xml.get_widget('custom_port_entry').set_text(str(port))
+
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if gajim.config.get('usegpg'):
 			self.init_account_gpg()
@@ -1128,9 +1131,21 @@ _('To change the account name, it must be disconnected.')).get_response()
 		if proxy == 'None':
 			proxy = ''
 		config['proxy'] = proxy
-
+		
 		config['usessl'] = self.xml.get_widget('use_ssl_checkbutton').get_active()
-		(config['name'], config['hostname']) = jid.split('@')
+
+		if self.xml.get_widget('custom_host_port_checkbutton').get_active():
+			config['name'] = jid.split('@')[0]
+			config['hostname'] = self.xml.get_widget('custom_host_entry').get_text()
+			config['port'] = int(self.xml.get_widget('custom_port_entry').get_text())
+		else:
+			(config['name'], config['hostname']) = jid.split('@')
+			if config['usessl']:
+				port = 5223 #FIXME: better way
+			else:
+				port = 5222
+			config['port'] = port
+
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text()
 		if config['keyname'] == '': #no key selected
 			config['keyid'] = ''
@@ -1302,6 +1317,13 @@ _('There was a problem retrieving your GPG secret keys.')).get_response()
 		for w in widgets:
 			if not widget.get_active():
 				w.set_text('')
+
+	def on_use_ssl_checkbutton_toggled(self, widget):
+		isactive = widget.get_active()
+		if isactive:
+			self.xml.get_widget('custom_port_entry').set_text('5223')
+		else:
+			self.xml.get_widget('custom_port_entry').set_text('5222')
 
 	def on_custom_host_port_checkbutton_toggled(self, widget):
 		isactive = widget.get_active()
