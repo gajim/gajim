@@ -2064,7 +2064,7 @@ _('Without a connection, you can not browse available services')).get_response()
 			if 'Transports' in contacts[j][0].groups:
 				registered_transports.append(j)
 		if jid in registered_transports:
-			self.register_button.set_label('_Edit')
+			self.register_button.set_label(_('_Edit'))
 		else:
 			self.register_button.set_label('Re_gister')
 		if self.agent_infos[jid + node].has_key('features'):
