@@ -1545,9 +1545,9 @@
 	  <property name="expand">False</property>
 	  <property name="fill">False</property>
 	</packing>
-     </child>
+      </child>
 
-     <child>
+      <child>
 	<widget class="GtkTable" id="table21">
 	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
@@ -8202,8 +8202,7 @@ Custom</property>
 		  <child>
 		    <widget class="GtkLabel" id="banner_name_label">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">&lt;span weight=&quot;heavy&quot; size=&quot;large&quot;&gt;Room: name@jabber.org&lt;/span&gt;
-This is the subject.</property>
+		      <property name="label" translatable="yes"></property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -8217,7 +8216,7 @@ This is the subject.</property>
 		  </child>
 		</widget>
 		<packing>
-		  <property name="padding">0</property>
+		  <property name="padding">4</property>
 		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
@@ -13695,7 +13694,7 @@ the Jabber network.</property>
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
-		  <property name="visibility">True</property>
+		  <property name="visibility">False</property>
 		  <property name="max_length">0</property>
 		  <property name="text" translatable="yes"></property>
 		  <property name="has_frame">True</property>

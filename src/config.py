@@ -2292,7 +2292,6 @@ class ManageBookmarksWindow:
 						bookmark['password'],
 						bookmark['nick'] ])
 
-
 		self.view = self.xml.get_widget('bookmarks_treeview')
 		self.view.set_model(self.treestore)
 		self.view.expand_all()

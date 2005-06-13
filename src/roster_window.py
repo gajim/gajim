@@ -265,11 +265,11 @@ class RosterWindow:
 			self.add_new_contact_handler_id = None
 		if self.service_disco_handler_id:
 			service_disco_menuitem.handler_disconnect(
-					self.service_disco_handler_id)
+				self.service_disco_handler_id)
 			self.service_disco_handler_id = None
 		if self.new_message_menuitem_handler_id:
 			new_message_menuitem.handler_disconnect(
-					self.new_message_menuitem_handler_id)
+				self.new_message_menuitem_handler_id)
 			self.new_message_menuitem_handler_id = None
 		#remove the existing submenus
 		add_new_contact_menuitem.remove_submenu()
