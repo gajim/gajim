@@ -56,7 +56,6 @@ class TCPsocket(PlugIn):
         PlugIn.__init__(self)
         self.DBG_LINE='socket'
         self._exported_methods=[self.send,self.disconnect]
-        self._server = server
 
         # SRV resolver
         if 'dns' in globals(): # if dnspython is available support SRV
@@ -76,8 +75,10 @@ class TCPsocket(PlugIn):
                 except:
                     pass
 
-                server = (host, port)
+            server = (host, port)
         # end of SRV resolver
+
+        self._server = server
 
     def plugin(self, owner):
         """ Fire up connection. Return non-empty string on success.
