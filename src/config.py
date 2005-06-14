@@ -1005,8 +1005,21 @@ class AccountModificationWindow:
 		usessl = gajim.config.get_per('accounts', self.account, 'usessl')
 		self.xml.get_widget('use_ssl_checkbutton').set_active(usessl)
 
-		port = gajim.config.get_per('accounts', self.account, 'port')
-		self.xml.get_widget('custom_port_entry').set_text(str(port))
+		use_custom_host = gajim.config.get_per('accounts', self.account,
+			'use_custom_host')
+		self.xml.get_widget('custom_host_port_checkbutton').set_active(
+			use_custom_host)
+		custom_host = gajim.config.get_per('accounts', self.account,
+			'custom_host')
+		if not custom_host:
+			custom_host = gajim.config.get_per('accounts',
+				self.account, 'hostname')
+		self.xml.get_widget('custom_host_entry').set_text(custom_host)
+		custom_port = gajim.config.get_per('accounts', self.account,
+			'custom_port')
+		if not custom_port:
+			custom_port = 5222
+		self.xml.get_widget('custom_port_entry').set_text(str(custom_port))
 
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if gajim.config.get('usegpg'):
@@ -1082,18 +1095,20 @@ _('To change the account name, it must be disconnected.')).get_response()
 		config['proxy'] = proxy
 		
 		config['usessl'] = self.xml.get_widget('use_ssl_checkbutton').get_active()
+		(config['name'], config['hostname']) = jid.split('@')
 
-		if self.xml.get_widget('custom_host_port_checkbutton').get_active():
-			config['name'] = jid.split('@')[0]
-			config['hostname'] = self.xml.get_widget('custom_host_entry').get_text()
-			config['port'] = int(self.xml.get_widget('custom_port_entry').get_text())
-		else:
-			(config['name'], config['hostname']) = jid.split('@')
-			if config['usessl']:
-				port = 5223 #FIXME: better way
-			else:
-				port = 5222
-			config['port'] = port
+		config['use_custom_host'] = self.xml.get_widget(
+			'custom_host_port_checkbutton').get_active()
+		custom_port = self.xml.get_widget('custom_port_entry').get_text()
+		try:
+			custom_port = int(custom_port)
+		except:
+			dialogs.ErrorDialog(_('Invalid entry'),
+				_('Custom port must be a port number.')).get_response()
+			return
+		config['custom_port'] = custom_port
+		config['custom_host'] = self.xml.get_widget(
+			'custom_host_entry').get_text()
 
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text()
 		if config['keyname'] == '': #no key selected

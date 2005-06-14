@@ -594,7 +594,6 @@ class Connection:
 		"""Connect and authenticate to the Jabber server"""
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-		port = gajim.config.get_per('accounts', self.name, 'port')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
 		usessl = gajim.config.get_per('accounts', self.name, 'usessl')
 
@@ -618,8 +617,15 @@ class Connection:
 		con.UnregisterDisconnectHandler(con.DisconnectHandler)
 		con.RegisterDisconnectHandler(self._disconnectedCB)
 
-		#pass ssl optional arg if neccessary when client.py is patched
-		con_type = con.connect((hostname, port), proxy = proxy) #FIXME: blocking
+		h = hostname
+		p = 5222
+		if usessl:
+			p = 5223
+		if gajim.config.get_per('accounts', self.name, 'use_custom_host'):
+			h = gajim.config.get_per('accounts', self.name, 'custom_host')
+			p = gajim.config.get_per('accounts', self.name, 'custom_port')
+		#TODO: pass ssl optional arg if neccessary when client.py is patched
+		con_type = con.connect((h, p), proxy = proxy) #FIXME: blocking
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
 			self.connected = 0
@@ -894,16 +900,19 @@ class Connection:
 		common.xmpp.dispatcher.DefaultTimeout = 45
 		c.UnregisterDisconnectHandler(c.DisconnectHandler)
 		c.RegisterDisconnectHandler(self._disconnectedCB)
-		port = gajim.config.get_per('accounts', self.name, 'port')
-		#FIXME: use ssl
-		#if usessl:
-			#port = 5223
+		h = hostname
+		p = 5222
+		if usessl:
+			p = 5223
+		if config['use_custom_host']:
+			h = config['custom_host']
+			p = config['custom_port']
 		#FIXME: blocking
-		con_type = c.connect((config['hostname'], port), proxy = proxy)
+		con_type = c.connect((h, p), proxy = proxy)
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % name)
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % name,
-				_('Check your connection or try again later')))
+				_('Check your connection or try again later.')))
 			return False
 		gajim.log.debug('Connected to server')
 		# FIXME! This blocks!

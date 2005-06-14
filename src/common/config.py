@@ -110,7 +110,6 @@ class Config:
 		'accounts': ({
 			'name': [ opt_str, '' ],
 			'hostname': [ opt_str, '' ],
-			'port': [ opt_int, 5222 ],
 			'savepass': [ opt_bool, False ],
 			'password': [ opt_str, '' ],
 			'resource': [ opt_str, 'gajim' ],
@@ -120,6 +119,9 @@ class Config:
 			'keyid': [ opt_str, '' ],
 			'keyname': [ opt_str, '' ],
 			'usessl': [ opt_bool, False ],
+			'use_custom_host': [ opt_bool, False ],
+			'custom_port': [ opt_int, 5222 ],
+			'custom_host': [ opt_str, '' ],
 			'savegpgpass': [ opt_bool, False ],
 			'gpgpassword': [ opt_str, '' ],
 			'sync_with_global_status': [ opt_bool, True ],
