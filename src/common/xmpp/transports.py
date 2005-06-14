@@ -32,6 +32,12 @@ from simplexml import ustr
 from client import PlugIn
 from protocol import *
 
+try:
+    import dns.resolver
+except:
+    pass
+        
+
 class error:
     """An exception to be raised in case of low-level errors in methods of 'transports' module."""
     def __init__(self,comment):
@@ -51,6 +57,27 @@ class TCPsocket(PlugIn):
         self.DBG_LINE='socket'
         self._exported_methods=[self.send,self.disconnect]
         self._server = server
+
+        # SRV resolver
+        if 'dns' in globals(): # if dnspython is available support SRV
+            host, port = server
+            possible_queries = [
+                "_xmpp-client._tcp." + host,
+                "_jabber._tcp." + host,
+            ]
+
+            for query in possible_queries:
+                try:
+                    answers = [x for x in dns.resolver.query(query, 'SRV')]
+                    if answers:
+                        host = str (answers[0].target)
+                        port = int (answers[0].port)
+                    break
+                except:
+                    pass
+
+                server = (host, port)
+        # end of SRV resolver
 
     def plugin(self, owner):
         """ Fire up connection. Return non-empty string on success.
