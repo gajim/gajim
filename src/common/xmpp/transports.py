@@ -70,7 +70,7 @@ class TCPsocket(PlugIn):
                 try:
                     answers = [x for x in dns.resolver.query(query, 'SRV')]
                     if answers:
-                        host = str (answers[0].target)
+                        host = str (answers[0].target)[:-1] #remove last .
                         port = int (answers[0].port)
                     break
                 except:
