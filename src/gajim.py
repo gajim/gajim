@@ -459,8 +459,8 @@ class Interface:
 				% jid).get_response()
 
 	def handle_event_unsubscribed(self, account, jid):
-		dialogs.InformationDialog(_('Contact "%s" removed subscription' % jid),
-				_('You will always see contact "%s" as offline.')).get_response()
+		dialogs.InformationDialog(_('Contact "%s" removed subscription from you') % jid,
+				_('You will always see him as offline.')).get_response()
 
 	def handle_event_agent_info(self, account, array):
 		#('AGENT_INFO', account, (agent, identities, features, items))
