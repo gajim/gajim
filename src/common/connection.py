@@ -590,6 +590,12 @@ class Connection:
 		jid_from = str(iq_obj.getFrom())
 		self.dispatch('ERROR_ANSWER', (jid_from, errmsg, errcode))
 
+	def _event_dispatcher(self, realm, event, data):
+		if realm == common.xmpp.NS_REGISTER:
+			if event == common.xmpp.features.REGISTER_DATA_RECEIVED:
+				# data is (agent, DataFrom)
+				self.dispatch('REGISTER_AGENT_INFO', (data[0], data[1].asDict()))
+
 	def connect(self):
 		"""Connect and authenticate to the Jabber server"""
 		name = gajim.config.get_per('accounts', self.name, 'name')
@@ -659,6 +665,7 @@ class Connection:
 		con.RegisterHandler('iq', self._PrivateCB, 'result',
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
+		con.RegisterEventHandler(self._event_dispatcher)
 
 		gajim.log.debug('Connected to server')
 
@@ -846,34 +853,10 @@ class Connection:
 				queryNS = common.xmpp.NS_BROWSE))
 			self.discoverInfo(jid, node)
 
-	def _receive_register_agent_info(self, con, iq_obj, agent):
-		if not common.xmpp.isResultNode(iq_obj):
-			return
-		iq = common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to = agent)
-		df = iq_obj.getTag('query', namespace = common.xmpp.NS_REGISTER).\
-			getTag('x', namespace = common.xmpp.NS_DATA)
-		if df:
-			df = common.xmpp.DataForm(node = df)
-			self.dispatch('REGISTER_AGENT_INFO', (agent, df.asDict()))
-			return
-		df = common.xmpp.DataForm(typ = 'form')
-		for i in iq_obj.getQueryPayload():
-			if type(i) != type(iq):
-				pass
-			elif i.getName() == 'instructions':
-				df.addInstructions(i.getData())
-			else:
-				df.setField(i.getName()).setValue(i.getData())
-		self.dispatch('REGISTER_AGENT_INFO', (agent, df.asDict()))
-		return
-
 	def request_register_agent_info(self, agent):
 		if not self.connection:
 			return None
-		iq = common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to = agent)
-		self.connection.SendAndCallForResponse(iq,
-			self._receive_register_agent_info, {'agent': agent})
-		return
+		common.xmpp.features.getRegInfo(self.connection, agent)
 
 	def register_agent(self, agent, info):
 		if not self.connection:
