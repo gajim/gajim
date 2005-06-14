@@ -1313,7 +1313,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="use_ssl_checkbutton">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default, if broadcasted by the server, and with this option enabled you disable TLS</property>
+			      <property name="tooltip" translatable="yes">Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default, if broadcasted by the server, and with this option enabled TLS will be disabled</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Use _SSL (legacy)</property>
 			      <property name="use_underline">True</property>
