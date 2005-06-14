@@ -254,7 +254,16 @@ class VcardWindow:
 					'os': ''}
 				i += 1
 		self.xml.get_widget('resource_label').set_text(resources)
-		self.xml.get_widget('status_label').set_text(stats)
+		
+		status_label = self.xml.get_widget('status_label')
+		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+
+		if gtk.pygtk_version > (2, 6, 0) and gtk.gtk_version > (2, 6, 0):
+			tip = gtk.Tooltips()
+			status_label_eventbox = self.xml.get_widget('status_label_eventbox')
+			tip.set_tip(status_label_eventbox, stats)
+			status_label.set_max_width_chars(15)
+		status_label.set_text(stats)
+		
 		gajim.connections[self.account].request_vcard(self.user.jid)
 
 	def add_to_vcard(self, vcard, entry, txt):
@@ -351,14 +360,14 @@ class VcardWindow:
 		#publish button
 		button = gtk.Button(stock = gtk.STOCK_GOTO_TOP)
 		button.get_children()[0].get_children()[0].get_children()[1].set_text(
-			_('Publish'))
+			_('_Publish'))
 		button.connect('clicked', self.on_publish_button_clicked)
 		button.show_all()
 		information_hbuttonbox.pack_start(button)
 		#retrieve button
 		button = gtk.Button(stock = gtk.STOCK_GOTO_BOTTOM)
 		button.get_children()[0].get_children()[0].get_children()[1].set_text(
-			_('Retrieve'))
+			_('_Retrieve'))
 		button.connect('clicked', self.on_retrieve_button_clicked)
 		button.show_all()
 		information_hbuttonbox.pack_start(button)
