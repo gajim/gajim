@@ -136,6 +136,11 @@ class GroupchatWindow(chat.Chat):
 				new_jid = jid
 				break
 		subject = self.subjects[new_jid]
+
+		# escape chars when necessary
+		subject = subject.replace('&', '&amp;')
+		new_jid = new_jid.replace('&', '&amp;')
+
 		name_label = self.name_labels[new_jid]
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (new_jid, subject))
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)

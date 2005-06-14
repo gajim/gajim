@@ -98,6 +98,8 @@ class TabbedChatWindow(chat.Chat):
 		'''Draw the fat line at the top of the window that 
 		houses the status icon, name, jid, and avatar'''
 		# this is the text for the big brown bar
+		# some chars need to be escaped.. this fixes '&'
+		name = name.replace('&', '&amp;')
 		label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
 			% (name, jid)
 
