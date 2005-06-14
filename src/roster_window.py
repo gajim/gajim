@@ -581,13 +581,15 @@ class RosterWindow:
 
 			sub_menu = gtk.Menu()
 			item.set_submenu(sub_menu)
-			item = gtk.MenuItem(_('Resend Authorization to'))
+			
+			item = gtk.MenuItem(_('Re_send Authorization to'))
 			sub_menu.append(item)
 			item.connect('activate', self.authorize, jid, account)
-			item = gtk.MenuItem(_('Rerequest Authorization from'))
+			
+			item = gtk.MenuItem(_('Rere_quest Authorization from'))
 			sub_menu.append(item)
 			item.connect('activate', self.req_sub, jid, 
-				_('I would like to add you to my roster'), account)
+				_('I would like to add you to my roster'), account, menuitem=True)
 		else:
 			item = gtk.MenuItem()
 			menu.append(item)
@@ -731,10 +733,13 @@ class RosterWindow:
 		dialogs.AddNewContactWindow(self.plugin, account, user.jid)
 	
 	def authorize(self, widget, jid, account):
-		'''Authorize a user'''
+		'''Authorize a user (by re-sending auth menuitem)'''
 		gajim.connections[account].send_authorization(jid)
+		dialogs.InformationDialog(_('Authorization has been sent'),
+			_('Now "%s" will know when your status.') %jid).get_response()
 
-	def req_sub(self, widget, jid, txt, account, group = None, pseudo = None):
+	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None,\
+				menuitem=False):
 		'''Request subscription to a user'''
 		if not pseudo:
 			pseudo = jid
@@ -758,6 +763,9 @@ class RosterWindow:
 			user1.name = pseudo
 			self.remove_user(user1, account)
 		self.add_user_to_roster(jid, account)
+		if menuitem:
+			dialogs.InformationDialog(_('Subscription request has been sent'),
+_('If "%s" accepts this request you will know his status.') %jid).get_response()
 
 	def on_roster_treeview_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''
