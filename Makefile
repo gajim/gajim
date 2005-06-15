@@ -4,6 +4,7 @@ GAJIM_AP	= 0
 MODULES		= src src/common po
 PREFIX		= /usr
 DESTDIR		= /
+LIBDIR		= /lib
 
 FIND		= find . \( -name '*.glade' -o -name '*.py' -o -name '*.xpm' -o -name '*.gif' -o -name '*.png' -o -name '*.mo' -o -name '*.wav' \)
 
@@ -69,9 +70,9 @@ install:
 	cp gajim.desktop "$(DESTDIR)$(PREFIX)/share/applications/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/man/man1";
 	cp gajim.1 "$(DESTDIR)$(PREFIX)/share/man/man1";
-	mkdir -p "$(DESTDIR)$(PREFIX)/lib/gajim";
+	mkdir -p "$(DESTDIR)$(PREFIX)$(LIBDIR)/gajim";
 	for f in $(FILES_LIB) ; do \
-		cp "$$f" "$(DESTDIR)$(PREFIX)/lib/gajim/"; \
+		cp "$$f" "$(DESTDIR)$(PREFIX)$(LIBDIR)/gajim/"; \
 	done
 	mkdir -p "$(DESTDIR)$(PREFIX)/bin";
 	for s in $(SCRIPTS) ; do \
