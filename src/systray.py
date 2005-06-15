@@ -43,6 +43,17 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 class Systray:
 	"""Class for icon in the systray"""
+	def __init__(self, plugin):
+		self.plugin = plugin
+		self.jids = []
+		self.t = None
+		self.tip = gtk.Tooltips()
+		self.img_tray = gtk.Image()
+		self.status = 'offline'
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
+		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
+		self.xml.signal_autoconnect(self)
+
 	def set_img(self):
 		if len(self.jids) > 0:
 			status = 'message'
@@ -117,15 +128,13 @@ class Systray:
 		"""create chat with and new message (sub) menus/menuitems"""
 		
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
-		#menu.append(chat_with_menuitem)
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
-		#menu.append(new_message_menuitem)
 		
-		iskey = len(gajim.connections.keys()) > 0
+		iskey = len(gajim.connections) > 0
 		chat_with_menuitem.set_sensitive(iskey)
 		new_message_menuitem.set_sensitive(iskey)
 		
-		if len(gajim.connections.keys()) >= 2: # 2 or more connections? make submenus
+		if len(gajim.connections) >= 2: # 2 or more connections? make submenus
 			account_menu_for_chat_with = gtk.Menu()
 			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
 
@@ -142,7 +151,7 @@ class Systray:
 				item.set_submenu(group_menu)
 				#for new_message
 				item = gtk.MenuItem(_('as ') + our_jid)
-				item.connect('activate',\
+				item.connect('activate',
 					self.on_new_message_menuitem_activate, account)
 				account_menu_for_new_message.append(item)
 				
@@ -161,7 +170,13 @@ class Systray:
 		self.systray_context_menu.popup(None, None, None, event.button, event.time)
 		self.systray_context_menu.show_all()
 		self.systray_context_menu.reposition()
-	
+
+	def on_preferences_menuitem_activate(self, widget):
+		if self.plugin.windows['preferences'].window.get_property('visible'):
+			self.plugin.windows['preferences'].window.present()
+		else:
+			self.plugin.windows['preferences'].window.show_all()
+
 	def on_quit_menuitem_activate(self, widget):	
 		self.plugin.roster.on_quit_menuitem_activate(widget)
 
@@ -265,14 +280,3 @@ class Systray:
 		if self.t:
 			self.t.destroy()
 			self.t = None
-
-	def __init__(self, plugin):
-		self.plugin = plugin
-		self.jids = []
-		self.t = None
-		self.tip = gtk.Tooltips()
-		self.img_tray = gtk.Image()
-		self.status = 'offline'
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
-		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
-		self.xml.signal_autoconnect(self)

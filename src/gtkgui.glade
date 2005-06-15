@@ -11025,7 +11025,7 @@ send a chat message to</property>
   <child>
     <widget class="GtkMenuItem" id="status_menu">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Status</property>
+      <property name="label" translatable="yes">_Status</property>
       <property name="use_underline">True</property>
 
       <child>
@@ -11125,7 +11125,7 @@ send a chat message to</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image505">
+	<widget class="GtkImage" id="image687">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -11135,6 +11135,15 @@ send a chat message to</property>
 	  <property name="ypad">0</property>
 	</widget>
       </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="preferences_menuitem">
+      <property name="visible">True</property>
+      <property name="label">gtk-preferences</property>
+      <property name="use_stock">True</property>
+      <signal name="activate" handler="on_preferences_menuitem_activate" last_modification_time="Wed, 15 Jun 2005 10:18:26 GMT"/>
     </widget>
   </child>
 
