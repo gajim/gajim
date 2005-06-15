@@ -45,6 +45,7 @@ class GroupchatWindow(chat.Chat):
 		self.list_treeview = {}
 		self.subjects = {}
 		self.name_labels = {}
+		self.subject_tooltip = {}
 		self.room_creation = {}
 		self.nick_hits = {}
 		self.last_key_tabs = {}
@@ -142,7 +143,12 @@ class GroupchatWindow(chat.Chat):
 		new_jid = new_jid.replace('&', '&amp;')
 
 		name_label = self.name_labels[new_jid]
+		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+  
+		if gtk.pygtk_version > (2, 6, 0) and gtk.gtk_version > (2, 6, 0):
+			name_label.set_max_width_chars(90)
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (new_jid, subject))
+		event_box = name_label.get_parent()
+		self.subject_tooltip[new_jid].set_tip(event_box, subject)
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
@@ -300,6 +306,8 @@ class GroupchatWindow(chat.Chat):
 		self.subjects[room_jid] = subject
 		name_label = self.name_labels[room_jid]
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (room_jid, subject))
+		event_box = name_label.get_parent()
+		self.subject_tooltip[room_jid].set_tip(event_box, subject)
 
 	def on_change_subject_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
@@ -666,9 +674,11 @@ class GroupchatWindow(chat.Chat):
 		self.hpaneds[room_jid] = self.xmls[room_jid].get_widget('hpaned')
 		self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
 			'list_treeview')
+		self.subject_tooltip[room_jid] = gtk.Tooltips()
+		
 		# we want to know when the the widget resizes, because that is
 		# an indication that the hpaned has moved...
-		# TODO: Find a better indicator that the hpaned has moved.
+		# FIXME: Find a better indicator that the hpaned has moved.
 		self.list_treeview[room_jid].connect('size-allocate', self.on_treeview_size_allocate)
 		conversation_textview = self.xmls[room_jid].get_widget(
 			'conversation_textview')
