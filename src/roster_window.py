@@ -589,7 +589,7 @@ class RosterWindow:
 			item = gtk.MenuItem(_('Rere_quest Authorization from'))
 			sub_menu.append(item)
 			item.connect('activate', self.req_sub, jid, 
-				_('I would like to add you to my roster'), account, menuitem=True)
+				_('I would like to add you to my roster'), account)
 		else:
 			item = gtk.MenuItem()
 			menu.append(item)
@@ -738,8 +738,7 @@ class RosterWindow:
 		dialogs.InformationDialog(_('Authorization has been sent'),
 			_('Now "%s" will know when your status.') %jid).get_response()
 
-	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None,\
-				menuitem=False):
+	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None):
 		'''Request subscription to a user'''
 		if not pseudo:
 			pseudo = jid
@@ -758,14 +757,13 @@ class RosterWindow:
 		else:
 			user1 = self.contacts[account][jid][0]
 			if not 'not in the roster' in user1.groups:
+				dialogs.InformationDialog(_('Subscription request has been sent'),
+_('If "%s" accepts this request you will know his status.') %jid).get_response()
 				return
 			user1.groups = [group]
 			user1.name = pseudo
 			self.remove_user(user1, account)
 		self.add_user_to_roster(jid, account)
-		if menuitem:
-			dialogs.InformationDialog(_('Subscription request has been sent'),
-_('If "%s" accepts this request you will know his status.') %jid).get_response()
 
 	def on_roster_treeview_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''

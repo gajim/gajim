@@ -331,8 +331,8 @@ _('User names must be of the form "user@servername".')).get_response()
 		end_iter = message_buffer.get_end_iter()
 		message = message_buffer.get_text(start_iter, end_iter, 0)
 		group = self.group_comboboxentry.child.get_text()
-		self.plugin.roster.req_sub(self, jid, message, self.account, group,
-			nickname)
+		self.plugin.roster.req_sub(self, jid, message, self.account,
+			group = group, pseudo = nickname)
 		if self.xml.get_widget('auto_authorize_checkbutton').get_active():
 			gajim.connections[self.account].send_authorization(jid)
 		self.window.destroy()
