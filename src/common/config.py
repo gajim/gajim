@@ -124,7 +124,7 @@ class Config:
 			'custom_host': [ opt_str, '' ],
 			'savegpgpass': [ opt_bool, False ],
 			'gpgpassword': [ opt_str, '' ],
-			'sync_with_global_status': [ opt_bool, True ],
+			'sync_with_global_status': [ opt_bool, False ],
 			'no_log_for': [ opt_str, '' ],
 			'attached_gpg_keys': [ opt_str, '' ],
 		}, {}),
