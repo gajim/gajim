@@ -271,7 +271,12 @@ class Chat:
 		self.tagStatus[jid] = conversation_buffer.create_tag('status')
 		color = gajim.config.get('statusmsgcolor')
 		self.tagStatus[jid].set_property('foreground', color)
-		
+
+		tag = conversation_buffer.create_tag('marked')
+		color = gajim.config.get('markedmsgcolor')
+		tag.set_property('foreground', color)
+		tag.set_property('weight', pango.WEIGHT_BOLD)
+
 		tag = conversation_buffer.create_tag('time_sometimes')
 		tag.set_property('foreground', '#9e9e9e')
 		tag.set_property('scale', pango.SCALE_SMALL)

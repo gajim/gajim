@@ -59,6 +59,7 @@ class Config:
 		'inmsgcolor': [ opt_color, '#a34526' ],
 		'outmsgcolor': [ opt_color, '#164e6f' ],
 		'statusmsgcolor': [ opt_color, '#1eaa1e' ],
+		'markedmsgcolor': [ opt_color, '#ff8080' ],
 		'collapsed_rows': [ opt_str, '' ],
 		'roster_theme': [ opt_str, 'green' ],
 		'saveposition': [ opt_bool, True ],

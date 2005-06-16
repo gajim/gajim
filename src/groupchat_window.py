@@ -471,6 +471,7 @@ class GroupchatWindow(chat.Chat):
 		if contact is set: it's a message from someone
 		if contact is not set: it's a message from the server"""
 		other_tags_for_name = []
+		other_tags_for_text = []
 		if contact:
 			if contact == self.nicks[room_jid]:
 				kind = 'outgoing'
@@ -483,9 +484,10 @@ class GroupchatWindow(chat.Chat):
 			text.lower().split() or self.nicks[room_jid].lower() + ',' in \
 			text.lower().split()):
 			other_tags_for_name.append('bold')
+			other_tags_for_text.append('marked')
 
 		chat.Chat.print_conversation_line(self, text, room_jid, kind, contact,
-			tim, other_tags_for_name)
+			tim, other_tags_for_name, [], other_tags_for_text)
 
 	def kick(self, widget, room_jid, nick):
 		"""kick a user"""
