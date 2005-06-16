@@ -51,7 +51,7 @@ class GroupchatWindow(chat.Chat):
 		self.last_key_tabs = {}
 		self.hpaneds = {} # used for auto positioning
 		self.hpaned_position = gajim.config.get('gc-hpaned-position')
-		self.gc_refer_to_nick_sep = gajim.config.get('gc_refer_to_nick_sep')
+		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 		self.new_room(room_jid, nick)
 		self.show_title()
 		self.xml.signal_connect('on_groupchat_window_destroy', 
