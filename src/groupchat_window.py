@@ -51,6 +51,7 @@ class GroupchatWindow(chat.Chat):
 		self.last_key_tabs = {}
 		self.hpaneds = {} # used for auto positioning
 		self.hpaned_position = gajim.config.get('gc-hpaned-position')
+		self.gc_refer_to_nick_sep = gajim.config.get('gc_refer_to_nick_sep')
 		self.new_room(room_jid, nick)
 		self.show_title()
 		self.xml.signal_connect('on_groupchat_window_destroy', 
@@ -392,7 +393,7 @@ class GroupchatWindow(chat.Chat):
 							self.nick_hits[room_jid].append(nick)
 				if len(self.nick_hits[room_jid]):
 					if len(splitted_text) == 1: # This is the 1st word of the line
-						add = ', '
+						add = self.gc_refer_to_nick_char + ' '
 					else:
 						add = ' '
 					start_iter = end_iter.copy()

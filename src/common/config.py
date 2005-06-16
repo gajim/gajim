@@ -79,6 +79,7 @@ class Config:
 		'gc-width': [opt_int, 675],
 		'gc-height': [opt_int, 400],
 		'gc-hpaned-position': [opt_int, 535],
+		'gc_refer_to_nick_char': [opt_str, ','],
 		'chat-x-position': [opt_int, 0],
 		'chat-y-position': [opt_int, 0],
 		'chat-width': [opt_int, 415],
