@@ -476,7 +476,7 @@ class GroupchatWindow(chat.Chat):
 		other_tags_for_name = []
 		other_tags_for_text = []
 		if contact:
-			if contact == self.nicks[room_jid]:
+			if contact == self.nicks[room_jid]: # it's us
 				kind = 'outgoing'
 			else:
 				kind = 'incoming'
