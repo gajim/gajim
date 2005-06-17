@@ -744,8 +744,6 @@ class Chat:
 			# not status nor /me
 			name_tags = other_tags_for_name[:] #create a new list
 			name_tags.append(kind)
-			if kind == 'incoming':
-				name_tags.append('incoming_message')
 			before_str = gajim.config.get('before_nickname')
 			after_str = gajim.config.get('after_nickname')
 			format = before_str + name + after_str + ' ' 
@@ -756,8 +754,6 @@ class Chat:
 
 		# add the rest of text located in the index and after
 		end_iter = buffer.get_end_iter()
-		if kind == 'incoming':
-				text_tags.append('incoming_message')
 		self.print_with_tag_list(buffer, text[index:], end_iter, text_tags)
 
 		#scroll to the end of the textview
