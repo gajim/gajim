@@ -21,7 +21,7 @@ import logging
 import common.config
 import common.logger
 
-version = '0.8'
+version = '0.7.5'
 config = common.config.Config()
 connections = {}
 verbose = False
