@@ -382,8 +382,10 @@ class GroupchatWindow(chat.Chat):
 				if len(splitted_text): # if there are any words
 					begin = splitted_text[-1] # last word we typed
 
-				if len(self.nick_hits[room_jid]) and self.nick_hits[room_jid][0].startswith(begin.replace(',', '')) \
-						and self.last_key_tabs[room_jid]: # we should cycle
+				if len(self.nick_hits[room_jid]) and \
+						self.nick_hits[room_jid][0].startswith(begin.replace(
+						self.gc_refer_to_nick_char, '')) and \
+						self.last_key_tabs[room_jid]: # we should cycle
 					self.nick_hits[room_jid].append(self.nick_hits[room_jid][0])
 					self.nick_hits[room_jid].pop(0)
 				else:
@@ -482,8 +484,8 @@ class GroupchatWindow(chat.Chat):
 			kind = 'status'
 
 		if kind == 'incoming' and (self.nicks[room_jid].lower() in \
-			text.lower().split() or self.nicks[room_jid].lower() + ',' in \
-			text.lower().split()):
+			text.lower().split() or self.nicks[room_jid].lower() + \
+			self.gc_refer_to_nick_char in text.lower().split()):
 			other_tags_for_name.append('bold')
 			other_tags_for_text.append('marked')
 
