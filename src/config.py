@@ -931,11 +931,13 @@ class AccountModificationWindow:
 			self.modify = True
 			self.init_account()
 			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
-			self.xml.get_widget('name_entry').grab_focus()
+			self.xml.get_widget('save_button').grab_focus()
 		else: # we create a new account
 			if len(gajim.connections) == 0: # is it the first accound we're creating?
 				# the first account *has* to sync
 				self.xml.get_widget('sync_with_global_status_checkbutton').set_active(True)
+				self.xml.get_widget('name_entry').set_text('Main')
+				self.xml.get_widget('jid_entry').grab_focus()
 		self.window.show_all()
 
 	def on_checkbutton_toggled(self, widget, widgets):
