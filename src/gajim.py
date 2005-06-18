@@ -663,13 +663,10 @@ class Interface:
 		try:
 			img.set_from_file(image)
 		except:
-			return True
+			return False
 		if img.get_storage_type() == gtk.IMAGE_PIXBUF:
 			pix = img.get_pixbuf()
 		else:
-			return False
-		if pix.get_width() > 24 or pix.get_height() > 24:
-			#FIXME: inform the user why you don't accept it
 			return False
 		return True
 		
@@ -713,7 +710,7 @@ class Interface:
 			emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
 
 		emot_and_basic_pattern = emoticons_pattern + basic_pattern
-		self.emot_and_basic_re = sre.compile(emot_and_basic_pattern,\
+		self.emot_and_basic_re = sre.compile(emot_and_basic_pattern,
 															sre.IGNORECASE)
 		
 		# at least one character in 3 parts (before @, after @, after .)
