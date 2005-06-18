@@ -217,7 +217,7 @@ class Interface:
 	
 	def handle_event_notify(self, account, array):
 		#('NOTIFY', account, (jid, status, message, resource, priority, keyID, 
-		# role, affiliation, real_jid, reason, actor, statusCode))
+		# role, affiliation, real_jid, reason, actor, statusCode, new_nick))
 		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd', 'invisible']
 		old_show = 0
 		new_show = statuss.index(array[1])
@@ -335,7 +335,7 @@ class Interface:
 			fjid = array[0] + '/' + array[3]
 			self.windows[account]['gc'][ji].chg_user_status(ji, resource,
 				array[1], array[2], array[6], array[7], array[8], array[9],
-				array[10], array[11], account)
+				array[10], array[11], array[12], account)
 
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (user, msg, time, encrypted))

@@ -15253,7 +15253,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_configure_room_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 11:04:55 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image684">
+	<widget class="GtkImage" id="image691">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-properties</property>
 	  <property name="icon_size">1</property>
@@ -15274,9 +15274,30 @@ the Jabber network.</property>
       <signal name="activate" handler="on_change_subject_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 11:05:10 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image685">
+	<widget class="GtkImage" id="image692">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-edit</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="change_nick_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Change _Nick</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_change_nick_menuitem_activate" last_modification_time="Sat, 18 Jun 2005 20:23:46 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image693">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-media-next</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
 	  <property name="yalign">0.5</property>
@@ -15295,7 +15316,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_bookmark_room_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 12:43:29 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image686">
+	<widget class="GtkImage" id="image694">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>

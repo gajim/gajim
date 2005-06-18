@@ -262,7 +262,7 @@ class GroupchatWindow(chat.Chat):
 				role_iter = model.iter_next(role_iter)
 
 	def chg_user_status(self, room_jid, nick, show, status, role, affiliation, \
-		jid, reason, actor, statusCode, account):
+		jid, reason, actor, statusCode, new_nick, account):
 		"""When a user changes his status"""
 		if not role:
 			role = 'visitor'
@@ -271,8 +271,13 @@ class GroupchatWindow(chat.Chat):
 			if statusCode == '307':
 				self.print_conversation(_('%s has been kicked by %s: %s') % (nick,
 					actor, reason), room_jid)
+			elif statusCode == '303': # Someone changed his nick
+				self.print_conversation(_('%s is now known as %s') % (nick,
+					new_nick), room_jid)
+				if nick == self.nicks[room_jid]: # We changed out nick
+					self.nicks[room_jid] = new_nick
 			self.remove_user(room_jid, nick)
-			if nick == self.nicks[room_jid]: # We became offline
+			if nick == self.nicks[room_jid] and statusCode != '303': # We became offline
 				model.clear()
 		else:
 			iter = self.get_user_iter(room_jid, nick)
@@ -293,7 +298,7 @@ class GroupchatWindow(chat.Chat):
 					model.set_value(iter, 0, image)
 					model.set_value(iter, 3, show)
 		if (time.time() - self.room_creation[room_jid]) > 30 and \
-				nick != self.nicks[room_jid]:
+				nick != self.nicks[room_jid] and statusCode != '303':
 			if show == 'offline':
 				st = _('%s has left') % nick
 			else:
@@ -323,6 +328,17 @@ class GroupchatWindow(chat.Chat):
 			subject = instance.input_entry.get_text()
 			gajim.connections[self.account].send_gc_subject(room_jid, subject)
 
+	def on_change_nick_menuitem_activate(self, widget):
+		room_jid = self.get_active_jid()
+		nick = self.nicks[room_jid]
+		instance = dialogs.InputDialog(_('Changing out Nickname'),
+			_('Please specify the new nickname you want to use:'), nick)
+		response = instance.dialog.run()
+		instance.dialog.destroy()
+		if response == gtk.RESPONSE_OK:
+			nick = instance.input_entry.get_text()
+			gajim.connections[self.account].change_gc_nick(nick, room_jid)
+
 	def on_configure_room_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
 		gajim.connections[self.account].request_gc_config(room_jid)
@@ -345,7 +361,7 @@ class GroupchatWindow(chat.Chat):
 
 		gajim.connections[self.account].bookmarks.append(bm)
 		gajim.connections[self.account].store_bookmarks()
-		
+
 		self.plugin.roster.make_menu()
 
 		dialogs.InformationDialog(

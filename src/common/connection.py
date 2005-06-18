@@ -313,7 +313,7 @@ class Connection:
 			self.dispatch('NOTIFY', ( account, show, status,
 				resource, prio, keyID, prs.getRole(),
 				prs.getAffiliation(), prs.getJid(), prs.getReason(),
-				prs.getActor(), prs.getStatusCode()))
+				prs.getActor(), prs.getStatusCode(), prs.getNewNick()))
 	# END presenceCB
 
 	def _disconnectedCB(self):
@@ -1041,6 +1041,12 @@ class Connection:
 		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
 			to = room_jid)
 		self.connection.send(iq)
+	
+	def change_gc_nick(self, nick, room_jid):
+		if not self.connection:
+			return
+		self.connection.send(common.xmpp.Presence(to = '%s/%s' % (room_jid,
+			nick)))
 
 	def send_gc_status(self, nick, jid, show, status):
 		if not self.connection:
