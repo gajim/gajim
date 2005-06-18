@@ -145,7 +145,7 @@ class GroupchatWindow(chat.Chat):
 
 		name_label = self.name_labels[new_jid]
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+  
-		if gtk.pygtk_version > (2, 6, 0) and gtk.gtk_version > (2, 6, 0):
+		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
 			name_label.set_max_width_chars(90)
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (new_jid, subject))
 		event_box = name_label.get_parent()

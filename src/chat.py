@@ -131,7 +131,7 @@ class Chat:
 			nickname = self.notebook.get_tab_label(child).get_children()[0]
 
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+
-		if gtk.pygtk_version > (2, 6, 0) and gtk.gtk_version > (2, 6, 0):
+		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
 			nickname.set_max_width_chars(10)
 
 		nickname.set_text(start + self.names[jid])

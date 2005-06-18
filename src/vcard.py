@@ -257,7 +257,7 @@ class VcardWindow:
 		
 		status_label = self.xml.get_widget('status_label')
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+
-		if gtk.pygtk_version > (2, 6, 0) and gtk.gtk_version > (2, 6, 0):
+		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
 			tip = gtk.Tooltips()
 			status_label_eventbox = self.xml.get_widget('status_label_eventbox')
 			tip.set_tip(status_label_eventbox, stats)
