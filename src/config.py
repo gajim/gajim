@@ -1774,6 +1774,7 @@ class ManageEmoticonsWindow:
 				if self.image_is_ok(file):
 					ok = True
 			else:
+				file = None
 				ok = True
 		dialog.destroy()
 		if file:
