@@ -259,9 +259,7 @@ class PreferencesWindow:
 
 		#sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
-		model = gtk.ListStore(str,
-					bool,
-					str)
+		model = gtk.ListStore(str,	bool, str)
 		self.sound_tree.set_model(model)
 
 		col = gtk.TreeViewColumn(_('Active'))
@@ -923,17 +921,21 @@ class AccountModificationWindow:
 		self.window = self.xml.get_widget('account_modification_window')
 		self.plugin = plugin
 		self.account = account
-		self.modify = False
+		self.modify = False # if we 're modifying an existing or creating a new account
 
 		# init proxy list
 		self.update_proxy_list()
 
 		self.xml.signal_autoconnect(self)
-		if account:
+		if account: # we modify an existing account
 			self.modify = True
 			self.init_account()
 			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
 			self.xml.get_widget('name_entry').grab_focus()
+		else: # we create a new account
+			if len(gajim.connections) == 0: # is it the first accound we're creating?
+				# the first account *has* to sync
+				self.xml.get_widget('sync_with_global_status_checkbutton').set_active(True)
 		self.window.show_all()
 
 	def on_checkbutton_toggled(self, widget, widgets):
@@ -988,7 +990,7 @@ class AccountModificationWindow:
 			+ '@' + gajim.config.get_per('accounts',
 						self.account, 'hostname')
 		self.xml.get_widget('jid_entry').set_text(jid)
-		self.xml.get_widget('save_password_checkbutton').set_active( \
+		self.xml.get_widget('save_password_checkbutton').set_active(
 			gajim.config.get_per('accounts', self.account, 'savepass'))
 		if gajim.config.get_per('accounts', self.account, 'savepass'):
 			passstr = gajim.config.get_per('accounts',
@@ -997,7 +999,7 @@ class AccountModificationWindow:
 			password_entry.set_sensitive(True)
 			password_entry.set_text(passstr)
 
-		self.xml.get_widget('resource_entry').set_text(gajim.config.get_per( \
+		self.xml.get_widget('resource_entry').set_text(gajim.config.get_per(
 			'accounts', self.account, 'resource'))
 		self.xml.get_widget('priority_spinbutton').set_value(gajim.config.\
 			get_per('accounts', self.account, 'priority'))
@@ -1029,9 +1031,12 @@ class AccountModificationWindow:
 			self.xml.get_widget('gpg_choose_button').set_sensitive(False)
 		self.xml.get_widget('autoconnect_checkbutton').set_active(gajim.config.\
 			get_per('accounts', self.account, 'autoconnect'))
-		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(
-			gajim.config.get_per('accounts', self.account, \
-			'sync_with_global_status'))
+
+		if len(gajim.connections) != 0: # only if we already have one account already
+			# we check that so we avoid the first account to have sync=False
+			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(
+				gajim.config.get_per('accounts', self.account,
+					'sync_with_global_status'))
 		list_no_log_for = gajim.config.get_per('accounts', self.account,
 			'no_log_for').split()
 		if self.account in list_no_log_for:
