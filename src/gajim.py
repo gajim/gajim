@@ -568,6 +568,8 @@ class Interface:
 			config.GroupchatConfigWindow(self, account, jid, array[1])
 
 	def handle_event_bad_passphrase(self, account, array):
+		keyID = gajim.config.get_per('accounts', account, 'keyid')
+		self.roster.forget_gpg_passphrase(keyID)
 		dialogs.WarningDialog(_('Your GPG passphrase is incorrect'),
 			_('You are currently connected without your GPG key.')).get_response()
 
