@@ -2,7 +2,7 @@ VERSION		?= 0.7.1
 
 GAJIM_AP	= 0
 MODULES		= src src/common po
-PREFIX		= /usr
+PREFIX		= /usr/local
 DESTDIR		= /
 LIBDIR		= /lib
 
