@@ -8359,7 +8359,7 @@ Custom</property>
 		<packing>
 		  <property name="padding">0</property>
 		  <property name="expand">False</property>
-		  <property name="fill">True</property>
+		  <property name="fill">False</property>
 		</packing>
 	      </child>
 
@@ -8544,7 +8544,6 @@ Custom</property>
 
 		      <child>
 			<widget class="GtkToggleButton" id="bold_togglebutton">
-			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Bold</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NONE</property>
@@ -8573,7 +8572,6 @@ Custom</property>
 
 		      <child>
 			<widget class="GtkToggleButton" id="italic_togglebutton">
-			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Italic</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NONE</property>
@@ -8602,7 +8600,6 @@ Custom</property>
 
 		      <child>
 			<widget class="GtkToggleButton" id="underline_togglebutton">
-			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Underline</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NONE</property>
@@ -10063,7 +10060,6 @@ JID: whatever@jabber.org</property>
 
 		  <child>
 		    <widget class="GtkToggleButton" id="bold_togglebutton">
-		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Bold</property>
 		      <property name="can_focus">True</property>
 		      <property name="relief">GTK_RELIEF_NONE</property>
@@ -10092,7 +10088,6 @@ JID: whatever@jabber.org</property>
 
 		  <child>
 		    <widget class="GtkToggleButton" id="italic_togglebutton">
-		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Italic</property>
 		      <property name="can_focus">True</property>
 		      <property name="relief">GTK_RELIEF_NONE</property>
@@ -10121,7 +10116,6 @@ JID: whatever@jabber.org</property>
 
 		  <child>
 		    <widget class="GtkToggleButton" id="underline_togglebutton">
-		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Underline</property>
 		      <property name="can_focus">True</property>
 		      <property name="relief">GTK_RELIEF_NONE</property>
