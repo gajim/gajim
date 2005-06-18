@@ -115,9 +115,11 @@ class Systray:
 	def start_chat(self, widget, account, jid):
 		if self.plugin.windows[account]['chats'].has_key(jid):
 			self.plugin.windows[account]['chats'][jid].window.present()
+			self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 		elif self.plugin.roster.contacts[account].has_key(jid):
 			self.plugin.roster.new_chat(
 				self.plugin.roster.contacts[account][jid][0], account)
+			self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 	
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When new message menuitem is activated:
