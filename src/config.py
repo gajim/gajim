@@ -1684,19 +1684,20 @@ class ManageEmoticonsWindow:
 
 	def image_is_ok(self, image):
 		if not os.path.exists(image):
-			return 0
+			return False
 		img = gtk.Image()
 		try:
 			img.set_from_file(image)
 		except:
-			return 0
+			return False
 		if img.get_storage_type() != gtk.IMAGE_PIXBUF:
-			return 0
+			return False
 		pix = img.get_pixbuf()
 
 		if pix.get_width() > 24 or pix.get_height() > 24:
-			return 0
-		return 1
+			dialogs.ErrorDialog(_('Image is too big'), _('Image for emoticon has to be less than or equal to 24 pixels in width and 24 in height.')).get_response()
+			return False
+		return True
 
 	def fill_emot_treeview(self):
 		model = self.emot_tree.get_model()
