@@ -394,7 +394,7 @@ class Interface:
 		jid = jids[0]
 		gcs = self.windows[account]['gc']
 		if jid in gcs:
-			if len(jid) > 1: # it's a pm
+			if len(jids) > 1: # it's a pm
 				nick = jids[1]
 				if not self.windows[account]['chats'].has_key(fjid):
 					gc = gcs[jid]
