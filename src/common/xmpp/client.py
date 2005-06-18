@@ -160,7 +160,8 @@ class CommonClient:
             transports.TLS().PlugIn(self,now=1)
             self.connected='ssl'
         dispatcher.Dispatcher().PlugIn(self)
-        while self.Dispatcher.Stream._document_attrs is None: self.Process(1)
+        while self.Dispatcher.Stream._document_attrs is None:
+            if not self.Process(1): return
         if self.Dispatcher.Stream._document_attrs.has_key('version') and self.Dispatcher.Stream._document_attrs['version']=='1.0':
             while not self.Dispatcher.Stream.features and self.Process(): pass      # If we get version 1.0 stream the features tag MUST BE presented
         return self.connected
@@ -170,12 +171,13 @@ class Client(CommonClient):
     def connect(self,server=None,proxy=None, secure=None):
         """ Connect to jabber server. If you want to specify different ip/port to connect to you can
             pass it as tuple as first parameter. If there is HTTP proxy between you and server -
-            specify it's address and credentials (if needed) in the second argument.
+            specify it's address and credentials (if needed) in the second argument
             If you want ssl/tls support to be discovered and enable automatically - leave third argument as None. (ssl will be autodetected only if port is 5223 or 443)
-            If you want to force SSL start (i.e. if port 5223 or 443 is remapped to some non-standart port) then set it to 1.
-            If you want to disable tls/ssl support completely, set it to 0.
-            Example: connect(('192.168.5.5',5222),{'host':'proxy.my.net','port':8080,'user':'me','password':'secret'})"""
-        if not CommonClient.connect(self,server,proxy,secure) or secure==0: return self.connected
+            If you want to force SSL start (i.e. if port 5223 or 443 is remapped to some non-standart port) then set it to 1
+            If you want to disable tls/ssl support completely, set it to 0
+            Example: connect(('192.168.5.5',5222),{'host':'proxy.my.net','port':8080,'user':'me','password':'secret'})
+            Returns '' (on no connection) or 'tcp' or 'tls', depending on the result."""
+        if not CommonClient.connect(self,server,proxy,secure) or secure<>None and not secure: return self.connected
         transports.TLS().PlugIn(self)
         if not self.Dispatcher.Stream._document_attrs.has_key('version') or not self.Dispatcher.Stream._document_attrs['version']=='1.0': return self.connected
         while not self.Dispatcher.Stream.features and self.Process(): pass      # If we get version 1.0 stream the features tag MUST BE presented
@@ -203,7 +205,7 @@ class Client(CommonClient):
         while self.SASL.startsasl=='in-process' and self.Process(): pass
         if self.SASL.startsasl=='success':
             auth.Bind().PlugIn(self)
-            while self.Bind.bound is None: self.Process()
+            while self.Bind.bound is None and self.Process(): pass
             if self.Bind.Bind(resource):
                 self.connected+='+sasl'
                 return 'sasl'
