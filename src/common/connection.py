@@ -625,13 +625,15 @@ class Connection:
 
 		h = hostname
 		p = 5222
+		secur = None # autodetect [for SSL in 5223/443 and for TLS if broadcasted]
 		if usessl:
 			p = 5223
+			secur=1 #1 means force SSL no matter what the port will be
 		if gajim.config.get_per('accounts', self.name, 'use_custom_host'):
 			h = gajim.config.get_per('accounts', self.name, 'custom_host')
 			p = gajim.config.get_per('accounts', self.name, 'custom_port')
-		#TODO: pass ssl optional arg if neccessary when client.py is patched
-		con_type = con.connect((h, p), proxy = proxy) #FIXME: blocking
+
+		con_type = con.connect((h, p), proxy = proxy, secure=secur) #FIXME: blocking
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
 			self.connected = 0
@@ -885,13 +887,16 @@ class Connection:
 		c.RegisterDisconnectHandler(self._disconnectedCB)
 		h = hostname
 		p = 5222
-		if usessl:
+		usessl = None
+		if usessl: #FIXME: we cannot create an account if we want ssl connection to create it
 			p = 5223
 		if config['use_custom_host']:
 			h = config['custom_host']
 			p = config['custom_port']
-		#FIXME: blocking
-		con_type = c.connect((h, p), proxy = proxy)
+		secur = None # autodetect [for SSL in 5223/443 and for TLS if broadcasted]
+		if usessl:
+			secur=1 #1 means force SSL no matter what the port is
+		con_type = c.connect((h, p), proxy = proxy, secure=secur)#FIXME: blocking
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % name)
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % name,
