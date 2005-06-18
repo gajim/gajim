@@ -319,7 +319,7 @@ class GroupchatWindow(chat.Chat):
 		room_jid = self.get_active_jid()
 		label_text = self.name_labels[room_jid].get_text() # whole text (including JID)
 		subject = label_text[label_text.find('\n') + 1:] # just the text after the newline
-		instance = dialogs.InputDialog(_('Changing the Subject'),
+		instance = dialogs.InputDialog(_('Changing Subject'),
 			_('Please specify the new subject:'), subject)
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
@@ -329,7 +329,7 @@ class GroupchatWindow(chat.Chat):
 	def on_change_nick_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
 		nick = self.nicks[room_jid]
-		instance = dialogs.InputDialog(_('Changing our Nickname'),
+		instance = dialogs.InputDialog(_('Changing Nickname'),
 			_('Please specify the new nickname you want to use:'), nick)
 		response = response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
