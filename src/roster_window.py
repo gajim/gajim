@@ -907,7 +907,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 							_('Save passphrase'))
 						passphrase, save = w.run()
 					if passphrase == -1:
-						passphrase = ''
+						passphrase = None
 					else:
 						self.gpg_passphrase[keyid] = passphrase
 						gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
