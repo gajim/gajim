@@ -1691,9 +1691,13 @@ class ManageEmoticonsWindow:
 			img.set_from_file(image)
 		except:
 			return False
-		if img.get_storage_type() != gtk.IMAGE_PIXBUF:
+		t = img.get_storage_type()
+		if t == gtk.IMAGE_PIXBUF:
+			pix = img.get_pixbuf()
+		elif t == gtk.IMAGE_ANIMATION:
+			pix = img.get_animation().get_static_image()
+		else:
 			return False
-		pix = img.get_pixbuf()
 
 		if pix.get_width() > 24 or pix.get_height() > 24:
 			dialogs.ErrorDialog(_('Image is too big'), _('Image for emoticon has to be less than or equal to 24 pixels in width and 24 in height.')).get_response()

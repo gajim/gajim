@@ -664,9 +664,8 @@ class Interface:
 			img.set_from_file(image)
 		except:
 			return False
-		if img.get_storage_type() == gtk.IMAGE_PIXBUF:
-			pix = img.get_pixbuf()
-		else:
+		t = img.get_storage_type()
+		if t != gtk.IMAGE_PIXBUF and t != gtk.IMAGE_ANIMATION:
 			return False
 		return True
 		
@@ -727,8 +726,9 @@ class Interface:
 			emot_file = gajim.config.get_per('emoticons', emot, 'path')
 			if not self.image_is_ok(emot_file):
 				continue
-			pix = gtk.gdk.pixbuf_new_from_file(emot_file)
-			self.emoticons[emot] = pix
+			img = gtk.Image()
+			img.set_from_file(emot_file)
+			self.emoticons[emot] = emot_file
 		
 		# update regular expressions
 		self.make_regexps()

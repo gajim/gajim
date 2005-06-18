@@ -612,22 +612,27 @@ class Chat:
 			index = end # update index
 			
 			#now print it
-			self.print_special_text(special_text, other_tags,
-								buffer)
+			self.print_special_text(special_text, other_tags, textview)
 					
 		return index
 		
-	def print_special_text(self, special_text, other_tags, buffer):
+	def print_special_text(self, special_text, other_tags, textview):
 		tags = []
 		use_other_tags = True
+		buffer = textview.get_buffer()
 
 		possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
 		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
 			#it's an emoticon
 			emot_ascii = possible_emot_ascii_caps
 			end_iter = buffer.get_end_iter()
-			buffer.insert_pixbuf(end_iter,
-					self.plugin.emoticons[emot_ascii])
+			anchor = buffer.create_child_anchor(end_iter)
+			w = gtk.Image()
+			w.set_from_file(self.plugin.emoticons[emot_ascii])
+			w.show()
+			textview.add_child_at_anchor(w, anchor)
+#			buffer.insert_pixbuf(end_iter,
+#					self.plugin.emoticons[emot_ascii])
 		elif special_text.startswith('mailto:'):
 			#it's a mail
 			tags.append('mail')
