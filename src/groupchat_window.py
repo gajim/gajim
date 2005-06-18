@@ -274,7 +274,7 @@ class GroupchatWindow(chat.Chat):
 			elif statusCode == '303': # Someone changed his nick
 				self.print_conversation(_('%s is now known as %s') % (nick,
 					new_nick), room_jid)
-				if nick == self.nicks[room_jid]: # We changed out nick
+				if nick == self.nicks[room_jid]: # We changed our nick
 					self.nicks[room_jid] = new_nick
 			self.remove_user(room_jid, nick)
 			if nick == self.nicks[room_jid] and statusCode != '303': # We became offline
@@ -317,13 +317,11 @@ class GroupchatWindow(chat.Chat):
 
 	def on_change_subject_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
-		# I don't know how this works with markup... Let's find out!
 		label_text = self.name_labels[room_jid].get_text() # whole text (including JID)
-		subject = label_text[label_text.find('\n') + 1:] # just the text after the newline *shrug*
+		subject = label_text[label_text.find('\n') + 1:] # just the text after the newline
 		instance = dialogs.InputDialog(_('Changing the Subject'),
 			_('Please specify the new subject:'), subject)
-		response = instance.dialog.run()
-		instance.dialog.destroy()
+		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
 			subject = instance.input_entry.get_text()
 			gajim.connections[self.account].send_gc_subject(room_jid, subject)
@@ -331,13 +329,12 @@ class GroupchatWindow(chat.Chat):
 	def on_change_nick_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
 		nick = self.nicks[room_jid]
-		instance = dialogs.InputDialog(_('Changing out Nickname'),
+		instance = dialogs.InputDialog(_('Changing our Nickname'),
 			_('Please specify the new nickname you want to use:'), nick)
-		response = instance.dialog.run()
-		instance.dialog.destroy()
+		response = response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
 			nick = instance.input_entry.get_text()
-			gajim.connections[self.account].change_gc_nick(nick, room_jid)
+			gajim.connections[self.account].change_gc_nick(room_jid, nick)
 
 	def on_configure_room_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
@@ -504,6 +501,12 @@ class GroupchatWindow(chat.Chat):
 			self.gc_refer_to_nick_char in text.lower().split()):
 			other_tags_for_name.append('bold')
 			other_tags_for_text.append('marked')
+		
+		if text.startswith('/nick '):
+			new_nick = text[6:]
+			if len(new_nick.split()) == 1: #dont accept /nick foo bar
+				gajim.connections[self.account].change_gc_nick(room_jid, new_nick)
+			return False
 
 		chat.Chat.print_conversation_line(self, text, room_jid, kind, contact,
 			tim, other_tags_for_name, [], other_tags_for_text)

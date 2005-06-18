@@ -1042,7 +1042,7 @@ class Connection:
 			to = room_jid)
 		self.connection.send(iq)
 	
-	def change_gc_nick(self, nick, room_jid):
+	def change_gc_nick(self, room_jid, nick):
 		if not self.connection:
 			return
 		self.connection.send(common.xmpp.Presence(to = '%s/%s' % (room_jid,

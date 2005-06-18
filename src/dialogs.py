@@ -496,7 +496,12 @@ class InputDialog:
 		label.set_text(label_str)
 		if input_str:
 			self.input_entry.set_text(input_str)
-			self.input_entry.select_region(0, -1) # select all	
+			self.input_entry.select_region(0, -1) # select all
+	
+	def get_response(self):
+		response = self.dialog.run()
+		self.dialog.destroy()
+		return response
 	
 class ErrorDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
@@ -710,12 +715,12 @@ _('Without a connection, you can not change your password.')).get_response()
 			if rep == gtk.RESPONSE_OK:
 				password1 = self.password1_entry.get_text()
 				if not password1:
-					ErrorDialog(_('Invalid password.'), \
+					ErrorDialog(_('Invalid password.'),
 							_('You must enter a password.')).get_response()
 					continue
 				password2 = self.password2_entry.get_text()
 				if password1 != password2:
-					ErrorDialog(_("Passwords don't match."), \
+					ErrorDialog(_("Passwords don't match."),
 							_('The passwords typed in both fields must be identical.')).get_response()
 					continue
 				message = password1

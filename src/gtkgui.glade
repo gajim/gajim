@@ -10817,7 +10817,6 @@ JID: whatever@jabber.org</property>
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="has_separator">True</property>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox8">
@@ -10959,7 +10958,7 @@ JID: whatever@jabber.org</property>
 		<widget class="GtkLabel" id="label212">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Enter the user ID of the contact you would like to
-send a chat message to</property>
+send a chat message to:</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -15290,7 +15289,7 @@ the Jabber network.</property>
   <child>
     <widget class="GtkImageMenuItem" id="change_nick_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Change _Nick</property>
+      <property name="label" translatable="yes">Change _Nickname</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_change_nick_menuitem_activate" last_modification_time="Sat, 18 Jun 2005 20:23:46 GMT"/>
 
