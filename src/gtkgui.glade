@@ -969,7 +969,7 @@
 		<widget class="GtkCheckButton" id="log_history_checkbutton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Conversation _history for all contacts in this account</property>
+		  <property name="label" translatable="yes">Save conversation _logs for all contacts</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
