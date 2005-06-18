@@ -1638,6 +1638,7 @@ class ManageEmoticonsWindow:
 		#emoticons
 		self.emot_tree = self.xml.get_widget('emoticons_treeview')
 		model = gtk.ListStore(str, str, gtk.Image)
+		model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 		self.emot_tree.set_model(model)
 		col = gtk.TreeViewColumn(_('Text'))
 		self.emot_tree.append_column(col)
@@ -1821,6 +1822,10 @@ _('Without a connection, you can not browse available services')).get_response()
 			raise RuntimeError, 'You must be connected to browse services'
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
 		self.window = xml.get_widget('service_discovery_window')
+		if len(gajim.connections):
+			self.window.set_title(_('Service Discovery using %s account') %account)
+		else:
+			self.window.set_title(_('Service Discovery'))
 		self.services_treeview = xml.get_widget('services_treeview')
 		self.join_button = xml.get_widget('join_button')
 		self.register_button = xml.get_widget('register_button')
@@ -1828,8 +1833,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.address_comboboxentry_entry = self.address_comboboxentry.child
 		self.address_comboboxentry_entry.set_activates_default(True)
 		
-		model = gtk.TreeStore(str, str,
-			str)
+		model = gtk.TreeStore(str, str, str)
 		model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 		self.services_treeview.set_model(model)
 		#columns

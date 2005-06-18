@@ -1278,7 +1278,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 
 	def on_editing_canceled (self, cell):
 		'''editing has been canceled'''
-		#TODO: get iter
+		#FIXME: get iter
 		#model.set_value(iter, 5, False)
 		pass
 
@@ -1484,8 +1484,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				jid2 = model.get_value(iter2, 3)
 				luser1 = self.contacts[account][jid1]
 				luser2 = self.contacts[account][jid2]
-				cshow = {'online':0, 'chat': 1, 'away':2, 'xa':3, 'dnd':4,
-					'invisible':5, 'offline':6, 'not in the roster':7, 'error':8}
+				cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
+					'invisible': 5, 'offline': 6, 'not in the roster': 7, 'error': 8}
 				s = self.get_show(luser1)
 				if s in cshow:
 					show1 = cshow[s]
