@@ -243,8 +243,8 @@ class RosterWindow:
 
 	def join_gc_room(self, account, room_jid, nick, password):
 		if room_jid in self.plugin.windows[account]['gc']:
-			dialogs.ErrorDialog(_('You are already in room ' + room_jid)
-					).get_response()
+			dialogs.ErrorDialog(_('You are already in room %s') %room_jid
+				).get_response()
 			return
 		room, server = room_jid.split('@')
 		self.new_room(room_jid, nick, account)
