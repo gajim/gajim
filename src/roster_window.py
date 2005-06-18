@@ -1624,7 +1624,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.newly_added[a] = []
 			self.to_be_removed[a] = []
 		#(icon, name, type, jid, account, editable)
-		model = gtk.TreeStore(gtk.Image, str, str, str, str, gobject.TYPE_BOOLEAN)
+		model = gtk.TreeStore(gtk.Image, str, str, str, str, bool)
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
@@ -1640,8 +1640,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.transports_state_images[transport] = self.load_iconset(folder + \
 				'/16x16/')
 
-		liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.Image, 
-			gobject.TYPE_STRING)
+		liststore = gtk.ListStore(str, gtk.Image, 
+			str)
 		self.status_combobox = gtk.ComboBox()
 		roster_vbox = self.xml.get_widget('roster_vbox')
 		roster_vbox.pack_end(self.status_combobox, False)

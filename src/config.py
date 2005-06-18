@@ -152,7 +152,7 @@ class PreferencesWindow:
 		cell = gtk.CellRendererText()
 		theme_combobox.pack_start(cell, True)
 		theme_combobox.add_attribute(cell, 'text', 0)  
-		model = gtk.ListStore(gobject.TYPE_STRING)
+		model = gtk.ListStore(str)
 		theme_combobox.set_model(model)
 		i = 0
 		for t in gajim.config.get_per('themes'):
@@ -259,9 +259,9 @@ class PreferencesWindow:
 
 		#sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
-		model = gtk.ListStore(gobject.TYPE_STRING,
-					gobject.TYPE_BOOLEAN,
-					gobject.TYPE_STRING)
+		model = gtk.ListStore(str,
+					bool,
+					str)
 		self.sound_tree.set_model(model)
 
 		col = gtk.TreeViewColumn(_('Active'))
@@ -313,7 +313,7 @@ class PreferencesWindow:
 
 		#Status messages
 		self.msg_tree = self.xml.get_widget('msg_treeview')
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		model = gtk.ListStore(str, str)
 		self.msg_tree.set_model(model)
 		col = gtk.TreeViewColumn('name')
 		self.msg_tree.append_column(col)
@@ -972,7 +972,7 @@ class AccountModificationWindow:
 		if not our_proxy:
 			our_proxy = 'None'
 		self.proxy_combobox = self.xml.get_widget('proxies_combobox')
-		model = gtk.ListStore(gobject.TYPE_STRING)
+		model = gtk.ListStore(str)
 		self.proxy_combobox.set_model(model)
 		l = gajim.config.get_per('proxies')
 		l.insert(0, 'None')
@@ -1337,7 +1337,7 @@ class ManageProxiesWindow:
 		self.xml.get_widget('remove_proxy_button').set_sensitive(False)
 		self.xml.get_widget('proxytype_combobox').set_sensitive(False)
 		self.xml.get_widget('proxy_table').set_sensitive(False)
-		model = gtk.ListStore(gobject.TYPE_STRING)
+		model = gtk.ListStore(str)
 		self.proxies_treeview.set_model(model)
 		col = gtk.TreeViewColumn('Proxies')
 		self.proxies_treeview.append_column(col)
@@ -1485,8 +1485,8 @@ class AccountsWindow:
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
 		self.modify_button = self.xml.get_widget('modify_button')
 		self.remove_button = self.xml.get_widget('remove_button')
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING,
-					gobject.TYPE_BOOLEAN)
+		model = gtk.ListStore(str, str,
+					bool)
 		self.accounts_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
@@ -1632,7 +1632,7 @@ class ManageEmoticonsWindow:
 
 		#emoticons
 		self.emot_tree = self.xml.get_widget('emoticons_treeview')
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gtk.Image)
+		model = gtk.ListStore(str, str, gtk.Image)
 		self.emot_tree.set_model(model)
 		col = gtk.TreeViewColumn(_('Text'))
 		self.emot_tree.append_column(col)
@@ -1822,8 +1822,8 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.address_comboboxentry_entry = self.address_comboboxentry.child
 		self.address_comboboxentry_entry.set_activates_default(True)
 		
-		model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING,
-			gobject.TYPE_STRING)
+		model = gtk.TreeStore(str, str,
+			str)
 		model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 		self.services_treeview.set_model(model)
 		#columns

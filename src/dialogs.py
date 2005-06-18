@@ -99,7 +99,7 @@ class EditGroupsDialog:
 		self.update_user()
 
 	def init_list(self):
-		store = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
+		store = gtk.ListStore(str, bool)
 		self.list.set_model(store)
 		for g in self.plugin.roster.groups[self.account].keys():
 			if g in ['Transports', 'not in the roster']:
@@ -179,7 +179,7 @@ class ChooseGPGKeyDialog:
 		self.keys_treeview = xml.get_widget('keys_treeview')
 		prompt_label = xml.get_widget('prompt_label')
 		prompt_label.set_text(prompt_text)
-		model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+		model = gtk.ListStore(str, str)
 		self.keys_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
