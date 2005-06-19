@@ -627,10 +627,10 @@ class Chat:
 			emot_ascii = possible_emot_ascii_caps
 			end_iter = buffer.get_end_iter()
 			anchor = buffer.create_child_anchor(end_iter)
-			w = gtk.Image()
-			w.set_from_file(self.plugin.emoticons[emot_ascii])
-			w.show()
-			textview.add_child_at_anchor(w, anchor)
+			img = gtk.Image()
+			img.set_from_file(self.plugin.emoticons[emot_ascii])
+			img.show()
+			textview.add_child_at_anchor(img, anchor)
 #			buffer.insert_pixbuf(end_iter,
 #					self.plugin.emoticons[emot_ascii])
 		elif special_text.startswith('mailto:'):
@@ -771,8 +771,9 @@ class Chat:
 		if (jid != self.get_active_jid() or \
 		   not self.window.is_active() or \
 		   not end) and kind == 'incoming':
-			if self.widget_name == 'groupchat_window': # Do not print gc messages
-				if text.find(self.nicks[jid]) == -1:		 # that are not for us
+			if self.widget_name == 'groupchat_window':
+				# Do not notify us for gc messages that are not for us
+				if text.find(self.nicks[jid]) == -1:
 					return
 			self.nb_unread[jid] += 1
 			if self.plugin.systray_enabled:
