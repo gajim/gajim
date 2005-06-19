@@ -7768,7 +7768,7 @@ Custom</property>
 	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">0</property>
+	      <property name="spacing">6</property>
 
 	      <child>
 		<widget class="GtkScrolledWindow" id="scrolledwindow33">
@@ -7802,7 +7802,7 @@ Custom</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">False</property>
+		  <property name="expand">True</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -7868,7 +7868,7 @@ Custom</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
