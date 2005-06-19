@@ -218,7 +218,7 @@ class Systray:
 		win = self.plugin.roster.window
 		if event.button == 1: # Left click
 			if len(self.jids) == 0:
-				if win.flags() & gtk.VISIBLE:
+				if win.get_property('visible'):
 					win.hide()
 				else:
 					win.present()

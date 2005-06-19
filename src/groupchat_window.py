@@ -497,7 +497,7 @@ class GroupchatWindow(chat.Chat):
 				return # don't print the command
 				
 			elif message.startswith('/msg '): #eg. /msg fooman hello man what's up
-				text_after_msg_command = message[5:].strip()
+				text_after_msg_command = message[5:].strip() # 5 is len('/msg ')
 				splitted_text_after_msg_command = text_after_msg_command.split()
 				if len(splitted_text_after_msg_command) >= 2: #dont accept /msg foo
 					nicks = self.get_nick_list(room_jid)
