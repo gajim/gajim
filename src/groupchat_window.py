@@ -41,13 +41,15 @@ class GroupchatWindow(chat.Chat):
 	"""Class for Groupchat window"""
 	def __init__(self, room_jid, nick, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
+		self.muc_cmds = ['chat', 'clear', 'me', 'msg', 'nick'] # alphanum sorted
 		self.nicks = {} # our nick for each groupchat we are in
 		self.list_treeview = {}
 		self.subjects = {}
 		self.name_labels = {}
 		self.subject_tooltip = {}
 		self.room_creation = {}
-		self.nick_hits = {}
+		self.nick_hits = {} # possible candidates for nick completion
+		self.cmd_hits = {} # possible candidates for command completion
 		self.last_key_tabs = {}
 		self.hpaneds = {} # used for auto positioning
 		self.hpaned_position = gajim.config.get('gc-hpaned-position')
@@ -384,13 +386,34 @@ class GroupchatWindow(chat.Chat):
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
 			else:
-				list_nick = self.get_nick_list(room_jid)
 				cursor_position = message_buffer.get_insert()
 				end_iter = message_buffer.get_iter_at_mark(cursor_position)
 				text = message_buffer.get_text(start_iter, end_iter, False)
 				if not text or text.endswith(' '):
 					if not self.last_key_tabs[room_jid]: # if we are nick cycling, last char will always be space
 						return False
+
+				# command completion
+				if text.startswith('/') and len(text.split()) == 1:
+					if len(text) == 1: # user wants to cycle all commands
+						self.cmd_hits[room_jid] = self.muc_cmds
+					else:
+						# cycle possible commands depending on what the user typed
+						if self.last_key_tabs[room_jid] and \
+								self.cmd_hits[room_jid][0].startswith(text.lstrip('/')):
+							self.cmd_hits[room_jid].append(self.cmd_hits[room_jid][0])
+							self.cmd_hits[room_jid].pop(0)
+						else: # find possible commands
+							self.cmd_hits[room_jid] = []
+							for cmd in self.muc_cmds:
+								if cmd.startswith(text.lstrip('/')):
+									self.cmd_hits[room_jid].append(cmd)
+					message_buffer.delete(start_iter, end_iter)
+					message_buffer.insert_at_cursor('/' + self.cmd_hits[room_jid][0])					
+					self.last_key_tabs[room_jid] = True
+					return True
+
+				# nick completion
 				splitted_text = text.split()
 				# check if tab is pressed with empty message
 				if len(splitted_text): # if there are any words
@@ -404,6 +427,7 @@ class GroupchatWindow(chat.Chat):
 					self.nick_hits[room_jid].pop(0)
 				else:
 					self.nick_hits[room_jid] = [] # clear the hit list
+					list_nick = self.get_nick_list(room_jid)
 					for nick in list_nick: 
 						if nick.lower().startswith(begin.lower()): # the word is the begining of a nick
 							self.nick_hits[room_jid].append(nick)
@@ -723,6 +747,7 @@ class GroupchatWindow(chat.Chat):
 		self.subjects[room_jid] = ''
 		self.room_creation[room_jid] = time.time()
 		self.nick_hits[room_jid] = []
+		self.cmd_hits[room_jid] = []
 		self.last_key_tabs[room_jid] = False
 		self.hpaneds[room_jid] = self.xmls[room_jid].get_widget('hpaned')
 		self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
