@@ -639,58 +639,46 @@ _('You can not join a group chat unless you are connected.')).get_response()
 
 class NewMessageDialog:
 	def __init__(self, plugin, account):
-		if gajim.connections[account].connected < 2:
-			ErrorDialog(_('You are not connected to the server'),
-				_('Without a connection, you can not send messages.')).get_response()
-			return
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'new_message_dialog', APP)
-		self.window = self.xml.get_widget('new_message_dialog')
-		self.jid_entry = self.xml.get_widget('jid_entry')
-
+		
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
 			title = _('New Message as ') + our_jid
 		else:
 			title = _('New Message')
-		self.window.set_title(title)
-		
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
+		prompt_text = _('Enter the user ID of the contact you would like\nto send a chat message to:')
 
-	def on_cancel_button_clicked(self, widget):
-		'''When Cancel button is clicked'''
-		self.window.destroy()
+		instance = InputDialog(title, prompt_text)
+		response = instance.get_response()
+		if response == gtk.RESPONSE_OK:  
+			jid = instance.input_entry.get_text()
 
-	def on_chat_button_clicked(self, widget):
-		'''When Chat button is clicked'''
-		jid = self.jid_entry.get_text()
-		if jid.find('@') == -1: # if no @ was given
-			ErrorDialog(_('Invalid user ID'),
-_('User ID must be of the form "username@servername".')).get_response()
-			return
-		self.window.destroy()
-		# use User class, new_chat expects it that way
-		# is it in the roster?
-		if self.plugin.roster.contacts[self.account].has_key(jid):
-			user = self.plugin.roster.contacts[self.account][jid][0]
-		else:
-			keyID = ''
-			attached_keys = gajim.config.get_per('accounts', self.account,
-				'attached_gpg_keys').split()
-			if jid in attached_keys:
-				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user = User(jid, jid, ['not in the roster'], 'not in the roster',
-				'not in the roster', 'none', None, '', 0, keyID)
-			self.plugin.roster.contacts[self.account][jid] = [user]
-			self.plugin.roster.add_user_to_roster(user.jid, self.account)			
+			if jid.find('@') == -1: # if no @ was given
+				ErrorDialog(_('Invalid user ID'),
+		_('User ID must be of the form "username@servername".')).get_response()
+				return
 
-		if not self.plugin.windows[self.account]['chats'].has_key(jid):
-			self.plugin.roster.new_chat(user, self.account)
-		self.plugin.windows[self.account]['chats'][jid].set_active_tab(jid)
-		self.plugin.windows[self.account]['chats'][jid].window.present()
+			# use User class, new_chat expects it that way
+			# is it in the roster?
+			if self.plugin.roster.contacts[self.account].has_key(jid):
+				user = self.plugin.roster.contacts[self.account][jid][0]
+			else:
+				keyID = ''
+				attached_keys = gajim.config.get_per('accounts', self.account,
+					'attached_gpg_keys').split()
+				if jid in attached_keys:
+					keyID = attached_keys[attached_keys.index(jid) + 1]
+				user = User(jid, jid, ['not in the roster'], 'not in the roster',
+					'not in the roster', 'none', None, '', 0, keyID)
+				self.plugin.roster.contacts[self.account][jid] = [user]
+				self.plugin.roster.add_user_to_roster(user.jid, self.account)			
+
+			if not self.plugin.windows[self.account]['chats'].has_key(jid):
+				self.plugin.roster.new_chat(user, self.account)
+			self.plugin.windows[self.account]['chats'][jid].set_active_tab(jid)
+			self.plugin.windows[self.account]['chats'][jid].window.present()
 
 class ChangePasswordDialog:
 	def __init__(self, plugin, account):
