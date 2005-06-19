@@ -41,7 +41,7 @@ class GroupchatWindow(chat.Chat):
 	"""Class for Groupchat window"""
 	def __init__(self, room_jid, nick, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
-		self.nicks = {}
+		self.nicks = {} # our nick for each groupchat we are in
 		self.list_treeview = {}
 		self.subjects = {}
 		self.name_labels = {}
@@ -190,6 +190,7 @@ class GroupchatWindow(chat.Chat):
 		return None
 
 	def get_nick_list(self, room_jid):
+		'''get nicks of contacts in a room'''
 		model = self.list_treeview[room_jid].get_model()
 		list = []
 		fin = False
@@ -468,6 +469,7 @@ class GroupchatWindow(chat.Chat):
 		message_buffer.set_text('', -1)
 
 	def send_gc_message(self, message):
+		'''call this function to send our message'''
 		room_jid = self.get_active_jid()
 		message_textview = self.xmls[room_jid].get_widget(
 			'message_textview')
@@ -478,12 +480,32 @@ class GroupchatWindow(chat.Chat):
 				self.on_clear(None, conversation_textview) # clear conversation
 				self.on_clear(None, widget) # clear message textview too
 				return
-			if message.startswith('/nick '):
-				new_nick = message[6:]
+
+			elif message.startswith('/nick '):
+				new_nick = message[6:].strip() # 6 is len('/nick ')
 				if len(new_nick.split()) == 1: #dont accept /nick foo bar
 					gajim.connections[self.account].change_gc_nick(room_jid,
 						new_nick)
-					return
+				return # don't print the command
+
+			elif message.startswith('/chat '):#eg. /chat fooman
+				to_whom_nick = message[6:].strip() # 6 is len('/nick ')
+				if len(to_whom_nick.split()) == 1: #dont accept /chat foo bar
+					nicks = self.get_nick_list(room_jid)
+					if to_whom_nick in nicks:
+						self.on_send_pm(nick=to_whom_nick)
+				return # don't print the command
+				
+			elif message.startswith('/msg '): #eg. /msg fooman hello man what's up
+				text_after_msg_command = message[5:].strip()
+				splitted_text_after_msg_command = text_after_msg_command.split()
+				if len(splitted_text_after_msg_command) >= 2: #dont accept /msg foo
+					nicks = self.get_nick_list(room_jid)
+					to_whom_nick = splitted_text_after_msg_command[0]
+					if to_whom_nick in nicks:
+						message = ' '.join(splitted_text_after_msg_command[1:])
+						self.on_send_pm(nick=to_whom_nick, msg=message)
+				return # don't print the command
 
 		gajim.connections[self.account].send_gc_message(room_jid, message)
 		message_buffer.set_text('', -1)
@@ -587,14 +609,20 @@ class GroupchatWindow(chat.Chat):
 	def on_add_to_roster(self, widget, jid):
 		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
 
-	def on_send_pm(self, widget, model=None, iter=None):
+	def on_send_pm(self, widget=None, model=None, iter=None, nick=None, msg=None):
+		'''opens a chat window and optionally sends private message to a 
+		contact in a room'''
+		if nick is None:
+			nick = model.get_value(iter, 1)
 		room_jid = self.get_active_jid()
-		nick = model.get_value(iter, 1)
-		fjid = room_jid + '/' + nick
+		fjid = room_jid + '/' + nick # 'fake' jid
 		if not self.plugin.windows[self.account]['chats'].has_key(fjid):
-			show = model.get_value(iter, 3)
+			#show = model.get_value(iter, 3) #FIXME: be able to get show from nick
+			show = 'chat'
 			u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0, '')
 			self.plugin.roster.new_chat(u, self.account)
+		if msg:
+			self.plugin.windows[self.account]['chats'][fjid].send_message(msg)
 		self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
 		self.plugin.windows[self.account]['chats'][fjid].window.present()
 
