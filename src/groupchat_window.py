@@ -477,7 +477,14 @@ class GroupchatWindow(chat.Chat):
 			if message == '/clear':
 				self.on_clear(None, conversation_textview) # clear conversation
 				self.on_clear(None, widget) # clear message textview too
-				return True
+				return
+			if message.startswith('/nick '):
+				new_nick = message[6:]
+				if len(new_nick.split()) == 1: #dont accept /nick foo bar
+					gajim.connections[self.account].change_gc_nick(room_jid,
+						new_nick)
+					return
+
 		gajim.connections[self.account].send_gc_message(room_jid, message)
 		message_buffer.set_text('', -1)
 		message_textview.grab_focus()
@@ -502,12 +509,6 @@ class GroupchatWindow(chat.Chat):
 			other_tags_for_name.append('bold')
 			other_tags_for_text.append('marked')
 		
-		if text.startswith('/nick '):
-			new_nick = text[6:]
-			if len(new_nick.split()) == 1: #dont accept /nick foo bar
-				gajim.connections[self.account].change_gc_nick(room_jid, new_nick)
-			return False
-
 		chat.Chat.print_conversation_line(self, text, room_jid, kind, contact,
 			tim, other_tags_for_name, [], other_tags_for_text)
 
