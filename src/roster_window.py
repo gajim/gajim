@@ -325,6 +325,8 @@ class RosterWindow:
 			sub_menu = gtk.Menu()
 			add_new_contact_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
+				if gajim.connections[account].connected <= 1: #if offline or connecting
+					continue
 				item = gtk.MenuItem(_('to ') + account + _(' account'))
 				sub_menu.append(item)
 				item.connect('activate', self.on_add_new_contact, account)
@@ -333,6 +335,8 @@ class RosterWindow:
 			sub_menu = gtk.Menu()
 			service_disco_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
+				if gajim.connections[account].connected <= 1: #if offline or connecting
+					continue
 				item = gtk.MenuItem(_('using ') + account + _(' account'))
 				sub_menu.append(item)
 				item.connect('activate', self.on_service_disco_menuitem_activate, account)
@@ -342,6 +346,8 @@ class RosterWindow:
 			sub_menu = gtk.Menu()
 			new_message_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
+				if gajim.connections[account].connected <= 1: #if offline or connecting
+					continue
 				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
 					gajim.config.get_per('accounts', account, 'hostname')
 				item = gtk.MenuItem(_('as ') + our_jid)
