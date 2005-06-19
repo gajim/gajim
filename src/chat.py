@@ -771,6 +771,9 @@ class Chat:
 		if (jid != self.get_active_jid() or \
 		   not self.window.is_active() or \
 		   not end) and kind == 'incoming':
+			if self.widget_name == 'groupchat_window': # Do not print gc messages
+				if text.find(self.nicks[jid]) == -1:		 # that are not for us
+					return
 			self.nb_unread[jid] += 1
 			if self.plugin.systray_enabled:
 				self.plugin.systray.add_jid(jid, self.account)
