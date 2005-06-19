@@ -408,9 +408,11 @@ class GroupchatWindow(chat.Chat):
 							for cmd in self.muc_cmds:
 								if cmd.startswith(text.lstrip('/')):
 									self.cmd_hits[room_jid].append(cmd)
-					message_buffer.delete(start_iter, end_iter)
-					message_buffer.insert_at_cursor('/' + self.cmd_hits[room_jid][0])					
-					self.last_key_tabs[room_jid] = True
+					if len(self.cmd_hits[room_jid]):
+						message_buffer.delete(start_iter, end_iter)
+						message_buffer.insert_at_cursor('/' + \
+							self.cmd_hits[room_jid][0])
+						self.last_key_tabs[room_jid] = True
 					return True
 
 				# nick completion
