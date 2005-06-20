@@ -192,6 +192,8 @@ class RosterWindow:
 			state_images = self.transports_state_images['aim']
 		elif host.startswith('gadugadu'):
 			state_images = self.transports_state_images['gadugadu']
+		elif host.startswith('gg'):
+			state_images = self.transports_state_images['gadugadu']
 		elif host.startswith('irc'):
 			state_images = self.transports_state_images['irc']
 		elif host.startswith('icq'): # abc@icqsucks.org will match as ICQ, but what to do..
@@ -200,6 +202,8 @@ class RosterWindow:
 			state_images = self.transports_state_images['msn']
 		elif host.startswith('sms'):
 			state_images = self.transports_state_images['sms']
+		elif host.startswith('tlen'):
+			state_images = self.transports_state_images['tlen']
 		elif host.startswith('yahoo'):
 			state_images = self.transports_state_images['yahoo']
 		else:
