@@ -38,8 +38,6 @@ else:
 			self.options.extra_args.append('--no-secmem-warning')
 			# Nolith's patch - prevent crashs on non fully-trusted keys
 			self.options.extra_args.append('--always-trust')
-			# Try to use agent if it is available
-			self.options.extra_args.append('--use-agent')
 
 		def _read_response(self, child_stdout):
 			# Internal method: reads all the output from GPG, taking notice
