@@ -299,9 +299,10 @@ class Connection:
 				self.dispatch('ERROR', (errmsg, ''))
 			elif errcode == '502': # Internal Timeout:
 				self.dispatch('NOTIFY', (prs.getFrom().getStripped().encode('utf8'),
-					'error', errmsg, prs.getFrom().getResource().encode('utf8'), prio, keyID,
-					prs.getRole(), prs.getAffiliation(), prs.getJid(),
-					prs.getReason(), prs.getActor(), prs.getStatusCode()))
+					'error', errmsg, prs.getFrom().getResource().encode('utf8'),
+					prio, keyID, prs.getRole(), prs.getAffiliation(), prs.getJid(),
+					prs.getReason(), prs.getActor(), prs.getStatusCode(),
+					prs.getNewNick()))
 			else:
 				self.dispatch('ERROR_ANSWER', (prs.getFrom().getStripped(), errmsg,
 																					errcode))
