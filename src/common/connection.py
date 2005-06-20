@@ -172,6 +172,8 @@ class Connection:
 			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 			frm = name + '@' + hostname
 		vcard = {'jid': frm}
+		if not vc.getTag('vCard'):
+			return
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
 			for info in card.getChildren():
