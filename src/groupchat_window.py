@@ -223,15 +223,15 @@ class GroupchatWindow(chat.Chat):
 		if model.iter_n_children(parent_iter) == 0:
 			model.remove(parent_iter)
 	
-	def add_user_to_roster(self, room_jid, nick, show, role, jid):
+	def add_user_to_roster(self, room_jid, nick, show, role, jid, affiliation):
 		model = self.list_treeview[room_jid].get_model()
 		image = self.plugin.roster.jabber_state_images[show]
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None,
 				(self.plugin.roster.jabber_state_images['closed'], '<b>%ss</b>' % role.capitalize(),
-				 role, ''))
-		iter = model.append(role_iter, (image, nick, jid, show))
+				 role, '', ''))
+		iter = model.append(role_iter, (image, nick, jid, show, affiliation))
 		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)),
 			False)
 		return iter
@@ -285,18 +285,19 @@ class GroupchatWindow(chat.Chat):
 			if jid:
 				ji = jid.split('/')[0]
 			if not iter:
-				iter = self.add_user_to_roster(room_jid, nick, show, role, ji)
+				iter = self.add_user_to_roster(room_jid, nick, show, role, ji, affiliation)
 			else:
 				actual_role = self.get_role(room_jid, iter)
 				if role != actual_role:
 					self.remove_user(room_jid, nick)
-					self.add_user_to_roster(room_jid, nick, show, role, ji)
+					self.add_user_to_roster(room_jid, nick, show, role, ji, affiliation)
 				else:
 					roster = self.plugin.roster
 					state_images = roster.get_appropriate_state_images(ji)
 					image = state_images[show]
 					model.set_value(iter, 0, image)
 					model.set_value(iter, 3, show)
+					model.set_value(iter, 4, affiliation)
 		if (time.time() - self.room_creation[room_jid]) > 30 and \
 				nick != self.nicks[room_jid] and statusCode != '303':
 			if show == 'offline':
@@ -657,6 +658,13 @@ class GroupchatWindow(chat.Chat):
 		model = self.list_treeview[room_jid].get_model()
 		nick = model.get_value(iter, 1)
 		jid = model.get_value(iter, 2)
+		target_affiliation = model.get_value(iter, 4)
+		target_role = self.get_role(room_jid, iter)
+
+		# looking for user's affiliation and role
+		user_iter = self.get_user_iter(room_jid, self.nicks[room_jid])
+		user_affiliation = model.get_value(user_iter, 4)
+		user_role = self.get_role(room_jid, user_iter)
 		
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_('_Privileges'))
@@ -664,51 +672,80 @@ class GroupchatWindow(chat.Chat):
 		
 		sub_menu = gtk.Menu()
 		item.set_submenu(sub_menu)
-		item = gtk.MenuItem(_('_Kick'))
-		sub_menu.append(item)
-		item.connect('activate', self.kick, room_jid, nick)
-		item = gtk.MenuItem(_('_Grant Voice'))
-		sub_menu.append(item)
-		item.connect('activate', self.grant_voice, room_jid, nick)
-		item = gtk.MenuItem(_('_Revoke Voice'))
-		sub_menu.append(item)
-		item.connect('activate', self.revoke_voice, room_jid, nick)
-		item = gtk.MenuItem(_('_Grant Moderator'))
-		sub_menu.append(item)
-		item.connect('activate', self.grant_moderator, room_jid, nick)
-		item = gtk.MenuItem(_('_Revoke Moderator'))
-		sub_menu.append(item)
-		item.connect('activate', self.revoke_moderator, room_jid, nick)
-		if jid:
+
+		# these conditions were taken from JEP 0045
+		if (user_role == 'moderator'):
+			if (target_role in ('visitor','participant')):
+				item = gtk.MenuItem(_('_Kick'))
+				sub_menu.append(item)
+				item.connect('activate', self.kick, room_jid, nick)
+	
+			if (target_role == 'visitor'):
+				item = gtk.MenuItem(_('_Grant Voice'))
+				sub_menu.append(item)
+				item.connect('activate', self.grant_voice, room_jid, nick)
+			# I know it is complicated, but this is how does JEP0045 descibe
+			# 'revoking voice' privilege
+			elif (user_affiliation=='member' and target_affiliation=='none') or \
+			     ((user_affiliation in ('admin','owner')) and \
+			      (target_affiliation in ('none','member'))):
+				item = gtk.MenuItem(_('_Revoke Voice'))
+				sub_menu.append(item)
+				item.connect('activate', self.revoke_voice, room_jid, nick)
+
+		if (user_affiliation in ('admin','owner')):
 			item = gtk.MenuItem()
 			sub_menu.append(item)
 
-			item = gtk.MenuItem(_('_Ban'))
-			sub_menu.append(item)
-			item.connect('activate', self.ban, room_jid, jid)
-			item = gtk.MenuItem(_('_Grant Membership'))
-			sub_menu.append(item)
-			item.connect('activate', self.grant_membership, room_jid, jid)
-			item = gtk.MenuItem(_('_Revoke Membership'))
-			sub_menu.append(item)
-			item.connect('activate', self.revoke_membership, room_jid, jid)
-			item = gtk.MenuItem(_('_Grant Admin'))
-			sub_menu.append(item)
-			item.connect('activate', self.grant_admin, room_jid, jid)
-			item = gtk.MenuItem(_('_Revoke Admin'))
-			sub_menu.append(item)
-			item.connect('activate', self.revoke_admin, room_jid, jid)
-			item = gtk.MenuItem(_('_Grant Owner'))
-			sub_menu.append(item)
-			item.connect('activate', self.grant_owner, room_jid, jid)
-			item = gtk.MenuItem(_('_Revoke Owner'))
-			sub_menu.append(item)
-			item.connect('activate', self.revoke_owner, room_jid, jid)
+			if not target_role == 'moderator':
+				item = gtk.MenuItem(_('_Grant Moderator'))
+				sub_menu.append(item)
+				item.connect('activate', self.grant_moderator, room_jid, nick)
+			elif target_affiliation in ('none','member'):
+				item = gtk.MenuItem(_('_Revoke Moderator'))
+				sub_menu.append(item)
+				item.connect('activate', self.revoke_moderator, room_jid, nick)
 
-			item = gtk.MenuItem(_('_Information'))
-			menu.append(item)
-			item.connect('activate', self.on_info, jid)
+			if (target_affiliation in ('none','member')) or \
+			    (user_affiliation=='owner'):
+				item = gtk.MenuItem(_('_Ban'))
+				sub_menu.append(item)
+				item.connect('activate', self.ban, room_jid, jid)
 
+			if target_affiliation=='none':
+				item = gtk.MenuItem(_('_Grant Membership'))
+				sub_menu.append(item)
+				item.connect('activate', self.grant_membership, room_jid, jid)
+			if (target_affiliation in ('member')) or \
+			   (target_affiliation in ('admin','owner') and (user_affiliation=='owner')):
+				item = gtk.MenuItem(_('_Revoke Membership'))
+				sub_menu.append(item)
+				item.connect('activate', self.revoke_membership, room_jid, jid)
+
+		if user_affiliation=='owner':
+			if (not target_affiliation=='admin'):
+				item = gtk.MenuItem(_('_Grant Admin'))
+				sub_menu.append(item)
+				item.connect('activate', self.grant_admin, room_jid, jid)
+			else:
+				item = gtk.MenuItem(_('_Revoke Admin'))
+				sub_menu.append(item)
+				item.connect('activate', self.revoke_admin, room_jid, jid)
+
+			if (not target_affiliation=='owner'):
+				item = gtk.MenuItem(_('_Grant Owner'))
+				sub_menu.append(item)
+				item.connect('activate', self.grant_owner, room_jid, jid)
+			else:
+				item = gtk.MenuItem(_('_Revoke Owner'))
+				sub_menu.append(item)
+				item.connect('activate', self.revoke_owner, room_jid, jid)
+
+		item = gtk.MenuItem(_('_Information'))
+		menu.append(item)
+		item.connect('activate', self.on_info, jid and jid or (room_jid+'/'+nick))
+
+		if jid:
 			item = gtk.MenuItem(_('_Add to Roster'))
 			menu.append(item)
 			item.connect('activate', self.on_add_to_roster, jid)
@@ -774,8 +811,8 @@ class GroupchatWindow(chat.Chat):
 		xm.signal_autoconnect(self)
 		self.gc_actions_menu = xm.get_widget('gc_actions_menu')
 
-		#status_image, nickname, real_jid, show
-		store = gtk.TreeStore(gtk.Image, str, str, str)
+		#status_image, nickname, real_jid, show, affiliation
+		store = gtk.TreeStore(gtk.Image, str, str, str, str)
 		store.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		column = gtk.TreeViewColumn('contacts')
 		renderer_image = cell_renderer_image.CellRendererImage()
