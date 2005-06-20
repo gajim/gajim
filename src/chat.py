@@ -53,15 +53,15 @@ class Chat:
 		self.account = account
 		self.change_cursor = None
 		self.xmls = {}
-		self.tagIn = {} # holds nick that talks to us
-		self.tagOut = {} # holds our nick
+		self.tagIn = {} # holds tag for nick that talks to us
+		self.tagOut = {} # holds tag for our nick
 		self.tagStatus = {} # holds status messages
 		self.nb_unread = {}
 		self.last_message_time = {}
 		self.last_time_printout = {}
 		self.print_time_timeout_id = {}
 		self.names = {} # what is printed in the tab (eg. user.name)
-		self.childs = {}
+		self.childs = {} # holds the contents for every tab (VBox)
 
 		#The following vars are used to keep history of user's messages
 		self.sent_history = {}
@@ -313,7 +313,6 @@ class Chat:
 		conversation_scrolledwindow.get_vadjustment().connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
 		
-		child = self.childs[jid]
 
 		if len(self.xmls) > 1:
 			self.notebook.set_show_tabs(True)
@@ -333,6 +332,8 @@ class Chat:
 		xm.signal_connect('on_close_button_clicked', 
 			self.on_close_button_clicked, jid)
 
+		child = self.childs[jid]
+		#FIXME: gtk+ bug or ours? (I vote the 1st :$): popup menu shows in child_vbox and not in tab_hbox!
 		self.notebook.append_page_menu(child, tab_hbox, gtklabel)
 
 		#init new sent history for this conversation
