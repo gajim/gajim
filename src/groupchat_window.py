@@ -393,8 +393,10 @@ class GroupchatWindow(chat.Chat):
 					if not self.last_key_tabs[room_jid]: # if we are nick cycling, last char will always be space
 						return False
 
+				splitted_text = text.split()
 				# command completion
-				if text.startswith('/') and len(text.split()) == 1:
+				if text.startswith('/') and len(splitted_text) == 1:
+					text = splitted_text[0]
 					if len(text) == 1: # user wants to cycle all commands
 						self.cmd_hits[room_jid] = self.muc_cmds
 					else:
@@ -411,12 +413,11 @@ class GroupchatWindow(chat.Chat):
 					if len(self.cmd_hits[room_jid]):
 						message_buffer.delete(start_iter, end_iter)
 						message_buffer.insert_at_cursor('/' + \
-							self.cmd_hits[room_jid][0])
+							self.cmd_hits[room_jid][0] + ' ')
 						self.last_key_tabs[room_jid] = True
 					return True
 
 				# nick completion
-				splitted_text = text.split()
 				# check if tab is pressed with empty message
 				if len(splitted_text): # if there are any words
 					begin = splitted_text[-1] # last word we typed
