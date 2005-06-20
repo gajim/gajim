@@ -1440,15 +1440,21 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''
 		model = self.tree.get_model()
-		account = model.get_value(iter, 4)
+		if gajim.config.get('mergeaccounts'):
+			accounts = gajim.connections.keys()
+		else:
+			accounts = [model.get_value(iter, 4)]
 		type = model.get_value(iter, 2)
 		if type == 'group':
 			model.set_value(iter, 0, self.jabber_state_images['opened'])
 			jid = model.get_value(iter, 3)
-			self.groups[account][jid]['expand'] = True
-			if account + jid in self.collapsed_rows:
-				self.collapsed_rows.remove(account + jid)
+			for account in accounts:
+				if self.groups[account].has_key(jid): # This account has this group
+					self.groups[account][jid]['expand'] = True
+					if account + jid in self.collapsed_rows:
+						self.collapsed_rows.remove(account + jid)
 		elif type == 'account':
+			account = accounts[0] # There is only one cause we don't use merge
 			if account in self.collapsed_rows:
 				self.collapsed_rows.remove(account)
 			for g in self.groups[account]:
@@ -1462,15 +1468,21 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		'''When a row is collapsed :
 		change the icon of the arrow'''
 		model = self.tree.get_model()
-		account = model.get_value(iter, 4)
+		if gajim.config.get('mergeaccounts'):
+			accounts = gajim.connections.keys()
+		else:
+			accounts = [model.get_value(iter, 4)]
 		type = model.get_value(iter, 2)
 		if type == 'group':
 			model.set_value(iter, 0, self.jabber_state_images['closed'])
 			jid = model.get_value(iter, 3)
-			self.groups[account][jid]['expand'] = False
-			if not account + jid in self.collapsed_rows:
-				self.collapsed_rows.append(account + jid)
+			for account in accounts:
+				if self.groups[account].has_key(jid): # This account has this group
+					self.groups[account][jid]['expand'] = False
+					if not account + jid in self.collapsed_rows:
+						self.collapsed_rows.append(account + jid)
 		elif type == 'account':
+			account = accounts[0] # There is only one cause we don't use merge
 			if not account in self.collapsed_rows:
 				self.collapsed_rows.append(account)
 
