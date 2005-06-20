@@ -552,9 +552,8 @@ class GroupchatWindow(chat.Chat):
 		else:
 			kind = 'status'
 
-		if kind == 'incoming' and (self.nicks[room_jid].lower() in \
-			text.lower().split() or self.nicks[room_jid].lower() + \
-			self.gc_refer_to_nick_char in text.lower().split()):
+		if kind == 'incoming' and \
+				text.lower().find(self.nicks[room_jid].lower()) != -1:
 			other_tags_for_name.append('bold')
 			other_tags_for_text.append('marked')
 		
