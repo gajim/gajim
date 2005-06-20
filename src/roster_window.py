@@ -747,10 +747,9 @@ class RosterWindow:
 		user = self.contacts[account][jid][0]
 		menu = gtk.Menu()
 		
-		state_images = self.get_appropriate_state_images(jid)
-		
 		item = gtk.MenuItem()
-		icon = state_images['online']
+		icon = gtk.Image()
+		icon.set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_BUTTON)
 		label = gtk.Label(_('_Log on'))
 		label.set_use_underline(True)
 		hbox = gtk.HBox(False, 3)
@@ -764,7 +763,8 @@ class RosterWindow:
 		item.connect('activate', self.on_agent_logging, jid, None, account)
 
 		item = gtk.MenuItem()
-		icon = state_images['offline']
+		icon = gtk.Image()
+		icon.set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_BUTTON)
 		label = gtk.Label(_('Log _off'))
 		label.set_use_underline(True)
 		hbox = gtk.HBox(False, 3)
