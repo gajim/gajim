@@ -134,12 +134,16 @@ class Systray:
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		status_menuitem = self.xml.get_widget('status_menu')
 
-		# We need our own set of status icons, let's make 'em!
-		state_images = self.plugin.roster.jabber_state_images
-
 		sub_menu = gtk.Menu()
 		status_menuitem.set_submenu(sub_menu)
 
+		# We need our own set of status icons, let's make 'em!
+		iconset = gajim.config.get('iconset')
+		if not iconset:
+			iconset = 'sun'
+		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
+		state_images = self.plugin.roster.load_iconset(path)
+		
 		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
 				'offline']:
 
