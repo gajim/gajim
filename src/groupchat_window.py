@@ -500,12 +500,14 @@ class GroupchatWindow(chat.Chat):
 		room_jid = self.get_active_jid()
 		message_textview = self.xmls[room_jid].get_widget(
 			'message_textview')
+		conversation_textview = self.xmls[room_jid].get_widget(
+			'conversation_textview')
 		message_buffer = message_textview.get_buffer()
 		if message != '' or message != '\n':
 			self.save_sent_message(room_jid, message)
-			if message == '/clear':
+			if message in ['/clear', '/clear ']:
 				self.on_clear(None, conversation_textview) # clear conversation
-				self.on_clear(None, widget) # clear message textview too
+				self.on_clear(None, message_textview) # clear message textview too
 				return
 
 			elif message.startswith('/nick '):
