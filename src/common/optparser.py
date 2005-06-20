@@ -1,4 +1,3 @@
-#!/usr/bin/python
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
