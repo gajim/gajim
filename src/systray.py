@@ -20,6 +20,7 @@
 import gtk
 import gtk.glade
 import dialogs
+import os
 
 from common import gajim
 from common import helpers
@@ -131,7 +132,31 @@ class Systray:
 		
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
-		
+		status_menuitem = self.xml.get_widget('status_menu')
+
+		# We need our own set of status icons, let's make 'em!
+		state_images = self.plugin.roster.jabber_state_images
+
+		sub_menu = gtk.Menu()
+		status_menuitem.set_submenu(sub_menu)
+
+		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
+				'offline']:
+
+			if show == 'offline': # We add a sep before offline item
+				item = gtk.MenuItem()
+				sub_menu.append(item)
+
+			item = gtk.MenuItem()
+			icon = state_images[show]
+			label = gtk.Label(helpers.get_uf_show(show))
+			hbox = gtk.HBox(False, 3)
+			hbox.pack_start(icon, False, False)
+			hbox.pack_start(label, False, False)
+			item.add(hbox)
+			sub_menu.append(item)
+			item.connect('activate', self.on_show_menuitem_activate, show)
+
 		iskey = len(gajim.connections) > 0
 		chat_with_menuitem.set_sensitive(iskey)
 		new_message_menuitem.set_sensitive(iskey)
@@ -245,26 +270,10 @@ class Systray:
 		if event.button == 3: # right click
 			self.make_menu(event)
 	
-	def on_online_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(0) # 0 is online
-
-	def on_free_for_chat_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(1) # 1 is free for chat
-
-	def on_away_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(2) # 2 is away
-	
-	def on_xa_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(3) # 3 is xa
-
-	def on_dnd_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(4) # 4 is dnd
-
-	def on_invisible_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(5) # 5 is invisible
-		
-	def on_offline_menuitem_activate(self, widget):
-		self.plugin.roster.status_combobox.set_active(6) # 6 is offline
+	def on_show_menuitem_activate(self, widget, show):
+		list = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'offline']
+		index = list.index(show)
+		self.plugin.roster.status_combobox.set_active(index)
 
 	def show_icon(self):
 		if not self.t:

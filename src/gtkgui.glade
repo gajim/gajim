@@ -10784,86 +10784,6 @@ JID: whatever@jabber.org</property>
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Status</property>
       <property name="use_underline">True</property>
-
-      <child>
-	<widget class="GtkMenu" id="status_menu_menu">
-
-	  <child>
-	    <widget class="GtkMenuItem" id="online_menuitem">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Online</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_online_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="free_for_chat_menuitem">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Free for Chat</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_free_for_chat_menuitem_activate" last_modification_time="Mon, 18 Apr 2005 22:28:10 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkSeparatorMenuItem" id="separator5">
-	      <property name="visible">True</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="away_menuitem">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Away</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_away_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="xa_menuitem">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Not Available</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_xa_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="dnd_menuitem">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Busy</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_dnd_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="invisible_menuitem">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Invisible</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_invisible_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkSeparatorMenuItem" id="separator4">
-	      <property name="visible">True</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="offline_menuitem">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Offline</property>
-	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_offline_menuitem_activate" last_modification_time="Tue, 15 Mar 2005 00:15:28 GMT"/>
-	    </widget>
-	  </child>
-	</widget>
-      </child>
     </widget>
   </child>
 
@@ -10882,7 +10802,7 @@ JID: whatever@jabber.org</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image687">
+	<widget class="GtkImage" id="image707">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
