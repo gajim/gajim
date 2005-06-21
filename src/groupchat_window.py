@@ -495,6 +495,8 @@ class GroupchatWindow(chat.Chat):
 
 	def send_gc_message(self, message):
 		'''call this function to send our message'''
+		if not message:
+			return
 		room_jid = self.get_active_jid()
 		message_textview = self.xmls[room_jid].get_widget(
 			'message_textview')

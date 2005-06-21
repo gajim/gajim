@@ -304,6 +304,8 @@ class TabbedChatWindow(chat.Chat):
 
 	def send_message(self, message):
 		"""Send the message given in the args"""
+		if not message:
+			return
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		message_textview = self.xmls[jid].get_widget('message_textview')

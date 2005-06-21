@@ -795,6 +795,8 @@ class Connection:
 	def send_message(self, jid, msg, keyID):
 		if not self.connection:
 			return
+		if not msg:
+			return
 		msgtxt = msg
 		msgenc = ''
 		if keyID and USE_GPG:
