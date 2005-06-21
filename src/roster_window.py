@@ -1158,11 +1158,17 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		if message == -1:
 			self.update_status_comboxbox()
 			return
+		one_connected = False
+		for acct in accounts:
+			if gajim.connections[acct].connected > 1:
+				one_connected = True
+				break
 		for acct in accounts:
 			if not gajim.config.get_per('accounts', acct, 
 													'sync_with_global_status'):
 				continue
-			self.send_status(acct, status, message)
+			if not one_connected or gajim.connections[acct].connected > 1:
+				self.send_status(acct, status, message)
 	
 	def update_status_comboxbox(self):
 		#table to change index in plugin.connected to index in combobox
