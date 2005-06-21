@@ -1667,6 +1667,7 @@ class ManageEmoticonsWindow:
 
 	def on_add_remove_emoticons_window_delete_event(self, widget, event):
 		self.window.hide()
+		self.plugin.init_regexp() # update regexp [emoticons included]
 		return True # do NOT destroy the window
 	
 	def on_close_button_clicked(self, widget):
@@ -1675,6 +1676,7 @@ class ManageEmoticonsWindow:
 	def on_emoticons_treemodel_row_deleted(self, model, path):
 		iter = model.get_iter(path)
 		gajim.config.get_per('emoticons', model.get_value(iter, 0))
+		#FIXME: we just remove it from Treeview!!! plz remove me from emoticons dict
 		self.plugin.save_config()
 
 	def on_emoticons_treemodel_row_changed(self, model, path, iter):
@@ -1734,7 +1736,7 @@ class ManageEmoticonsWindow:
 		path_to_file = widget.get_preview_filename()
 		widget.get_preview_widget().set_from_file(path_to_file)
 
-	def on_set_image_button_clicked(self, widget, data = None):
+	def on_set_image_button_clicked(self, widget, data=None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
@@ -1790,15 +1792,23 @@ class ManageEmoticonsWindow:
 				pix = gtk.gdk.pixbuf_new_from_file(file)
 				img.set_from_pixbuf(pix)
 			model.set(iter, 2, img)
+		#FIXME: we don't add it to emoticons dict!
+		# please call in the key the upper()
+		# so:
+		# ':D' -> 'path_to_file'
+		# ':d' works (will be uppered)
+		# '<lol>' should becomes <LOL>
+		# bottom line: emots are case INsensitive so make sure you add them in
+		# emoticons dict (the keys part) as CAPS
 			
-	def on_button_new_emoticon_clicked(self, widget, data = None):
+	def on_button_new_emoticon_clicked(self, widget, data=None):
 		model = self.emot_tree.get_model()
 		iter = model.append()
 		model.set(iter, 0, 'emoticon', 1, '')
 		col = self.emot_tree.get_column(0)
 		self.emot_tree.set_cursor(model.get_path(iter), col, True)
 
-	def on_button_remove_emoticon_clicked(self, widget, data = None):
+	def on_button_remove_emoticon_clicked(self, widget, data=None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
