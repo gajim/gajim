@@ -1659,8 +1659,6 @@ class ManageEmoticonsWindow:
 		self.fill_emot_treeview()
 		self.emot_tree.get_model().connect('row-changed', 
 				self.on_emoticons_treemodel_row_changed)
-		self.emot_tree.get_model().connect('row-deleted', 
-				self.on_emoticons_treemodel_row_deleted)
 
 		self.plugin = plugin
 		self.xml.signal_autoconnect(self)
@@ -1673,17 +1671,12 @@ class ManageEmoticonsWindow:
 	def on_close_button_clicked(self, widget):
 		self.window.hide()
 
-	def on_emoticons_treemodel_row_deleted(self, model, path):
-		iter = model.get_iter(path)
-		gajim.config.get_per('emoticons', model.get_value(iter, 0))
-		#FIXME: we just remove it from Treeview!!! plz remove me from emoticons dict
-		self.plugin.save_config()
-
 	def on_emoticons_treemodel_row_changed(self, model, path, iter):
 		emots = gajim.config.get_per('emoticons')
-		emot = model.get_value(iter, 0)
+		emot = model.get_value(iter, 0).upper()
 		if not emot in emots:
 			gajim.config.add_per('emoticons', emot)
+			self.plugin.init_regexp() # update regexp [emoticons included]
 		gajim.config.set_per('emoticons', emot, 'path', model.get_value(iter, 1))
 		self.plugin.save_config()
 
@@ -1728,9 +1721,22 @@ class ManageEmoticonsWindow:
 			model.set(iter, 2, img)
 
 	def on_emot_cell_edited(self, cell, row, new_text):
+		emots = gajim.config.get_per('emoticons')
 		model = self.emot_tree.get_model()
 		iter = model.get_iter_from_string(row)
-		model.set_value(iter, 0, new_text)
+		old_text = model.get_value(iter, 0)
+		if old_text in emots:
+			gajim.config.del_per('emoticons', old_text)
+		emot = new_text.upper()
+		if emot in emots:
+			model.remove(iter)
+		else:
+			gajim.config.add_per('emoticons', emot)
+			self.plugin.init_regexp() # update regexp [emoticons included]
+			gajim.config.set_per('emoticons', emot, 'path',
+				model.get_value(iter, 1))
+			model.set_value(iter, 0, emot)
+		self.plugin.save_config()
 
 	def update_preview(self, widget):
 		path_to_file = widget.get_preview_filename()
@@ -1792,19 +1798,11 @@ class ManageEmoticonsWindow:
 				pix = gtk.gdk.pixbuf_new_from_file(file)
 				img.set_from_pixbuf(pix)
 			model.set(iter, 2, img)
-		#FIXME: we don't add it to emoticons dict!
-		# please call in the key the upper()
-		# so:
-		# ':D' -> 'path_to_file'
-		# ':d' works (will be uppered)
-		# '<lol>' should becomes <LOL>
-		# bottom line: emots are case INsensitive so make sure you add them in
-		# emoticons dict (the keys part) as CAPS
-			
+
 	def on_button_new_emoticon_clicked(self, widget, data=None):
 		model = self.emot_tree.get_model()
 		iter = model.append()
-		model.set(iter, 0, 'emoticon', 1, '')
+		model.set(iter, 0, 'EMOTICON', 1, '')
 		col = self.emot_tree.get_column(0)
 		self.emot_tree.set_cursor(model.get_path(iter), col, True)
 
@@ -1812,6 +1810,9 @@ class ManageEmoticonsWindow:
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
+		gajim.config.del_per('emoticons', model.get_value(iter, 0))
+		self.plugin.init_regexp() # update regexp [emoticons included]
+		self.plugin.save_config()
 		model.remove(iter)
 
 	def on_emoticons_treeview_key_press_event(self, widget, event):
