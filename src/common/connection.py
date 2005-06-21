@@ -892,7 +892,7 @@ class Connection:
 		common.xmpp.dispatcher.DefaultTimeout = 45
 		c.UnregisterDisconnectHandler(c.DisconnectHandler)
 		c.RegisterDisconnectHandler(self._disconnectedCB)
-		h = hostname
+		h = config['hostname']
 		p = 5222
 		usessl = None
 		if usessl: #FIXME: we cannot create an account if we want ssl connection to create it
