@@ -1812,15 +1812,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				gajim.config.get('y-position'))
 			self.window.resize(gajim.config.get('width'), \
 				gajim.config.get('height'))
-		
-		if gajim.config.get('show_roster_on_startup'):
-			self.window.show_all()
-		else:
-			if not gajim.config.get('trayicon'):
-				# cannot happen via GUI, but I put this incase user touches config
-				self.window.show_all() # without trayicon, he should see the roster!
-				gajim.config.set('show_roster_on_startup', True)
-			
+
 		self.groups = {}
 		self.contacts = {}
 		self.newly_added = {}
@@ -1852,9 +1844,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 
 		liststore = gtk.ListStore(str, gtk.Image, 
 			str)
-		self.status_combobox = gtk.ComboBox()
-		roster_vbox = self.xml.get_widget('roster_vbox')
-		roster_vbox.pack_end(self.status_combobox, False)
+		self.status_combobox = self.xml.get_widget('status_combobox')
 		cell = cell_renderer_image.CellRendererImage()
 		self.status_combobox.pack_start(cell, False)
 		self.status_combobox.add_attribute(cell, 'image', 1)
@@ -1868,7 +1858,6 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			uf_show = helpers.get_uf_show(show)
 			iter = liststore.append([uf_show, self.jabber_state_images[show],
 				show])
-		self.status_combobox.show_all()
 		self.status_combobox.set_model(liststore)
 		self.status_combobox.set_active(6) # default to offline
 
@@ -1917,3 +1906,11 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		if len(gajim.connections) == 0: # if no account
 			self.plugin.windows['account_modification'] = \
 				config.AccountModificationWindow(self.plugin)
+
+		if gajim.config.get('show_roster_on_startup'):
+			self.window.show_all()
+		else:
+			if not gajim.config.get('trayicon'):
+				# cannot happen via GUI, but I put this incase user touches config
+				self.window.show_all() # without trayicon, he should see the roster!
+				gajim.config.set('show_roster_on_startup', True)
