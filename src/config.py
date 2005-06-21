@@ -131,7 +131,14 @@ class PreferencesWindow:
 
 		#iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
-		model = gtk.ListStore(str)
+		# new model, image in 0, string in 1
+		model = gtk.ListStore(gtk.Image, str)
+		renderer_image = cell_renderer_image.CellRendererImage()
+		renderer_text = gtk.CellRendererText()
+		self.iconset_combobox.pack_start(renderer_image, expand=False)
+		self.iconset_combobox.pack_start(renderer_text, expand=True)
+		self.iconset_combobox.set_attributes(renderer_text, text=1)
+		self.iconset_combobox.add_attribute(renderer_image, 'image', 0)
 		self.iconset_combobox.set_model(model)
 		l = []
 		for dir in iconsets_list:
@@ -140,7 +147,14 @@ class PreferencesWindow:
 		if l.count == 0:
 			l.append(' ')
 		for i in range(len(l)):
-			model.append([l[i]])
+			preview = gtk.Image()
+			files = []
+			files.append(os.path.join(gajim.DATA_DIR, 'iconsets', l[i], '16x16', 'online.png'))
+			files.append(os.path.join(gajim.DATA_DIR, 'iconsets', l[i], '16x16', 'online.gif'))
+			for file in files:
+				if os.path.exists(file):
+					preview.set_from_file(file)
+			model.append([preview, l[i]])
 			if gajim.config.get('iconset') == l[i]:
 				self.iconset_combobox.set_active(i)
 
@@ -428,7 +442,7 @@ class PreferencesWindow:
 	def on_iconset_combobox_changed(self, widget):
 		model = widget.get_model()
 		active = widget.get_active()
-		icon_string = model[active][0]
+		icon_string = model[active][1]
 		gajim.config.set('iconset', icon_string)
 		self.plugin.roster.reload_jabber_state_images()
 		self.plugin.save_config()

@@ -3085,8 +3085,7 @@
 			      <child>
 				<widget class="GtkComboBox" id="iconset_combobox">
 				  <property name="visible">True</property>
-				  <property name="items" translatable="yes"></property>
-				  <signal name="changed" handler="on_iconset_combobox_changed" last_modification_time="Wed, 30 Mar 2005 12:19:34 GMT"/>
+				  <signal name="changed" handler="on_iconset_combobox_changed" last_modification_time="Tue, 21 Jun 2005 15:36:21 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
