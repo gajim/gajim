@@ -475,25 +475,3 @@ class TabbedChatWindow(chat.Chat):
 		item.connect('activate', lambda obj:self.set_compact_view(
 			not self.get_compact_view()))
 		menu.append(item)
-
-	def get_compact_view(self):
-		"""Is compact view turned on?"""
-		return self.compact_view
-
-	def set_compact_view(self,state):
-		"""Toggle compact view"""
-
-		self.compact_view = state
-		
-		for jid in self.xmls:
-			widgets = [self.xmls[jid].get_widget('banner_eventbox'),
-				 self.xmls[jid].get_widget('actions_hbox'),
-				 ]
-
-			for widget in widgets:
-				if state:
-					widget.set_no_show_all(True)
-					widget.hide()
-				else:
-					widget.set_no_show_all(False)
-					widget.show()

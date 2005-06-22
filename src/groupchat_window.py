@@ -991,10 +991,6 @@ class GroupchatWindow(chat.Chat):
 		image = self.plugin.roster.jabber_state_images['closed']
 		model.set_value(iter, 0, image)
 
-	def get_compact_view(self):
-		'''Is compact view turned on?'''
-		return self.compact_view
-
 	def set_compact_view(self,state):
 		'''Toggle compact view'''
 

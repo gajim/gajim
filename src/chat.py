@@ -408,6 +408,9 @@ class Chat:
 		elif event.string and event.string in st and \
 			(event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
 			self.notebook.set_current_page(st.index(event.string))
+		elif event.keyval == gtk.keysyms.c and \
+			(event.state & gtk.gdk.MOD1_MASK): # alt + C
+			self.set_compact_view(not self.get_compact_view())
 		elif event.keyval == gtk.keysyms.Page_Down:
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				current = self.notebook.get_current_page()
@@ -875,3 +878,26 @@ class Chat:
 		# iterate through tabs/windows and repaint
 		for jid in self.xmls:
 			self.paint_banner(jid)
+
+	def get_compact_view(self):
+		"""Is compact view turned on?"""
+		return self.compact_view
+	
+	def set_compact_view(self,state):
+		'''Toggle compact view
+		To be overwritten in parent class if we want to toggle more
+		widgets'''
+		self.compact_view = state
+
+		for jid in self.xmls:
+			widgets = [self.xmls[jid].get_widget('banner_eventbox'),
+						self.xmls[jid].get_widget('actions_hbox'),
+						]
+
+			for widget in widgets:
+				if state:
+					widget.set_no_show_all(True)
+					widget.hide()
+				else:
+					widget.set_no_show_all(False)
+					widget.show()
