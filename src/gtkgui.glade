@@ -8273,6 +8273,7 @@ Custom</property>
   <signal name="focus_in_event" handler="on_groupchat_window_focus_in_event" last_modification_time="Sat, 05 Mar 2005 00:34:51 GMT"/>
   <signal name="delete_event" handler="on_groupchat_window_delete_event" last_modification_time="Mon, 07 Mar 2005 11:19:05 GMT"/>
   <signal name="destroy" handler="on_groupchat_window_destroy" last_modification_time="Mon, 07 Mar 2005 16:46:37 GMT"/>
+  <signal name="event" handler="on_groupchat_window_event"/>
 
   <child>
     <widget class="GtkVBox" id="vbox73">
@@ -8288,7 +8289,7 @@ Custom</property>
 	  <property name="show_border">False</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
 	  <property name="scrollable">True</property>
-	  <property name="enable_popup">True</property>
+	  <property name="enable_popup">False</property>
 	  <signal name="switch_page" handler="on_chat_notebook_switch_page" last_modification_time="Wed, 16 Mar 2005 20:58:25 GMT"/>
 	  <signal name="key_press_event" handler="on_chat_notebook_key_press_event" last_modification_time="Wed, 16 Mar 2005 20:58:38 GMT"/>
 
@@ -8453,7 +8454,7 @@ Custom</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkScrolledWindow" id="scrolledwindow17">
+		    <widget class="GtkScrolledWindow" id="list_scrolledwindow">
 		      <property name="width_request">100</property>
 		      <property name="visible">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
@@ -8492,7 +8493,7 @@ Custom</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox2972">
+		<widget class="GtkHBox" id="gc_actions_hbox">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
@@ -9749,6 +9750,7 @@ Custom</property>
   <signal name="focus_in_event" handler="on_tabbed_chat_window_focus_in_event" last_modification_time="Wed, 02 Mar 2005 17:57:33 GMT"/>
   <signal name="delete_event" handler="on_tabbed_chat_window_delete_event" last_modification_time="Mon, 07 Mar 2005 11:06:00 GMT"/>
   <signal name="destroy" handler="on_tabbed_chat_window_destroy" last_modification_time="Mon, 07 Mar 2005 16:35:25 GMT"/>
+  <signal name="event" handler="on_tabbed_chat_window_event" />
 
   <child>
     <widget class="GtkNotebook" id="chat_notebook">
@@ -9757,7 +9759,7 @@ Custom</property>
       <property name="show_border">True</property>
       <property name="tab_pos">GTK_POS_TOP</property>
       <property name="scrollable">True</property>
-      <property name="enable_popup">True</property>
+      <property name="enable_popup">False</property>
       <signal name="switch_page" handler="on_chat_notebook_switch_page" last_modification_time="Wed, 02 Mar 2005 18:00:21 GMT"/>
       <signal name="key_press_event" handler="on_chat_notebook_key_press_event" last_modification_time="Sat, 12 Mar 2005 21:18:17 GMT"/>
 
@@ -9979,7 +9981,7 @@ JID: whatever@jabber.org</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkHBox" id="hbox2970">
+	    <widget class="GtkHBox" id="actions_hbox">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -10129,7 +10131,7 @@ JID: whatever@jabber.org</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="actions_hbox">
+		<widget class="GtkHBox" id="hbox2972">
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>

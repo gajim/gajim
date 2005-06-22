@@ -41,7 +41,7 @@ class GroupchatWindow(chat.Chat):
 	"""Class for Groupchat window"""
 	def __init__(self, room_jid, nick, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
-		self.muc_cmds = ['chat', 'clear', 'me', 'msg', 'nick'] # alphanum sorted
+		self.muc_cmds = ['chat', 'clear', 'compact', 'me', 'msg', 'nick'] # alphanum sorted
 		self.nicks = {} # our nick for each groupchat we are in
 		self.list_treeview = {}
 		self.subjects = {}
@@ -62,12 +62,18 @@ class GroupchatWindow(chat.Chat):
 			self.on_groupchat_window_delete_event)
 		self.xml.signal_connect('on_groupchat_window_focus_in_event', 
 			self.on_groupchat_window_focus_in_event)
+		self.xml.signal_connect('on_groupchat_window_event',
+			self.on_groupchat_window_event)
 		self.xml.signal_connect('on_chat_notebook_key_press_event', 
 			self.on_chat_notebook_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', 
 			self.on_chat_notebook_switch_page)
 		self.xml.signal_connect('on_close_window_activate',
 			self.on_close_window_activate)
+
+		# needed for popup menu
+		self.xml.get_widget('groupchat_window').add_events(
+			gtk.gdk.BUTTON_PRESS_MASK)
 
 		# get size and position from config
 		if gajim.config.get('saveposition'):
@@ -128,6 +134,16 @@ class GroupchatWindow(chat.Chat):
 	def on_groupchat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
+
+	def on_groupchat_window_event(self,widget,event):
+		if event.type != gtk.gdk.BUTTON_PRESS:
+			return False
+		self.on_chat_window_button_press_event(widget, event)
+		return True
+
+	def on_groupchat_window_key_press_event(self, widget, event):
+		self.on_chat_window_button_press_event(widget, event)
+		return True
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
@@ -510,6 +526,11 @@ class GroupchatWindow(chat.Chat):
 				self.on_clear(None, message_textview) # clear message textview too
 				return
 
+			elif message in ('/compact', '/compact '):
+				self.set_compact_view(not self.get_compact_view())
+				self.on_clear(None, message_textview)
+				return
+
 			elif message.startswith('/nick '):
 				new_nick = message[6:].strip() # 6 is len('/nick ')
 				if len(new_nick.split()) == 1: #dont accept /nick foo bar
@@ -758,6 +779,35 @@ class GroupchatWindow(chat.Chat):
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
 		menu.reposition()
+	
+	def populate_popup_menu(self, menu):
+		"""Add menuitems do popup menu"""
+
+		# FIXME: add icons / use ItemFactory
+		item = gtk.MenuItem(_('_History'))
+		item.connect('activate', self.on_history_button_clicked)
+		menu.append(item)
+
+		item = gtk.MenuItem(_('Configure _Room'))
+		item.connect('activate', self.on_configure_room_menuitem_activate)
+		menu.append(item)
+
+		item = gtk.MenuItem(_('Change _Subject'))
+		item.connect('activate', self.on_change_subject_menuitem_activate)
+		menu.append(item)
+
+		item = gtk.MenuItem(_('Change _Nickname'))
+		item.connect('activate', self.on_change_nick_menuitem_activate)
+		menu.append(item)
+
+		item = gtk.MenuItem(_('_Bookmark This Room'))
+		item.connect('activate', self.on_bookmark_room_menuitem_activate)
+		menu.append(item)
+
+		item=gtk.MenuItem(_('_Toggle compact view'))
+		item.connect('activate', lambda obj:self.set_compact_view(
+			not self.get_compact_view()))
+		menu.append(item)
 
 	def remove_tab(self, room_jid):
 		if time.time() - self.last_message_time[room_jid] < 2:
@@ -782,6 +832,7 @@ class GroupchatWindow(chat.Chat):
 		self.names[room_jid] = room_jid.split('@')[0]
 		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'gc_vbox', APP)
 		self.childs[room_jid] = self.xmls[room_jid].get_widget('gc_vbox')
+		self.set_compact_view(self.get_compact_view())
 		chat.Chat.new_tab(self, room_jid)
 		self.nicks[room_jid] = nick
 		self.subjects[room_jid] = ''
@@ -939,3 +990,26 @@ class GroupchatWindow(chat.Chat):
 		model = widget.get_model()
 		image = self.plugin.roster.jabber_state_images['closed']
 		model.set_value(iter, 0, image)
+
+	def get_compact_view(self):
+		'''Is compact view turned on?'''
+		return self.compact_view
+
+	def set_compact_view(self,state):
+		'''Toggle compact view'''
+
+		self.compact_view = state
+		
+		for jid in self.xmls:
+			widgets = [self.xmls[jid].get_widget('banner_eventbox'),
+				 self.xmls[jid].get_widget('gc_actions_hbox'),
+				 self.xmls[jid].get_widget('list_scrolledwindow'),
+				 ]
+
+			for widget in widgets:
+				if state:
+					widget.set_no_show_all(True)
+					widget.hide()
+				else:
+					widget.set_no_show_all(False)
+					widget.show()

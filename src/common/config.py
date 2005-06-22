@@ -106,6 +106,7 @@ class Config:
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25],  # how many lines to store for key up
 		'version': [ None, '0.7' ],
+		'compact_view': [opt_bool, False] # initial compact view state
 	}
 
 	__options_per_key = {

@@ -53,10 +53,16 @@ class TabbedChatWindow(chat.Chat):
 			self.on_tabbed_chat_window_delete_event)
 		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event', 
 			self.on_tabbed_chat_window_focus_in_event)
+		self.xml.signal_connect('on_tabbed_chat_window_event',
+			self.on_tabbed_chat_window_event)
 		self.xml.signal_connect('on_chat_notebook_key_press_event', 
 			self.on_chat_notebook_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', 
 			self.on_chat_notebook_switch_page)
+
+		# needed for popup menu
+		self.xml.get_widget('tabbed_chat_window').add_events(
+			gtk.gdk.BUTTON_PRESS_MASK)
 
 		if gajim.config.get('saveposition'):
 		# get window position and size from config
@@ -196,6 +202,12 @@ class TabbedChatWindow(chat.Chat):
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
 
+	def on_tabbed_chat_window_event(self, widget, event):
+		if event.type != gtk.gdk.BUTTON_PRESS:
+			return False
+		self.on_chat_window_button_press_event(widget, event)
+		return True
+
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
@@ -230,6 +242,7 @@ class TabbedChatWindow(chat.Chat):
 		self.names[user.jid] = user.name
 		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[user.jid] = self.xmls[user.jid].get_widget('chats_vbox')
+		self.set_compact_view(self.get_compact_view())
 		self.users[user.jid] = user
 		self.encrypted[user.jid] = False
 		
@@ -314,7 +327,11 @@ class TabbedChatWindow(chat.Chat):
 			self.save_sent_message(jid, message)
 			if message == '/clear':
 				self.on_clear(None, conversation_textview) # clear conversation
-				self.on_clear(None, widget) # clear message textview too
+				self.on_clear(None, message_textview) # clear message textview too
+				return True
+			elif message == '/compact':
+				self.set_compact_view(not self.get_compact_view())
+				self.on_clear(None, message_textview)
 				return True
 			keyID = ''
 			encrypted = False
@@ -440,3 +457,43 @@ class TabbedChatWindow(chat.Chat):
 		if len(lines):
 			self.print_empty_line(jid)
 
+	def populate_popup_menu(self, menu):
+		"""Add menuitems do popup menu"""
+
+		# FIXME: add icons / use ItemFactory
+		item = gtk.MenuItem(_('_History'))
+		item.connect('activate', self.on_history_button_clicked)
+		menu.append(item)
+
+		item = gtk.MenuItem(_('_Information'))
+		item.connect('activate', self.on_contact_button_clicked)
+		menu.append(item)
+		
+		# FIXME: GPG stuff
+
+		item=gtk.MenuItem(_('_Toggle compact view'))
+		item.connect('activate', lambda obj:self.set_compact_view(
+			not self.get_compact_view()))
+		menu.append(item)
+
+	def get_compact_view(self):
+		"""Is compact view turned on?"""
+		return self.compact_view
+
+	def set_compact_view(self,state):
+		"""Toggle compact view"""
+
+		self.compact_view = state
+		
+		for jid in self.xmls:
+			widgets = [self.xmls[jid].get_widget('banner_eventbox'),
+				 self.xmls[jid].get_widget('actions_hbox'),
+				 ]
+
+			for widget in widgets:
+				if state:
+					widget.set_no_show_all(True)
+					widget.hide()
+				else:
+					widget.set_no_show_all(False)
+					widget.show()

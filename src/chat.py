@@ -68,6 +68,7 @@ class Chat:
 		self.sent_history_pos = {}
 		self.typing_new = {}
 		self.orig_msg = {}
+		self.compact_view = gajim.config.get('compact_view')
 
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -186,6 +187,36 @@ class Chat:
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(jid, self.account)
+	
+	def populate_popup_menu(self, menu):
+		'''To be overwritten in parrent class'''
+		pass
+
+	def on_chat_window_button_press_event(self, widget, event):
+		'''If right-clicked, show popup'''
+		if event.button == 3: # right click
+			# menu creation
+			menu=gtk.Menu()
+
+			# common menuitems (tab switches)
+			if len(self.xmls) > 1: # if there is more than one tab
+				for jid in self.xmls:
+					if jid != self.get_active_jid():
+						# FIXME: add icons representing contact's status?
+						item = gtk.MenuItem(self.names[jid])
+						item.connect('activate', lambda obj,jid:self.set_active_tab(
+							jid), jid)
+						menu.append(item)
+
+				menu.append(gtk.MenuItem())
+
+			# menuitems specific to type of chat
+			self.populate_popup_menu(menu)
+
+			# show the menu
+			menu.popup(None, None, None, event.button, event.time)
+			menu.show_all()
+			menu.reposition()
 
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
 		new_child = notebook.get_nth_page(page_num)
