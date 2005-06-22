@@ -127,6 +127,8 @@ class Connection:
 		self.myVCardID = []
 		self.bookmarks = []
 		self.on_purpose = False
+		self._lastIncome = time.time()
+		self._natSent = False
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
@@ -592,6 +594,10 @@ class Connection:
 		errcode = iq_obj.getErrorCode()
 		jid_from = str(iq_obj.getFrom())
 		self.dispatch('ERROR_ANSWER', (jid_from, errmsg, errcode))
+		
+	def _StanzaArrivedCB(self, con, obj):
+		self._lastIncome = time.time()
+		self._natSent = False
 
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
@@ -670,6 +676,9 @@ class Connection:
 		con.RegisterHandler('iq', self._PrivateCB, 'result',
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
+		con.RegisterHandler('iq', self._StanzaArrivedCB)
+		con.RegisterHandler('presence', self._StanzaArrivedCB)
+		con.RegisterHandler('message', self._StanzaArrivedCB)
 		con.RegisterEventHandler(self._event_dispatcher)
 
 		gajim.log.debug('Connected to server')
@@ -1152,6 +1161,16 @@ class Connection:
 			return
 		if self.connected:
 			try:
+				if time.time() > (self._lastIncome + 60) and not self._natSent:
+					# we received nothing since 1 minute
+					hostname = gajim.config.get_per('accounts', self.name,
+						'hostname')
+					iq = common.xmpp.Iq('get', common.xmpp.NS_LAST, to = hostname)
+					self.connection.send(iq)
+					self._natSent = True
+				if time.time() > self._lastIncome + 105: #1 min + 45 sec for answer
+					self.connection.disconnect()
+					return
 				self.connection.Process(timeout)
 			except:
 				gajim.log.debug('error appeared while processing xmpp:')
