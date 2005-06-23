@@ -623,14 +623,6 @@ class Chat:
 				#we launch the correct application
 				self.plugin.launch_browser_mailer(kind, word)
 
-	def print_with_tag_list(self, buffer, text, iter, tag_list):
-		begin_mark = buffer.create_mark('begin_tag', iter, True)
-		buffer.insert(iter, text)
-		begin_tagged = buffer.get_iter_at_mark(begin_mark)
-		for tag in tag_list:
-			buffer.apply_tag_by_name(tag, begin_tagged, iter)
-		buffer.delete_mark(begin_mark)
-
 	def detect_and_print_special_text(self, otext, jid, other_tags):
 		textview = self.xmls[jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
@@ -650,8 +642,8 @@ class Chat:
 			if start != 0:
 				text_before_special_text = otext[index:start]
 				end_iter = buffer.get_end_iter()
-				self.print_with_tag_list(buffer, text_before_special_text,
-					end_iter, other_tags)
+				buffer.insert_with_tags_by_name(end_iter,
+					text_before_special_text, *other_tags)
 			index = end # update index
 			
 			#now print it
@@ -724,8 +716,7 @@ class Chat:
 			all_tags = tags[:]
 			if use_other_tags:
 				all_tags += other_tags
-			self.print_with_tag_list(buffer, special_text,
-						end_iter, all_tags)
+			buffer.insert_with_tags_by_name(end_iter, special_text, *all_tags)
 
 	def scroll_to_end(self, textview):
 		parent = textview.get_parent()
@@ -746,6 +737,7 @@ class Chat:
 			other_tags_for_text = []):
 		textview = self.xmls[jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
+		buffer.begin_user_action()
 		at_the_end = False
 		end_iter = buffer.get_end_iter()
 		end_rect = textview.get_iter_location(end_iter)
@@ -763,8 +755,8 @@ class Chat:
 			after_str = gajim.config.get('after_time')
 			format = before_str + '%H:%M:%S' + after_str
 			tim_format = time.strftime(format, tim)
-			self.print_with_tag_list(buffer, tim_format + ' ', end_iter,
-				other_tags_for_time)
+			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
+				*other_tags_for_time)
 		elif gajim.config.get('print_time') == 'sometimes':
 			if (time.time() - self.last_time_printout[jid]) > (5*60):
 				self.last_time_printout[jid] = time.time()
@@ -795,14 +787,14 @@ class Chat:
 			before_str = gajim.config.get('before_nickname')
 			after_str = gajim.config.get('after_nickname')
 			format = before_str + name + after_str + ' ' 
-			self.print_with_tag_list(buffer, format, end_iter, name_tags)
-				
+			buffer.insert_with_tags_by_name(end_iter, format, *name_tags)
+
 		# detect urls formatting and if the user has it on emoticons
 		index = self.detect_and_print_special_text(text, jid, text_tags)
 
 		# add the rest of text located in the index and after
 		end_iter = buffer.get_end_iter()
-		self.print_with_tag_list(buffer, text[index:], end_iter, text_tags)
+		buffer.insert_with_tags_by_name(end_iter, text[index:], *text_tags)
 
 		#scroll to the end of the textview
 		end = False
@@ -811,6 +803,9 @@ class Chat:
 			end = True
 			# We scroll to the end after the scrollbar has appeared
 			gobject.idle_add(self.scroll_to_end, textview)
+
+		buffer.end_user_action()
+
 		if (jid != self.get_active_jid() or \
 		   not self.window.is_active() or \
 		   not end) and kind == 'incoming':
