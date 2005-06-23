@@ -369,7 +369,8 @@ class Chat:
 			gtklabel = gtk.Label(jid.split('@')[0])
 			gtklabel.set_property('xalign', 0)
 
-		xm.signal_autoconnect(self)
+		xm.signal_connect('on_close_button_clicked',
+			self.on_close_button_clicked, jid)
 
 		#FIXME: text formating buttons will be hidden in 0.8 release
 		for w in ['bold_togglebutton', 'italic_togglebutton', 'underline_togglebutton']:
