@@ -934,6 +934,27 @@ class GroupchatWindow(chat.Chat):
 				room_jid = self.get_active_jid()
 				self.mk_menu(room_jid, event, iter)
 			return True
+		if event.button == 2: # middle click
+			try:
+				path, column, x, y = widget.get_path_at_pos(int(event.x),
+					int(event.y))
+			except TypeError:
+				widget.get_selection().unselect_all()
+				return False
+			widget.get_selection().select_path(path)
+			model = widget.get_model()
+			iter = model.get_iter(path)
+			if len(path) == 2:
+				room_jid = self.get_active_jid()
+				nick = model.get_value(iter, 1)
+				fjid = room_jid + '/' + nick
+				if not self.plugin.windows[self.account]['chats'].has_key(fjid):
+					show = model.get_value(iter, 3)
+					u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0,'')
+					self.plugin.roster.new_chat(u, self.account)
+				self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
+				self.plugin.windows[self.account]['chats'][fjid].window.present()
+			return True
 		if event.button == 1: # left click
 			try:
 				path, column, x, y = widget.get_path_at_pos(int(event.x),

@@ -1014,6 +1014,27 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			elif type == 'account':
 				self.mk_menu_account(event, iter)
 			return True
+		if event.button == 2: # Middle click
+			try:
+				path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
+					int(event.y))
+			except TypeError:
+				self.tree.get_selection().unselect_all()
+				return
+			self.tree.get_selection().select_path(path)
+			model = self.tree.get_model()
+			iter = model.get_iter(path)
+			type = model.get_value(iter, 2)
+			if type == 'agent' or type == 'user':
+				account = model.get_value(iter, 4)
+				jid = model.get_value(iter, 3)
+				if self.plugin.windows[account]['chats'].has_key(jid):
+					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
+				elif self.contacts[account].has_key(jid):
+					self.new_chat(self.contacts[account][jid][0], account)
+					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
+				self.plugin.windows[account]['chats'][jid].window.present()
+			return True
 		if event.button == 1: # Left click
 			try:
 				path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
