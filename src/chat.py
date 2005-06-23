@@ -361,13 +361,9 @@ class Chat:
 			xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_hbox', APP)
 			tab_hbox = xm.get_widget('chat_tab_hbox')
 			user = self.users[jid]
-			gtklabel = gtk.Label(user.name)
-			gtklabel.set_property('xalign', 0)
 		elif self.widget_name == 'groupchat_window':
 			xm = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_tab_hbox', APP)
 			tab_hbox = xm.get_widget('groupchat_tab_hbox')
-			gtklabel = gtk.Label(jid.split('@')[0])
-			gtklabel.set_property('xalign', 0)
 
 		xm.signal_connect('on_close_button_clicked',
 			self.on_close_button_clicked, jid)
@@ -377,8 +373,7 @@ class Chat:
 			self.xmls[jid].get_widget(w).set_no_show_all(True)
 
 		child = self.childs[jid]
-		#FIXME: gtk+ bug or ours? (I vote the 1st :$): popup menu shows in child_vbox and not in tab_hbox!
-		self.notebook.append_page_menu(child, tab_hbox, gtklabel)
+		self.notebook.append_page(child, tab_hbox)
 
 		#init new sent history for this conversation
 		self.sent_history[jid] = []
