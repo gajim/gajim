@@ -202,8 +202,8 @@ class Chat:
 			if len(self.xmls) > 1: # if there is more than one tab
 				for jid in self.xmls:
 					if jid != self.get_active_jid():
-						# FIXME: add icons representing contact's status?
-						item = gtk.MenuItem('switch to %s' % self.names[jid])
+						# FIXME: do me via glade
+						item = gtk.MenuItem(_('Switch to %s') % self.names[jid])
 						item.connect('activate', lambda obj,jid:self.set_active_tab(
 							jid), jid)
 						menu.append(item)
@@ -213,8 +213,8 @@ class Chat:
 			# menuitems specific to type of chat
 			self.populate_popup_menu(menu)
 
-			item = gtk.CheckMenuItem(_('_Compact View'))# + ' Alt+C')
-			#FIXME: The accelerator is not used, it's just to show the Alt+c
+			item = gtk.CheckMenuItem(_('_Compact View'))
+			#FIXME: The accelerator is not used, do me via glade
 			ag = gtk.AccelGroup()
 			item.add_accelerator('activate', ag, ord('c'), gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
 			item.set_active(self.get_compact_view())
