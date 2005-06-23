@@ -265,10 +265,11 @@ class Connection:
 			#verify
 			sigmsg = sigTag.getData()
 			keyID = self.gpg.verify(status, sigmsg)
-		if not ptype:
-			show = prs.getShow()
-			if not show:
-				show = 'online'
+		show = prs.getShow()
+		if not show in STATUS_LIST:
+			show = '' # We ignore unknown show
+		if not ptype and not show:
+			show = 'online'
 		elif ptype == 'unavailable':
 			show = 'offline'
 		elif ptype == 'subscribe':
