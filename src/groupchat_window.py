@@ -926,7 +926,7 @@ class GroupchatWindow(chat.Chat):
 
 		self.redraw_tab(room_jid)
 		self.show_title()
-		self.set_subject(room_jid, '') # Set an empty subject ti show the room_jid
+		self.set_subject(room_jid, '') # Set an empty subject to show the room_jid
 		conversation_textview.grab_focus()
 
 	def on_treeview_size_allocate(self, widget, allocation):
