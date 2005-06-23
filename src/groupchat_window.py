@@ -135,7 +135,7 @@ class GroupchatWindow(chat.Chat):
 		"""When window get focus"""
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
 
-	def on_groupchat_window_event(self,widget,event):
+	def on_groupchat_window_event(self, widget, event):
 		if event.type != gtk.gdk.BUTTON_PRESS:
 			return False
 		self.on_chat_window_button_press_event(widget, event)
@@ -784,29 +784,64 @@ class GroupchatWindow(chat.Chat):
 		"""Add menuitems do popup menu"""
 
 		# FIXME: add icons / use ItemFactory
-		item = gtk.MenuItem(_('_History'))
+		item = gtk.MenuItem()
+		icon = gtk.Image()
+		icon.set_from_stock(gtk.STOCK_JUSTIFY_FILL, gtk.ICON_SIZE_BUTTON)
+		label = gtk.Label(_('_History'))
+		label.set_use_underline(True)
+		hbox = gtk.HBox(False, 3)
+		hbox.pack_start(icon, False, False)
+		hbox.pack_start(label, False, False)
+		item.add(hbox)
 		item.connect('activate', self.on_history_button_clicked)
 		menu.append(item)
 
-		item = gtk.MenuItem(_('Configure _Room'))
+		item = gtk.MenuItem()
+		icon = gtk.Image()
+		icon.set_from_stock(gtk.STOCK_PROPERTIES, gtk.ICON_SIZE_BUTTON)
+		label = gtk.Label(_('Configure _Room'))
+		label.set_use_underline(True)
+		hbox = gtk.HBox(False, 3)
+		hbox.pack_start(icon, False, False)
+		hbox.pack_start(label, False, False)
+		item.add(hbox)
 		item.connect('activate', self.on_configure_room_menuitem_activate)
 		menu.append(item)
 
-		item = gtk.MenuItem(_('Change _Subject'))
+		item = gtk.MenuItem()
+		icon = gtk.Image()
+		icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
+		label = gtk.Label(_('Change _Subject'))
+		label.set_use_underline(True)
+		hbox = gtk.HBox(False, 3)
+		hbox.pack_start(icon, False, False)
+		hbox.pack_start(label, False, False)
+		item.add(hbox)
 		item.connect('activate', self.on_change_subject_menuitem_activate)
 		menu.append(item)
 
-		item = gtk.MenuItem(_('Change _Nickname'))
+		item = gtk.MenuItem()
+		icon = gtk.Image()
+		icon.set_from_stock(gtk.STOCK_REDO, gtk.ICON_SIZE_BUTTON)
+		label = gtk.Label(_('Change _Nickname'))
+		label.set_use_underline(True)
+		hbox = gtk.HBox(False, 3)
+		hbox.pack_start(icon, False, False)
+		hbox.pack_start(label, False, False)
+		item.add(hbox)
 		item.connect('activate', self.on_change_nick_menuitem_activate)
 		menu.append(item)
 
-		item = gtk.MenuItem(_('_Bookmark This Room'))
+		item = gtk.MenuItem()
+		icon = gtk.Image()
+		icon.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
+		label = gtk.Label(_('_Bookmark This Room'))
+		label.set_use_underline(True)
+		hbox = gtk.HBox(False, 3)
+		hbox.pack_start(icon, False, False)
+		hbox.pack_start(label, False, False)
+		item.add(hbox)
 		item.connect('activate', self.on_bookmark_room_menuitem_activate)
-		menu.append(item)
-
-		item=gtk.MenuItem(_('_Toggle compact view'))
-		item.connect('activate', lambda obj:self.set_compact_view(
-			not self.get_compact_view()))
 		menu.append(item)
 
 	def remove_tab(self, room_jid):

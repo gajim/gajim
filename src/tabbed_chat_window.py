@@ -470,8 +470,3 @@ class TabbedChatWindow(chat.Chat):
 		menu.append(item)
 		
 		# FIXME: GPG stuff
-
-		item=gtk.MenuItem(_('_Toggle compact view'))
-		item.connect('activate', lambda obj:self.set_compact_view(
-			not self.get_compact_view()))
-		menu.append(item)

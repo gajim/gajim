@@ -189,7 +189,7 @@ class Chat:
 					self.plugin.systray.remove_jid(jid, self.account)
 	
 	def populate_popup_menu(self, menu):
-		'''To be overwritten in parrent class'''
+		'''To be overwritten in child class'''
 		pass
 
 	def on_chat_window_button_press_event(self, widget, event):
@@ -203,7 +203,7 @@ class Chat:
 				for jid in self.xmls:
 					if jid != self.get_active_jid():
 						# FIXME: add icons representing contact's status?
-						item = gtk.MenuItem(self.names[jid])
+						item = gtk.MenuItem('switch to %s' % self.names[jid])
 						item.connect('activate', lambda obj,jid:self.set_active_tab(
 							jid), jid)
 						menu.append(item)
@@ -212,6 +212,15 @@ class Chat:
 
 			# menuitems specific to type of chat
 			self.populate_popup_menu(menu)
+
+			item = gtk.CheckMenuItem(_('_Compact View'))# + ' Alt+C')
+			#FIXME: The accelerator is not used, it's just to show the Alt+c
+			ag = gtk.AccelGroup()
+			item.add_accelerator('activate', ag, ord('c'), gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
+			item.set_active(self.get_compact_view())
+			item.connect('activate', lambda obj:self.set_compact_view(
+				not self.get_compact_view()))
+			menu.append(item)
 
 			# show the menu
 			menu.popup(None, None, None, event.button, event.time)
@@ -360,8 +369,7 @@ class Chat:
 			gtklabel = gtk.Label(jid.split('@')[0])
 			gtklabel.set_property('xalign', 0)
 
-		xm.signal_connect('on_close_button_clicked', 
-			self.on_close_button_clicked, jid)
+		xm.signal_autoconnect(self)
 
 		#FIXME: text formating buttons will be hidden in 0.8 release
 		for w in ['bold_togglebutton', 'italic_togglebutton', 'underline_togglebutton']:
