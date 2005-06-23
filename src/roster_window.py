@@ -571,7 +571,7 @@ class RosterWindow:
 
 		chat_item = gtk.MenuItem()
 		chat_icon = gtk.Image()
-		chat_icon.set_from_stock(gtk.STOCK_JUMP_TO, gtk.ICON_SIZE_BUTTON)
+		chat_icon.set_from_stock(gtk.STOCK_JUMP_TO, gtk.ICON_SIZE_MENU)
 		label = gtk.Label(_('Start Chat'))
 		chat_hbox = gtk.HBox(False, 3)
 		chat_hbox.pack_start(chat_icon, False, False)
@@ -582,7 +582,7 @@ class RosterWindow:
 
 		rename_item = gtk.MenuItem()
 		rename_icon = gtk.Image()
-		rename_icon.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_BUTTON)
+		rename_icon.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU)
 		label = gtk.Label(_('Rename'))
 		rename_hbox = gtk.HBox(False, 3)
 		rename_hbox.pack_start(rename_icon, False, False)
@@ -594,7 +594,7 @@ class RosterWindow:
 		if not 'not in the roster' in user.groups:
 			edit_groups_item = gtk.MenuItem()
 			edit_groups_icon = gtk.Image()
-			edit_groups_icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
+			edit_groups_icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
 			label = gtk.Label(_('Edit Groups'))
 			edit_groups_hbox = gtk.HBox(False, 3)
 			edit_groups_hbox.pack_start(edit_groups_icon, False, False)
@@ -609,7 +609,7 @@ class RosterWindow:
 
 				gpg_key_item = gtk.MenuItem()
 				gpg_key_icon = gtk.Image()
-				gpg_key_icon.set_from_stock(gtk.STOCK_DIALOG_AUTHENTICATION, gtk.ICON_SIZE_BUTTON)
+				gpg_key_icon.set_from_stock(gtk.STOCK_DIALOG_AUTHENTICATION, gtk.ICON_SIZE_MENU)
 				label = gtk.Label(_('Assign OpenPGP Key'))
 				gpg_key_hbox = gtk.HBox(False, 3)
 				gpg_key_hbox.pack_start(gpg_key_icon, False, False)
@@ -623,7 +623,7 @@ class RosterWindow:
 
 			subscription_item = gtk.MenuItem()
 			subscription_icon = gtk.Image()
-			subscription_icon.set_from_stock(gtk.STOCK_DIALOG_QUESTION, gtk.ICON_SIZE_BUTTON)
+			subscription_icon.set_from_stock(gtk.STOCK_DIALOG_QUESTION, gtk.ICON_SIZE_MENU)
 			label = gtk.Label(_('Subscription'))
 			subscription_hbox = gtk.HBox(False, 3)
 			subscription_hbox.pack_start(subscription_icon, False, False)
@@ -636,7 +636,7 @@ class RosterWindow:
 			
 			resend_auth_item = gtk.MenuItem()
 			resend_auth_icon = gtk.Image()
-			resend_auth_icon.set_from_stock(gtk.STOCK_GO_FORWARD, gtk.ICON_SIZE_BUTTON)
+			resend_auth_icon.set_from_stock(gtk.STOCK_GO_FORWARD, gtk.ICON_SIZE_MENU)
 			label = gtk.Label(_('Re_send Authorization to'))
 			label.set_use_underline(True)
 			resend_auth_hbox = gtk.HBox(False, 3)
@@ -648,7 +648,7 @@ class RosterWindow:
 			
 			rerequest_auth_item = gtk.MenuItem()
 			rerequest_auth_icon = gtk.Image()
-			rerequest_auth_icon.set_from_stock(gtk.STOCK_GO_BACK, gtk.ICON_SIZE_BUTTON)
+			rerequest_auth_icon.set_from_stock(gtk.STOCK_GO_BACK, gtk.ICON_SIZE_MENU)
 			label = gtk.Label(_('Rere_quest Authorization from'))
 			label.set_use_underline(True)
 			rerequest_auth_hbox = gtk.HBox(False, 3)
@@ -665,7 +665,7 @@ class RosterWindow:
 
 			add_item = gtk.MenuItem()
 			add_icon = gtk.Image()
-			add_icon.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
+			add_icon.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU)
 			label = gtk.Label(_('_Add to Roster'))
 			label.set_use_underline(True)
 			add_hbox = gtk.HBox(False, 3)
@@ -677,7 +677,7 @@ class RosterWindow:
 			
 		remove_item = gtk.MenuItem()
 		remove_icon = gtk.Image()
-		remove_icon.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_BUTTON)
+		remove_icon.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 		label = gtk.Label(_('_Remove from Roster'))
 		label.set_use_underline(True)
 		remove_hbox = gtk.HBox(False, 3)
@@ -692,7 +692,7 @@ class RosterWindow:
 
 		info_item = gtk.MenuItem()
 		info_icon = gtk.Image()
-		info_icon.set_from_stock(gtk.STOCK_DIALOG_INFO, gtk.ICON_SIZE_BUTTON)
+		info_icon.set_from_stock(gtk.STOCK_DIALOG_INFO, gtk.ICON_SIZE_MENU)
 		label = gtk.Label(_('Information'))
 		info_hbox = gtk.HBox(False, 3)
 		info_hbox.pack_start(info_icon, False, False)
@@ -703,7 +703,7 @@ class RosterWindow:
 
 		history_item = gtk.MenuItem()
 		history_icon = gtk.Image()
-		history_icon.set_from_stock(gtk.STOCK_JUSTIFY_FILL, gtk.ICON_SIZE_BUTTON)
+		history_icon.set_from_stock(gtk.STOCK_JUSTIFY_FILL, gtk.ICON_SIZE_MENU)
 		label = gtk.Label(_('History'))
 		history_hbox = gtk.HBox(False, 3)
 		history_hbox.pack_start(history_icon, False, False)
@@ -725,7 +725,7 @@ class RosterWindow:
 
 		rename_item = gtk.MenuItem()
 		rename_icon = gtk.Image()
-		rename_icon.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_BUTTON)
+		rename_icon.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU)
 		label = gtk.Label(_('Rename'))
 		rename_hbox = gtk.HBox(False, 3)
 		rename_hbox.pack_start(rename_icon, False, False)
@@ -749,7 +749,7 @@ class RosterWindow:
 		
 		item = gtk.MenuItem()
 		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_BUTTON)
+		icon.set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
 		label = gtk.Label(_('_Log on'))
 		label.set_use_underline(True)
 		hbox = gtk.HBox(False, 3)
@@ -764,7 +764,7 @@ class RosterWindow:
 
 		item = gtk.MenuItem()
 		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_BUTTON)
+		icon.set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
 		label = gtk.Label(_('Log _off'))
 		label.set_use_underline(True)
 		hbox = gtk.HBox(False, 3)
@@ -782,7 +782,7 @@ class RosterWindow:
 
 		item = gtk.MenuItem()
 		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
+		icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
 		label = gtk.Label(_('Edit'))
 		label.set_use_underline(True)
 		hbox = gtk.HBox(False, 3)
@@ -794,7 +794,7 @@ class RosterWindow:
 
 		item = gtk.MenuItem()
 		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_BUTTON)
+		icon.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 		label = gtk.Label(_('_Remove from Roster'))
 		label.set_use_underline(True)
 		hbox = gtk.HBox(False, 3)
@@ -832,7 +832,7 @@ class RosterWindow:
 		
 		status_item = gtk.MenuItem()
 		status_icon = gtk.Image()
-		status_icon.set_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_BUTTON)
+		status_icon.set_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_MENU)
 		status_label = gtk.Label(_('Status'))
 		status_hbox = gtk.HBox(False, 3)
 		status_hbox.pack_start(status_icon, False, False)
@@ -865,7 +865,7 @@ class RosterWindow:
 
 		edit_item = gtk.MenuItem()
 		edit_icon = gtk.Image()
-		edit_icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
+		edit_icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
 		edit_label = gtk.Label(_('_Edit Account'))
 		edit_label.set_use_underline(True)
 		edit_hbox = gtk.HBox(False, 3)
@@ -877,7 +877,7 @@ class RosterWindow:
 		
 		discover_item = gtk.MenuItem()
 		discover_icon = gtk.Image()
-		discover_icon.set_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_BUTTON)
+		discover_icon.set_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_MENU)
 		discover_label = gtk.Label(_('_Service Discovery'))
 		discover_label.set_use_underline(True)
 		discover_hbox = gtk.HBox(False, 3)
@@ -889,7 +889,7 @@ class RosterWindow:
 		
 		add_contact_item = gtk.MenuItem()
 		add_contact_icon = gtk.Image()
-		add_contact_icon.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
+		add_contact_icon.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU)
 		add_contact_label = gtk.Label(_('_Add Contact'))
 		add_contact_label.set_use_underline(True)
 		add_contact_hbox = gtk.HBox(False, 3)
@@ -901,7 +901,7 @@ class RosterWindow:
 		
 		join_gc_item = gtk.MenuItem()
 		join_gc_icon = gtk.Image()
-		join_gc_icon.set_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_BUTTON)
+		join_gc_icon.set_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_MENU)
 		join_gc_label = gtk.Label(_('Join _Groupchat'))
 		join_gc_label.set_use_underline(True)
 		join_gc_hbox = gtk.HBox(False, 3)
@@ -913,7 +913,7 @@ class RosterWindow:
 		
 		new_message_item = gtk.MenuItem()
 		new_message_icon = gtk.Image()
-		new_message_icon.set_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_BUTTON)
+		new_message_icon.set_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
 		new_message_label = gtk.Label(_('_New Message'))
 		new_message_label.set_use_underline(True)
 		new_message_hbox = gtk.HBox(False, 3)
@@ -1869,8 +1869,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.transports_state_images[transport] = self.load_iconset(folder + \
 				'/16x16/')
 
-		liststore = gtk.ListStore(str, gtk.Image, 
-			str)
+		liststore = gtk.ListStore(str, gtk.Image, str)
 		self.status_combobox = self.xml.get_widget('status_combobox')
 		cell = cell_renderer_image.CellRendererImage()
 		self.status_combobox.pack_start(cell, False)
