@@ -135,6 +135,7 @@ class PreferencesWindow:
 		model = gtk.ListStore(gtk.Image, str)
 		renderer_image = cell_renderer_image.CellRendererImage()
 		renderer_text = gtk.CellRendererText()
+		renderer_text.set_property('xpad', 5)
 		self.iconset_combobox.pack_start(renderer_image, expand=False)
 		self.iconset_combobox.pack_start(renderer_text, expand=True)
 		self.iconset_combobox.set_attributes(renderer_text, text=1)
