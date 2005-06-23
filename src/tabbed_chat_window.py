@@ -60,10 +60,6 @@ class TabbedChatWindow(chat.Chat):
 		self.xml.signal_connect('on_chat_notebook_switch_page', 
 			self.on_chat_notebook_switch_page)
 
-		# needed for popup menu
-		self.xml.get_widget('tabbed_chat_window').add_events(
-			gtk.gdk.BUTTON_PRESS_MASK)
-
 		if gajim.config.get('saveposition'):
 		# get window position and size from config
 			self.window.move(gajim.config.get('chat-x-position'),

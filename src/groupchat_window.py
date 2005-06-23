@@ -71,10 +71,6 @@ class GroupchatWindow(chat.Chat):
 		self.xml.signal_connect('on_close_window_activate',
 			self.on_close_window_activate)
 
-		# needed for popup menu
-		self.xml.get_widget('groupchat_window').add_events(
-			gtk.gdk.BUTTON_PRESS_MASK)
-
 		# get size and position from config
 		if gajim.config.get('saveposition'):
 			self.window.move(gajim.config.get('gc-x-position'),
