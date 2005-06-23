@@ -363,6 +363,10 @@ class Chat:
 		xm.signal_connect('on_close_button_clicked', 
 			self.on_close_button_clicked, jid)
 
+		#FIXME: text formating buttons will be hidden in 0.8 release
+		for w in ['bold_togglebutton', 'italic_togglebutton', 'underline_togglebutton']:
+			self.xmls[jid].get_widget(w).set_no_show_all(True)
+
 		child = self.childs[jid]
 		#FIXME: gtk+ bug or ours? (I vote the 1st :$): popup menu shows in child_vbox and not in tab_hbox!
 		self.notebook.append_page_menu(child, tab_hbox, gtklabel)
@@ -885,7 +889,7 @@ class Chat:
 	
 	def set_compact_view(self,state):
 		'''Toggle compact view
-		To be overwritten in parent class if we want to toggle more
+		To be overwritten in child class if we want to toggle more
 		widgets'''
 		self.compact_view = state
 
@@ -900,4 +904,4 @@ class Chat:
 					widget.hide()
 				else:
 					widget.set_no_show_all(False)
-					widget.show()
+					widget.show_all()
