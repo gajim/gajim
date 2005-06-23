@@ -102,8 +102,13 @@ class TabbedChatWindow(chat.Chat):
 		# this is the text for the big brown bar
 		# some chars need to be escaped.. this fixes '&'
 		name = name.replace('&', '&amp;')
+
+		# composing full jid
+		fulljid = jid
+		if self.users[jid].resource:
+			fulljid += '/' + self.users[jid].resource
 		label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
-			% (name, jid)
+			% (name, fulljid)
 
 		# setup the label that holds name and jid
 		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
