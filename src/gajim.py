@@ -125,7 +125,7 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 
 class Interface:
-	def launch_browser_mailer(self, kind, url):
+	def launch_browser_mailer(self, kind, uri):
 		#kind = 'url' or 'mail'
 		if os.name == 'nt':
 			try:
@@ -134,27 +134,19 @@ class Interface:
 				pass
 			return
 		if gajim.config.get('openwith') == 'gnome-open':
-			app = 'gnome-open'
-			args = ['gnome-open']
-			args.append(url)
+			command = 'gnome-open'
 		elif gajim.config.get('openwith') == 'kfmclient exec':
-			app = 'kfmclient'
-			args = ['kfmclient', 'exec']
+			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'custom':
 			if kind == 'url':
-				conf = gajim.config.get('custombrowser')
+				command = gajim.config.get('custombrowser')
 			if kind == 'mail':
-				conf = gajim.config.get('custommailapp')
-			if conf == '': # if no app is configured
+				command = gajim.config.get('custommailapp')
+			if command == '': # if no app is configured
 				return
-			args = conf.split()
-			app = args[0]
-		args.append(url)
+		command = command + ' ' + uri
 		try:
-			if os.name == 'posix':
-				os.spawnvp(os.P_NOWAIT, app, args)
-			else:
-				os.spawnv(os.P_NOWAIT, app, args)
+			os.system(command)
 		except:
 			pass
 
