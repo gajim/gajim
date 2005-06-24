@@ -89,7 +89,7 @@ try:
 except ImportError:
 	pass
 
-class User:
+class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, *args):
 		if len(args) == 0:
@@ -241,7 +241,7 @@ class Interface:
 				if (resources != [''] and (len(luser) != 1 or 
 					luser[0].show != 'offline')) and not jid.find('@') <= 0:
 					old_show = 0
-					user1 = User(user1.jid, user1.name, user1.groups, user1.show, \
+					user1 = Contact(user1.jid, user1.name, user1.groups, user1.show, \
 					user1.status, user1.sub, user1.ask, user1.resource, \
 						user1.priority, user1.keyID)
 					luser.append(user1)
@@ -337,7 +337,7 @@ class Interface:
 				model = tv.get_model()
 				iter = gc.get_user_iter(jid, nick)
 				show = model.get_value(iter, 3)
-				u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0,
+				u = Contact(fjid, nick, ['none'], show, '', 'none', None, '', 0,
 					'')
 				self.roster.new_chat(u, account)
 			chat_win = self.windows[account]['chats'][fjid]
@@ -390,7 +390,7 @@ class Interface:
 						show = model.get_value(iter, 3)
 					else:
 						show = 'offline'
-					u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0,
+					u = Contact(fjid, nick, ['none'], show, '', 'none', None, '', 0,
 						'')
 					self.roster.new_chat(u, account)
 				self.windows[account]['chats'][fjid].print_conversation(
@@ -435,7 +435,7 @@ class Interface:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = User(jid, jid, ['General'], 'online', \
+			user1 = Contact(jid, jid, ['General'], 'online', \
 				'online', 'to', '', array[1], 0, keyID)
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)

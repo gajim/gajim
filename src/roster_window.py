@@ -32,7 +32,7 @@ import dialogs
 import config
 import cell_renderer_image
 
-from gajim import User
+from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n
@@ -432,7 +432,7 @@ class RosterWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = User(ji, name, array[jid]['groups'], show, status,\
+			user1 = Contact(ji, name, array[jid]['groups'], show, status,\
 					array[jid]['subscription'], array[jid]['ask'], resource, 0,
 					keyID)
 
@@ -949,7 +949,7 @@ class RosterWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = User(jid, pseudo, [group], 'requested', 'requested', 
+			user1 = Contact(jid, pseudo, [group], 'requested', 'requested', 
 								'none', 'subscribe', '', 0, keyID)
 			self.contacts[account][jid] = [user1]
 		else:
@@ -1063,7 +1063,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
 			if user.jid in self.plugin.windows[account]['chats']:
-				user1 = User(user.jid, user.name, ['not in the roster'],
+				user1 = Contact(user.jid, user.name, ['not in the roster'],
 					'not in the roster', 'not in the roster', 'none', None, '', 0,
 					user.keyID)
 				self.contacts[account][user.jid] = [user1] 
@@ -1263,7 +1263,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = User(jid, jid, ['not in the roster'], 'not in the roster', 
+			user1 = Contact(jid, jid, ['not in the roster'], 'not in the roster', 
 								'not in the roster', 'none', None, '', 0, keyID)
 			self.contacts[account][jid] = [user1] 
 			self.add_user_to_roster(jid, account)

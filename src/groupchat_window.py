@@ -25,7 +25,7 @@ import time
 import dialogs
 import chat
 import cell_renderer_image
-from gajim import User
+from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n
@@ -668,7 +668,7 @@ class GroupchatWindow(chat.Chat):
 		if not self.plugin.windows[self.account]['chats'].has_key(fjid):
 			#show = model.get_value(iter, 3) #FIXME: be able to get show from nick
 			show = 'chat'
-			u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0, '')
+			u = Contact(fjid, nick, ['none'], show, '', 'none', None, '', 0, '')
 			self.plugin.roster.new_chat(u, self.account)
 		if msg:
 			self.plugin.windows[self.account]['chats'][fjid].send_message(msg)
@@ -985,7 +985,7 @@ class GroupchatWindow(chat.Chat):
 				fjid = room_jid + '/' + nick
 				if not self.plugin.windows[self.account]['chats'].has_key(fjid):
 					show = model.get_value(iter, 3)
-					u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0,'')
+					u = Contact(fjid, nick, ['none'], show, '', 'none', None, '', 0,'')
 					self.plugin.roster.new_chat(u, self.account)
 				self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
 				self.plugin.windows[self.account]['chats'][fjid].window.present()
@@ -1030,7 +1030,7 @@ class GroupchatWindow(chat.Chat):
 			fjid = room_jid + '/' + nick
 			if not self.plugin.windows[self.account]['chats'].has_key(fjid):
 				show = model.get_value(iter, 3)
-				u = User(fjid, nick, ['none'], show, '', 'none', None, '', 0, 
+				u = Contact(fjid, nick, ['none'], show, '', 'none', None, '', 0, 
 					'')
 				self.plugin.roster.new_chat(u, self.account)
 			self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)

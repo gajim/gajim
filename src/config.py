@@ -33,7 +33,7 @@ try:
 except:
 	pass
 
-from gajim import User
+from gajim import Contact
 from common import gajim
 from common import connection
 from common import i18n
@@ -1620,7 +1620,7 @@ class ServiceRegistrationWindow:
 		if self.infos.has_key('registered'):
 			del self.infos['registered']
 		else:
-			user1 = User(self.service, self.service, ['Transports'], 'offline',
+			user1 = Contact(self.service, self.service, ['Transports'], 'offline',
 				'offline', 'from', '', '', 0, '')
 			self.plugin.roster.contacts[self.account][self.service] = [user1]
 			self.plugin.roster.add_user_to_roster(self.service, self.account)

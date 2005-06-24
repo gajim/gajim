@@ -25,7 +25,7 @@ import os
 from vcard import VcardWindow
 from gajim_themes_window import GajimThemesWindow
 from advanced import AdvancedConfigurationWindow
-from gajim import User
+from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n
@@ -186,7 +186,7 @@ class ChooseGPGKeyDialog:
 		self.keys_treeview.insert_column_with_attributes(-1, _('KeyID'),
 			renderer, text = 0)
 		renderer = gtk.CellRendererText()
-		self.keys_treeview.insert_column_with_attributes(-1, _('User name'),
+		self.keys_treeview.insert_column_with_attributes(-1, _('Contact name'),
 			renderer, text = 1)
 		self.fill_tree(secret_keys, selected)
 
@@ -324,7 +324,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			return
 		if jid.find('@') < 0:
 			ErrorDialog(_("Invalid user name"),
-_('User names must be of the form "user@servername".')).get_response()
+_('Contact names must be of the form "user@servername".')).get_response()
 			return
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
@@ -648,7 +648,7 @@ class NewMessageDialog:
 			title = _('New Message as ') + our_jid
 		else:
 			title = _('New Message')
-		prompt_text = _('Enter the user ID of the contact you would like\nto send a chat message to:')
+		prompt_text = _('Enter the contact ID of the contact you would like\nto send a chat message to:')
 
 		instance = InputDialog(title, prompt_text)
 		response = instance.get_response()
@@ -656,11 +656,11 @@ class NewMessageDialog:
 			jid = instance.input_entry.get_text()
 
 			if jid.find('@') == -1: # if no @ was given
-				ErrorDialog(_('Invalid user ID'),
-		_('User ID must be of the form "username@servername".')).get_response()
+				ErrorDialog(_('Invalid contact ID'),
+		_('Contact ID must be of the form "username@servername".')).get_response()
 				return
 
-			# use User class, new_chat expects it that way
+			# use Contact class, new_chat expects it that way
 			# is it in the roster?
 			if self.plugin.roster.contacts[self.account].has_key(jid):
 				user = self.plugin.roster.contacts[self.account][jid][0]
@@ -670,7 +670,7 @@ class NewMessageDialog:
 					'attached_gpg_keys').split()
 				if jid in attached_keys:
 					keyID = attached_keys[attached_keys.index(jid) + 1]
-				user = User(jid, jid, ['not in the roster'], 'not in the roster',
+				user = Contact(jid, jid, ['not in the roster'], 'not in the roster',
 					'not in the roster', 'none', None, '', 0, keyID)
 				self.plugin.roster.contacts[self.account][jid] = [user]
 				self.plugin.roster.add_user_to_roster(user.jid, self.account)			
@@ -788,7 +788,7 @@ class PopupNotificationWindow:
 					gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
 
 	def on_popup_notification_window_button_press_event(self, widget, event):
-		# use User class, new_chat expects it that way
+		# use Contact class, new_chat expects it that way
 		# is it in the roster?
 		if self.plugin.roster.contacts[self.account].has_key(self.jid):
 			user = self.plugin.roster.contacts[self.account][self.jid][0]
@@ -798,7 +798,7 @@ class PopupNotificationWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user = User(self.jid, self.jid, ['not in the roster'],
+			user = Contact(self.jid, self.jid, ['not in the roster'],
 				'not in the roster', 'not in the roster', 'none', None, '', 0,
 				keyID)
 			self.plugin.roster.contacts[self.account][self.jid] = [user]
