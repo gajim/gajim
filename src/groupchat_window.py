@@ -160,6 +160,8 @@ class GroupchatWindow(chat.Chat):
 		name_label = self.name_labels[new_jid]
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (new_jid, subject))
 		event_box = name_label.get_parent()
+		if subject == '':
+			subject = _('This room has no subject')
 		self.subject_tooltip[new_jid].set_tip(event_box, subject)
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
@@ -326,6 +328,8 @@ class GroupchatWindow(chat.Chat):
 		name_label = self.name_labels[room_jid]
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (room_jid, subject))
 		event_box = name_label.get_parent()
+		if subject == '':
+			subject = _('This room has no subject')
 		self.subject_tooltip[room_jid].set_tip(event_box, subject)
 
 	def on_change_subject_menuitem_activate(self, widget):
