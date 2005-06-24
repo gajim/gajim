@@ -173,15 +173,19 @@ class Interface:
 		#('ROSTER', account, array)
 		self.roster.mklists(data, account)
 		self.roster.draw_roster()
-	
+
 	def handle_event_warning(self, unused, data):
 		#('WARNING', account, (title_text, section_text))
 		dialogs.WarningDialog(data[0], data[1]).get_response()
-	
+
 	def handle_event_error(self, unused, data):
 		#('ERROR', account, (title_text, section_text))
 		dialogs.ErrorDialog(data[0], data[1]).get_response()
-	
+
+	def handle_event_information(self, unused, data):
+		#('INFORMATION', account, (title_text, section_text))
+		dialogs.InformationDialog(data[0], data[1]).get_response()
+
 	def handle_event_error_answer(self, account, array):
 		#('ERROR_ANSWER', account, (jid_from. errmsg, errcode))
 		jid_from = array[0]
@@ -722,6 +726,7 @@ class Interface:
 		conn.register_handler('ROSTER', self.handle_event_roster)
 		conn.register_handler('WARNING', self.handle_event_warning)
 		conn.register_handler('ERROR', self.handle_event_error)
+		conn.register_handler('INFORMATION', self.handle_event_information)
 		conn.register_handler('ERROR_ANSWER', self.handle_event_error_answer)
 		conn.register_handler('STATUS', self.handle_event_status)
 		conn.register_handler('NOTIFY', self.handle_event_notify)

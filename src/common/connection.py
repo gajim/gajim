@@ -111,14 +111,14 @@ class Connection:
 	"""Connection class"""
 	def __init__(self, name):
 		# dict of function to be called for each event
-		self.handlers = {'ROSTER': [], 'WARNING': [], 'ERROR': [], 'STATUS': [],
-			'NOTIFY': [], 'MSG': [], 'MSGERROR': [], 'MSGSENT': [] ,
-			'SUBSCRIBED': [], 'UNSUBSCRIBED': [], 'SUBSCRIBE': [],
-			'AGENT_INFO': [], 'REGISTER_AGENT_INFO': [], 'AGENT_INFO_ITEMS': [],
-			'AGENT_INFO_INFO': [], 'QUIT': [], 'ACC_OK': [], 'MYVCARD': [],
-			'OS_INFO': [], 'VCARD': [], 'GC_MSG': [], 'GC_SUBJECT': [],
-			'GC_CONFIG': [], 'BAD_PASSPHRASE': [], 'ROSTER_INFO': [],
-			'ERROR_ANSWER': [], 'BOOKMARKS': [],}
+		self.handlers = {'ROSTER': [], 'WARNING': [], 'ERROR': [], 
+			'INFORMATION': [], 'STATUS': [], 'NOTIFY': [], 'MSG': [],
+			'MSGERROR': [], 'MSGSENT': [] , 'SUBSCRIBED': [], 'UNSUBSCRIBED': [],
+			'SUBSCRIBE': [], 'AGENT_INFO': [], 'REGISTER_AGENT_INFO': [],
+			'AGENT_INFO_ITEMS': [], 'AGENT_INFO_INFO': [], 'QUIT': [],
+			'ACC_OK': [], 'MYVCARD': [], 'OS_INFO': [], 'VCARD': [], 'GC_MSG': [],
+			'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],
+			'ROSTER_INFO': [], 'ERROR_ANSWER': [], 'BOOKMARKS': [],}
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
