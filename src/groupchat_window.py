@@ -62,8 +62,8 @@ class GroupchatWindow(chat.Chat):
 			self.on_groupchat_window_delete_event)
 		self.xml.signal_connect('on_groupchat_window_focus_in_event', 
 			self.on_groupchat_window_focus_in_event)
-		self.xml.signal_connect('on_groupchat_window_event',
-			self.on_groupchat_window_event)
+		self.xml.signal_connect('on_groupchat_window_button_press_event',
+			self.on_chat_window_button_press_event)
 		self.xml.signal_connect('on_chat_notebook_key_press_event', 
 			self.on_chat_notebook_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page', 
@@ -130,12 +130,6 @@ class GroupchatWindow(chat.Chat):
 	def on_groupchat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
-
-	def on_groupchat_window_event(self, widget, event):
-		if event.type != gtk.gdk.BUTTON_PRESS:
-			return False
-		self.on_chat_window_button_press_event(widget, event)
-		return True
 
 	def on_groupchat_window_key_press_event(self, widget, event):
 		self.on_chat_window_button_press_event(widget, event)

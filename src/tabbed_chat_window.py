@@ -47,17 +47,17 @@ class TabbedChatWindow(chat.Chat):
 		self.encrypted = {}
 		self.new_user(user)
 		self.show_title()
-		self.xml.signal_connect('on_tabbed_chat_window_destroy', 
+		self.xml.signal_connect('on_tabbed_chat_window_destroy',
 			self.on_tabbed_chat_window_destroy)
-		self.xml.signal_connect('on_tabbed_chat_window_delete_event', 
+		self.xml.signal_connect('on_tabbed_chat_window_delete_event',
 			self.on_tabbed_chat_window_delete_event)
-		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event', 
+		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event',
 			self.on_tabbed_chat_window_focus_in_event)
-		self.xml.signal_connect('on_tabbed_chat_window_event',
-			self.on_tabbed_chat_window_event)
-		self.xml.signal_connect('on_chat_notebook_key_press_event', 
+		self.xml.signal_connect('on_tabbed_chat_window_button_press_event',
+			self.on_chat_window_button_press_event)
+		self.xml.signal_connect('on_chat_notebook_key_press_event',
 			self.on_chat_notebook_key_press_event)
-		self.xml.signal_connect('on_chat_notebook_switch_page', 
+		self.xml.signal_connect('on_chat_notebook_switch_page',
 			self.on_chat_notebook_switch_page)
 
 		if gajim.config.get('saveposition'):
