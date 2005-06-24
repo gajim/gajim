@@ -1,4 +1,4 @@
-##	src/advanced.py
+##	advanced.py
 ##
 ## Gajim Team:
 ## - Yann Le Boulanger <asterix@lagaule.org>
