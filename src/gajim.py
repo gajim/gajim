@@ -90,7 +90,7 @@ except ImportError:
 	pass
 
 class User:
-	'''Information concerning each users'''
+	'''Information concerning each contact'''
 	def __init__(self, *args):
 		if len(args) == 0:
 			self.jid = ''
@@ -144,15 +144,11 @@ class Interface:
 				command = gajim.config.get('custommailapp')
 			if command == '': # if no app is configured
 				return
-		command = command + ' ' + uri
+		command = command + ' ' + uri + ' &'
 		try:
 			os.system(command)
 		except:
 			pass
-
-	def play_timeout(self, pid):
-		pidp, r = os.waitpid(pid, os.WNOHANG)
-		return False
 
 	def play_sound(self, event):
 		if not gajim.config.get('sounds_on'):
@@ -169,12 +165,9 @@ class Interface:
 		elif os.name == 'posix':
 			if gajim.config.get('soundplayer') == '':
 				return
-			argv = gajim.config.get('soundplayer').split()
-			argv.append(path_to_soundfile)
-			pid = os.spawnvp(os.P_NOWAIT, argv[0], argv)
-			pidp, r = os.waitpid(pid, os.WNOHANG)
-			if pidp == 0:
-				gobject.timeout_add(10000, self.play_timeout, pid)
+			player = gajim.config.get('soundplayer')
+			command = player + ' ' + path_to_soundfile + ' &'
+			os.system(command)
 
 	def handle_event_roster(self, account, data):
 		#('ROSTER', account, array)
