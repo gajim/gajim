@@ -196,7 +196,7 @@ class Chat:
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
 			# menu creation
-			menu=gtk.Menu()
+			menu = gtk.Menu()
 
 			# common menuitems (tab switches)
 			if len(self.xmls) > 1: # if there is more than one tab
@@ -507,7 +507,7 @@ class Chat:
 				self.plugin.systray.remove_jid(jid, self.account)
 	
 	def on_conversation_textview_motion_notify_event(self, widget, event):
-		"""change the cursor to a hand when we are on a mail or an url"""
+		"""change the cursor to a hand when we are over a mail or an url"""
 		x, y, spam = widget.window.get_pointer()
 		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
 		tags = widget.get_iter_at_location(x, y).get_tags()
@@ -529,34 +529,80 @@ class Chat:
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
 
+	def visit_url_from_menuitem(self, widget, link):
+		'''basically it filters out the widget instance'''
+		self.plugin.launch_browser_mailer('url', link)
+
 	def on_conversation_textview_populate_popup(self, textview, menu):
+		'''we override the default context menu and we prepend Clear
+		and if we have sth selected we show a submenu with actions on the phrase
+		(see on_conversation_textview_button_press_event)'''
 		item = gtk.MenuItem() # seperator
 		menu.prepend(item)
 		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
 		menu.prepend(item)
 		item.connect('activate', self.on_clear, textview)
+		if self.selected_phrase:
+			item = gtk.MenuItem(_('Actions for "%s"') % self.selected_phrase)
+			menu.prepend(item)
+			submenu = gtk.Menu()
+			item.set_submenu(submenu)
+
+			item = gtk.MenuItem(_('Read _Wikipedia article'))
+			link = 'http://%s.wikipedia.org/wiki/%s'\
+				%(gajim.LANG, self.selected_phrase)
+			item.connect('activate', self.visit_url_from_menuitem, link)
+			submenu.append(item)
+
+			item = gtk.MenuItem(_('Look it up in _dictionary'))
+			link = 'http://dictionary.reference.com/search?q=' +\
+				self.selected_phrase
+			item.connect('activate', self.visit_url_from_menuitem, link)
+			submenu.append(item)
+			
+			item = gtk.MenuItem(_('Web _search for it'))
+			#FIXME: via expert allow other engine
+			gajim.config.get('search_engine')
+			link = gajim.config.get('search_engine') + self.selected_phrase +\
+				'&sourceid=gajim'
+			item.connect('activate', self.visit_url_from_menuitem, link)
+			submenu.append(item)
+			
 		menu.show_all()
 			
 	def on_conversation_textview_button_press_event(self, widget, event):
-		# Do not open the standard popup menu, so we block right button
-		# click on a taged text
+		# If we clicked on a taged text do NOT open the standard popup menu
+		# if normal text check if we have sth selected
 
-		if event.button != 3:
+		self.selected_phrase = ''
+
+		if event.button != 3: # if not right click
 			return False
 
 		win = widget.get_window(gtk.TEXT_WINDOW_TEXT)
-		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,\
+		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
 			int(event.x), int(event.y))
 		iter = widget.get_iter_at_location(x, y)
 		tags = iter.get_tags()
 
-		if not tags:
-			return False
 
-		for tag in tags:
-			tag_name = tag.get_property('name')
-			if 'url' in tag_name or 'mail' in tag_name:
-				return True
+		if tags: # we clicked on sth special
+			for tag in tags:
+				tag_name = tag.get_property('name')
+				if 'url' in tag_name or 'mail' in tag_name:
+					return True # we block normal context menu
+		else:
+			# we check if sth was selected and if it was we assign
+			# selected_phrase variable
+			# so on_conversation_textview_populate_popup can use it
+			buffer = widget.get_buffer()
+			return_val = buffer.get_selection_bounds()
+			if return_val: # if sth was selected when we right-clicked
+				# get the selected text
+				start_sel, finish_sel = return_val[0], return_val[1]
+				self.selected_phrase = buffer.get_text(start_sel, finish_sel)
+				
+			return False
 	
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
@@ -665,9 +711,8 @@ class Chat:
 			img = gtk.Image()
 			img.set_from_file(self.plugin.emoticons[emot_ascii])
 			img.show()
+			#add with possible animation
 			textview.add_child_at_anchor(img, anchor)
-#			buffer.insert_pixbuf(end_iter,
-#					self.plugin.emoticons[emot_ascii])
 		elif special_text.startswith('mailto:'):
 			#it's a mail
 			tags.append('mail')

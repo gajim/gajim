@@ -105,8 +105,9 @@ class Config:
 		'send_on_ctrl_enter': [opt_bool, False], # send on ctrl+enter
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25],  # how many lines to store for key up
-		'version': [ None, '0.7' ],
-		'compact_view': [opt_bool, False] # initial compact view state
+		'version': [ None, '0.8' ],
+		'compact_view': [opt_bool, False], # initial compact view state
+		'search_engine': [opt_str, 'http://www.google.com/search?&q='],
 	}
 
 	__options_per_key = {

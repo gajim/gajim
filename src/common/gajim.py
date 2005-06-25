@@ -17,6 +17,7 @@
 ## GNU General Public License for more details.
 ##
 
+import os
 import logging
 import common.config
 import common.logger
@@ -34,3 +35,4 @@ log.addHandler(h)
 
 logger = common.logger.Logger()
 DATA_DIR = '../data'
+LANG = os.getenv('LANG')[:2] # en, fr, el etc..
