@@ -951,7 +951,7 @@ class RosterWindow:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = Contact(jid = jid, name = pseudo, groups = [group],
 				show = 'requested', status = 'requested', ask = 'none',
-				sub = 'subscribe', keyOD = keyID)
+				sub = 'subscribe', keyID = keyID)
 			self.contacts[account][jid] = [user1]
 		else:
 			user1 = self.contacts[account][jid][0]
