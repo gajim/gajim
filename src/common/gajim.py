@@ -35,8 +35,8 @@ log.addHandler(h)
 
 logger = common.logger.Logger()
 DATA_DIR = '../data'
-LANG = os.getenv('LANG') # en, fr, el etc..
+LANG = os.getenv('LANG') # en_US, fr_FR, el_GR etc..
 if LANG:
-	LANG = LANG[:3]
+	LANG = LANG[:2] # en, fr, el etc..
 else:
 	LANG = 'en'
