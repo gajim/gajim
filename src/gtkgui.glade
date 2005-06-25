@@ -1339,6 +1339,27 @@
 			  </child>
 
 			  <child>
+			    <widget class="GtkCheckButton" id="send_keepalive_checkbutton">
+			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">If checked, Gajim will send keep-alive packets so it prevents connection timeout which results in disconnection</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Send keep-alive packets</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">True</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			      <signal name="toggled" handler="on_send_keepalive_checkbutton_toggled" last_modification_time="Sat, 25 Jun 2005 21:29:56 GMT"/>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
 			    <widget class="GtkCheckButton" id="custom_host_port_checkbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>

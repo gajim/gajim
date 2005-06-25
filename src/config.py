@@ -1311,6 +1311,11 @@ _('There was a problem retrieving your GPG secret keys.')).get_response()
 		else:
 			self.xml.get_widget('custom_port_entry').set_text('5222')
 
+	def on_send_keepalive_checkbutton_toggled(self, widget):
+		isactive = widget.get_active()
+		gajim.config.set_per('accounts', self.account,
+			'keep_alives_enabled', isactive)
+	
 	def on_custom_host_port_checkbutton_toggled(self, widget):
 		isactive = widget.get_active()
 		self.xml.get_widget('custom_host_port_hbox').set_sensitive(isactive)

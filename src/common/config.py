@@ -131,6 +131,13 @@ class Config:
 			'sync_with_global_status': [ opt_bool, False ],
 			'no_log_for': [ opt_str, '' ],
 			'attached_gpg_keys': [ opt_str, '' ],
+			'keep_alives_enabled': [ opt_bool, True],
+			# send keepalive every 60 seconds of inactivity
+			'keep_alive_every_foo_secs': [ opt_int, 60 ],
+			# disconnect if 2 minutes have passed and server didn't reply
+			'keep_alive_disconnect_secs': [ opt_int, 120 ],
+			# try for 2 minutes before giving up (aka. timeout after those seconds)
+			'try_connecting_for_foo_secs': [ opt_int, 120 ],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],

@@ -127,8 +127,8 @@ class Connection:
 		self.myVCardID = []
 		self.bookmarks = []
 		self.on_purpose = False
-		self._lastIncome = time.time()
-		self._natSent = False
+		self.last_incoming = time.time()
+		self.keep_alive_sent = False
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
@@ -597,8 +597,8 @@ class Connection:
 		self.dispatch('ERROR_ANSWER', (jid_from, errmsg, errcode))
 		
 	def _StanzaArrivedCB(self, con, obj):
-		self._lastIncome = time.time()
-		self._natSent = False
+		self.last_incoming = time.time()
+		self.keep_alive_sent = False
 
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
@@ -612,6 +612,8 @@ class Connection:
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
 		usessl = gajim.config.get_per('accounts', self.name, 'usessl')
+		try_connecting_for_foo_secs = gajim.config.get_per('accounts', self.name,
+			'try_connecting_for_foo_secs')
 
 		#create connection if it doesn't already exist
 		if self.connection:
@@ -629,7 +631,7 @@ class Connection:
 			con = common.xmpp.Client(hostname)
 		else:
 			con = common.xmpp.Client(hostname, debug = [])
-		common.xmpp.dispatcher.DefaultTimeout = 45 # wait 45 seconds until you timeout connection
+		common.xmpp.dispatcher.DefaultTimeout = try_connecting_for_foo_secs
 		con.UnregisterDisconnectHandler(con.DisconnectHandler)
 		con.RegisterDisconnectHandler(self._disconnectedCB)
 
@@ -1157,21 +1159,36 @@ class Connection:
 			q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
 			self.connection.send(iq)
 
+	def send_keepalive(self):
+		# we received nothing for the last foo seconds (60 secs by default)
+		hostname = gajim.config.get_per('accounts', self.name,
+			'hostname')
+		iq = common.xmpp.Iq('get', common.xmpp.NS_LAST, to = hostname)
+		self.connection.send(iq)
+		self.keep_alive_sent = True
+
 	def process(self, timeout):
 		if not self.connection:
 			return
 		if self.connected:
 			try:
-				if time.time() > (self._lastIncome + 60) and not self._natSent:
-					# we received nothing since 1 minute
-					hostname = gajim.config.get_per('accounts', self.name,
-						'hostname')
-					iq = common.xmpp.Iq('get', common.xmpp.NS_LAST, to = hostname)
-					self.connection.send(iq)
-					self._natSent = True
-				if time.time() > self._lastIncome + 105: #1 min + 45 sec for answer
-					self.connection.disconnect()
-					return
+				if gajim.config.get_per('accounts', self.name,
+				'keep_alives_enabled'): # do we want keepalives?
+					keep_alive_every_foo_secs = gajim.config.get_per('accounts',
+						self.name,'keep_alive_every_foo_secs')
+					if time.time() > (self.last_incoming + keep_alive_every_foo_secs)\
+					and not self.keep_alive_sent: #should we send keepalive?
+						self.send_keepalive()
+						return
+				
+				# did the server reply to the keepalive? if no disconnect
+				keep_alive_disconnect_secs = gajim.config.get_per('accounts',
+					self.name, 'keep_alive_disconnect_secs') # 2 mins by default
+				if time.time() > (self.last_incoming + keep_alive_disconnect_secs):
+					self.connection.disconnect() # disconnect if no answer
+					msg = str(keep_alive_disconnect_secs) +\
+		' seconds have passed and server did not reply to our keepalive. Gajim disconnected from ' + self.name
+					gajim.log.debug(msg)
 				self.connection.Process(timeout)
 			except:
 				gajim.log.debug('error appeared while processing xmpp:')
