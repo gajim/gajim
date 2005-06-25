@@ -544,7 +544,7 @@ class Chat:
 		item.connect('activate', self.on_clear, textview)
 		if self.selected_phrase:
 			s = self.selected_phrase
-			if len(s) > 25:
+			if len(s) > 25: #FIXME: do me with pango ellipseEND when gtk24 is OLD
 				s = s[:21] + '...'
 			item = gtk.MenuItem(_('Actions for "%s"') % s)
 			menu.prepend(item)
@@ -589,11 +589,12 @@ class Chat:
 		tags = iter.get_tags()
 
 
-		if tags: # we clicked on sth special
+		if tags: # we clicked on sth special (it can be status message too)
 			for tag in tags:
 				tag_name = tag.get_property('name')
 				if 'url' in tag_name or 'mail' in tag_name:
 					return True # we block normal context menu
+
 		# we check if sth was selected and if it was we assign
 		# selected_phrase variable
 		# so on_conversation_textview_populate_popup can use it
