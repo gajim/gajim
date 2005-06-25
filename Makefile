@@ -1,10 +1,12 @@
-VERSION		?= 0.7.1
+VERSION		?= 0.8
 
-GAJIM_AP	= 0
+GAJIM_AP	= 0 # do we build Autopackage?
+
 MODULES		= src src/common po
 PREFIX		= /usr/local
 DESTDIR		= /
 LIBDIR		= /lib
+MANDIR		= $(DESTDIR)$(PREFIX)/share/man
 
 FIND		= find . \( -name '*.glade' -o -name '*.py' -o -name '*.xpm' -o -name '*.gif' -o -name '*.png' -o -name '*.mo' -o -name '*.wav' \)
 
@@ -68,8 +70,8 @@ install:
 	cp data/pixmaps/gajim_about.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/applications";
 	cp gajim.desktop "$(DESTDIR)$(PREFIX)/share/applications/";
-	mkdir -p "$(DESTDIR)$(PREFIX)/share/man/man1";
-	cp gajim.1 "$(DESTDIR)$(PREFIX)/share/man/man1";
+	mkdir -p "$(MANDIR)/man1";
+	cp gajim.1 "$(MANDIR)/man1";
 	mkdir -p "$(DESTDIR)$(PREFIX)$(LIBDIR)/gajim";
 	for f in $(FILES_LIB) ; do \
 		cp "$$f" "$(DESTDIR)$(PREFIX)$(LIBDIR)/gajim/"; \
@@ -85,3 +87,32 @@ install:
 		echo "$$F" > "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 		chmod +x "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 	done
+
+#
+# show make params we accept
+#
+help:
+	@echo Usage:
+	@echo make					- builds all modules
+	@echo make clean			- delete built modules and object files
+	@echo make install		- install binaries into the official directories
+	@echo make uninstall		- uninstall binaries from the official directories
+	@echo make help			- prints this help
+	@echo 
+	@echo make trayicon		- makes only trayicon module
+	@echo make idle			- makes only idle detection module
+	@echo make translation	- makes only translation \(mo files\)
+	@echo make gtkspell		- makes only gtkspell detection module
+	@echo
+
+#
+# uninstall application from official directories
+#
+uninstall:
+	rm -rf	"$(DESTDIR)$(PREFIX)/share/gajim" # the main files are here
+	rm -rf	"$(DESTDIR)$(PREFIX)/lib/gajim" # the .so files are here
+	rm -f		"$(DESTDIR)$(PREFIX)/bin/gajim" # the bash script
+	rm -f		"$(MANDIR)/man1/gajim.1.gz" # the man page
+	rm -f		"$(DESTDIR)$(PREFIX)/share/pixmaps/gajim.png" # the icon
+	rm -f		"$(DESTDIR)$(PREFIX)/share/applications/gajim.desktop" #the desktop
+	@echo done uninstalling
