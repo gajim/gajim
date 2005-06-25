@@ -203,12 +203,6 @@ class TabbedChatWindow(chat.Chat):
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
 
-	def on_tabbed_chat_window_event(self, widget, event):
-		if event.type != gtk.gdk.BUTTON_PRESS:
-			return False
-		self.on_chat_window_button_press_event(widget, event)
-		return True
-
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
