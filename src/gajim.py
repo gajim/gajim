@@ -129,26 +129,27 @@ class Interface:
 		#kind = 'url' or 'mail'
 		if os.name == 'nt':
 			try:
-				os.startfile(url) # if pywin32 is installed we open
+				os.startfile(uri) # if pywin32 is installed we open
 			except:
 				pass
-			return
-		if gajim.config.get('openwith') == 'gnome-open':
-			command = 'gnome-open'
-		elif gajim.config.get('openwith') == 'kfmclient exec':
-			command = 'kfmclient exec'
-		elif gajim.config.get('openwith') == 'custom':
-			if kind == 'url':
-				command = gajim.config.get('custombrowser')
-			if kind == 'mail':
-				command = gajim.config.get('custommailapp')
-			if command == '': # if no app is configured
-				return
-		command = command + ' ' + uri + ' &'
-		try:
-			os.system(command)
-		except:
-			pass
+		else:
+			if gajim.config.get('openwith') == 'gnome-open':
+				command = 'gnome-open'
+			elif gajim.config.get('openwith') == 'kfmclient exec':
+				command = 'kfmclient exec'
+			elif gajim.config.get('openwith') == 'custom':
+				if kind == 'url':
+					command = gajim.config.get('custombrowser')
+				if kind == 'mail':
+					command = gajim.config.get('custommailapp')
+				if command == '': # if no app is configured
+					return
+			# we add the uri in "" so we have good parsing from shell
+			command = command + ' "' + uri + '" &'
+			try: #FIXME: when we require 2.4+ use subprocess module
+				os.system(command)
+			except:
+				pass
 
 	def play_sound(self, event):
 		if not gajim.config.get('sounds_on'):
@@ -166,7 +167,9 @@ class Interface:
 			if gajim.config.get('soundplayer') == '':
 				return
 			player = gajim.config.get('soundplayer')
-			command = player + ' ' + path_to_soundfile + ' &'
+			# we add the path in "" so we have good parsing from shell
+			command = player + ' "' + path_to_soundfile + '" &'
+			#FIXME: when we require 2.4+ use subprocess module
 			os.system(command)
 
 	def handle_event_roster(self, account, data):
