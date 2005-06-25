@@ -1620,8 +1620,9 @@ class ServiceRegistrationWindow:
 		if self.infos.has_key('registered'):
 			del self.infos['registered']
 		else:
-			user1 = Contact(self.service, self.service, ['Transports'], 'offline',
-				'offline', 'from', '', '', 0, '')
+			user1 = Contact(jid = self.service, name = self.service,
+			groups = ['Transports'], show = 'offline', status = 'offline',
+			sub = 'from')
 			self.plugin.roster.contacts[self.account][self.service] = [user1]
 			self.plugin.roster.add_user_to_roster(self.service, self.account)
 		gajim.connections[self.account].register_agent(self.service, self.infos)

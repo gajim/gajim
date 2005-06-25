@@ -670,8 +670,9 @@ class NewMessageDialog:
 					'attached_gpg_keys').split()
 				if jid in attached_keys:
 					keyID = attached_keys[attached_keys.index(jid) + 1]
-				user = Contact(jid, jid, ['not in the roster'], 'not in the roster',
-					'not in the roster', 'none', None, '', 0, keyID)
+				user = Contact(jid = jid, name = jid.split('@')[0],
+					groups = ['not in the roster'], show = 'not in the roster',
+					status = 'not in the roster', sub = 'none', keyID = keyID)
 				self.plugin.roster.contacts[self.account][jid] = [user]
 				self.plugin.roster.add_user_to_roster(user.jid, self.account)			
 
@@ -798,9 +799,9 @@ class PopupNotificationWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user = Contact(self.jid, self.jid, ['not in the roster'],
-				'not in the roster', 'not in the roster', 'none', None, '', 0,
-				keyID)
+			user = Contact(jid = self.jid, name = self.jid.split('@')[0],
+				groups = ['not in the roster'], show = 'not in the roster',
+				status = 'not in the roster', sub = 'none', keyID = keyID)
 			self.plugin.roster.contacts[self.account][self.jid] = [user]
 			self.plugin.roster.add_user_to_roster(user.self.jid, self.account)			
 

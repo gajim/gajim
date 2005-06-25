@@ -91,30 +91,20 @@ except ImportError:
 
 class Contact:
 	'''Information concerning each contact'''
-	def __init__(self, *args):
-		if len(args) == 0:
-			self.jid = ''
-			self.name = ''
-			self.groups = []
-			self.show = ''
-			self.status = ''
-			self.sub = ''
-			self.ask = ''
-			self.resource = ''
-			self.priority = 1
-			self.keyID = ''
-		elif len(args) == 10:
-			self.jid = args[0]
-			self.name = args[1]
-			self.groups = args[2]
-			self.show = args[3]
-			self.status = args[4]
-			self.sub = args[5]
-			self.ask = args[6]
-			self.resource = args[7]
-			self.priority = args[8]
-			self.keyID = args[9]
-		else: raise TypeError, _('bad arguments')
+	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
+			ask='', resource='', priority=5, keyID='', role='', affiliation=''):
+		self.jid = jid
+		self.name = name
+		self.groups = groups
+		self.show = show
+		self.status = status
+		self.sub = sub
+		self.ask = ask
+		self.resource = resource
+		self.priority = priority
+		self.keyID = keyID
+		self.role = role
+		self.affiliation = affiliation
 
 import roster_window
 import systray
@@ -248,9 +238,11 @@ class Interface:
 				if (resources != [''] and (len(luser) != 1 or 
 					luser[0].show != 'offline')) and not jid.find('@') <= 0:
 					old_show = 0
-					user1 = Contact(user1.jid, user1.name, user1.groups, user1.show, \
-					user1.status, user1.sub, user1.ask, user1.resource, \
-						user1.priority, user1.keyID)
+					user1 = Contact(jid = user1.jid, name = user1.name,
+						groups = user1.groups, show = user1.show,
+						status = user1.status, sub = user1.sub, ask = user1.ask,
+						resource = user1.resource, priority = user1.priority,
+						keyID = user1.keyID)
 					luser.append(user1)
 				user1.resource = resource
 			if user1.jid.find('@') > 0 and len(luser) == 1: # It's not an agent
@@ -344,8 +336,8 @@ class Interface:
 				model = tv.get_model()
 				iter = gc.get_user_iter(jid, nick)
 				show = model.get_value(iter, 3)
-				u = Contact(fjid, nick, ['none'], show, '', 'none', None, '', 0,
-					'')
+				u = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
+					ask = 'none')
 				self.roster.new_chat(u, account)
 			chat_win = self.windows[account]['chats'][fjid]
 			chat_win.print_conversation(array[1], fjid, tim = array[2])
@@ -397,8 +389,8 @@ class Interface:
 						show = model.get_value(iter, 3)
 					else:
 						show = 'offline'
-					u = Contact(fjid, nick, ['none'], show, '', 'none', None, '', 0,
-						'')
+					u = Contact(jid = fjid, name = nick, groups = ['none'],
+						show = show, ask = 'none')
 					self.roster.new_chat(u, account)
 				self.windows[account]['chats'][fjid].print_conversation(
 					'Error %s: %s' % (array[1], array[2]), fjid, 'status')
@@ -442,8 +434,9 @@ class Interface:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = Contact(jid, jid, ['General'], 'online', \
-				'online', 'to', '', array[1], 0, keyID)
+			user1 = Contact(jid = jid, name = jid.split('@')[0],
+				groups = ['General'], show = 'online', status = 'online',
+				ask = 'to', resource = array[1], keyID = keyID)
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),

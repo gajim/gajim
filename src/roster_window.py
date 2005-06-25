@@ -432,9 +432,9 @@ class RosterWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = Contact(ji, name, array[jid]['groups'], show, status,\
-					array[jid]['subscription'], array[jid]['ask'], resource, 0,
-					keyID)
+			user1 = Contact(jid = ji, name = name, groups = array[jid]['groups'],
+				show = show, status = status, sub = array[jid]['subscription'],
+				ask = array[jid]['ask'], resource = resource, keyID = keyID)
 
 			# when we draw the roster, we avoid having the same contact
 			# more than once (eg. we avoid showing it twice with 2 resources)
@@ -949,8 +949,9 @@ class RosterWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = Contact(jid, pseudo, [group], 'requested', 'requested', 
-								'none', 'subscribe', '', 0, keyID)
+			user1 = Contact(jid = jid, name = pseudo, groups = [group],
+				show = 'requested', status = 'requested', ask = 'none',
+				sub = 'subscribe', keyOD = keyID)
 			self.contacts[account][jid] = [user1]
 		else:
 			user1 = self.contacts[account][jid][0]
@@ -1063,9 +1064,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				self.remove_user(u, account)
 			del self.contacts[account][u.jid]
 			if user.jid in self.plugin.windows[account]['chats']:
-				user1 = Contact(user.jid, user.name, ['not in the roster'],
-					'not in the roster', 'not in the roster', 'none', None, '', 0,
-					user.keyID)
+				user1 = Contact(jid = user.jid, name = user.name,
+					groups = ['not in the roster'], show = 'not in the roster',
+					status = 'not in the roster', ask = 'none', keyID = user.keyID)
 				self.contacts[account][user.jid] = [user1] 
 				self.add_user_to_roster(user.jid, account)	
 			
@@ -1263,8 +1264,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = Contact(jid, jid, ['not in the roster'], 'not in the roster', 
-								'not in the roster', 'none', None, '', 0, keyID)
+			user1 = Contact(jid = jid, name = jid.split('@')[0],
+				groups = ['not in the roster'], show = 'not in the roster',
+				status = 'not in the roster', ask = 'none', keyID = keyID)
 			self.contacts[account][jid] = [user1] 
 			self.add_user_to_roster(jid, account)
 		iters = self.get_user_iter(jid, account)
