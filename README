@@ -1,11 +1,11 @@
 Welcome and thanks for trying out Gajim.
 
-Runtime Requirements:
+=RUNTIME REQUIREMENTS=
 python2.4 (python2.3 should work too)
 pygtk2.6 (pytgtk 2.4 should work too)
 python-libglade
 
-Compile-time Requirements:
+=COMPILE-TIME REQUIREMENTS=
 python-dev
 python-gtk2-dev
 libgtk2.0-dev (aka gtk2-devel)
@@ -18,27 +18,43 @@ dnspython (for SRV support; if you don't know what that is, you don't need it)
 GnomePythonExtras 2.10 or above (so you can avoid compiling trayicon and gtkspell)
 possible package name for your distro: python-gnome2-extras
 
-INSTALL PROCEDURE
+
+=INSTALLATION PROCEDURE=
 tar jxvf gajim-version.tar.bz2
 cd gajim
 make
-make install # as superuser
+su -c make install
 
-RUN GAJIM
+For more options where to install do
+su -c make DESTDIR=custom_path install
+
+=RUNNING GAJIM=
 gajim
 
 or if you didn't 'make install' you can also run from gajim folder with
 ./launch.sh
 
+Last but not least, you can run Gajim from your GNOME/XFCE/KDE/whatever Menus
 
+=UNINSTALLATION PROCEDURE=
+su -c make uninstall
+this will try to remove Gajim from the default directories.
+If you want to remove it from custom directory provide it as:
+make DESTDIR=custom_path uninstall
+
+=MISCELLANEOUS=
 If you want to see the xml stanzas and/or help us debugging 
 you're advised to enable verbose via advanced configuration window.
 If you don't want to make this permanent, execute gajim with --verbose
+everytime you want to have verbose output.
+
+=FAQ=
+FAQ can be found in http://trac.gajim.org/wiki/GajimFaq
 
 
-Enjoy!
+That is all, Enjoy!
 
-(C) 2005
+(C) 2003-2005
 The Gajim Team
 http://gajim.org
 
