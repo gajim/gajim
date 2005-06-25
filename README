@@ -9,14 +9,14 @@ python-libglade
 python-dev
 python-gtk2-dev
 libgtk2.0-dev (aka gtk2-devel)
-libxss-dev (for idle detection module) [Debian splits xscreensaver hopefully your distro does not]
+libxss-dev (for idle detection module) [Debian splits xscreensaver hopefully your distribution does not]
 libgtkspell-dev (for gtkspell module)
 
 Optionally:
 gtkspell and aspell-LANG (where lang is your locale eg. en, fr etc)
 dnspython (for SRV support; if you don't know what that is, you don't need it)
 GnomePythonExtras 2.10 or above (so you can avoid compiling trayicon and gtkspell)
-possible package name for your distro: python-gnome2-extras
+possible package name for your distribution: python-gnome2-extras
 
 
 =INSTALLATION PROCEDURE=
@@ -34,7 +34,7 @@ gajim
 or if you didn't 'make install' you can also run from gajim folder with
 ./launch.sh
 
-Last but not least, you can run Gajim from your GNOME/XFCE/KDE/whatever Menus
+Last but not least, you can run Gajim from your GNOME/XFCE/KDE/whatever menus.
 
 =UNINSTALLATION PROCEDURE=
 su -c make uninstall
