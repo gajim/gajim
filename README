@@ -8,24 +8,27 @@ python-libglade
 =COMPILE-TIME REQUIREMENTS=
 python-dev
 python-gtk2-dev
-libgtk2.0-dev (aka gtk2-devel)
-libxss-dev (for idle detection module) [Debian splits xscreensaver hopefully your distribution does not]
-libgtkspell-dev (for gtkspell module)
+libgtk2.0-dev		# aka. gtk2-devel
+libxss-dev			# for idle detection module (Some distributions split xscreensaver)
+libgtkspell-dev	# for gtkspell module
 
 Optionally:
-gtkspell and aspell-LANG (where lang is your locale eg. en, fr etc)
-dnspython (for SRV support; if you don't know what that is, you don't need it)
-GnomePythonExtras 2.10 or above (so you can avoid compiling trayicon and gtkspell)
+gtkspell and aspell-LANG where lang is your locale eg. en, fr etc
+dnspython for SRV support; if you don't know what that is, you don't need it)
+GnomePythonExtras 2.10 or above so you can avoid compiling trayicon and gtkspell
 possible package name for your distribution: python-gnome2-extras
 
 
 =INSTALLATION PROCEDURE=
 tar jxvf gajim-version.tar.bz2
 cd gajim
-make
+make	# builds all modules
 su -c make install
 
-For more options where to install do
+To specify what modules to build do:
+make help
+
+To specify where to install do:
 su -c make DESTDIR=custom_path install
 
 =RUNNING GAJIM=
@@ -52,7 +55,7 @@ everytime you want to have verbose output.
 FAQ can be found in http://trac.gajim.org/wiki/GajimFaq
 
 
-That is all, Enjoy!
+That is all, enjoy!
 
 (C) 2003-2005
 The Gajim Team
