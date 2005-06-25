@@ -543,7 +543,10 @@ class Chat:
 		menu.prepend(item)
 		item.connect('activate', self.on_clear, textview)
 		if self.selected_phrase:
-			item = gtk.MenuItem(_('Actions for "%s"') % self.selected_phrase)
+			s = self.selected_phrase
+			if len(s) > 25:
+				s = s[:21] + '...'
+			item = gtk.MenuItem(_('Actions for "%s"') % s)
 			menu.prepend(item)
 			submenu = gtk.Menu()
 			item.set_submenu(submenu)
@@ -591,19 +594,16 @@ class Chat:
 				tag_name = tag.get_property('name')
 				if 'url' in tag_name or 'mail' in tag_name:
 					return True # we block normal context menu
-		else:
-			# we check if sth was selected and if it was we assign
-			# selected_phrase variable
-			# so on_conversation_textview_populate_popup can use it
-			buffer = widget.get_buffer()
-			return_val = buffer.get_selection_bounds()
-			if return_val: # if sth was selected when we right-clicked
-				# get the selected text
-				start_sel, finish_sel = return_val[0], return_val[1]
-				self.selected_phrase = buffer.get_text(start_sel, finish_sel)
-				
-			return False
-	
+		# we check if sth was selected and if it was we assign
+		# selected_phrase variable
+		# so on_conversation_textview_populate_popup can use it
+		buffer = widget.get_buffer()
+		return_val = buffer.get_selection_bounds()
+		if return_val: # if sth was selected when we right-clicked
+			# get the selected text
+			start_sel, finish_sel = return_val[0], return_val[1]
+			self.selected_phrase = buffer.get_text(start_sel, finish_sel)
+
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
 			return False
