@@ -6528,7 +6528,7 @@ Custom</property>
 		<widget class="GtkExpander" id="expander4">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="expanded">True</property>
+		  <property name="expanded">False</property>
 		  <property name="spacing">0</property>
 
 		  <child>
@@ -6665,7 +6665,7 @@ Custom</property>
 			<widget class="GtkEntry" id="N_FAMILY_entry">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="editable">True</property>
+			  <property name="editable">False</property>
 			  <property name="visibility">True</property>
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
@@ -6686,7 +6686,7 @@ Custom</property>
 			<widget class="GtkEntry" id="N_GIVEN_entry">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="editable">True</property>
+			  <property name="editable">False</property>
 			  <property name="visibility">True</property>
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
@@ -6707,7 +6707,7 @@ Custom</property>
 			<widget class="GtkEntry" id="N_MIDDLE_entry">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="editable">True</property>
+			  <property name="editable">False</property>
 			  <property name="visibility">True</property>
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
@@ -6728,7 +6728,7 @@ Custom</property>
 			<widget class="GtkEntry" id="N_PREFIX_entry">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="editable">True</property>
+			  <property name="editable">False</property>
 			  <property name="visibility">True</property>
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
@@ -6749,7 +6749,7 @@ Custom</property>
 			<widget class="GtkEntry" id="N_SUFFIX_entry">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="editable">True</property>
+			  <property name="editable">False</property>
 			  <property name="visibility">True</property>
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
@@ -7711,7 +7711,7 @@ Custom</property>
 		<widget class="GtkEntry" id="TEL_WORK_NUMBER_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="editable">True</property>
+		  <property name="editable">False</property>
 		  <property name="visibility">True</property>
 		  <property name="max_length">0</property>
 		  <property name="text" translatable="yes"></property>
@@ -7732,7 +7732,7 @@ Custom</property>
 		<widget class="GtkEntry" id="EMAIL_WORK_USERID_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="editable">True</property>
+		  <property name="editable">False</property>
 		  <property name="visibility">True</property>
 		  <property name="max_length">0</property>
 		  <property name="text" translatable="yes"></property>
