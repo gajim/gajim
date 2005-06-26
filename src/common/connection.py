@@ -1179,16 +1179,15 @@ class Connection:
 					if time.time() > (self.last_incoming + keep_alive_every_foo_secs)\
 					and not self.keep_alive_sent: #should we send keepalive?
 						self.send_keepalive()
-						return
 				
-				# did the server reply to the keepalive? if no disconnect
-				keep_alive_disconnect_secs = gajim.config.get_per('accounts',
-					self.name, 'keep_alive_disconnect_secs') # 2 mins by default
-				if time.time() > (self.last_incoming + keep_alive_disconnect_secs):
-					self.connection.disconnect() # disconnect if no answer
-					msg = str(keep_alive_disconnect_secs) +\
-		' seconds have passed and server did not reply to our keepalive. Gajim disconnected from ' + self.name
-					gajim.log.debug(msg)
+					# did the server reply to the keepalive? if no disconnect
+					keep_alive_disconnect_secs = gajim.config.get_per('accounts',
+						self.name, 'keep_alive_disconnect_secs') # 2 mins by default
+					if time.time() > (self.last_incoming + keep_alive_disconnect_secs):
+						self.connection.disconnect() # disconnect if no answer
+						msg = '%s seconds have passed and server did not reply to our keepalive. Gajim disconnected from %s' % (str(keep_alive_disconnect_secs), self.name)
+						gajim.log.debug(msg)
+						return
 				self.connection.Process(timeout)
 			except:
 				gajim.log.debug('error appeared while processing xmpp:')
