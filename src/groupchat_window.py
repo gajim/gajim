@@ -638,10 +638,6 @@ class GroupchatWindow(chat.Chat):
 		else:
 			self.plugin.windows[self.account]['infos'][jid] = \
 				dialogs.VcardWindow(c, self.plugin, self.account, False)
-			if c.resource:
-				gajim.connections[self.account].request_os_info(c.jid, c.resource)
-			else:
-				gajim.connections[self.account].request_os_info(room_jid, nick)
 
 	def on_add_to_roster(self, widget, jid):
 		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
