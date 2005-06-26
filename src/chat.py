@@ -875,6 +875,7 @@ class Chat:
 				self.sent_history[jid][i] = self.sent_history[jid][i+1]
 			self.sent_history[jid][max_size - 1] = message
 		else:
+			message += ' ' # append message with a space
 			self.sent_history[jid].append(message)
 
 		self.sent_history_pos[jid] = size + 1

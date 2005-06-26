@@ -482,9 +482,11 @@ class GroupchatWindow(chat.Chat):
 		elif event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
 				self.sent_messages_scroll(room_jid, 'up', widget.get_buffer())
+				return True # override the default gtk+ thing for ctrl+up
 		elif event.keyval == gtk.keysyms.Down:
 			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+Down
 				self.sent_messages_scroll(room_jid, 'down', widget.get_buffer())
+				return True # override the default gtk+ thing for ctrl+down
 		else:
 			self.last_key_tabs[room_jid] = False
 
