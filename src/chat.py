@@ -421,9 +421,7 @@ class Chat:
 			self.set_compact_view(not self.get_compact_view())
 		elif event.keyval == gtk.keysyms.Page_Down:
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
-				current = self.notebook.get_current_page()
-				if current > 0:
-					self.notebook.set_current_page(current-1)
+				self.notebook.prev_page()
 			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
 				conversation_textview = self.xmls[jid].\
 					get_widget('conversation_textview')
@@ -433,9 +431,7 @@ class Chat:
 				conversation_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
 		elif event.keyval == gtk.keysyms.Page_Up: 
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
-				current = self.notebook.get_current_page()
-				if current < (self.notebook.get_n_pages()-1):
-					self.notebook.set_current_page(current + 1)
+				self.notebook.next_page()
 			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
 				conversation_textview = self.xmls[jid].\
 					get_widget('conversation_textview')
