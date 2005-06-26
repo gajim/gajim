@@ -22,9 +22,12 @@ from tempfile import *
 USE_GPG = 1
 
 try:
-	from common import GnuPGInterface
-except:
-	USE_GPG = 0
+	import GnuPGInterface # Debian package doesn't distribute 'our' file
+except ImportError:
+	try:
+		from common import GnuPGInterface # use 'our' file
+	except ImportError:
+		USE_GPG = 0 # user can't do OpenGPG only if he removed the file!
 	
 else:
 	class GnuPG(GnuPGInterface.GnuPG):
