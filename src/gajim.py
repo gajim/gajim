@@ -509,6 +509,7 @@ class Interface:
 		self.nicks[account] = nick
 
 	def handle_event_vcard(self, account, array):
+		win = None
 		if self.windows[account]['infos'].has_key(array['jid']):
 			win = self.windows[account]['infos'][array['jid']]
 		elif self.windows[account]['infos'].has_key(array['jid'] + '/' + \
