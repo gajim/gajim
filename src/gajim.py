@@ -510,7 +510,13 @@ class Interface:
 
 	def handle_event_vcard(self, account, array):
 		if self.windows[account]['infos'].has_key(array['jid']):
-			self.windows[account]['infos'][array['jid']].set_values(array)
+			win = self.windows[account]['infos'][array['jid']]
+		elif self.windows[account]['infos'].has_key(array['jid'] + '/' + \
+				array['resource']):
+			win = self.windows[account]['infos'][array['jid'] + '/' + \
+				array['resource']]
+		if win:
+			win.set_values(array)
 		if self.windows[account]['chats'].has_key(array['jid']):
 			self.windows[account]['chats'][array['jid']].set_avatar(array)
 

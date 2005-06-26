@@ -166,14 +166,16 @@ class Connection:
 	def _vCardCB(self, con, vc):
 		"""Called when we receive a vCard
 		Parse the vCard and send it to plugins"""
-		frm = vc.getFrom()
-		if frm:
-			frm = frm.getStripped()
+		frm_iq = vc.getFrom()
+		resource = ''
+		if frm_iq:
+			frm = frm_iq.getStripped()
+			resource = frm_iq.getResource()
 		else:
 			name = gajim.config.get_per('accounts', self.name, 'name')
 			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 			frm = name + '@' + hostname
-		vcard = {'jid': frm}
+		vcard = {'jid': frm, 'resource': resource}
 		if not vc.getTag('vCard'):
 			return
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:

@@ -242,17 +242,18 @@ class VcardWindow:
 		self.os_info = {0: {'resource': self.user.resource, 'client': '',
 			'os': ''}}
 		i = 1
-		for u in self.plugin.roster.contacts[self.account][self.user.jid]:
-			if u.resource != self.user.resource:
-				resources += '\n' + u.resource + ' (' + str(u.priority) + ')'
-				if not u.status:
-					u.status = ''
-				stats += '\n' + u.show + ': ' + u.status
-				gajim.connections[self.account].request_os_info(self.user.jid,
-					u.resource)
-				self.os_info[i] = {'resource': u.resource, 'client': '',
-					'os': ''}
-				i += 1
+		if self.plugin.roster.contacts[self.account].has_key(self.user.jid):
+			for u in self.plugin.roster.contacts[self.account][self.user.jid]:
+				if u.resource != self.user.resource:
+					resources += '\n' + u.resource + ' (' + str(u.priority) + ')'
+					if not u.status:
+						u.status = ''
+					stats += '\n' + u.show + ': ' + u.status
+					gajim.connections[self.account].request_os_info(self.user.jid,
+						u.resource)
+					self.os_info[i] = {'resource': u.resource, 'client': '',
+						'os': ''}
+					i += 1
 		self.xml.get_widget('resource_label').set_text(resources)
 		
 		status_label = self.xml.get_widget('status_label')

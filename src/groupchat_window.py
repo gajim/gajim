@@ -43,6 +43,7 @@ class GroupchatWindow(chat.Chat):
 		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
 		self.muc_cmds = ['chat', 'clear', 'compact', 'me', 'msg', 'nick'] # alphanum sorted
 		self.nicks = {} # our nick for each groupchat we are in
+		self.contacts = {} # contact instances for each room
 		self.list_treeview = {}
 		self.subjects = {}
 		self.name_labels = {}
@@ -85,6 +86,7 @@ class GroupchatWindow(chat.Chat):
 			return {}
 		return {
 			'nick': self.nicks[jid],
+			'contacts': self.contacts[jid],
 			'model': self.list_treeview[jid].get_model(),
 			'subject': self.subjects[jid],
 		}
@@ -95,6 +97,7 @@ class GroupchatWindow(chat.Chat):
 		self.list_treeview[jid].set_model(var['model'])
 		self.list_treeview[jid].expand_all()
 		self.set_subject(jid, var['subject'])
+		self.subjects[jid] = var['contacts']
 
 	def on_close_window_activate(self, widget):
 		if not self.on_groupchat_window_delete_event(widget, None):
@@ -160,14 +163,15 @@ class GroupchatWindow(chat.Chat):
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
+		r = '<b>%ss</b>' % role.capitalize()
 		model = self.list_treeview[room_jid].get_model()
 		fin = False
 		iter = model.get_iter_root()
 		if not iter:
 			return None
 		while not fin:
-			role_name = model.get_value(iter, 2)
-			if role == role_name:
+			role_name = model.get_value(iter, 1)
+			if r == role_name:
 				return iter
 			iter = model.iter_next(iter)
 			if not iter:
@@ -198,27 +202,7 @@ class GroupchatWindow(chat.Chat):
 
 	def get_nick_list(self, room_jid):
 		'''get nicks of contacts in a room'''
-		model = self.list_treeview[room_jid].get_model()
-		list = []
-		fin = False
-		role = model.get_iter_root()
-		if not role:
-			return list
-		while not fin:
-			fin2 = False
-			user = model.iter_children(role)
-			if not user:
-				fin2 = True
-			while not fin2:
-				nick = unicode(model.get_value(user, 1))
-				list.append(nick)
-				user = model.iter_next(user)
-				if not user:
-					fin2 = True
-			role = model.iter_next(role)
-			if not role:
-				fin = True
-		return list
+		return self.contacts[room_jid].keys()
 
 	def remove_user(self, room_jid, nick):
 		"""Remove a user from the list_users"""
@@ -226,6 +210,7 @@ class GroupchatWindow(chat.Chat):
 		iter = self.get_user_iter(room_jid, nick)
 		if not iter:
 			return
+		del self.contacts[room_jid][nick]
 		parent_iter = model.iter_parent(iter)
 		model.remove(iter)
 		if model.iter_n_children(parent_iter) == 0:
@@ -234,21 +219,29 @@ class GroupchatWindow(chat.Chat):
 	def add_user_to_roster(self, room_jid, nick, show, role, jid, affiliation):
 		model = self.list_treeview[room_jid].get_model()
 		image = self.plugin.roster.jabber_state_images[show]
+		resource = ''
+		if jid:
+			jids = jid.split('/')
+			j = jids[0]
+			if len(jids) > 1:
+				resource = jids[1]
+		else:
+			j = room_jid + '/' + nick
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(self.plugin.roster.jabber_state_images['closed'], '<b>%ss</b>' % role.capitalize(),
-				 role, '', ''))
-		iter = model.append(role_iter, (image, nick, jid, show, affiliation))
+				(self.plugin.roster.jabber_state_images['closed'],
+				'<b>%ss</b>' % role.capitalize()))
+		iter = model.append(role_iter, (image, nick))
+		self.contacts[room_jid][nick] = Contact(jid = j, name = nick,
+			show = show, resource = resource, role = role,
+			affiliation = affiliation)
 		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)),
 			False)
 		return iter
 	
-	def get_role(self, room_jid, jid_iter):
-		model = self.list_treeview[room_jid].get_model()
-		path = model.get_path(jid_iter)[0]
-		iter = model.get_iter(path)
-		return model.get_value(iter, 2)
+	def get_role(self, room_jid, nick):
+		return self.contacts[room_jid][nick].role
 
 	def update_state_images(self):
 		roster = self.plugin.roster
@@ -262,7 +255,8 @@ class GroupchatWindow(chat.Chat):
 				if not user_iter:
 					continue
 				while user_iter:
-					show = model.get_value(user_iter, 3)
+					nick = model.get_value(user_iter, 1)
+					show = self.contacts[room_jid][nick].show
 					state_images = roster.get_appropriate_state_images(room_jid)
 					image = state_images[show] #FIXME: always Jabber why?
 					model.set_value(user_iter, 0, image)
@@ -287,25 +281,24 @@ class GroupchatWindow(chat.Chat):
 			self.remove_user(room_jid, nick)
 			if nick == self.nicks[room_jid] and statusCode != '303': # We became offline
 				model.clear()
+				self.contacts[room_jid] = {}
 		else:
 			iter = self.get_user_iter(room_jid, nick)
-			ji = jid
-			if jid:
-				ji = jid.split('/')[0]
 			if not iter:
-				iter = self.add_user_to_roster(room_jid, nick, show, role, ji, affiliation)
+				iter = self.add_user_to_roster(room_jid, nick, show, role, jid, affiliation)
 			else:
-				actual_role = self.get_role(room_jid, iter)
+				actual_role = self.get_role(room_jid, nick)
 				if role != actual_role:
 					self.remove_user(room_jid, nick)
-					self.add_user_to_roster(room_jid, nick, show, role, ji, affiliation)
+					self.add_user_to_roster(room_jid, nick, show, role, jid, affiliation)
 				else:
 					roster = self.plugin.roster
-					state_images = roster.get_appropriate_state_images(ji)
+					state_images = roster.get_appropriate_state_images(jid)
 					image = state_images[show]
 					model.set_value(iter, 0, image)
-					model.set_value(iter, 3, show)
-					model.set_value(iter, 4, affiliation)
+					c = self.contacts[room_jid][nick]
+					c.show = show
+					c.affiliation = affiliation
 		if (time.time() - self.room_creation[room_jid]) > 30 and \
 				nick != self.nicks[room_jid] and statusCode != '303':
 			if show == 'offline':
@@ -342,7 +335,7 @@ class GroupchatWindow(chat.Chat):
 		nick = self.nicks[room_jid]
 		instance = dialogs.InputDialog(_('Changing Nickname'),
 			_('Please specify the new nickname you want to use:'), nick)
-		response = response = instance.get_response()
+		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
 			nick = instance.input_entry.get_text()
 			gajim.connections[self.account].change_gc_nick(room_jid, nick)
@@ -631,25 +624,24 @@ class GroupchatWindow(chat.Chat):
 		"""revoke owner privilege to a user"""
 		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, 'admin')
 
-	def on_info(self, widget, jid):
+	def on_info(self, widget, room_jid, nick):
 		"""Call vcard_information_window class to display user's information"""
+		c = self.contacts[room_jid][nick]
+		if c.jid and c.resource:
+			jid = c.jid
+			fjid = c.jid + '/' + c.resource
+		else:
+			fjid = room_jid + '/' + nick
+			jid = fjid
 		if self.plugin.windows[self.account]['infos'].has_key(jid):
 			self.plugin.windows[self.account]['infos'][jid].window.present()
 		else:
 			self.plugin.windows[self.account]['infos'][jid] = \
-				dialogs.VcardWindow(jid, self.plugin, self.account, True)
-			# FIXME: when we'll have a user for each contact, this won't be needed
-			# cause we'll user real information window
-			vcard_xml = self.plugin.windows[self.account]['infos'][jid].xml
-			hbuttonbox = vcard_xml.get_widget('information_hbuttonbox')
-			children = hbuttonbox.get_children()
-			hbuttonbox.remove(children[0])
-			hbuttonbox.remove(children[1])
-			vcard_xml.get_widget('nickname_label').set_text(jid)
-			gajim.connections[self.account].request_vcard(jid)
-			
-			#FIXME: we need the resource but it's not saved
-			#self.plugin.send('ASK_OS_INFO', self.account, jid, resource)
+				dialogs.VcardWindow(c, self.plugin, self.account, False)
+			if c.resource:
+				gajim.connections[self.account].request_os_info(c.jid, c.resource)
+			else:
+				gajim.connections[self.account].request_os_info(room_jid, nick)
 
 	def on_add_to_roster(self, widget, jid):
 		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
@@ -662,10 +654,9 @@ class GroupchatWindow(chat.Chat):
 		room_jid = self.get_active_jid()
 		fjid = room_jid + '/' + nick # 'fake' jid
 		if not self.plugin.windows[self.account]['chats'].has_key(fjid):
-			#show = model.get_value(iter, 3) #FIXME: be able to get show from nick
-			show = 'chat'
+			show = self.contacts[room_jid][nick].show
 			u = Contact(jid = fjid, name =  nick, groups = ['none'], show = show,
-			sub = 'none')
+				sub = 'none')
 			self.plugin.roster.new_chat(u, self.account)
 		if msg:
 			self.plugin.windows[self.account]['chats'][fjid].send_message(msg)
@@ -676,14 +667,15 @@ class GroupchatWindow(chat.Chat):
 		"""Make user's popup menu"""
 		model = self.list_treeview[room_jid].get_model()
 		nick = model.get_value(iter, 1)
-		jid = model.get_value(iter, 2)
-		target_affiliation = model.get_value(iter, 4)
-		target_role = self.get_role(room_jid, iter)
+		c = self.contacts[room_jid][nick]
+		jid = c.jid
+		target_affiliation = c.affiliation
+		target_role = c.role
 
 		# looking for user's affiliation and role
-		user_iter = self.get_user_iter(room_jid, self.nicks[room_jid])
-		user_affiliation = model.get_value(user_iter, 4)
-		user_role = self.get_role(room_jid, user_iter)
+		user_nick = self.nicks[room_jid]
+		user_affiliation = self.contacts[room_jid][user_nick].affiliation
+		user_role = self.get_role(room_jid, user_nick)
 		
 		menu = gtk.Menu()
 		item = gtk.MenuItem(_('_Privileges'))
@@ -762,7 +754,7 @@ class GroupchatWindow(chat.Chat):
 
 		item = gtk.MenuItem(_('_Information'))
 		menu.append(item)
-		item.connect('activate', self.on_info, jid and jid or (room_jid+'/'+nick))
+		item.connect('activate', self.on_info, room_jid, nick)
 
 		if jid:
 			item = gtk.MenuItem(_('_Add to Roster'))
@@ -855,6 +847,7 @@ class GroupchatWindow(chat.Chat):
 			gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
 				room_jid, 'offline', 'offline')
 			del self.nicks[room_jid]
+			del self.contacts[room_jid]
 			del self.list_treeview[room_jid]
 			del self.subjects[room_jid]
 			del self.name_labels[room_jid]
@@ -867,6 +860,7 @@ class GroupchatWindow(chat.Chat):
 		self.set_compact_view(self.get_compact_view())
 		chat.Chat.new_tab(self, room_jid)
 		self.nicks[room_jid] = nick
+		self.contacts[room_jid] = {}
 		self.subjects[room_jid] = ''
 		self.room_creation[room_jid] = time.time()
 		self.nick_hits[room_jid] = []
@@ -895,8 +889,8 @@ class GroupchatWindow(chat.Chat):
 		xm.signal_autoconnect(self)
 		self.gc_actions_menu = xm.get_widget('gc_actions_menu')
 
-		#status_image, nickname, real_jid, show, affiliation
-		store = gtk.TreeStore(gtk.Image, str, str, str, str)
+		#status_image, nickname
+		store = gtk.TreeStore(gtk.Image, str)
 		store.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		column = gtk.TreeViewColumn('contacts')
 		renderer_image = cell_renderer_image.CellRendererImage()
@@ -952,6 +946,7 @@ class GroupchatWindow(chat.Chat):
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
+		room_jid = self.get_active_jid()
 		if event.button == 3: # right click
 			try:
 				path, column, x, y = widget.get_path_at_pos(int(event.x),
@@ -963,7 +958,6 @@ class GroupchatWindow(chat.Chat):
 			model = widget.get_model()
 			iter = model.get_iter(path)
 			if len(path) == 2:
-				room_jid = self.get_active_jid()
 				self.mk_menu(room_jid, event, iter)
 			return True
 		if event.button == 2: # middle click
@@ -977,11 +971,10 @@ class GroupchatWindow(chat.Chat):
 			model = widget.get_model()
 			iter = model.get_iter(path)
 			if len(path) == 2:
-				room_jid = self.get_active_jid()
 				nick = model.get_value(iter, 1)
 				fjid = room_jid + '/' + nick
 				if not self.plugin.windows[self.account]['chats'].has_key(fjid):
-					show = model.get_value(iter, 3)
+					show = gajim.contacts[room_jid][nick].show
 					u = Contact(jid = fjid, name = nick, groups = ['none'],
 						show = show, sub = 'none')
 					self.plugin.roster.new_chat(u, self.account)
@@ -998,8 +991,8 @@ class GroupchatWindow(chat.Chat):
 
 			model = widget.get_model()
 			iter = model.get_iter(path)
-			status = model.get_value(iter, 3) # if no status: it's a group
-			if not status:
+			nick = model.get_value(iter, 1)
+			if not nick in self.contacts[room_jid]: #it's a group
 				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 					if (widget.row_expanded(path)):
 						widget.collapse_row(path)
@@ -1027,9 +1020,9 @@ class GroupchatWindow(chat.Chat):
 			nick = model.get_value(iter, 1)
 			fjid = room_jid + '/' + nick
 			if not self.plugin.windows[self.account]['chats'].has_key(fjid):
-				show = model.get_value(iter, 3)
-				u = Contact(jid = fjid, name = nick, groups = ['none'],
-					show = show, sub = 'none')
+				show = self.contacts[room_jid][nick].show
+				u = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
+					sub = 'none')
 				self.plugin.roster.new_chat(u, self.account)
 			self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
 			self.plugin.windows[self.account]['chats'][fjid].window.present()
