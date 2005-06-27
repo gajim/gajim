@@ -163,7 +163,6 @@ class GroupchatWindow(chat.Chat):
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
-		r = '<b>%ss</b>' % role.capitalize()
 		model = self.list_treeview[room_jid].get_model()
 		fin = False
 		iter = model.get_iter_root()
@@ -171,7 +170,7 @@ class GroupchatWindow(chat.Chat):
 			return None
 		while not fin:
 			role_name = model.get_value(iter, 1)
-			if r == role_name:
+			if role == role_name:
 				return iter
 			iter = model.iter_next(iter)
 			if not iter:
@@ -215,6 +214,9 @@ class GroupchatWindow(chat.Chat):
 		model.remove(iter)
 		if model.iter_n_children(parent_iter) == 0:
 			model.remove(parent_iter)
+
+	def escape(self, s):
+		return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 	
 	def add_user_to_roster(self, room_jid, nick, show, role, jid, affiliation):
 		model = self.list_treeview[room_jid].get_model()
@@ -230,9 +232,9 @@ class GroupchatWindow(chat.Chat):
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(self.plugin.roster.jabber_state_images['closed'],
+				(self.plugin.roster.jabber_state_images['closed'], role,
 				'<b>%ss</b>' % role.capitalize()))
-		iter = model.append(role_iter, (image, nick))
+		iter = model.append(role_iter, (image, nick, self.escape(nick)))
 		self.contacts[room_jid][nick] = Contact(jid = j, name = nick,
 			show = show, resource = resource, role = role,
 			affiliation = affiliation)
@@ -885,8 +887,8 @@ class GroupchatWindow(chat.Chat):
 		xm.signal_autoconnect(self)
 		self.gc_actions_menu = xm.get_widget('gc_actions_menu')
 
-		#status_image, nickname
-		store = gtk.TreeStore(gtk.Image, str)
+		#status_image, nickname, shown_nick
+		store = gtk.TreeStore(gtk.Image, str, str)
 		store.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		column = gtk.TreeViewColumn('contacts')
 		renderer_image = cell_renderer_image.CellRendererImage()
@@ -895,7 +897,7 @@ class GroupchatWindow(chat.Chat):
 		column.add_attribute(renderer_image, 'image', 0)
 		renderer_text = gtk.CellRendererText()
 		column.pack_start(renderer_text, expand = True)
-		column.set_attributes(renderer_text, markup=1)
+		column.set_attributes(renderer_text, markup = 2)
 		column.set_cell_data_func(renderer_image, self.tree_cell_data_func, None)
 		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
 
