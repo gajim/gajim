@@ -448,15 +448,15 @@ class Chat:
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + SHIFT + TAB
 				current = self.notebook.get_current_page()
 				if current > 0:
-					self.notebook.set_current_page(current - 1)
-				else:
+					self.notebook.prev_page()
+				else: # traverse for ever (eg. don't stop at first tab)
 					self.notebook.set_current_page(self.notebook.get_n_pages()-1)
 		elif event.keyval == gtk.keysyms.Tab: # TAB
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				current = self.notebook.get_current_page()
 				if current < (self.notebook.get_n_pages()-1):
-					self.notebook.set_current_page(current + 1)
-				else:
+					self.notebook.next_page()
+				else: # traverse for ever (eg. don't stop at last tab)
 					self.notebook.set_current_page(0)
 		elif event.keyval == gtk.keysyms.l or \
 			 event.keyval == gtk.keysyms.L:
