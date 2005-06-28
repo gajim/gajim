@@ -295,7 +295,7 @@ class TabbedChatWindow(chat.Chat):
 					return False
 			if gajim.connections[self.account].connected < 2: #we are not connected
 				dialogs.ErrorDialog(_("A connection is not available"),
-                        _("Your message can't be sent until you reconnect.")).get_response()
+					_("Your message can't be sent until you are connected.")).get_response()
 				return True
 
 			# send the message
