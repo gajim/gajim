@@ -1075,7 +1075,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			del self.gpg_passphrase[keyid]
 		return False
 
-	def send_status(self, account, status, txt):
+	def send_status(self, account, status, txt, sync = False):
 		if status != 'offline':
 			if gajim.connections[account].connected < 2:
 				model = self.tree.get_model()
@@ -1136,7 +1136,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 						gajim.config.set_per('accounts', account, 'gpgpassword', 
 													passphrase)
 				gajim.connections[account].gpg_passphrase(passphrase)
-		gajim.connections[account].change_status(status, txt)
+		gajim.connections[account].change_status(status, txt, sync)
 		for room_jid in self.plugin.windows[account]['gc']:
 			if room_jid != 'tabbed':
 				nick = self.plugin.windows[account]['gc'][room_jid].nicks[room_jid]
@@ -1443,7 +1443,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					return
 			for acct in accounts:
 				if gajim.connections[acct].connected:
-					self.send_status(acct, 'offline', message)
+					# send status asynchronously
+					self.send_status(acct, 'offline', message, True)
 		self.quit_gtkgui_plugin()
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):

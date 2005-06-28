@@ -37,6 +37,7 @@ import os
 import sre
 import signal
 import getopt
+import time
 
 from common import i18n
 i18n.init()
@@ -763,6 +764,7 @@ class Interface:
 			for account in gajim.connections:
 				if gajim.connections[account].connected:
 					gajim.connections[account].process(0.01)
+			time.sleep(0.01) # threads in connection.py have time to run
 			return True # renew timeout (loop for ever)
 		except KeyboardInterrupt:
 			sys.exit()

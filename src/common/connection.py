@@ -22,6 +22,7 @@ import os
 import time
 import sre
 import traceback
+import threading
 from calendar import timegm
 
 import common.xmpp
@@ -732,7 +733,14 @@ class Connection:
 			roster = self.connection.getRoster().getRaw()
 		return roster
 	
-	def change_status(self, show, msg):
+	def change_status(self, show, msg, sync = False):
+		if sync:
+			self.change_status2(show, msg)
+		else:
+			t = threading.Thread(target=self.change_status2, args = (show, msg))
+			t.start()
+
+	def change_status2(self, show, msg):
 		if not show in STATUS_LIST:
 			return -1
 		sshow = show # show to be send
