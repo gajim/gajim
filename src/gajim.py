@@ -333,10 +333,7 @@ class Interface:
 			fjid = jid + '/' + nick
 			if not self.windows[account]['chats'].has_key(fjid):
 				gc = self.windows[account]['gc'][jid]
-				tv = gc.list_treeview[jid]
-				model = tv.get_model()
-				iter = gc.get_user_iter(jid, nick)
-				show = model.get_value(iter, 3)
+				show = gc.contacts[nick].show()
 				u = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
 					ask = 'none')
 				self.roster.new_chat(u, account)
