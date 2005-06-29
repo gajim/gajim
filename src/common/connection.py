@@ -666,7 +666,9 @@ class Connection:
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
 				_('Check your connection or try again later')))
 			return None, None
-		
+
+		gajim.log.debug('Connected to server with %s', con_type)
+
 		self.dispatch('CON_TYPE', con_type) # notify the gui about con_type
 
 		con.RegisterHandler('message', self._messageCB)
@@ -698,8 +700,6 @@ class Connection:
 		con.RegisterHandler('presence', self._StanzaArrivedCB)
 		con.RegisterHandler('message', self._StanzaArrivedCB)
 		con.RegisterEventHandler(self._event_dispatcher)
-
-		gajim.log.debug('Connected to server')
 
 		try:
 			#FIXME: blocking
