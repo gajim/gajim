@@ -376,7 +376,7 @@ class Interface:
 	def handle_event_msgerror(self, account, array):
 		#('MSGERROR', account, (jid, error_code, error_msg, msg, time))
 		fjid = array[0]
-		jids = fjid.split('/')
+		jids = fjid.split('/', 1)
 		jid = jids[0]
 		gcs = self.windows[account]['gc']
 		if jid in gcs:
@@ -530,7 +530,7 @@ class Interface:
 
 	def handle_event_gc_msg(self, account, array):
 		#('GC_MSG', account, (jid, msg, time))
-		jids = array[0].split('/')
+		jids = array[0].split('/', 1)
 		jid = jids[0]
 		if not self.windows[account]['gc'].has_key(jid):
 			return
@@ -545,7 +545,7 @@ class Interface:
 
 	def handle_event_gc_subject(self, account, array):
 		#('GC_SUBJECT', account, (jid, subject))
-		jids = array[0].split('/')
+		jids = array[0].split('/', 1)
 		jid = jids[0]
 		if not self.windows[account]['gc'].has_key(jid):
 			return
