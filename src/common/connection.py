@@ -101,7 +101,8 @@ def get_os_info():
 					# sourcemage_version has all the info we need
 					if not os.path.basename(path_to_file).startswith('sourcemage'):
 						text = distro_name + ' ' + text
-				elif path_to_file.endswith('aurox-release'): # file doesn't have version
+				elif path_to_file.endswith('aurox-release'):
+					# file doesn't have version
 					text = distro_name
 				elif path_to_file.endswith('lfs-release'): # file just has version
 					text = distro_name + ' ' + text
@@ -130,6 +131,8 @@ class Connection:
 		self.on_purpose = False
 		self.last_incoming = time.time()
 		self.keep_alive_sent = False
+		self.to_be_sent = []
+		self.last_sent = []
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
@@ -151,7 +154,7 @@ class Connection:
 		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = ns)
 		if node:
 			iq.setQuerynode(node)
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 
 	def discoverItems(self, jid, node = None):
 		'''According to JEP-0030: jid is mandatory, 
@@ -279,10 +282,12 @@ class Connection:
 			gajim.log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0:
 				if self.connection:
-					self.connection.send(common.xmpp.Presence(who, 'subscribed'))
+					self.to_be_sent.insert(0, common.xmpp.Presence(who,
+						'subscribed'))
 				if who.find("@") <= 0:
-					self.dispatch('NOTIFY', (prs.getFrom().getStripped().encode('utf8'), \
-						'offline', 'offline', prs.getFrom().getResource().encode('utf8'), prio, \
+					self.dispatch('NOTIFY',
+						(prs.getFrom().getStripped().encode('utf8'), 'offline',
+						'offline', prs.getFrom().getResource().encode('utf8'), prio,
 						keyID, None, None, None, None, None, None))
 			else:
 				if not status:
@@ -290,9 +295,10 @@ class Connection:
 				self.dispatch('SUBSCRIBE', (who, status))
 		elif ptype == 'subscribed':
 			jid = prs.getFrom()
-			self.dispatch('SUBSCRIBED', (jid.getStripped().encode('utf8'), jid.getResource().encode('utf8')))
-			self.dispatch('UPDUSER', (jid.getStripped().encode('utf8'), jid.getNode(), \
-				['General']))
+			self.dispatch('SUBSCRIBED', (jid.getStripped().encode('utf8'),
+				jid.getResource().encode('utf8')))
+			self.dispatch('UPDUSER', (jid.getStripped().encode('utf8'),
+				jid.getNode(), ['General']))
 			#BE CAREFUL : no con.updateRosterItem() in a callback
 			gajim.log.debug('we are now subscribed to %s' % who)
 		elif ptype == 'unsubscribe':
@@ -401,7 +407,7 @@ class Connection:
 		gajim.log.debug('DiscoverInfoErrorCB')
 		iq = common.xmpp.Iq(to = iq_obj.getFrom(), typ = 'get', queryNS =\
 			common.xmpp.NS_AGENTS)
-		con.send(iq)
+		self.to_be_sent.insert(0, iq)
 
 	def _DiscoverInfoCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoCB')
@@ -426,7 +432,7 @@ class Connection:
 				features.append(i.getAttr('var'))
 		jid = str(iq_obj.getFrom())
 		if not identities:
-			self.connection.send(common.xmpp.Iq(typ = 'get', queryNS = \
+			self.to_be_sent.insert(0, common.xmpp.Iq(typ = 'get', queryNS = \
 				common.xmpp.NS_AGENTS))
 		else:
 			self.dispatch('AGENT_INFO_INFO', (jid, node, identities, features))
@@ -441,7 +447,7 @@ class Connection:
 		send_os = gajim.config.get('send_os_info')
 		if send_os:
 			qp.setTagData('os', get_os_info())
-		con.send(iq_obj)
+		self.to_be_sent.insert(0, iq_obj)
 		raise common.xmpp.NodeProcessed
 
 	def _VersionResultCB(self, con, iq_obj):
@@ -540,11 +546,12 @@ class Connection:
 			for i in roster.keys():
 				props = roster[i]
 				if props.has_key('name') and props['name']:
-					props['name']=props['name'].encode('utf8')
+					props['name'] = props['name'].encode('utf8')
 				if props.has_key('groups') and props['groups']:
-					props['groups']= map(lambda e:e.encode('utf8'),props['groups'])
+					props['groups'] = map(lambda e:e.encode('utf8'), props['groups'])
 				if props.has_key('resources') and props['resources']:
-					props['resources']= map(lambda e:e.encode('utf8'),props['resources'])
+					props['resources'] = map(lambda e:e.encode('utf8'),
+						props['resources'])
 				del roster[i]
 				roster[i.encode('utf8')] = props
 				
@@ -706,7 +713,8 @@ class Connection:
 			gajim.log.debug("Couldn't authenticate to %s" % self.name)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Authentication failed with "%s"') % self.name,
+			self.dispatch('ERROR', (_('Authentication failed with "%s"') % \
+				self.name,
 				_('Please check your login and password for correctness.')))
 			return None
 	# END connect
@@ -749,7 +757,8 @@ class Connection:
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if keyID and USE_GPG:
-			if self.connected < 2 and self.gpg.passphrase == None: # We didn't set a passphrase
+			if self.connected < 2 and self.gpg.passphrase == None:
+				# We didn't set a passphrase
 				self.dispatch('ERROR', (_('OpenPGP Key was not given'),
 					_('You will be connected to %s without OpenPGP.') % self.name))
 			else:
@@ -828,7 +837,7 @@ class Connection:
 		msg_iq = common.xmpp.Message(to = jid, body = msgtxt, typ = 'chat')
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
-		self.connection.send(msg_iq)
+		self.to_be_sent.insert(0, msg_iq)
 		gajim.logger.write('outgoing', msg, jid)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 
@@ -840,17 +849,17 @@ class Connection:
 		if not msg:
 			msg = _('I would like to add you to my roster.')
 		pres.setStatus(msg)
-		self.connection.send(pres)
+		self.to_be_sent.insert(0, pres)
 
 	def send_authorization(self, jid):
 		if not self.connection:
 			return
-		self.connection.send(common.xmpp.Presence(jid, 'subscribed'))
+		self.to_be_sent.insert(0, common.xmpp.Presence(jid, 'subscribed'))
 
 	def refuse_authorization(self, jid):
 		if not self.connection:
 			return
-		self.connection.send(common.xmpp.Presence(jid, 'unsubscribed'))
+		self.to_be_sent.insert(0, common.xmpp.Presence(jid, 'unsubscribed'))
 
 	def unsubscribe(self, jid):
 		if not self.connection:
@@ -882,7 +891,7 @@ class Connection:
 
 	def request_agents(self, jid, node):
 		if self.connection:
-			self.connection.send(common.xmpp.Iq(to = jid, typ = 'get', 
+			self.to_be_sent.insert(0, common.xmpp.Iq(to = jid, typ = 'get', 
 				queryNS = common.xmpp.NS_BROWSE))
 			self.discoverInfo(jid, node)
 
@@ -960,7 +969,7 @@ class Connection:
 			return
 		iq = common.xmpp.Iq(to=jid + '/' + resource, typ = 'get', queryNS =\
 			common.xmpp.NS_VERSION)
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 
 	def request_vcard(self, jid = None):
 		'''request the VCARD and return the iq'''
@@ -970,7 +979,7 @@ class Connection:
 		if jid:
 			iq.setTo(jid)
 		iq.setTag(common.xmpp.NS_VCARD + ' vCard')
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 		return iq
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 	
@@ -993,7 +1002,7 @@ class Connection:
 						iq3.addChild(k).setData(j[k])
 			else:
 				iq2.addChild(i).setData(vcard[i])
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 
 	def get_settings(self):
 		''' Get Gajim settings as described in JEP 0049 '''
@@ -1002,7 +1011,7 @@ class Connection:
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
 		iq3 = iq2.addChild(name='gajim', namespace='gajim:prefs')
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 
 	def get_bookmarks(self):
 		''' Get Bookmarks from storage as described in JEP 0048 '''
@@ -1012,7 +1021,7 @@ class Connection:
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name="query", namespace="jabber:iq:private")
 		iq3 = iq2.addChild(name="storage", namespace="storage:bookmarks")
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 
 	def store_bookmarks(self):
 		''' Send bookmarks to the storage namespace '''
@@ -1028,14 +1037,13 @@ class Connection:
 			iq4.setAttr('name',bm['name'])
 			iq5 = iq4.setTagData('nick',bm['nick'])
 			iq5 = iq4.setTagData('password',bm['password'])
-		self.connection.send(iq)
-
+		self.to_be_sent.insert(0, iq)
 
 	def send_agent_status(self, agent, ptype):
 		if not self.connection:
 			return
 		p = common.xmpp.Presence(to = agent, typ = ptype)
-		self.connection.send(p)
+		self.to_be_sent.insert(0, p)
 
 	def join_gc(self, nick, room, server, password):
 		if not self.connection:
@@ -1049,30 +1057,30 @@ class Connection:
 		t = p.setTag(common.xmpp.NS_MUC + ' x')
 		if password:
 			t.setTagData('password', password)
-		self.connection.send(p)
+		self.to_be_sent.insert(0, p)
 
 	def send_gc_message(self, jid, msg):
 		if not self.connection:
 			return
 		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat')
-		self.connection.send(msg_iq)
+		self.to_be_sent.insert(0, msg_iq)
 		self.dispatch('MSGSENT', (jid, msg))
 
 	def send_gc_subject(self, jid, subject):
 		if not self.connection:
 			return
 		msg_iq = common.xmpp.Message(jid,typ = 'groupchat', subject = subject)
-		self.connection.send(msg_iq)
+		self.to_be_sent.insert(0, msg_iq)
 
 	def request_gc_config(self, room_jid):
 		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
 			to = room_jid)
-		self.connection.send(iq)
-	
+		self.to_be_sent.insert(0, iq)
+
 	def change_gc_nick(self, room_jid, nick):
 		if not self.connection:
 			return
-		self.connection.send(common.xmpp.Presence(to = '%s/%s' % (room_jid,
+		self.to_be_sent.insert(0, common.xmpp.Presence(to = '%s/%s' % (room_jid,
 			nick)))
 
 	def send_gc_status(self, nick, jid, show, status):
@@ -1084,7 +1092,7 @@ class Connection:
 			show = None
 		if show == 'online':
 			show = None
-		self.connection.send(common.xmpp.Presence(to = '%s/%s' % (jid, nick),
+		self.to_be_sent.insert(0, common.xmpp.Presence(to = '%s/%s' % (jid, nick),
 			typ = ptype, show = show, status = status))
 
 	def gc_set_role(self, room_jid, nick, role):
@@ -1095,7 +1103,7 @@ class Connection:
 		item = iq.getTag('query').setTag('item')
 		item.setAttr('nick', nick)
 		item.setAttr('role', role)
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 
 	def gc_set_affiliation(self, room_jid, jid, affiliation):
 		if not self.connection:
@@ -1105,7 +1113,7 @@ class Connection:
 		item = iq.getTag('query').setTag('item')
 		item.setAttr('jid', jid)
 		item.setAttr('affiliation', affiliation)
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 
 	def send_gc_config(self, room_jid, config):
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
@@ -1132,7 +1140,7 @@ class Connection:
 						val = '1'
 					tag.setTagData('value', val)
 			i += 1
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 
 	def gpg_passphrase(self, passphrase):
 		if USE_GPG:
@@ -1158,7 +1166,7 @@ class Connection:
 		q = iq.setTag(common.xmpp.NS_REGISTER + ' query')
 		q.setTagData('username',username)
 		q.setTagData('password',password)
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 
 	def unregister_account(self):
 		if self.connected == 0:
@@ -1167,33 +1175,47 @@ class Connection:
 			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 			iq = common.xmpp.Iq(typ = 'set', to = hostname)
 			q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
-			self.connection.send(iq)
+			self.to_be_sent.insert(0, iq)
 
 	def send_keepalive(self):
 		# we received nothing for the last foo seconds (60 secs by default)
 		hostname = gajim.config.get_per('accounts', self.name,
 			'hostname')
 		iq = common.xmpp.Iq('get', common.xmpp.NS_LAST, to = hostname)
-		self.connection.send(iq)
+		self.to_be_sent.insert(0, iq)
 		self.keep_alive_sent = True
 
 	def process(self, timeout):
 		if not self.connection:
 			return
 		if self.connected:
+			now = time.time()
+			l = []
+			for t in self.last_sent:
+				if (now - t) < 1:
+					l.append(t)
+			self.last_sent = l
+			t_limit = time.time() + timeout
+			while time.time() < t_limit and len(self.to_be_sent) and \
+					len(self.last_sent) < gajim.config.get_per('accounts',
+						self.name, 'max_stanza_per_sec'):
+				self.connection.send(self.to_be_sent.pop())
+				self.last_sent.append(time.time())
 			try:
 				if gajim.config.get_per('accounts', self.name,
 				'keep_alives_enabled'): # do we want keepalives?
 					keep_alive_every_foo_secs = gajim.config.get_per('accounts',
 						self.name,'keep_alive_every_foo_secs')
-					if time.time() > (self.last_incoming + keep_alive_every_foo_secs)\
-					and not self.keep_alive_sent: #should we send keepalive?
+					#should we send keepalive?
+					if time.time() > (self.last_incoming + \
+							keep_alive_every_foo_secs) and not self.keep_alive_sent:
 						self.send_keepalive()
-				
+
 					# did the server reply to the keepalive? if no disconnect
 					keep_alive_disconnect_secs = gajim.config.get_per('accounts',
 						self.name, 'keep_alive_disconnect_secs') # 2 mins by default
-					if time.time() > (self.last_incoming + keep_alive_disconnect_secs):
+					if time.time() > (self.last_incoming + \
+							keep_alive_disconnect_secs):
 						self.connection.disconnect() # disconnect if no answer
 						msg = '%s seconds have passed and server did not reply to our keepalive. Gajim disconnected from %s' % (str(keep_alive_disconnect_secs), self.name)
 						gajim.log.debug(msg)
