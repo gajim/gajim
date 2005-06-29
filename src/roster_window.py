@@ -94,8 +94,16 @@ class RosterWindow:
 		statuss = ['offline', 'connecting', 'online', 'chat',
 			'away', 'xa', 'dnd', 'invisible']
 		status = statuss[gajim.connections[account].connected]
-		model.append(None, (self.jabber_state_images[status], account,
-				'account', account, account, False))
+
+		tls_pixbuf = None
+		if self.plugin.con_types.has_key(account) and\
+			(self.plugin.con_types[account] == 'tls' or\
+			self.plugin.con_types[account] == 'ssl'):
+			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
+				gtk.ICON_SIZE_MENU, 'foo')
+
+		model.append(None, [self.jabber_state_images[status], account,
+			'account', account, account, False, tls_pixbuf])
 
 	def remove_newly_added(self, jid, account):
 		if jid in self.newly_added[account]:
@@ -126,7 +134,7 @@ class RosterWindow:
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
 				iterG = model.append(IterAcct, 
-					(self.jabber_state_images['closed'], g, 'group', g, account, False))
+		[self.jabber_state_images['closed'], g, 'group', g, account, False, None])
 			if not self.groups[account].has_key(g): #It can probably never append
 				if account + g in self.collapsed_rows:
 					ishidden = False
@@ -141,8 +149,8 @@ class RosterWindow:
 			if g == 'Transports':
 				typestr = 'agent'
 
-			model.append(iterG, (self.jabber_state_images[user.show], user.name,
-					typestr, user.jid, account, False))
+			model.append(iterG, [self.jabber_state_images[user.show], user.name,
+					typestr, user.jid, account, False, None]) # FIXME None --> avatar
 			
 			if self.groups[account][g]['expand']:
 				self.tree.expand_row(model.get_path(iterG),
@@ -244,6 +252,7 @@ class RosterWindow:
 		for iter in iters:
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
+			#FIXME: add avatar
 
 	def join_gc_room(self, account, room_jid, nick, password):
 		if room_jid in self.plugin.windows[account]['gc']:
@@ -976,7 +985,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			type = model.get_value(iter, 2)
 			if type == 'user' or type == 'group':
 				path = model.get_path(iter)
-				model.set_value(iter, 5, True)
+				model.set_value(iter, 5, True) # editable -> True
 				self.tree.set_cursor(path, self.tree.get_column(0), True)
 		if event.keyval == gtk.keysyms.Delete:
 			treeselection = self.tree.get_selection()
@@ -1690,6 +1699,30 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				gajim.config.get_per('themes', theme, 'contactfont'))
 			renderer.set_property('xpad', 8)
 
+	def fill_secondary_pixbuf_rederer(self, column, renderer, model, iter, data=None):
+		'''When a row is added, set properties for secondary renderer (avatar or tls)'''
+		theme = gajim.config.get('roster_theme')
+		if model.get_value(iter, 2) == 'account':
+			renderer.set_property('cell-background', 
+				gajim.config.get_per('themes', theme, 'accountbgcolor'))
+			renderer.set_property('xalign', 0)
+		elif model.get_value(iter, 2) == 'group':
+			renderer.set_property('cell-background', 
+				gajim.config.get_per('themes', theme, 'groupbgcolor'))
+			#renderer.set_property('xalign', 0.5)
+		else:
+			jid = model.get_value(iter, 3)
+			account = model.get_value(iter, 4)
+			if jid in self.newly_added[account]:
+				renderer.set_property('cell-background', '#adc3c6')
+			elif jid in self.to_be_removed[account]:
+				renderer.set_property('cell-background', '#ab6161')
+			else:
+				renderer.set_property('cell-background', 
+					gajim.config.get_per('themes', theme, 'contactbgcolor'))
+			renderer.set_property('xalign', 0)
+		#renderer.set_property('width', 20)
+
 	def get_show(self, luser):
 		prio = luser[0].priority
 		show = luser[0].show
@@ -1838,9 +1871,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		self.regroup = 0
 		self.regroup = gajim.config.get('mergeaccounts')
 		if gajim.config.get('saveposition'):
-			self.window.move(gajim.config.get('x-position'), \
+			self.window.move(gajim.config.get('x-position'),
 				gajim.config.get('y-position'))
-			self.window.resize(gajim.config.get('width'), \
+			self.window.resize(gajim.config.get('width'),
 				gajim.config.get('height'))
 
 		self.groups = {}
@@ -1855,13 +1888,14 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.groups[a] = {}
 			self.newly_added[a] = []
 			self.to_be_removed[a] = []
-		#(icon, name, type, jid, account, editable)
-		model = gtk.TreeStore(gtk.Image, str, str, str, str, bool)
+		#(icon, name, type, jid, account, editable, secondary_pixbuf)
+		model = gtk.TreeStore(gtk.Image, str, str, str, str, bool, gtk.gdk.Pixbuf)
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
 		self.make_jabber_state_images()
-		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'irc': {}, 'icq': {}, 'msn': {}, 'sms': {}, 'yahoo': {} }
+		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'irc': {},
+			'icq': {}, 'msn': {}, 'sms': {}, 'yahoo': {} }
 		
 		path = os.path.join(gajim.DATA_DIR, 'iconsets/transports')
 		folders = os.listdir(path)
@@ -1869,8 +1903,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if transport == '.svn':
 				continue
 			folder = os.path.join(path, transport)
-			self.transports_state_images[transport] = self.load_iconset(folder + \
-				'/16x16/')
+			self.transports_state_images[transport] = self.load_iconset(
+				folder +	'/16x16/')
 
 		liststore = gtk.ListStore(str, gtk.Image, str)
 		self.status_combobox = self.xml.get_widget('status_combobox')
@@ -1897,18 +1931,27 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		
 		#this col has two cells: first one img, second one text
 		col = gtk.TreeViewColumn()
-		render_pixbuf = cell_renderer_image.CellRendererImage()
-		col.pack_start(render_pixbuf, expand = False)
-		col.add_attribute(render_pixbuf, 'image', 0)
-		col.set_cell_data_func(render_pixbuf, self.iconCellDataFunc, None)
+		
+		render_image = cell_renderer_image.CellRendererImage() # show img or +-
+		col.pack_start(render_image, expand = False)
+		col.add_attribute(render_image, 'image', 0)
+		col.set_cell_data_func(render_image, self.iconCellDataFunc, None)
 
-		render_text = gtk.CellRendererText()
+		render_text = gtk.CellRendererText() # contact or group or account name
 		render_text.connect('edited', self.on_cell_edited)
 		render_text.connect('editing-canceled', self.on_editing_canceled)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'text', 1)
 		col.add_attribute(render_text, 'editable', 5)
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
+
+		
+		render_pixbuf = gtk.CellRendererPixbuf() # tls or avatar img
+		col.pack_start(render_pixbuf, expand = False)
+		col.add_attribute(render_pixbuf, 'pixbuf', 6)
+		col.set_cell_data_func(render_pixbuf, self.fill_secondary_pixbuf_rederer,
+			None)
+
 		self.tree.append_column(col)
 		
 		#do not show gtk arrows workaround

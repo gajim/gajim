@@ -120,7 +120,8 @@ class Connection:
 			'AGENT_INFO_ITEMS': [], 'AGENT_INFO_INFO': [], 'QUIT': [],
 			'ACC_OK': [], 'MYVCARD': [], 'OS_INFO': [], 'VCARD': [], 'GC_MSG': [],
 			'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],
-			'ROSTER_INFO': [], 'ERROR_ANSWER': [], 'BOOKMARKS': [],}
+			'ROSTER_INFO': [], 'ERROR_ANSWER': [], 'BOOKMARKS': [], 'CON_TYPE': [],
+			}
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
@@ -142,6 +143,7 @@ class Connection:
 	# END __init__
 
 	def dispatch(self, event, data):
+		'''always passes account name as first param'''
 		if not event in self.handlers:
 			return
 		for handler in self.handlers[event]:
@@ -232,7 +234,7 @@ class Connection:
 			msgtxt = decmsg
 			encrypted = True
 		if mtype == 'error':
-			self.dispatch('MSGERROR', (str(msg.getFrom()), \
+			self.dispatch('MSGERROR', (str(msg.getFrom()),
 				msg.getErrorCode(), msg.getError(), msgtxt, tim))
 		elif mtype == 'groupchat':
 			subject = msg.getSubject()
@@ -617,7 +619,8 @@ class Connection:
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], data[1].asDict()))
 
 	def connect(self):
-		"""Connect and authenticate to the Jabber server"""
+		"""Connect and authenticate to the Jabber server
+		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')"""
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
@@ -662,7 +665,9 @@ class Connection:
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
 				_('Check your connection or try again later')))
-			return None
+			return None, None
+		
+		self.dispatch('CON_TYPE', con_type) # notify the gui about con_type
 
 		con.RegisterHandler('message', self._messageCB)
 		con.RegisterHandler('presence', self._presenceCB)
@@ -704,11 +709,11 @@ class Connection:
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
 				_('Check your connection or try again later')))
-			return None
+			return None, None
 		if auth:
 			con.initRoster()
 			self.connected = 2
-			return con
+			return con, con_type # return connection and connection type
 		else:
 			gajim.log.debug("Couldn't authenticate to %s" % self.name)
 			self.connected = 0
@@ -716,7 +721,7 @@ class Connection:
 			self.dispatch('ERROR', (_('Authentication failed with "%s"') % \
 				self.name,
 				_('Please check your login and password for correctness.')))
-			return None
+			return None, None
 	# END connect
 
 	def register_handler(self, event, function):
@@ -772,7 +777,7 @@ class Connection:
 						self.dispatch('BAD_PASSPHRASE', ())
 		self.status = msg
 		if show != 'offline' and not self.connected:
-			self.connection = self.connect()
+			self.connection, self.con_type = self.connect()
 			if self.connected == 2:
 				self.connected = STATUS_LIST.index(show)
 				#send our presence
@@ -942,8 +947,8 @@ class Connection:
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % name,
 				_('Check your connection or try again later.')))
 			return False
-		gajim.log.debug('Connected to server')
-		# FIXME! This blocks!
+		gajim.log.debug('Connected to server with %s', con_type)
+
 		req = common.xmpp.features.getRegInfo(c, config['hostname']).asDict()
 		req['username'] = config['name']
 		req['password'] = config['password']

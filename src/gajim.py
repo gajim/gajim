@@ -187,6 +187,10 @@ class Interface:
 			self.windows[account]['gc'][jid_from].print_conversation(
 				'Error %s: %s' % (array[2], array[1]), jid_from)
 
+	def handle_event_con_type(self, account, con_type):
+		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
+		self.con_types[account] = con_type
+
 	def allow_notif(self, account):
 		self.allow_notifications[account] = True
 
@@ -723,38 +727,39 @@ class Interface:
 		# update regular expressions
 		self.make_regexps()
 
-	def register_handlers(self, conn):
-		conn.register_handler('ROSTER', self.handle_event_roster)
-		conn.register_handler('WARNING', self.handle_event_warning)
-		conn.register_handler('ERROR', self.handle_event_error)
-		conn.register_handler('INFORMATION', self.handle_event_information)
-		conn.register_handler('ERROR_ANSWER', self.handle_event_error_answer)
-		conn.register_handler('STATUS', self.handle_event_status)
-		conn.register_handler('NOTIFY', self.handle_event_notify)
-		conn.register_handler('MSG', self.handle_event_msg)
-		conn.register_handler('MSGERROR', self.handle_event_msgerror)
-		conn.register_handler('MSGSENT', self.handle_event_msgsent)
-		conn.register_handler('SUBSCRIBED', self.handle_event_subscribed)
-		conn.register_handler('UNSUBSCRIBED', self.handle_event_unsubscribed)
-		conn.register_handler('SUBSCRIBE', self.handle_event_subscribe)
-		conn.register_handler('AGENT_INFO', self.handle_event_agent_info)
-		conn.register_handler('REGISTER_AGENT_INFO',
+	def register_handlers(self, con):
+		con.register_handler('ROSTER', self.handle_event_roster)
+		con.register_handler('WARNING', self.handle_event_warning)
+		con.register_handler('ERROR', self.handle_event_error)
+		con.register_handler('INFORMATION', self.handle_event_information)
+		con.register_handler('ERROR_ANSWER', self.handle_event_error_answer)
+		con.register_handler('STATUS', self.handle_event_status)
+		con.register_handler('NOTIFY', self.handle_event_notify)
+		con.register_handler('MSG', self.handle_event_msg)
+		con.register_handler('MSGERROR', self.handle_event_msgerror)
+		con.register_handler('MSGSENT', self.handle_event_msgsent)
+		con.register_handler('SUBSCRIBED', self.handle_event_subscribed)
+		con.register_handler('UNSUBSCRIBED', self.handle_event_unsubscribed)
+		con.register_handler('SUBSCRIBE', self.handle_event_subscribe)
+		con.register_handler('AGENT_INFO', self.handle_event_agent_info)
+		con.register_handler('REGISTER_AGENT_INFO',
 			self.handle_event_register_agent_info)
-		conn.register_handler('AGENT_INFO_ITEMS',
+		con.register_handler('AGENT_INFO_ITEMS',
 			self.handle_event_agent_info_items)
-		conn.register_handler('AGENT_INFO_INFO',
+		con.register_handler('AGENT_INFO_INFO',
 			self.handle_event_agent_info_info)
-		conn.register_handler('QUIT', self.handle_event_quit)
-		conn.register_handler('ACC_OK', self.handle_event_acc_ok)
-		conn.register_handler('MYVCARD', self.handle_event_myvcard)
-		conn.register_handler('VCARD', self.handle_event_vcard)
-		conn.register_handler('OS_INFO', self.handle_event_os_info)
-		conn.register_handler('GC_MSG', self.handle_event_gc_msg)
-		conn.register_handler('GC_SUBJECT', self.handle_event_gc_subject)
-		conn.register_handler('GC_CONFIG', self.handle_event_gc_config)
-		conn.register_handler('BAD_PASSPHRASE', self.handle_event_bad_passphrase)
-		conn.register_handler('ROSTER_INFO', self.handle_event_roster_info)
-		conn.register_handler('BOOKMARKS', self.handle_event_bookmarks)
+		con.register_handler('QUIT', self.handle_event_quit)
+		con.register_handler('ACC_OK', self.handle_event_acc_ok)
+		con.register_handler('MYVCARD', self.handle_event_myvcard)
+		con.register_handler('VCARD', self.handle_event_vcard)
+		con.register_handler('OS_INFO', self.handle_event_os_info)
+		con.register_handler('GC_MSG', self.handle_event_gc_msg)
+		con.register_handler('GC_SUBJECT', self.handle_event_gc_subject)
+		con.register_handler('GC_CONFIG', self.handle_event_gc_config)
+		con.register_handler('BAD_PASSPHRASE', self.handle_event_bad_passphrase)
+		con.register_handler('ROSTER_INFO', self.handle_event_roster_info)
+		con.register_handler('BOOKMARKS', self.handle_event_bookmarks)
+		con.register_handler('CON_TYPE', self.handle_event_con_type)
 
 	def process_connections(self):
 		try:
@@ -816,6 +821,7 @@ class Interface:
 		self.queues = {}
 		self.nicks = {}
 		self.allow_notifications = {}
+		self.con_types = {}
 		self.sleeper_state = {} #whether we pass auto away / xa or not
 		for a in gajim.connections:
 			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
