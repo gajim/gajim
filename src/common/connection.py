@@ -665,7 +665,7 @@ class Connection:
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
 				_('Check your connection or try again later')))
-			return None, None
+			return None
 
 		gajim.log.debug('Connected to server with %s', con_type)
 
@@ -709,11 +709,11 @@ class Connection:
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
 				_('Check your connection or try again later')))
-			return None, None
+			return None
 		if auth:
 			con.initRoster()
 			self.connected = 2
-			return con, con_type # return connection and connection type
+			return con # return connection
 		else:
 			gajim.log.debug("Couldn't authenticate to %s" % self.name)
 			self.connected = 0
@@ -721,7 +721,7 @@ class Connection:
 			self.dispatch('ERROR', (_('Authentication failed with "%s"') % \
 				self.name,
 				_('Please check your login and password for correctness.')))
-			return None, None
+			return None
 	# END connect
 
 	def register_handler(self, event, function):
@@ -777,7 +777,7 @@ class Connection:
 						self.dispatch('BAD_PASSPHRASE', ())
 		self.status = msg
 		if show != 'offline' and not self.connected:
-			self.connection, self.con_type = self.connect()
+			self.connection = self.connect()
 			if self.connected == 2:
 				self.connected = STATUS_LIST.index(show)
 				#send our presence
