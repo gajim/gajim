@@ -1982,7 +1982,7 @@ _('Without a connection, you can not browse available services')).get_response()
 				model.set_value(iter, 0, identities[0]['name'])
 		self.on_services_treeview_cursor_changed(self.services_treeview)
 
-	def agent_info_items(self, agent, node, items):
+	def agent_info_items(self, agent, node, items, do_browse = True):
 		'''When we recieve items about an agent'''
 		model = self.services_treeview.get_model()
 		iter = model.get_iter_root()
@@ -2020,7 +2020,7 @@ _('Without a connection, you can not browse available services')).get_response()
 			if not iter_child: # If it is not we add it
 				iter_child = model.append(iter, (name, item['jid'], node))
 			self.agent_infos[item['jid'] + node] = {'identities': [item]}
-			if self.iter_is_visible(iter_child) or expand:
+			if self.iter_is_visible(iter_child) and not expand and do_browse:
 				self.browse(item['jid'], node)
 		if expand:
 			self.services_treeview.expand_row((model.get_path(iter)), False)
@@ -2028,7 +2028,7 @@ _('Without a connection, you can not browse available services')).get_response()
 	def agent_info(self, agent, identities, features, items):
 		'''When we recieve informations about an agent'''
 		self.agent_info_info(agent, '', identities, features)
-		self.agent_info_items(agent, '', items)
+		self.agent_info_items(agent, '', items, False)
 
 	def on_refresh_button_clicked(self, widget):
 		'''When refresh button is clicked: refresh list: clear and rerequest it'''
