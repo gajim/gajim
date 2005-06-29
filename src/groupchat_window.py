@@ -930,12 +930,12 @@ class GroupchatWindow(chat.Chat):
 			self.hpaneds[room_jid].set_position(self.hpaned_position)
 
 	def tree_cell_data_func(self, column, renderer, model, iter, data=None):
+		theme = gajim.config.get('roster_theme')
 		if model.iter_parent(iter):
-			bgcolor = gajim.config.get('userbgcolor')
-			renderer.set_property('cell-background', bgcolor)
+			bgcolor = gajim.config.get_per('themes', theme, 'contactbgcolor')
 		else: # it is root (eg. group)
-			bgcolor = gajim.config.get('groupbgcolor')
-			renderer.set_property('cell-background', bgcolor)
+			bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
+		renderer.set_property('cell-background', bgcolor)
 			
 	def on_actions_button_clicked(self, button):
 		"""popup action menu"""
