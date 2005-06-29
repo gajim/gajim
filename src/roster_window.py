@@ -1675,6 +1675,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			renderer.set_property('font',
 				gajim.config.get_per('themes', theme, 'accountfont'))
 			renderer.set_property('xpad', 0)
+			renderer.set_property('width', 3)
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('foreground', 
 				gajim.config.get_per('themes', theme, 'grouptextcolor'))
@@ -1705,11 +1706,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		if model.get_value(iter, 2) == 'account':
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'accountbgcolor'))
-			renderer.set_property('xalign', 0)
 		elif model.get_value(iter, 2) == 'group':
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'groupbgcolor'))
-			#renderer.set_property('xalign', 0.5)
 		else:
 			jid = model.get_value(iter, 3)
 			account = model.get_value(iter, 4)
@@ -1720,8 +1719,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			else:
 				renderer.set_property('cell-background', 
 					gajim.config.get_per('themes', theme, 'contactbgcolor'))
-			renderer.set_property('xalign', 0)
 		#renderer.set_property('width', 20)
+		#renderer.set_property('xalign', 0)
 
 	def get_show(self, luser):
 		prio = luser[0].priority
