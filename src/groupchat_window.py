@@ -877,12 +877,12 @@ class GroupchatWindow(chat.Chat):
 			bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
 		renderer.set_property('cell-background', bgcolor)
 			
-	def on_actions_button_clicked(self, button):
+	def on_actions_button_clicked(self, widget):
 		"""popup action menu"""
 		menu = self.gc_popup_menu
 		menu.get_children()[0].hide() # hide history_menuitem
 		menu = self.remove_possible_switch_to_menuitems(menu)
-		menu.popup(None, None, None, event.button, event.time)
+		menu.popup(None, None, None, 1, 0)
 		menu.show_all()
 
 	def on_list_treeview_button_press_event(self, widget, event):
