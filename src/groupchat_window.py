@@ -268,6 +268,8 @@ class GroupchatWindow(chat.Chat):
 	def chg_user_status(self, room_jid, nick, show, status, role, affiliation, \
 		jid, reason, actor, statusCode, new_nick, account):
 		"""When a user changes his status"""
+		if show == 'invisible':
+			return
 		if not role:
 			role = 'visitor'
 		model = self.list_treeview[room_jid].get_model()
