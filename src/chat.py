@@ -68,7 +68,9 @@ class Chat:
 		self.sent_history_pos = {}
 		self.typing_new = {}
 		self.orig_msg = {}
-		self.compact_view = gajim.config.get('compact_view')
+		
+		# we check that on opening new windows
+		self.always_compact_view = gajim.config.get('always_compact_view')
 
 	def update_tags(self):
 		for jid in self.tagIn:
@@ -187,40 +189,62 @@ class Chat:
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(jid, self.account)
-	
-	def populate_popup_menu(self, menu):
-		'''To be overwritten in child class'''
-		pass
 
+	def on_compact_view_menuitem_activate(self, widget):
+		isactive = widget.get_active()
+		self.set_compact_view(isactive)
+
+	def remove_possible_switch_to_menuitems(self, menu):
+		''' remove duplicate 'Switch to' if they exist and return clean menu'''
+		childs = menu.get_children()
+		childs_no = len(childs)
+		if self.widget_name == 'groupchat_window':
+			no_more_than = 6
+		elif self.widget_name == 'tabbed_chat_window':
+			no_more_than = 4
+						
+		if childs_no > no_more_than:
+			# we have switch to which we should remove
+			how_many = childs_no - no_more_than # how many to remove
+			for child_cnt in range(how_many):
+				real_pos = child_cnt + no_more_than
+				menu.remove(childs[real_pos])
+		
+		return menu
+	
 	def on_chat_window_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
-			# menu creation
-			menu = gtk.Menu()
-
+			if self.widget_name == 'groupchat_window':
+				menu = self.gc_popup_menu
+				childs = menu.get_children()
+				childs[0].show() # history_menuitem
+				# compact_view_menuitem
+				childs[5].set_active(self.compact_view_current_state)
+			elif self.widget_name == 'tabbed_chat_window':
+				menu = self.tabbed_chat_popup_menu
+				childs = menu.get_children()
+				# compact_view_menuitem
+				childs[3].set_active(self.compact_view_current_state)
+			menu = self.remove_possible_switch_to_menuitems(menu)
+			
 			# common menuitems (tab switches)
 			if len(self.xmls) > 1: # if there is more than one tab
+				menu.append(gtk.MenuItem()) # seperator
 				for jid in self.xmls:
 					if jid != self.get_active_jid():
-						# FIXME: do me via glade
-						item = gtk.MenuItem(_('Switch to %s') % self.names[jid])
+						#FIXME: do me via glade
+						icon = gtk.image_new_from_stock(gtk.STOCK_JUMP_TO,
+							gtk.ICON_SIZE_MENU)
+						label = gtk.Label(_('Switch to %s') % self.names[jid])
+						hbox = gtk.HBox(False, 3)
+						hbox.pack_start(icon, False, False)
+						hbox.pack_start(label, True, True)
+						item = gtk.MenuItem()
+						item.add(hbox)
 						item.connect('activate', lambda obj,jid:self.set_active_tab(
 							jid), jid)
 						menu.append(item)
-
-				menu.append(gtk.MenuItem())
-
-			# menuitems specific to type of chat
-			self.populate_popup_menu(menu)
-
-			item = gtk.CheckMenuItem(_('_Compact View'))
-			#FIXME: The accelerator is not used, do me via glade
-			ag = gtk.AccelGroup()
-			item.add_accelerator('activate', ag, ord('c'), gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
-			item.set_active(self.get_compact_view())
-			item.connect('activate', lambda obj:self.set_compact_view(
-				not self.get_compact_view()))
-			menu.append(item)
 
 			# show the menu
 			menu.popup(None, None, None, event.button, event.time)
@@ -283,6 +307,7 @@ class Chat:
 		self.show_title()
 
 	def new_tab(self, jid):
+		self.set_compact_view(self.always_compact_view)
 		self.nb_unread[jid] = 0
 		self.last_message_time[jid] = 0
 		self.last_time_printout[jid] = float(0.0)
@@ -395,7 +420,8 @@ class Chat:
 			elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
 				self.notebook.emit('key_press_event', event)
 			elif event.keyval == gtk.keysyms.l or \
-				 event.keyval == gtk.keysyms.L: # CTRL + L
+				event.keyval == gtk.keysyms.L: # CTRL + L
+				message_textview = self.xmls[jid].get_widget('message_textview')
 				conversation_textview.get_buffer().set_text('')
 			elif event.keyval == gtk.keysyms.v: # CTRL + V
 				jid = self.get_active_jid()
@@ -417,8 +443,8 @@ class Chat:
 			(event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
 			self.notebook.set_current_page(st.index(event.string))
 		elif event.keyval == gtk.keysyms.c and \
-			(event.state & gtk.gdk.MOD1_MASK): # alt + C
-			self.set_compact_view(not self.get_compact_view())
+			(event.state & gtk.gdk.MOD1_MASK): # alt + C toggles compact view
+			self.set_compact_view(not self.compact_view_current_state)
 		elif event.keyval == gtk.keysyms.Page_Down:
 			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
 				conversation_textview = self.xmls[jid].\
@@ -542,7 +568,8 @@ class Chat:
 			menu.prepend(item)
 			submenu = gtk.Menu()
 			item.set_submenu(submenu)
-
+			
+			#FIXME: via expert allow non using $LANG
 			item = gtk.MenuItem(_('Read _Wikipedia article'))
 			link = 'http://%s.wikipedia.org/wiki/%s'\
 				%(gajim.LANG, self.selected_phrase)
@@ -556,7 +583,6 @@ class Chat:
 			submenu.append(item)
 			
 			item = gtk.MenuItem(_('Web _search for it'))
-			#FIXME: via expert allow other engine
 			gajim.config.get('search_engine')
 			link = gajim.config.get('search_engine') + self.selected_phrase +\
 				'&sourceid=gajim'
@@ -867,7 +893,6 @@ class Chat:
 				self.sent_history[jid][i] = self.sent_history[jid][i+1]
 			self.sent_history[jid][max_size - 1] = message
 		else:
-			message += ' ' # append message with a space
 			self.sent_history[jid].append(message)
 
 		self.sent_history_pos[jid] = size + 1
@@ -905,10 +930,8 @@ class Chat:
 		theme = gajim.config.get('roster_theme')
 		bgcolor = gajim.config.get_per('themes', theme, 'bannerbgcolor')
 		textcolor = gajim.config.get_per('themes', theme, 'bannertextcolor')
-		# the backgrounds are colored by using eventboxes and
-		# setting the bg color of the eventboxes. There is a
-		# separate event box for each component (name label and
-		# status icon). The avatar has one too in the glade file.
+		# the backgrounds are colored by using an eventbox by
+		# setting the bg color of the eventbox and the fg of the name_label
 		self.xmls[jid].get_widget('banner_eventbox').modify_bg(
 			gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
 		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
@@ -921,20 +944,21 @@ class Chat:
 		for jid in self.xmls:
 			self.paint_banner(jid)
 
-	def get_compact_view(self):
-		"""Is compact view turned on?"""
-		return self.compact_view
-	
-	def set_compact_view(self,state):
-		'''Toggle compact view
-		To be overwritten in child class if we want to toggle more
-		widgets'''
-		self.compact_view = state
+	def set_compact_view(self, state):
+		'''Toggle compact view'''
+		self.compact_view_current_state = state
 
 		for jid in self.xmls:
-			widgets = [self.xmls[jid].get_widget('banner_eventbox'),
-						self.xmls[jid].get_widget('actions_hbox'),
-						]
+			if self.widget_name == 'tabbed_chat_window':
+				widgets = [
+				self.xmls[jid].get_widget('banner_eventbox'),
+				self.xmls[jid].get_widget('actions_hbox'),
+				]
+			elif self.widget_name == 'groupchat_window':
+				widgets = [self.xmls[jid].get_widget('banner_eventbox'),
+					self.xmls[jid].get_widget('gc_actions_hbox'),
+					self.xmls[jid].get_widget('list_scrolledwindow'),
+					 ]
 
 			for widget in widgets:
 				if state:

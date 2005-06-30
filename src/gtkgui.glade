@@ -14944,19 +14944,38 @@ the Jabber network.</property>
   </child>
 </widget>
 
-<widget class="GtkMenu" id="gc_actions_menu">
+<widget class="GtkMenu" id="gc_popup_menu">
+
+  <child>
+    <widget class="GtkImageMenuItem" id="history_menuitem">
+      <property name="label" translatable="yes">_History</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_history_menuitem_activate" last_modification_time="Mon, 27 Jun 2005 16:58:29 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image732">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-justify-fill</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
 
   <child>
     <widget class="GtkImageMenuItem" id="configure_room_menuitem">
-      <property name="visible">True</property>
       <property name="label" translatable="yes">Configure _Room</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_configure_room_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 11:04:55 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image694">
+	<widget class="GtkImage" id="image733">
 	  <property name="visible">True</property>
-	  <property name="stock">gtk-properties</property>
+	  <property name="stock">gtk-preferences</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
 	  <property name="yalign">0.5</property>
@@ -14969,13 +14988,12 @@ the Jabber network.</property>
 
   <child>
     <widget class="GtkImageMenuItem" id="change_subject_menuitem">
-      <property name="visible">True</property>
       <property name="label" translatable="yes">Change _Subject</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_change_subject_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 11:05:10 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image695">
+	<widget class="GtkImage" id="image734">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-edit</property>
 	  <property name="icon_size">1</property>
@@ -14990,13 +15008,12 @@ the Jabber network.</property>
 
   <child>
     <widget class="GtkImageMenuItem" id="change_nick_menuitem">
-      <property name="visible">True</property>
       <property name="label" translatable="yes">Change _Nickname</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_change_nick_menuitem_activate" last_modification_time="Sat, 18 Jun 2005 20:23:46 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image696">
+	<widget class="GtkImage" id="image735">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-redo</property>
 	  <property name="icon_size">1</property>
@@ -15011,13 +15028,12 @@ the Jabber network.</property>
 
   <child>
     <widget class="GtkImageMenuItem" id="bookmark_room_menuitem">
-      <property name="visible">True</property>
       <property name="label" translatable="yes">_Bookmark This Room</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_bookmark_room_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 12:43:29 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image697">
+	<widget class="GtkImage" id="image736">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -15027,6 +15043,68 @@ the Jabber network.</property>
 	  <property name="ypad">0</property>
 	</widget>
       </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkCheckMenuItem" id="compact_view_menuitem">
+      <property name="label" translatable="yes">_Compact View</property>
+      <property name="use_underline">True</property>
+      <property name="active">False</property>
+      <signal name="activate" handler="on_compact_view_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 13:07:23 GMT"/>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkMenu" id="tabbed_chat_popup_menu">
+
+  <child>
+    <widget class="GtkImageMenuItem" id="history_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_History</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_history_button_clicked" last_modification_time="Thu, 30 Jun 2005 10:23:04 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image731">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-justify-fill</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="information_menuitem">
+      <property name="visible">True</property>
+      <property name="label">gtk-dialog-info</property>
+      <property name="use_stock">True</property>
+      <signal name="activate" handler="on_contact_button_clicked" last_modification_time="Thu, 30 Jun 2005 10:23:04 GMT"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkCheckMenuItem" id="toggle_gpg_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Toggle _GPG Encryption</property>
+      <property name="use_underline">True</property>
+      <property name="active">False</property>
+      <signal name="activate" handler="on_toggle_gpg_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 10:43:11 GMT"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkCheckMenuItem" id="compact_view_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Compact View</property>
+      <property name="use_underline">True</property>
+      <property name="active">False</property>
+      <signal name="activate" handler="on_compact_view_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 13:07:17 GMT"/>
     </widget>
   </child>
 </widget>

@@ -518,7 +518,8 @@ class GroupchatWindow(chat.Chat):
 				return
 
 			elif message in ('/compact', '/compact '):
-				self.set_compact_view(not self.get_compact_view())
+				# toggle compact
+				self.set_compact_view(not self.compact_view_current_state)
 				self.on_clear(None, message_textview)
 				return
 
@@ -766,70 +767,6 @@ class GroupchatWindow(chat.Chat):
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
 		menu.reposition()
-	
-	def populate_popup_menu(self, menu):
-		"""Add menuitems do popup menu"""
-
-		# FIXME: add icons / use ItemFactory
-		item = gtk.MenuItem()
-		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_JUSTIFY_FILL, gtk.ICON_SIZE_BUTTON)
-		label = gtk.Label(_('_History'))
-		label.set_use_underline(True)
-		hbox = gtk.HBox(False, 3)
-		hbox.pack_start(icon, False, False)
-		hbox.pack_start(label, False, False)
-		item.add(hbox)
-		item.connect('activate', self.on_history_button_clicked)
-		menu.append(item)
-
-		item = gtk.MenuItem()
-		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_PROPERTIES, gtk.ICON_SIZE_BUTTON)
-		label = gtk.Label(_('Configure _Room'))
-		label.set_use_underline(True)
-		hbox = gtk.HBox(False, 3)
-		hbox.pack_start(icon, False, False)
-		hbox.pack_start(label, False, False)
-		item.add(hbox)
-		item.connect('activate', self.on_configure_room_menuitem_activate)
-		menu.append(item)
-
-		item = gtk.MenuItem()
-		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
-		label = gtk.Label(_('Change _Subject'))
-		label.set_use_underline(True)
-		hbox = gtk.HBox(False, 3)
-		hbox.pack_start(icon, False, False)
-		hbox.pack_start(label, False, False)
-		item.add(hbox)
-		item.connect('activate', self.on_change_subject_menuitem_activate)
-		menu.append(item)
-
-		item = gtk.MenuItem()
-		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_REDO, gtk.ICON_SIZE_BUTTON)
-		label = gtk.Label(_('Change _Nickname'))
-		label.set_use_underline(True)
-		hbox = gtk.HBox(False, 3)
-		hbox.pack_start(icon, False, False)
-		hbox.pack_start(label, False, False)
-		item.add(hbox)
-		item.connect('activate', self.on_change_nick_menuitem_activate)
-		menu.append(item)
-
-		item = gtk.MenuItem()
-		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
-		label = gtk.Label(_('_Bookmark This Room'))
-		label.set_use_underline(True)
-		hbox = gtk.HBox(False, 3)
-		hbox.pack_start(icon, False, False)
-		hbox.pack_start(label, False, False)
-		item.add(hbox)
-		item.connect('activate', self.on_bookmark_room_menuitem_activate)
-		menu.append(item)
 
 	def remove_tab(self, room_jid):
 		if time.time() - self.last_message_time[room_jid] < 2:
@@ -855,7 +792,6 @@ class GroupchatWindow(chat.Chat):
 		self.names[room_jid] = room_jid.split('@')[0]
 		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'gc_vbox', APP)
 		self.childs[room_jid] = self.xmls[room_jid].get_widget('gc_vbox')
-		self.set_compact_view(self.get_compact_view())
 		chat.Chat.new_tab(self, room_jid)
 		self.nicks[room_jid] = nick
 		self.contacts[room_jid] = {}
@@ -883,9 +819,11 @@ class GroupchatWindow(chat.Chat):
 			self.name_labels[room_jid].set_ellipsize(pango.ELLIPSIZE_END)
 		
 		# connect the menuitems to their respective functions
-		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_actions_menu', APP)
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_popup_menu', APP)
 		xm.signal_autoconnect(self)
-		self.gc_actions_menu = xm.get_widget('gc_actions_menu')
+		self.gc_popup_menu = xm.get_widget('gc_popup_menu')
+		# don't show history_menuitem on show_all()
+		self.gc_popup_menu.get_children()[0].set_no_show_all(True)
 
 		#status_image, nickname, shown_nick
 		store = gtk.TreeStore(gtk.Image, str, str)
@@ -939,8 +877,11 @@ class GroupchatWindow(chat.Chat):
 			
 	def on_actions_button_clicked(self, button):
 		"""popup action menu"""
-		self.gc_actions_menu.popup(None, None, None, 1, 0)
-		self.gc_actions_menu.show_all()
+		menu = self.gc_popup_menu
+		menu.get_children()[0].hide() # hide history_menuitem
+		menu = self.remove_possible_switch_to_menuitems(menu)
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
@@ -1036,22 +977,3 @@ class GroupchatWindow(chat.Chat):
 		model = widget.get_model()
 		image = self.plugin.roster.jabber_state_images['closed']
 		model.set_value(iter, 0, image)
-
-	def set_compact_view(self,state):
-		'''Toggle compact view'''
-
-		self.compact_view = state
-		
-		for jid in self.xmls:
-			widgets = [self.xmls[jid].get_widget('banner_eventbox'),
-				 self.xmls[jid].get_widget('gc_actions_hbox'),
-				 self.xmls[jid].get_widget('list_scrolledwindow'),
-				 ]
-
-			for widget in widgets:
-				if state:
-					widget.set_no_show_all(True)
-					widget.hide()
-				else:
-					widget.set_no_show_all(False)
-					widget.show()

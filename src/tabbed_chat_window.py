@@ -237,9 +237,12 @@ class TabbedChatWindow(chat.Chat):
 		self.names[user.jid] = user.name
 		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[user.jid] = self.xmls[user.jid].get_widget('chats_vbox')
-		self.set_compact_view(self.get_compact_view())
 		self.users[user.jid] = user
 		self.encrypted[user.jid] = False
+		
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat_popup_menu', APP)
+		xm.signal_autoconnect(self)
+		self.tabbed_chat_popup_menu = xm.get_widget('tabbed_chat_popup_menu')
 		
 		chat.Chat.new_tab(self, user.jid)
 		self.redraw_tab(user.jid)
@@ -327,7 +330,7 @@ class TabbedChatWindow(chat.Chat):
 				self.on_clear(None, message_textview) # clear message textview too
 				return True
 			elif message == '/compact':
-				self.set_compact_view(not self.get_compact_view())
+				self.set_compact_view(not self.compact_view_current_state)
 				self.on_clear(None, message_textview)
 				return True
 			keyID = ''
@@ -453,17 +456,3 @@ class TabbedChatWindow(chat.Chat):
 
 		if len(lines):
 			self.print_empty_line(jid)
-
-	def populate_popup_menu(self, menu):
-		"""Add menuitems do popup menu"""
-
-		# FIXME: add icons / use ItemFactory
-		item = gtk.MenuItem(_('_History'))
-		item.connect('activate', self.on_history_button_clicked)
-		menu.append(item)
-
-		item = gtk.MenuItem(_('_Information'))
-		item.connect('activate', self.on_contact_button_clicked)
-		menu.append(item)
-		
-		# FIXME: GPG stuff
