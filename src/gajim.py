@@ -126,7 +126,7 @@ class Interface:
 
 		else:
 			if kind == 'url' and not\
-				(uri.startswith('http://') or uri.startswith('http://')):
+				(uri.startswith('http://') or uri.startswith('https://')):
 				uri = 'http://' + uri
 			elif kind == 'mail' and not uri.startswith('mailto:'):
 				uri = 'mailto:' + uri
