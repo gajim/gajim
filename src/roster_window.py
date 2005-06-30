@@ -1896,6 +1896,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				gajim.config.get('height'))
 
 		self.groups = {}
+		# contacts[account][jid] is a list of all Contact insatnces:
+		# one per resource
 		self.contacts = {}
 		self.newly_added = {}
 		self.to_be_removed = {}
