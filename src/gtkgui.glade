@@ -12023,7 +12023,7 @@ JID: whatever@jabber.org</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image593">
+	<widget class="GtkImage" id="image737">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-copy</property>
 	  <property name="icon_size">1</property>
@@ -12043,7 +12043,7 @@ JID: whatever@jabber.org</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image594">
+	<widget class="GtkImage" id="image738">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -12063,7 +12063,7 @@ JID: whatever@jabber.org</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image595">
+	<widget class="GtkImage" id="image739">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-copy</property>
 	  <property name="icon_size">1</property>
@@ -12083,9 +12083,76 @@ JID: whatever@jabber.org</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image596">
+	<widget class="GtkImage" id="image740">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkSeparatorMenuItem" id="jid_section_separator">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="start_chat_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Start Chat</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image741">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-jump-to</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="join_group_chat_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Join _Group Chat</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_join_group_chat_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 16:13:06 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image742">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-connect</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="add_to_roster_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Add to Roster</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image743">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
 	  <property name="yalign">0.5</property>

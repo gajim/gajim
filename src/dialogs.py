@@ -580,7 +580,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
-			title = _('Join Groupchat as ') + our_jid
+			title = _('Join Groupchat as %s') % our_jid
 		else:
 			title = _('Join Groupchat')
 		self.window.set_title(title)
@@ -594,7 +594,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		self.recently_groupchat = gajim.config.get('recently_groupchat').split()
 		for g in self.recently_groupchat:
 			self.recently_combobox.append_text(g)
-		if len(self.recently_groupchat):
+		if len(self.recently_groupchat) and server == '' and room == '':
 			self.recently_combobox.set_active(0)
 			self.xml.get_widget('room_entry').select_region(0, -1)
 
@@ -660,26 +660,7 @@ class NewMessageDialog:
 		_('Contact ID must be of the form "username@servername".')).get_response()
 				return
 
-			# use Contact class, new_chat expects it that way
-			# is it in the roster?
-			if self.plugin.roster.contacts[self.account].has_key(jid):
-				user = self.plugin.roster.contacts[self.account][jid][0]
-			else:
-				keyID = ''
-				attached_keys = gajim.config.get_per('accounts', self.account,
-					'attached_gpg_keys').split()
-				if jid in attached_keys:
-					keyID = attached_keys[attached_keys.index(jid) + 1]
-				user = Contact(jid = jid, name = jid.split('@')[0],
-					groups = ['not in the roster'], show = 'not in the roster',
-					status = 'not in the roster', sub = 'none', keyID = keyID)
-				self.plugin.roster.contacts[self.account][jid] = [user]
-				self.plugin.roster.add_user_to_roster(user.jid, self.account)			
-
-			if not self.plugin.windows[self.account]['chats'].has_key(jid):
-				self.plugin.roster.new_chat(user, self.account)
-			self.plugin.windows[self.account]['chats'][jid].set_active_tab(jid)
-			self.plugin.windows[self.account]['chats'][jid].window.present()
+			self.plugin.roster.new_chat_from_jid(self.account, jid)
 
 class ChangePasswordDialog:
 	def __init__(self, plugin, account):

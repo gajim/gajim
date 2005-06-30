@@ -653,6 +653,27 @@ class Chat:
 		clip = gtk.clipboard_get()
 		clip.set_text(text)
 
+	def on_start_chat_activate(self, widget, jid):
+		self.plugin.roster.new_chat_from_jid(self.account, jid)
+
+	def on_join_group_chat_menuitem_activate(self, widget, jid):
+		server, room = jid.split('@')
+		if self.plugin.windows[self.account].has_key('join_gc'):
+			instance = self.plugin.windows[self.account]['join_gc']
+			print instance.xml
+			instance.xml.get_widget('server_entry').set_text(server)
+			instance.xml.get_widget('room_entry').set_text(room)
+			self.plugin.windows[self.account]['join_gc'].window.present()		
+		else:
+			try:
+				self.plugin.windows[self.account]['join_gc'] = \
+				dialogs.JoinGroupchatWindow(self.plugin, self.account, server, room)
+			except RuntimeError:
+				pass
+
+	def on_add_to_roster_activate(self, widget, jid):
+		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
+
 	def make_link_menu(self, event, kind, text):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_context_menu', APP)
 		menu = xml.get_widget('chat_context_menu')
@@ -662,9 +683,22 @@ class Chat:
 			childs[1].connect('activate', self.on_open_link_activate, kind, text)
 			childs[2].hide() # copy mail address
 			childs[3].hide() # open mail composer
-		else: # It's a mail
+			childs[4].hide() # jid section seperator
+			childs[5].hide() # start chat
+			childs[6].hide() # add to roster
+		else: # It's a mail or a JID
 			childs[2].connect('activate', self.on_copy_link_activate, text)
 			childs[3].connect('activate', self.on_open_link_activate, kind, text)
+			childs[5].connect('activate', self.on_start_chat_activate, text)
+			childs[6].connect('activate',
+				self.on_join_group_chat_menuitem_activate, text)
+			if self.plugin.roster.contacts[self.account].has_key(text):
+#and\#FIXME: check if it's in 'not in the roster' and then don't hide
+#not self.plugin.roster.contacts[self.account][text].show == 'not in the roster':
+				childs[7].hide()
+			else:
+				childs[7].connect('activate', self.on_add_to_roster_activate, text)
+				childs[7].show()
 			childs[0].hide() # copy link location
 			childs[1].hide() # open link in browser
 

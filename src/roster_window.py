@@ -1251,6 +1251,26 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.plugin.windows[account]['chats'][user.jid] = \
 				tabbed_chat_window.TabbedChatWindow(user, self.plugin, account)
 
+	def new_chat_from_jid(self, account, jid):
+		if self.contacts[account].has_key(jid):
+			user = self.contacts[account][jid][0]
+		else:
+			keyID = ''
+			attached_keys = gajim.config.get_per('accounts', account,
+				'attached_gpg_keys').split()
+			if jid in attached_keys:
+				keyID = attached_keys[attached_keys.index(jid) + 1]
+			user = Contact(jid = jid, name = jid.split('@')[0],
+				groups = ['not in the roster'], show = 'not in the roster',
+				status = 'not in the roster', sub = 'none', keyID = keyID)
+			self.contacts[account][jid] = [user]
+			self.add_user_to_roster(user.jid, account)			
+
+		if not self.plugin.windows[account]['chats'].has_key(jid):
+			self.new_chat(user, account)
+		self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
+		self.plugin.windows[account]['chats'][jid].window.present()
+
 	def new_room(self, jid, nick, account):
 		if gajim.config.get('usetabbedchat'):
 			if not self.plugin.windows[account]['gc'].has_key('tabbed'):
