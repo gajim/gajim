@@ -712,6 +712,7 @@ class Connection:
 			return None
 		if auth:
 			con.initRoster()
+			self.last_incoming = time.time()
 			self.connected = 2
 			return con # return connection
 		else:
