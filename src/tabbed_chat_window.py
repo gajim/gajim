@@ -448,7 +448,7 @@ class TabbedChatWindow(chat.Chat):
 				kind = 'incoming'
 				name = self.users[jid].name
 
-			tim = time.gmtime(float(msg[0]))
+			tim = time.localtime(float(msg[0]))
 
 			text = ':'.join(msg[2:])[0:-1] #remove the latest \n
 			self.print_conversation_line(text, jid, kind, name, tim,
