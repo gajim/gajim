@@ -123,7 +123,13 @@ class Interface:
 				os.startfile(uri) # if pywin32 is installed we open
 			except:
 				pass
+
 		else:
+			if kind == 'url' and not uri.startswith('http://'):
+				uri = 'http://' + uri
+			elif kind == 'mail' and not uri.startswith('mailto:'):
+				uri = 'mailto:' + uri
+
 			if gajim.config.get('openwith') == 'gnome-open':
 				command = 'gnome-open'
 			elif gajim.config.get('openwith') == 'kfmclient exec':
