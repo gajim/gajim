@@ -506,9 +506,8 @@ class Interface:
 		nick = ''
 		if array.has_key('NICKNAME'):
 			nick = array['NICKNAME']
-		if nick == '':
-			nick = gajim.config.get_per('accounts', account, 'name')
-		self.nicks[account] = nick
+			if nick:
+				self.nicks[account] = nick
 
 	def handle_event_vcard(self, account, array):
 		win = None
