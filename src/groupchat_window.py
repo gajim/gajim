@@ -244,7 +244,10 @@ class GroupchatWindow(chat.Chat):
 		return iter
 	
 	def get_role(self, room_jid, nick):
-		return self.contacts[room_jid][nick].role
+		if self.contacts[room_jid].has_key(nick):
+			return self.contacts[room_jid][nick].role
+		else:
+			return 'visitor'
 
 	def update_state_images(self):
 		roster = self.plugin.roster
