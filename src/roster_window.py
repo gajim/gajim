@@ -560,13 +560,13 @@ class RosterWindow:
 		dlg = dialogs.EditGroupsDialog(user, account, self.plugin)
 		dlg.run()
 		
-	def on_history(self, widget, user):
+	def on_history(self, widget, user, account):
 		'''When history menuitem is activated: call log window'''
 		if self.plugin.windows['logs'].has_key(user.jid):
 			self.plugin.windows['logs'][user.jid].window.present()
 		else:
 			self.plugin.windows['logs'][user.jid] = history_window.\
-				HistoryWindow(self.plugin, user.jid)
+				HistoryWindow(self.plugin, user.jid, account)
 	
 	def mk_menu_user(self, event, iter):
 		'''Make user's popup menu'''
@@ -719,7 +719,7 @@ class RosterWindow:
 		history_hbox.pack_start(label, False, False)
 		history_item.add(history_hbox)
 		menu.append(history_item)
-		history_item.connect('activate', self.on_history, user)
+		history_item.connect('activate', self.on_history, user, account)
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
