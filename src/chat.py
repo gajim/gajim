@@ -690,9 +690,9 @@ class Chat:
 			childs[5].connect('activate', self.on_start_chat_activate, text)
 			childs[6].connect('activate',
 				self.on_join_group_chat_menuitem_activate, text)
-			if self.plugin.roster.contacts[self.account].has_key(text):
-#and\#FIXME: check if it's in 'not in the roster' and then don't hide
-#not self.plugin.roster.contacts[self.account][text].show == 'not in the roster':
+			u = self.plugin.roster.contacts[self.account][text][0]
+			if self.plugin.roster.contacts[self.account].has_key(text) and \
+					'not in the roster' not in u.groups:
 				childs[7].hide()
 			else:
 				childs[7].connect('activate', self.on_add_to_roster_activate, text)
