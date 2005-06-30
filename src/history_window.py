@@ -125,33 +125,51 @@ class HistoryWindow:
 		end_iter = buffer.get_end_iter()
 		tim = time.strftime('[%x %X] ', time.localtime(float(date)))
 		buffer.insert(start_iter, tim)
+		name = None
+		tag_name = ''
+		tag_msg = ''
 		if type == 'gc':
+			name = data[0]
 			msg = ':'.join(data[1:])
-			buffer.insert_with_tags_by_name(start_iter, msg,
-							'incoming')
+			tag_name = 'incoming'
 		elif type == 'gcstatus':
 			nick = data[0]
 			show = data[1]
-			msg = ':'.join(data[2:])
-			buffer.insert_with_tags_by_name(start_iter,
-						_('%s is now %s: %s') % (nick, show, msg), 'status')
+			status_msg = ':'.join(data[2:])
+			msg = _('%s is now %s: %s') % (nick, show, status_msg)
+			tag_msg = 'status'
 		elif type == 'recv':
+			try:
+				name = self.plugin.roster.contacts[self.jid][0].name
+			except:
+				name = None
+			if not name:
+				name = self.jid.split('@')[0]
 			msg = ':'.join(data[0:])
-			buffer.insert_with_tags_by_name(start_iter, msg,
-							'incoming')
+			tag_name = 'incoming'
 		elif type == 'sent':
+			name = self.plugin.nicks[self.account]
 			msg = ':'.join(data[0:])
-			buffer.insert_with_tags_by_name(start_iter, msg,
-							'outgoing')
+			tag_name = 'outgoing'
 		else:
-			msg = ':'.join(data[1:])
-			buffer.insert_with_tags_by_name(start_iter,
-						_('Status is now: ') + data[0]
-						+ ': ' + msg, 'status')
+			status_msg = ':'.join(data[1:])
+			msg = _('Status is now: ') + data[0] + ': ' + status_msg
+			tag_msg = 'status'
+
+		if name:
+			before_str = gajim.config.get('before_nickname')
+			after_str = gajim.config.get('after_nickname')
+			format = before_str + name + after_str + ' '
+			buffer.insert_with_tags_by_name(start_iter, format, tag_name)
+		if tag_msg:
+			buffer.insert_with_tags_by_name(start_iter, msg, tag_msg)
+		else:
+			buffer.insert(start_iter, msg)
 	
-	def __init__(self, plugin, jid, account=None):
+	def __init__(self, plugin, jid, account):
 		self.plugin = plugin
 		self.jid = jid
+		self.account = account
 		self.nb_line = gajim.logger.get_nb_line(jid)
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
