@@ -480,19 +480,18 @@ class Chat:
 					self.notebook.next_page()
 				else: # traverse for ever (eg. don't stop at last tab)
 					self.notebook.set_current_page(0)
-		elif event.keyval == gtk.keysyms.l or \
-			 event.keyval == gtk.keysyms.L:
-			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + L
-				conversation_textview = self.xmls[jid].\
-					get_widget('conversation_textview')
-				conversation_textview.get_buffer().set_text('')
-		elif event.keyval == gtk.keysyms.v:
-			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + V
-				jid = self.get_active_jid()
-				message_textview = self.xmls[jid].get_widget('message_textview')
-				if not message_textview.is_focus():
-					message_textview.grab_focus()
-				message_textview.emit('key_press_event', event)
+		elif (event.keyval == gtk.keysyms.l or event.keyval == gtk.keysyms.L) \
+				and event.state & gtk.gdk.CONTROL_MASK: # CTRL + L
+			conversation_textview = self.xmls[jid].\
+				get_widget('conversation_textview')
+			conversation_textview.get_buffer().set_text('')
+		elif event.keyval == gtk.keysyms.v and event.state & gtk.gdk.CONTROL_MASK:
+			# CTRL + V
+			jid = self.get_active_jid()
+			message_textview = self.xmls[jid].get_widget('message_textview')
+			if not message_textview.is_focus():
+				message_textview.grab_focus()
+			message_textview.emit('key_press_event', event)
 		elif event.state & gtk.gdk.CONTROL_MASK or \
 			  (event.keyval == gtk.keysyms.Control_L) or \
 			  (event.keyval == gtk.keysyms.Control_R):
