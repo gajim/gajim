@@ -209,7 +209,8 @@ class GroupchatWindow(chat.Chat):
 		iter = self.get_user_iter(room_jid, nick)
 		if not iter:
 			return
-		del self.contacts[room_jid][nick]
+		if self.contacts[room_jid].has_key(nick):
+			del self.contacts[room_jid][nick]
 		parent_iter = model.iter_parent(iter)
 		model.remove(iter)
 		if model.iter_n_children(parent_iter) == 0:
