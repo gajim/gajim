@@ -194,6 +194,7 @@ class ChooseGPGKeyDialog:
 
 class ChangeStatusMessageDialog:
 	def __init__(self, plugin, show):
+		self.show = show
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
 		self.window = self.xml.get_widget('change_status_message_dialog')
 		uf_show = helpers.get_uf_show(show)
@@ -201,7 +202,10 @@ class ChangeStatusMessageDialog:
 		
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
-		self.message_buffer.set_text(gajim.config.get('last_status_msg'))
+		msg = gajim.config.get('last_status_msg_' + show)
+		if not msg:
+			msg = ''
+		self.message_buffer.set_text(msg)
 		self.values = {'':''} # have an empty string selectable, so user can clear msg
 		for msg in gajim.config.get_per('statusmsg'):
 			self.values[msg] = gajim.config.get_per('statusmsg', msg, 'message')
@@ -222,7 +226,7 @@ class ChangeStatusMessageDialog:
 			beg, end = self.message_buffer.get_bounds()
 			message = self.message_buffer.get_text(beg, end, 0).strip()
 			#FIXME: support more than one line
-			gajim.config.set('last_status_msg', message)
+			gajim.config.set('last_status_msg_' + self.show, message)
 		else:
 			message = -1
 		self.window.destroy()
