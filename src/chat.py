@@ -660,7 +660,6 @@ class Chat:
 		server, room = jid.split('@')
 		if self.plugin.windows[self.account].has_key('join_gc'):
 			instance = self.plugin.windows[self.account]['join_gc']
-			print instance.xml
 			instance.xml.get_widget('server_entry').set_text(server)
 			instance.xml.get_widget('room_entry').set_text(room)
 			self.plugin.windows[self.account]['join_gc'].window.present()		
