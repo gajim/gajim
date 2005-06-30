@@ -656,7 +656,7 @@ class Chat:
 		self.plugin.roster.new_chat_from_jid(self.account, jid)
 
 	def on_join_group_chat_menuitem_activate(self, widget, jid):
-		server, room = jid.split('@')
+		room, server = jid.split('@')
 		if self.plugin.windows[self.account].has_key('join_gc'):
 			instance = self.plugin.windows[self.account]['join_gc']
 			instance.xml.get_widget('server_entry').set_text(server)
