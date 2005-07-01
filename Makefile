@@ -41,7 +41,7 @@ clean:
 dist:
 	rm -rf gajim-$(VERSION)
 	mkdir gajim-$(VERSION)
-	cp -r data src doc po gajim-$(VERSION)/
+	cp -r data src po gajim-$(VERSION)/
 	cp AUTHORS gajim.1 gajim.ico gajim.desktop gajim.pot COPYING Makefile Changelog README launch.sh gajim-$(VERSION)
 	mkdir gajim-$(VERSION)/scripts
 	cp scripts/gajim gajim-$(VERSION)/scripts/
