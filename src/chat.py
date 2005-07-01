@@ -683,7 +683,8 @@ class Chat:
 			childs[3].hide() # open mail composer
 			childs[4].hide() # jid section seperator
 			childs[5].hide() # start chat
-			childs[6].hide() # add to roster
+			childs[6].hide() # join group chat
+			childs[7].hide() # add to roster
 		else: # It's a mail or a JID
 			childs[2].connect('activate', self.on_copy_link_activate, text)
 			childs[3].connect('activate', self.on_open_link_activate, kind, text)
