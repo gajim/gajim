@@ -1227,17 +1227,18 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
 		# Do we have a queue ?
+		qs = self.plugin.queues[account]
 		no_queue = True
-		if self.plugin.queues[account].has_key(jid):
+		if qs.has_key(jid):
 			no_queue = False
 		if self.plugin.windows[account]['chats'].has_key(jid):
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg, 
 				jid, tim = tim, encrypted = encrypted)
 			return
 		#We save it in a queue
-		if not self.plugin.queues[account].has_key(jid):
-			self.plugin.queues[account][jid] = []
-		self.plugin.queues[account][jid].append((msg, tim, encrypted))
+		if no_queue:
+			qs[jid] = []
+		qs[jid].append((msg, tim, encrypted))
 		self.nb_unread += 1
 		if (not autopopup or ( not autopopupaway and \
 			gajim.connections[account].connected > 2)) and not \
