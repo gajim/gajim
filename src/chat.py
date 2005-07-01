@@ -826,7 +826,7 @@ class Chat:
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
 			other_tags_for_name = [], other_tags_for_time = [], 
-			other_tags_for_text = []):
+			other_tags_for_text = [], count_as_new = True):
 		textview = self.xmls[jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
 		buffer.begin_user_action()
@@ -869,9 +869,6 @@ class Chat:
 			text = '* ' + name + text[3:]
 			text_tags.append(kind)
 
-		if kind == 'incoming':
-			self.last_message_time[jid] = time.time()
-
 		if name and len(text_tags) == len(other_tags_for_text):
 			# not status nor /me
 			name_tags = other_tags_for_name[:] #create a new list
@@ -897,6 +894,12 @@ class Chat:
 			gobject.idle_add(self.scroll_to_end, textview)
 
 		buffer.end_user_action()
+
+		if not count_as_new:
+			return
+
+		if kind == 'incoming':
+			self.last_message_time[jid] = time.time()
 
 		if (jid != self.get_active_jid() or \
 		   not self.window.is_active() or \

@@ -453,7 +453,7 @@ class TabbedChatWindow(chat.Chat):
 
 			text = ':'.join(msg[2:])[0:-1] #remove the latest \n
 			self.print_conversation_line(text, jid, kind, name, tim,
-				['small'], ['small', 'grey'], ['small', 'grey'])
+				['small'], ['small', 'grey'], ['small', 'grey'], False)
 
 		if len(lines):
 			self.print_empty_line(jid)
