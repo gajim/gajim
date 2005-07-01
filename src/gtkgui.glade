@@ -1320,7 +1320,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="use_ssl_checkbutton">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default, if broadcasted by the server, and with this option enabled TLS will be disabled</property>
+			      <property name="tooltip" translatable="yes">Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default if broadcasted by the server, and with this option enabled TLS will be disabled</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Use _SSL (legacy)</property>
 			      <property name="use_underline">True</property>
@@ -2087,7 +2087,7 @@
 </widget>
 
 <widget class="GtkWindow" id="subscription_request_window">
-  <property name="border_width">6</property>
+  <property name="border_width">12</property>
   <property name="title" translatable="yes">Subscription Request</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -2411,7 +2411,7 @@
 </widget>
 
 <widget class="GtkWindow" id="service_discovery_window">
-  <property name="border_width">6</property>
+  <property name="border_width">12</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -2533,7 +2533,7 @@
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox4">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 	  <property name="spacing">6</property>
 
 	  <child>
@@ -2662,8 +2662,8 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_width">300</property>
-  <property name="default_height">200</property>
+  <property name="default_width">350</property>
+  <property name="default_height">250</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
@@ -2701,7 +2701,6 @@
 
       <child>
 	<widget class="GtkTable" id="table">
-	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="n_rows">1</property>
 	  <property name="n_columns">2</property>
@@ -2720,7 +2719,7 @@
 	<widget class="GtkHButtonBox" id="hbuttonbox5">
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
-	  <property name="spacing">10</property>
+	  <property name="spacing">12</property>
 
 	  <child>
 	    <widget class="GtkButton" id="cancel_button">
@@ -2960,7 +2959,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="merge_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If you have 2 or more accounts and this is checked, Gajim will list all contacts as if you had one account</property>
+		  <property name="tooltip" translatable="yes">If you have 2 or more accounts and it is checked, Gajim will list all contacts as if you had one account</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Merge accounts</property>
 		  <property name="use_underline">True</property>
@@ -4108,7 +4107,7 @@
 			      <child>
 				<widget class="GtkEventBox" id="eventbox1">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">When a new message is received which in not from a contact already in a chat window, the three following actions may happen</property>
+				  <property name="tooltip" translatable="yes">When a new message is received which is not from a contact already in a chat window, the three following actions may happen in order for you to be informed about it</property>
 				  <property name="visible_window">True</property>
 				  <property name="above_child">False</property>
 
@@ -8960,7 +8959,7 @@ Custom</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="resizable">False</property>
+  <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
@@ -9314,7 +9313,7 @@ Custom</property>
 </widget>
 
 <widget class="GtkDialog" id="passphrase_dialog">
-  <property name="border_width">6</property>
+  <property name="border_width">12</property>
   <property name="title" translatable="yes">Passphrase</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -9457,8 +9456,8 @@ Custom</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_width">500</property>
-  <property name="default_height">250</property>
+  <property name="default_width">550</property>
+  <property name="default_height">300</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
@@ -11718,13 +11717,13 @@ JID: whatever@jabber.org</property>
 </widget>
 
 <widget class="GtkWindow" id="advanced_configuration_window">
-  <property name="border_width">4</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes">Advanced Configuration Editor</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_width">600</property>
-  <property name="default_height">480</property>
+  <property name="default_width">640</property>
+  <property name="default_height">500</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
@@ -11853,7 +11852,7 @@ JID: whatever@jabber.org</property>
 	  </child>
 	</widget>
 	<packing>
-	  <property name="padding">0</property>
+	  <property name="padding">6</property>
 	  <property name="expand">False</property>
 	  <property name="fill">True</property>
 	</packing>
@@ -11863,7 +11862,7 @@ JID: whatever@jabber.org</property>
 </widget>
 
 <widget class="GtkDialog" id="input_dialog">
-  <property name="border_width">6</property>
+  <property name="border_width">12</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -12162,12 +12161,12 @@ JID: whatever@jabber.org</property>
 </widget>
 
 <widget class="GtkWindow" id="wizard_window">
-  <property name="border_width">6</property>
+  <property name="border_width">12</property>
   <property name="title" translatable="yes">Gajim: First Time Wizard</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="resizable">False</property>
+  <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
@@ -13453,7 +13452,7 @@ the Jabber network.</property>
 </widget>
 
 <widget class="GtkWindow" id="manage_bookmarks_window">
-  <property name="border_width">6</property>
+  <property name="border_width">12</property>
   <property name="title" translatable="yes">Manage Bookmarks</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -13873,7 +13872,7 @@ the Jabber network.</property>
 </widget>
 
 <widget class="GtkWindow" id="manage_proxies_window">
-  <property name="border_width">6</property>
+  <property name="border_width">12</property>
   <property name="title" translatable="yes">Manage Proxy Profiles</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
