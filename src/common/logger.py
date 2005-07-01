@@ -20,6 +20,7 @@
 import os
 import sys
 import time
+import sre
 import common.gajim
 from common import i18n
 _ = i18n._
@@ -52,6 +53,10 @@ class Logger:
 			if not os.path.isdir(LOGPATH):
 				print 'creating', LOGPATH, 'directory'
 				os.mkdir(LOGPATH)
+		# (?<!...) Matches if ... doesn't matche next, but doesn't consume 
+		# the string.
+		# So matches on '\\n' but not if you have a '\' before that
+		self.re = sre.compile(r'(?<!\\)\\n')
 
 	def write(self, kind, msg, jid, show = None, tim = None):
 		if not tim:
@@ -61,7 +66,18 @@ class Logger:
 
 		if not msg:
 			msg = ''
+		msg = msg.replace('\\', '\\\\')
 		msg = msg.replace('\n', '\\n')
+		# s1 = 'test\ntest'
+		# s2 = 'test\\ntest'
+		# s11 = s1.replace('\\', '\\\\')
+		# s21 = s2.replace('\\', '\\\\')
+		# s12 = s11.replace('\n', '\\n')
+		# s22 = s21.replace('\n', '\\n')
+		# s12
+		# 'test\\ntest'
+		# s22
+		# test\\\\ntest'
 		if len(jid.split('/')) > 1:
 			ji, nick = jid.split('/', 1)
 		else:
@@ -158,7 +174,17 @@ class Logger:
 		while nb < end_line:
 			line = fic.readline()
 			if line:
-				line = line.replace('\\n', '\n')
+				line = self.re.sub('\n', line)
+				line = line.replace('\\\\', '\\')
+				# re = sre.compile(r'(?<!\\)\\n')
+				# s13 = re.sub('\n', s12)
+				# s23 = re.sub('\n', s22)
+				# s14 = s13.replace('\\\\', '\\')
+				# s24 = s23.replace('\\\\', '\\')
+				# s14
+				# 'test\ntest'
+				# s24
+				# 'test\\ntest'
 				lineSplited = line.split(':')
 				if len(lineSplited) > 2:
 					lines.append(lineSplited)
