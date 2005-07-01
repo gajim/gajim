@@ -8620,10 +8620,10 @@ Custom</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkHBox" id="hbox2973">
+		    <widget class="GtkHBox" id="ahs_buttons_hbox">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
-		      <property name="spacing">2</property>
+		      <property name="spacing">6</property>
 
 		      <child>
 			<widget class="GtkButton" id="actions_button">
@@ -10141,7 +10141,7 @@ JID: whatever@jabber.org</property>
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">5</property>
+		  <property name="spacing">6</property>
 
 		  <child>
 		    <widget class="GtkButton" id="contact_button">
