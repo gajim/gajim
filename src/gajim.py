@@ -342,14 +342,20 @@ class Interface:
 		if self.windows[account]['gc'].has_key(jid): # it's a Private Message
 			nick = array[0].split('/', 1)[1]
 			fjid = jid + '/' + nick
-			if not self.windows[account]['chats'].has_key(fjid):
-				gc = self.windows[account]['gc'][jid]
-				show = gc.contacts[jid][nick].show
-				u = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
-					ask = 'none')
-				self.roster.new_chat(u, account)
-			chat_win = self.windows[account]['chats'][fjid]
-			chat_win.print_conversation(array[1], fjid, tim = array[2])
+			if self.windows[account]['chats'].has_key(fjid):
+				chat_win = self.windows[account]['chats'][fjid]
+				chat_win.print_conversation(array[1], fjid, tim = array[2])
+				return
+			qs = self.queues[account]
+			if not qs.has_key(fjid):
+				qs[fjid] = []
+			qs[fjid].append((array[1], array[2], array[3]))
+			self.roster.nb_unread += 1
+			gc = self.windows[account]['gc'][jid]
+			show = gc.contacts[jid][nick].show
+			u = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
+				ask = 'none')
+			self.roster.new_chat(u, account)
 			return
 
 				
