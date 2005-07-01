@@ -920,7 +920,7 @@ class GroupchatWindow(chat.Chat):
 				nick = model.get_value(iter, 1)
 				fjid = room_jid + '/' + nick
 				if not self.plugin.windows[self.account]['chats'].has_key(fjid):
-					show = gajim.contacts[room_jid][nick].show
+					show = self.contacts[room_jid][nick].show
 					u = Contact(jid = fjid, name = nick, groups = ['none'],
 						show = show, sub = 'none')
 					self.plugin.roster.new_chat(u, self.account)
