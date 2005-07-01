@@ -567,6 +567,10 @@ class RosterWindow:
 		else:
 			self.plugin.windows['logs'][user.jid] = history_window.\
 				HistoryWindow(self.plugin, user.jid, account)
+
+	def on_send_single_message_menuitem_activate(self, wiget, account, contact):
+		pass
+		#SendSingleMessageDialog
 	
 	def mk_menu_user(self, event, iter):
 		'''Make user's popup menu'''
@@ -574,156 +578,73 @@ class RosterWindow:
 		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
 		account = model.get_value(iter, 4)
-		user = self.contacts[account][jid][0]
+		contact = self.contacts[account][jid][0]
 		
-		menu = gtk.Menu()
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_contact_context_menu',
+			APP)
+		roster_contact_context_menu = xml.get_widget(
+			'roster_contact_context_menu')
+		childs = roster_contact_context_menu.get_children()
+		
+		start_chat_menuitem = childs[0]
+		send_single_message_menuitem = childs[1]
+		rename_menuitem = childs[2]
+		#skip a seperator
+		edit_groups_menuitem = childs[4]
+		assign_openpgp_key_menuitem = childs[5]
+		#skip a seperator
+		subscription_to_menuitem, subscription_from_menuitem =\
+			childs[7].get_submenu().get_children()
+		add_to_roster_menuitem = childs[8]
+		remove_from_roster_menuitem = childs[9]
+		#skip a seperator
+		information_menuitem = childs[11]
+		history_menuitem = childs[12]
+		
+		start_chat_menuitem.connect('activate',
+			self.on_roster_treeview_row_activated, path)
+		send_single_message_menuitem.connect('activate',
+			self.on_send_single_message_menuitem_activate, account, contact)
+		rename_menuitem.connect('activate', self.on_rename, iter, path)
+		remove_from_roster_menuitem.connect('activate', self.on_req_usub,
+			contact, account)
+		information_menuitem.connect('activate', self.on_info, contact,
+			account)
+		history_menuitem.connect('activate', self.on_history, contact,
+			account)
 
-		chat_item = gtk.MenuItem()
-		chat_icon = gtk.Image()
-		chat_icon.set_from_stock(gtk.STOCK_JUMP_TO, gtk.ICON_SIZE_MENU)
-		label = gtk.Label(_('Start Chat'))
-		chat_hbox = gtk.HBox(False, 3)
-		chat_hbox.pack_start(chat_icon, False, False)
-		chat_hbox.pack_start(label, False, False)
-		chat_item.add(chat_hbox)
-		menu.append(chat_item)
-		chat_item.connect('activate', self.on_roster_treeview_row_activated, path)
+		if 'not in the roster' not in contact.groups:
+			#contact is in normal group
+			edit_groups_menuitem.set_no_show_all(False)
+			assign_openpgp_key_menuitem.set_no_show_all(False)
+			add_to_roster_menuitem.hide()
+			add_to_roster_menuitem.set_no_show_all(True)
+			edit_groups_menuitem.connect('activate', self.on_edit_groups, contact,
+				account)
 
-		rename_item = gtk.MenuItem()
-		rename_icon = gtk.Image()
-		rename_icon.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU)
-		label = gtk.Label(_('Rename'))
-		rename_hbox = gtk.HBox(False, 3)
-		rename_hbox.pack_start(rename_icon, False, False)
-		rename_hbox.pack_start(label, False, False)
-		rename_item.add(rename_hbox)
-		menu.append(rename_item)
-		rename_item.connect('activate', self.on_rename, iter, path)
-
-		if not 'not in the roster' in user.groups:
-			edit_groups_item = gtk.MenuItem()
-			edit_groups_icon = gtk.Image()
-			edit_groups_icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
-			label = gtk.Label(_('Edit Groups'))
-			edit_groups_hbox = gtk.HBox(False, 3)
-			edit_groups_hbox.pack_start(edit_groups_icon, False, False)
-			edit_groups_hbox.pack_start(label, False, False)
-			edit_groups_item.add(edit_groups_hbox)
-			menu.append(edit_groups_item)
-			edit_groups_item.connect('activate', self.on_edit_groups, user, account)
-
-			item = gtk.MenuItem()
-			menu.append(item)
 			if gajim.config.get('usegpg'):
+				assign_openpgp_key_menuitem.connect('activate',
+					self.on_assign_pgp_key, contact, account)
 
-				gpg_key_item = gtk.MenuItem()
-				gpg_key_icon = gtk.Image()
-				gpg_key_icon.set_from_stock(gtk.STOCK_DIALOG_AUTHENTICATION, gtk.ICON_SIZE_MENU)
-				label = gtk.Label(_('Assign OpenPGP Key'))
-				gpg_key_hbox = gtk.HBox(False, 3)
-				gpg_key_hbox.pack_start(gpg_key_icon, False, False)
-				gpg_key_hbox.pack_start(label, False, False)
-				gpg_key_item.add(gpg_key_hbox)
-				menu.append(gpg_key_item)
-				gpg_key_item.connect('activate', self.on_assign_pgp_key, user, account)
-
-				item = gtk.MenuItem()
-				menu.append(item)
-
-			subscription_item = gtk.MenuItem()
-			subscription_icon = gtk.Image()
-			subscription_icon.set_from_stock(gtk.STOCK_DIALOG_QUESTION, gtk.ICON_SIZE_MENU)
-			label = gtk.Label(_('Subscription'))
-			subscription_hbox = gtk.HBox(False, 3)
-			subscription_hbox.pack_start(subscription_icon, False, False)
-			subscription_hbox.pack_start(label, False, False)
-			subscription_item.add(subscription_hbox)
-			menu.append(subscription_item)
-
-			sub_menu = gtk.Menu()
-			subscription_item.set_submenu(sub_menu)
+			subscription_to_menuitem.connect('activate', self.authorize, jid,
+				account)
+			subscription_from_menuitem.connect('activate', self.req_sub,
+				jid, _('I would like to add you to my roster'), account)
 			
-			resend_auth_item = gtk.MenuItem()
-			resend_auth_icon = gtk.Image()
-			resend_auth_icon.set_from_stock(gtk.STOCK_GO_FORWARD, gtk.ICON_SIZE_MENU)
-			label = gtk.Label(_('Re_send Authorization to'))
-			label.set_use_underline(True)
-			resend_auth_hbox = gtk.HBox(False, 3)
-			resend_auth_hbox.pack_start(resend_auth_icon, False, False)
-			resend_auth_hbox.pack_start(label, False, False)
-			resend_auth_item.add(resend_auth_hbox)
-			sub_menu.append(resend_auth_item)
-			resend_auth_item.connect('activate', self.authorize, jid, account)
+		else: # contact is in group 'not in the roster'
+			add_to_roster_menuitem.set_no_show_all(False)
+			edit_groups_menuitem.hide()
+			edit_groups_menuitem.set_no_show_all(True)
+			assign_openpgp_key_menuitem.hide()
+			assign_openpgp_key_menuitem.set_no_show_all(True)
 			
-			rerequest_auth_item = gtk.MenuItem()
-			rerequest_auth_icon = gtk.Image()
-			rerequest_auth_icon.set_from_stock(gtk.STOCK_GO_BACK, gtk.ICON_SIZE_MENU)
-			label = gtk.Label(_('Rere_quest Authorization from'))
-			label.set_use_underline(True)
-			rerequest_auth_hbox = gtk.HBox(False, 3)
-			rerequest_auth_hbox.pack_start(rerequest_auth_icon, False, False)
-			rerequest_auth_hbox.pack_start(label, False, False)
-			rerequest_auth_item.add(rerequest_auth_hbox)
-			sub_menu.append(rerequest_auth_item)
-			rerequest_auth_item.connect('activate', self.req_sub, jid, 
-				_('I would like to add you to my roster'), account)
-			
-		else:
-			item = gtk.MenuItem()
-			menu.append(item)
+			add_to_roster_menuitem.connect('activate',
+				self.on_add_to_roster, contact, account)
 
-			add_item = gtk.MenuItem()
-			add_icon = gtk.Image()
-			add_icon.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU)
-			label = gtk.Label(_('_Add to Roster'))
-			label.set_use_underline(True)
-			add_hbox = gtk.HBox(False, 3)
-			add_hbox.pack_start(add_icon, False, False)
-			add_hbox.pack_start(label, False, False)
-			add_item.add(add_hbox)
-			menu.append(add_item)
-			add_item.connect('activate', self.on_add_to_roster, user, account)
-			
-		remove_item = gtk.MenuItem()
-		remove_icon = gtk.Image()
-		remove_icon.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
-		label = gtk.Label(_('_Remove from Roster'))
-		label.set_use_underline(True)
-		remove_hbox = gtk.HBox(False, 3)
-		remove_hbox.pack_start(remove_icon, False, False)
-		remove_hbox.pack_start(label, False, False)
-		remove_item.add(remove_hbox)
-		menu.append(remove_item)
-		remove_item.connect('activate', self.on_req_usub, user, account)
-
-		item = gtk.MenuItem()
-		menu.append(item)
-
-		info_item = gtk.MenuItem()
-		info_icon = gtk.Image()
-		info_icon.set_from_stock(gtk.STOCK_DIALOG_INFO, gtk.ICON_SIZE_MENU)
-		label = gtk.Label(_('Information'))
-		info_hbox = gtk.HBox(False, 3)
-		info_hbox.pack_start(info_icon, False, False)
-		info_hbox.pack_start(label, False, False)
-		info_item.add(info_hbox)
-		menu.append(info_item)
-		info_item.connect('activate', self.on_info, user, account)
-
-		history_item = gtk.MenuItem()
-		history_icon = gtk.Image()
-		history_icon.set_from_stock(gtk.STOCK_JUSTIFY_FILL, gtk.ICON_SIZE_MENU)
-		label = gtk.Label(_('History'))
-		history_hbox = gtk.HBox(False, 3)
-		history_hbox.pack_start(history_icon, False, False)
-		history_hbox.pack_start(label, False, False)
-		history_item.add(history_hbox)
-		menu.append(history_item)
-		history_item.connect('activate', self.on_history, user, account)
-
-		menu.popup(None, None, None, event.button, event.time)
-		menu.show_all()
-		menu.reposition()
+		roster_contact_context_menu.popup(None, None, None, event.button,
+			event.time)
+		roster_contact_context_menu.show_all()
+		roster_contact_context_menu.reposition()
 
 	def mk_menu_g(self, event, iter):
 		'''Make group's popup menu'''

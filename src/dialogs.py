@@ -649,10 +649,10 @@ class NewMessageDialog:
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
-			title = _('New Message as ') + our_jid
+			title = _('New Message as %s') % our_jid
 		else:
 			title = _('New Message')
-		prompt_text = _('Enter the contact ID of the contact you would like\nto send a chat message to:')
+		prompt_text = _('Fill in the contact ID of the contact you would like\nto send a chat message to:')
 
 		instance = InputDialog(title, prompt_text)
 		response = instance.get_response()
@@ -795,3 +795,37 @@ class PopupNotificationWindow:
 		chats_window.set_active_tab(self.jid)
 		chats_window.window.present()
 		self.adjust_height_and_move_popup_notification_windows()
+
+
+class SendSingleMessageDialog:
+	def __init__(self, plugin, account):
+		self.plugin = plugin
+		self.account = account
+		
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_notification_window', APP)
+		self.window = xml.get_widget('popup_notification_window')
+		xml.signal_autoconnect(self)
+		
+		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
+			gajim.config.get_per('accounts', self.account, 'hostname')
+		
+		if len(gajim.connections) > 1:
+			title = _('Send Single Message as %s') % our_jid
+		else:
+			title = _('Send Single Message')
+		self.window.set_title(title)
+
+		instance = InputDialog(title, prompt_text)
+		response = instance.get_response()
+		if response == gtk.RESPONSE_OK:  
+			jid = instance.input_entry.get_text()
+
+			if jid.find('@') == -1: # if no @ was given
+				ErrorDialog(_('Invalid contact ID'),
+		_('Contact ID must be of the form "username@servername".')).get_response()
+				return
+
+			self.plugin.roster.new_chat_from_jid(self.account, jid)
+	
+	def on_send_button_clicked(self, widget):
+		pass

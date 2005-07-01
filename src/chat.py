@@ -233,15 +233,10 @@ class Chat:
 				menu.append(gtk.MenuItem()) # seperator
 				for jid in self.xmls:
 					if jid != self.get_active_jid():
-						#FIXME: do me via glade
-						icon = gtk.image_new_from_stock(gtk.STOCK_JUMP_TO,
+						item = gtk.ImageMenuItem(_('Switch to %s') % self.names[jid])
+						img = gtk.image_new_from_stock(gtk.STOCK_JUMP_TO,
 							gtk.ICON_SIZE_MENU)
-						label = gtk.Label(_('Switch to %s') % self.names[jid])
-						hbox = gtk.HBox(False, 3)
-						hbox.pack_start(icon, False, False)
-						hbox.pack_start(label, True, True)
-						item = gtk.MenuItem()
-						item.add(hbox)
+						item.set_image(img)
 						item.connect('activate', lambda obj,jid:self.set_active_tab(
 							jid), jid)
 						menu.append(item)
