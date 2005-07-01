@@ -302,6 +302,10 @@ class Chat:
 		self.show_title()
 
 	def new_tab(self, jid):
+		#FIXME: text formating buttons will be hidden in 0.8 release
+		for w in ['bold_togglebutton', 'italic_togglebutton', 'underline_togglebutton']:
+			self.xmls[jid].get_widget(w).set_no_show_all(True)
+
 		self.set_compact_view(self.always_compact_view)
 		self.nb_unread[jid] = 0
 		self.last_message_time[jid] = 0
@@ -387,10 +391,6 @@ class Chat:
 
 		xm.signal_connect('on_close_button_clicked',
 			self.on_close_button_clicked, jid)
-
-		#FIXME: text formating buttons will be hidden in 0.8 release
-		for w in ['bold_togglebutton', 'italic_togglebutton', 'underline_togglebutton']:
-			self.xmls[jid].get_widget(w).set_no_show_all(True)
 
 		child = self.childs[jid]
 		self.notebook.append_page(child, tab_hbox)

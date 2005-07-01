@@ -865,6 +865,7 @@ class GroupchatWindow(chat.Chat):
 		self.show_title()
 		self.set_subject(room_jid, '') # Set an empty subject to show the room_jid
 		conversation_textview.grab_focus()
+		self.childs[room_jid].show_all()
 
 	def on_treeview_size_allocate(self, widget, allocation):
 		"""The MUC treeview has resized. Move the hpaneds in all tabs to match"""

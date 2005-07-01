@@ -262,6 +262,7 @@ class TabbedChatWindow(chat.Chat):
 			self.read_queue(user.jid)
 
 		gajim.connections[self.account].request_vcard(user.jid)
+		self.childs[user.jid].show_all()
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
