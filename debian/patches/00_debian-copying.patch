@@ -1,0 +1,13 @@
+Index: src/dialogs.py
+===================================================================
+--- src/dialogs.py	(Revision 2236)
++++ src/dialogs.py	(Arbeitskopie)
+@@ -391,7 +391,7 @@
+ 		dlg.set_version(gajim.version)
+ 		s = u'Copyright \xa9 2003-2005 Gajim Team'
+ 		dlg.set_copyright(s)
+-		text = open('../COPYING').read()
++		text = open('/usr/share/common-licenses/GPL-2').read()
+ 		dlg.set_license(text)
+ 
+ 		dlg.set_comments(_('A GTK jabber client'))

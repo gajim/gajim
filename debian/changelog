@@ -1,3 +1,10 @@
+gajim (0.8-1) unstable; urgency=low
+
+  * new upstream release
+  * use cdbs
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Fri,  1 Jul 2005 18:35:02 +0200
+
 gajim (0.7.1-1) unstable; urgency=low
 
   * Initial Release. Closes: #311215
