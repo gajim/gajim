@@ -2,14 +2,13 @@ Source: gajim
 Section: net
 Priority: optional
 Maintainer: Yann Le Boulanger <asterix@lagaule.org>
-Standards-Version: 3.6.1.1
-Build-Depends: debmake, python-dev, libgtk2.0-dev, python-gtk2-dev, libgtkspell-dev, gettext
+Build-Depends: debhelper (>= 4.0.0), python-dev, libgtk2.0-dev, python-gtk2-dev, libgtkspell-dev, gettext
+Standards-Version: 3.6.1
 
 Package: gajim
 Architecture: any
-Section: net
-Priority: optional
-Depends: python (>= 2.3), python-glade2 (>= 2.4.0), python-gtk2 (>= 2.4.0)
+Depends: ${shlibs:Depends}, python (>= 2.3), python-glade2 (>= 2.4.0), python-gtk2 (>= 2.4.0)
 Suggests: python-gnupginterface
 Description: Jabber client written in PyGTK
- Gajim is a jabber client written in python, with a GTK frontend.
+ Gajim is a jabber client written in python, with a GTK frontend. It supports
+ tabbed chat, MUC, systray icon, TLS, GPG, SSL, multiple accounts, ...

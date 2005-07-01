@@ -1,0 +1,6 @@
+gajim for Debian
+----------------
+
+If you want to use OpenPGP in gajim, you have to install python-gnupginterface.
+
+ -- Yann Le Boulanger <asterix@lagaule.org>, Mon, 20 Jun 2005 12:02:31 +0200

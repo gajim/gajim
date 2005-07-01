@@ -1,51 +1,19 @@
 #!/usr/bin/make -f
-# Made with the aid of debmake, by Christoph Lameter,
-# based on the sample debian/rules file for GNU hello by Ian Jackson.
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/makefile.mk
 
-package=gajim
+PYTHONVER = `python -c 'import sys; print sys.version[:3]'`
+CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -fPIC -I/usr/include/python$(PYTHONVER) -I.
+LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0`
 
-build: build-stamp
-build-stamp:
-	$(checkdir)
-	
-	make
-	touch build
+DEB_MAKE_CLEAN_TARGET    := clean
+DEB_MAKE_BUILD_TARGET    := all
+DEB_MAKE_INSTALL_TARGET  := install PREFIX=/usr DESTDIR=$(DEB_DESTDIR)
 
-clean:
-	$(checkdir)
-	rm -f build
-	make clean
-	rm -f `find . -name "*~"`
-	rm -rf debian/tmp debian/files* core debian/substvars files
+DEB_MAKE_INSTALL_TARGET =  install PREFIX=/usr DESTDIR=$(DEB_DESTDIR)
 
-install: install-stamp
-install-stamp: build-stamp
-	$(checkdir)
-	rm -rf debian/tmp
-	install -d debian/tmp
-	cd debian/tmp && install -d `cat ../dirs`
-	make install PREFIX=/usr DESTDIR=`pwd`/debian/tmp
+clean/gajim::
+
+binary-install:
 	rm debian/tmp/usr/share/gajim/src/common/GnuPGInterface.py
-
-binary-indep: checkroot build
-	$(checkdir)
-
-binary-arch: checkroot build install
-	$(checkdir)
-	debstd
-	dpkg-gencontrol -isp
-	chown -R root:root debian/tmp
-	chmod -R go=rX debian/tmp
-	dpkg --build debian/tmp ..
-
-define checkdir
-	test -f debian/rules
-endef
-
-binary: binary-indep binary-arch
-
-checkroot:
-	$(checkdir)
-	test root = "`whoami`"
-
-.PHONY: binary binary-arch binary-indep clean checkroot
+	dh_python -pgajim /usr/share/gajim/src
