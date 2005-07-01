@@ -71,8 +71,7 @@ class Systray:
 		if not list in self.jids:
 			self.jids.append(list)
 			self.set_img()
-		#we look for the number of unread messages
-		#in roster
+		#we append to the number of unread messages
 		nb = self.plugin.roster.nb_unread
 		for acct in gajim.connections:
 			#in chat / groupchat windows
@@ -81,19 +80,15 @@ class Systray:
 				for jid in jids:
 					if jid != 'tabbed':
 						nb += jids[jid].nb_unread[jid]
-		if nb > 1:
-			label = _('Gajim - %s unread messages') % nb
-		else:
-			label = _('Gajim - 1 unread message')
-		self.tip.set_tip(self.t, label)
+
+		self.set_tooltip(nb) # update the tooltip
 
 	def remove_jid(self, jid, account):
 		list = [account, jid]
 		if list in self.jids:
 			self.jids.remove(list)
 			self.set_img()
-		#we look for the number of unread messages
-		#in roster
+		#we remove from the number of unread messages
 		nb = self.plugin.roster.nb_unread
 		for acct in gajim.connections:
 			#in chat / groupchat windows
@@ -101,17 +96,13 @@ class Systray:
 				for jid in self.plugin.windows[acct][kind]:
 					if jid != 'tabbed':
 						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
-		if nb > 1:
-			label = _('Gajim - %s unread messages') % nb
-		elif nb == 1:
-			label = _('Gajim - 1 unread message')
-		else:
-			label = 'Gajim'
-		self.tip.set_tip(self.t, label)
+		
+		self.set_tooltip(nb) # update the tooltip
 
 	def set_status(self, status):
 		self.status = status
 		self.set_img()
+		self.set_tooltip()
 
 	def start_chat(self, widget, account, jid):
 		if self.plugin.windows[account]['chats'].has_key(jid):
@@ -284,12 +275,24 @@ class Systray:
 			self.t = trayicon.TrayIcon('Gajim')
 			eb = gtk.EventBox()
 			eb.connect('button-press-event', self.on_clicked)
-			self.tip.set_tip(self.t, 'Gajim')
+			self.set_tooltip()
 			self.img_tray = gtk.Image()
 			eb.add(self.img_tray)
 			self.t.add(eb)
 			self.set_img()
 		self.t.show_all()
+	
+	def set_tooltip(self, unread_messages_no=None):
+		# we look for the number of unread messages
+		# and we set the appropriate tooltip
+		if unread_messages_no > 1:
+			text = _('Gajim - %s unread messages') % unread_messages_no
+		elif unread_messages_no == 1:
+			text = _('Gajim - 1 unread message')
+		else: # it's None or 0
+			uf_show = helpers.get_uf_show(self.status)
+			text = _('Gajim - %s') % uf_show
+		self.tip.set_tip(self.t, text)
 	
 	def hide_icon(self):
 		if self.t:
