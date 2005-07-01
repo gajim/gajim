@@ -53,9 +53,11 @@ class Logger:
 			if not os.path.isdir(LOGPATH):
 				print 'creating', LOGPATH, 'directory'
 				os.mkdir(LOGPATH)
-		# (?<!...) Matches if ... doesn't matche next, but doesn't consume 
-		# the string.
-		# So matches on '\\n' but not if you have a '\' before that
+
+		# (?<!\\) is a lookbehind assertion which asks anything but '\'
+		# to match the regexp that follows it
+		
+		# So here match '\\n' but not if you have a '\' before that
 		self.re = sre.compile(r'(?<!\\)\\n')
 
 	def write(self, kind, msg, jid, show = None, tim = None):
