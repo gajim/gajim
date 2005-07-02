@@ -651,7 +651,7 @@ class GroupchatWindow(chat.Chat):
 	def on_info(self, widget, room_jid, nick):
 		"""Call vcard_information_window class to display user's information"""
 		c = self.contacts[room_jid][nick]
-		if c.jid and c.resource:
+		if c.jid and c.resource: # on GC, we know resource only if we're mod and up
 			jid = c.jid
 			fjid = c.jid + '/' + c.resource
 		else:
