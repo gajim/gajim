@@ -1163,6 +1163,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 					self.plugin.roster.to_be_removed[self.account]
 				self.plugin.sleeper_state[name] = \
 					self.plugin.sleeper_state[self.account]
+				gajim.encrypted_chats[name] = gajim.encrypted_chats[self.account]
 				#upgrade account variable in opened windows
 				for kind in ['infos', 'chats', 'gc', 'gc_config']:
 					for j in self.plugin.windows[name][kind]:
@@ -1178,6 +1179,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 				del self.plugin.roster.groups[self.account]
 				del self.plugin.roster.contacts[self.account]
 				del self.plugin.sleeper_state[self.account]
+				del gajim.encrypted_chats[self.account]
 				gajim.connections[self.account].name = name
 				gajim.connections[name] = gajim.connections[self.account]
 				del gajim.connections[self.account]
@@ -1227,6 +1229,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 		self.plugin.nicks[name] = config['name']
 		self.plugin.allow_notifications[name] = False
 		self.plugin.sleeper_state[name] = 0
+		gajim.encrypted_chats[name] = []
 		#refresh accounts window
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].init_accounts()

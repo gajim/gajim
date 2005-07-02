@@ -40,3 +40,5 @@ if LANG:
 	LANG = LANG[:2] # en, fr, el etc..
 else:
 	LANG = 'en'
+
+encrypted_chats = {} # list of encrypted chats {acct1: [jid1, jid2], ..}

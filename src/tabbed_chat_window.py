@@ -44,7 +44,6 @@ class TabbedChatWindow(chat.Chat):
 	def __init__(self, user, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
 		self.users = {}
-		self.encrypted = {}
 		self.new_user(user)
 		self.show_title()
 		self.xml.signal_connect('on_tabbed_chat_window_destroy',
@@ -238,7 +237,9 @@ class TabbedChatWindow(chat.Chat):
 		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[user.jid] = self.xmls[user.jid].get_widget('chats_vbox')
 		self.users[user.jid] = user
-		self.encrypted[user.jid] = False
+
+		if user.jid in gajim.encrypted_chats[self.account]:
+			self.xmls[user.jid].get_widget('gpg_togglebutton').set_active(True)
 		
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat_popup_menu', APP)
 		xm.signal_autoconnect(self)
@@ -378,13 +379,15 @@ class TabbedChatWindow(chat.Chat):
 			kind = 'status'
 			name = ''
 		else:
-			if encrypted and not self.encrypted[jid]:
+			ec = gajim.encrypted_chats[self.account]
+			if encrypted and jid not in ec:
 				chat.Chat.print_conversation_line(self, 'Encryption enabled', jid,
 					'status', '', tim)
-			if not encrypted and self.encrypted[jid]:
+				ec.append(jid)
+			if not encrypted and jid in ec:
 				chat.Chat.print_conversation_line(self, 'Encryption disabled', jid,
 					'status', '', tim)
-			self.encrypted[jid] = encrypted
+				ec.remove(jid)
 			self.xmls[jid].get_widget('gpg_togglebutton').set_active(encrypted)
 			if contact:
 				kind = 'outgoing'
