@@ -583,7 +583,15 @@ class GroupchatWindow(chat.Chat):
 
 	def kick(self, widget, room_jid, nick):
 		"""kick a user"""
-		gajim.connections[self.account].gc_set_role(room_jid, nick, 'none')
+		# ask for reason
+		instance = dialogs.InputDialog(_('Kicking %s') % nick,
+			_('Please specify a reason below:'))
+		response = instance.get_response()
+		if response == gtk.RESPONSE_OK:
+			reason = instance.input_entry.get_text()
+		else:
+			return # stop kicking procedure
+		gajim.connections[self.account].gc_set_role(room_jid, nick, 'none', reason)
 
 	def grant_voice(self, widget, room_jid, nick):
 		"""grant voice privilege to a user"""
@@ -603,8 +611,15 @@ class GroupchatWindow(chat.Chat):
 
 	def ban(self, widget, room_jid, jid):
 		"""ban a user"""
-		gajim.connections[self.account].gc_set_affiliation(room_jid, jid,
-			'outcast')
+		# ask for reason
+		instance = dialogs.InputDialog(_('Banning %s') % nick,
+			_('Please specify a reason below:'))
+		response = instance.get_response()
+		if response == gtk.RESPONSE_OK:
+			reason = instance.input_entry.get_text()
+		else:
+			return # stop banning procedure
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, 'outcast', reason)
 
 	def grant_membership(self, widget, room_jid, jid):
 		"""grant membership privilege to a user"""

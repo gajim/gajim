@@ -1109,7 +1109,7 @@ class Connection:
 		self.to_be_sent.insert(0, common.xmpp.Presence(to = '%s/%s' % (jid, nick),
 			typ = ptype, show = show, status = status))
 
-	def gc_set_role(self, room_jid, nick, role):
+	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
@@ -1117,9 +1117,11 @@ class Connection:
 		item = iq.getTag('query').setTag('item')
 		item.setAttr('nick', nick)
 		item.setAttr('role', role)
+		if reason:
+			item.addChild(name = 'reason', payload = reason)
 		self.to_be_sent.insert(0, iq)
 
-	def gc_set_affiliation(self, room_jid, jid, affiliation):
+	def gc_set_affiliation(self, room_jid, jid, affiliation, reason = ''):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
@@ -1127,6 +1129,8 @@ class Connection:
 		item = iq.getTag('query').setTag('item')
 		item.setAttr('jid', jid)
 		item.setAttr('affiliation', affiliation)
+		if reason:
+			item.addChild(name = 'reason', payload = reason)
 		self.to_be_sent.insert(0, iq)
 
 	def send_gc_config(self, room_jid, config):

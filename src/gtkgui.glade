@@ -11863,7 +11863,7 @@ JID: whatever@jabber.org</property>
 </widget>
 
 <widget class="GtkDialog" id="input_dialog">
-  <property name="border_width">12</property>
+  <property name="border_width">6</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
