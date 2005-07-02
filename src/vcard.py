@@ -35,11 +35,34 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 class VcardWindow:
 	'''Class for contact's information window'''
+
+	def __init__(self, user, plugin, account, vcard = False):
+		#the user variable is the jid if vcard is true
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
+		self.window = self.xml.get_widget('vcard_information_window')
+		self.xml.get_widget('photo_vbuttonbox').set_no_show_all(True)
+		self.plugin = plugin
+		self.user = user #don't use it if vcard is true
+		self.account = account
+		self.vcard = vcard
+		self.avatar_mime_type = None
+		self.avatar_encoded = None
+
+		if vcard:
+			self.jid = user
+			self.change_to_vcard() # remove Jabber Tab so it has vcard-only info
+		else:
+			self.jid = user.jid
+			self.fill_jabber_page()
+
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
 	def on_user_information_window_destroy(self, widget = None):
 		del self.plugin.windows[self.account]['infos'][self.jid]
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
-		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+		if event.keyval == gtk.keysyms.Escape:
 			self.window.destroy()
 
 	def on_close_button_clicked(self, widget):
@@ -392,25 +415,3 @@ class VcardWindow:
 		description_textview = self.xml.get_widget('DESC_textview')
 		description_textview.set_editable(True)
 		description_textview.set_cursor_visible(True)
-
-	#the user variable is the jid if vcard is true
-	def __init__(self, user, plugin, account, vcard = False):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
-		self.window = self.xml.get_widget('vcard_information_window')
-		self.xml.get_widget('photo_vbuttonbox').set_no_show_all(True)
-		self.plugin = plugin
-		self.user = user #don't use it if vcard is true
-		self.account = account
-		self.vcard = vcard
-		self.avatar_mime_type = None
-		self.avatar_encoded = None
-
-		if vcard:
-			self.jid = user
-			self.change_to_vcard()
-		else:
-			self.jid = user.jid
-			self.fill_jabber_page()
-
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
