@@ -668,6 +668,36 @@ class GroupchatWindow(chat.Chat):
 		self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
 		self.plugin.windows[self.account]['chats'][fjid].window.present()
 
+	def on_voice_checkmenuitem_activate(self, widget, room_jid, nick):
+		if widget.get_active():
+			self.grant_voice(widget, room_jid, nick)
+		else:
+			self.revoke_voice(widget, room_jid, nick)
+
+	def on_moderator_checkmenuitem_activate(self, widget, room_jid, nick):
+		if widget.get_active():
+			self.grant_moderator(widget, room_jid, nick)
+		else:
+			self.revoke_moderator(widget, room_jid, nick)
+
+	def on_member_checkmenuitem_activate(self, widget, room_jid, jid):
+		if widget.get_active():
+			self.grant_membership(widget, room_jid, jid)
+		else:
+			self.revoke_membership(widget, room_jid, jid)
+
+	def on_admin_checkmenuitem_activate(self, widget, room_jid, jid):
+		if widget.get_active():
+			self.grant_admin(widget, room_jid, jid)
+		else:
+			self.revoke_admin(widget, room_jid, jid)
+
+	def on_owner_checkmenuitem_activate(self, widget, room_jid, jid):
+		if widget.get_active():
+			self.grant_owner(widget, room_jid, jid)
+		else:
+			self.revoke_owner(widget, room_jid, jid)
+
 	def mk_menu(self, room_jid, event, iter):
 		"""Make user's popup menu"""
 		model = self.list_treeview[room_jid].get_model()
@@ -682,94 +712,69 @@ class GroupchatWindow(chat.Chat):
 		user_affiliation = self.contacts[room_jid][user_nick].affiliation
 		user_role = self.get_role(room_jid, user_nick)
 		
-		menu = gtk.Menu()
-		item = gtk.MenuItem(_('_Privileges'))
-		menu.append(item)
-		
-		sub_menu = gtk.Menu()
-		item.set_submenu(sub_menu)
+		# making menu from glade
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'gc_occupants_menu', APP)
 
 		# these conditions were taken from JEP 0045
-		if (user_role == 'moderator'):
-			if (target_role in ('visitor','participant')):
-				item = gtk.MenuItem(_('_Kick'))
-				sub_menu.append(item)
-				item.connect('activate', self.kick, room_jid, nick)
-	
-			if (target_role == 'visitor'):
-				item = gtk.MenuItem(_('_Grant Voice'))
-				sub_menu.append(item)
-				item.connect('activate', self.grant_voice, room_jid, nick)
-			# I know it is complicated, but this is how does JEP0045 descibe
-			# 'revoking voice' privilege
-			elif (user_affiliation=='member' and target_affiliation=='none') or \
-			     ((user_affiliation in ('admin','owner')) and \
-			      (target_affiliation in ('none','member'))):
-				item = gtk.MenuItem(_('_Revoke Voice'))
-				sub_menu.append(item)
-				item.connect('activate', self.revoke_voice, room_jid, nick)
+		item = xml.get_widget('kick_menuitem')
+		item.connect('activate', self.kick, room_jid, nick)
+		if user_role != 'moderator' or target_role == 'moderator':
+			item.set_sensitive(False)
 
-		if (user_affiliation in ('admin','owner')):
-			item = gtk.MenuItem()
-			sub_menu.append(item)
+		item = xml.get_widget('voice_checkmenuitem')
+		item.set_active(target_role != 'visitor')
+		if user_role != 'moderator' or \
+		   user_affiliation == 'none' or \
+		   (user_affiliation=='member' and target_affiliation!='none') or \
+		   target_affiliation in ('admin','owner'):
+			item.set_sensitive(False)
+		item.connect('activate', self.on_voice_checkmenuitem_activate, room_jid, nick)
 
-			if not target_role == 'moderator':
-				item = gtk.MenuItem(_('_Grant Moderator'))
-				sub_menu.append(item)
-				item.connect('activate', self.grant_moderator, room_jid, nick)
-			elif target_affiliation in ('none','member'):
-				item = gtk.MenuItem(_('_Revoke Moderator'))
-				sub_menu.append(item)
-				item.connect('activate', self.revoke_moderator, room_jid, nick)
+		item = xml.get_widget('moderator_checkmenuitem')
+		item.set_active(target_role == 'moderator')
+		if not user_affiliation in ('admin','owner') or \
+		   target_affiliation in ('admin','owner'):
+			item.set_sensitive(False)
+		item.connect('activate', self.on_moderator_checkmenuitem_activate, room_jid, nick)
 
-			if (target_affiliation in ('none','member')) or \
-			    (user_affiliation=='owner'):
-				item = gtk.MenuItem(_('_Ban'))
-				sub_menu.append(item)
-				item.connect('activate', self.ban, room_jid, jid)
+		item = xml.get_widget('ban_menuitem')
+		if not user_affiliation in ('admin','owner') or \
+		   (target_affiliation in ('admin','owner') and user_affiliation != 'owner'):
+			item.set_sensitive(False)
+		item.connect('activate', self.ban, room_jid, jid)
 
-			if target_affiliation=='none':
-				item = gtk.MenuItem(_('_Grant Membership'))
-				sub_menu.append(item)
-				item.connect('activate', self.grant_membership, room_jid, jid)
-			if (target_affiliation in ('member')) or \
-			   (target_affiliation in ('admin','owner') and (user_affiliation=='owner')):
-				item = gtk.MenuItem(_('_Revoke Membership'))
-				sub_menu.append(item)
-				item.connect('activate', self.revoke_membership, room_jid, jid)
+		item = xml.get_widget('member_checkmenuitem')
+		item.set_active(target_affiliation != 'none')
+		if not user_affiliation in ('admin','owner') or \
+		   (user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
+			item.set_sensitive(False)
+		item.connect('activate', self.on_member_checkmenuitem_activate, room_jid, jid)
 
-		if user_affiliation=='owner':
-			if (not target_affiliation=='admin'):
-				item = gtk.MenuItem(_('_Grant Admin'))
-				sub_menu.append(item)
-				item.connect('activate', self.grant_admin, room_jid, jid)
-			else:
-				item = gtk.MenuItem(_('_Revoke Admin'))
-				sub_menu.append(item)
-				item.connect('activate', self.revoke_admin, room_jid, jid)
+		item = xml.get_widget('admin_checkmenuitem')
+		item.set_active(target_affiliation in ('admin','owner'))
+		if not user_affiliation == 'owner':
+			item.set_sensitive(False)
+		item.connect('activate', self.on_admin_checkmenuitem_activate, room_jid, jid)
 
-			if (not target_affiliation=='owner'):
-				item = gtk.MenuItem(_('_Grant Owner'))
-				sub_menu.append(item)
-				item.connect('activate', self.grant_owner, room_jid, jid)
-			else:
-				item = gtk.MenuItem(_('_Revoke Owner'))
-				sub_menu.append(item)
-				item.connect('activate', self.revoke_owner, room_jid, jid)
+		item = xml.get_widget('owner_checkmenuitem')
+		item.set_active(target_affiliation == 'owner')
+		if not user_affiliation == 'owner':
+			item.set_sensitive(False)
+		item.connect('activate', self.on_owner_checkmenuitem_activate, room_jid, jid)
 
-		item = gtk.MenuItem(_('_Information'))
-		menu.append(item)
+		item = xml.get_widget('information_menuitem')
 		item.connect('activate', self.on_info, room_jid, nick)
 
-		if jid:
-			item = gtk.MenuItem(_('_Add to Roster'))
-			menu.append(item)
-			item.connect('activate', self.on_add_to_roster, jid)
-		
-		item = gtk.MenuItem(_('Send _Private Message'))
-		menu.append(item)
+		item = xml.get_widget('add_to_roster_menuitem')
+		if not jid:
+			item.set_sensitive(False)
+		item.connect('activate', self.on_add_to_roster, jid)
+
+		item = xml.get_widget('send_private_message_menuitem')
 		item.connect('activate', self.on_send_pm, model, iter)
-		
+
+		# show the popup now!
+		menu = xml.get_widget('gc_occupants_menu')
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
 		menu.reposition()

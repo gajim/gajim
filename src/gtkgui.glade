@@ -15402,6 +15402,8 @@ the Jabber network.</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
+  <property name="default_width">400</property>
+  <property name="default_height">250</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
@@ -15497,7 +15499,6 @@ the Jabber network.</property>
 	  <child>
 	    <widget class="GtkLabel" id="count_chars_label">
 	      <property name="visible">True</property>
-	      <property name="sensitive">False</property>
 	      <property name="label" translatable="yes">0</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
@@ -15568,7 +15569,7 @@ the Jabber network.</property>
 	      <property name="overwrite">False</property>
 	      <property name="accepts_tab">True</property>
 	      <property name="justification">GTK_JUSTIFY_LEFT</property>
-	      <property name="wrap_mode">GTK_WRAP_NONE</property>
+	      <property name="wrap_mode">GTK_WRAP_WORD</property>
 	      <property name="cursor_visible">True</property>
 	      <property name="pixels_above_lines">0</property>
 	      <property name="pixels_below_lines">0</property>
@@ -15683,6 +15684,119 @@ the Jabber network.</property>
 	  <property name="fill">True</property>
 	</packing>
       </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkMenu" id="gc_occupants_menu">
+
+  <child>
+    <widget class="GtkMenuItem" id="group_chat_actions_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Occupant Actions</property>
+      <property name="use_underline">True</property>
+
+      <child>
+	<widget class="GtkMenu" id="group_chat_actions_menuitem_menu">
+
+	  <child>
+	    <widget class="GtkCheckMenuItem" id="voice_checkmenuitem">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Voice</property>
+	      <property name="use_underline">True</property>
+	      <property name="active">False</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkCheckMenuItem" id="moderator_checkmenuitem">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Mo_derator</property>
+	      <property name="use_underline">True</property>
+	      <property name="active">False</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorMenuItem" id="separator5">
+	      <property name="visible">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkCheckMenuItem" id="member_checkmenuitem">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Member</property>
+	      <property name="use_underline">True</property>
+	      <property name="active">False</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkCheckMenuItem" id="admin_checkmenuitem">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Admin</property>
+	      <property name="use_underline">True</property>
+	      <property name="active">False</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkCheckMenuItem" id="owner_checkmenuitem">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Owner</property>
+	      <property name="use_underline">True</property>
+	      <property name="active">False</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorMenuItem" id="separator4">
+	      <property name="visible">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="kick_menuitem">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Kick</property>
+	      <property name="use_underline">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="ban_menuitem">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Ban</property>
+	      <property name="use_underline">True</property>
+	    </widget>
+	  </child>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="information_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Information</property>
+      <property name="use_underline">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="add_to_roster_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Add to Roster</property>
+      <property name="use_underline">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="send_private_message_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Send Private Message</property>
+      <property name="use_underline">True</property>
     </widget>
   </child>
 </widget>
