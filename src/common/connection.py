@@ -981,10 +981,9 @@ class Connection:
 	def request_os_info(self, jid, resource):
 		if not self.connection:
 			return
+		to_whom_jid = jid
 		if resource:
-			to_whom_jid = jid + '/' + resource
-		else:
-			to_whom_jid = jid
+			to_whom_jid += '/' + resource
 		iq = common.xmpp.Iq(to=to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_VERSION)
 		self.to_be_sent.insert(0, iq)
