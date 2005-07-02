@@ -27,7 +27,6 @@ from gajim_themes_window import GajimThemesWindow
 from advanced import AdvancedConfigurationWindow
 from gajim import Contact
 from common import gajim
-from common import helpers
 from common import i18n
 from common import helpers
 
@@ -205,6 +204,7 @@ class ChangeStatusMessageDialog:
 		msg = gajim.config.get('last_status_msg_' + show)
 		if not msg:
 			msg = ''
+		msg = helpers.from_one_line(msg)
 		self.message_buffer.set_text(msg)
 		self.values = {'':''} # have an empty string selectable, so user can clear msg
 		for msg in gajim.config.get_per('statusmsg'):
@@ -225,8 +225,8 @@ class ChangeStatusMessageDialog:
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
 			message = self.message_buffer.get_text(beg, end, 0).strip()
-			#FIXME: support more than one line
-			gajim.config.set('last_status_msg_' + self.show, message)
+			msg = helpers.to_one_line(message)
+			gajim.config.set('last_status_msg_' + self.show, msg)
 		else:
 			message = -1
 		self.window.destroy()
