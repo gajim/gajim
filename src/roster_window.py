@@ -553,7 +553,7 @@ class RosterWindow:
 				self.plugin.windows[account]['chats'][user.jid].draw_widgets(user)
 		keys_str = ''
 		for jid in keys:
-			keys_str += jid + ' ' + keys[jid]
+			keys_str += jid + ' ' + keys[jid] + ' '
 		gajim.config.set_per('accounts', account, 'attached_gpg_keys', keys_str)
 
 	def on_edit_groups(self, widget, user, account):
