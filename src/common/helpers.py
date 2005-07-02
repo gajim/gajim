@@ -19,6 +19,7 @@
 
 from common import i18n
 _ = i18n._
+import sre
 
 def get_uf_show(show):
 	'''returns a userfriendly string for dnd/xa/chat
@@ -49,4 +50,28 @@ def get_sorted_keys(adict):
 	keys = adict.keys()
 	keys.sort()
 	return keys
-		
+
+def to_one_line(msg):
+	msg = msg.replace('\\', '\\\\')
+	msg = msg.replace('\n', '\\n')
+	# s1 = 'test\ntest\\ntest'
+	# s11 = s1.replace('\\', '\\\\')
+	# s12 = s11.replace('\n', '\\n')
+	# s12
+	# 'test\\ntest\\\\ntest'
+	return msg
+
+def from_one_line(msg):
+	# (?<!\\) is a lookbehind assertion which asks anything but '\'
+	# to match the regexp that follows it
+
+	# So here match '\\n' but not if you have a '\' before that
+	re = sre.compile(r'(?<!\\)\\n')
+	msg = re.sub('\n', msg)
+	msg = msg.replace('\\\\', '\\')
+	# s12 = 'test\\ntest\\\\ntest'
+	# s13 = re.sub('\n', s12)
+	# s14 s13.replace('\\\\', '\\')
+	# s14
+	# 'test\ntest\\ntest'
+	return msg
