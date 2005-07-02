@@ -569,8 +569,7 @@ class RosterWindow:
 				HistoryWindow(self.plugin, user.jid, account)
 
 	def on_send_single_message_menuitem_activate(self, wiget, account, contact):
-		pass
-		#SendSingleMessageDialog
+		dialogs.SendSingleMessageDialog(self, account, contact)
 	
 	def mk_menu_user(self, event, iter):
 		'''Make user's popup menu'''

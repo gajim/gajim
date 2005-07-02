@@ -798,13 +798,21 @@ class PopupNotificationWindow:
 
 
 class SendSingleMessageDialog:
-	def __init__(self, plugin, account):
+	def __init__(self, plugin, account, contact):
 		self.plugin = plugin
 		self.account = account
 		
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_notification_window', APP)
-		self.window = xml.get_widget('popup_notification_window')
-		xml.signal_autoconnect(self)
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'send_single_message_window', APP)
+		self.window = self.xml.get_widget('send_single_message_window')
+		self.count_chars_label = self.xml.get_widget('count_chars_label')
+		self.to_entry = self.xml.get_widget('to_entry')
+		self.subject_entry = self.xml.get_widget('subject_entry')
+		self.message_tv_buffer = self.xml.get_widget('message_textview').\
+			get_buffer()
+
+		self.message_tv_buffer.connect('changed', self.update_char_counter)
+		
+		self.to_entry.set_text(contact.jid)
 		
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
@@ -814,18 +822,31 @@ class SendSingleMessageDialog:
 		else:
 			title = _('Send Single Message')
 		self.window.set_title(title)
+		
+		self.subject_entry.grab_focus()
+		
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
-		instance = InputDialog(title, prompt_text)
-		response = instance.get_response()
-		if response == gtk.RESPONSE_OK:  
-			jid = instance.input_entry.get_text()
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
 
-			if jid.find('@') == -1: # if no @ was given
-				ErrorDialog(_('Invalid contact ID'),
-		_('Contact ID must be of the form "username@servername".')).get_response()
-				return
-
-			self.plugin.roster.new_chat_from_jid(self.account, jid)
+	def update_char_counter(self, widget):
+		characters_no = self.message_tv_buffer.get_char_count()
+		self.count_chars_label.set_text(str(characters_no))
 	
 	def on_send_button_clicked(self, widget):
-		pass
+		to_whom_jid = self.to_entry.get_text()
+		if to_whom_jid.find('@') == -1: # if no @ was given
+			ErrorDialog(_('Invalid contact ID'),
+		_('Contact ID must be of the form "username@servername".')).get_response()
+			return
+		subject = self.subject_entry.get_text()
+		begin, end = self.message_tv_buffer.get_bounds()
+		message = self.message_tv_buffer.get_text(begin, end)
+
+		# FIXME: allow GPG message some day
+		gajim.connections[self.account].send_message(to_whom_jid, message,
+			keyID = None, type = 'normal', subject=subject)
+		
+		self.message_tv_buffer.set_text('') # we sent ok, clear the textview

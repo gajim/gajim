@@ -15397,8 +15397,7 @@ the Jabber network.</property>
 </widget>
 
 <widget class="GtkWindow" id="send_single_message_window">
-  <property name="border_width">12</property>
-  <property name="visible">True</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -15475,7 +15474,7 @@ the Jabber network.</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="entry4">
+	    <widget class="GtkEntry" id="subject_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
@@ -15521,7 +15520,7 @@ the Jabber network.</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="entry5">
+	    <widget class="GtkEntry" id="to_entry">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
@@ -15603,7 +15602,7 @@ the Jabber network.</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Thu, 30 Jun 2005 23:51:17 GMT"/>
+	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Sat, 02 Jul 2005 15:27:45 GMT"/>
 	    </widget>
 	  </child>
 
@@ -15654,7 +15653,7 @@ the Jabber network.</property>
 		      <child>
 			<widget class="GtkLabel" id="label333">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Send</property>
+			  <property name="label" translatable="yes">_Send</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>

@@ -829,7 +829,7 @@ class Connection:
 			self.connection.send(p)
 			self.dispatch('STATUS', show)
 
-	def send_message(self, jid, msg, keyID, type = 'chat'):
+	def send_message(self, jid, msg, keyID, type = 'chat', subject=''):
 		if not self.connection:
 			return
 		if not msg:
@@ -840,7 +840,15 @@ class Connection:
 			#encrypt
 			msgenc = self.gpg.encrypt(msg, [keyID])
 			if msgenc: msgtxt = _('[this message is encrypted]')
-		msg_iq = common.xmpp.Message(to = jid, body = msgtxt, typ = type)
+		if type == 'chat':
+			msg_iq = common.xmpp.Message(to = jid, body = msgtxt, typ = type)
+		else:
+			if subject:
+				msg_iq = common.xmpp.Message(to = jid, body = msgtxt,
+					typ = 'normal', subject = subject)
+			else:
+				msg_iq = common.xmpp.Message(to = jid, body = msgtxt,
+					typ = 'normal')
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 		self.to_be_sent.insert(0, msg_iq)
