@@ -1241,7 +1241,8 @@ class Connection:
 						msg = '%s seconds have passed and server did not reply to our keepalive. Gajim disconnected from %s' % (str(keep_alive_disconnect_secs), self.name)
 						gajim.log.debug(msg)
 						return
-				self.connection.Process(timeout)
+				if self.connection:
+					self.connection.Process(timeout)
 			except:
 				gajim.log.debug('error appeared while processing xmpp:')
 				traceback.print_exc()
