@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-03 17:05+0200\n"
+"POT-Creation-Date: 2005-07-04 00:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,16 +28,16 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: src/chat.py:118
+#: src/chat.py:117
 msgid " (account: "
 msgstr ""
 
-#: src/chat.py:236
+#: src/chat.py:235
 #, python-format
 msgid "Switch to %s"
 msgstr ""
 
-#: src/chat.py:319
+#: src/chat.py:318
 msgid ""
 "If that is not your language for which you want to highlight misspelled "
 "words, then please set your $LANG as appropriate. Eg. for French do export "
@@ -47,20 +47,20 @@ msgid ""
 "Highlighting misspelled words feature will not be used"
 msgstr ""
 
-#: src/chat.py:561
+#: src/chat.py:560
 #, python-format
 msgid "Actions for \"%s\""
 msgstr ""
 
-#: src/chat.py:567
+#: src/chat.py:566
 msgid "Read _Wikipedia article"
 msgstr ""
 
-#: src/chat.py:573
+#: src/chat.py:572
 msgid "Look it up in _dictionary"
 msgstr ""
 
-#: src/chat.py:579
+#: src/chat.py:578
 msgid "Web _search for it"
 msgstr ""
 
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Choose Sound"
 msgstr ""
 
-#: src/config.py:880 src/config.py:1780 src/vcard.py:120
+#: src/config.py:880 src/config.py:1784 src/vcard.py:120
 msgid "All files"
 msgstr ""
 
@@ -136,147 +136,147 @@ msgstr ""
 msgid "Custom port must be a port number."
 msgstr ""
 
-#: src/config.py:1204
+#: src/config.py:1207
 msgid "Account name is in use"
 msgstr ""
 
-#: src/config.py:1205
+#: src/config.py:1208
 msgid "You already have an account using this name."
 msgstr ""
 
-#: src/config.py:1258
+#: src/config.py:1262
 msgid "No such account available"
 msgstr ""
 
-#: src/config.py:1259
+#: src/config.py:1263
 msgid "You must create your account before editing your personal information."
 msgstr ""
 
-#: src/config.py:1263 src/config.py:1862 src/dialogs.py:572 src/dialogs.py:672
+#: src/config.py:1267 src/config.py:1866 src/dialogs.py:572 src/dialogs.py:672
 #: src/vcard.py:349 src/vcard.py:377
 msgid "You are not connected to the server"
 msgstr ""
 
-#: src/config.py:1264
+#: src/config.py:1268
 msgid "Without a connection, you can not edit your personal information."
 msgstr ""
 
-#: src/config.py:1281
+#: src/config.py:1285
 msgid "Failed to get secret keys"
 msgstr ""
 
-#: src/config.py:1282
+#: src/config.py:1286
 msgid "There was a problem retrieving your GPG secret keys."
 msgstr ""
 
-#: src/config.py:1285 src/msg.c:239
+#: src/config.py:1289 src/gtkgui.glade.h:164
 msgid "Passphrase"
 msgstr ""
 
-#: src/config.py:1285
+#: src/config.py:1289
 msgid "Choose your OpenPGP key"
 msgstr ""
 
-#: src/config.py:1293 src/msg.c:43
+#: src/config.py:1297 src/gtkgui.glade.h:152
 msgid "No key selected"
 msgstr ""
 
-#: src/config.py:1524 src/config.py:1885
+#: src/config.py:1528 src/config.py:1889
 msgid "Name"
 msgstr ""
 
-#: src/config.py:1527
+#: src/config.py:1531
 msgid "Server"
 msgstr ""
 
-#: src/config.py:1647
+#: src/config.py:1651
 #, python-format
 msgid "Edit %s"
 msgstr ""
 
-#: src/config.py:1649
+#: src/config.py:1653
 #, python-format
 msgid "Register to %s"
 msgstr ""
 
-#: src/config.py:1669
+#: src/config.py:1673
 msgid "Text"
 msgstr ""
 
-#: src/config.py:1677
+#: src/config.py:1681
 msgid "Image"
 msgstr ""
 
-#: src/config.py:1724
+#: src/config.py:1728
 msgid "Image is too big"
 msgstr ""
 
-#: src/config.py:1724
+#: src/config.py:1728
 msgid ""
 "Image for emoticon has to be less than or equal to 24 pixels in width and 24 "
 "in height."
 msgstr ""
 
-#: src/config.py:1774
+#: src/config.py:1778
 msgid "Choose image"
 msgstr ""
 
-#: src/config.py:1785 src/vcard.py:125
+#: src/config.py:1789 src/vcard.py:125
 msgid "Images"
 msgstr ""
 
-#: src/config.py:1863
+#: src/config.py:1867
 msgid "Without a connection, you can not browse available services"
 msgstr ""
 
-#: src/config.py:1868
+#: src/config.py:1872
 #, python-format
 msgid "Service Discovery using %s account"
 msgstr ""
 
-#: src/config.py:1870
+#: src/config.py:1874
 msgid "Service Discovery"
 msgstr ""
 
-#: src/config.py:1890
+#: src/config.py:1894
 msgid "Service"
 msgstr ""
 
-#: src/config.py:1895
+#: src/config.py:1899
 msgid "Node"
 msgstr ""
 
-#: src/config.py:2105 src/msg.c:16
+#: src/config.py:2109 src/gtkgui.glade.h:259
 msgid "_Edit"
 msgstr ""
 
-#: src/config.py:2107 src/msg.c:83
+#: src/config.py:2111 src/gtkgui.glade.h:182
 msgid "Re_gister"
 msgstr ""
 
-#: src/config.py:2280
+#: src/config.py:2284
 #, python-format
 msgid "Removing %s account"
 msgstr ""
 
-#: src/config.py:2287
+#: src/config.py:2291
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr ""
 
-#: src/config.py:2288
+#: src/config.py:2292
 msgid "If you remove it, the connection will be lost."
 msgstr ""
 
-#: src/config.py:2407
+#: src/config.py:2411
 msgid "New Room"
 msgstr ""
 
-#: src/config.py:2437
+#: src/config.py:2441
 msgid "This bookmark has invalid data"
 msgstr ""
 
-#: src/config.py:2438
+#: src/config.py:2442
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
@@ -382,7 +382,8 @@ msgstr ""
 msgid "New Message as %s"
 msgstr ""
 
-#: src/dialogs.py:654 src/dialogs.py:738 src/gajim.py:379 src/msg.c:259
+#: src/dialogs.py:654 src/dialogs.py:738 src/gajim.py:379
+#: src/gtkgui.glade.h:149
 msgid "New Message"
 msgstr ""
 
@@ -482,11 +483,11 @@ msgstr ""
 msgid "The account \"%s\" has been registered with the Jabber server."
 msgstr ""
 
-#: src/gajim.py:580
+#: src/gajim.py:581
 msgid "Your GPG passphrase is incorrect"
 msgstr ""
 
-#: src/gajim.py:581
+#: src/gajim.py:582
 msgid "You are currently connected without your GPG key."
 msgstr ""
 
@@ -570,7 +571,7 @@ msgstr ""
 msgid "Banning %s"
 msgstr ""
 
-#: src/groupchat_window.py:801 src/tabbed_chat_window.py:226
+#: src/groupchat_window.py:801 src/tabbed_chat_window.py:227
 msgid "If you close this tab, the message will be lost."
 msgstr ""
 
@@ -656,11 +657,11 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: src/roster_window.py:727 src/msg.c:362
+#: src/roster_window.py:727 src/gtkgui.glade.h:296
 msgid "_Remove from Roster"
 msgstr ""
 
-#: src/roster_window.py:765 src/msg.c:153
+#: src/roster_window.py:765 src/gtkgui.glade.h:214
 msgid "Status"
 msgstr ""
 
@@ -668,7 +669,7 @@ msgstr ""
 msgid "_Edit Account"
 msgstr ""
 
-#: src/roster_window.py:810 src/msg.c:12
+#: src/roster_window.py:810 src/gtkgui.glade.h:301
 msgid "_Service Discovery"
 msgstr ""
 
@@ -680,7 +681,7 @@ msgstr ""
 msgid "Join _Groupchat"
 msgstr ""
 
-#: src/roster_window.py:846 src/msg.c:9
+#: src/roster_window.py:846 src/gtkgui.glade.h:277
 msgid "_New Message"
 msgstr ""
 
@@ -781,25 +782,25 @@ msgstr ""
 msgid "Gajim - %s"
 msgstr ""
 
-#: src/tabbed_chat_window.py:184 src/tabbed_chat_window.py:225
+#: src/tabbed_chat_window.py:185 src/tabbed_chat_window.py:226
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr ""
 
-#: src/tabbed_chat_window.py:185
+#: src/tabbed_chat_window.py:186
 msgid "If you close the window, this message will be lost."
 msgstr ""
 
-#: src/tabbed_chat_window.py:253
+#: src/tabbed_chat_window.py:254
 #, python-format
 msgid "%s is %s"
 msgstr ""
 
-#: src/tabbed_chat_window.py:302
+#: src/tabbed_chat_window.py:303
 msgid "A connection is not available"
 msgstr ""
 
-#: src/tabbed_chat_window.py:303
+#: src/tabbed_chat_window.py:304
 msgid "Your message can't be sent until you are connected."
 msgstr ""
 
@@ -977,90 +978,780 @@ msgstr ""
 msgid "Has errors"
 msgstr ""
 
-#: src/msg.c:7 src/msg.c:31
-msgid "Gajim"
+#: src/gtkgui.glade.h:1
+msgid "..."
 msgstr ""
 
-#: src/msg.c:8 src/msg.c:228
-msgid "_Actions"
+#: src/gtkgui.glade.h:2
+msgid "0"
 msgstr ""
 
-#: src/msg.c:10
-msgid "_Join Group Chat"
+#: src/gtkgui.glade.h:3
+msgid "<b>Advanced Configuration Editor</b>"
 msgstr ""
 
-#: src/msg.c:11
-msgid "Add _Contact"
+#: src/gtkgui.glade.h:4
+msgid "<b>Changes in latest version</b>"
 msgstr ""
 
-#: src/msg.c:13
-msgid "Show _Offline Contacts"
+#: src/gtkgui.glade.h:5
+msgid "<b>Custom Applications</b>"
 msgstr ""
 
-#: src/msg.c:14
-msgid "_About"
+#: src/gtkgui.glade.h:6
+msgid "<b>Format of a chat line</b>"
 msgstr ""
 
-#: src/msg.c:15
-msgid "_Quit"
+#: src/gtkgui.glade.h:7
+msgid "<b>Interface Customization</b>"
 msgstr ""
 
-#: src/msg.c:17
+#: src/gtkgui.glade.h:8
+msgid "<b>Links</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:9
+msgid "<b>Log</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:10
+msgid "<b>Miscellaneous</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:11
+msgid "<b>Notifications</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:12
+msgid "<b>OpenPGP</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:13
+msgid "<b>Please choose on of the options below:</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:14
+msgid "<b>Preset Status Messages</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:15
+msgid "<b>Properties</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:16
+msgid "<b>Settings</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:17
+msgid "<b>Sounds</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:18
+msgid "<b>What do you want to do?</b>"
+msgstr ""
+
+#: src/gtkgui.glade.h:19
+msgid "<span background=\"lightyellow\"></span>"
+msgstr ""
+
+#: src/gtkgui.glade.h:20
 msgid "A_ccounts"
 msgstr ""
 
-#: src/msg.c:18
-msgid "Profile, Avatar"
+#: src/gtkgui.glade.h:21
+msgid "About"
 msgstr ""
 
-#: src/msg.c:19
-msgid "_Preferences"
+#: src/gtkgui.glade.h:22
+msgid "Account"
 msgstr ""
 
-#: src/msg.c:20
-msgid "Accounts"
-msgstr ""
-
-#: src/msg.c:21
-msgid "_Modify"
-msgstr ""
-
-#: src/msg.c:22 src/msg.c:270
-msgid "_Remove"
-msgstr ""
-
-#: src/msg.c:23
+#: src/gtkgui.glade.h:23
 msgid "Account Modification"
 msgstr ""
 
-#: src/msg.c:24
-msgid "_Name: "
+#: src/gtkgui.glade.h:24
+msgid "Account:"
 msgstr ""
 
-#: src/msg.c:25
-msgid "_Jabber ID:"
+#: src/gtkgui.glade.h:25
+msgid "Accounts"
 msgstr ""
 
-#: src/msg.c:26 src/msg.c:288 src/msg.c:304
-msgid "_Password:"
+#: src/gtkgui.glade.h:26
+msgid "Add New Contact"
 msgstr ""
 
-#: src/msg.c:27
-msgid "Resour_ce: "
+#: src/gtkgui.glade.h:27
+msgid "Add _Contact"
 msgstr ""
 
-#: src/msg.c:28
+#: src/gtkgui.glade.h:28
+msgid "Address"
+msgstr ""
+
+#: src/gtkgui.glade.h:29
+msgid "Advanced"
+msgstr ""
+
+#: src/gtkgui.glade.h:30
+msgid "Advanced Configuration Editor"
+msgstr ""
+
+#: src/gtkgui.glade.h:31
+msgid "After nickname:"
+msgstr ""
+
+#: src/gtkgui.glade.h:32
+msgid "After time:"
+msgstr ""
+
+#: src/gtkgui.glade.h:33
+msgid "Allow _OS information to be sent"
+msgstr ""
+
+#: src/gtkgui.glade.h:34
+msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
+msgstr ""
+
+#: src/gtkgui.glade.h:35
+msgid "Also known as iChat style"
+msgstr ""
+
+#: src/gtkgui.glade.h:36
+msgid "Ask status message when going: "
+msgstr ""
+
+#: src/gtkgui.glade.h:37
+msgid "Ask:"
+msgstr ""
+
+#: src/gtkgui.glade.h:38
+msgid "Assign Open_PGP Key"
+msgstr ""
+
+#: src/gtkgui.glade.h:39
+msgid "Authorize contact so he can know when you're connected"
+msgstr ""
+
+#: src/gtkgui.glade.h:40
+msgid "Auto _away after:"
+msgstr ""
+
+#: src/gtkgui.glade.h:41
+msgid "Auto _not available after:"
+msgstr ""
+
+#: src/gtkgui.glade.h:42
+msgid "Auto join"
+msgstr ""
+
+#: src/gtkgui.glade.h:43
+msgid "Automatically authorize contact"
+msgstr ""
+
+#: src/gtkgui.glade.h:44
+msgid "Background color"
+msgstr ""
+
+#: src/gtkgui.glade.h:45
+msgid "Banner:"
+msgstr ""
+
+#: src/gtkgui.glade.h:46
+msgid "Before nickname:"
+msgstr ""
+
+#: src/gtkgui.glade.h:47
+msgid "Before time:"
+msgstr ""
+
+#: src/gtkgui.glade.h:48
+msgid "Birthday:"
+msgstr ""
+
+#: src/gtkgui.glade.h:49
+msgid "Bold"
+msgstr ""
+
+#: src/gtkgui.glade.h:50
+msgid "C_onnect at startup"
+msgstr ""
+
+#: src/gtkgui.glade.h:51
+msgid "Chan_ge"
+msgstr ""
+
+#: src/gtkgui.glade.h:52
+msgid "Change Password"
+msgstr ""
+
+#: src/gtkgui.glade.h:53
+msgid "Change _Nickname"
+msgstr ""
+
+#: src/gtkgui.glade.h:54
+msgid "Change _Subject"
+msgstr ""
+
+#: src/gtkgui.glade.h:55
+msgid "Chat"
+msgstr ""
+
+#: src/gtkgui.glade.h:56
+msgid "Chat with"
+msgstr ""
+
+#: src/gtkgui.glade.h:57
+msgid "Check for new _version at startup"
+msgstr ""
+
+#: src/gtkgui.glade.h:58
+msgid "Check if you want to register for a new jabber account"
+msgstr ""
+
+#: src/gtkgui.glade.h:59
+msgid ""
+"Check this option, only if someone you don't have in the roster spams/annoys "
+"you. Use with caution, cause it blocks all messages from any contact that is "
+"not in the roster."
+msgstr ""
+
+#: src/gtkgui.glade.h:60
+msgid ""
+"Check this so Gajim will connect in port 5223 where legacy servers are "
+"expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
+"default if broadcasted by the server, and with this option enabled TLS will "
+"be disabled"
+msgstr ""
+
+#: src/gtkgui.glade.h:61
+msgid "Choose _Key..."
+msgstr ""
+
+#: src/gtkgui.glade.h:62
+msgid "City:"
+msgstr ""
+
+#: src/gtkgui.glade.h:63
+msgid "Click to change account's password"
+msgstr ""
+
+#: src/gtkgui.glade.h:64
+msgid "Click to get contact's extended information"
+msgstr ""
+
+#: src/gtkgui.glade.h:65
+msgid "Click to see features like on jabber servers"
+msgstr ""
+
+#: src/gtkgui.glade.h:66
+msgid "Click to see past conversation in this room"
+msgstr ""
+
+#: src/gtkgui.glade.h:67
+msgid "Click to see past conversations with this contact"
+msgstr ""
+
+#: src/gtkgui.glade.h:68
+msgid "Click to toggle OpenPGP encryption"
+msgstr ""
+
+#: src/gtkgui.glade.h:69
+msgid "Client:"
+msgstr ""
+
+#: src/gtkgui.glade.h:70
+msgid "Company:"
+msgstr ""
+
+#: src/gtkgui.glade.h:71
+msgid "Configure _Room"
+msgstr ""
+
+#: src/gtkgui.glade.h:72
+msgid "Connection"
+msgstr ""
+
+#: src/gtkgui.glade.h:73
+msgid "Contact Information"
+msgstr ""
+
+#: src/gtkgui.glade.h:74
+msgid "Contact _Info"
+msgstr ""
+
+#: src/gtkgui.glade.h:75
+msgid "Contact:"
+msgstr ""
+
+#: src/gtkgui.glade.h:76
+msgid "Conversation History"
+msgstr ""
+
+#: src/gtkgui.glade.h:77
+msgid "Country:"
+msgstr ""
+
+#: src/gtkgui.glade.h:78
+msgid "Default _status iconset:"
+msgstr ""
+
+#: src/gtkgui.glade.h:79
+msgid "Deny authorization from contact so he cannot know when you're connected"
+msgstr ""
+
+#: src/gtkgui.glade.h:80
+msgid "Department:"
+msgstr ""
+
+#: src/gtkgui.glade.h:81
+msgid "E-Mail"
+msgstr ""
+
+#: src/gtkgui.glade.h:82
+msgid "E-Mail:"
+msgstr ""
+
+#: src/gtkgui.glade.h:83
+msgid "Edit Groups"
+msgstr ""
+
+#: src/gtkgui.glade.h:84
+msgid "Edit Personal Information..."
+msgstr ""
+
+#: src/gtkgui.glade.h:85
+msgid "Edit _Groups"
+msgstr ""
+
+#: src/gtkgui.glade.h:86
+msgid "Enter it again for confirmation:"
+msgstr ""
+
+#: src/gtkgui.glade.h:87
+msgid "Enter new password:"
+msgstr ""
+
+#: src/gtkgui.glade.h:88
+msgid "Enter your message:"
+msgstr ""
+
+#: src/gtkgui.glade.h:89
+msgid "Events"
+msgstr ""
+
+#: src/gtkgui.glade.h:90
+msgid "Every 5 _minutes"
+msgstr ""
+
+#: src/gtkgui.glade.h:91
+msgid "Extra Address:"
+msgstr ""
+
+#: src/gtkgui.glade.h:92
+msgid "Family:"
+msgstr ""
+
+#: src/gtkgui.glade.h:93
+msgid "Filter:"
+msgstr ""
+
+#: src/gtkgui.glade.h:94
+msgid "Format: YYYY-MM-DD"
+msgstr ""
+
+#: src/gtkgui.glade.h:95
+msgid ""
+"GNOME default applications\n"
+"KDE default applications\n"
+"Custom"
+msgstr ""
+
+#: src/gtkgui.glade.h:98
+msgid "Gajim"
+msgstr ""
+
+#: src/gtkgui.glade.h:99
+msgid "Gajim Themes Customization"
+msgstr ""
+
+#: src/gtkgui.glade.h:100
+msgid "Gajim theme:"
+msgstr ""
+
+#: src/gtkgui.glade.h:101
+msgid ""
+"Gajim will automatically show the new received message in a new chat window "
+"or tab in an existing chat window"
+msgstr ""
+
+#: src/gtkgui.glade.h:102
+msgid ""
+"Gajim will notify you for new message via a popup in the bottom right of the "
+"screen"
+msgstr ""
+
+#: src/gtkgui.glade.h:103
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed in"
+msgstr ""
+
+#: src/gtkgui.glade.h:104
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed out"
+msgstr ""
+
+#: src/gtkgui.glade.h:105
+msgid ""
+"Gajim will only change the icon of the contact that sent the new message"
+msgstr ""
+
+#: src/gtkgui.glade.h:106
+msgid "Gajim: First Time Wizard"
+msgstr ""
+
+#: src/gtkgui.glade.h:107
+msgid "General"
+msgstr ""
+
+#: src/gtkgui.glade.h:108
+msgid "Given:"
+msgstr ""
+
+#: src/gtkgui.glade.h:109
+msgid "Go"
+msgstr ""
+
+#: src/gtkgui.glade.h:110
+msgid "Group Chat"
+msgstr ""
+
+#: src/gtkgui.glade.h:111
+msgid "Group:"
+msgstr ""
+
+#: src/gtkgui.glade.h:112
+msgid "HTTP Connect"
+msgstr ""
+
+#: src/gtkgui.glade.h:113
+msgid "Hold_Account"
+msgstr ""
+
+#: src/gtkgui.glade.h:114
+msgid "Homepage:"
+msgstr ""
+
+#: src/gtkgui.glade.h:115
+msgid "Hostname: "
+msgstr ""
+
+#: src/gtkgui.glade.h:116
+msgid "I already have an account I want to use"
+msgstr ""
+
+#: src/gtkgui.glade.h:117
+msgid "I want to _register for a new account"
+msgstr ""
+
+#: src/gtkgui.glade.h:118
+msgid "I would like to add you to my contact list."
+msgstr ""
+
+#: src/gtkgui.glade.h:119
+msgid "If checked, Gajim will also have a trayicon"
+msgstr ""
+
+#: src/gtkgui.glade.h:120
+msgid "If checked, Gajim will join this groupchat on startup"
+msgstr ""
+
+#: src/gtkgui.glade.h:121
+msgid "If checked, Gajim will remember the password for this account"
+msgstr ""
+
+#: src/gtkgui.glade.h:122
+msgid ""
+"If checked, Gajim will remember the roster and chat window positions in the "
+"screen and the sizes of them next time you run it"
+msgstr ""
+
+#: src/gtkgui.glade.h:123
+msgid ""
+"If checked, Gajim will replace ascii smilies like ':)' with equivalent "
+"graphical emoticons"
+msgstr ""
+
+#: src/gtkgui.glade.h:124
+msgid ""
+"If checked, Gajim will send keep-alive packets so it prevents connection "
+"timeout which results in disconnection"
+msgstr ""
+
+#: src/gtkgui.glade.h:125
+msgid ""
+"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
+"permission only for only you and of course the administrator"
+msgstr ""
+
+#: src/gtkgui.glade.h:126
+msgid ""
+"If checked, Gajim will use protocol-specific status icons. (eg. A contact "
+"from MSN will have the equivalent msn icon for status online, away, busy, "
+"etc...)"
+msgstr ""
+
+#: src/gtkgui.glade.h:127
+msgid ""
+"If checked, Gajim, when launched, will automatically connect to jabber using "
+"this account"
+msgstr ""
+
+#: src/gtkgui.glade.h:128
+msgid ""
+"If you have 2 or more accounts and it is checked, Gajim will list all "
+"contacts as if you had one account"
+msgstr ""
+
+#: src/gtkgui.glade.h:129
+msgid "Incoming message:"
+msgstr ""
+
+#: src/gtkgui.glade.h:130
+msgid "Information about you are stored on the server as vCard"
+msgstr ""
+
+#: src/gtkgui.glade.h:131
+msgid "Italic"
+msgstr ""
+
+#: src/gtkgui.glade.h:132
+msgid "Jabber"
+msgstr ""
+
+#: src/gtkgui.glade.h:133
+msgid "Jabber ID:"
+msgstr ""
+
+#: src/gtkgui.glade.h:134
+msgid "Join Group Chat"
+msgstr ""
+
+#: src/gtkgui.glade.h:135
+msgid "Join _Group Chat"
+msgstr ""
+
+#: src/gtkgui.glade.h:136
+msgid "Location"
+msgstr ""
+
+#: src/gtkgui.glade.h:137
+msgid "Log history"
+msgstr ""
+
+#: src/gtkgui.glade.h:138
+msgid "Log presences in _contact's log file"
+msgstr ""
+
+#: src/gtkgui.glade.h:139
+msgid "Log presences in an _external file"
+msgstr ""
+
+#: src/gtkgui.glade.h:140
+msgid "Manage Accounts"
+msgstr ""
+
+#: src/gtkgui.glade.h:141
+msgid "Manage Bookmarks"
+msgstr ""
+
+#: src/gtkgui.glade.h:142
+msgid "Manage Emoticons"
+msgstr ""
+
+#: src/gtkgui.glade.h:143
+msgid "Manage Proxy Profiles"
+msgstr ""
+
+#: src/gtkgui.glade.h:144
+msgid "Manage..."
+msgstr ""
+
+#: src/gtkgui.glade.h:145
+msgid "Middle:"
+msgstr ""
+
+#: src/gtkgui.glade.h:146
+msgid "Mo_derator"
+msgstr ""
+
+#: src/gtkgui.glade.h:147
+msgid "More"
+msgstr ""
+
+#: src/gtkgui.glade.h:148
+msgid "Name:"
+msgstr ""
+
+#: src/gtkgui.glade.h:150
+msgid "New version of Gajim available"
+msgstr ""
+
+#: src/gtkgui.glade.h:151
+msgid "Nickname:"
+msgstr ""
+
+#: src/gtkgui.glade.h:153
+msgid "None"
+msgstr ""
+
+#: src/gtkgui.glade.h:154
+msgid "Notify me about contacts that: "
+msgstr ""
+
+#: src/gtkgui.glade.h:155
+msgid "OS:"
+msgstr ""
+
+#: src/gtkgui.glade.h:156
+msgid "Of_fline"
+msgstr ""
+
+#: src/gtkgui.glade.h:157
+msgid "On every _message"
+msgstr ""
+
+#: src/gtkgui.glade.h:158
+msgid "Open Download Page"
+msgstr ""
+
+#: src/gtkgui.glade.h:159
+msgid "Open _with:"
+msgstr ""
+
+#: src/gtkgui.glade.h:160
+msgid "Open..."
+msgstr ""
+
+#: src/gtkgui.glade.h:161
+msgid "Or choose a preset message:"
+msgstr ""
+
+#: src/gtkgui.glade.h:162
+msgid "Outgoing message:"
+msgstr ""
+
+#: src/gtkgui.glade.h:163
+msgid "Pass_word:"
+msgstr ""
+
+#: src/gtkgui.glade.h:165
+msgid "Password:"
+msgstr ""
+
+#: src/gtkgui.glade.h:166
+msgid "Personal Details"
+msgstr ""
+
+#: src/gtkgui.glade.h:167
+msgid "Phone No.:"
+msgstr ""
+
+#: src/gtkgui.glade.h:168
+msgid "Play _sounds"
+msgstr ""
+
+#: src/gtkgui.glade.h:169
+msgid "Please fill in the data for your existing account"
+msgstr ""
+
+#: src/gtkgui.glade.h:170
+msgid "Please fill in the data for your new account"
+msgstr ""
+
+#: src/gtkgui.glade.h:171
+msgid "Port: "
+msgstr ""
+
+#: src/gtkgui.glade.h:172
+msgid "Position:"
+msgstr ""
+
+#: src/gtkgui.glade.h:173
+msgid "Postal Code:"
+msgstr ""
+
+#: src/gtkgui.glade.h:174
+msgid "Preferences"
+msgstr ""
+
+#: src/gtkgui.glade.h:175
+msgid "Prefix:"
+msgstr ""
+
+#: src/gtkgui.glade.h:176
+msgid "Print time:"
+msgstr ""
+
+#: src/gtkgui.glade.h:177
 msgid "Priori_ty:"
 msgstr ""
 
-#: src/msg.c:29
+#: src/gtkgui.glade.h:178
 msgid ""
 "Priority is used in Jabber to determine who gets the events from the jabber "
 "server when two or more clients are connected using the same account; The "
 "client with the highest priority gets the events"
 msgstr ""
 
-#: src/msg.c:30
+#: src/gtkgui.glade.h:179
+msgid "Profile, Avatar"
+msgstr ""
+
+#: src/gtkgui.glade.h:180
+msgid "Protocol:"
+msgstr ""
+
+#: src/gtkgui.glade.h:181
+msgid "Proxy:"
+msgstr ""
+
+#: src/gtkgui.glade.h:183
+msgid "Re_send Authorization to"
+msgstr ""
+
+#: src/gtkgui.glade.h:184
+msgid "Recently:"
+msgstr ""
+
+#: src/gtkgui.glade.h:185
+msgid "Register to"
+msgstr ""
+
+#: src/gtkgui.glade.h:186
+msgid "Remove account from Gajim and from server"
+msgstr ""
+
+#: src/gtkgui.glade.h:187
+msgid "Remove account only from Gajim"
+msgstr ""
+
+#: src/gtkgui.glade.h:188
+msgid "Rere_quest Authorization from"
+msgstr ""
+
+#: src/gtkgui.glade.h:189
+msgid "Reset to Default Colors"
+msgstr ""
+
+#: src/gtkgui.glade.h:190
+msgid "Resour_ce: "
+msgstr ""
+
+#: src/gtkgui.glade.h:191
 msgid ""
 "Resource is sent to the Jabber server in order to 'seperate' the same JID in "
 "two or more parts depending on the number of the clients connected in the "
@@ -1069,1190 +1760,455 @@ msgid ""
 "has the highest priority will get the events. (see below)"
 msgstr ""
 
-#: src/msg.c:32 src/msg.c:289 src/msg.c:305
-msgid "If checked, Gajim will remember the password for this account"
+#: src/gtkgui.glade.h:192
+msgid "Resource:"
 msgstr ""
 
-#: src/msg.c:33 src/msg.c:290 src/msg.c:306
-msgid "Save pass_word"
+#: src/gtkgui.glade.h:193
+msgid "Role:"
 msgstr ""
 
-#: src/msg.c:34
-msgid "Click to change account's password"
+#: src/gtkgui.glade.h:194
+msgid "Room Configuration"
 msgstr ""
 
-#: src/msg.c:35 src/msg.c:266
-msgid "Chan_ge"
+#: src/gtkgui.glade.h:195
+msgid "Room:"
 msgstr ""
 
-#: src/msg.c:36
-msgid "Check if you want to register for a new jabber account"
-msgstr ""
-
-#: src/msg.c:37
-msgid "_Register new account"
-msgstr ""
-
-#: src/msg.c:38
-msgid "Account"
-msgstr ""
-
-#: src/msg.c:39
-msgid ""
-"If checked, Gajim, when launched, will automatically connect to jabber using "
-"this account"
-msgstr ""
-
-#: src/msg.c:40
-msgid "C_onnect at startup"
-msgstr ""
-
-#: src/msg.c:41
-msgid "Save conversation _logs for all contacts"
-msgstr ""
-
-#: src/msg.c:42
-msgid "Synch_ronize account status with global status"
-msgstr ""
-
-#: src/msg.c:44
-msgid "Choose _Key..."
-msgstr ""
-
-#: src/msg.c:45
-msgid ""
-"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
-"permission only for only you and of course the administrator"
-msgstr ""
-
-#: src/msg.c:46
+#: src/gtkgui.glade.h:196
 msgid "Save _passphrase (insecure)"
 msgstr ""
 
-#: src/msg.c:47
-msgid "<b>OpenPGP</b>"
-msgstr ""
-
-#: src/msg.c:48 src/msg.c:105 src/msg.c:196
-msgid "General"
-msgstr ""
-
-#: src/msg.c:49
-msgid "Proxy:"
-msgstr ""
-
-#: src/msg.c:50
-msgid "None"
-msgstr ""
-
-#: src/msg.c:51 src/msg.c:98 src/msg.c:103
-msgid "Manage..."
-msgstr ""
-
-#: src/msg.c:52
-msgid ""
-"Check this so Gajim will connect in port 5223 where legacy servers are "
-"expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
-"default if broadcasted by the server, and with this option enabled TLS will "
-"be disabled"
-msgstr ""
-
-#: src/msg.c:53
-msgid "Use _SSL (legacy)"
-msgstr ""
-
-#: src/msg.c:54
-msgid ""
-"If checked, Gajim will send keep-alive packets so it prevents connection "
-"timeout which results in disconnection"
-msgstr ""
-
-#: src/msg.c:55
-msgid "Send keep-alive packets"
-msgstr ""
-
-#: src/msg.c:56
-msgid "Use custom hostname/port"
-msgstr ""
-
-#: src/msg.c:57
-msgid "Hostname: "
-msgstr ""
-
-#: src/msg.c:58
-msgid "Port: "
-msgstr ""
-
-#: src/msg.c:59
-msgid "5222"
-msgstr ""
-
-#: src/msg.c:60 src/msg.c:168
-msgid "<b>Miscellaneous</b>"
-msgstr ""
-
-#: src/msg.c:61
-msgid "Connection"
-msgstr ""
-
-#: src/msg.c:62
-msgid "Information about you are stored on the server as vCard"
-msgstr ""
-
-#: src/msg.c:63
-msgid "Edit Personal Information..."
-msgstr ""
-
-#: src/msg.c:64
-msgid "Personal Details"
-msgstr ""
-
-#: src/msg.c:65
-msgid "Add New Contact"
-msgstr ""
-
-#: src/msg.c:66
-msgid "User ID:"
-msgstr ""
-
-#: src/msg.c:67
-msgid "Protocol:"
-msgstr ""
-
-#: src/msg.c:68 src/msg.c:173
-msgid "Jabber ID:"
-msgstr ""
-
-#: src/msg.c:69 src/msg.c:175 src/msg.c:187 src/msg.c:236 src/msg.c:322
-msgid "Nickname:"
-msgstr ""
-
-#: src/msg.c:70
-msgid "Automatically authorize contact"
-msgstr ""
-
-#: src/msg.c:71 src/msg.c:337
-msgid "Group:"
-msgstr ""
-
-#: src/msg.c:72
-msgid "I would like to add you to my contact list."
-msgstr ""
-
-#: src/msg.c:73
-msgid "_Subscribe"
-msgstr ""
-
-#: src/msg.c:74
-msgid "Subscription Request"
-msgstr ""
-
-#: src/msg.c:75
-msgid "Deny authorization from contact so he cannot know when you're connected"
-msgstr ""
-
-#: src/msg.c:76
-msgid "_Deny"
-msgstr ""
-
-#: src/msg.c:77
-msgid "Contact _Info"
-msgstr ""
-
-#: src/msg.c:78
-msgid "Authorize contact so he can know when you're connected"
-msgstr ""
-
-#: src/msg.c:79
-msgid "_Authorize"
-msgstr ""
-
-#: src/msg.c:80
-msgid "_Address:"
-msgstr ""
-
-#: src/msg.c:81
-msgid "Go"
-msgstr ""
-
-#: src/msg.c:82
-msgid "_Refresh"
-msgstr ""
-
-#: src/msg.c:84 src/msg.c:238
-msgid "_Join"
-msgstr ""
-
-#: src/msg.c:85
-msgid "Register to"
-msgstr ""
-
-#: src/msg.c:86
-msgid "_Cancel"
-msgstr ""
-
-#: src/msg.c:87
-msgid "_OK"
-msgstr ""
-
-#: src/msg.c:88
-msgid "Preferences"
-msgstr ""
-
-#: src/msg.c:89
-msgid "If checked, Gajim will also have a trayicon"
-msgstr ""
-
-#: src/msg.c:90
-msgid "_Icon in systray (aka. notification area)"
-msgstr ""
-
-#: src/msg.c:91
-msgid ""
-"If checked, Gajim will remember the roster and chat window positions in the "
-"screen and the sizes of them next time you run it"
-msgstr ""
-
-#: src/msg.c:92
+#: src/gtkgui.glade.h:197
 msgid "Save _position and size for roster and chat windows"
 msgstr ""
 
-#: src/msg.c:93
-msgid ""
-"If you have 2 or more accounts and it is checked, Gajim will list all "
-"contacts as if you had one account"
+#: src/gtkgui.glade.h:198
+msgid "Save conversation _logs for all contacts"
 msgstr ""
 
-#: src/msg.c:94
-msgid "_Merge accounts"
+#: src/gtkgui.glade.h:199
+msgid "Save pass_word"
 msgstr ""
 
-#: src/msg.c:95
-msgid "Sort contacts by status"
+#: src/gtkgui.glade.h:200
+msgid "Send Single _Message"
 msgstr ""
 
-#: src/msg.c:96
-msgid ""
-"If checked, Gajim will replace ascii smilies like ':)' with equivalent "
-"graphical emoticons"
+#: src/gtkgui.glade.h:201
+msgid "Send keep-alive packets"
 msgstr ""
 
-#: src/msg.c:97
-msgid "Use _emoticons"
+#: src/gtkgui.glade.h:202
+msgid "Server:"
 msgstr ""
 
-#: src/msg.c:99
-msgid "Default _status iconset:"
+#: src/gtkgui.glade.h:203
+msgid "Servers Features"
 msgstr ""
 
-#: src/msg.c:100
-msgid ""
-"If checked, Gajim will use protocol-specific status icons. (eg. A contact "
-"from MSN will have the equivalent msn icon for status online, away, busy, "
-"etc...)"
+#: src/gtkgui.glade.h:204
+msgid "Set Avatar"
 msgstr ""
 
-#: src/msg.c:101
-msgid "Use _transports iconsets"
+#: src/gtkgui.glade.h:205
+msgid "Set Image..."
 msgstr ""
 
-#: src/msg.c:102
-msgid "Gajim theme:"
+#: src/gtkgui.glade.h:206
+msgid "Show _Offline Contacts"
 msgstr ""
 
-#: src/msg.c:104
-msgid "<b>Interface Customization</b>"
-msgstr ""
-
-#: src/msg.c:106
-msgid "Use a single chat window with _tabs"
-msgstr ""
-
-#: src/msg.c:107
-msgid "_Highlight misspelled words"
-msgstr ""
-
-#: src/msg.c:108
-msgid "Print time:"
-msgstr ""
-
-#: src/msg.c:109
-msgid "On every _message"
-msgstr ""
-
-#: src/msg.c:110
-msgid "Also known as iChat style"
-msgstr ""
-
-#: src/msg.c:111
-msgid "Every 5 _minutes"
-msgstr ""
-
-#: src/msg.c:112
-msgid "_Never"
-msgstr ""
-
-#: src/msg.c:113
-msgid "After time:"
-msgstr ""
-
-#: src/msg.c:114
-msgid "After nickname:"
-msgstr ""
-
-#: src/msg.c:115
-msgid "Before nickname:"
-msgstr ""
-
-#: src/msg.c:116
-msgid "Before time:"
-msgstr ""
-
-#: src/msg.c:117
-msgid "Incoming message:"
-msgstr ""
-
-#: src/msg.c:118
-msgid "Outgoing message:"
-msgstr ""
-
-#: src/msg.c:119
-msgid "Status message:"
-msgstr ""
-
-#: src/msg.c:120
-msgid "Reset to Default Colors"
-msgstr ""
-
-#: src/msg.c:121
-msgid "<b>Format of a chat line</b>"
-msgstr ""
-
-#: src/msg.c:122 src/msg.c:242
-msgid "Chat"
-msgstr ""
-
-#: src/msg.c:123
-msgid ""
-"Gajim will notify you for new message via a popup in the bottom right of the "
-"screen"
-msgstr ""
-
-#: src/msg.c:124
-msgid "_Notify me about it"
-msgstr ""
-
-#: src/msg.c:125
-msgid ""
-"Gajim will automatically show the new received message in a new chat window "
-"or tab in an existing chat window"
-msgstr ""
-
-#: src/msg.c:126
-msgid "_Pop it up"
-msgstr ""
-
-#: src/msg.c:127
-msgid ""
-"Gajim will only change the icon of the contact that sent the new message"
-msgstr ""
-
-#: src/msg.c:128
+#: src/gtkgui.glade.h:207
 msgid "Show only in _roster"
 msgstr ""
 
-#: src/msg.c:129
+#: src/gtkgui.glade.h:208
+msgid "Show roster window on startup"
+msgstr ""
+
+#: src/gtkgui.glade.h:209
+msgid "Sign _in"
+msgstr ""
+
+#: src/gtkgui.glade.h:210
+msgid "Sign _out"
+msgstr ""
+
+#: src/gtkgui.glade.h:211
+msgid "Sort contacts by status"
+msgstr ""
+
+#: src/gtkgui.glade.h:212
+msgid "Start _Chat"
+msgstr ""
+
+#: src/gtkgui.glade.h:213
+msgid "State:"
+msgstr ""
+
+#: src/gtkgui.glade.h:215
+msgid "Status message:"
+msgstr ""
+
+#: src/gtkgui.glade.h:216
+msgid "Status:"
+msgstr ""
+
+#: src/gtkgui.glade.h:217
+msgid "Street:"
+msgstr ""
+
+#: src/gtkgui.glade.h:218
+msgid "Subject:"
+msgstr ""
+
+#: src/gtkgui.glade.h:219
+msgid "Subscription Request"
+msgstr ""
+
+#: src/gtkgui.glade.h:220
+msgid "Subscription:"
+msgstr ""
+
+#: src/gtkgui.glade.h:221
+msgid "Suffix:"
+msgstr ""
+
+#: src/gtkgui.glade.h:222
+msgid "Synch_ronize account status with global status"
+msgstr ""
+
+#: src/gtkgui.glade.h:223
+msgid "Text color"
+msgstr ""
+
+#: src/gtkgui.glade.h:224
+msgid "Text font"
+msgstr ""
+
+#: src/gtkgui.glade.h:225
+msgid "The bar line which is on top of chat windows"
+msgstr ""
+
+#: src/gtkgui.glade.h:226
+msgid "Title:"
+msgstr ""
+
+#: src/gtkgui.glade.h:227
+msgid "To:"
+msgstr ""
+
+#: src/gtkgui.glade.h:228
+msgid "Toggle _GPG Encryption"
+msgstr ""
+
+#: src/gtkgui.glade.h:229
+msgid "Type:"
+msgstr ""
+
+#: src/gtkgui.glade.h:230
+msgid "Underline"
+msgstr ""
+
+#: src/gtkgui.glade.h:231
+msgid "Use _SSL (legacy)"
+msgstr ""
+
+#: src/gtkgui.glade.h:232
+msgid "Use _emoticons"
+msgstr ""
+
+#: src/gtkgui.glade.h:233
+msgid "Use _transports iconsets"
+msgstr ""
+
+#: src/gtkgui.glade.h:234
+msgid "Use a single chat window with _tabs"
+msgstr ""
+
+#: src/gtkgui.glade.h:235
+msgid "Use authentication"
+msgstr ""
+
+#: src/gtkgui.glade.h:236
+msgid "Use custom hostname/port"
+msgstr ""
+
+#: src/gtkgui.glade.h:237
+msgid "User ID:"
+msgstr ""
+
+#: src/gtkgui.glade.h:238
 msgid ""
 "When a new message is received which is not from a contact already in a chat "
 "window, the three following actions may happen in order for you to be "
 "informed about it"
 msgstr ""
 
-#: src/msg.c:130
+#: src/gtkgui.glade.h:239
 msgid "When new message is received"
 msgstr ""
 
-#: src/msg.c:131
-msgid "Notify me about contacts that: "
-msgstr ""
-
-#: src/msg.c:132
-msgid ""
-"Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just signed in"
-msgstr ""
-
-#: src/msg.c:133
-msgid "Sign _in"
-msgstr ""
-
-#: src/msg.c:134
-msgid ""
-"Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just signed out"
-msgstr ""
-
-#: src/msg.c:135
-msgid "Sign _out"
-msgstr ""
-
-#: src/msg.c:136
-msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
-msgstr ""
-
-#: src/msg.c:137
-msgid "<b>Notifications</b>"
-msgstr ""
-
-#: src/msg.c:138
-msgid ""
-"Check this option, only if someone you don't have in the roster spams/annoys "
-"you. Use with caution, cause it blocks all messages from any contact that is "
-"not in the roster."
-msgstr ""
-
-#: src/msg.c:139
-msgid "_Ignore events from contacts not in the roster"
-msgstr ""
-
-#: src/msg.c:140
-msgid "Play _sounds"
-msgstr ""
-
-#: src/msg.c:141
-msgid "_Player:"
-msgstr ""
-
-#: src/msg.c:142
-msgid "..."
-msgstr ""
-
-#: src/msg.c:143
-msgid "<b>Sounds</b>"
-msgstr ""
-
-#: src/msg.c:144
-msgid "Events"
-msgstr ""
-
-#: src/msg.c:145
-msgid "Auto _away after:"
-msgstr ""
-
-#: src/msg.c:146
-msgid "Auto _not available after:"
-msgstr ""
-
-#: src/msg.c:147 src/msg.c:148
-msgid "minutes"
-msgstr ""
-
-#: src/msg.c:149
-msgid "Ask status message when going: "
-msgstr ""
-
-#: src/msg.c:150
-msgid "_Online"
-msgstr ""
-
-#: src/msg.c:151
-msgid "Of_fline"
-msgstr ""
-
-#: src/msg.c:152
-msgid "<b>Preset Status Messages</b>"
-msgstr ""
-
-#: src/msg.c:154
-msgid "Open _with:"
-msgstr ""
-
-#: src/msg.c:155
-msgid "GNOME default applications"
-msgstr ""
-
-#: src/msg.c:156
-msgid "KDE default applications"
-msgstr ""
-
-#: src/msg.c:157
-msgid "Custom"
-msgstr ""
-
-#: src/msg.c:158
-msgid "_Browser:"
-msgstr ""
-
-#: src/msg.c:159
-msgid "_Mail client:"
-msgstr ""
-
-#: src/msg.c:160
-msgid "<b>Custom Applications</b>"
-msgstr ""
-
-#: src/msg.c:161
-msgid "<b>Links</b>"
-msgstr ""
-
-#: src/msg.c:162
-msgid "Log presences in _contact's log file"
-msgstr ""
-
-#: src/msg.c:163
-msgid "Log presences in an _external file"
-msgstr ""
-
-#: src/msg.c:164
-msgid "<b>Log</b>"
-msgstr ""
-
-#: src/msg.c:165
-msgid "Show roster window on startup"
-msgstr ""
-
-#: src/msg.c:166
-msgid "Allow _OS information to be sent"
-msgstr ""
-
-#: src/msg.c:167
-msgid "Check for new _version at startup"
-msgstr ""
-
-#: src/msg.c:169
-msgid "Open..."
-msgstr ""
-
-#: src/msg.c:170
-msgid "<b>Advanced Configuration Editor</b>"
-msgstr ""
-
-#: src/msg.c:171
-msgid "Advanced"
-msgstr ""
-
-#: src/msg.c:172
-msgid "Contact Information"
-msgstr ""
-
-#: src/msg.c:174
-msgid "Status:"
-msgstr ""
-
-#: src/msg.c:176
-msgid "Resource:"
-msgstr ""
-
-#: src/msg.c:177
-msgid "Subscription:"
-msgstr ""
-
-#: src/msg.c:178
-msgid "Ask:"
-msgstr ""
-
-#: src/msg.c:179
-msgid "Client:"
-msgstr ""
-
-#: src/msg.c:180
-msgid "Log history"
-msgstr ""
-
-#: src/msg.c:181
-msgid "OS:"
-msgstr ""
-
-#: src/msg.c:182
-msgid "Jabber"
-msgstr ""
-
-#: src/msg.c:183 src/msg.c:325
-msgid "Name:"
-msgstr ""
-
-#: src/msg.c:184 src/msg.c:215
-msgid "Phone No.:"
-msgstr ""
-
-#: src/msg.c:185
-msgid "Homepage:"
-msgstr ""
-
-#: src/msg.c:186
-msgid "E-Mail:"
-msgstr ""
-
-#: src/msg.c:188
-msgid "Family:"
-msgstr ""
-
-#: src/msg.c:189
-msgid "Given:"
-msgstr ""
-
-#: src/msg.c:190
-msgid "Middle:"
-msgstr ""
-
-#: src/msg.c:191
-msgid "Prefix:"
-msgstr ""
-
-#: src/msg.c:192
-msgid "Suffix:"
-msgstr ""
-
-#: src/msg.c:193
-msgid "More"
-msgstr ""
-
-#: src/msg.c:194
-msgid "Format: YYYY-MM-DD"
-msgstr ""
-
-#: src/msg.c:195
-msgid "Birthday:"
-msgstr ""
-
-#: src/msg.c:197 src/msg.c:208
-msgid "Street:"
-msgstr ""
-
-#: src/msg.c:198 src/msg.c:209
-msgid "Extra Address:"
-msgstr ""
-
-#: src/msg.c:199 src/msg.c:210
-msgid "City:"
-msgstr ""
-
-#: src/msg.c:200 src/msg.c:211
-msgid "State:"
-msgstr ""
-
-#: src/msg.c:201 src/msg.c:212
-msgid "Postal Code:"
-msgstr ""
-
-#: src/msg.c:202 src/msg.c:213
-msgid "Country:"
-msgstr ""
-
-#: src/msg.c:203
-msgid "Location"
-msgstr ""
-
-#: src/msg.c:204
-msgid "Company:"
-msgstr ""
-
-#: src/msg.c:205
-msgid "Department:"
-msgstr ""
-
-#: src/msg.c:206
-msgid "Position:"
-msgstr ""
-
-#: src/msg.c:207
-msgid "Role:"
-msgstr ""
-
-#: src/msg.c:214
-msgid "Address"
-msgstr ""
-
-#: src/msg.c:216
-msgid "E-Mail"
-msgstr ""
-
-#: src/msg.c:217
+#: src/gtkgui.glade.h:240
 msgid "Work"
 msgstr ""
 
-#: src/msg.c:218
-msgid "Set Avatar"
-msgstr ""
-
-#: src/msg.c:219
-msgid "About"
-msgstr ""
-
-#: src/msg.c:220
-msgid "Conversation History"
-msgstr ""
-
-#: src/msg.c:221
-msgid "_Earliest"
-msgstr ""
-
-#: src/msg.c:222
-msgid "_Previous"
-msgstr ""
-
-#: src/msg.c:223
-msgid "_Latest"
-msgstr ""
-
-#: src/msg.c:224
-msgid "Group Chat"
-msgstr ""
-
-#: src/msg.c:225 src/msg.c:246
-msgid "Bold"
-msgstr ""
-
-#: src/msg.c:226 src/msg.c:247
-msgid "Italic"
-msgstr ""
-
-#: src/msg.c:227 src/msg.c:248
-msgid "Underline"
-msgstr ""
-
-#: src/msg.c:229
-msgid "Click to see past conversation in this room"
-msgstr ""
-
-#: src/msg.c:230 src/msg.c:251 src/msg.c:344 src/msg.c:350 src/msg.c:363
-msgid "_History"
-msgstr ""
-
-#: src/msg.c:231 src/msg.c:252 src/msg.c:367
-msgid "_Send"
-msgstr ""
-
-#: src/msg.c:232
-msgid "Join Group Chat"
-msgstr ""
-
-#: src/msg.c:233 src/msg.c:319
-msgid "Password:"
-msgstr ""
-
-#: src/msg.c:234 src/msg.c:320
-msgid "Server:"
-msgstr ""
-
-#: src/msg.c:235 src/msg.c:321
-msgid "Room:"
-msgstr ""
-
-#: src/msg.c:237
-msgid "Recently:"
-msgstr ""
-
-#: src/msg.c:240
-msgid "Enter your message:"
-msgstr ""
-
-#: src/msg.c:241
-msgid "Or choose a preset message:"
-msgstr ""
-
-#: src/msg.c:243
-msgid ""
-"<span weight=\"heavy\" size=\"large\">Contact: name</span>\n"
-"JID: whatever@jabber.org"
-msgstr ""
-
-#: src/msg.c:245
-msgid "Click to toggle OpenPGP encryption"
-msgstr ""
-
-#: src/msg.c:249
-msgid "Click to get contact's extended information"
-msgstr ""
-
-#: src/msg.c:250
-msgid "Click to see past conversations with this contact"
-msgstr ""
-
-#: src/msg.c:253
-msgid "Edit Groups"
-msgstr ""
-
-#: src/msg.c:254
-msgid "Change Password"
-msgstr ""
-
-#: src/msg.c:255
-msgid "Enter new password:"
-msgstr ""
-
-#: src/msg.c:256
-msgid "Enter it again for confirmation:"
-msgstr ""
-
-#: src/msg.c:257
-msgid "_Status"
-msgstr ""
-
-#: src/msg.c:258
-msgid "Chat with"
-msgstr ""
-
-#: src/msg.c:260
-msgid "Manage Emoticons"
-msgstr ""
-
-#: src/msg.c:261
-msgid "Set Image..."
-msgstr ""
-
-#: src/msg.c:262
-msgid "New version of Gajim available"
-msgstr ""
-
-#: src/msg.c:263
-msgid "Open Download Page"
-msgstr ""
-
-#: src/msg.c:264
-msgid "<b>Changes in latest version</b>"
-msgstr ""
-
-#: src/msg.c:265
-msgid "Room Configuration"
-msgstr ""
-
-#: src/msg.c:267
-msgid "Remove account only from Gajim"
-msgstr ""
-
-#: src/msg.c:268
-msgid "Remove account from Gajim and from server"
-msgstr ""
-
-#: src/msg.c:269
-msgid "<b>What do you want to do?</b>"
-msgstr ""
-
-#: src/msg.c:271
-msgid "Advanced Configuration Editor"
-msgstr ""
-
-#: src/msg.c:272
-msgid "Filter:"
-msgstr ""
-
-#: src/msg.c:273
-msgid "_Copy Link Location"
-msgstr ""
-
-#: src/msg.c:274
-msgid "_Open Link in Browser"
-msgstr ""
-
-#: src/msg.c:275
-msgid "_Copy Email Address"
-msgstr ""
-
-#: src/msg.c:276
-msgid "_Open Email Composer"
-msgstr ""
-
-#: src/msg.c:277
-msgid "_Start Chat"
-msgstr ""
-
-#: src/msg.c:278
-msgid "Join _Group Chat"
-msgstr ""
-
-#: src/msg.c:279 src/msg.c:361 src/msg.c:377
-msgid "_Add to Roster"
-msgstr ""
-
-#: src/msg.c:280
-msgid "Gajim: First Time Wizard"
-msgstr ""
-
-#: src/msg.c:281
+#: src/gtkgui.glade.h:241
 msgid ""
 "You need to have an account in order to connect to\n"
 "the Jabber network."
 msgstr ""
 
-#: src/msg.c:283
-msgid "I already have an account I want to use"
-msgstr ""
-
-#: src/msg.c:284
-msgid "I want to _register for a new account"
-msgstr ""
-
-#: src/msg.c:285
-msgid "<b>Please choose on of the options below:</b>"
-msgstr ""
-
-#: src/msg.c:286
-msgid "Please fill in the data for your existing account"
-msgstr ""
-
-#: src/msg.c:287 src/msg.c:301
-msgid "_Server:"
-msgstr ""
-
-#: src/msg.c:291 src/msg.c:307
-msgid "_Nickname:"
-msgstr ""
-
-#: src/msg.c:292 src/msg.c:310 src/msg.c:330
-msgid "_Host:"
-msgstr ""
-
-#: src/msg.c:293 src/msg.c:311 src/msg.c:329
-msgid "_Port:"
-msgstr ""
-
-#: src/msg.c:294 src/msg.c:312 src/msg.c:332
-msgid "_Username:"
-msgstr ""
-
-#: src/msg.c:295 src/msg.c:313 src/msg.c:331
-msgid "Pass_word:"
-msgstr ""
-
-#: src/msg.c:296 src/msg.c:314
-msgid "3128"
-msgstr ""
-
-#: src/msg.c:297 src/msg.c:315
-msgid "_Use proxy"
-msgstr ""
-
-#: src/msg.c:298 src/msg.c:309
-msgid "<span background=\"lightyellow\"></span>"
-msgstr ""
-
-#: src/msg.c:299 src/msg.c:308
+#: src/gtkgui.glade.h:243
 msgid "Your JID:"
 msgstr ""
 
-#: src/msg.c:300
-msgid "Please fill in the data for your new account"
+#: src/gtkgui.glade.h:244
+msgid "_About"
 msgstr ""
 
-#: src/msg.c:302
-msgid "Click to see features like on jabber servers"
+#: src/gtkgui.glade.h:245
+msgid "_Actions"
 msgstr ""
 
-#: src/msg.c:303
-msgid "Servers Features"
+#: src/gtkgui.glade.h:246
+msgid "_Add to Roster"
 msgstr ""
 
-#: src/msg.c:316
-msgid "Manage Bookmarks"
+#: src/gtkgui.glade.h:247
+msgid "_Address:"
 msgstr ""
 
-#: src/msg.c:317
-msgid "If checked, Gajim will join this groupchat on startup"
-msgstr ""
-
-#: src/msg.c:318
-msgid "Auto join"
-msgstr ""
-
-#: src/msg.c:323
-msgid "Title:"
-msgstr ""
-
-#: src/msg.c:324
-msgid "Manage Proxy Profiles"
-msgstr ""
-
-#: src/msg.c:326
-msgid "Type:"
-msgstr ""
-
-#: src/msg.c:327
-msgid "HTTP Connect"
-msgstr ""
-
-#: src/msg.c:328
-msgid "<b>Properties</b>"
-msgstr ""
-
-#: src/msg.c:333
-msgid "Use authentication"
-msgstr ""
-
-#: src/msg.c:334
-msgid "<b>Settings</b>"
-msgstr ""
-
-#: src/msg.c:335
-msgid "Gajim Themes Customization"
-msgstr ""
-
-#: src/msg.c:336
-msgid "Account:"
-msgstr ""
-
-#: src/msg.c:338
-msgid "Contact:"
-msgstr ""
-
-#: src/msg.c:339
-msgid "Text color"
-msgstr ""
-
-#: src/msg.c:340
-msgid "Text font"
-msgstr ""
-
-#: src/msg.c:341
-msgid "Background color"
-msgstr ""
-
-#: src/msg.c:342
-msgid "The bar line which is on top of chat windows"
-msgstr ""
-
-#: src/msg.c:343
-msgid "Banner:"
-msgstr ""
-
-#: src/msg.c:345
-msgid "Configure _Room"
-msgstr ""
-
-#: src/msg.c:346
-msgid "Change _Subject"
-msgstr ""
-
-#: src/msg.c:347
-msgid "Change _Nickname"
-msgstr ""
-
-#: src/msg.c:348
-msgid "_Bookmark This Room"
-msgstr ""
-
-#: src/msg.c:349 src/msg.c:352
-msgid "_Compact View"
-msgstr ""
-
-#: src/msg.c:351
-msgid "Toggle _GPG Encryption"
-msgstr ""
-
-#: src/msg.c:353
-msgid "Start _Chat"
-msgstr ""
-
-#: src/msg.c:354
-msgid "Send Single _Message"
-msgstr ""
-
-#: src/msg.c:355
-msgid "_Rename"
-msgstr ""
-
-#: src/msg.c:356
-msgid "Edit _Groups"
-msgstr ""
-
-#: src/msg.c:357
-msgid "Assign Open_PGP Key"
-msgstr ""
-
-#: src/msg.c:358
-msgid "_Subscription"
-msgstr ""
-
-#: src/msg.c:359
-msgid "Re_send Authorization to"
-msgstr ""
-
-#: src/msg.c:360
-msgid "Rere_quest Authorization from"
-msgstr ""
-
-#: src/msg.c:364
-msgid "To:"
-msgstr ""
-
-#: src/msg.c:365
-msgid "Subject:"
-msgstr ""
-
-#: src/msg.c:366
-msgid "0"
-msgstr ""
-
-#: src/msg.c:368
-msgid "_Occupant Actions"
-msgstr ""
-
-#: src/msg.c:369
-msgid "_Voice"
-msgstr ""
-
-#: src/msg.c:370
-msgid "Mo_derator"
-msgstr ""
-
-#: src/msg.c:371
-msgid "_Member"
-msgstr ""
-
-#: src/msg.c:372
+#: src/gtkgui.glade.h:248
 msgid "_Admin"
 msgstr ""
 
-#: src/msg.c:373
-msgid "_Owner"
+#: src/gtkgui.glade.h:249
+msgid "_Authorize"
 msgstr ""
 
-#: src/msg.c:374
-msgid "_Kick"
-msgstr ""
-
-#: src/msg.c:375
+#: src/gtkgui.glade.h:250
 msgid "_Ban"
 msgstr ""
 
-#: src/msg.c:376
+#: src/gtkgui.glade.h:251
+msgid "_Bookmark This Room"
+msgstr ""
+
+#: src/gtkgui.glade.h:252
+msgid "_Browser:"
+msgstr ""
+
+#: src/gtkgui.glade.h:253
+msgid "_Cancel"
+msgstr ""
+
+#: src/gtkgui.glade.h:254
+msgid "_Compact View"
+msgstr ""
+
+#: src/gtkgui.glade.h:255
+msgid "_Copy Email Address"
+msgstr ""
+
+#: src/gtkgui.glade.h:256
+msgid "_Copy Link Location"
+msgstr ""
+
+#: src/gtkgui.glade.h:257
+msgid "_Deny"
+msgstr ""
+
+#: src/gtkgui.glade.h:258
+msgid "_Earliest"
+msgstr ""
+
+#: src/gtkgui.glade.h:260
+msgid "_Highlight misspelled words"
+msgstr ""
+
+#: src/gtkgui.glade.h:261
+msgid "_History"
+msgstr ""
+
+#: src/gtkgui.glade.h:262
+msgid "_Host:"
+msgstr ""
+
+#: src/gtkgui.glade.h:263
+msgid "_Icon in systray (aka. notification area)"
+msgstr ""
+
+#: src/gtkgui.glade.h:264
+msgid "_Ignore events from contacts not in the roster"
+msgstr ""
+
+#: src/gtkgui.glade.h:265
 msgid "_Information"
 msgstr ""
 
-#: src/msg.c:378
+#: src/gtkgui.glade.h:266
+msgid "_Jabber ID:"
+msgstr ""
+
+#: src/gtkgui.glade.h:267
+msgid "_Join"
+msgstr ""
+
+#: src/gtkgui.glade.h:268
+msgid "_Join Group Chat"
+msgstr ""
+
+#: src/gtkgui.glade.h:269
+msgid "_Kick"
+msgstr ""
+
+#: src/gtkgui.glade.h:270
+msgid "_Latest"
+msgstr ""
+
+#: src/gtkgui.glade.h:271
+msgid "_Mail client:"
+msgstr ""
+
+#: src/gtkgui.glade.h:272
+msgid "_Member"
+msgstr ""
+
+#: src/gtkgui.glade.h:273
+msgid "_Merge accounts"
+msgstr ""
+
+#: src/gtkgui.glade.h:274
+msgid "_Modify"
+msgstr ""
+
+#: src/gtkgui.glade.h:275
+msgid "_Name: "
+msgstr ""
+
+#: src/gtkgui.glade.h:276
+msgid "_Never"
+msgstr ""
+
+#: src/gtkgui.glade.h:278
+msgid "_Nickname:"
+msgstr ""
+
+#: src/gtkgui.glade.h:279
+msgid "_Notify me about it"
+msgstr ""
+
+#: src/gtkgui.glade.h:280
+msgid "_OK"
+msgstr ""
+
+#: src/gtkgui.glade.h:281
+msgid "_Occupant Actions"
+msgstr ""
+
+#: src/gtkgui.glade.h:282
+msgid "_Online"
+msgstr ""
+
+#: src/gtkgui.glade.h:283
+msgid "_Open Email Composer"
+msgstr ""
+
+#: src/gtkgui.glade.h:284
+msgid "_Open Link in Browser"
+msgstr ""
+
+#: src/gtkgui.glade.h:285
+msgid "_Owner"
+msgstr ""
+
+#: src/gtkgui.glade.h:286
+msgid "_Password:"
+msgstr ""
+
+#: src/gtkgui.glade.h:287
+msgid "_Player:"
+msgstr ""
+
+#: src/gtkgui.glade.h:288
+msgid "_Pop it up"
+msgstr ""
+
+#: src/gtkgui.glade.h:289
+msgid "_Port:"
+msgstr ""
+
+#: src/gtkgui.glade.h:290
+msgid "_Preferences"
+msgstr ""
+
+#: src/gtkgui.glade.h:291
+msgid "_Previous"
+msgstr ""
+
+#: src/gtkgui.glade.h:292
+msgid "_Quit"
+msgstr ""
+
+#: src/gtkgui.glade.h:293
+msgid "_Refresh"
+msgstr ""
+
+#: src/gtkgui.glade.h:294
+msgid "_Register new account"
+msgstr ""
+
+#: src/gtkgui.glade.h:295
+msgid "_Remove"
+msgstr ""
+
+#: src/gtkgui.glade.h:297
+msgid "_Rename"
+msgstr ""
+
+#: src/gtkgui.glade.h:298
+msgid "_Send"
+msgstr ""
+
+#: src/gtkgui.glade.h:299
 msgid "_Send Private Message"
 msgstr ""
 
-#: src/msg.c:379
-msgid "Manage Accounts"
+#: src/gtkgui.glade.h:300
+msgid "_Server:"
 msgstr ""
 
-#: src/msg.c:380
-msgid ""
-"TABS BECOME INVISIBLE VIA CODE\n"
-"AND HERE WE DRAW ROWS FROM THE LEFT\n"
-"ONE TAB ONE ROW. SO\n"
-"MAIN (can't be clicked)\n"
-" -- Account\n"
-" -- General\n"
-" -- Connection\n"
-" -- Personal\n"
-"\n"
-"Maybe I'll refactor later"
+#: src/gtkgui.glade.h:302
+msgid "_Start Chat"
 msgstr ""
 
-#: src/msg.c:390
-msgid "Hold_Account"
+#: src/gtkgui.glade.h:303
+msgid "_Status"
 msgstr ""
 
-#: src/msg.c:391
-msgid "Hold_General"
+#: src/gtkgui.glade.h:304
+msgid "_Subscribe"
 msgstr ""
 
-#: src/msg.c:392
-msgid "Hold_Connection"
+#: src/gtkgui.glade.h:305
+msgid "_Subscription"
 msgstr ""
 
-#: src/msg.c:393
-msgid "Hold_Personal_Details"
+#: src/gtkgui.glade.h:306
+msgid "_Use proxy"
+msgstr ""
+
+#: src/gtkgui.glade.h:307
+msgid "_Username:"
+msgstr ""
+
+#: src/gtkgui.glade.h:308
+msgid "_Voice"
+msgstr ""
+
+#: src/gtkgui.glade.h:309
+msgid "minutes"
 msgstr ""
