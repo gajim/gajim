@@ -738,7 +738,7 @@ class Connection:
 		if kill_core:
 			if self.connected > 1:
 				self.connected = 0
-				self.connection.disconnect('Disconnected')
+				self.connection.disconnect()
 			return
 
 	def ask_roster(self):
