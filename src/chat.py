@@ -57,7 +57,6 @@ class Chat:
 		self.tagOut = {} # holds tag for our nick
 		self.tagStatus = {} # holds status messages
 		self.nb_unread = {}
-		self.last_message_time = {}
 		self.last_time_printout = {}
 		self.print_time_timeout_id = {}
 		self.names = {} # what is printed in the tab (eg. user.name)
@@ -293,7 +292,7 @@ class Chat:
 
 		del self.plugin.windows[self.account][kind][jid]
 		del self.nb_unread[jid]
-		del self.last_message_time[jid]
+		del gajim.last_message_time[self.account][jid]
 		del self.last_time_printout[jid]
 		del self.xmls[jid]
 		del self.tagIn[jid]
@@ -308,7 +307,7 @@ class Chat:
 
 		self.set_compact_view(self.always_compact_view)
 		self.nb_unread[jid] = 0
-		self.last_message_time[jid] = 0
+		gajim.last_message_time[self.account][jid] = 0
 		self.last_time_printout[jid] = float(0.0)
 		
 		if gajim.config.get('use_speller') and 'gtkspell' in globals():
@@ -901,7 +900,7 @@ class Chat:
 			return
 
 		if kind == 'incoming':
-			self.last_message_time[jid] = time.time()
+			gajim.last_message_time[self.account][jid] = time.time()
 
 		if (jid != self.get_active_jid() or \
 		   not self.window.is_active() or \

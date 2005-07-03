@@ -41,4 +41,6 @@ if LANG:
 else:
 	LANG = 'en'
 
+last_message_time = {} # list of time of the latest incomming message
+							# {acct1: {jid1: time1, jid2: time2}, }
 encrypted_chats = {} # list of encrypted chats {acct1: [jid1, jid2], ..}

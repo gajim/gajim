@@ -106,7 +106,7 @@ class GroupchatWindow(chat.Chat):
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
 		for room_jid in self.xmls:
-			if time.time() - self.last_message_time[room_jid] < 2:
+			if time.time() - gajim.last_message_time[self.account][room_jid] < 2:
 				dialog = dialogs.ConfirmationDialog(
 		_('You just received a new message in room "%s"') %room_jid.split('@')[0],
 			_('If you close this window, this message will be lost.')
@@ -795,7 +795,7 @@ class GroupchatWindow(chat.Chat):
 		menu.reposition()
 
 	def remove_tab(self, room_jid):
-		if time.time() - self.last_message_time[room_jid] < 2:
+		if time.time() - gajim.last_message_time[self.account][room_jid] < 2:
 			dialog = dialogs.ConfirmationDialog(
 				_('You just received a new message in room "%s"'),
 				_('If you close this tab, the message will be lost.') % \

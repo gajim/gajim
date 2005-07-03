@@ -509,6 +509,7 @@ class Interface:
 		self.roster.to_be_removed[name] = []
 		self.sleeper_state[name] = 0
 		gajim.encrypted_chats[name] = []
+		gajim.last_message_time[name] = {}
 		if self.windows.has_key('accounts'):
 			self.windows['accounts'].init_accounts()
 		self.roster.draw_roster()
@@ -846,6 +847,7 @@ class Interface:
 												#2:autoaway and use sleeper
 												#3:autoxa and use sleeper
 			gajim.encrypted_chats[a] = []
+			gajim.last_message_time[a] = {}
 
 		self.roster = roster_window.RosterWindow(self)
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')

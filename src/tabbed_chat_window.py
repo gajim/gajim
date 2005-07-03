@@ -179,7 +179,8 @@ class TabbedChatWindow(chat.Chat):
 	def on_tabbed_chat_window_delete_event(self, widget, event):
 		"""close window"""
 		for jid in self.users:
-			if time.time() - self.last_message_time[jid] < 2: # 2 seconds
+			if time.time() - gajim.last_message_time[self.account][jid] < 2:
+				# 2 seconds
 				dialog = dialogs.ConfirmationDialog(
 					_('You just received a new message from "%s"' % jid),
 					_('If you close the window, this message will be lost.'))
@@ -220,7 +221,7 @@ class TabbedChatWindow(chat.Chat):
 		message_buffer.set_text('', -1)
 
 	def remove_tab(self, jid):
-		if time.time() - self.last_message_time[jid] < 2:
+		if time.time() - gajim.last_message_time[self.account][jid] < 2:
 			dialog = dialogs.ConfirmationDialog(
 				_('You just received a new message from "%s"' % jid),
 				_('If you close this tab, the message will be lost.'))
