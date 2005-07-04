@@ -633,7 +633,7 @@ class Connection:
 			return self.connection
 		self.connected = 1
 		p = gajim.config.get_per('accounts', self.name, 'proxy')
-		if p and gajim.config.get_per('proxies').has_key(p):
+		if p and p in gajim.config.get_per('proxies'):
 			proxy = {'host': gajim.config.get_per('proxies', p, 'host')}
 			proxy['port'] = gajim.config.get_per('proxies', p, 'port')
 			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
@@ -925,7 +925,7 @@ class Connection:
 		if self.connection:
 			return
 		p = config['proxy']
-		if p and gajim.config.get_per('proxies').has_key(p):
+		if p and p in gajim.config.get_per('proxies'):
 			proxy = {'host': gajim.config.get_per('proxies', p, 'host')}
 			proxy['port'] = gajim.config.get_per('proxies', p, 'port')
 			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
