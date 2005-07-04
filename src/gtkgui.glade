@@ -16077,4 +16077,178 @@ Maybe I'll refactor later</property>
   </child>
 </widget>
 
+<widget class="GtkMenu" id="account_context_menu">
+
+  <child>
+    <widget class="GtkImageMenuItem" id="status_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Status</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image825">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-network</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkSeparatorMenuItem" id="separator7">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="advanced_actions_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Ad_vanced Actions</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image826">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-dialog-warning</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+
+      <child>
+	<widget class="GtkMenu" id="advanced_actions_menuitem_menu">
+
+	  <child>
+	    <widget class="GtkImageMenuItem" id="xml_console_menuitem">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_XML Console...</property>
+	      <property name="use_underline">True</property>
+
+	      <child internal-child="image">
+		<widget class="GtkImage" id="image827">
+		  <property name="visible">True</property>
+		  <property name="stock">gtk-execute</property>
+		  <property name="icon_size">1</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="edit_account_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Edit Account...</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image828">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-preferences</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="service_discovery_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Service Discovery...</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image829">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-find</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="add_contact_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Add Contact...</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image830">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-add</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="join_group_chat_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Join _Group Chat...</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image831">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-connect</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="new_message_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_New Message...</property>
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image832">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-new</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+</widget>
+
 </glade-interface>

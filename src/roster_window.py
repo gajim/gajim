@@ -748,6 +748,8 @@ class RosterWindow:
 		'''Make account's popup menu'''
 		model = self.tree.get_model()
 		account = model.get_value(iter, 3)
+		
+		#FIXME: made this menu insensitive if we're offline
 
 		# we have to create our own set of icons for the menu
 		# using self.jabber_status_images is poopoo
@@ -757,20 +759,21 @@ class RosterWindow:
 		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
 		state_images = self.load_iconset(path)
 
-		menu = gtk.Menu()
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'account_context_menu', APP)
+		account_context_menu = xml.get_widget('account_context_menu')
+		childs = account_context_menu.get_children()
 		
-		status_item = gtk.MenuItem()
-		status_icon = gtk.Image()
-		status_icon.set_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_MENU)
-		status_label = gtk.Label(_('Status'))
-		status_hbox = gtk.HBox(False, 3)
-		status_hbox.pack_start(status_icon, False, False)
-		status_hbox.pack_start(status_label, False, False)
-		status_item.add(status_hbox)
-		menu.append(status_item)
+		status_menuitem = childs[0]
+		#sep
+		advanced_actions_menuitem = childs[2]
+		edit_account_menuitem = childs[3]
+		service_discovery_menuitem = childs[4]
+		add_contact_menuitem = childs[5]
+		join_group_chat_menuitem = childs[6]
+		new_message_menuitem = childs[7]
 		
 		sub_menu = gtk.Menu()
-		status_item.set_submenu(sub_menu)
+		status_menuitem.set_submenu(sub_menu)
 
 		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
 			'offline']:
@@ -779,82 +782,24 @@ class RosterWindow:
 				item = gtk.MenuItem()
 				sub_menu.append(item)
 
-			item = gtk.MenuItem()
+			item = gtk.ImageMenuItem(helpers.get_uf_show(show))
 			icon = state_images[show]
-			label = gtk.Label(helpers.get_uf_show(show))
-			hbox = gtk.HBox(False, 3)
-			hbox.pack_start(icon, False, False)
-			hbox.pack_start(label, False, False)
-			item.add(hbox)
+			item.set_image(icon)
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, show)
 		
-		item = gtk.MenuItem()
-		menu.append(item)
-
-		edit_item = gtk.MenuItem()
-		edit_icon = gtk.Image()
-		edit_icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
-		edit_label = gtk.Label(_('_Edit Account'))
-		edit_label.set_use_underline(True)
-		edit_hbox = gtk.HBox(False, 3)
-		edit_hbox.pack_start(edit_icon, False, False)
-		edit_hbox.pack_start(edit_label, False, False)
-		edit_item.add(edit_hbox)
-		edit_item.connect('activate', self.on_edit_account, account)
-		menu.append(edit_item)
+		edit_account_menuitem.connect('activate', self.on_edit_account, account)
+		service_discovery_menuitem.connect('activate',
+			self.on_service_disco_menuitem_activate, account)
+		add_contact_menuitem.connect('activate', self.on_add_new_contact, account)
+		join_group_chat_menuitem.connect('activate',
+			self.on_join_gc_activate, account)
+		new_message_menuitem.connect('activate',
+			self.on_new_message_menuitem_activate, account)
 		
-		discover_item = gtk.MenuItem()
-		discover_icon = gtk.Image()
-		discover_icon.set_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_MENU)
-		discover_label = gtk.Label(_('_Service Discovery'))
-		discover_label.set_use_underline(True)
-		discover_hbox = gtk.HBox(False, 3)
-		discover_hbox.pack_start(discover_icon, False, False)
-		discover_hbox.pack_start(discover_label, False, False)
-		discover_item.add(discover_hbox)
-		discover_item.connect('activate', self.on_service_disco_menuitem_activate, account)
-		menu.append(discover_item)
-		
-		add_contact_item = gtk.MenuItem()
-		add_contact_icon = gtk.Image()
-		add_contact_icon.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU)
-		add_contact_label = gtk.Label(_('_Add Contact'))
-		add_contact_label.set_use_underline(True)
-		add_contact_hbox = gtk.HBox(False, 3)
-		add_contact_hbox.pack_start(add_contact_icon, False, False)
-		add_contact_hbox.pack_start(add_contact_label, False, False)
-		add_contact_item.add(add_contact_hbox)
-		add_contact_item.connect('activate', self.on_add_new_contact, account)
-		menu.append(add_contact_item)
-		
-		join_gc_item = gtk.MenuItem()
-		join_gc_icon = gtk.Image()
-		join_gc_icon.set_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_MENU)
-		join_gc_label = gtk.Label(_('Join _Groupchat'))
-		join_gc_label.set_use_underline(True)
-		join_gc_hbox = gtk.HBox(False, 3)
-		join_gc_hbox.pack_start(join_gc_icon, False, False)
-		join_gc_hbox.pack_start(join_gc_label, False, False)
-		join_gc_item.add(join_gc_hbox)
-		join_gc_item.connect('activate', self.on_join_gc_activate, account)
-		menu.append(join_gc_item)
-		
-		new_message_item = gtk.MenuItem()
-		new_message_icon = gtk.Image()
-		new_message_icon.set_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
-		new_message_label = gtk.Label(_('_New Message'))
-		new_message_label.set_use_underline(True)
-		new_message_hbox = gtk.HBox(False, 3)
-		new_message_hbox.pack_start(new_message_icon, False, False)
-		new_message_hbox.pack_start(new_message_label, False, False)
-		new_message_item.add(new_message_hbox)
-		new_message_item.connect('activate', self.on_new_message_menuitem_activate, account)
-		menu.append(new_message_item)
-		
-		menu.popup(None, None, None, event.button, event.time)
-		menu.show_all()
-		menu.reposition()
+		account_context_menu.popup(None, None, None, event.button, event.time)
+		account_context_menu.show_all()
+		account_context_menu.reposition()
 
 	def on_add_to_roster(self, widget, user, account):
 		dialogs.AddNewContactWindow(self.plugin, account, user.jid)
