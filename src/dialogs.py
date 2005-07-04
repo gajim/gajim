@@ -862,8 +862,6 @@ class XMLConsoleWindow:
 		self.stanzas_log_textview = self.xml.get_widget('stanzas_log_textview')
 		self.input_tv_buffer = self.input_textview.get_buffer()
 		
-		print self.xml.get_widget('expander').set_resize_mode(gtk.RESIZE_IMMEDIATE)
-		
 		self.input_textview.modify_base(
 			gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
 		self.input_textview.modify_text(
@@ -875,14 +873,11 @@ class XMLConsoleWindow:
 			gtk.STATE_NORMAL, gtk.gdk.color_parse('green'))
 		
 		if len(gajim.connections) > 1:
-			title = _('XML Console for %s')\
-				% gajim.config.get_per('accounts', self.account, 'name')
+			title = _('XML Console for %s') % self.account
 		else:
 			title = _('XML Console')
 		
 		self.window.set_title(title)
-		
-		self.input_textview.grab_focus()
 		
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -908,9 +903,11 @@ class XMLConsoleWindow:
 		self.input_tv_buffer.set_text(
 			'<message to="" type=""><body></body></message>'
 		)
-	
-	def on_expander_size_request(self, widget, req):
-		pass
+
+	def on_expander_activate(self, widget):
+		if not widget.get_expanded(): # it's the opposite!
+			# it's expanded!!
+			self.input_textview.grab_focus()
 	
 	def on_xml_console_window_destroy(self, widget):
 		# remove us from open windows
