@@ -684,15 +684,21 @@ class Chat:
 			childs[5].connect('activate', self.on_start_chat_activate, text)
 			childs[6].connect('activate',
 				self.on_join_group_chat_menuitem_activate, text)
-			if self.plugin.roster.contacts[self.account].has_key(text):
-				u = self.plugin.roster.contacts[self.account][text][0]
 				
-				if self.plugin.roster.contacts[self.account].has_key(text) and \
-						'not in the roster' not in u.groups:
-					childs[7].hide() # add to roster menuitem
-				else:
-					childs[7].connect('activate', self.on_add_to_roster_activate, text)
-					childs[7].show()
+			allow_add = False
+			if self.plugin.roster.contacts[self.account].has_key(text):
+				c = self.plugin.roster.contacts[self.account][text][0]
+				if 'not in the roster' in c.groups:
+					allow_add = True
+			else: # he's not at all in the account contacts
+				allow_add = True
+			
+			if allow_add:
+				childs[7].connect('activate', self.on_add_to_roster_activate, text)
+				childs[7].show() # show add to roster menuitem
+			else:
+				childs[7].hide() # hide add to roster menuitem
+				
 			childs[0].hide() # copy link location
 			childs[1].hide() # open link in browser
 
