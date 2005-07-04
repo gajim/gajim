@@ -643,7 +643,6 @@ class RosterWindow:
 		roster_contact_context_menu.popup(None, None, None, event.button,
 			event.time)
 		roster_contact_context_menu.show_all()
-		roster_contact_context_menu.reposition()
 
 	def mk_menu_g(self, event, iter):
 		'''Make group's popup menu'''
@@ -665,7 +664,6 @@ class RosterWindow:
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
-		menu.reposition()
 	
 	def mk_menu_agent(self, event, iter):
 		'''Make agent's popup menu'''
@@ -676,66 +674,52 @@ class RosterWindow:
 		user = self.contacts[account][jid][0]
 		menu = gtk.Menu()
 		
-		item = gtk.MenuItem()
+		item = gtk.ImageMenuItem(_('_Log on'))
 		icon = gtk.Image()
 		icon.set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
-		label = gtk.Label(_('_Log on'))
-		label.set_use_underline(True)
-		hbox = gtk.HBox(False, 3)
-		hbox.pack_start(icon, False, False)
-		hbox.pack_start(label, False, False)
-		item.add(hbox)
+		item.set_image(icon)
 		menu.append(item)
 		show = self.contacts[account][jid][0].show
 		if show != 'offline' and show != 'error':
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, None, account)
 
-		item = gtk.MenuItem()
+		item = gtk.ImageMenuItem(_('Log _off'))
 		icon = gtk.Image()
 		icon.set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
-		label = gtk.Label(_('Log _off'))
-		label.set_use_underline(True)
-		hbox = gtk.HBox(False, 3)
-		hbox.pack_start(icon, False, False)
-		hbox.pack_start(label, False, False)
-		item.add(hbox)
+		item.set_image(icon)
 		menu.append(item)
 		if show == 'offline' or show == 'error':
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
 							account)
 
-		item = gtk.MenuItem()
+		item = gtk.MenuItem() # seperator
 		menu.append(item)
 
-		item = gtk.MenuItem()
+		item = gtk.ImageMenuItem(_('Edit'))
 		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
-		label = gtk.Label(_('Edit'))
-		label.set_use_underline(True)
-		hbox = gtk.HBox(False, 3)
-		hbox.pack_start(icon, False, False)
-		hbox.pack_start(label, False, False)
-		item.add(hbox)
+		icon.set_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_edit_agent, user, account)
 
-		item = gtk.MenuItem()
+		item = gtk.ImageMenuItem(_('_Remove from Roster'))
 		icon = gtk.Image()
 		icon.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
-		label = gtk.Label(_('_Remove from Roster'))
-		label.set_use_underline(True)
-		hbox = gtk.HBox(False, 3)
-		hbox.pack_start(icon, False, False)
-		hbox.pack_start(label, False, False)
-		item.add(hbox)
+		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_remove_agent, user, account)
 
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
-		menu.reposition()
+
+	def on_xml_console(self, widget, account):
+		if self.plugin.windows[account].has_key('xml_console'):
+			self.plugin.windows[account]['xml_console'].window.present()
+		else:
+			self.plugin.windows[account]['xml_console'] = \
+				dialogs.XMLConsoleWindow(self.plugin, account)
 
 	def on_edit_account(self, widget, account):
 		if self.plugin.windows[account].has_key('account_modification'):
@@ -766,6 +750,8 @@ class RosterWindow:
 		status_menuitem = childs[0]
 		#sep
 		advanced_actions_menuitem = childs[2]
+		xml_console_menuitem =\
+			advanced_actions_menuitem.get_submenu().get_children()[0]
 		edit_account_menuitem = childs[3]
 		service_discovery_menuitem = childs[4]
 		add_contact_menuitem = childs[5]
@@ -788,6 +774,8 @@ class RosterWindow:
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, show)
 		
+		
+		xml_console_menuitem.connect('activate', self.on_xml_console, account)
 		edit_account_menuitem.connect('activate', self.on_edit_account, account)
 		service_discovery_menuitem.connect('activate',
 			self.on_service_disco_menuitem_activate, account)
@@ -799,7 +787,6 @@ class RosterWindow:
 		
 		account_context_menu.popup(None, None, None, event.button, event.time)
 		account_context_menu.show_all()
-		account_context_menu.reposition()
 
 	def on_add_to_roster(self, widget, user, account):
 		dialogs.AddNewContactWindow(self.plugin, account, user.jid)
@@ -808,7 +795,7 @@ class RosterWindow:
 		'''Authorize a user (by re-sending auth menuitem)'''
 		gajim.connections[account].send_authorization(jid)
 		dialogs.InformationDialog(_('Authorization has been sent'),
-			_('Now "%s" will know when your status.') %jid).get_response()
+			_('Now "%s" will know your status.') %jid).get_response()
 
 	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None):
 		'''Request subscription to a user'''

@@ -850,3 +850,69 @@ class SendSingleMessageDialog:
 			keyID = None, type = 'normal', subject=subject)
 		
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview
+
+class XMLConsoleWindow:
+	def __init__(self, plugin, account):
+		self.plugin = plugin
+		self.account = account
+		
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'xml_console_window', APP)
+		self.window = self.xml.get_widget('xml_console_window')
+		self.input_textview = self.xml.get_widget('input_textview')
+		self.stanzas_log_textview = self.xml.get_widget('stanzas_log_textview')
+		self.input_tv_buffer = self.input_textview.get_buffer()
+		
+		print self.xml.get_widget('expander').set_resize_mode(gtk.RESIZE_IMMEDIATE)
+		
+		self.input_textview.modify_base(
+			gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
+		self.input_textview.modify_text(
+			gtk.STATE_NORMAL, gtk.gdk.color_parse('green'))
+
+		self.stanzas_log_textview.modify_base(
+			gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
+		self.stanzas_log_textview.modify_text(
+			gtk.STATE_NORMAL, gtk.gdk.color_parse('green'))
+		
+		if len(gajim.connections) > 1:
+			title = _('XML Console for %s')\
+				% gajim.config.get_per('accounts', self.account, 'name')
+		else:
+			title = _('XML Console')
+		
+		self.window.set_title(title)
+		
+		self.input_textview.grab_focus()
+		
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_send_button_clicked(self, widget):
+		begin_iter, end_iter = self.input_tv_buffer.get_bounds()
+		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter)
+		if stanza:
+			gajim.connections[self.account].send_stanza(stanza)
+			self.input_tv_buffer.set_text('') # we sent ok, clear the textview
+	
+	def on_presence_button_clicked(self, widget):
+		self.input_tv_buffer.set_text(
+		'<presence><show></show><status></status><priority></priority></presence>'
+		)
+
+	def on_iq_button_clicked(self, widget):
+		self.input_tv_buffer.set_text(
+			'<iq to="" type=""><query xmlns=""></query></iq>'
+		)
+	
+	def on_message_button_clicked(self, widget):
+		self.input_tv_buffer.set_text(
+			'<message to="" type=""><body></body></message>'
+		)
+	
+	def on_expander_size_request(self, widget, req):
+		pass
+	
+	def on_xml_console_window_destroy(self, widget):
+		# remove us from open windows
+		del self.plugin.windows[self.account]['xml_console']
+		widget.destroy()
