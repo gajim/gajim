@@ -243,7 +243,6 @@ class Chat:
 			# show the menu
 			menu.popup(None, None, None, event.button, event.time)
 			menu.show_all()
-			menu.reposition()
 
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
 		new_child = notebook.get_nth_page(page_num)
@@ -698,7 +697,6 @@ class Chat:
 			childs[1].hide() # open link in browser
 
 		menu.popup(None, None, None, event.button, event.time)
-		menu.reposition()
 
 	def hyperlink_handler(self, texttag, widget, event, iter, kind):
 		if event.type == gtk.gdk.BUTTON_PRESS:

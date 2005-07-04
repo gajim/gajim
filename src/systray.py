@@ -191,7 +191,6 @@ class Systray:
 
 		self.systray_context_menu.popup(None, None, None, event.button, event.time)
 		self.systray_context_menu.show_all()
-		self.systray_context_menu.reposition()
 
 	def on_preferences_menuitem_activate(self, widget):
 		if self.plugin.windows['preferences'].window.get_property('visible'):

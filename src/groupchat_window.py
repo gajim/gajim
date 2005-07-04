@@ -792,7 +792,6 @@ class GroupchatWindow(chat.Chat):
 		menu = xml.get_widget('gc_occupants_menu')
 		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
-		menu.reposition()
 
 	def remove_tab(self, room_jid):
 		if time.time() - gajim.last_message_time[self.account][room_jid] < 2:
