@@ -156,7 +156,7 @@ class Connection:
 		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = ns)
 		if node:
 			iq.setQuerynode(node)
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def discoverItems(self, jid, node = None):
 		'''According to JEP-0030: jid is mandatory, 
@@ -284,7 +284,7 @@ class Connection:
 			gajim.log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0:
 				if self.connection:
-					self.to_be_sent.insert(0, common.xmpp.Presence(who,
+					self.to_be_sent.append(common.xmpp.Presence(who,
 						'subscribed'))
 				if who.find("@") <= 0:
 					self.dispatch('NOTIFY',
@@ -409,7 +409,7 @@ class Connection:
 		gajim.log.debug('DiscoverInfoErrorCB')
 		iq = common.xmpp.Iq(to = iq_obj.getFrom(), typ = 'get', queryNS =\
 			common.xmpp.NS_AGENTS)
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def _DiscoverInfoCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoCB')
@@ -434,7 +434,7 @@ class Connection:
 				features.append(i.getAttr('var'))
 		jid = str(iq_obj.getFrom())
 		if not identities:
-			self.to_be_sent.insert(0, common.xmpp.Iq(typ = 'get', queryNS = \
+			self.to_be_sent.append(common.xmpp.Iq(typ = 'get', queryNS = \
 				common.xmpp.NS_AGENTS))
 		else:
 			self.dispatch('AGENT_INFO_INFO', (jid, node, identities, features))
@@ -449,7 +449,7 @@ class Connection:
 		send_os = gajim.config.get('send_os_info')
 		if send_os:
 			qp.setTagData('os', get_os_info())
-		self.to_be_sent.insert(0, iq_obj)
+		self.to_be_sent.append(iq_obj)
 		raise common.xmpp.NodeProcessed
 
 	def _VersionResultCB(self, con, iq_obj):
@@ -853,9 +853,15 @@ class Connection:
 					typ = 'normal')
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
-		self.to_be_sent.insert(0, msg_iq)
+		self.to_be_sent.append(msg_iq)
 		gajim.logger.write('outgoing', msg, jid)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
+
+	def send_stanza(self, stanza):
+		''' send a stanza untouched '''
+		if not self.connection:
+			return
+		self.to_be_sent.append(stanza)
 
 	def request_subscription(self, jid, msg):
 		if not self.connection:
@@ -865,17 +871,17 @@ class Connection:
 		if not msg:
 			msg = _('I would like to add you to my roster.')
 		pres.setStatus(msg)
-		self.to_be_sent.insert(0, pres)
+		self.to_be_sent.append(pres)
 
 	def send_authorization(self, jid):
 		if not self.connection:
 			return
-		self.to_be_sent.insert(0, common.xmpp.Presence(jid, 'subscribed'))
+		self.to_be_sent.append(common.xmpp.Presence(jid, 'subscribed'))
 
 	def refuse_authorization(self, jid):
 		if not self.connection:
 			return
-		self.to_be_sent.insert(0, common.xmpp.Presence(jid, 'unsubscribed'))
+		self.to_be_sent.append(common.xmpp.Presence(jid, 'unsubscribed'))
 
 	def unsubscribe(self, jid):
 		if not self.connection:
@@ -907,7 +913,7 @@ class Connection:
 
 	def request_agents(self, jid, node):
 		if self.connection:
-			self.to_be_sent.insert(0, common.xmpp.Iq(to = jid, typ = 'get', 
+			self.to_be_sent.append(common.xmpp.Iq(to = jid, typ = 'get', 
 				queryNS = common.xmpp.NS_BROWSE))
 			self.discoverInfo(jid, node)
 
@@ -988,7 +994,7 @@ class Connection:
 			to_whom_jid += '/' + resource
 		iq = common.xmpp.Iq(to=to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_VERSION)
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def request_vcard(self, jid = None):
 		'''request the VCARD and return the iq'''
@@ -998,7 +1004,7 @@ class Connection:
 		if jid:
 			iq.setTo(jid)
 		iq.setTag(common.xmpp.NS_VCARD + ' vCard')
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 		return iq
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 	
@@ -1021,7 +1027,7 @@ class Connection:
 						iq3.addChild(k).setData(j[k])
 			else:
 				iq2.addChild(i).setData(vcard[i])
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def get_settings(self):
 		''' Get Gajim settings as described in JEP 0049 '''
@@ -1030,7 +1036,7 @@ class Connection:
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
 		iq3 = iq2.addChild(name='gajim', namespace='gajim:prefs')
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def get_bookmarks(self):
 		''' Get Bookmarks from storage as described in JEP 0048 '''
@@ -1040,29 +1046,29 @@ class Connection:
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name="query", namespace="jabber:iq:private")
 		iq3 = iq2.addChild(name="storage", namespace="storage:bookmarks")
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def store_bookmarks(self):
 		''' Send bookmarks to the storage namespace '''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name="query", namespace="jabber:iq:private")
-		iq3 = iq2.addChild(name="storage", namespace="storage:bookmarks")
+		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq3 = iq2.addChild(name='storage', namespace='storage:bookmarks')
 		for bm in self.bookmarks:
-			iq4 = iq3.addChild(name="conference")
-			iq4.setAttr('jid',bm['jid'])
-			iq4.setAttr('autojoin',bm['autojoin'])
-			iq4.setAttr('name',bm['name'])
-			iq5 = iq4.setTagData('nick',bm['nick'])
-			iq5 = iq4.setTagData('password',bm['password'])
-		self.to_be_sent.insert(0, iq)
+			iq4 = iq3.addChild(name = "conference")
+			iq4.setAttr('jid', bm['jid'])
+			iq4.setAttr('autojoin', bm['autojoin'])
+			iq4.setAttr('name', bm['name'])
+			iq5 = iq4.setTagData('nick', bm['nick'])
+			iq5 = iq4.setTagData('password', bm['password'])
+		self.to_be_sent.append(iq)
 
 	def send_agent_status(self, agent, ptype):
 		if not self.connection:
 			return
 		p = common.xmpp.Presence(to = agent, typ = ptype)
-		self.to_be_sent.insert(0, p)
+		self.to_be_sent.append(p)
 
 	def join_gc(self, nick, room, server, password):
 		if not self.connection:
@@ -1076,30 +1082,30 @@ class Connection:
 		t = p.setTag(common.xmpp.NS_MUC + ' x')
 		if password:
 			t.setTagData('password', password)
-		self.to_be_sent.insert(0, p)
+		self.to_be_sent.append(p)
 
 	def send_gc_message(self, jid, msg):
 		if not self.connection:
 			return
 		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat')
-		self.to_be_sent.insert(0, msg_iq)
+		self.to_be_sent.append(msg_iq)
 		self.dispatch('MSGSENT', (jid, msg))
 
 	def send_gc_subject(self, jid, subject):
 		if not self.connection:
 			return
 		msg_iq = common.xmpp.Message(jid,typ = 'groupchat', subject = subject)
-		self.to_be_sent.insert(0, msg_iq)
+		self.to_be_sent.append(msg_iq)
 
 	def request_gc_config(self, room_jid):
 		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
 			to = room_jid)
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def change_gc_nick(self, room_jid, nick):
 		if not self.connection:
 			return
-		self.to_be_sent.insert(0, common.xmpp.Presence(to = '%s/%s' % (room_jid,
+		self.to_be_sent.append(common.xmpp.Presence(to = '%s/%s' % (room_jid,
 			nick)))
 
 	def send_gc_status(self, nick, jid, show, status):
@@ -1111,7 +1117,7 @@ class Connection:
 			show = None
 		if show == 'online':
 			show = None
-		self.to_be_sent.insert(0, common.xmpp.Presence(to = '%s/%s' % (jid, nick),
+		self.to_be_sent.append(common.xmpp.Presence(to = '%s/%s' % (jid, nick),
 			typ = ptype, show = show, status = status))
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
@@ -1124,7 +1130,7 @@ class Connection:
 		item.setAttr('role', role)
 		if reason:
 			item.addChild(name = 'reason', payload = reason)
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def gc_set_affiliation(self, room_jid, jid, affiliation, reason = ''):
 		if not self.connection:
@@ -1136,7 +1142,7 @@ class Connection:
 		item.setAttr('affiliation', affiliation)
 		if reason:
 			item.addChild(name = 'reason', payload = reason)
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def send_gc_config(self, room_jid, config):
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
@@ -1163,7 +1169,7 @@ class Connection:
 						val = '1'
 					tag.setTagData('value', val)
 			i += 1
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def gpg_passphrase(self, passphrase):
 		if USE_GPG:
@@ -1189,7 +1195,7 @@ class Connection:
 		q = iq.setTag(common.xmpp.NS_REGISTER + ' query')
 		q.setTagData('username',username)
 		q.setTagData('password',password)
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 
 	def unregister_account(self):
 		if self.connected == 0:
@@ -1198,14 +1204,14 @@ class Connection:
 			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 			iq = common.xmpp.Iq(typ = 'set', to = hostname)
 			q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
-			self.to_be_sent.insert(0, iq)
+			self.to_be_sent.append(iq)
 
 	def send_keepalive(self):
 		# we received nothing for the last foo seconds (60 secs by default)
 		hostname = gajim.config.get_per('accounts', self.name,
 			'hostname')
 		iq = common.xmpp.Iq('get', common.xmpp.NS_LAST, to = hostname)
-		self.to_be_sent.insert(0, iq)
+		self.to_be_sent.append(iq)
 		self.keep_alive_sent = True
 
 	def process(self, timeout):
@@ -1222,7 +1228,7 @@ class Connection:
 			while time.time() < t_limit and len(self.to_be_sent) and \
 					len(self.last_sent) < gajim.config.get_per('accounts',
 						self.name, 'max_stanza_per_sec'):
-				self.connection.send(self.to_be_sent.pop())
+				self.connection.send(self.to_be_sent.pop(0))
 				self.last_sent.append(time.time())
 			try:
 				if gajim.config.get_per('accounts', self.name,
