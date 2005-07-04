@@ -440,7 +440,7 @@ class Interface:
 			if 'not in the roster' in u.groups:
 				u.groups.remove('not in the roster')
 			if len(u.groups) == 0:
-				u.groups = ['General']
+				u.groups = [_('General')]
 			self.roster.add_user_to_roster(u.jid, account)
 			gajim.connections[account].update_user(u.jid, u.name, u.groups)
 		else:
@@ -450,7 +450,7 @@ class Interface:
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = Contact(jid = jid, name = jid.split('@')[0],
-				groups = ['General'], show = 'online', status = 'online',
+				groups = [_('General')], show = 'online', status = 'online',
 				ask = 'to', resource = array[1], keyID = keyID)
 			self.roster.contacts[account][jid] = [user1]
 			self.roster.add_user_to_roster(jid, account)

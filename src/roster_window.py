@@ -120,7 +120,7 @@ class RosterWindow:
 		if user.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 			user.groups = ['Transports']
 		elif user.groups == []:
-			user.groups.append('General')
+			user.groups.append(_('General'))
 
 		if (user.show == 'offline' or user.show == 'error') and \
 		   not showOffline and (not 'Transports' in user.groups or \
@@ -803,7 +803,7 @@ class RosterWindow:
 			pseudo = jid
 		gajim.connections[account].request_subscription(jid, txt)
 		if not group:
-			group = 'General'
+			group = _('General')
 		if not self.contacts[account].has_key(jid):
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
