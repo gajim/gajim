@@ -839,7 +839,9 @@ class Connection:
 		if keyID and USE_GPG:
 			#encrypt
 			msgenc = self.gpg.encrypt(msg, [keyID])
-			if msgenc: msgtxt = _('[this message is encrypted]')
+			if msgenc:
+				msgtxt = _('[This message is encrypted]') +\
+					' [This message is encrypted]' # once translated and once english
 		if type == 'chat':
 			msg_iq = common.xmpp.Message(to = jid, body = msgtxt, typ = type)
 		else:
