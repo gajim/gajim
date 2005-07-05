@@ -334,7 +334,7 @@ class Interface:
 				array[10], array[11], array[12], account)
 
 	def handle_event_msg(self, account, array):
-		#('MSG', account, (user, msg, time, encrypted))
+		#('MSG', account, (contact, msg, time, encrypted, mtype, subject))
 		jid = array[0].split('/')[0]
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
@@ -353,9 +353,9 @@ class Interface:
 			self.roster.nb_unread += 1
 			gc = self.windows[account]['gc'][jid]
 			show = gc.contacts[jid][nick].show
-			u = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
+			c = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
 				ask = 'none')
-			self.roster.new_chat(u, account)
+			self.roster.new_chat(c, account)
 			return
 
 				
@@ -376,9 +376,12 @@ class Interface:
 					show_notification = True
 				if show_notification:
 					instance = dialogs.PopupNotificationWindow(self,
-																_('New Message'), jid, account)
+						_('New Message'), jid, account)
 					self.roster.popup_notification_windows.append(instance)
-		self.roster.on_message(jid, array[1], array[2], account, array[3])
+
+		# array : (contact, msg, time, encrypted, mtype, subject)
+		self.roster.on_message(jid, array[1], array[2], account, array[3],
+			array[4], array[5])
 		if gajim.config.get_per('soundevents', 'first_message_received',
 			'enabled') and first:
 			self.play_sound('first_message_received')

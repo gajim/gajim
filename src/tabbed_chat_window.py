@@ -370,7 +370,7 @@ class TabbedChatWindow(chat.Chat):
 				self.plugin.roster.really_remove_user(user, self.account)
 
 	def print_conversation(self, text, jid, contact = '', tim = None,
-		encrypted = False):
+		encrypted = False, subject = None):
 		"""Print a line in the conversation:
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message
@@ -382,11 +382,15 @@ class TabbedChatWindow(chat.Chat):
 		else:
 			ec = gajim.encrypted_chats[self.account]
 			if encrypted and jid not in ec:
-				chat.Chat.print_conversation_line(self, 'Encryption enabled', jid,
+				msg_in_two_langs = _('Encryption enabled')\
+					+ ' - Encryption enabled'
+				chat.Chat.print_conversation_line(self, msg_in_two_langs, jid,
 					'status', '', tim)
 				ec.append(jid)
 			if not encrypted and jid in ec:
-				chat.Chat.print_conversation_line(self, 'Encryption disabled', jid,
+				msg_in_two_langs = _('Encryption disabled')\
+					+ ' - Encryption disabled'
+				chat.Chat.print_conversation_line(self, msg_in_two_langs, jid,
 					'status', '', tim)
 				ec.remove(jid)
 			self.xmls[jid].get_widget('gpg_togglebutton').set_active(encrypted)
@@ -397,7 +401,8 @@ class TabbedChatWindow(chat.Chat):
 				kind = 'incoming'
 				name = user.name
 
-		chat.Chat.print_conversation_line(self, text, jid, kind, name, tim)
+		chat.Chat.print_conversation_line(self, text, jid, kind, name, tim,
+			subject = subject)
 
 	def restore_conversation(self, jid):
 		# don't restore lines if it's a transport

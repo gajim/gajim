@@ -831,7 +831,7 @@ class Chat:
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
 			other_tags_for_name = [], other_tags_for_time = [], 
-			other_tags_for_text = [], count_as_new = True):
+			other_tags_for_text = [], count_as_new = True, subject = None):
 		textview = self.xmls[jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
 		buffer.begin_user_action()
@@ -889,6 +889,11 @@ class Chat:
 		# add the rest of text located in the index and after
 		end_iter = buffer.get_end_iter()
 		buffer.insert_with_tags_by_name(end_iter, text[index:], *text_tags)
+		
+		if subject: # if we have subject, send it too!
+			subject = '\n' + _('Subject: %s') % subject
+			end_iter = buffer.get_end_iter()
+			buffer.insert_with_tags_by_name(end_iter, subject, *text_tags)
 
 		#scroll to the end of the textview
 		end = False

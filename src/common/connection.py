@@ -212,6 +212,7 @@ class Connection:
 		"""Called when we receive a message"""
 		msgtxt = msg.getBody()
 		mtype = msg.getType()
+		subject = msg.getSubject() # if note there it's None
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
@@ -237,7 +238,6 @@ class Connection:
 			self.dispatch('MSGERROR', (str(msg.getFrom()),
 				msg.getErrorCode(), msg.getError(), msgtxt, tim))
 		elif mtype == 'groupchat':
-			subject = msg.getSubject()
 			if subject:
 				self.dispatch('GC_SUBJECT', (str(msg.getFrom()), subject))
 			else:
@@ -245,11 +245,24 @@ class Connection:
 					return
 				self.dispatch('GC_MSG', (str(msg.getFrom()), msgtxt, tim))
 				gajim.logger.write('gc', msgtxt, str(msg.getFrom()), tim = tim)
-		else:
+		elif mtype == 'normal': # it's single message
+			log_msgtxt = msgtxt
+			if subject:
+				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
+			gajim.logger.write('incoming', log_msgtxt, str(msg.getFrom()),
+				tim = tim)
+			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted,
+				mtype, subject))
+		else: # it's type 'chat'
 			if not msg.getTag('body'): #no <body>
 				return
-			gajim.logger.write('incoming', msgtxt, str(msg.getFrom()), tim = tim)
-			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted))
+			log_msgtxt = msgtxt
+			if subject:
+				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
+			gajim.logger.write('incoming', log_msgtxt, str(msg.getFrom()),
+				tim = tim)
+			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted,
+				mtype, subject))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):

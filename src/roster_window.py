@@ -579,7 +579,7 @@ class RosterWindow:
 				HistoryWindow(self.plugin, user.jid, account)
 
 	def on_send_single_message_menuitem_activate(self, wiget, account, contact):
-		dialogs.SendSingleMessageDialog(self, account, contact)
+		dialogs.SingleMessageWindow(self, account, contact, 'send')
 	
 	def mk_menu_user(self, event, iter):
 		'''Make user's popup menu'''
@@ -1147,7 +1147,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.plugin.windows[account]['gc'][jid] = \
 				groupchat_window.GroupchatWindow(jid, nick, self.plugin, account)
 
-	def on_message(self, jid, msg, tim, account, encrypted = False):
+	def on_message(self, jid, msg, tim, account, encrypted = False,\
+		msg_type = '', subject = None):
 		'''when we receive a message'''
 		if not self.contacts[account].has_key(jid):
 			keyID = ''
@@ -1160,6 +1161,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				status = 'not in the roster', ask = 'none', keyID = keyID)
 			self.contacts[account][jid] = [user1] 
 			self.add_user_to_roster(jid, account)
+
 		iters = self.get_user_iter(jid, account)
 		if iters:
 			path = self.tree.get_model().get_path(iters[0])
@@ -1167,15 +1169,26 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			path = None
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
-		# Do we have a queue ?
+		
+		
+		if msg_type == 'normal': # it's single message
+			#FIXME: take into account autopopup and autopopupaway
+			# if user doesn't want to be bugged do it as we do the 'chat'
+			contact = self.contacts[account][jid][0]
+			dialogs.SingleMessageWindow(self.plugin, account, contact,
+		action = 'receive', from_whom = jid, subject = subject, message = msg)
+			return
+		
+		# Do we have a queue?
 		qs = self.plugin.queues[account]
 		no_queue = True
 		if qs.has_key(jid):
 			no_queue = False
 		if self.plugin.windows[account]['chats'].has_key(jid):
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg, 
-				jid, tim = tim, encrypted = encrypted)
+				jid, tim = tim, encrypted = encrypted, subject = subject)
 			return
+
 		#We save it in a queue
 		if no_queue:
 			qs[jid] = []

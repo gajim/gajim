@@ -797,36 +797,91 @@ class PopupNotificationWindow:
 		self.adjust_height_and_move_popup_notification_windows()
 
 
-class SendSingleMessageDialog:
-	def __init__(self, plugin, account, contact):
+class SingleMessageWindow:
+	'''SingleMessageWindow can send or show a received
+	singled message depending on action argument'''
+	def __init__(self, plugin, account, contact, action='', from_whom='',\
+	subject='', message=''):
 		self.plugin = plugin
 		self.account = account
+		self.contact = contact
+		self.action = action
+
+		self.subject = subject
+		self.message = message
 		
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'send_single_message_window', APP)
-		self.window = self.xml.get_widget('send_single_message_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'single_message_window', APP)
+		self.window = self.xml.get_widget('single_message_window')
 		self.count_chars_label = self.xml.get_widget('count_chars_label')
+		self.from_label = self.xml.get_widget('from_label')
+		self.from_entry = self.xml.get_widget('from_entry')
+		self.to_label = self.xml.get_widget('to_label')
 		self.to_entry = self.xml.get_widget('to_entry')
 		self.subject_entry = self.xml.get_widget('subject_entry')
-		self.message_tv_buffer = self.xml.get_widget('message_textview').\
-			get_buffer()
-
+		self.message_textview = self.xml.get_widget('message_textview')
+		self.message_tv_buffer = self.message_textview.get_buffer()
+		self.send_button = self.xml.get_widget('send_button')
+		self.reply_button = self.xml.get_widget('reply_button')
 		self.message_tv_buffer.connect('changed', self.update_char_counter)
 		
-		self.to_entry.set_text(contact.jid)
+		self.to_entry.set_text(self.contact.jid)
 		
-		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
-			gajim.config.get_per('accounts', self.account, 'hostname')
+		self.send_button.set_no_show_all(True)
+		self.reply_button.set_no_show_all(True)
+		self.to_label.set_no_show_all(True)
+		self.to_entry.set_no_show_all(True)
+		self.from_label.set_no_show_all(True)
+		self.from_entry.set_no_show_all(True)
 		
-		if len(gajim.connections) > 1:
-			title = _('Send Single Message as %s') % our_jid
-		else:
-			title = _('Send Single Message')
-		self.window.set_title(title)
-		
-		self.subject_entry.grab_focus()
-		
+		self.prepare_widgets_for(self.action)
+
+		if self.action == 'send':
+			if self.message: # we come from a reply?
+				self.message_textview.grab_focus()
+			else: # we write a new message
+				self.subject_entry.grab_focus()
+		elif self.action == 'receive':
+			self.from_whom = from_whom
+			self.from_entry.set_text(self.from_whom)
+			self.from_entry.set_property('editable', False)
+			self.subject_entry.set_property('editable', False)
+			self.message_textview.set_editable(False)
+			self.reply_button.grab_focus()
+
+		self.subject_entry.set_text(self.subject)
+		self.message_tv_buffer.set_text(self.message)
+		begin_iter = self.message_tv_buffer.get_start_iter()
+		self.message_tv_buffer.place_cursor(begin_iter)
+
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
+
+	def prepare_widgets_for(self, action):
+		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
+			gajim.config.get_per('accounts', self.account, 'hostname')
+		if len(gajim.connections) > 1:
+			title = _('Single Message as %s') % our_jid
+		else:
+			title = _('Single Message')
+
+		if action == 'send':
+			title = _('Send %s') % title
+			self.send_button.show()
+			self.to_label.show()
+			self.to_entry.show()
+			self.reply_button.hide()
+			self.from_label.hide()
+			self.from_entry.hide()
+		elif action == 'receive':
+			title = _('%s Received') % title
+			self.reply_button.show()
+			self.from_label.show()
+			self.from_entry.show()
+			self.send_button.hide()
+			self.to_label.hide()
+			self.to_entry.hide()
+		
+		self.window.set_title(title)
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
@@ -850,6 +905,14 @@ class SendSingleMessageDialog:
 			keyID = None, type = 'normal', subject=subject)
 		
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview
+
+	def on_reply_button_clicked(self, widget):
+		# we create a new blank window to send and we preset RE: and to jid
+		self.subject = _('RE: %s') % self.subject
+		self.message = _('\n-< Original Message >-\n%s') % self.message
+		SingleMessageWindow(self.plugin, self.account, self.contact,
+			action = 'send',	from_whom = self.from_whom, subject = self.subject,
+			message = self.message)
 
 class XMLConsoleWindow:
 	def __init__(self, plugin, account):
