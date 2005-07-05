@@ -904,12 +904,14 @@ class SingleMessageWindow:
 		gajim.connections[self.account].send_message(to_whom_jid, message,
 			keyID = None, type = 'normal', subject=subject)
 		
+		self.subject_entry.set_text('') # we sent ok, clear the subject
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview
 
 	def on_reply_button_clicked(self, widget):
 		# we create a new blank window to send and we preset RE: and to jid
 		self.subject = _('RE: %s') % self.subject
 		self.message = _('\n-< Original Message >-\n%s') % self.message
+		self.window.destroy()
 		SingleMessageWindow(self.plugin, self.account, self.contact,
 			action = 'send',	from_whom = self.from_whom, subject = self.subject,
 			message = self.message)
