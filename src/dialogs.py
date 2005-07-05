@@ -822,12 +822,14 @@ class SingleMessageWindow:
 		self.message_tv_buffer = self.message_textview.get_buffer()
 		self.send_button = self.xml.get_widget('send_button')
 		self.reply_button = self.xml.get_widget('reply_button')
+		self.send_and_close_button = self.xml.get_widget('send_and_close_button')
 		self.message_tv_buffer.connect('changed', self.update_char_counter)
 		
 		self.to_entry.set_text(self.contact.jid)
 		
 		self.send_button.set_no_show_all(True)
 		self.reply_button.set_no_show_all(True)
+		self.send_and_close_button.set_no_show_all(True)
 		self.to_label.set_no_show_all(True)
 		self.to_entry.set_no_show_all(True)
 		self.from_label.set_no_show_all(True)
@@ -867,17 +869,19 @@ class SingleMessageWindow:
 		if action == 'send':
 			title = _('Send %s') % title
 			self.send_button.show()
+			self.send_and_close_button.show()
 			self.to_label.show()
 			self.to_entry.show()
 			self.reply_button.hide()
 			self.from_label.hide()
 			self.from_entry.hide()
 		elif action == 'receive':
-			title = _('%s Received') % title
+			title = _('Received %s') % title
 			self.reply_button.show()
 			self.from_label.show()
 			self.from_entry.show()
 			self.send_button.hide()
+			self.send_and_close_button.hide()
 			self.to_label.hide()
 			self.to_entry.hide()
 		
@@ -890,7 +894,7 @@ class SingleMessageWindow:
 		characters_no = self.message_tv_buffer.get_char_count()
 		self.count_chars_label.set_text(str(characters_no))
 	
-	def on_send_button_clicked(self, widget):
+	def send_single_message(self):
 		to_whom_jid = self.to_entry.get_text()
 		if to_whom_jid.find('@') == -1: # if no @ was given
 			ErrorDialog(_('Invalid contact ID'),
@@ -907,14 +911,25 @@ class SingleMessageWindow:
 		self.subject_entry.set_text('') # we sent ok, clear the subject
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview
 
+	def on_send_button_clicked(self, widget):
+		self.send_single_message()
+
 	def on_reply_button_clicked(self, widget):
 		# we create a new blank window to send and we preset RE: and to jid
 		self.subject = _('RE: %s') % self.subject
-		self.message = _('\n-< Original Message >-\n%s') % self.message
+		self.message = _('\n\n\n== Original Message ==\n%s') % self.message
 		self.window.destroy()
 		SingleMessageWindow(self.plugin, self.account, self.contact,
 			action = 'send',	from_whom = self.from_whom, subject = self.subject,
 			message = self.message)
+
+	def on_send_and_close_button_clicked(self, widget):
+		self.send_single_message()
+		self.window.destroy()
+
+	def on_single_message_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			self.window.destroy()
 
 class XMLConsoleWindow:
 	def __init__(self, plugin, account):
