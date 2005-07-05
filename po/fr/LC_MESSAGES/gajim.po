@@ -5,13 +5,12 @@
 # This file is distributed under the same license as the gajim package.
 # Automatically generated, 2004.
 # , 2005.
-# , 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-03 17:05+0200\n"
+"POT-Creation-Date: 2005-07-05 21:11+0200\n"
 "PO-Revision-Date: 2005-06-01 20:37+0200\n"
 "Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
 "Language-Team:  none\n"
@@ -32,17 +31,16 @@ msgstr "Valeur"
 msgid "Type"
 msgstr "Type"
 
-#: src/chat.py:118
+#: src/chat.py:117
 msgid " (account: "
 msgstr " (compte: "
 
-#: src/chat.py:236
-#, fuzzy, python-format
+#: src/chat.py:235
+#, python-format
 msgid "Switch to %s"
-msgstr "S'enregistrer à %s"
+msgstr "Basculer vers %s"
 
-#: src/chat.py:319
-#, fuzzy
+#: src/chat.py:317
 msgid ""
 "If that is not your language for which you want to highlight misspelled "
 "words, then please set your $LANG as appropriate. Eg. for French do export "
@@ -53,27 +51,27 @@ msgid ""
 msgstr ""
 "Si ce n'est pas la langue pour laquelle vous souhaitez souligner les fautes, "
 "configurer votre variable $LANG comme vous le souhaitez. Ajoutez export "
-"LANG=fr_FR a votre fichier ~/.bash_profile ou plus globalement dans /etc/"
-"profile.\n"
+"LANG=fr_FR ou export LANG=fr_FR.UTF-8 à votre fichier ~/.bash_profile ou "
+"plus globalement dans /etc/profile.\n"
 "\n"
 "La vérification orthographique ne sera pas utilisée"
 
-#: src/chat.py:561
+#: src/chat.py:559
 #, python-format
 msgid "Actions for \"%s\""
-msgstr ""
+msgstr "Actions pour \"%s\""
 
-#: src/chat.py:567
+#: src/chat.py:565
 msgid "Read _Wikipedia article"
-msgstr ""
+msgstr "Lire l'article _Wikipédia"
 
-#: src/chat.py:573
+#: src/chat.py:571
 msgid "Look it up in _dictionary"
-msgstr ""
+msgstr "Chercher dans le _dictionnaire"
 
-#: src/chat.py:579
+#: src/chat.py:577
 msgid "Web _search for it"
-msgstr ""
+msgstr "_Rechercher sur Internet"
 
 #: src/config.py:280
 msgid "Active"
@@ -91,7 +89,7 @@ msgstr "Son"
 msgid "Choose Sound"
 msgstr "Choisissez un Son"
 
-#: src/config.py:880 src/config.py:1780 src/vcard.py:120
+#: src/config.py:880 src/config.py:1784 src/vcard.py:120
 msgid "All files"
 msgstr "Tous les fichiers"
 
@@ -104,210 +102,197 @@ msgid "OpenPGP is not usable in this computer"
 msgstr "OpenPGP n'est pas utilisable sur cet ordinateur"
 
 #: src/config.py:1069
-#, fuzzy
 msgid "You are connected to the server"
-msgstr "Vous devez être connecté pour voir les services"
+msgstr "Vous êtes connecté au serveur"
 
 #: src/config.py:1070
 msgid "To change the account name, it must be disconnected."
-msgstr ""
+msgstr "Pour changer le nom du compte, celui-ci doit être déconnecté."
 
 #: src/config.py:1073 src/config.py:1077
 msgid "Invalid account name"
-msgstr ""
+msgstr "Nom de compte invalide"
 
 #: src/config.py:1074
-#, fuzzy
 msgid "Account names cannot be empty."
-msgstr "Votre mot de passe ne peut être vide"
+msgstr "Le nom du compte ne peut pas être vide."
 
 #: src/config.py:1078
 msgid "Account names cannot contain spaces."
-msgstr ""
+msgstr "Les noms de comptes ne peuvent pas contenir d'espaces."
 
 #: src/config.py:1082
-#, fuzzy
 msgid "Invalid Jabber ID"
-msgstr "Identifiant Jabber :"
+msgstr "Identifiant Jabber invalide"
 
 #: src/config.py:1083
 msgid "A Jabber ID must be in the form \"user@servername\"."
-msgstr ""
+msgstr "Un Identifiant Jabber doit être de la forme \"user@servername\"."
 
 #: src/config.py:1090
-#, fuzzy
 msgid "Invalid password"
-msgstr "Enregistrer le mot de _passe"
+msgstr "Mot de passe invalide"
 
 #: src/config.py:1091
-#, fuzzy
 msgid "You must enter a password for the new account."
-msgstr "Vous devez entrer un mot de passe pour enregistrer un nouveau compte"
+msgstr "Vous devez entrer un mot de passe pour enregistrer un nouveau compte."
 
 #: src/config.py:1128
 msgid "Invalid entry"
-msgstr ""
+msgstr "Entrée invalide"
 
 #: src/config.py:1129
-#, fuzzy
 msgid "Custom port must be a port number."
-msgstr "Le port du proxy doit être un numéro de port"
+msgstr "Le port personnalisé doit être un numéro de port"
 
-#: src/config.py:1204
+#: src/config.py:1207
 msgid "Account name is in use"
-msgstr ""
+msgstr "Le nom du compte est utilisé"
 
-#: src/config.py:1205
-#, fuzzy
+#: src/config.py:1208
 msgid "You already have an account using this name."
-msgstr "J'ai déjà un compte que je veux utiliser"
+msgstr "Vous avez déjà un compte avec ce nom."
 
-#: src/config.py:1258
-#, fuzzy
+#: src/config.py:1262
 msgid "No such account available"
-msgstr "Non Disponible"
+msgstr "Compte non disponible"
 
-#: src/config.py:1259
-#, fuzzy
+#: src/config.py:1263
 msgid "You must create your account before editing your personal information."
-msgstr "Vous devez d'abord créer votre compte avant d'éditer vos informations"
+msgstr "Vous devez d'abord créer votre compte avant d'éditer vos informations."
 
-#: src/config.py:1263 src/config.py:1862 src/dialogs.py:572 src/dialogs.py:672
+#: src/config.py:1267 src/config.py:1866 src/dialogs.py:572 src/dialogs.py:672
 #: src/vcard.py:349 src/vcard.py:377
-#, fuzzy
 msgid "You are not connected to the server"
-msgstr "Vous devez être connecté pour voir les services"
+msgstr "Vous n'êtes pas connecté au serveur"
 
-#: src/config.py:1264
-#, fuzzy
+#: src/config.py:1268
 msgid "Without a connection, you can not edit your personal information."
-msgstr "Vous devez être connecté pour éditer vos informations"
+msgstr "Vous devez être connecté pour éditer vos informations."
 
-#: src/config.py:1281
-#, fuzzy
+#: src/config.py:1285
 msgid "Failed to get secret keys"
-msgstr "Une erreur est survenue en récupérant les clés secrètes"
+msgstr "Erreur en récupérant les clés secrètes"
 
-#: src/config.py:1282
+#: src/config.py:1286
 msgid "There was a problem retrieving your GPG secret keys."
-msgstr ""
+msgstr "Il y a eut un problème durant la récupération de vos clés GPG privées."
 
-#: src/config.py:1285 src/msg.c:239
+#: src/config.py:1289 src/gtkgui.glade.h:168
 msgid "Passphrase"
 msgstr "Mot de passe"
 
-#: src/config.py:1285
-#, fuzzy
+#: src/config.py:1289
 msgid "Choose your OpenPGP key"
-msgstr "<b>Choisissez votre clé OpenPGP</b>"
+msgstr "Choisissez votre clé OpenPGP"
 
-#: src/config.py:1293 src/msg.c:43
+#: src/config.py:1297 src/gtkgui.glade.h:156
 msgid "No key selected"
 msgstr "Pas de clé sélectionnée"
 
-#: src/config.py:1524 src/config.py:1885
+#: src/config.py:1528 src/config.py:1889
 msgid "Name"
 msgstr "Nom"
 
-#: src/config.py:1527
+#: src/config.py:1531
 msgid "Server"
 msgstr "Serveur"
 
-#: src/config.py:1647
+#: src/config.py:1651
 #, python-format
 msgid "Edit %s"
 msgstr "_Éditer %s"
 
-#: src/config.py:1649
+#: src/config.py:1653
 #, python-format
 msgid "Register to %s"
 msgstr "S'enregistrer à %s"
 
-#: src/config.py:1669
+#: src/config.py:1673
 msgid "Text"
 msgstr "Texte"
 
-#: src/config.py:1677
+#: src/config.py:1681
 msgid "Image"
 msgstr "Image"
 
-#: src/config.py:1724
+#: src/config.py:1728
 msgid "Image is too big"
-msgstr ""
+msgstr "L'image est trop grande"
 
-#: src/config.py:1724
+#: src/config.py:1728
 msgid ""
 "Image for emoticon has to be less than or equal to 24 pixels in width and 24 "
 "in height."
 msgstr ""
+"L'image pour l'émoticône doit être inférieure ou égale à 24 points en "
+"largeur et 24 points en hauteur."
 
-#: src/config.py:1774
-#, fuzzy
+#: src/config.py:1778
 msgid "Choose image"
-msgstr "Choisissez une _clé"
+msgstr "Choisissez une image"
 
-#: src/config.py:1785 src/vcard.py:125
-#, fuzzy
+#: src/config.py:1789 src/vcard.py:125
 msgid "Images"
-msgstr "Image"
+msgstr "Images"
 
-#: src/config.py:1863
-#, fuzzy
+#: src/config.py:1867
 msgid "Without a connection, you can not browse available services"
 msgstr "Vous devez être connecté pour voir les services"
 
-#: src/config.py:1868
-#, fuzzy, python-format
+#: src/config.py:1872
+#, python-format
 msgid "Service Discovery using %s account"
-msgstr "Gestion des Services"
+msgstr "Gestion des Services du compte %s"
 
-#: src/config.py:1870
+#: src/config.py:1874
 msgid "Service Discovery"
 msgstr "Gestion des Services"
 
-#: src/config.py:1890
+#: src/config.py:1894
 msgid "Service"
 msgstr "Service"
 
-#: src/config.py:1895
+#: src/config.py:1899
 msgid "Node"
 msgstr "Noeud"
 
-#: src/config.py:2105 src/msg.c:16
+#: src/config.py:2109 src/gtkgui.glade.h:264
 msgid "_Edit"
 msgstr "_Éditer"
 
-#: src/config.py:2107 src/msg.c:83
+#: src/config.py:2111 src/gtkgui.glade.h:186
 msgid "Re_gister"
 msgstr "_Souscrire"
 
-#: src/config.py:2280
+#: src/config.py:2284
 #, python-format
 msgid "Removing %s account"
 msgstr "Supprimer le compte %s"
 
-#: src/config.py:2287
-#, fuzzy, python-format
+#: src/config.py:2291
+#, python-format
 msgid "Account \"%s\" is connected to the server"
-msgstr "Vous devez être connecté pour voir les services"
+msgstr "Le compte \"%s\" est connecté au serveur"
 
-#: src/config.py:2288
+#: src/config.py:2292
 msgid "If you remove it, the connection will be lost."
-msgstr ""
+msgstr "Si vous l'enlevez, la connection sera perdue."
 
-#: src/config.py:2407
-#, fuzzy
+#: src/config.py:2411
 msgid "New Room"
-msgstr "Salon :"
+msgstr "Nouveau Salon"
 
-#: src/config.py:2437
+#: src/config.py:2441
 msgid "This bookmark has invalid data"
-msgstr ""
+msgstr "Ce marque-pages contient des données invalides"
 
-#: src/config.py:2438
+#: src/config.py:2442
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
+"Assurez-vous de remplir les champs serveur et salon ou enlevez ce marque-"
+"pages"
 
 #: src/dialogs.py:51
 #, python-format
@@ -321,11 +306,11 @@ msgstr "JID : <i>%s</i>"
 
 #: src/dialogs.py:90
 msgid "Can't remove last group"
-msgstr ""
+msgstr "Impossible d'enlever le dernier groupe"
 
 #: src/dialogs.py:91
 msgid "At least one contact group must be present."
-msgstr ""
+msgstr "Au moins un groupe de contacts doit exister."
 
 #: src/dialogs.py:112
 msgid "Group"
@@ -340,9 +325,8 @@ msgid "KeyID"
 msgstr "KeyID"
 
 #: src/dialogs.py:188
-#, fuzzy
 msgid "Contact name"
-msgstr "_Informations"
+msgstr "Nom du contact"
 
 #: src/dialogs.py:200
 #, python-format
@@ -350,23 +334,21 @@ msgid "%s Status Message"
 msgstr "Message d'état %s"
 
 #: src/dialogs.py:262
-#, fuzzy, python-format
+#, python-format
 msgid "Please fill in the data of the contact you want to add in account %s"
-msgstr "Remplissez les informations de votre compte existant"
+msgstr "Remplissez les informations sur le contact à ajouter au compte %s"
 
 #: src/dialogs.py:264
-#, fuzzy
 msgid "Please fill in the data of the contact you want to add"
-msgstr "Remplissez les informations pour votre nouveau compte"
+msgstr "Remplissez les informations sur le contact à ajouter"
 
 #: src/dialogs.py:330
-#, fuzzy
 msgid "Invalid user name"
-msgstr "Nom"
+msgstr "Nom d'utilisateur invalide"
 
 #: src/dialogs.py:331
 msgid "Contact names must be of the form \"user@servername\"."
-msgstr ""
+msgstr "Les noms des contacts doivent être de la forme \"user@servername\"."
 
 #: src/dialogs.py:385
 msgid "Gajim - a GTK+ Jabber client"
@@ -375,7 +357,7 @@ msgstr "Gajim - Un client Jabber en GTK+"
 #: src/dialogs.py:386
 #, python-format
 msgid "Version %s"
-msgstr ""
+msgstr "Version %s"
 
 #: src/dialogs.py:397
 msgid "A GTK jabber client"
@@ -386,9 +368,9 @@ msgid "translator_credits"
 msgstr "traduction francaise proposée par Yann Le Boulanger"
 
 #: src/dialogs.py:527
-#, fuzzy, python-format
+#, python-format
 msgid "Subscription request for account %s from %s"
-msgstr "Requête d'inscription de la part de %s"
+msgstr "Requête d'inscription pour le compte %s de la part de %s"
 
 #: src/dialogs.py:530
 #, python-format
@@ -398,27 +380,29 @@ msgstr "Requête d'inscription de la part de %s"
 #: src/dialogs.py:573
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
+"Vous ne pouvez joindre un groupe de discussion tant que vous n'êtes pas "
+"connecté."
 
 #: src/dialogs.py:587
-#, fuzzy, python-format
+#, python-format
 msgid "Join Groupchat as %s"
-msgstr "Rejoindre un groupe de discussion "
+msgstr "Rejoindre un groupe de discussion en tant que %s"
 
 #: src/dialogs.py:589
 msgid "Join Groupchat"
 msgstr "Rejoindre un groupe de discussion"
 
 #: src/dialogs.py:652
-#, fuzzy, python-format
+#, python-format
 msgid "New Message as %s"
-msgstr "Nouveau message "
+msgstr "Nouveau message en tant que %s"
 
-#: src/dialogs.py:654 src/dialogs.py:738 src/gajim.py:379 src/msg.c:259
+#: src/dialogs.py:654 src/dialogs.py:738 src/gajim.py:379
+#: src/gtkgui.glade.h:153
 msgid "New Message"
 msgstr "Nouveau message"
 
 #: src/dialogs.py:655
-#, fuzzy
 msgid ""
 "Fill in the contact ID of the contact you would like\n"
 "to send a chat message to:"
@@ -428,123 +412,130 @@ msgstr ""
 
 #: src/dialogs.py:663 src/dialogs.py:841
 msgid "Invalid contact ID"
-msgstr ""
+msgstr "Identifiant du contact invalide"
 
 #: src/dialogs.py:664 src/dialogs.py:842
 msgid "Contact ID must be of the form \"username@servername\"."
 msgstr ""
+"L'identifiant du contact doit être de la forme \"username@servername\"."
 
 #: src/dialogs.py:673
-#, fuzzy
 msgid "Without a connection, you can not change your password."
-msgstr "Vous devez être connecté pour changer votre mot de passe"
+msgstr "Vous devez être connecté pour changer votre mot de passe."
 
 #: src/dialogs.py:692
-#, fuzzy
 msgid "Invalid password."
-msgstr "Enregistrer le mot de _passe"
+msgstr "Mot de passe invalide."
 
 #: src/dialogs.py:693
-#, fuzzy
 msgid "You must enter a password."
-msgstr "Vous devez être connecté pour changer votre mot de passe"
+msgstr "Vous devez entrez un mot de passe."
 
 #: src/dialogs.py:697
 msgid "Passwords don't match."
-msgstr ""
+msgstr "Les mots de passe ne correspondent pas."
 
 #: src/dialogs.py:698
 msgid "The passwords typed in both fields must be identical."
-msgstr ""
+msgstr "Les mots de passe tapés dans chaque champs doivent être identiques."
 
 #: src/dialogs.py:732 src/gajim.py:307
-#, fuzzy
 msgid "Contact Signed In"
-msgstr "_Informations"
+msgstr "Contact connecté"
 
 #: src/dialogs.py:735 src/gajim.py:325
 msgid "Contact Signed Out"
-msgstr ""
+msgstr "Contact déconnecté"
 
 #: src/dialogs.py:741
 #, python-format
 msgid "From %s"
-msgstr ""
+msgstr "De %s"
 
 #: src/dialogs.py:821
-#, fuzzy, python-format
+#, python-format
 msgid "Send Single Message as %s"
-msgstr "Nouveau message "
+msgstr "Envoyer un Message Simple en tant que %s"
 
 #: src/dialogs.py:823
-#, fuzzy
 msgid "Send Single Message"
-msgstr "Message entrant :"
+msgstr "Envoyer un Message Simple"
+
+#: src/dialogs.py:876
+#, python-format
+msgid "XML Console for %s"
+msgstr "Console XML pour %s"
+
+#: src/dialogs.py:878
+msgid "XML Console"
+msgstr "Console XML"
 
 #: src/gajim.py:421
 msgid "error while sending"
 msgstr "erreur en envoyant"
 
+#: src/gajim.py:443 src/gajim.py:453 src/roster_window.py:123
+#: src/roster_window.py:809 src/common/connection.py:303
+#: src/gtkgui.glade.h:110
+msgid "General"
+msgstr "Général"
+
 #: src/gajim.py:457
-#, fuzzy
 msgid "Authorization accepted"
-msgstr "Renvoyer l'Autorisation à"
+msgstr "Autorisation accepté"
 
 #: src/gajim.py:458
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his status."
-msgstr ""
+msgstr "Le contact \"%s\" vous autorisé à voir sont statut."
 
 #: src/gajim.py:462
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
-msgstr ""
+msgstr "Le contact \"%s\" a cessé de vous souscrire à sa présence"
 
 #: src/gajim.py:463
 msgid "You will always see him as offline."
-msgstr ""
+msgstr "Vous le verrez toujours en tant que déconnecté."
 
 #: src/gajim.py:476
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
-msgstr ""
+msgstr "Le contact avec \"%s\" ne peut être établi"
 
-#: src/gajim.py:477 src/common/connection.py:957
+#: src/gajim.py:477 src/common/connection.py:965
 msgid "Check your connection or try again later."
-msgstr ""
+msgstr "Vérifiez votre connexion ou réessayer plus tard."
 
 #: src/gajim.py:494
 msgid "Account registration successful"
-msgstr ""
+msgstr "Compté enregistré avec succès"
 
 #: src/gajim.py:495
 #, python-format
 msgid "The account \"%s\" has been registered with the Jabber server."
-msgstr ""
-
-#: src/gajim.py:580
-msgid "Your GPG passphrase is incorrect"
-msgstr ""
+msgstr "Le compte \"%s\" a été enregistré sur le serveur Jabber."
 
 #: src/gajim.py:581
-#, fuzzy
-msgid "You are currently connected without your GPG key."
-msgstr ""
-"Votre mot de passe GPG est erronné, vous êtes donc connecté sans votre clé "
-"GPG"
+msgid "Your GPG passphrase is incorrect"
+msgstr "Votre mot de passe GPG est incorrecte"
 
-#: src/groupchat_window.py:111 src/groupchat_window.py:800
+#: src/gajim.py:582
+msgid "You are currently connected without your GPG key."
+msgstr "Vous êtes maintenant connecté sans votre clé GPG."
+
+#: src/groupchat_window.py:111 src/groupchat_window.py:799
 #, python-format
 msgid "You just received a new message in room \"%s\""
-msgstr ""
+msgstr "Vous venez de recevoir un nouveau message dans le salon \"%s\""
 
 #: src/groupchat_window.py:112
 msgid "If you close this window, this message will be lost."
-msgstr ""
+msgstr "Si vous fermer cette fenêtre, ce message sera perdu."
 
 #: src/groupchat_window.py:161 src/groupchat_window.py:327
 msgid "This room has no subject"
-msgstr ""
+msgstr "Ce salon n'a pas de sujet"
 
 #: src/groupchat_window.py:282
 #, python-format
@@ -552,346 +543,311 @@ msgid "%s has been kicked by %s: %s"
 msgstr "%s a été éjecté par %s : %s"
 
 #: src/groupchat_window.py:285
-#, fuzzy, python-format
+#, python-format
 msgid "%s is now known as %s"
-msgstr "%s est maintenant %s (%s)"
+msgstr "%s est maintenant %s"
 
 #: src/groupchat_window.py:313
 #, python-format
 msgid "%s has left"
-msgstr ""
+msgstr "%s est parti"
 
 #: src/groupchat_window.py:315
-#, fuzzy, python-format
+#, python-format
 msgid "%s is now %s"
-msgstr "%s est maintenant %s (%s)"
+msgstr "%s est maintenant %s"
 
 #: src/groupchat_window.py:334
-#, fuzzy
 msgid "Changing Subject"
-msgstr "Changer le _Sujet"
+msgstr "Changement de Sujet"
 
 #: src/groupchat_window.py:335
 msgid "Please specify the new subject:"
-msgstr ""
+msgstr "Saisissez le nouveau sujet:"
 
 #: src/groupchat_window.py:344
-#, fuzzy
 msgid "Changing Nickname"
-msgstr "Surnom :"
+msgstr "Changement de Surnom"
 
 #: src/groupchat_window.py:345
 msgid "Please specify the new nickname you want to use:"
-msgstr ""
+msgstr "Saisissez le nouveau surnom que vous souhaitez utiliser:"
 
 #: src/groupchat_window.py:367
 msgid "Bookmark already set"
-msgstr ""
+msgstr "Marque-pages déjà spécifié"
 
 #: src/groupchat_window.py:368
 #, python-format
 msgid "Room \"%s\" is already in your bookmarks."
-msgstr ""
+msgstr "Le salon \"%s\" est déjà dans vos marque-pages."
 
 #: src/groupchat_window.py:377
 msgid "Bookmark has been added successfully"
-msgstr ""
+msgstr "Marque-page ajouté avec succès"
 
 #: src/groupchat_window.py:378
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
+"Vous pouvez gérer vos marque-pages par le menu Actions de votre liste de "
+"contacts."
 
 #: src/groupchat_window.py:587
 #, python-format
 msgid "Kicking %s"
-msgstr ""
+msgstr "Exclusion de %s"
 
 #: src/groupchat_window.py:588 src/groupchat_window.py:616
 msgid "Please specify a reason below:"
-msgstr ""
+msgstr "Saisissez la raison en-dessous:"
 
 #: src/groupchat_window.py:615
 #, python-format
 msgid "Banning %s"
-msgstr ""
+msgstr "Bannissement de %s"
 
-#: src/groupchat_window.py:801 src/tabbed_chat_window.py:226
+#: src/groupchat_window.py:800 src/tabbed_chat_window.py:227
 msgid "If you close this tab, the message will be lost."
-msgstr ""
+msgstr "Si vous fermez cet onglet, le message sera perdu."
 
 #: src/history_window.py:139
-#, fuzzy, python-format
+#, python-format
 msgid "%s is now %s: %s"
-msgstr "%s est maintenant %s (%s)"
+msgstr "%s est maintenant %s : %s"
 
 #: src/history_window.py:156
 msgid "Status is now: "
 msgstr "L'état est maintenant : "
 
 #: src/roster_window.py:259
-#, fuzzy, python-format
+#, python-format
 msgid "You are already in room %s"
-msgstr "Vous êtes déjà dans le salon "
+msgstr "Vous êtes déjà dans le salon %s"
 
-#: src/roster_window.py:317
+#: src/roster_window.py:320
 msgid "New _Room"
-msgstr ""
+msgstr "Nouveau _Salon"
 
-#: src/roster_window.py:331
+#: src/roster_window.py:334
 msgid "Manage Bookmarks..."
-msgstr ""
+msgstr "Gérer les Marque-pages..."
 
-#: src/roster_window.py:343
+#: src/roster_window.py:346
 msgid "to "
 msgstr "à "
 
-#: src/roster_window.py:343 src/roster_window.py:353
+#: src/roster_window.py:346 src/roster_window.py:356
 msgid " account"
 msgstr " "
 
-#: src/roster_window.py:353
+#: src/roster_window.py:356
 msgid "using "
 msgstr "en utilisant le compte "
 
-#: src/roster_window.py:366 src/systray.py:170 src/systray.py:175
+#: src/roster_window.py:369 src/systray.py:170 src/systray.py:175
 msgid "as "
 msgstr "avec "
 
-#: src/roster_window.py:490
+#: src/roster_window.py:493
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s est maintenant %s (%s)"
 
-#: src/roster_window.py:511
+#: src/roster_window.py:514
 #, python-format
 msgid "Transport \"%s\" will be removed"
-msgstr ""
+msgstr "Le transport \"%s\" sera enlevé"
 
-#: src/roster_window.py:511
-#, fuzzy, python-format
+#: src/roster_window.py:514
+#, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from %s."
-msgstr "Vous devez être connecté pour envoyer un message à un contact"
+msgstr ""
+"Vous ne pourrez plus envoyer et recevoir de messages aux contacts de %s."
 
-#: src/roster_window.py:541
-#, fuzzy
+#: src/roster_window.py:544
 msgid "Assign OpenPGP Key"
 msgstr "Assigner une clé OpenPGP"
 
-#: src/roster_window.py:541
+#: src/roster_window.py:544
 msgid "Select a key to apply to the contact"
-msgstr ""
+msgstr "Choisissez une clé à assigner au contact"
 
-#: src/roster_window.py:631
+#: src/roster_window.py:634
 msgid "I would like to add you to my roster"
 msgstr "Je souhaiterais vous ajouter à ma liste de contacts"
 
-#: src/roster_window.py:658
+#: src/roster_window.py:660
 msgid "Rename"
 msgstr "Renommer"
 
-#: src/roster_window.py:682
+#: src/roster_window.py:680
 msgid "_Log on"
 msgstr "_Connecter"
 
-#: src/roster_window.py:697
+#: src/roster_window.py:690
 msgid "Log _off"
 msgstr "_Déconnecter"
 
-#: src/roster_window.py:715
-#, fuzzy
+#: src/roster_window.py:703
 msgid "Edit"
-msgstr "_Éditer"
+msgstr "Éditer"
 
-#: src/roster_window.py:727 src/msg.c:362
+#: src/roster_window.py:710 src/gtkgui.glade.h:306
 msgid "_Remove from Roster"
-msgstr ""
+msgstr "_Enlever de la liste de contacts"
 
-#: src/roster_window.py:765 src/msg.c:153
-msgid "Status"
-msgstr "État"
-
-#: src/roster_window.py:798
-msgid "_Edit Account"
-msgstr "_Éditer le Compte"
-
-#: src/roster_window.py:810 src/msg.c:12
-msgid "_Service Discovery"
-msgstr "Gestion des _Services"
-
-#: src/roster_window.py:822
-msgid "_Add Contact"
-msgstr "Ajouter un _Contact"
-
-#: src/roster_window.py:834
-msgid "Join _Groupchat"
-msgstr "Rejoindre un Groupe de Discussion"
-
-#: src/roster_window.py:846 src/msg.c:9
-msgid "_New Message"
-msgstr "_Nouveau message"
-
-#: src/roster_window.py:865
-#, fuzzy
+#: src/roster_window.py:800
 msgid "Authorization has been sent"
-msgstr "Renvoyer l'Autorisation à"
+msgstr "L'Autorisation a été envoyée"
 
-#: src/roster_window.py:866
+#: src/roster_window.py:801
 #, python-format
-msgid "Now \"%s\" will know when your status."
-msgstr ""
+msgid "Now \"%s\" will know your status."
+msgstr "Désormais \"%s\" connaitra votre état."
 
-#: src/roster_window.py:888
-#, fuzzy
+#: src/roster_window.py:823
 msgid "Subscription request has been sent"
-msgstr "Requête d'inscription de la part de %s"
+msgstr "La requête d'inscription a été envoyée"
 
-#: src/roster_window.py:889
+#: src/roster_window.py:824
 #, python-format
 msgid "If \"%s\" accepts this request you will know his status."
-msgstr ""
+msgstr "Si \"%s\" accepte cette requête, vous connaitrez son statut."
 
-#: src/roster_window.py:988
+#: src/roster_window.py:923
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
-msgstr ""
+msgstr "Le contact \"%s\" sera enlevé de la liste de contacts"
 
-#: src/roster_window.py:989
+#: src/roster_window.py:924
 #, python-format
 msgid ""
 "By removing this contact you also remove authorization. Contact \"%s\" will "
 "always see you as offline."
 msgstr ""
+"En enlevant ce contact, vous enlevez aussi son autorisation. Le contact \"%s"
+"\" vous verra toujours déconnecté."
 
-#: src/roster_window.py:1021
-#, fuzzy
+#: src/roster_window.py:956
 msgid "Password Required"
-msgstr "Mot de passe :"
+msgstr "Mot de Passe Requis"
 
-#: src/roster_window.py:1022
+#: src/roster_window.py:957
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Entrez votre mot de passe pour le compte %s"
 
-#: src/roster_window.py:1023
-#, fuzzy
+#: src/roster_window.py:958
 msgid "Save password"
-msgstr "Enregistrer le mot de _passe"
+msgstr "Enregistrer le mot de passe"
 
-#: src/roster_window.py:1054
-#, fuzzy
+#: src/roster_window.py:989
 msgid "Passphrase Required"
-msgstr "Mot de passe"
+msgstr "Mot de Passe Requis"
 
-#: src/roster_window.py:1055
+#: src/roster_window.py:990
 #, python-format
 msgid "Enter GPG key passphrase for account %s"
 msgstr "Entrez votre mot de passe GPG pour le compte %s"
 
-#: src/roster_window.py:1056
-#, fuzzy
+#: src/roster_window.py:991
 msgid "Save passphrase"
-msgstr "Mot de passe"
+msgstr "Enregistrer le mot de passe"
 
-#: src/roster_window.py:1084 src/common/connection.py:773
+#: src/roster_window.py:1019 src/common/connection.py:773
 #, python-format
 msgid "I'm %s"
-msgstr ""
+msgstr "Je suis %s"
 
-#: src/roster_window.py:1103
-#, fuzzy
+#: src/roster_window.py:1038
 msgid "No accounts created"
-msgstr " (compte: "
+msgstr "Aucun compte créé"
 
-#: src/roster_window.py:1104
-#, fuzzy
+#: src/roster_window.py:1039
 msgid "You must create Jabber account before connecting the server."
-msgstr "Vous devez créer un compte avant de vous connecter au réseau Jabber"
+msgstr "Vous devez créer un compte Jabber avant de vous connecter au serveur."
 
-#: src/roster_window.py:1384 src/roster_window.py:1390
-#, fuzzy
+#: src/roster_window.py:1319 src/roster_window.py:1325
 msgid "You have unread messages"
-msgstr "Gajim - %s messages non-lus"
+msgstr "Vous avez des messages non-lus"
 
-#: src/roster_window.py:1385 src/roster_window.py:1391
+#: src/roster_window.py:1320 src/roster_window.py:1326
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
 msgstr ""
+"Les messages seront disponibles à une lecture ultérieure si l'archivage de "
+"l'historique est actif."
 
-#: src/systray.py:230
+#: src/systray.py:229
 msgid "All contacts in this group are offline or have errors"
 msgstr "Tous les contacts de ce groupe sont déconnectés ou ont des erreurs"
 
-#: src/systray.py:289
+#: src/systray.py:288
 #, python-format
 msgid "Gajim - %s unread messages"
 msgstr "Gajim - %s messages non-lus"
 
-#: src/systray.py:291
+#: src/systray.py:290
 msgid "Gajim - 1 unread message"
 msgstr "Gajim - 1 message non-lu"
 
-#: src/systray.py:294
-#, fuzzy, python-format
+#: src/systray.py:293
+#, python-format
 msgid "Gajim - %s"
-msgstr "Gajim"
+msgstr "Gajim - %s"
 
-#: src/tabbed_chat_window.py:184 src/tabbed_chat_window.py:225
+#: src/tabbed_chat_window.py:185 src/tabbed_chat_window.py:226
 #, python-format
 msgid "You just received a new message from \"%s\""
-msgstr ""
+msgstr "Vous venez de recevoir un nouveau message de \"%s\""
 
-#: src/tabbed_chat_window.py:185
+#: src/tabbed_chat_window.py:186
 msgid "If you close the window, this message will be lost."
-msgstr ""
+msgstr "Si vous fermez cette fenêtre, ce message sera perdu."
 
-#: src/tabbed_chat_window.py:253
+#: src/tabbed_chat_window.py:254
 #, python-format
 msgid "%s is %s"
 msgstr "%s est %s"
 
-#: src/tabbed_chat_window.py:302
-#, fuzzy
-msgid "A connection is not available"
-msgstr "Passer _indisponible après :"
-
 #: src/tabbed_chat_window.py:303
+msgid "A connection is not available"
+msgstr "Aucune connexion disponible"
+
+#: src/tabbed_chat_window.py:304
 msgid "Your message can't be sent until you are connected."
-msgstr ""
+msgstr "Votre message ne peut être envoyé tant que vous n'êtes pas connecté."
 
 #: src/vcard.py:114
 msgid "Choose avatar"
-msgstr ""
+msgstr "Choisissez un avatar"
 
 #: src/vcard.py:154
 #, python-format
 msgid "The filesize of image \"%s\" is too large"
-msgstr ""
+msgstr "Le poids du fichier de l'image \"%s\" est trop importante"
 
 #: src/vcard.py:155
 msgid "The file must not be more than 8 kilobytes."
-msgstr ""
+msgstr "Le fichier ne doit pas excéder les 8 kilobytes."
 
 #: src/vcard.py:350
-#, fuzzy
 msgid "Without a connection you can not publish your contact information."
-msgstr "Vous devez être connecté pour publier vos informations"
+msgstr "Vous devez être connecté pour publier vos informations."
 
 #: src/vcard.py:378
-#, fuzzy
 msgid "Without a connection, you can not get your contact information."
-msgstr "Vous devez être connecté pour récupérer vos informations"
+msgstr "Vous devez être connecté pour récupérer vos informations."
 
 #: src/vcard.py:387
-#, fuzzy
 msgid "_Publish"
-msgstr "Publier"
+msgstr "_Publier"
 
 #: src/vcard.py:394
-#, fuzzy
 msgid "_Retrieve"
-msgstr "Récupérer"
+msgstr "_Récupérer"
 
 #: src/common/config.py:243
 msgid "Nap"
@@ -903,7 +859,7 @@ msgstr "Je fais une sieste"
 
 #: src/common/config.py:244
 msgid "Back soon"
-msgstr ""
+msgstr "Bientôt de retour"
 
 #: src/common/config.py:244
 msgid "Back in some minutes."
@@ -943,62 +899,62 @@ msgstr "Je suis au téléphone."
 
 #: src/common/config.py:249
 msgid "Out"
-msgstr ""
+msgstr "Dehors"
 
 #: src/common/config.py:249
 msgid "I'm out enjoying life"
-msgstr ""
+msgstr "Je suis dehors à profiter de la vie"
 
-#: src/common/connection.py:296 src/common/connection.py:864
+#: src/common/connection.py:296 src/common/connection.py:872
 msgid "I would like to add you to my roster."
 msgstr "Je souhaiterais vous ajouter à ma liste de contacts"
 
 #: src/common/connection.py:346
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
-msgstr ""
+msgstr "La connexion du compte \"%s\" a été perdue"
 
 #: src/common/connection.py:347
 msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr ""
+"Pour continuer à envoyer et recevoir des messages, vous devez vous "
+"reconnecter."
 
 #: src/common/connection.py:666 src/common/connection.py:710
-#: src/common/connection.py:956
-#, fuzzy, python-format
+#: src/common/connection.py:964
+#, python-format
 msgid "Could not connect to \"%s\""
-msgstr "Impossible de se connecter à %s"
+msgstr "Impossible de se connecter à \"%s\""
 
 #: src/common/connection.py:667 src/common/connection.py:711
 msgid "Check your connection or try again later"
-msgstr ""
+msgstr "Vérifiez votre connexion ou réessayer plus tard"
 
 #: src/common/connection.py:722
-#, fuzzy, python-format
+#, python-format
 msgid "Authentication failed with \"%s\""
-msgstr ""
-"Impossible de s'authentifier à %s, vérifiez votre login et votre mot de passe"
+msgstr "Echec de l'authentification avec \"%s\""
 
 #: src/common/connection.py:724
 msgid "Please check your login and password for correctness."
-msgstr ""
+msgstr "Vérifiez si votre identifiant et votre mot de passe sont corrects."
 
 #: src/common/connection.py:768
 msgid "OpenPGP Key was not given"
-msgstr ""
+msgstr "Clé OpenPGP non renseignée"
 
 #: src/common/connection.py:769
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
-msgstr ""
+msgstr "Vous serez connecté à %s sans OpenPGP."
 
-#: src/common/connection.py:842
-msgid "[this message is encrypted]"
+#: src/common/connection.py:843
+msgid "[This message is encrypted]"
 msgstr "[ce message est chiffré]"
 
-#: src/common/connection.py:965
-#, fuzzy
+#: src/common/connection.py:973
 msgid "Error:"
-msgstr "Erreur : "
+msgstr "Erreur :"
 
 #: src/common/helpers.py:28
 msgid "Busy"
@@ -1026,7 +982,7 @@ msgstr "Absent"
 
 #: src/common/helpers.py:40
 msgid "Offline"
-msgstr "Déconnecter"
+msgstr "Déconnecté"
 
 #: src/common/helpers.py:42
 msgid "Invisible"
@@ -1040,84 +996,788 @@ msgstr "Non dans la liste"
 msgid "Has errors"
 msgstr "À des erreurs"
 
-#: src/msg.c:7 src/msg.c:31
-msgid "Gajim"
-msgstr "Gajim"
+#: src/gtkgui.glade.h:1
+msgid "..."
+msgstr "..."
 
-#: src/msg.c:8 src/msg.c:228
-msgid "_Actions"
-msgstr "_Actions"
+#: src/gtkgui.glade.h:2
+msgid "0"
+msgstr "0"
 
-#: src/msg.c:10
-#, fuzzy
-msgid "_Join Group Chat"
-msgstr "Re_joindre un Groupe de Discussion"
+#: src/gtkgui.glade.h:3
+msgid "<b>Advanced Configuration Editor</b>"
+msgstr "<b>Éditeur de Configuration Avancé</b>"
 
-#: src/msg.c:11
-msgid "Add _Contact"
-msgstr "Ajouter un _Contact"
+#: src/gtkgui.glade.h:4
+msgid "<b>Changes in latest version</b>"
+msgstr "<b>Changements dans la dernière version</b>"
 
-#: src/msg.c:13
-msgid "Show _Offline Contacts"
-msgstr "Montrer les contacts Déconnectés"
+#: src/gtkgui.glade.h:5
+msgid "<b>Custom Applications</b>"
+msgstr "<b>Applications</b>"
 
-#: src/msg.c:14
-msgid "_About"
-msgstr "_À Propos"
+#: src/gtkgui.glade.h:6
+msgid "<b>Format of a chat line</b>"
+msgstr "<b>Format de la ligne de discussion</b>"
 
-#: src/msg.c:15
-msgid "_Quit"
-msgstr "_Quitter"
+#: src/gtkgui.glade.h:7
+msgid "<b>Interface Customization</b>"
+msgstr "<b>Personnalisation de l'interface</b>"
 
-#: src/msg.c:17
+#: src/gtkgui.glade.h:8
+msgid "<b>Jabber Traffic</b>"
+msgstr "<b>Trafic Jabber</b>"
+
+#: src/gtkgui.glade.h:9
+msgid "<b>Links</b>"
+msgstr "<b>Liens</b>"
+
+#: src/gtkgui.glade.h:10
+msgid "<b>Log</b>"
+msgstr "<b>Archivage</b>"
+
+#: src/gtkgui.glade.h:11
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>Divers</b>"
+
+#: src/gtkgui.glade.h:12
+msgid "<b>Notifications</b>"
+msgstr "<b>Notifications</b>"
+
+#: src/gtkgui.glade.h:13
+msgid "<b>OpenPGP</b>"
+msgstr "<b>OpenPGP</b>"
+
+#: src/gtkgui.glade.h:14
+msgid "<b>Please choose on of the options below:</b>"
+msgstr "<b>Choisissez une des options suivantes :</b>"
+
+#: src/gtkgui.glade.h:15
+msgid "<b>Preset Status Messages</b>"
+msgstr "<b>Messages prédéfinis</b>"
+
+#: src/gtkgui.glade.h:16
+msgid "<b>Properties</b>"
+msgstr "<b>Propriétés</b>"
+
+#: src/gtkgui.glade.h:17
+msgid "<b>Settings</b>"
+msgstr "<b>Réglages</b>"
+
+#: src/gtkgui.glade.h:18
+msgid "<b>Sounds</b>"
+msgstr "<b>Sons</b>"
+
+#: src/gtkgui.glade.h:19
+msgid "<b>What do you want to do?</b>"
+msgstr "<b>Que voulez vous faire ?</b>"
+
+#: src/gtkgui.glade.h:20
+msgid "<b>XML Input</b>"
+msgstr "<b>Entrée XML</b>"
+
+#: src/gtkgui.glade.h:21
+msgid "<span background=\"lightyellow\"></span>"
+msgstr "<span background=\"lightyellow\"></span>"
+
+#: src/gtkgui.glade.h:22
 msgid "A_ccounts"
 msgstr "_Comptes"
 
-#: src/msg.c:18
-msgid "Profile, Avatar"
-msgstr ""
+#: src/gtkgui.glade.h:23
+msgid "About"
+msgstr "À Propos"
 
-#: src/msg.c:19
-msgid "_Preferences"
-msgstr "_Préférences"
+#: src/gtkgui.glade.h:24
+msgid "Account"
+msgstr "Compte"
 
-#: src/msg.c:20
-msgid "Accounts"
-msgstr "Comptes"
-
-#: src/msg.c:21
-msgid "_Modify"
-msgstr "_Modifier"
-
-#: src/msg.c:22 src/msg.c:270
-msgid "_Remove"
-msgstr "_Supprimer"
-
-#: src/msg.c:23
+#: src/gtkgui.glade.h:25
 msgid "Account Modification"
 msgstr "Modification du compte"
 
-#: src/msg.c:24
-msgid "_Name: "
-msgstr "_Nom : "
+#: src/gtkgui.glade.h:26
+msgid "Account:"
+msgstr "Comptes :"
 
-#: src/msg.c:25
-msgid "_Jabber ID:"
-msgstr "Identifiant _Jabber : "
+#: src/gtkgui.glade.h:27
+msgid "Accounts"
+msgstr "Comptes"
 
-#: src/msg.c:26 src/msg.c:288 src/msg.c:304
-msgid "_Password:"
-msgstr "Mot de _passe : "
+#: src/gtkgui.glade.h:28
+msgid "Ad_vanced Actions"
+msgstr "Actions A_vancées"
 
-#: src/msg.c:27
-msgid "Resour_ce: "
-msgstr "Ressour_ce: "
+#: src/gtkgui.glade.h:29
+msgid "Add New Contact"
+msgstr "Ajouter un nouveau contact"
 
-#: src/msg.c:28
+#: src/gtkgui.glade.h:30
+msgid "Add _Contact"
+msgstr "Ajouter un _Contact"
+
+#: src/gtkgui.glade.h:31
+msgid "Address"
+msgstr "Adresse :"
+
+#: src/gtkgui.glade.h:32
+msgid "Advanced"
+msgstr "Avancé"
+
+#: src/gtkgui.glade.h:33
+msgid "Advanced Configuration Editor"
+msgstr "Éditeur de Configuration Avancé"
+
+#: src/gtkgui.glade.h:34
+msgid "After nickname:"
+msgstr "Après le surnom :"
+
+#: src/gtkgui.glade.h:35
+msgid "After time:"
+msgstr "Après l'heure :"
+
+#: src/gtkgui.glade.h:36
+msgid "Allow _OS information to be sent"
+msgstr ""
+"Autoriser l'envoi des informations concernant votre _système d'exploitation"
+
+#: src/gtkgui.glade.h:37
+msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
+msgstr ""
+"Autoriser les popups/notifications lorsque je suis _absent/indisponible/"
+"occupé/invisible"
+
+#: src/gtkgui.glade.h:38
+msgid "Also known as iChat style"
+msgstr "Aussi appellé style iChat"
+
+#: src/gtkgui.glade.h:39
+msgid "Ask status message when going: "
+msgstr "Demander le message d'état lorsque l'on passe : "
+
+#: src/gtkgui.glade.h:40
+msgid "Ask:"
+msgstr "Demande :"
+
+#: src/gtkgui.glade.h:41
+msgid "Assign Open_PGP Key"
+msgstr "Assigner une clé Open_PGP"
+
+#: src/gtkgui.glade.h:42
+msgid "Authorize contact so he can know when you're connected"
+msgstr "Autoriser le contact pour qu'il sache quand vous êtes connecté"
+
+#: src/gtkgui.glade.h:43
+msgid "Auto _away after:"
+msgstr "Passer _absent après :"
+
+#: src/gtkgui.glade.h:44
+msgid "Auto _not available after:"
+msgstr "Passer _indisponible après :"
+
+#: src/gtkgui.glade.h:45
+msgid "Auto join"
+msgstr "Rejoindre automatiquement"
+
+#: src/gtkgui.glade.h:46
+msgid "Automatically authorize contact"
+msgstr "Autoriser le contact automatiquement"
+
+#: src/gtkgui.glade.h:47
+msgid "Background color"
+msgstr "Couleur du fond"
+
+#: src/gtkgui.glade.h:48
+msgid "Banner:"
+msgstr "Bannière:"
+
+#: src/gtkgui.glade.h:49
+msgid "Before nickname:"
+msgstr "Avant le surnom :"
+
+#: src/gtkgui.glade.h:50
+msgid "Before time:"
+msgstr "Avant l'heure :"
+
+#: src/gtkgui.glade.h:51
+msgid "Birthday:"
+msgstr "Anniversaire :"
+
+#: src/gtkgui.glade.h:52
+msgid "Bold"
+msgstr "Gras"
+
+#: src/gtkgui.glade.h:53
+msgid "C_onnect at startup"
+msgstr "C_onnexion au démarrage"
+
+#: src/gtkgui.glade.h:54
+msgid "Chan_ge"
+msgstr "Chan_ger"
+
+#: src/gtkgui.glade.h:55
+msgid "Change Password"
+msgstr "Changer le mot de passe"
+
+#: src/gtkgui.glade.h:56
+msgid "Change _Nickname"
+msgstr "Changer de Sur_nom"
+
+#: src/gtkgui.glade.h:57
+msgid "Change _Subject"
+msgstr "Changer le _Sujet"
+
+#: src/gtkgui.glade.h:58
+msgid "Chat"
+msgstr "Discussion"
+
+#: src/gtkgui.glade.h:59
+msgid "Chat with"
+msgstr "Discuter avec"
+
+#: src/gtkgui.glade.h:60
+msgid "Check for new _version at startup"
+msgstr "_Vérifier l'existence d'une nouvelle version au démarrage"
+
+#: src/gtkgui.glade.h:61
+msgid "Check if you want to register for a new jabber account"
+msgstr "A cocher si vous voulez créer un nouveau compte Jabber"
+
+#: src/gtkgui.glade.h:62
+msgid ""
+"Check this option, only if someone you don't have in the roster spams/annoys "
+"you. Use with caution, cause it blocks all messages from any contact that is "
+"not in the roster."
+msgstr ""
+"Cochez cette option seulement si quelqu'un n'appartenant pas à votre liste "
+"vous spamme/ennuie. Utilisez avec précaution, car cette option bloque tous "
+"les messages des contacts qui ne sont pas dans votre liste et qui "
+"souhaiteraient vous envoyer un message"
+
+#: src/gtkgui.glade.h:63
+msgid ""
+"Check this so Gajim will connect in port 5223 where legacy servers are "
+"expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
+"default if broadcasted by the server, and with this option enabled TLS will "
+"be disabled"
+msgstr ""
+"Si vous cochez cette case, Gajim se connectera sur le port 5223, sur lequel "
+"les serveurs sont supposés gérer le SSL. Notez que Gajim utilise le cryptage "
+"TLS par défaut si le serveur annonce qu'il le supporte, et avec cette option "
+"vous désactivez le TLS"
+
+#: src/gtkgui.glade.h:64
+msgid "Choose _Key..."
+msgstr "Choisissez une _clé"
+
+#: src/gtkgui.glade.h:65
+msgid "City:"
+msgstr "Ville :"
+
+#: src/gtkgui.glade.h:66
+msgid "Click to change account's password"
+msgstr "Cliquez pour changer le mot de passe du compte"
+
+#: src/gtkgui.glade.h:67
+msgid "Click to get contact's extended information"
+msgstr "Cliquez pour plus d'informations sur le contact"
+
+#: src/gtkgui.glade.h:68
+msgid "Click to see features like on jabber servers"
+msgstr "Cliquez pour voir les fonctionnalités du serveur jabber"
+
+#: src/gtkgui.glade.h:69
+msgid "Click to see past conversation in this room"
+msgstr "Cliquez ici pour voir les précédentes conversations de ce salon"
+
+#: src/gtkgui.glade.h:70
+msgid "Click to see past conversations with this contact"
+msgstr "Cliquez ici pour voir les précédentes conversations avec ce contact"
+
+#: src/gtkgui.glade.h:71
+msgid "Click to toggle OpenPGP encryption"
+msgstr "Cliquez pour activer l'encryption OpenPGP"
+
+#: src/gtkgui.glade.h:72
+msgid "Client:"
+msgstr "Client :"
+
+#: src/gtkgui.glade.h:73
+msgid "Company:"
+msgstr "Companie :"
+
+#: src/gtkgui.glade.h:74
+msgid "Configure _Room"
+msgstr "Configurer le _Groupe"
+
+#: src/gtkgui.glade.h:75
+msgid "Connection"
+msgstr "Connexion"
+
+#: src/gtkgui.glade.h:76
+msgid "Contact Information"
+msgstr "Informations"
+
+#: src/gtkgui.glade.h:77
+msgid "Contact _Info"
+msgstr "_Informations"
+
+#: src/gtkgui.glade.h:78
+msgid "Contact:"
+msgstr "Contact :"
+
+#: src/gtkgui.glade.h:79
+msgid "Conversation History"
+msgstr "Historique de Conversation"
+
+#: src/gtkgui.glade.h:80
+msgid "Country:"
+msgstr "Pays :"
+
+#: src/gtkgui.glade.h:81
+msgid "Default _status iconset:"
+msgstr "Icônes d'état par défaut :"
+
+#: src/gtkgui.glade.h:82
+msgid "Deny authorization from contact so he cannot know when you're connected"
+msgstr ""
+"Refuser l'autorisation du contact pour qu'il ne puisse pas savoir quand vous "
+"êtes connecté"
+
+#: src/gtkgui.glade.h:83
+msgid "Department:"
+msgstr "Département :"
+
+#: src/gtkgui.glade.h:84
+msgid "E-Mail"
+msgstr "EMail"
+
+#: src/gtkgui.glade.h:85
+msgid "E-Mail:"
+msgstr "EMail :"
+
+#: src/gtkgui.glade.h:86
+msgid "Edit Groups"
+msgstr "Éditer les Groupes"
+
+#: src/gtkgui.glade.h:87
+msgid "Edit Personal Information..."
+msgstr "_Éditer les Informations Personnelles..."
+
+#: src/gtkgui.glade.h:88
+msgid "Edit _Groups"
+msgstr "Éditer les _Groupes"
+
+#: src/gtkgui.glade.h:89
+msgid "Enter it again for confirmation:"
+msgstr "Entrez le de nouveau pour confirmer :"
+
+#: src/gtkgui.glade.h:90
+msgid "Enter new password:"
+msgstr "Entrez un nouveau mot de passe :"
+
+#: src/gtkgui.glade.h:91
+msgid "Enter your message:"
+msgstr "Entrez votre message :"
+
+#: src/gtkgui.glade.h:92
+msgid "Events"
+msgstr "Événements"
+
+#: src/gtkgui.glade.h:93
+msgid "Every 5 _minutes"
+msgstr "Toutes les 5 _minutes"
+
+#: src/gtkgui.glade.h:94
+msgid "Extra Address:"
+msgstr "Adresse 2 :"
+
+#: src/gtkgui.glade.h:95
+msgid "Family:"
+msgstr "Famille:"
+
+#: src/gtkgui.glade.h:96
+msgid "Filter:"
+msgstr "Filtre :"
+
+#: src/gtkgui.glade.h:97
+msgid "Format: YYYY-MM-DD"
+msgstr "Format : AAAA-MM-JJ"
+
+#: src/gtkgui.glade.h:98
+msgid ""
+"GNOME default applications\n"
+"KDE default applications\n"
+"Custom"
+msgstr ""
+"Applications par défaut de GNOME\n"
+"Applications par défaut de KDE\n"
+"Personnalisé"
+
+#: src/gtkgui.glade.h:101
+msgid "Gajim"
+msgstr "Gajim"
+
+#: src/gtkgui.glade.h:102
+msgid "Gajim Themes Customization"
+msgstr "Personalisation des Thèmes de Gajim"
+
+#: src/gtkgui.glade.h:103
+msgid "Gajim theme:"
+msgstr "Thème de Gajim:"
+
+#: src/gtkgui.glade.h:104
+msgid ""
+"Gajim will automatically show the new received message in a new chat window "
+"or tab in an existing chat window"
+msgstr ""
+"Gajim va automatiquement montrer les nouveaux messages reçus dans une "
+"nouvelle fenêtre de discussion ou dans un onglet d'une fenêtre de discussion "
+"existante"
+
+#: src/gtkgui.glade.h:105
+msgid ""
+"Gajim will notify you for new message via a popup in the bottom right of the "
+"screen"
+msgstr ""
+"Gajim vous signalera les nouveaux messages dans un popup en bas à droite de "
+"l'écran"
+
+#: src/gtkgui.glade.h:106
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed in"
+msgstr ""
+"Gajim vous signalera par une fenêtre popup en bas à droite de l'écran qu'un "
+"contact s'est connecté"
+
+#: src/gtkgui.glade.h:107
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed out"
+msgstr ""
+"Gajim vous signalera par une fenêtre popup en bas à droite de l'écran qu'un "
+"contact s'est déconnecté"
+
+#: src/gtkgui.glade.h:108
+msgid ""
+"Gajim will only change the icon of the contact that sent the new message"
+msgstr ""
+"Gajim ne fera que changer l'icône du contact qui a envoyé le nouveau message"
+
+#: src/gtkgui.glade.h:109
+msgid "Gajim: First Time Wizard"
+msgstr "Gajim : Assistant"
+
+#: src/gtkgui.glade.h:111
+msgid "Given:"
+msgstr "Prénom :"
+
+#: src/gtkgui.glade.h:112
+msgid "Go"
+msgstr "Parcourir"
+
+#: src/gtkgui.glade.h:113
+msgid "Group Chat"
+msgstr "Groupes de Discussion"
+
+#: src/gtkgui.glade.h:114
+msgid "Group:"
+msgstr "Groupe :"
+
+#: src/gtkgui.glade.h:115
+msgid "HTTP Connect"
+msgstr "Connexion HTTP"
+
+#: src/gtkgui.glade.h:116
+msgid "Homepage:"
+msgstr "Site perso :"
+
+#: src/gtkgui.glade.h:117
+msgid "Hostname: "
+msgstr "_Serveur :"
+
+#: src/gtkgui.glade.h:118
+msgid "I already have an account I want to use"
+msgstr "J'ai déjà un compte que je veux utiliser"
+
+#: src/gtkgui.glade.h:119
+msgid "I want to _register for a new account"
+msgstr "Je veux _créer un nouveau compte"
+
+#: src/gtkgui.glade.h:120
+msgid "I would like to add you to my contact list."
+msgstr "Je souhaiterais vous ajouter à ma liste de contacts."
+
+#: src/gtkgui.glade.h:121
+msgid "If checked, Gajim will also have a trayicon"
+msgstr ""
+"Si cette case est cochée, Gajim placera une icône dans la zone de "
+"notification"
+
+#: src/gtkgui.glade.h:122
+msgid "If checked, Gajim will join this groupchat on startup"
+msgstr "Si cette case est cochée, Gajim se connectera à ce salon au démarrage"
+
+#: src/gtkgui.glade.h:123
+msgid "If checked, Gajim will remember the password for this account"
+msgstr ""
+"Si cette case est cochée, Gajim va retenir le mot de passe pour ce compte"
+
+#: src/gtkgui.glade.h:124
+msgid ""
+"If checked, Gajim will remember the roster and chat window positions in the "
+"screen and the sizes of them next time you run it"
+msgstr ""
+"Si cette case est cochée, Gajim va retenir la position de la fenêtre "
+"principale et des fenêtres de discussion pour vos prochaines utilisations de "
+"Gajim"
+
+#: src/gtkgui.glade.h:125
+msgid ""
+"If checked, Gajim will replace ascii smilies like ':)' with equivalent "
+"graphical emoticons"
+msgstr ""
+"Si cette case est cochée, Gajim va remplacer les frimousses ASCII comme « :) "
+"» par un équivalent graphique"
+
+#: src/gtkgui.glade.h:126
+msgid ""
+"If checked, Gajim will send keep-alive packets so it prevents connection "
+"timeout which results in disconnection"
+msgstr ""
+"Si coché, Gajim enverra des paquets de maintien de connection pour prévenir "
+"des temps de latence pouvant entraîner des déconnections"
+
+#: src/gtkgui.glade.h:127
+msgid ""
+"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
+"permission only for only you and of course the administrator"
+msgstr ""
+"Si cette case est cochée, Gajim va sauvegarder le mot de passe dans ~/.gajim/"
+"config avec accès en lecture pour vous et l'administrateur uniquement"
+
+#: src/gtkgui.glade.h:128
+msgid ""
+"If checked, Gajim will use protocol-specific status icons. (eg. A contact "
+"from MSN will have the equivalent msn icon for status online, away, busy, "
+"etc...)"
+msgstr ""
+"Si cette case est cochée, Gajim utilisera des icônes d'état spécifiques aux "
+"protocoles. (Par ex. un contat MSN aura les icônes de MSN pour les états "
+"disponible, absent, occupé, etc)"
+
+#: src/gtkgui.glade.h:129
+msgid ""
+"If checked, Gajim, when launched, will automatically connect to jabber using "
+"this account"
+msgstr ""
+"Si cette case est cochée, au démarrage, Gajim se connectera automatiquement "
+"à jabber en utilisant ce compte."
+
+#: src/gtkgui.glade.h:130
+msgid ""
+"If you have 2 or more accounts and it is checked, Gajim will list all "
+"contacts as if you had one account"
+msgstr ""
+"Si vous avez 2 comptes ou plus et que cette case est cochée, Gajim va lister "
+"tous les contacts comme si vous n'aviez qu'un seul compte"
+
+#: src/gtkgui.glade.h:131
+msgid "Incoming message:"
+msgstr "Message entrant :"
+
+#: src/gtkgui.glade.h:132
+msgid "Info/Query"
+msgstr "Information/Demande"
+
+#: src/gtkgui.glade.h:133
+msgid "Information about you are stored on the server as vCard"
+msgstr ""
+"Les informations vous concernant sont stockées\n"
+"sur le serveur, dans une vCard"
+
+#: src/gtkgui.glade.h:134
+msgid "Italic"
+msgstr "Italique"
+
+#: src/gtkgui.glade.h:135
+msgid "Jabber"
+msgstr "Jabber"
+
+#: src/gtkgui.glade.h:136
+msgid "Jabber ID:"
+msgstr "Identifiant Jabber :"
+
+#: src/gtkgui.glade.h:137
+msgid "Join Group Chat"
+msgstr "Rejoindre un Groupe de Discussion"
+
+#: src/gtkgui.glade.h:138
+msgid "Join _Group Chat"
+msgstr "Rejoindre un _Groupe de Discussion"
+
+#: src/gtkgui.glade.h:139
+msgid "Join _Group Chat..."
+msgstr "Rejoindre un _Groupe de Discussion..."
+
+#: src/gtkgui.glade.h:140
+msgid "Location"
+msgstr "Adresse"
+
+#: src/gtkgui.glade.h:141
+msgid "Log history"
+msgstr "Historique"
+
+#: src/gtkgui.glade.h:142
+msgid "Log presences in _contact's log file"
+msgstr "Archiver les présences dans l'archive du _contact"
+
+#: src/gtkgui.glade.h:143
+msgid "Log presences in an _external file"
+msgstr "Archiver les présences dans un fichier e_xterne"
+
+#: src/gtkgui.glade.h:144
+msgid "Manage Accounts"
+msgstr "Gérer les comptes"
+
+#: src/gtkgui.glade.h:145
+msgid "Manage Bookmarks"
+msgstr "Gérer les Marque-pages"
+
+#: src/gtkgui.glade.h:146
+msgid "Manage Emoticons"
+msgstr "Gérer les frimousses"
+
+#: src/gtkgui.glade.h:147
+msgid "Manage Proxy Profiles"
+msgstr "Gérer les profils de Proxy"
+
+#: src/gtkgui.glade.h:148
+msgid "Manage..."
+msgstr "Modifier..."
+
+#: src/gtkgui.glade.h:149
+msgid "Middle:"
+msgstr "Racine:"
+
+#: src/gtkgui.glade.h:150
+msgid "Mo_derator"
+msgstr "Mo_dérateur"
+
+#: src/gtkgui.glade.h:151
+msgid "More"
+msgstr "Plus"
+
+#: src/gtkgui.glade.h:152
+msgid "Name:"
+msgstr "Nom :"
+
+#: src/gtkgui.glade.h:154
+msgid "New version of Gajim available"
+msgstr "Une nouvelle version de Gajim est disponible"
+
+#: src/gtkgui.glade.h:155
+msgid "Nickname:"
+msgstr "Surnom :"
+
+#: src/gtkgui.glade.h:157
+msgid "None"
+msgstr "Aucun"
+
+#: src/gtkgui.glade.h:158
+msgid "Notify me about contacts that: "
+msgstr "Me Signaler quand un contact : "
+
+#: src/gtkgui.glade.h:159
+msgid "OS:"
+msgstr "Syst. d'exploit. :"
+
+#: src/gtkgui.glade.h:160
+msgid "Of_fline"
+msgstr "_Déconnecter"
+
+#: src/gtkgui.glade.h:161
+msgid "On every _message"
+msgstr "À chaque message"
+
+#: src/gtkgui.glade.h:162
+msgid "Open Download Page"
+msgstr "Ouvrir la page de téléchargement"
+
+#: src/gtkgui.glade.h:163
+msgid "Open _with:"
+msgstr "Ouvrir avec :"
+
+#: src/gtkgui.glade.h:164
+msgid "Open..."
+msgstr "Ouvrir..."
+
+#: src/gtkgui.glade.h:165
+msgid "Or choose a preset message:"
+msgstr "Ou choisissez votre message :"
+
+#: src/gtkgui.glade.h:166
+msgid "Outgoing message:"
+msgstr "Message sortant :"
+
+#: src/gtkgui.glade.h:167
+msgid "Pass_word:"
+msgstr "_Mot de passe : "
+
+#: src/gtkgui.glade.h:169
+msgid "Password:"
+msgstr "Mot de passe :"
+
+#: src/gtkgui.glade.h:170
+msgid "Personal Details"
+msgstr "Informations Personnelles"
+
+#: src/gtkgui.glade.h:171
+msgid "Phone No.:"
+msgstr "Téléphone :"
+
+#: src/gtkgui.glade.h:172
+msgid "Play _sounds"
+msgstr "Jouer les sons"
+
+#: src/gtkgui.glade.h:173
+msgid "Please fill in the data for your existing account"
+msgstr "Remplissez les informations de votre compte existant"
+
+#: src/gtkgui.glade.h:174
+msgid "Please fill in the data for your new account"
+msgstr "Remplissez les informations pour votre nouveau compte"
+
+#: src/gtkgui.glade.h:175
+msgid "Port: "
+msgstr "Port : "
+
+#: src/gtkgui.glade.h:176
+msgid "Position:"
+msgstr "Position :"
+
+#: src/gtkgui.glade.h:177
+msgid "Postal Code:"
+msgstr "Code postal :"
+
+#: src/gtkgui.glade.h:178
+msgid "Preferences"
+msgstr "Préférences"
+
+#: src/gtkgui.glade.h:179
+msgid "Prefix:"
+msgstr "Préfixe:"
+
+#: src/gtkgui.glade.h:180
+msgid "Print time:"
+msgstr "Afficher l'heure :"
+
+#: src/gtkgui.glade.h:181
 msgid "Priori_ty:"
 msgstr "Priori_té:"
 
-#: src/msg.c:29
+#: src/gtkgui.glade.h:182
 msgid ""
 "Priority is used in Jabber to determine who gets the events from the jabber "
 "server when two or more clients are connected using the same account; The "
@@ -1127,7 +1787,47 @@ msgstr ""
 "du serveur quand plusieurs clients sont connectés avec le même compte. Le "
 "client ayant la plus haute priorité recevra les messages"
 
-#: src/msg.c:30
+#: src/gtkgui.glade.h:183
+msgid "Profile, Avatar"
+msgstr "Profil, Avatar"
+
+#: src/gtkgui.glade.h:184
+msgid "Protocol:"
+msgstr "Protocole :"
+
+#: src/gtkgui.glade.h:185
+msgid "Proxy:"
+msgstr "Proxy :"
+
+#: src/gtkgui.glade.h:187
+msgid "Re_quest Authorization from"
+msgstr "Demander l'Autorisation à"
+
+#: src/gtkgui.glade.h:188
+msgid "Recently:"
+msgstr "Récemment :"
+
+#: src/gtkgui.glade.h:189
+msgid "Register to"
+msgstr "S'enregistrer à"
+
+#: src/gtkgui.glade.h:190
+msgid "Remove account from Gajim and from server"
+msgstr "Supprimer le compte de Gajim et du serveur"
+
+#: src/gtkgui.glade.h:191
+msgid "Remove account only from Gajim"
+msgstr "Supprimer le compte de Gajim uniquement"
+
+#: src/gtkgui.glade.h:192
+msgid "Reset to Default Colors"
+msgstr "Utiliser les Couleurs par Défaut"
+
+#: src/gtkgui.glade.h:193
+msgid "Resour_ce: "
+msgstr "Ressour_ce: "
+
+#: src/gtkgui.glade.h:194
 msgid ""
 "Resource is sent to the Jabber server in order to 'seperate' the same JID in "
 "two or more parts depending on the number of the clients connected in the "
@@ -1141,980 +1841,214 @@ msgstr ""
 "en même temps. La ressource avec la plus haute priorité recevra les messages "
 "(voir plus bas)."
 
-#: src/msg.c:32 src/msg.c:289 src/msg.c:305
-msgid "If checked, Gajim will remember the password for this account"
-msgstr ""
-"Si cette case est cochée, Gajim va retenir le mot de passe pour ce compte"
+#: src/gtkgui.glade.h:195
+msgid "Resource:"
+msgstr "Ressource :"
 
-#: src/msg.c:33 src/msg.c:290 src/msg.c:306
-msgid "Save pass_word"
-msgstr "Enregistrer le mot de _passe"
+#: src/gtkgui.glade.h:196
+msgid "Role:"
+msgstr "Rôle :"
 
-#: src/msg.c:34
-msgid "Click to change account's password"
-msgstr "Cliquez pour changer le mot de passe du compte"
+#: src/gtkgui.glade.h:197
+msgid "Room Configuration"
+msgstr "Configuration du Groupe de Discussion"
 
-#: src/msg.c:35 src/msg.c:266
-msgid "Chan_ge"
-msgstr "Chan_ger"
+#: src/gtkgui.glade.h:198
+msgid "Room:"
+msgstr "Salon :"
 
-#: src/msg.c:36
-msgid "Check if you want to register for a new jabber account"
-msgstr "A cocher si vous voulez créer un nouveau compte Jabber"
-
-#: src/msg.c:37
-msgid "_Register new account"
-msgstr "En_registrer un nouveau compte"
-
-#: src/msg.c:38
-msgid "Account"
-msgstr "Compte"
-
-#: src/msg.c:39
-msgid ""
-"If checked, Gajim, when launched, will automatically connect to jabber using "
-"this account"
-msgstr ""
-"Si cette case est cochée, au démarrage, Gajim se connectera automatiquement "
-"à jabber en utilisant ce compte."
-
-#: src/msg.c:40
-msgid "C_onnect at startup"
-msgstr "C_onnexion au démarrage"
-
-#: src/msg.c:41
-#, fuzzy
-msgid "Save conversation _logs for all contacts"
-msgstr "_Historique des conversations pour tous les contacts de ce compte"
-
-#: src/msg.c:42
-msgid "Synch_ronize account status with global status"
-msgstr "Synch_roniser l'état du compte avec l'état global"
-
-#: src/msg.c:44
-#, fuzzy
-msgid "Choose _Key..."
-msgstr "Choisissez une _clé"
-
-#: src/msg.c:45
-msgid ""
-"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
-"permission only for only you and of course the administrator"
-msgstr ""
-"Si cette case est cochée, Gajim va sauvegarder le mot de passe dans ~/.gajim/"
-"config avec accès en lecture pour vous et l'administrateur uniquement"
-
-#: src/msg.c:46
+#: src/gtkgui.glade.h:199
 msgid "Save _passphrase (insecure)"
 msgstr "Enregistrer votre mot de passe (non sécurisé)"
 
-#: src/msg.c:47
-msgid "<b>OpenPGP</b>"
-msgstr "<b>OpenPGP</b>"
-
-#: src/msg.c:48 src/msg.c:105 src/msg.c:196
-msgid "General"
-msgstr "Général"
-
-#: src/msg.c:49
-#, fuzzy
-msgid "Proxy:"
-msgstr "Proxy"
-
-#: src/msg.c:50
-#, fuzzy
-msgid "None"
-msgstr "Noeud"
-
-#: src/msg.c:51 src/msg.c:98 src/msg.c:103
-msgid "Manage..."
-msgstr ""
-
-#: src/msg.c:52
-#, fuzzy
-msgid ""
-"Check this so Gajim will connect in port 5223 where legacy servers are "
-"expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
-"default if broadcasted by the server, and with this option enabled TLS will "
-"be disabled"
-msgstr ""
-"Si vous cochez cette case, Gajim se connectera sur le port 5223, sur lequel "
-"les serveurs sont supposés gérer le SSL. Notez que Gajim utilise le cryptage "
-"TLS par défaut si le serveur annonce qu'il le supporte, et avec cette option "
-"vous désactivez le TLS"
-
-#: src/msg.c:53
-#, fuzzy
-msgid "Use _SSL (legacy)"
-msgstr "Utiliser _SSL"
-
-#: src/msg.c:54
-msgid ""
-"If checked, Gajim will send keep-alive packets so it prevents connection "
-"timeout which results in disconnection"
-msgstr ""
-
-#: src/msg.c:55
-msgid "Send keep-alive packets"
-msgstr ""
-
-#: src/msg.c:56
-msgid "Use custom hostname/port"
-msgstr ""
-
-#: src/msg.c:57
-#, fuzzy
-msgid "Hostname: "
-msgstr "_Serveur :"
-
-#: src/msg.c:58
-#, fuzzy
-msgid "Port: "
-msgstr "_Port :"
-
-#: src/msg.c:59
-msgid "5222"
-msgstr ""
-
-#: src/msg.c:60 src/msg.c:168
-msgid "<b>Miscellaneous</b>"
-msgstr "<b>Divers</b>"
-
-#: src/msg.c:61
-#, fuzzy
-msgid "Connection"
-msgstr "Connexion"
-
-#: src/msg.c:62
-msgid "Information about you are stored on the server as vCard"
-msgstr ""
-"Les informations vous concernant sont stockées\n"
-"sur le serveur, dans une vCard"
-
-#: src/msg.c:63
-#, fuzzy
-msgid "Edit Personal Information..."
-msgstr "_Éditer les Informations Personnelles..."
-
-#: src/msg.c:64
-msgid "Personal Details"
-msgstr "Informations Personnelles"
-
-#: src/msg.c:65
-msgid "Add New Contact"
-msgstr "Ajouter un nouveau contact"
-
-#: src/msg.c:66
-msgid "User ID:"
-msgstr "Identifiant :"
-
-#: src/msg.c:67
-msgid "Protocol:"
-msgstr "Protocole :"
-
-#: src/msg.c:68 src/msg.c:173
-msgid "Jabber ID:"
-msgstr "Identifiant Jabber :"
-
-#: src/msg.c:69 src/msg.c:175 src/msg.c:187 src/msg.c:236 src/msg.c:322
-msgid "Nickname:"
-msgstr "Surnom :"
-
-#: src/msg.c:70
-msgid "Automatically authorize contact"
-msgstr "Autoriser le contact automatiquement"
-
-#: src/msg.c:71 src/msg.c:337
-msgid "Group:"
-msgstr "Groupe :"
-
-#: src/msg.c:72
-msgid "I would like to add you to my contact list."
-msgstr "Je souhaiterais vous ajouter à ma liste de contacts."
-
-#: src/msg.c:73
-msgid "_Subscribe"
-msgstr "_Ajouter"
-
-#: src/msg.c:74
-msgid "Subscription Request"
-msgstr "Requête d'Inscription"
-
-#: src/msg.c:75
-msgid "Deny authorization from contact so he cannot know when you're connected"
-msgstr ""
-"Refuser l'autorisation du contact pour qu'il ne puisse pas savoir quand vous "
-"êtes connecté"
-
-#: src/msg.c:76
-msgid "_Deny"
-msgstr "_Refuser"
-
-#: src/msg.c:77
-msgid "Contact _Info"
-msgstr "_Informations"
-
-#: src/msg.c:78
-msgid "Authorize contact so he can know when you're connected"
-msgstr "Autoriser le contact pour qu'il sache quand vous êtes connecté"
-
-#: src/msg.c:79
-msgid "_Authorize"
-msgstr "_Autoriser"
-
-#: src/msg.c:80
-msgid "_Address:"
-msgstr "_Adresse :"
-
-#: src/msg.c:81
-msgid "Go"
-msgstr "Parcourir"
-
-#: src/msg.c:82
-msgid "_Refresh"
-msgstr "_Rafraîchir"
-
-#: src/msg.c:84 src/msg.c:238
-msgid "_Join"
-msgstr "Re_joindre"
-
-#: src/msg.c:85
-msgid "Register to"
-msgstr "S'enregistrer à"
-
-#: src/msg.c:86
-msgid "_Cancel"
-msgstr "_Annuler"
-
-#: src/msg.c:87
-msgid "_OK"
-msgstr "_OK"
-
-#: src/msg.c:88
-msgid "Preferences"
-msgstr "Préférences"
-
-#: src/msg.c:89
-msgid "If checked, Gajim will also have a trayicon"
-msgstr ""
-"Si cette case est cochée, Gajim placera une icône dans la zone de "
-"notification"
-
-#: src/msg.c:90
-msgid "_Icon in systray (aka. notification area)"
-msgstr "_Icône dans la zone de notification"
-
-#: src/msg.c:91
-#, fuzzy
-msgid ""
-"If checked, Gajim will remember the roster and chat window positions in the "
-"screen and the sizes of them next time you run it"
-msgstr ""
-"Si cette case est cochée, Gajim va retenir la position de la fenêtre "
-"principale après que vous ayez quitté"
-
-#: src/msg.c:92
+#: src/gtkgui.glade.h:200
 msgid "Save _position and size for roster and chat windows"
 msgstr ""
+"Garder la _position et la taille pour la liste de contact et les fenêtres de "
+"discussion"
 
-#: src/msg.c:93
-#, fuzzy
-msgid ""
-"If you have 2 or more accounts and it is checked, Gajim will list all "
-"contacts as if you had one account"
-msgstr ""
-"Si vous avez au moins 2 comptes et que cette case est cochée, Gajim va "
-"lister tous les contacts comme si vous n'aviez qu'un compte"
+#: src/gtkgui.glade.h:201
+msgid "Save conversation _logs for all contacts"
+msgstr "Archiver l'historique des conversations pour tous les contacts"
 
-#: src/msg.c:94
-msgid "_Merge accounts"
-msgstr "_Fusionner les comptes"
+#: src/gtkgui.glade.h:202
+msgid "Save pass_word"
+msgstr "Enregistrer le mot de _passe"
 
-#: src/msg.c:95
-msgid "Sort contacts by status"
-msgstr "Trier les contacts par status"
+#: src/gtkgui.glade.h:203
+msgid "Send Authorization to"
+msgstr "Envoyer l'Autorisation à"
 
-#: src/msg.c:96
-msgid ""
-"If checked, Gajim will replace ascii smilies like ':)' with equivalent "
-"graphical emoticons"
-msgstr ""
-"Si cette case est cochée, Gajim va remplacer les frimousses ASCII comme « :) "
-"» par un équivalent graphique"
+#: src/gtkgui.glade.h:204
+msgid "Send Single _Message"
+msgstr "Envoyer un _Message"
 
-#: src/msg.c:97
-msgid "Use _emoticons"
-msgstr "Utiliser les _frimousses"
+#: src/gtkgui.glade.h:205
+msgid "Send keep-alive packets"
+msgstr "Envoi des paquets de maintien de connexion"
 
-#: src/msg.c:99
-msgid "Default _status iconset:"
-msgstr "Icônes d'état par défaut :"
+#: src/gtkgui.glade.h:206
+msgid "Server:"
+msgstr "Serveur :"
 
-#: src/msg.c:100
-msgid ""
-"If checked, Gajim will use protocol-specific status icons. (eg. A contact "
-"from MSN will have the equivalent msn icon for status online, away, busy, "
-"etc...)"
-msgstr ""
-"Si cette case est cochée, Gajim utilisera des icônes d'état spécifiques aux "
-"protocoles. (Par ex. un contat MSN aura les icônes de MSN pour les états "
-"disponible, absent, occupé, etc"
+#: src/gtkgui.glade.h:207
+msgid "Servers Features"
+msgstr "Fonctionalités des Serveurs"
 
-#: src/msg.c:101
-msgid "Use _transports iconsets"
-msgstr "Utiliser les icônes des transports"
+#: src/gtkgui.glade.h:208
+msgid "Set Avatar"
+msgstr "Choisir un Avatar"
 
-#: src/msg.c:102
-msgid "Gajim theme:"
-msgstr ""
+#: src/gtkgui.glade.h:209
+msgid "Set Image..."
+msgstr "Choisir  une Image..."
 
-#: src/msg.c:104
-#, fuzzy
-msgid "<b>Interface Customization</b>"
-msgstr "<b>Applications</b>"
+#: src/gtkgui.glade.h:210
+msgid "Show _Offline Contacts"
+msgstr "Montrer les contacts Déconnectés"
 
-#: src/msg.c:106
-msgid "Use a single chat window with _tabs"
-msgstr "Utiliser une seule fenê_tre de chat avec des onglets"
-
-#: src/msg.c:107
-msgid "_Highlight misspelled words"
-msgstr "Souligner les fautes d'orthographe"
-
-#: src/msg.c:108
-msgid "Print time:"
-msgstr "Afficher l'heure :"
-
-#: src/msg.c:109
-#, fuzzy
-msgid "On every _message"
-msgstr "Sur toutes les _lignes"
-
-#: src/msg.c:110
-msgid "Also known as iChat style"
-msgstr ""
-
-#: src/msg.c:111
-msgid "Every 5 _minutes"
-msgstr "Toutes les 5 _minutes"
-
-#: src/msg.c:112
-msgid "_Never"
-msgstr "_Jamais"
-
-#: src/msg.c:113
-msgid "After time:"
-msgstr "Après l'heure :"
-
-#: src/msg.c:114
-msgid "After nickname:"
-msgstr "Après le surnom :"
-
-#: src/msg.c:115
-msgid "Before nickname:"
-msgstr "Avant le surnom :"
-
-#: src/msg.c:116
-msgid "Before time:"
-msgstr "Avant l'heure :"
-
-#: src/msg.c:117
-msgid "Incoming message:"
-msgstr "Message entrant :"
-
-#: src/msg.c:118
-msgid "Outgoing message:"
-msgstr "Message sortant :"
-
-#: src/msg.c:119
-msgid "Status message:"
-msgstr "Message d'état :"
-
-#: src/msg.c:120
-msgid "Reset to Default Colors"
-msgstr "Utiliser les Couleurs par Défaut"
-
-#: src/msg.c:121
-msgid "<b>Format of a chat line</b>"
-msgstr "<b>Format de la ligne de discussion</b>"
-
-#: src/msg.c:122 src/msg.c:242
-msgid "Chat"
-msgstr "Discussion"
-
-#: src/msg.c:123
-msgid ""
-"Gajim will notify you for new message via a popup in the bottom right of the "
-"screen"
-msgstr ""
-"Gajim vous signalera les nouveaux messages dans un popup en bas à droite de "
-"l'écran"
-
-#: src/msg.c:124
-msgid "_Notify me about it"
-msgstr "Me le _signaler"
-
-#: src/msg.c:125
-msgid ""
-"Gajim will automatically show the new received message in a new chat window "
-"or tab in an existing chat window"
-msgstr ""
-"Gajim va automatiquement montrer les nouveaux messages reçus dans une "
-"nouvelle fenêtre de discussion ou dans un onglet d'une fenêtre de discussion "
-"existante"
-
-#: src/msg.c:126
-msgid "_Pop it up"
-msgstr "L'_afficher"
-
-#: src/msg.c:127
-msgid ""
-"Gajim will only change the icon of the contact that sent the new message"
-msgstr ""
-"Gajim ne fera que changer l'icône du contact qui a envoyé le nouveau message"
-
-#: src/msg.c:128
+#: src/gtkgui.glade.h:211
 msgid "Show only in _roster"
 msgstr "Ne montrer que dans la liste"
 
-#: src/msg.c:129
+#: src/gtkgui.glade.h:212
+msgid "Show roster window on startup"
+msgstr "Afficher la fenêtre de contacts au démarrage"
+
+#: src/gtkgui.glade.h:213
+msgid "Sign _in"
+msgstr "Se _connecte"
+
+#: src/gtkgui.glade.h:214
+msgid "Sign _out"
+msgstr "Se _déconnecte"
+
+#: src/gtkgui.glade.h:215
+msgid "Sort contacts by status"
+msgstr "Trier les contacts par status"
+
+#: src/gtkgui.glade.h:216
+msgid "Start _Chat"
+msgstr "Commencer une discussion"
+
+#: src/gtkgui.glade.h:217
+msgid "State:"
+msgstr "État :"
+
+#: src/gtkgui.glade.h:218
+msgid "Status"
+msgstr "État"
+
+#: src/gtkgui.glade.h:219
+msgid "Status message:"
+msgstr "Message d'état :"
+
+#: src/gtkgui.glade.h:220
+msgid "Status:"
+msgstr "État :"
+
+#: src/gtkgui.glade.h:221
+msgid "Street:"
+msgstr "Rue :"
+
+#: src/gtkgui.glade.h:222
+msgid "Subject:"
+msgstr "Sujet :"
+
+#: src/gtkgui.glade.h:223
+msgid "Subscription Request"
+msgstr "Requête d'Inscription"
+
+#: src/gtkgui.glade.h:224
+msgid "Subscription:"
+msgstr "Inscription :"
+
+#: src/gtkgui.glade.h:225
+msgid "Suffix:"
+msgstr "Suffixe:"
+
+#: src/gtkgui.glade.h:226
+msgid "Synch_ronize account status with global status"
+msgstr "Synch_roniser l'état du compte avec l'état global"
+
+#: src/gtkgui.glade.h:227
+msgid "Text color"
+msgstr "Couleur du texte"
+
+#: src/gtkgui.glade.h:228
+msgid "Text font"
+msgstr "Police du texte"
+
+#: src/gtkgui.glade.h:229
+msgid "The bar line which is on top of chat windows"
+msgstr "La barre horizontale en haut de la fenêtre de discussion"
+
+#: src/gtkgui.glade.h:230
+msgid "Title:"
+msgstr "Titre:"
+
+#: src/gtkgui.glade.h:231
+msgid "To:"
+msgstr "À:"
+
+#: src/gtkgui.glade.h:232
+msgid "Toggle _GPG Encryption"
+msgstr "Activer l'Encryption _GPG"
+
+#: src/gtkgui.glade.h:233
+msgid "Type:"
+msgstr "Type :"
+
+#: src/gtkgui.glade.h:234
+msgid "Underline"
+msgstr "Sousligner"
+
+#: src/gtkgui.glade.h:235
+msgid "Use _SSL (legacy)"
+msgstr "Utiliser _SSL"
+
+#: src/gtkgui.glade.h:236
+msgid "Use _emoticons"
+msgstr "Utiliser les _frimousses"
+
+#: src/gtkgui.glade.h:237
+msgid "Use _transports iconsets"
+msgstr "Utiliser les icônes des transports"
+
+#: src/gtkgui.glade.h:238
+msgid "Use a single chat window with _tabs"
+msgstr "Utiliser une seule fenê_tre de chat avec des onglets"
+
+#: src/gtkgui.glade.h:239
+msgid "Use authentication"
+msgstr "Utiliser l'authentification"
+
+#: src/gtkgui.glade.h:240
+msgid "Use custom hostname/port"
+msgstr "Utiliser un nom d'hôte/port personnalisé"
+
+#: src/gtkgui.glade.h:241
+msgid "User ID:"
+msgstr "Identifiant :"
+
+#: src/gtkgui.glade.h:242
 msgid ""
 "When a new message is received which is not from a contact already in a chat "
 "window, the three following actions may happen in order for you to be "
 "informed about it"
 msgstr ""
+"Quand un nouveau message d'un contact n'ayant pas de fenêtre est reçu, l'une "
+"des trois actions suivantes est possible pour vous prévenir"
 
-#: src/msg.c:130
-#, fuzzy
+#: src/gtkgui.glade.h:243
 msgid "When new message is received"
 msgstr "Quand un nouveau message est reçu"
 
-#: src/msg.c:131
-msgid "Notify me about contacts that: "
-msgstr "Me Signaler quand un contact : "
-
-#: src/msg.c:132
-msgid ""
-"Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just signed in"
-msgstr ""
-"Gajim vous signalera par une fenêtre popup en bas à droite de l'écran qu'un "
-"contact s'est connecté"
-
-#: src/msg.c:133
-msgid "Sign _in"
-msgstr "Se _connecte"
-
-#: src/msg.c:134
-msgid ""
-"Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just signed out"
-msgstr ""
-"Gajim vous signalera par une fenêtre popup en bas à droite de l'écran qu'un "
-"contact s'est déconnecté"
-
-#: src/msg.c:135
-msgid "Sign _out"
-msgstr "Se _déconnecte"
-
-#: src/msg.c:136
-msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
-msgstr ""
-"Autoriser les popups/notifications lorsque je suis _absent/indisponible/"
-"occupé/invisible"
-
-#: src/msg.c:137
-msgid "<b>Notifications</b>"
-msgstr "<b>Notifications</b>"
-
-#: src/msg.c:138
-msgid ""
-"Check this option, only if someone you don't have in the roster spams/annoys "
-"you. Use with caution, cause it blocks all messages from any contact that is "
-"not in the roster."
-msgstr ""
-"Cochez cette option seulement si quelqu'un n'appartenant pas à votre liste "
-"vous spamme/ennuie. Utilisez avec précaution, car cette option bloque tous "
-"les messages des contacts qui ne sont pas dans votre liste et qui "
-"souhaiteraient vous envoyer un message"
-
-#: src/msg.c:139
-msgid "_Ignore events from contacts not in the roster"
-msgstr "_Ignorer les messages des contacts qui ne sont pas dans notre liste"
-
-#: src/msg.c:140
-msgid "Play _sounds"
-msgstr "Jouer les sons"
-
-#: src/msg.c:141
-msgid "_Player:"
-msgstr "_Programme pour lire les sons :"
-
-#: src/msg.c:142
-msgid "..."
-msgstr "..."
-
-#: src/msg.c:143
-msgid "<b>Sounds</b>"
-msgstr "<b>Sons</b>"
-
-#: src/msg.c:144
-msgid "Events"
-msgstr "Événements"
-
-#: src/msg.c:145
-msgid "Auto _away after:"
-msgstr "Passer _absent après :"
-
-#: src/msg.c:146
-msgid "Auto _not available after:"
-msgstr "Passer _indisponible après :"
-
-#: src/msg.c:147 src/msg.c:148
-msgid "minutes"
-msgstr "minutes"
-
-#: src/msg.c:149
-msgid "Ask status message when going: "
-msgstr "Demander le message d'état lorsque l'on passe : "
-
-#: src/msg.c:150
-msgid "_Online"
-msgstr "_En ligne"
-
-#: src/msg.c:151
-msgid "Of_fline"
-msgstr "_Déconnecter"
-
-#: src/msg.c:152
-msgid "<b>Preset Status Messages</b>"
-msgstr "<b>Messages prédéfinis</b>"
-
-#: src/msg.c:154
-msgid "Open _with:"
-msgstr "Ouvrir avec :"
-
-#: src/msg.c:155
-msgid "GNOME default applications"
-msgstr "Applications par défaut de GNOME"
-
-#: src/msg.c:156
-msgid "KDE default applications"
-msgstr "Applications par défaut de KDE"
-
-#: src/msg.c:157
-msgid "Custom"
-msgstr "Autre"
-
-#: src/msg.c:158
-msgid "_Browser:"
-msgstr "_Navigateur :"
-
-#: src/msg.c:159
-msgid "_Mail client:"
-msgstr "Client e_mail :"
-
-#: src/msg.c:160
-msgid "<b>Custom Applications</b>"
-msgstr "<b>Applications</b>"
-
-#: src/msg.c:161
-msgid "<b>Links</b>"
-msgstr "<b>Liens</b>"
-
-#: src/msg.c:162
-msgid "Log presences in _contact's log file"
-msgstr "Archiver les présences dans l'archive du _contact"
-
-#: src/msg.c:163
-msgid "Log presences in an _external file"
-msgstr "Archiver les présences dans un fichier e_xterne"
-
-#: src/msg.c:164
-msgid "<b>Log</b>"
-msgstr "<b>Archivage</b>"
-
-#: src/msg.c:165
-msgid "Show roster window on startup"
-msgstr ""
-
-#: src/msg.c:166
-msgid "Allow _OS information to be sent"
-msgstr ""
-"Autoriser l'envoi des informations concernant votre _système d'exploitation"
-
-#: src/msg.c:167
-msgid "Check for new _version at startup"
-msgstr "_Vérifier l'existence d'une nouvelle version au démarrage"
-
-#: src/msg.c:169
-msgid "Open..."
-msgstr "Ouvrir..."
-
-#: src/msg.c:170
-msgid "<b>Advanced Configuration Editor</b>"
-msgstr "<b>Éditeur de Configuration Avancé</b>"
-
-#: src/msg.c:171
-msgid "Advanced"
-msgstr "Avancé"
-
-#: src/msg.c:172
-msgid "Contact Information"
-msgstr "Informations"
-
-#: src/msg.c:174
-msgid "Status:"
-msgstr "État :"
-
-#: src/msg.c:176
-msgid "Resource:"
-msgstr "Ressource :"
-
-#: src/msg.c:177
-msgid "Subscription:"
-msgstr "Inscription :"
-
-#: src/msg.c:178
-msgid "Ask:"
-msgstr "Demande :"
-
-#: src/msg.c:179
-msgid "Client:"
-msgstr "Client :"
-
-#: src/msg.c:180
-msgid "Log history"
-msgstr "Historique"
-
-#: src/msg.c:181
-msgid "OS:"
-msgstr "Syst. d'exploit. :"
-
-#: src/msg.c:182
-msgid "Jabber"
-msgstr "Jabber"
-
-#: src/msg.c:183 src/msg.c:325
-msgid "Name:"
-msgstr "Nom :"
-
-#: src/msg.c:184 src/msg.c:215
-msgid "Phone No.:"
-msgstr "Téléphone :"
-
-#: src/msg.c:185
-msgid "Homepage:"
-msgstr "Site perso :"
-
-#: src/msg.c:186
-msgid "E-Mail:"
-msgstr "EMail :"
-
-#: src/msg.c:188
-msgid "Family:"
-msgstr ""
-
-#: src/msg.c:189
-#, fuzzy
-msgid "Given:"
-msgstr "Client :"
-
-#: src/msg.c:190
-msgid "Middle:"
-msgstr ""
-
-#: src/msg.c:191
-msgid "Prefix:"
-msgstr ""
-
-#: src/msg.c:192
-msgid "Suffix:"
-msgstr ""
-
-#: src/msg.c:193
-#, fuzzy
-msgid "More"
-msgstr "Film"
-
-#: src/msg.c:194
-msgid "Format: YYYY-MM-DD"
-msgstr ""
-
-#: src/msg.c:195
-msgid "Birthday:"
-msgstr "Anniversaire :"
-
-#: src/msg.c:197 src/msg.c:208
-msgid "Street:"
-msgstr "Rue :"
-
-#: src/msg.c:198 src/msg.c:209
-msgid "Extra Address:"
-msgstr "Adresse 2 :"
-
-#: src/msg.c:199 src/msg.c:210
-msgid "City:"
-msgstr "Ville :"
-
-#: src/msg.c:200 src/msg.c:211
-msgid "State:"
-msgstr "État :"
-
-#: src/msg.c:201 src/msg.c:212
-msgid "Postal Code:"
-msgstr "Code postal :"
-
-#: src/msg.c:202 src/msg.c:213
-msgid "Country:"
-msgstr "Pays :"
-
-#: src/msg.c:203
-msgid "Location"
-msgstr "Adresse"
-
-#: src/msg.c:204
-msgid "Company:"
-msgstr "Companie :"
-
-#: src/msg.c:205
-msgid "Department:"
-msgstr "Département :"
-
-#: src/msg.c:206
-msgid "Position:"
-msgstr "Position :"
-
-#: src/msg.c:207
-msgid "Role:"
-msgstr "Rôle :"
-
-#: src/msg.c:214
-#, fuzzy
-msgid "Address"
-msgstr "_Adresse :"
-
-#: src/msg.c:216
-#, fuzzy
-msgid "E-Mail"
-msgstr "EMail :"
-
-#: src/msg.c:217
+#: src/gtkgui.glade.h:244
 msgid "Work"
 msgstr "Emploi"
 
-#: src/msg.c:218
-msgid "Set Avatar"
-msgstr ""
-
-#: src/msg.c:219
-msgid "About"
-msgstr "À Propos"
-
-#: src/msg.c:220
-msgid "Conversation History"
-msgstr "Historique de Conversation"
-
-#: src/msg.c:221
-msgid "_Earliest"
-msgstr "P_remiers"
-
-#: src/msg.c:222
-msgid "_Previous"
-msgstr "_Précédent"
-
-#: src/msg.c:223
-msgid "_Latest"
-msgstr "_Derniers"
-
-#: src/msg.c:224
-#, fuzzy
-msgid "Group Chat"
-msgstr "Groupes de discussion"
-
-#: src/msg.c:225 src/msg.c:246
-msgid "Bold"
-msgstr ""
-
-#: src/msg.c:226 src/msg.c:247
-msgid "Italic"
-msgstr ""
-
-#: src/msg.c:227 src/msg.c:248
-#, fuzzy
-msgid "Underline"
-msgstr "En ligne"
-
-#: src/msg.c:229
-#, fuzzy
-msgid "Click to see past conversation in this room"
-msgstr "Cliquez ici pour voir les précédentes conversations avec ce contact"
-
-#: src/msg.c:230 src/msg.c:251 src/msg.c:344 src/msg.c:350 src/msg.c:363
-msgid "_History"
-msgstr "_Historique"
-
-#: src/msg.c:231 src/msg.c:252 src/msg.c:367
-#, fuzzy
-msgid "_Send"
-msgstr "_Refuser"
-
-#: src/msg.c:232
-#, fuzzy
-msgid "Join Group Chat"
-msgstr "Rejoindre un groupe de discussion"
-
-#: src/msg.c:233 src/msg.c:319
-msgid "Password:"
-msgstr "Mot de passe :"
-
-#: src/msg.c:234 src/msg.c:320
-msgid "Server:"
-msgstr "Serveur :"
-
-#: src/msg.c:235 src/msg.c:321
-msgid "Room:"
-msgstr "Salon :"
-
-#: src/msg.c:237
-msgid "Recently:"
-msgstr "Récemment :"
-
-#: src/msg.c:240
-msgid "Enter your message:"
-msgstr "Entrez votre message :"
-
-#: src/msg.c:241
-msgid "Or choose a preset message:"
-msgstr "Ou choisissez votre message :"
-
-#: src/msg.c:243
-msgid ""
-"<span weight=\"heavy\" size=\"large\">Contact: name</span>\n"
-"JID: whatever@jabber.org"
-msgstr ""
-
-#: src/msg.c:245
-#, fuzzy
-msgid "Click to toggle OpenPGP encryption"
-msgstr "Cliquez pour configurer les options du groupe de discussion"
-
-#: src/msg.c:249
-#, fuzzy
-msgid "Click to get contact's extended information"
-msgstr "Cliquez pour plus d'informations sur le contact"
-
-#: src/msg.c:250
-msgid "Click to see past conversations with this contact"
-msgstr "Cliquez ici pour voir les précédentes conversations avec ce contact"
-
-#: src/msg.c:253
-msgid "Edit Groups"
-msgstr "Éditer les Groupes"
-
-#: src/msg.c:254
-msgid "Change Password"
-msgstr "Changer le mot de passe"
-
-#: src/msg.c:255
-msgid "Enter new password:"
-msgstr "Entrez un nouveau mot de passe :"
-
-#: src/msg.c:256
-msgid "Enter it again for confirmation:"
-msgstr "Entrez le de nouveau pour confirmer :"
-
-#: src/msg.c:257
-#, fuzzy
-msgid "_Status"
-msgstr "État"
-
-#: src/msg.c:258
-msgid "Chat with"
-msgstr "Discuter avec"
-
-#: src/msg.c:260
-#, fuzzy
-msgid "Manage Emoticons"
-msgstr "Utiliser les _frimousses"
-
-#: src/msg.c:261
-#, fuzzy
-msgid "Set Image..."
-msgstr "Choisir l'Image"
-
-#: src/msg.c:262
-msgid "New version of Gajim available"
-msgstr "Une nouvelle version de Gajim est disponible"
-
-#: src/msg.c:263
-msgid "Open Download Page"
-msgstr "Ouvrir la page de téléchargement"
-
-#: src/msg.c:264
-msgid "<b>Changes in latest version</b>"
-msgstr "<b>Changements dans la dernière version</b>"
-
-#: src/msg.c:265
-msgid "Room Configuration"
-msgstr "Configuration du Groupe de Discussion"
-
-#: src/msg.c:267
-msgid "Remove account only from Gajim"
-msgstr "Supprimer le compte de Gajim uniquement"
-
-#: src/msg.c:268
-msgid "Remove account from Gajim and from server"
-msgstr "Supprimer le compte de Gajim et du serveur"
-
-#: src/msg.c:269
-msgid "<b>What do you want to do?</b>"
-msgstr "<b>Que voulez vous faire ?</b>"
-
-#: src/msg.c:271
-msgid "Advanced Configuration Editor"
-msgstr "Éditeur de Configuration Avancé"
-
-#: src/msg.c:272
-msgid "Filter:"
-msgstr "Filtre :"
-
-#: src/msg.c:273
-msgid "_Copy Link Location"
-msgstr "_Copier l'Adresse du Lien"
-
-#: src/msg.c:274
-msgid "_Open Link in Browser"
-msgstr "_Ouvrir le Lien dans votre navigateur"
-
-#: src/msg.c:275
-msgid "_Copy Email Address"
-msgstr "_Copier l'Adresse Email"
-
-#: src/msg.c:276
-msgid "_Open Email Composer"
-msgstr "_Ouvrir le Compositeur d'Email"
-
-#: src/msg.c:277
-#, fuzzy
-msgid "_Start Chat"
-msgstr "Envoyer un message"
-
-#: src/msg.c:278
-#, fuzzy
-msgid "Join _Group Chat"
-msgstr "Rejoindre un Groupe de Discussion"
-
-#: src/msg.c:279 src/msg.c:361 src/msg.c:377
-#, fuzzy
-msgid "_Add to Roster"
-msgstr "Ajouter à la liste de contacts"
-
-#: src/msg.c:280
-msgid "Gajim: First Time Wizard"
-msgstr "Gajim : Assistant"
-
-#: src/msg.c:281
+#: src/gtkgui.glade.h:245
 msgid ""
 "You need to have an account in order to connect to\n"
 "the Jabber network."
@@ -2122,507 +2056,294 @@ msgstr ""
 "Vous devez avoir un compte pour vous connecter\n"
 "au réseau Jabber."
 
-#: src/msg.c:283
-msgid "I already have an account I want to use"
-msgstr "J'ai déjà un compte que je veux utiliser"
-
-#: src/msg.c:284
-msgid "I want to _register for a new account"
-msgstr "Je veux _créer un nouveau compte"
-
-#: src/msg.c:285
-msgid "<b>Please choose on of the options below:</b>"
-msgstr "<b>Choisissez une des options suivantes :</b>"
-
-#: src/msg.c:286
-msgid "Please fill in the data for your existing account"
-msgstr "Remplissez les informations de votre compte existant"
-
-#: src/msg.c:287 src/msg.c:301
-msgid "_Server:"
-msgstr "_Serveur :"
-
-#: src/msg.c:291 src/msg.c:307
-msgid "_Nickname:"
-msgstr "_Surnom :"
-
-#: src/msg.c:292 src/msg.c:310 src/msg.c:330
-msgid "_Host:"
-msgstr "_Serveur :"
-
-#: src/msg.c:293 src/msg.c:311 src/msg.c:329
-msgid "_Port:"
-msgstr "_Port :"
-
-#: src/msg.c:294 src/msg.c:312 src/msg.c:332
-msgid "_Username:"
-msgstr "_Nom"
-
-#: src/msg.c:295 src/msg.c:313 src/msg.c:331
-msgid "Pass_word:"
-msgstr "_Mot de passe : "
-
-#: src/msg.c:296 src/msg.c:314
-msgid "3128"
-msgstr ""
-
-#: src/msg.c:297 src/msg.c:315
-msgid "_Use proxy"
-msgstr "_Utiliser un proxy"
-
-#: src/msg.c:298 src/msg.c:309
-msgid "<span background=\"lightyellow\"></span>"
-msgstr "<span background=\"lightyellow\"></span>"
-
-#: src/msg.c:299 src/msg.c:308
+#: src/gtkgui.glade.h:247
 msgid "Your JID:"
 msgstr "Votre Identifiant Jabber :"
 
-#: src/msg.c:300
-msgid "Please fill in the data for your new account"
-msgstr "Remplissez les informations pour votre nouveau compte"
+#: src/gtkgui.glade.h:248
+msgid "_About"
+msgstr "_À Propos"
 
-#: src/msg.c:302
-msgid "Click to see features like on jabber servers"
-msgstr "Cliquez pour voir les fonctionnalités du serveur jabber"
-
-#: src/msg.c:303
-msgid "Servers Features"
-msgstr "Fonctionalités des Serveurs"
-
-#: src/msg.c:316
-msgid "Manage Bookmarks"
-msgstr ""
-
-#: src/msg.c:317
-#, fuzzy
-msgid "If checked, Gajim will join this groupchat on startup"
-msgstr ""
-"Si cette case est cochée, Gajim placera une icône dans la zone de "
-"notification"
-
-#: src/msg.c:318
-msgid "Auto join"
-msgstr ""
-
-#: src/msg.c:323
-#, fuzzy
-msgid "Title:"
-msgstr "Filtre :"
-
-#: src/msg.c:324
-msgid "Manage Proxy Profiles"
-msgstr ""
-
-#: src/msg.c:326
-#, fuzzy
-msgid "Type:"
-msgstr "Type"
-
-#: src/msg.c:327
-#, fuzzy
-msgid "HTTP Connect"
-msgstr "Connexion"
-
-#: src/msg.c:328
-#, fuzzy
-msgid "<b>Properties</b>"
-msgstr "<b>Proxy</b>"
-
-#: src/msg.c:333
-#, fuzzy
-msgid "Use authentication"
-msgstr "Utiliser les _frimousses"
-
-#: src/msg.c:334
-#, fuzzy
-msgid "<b>Settings</b>"
-msgstr "<b>Liens</b>"
-
-#: src/msg.c:335
-msgid "Gajim Themes Customization"
-msgstr ""
-
-#: src/msg.c:336
-msgid "Account:"
-msgstr "Comptes :"
-
-#: src/msg.c:338
-#, fuzzy
-msgid "Contact:"
-msgstr "Ajouter un _Contact"
-
-#: src/msg.c:339
-msgid "Text color"
-msgstr "Couleur du texte"
-
-#: src/msg.c:340
-msgid "Text font"
-msgstr "Police du texte"
-
-#: src/msg.c:341
-msgid "Background color"
-msgstr "Couleur du fond"
-
-#: src/msg.c:342
-msgid "The bar line which is on top of chat windows"
-msgstr ""
-
-#: src/msg.c:343
-msgid "Banner:"
-msgstr ""
-
-#: src/msg.c:345
-msgid "Configure _Room"
-msgstr "Configurer le _Groupe"
-
-#: src/msg.c:346
-msgid "Change _Subject"
-msgstr "Changer le _Sujet"
-
-#: src/msg.c:347
-#, fuzzy
-msgid "Change _Nickname"
-msgstr "_Surnom :"
-
-#: src/msg.c:348
-msgid "_Bookmark This Room"
-msgstr ""
-
-#: src/msg.c:349 src/msg.c:352
-msgid "_Compact View"
-msgstr ""
-
-#: src/msg.c:351
-msgid "Toggle _GPG Encryption"
-msgstr ""
-
-#: src/msg.c:353
-#, fuzzy
-msgid "Start _Chat"
-msgstr "Envoyer un message"
-
-#: src/msg.c:354
-msgid "Send Single _Message"
-msgstr ""
-
-#: src/msg.c:355
-#, fuzzy
-msgid "_Rename"
-msgstr "Renommer"
-
-#: src/msg.c:356
-#, fuzzy
-msgid "Edit _Groups"
-msgstr "Éditer les Groupes"
-
-#: src/msg.c:357
-#, fuzzy
-msgid "Assign Open_PGP Key"
-msgstr "Assigner une clé OpenPGP"
-
-#: src/msg.c:358
-#, fuzzy
-msgid "_Subscription"
-msgstr "Autorisation"
-
-#: src/msg.c:359
-#, fuzzy
-msgid "Re_send Authorization to"
-msgstr "Renvoyer l'Autorisation à"
-
-#: src/msg.c:360
-#, fuzzy
-msgid "Rere_quest Authorization from"
-msgstr "Redemander l'Autorisation à"
-
-#: src/msg.c:364
-msgid "To:"
-msgstr ""
-
-#: src/msg.c:365
-msgid "Subject:"
-msgstr "Sujet :"
-
-#: src/msg.c:366
-msgid "0"
-msgstr ""
-
-#: src/msg.c:368
-#, fuzzy
-msgid "_Occupant Actions"
+#: src/gtkgui.glade.h:249
+msgid "_Actions"
 msgstr "_Actions"
 
-#: src/msg.c:369
-#, fuzzy
-msgid "_Voice"
-msgstr "_Donner la voix"
+#: src/gtkgui.glade.h:250
+msgid "_Add Contact..."
+msgstr "_Ajouter un Contact..."
 
-#: src/msg.c:370
-#, fuzzy
-msgid "Mo_derator"
-msgstr "_Donner la modération"
+#: src/gtkgui.glade.h:251
+msgid "_Add to Roster"
+msgstr "_Ajouter à la liste de contacts"
 
-#: src/msg.c:371
-#, fuzzy
-msgid "_Member"
-msgstr "_Jamais"
+#: src/gtkgui.glade.h:252
+msgid "_Address:"
+msgstr "Adresse :"
 
-#: src/msg.c:372
-#, fuzzy
+#: src/gtkgui.glade.h:253
 msgid "_Admin"
-msgstr "_Donner l'administration"
+msgstr "_Admin"
 
-#: src/msg.c:373
-#, fuzzy
-msgid "_Owner"
-msgstr "_Donner la possession"
+#: src/gtkgui.glade.h:254
+msgid "_Authorize"
+msgstr "_Autoriser"
 
-#: src/msg.c:374
-msgid "_Kick"
-msgstr "_Éjecter"
-
-#: src/msg.c:375
+#: src/gtkgui.glade.h:255
 msgid "_Ban"
 msgstr "_Bannir"
 
-#: src/msg.c:376
+#: src/gtkgui.glade.h:256
+msgid "_Bookmark This Room"
+msgstr "Ajouter ce salon aux _Marque-pages"
+
+#: src/gtkgui.glade.h:257
+msgid "_Browser:"
+msgstr "_Navigateur :"
+
+#: src/gtkgui.glade.h:258
+msgid "_Cancel"
+msgstr "_Annuler"
+
+#: src/gtkgui.glade.h:259
+msgid "_Compact View"
+msgstr "Vue _Compacte"
+
+#: src/gtkgui.glade.h:260
+msgid "_Copy Email Address"
+msgstr "_Copier l'Adresse Email"
+
+#: src/gtkgui.glade.h:261
+msgid "_Copy Link Location"
+msgstr "_Copier l'Adresse du Lien"
+
+#: src/gtkgui.glade.h:262
+msgid "_Deny"
+msgstr "_Refuser"
+
+#: src/gtkgui.glade.h:263
+msgid "_Earliest"
+msgstr "P_remiers"
+
+#: src/gtkgui.glade.h:265
+msgid "_Edit Account..."
+msgstr "_Éditer le Compte..."
+
+#: src/gtkgui.glade.h:266
+msgid "_Highlight misspelled words"
+msgstr "Souligner les fautes d'orthographe"
+
+#: src/gtkgui.glade.h:267
+msgid "_History"
+msgstr "_Historique"
+
+#: src/gtkgui.glade.h:268
+msgid "_Host:"
+msgstr "_Serveur :"
+
+#: src/gtkgui.glade.h:269
+msgid "_IQ"
+msgstr "_IQ"
+
+#: src/gtkgui.glade.h:270
+msgid "_Icon in systray (aka. notification area)"
+msgstr "_Icône dans la zone de notification"
+
+#: src/gtkgui.glade.h:271
+msgid "_Ignore events from contacts not in the roster"
+msgstr "_Ignorer les messages des contacts qui ne sont pas dans notre liste"
+
+#: src/gtkgui.glade.h:272
 msgid "_Information"
 msgstr "_Information"
 
-#: src/msg.c:378
-#, fuzzy
-msgid "_Send Private Message"
-msgstr "_Nouveau message"
+#: src/gtkgui.glade.h:273
+msgid "_Jabber ID:"
+msgstr "Identifiant _Jabber : "
 
-#: src/msg.c:379
-#, fuzzy
-msgid "Manage Accounts"
+#: src/gtkgui.glade.h:274
+msgid "_Join"
+msgstr "Re_joindre"
+
+#: src/gtkgui.glade.h:275
+msgid "_Join Group Chat"
+msgstr "Re_joindre un salon de Discussion"
+
+#: src/gtkgui.glade.h:276
+msgid "_Kick"
+msgstr "_Éjecter"
+
+#: src/gtkgui.glade.h:277
+msgid "_Latest"
+msgstr "_Derniers"
+
+#: src/gtkgui.glade.h:278
+msgid "_Mail client:"
+msgstr "Client e_mail :"
+
+#: src/gtkgui.glade.h:279
+msgid "_Member"
+msgstr "_Membre"
+
+#: src/gtkgui.glade.h:280
+msgid "_Merge accounts"
 msgstr "_Fusionner les comptes"
 
-#: src/msg.c:380
-msgid ""
-"TABS BECOME INVISIBLE VIA CODE\n"
-"AND HERE WE DRAW ROWS FROM THE LEFT\n"
-"ONE TAB ONE ROW. SO\n"
-"MAIN (can't be clicked)\n"
-" -- Account\n"
-" -- General\n"
-" -- Connection\n"
-" -- Personal\n"
-"\n"
-"Maybe I'll refactor later"
-msgstr ""
+#: src/gtkgui.glade.h:281
+msgid "_Message"
+msgstr "_Message"
 
-#: src/msg.c:390
-#, fuzzy
-msgid "Hold_Account"
-msgstr "Compte"
+#: src/gtkgui.glade.h:282
+msgid "_Modify"
+msgstr "_Modifier"
 
-#: src/msg.c:391
-#, fuzzy
-msgid "Hold_General"
-msgstr "Général"
+#: src/gtkgui.glade.h:283
+msgid "_Name: "
+msgstr "_Nom : "
 
-#: src/msg.c:392
-#, fuzzy
-msgid "Hold_Connection"
-msgstr "Connexion"
+#: src/gtkgui.glade.h:284
+msgid "_Never"
+msgstr "_Jamais"
 
-#: src/msg.c:393
-#, fuzzy
-msgid "Hold_Personal_Details"
-msgstr "Informations Personnelles"
+#: src/gtkgui.glade.h:285
+msgid "_New Message"
+msgstr "_Nouveau message"
 
-#~ msgid "You must be offline to change the account's name"
-#~ msgstr "Vous devez être déconnecté pour changer le nom du compte"
+#: src/gtkgui.glade.h:286
+msgid "_New Message..."
+msgstr "_Nouveau message..."
 
-#~ msgid "You must enter a name for this account"
-#~ msgstr "Vous devez entrer un nom pour ce compte"
+#: src/gtkgui.glade.h:287
+msgid "_Nickname:"
+msgstr "_Surnom :"
 
-#~ msgid "Spaces are not permited in account name"
-#~ msgstr "Vous ne pouvez pas utiliser d'espace dans le nom du compte"
+#: src/gtkgui.glade.h:288
+msgid "_Notify me about it"
+msgstr "Me le _signaler"
 
-#~ msgid ""
-#~ "You must enter a Jabber ID for this account\n"
-#~ "For example: someone@someserver.org"
-#~ msgstr ""
-#~ "Vous devez entrer un identifiant Jabber pour ce compte\n"
-#~ "Par exemple : login@serveur.org"
+#: src/gtkgui.glade.h:289
+msgid "_OK"
+msgstr "_OK"
 
-#~ msgid "You must enter a proxy port to use proxy"
-#~ msgstr "Vous devez entrer un port de proxy pour utiliser le proxy"
+#: src/gtkgui.glade.h:290
+msgid "_Occupant Actions"
+msgstr "_Pouvoirs du contact"
 
-#~ msgid "You must enter a proxy host to use proxy"
-#~ msgstr "Vous devez entrer un nom de proxy pour utiliser le proxy"
+#: src/gtkgui.glade.h:291
+msgid "_Online"
+msgstr "_En ligne"
 
-#~ msgid "This name is taken by an another account of yours"
-#~ msgstr "Ce nom est déjà utilisé pour un autre de vos comptes"
+#: src/gtkgui.glade.h:292
+msgid "_Open Email Composer"
+msgstr "_Ouvrir le Compositeur d'Email"
 
-#~ msgid ""
-#~ "You're currently connected with %s.\n"
-#~ "Are you sure you want to remove this account?"
-#~ msgstr ""
-#~ "Vous êtes actuellement connecté avec %s.\n"
-#~ "Souhaitez-vous quand-même supprimer ce compte ?"
+#: src/gtkgui.glade.h:293
+msgid "_Open Link in Browser"
+msgstr "_Ouvrir le Lien dans votre navigateur"
 
-#~ msgid "A contact must belong at least to one group"
-#~ msgstr "Un contact doit appartenir à au moins un groupe"
+#: src/gtkgui.glade.h:294
+msgid "_Owner"
+msgstr "P_ossesseur"
 
-#~ msgid "You must be connected to add a contact"
-#~ msgstr "Vous devez être connecté pour ajouter un contact"
+#: src/gtkgui.glade.h:295
+msgid "_Password:"
+msgstr "Mot de _passe : "
 
-#~ msgid "The contact's name must be something like login@hostname"
-#~ msgstr "Le nom du contact doit être de la forme : login@hostname"
+#: src/gtkgui.glade.h:296
+msgid "_Player:"
+msgstr "_Programme pour lire les sons :"
 
-#~ msgid "You must be connected to join a groupchat"
-#~ msgstr "Vous devez être connecté pour rejoindre un groupe de discussion"
+#: src/gtkgui.glade.h:297
+msgid "_Pop it up"
+msgstr "L'_afficher"
 
-#~ msgid "User ID is not valid"
-#~ msgstr "L'identifiant Jabber n'est pas valide"
+#: src/gtkgui.glade.h:298
+msgid "_Port:"
+msgstr "_Port :"
 
-#~ msgid "Confirmation password is not the same"
-#~ msgstr "Votre confirmation n'est pas identique à votre mot de passe"
+#: src/gtkgui.glade.h:299
+msgid "_Preferences"
+msgstr "_Préférences"
 
-#~ msgid "bad arguments"
-#~ msgstr "Mauvais arguments"
+#: src/gtkgui.glade.h:300
+msgid "_Presence"
+msgstr "_Présence"
 
-#~ msgid "You are now authorized by %s"
-#~ msgstr "%s vous a autorisé"
+#: src/gtkgui.glade.h:301
+msgid "_Previous"
+msgstr "_Précédent"
 
-#~ msgid "You are now unsubscribed by %s"
-#~ msgstr "%s vous a supprimé"
+#: src/gtkgui.glade.h:302
+msgid "_Quit"
+msgstr "_Quitter"
 
-#~ msgid "error contacting %s"
-#~ msgstr "Erreur survenue pour contacter %s"
+#: src/gtkgui.glade.h:303
+msgid "_Refresh"
+msgstr "_Rafraîchir"
 
-#~ msgid ""
-#~ "You received a message in the room %s in the last two seconds.\n"
-#~ "Do you still want to close this window?"
-#~ msgstr ""
-#~ "Vous avez reçu un message dans le groupe %s il y a moins de deux "
-#~ "secondes.\n"
-#~ "Voulez-vous quand-même fermer cette fenêtre ?"
+#: src/gtkgui.glade.h:304
+msgid "_Register new account"
+msgstr "En_registrer un nouveau compte"
 
-#~ msgid "_Privileges"
-#~ msgstr "_Privilèges"
+#: src/gtkgui.glade.h:305
+msgid "_Remove"
+msgstr "_Supprimer"
 
-#~ msgid "_Revoke Voice"
-#~ msgstr "_Retirer la voix"
+#: src/gtkgui.glade.h:307
+msgid "_Rename"
+msgstr "_Renommer"
 
-#~ msgid "_Revoke Moderator"
-#~ msgstr "_Retirer la modération"
+#: src/gtkgui.glade.h:308
+msgid "_Send"
+msgstr "_Envoyer"
 
-#~ msgid "_Grant Membership"
-#~ msgstr "_Donner l'adhésion"
+#: src/gtkgui.glade.h:309
+msgid "_Send Private Message"
+msgstr "_Envoyer un message privé"
 
-#~ msgid "_Revoke Membership"
-#~ msgstr "_Retirer l'adhésion"
+#: src/gtkgui.glade.h:310
+msgid "_Server:"
+msgstr "_Serveur :"
 
-#~ msgid "_Revoke Admin"
-#~ msgstr "_Retirer l'administration"
+#: src/gtkgui.glade.h:311
+msgid "_Service Discovery"
+msgstr "Gestion des _Services"
 
-#~ msgid "_Revoke Owner"
-#~ msgstr "_Retirer la possession"
+#: src/gtkgui.glade.h:312
+msgid "_Service Discovery..."
+msgstr "Gestion des _Services..."
 
-#~ msgid ""
-#~ "You received a message in the room %s in the last two seconds.\n"
-#~ "Do you still want to close this tab?"
-#~ msgstr ""
-#~ "Vous avez reçu un message dans le groupe %s il y a moins de deux "
-#~ "secondes.\n"
-#~ "Voulez-vous quand-même fermer cet onglet ?"
+#: src/gtkgui.glade.h:313
+msgid "_Start Chat"
+msgstr "Commencer une discussion"
 
-#~ msgid "Are you sure you want to remove %s transport from your roster?"
-#~ msgstr "Êtes-vous sûr de vouloir supprimer le transport %s de votre liste ?"
+#: src/gtkgui.glade.h:314
+msgid "_Status"
+msgstr "État"
 
-#~ msgid "Remove"
-#~ msgstr "Supprimer"
+#: src/gtkgui.glade.h:315
+msgid "_Subscribe"
+msgstr "_Ajouter"
 
-#~ msgid "Information"
-#~ msgstr "Information"
+#: src/gtkgui.glade.h:316
+msgid "_Subscription"
+msgstr "_Autorisation"
 
-#~ msgid "History"
-#~ msgstr "Historique"
+#: src/gtkgui.glade.h:317
+msgid "_Use proxy"
+msgstr "_Utiliser un proxy"
 
-#~ msgid "Free for chat"
-#~ msgstr "Disponible pour Discuter"
+#: src/gtkgui.glade.h:318
+msgid "_Username:"
+msgstr "_Nom"
 
-#~ msgid "Are you sure you want to remove %s (%s) from your roster?"
-#~ msgstr "Êtes-vous sûr de vouloir supprimer %s (%s) de votre liste ?"
+#: src/gtkgui.glade.h:319
+msgid "_Voice"
+msgstr "_Voix"
 
-#~ msgid ""
-#~ "You have unread messages.\n"
-#~ "Are you sure you want to quit Gajim?"
-#~ msgstr ""
-#~ "Vous avez des messages non-lus.\n"
-#~ "Souhaitez-vous quand-même quitter Gajim ?"
+#: src/gtkgui.glade.h:320
+msgid "_XML Console..."
+msgstr "Console _XML..."
 
-#~ msgid ""
-#~ "You received a message in the last two seconds.\n"
-#~ "Are you sure you want to quit Gajim?"
-#~ msgstr ""
-#~ "Vous avez reçu un message il y a moins de deux secondes.\n"
-#~ "Voulez-vous quand-même quitter Gajim ?"
-
-#~ msgid ""
-#~ "You received a message from %s in the last two seconds.\n"
-#~ "Do you still want to close this window?"
-#~ msgstr ""
-#~ "Vous avez reçu un message de %s il y a moins de deux secondes.\n"
-#~ "Voulez-vous quand-même fermer cette fenêtre ?"
-
-#~ msgid ""
-#~ "You received a message from %s in the last two seconds.\n"
-#~ "Do you still want to close this tab?"
-#~ msgstr ""
-#~ "Vous avez reçu un message de %s il y a moins de deux secondes.\n"
-#~ "Voulez-vous quand-même fermer cet onglet ?"
-
-#~ msgid "You are not connected, so you cannot send a message"
-#~ msgstr ""
-#~ "Vous n'êtes pas connecté, vous ne pouvez donc pas envoyer de message"
-
-#~ msgid "Brb"
-#~ msgstr "Bientôt de retour"
-
-#~ msgid "<b>SSL</b>"
-#~ msgstr "<b>SSL</b>"
-
-#~ msgid "Security"
-#~ msgstr "Sécurité"
-
-#~ msgid "Subscription request from"
-#~ msgstr "Requête d'inscription de la part de"
-
-#~ msgid "Save roster _position and size"
-#~ msgstr "Enregistrer la _position / taille de la fenêtre"
-
-#~ msgid "Add/Remove Emoticons..."
-#~ msgstr "Ajouter/Supprimer des Frimousses..."
-
-#~ msgid "Roster theme:"
-#~ msgstr "Thème de la liste de contacts :"
-
-#~ msgid "User:"
-#~ msgstr "Contact :"
-
-#~ msgid "Click to change the subject of the room"
-#~ msgstr "Cliquez pour changer le sujet du groupe de discussion"
-
-#~ msgid "Close _Window"
-#~ msgstr "_Fermer la Fenêtre"
-
-#~ msgid "Click to clear conversation (won't delete it from history)"
-#~ msgstr ""
-#~ "Cliquez ici pour effacer la conversation en cours (n'effacera pas "
-#~ "l'historique)"
-
-#~ msgid "Anonymous <nick@server/res>"
-#~ msgstr "Anonyme <pseudo@serveur/ressource>"
-
-#~ msgid "_Chat"
-#~ msgstr "_Discussion"
-
-#~ msgid "Add/Remove Emoticons"
-#~ msgstr "Ajouter/Supprimer des Frimousses"
+#: src/gtkgui.glade.h:321
+msgid "minutes"
+msgstr "minutes"
