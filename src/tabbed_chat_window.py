@@ -87,10 +87,15 @@ class TabbedChatWindow(chat.Chat):
 		self.set_state_image(jid)
 		contact_button = self.xmls[jid].get_widget('contact_button')
 		contact_button.set_use_underline(False)
+		tb = self.xmls[jid].get_widget('gpg_togglebutton')
 		if not user.keyID:
-			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
+			tb.set_sensitive(False)
+			tt = '%s has not broadcasted an OpenPGP key nor you have assigned one'
 		else:
-			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(True)
+			tb.set_sensitive(True)
+			tt = 'OpenPGP Encryption'
+		tip = gtk.Tooltips()
+		tip.set_tip(self.xmls[jid].get_widget('gpg_eventbox'), tt)
 
 		# add the fat line at the top
 		self.draw_name_banner(user.name, jid)

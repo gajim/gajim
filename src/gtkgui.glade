@@ -10000,7 +10000,6 @@ JID: whatever@jabber.org</property>
 		  <child>
 		    <widget class="GtkEventBox" id="gpg_eventbox">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Click to toggle OpenPGP encryption</property>
 		      <property name="visible_window">True</property>
 		      <property name="above_child">False</property>
 
