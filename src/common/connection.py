@@ -212,7 +212,7 @@ class Connection:
 		"""Called when we receive a message"""
 		msgtxt = msg.getBody()
 		mtype = msg.getType()
-		subject = msg.getSubject() # if note there it's None
+		subject = msg.getSubject() # if not there, it's None
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
