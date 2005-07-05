@@ -296,6 +296,12 @@ class RosterWindow:
 		join_gc_menuitem.remove_submenu()
 		new_message_menuitem.remove_submenu()
 
+		#remove the existing accelerator
+		if self.have_new_message_accel:
+			ag = gtk.accel_groups_from_object(self.window)[0]
+			new_message_menuitem.remove_accelerator(ag, gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
+			self.have_new_message_accel = False
+
 		#join gc
 		sub_menu = gtk.Menu()
 		join_gc_menuitem.set_submenu(sub_menu)
@@ -383,6 +389,10 @@ class RosterWindow:
 					self.new_message_menuitem_handler_id = new_message_menuitem.\
 						connect('activate', self.on_new_message_menuitem_activate, 
 						gajim.connections.keys()[0])
+				if not self.have_new_message_accel:
+					ag = gtk.accel_groups_from_object(self.window)[0]
+					new_message_menuitem.add_accelerator('activate', ag, gtk.keysyms.n, gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+					self.have_new_message_accel = True
 
 		if at_least_one_account_connected:
 			new_message_menuitem.set_sensitive(True)
@@ -1742,6 +1752,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		self.new_message_menuitem_handler_id = False
 		self.regroup = 0
 		self.regroup = gajim.config.get('mergeaccounts')
+		#FIXME: When list_accel_closures will be wrapped in pygtk
+		# no need of this variable
+		self.have_new_message_accel = False # Is the "Ctrl+N" shown ?
 		if gajim.config.get('saveposition'):
 			self.window.move(gajim.config.get('x-position'),
 				gajim.config.get('y-position'))
