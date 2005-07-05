@@ -27,7 +27,8 @@ def show_help():
 	sys.exit(0)
 
 def update_pot():
-	os.system('xgettext -k_ -kN_ -o gajim.pot ../src/*.py ../src/common/*.py ../src/msg.c')
+	os.system('intltool-extract --type=gettext/glade ../src/gtkgui.glade')
+	os.system('xgettext -k_ -kN_ -o gajim.pot ../src/*.py ../src/common/*.py ../src/gtkgui.glade.h')
 
 if __name__ == '__main__':
 	if os.path.basename(os.getcwd()) != 'scripts':
