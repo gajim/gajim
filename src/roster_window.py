@@ -339,7 +339,10 @@ class RosterWindow:
 			newitem = gtk.MenuItem() # seperator
 			sub_menu.append(newitem)
 		
-			newitem = gtk.MenuItem(_('Manage Bookmarks...'))
+			newitem = gtk.ImageMenuItem(_('Manage Bookmarks...'))
+			img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
+				gtk.ICON_SIZE_MENU)
+			newitem.set_image(img)
 			sub_menu.append(newitem)
 			newitem.connect('activate', self.on_bookmarks_menuitem_activate)
 			sub_menu.show_all()
@@ -396,7 +399,8 @@ class RosterWindow:
 						gajim.connections.keys()[0])
 				if not self.have_new_message_accel:
 					ag = gtk.accel_groups_from_object(self.window)[0]
-					new_message_menuitem.add_accelerator('activate', ag, gtk.keysyms.n, gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+					new_message_menuitem.add_accelerator('activate', ag,
+						gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 					self.have_new_message_accel = True
 
 		if at_least_one_account_connected:
@@ -516,25 +520,27 @@ class RosterWindow:
 		'''When an agent is requested to log in or off'''
 		gajim.connections[account].send_agent_status(jid, state)
 
-	def on_edit_agent(self, widget, user, account):
+	def on_edit_agent(self, widget, contact, account):
 		'''When we want to modify the agent registration'''
-		gajim.connections[account].request_register_agent_info(user.jid)
+		gajim.connections[account].request_register_agent_info(contact.jid)
 
-	def on_remove_agent(self, widget, user, account):
+	def on_remove_agent(self, widget, contact, account):
 		'''When an agent is requested to log in or off'''
-		window = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % user.jid, _('You will no longer be able to send and receive messages to contacts from %s.' % user.jid))
+		window = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % user.jid, _('You will no longer be able to send and receive messages to contacts from %s.' % contact.jid))
 		if window.get_response() == gtk.RESPONSE_OK:
-			gajim.connections[account].unsubscribe_agent(user.jid + '/' \
-																		+ user.resource)
+			gajim.connections[account].unsubscribe_agent(contact.jid + '/' \
+																		+ contact.resource)
 			# remove transport from treeview
-			self.remove_user(user, account)
+			self.remove_user(contact, account)
 			# remove transport's contacts from treeview
 			for jid, contacts in self.contacts[account].items():
 				contact = contacts[0]
-				if jid.endswith('@' + user.jid):
-					gajim.log.debug('REMOVE user %s due to unregistered transport %s' % (contact.jid, user.name))
+				if jid.endswith('@' + contact.jid):
+					gajim.log.debug(
+					'Removing contact %s due to unregistered transport %s'\
+						% (contact.jid, contact.name))
 					self.remove_user(contact, account)
-			del self.contacts[account][user.jid]
+			del self.contacts[account][contact.jid]
 
 	def on_rename(self, widget, iter, path):
 		model = self.tree.get_model()
@@ -587,7 +593,7 @@ class RosterWindow:
 		dialogs.SingleMessageWindow(self, account, contact, 'send')
 	
 	def mk_menu_user(self, event, iter):
-		'''Make user's popup menu'''
+		'''Make contact's popup menu'''
 		model = self.tree.get_model()
 		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
@@ -666,14 +672,10 @@ class RosterWindow:
 
 		menu = gtk.Menu()
 
-		rename_item = gtk.MenuItem()
-		rename_icon = gtk.Image()
-		rename_icon.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU)
-		label = gtk.Label(_('Rename'))
-		rename_hbox = gtk.HBox(False, 3)
-		rename_hbox.pack_start(rename_icon, False, False)
-		rename_hbox.pack_start(label, False, False)
-		rename_item.add(rename_hbox)
+		rename_item = gtk.ImageMenuItem(_('Rename'))
+		rename_icon = gtk.image_new_from_stock(gtk.STOCK_REFRESH,
+			gtk.ICON_SIZE_MENU)
+		rename_item.set_image(rename_icon)
 		menu.append(rename_item)
 		rename_item.connect('activate', self.on_rename, iter, path)
 
@@ -690,9 +692,7 @@ class RosterWindow:
 		menu = gtk.Menu()
 		
 		item = gtk.ImageMenuItem(_('_Log on'))
-		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
-		item.set_image(icon)
+		icon = gtk.image_new_from_stock(icon)
 		menu.append(item)
 		show = self.contacts[account][jid][0].show
 		if show != 'offline' and show != 'error':
@@ -700,8 +700,7 @@ class RosterWindow:
 		item.connect('activate', self.on_agent_logging, jid, None, account)
 
 		item = gtk.ImageMenuItem(_('Log _off'))
-		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
+		icon = gtk.image_new_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
 		if show == 'offline' or show == 'error':
@@ -713,15 +712,13 @@ class RosterWindow:
 		menu.append(item)
 
 		item = gtk.ImageMenuItem(_('Edit'))
-		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
+		icon = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_edit_agent, user, account)
 
 		item = gtk.ImageMenuItem(_('_Remove from Roster'))
-		icon = gtk.Image()
-		icon.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
+		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_remove_agent, user, account)
