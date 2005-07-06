@@ -387,15 +387,20 @@ class TabbedChatWindow(chat.Chat):
 		else:
 			ec = gajim.encrypted_chats[self.account]
 			if encrypted and jid not in ec:
-				msg_in_two_langs = _('Encryption enabled')\
-					+ ' - Encryption enabled'
-				chat.Chat.print_conversation_line(self, msg_in_two_langs, jid,
+				msg = 'Encryption enabled
+				lang = os.getenv('LANG')
+				if lang is not None or lang != 'en': # we're not english
+					msg = _('Encryption enabled')\
+						+ ' (Encryption enabled)' # one in locale and one in en
+				chat.Chat.print_conversation_line(self, msg, jid,
 					'status', '', tim)
 				ec.append(jid)
 			if not encrypted and jid in ec:
-				msg_in_two_langs = _('Encryption disabled')\
-					+ ' - Encryption disabled'
-				chat.Chat.print_conversation_line(self, msg_in_two_langs, jid,
+				msg = 'Encryption disabled'
+				lang = os.getenv('LANG')
+				if lang is not None or lang != 'en': # we're not english
+					msg = _('Encryption disabled') + ' (Encryption disabled)'
+				chat.Chat.print_conversation_line(self, msg, jid,
 					'status', '', tim)
 				ec.remove(jid)
 			self.xmls[jid].get_widget('gpg_togglebutton').set_active(encrypted)
