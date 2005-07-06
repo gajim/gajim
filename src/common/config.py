@@ -240,7 +240,7 @@ class Config:
 	}
 
 	statusmsg_default = {
-		_('Nap'): _("I'm taking a nap."),
+		_('Sleeping'): 'ZZZZzzzzzZZZZZ',
 		_('Back soon'): _('Back in some minutes.'),
 		_('Eating'): _("I'm eating, so leave me a message."),
 		_('Movie'): _("I'm watching a movie."),

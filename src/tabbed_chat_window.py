@@ -24,6 +24,7 @@ import gobject
 import time
 import urllib
 import base64
+import os
 
 import dialogs
 import chat
