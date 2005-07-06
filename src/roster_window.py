@@ -609,8 +609,8 @@ class RosterWindow:
 		start_chat_menuitem = childs[0]
 		send_single_message_menuitem = childs[1]
 		rename_menuitem = childs[2]
+		edit_groups_menuitem = childs[3]
 		#skip a seperator
-		edit_groups_menuitem = childs[4]
 		assign_openpgp_key_menuitem = childs[5]
 		#skip a seperator
 		subscription_to_menuitem, subscription_from_menuitem =\
