@@ -557,8 +557,9 @@ class RosterWindow:
 		keyID = w.run()
 		if keyID == -1:
 			return
-		if keyID[0] == 'None' and user.jid in keys:
-			del keys[user.jid]
+		if keyID[0] == 'None'
+			if user.jid in keys:
+				del keys[user.jid]
 		else:
 			keys[user.jid] = keyID[0]
 			for u in self.contacts[account][user.jid]:
