@@ -47,7 +47,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image881">
+			<widget class="GtkImage" id="image897">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -67,7 +67,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image882">
+			<widget class="GtkImage" id="image898">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>
@@ -93,7 +93,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image883">
+			<widget class="GtkImage" id="image899">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -113,7 +113,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image884">
+			<widget class="GtkImage" id="image900">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find</property>
 			  <property name="icon_size">1</property>
@@ -131,6 +131,138 @@
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Advanced</property>
 		      <property name="use_underline">True</property>
+
+		      <child>
+			<widget class="GtkMenu" id="advanced_menuitem_menu">
+
+			  <child>
+			    <widget class="GtkImageMenuItem" id="send_single_message_menuitem">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_Send Single Message</property>
+			      <property name="use_underline">True</property>
+			      <signal name="activate" handler="on_send_single_message_menuitem_activate" last_modification_time="Wed, 06 Jul 2005 13:20:23 GMT"/>
+
+			      <child internal-child="image">
+				<widget class="GtkImage" id="image901">
+				  <property name="visible">True</property>
+				  <property name="stock">gtk-new</property>
+				  <property name="icon_size">1</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+			      </child>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkMenuItem" id="xml_console_menuitem">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_XML Console</property>
+			      <property name="use_underline">True</property>
+			      <signal name="activate" handler="on_xml_console_menuitem_activate" last_modification_time="Wed, 06 Jul 2005 13:20:23 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSeparatorMenuItem" id="separator8">
+			      <property name="visible">True</property>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkMenuItem" id="administrator_menuitem">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_Administrator</property>
+			      <property name="use_underline">True</property>
+
+			      <child>
+				<widget class="GtkMenu" id="administrator_menuitem_menu">
+
+				  <child>
+				    <widget class="GtkMenuItem" id="online_users_menuitem">
+				      <property name="visible">True</property>
+				      <property name="label" translatable="yes">_Online Users</property>
+				      <property name="use_underline">True</property>
+				      <signal name="activate" handler="on_online_users_menuitem_activate" last_modification_time="Wed, 06 Jul 2005 13:26:25 GMT"/>
+				    </widget>
+				  </child>
+
+				  <child>
+				    <widget class="GtkImageMenuItem" id="send_server_message_menuitem">
+				      <property name="visible">True</property>
+				      <property name="label" translatable="yes">_Send Server Message</property>
+				      <property name="use_underline">True</property>
+				      <signal name="activate" handler="on_send_server_message_menuitem_activate" last_modification_time="Wed, 06 Jul 2005 13:26:25 GMT"/>
+
+				      <child internal-child="image">
+					<widget class="GtkImage" id="image902">
+					  <property name="visible">True</property>
+					  <property name="stock">gtk-new</property>
+					  <property name="icon_size">1</property>
+					  <property name="xalign">0.5</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+				      </child>
+				    </widget>
+				  </child>
+
+				  <child>
+				    <widget class="GtkSeparatorMenuItem" id="separator9">
+				      <property name="visible">True</property>
+				    </widget>
+				  </child>
+
+				  <child>
+				    <widget class="GtkMenuItem" id="set_motd_menuitem">
+				      <property name="visible">True</property>
+				      <property name="tooltip" translatable="yes">Set Message of the Day</property>
+				      <property name="label" translatable="yes">Set MOTD</property>
+				      <property name="use_underline">True</property>
+				      <signal name="activate" handler="on_set_motd_menuitem_activate" last_modification_time="Wed, 06 Jul 2005 13:26:25 GMT"/>
+				    </widget>
+				  </child>
+
+				  <child>
+				    <widget class="GtkMenuItem" id="update_motd_menuitem">
+				      <property name="visible">True</property>
+				      <property name="tooltip" translatable="yes">Update Message of the Day</property>
+				      <property name="label" translatable="yes">Update MOTD</property>
+				      <property name="use_underline">True</property>
+				      <signal name="activate" handler="on_update_motd_menuitem_activate" last_modification_time="Wed, 06 Jul 2005 13:26:25 GMT"/>
+				    </widget>
+				  </child>
+
+				  <child>
+				    <widget class="GtkImageMenuItem" id="delete_motd_menuitem">
+				      <property name="visible">True</property>
+				      <property name="tooltip" translatable="yes">Delete Message of the Day</property>
+				      <property name="label" translatable="yes">Delete MOTD</property>
+				      <property name="use_underline">True</property>
+				      <signal name="activate" handler="on_delete_motd_menuitem_activate" last_modification_time="Wed, 06 Jul 2005 13:26:25 GMT"/>
+
+				      <child internal-child="image">
+					<widget class="GtkImage" id="image903">
+					  <property name="visible">True</property>
+					  <property name="stock">gtk-clear</property>
+					  <property name="icon_size">1</property>
+					  <property name="xalign">0.5</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+				      </child>
+				    </widget>
+				  </child>
+				</widget>
+			      </child>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
 		    </widget>
 		  </child>
 
@@ -159,7 +291,7 @@
 		      <signal name="activate" handler="on_about_menuitem_activate" last_modification_time="Tue, 01 Mar 2005 22:56:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image885">
+			<widget class="GtkImage" id="image904">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-about</property>
 			  <property name="icon_size">1</property>
@@ -187,7 +319,7 @@
 		      <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image886">
+			<widget class="GtkImage" id="image905">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-quit</property>
 			  <property name="icon_size">1</property>
@@ -222,7 +354,7 @@
 		      <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image887">
+			<widget class="GtkImage" id="image906">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-network</property>
 			  <property name="icon_size">1</property>
@@ -243,7 +375,7 @@
 		      <signal name="activate" handler="on_profile_avatar_activate" last_modification_time="Thu, 09 Jun 2005 22:22:16 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image888">
+			<widget class="GtkImage" id="image907">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-properties</property>
 			  <property name="icon_size">1</property>
@@ -271,7 +403,7 @@
 		      <accelerator key="P" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image889">
+			<widget class="GtkImage" id="image908">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-preferences</property>
 			  <property name="icon_size">1</property>
@@ -13662,7 +13794,7 @@ the Jabber network.</property>
 	      <child>
 		<widget class="GtkHButtonBox" id="hbuttonbox25">
 		  <property name="visible">True</property>
-		  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
+		  <property name="layout_style">GTK_BUTTONBOX_END</property>
 		  <property name="spacing">6</property>
 
 		  <child>
@@ -14084,7 +14216,7 @@ the Jabber network.</property>
 	      <child>
 		<widget class="GtkHButtonBox" id="hbuttonbox21">
 		  <property name="visible">True</property>
-		  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
+		  <property name="layout_style">GTK_BUTTONBOX_END</property>
 		  <property name="spacing">6</property>
 
 		  <child>
@@ -15329,7 +15461,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image852">
+	<widget class="GtkImage" id="image909">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -15343,10 +15475,22 @@ the Jabber network.</property>
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="send_single_message_menuitem">
+    <widget class="GtkImageMenuItem" id="send_single_message_menuitem">
       <property name="visible">True</property>
       <property name="label" translatable="yes">Send Single _Message</property>
       <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image910">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-new</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
     </widget>
   </child>
 
@@ -15356,7 +15500,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image853">
+	<widget class="GtkImage" id="image911">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-refresh</property>
 	  <property name="icon_size">1</property>
@@ -15389,7 +15533,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_assign_openpgp_key_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 22:57:59 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image854">
+	<widget class="GtkImage" id="image912">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-dialog-authentication</property>
 	  <property name="icon_size">1</property>
@@ -15414,7 +15558,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image855">
+	<widget class="GtkImage" id="image913">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-dialog-question</property>
 	  <property name="icon_size">1</property>
@@ -15435,7 +15579,7 @@ the Jabber network.</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image856">
+		<widget class="GtkImage" id="image914">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-go-up</property>
 		  <property name="icon_size">1</property>
@@ -15455,7 +15599,7 @@ the Jabber network.</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image857">
+		<widget class="GtkImage" id="image915">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-go-down</property>
 		  <property name="icon_size">1</property>
@@ -15478,7 +15622,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image858">
+	<widget class="GtkImage" id="image916">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -15497,7 +15641,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image859">
+	<widget class="GtkImage" id="image917">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-remove</property>
 	  <property name="icon_size">1</property>
@@ -15529,7 +15673,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image860">
+	<widget class="GtkImage" id="image918">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>

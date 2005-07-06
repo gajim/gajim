@@ -278,9 +278,14 @@ class RosterWindow:
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		add_new_contact_menuitem  = self.xml.get_widget('add_new_contact_menuitem')
 		service_disco_menuitem  = self.xml.get_widget('service_disco_menuitem')
-		show_offline_contacts_menuitem = self.xml.get_widget('show_offline_contacts_menuitem')
+		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
+		show_offline_contacts_menuitem = self.xml.get_widget(
+			'show_offline_contacts_menuitem')
+		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
+		
 		if self.add_new_contact_handler_id:
-			add_new_contact_menuitem.handler_disconnect(self.add_new_contact_handler_id)
+			add_new_contact_menuitem.handler_disconnect(
+				self.add_new_contact_handler_id)
 			self.add_new_contact_handler_id = None
 		if self.service_disco_handler_id:
 			service_disco_menuitem.handler_disconnect(
@@ -399,19 +404,18 @@ class RosterWindow:
 			join_gc_menuitem.set_sensitive(True)
 			add_new_contact_menuitem.set_sensitive(True)
 			service_disco_menuitem.set_sensitive(True)
+			advanced_menuitem.set_sensitive(True)
 			show_offline_contacts_menuitem.set_sensitive(True)
+			profile_avatar_menuitem.set_sensitive(True)
 		else:
-			#remove submenu from menuitems and make the insensitive
-			new_message_menuitem.remove_submenu()
+			# make the menuitems insensitive
 			new_message_menuitem.set_sensitive(False)
-			join_gc_menuitem.remove_submenu()
 			join_gc_menuitem.set_sensitive(False)
-			add_new_contact_menuitem.remove_submenu()
 			add_new_contact_menuitem.set_sensitive(False)
-			service_disco_menuitem.remove_submenu()
 			service_disco_menuitem.set_sensitive(False)
-			#FIXME: make insensitive profile,avatar menuitem
+			advanced_menuitem.set_sensitive(False)
 			show_offline_contacts_menuitem.set_sensitive(False)
+			profile_avatar_menuitem.set_sensitive(False)
 
 	def draw_roster(self):
 		'''Clear and draw roster'''
