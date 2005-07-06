@@ -89,7 +89,7 @@ class TabbedChatWindow(chat.Chat):
 		contact_button = self.xmls[jid].get_widget('contact_button')
 		contact_button.set_use_underline(False)
 		tb = self.xmls[jid].get_widget('gpg_togglebutton')
-		if user.keyID: # we can do gpg
+		if contact.keyID: # we can do gpg
 			tb.set_sensitive(True)
 			tt = 'OpenPGP Encryption'
 		else:
