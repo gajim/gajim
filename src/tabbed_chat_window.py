@@ -387,7 +387,7 @@ class TabbedChatWindow(chat.Chat):
 		else:
 			ec = gajim.encrypted_chats[self.account]
 			if encrypted and jid not in ec:
-				msg = 'Encryption enabled
+				msg = 'Encryption enabled'
 				lang = os.getenv('LANG')
 				if lang is not None or lang != 'en': # we're not english
 					msg = _('Encryption enabled')\
