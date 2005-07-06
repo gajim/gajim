@@ -81,25 +81,26 @@ class TabbedChatWindow(chat.Chat):
 		self.xmls[jid].get_widget('gpg_togglebutton').set_active(
 			var['gpg_enabled'])
 		
-	def draw_widgets(self, user):
+	def draw_widgets(self, contact):
 		"""draw the widgets in a tab (status_image, contact_button ...)
-		according to the the information in the user variable"""
-		jid = user.jid
+		according to the the information in the contact variable"""
+		jid = contact.jid
 		self.set_state_image(jid)
 		contact_button = self.xmls[jid].get_widget('contact_button')
 		contact_button.set_use_underline(False)
 		tb = self.xmls[jid].get_widget('gpg_togglebutton')
-		if not user.keyID:
-			tb.set_sensitive(False)
-			tt = '%s has not broadcasted an OpenPGP key nor you have assigned one'
-		else:
+		if user.keyID: # we can do gpg
 			tb.set_sensitive(True)
 			tt = 'OpenPGP Encryption'
+		else:
+			tb.set_sensitive(False)
+			tt = '%s has not broadcasted an OpenPGP key nor you have assigned one'\
+				% contact.name
 		tip = gtk.Tooltips()
 		tip.set_tip(self.xmls[jid].get_widget('gpg_eventbox'), tt)
 
 		# add the fat line at the top
-		self.draw_name_banner(user.name, jid)
+		self.draw_name_banner(contact.name, jid)
 
 	def draw_name_banner(self, name, jid):
 		'''Draw the fat line at the top of the window that 
