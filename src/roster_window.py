@@ -557,7 +557,7 @@ class RosterWindow:
 		keyID = w.run()
 		if keyID == -1:
 			return
-		if keyID[0] == 'None'
+		if keyID[0] == 'None':
 			if user.jid in keys:
 				del keys[user.jid]
 		else:
