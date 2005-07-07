@@ -205,7 +205,7 @@ class Systray:
 		groups_menu = gtk.Menu()
 		
 		for group in self.plugin.roster.groups[account].keys():
-			if group == 'Transports':
+			if group == _('Transports'):
 				continue
 			# at least one 'not offline' or 'without errors' in this group
 			at_least_one = False

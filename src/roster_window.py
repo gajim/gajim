@@ -118,12 +118,12 @@ class RosterWindow:
 		users = self.contacts[account][jid]
 		user = users[0]
 		if user.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
-			user.groups = ['Transports']
+			user.groups = [_('Transports')]
 		elif user.groups == []:
 			user.groups.append(_('General'))
 
 		if (user.show == 'offline' or user.show == 'error') and \
-		   not showOffline and (not 'Transports' in user.groups or \
+		   not showOffline and (not _('Transports') in user.groups or \
 			gajim.connections[account].connected < 2) and \
 		   not self.plugin.queues[account].has_key(user.jid):
 			return
@@ -146,7 +146,7 @@ class RosterWindow:
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
 			typestr = 'contact'
-			if g == 'Transports':
+			if g == _('Transports'):
 				typestr = 'agent'
 
 			model.append(iterG, [self.jabber_state_images[user.show], user.name,
@@ -1664,9 +1664,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		type1 = model.get_value(iter1, 2)
 		type2 = model.get_value(iter2, 2)
 		if type1 == 'group':
-			if name1 == 'Transports':
+			if name1 == _('Transports'):
 				return 1
-			if name2 == 'Transports':
+			if name2 == _('Transports'):
 				return -1
 			if name1 == 'not in the roster':
 				return 1
@@ -1740,7 +1740,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			return
 		iter_group_source = model.iter_parent(iter_source)
 		grp_source = model.get_value(iter_group_source, 3)
-		if grp_source == 'Transports' or grp_source == 'not in the roster':
+		if grp_source == _('Transports') or grp_source == 'not in the roster':
 			return
 		account = model.get_value(iter_dest, 4)
 		type_dest = model.get_value(iter_dest, 2)

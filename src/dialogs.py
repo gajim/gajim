@@ -101,7 +101,7 @@ class EditGroupsDialog:
 		store = gtk.ListStore(str, bool)
 		self.list.set_model(store)
 		for g in self.plugin.roster.groups[self.account].keys():
-			if g in ['Transports', 'not in the roster']:
+			if g in [_('Transports'), 'not in the roster']:
 				continue
 			iter = store.append()
 			store.set(iter, 0, g)
@@ -270,7 +270,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		jid_agents = []
 		for j in self.plugin.roster.contacts[account]:
 			user = self.plugin.roster.contacts[account][j][0]
-			if 'Transports' in user.groups and user.show != 'offline' and \
+			if _('Transports') in user.groups and user.show != 'offline' and \
 					user.show != 'error':
 				jid_agents.append(j)
 		for a in jid_agents:
@@ -306,7 +306,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
 		for g in self.plugin.roster.groups[account].keys():
-			if g != 'not in the roster' and g != 'Transports':
+			if g != 'not in the roster' and g != _('Transports'):
 				self.group_comboboxentry.append_text(g)
 
 		self.xml.signal_autoconnect(self)

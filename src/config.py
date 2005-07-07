@@ -1633,7 +1633,7 @@ class ServiceRegistrationWindow:
 			del self.infos['registered']
 		else:
 			user1 = Contact(jid = self.service, name = self.service,
-			groups = ['Transports'], show = 'offline', status = 'offline',
+			groups = [_('Transports')], show = 'offline', status = 'offline',
 			sub = 'from')
 			self.plugin.roster.contacts[self.account][self.service] = [user1]
 			self.plugin.roster.add_contact_to_roster(self.service, self.account)
@@ -2103,7 +2103,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		registered_transports = []
 		contacts = self.plugin.roster.contacts[self.account]
 		for j in contacts:
-			if 'Transports' in contacts[j][0].groups:
+			if _('Transports') in contacts[j][0].groups:
 				registered_transports.append(j)
 		if jid in registered_transports:
 			self.register_button.set_label(_('_Edit'))
