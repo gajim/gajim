@@ -1182,7 +1182,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 				del self.plugin.roster.contacts[self.account]
 				del self.plugin.sleeper_state[self.account]
 				del gajim.encrypted_chats[self.account]
-				del gajim.last_time_message[self.account]
+				del gajim.last_message_time[self.account]
 				gajim.connections[self.account].name = name
 				gajim.connections[name] = gajim.connections[self.account]
 				del gajim.connections[self.account]
