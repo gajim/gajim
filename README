@@ -29,7 +29,7 @@ To specify what modules to build do:
 make help
 
 To specify where to install do:
-su -c make DESTDIR=custom_path install
+su -c make PREFIX=custom_path install
 
 =RUNNING GAJIM=
 gajim
