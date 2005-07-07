@@ -751,7 +751,8 @@ class RosterWindow:
 		menu = gtk.Menu()
 		
 		item = gtk.ImageMenuItem(_('_Log on'))
-		icon = gtk.image_new_from_stock(icon)
+		icon = gtk.image_new_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
 		menu.append(item)
 		show = self.contacts[account][jid][0].show
 		if show != 'offline' and show != 'error':
