@@ -140,7 +140,7 @@ class HistoryWindow:
 			tag_msg = 'status'
 		elif type == 'recv':
 			try:
-				name = self.plugin.roster.contacts[self.jid][0].name
+				name = self.plugin.roster.contacts[self.account][self.jid][0].name
 			except:
 				name = None
 			if not name:
