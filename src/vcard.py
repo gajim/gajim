@@ -84,7 +84,7 @@ class VcardWindow:
 		new_name = name_entry.get_text()
 		if new_name != self.user.name and new_name != '':
 			self.user.name = new_name
-			for i in self.plugin.roster.get_user_iter(self.user.jid, self.account):
+			for i in self.plugin.roster.get_contact_iter(self.user.jid, self.account):
 				self.plugin.roster.tree.get_model().set_value(i, 1, new_name)
 			gajim.connections[self.account].update_user(self.user.jid,
 				self.user.name, self.user.groups)

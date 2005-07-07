@@ -64,7 +64,7 @@ class EditGroupsDialog:
 
 	def update_user(self):
 		self.plugin.roster.remove_user(self.user, self.account)
-		self.plugin.roster.add_user_to_roster(self.user.jid, self.account)
+		self.plugin.roster.add_contact_to_roster(self.user.jid, self.account)
 
 	def on_add_button_clicked(self, widget):
 		group = self.xml.get_widget('group_entry').get_text()
@@ -789,7 +789,7 @@ class PopupNotificationWindow:
 				groups = ['not in the roster'], show = 'not in the roster',
 				status = 'not in the roster', sub = 'none', keyID = keyID)
 			self.plugin.roster.contacts[self.account][self.jid] = [user]
-			self.plugin.roster.add_user_to_roster(user.self.jid, self.account)			
+			self.plugin.roster.add_contact_to_roster(user.self.jid, self.account)			
 
 		if msg_type == 'normal': # it's single message
 			pass

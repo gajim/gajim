@@ -177,7 +177,7 @@ class GroupchatWindow(chat.Chat):
 				fin = True
 		return None
 
-	def get_user_iter(self, room_jid, nick):
+	def get_contact_iter(self, room_jid, nick):
 		model = self.list_treeview[room_jid].get_model()
 		fin = False
 		role_iter = model.get_iter_root()
@@ -206,7 +206,7 @@ class GroupchatWindow(chat.Chat):
 	def remove_user(self, room_jid, nick):
 		"""Remove a user from the list_users"""
 		model = self.list_treeview[room_jid].get_model()
-		iter = self.get_user_iter(room_jid, nick)
+		iter = self.get_contact_iter(room_jid, nick)
 		if not iter:
 			return
 		if self.contacts[room_jid].has_key(nick):
@@ -219,7 +219,7 @@ class GroupchatWindow(chat.Chat):
 	def escape(self, s):
 		return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 	
-	def add_user_to_roster(self, room_jid, nick, show, role, jid, affiliation):
+	def add_contact_to_roster(self, room_jid, nick, show, role, jid, affiliation):
 		model = self.list_treeview[room_jid].get_model()
 		image = self.plugin.roster.jabber_state_images[show]
 		resource = ''
@@ -269,7 +269,7 @@ class GroupchatWindow(chat.Chat):
 					user_iter = model.iter_next(user_iter)
 				role_iter = model.iter_next(role_iter)
 
-	def chg_user_status(self, room_jid, nick, show, status, role, affiliation, \
+	def chg_contact_status(self, room_jid, nick, show, status, role, affiliation, \
 		jid, reason, actor, statusCode, new_nick, account):
 		"""When a user changes his status"""
 		if show == 'invisible':
@@ -291,14 +291,14 @@ class GroupchatWindow(chat.Chat):
 				model.clear()
 				self.contacts[room_jid] = {}
 		else:
-			iter = self.get_user_iter(room_jid, nick)
+			iter = self.get_contact_iter(room_jid, nick)
 			if not iter:
-				iter = self.add_user_to_roster(room_jid, nick, show, role, jid, affiliation)
+				iter = self.add_contact_to_roster(room_jid, nick, show, role, jid, affiliation)
 			else:
 				actual_role = self.get_role(room_jid, nick)
 				if role != actual_role:
 					self.remove_user(room_jid, nick)
-					self.add_user_to_roster(room_jid, nick, show, role, jid, affiliation)
+					self.add_contact_to_roster(room_jid, nick, show, role, jid, affiliation)
 				else:
 					roster = self.plugin.roster
 					state_images = roster.get_appropriate_state_images(jid)

@@ -1636,7 +1636,7 @@ class ServiceRegistrationWindow:
 			groups = ['Transports'], show = 'offline', status = 'offline',
 			sub = 'from')
 			self.plugin.roster.contacts[self.account][self.service] = [user1]
-			self.plugin.roster.add_user_to_roster(self.service, self.account)
+			self.plugin.roster.add_contact_to_roster(self.service, self.account)
 		gajim.connections[self.account].register_agent(self.service, self.infos)
 		self.window.destroy()
 	

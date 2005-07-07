@@ -70,7 +70,7 @@ class RosterWindow:
 			group = model.iter_next(group)
 		return group
 
-	def get_user_iter(self, jid, account):
+	def get_contact_iter(self, jid, account):
 		model = self.tree.get_model()
 		acct = self.get_account_iter(account)
 		found = []
@@ -88,6 +88,8 @@ class RosterWindow:
 	def add_account_to_roster(self, account):
 		if self.regroup:
 			return
+		if len(gajim.connections) == 1: # user has only one account
+			return # do not draw the account row
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
@@ -100,7 +102,7 @@ class RosterWindow:
 			(self.plugin.con_types[account] == 'tls' or\
 			self.plugin.con_types[account] == 'ssl'):
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
-				gtk.ICON_SIZE_MENU, 'foo')
+				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
 
 		model.append(None, [self.jabber_state_images[status], account,
 			'account', account, account, False, tls_pixbuf])
@@ -110,8 +112,8 @@ class RosterWindow:
 			self.newly_added[account].remove(jid)
 			self.draw_contact(jid, account)
 
-	def add_user_to_roster(self, jid, account):
-		'''Add a user to the roster and add groups if they aren't in roster'''
+	def add_contact_to_roster(self, jid, account):
+		'''Add a contact to the roster and add groups if they aren't in roster'''
 		showOffline = gajim.config.get('showoffline')
 		if not self.contacts[account].has_key(jid):
 			return
@@ -145,7 +147,7 @@ class RosterWindow:
 			   not gajim.config.get('mergeaccounts'):
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
-			typestr = 'user'
+			typestr = 'contact'
 			if g == 'Transports':
 				typestr = 'agent'
 
@@ -174,7 +176,7 @@ class RosterWindow:
 		if user.jid in self.to_be_removed[account]:
 			return
 		model = self.tree.get_model()
-		for i in self.get_user_iter(user.jid, account):
+		for i in self.get_contact_iter(user.jid, account):
 			parent_i = model.iter_parent(i)
 			group = model.get_value(parent_i, 3)
 			model.remove(i)
@@ -222,7 +224,7 @@ class RosterWindow:
 	def draw_contact(self, jid, account):
 		'''draw the correct state image and name'''
 		model = self.tree.get_model()
-		iters = self.get_user_iter(jid, account)
+		iters = self.get_contact_iter(jid, account)
 		if len(iters) == 0:
 			return
 		users = self.contacts[account][jid]
@@ -406,7 +408,7 @@ class RosterWindow:
 			sub_menu.show_all()
 			
 		else:
-			if len(gajim.connections) == 1: # one account
+			if len(gajim.connections) == 1: # user has only one account
 				#add
 				if not self.add_new_contact_handler_id:
 					self.add_new_contact_handler_id = add_new_contact_menuitem.connect(
@@ -454,7 +456,7 @@ class RosterWindow:
 		for acct in gajim.connections:
 			self.add_account_to_roster(acct)
 			for jid in self.contacts[acct].keys():
-				self.add_user_to_roster(jid, acct)
+				self.add_contact_to_roster(jid, acct)
 	
 	def mklists(self, array, account):
 		'''fill self.contacts and self.groups'''
@@ -502,8 +504,8 @@ class RosterWindow:
 					ishidden = True
 				self.groups[account][g] = { 'expand': ishidden }
 
-	def chg_user_status(self, user, show, status, account):
-		'''When a user change his status'''
+	def chg_contact_status(self, user, show, status, account):
+		'''When a contact changes his status'''
 		showOffline = gajim.config.get('showoffline')
 		model = self.tree.get_model()
 		luser = self.contacts[account][user.jid]
@@ -519,8 +521,8 @@ class RosterWindow:
 			else:
 				self.draw_contact(user.jid, account)
 		else:
-			if not self.get_user_iter(user.jid, account):
-				self.add_user_to_roster(user.jid, account)
+			if not self.get_contact_iter(user.jid, account):
+				self.add_contact_to_roster(user.jid, account)
 			self.draw_contact(user.jid, account)
 		#print status in chat window and update status/GPG image
 		if self.plugin.windows[account]['chats'].has_key(user.jid):
@@ -861,7 +863,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			user1.groups = [group]
 			user1.name = pseudo
 			self.remove_user(user1, account)
-		self.add_user_to_roster(jid, account)
+		self.add_contact_to_roster(jid, account)
 
 	def on_roster_treeview_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''
@@ -873,7 +875,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if not iter:
 				return
 			type = model.get_value(iter, 2)
-			if type == 'user' or type == 'group':
+			if type == 'contact' or type == 'group':
 				path = model.get_path(iter)
 				model.set_value(iter, 5, True) # editable -> True
 				self.tree.set_cursor(path, self.tree.get_column(0), True)
@@ -886,7 +888,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			account = model.get_value(iter, 4)
 			type = model.get_value(iter, 2)
 			user = self.contacts[account][jid][0]
-			if type == 'user':
+			if type == 'contact':
 				self.on_req_usub(widget, user, account)
 			elif type == 'agent':
 				self.on_remove_agent(widget, user, account)
@@ -909,7 +911,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				self.mk_menu_g(event, iter)
 			elif type == 'agent':
 				self.mk_menu_agent(event, iter)
-			elif type == 'user':
+			elif type == 'contact':
 				self.mk_menu_user(event, iter)
 			elif type == 'account':
 				self.mk_menu_account(event, iter)
@@ -925,7 +927,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			type = model.get_value(iter, 2)
-			if type == 'agent' or type == 'user':
+			if type == 'agent' or type == 'contact':
 				account = model.get_value(iter, 4)
 				jid = model.get_value(iter, 3)
 				if self.plugin.windows[account]['chats'].has_key(jid):
@@ -967,7 +969,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					groups = ['not in the roster'], show = 'not in the roster',
 					status = 'not in the roster', ask = 'none', keyID = user.keyID)
 				self.contacts[account][user.jid] = [user1] 
-				self.add_user_to_roster(user.jid, account)	
+				self.add_contact_to_roster(user.jid, account)	
 			
 	def forget_gpg_passphrase(self, keyid):
 		if self.gpg_passphrase.has_key(keyid):
@@ -1123,7 +1125,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				for user in luser:
 					luser_copy.append(user)
 				for user in luser_copy:
-					self.chg_user_status(user, 'offline', 'Disconnected', account)
+					self.chg_contact_status(user, 'offline', 'Disconnected', account)
 		self.update_status_comboxbox()
 		self.make_menu()
 
@@ -1154,7 +1156,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				groups = ['not in the roster'], show = 'not in the roster',
 				status = 'not in the roster', sub = 'none', keyID = keyID)
 			self.contacts[account][jid] = [user]
-			self.add_user_to_roster(user.jid, account)			
+			self.add_contact_to_roster(user.jid, account)			
 
 		if not self.plugin.windows[account]['chats'].has_key(jid):
 			self.new_chat(user, account)
@@ -1188,9 +1190,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				groups = ['not in the roster'], show = 'not in the roster',
 				status = 'not in the roster', ask = 'none', keyID = keyID)
 			self.contacts[account][jid] = [user1] 
-			self.add_user_to_roster(jid, account)
+			self.add_contact_to_roster(jid, account)
 
-		iters = self.get_user_iter(jid, account)
+		iters = self.get_contact_iter(jid, account)
 		if iters:
 			path = self.tree.get_model().get_path(iters[0])
 		else:
@@ -1232,8 +1234,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					self.plugin.systray.add_jid(jid, account)
 			self.show_title() # we show the * or [n]
 			if not path:
-				self.add_user_to_roster(jid, account)
-				iters = self.get_user_iter(jid, account)
+				self.add_contact_to_roster(jid, account)
+				iters = self.get_contact_iter(jid, account)
 				path = self.tree.get_model().get_path(iters[0])
 			self.tree.expand_row(path[0:1], False)
 			self.tree.expand_row(path[0:2], False)
@@ -1464,7 +1466,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		account = model.get_value(iter, 4)
 		jid = model.get_value(iter, 3)
 		type = model.get_value(iter, 2)
-		if type == 'user':
+		if type == 'contact':
 			old_text = self.contacts[account][jid][0].name
 			if old_text != new_text:
 				for u in self.contacts[account][jid]:
@@ -1481,7 +1483,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					self.remove_user(user, account)
 					user.groups.remove(old_name)
 					user.groups.append(new_text)
-					self.add_user_to_roster(user.jid, account)
+					self.add_contact_to_roster(user.jid, account)
 					gajim.connections[account].update_user(user.jid, user.name, 
 																		user.groups)
 		model.set_value(iter, 5, False)
@@ -1672,7 +1674,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				return 1
 			if name2 == 'not in the roster':
 				return -1
-		if type1 == 'user' and type2 == 'user' and \
+		if type1 == 'contact' and type2 == 'contact' and \
 				gajim.config.get('sort_by_show'):
 			account = model.get_value(iter1, 4)
 			if account and model.get_value(iter2, 4) == account:
@@ -1766,7 +1768,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			del self.groups[account][grp_source]
 		if not grp_dest in u.groups:
 			u.groups.append(grp_dest)
-			self.add_user_to_roster(data, account)
+			self.add_contact_to_roster(data, account)
 		gajim.connections[account].update_user(u.jid, u.name, u.groups)
 		if context.action == gtk.gdk.ACTION_MOVE:
 			context.finish(True, True, etime)
@@ -1853,7 +1855,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		self.status_combobox.set_active(6) # default to offline
 
 		showOffline = gajim.config.get('showoffline')
-		self.xml.get_widget('show_offline_contacts_menuitem').set_active(showOffline)
+		self.xml.get_widget('show_offline_contacts_menuitem').set_active(
+			showOffline)
 
 		#columns
 		
@@ -1869,7 +1872,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		render_text.connect('edited', self.on_cell_edited)
 		render_text.connect('editing-canceled', self.on_editing_canceled)
 		col.pack_start(render_text, expand = True)
-		col.add_attribute(render_text, 'text', 1)
+		col.add_attribute(render_text, 'text', 1) # where we hold the name
 		col.add_attribute(render_text, 'editable', 5)
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
 

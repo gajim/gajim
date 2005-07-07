@@ -286,7 +286,7 @@ class Interface:
 				self.roster.draw_contact(ji, account)
 		elif self.roster.contacts[account].has_key(ji):
 			#It isn't an agent
-			self.roster.chg_user_status(user1, array[1], array[2], account)
+			self.roster.chg_contact_status(user1, array[1], array[2], account)
 			#play sound
 			if old_show < 2 and new_show > 1:
 				if gajim.config.get_per('soundevents', 'contact_connected',
@@ -329,7 +329,7 @@ class Interface:
 			#it is a groupchat presence
 			#TODO: upgrade the chat instavces (for pm)
 			fjid = array[0] + '/' + array[3]
-			self.windows[account]['gc'][ji].chg_user_status(ji, resource,
+			self.windows[account]['gc'][ji].chg_contact_status(ji, resource,
 				array[1], array[2], array[6], array[7], array[8], array[9],
 				array[10], array[11], array[12], account)
 
@@ -402,7 +402,7 @@ class Interface:
 					gc = gcs[jid]
 					tv = gc.list_treeview[jid]
 					model = tv.get_model()
-					iter = gc.get_user_iter(jid, nick)
+					iter = gc.get_contact_iter(jid, nick)
 					if iter:
 						show = model.get_value(iter, 3)
 					else:
@@ -444,7 +444,7 @@ class Interface:
 				u.groups.remove('not in the roster')
 			if len(u.groups) == 0:
 				u.groups = [_('General')]
-			self.roster.add_user_to_roster(u.jid, account)
+			self.roster.add_contact_to_roster(u.jid, account)
 			gajim.connections[account].update_user(u.jid, u.name, u.groups)
 		else:
 			keyID = ''
@@ -456,7 +456,7 @@ class Interface:
 				groups = [_('General')], show = 'online', status = 'online',
 				ask = 'to', resource = array[1], keyID = keyID)
 			self.roster.contacts[account][jid] = [user1]
-			self.roster.add_user_to_roster(jid, account)
+			self.roster.add_contact_to_roster(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his status.')
 				% jid).get_response()
