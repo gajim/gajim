@@ -546,16 +546,16 @@ class RosterWindow:
 		self.tooltip.show_tooltip(contact, img, self.window.get_pointer(),
 			self.window.get_position())
 
-	def on_roster_treeview_leave_notify_event(self, widget, ev):
+	def on_roster_treeview_leave_notify_event(self, widget, event):
 		model = widget.get_model()
-		props = widget.get_path_at_pos(int(ev.x), int(ev.y))
+		props = widget.get_path_at_pos(int(event.x), int(event.y))
 		if self.tooltip.timeout > 0:
 			if not props or self.tooltip.path == props[0]:
 				self.tooltip.hide_tooltip()
 
-	def on_roster_treeview_motion_notify_event(self, widget, ev):
+	def on_roster_treeview_motion_notify_event(self, widget, event):
 		model = widget.get_model()
-		props = widget.get_path_at_pos(int(ev.x), int(ev.y))
+		props = widget.get_path_at_pos(int(event.x), int(event.y))
 		if self.tooltip.timeout > 0:
 			if not props or self.tooltip.path != props[0]:
 				self.tooltip.hide_tooltip()

@@ -494,7 +494,7 @@ class RosterTooltip(gtk.Window):
 		gtk.Window.__init__(self, gtk.WINDOW_POPUP)
 		self.plugin = plugin
 		self.set_resizable(False)
-		self.set_name('gtk-tooltips')
+		self.set_name('roster-tooltips')
 		hbox = gtk.HBox()
 		hbox.set_spacing(6)
 		hbox.set_border_width(6)
@@ -510,8 +510,8 @@ class RosterTooltip(gtk.Window):
 		self.account.set_alignment(0, 0)
 		self.account.set_selectable(False)
 		contents.pack_start(self.account)
-		self.timeout=0
-		self.prefered_position = [0,0]
+		self.timeout = 0
+		self.prefered_position = [0, 0]
 		self.path = None
 		self.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		self.connect_after('expose_event', self.expose)
@@ -573,7 +573,7 @@ class RosterTooltip(gtk.Window):
 		info = '<span size="large" weight="bold">' + contact.jid + '</span>'
 		info += '\n<span weight="bold">' + _('Name: ') + '</span>' + \
 			contact.name
-		info += '\n<span weight="bold">' + _('Subscribtion: ') + '</span>' + \
+		info += '\n<span weight="bold">' + _('Subscription: ') + '</span>' + \
 			contact.sub
 		if contact.keyID:
 			keyID = None
@@ -904,7 +904,7 @@ class PopupNotificationWindow:
 			self.plugin.roster.contacts[self.account][self.jid] = [user]
 			self.plugin.roster.add_contact_to_roster(user.self.jid, self.account)			
 
-		if msg_type == 'normal': # it's single message
+		if self.msg_type == 'normal': # it's single message
 			pass
 		else: # 'chat'
 			self.plugin.roster.new_chat(user, self.account)
