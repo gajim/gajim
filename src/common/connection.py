@@ -273,7 +273,7 @@ class Connection:
 			prio = 0
 		ptype = prs.getType()
 		if ptype == 'available': ptype = None
-		gajim.log.debug('PresenceCB : %s' % ptype)
+		gajim.log.debug('PresenceCB: %s' % ptype)
 		xtags = prs.getTags('x')
 		sigTag = None
 		keyID = ''
@@ -314,7 +314,7 @@ class Connection:
 				jid.getResource().encode('utf8')))
 			self.dispatch('UPDUSER', (jid.getStripped().encode('utf8'),
 				jid.getNode(), [_('General')]))
-			#BE CAREFUL : no con.updateRosterItem() in a callback
+			#BE CAREFUL: no con.updateRosterItem() in a callback
 			gajim.log.debug('we are now subscribed to %s' % who)
 		elif ptype == 'unsubscribe':
 			gajim.log.debug('unsubscribe request from %s' % who)
@@ -324,7 +324,7 @@ class Connection:
 		elif ptype == 'error':
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
-			if errcode == '409':	#conflict :	Nick Conflict
+			if errcode == '409':	#conflict:	Nick Conflict
 				self.dispatch('ERROR', (errmsg, ''))
 			elif errcode == '502': # Internal Timeout:
 				self.dispatch('NOTIFY', (prs.getFrom().getStripped().encode('utf8'),
@@ -555,7 +555,7 @@ class Connection:
 		if not self.connection:
 			return
 		roster = self.connection.getRoster().getRaw()
-		if not roster :
+		if not roster:
 			roster = {}
 		else:
 			for i in roster.keys():
@@ -602,12 +602,6 @@ class Connection:
 
 				self.bookmarks.append(bm)
 			self.dispatch('BOOKMARKS', self.bookmarks)
-
-#				if bm['autojoin'] == '1':
-#					jid = common.xmpp.protocol.JID(conf.getAttr('jid'))
-#					server = jid.getDomain()
-#					room = jid.getNode()
-#					gc = self.join_gc(bm['nick'], room, server, bm['password'])
 
 		elif ns == 'gajim:prefs':
 			#Preferences data
