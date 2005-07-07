@@ -88,8 +88,6 @@ class RosterWindow:
 	def add_account_to_roster(self, account):
 		if self.regroup:
 			return
-		if len(gajim.connections) == 1: # user has only one account
-			return # do not draw the account row
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
@@ -1838,9 +1836,11 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 
 		liststore = gtk.ListStore(str, gtk.Image, str)
 		self.status_combobox = self.xml.get_widget('status_combobox')
+		
 		cell = cell_renderer_image.CellRendererImage()
 		self.status_combobox.pack_start(cell, False)
 		self.status_combobox.add_attribute(cell, 'image', 1)
+		
 		cell = gtk.CellRendererText()
 		cell.set_property('xpad', 5) # padding for status text
 		self.status_combobox.pack_start(cell, True)
