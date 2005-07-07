@@ -43,7 +43,7 @@ Last but not least, you can run Gajim from your GNOME/XFCE/KDE/whatever menus.
 su -c make uninstall
 this will try to remove Gajim from the default directories.
 If you want to remove it from custom directory provide it as:
-make DESTDIR=custom_path uninstall
+make PREFIX=custom_path uninstall
 
 =MISCELLANEOUS=
 If you want to see the xml stanzas and/or help us debugging 
