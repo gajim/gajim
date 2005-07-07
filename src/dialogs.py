@@ -489,6 +489,119 @@ class InformationDialog(HigDialog):
 			[ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
 		)
 
+class RosterTooltip(gtk.Window):
+	def __init__(self, plugin):
+		gtk.Window.__init__(self, gtk.WINDOW_POPUP)
+		self.plugin = plugin
+		self.set_resizable(False)
+		self.set_name('gtk-tooltips')
+		hbox = gtk.HBox()
+		hbox.set_spacing(6)
+		hbox.set_border_width(6)
+		self.add(hbox)
+		self.image = gtk.Image()
+		self.image.set_alignment(0, 0)
+		hbox.pack_start(self.image, False, False)
+		contents = gtk.VBox()
+		contents.set_spacing(10)
+		hbox.pack_start(contents)
+		self.account = gtk.Label()
+		self.account.set_line_wrap(True)
+		self.account.set_alignment(0, 0)
+		self.account.set_selectable(False)
+		contents.pack_start(self.account)
+		self.timeout=0
+		self.prefered_position = [0,0]
+		self.path = None
+		self.set_events(gtk.gdk.POINTER_MOTION_MASK)
+		self.connect_after('expose_event', self.expose)
+		self.connect('size-request', self.size_request)
+		self.connect('motion-notify-event', self.motion_notify_event)
+		
+	def motion_notify_event(self, widget, event):
+		self.hide_tooltip()
+
+	def size_request(self, widget, requisition):
+		screen = self.get_screen()
+		half_width = requisition.width / 2 + 1
+		if self.prefered_position[0] < half_width:
+			self.prefered_position[0] = 0
+		elif self.prefered_position[0]  + requisition.width > screen.get_width() \
+				+ half_width:
+			self.prefered_position[0] = screen.get_width() - requisition.width
+		else:
+			self.prefered_position[0] -= half_width 
+		if self.prefered_position[1] + requisition.height > screen.get_height():
+			self.prefered_position[1] -= requisition.height  + 25
+		if self.prefered_position[1] < 0:
+			self.prefered_position[1] = 0
+		self.move(self.prefered_position[0], self.prefered_position[1])
+
+	def expose(self, widget, event):
+		style = self.get_style()
+		size = self.get_size()
+		style.paint_flat_box(self.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
+			self, 'tooltip', 0, 0, -1, 1)
+		style.paint_flat_box(self.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
+			self, 'tooltip', 0, size[1] - 1, -1, 1)
+		style.paint_flat_box(self.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
+			self, 'tooltip', 0, 0, 1, -1)
+		style.paint_flat_box(self.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
+			self, 'tooltip', size[0] - 1, 0, 1, -1)
+		return True
+	
+	def show_tooltip(self, contact, img, pointer_position, win_size):
+		self.populate(contact, img)
+		new_x = win_size[0] + pointer_position[0] 
+		new_y = win_size[1] + pointer_position[1] + 35
+		self.prefered_position = [new_x, new_y]
+		self.ensure_style()
+		self.show_all()
+
+	def hide_tooltip(self):
+		if(self.timeout > 0):
+			gobject.source_remove(self.timeout)
+			self.timeout=0
+		self.hide()
+		self.path = None
+
+	def populate(self, contact, img):
+		if img:
+			self.image.set_from_pixbuf(img.get_pixbuf())
+		else:
+			self.image.set_from_pixbuf(None)
+		info = '<span size="large" weight="bold">' + contact.jid + '</span>'
+		info += '\n<span weight="bold">' + _('Name: ') + '</span>' + \
+			contact.name
+		info += '\n<span weight="bold">' + _('Subscribtion: ') + '</span>' + \
+			contact.sub
+		if contact.keyID:
+			keyID = None
+			if len(contact.keyID) == 8:
+				keyID = contact.keyID
+			elif len(contact.keyID) == 16:
+				keyID = contact.keyID[8:]
+			if keyID:
+				info += '\n<span weight="bold">' + _('OpenPGP: ') + '</span>' + \
+					keyID 
+		if contact.resource:
+			info += '\n<span weight="bold">' + _('Resource: ') + '</span>' + \
+				contact.resource + ' (' + str(contact.priority) + ')'
+		#FIXME: we need the account
+#		lcontact = self.plugin.roster.contacts[acct][contact.jid]
+#		if len(lcontact) > 1:
+#			for c in lcontact:
+#				if c == contact:
+#					continue
+#				info += '\n<span weight="bold">' + ' ' * len(_('Resource: ')) + \
+#					'</span>' + c.resource + ' (' + str(c.priority) + ')'
+		if contact.show:
+			info += '\n<span weight="bold">' + _('Status: ') + '</span>' + \
+				helpers.get_uf_show(contact.show)
+		if contact.status:
+			info +=  ' - ' + contact.status
+		self.account.set_markup(info)
+
 class InputDialog:
 	'''Class for Input dialog'''
 	def __init__(self, title, label_str, input_str = None):

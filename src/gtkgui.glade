@@ -318,6 +318,8 @@
 	      <signal name="row_expanded" handler="on_roster_treeview_row_expanded" last_modification_time="Mon, 28 Feb 2005 14:18:14 GMT"/>
 	      <signal name="row_collapsed" handler="on_roster_treeview_row_collapsed" last_modification_time="Mon, 28 Feb 2005 14:18:33 GMT"/>
 	      <signal name="key_press_event" handler="on_roster_treeview_key_press_event" last_modification_time="Sat, 26 Mar 2005 20:39:36 GMT"/>
+	      <signal name="motion_notify_event" handler="on_roster_treeview_motion_notify_event" last_modification_time="Wed, 06 Jul 2005 14:38:58 GMT"/>
+              <signal name="leave_notify_event" handler="on_roster_treeview_leave_notify_event" last_modification_time="Wed, 06 Jul 2005 14:39:06 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

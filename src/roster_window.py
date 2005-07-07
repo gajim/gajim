@@ -542,6 +542,39 @@ class RosterWindow:
 			info[user.jid] = dialogs.VcardWindow(user, self.plugin,
 								account)
 
+	def show_tooltip(self, contact, img):
+		self.tooltip.show_tooltip(contact, img, self.window.get_pointer(),
+			self.window.get_position())
+
+	def on_roster_treeview_leave_notify_event(self, widget, ev):
+		model = widget.get_model()
+		props = widget.get_path_at_pos(int(ev.x), int(ev.y))
+		if self.tooltip.timeout > 0:
+			if not props or self.tooltip.path == props[0]:
+				self.tooltip.hide_tooltip()
+
+	def on_roster_treeview_motion_notify_event(self, widget, ev):
+		model = widget.get_model()
+		props = widget.get_path_at_pos(int(ev.x), int(ev.y))
+		if self.tooltip.timeout > 0:
+			if not props or self.tooltip.path != props[0]:
+				self.tooltip.hide_tooltip()
+		if props:
+			[row, col, x, y] = props
+			iter = model.get_iter(row)
+			if model.get_value(iter, 2) == 'contact':
+				account = model.get_value(iter, 4)
+				jid = model.get_value(iter, 3)
+				contact = None
+				for resource in self.contacts[account][jid]:
+					if contact == None or resource.priority > contact.priority:
+						contact = resource
+				img = model.get_value(iter, 0)
+				if self.tooltip.timeout == 0 or self.tooltip.path != props[0]:
+					self.tooltip.path = row
+					self.tooltip.timeout = gobject.timeout_add(500,
+						self.show_tooltip, contact, img)
+
 	def on_agent_logging(self, widget, jid, state, account):
 		'''When an agent is requested to log in or off'''
 		gajim.connections[account].send_agent_status(jid, state)
@@ -1293,6 +1326,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def on_roster_window_delete_event(self, widget, event):
 		'''When we want to close the window'''
 		if self.plugin.systray_enabled:
+			self.tooltip.hide_tooltip()
 			self.window.hide()
 		else:
 			accounts = gajim.connections.keys()
@@ -1905,6 +1939,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.on_status_combobox_changed)
 
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
+		self.tooltip = dialogs.RosterTooltip(self.plugin)
 		self.make_menu()
 		self.draw_roster()
 		if len(gajim.connections) == 0: # if no account
