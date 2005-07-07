@@ -273,7 +273,7 @@ class RosterWindow:
 		widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
 
 	def make_menu(self):
-		'''create the main_window's menus'''
+		'''create the main window's menus'''
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		add_new_contact_menuitem  = self.xml.get_widget('add_new_contact_menuitem')
@@ -283,23 +283,31 @@ class RosterWindow:
 			'show_offline_contacts_menuitem')
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
 		
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'advanced_menuitem_menu', APP)
+		advanced_menuitem_menu = xm.get_widget('advanced_menuitem_menu')
+		xm.signal_autoconnect(self)
+		
 		if self.add_new_contact_handler_id:
 			add_new_contact_menuitem.handler_disconnect(
 				self.add_new_contact_handler_id)
 			self.add_new_contact_handler_id = None
+
 		if self.service_disco_handler_id:
 			service_disco_menuitem.handler_disconnect(
 				self.service_disco_handler_id)
 			self.service_disco_handler_id = None
+			
 		if self.new_message_menuitem_handler_id:
 			new_message_menuitem.handler_disconnect(
 				self.new_message_menuitem_handler_id)
 			self.new_message_menuitem_handler_id = None
+			
 		#remove the existing submenus
 		add_new_contact_menuitem.remove_submenu()
 		service_disco_menuitem.remove_submenu()
 		join_gc_menuitem.remove_submenu()
 		new_message_menuitem.remove_submenu()
+		advanced_menuitem.remove_submenu()
 
 		#remove the existing accelerator
 		if self.have_new_message_accel:
@@ -354,17 +362,18 @@ class RosterWindow:
 			for account in gajim.connections:
 				if gajim.connections[account].connected <= 1: #if offline or connecting
 					continue
-				item = gtk.MenuItem(_('to ') + account + _(' account'))
+				item = gtk.MenuItem(_('to %s account') % account)
 				sub_menu.append(item)
 				item.connect('activate', self.on_add_new_contact, account)
 			sub_menu.show_all()
+			
 			#disco
 			sub_menu = gtk.Menu()
 			service_disco_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
 				if gajim.connections[account].connected <= 1: #if offline or connecting
 					continue
-				item = gtk.MenuItem(_('using ') + account + _(' account'))
+				item = gtk.MenuItem(_('using %s account') % account)
 				sub_menu.append(item)
 				item.connect('activate', self.on_service_disco_menuitem_activate, account)
 			sub_menu.show_all()
@@ -377,11 +386,25 @@ class RosterWindow:
 					continue
 				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
 					gajim.config.get_per('accounts', account, 'hostname')
-				item = gtk.MenuItem(_('as ') + our_jid)
+				item = gtk.MenuItem(_('as %s') % our_jid)
 				sub_menu.append(item)
 				item.connect('activate', self.on_new_message_menuitem_activate, 
 									account)
 			sub_menu.show_all()
+			
+			#Advanced Actions
+			for account in gajim.connections:
+				if gajim.connections[account].connected <= 1: #if offline or connecting
+					continue
+
+				item = gtk.MenuItem(_('for %s ') % account)
+				item.set_submenu(advanced_menuitem_menu)
+				sub_menu = gtk.Menu()
+				sub_menu.append(item)
+				advanced_menuitem.set_submenu(sub_menu)
+				
+			sub_menu.show_all()
+			
 		else:
 			if len(gajim.connections) == 1: # one account
 				#add
@@ -393,15 +416,19 @@ class RosterWindow:
 					self.service_disco_handler_id = service_disco_menuitem.connect( 
 						'activate', self.on_service_disco_menuitem_activate, 
 						gajim.connections.keys()[0])
+				#new msg
 				if not self.new_message_menuitem_handler_id:
 					self.new_message_menuitem_handler_id = new_message_menuitem.\
 						connect('activate', self.on_new_message_menuitem_activate, 
 						gajim.connections.keys()[0])
+				#new msg accel
 				if not self.have_new_message_accel:
 					ag = gtk.accel_groups_from_object(self.window)[0]
 					new_message_menuitem.add_accelerator('activate', ag,
 						gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 					self.have_new_message_accel = True
+				
+			advanced_menuitem.set_submenu(advanced_menuitem_menu)
 
 		if at_least_one_account_connected:
 			new_message_menuitem.set_sensitive(True)
@@ -423,7 +450,6 @@ class RosterWindow:
 
 	def draw_roster(self):
 		'''Clear and draw roster'''
-		self.make_menu()
 		self.tree.get_model().clear()
 		for acct in gajim.connections:
 			self.add_account_to_roster(acct)
@@ -1535,7 +1561,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def on_show_offline_contacts_menuitem_activate(self, widget):
 		'''when show offline option is changed:
 		redraw the treeview'''
-		gajim.config.set('showoffline', 1 - gajim.config.get('showoffline'))
+		gajim.config.set('showoffline', not gajim.config.get('showoffline'))
 		self.draw_roster()
 
 	def iconCellDataFunc(self, column, renderer, model, iter, data = None):
@@ -1777,7 +1803,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				gajim.config.get('height'))
 
 		self.groups = {}
-		# contacts[account][jid] is a list of all Contact insatnces:
+		# contacts[account][jid] is a list of all Contact instances:
 		# one per resource
 		self.contacts = {}
 		self.newly_added = {}
@@ -1876,6 +1902,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.on_status_combobox_changed)
 
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
+		self.make_menu()
 		self.draw_roster()
 		if len(gajim.connections) == 0: # if no account
 			self.plugin.windows['account_modification'] = \

@@ -706,10 +706,11 @@ _('Without a connection, you can not change your password.')).get_response()
 
 
 class PopupNotificationWindow:
-	def __init__(self, plugin, event_type, jid, account):
+	def __init__(self, plugin, event_type, jid, account, msg_type = ''):
 		self.plugin = plugin
 		self.account = account
 		self.jid = jid
+		self.msg_type = msg_type
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_notification_window', APP)
 		self.window = xml.get_widget('popup_notification_window')
@@ -771,7 +772,7 @@ class PopupNotificationWindow:
 			window_width, window_height = window_instance.window.get_size()
 			self.plugin.roster.popups_notification_height += window_height
 			window_instance.window.move(gtk.gdk.screen_width() - window_width,
-					gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
+		gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
 
 	def on_popup_notification_window_button_press_event(self, widget, event):
 		# use Contact class, new_chat expects it that way
@@ -790,10 +791,14 @@ class PopupNotificationWindow:
 			self.plugin.roster.contacts[self.account][self.jid] = [user]
 			self.plugin.roster.add_user_to_roster(user.self.jid, self.account)			
 
-		self.plugin.roster.new_chat(user, self.account)
-		chats_window = self.plugin.windows[self.account]['chats'][self.jid]
-		chats_window.set_active_tab(self.jid)
-		chats_window.window.present()
+		if msg_type == 'normal': # it's single message
+			pass
+		else: # 'chat'
+			self.plugin.roster.new_chat(user, self.account)
+			chats_window = self.plugin.windows[self.account]['chats'][self.jid]
+			chats_window.set_active_tab(self.jid)
+			chats_window.window.present()
+
 		self.adjust_height_and_move_popup_notification_windows()
 
 
