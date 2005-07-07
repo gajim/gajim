@@ -440,8 +440,8 @@ class Interface:
 			u = self.roster.contacts[account][jid][0]
 			u.resource = array[1]
 			self.roster.remove_user(u, account)
-			if 'not in the roster' in u.groups:
-				u.groups.remove('not in the roster')
+			if _('not in the roster') in u.groups:
+				u.groups.remove(_('not in the roster'))
 			if len(u.groups) == 0:
 				u.groups = [_('General')]
 			self.roster.add_contact_to_roster(u.jid, account)

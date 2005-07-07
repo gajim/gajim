@@ -248,7 +248,7 @@ class RosterWindow:
 				if user.ask == 'subscribe':
 					img = state_images['requested']
 				else:
-					img = state_images['not in the roster']
+					img = state_images[_('not in the roster')]
 		for iter in iters:
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
@@ -659,7 +659,7 @@ class RosterWindow:
 		history_menuitem.connect('activate', self.on_history, contact,
 			account)
 
-		if 'not in the roster' not in contact.groups:
+		if _('not in the roster') not in contact.groups:
 			#contact is in normal group
 			edit_groups_menuitem.set_no_show_all(False)
 			assign_openpgp_key_menuitem.set_no_show_all(False)
@@ -854,7 +854,7 @@ class RosterWindow:
 			self.contacts[account][jid] = [user1]
 		else:
 			user1 = self.contacts[account][jid][0]
-			if not 'not in the roster' in user1.groups:
+			if not _('not in the roster') in user1.groups:
 				dialogs.InformationDialog(_('Subscription request has been sent'),
 _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				return
@@ -964,8 +964,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			del self.contacts[account][u.jid]
 			if user.jid in self.plugin.windows[account]['chats']:
 				user1 = Contact(jid = user.jid, name = user.name,
-					groups = ['not in the roster'], show = 'not in the roster',
-					status = 'not in the roster', ask = 'none', keyID = user.keyID)
+					groups = [_('not in the roster')], show = _('not in the roster'),
+					status = _('not in the roster'), ask = 'none', keyID = user.keyID)
 				self.contacts[account][user.jid] = [user1] 
 				self.add_contact_to_roster(user.jid, account)	
 			
@@ -1151,8 +1151,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user = Contact(jid = jid, name = jid.split('@')[0],
-				groups = ['not in the roster'], show = 'not in the roster',
-				status = 'not in the roster', sub = 'none', keyID = keyID)
+				groups = [_('not in the roster')], show = _('not in the roster'),
+				status = _('not in the roster'), sub = 'none', keyID = keyID)
 			self.contacts[account][jid] = [user]
 			self.add_contact_to_roster(user.jid, account)			
 
@@ -1185,8 +1185,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = Contact(jid = jid, name = jid.split('@')[0],
-				groups = ['not in the roster'], show = 'not in the roster',
-				status = 'not in the roster', ask = 'none', keyID = keyID)
+				groups = [_('not in the roster')], show = _('not in the roster'),
+				status = _('not in the roster'), ask = 'none', keyID = keyID)
 			self.contacts[account][jid] = [user1] 
 			self.add_contact_to_roster(jid, account)
 
@@ -1501,7 +1501,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		imgs = {}
 		for state in ('connecting', 'online', 'chat', 'away', 'xa',
 							'dnd', 'invisible', 'offline', 'error', 'requested',
-							'message', 'opened', 'closed', 'not in the roster'):
+							'message', 'opened', 'closed', _('not in the roster')):
 			
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
@@ -1668,9 +1668,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				return 1
 			if name2 == _('Transports'):
 				return -1
-			if name1 == 'not in the roster':
+			if name1 == _('not in the roster'):
 				return 1
-			if name2 == 'not in the roster':
+			if name2 == _('not in the roster'):
 				return -1
 		if type1 == 'contact' and type2 == 'contact' and \
 				gajim.config.get('sort_by_show'):
@@ -1681,7 +1681,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				luser1 = self.contacts[account][jid1]
 				luser2 = self.contacts[account][jid2]
 				cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
-					'invisible': 5, 'offline': 6, 'not in the roster': 7, 'error': 8}
+					'invisible': 5, 'offline': 6, _('not in the roster'): 7, 'error': 8}
 				s = self.get_show(luser1)
 				if s in cshow:
 					show1 = cshow[s]
@@ -1740,7 +1740,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			return
 		iter_group_source = model.iter_parent(iter_source)
 		grp_source = model.get_value(iter_group_source, 3)
-		if grp_source == _('Transports') or grp_source == 'not in the roster':
+		if grp_source == _('Transports') or grp_source == _('not in the roster'):
 			return
 		account = model.get_value(iter_dest, 4)
 		type_dest = model.get_value(iter_dest, 2)

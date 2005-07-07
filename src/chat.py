@@ -688,7 +688,7 @@ class Chat:
 			allow_add = False
 			if self.plugin.roster.contacts[self.account].has_key(text):
 				c = self.plugin.roster.contacts[self.account][text][0]
-				if 'not in the roster' in c.groups:
+				if _('not in the roster') in c.groups:
 					allow_add = True
 			else: # he's not at all in the account contacts
 				allow_add = True

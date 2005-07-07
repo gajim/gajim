@@ -101,7 +101,7 @@ class EditGroupsDialog:
 		store = gtk.ListStore(str, bool)
 		self.list.set_model(store)
 		for g in self.plugin.roster.groups[self.account].keys():
-			if g in [_('Transports'), 'not in the roster']:
+			if g in [_('Transports'), _('not in the roster')]:
 				continue
 			iter = store.append()
 			store.set(iter, 0, g)
@@ -306,7 +306,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
 		for g in self.plugin.roster.groups[account].keys():
-			if g != 'not in the roster' and g != _('Transports'):
+			if g != _('not in the roster') and g != _('Transports'):
 				self.group_comboboxentry.append_text(g)
 
 		self.xml.signal_autoconnect(self)
@@ -786,8 +786,8 @@ class PopupNotificationWindow:
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user = Contact(jid = self.jid, name = self.jid.split('@')[0],
-				groups = ['not in the roster'], show = 'not in the roster',
-				status = 'not in the roster', sub = 'none', keyID = keyID)
+				groups = [_('not in the roster')], show = 'not in the roster',
+				status = _('not in the roster'), sub = 'none', keyID = keyID)
 			self.plugin.roster.contacts[self.account][self.jid] = [user]
 			self.plugin.roster.add_contact_to_roster(user.self.jid, self.account)			
 
