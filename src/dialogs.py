@@ -397,7 +397,7 @@ class AboutDialog:
 		dlg.set_comments(_('A GTK jabber client'))
 		dlg.set_website('http://www.gajim.org')
 
-		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>', 'Alex Podaras <bigpod@gmail.com>', 'Gajim patchers <http://www.gajim.org/dev.php>']
+		authors = ['Yann Le Boulanger <asterix@lagaule.org>', 'Vincent Hanquez <tab@snarc.org>', 'Nikos Kouremenos <kourem@gmail.com>', 'Alex Podaras <bigpod@gmail.com>', 'Gajim patchers']
 		dlg.set_authors(authors)
 
 		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps/gajim_about.png'))			
