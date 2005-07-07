@@ -76,7 +76,7 @@ def discoverInfo(disp,jid,node=None):
     return identities , features
 
 ### Registration ### jabber:iq:register ### JEP-0077 ###########################
-def getRegInfo(disp,host,info={}):
+def getRegInfo(disp,host,info={},sync=True):
     """ Gets registration form from remote host.
         You can pre-fill the info dictionary.
         F.e. if you are requesting info on registering user joey than specify 
@@ -84,7 +84,10 @@ def getRegInfo(disp,host,info={}):
         'disp' must be connected dispatcher instance."""
     iq=Iq('get',NS_REGISTER,to=host)
     for i in info.keys(): iq.setTagData(i,info[i])
-    disp.SendAndCallForResponse(iq,_ReceivedRegInfo, {'agent': host})
+    if sync:
+        resp=disp.SendAndWaitForResponse(iq)
+        _ReceivedRegInfo(disp.Dispatcher,resp, host)
+    else: disp.SendAndCallForResponse(iq,_ReceivedRegInfo, {'agent': host})
 
 def _ReceivedRegInfo(con, resp, agent):
     iq=Iq('get',NS_REGISTER,to=agent)

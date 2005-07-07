@@ -128,6 +128,7 @@ class Connection:
 		self.gpg = None
 		self.status = ''
 		self.myVCardID = []
+		self.new_account_info = None
 		self.bookmarks = []
 		self.on_purpose = False
 		self.last_incoming = time.time()
@@ -623,6 +624,25 @@ class Connection:
 		if realm == common.xmpp.NS_REGISTER:
 			if event == common.xmpp.features.REGISTER_DATA_RECEIVED:
 				# data is (agent, DataFrom)
+				if self.new_account_info and self.new_account_info['hostname'] == data[0]:
+					#it's a new account
+					req = data[1].asDict()
+					req['username'] = self.new_account_info['name']
+					req['password'] = self.new_account_info['password']
+					if not common.xmpp.features.register(self.connection, data[0], req):
+						self.dispatch('ERROR', (_('Error:'), self.connection.lastErr))
+						return
+					self.connected = 0
+					self.password = self.new_account_info['password']
+					if USE_GPG:
+						self.gpg = GnuPG.GnuPG()
+						gajim.config.set('usegpg', True)
+					else:
+						gajim.config.set('usegpg', False)
+					self.dispatch('ACC_OK', (self.name, self.new_account_info))
+					gajim.connections[self.name] = self
+					self.new_account_info = None
+					return
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], data[1].asDict()))
 
 	def connect(self):
@@ -930,7 +950,7 @@ class Connection:
 	def request_register_agent_info(self, agent):
 		if not self.connection:
 			return None
-		common.xmpp.features.getRegInfo(self.connection, agent)
+		common.xmpp.features.getRegInfo(self.connection, agent, sync = False)
 
 	def register_agent(self, agent, info):
 		if not self.connection:
@@ -938,7 +958,14 @@ class Connection:
 		# FIXME: Blocking
 		common.xmpp.features.register(self.connection, agent, info)
 
-	def new_account(self, name, config):
+	def new_account(self, name, config, sync = False):
+		if sync:
+			self.new_account2(name, config)
+		else:
+			t = threading.Thread(target=self.new_account2, args = (name, config))
+			t.start()
+
+	def new_account2(self, name, config):
 		# If a connection already exist we cannot create a new account
 		if self.connection:
 			return
@@ -976,22 +1003,11 @@ class Connection:
 			return False
 		gajim.log.debug('Connected to server with %s', con_type)
 
-		req = common.xmpp.features.getRegInfo(c, config['hostname']).asDict()
-		req['username'] = config['name']
-		req['password'] = config['password']
-		if not common.xmpp.features.register(c, config['hostname'], req):
-			self.dispatch('ERROR', (_('Error:'), c.lastErr))
-			return False
+		c.RegisterEventHandler(self._event_dispatcher)
+		self.new_account_info = config
+		self.connection = c
 		self.name = name
-		self.connected = 0
-		self.password = config['password']
-		if USE_GPG:
-			self.gpg = GnuPG.GnuPG()
-			gajim.config.set('usegpg', True)
-		else:
-			gajim.config.set('usegpg', False)
-		gajim.connections[name] = self
-		self.dispatch('ACC_OK', (name, config))
+		common.xmpp.features.getRegInfo(c, config['hostname'])
 
 	def account_changed(self, new_name):
 		self.name = new_name
