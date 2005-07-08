@@ -236,7 +236,7 @@ class Chat:
 						img = gtk.image_new_from_stock(gtk.STOCK_JUMP_TO,
 							gtk.ICON_SIZE_MENU)
 						item.set_image(img)
-						item.connect('activate', lambda obj,jid:self.set_active_tab(
+						item.connect('activate', lambda obj, jid:self.set_active_tab(
 							jid), jid)
 						menu.append(item)
 
@@ -832,6 +832,7 @@ class Chat:
 	def print_conversation_line(self, text, jid, kind, name, tim,
 			other_tags_for_name = [], other_tags_for_time = [], 
 			other_tags_for_text = [], count_as_new = True, subject = None):
+		'''' prints 'chat' type messages '''
 		textview = self.xmls[jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
 		buffer.begin_user_action()
@@ -886,14 +887,14 @@ class Chat:
 		# detect urls formatting and if the user has it on emoticons
 		index = self.detect_and_print_special_text(text, jid, text_tags)
 
+		if subject: # if we have subject, show it too!
+			subject = _('Subject: %s\n') % subject
+			end_iter = buffer.get_end_iter()
+			buffer.insert(end_iter, subject)
+		
 		# add the rest of text located in the index and after
 		end_iter = buffer.get_end_iter()
 		buffer.insert_with_tags_by_name(end_iter, text[index:], *text_tags)
-		
-		if subject: # if we have subject, send it too!
-			subject = '\n' + _('Subject: %s') % subject
-			end_iter = buffer.get_end_iter()
-			buffer.insert_with_tags_by_name(end_iter, subject, *text_tags)
 
 		#scroll to the end of the textview
 		end = False
