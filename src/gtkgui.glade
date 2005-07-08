@@ -12205,7 +12205,7 @@ JID: whatever@jabber.org</property>
   <child>
     <widget class="GtkImageMenuItem" id="copy_email_address_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Copy Email Address</property>
+      <property name="label" translatable="yes">_Copy JID/Email Address</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
