@@ -576,7 +576,7 @@ class RosterWindow:
 				if self.tooltip.timeout == 0 or self.tooltip.path != props[0]:
 					self.tooltip.path = row
 					self.tooltip.timeout = gobject.timeout_add(500,
-						self.show_tooltip, self.contacts[account][jid], img)
+						self.show_tooltip, self.contacts[account][jid], self.path)
 
 	def on_agent_logging(self, widget, jid, state, account):
 		'''When an agent is requested to log in or off'''
@@ -935,7 +935,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	
 	def on_roster_treeview_button_press_event(self, widget, event):
 		'''popup contact's, group's or agent's menu'''
-		# hide tooltip, whichever button is pressed
+		# hide tooltip, no matter the button is pressed
 		self.tooltip.hide_tooltip()
 		if event.button == 3: # Right click
 			try:

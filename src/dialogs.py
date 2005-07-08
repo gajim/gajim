@@ -565,12 +565,7 @@ class RosterTooltip(gtk.Window):
 		self.hide()
 		self.path = None
 
-	def populate(self, contacts, img):
-		if img:
-			self.image.set_from_pixbuf(img.get_pixbuf())
-		else:
-			self.image.set_from_pixbuf(None)
-		#self.image = img # why this doesn't work? MYSTERY! [maybe I need to sleep]
+	def populate(self, contacts, path):
 		if not contacts or len(contacts) == 0:
 			return
 		# default resource of the contact
@@ -578,6 +573,16 @@ class RosterTooltip(gtk.Window):
 		for contact in contacts:
 			if prim_contact == None or contact.priority > prim_contact.priority:
 				prim_contact = contact
+
+		# try to find the image for the contact status
+		state_file = prim_contact.show.replace(' ', '_')
+		files = []
+		files.append(path + state_file + '.gif')
+		files.append(path + state_file + '.png')
+		for file in files:
+			if os.path.exists(file):
+				self.image.set_from_file(file)
+				break
 
 		info = '<span size="large" weight="bold">' + prim_contact.jid + '</span>'
 		info += '\n<span weight="bold">' + _('Name: ') + '</span>' + \
