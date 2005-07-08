@@ -494,7 +494,7 @@ class RosterTooltip(gtk.Window):
 		gtk.Window.__init__(self, gtk.WINDOW_POPUP)
 		self.plugin = plugin
 		self.set_resizable(False)
-		self.set_name('roster-tooltips')
+		self.set_name('gtk-tooltips')
 		hbox = gtk.HBox()
 		hbox.set_spacing(6)
 		hbox.set_border_width(6)
