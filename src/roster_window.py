@@ -565,15 +565,11 @@ class RosterWindow:
 			if model.get_value(iter, 2) == 'contact':
 				account = model.get_value(iter, 4)
 				jid = model.get_value(iter, 3)
-				contact = None
-				for resource in self.contacts[account][jid]:
-					if contact == None or resource.priority > contact.priority:
-						contact = resource
 				img = model.get_value(iter, 0)
 				if self.tooltip.timeout == 0 or self.tooltip.path != props[0]:
 					self.tooltip.path = row
 					self.tooltip.timeout = gobject.timeout_add(500,
-						self.show_tooltip, contact, img)
+						self.show_tooltip, self.contacts[account][jid], img)
 
 	def on_agent_logging(self, widget, jid, state, account):
 		'''When an agent is requested to log in or off'''

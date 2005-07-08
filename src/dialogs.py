@@ -565,41 +565,67 @@ class RosterTooltip(gtk.Window):
 		self.hide()
 		self.path = None
 
-	def populate(self, contact, img):
+	def populate(self, contacts, img):
 		if img:
 			self.image.set_from_pixbuf(img.get_pixbuf())
 		else:
 			self.image.set_from_pixbuf(None)
-		info = '<span size="large" weight="bold">' + contact.jid + '</span>'
+		#self.image = img # why this doesn't work? MYSTERY! [maybe I need to sleep]
+		if not contacts or len(contacts) == 0:
+			return
+		# default resource of the contact
+		prim_contact = None # primary contact
+		for contact in contacts:
+			if prim_contact == None or contact.priority > prim_contact.priority:
+				prim_contact = contact
+
+		info = '<span size="large" weight="bold">' + prim_contact.jid + '</span>'
 		info += '\n<span weight="bold">' + _('Name: ') + '</span>' + \
-			contact.name
+			prim_contact.name
 		info += '\n<span weight="bold">' + _('Subscription: ') + '</span>' + \
-			contact.sub
-		if contact.keyID:
+			prim_contact.sub
+
+		if prim_contact.keyID:
 			keyID = None
-			if len(contact.keyID) == 8:
-				keyID = contact.keyID
-			elif len(contact.keyID) == 16:
-				keyID = contact.keyID[8:]
+			if len(prim_contact.keyID) == 8:
+				keyID = prim_contact.keyID
+			elif len(prim_contact.keyID) == 16:
+				keyID = prim_contact.keyID[8:]
 			if keyID:
-				info += '\n<span weight="bold">' + _('OpenPGP: ') + '</span>' + \
-					keyID 
-		if contact.resource:
-			info += '\n<span weight="bold">' + _('Resource: ') + '</span>' + \
-				contact.resource + ' (' + str(contact.priority) + ')'
-		#FIXME: we need the account
-#		lcontact = self.plugin.roster.contacts[acct][contact.jid]
-#		if len(lcontact) > 1:
-#			for c in lcontact:
-#				if c == contact:
-#					continue
-#				info += '\n<span weight="bold">' + ' ' * len(_('Resource: ')) + \
-#					'</span>' + c.resource + ' (' + str(c.priority) + ')'
-		if contact.show:
-			info += '\n<span weight="bold">' + _('Status: ') + '</span>' + \
-				helpers.get_uf_show(contact.show)
-		if contact.status:
-			info +=  ' - ' + contact.status
+				info += '\n<span weight="bold">' + _('OpenPGP: ') + \
+					'</span>' + keyID 
+
+		resource_str, status_str, multiple_resource, multiple_status =\
+			'', '', False, False
+		for contact in contacts:
+			if contact.resource:
+				if resource_str != '':
+					multiple_resource = True
+				resource_str += '\n\t' +  contact.resource + \
+					'(' + str(contact.priority) + ')'
+			if contact.show:
+				if status_str != '':
+					multiple_status = True
+				status_str += '\n\t' + helpers.get_uf_show(contact.show)
+				if contact.status:
+					status_str +=  ' - ' + contact.status
+				
+		if resource_str != '':
+			info += '\n<span weight="bold">' + _('Resource: ') + '</span>'
+			if multiple_resource:
+				info += resource_str
+			else:
+				# show the status on the same line
+				info += resource_str[2:]
+				
+		if status_str != '':
+			info += '\n<span weight="bold">' + _('Status: ') + '</span>'
+			if not multiple_status:
+				# show the resource on the same line
+				info += status_str[2:] 
+			else:
+				info += status_str
+		
 		self.account.set_markup(info)
 
 class InputDialog:
