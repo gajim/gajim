@@ -304,7 +304,6 @@
 	  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 	  <property name="shadow_type">GTK_SHADOW_NONE</property>
 	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-	  <signal name="scroll_child" handler="on_scrolledwindow_scroll_child" last_modification_time="Fri, 08 Jul 2005 21:04:28 GMT"/>
 
 	  <child>
 	    <widget class="GtkTreeView" id="roster_treeview">
@@ -321,6 +320,7 @@
 	      <signal name="key_press_event" handler="on_roster_treeview_key_press_event" last_modification_time="Sat, 26 Mar 2005 20:39:36 GMT"/>
 	      <signal name="motion_notify_event" handler="on_roster_treeview_motion_notify_event" last_modification_time="Wed, 06 Jul 2005 14:38:58 GMT"/>
 	      <signal name="leave_notify_event" handler="on_roster_treeview_leave_notify_event" last_modification_time="Wed, 06 Jul 2005 14:39:06 GMT"/>
+	      <signal name="scroll_event" handler="on_roster_treeview_scroll_event" last_modification_time="Fri, 08 Jul 2005 22:09:03 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

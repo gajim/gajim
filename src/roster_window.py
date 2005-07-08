@@ -543,8 +543,15 @@ class RosterWindow:
 								account)
 
 	def show_tooltip(self, contact, img):
-		self.tooltip.show_tooltip(contact, img, self.window.get_pointer(),
-			self.window.get_position())
+		pointer = self.tree.get_pointer()
+		props = self.tree.get_path_at_pos(pointer[0], pointer[1])
+		if props and self.tooltip.path == props[0]:
+			# check if the current pointer is at the same path
+			# as it was before setting the timeout
+			self.tooltip.show_tooltip(contact, img, self.window.get_pointer(),
+				self.window.get_position())
+		else:
+			self.tooltip.hide_tooltip()
 
 	def on_roster_treeview_leave_notify_event(self, widget, event):
 		model = widget.get_model()
@@ -893,8 +900,12 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.remove_user(user1, account)
 		self.add_contact_to_roster(jid, account)
 
+	def on_roster_treeview_scroll_event(self, widget, event):
+		self.tooltip.hide_tooltip()
+
 	def on_roster_treeview_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''
+		self.tooltip.hide_tooltip()
 		if event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
 		if event.keyval == gtk.keysyms.F2:
@@ -924,6 +935,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	
 	def on_roster_treeview_button_press_event(self, widget, event):
 		'''popup contact's, group's or agent's menu'''
+		# hide tooltip, whichever button is pressed
+		self.tooltip.hide_tooltip()
 		if event.button == 3: # Right click
 			try:
 				path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
