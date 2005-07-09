@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Dedicated to Yann
+# Initially written by Nikos Kouremenos
+# Dedicated to Yann Le Boulanger
+# Usage: './translations.py [help] [stats] [update]'
 
 import os
 import sys
@@ -28,7 +30,8 @@ def show_help():
 
 def update_pot():
 	os.system('intltool-extract --type=gettext/glade ../src/gtkgui.glade')
-	os.system('xgettext -k_ -kN_ -o gajim.pot ../src/*.py ../src/common/*.py ../src/gtkgui.glade.h')
+	os.system('xgettext -k_ -kN_ -o ../gajim.pot ../src/*.py ../src/common/*.py ../src/gtkgui.glade.h')
+	print 'gajim.pot was updated successfully'
 
 if __name__ == '__main__':
 	if os.path.basename(os.getcwd()) != 'scripts':
@@ -51,7 +54,7 @@ if __name__ == '__main__':
 			os.path.walk(path_to_dir, visit, None) # update each po & no stats
 			print 'Done'
 
-	elif len(sys.argv) ==1: # update & stats
+	elif len(sys.argv) == 1: # update & stats
 		update_pot()
 		update = True
 		stats = True
