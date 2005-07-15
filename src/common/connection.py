@@ -819,7 +819,8 @@ class Connection:
 				if signed:
 				    p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 
-				self.connection.send(p)
+				if self.connection:
+					self.connection.send(p)
 				self.dispatch('STATUS', show)
 				#ask our VCard
 				iq = self.request_vcard(None)
@@ -835,7 +836,8 @@ class Connection:
 				p = common.xmpp.Presence(typ = 'unavailable')
 				if msg:
 					p.setStatus(msg)
-				self.connection.send(p)
+				if self.connection:
+					self.connection.send(p)
 				try:
 					self.connection.disconnect()
 				except:
@@ -853,7 +855,8 @@ class Connection:
 				p.setStatus(msg)
 			if signed:
 				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
-			self.connection.send(p)
+			if connection:
+				self.connection.send(p)
 			self.dispatch('STATUS', show)
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject=''):
