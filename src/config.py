@@ -1173,7 +1173,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 						self.plugin.windows[name][kind][j].account = name
 
 				#upgrade account in systray
-				if hasattr(self.plugin, 'systray'):
+				if self.plugin.systray_enabled:
 					for list in self.plugin.systray.jids:
 						if list[0] == self.account:
 							list[0] = name
