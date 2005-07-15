@@ -188,36 +188,35 @@ class RosterWindow:
 						break
 				if group_empty:
 					del self.groups[account][group]
-
+	def get_transport_name_by_jid(self,jid):
+		if not jid or not gajim.config.get('use_transports_iconsets'):
+			return None
+		host = jid.split('@')[-1]
+		if host.startswith('aim'):
+			return 'aim'
+		elif host.startswith('gadugadu'):
+			return 'gadugadu'
+		elif host.startswith('gg'):
+			return 'gadugadu'
+		elif host.startswith('irc'):
+			return 'irc'
+		elif host.startswith('icq'): # abc@icqsucks.org will match as ICQ, but what to do..
+			return 'icq'
+		elif host.startswith('msn'):
+			return 'msn'
+		elif host.startswith('sms'):
+			return 'sms'
+		elif host.startswith('tlen'):
+			return 'tlen'
+		elif host.startswith('yahoo'):
+			return 'yahoo'
+		return None
 	def get_appropriate_state_images(self, jid):
 		'''check jid and return the appropriate state images dict'''
-		if not jid or not gajim.config.get('use_transports_iconsets'):
-			return self.jabber_state_images
-
-		host = jid.split('@')[-1]
-
-		if host.startswith('aim'):
-			state_images = self.transports_state_images['aim']
-		elif host.startswith('gadugadu'):
-			state_images = self.transports_state_images['gadugadu']
-		elif host.startswith('gg'):
-			state_images = self.transports_state_images['gadugadu']
-		elif host.startswith('irc'):
-			state_images = self.transports_state_images['irc']
-		elif host.startswith('icq'): # abc@icqsucks.org will match as ICQ, but what to do..
-			state_images = self.transports_state_images['icq']
-		elif host.startswith('msn'):
-			state_images = self.transports_state_images['msn']
-		elif host.startswith('sms'):
-			state_images = self.transports_state_images['sms']
-		elif host.startswith('tlen'):
-			state_images = self.transports_state_images['tlen']
-		elif host.startswith('yahoo'):
-			state_images = self.transports_state_images['yahoo']
-		else:
-			state_images = self.jabber_state_images
-
-		return state_images
+		transport = self.get_transport_name_by_jid(jid)
+		if transport:
+			return self.transports_state_images[transport]
+		return self.jabber_state_images
 
 	def draw_contact(self, jid, account):
 		'''draw the correct state image and name'''
@@ -542,13 +541,13 @@ class RosterWindow:
 			info[user.jid] = dialogs.VcardWindow(user, self.plugin,
 								account)
 
-	def show_tooltip(self, contact, img):
+	def show_tooltip(self, contact):
 		pointer = self.tree.get_pointer()
 		props = self.tree.get_path_at_pos(pointer[0], pointer[1])
 		if props and self.tooltip.path == props[0]:
 			# check if the current pointer is at the same path
 			# as it was before setting the timeout
-			self.tooltip.show_tooltip(contact, img, self.window.get_pointer(),
+			self.tooltip.show_tooltip(contact, self.window.get_pointer(),
 				self.window.get_position())
 		else:
 			self.tooltip.hide_tooltip()
@@ -576,7 +575,7 @@ class RosterWindow:
 				if self.tooltip.timeout == 0 or self.tooltip.path != props[0]:
 					self.tooltip.path = row
 					self.tooltip.timeout = gobject.timeout_add(500,
-						self.show_tooltip, self.contacts[account][jid], self.path)
+						self.show_tooltip, self.contacts[account][jid])
 
 	def on_agent_logging(self, widget, jid, state, account):
 		'''When an agent is requested to log in or off'''

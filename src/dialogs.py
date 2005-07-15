@@ -550,8 +550,8 @@ class RosterTooltip(gtk.Window):
 			self, 'tooltip', size[0] - 1, 0, 1, -1)
 		return True
 	
-	def show_tooltip(self, contact, img, pointer_position, win_size):
-		self.populate(contact, img)
+	def show_tooltip(self, contact, pointer_position, win_size):
+		self.populate(contact)
 		new_x = win_size[0] + pointer_position[0] 
 		new_y = win_size[1] + pointer_position[1] + 35
 		self.prefered_position = [new_x, new_y]
@@ -565,7 +565,7 @@ class RosterTooltip(gtk.Window):
 		self.hide()
 		self.path = None
 
-	def populate(self, contacts, path):
+	def populate(self, contacts):
 		if not contacts or len(contacts) == 0:
 			return
 		# default resource of the contact
@@ -576,9 +576,19 @@ class RosterTooltip(gtk.Window):
 
 		# try to find the image for the contact status
 		state_file = prim_contact.show.replace(' ', '_')
+		transport = self.plugin.roster.get_transport_name_by_jid(prim_contact.jid)
+		if transport:
+			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports', transport , '16x16')
+		else:
+			iconset = gajim.config.get('iconset')
+			if not iconset:
+				iconset = 'sun'
+			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+
 		files = []
-		files.append(path + state_file + '.gif')
-		files.append(path + state_file + '.png')
+		files.append(os.path.join(file_path, state_file + '.png'))
+		files.append(os.path.join(file_path, state_file + '.gif'))
+		self.image.set_from_pixbuf(None)
 		for file in files:
 			if os.path.exists(file):
 				self.image.set_from_file(file)
