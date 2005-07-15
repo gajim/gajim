@@ -1166,14 +1166,18 @@ _('To change the account name, it must be disconnected.')).get_response()
 				gajim.encrypted_chats[name] = gajim.encrypted_chats[self.account]
 				gajim.last_message_time[name] = \
 					gajim.last_message_time[self.account]
+
 				#upgrade account variable in opened windows
 				for kind in ['infos', 'chats', 'gc', 'gc_config']:
 					for j in self.plugin.windows[name][kind]:
 						self.plugin.windows[name][kind][j].account = name
+
 				#upgrade account in systray
-				for list in self.plugin.systray.jids:
-					if list[0] == self.account:
-						list[0] = name
+				if hasattr(self.plugin, 'systray'):
+					for list in self.plugin.systray.jids:
+						if list[0] == self.account:
+							list[0] = name
+
 				del self.plugin.windows[self.account]
 				del self.plugin.queues[self.account]
 				del self.plugin.nicks[self.account]
