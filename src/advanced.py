@@ -138,7 +138,3 @@ class AdvancedConfigurationWindow:
 	def on_advanced_entry_changed(self, widget):
 		text = widget.get_text()
 		self.modelfilter.refilter()
-
-	def on_advanced_configuration_window_key_press_event(self, widget, event):
-		if event.keyval == gtk.keysyms.Escape:
-			self.window.hide()
