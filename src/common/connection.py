@@ -855,7 +855,7 @@ class Connection:
 				p.setStatus(msg)
 			if signed:
 				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
-			if connection:
+			if self.connection:
 				self.connection.send(p)
 			self.dispatch('STATUS', show)
 
