@@ -320,7 +320,7 @@ class Connection:
 		elif ptype == 'unsubscribe':
 			gajim.log.debug('unsubscribe request from %s' % who)
 		elif ptype == 'unsubscribed':
-			gajim.log.debug('we are now unsubscribed to %s' % who)
+			gajim.log.debug('we are now unsubscribed from %s' % who)
 			self.dispatch('UNSUBSCRIBED', prs.getFrom().getStripped())
 		elif ptype == 'error':
 			errmsg = prs.getError()
