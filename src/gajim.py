@@ -336,6 +336,7 @@ class Interface:
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (contact, msg, time, encrypted, msg_type, subject))
 		jid = array[0].split('/')[0]
+		msg_type = array[4]
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
 
@@ -375,8 +376,13 @@ class Interface:
 				elif gajim.connections[account].connected in (2, 3): # we're online or chat
 					show_notification = True
 				if show_notification:
-					instance = dialogs.PopupNotificationWindow(self,
-						_('New Message'), jid, account, array[4]) #[4] is msg_type
+					if msg_type == 'normal': # single message
+						instance = dialogs.PopupNotificationWindow(self,
+							_('New Single Message'), jid, account, msg_type)
+					else: # chat message
+						instance = dialogs.PopupNotificationWindow(self,
+							_('New Message'), jid, account, msg_type)
+
 					self.roster.popup_notification_windows.append(instance)
 
 		# array : (contact, msg, time, encrypted, msg_type, subject)

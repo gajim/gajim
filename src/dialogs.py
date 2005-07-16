@@ -885,14 +885,18 @@ class PopupNotificationWindow:
 		# set colors [ http://www.w3schools.com/html/html_colornames.asp ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
 		if event_type == _('Contact Signed In'):
-			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('limegreen'))
-			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('limegreen'))
+			limegreen = gtk.gdk.color_parse('limegreen')
+			close_button.modify_bg(gtk.STATE_NORMAL, limegreen)
+			eventbox.modify_bg(gtk.STATE_NORMAL, limegreen)
 		elif event_type == _('Contact Signed Out'):
-			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('red'))
-			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('red'))
-		elif event_type == _('New Message'):
-			close_button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('dodgerblue'))
-			eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('dodgerblue'))
+			red = gtk.gdk.color_parse('red')
+			close_button.modify_bg(gtk.STATE_NORMAL, red)
+			eventbox.modify_bg(gtk.STATE_NORMAL, red)
+		elif event_type == _('New Message') or\
+		event_type == _('New Single Message'):
+			dodgerblue = gtk.gdk.color_parse('dodgerblue')
+			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
+			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			txt = _('From %s') % txt
 	
 		# position the window to bottom-right of screen
@@ -932,23 +936,27 @@ class PopupNotificationWindow:
 		# use Contact class, new_chat expects it that way
 		# is it in the roster?
 		if self.plugin.roster.contacts[self.account].has_key(self.jid):
-			user = self.plugin.roster.contacts[self.account][self.jid][0]
+			contact = self.plugin.roster.contacts[self.account][self.jid][0]
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', self.account,
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user = Contact(jid = self.jid, name = self.jid.split('@')[0],
+			contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
 				groups = [_('not in the roster')], show = 'not in the roster',
 				status = _('not in the roster'), sub = 'none', keyID = keyID)
-			self.plugin.roster.contacts[self.account][self.jid] = [user]
-			self.plugin.roster.add_contact_to_roster(user.self.jid, self.account)			
+			self.plugin.roster.contacts[self.account][self.jid] = [contact]
+			self.plugin.roster.add_contact_to_roster(contact.self.jid,
+				self.account) # FIXME: contact.self.jid ???
 
 		if self.msg_type == 'normal': # it's single message
-			pass
+			return # FIXME: I think I should not print here but in new_chat?
+			contact = self.contacts[account][jid][0]
+			dialogs.SingleMessageWindow(self.plugin, self.account, contact,
+			action = 'receive', from_whom = jid, subject = subject, message = msg)
 		else: # 'chat'
-			self.plugin.roster.new_chat(user, self.account)
+			self.plugin.roster.new_chat(contact, self.account)
 			chats_window = self.plugin.windows[self.account]['chats'][self.jid]
 			chats_window.set_active_tab(self.jid)
 			chats_window.window.present()
