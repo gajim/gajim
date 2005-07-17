@@ -247,7 +247,11 @@ class RosterWindow:
 				if user.ask == 'subscribe':
 					img = state_images['requested']
 				else:
-					img = state_images[_('not in the roster')]
+					transport = self.get_transport_name_by_jid(jid)
+					if transport and state_images.has_key(user.show):
+						img = state_images[user.show]
+					else:
+						img = state_images[_('not in the roster')]
 		for iter in iters:
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
