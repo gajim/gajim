@@ -114,6 +114,8 @@ class Config:
 		'version': [ None, '0.8' ],
 		'always_compact_view': [opt_bool, False], # initial compact view state
 		'search_engine': [opt_str, 'http://www.google.com/search?&q='],
+		'dictionary_url': [opt_str, 'http://dictionary.reference.com/search?q='],
+		'always_english_wikipedia': [opt_bool, False],
 	}
 
 	__options_per_key = {
