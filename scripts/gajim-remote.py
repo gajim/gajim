@@ -20,15 +20,14 @@
 ## GNU General Public License for more details.
 ##
 
-# gajim-remote help will show you the 'dbus' api
-# That api is also usable, and the code to use it follows..
+# gajim-remote help will show you the DBUS API of Gajim
 
 import sys
 import gtk
 import gobject
 
 def send_error(error_message):
-	sys.stderr.write(error_message+'\n')
+	sys.stderr.write(error_message + '\n')
 	sys.stderr.flush()
 	sys.exit(1)
 
@@ -118,8 +117,6 @@ if command == 'contact_info':
 			INTERFACE, SERVICE, OBJ_PATH)
 	except:
 		send_error('Service not available')
-	gobject.timeout_add(5000, gtk_quit)
-	gtk.main()
 
 #FIXME: gajim-remote.py change_status help to inform what it does with optional arg (account). the same for rest of methods that accept args
 
@@ -129,7 +126,7 @@ try:
 	if argv_len == 2:
 		res = method()
 	elif argv_len == 3:
-		res = method(str(sys.argv[2]))
+		res = method(sys.argv[2])
 	elif argv_len == 4:
 		res = method(sys.argv[2], sys.argv[3])
 	elif argv_len == 5:
@@ -138,3 +135,7 @@ try:
 		print res
 except:
 	send_error('Service not available')
+
+if command == 'contact_info':
+	gobject.timeout_add(5000, gtk_quit) # wait 5 sec maximum
+	gtk.main()
