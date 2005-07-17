@@ -823,6 +823,15 @@ class Interface:
 	def save_config(self):
 		parser.write()
 
+	def enable_dbus(self):
+		import remote_control
+		self.remote = remote_control.Remote(self)
+
+	def disable_dbus(self):
+		if self.remote: # FIXME:  A handler is already registered for the path starting with path[0] = "org"
+			del (self.remote)
+		self.remote = None
+
 	def __init__(self):
 		self.default_values = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
@@ -886,10 +895,9 @@ class Interface:
 
 		self.roster = roster_window.RosterWindow(self)
 		if gajim.config.get('use_dbus'):
-			import remote_control
-			self.remote = remote_control.Remote(self)
+			self.enable_dbus()
 		else:
-			self.remote = None
+			self.disable_dbus()
 																	
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)

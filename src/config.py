@@ -365,13 +365,18 @@ class PreferencesWindow:
 		st = gajim.config.get('log_notif_in_sep_file')
 		self.xml.get_widget('log_in_extern_checkbutton').set_active(st)
 		
-		# don't send os info
+		# send os info
 		st = gajim.config.get('send_os_info')
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
 		
-		# don't check for new version
+		# check for new version
 		st = gajim.config.get('check_for_new_version')
 		btn = self.xml.get_widget('check_for_new_version_checkbutton')
+		btn.set_active(st)
+		
+		# use dbus
+		st = gajim.config.get('use_dbus')
+		btn = self.xml.get_widget('enable_dbus_checkbutton')
 		btn.set_active(st)
 		
 		self.xml.signal_autoconnect(self)
@@ -789,6 +794,17 @@ class PreferencesWindow:
 	def on_check_for_new_version_checkbutton_toggled(self, widget):
 		gajim.config.set('check_for_new_version', widget.get_active())
 		self.plugin.save_config()
+
+	def on_enable_dbus_checkbutton_toggled(self, widget):
+		isactive = widget.get_active()
+		gajim.config.set('use_dbus', isactive)
+		self.plugin.save_config()
+		if isactive:
+			if self.plugin.remote is None:
+				self.plugin.enable_dbus()
+		else:
+			if self.plugin.remote is not None:
+				self.plugin.disable_dbus()
 
 	def fill_msg_treeview(self):
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)

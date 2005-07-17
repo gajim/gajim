@@ -84,12 +84,9 @@ def gtk_quit():
 
 argv_len = len(sys.argv) 
 
-if argv_len  < 2:
-	send_error('Usage: ' + sys.argv[0] + ' command [arguments]')
+if argv_len  < 2 or sys.argv[1] not in commands: # no args or bad args
+	end_error(compose_help())
 
-if sys.argv[1] not in commands:
-	send_error(compose_help())
-	
 command = sys.argv[1]
 
 if command == 'help':
