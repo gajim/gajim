@@ -95,7 +95,7 @@ class SignalObject(DbusPrototype):
 
 	def raise_signal(self, signal, arg):
 		''' raise a signal, with a single string message '''
-		if _version[1] >=30:
+		if _version[1] >= 30:
 			from dbus import dbus_bindings
 			message = dbus_bindings.Signal(OBJ_PATH, INTERFACE, signal)
 			iter = message.get_iter(True)
@@ -175,8 +175,8 @@ class SignalObject(DbusPrototype):
 					status, message)
 		return None
 
-	def show_waiting(self, *args):
-		''' Show the window(s) with waiting messages/chats. '''
+	def show_next_unread(self, *args):
+		''' Show the window(s) with next waiting messages/chats. '''
 		#FIXME: when systray is disabled this method does nothing.
 		if len(self.plugin.systray.jids) != 0:
 			account = self.plugin.systray.jids[0][0]
@@ -202,18 +202,14 @@ class SignalObject(DbusPrototype):
 				
 
 	def contact_info(self, *args):
-		''' get vcard info for a contact. The second argument is optional and 
-		stands for the account, to which this contact belongs. This method 
-		return nothing. You have to register the 'VcartInfo' signal to get the 
-		real vcard. '''
-		jid, account = self._get_real_arguments(args, 2)
+		''' get vcard info for a contact. This method returns nothing.
+		You have to register the 'VcardInfo' signal to get the real vcard. '''
+		jid = self._get_real_arguments(args, 1)
 		if not jid:
 			# FIXME: raise exception for missing argument (0.3+)
 			return None
-		if account:
-			accounts = [account]
-		else:
-			accounts = self.contacts.keys()
+
+		accounts = self.contacts.keys()
 		iq = None
 		
 		for account in accounts:
