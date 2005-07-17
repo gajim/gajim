@@ -726,7 +726,9 @@ class RosterWindow:
 			add_to_roster_menuitem.connect('activate',
 				self.on_add_to_roster, contact, account)
 
-		roster_contact_context_menu.popup(None, None, None, event.button,
+		event_button = self.get_possible_button_event(event)
+
+		roster_contact_context_menu.popup(None, None, None, event_button,
 			event.time)
 		roster_contact_context_menu.show_all()
 
@@ -734,7 +736,7 @@ class RosterWindow:
 		'''Make group's popup menu'''
 		model = self.tree.get_model()
 		path = model.get_path(iter)
-
+		
 		menu = gtk.Menu()
 
 		rename_item = gtk.ImageMenuItem(_('Rename'))
@@ -744,7 +746,9 @@ class RosterWindow:
 		menu.append(rename_item)
 		rename_item.connect('activate', self.on_rename, iter, path)
 
-		menu.popup(None, None, None, event.button, event.time)
+		event_button = self.get_possible_button_event(event)
+			
+		menu.popup(None, None, None, event_button, event.time)
 		menu.show_all()
 	
 	def mk_menu_agent(self, event, iter):
@@ -789,7 +793,9 @@ class RosterWindow:
 		menu.append(item)
 		item.connect('activate', self.on_remove_agent, user, account)
 
-		menu.popup(None, None, None, event.button, event.time)
+		event_button = self.get_possible_button_event(event)
+
+		menu.popup(None, None, None, event_button, event.time)
 		menu.show_all()
 
 	def on_xml_console(self, widget, account):
@@ -805,6 +811,16 @@ class RosterWindow:
 		else:
 			self.plugin.windows[account]['account_modification'] = \
 				config.AccountModificationWindow(self.plugin, account)
+	
+	def get_possible_button_event(self, event):
+		''' what is mouse of kbd that caused the event? '''
+		if event.type == gtk.gdk.KEY_PRESS:
+			event_button = 0 # no event.button so pass 0
+		else: # BUTTON_PRESS event, so pass event.button
+			event_button = event.button
+		
+		return event_button
+		
 
 	def mk_menu_account(self, event, iter):
 		'''Make account's popup menu'''
@@ -851,8 +867,7 @@ class RosterWindow:
 			item.set_image(icon)
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, show)
-		
-		
+
 		xml_console_menuitem.connect('activate', self.on_xml_console, account)
 		edit_account_menuitem.connect('activate', self.on_edit_account, account)
 		service_discovery_menuitem.connect('activate',
@@ -863,7 +878,10 @@ class RosterWindow:
 		new_message_menuitem.connect('activate',
 			self.on_new_message_menuitem_activate, account)
 		
-		account_context_menu.popup(None, None, None, event.button, event.time)
+		event_button = self.get_possible_button_event(event)
+		
+		account_context_menu.popup(None, self.tree, None, event_button,
+			event.time)
 		account_context_menu.show_all()
 
 	def on_add_to_roster(self, widget, user, account):
@@ -909,6 +927,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def on_roster_treeview_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''
 		self.tooltip.hide_tooltip()
+		if event.keyval == gtk.keysyms.Menu:
+			self._show_treeview_menu(event)
 		if event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
 		if event.keyval == gtk.keysyms.F2:
@@ -934,8 +954,33 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				self.on_req_usub(widget, user, account)
 			elif type == 'agent':
 				self.on_remove_agent(widget, user, account)
-		return False
-	
+
+	def show_appropriate_context_menu(self, event, iter):
+		model = self.tree.get_model()
+		type = model.get_value(iter, 2)
+		if type == 'group':
+			self.mk_menu_g(event, iter)
+		elif type == 'agent':
+			self.mk_menu_agent(event, iter)
+		elif type == 'contact':
+			self.mk_menu_user(event, iter)
+		elif type == 'account':
+			self.mk_menu_account(event, iter)
+
+	def _show_treeview_menu(self, event):
+		try:
+			store, iter = self.tree.get_selection().get_selected()
+		except TypeError:
+			self.tree.get_selection().unselect_all()
+			return
+		model = self.tree.get_model()
+		path = model.get_path(iter)
+		self.tree.get_selection().select_path(path)
+
+		self.show_appropriate_context_menu(event, iter)
+		
+		return True
+
 	def on_roster_treeview_button_press_event(self, widget, event):
 		'''popup contact's, group's or agent's menu'''
 		# hide tooltip, no matter the button is pressed
@@ -950,15 +995,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.tree.get_selection().select_path(path)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
-			type = model.get_value(iter, 2)
-			if type == 'group':
-				self.mk_menu_g(event, iter)
-			elif type == 'agent':
-				self.mk_menu_agent(event, iter)
-			elif type == 'contact':
-				self.mk_menu_user(event, iter)
-			elif type == 'account':
-				self.mk_menu_account(event, iter)
+			self.show_appropriate_context_menu(event, iter)
 			return True
 		if event.button == 2: # Middle click
 			try:
