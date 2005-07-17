@@ -84,7 +84,7 @@ class SignalObject(DbusPrototype):
 		else:
 			DbusPrototype.__init__(self, OBJ_PATH, service, 
 			[	self.show_roster,
-				self.show_waiting,
+				self.show_next_unread,
 				self.list_contacts,
 				self.list_accounts,
 				self.change_status,
@@ -176,8 +176,9 @@ class SignalObject(DbusPrototype):
 		return None
 
 	def show_next_unread(self, *args):
-		''' Show the window(s) with next waiting messages/chats. '''
+		''' Show the window(s) with next waiting messages in tabbed/group chats. '''
 		#FIXME: when systray is disabled this method does nothing.
+		#FIXME: show message from GC that refer to us (like systray does)
 		if len(self.plugin.systray.jids) != 0:
 			account = self.plugin.systray.jids[0][0]
 			jid = self.plugin.systray.jids[0][1]
@@ -341,7 +342,7 @@ class SignalObject(DbusPrototype):
 		show_roster = method(INTERFACE)(show_roster)
 		list_contacts = method(INTERFACE)(list_contacts)
 		list_accounts = method(INTERFACE)(list_accounts)
-		show_waiting = method(INTERFACE)(show_waiting)
+		show_waiting = method(INTERFACE)(show_next_unread)
 		change_status = method(INTERFACE)(change_status)
 		new_message = method(INTERFACE)(new_message)
 		contact_info = method(INTERFACE)(contact_info)

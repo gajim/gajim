@@ -26,6 +26,10 @@ import sys
 import gtk
 import gobject
 
+import signal
+
+signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
+
 def send_error(error_message):
 	sys.stderr.write(error_message + '\n')
 	sys.stderr.flush()
@@ -41,7 +45,7 @@ _version = getattr(dbus, 'version', (0, 20, 0))
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 SERVICE = 'org.gajim.dbus'
-commands = ['help', 'show_roster', 'show_waiting', 'list_contacts',
+commands = ['help', 'show_roster', 'show_next_unread', 'list_contacts',
 	'list_accounts', 'change_status', 'new_message', 'send_message', 
 	'contact_info']
 	
