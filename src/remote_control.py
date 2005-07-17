@@ -342,7 +342,7 @@ class SignalObject(DbusPrototype):
 		show_roster = method(INTERFACE)(show_roster)
 		list_contacts = method(INTERFACE)(list_contacts)
 		list_accounts = method(INTERFACE)(list_accounts)
-		show_waiting = method(INTERFACE)(show_next_unread)
+		show_next_unread = method(INTERFACE)(show_next_unread)
 		change_status = method(INTERFACE)(change_status)
 		new_message = method(INTERFACE)(new_message)
 		contact_info = method(INTERFACE)(contact_info)
