@@ -561,16 +561,18 @@ class Chat:
 			submenu = gtk.Menu()
 			item.set_submenu(submenu)
 			
-			#FIXME: via expert allow non using $LANG
+			always_use_en = gajim.config.get('always_english_wikipedia')
+			if always_use_en:
+				link = 'http://en.wikipedia.org/wiki/%s' % self.selected_phrase
+			else:
+				link = 'http://%s.wikipedia.org/wiki/%s'\
+					%(gajim.LANG, self.selected_phrase)
 			item = gtk.MenuItem(_('Read _Wikipedia article'))
-			link = 'http://%s.wikipedia.org/wiki/%s'\
-				%(gajim.LANG, self.selected_phrase)
 			item.connect('activate', self.visit_url_from_menuitem, link)
 			submenu.append(item)
 
 			item = gtk.MenuItem(_('Look it up in _dictionary'))
-			link = 'http://dictionary.reference.com/search?q=' +\
-				self.selected_phrase
+			link = gajim.config.get('dictionary_url') + self.selected_phrase
 			item.connect('activate', self.visit_url_from_menuitem, link)
 			submenu.append(item)
 			
@@ -842,10 +844,15 @@ class Chat:
 		visible_rect = textview.get_visible_rect()
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			at_the_end = True
+
+		# FIXME: who gives us text that is not a string?
 		if not text:
 			text = ''
+		
 		if buffer.get_char_count() > 0:
 			buffer.insert(end_iter, '\n')
+		
+		# print the time stamp
 		if gajim.config.get('print_time') == 'always':
 			if not tim:
 				tim = time.localtime()
