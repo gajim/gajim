@@ -591,7 +591,7 @@ class RosterWindow:
 
 	def on_remove_agent(self, widget, contact, account):
 		'''When an agent is requested to log in or off'''
-		window = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % user.jid, _('You will no longer be able to send and receive messages to contacts from %s.' % contact.jid))
+		window = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % contact.jid, _('You will no longer be able to send and receive messages to contacts from %s.' % contact.jid))
 		if window.get_response() == gtk.RESPONSE_OK:
 			gajim.connections[account].unsubscribe_agent(contact.jid + '/' \
 																		+ contact.resource)
