@@ -813,7 +813,7 @@ class RosterWindow:
 				config.AccountModificationWindow(self.plugin, account)
 	
 	def get_possible_button_event(self, event):
-		''' what is mouse of kbd that caused the event? '''
+		'''mouse or keyboard caused the event?'''
 		if event.type == gtk.gdk.KEY_PRESS:
 			event_button = 0 # no event.button so pass 0
 		else: # BUTTON_PRESS event, so pass event.button
@@ -928,7 +928,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		'''when a key is pressed in the treeviews'''
 		self.tooltip.hide_tooltip()
 		if event.keyval == gtk.keysyms.Menu:
-			self._show_treeview_menu(event)
+			self.show_treeview_menu(event)
 		if event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
 		if event.keyval == gtk.keysyms.F2:
@@ -967,7 +967,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		elif type == 'account':
 			self.mk_menu_account(event, iter)
 
-	def _show_treeview_menu(self, event):
+	def show_treeview_menu(self, event):
 		try:
 			store, iter = self.tree.get_selection().get_selected()
 		except TypeError:
