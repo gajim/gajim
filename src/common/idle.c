@@ -20,8 +20,6 @@
 	#include <X11/Xlib.h>
 	#include <X11/Xutil.h>
 	#include <X11/extensions/scrnsaver.h>
-	#include <gdk/gdkx.h>
-	#include <gtk/gtk.h>
 #else
 	#define _WIN32_WINNT 0x0500
 	#include <windows.h>
@@ -34,13 +32,15 @@
 	typedef BOOL (WINAPI *GETLASTINPUTINFO)(LASTINPUTINFO *);
 	static HMODULE g_user32 = NULL;
 	static GETLASTINPUTINFO g_GetLastInputInfo = NULL;
+#else
+	Display *display;
 #endif
 
 
 static PyObject * idle_init(PyObject *self, PyObject *args)
 {
 #ifndef _WIN32
-	gtk_init (NULL, NULL);
+	display = XOpenDisplay(NULL);
 #else
 	g_user32 = LoadLibrary("user32.dll");
 	if (g_user32) {
@@ -56,17 +56,18 @@ static PyObject * idle_getIdleSec(PyObject *self, PyObject *args)
 #ifndef _WIN32
 	static XScreenSaverInfo *mit_info = NULL;
 	int idle_time, event_base, error_base;
+	Display *dplay;
 #else
 	int idle_time = 0;
 #endif
 
 #ifndef _WIN32
-	gtk_init (NULL, NULL);
-	if (XScreenSaverQueryExtension(GDK_DISPLAY(), &event_base, &error_base))
+	dplay = XOpenDisplay(NULL);
+	if (!XScreenSaverQueryExtension(dplay, &event_base, &error_base))
 	{
 		if (mit_info == NULL)
 			mit_info = XScreenSaverAllocInfo();
-		XScreenSaverQueryInfo(GDK_DISPLAY(), GDK_ROOT_WINDOW(), mit_info);
+		XScreenSaverQueryInfo(dplay, RootWindow(dplay, 0), mit_info);
 		idle_time = (mit_info->idle) / 1000;
 	}
 	else
@@ -88,7 +89,7 @@ static PyObject * idle_getIdleSec(PyObject *self, PyObject *args)
 static PyObject * idle_close(PyObject *self, PyObject *args)
 {
 #ifndef _WIN32
-	gtk_main_quit ();
+	XCloseDisplay(display);
 #else
 	if (g_user32 != NULL)
 		FreeLibrary(g_user32);
@@ -99,9 +100,9 @@ static PyObject * idle_close(PyObject *self, PyObject *args)
 
 static PyMethodDef idleMethods[] =
 {
-	{"init",  idle_init, METH_VARARGS, "init gtk"},
+	{"init",  idle_init, METH_VARARGS, "init idle"},
 	{"getIdleSec",  idle_getIdleSec, METH_VARARGS, "Give the idle time in secondes"},
-	{"close",  idle_close, METH_VARARGS, "close gtk"},
+	{"close",  idle_close, METH_VARARGS, "close idle"},
 	{NULL, NULL, 0, NULL}
 };
 
