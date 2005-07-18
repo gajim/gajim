@@ -90,10 +90,10 @@ class TabbedChatWindow(chat.Chat):
 		tb = self.xmls[jid].get_widget('gpg_togglebutton')
 		if contact.keyID: # we can do gpg
 			tb.set_sensitive(True)
-			tt = 'OpenPGP Encryption'
+			tt = _('OpenPGP Encryption')
 		else:
 			tb.set_sensitive(False)
-			tt = '%s has not broadcasted an OpenPGP key nor you have assigned one'\
+			tt = _('%s has not broadcasted an OpenPGP key nor you have assigned one')\				
 				% contact.name
 		tip = gtk.Tooltips()
 		tip.set_tip(self.xmls[jid].get_widget('gpg_eventbox'), tt)
