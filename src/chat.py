@@ -432,6 +432,9 @@ class Chat:
 		elif event.keyval == gtk.keysyms.F4 and \
 			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
 				self.remove_tab(jid)
+		elif event.keyval == gtk.keysyms.w and \
+			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + W
+				self.remove_tab(jid)
 		elif event.string and event.string in st and \
 			(event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
 			self.notebook.set_current_page(st.index(event.string))
