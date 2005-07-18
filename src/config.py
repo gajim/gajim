@@ -1287,11 +1287,12 @@ _('To change the account name, you must be disconnected.')).get_response()
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
 
-		# raise the error if account is newly created (not in gajim.connections)
+		# show error dialog if account is newly created (not in gajim.connections)
 		if not gajim.connections.has_key(self.account) or \
-				gajim.connections[self.account].connected < 2:
+			gajim.connections[self.account].connected < 2:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
-				_('Without a connection, you can not edit your personal information.')).get_response()
+_('Without a connection, you can not edit your personal information.')
+).get_response()
 			return
 		if not self.plugin.windows[self.account]['infos'].has_key('vcard'):
 			self.plugin.windows[self.account]['infos'][jid] = \
