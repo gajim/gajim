@@ -56,18 +56,16 @@ static PyObject * idle_getIdleSec(PyObject *self, PyObject *args)
 #ifndef _WIN32
 	static XScreenSaverInfo *mit_info = NULL;
 	int idle_time, event_base, error_base;
-	Display *dplay;
 #else
 	int idle_time = 0;
 #endif
 
 #ifndef _WIN32
-	dplay = XOpenDisplay(NULL);
-	if (!XScreenSaverQueryExtension(dplay, &event_base, &error_base))
+	if (!XScreenSaverQueryExtension(display, &event_base, &error_base))
 	{
 		if (mit_info == NULL)
 			mit_info = XScreenSaverAllocInfo();
-		XScreenSaverQueryInfo(dplay, RootWindow(dplay, 0), mit_info);
+		XScreenSaverQueryInfo(display, RootWindow(display, 0), mit_info);
 		idle_time = (mit_info->idle) / 1000;
 	}
 	else
