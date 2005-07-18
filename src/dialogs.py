@@ -500,7 +500,7 @@ class RosterTooltip(gtk.Window):
 		hbox.set_border_width(6)
 		self.add(hbox)
 		self.image = gtk.Image()
-		self.image.set_alignment(0.5, 0.05)
+		self.image.set_alignment(0.5, 0.025)
 		
 		hbox.pack_start(self.image, False, False)
 		contents = gtk.VBox()
