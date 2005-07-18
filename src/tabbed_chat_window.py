@@ -329,7 +329,7 @@ class TabbedChatWindow(chat.Chat):
 				return True # override the default gtk+ thing for ctrl+down
 
 	def send_message(self, message):
-		"""Send the message given in the args"""
+		"""Send the message given to the active tab"""
 		if not message:
 			return
 		jid = self.get_active_jid()

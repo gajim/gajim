@@ -688,9 +688,12 @@ class GroupchatWindow(chat.Chat):
 			u = Contact(jid = fjid, name =  nick, groups = ['none'], show = show,
 				sub = 'none')
 			self.plugin.roster.new_chat(u, self.account)
+		
+		#make active here in case we need to send a message
+		self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
+
 		if msg:
 			self.plugin.windows[self.account]['chats'][fjid].send_message(msg)
-		self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
 		self.plugin.windows[self.account]['chats'][fjid].window.present()
 
 	def on_voice_checkmenuitem_activate(self, widget, room_jid, nick):

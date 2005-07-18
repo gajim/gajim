@@ -1809,7 +1809,7 @@ class ManageEmoticonsWindow:
 		if not iter:
 			return
 		file = model.get_value(iter, 1)
-		dialog = gtk.FileChooserDialog(_('Choose Ιmage'), None,
+		dialog = gtk.FileChooserDialog(_('Choose Image'), None,
 					gtk.FILE_CHOOSER_ACTION_OPEN,
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 					gtk.STOCK_OPEN, gtk.RESPONSE_OK))
