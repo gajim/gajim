@@ -655,7 +655,8 @@ class Interface:
 			return True # renew timeout (loop for ever)
 		state = self.sleeper.getState()
 		for account in gajim.connections:
-			if not gajim.sleeper_state[account]:
+			if not gajim.sleeper_state.has_key(account) or \
+					not gajim.sleeper_state[account]:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
 				gajim.sleeper_state[account] > 1:
