@@ -465,7 +465,7 @@ class Interface:
 			if len(u.groups) == 0:
 				u.groups = [_('General')]
 			self.roster.add_contact_to_roster(u.jid, account)
-			gajim.connections[account].update_user(u.jid, u.name, u.groups)
+			gajim.connections[account].update_contact(u.jid, u.name, u.groups)
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,

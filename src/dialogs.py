@@ -59,10 +59,10 @@ class EditGroupsDialog:
 		self.dialog.run()
 		self.dialog.destroy()
 		if self.changes_made:
-			gajim.connections[self.account].update_user(self.user.jid,
+			gajim.connections[self.account].update_contact(self.user.jid,
 				self.user.name, self.user.groups)
 
-	def update_user(self):
+	def update_contact(self):
 		self.plugin.roster.remove_user(self.user, self.account)
 		self.plugin.roster.add_contact_to_roster(self.user.jid, self.account)
 
@@ -80,7 +80,7 @@ class EditGroupsDialog:
 		self.changes_made = True
 		model.append((group, True))
 		self.user.groups.append(group)
-		self.update_user()
+		self.update_contact()
 
 	def group_toggled_cb(self, cell, path):
 		self.changes_made = True
@@ -95,7 +95,7 @@ class EditGroupsDialog:
 			self.user.groups.append(model[path][0])
 		else:
 			self.user.groups.remove(model[path][0])
-		self.update_user()
+		self.update_contact()
 
 	def init_list(self):
 		store = gtk.ListStore(str, bool)

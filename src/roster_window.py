@@ -1601,8 +1601,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		pass
 
 	def on_cell_edited(self, cell, row, new_text):
-		'''When an iter is editer :
-		if text has changed, rename the user'''
+		'''When an iter is edited:
+		if text has changed, rename the contact'''
 		model = self.tree.get_model()
 		iter = model.get_iter_from_string(row)
 		path = model.get_path(iter)
@@ -1614,7 +1614,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if old_text != new_text:
 				for u in self.contacts[account][jid]:
 					u.name = new_text
-				gajim.connections[account].update_user(jid, new_text, u.groups)
+				gajim.connections[account].update_contact(jid, new_text, u.groups)
 			self.draw_contact(jid, account)
 		elif type == 'group':
 			old_name = model.get_value(iter, 1)
@@ -1627,7 +1627,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					user.groups.remove(old_name)
 					user.groups.append(new_text)
 					self.add_contact_to_roster(user.jid, account)
-					gajim.connections[account].update_user(user.jid, user.name, 
+					gajim.connections[account].update_contact(user.jid, user.name, 
 																		user.groups)
 		model.set_value(iter, 5, False)
 		
@@ -1912,7 +1912,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		if not grp_dest in u.groups:
 			u.groups.append(grp_dest)
 			self.add_contact_to_roster(data, account)
-		gajim.connections[account].update_user(u.jid, u.name, u.groups)
+		gajim.connections[account].update_contact(u.jid, u.name, u.groups)
 		if context.action == gtk.gdk.ACTION_MOVE:
 			context.finish(True, True, etime)
 		return
