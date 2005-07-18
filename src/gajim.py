@@ -829,8 +829,9 @@ class Interface:
 		self.remote = remote_control.Remote(self)
 
 	def disable_dbus(self):
-		if hasattr(self, 'remote') and self.remote: # FIXME:  A handler is already registered for the path starting with path[0] = "org"
-			del (self.remote)
+		if hasattr(self, 'remote') and self.remote is not None:
+		# FIXME:  A handler is already registered for the path starting with path[0] = "org"
+			# so we need to unregister it from dbus
 		self.remote = None
 
 	def __init__(self):
