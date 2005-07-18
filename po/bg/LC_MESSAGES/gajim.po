@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-18 02:21+0300\n"
+"POT-Creation-Date: 2005-07-18 19:35+0300\n"
 "PO-Revision-Date: 2005-06-01 18:52+0300\n"
 "Last-Translator: Yavor Doganov <yavor@doganov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -56,37 +56,37 @@ msgstr ""
 "\n"
 "Осветяването на неправилно изписаните думи няма да се използва"
 
-#: ../src/chat.py:559
+#: ../src/chat.py:562
 #, python-format
 msgid "Actions for \"%s\""
 msgstr ""
 
-#: ../src/chat.py:570
-msgid "Read _Wikipedia article"
+#: ../src/chat.py:573
+msgid "Read _Wikipedia Article"
 msgstr ""
 
-#: ../src/chat.py:574
-msgid "Look it up in _dictionary"
+#: ../src/chat.py:577
+msgid "Look it up in _Dictionary"
 msgstr ""
 
-#: ../src/chat.py:579
-msgid "Web _search for it"
+#: ../src/chat.py:582
+msgid "Web _Search for it"
 msgstr ""
 
-#: ../src/chat.py:693 ../src/dialogs.py:104 ../src/dialogs.py:309
-#: ../src/dialogs.py:947 ../src/dialogs.py:948 ../src/gajim.py:463
-#: ../src/gajim.py:464 ../src/roster_window.py:254 ../src/roster_window.py:701
-#: ../src/roster_window.py:915 ../src/roster_window.py:1050
-#: ../src/roster_window.py:1051 ../src/roster_window.py:1237
-#: ../src/roster_window.py:1238 ../src/roster_window.py:1271
-#: ../src/roster_window.py:1272 ../src/roster_window.py:1588
-#: ../src/roster_window.py:1755 ../src/roster_window.py:1757
-#: ../src/roster_window.py:1768 ../src/roster_window.py:1827
+#: ../src/chat.py:696 ../src/dialogs.py:104 ../src/dialogs.py:309
+#: ../src/dialogs.py:952 ../src/dialogs.py:953 ../src/gajim.py:463
+#: ../src/gajim.py:464 ../src/roster_window.py:254 ../src/roster_window.py:762
+#: ../src/roster_window.py:976 ../src/roster_window.py:1111
+#: ../src/roster_window.py:1112 ../src/roster_window.py:1298
+#: ../src/roster_window.py:1299 ../src/roster_window.py:1332
+#: ../src/roster_window.py:1333 ../src/roster_window.py:1649
+#: ../src/roster_window.py:1816 ../src/roster_window.py:1818
+#: ../src/roster_window.py:1829 ../src/roster_window.py:1888
 #, fuzzy
 msgid "not in the roster"
 msgstr "Не е в списъка"
 
-#: ../src/chat.py:898
+#: ../src/chat.py:901
 #, fuzzy, python-format
 msgid "Subject: %s\n"
 msgstr "Тема:"
@@ -107,7 +107,7 @@ msgstr "Звук"
 msgid "Choose Sound"
 msgstr "Избор на звук"
 
-#: ../src/config.py:896 ../src/config.py:1804 ../src/vcard.py:129
+#: ../src/config.py:896 ../src/config.py:1818 ../src/vcard.py:129
 msgid "All files"
 msgstr "Всички файлове"
 
@@ -121,11 +121,11 @@ msgstr "OpenPGP не може да бъде използван на този к�
 
 #: ../src/config.py:1085
 #, fuzzy
-msgid "You are connected to the server"
+msgid "You are currently connected to the server"
 msgstr "Трябва да сте свързани, за да разглеждате услугите"
 
 #: ../src/config.py:1086
-msgid "To change the account name, it must be disconnected."
+msgid "To change the account name, you must be disconnected."
 msgstr ""
 
 #: ../src/config.py:1089 ../src/config.py:1093
@@ -134,12 +134,13 @@ msgstr ""
 
 #: ../src/config.py:1090
 #, fuzzy
-msgid "Account names cannot be empty."
+msgid "Account name cannot be empty."
 msgstr "Паролата трябва да съдържа символи"
 
 #: ../src/config.py:1094
-msgid "Account names cannot contain spaces."
-msgstr ""
+#, fuzzy
+msgid "Account name cannot contain spaces."
+msgstr "Паролата трябва да съдържа символи"
 
 #: ../src/config.py:1098
 #, fuzzy
@@ -178,158 +179,158 @@ msgstr ""
 msgid "You already have an account using this name."
 msgstr "Вече има регистриран акаунт"
 
-#: ../src/config.py:1282
+#: ../src/config.py:1287
 #, fuzzy
 msgid "No such account available"
 msgstr "Не съм на разположение"
 
-#: ../src/config.py:1283
+#: ../src/config.py:1288
 #, fuzzy
 msgid "You must create your account before editing your personal information."
 msgstr ""
 "Трябва първо да създадете акаунт и след това да редактирате личните данни"
 
-#: ../src/config.py:1287 ../src/config.py:1886 ../src/dialogs.py:726
-#: ../src/dialogs.py:826 ../src/vcard.py:359 ../src/vcard.py:387
+#: ../src/config.py:1292 ../src/config.py:1900 ../src/dialogs.py:730
+#: ../src/dialogs.py:831 ../src/vcard.py:359 ../src/vcard.py:387
 #, fuzzy
 msgid "You are not connected to the server"
 msgstr "Трябва да сте свързани, за да разглеждате услугите"
 
-#: ../src/config.py:1288
+#: ../src/config.py:1293
 #, fuzzy
 msgid "Without a connection, you can not edit your personal information."
 msgstr "Трябва да сте свързани, за да редактирате личните данни"
 
-#: ../src/config.py:1305
+#: ../src/config.py:1319
 #, fuzzy
 msgid "Failed to get secret keys"
 msgstr "Грешка при извличане на частните ключове"
 
-#: ../src/config.py:1306
+#: ../src/config.py:1320
 msgid "There was a problem retrieving your GPG secret keys."
 msgstr ""
 
-#: ../src/config.py:1309 ../src/gtkgui.glade.h:172
+#: ../src/config.py:1323 ../src/gtkgui.glade.h:172
 msgid "Passphrase"
 msgstr "Парола"
 
-#: ../src/config.py:1309
+#: ../src/config.py:1323
 #, fuzzy
 msgid "Choose your OpenPGP key"
 msgstr "<b>Изберете вашия OpenPGP ключ</b>"
 
-#: ../src/config.py:1317 ../src/gtkgui.glade.h:160
+#: ../src/config.py:1331 ../src/gtkgui.glade.h:160
 msgid "No key selected"
 msgstr "Няма избран ключ"
 
-#: ../src/config.py:1548 ../src/config.py:1909
+#: ../src/config.py:1562 ../src/config.py:1923
 msgid "Name"
 msgstr "Име"
 
-#: ../src/config.py:1551
+#: ../src/config.py:1565
 msgid "Server"
 msgstr "Сървър"
 
-#: ../src/config.py:1656 ../src/config.py:2126 ../src/dialogs.py:104
+#: ../src/config.py:1670 ../src/config.py:2140 ../src/dialogs.py:104
 #: ../src/dialogs.py:273 ../src/dialogs.py:309 ../src/roster_window.py:121
 #: ../src/roster_window.py:126 ../src/roster_window.py:149
-#: ../src/roster_window.py:1751 ../src/roster_window.py:1753
-#: ../src/roster_window.py:1827 ../src/systray.py:208
+#: ../src/roster_window.py:1812 ../src/roster_window.py:1814
+#: ../src/roster_window.py:1888 ../src/systray.py:208
 msgid "Transports"
 msgstr ""
 
-#: ../src/config.py:1671
+#: ../src/config.py:1685
 #, python-format
 msgid "Edit %s"
 msgstr "Редактиране на %s"
 
-#: ../src/config.py:1673
+#: ../src/config.py:1687
 #, python-format
 msgid "Register to %s"
 msgstr "Регистриране в %s"
 
-#: ../src/config.py:1693
+#: ../src/config.py:1707
 msgid "Text"
 msgstr "Текст"
 
-#: ../src/config.py:1701
+#: ../src/config.py:1715
 msgid "Image"
 msgstr "Изображение"
 
-#: ../src/config.py:1748
+#: ../src/config.py:1762
 msgid "Image is too big"
 msgstr ""
 
-#: ../src/config.py:1748
+#: ../src/config.py:1762
 msgid ""
 "Image for emoticon has to be less than or equal to 24 pixels in width and 24 "
 "in height."
 msgstr ""
 
-#: ../src/config.py:1798
+#: ../src/config.py:1812
 #, fuzzy
-msgid "Choose image"
+msgid "Choose Îmage"
 msgstr "Избор на _ключ"
 
-#: ../src/config.py:1809 ../src/vcard.py:134
+#: ../src/config.py:1823 ../src/vcard.py:134
 #, fuzzy
 msgid "Images"
 msgstr "Изображение"
 
-#: ../src/config.py:1887
+#: ../src/config.py:1901
 #, fuzzy
 msgid "Without a connection, you can not browse available services"
 msgstr "Трябва да сте свързани, за да разглеждате услугите"
 
-#: ../src/config.py:1892
+#: ../src/config.py:1906
 #, fuzzy, python-format
 msgid "Service Discovery using %s account"
 msgstr "Откриване на услуги"
 
-#: ../src/config.py:1894
+#: ../src/config.py:1908
 msgid "Service Discovery"
 msgstr "Откриване на услуги"
 
-#: ../src/config.py:1914
+#: ../src/config.py:1928
 msgid "Service"
 msgstr "Услуга"
 
-#: ../src/config.py:1919
+#: ../src/config.py:1933
 msgid "Node"
 msgstr "Възел"
 
-#: ../src/config.py:2129 ../src/gtkgui.glade.h:277
+#: ../src/config.py:2143 ../src/gtkgui.glade.h:277
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: ../src/config.py:2131 ../src/gtkgui.glade.h:190
+#: ../src/config.py:2145 ../src/gtkgui.glade.h:190
 msgid "Re_gister"
 msgstr "_Регистриране"
 
-#: ../src/config.py:2304
+#: ../src/config.py:2318
 #, python-format
 msgid "Removing %s account"
 msgstr "Премахване на акаунт %s"
 
-#: ../src/config.py:2311
+#: ../src/config.py:2325
 #, fuzzy, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Трябва да сте свързани, за да разглеждате услугите"
 
-#: ../src/config.py:2312
+#: ../src/config.py:2326
 msgid "If you remove it, the connection will be lost."
 msgstr ""
 
-#: ../src/config.py:2431
+#: ../src/config.py:2445
 #, fuzzy
 msgid "New Room"
 msgstr "Стая:"
 
-#: ../src/config.py:2461
+#: ../src/config.py:2475
 msgid "This bookmark has invalid data"
 msgstr ""
 
-#: ../src/config.py:2462
+#: ../src/config.py:2476
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
@@ -415,65 +416,65 @@ msgstr ""
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на https://gnome.cult.bg/bugs"
 
-#: ../src/dialogs.py:598
+#: ../src/dialogs.py:602
 #, fuzzy
 msgid "Name: "
 msgstr "_Име: "
 
-#: ../src/dialogs.py:600
+#: ../src/dialogs.py:604
 #, fuzzy
 msgid "Subscription: "
 msgstr "Записване:"
 
-#: ../src/dialogs.py:610
+#: ../src/dialogs.py:614
 #, fuzzy
 msgid "OpenPGP: "
 msgstr "<b>OpenPGP</b>"
 
-#: ../src/dialogs.py:629
+#: ../src/dialogs.py:633
 #, fuzzy
 msgid "Resource: "
 msgstr "Ре_сурс: "
 
-#: ../src/dialogs.py:637
+#: ../src/dialogs.py:641
 #, fuzzy
 msgid "Status: "
 msgstr "Състояние:"
 
-#: ../src/dialogs.py:681
+#: ../src/dialogs.py:685
 #, fuzzy, python-format
 msgid "Subscription request for account %s from %s"
 msgstr "Искане за записване от %s"
 
-#: ../src/dialogs.py:684
+#: ../src/dialogs.py:688
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Искане за записване от %s"
 
-#: ../src/dialogs.py:727
+#: ../src/dialogs.py:731
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
 
-#: ../src/dialogs.py:741
+#: ../src/dialogs.py:745
 #, fuzzy, python-format
 msgid "Join Groupchat as %s"
 msgstr "Влизане в стая като "
 
-#: ../src/dialogs.py:743
+#: ../src/dialogs.py:747
 msgid "Join Groupchat"
 msgstr "Влизане в стая"
 
-#: ../src/dialogs.py:806
+#: ../src/dialogs.py:810
 #, fuzzy, python-format
 msgid "New Message as %s"
 msgstr "Ново съобщение като "
 
-#: ../src/dialogs.py:808 ../src/dialogs.py:895 ../src/gajim.py:394
+#: ../src/dialogs.py:812 ../src/dialogs.py:900 ../src/gajim.py:394
 #: ../src/gtkgui.glade.h:157
 msgid "New Message"
 msgstr "Ново съобщение"
 
-#: ../src/dialogs.py:809
+#: ../src/dialogs.py:813
 #, fuzzy
 msgid ""
 "Fill in the contact ID of the contact you would like\n"
@@ -482,82 +483,82 @@ msgstr ""
 "Въведете идентификатора на контакта, до който\n"
 "искате да изпратите съобщение"
 
-#: ../src/dialogs.py:817 ../src/dialogs.py:1067
+#: ../src/dialogs.py:821 ../src/dialogs.py:1072
 msgid "Invalid contact ID"
 msgstr ""
 
-#: ../src/dialogs.py:818 ../src/dialogs.py:1068
+#: ../src/dialogs.py:822 ../src/dialogs.py:1073
 msgid "Contact ID must be of the form \"username@servername\"."
 msgstr ""
 
-#: ../src/dialogs.py:827
+#: ../src/dialogs.py:832
 #, fuzzy
 msgid "Without a connection, you can not change your password."
 msgstr "Трябва да сте свързани, за да променяте паролата"
 
-#: ../src/dialogs.py:846
+#: ../src/dialogs.py:851
 #, fuzzy
 msgid "Invalid password."
 msgstr "Запазване на паро_ла"
 
-#: ../src/dialogs.py:847
+#: ../src/dialogs.py:852
 #, fuzzy
 msgid "You must enter a password."
 msgstr "Трябва да сте свързани, за да променяте паролата"
 
-#: ../src/dialogs.py:851
+#: ../src/dialogs.py:856
 msgid "Passwords don't match."
 msgstr ""
 
-#: ../src/dialogs.py:852
+#: ../src/dialogs.py:857
 msgid "The passwords typed in both fields must be identical."
 msgstr ""
 
-#: ../src/dialogs.py:887 ../src/gajim.py:311
+#: ../src/dialogs.py:892 ../src/gajim.py:311
 #, fuzzy
 msgid "Contact Signed In"
 msgstr "_Данни за контакта"
 
-#: ../src/dialogs.py:891 ../src/gajim.py:331
+#: ../src/dialogs.py:896 ../src/gajim.py:331
 msgid "Contact Signed Out"
 msgstr ""
 
-#: ../src/dialogs.py:896 ../src/gajim.py:391
+#: ../src/dialogs.py:901 ../src/gajim.py:391
 #, fuzzy
 msgid "New Single Message"
 msgstr "Входящо съобщение:"
 
-#: ../src/dialogs.py:900
+#: ../src/dialogs.py:905
 #, python-format
 msgid "From %s"
 msgstr ""
 
-#: ../src/dialogs.py:1032
+#: ../src/dialogs.py:1037
 #, fuzzy, python-format
 msgid "Single Message as %s"
 msgstr "Ново съобщение като "
 
-#: ../src/dialogs.py:1034
+#: ../src/dialogs.py:1039
 #, fuzzy
 msgid "Single Message"
 msgstr "Входящо съобщение:"
 
-#: ../src/dialogs.py:1037
+#: ../src/dialogs.py:1042
 #, fuzzy, python-format
 msgid "Send %s"
 msgstr "_Отказване"
 
-#: ../src/dialogs.py:1046
+#: ../src/dialogs.py:1051
 #, python-format
 msgid "Received %s"
 msgstr ""
 
-#: ../src/dialogs.py:1086
+#: ../src/dialogs.py:1091
 #, fuzzy, python-format
 msgid "RE: %s"
 msgstr "Редактиране на %s"
 
-#: ../src/dialogs.py:1087
+#: ../src/dialogs.py:1092
 #, python-format
 msgid ""
 "\n"
@@ -567,12 +568,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../src/dialogs.py:1123
+#: ../src/dialogs.py:1128
 #, python-format
 msgid "XML Console for %s"
 msgstr ""
 
-#: ../src/dialogs.py:1125
+#: ../src/dialogs.py:1130
 msgid "XML Console"
 msgstr ""
 
@@ -581,7 +582,7 @@ msgid "error while sending"
 msgstr "грешка при изпращане"
 
 #: ../src/gajim.py:466 ../src/gajim.py:476 ../src/roster_window.py:123
-#: ../src/roster_window.py:902 ../src/common/connection.py:317
+#: ../src/roster_window.py:963 ../src/common/connection.py:317
 #: ../src/gtkgui.glade.h:113
 msgid "General"
 msgstr "Общи"
@@ -632,7 +633,7 @@ msgstr ""
 msgid "You are currently connected without your GPG key."
 msgstr "Паролата ви за GPG е грешна, така че сте свързани без GPG ключ"
 
-#: ../src/groupchat_window.py:111 ../src/groupchat_window.py:799
+#: ../src/groupchat_window.py:111 ../src/groupchat_window.py:809
 #, python-format
 msgid "You just received a new message in room \"%s\""
 msgstr ""
@@ -641,80 +642,99 @@ msgstr ""
 msgid "If you close this window, this message will be lost."
 msgstr ""
 
-#: ../src/groupchat_window.py:161 ../src/groupchat_window.py:327
+#: ../src/groupchat_window.py:161 ../src/groupchat_window.py:337
 msgid "This room has no subject"
 msgstr ""
 
-#: ../src/groupchat_window.py:282
+#: ../src/groupchat_window.py:227 ../src/gtkgui.glade.h:161
+#, fuzzy
+msgid "None"
+msgstr "Възел"
+
+#: ../src/groupchat_window.py:229
+#, fuzzy
+msgid "Moderators"
+msgstr "Даване на _ръководни функции"
+
+#: ../src/groupchat_window.py:231
+msgid "Participants"
+msgstr ""
+
+#: ../src/groupchat_window.py:233
+#, fuzzy
+msgid "Visitors"
+msgstr "История"
+
+#: ../src/groupchat_window.py:291
 #, python-format
 msgid "%s has been kicked by %s: %s"
 msgstr "%s беше изритан от %s: %s"
 
-#: ../src/groupchat_window.py:285
+#: ../src/groupchat_window.py:294
 #, fuzzy, python-format
 msgid "%s is now known as %s"
 msgstr "%s сега е %s (%s)"
 
-#: ../src/groupchat_window.py:313
+#: ../src/groupchat_window.py:323
 #, python-format
 msgid "%s has left"
 msgstr ""
 
-#: ../src/groupchat_window.py:315
+#: ../src/groupchat_window.py:325
 #, fuzzy, python-format
 msgid "%s is now %s"
 msgstr "%s сега е %s (%s)"
 
-#: ../src/groupchat_window.py:334
+#: ../src/groupchat_window.py:344
 #, fuzzy
 msgid "Changing Subject"
 msgstr "Промяна на _темата"
 
-#: ../src/groupchat_window.py:335
+#: ../src/groupchat_window.py:345
 msgid "Please specify the new subject:"
 msgstr ""
 
-#: ../src/groupchat_window.py:344
+#: ../src/groupchat_window.py:354
 #, fuzzy
 msgid "Changing Nickname"
 msgstr "Псевдоним:"
 
-#: ../src/groupchat_window.py:345
+#: ../src/groupchat_window.py:355
 msgid "Please specify the new nickname you want to use:"
 msgstr ""
 
-#: ../src/groupchat_window.py:367
+#: ../src/groupchat_window.py:377
 msgid "Bookmark already set"
 msgstr ""
 
-#: ../src/groupchat_window.py:368
+#: ../src/groupchat_window.py:378
 #, python-format
 msgid "Room \"%s\" is already in your bookmarks."
 msgstr ""
 
-#: ../src/groupchat_window.py:377
+#: ../src/groupchat_window.py:387
 msgid "Bookmark has been added successfully"
 msgstr ""
 
-#: ../src/groupchat_window.py:378
+#: ../src/groupchat_window.py:388
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 
-#: ../src/groupchat_window.py:587
+#: ../src/groupchat_window.py:597
 #, python-format
 msgid "Kicking %s"
 msgstr ""
 
-#: ../src/groupchat_window.py:588 ../src/groupchat_window.py:616
+#: ../src/groupchat_window.py:598 ../src/groupchat_window.py:626
 msgid "Please specify a reason below:"
 msgstr ""
 
-#: ../src/groupchat_window.py:615
+#: ../src/groupchat_window.py:625
 #, python-format
 msgid "Banning %s"
 msgstr ""
 
-#: ../src/groupchat_window.py:800 ../src/tabbed_chat_window.py:233
+#: ../src/groupchat_window.py:810 ../src/tabbed_chat_window.py:237
 msgid "If you close this tab, the message will be lost."
 msgstr ""
 
@@ -732,167 +752,162 @@ msgstr "Сегашното състояние е: "
 msgid "You are already in room %s"
 msgstr "Вече сте в стая "
 
-#: ../src/roster_window.py:339
+#: ../src/roster_window.py:361
 msgid "New _Room"
 msgstr ""
 
-#: ../src/roster_window.py:353
+#: ../src/roster_window.py:375
 msgid "Manage Bookmarks..."
 msgstr ""
 
-#: ../src/roster_window.py:368
+#: ../src/roster_window.py:391
 #, fuzzy, python-format
 msgid "to %s account"
 msgstr " акаунт"
 
-#: ../src/roster_window.py:379
+#: ../src/roster_window.py:403
 #, fuzzy, python-format
 msgid "using %s account"
 msgstr "Премахване на акаунт %s"
 
-#: ../src/roster_window.py:392
+#: ../src/roster_window.py:417
 #, fuzzy, python-format
 msgid "as %s"
 msgstr "като "
 
-#: ../src/roster_window.py:403
-#, python-format
-msgid "for %s "
-msgstr ""
-
-#: ../src/roster_window.py:537
+#: ../src/roster_window.py:598
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s сега е %s (%s)"
 
-#: ../src/roster_window.py:594
+#: ../src/roster_window.py:655
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr ""
 
-#: ../src/roster_window.py:594
+#: ../src/roster_window.py:655
 #, fuzzy, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from %s."
 msgstr "Трябва да сте свързани, за да изпратите съобщение на контакт"
 
-#: ../src/roster_window.py:626
+#: ../src/roster_window.py:687
 #, fuzzy
 msgid "Assign OpenPGP Key"
 msgstr "Задаване на OpenPGP ключ"
 
-#: ../src/roster_window.py:626
+#: ../src/roster_window.py:687
 msgid "Select a key to apply to the contact"
 msgstr ""
 
-#: ../src/roster_window.py:717
+#: ../src/roster_window.py:778
 msgid "I would like to add you to my roster"
 msgstr "Бих искал(а) да ви добавя към списъка си"
 
-#: ../src/roster_window.py:742
+#: ../src/roster_window.py:803
 msgid "Rename"
 msgstr "Преименуване"
 
-#: ../src/roster_window.py:763
+#: ../src/roster_window.py:824
 msgid "_Log on"
 msgstr "С_вързване"
 
-#: ../src/roster_window.py:772
+#: ../src/roster_window.py:833
 msgid "Log _off"
 msgstr "Изкл_ючване"
 
-#: ../src/roster_window.py:784
+#: ../src/roster_window.py:845
 #, fuzzy
 msgid "Edit"
 msgstr "_Редактиране"
 
-#: ../src/roster_window.py:790 ../src/gtkgui.glade.h:321
+#: ../src/roster_window.py:851 ../src/gtkgui.glade.h:321
 msgid "_Remove from Roster"
 msgstr ""
 
-#: ../src/roster_window.py:893
+#: ../src/roster_window.py:954
 #, fuzzy
 msgid "Authorization has been sent"
 msgstr "Повторно упълномощаване на"
 
-#: ../src/roster_window.py:894
+#: ../src/roster_window.py:955
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr ""
 
-#: ../src/roster_window.py:916
+#: ../src/roster_window.py:977
 #, fuzzy
 msgid "Subscription request has been sent"
 msgstr "Искане за записване от %s"
 
-#: ../src/roster_window.py:917
+#: ../src/roster_window.py:978
 #, python-format
 msgid "If \"%s\" accepts this request you will know his status."
 msgstr ""
 
-#: ../src/roster_window.py:1041
+#: ../src/roster_window.py:1102
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr ""
 
-#: ../src/roster_window.py:1042
+#: ../src/roster_window.py:1103
 #, python-format
 msgid ""
 "By removing this contact you also remove authorization. Contact \"%s\" will "
 "always see you as offline."
 msgstr ""
 
-#: ../src/roster_window.py:1074
+#: ../src/roster_window.py:1135
 #, fuzzy
 msgid "Password Required"
 msgstr "Парола:"
 
-#: ../src/roster_window.py:1075
+#: ../src/roster_window.py:1136
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Въведете парола за акаунт %s"
 
-#: ../src/roster_window.py:1076
+#: ../src/roster_window.py:1137
 #, fuzzy
 msgid "Save password"
 msgstr "Запазване на паро_ла"
 
-#: ../src/roster_window.py:1107
+#: ../src/roster_window.py:1168
 #, fuzzy
 msgid "Passphrase Required"
 msgstr "Парола"
 
-#: ../src/roster_window.py:1108
+#: ../src/roster_window.py:1169
 #, python-format
 msgid "Enter GPG key passphrase for account %s"
 msgstr "Въведете парола за GPG ключ за акаунт %s"
 
-#: ../src/roster_window.py:1109
+#: ../src/roster_window.py:1170
 #, fuzzy
 msgid "Save passphrase"
 msgstr "Парола"
 
-#: ../src/roster_window.py:1137 ../src/common/connection.py:800
+#: ../src/roster_window.py:1198 ../src/common/connection.py:800
 #, python-format
 msgid "I'm %s"
 msgstr ""
 
-#: ../src/roster_window.py:1156
+#: ../src/roster_window.py:1217
 #, fuzzy
 msgid "No accounts created"
 msgstr " (акаунт: "
 
-#: ../src/roster_window.py:1157
+#: ../src/roster_window.py:1218
 #, fuzzy
 msgid "You must create Jabber account before connecting the server."
 msgstr "Трябва да създадете акаунт, за да се свържете с Jabber сървър."
 
-#: ../src/roster_window.py:1451 ../src/roster_window.py:1457
+#: ../src/roster_window.py:1512 ../src/roster_window.py:1518
 #, fuzzy
 msgid "You have unread messages"
 msgstr "Gajim - %s непрочетени съобщения"
 
-#: ../src/roster_window.py:1452 ../src/roster_window.py:1458
+#: ../src/roster_window.py:1513 ../src/roster_window.py:1519
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
@@ -906,48 +921,48 @@ msgstr "като "
 msgid "All contacts in this group are offline or have errors"
 msgstr "Всички контакти в тази група са изключени или има грешки"
 
-#: ../src/systray.py:288
+#: ../src/systray.py:292
 #, python-format
 msgid "Gajim - %s unread messages"
 msgstr "Gajim - %s непрочетени съобщения"
 
-#: ../src/systray.py:290
+#: ../src/systray.py:294
 msgid "Gajim - 1 unread message"
 msgstr "Gajim - 1 непрочетено съобщение"
 
-#: ../src/systray.py:293
+#: ../src/systray.py:297
 #, fuzzy, python-format
 msgid "Gajim - %s"
 msgstr "Gajim"
 
-#: ../src/tabbed_chat_window.py:191 ../src/tabbed_chat_window.py:232
+#: ../src/tabbed_chat_window.py:195 ../src/tabbed_chat_window.py:236
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:192
+#: ../src/tabbed_chat_window.py:196
 msgid "If you close the window, this message will be lost."
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:260
+#: ../src/tabbed_chat_window.py:264
 #, python-format
 msgid "%s is %s"
 msgstr "%s е %s"
 
-#: ../src/tabbed_chat_window.py:309
+#: ../src/tabbed_chat_window.py:313
 #, fuzzy
 msgid "A connection is not available"
 msgstr "Автоматично \"_Не съм на разположение\" след:"
 
-#: ../src/tabbed_chat_window.py:310
+#: ../src/tabbed_chat_window.py:314
 msgid "Your message can't be sent until you are connected."
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:391
+#: ../src/tabbed_chat_window.py:395
 msgid "Encryption enabled"
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:396
+#: ../src/tabbed_chat_window.py:400
 msgid "Encryption disabled"
 msgstr ""
 
@@ -1839,11 +1854,6 @@ msgstr "Има нова версия на Gajim"
 msgid "Nickname:"
 msgstr "Псевдоним:"
 
-#: ../src/gtkgui.glade.h:161
-#, fuzzy
-msgid "None"
-msgstr "Възел"
-
 #: ../src/gtkgui.glade.h:162
 msgid "Notify me about contacts that: "
 msgstr "Уведомяване за контакти при: "
@@ -2618,6 +2628,10 @@ msgstr ""
 msgid "minutes"
 msgstr "минути"
 
+#, fuzzy
+#~ msgid "You are connected to the server"
+#~ msgstr "Трябва да сте свързани, за да разглеждате услугите"
+
 #~ msgid "to "
 #~ msgstr "към "
 
@@ -2747,9 +2761,6 @@ msgstr "минути"
 
 #~ msgid "Information"
 #~ msgstr "Данни за контакта"
-
-#~ msgid "History"
-#~ msgstr "История"
 
 #~ msgid "Free for chat"
 #~ msgstr "Свободен за разговор"
