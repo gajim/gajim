@@ -1266,7 +1266,7 @@ _('To change the account name, it must be disconnected.')).get_response()
 		try:
 			dialog = dialogs.ChangePasswordDialog(self.plugin, self.account)
 		except RuntimeError: 
-			#if we showed ErrorDialog, there will not be 'self.dialog'
+			#if we showed ErrorDialog, there will not be dialog instance
 			return
 			
 		new_password = dialog.run()
