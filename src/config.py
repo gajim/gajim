@@ -1305,7 +1305,16 @@ _('To change the account name, it must be disconnected.')).get_response()
 				ManageProxiesWindow(self.plugin)
 
 	def on_gpg_choose_button_clicked(self, widget, data = None):
-		secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
+		if gajim.connections.has_key(self.account):
+			secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
+
+		# self.account is None and/or gajim.connections is {}
+		else:
+			from common import GnuPG
+			if GnuPG.USE_GPG:
+				secret_keys = GnuPG.GnuPG().get_keys()
+			else:
+				secret_keys = []
 		if not secret_keys:
 			dialogs.ErrorDialog(_('Failed to get secret keys'),
 _('There was a problem retrieving your GPG secret keys.')).get_response()
