@@ -1,4 +1,4 @@
-##	plugins/tabbed_chat_window.py
+##	tabbed_chat_window.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -108,12 +108,16 @@ class TabbedChatWindow(chat.Chat):
 		# some chars need to be escaped.. this fixes '&'
 		name = name.replace('&', '&amp;')
 
+		#FIXME: uncomment me when we support sending messages to specific resource
 		# composing full jid
-		fulljid = jid
-		if self.users[jid].resource:
-			fulljid += '/' + self.users[jid].resource
+		#fulljid = jid
+		#if self.users[jid].resource:
+		#	fulljid += '/' + self.users[jid].resource
+		#label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
+		#	% (name, fulljid)
+		
 		label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
-			% (name, fulljid)
+			% (name, jid)
 
 		# setup the label that holds name and jid
 		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
