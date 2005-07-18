@@ -223,6 +223,15 @@ class GroupchatWindow(chat.Chat):
 		model = self.list_treeview[room_jid].get_model()
 		image = self.plugin.roster.jabber_state_images[show]
 		resource = ''
+		if role == 'none':
+			role = _('None')
+		elif role == 'moderator':
+			role = _('Moderators')
+		elif role == 'participant':
+			role = _('Participants')
+		elif role == 'visitor':
+			role = _('Visitors')
+
 		if jid:
 			jids = jid.split('/')
 			j = jids[0]
@@ -231,10 +240,10 @@ class GroupchatWindow(chat.Chat):
 		else:
 			j = room_jid + '/' + nick
 		role_iter = self.get_role_iter(room_jid, role)
-		if not role_iter:
+		if not role_iter:			
 			role_iter = model.append(None,
 				(self.plugin.roster.jabber_state_images['closed'], role,
-				'<b>%ss</b>' % role.capitalize()))
+				'<b>%s</b>' % role))
 		iter = model.append(role_iter, (image, nick, self.escape(nick)))
 		self.contacts[room_jid][nick] = Contact(jid = j, name = nick,
 			show = show, resource = resource, role = role,
@@ -269,7 +278,7 @@ class GroupchatWindow(chat.Chat):
 					user_iter = model.iter_next(user_iter)
 				role_iter = model.iter_next(role_iter)
 
-	def chg_contact_status(self, room_jid, nick, show, status, role, affiliation, \
+	def chg_contact_status(self, room_jid, nick, show, status, role, affiliation, 
 		jid, reason, actor, statusCode, new_nick, account):
 		"""When a user changes his status"""
 		if show == 'invisible':
@@ -298,7 +307,8 @@ class GroupchatWindow(chat.Chat):
 				actual_role = self.get_role(room_jid, nick)
 				if role != actual_role:
 					self.remove_user(room_jid, nick)
-					self.add_contact_to_roster(room_jid, nick, show, role, jid, affiliation)
+					self.add_contact_to_roster(room_jid, nick, show, role, jid,
+						affiliation)
 				else:
 					roster = self.plugin.roster
 					state_images = roster.get_appropriate_state_images(jid)
@@ -741,32 +751,32 @@ class GroupchatWindow(chat.Chat):
 		if user_role != 'moderator' or \
 		   user_affiliation == 'none' or \
 		   (user_affiliation=='member' and target_affiliation!='none') or \
-		   target_affiliation in ('admin','owner'):
+		   target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
 		item.connect('activate', self.on_voice_checkmenuitem_activate, room_jid, nick)
 
 		item = xml.get_widget('moderator_checkmenuitem')
 		item.set_active(target_role == 'moderator')
-		if not user_affiliation in ('admin','owner') or \
-		   target_affiliation in ('admin','owner'):
+		if not user_affiliation in ('admin', 'owner') or \
+		   target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
 		item.connect('activate', self.on_moderator_checkmenuitem_activate, room_jid, nick)
 
 		item = xml.get_widget('ban_menuitem')
-		if not user_affiliation in ('admin','owner') or \
-		   (target_affiliation in ('admin','owner') and user_affiliation != 'owner'):
+		if not user_affiliation in ('admin', 'owner') or \
+		   (target_affiliation in ('admin', 'owner') and user_affiliation != 'owner'):
 			item.set_sensitive(False)
 		item.connect('activate', self.ban, room_jid, jid)
 
 		item = xml.get_widget('member_checkmenuitem')
 		item.set_active(target_affiliation != 'none')
-		if not user_affiliation in ('admin','owner') or \
+		if not user_affiliation in ('admin', 'owner') or \
 		   (user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
 			item.set_sensitive(False)
 		item.connect('activate', self.on_member_checkmenuitem_activate, room_jid, jid)
 
 		item = xml.get_widget('admin_checkmenuitem')
-		item.set_active(target_affiliation in ('admin','owner'))
+		item.set_active(target_affiliation in ('admin', 'owner'))
 		if not user_affiliation == 'owner':
 			item.set_sensitive(False)
 		item.connect('activate', self.on_admin_checkmenuitem_activate, room_jid, jid)
@@ -833,7 +843,8 @@ class GroupchatWindow(chat.Chat):
 		# we want to know when the the widget resizes, because that is
 		# an indication that the hpaned has moved...
 		# FIXME: Find a better indicator that the hpaned has moved.
-		self.list_treeview[room_jid].connect('size-allocate', self.on_treeview_size_allocate)
+		self.list_treeview[room_jid].connect('size-allocate',
+			self.on_treeview_size_allocate)
 		conversation_textview = self.xmls[room_jid].get_widget(
 			'conversation_textview')
 		self.name_labels[room_jid] = self.xmls[room_jid].get_widget(
