@@ -245,17 +245,21 @@ class Systray:
 				account = self.jids[0][0]
 				jid = self.jids[0][1]
 				acc = self.plugin.windows[account]
+				w = None
 				if acc['gc'].has_key(jid):
-					acc['gc'][jid].set_active_tab(jid)
-					acc['gc'][jid].window.present()
+					w = acc['gc'][jid]
 				elif acc['chats'].has_key(jid):
-					acc['chats'][jid].set_active_tab(jid)
-					acc['chats'][jid].window.present()
+					w = acc['chats'][jid]
 				else:
 					self.plugin.roster.new_chat(
 						self.plugin.roster.contacts[account][jid][0], account)
 					acc['chats'][jid].set_active_tab(jid)
 					acc['chats'][jid].window.present()
+				if w:
+					w.set_active_tab(jid)
+					w.window.present()
+					tv = w.xmls[jid].get_widget('conversation_textview')
+					w.scroll_to_end(tv)
 		if event.button == 2: # middle click
 			if win.is_active():
 				win.hide()
