@@ -1082,16 +1082,16 @@ class AccountModificationWindow:
 		if gajim.connections.has_key(self.account):
 			if name != self.account and \
 			   gajim.connections[self.account].connected != 0:
-				dialogs.ErrorDialog(_('You are connected to the server'),
-_('To change the account name, it must be disconnected.')).get_response()
+				dialogs.ErrorDialog(_('You are currently connected to the server'),
+_('To change the account name, you must be disconnected.')).get_response()
 				return
 		if (name == ''):
 			dialogs.ErrorDialog(_('Invalid account name'),
-				_('Account names cannot be empty.')).get_response()
+				_('Account name cannot be empty.')).get_response()
 			return
 		if name.find(' ') != -1:
 			dialogs.ErrorDialog(_('Invalid account name'),
-				_('Account names cannot contain spaces.')).get_response()
+				_('Account name cannot contain spaces.')).get_response()
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
 		if jid == '' or jid.count('@') != 1:
@@ -1809,7 +1809,7 @@ class ManageEmoticonsWindow:
 		if not iter:
 			return
 		file = model.get_value(iter, 1)
-		dialog = gtk.FileChooserDialog(_('Choose image'), None,
+		dialog = gtk.FileChooserDialog(_('Choose Ιmage'), None,
 					gtk.FILE_CHOOSER_ACTION_OPEN,
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 					gtk.STOCK_OPEN, gtk.RESPONSE_OK))

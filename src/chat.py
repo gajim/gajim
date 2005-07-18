@@ -570,16 +570,16 @@ class Chat:
 			else:
 				link = 'http://%s.wikipedia.org/wiki/%s'\
 					%(gajim.LANG, self.selected_phrase)
-			item = gtk.MenuItem(_('Read _Wikipedia article'))
+			item = gtk.MenuItem(_('Read _Wikipedia Article'))
 			item.connect('activate', self.visit_url_from_menuitem, link)
 			submenu.append(item)
 
-			item = gtk.MenuItem(_('Look it up in _dictionary'))
+			item = gtk.MenuItem(_('Look it up in _Dictionary'))
 			link = gajim.config.get('dictionary_url') + self.selected_phrase
 			item.connect('activate', self.visit_url_from_menuitem, link)
 			submenu.append(item)
 			
-			item = gtk.MenuItem(_('Web _search for it'))
+			item = gtk.MenuItem(_('Web _Search for it'))
 			gajim.config.get('search_engine')
 			link = gajim.config.get('search_engine') + self.selected_phrase +\
 				'&sourceid=gajim'
