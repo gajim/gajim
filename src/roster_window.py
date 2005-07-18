@@ -426,6 +426,7 @@ class RosterWindow:
 				if gajim.connections[account].connected <= 1: 
 					#if offline or connecting
 					continue
+				'''
 				childs = advanced_menuitem_menu.get_children()
 
 				send_single_message_menuitem = childs[0]
@@ -465,7 +466,7 @@ class RosterWindow:
 				
 				sub_menu.append(item)
 				advanced_menuitem.set_submenu(sub_menu)
-				
+				'''
 			sub_menu.show_all()
 			
 		else:
