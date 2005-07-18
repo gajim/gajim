@@ -44,3 +44,17 @@ else:
 last_message_time = {} # list of time of the latest incomming message
 							# {acct1: {jid1: time1, jid2: time2}, }
 encrypted_chats = {} # list of encrypted chats {acct1: [jid1, jid2], ..}
+
+contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
+groups = {} # list of groups
+newly_added = {} # list of contacts that has just signed in
+to_be_removed = {} # list of contacts that has just signed out
+awaiting_messages = {} # list of messages reveived but not printed
+nicks = {} # list of our nick names in each account
+allow_notifications = {} # do we allow notifications for each account ?
+con_types = {} # type of each connection (ssl, tls, tcp, ...)
+sleeper_state = {} #whether we pass auto away / xa or not
+#0:don't use sleeper for this account
+#1:online and use sleeper
+#2:autoaway and use sleeper
+#3:autoxa and use sleeper

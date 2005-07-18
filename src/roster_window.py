@@ -96,9 +96,9 @@ class RosterWindow:
 		status = statuss[gajim.connections[account].connected]
 
 		tls_pixbuf = None
-		if self.plugin.con_types.has_key(account) and\
-			(self.plugin.con_types[account] == 'tls' or\
-			self.plugin.con_types[account] == 'ssl'):
+		if gajim.con_types.has_key(account) and \
+			(gajim.con_types[account] == 'tls' or \
+			gajim.con_types[account] == 'ssl'):
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
 
@@ -106,16 +106,16 @@ class RosterWindow:
 			'account', account, account, False, tls_pixbuf])
 
 	def remove_newly_added(self, jid, account):
-		if jid in self.newly_added[account]:
-			self.newly_added[account].remove(jid)
+		if jid in gajim.newly_added[account]:
+			gajim.newly_added[account].remove(jid)
 			self.draw_contact(jid, account)
 
 	def add_contact_to_roster(self, jid, account):
 		'''Add a contact to the roster and add groups if they aren't in roster'''
 		showOffline = gajim.config.get('showoffline')
-		if not self.contacts[account].has_key(jid):
+		if not gajim.contacts[account].has_key(jid):
 			return
-		users = self.contacts[account][jid]
+		users = gajim.contacts[account][jid]
 		user = users[0]
 		if user.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 			user.groups = [_('Transports')]
@@ -125,7 +125,7 @@ class RosterWindow:
 		if (user.show == 'offline' or user.show == 'error') and \
 		   not showOffline and (not _('Transports') in user.groups or \
 			gajim.connections[account].connected < 2) and \
-		   not self.plugin.queues[account].has_key(user.jid):
+		   not gajim.awaiting_messages[account].has_key(user.jid):
 			return
 
 		model = self.tree.get_model()
@@ -135,12 +135,12 @@ class RosterWindow:
 				IterAcct = self.get_account_iter(account)
 				iterG = model.append(IterAcct, 
 		[self.jabber_state_images['closed'], g, 'group', g, account, False, None])
-			if not self.groups[account].has_key(g): #It can probably never append
+			if not gajim.groups[account].has_key(g): #It can probably never append
 				if account + g in self.collapsed_rows:
 					ishidden = False
 				else:
 					ishidden = True
-				self.groups[account][g] = { 'expand': ishidden }
+				gajim.groups[account][g] = { 'expand': ishidden }
 			if not account in self.collapsed_rows and \
 			   not gajim.config.get('mergeaccounts'):
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
@@ -152,18 +152,18 @@ class RosterWindow:
 			model.append(iterG, [self.jabber_state_images[user.show], user.name,
 					typestr, user.jid, account, False, None]) # FIXME None --> avatar
 			
-			if self.groups[account][g]['expand']:
+			if gajim.groups[account][g]['expand']:
 				self.tree.expand_row(model.get_path(iterG),
 							False)
 		self.draw_contact(jid, account)
 	
 	def really_remove_user(self, user, account):
-		if user.jid in self.newly_added[account]:
+		if user.jid in gajim.newly_added[account]:
 			return
 		if user.jid.find('@') < 1 and gajim.connections[account].connected > 1: # It's an agent
 			return
-		if user.jid in self.to_be_removed[account]:
-			self.to_be_removed[account].remove(user.jid)
+		if user.jid in gajim.to_be_removed[account]:
+			gajim.to_be_removed[account].remove(user.jid)
 		if gajim.config.get('showoffline'):
 			self.draw_contact(user.jid, account)
 			return
@@ -171,7 +171,7 @@ class RosterWindow:
 	
 	def remove_user(self, user, account):
 		'''Remove a user from the roster'''
-		if user.jid in self.to_be_removed[account]:
+		if user.jid in gajim.to_be_removed[account]:
 			return
 		model = self.tree.get_model()
 		for i in self.get_contact_iter(user.jid, account):
@@ -182,12 +182,13 @@ class RosterWindow:
 				model.remove(parent_i)
 				# We need to check all contacts, even offline contacts
 				group_empty = True
-				for jid in self.contacts[account]:
-					if group in self.contacts[account][jid][0].groups:
+				for jid in gajim.contacts[account]:
+					if group in gajim.contacts[account][jid][0].groups:
 						group_empty = False
 						break
 				if group_empty:
-					del self.groups[account][group]
+					del gajim.groups[account][group]
+
 	def get_transport_name_by_jid(self,jid):
 		if not jid or not gajim.config.get('use_transports_iconsets'):
 			return None
@@ -224,7 +225,7 @@ class RosterWindow:
 		iters = self.get_contact_iter(jid, account)
 		if len(iters) == 0:
 			return
-		users = self.contacts[account][jid]
+		users = gajim.contacts[account][jid]
 		name = users[0].name
 		if len(users) > 1:
 			name += ' (' + str(len(users)) + ')'
@@ -236,7 +237,7 @@ class RosterWindow:
 				user = u
 
 		state_images = self.get_appropriate_state_images(jid)
-		if self.plugin.queues[account].has_key(jid):
+		if gajim.awaiting_messages[account].has_key(jid):
 			img = state_images['message']
 		elif jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 			img = state_images[user.show]					
@@ -517,15 +518,15 @@ class RosterWindow:
 		self.tree.get_model().clear()
 		for acct in gajim.connections:
 			self.add_account_to_roster(acct)
-			for jid in self.contacts[acct].keys():
+			for jid in gajim.contacts[acct].keys():
 				self.add_contact_to_roster(jid, acct)
 	
 	def mklists(self, array, account):
-		'''fill self.contacts and self.groups'''
-		if not self.contacts.has_key(account):
-			self.contacts[account] = {}
-		if not self.groups.has_key(account):
-			self.groups[account] = {}
+		'''fill gajim.contacts and gajim.groups'''
+		if not gajim.contacts.has_key(account):
+			gajim.contacts[account] = {}
+		if not gajim.groups.has_key(account):
+			gajim.groups[account] = {}
 		for jid in array.keys():
 			jids = jid.split('/')
 			#get jid
@@ -555,26 +556,26 @@ class RosterWindow:
 
 			# when we draw the roster, we avoid having the same contact
 			# more than once (eg. we avoid showing it twice with 2 resources)
-			self.contacts[account][ji] = [user1]
+			gajim.contacts[account][ji] = [user1]
 			for g in array[jid]['groups'] :
-				if g in self.groups[account].keys():
+				if g in gajim.groups[account].keys():
 					continue
 
 				if account + g in self.collapsed_rows:
 					ishidden = False
 				else:
 					ishidden = True
-				self.groups[account][g] = { 'expand': ishidden }
+				gajim.groups[account][g] = { 'expand': ishidden }
 
 	def chg_contact_status(self, user, show, status, account):
 		'''When a contact changes his status'''
 		showOffline = gajim.config.get('showoffline')
 		model = self.tree.get_model()
-		luser = self.contacts[account][user.jid]
+		luser = gajim.contacts[account][user.jid]
 		user.show = show
 		user.status = status
 		if (show == 'offline' or show == 'error') and \
-		   not self.plugin.queues[account].has_key(user.jid):
+		   not gajim.awaiting_messages[account].has_key(user.jid):
 			if len(luser) > 1:
 				luser.remove(user)
 				self.draw_contact(user.jid, account)
@@ -640,7 +641,7 @@ class RosterWindow:
 				if self.tooltip.timeout == 0 or self.tooltip.path != props[0]:
 					self.tooltip.path = row
 					self.tooltip.timeout = gobject.timeout_add(500,
-						self.show_tooltip, self.contacts[account][jid])
+						self.show_tooltip, gajim.contacts[account][jid])
 
 	def on_agent_logging(self, widget, jid, state, account):
 		'''When an agent is requested to log in or off'''
@@ -659,14 +660,14 @@ class RosterWindow:
 			# remove transport from treeview
 			self.remove_user(contact, account)
 			# remove transport's contacts from treeview
-			for jid, contacts in self.contacts[account].items():
+			for jid, contacts in gajim.contacts[account].items():
 				contact = contacts[0]
 				if jid.endswith('@' + contact.jid):
 					gajim.log.debug(
 					'Removing contact %s due to unregistered transport %s'\
 						% (contact.jid, contact.name))
 					self.remove_user(contact, account)
-			del self.contacts[account][contact.jid]
+			del gajim.contacts[account][contact.jid]
 
 	def on_rename(self, widget, iter, path):
 		model = self.tree.get_model()
@@ -694,7 +695,7 @@ class RosterWindow:
 				del keys[user.jid]
 		else:
 			keys[user.jid] = keyID[0]
-			for u in self.contacts[account][user.jid]:
+			for u in gajim.contacts[account][user.jid]:
 				u.keyID = keyID[0]
 			if self.plugin.windows[account]['chats'].has_key(user.jid):
 				self.plugin.windows[account]['chats'][user.jid].draw_widgets(user)
@@ -724,7 +725,7 @@ class RosterWindow:
 		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
 		account = model.get_value(iter, 4)
-		contact = self.contacts[account][jid][0]
+		contact = gajim.contacts[account][jid][0]
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_contact_context_menu',
 			APP)
@@ -818,14 +819,14 @@ class RosterWindow:
 		jid = model.get_value(iter, 3)
 		path = model.get_path(iter)
 		account = model.get_value(iter, 4)
-		user = self.contacts[account][jid][0]
+		user = gajim.contacts[account][jid][0]
 		menu = gtk.Menu()
 		
 		item = gtk.ImageMenuItem(_('_Log on'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
-		show = self.contacts[account][jid][0].show
+		show = gajim.contacts[account][jid][0].show
 		if show != 'offline' and show != 'error':
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, None, account)
@@ -961,7 +962,7 @@ class RosterWindow:
 		gajim.connections[account].request_subscription(jid, txt)
 		if not group:
 			group = _('General')
-		if not self.contacts[account].has_key(jid):
+		if not gajim.contacts[account].has_key(jid):
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
 				'attached_gpg_keys').split()
@@ -970,9 +971,9 @@ class RosterWindow:
 			user1 = Contact(jid = jid, name = pseudo, groups = [group],
 				show = 'requested', status = 'requested', ask = 'none',
 				sub = 'subscribe', keyID = keyID)
-			self.contacts[account][jid] = [user1]
+			gajim.contacts[account][jid] = [user1]
 		else:
-			user1 = self.contacts[account][jid][0]
+			user1 = gajim.contacts[account][jid][0]
 			if not _('not in the roster') in user1.groups:
 				dialogs.InformationDialog(_('Subscription request has been sent'),
 _('If "%s" accepts this request you will know his status.') %jid).get_response()
@@ -1010,7 +1011,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			jid = model.get_value(iter, 3)
 			account = model.get_value(iter, 4)
 			type = model.get_value(iter, 2)
-			user = self.contacts[account][jid][0]
+			user = gajim.contacts[account][jid][0]
 			if type == 'contact':
 				self.on_req_usub(widget, user, account)
 			elif type == 'agent':
@@ -1074,8 +1075,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				jid = model.get_value(iter, 3)
 				if self.plugin.windows[account]['chats'].has_key(jid):
 					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
-				elif self.contacts[account].has_key(jid):
-					self.new_chat(self.contacts[account][jid][0], account)
+				elif gajim.contacts[account].has_key(jid):
+					self.new_chat(gajim.contacts[account][jid][0], account)
 					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 				self.plugin.windows[account]['chats'][jid].window.present()
 			return True
@@ -1103,14 +1104,14 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			_('By removing this contact you also remove authorization. Contact "%s" will always see you as offline.') % user.name)
 		if window.get_response() == gtk.RESPONSE_OK:
 			gajim.connections[account].unsubscribe(user.jid)
-			for u in self.contacts[account][user.jid]:
+			for u in gajim.contacts[account][user.jid]:
 				self.remove_user(u, account)
-			del self.contacts[account][u.jid]
+			del gajim.contacts[account][u.jid]
 			if user.jid in self.plugin.windows[account]['chats']:
 				user1 = Contact(jid = user.jid, name = user.name,
 					groups = [_('not in the roster')], show = _('not in the roster'),
 					status = _('not in the roster'), ask = 'none', keyID = user.keyID)
-				self.contacts[account][user.jid] = [user1] 
+				gajim.contacts[account][user.jid] = [user1] 
 				self.add_contact_to_roster(user.jid, account)	
 			
 	def forget_gpg_passphrase(self, keyid):
@@ -1187,9 +1188,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 																		txt)
 		if status == 'online' and self.plugin.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
-			self.plugin.sleeper_state[account] = 1
+			gajim.sleeper_state[account] = 1
 		else:
-			self.plugin.sleeper_state[account] = 0
+			gajim.sleeper_state[account] = 0
 
 	def get_status_message(self, show):
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
@@ -1254,15 +1255,15 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 
 	def on_status_changed(self, account, status):
 		'''the core tells us that our status has changed'''
-		if not self.contacts.has_key(account):
+		if not gajim.contacts.has_key(account):
 			return
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
 		if accountIter:
 			model.set_value(accountIter, 0, self.jabber_state_images[status])
 		if status == 'offline':
-			for jid in self.contacts[account]:
-				luser = self.contacts[account][jid]
+			for jid in gajim.contacts[account]:
+				luser = gajim.contacts[account][jid]
 				luser_copy = []
 				for user in luser:
 					luser_copy.append(user)
@@ -1286,8 +1287,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				tabbed_chat_window.TabbedChatWindow(user, self.plugin, account)
 
 	def new_chat_from_jid(self, account, jid):
-		if self.contacts[account].has_key(jid):
-			user = self.contacts[account][jid][0]
+		if gajim.contacts[account].has_key(jid):
+			user = gajim.contacts[account][jid][0]
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
@@ -1297,7 +1298,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			user = Contact(jid = jid, name = jid.split('@')[0],
 				groups = [_('not in the roster')], show = _('not in the roster'),
 				status = _('not in the roster'), sub = 'none', keyID = keyID)
-			self.contacts[account][jid] = [user]
+			gajim.contacts[account][jid] = [user]
 			self.add_contact_to_roster(user.jid, account)			
 
 		if not self.plugin.windows[account]['chats'].has_key(jid):
@@ -1322,7 +1323,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def on_message(self, jid, msg, tim, account, encrypted = False,\
 		msg_type = '', subject = None):
 		'''when we receive a message'''
-		if not self.contacts[account].has_key(jid):
+		if not gajim.contacts[account].has_key(jid):
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
 				'attached_gpg_keys').split()
@@ -1331,7 +1332,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			user1 = Contact(jid = jid, name = jid.split('@')[0],
 				groups = [_('not in the roster')], show = _('not in the roster'),
 				status = _('not in the roster'), ask = 'none', keyID = keyID)
-			self.contacts[account][jid] = [user1] 
+			gajim.contacts[account][jid] = [user1] 
 			self.add_contact_to_roster(jid, account)
 
 		iters = self.get_contact_iter(jid, account)
@@ -1346,13 +1347,13 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		if msg_type == 'normal': # it's single message
 			#FIXME: take into account autopopup and autopopupaway
 			# if user doesn't want to be bugged do it as we do the 'chat'
-			contact = self.contacts[account][jid][0]
+			contact = gajim.contacts[account][jid][0]
 			dialogs.SingleMessageWindow(self.plugin, account, contact,
 		action = 'receive', from_whom = jid, subject = subject, message = msg)
 			return
 		
 		# Do we have a queue?
-		qs = self.plugin.queues[account]
+		qs = gajim.awaiting_messages[account]
 		no_queue = True
 		if qs.has_key(jid):
 			no_queue = False
@@ -1385,7 +1386,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.tree.set_cursor(path)
 		else:
 			if not self.plugin.windows[account]['chats'].has_key(jid):
-				self.new_chat(self.contacts[account][jid][0], account)
+				self.new_chat(gajim.contacts[account][jid][0], account)
 				if path:
 					self.tree.expand_row(path[0:1], False)
 					self.tree.expand_row(path[0:2], False)
@@ -1540,8 +1541,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		else:
 			if self.plugin.windows[account]['chats'].has_key(jid):
 				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
-			elif self.contacts[account].has_key(jid):
-				self.new_chat(self.contacts[account][jid][0], account)
+			elif gajim.contacts[account].has_key(jid):
+				self.new_chat(gajim.contacts[account][jid][0], account)
 				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 			self.plugin.windows[account]['chats'][jid].window.present()
 
@@ -1557,21 +1558,20 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			model.set_value(iter, 0, self.jabber_state_images['opened'])
 			jid = model.get_value(iter, 3)
 			for account in accounts:
-				if self.groups[account].has_key(jid): # This account has this group
-					self.groups[account][jid]['expand'] = True
+				if gajim.groups[account].has_key(jid): # This account has this group
+					gajim.groups[account][jid]['expand'] = True
 					if account + jid in self.collapsed_rows:
 						self.collapsed_rows.remove(account + jid)
 		elif type == 'account':
 			account = accounts[0] # There is only one cause we don't use merge
 			if account in self.collapsed_rows:
 				self.collapsed_rows.remove(account)
-			for g in self.groups[account]:
+			for g in gajim.groups[account]:
 				groupIter = self.get_group_iter(g, account)
-				if groupIter and self.groups[account][g]['expand']:
+				if groupIter and gajim.groups[account][g]['expand']:
 					pathG = model.get_path(groupIter)
 					self.tree.expand_row(pathG, False)
-			
-	
+
 	def on_roster_treeview_row_collapsed(self, widget, iter, path):
 		'''When a row is collapsed :
 		change the icon of the arrow'''
@@ -1585,8 +1585,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			model.set_value(iter, 0, self.jabber_state_images['closed'])
 			jid = model.get_value(iter, 3)
 			for account in accounts:
-				if self.groups[account].has_key(jid): # This account has this group
-					self.groups[account][jid]['expand'] = False
+				if gajim.groups[account].has_key(jid): # This account has this group
+					gajim.groups[account][jid]['expand'] = False
 					if not account + jid in self.collapsed_rows:
 						self.collapsed_rows.append(account + jid)
 		elif type == 'account':
@@ -1610,17 +1610,17 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		jid = model.get_value(iter, 3)
 		type = model.get_value(iter, 2)
 		if type == 'contact':
-			old_text = self.contacts[account][jid][0].name
+			old_text = gajim.contacts[account][jid][0].name
 			if old_text != new_text:
-				for u in self.contacts[account][jid]:
+				for u in gajim.contacts[account][jid]:
 					u.name = new_text
 				gajim.connections[account].update_contact(jid, new_text, u.groups)
 			self.draw_contact(jid, account)
 		elif type == 'group':
 			old_name = model.get_value(iter, 1)
 			#get all users in that group
-			for jid in self.contacts[account]:
-				user = self.contacts[account][jid][0]
+			for jid in gajim.contacts[account]:
+				user = gajim.contacts[account][jid][0]
 				if old_name in user.groups:
 					#set them in the new one and remove it from the old
 					self.remove_user(user, account)
@@ -1723,9 +1723,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		else:
 			jid = model.get_value(iter, 3)
 			account = model.get_value(iter, 4)
-			if jid in self.newly_added[account]:
+			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
-			elif jid in self.to_be_removed[account]:
+			elif jid in gajim.to_be_removed[account]:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
 				renderer.set_property('cell-background', 
@@ -1758,9 +1758,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			account = model.get_value(iter, 4)
 			renderer.set_property('foreground', 
 				gajim.config.get_per('themes', theme, 'contacttextcolor'))
-			if jid in self.newly_added[account]:
+			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
-			elif jid in self.to_be_removed[account]:
+			elif jid in gajim.to_be_removed[account]:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
 				renderer.set_property('cell-background', 
@@ -1781,9 +1781,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		else:
 			jid = model.get_value(iter, 3)
 			account = model.get_value(iter, 4)
-			if jid in self.newly_added[account]:
+			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
-			elif jid in self.to_be_removed[account]:
+			elif jid in gajim.to_be_removed[account]:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
 				renderer.set_property('cell-background', 
@@ -1823,8 +1823,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if account and model.get_value(iter2, 4) == account:
 				jid1 = model.get_value(iter1, 3)
 				jid2 = model.get_value(iter2, 3)
-				luser1 = self.contacts[account][jid1]
-				luser2 = self.contacts[account][jid2]
+				luser1 = gajim.contacts[account][jid1]
+				luser2 = gajim.contacts[account][jid2]
 				cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
 					'invisible': 5, 'offline': 6, _('not in the roster'): 7, 'error': 8}
 				s = self.get_show(luser1)
@@ -1897,18 +1897,18 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
 		# user1.groups
-		u = self.contacts[account][data][0]
+		u = gajim.contacts[account][data][0]
 		u.groups.remove(grp_source)
 		if model.iter_n_children(iter_group_source) == 1: #this was the only child
 			model.remove(iter_group_source)
 		#delete the group if it is empty (need to look for offline users too)
 		group_empty = True
-		for jid in self.contacts[account]:
-			if grp_source in self.contacts[account][jid][0].groups:
+		for jid in gajim.contacts[account]:
+			if grp_source in gajim.contacts[account][jid][0].groups:
 				group_empty = False
 				break
 		if group_empty:
-			del self.groups[account][grp_source]
+			del gajim.groups[account][grp_source]
 		if not grp_dest in u.groups:
 			u.groups.append(grp_dest)
 			self.add_contact_to_roster(data, account)
@@ -1947,20 +1947,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.window.resize(gajim.config.get('width'),
 				gajim.config.get('height'))
 
-		self.groups = {}
-		# contacts[account][jid] is a list of all Contact instances:
-		# one per resource
-		self.contacts = {}
-		self.newly_added = {}
-		self.to_be_removed = {}
 		self.popups_notification_height = 0
 		self.popup_notification_windows = []
 		self.gpg_passphrase = {}
-		for a in gajim.connections:
-			self.contacts[a] = {}
-			self.groups[a] = {}
-			self.newly_added[a] = []
-			self.to_be_removed[a] = []
 		#(icon, name, type, jid, account, editable, secondary_pixbuf)
 		model = gtk.TreeStore(gtk.Image, str, str, str, str, bool, gtk.gdk.Pixbuf)
 		model.set_sort_func(1, self.compareIters)

@@ -140,7 +140,7 @@ class HistoryWindow:
 			tag_msg = 'status'
 		elif type == 'recv':
 			try:
-				name = self.plugin.roster.contacts[self.account][self.jid][0].name
+				name = gajim.contacts[self.account][self.jid][0].name
 			except:
 				name = None
 			if not name:
@@ -148,7 +148,7 @@ class HistoryWindow:
 			msg = ':'.join(data[0:])
 			tag_name = 'incoming'
 		elif type == 'sent':
-			name = self.plugin.nicks[self.account]
+			name = gajim.nicks[self.account]
 			msg = ':'.join(data[0:])
 			tag_name = 'outgoing'
 		else:
@@ -173,8 +173,8 @@ class HistoryWindow:
 		self.nb_line = gajim.logger.get_nb_line(jid)
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
-		if account and self.plugin.roster.contacts[account].has_key(jid):
-			list_users = self.plugin.roster.contacts[account][self.jid]
+		if account and gajim.contacts[account].has_key(jid):
+			list_users = gajim.contacts[account][self.jid]
 			user = list_users[0]
 			title = 'Conversation History with ' + user.name
 		else:

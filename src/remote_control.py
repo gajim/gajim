@@ -73,7 +73,6 @@ class SignalObject(DbusPrototype):
 	def __init__(self, service, plugin):
 		self.plugin = plugin
 		self.first_show = True
-		self.contacts = self.plugin.roster.contacts
 		self.vcard_account = None
 		
 		# register our dbus API
@@ -121,8 +120,8 @@ class SignalObject(DbusPrototype):
 		if account:
 			self.plugin.connections[account].send_message(jid, message, keyID)
 		else:
-			for account in self.contacts.keys():
-				if self.contacts[account].has_key(jid):
+			for account in gajim.contacts.keys():
+				if gajim.contacts[account].has_key(jid):
 					gajim.connections[account].send_message(jid, 
 						message, keyID)
 					return True
@@ -138,14 +137,14 @@ class SignalObject(DbusPrototype):
 		if account:
 			accounts = [account]
 		else:
-			accounts = self.contacts.keys()
+			accounts = gajim.connections.keys()
 
 		for account in accounts:
 			if self.plugin.windows[account]['chats'].has_key(jid):
 				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 				break
-			elif self.contacts[account].has_key(jid):
-				self.plugin.roster.new_chat(self.contacts[account][jid][0], 
+			elif gajim.contacts[account].has_key(jid):
+				self.plugin.roster.new_chat(gajim.contacts[account][jid][0],
 					account)
 				jid_data = self.plugin.windows[account]['chats'][jid]
 				jid_data.set_active_tab(jid)
@@ -170,7 +169,7 @@ class SignalObject(DbusPrototype):
 				status, message)
 		else:
 			# account not specified, so change the status of all accounts
-			for acc in self.contacts.keys():
+			for acc in gajim.contacts.keys():
 				gobject.idle_add(self.plugin.roster.send_status, acc, 
 					status, message)
 		return None
@@ -190,7 +189,7 @@ class SignalObject(DbusPrototype):
 				jid_tab = acc['chats'][jid]
 			else:
 				self.plugin.roster.new_chat(
-					self.contacts[account][jid][0], account)
+					gajim.contacts[account][jid][0], account)
 				jid_tab = acc['chats'][jid]
 			if jid_tab:
 				jid_tab.set_active_tab(jid)
@@ -210,11 +209,11 @@ class SignalObject(DbusPrototype):
 			# FIXME: raise exception for missing argument (0.3+)
 			return None
 
-		accounts = self.contacts.keys()
+		accounts = gajim.contacts.keys()
 		iq = None
 		
 		for account in accounts:
-			if self.contacts[account].has_key(jid):
+			if gajim.contacts[account].has_key(jid):
 				self.vcard_account =  account
 				gajim.connections[account].register_handler('VCARD', 
 					self._receive_vcard)
@@ -224,8 +223,8 @@ class SignalObject(DbusPrototype):
 
 	def list_accounts(self, *args):
 		''' list register accounts '''
-		if self.contacts:
-			result = self.contacts.keys()
+		if gajim.contacts:
+			result = gajim.contacts.keys()
 			if result and len(result) > 0:
 				return result
 		return None
@@ -236,13 +235,13 @@ class SignalObject(DbusPrototype):
 		then return the contacts for the specified account '''
 		[for_account] = self._get_real_arguments(args, 1)
 		result = []
-		if not self.contacts or len(self.contacts) == 0:
+		if not gajim.contacts or len(gajim.contacts) == 0:
 			return None
 		if for_account:
-			if self.contacts.has_key(for_account):
-				for jid in self.contacts[for_account]:
+			if gajim.contacts.has_key(for_account):
+				for jid in gajim.contacts[for_account]:
 					item = self._serialized_contacts(
-						self.contacts[for_account][jid])
+						gajim.contacts[for_account][jid])
 					if item:
 						result.append(item)
 			else:
@@ -250,9 +249,9 @@ class SignalObject(DbusPrototype):
 				# FIXME: there can be a return status for this [0.3+]
 				return None
 		else:
-			for account in self.contacts:
-				for jid in self.contacts[account]:
-					item = self._serialized_contacts(self.contacts[account][jid])
+			for account in gajim.contacts:
+				for jid in gajim.contacts[account]:
+					item = self._serialized_contacts(gajim.contacts[account][jid])
 					if item:
 						result.append(item)
 		# dbus 0.40 does not support return result as empty list

@@ -691,8 +691,8 @@ class Chat:
 				self.on_join_group_chat_menuitem_activate, text)
 				
 			allow_add = False
-			if self.plugin.roster.contacts[self.account].has_key(text):
-				c = self.plugin.roster.contacts[self.account][text][0]
+			if gajim.contacts[self.account].has_key(text):
+				c = gajim.contacts[self.account][text][0]
 				if _('not in the roster') in c.groups:
 					allow_add = True
 			else: # he's not at all in the account contacts

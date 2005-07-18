@@ -275,8 +275,8 @@ class VcardWindow:
 		self.os_info = {0: {'resource': self.user.resource, 'client': '',
 			'os': ''}}
 		i = 1
-		if self.plugin.roster.contacts[self.account].has_key(self.user.jid):
-			for u in self.plugin.roster.contacts[self.account][self.user.jid]:
+		if gajim.contacts[self.account].has_key(self.user.jid):
+			for u in gajim.contacts[self.account][self.user.jid]:
 				if u.resource != self.user.resource:
 					resources += '\n' + u.resource + ' (' + str(u.priority) + ')'
 					if not u.status:
@@ -365,7 +365,7 @@ class VcardWindow:
 			nick = vcard['NICKNAME']
 		if nick == '':
 			nick = gajim.config.get_per('accounts', self.account, 'name')
-		self.plugin.nicks[self.account] = nick
+		gajim.nicks[self.account] = nick
 		gajim.connections[self.account].send_vcard(vcard)
 
 	def on_retrieve_button_clicked(self, widget):

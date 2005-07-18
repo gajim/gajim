@@ -154,8 +154,8 @@ class TabbedChatWindow(chat.Chat):
 
 	def set_state_image(self, jid):
 		prio = 0
-		if self.plugin.roster.contacts[self.account].has_key(jid):
-			list_users = self.plugin.roster.contacts[self.account][jid]
+		if gajim.contacts[self.account].has_key(jid):
+			list_users = gajim.contacts[self.account][jid]
 		else:
 			list_users = [self.users[jid]]
 		user = list_users[0]
@@ -270,7 +270,7 @@ class TabbedChatWindow(chat.Chat):
 		self.restore_conversation(user.jid)
 
 		#print queued messages
-		if self.plugin.queues[self.account].has_key(user.jid):
+		if gajim.awaiting_messages[self.account].has_key(user.jid):
 			self.read_queue(user.jid)
 
 		gajim.connections[self.account].request_vcard(user.jid)
@@ -362,21 +362,21 @@ class TabbedChatWindow(chat.Chat):
 
 	def read_queue(self, jid):
 		"""read queue and print messages containted in it"""
-		l = self.plugin.queues[self.account][jid]
+		l = gajim.awaiting_messages[self.account][jid]
 		user = self.users[jid]
 		for event in l:
 			self.print_conversation(event[0], jid, tim = event[1],
 				encrypted = event[2])
 			self.plugin.roster.nb_unread -= 1
 		self.plugin.roster.show_title()
-		del self.plugin.queues[self.account][jid]
+		del gajim.awaiting_messages[self.account][jid]
 		self.plugin.roster.draw_contact(jid, self.account)
 		if self.plugin.systray_enabled:
 			self.plugin.systray.remove_jid(jid, self.account)
 		showOffline = gajim.config.get('showoffline')
 		if (user.show == 'offline' or user.show == 'error') and \
 			not showOffline:
-			if len(self.plugin.roster.contacts[self.account][jid]) == 1:
+			if len(gajim.contacts[self.account][jid]) == 1:
 				self.plugin.roster.really_remove_user(user, self.account)
 
 	def print_conversation(self, text, jid, contact = '', tim = None,
@@ -404,7 +404,7 @@ class TabbedChatWindow(chat.Chat):
 			self.xmls[jid].get_widget('gpg_togglebutton').set_active(encrypted)
 			if contact:
 				kind = 'outgoing'
-				name = self.plugin.nicks[self.account] 
+				name = gajim.nicks[self.account] 
 			else:
 				kind = 'incoming'
 				name = user.name
@@ -431,8 +431,8 @@ class TabbedChatWindow(chat.Chat):
 		count		= gajim.logger.get_nb_line(jid)
 
 
-		if self.plugin.queues[self.account].has_key(jid):
-			pos = len(self.plugin.queues[self.account][jid])
+		if gajim.awaiting_messages[self.account].has_key(jid):
+			pos = len(gajim.awaiting_messages[self.account][jid])
 		else:
 			pos = 0
 
@@ -461,7 +461,7 @@ class TabbedChatWindow(chat.Chat):
 		for msg in lines:
 			if msg[1] == 'sent':
 				kind = 'outgoing'
-				name = self.plugin.nicks[self.account]
+				name = gajim.nicks[self.account]
 			elif msg[1] == 'recv':
 				kind = 'incoming'
 				name = self.users[jid].name

@@ -491,7 +491,7 @@ class PreferencesWindow:
 			#open new tabbed chat windows
 			for jid in jids:
 				if kind == 'chats':
-					user = self.plugin.roster.contacts[acct][jid][0]
+					user = gajim.contacts[acct][jid][0]
 					self.plugin.roster.new_chat(user, acct)
 				if kind == 'gc':
 					self.plugin.roster.new_room(jid, saved_var[jid]['nick'], acct)
@@ -524,7 +524,7 @@ class PreferencesWindow:
 			#open new tabbed chat windows
 			for jid in jids:
 				if kind == 'chats':
-					user = self.plugin.roster.contacts[acct][jid][0]
+					user = gajim.contacts[acct][jid][0]
 					self.plugin.roster.new_chat(user, acct)
 				if kind == 'gc':
 					self.plugin.roster.new_room(jid, saved_var[jid]['nick'], acct)
@@ -1165,20 +1165,16 @@ _('To change the account name, you must be disconnected.')).get_response()
 			if name != self.account:
 				#update variables
 				self.plugin.windows[name] = self.plugin.windows[self.account]
-				self.plugin.queues[name] = self.plugin.queues[self.account]
-				self.plugin.nicks[name] = self.plugin.nicks[self.account]
-				self.plugin.allow_notifications[name] = \
-					self.plugin.allow_notifications[self.account]
-				self.plugin.roster.groups[name] = \
-					self.plugin.roster.groups[self.account]
-				self.plugin.roster.contacts[name] = \
-					self.plugin.roster.contacts[self.account]
-				self.plugin.roster.newly_added[name] = \
-					self.plugin.roster.newly_added[self.account]
-				self.plugin.roster.to_be_removed[name] = \
-					self.plugin.roster.to_be_removed[self.account]
-				self.plugin.sleeper_state[name] = \
-					self.plugin.sleeper_state[self.account]
+				gajim.awaiting_messages[name] = \
+					gajim.awaiting_messages[self.account]
+				gajim.nicks[name] = gajim.nicks[self.account]
+				gajim.allow_notifications[name] = \
+					gajim.allow_notifications[self.account]
+				gajim.groups[name] = gajim.groups[self.account]
+				gajim.contacts[name] = gajim.contacts[self.account]
+				gajim.newly_added[name] = gajim.newly_added[self.account]
+				gajim.to_be_removed[name] = gajim.to_be_removed[self.account]
+				gajim.sleeper_state[name] = gajim.sleeper_state[self.account]
 				gajim.encrypted_chats[name] = gajim.encrypted_chats[self.account]
 				gajim.last_message_time[name] = \
 					gajim.last_message_time[self.account]
@@ -1195,12 +1191,14 @@ _('To change the account name, you must be disconnected.')).get_response()
 							list[0] = name
 
 				del self.plugin.windows[self.account]
-				del self.plugin.queues[self.account]
-				del self.plugin.nicks[self.account]
-				del self.plugin.allow_notifications[self.account]
-				del self.plugin.roster.groups[self.account]
-				del self.plugin.roster.contacts[self.account]
-				del self.plugin.sleeper_state[self.account]
+				del gajim.awaiting_messages[self.account]
+				del gajim.nicks[self.account]
+				del gajim.allow_notifications[self.account]
+				del gajim.groups[self.account]
+				del gajim.contacts[self.account]
+				del gajim.newly_added[self.account]
+				del gajim.to_be_removed[self.account]
+				del gajim.sleeper_state[self.account]
 				del gajim.encrypted_chats[self.account]
 				del gajim.last_message_time[self.account]
 				gajim.connections[self.account].name = name
@@ -1243,15 +1241,15 @@ _('To change the account name, you must be disconnected.')).get_response()
 		#update variables
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, \
 			'gc_config': {}}
-		self.plugin.queues[name] = {}
+		gajim.awaiting_messages[name] = {}
 		gajim.connections[name].connected = 0
-		self.plugin.roster.groups[name] = {}
-		self.plugin.roster.contacts[name] = {}
-		self.plugin.roster.newly_added[name] = []
-		self.plugin.roster.to_be_removed[name] = []
-		self.plugin.nicks[name] = config['name']
-		self.plugin.allow_notifications[name] = False
-		self.plugin.sleeper_state[name] = 0
+		gajim.groups[name] = {}
+		gajim.contacts[name] = {}
+		gajim.newly_added[name] = []
+		gajim.to_be_removed[name] = []
+		gajim.nicks[name] = config['name']
+		gajim.allow_notifications[name] = False
+		gajim.sleeper_state[name] = 0
 		gajim.encrypted_chats[name] = []
 		gajim.last_message_time[name] = {}
 		#refresh accounts window
@@ -1272,7 +1270,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 		new_password = dialog.run()
 		if new_password != -1:
 			gajim.connections[self.account].change_password(new_password, \
-				self.plugin.nicks[self.account])
+				gajim.nicks[self.account])
 			if self.xml.get_widget('save_password_checkbutton').get_active():
 				self.xml.get_widget('password_entry').set_text(new_password)
 
@@ -1669,7 +1667,7 @@ class ServiceRegistrationWindow:
 			user1 = Contact(jid = self.service, name = self.service,
 			groups = [_('Transports')], show = 'offline', status = 'offline',
 			sub = 'from')
-			self.plugin.roster.contacts[self.account][self.service] = [user1]
+			gajim.contacts[self.account][self.service] = [user1]
 			self.plugin.roster.add_contact_to_roster(self.service, self.account)
 		gajim.connections[self.account].register_agent(self.service, self.infos)
 		self.window.destroy()
@@ -2135,7 +2133,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		jid = model.get_value(iter, 1)
 		node = model.get_value(iter, 2)
 		registered_transports = []
-		contacts = self.plugin.roster.contacts[self.account]
+		contacts = gajim.contacts[self.account]
 		for j in contacts:
 			if _('Transports') in contacts[j][0].groups:
 				registered_transports.append(j)
@@ -2334,13 +2332,16 @@ class RemoveAccountWindow:
 		gajim.config.del_per('accounts', self.account)
 		self.plugin.save_config()
 		del self.plugin.windows[self.account]
-		del self.plugin.queues[self.account]
-		del self.plugin.nicks[self.account]
-		del self.plugin.allow_notifications[self.account]
-		del self.plugin.roster.groups[self.account]
-		del self.plugin.roster.contacts[self.account]
-		del self.plugin.roster.to_be_removed[self.account]
-		del self.plugin.roster.newly_added[self.account]
+		del gajim.awaiting_messages[self.account]
+		del gajim.nicks[self.account]
+		del gajim.allow_notifications[self.account]
+		del gajim.groups[self.account]
+		del gajim.contacts[self.account]
+		del gajim.to_be_removed[self.account]
+		del gajim.newly_added[self.account]
+		del gajim.sleeper_state[self.account]
+		del gajim.encrypted_chats[self.account]
+		del gajim.last_message_time[self.account]
 		self.plugin.roster.draw_roster()
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].init_accounts()

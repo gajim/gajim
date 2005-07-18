@@ -100,7 +100,7 @@ class EditGroupsDialog:
 	def init_list(self):
 		store = gtk.ListStore(str, bool)
 		self.list.set_model(store)
-		for g in self.plugin.roster.groups[self.account].keys():
+		for g in gajim.groups[self.account].keys():
 			if g in [_('Transports'), _('not in the roster')]:
 				continue
 			iter = store.append()
@@ -268,8 +268,8 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		liststore.append(['Jabber', ''])
 		self.agents = ['Jabber']
 		jid_agents = []
-		for j in self.plugin.roster.contacts[account]:
-			user = self.plugin.roster.contacts[account][j][0]
+		for j in gajim.contacts[account]:
+			user = gajim.contacts[account][j][0]
 			if _('Transports') in user.groups and user.show != 'offline' and \
 					user.show != 'error':
 				jid_agents.append(j)
@@ -305,7 +305,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
-		for g in self.plugin.roster.groups[account].keys():
+		for g in gajim.groups[account].keys():
 			if g != _('not in the roster') and g != _('Transports'):
 				self.group_comboboxentry.append_text(g)
 
@@ -698,7 +698,7 @@ class SubscriptionRequestWindow:
 		'''accept the request'''
 		gajim.connections[self.account].send_authorization(self.jid)
 		self.window.destroy()
-		if not self.plugin.roster.contacts[self.account].has_key(self.jid):
+		if not gajim.contacts[self.account].has_key(self.jid):
 			AddNewContactWindow(self.plugin, self.account, self.jid)
 
 	def on_contact_info_button_clicked(self, widget):
@@ -735,8 +735,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		self.window = self.xml.get_widget('join_groupchat_window')
 		self.xml.get_widget('server_entry').set_text(server)
 		self.xml.get_widget('room_entry').set_text(room)
-		self.xml.get_widget('nickname_entry').set_text(
-						self.plugin.nicks[self.account])
+		self.xml.get_widget('nickname_entry').set_text(gajim.nicks[self.account])
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows[account]['join_gc'] = self #now add us to open windows
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
@@ -880,8 +879,8 @@ class PopupNotificationWindow:
 		
 		event_type_label.set_markup('<b>' + event_type + '</b>')
 
-		if self.jid in self.plugin.roster.contacts[account]:
-			txt = self.plugin.roster.contacts[account][self.jid][0].name
+		if self.jid in gajim.contacts[account]:
+			txt = gajim.contacts[account][self.jid][0].name
 		else:
 			txt = self.jid
 
@@ -940,8 +939,8 @@ class PopupNotificationWindow:
 	def on_popup_notification_window_button_press_event(self, widget, event):
 		# use Contact class, new_chat expects it that way
 		# is it in the roster?
-		if self.plugin.roster.contacts[self.account].has_key(self.jid):
-			contact = self.plugin.roster.contacts[self.account][self.jid][0]
+		if gajim.contacts[self.account].has_key(self.jid):
+			contact = gajim.contacts[self.account][self.jid][0]
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', self.account,
@@ -951,7 +950,7 @@ class PopupNotificationWindow:
 			contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
 				groups = [_('not in the roster')], show = 'not in the roster',
 				status = _('not in the roster'), sub = 'none', keyID = keyID)
-			self.plugin.roster.contacts[self.account][self.jid] = [contact]
+			gajim.contacts[self.account][self.jid] = [contact]
 			self.plugin.roster.add_contact_to_roster(contact.self.jid,
 				self.account) # FIXME: contact.self.jid ???
 

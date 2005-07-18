@@ -198,17 +198,17 @@ class Interface:
 
 	def handle_event_con_type(self, account, con_type):
 		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
-		self.con_types[account] = con_type
+		gajim.con_types[account] = con_type
 
 	def allow_notif(self, account):
-		self.allow_notifications[account] = True
+		gajim.allow_notifications[account] = True
 
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
 		if status != 'offline':
 			gobject.timeout_add(30000, self.allow_notif, account)
 		else:
-			self.allow_notifications[account] = False
+			gajim.allow_notifications[account] = False
 		self.roster.on_status_changed(account, status)
 		if self.remote:
 			self.remote.raise_signal('AccountPresence', (status, account))
@@ -235,8 +235,8 @@ class Interface:
 		else:
 			ji = jid
 		#Update user
-		if self.roster.contacts[account].has_key(ji):
-			luser = self.roster.contacts[account][ji]
+		if gajim.contacts[account].has_key(ji):
+			luser = gajim.contacts[account][ji]
 			user1 = None
 			resources = []
 			for u in luser:
@@ -248,7 +248,7 @@ class Interface:
 				if user1.show in statuss:
 					old_show = statuss.index(user1.show)
 			else:
-				user1 = self.roster.contacts[account][ji][0]
+				user1 = gajim.contacts[account][ji][0]
 				if user1.show in statuss:
 					old_show = statuss.index(user1.show)
 				if (resources != [''] and (len(luser) != 1 or 
@@ -263,20 +263,20 @@ class Interface:
 				user1.resource = resource
 			if user1.jid.find('@') > 0 and len(luser) == 1: # It's not an agent
 				if old_show == 0 and new_show > 1:
-					if not user1.jid in self.roster.newly_added[account]:
-						self.roster.newly_added[account].append(user1.jid)
-					if user1.jid in self.roster.to_be_removed[account]:
-						self.roster.to_be_removed[account].remove(user1.jid)
+					if not user1.jid in gajim.newly_added[account]:
+						gajim.newly_added[account].append(user1.jid)
+					if user1.jid in gajim.to_be_removed[account]:
+						gajim.to_be_removed[account].remove(user1.jid)
 					gobject.timeout_add(5000, self.roster.remove_newly_added, \
 						user1.jid, account)
 				if old_show > 1 and new_show == 0 and gajim.connections[account].\
 					connected > 1:
-					if not user1.jid in self.roster.to_be_removed[account]:
-						self.roster.to_be_removed[account].append(user1.jid)
-					if user1.jid in self.roster.newly_added[account]:
-						self.roster.newly_added[account].remove(user1.jid)
+					if not user1.jid in gajim.to_be_removed[account]:
+						gajim.to_be_removed[account].append(user1.jid)
+					if user1.jid in gajim.newly_added[account]:
+						gajim.newly_added[account].remove(user1.jid)
 					self.roster.draw_contact(user1.jid, account)
-					if not self.queues[account].has_key(jid):
+					if not gajim.awaiting_messages[account].has_key(jid):
 						gobject.timeout_add(5000, self.roster.really_remove_user, \
 							user1, account)
 			user1.show = array[1]
@@ -285,10 +285,10 @@ class Interface:
 			user1.keyID = keyID
 		if jid.find('@') <= 0:
 			#It must be an agent
-			if self.roster.contacts[account].has_key(ji):
+			if gajim.contacts[account].has_key(ji):
 				#Update existing iter
 				self.roster.draw_contact(ji, account)
-		elif self.roster.contacts[account].has_key(ji):
+		elif gajim.contacts[account].has_key(ji):
 			#It isn't an agent
 			self.roster.chg_contact_status(user1, array[1], array[2], account)
 			#play sound
@@ -297,9 +297,9 @@ class Interface:
 												'enabled'):
 					self.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
-					not self.queues[account].has_key(jid) and \
+					not gajim.awaiting_messages[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
-					self.allow_notifications[account]:
+					gajim.allow_notifications[account]:
 					show_notification = False
 					# check OUR status and if we allow notifications for that status
 					if gajim.config.get('autopopupaway'): # always notify
@@ -318,7 +318,7 @@ class Interface:
 												'enabled'):
 					self.play_sound('contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
-					not self.queues[account].has_key(jid) and \
+					not gajim.awaiting_messages[account].has_key(jid) and \
 					gajim.config.get('notify_on_signout'):
 					show_notification = False
 					# check OUR status and if we allow notifications for that status
@@ -357,7 +357,7 @@ class Interface:
 				chat_win = self.windows[account]['chats'][fjid]
 				chat_win.print_conversation(array[1], fjid, tim = array[2])
 				return
-			qs = self.queues[account]
+			qs = gajim.awaiting_messages[account]
 			if not qs.has_key(fjid):
 				qs[fjid] = []
 			qs[fjid].append((array[1], array[2], array[3]))
@@ -371,12 +371,12 @@ class Interface:
 
 				
 		if gajim.config.get('ignore_unknown_contacts') and \
-			not self.roster.contacts[account].has_key(jid):
+			not gajim.contacts[account].has_key(jid):
 			return
 
 		first = False
 		if not self.windows[account]['chats'].has_key(jid) and \
-						not self.queues[account].has_key(jid):
+						not gajim.awaiting_messages[account].has_key(jid):
 			first = True
 			if gajim.config.get('notify_on_new_message'):
 				show_notification = False
@@ -456,8 +456,8 @@ class Interface:
 	def handle_event_subscribed(self, account, array):
 		#('SUBSCRIBED', account, (jid, resource))
 		jid = array[0]
-		if self.roster.contacts[account].has_key(jid):
-			u = self.roster.contacts[account][jid][0]
+		if gajim.contacts[account].has_key(jid):
+			u = gajim.contacts[account][jid][0]
 			u.resource = array[1]
 			self.roster.remove_user(u, account)
 			if _('not in the roster') in u.groups:
@@ -475,7 +475,7 @@ class Interface:
 			user1 = Contact(jid = jid, name = jid.split('@')[0],
 				groups = [_('General')], show = 'online', status = 'online',
 				ask = 'to', resource = array[1], keyID = keyID)
-			self.roster.contacts[account][jid] = [user1]
+			gajim.contacts[account][jid] = [user1]
 			self.roster.add_contact_to_roster(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his status.')
@@ -526,15 +526,15 @@ class Interface:
 		if self.windows.has_key('account_modification'):
 			self.windows['account_modification'].account_is_ok(array[0])
 		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
-		self.queues[name] = {}
+		gajim.awaiting_messages[name] = {}
 		gajim.connections[name].connected = 0
-		self.nicks[name] = array[1]['name']
-		self.allow_notifications[name] = False
-		self.roster.groups[name] = {}
-		self.roster.contacts[name] = {}
-		self.roster.newly_added[name] = []
-		self.roster.to_be_removed[name] = []
-		self.sleeper_state[name] = 0
+		gajim.nicks[name] = array[1]['name']
+		gajim.allow_notifications[name] = False
+		gajim.groups[name] = {}
+		gajim.contacts[name] = {}
+		gajim.newly_added[name] = []
+		gajim.to_be_removed[name] = []
+		gajim.sleeper_state[name] = 0
 		gajim.encrypted_chats[name] = []
 		gajim.last_message_time[name] = {}
 		if self.windows.has_key('accounts'):
@@ -551,7 +551,7 @@ class Interface:
 		if array.has_key('NICKNAME'):
 			nick = array['NICKNAME']
 			if nick:
-				self.nicks[account] = nick
+				gajim.nicks[account] = nick
 
 	def handle_event_vcard(self, account, array):
 		win = None
@@ -617,12 +617,12 @@ class Interface:
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
 		jid = array[0]
-		if not self.roster.contacts[account].has_key(jid):
+		if not gajim.contacts[account].has_key(jid):
 			return
-		users = self.roster.contacts[account][jid]
+		users = gajim.contacts[account][jid]
 		if not (array[2] or array[3]):
 			self.roster.remove_user(users[0], account)
-			del self.roster.contacts[account][jid]
+			del gajim.contacts[account][jid]
 			#TODO if it was the only one in its group, remove the group
 			return
 		for user in users:
@@ -655,26 +655,26 @@ class Interface:
 			return True # renew timeout (loop for ever)
 		state = self.sleeper.getState()
 		for account in gajim.connections:
-			if not self.sleeper_state[account]:
+			if not gajim.sleeper_state[account]:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
-				self.sleeper_state[account] > 1:
+				gajim.sleeper_state[account] > 1:
 				#we go online
 				self.roster.send_status(account, 'online', 'Online')
-				self.sleeper_state[account] = 1
+				gajim.sleeper_state[account] = 1
 			elif state == common.sleepy.STATE_AWAY and \
-				self.sleeper_state[account] == 1 and \
+				gajim.sleeper_state[account] == 1 and \
 				gajim.config.get('autoaway'):
 				#we go away
 				self.roster.send_status(account, 'away', 'auto away (idle)')
-				self.sleeper_state[account] = 2
+				gajim.sleeper_state[account] = 2
 			elif state == common.sleepy.STATE_XAWAY and (\
-				self.sleeper_state[account] == 2 or \
-				self.sleeper_state[account] == 1) and \
+				gajim.sleeper_state[account] == 2 or \
+				gajim.sleeper_state[account] == 1) and \
 				gajim.config.get('autoxa'):
 				#we go extended away
 				self.roster.send_status(account, 'xa', 'auto away (idle)')
-				self.sleeper_state[account] = 3
+				gajim.sleeper_state[account] = 3
 		return True # renew timeout (loop for ever)
 
 	def autoconnect(self):
@@ -879,20 +879,16 @@ class Interface:
 			gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 			gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
 		self.windows = {'logs':{}}
-		self.queues = {}
-		self.nicks = {}
-		self.allow_notifications = {}
-		self.con_types = {}
-		self.sleeper_state = {} #whether we pass auto away / xa or not
 		for a in gajim.connections:
 			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
-			self.queues[a] = {}
-			self.nicks[a] = gajim.config.get_per('accounts', a, 'name')
-			self.allow_notifications[a] = False
-			self.sleeper_state[a] = 0	#0:don't use sleeper for this account
-												#1:online and use sleeper
-												#2:autoaway and use sleeper
-												#3:autoxa and use sleeper
+			gajim.contacts[a] = {}
+			gajim.groups[a] = {}
+			gajim.newly_added[a] = []
+			gajim.to_be_removed[a] = []
+			gajim.awaiting_messages[a] = {}
+			gajim.nicks[a] = gajim.config.get_per('accounts', a, 'name')
+			gajim.allow_notifications[a] = False
+			gajim.sleeper_state[a] = 0
 			gajim.encrypted_chats[a] = []
 			gajim.last_message_time[a] = {}
 

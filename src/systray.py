@@ -108,9 +108,9 @@ class Systray:
 		if self.plugin.windows[account]['chats'].has_key(jid):
 			self.plugin.windows[account]['chats'][jid].window.present()
 			self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
-		elif self.plugin.roster.contacts[account].has_key(jid):
+		elif gajim.contacts[account].has_key(jid):
 			self.plugin.roster.new_chat(
-				self.plugin.roster.contacts[account][jid][0], account)
+				gajim.contacts[account][jid][0], account)
 			self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 	
 	def on_new_message_menuitem_activate(self, widget, account):
@@ -204,7 +204,7 @@ class Systray:
 	def make_groups_submenus_for_chat_with(self, account):
 		groups_menu = gtk.Menu()
 		
-		for group in self.plugin.roster.groups[account].keys():
+		for group in gajim.groups[account].keys():
 			if group == _('Transports'):
 				continue
 			# at least one 'not offline' or 'without errors' in this group
@@ -213,7 +213,7 @@ class Systray:
 			groups_menu.append(item)
 			contacts_menu = gtk.Menu()
 			item.set_submenu(contacts_menu)
-			for users in self.plugin.roster.contacts[account].values():
+			for users in gajim.contacts[account].values():
 				user = users[0]
 				if group in user.groups and user.show != 'offline' and \
 						user.show != 'error':
@@ -252,7 +252,7 @@ class Systray:
 					w = acc['chats'][jid]
 				else:
 					self.plugin.roster.new_chat(
-						self.plugin.roster.contacts[account][jid][0], account)
+						gajim.contacts[account][jid][0], account)
 					acc['chats'][jid].set_active_tab(jid)
 					acc['chats'][jid].window.present()
 				if w:
