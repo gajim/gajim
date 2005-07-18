@@ -1263,7 +1263,12 @@ _('To change the account name, it must be disconnected.')).get_response()
 		self.window.destroy()
 
 	def on_change_password_button_clicked(self, widget):
-		dialog = dialogs.ChangePasswordDialog(self.plugin, self.account)
+		try:
+			dialog = dialogs.ChangePasswordDialog(self.plugin, self.account)
+		except RuntimeError: 
+			#if we showed ErrorDialog, there will not be 'self.dialog'
+			return
+			
 		new_password = dialog.run()
 		if new_password != -1:
 			gajim.connections[self.account].change_password(new_password, \

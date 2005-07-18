@@ -500,19 +500,23 @@ class RosterTooltip(gtk.Window):
 		hbox.set_border_width(6)
 		self.add(hbox)
 		self.image = gtk.Image()
-		#self.image.set_alignment(0, 0)
+		self.image.set_alignment(0.5, 0.05)
+		
 		hbox.pack_start(self.image, False, False)
 		contents = gtk.VBox()
 		contents.set_spacing(10)
 		hbox.pack_start(contents)
+		
 		self.account = gtk.Label()
 		self.account.set_line_wrap(True)
 		self.account.set_alignment(0, 0)
 		self.account.set_selectable(False)
 		contents.pack_start(self.account)
+		
 		self.timeout = 0
 		self.prefered_position = [0, 0]
 		self.path = None
+		
 		self.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		self.connect_after('expose_event', self.expose)
 		self.connect('size-request', self.size_request)
@@ -822,10 +826,11 @@ class NewMessageDialog:
 
 class ChangePasswordDialog:
 	def __init__(self, plugin, account):
-		if gajim.connections[account].connected < 2:
+		# 'account' can be None if we are about to create our first one
+		if not account or gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
 _('Without a connection, you can not change your password.')).get_response()
-			return
+			raise RuntimeError, 'You are not connected to the server'
 		self.plugin = plugin
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_password_dialog', APP)
