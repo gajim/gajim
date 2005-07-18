@@ -1286,7 +1286,10 @@ _('To change the account name, you must be disconnected.')).get_response()
 				_('You must create your account before editing your personal information.')).get_response()
 			return
 		jid = self.xml.get_widget('jid_entry').get_text()
-		if gajim.connections[self.account].connected < 2:
+
+		# raise the error if account is newly created (not in gajim.connections)
+		if not gajim.connections.has_key(self.account) or \
+				gajim.connections[self.account].connected < 2:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
 				_('Without a connection, you can not edit your personal information.')).get_response()
 			return

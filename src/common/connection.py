@@ -639,8 +639,8 @@ class Connection:
 						gajim.config.set('usegpg', True)
 					else:
 						gajim.config.set('usegpg', False)
-					self.dispatch('ACC_OK', (self.name, self.new_account_info))
 					gajim.connections[self.name] = self
+					self.dispatch('ACC_OK', (self.name, self.new_account_info))
 					self.new_account_info = None
 					return
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], data[1].asDict()))
