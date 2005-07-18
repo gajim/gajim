@@ -11,6 +11,5 @@ DEB_MAKE_BUILD_TARGET    := all
 DEB_MAKE_INSTALL_TARGET =  install PREFIX=/usr DESTDIR=$(DEB_DESTDIR)
 
 binary-install/gajim::
-	rm $(DEB_DESTDIR)/usr/share/gajim/COPYING
 	rm $(DEB_DESTDIR)/usr/share/gajim/src/common/GnuPGInterface.py
 	dh_python -pgajim /usr/share/gajim/src
