@@ -275,6 +275,28 @@ class RosterWindow:
 	def on_bm_header_changed_state(self, widget, event):
 		widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
 
+	def on_send_single_message_menuitem_activate(self, widget, account):
+		#FIXME: the same name func already exists and expects 4 args
+		pass
+	
+	def on_xml_console_menuitem_activate(self, widget, account):
+		pass
+
+	def on_online_users_menuitem_activate(self, widget, account):
+		pass
+
+	def on_send_server_message_menuitem_activate(self, widget, account):
+		pass
+
+	def on_set_motd_menuitem_activate(self, widget, account):
+		pass
+
+	def on_update_motd_menuitem_activate(self, widget, account):
+		pass
+
+	def on_delete_motd_menuitem_activate(self, widget, account):
+		pass
+
 	def make_menu(self):
 		'''create the main window's menus'''
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
@@ -286,10 +308,10 @@ class RosterWindow:
 			'show_offline_contacts_menuitem')
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
 		
+		
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'advanced_menuitem_menu', APP)
 		advanced_menuitem_menu = xm.get_widget('advanced_menuitem_menu')
-		xm.signal_autoconnect(self)
-		
+
 		if self.add_new_contact_handler_id:
 			add_new_contact_menuitem.handler_disconnect(
 				self.add_new_contact_handler_id)
@@ -363,7 +385,8 @@ class RosterWindow:
 			sub_menu = gtk.Menu()
 			add_new_contact_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
-				if gajim.connections[account].connected <= 1: #if offline or connecting
+				if gajim.connections[account].connected <= 1:
+					#if offline or connecting
 					continue
 				item = gtk.MenuItem(_('to %s account') % account)
 				sub_menu.append(item)
@@ -374,7 +397,8 @@ class RosterWindow:
 			sub_menu = gtk.Menu()
 			service_disco_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
-				if gajim.connections[account].connected <= 1: #if offline or connecting
+				if gajim.connections[account].connected <= 1:
+					#if offline or connecting
 					continue
 				item = gtk.MenuItem(_('using %s account') % account)
 				sub_menu.append(item)
@@ -385,7 +409,8 @@ class RosterWindow:
 			sub_menu = gtk.Menu()
 			new_message_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
-				if gajim.connections[account].connected <= 1: #if offline or connecting
+				if gajim.connections[account].connected <= 1:
+					#if offline or connecting
 					continue
 				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
 					gajim.config.get_per('accounts', account, 'hostname')
@@ -396,13 +421,48 @@ class RosterWindow:
 			sub_menu.show_all()
 			
 			#Advanced Actions
+			sub_menu = gtk.Menu()
 			for account in gajim.connections:
-				if gajim.connections[account].connected <= 1: #if offline or connecting
+				if gajim.connections[account].connected <= 1: 
+					#if offline or connecting
 					continue
+				childs = advanced_menuitem_menu.get_children()
+
+				send_single_message_menuitem = childs[0]
+				send_single_message_menuitem.connect('activate',
+					self.on_send_single_message_menuitem_activate, account)
+
+				xml_console_menuitem = childs[1]
+				xml_console_menuitem.connect('activate',
+					self.on_xml_console_menuitem_activate, account)
+
+				# skip the seperator
+				admin_childs = childs[3].get_submenu().get_children()
+
+				online_users_menuitem = admin_childs[0]
+				online_users_menuitem.connect('activate',
+					self.on_online_users_menuitem_activate, account)
+
+				send_server_message_menuitem = admin_childs[1]
+				send_server_message_menuitem.connect('activate',
+					self.on_send_server_message_menuitem_activate, account)
+
+				# skip the seperator
+				set_motd_menuitem = admin_childs[3]
+				set_motd_menuitem.connect('activate',
+					self.on_set_motd_menuitem_activate, account)
+
+				update_motd_menuitem = admin_childs[4]
+				update_motd_menuitem.connect('activate',
+					self.on_update_motd_menuitem_activate, account)
+				
+				delete_motd_menuitem = admin_childs[5]
+				delete_motd_menuitem.connect('activate',
+					self.on_delete_motd_menuitem_activate, account)
 
 				item = gtk.MenuItem(_('for %s ') % account)
 				item.set_submenu(advanced_menuitem_menu)
-				sub_menu = gtk.Menu()
+				
 				sub_menu.append(item)
 				advanced_menuitem.set_submenu(sub_menu)
 				
