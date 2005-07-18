@@ -500,7 +500,7 @@ class RosterTooltip(gtk.Window):
 		hbox.set_border_width(6)
 		self.add(hbox)
 		self.image = gtk.Image()
-		self.image.set_alignment(0, 0)
+		#self.image.set_alignment(0, 0)
 		hbox.pack_start(self.image, False, False)
 		contents = gtk.VBox()
 		contents.set_spacing(10)
@@ -561,7 +561,7 @@ class RosterTooltip(gtk.Window):
 	def hide_tooltip(self):
 		if(self.timeout > 0):
 			gobject.source_remove(self.timeout)
-			self.timeout=0
+			self.timeout = 0
 		self.hide()
 		self.path = None
 
@@ -617,7 +617,7 @@ class RosterTooltip(gtk.Window):
 				if resource_str != '':
 					multiple_resource = True
 				resource_str += '\n\t' +  contact.resource + \
-					'(' + str(contact.priority) + ')'
+					' (' + str(contact.priority) + ')'
 			if contact.show:
 				if status_str != '':
 					multiple_status = True
@@ -637,7 +637,7 @@ class RosterTooltip(gtk.Window):
 			info += '\n<span weight="bold">' + _('Status: ') + '</span>'
 			if not multiple_status:
 				# show the resource on the same line
-				info += status_str[2:] 
+				info += status_str[2:] # remove \n\t
 			else:
 				info += status_str
 		
