@@ -824,7 +824,7 @@ class Interface:
 		parser.write()
 
 	def enable_dbus(self):
-		if remote_control not in globals():
+		if 'remote_control' not in globals():
 			import remote_control
 		self.remote = remote_control.Remote(self)
 
