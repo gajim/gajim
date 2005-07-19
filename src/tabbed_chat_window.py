@@ -298,7 +298,7 @@ class TabbedChatWindow(chat.Chat):
 		self.childs[contact.jid].show_all()
 
 		# chatstates
-		self.kdb_activity_in_last_5_secs = False
+		self.kbd_activity_in_last_5_secs = False
 		self.mouse_over_in_last_5_secs = False
 		
 		self.chatstates[contact.jid] = None # our current chatstate with contact
@@ -312,36 +312,32 @@ class TabbedChatWindow(chat.Chat):
 		if yes we go active if not already
 		if no we go paused if not already '''
 		current_state = self.chatstates[contact.jid]
-		if self.mouse_over_in_last_5_secs or self.kdb_activity_in_last_5_secs:
-			if current_state != 'active': # if we were not active
-				self.send_chatstate('active') # send we became active
-				print 'active'
+		if self.mouse_over_in_last_5_secs:
+			self.send_chatstate('active')
+		if self.kbd_activity_in_last_5_secs:
+			self.send_chatstate('composing')
 		else:
-			if current_state != 'paused': # if we were not paused
-				self.send_chatstate('paused') # send we became paused
-				self.mouse_over_in_last_5_secs = False
-				self.kdb_activity_in_last_5_secs = False
-				print 'paused'
+			self.send_chatstate('paused')
+			self.mouse_over_in_last_5_secs = False
+			self.kbd_activity_in_last_5_secs = False
 
 	def check_for_possible_inactive_chatstate(self, contact):
 		''' did we move mouse of that window or kbd activity in that window
 		if yes we go active if not already
 		if no we go inactive if not already '''
 		current_state = self.chatstates[contact.jid]
-		if self.mouse_over_in_last_5_secs or self.kdb_activity_in_last_5_secs:
-			if current_state != 'active': # if we were not active
-				self.send_chatstate('active') # send we became active
-				print 'active'
+		if self.mouse_over_in_last_5_secs:
+			self.send_chatstate('active')
+		elif self.kbd_activity_in_last_5_secs:
+			self.send_chatstate('composing')
 		else:
-			if current_state != 'inactive': # if we were not inactive
-				self.send_chatstate('inactive') # send we became inactive
-				print 'INactive'
+			self.send_chatstate('inactive')
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation"""
-		self.kdb_activity_in_last_5_secs = True
+		self.kbd_activity_in_last_5_secs = True
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		message_buffer = widget.get_buffer()
@@ -396,7 +392,8 @@ class TabbedChatWindow(chat.Chat):
 			self.send_chatstate('composing')
 
 	def send_chatstate(self, state):
-		''' sends our chatstate to the current tab '''
+		''' sends our chatstate to the current tab only if new chatstate
+		is different for the previous one'''
 		# please read jep-85 to get an idea of this
 		# we keep track of jep85 support by the peer by three extra states:
 		# None, -1 and 'ask'
@@ -463,7 +460,7 @@ class TabbedChatWindow(chat.Chat):
 
 			# if peer supports jep85, send 'active'
 			elif self.chatstates[jid] != -1:
-				#FIXME: only when we open the tab
+				#send active chatstate on every message (as JEP says)
 				gajim.connections[self.account].send_message(jid, message, keyID,
 					chatstate = 'active')
 			else: # just send the message
