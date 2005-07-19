@@ -218,6 +218,7 @@ class Connection:
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
 		encrypted = False
+		chatstate_tag = None
 		xtags = msg.getTags('x')
 		encTag = None
 		decmsg = ''
@@ -225,6 +226,14 @@ class Connection:
 			if xtag.getNamespace() == common.xmpp.NS_ENCRYPTED:
 				encTag = xtag
 				break
+
+		# chatstates - look for chatstate tags in a message
+		children = msg.getChildren()
+		for child in children:
+			if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
+				chatstate_tag = child.getName()
+				break
+			
 		if encTag and USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()
@@ -253,9 +262,9 @@ class Connection:
 			gajim.logger.write('incoming', log_msgtxt, str(msg.getFrom()),
 				tim = tim)
 			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted,
-				mtype, subject))
+				mtype, subject, None))
 		else: # it's type 'chat'
-			if not msg.getTag('body'): #no <body>
+			if not msg.getTag('body') and chatstate_tag is None: #no <body>
 				return
 			log_msgtxt = msgtxt
 			if subject:
@@ -263,7 +272,7 @@ class Connection:
 			gajim.logger.write('incoming', log_msgtxt, str(msg.getFrom()),
 				tim = tim)
 			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted,
-				mtype, subject))
+				mtype, subject, chatstate_tag))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
@@ -859,10 +868,10 @@ class Connection:
 				self.connection.send(p)
 			self.dispatch('STATUS', show)
 
-	def send_message(self, jid, msg, keyID, type = 'chat', subject=''):
+	def send_message(self, jid, msg, keyID, type = 'chat', subject='', chatstate = None):
 		if not self.connection:
 			return
-		if not msg:
+		if not msg and chatstate is None:
 			return
 		msgtxt = msg
 		msgenc = ''
@@ -886,6 +895,12 @@ class Connection:
 					typ = 'normal')
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
+
+		# chatstates - if peer supports jep85, send chatstates
+		# please note that the only valid tag inside a message containing a <body> tag is the active event
+		if chatstate != None:
+			msg_iq.setTag(chatstate, {}, namespace='http://jabber.org/protocol/chatstates')
+		
 		self.to_be_sent.append(msg_iq)
 		gajim.logger.write('outgoing', msg, jid)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
@@ -939,7 +954,7 @@ class Connection:
 			{'agent': agent})
 		return
 
-	def update_user(self, jid, name, groups):
+	def update_contact(self, jid, name, groups):
 		if self.connection:
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
@@ -1150,6 +1165,7 @@ class Connection:
 			typ = ptype, show = show, status = status))
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
+		'''role is for all the life of the room so it's based on nick'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
@@ -1162,6 +1178,7 @@ class Connection:
 		self.to_be_sent.append(iq)
 
 	def gc_set_affiliation(self, room_jid, jid, affiliation, reason = ''):
+		'''affiliation is for all the life of the room so it's based on jid'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\

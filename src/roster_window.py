@@ -309,9 +309,30 @@ class RosterWindow:
 			'show_offline_contacts_menuitem')
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
 		
-		
-		xm = gtk.glade.XML(GTKGUI_GLADE, 'advanced_menuitem_menu', APP)
-		advanced_menuitem_menu = xm.get_widget('advanced_menuitem_menu')
+
+		ui_description = """
+<ui>
+	<menu action='advanced_menuitem_menu'>
+		<menu action='A'>
+			%(menu)s
+		</menu>
+		<menu action='B'>
+			%(menu)s
+		</menu>
+		<menu action='C'>
+			%(menu)s
+		</menu>
+		<menuitem action="Quit" />
+	</menu>
+</ui>"""
+
+		menu_description = """
+			<menuitem action='Send Single Message' />
+			<menuitem action='XML Console' />
+			<separator />
+			<menuitem action='Administrator' />
+			<menuitem action='Test5' />
+"""
 
 		if self.add_new_contact_handler_id:
 			add_new_contact_menuitem.handler_disconnect(

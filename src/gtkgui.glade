@@ -9932,7 +9932,6 @@ Custom</property>
   <signal name="event" handler="on_tabbed_chat_window_event"/>
   <signal name="button_press_event" handler="on_tabbed_chat_window_button_press_event" last_modification_time="Fri, 24 Jun 2005 23:54:20 GMT"/>
   <signal name="focus_out_event" handler="on_tabbed_chat_window_focus_out_event" last_modification_time="Mon, 18 Jul 2005 22:07:30 GMT"/>
-  <signal name="window_state_event" handler="on_tabbed_chat_window_state_changed" last_modification_time="Mon, 18 Jul 2005 22:21:37 GMT"/>
 
   <child>
     <widget class="GtkNotebook" id="chat_notebook">

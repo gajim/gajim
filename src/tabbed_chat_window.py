@@ -44,6 +44,7 @@ class TabbedChatWindow(chat.Chat):
 	def __init__(self, user, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
 		self.users = {}
+		self.chatstates = {}
 		self.new_user(user)
 		self.show_title()
 		self.xml.signal_connect('on_tabbed_chat_window_destroy',
@@ -52,6 +53,8 @@ class TabbedChatWindow(chat.Chat):
 			self.on_tabbed_chat_window_delete_event)
 		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event',
 			self.on_tabbed_chat_window_focus_in_event)
+		self.xml.signal_connect('on_tabbed_chat_window_focus_out_event',
+			self.on_tabbed_chat_window_focus_out_event)
 		self.xml.signal_connect('on_tabbed_chat_window_button_press_event',
 			self.on_chat_window_button_press_event)
 		self.xml.signal_connect('on_chat_notebook_key_press_event',
@@ -60,7 +63,7 @@ class TabbedChatWindow(chat.Chat):
 			self.on_chat_notebook_switch_page)
 
 		if gajim.config.get('saveposition'):
-		# get window position and size from config
+			# get window position and size from config
 			self.window.move(gajim.config.get('chat-x-position'),
 					gajim.config.get('chat-y-position'))
 			self.window.resize(gajim.config.get('chat-width'),
@@ -197,7 +200,7 @@ class TabbedChatWindow(chat.Chat):
 					return True #stop the propagation of the event
 
 		if gajim.config.get('saveposition'):
-		# save the window size and position
+			# save the window size and position
 			x, y = self.window.get_position()
 			gajim.config.set('chat-x-position', x)
 			gajim.config.set('chat-y-position', y)
@@ -207,10 +210,28 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_tabbed_chat_window_destroy(self, widget):
 		#clean self.plugin.windows[self.account]['chats']
+		# on window destroy, send 'gone' chatstate
+		self.send_chatstate('gone')
 		chat.Chat.on_window_destroy(self, widget, 'chats')
 
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
+		# on focus in, send 'active' chatstate
+		self.send_chatstate('active')
+
+	def on_tabbed_chat_window_focus_out_event(self, widget, event):
+		gobject.timeout_add(500, self.check_window_state, widget)
+
+	def check_window_state(self, widget):
+		''' we want: "minimized" or "focus-out"
+      not "focus-out, minimized" or "focus-out" '''
+		new_state = widget.window.get_state()
+		if new_state & gtk.gdk.WINDOW_STATE_ICONIFIED:
+			print 'iconify'
+			self.send_chatstate('inactive')
+		else:
+			print 'just focus-out'
+			self.send_chatstate('paused')
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
@@ -237,6 +258,9 @@ class TabbedChatWindow(chat.Chat):
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 
+		# chatstates - window is destroyed, send gone
+		self.send_chatstate('gone')
+		
 		chat.Chat.remove_tab(self, jid, 'chats')
 		if len(self.xmls) > 0:
 			del self.users[jid]
@@ -274,6 +298,9 @@ class TabbedChatWindow(chat.Chat):
 
 		gajim.connections[self.account].request_vcard(user.jid)
 		self.childs[user.jid].show_all()
+
+		# chatstates
+		self.chatstates[user.jid] = None
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
@@ -326,7 +353,45 @@ class TabbedChatWindow(chat.Chat):
 			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+Down
 				self.sent_messages_scroll(jid, 'down', widget.get_buffer())
 				return True # override the default gtk+ thing for ctrl+down
+			
+		else:
+			# chatstates
+			# if composing, send chatstate
+			self.send_chatstate('composing')
 
+	def send_chatstate(self, state):
+		# please read jep-85 to get an idea of this
+		# we keep track of jep85 support by the peer by three extra states: None, -1 and 'ask'
+		# None if no info about peer
+		# -1 if peer does not support jep85
+		# 'ask' if we sent 'active' chatstate and are waiting for reply
+
+		jid = self.get_active_jid()
+
+		# print jid, self.chatstates[jid], state
+		if self.chatstates[jid] == -1:
+			return
+
+		# if current state equals last state, return
+		if self.chatstates[jid] == state:
+			return
+
+		if self.chatstates[jid] is None:
+			# state = 'ask'
+			# send and return
+			return
+
+		if self.chatstates[jid] == 'ask':
+			return
+		
+		# if last state was composing, don't send active
+		if self.chatstates[jid] == 'composing' and state == 'active':
+			return
+
+		self.chatstates[jid] = state
+		gajim.connections[self.account].send_message(jid, None, None, chatstate = state)
+		
+		
 	def send_message(self, message):
 		"""Send the message given to the active tab"""
 		if not message:
@@ -350,7 +415,18 @@ class TabbedChatWindow(chat.Chat):
 			if self.xmls[jid].get_widget('gpg_togglebutton').get_active():
 				keyID = self.users[jid].keyID
 				encrypted = True
-			gajim.connections[self.account].send_message(jid, message, keyID)
+
+			# chatstates - if no info about peer, discover
+			if self.chatstates[jid] is None:
+				
+				gajim.connections[self.account].send_message(jid, message, keyID, chatstate = 'active')
+				self.chatstates[jid] = 'ask'
+			# if peer supports jep85, send 'active'
+			elif self.chatstates[jid] != -1:
+				gajim.connections[self.account].send_message(jid, message, keyID, chatstate = 'active')
+			else:
+				gajim.connections[self.account].send_message(jid, message, keyID)
+				print self.chatstates[jid]
 			message_buffer.set_text('', -1)
 			self.print_conversation(message, jid, jid, encrypted = encrypted)
 
