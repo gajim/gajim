@@ -695,8 +695,8 @@ class RosterWindow:
 		model = self.tree.get_model()
 		
 		#Remove resource indicator (Name (2))
-		jid = model.get_value(iter, 3))
-		account = model.get_value(iter, 4))
+		jid = model.get_value(iter, 3)
+		account = model.get_value(iter, 4)
 		users = gajim.contacts[account][jid]
 		name = users[0].name
 		model.set_value(iter, 1, name)
