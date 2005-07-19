@@ -23,7 +23,6 @@ import pango
 import gobject
 import os
 import time
-import sre
 
 import common.sleepy
 import tabbed_chat_window
@@ -696,7 +695,10 @@ class RosterWindow:
 		model = self.tree.get_model()
 		
 		#Remove resource indicator (Name (2))
-		name = sre.sub(r' \([0-9]+\)$', '', model.get_value(iter, 1))
+		jid = model.get_value(iter, 3))
+		account = model.get_value(iter, 4))
+		users = gajim.contacts[account][jid]
+		name = users[0].name
 		model.set_value(iter, 1, name)
 
 		model.set_value(iter, 5, True) # set 'editable' to True
