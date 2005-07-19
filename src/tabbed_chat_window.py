@@ -425,6 +425,10 @@ class TabbedChatWindow(chat.Chat):
 		# False if peer does not support jep85
 		# 'ask' if we sent 'active' chatstate and are waiting for reply
 
+		# do nothing if config has typing notifications disabled
+		if not gajim.config.get('send_chat_state_notifications'):
+			return
+
 		jid = self.get_active_jid()
 
 		if self.chatstates[jid] == False:
