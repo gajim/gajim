@@ -63,13 +63,11 @@ def get_nick_from_jid(jid):
 
 def get_nick_from_fjid(jid):
 	# fake jid is the jid for a contact in a room
-	# gaim@conference.jabber.org/nick
-	pos = jid.rfind('/') + 1 # 1 means after /
-	return jid[pos:]
+	# gaim@conference.jabber.org/nick/nick-continued
+	return jid.split('/', 1)[1]
 
 def get_resource_from_jid(jid):
-	pos = jid.rfind('/') + 1 # 1 means after /
-	return jid[pos:]
+	return jid.split('/', 1)[1] # abc@doremi.org/res/res-continued
 
 def to_one_line(msg):
 	msg = msg.replace('\\', '\\\\')
