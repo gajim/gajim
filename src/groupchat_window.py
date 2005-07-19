@@ -317,7 +317,7 @@ class GroupchatWindow(chat.Chat):
 					c = self.contacts[room_jid][nick]
 					if c.show == show and c.status == status and \
 						c.affiliation == affiliation: #no change
-					return
+						return
 					c.show = show
 					c.affiliation = affiliation
 					roster = self.plugin.roster
