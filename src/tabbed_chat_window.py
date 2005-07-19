@@ -209,9 +209,9 @@ class TabbedChatWindow(chat.Chat):
 			gajim.config.set('chat-height', height)
 
 	def on_tabbed_chat_window_destroy(self, widget):
-		#clean self.plugin.windows[self.account]['chats']
 		# on window destroy, send 'gone' chatstate
-		self.send_chatstate('gone')
+		self.send_chatstate('gone') # FIXME: loop to each tab and send that
+		#clean self.plugin.windows[self.account]['chats']
 		chat.Chat.on_window_destroy(self, widget, 'chats')
 
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
