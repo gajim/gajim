@@ -23,8 +23,9 @@ import pango
 import gobject
 import os
 import time
-import common.sleepy
+import sre
 
+import common.sleepy
 import tabbed_chat_window
 import groupchat_window
 import history_window
@@ -692,7 +693,12 @@ class RosterWindow:
 
 	def on_rename(self, widget, iter, path):
 		model = self.tree.get_model()
-		model.set_value(iter, 5, True)
+		
+		#Remove resource indicator (Name (2))
+		name = sre.sub(r' \([0-9]+\)$', '', model.get_value(iter, 1))
+		model.set_value(iter, 1, name)
+
+		model.set_value(iter, 5, True) # set 'editable' to True
 		self.tree.set_cursor(path, self.tree.get_column(0), True)
 		
 	def on_assign_pgp_key(self, widget, user, account):
@@ -1022,8 +1028,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			type = model.get_value(iter, 2)
 			if type == 'contact' or type == 'group':
 				path = model.get_path(iter)
-				model.set_value(iter, 5, True) # editable -> True
-				self.tree.set_cursor(path, self.tree.get_column(0), True)
+				self.on_rename(widget, iter, path)
+
 		if event.keyval == gtk.keysyms.Delete:
 			treeselection = self.tree.get_selection()
 			model, iter = treeselection.get_selected()
