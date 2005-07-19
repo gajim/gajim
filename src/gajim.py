@@ -247,12 +247,14 @@ class Interface:
 			if user1:
 				if user1.show in statuss:
 					old_show = statuss.index(user1.show)
+				if old_show == new_show and user1.status == array[2]: #no chgmt
+					return
 			else:
 				user1 = gajim.contacts[account][ji][0]
 				if user1.show in statuss:
 					old_show = statuss.index(user1.show)
 				if (resources != [''] and (len(luser) != 1 or 
-					luser[0].show != 'offline')) and not jid.find('@') <= 0:
+					luser[0].show != 'offline')) and jid.find('@') > 0:
 					old_show = 0
 					user1 = Contact(jid = user1.jid, name = user1.name,
 						groups = user1.groups, show = user1.show,
@@ -335,7 +337,7 @@ class Interface:
 				
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
-			#TODO: upgrade the chat instavces (for pm)
+			#TODO: upgrade the chat instances (for pm)
 			fjid = array[0] + '/' + array[3]
 			self.windows[account]['gc'][ji].chg_contact_status(ji, resource,
 				array[1], array[2], array[6], array[7], array[8], array[9],
