@@ -31,7 +31,6 @@ except RuntimeError, msg:
 		print 'Gajim needs Xserver to run. Exiting...'
 		sys.exit()
 import gtk.glade
-import pango
 import gobject
 import os
 import sre
@@ -338,7 +337,6 @@ class Interface:
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence
 			#TODO: upgrade the chat instances (for pm)
-			fjid = array[0] + '/' + array[3]
 			self.windows[account]['gc'][ji].chg_contact_status(ji, resource,
 				array[1], array[2], array[6], array[7], array[8], array[9],
 				array[10], array[11], array[12], account)
@@ -437,9 +435,9 @@ class Interface:
 					gc = gcs[jid]
 					tv = gc.list_treeview[jid]
 					model = tv.get_model()
-					iter = gc.get_contact_iter(jid, nick)
-					if iter:
-						show = model.get_value(iter, 3)
+					i = gc.get_contact_iter(jid, nick)
+					if i:
+						show = model.get_value(i, 3)
 					else:
 						show = 'offline'
 					u = Contact(jid = fjid, name = nick, groups = ['none'],
@@ -504,7 +502,7 @@ class Interface:
 		dialogs.InformationDialog(_('Contact "%s" removed subscription from you') % jid,
 				_('You will always see him as offline.')).get_response()
 		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('Unsubscribed', (account, array))
+			self.remote.raise_signal('Unsubscribed', (account, jid))
 
 	def handle_event_agent_info(self, account, array):
 		#('AGENT_INFO', account, (agent, identities, features, items))
@@ -837,6 +835,7 @@ class Interface:
 			return True # renew timeout (loop for ever)
 		except KeyboardInterrupt:
 			sys.exit()
+		return False
 
 	def save_config(self):
 		parser.write()
@@ -847,14 +846,14 @@ class Interface:
 		if not hasattr(self, 'remote') or not self.remote:
 			try:
 				self.remote = remote_control.Remote(self)
-			except remote_control.DbusNotSupported, e:
+			except remote_control.DbusNotSupported:
 				if not is_initial:
-					dialog = dialogs.ErrorDialog(_("D-Bus is not present on this machine"),_("Please install dbus if you want to use remote control.")).get_response()
+					dialogs.ErrorDialog(_("D-Bus is not present on this machine"),_("Please install dbus if you want to use remote control.")).get_response()
 				self.remote = None
 				return False
-			except remote_control.SessionBusNotPresent, e:
+			except remote_control.SessionBusNotPresent:
 				if not is_initial:
-					dialog = dialogs.ErrorDialog(_("Session bus is not started"),_("Your system is running without session bus daemon. \n See: for instructions how to do it.")).get_response()
+					dialogs.ErrorDialog(_("Session bus is not started"),_("Your system is running without session bus daemon. \n See: for instructions how to do it.")).get_response()
 				self.remote = None
 				return False
 		else:
@@ -941,7 +940,7 @@ class Interface:
 			gajim.config.get('autoxatime') * 60)
 		self.systray_enabled = False
 		try:
-			import egg.trayicon as trayicon # use gnomepythonextras trayicon
+			import egg.trayicon # use gnomepythonextras trayicon
 		except:
 			try:
 				import trayicon # use yann's
