@@ -246,7 +246,7 @@ class TabbedChatWindow(chat.Chat):
 		# send the message
 		self.send_message(message)
 
-		message_buffer.set_text('', -1)
+		message_buffer.set_text('')
 
 	def remove_tab(self, jid):
 		if time.time() - gajim.last_message_time[self.account][jid] < 2:
@@ -341,7 +341,7 @@ class TabbedChatWindow(chat.Chat):
 			# send the message
 			self.send_message(message)
 
-			message_buffer.set_text('', -1)
+			message_buffer.set_text('')
 			return True
 		elif event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
@@ -427,7 +427,7 @@ class TabbedChatWindow(chat.Chat):
 			else:
 				gajim.connections[self.account].send_message(jid, message, keyID)
 				print self.chatstates[jid]
-			message_buffer.set_text('', -1)
+			message_buffer.set_text('')
 			self.print_conversation(message, jid, jid, encrypted = encrypted)
 
 	def on_contact_button_clicked(self, widget):

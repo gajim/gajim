@@ -495,7 +495,7 @@ class GroupchatWindow(chat.Chat):
 				self.last_key_tabs[room_jid] = False
 				return False
 			self.send_gc_message(message)
-			message_buffer.set_text('', -1)
+			message_buffer.set_text('')
 			return True
 		elif event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
@@ -521,7 +521,7 @@ class GroupchatWindow(chat.Chat):
 		# send the message
 		self.send_gc_message(message)
 
-		message_buffer.set_text('', -1)
+		message_buffer.set_text('')
 
 	def send_gc_message(self, message):
 		'''call this function to send our message'''
