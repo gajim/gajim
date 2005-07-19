@@ -377,6 +377,20 @@ class Interface:
 			not gajim.contacts[account].has_key(jid):
 			return
 
+		if self.windows[account]['chats'].has_key(jid):
+			chat_win = self.windows[account]['chats'][jid]
+			# chatstates - display jep85 events in window
+			if chatstate_tag != None:
+				if chat_win.chatstates[jid] == 'ask':
+					chat_win.chatstates[jid] = 'active'
+				chat_win.print_conversation(jid + ' is now ' + chatstate_tag, jid, 'status', tim = array[2])
+			else:
+				# got no valid jep85 answer, peer does not support it
+				chat_win.chatstates[jid] = -1
+
+		if not array[1]: #empty message
+			return
+
 		first = False
 		if not self.windows[account]['chats'].has_key(jid) and \
 						not gajim.awaiting_messages[account].has_key(jid):
@@ -409,18 +423,7 @@ class Interface:
 			self.play_sound('next_message_received')
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('NewMessage', (account, array))
-		if self.windows[account]['chats'].has_key(jid):
-			chat_win = self.windows[account]['chats'][jid]
-			# chatstates - display jep85 events in window
-			if chatstate_tag != None:
-				if chat_win.chatstates[jid] == 'ask':
-					chat_win.chatstates[jid] = 'active'
-				chat_win.print_conversation(jid + ' is now ' + chatstate_tag, jid, 'status', tim = array[2])
-			else:
-				# got no valid jep85 answer, peer does not support it
-				chat_win.chatstates[jid] = -1
-				
-		
+
 	def handle_event_msgerror(self, account, array):
 		#('MSGERROR', account, (jid, error_code, error_msg, msg, time))
 		fjid = array[0]
