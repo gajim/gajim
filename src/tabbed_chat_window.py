@@ -320,6 +320,10 @@ class TabbedChatWindow(chat.Chat):
 		current_state = self.chatstates[contact.jid]
 		if current_state == False: # he doesn't support chatstates
 			return False # stop looping
+		
+		# if we're inactive prevent paused (inactive is stronger)
+		if current_state = 'inactive':
+			return True
 		print 'mouse', self.mouse_over_in_last_5_secs
 		print 'kbd', self.kbd_activity_in_last_5_secs
 		
