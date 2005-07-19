@@ -263,47 +263,85 @@ class TabbedChatWindow(chat.Chat):
 		if len(self.xmls) > 0:
 			del self.users[jid]
 
-	def new_user(self, user):
+	def new_user(self, contact):
 		'''when new tab is created'''
-		self.names[user.jid] = user.name
-		self.xmls[user.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
-		self.childs[user.jid] = self.xmls[user.jid].get_widget('chats_vbox')
-		self.users[user.jid] = user
+		self.names[contact.jid] = contact.name
+		self.xmls[contact.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
+		self.childs[contact.jid] = self.xmls[contact.jid].get_widget('chats_vbox')
+		self.users[contact.jid] = contact
 
-		if user.jid in gajim.encrypted_chats[self.account]:
-			self.xmls[user.jid].get_widget('gpg_togglebutton').set_active(True)
+		if contact.jid in gajim.encrypted_chats[self.account]:
+			self.xmls[contact.jid].get_widget('gpg_togglebutton').set_active(True)
 		
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat_popup_menu', APP)
 		xm.signal_autoconnect(self)
 		self.tabbed_chat_popup_menu = xm.get_widget('tabbed_chat_popup_menu')
 		
-		chat.Chat.new_tab(self, user.jid)
-		self.redraw_tab(user.jid)
-		self.draw_widgets(user)
+		chat.Chat.new_tab(self, contact.jid)
+		self.redraw_tab(contact.jid)
+		self.draw_widgets(contact)
 		
-		uf_show = helpers.get_uf_show(user.show)
-		s = _('%s is %s') % (user.name, uf_show)
-		if user.status:
-			s += ' (' + user.status + ')'
-		self.print_conversation(s, user.jid, 'status')
+		uf_show = helpers.get_uf_show(contact.show)
+		s = _('%s is %s') % (contact.name, uf_show)
+		if contact.status:
+			s += ' (' + contact.status + ')'
+		self.print_conversation(s, contact.jid, 'status')
 
 		#restore previous conversation
-		self.restore_conversation(user.jid)
+		self.restore_conversation(contact.jid)
 
 		#print queued messages
-		if gajim.awaiting_messages[self.account].has_key(user.jid):
-			self.read_queue(user.jid)
+		if gajim.awaiting_messages[self.account].has_key(contact.jid):
+			self.read_queue(contact.jid)
 
-		gajim.connections[self.account].request_vcard(user.jid)
-		self.childs[user.jid].show_all()
+		gajim.connections[self.account].request_vcard(contact.jid)
+		self.childs[contact.jid].show_all()
 
 		# chatstates
-		self.chatstates[user.jid] = None
+		self.kdb_activity_in_last_5_secs = False
+		self.mouse_over_in_last_5_secs = False
+		
+		self.chatstates[contact.jid] = None # our current chatstate with contact
+		gobject.timeout_add(5000, self.check_for_possible_paused_chatstate,
+			contact)
+		gobject.timeout_add(30000, self.check_for_possible_inactive_chatstate,
+			contact)
+		
+	def check_for_possible_paused_chatstate(self, contact):
+		''' did we move mouse of that window or kbd activity in that window
+		if yes we go active if not already
+		if no we go paused if not already '''
+		current_state = self.chatstates[contact.jid]
+		if self.mouse_over_in_last_5_secs or self.kdb_activity_in_last_5_secs:
+			if current_state != 'active': # if we were not active
+				self.send_chatstate('active') # send we became active
+				print 'active'
+		else:
+			if current_state != 'paused': # if we were not paused
+				self.send_chatstate('paused') # send we became paused
+				self.mouse_over_in_last_5_secs = False
+				self.kdb_activity_in_last_5_secs = False
+				print 'paused'
+
+	def check_for_possible_inactive_chatstate(self, contact):
+		''' did we move mouse of that window or kbd activity in that window
+		if yes we go active if not already
+		if no we go inactive if not already '''
+		current_state = self.chatstates[contact.jid]
+		if self.mouse_over_in_last_5_secs or self.kdb_activity_in_last_5_secs:
+			if current_state != 'active': # if we were not active
+				self.send_chatstate('active') # send we became active
+				print 'active'
+		else:
+			if current_state != 'inactive': # if we were not inactive
+				self.send_chatstate('inactive') # send we became inactive
+				print 'INactive'
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation"""
+		self.kdb_activity_in_last_5_secs = True
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		message_buffer = widget.get_buffer()
@@ -389,7 +427,8 @@ class TabbedChatWindow(chat.Chat):
 			return
 
 		self.chatstates[jid] = state
-		gajim.connections[self.account].send_message(jid, None, None, chatstate = state)
+		gajim.connections[self.account].send_message(jid, None, None,
+			chatstate = state)
 		
 		
 	def send_message(self, message):
@@ -418,15 +457,18 @@ class TabbedChatWindow(chat.Chat):
 
 			# chatstates - if no info about peer, discover
 			if self.chatstates[jid] is None:
-				
-				gajim.connections[self.account].send_message(jid, message, keyID, chatstate = 'active')
+				gajim.connections[self.account].send_message(jid, message, keyID,
+					chatstate = 'active')
 				self.chatstates[jid] = 'ask'
+
 			# if peer supports jep85, send 'active'
 			elif self.chatstates[jid] != -1:
-				gajim.connections[self.account].send_message(jid, message, keyID, chatstate = 'active')
-			else:
+				#FIXME: only when we open the tab
+				gajim.connections[self.account].send_message(jid, message, keyID,
+					chatstate = 'active')
+			else: # just send the message
 				gajim.connections[self.account].send_message(jid, message, keyID)
-				print self.chatstates[jid]
+			
 			message_buffer.set_text('')
 			self.print_conversation(message, jid, jid, encrypted = encrypted)
 

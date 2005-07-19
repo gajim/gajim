@@ -524,7 +524,10 @@ class Chat:
 				self.plugin.systray.remove_jid(jid, self.account)
 	
 	def on_conversation_textview_motion_notify_event(self, widget, event):
-		"""change the cursor to a hand when we are over a mail or an url"""
+		'''change the cursor to a hand when we are over a mail or an url'''
+		jid = self.get_active_jid()
+		if self.widget_name == 'tabbed_chat_window':
+			self.mouse_over_in_last_5_secs = True
 		x, y, spam = widget.window.get_pointer()
 		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
 		tags = widget.get_iter_at_location(x, y).get_tags()
