@@ -377,7 +377,10 @@ class PreferencesWindow:
 		# use dbus
 		st = gajim.config.get('use_dbus')
 		btn = self.xml.get_widget('enable_dbus_checkbutton')
-		btn.set_active(st)
+		if st and self.plugin.remote:
+			btn.set_active(True)
+		else:
+			btn.set_active(False)
 		
 		self.xml.signal_autoconnect(self)
 		
@@ -801,7 +804,10 @@ class PreferencesWindow:
 		self.plugin.save_config()
 		if isactive:
 			if self.plugin.remote is None:
-				self.plugin.enable_dbus()
+				if not self.plugin.enable_dbus():
+					btn = self.xml.get_widget('enable_dbus_checkbutton')
+					btn.set_sensitive(False)
+					btn.set_active(False)
 		else:
 			if self.plugin.remote is not None:
 				self.plugin.disable_dbus()

@@ -174,7 +174,7 @@ class Interface:
 		#('ROSTER', account, array)
 		self.roster.mklists(data, account)
 		self.roster.draw_roster()
-		if self.remote:
+		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Roster', (account, data))
 
 	def handle_event_warning(self, unused, data):
@@ -210,7 +210,7 @@ class Interface:
 		else:
 			gajim.allow_notifications[account] = False
 		self.roster.on_status_changed(account, status)
-		if self.remote:
+		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('AccountPresence', (status, account))
 	
 	def handle_event_notify(self, account, array):
@@ -310,7 +310,7 @@ class Interface:
 						instance = dialogs.PopupNotificationWindow(self,
 														_('Contact Signed In'), jid, account)
 						self.roster.popup_notification_windows.append(instance)
-				if self.remote:
+				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactPresence', (account, array))						
 						
 			elif old_show > 1 and new_show < 2:
@@ -330,7 +330,7 @@ class Interface:
 						instance = dialogs.PopupNotificationWindow(self,
 											 		_('Contact Signed Out'), jid, account)
 						self.roster.popup_notification_windows.append(instance)
-				if self.remote:
+				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactAbsence', (account, array))
 				
 		elif self.windows[account]['gc'].has_key(ji):
@@ -340,7 +340,7 @@ class Interface:
 			self.windows[account]['gc'][ji].chg_contact_status(ji, resource,
 				array[1], array[2], array[6], array[7], array[8], array[9],
 				array[10], array[11], array[12], account)
-			if self.remote:
+			if self.remote and self.remote.is_enabled():
 				self.remote.raise_signal('GCPresence', (account, array))
 
 	def handle_event_msg(self, account, array):
@@ -405,7 +405,7 @@ class Interface:
 		if gajim.config.get_per('soundevents', 'next_message_received',
 			'enabled') and not first:
 			self.play_sound('next_message_received')
-		if self.remote:
+		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('NewMessage', (account, array))
 		if self.windows[account]['chats'].has_key(jid):
 			chat_win = self.windows[account]['chats'][jid]
@@ -462,7 +462,7 @@ class Interface:
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
 		dialogs.SubscriptionRequestWindow(self, array[0], array[1], account)
-		if self.remote:
+		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Subscribe', (account, array))
 
 	def handle_event_subscribed(self, account, array):
@@ -492,13 +492,13 @@ class Interface:
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his status.')
 				% jid).get_response()
-		if self.remote:
+		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Subscribed', (account, array))
 
 	def handle_event_unsubscribed(self, account, jid):
 		dialogs.InformationDialog(_('Contact "%s" removed subscription from you') % jid,
 				_('You will always see him as offline.')).get_response()
-		if self.remote:
+		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Unsubscribed', (account, array))
 
 	def handle_event_agent_info(self, account, array):
@@ -552,7 +552,7 @@ class Interface:
 		if self.windows.has_key('accounts'):
 			self.windows['accounts'].init_accounts()
 		self.roster.draw_roster()
-		if self.remote:
+		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('NewAccount', (account, array))
 
 	def handle_event_quit(self, p1, p2):
@@ -582,7 +582,7 @@ class Interface:
 		if self.windows[account]['infos'].has_key(array[0]):
 			self.windows[account]['infos'][array[0]].set_os_info(array[1], \
 				array[2], array[3])
-		if self.remote:
+		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('OsInfo', (account, array))
 
 	def handle_event_gc_msg(self, account, array):
@@ -599,7 +599,7 @@ class Interface:
 			#message from someone
 			self.windows[account]['gc'][jid].print_conversation(array[1], jid, \
 				jids[1], array[2])
-		if self.remote:
+		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('GCMessage', (account, array))
 
 	def handle_event_gc_subject(self, account, array):
@@ -646,7 +646,7 @@ class Interface:
 			if array[4]:
 				user.groups = array[4]
 		self.roster.draw_contact(jid, account)
-		if self.remote:
+		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('RosterInfo', (account, array))
 
 	def handle_event_bookmarks(self, account, bms):
@@ -836,17 +836,33 @@ class Interface:
 	def save_config(self):
 		parser.write()
 
-	def enable_dbus(self):
+	def enable_dbus(self, is_initial = False):
 		if 'remote_control' not in globals():
 			import remote_control
-		self.remote = remote_control.Remote(self)
+		if not hasattr(self, 'remote') or not self.remote:
+			try:
+				self.remote = remote_control.Remote(self)
+			except remote_control.DbusNotSupported, e:
+				if not is_initial:
+					dialog = dialogs.ErrorDialog(_("D-Bus is not present on this machine"),_("Please install dbus if you want to use remote control.")).get_response()
+				self.remote = None
+				return False
+			except remote_control.SessionBusNotPresent, e:
+				if not is_initial:
+					dialog = dialogs.ErrorDialog(_("Session bus is not started"),_("Your system is running without session bus daemon. \n See: for instructions how to do it.")).get_response()
+				self.remote = None
+				return False
+		else:
+			# enable the previously disabled object
+			self.remote.set_enabled(True)
+		return True
 
 	def disable_dbus(self):
 		if hasattr(self, 'remote') and self.remote is not None:
-			pass
-		# FIXME:  A handler is already registered for the path starting with path[0] = "org"
-			# so we need to unregister it from dbus
-		self.remote = None
+			# just tell the remote object to skip remote messages
+			self.remote.set_enabled(False)
+		else:
+			self.remote = None
 
 	def __init__(self):
 		self.default_values = {
@@ -907,7 +923,7 @@ class Interface:
 
 		self.roster = roster_window.RosterWindow(self)
 		if gajim.config.get('use_dbus'):
-			self.enable_dbus()
+			self.enable_dbus(True)
 		else:
 			self.disable_dbus()
 																	

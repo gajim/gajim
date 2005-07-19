@@ -45,15 +45,13 @@ class Remote:
 	def __init__(self, plugin):
 		self.signal_object = None
 		if 'dbus' not in globals():
-			print 'DBUS python bindings are missing in this computer.'
-			print 'DBUS capabilities of Gajim cannot be used'
-			return None
+			print 'D-Bus python bindings are missing in this computer.'
+			print 'D-Bus capabilities of Gajim cannot be used'
+			raise DbusNotSupported()
 		try:
 			session_bus = dbus.SessionBus()
 		except:
-			# FIXME: some status why remote is not supported
-			# When dbus 0.2.x is obsolete
-			return None
+			raise SessionBusNotPresent()
 		
 		if _version[1] >= 41:
 			service = dbus.service.BusName(SERVICE, bus=session_bus)
@@ -62,19 +60,28 @@ class Remote:
 			service=dbus.Service(SERVICE, session_bus)
 			self.signal_object = SignalObject(service, plugin)
 
+	def set_enabled(self, status):
+		self.signal_object.disabled = not status
+		
+	def is_enabled(self):
+		return not self.signal_object.disabled
+
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
 			self.signal_object.raise_signal(signal, repr(arg))
 		
 
 class SignalObject(DbusPrototype):
+	''' Local object definition for /org/gajim/dbus/RemoteObject. This doc must 
+	not be visible, because the clients can access only the remote object. '''
 	_version = getattr(dbus, 'version', (0, 20, 0))
 	
 	def __init__(self, service, plugin):
 		self.plugin = plugin
 		self.first_show = True
 		self.vcard_account = None
-		
+		self.disabled = False
+
 		# register our dbus API
 		if _version[1] >= 41:
 			DbusPrototype.__init__(self, service, OBJ_PATH)
@@ -92,8 +99,13 @@ class SignalObject(DbusPrototype):
 				self.contact_info
 			])
 
+	def disconnect(self):
+	self._connection.disconnect()
+	
 	def raise_signal(self, signal, arg):
 		''' raise a signal, with a single string message '''
+		if self.disabled :
+			return
 		if _version[1] >= 30:
 			from dbus import dbus_bindings
 			message = dbus_bindings.Signal(OBJ_PATH, INTERFACE, signal)
@@ -112,6 +124,8 @@ class SignalObject(DbusPrototype):
 		''' send_message(jid, message, keyID=None, account=None)
 		send 'message' to 'jid', using account (optional) 'account'.
 		if keyID is specified, encrypt the message with the pgp key '''
+		if self.disabled:
+			return
 		jid, message, keyID, account = self._get_real_arguments(args, 4)
 		if not jid or not message:
 			return None # or raise error
@@ -130,6 +144,8 @@ class SignalObject(DbusPrototype):
 	def new_message(self, *args):
 		''' new_message(jid, account=None) -> shows the tabbed window for new 
 		message to 'jid', using account(optional) 'account ' '''
+		if self.disabled:
+			return
 		jid, account = self._get_real_arguments(args, 2)
 		if not jid:
 			# FIXME: raise exception for missing argument (dbus0.3+)
@@ -159,6 +175,8 @@ class SignalObject(DbusPrototype):
 	def change_status(self, *args, **keywords):
 		''' change_status(status, message, account). account is optional -
 		if not specified status is changed for all accounts. '''
+		if self.disabled:
+			return
 		status, message, account = self._get_real_arguments(args, 3)
 		if status not in ('offline', 'online', 'chat', 
 			'away', 'xa', 'dnd', 'invisible'):
@@ -176,6 +194,8 @@ class SignalObject(DbusPrototype):
 
 	def show_next_unread(self, *args):
 		''' Show the window(s) with next waiting messages in tabbed/group chats. '''
+		if self.disabled:
+			return
 		#FIXME: when systray is disabled this method does nothing.
 		#FIXME: show message from GC that refer to us (like systray does)
 		if len(self.plugin.systray.jids) != 0:
@@ -204,6 +224,8 @@ class SignalObject(DbusPrototype):
 	def contact_info(self, *args):
 		''' get vcard info for a contact. This method returns nothing.
 		You have to register the 'VcardInfo' signal to get the real vcard. '''
+		if self.disabled:
+			return
 		jid = self._get_real_arguments(args, 1)
 		if not jid:
 			# FIXME: raise exception for missing argument (0.3+)
@@ -223,6 +245,8 @@ class SignalObject(DbusPrototype):
 
 	def list_accounts(self, *args):
 		''' list register accounts '''
+		if self.disabled:
+			return
 		if gajim.contacts:
 			result = gajim.contacts.keys()
 			if result and len(result) > 0:
@@ -231,6 +255,8 @@ class SignalObject(DbusPrototype):
 
 
 	def list_contacts(self, *args):
+		if self.disabled:
+			return
 		''' list all contacts in the roster. If the first argument is specified,
 		then return the contacts for the specified account '''
 		[for_account] = self._get_real_arguments(args, 1)
@@ -261,6 +287,8 @@ class SignalObject(DbusPrototype):
 
 	def toggle_roster_appearance(self, *args):
 		''' shows/hides the roster window '''
+		if self.disabled:
+			return
 		win = self.plugin.roster.window
 		if win.get_property('visible'):
 			gobject.idle_add(win.hide)
@@ -283,6 +311,8 @@ class SignalObject(DbusPrototype):
 			gajim.connections[self.vcard_account].unregister_handler('VCARD', 
 				self._receive_vcard)
 			self.unregistered_vcard = None
+			if self.disabled:
+				return
 			if _version[1] >=30:
 				self.VcardInfo(repr(array))
 			else:
@@ -337,7 +367,7 @@ class SignalObject(DbusPrototype):
 	if _version[1] >= 30:
 		# prevent using decorators, because they are not supported 
 		# on python < 2.4
-		# FIXME: use decorators when python2.3 is OOOOOOLD
+		# FIXME: use decorators when python2.3 (and dbus 0.23) is OOOOOOLD
 		toggle_roster_appearance = method(INTERFACE)(toggle_roster_appearance)
 		list_contacts = method(INTERFACE)(list_contacts)
 		list_accounts = method(INTERFACE)(list_accounts)
@@ -347,3 +377,19 @@ class SignalObject(DbusPrototype):
 		contact_info = method(INTERFACE)(contact_info)
 		send_message = method(INTERFACE)(send_message)
 		VcardInfo = signal(INTERFACE)(VcardInfo)
+
+class SessionBusNotPresent(Exception):
+	''' This exception indicates that there is no session daemon '''
+	def __init__(self):
+		Exception.__init__(self)
+
+	def __str__(self):
+		return _("Session bus is not available")
+
+class DbusNotSupported(Exception):
+	''' D-Bus is not installed or python bindings are missing '''
+	def __init__(self):
+		Exception.__init__(self)
+
+	def __str__(self):
+		return _("D-Bus is not present on this machine")
