@@ -530,6 +530,7 @@ class Chat:
 		jid = self.get_active_jid()
 		if self.widget_name == 'tabbed_chat_window':
 			self.mouse_over_in_last_5_secs = True
+			self.mouse_over_in_last_30_secs = True
 		x, y, spam = widget.window.get_pointer()
 		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
 		tags = widget.get_iter_at_location(x, y).get_tags()

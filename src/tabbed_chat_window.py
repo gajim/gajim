@@ -304,6 +304,8 @@ class TabbedChatWindow(chat.Chat):
 		# chatstates
 		self.kbd_activity_in_last_5_secs = False
 		self.mouse_over_in_last_5_secs = False
+		self.mouse_over_in_last_30_secs = False
+		self.kbd_activity_in_last_30_secs = False
 		
 		self.chatstates[contact.jid] = None # our current chatstate with contact
 		self.possible_paused_timeout_id[contact.jid] =\
@@ -335,19 +337,23 @@ class TabbedChatWindow(chat.Chat):
 		self.mouse_over_in_last_5_secs = False
 		self.kbd_activity_in_last_5_secs = False
 		
+		# refresh 30 seconds or else it's 30 - 5 = 25 seconds!
+		self.mouse_over_in_last_30_secs = True
+		self.kbd_activity_in_last_30_secs = True
+		
 		return True # loop forever
 
 	def check_for_possible_inactive_chatstate(self, contact):
-		''' did we move mouse of that window or kbd activity in that window
+		''' did we move mouse over that window or kbd activity in that window
 		if yes we go active if not already
 		if no we go inactive if not already '''
 		current_state = self.chatstates[contact.jid]
 		if current_state == False: # he doesn't support chatstates
 			return False # stop looping
 		
-		if self.mouse_over_in_last_5_secs:
+		if self.mouse_over_in_last_30_secs:
 			self.send_chatstate('active')
-		elif self.kbd_activity_in_last_5_secs:
+		elif self.kbd_activity_in_last_30_secs:
 			self.send_chatstate('composing')
 		else:
 			self.send_chatstate('inactive')
@@ -356,6 +362,9 @@ class TabbedChatWindow(chat.Chat):
 		self.mouse_over_in_last_5_secs = False
 		self.kbd_activity_in_last_5_secs = False
 		
+		self.mouse_over_in_last_30_secs = False
+		self.kbd_activity_in_last_30_secs = False
+		
 		return True # loop forever
 
 	def on_message_textview_key_press_event(self, widget, event):
@@ -363,6 +372,7 @@ class TabbedChatWindow(chat.Chat):
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation"""
 		self.kbd_activity_in_last_5_secs = True
+		self.kbd_activity_in_last_30_secs = True
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		message_buffer = widget.get_buffer()
