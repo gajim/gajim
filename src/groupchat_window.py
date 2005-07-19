@@ -282,7 +282,7 @@ class GroupchatWindow(chat.Chat):
 					user_iter = model.iter_next(user_iter)
 				role_iter = model.iter_next(role_iter)
 
-	def chg_contact_status(self, room_jid, nick, show, status, role, affiliation, 
+	def chg_contact_status(self, room_jid, nick, show, status, role, affiliation,
 		jid, reason, actor, statusCode, new_nick, account):
 		"""When a user changes his status"""
 		if show == 'invisible':
@@ -314,13 +314,16 @@ class GroupchatWindow(chat.Chat):
 					self.add_contact_to_roster(room_jid, nick, show, role, jid,
 						affiliation)
 				else:
+					c = self.contacts[room_jid][nick]
+					if c.show == show and c.status == status and \
+						c.affiliation == affiliation: #no change
+					return
+					c.show = show
+					c.affiliation = affiliation
 					roster = self.plugin.roster
 					state_images = roster.get_appropriate_state_images(jid)
 					image = state_images[show]
 					model.set_value(iter, 0, image)
-					c = self.contacts[room_jid][nick]
-					c.show = show
-					c.affiliation = affiliation
 		if (time.time() - self.room_creation[room_jid]) > 30 and \
 				nick != self.nicks[room_jid] and statusCode != '303':
 			if show == 'offline':
