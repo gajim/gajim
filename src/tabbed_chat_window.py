@@ -321,9 +321,6 @@ class TabbedChatWindow(chat.Chat):
 		if current_state == False: # he doesn't support chatstates
 			return False # stop looping
 		
-		# if we're inactive prevent paused (inactive is stronger)
-		if current_state = 'inactive':
-			return True
 		print 'mouse', self.mouse_over_in_last_5_secs
 		print 'kbd', self.kbd_activity_in_last_5_secs
 		
@@ -453,6 +450,10 @@ class TabbedChatWindow(chat.Chat):
 		# if last state was composing, don't send active
 		if self.chatstates[jid] == 'composing' and state == 'active':
 			return
+			
+		# if we're inactive prevent paused (inactive is stronger)
+		if self.chatstates[jid] == = 'inactive' and state == 'paused':
+			return True
 
 		self.chatstates[jid] = state
 		gajim.connections[self.account].send_message(jid, None, None,
