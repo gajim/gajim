@@ -847,13 +847,16 @@ class Interface:
 			try:
 				self.remote = remote_control.Remote(self)
 			except remote_control.DbusNotSupported:
-				if not is_initial:
-					dialogs.ErrorDialog(_("D-Bus is not present on this machine"),_("Please install dbus if you want to use remote control.")).get_response()
+				if not is_initial: # show only the first time
+					dialog = dialogs.ErrorDialog(
+					_('D-Bus is not present on this machine'),
+_('Please install D-Bus if you want to use remote control.')).get_response()
 				self.remote = None
 				return False
 			except remote_control.SessionBusNotPresent:
-				if not is_initial:
-					dialogs.ErrorDialog(_("Session bus is not started"),_("Your system is running without session bus daemon. \n See: for instructions how to do it.")).get_response()
+				if not is_initial: # show only the first time
+					dialog = dialogs.ErrorDialog(_('Session bus is not started'),
+_('Your system is running without session bus daemon. \n See: http://trac.gajim.org/wiki/GajimDBus for instructions on how to enable it.")).get_response()
 				self.remote = None
 				return False
 		else:
