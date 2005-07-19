@@ -856,7 +856,7 @@ _('Please install D-Bus if you want to use remote control.')).get_response()
 			except remote_control.SessionBusNotPresent:
 				if not is_initial: # show only the first time
 					dialog = dialogs.ErrorDialog(_('Session bus is not started'),
-_('Your system is running without session bus daemon. \n See: http://trac.gajim.org/wiki/GajimDBus for instructions on how to enable it.")).get_response()
+_('Your system is running without session bus daemon. \n See: http://trac.gajim.org/wiki/GajimDBus for instructions on how to enable it.')).get_response()
 				self.remote = None
 				return False
 		else:
