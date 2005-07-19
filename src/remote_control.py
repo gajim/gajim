@@ -100,7 +100,7 @@ class SignalObject(DbusPrototype):
 			])
 
 	def disconnect(self):
-	self._connection.disconnect()
+		self._connection.disconnect()
 	
 	def raise_signal(self, signal, arg):
 		''' raise a signal, with a single string message '''
