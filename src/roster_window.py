@@ -310,7 +310,7 @@ class RosterWindow:
 			'show_offline_contacts_menuitem')
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
 		
-
+		'''
 		ui_description = """
 <ui>
 	<menu action='advanced_menuitem_menu'>
@@ -334,6 +334,7 @@ class RosterWindow:
 			<menuitem action='Administrator' />
 			<menuitem action='Test5' />
 """
+'''
 
 		if self.add_new_contact_handler_id:
 			add_new_contact_menuitem.handler_disconnect(
@@ -515,7 +516,7 @@ class RosterWindow:
 						gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 					self.have_new_message_accel = True
 				
-			advanced_menuitem.set_submenu(advanced_menuitem_menu)
+			#advanced_menuitem.set_submenu(advanced_menuitem_menu)
 
 		if at_least_one_account_connected:
 			new_message_menuitem.set_sensitive(True)
