@@ -950,8 +950,8 @@ class PopupNotificationWindow:
 				groups = [_('not in the roster')], show = 'not in the roster',
 				status = _('not in the roster'), sub = 'none', keyID = keyID)
 			gajim.contacts[self.account][self.jid] = [contact]
-			self.plugin.roster.add_contact_to_roster(contact.self.jid,
-				self.account) # FIXME: contact.self.jid ???
+			self.plugin.roster.add_contact_to_roster(contact.jid,
+				self.account)
 
 		if self.msg_type == 'normal': # it's single message
 			return # FIXME: I think I should not print here but in new_chat?
