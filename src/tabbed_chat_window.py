@@ -318,7 +318,7 @@ class TabbedChatWindow(chat.Chat):
 		if yes we go active if not already
 		if no we go paused if not already '''
 		current_state = self.chatstates[contact.jid]
-		if current_state = False: # he doesn't support chatstates
+		if current_state == False: # he doesn't support chatstates
 			return False # stop looping
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active')
@@ -336,7 +336,7 @@ class TabbedChatWindow(chat.Chat):
 		if yes we go active if not already
 		if no we go inactive if not already '''
 		current_state = self.chatstates[contact.jid]
-		if current_state = False: # he doesn't support chatstates
+		if current_state == False: # he doesn't support chatstates
 			return False # stop looping
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active')
