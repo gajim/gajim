@@ -318,7 +318,7 @@ class TabbedChatWindow(chat.Chat):
 		if yes we go active if not already
 		if no we go paused if not already '''
 		current_state = self.chatstates[contact.jid]
-		if current_state = -1: # he doesn't support chatstates
+		if current_state = False: # he doesn't support chatstates
 			return False # stop looping
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active')
@@ -336,7 +336,7 @@ class TabbedChatWindow(chat.Chat):
 		if yes we go active if not already
 		if no we go inactive if not already '''
 		current_state = self.chatstates[contact.jid]
-		if current_state = -1: # he doesn't support chatstates
+		if current_state = False: # he doesn't support chatstates
 			return False # stop looping
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active')
@@ -410,15 +410,15 @@ class TabbedChatWindow(chat.Chat):
 		is different for the previous one'''
 		# please read jep-85 to get an idea of this
 		# we keep track of jep85 support by the peer by three extra states:
-		# None, -1 and 'ask'
+		# None, False and 'ask'
 		# None if no info about peer
-		# -1 if peer does not support jep85
+		# False if peer does not support jep85
 		# 'ask' if we sent 'active' chatstate and are waiting for reply
 
 		jid = self.get_active_jid()
 
 		# print jid, self.chatstates[jid], state
-		if self.chatstates[jid] == -1:
+		if self.chatstates[jid] == False:
 			return
 
 		# if current state equals last state, return
@@ -473,7 +473,7 @@ class TabbedChatWindow(chat.Chat):
 				self.chatstates[jid] = 'ask'
 
 			# if peer supports jep85, send 'active'
-			elif self.chatstates[jid] != -1:
+			elif self.chatstates[jid] != False:
 				#send active chatstate on every message (as JEP says)
 				gajim.connections[self.account].send_message(jid, message, keyID,
 					chatstate = 'active')
@@ -596,7 +596,7 @@ class TabbedChatWindow(chat.Chat):
 
 			tim = time.localtime(float(msg[0]))
 
-			text = ':'.join(msg[2:])[0:-1] #remove the latest \n
+			text = ':'.join(msg[2:])[:-1] #remove the latest \n
 			self.print_conversation_line(text, jid, kind, name, tim,
 				['small'], ['small', 'grey'], ['small', 'grey'], False)
 
