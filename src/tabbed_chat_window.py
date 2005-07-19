@@ -45,6 +45,10 @@ class TabbedChatWindow(chat.Chat):
 		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
 		self.users = {}
 		self.chatstates = {}
+		# keep check for possible paused timeouts per jid
+		self.possible_paused_timeout_id = {}
+		# keep check for possible inactive timeouts per jid
+		self.possible_inactive_timeout_id = {}
 		self.new_user(user)
 		self.show_title()
 		self.xml.signal_connect('on_tabbed_chat_window_destroy',
@@ -302,16 +306,20 @@ class TabbedChatWindow(chat.Chat):
 		self.mouse_over_in_last_5_secs = False
 		
 		self.chatstates[contact.jid] = None # our current chatstate with contact
-		gobject.timeout_add(5000, self.check_for_possible_paused_chatstate,
-			contact)
-		gobject.timeout_add(30000, self.check_for_possible_inactive_chatstate,
-			contact)
+		self.possible_paused_timeout_id[contact.jid] =\
+			gobject.timeout_add(5000, self.check_for_possible_paused_chatstate,
+				contact)
+		self.possible_inactive_timeout_id[contact.jid] =\
+			gobject.timeout_add(30000, self.check_for_possible_inactive_chatstate,
+				contact)
 		
 	def check_for_possible_paused_chatstate(self, contact):
 		''' did we move mouse of that window or kbd activity in that window
 		if yes we go active if not already
 		if no we go paused if not already '''
 		current_state = self.chatstates[contact.jid]
+		if current_state = -1: # he doesn't support chatstates
+			return False # stop looping
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active')
 		if self.kbd_activity_in_last_5_secs:
@@ -320,18 +328,24 @@ class TabbedChatWindow(chat.Chat):
 			self.send_chatstate('paused')
 			self.mouse_over_in_last_5_secs = False
 			self.kbd_activity_in_last_5_secs = False
+		
+		return True # loop forever
 
 	def check_for_possible_inactive_chatstate(self, contact):
 		''' did we move mouse of that window or kbd activity in that window
 		if yes we go active if not already
 		if no we go inactive if not already '''
 		current_state = self.chatstates[contact.jid]
+		if current_state = -1: # he doesn't support chatstates
+			return False # stop looping
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active')
 		elif self.kbd_activity_in_last_5_secs:
 			self.send_chatstate('composing')
 		else:
 			self.send_chatstate('inactive')
+
+		return True # loop forever
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
