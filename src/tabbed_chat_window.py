@@ -453,7 +453,11 @@ class TabbedChatWindow(chat.Chat):
 			
 		# if we're inactive prevent paused (inactive is stronger)
 		if self.chatstates[jid] == = 'inactive' and state == 'paused':
-			return True
+			return
+		
+		# if we're inactive prevent paused (inactive is stronger)
+		if self.chatstates[jid] == = 'inactive' and state == 'composing':
+			return
 
 		self.chatstates[jid] = state
 		gajim.connections[self.account].send_message(jid, None, None,
