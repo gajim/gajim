@@ -452,11 +452,11 @@ class TabbedChatWindow(chat.Chat):
 			return
 			
 		# if we're inactive prevent paused (inactive is stronger)
-		if self.chatstates[jid] == = 'inactive' and state == 'paused':
+		if self.chatstates[jid] == 'inactive' and state == 'paused':
 			return
 		
 		# if we're inactive prevent paused (inactive is stronger)
-		if self.chatstates[jid] == = 'inactive' and state == 'composing':
+		if self.chatstates[jid] == 'inactive' and state == 'composing':
 			return
 
 		self.chatstates[jid] = state
