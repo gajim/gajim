@@ -582,7 +582,8 @@ class RosterTooltip(gtk.Window):
 		state_file = prim_contact.show.replace(' ', '_')
 		transport = self.plugin.roster.get_transport_name_by_jid(prim_contact.jid)
 		if transport:
-			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports', transport , '16x16')
+			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports', 
+				transport , '16x16')
 		else:
 			iconset = gajim.config.get('iconset')
 			if not iconset:
@@ -614,37 +615,35 @@ class RosterTooltip(gtk.Window):
 				info += '\n<span weight="bold">' + _('OpenPGP: ') + \
 					'</span>' + keyID 
 
-		resource_str, status_str, multiple_resource, multiple_status =\
-			'', '', False, False
+		single_line, resource_str, multiple_resource= '', '', False
 		for contact in contacts:
 			if contact.resource:
 				if resource_str != '':
 					multiple_resource = True
+				else:
+					# keep a single line entry in case there are no resources/statuses
+					single_line = contact.resource + ' (' + \
+						str(contact.priority) + ')'
 				resource_str += '\n\t' +  contact.resource + \
 					' (' + str(contact.priority) + ')'
 			if contact.show:
-				if status_str != '':
-					multiple_status = True
-				status_str += '\n\t' + helpers.get_uf_show(contact.show)
+				if multiple_resource is False:
+					# keep a single line entry in case there are no resources/statuses
+					single_line += ": " + helpers.get_uf_show(contact.show)
+				resource_str += '\n\t\t' + helpers.get_uf_show(contact.show)
 				if contact.status:
-					status_str +=  ' - ' + contact.status
+					resource_str += ' - ' + contact.status
+					if multiple_resource is False:
+						single_line += ' - ' + contact.status
 				
 		if resource_str != '':
-			info += '\n<span weight="bold">' + _('Resource: ') + '</span>'
+			info += '\n<span weight="bold">' + _('Status: ') + '</span>'
 			if multiple_resource:
 				info += resource_str
 			else:
-				# show the status on the same line
-				info += resource_str[2:]
+				# show the resource & status on the same line
+				info += single_line
 				
-		if status_str != '':
-			info += '\n<span weight="bold">' + _('Status: ') + '</span>'
-			if not multiple_status:
-				# show the resource on the same line
-				info += status_str[2:] # remove \n\t
-			else:
-				info += status_str
-		
 		self.account.set_markup(info)
 
 class InputDialog:
