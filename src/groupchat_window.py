@@ -41,7 +41,11 @@ class GroupchatWindow(chat.Chat):
 	"""Class for Groupchat window"""
 	def __init__(self, room_jid, nick, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
-		self.muc_cmds = ['chat', 'clear', 'compact', 'me', 'msg', 'nick'] # alphanum sorted
+		
+		# alphanum sorted
+		self.muc_cmds = ['ban', 'chat', 'clear', 'compact', 'kick', 
+			'me', 'msg', 'nick',	'topic']
+		
 		self.nicks = {} # our nick for each groupchat we are in
 		self.contacts = {} # contact instances for each room
 		self.list_treeview = {}
@@ -339,8 +343,10 @@ class GroupchatWindow(chat.Chat):
 
 	def on_change_subject_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
-		label_text = self.name_labels[room_jid].get_text() # whole text (including JID)
-		subject = label_text[label_text.find('\n') + 1:] # just the text after the newline
+		# whole text (including JID)
+		label_text = self.name_labels[room_jid].get_text()
+		# just the text after the newline
+		subject = label_text[label_text.find('\n') + 1:]
 		instance = dialogs.InputDialog(_('Changing Subject'),
 			_('Please specify the new subject:'), subject)
 		response = instance.get_response()
@@ -364,7 +370,8 @@ class GroupchatWindow(chat.Chat):
 
 	def on_bookmark_room_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
-		bm = { 'name': room_jid,
+		bm = {
+				'name': room_jid,
 			   'jid': room_jid,
 			   'autojoin': '0',
 			   'password': '',
@@ -565,9 +572,29 @@ class GroupchatWindow(chat.Chat):
 						self.on_send_pm(nick=to_whom_nick, msg=message)
 				return # don't print the command
 			
-			elif message.startswith('/topic '):
+			elif message.startswith('/topic '): #eg. /topic Gajim rocks
 				new_subj = message[7:].strip() # 7 is len('/topic ')
 				gajim.connections[self.account].send_gc_subject(room_jid, new_subj)
+				return # don't print the command
+			
+			elif message.startswith('/ban '): #eg. /ban fooman he was a bad boy
+				text_after_ban_command = message[5:].strip() # 5 is len('/ban ')
+				splitted_text_after_ban_command = text_after_ban_command.split()
+				if len(splitted_text_after_ban_command) == 1:
+					# reason is optional so accept just nick
+					nick_to_ban = splitted_text_after_msg_command[0]
+					if nick_to_ban in nicks:
+						fjid = get_fjid_from_nick(room_jid, nick_to_ban)
+						gajim.connections[self.account].gc_set_affiliation(room_jid,
+							fjid, 'outcast')
+				elif len(splitted_text_after_ban_command) >= 2:
+					# a reason was given
+					nick_to_ban = splitted_text_after_msg_command[0]
+					if nick_to_ban in nicks:
+						reason = splitted_text_after_msg_command[1:]
+						fjid = get_fjid_from_nick(room_jid, nick_to_ban)
+						gajim.connections[self.account].gc_set_affiliation(room_jid,
+							fjid, 'outcast', reason)
 				return # don't print the command
 
 		gajim.connections[self.account].send_gc_message(room_jid, message)
@@ -600,13 +627,14 @@ class GroupchatWindow(chat.Chat):
 		"""kick a user"""
 		# ask for reason
 		instance = dialogs.InputDialog(_('Kicking %s') % nick,
-			_('Please specify a reason below:'))
+			_('You may specify a reason below:'))
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
 			reason = instance.input_entry.get_text()
 		else:
 			return # stop kicking procedure
-		gajim.connections[self.account].gc_set_role(room_jid, nick, 'none', reason)
+		gajim.connections[self.account].gc_set_role(room_jid, nick, 'none',
+			reason)
 
 	def grant_voice(self, widget, room_jid, nick):
 		"""grant voice privilege to a user"""
@@ -626,15 +654,17 @@ class GroupchatWindow(chat.Chat):
 
 	def ban(self, widget, room_jid, jid):
 		"""ban a user"""
+		nick = helpers.get_nick_from_fjid(jid)
 		# ask for reason
 		instance = dialogs.InputDialog(_('Banning %s') % nick,
-			_('Please specify a reason below:'))
+			_('You may specify a reason below:'))
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
 			reason = instance.input_entry.get_text()
 		else:
 			return # stop banning procedure
-		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, 'outcast', reason)
+		gajim.connections[self.account].gc_set_affiliation(room_jid, jid,
+			'outcast', reason)
 
 	def grant_membership(self, widget, room_jid, jid):
 		"""grant membership privilege to a user"""
@@ -761,18 +791,21 @@ class GroupchatWindow(chat.Chat):
 		   (user_affiliation=='member' and target_affiliation!='none') or \
 		   target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
-		item.connect('activate', self.on_voice_checkmenuitem_activate, room_jid, nick)
+		item.connect('activate', self.on_voice_checkmenuitem_activate, room_jid,
+			nick)
 
 		item = xml.get_widget('moderator_checkmenuitem')
 		item.set_active(target_role == 'moderator')
 		if not user_affiliation in ('admin', 'owner') or \
 		   target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
-		item.connect('activate', self.on_moderator_checkmenuitem_activate, room_jid, nick)
+		item.connect('activate', self.on_moderator_checkmenuitem_activate,
+			room_jid, nick)
 
 		item = xml.get_widget('ban_menuitem')
 		if not user_affiliation in ('admin', 'owner') or \
-		   (target_affiliation in ('admin', 'owner') and user_affiliation != 'owner'):
+		   (target_affiliation in ('admin', 'owner') and\
+		   user_affiliation != 'owner'):
 			item.set_sensitive(False)
 		item.connect('activate', self.ban, room_jid, jid)
 
@@ -781,19 +814,22 @@ class GroupchatWindow(chat.Chat):
 		if not user_affiliation in ('admin', 'owner') or \
 		   (user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
 			item.set_sensitive(False)
-		item.connect('activate', self.on_member_checkmenuitem_activate, room_jid, jid)
+		item.connect('activate', self.on_member_checkmenuitem_activate,
+			room_jid, jid)
 
 		item = xml.get_widget('admin_checkmenuitem')
 		item.set_active(target_affiliation in ('admin', 'owner'))
 		if not user_affiliation == 'owner':
 			item.set_sensitive(False)
-		item.connect('activate', self.on_admin_checkmenuitem_activate, room_jid, jid)
+		item.connect('activate', self.on_admin_checkmenuitem_activate,
+			room_jid, jid)
 
 		item = xml.get_widget('owner_checkmenuitem')
 		item.set_active(target_affiliation == 'owner')
 		if not user_affiliation == 'owner':
 			item.set_sensitive(False)
-		item.connect('activate', self.on_owner_checkmenuitem_activate, room_jid, jid)
+		item.connect('activate', self.on_owner_checkmenuitem_activate,
+			room_jid, jid)
 
 		item = xml.get_widget('information_menuitem')
 		item.connect('activate', self.on_info, room_jid, nick)

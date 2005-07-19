@@ -51,6 +51,26 @@ def get_sorted_keys(adict):
 	keys.sort()
 	return keys
 
+def get_fjid_from_nick(room_jid, nick):
+	# fake jid is the jid for a contact in a room
+	# gaim@conference.jabber.org/nick
+	fjid = room_jid + '/' + nick
+	return fjid
+
+def get_nick_from_jid(jid):
+	pos = jid.rfind('/')
+	return jid[:pos]
+
+def get_nick_from_fjid(jid):
+	# fake jid is the jid for a contact in a room
+	# gaim@conference.jabber.org/nick
+	pos = jid.rfind('/') + 1 # 1 means after /
+	return jid[pos:]
+
+def get_resource_from_jid(jid):
+	pos = jid.rfind('/') + 1 # 1 means after /
+	return jid[pos:]
+
 def to_one_line(msg):
 	msg = msg.replace('\\', '\\\\')
 	msg = msg.replace('\n', '\\n')
