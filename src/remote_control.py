@@ -82,7 +82,7 @@ class SignalObject(DbusPrototype):
 			DbusPrototype.__init__(self, OBJ_PATH, service)
 		else:
 			DbusPrototype.__init__(self, OBJ_PATH, service, 
-			[	self.show_roster,
+			[	self.toggle_roster_appearance,
 				self.show_next_unread,
 				self.list_contacts,
 				self.list_accounts,
@@ -259,7 +259,7 @@ class SignalObject(DbusPrototype):
 			return None
 		return result
 
-	def show_roster(self, *args):
+	def toggle_roster_appearance(self, *args):
 		''' shows/hides the roster window '''
 		win = self.plugin.roster.window
 		if win.get_property('visible'):
@@ -338,7 +338,7 @@ class SignalObject(DbusPrototype):
 		# prevent using decorators, because they are not supported 
 		# on python < 2.4
 		# FIXME: use decorators when python2.3 is OOOOOOLD
-		show_roster = method(INTERFACE)(show_roster)
+		toggle_roster_appearance = method(INTERFACE)(toggle_roster_appearance)
 		list_contacts = method(INTERFACE)(list_contacts)
 		list_accounts = method(INTERFACE)(list_accounts)
 		show_next_unread = method(INTERFACE)(show_next_unread)

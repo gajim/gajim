@@ -45,9 +45,9 @@ _version = getattr(dbus, 'version', (0, 20, 0))
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 SERVICE = 'org.gajim.dbus'
-commands = ['help', 'show_roster', 'show_next_unread', 'list_contacts',
-	'list_accounts', 'change_status', 'new_message', 'send_message', 
-	'contact_info']
+commands = ['help', 'toggle_roster_appearance', 'show_next_unread',
+	'list_contacts',	'list_accounts', 'change_status', 'new_message',
+	'send_message', 'contact_info']
 	
 if _version[1] >= 41:
 	import dbus.service
