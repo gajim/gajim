@@ -119,29 +119,29 @@ class VcardWindow:
 		widget.get_preview_widget().set_from_file(path_to_file)
 
 	def on_set_avatar_button_clicked(self, widget):
-		file = None
+		f = None
 		dialog = gtk.FileChooserDialog(_('Choose avatar'), None,
 			gtk.FILE_CHOOSER_ACTION_OPEN,
 			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 			gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
-		filter = gtk.FileFilter()
-		filter.set_name(_('All files'))
-		filter.add_pattern('*')
-		dialog.add_filter(filter)
+		filtr = gtk.FileFilter()
+		filtr.set_name(_('All files'))
+		filtr.add_pattern('*')
+		dialog.add_filter(filtr)
 
-		filter = gtk.FileFilter()
-		filter.set_name(_('Images'))
-		filter.add_mime_type('image/png')
-		filter.add_mime_type('image/jpeg')
-		filter.add_mime_type('image/gif')
-		filter.add_pattern('*.png')
-		filter.add_pattern('*.jpg')
-		filter.add_pattern('*.gif')
-		filter.add_pattern('*.tif')
-		filter.add_pattern('*.xpm')
-		dialog.add_filter(filter)
-		dialog.set_filter(filter)
+		filtr = gtk.FileFilter()
+		filtr.set_name(_('Images'))
+		filtr.add_mime_type('image/png')
+		filtr.add_mime_type('image/jpeg')
+		filtr.add_mime_type('image/gif')
+		filtr.add_pattern('*.png')
+		filtr.add_pattern('*.jpg')
+		filtr.add_pattern('*.gif')
+		filtr.add_pattern('*.tif')
+		filtr.add_pattern('*.xpm')
+		dialog.add_filter(filtr)
+		dialog.set_filter(filtr)
 		dialog.set_use_preview_label(False)
 		dialog.set_preview_widget(gtk.Image())
 		dialog.connect('selection-changed', self.update_preview)
@@ -150,21 +150,21 @@ class VcardWindow:
 		while not ok:
 			response = dialog.run()
 			if response == gtk.RESPONSE_OK:
-				file = dialog.get_filename()
-				if self.image_is_ok(file):
+				f = dialog.get_filename()
+				if self.image_is_ok(f):
 					ok = True
 			else:
 				ok = True
 		dialog.destroy()
 
-		if file:
-			filesize = os.path.getsize(file) # in bytes
+		if f:
+			filesize = os.path.getsize(f) # in bytes
 			if filesize > 8192: # 8 kb
 				dialogs.ErrorDialog(_('The filesize of image "%s" is too large')\
-					% file,
+					% f,
 					_('The file must not be more than 8 kilobytes.')).get_response()
 				return
-			fd = open(file)
+			fd = open(f)
 			data = fd.read()
 			pixbufloader = gtk.gdk.PixbufLoader()
 			pixbufloader.write(data)
@@ -173,12 +173,12 @@ class VcardWindow:
 			image = self.xml.get_widget('PHOTO_image')
 			image.set_from_pixbuf(pixbuf)
 			self.avatar_encoded = base64.encodestring(data)
-			self.avatar_mime_type = mimetypes.guess_type(file)[0]
+			self.avatar_mime_type = mimetypes.guess_type(f)[0]
 
 	def set_value(self, entry_name, value):
 		try:
 			self.xml.get_widget(entry_name).set_text(value)
-		except AttributeError, e:
+		except AttributeError:
 			pass
 
 	def set_values(self, vcard):
@@ -341,10 +341,10 @@ class VcardWindow:
 				vcard = self.add_to_vcard(vcard, e, txt)
 
 		# DESC textview
-		buffer = self.xml.get_widget('DESC_textview').get_buffer()
-		start_iter = buffer.get_start_iter()
-		end_iter = buffer.get_end_iter()
-		txt = buffer.get_text(start_iter, end_iter, 0)
+		buff = self.xml.get_widget('DESC_textview').get_buffer()
+		start_iter = buff.get_start_iter()
+		end_iter = buff.get_end_iter()
+		txt = buff.get_text(start_iter, end_iter, 0)
 		if txt != '':
 			vcard['DESC'] = txt
 
@@ -390,7 +390,6 @@ class VcardWindow:
 	def change_to_vcard(self):
 		self.xml.get_widget('information_notebook').remove_page(0)
 		self.xml.get_widget('nickname_label').set_text('Personal details')
-		information_hbuttonbox = self.xml.get_widget('information_hbuttonbox')
 		
 		self.publish_button.show()
 		self.retrieve_button.show()

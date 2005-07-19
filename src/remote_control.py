@@ -17,11 +17,16 @@
 ## GNU General Public License for more details.
 ##
 
-import gtk
 import gobject
 
 from common import gajim
 from time import time
+
+from common import i18n
+_ = i18n._
+APP = i18n.APP
+gtk.glade.bindtextdomain (APP, i18n.DIR)
+gtk.glade.textdomain (APP)
 
 try:
 	import dbus
@@ -109,8 +114,8 @@ class SignalObject(DbusPrototype):
 		if _version[1] >= 30:
 			from dbus import dbus_bindings
 			message = dbus_bindings.Signal(OBJ_PATH, INTERFACE, signal)
-			iter = message.get_iter(True)
-			iter.append(arg)
+			i = message.get_iter(True)
+			i.append(arg)
 			self._connection.send(message)
 		else:
 			self.emit_signal(INTERFACE, signal, arg)
@@ -232,14 +237,13 @@ class SignalObject(DbusPrototype):
 			return None
 
 		accounts = gajim.contacts.keys()
-		iq = None
 		
 		for account in accounts:
 			if gajim.contacts[account].has_key(jid):
 				self.vcard_account =  account
 				gajim.connections[account].register_handler('VCARD', 
 					self._receive_vcard)
-				iq = gajim.connections[account].request_vcard(jid)
+				gajim.connections[account].request_vcard(jid)
 				break
 		return None
 

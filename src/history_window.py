@@ -120,11 +120,10 @@ class HistoryWindow:
 
 	def new_line(self, date, type, data):
 		"""write a new line"""
-		buffer = self.history_buffer
-		start_iter = buffer.get_start_iter()
-		end_iter = buffer.get_end_iter()
+		buff = self.history_buffer
+		start_iter = buff.get_start_iter()
 		tim = time.strftime('[%x %X] ', time.localtime(float(date)))
-		buffer.insert(start_iter, tim)
+		buff.insert(start_iter, tim)
 		name = None
 		tag_name = ''
 		tag_msg = ''
@@ -160,11 +159,11 @@ class HistoryWindow:
 			before_str = gajim.config.get('before_nickname')
 			after_str = gajim.config.get('after_nickname')
 			format = before_str + name + after_str + ' '
-			buffer.insert_with_tags_by_name(start_iter, format, tag_name)
+			buff.insert_with_tags_by_name(start_iter, format, tag_name)
 		if tag_msg:
-			buffer.insert_with_tags_by_name(start_iter, msg, tag_msg)
+			buff.insert_with_tags_by_name(start_iter, msg, tag_msg)
 		else:
-			buffer.insert(start_iter, msg)
+			buff.insert(start_iter, msg)
 	
 	def __init__(self, plugin, jid, account):
 		self.plugin = plugin

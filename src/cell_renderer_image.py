@@ -53,8 +53,8 @@ class CellRendererImage(gtk.GenericCellRenderer):
 		model = tree.get_model()
 		model.foreach(self.func, (image, tree))
 		if self.redraw:
-			iter = image.get_data('iter')
-			gobject.timeout_add(iter.get_delay_time(),
+			i = image.get_data('iter')
+			gobject.timeout_add(i.get_delay_time(),
 					self.animation_timeout, tree, image)
 		else:
 			image.set_data('iter', None)
@@ -79,8 +79,8 @@ class CellRendererImage(gtk.GenericCellRenderer):
 			if not self.image.get_data('iter'):
 				animation = self.image.get_animation()
 				self.image.set_data('iter', animation.get_iter())
-				iter = self.image.get_data('iter')
-				gobject.timeout_add(iter.get_delay_time(),
+				i = self.image.get_data('iter')
+				gobject.timeout_add(i.get_delay_time(),
 						self.animation_timeout,
 						widget, self.image)
 

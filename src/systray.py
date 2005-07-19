@@ -67,9 +67,9 @@ class Systray:
 			self.img_tray.set_from_pixbuf(image.get_pixbuf())
 
 	def add_jid(self, jid, account):
-		list = [account, jid]
-		if not list in self.jids:
-			self.jids.append(list)
+		l = [account, jid]
+		if not l in self.jids:
+			self.jids.append(l)
 			self.set_img()
 		#we append to the number of unread messages
 		nb = self.plugin.roster.nb_unread
@@ -84,9 +84,9 @@ class Systray:
 		self.set_tooltip(nb) # update the tooltip
 
 	def remove_jid(self, jid, account):
-		list = [account, jid]
-		if list in self.jids:
-			self.jids.remove(list)
+		l = [account, jid]
+		if l in self.jids:
+			self.jids.remove(l)
 			self.set_img()
 		#we remove from the number of unread messages
 		nb = self.plugin.roster.nb_unread
@@ -269,8 +269,8 @@ class Systray:
 			self.make_menu(event)
 	
 	def on_show_menuitem_activate(self, widget, show):
-		list = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'offline']
-		index = list.index(show)
+		l = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'offline']
+		index = l.index(show)
 		self.plugin.roster.status_combobox.set_active(index)
 
 	def show_icon(self):
