@@ -24,9 +24,6 @@ from time import time
 
 from common import i18n
 _ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain (APP, i18n.DIR)
-gtk.glade.textdomain (APP)
 
 try:
 	import dbus
