@@ -256,6 +256,14 @@ class PreferencesWindow:
 		#Ignore messages from unknown contacts
 		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
 			set_active(gajim.config.get('ignore_unknown_contacts'))
+		
+		# send chat state notifications
+		st = gajim.config.get('send_chat_state_notifications')
+		btn = self.xml.get_widget('send_chat_state_checkbutton')
+		if st:
+			btn.set_active(True)
+		else:
+			btn.set_active(False)
 
 		#sounds
 		if os.name == 'nt': # if windows, player must not become visible on show_all
@@ -373,15 +381,7 @@ class PreferencesWindow:
 		st = gajim.config.get('check_for_new_version')
 		btn = self.xml.get_widget('check_for_new_version_checkbutton')
 		btn.set_active(st)
-		
-		# use dbus
-		st = gajim.config.get('use_dbus')
-		btn = self.xml.get_widget('enable_dbus_checkbutton')
-		if st and self.plugin.remote:
-			btn.set_active(True)
-		else:
-			btn.set_active(False)
-		
+				
 		self.xml.signal_autoconnect(self)
 		
 		self.sound_tree.get_model().connect('row-changed',
@@ -696,6 +696,9 @@ class PreferencesWindow:
 	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
 
+	def on_send_chat_state_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'send_chat_state_notifications')
+
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',
 				[self.xml.get_widget('soundplayer_hbox'),
@@ -797,20 +800,6 @@ class PreferencesWindow:
 	def on_check_for_new_version_checkbutton_toggled(self, widget):
 		gajim.config.set('check_for_new_version', widget.get_active())
 		self.plugin.save_config()
-
-	def on_enable_dbus_checkbutton_toggled(self, widget):
-		isactive = widget.get_active()
-		gajim.config.set('use_dbus', isactive)
-		self.plugin.save_config()
-		if isactive:
-			if self.plugin.remote is None:
-				if not self.plugin.enable_dbus():
-					btn = self.xml.get_widget('enable_dbus_checkbutton')
-					btn.set_sensitive(False)
-					btn.set_active(False)
-		else:
-			if self.plugin.remote is not None:
-				self.plugin.disable_dbus()
 
 	def fill_msg_treeview(self):
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
