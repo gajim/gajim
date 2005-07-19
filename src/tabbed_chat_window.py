@@ -320,14 +320,19 @@ class TabbedChatWindow(chat.Chat):
 		current_state = self.chatstates[contact.jid]
 		if current_state == False: # he doesn't support chatstates
 			return False # stop looping
+		print 'mouse', self.mouse_over_in_last_5_secs
+		print 'kbd', self.kbd_activity_in_last_5_secs
+		
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active')
-		if self.kbd_activity_in_last_5_secs:
+		elif self.kbd_activity_in_last_5_secs:
 			self.send_chatstate('composing')
 		else:
 			self.send_chatstate('paused')
-			self.mouse_over_in_last_5_secs = False
-			self.kbd_activity_in_last_5_secs = False
+		
+		# assume no activity and let the motion-notify or key_press make them True
+		self.mouse_over_in_last_5_secs = False
+		self.kbd_activity_in_last_5_secs = False
 		
 		return True # loop forever
 
@@ -338,6 +343,7 @@ class TabbedChatWindow(chat.Chat):
 		current_state = self.chatstates[contact.jid]
 		if current_state == False: # he doesn't support chatstates
 			return False # stop looping
+		
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active')
 		elif self.kbd_activity_in_last_5_secs:
@@ -345,6 +351,10 @@ class TabbedChatWindow(chat.Chat):
 		else:
 			self.send_chatstate('inactive')
 
+		# assume no activity and let the motion-notify or key_press make them True
+		self.mouse_over_in_last_5_secs = False
+		self.kbd_activity_in_last_5_secs = False
+		
 		return True # loop forever
 
 	def on_message_textview_key_press_event(self, widget, event):
@@ -417,7 +427,6 @@ class TabbedChatWindow(chat.Chat):
 
 		jid = self.get_active_jid()
 
-		# print jid, self.chatstates[jid], state
 		if self.chatstates[jid] == False:
 			return
 
@@ -485,8 +494,8 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_contact_button_clicked(self, widget):
 		jid = self.get_active_jid()
-		user = self.users[jid]
-		self.plugin.roster.on_info(widget, user, self.account)
+		contact = self.users[jid]
+		self.plugin.roster.on_info(widget, contact, self.account)
 
 	def read_queue(self, jid):
 		"""read queue and print messages containted in it"""
