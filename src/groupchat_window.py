@@ -564,9 +564,14 @@ class GroupchatWindow(chat.Chat):
 						message = ' '.join(splitted_text_after_msg_command[1:])
 						self.on_send_pm(nick=to_whom_nick, msg=message)
 				return # don't print the command
+			
+			elif message.startswith('/topic '):
+				new_subj = message[7:].strip() # 7 is len('/topic ')
+				gajim.connections[self.account].send_gc_subject(room_jid, new_subj)
+				return # don't print the command
 
 		gajim.connections[self.account].send_gc_message(room_jid, message)
-		message_buffer.set_text('', -1)
+		message_buffer.set_text('')
 		message_textview.grab_focus()
 
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
