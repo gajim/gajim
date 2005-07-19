@@ -247,7 +247,7 @@ class Interface:
 			if user1:
 				if user1.show in statuss:
 					old_show = statuss.index(user1.show)
-				if old_show == new_show and user1.status == array[2]: #no chgmt
+				if old_show == new_show and user1.status == array[2]: #no change
 					return
 			else:
 				user1 = gajim.contacts[account][ji][0]
