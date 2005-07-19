@@ -116,7 +116,7 @@ class Config:
 		'search_engine': [opt_str, 'http://www.google.com/search?&q='],
 		'dictionary_url': [opt_str, 'http://dictionary.reference.com/search?q='],
 		'always_english_wikipedia': [opt_bool, False],
-		'use_dbus': [opt_bool, False], # allow control via dbus service
+		'use_dbus': [opt_bool, True], # allow control via dbus service
 	}
 
 	__options_per_key = {
