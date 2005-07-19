@@ -141,13 +141,17 @@ class Chat:
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
 		#clean self.plugin.windows[self.account][kind]
 		for jid in self.xmls:
+			windows = self.plugin.windows[self.account][kind]
+			if kind == 'chats':
+				# send 'gone' chatstate to every tabbed chat tab
+				windows[jid].send_chatstate('gone')
 			if self.plugin.systray_enabled and self.nb_unread[jid] > 0:
 				self.plugin.systray.remove_jid(jid, self.account)
-			del self.plugin.windows[self.account][kind][jid]
+			del windows[jid]
 			if self.print_time_timeout_id.has_key(jid):
 				gobject.source_remove(self.print_time_timeout_id[jid])
-		if self.plugin.windows[self.account][kind].has_key('tabbed'):
-			del self.plugin.windows[self.account][kind]['tabbed']
+		if windows.has_key('tabbed'):
+			del windows['tabbed']
 
 	def get_active_jid(self):
 		notebook = self.notebook

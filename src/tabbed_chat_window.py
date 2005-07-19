@@ -209,8 +209,6 @@ class TabbedChatWindow(chat.Chat):
 			gajim.config.set('chat-height', height)
 
 	def on_tabbed_chat_window_destroy(self, widget):
-		# on window destroy, send 'gone' chatstate
-		self.send_chatstate('gone') # FIXME: loop to each tab and send that
 		#clean self.plugin.windows[self.account]['chats']
 		chat.Chat.on_window_destroy(self, widget, 'chats')
 
@@ -360,8 +358,10 @@ class TabbedChatWindow(chat.Chat):
 			self.send_chatstate('composing')
 
 	def send_chatstate(self, state):
+		''' sends our chatstate to the current tab '''
 		# please read jep-85 to get an idea of this
-		# we keep track of jep85 support by the peer by three extra states: None, -1 and 'ask'
+		# we keep track of jep85 support by the peer by three extra states:
+		# None, -1 and 'ask'
 		# None if no info about peer
 		# -1 if peer does not support jep85
 		# 'ask' if we sent 'active' chatstate and are waiting for reply
