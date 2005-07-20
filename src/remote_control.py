@@ -129,15 +129,19 @@ class SignalObject(DbusPrototype):
 			return None # or raise error
 		if not keyID:
 			keyID = ''
-		if account:
-			self.plugin.connections[account].send_message(jid, message, keyID)
+		connected_account = None
+		if account and \
+			gajim.connections[account].connected > 1: # account is  online
+			connected_account = gajim.connections[account]
 		else:
 			for account in gajim.contacts.keys():
-				if gajim.contacts[account].has_key(jid):
+				if gajim.contacts[account].has_key(jid) and \
+					gajim.connections[account].connected > 1: # account is  online
+					connected_account = gajim.connections[account]
 					break
-			if account:
-				res = gajim.connections[account].send_message(jid, message, keyID)
-				return True
+		if connected_account:
+			res = connected_account.send_message(jid, message, keyID)
+			return True
 		return False
 
 	def open_chat(self, *args):
@@ -153,19 +157,22 @@ class SignalObject(DbusPrototype):
 			accounts = [account]
 		else:
 			accounts = gajim.connections.keys()
-
+		connected_account = None
 		for account in accounts:
-			if self.plugin.windows[account]['chats'].has_key(jid):
-				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
+			if self.plugin.windows[account]['chats'].has_key(jid) and \
+				gajim.connections[account].connected > 1: # account is  online
+				connected_account = account
 				break
-			elif gajim.contacts[account].has_key(jid):
-				break
-		self.plugin.roster.new_chat_from_jid(account, jid)
-		
-		# preserve the 'steal focus preservation'
-		win = self.plugin.windows[account]['chats'][jid].window
-		if win.get_property('visible'):
-			win.window.focus()
+			elif gajim.connections[account].connected > 1: # account is  online
+				connected_account = account
+				if gajim.contacts[account].has_key(jid):
+					break
+		if connected_account:
+			self.plugin.roster.new_chat_from_jid(connected_account, jid)
+			# preserve the 'steal focus preservation'
+			win = self.plugin.windows[connected_account]['chats'][jid].window
+			if win.get_property('visible'):
+				win.window.focus()
 	
 	def change_status(self, *args, **keywords):
 		''' change_status(status, message, account). account is optional -
