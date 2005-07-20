@@ -228,19 +228,14 @@ class TabbedChatWindow(chat.Chat):
 		self.send_chatstate('active')
 
 	def on_tabbed_chat_window_focus_out_event(self, widget, event):
-		gobject.timeout_add(500, self.check_window_state, widget)
+		'''catch focus out and minimized and send inactive chatstate;
+		minimize action also focuses out first so it's catched here'''
+		window_state = widget.window.get_state()
+		if window_state is None:
+			print 'return NOOOOOONE'
+			return
 
-	def check_window_state(self, widget):
-		''' we want: "minimized" or "focus-out"
-		not "focus-out, minimized" or "focus-out" '''
-		widget.realize()
-		new_state = widget.window.get_state()
-		if new_state & gtk.gdk.WINDOW_STATE_ICONIFIED:
-			print 'iconify'
-			self.send_chatstate('inactive')
-		else:
-			print 'just focus-out'
-			self.send_chatstate('paused')
+		self.send_chatstate('inactive')
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
@@ -324,21 +319,22 @@ class TabbedChatWindow(chat.Chat):
 		
 	def check_for_possible_paused_chatstate(self, contact):
 		''' did we move mouse of that window or kbd activity in that window
-		if yes we go active if not already
-		if no we go paused if not already '''
+		if yes we go active
+		if no we go paused if we were previously composing '''
 		current_state = self.chatstates[contact.jid]
-		if current_state == False: # he doesn't support chatstates
+		if current_state == False: # jid doesn't support chatstates
 			return False # stop looping
 		
-		print 'mouse', self.mouse_over_in_last_5_secs
-		print 'kbd', self.kbd_activity_in_last_5_secs
+		#print 'mouse', self.mouse_over_in_last_5_secs
+		#print 'kbd', self.kbd_activity_in_last_5_secs
 		
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active')
 		elif self.kbd_activity_in_last_5_secs:
 			self.send_chatstate('composing')
 		else:
-			self.send_chatstate('paused')
+			if self.chatstates[contact.jid] == 'composing':
+				self.send_chatstate('paused') # pause composing
 		
 		# assume no activity and let the motion-notify or key_press make them True
 		self.mouse_over_in_last_5_secs = False
@@ -355,14 +351,11 @@ class TabbedChatWindow(chat.Chat):
 		if yes we go active if not already
 		if no we go inactive if not already '''
 		current_state = self.chatstates[contact.jid]
-		if current_state == False: # he doesn't support chatstates
+		if current_state == False: # jid doesn't support chatstates
 			return False # stop looping
 		
-		if self.mouse_over_in_last_30_secs:
-			self.send_chatstate('active')
-		elif self.kbd_activity_in_last_30_secs:
-			self.send_chatstate('composing')
-		else:
+		if not (self.mouse_over_in_last_30_secs or\
+		self.kbd_activity_in_last_30_secs):
 			self.send_chatstate('inactive')
 
 		# assume no activity and let the motion-notify or key_press make them True
@@ -436,12 +429,20 @@ class TabbedChatWindow(chat.Chat):
 	def send_chatstate(self, state):
 		''' sends our chatstate to the current tab only if new chatstate
 		is different for the previous one'''
-		# please read jep-85 to get an idea of this
+		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
 		# we keep track of jep85 support by the peer by three extra states:
 		# None, False and 'ask'
 		# None if no info about peer
 		# False if peer does not support jep85
 		# 'ask' if we sent 'active' chatstate and are waiting for reply
+		
+		# JEP 85 does not allow resending the same chatstate
+		# this function checks for that and just returns so it's safe to call it
+		# with same state.
+		
+		# This functions also checks for violation in state transitions
+		# and raises RuntimeException with appropriate message
+		# more on that http://www.jabber.org/jeps/jep-0085.html#statechart
 
 		# do not send nothing if we have chat state notifications disabled
 		if not gajim.config.get('send_chat_state_notifications'):
@@ -449,10 +450,10 @@ class TabbedChatWindow(chat.Chat):
 
 		jid = self.get_active_jid()
 
-		if self.chatstates[jid] == False:
+		if self.chatstates[jid] == False: # jid cannot do jep85
 			return
 
-		# if current state equals last state, return
+		# if current state equals previous state, return
 		if self.chatstates[jid] == state:
 			return
 
@@ -463,18 +464,14 @@ class TabbedChatWindow(chat.Chat):
 
 		if self.chatstates[jid] == 'ask':
 			return
+
+		# prevent going paused if we we were not composing (JEP violation)
+		if state == 'paused' and not self.chatstates[jid] == 'composing':
+			raise RuntimeError, 'paused chatstate can only exist after composing'
 		
-		# if last state was composing, don't send active
-		if self.chatstates[jid] == 'composing' and state == 'active':
-			return
-			
-		# if we're inactive prevent paused (inactive is stronger)
-		if self.chatstates[jid] == 'inactive' and state == 'paused':
-			return
-		
-		# if we're inactive prevent paused (inactive is stronger)
+		# if we're inactive prevent composing (JEP violation)
 		if self.chatstates[jid] == 'inactive' and state == 'composing':
-			return
+			raise RuntimeError, 'inactive chatstate can only be followed by active'
 
 		self.chatstates[jid] = state
 		gajim.connections[self.account].send_message(jid, None, None,
