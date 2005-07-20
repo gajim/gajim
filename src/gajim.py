@@ -582,9 +582,13 @@ class Interface:
 			self.windows[account]['chats'][array['jid']].set_avatar(array)
 
 	def handle_event_os_info(self, account, array):
+		win = None
 		if self.windows[account]['infos'].has_key(array[0]):
-			self.windows[account]['infos'][array[0]].set_os_info(array[1], \
-				array[2], array[3])
+			win = self.windows[account]['infos'][array[0]]
+		elif self.windows[account]['infos'].has_key(array[0] + '/' + array[1]):
+			win = self.windows[account]['infos'][array[0] + '/' + array[1]]
+		if win:
+			win.set_os_info(array[1], array[2], array[3])
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('OsInfo', (account, array))
 

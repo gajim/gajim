@@ -232,7 +232,8 @@ class VcardWindow:
 		client = ''
 		os = ''
 		while self.os_info.has_key(i):
-			if self.os_info[i]['resource'] == resource:
+			if not self.os_info[i]['resource'] or \
+					self.os_info[i]['resource'] == resource:
 				self.os_info[i]['client'] = client_info
 				self.os_info[i]['os'] = os_info
 			if i > 0:

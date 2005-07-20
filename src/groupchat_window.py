@@ -708,8 +708,12 @@ class GroupchatWindow(chat.Chat):
 		if self.plugin.windows[self.account]['infos'].has_key(jid):
 			self.plugin.windows[self.account]['infos'][jid].window.present()
 		else:
+			# we copy contact because c.jid must contain the fakeJid for vcard
+			c2 = Contact(jid = jid, name = c.name, groups = c.groups, 
+				show = c.show, status = c.status, sub = c.sub, 
+				resource = c.resource, role = c.role, affiliation = c.affiliation)
 			self.plugin.windows[self.account]['infos'][jid] = \
-				dialogs.VcardWindow(c, self.plugin, self.account, False)
+				dialogs.VcardWindow(c2, self.plugin, self.account, False)
 
 	def on_add_to_roster(self, widget, jid):
 		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
