@@ -117,7 +117,7 @@ class Config:
 		'dictionary_url': [opt_str, 'http://dictionary.reference.com/search?q='],
 		'always_english_wikipedia': [opt_bool, False],
 		'use_dbus': [opt_bool, True], # allow control via dbus service
-		'send_chat_state_notifications': [opt_bool, True],
+		'send_receive_chat_state_notifications': [opt_bool, True],
 	}
 
 	__options_per_key = {

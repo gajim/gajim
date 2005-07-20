@@ -378,7 +378,7 @@ class Interface:
 		if self.windows[account]['chats'].has_key(jid):
 			chat_win = self.windows[account]['chats'][jid]
 			# chatstates - display jep85 events in window
-			if chatstate_tag != None:
+			if chatstate_tag is not None:
 				if chat_win.chatstates[jid] == 'ask':
 					chat_win.chatstates[jid] = 'active'
 				chat_win.print_conversation(jid + ' is now ' + chatstate_tag, jid, 'status', tim = array[2])

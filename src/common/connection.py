@@ -633,12 +633,14 @@ class Connection:
 		if realm == common.xmpp.NS_REGISTER:
 			if event == common.xmpp.features.REGISTER_DATA_RECEIVED:
 				# data is (agent, DataFrom)
-				if self.new_account_info and self.new_account_info['hostname'] == data[0]:
+				if self.new_account_info and\
+				self.new_account_info['hostname'] == data[0]:
 					#it's a new account
 					req = data[1].asDict()
 					req['username'] = self.new_account_info['name']
 					req['password'] = self.new_account_info['password']
-					if not common.xmpp.features.register(self.connection, data[0], req):
+					if not common.xmpp.features.register(self.connection, data[0],
+						req):
 						self.dispatch('ERROR', (_('Error:'), self.connection.lastErr))
 						return
 					self.connected = 0

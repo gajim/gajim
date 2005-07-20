@@ -258,8 +258,8 @@ class PreferencesWindow:
 			set_active(gajim.config.get('ignore_unknown_contacts'))
 		
 		# send chat state notifications
-		st = gajim.config.get('send_chat_state_notifications')
-		btn = self.xml.get_widget('send_chat_state_checkbutton')
+		st = gajim.config.get('send_receive_chat_state_notifications')
+		btn = self.xml.get_widget('send_receive_chat_state_checkbutton')
 		if st:
 			btn.set_active(True)
 		else:
@@ -696,8 +696,9 @@ class PreferencesWindow:
 	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
 
-	def on_send_chat_state_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'send_chat_state_notifications')
+	def on_send_receive_chat_state_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget,
+			'send_receive_chat_state_notifications')
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',

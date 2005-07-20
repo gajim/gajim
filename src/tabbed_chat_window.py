@@ -232,7 +232,7 @@ class TabbedChatWindow(chat.Chat):
 		minimize action also focuses out first so it's catched here'''
 		window_state = widget.window.get_state()
 		if window_state is None:
-			print 'return NOOOOOONE'
+			#print 'return NOOOOOONE'
 			return
 
 		self.send_chatstate('inactive')
@@ -319,6 +319,7 @@ class TabbedChatWindow(chat.Chat):
 		
 	def check_for_possible_paused_chatstate(self, contact):
 		''' did we move mouse of that window or kbd activity in that window
+		in the last 5 seconds?
 		if yes we go active
 		if no we go paused if we were previously composing '''
 		current_state = self.chatstates[contact.jid]
@@ -328,12 +329,16 @@ class TabbedChatWindow(chat.Chat):
 		#print 'mouse', self.mouse_over_in_last_5_secs
 		#print 'kbd', self.kbd_activity_in_last_5_secs
 		
+		#gajim.log.debug('about %s' % contact.jid)
 		if self.mouse_over_in_last_5_secs:
+			#gajim.log.debug('sending active because of mouseover in last 5')
 			self.send_chatstate('active')
 		elif self.kbd_activity_in_last_5_secs:
+			#gajim.log.debug('sending composing because of kbd activity in last 5')
 			self.send_chatstate('composing')
 		else:
 			if self.chatstates[contact.jid] == 'composing':
+				#gajim.log.debug('sending paused because of inactivity in last 5')
 				self.send_chatstate('paused') # pause composing
 		
 		# assume no activity and let the motion-notify or key_press make them True
@@ -348,14 +353,17 @@ class TabbedChatWindow(chat.Chat):
 
 	def check_for_possible_inactive_chatstate(self, contact):
 		''' did we move mouse over that window or kbd activity in that window
+		in the last 30 seconds?
 		if yes we go active if not already
 		if no we go inactive if not already '''
 		current_state = self.chatstates[contact.jid]
 		if current_state == False: # jid doesn't support chatstates
 			return False # stop looping
 		
+		#gajim.log.debug('about %s' % contact.jid)
 		if not (self.mouse_over_in_last_30_secs or\
 		self.kbd_activity_in_last_30_secs):
+			#gajim.log.debug('sending inactive because of lack of activity in last 30')
 			self.send_chatstate('inactive')
 
 		# assume no activity and let the motion-notify or key_press make them True
@@ -445,24 +453,30 @@ class TabbedChatWindow(chat.Chat):
 		# more on that http://www.jabber.org/jeps/jep-0085.html#statechart
 
 		# do not send nothing if we have chat state notifications disabled
-		if not gajim.config.get('send_chat_state_notifications'):
+		# that means we won't reply to the <active/> from other peer
+		# so we do not broadcast jep85 capabalities
+		if not gajim.config.get('send_receive_chat_state_notifications'):
 			return
 
 		jid = self.get_active_jid()
 
 		if self.chatstates[jid] == False: # jid cannot do jep85
+			#print 'jid does not do jep85'
 			return
 
 		# if current state equals previous state, return
 		if self.chatstates[jid] == state:
+			#print 'same states'
 			return
 
 		if self.chatstates[jid] is None:
-			# state = 'ask'
-			# send and return
+			# we don't know anything about jid,
+			# send 'active', set current state to 'ask' and return
+			#print 'None so return'
 			return
 
 		if self.chatstates[jid] == 'ask':
+			#print 'ask so return'
 			return
 
 		# prevent going paused if we we were not composing (JEP violation)
@@ -471,15 +485,17 @@ class TabbedChatWindow(chat.Chat):
 		
 		# if we're inactive prevent composing (JEP violation)
 		if self.chatstates[jid] == 'inactive' and state == 'composing':
-			raise RuntimeError, 'inactive chatstate can only be followed by active'
+			gajim.connections[self.account].send_message(jid, None, None,
+			chatstate = 'active') # send active before
+			#raise RuntimeError, 'inactive chatstate can only be followed by active'
 
 		self.chatstates[jid] = state
+		#print 'SENDING', state
 		gajim.connections[self.account].send_message(jid, None, None,
 			chatstate = state)
 		
-		
 	def send_message(self, message):
-		"""Send the message given to the active tab"""
+		"""Send the given message to the active tab"""
 		if not message:
 			return
 		jid = self.get_active_jid()
@@ -502,20 +518,23 @@ class TabbedChatWindow(chat.Chat):
 				keyID = self.users[jid].keyID
 				encrypted = True
 
-			# chatstates - if no info about peer, discover
-			if self.chatstates[jid] is None:
-				gajim.connections[self.account].send_message(jid, message, keyID,
-					chatstate = 'active')
-				self.chatstates[jid] = 'ask'
-
-			# if peer supports jep85, send 'active'
-			elif self.chatstates[jid] != False:
-				#send active chatstate on every message (as JEP says)
-				gajim.connections[self.account].send_message(jid, message, keyID,
-					chatstate = 'active')
-			else: # just send the message
-				gajim.connections[self.account].send_message(jid, message, keyID)
+			notif_on = gajim.config.get('send_receive_chat_state_notifications')
+			# chatstates - if no info about peer, start discover procedure
 			
+			if notif_on: # if we have them one
+				if self.chatstates[jid] is None:
+					chatstate_to_send = 'active'
+					self.chatstates[jid] = 'ask'
+
+				# if peer supports jep85, send 'active'
+				elif self.chatstates[jid] != False:
+					#send active chatstate on every message (as JEP says)
+					chatstate_to_send = 'active'
+			else: # just send the message
+				chatstate_to_send = None
+			
+			gajim.connections[self.account].send_message(jid, message, keyID,
+				chatstate = chatstate_to_send)
 			message_buffer.set_text('')
 			self.print_conversation(message, jid, jid, encrypted = encrypted)
 
