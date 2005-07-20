@@ -587,7 +587,7 @@ class Interface:
 				array['resource']):
 			win = self.windows[account]['chats'][array['jid'] + '/' + \
 				array['resource']]
-		if win
+		if win:
 			win.set_avatar(array)
 
 	def handle_event_os_info(self, account, array):
