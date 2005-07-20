@@ -458,7 +458,7 @@ class Interface:
 			' \"%s\" ( %s )' % (array[3], array[2]), array[4], account)
 		
 	def handle_event_msgsent(self, account, array):
-		#('MSG', account, (jid, msg, keyID))
+		#('MSGSENT', account, (jid, msg, keyID))
 		if gajim.config.get_per('soundevents', 'message_sent', 'enabled'):
 			self.play_sound('message_sent')
 		
