@@ -16,7 +16,8 @@ FIND_LIB	= find . -name '*.so'
 FILES_LIB	= `$(FIND_LIB)`
 
 SCRIPTS = \
-	scripts/gajim
+	scripts/gajim \
+	scripts/gajim-remote
 
 all: translation trayicon gtkspell idle
 
@@ -112,6 +113,7 @@ uninstall:
 	rm -rf	"$(DESTDIR)$(PREFIX)/share/gajim" # the main files are here
 	rm -rf	"$(DESTDIR)$(PREFIX)/lib/gajim" # the .so files are here
 	rm -f		"$(DESTDIR)$(PREFIX)/bin/gajim" # the bash script
+	rm -f		"$(DESTDIR)$(PREFIX)/bin/gajim-remote" # remote-control script
 	rm -f		"$(MANDIR)/man1/gajim.1.gz" # the man page
 	rm -f		"$(DESTDIR)$(PREFIX)/share/pixmaps/gajim.png" # the icon
 	rm -f		"$(DESTDIR)$(PREFIX)/share/applications/gajim.desktop" #the desktop
