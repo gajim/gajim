@@ -24,12 +24,20 @@
 
 import sys
 import gtk
+import gtk.glade
 import gobject
 
 import signal
 
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
+import i18n
+
+_ = i18n._
+APP = i18n.APP
+gtk.glade.bindtextdomain(APP, i18n.DIR)
+gtk.glade.textdomain(APP)
+i18n.init()
 def send_error(error_message):
 	sys.stderr.write(error_message + '\n')
 	sys.stderr.flush()
@@ -41,33 +49,131 @@ except:
 	send_error('Dbus is not supported.\n')
 
 _version = getattr(dbus, 'version', (0, 20, 0))
+if _version[1] >= 41:
+	import dbus.service
+	import dbus.glib
 
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 SERVICE = 'org.gajim.dbus'
-commands = ['help', 'toggle_roster_appearance', 'show_next_unread',
-	'list_contacts',	'list_accounts', 'change_status', 'new_message',
-	'send_message', 'contact_info']
+
+
+commands = {
+	'help':[
+			_('show a help on specific command'),
+			[
+				(_('on_command'), _('show help on command'), False)
+			]
+		], 
+	'toggle_roster_appearance' : [
+			_('Shows or hides the roster window'),
+			[]
+		], 
+	'show_next_unread': [
+			_('Popup a window with the next unread message'),
+			[]
+		],
+	'list_contacts': [
+			_('Print a list of all contacts in the roster. \
+Each contact appear on a separate line'),
+			[
+				(_('account'), _('show only contacts of the account \'account\''), False)
+			]
+			
+		],	
+	'list_accounts': [
+			_('Print a list of registered accounts'),
+			[]
+		], 
+	'change_status': [
+			_('Change '),
+			[
+				(_('status'), _('one of: offline, online, chat, \
+away, xa, dnd, invisible '), True), 
+				(_('message'), _('status message'), False), 
+				(_('account'), _('change status of the account \'accounts\'. \
+If not specified try to change stutus of all accounts that \
+have \'sync with global \' option set'), False)
+			]
+		],
+	'new_message': [
+			_('Show the chat dialog so that you can send message to a contact'), 
+			[
+				(_('jid'), _('jid of the contact that you want to send a message to'), True), 
+				(_('account'), _('if specified will try to send the \
+message using this account'), False)
+			]
+		],
+	'send_message':[
+			_('Send new message to a contact in the roster'), 
+			[
+				(_('jid'), _('jid of the contact that will receive the message'), True),
+				(_('message'), _('message contents'), True),
+				(_('keyID'), _('if specified will encrypt the message using \
+this pulic key'), False),
+				(_('account'), _('if specified will try to send the \
+message using this account'), False),
+			]
+		], 
+	'contact_info': [
+			_('Get detailed info on a contact'), 
+			[
+				(_('jid'), _('jid of the contact'), True)
+			]
+		]
+	}
+
 	
-if _version[1] >= 41:
-	import dbus.service
-	import dbus.glib
-	
+def make_arguments_row(args):
+	str = ''
+	for argument in args:
+		str += ' '
+		if argument[2]:
+			str += '<'
+		else:
+			str += '['
+		str += argument[0]
+		if argument[2]:
+			str += '>'
+		else:
+			str += ']'
+	return str
+def help_on_command(command):
+	if command in commands:
+		str = _('Usage: %s %s %s \n\t') % (sys.argv[0], command, make_arguments_row(commands[command][1]))
+		str += commands[command][0] + '\n\nArguments:\n'
+		for argument in commands[command][1]:
+			str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
+		return str
+	send_error(_(' %s not found') % command)
+		
 def compose_help():
-	str = 'Usage: '+ sys.argv[0] + ' command [arguments]\n'
-	str += 'Command must be one of:\n'
-	for command in commands:
-		str += '\t' + command +'\n'
+	str = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % sys.argv[0]
+	for command in commands.keys():
+		str += '  ' + command 
+		for argument in commands[command][1]:
+			str += ' '
+			if argument[2]:
+				str += '<'
+			else:
+				str += '['
+			str += argument[0]
+			if argument[2]:
+				str += '>'
+			else:
+				str += ']'
+		str += '\n'
 	return str
 
 def show_vcard_info(*args, **keyword):
+	# more cleaner output
 	if _version[1] >= 30:
 		print args[0]
 	else:
 		if args and len(args) >= 5:
 			print args[4].get_args_list()
 
-	# remove_signal_receiver is broken in lower versions, 
+	# remove_signal_receiver is broken in lower versions (< 0.35), 
 	# so we leave the leak - nothing can be done
 	if _version[1] >= 41:
 		sbus.remove_signal_receiver(show_vcard_info, 'VcardInfo', INTERFACE, 
@@ -84,13 +190,16 @@ def gtk_quit():
 
 argv_len = len(sys.argv) 
 
-if argv_len  < 2 or sys.argv[1] not in commands: # no args or bad args
+if argv_len  < 2 or sys.argv[1] not in commands.keys(): # no args or bad args
 	send_error(compose_help())
 
 command = sys.argv[1]
 
 if command == 'help':
-	print compose_help()
+	if argv_len == 3:
+		print help_on_command(sys.argv[2])
+	else:
+		print compose_help()
 	sys.exit()
 
 try:
@@ -112,30 +221,36 @@ method = interface.__getattr__(sys.argv[1]) # get the function asked
 
 if command == 'contact_info':
 	if argv_len < 3:
-		send_error("Missing argument \'contact_jid'")
+		send_error('Missing argument \'contact_jid\'')
 	try:
 		id = sbus.add_signal_receiver(show_vcard_info, 'VcardInfo', 
 			INTERFACE, SERVICE, OBJ_PATH)
 	except:
 		send_error('Service not available')
 
-#FIXME: gajim-remote.py change_status help to inform what it does with optional arg (account). the same for rest of methods that accept args
-
 #FIXME - didn't find more clever way for the below 8 lines of code.
 # method(sys.argv[2:]) doesn't work, cos sys.argv[2:] is a tuple
-try:
-	if argv_len == 2:
-		res = method()
-	elif argv_len == 3:
-		res = method(sys.argv[2])
-	elif argv_len == 4:
-		res = method(sys.argv[2], sys.argv[3])
-	elif argv_len == 5:
-		res = method(sys.argv[2], sys.argv[3], sys.argv[4])
-	if res:
-		print res
-except:
-	send_error('Service not available')
+def call_remote_method(method):
+	argv_len = len(sys.argv)
+	try:
+		if argv_len == 2:
+			res = method()
+		elif argv_len == 3:
+			res = method(sys.argv[2])
+		elif argv_len == 4:
+			res = method(sys.argv[2], sys.argv[3])
+		elif argv_len == 5:
+			res = method(sys.argv[2], sys.argv[3], sys.argv[4])
+		return res
+	except:
+		send_error(_('Service not available'))
+	return None
+
+res = call_remote_method(method)
+
+
+if res:
+	print res
 
 if command == 'contact_info':
 	gobject.timeout_add(5000, gtk_quit) # wait 5 sec maximum
