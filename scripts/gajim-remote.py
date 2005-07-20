@@ -102,13 +102,13 @@ If not specified try to change status of all accounts that \
 have "sync with global status" option set'), False)
 			]
 		],
-	'new_message': [ # FIXME: merge me with send_message
+	'open_chat': [ 
 			_('Show the chat dialog so that you can send message to a contact'), 
 			[
-				('jid', _('jid of the contact that you want to send a message to'),
+				('jid', _('jid of the contact that you want to chat with'),
 					True), 
-				(_('account'), _('if specified the message will be sent the \
-message using this account'), False)
+				(_('account'), _('if specified contact is taken from the contact \
+list of this account'), False)
 			]
 		],
 	'send_message':[
