@@ -141,8 +141,8 @@ class TabbedChatWindow(chat.Chat):
 				img_decoded = base64.decodestring(vcard['PHOTO']['BINVAL'])
 			except:
 				pass
-		elif vcard[i].has_key('EXTVAL'):
-			url = vcard[i]['EXTVAL']
+		elif vcard['PHOTO'].has_key('EXTVAL'):
+			url = vcard['PHOTO']['EXTVAL']
 			try:
 				fd = urllib.urlopen(url)
 				img_decoded = fd.read()
