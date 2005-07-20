@@ -2057,7 +2057,9 @@ _('Without a connection, you can not browse available services')).get_response()
 				iter_child = model.iter_next(iter_child)
 			if not iter_child: # If it is not we add it
 				iter_child = model.append(iter, (name, item['jid'], node))
-			self.agent_infos[item['jid'] + node] = {'identities': [item]}
+				self.agent_infos[item['jid'] + node] = {'identities': [item]}
+			else:
+				self.agent_infos[item['jid'] + node]['identities'] = [item]
 			if self.iter_is_visible(iter_child) and not expand and do_browse:
 				self.browse(item['jid'], node)
 		if expand:
@@ -2141,8 +2143,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		else:
 			self.register_button.set_label(_('Re_gister'))
 		if self.agent_infos[jid + node].has_key('features'):
-			if common.xmpp.NS_REGISTER in self.agent_infos[jid + node] \
-					['features']:
+			if common.xmpp.NS_REGISTER in self.agent_infos[jid + node]['features']:
 				self.register_button.set_sensitive(True)
 		if self.agent_infos[jid + node].has_key('identities') and \
 				len(self.agent_infos[jid + node]['identities']):
