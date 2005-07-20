@@ -208,7 +208,7 @@ class GroupchatWindow(chat.Chat):
 		return self.contacts[room_jid].keys()
 
 	def remove_user(self, room_jid, nick):
-		"""Remove a user from the list_users"""
+		"""Remove a user from the contacts_list"""
 		model = self.list_treeview[room_jid].get_model()
 		iter = self.get_contact_iter(room_jid, nick)
 		if not iter:

@@ -167,14 +167,14 @@ class TabbedChatWindow(chat.Chat):
 	def set_state_image(self, jid):
 		prio = 0
 		if gajim.contacts[self.account].has_key(jid):
-			list_users = gajim.contacts[self.account][jid]
+			contacts_list = gajim.contacts[self.account][jid]
 		else:
-			list_users = [self.contacts[jid]]
-		user = list_users[0]
+			contacts_list = [self.contacts[jid]]
+		user = contacts_list[0]
 		show = user.show
 		jid = user.jid
 		keyID = user.keyID
-		for u in list_users:
+		for u in contacts_list:
 			if u.priority > prio:
 				prio = u.priority
 				show = u.show

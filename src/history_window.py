@@ -173,8 +173,8 @@ class HistoryWindow:
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
 		if account and gajim.contacts[account].has_key(jid):
-			list_users = gajim.contacts[account][self.jid]
-			user = list_users[0]
+			contacts_list = gajim.contacts[account][self.jid]
+			user = contacts_list[0]
 			title = 'Conversation History with ' + user.name
 		else:
 			title = 'Conversation History with ' + jid
