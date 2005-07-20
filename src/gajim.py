@@ -578,8 +578,17 @@ class Interface:
 				array['resource']]
 		if win:
 			win.set_values(array)
+
+		#show avatar in chat
+		win = None
 		if self.windows[account]['chats'].has_key(array['jid']):
-			self.windows[account]['chats'][array['jid']].set_avatar(array)
+			win = self.windows[account]['chats'][array['jid']]
+		elif self.windows[account]['chats'].has_key(array['jid'] + '/' + \
+				array['resource']):
+			win = self.windows[account]['chats'][array['jid'] + '/' + \
+				array['resource']]
+		if win
+			win.set_avatar(array)
 
 	def handle_event_os_info(self, account, array):
 		win = None
