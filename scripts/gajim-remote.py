@@ -25,7 +25,6 @@
 
 import sys
 import gtk
-import gtk.glade
 import gobject
 
 import signal
@@ -36,9 +35,8 @@ import i18n
 
 _ = i18n._
 APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
 i18n.init()
+
 def send_error(error_message):
 	sys.stderr.write(error_message + '\n')
 	sys.stderr.flush()
