@@ -226,7 +226,8 @@ class TabbedChatWindow(chat.Chat):
 
 	def check_window_state(self, widget):
 		''' we want: "minimized" or "focus-out"
-      not "focus-out, minimized" or "focus-out" '''
+		not "focus-out, minimized" or "focus-out" '''
+		widget.realize()
 		new_state = widget.window.get_state()
 		if new_state & gtk.gdk.WINDOW_STATE_ICONIFIED:
 			print 'iconify'

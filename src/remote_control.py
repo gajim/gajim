@@ -95,7 +95,7 @@ class SignalObject(DbusPrototype):
 				self.list_contacts,
 				self.list_accounts,
 				self.change_status,
-				self.new_message,
+				self.open_chat,
 				self.send_message,
 				self.contact_info
 			])
@@ -134,19 +134,20 @@ class SignalObject(DbusPrototype):
 		else:
 			for account in gajim.contacts.keys():
 				if gajim.contacts[account].has_key(jid):
-					gajim.connections[account].send_message(jid, 
-						message, keyID)
-					return True
+					break
+			if account:
+				res = gajim.connections[account].send_message(jid, message, keyID)
+				return True
 		return False
 
-	def new_message(self, *args):
-		''' new_message(jid, account=None) -> shows the tabbed window for new 
+	def open_chat(self, *args):
+		''' start_chat(jid, account=None) -> shows the tabbed window for new 
 		message to 'jid', using account(optional) 'account ' '''
 		if self.disabled:
 			return
 		jid, account = self._get_real_arguments(args, 2)
 		if not jid:
-			# FIXME: raise exception for missing argument (dbus0.3+)
+			# FIXME: raise exception for missing argument (dbus0.35+ - released last week)
 			return None
 		if account:
 			accounts = [account]
@@ -158,17 +159,13 @@ class SignalObject(DbusPrototype):
 				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 				break
 			elif gajim.contacts[account].has_key(jid):
-				self.plugin.roster.new_chat(gajim.contacts[account][jid][0],
-					account)
-				jid_data = self.plugin.windows[account]['chats'][jid]
-				jid_data.set_active_tab(jid)
-				jid_data.window.present()
-				# preserve the "steal focus preservation"
-				if self._is_first():
-					jid_data.window.window.focus()
-				else:
-					jid_data.window.window.focus(long(time()))
 				break
+		self.plugin.roster.new_chat_from_jid(account, jid)
+		
+		# preserve the 'steal focus preservation'
+		win = self.plugin.windows[account]['chats'][jid].window
+		if win.get_property('visible'):
+			win.window.focus()
 	
 	def change_status(self, *args, **keywords):
 		''' change_status(status, message, account). account is optional -
@@ -178,7 +175,7 @@ class SignalObject(DbusPrototype):
 		status, message, account = self._get_real_arguments(args, 3)
 		if status not in ('offline', 'online', 'chat', 
 			'away', 'xa', 'dnd', 'invisible'):
-			# FIXME: raise exception for bad status (dbus0.3+)
+			# FIXME: raise exception for bad status (dbus0.35)
 			return None
 		if account:
 			gobject.idle_add(self.plugin.roster.send_status, account, 
@@ -212,7 +209,7 @@ class SignalObject(DbusPrototype):
 			if jid_tab:
 				jid_tab.set_active_tab(jid)
 				jid_tab.window.present()
-				# preserve the "steal focus preservation"
+				# preserve the 'steal focus preservation'
 				if self._is_first():
 					jid_tab.window.window.focus()
 				else:
@@ -269,7 +266,7 @@ class SignalObject(DbusPrototype):
 					if item:
 						result.append(item)
 			else:
-				# "for_account: is not recognised:", 
+				# 'for_account: is not recognised:', 
 				# FIXME: there can be a return status for this [0.3+]
 				return None
 		else:
@@ -292,7 +289,7 @@ class SignalObject(DbusPrototype):
 			gobject.idle_add(win.hide)
 		else:
 			win.present()
-			# preserve the "steal focus preservation"
+			# preserve the 'steal focus preservation'
 			if self._is_first():
 				win.window.focus()
 			else:
@@ -318,7 +315,7 @@ class SignalObject(DbusPrototype):
 					repr(array))
 
 	def _get_real_arguments(self, args, desired_length):
-		# supresses the first "message" argument, which is set in dbus 0.23
+		# supresses the first 'message' argument, which is set in dbus 0.23
 		if _version[1] == 20:
 			args=args[1:]
 		if desired_length > 0:
@@ -371,7 +368,7 @@ class SignalObject(DbusPrototype):
 		list_accounts = method(INTERFACE)(list_accounts)
 		show_next_unread = method(INTERFACE)(show_next_unread)
 		change_status = method(INTERFACE)(change_status)
-		new_message = method(INTERFACE)(new_message)
+		open_chat = method(INTERFACE)(open_chat)
 		contact_info = method(INTERFACE)(contact_info)
 		send_message = method(INTERFACE)(send_message)
 		VcardInfo = signal(INTERFACE)(VcardInfo)
@@ -382,7 +379,7 @@ class SessionBusNotPresent(Exception):
 		Exception.__init__(self)
 
 	def __str__(self):
-		return _("Session bus is not available")
+		return _('Session bus is not available')
 
 class DbusNotSupported(Exception):
 	''' D-Bus is not installed or python bindings are missing '''
@@ -390,4 +387,4 @@ class DbusNotSupported(Exception):
 		Exception.__init__(self)
 
 	def __str__(self):
-		return _("D-Bus is not present on this machine")
+		return _('D-Bus is not present on this machine')
