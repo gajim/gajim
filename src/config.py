@@ -1309,7 +1309,7 @@ _('Without a connection, you can not edit your personal information.')
 		else:
 			from common import GnuPG
 			if GnuPG.USE_GPG:
-				secret_keys = GnuPG.GnuPG().get_keys()
+				secret_keys = GnuPG.GnuPG().get_secret_keys()
 			else:
 				secret_keys = []
 		if not secret_keys:
