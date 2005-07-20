@@ -157,6 +157,7 @@ class TabbedChatWindow(chat.Chat):
 			x = None
 			if self.xmls.has_key(vcard['jid']):
 				x = self.xmls[vcard['jid']]
+			# it can be xmls[jid/resource] if it's a vcard from pm
 			elif self.xmls.has_key(vcard['jid'] + '/' + vcard['resource']):
 				x = self.xmls[vcard['jid'] + '/' + vcard['resource']]
 			image = x.get_widget('avatar_image')
