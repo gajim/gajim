@@ -841,7 +841,12 @@ class Interface:
 
 	def process_connections(self):
 		try:
+			# We copy the list of connections because one can disappear while we 
+			# process()
+			accounts = []
 			for account in gajim.connections:
+				accounts.append(account)
+			for account in accounts:
 				if gajim.connections[account].connected:
 					gajim.connections[account].process(0.01)
 			time.sleep(0.01) # threads in connection.py have time to run
