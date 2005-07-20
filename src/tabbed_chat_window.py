@@ -43,7 +43,7 @@ class TabbedChatWindow(chat.Chat):
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
-		self.users = {}
+		self.contacts = {}
 		self.chatstates = {}
 		# keep check for possible paused timeouts per jid
 		self.possible_paused_timeout_id = {}
@@ -117,8 +117,8 @@ class TabbedChatWindow(chat.Chat):
 		#FIXME: uncomment me when we support sending messages to specific resource
 		# composing full jid
 		#fulljid = jid
-		#if self.users[jid].resource:
-		#	fulljid += '/' + self.users[jid].resource
+		#if self.contacts[jid].resource:
+		#	fulljid += '/' + self.contacts[jid].resource
 		#label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
 		#	% (name, fulljid)
 		
@@ -169,7 +169,7 @@ class TabbedChatWindow(chat.Chat):
 		if gajim.contacts[self.account].has_key(jid):
 			list_users = gajim.contacts[self.account][jid]
 		else:
-			list_users = [self.users[jid]]
+			list_users = [self.contacts[jid]]
 		user = list_users[0]
 		show = user.show
 		jid = user.jid
@@ -200,7 +200,7 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_tabbed_chat_window_delete_event(self, widget, event):
 		"""close window"""
-		for jid in self.users:
+		for jid in self.contacts:
 			if time.time() - gajim.last_message_time[self.account][jid] < 2:
 				# 2 seconds
 				dialog = dialogs.ConfirmationDialog(
@@ -267,14 +267,14 @@ class TabbedChatWindow(chat.Chat):
 		
 		chat.Chat.remove_tab(self, jid, 'chats')
 		if len(self.xmls) > 0:
-			del self.users[jid]
+			del self.contacts[jid]
 
 	def new_user(self, contact):
 		'''when new tab is created'''
 		self.names[contact.jid] = contact.name
 		self.xmls[contact.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[contact.jid] = self.xmls[contact.jid].get_widget('chats_vbox')
-		self.users[contact.jid] = contact
+		self.contacts[contact.jid] = contact
 
 		if contact.jid in gajim.encrypted_chats[self.account]:
 			self.xmls[contact.jid].get_widget('gpg_togglebutton').set_active(True)
@@ -515,7 +515,7 @@ class TabbedChatWindow(chat.Chat):
 			keyID = ''
 			encrypted = False
 			if self.xmls[jid].get_widget('gpg_togglebutton').get_active():
-				keyID = self.users[jid].keyID
+				keyID = self.contacts[jid].keyID
 				encrypted = True
 
 			notif_on = gajim.config.get('send_receive_chat_state_notifications')
@@ -542,13 +542,13 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_contact_button_clicked(self, widget):
 		jid = self.get_active_jid()
-		contact = self.users[jid]
+		contact = self.contacts[jid]
 		self.plugin.roster.on_info(widget, contact, self.account)
 
 	def read_queue(self, jid):
 		"""read queue and print messages containted in it"""
 		l = gajim.awaiting_messages[self.account][jid]
-		user = self.users[jid]
+		user = self.contacts[jid]
 		for event in l:
 			self.print_conversation(event[0], jid, tim = event[1],
 				encrypted = event[2])
@@ -570,7 +570,7 @@ class TabbedChatWindow(chat.Chat):
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message
 		if contact is not set: it's an incomming message"""
-		user = self.users[jid]
+		user = self.contacts[jid]
 		if contact == 'status':
 			kind = 'status'
 			name = ''
@@ -649,7 +649,7 @@ class TabbedChatWindow(chat.Chat):
 				name = gajim.nicks[self.account]
 			elif msg[1] == 'recv':
 				kind = 'incoming'
-				name = self.users[jid].name
+				name = self.contacts[jid].name
 
 			tim = time.localtime(float(msg[0]))
 
