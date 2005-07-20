@@ -57,7 +57,7 @@ if _version[1] >= 41:
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 SERVICE = 'org.gajim.dbus'
-
+BASENAME = 'gajim-remote'
 # define commands dict. Prototype :
 # {
 #	'command': [comment, [list of arguments] ]
@@ -152,7 +152,7 @@ def make_arguments_row(args):
 def help_on_command(command):
 	''' return help message for a given command '''
 	if command in commands:
-		str = _('Usage: %s %s %s \n\t') % (sys.argv[0], command, make_arguments_row(commands[command][1]))
+		str = _('Usage: %s %s %s \n\t') % (BASENAME, command, make_arguments_row(commands[command][1]))
 		str += commands[command][0] + '\n\nArguments:\n'
 		for argument in commands[command][1]:
 			str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
@@ -161,7 +161,7 @@ def help_on_command(command):
 		
 def compose_help():
 	''' print usage, and list available commands '''
-	str = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % sys.argv[0]
+	str = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % BASENAME
 	for command in commands.keys():
 		str += '  ' + command 
 		for argument in commands[command][1]:
@@ -202,7 +202,7 @@ def check_arguments(command):
 		if args[argv_len][2]:
 			send_error(_('Argument <%s> is not specified. \n\
 Type \'%s help %s\' for more info') % \
-			(args[argv_len][0], sys.argv[0], command))
+			(args[argv_len][0], BASENAME, command))
 
 def gtk_quit():
 	if _version[1] >= 41:
