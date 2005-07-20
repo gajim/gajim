@@ -312,7 +312,8 @@ class Interface:
 														_('Contact Signed In'), jid, account)
 						self.roster.popup_notification_windows.append(instance)
 				if self.remote and self.remote.is_enabled():
-					self.remote.raise_signal('ContactPresence', (account, array))						
+					self.remote.raise_signal('ContactPresence',
+						(account, array))						
 						
 			elif old_show > 1 and new_show < 2:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
