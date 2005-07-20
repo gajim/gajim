@@ -242,7 +242,7 @@ class GroupchatWindow(chat.Chat):
 			if len(jids) > 1:
 				resource = jids[1]
 		else:
-			j = room_jid + '/' + nick
+			j = ''
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:			
 			role_iter = model.append(None,
