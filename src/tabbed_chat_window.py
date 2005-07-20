@@ -154,7 +154,12 @@ class TabbedChatWindow(chat.Chat):
 			pixbuf = pixbufloader.get_pixbuf()
 			pixbufloader.close()
 			scaled_buf = pixbuf.scale_simple(52, 52, gtk.gdk.INTERP_HYPER)
-			image = self.xmls[vcard['jid']].get_widget('avatar_image')
+			x = None
+			if self.xmls.has_key(vcard['jid']):
+				x = self.xmls[vcard['jid']]
+			elif self.xmls.has_key(vcard['jid'] + '/' + vcard['resource']):
+				x = self.xmls[vcard['jid'] + '/' + vcard['resource']]
+			image = x.get_widget('avatar_image')
 			image.set_from_pixbuf(scaled_buf)
 			image.show_all()
 
