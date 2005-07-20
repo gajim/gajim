@@ -112,11 +112,11 @@ list of this account'), False)
 			]
 		],
 	'send_message':[
-			_('Send new message to a contact in the roster'), 
+			_('Send new message to a contact in the roster. Both pgp key and account are optional. If you want to set only \'account\', whitout \'pgp key\', just set \'pgp key\' to \'\'.'), 
 			[
 				('jid', _('jid of the contact that will receive the message'), True),
 				(_('message'), _('message contents'), True),
-				(_('keyID'), _('if specified the message will be encrypted using \
+				(_('pgp key'), _('if specified the message will be encrypted using \
 this pulic key'), False),
 				(_('account'), _('if specified the message will be sent using this account'), False),
 			]
@@ -222,6 +222,8 @@ def call_remote_method(method):
 			res = method(sys.argv[2], sys.argv[3])
 		elif argv_len == 5:
 			res = method(sys.argv[2], sys.argv[3], sys.argv[4])
+		elif argv_len == 6:
+			res = method(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
 		return res
 	except:
 		send_error(_('Service not available'))
@@ -271,9 +273,19 @@ if command == 'contact_info':
 
 res = call_remote_method(method)
 
-
-if res:
-	print res
+if res is not None:
+	if command in ['open_chat', 'send_message']:
+		if command == 'send_message':
+			argv_len -= 2
+		
+		if res == False:
+			if argv_len < 4:
+				send_error(_('\'%s\' is not in your roster.\n\
+Please specify account for sending the message.') % sys.argv[2])
+			else:
+				send_error(_('You have no active account'))
+	elif res is True:
+		print res
 
 if command == 'contact_info':
 	gobject.timeout_add(5000, gtk_quit) # wait 5 sec maximum

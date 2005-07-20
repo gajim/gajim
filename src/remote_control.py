@@ -130,11 +130,16 @@ class SignalObject(DbusPrototype):
 		if not keyID:
 			keyID = ''
 		connected_account = None
-		if account and \
-			gajim.connections[account].connected > 1: # account is  online
-			connected_account = gajim.connections[account]
+		accounts = gajim.contacts.keys()
+		
+		# if there is only one account in roster, take it as default
+		if not account and len(accounts) == 1:
+			account = accounts[0]
+		if account:
+			if gajim.connections[account].connected > 1: # account is  online
+				connected_account = gajim.connections[account]
 		else:
-			for account in gajim.contacts.keys():
+			for account in accounts:
 				if gajim.contacts[account].has_key(jid) and \
 					gajim.connections[account].connected > 1: # account is  online
 					connected_account = gajim.connections[account]
@@ -157,22 +162,30 @@ class SignalObject(DbusPrototype):
 			accounts = [account]
 		else:
 			accounts = gajim.connections.keys()
+			if len(accounts) == 1:
+				account = accounts[0]
 		connected_account = None
-		for account in accounts:
-			if self.plugin.windows[account]['chats'].has_key(jid) and \
-				gajim.connections[account].connected > 1: # account is  online
-				connected_account = account
-				break
-			elif gajim.connections[account].connected > 1: # account is  online
-				connected_account = account
-				if gajim.contacts[account].has_key(jid):
+		for acct in accounts:
+			if gajim.connections[acct].connected > 1: # account is  online
+				if self.plugin.windows[acct]['chats'].has_key(jid):
+					connected_account = acct
 					break
+				# jid is in roster
+				elif gajim.contacts[acct].has_key(jid):
+					connected_account = acct
+					break
+				# we send the message to jid not in roster, because account is specified,
+				# or there is only one account
+				elif account: 
+					connected_account = acct
 		if connected_account:
 			self.plugin.roster.new_chat_from_jid(connected_account, jid)
 			# preserve the 'steal focus preservation'
 			win = self.plugin.windows[connected_account]['chats'][jid].window
 			if win.get_property('visible'):
 				win.window.focus()
+			return True
+		return False
 	
 	def change_status(self, *args, **keywords):
 		''' change_status(status, message, account). account is optional -
