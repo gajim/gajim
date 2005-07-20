@@ -18,20 +18,24 @@
 ##
 
 import gobject
+import gtk
+import gtk.glade
 
 from common import gajim
 from time import time
-
 from common import i18n
+
 _ = i18n._
+APP = i18n.APP
+gtk.glade.bindtextdomain(APP, i18n.DIR)
+gtk.glade.textdomain(APP)
+i18n.init()
 
 try:
 	import dbus
 except:
 	pass
-
 _version = getattr(dbus, 'version', (0, 20, 0)) 
-
 if _version >= (0, 41, 0):
 	import dbus.service
 	import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it
@@ -47,8 +51,8 @@ class Remote:
 	def __init__(self, plugin):
 		self.signal_object = None
 		if 'dbus' not in globals():
-			print 'D-Bus python bindings are missing in this computer.'
-			print 'D-Bus capabilities of Gajim cannot be used'
+			print _('D-Bus python bindings are missing in this computer.')
+			print _('D-Bus capabilities of Gajim cannot be used')
 			raise DbusNotSupported()
 		try:
 			session_bus = dbus.SessionBus()
@@ -101,9 +105,6 @@ class SignalObject(DbusPrototype):
 				self.contact_info
 			])
 
-	def disconnect(self):
-		self._connection.disconnect()
-	
 	def raise_signal(self, signal, arg):
 		''' raise a signal, with a single string message '''
 		if self.disabled :
