@@ -26,11 +26,13 @@ from common import i18n
 
 _ = i18n._
 
+USE_DBUS = True
+
 try:
 	import dbus
 	_version = getattr(dbus, 'version', (0, 20, 0)) 
 except ImportError:
-	pass
+	USE_DBUS = True # user can't do OpenGPG only if he removed the file!
 
 if _version >= (0, 41, 0):
 	import dbus.service

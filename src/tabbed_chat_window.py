@@ -442,7 +442,7 @@ class TabbedChatWindow(chat.Chat):
 		# None, False and 'ask'
 		# None if no info about peer
 		# False if peer does not support jep85
-		# 'ask' if we sent 'active' chatstate and are waiting for reply
+		# 'ask' if we sent the first 'active' chatstate and are waiting for reply
 		
 		# JEP 85 does not allow resending the same chatstate
 		# this function checks for that and just returns so it's safe to call it
@@ -481,13 +481,13 @@ class TabbedChatWindow(chat.Chat):
 
 		# prevent going paused if we we were not composing (JEP violation)
 		if state == 'paused' and not self.chatstates[jid] == 'composing':
-			raise RuntimeError, 'paused chatstate can only exist after composing'
+			gajim.connections[self.account].send_message(jid, None, None,
+				chatstate = 'active') # go active before
 		
 		# if we're inactive prevent composing (JEP violation)
 		if self.chatstates[jid] == 'inactive' and state == 'composing':
 			gajim.connections[self.account].send_message(jid, None, None,
-			chatstate = 'active') # send active before
-			#raise RuntimeError, 'inactive chatstate can only be followed by active'
+				chatstate = 'active') # go active before
 
 		self.chatstates[jid] = state
 		#print 'SENDING', state
@@ -520,8 +520,11 @@ class TabbedChatWindow(chat.Chat):
 
 			notif_on = gajim.config.get('send_receive_chat_state_notifications')
 			# chatstates - if no info about peer, start discover procedure
-			
+			chatstate_to_send = None
 			if notif_on: # if we have them one
+				
+				#FIXME: move me from here to  if self.chatstates[jid] is None:
+				#in send_chatstae
 				if self.chatstates[jid] is None:
 					chatstate_to_send = 'active'
 					self.chatstates[jid] = 'ask'
@@ -530,11 +533,10 @@ class TabbedChatWindow(chat.Chat):
 				elif self.chatstates[jid] != False:
 					#send active chatstate on every message (as JEP says)
 					chatstate_to_send = 'active'
-			else: # just send the message
-				chatstate_to_send = None
 			
 			gajim.connections[self.account].send_message(jid, message, keyID,
 				chatstate = chatstate_to_send)
+
 			message_buffer.set_text('')
 			self.print_conversation(message, jid, jid, encrypted = encrypted)
 

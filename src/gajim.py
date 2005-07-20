@@ -385,7 +385,7 @@ class Interface:
 				chat_win.print_conversation(jid + ' is now ' + chatstate_tag, jid, 'status', tim = array[2])
 			else:
 				# got no valid jep85 answer, peer does not support it
-				chat_win.chatstates[jid] = -1
+				chat_win.chatstates[jid] = False
 
 		if not array[1]: #empty message
 			return
