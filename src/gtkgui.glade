@@ -4300,7 +4300,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="send_receive_chat_state_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If checked, Gajim will broadcast capability to send and receive meta-information related to a conversation you may have with a contact, such as composing a message</property>
+		  <property name="tooltip" translatable="yes">If checked, Gajim will broadcast capability to send and receive meta-information related to a conversation you may have with a contact such as composing a message</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Send &amp; receive chat state noti_fications</property>
 		  <property name="use_underline">True</property>
