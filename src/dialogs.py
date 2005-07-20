@@ -495,24 +495,17 @@ class RosterTooltip(gtk.Window):
 		self.plugin = plugin
 		self.set_resizable(False)
 		self.set_name('gtk-tooltips')
-		hbox = gtk.HBox()
-		hbox.set_spacing(6)
-		hbox.set_border_width(6)
-		self.add(hbox)
+		self.hbox = gtk.HBox()
+		self.hbox.set_border_width(6)
+		self.add(self.hbox)
 		self.image = gtk.Image()
 		self.image.set_alignment(0.5, 0.025)
 		
-		hbox.pack_start(self.image, False, False)
-		contents = gtk.VBox()
-		contents.set_spacing(10)
-		hbox.pack_start(contents)
+		self.hbox.pack_start(self.image, False, False)
+		self.account = None
+		self.table = None
 		
-		self.account = gtk.Label()
-		self.account.set_line_wrap(True)
-		self.account.set_alignment(0, 0)
-		self.account.set_selectable(False)
-		contents.pack_start(self.account)
-		
+		self.current_row = 1
 		self.timeout = 0
 		self.prefered_position = [0, 0]
 		self.path = None
@@ -522,6 +515,8 @@ class RosterTooltip(gtk.Window):
 		self.connect('size-request', self.size_request)
 		self.connect('motion-notify-event', self.motion_notify_event)
 		
+	
+	
 	def motion_notify_event(self, widget, event):
 		self.hide_tooltip()
 
@@ -569,9 +564,49 @@ class RosterTooltip(gtk.Window):
 		self.hide()
 		self.path = None
 
+
+	def add_status(self, file_path, resource, priority, show, status):
+		''' appends a new row with status icon to the table '''
+		self.current_row += 1
+		state_file = show.replace(' ', '_')
+		files = []
+		files.append(os.path.join(file_path, state_file + '.png'))
+		files.append(os.path.join(file_path, state_file + '.gif'))
+		image = gtk.Image()
+		image.set_from_pixbuf(None)
+		spacer = gtk.Label('    ')
+		for file in files:
+			if os.path.exists(file):
+				image.set_from_file(file)
+				break
+		self.table.attach(spacer, 1, 2, self.current_row, 
+			self.current_row + 1, 0, 0, 0, 0)
+		self.table.attach(image,2,3,self.current_row, 
+			self.current_row + 1, 0, 0, 3, 0)
+		str_status = resource + ' ('+str(priority)+')'
+		if status or status.strip() != '':
+			str_status += ' - ' + status
+		status_label = gtk.Label(str_status)
+		status_label.set_alignment(00, 0)
+		self.table.attach(status_label, 3, 4, self.current_row, self.current_row + 1, 
+				gtk.EXPAND | gtk.FILL, 0, 0, 0)
+	
 	def populate(self, contacts):
 		if not contacts or len(contacts) == 0:
 			return
+		# remove prevous table 
+		if self.account:
+			self.table.remove(self.account)
+		if self.table:
+			self.hbox.remove(self.table)
+		self.table = gtk.Table(3, 1)
+		self.table.set_property('column-spacing', 6)
+		self.account = gtk.Label()
+		self.account.set_line_wrap(True)
+		self.account.set_alignment(0, 0)
+		self.account.set_selectable(False)
+		self.table.attach(self.account, 1, 4, 1, 2)
+		self.hbox.pack_start(self.table)
 		# default resource of the contact
 		prim_contact = None # primary contact
 		for contact in contacts:
@@ -591,8 +626,9 @@ class RosterTooltip(gtk.Window):
 			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 
 		files = []
-		files.append(os.path.join(file_path, state_file + '.png'))
-		files.append(os.path.join(file_path, state_file + '.gif'))
+		file_full_path = os.path.join(file_path, state_file)
+		files.append(file_full_path + '.png')
+		files.append(file_full_path + '.gif')
 		self.image.set_from_pixbuf(None)
 		for file in files:
 			if os.path.exists(file):
@@ -616,34 +652,29 @@ class RosterTooltip(gtk.Window):
 					'</span>' + keyID 
 
 		single_line, resource_str, multiple_resource= '', '', False
+		num_resources = 0
 		for contact in contacts:
 			if contact.resource:
-				if resource_str != '':
-					multiple_resource = True
-				else:
-					# keep a single line entry in case there are no resources/statuses
-					single_line = contact.resource + ' (' + \
-						str(contact.priority) + ')'
-				resource_str += '\n\t' +  contact.resource + \
-					' (' + str(contact.priority) + ')'
-			if contact.show:
-				if multiple_resource is False:
-					# keep a single line entry in case there are no resources/statuses
-					single_line += ": " + helpers.get_uf_show(contact.show)
-				resource_str += '\n\t\t' + helpers.get_uf_show(contact.show)
-				if contact.status:
-					resource_str += ' - ' + contact.status
-					if multiple_resource is False:
-						single_line += ' - ' + contact.status
-				
-		if resource_str != '':
+				num_resources += 1
+		if num_resources > 1:
+			self.current_row = 1
+			self.table.resize(2,1)
 			info += '\n<span weight="bold">' + _('Status: ') + '</span>'
-			if multiple_resource:
-				info += resource_str
-			else:
-				# show the resource & status on the same line
-				info += single_line
-				
+			for contact in contacts:
+				if contact.resource:
+					self.add_status(file_path, contact.resource, contact.priority, 
+						contact.show, contact.status)
+					
+		else: # only one resource
+			if contact.resource:
+				info += '\n<span weight="bold">' + _('Resource: ') + \
+					'</span>' + contact.resource + ' (' + str(contact.priority) + ')'
+			if contact.show:
+				info += '\n<span weight="bold">' + _('Status: ') + \
+					'</span>' + helpers.get_uf_show(contact.show) 
+				if contact.status and contact.status.strip() != '':
+					info += ' - ' + contact.status
+
 		self.account.set_markup(info)
 
 class InputDialog:
