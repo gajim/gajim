@@ -28,9 +28,10 @@ _ = i18n._
 
 try:
 	import dbus
-except:
+	_version = getattr(dbus, 'version', (0, 20, 0)) 
+except ImportError:
 	pass
-_version = getattr(dbus, 'version', (0, 20, 0)) 
+
 if _version >= (0, 41, 0):
 	import dbus.service
 	import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it
@@ -46,7 +47,7 @@ class Remote:
 	def __init__(self, plugin):
 		self.signal_object = None
 		if 'dbus' not in globals():
-			print _('D-Bus python bindings are missing in this computer.')
+			print _('D-Bus python bindings are missing in this computer')
 			print _('D-Bus capabilities of Gajim cannot be used')
 			raise DbusNotSupported()
 		try:
