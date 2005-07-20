@@ -85,23 +85,23 @@ class GroupchatWindow(chat.Chat):
 
 		self.window.show_all()
 
-	def save_var(self, jid):
-		if not jid in self.nicks:
+	def save_var(self, room_jid):
+		if not room_jid in self.nicks:
 			return {}
 		return {
-			'nick': self.nicks[jid],
-			'contacts': self.contacts[jid],
-			'model': self.list_treeview[jid].get_model(),
-			'subject': self.subjects[jid],
+			'nick': self.nicks[room_jid],
+			'contacts': self.contacts[room_jid],
+			'model': self.list_treeview[room_jid].get_model(),
+			'subject': self.subjects[room_jid],
 		}
 		
-	def load_var(self, jid, var):
-		if not self.xmls.has_key(jid):
+	def load_var(self, room_jid, var):
+		if not self.xmls.has_key(room_jid):
 			return
-		self.list_treeview[jid].set_model(var['model'])
-		self.list_treeview[jid].expand_all()
-		self.set_subject(jid, var['subject'])
-		self.subjects[jid] = var['contacts']
+		self.list_treeview[room_jid].set_model(var['model'])
+		self.list_treeview[room_jid].expand_all()
+		self.set_subject(room_jid, var['subject'])
+		self.subjects[room_jid] = var['contacts']
 
 	def on_close_window_activate(self, widget):
 		if not self.on_groupchat_window_delete_event(widget, None):
@@ -148,9 +148,9 @@ class GroupchatWindow(chat.Chat):
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
 		new_child = notebook.get_nth_page(page_num)
 		new_jid = ''
-		for jid in self.xmls:
-			if self.childs[jid] == new_child: 
-				new_jid = jid
+		for room_jid in self.xmls:
+			if self.childs[room_jid] == new_child: 
+				new_jid = room_jid
 				break
 		subject = self.subjects[new_jid]
 
@@ -237,7 +237,7 @@ class GroupchatWindow(chat.Chat):
 			role = _('Visitors')
 
 		if jid:
-			jids = jid.split('/')
+			jids = jid.split('/', 1)
 			j = jids[0]
 			if len(jids) > 1:
 				resource = jids[1]
