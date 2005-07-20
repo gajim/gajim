@@ -232,7 +232,6 @@ class TabbedChatWindow(chat.Chat):
 		minimize action also focuses out first so it's catched here'''
 		window_state = widget.window.get_state()
 		if window_state is None:
-			#print 'return NOOOOOONE'
 			return
 
 		self.send_chatstate('inactive')
@@ -326,19 +325,12 @@ class TabbedChatWindow(chat.Chat):
 		if current_state == False: # jid doesn't support chatstates
 			return False # stop looping
 		
-		#print 'mouse', self.mouse_over_in_last_5_secs
-		#print 'kbd', self.kbd_activity_in_last_5_secs
-		
-		#gajim.log.debug('about %s' % contact.jid)
 		if self.mouse_over_in_last_5_secs:
-			#gajim.log.debug('sending active because of mouseover in last 5')
 			self.send_chatstate('active')
 		elif self.kbd_activity_in_last_5_secs:
-			#gajim.log.debug('sending composing because of kbd activity in last 5')
 			self.send_chatstate('composing')
 		else:
 			if self.chatstates[contact.jid] == 'composing':
-				#gajim.log.debug('sending paused because of inactivity in last 5')
 				self.send_chatstate('paused') # pause composing
 		
 		# assume no activity and let the motion-notify or key_press make them True
@@ -360,10 +352,8 @@ class TabbedChatWindow(chat.Chat):
 		if current_state == False: # jid doesn't support chatstates
 			return False # stop looping
 		
-		#gajim.log.debug('about %s' % contact.jid)
 		if not (self.mouse_over_in_last_30_secs or\
 		self.kbd_activity_in_last_30_secs):
-			#gajim.log.debug('sending inactive because of lack of activity in last 30')
 			self.send_chatstate('inactive')
 
 		# assume no activity and let the motion-notify or key_press make them True
@@ -435,8 +425,9 @@ class TabbedChatWindow(chat.Chat):
 			self.send_chatstate('composing')
 
 	def send_chatstate(self, state):
-		''' sends our chatstate to the current tab only if new chatstate
-		is different for the previous one'''
+		''' sends our chatstate as STANDLONE chat state message (eg. no body)
+		to the current tab only if new chatstate is different
+		from the previous one'''
 		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
 		# we keep track of jep85 support by the peer by three extra states:
 		# None, False and 'ask'
@@ -461,22 +452,22 @@ class TabbedChatWindow(chat.Chat):
 		jid = self.get_active_jid()
 
 		if self.chatstates[jid] == False: # jid cannot do jep85
-			#print 'jid does not do jep85'
 			return
 
 		# if current state equals previous state, return
 		if self.chatstates[jid] == state:
-			#print 'same states'
 			return
 
 		if self.chatstates[jid] is None:
 			# we don't know anything about jid,
-			# send 'active', set current state to 'ask' and return
-			#print 'None so return'
-			return
+			# NOTE:
+			# send 'active', set current state to 'ask' and return is done
+			# in send_message because we need REAL message (with <body>)
+			# for that procedure so return to make sure we send only once 'active'
+			# until we know peer supports jep85
+			return 
 
 		if self.chatstates[jid] == 'ask':
-			#print 'ask so return'
 			return
 
 		# prevent going paused if we we were not composing (JEP violation)
@@ -490,7 +481,6 @@ class TabbedChatWindow(chat.Chat):
 				chatstate = 'active') # go active before
 
 		self.chatstates[jid] = state
-		#print 'SENDING', state
 		gajim.connections[self.account].send_message(jid, None, None,
 			chatstate = state)
 		
@@ -519,15 +509,17 @@ class TabbedChatWindow(chat.Chat):
 				encrypted = True
 
 			notif_on = gajim.config.get('send_receive_chat_state_notifications')
-			# chatstates - if no info about peer, start discover procedure
+
 			chatstate_to_send = None
 			if notif_on: # if we have them one
-				
-				#FIXME: move me from here to  if self.chatstates[jid] is None:
-				#in send_chatstae
 				if self.chatstates[jid] is None:
+					# no info about peer
+					# send active to discover chat state capabilities
+					# this is here (and not in send_chatstate)
+					# because we want it sent with REAL message
+					# (not standlone) eg. one that has body
 					chatstate_to_send = 'active'
-					self.chatstates[jid] = 'ask'
+					self.chatstates[jid] = 'ask' # pseudo state
 
 				# if peer supports jep85, send 'active'
 				elif self.chatstates[jid] != False:
