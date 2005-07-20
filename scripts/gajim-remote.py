@@ -213,20 +213,20 @@ def gtk_quit():
 # method(sys.argv[2:]) doesn't work, cos sys.argv[2:] is a tuple
 def call_remote_method(method):
 	argv_len = len(sys.argv)
-	try:
-		if argv_len == 2:
-			res = method()
-		elif argv_len == 3:
-			res = method(sys.argv[2])
-		elif argv_len == 4:
-			res = method(sys.argv[2], sys.argv[3])
-		elif argv_len == 5:
-			res = method(sys.argv[2], sys.argv[3], sys.argv[4])
-		elif argv_len == 6:
-			res = method(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
-		return res
-	except:
-		send_error(_('Service not available'))
+	#~ try:
+	if argv_len == 2:
+		res = method()
+	elif argv_len == 3:
+		res = method(sys.argv[2])
+	elif argv_len == 4:
+		res = method(sys.argv[2], sys.argv[3])
+	elif argv_len == 5:
+		res = method(sys.argv[2], sys.argv[3], sys.argv[4])
+	elif argv_len == 6:
+		res = method(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+	return res
+	#~ except:
+		#~ send_error(_('Service not available'))
 	return None
 
 
@@ -284,9 +284,8 @@ if res is not None:
 Please specify account for sending the message.') % sys.argv[2])
 			else:
 				send_error(_('You have no active account'))
-	elif res is True:
+	elif res:
 		print res
-
 if command == 'contact_info':
 	gobject.timeout_add(5000, gtk_quit) # wait 5 sec maximum
 	gtk.main()
