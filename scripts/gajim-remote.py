@@ -34,7 +34,6 @@ signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 import i18n
 
 _ = i18n._
-APP = i18n.APP
 i18n.init()
 
 def send_error(error_message):
