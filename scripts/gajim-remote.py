@@ -5,6 +5,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
+##  - Dimitur Kirov <dkirov@gmail.com>
 ##
 ## This file was initially written by Dimitur Kirov
 ##
@@ -57,7 +58,14 @@ OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 SERVICE = 'org.gajim.dbus'
 
-
+# define commands dict. Prototype :
+# {
+#	'command': [comment, [list of arguments] ]
+# }
+#
+# each argument is defined as a tuple:
+#    (argument name, help on argument, is mandatory)
+#
 commands = {
 	'help':[
 			_('show a help on specific command'),
@@ -125,6 +133,8 @@ message using this account'), False),
 
 	
 def make_arguments_row(args):
+	''' return arguments list. Mandatory arguments are enclosed with:
+	'<', '>', optional arguments - with '[', ']' '''
 	str = ''
 	for argument in args:
 		str += ' '
@@ -138,7 +148,9 @@ def make_arguments_row(args):
 		else:
 			str += ']'
 	return str
+	
 def help_on_command(command):
+	''' return help message for a given command '''
 	if command in commands:
 		str = _('Usage: %s %s %s \n\t') % (sys.argv[0], command, make_arguments_row(commands[command][1]))
 		str += commands[command][0] + '\n\nArguments:\n'
@@ -148,6 +160,7 @@ def help_on_command(command):
 	send_error(_(' %s not found') % command)
 		
 def compose_help():
+	''' print usage, and list available commands '''
 	str = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % sys.argv[0]
 	for command in commands.keys():
 		str += '  ' + command 
@@ -166,7 +179,7 @@ def compose_help():
 	return str
 
 def show_vcard_info(*args, **keyword):
-	# more cleaner output
+	# FIXME: more cleaner output
 	if _version[1] >= 30:
 		print args[0]
 	else:
@@ -181,11 +194,39 @@ def show_vcard_info(*args, **keyword):
 
 	gtk.main_quit()
 	
+def check_arguments(command):
+	''' Make check if all necessary arguments are given '''
+	argv_len = len(sys.argv) - 2
+	args = commands[command][1]
+	if len(args) > argv_len:
+		if args[argv_len][2]:
+			send_error(_('Argument <%s> is not specified. \n\
+Type \'%s help %s\' for more info') % \
+			(args[argv_len][0], sys.argv[0], command))
+
 def gtk_quit():
 	if _version[1] >= 41:
 		sbus.remove_signal_receiver(show_vcard_info, 'VcardInfo', INTERFACE, 
 			SERVICE, OBJ_PATH)
 	gtk.main_quit()
+
+#FIXME - didn't find more clever way for the below 8 lines of code.
+# method(sys.argv[2:]) doesn't work, cos sys.argv[2:] is a tuple
+def call_remote_method(method):
+	argv_len = len(sys.argv)
+	try:
+		if argv_len == 2:
+			res = method()
+		elif argv_len == 3:
+			res = method(sys.argv[2])
+		elif argv_len == 4:
+			res = method(sys.argv[2], sys.argv[3])
+		elif argv_len == 5:
+			res = method(sys.argv[2], sys.argv[3], sys.argv[4])
+		return res
+	except:
+		send_error(_('Service not available'))
+	return None
 
 
 argv_len = len(sys.argv) 
@@ -205,7 +246,7 @@ if command == 'help':
 try:
 	sbus = dbus.SessionBus()
 except:
-	send_error('Session bus is not available.\n')
+	send_error(_('Session bus is not available.\n'))
 
 
 if _version[1] >= 30 and _version[1] <= 42:
@@ -215,36 +256,19 @@ elif _version[1] < 30:
 	service = sbus.get_service(SERVICE)
 	interface = service.get_object(OBJ_PATH, INTERFACE)
 else:
-	send_error('Unknow dbus version: '+ _version)
+	send_error(_('Unknow dbus version: %s') % _version)
 
 method = interface.__getattr__(sys.argv[1]) # get the function asked
 
+check_arguments(command)
 if command == 'contact_info':
 	if argv_len < 3:
-		send_error('Missing argument \'contact_jid\'')
+		send_error(_('Missing argument \'contact_jid\''))
 	try:
 		id = sbus.add_signal_receiver(show_vcard_info, 'VcardInfo', 
 			INTERFACE, SERVICE, OBJ_PATH)
 	except:
-		send_error('Service not available')
-
-#FIXME - didn't find more clever way for the below 8 lines of code.
-# method(sys.argv[2:]) doesn't work, cos sys.argv[2:] is a tuple
-def call_remote_method(method):
-	argv_len = len(sys.argv)
-	try:
-		if argv_len == 2:
-			res = method()
-		elif argv_len == 3:
-			res = method(sys.argv[2])
-		elif argv_len == 4:
-			res = method(sys.argv[2], sys.argv[3])
-		elif argv_len == 5:
-			res = method(sys.argv[2], sys.argv[3], sys.argv[4])
-		return res
-	except:
 		send_error(_('Service not available'))
-	return None
 
 res = call_remote_method(method)
 

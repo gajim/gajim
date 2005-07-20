@@ -229,7 +229,8 @@ class SignalObject(DbusPrototype):
 		You have to register the 'VcardInfo' signal to get the real vcard. '''
 		if self.disabled:
 			return
-		jid = self._get_real_arguments(args, 1)
+		
+		[jid] = self._get_real_arguments(args, 1)
 		if not jid:
 			# FIXME: raise exception for missing argument (0.3+)
 			return None
