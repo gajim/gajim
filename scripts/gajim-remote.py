@@ -5,7 +5,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
-##  - Dimitur Kirov <dkirov@gmail.com>
+##	- Dimitur Kirov <dkirov@gmail.com>
 ##
 ## This file was initially written by Dimitur Kirov
 ##
@@ -82,7 +82,8 @@ commands = {
 			_('Print a list of all contacts in the roster. \
 Each contact appear on a separate line'),
 			[
-				(_('account'), _('show only contacts of the account \'account\''), False)
+				(_('account'), _('show only contacts of the given account'),
+					False)
 			]
 			
 		],	
@@ -96,34 +97,34 @@ Each contact appear on a separate line'),
 				(_('status'), _('one of: offline, online, chat, \
 away, xa, dnd, invisible '), True), 
 				(_('message'), _('status message'), False), 
-				(_('account'), _('change status of the account \'accounts\'. \
-If not specified try to change stutus of all accounts that \
-have \'sync with global \' option set'), False)
+				(_('account'), _('change status of the account "accounts". \
+If not specified try to change status of all accounts that \
+have "sync with global status" option set'), False)
 			]
 		],
-	'new_message': [
+	'new_message': [ # FIXME: merge me with send_message
 			_('Show the chat dialog so that you can send message to a contact'), 
 			[
-				(_('jid'), _('jid of the contact that you want to send a message to'), True), 
-				(_('account'), _('if specified will try to send the \
+				('jid', _('jid of the contact that you want to send a message to'),
+					True), 
+				(_('account'), _('if specified the message will be sent the \
 message using this account'), False)
 			]
 		],
 	'send_message':[
 			_('Send new message to a contact in the roster'), 
 			[
-				(_('jid'), _('jid of the contact that will receive the message'), True),
+				('jid', _('jid of the contact that will receive the message'), True),
 				(_('message'), _('message contents'), True),
-				(_('keyID'), _('if specified will encrypt the message using \
+				(_('keyID'), _('if specified the message will be encrypted using \
 this pulic key'), False),
-				(_('account'), _('if specified will try to send the \
-message using this account'), False),
+				(_('account'), _('if specified the message will be sent using this account'), False),
 			]
 		], 
 	'contact_info': [
 			_('Get detailed info on a contact'), 
 			[
-				(_('jid'), _('jid of the contact'), True)
+				('jid', _('jid of the contact'), True)
 			]
 		]
 	}
@@ -149,7 +150,8 @@ def make_arguments_row(args):
 def help_on_command(command):
 	''' return help message for a given command '''
 	if command in commands:
-		str = _('Usage: %s %s %s \n\t') % (BASENAME, command, make_arguments_row(commands[command][1]))
+		str = _('Usage: %s %s %s \n\t') % (BASENAME, command,
+			make_arguments_row(commands[command][1]))
 		str += commands[command][0] + '\n\nArguments:\n'
 		for argument in commands[command][1]:
 			str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
@@ -197,8 +199,8 @@ def check_arguments(command):
 	args = commands[command][1]
 	if len(args) > argv_len:
 		if args[argv_len][2]:
-			send_error(_('Argument <%s> is not specified. \n\
-Type \'%s help %s\' for more info') % \
+			send_error(_('Argument "%s" is not specified. \n\
+Type "%s help %s" for more info') % \
 			(args[argv_len][0], BASENAME, command))
 
 def gtk_quit():
@@ -260,7 +262,7 @@ method = interface.__getattr__(sys.argv[1]) # get the function asked
 check_arguments(command)
 if command == 'contact_info':
 	if argv_len < 3:
-		send_error(_('Missing argument \'contact_jid\''))
+		send_error(_('Missing argument "contact_jid"'))
 	try:
 		id = sbus.add_signal_receiver(show_vcard_info, 'VcardInfo', 
 			INTERFACE, SERVICE, OBJ_PATH)
