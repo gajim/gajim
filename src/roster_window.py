@@ -1505,11 +1505,11 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		tell that to the core and exit gtk'''
 		if gajim.config.get('saveposition'):
 			x, y = self.window.get_position()
-			gajim.config.set('x-position', x)
-			gajim.config.set('y-position', y)
+			gajim.config.set('roster_x-position', x)
+			gajim.config.set('roster_y-position', y)
 			width, height = self.window.get_size()
-			gajim.config.set('width', width)
-			gajim.config.set('height', height)
+			gajim.config.set('roster_width', width)
+			gajim.config.set('roster_height', height)
 
 		gajim.config.set('collapsed_rows', '\t'.join(self.collapsed_rows))
 		self.plugin.save_config()
@@ -1985,10 +1985,10 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		# no need of this variable
 		self.have_new_message_accel = False # Is the "Ctrl+N" shown ?
 		if gajim.config.get('saveposition'):
-			self.window.move(gajim.config.get('x-position'),
-				gajim.config.get('y-position'))
-			self.window.resize(gajim.config.get('width'),
-				gajim.config.get('height'))
+			self.window.move(gajim.config.get('roster_x-position'),
+				gajim.config.get('roster_y-position'))
+			self.window.resize(gajim.config.get('roster_width'),
+				gajim.config.get('roster_height'))
 
 		self.popups_notification_height = 0
 		self.popup_notification_windows = []
