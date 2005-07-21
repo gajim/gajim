@@ -30,14 +30,16 @@ try:
 	import dbus
 	_version = getattr(dbus, 'version', (0, 20, 0)) 
 except ImportError:
-	pass
-
+	_version = (0, 0, 0)
+	
 if _version >= (0, 41, 0):
 	import dbus.service
 	import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it
 	DbusPrototype = dbus.service.Object
-else:
+elif _version >= (0, 20, 0):
 	DbusPrototype = dbus.Object
+else: #dbus is not defined
+	DbusPrototype = str 
 
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
@@ -58,10 +60,10 @@ class Remote:
 		if _version[1] >= 41:
 			service = dbus.service.BusName(SERVICE, bus=session_bus)
 			self.signal_object = SignalObject(service, plugin)
-		elif _version[1] <= 40:
+		elif _version[1] <= 40 and _version[1] >= 20:
 			service=dbus.Service(SERVICE, session_bus)
 			self.signal_object = SignalObject(service, plugin)
-
+	
 	def set_enabled(self, status):
 		self.signal_object.disabled = not status
 		
@@ -76,7 +78,6 @@ class Remote:
 class SignalObject(DbusPrototype):
 	''' Local object definition for /org/gajim/dbus/RemoteObject. This doc must 
 	not be visible, because the clients can access only the remote object. '''
-	_version = getattr(dbus, 'version', (0, 20, 0))
 	
 	def __init__(self, service, plugin):
 		self.plugin = plugin
