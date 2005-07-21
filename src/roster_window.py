@@ -694,14 +694,13 @@ class RosterWindow:
 	def on_rename(self, widget, iter, path):
 		model = self.tree.get_model()
 		
-		#Remove resource indicator (Name (2))
-		print model[iter]
 		row_type = model[iter][2]
-		string = model[iter][3] # the string (name) we show in the row
+		jid = model[iter][3]
 		account = model[iter][4]
 		if row_type == 'contact':
 			# it's jid
-			contacts = gajim.contacts[account][string]
+			#Remove resource indicator (Name (2))
+			contacts = gajim.contacts[account][jid]
 			name = contacts[0].name
 			model[iter][1] = name
 
