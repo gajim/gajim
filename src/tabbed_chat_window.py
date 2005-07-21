@@ -122,7 +122,11 @@ class TabbedChatWindow(chat.Chat):
 		# this is the text for the big brown bar
 		# some chars need to be escaped..
 		name = gtkgui_helpers.escape_for_pango_markup(contact.name)
-		status = gtkgui_helpers.escape_for_pango_markup(contact.status)
+		
+		status = contact.status
+		if len(status) > 25: #FIXME: do me with pango ellipseEND when gtk24 is OLD
+				status = status[:21] + '...'
+		status = gtkgui_helpers.escape_for_pango_markup(status)
 		
 		jid = contact.jid
 
