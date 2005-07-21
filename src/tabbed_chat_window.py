@@ -117,6 +117,10 @@ class TabbedChatWindow(chat.Chat):
 			'<','&lt;')
 		
 		jid = contact.jid
+		status = contact.status
+
+		if status is None:
+			status = ''
 
 		#FIXME: uncomment me when we support sending messages to specific resource
 		# composing full jid
@@ -128,10 +132,10 @@ class TabbedChatWindow(chat.Chat):
 		
 		if chatstate:
 			label_text = '<span weight="heavy" size="x-large">%s</span> (chat state: %s)\n%s' \
-				% (name, chatstate, jid)
+				% (name, chatstate, status)
 		else:
 			label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
-				% (name, jid)
+				% (name, status)
 
 		# setup the label that holds name and jid
 		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
@@ -293,12 +297,6 @@ class TabbedChatWindow(chat.Chat):
 		chat.Chat.new_tab(self, contact.jid)
 		self.redraw_tab(contact.jid)
 		self.draw_widgets(contact)
-		
-		uf_show = helpers.get_uf_show(contact.show)
-		s = _('%s is %s') % (contact.name, uf_show)
-		if contact.status:
-			s += ' (' + contact.status + ')'
-		self.print_conversation(s, contact.jid, 'status')
 
 		#restore previous conversation
 		self.restore_conversation(contact.jid)
@@ -567,7 +565,7 @@ class TabbedChatWindow(chat.Chat):
 		if (user.show == 'offline' or user.show == 'error') and \
 			not showOffline:
 			if len(gajim.contacts[self.account][jid]) == 1:
-				self.plugin.roster.really_remove_user(user, self.account)
+				self.plugin.roster.really_remove_contact(user, self.account)
 
 	def print_conversation(self, text, jid, contact = '', tim = None,
 		encrypted = False, subject = None):

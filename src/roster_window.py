@@ -158,7 +158,7 @@ class RosterWindow:
 							False)
 		self.draw_contact(jid, account)
 	
-	def really_remove_user(self, user, account):
+	def really_remove_contact(self, user, account):
 		if user.jid in gajim.newly_added[account]:
 			return
 		if user.jid.find('@') < 1 and gajim.connections[account].connected > 1: # It's an agent
@@ -168,9 +168,9 @@ class RosterWindow:
 		if gajim.config.get('showoffline'):
 			self.draw_contact(user.jid, account)
 			return
-		self.remove_user(user, account)
+		self.remove_contact(user, account)
 	
-	def remove_user(self, user, account):
+	def remove_contact(self, user, account):
 		'''Remove a user from the roster'''
 		if user.jid in gajim.to_be_removed[account]:
 			return
@@ -593,36 +593,39 @@ class RosterWindow:
 					ishidden = True
 				gajim.groups[account][g] = { 'expand': ishidden }
 
-	def chg_contact_status(self, user, show, status, account):
+	def chg_contact_status(self, contact, show, status, account):
 		'''When a contact changes his status'''
 		showOffline = gajim.config.get('showoffline')
 		model = self.tree.get_model()
-		luser = gajim.contacts[account][user.jid]
-		user.show = show
-		user.status = status
+		contact_instances = gajim.contacts[account][contact.jid]
+		contact.show = show
+		contact.status = status
 		if (show == 'offline' or show == 'error') and \
-		   not gajim.awaiting_messages[account].has_key(user.jid):
-			if len(luser) > 1:
-				luser.remove(user)
-				self.draw_contact(user.jid, account)
+		   not gajim.awaiting_messages[account].has_key(contact.jid):
+			if len(contact_instances) > 1: # if multiple resources
+				contact_instances.remove(contact)
+				self.draw_contact(contact.jid, account)
 			elif not showOffline:
-				self.remove_user(user, account)
+				self.remove_contact(contact, account)
 			else:
-				self.draw_contact(user.jid, account)
+				self.draw_contact(contact.jid, account)
 		else:
-			if not self.get_contact_iter(user.jid, account):
-				self.add_contact_to_roster(user.jid, account)
-			self.draw_contact(user.jid, account)
+			if not self.get_contact_iter(contact.jid, account):
+				self.add_contact_to_roster(contact.jid, account)
+			self.draw_contact(contact.jid, account)
 		#print status in chat window and update status/GPG image
-		if self.plugin.windows[account]['chats'].has_key(user.jid):
-			jid = user.jid
+		if self.plugin.windows[account]['chats'].has_key(contact.jid):
+			jid = contact.jid
 			self.plugin.windows[account]['chats'][jid].set_state_image(jid)
-			name = user.name
-			if user.resource != '':
-				name += '/' + user.resource
+			name = contact.name
+			if contact.resource != '':
+				name += '/' + contact.resource
 			uf_show = helpers.get_uf_show(show)
 			self.plugin.windows[account]['chats'][jid].print_conversation(
 				_('%s is now %s (%s)') % (name, uf_show, status), jid, 'status')
+			
+			self.plugin.windows[account]['chats'][jid].draw_name_banner(
+				contact, chatstate = None)
 
 	def on_info(self, widget, user, account):
 		'''Call vcard_information_window class to display user's information'''
@@ -684,7 +687,7 @@ class RosterWindow:
 			gajim.connections[account].unsubscribe_agent(contact.jid + '/' \
 																		+ contact.resource)
 			# remove transport from treeview
-			self.remove_user(contact, account)
+			self.remove_contact(contact, account)
 			# remove transport's contacts from treeview
 			for jid, contacts in gajim.contacts[account].items():
 				contact = contacts[0]
@@ -692,7 +695,7 @@ class RosterWindow:
 					gajim.log.debug(
 					'Removing contact %s due to unregistered transport %s'\
 						% (contact.jid, contact.name))
-					self.remove_user(contact, account)
+					self.remove_contact(contact, account)
 			del gajim.contacts[account][contact.jid]
 
 	def on_rename(self, widget, iter, path):
@@ -1021,7 +1024,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				return
 			user1.groups = [group]
 			user1.name = pseudo
-			self.remove_user(user1, account)
+			self.remove_contact(user1, account)
 		self.add_contact_to_roster(jid, account)
 
 	def on_roster_treeview_scroll_event(self, widget, event):
@@ -1146,7 +1149,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		if window.get_response() == gtk.RESPONSE_OK:
 			gajim.connections[account].unsubscribe(user.jid)
 			for u in gajim.contacts[account][user.jid]:
-				self.remove_user(u, account)
+				self.remove_contact(u, account)
 			del gajim.contacts[account][u.jid]
 			if user.jid in self.plugin.windows[account]['chats']:
 				user1 = Contact(jid = user.jid, name = user.name,
@@ -1663,7 +1666,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				user = gajim.contacts[account][jid][0]
 				if old_name in user.groups:
 					#set them in the new one and remove it from the old
-					self.remove_user(user, account)
+					self.remove_contact(user, account)
 					user.groups.remove(old_name)
 					user.groups.append(new_text)
 					self.add_contact_to_roster(user.jid, account)

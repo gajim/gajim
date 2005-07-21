@@ -63,7 +63,7 @@ class EditGroupsDialog:
 				self.user.name, self.user.groups)
 
 	def update_contact(self):
-		self.plugin.roster.remove_user(self.user, self.account)
+		self.plugin.roster.remove_contact(self.user, self.account)
 		self.plugin.roster.add_contact_to_roster(self.user.jid, self.account)
 
 	def on_add_button_clicked(self, widget):

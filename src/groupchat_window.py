@@ -207,7 +207,7 @@ class GroupchatWindow(chat.Chat):
 		'''get nicks of contacts in a room'''
 		return self.contacts[room_jid].keys()
 
-	def remove_user(self, room_jid, nick):
+	def remove_contact(self, room_jid, nick):
 		"""Remove a user from the contacts_list"""
 		model = self.list_treeview[room_jid].get_model()
 		iter = self.get_contact_iter(room_jid, nick)
@@ -299,7 +299,7 @@ class GroupchatWindow(chat.Chat):
 					new_nick), room_jid)
 				if nick == self.nicks[room_jid]: # We changed our nick
 					self.nicks[room_jid] = new_nick
-			self.remove_user(room_jid, nick)
+			self.remove_contact(room_jid, nick)
 			if nick == self.nicks[room_jid] and statusCode != '303': # We became offline
 				model.clear()
 				self.contacts[room_jid] = {}
@@ -310,7 +310,7 @@ class GroupchatWindow(chat.Chat):
 			else:
 				actual_role = self.get_role(room_jid, nick)
 				if role != actual_role:
-					self.remove_user(room_jid, nick)
+					self.remove_contact(room_jid, nick)
 					self.add_contact_to_roster(room_jid, nick, show, role, jid,
 						affiliation)
 				else:

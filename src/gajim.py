@@ -280,7 +280,7 @@ class Interface:
 						gajim.newly_added[account].remove(user1.jid)
 					self.roster.draw_contact(user1.jid, account)
 					if not gajim.awaiting_messages[account].has_key(jid):
-						gobject.timeout_add(5000, self.roster.really_remove_user, \
+						gobject.timeout_add(5000, self.roster.really_remove_contact, \
 							user1, account)
 			user1.show = array[1]
 			user1.status = array[2]
@@ -478,7 +478,7 @@ class Interface:
 		if gajim.contacts[account].has_key(jid):
 			u = gajim.contacts[account][jid][0]
 			u.resource = array[1]
-			self.roster.remove_user(u, account)
+			self.roster.remove_contact(u, account)
 			if _('not in the roster') in u.groups:
 				u.groups.remove(_('not in the roster'))
 			if len(u.groups) == 0:
@@ -653,7 +653,7 @@ class Interface:
 			return
 		users = gajim.contacts[account][jid]
 		if not (array[2] or array[3]):
-			self.roster.remove_user(users[0], account)
+			self.roster.remove_contact(users[0], account)
 			del gajim.contacts[account][jid]
 			#TODO if it was the only one in its group, remove the group
 			return
