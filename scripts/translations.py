@@ -31,7 +31,7 @@ def show_help():
 def update_pot():
 	os.system('intltool-extract --type=gettext/glade ../src/gtkgui.glade')
 	os.system('xgettext -k_ -kN_ -o ../gajim.pot ../src/*.py ../src/common/*.py \
-		../src/gtkgui.glade.h ../scripts/gajim-remote.py')
+		../src/gtkgui.glade.h gajim-remote.py')
 	print 'gajim.pot was updated successfully'
 
 if __name__ == '__main__':
