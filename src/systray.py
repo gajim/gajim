@@ -47,6 +47,7 @@ class Systray:
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.jids = []
+		self.new_message_handler_id = None
 		self.t = None
 		self.tip = gtk.Tooltips()
 		self.img_tray = gtk.Image()
@@ -124,6 +125,11 @@ class Systray:
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		status_menuitem = self.xml.get_widget('status_menu')
+		
+		if self.new_message_handler_id:
+			new_message_menuitem.handler_disconnect(
+				self.new_message_handler_id)
+			self.new_message_handler_id = None
 
 		sub_menu = gtk.Menu()
 		status_menuitem.set_submenu(sub_menu)
