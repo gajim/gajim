@@ -695,13 +695,17 @@ class RosterWindow:
 		model = self.tree.get_model()
 		
 		#Remove resource indicator (Name (2))
-		jid = model.get_value(iter, 3)
-		account = model.get_value(iter, 4)
-		users = gajim.contacts[account][jid]
-		name = users[0].name
-		model.set_value(iter, 1, name)
+		print model[iter]
+		row_type = model[iter][2]
+		string = model[iter][3] # the string (name) we show in the row
+		account = model[iter][4]
+		if row_type == 'contact':
+			# it's jid
+			contacts = gajim.contacts[account][string]
+			name = contacts[0].name
+			model[iter][1] = name
 
-		model.set_value(iter, 5, True) # set 'editable' to True
+		model[iter][5] = True # set 'editable' to True
 		self.tree.set_cursor(path, self.tree.get_column(0), True)
 		
 	def on_assign_pgp_key(self, widget, user, account):
