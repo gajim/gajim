@@ -859,23 +859,16 @@ class Interface:
 	def save_config(self):
 		parser.write()
 
-	def enable_dbus(self, is_initial = False):
+	def enable_dbus(self):
 		if 'remote_control' not in globals():
 			import remote_control
 		if not hasattr(self, 'remote') or not self.remote:
 			try:
 				self.remote = remote_control.Remote(self)
 			except remote_control.DbusNotSupported:
-				if not is_initial: # show only the first time
-					dialog = dialogs.ErrorDialog(
-					_('D-Bus is not present on this machine'),
-_('Please install D-Bus if you want to use remote control.')).get_response()
 				self.remote = None
 				return False
 			except remote_control.SessionBusNotPresent:
-				if not is_initial: # show only the first time
-					dialog = dialogs.ErrorDialog(_('Session bus is not started'),
-_('Your system is running without session bus daemon. \n See: http://trac.gajim.org/wiki/GajimDBus for instructions on how to enable it.')).get_response()
 				self.remote = None
 				return False
 		else:
@@ -949,10 +942,10 @@ _('Your system is running without session bus daemon. \n See: http://trac.gajim.
 
 		self.roster = roster_window.RosterWindow(self)
 		if gajim.config.get('use_dbus'):
-			self.enable_dbus(True)
+			self.enable_dbus()
 		else:
 			self.disable_dbus()
-																	
+
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
 		gtk.window_set_default_icon(pix) # set the icon to all newly opened windows
