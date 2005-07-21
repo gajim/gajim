@@ -122,9 +122,9 @@ class TabbedChatWindow(chat.Chat):
 		# this is the text for the big brown bar
 		# some chars need to be escaped..
 		name = gtkgui_helpers.escape_for_pango_markup(contact.name)
+		status = gtkgui_helpers.escape_for_pango_markup(contact.status)
 		
 		jid = contact.jid
-		status = contact.status
 
 		#FIXME: uncomment me when we support sending messages to specific resource
 		# composing full jid
