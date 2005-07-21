@@ -459,7 +459,9 @@ class Interface:
 		
 	def handle_event_msgsent(self, account, array):
 		#('MSGSENT', account, (jid, msg, keyID))
-		if gajim.config.get_per('soundevents', 'message_sent', 'enabled'):
+		msg = array[1]
+		# do not play sound when standalone chatstate message (eg no msg)
+		if msg and gajim.config.get_per('soundevents', 'message_sent', 'enabled'):
 			self.play_sound('message_sent')
 		
 	def handle_event_subscribe(self, account, array):
