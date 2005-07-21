@@ -31,6 +31,7 @@ import history_window
 import dialogs
 import config
 import cell_renderer_image
+import gtkgui_helpers
 
 from gajim import Contact
 from common import gajim
@@ -201,7 +202,8 @@ class RosterWindow:
 			return 'gadugadu'
 		elif host.startswith('irc'):
 			return 'irc'
-		elif host.startswith('icq'): # abc@icqsucks.org will match as ICQ, but what to do..
+		# abc@icqsucks.org will match as ICQ, but what to do..
+		elif host.startswith('icq'):
 			return 'icq'
 		elif host.startswith('msn'):
 			return 'msn'
@@ -225,32 +227,34 @@ class RosterWindow:
 		iters = self.get_contact_iter(jid, account)
 		if len(iters) == 0:
 			return
-		users = gajim.contacts[account][jid]
-		name = users[0].name
-		if len(users) > 1:
-			name += ' (' + str(len(users)) + ')'
-		prio = 0
-		user = users[0]
-		for u in users:
-			if u.priority > prio:
-				prio = u.priority
-				user = u
+		contact_instances = gtkgui_helpers.get_contact_instances_from_jid(account,
+			jid)
+		contact = contact_instances[0]
+		name = contact.name
+		if len(contact_instances) > 1:
+			name += ' (' + str(len(contact_instances)) + ')'
+
+		prio = 0 # FIXME: add a comment explain what you do here
+		for c in contact_instances:
+			if c.priority > prio:
+				prio = c.priority
+				contact = c
 
 		state_images = self.get_appropriate_state_images(jid)
 		if gajim.awaiting_messages[account].has_key(jid):
 			img = state_images['message']
 		elif jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
-			img = state_images[user.show]					
+			img = state_images[contact.show]					
 		else:
-			if user.sub == 'both':
-				img = state_images[user.show]
+			if contact.sub == 'both':
+				img = state_images[contact.show]
 			else:
-				if user.ask == 'subscribe':
+				if contact.ask == 'subscribe':
 					img = state_images['requested']
 				else:
 					transport = self.get_transport_name_by_jid(jid)
-					if transport and state_images.has_key(user.show):
-						img = state_images[user.show]
+					if transport and state_images.has_key(contact.show):
+						img = state_images[contact.show]
 					else:
 						img = state_images[_('not in the roster')]
 		for iter in iters:
@@ -2079,9 +2083,6 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		self.tooltip = dialogs.RosterTooltip(self.plugin)
 		self.make_menu()
 		self.draw_roster()
-		if len(gajim.connections) == 0: # if no account
-			self.plugin.windows['account_modification'] = \
-				config.AccountModificationWindow(self.plugin)
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
@@ -2090,3 +2091,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				# cannot happen via GUI, but I put this incase user touches config
 				self.window.show_all() # without trayicon, he should see the roster!
 				gajim.config.set('show_roster_on_startup', True)
+
+		if len(gajim.connections) == 0: # if we have no account
+			self.plugin.windows['account_modification'] = \
+				config.AccountModificationWindow(self.plugin)

@@ -345,10 +345,10 @@ class Interface:
 				self.remote.raise_signal('GCPresence', (account, array))
 
 	def handle_event_msg(self, account, array):
-		#('MSG', account, (contact, msg, time, encrypted, msg_type, subject, chatstate_tag))
+		#('MSG', account, (contact, msg, time, encrypted, msg_type, subject, chatstate))
 		jid = array[0].split('/')[0]
 		msg_type = array[4]
-		chatstate_tag = array[6]
+		chatstate = array[6]
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
 
@@ -370,7 +370,6 @@ class Interface:
 				ask = 'none')
 			self.roster.new_chat(c, account)
 			return
-
 				
 		if gajim.config.get('ignore_unknown_contacts') and \
 			not gajim.contacts[account].has_key(jid):
@@ -378,11 +377,11 @@ class Interface:
 
 		if self.windows[account]['chats'].has_key(jid):
 			chat_win = self.windows[account]['chats'][jid]
-			# chatstates - display jep85 events in window
-			if chatstate_tag is not None:
-				if chat_win.chatstates[jid] == 'ask':
-					chat_win.chatstates[jid] = 'active'
-				chat_win.print_conversation(jid + ' is now ' + chatstate_tag, jid, 'status', tim = array[2])
+			if chatstate is not None: # he sent us reply, so he supports jep85
+				if chat_win.chatstates[jid] == 'ask': # we were jep85 disco?
+					chat_win.chatstates[jid] = 'active' # no more
+				
+				chat_win.handle_incoming_chatstate(account, jid, chatstate)
 			else:
 				# got no valid jep85 answer, peer does not support it
 				chat_win.chatstates[jid] = False

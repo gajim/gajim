@@ -27,6 +27,7 @@ import base64
 
 import dialogs
 import chat
+import gtkgui_helpers
 
 from common import gajim
 from common import helpers
@@ -105,14 +106,17 @@ class TabbedChatWindow(chat.Chat):
 		tip.set_tip(self.xmls[jid].get_widget('gpg_eventbox'), tt)
 
 		# add the fat line at the top
-		self.draw_name_banner(contact.name, jid)
+		self.draw_name_banner(contact)
 
-	def draw_name_banner(self, name, jid):
+	def draw_name_banner(self, contact, chatstate = None):
 		'''Draw the fat line at the top of the window that 
 		houses the status icon, name, jid, and avatar'''
 		# this is the text for the big brown bar
-		# some chars need to be escaped.. this fixes '&'
-		name = name.replace('&', '&amp;')
+		# some chars need to be escaped..
+		name = contact.name.replace('&', '&amp;').replace('>','&gt;').replace(
+			'<','&lt;')
+		
+		jid = contact.jid
 
 		#FIXME: uncomment me when we support sending messages to specific resource
 		# composing full jid
@@ -122,8 +126,12 @@ class TabbedChatWindow(chat.Chat):
 		#label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
 		#	% (name, fulljid)
 		
-		label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
-			% (name, jid)
+		if chatstate:
+			label_text = '<span weight="heavy" size="x-large">%s</span> (chat state: %s)\n%s' \
+				% (name, chatstate, jid)
+		else:
+			label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
+				% (name, jid)
 
 		# setup the label that holds name and jid
 		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
@@ -316,6 +324,11 @@ class TabbedChatWindow(chat.Chat):
 			gobject.timeout_add(30000, self.check_for_possible_inactive_chatstate,
 				contact)
 		
+	def handle_incoming_chatstate(self, account, jid, chatstate):
+		''' handle incoming chatstate that jid SENT TO us '''
+		contact = gtkgui_helpers.get_first_contact_instance_from_jid(account, jid)
+		self.draw_name_banner(contact, chatstate)
+
 	def check_for_possible_paused_chatstate(self, contact):
 		''' did we move mouse of that window or kbd activity in that window
 		in the last 5 seconds?

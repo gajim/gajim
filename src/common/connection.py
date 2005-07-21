@@ -218,7 +218,7 @@ class Connection:
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
 		encrypted = False
-		chatstate_tag = None
+		chatstate = None
 		xtags = msg.getTags('x')
 		encTag = None
 		decmsg = ''
@@ -231,7 +231,7 @@ class Connection:
 		children = msg.getChildren()
 		for child in children:
 			if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
-				chatstate_tag = child.getName()
+				chatstate = child.getName()
 				break
 			
 		if encTag and USE_GPG:
@@ -264,7 +264,7 @@ class Connection:
 			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted,
 				mtype, subject, None))
 		else: # it's type 'chat'
-			if not msg.getTag('body') and chatstate_tag is None: #no <body>
+			if not msg.getTag('body') and chatstate is None: #no <body>
 				return
 			log_msgtxt = msgtxt
 			if subject:
@@ -272,7 +272,7 @@ class Connection:
 			gajim.logger.write('incoming', log_msgtxt, str(msg.getFrom()),
 				tim = tim)
 			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted,
-				mtype, subject, chatstate_tag))
+				mtype, subject, chatstate))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
