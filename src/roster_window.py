@@ -1166,7 +1166,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				model = self.tree.get_model()
 				accountIter = self.get_account_iter(account)
 				if accountIter:
-					model.set_value(accountIter, 0, self.jabber_state_images['connecting'])
+					model[accountIter][0] =	self.jabber_state_images['connecting']
 				if self.plugin.systray_enabled:
 					self.plugin.systray.set_status('connecting')
 
@@ -1180,8 +1180,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				passphrase, save = w.run()
 				if passphrase == -1:
 					if accountIter:
-						model.set_value(accountIter, 0, self.jabber_state_images['offline'])
-#					gajim.connections[account].connected = 0
+						model[accountIter][0] =	self.jabber_state_images['offline']
 					if self.plugin.systray_enabled:
 						self.plugin.systray.set_status('offline')
 					self.update_status_comboxbox()
@@ -1192,7 +1191,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					gajim.config.set_per('accounts', account, 'password', passphrase)
 
 			keyid = None
-			save_gpg_pass = 0
+			save_gpg_pass = True
 			save_gpg_pass = gajim.config.get_per('accounts', account, 
 				'savegpgpass')
 			keyid = gajim.config.get_per('accounts', account, 'keyid')
@@ -1226,12 +1225,12 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if room_jid != 'tabbed':
 				nick = self.plugin.windows[account]['gc'][room_jid].nicks[room_jid]
 				gajim.connections[account].send_gc_status(nick, room_jid, status, 
-																		txt)
+					txt)
 		if status == 'online' and self.plugin.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
-			gajim.sleeper_state[account] = 1
+			gajim.sleeper_state[account] = True
 		else:
-			gajim.sleeper_state[account] = 0
+			gajim.sleeper_state[account] = False
 
 	def get_status_message(self, show):
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \

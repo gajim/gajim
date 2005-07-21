@@ -215,7 +215,9 @@ class Interface:
 	def handle_event_notify(self, account, array):
 		#('NOTIFY', account, (jid, status, message, resource, priority, keyID, 
 		# role, affiliation, real_jid, reason, actor, statusCode, new_nick))
-		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd', 'invisible']
+		# if we're here it means contact changed show
+		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
+			'invisible']
 		old_show = 0
 		new_show = statuss.index(array[1])
 		jid = array[0].split('/')[0]
