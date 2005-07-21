@@ -516,7 +516,6 @@ class RosterTooltip(gtk.Window):
 		self.connect('motion-notify-event', self.motion_notify_event)
 		
 	
-	
 	def motion_notify_event(self, widget, event):
 		self.hide_tooltip()
 
@@ -579,10 +578,12 @@ class RosterTooltip(gtk.Window):
 			if os.path.exists(file):
 				image.set_from_file(file)
 				break
+		image.set_alignment(0.01, 1)
 		self.table.attach(spacer, 1, 2, self.current_row, 
 			self.current_row + 1, 0, 0, 0, 0)
 		self.table.attach(image,2,3,self.current_row, 
 			self.current_row + 1, 0, 0, 3, 0)
+		image.set_alignment(0.01, 1)
 		str_status = resource + ' ('+str(priority)+')'
 		if status:
 			status = status.strip()
@@ -592,7 +593,11 @@ class RosterTooltip(gtk.Window):
 		status_label.set_alignment(00, 0)
 		self.table.attach(status_label, 3, 4, self.current_row, self.current_row + 1, 
 				gtk.EXPAND | gtk.FILL, 0, 0, 0)
-	
+		
+	def escape_entities(self, text):
+		# escapes markup entities
+		return text.replace('&', '&amp;').replace('>','&gt;').replace('<','&lt;')
+		
 	def populate(self, contacts):
 		if not contacts or len(contacts) == 0:
 			return
@@ -639,9 +644,9 @@ class RosterTooltip(gtk.Window):
 
 		info = '<span size="large" weight="bold">' + prim_contact.jid + '</span>'
 		info += '\n<span weight="bold">' + _('Name: ') + '</span>' + \
-			prim_contact.name
+			self.escape_entities(prim_contact.name)
 		info += '\n<span weight="bold">' + _('Subscription: ') + '</span>' + \
-			prim_contact.sub
+			self.escape_entities(prim_contact.sub)
 
 		if prim_contact.keyID:
 			keyID = None
@@ -651,7 +656,7 @@ class RosterTooltip(gtk.Window):
 				keyID = prim_contact.keyID[8:]
 			if keyID:
 				info += '\n<span weight="bold">' + _('OpenPGP: ') + \
-					'</span>' + keyID 
+					'</span>' + self.escape_entities(keyID )
 
 		single_line, resource_str, multiple_resource= '', '', False
 		num_resources = 0
@@ -670,15 +675,16 @@ class RosterTooltip(gtk.Window):
 		else: # only one resource
 			if contact.resource:
 				info += '\n<span weight="bold">' + _('Resource: ') + \
-					'</span>' + contact.resource + ' (' + str(contact.priority) + ')'
+					'</span>' + self.escape_entities(contact.resource) + ' (' + str(contact.priority) + ')'
 			if contact.show:
 				info += '\n<span weight="bold">' + _('Status: ') + \
 					'</span>' + helpers.get_uf_show(contact.show) 
 				if contact.status:
 					status = contact.status.strip()
 					if status != '':
-						info += ' - ' + status
-
+						# escape markup entities. Is it posible to have markup in status?
+						info += ' - ' + self.escape_entities(status)
+		
 		self.account.set_markup(info)
 
 class InputDialog:
