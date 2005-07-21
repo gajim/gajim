@@ -233,7 +233,8 @@ class PreferencesWindow:
 		# on new message
 		only_in_roster = True
 		if gajim.config.get('notify_on_new_message'):
-			self.xml.get_widget('notify_on_new_message_radiobutton').set_active(1)
+			self.xml.get_widget('notify_on_new_message_radiobutton').set_active(
+				True)
 			only_in_roster = False
 		if gajim.config.get('autopopup'):
 			self.xml.get_widget('popup_new_message_radiobutton').set_active(True)

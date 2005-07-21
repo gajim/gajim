@@ -42,7 +42,7 @@ class Config:
 		'autopopup': [ opt_bool, False ],
 		'notify_on_signin': [ opt_bool, True ],
 		'notify_on_signout': [ opt_bool, False ],
-		'notify_on_new_message': [ opt_bool, False ],
+		'notify_on_new_message': [ opt_bool, True ],
 		'autopopupaway': [ opt_bool, False ],
 		'ignore_unknown_contacts': [ opt_bool, False ],
 		'showoffline': [ opt_bool, False ],
