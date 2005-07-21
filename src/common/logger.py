@@ -62,6 +62,7 @@ class Logger:
 
 		if not msg:
 			msg = ''
+
 		msg = helpers.to_one_line(msg)
 		if len(jid.split('/')) > 1:
 			ji, nick = jid.split('/', 1)

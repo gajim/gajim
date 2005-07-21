@@ -1,4 +1,4 @@
-##	common/check_for_new_version.py
+##	check_for_new_version.py
 ##
 ## Gajim Team:
 ## - Yann Le Boulanger <asterix@lagaule.org>

@@ -22,6 +22,8 @@ import gtk.glade
 import gobject
 import os
 
+import gtkgui_helpers.py
+
 from vcard import VcardWindow
 from gajim_themes_window import GajimThemesWindow
 from advanced import AdvancedConfigurationWindow
@@ -592,12 +594,8 @@ class RosterTooltip(gtk.Window):
 				str_status += ' - ' + status
 		status_label = gtk.Label(str_status)
 		status_label.set_alignment(00, 0)
-		self.table.attach(status_label, 3, 4, self.current_row, self.current_row + 1, 
-				gtk.EXPAND | gtk.FILL, 0, 0, 0)
-		
-	def escape_entities(self, text):
-		# escapes markup entities
-		return text.replace('&', '&amp;').replace('>','&gt;').replace('<','&lt;')
+		self.table.attach(status_label, 3, 4, self.current_row,
+			self.current_row + 1, gtk.EXPAND | gtk.FILL, 0, 0, 0)
 		
 	def populate(self, contacts):
 		if not contacts or len(contacts) == 0:
@@ -645,9 +643,9 @@ class RosterTooltip(gtk.Window):
 
 		info = '<span size="large" weight="bold">' + prim_contact.jid + '</span>'
 		info += '\n<span weight="bold">' + _('Name: ') + '</span>' + \
-			self.escape_entities(prim_contact.name)
+			gtkgui_helpers.escape_for_pango_markup(prim_contact.name)
 		info += '\n<span weight="bold">' + _('Subscription: ') + '</span>' + \
-			self.escape_entities(prim_contact.sub)
+			gtkgui_helpers.escape_for_pango_markup(prim_contact.sub)
 
 		if prim_contact.keyID:
 			keyID = None
@@ -657,7 +655,7 @@ class RosterTooltip(gtk.Window):
 				keyID = prim_contact.keyID[8:]
 			if keyID:
 				info += '\n<span weight="bold">' + _('OpenPGP: ') + \
-					'</span>' + self.escape_entities(keyID )
+					'</span>' + gtkgui_helpers.escape_for_pango_markup(keyID)
 
 		single_line, resource_str, multiple_resource= '', '', False
 		num_resources = 0
@@ -676,7 +674,7 @@ class RosterTooltip(gtk.Window):
 		else: # only one resource
 			if contact.resource:
 				info += '\n<span weight="bold">' + _('Resource: ') + \
-					'</span>' + self.escape_entities(contact.resource) + ' (' + str(contact.priority) + ')'
+					'</span>' + gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + str(contact.priority) + ')'
 			if contact.show:
 				info += '\n<span weight="bold">' + _('Status: ') + \
 					'</span>' + helpers.get_uf_show(contact.show) 
@@ -684,7 +682,7 @@ class RosterTooltip(gtk.Window):
 					status = contact.status.strip()
 					if status != '':
 						# escape markup entities. Is it posible to have markup in status?
-						info += ' - ' + self.escape_entities(status)
+						info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 		
 		self.account.set_markup(info)
 

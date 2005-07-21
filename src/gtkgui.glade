@@ -10008,8 +10008,8 @@ Custom</property>
 		      <child>
 			<widget class="GtkLabel" id="banner_name_label">
 			  <property name="visible">True</property>
-			  <property name="label">&lt;span weight=&quot;heavy&quot; size=&quot;large&quot;&gt;Contact: name&lt;/span&gt;
-JID: whatever@jabber.org</property>
+			  <property name="label">&lt;span weight=&quot;heavy&quot; size=&quot;large&quot;&gt;Contact name&lt;/span&gt;
+Status message</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">True</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>

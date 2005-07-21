@@ -113,8 +113,7 @@ class TabbedChatWindow(chat.Chat):
 		houses the status icon, name, jid, and avatar'''
 		# this is the text for the big brown bar
 		# some chars need to be escaped..
-		name = contact.name.replace('&', '&amp;').replace('>','&gt;').replace(
-			'<','&lt;')
+		name = gtkgui_helpers.escape_for_pango_markup(contact.name)
 		
 		jid = contact.jid
 		status = contact.status
