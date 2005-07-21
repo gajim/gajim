@@ -119,9 +119,6 @@ class TabbedChatWindow(chat.Chat):
 		jid = contact.jid
 		status = contact.status
 
-		if status is None:
-			status = ''
-
 		#FIXME: uncomment me when we support sending messages to specific resource
 		# composing full jid
 		#fulljid = jid
@@ -131,11 +128,14 @@ class TabbedChatWindow(chat.Chat):
 		#	% (name, fulljid)
 		
 		if chatstate:
-			label_text = '<span weight="heavy" size="x-large">%s</span> (chat state: %s)\n%s' \
-				% (name, chatstate, status)
+			label_text = \
+			'<span weight="heavy" size="x-large">%s</span> (chat state: %s)' \
+				% (name, chatstate)
 		else:
-			label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
-				% (name, status)
+			label_text = '<span weight="heavy" size="x-large">%s</span>' % name
+		
+		if status is not None:
+			label_text += '\n%s' % status
 
 		# setup the label that holds name and jid
 		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
