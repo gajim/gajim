@@ -1546,7 +1546,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					if unrd:
 						unread = True
 						break
-					for jid in win.users:
+					for jid in win.contacts:
 						if time.time() - gajim.last_message_time[account][jid] < 2:
 							recent = True
 							break
