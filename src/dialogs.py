@@ -22,7 +22,7 @@ import gtk.glade
 import gobject
 import os
 
-import gtkgui_helpers.py
+import gtkgui_helpers
 
 from vcard import VcardWindow
 from gajim_themes_window import GajimThemesWindow
