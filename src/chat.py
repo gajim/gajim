@@ -139,7 +139,7 @@ class Chat:
 		nickname.set_text(start + self.names[jid])
 
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
-		#clean self.plugin.windows[self.account][kind]
+		'''clean self.plugin.windows[self.account][kind]'''
 		for jid in self.xmls:
 			windows = self.plugin.windows[self.account][kind]
 			if kind == 'chats':
@@ -279,7 +279,28 @@ class Chat:
 		self.notebook.set_current_page(self.notebook.page_num(self.childs[jid]))
 
 	def remove_tab(self, jid, kind): #kind is 'chats' or 'gc'
-		if len(self.xmls) == 1:
+		if len(self.xmls) == 1: # only one tab so destroy window
+		
+			# we check and possibly save positions here, because Ctrl+W, Escape
+			# etc.. call remove_tab so similar code in delete_event callbacks
+			# is not enough
+			if gajim.config.get('saveposition'):
+				if kind == 'chats':
+					x, y = self.window.get_position()
+					gajim.config.set('chat-x-position', x)
+					gajim.config.set('chat-y-position', y)
+					width, height = self.window.get_size()
+					gajim.config.set('chat-width', width)
+					gajim.config.set('chat-height', height)
+				elif kind == 'gc':
+					gajim.config.set('gc-hpaned-position', self.hpaned_position)
+					x, y = self.window.get_position()
+					gajim.config.set('gc-x-position', x)
+					gajim.config.set('gc-y-position', y)
+					width, height = self.window.get_size()
+					gajim.config.set('gc-width', width)
+					gajim.config.set('gc-height', height)
+
 			self.window.destroy()
 			return
 		if self.nb_unread[jid] > 0:
