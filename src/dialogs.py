@@ -214,6 +214,7 @@ class ChangeStatusMessageDialog:
 		message_comboboxentry = self.xml.get_widget('message_comboboxentry')
 		message_comboboxentry.set_model(liststore)
 		message_comboboxentry.set_text_column(0)
+		message_comboboxentry.child.set_property('editable', False)
 		for val in sorted_keys_list:
 			message_comboboxentry.append_text(val)
 		self.xml.signal_autoconnect(self)
