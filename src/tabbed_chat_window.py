@@ -66,6 +66,8 @@ class TabbedChatWindow(chat.Chat):
 			self.on_chat_notebook_key_press_event)
 		self.xml.signal_connect('on_chat_notebook_switch_page',
 			self.on_chat_notebook_switch_page)
+		self.xml.signal_connect('on_tabbed_chat_window_motion_notify_event',
+			self.on_tabbed_chat_window_motion_notify_event)
 
 		if gajim.config.get('saveposition'):
 			# get window position and size from config
@@ -88,6 +90,12 @@ class TabbedChatWindow(chat.Chat):
 		self.xmls[jid].get_widget('gpg_togglebutton').set_active(
 			var['gpg_enabled'])
 		
+	def on_tabbed_chat_window_motion_notify_event(self, widget, event):
+		print widget, widget.is_focus()
+		if widget.is_focus(): # change chatstate only if window has focus
+			self.mouse_over_in_last_5_secs = True
+			self.mouse_over_in_last_30_secs = True
+
 	def draw_widgets(self, contact):
 		"""draw the widgets in a tab (status_image, contact_button ...)
 		according to the the information in the contact variable"""
