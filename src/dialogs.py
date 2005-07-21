@@ -584,8 +584,10 @@ class RosterTooltip(gtk.Window):
 		self.table.attach(image,2,3,self.current_row, 
 			self.current_row + 1, 0, 0, 3, 0)
 		str_status = resource + ' ('+str(priority)+')'
-		if status or status.strip() != '':
-			str_status += ' - ' + status
+		if status:
+			status = status.strip()
+			if status != '':
+				str_status += ' - ' + status
 		status_label = gtk.Label(str_status)
 		status_label.set_alignment(00, 0)
 		self.table.attach(status_label, 3, 4, self.current_row, self.current_row + 1, 
@@ -672,8 +674,10 @@ class RosterTooltip(gtk.Window):
 			if contact.show:
 				info += '\n<span weight="bold">' + _('Status: ') + \
 					'</span>' + helpers.get_uf_show(contact.show) 
-				if contact.status and contact.status.strip() != '':
-					info += ' - ' + contact.status
+				if contact.status:
+					status = contact.status.strip()
+					if status != '':
+						info += ' - ' + status
 
 		self.account.set_markup(info)
 
