@@ -767,7 +767,8 @@ class RosterWindow:
 		send_single_message_menuitem = childs[1]
 		rename_menuitem = childs[2]
 		edit_groups_menuitem = childs[3]
-		#skip a seperator
+		# separator4 goes with assign_openpgp_key_menuitem
+		assign_openpgp_separator = childs[4]
 		assign_openpgp_key_menuitem = childs[5]
 		#skip a seperator
 		subscription_to_menuitem, subscription_from_menuitem =\
@@ -812,6 +813,9 @@ class RosterWindow:
 			add_to_roster_menuitem.set_no_show_all(False)
 			edit_groups_menuitem.hide()
 			edit_groups_menuitem.set_no_show_all(True)
+			# hide first of the two consecutive separators
+			assign_openpgp_separator.hide()
+			assign_openpgp_separator.set_no_show_all(True)
 			assign_openpgp_key_menuitem.hide()
 			assign_openpgp_key_menuitem.set_no_show_all(True)
 			
