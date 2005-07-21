@@ -1246,7 +1246,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 		gajim.to_be_removed[name] = []
 		gajim.nicks[name] = config['name']
 		gajim.allow_notifications[name] = False
-		gajim.sleeper_state[name] = 0
+		gajim.sleeper_state[name] = 'off'
 		gajim.encrypted_chats[name] = []
 		gajim.last_message_time[name] = {}
 		#refresh accounts window

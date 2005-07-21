@@ -1231,9 +1231,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					txt)
 		if status == 'online' and self.plugin.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
-			gajim.sleeper_state[account] = True
+			gajim.sleeper_state[account] = 'online'
 		else:
-			gajim.sleeper_state[account] = False
+			gajim.sleeper_state[account] = 'off'
 
 	def get_status_message(self, show):
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \

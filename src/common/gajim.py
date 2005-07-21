@@ -53,8 +53,9 @@ awaiting_messages = {} # list of messages reveived but not printed
 nicks = {} # list of our nick names in each account
 allow_notifications = {} # do we allow notifications for each account ?
 con_types = {} # type of each connection (ssl, tls, tcp, ...)
-sleeper_state = {} #whether we pass auto away / xa or not
-#0:don't use sleeper for this account
-#1:online and use sleeper
-#2:autoaway and use sleeper
-#3:autoxa and use sleeper
+
+sleeper_state = {} # whether we pass auto away / xa or not
+#'off': don't use sleeper for this account
+#'online': online and use sleeper
+#'autoaway': autoaway and use sleeper
+#'autoxa': autoxa and use sleeper
