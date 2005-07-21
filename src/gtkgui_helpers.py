@@ -39,4 +39,5 @@ def get_contact_name_from_jid(account, jid):
 
 def escape_for_pango_markup(string):
 	# escapes chars for pango markup not to break
-	return cgi.escape(string)
+	if string is not None:
+		return cgi.escape(string)

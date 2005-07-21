@@ -15301,7 +15301,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_history_button_clicked" last_modification_time="Thu, 30 Jun 2005 10:23:04 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image731">
+	<widget class="GtkImage" id="image940">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
@@ -15340,6 +15340,33 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
       <property name="active">False</property>
       <signal name="activate" handler="on_compact_view_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 13:07:17 GMT"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkSeparatorMenuItem" id="separator10">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="add_to_roster_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Add to Roster</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_add_to_roster_menuitem_activate" last_modification_time="Thu, 21 Jul 2005 22:46:10 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image941">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-add</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
     </widget>
   </child>
 </widget>

@@ -121,14 +121,19 @@ class TabbedChatWindow(chat.Chat):
 		houses the status icon, name, jid, and avatar'''
 		# this is the text for the big brown bar
 		# some chars need to be escaped..
+		jid = contact.jid
+		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
+		
 		name = gtkgui_helpers.escape_for_pango_markup(contact.name)
 		
 		status = contact.status
-		if len(status) > 25: #FIXME: do me with pango ellipseEND when gtk24 is OLD
-				status = status[:21] + '...'
+		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+  
+		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
+			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
+		#FIXME: do me with pango ellipseEND when gtk24 is OLD
+		elif status is not None and len(status) > 50:
+				status = status[:47] + '...'
 		status = gtkgui_helpers.escape_for_pango_markup(status)
-		
-		jid = contact.jid
 
 		#FIXME: uncomment me when we support sending messages to specific resource
 		# composing full jid
@@ -149,7 +154,6 @@ class TabbedChatWindow(chat.Chat):
 			label_text += '\n%s' % status
 
 		# setup the label that holds name and jid
-		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
 		banner_name_label.set_markup(label_text)
 		self.paint_banner(jid)
 
