@@ -882,7 +882,10 @@ class Chat:
 		
 		if buffer.get_char_count() > 0:
 			buffer.insert(end_iter, '\n')
-		
+		update_time = True
+		if kind == 'incoming_queue':
+			kind = 'incoming'
+			update_time  = False
 		# print the time stamp
 		if gajim.config.get('print_time') == 'always':
 			if not tim:
@@ -946,10 +949,8 @@ class Chat:
 
 		if not count_as_new:
 			return
-
-		if kind == 'incoming':
+		if kind == 'incoming' and update_time:
 			gajim.last_message_time[self.account][jid] = time.time()
-
 		if (jid != self.get_active_jid() or \
 		   not self.window.is_active() or \
 		   not end) and kind == 'incoming':

@@ -568,7 +568,7 @@ class TabbedChatWindow(chat.Chat):
 		user = self.contacts[jid]
 		for event in l:
 			self.print_conversation(event[0], jid, tim = event[1],
-				encrypted = event[2])
+				encrypted = event[2], contact='print_queue')
 			self.plugin.roster.nb_unread -= 1
 		self.plugin.roster.show_title()
 		del gajim.awaiting_messages[self.account][jid]
@@ -586,6 +586,7 @@ class TabbedChatWindow(chat.Chat):
 		"""Print a line in the conversation:
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message
+		if contact is set to print_queue: it is incomming from queue
 		if contact is not set: it's an incomming message"""
 		user = self.contacts[jid]
 		if contact == 'status':
@@ -604,13 +605,15 @@ class TabbedChatWindow(chat.Chat):
 					'status', '', tim)
 				ec.remove(jid)
 			self.xmls[jid].get_widget('gpg_togglebutton').set_active(encrypted)
-			if contact:
-				kind = 'outgoing'
-				name = gajim.nicks[self.account] 
-			else:
+			if not contact:
 				kind = 'incoming'
 				name = user.name
-
+			elif contact == 'print_queue': # incoming message, but do not update time
+				kind = 'incoming_queue'
+				name = user.name
+			else:
+				kind = 'outgoing'
+				name = gajim.nicks[self.account] 
 		chat.Chat.print_conversation_line(self, text, jid, kind, name, tim,
 			subject = subject)
 
