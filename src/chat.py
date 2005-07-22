@@ -125,7 +125,7 @@ class Chat:
 			start = '[' + str(self.nb_unread[jid]) + '] '
 		elif self.nb_unread[jid] == 1:
 			start = '* '
-
+			
 		child = self.childs[jid]
 		if self.widget_name == 'tabbed_chat_window':
 			nickname = self.notebook.get_tab_label(child).get_children()[1]
@@ -137,6 +137,7 @@ class Chat:
 			nickname.set_max_width_chars(10)
 
 		nickname.set_text(start + self.names[jid])
+
 
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
 		'''clean self.plugin.windows[self.account][kind]'''
@@ -272,7 +273,8 @@ class Chat:
 		if self.widget_name == 'tabbed_chat_window':
 			# send chatstate inactive to the one we're leaving
 			# and active to the one we visit
-			self.send_chatstate('inactive', old_jid)
+			if old_jid != '':
+				self.send_chatstate('inactive', old_jid)
 			self.send_chatstate('active', new_jid)
 
 		conversation_textview = self.xmls[new_jid].get_widget(
