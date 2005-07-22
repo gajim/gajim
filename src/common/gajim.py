@@ -59,6 +59,7 @@ sleeper_state = {} # whether we pass auto away / xa or not
 #'online': online and use sleeper
 #'autoaway': autoaway and use sleeper
 #'autoxa': autoxa and use sleeper
+status_before_autoaway = {}
 
 
 def get_fjid_from_nick(room_jid, nick):

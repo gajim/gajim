@@ -566,6 +566,7 @@ class Interface:
 		gajim.sleeper_state[name] = 'off'
 		gajim.encrypted_chats[name] = []
 		gajim.last_message_time[name] = {}
+		gajim.status_before_autoaway[name] = {}
 		if self.windows.has_key('accounts'):
 			self.windows['accounts'].init_accounts()
 		self.roster.draw_roster()
@@ -704,11 +705,15 @@ class Interface:
 				gajim.sleeper_state[account] == 'autoaway' or \
 				gajim.sleeper_state[account] == 'autoxa':
 				#we go online
-				self.roster.send_status(account, 'online', 'Online')
+				self.roster.send_status(account, 'online',
+					gajim.status_before_autoaway[account])
 				gajim.sleeper_state[account] = 'online'
 			elif state == common.sleepy.STATE_AWAY and \
 				gajim.sleeper_state[account] == 'online' and \
 				gajim.config.get('autoaway'):
+				#we save out online status
+				gajim.status_before_autoaway[account] = \
+					gajim.connections[account].status
 				#we go away
 				self.roster.send_status(account, 'away', 'auto away (idle)')
 				gajim.sleeper_state[account] = 'autoaway'
@@ -953,6 +958,7 @@ class Interface:
 			gajim.sleeper_state[a] = 0
 			gajim.encrypted_chats[a] = []
 			gajim.last_message_time[a] = {}
+			gajim.status_before_autoaway[a] = ''
 
 		self.roster = roster_window.RosterWindow(self)
 		if gajim.config.get('use_dbus'):
