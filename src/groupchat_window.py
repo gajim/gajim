@@ -657,7 +657,8 @@ class GroupchatWindow(chat.Chat):
 
 	def ban(self, widget, room_jid, jid):
 		"""ban a user"""
-		nick = helpers.get_nick_from_fjid(jid)
+		# to ban we know the real jid. so jid is not fakejid
+		nick = helpers.get_nick_from_jid(jid)
 		# ask for reason
 		instance = dialogs.InputDialog(_('Banning %s') % nick,
 			_('You may specify a reason below:'))
@@ -719,7 +720,7 @@ class GroupchatWindow(chat.Chat):
 		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
 
 	def on_send_pm(self, widget=None, model=None, iter=None, nick=None, msg=None):
-		'''opens a chat window and optionally sends private message to a 
+		'''opens a chat window and msg is not None sends private message to a 
 		contact in a room'''
 		if nick is None:
 			nick = model.get_value(iter, 1)
