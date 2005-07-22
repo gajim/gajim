@@ -270,8 +270,9 @@ class Connection:
 			log_msgtxt = msgtxt
 			if subject:
 				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
-			gajim.logger.write('incoming', log_msgtxt, str(msg.getFrom()),
-				tim = tim)
+			if msg.getTag('body'):
+				gajim.logger.write('incoming', log_msgtxt, str(msg.getFrom()),
+					tim = tim)
 			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted,
 				mtype, subject, chatstate))
 	# END messageCB
