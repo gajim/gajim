@@ -115,10 +115,9 @@ else:
 
 			try: proc.wait()
 			except IOError: pass
-			if resp.has_key('BAD_PASSPHRASE'):
-				return 'BAD_PASSPHRASE'
-			elif resp.has_key('GOOD_PASSPHRASE'):
+			if resp.has_key('GOOD_PASSPHRASE'):
 				return self._stripHeaderFooter(output)
+			return 'BAD_PASSPHRASE'
 
 		def verify(self, str, sign):
 			if not USE_GPG:
@@ -154,7 +153,7 @@ else:
 
 		def get_keys(self, secret = False):
 			if not USE_GPG:
-				return
+				return {}
 			if secret:
 				opt = '--list-secret-keys'
 			else:
