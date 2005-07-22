@@ -349,10 +349,7 @@ class GroupchatWindow(chat.Chat):
 
 	def on_change_subject_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
-		# whole text (including JID)
-		label_text = self.name_labels[room_jid].get_text()
-		# just the text after the newline
-		subject = label_text[label_text.find('\n') + 1:]
+		subject = self.subjects[room_jid]
 		instance = dialogs.InputDialog(_('Changing Subject'),
 			_('Please specify the new subject:'), subject)
 		response = instance.get_response()
