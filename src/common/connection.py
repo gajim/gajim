@@ -136,6 +136,7 @@ class Connection:
 		self.to_be_sent = []
 		self.last_sent = []
 		self.password = gajim.config.get_per('accounts', name, 'password')
+		self.privacy_rules_supported = False
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
 			gajim.config.set('usegpg', True)
@@ -784,7 +785,55 @@ class Connection:
 		if self.connection:
 			roster = self.connection.getRoster().getRaw()
 		return roster
+
+	def build_privacy_rule(self, name, action):
+		'''Build a Privacy rule stanza for invisibility'''
+		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
+		l = iq.getTag('query').setTag('list', {'name': name})
+		i = l.setTag('item', {'action': action, 'order': '1'})
+		i.setTag('presence-out')
+		return iq
+
+	def activate_privacy_rule(self, name):
+		'''activate a privacy rule'''
+		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
+		iq.getTag('query').setTag('active', {'name': name})
+		self.connection.send(iq)
+
+	def send_invisible_presence(self, msg, signed, initial = False):
+		# try to set the privacy rule
+		iq = self.build_privacy_rule('invisible', 'deny')
+		self.connection.SendAndCallForResponse(iq, self._continue_invisible,
+			{'msg': msg, 'signed': signed, 'initial': initial})
 	
+	def _continue_invisible(self, con, iq_obj, msg, signed, initial):
+		ptype = ''
+		show = ''
+		# FIXME: JEP 126 need some modifications (see http://lists.jabber.ru/pipermail/ejabberd/2005-July/001252.html). So I disable it for the moment
+		if 1 or iq_obj.getType() == 'error': #server doesn't support privacy lists
+			# We use the old way which is not xmpp complient
+			ptype = 'invisible'
+			show = 'invisible'
+		else:
+			# active the privacy rule
+			self.privacy_rules_supported = True
+			self.activate_privacy_rule('invisible')
+		prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
+		p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
+		if msg:
+			p.setStatus(msg)
+		if signed:
+			p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+		self.connection.send(p)
+		self.dispatch('STATUS', 'invisible')
+		if initial:
+			#ask our VCard
+			iq = self.request_vcard(None)
+			self.myVCardID.append(iq.getID())
+
+			#Get bookmarks from private namespace
+			self.get_bookmarks()
+
 	def change_status(self, show, msg, sync = False):
 		if sync:
 			self.change_status2(show, msg)
@@ -822,7 +871,8 @@ class Connection:
 				#send our presence
 				ptype = None
 				if show == 'invisible':
-					ptype = 'invisible'
+					self.send_invisible_presence(msg, signed, True)
+					return
 				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
 				p = common.xmpp.Presence(typ = ptype, priority = prio, show = sshow)
 				if msg:
@@ -856,10 +906,16 @@ class Connection:
 			self.dispatch('STATUS', 'offline')
 			self.connection = None
 		elif show != 'offline' and self.connected:
+			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
 			ptype = None
 			if show == 'invisible':
-				ptype = 'invisible'
+				self.send_invisible_presence(msg, signed)
+				return
+			if was_invisible and self.privacy_rules_supported:
+				iq = self.build_privacy_rule('visible', 'allow')
+				self.connection.send(iq)
+				self.activate_privacy_rule('visible')
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
 			p = common.xmpp.Presence(typ = ptype, priority = prio, show = sshow)
 			if msg:
