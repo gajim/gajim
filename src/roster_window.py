@@ -662,10 +662,10 @@ class RosterWindow:
 		if props:
 			[row, col, x, y] = props
 			iter = model.get_iter(row)
-			if model.get_value(iter, 2) == 'contact':
-				account = model.get_value(iter, 4)
-				jid = model.get_value(iter, 3)
-				img = model.get_value(iter, 0)
+			if model[iter][2] == 'contact':
+				account = model[iter][4]
+				jid = model[iter][3]
+				img = model[iter][0]
 				if self.tooltip.timeout == 0 or self.tooltip.path != props[0]:
 					self.tooltip.path = row
 					self.tooltip.timeout = gobject.timeout_add(500,
@@ -761,9 +761,9 @@ class RosterWindow:
 	def mk_menu_user(self, event, iter):
 		'''Make contact's popup menu'''
 		model = self.tree.get_model()
-		jid = model.get_value(iter, 3)
+		jid = model[iter][3]
 		path = model.get_path(iter)
-		account = model.get_value(iter, 4)
+		account = model[iter][4]
 		contact = gajim.contacts[account][jid][0]
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_contact_context_menu',
@@ -859,9 +859,9 @@ class RosterWindow:
 	def mk_menu_agent(self, event, iter):
 		'''Make agent's popup menu'''
 		model = self.tree.get_model()
-		jid = model.get_value(iter, 3)
+		jid = model[iter][3]
 		path = model.get_path(iter)
-		account = model.get_value(iter, 4)
+		account = model[iter][4]
 		user = gajim.contacts[account][jid][0]
 		menu = gtk.Menu()
 		
@@ -930,7 +930,7 @@ class RosterWindow:
 	def mk_menu_account(self, event, iter):
 		'''Make account's popup menu'''
 		model = self.tree.get_model()
-		account = model.get_value(iter, 3)
+		account = model[iter][3]
 		
 		#FIXME: made this menu insensitive if we're offline
 
@@ -1041,7 +1041,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			model, iter = treeselection.get_selected()
 			if not iter:
 				return
-			type = model.get_value(iter, 2)
+			type = model[iter][2]
 			if type == 'contact' or type == 'group':
 				path = model.get_path(iter)
 				self.on_rename(widget, iter, path)
@@ -1051,9 +1051,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			model, iter = treeselection.get_selected()
 			if not iter:
 				return
-			jid = model.get_value(iter, 3)
-			account = model.get_value(iter, 4)
-			type = model.get_value(iter, 2)
+			jid = model[iter][3]
+			account = model[iter][4]
+			type = model[iter][2]
 			user = gajim.contacts[account][jid][0]
 			if type == 'contact':
 				self.on_req_usub(widget, user, account)
@@ -1062,7 +1062,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 
 	def show_appropriate_context_menu(self, event, iter):
 		model = self.tree.get_model()
-		type = model.get_value(iter, 2)
+		type = model[iter][2]
 		if type == 'group':
 			self.mk_menu_g(event, iter)
 		elif type == 'agent':
@@ -1087,7 +1087,6 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		return True
 
 	def on_roster_treeview_button_press_event(self, widget, event):
-		'''popup contact's, group's or agent's menu'''
 		# hide tooltip, no matter the button is pressed
 		self.tooltip.hide_tooltip()
 		if event.button == 3: # Right click
@@ -1102,6 +1101,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			iter = model.get_iter(path)
 			self.show_appropriate_context_menu(event, iter)
 			return True
+		
 		if event.button == 2: # Middle click
 			try:
 				path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
@@ -1112,10 +1112,10 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.tree.get_selection().select_path(path)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
-			type = model.get_value(iter, 2)
+			type = model[iter][2]
 			if type == 'agent' or type == 'contact':
-				account = model.get_value(iter, 4)
-				jid = model.get_value(iter, 3)
+				account = model[iter][4]
+				jid = model[iter][3]
 				if self.plugin.windows[account]['chats'].has_key(jid):
 					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 				elif gajim.contacts[account].has_key(jid):
@@ -1123,6 +1123,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 				self.plugin.windows[account]['chats'][jid].window.present()
 			return True
+		
 		if event.button == 1: # Left click
 			try:
 				path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
@@ -1132,7 +1133,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				return False
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
-			type = model.get_value(iter, 2)
+			type = model[iter][2]
 			if type == 'group':
 				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 					if (self.tree.row_expanded(path)):
@@ -1572,9 +1573,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		'''When an iter is double clicked: open the chat window'''
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
-		account = model.get_value(iter, 4)
-		type = model.get_value(iter, 2)
-		jid = model.get_value(iter, 3)
+		account = model[iter][4]
+		type = model[iter][2]
+		jid = model[iter][3]
 		if type == 'group' or type == 'account':
 			if self.tree.row_expanded(path):
 				self.tree.collapse_row(path)
@@ -1594,11 +1595,11 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		if gajim.config.get('mergeaccounts'):
 			accounts = gajim.connections.keys()
 		else:
-			accounts = [model.get_value(iter, 4)]
-		type = model.get_value(iter, 2)
+			accounts = [model[iter][4]]
+		type = model[iter][2]
 		if type == 'group':
 			model.set_value(iter, 0, self.jabber_state_images['opened'])
-			jid = model.get_value(iter, 3)
+			jid = model[iter][3]
 			for account in accounts:
 				if gajim.groups[account].has_key(jid): # This account has this group
 					gajim.groups[account][jid]['expand'] = True
@@ -1621,11 +1622,11 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		if gajim.config.get('mergeaccounts'):
 			accounts = gajim.connections.keys()
 		else:
-			accounts = [model.get_value(iter, 4)]
-		type = model.get_value(iter, 2)
+			accounts = [model[iter][4]]
+		type = model[iter][2]
 		if type == 'group':
 			model.set_value(iter, 0, self.jabber_state_images['closed'])
-			jid = model.get_value(iter, 3)
+			jid = model[iter][3]
 			for account in accounts:
 				if gajim.groups[account].has_key(jid): # This account has this group
 					gajim.groups[account][jid]['expand'] = False
@@ -1667,7 +1668,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				gajim.connections[account].update_contact(jid, new_text, u.groups)
 			self.draw_contact(jid, account)
 		elif type == 'group':
-			old_name = model.get_value(iter, 1)
+			old_name = model[iter][1]
 			#  Groups maynot change name from or to 'not in the roster'
 			if _('not in the roster') in [new_text, old_name]:
 				return
@@ -1731,7 +1732,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		model = self.status_combobox.get_model()
 		iter = model.get_iter_root()
 		while iter:
-			model.set_value(iter, 1, self.jabber_state_images[model.get_value(iter, 2)])
+			model.set_value(iter, 1, self.jabber_state_images[model[iter][2]])
 			iter = model.iter_next(iter)
 		# Update the systray
 		if self.plugin.systray_enabled:
@@ -1765,17 +1766,17 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def iconCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for icon renderer'''
 		theme = gajim.config.get('roster_theme')
-		if model.get_value(iter, 2) == 'account':
+		if model[iter][2] == 'account':
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'accountbgcolor'))
 			renderer.set_property('xalign', 0)
-		elif model.get_value(iter, 2) == 'group':
+		elif model[iter][2] == 'group':
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'groupbgcolor'))
 			renderer.set_property('xalign', 0.5)
 		else:
-			jid = model.get_value(iter, 3)
-			account = model.get_value(iter, 4)
+			jid = model[iter][3]
+			account = model[iter][4]
 			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in gajim.to_be_removed[account]:
@@ -1789,7 +1790,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def nameCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for name renderer'''
 		theme = gajim.config.get('roster_theme')
-		if model.get_value(iter, 2) == 'account':
+		if model[iter][2] == 'account':
 			renderer.set_property('foreground', 
 				gajim.config.get_per('themes', theme, 'accounttextcolor'))
 			renderer.set_property('cell-background', 
@@ -1798,7 +1799,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				gajim.config.get_per('themes', theme, 'accountfont'))
 			renderer.set_property('xpad', 0)
 			renderer.set_property('width', 3)
-		elif model.get_value(iter, 2) == 'group':
+		elif model[iter][2] == 'group':
 			renderer.set_property('foreground', 
 				gajim.config.get_per('themes', theme, 'grouptextcolor'))
 			renderer.set_property('cell-background', 
@@ -1807,8 +1808,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				gajim.config.get_per('themes', theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
 		else:
-			jid = model.get_value(iter, 3)
-			account = model.get_value(iter, 4)
+			jid = model[iter][3]
+			account = model[iter][4]
 			renderer.set_property('foreground', 
 				gajim.config.get_per('themes', theme, 'contacttextcolor'))
 			if jid in gajim.newly_added[account]:
@@ -1825,15 +1826,15 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def fill_secondary_pixbuf_rederer(self, column, renderer, model, iter, data=None):
 		'''When a row is added, set properties for secondary renderer (avatar or tls)'''
 		theme = gajim.config.get('roster_theme')
-		if model.get_value(iter, 2) == 'account':
+		if model[iter][2] == 'account':
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'accountbgcolor'))
-		elif model.get_value(iter, 2) == 'group':
+		elif model[iter][2] == 'group':
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'groupbgcolor'))
 		else:
-			jid = model.get_value(iter, 3)
-			account = model.get_value(iter, 4)
+			jid = model[iter][3]
+			account = model[iter][4]
 			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in gajim.to_be_removed[account]:
@@ -1906,7 +1907,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		path = model.get_path(iter)
 		data = ''
 		if len(path) == 3:
-			data = model.get_value(iter, 3)
+			data = model[iter][3]
 		selection.set(selection.target, 8, data)
 
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
