@@ -723,10 +723,10 @@ class Interface:
 
 	def autoconnect(self):
 		'''auto connect at startup'''
-		ask_message = 0
+		ask_message = False
 		for a in gajim.connections:
 			if gajim.config.get_per('accounts', a, 'autoconnect'):
-				ask_message = 1
+				ask_message = True
 				break
 		if ask_message:
 			message = self.roster.get_status_message('online')
