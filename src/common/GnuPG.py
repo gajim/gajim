@@ -125,14 +125,14 @@ else:
 				return str
 			if not str:
 				return ''
-			file = TemporaryFile(prefix='gajim')
-			fd = file.fileno()
-			file.write(str)
-			file.seek(0)
+			f = TemporaryFile(prefix='gajim')
+			fd = f.fileno()
+			f.write(str)
+			f.seek(0)
 
 			proc = self.run(['--verify', '--enable-special-filenames', '-', '-&%s'%fd], create_fhs=['stdin', 'status', 'stderr'])
 
-			file.close()
+			f.close()
 			sign = self._addHeaderFooter(sign, 'SIGNATURE')
 			proc.handles['stdin'].write(sign)
 			proc.handles['stdin'].close()
