@@ -86,16 +86,13 @@ else:
 		def decrypt(self, str, keyID):
 			if not USE_GPG:
 				return str
-			proc = self.run(['--decrypt', '-q', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status'])
+			proc = self.run(['--decrypt', '-q', '-u %s'%keyID], create_fhs=['stdin', 'stdout'])
 			enc = self._addHeaderFooter(str, 'MESSAGE')
 			proc.handles['stdin'].write(enc)
 			proc.handles['stdin'].close()
 	
 			output = proc.handles['stdout'].read()
 			proc.handles['stdout'].close()
-
-			resp = proc.handles['status'].read()
-			proc.handles['status'].close()
 
 			try: proc.wait()
 			except IOError: pass
