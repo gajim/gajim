@@ -1,4 +1,4 @@
-## plugins/groupchat_window.py
+## groupchat_window.py
 ##
 ## Gajim Team:
 ## - Yann Le Boulanger <asterix@lagaule.org>
@@ -228,13 +228,13 @@ class GroupchatWindow(chat.Chat):
 		image = self.plugin.roster.jabber_state_images[show]
 		resource = ''
 		if role == 'none':
-			role = _('None')
+			role_name = _('None')
 		elif role == 'moderator':
-			role = _('Moderators')
+			role_name = _('Moderators')
 		elif role == 'participant':
-			role = _('Participants')
+			role_name = _('Participants')
 		elif role == 'visitor':
-			role = _('Visitors')
+			role_name = _('Visitors')
 
 		if jid:
 			jids = jid.split('/', 1)
@@ -244,10 +244,10 @@ class GroupchatWindow(chat.Chat):
 		else:
 			j = ''
 		role_iter = self.get_role_iter(room_jid, role)
-		if not role_iter:			
+		if not role_iter:
 			role_iter = model.append(None,
 				(self.plugin.roster.jabber_state_images['closed'], role,
-				'<b>%s</b>' % role))
+				'<b>%s</b>' % role_name))
 		iter = model.append(role_iter, (image, nick, self.escape(nick)))
 		self.contacts[room_jid][nick] = Contact(jid = j, name = nick,
 			show = show, resource = resource, role = role,
