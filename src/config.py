@@ -962,8 +962,11 @@ class AccountModificationWindow:
 			self.xml.get_widget('save_button').grab_focus()
 		else: # we create a new account
 			if len(gajim.connections) == 0: # is it the first accound we're creating?
-				# the first account *has* to sync
-				self.xml.get_widget('sync_with_global_status_checkbutton').set_active(True)
+				# the first account *has* to sync by default
+				self.xml.get_widget('sync_with_global_status_checkbutton')\
+					.set_active(True)
+				# the first account *has* to autoconnect by default
+				self.xml.get_widget('autoconnect_checkbutton').set_active(True)
 				self.xml.get_widget('name_entry').set_text('Main')
 				self.xml.get_widget('jid_entry').grab_focus()
 		self.window.show_all()
@@ -1062,11 +1065,14 @@ class AccountModificationWindow:
 		self.xml.get_widget('autoconnect_checkbutton').set_active(gajim.config.\
 			get_per('accounts', self.account, 'autoconnect'))
 
-		if len(gajim.connections) != 0: # only if we already have one account already
+		if len(gajim.connections) != 0:
+			# only if we already have one account already
 			# we check that so we avoid the first account to have sync=False
 			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(
 				gajim.config.get_per('accounts', self.account,
 					'sync_with_global_status'))
+			self.xml.get_widget('autoconnect_checkbutton').set_active(
+				gajim.config.get_per('accounts', self.account, 'autoconnect'))
 		list_no_log_for = gajim.config.get_per('accounts', self.account,
 			'no_log_for').split()
 		if self.account in list_no_log_for:
