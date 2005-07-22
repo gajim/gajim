@@ -724,10 +724,10 @@ class RosterWindow:
 				keyID = attached_keys[2*i+1]
 		public_keys = gajim.connections[account].ask_gpg_keys()
 		public_keys['None'] = 'None'
-		w = dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'), _('Select a key to apply to the contact'), 
-			public_keys, keyID)
-		keyID = w.run()
-		if keyID == -1:
+		instance = dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'),
+			_('Select a key to apply to the contact'), public_keys, keyID)
+		keyID = instance.keyID
+		if keyID is None:
 			return
 		if keyID[0] == 'None':
 			if user.jid in keys:

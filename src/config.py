@@ -1329,9 +1329,10 @@ _('Without a connection, you can not edit your personal information.')
 _('There was a problem retrieving your GPG secret keys.')).get_response()
 			return
 		secret_keys['None'] = 'None'
-		w = dialogs.ChooseGPGKeyDialog(_('Passphrase'), _('Choose your OpenPGP key'), secret_keys)
-		keyID = w.run()
-		if keyID == -1:
+		instance = dialogs.ChooseGPGKeyDialog(_('Passphrase'),
+			_('Choose your OpenPGP key'), secret_keys)
+		keyID = instance.keyID
+		if keyID is None:
 			return
 		checkbutton = self.xml.get_widget('gpg_save_password_checkbutton')
 		gpg_key_label = self.xml.get_widget('gpg_key_label')

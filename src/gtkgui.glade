@@ -9629,7 +9629,7 @@ Custom</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
-  <property name="modal">False</property>
+  <property name="modal">True</property>
   <property name="default_width">550</property>
   <property name="default_height">300</property>
   <property name="resizable">True</property>
@@ -9641,6 +9641,7 @@ Custom</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
   <signal name="key_press_event" handler="on_Passphrase_key_press_event" last_modification_time="Thu, 07 Oct 2004 14:25:48 GMT"/>
+  <signal name="response" handler="on_choose_gpg_key_dialog_response" last_modification_time="Fri, 22 Jul 2005 22:35:39 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="vbox33">

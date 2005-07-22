@@ -149,38 +149,20 @@ class PassphraseDialog:
 		self.passphrase = -1
 		self.window.set_title(titletext)
 		self.xml.get_widget('message_label').set_text(labeltext)
-		self.xml.get_widget('save_passphrase_checkbutton').set_label(checkbuttontext)
+		self.xml.get_widget('save_passphrase_checkbutton').set_label(
+			checkbuttontext)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
 class ChooseGPGKeyDialog:
 	'''Class for GPG key dialog'''
-	def run(self):
-		'''Wait for Ok button to be pressed and return the selected key'''
-		rep = self.window.run()
-		if rep == gtk.RESPONSE_OK:
-			selection = self.keys_treeview.get_selection()
-			(model, iter) = selection.get_selected()
-			keyID = [model.get_value(iter, 0), model.get_value(iter, 1)]
-		else:
-			keyID = -1
-		self.window.destroy()
-		return keyID
-
-	def fill_tree(self, list, selected):
-		model = self.keys_treeview.get_model()
-		for keyID in list.keys():
-			iter = model.append((keyID, list[keyID]))
-			if keyID == selected:
-				path = model.get_path(iter)
-				self.keys_treeview.set_cursor(path)
-	
 	def __init__(self, title_text, prompt_text, secret_keys, selected = None):
 		#list : {keyID: userName, ...}
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'choose_gpg_key_dialog', APP)
 		self.window = xml.get_widget('choose_gpg_key_dialog')
 		self.window.set_title(title_text)
 		self.keys_treeview = xml.get_widget('keys_treeview')
+		self.keyID = None
 		prompt_label = xml.get_widget('prompt_label')
 		prompt_label.set_text(prompt_text)
 		model = gtk.ListStore(str, str)
@@ -193,8 +175,27 @@ class ChooseGPGKeyDialog:
 		self.keys_treeview.insert_column_with_attributes(-1, _('Contact name'),
 			renderer, text = 1)
 		self.fill_tree(secret_keys, selected)
-
+		
+		xml.signal_autoconnect(self)
 		self.window.show_all()
+
+	def on_choose_gpg_key_dialog_response(self, widget, response_id):
+		'''If OK button was pressed return the selected key'''
+		if response_id == gtk.RESPONSE_OK:
+			selection = self.keys_treeview.get_selection()
+			(model, iter) = selection.get_selected()
+			self.keyID = [ model[iter][0], model[iter][1] ]
+
+		self.window.destroy()
+	
+	def fill_tree(self, list, selected):
+		model = self.keys_treeview.get_model()
+		for keyID in list.keys():
+			iter = model.append((keyID, list[keyID]))
+			if keyID == selected:
+				path = model.get_path(iter)
+				self.keys_treeview.set_cursor(path)
+
 
 class ChangeStatusMessageDialog:
 	def __init__(self, plugin, show):
