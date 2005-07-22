@@ -78,7 +78,6 @@ def get_nick_from_fjid(jid):
 
 def get_contact_instances_from_jid(account, jid):
 	''' we may have two or more resources on that jid '''
-	#print contacts
 	if jid in contacts[account]:
 		contacts_instances = contacts[account][jid]
 		return contacts_instances
