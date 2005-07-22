@@ -1640,7 +1640,15 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		'''editing has been canceled'''
 		#FIXME: get iter
 		#model.set_value(iter, 5, False)
-		pass
+		path = self.tree.get_cursor()[0]
+		model = self.tree.get_model()
+		iter = model.get_iter(path)
+		account = model.get_value(iter, 4)
+		jid = model.get_value(iter, 3)
+		type = model.get_value(iter, 2)
+		# restore the number of resources string at the end of contact name
+		if type == 'contact' and len(gajim.contacts[account][jid]) > 1:
+			self.draw_contact(jid, account)
 
 	def on_cell_edited(self, cell, row, new_text):
 		'''When an iter is edited:
