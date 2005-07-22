@@ -294,6 +294,9 @@ class GroupchatWindow(chat.Chat):
 			if statusCode == '307':
 				self.print_conversation(_('%s has been kicked by %s: %s') % (nick,
 					actor, reason), room_jid)
+			elif statusCode == '301':
+				self.print_conversation(_('%s has been bannedd by %s: %s') % (nick,
+					actor, reason), room_jid)
 			elif statusCode == '303': # Someone changed his nick
 				self.print_conversation(_('%s is now known as %s') % (nick,
 					new_nick), room_jid)
