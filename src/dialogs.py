@@ -674,7 +674,8 @@ class RosterTooltip(gtk.Window):
 		else: # only one resource
 			if contact.resource:
 				info += '\n<span weight="bold">' + _('Resource: ') + \
-					'</span>' + gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + str(contact.priority) + ')'
+					'</span>' + gtkgui_helpers.escape_for_pango_markup(
+						contact.resource) + ' (' + str(contact.priority) + ')'
 			if contact.show:
 				info += '\n<span weight="bold">' + _('Status: ') + \
 					'</span>' + helpers.get_uf_show(contact.show) 

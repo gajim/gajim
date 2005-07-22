@@ -476,15 +476,15 @@ class Interface:
 		#('SUBSCRIBED', account, (jid, resource))
 		jid = array[0]
 		if gajim.contacts[account].has_key(jid):
-			u = gajim.contacts[account][jid][0]
-			u.resource = array[1]
-			self.roster.remove_contact(u, account)
-			if _('not in the roster') in u.groups:
-				u.groups.remove(_('not in the roster'))
-			if len(u.groups) == 0:
-				u.groups = [_('General')]
-			self.roster.add_contact_to_roster(u.jid, account)
-			gajim.connections[account].update_contact(u.jid, u.name, u.groups)
+			c = gajim.get_first_contact_instance_from_jid(account, jid)
+			c.resource = array[1]
+			self.roster.remove_contact(c, account)
+			if _('not in the roster') in c.groups:
+				c.groups.remove(_('not in the roster'))
+			if len(c.groups) == 0:
+				c.groups = [_('General')]
+			self.roster.add_contact_to_roster(c.jid, account)
+			gajim.connections[account].update_contact(c.jid, c.name, c.groups)
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,

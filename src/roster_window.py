@@ -31,7 +31,6 @@ import history_window
 import dialogs
 import config
 import cell_renderer_image
-import gtkgui_helpers
 
 from gajim import Contact
 from common import gajim
@@ -227,7 +226,7 @@ class RosterWindow:
 		iters = self.get_contact_iter(jid, account)
 		if len(iters) == 0:
 			return
-		contact_instances = gtkgui_helpers.get_contact_instances_from_jid(account,
+		contact_instances = gajim.get_contact_instances_from_jid(account,
 			jid)
 		contact = contact_instances[0]
 		name = contact.name

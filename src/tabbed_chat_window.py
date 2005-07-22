@@ -339,7 +339,7 @@ class TabbedChatWindow(chat.Chat):
 		
 	def handle_incoming_chatstate(self, account, jid, chatstate):
 		''' handle incoming chatstate that jid SENT TO us '''
-		contact = gtkgui_helpers.get_first_contact_instance_from_jid(account, jid)
+		contact = gajim.get_first_contact_instance_from_jid(account, jid)
 		self.draw_name_banner(contact, chatstate)
 
 	def check_for_possible_paused_chatstate(self, contact):
