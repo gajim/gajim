@@ -289,7 +289,7 @@ class TabbedChatWindow(chat.Chat):
 				return
 
 		# chatstates - window is destroyed, send gone
-		self.send_chatstate('gone')
+		self.send_chatstate('gone', jid)
 		
 		chat.Chat.remove_tab(self, jid, 'chats')
 		if len(self.xmls) > 0:
@@ -450,7 +450,7 @@ class TabbedChatWindow(chat.Chat):
 			# if composing, send chatstate
 			self.send_chatstate('composing')
 
-	def send_chatstate(self, state):
+	def send_chatstate(self, state, jid = None):
 		''' sends our chatstate as STANDLONE chat state message (eg. no body)
 		to the current tab only if new chatstate is different
 		from the previous one'''
@@ -468,7 +468,8 @@ class TabbedChatWindow(chat.Chat):
 		if not gajim.config.get('send_receive_chat_state_notifications'):
 			return
 
-		jid = self.get_active_jid()
+		if jid is None:
+			jid = self.get_active_jid()
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 
 		if contact.chatstate is False: # jid cannot do jep85
