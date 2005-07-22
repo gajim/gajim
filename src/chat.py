@@ -251,12 +251,29 @@ class Chat:
 			menu.show_all()
 
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
+		
+		# get the index of the page and then the page that we're leaving
+		old_no = notebook.get_current_page()
+		old_child = notebook.get_nth_page(old_no)
+		
 		new_child = notebook.get_nth_page(page_num)
+		
+		old_jid = ''
 		new_jid = ''
 		for jid in self.xmls:
 			if self.childs[jid] == new_child:
 				new_jid = jid
-				break
+			elif self.childs[jid] == old_child:
+				old_jid = jid
+			
+			if old_jid != '' and new_jid != '': # we found both jids
+				break # so stop looping
+		
+		if self.widget_name == 'tabbed_chat_window':
+			# send chatstate inactive to the one we're leaving
+			# and active to the one we visit
+			self.send_chatstate('inactive', old_jid)
+			self.send_chatstate('active', new_jid)
 
 		conversation_textview = self.xmls[new_jid].get_widget(
 			'conversation_textview')
