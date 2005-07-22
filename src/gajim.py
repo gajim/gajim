@@ -91,8 +91,9 @@ except ImportError:
 
 class Contact:
 	'''Information concerning each contact'''
-	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
-			ask='', resource='', priority=5, keyID='', role='', affiliation=''):
+	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',\
+			ask='', resource='', priority=5, keyID='', role='', affiliation='',\
+			chatstate=None):
 		self.jid = jid
 		self.name = name
 		self.groups = groups
@@ -105,6 +106,14 @@ class Contact:
 		self.keyID = keyID
 		self.role = role
 		self.affiliation = affiliation
+
+		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
+		# we keep track of jep85 support by the peer by three extra states:
+		# None, False and 'ask'
+		# None if no info about peer
+		# False if peer does not support jep85
+		# 'ask' if we sent the first 'active' chatstate and are waiting for reply
+		self.chatstate = chatstate
 
 import roster_window
 import systray
@@ -347,8 +356,8 @@ class Interface:
 				self.remote.raise_signal('GCPresence', (account, array))
 
 	def handle_event_msg(self, account, array):
-		#('MSG', account, (contact, msg, time, encrypted, msg_type, subject, chatstate))
-		jid = array[0].split('/')[0]
+		#('MSG', account, (jid, msg, time, encrypted, msg_type, subject, chatstate))
+		jid = gajim.get_jid_without_resource(array[0])
 		msg_type = array[4]
 		chatstate = array[6]
 		if jid.find('@') <= 0:
@@ -379,16 +388,17 @@ class Interface:
 
 		if self.windows[account]['chats'].has_key(jid):
 			chat_win = self.windows[account]['chats'][jid]
+			contact = gajim.get_first_contact_instance_from_jid(account, jid)
 			if chatstate is not None: # he sent us reply, so he supports jep85
-				if chat_win.chatstates[jid] == 'ask': # we were jep85 disco?
-					chat_win.chatstates[jid] = 'active' # no more
+				if contact.chatstate == 'ask': # we were jep85 disco?
+					contact.chatstate = 'active' # no more
 				
 				chat_win.handle_incoming_chatstate(account, jid, chatstate)
 			else:
 				# got no valid jep85 answer, peer does not support it
-				chat_win.chatstates[jid] = False
+				contact.chatstate = False
 
-		if not array[1]: #empty message
+		if not array[1]: #empty message text
 			return
 
 		first = False
@@ -491,10 +501,10 @@ class Interface:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = Contact(jid = jid, name = jid.split('@')[0],
+			contact1 = Contact(jid = jid, name = jid.split('@')[0],
 				groups = [_('General')], show = 'online', status = 'online',
 				ask = 'to', resource = array[1], keyID = keyID)
-			gajim.contacts[account][jid] = [user1]
+			gajim.contacts[account][jid] = [contact1]
 			self.roster.add_contact_to_roster(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his status.')

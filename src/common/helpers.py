@@ -58,7 +58,7 @@ def get_fjid_from_nick(room_jid, nick):
 	return fjid
 
 def get_nick_from_jid(jid):
-	pos = jid.rfind('/')
+	pos = jid.find('@')
 	return jid[:pos]
 
 def get_nick_from_fjid(jid):

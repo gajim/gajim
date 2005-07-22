@@ -901,7 +901,8 @@ class Connection:
 		# chatstates - if peer supports jep85, send chatstates
 		# please note that the only valid tag inside a message containing a <body> tag is the active event
 		if chatstate is not None:
-			msg_iq.setTag(chatstate, {}, namespace='http://jabber.org/protocol/chatstates')
+			msg_iq.setTag(chatstate, {},
+				namespace = 'http://jabber.org/protocol/chatstates')
 		
 		self.to_be_sent.append(msg_iq)
 		gajim.logger.write('outgoing', msg, jid)

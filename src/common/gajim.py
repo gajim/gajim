@@ -63,13 +63,13 @@ sleeper_state = {} # whether we pass auto away / xa or not
 
 def get_contact_instances_from_jid(account, jid):
 	''' we may have two or more resources on that jid '''
-	contact_instances = gajim.contacts[account][jid]
-	return contact_instances
+	return contacts[account][jid]
 
 def get_first_contact_instance_from_jid(account, jid):
-	contact_instances = get_contact_instances_from_jid(account, jid)
-	return contact_instances[0]
+	return contacts[account][jid][0]
 
 def get_contact_name_from_jid(account, jid):
-	contact_instances = get_contact_instances_from_jid(account, jid)
-	return contact_instances[0].name
+	return contacts[account][jid][0].name
+
+def get_jid_without_resource(jid):
+	return jid.split('/')[0]

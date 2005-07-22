@@ -454,13 +454,6 @@ class TabbedChatWindow(chat.Chat):
 		''' sends our chatstate as STANDLONE chat state message (eg. no body)
 		to the current tab only if new chatstate is different
 		from the previous one'''
-		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
-		# we keep track of jep85 support by the peer by three extra states:
-		# None, False and 'ask'
-		# None if no info about peer
-		# False if peer does not support jep85
-		# 'ask' if we sent the first 'active' chatstate and are waiting for reply
-		
 		# JEP 85 does not allow resending the same chatstate
 		# this function checks for that and just returns so it's safe to call it
 		# with same state.
@@ -476,16 +469,17 @@ class TabbedChatWindow(chat.Chat):
 			return
 
 		jid = self.get_active_jid()
+		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 
-		if self.chatstates[jid] == False: # jid cannot do jep85
+		if contact.chatstate is False: # jid cannot do jep85
 			return
 
 		# if current state equals previous state, return
-		if self.chatstates[jid] == state:
+		if contact.chatstate == state:
 			return
 
-		if self.chatstates[jid] is None:
-			# we don't know anything about jid,
+		if contact.chatstate is None:
+			# we don't know anything about jid, so return
 			# NOTE:
 			# send 'active', set current state to 'ask' and return is done
 			# in send_message because we need REAL message (with <body>)
@@ -493,20 +487,20 @@ class TabbedChatWindow(chat.Chat):
 			# until we know peer supports jep85
 			return 
 
-		if self.chatstates[jid] == 'ask':
+		if contact.chatstate == 'ask':
 			return
 
 		# prevent going paused if we we were not composing (JEP violation)
-		if state == 'paused' and not self.chatstates[jid] == 'composing':
+		if state == 'paused' and not contact.chatstate == 'composing':
 			gajim.connections[self.account].send_message(jid, None, None,
 				chatstate = 'active') # go active before
 		
 		# if we're inactive prevent composing (JEP violation)
-		if self.chatstates[jid] == 'inactive' and state == 'composing':
+		if contact.chatstate == 'inactive' and state == 'composing':
 			gajim.connections[self.account].send_message(jid, None, None,
 				chatstate = 'active') # go active before
 
-		self.chatstates[jid] = state
+		contact.chatstate = state
 		gajim.connections[self.account].send_message(jid, None, None,
 			chatstate = state)
 		
@@ -514,10 +508,13 @@ class TabbedChatWindow(chat.Chat):
 		"""Send the given message to the active tab"""
 		if not message:
 			return
+		
 		jid = self.get_active_jid()
+		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		message_textview = self.xmls[jid].get_widget('message_textview')
 		message_buffer = message_textview.get_buffer()
+
 		if message != '' or message != '\n':
 			self.save_sent_message(jid, message)
 			if message == '/clear':
@@ -534,21 +531,23 @@ class TabbedChatWindow(chat.Chat):
 				keyID = self.contacts[jid].keyID
 				encrypted = True
 
-			notif_on = gajim.config.get('send_receive_chat_state_notifications')
+			chatstates_on = gajim.config.get(
+				'send_receive_chat_state_notifications')
 
 			chatstate_to_send = None
-			if notif_on: # if we have them one
-				if self.chatstates[jid] is None:
+			
+			if chatstates_on: # if we have them one
+				if contact.chatstate is None:
 					# no info about peer
 					# send active to discover chat state capabilities
 					# this is here (and not in send_chatstate)
 					# because we want it sent with REAL message
 					# (not standlone) eg. one that has body
 					chatstate_to_send = 'active'
-					self.chatstates[jid] = 'ask' # pseudo state
+					contact.chatstate = 'ask' # pseudo state
 
 				# if peer supports jep85, send 'active'
-				elif self.chatstates[jid] != False:
+				elif contact.chatstate is not False:
 					#send active chatstate on every message (as JEP says)
 					chatstate_to_send = 'active'
 			
