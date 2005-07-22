@@ -563,7 +563,7 @@ class Interface:
 		gajim.contacts[name] = {}
 		gajim.newly_added[name] = []
 		gajim.to_be_removed[name] = []
-		gajim.sleeper_state[name] = 0
+		gajim.sleeper_state[name] = 'off'
 		gajim.encrypted_chats[name] = []
 		gajim.last_message_time[name] = {}
 		if self.windows.has_key('accounts'):
@@ -692,7 +692,7 @@ class Interface:
 										
 
 	def read_sleepy(self):	
-		'''Check if we are idle'''
+		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
 			return True # renew timeout (loop for ever)
 		state = self.sleeper.getState()
@@ -701,23 +701,24 @@ class Interface:
 					not gajim.sleeper_state[account]:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
-				gajim.sleeper_state[account] > 1:
+				gajim.sleeper_state[account] == 'autoaway' or \
+				gajim.sleeper_state[account] == 'autoxa':
 				#we go online
 				self.roster.send_status(account, 'online', 'Online')
-				gajim.sleeper_state[account] = 1
+				gajim.sleeper_state[account] = 'online'
 			elif state == common.sleepy.STATE_AWAY and \
-				gajim.sleeper_state[account] == 1 and \
+				gajim.sleeper_state[account] == 'online' and \
 				gajim.config.get('autoaway'):
 				#we go away
 				self.roster.send_status(account, 'away', 'auto away (idle)')
-				gajim.sleeper_state[account] = 2
+				gajim.sleeper_state[account] = 'autoaway'
 			elif state == common.sleepy.STATE_XAWAY and (\
-				gajim.sleeper_state[account] == 2 or \
-				gajim.sleeper_state[account] == 1) and \
+				gajim.sleeper_state[account] == 'autoaway' or \
+				gajim.sleeper_state[account] == 'online') and \
 				gajim.config.get('autoxa'):
 				#we go extended away
 				self.roster.send_status(account, 'xa', 'auto away (idle)')
-				gajim.sleeper_state[account] = 3
+				gajim.sleeper_state[account] = 'autoxa'
 		return True # renew timeout (loop for ever)
 
 	def autoconnect(self):
