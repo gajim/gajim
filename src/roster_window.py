@@ -1643,9 +1643,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		path = self.tree.get_cursor()[0]
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
-		account = model.get_value(iter, 4)
-		jid = model.get_value(iter, 3)
-		type = model.get_value(iter, 2)
+		account = model[iter][4]
+		jid = model[iter][3]
+		type = model[iter][2]
 		# restore the number of resources string at the end of contact name
 		if type == 'contact' and len(gajim.contacts[account][jid]) > 1:
 			self.draw_contact(jid, account)
@@ -1656,9 +1656,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		model = self.tree.get_model()
 		iter = model.get_iter_from_string(row)
 		path = model.get_path(iter)
-		account = model.get_value(iter, 4)
-		jid = model.get_value(iter, 3)
-		type = model.get_value(iter, 2)
+		account = model[iter][4]
+		jid = model[iter][3]
+		type = model[iter][2]
 		if type == 'contact':
 			old_text = gajim.contacts[account][jid][0].name
 			if old_text != new_text:
