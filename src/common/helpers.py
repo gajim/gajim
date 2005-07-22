@@ -87,4 +87,4 @@ def get_uf_chatstate(chatstate):
 	elif chatstate == 'paused':
 		return _('paused composing a message...')
 	elif chatstate == 'gone':
-		return _('closed the chat window or tab')
+		return _('has closed the chat window or tab')
