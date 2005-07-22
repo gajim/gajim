@@ -1660,6 +1660,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.draw_contact(jid, account)
 		elif type == 'group':
 			old_name = model.get_value(iter, 1)
+			#  Groups maynot change name from or to 'not in the roster'
+			if _('not in the roster') in [new_text, old_name]:
+				return
 			#get all users in that group
 			for jid in gajim.contacts[account]:
 				user = gajim.contacts[account][jid][0]
