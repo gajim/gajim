@@ -1638,9 +1638,19 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if not account in self.collapsed_rows:
 				self.collapsed_rows.append(account)
 
+	def on_editing_started (self, cell, event, row):
+		''' start editing a cell in the tree  '''
+		path = self.tree.get_cursor()[0]
+		self.editing_path = path
+		
 	def on_editing_canceled (self, cell):
 		'''editing has been canceled'''
 		path = self.tree.get_cursor()[0]
+		# do not set new name if row order has changed
+		if path != self.editing_path:
+			self.editing_path = None
+			return
+		self.editing_path = None
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
 		account = model[iter][4]
@@ -1656,8 +1666,18 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		'''When an iter is edited:
 		if text has changed, rename the contact'''
 		model = self.tree.get_model()
-		iter = model.get_iter_from_string(row)
+		# if this is a last item in the group, row is invalid
+		try:
+			iter = model.get_iter_from_string(row)
+		except:
+			self.editing_path = None
+			return
 		path = model.get_path(iter)
+		# do not set new name if row order has changed
+		if path != self.editing_path:
+			self.editing_path = None
+			return
+		self.editing_path = None
 		account = model[iter][4]
 		jid = model[iter][3]
 		type = model[iter][2]
@@ -1988,6 +2008,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		self.tree = self.xml.get_widget('roster_treeview')
 		self.plugin = plugin
 		self.nb_unread = 0
+		self.editing_path = None  # path of row with cell in edit mode
 		self.add_new_contact_handler_id = False
 		self.service_disco_handler_id = False
 		self.new_message_menuitem_handler_id = False
@@ -2060,6 +2081,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		render_text = gtk.CellRendererText() # contact or group or account name
 		render_text.connect('edited', self.on_cell_edited)
 		render_text.connect('editing-canceled', self.on_editing_canceled)
+		render_text.connect('editing-started', self.on_editing_started)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'text', 1) # where we hold the name
 		col.add_attribute(render_text, 'editable', 5)
