@@ -10611,7 +10611,7 @@ Status message</property>
   <property name="title" translatable="yes">Edit Groups</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
-  <property name="modal">False</property>
+  <property name="modal">True</property>
   <property name="default_height">260</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -10621,6 +10621,7 @@ Status message</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
+  <signal name="response" handler="on_edit_groups_dialog_response" last_modification_time="Fri, 22 Jul 2005 22:28:44 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox6">

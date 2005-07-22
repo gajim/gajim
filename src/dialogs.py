@@ -53,16 +53,19 @@ class EditGroupsDialog:
 			_("Contact's name: <i>%s</i>") % user.name)
 		self.xml.get_widget('jid_label').set_markup(
 			_('JID: <i>%s</i>') % user.jid)
+		
 		self.xml.signal_autoconnect(self)
-		self.dialog.show_all()
 		self.init_list()
 
 	def run(self):
-		self.dialog.run()
-		self.dialog.destroy()
+		self.dialog.show_all()
 		if self.changes_made:
 			gajim.connections[self.account].update_contact(self.user.jid,
 				self.user.name, self.user.groups)
+
+	def on_edit_groups_dialog_response(self, widget, response_id):
+		if response_id == gtk.RESPONSE_CLOSE:
+			self.dialog.destroy()
 
 	def update_contact(self):
 		self.plugin.roster.remove_contact(self.user, self.account)
