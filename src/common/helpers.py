@@ -51,24 +51,6 @@ def get_sorted_keys(adict):
 	keys.sort()
 	return keys
 
-def get_fjid_from_nick(room_jid, nick):
-	# fake jid is the jid for a contact in a room
-	# gaim@conference.jabber.org/nick
-	fjid = room_jid + '/' + nick
-	return fjid
-
-def get_nick_from_jid(jid):
-	pos = jid.find('@')
-	return jid[:pos]
-
-def get_nick_from_fjid(jid):
-	# fake jid is the jid for a contact in a room
-	# gaim@conference.jabber.org/nick/nick-continued
-	return jid.split('/', 1)[1]
-
-def get_resource_from_jid(jid):
-	return jid.split('/', 1)[1] # abc@doremi.org/res/res-continued
-
 def to_one_line(msg):
 	msg = msg.replace('\\', '\\\\')
 	msg = msg.replace('\n', '\\n')
@@ -93,3 +75,16 @@ def from_one_line(msg):
 	# s14
 	# 'test\ntest\\ntest'
 	return msg
+
+def get_uf_chatstate(chatstate):
+	'''removes chatstate jargon and returns user friendly messages'''
+	if chatstate == 'active':
+		return _('is paying attention to the conversation')
+	elif chatstate == 'inactive':
+		return _('is doing something else')
+	elif chatstate == 'composing':
+		return _('is composing a message...')
+	elif chatstate == 'paused':
+		return _('paused composing a message...')
+	elif chatstate == 'gone':
+		return _('closed the chat window or tab')

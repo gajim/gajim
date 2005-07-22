@@ -658,7 +658,7 @@ class GroupchatWindow(chat.Chat):
 	def ban(self, widget, room_jid, jid):
 		"""ban a user"""
 		# to ban we know the real jid. so jid is not fakejid
-		nick = helpers.get_nick_from_jid(jid)
+		nick = gajim.get_nick_from_jid(jid)
 		# ask for reason
 		instance = dialogs.InputDialog(_('Banning %s') % nick,
 			_('You may specify a reason below:'))
@@ -704,7 +704,7 @@ class GroupchatWindow(chat.Chat):
 			jid = c.jid
 			fjid = c.jid + '/' + c.resource
 		else:
-			fjid = room_jid + '/' + nick
+			fjid = gajim.construct_fjid(room_jid, nick)
 			jid = fjid
 		if self.plugin.windows[self.account]['infos'].has_key(jid):
 			self.plugin.windows[self.account]['infos'][jid].window.present()
@@ -723,9 +723,9 @@ class GroupchatWindow(chat.Chat):
 		'''opens a chat window and msg is not None sends private message to a 
 		contact in a room'''
 		if nick is None:
-			nick = model.get_value(iter, 1)
+			nick = model[iter][1]
 		room_jid = self.get_active_jid()
-		fjid = room_jid + '/' + nick # 'fake' jid
+		fjid = gajim.construct_fjid(room_jid, nick) # 'fake' jid
 		if not self.plugin.windows[self.account]['chats'].has_key(fjid):
 			show = self.contacts[room_jid][nick].show
 			u = Contact(jid = fjid, name =  nick, groups = ['none'], show = show,
@@ -772,7 +772,7 @@ class GroupchatWindow(chat.Chat):
 	def mk_menu(self, room_jid, event, iter):
 		"""Make user's popup menu"""
 		model = self.list_treeview[room_jid].get_model()
-		nick = model.get_value(iter, 1)
+		nick = model[iter][1]
 		c = self.contacts[room_jid][nick]
 		jid = c.jid
 		target_affiliation = c.affiliation
@@ -999,8 +999,8 @@ class GroupchatWindow(chat.Chat):
 			model = widget.get_model()
 			iter = model.get_iter(path)
 			if len(path) == 2:
-				nick = model.get_value(iter, 1)
-				fjid = room_jid + '/' + nick
+				nick = model[iter][1]
+				fjid = gajim.construct_fjid(room_jid, nick)
 				if not self.plugin.windows[self.account]['chats'].has_key(fjid):
 					show = self.contacts[room_jid][nick].show
 					u = Contact(jid = fjid, name = nick, groups = ['none'],
@@ -1019,7 +1019,7 @@ class GroupchatWindow(chat.Chat):
 
 			model = widget.get_model()
 			iter = model.get_iter(path)
-			nick = model.get_value(iter, 1)
+			nick = model[iter][1]
 			if not nick in self.contacts[room_jid]: #it's a group
 				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 					if (widget.row_expanded(path)):
@@ -1045,8 +1045,8 @@ class GroupchatWindow(chat.Chat):
 				widget.expand_row(path, False)
 		else: # We want to send a private message
 			room_jid = self.get_active_jid()
-			nick = model.get_value(iter, 1)
-			fjid = room_jid + '/' + nick
+			nick = model[iter][1]
+			fjid = gajim.construct_fjid(room_jid, nick)
 			if not self.plugin.windows[self.account]['chats'].has_key(fjid):
 				show = self.contacts[room_jid][nick].show
 				u = Contact(jid = fjid, name = nick, groups = ['none'], show = show,

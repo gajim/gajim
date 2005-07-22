@@ -546,7 +546,7 @@ class RosterWindow:
 			for jid in gajim.contacts[acct].keys():
 				self.add_contact_to_roster(jid, acct)
 	
-	def mklists(self, array, account):
+	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
 		if not gajim.contacts.has_key(account):
 			gajim.contacts[account] = {}
@@ -575,13 +575,13 @@ class RosterWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = Contact(jid = ji, name = name, groups = array[jid]['groups'],
+			contact1 = Contact(jid = ji, name = name, groups = array[jid]['groups'],
 				show = show, status = status, sub = array[jid]['subscription'],
 				ask = array[jid]['ask'], resource = resource, keyID = keyID)
 
 			# when we draw the roster, we avoid having the same contact
-			# more than once (eg. we avoid showing it twice with 2 resources)
-			gajim.contacts[account][ji] = [user1]
+			# more than once (f.e. we avoid showing it twice when 2 resources)
+			gajim.contacts[account][ji] = [contact1]
 			for g in array[jid]['groups'] :
 				if g in gajim.groups[account].keys():
 					continue

@@ -180,7 +180,7 @@ class Interface:
 
 	def handle_event_roster(self, account, data):
 		#('ROSTER', account, array)
-		self.roster.mklists(data, account)
+		self.roster.fill_contacts_and_groups_dicts(data, account)
 		self.roster.draw_roster()
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Roster', (account, data))

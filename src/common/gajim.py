@@ -61,15 +61,52 @@ sleeper_state = {} # whether we pass auto away / xa or not
 #'autoxa': autoxa and use sleeper
 
 
+def get_fjid_from_nick(room_jid, nick):
+	# fake jid is the jid for a contact in a room
+	# gaim@conference.jabber.org/nick
+	fjid = room_jid + '/' + nick
+	return fjid
+
+def get_nick_from_jid(jid):
+	pos = jid.find('@')
+	return jid[:pos]
+
+def get_nick_from_fjid(jid):
+	# fake jid is the jid for a contact in a room
+	# gaim@conference.jabber.org/nick/nick-continued
+	return jid.split('/', 1)[1]
+
 def get_contact_instances_from_jid(account, jid):
 	''' we may have two or more resources on that jid '''
-	return contacts[account][jid]
+	#print contacts
+	if jid in contacts[account]:
+		contacts_instances = contacts[account][jid]
+		return contacts_instances
 
 def get_first_contact_instance_from_jid(account, jid):
-	return contacts[account][jid][0]
+	if jid in contacts[account]:
+		contact = contacts[account][jid][0]
+	else: # it's fake jid
+		nick = get_nick_from_fjid(jid)
+		if nick in gc_contacts[room_jid]:
+			contact = gc_contacts[room_jid][nick] # always only one instance
+	return contact
 
 def get_contact_name_from_jid(account, jid):
 	return contacts[account][jid][0].name
 
 def get_jid_without_resource(jid):
 	return jid.split('/')[0]
+
+def construct_fjid(room_jid, nick):
+	''' nick is in utf8 (taken from treeview); room_jid is in unicode'''
+	return room_jid + '/' + unicode(nick, 'utf-8')
+	
+def get_resource_from_jid(jid):
+	return jid.split('/', 1)[1] # abc@doremi.org/res/res-continued
+	'''\
+[15:34:28] <asterix> we should add contact.fake_jid I think
+[15:34:46] <asterix> so if we know real jid, it wil be in contact.jid, or we look in contact.fake_jid
+[15:32:54] <asterix> they can have resource if we know the real jid
+[15:33:07] <asterix> and that resource is in contact.resource
+'''

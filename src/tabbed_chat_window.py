@@ -144,9 +144,9 @@ class TabbedChatWindow(chat.Chat):
 		#	% (name, fulljid)
 		
 		if chatstate:
+			chatstate = helpers.get_uf_chatstate(chatstate)
 			label_text = \
-			'<span weight="heavy" size="x-large">%s</span> (chat state: %s)' \
-				% (name, chatstate)
+			'<span weight="heavy" size="x-large">%s</span> %s' % (name, chatstate)
 		else:
 			label_text = '<span weight="heavy" size="x-large">%s</span>' % name
 		
