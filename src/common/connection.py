@@ -851,7 +851,7 @@ class Connection:
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if keyID and USE_GPG:
-			if self.connected < 2 and self.gpg.passphrase == None:
+			if self.connected < 2 and self.gpg.passphrase is None:
 				# We didn't set a passphrase
 				self.dispatch('ERROR', (_('OpenPGP Key was not given'),
 					_('You will be connected to %s without OpenPGP.') % self.name))
