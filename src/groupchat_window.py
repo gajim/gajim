@@ -25,6 +25,8 @@ import time
 import dialogs
 import chat
 import cell_renderer_image
+import gtkgui_helpers
+
 from gajim import Contact
 from common import gajim
 from common import helpers
