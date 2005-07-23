@@ -106,7 +106,7 @@ class AdvancedConfigurationWindow:
 		else:
 			iter = model.iter_children(parent_iter)
 		while iter:
-			if model.get_value(iter, 0) == name:
+			if model[iter][0] == name:
 				break
 			iter = model.iter_next(iter)
 		return iter
@@ -131,16 +131,16 @@ class AdvancedConfigurationWindow:
 		str = self.entry.get_text()
 		if str is None or str == '':
 			return True # show all
-		name = model.get_value(iter, 0)
-		# If a child of the iter match, we return True
+		name = model[iter][0]
+		# If a child of the iter matches, we return True
 		if model.iter_has_child(iter):
 			iterC = model.iter_children(iter)
 			while iterC:
-				nameC = model.get_value(iterC, 0)
+				nameC = model[iterC][0]
 				if model.iter_has_child(iterC):
 					iterCC = model.iter_children(iterC)
 					while iterCC:
-						nameCC = model.get_value(iterCC, 0)
+						nameCC = model[iterCC][0]
 						if nameCC.find(str) != -1:
 							return True
 						iterCC = model.iter_next(iterCC)
