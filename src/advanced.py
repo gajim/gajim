@@ -76,14 +76,15 @@ class AdvancedConfigurationWindow:
 		self.window.show_all()
 		self.plugin.windows['advanced_config'] = self
 
-	def on_config_edited(self, cell, row, text):
-		modelrow = self.model[row]
+	def on_config_edited(self, cell, path, text):
+		#convert modelfilter path to model path
+		modelpath = self.modelfilter.convert_path_to_child_path(path)
+		modelrow = self.model[modelpath]
 		option = modelrow[0]
-		if row.find(':') > 0:
-			row_splitted = row.split(':')
-			optnamerow = self.model[row_splitted[0]]
+		if len(modelpath) > 1:
+			optnamerow = self.model[modelpath[0]]
 			optname = optnamerow[0]
-			keyrow = self.model[':'.join(row_splitted[:2])]
+			keyrow = self.model[modelpath]
 			key = keyrow[0]
 			if gajim.config.set_per(optname, key, option, text):
 				return
