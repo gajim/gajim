@@ -132,7 +132,22 @@ class AdvancedConfigurationWindow:
 		if str is None or str == '':
 			return True # show all
 		name = model.get_value(iter, 0)
-		if name.find(str) != -1:
+		# If a child of the iter match, we return True
+		if model.iter_has_child(iter):
+			iterC = model.iter_children(iter)
+			while iterC:
+				nameC = model.get_value(iterC, 0)
+				if model.iter_has_child(iterC):
+					iterCC = model.iter_children(iterC)
+					while iterCC:
+						nameCC = model.get_value(iterCC, 0)
+						if nameCC.find(str) != -1:
+							return True
+						iterCC = model.iter_next(iterCC)
+				elif nameC.find(str) != -1:
+					return True
+				iterC = model.iter_next(iterC)
+		elif name.find(str) != -1:
 			return True
 		return False
 		
