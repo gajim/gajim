@@ -76,6 +76,10 @@ class TabbedChatWindow(chat.Chat):
 			self.window.resize(gajim.config.get('chat-width'),
 					gajim.config.get('chat-height'))
 
+		# gtk+ doesn't make use of the motion notify on gtkwindow by default
+		# so this line adds that
+		self.window.set_events(gtk.gdk.POINTER_MOTION_MASK)
+		
 		self.window.show_all()
 
 	def save_var(self, jid):
@@ -91,8 +95,9 @@ class TabbedChatWindow(chat.Chat):
 			var['gpg_enabled'])
 		
 	def on_tabbed_chat_window_motion_notify_event(self, widget, event):
-		print widget, widget.is_focus()
-		if widget.is_focus(): # change chatstate only if window has focus
+		'''it gets called no matter if it is the active window or not'''
+		if widget.get_property('has-toplevel-focus'):
+			# change chatstate only if window is the active one
 			self.mouse_over_in_last_5_secs = True
 			self.mouse_over_in_last_30_secs = True
 
