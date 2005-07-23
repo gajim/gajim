@@ -702,8 +702,7 @@ class Interface:
 					not gajim.sleeper_state[account]:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
-				(gajim.sleeper_state[account] == 'autoaway' or \
-				gajim.sleeper_state[account] == 'autoxa'):
+				gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
 				#we go online
 				self.roster.send_status(account, 'online',
 					gajim.status_before_autoaway[account])
@@ -869,7 +868,7 @@ class Interface:
 			for account in accounts:
 				if gajim.connections[account].connected:
 					gajim.connections[account].process(0.01)
-			time.sleep(0.01) # threads in connection.py have time to run
+			time.sleep(0.01) # so threads in connection.py have time to run
 			return True # renew timeout (loop for ever)
 		except KeyboardInterrupt:
 			sys.exit()
