@@ -9,7 +9,7 @@ python-libglade
 python-dev
 python-gtk2-dev
 libgtk2.0-dev		# aka. gtk2-devel
-libxss-dev			# for idle detection module (Some distributions split xscreensaver)
+libxss-dev			# for idle detection module (Some distributions (f.e. Debian) split xscreensaver)
 libgtkspell-dev	# for gtkspell module
 
 Optionally:
