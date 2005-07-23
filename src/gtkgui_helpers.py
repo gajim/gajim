@@ -21,6 +21,7 @@
 ##
 
 import xml.sax.saxutils
+import gtk
 
 def escape_for_pango_markup(string):
 	# escapes < > & \ "
