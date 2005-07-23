@@ -84,7 +84,7 @@ class AdvancedConfigurationWindow:
 		if len(modelpath) > 1:
 			optnamerow = self.model[modelpath[0]]
 			optname = optnamerow[0]
-			keyrow = self.model[modelpath]
+			keyrow = self.model[modelpath[:2]]
 			key = keyrow[0]
 			if gajim.config.set_per(optname, key, option, text):
 				return
