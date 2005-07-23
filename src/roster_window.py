@@ -97,8 +97,7 @@ class RosterWindow:
 
 		tls_pixbuf = None
 		if gajim.con_types.has_key(account) and \
-			(gajim.con_types[account] == 'tls' or \
-			gajim.con_types[account] == 'ssl'):
+			gajim.con_types[account] in ('tls', 'ssl'):
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
 
@@ -122,7 +121,7 @@ class RosterWindow:
 		elif user.groups == []:
 			user.groups.append(_('General'))
 
-		if (user.show == 'offline' or user.show == 'error') and \
+		if user.show in ('offline', 'error') and \
 		   not showOffline and (not _('Transports') in user.groups or \
 			gajim.connections[account].connected < 2) and \
 		   not gajim.awaiting_messages[account].has_key(user.jid):
@@ -428,7 +427,8 @@ class RosterWindow:
 					continue
 				item = gtk.MenuItem(_('using %s account') % account)
 				sub_menu.append(item)
-				item.connect('activate', self.on_service_disco_menuitem_activate, account)
+				item.connect('activate', self.on_service_disco_menuitem_activate,
+					account)
 			sub_menu.show_all()
 			
 			#new message
@@ -599,7 +599,7 @@ class RosterWindow:
 		contact_instances = gajim.contacts[account][contact.jid]
 		contact.show = show
 		contact.status = status
-		if (show == 'offline' or show == 'error') and \
+		if show in ('offline', 'error') and \
 		   not gajim.awaiting_messages[account].has_key(contact.jid):
 			if len(contact_instances) > 1: # if multiple resources
 				contact_instances.remove(contact)
@@ -878,7 +878,7 @@ class RosterWindow:
 		icon = gtk.image_new_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
-		if show == 'offline' or show == 'error':
+		if show in ('offline', 'error'):
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
 							account)
@@ -1042,7 +1042,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if not iter:
 				return
 			type = model[iter][2]
-			if type == 'contact' or type == 'group':
+			if type in ('contact', 'group'):
 				path = model.get_path(iter)
 				self.on_rename(widget, iter, path)
 
@@ -1113,7 +1113,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			type = model[iter][2]
-			if type == 'agent' or type == 'contact':
+			if type in ('agent', 'contact'):
 				account = model[iter][4]
 				jid = model[iter][3]
 				if self.plugin.windows[account]['chats'].has_key(jid):
@@ -1577,7 +1577,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		account = model[iter][4]
 		type = model[iter][2]
 		jid = model[iter][3]
-		if type == 'group' or type == 'account':
+		if type in ('group', 'account'):
 			if self.tree.row_expanded(path):
 				self.tree.collapse_row(path)
 			else:
@@ -1691,7 +1691,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		elif type == 'group':
 			old_name = model[iter][1]
 			#  Groups maynot change name from or to 'not in the roster'
-			if _('not in the roster') in [new_text, old_name]:
+			if _('not in the roster') in (new_text, old_name):
 				return
 			#get all users in that group
 			for jid in gajim.contacts[account]:
