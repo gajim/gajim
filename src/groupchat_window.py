@@ -581,9 +581,18 @@ class GroupchatWindow(chat.Chat):
 						self.on_send_pm(nick=to_whom_nick, msg=message)
 				return # don't print the command
 			
-			elif message.startswith('/topic '): #eg. /topic Gajim rocks
-				new_subj = message[7:].strip() # 7 is len('/topic ')
-				gajim.connections[self.account].send_gc_subject(room_jid, new_subj)
+			elif message.startswith('/topic'):
+				# eg. /topic Peace allover!
+				# or /topic to get the subject printed
+				after_command = message[6:] # 6 is len('/topic')
+				splitted_arg = after_command.split()
+				if len(splitted_arg): # we set subject
+					new_subj = ' '.join(splitted_arg).strip()
+					gajim.connections[self.account].send_gc_subject(room_jid,
+						new_subj)
+				else:
+					 # print it as green text
+					self.print_conversation(self.subjects[room_jid], room_jid)
 				return # don't print the command
 			
 			elif message.startswith('/ban '): #eg. /ban fooman he was a bad boy
