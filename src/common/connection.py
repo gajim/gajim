@@ -962,7 +962,8 @@ class Connection:
 				namespace = 'http://jabber.org/protocol/chatstates')
 		
 		self.to_be_sent.append(msg_iq)
-		gajim.logger.write('outgoing', msg, jid)
+		if msg:
+			gajim.logger.write('outgoing', msg, jid)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 
 	def send_stanza(self, stanza):
