@@ -806,7 +806,7 @@ class Interface:
 															sre.IGNORECASE)
 		
 		# at least one character in 3 parts (before @, after @, after .)
-		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?]')
+		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?:]')
 
 	def on_launch_browser_mailer(self, widget, url, kind):
 		self.launch_browser_mailer(kind, url)
