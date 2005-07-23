@@ -260,8 +260,20 @@ class TabbedChatWindow(chat.Chat):
 		window_state = widget.window.get_state()
 		if window_state is None:
 			return
-
-		self.send_chatstate('inactive')
+		
+		# focus-out is also emitted by showing context menu
+		# so check to see if we're really not paying attention to window/tab
+		x, y, width, height, depth = widget.window.get_geometry()
+		mouse_x, mouse_y, state = widget.window.get_pointer()
+		# mouse_x, mouse_y are relative to window that is:
+		# (0, 0) is the left upper corner of the window
+		#  so just check if mouse_x is inside width value to see where the pointer
+		# is at the time of focus-out
+		# NOTE: if the user changes tab, (switch-tab send inactive to current tab
+		# so that's not a problem)
+		if mouse_x < 0 or mouse_x > width: # it's outside of window
+			# so no context menu, so sent inactive
+			self.send_chatstate('inactive')
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
