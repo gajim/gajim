@@ -702,8 +702,8 @@ class Interface:
 					not gajim.sleeper_state[account]:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
-				gajim.sleeper_state[account] == 'autoaway' or \
-				gajim.sleeper_state[account] == 'autoxa':
+				(gajim.sleeper_state[account] == 'autoaway' or \
+				gajim.sleeper_state[account] == 'autoxa'):
 				#we go online
 				self.roster.send_status(account, 'online',
 					gajim.status_before_autoaway[account])
