@@ -994,8 +994,8 @@ class Chat:
 			self.sent_history[jid][max_size - 1] = message
 		else:
 			self.sent_history[jid].append(message)
+			self.sent_history_pos[jid] = size + 1
 
-		self.sent_history_pos[jid] = size + 1
 		self.typing_new[jid] = True
 		self.orig_msg[jid] = ''
 	
