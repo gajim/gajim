@@ -48,7 +48,7 @@ class VcardWindow:
 		self.retrieve_button.set_no_show_all(True)
 		
 		self.plugin = plugin
-		self.user = user #don't use it if vcard is true
+		self.contact = user #don't use it if vcard is true
 		self.account = account
 		self.vcard = vcard
 		self.avatar_mime_type = None
@@ -82,23 +82,23 @@ class VcardWindow:
 		#update user.name if it's not ''
 		name_entry = self.xml.get_widget('nickname_entry')
 		new_name = name_entry.get_text()
-		if new_name != self.user.name and new_name != '':
-			self.user.name = new_name
-			for i in self.plugin.roster.get_contact_iter(self.user.jid, self.account):
+		if new_name != self.contact.name and new_name != '':
+			self.contact.name = new_name
+			for i in self.plugin.roster.get_contact_iter(self.contact.jid, self.account):
 				self.plugin.roster.tree.get_model().set_value(i, 1, new_name)
-			gajim.connections[self.account].update_contact(self.user.jid,
-				self.user.name, self.user.groups)
+			gajim.connections[self.account].update_contact(self.contact.jid,
+				self.contact.name, self.contact.groups)
 		#log history ?
 		oldlog = True
 		no_log_for = gajim.config.get_per('accounts', self.account,
 			'no_log_for').split()
-		if self.user.jid in no_log_for:
+		if self.contact.jid in no_log_for:
 			oldlog = False
 		log = self.xml.get_widget('log_checkbutton').get_active()
-		if not log and not self.user.jid in no_log_for:
-			no_log_for.append(self.user.jid)
-		if log and self.user.jid in no_log_for:
-			no_log_for.remove(self.user.jid)
+		if not log and not self.contact.jid in no_log_for:
+			no_log_for.append(self.contact.jid)
+		if log and self.contact.jid in no_log_for:
+			no_log_for.remove(self.contact.jid)
 		if oldlog != log:
 			gajim.config.set_per('accounts', self.account, 'no_log_for',
 				' '.join(no_log_for))
@@ -251,44 +251,52 @@ class VcardWindow:
 		self.xml.get_widget('os_label').set_text(os)
 
 	def fill_jabber_page(self):
-		self.xml.get_widget('nickname_label').set_text(self.user.name)
-		self.xml.get_widget('jid_label').set_text(self.user.jid)
-		self.xml.get_widget('subscription_label').set_text(self.user.sub)
+		self.xml.get_widget('nickname_label').set_text(self.contact.name)
+		self.xml.get_widget('jid_label').set_text(self.contact.jid)
+		self.xml.get_widget('subscription_label').set_text(self.contact.sub)
 		label = self.xml.get_widget('ask_label')
-		if self.user.ask:
-			label.set_text(self.user.ask)
+		if self.contact.ask:
+			label.set_text(self.contact.ask)
 		else:
 			label.set_text('None')
-		self.xml.get_widget('nickname_entry').set_text(self.user.name)
+		self.xml.get_widget('nickname_entry').set_text(self.contact.name)
 		log = 1
-		if self.user.jid in gajim.config.get_per('accounts', self.account,
+		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 			'no_log_for').split(' '):
 			log = 0
 		self.xml.get_widget('log_checkbutton').set_active(log)
-		resources = self.user.resource + ' (' + str(self.user.priority) + ')'
-		if not self.user.status:
-			self.user.status = ''
-		stats = self.user.show
-		if self.user.status:
-			stats += ': ' + self.user.status
-		gajim.connections[self.account].request_os_info(self.user.jid,
-			self.user.resource)
-		self.os_info = {0: {'resource': self.user.resource, 'client': '',
+		resources = '%s (%s)' % (self.contact.resource, str(self.contact.priority))
+		uf_resources = self.contact.resource + _(' resource with priority ')\
+			+ str(self.contact.priority)
+		if not self.contact.status:
+			self.contact.status = ''
+		stats = self.contact.show # holds show and status message
+		if self.contact.status:
+			stats += ': ' + self.contact.status
+		gajim.connections[self.account].request_os_info(self.contact.jid,
+			self.contact.resource)
+		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
 			'os': ''}}
 		i = 1
-		if gajim.contacts[self.account].has_key(self.user.jid):
-			for u in gajim.contacts[self.account][self.user.jid]:
-				if u.resource != self.user.resource:
-					resources += '\n' + u.resource + ' (' + str(u.priority) + ')'
-					if not u.status:
-						u.status = ''
-					stats += '\n' + u.show + ': ' + u.status
-					gajim.connections[self.account].request_os_info(self.user.jid,
-						u.resource)
-					self.os_info[i] = {'resource': u.resource, 'client': '',
+		if gajim.contacts[self.account].has_key(self.contact.jid):
+			for c in gajim.contacts[self.account][self.contact.jid]:
+				if c.resource != self.contact.resource:
+					resources = '\n%s (%s)' % (c.resource, str(c.priority))
+					uf_resources += '\n' + c.resource + _(' resource with priority ')\
+						+ str(c.priority)
+					if not c.status:
+						c.status = ''
+					stats += '\n' + c.show + ': ' + c.status
+					gajim.connections[self.account].request_os_info(self.contact.jid,
+						c.resource)
+					self.os_info[i] = {'resource': c.resource, 'client': '',
 						'os': ''}
 					i += 1
-		self.xml.get_widget('resource_label').set_text(resources)
+		self.xml.get_widget('resource_prio_label').set_text(resources)
+		tip = gtk.Tooltips()
+		resource_prio_label_eventbox = self.xml.get_widget(
+			'resource_prio_label_eventbox')
+		tip.set_tip(resource_prio_label_eventbox, uf_resources)
 		
 		status_label = self.xml.get_widget('status_label')
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+
@@ -297,9 +305,11 @@ class VcardWindow:
 			status_label_eventbox = self.xml.get_widget('status_label_eventbox')
 			tip.set_tip(status_label_eventbox, stats)
 			status_label.set_max_width_chars(15)
+		
 		status_label.set_text(stats)
 		
-		gajim.connections[self.account].request_vcard(self.user.jid)
+		
+		gajim.connections[self.account].request_vcard(self.contact.jid)
 
 	def add_to_vcard(self, vcard, entry, txt):
 		'''Add an information to the vCard dictionary'''
