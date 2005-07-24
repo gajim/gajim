@@ -95,6 +95,8 @@ class AdvancedConfigurationWindow:
 		modelrow[1] = text
 
 	def on_advanced_configuration_window_destroy(self, widget):
+		# update ui of preferences window to get possible changes we did
+		self.plugin.windows['preferences'].update_preferences_window()
 		del self.plugin.windows['advanced_config']
 
 	def on_advanced_close_button_clicked(self, widget):

@@ -397,11 +397,14 @@ class PreferencesWindow:
 					self.on_msg_treemodel_row_deleted)
 
 	def on_preferences_window_show(self, widget):
+		self.update_preferences_window()
 		self.notebook.set_current_page(0)
+		
+	def update_preferences_window(self):
 		st = gajim.config.get('print_ichat_every_foo_minutes')
 		text = _('Every %s _minutes') % st
 		self.xml.get_widget('time_sometimes_radiobutton').set_label(text)
-		
+		#FIXME: move code from __init__ here
 
 	def on_preferences_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
