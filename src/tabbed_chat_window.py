@@ -412,8 +412,7 @@ class TabbedChatWindow(chat.Chat):
 		"""When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation"""
-		self.kbd_activity_in_last_5_secs = True
-		self.kbd_activity_in_last_30_secs = True
+
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		message_buffer = widget.get_buffer()
@@ -436,6 +435,14 @@ class TabbedChatWindow(chat.Chat):
 				self.notebook.emit('key_press_event', event)
 			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
 				conversation_textview.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.Up:
+			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
+				self.sent_messages_scroll(jid, 'up', widget.get_buffer())
+				return True # override the default gtk+ thing for ctrl+up
+		elif event.keyval == gtk.keysyms.Down:
+			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+Down
+				self.sent_messages_scroll(jid, 'down', widget.get_buffer())
+				return True # override the default gtk+ thing for ctrl+down
 		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			if gajim.config.get('send_on_ctrl_enter'): 
@@ -453,19 +460,15 @@ class TabbedChatWindow(chat.Chat):
 
 			message_buffer.set_text('')
 			return True
-		elif event.keyval == gtk.keysyms.Up:
-			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
-				self.sent_messages_scroll(jid, 'up', widget.get_buffer())
-				return True # override the default gtk+ thing for ctrl+up
-		elif event.keyval == gtk.keysyms.Down:
-			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+Down
-				self.sent_messages_scroll(jid, 'down', widget.get_buffer())
-				return True # override the default gtk+ thing for ctrl+down
 			
 		else:
 			# chatstates
-			# if composing, send chatstate
-			self.send_chatstate('composing')
+			# if really composing (eg. no Ctrl, or alt modifier, send chatstate
+			if not (event.state & gtk.gdk.CONTROL_MASK) and not\
+				(event.state & gtk.gdk.MOD1_MASK):
+				self.kbd_activity_in_last_5_secs = True
+				self.kbd_activity_in_last_30_secs = True
+				self.send_chatstate('composing')
 
 	def send_chatstate(self, state, jid = None):
 		''' sends our chatstate as STANDLONE chat state message (eg. no body)
