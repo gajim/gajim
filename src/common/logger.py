@@ -116,12 +116,12 @@ class Logger:
 			show = nick
 		for f in files:
 			path_to_file = os.path.join(LOGPATH, f)
-			fic = open(path_to_file, 'a')
-			fic.write('%s:%s:%s' % (tim, jid, show))
+			fil = open(path_to_file, 'a')
+			fil.write('%s:%s:%s' % (tim, jid, show))
 			if msg:
-				fic.write(':' + msg)
-			fic.write('\n')
-			fic.close()
+				fil.write(':' + msg)
+			fil.write('\n')
+			fil.close()
 
 	def __get_path_to_file(self, fjid):
 		jid = fjid.split('/')[0]
@@ -133,18 +133,18 @@ class Logger:
 				path_to_file = os.path.join(LOGPATH, fjid)
 		return path_to_file
 
-	def get_nb_line(self, fjid):
+	def get_no_of_lines(self, fjid):
 		'''return total number of lines in a log file
 		return 0 if log file does not exist'''
 		path_to_file = self.__get_path_to_file(fjid)
 		if not os.path.exists(path_to_file):
 			return 0
-		fic = open(path_to_file, 'r')
-		nb = 0 # number of lines
-		while fic.readline():
-			nb += 1
-		fic.close()
-		return nb
+		fil = open(path_to_file, 'r')
+		no_of_lines = 0 # number of lines
+		while fil.readline():
+			no_of_lines += 1
+		fil.close()
+		return no_of_lines
 
 	def read(self, fjid, begin_line, end_line):
 		'''return number of lines read and the text in the lines
@@ -152,17 +152,17 @@ class Logger:
 		path_to_file = self.__get_path_to_file(fjid)
 		if not os.path.exists(path_to_file):
 			return 0, []
-		fic = open(path_to_file, 'r')
-		nb = 0 # number of lines
+		fil = open(path_to_file, 'r')
+		no_of_lines = 0 # number of lines
 		lines = []
-		while (nb < begin_line and fic.readline()):
-			nb += 1
-		while nb < end_line:
-			line = fic.readline()
+		while (no_of_lines < begin_line and fil.readline()):
+			no_of_lines += 1
+		while no_of_lines < end_line:
+			line = fil.readline()
 			if line:
 				line = helpers.from_one_line(line)
 				lineSplited = line.split(':')
 				if len(lineSplited) > 2:
 					lines.append(lineSplited)
-			nb += 1
-		return nb, lines
+			no_of_lines += 1
+		return no_of_lines, lines

@@ -84,7 +84,6 @@ def get_contact_instances_from_jid(account, jid):
 		return contacts_instances
 
 def get_first_contact_instance_from_jid(account, jid):
-	print 'jIIIIIIIIIIIIIIIIIIID', jid
 	if jid in contacts[account]:
 		contact = contacts[account][jid][0]
 	else: # it's fake jid
