@@ -916,7 +916,10 @@ class Chat:
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
 		elif gajim.config.get('print_time') == 'sometimes':
-			if (time.time() - self.last_time_printout[jid]) > (5*60):
+			every_foo_seconds = 60 * gajim.config.get(
+				'print_ichat_every_foo_minutes')
+			seconds_passed = time.time() - self.last_time_printout[jid]
+			if seconds_passed > every_foo_seconds:
 				self.last_time_printout[jid] = time.time()
 				end_iter = buffer.get_end_iter()
 				tim = time.localtime()

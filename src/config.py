@@ -192,6 +192,10 @@ class PreferencesWindow:
 				self.xml.get_widget('speller_checkbutton').set_sensitive(False)
 		
 		#Print time
+		st = gajim.config.get('print_ichat_every_foo_minutes')
+		text = _('Every %s _minutes') % st
+		self.xml.get_widget('time_sometimes_radiobutton').set_label(text)
+
 		if gajim.config.get('print_time') == 'never':
 			self.xml.get_widget('time_never_radiobutton').set_active(True)
 		elif gajim.config.get('print_time') == 'sometimes':
@@ -394,6 +398,10 @@ class PreferencesWindow:
 
 	def on_preferences_window_show(self, widget):
 		self.notebook.set_current_page(0)
+		st = gajim.config.get('print_ichat_every_foo_minutes')
+		text = _('Every %s _minutes') % st
+		self.xml.get_widget('time_sometimes_radiobutton').set_label(text)
+		
 
 	def on_preferences_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:

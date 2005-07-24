@@ -118,6 +118,7 @@ class Config:
 		'always_english_wikipedia': [opt_bool, False],
 		'use_dbus': [opt_bool, True], # allow control via dbus service
 		'send_receive_chat_state_notifications': [opt_bool, True],
+		'print_ichat_every_foo_minutes': [opt_int, 5], # default is every 5 minutes
 	}
 
 	__options_per_key = {
