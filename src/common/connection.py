@@ -1348,12 +1348,14 @@ class Connection:
 						self.send_keepalive()
 
 					# did the server reply to the keepalive? if no disconnect
-					keep_alive_disconnect_secs = gajim.config.get_per('accounts',
-						self.name, 'keep_alive_disconnect_secs') # 2 mins by default
+					keep_alive_disconnect_after_foo_secs = gajim.config.get_per(
+						'accounts', self.name,
+						'keep_alive_disconnect_after_foo_secs') # 2 mins by default
 					if time.time() > (self.last_incoming + \
-							keep_alive_disconnect_secs):
+							keep_alive_disconnect_after_foo_secs):
 						self.connection.disconnect() # disconnect if no answer
-						msg = '%s seconds have passed and server did not reply to our keepalive. Gajim disconnected from %s' % (str(keep_alive_disconnect_secs), self.name)
+						msg = '%s seconds have passed and server did not reply to our keepalive. Gajim disconnected from %s'\
+							% (str(keep_alive_disconnect_after_foo_secs), self.name)
 						gajim.log.debug(msg)
 						return
 				if self.connection:
