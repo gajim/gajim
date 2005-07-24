@@ -12355,9 +12355,10 @@ Status message</property>
       <property name="spacing">6</property>
 
       <child>
-	<widget class="GtkNotebook" id="notebook2">
+	<widget class="GtkNotebook" id="notebook">
 	  <property name="visible">True</property>
-	  <property name="show_tabs">False</property>
+	  <property name="can_focus">True</property>
+	  <property name="show_tabs">True</property>
 	  <property name="show_border">False</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
 	  <property name="scrollable">False</property>
@@ -12557,6 +12558,7 @@ the Jabber network.</property>
 		      <property name="has_frame">True</property>
 		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
+		      <signal name="changed" handler="on_nick_entry_changed" last_modification_time="Sun, 24 Jul 2005 14:30:31 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -12594,6 +12596,7 @@ the Jabber network.</property>
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="server_comboboxentry">
 		      <property name="visible">True</property>
+		      <signal name="changed" handler="on_server_comboboxentry_changed" last_modification_time="Sun, 24 Jul 2005 14:30:26 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -12618,7 +12621,6 @@ the Jabber network.</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">entry1</property>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -12642,7 +12644,6 @@ the Jabber network.</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
-		      <signal name="toggled" handler="on_save_password_checkbutton_toggled" last_modification_time="Mon, 28 Feb 2005 20:25:48 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">2</property>
@@ -12689,7 +12690,6 @@ the Jabber network.</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">entry3</property>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -13051,7 +13051,7 @@ the Jabber network.</property>
 		  <property name="column_spacing">12</property>
 
 		  <child>
-		    <widget class="GtkEntry" id="entry3">
+		    <widget class="GtkEntry" id="register_nick_entry">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="editable">True</property>
@@ -13061,6 +13061,7 @@ the Jabber network.</property>
 		      <property name="has_frame">True</property>
 		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
+		      <signal name="changed" handler="on_register_nick_entry_changed" last_modification_time="Sun, 24 Jul 2005 14:30:37 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -13096,8 +13097,9 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkComboBoxEntry" id="comboboxentry1">
+		    <widget class="GtkComboBoxEntry" id="register_server_comboboxentry">
 		      <property name="visible">True</property>
+		      <signal name="changed" handler="on_register_server_comboboxentry_changed" last_modification_time="Sun, 24 Jul 2005 14:30:19 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -13110,7 +13112,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkButton" id="button34">
+		    <widget class="GtkButton" id="server_features_button">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Click to see features like on jabber servers</property>
 		      <property name="can_focus">True</property>
@@ -13118,7 +13120,7 @@ the Jabber network.</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
-		      <signal name="clicked" handler="on_change_password_button_clicked" last_modification_time="Fri, 04 Mar 2005 11:33:37 GMT"/>
+		      <signal name="clicked" handler="on_server_features_button_clicked" last_modification_time="Sun, 24 Jul 2005 14:24:18 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">2</property>
@@ -13143,7 +13145,6 @@ the Jabber network.</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">entry1</property>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -13156,7 +13157,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="checkbutton2">
+		    <widget class="GtkCheckButton" id="register_save_password_checkbutton">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">If checked, Gajim will remember the password for this account</property>
 		      <property name="can_focus">True</property>
@@ -13167,7 +13168,6 @@ the Jabber network.</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
-		      <signal name="toggled" handler="on_save_password_checkbutton_toggled" last_modification_time="Mon, 28 Feb 2005 20:25:48 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">2</property>
@@ -13180,7 +13180,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkEntry" id="entry1">
+		    <widget class="GtkEntry" id="register_pass_entry">
 		      <property name="visible">True</property>
 		      <property name="sensitive">False</property>
 		      <property name="can_focus">True</property>
@@ -13214,7 +13214,6 @@ the Jabber network.</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">entry3</property>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -13251,7 +13250,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkLabel" id="label257">
+		    <widget class="GtkLabel" id="register_jid_label">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">&lt;span background=&quot;lightyellow&quot;&gt;&lt;/span&gt;</property>
@@ -13540,7 +13539,53 @@ the Jabber network.</property>
 	  </child>
 
 	  <child>
-	    <placeholder/>
+	    <widget class="GtkHBox" id="hbox2986">
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">12</property>
+
+	      <child>
+		<widget class="GtkImage" id="image942">
+		  <property name="visible">True</property>
+		  <property name="stock">gtk-apply</property>
+		  <property name="icon_size">4</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="finish_label">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes"></property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+	    </widget>
+	    <packing>
+	      <property name="tab_expand">False</property>
+	      <property name="tab_fill">True</property>
+	    </packing>
 	  </child>
 
 	  <child>
@@ -13631,6 +13676,8 @@ the Jabber network.</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
+  <property name="default_width">550</property>
+  <property name="default_height">300</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
