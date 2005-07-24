@@ -556,6 +556,9 @@ class Interface:
 			self.windows['account_modification'].account_is_ok(array[0])
 		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
 		gajim.awaiting_messages[name] = {}
+		# disconnect from server - our status in roster is offline
+		gajim.connections[name].connected = 1
+		gajim.connections[name].change_status('offline', None, True)
 		gajim.connections[name].connected = 0
 		gajim.nicks[name] = array[1]['name']
 		gajim.allow_notifications[name] = False
@@ -570,6 +573,7 @@ class Interface:
 		if self.windows.has_key('accounts'):
 			self.windows['accounts'].init_accounts()
 		self.roster.draw_roster()
+		
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('NewAccount', (account, array))
 
