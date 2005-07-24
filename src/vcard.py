@@ -36,8 +36,8 @@ GTKGUI_GLADE = 'gtkgui.glade'
 class VcardWindow:
 	'''Class for contact's information window'''
 
-	def __init__(self, user, plugin, account, vcard = False):
-		#the user variable is the jid if vcard is true
+	def __init__(self, contact, plugin, account, vcard = False):
+		#the contact variable is the jid if vcard is true
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
 		self.window = self.xml.get_widget('vcard_information_window')
 		self.xml.get_widget('photo_vbuttonbox').set_no_show_all(True)
@@ -48,18 +48,18 @@ class VcardWindow:
 		self.retrieve_button.set_no_show_all(True)
 		
 		self.plugin = plugin
-		self.contact = user #don't use it if vcard is true
+		self.contact = contact #don't use it if vcard is true
 		self.account = account
 		self.vcard = vcard
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
 
 		if vcard:
-			self.jid = user
+			self.jid = contact
 			# remove Jabber tab & show publish/retrieve/set_avatar buttons
 			self.change_to_vcard()
 		else:
-			self.jid = user.jid
+			self.jid = contact.jid
 			self.publish_button.hide()
 			self.retrieve_button.hide()
 			self.fill_jabber_page()
@@ -67,7 +67,7 @@ class VcardWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	def on_user_information_window_destroy(self, widget = None):
+	def on_vcard_information_window_destroy(self, widget = None):
 		del self.plugin.windows[self.account]['infos'][self.jid]
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
@@ -75,11 +75,11 @@ class VcardWindow:
 			self.window.destroy()
 
 	def on_close_button_clicked(self, widget):
-		'''Save user's informations and update the roster on the Jabber server'''
+		'''Save contact information and update the roster on the Jabber server'''
 		if self.vcard:
 			self.window.destroy()
 			return
-		#update user.name if it's not ''
+		#update contact.name if it's not ''
 		name_entry = self.xml.get_widget('nickname_entry')
 		new_name = name_entry.get_text()
 		if new_name != self.contact.name and new_name != '':
