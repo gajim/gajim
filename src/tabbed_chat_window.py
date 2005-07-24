@@ -654,7 +654,7 @@ class TabbedChatWindow(chat.Chat):
 		pos		= 0	#position, while reading from history
 		size		= 0	#how many lines we alreay retreived
 		lines		= []	#we'll need to reverse the lines from history
-		count		= gajim.logger.get_nb_line(jid)
+		count		= gajim.logger.get_no_of_lines(jid)
 
 
 		if gajim.awaiting_messages[self.account].has_key(jid):

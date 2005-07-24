@@ -48,8 +48,8 @@ class HistoryWindow:
 		self.forward_button.set_sensitive(True)
 		self.latest_button.set_sensitive(True)
 		end = 50
-		if end > self.nb_line:
-			end = self.nb_line
+		if end > self.no_of_lines:
+			end = self.no_of_lines
 		nb, lines = gajim.logger.read(self.jid, 0, end)
 		self.set_buttons_sensitivity(nb)
 		for line in lines:
@@ -67,8 +67,8 @@ class HistoryWindow:
 		if begin < 0:
 			begin = 0
 		end = begin + 50
-		if end > self.nb_line:
-			end = self.nb_line
+		if end > self.no_of_lines:
+			end = self.no_of_lines
 		nb, lines = gajim.logger.read(self.jid, begin, end)
 		self.set_buttons_sensitivity(nb)
 		for line in lines:
@@ -83,11 +83,11 @@ class HistoryWindow:
 		self.forward_button.set_sensitive(True)
 		self.latest_button.set_sensitive(True)
 		begin = self.num_begin + 50
-		if begin > self.nb_line:
-			begin = self.nb_line
+		if begin > self.no_of_lines:
+			begin = self.no_of_lines
 		end = begin + 50
-		if end > self.nb_line:
-			end = self.nb_line
+		if end > self.no_of_lines:
+			end = self.no_of_lines
 		nb, lines = gajim.logger.read(self.jid, begin, end)
 		self.set_buttons_sensitivity(nb)
 		for line in lines:
@@ -101,10 +101,10 @@ class HistoryWindow:
 		self.previous_button.set_sensitive(True)
 		self.forward_button.set_sensitive(False)
 		self.latest_button.set_sensitive(False)
-		begin = self.nb_line - 50
+		begin = self.no_of_lines - 50
 		if begin < 0:
 			begin = 0
-		nb, lines = gajim.logger.read(self.jid, begin, self.nb_line)
+		nb, lines = gajim.logger.read(self.jid, begin, self.no_of_lines)
 		self.set_buttons_sensitivity(nb)
 		for line in lines:
 			self.new_line(line[0], line[1], line[2:])
@@ -114,7 +114,7 @@ class HistoryWindow:
 		if nb == 50:
 			self.earliest_button.set_sensitive(False)
 			self.previous_button.set_sensitive(False)
-		if nb == self.nb_line:
+		if nb == self.no_of_lines:
 			self.forward_button.set_sensitive(False)
 			self.latest_button.set_sensitive(False)
 
@@ -152,7 +152,7 @@ class HistoryWindow:
 			tag_name = 'outgoing'
 		else:
 			status_msg = ':'.join(data[1:])
-			msg = _('Status is now: ') + data[0] + ': ' + status_msg
+			msg = _('Status is now: %s: %s') % (data[0], status_msg)
 			tag_msg = 'status'
 
 		if name:
@@ -169,15 +169,14 @@ class HistoryWindow:
 		self.plugin = plugin
 		self.jid = jid
 		self.account = account
-		self.nb_line = gajim.logger.get_nb_line(jid)
+		self.no_of_lines = gajim.logger.get_no_of_lines(jid)
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
 		if account and gajim.contacts[account].has_key(jid):
-			contacts_list = gajim.contacts[account][self.jid]
-			user = contacts_list[0]
-			title = 'Conversation History with ' + user.name
+			contact = gajim.get_first_contact_instance_from_jid(account, jid)
+			title = _('Conversation History with %s') % contact.name
 		else:
-			title = 'Conversation History with ' + jid
+			title = _('Conversation History with %s') % jid
 		self.window.set_title(title)
 		self.history_buffer = xml.get_widget('history_textview').get_buffer()
 		self.earliest_button = xml.get_widget('earliest_button')
@@ -199,9 +198,9 @@ class HistoryWindow:
 		tag.set_property('foreground', color)
 
 		begin = 0
-		if self.nb_line > 50:
-			begin = self.nb_line - 50
-		nb, lines = gajim.logger.read(self.jid, begin, self.nb_line)
+		if self.no_of_lines > 50:
+			begin = self.no_of_lines - 50
+		nb, lines = gajim.logger.read(self.jid, begin, self.no_of_lines)
 		self.set_buttons_sensitivity(nb)
 		for line in lines:
 			self.new_line(line[0], line[1], line[2:])
