@@ -327,11 +327,11 @@ class Connection:
 			self.dispatch('UPDUSER', (jid.getStripped().encode('utf8'),
 				jid.getNode(), [_('General')]))
 			#BE CAREFUL: no con.updateRosterItem() in a callback
-			gajim.log.debug('we are now subscribed to %s' % who)
+			gajim.log.debug(_('we are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
-			gajim.log.debug('unsubscribe request from %s' % who)
+			gajim.log.debug(_('unsubscribe request from %s') % who)
 		elif ptype == 'unsubscribed':
-			gajim.log.debug('we are now unsubscribed from %s' % who)
+			gajim.log.debug(_('we are now unsubscribed from %s') % who)
 			self.dispatch('UNSUBSCRIBED', prs.getFrom().getStripped())
 		elif ptype == 'error':
 			errmsg = prs.getError()
@@ -707,7 +707,7 @@ class Connection:
 				_('Check your connection or try again later')))
 			return None
 
-		gajim.log.debug('Connected to server with %s', con_type)
+		gajim.log.debug(('Connected to server with %s'), con_type)
 
 		self.dispatch('CON_TYPE', con_type) # notify the gui about con_type
 
@@ -1080,7 +1080,7 @@ class Connection:
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % name,
 				_('Check your connection or try again later.')))
 			return False
-		gajim.log.debug('Connected to server with %s', con_type)
+		gajim.log.debug(_('Connected to server with %s'), con_type)
 
 		c.RegisterEventHandler(self._event_dispatcher)
 		self.new_account_info = config
@@ -1354,14 +1354,13 @@ class Connection:
 					if time.time() > (self.last_incoming + \
 							keep_alive_disconnect_after_foo_secs):
 						self.connection.disconnect() # disconnect if no answer
-						msg = '%s seconds have passed and server did not reply to our keepalive. Gajim disconnected from %s'\
-							% (str(keep_alive_disconnect_after_foo_secs), self.name)
+						msg = _('%s seconds have passed and server did not reply to our keepalive. Gajim disconnected from %s') % (str(keep_alive_disconnect_after_foo_secs), self.name)
 						gajim.log.debug(msg)
 						return
 				if self.connection:
 					self.connection.Process(timeout)
 			except:
-				gajim.log.debug('error appeared while processing xmpp:')
+				gajim.log.debug(_('error appeared while processing xmpp:'))
 				traceback.print_exc()
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
@@ -1370,7 +1369,7 @@ class Connection:
 				try:
 					self.connection.disconnect()
 				except:
-					gajim.log.debug('error appeared while processing xmpp:')
+					gajim.log.debug(_('error appeared while processing xmpp:'))
 					traceback.print_exc()
 				self.connection = None
 # END Connection
