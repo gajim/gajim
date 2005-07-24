@@ -1303,9 +1303,10 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
 		if accountIter:
-			model.set_value(accountIter, 0, self.jabber_state_images[status])
+			model[accountIter][0] = self.jabber_state_images[status]
 		if status == 'offline':
-			model[accountIter][6] = None
+			if accountIter:
+				model[accountIter][6] = None
 			for jid in gajim.contacts[account]:
 				luser = gajim.contacts[account][jid]
 				luser_copy = []
