@@ -344,13 +344,33 @@ class Chat:
 		del self.tagOut[jid]
 		del self.tagStatus[jid]
 		self.show_title()
-
+	
+	def bring_scroll_to_end(self, textview, diff_y = 0):
+		''' scrolls to the end of textview if end is not visible '''
+		buffer = textview.get_buffer()
+		buffer.begin_user_action()
+		at_the_end = False
+		end_iter = buffer.get_end_iter()
+		end_rect = textview.get_iter_location(end_iter)
+		visible_rect = textview.get_visible_rect()
+		# scroll only if expected end is not visible
+		if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
+			gobject.idle_add(self.scroll_to_end_iter, textview)
+			
+	def scroll_to_end_iter(self, textview):
+		buffer = textview.get_buffer()
+		end_iter = buffer.get_end_iter()
+		textview.scroll_to_iter(end_iter, 0, False, 1, 1)
+		return False
+		
 	def size_request(self, a, b, xml_top, message_scrolledwindow):
 		''' When message_textview changes its size. If the new height
 		will enlarge the window, enable the scrollbar automatic policy'''
 		message_textview = xml_top.get_widget('message_textview')
 		conversation_scrolledwindow = \
 			xml_top.get_widget('conversation_scrolledwindow')
+		conversation_textview = \
+			xml_top.get_widget('conversation_textview')
 		vpaned = xml_top.get_widget('vpaned')
 		if not vpaned.window:
 			return 
@@ -365,17 +385,22 @@ class Chat:
 		x3 = vpaned.window.get_size()[1]
 		x4 = banner_eventbox.size_request()[1]
 		x5 = actions_hbox.size_request()[1]
+		# difference between old height and new height
+		diff_y =  message_textview.window.get_size()[1] - b.height
 		add_length = 22
 		if not self.compact_view_current_state:
 			add_length += x4 + x5
-		if x2 + x1 + add_length > x3:
-			message_scrolledwindow.set_property('vscrollbar-policy', gtk.POLICY_AUTOMATIC)
-			message_scrolledwindow.set_property('hscrollbar-policy', gtk.POLICY_AUTOMATIC)
-			message_scrolledwindow.set_property('height-request', x3 - x1 - add_length)
-		else:
-			message_scrolledwindow.set_property('vscrollbar-policy', gtk.POLICY_NEVER)
-			message_scrolledwindow.set_property('hscrollbar-policy', gtk.POLICY_NEVER)
-			message_scrolledwindow.set_property('height-request', -1)
+		if diff_y is not 0:
+			if x2 + x1 + add_length > x3:
+				message_scrolledwindow.set_property('vscrollbar-policy', gtk.POLICY_AUTOMATIC)
+				message_scrolledwindow.set_property('hscrollbar-policy', gtk.POLICY_AUTOMATIC)
+				message_scrolledwindow.set_property('height-request', x3 - x1 - add_length)
+				self.bring_scroll_to_end(message_textview)
+			else:
+				message_scrolledwindow.set_property('vscrollbar-policy', gtk.POLICY_NEVER)
+				message_scrolledwindow.set_property('hscrollbar-policy', gtk.POLICY_NEVER)
+				message_scrolledwindow.set_property('height-request', -1)
+				self.bring_scroll_to_end(conversation_textview, diff_y)
 		return True
 	
 	def new_tab(self, jid):
