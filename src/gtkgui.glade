@@ -9948,7 +9948,7 @@ Custom</property>
     <widget class="GtkNotebook" id="chat_notebook">
       <property name="visible">True</property>
       <property name="show_tabs">False</property>
-      <property name="show_border">True</property>
+      <property name="show_border">False</property>
       <property name="tab_pos">GTK_POS_TOP</property>
       <property name="scrollable">True</property>
       <property name="enable_popup">False</property>
@@ -12606,7 +12606,6 @@ the Jabber network.</property>
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="server_comboboxentry">
 		      <property name="visible">True</property>
-		      <signal name="changed" handler="on_server_comboboxentry_changed" last_modification_time="Sun, 24 Jul 2005 14:30:26 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -13111,7 +13110,6 @@ the Jabber network.</property>
 		  <child>
 		    <widget class="GtkComboBoxEntry" id="register_server_comboboxentry">
 		      <property name="visible">True</property>
-		      <signal name="changed" handler="on_register_server_comboboxentry_changed" last_modification_time="Sun, 24 Jul 2005 14:30:19 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
