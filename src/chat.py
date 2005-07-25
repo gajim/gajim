@@ -345,6 +345,39 @@ class Chat:
 		del self.tagStatus[jid]
 		self.show_title()
 
+	def size_request(self, a, b, xml_top, message_scrollwindow):
+		''' When message_textview changes its size. If the new height
+		will enlarge the window, enable the scrollbar automatic policy'''
+		message_textview = xml_top.get_widget('message_textview')
+		conversation_scrolledwindow = \
+			xml_top.get_widget('conversation_scrolledwindow')
+		vpaned = xml_top.get_widget('vpaned')
+		if not vpaned.window:
+			return 
+			
+		banner_eventbox = xml_top.get_widget('banner_eventbox')
+		actions_hbox = xml_top.get_widget('actions_hbox')
+		if not actions_hbox:
+			actions_hbox = xml_top.get_widget('gc_actions_hbox')
+		
+		x1 = conversation_scrolledwindow.get_property("height-request")
+		x2 = b.height
+		x3 = vpaned.window.get_size()[1]
+		x4 = banner_eventbox.size_request()[1]
+		x5 = actions_hbox.size_request()[1]
+		add_length = 22
+		if not self.compact_view_current_state:
+			add_length += x4 + x5
+		if x2 + x1 + add_length > x3:
+			message_scrollwindow.set_property('vscrollbar-policy', gtk.POLICY_AUTOMATIC)
+			message_scrollwindow.set_property('hscrollbar-policy', gtk.POLICY_AUTOMATIC)
+			message_scrollwindow.set_property('height-request',x3 - x1 - add_length)
+		else:
+			message_scrollwindow.set_property('vscrollbar-policy', gtk.POLICY_NEVER)
+			message_scrollwindow.set_property('hscrollbar-policy', gtk.POLICY_NEVER)
+			message_scrollwindow.set_property('height-request',-1)
+		return True
+	
 	def new_tab(self, jid):
 		#FIXME: text formating buttons will be hidden in 0.8 release
 		for w in ['bold_togglebutton', 'italic_togglebutton', 'underline_togglebutton']:
@@ -429,16 +462,26 @@ class Chat:
 			xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_hbox', APP)
 			tab_hbox = xm.get_widget('chat_tab_hbox')
 			user = self.contacts[jid]
+			message_textview = self.xmls[jid].get_widget('message_textview')
+			message_scrollwindow = self.xmls[jid].get_widget('scrolledwindow31')
 		elif self.widget_name == 'groupchat_window':
 			xm = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_tab_hbox', APP)
 			tab_hbox = xm.get_widget('groupchat_tab_hbox')
-
+			message_textview = self.xmls[jid].get_widget('message_textview')
+			message_scrollwindow = self.xmls[jid].get_widget('scrolledwindow19')
+		
 		xm.signal_connect('on_close_button_clicked',
 			self.on_close_button_clicked, jid)
 
 		child = self.childs[jid]
 		self.notebook.append_page(child, tab_hbox)
-
+		
+		message_textview.connect('size-request', self.size_request, 
+			self.xmls[jid], message_scrollwindow)
+		
+		message_scrollwindow.set_property('height-request', -1)
+		message_scrollwindow.set_property('hscrollbar-policy', gtk.POLICY_NEVER)
+		message_scrollwindow.set_property('vscrollbar-policy', gtk.POLICY_NEVER)
 		#init new sent history for this conversation
 		self.sent_history[jid] = []
 		self.sent_history_pos[jid] = 0
