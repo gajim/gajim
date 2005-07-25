@@ -363,38 +363,27 @@ class Chat:
 		textview.scroll_to_iter(end_iter, 0, False, 1, 1)
 		return False
 		
-	def size_request(self, a, b, xml_top, message_scrolledwindow):
+	def size_request(self, message_textview , requisition, xml_top, 
+		message_scrolledwindow):
 		''' When message_textview changes its size. If the new height
 		will enlarge the window, enable the scrollbar automatic policy'''
-		message_textview = xml_top.get_widget('message_textview')
+		if message_textview.window is None:
+			return
 		conversation_scrolledwindow = \
 			xml_top.get_widget('conversation_scrolledwindow')
 		conversation_textview = \
 			xml_top.get_widget('conversation_textview')
-		vpaned = xml_top.get_widget('vpaned')
-		if not vpaned.window:
-			return 
-			
-		banner_eventbox = xml_top.get_widget('banner_eventbox')
-		actions_hbox = xml_top.get_widget('actions_hbox')
-		if not actions_hbox:
-			actions_hbox = xml_top.get_widget('gc_actions_hbox')
-		
-		x1 = conversation_scrolledwindow.get_property('height-request')
-		x2 = b.height
-		x3 = vpaned.window.get_size()[1]
-		x4 = banner_eventbox.size_request()[1]
-		x5 = actions_hbox.size_request()[1]
-		# difference between old height and new height
-		diff_y =  message_textview.window.get_size()[1] - b.height
-		add_length = 22
-		if not self.compact_view_current_state:
-			add_length += x4 + x5
+
+		min_height = conversation_scrolledwindow.get_property('height-request')
+		conversation_height = conversation_textview.window.get_size()[1]
+		message_height = message_textview.window.get_size()[1]
+		diff_y =  message_height - requisition.height
 		if diff_y is not 0:
-			if x2 + x1 + add_length > x3:
+			if  conversation_height + diff_y < min_height:
 				message_scrolledwindow.set_property('vscrollbar-policy', gtk.POLICY_AUTOMATIC)
 				message_scrolledwindow.set_property('hscrollbar-policy', gtk.POLICY_AUTOMATIC)
-				message_scrolledwindow.set_property('height-request', x3 - x1 - add_length)
+				message_scrolledwindow.set_property('height-request', message_height + \
+					conversation_height - min_height)
 				self.bring_scroll_to_end(message_textview)
 			else:
 				message_scrolledwindow.set_property('vscrollbar-policy', gtk.POLICY_NEVER)
