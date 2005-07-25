@@ -834,7 +834,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 	def on_recently_combobox_changed(self, widget):
 		model = widget.get_model()
 		iter = widget.get_active_iter()
-		gid = model.get_value(iter, 0)
+		gid = model[iter][0]
 		self.xml.get_widget('room_entry').set_text(gid.split('@')[0])
 		self.xml.get_widget('server_entry').set_text(gid.split('@')[1])
 
