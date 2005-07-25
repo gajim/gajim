@@ -1050,6 +1050,10 @@ class AccountModificationWindow:
 
 		usessl = gajim.config.get_per('accounts', self.account, 'usessl')
 		self.xml.get_widget('use_ssl_checkbutton').set_active(usessl)
+		
+		self.xml.get_widget('send_keepalive_checkbutton').set_active(
+			gajim.config.get_per('accounts', self.account,
+			'keep_alives_enabled'))
 
 		use_custom_host = gajim.config.get_per('accounts', self.account,
 			'use_custom_host')
