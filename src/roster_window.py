@@ -49,8 +49,10 @@ class RosterWindow:
 
 	def get_account_iter(self, name):
 		if self.regroup:
-			return None
+			return
 		model = self.tree.get_model()
+		if model is None:
+			return
 		account = model.get_iter_root()
 		while account:
 			account_name = model.get_value(account, 3)
