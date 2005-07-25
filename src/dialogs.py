@@ -709,12 +709,17 @@ class InputDialog:
 			self.ok_handler = ok_handler
 			okbutton = xml.get_widget('okbutton')
 			okbutton.connect('clicked', self.on_okbutton_clicked)
+			cancelbutton = xml.get_widget('cancelbutton')
+			cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
 			self.dialog.show_all()
 
 	def on_okbutton_clicked(self,  widget):
 		response = self.input_entry.get_text()
 		self.dialog.destroy()
 		self.ok_handler(response)
+	
+	def on_cancelbutton_clicked(self,  widget):
+		self.dialog.destroy()
 
 	def get_response(self):
 		if self.is_modal:
