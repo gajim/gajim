@@ -707,7 +707,7 @@ class Connection:
 				_('Check your connection or try again later')))
 			return None
 
-		gajim.log.debug(('Connected to server with %s'), con_type)
+		gajim.log.debug(_('Connected to server with %s'), con_type)
 
 		self.dispatch('CON_TYPE', con_type) # notify the gui about con_type
 
