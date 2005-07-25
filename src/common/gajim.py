@@ -91,8 +91,8 @@ def get_first_contact_instance_from_jid(account, jid):
 	else: # it's fake jid
 		#FIXME: problem see comment in next line
 		nick = get_nick_from_fjid(jid) # if we ban/kick we now real jid
-		if nick in gc_contacts[room_jid]:
-			contact = gc_contacts[room_jid][nick] # always only one instance
+		if nick in gc_contacts[jid]:
+			contact = gc_contacts[jid][nick] # always only one instance
 	return contact
 
 def get_contact_name_from_jid(account, jid):
