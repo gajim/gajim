@@ -693,7 +693,7 @@ class RosterTooltip(gtk.Window):
 
 class InputDialog:
 	'''Class for Input dialog'''
-	def __init__(self, title, label_str, input_str = None):
+	def __init__(self, title, label_str, input_str = None, is_modal = True, ok_handler = None):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'input_dialog', APP)
 		self.dialog = xml.get_widget('input_dialog')
 		label = xml.get_widget('label')
@@ -703,10 +703,23 @@ class InputDialog:
 		if input_str:
 			self.input_entry.set_text(input_str)
 			self.input_entry.select_region(0, -1) # select all
-	
-	def get_response(self):
-		response = self.dialog.run()
+		
+		self.is_modal = is_modal
+		if not is_modal and ok_handler is not None:
+			self.ok_handler = ok_handler
+			okbutton = xml.get_widget('okbutton')
+			okbutton.connect('clicked', self.on_okbutton_clicked)
+			self.dialog.show_all()
+
+	def on_okbutton_clicked(self,  widget):
+		response = self.input_entry.get_text()
 		self.dialog.destroy()
+		self.ok_handler(response)
+
+	def get_response(self):
+		if self.is_modal:
+			response = self.dialog.run()
+			self.dialog.destroy()
 		return response
 	
 class ErrorDialog(HigDialog):
@@ -855,17 +868,16 @@ class NewMessageDialog:
 			title = _('New Message')
 		prompt_text = _('Fill in the contact ID of the contact you would like\nto send a chat message to:')
 
-		instance = InputDialog(title, prompt_text)
-		response = instance.get_response()
-		if response == gtk.RESPONSE_OK:  
-			jid = instance.input_entry.get_text()
+		instance = InputDialog(title, prompt_text, is_modal = False, ok_handler = self.new_message_response)
+			
+	def new_message_response(self, jid):
+		''' called when ok button is clicked '''
+		if jid.find('@') == -1: # if no @ was given
+			ErrorDialog(_('Invalid contact ID'),
+	_('Contact ID must be of the form "username@servername".')).get_response()
+			return
 
-			if jid.find('@') == -1: # if no @ was given
-				ErrorDialog(_('Invalid contact ID'),
-		_('Contact ID must be of the form "username@servername".')).get_response()
-				return
-
-			self.plugin.roster.new_chat_from_jid(self.account, jid)
+		self.plugin.roster.new_chat_from_jid(self.account, jid)
 
 class ChangePasswordDialog:
 	def __init__(self, plugin, account):
