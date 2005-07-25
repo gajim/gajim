@@ -35,3 +35,41 @@ def escape_for_pango_markup(string):
 			'"': '&quot;'})
 	
 	return escaped_str
+
+def autodetect_browser_mailer(self):
+	#recognize the environment for appropriate browser/mailer
+	if os.path.isdir('/proc'):
+		# under Linux: checking if 'gnome-session' or
+		# 'startkde' programs were run before gajim, by
+		# checking /proc (if it exists)
+		#
+		# if something is unclear, read `man proc`;
+		# if /proc exists, directories that have only numbers
+		# in their names contain data about processes.
+		# /proc/[xxx]/exe is a symlink to executable started
+		# as process number [xxx].
+		# filter out everything that we are not interested in:
+		files = os.listdir('/proc')
+
+		# files that doesn't have only digits in names...
+		files = filter(str.isdigit, files)
+
+		# files that aren't directories...
+		files = filter(lambda f:os.path.isdir('/proc/' + f), files)
+
+		# processes owned by somebody not running gajim...
+		# (we check if we have access to that file)
+		files = filter(lambda f:os.access('/proc/' + f +'/exe', os.F_OK), files)
+
+		# be sure that /proc/[number]/exe is really a symlink
+		# to avoid TBs in incorrectly configured systems
+		files = filter(lambda f:os.path.islink('/proc/' + f + '/exe'), files)
+
+		# list of processes
+		processes = [os.path.basename(os.readlink('/proc/' + f +'/exe')) for f in files]
+		if 'gnome-session' in processes:
+			gajim.config.set('openwith', 'gnome-open')
+		elif 'startkde' in processes:
+			gajim.config.set('openwith', 'kfmclient exec')
+		else:
+			gajim.config.set('openwith', 'custom')

@@ -5169,8 +5169,9 @@
 			      <child>
 				<widget class="GtkComboBox" id="links_open_with_combobox">
 				  <property name="visible">True</property>
-				  <property name="items" translatable="yes">GNOME default applications
-KDE default applications
+				  <property name="items" translatable="yes">Autodetect
+Always use GNOME default applications
+Always use KDE default applications
 Custom</property>
 				  <signal name="changed" handler="on_links_open_with_combobox_changed" last_modification_time="Sat, 05 Mar 2005 16:44:57 GMT"/>
 				</widget>

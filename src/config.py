@@ -24,6 +24,7 @@ import os
 import common.config
 import common.sleepy
 
+import gtkgui_helpers
 import dialogs
 import cell_renderer_image
 import cell_renderer_image
@@ -358,12 +359,17 @@ class PreferencesWindow:
 			self.links_frame.set_no_show_all(True)
 		else:
 			self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
-			if gajim.config.get('openwith') == 'gnome-open':
+			if gajim.config.get('autodetect_browser_mailer'):
 				self.links_open_with_combobox.set_active(0)
+				gtkgui_helpers.plugin.autodetect_browser_mailer()
+			# autodetect_browser_mailer is now False.
+			# so user has 'Always Use GNOME/KDE' or Custom
+			elif gajim.config.get('openwith') == 'gnome-open':
+				self.links_open_with_combobox.set_active(1)
 			elif gajim.config.get('openwith') == 'kfmclient exec':
-				self.links_open_with_combobox.set_active(True)
-			elif gajim.config.get('openwith') == 'custom':
 				self.links_open_with_combobox.set_active(2)
+			elif gajim.config.get('openwith') == 'custom':
+				self.links_open_with_combobox.set_active(3)
 				self.xml.get_widget('custom_apps_frame').set_sensitive(True)
 			self.xml.get_widget('custom_browser_entry').set_text(
 				gajim.config.get('custombrowser'))
@@ -779,13 +785,16 @@ class PreferencesWindow:
 		self.save_status_messages(model)
 
 	def on_links_open_with_combobox_changed(self, widget):
+		gajim.config.set('autodetect_browser_mailer', False)
 		if widget.get_active() == 2:
 			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
 			gajim.config.set('openwith', 'custom')
 		else:
 			if widget.get_active() == 0:
+				gajim.config.set('autodetect_browser_mailer', True)
+			elif widget.get_active() == 1:
 				gajim.config.set('openwith', 'gnome-open')
-			if widget.get_active() == 1:
+			elif widget.get_active() == 2:
 				gajim.config.set('openwith', 'kfmclient exec')
 			self.xml.get_widget('custom_apps_frame').set_sensitive(False)
 		self.plugin.save_config()

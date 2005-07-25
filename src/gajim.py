@@ -30,6 +30,7 @@ except RuntimeError, msg:
 	if str(msg) == 'could not open display':
 		print 'Gajim needs Xserver to run. Exiting...'
 		sys.exit()
+		
 import gtk.glade
 import gobject
 import os
@@ -37,6 +38,7 @@ import sre
 import signal
 import getopt
 import time
+import gtkgui_helpers
 
 from common import i18n
 i18n.init()
@@ -936,6 +938,10 @@ class Interface:
 				for o in d:
 					gajim.config.set_per('themes', theme, o,
 						default[theme][d.index(o)])
+
+		
+		if gajim.config.get('autodetect_browser_mailer'):
+			gtkgui_helpers.plugin.autodetect_browser_mailer()
 
 		if gajim.verbose:
 			gajim.log.setLevel(gajim.logging.DEBUG)
