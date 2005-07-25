@@ -8586,8 +8586,8 @@ Custom</property>
 				  <property name="justification">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap_mode">GTK_WRAP_WORD</property>
 				  <property name="cursor_visible">False</property>
-				  <property name="pixels_above_lines">2</property>
-				  <property name="pixels_below_lines">2</property>
+				  <property name="pixels_above_lines">0</property>
+				  <property name="pixels_below_lines">0</property>
 				  <property name="pixels_inside_wrap">0</property>
 				  <property name="left_margin">2</property>
 				  <property name="right_margin">2</property>
@@ -10091,8 +10091,8 @@ Status message</property>
 		      <property name="justification">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap_mode">GTK_WRAP_WORD</property>
 		      <property name="cursor_visible">False</property>
-		      <property name="pixels_above_lines">2</property>
-		      <property name="pixels_below_lines">2</property>
+		      <property name="pixels_above_lines">0</property>
+		      <property name="pixels_below_lines">0</property>
 		      <property name="pixels_inside_wrap">0</property>
 		      <property name="left_margin">2</property>
 		      <property name="right_margin">2</property>
