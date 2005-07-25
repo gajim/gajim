@@ -461,7 +461,6 @@ class Chat:
 		if self.widget_name == 'tabbed_chat_window':
 			xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_hbox', APP)
 			tab_hbox = xm.get_widget('chat_tab_hbox')
-			user = self.contacts[jid]
 			message_textview = self.xmls[jid].get_widget('message_textview')
 			message_scrolledwindow = self.xmls[jid].get_widget('message_scrolledwindow')
 		elif self.widget_name == 'groupchat_window':
