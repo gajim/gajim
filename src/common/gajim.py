@@ -46,6 +46,8 @@ last_message_time = {} # list of time of the latest incomming message
 encrypted_chats = {} # list of encrypted chats {acct1: [jid1, jid2], ..}
 
 contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
+gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
+
 groups = {} # list of groups
 newly_added = {} # list of contacts that has just signed in
 to_be_removed = {} # list of contacts that has just signed out

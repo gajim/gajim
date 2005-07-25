@@ -377,8 +377,7 @@ class Interface:
 				qs[fjid] = []
 			qs[fjid].append((array[1], array[2], array[3]))
 			self.roster.nb_unread += 1
-			gc = self.windows[account]['gc'][jid]
-			show = gc.contacts[jid][nick].show
+			show = gajim.gc_contacts[account][jid][nick].show
 			c = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
 				ask = 'none')
 			self.roster.new_chat(c, account)
@@ -959,6 +958,7 @@ class Interface:
 			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
 			gajim.contacts[a] = {}
 			gajim.groups[a] = {}
+			gajim.gc_contacts[a] = {}
 			gajim.newly_added[a] = []
 			gajim.to_be_removed[a] = []
 			gajim.awaiting_messages[a] = {}
