@@ -490,6 +490,11 @@ class TabbedChatWindow(chat.Chat):
 
 		if jid is None:
 			jid = self.get_active_jid()
+		
+		# this happens sometime when we close  fastly all tabs
+		if jid is '':
+			return 
+			
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 
 		if contact.chatstate is False: # jid cannot do jep85
