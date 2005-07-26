@@ -1081,7 +1081,10 @@ class SingleMessageWindow:
 			self.subject_entry.set_property('editable', False)
 			self.message_textview.set_editable(False)
 			self.reply_button.grab_focus()
-
+		
+		# set_text(None) raises TypeError exception
+		if self.subject is None:
+			self.subject = ''
 		self.subject_entry.set_text(self.subject)
 		self.message_tv_buffer.set_text(self.message)
 		begin_iter = self.message_tv_buffer.get_start_iter()
