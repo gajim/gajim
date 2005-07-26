@@ -148,23 +148,9 @@ sent using this account'), False),
 				print self.compose_help()
 			sys.exit()
 		
-		try:
-			self.sbus = dbus.SessionBus()
-		except:
-			self.send_error(_('Session bus is not available.'))
-		
-		if _version[1] >= 30 and _version[1] <= 42:
-			self.object = self.sbus.get_object(SERVICE, OBJ_PATH)
-			self.interface = dbus.Interface(object, INTERFACE)
-		elif _version[1] < 30:
-			self.service = self.sbus.get_service(SERVICE)
-			self.interface = self.service.get_object(OBJ_PATH, INTERFACE)
-		else:
-			send_error(_('Unknow dbus version: %s') % _version)
-		# get the function asked
-		self.method = self.interface.__getattr__(self.command) 
-		
+		self.init_connection()
 		self.check_arguments()
+		
 		if self.command == 'contact_info':
 			if self.argv_len < 3:
 				self.send_error(_('Missing argument "contact_jid"'))
@@ -175,7 +161,14 @@ sent using this account'), False),
 				self.send_error(_('Service not available'))
 		
 		res = self.call_remote_method()
+		self.print_result(res)
 		
+		if self.command == 'contact_info':
+			gobject.timeout_add(10000, self.gtk_quit) # wait 10 sec for response
+			gtk.main()
+	
+	def print_result(self, res):
+		''' Print retrieved result to the output '''
 		if res is not None:
 			if self.command in ['open_chat', 'send_message']:
 				if self.command == 'send_message':
@@ -191,11 +184,32 @@ Please specify account for sending the message.') % sys.argv[2])
 				if type(res) == list:
 					for account in res:
 						print account
+			elif self.command == 'list_contacts':
+				for single_res in res:
+					accounts = self.unrepr(single_res)
+					for account_dict in accounts:
+						print self.print_info(0, account_dict)
 			elif res:
 				print res
-		if self.command == 'contact_info':
-			gobject.timeout_add(5000, self.gtk_quit) # wait 5 sec maximum
-			gtk.main()
+	
+	def init_connection(self):
+		''' create the onnection to the session dbus,
+		or exit if it is not possible '''
+		try:
+			self.sbus = dbus.SessionBus()
+		except:
+			self.send_error(_('Session bus is not available.'))
+		
+		if _version[1] >= 30 and _version[1] <= 42:
+			self.object = self.sbus.get_object(SERVICE, OBJ_PATH)
+			self.interface = dbus.Interface(object, INTERFACE)
+		elif _version[1] < 30:
+			self.service = self.sbus.get_service(SERVICE)
+			self.interface = self.service.get_object(OBJ_PATH, INTERFACE)
+		else:
+			send_error(_('Unknow dbus version: %s') % _version)
+		# get the function asked
+		self.method = self.interface.__getattr__(self.command) 
 		
 	def make_arguments_row(self, args):
 		''' return arguments list. Mandatory arguments are enclosed with:
@@ -248,29 +262,47 @@ Please specify account for sending the message.') % sys.argv[2])
 		
 	def print_info(self, level, prop_dict):
 		''' return formated string from serialized vcard data '''
-		if prop_dict is None:
+		if prop_dict is None or type(prop_dict) \
+			not in [dict, list, tuple]:
 			return ''
 		ret_str = ''
-		for key in prop_dict.keys():
-			val = prop_dict[key]
+		if type(prop_dict) in [list, tuple]:
+			ret_str = ''
 			spacing = ' ' * level * 4
-			if type(val) == unicode or type(val) == int or \
-				type(val) == str:
-				if val is not None:
-					val = val.strip()
-					ret_str += '%s%-10s: %s\n' % (spacing, key, val)
-			elif type(val) == list or type(val) == tuple:
-				res = ''
-				for items in val:
-					res += self.print_info(level+1, items)
-				if res != '':
-					ret_str += '%s%s: \n%s' % (spacing, key, res)
-			elif type(val) == dict:
-				res = self.print_info(level+1, val)
-				if res != '':
-					ret_str += '%s%s: \n%s' % (spacing, key, res)
-			else:
-				self.send_warning(_('Unknown type %s ') % type(val))
+			for val in prop_dict:
+				if val is None:
+					ret_str +='\t'
+				elif type(val) == unicode or type(val) == int or \
+					type(val) == str:
+					ret_str +='\t' + str(val)
+				elif type(val) == list or type(val) == tuple:
+					res = ''
+					for items in val:
+						res += self.print_info(level+1, items)
+					if res != '':
+						ret_str += '\t' + res
+			ret_str = '%s(%s)\n' % (spacing, ret_str[1:])
+		elif type(prop_dict) is dict:
+			for key in prop_dict.keys():
+				val = prop_dict[key]
+				spacing = ' ' * level * 4
+				if type(val) == unicode or type(val) == int or \
+					type(val) == str:
+					if val is not None:
+						val = val.strip()
+						ret_str += '%s%-10s: %s\n' % (spacing, key, val)
+				elif type(val) == list or type(val) == tuple:
+					res = ''
+					for items in val:
+						res += self.print_info(level+1, items)
+					if res != '':
+						ret_str += '%s%s: \n%s' % (spacing, key, res)
+				elif type(val) == dict:
+					res = self.print_info(level+1, val)
+					if res != '':
+						ret_str += '%s%s: \n%s' % (spacing, key, res)
+				else:
+					self.send_warning(_('Unknown type %s ') % type(val))
 		return ret_str
 		
 	def unrepr(self, serialized_data):
@@ -281,10 +313,35 @@ Please specify account for sending the message.') % sys.argv[2])
 		value = serialized_data.strip()
 		first_char = value[0]
 		is_unicode  = False
+		is_int  = False
+		
 		if first_char == 'u':
 			is_unicode = True
 			value = value[1:]
 			first_char = value[0]
+		elif '0123456789.'.find(first_char) != -1:
+			is_int = True
+			_str = first_char
+			if first_char == '.':
+				is_float = True
+			else:
+				is_float =  False
+			for i in range(len(value) - 1):
+				chr = value[i+1]
+				if chr == '.':
+					is_float = True
+				elif '0123456789'.find(chr) == -1:
+					break
+				_str += chr
+			if is_float:
+				return (float(_str), value[len(_str):])
+			else:
+				return (int(_str), value[len(_str):])
+		elif first_char == 'N':
+			if value[1:4] == 'one':
+				return (None, value[4:])
+			else:
+				return (None, '')
 		if first_char == "'" or first_char == '"': # handle strings and unicode
 			if len(value) < 2:
 				return ('',value[1:])
@@ -425,4 +482,3 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 
 if __name__ == '__main__':
 	GajimRemote()
-	pass
