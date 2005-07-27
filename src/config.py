@@ -786,7 +786,7 @@ class PreferencesWindow:
 
 	def on_links_open_with_combobox_changed(self, widget):
 		gajim.config.set('autodetect_browser_mailer', False)
-		if widget.get_active() == 2:
+		if widget.get_active() == 3:
 			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
 			gajim.config.set('openwith', 'custom')
 		else:
