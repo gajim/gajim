@@ -479,7 +479,26 @@ class ConfirmationDialog(HigDialog):
 		HigDialog.__init__(self, None, pritext, sectext,
 			gtk.STOCK_DIALOG_WARNING, [ [gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL],
 			[ gtk.STOCK_OK, gtk.RESPONSE_OK ] ])
-
+			
+class ConfirmationDialogCheck(ConfirmationDialog):
+	'''HIG compliant confirmation dialog with checkbutton.'''
+	def __init__(self, pritext, sectext='', checktext = ''):
+		HigDialog.__init__(self, None, pritext, sectext,
+			gtk.STOCK_DIALOG_WARNING, [ [gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL],
+			[ gtk.STOCK_OK, gtk.RESPONSE_OK ] ])
+		self.checkbutton = gtk.CheckButton(checktext)
+		self.vbox.pack_start(self.checkbutton, expand=False, fill=True)
+	
+	# override this method not to destroy the dialog
+	def get_response(self):
+		self.show_all()
+		response = gtk.Dialog.run(self)
+		return response
+	
+	def is_checked(self):
+		''' Get active state of the checkbutton '''
+		return self.checkbutton.get_active()
+		
 class WarningDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		"""HIG compliant warning dialog."""

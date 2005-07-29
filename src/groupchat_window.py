@@ -84,7 +84,8 @@ class GroupchatWindow(chat.Chat):
 					gajim.config.get('gc-y-position'))
 			self.window.resize(gajim.config.get('gc-width'),
 					gajim.config.get('gc-height'))
-
+		self.confirm_close = gajim.config.get('confirm_close_muc')
+		self.confirm_close = True
 		self.window.show_all()
 
 	def save_var(self, room_jid):
@@ -110,6 +111,7 @@ class GroupchatWindow(chat.Chat):
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
+		stop_propagation = False
 		for room_jid in self.xmls:
 			if time.time() - gajim.last_message_time[self.account][room_jid] < 2:
 				dialog = dialogs.ConfirmationDialog(
@@ -117,7 +119,20 @@ class GroupchatWindow(chat.Chat):
 			_('If you close this window, this message will be lost.')
 					)
 				if dialog.get_response() != gtk.RESPONSE_OK:
-					return True #stop the propagation of the event
+					stop_propagation = True #stop the propagation of the event
+		if not stop_propagation and self.confirm_close:
+			dialog = dialogs.ConfirmationDialogCheck(
+			_('Do you want to leave room "%s"') %room_jid.split('@')[0],
+			_('If you close this window, you will be disconnected from the room.'),
+			_('Do not ask me again')
+				)
+			if dialog.get_response() != gtk.RESPONSE_OK:
+				stop_propagation = True 
+			if dialog.is_checked():
+				gajim.config.set('confirm_close_muc', False)
+			dialog.destroy()
+		if stop_propagation:
+			return True
 		for room_jid in self.xmls:
 			gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
 				room_jid, 'offline', 'offline')
