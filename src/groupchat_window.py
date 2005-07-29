@@ -84,8 +84,8 @@ class GroupchatWindow(chat.Chat):
 					gajim.config.get('gc-y-position'))
 			self.window.resize(gajim.config.get('gc-width'),
 					gajim.config.get('gc-height'))
+		# whether to ask for comfirmation before closing muc
 		self.confirm_close = gajim.config.get('confirm_close_muc')
-		self.confirm_close = True
 		self.window.show_all()
 
 	def save_var(self, room_jid):
