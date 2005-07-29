@@ -1129,3 +1129,8 @@ class Chat:
 				else:
 					widget.set_no_show_all(False)
 					widget.show_all()
+			# make the last message visible, when changing to "full view"
+			if not state:
+				conversation_textview = \
+					self.xmls[jid].get_widget('conversation_textview')
+				gobject.idle_add(self.scroll_to_end_iter, conversation_textview)
