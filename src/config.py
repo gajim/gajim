@@ -850,7 +850,7 @@ class PreferencesWindow:
 	def on_new_msg_button_clicked(self, widget, data = None):
 		model = self.msg_tree.get_model()
 		iter = model.append()
-		model.set(iter, 0, 'msg', 1, 'message')
+		model.set(iter, 0, _('status message title'), 1, _('status message text'))
 
 	def on_delete_msg_button_clicked(self, widget, data = None):
 		(model, iter) = self.msg_tree.get_selection().get_selected()
