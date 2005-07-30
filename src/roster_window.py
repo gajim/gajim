@@ -1174,7 +1174,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				if accountIter:
 					model[accountIter][0] =	self.jabber_state_images['connecting']
 				if self.plugin.systray_enabled:
-					self.plugin.systray.set_status('connecting')
+					self.plugin.systray.change_status('connecting')
 
 			save_pass = gajim.config.get_per('accounts', account, 'savepass')
 			if not save_pass and gajim.connections[account].connected < 2:
@@ -1188,7 +1188,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					if accountIter:
 						model[accountIter][0] =	self.jabber_state_images['offline']
 					if self.plugin.systray_enabled:
-						self.plugin.systray.set_status('offline')
+						self.plugin.systray.change_status('offline')
 					self.update_status_comboxbox()
 					return
 				gajim.connections[account].password = passphrase
@@ -1297,7 +1297,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 
 						'xa', 'dnd', 'invisible']
 		if self.plugin.systray_enabled:
-			self.plugin.systray.set_status(statuss[maxi])
+			self.plugin.systray.change_status(statuss[maxi])
 
 	def on_status_changed(self, account, status):
 		'''the core tells us that our status has changed'''
