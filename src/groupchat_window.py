@@ -121,11 +121,24 @@ class GroupchatWindow(chat.Chat):
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					stop_propagation = True #stop the propagation of the event
 		if not stop_propagation and self.confirm_close:
-			dialog = dialogs.ConfirmationDialogCheck(
-			_('Do you want to leave room "%s"') %room_jid.split('@')[0],
-			_('If you close this window, you will be disconnected from the room.'),
-			_('Do not ask me again')
-				)
+			if len(self.xmls) >=2:
+				names = ''
+				for room in self.xmls:
+					if names != '':
+						names += ', '
+					names += gajim.get_nick_from_jid(room)
+					pritext = _('Are you sure you want to leave rooms "%s"?') \
+						% names
+					sectext = \
+		_('If you close this window, you will be disconnected from these rooms.')
+			else:
+				name = gajim.get_nick_from_jid(room_jid)
+				pritext = _('Are you sure you want to leave room "%s"?') \
+					% name
+				sectext = \
+		_('If you close this window, you will be disconnected from the room.')
+			dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
+				_('Do not ask me again') )
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				stop_propagation = True 
 			if dialog.is_checked():
