@@ -66,6 +66,10 @@ NS_VERSION      ='jabber:iq:version'
 NS_ENCRYPTED    ='jabber:x:encrypted'                           # JEP-0027
 NS_XMPP_STREAMS ='urn:ietf:params:xml:ns:xmpp-streams'
 NS_SIGNED       ='jabber:x:signed'                              # JEP-0027
+NS_SI           ='http://jabber.org/protocol/si' # JEP-0096
+NS_FILE         ='http://jabber.org/protocol/si/profile/file-transfer' # JEP-0096
+NS_FEATURE      ='http://jabber.org/protocol/feature-neg'
+NS_BYTESTREAM   ='http://jabber.org/protocol/bytestreams' # JEP-0065
 
 xmpp_stream_error_conditions="""
 bad-format --  --  -- The entity has sent XML that cannot be processed.
