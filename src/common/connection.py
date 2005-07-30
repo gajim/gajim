@@ -4,6 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
+##  - Dimitur Kirov <dkirov@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -24,7 +25,7 @@ import sre
 import traceback
 import threading
 import select
-import socks5
+
 
 from calendar import timegm
 
@@ -33,6 +34,7 @@ import common.xmpp
 from common import helpers
 from common import gajim
 from common import GnuPG
+from xmpp import socks5
 USE_GPG = GnuPG.USE_GPG
 
 from common import i18n
