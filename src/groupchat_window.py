@@ -613,7 +613,7 @@ class GroupchatWindow(chat.Chat):
 				# or /topic to get the subject printed
 				after_command = message[6:] # 6 is len('/topic')
 				splitted_arg = after_command.split()
-				if not message[6].isspace() and len(message) > 6:
+				if len(message) > 6 and not message[6].isspace():
 					# he wrote /topicA so do not accept that
 					return
 				if len(splitted_arg): # we set subject
