@@ -1,4 +1,4 @@
-##	common/socks5.py
+##	common/xmpp/socks5.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -26,12 +26,15 @@ import struct
 import sha
 
 class SocksQueue:
-	''' qwueue for all file requests objects '''
-	def __init__(self):
+	''' queue for all file requests objects '''
+	def __init__(self, complete_transfer_cb = None, \
+		progress_transfer_cb = None):
 		self.connected = 0
 		self.readers = {}
 		self.files_props = {}
 		self.idx = 0
+		self.complete_transfer_cb = complete_transfer_cb
+		self.progress_transfer_cb = progress_transfer_cb
 	
 	def add_receiver(self, sock5_receiver):
 		''' add new file request '''
@@ -41,6 +44,9 @@ class SocksQueue:
 		self.idx += 1
 		result = sock5_receiver.connect()
 		self.connected += 1
+		# we don;t need blocking sockets anymore
+		# this unblocks ui! 
+		sock5_receiver._sock.setblocking(False)
 		return result
 	
 	def add_file_props(self, file_props):
@@ -60,8 +66,13 @@ class SocksQueue:
 		for idx in self.readers.keys():
 			receiver = self.readers[idx]
 			if receiver.connected:
-				if not receiver.receiving and receiver.pending_data():
-					receiver.get_file_contents(timeout)
+				if receiver.pending_data():
+					result = receiver.get_file_contents(timeout)
+					if result in [0, -1] and \
+						self.complete_transfer_cb is not None:
+						self.complete_transfer_cb(receiver.file_props)
+					elif self.progress_transfer_cb is not None:
+						self.progress_transfer_cb(receiver.file_props)
 			else:
 				self.remove_receiver(idx)
 		
@@ -112,8 +123,8 @@ class Socks5:
 		return received
 
 	def send_raw(self,raw_data):
-		""" Writes raw outgoing data. Blocks until done.
-			If supplied data is unicode string, encodes it to utf-8 before send."""
+		''' Writes raw outgoing data. Blocks until done.
+			If supplied data is unicode string, encodes it to utf-8 before send.'''
 		try:
 			self._send(raw_data)
 		except:
@@ -121,13 +132,13 @@ class Socks5:
 		pass
 			
 	def disconnect(self):
-		""" Closes the socket. """
+		''' Closes the socket. '''
 		fcntl.fcntl(self._sock, fcntl.F_SETFL, 0);
 		self._sock.close()
 		self.connected = False
 		
 	def pending_data(self,timeout=0):
-		""" Returns true if there is a data ready to be read. """
+		''' Returns true if there is a data ready to be read. '''
 		if self._sock is None:
 			return False
 		try:
@@ -136,6 +147,7 @@ class Socks5:
 			return False
 	
 	def send_connect(self):
+		''' begin negotiation. on success 'address' != 0 '''
 		self.send_raw(self._get_auth_buff())
 		buff = self.receive()
 		version, method = struct.unpack('!BB', buff[:2])
@@ -153,15 +165,20 @@ class Socks5:
 		
 		
 	def _get_auth_buff(self):
+		''' Message, that we support 1 one auth mechanism: 
+		the 'no auth' mechanism. '''
 		return struct.pack('!BBB', 0x05, 0x01, 0x00)
 	
 	def _get_connect_buff(self):
+		''' Connect request by domain name '''
 		buff = struct.pack('!BBBBB%dsBB' % len(self.host), \
 			0x05, 0x01, 0x00, 0x03, len(self.host), self.host, \
 			self.port >> 8, self.port & 0xff)
 		return buff
 	
 	def _get_request_buff(self):
+		''' Connect request by domain name, 
+		sid sha, instead of domain name (jep 0096) '''
 		msg = self._get_sha1_auth()
 		buff = struct.pack('!BBBBB%dsBB' % len(msg), \
 			0x05, 0x01, 0x00, 0x03, len(msg), msg, 0, 0)
@@ -177,58 +194,59 @@ class Socks5:
 	def _get_sha1_auth(self):
 		return sha.new("%s%s%s" % (self.sid, self.initiator, self.target)).hexdigest()
 		
-	def mainloop():
-		pass
-
 class Socks5Receiver(Socks5):
 	def __init__(self, host, port, initiator, target, sid, file_props = None):
 		self.queue_idx = -1
 		self.queue = None
-		self.receiving = False
 		self.file_props = file_props
 		Socks5.__init__(self, host, port, initiator, target, sid)
 	
 	def get_file_contents(self, timeout):
 		''' read file contents from socket and write them to file "'''
-		if self.receiving is True:
-			return 
-		else:
-			self.receiving = True
 		if self.file_props is None or \
 			self.file_props.has_key('file-name') is False:
 			return 
 			#TODO error
-		try: 
-			buff = self._recv(512)
-		except: 
-			buff = ''
-		
-		fd = open(self.file_props['file-name'],'w')
-		fd.write(buff)
-		self.receiving = True
 		while self.pending_data(timeout):
+			if self.file_props.has_key('fd'):
+				fd = self.file_props['fd']
+			else:
+				fd = open(self.file_props['file-name'],'w')
+				self.file_props['fd'] = fd
+				self.file_props['received-len'] = 0
 			try: 
-				buff = self._recv(512)
+				buff = self._recv(65536)
 			except: 
-				buff=''
+				buff = ''
+			self.file_props['received-len'] += len(buff)
 			fd.write(buff)
-			if not buff: 
-				break
-		# TODO check if size is the same
-		fd.close()
-		self.disconnect()
-		self.receiving = False
-	
+			if len(buff) == 0:
+				# Transfer stopped  somehow:
+				# reset, paused or network error
+				fd.close()
+				try:
+					# file is not complete, remove it
+					os.remove(self.file_props['file-name'])
+				except:
+					# unable to remove the incomplete file
+					pass
+				self.disconnect()
+				self.file_props['error'] = -1
+				return -1
+			if self.file_props['received-len'] == int(self.file_props['size']):
+				# transfer completed
+				fd.close()
+				self.disconnect()
+				self.file_props['error'] = 0
+				return 0
+		# return number of read bytes. It can be used in progressbar
+		return self.file_props['received-len']
+		
 	def disconnect(self):
-		""" Closes the socket. """
-		try:
-			fcntl.fcntl(self._sock, fcntl.F_SETFL, 0);
-			self._sock.close()
-		except:
-			pass
+		''' Closes the socket. '''
+		# close connection and remove us from the queue
+		fcntl.fcntl(self._sock, fcntl.F_SETFL, 0);
+		self._sock.close()
 		self.connected = False
 		if self.queue is not None:
 			self.queue.remove_receiver(self.queue_idx)
-
-
-# TODO REMOVE above lines when ready

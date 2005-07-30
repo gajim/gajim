@@ -126,7 +126,7 @@ class Connection:
 			'ACC_OK': [], 'MYVCARD': [], 'OS_INFO': [], 'VCARD': [], 'GC_MSG': [],
 			'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],
 			'ROSTER_INFO': [], 'ERROR_ANSWER': [], 'BOOKMARKS': [], 'CON_TYPE': [],
-			'FILE_REQUEST': []
+			'FILE_REQUEST': [], 'FILE_RCV_COMPLETED': []
 			}
 		self.name = name
 		self.connected = 0 # offline
@@ -143,7 +143,7 @@ class Connection:
 		self.last_sent = []
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		self.privacy_rules_supported = False
-		self.receiver = socks5.SocksQueue()
+		self.receiver = socks5.SocksQueue(self.complete_file_transfer)
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
 			gajim.config.set('usegpg', True)
@@ -454,8 +454,22 @@ class Connection:
 		self.receiver.add_file_props(file_props)
 		self.dispatch('FILE_REQUEST', (jid, file_props))
 		raise common.xmpp.NodeProcessed
-		
+	
+	def complete_file_transfer(self, file_props):
+		''' file transfer is completed or stopped '''
+		self.dispatch('FILE_RCV_COMPLETED', file_props)
+	
+	def send_file_rejection(self, file_props):
+		''' informs sender that we refuse to download the file '''
+		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['sender']), \
+			typ = 'error')
+		iq.setAttr('id', file_props['request-id'])
+		err = common.xmpp.ErrorNode(code = '406', typ = 'auth', name = 'not-acceptable')
+		iq.addChild(node=err)
+		self.to_be_sent.append(iq)
+
 	def send_file_approval(self, file_props):
+		''' comfirm that we want to download the file '''
 		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['sender']), \
 			typ = 'result')
 		iq.setAttr('id', file_props['request-id'])
