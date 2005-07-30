@@ -1341,10 +1341,16 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				gtk.STOCK_SAVE, gtk.RESPONSE_OK))
 			dialog.set_current_name(file_props['name'])
 			dialog.set_default_response(gtk.RESPONSE_OK)
+			if self.last_save_dir and os.path.exists(self.last_save_dir) \
+				and os.path.isdir(self.last_save_dir):
+				dialog.set_current_folder(self.last_save_dir)
 			response = dialog.run()
 			if response == gtk.RESPONSE_OK:
-				file_name = dialog.get_filename()
-				file_props['file-name'] = file_name
+				file_path = dialog.get_filename()
+				(file_dir, file_name) = os.path.split(file_path)
+				if file_dir:
+					self.last_save_dir = file_dir
+				file_props['file-name'] = file_path
 				gajim.connections[account].send_file_approval(file_props)
 			else:
 				gajim.connections[account].send_file_rejection(file_props)
@@ -2045,6 +2051,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		self.tree = self.xml.get_widget('roster_treeview')
 		self.plugin = plugin
 		self.nb_unread = 0
+		self.last_save_dir = None
 		self.editing_path = None  # path of row with cell in edit mode
 		self.add_new_contact_handler_id = False
 		self.service_disco_handler_id = False
