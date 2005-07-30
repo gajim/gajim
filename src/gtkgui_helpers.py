@@ -22,7 +22,34 @@
 
 import xml.sax.saxutils
 import gtk
+from common import i18n
 
+_ = i18n._
+APP = i18n.APP
+gtk.glade.bindtextdomain (APP, i18n.DIR)
+gtk.glade.textdomain (APP)
+
+def convert_bytes(string):
+	suffix = ''
+	bytes = int(string)
+	if bytes >= 1024:
+		bytes /= 1024
+		if bytes >= 1024:
+			bytes /= 1024
+			if bytes >= 1024:
+				bytes /= 1024
+				suffix = _('%s Gb') 
+			else:
+				suffix = _('%s Mb') 
+		else:
+			suffix = _('%s Kb') 
+	else:
+		if bytes == 1:
+			suffix = _('%s byte') 
+		else:
+			suffix = _('%s bytes') 
+	return suffix % str(bytes)
+	
 def escape_for_pango_markup(string):
 	# escapes < > & \ "
 	# for pango markup not to break
