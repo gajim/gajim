@@ -517,21 +517,12 @@ class InformationDialog(HigDialog):
 			[ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
 		)
 
-class RosterTooltip(gtk.Window):
+class RosterTooltip:
 	def __init__(self, plugin):
-		gtk.Window.__init__(self, gtk.WINDOW_POPUP)
 		self.plugin = plugin
-		self.set_resizable(False)
-		self.set_name('gtk-tooltips')
-		self.hbox = gtk.HBox()
-		self.hbox.set_border_width(6)
-		self.hbox.set_homogeneous(False)
-		self.add(self.hbox)
+		
 		self.image = gtk.Image()
 		self.image.set_alignment(0.5, 0.025)
-		
-		self.hbox.pack_start(self.image, False, False)
-		#~ self.image.set_property('expand', False)
 		self.account = None
 		self.table = None
 		
@@ -539,18 +530,29 @@ class RosterTooltip(gtk.Window):
 		self.timeout = 0
 		self.prefered_position = [0, 0]
 		self.path = None
+		self.create_window()
 		
-		self.set_events(gtk.gdk.POINTER_MOTION_MASK)
-		self.connect_after('expose_event', self.expose)
-		self.connect('size-request', self.size_request)
-		self.connect('motion-notify-event', self.motion_notify_event)
+	def create_window(self):
+		''' create a popup window each time tooltip is requested '''
+		self.win = gtk.Window(gtk.WINDOW_POPUP)
+		self.win.set_resizable(False)
+		self.win.set_name('gtk-tooltips')
+		self.hbox = gtk.HBox()
+		self.hbox.set_border_width(6)
+		self.hbox.set_homogeneous(False)
+		self.win.add(self.hbox)
+		self.hbox.pack_start(self.image, False, False)
 		
+		self.win.set_events(gtk.gdk.POINTER_MOTION_MASK)
+		self.win.connect_after('expose_event', self.expose)
+		self.win.connect('size-request', self.size_request)
+		self.win.connect('motion-notify-event', self.motion_notify_event)
 	
 	def motion_notify_event(self, widget, event):
 		self.hide_tooltip()
 
 	def size_request(self, widget, requisition):
-		screen = self.get_screen()
+		screen = self.win.get_screen()
 		half_width = requisition.width / 2 + 1
 		if self.prefered_position[0] < half_width:
 			self.prefered_position[0] = 0
@@ -563,19 +565,19 @@ class RosterTooltip(gtk.Window):
 			self.prefered_position[1] -= requisition.height  + 25
 		if self.prefered_position[1] < 0:
 			self.prefered_position[1] = 0
-		self.move(self.prefered_position[0], self.prefered_position[1])
+		self.win.move(self.prefered_position[0], self.prefered_position[1])
 
 	def expose(self, widget, event):
-		style = self.get_style()
-		size = self.get_size()
-		style.paint_flat_box(self.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
-			self, 'tooltip', 0, 0, -1, 1)
-		style.paint_flat_box(self.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
-			self, 'tooltip', 0, size[1] - 1, -1, 1)
-		style.paint_flat_box(self.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
-			self, 'tooltip', 0, 0, 1, -1)
-		style.paint_flat_box(self.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
-			self, 'tooltip', size[0] - 1, 0, 1, -1)
+		style = self.win.get_style()
+		size = self.win.get_size()
+		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
+			self.win, 'tooltip', 0, 0, -1, 1)
+		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
+			self.win, 'tooltip', 0, size[1] - 1, -1, 1)
+		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
+			self.win, 'tooltip', 0, 0, 1, -1)
+		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
+			self.win, 'tooltip', size[0] - 1, 0, 1, -1)
 		return True
 	
 	def show_tooltip(self, contact, pointer_position, win_size):
@@ -583,14 +585,14 @@ class RosterTooltip(gtk.Window):
 		new_x = win_size[0] + pointer_position[0] 
 		new_y = win_size[1] + pointer_position[1] + 35
 		self.prefered_position = [new_x, new_y]
-		self.ensure_style()
-		self.show_all()
+		self.win.ensure_style()
+		self.win.show_all()
 
 	def hide_tooltip(self):
 		if(self.timeout > 0):
 			gobject.source_remove(self.timeout)
 			self.timeout = 0
-		self.hide()
+		self.win.destroy()
 		self.path = None
 
 
@@ -627,11 +629,7 @@ class RosterTooltip(gtk.Window):
 	def populate(self, contacts):
 		if not contacts or len(contacts) == 0:
 			return
-		# remove prevous table 
-		if self.account:
-			self.table.remove(self.account)
-		if self.table:
-			self.hbox.remove(self.table)
+		self.create_window()
 		self.table = gtk.Table(3, 1)
 		self.table.set_property('column-spacing', 6)
 		self.account = gtk.Label()
