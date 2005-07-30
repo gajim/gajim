@@ -1,3 +1,24 @@
+##	common/socks5.py
+##
+## Gajim Team:
+##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Vincent Hanquez <tab@snarc.org>
+##	- Nikos Kouremenos <nkour@jabber.org>
+##  - Dimitur Kirov <dkirov@gmail.com>
+##
+##	Copyright (C) 2003-2005 Gajim Team
+##
+## This program is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 2 only.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+
+
 import socket
 import select 
 import fcntl
@@ -5,6 +26,7 @@ import struct
 import sha
 
 class SocksQueue:
+	''' qwueue for all file requests objects '''
 	def __init__(self):
 		self.connected = 0
 		self.readers = {}
@@ -12,6 +34,7 @@ class SocksQueue:
 		self.idx = 0
 	
 	def add_receiver(self, sock5_receiver):
+		''' add new file request '''
 		self.readers[self.idx] = sock5_receiver
 		sock5_receiver.queue_idx = self.idx
 		sock5_receiver.queue = self
@@ -33,10 +56,9 @@ class SocksQueue:
 		return None
 
 	def process(self, timeout=0):
-		print 'PROCESS'
+		''' process all file requests '''
 		for idx in self.readers.keys():
 			receiver = self.readers[idx]
-			print 'PROCESS receiver ', receiver.connected, receiver.receiving
 			if receiver.connected:
 				if not receiver.receiving and receiver.pending_data():
 					receiver.get_file_contents(timeout)
@@ -44,7 +66,6 @@ class SocksQueue:
 				self.remove_receiver(idx)
 		
 	def remove_receiver(self, idx):
-		print 'REMOVE', idx
 		if idx != -1:
 			if self.readers.has_key(idx):
 				del(self.readers[idx])
@@ -63,7 +84,6 @@ class Socks5:
 	def connect(self):
 		self._sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self._sock.connect((self.host, self.port))
-		print 'self.host, self.port', self.host, self.port
 		self._sock.setblocking(True)
 		self._send=self._sock.sendall
 		self._recv=self._sock.recv
@@ -102,21 +122,16 @@ class Socks5:
 			
 	def disconnect(self):
 		""" Closes the socket. """
-		#~ try:
-		print 'disconnect'
 		fcntl.fcntl(self._sock, fcntl.F_SETFL, 0);
 		self._sock.close()
-		#~ except:
-			#~ pass
 		self.connected = False
 		
 	def pending_data(self,timeout=0):
 		""" Returns true if there is a data ready to be read. """
 		if self._sock is None:
 			return False
-		print 'self._sock:', self._sock, timeout, self._sock
 		try:
-			return select.select([self._sock],[],[],0)[0]
+			return select.select([self._sock],[],[],timeout)[0]
 		except:
 			return False
 	
@@ -134,8 +149,6 @@ class Socks5:
 		if address_type == 0x03:
 			addrlen = ord(buff[4])
 			address, port= struct.unpack('!%dsH' % addrlen, buff[5:])
-		else:
-			print 'ADRRTYPE:', address_type
 		return (version, command, rsvd, address_type, addrlen, address, port)
 		
 		
@@ -181,7 +194,6 @@ class Socks5Receiver(Socks5):
 			return 
 		else:
 			self.receiving = True
-		print 'get_file_contents', self.file_props
 		if self.file_props is None or \
 			self.file_props.has_key('file-name') is False:
 			return 
@@ -219,13 +231,4 @@ class Socks5Receiver(Socks5):
 			self.queue.remove_receiver(self.queue_idx)
 
 
-if __name__ == '__main__':
-	sock5 = Socks5(host = '127.0.0.1', port = 8010, 
-		initiator = 'fgh@jabber.homeunix.net/Psi', 
-		target = 'emi@jabber.homeunix.net/Gajim',
-		sid = 's5b_962e391e895248e3')
-	
-	sock5.connect()
-	#~ res=sock5.receive()
-	#~ print 'res', res
-	#~ sock5.mainloop()
+# TODO REMOVE above lines when ready
