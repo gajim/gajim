@@ -23,6 +23,9 @@ import time
 import sre
 import traceback
 import threading
+import select
+import socks5
+
 from calendar import timegm
 
 import common.xmpp
@@ -121,6 +124,7 @@ class Connection:
 			'ACC_OK': [], 'MYVCARD': [], 'OS_INFO': [], 'VCARD': [], 'GC_MSG': [],
 			'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],
 			'ROSTER_INFO': [], 'ERROR_ANSWER': [], 'BOOKMARKS': [], 'CON_TYPE': [],
+			'FILE_REQUEST': []
 			}
 		self.name = name
 		self.connected = 0 # offline
@@ -137,6 +141,7 @@ class Connection:
 		self.last_sent = []
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		self.privacy_rules_supported = False
+		self.receiver = socks5.SocksQueue()
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
 			gajim.config.set('usegpg', True)
@@ -147,6 +152,7 @@ class Connection:
 	def dispatch(self, event, data):
 		'''always passes account name as first param'''
 		if not event in self.handlers:
+			print event, 'is not in:', self.handlers
 			return
 		for handler in self.handlers[event]:
 			handler(self.name, data)
@@ -372,7 +378,98 @@ class Connection:
 			_('To continue sending and receiving messages, you will need to reconnect.')))
 		self.on_purpose = False
 	# END disconenctedCB
-
+	
+	def _bytestreamSetCB(self, con, iq_obj):
+		gajim.log.debug('_bytestreamSetCB')
+		target = str(iq_obj.getAttr('to'))
+		id = str(iq_obj.getAttr('id'))
+		query = iq_obj.getTag('query')
+		sid = str(query.getAttr('sid'))
+		file_props = self.receiver.get_file_props(sid)
+		if file_props is None:
+			return
+			# todo - error
+		streamhosts=[]
+		for item in query.getChildren():
+			if item.getName() == 'streamhost':
+				host_dict={}
+				for attr in item.getAttrs():
+					val = item.getAttr(attr)
+					if type(val) == unicode:
+						val = val.encode('utf-8')
+					if type(attr) == unicode:
+						attr = attr.encode('utf-8')
+					host_dict[attr] = val
+				streamhosts.append(host_dict)
+		
+		for streamhost in streamhosts:
+			sock5 = socks5.Socks5Receiver(host = streamhost['host'], \
+				port = int(streamhost['port']), initiator = streamhost['jid'], 
+				target = target, sid = sid, file_props = file_props)
+			ret = self.receiver.add_receiver(sock5)
+			if ret is None:
+				continue
+			iq = common.xmpp.Iq(to = streamhost['jid'], typ = 'result', frm = target)
+			iq.setAttr('id', id)
+			query = iq.setTag('query')
+			query.setNamespace(common.xmpp.NS_BYTESTREAM)
+			stream_tag = query.setTag('streamhost-used')
+			stream_tag.setAttr('jid', streamhost['jid'])
+			self.to_be_sent.append(iq)
+			raise common.xmpp.NodeProcessed
+		
+	def _siSetCB(self, con, iq_obj):
+		gajim.log.debug('_siSetCB')
+		jid = iq_obj.getFrom().getStripped().encode('utf8')
+		si = iq_obj.getTag('si')
+		
+		profile = si.getAttr('profile')
+		mime_type = si.getAttr('mime-type')
+		if profile != 'http://jabber.org/protocol/si/profile/file-transfer':
+			return
+		feature = si.getTag('feature')
+		file_tag = si.getTag('file')
+		file_props = {}
+		for attribute in file_tag.getAttrs():
+			attribute = attribute.encode('utf-8')
+			if attribute in ['name', 'size', 'hash', 'date']:
+				val = file_tag.getAttr(attribute)
+				if val is None:
+					continue
+				if type(val) is unicode:
+					val = val.encode('utf-8')
+				file_props[attribute] = val
+		file_desc_tag = file_tag.getTag('desc')
+		if file_desc_tag is not None:
+			file_props['desc'] = file_desc_tag.getData()
+		
+		if mime_type is not None:
+			file_props['mime-type'] = mime_type
+			
+		file_props['sender'] = iq_obj.getFrom()
+		file_props['request-id'] = str(iq_obj.getAttr('id'))
+		file_props['sid'] = str(si.getAttr('id'))
+		self.receiver.add_file_props(file_props)
+		self.dispatch('FILE_REQUEST', (jid, file_props))
+		raise common.xmpp.NodeProcessed
+		
+	def send_file_approval(self, file_props):
+		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['sender']), \
+			typ = 'result')
+		iq.setAttr('id', file_props['request-id'])
+		si = iq.setTag('si')
+		si.setNamespace(common.xmpp.NS_SI)
+		file_tag = si.setTag('file')
+		file_tag.setNamespace(common.xmpp.NS_FILE)
+		feature = si.setTag('feature')
+		feature.setNamespace(common.xmpp.NS_FEATURE)
+		_feature = common.xmpp.DataForm(typ='submit')
+		feature.addChild(node=_feature)
+		field = _feature.setField('stream-method')
+		field.delAttr('type')
+		field.setValue('http://jabber.org/protocol/bytestreams')
+		self.to_be_sent.append(iq)
+		
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
@@ -717,6 +814,10 @@ class Connection:
 			common.xmpp.NS_VCARD)
 		con.RegisterHandler('iq', self._rosterSetCB, 'set',
 			common.xmpp.NS_ROSTER)
+		con.RegisterHandler('iq', self._siSetCB, 'set', 
+			common.xmpp.NS_SI)
+		con.RegisterHandler('iq', self._bytestreamSetCB, 'set', 
+			common.xmpp.NS_BYTESTREAM)
 		con.RegisterHandler('iq', self._BrowseResultCB, 'result',
 			common.xmpp.NS_BROWSE)
 		con.RegisterHandler('iq', self._DiscoverItemsCB, 'result',
@@ -834,7 +935,7 @@ class Connection:
 
 			#Get bookmarks from private namespace
 			self.get_bookmarks()
-
+	
 	def change_status(self, show, msg, sync = False):
 		if sync:
 			self.change_status2(show, msg)
@@ -1335,7 +1436,9 @@ class Connection:
 			while time.time() < t_limit and len(self.to_be_sent) and \
 					len(self.last_sent) < gajim.config.get_per('accounts',
 						self.name, 'max_stanza_per_sec'):
-				self.connection.send(self.to_be_sent.pop(0))
+				tosend = self.to_be_sent.pop(0)
+				
+				self.connection.send(tosend)
 				self.last_sent.append(time.time())
 			try:
 				if gajim.config.get_per('accounts', self.name,
@@ -1359,6 +1462,8 @@ class Connection:
 						return
 				if self.connection:
 					self.connection.Process(timeout)
+				if self.receiver.connected > 0:
+					self.receiver.process(timeout)
 			except:
 				gajim.log.debug(_('error appeared while processing xmpp:'))
 				traceback.print_exc()
