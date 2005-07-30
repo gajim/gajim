@@ -101,7 +101,7 @@ class Systray:
 		
 		self.set_tooltip(nb) # update the tooltip
 	
-	def change_status(self, global_status = 'offline'):
+	def change_status(self, global_status = None):
 		''' change the tooltip text and set tray image to 'global_status' '''
 		text, single, multiline, multilined = 'Gajim', '', '', False
 		if gajim.contacts:
@@ -129,9 +129,9 @@ class Systray:
 			text += ' - ' + helpers.get_uf_show('offline')
 		
 		# change image and status, only if it is different 
-		if self.status != global_status:
+		if global_status is not None and self.status != global_status:
 			self.status = global_status
-			self.set_img()
+		self.set_img()
 		self.tip.set_tip(self.t, text)
 	
 	def start_chat(self, widget, account, jid):
@@ -328,12 +328,12 @@ class Systray:
 		# and we set the appropriate tooltip
 		if unread_messages_no > 1:
 			text = _('Gajim - %s unread messages') % unread_messages_no
+			self.tip.set_tip(self.t, text)
 		elif unread_messages_no == 1:
 			text = _('Gajim - 1 unread message')
+			self.tip.set_tip(self.t, text)
 		else: # it's None or 0
-			uf_show = helpers.get_uf_show(self.status)
-			text = _('Gajim - %s') % uf_show
-		self.tip.set_tip(self.t, text)
+			self.change_status()
 	
 	def hide_icon(self):
 		if self.t:
