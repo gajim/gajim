@@ -445,7 +445,7 @@ class Connection:
 		si = iq_obj.getTag('si')
 		profile = si.getAttr('profile')
 		mime_type = si.getAttr('mime-type')
-		if profile != NS_FILE:
+		if profile != common.xmpp.NS_FILE:
 			return
 		feature = si.getTag('feature')
 		file_tag = si.getTag('file')
