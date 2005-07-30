@@ -696,7 +696,22 @@ class Interface:
 					bm['password'])
 		self.roster.make_menu()
 										
-
+	def handle_event_file_request(self, account, array):
+		jid = array[0]
+		#~ print 'handle_event_file_request:', jid, gajim.contacts[account]
+		if not gajim.contacts[account].has_key(jid):
+			return
+		file_props = array[1]
+		#~ print 'handle_event_file_request:', array
+		if gajim.config.get('notify_on_new_message'):
+			# check OUR status and if we allow notifications for that status
+			if gajim.config.get('autopopupaway') or \
+				gajim.connections[account].connected in (2, 3): # we're online or chat
+				print 'HERE'
+				instance = dialogs.PopupNotificationWindow(self,
+						_('File Request'), jid, account, 'file', file_props)
+				self.roster.popup_notification_windows.append(instance)
+	
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -862,6 +877,7 @@ class Interface:
 		con.register_handler('ROSTER_INFO', self.handle_event_roster_info)
 		con.register_handler('BOOKMARKS', self.handle_event_bookmarks)
 		con.register_handler('CON_TYPE', self.handle_event_con_type)
+		con.register_handler('FILE_REQUEST', self.handle_event_file_request)
 
 	def process_connections(self):
 		try:

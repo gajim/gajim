@@ -945,11 +945,12 @@ _('Without a connection, you can not change your password.')).get_response()
 
 
 class PopupNotificationWindow:
-	def __init__(self, plugin, event_type, jid, account, msg_type = ''):
+	def __init__(self, plugin, event_type, jid, account, msg_type = '', file_props = None):
 		self.plugin = plugin
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
+		self.file_props = file_props
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_notification_window', APP)
 		self.window = xml.get_widget('popup_notification_window')
@@ -982,6 +983,11 @@ class PopupNotificationWindow:
 			dodgerblue = gtk.gdk.color_parse('dodgerblue')
 			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
+			txt = _('From %s') % txt
+		elif event_type == _('File Request'):
+			bg_color = gtk.gdk.color_parse('coral')
+			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
+			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			txt = _('From %s') % txt
 	
 		# position the window to bottom-right of screen
@@ -1040,6 +1046,11 @@ class PopupNotificationWindow:
 			contact = self.contacts[account][jid][0]
 			dialogs.SingleMessageWindow(self.plugin, self.account, contact,
 			action = 'receive', from_whom = jid, subject = subject, message = msg)
+		
+		elif self.msg_type == 'file': # it's file request
+			self.plugin.roster.show_file_request(self.account, contact, 
+				self.file_props)
+		
 		else: # 'chat'
 			self.plugin.roster.new_chat(contact, self.account)
 			chats_window = self.plugin.windows[self.account]['chats'][self.jid]

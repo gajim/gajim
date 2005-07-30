@@ -30,6 +30,7 @@ import groupchat_window
 import history_window
 import dialogs
 import config
+import gtkgui_helpers
 import cell_renderer_image
 
 from gajim import Contact
@@ -1319,6 +1320,35 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					self.chg_contact_status(user, 'offline', 'Disconnected', account)
 		self.update_status_comboxbox()
 		self.make_menu()
+	
+	def show_file_request(self, account, contact, file_props):
+		if file_props is None or not file_props.has_key('name'):
+			return
+		sec_text = _('\tFile: %s') % file_props['name']
+		if file_props.has_key('size'):
+			sec_text += '\n\t' + _('Size: %s') % \
+				gtkgui_helpers.convert_bytes(file_props['size'])
+		if file_props.has_key('mime-type'):
+			sec_text += '\n\t' + _('Type: %s') % file_props['mime-type']
+		if file_props.has_key('desc'):
+			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
+		prim_text = _(' %s wants to send you file') % contact.jid
+		dialog = dialogs.ConfirmationDialog(prim_text, sec_text)
+		if dialog.get_response() == gtk.RESPONSE_OK:
+			dialog = gtk.FileChooserDialog(title=_('Save File As...'), 
+				action=gtk.FILE_CHOOSER_ACTION_SAVE, 
+				buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
+				gtk.STOCK_SAVE, gtk.RESPONSE_OK))
+			dialog.set_current_name(file_props['name'])
+			dialog.set_default_response(gtk.RESPONSE_OK)
+			response = dialog.run()
+			if response == gtk.RESPONSE_OK:
+				file_name = dialog.get_filename()
+				file_props['file-name'] = file_name
+				gajim.connections[account].send_file_approval(file_props)
+			else:
+				gajim.connections[account].send_file_rejection(file_props)
+			dialog.destroy()
 
 	def new_chat(self, user, account):
 		if gajim.config.get('usetabbedchat'):
