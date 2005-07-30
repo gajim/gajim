@@ -525,11 +525,13 @@ class RosterTooltip(gtk.Window):
 		self.set_name('gtk-tooltips')
 		self.hbox = gtk.HBox()
 		self.hbox.set_border_width(6)
+		self.hbox.set_homogeneous(False)
 		self.add(self.hbox)
 		self.image = gtk.Image()
 		self.image.set_alignment(0.5, 0.025)
 		
 		self.hbox.pack_start(self.image, False, False)
+		#~ self.image.set_property('expand', False)
 		self.account = None
 		self.table = None
 		
@@ -637,7 +639,7 @@ class RosterTooltip(gtk.Window):
 		self.account.set_alignment(0, 0)
 		self.account.set_selectable(False)
 		self.table.attach(self.account, 1, 4, 1, 2)
-		self.hbox.pack_start(self.table)
+		self.hbox.pack_start(self.table, True, True)
 		# default resource of the contact
 		prim_contact = None # primary contact
 		for contact in contacts:
