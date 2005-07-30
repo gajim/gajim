@@ -315,6 +315,8 @@ class Systray:
 		if not self.t:
 			self.t = trayicon.TrayIcon('Gajim')
 			eb = gtk.EventBox()
+			# avoid draw seperate bg color in some gtk themes
+			eb.set_visible_window(False)
 			eb.connect('button-press-event', self.on_clicked)
 			self.set_tooltip()
 			self.img_tray = gtk.Image()
