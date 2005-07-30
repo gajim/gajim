@@ -419,15 +419,33 @@ class Connection:
 			stream_tag.setAttr('jid', streamhost['jid'])
 			self.to_be_sent.append(iq)
 			raise common.xmpp.NodeProcessed
+
+	def _discoGetCB(self, con, iq_obj):
+		''' get disco info '''
+		frm = str(iq_obj.getFrom())
+		to = str(iq_obj.getAttr('to'))
+		id = str(iq_obj.getAttr('id'))
+		iq = common.xmpp.Iq(to = frm, typ = 'result', queryNS =\
+			common.xmpp.NS_DISCO, frm = to)
+		iq.setAttr('id', id)
+		# bytestream transfers
+		feature = common.xmpp.Node('feature')
+		feature.setNamespace(common.xmpp.NS_SI)
+		iq.addChild(node=feature)
+		# filetransfers transfers
+		_feature = common.xmpp.Node('feature')
+		_feature.setNamespace(common.xmpp.NS_FILE)
+		iq.addChild(node=_feature)
+		self.to_be_sent.append(iq)
+		raise common.xmpp.NodeProcessed
 		
 	def _siSetCB(self, con, iq_obj):
 		gajim.log.debug('_siSetCB')
 		jid = iq_obj.getFrom().getStripped().encode('utf8')
 		si = iq_obj.getTag('si')
-		
 		profile = si.getAttr('profile')
 		mime_type = si.getAttr('mime-type')
-		if profile != 'http://jabber.org/protocol/si/profile/file-transfer':
+		if profile != NS_FILE:
 			return
 		feature = si.getTag('feature')
 		file_tag = si.getTag('file')
@@ -832,6 +850,8 @@ class Connection:
 			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._siSetCB, 'set', 
 			common.xmpp.NS_SI)
+		con.RegisterHandler('iq', self._discoGetCB, 'get', 
+			common.xmpp.NS_DISCO)
 		con.RegisterHandler('iq', self._bytestreamSetCB, 'set', 
 			common.xmpp.NS_BYTESTREAM)
 		con.RegisterHandler('iq', self._BrowseResultCB, 'result',

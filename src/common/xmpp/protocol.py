@@ -70,6 +70,7 @@ NS_SI           ='http://jabber.org/protocol/si' # JEP-0096
 NS_FILE         ='http://jabber.org/protocol/si/profile/file-transfer' # JEP-0096
 NS_FEATURE      ='http://jabber.org/protocol/feature-neg'
 NS_BYTESTREAM   ='http://jabber.org/protocol/bytestreams' # JEP-0065
+NS_DISCO		='http://jabber.org/protocol/disco#info' # JEP-0095
 
 xmpp_stream_error_conditions="""
 bad-format --  --  -- The entity has sent XML that cannot be processed.
