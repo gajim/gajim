@@ -182,6 +182,10 @@ class PreferencesWindow:
 		st = gajim.config.get('usetabbedchat')
 		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
 		
+		# always compact view
+		st = gajim.config.get('always_compact_view')
+		self.xml.get_widget('always_compact_view_checkbutton').set_active(st)
+		
 		#use speller
 		if os.name == 'nt':
 			self.xml.get_widget('speller_checkbutton').set_no_show_all(True)
@@ -572,6 +576,9 @@ class PreferencesWindow:
 			self.split_windows('gc')
 		self.plugin.save_config()
 
+	def on_always_compact_view_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'always_compact_view')
+	
 	def apply_speller(self, kind):
 		for acct in gajim.connections:
 			windows = self.plugin.windows[acct][kind]

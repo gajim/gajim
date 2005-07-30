@@ -3329,6 +3329,27 @@
 	      </child>
 
 	      <child>
+		<widget class="GtkCheckButton" id="always_compact_view_checkbutton">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">If checked, all chat and group chat windows will have the information area in the top and the buttons area in the bottom hidden. You can quick toggle compact view with Ctrl+C. NOTE: The last state you leave a window/tab is not a permanent one</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Always use compact _view</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="on_always_compact_view_checkbutton_toggled" last_modification_time="Fri, 29 Jul 2005 19:35:06 GMT"/>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
 		<widget class="GtkCheckButton" id="speller_checkbutton">
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Highlight misspelled words</property>
