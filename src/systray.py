@@ -23,6 +23,7 @@ import dialogs
 import os
 
 from common import gajim
+from common.connection import STATUS_LIST
 from common import helpers
 from common import i18n
 
@@ -99,12 +100,40 @@ class Systray:
 						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
 		
 		self.set_tooltip(nb) # update the tooltip
-
-	def set_status(self, status):
-		self.status = status
-		self.set_img()
-		self.set_tooltip()
-
+	
+	def change_status(self, global_status = 'offline'):
+		''' change the tooltip text and set tray image to 'global_status' '''
+		text, single, multiline, multilined = 'Gajim', '', '', False
+		if gajim.contacts:
+			for account in gajim.contacts.keys():
+				status_idx = gajim.connections[account].connected
+				if status_idx == 0:
+					continue
+				status = STATUS_LIST[status_idx]
+				message = gajim.connections[account].status
+				single = helpers.get_uf_show(status)
+				if message is None:
+					message = ''
+				else:
+					message = message.strip()
+				if message != '':
+					single += ': ' + message
+				if multiline != '':
+					multilined = True
+				multiline += '\n  ' + account + '\n  \t' + single
+		if multilined:
+			text += multiline
+		elif single != '':
+			text += ' - ' + single
+		else:
+			text += ' - ' + helpers.get_uf_show('offline')
+		
+		# change image and status, only if it is different 
+		if self.status != global_status:
+			self.status = global_status
+			self.set_img()
+		self.tip.set_tip(self.t, text)
+	
 	def start_chat(self, widget, account, jid):
 		if self.plugin.windows[account]['chats'].has_key(jid):
 			self.plugin.windows[account]['chats'][jid].window.present()
@@ -240,6 +269,9 @@ class Systray:
 		return groups_menu
 
 	def on_clicked(self, widget, event):
+		# hide the tooltip
+		self.tip.disable()
+		self.tip.enable()
 		win = self.plugin.roster.window
 		if event.button == 1: # Left click
 			if len(self.jids) == 0:
