@@ -4,6 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
+##  - Dimitur Kirov <dkirov@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -989,7 +990,11 @@ class PopupNotificationWindow:
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			txt = _('From %s') % txt
-	
+		elif event_type in [_('File Completed'), _('File Stopped')]:
+			bg_color = gtk.gdk.color_parse('coral')
+			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
+			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
+			
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
 		self.plugin.roster.popups_notification_height += self.window_height
@@ -1044,12 +1049,25 @@ class PopupNotificationWindow:
 		if self.msg_type == 'normal': # it's single message
 			return # FIXME: I think I should not print here but in new_chat?
 			contact = self.contacts[account][jid][0]
-			dialogs.SingleMessageWindow(self.plugin, self.account, contact,
+			dialogs.SingleMessageWindow(self.plugin, self.account, contact, 
 			action = 'receive', from_whom = jid, subject = subject, message = msg)
 		
 		elif self.msg_type == 'file': # it's file request
 			self.plugin.roster.show_file_request(self.account, contact, 
 				self.file_props)
+		
+		elif self.msg_type == 'file-completed': # it's file request
+			sectext ='\t' + _('File Name: %s') % self.file_props['name'] 
+			sectext +='\n\t' + _('Size: %s') % \
+				gtkgui_helpers.convert_bytes(self.file_props['size'])
+			sectext +='\n\t' +_('Sender: %s') % self.jid
+			InformationDialog(_('File Transfer Completed'), sectext).get_response()
+		
+		elif self.msg_type == 'file-stopped': # it's file request
+			sectext ='\t' + _('File Name: %s') % self.file_props['name']
+			sectext +='\n\t' + _('Sender: %s') % self.jid
+			ErrorDialog(_('File Transfer Stopped by Peer'), \
+				sectext).get_response()
 		
 		else: # 'chat'
 			self.plugin.roster.new_chat(contact, self.account)

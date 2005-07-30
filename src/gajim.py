@@ -8,6 +8,7 @@ exec python -OOt "$0" ${1+"$@"}
 ## - Yann Le Boulanger <asterix@lagaule.org>
 ## - Vincent Hanquez <tab@snarc.org>
 ## - Nikos Kouremenos <kourem@gmail.com>
+## - Dimitur Kirov <dkirov@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -698,18 +699,30 @@ class Interface:
 										
 	def handle_event_file_request(self, account, array):
 		jid = array[0]
-		#~ print 'handle_event_file_request:', jid, gajim.contacts[account]
 		if not gajim.contacts[account].has_key(jid):
 			return
 		file_props = array[1]
-		#~ print 'handle_event_file_request:', array
 		if gajim.config.get('notify_on_new_message'):
 			# check OUR status and if we allow notifications for that status
 			if gajim.config.get('autopopupaway') or \
 				gajim.connections[account].connected in (2, 3): # we're online or chat
-				print 'HERE'
 				instance = dialogs.PopupNotificationWindow(self,
 						_('File Request'), jid, account, 'file', file_props)
+				self.roster.popup_notification_windows.append(instance)
+	
+	def handle_event_file_rcv_completed(self, account, file_props):
+		# it is good to have 'notify_on_new_event'
+		if gajim.config.get('notify_on_new_message'):
+			if gajim.config.get('autopopupaway') or \
+				gajim.connections[account].connected in (2, 3): # we're online or chat
+				if file_props['error'] == 0:
+					msg_type = 'file-completed'
+					event_type = _('File Completed')
+				elif file_props['error'] == -1:
+					msg_type = 'file-stopped'
+					event_type = _('File Stopped')
+				instance = dialogs.PopupNotificationWindow(self, event_type, 
+					file_props['sender'].getStripped(), account, msg_type, file_props)
 				self.roster.popup_notification_windows.append(instance)
 	
 	def read_sleepy(self):	
@@ -878,6 +891,8 @@ class Interface:
 		con.register_handler('BOOKMARKS', self.handle_event_bookmarks)
 		con.register_handler('CON_TYPE', self.handle_event_con_type)
 		con.register_handler('FILE_REQUEST', self.handle_event_file_request)
+		con.register_handler('FILE_RCV_COMPLETED', \
+			self.handle_event_file_rcv_completed)
 
 	def process_connections(self):
 		try:

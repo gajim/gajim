@@ -1324,7 +1324,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def show_file_request(self, account, contact, file_props):
 		if file_props is None or not file_props.has_key('name'):
 			return
-		sec_text = _('\tFile: %s') % file_props['name']
+		sec_text = '\t' + _('File: %s') % file_props['name']
 		if file_props.has_key('size'):
 			sec_text += '\n\t' + _('Size: %s') % \
 				gtkgui_helpers.convert_bytes(file_props['size'])
@@ -1349,6 +1349,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			else:
 				gajim.connections[account].send_file_rejection(file_props)
 			dialog.destroy()
+		else:
+			gajim.connections[account].send_file_rejection(file_props)
+			
 
 	def new_chat(self, user, account):
 		if gajim.config.get('usetabbedchat'):
