@@ -20,8 +20,11 @@
 
 
 import socket
-import select 
-import fcntl
+import select
+try:
+	import fcntl
+except:
+	pass
 import struct
 import sha
 
@@ -133,7 +136,8 @@ class Socks5:
 			
 	def disconnect(self):
 		''' Closes the socket. '''
-		fcntl.fcntl(self._sock, fcntl.F_SETFL, 0);
+		if 'fcntl' in globals():
+			fcntl.fcntl(self._sock, fcntl.F_SETFL, 0);
 		self._sock.close()
 		self.connected = False
 		
@@ -245,7 +249,8 @@ class Socks5Receiver(Socks5):
 	def disconnect(self):
 		''' Closes the socket. '''
 		# close connection and remove us from the queue
-		fcntl.fcntl(self._sock, fcntl.F_SETFL, 0);
+		if 'fcntl' in globals():
+			fcntl.fcntl(self._sock, fcntl.F_SETFL, 0);
 		self._sock.close()
 		self.connected = False
 		if self.queue is not None:
