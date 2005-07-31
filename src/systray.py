@@ -52,7 +52,6 @@ class Systray:
 		self.jids = []
 		self.new_message_handler_id = None
 		self.t = None
-		#~ self.tip = gtk.Tooltips()
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
@@ -85,8 +84,6 @@ class Systray:
 					if jid != 'tabbed':
 						nb += jids[jid].nb_unread[jid]
 
-		self.set_tooltip(nb) # update the tooltip
-
 	def remove_jid(self, jid, account):
 		l = [account, jid]
 		if l in self.jids:
@@ -100,41 +97,13 @@ class Systray:
 				for jid in self.plugin.windows[acct][kind]:
 					if jid != 'tabbed':
 						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
-		
-		self.set_tooltip(nb) # update the tooltip
 	
-	def change_status(self, global_status = None):
-		''' change the tooltip text and set tray image to 'global_status' '''
-		text, single, multiline, multilined = 'Gajim', '', '', False
-		if gajim.contacts:
-			for account in gajim.contacts.keys():
-				status_idx = gajim.connections[account].connected
-				if status_idx == 0:
-					continue
-				status = STATUS_LIST[status_idx]
-				message = gajim.connections[account].status
-				single = helpers.get_uf_show(status)
-				if message is None:
-					message = ''
-				else:
-					message = message.strip()
-				if message != '':
-					single += ': ' + message
-				if multiline != '':
-					multilined = True
-				multiline += '\n  ' + account + '\n  \t' + single
-		if multilined:
-			text += multiline
-		elif single != '':
-			text += ' - ' + single
-		else:
-			text += ' - ' + helpers.get_uf_show('offline')
-		
+	def change_status(self, global_status):
+		''' set tray image to 'global_status' '''
 		# change image and status, only if it is different 
 		if global_status is not None and self.status != global_status:
 			self.status = global_status
 		self.set_img()
-		#~ self.tip.set_tip(self.t, text)
 	
 	def start_chat(self, widget, account, jid):
 		if self.plugin.windows[account]['chats'].has_key(jid):
@@ -271,9 +240,7 @@ class Systray:
 		return groups_menu
 
 	def on_clicked(self, widget, event):
-		# hide the tooltip
-		#~ self.tip.disable()
-		#~ self.tip.enable()
+		self.on_tray_leave_notify_event(widget, None)
 		win = self.plugin.roster.window
 		if event.button == 1: # Left click
 			if len(self.jids) == 0:
@@ -349,20 +316,12 @@ class Systray:
 			eb.connect('motion-notify-event', self.on_tray_motion_notify_event)
 			eb.connect('leave-notify-event', self.on_tray_leave_notify_event)
 			self.tooltip = dialogs.NotificationAreaTooltip(self.plugin)
-			#~ self.set_tooltip()
+
 			self.img_tray = gtk.Image()
 			eb.add(self.img_tray)
 			self.t.add(eb)
 			self.set_img()
 		self.t.show_all()
-	
-	def set_tooltip(self, unread_messages_no=None):
-		if unread_messages_no > 1:
-			text = _('Gajim - %s unread messages') % unread_messages_no
-		elif unread_messages_no == 1:
-			text = _('Gajim - 1 unread message')
-		else: # it's None or 0
-			self.change_status()
 	
 	def hide_icon(self):
 		if self.t:
