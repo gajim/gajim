@@ -623,9 +623,17 @@ class StatusTable:
 		if status:
 			status = status.strip()
 			if status != '':
+				status = self.strip_text(status, 50)
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)
-		
+	
+	# "Pan Taduesz; Ksiega I" problem, reported by koorek
+	def strip_text(self, text, max_length):
+		text = text.strip()
+		if len(text) > max_length:
+				text = text[:max_length - 3] + '...'
+		return text
+	
 	def add_status_row(self, file_path, show, str_status):
 		''' appends a new row with status icon to the table '''
 		self.current_row += 1
@@ -700,9 +708,11 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				iconset = 'sun'
 			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			for acct in accounts:
+				mesage = gtkgui_helpers.escape_for_pango_markup(acct['message'])
+				mesage = self.strip_text(mesage, 50)
 				self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
 					gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>' 
-					+ ' - ' + gtkgui_helpers.escape_for_pango_markup(acct['message']))
+					+ ' - ' + mesage)
 					
 		elif len(accounts) == 1:
 			text = _('Gajim - %s') % accounts[0]['status_line']
