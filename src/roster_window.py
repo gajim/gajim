@@ -1258,12 +1258,13 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		'''When we change our status'''
 		model = self.status_combobox.get_model()
 		active = self.status_combobox.get_active()
-		if active < 0:
+		if active == -1: # no active item
 			return
 		accounts = gajim.connections.keys()
 		if len(accounts) == 0:
-			dialogs.ErrorDialog(_('No accounts created'),
-				_('You must create Jabber account before connecting the server.')).get_response()
+			dialogs.ErrorDialog(_('No account available'),
+		_('You must create an account before you can chat with other contacts.')
+		).get_response()
 			self.update_status_comboxbox()
 			return
 		status = model[active][2]
