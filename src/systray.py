@@ -4,6 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
+##  - Dimitur Kirov <dkirov@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -19,6 +20,7 @@
 
 import gtk
 import gtk.glade
+import gobject
 import dialogs
 import os
 
@@ -50,7 +52,7 @@ class Systray:
 		self.jids = []
 		self.new_message_handler_id = None
 		self.t = None
-		self.tip = gtk.Tooltips()
+		#~ self.tip = gtk.Tooltips()
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
@@ -132,7 +134,7 @@ class Systray:
 		if global_status is not None and self.status != global_status:
 			self.status = global_status
 		self.set_img()
-		self.tip.set_tip(self.t, text)
+		#~ self.tip.set_tip(self.t, text)
 	
 	def start_chat(self, widget, account, jid):
 		if self.plugin.windows[account]['chats'].has_key(jid):
@@ -270,8 +272,8 @@ class Systray:
 
 	def on_clicked(self, widget, event):
 		# hide the tooltip
-		self.tip.disable()
-		self.tip.enable()
+		#~ self.tip.disable()
+		#~ self.tip.enable()
 		win = self.plugin.roster.window
 		if event.button == 1: # Left click
 			if len(self.jids) == 0:
@@ -310,15 +312,44 @@ class Systray:
 		l = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'offline']
 		index = l.index(show)
 		self.plugin.roster.status_combobox.set_active(index)
-
+	
+	def show_tooltip(self, widget):
+		position = widget.window.get_origin()
+		if self.tooltip.id == position:
+			size = widget.window.get_size()
+			self.tooltip.show_tooltip('', 
+				(widget.window.get_pointer()[0], size[1]), position)
+			
+	def on_tray_motion_notify_event(self, widget, event):
+		wireq=widget.size_request()
+		position = widget.window.get_origin()
+		if self.tooltip.timeout > 0:
+			if self.tooltip.id != position:
+				self.tooltip.hide_tooltip()
+		if self.tooltip.timeout == 0 and \
+			self.tooltip.id != position:
+			self.tooltip.id = position
+			self.tooltip.timeout = gobject.timeout_add(500,
+				self.show_tooltip, widget)
+	
+	def on_tray_leave_notify_event(self, widget, event):
+		position = widget.window.get_origin()
+		if self.tooltip.timeout > 0 and \
+			self.tooltip.id == position:
+			self.tooltip.hide_tooltip()
+		
 	def show_icon(self):
 		if not self.t:
 			self.t = trayicon.TrayIcon('Gajim')
 			eb = gtk.EventBox()
 			# avoid draw seperate bg color in some gtk themes
 			eb.set_visible_window(False)
+			eb.set_events(gtk.gdk.POINTER_MOTION_MASK)
 			eb.connect('button-press-event', self.on_clicked)
-			self.set_tooltip()
+			eb.connect('motion-notify-event', self.on_tray_motion_notify_event)
+			eb.connect('leave-notify-event', self.on_tray_leave_notify_event)
+			self.tooltip = dialogs.NotificationAreaTooltip(self.plugin)
+			#~ self.set_tooltip()
 			self.img_tray = gtk.Image()
 			eb.add(self.img_tray)
 			self.t.add(eb)
@@ -326,14 +357,10 @@ class Systray:
 		self.t.show_all()
 	
 	def set_tooltip(self, unread_messages_no=None):
-		# we look for the number of unread messages
-		# and we set the appropriate tooltip
 		if unread_messages_no > 1:
 			text = _('Gajim - %s unread messages') % unread_messages_no
-			self.tip.set_tip(self.t, text)
 		elif unread_messages_no == 1:
 			text = _('Gajim - 1 unread message')
-			self.tip.set_tip(self.t, text)
 		else: # it's None or 0
 			self.change_status()
 	

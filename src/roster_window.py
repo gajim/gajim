@@ -642,11 +642,14 @@ class RosterWindow:
 	def show_tooltip(self, contact):
 		pointer = self.tree.get_pointer()
 		props = self.tree.get_path_at_pos(pointer[0], pointer[1])
-		if props and self.tooltip.path == props[0]:
+		if props and self.tooltip.id == props[0]:
 			# check if the current pointer is at the same path
 			# as it was before setting the timeout
-			self.tooltip.show_tooltip(contact, self.window.get_pointer(),
-				self.window.get_position())
+			rect =  self.tree.get_cell_area(props[0],props[1])
+			position = self.tree.window.get_origin()
+			pointer = self.window.get_pointer()
+			self.tooltip.show_tooltip(contact, (pointer[0], rect.height ),
+				 (position[0], position[1] + rect.y))
 		else:
 			self.tooltip.hide_tooltip()
 
@@ -654,14 +657,14 @@ class RosterWindow:
 		model = widget.get_model()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))
 		if self.tooltip.timeout > 0:
-			if not props or self.tooltip.path == props[0]:
+			if not props or self.tooltip.id == props[0]:
 				self.tooltip.hide_tooltip()
 
 	def on_roster_treeview_motion_notify_event(self, widget, event):
 		model = widget.get_model()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))
 		if self.tooltip.timeout > 0:
-			if not props or self.tooltip.path != props[0]:
+			if not props or self.tooltip.id != props[0]:
 				self.tooltip.hide_tooltip()
 		if props:
 			[row, col, x, y] = props
@@ -670,8 +673,8 @@ class RosterWindow:
 				account = model[iter][4]
 				jid = model[iter][3]
 				img = model[iter][0]
-				if self.tooltip.timeout == 0 or self.tooltip.path != props[0]:
-					self.tooltip.path = row
+				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+					self.tooltip.id = row
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, gajim.contacts[account][jid])
 
