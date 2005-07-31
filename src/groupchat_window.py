@@ -571,6 +571,7 @@ class GroupchatWindow(chat.Chat):
 		message_buffer = message_textview.get_buffer()
 		if message != '' or message != '\n':
 			self.save_sent_message(room_jid, message)
+			
 			if message in ['/clear', '/clear ']:
 				self.on_clear(None, conversation_textview) # clear conversation
 				self.on_clear(None, message_textview) # clear message textview too
@@ -623,6 +624,13 @@ class GroupchatWindow(chat.Chat):
 				else:
 					 # print it as green text
 					self.print_conversation(self.subjects[room_jid], room_jid)
+				return # don't print the command
+			
+			elif message.startswith('/leave') or message.startswith('/part')\
+				or message.startswith('/close'):
+				# close current tab
+				room_jid = self.get_active_jid()
+				self.remove_tab(room_jid)
 				return # don't print the command
 			
 			elif message.startswith('/ban '): #eg. /ban fooman he was a bad boy
@@ -903,10 +911,10 @@ class GroupchatWindow(chat.Chat):
 
 	def remove_tab(self, room_jid):
 		if time.time() - gajim.last_message_time[self.account][room_jid] < 2:
+			name = gajim.get_nick_from_jid(room_jid)
 			dialog = dialogs.ConfirmationDialog(
-				_('You just received a new message in room "%s"'),
-				_('If you close this tab, the message will be lost.') % \
-				room_jid.split('@')[0])
+				_('You just received a new message in room "%s"') % name,
+				_('If you close this tab, the message will be lost.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 
