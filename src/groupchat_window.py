@@ -45,8 +45,8 @@ class GroupchatWindow(chat.Chat):
 		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
 		
 		# alphanum sorted
-		self.muc_cmds = ['ban', 'chat', 'clear', 'compact', 'kick', 
-			'me', 'msg', 'nick',	'topic']
+		self.muc_cmds = ['ban', 'chat', 'clear', 'close', 'compact', 'kick', 
+			'leave', 'me', 'msg', 'nick', 'part', 'topic']
 		
 		self.nicks = {} # our nick for each groupchat we are in
 		gajim.gc_contacts[account] = {} # contact instances for each room
@@ -626,9 +626,13 @@ class GroupchatWindow(chat.Chat):
 					self.print_conversation(self.subjects[room_jid], room_jid)
 				return # don't print the command
 			
+			#FIXME: we lack /join to adhere to JEP
+			
 			elif message.startswith('/leave') or message.startswith('/part')\
 				or message.startswith('/close'):
 				# close current tab
+				#FIXME: accept optional reason (pas in status msg for this room)
+				# see JEP
 				room_jid = self.get_active_jid()
 				self.remove_tab(room_jid)
 				return # don't print the command
