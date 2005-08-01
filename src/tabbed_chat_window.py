@@ -497,6 +497,11 @@ class TabbedChatWindow(chat.Chat):
 			
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 
+		if contact is None:
+			# contact was from pm in MUC, and left the room so contact is None
+			# so we cannot send chatstate anymore
+			return
+
 		if contact.chatstate is False: # jid cannot do jep85
 			return
 
