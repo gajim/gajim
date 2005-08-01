@@ -997,16 +997,16 @@ class Connection:
 		if show == 'online':
 			sshow = None
 		signed = ''
+		if not msg:
+			lowered_uf_status_msg = helpers.get_uf_show(show).lower()
+			msg = _("I'm %s") % lowered_uf_status_msg
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if keyID and USE_GPG:
 			if self.connected < 2 and self.gpg.passphrase is None:
 				# We didn't set a passphrase
 				self.dispatch('ERROR', (_('OpenPGP Key was not given'),
 					_('You will be connected to %s without OpenPGP.') % self.name))
-			if self.connected >= 2:
-				if not msg:
-					lowered_uf_status_msg = helpers.get_uf_show(show).lower()
-					msg = _("I'm %s") % lowered_uf_status_msg
+			else:
 				signed = self.gpg.sign(msg, keyID)
 				if signed == 'BAD_PASSPHRASE':
 					signed = ''
