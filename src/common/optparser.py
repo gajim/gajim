@@ -2,7 +2,7 @@
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
-## - Nikos Kouremenos <kourem@gmail.com>
+##  - Nikos Kouremenos <kourem@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -18,6 +18,13 @@
 
 import os
 from common import gajim
+from common import i18n
+from gtk import glade
+i18n.init()
+_ = i18n._
+APP = i18n.APP
+glade.bindtextdomain(APP, i18n.DIR)
+glade.textdomain(APP)
 
 class OptionsParser:
 	def __init__(self, filename):
@@ -45,7 +52,7 @@ class OptionsParser:
 			fd = open(self.__filename)
 		except:
 			if os.path.exists(self.__filename):
-				print 'error: cannot open %s for reading\n' % (self.__filename)
+				print _('error: cannot open %s for reading\n') % (self.__filename)
 			return
 
 		for line in fd.readlines():
@@ -66,10 +73,30 @@ class OptionsParser:
 		fd.write(s + " = " + str(value[1]) + "\n")
 	
 	def write(self):
+		(base_dir, filename) = os.path.split(self.__filename)
+		self.__tempfile = os.path.join(base_dir, '.'+filename)
 		try:
-			fd = open(self.__filename, 'w')
+			fd = open(self.__tempfile, 'w')
 		except:
-			print 'error: cannot open %s for writing\n' % (self.__filename)
-			return
-		gajim.config.foreach(self.write_line, fd)
+			err_str = _('Unable to write file in %s\n') % (base_dir)
+			print err_str
+			return err_str
+		try:
+			gajim.config.foreach(self.write_line, fd)
+		except IOError, e:
+			print e, dir(e), e.errno
+			if e.errno == 28:
+				err_str = _('No space left on device.')
+			else:
+				err_str = e
+			print err_str
+			fd.close()
+			return err_str
 		fd.close()
+		try:
+			os.rename(self.__tempfile, self.__filename)
+		except:
+			err_str = _('Unable to open %s for writing\n') % (self.__filename)
+			return err_str
+		return None
+		

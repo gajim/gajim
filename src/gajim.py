@@ -911,7 +911,11 @@ class Interface:
 		return False
 
 	def save_config(self):
-		parser.write()
+		err_str = parser.write()
+		if err_str is not None:
+			dialogs.ErrorDialog(_('Cannot save your preferences'), 
+				err_str).get_response()
+			sys.exit(2)
 
 	def enable_dbus(self):
 		if 'remote_control' not in globals():
