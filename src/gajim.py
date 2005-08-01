@@ -32,7 +32,6 @@ except RuntimeError, msg:
 		print 'Gajim needs Xserver to run. Exiting...'
 		sys.exit()
 		
-import gtk.glade
 import gobject
 import os
 import sre
@@ -44,9 +43,6 @@ import gtkgui_helpers
 from common import i18n
 i18n.init()
 _ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
 
 import common.sleepy
 import check_for_new_version
