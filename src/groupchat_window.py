@@ -373,14 +373,23 @@ class GroupchatWindow(chat.Chat):
 	def set_subject(self, room_jid, subject):
 		self.subjects[room_jid] = subject
 		name_label = self.name_labels[room_jid]
-		if len(subject) > 100:
-			subject = subject[:97] + "..."
+		full_subject = None
+
+		if gtk.gtk_version < (2, 6, 0) or gtk.pygtk_version < (2, 6, 0):
+			# long subject makes window bigger than the screen
+			# FIXME: check and do the same if we have more than one \n
+			if len(subject) > 80:
+				full_subject = subject
+				subject = subject[:77] + '...'
+				
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
-		# long subject makes window bigger than the screen
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (room_jid, subject))
 		event_box = name_label.get_parent()
 		if subject == '':
 			subject = _('This room has no subject')
+
+		if full_subject is not None:
+			subject = full_subject # tooltip must always hold ALL the subject
 		self.subject_tooltip[room_jid].set_tip(event_box, subject)
 
 	def on_change_subject_menuitem_activate(self, widget):
