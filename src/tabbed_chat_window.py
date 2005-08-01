@@ -567,7 +567,7 @@ class TabbedChatWindow(chat.Chat):
 
 			chatstate_to_send = None
 			
-			if chatstates_on: # if we have them one
+			if chatstates_on and contact is not None:
 				if contact.chatstate is None:
 					# no info about peer
 					# send active to discover chat state capabilities
