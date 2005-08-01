@@ -816,7 +816,7 @@ class Interface:
 		# so http://be) will match http://be and http://be)be) will match http://be)be
 		links = r'\bhttp://\S*[^\s)?!,.;]|' r'\bhttps://\S*[^\s)?!,.;]|' r'\bnews://\S*[^\s)?!,.;]|' r'\bftp://\S*[^\s)?!,.;]|' r'\bed2k://\S*[^\s)?!,.;]|' r'\bwww\.\S*[^\s)?!,.;]|' r'\bftp\.\S*[^\s)?!,.;]|'
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
-		mail = r'\bmailto:\S*[^\s)?!,.;]|' r'\b\S+@\S+\.\S*[^\s)?]|'
+		mail = r'\bmailto:\S*[^\s)?!,.;:]|' r'\b\S+@\S+\.\S*[^\s)?!,.;:]|'
 
 		#detects eg. *b* *bold* *bold bold* test *bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
@@ -835,7 +835,7 @@ class Interface:
 															sre.IGNORECASE)
 		
 		# at least one character in 3 parts (before @, after @, after .)
-		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?:]')
+		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?]')
 
 	def on_launch_browser_mailer(self, widget, url, kind):
 		self.launch_browser_mailer(kind, url)
