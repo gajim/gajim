@@ -95,7 +95,7 @@ class EditGroupsDialog:
 		model = self.list.get_model()
 		if model[path][1] and len(self.user.groups) == 1: # we try to remove 
 																		  # the last group
-			ErrorDialog(_("Can't remove last group"),
+			ErrorDialog(_('Cannot remove last group'),
 					_('At least one contact group must be present.')).get_response()
 			return
 		model[path][1] = not model[path][1]
@@ -934,9 +934,9 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
-			title = _('Join Groupchat as %s') % our_jid
+			title = _('Join Group Chat as %s') % our_jid
 		else:
-			title = _('Join Groupchat')
+			title = _('Join Group Chat')
 		self.window.set_title(title)
 
 		self.recently_combobox = self.xml.get_widget('recently_combobox')
@@ -1044,7 +1044,7 @@ _('Without a connection, you can not change your password.')).get_response()
 					continue
 				password2 = self.password2_entry.get_text()
 				if password1 != password2:
-					ErrorDialog(_("Passwords don't match."),
+					ErrorDialog(_('Passwords do not match'),
 							_('The passwords typed in both fields must be identical.')).get_response()
 					continue
 				message = password1
@@ -1095,12 +1095,12 @@ class PopupNotificationWindow:
 			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			txt = _('From %s') % txt
-		elif event_type == _('File Request'):
+		elif event_type == _('File Trasfer Request'):
 			bg_color = gtk.gdk.color_parse('coral')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			txt = _('From %s') % txt
-		elif event_type in [_('File Completed'), _('File Stopped')]:
+		elif event_type in [_('File Transfer Completed'), _('File Transfer Stopped')]:
 			bg_color = gtk.gdk.color_parse('coral')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
@@ -1166,17 +1166,17 @@ class PopupNotificationWindow:
 			self.plugin.windows['file_transfers'].show_file_request(
 				self.account, contact, self.file_props)
 		
-		elif self.msg_type == 'file-completed': # it's file request
-			sectext ='\t' + _('File Name: %s') % self.file_props['name'] 
-			sectext +='\n\t' + _('Size: %s') % \
+		elif self.msg_type == 'file-completed': # it's file request # FIXME: comment
+			sectext = '\t' + _('Filename: %s') % self.file_props['name'] 
+			sectext += '\n\t' + _('Size: %s') % \
 				gtkgui_helpers.convert_bytes(self.file_props['size'])
-			sectext +='\n\t' +_('Sender: %s') % self.jid
-			InformationDialog(_('File Transfer Completed'), sectext).get_response()
+			sectext += '\n\t' +_('Sender: %s') % self.jid
+			InformationDialog(_('File transfer completed'), sectext).get_response()
 		
-		elif self.msg_type == 'file-stopped': # it's file request
-			sectext ='\t' + _('File Name: %s') % self.file_props['name']
-			sectext +='\n\t' + _('Sender: %s') % self.jid
-			ErrorDialog(_('File Transfer Stopped by Peer'), \
+		elif self.msg_type == 'file-stopped': # it's file request # FIXME: comment
+			sectext = '\t' + _('Filename: %s') % self.file_props['name']
+			sectext += '\n\t' + _('Sender: %s') % self.jid
+			ErrorDialog(_('File transfer stopped by the contact of the other side'), \
 				sectext).get_response()
 		
 		else: # 'chat'
@@ -1340,7 +1340,21 @@ class XMLConsoleWindow:
 			gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
 		self.input_textview.modify_text(
 			gtk.STATE_NORMAL, gtk.gdk.color_parse('green'))
-
+		
+		
+		#st = self.input_textview.get_style()
+		
+		
+		#style = gtk.Style()
+		#style.font_desc = st.font_desc
+		
+		#self.input_textview.set_name('input')
+		#s = '''\
+style "console" { GtkTextView::cursor-color="%s" }
+#widget "*.*.input" style : application "console"''' % '#FFFFFF'
+		#gtk.rc_parse_string(s)
+		
+		
 		self.stanzas_log_textview.modify_base(
 			gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
 		self.stanzas_log_textview.modify_text(
@@ -1457,10 +1471,10 @@ class FileTransfersWindow:
 			sec_text += '\n\t' + _('Type: %s') % file_props['mime-type']
 		if file_props.has_key('desc'):
 			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
-		prim_text = _(' %s wants to send you file') % contact.jid
+		prim_text = _('%s wants to send you a file:') % contact.jid
 		dialog = ConfirmationDialog(prim_text, sec_text)
 		if dialog.get_response() == gtk.RESPONSE_OK:
-			dialog = gtk.FileChooserDialog(title=_('Save File As...'), 
+			dialog = gtk.FileChooserDialog(title=_('Save File as...'), 
 				action=gtk.FILE_CHOOSER_ACTION_SAVE, 
 				buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
 				gtk.STOCK_SAVE, gtk.RESPONSE_OK))

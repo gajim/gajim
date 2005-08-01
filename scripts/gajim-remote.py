@@ -102,7 +102,7 @@ given account'), False)
 xa, dnd, invisible '), True), 
 						(_('message'), _('status message'), False), 
 						(_('account'), _('change status of account "account". \
-If not specified try to change status of all accounts that \
+If not specified, try to change status of all accounts that \
 have "sync with global status" option set'), False)
 					]
 				],
@@ -113,21 +113,21 @@ contact'),
 						('jid', _('jid of the contact that you want to chat \
 with'),
 							True), 
-						(_('account'), _('if specified contact is taken from \
+						(_('account'), _('if specified, contact is taken from \
 the contact list of this account'), False)
 					]
 				],
 			'send_message':[
-					_('Send new message to a contact in the roster. Both pgp \
+					_('Send new message to a contact in the roster. Both OpenPGP \
 key and account are optional. If you want to set only \'account\', whitout \
 \'pgp key\', just set \'pgp key\' to \'\'.'), 
 					[
 						('jid', _('jid of the contact that will receive the \
 message'), True),
 						(_('message'), _('message contents'), True),
-						(_('pgp key'), _('if specified the message will be \
+						(_('pgp key'), _('if specified, the message will be \
 encrypted using this pulic key'), False),
-						(_('account'), _('if specified the message will be \
+						(_('account'), _('if specified, the message will be \
 sent using this account'), False),
 					]
 				], 
@@ -241,7 +241,7 @@ Please specify account for sending the message.') % sys.argv[2])
 			for argument in command_props[1]:
 				str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
 			return str
-		self.send_error(_(' %s not found') % command)
+		self.send_error(_('%s not found') % command)
 			
 	def compose_help(self):
 		''' print usage, and list available commands '''

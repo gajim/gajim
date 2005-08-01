@@ -332,11 +332,11 @@ class Connection:
 			self.dispatch('SUBSCRIBED', (jid.getStripped().encode('utf8'),
 				jid.getResource().encode('utf8')))
 			#BE CAREFUL: no con.updateRosterItem() in a callback
-			gajim.log.debug(_('we are now subscribed to %s') % who)
+			gajim.log.debug(_('you are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
 			gajim.log.debug(_('unsubscribe request from %s') % who)
 		elif ptype == 'unsubscribed':
-			gajim.log.debug(_('we are now unsubscribed from %s') % who)
+			gajim.log.debug(_('you are now unsubscribed from %s') % who)
 			self.dispatch('UNSUBSCRIBED', prs.getFrom().getStripped())
 		elif ptype == 'error':
 			errmsg = prs.getError()

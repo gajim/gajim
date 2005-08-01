@@ -4,7 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
-##  - Dimitur Kirov <dkirov@gmail.com>
+##	- Dimitur Kirov <dkirov@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -51,7 +51,7 @@ class SocksQueue:
 		self.idx += 1
 		result = sock5_receiver.connect()
 		self.connected += 1
-		# we don;t need blocking sockets anymore
+		# we don't need blocking sockets anymore
 		# this unblocks ui! 
 		sock5_receiver._sock.setblocking(False)
 		return result
