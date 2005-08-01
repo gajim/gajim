@@ -627,7 +627,7 @@ class StatusTable:
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)
 	
-	# "Pan Taduesz; Ksiega I" problem, reported by koorek
+	# "too long status make the tooltip large than the screen" problem, reported by koorek
 	def strip_text(self, text, max_length):
 		text = text.strip()
 		if len(text) > max_length:
