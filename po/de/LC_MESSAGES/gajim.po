@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-01 18:46+0300\n"
+"POT-Creation-Date: 2005-08-02 01:34+0300\n"
 "PO-Revision-Date: 2005-06-01 18:11+0200\n"
 "Last-Translator: Christoph Neuroth <delmonico@gmx.net>\n"
 "Language-Team: German\n"
@@ -365,7 +365,7 @@ msgid "JID: <i>%s</i>"
 msgstr "JID: <i>%s</i> "
 
 #: ../src/dialogs.py:96
-msgid "Can't remove last group"
+msgid "Cannot remove last group"
 msgstr ""
 
 #: ../src/dialogs.py:97
@@ -489,11 +489,12 @@ msgstr ""
 
 #: ../src/dialogs.py:933
 #, fuzzy, python-format
-msgid "Join Groupchat as %s"
+msgid "Join Group Chat as %s"
 msgstr "Betrete Chatraum als"
 
-#: ../src/dialogs.py:935
-msgid "Join Groupchat"
+#: ../src/dialogs.py:935 ../src/gtkgui.glade.h:145
+#, fuzzy
+msgid "Join Group Chat"
 msgstr "Betrete Chatraum"
 
 #: ../src/dialogs.py:998
@@ -539,7 +540,7 @@ msgid "You must enter a password."
 msgstr "Sie müssen verbunden sein, um Ihr Passwort zu ändern"
 
 #: ../src/dialogs.py:1043
-msgid "Passwords don't match."
+msgid "Passwords do not match."
 msgstr ""
 
 #: ../src/dialogs.py:1044
@@ -565,21 +566,23 @@ msgstr "Eingehende Nachricht:"
 msgid "From %s"
 msgstr ""
 
-#: ../src/dialogs.py:1094 ../src/gajim.py:706
-msgid "File Request"
-msgstr ""
+#: ../src/dialogs.py:1094
+#, fuzzy
+msgid "File Trasfer Request"
+msgstr "_Transport-Symbole verwenden"
 
 #: ../src/dialogs.py:1099 ../src/gajim.py:725
-msgid "File Completed"
+msgid "File Transfer Completed"
 msgstr ""
 
 #: ../src/dialogs.py:1099 ../src/gajim.py:728
-msgid "File Stopped"
-msgstr ""
+#, fuzzy
+msgid "File Transfer Stopped"
+msgstr "_Transport-Symbole verwenden"
 
 #: ../src/dialogs.py:1166 ../src/dialogs.py:1173
 #, fuzzy, python-format
-msgid "File Name: %s"
+msgid "Filename: %s"
 msgstr "_Name: "
 
 #: ../src/dialogs.py:1167 ../src/dialogs.py:1462
@@ -593,11 +596,12 @@ msgid "Sender: %s"
 msgstr "_Ablehnen"
 
 #: ../src/dialogs.py:1170
-msgid "File Transfer Completed"
-msgstr ""
+#, fuzzy
+msgid "File transfer completed"
+msgstr "_Transport-Symbole verwenden"
 
 #: ../src/dialogs.py:1175
-msgid "File Transfer Stopped by Peer"
+msgid "File transfer stopped by the contact of the other side"
 msgstr ""
 
 #: ../src/dialogs.py:1255
@@ -670,11 +674,11 @@ msgstr "Abonnement:"
 
 #: ../src/dialogs.py:1468
 #, python-format
-msgid " %s wants to send you file"
+msgid "%s wants to send you a file:"
 msgstr ""
 
 #: ../src/dialogs.py:1471
-msgid "Save File As..."
+msgid "Save File as..."
 msgstr ""
 
 #: ../src/dialogs.py:1553
@@ -745,15 +749,21 @@ msgid "The account \"%s\" has been registered with the Jabber server."
 msgstr ""
 
 #: ../src/gajim.py:659
-msgid "Your GPG passphrase is incorrect"
-msgstr ""
+#, fuzzy
+msgid "Your passphrase is incorrect"
+msgstr "_Passphrase speichern (unsicher)"
 
 #: ../src/gajim.py:660
 #, fuzzy
-msgid "You are currently connected without your GPG key."
+msgid "You are currently connected without your OpenPGP key."
 msgstr ""
 "Die GPG Passphrase ist falsch, daher wurden Sie ohne ihren GPG-Schlüssel "
 "verbunden"
+
+#: ../src/gajim.py:706
+#, fuzzy
+msgid "File Transfer Request"
+msgstr "_Transport-Symbole verwenden"
 
 #: ../src/gajim.py:922
 msgid "Cannot save your preferences"
@@ -1254,7 +1264,7 @@ msgstr "Ich würde dich gerne zu meiner Liste hinzufügen."
 
 #: ../src/common/connection.py:339
 #, fuzzy, python-format
-msgid "we are now subscribed to %s"
+msgid "you are now subscribed to %s"
 msgstr "%s hat das Abonement beendet"
 
 #: ../src/common/connection.py:341
@@ -1264,7 +1274,7 @@ msgstr "Abonnement-Anforderung von %s"
 
 #: ../src/common/connection.py:343
 #, fuzzy, python-format
-msgid "we are now unsubscribed from %s"
+msgid "you are now unsubscribed from %s"
 msgstr "%s hat das Abonement beendet"
 
 #: ../src/common/connection.py:380
@@ -2072,11 +2082,6 @@ msgstr "Jabber"
 #: ../src/gtkgui.glade.h:144
 msgid "Jabber ID:"
 msgstr "Jabber-ID:"
-
-#: ../src/gtkgui.glade.h:145
-#, fuzzy
-msgid "Join Group Chat"
-msgstr "Betrete Chatraum"
 
 #: ../src/gtkgui.glade.h:146
 #, fuzzy
@@ -3051,7 +3056,7 @@ msgstr "Status-Nachricht:"
 
 #: gajim-remote.py:104
 msgid ""
-"change status of account \"account\". If not specified try to change status "
+"change status of account \"account\". If not specified, try to change status "
 "of all accounts that have \"sync with global status\" option set"
 msgstr ""
 
@@ -3065,7 +3070,7 @@ msgid "jid of the contact that you want to chat with"
 msgstr "Bitte füllen Sie die Daten für Ihr neues Konto aus"
 
 #: gajim-remote.py:116
-msgid "if specified contact is taken from the contact list of this account"
+msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
 
 #: gajim-remote.py:121
@@ -3091,11 +3096,11 @@ msgid "pgp key"
 msgstr ""
 
 #: gajim-remote.py:128
-msgid "if specified the message will be encrypted using this pulic key"
+msgid "if specified, the message will be encrypted using this pulic key"
 msgstr ""
 
 #: gajim-remote.py:130
-msgid "if specified the message will be sent using this account"
+msgid "if specified, the message will be sent using this account"
 msgstr ""
 
 #: gajim-remote.py:135
@@ -3167,6 +3172,9 @@ msgid ""
 "Argument \"%s\" is not specified. \n"
 "Type \"%s help %s\" for more info"
 msgstr ""
+
+#~ msgid "Join Groupchat"
+#~ msgstr "Betrete Chatraum"
 
 #, fuzzy
 #~ msgid "sync with global status"
