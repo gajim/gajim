@@ -37,7 +37,6 @@ _ = i18n._
 i18n.init()
 
 
-
 try:
 	import dbus
 except:
