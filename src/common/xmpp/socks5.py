@@ -38,12 +38,16 @@ class SocksQueue:
 		self.idx = 0
 		self.complete_transfer_cb = complete_transfer_cb
 		self.progress_transfer_cb = progress_transfer_cb
+		
+	def start_listener(self):
+		Socks5Sender()
 	
-	def add_receiver(self, sock5_receiver):
+	def add_receiver(self, account, sock5_receiver):
 		''' add new file request '''
 		self.readers[self.idx] = sock5_receiver
 		sock5_receiver.queue_idx = self.idx
 		sock5_receiver.queue = self
+		sock5_receiver.account = account
 		self.idx += 1
 		result = sock5_receiver.connect()
 		self.connected += 1
@@ -52,16 +56,20 @@ class SocksQueue:
 		sock5_receiver._sock.setblocking(False)
 		return result
 	
-	def add_file_props(self, file_props):
+	def add_file_props(self, account, file_props):
 		if file_props is None or \
 			file_props.has_key('sid') is False:
 			return
 		id = file_props['sid']
-		self.files_props[id] = file_props
+		if not self.files_props.has_key(account):
+			self.files_props[account] = {}
+		self.files_props[account][id] = file_props
 		
-	def get_file_props(self, id):
-		if self.files_props.has_key(id):
-			return self.files_props[id]
+	def get_file_props(self, account, id):
+		if self.files_props.has_key(account):
+			fl_props = self.files_props[account]
+		if fl_props.has_key(id):
+			return fl_props[id]
 		return None
 
 	def process(self, timeout=0):
@@ -75,10 +83,12 @@ class SocksQueue:
 					result = receiver.get_file_contents(timeout)
 					if result in [0, -1] and \
 						self.complete_transfer_cb is not None:
-						self.complete_transfer_cb(receiver.file_props)
+						self.complete_transfer_cb(receiver.account, 
+							receiver.file_props)
 					
 					elif self.progress_transfer_cb is not None:
-						self.progress_transfer_cb(receiver.file_props)
+						self.progress_transfer_cb(receiver.account, 
+							receiver.file_props)
 			else:
 				self.remove_receiver(idx)
 		
@@ -97,6 +107,7 @@ class Socks5:
 		self.target = target
 		self.sid = sid
 		self._sock = None
+		self.account = None
 	
 	def connect(self):
 		self._sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -150,6 +161,15 @@ class Socks5:
 			return False
 		try:
 			return select.select([self._sock],[],[],timeout)[0]
+		except:
+			return False
+			
+	def pending_connection(self,timeout=0):
+		''' Returns true if there is a data ready to be read. '''
+		if self._sock is None:
+			return False
+		try:
+			return select.select([],[self._sock],[],timeout)[0]
 		except:
 			return False
 	
@@ -207,6 +227,21 @@ class Socks5:
 	
 	def _get_sha1_auth(self):
 		return sha.new("%s%s%s" % (self.sid, self.initiator, self.target)).hexdigest()
+
+class Socks5Listener:
+	def __init__(self, host, port):
+		self.host, self.port
+		self.queue_idx = -1	
+		self.queue = None
+		
+		def bind(self):
+			self._serv=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+			self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+			self._serv.bind((self.host, self.port))
+			self._serv.listen(socket.SOMAXCONN)
+			self.connected = False
 		
 class Socks5Receiver(Socks5):
 	def __init__(self, host, port, initiator, target, sid, file_props = None):
@@ -273,3 +308,4 @@ class Socks5Receiver(Socks5):
 		self.file_props['disconnect_cb'] = None
 		if self.queue is not None:
 			self.queue.remove_receiver(self.queue_idx)
+

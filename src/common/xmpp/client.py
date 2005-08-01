@@ -148,6 +148,13 @@ class CommonClient:
         self.Dispatcher.restoreHandlers(handlerssave)
         return self.connected
 
+    def get_peerhost(self):
+        ''' get the ip address of the account, from which is made connection 
+        to the server , (e.g. me).
+        We will create listening socket on the same ip '''
+        if self.Connection:
+            return self.Connection._sock.getsockname()
+
     def connect(self,server=None,proxy=None, ssl=None):
         """ Make a tcp/ip connection, protect it with tls/ssl if possible and start XMPP stream. """
         if not server: server=(self.Server,self.Port)
