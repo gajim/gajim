@@ -623,7 +623,9 @@ class StatusTable:
 		if status:
 			status = status.strip()
 			if status != '':
-				status = self.strip_text(status, 50)
+				if gtk.gtk_version < (2, 6, 0) or gtk.pygtk_version < (2, 6, 0):
+					# FIXME: check and do the same if we have more than one \n 
+					status = self.strip_text(status, 50)
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)
 	
@@ -1628,7 +1630,7 @@ class FileTransfersWindow:
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if self.is_transfer_paused(file_props):
 			file_props['paused'] = False
-			types = {'r':'download', 's':'upload'}
+			types = {'r' : 'download', 's' : 'upload'}
 			self.set_status(file_props['type'], file_props['sid'], types[sid[0]])
 			widget.set_label(_('Pause'))
 		elif self.is_transfer_active(file_props):
