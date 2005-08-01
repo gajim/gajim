@@ -373,7 +373,10 @@ class GroupchatWindow(chat.Chat):
 	def set_subject(self, room_jid, subject):
 		self.subjects[room_jid] = subject
 		name_label = self.name_labels[room_jid]
+		if len(subject) > 100:
+			subject = subject[:97] + "..."
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
+		# long subject makes window bigger than the screen
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (room_jid, subject))
 		event_box = name_label.get_parent()
 		if subject == '':
