@@ -1003,7 +1003,7 @@ class Connection:
 				# We didn't set a passphrase
 				self.dispatch('ERROR', (_('OpenPGP Key was not given'),
 					_('You will be connected to %s without OpenPGP.') % self.name))
-			if self.connected >= 2
+			if self.connected >= 2:
 				if not msg:
 					lowered_uf_status_msg = helpers.get_uf_show(show).lower()
 					msg = _("I'm %s") % lowered_uf_status_msg
