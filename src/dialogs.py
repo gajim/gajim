@@ -534,7 +534,7 @@ class BaseTooltip:
 		self.id = None
 		
 	def populate(self, data):
-		''' this method must be overridenby all extenders '''
+		''' this method must be overriden by all extenders '''
 		self.create_window()
 		self.win.add(gtk.Label(data))
 		
@@ -621,7 +621,7 @@ class StatusTable:
 		self.table.attach(self.text_lable, 1, 4, 1, 2)
 		
 	def get_status_info(self, resource, priority, show, status):
-		str_status = resource + ' ('+str(priority)+')'
+		str_status = resource + ' (' + str(priority) + ')'
 		if status:
 			status = status.strip()
 			if status != '':
@@ -631,7 +631,7 @@ class StatusTable:
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)
 	
-	# "too long status make the tooltip large than the screen" problem, reported by koorek
+	# fix "too long status make the tooltip large than the screen" problem
 	def strip_text(self, text, max_length):
 		text = text.strip()
 		if len(text) > max_length:
@@ -670,8 +670,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		self.plugin = plugin
 		BaseTooltip.__init__(self)
 		StatusTable.__init__(self)
-		
-		
+
 	def populate(self, data):
 		self.create_window()
 		self.create_table()
@@ -696,8 +695,8 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				# the other solution is to hide offline accounts
 				elif status == 'offline':
 					message = helpers.get_uf_show(status)
-				accounts.append({'name':account, 'status_line':single_line, 
-						'show':status, 'message':message})
+				accounts.append({'name': account, 'status_line': single_line, 
+						'show': status, 'message': message})
 		unread_messages_no = self.plugin.roster.nb_unread
 		if unread_messages_no > 1:
 			text = _('Gajim - %s unread messages') % unread_messages_no
@@ -1039,7 +1038,7 @@ _('Without a connection, you can not change your password.')).get_response()
 			if rep == gtk.RESPONSE_OK:
 				password1 = self.password1_entry.get_text()
 				if not password1:
-					ErrorDialog(_('Invalid password.'),
+					ErrorDialog(_('Invalid password'),
 							_('You must enter a password.')).get_response()
 					continue
 				password2 = self.password2_entry.get_text()
@@ -1350,7 +1349,7 @@ class XMLConsoleWindow:
 		
 		#self.input_textview.set_name('input')
 		#s = '''\
-style "console" { GtkTextView::cursor-color="%s" }
+#style "console" { GtkTextView::cursor-color="%s" }
 #widget "*.*.input" style : application "console"''' % '#FFFFFF'
 		#gtk.rc_parse_string(s)
 		
