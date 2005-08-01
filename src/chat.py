@@ -320,6 +320,8 @@ class Chat:
 					gajim.config.set('gc-width', width)
 					gajim.config.set('gc-height', height)
 
+			# FIXME: if we're here the del in 10 lines will not be called!
+			# maybe mem leak?
 			self.window.destroy()
 			return
 		if self.nb_unread[jid] > 0:
