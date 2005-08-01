@@ -211,7 +211,7 @@ Please specify account for sending the message.') % sys.argv[2])
 		else:
 			send_error(_('Unknow dbus version: %s') % _version)
 		# get the function asked
-		self.method = self.interface.__getattr__(self.command) 
+		self.method = eval('self.interface.'+self.command) 
 		
 	def make_arguments_row(self, args):
 		''' return arguments list. Mandatory arguments are enclosed with:
