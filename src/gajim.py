@@ -812,11 +812,11 @@ class Interface:
 		# and mathces beginning of lines so we have correct formatting detection
 		# even if the the text is just '*foo*'
 		# (?!\S) is the same thing but it's a lookahead assertion
-		# \S*[^\s)?!,.;] --> in the matching string don't match ? or ) etc.. if at the end
+		# \S*[^\s\W] --> in the matching string don't match ? or ) etc.. if at the end
 		# so http://be) will match http://be and http://be)be) will match http://be)be
-		links = r'\bhttp://\S*[^\s)?!,.;]|' r'\bhttps://\S*[^\s)?!,.;]|' r'\bnews://\S*[^\s)?!,.;]|' r'\bftp://\S*[^\s)?!,.;]|' r'\bed2k://\S*[^\s)?!,.;]|' r'\bwww\.\S*[^\s)?!,.;]|' r'\bftp\.\S*[^\s)?!,.;]|'
+		links = r'\bhttp://\S*[^\s\W]|' r'\bhttps://\S*[^\s\W]|' r'\bnews://\S*[^\s\W]|' r'\bftp://\S*[^\s\W]|' r'\bed2k://\S*[^\s\W]|' r'\bwww\.\S*[^\s\W]|' r'\bftp\.\S*[^\s\W]|'
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
-		mail = r'\bmailto:\S*[^\s)?!,.;:]|' r'\b\S+@\S+\.\S*[^\s)?!,.;:]|'
+		mail = r'\bmailto:\S*[^\s\W]|' r'\b\S+@\S+\.\S*[^\s\W]|'
 
 		#detects eg. *b* *bold* *bold bold* test *bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
