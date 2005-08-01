@@ -896,10 +896,9 @@ class Interface:
 		con.register_handler('BOOKMARKS', self.handle_event_bookmarks)
 		con.register_handler('CON_TYPE', self.handle_event_con_type)
 		con.register_handler('FILE_REQUEST', self.handle_event_file_request)
-		con.register_handler('FILE_RCV_COMPLETED', \
+		con.register_handler('FILE_RCV_COMPLETED', 
 			self.handle_event_file_rcv_completed)
-		con.register_handler('FILE_PROGRESS', \
-			self.handle_event_file_progress)
+		con.register_handler('FILE_PROGRESS', self.handle_event_file_progress)
 
 	def process_connections(self):
 		try:
