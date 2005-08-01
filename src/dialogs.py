@@ -1155,12 +1155,12 @@ class PopupNotificationWindow:
 		if self.msg_type == 'normal': # it's single message
 			return # FIXME: I think I should not print here but in new_chat?
 			contact = self.contacts[account][jid][0]
-			dialogs.SingleMessageWindow(self.plugin, self.account, contact, 
+			SingleMessageWindow(self.plugin, self.account, contact, 
 			action = 'receive', from_whom = jid, subject = subject, message = msg)
 		
 		elif self.msg_type == 'file': # it's file request
-			self.plugin.roster.show_file_request(self.account, contact, 
-				self.file_props)
+			self.plugin.windows['file_transfers'].show_file_request(
+				self.account, contact, self.file_props)
 		
 		elif self.msg_type == 'file-completed': # it's file request
 			sectext ='\t' + _('File Name: %s') % self.file_props['name'] 
@@ -1383,3 +1383,275 @@ class XMLConsoleWindow:
 		# remove us from open windows
 		del self.plugin.windows[self.account]['xml_console']
 		widget.destroy()
+		
+class FileTransfersWindow:
+	def __init__(self, plugin):
+		self.files_props = {'r':{},'s':{}}
+		self.plugin = plugin
+		self.last_save_dir = None
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_window', APP)
+		self.window = self.xml.get_widget('file_transfers_window')
+		self.tree = self.xml.get_widget('transfers_list')
+		self.stop_button = self.xml.get_widget('stop_button')
+		self.pause_button = self.xml.get_widget('pause_restore_button')
+		self.notify_ft_checkbox = \
+			self.xml.get_widget('notify_ft_complete_checkbox')
+		notify = gajim.config.get('notify_on_file_complete')
+		if notify:
+			self.notify_ft_checkbox.set_active(1)
+		else:
+			self.notify_ft_checkbox.set_active(0)
+		self.model = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, str, str)
+		self.tree.set_model(self.model)
+		col = gtk.TreeViewColumn()
+		
+		render_pixbuf = gtk.CellRendererPixbuf()
+		
+		col.pack_start(render_pixbuf, expand = True)
+		render_pixbuf.set_property('xpad', 3)
+		render_pixbuf.set_property('ypad', 3)
+		render_pixbuf.set_property('yalign', .0)
+		#~ render_pixbuf.set_property('stock-size', gtk.ICON_SIZE_MENU)
+		col.add_attribute(render_pixbuf, "pixbuf", 0)
+		self.tree.append_column(col)
+		
+		col = gtk.TreeViewColumn(_('File'))
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, expand=False)
+		col.add_attribute(renderer, 'markup' , 1)
+		renderer.set_property('yalign', 0.)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, expand=True)
+		col.add_attribute(renderer, 'markup' , 2)
+		renderer.set_property('xalign', 0.)
+		renderer.set_property('yalign', 0.)
+		col.set_expand(True)
+		self.tree.append_column(col)
+		
+		col = gtk.TreeViewColumn(_('Progress'))
+		renderer = gtk.CellRendererText()
+		renderer.set_property('yalign', 0.)
+		renderer.set_property('xalign', 0.)
+		col.pack_start(renderer, expand = True)
+		col.set_expand(False)
+		col.add_attribute(renderer, 'text' , 3)
+		self.tree.append_column(col)
+		self.set_images()
+		self.tree.get_selection().set_select_function(self.select_func)
+		self.xml.signal_autoconnect(self)
+		
+	
+		
+	def show_file_request(self, account, contact, file_props):
+		if file_props is None or not file_props.has_key('name'):
+			return
+		sec_text = '\t' + _('File: %s') % file_props['name']
+		if file_props.has_key('size'):
+			sec_text += '\n\t' + _('Size: %s') % \
+				gtkgui_helpers.convert_bytes(file_props['size'])
+		if file_props.has_key('mime-type'):
+			sec_text += '\n\t' + _('Type: %s') % file_props['mime-type']
+		if file_props.has_key('desc'):
+			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
+		prim_text = _(' %s wants to send you file') % contact.jid
+		dialog = ConfirmationDialog(prim_text, sec_text)
+		if dialog.get_response() == gtk.RESPONSE_OK:
+			dialog = gtk.FileChooserDialog(title=_('Save File As...'), 
+				action=gtk.FILE_CHOOSER_ACTION_SAVE, 
+				buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
+				gtk.STOCK_SAVE, gtk.RESPONSE_OK))
+			dialog.set_current_name(file_props['name'])
+			dialog.set_default_response(gtk.RESPONSE_OK)
+			if self.last_save_dir and os.path.exists(self.last_save_dir) \
+				and os.path.isdir(self.last_save_dir):
+				dialog.set_current_folder(self.last_save_dir)
+			response = dialog.run()
+			if response == gtk.RESPONSE_OK:
+				file_path = dialog.get_filename()
+				(file_dir, file_name) = os.path.split(file_path)
+				if file_dir:
+					self.last_save_dir = file_dir
+				file_props['file-name'] = file_path
+				self.add_transfer(account, contact, file_props)
+				gajim.connections[account].send_file_approval(file_props)
+			else:
+				gajim.connections[account].send_file_rejection(file_props)
+			dialog.destroy()
+		else:
+			gajim.connections[account].send_file_rejection(file_props)
+	
+	def set_images(self):
+		self.images = {}
+		self.images['upload'] = self.window.render_icon(gtk.STOCK_GO_UP, 
+			gtk.ICON_SIZE_MENU)
+		self.images['download'] = self.window.render_icon(gtk.STOCK_GO_DOWN, 
+			gtk.ICON_SIZE_MENU)
+		self.images['stop'] = self.window.render_icon(gtk.STOCK_STOP, 
+			gtk.ICON_SIZE_MENU)
+		self.images['waiting'] = self.window.render_icon(gtk.STOCK_REFRESH, 
+			gtk.ICON_SIZE_MENU)
+		self.images['pause'] = self.window.render_icon(gtk.STOCK_MEDIA_PAUSE, 
+			gtk.ICON_SIZE_MENU)
+		self.images['ok'] = self.window.render_icon(gtk.STOCK_APPLY, 
+			gtk.ICON_SIZE_MENU)
+			
+			
+	
+	def set_status(self, typ, sid, status):
+		iter = self.get_iter_by_sid(typ, sid)
+		if iter is not None:
+			self.model.set(iter, 0, self.images[status])
+			
+	def set_progress(self, typ, sid, transfered_size, iter = None):
+		if not self.files_props[typ].has_key(sid):
+			return
+		file_props = self.files_props[typ][sid]
+		full_size = int(file_props['size'])
+		if full_size == 0:
+			percent = 0
+		else:
+			percent = round(float(transfered_size) / full_size * 100)
+		if iter is None:
+			iter = self.get_iter_by_sid(typ, sid)
+		if iter is not None:
+			text = str(percent) + '%\n' 
+			if transfered_size == 0:
+				text += '0'
+			else:
+				text += gtkgui_helpers.convert_bytes(transfered_size)
+			text += '/' + gtkgui_helpers.convert_bytes(full_size)
+			self.model.set(iter, 3, text)
+			if percent == 100:
+				self.set_status(typ, sid, 'ok')
+		
+	def get_iter_by_sid(self, typ, sid):
+		iter = self.model.get_iter_root()
+		while iter:
+			if typ + sid == self.model.get_value(iter, 4):
+				return iter
+			iter = self.model.iter_next(iter)
+		return None
+		
+	def add_transfer(self, account, contact, file_props):
+		if file_props is None:
+			return
+		self.files_props[file_props['type']][file_props['sid']] = file_props
+		iter = self.model.append()
+		text_labels = '<b>' + _('Name: ') + '</b>\n' 
+		text_labels += '<b>' + _('Sender: ') + '</b>' 
+		text_props = file_props['name'] + '\n'
+		text_props += contact.name
+		self.model.set(iter, 1, text_labels, 2, text_props, 4, \
+			file_props['type'] + file_props['sid'])
+		self.set_progress(file_props['type'], file_props['sid'], 0, iter)
+		self.set_status(file_props['type'], file_props['sid'], 'download')
+		self.window.show_all()
+	
+	
+	def on_transfers_list_enter_notify_event(self, widget, event):
+		pass
+	
+	def on_transfers_list_leave_notify_event(self, widget, event):
+		pass
+	
+	def on_transfers_list_row_activated(self, widget, path, col):
+		# try to open the file
+		pass
+		
+	def is_transfer_paused(self, file_props):
+		if file_props.has_key('error') and file_props['error'] != 0:
+			return False
+		if file_props['completed'] or file_props['disconnect_cb'] is None:
+			return False
+		return file_props['paused']
+		
+	def is_transfer_active(self, file_props):
+		if file_props.has_key('error') and file_props['error'] != 0:
+			return False
+		if file_props['completed'] or file_props['disconnect_cb'] is None:
+			return False
+		return not file_props['paused']
+		
+	def is_transfer_stoped(self, file_props):
+		if file_props.has_key('error') and file_props['error'] != 0:
+			return True
+		if file_props['completed']:
+			return True
+		if file_props.has_key('disconnect_cb') and \
+			file_props['disconnect_cb'] is not None:
+			return False
+		return True
+	
+	def select_func(self, path):
+		is_selected = False
+		current_iter = self.model.get_iter(path)
+		selected = self.tree.get_selection().get_selected()
+		if selected[1] != None:
+			selected_path = self.model.get_path(selected[1])
+			if selected_path == path:
+				is_selected = True
+		sid = self.model[current_iter][4]
+		file_props = self.files_props[sid[0]][sid[1:]]
+		if self.is_transfer_stoped(file_props):
+			is_selected = True
+		self.stop_button.set_property('sensitive', not is_selected)
+		if is_selected:
+			self.pause_button.set_property('sensitive', False)
+		else:
+			if self.is_transfer_active(file_props):
+				self.pause_button.set_property('sensitive', True)
+				self.pause_button.set_label(_('_Pause'))
+			elif self.is_transfer_paused(file_props):
+				self.pause_button.set_property('sensitive', True)
+				self.pause_button.set_label(_('_Continue'))
+			else:
+				self.pause_button.set_property('sensitive', False)
+			
+		return True
+	def on_clean_button_clicked(self, widget):
+		selected = self.tree.get_selection().get_selected()
+		if selected is None or selected[1] is None:
+			return 
+		s_iter = selected[1]
+		sid = self.model[s_iter][4]
+		file_props = self.files_props[sid[0]][sid[1:]]
+		if not self.is_transfer_stoped(file_props):
+			file_props['disconnect_cb']()
+		self.model.remove(s_iter)
+		
+	def on_pause_restore_button_clicked(self, widget):
+		selected = self.tree.get_selection().get_selected()
+		if selected is None or selected[1] is None:
+			return 
+		s_iter = selected[1]
+		sid = self.model[s_iter][4]
+		file_props = self.files_props[sid[0]][sid[1:]]
+		if self.is_transfer_paused(file_props):
+			file_props['paused'] = False
+			types = {'r':'download', 's':'upload'}
+			self.set_status(file_props['type'], file_props['sid'], types[sid[0]])
+			widget.set_label(_('Pause'))
+		elif self.is_transfer_active(file_props):
+			file_props['paused'] = True
+			self.set_status(file_props['type'], file_props['sid'], 'pause')
+			widget.set_label(_('_Continue'))
+		
+	def on_stop_button_clicked(self, widget):
+		selected = self.tree.get_selection().get_selected()
+		if selected is None or selected[1] is None:
+			return 
+		s_iter = selected[1]
+		sid = self.model[s_iter][4]
+		file_props = self.files_props[sid[0]][sid[1:]]
+		if not self.is_transfer_stoped(file_props):
+			file_props['disconnect_cb']()
+		self.set_status(file_props['type'], file_props['sid'], 'stop')
+		
+	def on_notify_ft_complete_checkbox_toggled(self, widget):
+		gajim.config.set('notify_on_file_complete', 
+			widget.get_active())
+		
+	def on_file_transfers_dialog_delete_event(self, widget, event):
+		self.window.hide()
+		return True
+	
