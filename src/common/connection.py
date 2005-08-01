@@ -126,7 +126,7 @@ class Connection:
 			'ACC_OK': [], 'MYVCARD': [], 'OS_INFO': [], 'VCARD': [], 'GC_MSG': [],
 			'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],
 			'ROSTER_INFO': [], 'ERROR_ANSWER': [], 'BOOKMARKS': [], 'CON_TYPE': [],
-			'FILE_REQUEST': [], 'FILE_RCV_COMPLETED': []
+			'FILE_REQUEST': [], 'FILE_RCV_COMPLETED': [], 'FILE_PROGRESS': []
 			}
 		self.name = name
 		self.connected = 0 # offline
@@ -143,7 +143,8 @@ class Connection:
 		self.last_sent = []
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		self.privacy_rules_supported = False
-		self.receiver = socks5.SocksQueue(self.complete_file_transfer)
+		self.receiver = socks5.SocksQueue(self.complete_file_transfer, 
+			self.file_transfer_progress)
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
 			gajim.config.set('usegpg', True)
@@ -428,14 +429,20 @@ class Connection:
 		iq = common.xmpp.Iq(to = frm, typ = 'result', queryNS =\
 			common.xmpp.NS_DISCO, frm = to)
 		iq.setAttr('id', id)
+		query = iq.setTag('query')
 		# bytestream transfers
 		feature = common.xmpp.Node('feature')
-		feature.setNamespace(common.xmpp.NS_SI)
-		iq.addChild(node=feature)
+		feature.setAttr('var', common.xmpp.NS_BYTESTREAM)
+		query.addChild(node=feature)
+		# si methods
+		feature = common.xmpp.Node('feature')
+		feature.setAttr('var', common.xmpp.NS_SI)
+		query.addChild(node=feature)
 		# filetransfers transfers
-		_feature = common.xmpp.Node('feature')
-		_feature.setNamespace(common.xmpp.NS_FILE)
-		iq.addChild(node=_feature)
+		feature = common.xmpp.Node('feature')
+		feature.setAttr('var', common.xmpp.NS_FILE)
+		query.addChild(node=feature)
+		
 		self.to_be_sent.append(iq)
 		raise common.xmpp.NodeProcessed
 		
@@ -449,7 +456,7 @@ class Connection:
 			return
 		feature = si.getTag('feature')
 		file_tag = si.getTag('file')
-		file_props = {}
+		file_props = {'type':'r'}
 		for attribute in file_tag.getAttrs():
 			attribute = attribute.encode('utf-8')
 			if attribute in ['name', 'size', 'hash', 'date']:
@@ -476,6 +483,10 @@ class Connection:
 	def complete_file_transfer(self, file_props):
 		''' file transfer is completed or stopped '''
 		self.dispatch('FILE_RCV_COMPLETED', file_props)
+		
+	def file_transfer_progress(self, file_props):
+		''' file transfer is completed or stopped '''
+		self.dispatch('FILE_PROGRESS', file_props)
 	
 	def send_file_rejection(self, file_props):
 		''' informs sender that we refuse to download the file '''

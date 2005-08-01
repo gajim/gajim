@@ -69,11 +69,14 @@ class SocksQueue:
 		for idx in self.readers.keys():
 			receiver = self.readers[idx]
 			if receiver.connected:
+				if receiver.file_props['paused']:
+					continue
 				if receiver.pending_data():
 					result = receiver.get_file_contents(timeout)
 					if result in [0, -1] and \
 						self.complete_transfer_cb is not None:
 						self.complete_transfer_cb(receiver.file_props)
+					
 					elif self.progress_transfer_cb is not None:
 						self.progress_transfer_cb(receiver.file_props)
 			else:
@@ -164,7 +167,14 @@ class Socks5:
 		addrlen, address, port = 0, 0, 0
 		if address_type == 0x03:
 			addrlen = ord(buff[4])
-			address, port= struct.unpack('!%dsH' % addrlen, buff[5:])
+			address = struct.unpack('!%ds' % addrlen, buff[5:addrlen+5])
+			
+			portlen = len(buff[addrlen+5])
+			if portlen == 1: # Gaim bug :)
+				(port) = struct.unpack('!B', buff[addrlen+5])
+			else: 
+				(port) = struct.unpack('!H', buff[addrlen+5])
+			
 		return (version, command, rsvd, address_type, addrlen, address, port)
 		
 		
@@ -203,6 +213,11 @@ class Socks5Receiver(Socks5):
 		self.queue_idx = -1
 		self.queue = None
 		self.file_props = file_props
+		if file_props:
+			file_props['disconnect_cb'] = self.disconnect
+			file_props['error'] = 0
+			self.file_props['completed'] = False
+			self.file_props['paused'] = False
 		Socks5.__init__(self, host, port, initiator, target, sid)
 	
 	def get_file_contents(self, timeout):
@@ -237,11 +252,13 @@ class Socks5Receiver(Socks5):
 				self.disconnect()
 				self.file_props['error'] = -1
 				return -1
+			
 			if self.file_props['received-len'] == int(self.file_props['size']):
 				# transfer completed
 				fd.close()
 				self.disconnect()
 				self.file_props['error'] = 0
+				self.file_props['completed'] = True
 				return 0
 		# return number of read bytes. It can be used in progressbar
 		return self.file_props['received-len']
@@ -253,5 +270,6 @@ class Socks5Receiver(Socks5):
 			fcntl.fcntl(self._sock, fcntl.F_SETFL, 0);
 		self._sock.close()
 		self.connected = False
+		self.file_props['disconnect_cb'] = None
 		if self.queue is not None:
 			self.queue.remove_receiver(self.queue_idx)
