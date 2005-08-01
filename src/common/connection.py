@@ -34,7 +34,7 @@ import common.xmpp
 from common import helpers
 from common import gajim
 from common import GnuPG
-from xmpp import socks5
+import socks5
 USE_GPG = GnuPG.USE_GPG
 
 from common import i18n
@@ -332,11 +332,11 @@ class Connection:
 			self.dispatch('SUBSCRIBED', (jid.getStripped().encode('utf8'),
 				jid.getResource().encode('utf8')))
 			#BE CAREFUL: no con.updateRosterItem() in a callback
-			gajim.log.debug(_('you are now subscribed to %s') % who)
+			gajim.log.debug(_('we are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
 			gajim.log.debug(_('unsubscribe request from %s') % who)
 		elif ptype == 'unsubscribed':
-			gajim.log.debug(_('you are now unsubscribed from %s') % who)
+			gajim.log.debug(_('we are now unsubscribed from %s') % who)
 			self.dispatch('UNSUBSCRIBED', prs.getFrom().getStripped())
 		elif ptype == 'error':
 			errmsg = prs.getError()
@@ -476,14 +476,6 @@ class Connection:
 		gajim.socks5queue.add_file_props(self.name, file_props)
 		self.dispatch('FILE_REQUEST', (jid, file_props))
 		raise common.xmpp.NodeProcessed
-	
-	def complete_file_transfer(self, file_props):
-		''' file transfer is completed or stopped '''
-		self.dispatch('FILE_RCV_COMPLETED', file_props)
-		
-	def file_transfer_progress(self, file_props):
-		''' file transfer is completed or stopped '''
-		self.dispatch('FILE_PROGRESS', file_props)
 	
 	def send_file_rejection(self, file_props):
 		''' informs sender that we refuse to download the file '''

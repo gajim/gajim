@@ -38,7 +38,7 @@ import sre
 import signal
 import getopt
 import time
-from common.xmpp import socks5
+from common import socks5
 import gtkgui_helpers
 
 from common import i18n
@@ -897,9 +897,6 @@ class Interface:
 		con.register_handler('BOOKMARKS', self.handle_event_bookmarks)
 		con.register_handler('CON_TYPE', self.handle_event_con_type)
 		con.register_handler('FILE_REQUEST', self.handle_event_file_request)
-		con.register_handler('FILE_RCV_COMPLETED', 
-			self.handle_event_file_rcv_completed)
-		con.register_handler('FILE_PROGRESS', self.handle_event_file_progress)
 
 	def process_connections(self):
 		try:
