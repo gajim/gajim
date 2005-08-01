@@ -81,9 +81,9 @@ install:
 	for s in $(SCRIPTS) ; do \
 		BASE=`basename "$$s"`; \
 		if [ $(GAJIM_AP) -ne 0 ] ; then \
-			F=`cat "$$s"`; \
+			F=`cat "$$s" | sed -e 's!LIB!$(LIBDIR)!g'`; \
 		else \
-			F=`cat "$$s" | sed -e 's!PREFIX!$(PREFIX)!g'`; \
+			F=`cat "$$s" | sed -e 's!PREFIX!$(PREFIX)!g' -e 's!LIB!$(LIBDIR)!g'`; \
 		fi; \
 		echo "$$F" > "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 		chmod +x "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \

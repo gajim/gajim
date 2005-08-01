@@ -23,5 +23,5 @@ if [ `id -u` -eq 0 ]; then
 fi
 
 cd PREFIX/share/gajim/scripts
-export PYTHONPATH="$PYTHONPATH:PREFIX/lib/gajim"
+export PYTHONPATH="$PYTHONPATH:PREFIXLIB/gajim"
 python gajim-remote.py $@
