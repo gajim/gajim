@@ -1,4 +1,7 @@
-#!/usr/bin/env python
+#!/bin/sh
+''':'
+exec python -OOt "$0" ${1+"$@"}
+' '''
 ##	scripts/gajim-remote.py
 ##
 ## Gajim Team:
