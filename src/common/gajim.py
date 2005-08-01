@@ -63,6 +63,7 @@ sleeper_state = {} # whether we pass auto away / xa or not
 #'autoxa': autoxa and use sleeper
 status_before_autoaway = {}
 
+socks5quue = None
 
 def get_fjid_from_nick(room_jid, nick):
 	# fake jid is the jid for a contact in a room

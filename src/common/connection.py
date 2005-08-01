@@ -143,8 +143,6 @@ class Connection:
 		self.last_sent = []
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		self.privacy_rules_supported = False
-		self.receiver = socks5.SocksQueue(self.complete_file_transfer, 
-			self.file_transfer_progress)
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
 			gajim.config.set('usegpg', True)
@@ -386,7 +384,8 @@ class Connection:
 		id = str(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
 		sid = str(query.getAttr('sid'))
-		file_props = self.receiver.get_file_props(sid)
+		file_props = gajim.socks5queue.get_file_props(
+			self.name, sid)
 		if file_props is None:
 			return
 			# todo - error
@@ -407,7 +406,7 @@ class Connection:
 			sock5 = socks5.Socks5Receiver(host = streamhost['host'], \
 				port = int(streamhost['port']), initiator = streamhost['jid'], 
 				target = target, sid = sid, file_props = file_props)
-			ret = self.receiver.add_receiver(sock5)
+			ret = gajim.socks5queue.add_receiver(self.name, sock5)
 			if ret is None:
 				continue
 			iq = common.xmpp.Iq(to = streamhost['jid'], typ = 'result', frm = target)
@@ -474,7 +473,7 @@ class Connection:
 		file_props['sender'] = iq_obj.getFrom()
 		file_props['request-id'] = str(iq_obj.getAttr('id'))
 		file_props['sid'] = str(si.getAttr('id'))
-		self.receiver.add_file_props(file_props)
+		gajim.socks5queue.add_file_props(self.name, file_props)
 		self.dispatch('FILE_REQUEST', (jid, file_props))
 		raise common.xmpp.NodeProcessed
 	
@@ -839,6 +838,7 @@ class Connection:
 			p = gajim.config.get_per('accounts', self.name, 'custom_port')
 
 		con_type = con.connect((h, p), proxy = proxy, secure=secur) #FIXME: blocking
+		self.peerhost = con.get_peerhost()
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
 			self.connected = 0
@@ -1507,8 +1507,6 @@ class Connection:
 						return
 				if self.connection:
 					self.connection.Process(timeout)
-				if self.receiver.connected > 0:
-					self.receiver.process(timeout)
 			except:
 				gajim.log.debug(_('error appeared while processing xmpp:'))
 				traceback.print_exc()
