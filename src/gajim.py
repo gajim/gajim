@@ -38,6 +38,7 @@ import sre
 import signal
 import getopt
 import time
+from common.xmpp import socks5
 import gtkgui_helpers
 
 from common import i18n
@@ -910,6 +911,8 @@ class Interface:
 			for account in accounts:
 				if gajim.connections[account].connected:
 					gajim.connections[account].process(0.01)
+				if gajim.socks5queue.connected:
+					gajim.socks5queue.process(0.01)
 			time.sleep(0.01) # so threads in connection.py have time to run
 			return True # renew timeout (loop for ever)
 		except KeyboardInterrupt:
@@ -987,7 +990,9 @@ class Interface:
 			gajim.log.setLevel(gajim.logging.DEBUG)
 		else:
 			gajim.log.setLevel(None)
-		
+		gajim.socks5queue = socks5.SocksQueue(
+			self.handle_event_file_rcv_completed, 
+			self.handle_event_file_progress)
 		for account in gajim.config.get_per('accounts'):
 			gajim.connections[account] = common.connection.Connection(account)
 															
