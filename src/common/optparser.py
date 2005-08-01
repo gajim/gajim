@@ -19,12 +19,7 @@
 import os
 from common import gajim
 from common import i18n
-from gtk import glade
-i18n.init()
 _ = i18n._
-APP = i18n.APP
-glade.bindtextdomain(APP, i18n.DIR)
-glade.textdomain(APP)
 
 class OptionsParser:
 	def __init__(self, filename):
