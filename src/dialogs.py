@@ -689,9 +689,6 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 					message = message.strip()
 				if message != '':
 					single_line += ': ' + message
-				else:
-					message = helpers.get_uf_show(status)
-
 				accounts.append({'name':account, 'status_line':single_line, 
 						'show':status, 'message':message})
 		unread_messages_no = self.plugin.roster.nb_unread

@@ -1006,6 +1006,8 @@ class Connection:
 			else:
 				if not msg:
 					lowered_uf_status_msg = helpers.get_uf_show(show).lower()
+					# FIXME: so, I will have an empty message, not: "I'm online",
+					# because I have a gpg
 					msg = _("I'm %s") % lowered_uf_status_msg
 				signed = self.gpg.sign(msg, keyID)
 				if signed == 'BAD_PASSPHRASE':
