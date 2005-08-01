@@ -333,8 +333,6 @@ class Connection:
 			jid = prs.getFrom()
 			self.dispatch('SUBSCRIBED', (jid.getStripped().encode('utf8'),
 				jid.getResource().encode('utf8')))
-			self.dispatch('UPDUSER', (jid.getStripped().encode('utf8'),
-				jid.getNode(), [_('General')]))
 			#BE CAREFUL: no con.updateRosterItem() in a callback
 			gajim.log.debug(_('we are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
