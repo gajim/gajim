@@ -705,10 +705,19 @@ class Interface:
 				instance = dialogs.PopupNotificationWindow(self,
 						_('File Request'), jid, account, 'file', file_props)
 				self.roster.popup_notification_windows.append(instance)
+	def handle_event_file_progress(self, account, file_props):
+		self.windows['file_transfers'].set_progress(file_props['type'], 
+			file_props['sid'], file_props['received-len'])
 	
 	def handle_event_file_rcv_completed(self, account, file_props):
 		# it is good to have 'notify_on_new_event'
-		if gajim.config.get('notify_on_new_message'):
+		ft = self.windows['file_transfers']
+		if file_props['error'] == 0:
+			ft.set_progress(file_props['type'], file_props['sid'], 
+				file_props['received-len'])
+		else:
+			ft.set_status(file_props['type'], file_props['sid'], 'stop')
+		if gajim.config.get('notify_on_file_complete'):
 			if gajim.config.get('autopopupaway') or \
 				gajim.connections[account].connected in (2, 3): # we're online or chat
 				if file_props['error'] == 0:
@@ -889,6 +898,8 @@ class Interface:
 		con.register_handler('FILE_REQUEST', self.handle_event_file_request)
 		con.register_handler('FILE_RCV_COMPLETED', \
 			self.handle_event_file_rcv_completed)
+		con.register_handler('FILE_PROGRESS', \
+			self.handle_event_file_progress)
 
 	def process_connections(self):
 		try:
@@ -985,6 +996,7 @@ class Interface:
 			gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 			gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
 		self.windows = {'logs':{}}
+		
 		for a in gajim.connections:
 			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
 			gajim.contacts[a] = {}
@@ -1035,6 +1047,7 @@ class Interface:
 		self.init_regexp()
 		
 		# get instances for windows/dialogs that will show_all()/hide()
+		self.windows['file_transfers'] = dialogs.FileTransfersWindow(self)
 		self.windows['preferences'] = config.PreferencesWindow(self)
 		self.windows['add_remove_emoticons'] = \
 			config.ManageEmoticonsWindow(self)
