@@ -89,19 +89,15 @@ class OptionsParser:
 			return err_str
 		fd.close()
 		if os.path.exists(self.__filename):
+			# win32 needs this
 			try:
 				os.remove(self.__filename)
 			except:
 				pass
 		try:
 			os.rename(self.__tempfile, self.__filename)
-		except Exception, e:
+		except:
 			err_str = _('Unable to open %s for writing.\n') % (self.__filename)
-			# write the exception in case the bug continue to exists on
-			# windows
-			# TODO remove the following 2 lines
-			from sys import stderr
-			stderr.write(err_str + str(e) + '\n')
 			return err_str
 		return None
 		
