@@ -740,7 +740,7 @@ class RosterWindow:
 		public_keys['None'] = 'None'
 		instance = dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'),
 			_('Select a key to apply to the contact'), public_keys, keyID)
-		keyID = instance.keyID
+		keyID = instance.run()
 		if keyID is None:
 			return
 		if keyID[0] == 'None':

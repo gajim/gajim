@@ -1365,7 +1365,7 @@ _('There was a problem retrieving your GPG secret keys.')).get_response()
 		secret_keys['None'] = 'None'
 		instance = dialogs.ChooseGPGKeyDialog(_('Passphrase'),
 			_('Choose your OpenPGP key'), secret_keys)
-		keyID = instance.keyID
+		keyID = instance.run()
 		if keyID is None:
 			return
 		checkbutton = self.xml.get_widget('gpg_save_password_checkbutton')

@@ -165,7 +165,6 @@ class ChooseGPGKeyDialog:
 		self.window = xml.get_widget('choose_gpg_key_dialog')
 		self.window.set_title(title_text)
 		self.keys_treeview = xml.get_widget('keys_treeview')
-		self.keyID = None
 		prompt_label = xml.get_widget('prompt_label')
 		prompt_label.set_text(prompt_text)
 		model = gtk.ListStore(str, str)
@@ -178,19 +177,19 @@ class ChooseGPGKeyDialog:
 		self.keys_treeview.insert_column_with_attributes(-1, _('Contact name'),
 			renderer, text = 1)
 		self.fill_tree(secret_keys, selected)
-		
-		xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	def on_choose_gpg_key_dialog_response(self, widget, response_id):
-		'''If OK button was pressed return the selected key'''
-		if response_id == gtk.RESPONSE_OK:
+	def run(self):
+		rep = self.window.run()
+		if rep == gtk.RESPONSE_OK:
 			selection = self.keys_treeview.get_selection()
 			(model, iter) = selection.get_selected()
-			self.keyID = [ model[iter][0], model[iter][1] ]
-
+			keyID = [ model[iter][0], model[iter][1] ]
+		else:
+			keyID = None
 		self.window.destroy()
-	
+		return keyID
+
 	def fill_tree(self, list, selected):
 		model = self.keys_treeview.get_model()
 		for keyID in list.keys():
