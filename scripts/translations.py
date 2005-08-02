@@ -18,8 +18,8 @@ def visit(arg, dirname, names):
 			path_to_po = os.path.join(dirname, 'gajim.po')
 			pos = path_to_po.find('po/') + 3 #3 = len('po/')
 			name = path_to_po[pos:pos+2]
-			if update:
-				os.system('msgmerge -q -U ../po/'+name+'/LC_MESSAGES/gajim.po ../gajim.pot')
+			if update: # update an existing po file)
+				os.system('msgmerge -q -U ../po/'+name+'/LC_MESSAGES/gajim.po ../po/gajim.pot')
 			if stats:
 				print name, 'has now:'
 				os.system('msgfmt --statistics ' + path_to_po)
@@ -29,9 +29,10 @@ def show_help():
 	sys.exit(0)
 
 def update_pot():
+	# create header for glade strings
 	os.system('intltool-extract --type=gettext/glade ../src/gtkgui.glade')
-	os.system('xgettext -k_ -kN_ -o ../gajim.pot ../src/*.py ../src/common/*.py \
-		../src/gtkgui.glade.h gajim-remote.py')
+	# update the pot
+	os.system('make -C ../po/ all')
 	print 'gajim.pot was updated successfully'
 
 if __name__ == '__main__':
