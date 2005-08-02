@@ -1,5 +1,5 @@
 ##	common/i18n.py
-##
+## -*- coding: utf-8 -*-
 ## Gajim Team:
 ##  - Yann Le Boulanger <asterix@lagaule.org>
 ##  - Vincent Hanquez <tab@snarc.org>
@@ -17,8 +17,8 @@
 ## GNU General Public License for more details.
 ##
 
-APP='gajim'
-DIR='../po'
+APP = 'gajim'
+DIR = '../po'
 
 import locale
 import gettext
@@ -36,5 +36,4 @@ def init():
 def _(s):
 	if s == '':
 		return s
-	assert s
 	return _translation.gettext(s)

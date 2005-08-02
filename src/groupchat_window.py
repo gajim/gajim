@@ -30,6 +30,7 @@ import gtkgui_helpers
 from gajim import Contact
 from common import gajim
 from common import helpers
+from gettext import ngettext
 from common import i18n
 
 _ = i18n._
@@ -111,7 +112,6 @@ class GroupchatWindow(chat.Chat):
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
-		stop_propagation = False
 		for room_jid in self.xmls:
 			if time.time() - gajim.last_message_time[self.account][room_jid] < 2:
 				dialog = dialogs.ConfirmationDialog(
@@ -119,39 +119,44 @@ class GroupchatWindow(chat.Chat):
 			_('If you close this window, this message will be lost.')
 					)
 				if dialog.get_response() != gtk.RESPONSE_OK:
-					stop_propagation = True #stop the propagation of the event
-		if not stop_propagation and self.confirm_close:
-			if len(self.xmls) >=2:
-				names = ''
+					dialog.destroy()
+					return True # stop the propagation of the delete event
+		
+		if self.confirm_close:
+			name = ''
+			names = ''
+			if len(self.xmls) >= 2:
 				for room in self.xmls:
 					if names != '':
 						names += ', '
 					names += gajim.get_nick_from_jid(room)
-					pritext = _('Are you sure you want to leave rooms "%s"?') \
-						% names
-					sectext = \
-		_('If you close this window, you will be disconnected from these rooms.')
 			else:
 				name = gajim.get_nick_from_jid(room_jid)
-				pritext = _('Are you sure you want to leave room "%s"?') \
-					% name
-				sectext = \
-		_('If you close this window, you will be disconnected from the room.')
+		
+			pritext = ngettext('Are you sure you want to leave room "%s"?' % name,
+				'Are you sure you want to leave rooms "%s"?' % names, len(self.xmls))
+			
+			sectext = ngettext(
+			'If you close this window, you will be disconnected from this room.',
+			'If you close this window, you will be disconnected from these rooms.',
+				len(self.xmls))
+			
 			dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
 				_('Do not ask me again') )
+			
 			if dialog.get_response() != gtk.RESPONSE_OK:
-				stop_propagation = True 
+				return True  # stop propagation of the delete event
+			
 			if dialog.is_checked():
 				gajim.config.set('confirm_close_muc', False)
-			dialog.destroy()
-		if stop_propagation:
-			return True
+				dialog.destroy()
+
 		for room_jid in self.xmls:
 			gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
 				room_jid, 'offline', 'offline')
 
 		if gajim.config.get('saveposition'):
-		# save window position and size
+			# save window position and size
 			gajim.config.set('gc-hpaned-position', self.hpaned_position)
 			x, y = self.window.get_position()
 			gajim.config.set('gc-x-position', x)

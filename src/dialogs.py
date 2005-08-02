@@ -487,16 +487,12 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 	def __init__(self, pritext, sectext='', checktext = ''):
 		HigDialog.__init__(self, None, pritext, sectext,
 			gtk.STOCK_DIALOG_WARNING, [ [gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL] ])
+		
 		# add ok button manually, because we need to focus on it 
-		ok_button = self.add_button (gtk.STOCK_OK, gtk.RESPONSE_OK)
+		ok_button = self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
 		self.checkbutton = gtk.CheckButton(checktext)
 		self.vbox.pack_start(self.checkbutton, expand=False, fill=True)
 		ok_button.grab_focus()
-	# override this method not to destroy the dialog
-	def get_response(self):
-		self.show_all()
-		response = gtk.Dialog.run(self)
-		return response
 	
 	def is_checked(self):
 		''' Get active state of the checkbutton '''

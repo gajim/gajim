@@ -109,12 +109,12 @@ class Chat:
 		chat = self.names[jid]
 		if len(self.xmls) > 1: # if more than one tab in the same window
 			if self.widget_name == 'tabbed_chat_window':
-				chat = 'Chat'
+				chat = _('Chat')
 			elif self.widget_name == 'groupchat_window':
-				chat = 'Groupchat'
+				chat = _('Group Chat')
 		title = start + chat
 		if len(gajim.connections) >= 2: # if we have 2 or more accounts
-			title = title + _(' (account: ') + self.account + ')'
+			title = title + ' (' + _('account: ') + self.account + ')'
 
 		self.window.set_title(title)
 
