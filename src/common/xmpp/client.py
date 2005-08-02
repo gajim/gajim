@@ -152,7 +152,7 @@ class CommonClient:
         ''' get the ip address of the account, from which is made connection 
         to the server , (e.g. me).
         We will create listening socket on the same ip '''
-        if self.Connection:
+        if hasattr(self, 'Connection'):
             return self.Connection._sock.getsockname()
 
     def connect(self,server=None,proxy=None, ssl=None):
