@@ -123,3 +123,6 @@ def get_resource_from_jid(jid):
 [15:32:54] <asterix> they can have resource if we know the real jid
 [15:33:07] <asterix> and that resource is in contact.resource
 '''
+
+def get_number_of_accounts():
+	return len(connections.keys())
