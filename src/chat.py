@@ -196,6 +196,12 @@ class Chat:
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(jid, self.account)
 
+	def on_send_file_menuitem_activate(self, widget):
+		jid = self.get_active_jid()
+		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
+		self.plugin.windows['file_transfers'].show_file_send_request( 
+			self.account, contact)
+	
 	def on_compact_view_menuitem_activate(self, widget):
 		isactive = widget.get_active()
 		self.set_compact_view(isactive)
@@ -207,7 +213,10 @@ class Chat:
 		if self.widget_name == 'groupchat_window':
 			no_more_than = 6
 		elif self.widget_name == 'tabbed_chat_window':
-			no_more_than = 4
+			no_more_than = 5
+			# FIXME: that is 7 for contact not in the roster..
+			# so loop in all open tabs find if one is 'not in the roster'
+			# etc..
 						
 		if childs_no > no_more_than:
 			# we have switch to which we should remove
@@ -230,8 +239,9 @@ class Chat:
 			elif self.widget_name == 'tabbed_chat_window':
 				menu = self.tabbed_chat_popup_menu
 				childs = menu.get_children()
+				#FIXME: check if gpg capabitlies or else make gpg toggle insensitive it's childs[3]
 				# compact_view_menuitem
-				childs[3].set_active(self.compact_view_current_state)
+				childs[4].set_active(self.compact_view_current_state)
 			menu = self.remove_possible_switch_to_menuitems(menu)
 			
 			# common menuitems (tab switches)
