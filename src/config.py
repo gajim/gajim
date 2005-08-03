@@ -1287,7 +1287,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 		gajim.groups[name] = {}
 		gajim.contacts[name] = {}
 		gajim.gc_contacts[name] = {}
-		gajim.gc_connnected[name] = {}
+		gajim.gc_connected[name] = {}
 		gajim.newly_added[name] = []
 		gajim.to_be_removed[name] = []
 		gajim.nicks[name] = config['name']

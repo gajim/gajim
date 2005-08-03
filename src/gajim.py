@@ -571,8 +571,8 @@ class Interface:
 		gajim.awaiting_messages[name] = {}
 		# disconnect from server - our status in roster is offline
 		gajim.connections[name].connected = 1
-		gajim.connections[name].change_status('offline', None, True)
-		gajim.connections[name].connected = 0
+		gajim.gc_contacts[name] = {}
+		gajim.gc_connected[name] = {}
 		gajim.nicks[name] = array[1]['name']
 		gajim.allow_notifications[name] = False
 		gajim.groups[name] = {}
@@ -583,6 +583,8 @@ class Interface:
 		gajim.encrypted_chats[name] = []
 		gajim.last_message_time[name] = {}
 		gajim.status_before_autoaway[name] = {}
+		gajim.connections[name].change_status('offline', None, True)
+		gajim.connections[name].connected = 0
 		if self.windows.has_key('accounts'):
 			self.windows['accounts'].init_accounts()
 		self.roster.draw_roster()
