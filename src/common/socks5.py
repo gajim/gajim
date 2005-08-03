@@ -47,6 +47,8 @@ class SocksQueue:
 		if self.listener == None:
 			self.listener = Socks5Listener(host, port)
 			self.listener.bind()
+			if self.listener.started is False:
+				return None
 			self.connected += 1
 		return self.listener
 	
@@ -84,8 +86,7 @@ class SocksQueue:
 		if not self.files_props.has_key(account):
 			self.files_props[account] = {}
 		self.files_props[account][id] = file_props
-		
-	def get_file_props(self, account, id):
+	def get_file_props(self, account, sid):
 		if self.files_props.has_key(account):
 			fl_props = self.files_props[account]
 			if fl_props.has_key(id):
@@ -276,7 +277,6 @@ class Socks5:
 	def _get_request_buff(self, msg, command = 0x01):
 		''' Connect request by domain name, 
 		sid sha, instead of domain name (jep 0096) '''
-		#~ msg = self._get_sha1_auth()
 		buff = struct.pack('!BBBBB%dsBB' % len(msg), \
 			0x05, command, 0x00, 0x03, len(msg), msg, 0, 0)
 		return buff
@@ -337,11 +337,13 @@ class Socks5Sender(Socks5):
 					self.state = 4
 					self.fd.close()
 					self.disconnect()
+					self.file_props['error'] = -1
 					return -1
 			self.size += lenn
 			self.file_props['received-len'] = self.size
 			if self.size == int(self.file_props['size']):
 				self.state = 4
+				self.file_props['error'] = 0
 				self.fd.close()
 				self.disconnect()
 				return -1
@@ -370,6 +372,7 @@ class Socks5Sender(Socks5):
 		file_props['started'] = True
 		file_props['completed'] = False
 		file_props['paused'] = False
+		file_props['received-len'] = 0
 		self.pauses = 0
 		self.file_props = file_props
 		self.size = 0
@@ -428,12 +431,15 @@ class Socks5Listener:
 		self._sock = None
 		
 	def bind(self):
-		self._serv=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-		self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-		self._serv.bind((self.host, self.port))
-		self._serv.listen(socket.SOMAXCONN)
+		try:
+			self._serv=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+			self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+			self._serv.bind((self.host, self.port))
+			self._serv.listen(socket.SOMAXCONN)
+		except Exception, (errno, errstr):
+			return None
 		self._serv.setblocking(False)
 		self.started = True
 	
@@ -461,6 +467,7 @@ class Socks5Receiver(Socks5):
 		self.queue = None
 		self.file_props = file_props
 		self.file_props['started'] = True
+		self.connected = False
 		if file_props:
 			file_props['disconnect_cb'] = self.disconnect
 			file_props['error'] = 0

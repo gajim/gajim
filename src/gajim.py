@@ -198,8 +198,18 @@ class Interface:
 		dialogs.InformationDialog(data[0], data[1]).get_response()
 
 	def handle_event_error_answer(self, account, array):
-		#('ERROR_ANSWER', account, (jid_from. errmsg, errcode))
-		jid_from = array[0]
+		id, jid_from, errmsg, errcode = array
+		if str(errcode) == '403' and id:
+			ft = self.windows['file_transfers']
+			if ft.files_props['s'].has_key(id):
+				file_props = ft.files_props['s'][id]
+				file_props['error'] = -1
+				if file_props.has_key('disconnect_cb') and \
+					file_props['disconnect_cb'] is not None:
+					file_props['disconnect_cb']()
+				self.handle_event_file_rcv_completed(account, file_props)
+				return
+		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		if jid_from in self.windows[account]['gc']:
 			self.windows[account]['gc'][jid_from].print_conversation(
 				'Error %s: %s' % (array[2], array[1]), jid_from)

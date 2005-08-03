@@ -351,7 +351,7 @@ class Connection:
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
 					prs.getNewNick()))
 			else:
-				self.dispatch('ERROR_ANSWER', (prs.getFrom().getStripped(), errmsg,
+				self.dispatch('ERROR_ANSWER', ('', prs.getFrom().getStripped(), errmsg,
 																					errcode))
 		if not ptype or ptype == 'unavailable':
 			jid = prs.getFrom()
@@ -861,7 +861,8 @@ class Connection:
 		errmsg = iq_obj.getError()
 		errcode = iq_obj.getErrorCode()
 		jid_from = str(iq_obj.getFrom())
-		self.dispatch('ERROR_ANSWER', (jid_from, errmsg, errcode))
+		id = str(iq_obj.getID())
+		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
 		
 	def _StanzaArrivedCB(self, con, obj):
 		self.last_incoming = time.time()
