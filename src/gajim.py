@@ -714,7 +714,6 @@ class Interface:
 			file_props['sid'], file_props['received-len'])
 	
 	def handle_event_file_rcv_completed(self, account, file_props):
-		# it is good to have 'notify_on_new_event'
 		ft = self.windows['file_transfers']
 		if file_props['error'] == 0:
 			ft.set_progress(file_props['type'], file_props['sid'], 
