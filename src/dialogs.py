@@ -1521,7 +1521,7 @@ class FileTransfersWindow:
 			gtk.ICON_SIZE_MENU)
 		self.images['stop'] = self.window.render_icon(gtk.STOCK_STOP, 
 			gtk.ICON_SIZE_MENU)
-		self.images['waiting'] = self.window.render_icon(gtk.STOCK_REFRESH, 
+		self.images['waiting'] = self.window.render_icon(gtk.STOCK_CONNECT, 
 			gtk.ICON_SIZE_MENU)
 		self.images['pause'] = self.window.render_icon(gtk.STOCK_MEDIA_PAUSE, 
 			gtk.ICON_SIZE_MENU)
@@ -1600,7 +1600,10 @@ class FileTransfersWindow:
 		self.files_props[file_props['type']][file_props['sid']] = file_props
 		iter = self.model.append()
 		text_labels = '<b>' + _('Name: ') + '</b>\n' 
-		text_labels += '<b>' + _('Sender: ') + '</b>' 
+		if file_props['type'] == 'r':
+			text_labels += '<b>' + _('Sender: ') + '</b>' 
+		else:
+			text_labels += '<b>' + _('Recipient: ') + '</b>' 
 		text_props = file_props['name'] + '\n'
 		text_props += contact.name
 		self.model.set(iter, 1, text_labels, 2, text_props, 4, \
@@ -1711,10 +1714,12 @@ class FileTransfersWindow:
 			return 
 		s_iter = selected[1]
 		sid = self.model[s_iter][4]
+		
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if not self.is_transfer_stoped(file_props):
 			file_props['disconnect_cb']()
 		self.set_status(file_props['type'], file_props['sid'], 'stop')
+		self.select_func(self.model.get_path(s_iter))
 		
 	def on_notify_ft_complete_checkbox_toggled(self, widget):
 		gajim.config.set('notify_on_file_complete', 
