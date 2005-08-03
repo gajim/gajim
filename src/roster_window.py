@@ -668,7 +668,12 @@ class RosterWindow:
 				self.tooltip.hide_tooltip()
 		if props:
 			[row, col, x, y] = props
-			iter = model.get_iter(row)
+			iter = None
+			try:
+				iter = model.get_iter(row)
+			except:
+				self.tooltip.hide_tooltip()
+				return
 			if model[iter][2] == 'contact':
 				account = model[iter][4]
 				jid = model[iter][3]
@@ -771,7 +776,11 @@ class RosterWindow:
 
 	def on_send_single_message_menuitem_activate(self, wiget, account, contact):
 		dialogs.SingleMessageWindow(self, account, contact, 'send')
-	
+		
+	def on_send_file_menuitem_activate(self, widget, account, contact):
+		self.plugin.windows['file_transfers'].show_file_send_request( 
+			account, contact)
+		
 	def mk_menu_user(self, event, iter):
 		'''Make contact's popup menu'''
 		model = self.tree.get_model()
@@ -792,16 +801,20 @@ class RosterWindow:
 		edit_groups_menuitem = childs[3]
 		# separator4 goes with assign_openpgp_key_menuitem
 		assign_openpgp_separator = childs[4]
-		assign_openpgp_key_menuitem = childs[5]
+		send_file_menuitem = childs[5]
+		assign_openpgp_key_menuitem = childs[6]
+		
 		#skip a seperator
 		subscription_to_menuitem, subscription_from_menuitem =\
-			childs[7].get_submenu().get_children()
-		add_to_roster_menuitem = childs[8]
-		remove_from_roster_menuitem = childs[9]
+			childs[8].get_submenu().get_children()
+		add_to_roster_menuitem = childs[9]
+		remove_from_roster_menuitem = childs[10]
 		#skip a seperator
-		information_menuitem = childs[11]
-		history_menuitem = childs[12]
+		information_menuitem = childs[12]
+		history_menuitem = childs[13]
 		
+		send_file_menuitem.connect('activate',
+			self.on_send_file_menuitem_activate, account, contact)
 		start_chat_menuitem.connect('activate',
 			self.on_roster_treeview_row_activated, path)
 		send_single_message_menuitem.connect('activate',
