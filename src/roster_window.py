@@ -2029,7 +2029,6 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		self.add_new_contact_handler_id = False
 		self.service_disco_handler_id = False
 		self.new_message_menuitem_handler_id = False
-		self.regroup = 0
 		self.regroup = gajim.config.get('mergeaccounts')
 		#FIXME: When list_accel_closures will be wrapped in pygtk
 		# no need of this variable
