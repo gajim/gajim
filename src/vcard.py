@@ -24,6 +24,8 @@ import base64
 import mimetypes
 import os
 import dialogs
+
+from common import helpers
 from common import gajim
 from common import i18n
 _ = i18n._
@@ -270,7 +272,9 @@ class VcardWindow:
 			+ str(self.contact.priority)
 		if not self.contact.status:
 			self.contact.status = ''
-		stats = self.contact.show # holds show and status message
+		
+		# stats holds show and status message
+		stats = helpers.get_uf_show(self.contact.show)
 		if self.contact.status:
 			stats += ': ' + self.contact.status
 		gajim.connections[self.account].request_os_info(self.contact.jid,
