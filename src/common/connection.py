@@ -494,7 +494,7 @@ class Connection:
 	def send_socks5_info(self, file_props):
 		if type(self.peerhost) != tuple:
 			return
-		port = 8011
+		port = gajim.config.get('file_transfers_port')
 		sha_str = self._get_sha(file_props['sid'], file_props['sender'], 
 			file_props['receiver'])
 		file_props['sha_str'] = sha_str
