@@ -1140,7 +1140,7 @@ class PopupNotificationWindow:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', self.account,
 				'attached_gpg_keys').split()
-			if jid in attached_keys:
+			if self.jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
 				groups = [_('not in the roster')], show = 'not in the roster',
@@ -1405,6 +1405,7 @@ class FileTransfersWindow:
 		self.tree = self.xml.get_widget('transfers_list')
 		self.stop_button = self.xml.get_widget('stop_button')
 		self.pause_button = self.xml.get_widget('pause_restore_button')
+		self.remove_button = self.xml.get_widget('remove_button')
 		self.notify_ft_checkbox = \
 			self.xml.get_widget('notify_ft_complete_checkbox')
 		notify = gajim.config.get('notify_on_file_complete')
@@ -1660,6 +1661,7 @@ class FileTransfersWindow:
 			selected_path = self.model.get_path(selected[1])
 			if selected_path == path:
 				is_selected = True
+		self.remove_button.set_property('sensitive', selected[1] == None)
 		sid = self.model[current_iter][4]
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if self.is_transfer_stoped(file_props):
@@ -1676,7 +1678,6 @@ class FileTransfersWindow:
 				self.pause_button.set_label(_('_Continue'))
 			else:
 				self.pause_button.set_property('sensitive', False)
-			
 		return True
 
 	def on_remove_button_clicked(self, widget):
