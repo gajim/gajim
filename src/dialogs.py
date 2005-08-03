@@ -1398,7 +1398,7 @@ class XMLConsoleWindow:
 		
 class FileTransfersWindow:
 	def __init__(self, plugin):
-		self.files_props = {'r':{},'s':{}}
+		self.files_props = {'r' : {}, 's': {}}
 		self.plugin = plugin
 		self.last_save_dir = None
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_window', APP)
@@ -1451,8 +1451,29 @@ class FileTransfersWindow:
 		self.set_images()
 		self.tree.get_selection().set_select_function(self.select_func)
 		self.xml.signal_autoconnect(self)
-		
 	
+	def show_file_send_request(self, account, contact):
+		dialog = gtk.FileChooserDialog(title=_('Open File...'), 
+			action=gtk.FILE_CHOOSER_ACTION_OPEN, 
+			buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
+			gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		dialog.set_default_response(gtk.RESPONSE_OK)
+		if self.last_save_dir and os.path.exists(self.last_save_dir) \
+			and os.path.isdir(self.last_save_dir):
+			dialog.set_current_folder(self.last_save_dir)
+		file_props = {}
+		response = dialog.run()
+		if response == gtk.RESPONSE_OK:
+			file_path = dialog.get_filename()
+			(file_dir, file_name) = os.path.split(file_path)
+			if file_dir:
+				self.last_save_dir = file_dir
+			file_props = self.get_send_file_props(account, contact, file_path, file_name)
+			dialog.destroy()
+			self.add_transfer(account, contact, file_props)
+			gajim.connections[account].send_file_request(file_props)
+		else:
+			dialog.destroy()
 		
 	def show_file_request(self, account, contact, file_props):
 		if file_props is None or not file_props.has_key('name'):
@@ -1507,8 +1528,6 @@ class FileTransfersWindow:
 		self.images['ok'] = self.window.render_icon(gtk.STOCK_APPLY, 
 			gtk.ICON_SIZE_MENU)
 			
-			
-	
 	def set_status(self, typ, sid, status):
 		iter = self.get_iter_by_sid(typ, sid)
 		if iter is not None:
@@ -1533,6 +1552,15 @@ class FileTransfersWindow:
 				text += gtkgui_helpers.convert_bytes(transfered_size)
 			text += '/' + gtkgui_helpers.convert_bytes(full_size)
 			self.model.set(iter, 3, text)
+			if file_props['type'] == 'r':
+				status = 'download'
+			else:
+				status = 'upload'
+			if file_props.has_key('paused') and file_props['paused'] == True:
+				status = 'pause'
+			if file_props.has_key('connected') and file_props['connected'] == False:
+				status = 'stop'
+			self.model.set(iter, 0, self.images[status])
 			if percent == 100:
 				self.set_status(typ, sid, 'ok')
 		
@@ -1544,6 +1572,27 @@ class FileTransfersWindow:
 			if typ + sid == self.model[iter][4]:
 				return iter
 			iter = self.model.iter_next(iter)
+	def get_sid(self):
+		rng = range(65, 90)
+		rng.extend(range(48, 57))
+		char_sequence = map(lambda e:chr(e), rng)
+		from random import sample
+		return reduce(lambda e1, e2: e1 + e2, 
+				sample(char_sequence, 16))
+	
+	def get_send_file_props(self, account, contact, file_path, file_name):
+		file_props = {'file-name' : file_path, 'name' : file_name, 
+			'type' : 's'}
+		if os.path.exists(file_path) and os.path.isfile(file_path):
+			stat = os.stat(file_path)
+		os.stat(file_path)
+		file_props['size'] = str(stat[6])
+		file_props['sid'] = self.get_sid()
+		file_props['completed'] = False
+		file_props['started'] = False
+		file_props['sender'] = account
+		file_props['receiver'] = contact
+		return file_props
 		
 	def add_transfer(self, account, contact, file_props):
 		if file_props is None:
@@ -1557,7 +1606,13 @@ class FileTransfersWindow:
 		self.model.set(iter, 1, text_labels, 2, text_props, 4, \
 			file_props['type'] + file_props['sid'])
 		self.set_progress(file_props['type'], file_props['sid'], 0, iter)
-		self.set_status(file_props['type'], file_props['sid'], 'download')
+		if file_props.has_key('started') and file_props['started'] is False:
+			status = 'waiting'
+		elif file_props['type'] == 'r':
+			status = 'download'
+		else:
+			status = 'upload'
+		self.set_status(file_props['type'], file_props['sid'], status)
 		self.window.show_all()
 	
 	
@@ -1588,7 +1643,7 @@ class FileTransfersWindow:
 	def is_transfer_stoped(self, file_props):
 		if file_props.has_key('error') and file_props['error'] != 0:
 			return True
-		if file_props['completed']:
+		if file_props.has_key('completed') and file_props['completed']:
 			return True
 		if file_props.has_key('disconnect_cb') and \
 			file_props['disconnect_cb'] is not None:
