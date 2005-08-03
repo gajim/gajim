@@ -141,6 +141,7 @@ class Connection:
 		self.keep_alive_sent = False
 		self.to_be_sent = []
 		self.last_sent = []
+		self.files_props = {}
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		self.privacy_rules_supported = False
 		if USE_GPG:
@@ -387,7 +388,7 @@ class Connection:
 		file_props = gajim.socks5queue.get_file_props(
 			self.name, sid)
 		if file_props is None:
-			return
+			raise common.xmpp.NodeProcessed
 			# todo - error
 		streamhosts=[]
 		for item in query.getChildren():
@@ -417,7 +418,21 @@ class Connection:
 			stream_tag.setAttr('jid', streamhost['jid'])
 			self.to_be_sent.append(iq)
 			raise common.xmpp.NodeProcessed
-
+		
+	def _bytestreamResultCB(self, con, iq_obj):
+		gajim.log.debug('_bytestreamResultCB')
+		frm = str(iq_obj.getFrom())
+		id = str(iq_obj.getAttr('id'))
+		query = iq_obj.getTag('query')
+		streamhost =  query.getTag('streamhost-used')
+		jid = streamhost.getAttr('jid')
+		id = id[3:]
+		if not self.files_props.has_key(id):
+			return
+		file_props = self.files_props[id]
+		gajim.socks5queue.send_file(file_props, self.name)
+		raise common.xmpp.NodeProcessed
+		
 	def _discoGetCB(self, con, iq_obj):
 		''' get disco info '''
 		frm = str(iq_obj.getFrom())
@@ -442,7 +457,65 @@ class Connection:
 		
 		self.to_be_sent.append(iq)
 		raise common.xmpp.NodeProcessed
+	
+	def _siResultCB(self, con, iq_obj):
+		gajim.log.debug('_siResultCB')
+		id = iq_obj.getAttr('id')
+		if not self.files_props.has_key(id):
+			return 
+		file_props = self.files_props[id]
+		if file_props is None:
+			return
+		file_props['receiver'] = str(iq_obj.getFrom())
+		jid = iq_obj.getFrom().getStripped().encode('utf8')
+		si = iq_obj.getTag('si')
+		feature = si.setTag('feature')
+		if feature.getNamespace() != common.xmpp.NS_FEATURE:
+			return
+		form_tag = feature.getTag('x')
+		form = common.xmpp.DataForm(node=form_tag)
+		field = form.getField('stream-method')
+		if field.getValue() != common.xmpp.NS_BYTESTREAM:
+			return
+		self.send_socks5_info(file_props)
+		raise common.xmpp.NodeProcessed
+	
+	def _get_sha(self, sid, initiator, target):
+		import sha
+		return sha.new("%s%s%s" % (sid, initiator, target)).hexdigest()
 		
+	def result_socks5_sid(self, sid, hash_id):
+		if not self.files_props.has_key(sid):
+			return
+		file_props = self.files_props[sid]
+		file_props['hash'] = hash_id
+		return
+	
+	def send_socks5_info(self, file_props):
+		if type(self.peerhost) != tuple:
+			return
+		port = 8011
+		sha_str = self._get_sha(file_props['sid'], file_props['sender'], 
+			file_props['receiver'])
+		file_props['sha_str'] = sha_str
+		listener = gajim.socks5queue.start_listener(self.peerhost[0], port, 
+			sha_str, self.result_socks5_sid, file_props['sid'])
+		if listener == None:
+			return
+		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['receiver']), 
+			typ = 'set')
+		file_props['request-id'] = 'id_' + file_props['sid']
+		iq.setID(file_props['request-id'])
+		query = iq.setTag('query')
+		query.setNamespace(common.xmpp.NS_BYTESTREAM)
+		query.setAttr('mode', 'tcp')
+		query.setAttr('sid', file_props['sid'])
+		streamhost = query.setTag('streamhost')
+		streamhost.setAttr('port', str(port))
+		streamhost.setAttr('host', self.peerhost[0])
+		streamhost.setAttr('jid', str(file_props['sender']))
+		self.to_be_sent.append(iq)
+			
 	def _siSetCB(self, con, iq_obj):
 		gajim.log.debug('_siSetCB')
 		jid = iq_obj.getFrom().getStripped().encode('utf8')
@@ -453,7 +526,7 @@ class Connection:
 			return
 		feature = si.getTag('feature')
 		file_tag = si.getTag('file')
-		file_props = {'type':'r'}
+		file_props = {'type' : 'r'}
 		for attribute in file_tag.getAttrs():
 			attribute = attribute.encode('utf-8')
 			if attribute in ['name', 'size', 'hash', 'date']:
@@ -479,7 +552,7 @@ class Connection:
 	
 	def send_file_rejection(self, file_props):
 		''' informs sender that we refuse to download the file '''
-		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['sender']), \
+		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['sender']), 
 			typ = 'error')
 		iq.setAttr('id', file_props['request-id'])
 		err = common.xmpp.ErrorNode(code = '406', typ = 'auth', name = 'not-acceptable')
@@ -488,7 +561,7 @@ class Connection:
 
 	def send_file_approval(self, file_props):
 		''' comfirm that we want to download the file '''
-		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['sender']), \
+		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['sender']), 
 			typ = 'result')
 		iq.setAttr('id', file_props['request-id'])
 		si = iq.setTag('si')
@@ -502,6 +575,38 @@ class Connection:
 		field = _feature.setField('stream-method')
 		field.delAttr('type')
 		field.setValue('http://jabber.org/protocol/bytestreams')
+		self.to_be_sent.append(iq)
+		
+	def send_file_request(self, file_props):
+		name = gajim.config.get_per('accounts', self.name, 'name')
+		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+		resource = gajim.config.get_per('accounts', self.name, 'resource')
+		frm = name + '@' + hostname + '/' + resource
+		file_props['sender'] = frm
+		fjid = file_props['receiver'].jid + '/' + file_props['receiver'].resource
+		iq = common.xmpp.Protocol(name = 'iq', to = fjid, 
+			typ = 'set')
+		iq.setID(file_props['sid'])
+		self.files_props[file_props['sid']] = file_props
+		si = iq.setTag('si')
+		si.setNamespace(common.xmpp.NS_SI)
+		si.setAttr('profile', common.xmpp.NS_FILE)
+		si.setAttr('id', file_props['sid'])
+		file_tag = si.setTag('file')
+		file_tag.setNamespace(common.xmpp.NS_FILE)
+		file_tag.setAttr('name', file_props['name'])
+		file_tag.setAttr('size', file_props['size'])
+		desc = file_tag.setTag('desc')
+		if file_props.has_key('desc'):
+			desc.setData(file_props['desc'])
+		file_tag.setTag('range')
+		feature = si.setTag('feature')
+		feature.setNamespace(common.xmpp.NS_FEATURE)
+		_feature = common.xmpp.DataForm(typ='form')
+		feature.addChild(node=_feature)
+		field = _feature.setField('stream-method')
+		field.setAttr('type', 'list-single')
+		field.addOption('http://jabber.org/protocol/bytestreams')
 		self.to_be_sent.append(iq)
 		
 	def _rosterSetCB(self, con, iq_obj):
@@ -851,9 +956,13 @@ class Connection:
 			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._siSetCB, 'set', 
 			common.xmpp.NS_SI)
+		con.RegisterHandler('iq', self._siResultCB, 'result', 
+			common.xmpp.NS_SI)
 		con.RegisterHandler('iq', self._discoGetCB, 'get', 
 			common.xmpp.NS_DISCO)
 		con.RegisterHandler('iq', self._bytestreamSetCB, 'set', 
+			common.xmpp.NS_BYTESTREAM)
+		con.RegisterHandler('iq', self._bytestreamResultCB, 'result', 
 			common.xmpp.NS_BYTESTREAM)
 		con.RegisterHandler('iq', self._BrowseResultCB, 'result',
 			common.xmpp.NS_BROWSE)
