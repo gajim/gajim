@@ -1089,7 +1089,7 @@ class PopupNotificationWindow:
 			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			txt = _('From %s') % txt
-		elif event_type == _('File Trasfer Request'):
+		elif event_type == _('File Transfer Request'):
 			bg_color = gtk.gdk.color_parse('coral')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
@@ -1098,7 +1098,6 @@ class PopupNotificationWindow:
 			bg_color = gtk.gdk.color_parse('coral')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
-			
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
 		self.plugin.roster.popups_notification_height += self.window_height
