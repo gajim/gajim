@@ -1537,12 +1537,13 @@ class FileTransfersWindow:
 				self.set_status(typ, sid, 'ok')
 		
 	def get_iter_by_sid(self, typ, sid):
+		'''returns iter to the row, which holds file transfer, identified by the
+		session id'''
 		iter = self.model.get_iter_root()
 		while iter:
-			if typ + sid == self.model.get_value(iter, 4):
+			if typ + sid == self.model[iter][4]:
 				return iter
 			iter = self.model.iter_next(iter)
-		return None
 		
 	def add_transfer(self, account, contact, file_props):
 		if file_props is None:
@@ -1620,7 +1621,8 @@ class FileTransfersWindow:
 				self.pause_button.set_property('sensitive', False)
 			
 		return True
-	def on_clean_button_clicked(self, widget):
+
+	def on_remove_button_clicked(self, widget):
 		selected = self.tree.get_selection().get_selected()
 		if selected is None or selected[1] is None:
 			return 
@@ -1665,5 +1667,5 @@ class FileTransfersWindow:
 		
 	def on_file_transfers_dialog_delete_event(self, widget, event):
 		self.window.hide()
-		return True
+		return True # do NOT destory window
 	
