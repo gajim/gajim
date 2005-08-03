@@ -199,7 +199,7 @@ class Interface:
 
 	def handle_event_error_answer(self, account, array):
 		id, jid_from, errmsg, errcode = array
-		if str(errcode) == '403' and id:
+		if str(errcode) in ['403', '406'] and id:
 			ft = self.windows['file_transfers']
 			if ft.files_props['s'].has_key(id):
 				file_props = ft.files_props['s'][id]
