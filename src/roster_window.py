@@ -257,7 +257,7 @@ class RosterWindow:
 					if transport and state_images.has_key(contact.show):
 						img = state_images[contact.show]
 					else:
-						img = state_images[_('not in the roster')]
+						img = state_images['not in the roster']
 		for iter in iters:
 			model.set_value(iter, 0, img)
 			model.set_value(iter, 1, name)
@@ -1167,7 +1167,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			del gajim.contacts[account][u.jid]
 			if user.jid in self.plugin.windows[account]['chats']:
 				user1 = Contact(jid = user.jid, name = user.name,
-					groups = [_('not in the roster')], show = _('not in the roster'),
+					groups = [_('not in the roster')], show = 'not in the roster',
 					status = _('not in the roster'), ask = 'none', keyID = user.keyID)
 				gajim.contacts[account][user.jid] = [user1] 
 				self.add_contact_to_roster(user.jid, account)	
@@ -1356,7 +1356,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user = Contact(jid = jid, name = jid.split('@')[0],
-				groups = [_('not in the roster')], show = _('not in the roster'),
+				groups = [_('not in the roster')], show = 'not in the roster',
 				status = _('not in the roster'), sub = 'none', keyID = keyID)
 			gajim.contacts[account][jid] = [user]
 			self.add_contact_to_roster(user.jid, account)			
@@ -1390,7 +1390,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = Contact(jid = jid, name = jid.split('@')[0],
-				groups = [_('not in the roster')], show = _('not in the roster'),
+				groups = [_('not in the roster')], show = 'not in the roster',
 				status = _('not in the roster'), ask = 'none', keyID = keyID)
 			gajim.contacts[account][jid] = [user1] 
 			self.add_contact_to_roster(jid, account)
@@ -1737,7 +1737,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		imgs = {}
 		for state in ('connecting', 'online', 'chat', 'away', 'xa',
 							'dnd', 'invisible', 'offline', 'error', 'requested',
-							'message', 'opened', 'closed', _('not in the roster')):
+							'message', 'opened', 'closed', 'not in the roster'):
 			
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
@@ -1917,7 +1917,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				luser1 = gajim.contacts[account][jid1]
 				luser2 = gajim.contacts[account][jid2]
 				cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
-					'invisible': 5, 'offline': 6, _('not in the roster'): 7, 'error': 8}
+					'invisible': 5, 'offline': 6, 'not in the roster': 7, 'error': 8}
 				s = self.get_show(luser1)
 				if s in cshow:
 					show1 = cshow[s]
