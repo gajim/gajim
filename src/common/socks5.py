@@ -89,8 +89,8 @@ class SocksQueue:
 	def get_file_props(self, account, sid):
 		if self.files_props.has_key(account):
 			fl_props = self.files_props[account]
-			if fl_props.has_key(id):
-				return fl_props[id]
+			if fl_props.has_key(sid):
+				return fl_props[sid]
 		return None
 
 	def process(self, timeout=0):
@@ -436,7 +436,7 @@ class Socks5Listener:
 			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 			self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-			self._serv.bind((self.host, self.port))
+			self._serv.bind(('0.0.0.0', self.port))
 			self._serv.listen(socket.SOMAXCONN)
 		except Exception, (errno, errstr):
 			return None
