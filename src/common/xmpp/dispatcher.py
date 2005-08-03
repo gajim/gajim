@@ -32,7 +32,6 @@ class Dispatcher(PlugIn):
     """ Ancestor of PlugIn class. Handles XMPP stream, i.e. aware of stream headers.
         Can be plugged out/in to restart these headers (used for SASL f.e.). """
     def __init__(self):
-        self.in_buffer=''
         PlugIn.__init__(self)
         DBG_LINE='dispatcher'
         self.handlers={}
@@ -111,13 +110,9 @@ class Dispatcher(PlugIn):
             3) 0 (zero) if underlying connection is closed."""
         for handler in self._cycleHandlers: handler(self)
         if self._owner.Connection.pending_data(timeout):
-            if not self.in_buffer: 
-                try: self.in_buffer=self._owner.Connection.receive() 
-                except IOError: return
-            data = self.in_buffer[:1024] # parse first 1 MB
+            try: data=self._owner.Connection.receive()  
+            except IOError: return
             self.Stream.Parse(data) 
-            self.in_buffer=self.in_buffer[1024:] # parse the rest next time
-            #if data: 
             return len(data)
         return '0'      # It means that nothing is received but link is alive.
         
