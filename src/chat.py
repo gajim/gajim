@@ -252,7 +252,6 @@ class Chat:
 			menu.show_all()
 
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
-		
 		# get the index of the page and then the page that we're leaving
 		old_no = notebook.get_current_page()
 		old_child = notebook.get_nth_page(old_no)

@@ -15243,10 +15243,10 @@ the Jabber network.</property>
     <widget class="GtkImageMenuItem" id="history_menuitem">
       <property name="label" translatable="yes">_History</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_history_menuitem_activate" last_modification_time="Mon, 27 Jun 2005 16:58:29 GMT"/>
+      <signal name="activate" handler="on_history_button_clicked" last_modification_time="Wed, 03 Aug 2005 10:37:51 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image732">
+	<widget class="GtkImage" id="image947">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
@@ -15266,7 +15266,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_configure_room_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 11:04:55 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image733">
+	<widget class="GtkImage" id="image948">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-preferences</property>
 	  <property name="icon_size">1</property>
@@ -15286,7 +15286,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_change_subject_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 11:05:10 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image734">
+	<widget class="GtkImage" id="image949">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-edit</property>
 	  <property name="icon_size">1</property>
@@ -15306,7 +15306,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_change_nick_menuitem_activate" last_modification_time="Sat, 18 Jun 2005 20:23:46 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image735">
+	<widget class="GtkImage" id="image950">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-redo</property>
 	  <property name="icon_size">1</property>
@@ -15326,7 +15326,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_bookmark_room_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 12:43:29 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image736">
+	<widget class="GtkImage" id="image951">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -15341,7 +15341,7 @@ the Jabber network.</property>
 
   <child>
     <widget class="GtkCheckMenuItem" id="compact_view_menuitem">
-      <property name="label" translatable="yes">_Compact View</property>
+      <property name="label" translatable="yes">_Compact View    Alt+C</property>
       <property name="use_underline">True</property>
       <property name="active">False</property>
       <signal name="activate" handler="on_compact_view_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 13:07:23 GMT"/>
