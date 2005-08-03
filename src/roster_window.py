@@ -264,8 +264,8 @@ class RosterWindow:
 			#FIXME: add avatar
 
 	def join_gc_room(self, account, room_jid, nick, password):
-		#FIXME: maybe remove this and just let the server do the message?
-		if room_jid in self.plugin.windows[account]['gc']:
+		if room_jid in self.plugin.windows[account]['gc'] and \
+		gajim.gc_connected[account][room_jid]:
 			dialogs.ErrorDialog(_('You are already in room %s') %room_jid
 				).get_response()
 			return

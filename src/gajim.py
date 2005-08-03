@@ -217,6 +217,9 @@ class Interface:
 			gobject.timeout_add(30000, self.allow_notif, account)
 		else:
 			gajim.allow_notifications[account] = False
+			# we are disconnected from all gc
+			for room_jid in gajim.gc_connected[account]:
+				self.windows[account]['gc'][room_jid].got_disconnected(room_jid)
 		self.roster.on_status_changed(account, status)
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('AccountPresence', (status, account))
@@ -1003,6 +1006,7 @@ class Interface:
 			gajim.contacts[a] = {}
 			gajim.groups[a] = {}
 			gajim.gc_contacts[a] = {}
+			gajim.gc_connected[a] = {}
 			gajim.newly_added[a] = []
 			gajim.to_be_removed[a] = []
 			gajim.awaiting_messages[a] = {}

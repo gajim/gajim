@@ -50,7 +50,6 @@ class GroupchatWindow(chat.Chat):
 			'leave', 'me', 'msg', 'nick', 'part', 'topic']
 		
 		self.nicks = {} # our nick for each groupchat we are in
-		gajim.gc_contacts[account] = {} # contact instances for each room
 		self.list_treeview = {}
 		self.subjects = {}
 		self.name_labels = {}
@@ -85,8 +84,6 @@ class GroupchatWindow(chat.Chat):
 					gajim.config.get('gc-y-position'))
 			self.window.resize(gajim.config.get('gc-width'),
 					gajim.config.get('gc-height'))
-		# whether to ask for comfirmation before closing muc
-		self.confirm_close = gajim.config.get('confirm_close_muc')
 		self.window.show_all()
 
 	def save_var(self, room_jid):
@@ -122,38 +119,37 @@ class GroupchatWindow(chat.Chat):
 					dialog.destroy()
 					return True # stop the propagation of the delete event
 		
-		if self.confirm_close:
-			name = ''
-			names = ''
-			if len(self.xmls) >= 2:
-				for room in self.xmls:
-					if names != '':
-						names += ', '
-					names += gajim.get_nick_from_jid(room)
-			else:
-				name = gajim.get_nick_from_jid(room_jid)
-		
-			pritext = ngettext('Are you sure you want to leave room "%s"?' % name,
-				'Are you sure you want to leave rooms "%s"?' % names, len(self.xmls))
+		# whether to ask for comfirmation before closing muc
+		if gajim.config.get('confirm_close_muc'):
+			names = []
+			for room_jid in self.xmls:
+				if gajim.gc_connected[self.account][room_jid]:
+					names.append(gajim.get_nick_from_jid(room_jid))
+
+			if len(names): #if one or more rooms connected
+				pritext = ngettext('Are you sure you want to leave room "%s"?' % \
+					names[0], 'Are you sure you want to leave rooms "%s"?' % \
+					', '.join(names), len(names))
 			
-			sectext = ngettext(
+				sectext = ngettext(
 			'If you close this window, you will be disconnected from this room.',
 			'If you close this window, you will be disconnected from these rooms.',
-				len(self.xmls))
+					len(names))
 			
-			dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
-				_('Do not ask me again') )
+				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
+					_('Do not ask me again') )
 			
-			if dialog.get_response() != gtk.RESPONSE_OK:
-				return True  # stop propagation of the delete event
+				if dialog.get_response() != gtk.RESPONSE_OK:
+					return True  # stop propagation of the delete event
 			
-			if dialog.is_checked():
-				gajim.config.set('confirm_close_muc', False)
-				dialog.destroy()
+				if dialog.is_checked():
+					gajim.config.set('confirm_close_muc', False)
+					dialog.destroy()
 
 		for room_jid in self.xmls:
-			gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
-				room_jid, 'offline', 'offline')
+			if gajim.gc_connected[self.account][room_jid]:
+				gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
+					room_jid, 'offline', 'offline')
 
 		if gajim.config.get('saveposition'):
 			# save window position and size
@@ -286,6 +282,8 @@ class GroupchatWindow(chat.Chat):
 		gajim.gc_contacts[self.account][room_jid][nick] = \
 			Contact(jid = j, name = nick, show = show, resource = resource,
 			role = role, affiliation = affiliation)
+		if nick == self.nicks[room_jid]: # we became online
+			gajim.gc_connected[self.account][room_jid] = True
 		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)),
 			False)
 		return iter
@@ -341,8 +339,7 @@ class GroupchatWindow(chat.Chat):
 					self.nicks[room_jid] = new_nick
 			self.remove_contact(room_jid, nick)
 			if nick == self.nicks[room_jid] and statusCode != '303': # We became offline
-				model.clear()
-				gajim.gc_contacts[self.account][room_jid] = {}
+				self.got_disconnected(room_jid)
 		else:
 			iter = self.get_contact_iter(room_jid, nick)
 			if not iter:
@@ -945,10 +942,17 @@ class GroupchatWindow(chat.Chat):
 				room_jid, 'offline', 'offline')
 			del self.nicks[room_jid]
 			del gajim.gc_contacts[self.account][room_jid]
+			del gajim.gc_connected[self.account][room_jid]
 			del self.list_treeview[room_jid]
 			del self.subjects[room_jid]
 			del self.name_labels[room_jid]
 			del self.hpaneds[room_jid]
+
+	def got_disconnected(self, room_jid):
+		model = self.list_treeview[room_jid].get_model()
+		model.clear()
+		gajim.gc_contacts[self.account][room_jid] = {}
+		gajim.gc_connected[self.account][room_jid] = False
 
 	def new_room(self, room_jid, nick):
 		self.names[room_jid] = room_jid.split('@')[0]
@@ -956,7 +960,6 @@ class GroupchatWindow(chat.Chat):
 		self.childs[room_jid] = self.xmls[room_jid].get_widget('gc_vbox')
 		chat.Chat.new_tab(self, room_jid)
 		self.nicks[room_jid] = nick
-		gajim.gc_contacts[self.account][room_jid] = {}
 		self.subjects[room_jid] = ''
 		self.room_creation[room_jid] = time.time()
 		self.nick_hits[room_jid] = []
@@ -1021,6 +1024,7 @@ class GroupchatWindow(chat.Chat):
 		self.redraw_tab(room_jid)
 		self.show_title()
 		self.set_subject(room_jid, '') # Set an empty subject to show the room_jid
+		self.got_disconnected(room_jid) #init some variables
 		conversation_textview.grab_focus()
 		self.childs[room_jid].show_all()
 

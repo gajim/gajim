@@ -1207,6 +1207,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 				gajim.groups[name] = gajim.groups[self.account]
 				gajim.contacts[name] = gajim.contacts[self.account]
 				gajim.gc_contacts[name] = gajim.gc_contacts[self.account]
+				gajim.gc_connected[name] = gajim.gc_connected[self.account]
 				gajim.newly_added[name] = gajim.newly_added[self.account]
 				gajim.to_be_removed[name] = gajim.to_be_removed[self.account]
 				gajim.sleeper_state[name] = gajim.sleeper_state[self.account]
@@ -1234,6 +1235,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 				del gajim.groups[self.account]
 				del gajim.contacts[self.account]
 				del gajim.gc_contacts[self.account]
+				del gajim.gc_connected[self.account]
 				del gajim.newly_added[self.account]
 				del gajim.to_be_removed[self.account]
 				del gajim.sleeper_state[self.account]
@@ -1285,6 +1287,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 		gajim.groups[name] = {}
 		gajim.contacts[name] = {}
 		gajim.gc_contacts[name] = {}
+		gajim.gc_connnected[name] = {}
 		gajim.newly_added[name] = []
 		gajim.to_be_removed[name] = []
 		gajim.nicks[name] = config['name']
@@ -2385,6 +2388,7 @@ class RemoveAccountWindow:
 		del gajim.groups[self.account]
 		del gajim.contacts[self.account]
 		del gajim.gc_contacts[self.account]
+		del gajim.gc_connected[self.account]
 		del gajim.to_be_removed[self.account]
 		del gajim.newly_added[self.account]
 		del gajim.sleeper_state[self.account]
