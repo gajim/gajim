@@ -940,13 +940,13 @@ class GroupchatWindow(chat.Chat):
 		if len(self.xmls) > 0:
 			gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
 				room_jid, 'offline', 'offline')
-			del self.nicks[room_jid]
-			del gajim.gc_contacts[self.account][room_jid]
-			del gajim.gc_connected[self.account][room_jid]
-			del self.list_treeview[room_jid]
-			del self.subjects[room_jid]
-			del self.name_labels[room_jid]
-			del self.hpaneds[room_jid]
+		del self.nicks[room_jid]
+		del gajim.gc_contacts[self.account][room_jid]
+		del gajim.gc_connected[self.account][room_jid]
+		del self.list_treeview[room_jid]
+		del self.subjects[room_jid]
+		del self.name_labels[room_jid]
+		del self.hpaneds[room_jid]
 
 	def got_disconnected(self, room_jid):
 		model = self.list_treeview[room_jid].get_model()

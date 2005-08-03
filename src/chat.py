@@ -319,32 +319,31 @@ class Chat:
 					gajim.config.set('gc-width', width)
 					gajim.config.set('gc-height', height)
 
-			# FIXME: if we're here the del in 10 lines will not be called!
-			# maybe mem leak?
 			self.window.destroy()
-			return
-		if self.nb_unread[jid] > 0:
-			self.nb_unread[jid] = 0
+		else:
+			if self.nb_unread[jid] > 0:
+				self.nb_unread[jid] = 0
+				if self.plugin.systray_enabled:
+					self.plugin.systray.remove_jid(jid, self.account)
+			if self.print_time_timeout_id.has_key(jid):
+				gobject.source_remove(self.print_time_timeout_id[jid])
+				del self.print_time_timeout_id[jid]
+
+			self.notebook.remove_page(self.notebook.page_num(self.childs[jid]))
+			if len(self.xmls) == 2:
+				# one that remains and one that we'll remove, 1 tab remains
+				self.notebook.set_show_tabs(False)
 			self.show_title()
-			if self.plugin.systray_enabled:
-				self.plugin.systray.remove_jid(jid, self.account)
-		if self.print_time_timeout_id.has_key(jid):
-			gobject.source_remove(self.print_time_timeout_id[jid])
-			del self.print_time_timeout_id[jid]
-		self.notebook.remove_page(self.notebook.page_num(self.childs[jid]))
-		if len(self.xmls) == 2:
-			# one that remains and one that we'll remove, 1 tab remains
-			self.notebook.set_show_tabs(False)
 
 		del self.plugin.windows[self.account][kind][jid]
 		del self.nb_unread[jid]
 		del gajim.last_message_time[self.account][jid]
 		del self.last_time_printout[jid]
 		del self.xmls[jid]
+		del self.childs[jid]
 		del self.tagIn[jid]
 		del self.tagOut[jid]
 		del self.tagStatus[jid]
-		self.show_title()
 	
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''

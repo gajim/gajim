@@ -309,8 +309,7 @@ class TabbedChatWindow(chat.Chat):
 		self.send_chatstate('gone', jid)
 		
 		chat.Chat.remove_tab(self, jid, 'chats')
-		if len(self.xmls) > 0:
-			del self.contacts[jid]
+		del self.contacts[jid]
 
 	def new_user(self, contact):
 		'''when new tab is created'''
