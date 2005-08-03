@@ -345,7 +345,8 @@ class Chat:
 				self.notebook.set_show_tabs(False)
 			self.show_title()
 
-		del self.plugin.windows[self.account][kind][jid]
+		if self.plugin.windows[self.account][kind].has_key(jid):
+			del self.plugin.windows[self.account][kind][jid]
 		del self.nb_unread[jid]
 		del gajim.last_message_time[self.account][jid]
 		del self.last_time_printout[jid]
