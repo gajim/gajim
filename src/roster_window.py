@@ -49,7 +49,7 @@ class RosterWindow:
 	'''Class for main window of gtkgui plugin'''
 
 	def get_account_iter(self, name):
-		if self.regroup:
+		if self.regroup or len(gajim.connections) == 1:
 			return
 		model = self.tree.get_model()
 		if model is None:
@@ -89,7 +89,7 @@ class RosterWindow:
 		return found
 
 	def add_account_to_roster(self, account):
-		if self.regroup:
+		if self.regroup or len(gajim.connections) == 1:
 			return
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
@@ -135,8 +135,8 @@ class RosterWindow:
 			iterG = self.get_group_iter(g, account)
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
-				iterG = model.append(IterAcct, 
-		[self.jabber_state_images['closed'], g, 'group', g, account, False, None])
+				iterG = model.append(IterAcct, [self.jabber_state_images['closed'],
+					g, 'group', g, account, False, None])
 			if not gajim.groups[account].has_key(g): #It can probably never append
 				if account + g in self.collapsed_rows:
 					ishidden = False
@@ -144,7 +144,8 @@ class RosterWindow:
 					ishidden = True
 				gajim.groups[account][g] = { 'expand': ishidden }
 			if not account in self.collapsed_rows and \
-			   not gajim.config.get('mergeaccounts'):
+			   not gajim.config.get('mergeaccounts') and \
+				len(gajim.connections) > 1: #if one acct: don't show acct line
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
 			typestr = 'contact'
@@ -1627,7 +1628,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''
 		model = self.tree.get_model()
-		if gajim.config.get('mergeaccounts'):
+		if gajim.config.get('mergeaccounts') or len(gajim.connections) == 1:
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [model[iter][4]]
@@ -1654,7 +1655,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		'''When a row is collapsed :
 		change the icon of the arrow'''
 		model = self.tree.get_model()
-		if gajim.config.get('mergeaccounts'):
+		if gajim.config.get('mergeaccounts') or len(gajim.connections) == 1:
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [model[iter][4]]
@@ -1968,7 +1969,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
 		etime):
 		merge = 0
-		if gajim.config.get('mergeaccounts'):
+		if gajim.config.get('mergeaccounts') or len(gajim.connections) == 1:
 			merge = 1
 		model = treeview.get_model()
 		data = selection.data
