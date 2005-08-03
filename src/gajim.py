@@ -730,7 +730,7 @@ class Interface:
 					msg_type = 'file-stopped'
 					event_type = _('File Transfer Stopped')
 				instance = dialogs.PopupNotificationWindow(self, event_type, 
-					file_props['sender'].getStripped(), account, msg_type, file_props)
+					str(file_props['sender']), account, msg_type, file_props)
 				self.roster.popup_notification_windows.append(instance)
 	
 	def read_sleepy(self):	
