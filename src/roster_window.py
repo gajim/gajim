@@ -1484,7 +1484,6 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			except RuntimeError:
 				pass
 
-
 	def on_new_message_menuitem_activate(self, widget, account):
 		dialogs.NewMessageDialog(self.plugin, account)
 			
@@ -1496,6 +1495,12 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.plugin.windows['accounts'].window.present()
 		else:
 			self.plugin.windows['accounts'] = config.AccountsWindow(self.plugin) 
+
+	def on_file_transfers_menuitem_activate(self, widget):
+		if self.plugin.windows['file_transfers'].window.get_property('visible'):
+			self.plugin.windows['file_transfers'].window.present()
+		else:
+			self.plugin.windows['file_transfers'].window.show_all()
 
 	def on_bookmarks_menuitem_activate(self, widget):
 		config.ManageBookmarksWindow(self.plugin)

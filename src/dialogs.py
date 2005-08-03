@@ -1729,3 +1729,5 @@ class FileTransfersWindow:
 		self.window.hide()
 		return True # do NOT destory window
 	
+	def on_close_button_clicked(self, widget):
+		self.window.hide()
