@@ -1182,7 +1182,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if user.jid in self.plugin.windows[account]['chats']:
 				user1 = Contact(jid = user.jid, name = user.name,
 					groups = [_('not in the roster')], show = 'not in the roster',
-					status = _('not in the roster'), ask = 'none', keyID = user.keyID)
+					status = '', ask = 'none', keyID = user.keyID)
 				gajim.contacts[account][user.jid] = [user1] 
 				self.add_contact_to_roster(user.jid, account)	
 			
@@ -1371,7 +1371,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user = Contact(jid = jid, name = jid.split('@')[0],
 				groups = [_('not in the roster')], show = 'not in the roster',
-				status = _('not in the roster'), sub = 'none', keyID = keyID)
+				status = '', sub = 'none', keyID = keyID)
 			gajim.contacts[account][jid] = [user]
 			self.add_contact_to_roster(user.jid, account)			
 
@@ -1405,7 +1405,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = Contact(jid = jid, name = jid.split('@')[0],
 				groups = [_('not in the roster')], show = 'not in the roster',
-				status = _('not in the roster'), ask = 'none', keyID = keyID)
+				status = '', ask = 'none', keyID = keyID)
 			gajim.contacts[account][jid] = [user1] 
 			self.add_contact_to_roster(jid, account)
 
