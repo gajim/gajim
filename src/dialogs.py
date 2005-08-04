@@ -736,7 +736,6 @@ class RosterTooltip(BaseTooltip, StatusTable):
 			return
 		self.create_window()
 		self.hbox = gtk.HBox()
-		#~ self.hbox.set_border_width(6)
 		self.hbox.set_homogeneous(False)
 		self.create_table()
 		prim_contact = None # primary contact
@@ -1142,12 +1141,13 @@ class PopupNotificationWindow:
 				'attached_gpg_keys').split()
 			if self.jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
-				groups = [_('not in the roster')], show = 'not in the roster',
-				status = _('not in the roster'), sub = 'none', keyID = keyID)
-			gajim.contacts[self.account][self.jid] = [contact]
-			self.plugin.roster.add_contact_to_roster(contact.jid,
-				self.account)
+			if self.msg_type.find('file') != 0:
+				contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
+					groups = [_('not in the roster')], show = 'not in the roster',
+					status = _('not in the roster'), sub = 'none', keyID = keyID)
+				gajim.contacts[self.account][self.jid] = [contact]
+				self.plugin.roster.add_contact_to_roster(contact.jid,
+					self.account)
 
 		if self.msg_type == 'normal': # it's single message
 			return # FIXME: I think I should not print here but in new_chat?
@@ -1423,7 +1423,6 @@ class FileTransfersWindow:
 		render_pixbuf.set_property('xpad', 3)
 		render_pixbuf.set_property('ypad', 3)
 		render_pixbuf.set_property('yalign', .0)
-		#~ render_pixbuf.set_property('stock-size', gtk.ICON_SIZE_MENU)
 		col.add_attribute(render_pixbuf, "pixbuf", 0)
 		self.tree.append_column(col)
 		
@@ -1521,7 +1520,7 @@ class FileTransfersWindow:
 			gtk.ICON_SIZE_MENU)
 		self.images['stop'] = self.window.render_icon(gtk.STOCK_STOP, 
 			gtk.ICON_SIZE_MENU)
-		self.images['waiting'] = self.window.render_icon(gtk.STOCK_CONNECT, 
+		self.images['waiting'] = self.window.render_icon(gtk.STOCK_REFRESH, 
 			gtk.ICON_SIZE_MENU)
 		self.images['pause'] = self.window.render_icon(gtk.STOCK_MEDIA_PAUSE, 
 			gtk.ICON_SIZE_MENU)
@@ -1558,6 +1557,8 @@ class FileTransfersWindow:
 				status = 'upload'
 			if file_props.has_key('paused') and file_props['paused'] == True:
 				status = 'pause'
+			elif file_props.has_key('stalled') and file_props['stalled'] == True:
+				status = 'waiting'
 			if file_props.has_key('connected') and file_props['connected'] == False:
 				status = 'stop'
 			self.model.set(iter, 0, self.images[status])
@@ -1661,9 +1662,9 @@ class FileTransfersWindow:
 			selected_path = self.model.get_path(selected[1])
 			if selected_path == path:
 				is_selected = True
-		self.remove_button.set_property('sensitive', selected[1] == None)
 		sid = self.model[current_iter][4]
 		file_props = self.files_props[sid[0]][sid[1:]]
+		self.remove_button.set_property('sensitive', not is_selected)
 		if self.is_transfer_stoped(file_props):
 			is_selected = True
 		self.stop_button.set_property('sensitive', not is_selected)
@@ -1690,6 +1691,7 @@ class FileTransfersWindow:
 		if not self.is_transfer_stoped(file_props):
 			file_props['disconnect_cb']()
 		self.model.remove(s_iter)
+		self.remove_button.set_property('sensitive', False)
 		
 	def on_pause_restore_button_clicked(self, widget):
 		selected = self.tree.get_selection().get_selected()
@@ -1719,7 +1721,6 @@ class FileTransfersWindow:
 		if not self.is_transfer_stoped(file_props):
 			file_props['disconnect_cb']()
 		self.set_status(file_props['type'], file_props['sid'], 'stop')
-		self.select_func(self.model.get_path(s_iter))
 		
 	def on_notify_ft_complete_checkbox_toggled(self, widget):
 		gajim.config.set('notify_on_file_complete', 
