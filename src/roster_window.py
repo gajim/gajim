@@ -1962,7 +1962,10 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		model, iter = treeselection.get_selected()
 		path = model.get_path(iter)
 		data = ''
-		if len(path) == 3:
+		merge = 0
+		if gajim.config.get('mergeaccounts') or len(gajim.connections) == 1:
+			merge = 1
+		if len(path) == 3 - merge:
 			data = model[iter][3]
 		selection.set(selection.target, 8, data)
 
