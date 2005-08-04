@@ -42,6 +42,8 @@ def get_uf_show(show):
 		uf_show = _('Invisible')
 	elif show == 'not in the roster':
 		uf_show = _('Not in the roster')
+	elif show == 'requested':
+		uf_show = _('Unknown')
 	else:
 		uf_show = _('Has errors')
 	return unicode(uf_show)
