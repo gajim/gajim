@@ -932,7 +932,8 @@ class Connection:
 
 		h = hostname
 		p = 5222
-		secur = None # autodetect [for SSL in 5223/443 and for TLS if broadcasted]
+		# autodetect [for SSL in 5223/443 and for TLS if broadcasted]
+		secur = None
 		if usessl:
 			p = 5223
 			secur=1 #1 means force SSL no matter what the port will be
@@ -1611,7 +1612,6 @@ class Connection:
 						self.connection.disconnect() # disconnect if no answer
 						pritext = _('Gajim disconnected you from %s') % self.name
 						sectext = _('%s seconds have passed and server did not reply to our keepalive. If you believe such disconnection should not have happend, you can disable sending keepalive packets by modifying this account') % str(keep_alive_disconnect_after_foo_secs)
-						#FIXME: perhaps we should ask the user to confirm disconnectio?
 						self.dispatch('ERROR', (pritext, sectext))
 						return
 				if self.connection:
