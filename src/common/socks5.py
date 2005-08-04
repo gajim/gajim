@@ -51,10 +51,8 @@ class SocksQueue:
 			self.listener = Socks5Listener(host, port)
 			self.listener.bind()
 			if self.listener.started is False:
-				print 'LISTENER IS NOT STARTED'
 				return None
 			self.connected += 1
-			print 'LISTENER STARTED'
 		return self.listener
 	
 	def result_sha(self, sha_str, idx):
@@ -130,7 +128,7 @@ class SocksQueue:
 						if result == -1:
 							sender.disconnect()
 				elif sender.state == 7:
-					for i in range(10):
+					for i in range(5):
 						if sender.file_props['paused']:
 							break
 						if not sender.connected:
@@ -141,6 +139,8 @@ class SocksQueue:
 							break
 						result = sender.write_next()
 						self.process_result(result, sender)
+						if sender.file_props['stalled']:
+							break
 				elif sender.state == 8:
 					self.remove_sender(idx)
 			else:
@@ -467,14 +467,11 @@ class Socks5Listener:
 			self._serv.listen(socket.SOMAXCONN)
 			self._serv.setblocking(False)
 		except Exception, (errno, errstr):
-			print 'EXCEPTION BINDING', (errno, errstr)
 			return None
 		self.started = True
 	
 	def accept_conn(self):
-		print 'ACCEPTED CONNECTION', 
 		_sock  = self._serv.accept()
-		print _sock
 		_sock[0].setblocking(False)
 		return _sock
 	
@@ -494,17 +491,17 @@ class Socks5Receiver(Socks5):
 		self.queue_idx = -1
 		self.queue = None
 		self.file_props = file_props
-		self.file_props['started'] = True
 		self.connected = False
 		self.pauses = 0
-		if file_props:
-			file_props['disconnect_cb'] = self.disconnect
-			file_props['error'] = 0
-			self.file_props['started'] = True
-			self.file_props['completed'] = False
-			self.file_props['paused'] = False
-			self.file_props['stalled'] = False
-			self.file_props['started'] = True
+		if not self.file_props:
+			self.file_props = {}
+		self.file_props['disconnect_cb'] = self.disconnect
+		self.file_props['error'] = 0
+		self.file_props['started'] = True
+		self.file_props['completed'] = False
+		self.file_props['paused'] = False
+		self.file_props['stalled'] = False
+		self.file_props['started'] = True
 		Socks5.__init__(self, host, port, initiator, target, sid)
 	
 	
