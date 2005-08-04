@@ -767,13 +767,13 @@ class RosterWindow:
 		dlg = dialogs.EditGroupsDialog(user, account, self.plugin)
 		dlg.run()
 		
-	def on_history(self, widget, user, account):
+	def on_history(self, widget, contact, account):
 		'''When history menuitem is activated: call log window'''
-		if self.plugin.windows['logs'].has_key(user.jid):
-			self.plugin.windows['logs'][user.jid].window.present()
+		if self.plugin.windows['logs'].has_key(contact.jid):
+			self.plugin.windows['logs'][contact.jid].window.present()
 		else:
-			self.plugin.windows['logs'][user.jid] = history_window.\
-				HistoryWindow(self.plugin, user.jid, account)
+			self.plugin.windows['logs'][contact.jid] = history_window.\
+				HistoryWindow(self.plugin, contact.jid, account)
 
 	def on_send_single_message_menuitem_activate(self, wiget, account, contact):
 		dialogs.SingleMessageWindow(self, account, contact, 'send')

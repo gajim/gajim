@@ -171,9 +171,10 @@ class Chat:
 		"""When close button is pressed: close a tab"""
 		self.remove_tab(jid)
 
-	def on_history_button_clicked(self, widget):
-		"""When history button is pressed: call history window"""
-		jid = self.get_active_jid()
+	def on_history_menuitem_clicked(self, widget = None, jid = None):
+		"""When history menuitem is pressed: call history window"""
+		if jid is None:
+			jid = self.get_active_jid()
 		if self.plugin.windows['logs'].has_key(jid):
 			self.plugin.windows['logs'][jid].window.present()
 		else:
@@ -233,7 +234,6 @@ class Chat:
 			if self.widget_name == 'groupchat_window':
 				menu = self.gc_popup_menu
 				childs = menu.get_children()
-				childs[0].show() # history_menuitem
 				# compact_view_menuitem
 				childs[5].set_active(self.compact_view_current_state)
 			elif self.widget_name == 'tabbed_chat_window':

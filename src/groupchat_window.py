@@ -26,6 +26,7 @@ import dialogs
 import chat
 import cell_renderer_image
 import gtkgui_helpers
+import history_window
 
 from gajim import Contact
 from common import gajim
@@ -658,7 +659,7 @@ class GroupchatWindow(chat.Chat):
 					# reason is optional so accept just nick
 					nick_to_ban = splitted_text_after_msg_command[0]
 					if nick_to_ban in nicks:
-						fjid = get_fjid_from_nick(room_jid, nick_to_ban)
+						fjid = gajim.construct_fjid(room_jid, nick_to_ban)
 						gajim.connections[self.account].gc_set_affiliation(room_jid,
 							fjid, 'outcast')
 				elif len(splitted_text_after_ban_command) >= 2:
@@ -666,7 +667,7 @@ class GroupchatWindow(chat.Chat):
 					nick_to_ban = splitted_text_after_msg_command[0]
 					if nick_to_ban in nicks:
 						reason = splitted_text_after_msg_command[1:]
-						fjid = get_fjid_from_nick(room_jid, nick_to_ban)
+						fjid = gajim.construct_fjid(room_jid, nick_to_ban)
 						gajim.connections[self.account].gc_set_affiliation(room_jid,
 							fjid, 'outcast', reason)
 				return # don't print the command
@@ -771,7 +772,8 @@ class GroupchatWindow(chat.Chat):
 	def on_info(self, widget, room_jid, nick):
 		"""Call vcard_information_window class to display user's information"""
 		c = gajim.gc_contacts[self.account][room_jid][nick]
-		if c.jid and c.resource: # on GC, we know resource only if we're mod and up
+		if c.jid and c.resource:
+			# on GC, we know resource only if we're mod and up
 			jid = c.jid
 			fjid = c.jid + '/' + c.resource
 		else:
@@ -786,6 +788,17 @@ class GroupchatWindow(chat.Chat):
 				resource = c.resource, role = c.role, affiliation = c.affiliation)
 			self.plugin.windows[self.account]['infos'][jid] = \
 				dialogs.VcardWindow(c2, self.plugin, self.account, False)
+
+	def on_history(self, widget, room_jid, nick):
+		c = gajim.gc_contacts[self.account][room_jid][nick]
+		if c.jid and c.resource:
+			# on GC, we know resource only if we're mod and up
+			jid = c.jid
+			fjid = c.jid + '/' + c.resource
+		else:
+			fjid = gajim.construct_fjid(room_jid, nick)
+			jid = fjid
+		self.on_history_menuitem_clicked(jid = jid)
 
 	def on_add_to_roster(self, widget, jid):
 		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
@@ -913,6 +926,9 @@ class GroupchatWindow(chat.Chat):
 
 		item = xml.get_widget('information_menuitem')
 		item.connect('activate', self.on_info, room_jid, nick)
+		
+		item = xml.get_widget('history_menuitem')
+		item.connect('activate', self.on_history, room_jid, nick)
 
 		item = xml.get_widget('add_to_roster_menuitem')
 		if not jid:
@@ -995,8 +1011,6 @@ class GroupchatWindow(chat.Chat):
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_popup_menu', APP)
 		xm.signal_autoconnect(self)
 		self.gc_popup_menu = xm.get_widget('gc_popup_menu')
-		# don't show history_menuitem on show_all()
-		self.gc_popup_menu.get_children()[0].set_no_show_all(True)
 
 		#status_image, nickname, shown_nick
 		store = gtk.TreeStore(gtk.Image, str, str)
@@ -1024,13 +1038,13 @@ class GroupchatWindow(chat.Chat):
 		self.list_treeview[room_jid].set_expander_column(column)
 
 		# set the position of the current hpaned
-		self.hpaneds[room_jid] = self.xmls[room_jid].get_widget(
-			'hpaned')
+		self.hpaneds[room_jid] = self.xmls[room_jid].get_widget('hpaned')
 		self.hpaneds[room_jid].set_position(self.hpaned_position)
 
 		self.redraw_tab(room_jid)
 		self.show_title()
-		self.set_subject(room_jid, '') # Set an empty subject to show the room_jid
+		# set an empty subject to show the room_jid
+		self.set_subject(room_jid, '')
 		self.got_disconnected(room_jid) #init some variables
 		conversation_textview.grab_focus()
 		self.childs[room_jid].show_all()
@@ -1053,7 +1067,9 @@ class GroupchatWindow(chat.Chat):
 	def on_actions_button_clicked(self, widget):
 		"""popup action menu"""
 		menu = self.gc_popup_menu
-		menu.get_children()[0].hide() # hide history_menuitem
+		childs = menu.get_children()
+		# compact_view_menuitem
+		childs[5].set_active(self.compact_view_current_state)
 		menu = self.remove_possible_switch_to_menuitems(menu)
 		menu.popup(None, None, None, 1, 0)
 		menu.show_all()

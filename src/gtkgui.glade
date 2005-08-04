@@ -8924,82 +8924,6 @@ Custom</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkButton" id="history_button">
-		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Click to see past conversation in this room</property>
-		      <property name="can_focus">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">True</property>
-		      <signal name="clicked" handler="on_history_button_clicked" last_modification_time="Mon, 13 Jun 2005 10:57:54 GMT"/>
-
-		      <child>
-			<widget class="GtkAlignment" id="alignment75">
-			  <property name="visible">True</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xscale">0</property>
-			  <property name="yscale">0</property>
-			  <property name="top_padding">0</property>
-			  <property name="bottom_padding">0</property>
-			  <property name="left_padding">0</property>
-			  <property name="right_padding">0</property>
-
-			  <child>
-			    <widget class="GtkHBox" id="hbox2975">
-			      <property name="visible">True</property>
-			      <property name="homogeneous">False</property>
-			      <property name="spacing">2</property>
-
-			      <child>
-				<widget class="GtkImage" id="image659">
-				  <property name="visible">True</property>
-				  <property name="stock">gtk-justify-fill</property>
-				  <property name="icon_size">4</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="label329">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">_History</property>
-				  <property name="use_underline">True</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
-				</packing>
-			      </child>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
-		  </child>
-
-		  <child>
 		    <widget class="GtkVSeparator" id="vseparator2">
 		      <property name="visible">True</property>
 		    </widget>
@@ -10430,81 +10354,6 @@ Status message</property>
 				<widget class="GtkLabel" id="label350">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">_Actions</property>
-				  <property name="use_underline">True</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
-				</packing>
-			      </child>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkButton" id="history_button">
-		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Click to see past conversations with this contact</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">False</property>
-		      <signal name="clicked" handler="on_history_button_clicked" last_modification_time="Wed, 02 Mar 2005 17:03:17 GMT"/>
-
-		      <child>
-			<widget class="GtkAlignment" id="alignment47">
-			  <property name="visible">True</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xscale">0</property>
-			  <property name="yscale">0</property>
-			  <property name="top_padding">0</property>
-			  <property name="bottom_padding">0</property>
-			  <property name="left_padding">0</property>
-			  <property name="right_padding">0</property>
-
-			  <child>
-			    <widget class="GtkHBox" id="hbox2924">
-			      <property name="visible">True</property>
-			      <property name="homogeneous">False</property>
-			      <property name="spacing">2</property>
-
-			      <child>
-				<widget class="GtkImage" id="image412">
-				  <property name="visible">True</property>
-				  <property name="stock">gtk-justify-fill</property>
-				  <property name="icon_size">4</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="label205">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">_History</property>
 				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -14791,7 +14640,6 @@ the Jabber network.</property>
 
 <widget class="GtkWindow" id="gajim_themes_window">
   <property name="border_width">12</property>
-  <property name="visible">True</property>
   <property name="title" translatable="yes">Gajim Themes Customization</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -15356,12 +15204,13 @@ the Jabber network.</property>
 
   <child>
     <widget class="GtkImageMenuItem" id="history_menuitem">
+      <property name="tooltip" translatable="yes">Click to see past conversation in this room</property>
       <property name="label" translatable="yes">_History</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_history_button_clicked" last_modification_time="Wed, 03 Aug 2005 10:37:51 GMT"/>
+      <signal name="activate" handler="on_history_menuitem_clicked" last_modification_time="Thu, 04 Aug 2005 13:57:24 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image947">
+	<widget class="GtkImage" id="image1053">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
@@ -15381,7 +15230,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_configure_room_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 11:04:55 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image948">
+	<widget class="GtkImage" id="image1054">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-preferences</property>
 	  <property name="icon_size">1</property>
@@ -15401,7 +15250,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_change_subject_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 11:05:10 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image949">
+	<widget class="GtkImage" id="image1055">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-edit</property>
 	  <property name="icon_size">1</property>
@@ -15421,7 +15270,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_change_nick_menuitem_activate" last_modification_time="Sat, 18 Jun 2005 20:23:46 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image950">
+	<widget class="GtkImage" id="image1056">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-redo</property>
 	  <property name="icon_size">1</property>
@@ -15441,7 +15290,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_bookmark_room_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 12:43:29 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image951">
+	<widget class="GtkImage" id="image1057">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -15469,12 +15318,13 @@ the Jabber network.</property>
   <child>
     <widget class="GtkImageMenuItem" id="history_menuitem">
       <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Click to see past conversations with this contact</property>
       <property name="label" translatable="yes">_History</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_history_button_clicked" last_modification_time="Thu, 30 Jun 2005 10:23:04 GMT"/>
+      <signal name="activate" handler="on_history_menuitem_clicked" last_modification_time="Thu, 04 Aug 2005 13:53:23 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1029">
+	<widget class="GtkImage" id="image1050">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
@@ -15504,7 +15354,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_send_file_menuitem_activate" last_modification_time="Wed, 03 Aug 2005 15:21:47 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1030">
+	<widget class="GtkImage" id="image1051">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-file</property>
 	  <property name="icon_size">1</property>
@@ -15545,7 +15395,7 @@ the Jabber network.</property>
       <signal name="activate" handler="on_add_to_roster_menuitem_activate" last_modification_time="Thu, 21 Jul 2005 22:46:10 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1031">
+	<widget class="GtkImage" id="image1052">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -16327,11 +16177,19 @@ the Jabber network.</property>
   <child>
     <widget class="GtkImageMenuItem" id="information_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Information</property>
+      <property name="label">gtk-dialog-info</property>
+      <property name="use_stock">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="history_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_History</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image849">
+	<widget class="GtkImage" id="image1047">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
@@ -16351,7 +16209,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image850">
+	<widget class="GtkImage" id="image1048">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -16371,7 +16229,7 @@ the Jabber network.</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image851">
+	<widget class="GtkImage" id="image1049">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>

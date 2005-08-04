@@ -66,12 +66,6 @@ status_before_autoaway = {}
 
 socks5quue = None
 
-def get_fjid_from_nick(room_jid, nick):
-	# fake jid is the jid for a contact in a room
-	# gaim@conference.jabber.org/nick
-	fjid = room_jid + '/' + nick
-	return fjid
-
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
 	return jid[:pos]
@@ -113,7 +107,11 @@ def get_jid_without_resource(jid):
 
 def construct_fjid(room_jid, nick):
 	''' nick is in utf8 (taken from treeview); room_jid is in unicode'''
-	return room_jid + '/' + unicode(nick, 'utf-8')
+	# fake jid is the jid for a contact in a room
+	# gaim@conference.jabber.org/nick
+	if type(nick) is str:
+		nick = unicode(nick, 'utf-8')
+	return room_jid + '/' + nick
 	
 def get_resource_from_jid(jid):
 	return jid.split('/', 1)[1] # abc@doremi.org/res/res-continued
