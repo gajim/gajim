@@ -407,16 +407,16 @@ class Connection:
 			sock5 = socks5.Socks5Receiver(host = streamhost['host'], \
 				port = int(streamhost['port']), initiator = streamhost['jid'], 
 				target = target, sid = sid, file_props = file_props)
-			ret = gajim.socks5queue.add_receiver(self.name, sock5)
-			if ret is None:
-				continue
 			iq = common.xmpp.Iq(to = streamhost['jid'], typ = 'result', frm = target)
 			iq.setAttr('id', id)
 			query = iq.setTag('query')
 			query.setNamespace(common.xmpp.NS_BYTESTREAM)
 			stream_tag = query.setTag('streamhost-used')
 			stream_tag.setAttr('jid', streamhost['jid'])
-			self.to_be_sent.append(iq)
+			ret = gajim.socks5queue.add_receiver(self.name, sock5, 
+				self.to_be_sent.append, iq)
+			if ret is None:
+				continue
 			raise common.xmpp.NodeProcessed
 		
 	def _bytestreamResultCB(self, con, iq_obj):

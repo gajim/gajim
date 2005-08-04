@@ -733,6 +733,8 @@ class Interface:
 				file_props['received-len'])
 		else:
 			ft.set_status(file_props['type'], file_props['sid'], 'stop')
+		if file_props['stalled'] or file_props['paused']:
+			return
 		if gajim.config.get('notify_on_file_complete'):
 			if gajim.config.get('autopopupaway') or \
 				gajim.connections[account].connected in (2, 3): # we're online or chat
