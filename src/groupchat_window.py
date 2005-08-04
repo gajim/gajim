@@ -283,7 +283,7 @@ class GroupchatWindow(chat.Chat):
 			Contact(jid = j, name = nick, show = show, resource = resource,
 			role = role, affiliation = affiliation)
 		if nick == self.nicks[room_jid]: # we became online
-			gajim.gc_connected[self.account][room_jid] = True
+			self.got_connected(room_jid)
 		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)),
 			False)
 		return iter
@@ -948,11 +948,18 @@ class GroupchatWindow(chat.Chat):
 		del self.name_labels[room_jid]
 		del self.hpaneds[room_jid]
 
+	def got_connected(self, room_jid):
+		gajim.gc_connected[self.account][room_jid] = True
+		self.xmls[room_jid].get_widget('message_textview').set_sensitive(True)
+		self.xmls[room_jid].get_widget('send_button').set_sensitive(True)
+
 	def got_disconnected(self, room_jid):
 		model = self.list_treeview[room_jid].get_model()
 		model.clear()
 		gajim.gc_contacts[self.account][room_jid] = {}
 		gajim.gc_connected[self.account][room_jid] = False
+		self.xmls[room_jid].get_widget('message_textview').set_sensitive(False)
+		self.xmls[room_jid].get_widget('send_button').set_sensitive(False)
 
 	def new_room(self, room_jid, nick):
 		self.names[room_jid] = room_jid.split('@')[0]
