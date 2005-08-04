@@ -126,7 +126,8 @@ class Connection:
 			'ACC_OK': [], 'MYVCARD': [], 'OS_INFO': [], 'VCARD': [], 'GC_MSG': [],
 			'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],
 			'ROSTER_INFO': [], 'ERROR_ANSWER': [], 'BOOKMARKS': [], 'CON_TYPE': [],
-			'FILE_REQUEST': [], 'FILE_RCV_COMPLETED': [], 'FILE_PROGRESS': []
+			'FILE_REQUEST': [], 'FILE_RCV_COMPLETED': [], 'FILE_PROGRESS': [],
+			'STANZA_ARRIVED': []
 			}
 		self.name = name
 		self.connected = 0 # offline
@@ -868,6 +869,7 @@ class Connection:
 		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
 		
 	def _StanzaArrivedCB(self, con, obj):
+		self.dispatch('STANZA_ARRIVED', str(obj))
 		self.last_incoming = time.time()
 		self.keep_alive_sent = False
 

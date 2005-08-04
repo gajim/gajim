@@ -760,6 +760,11 @@ class Interface:
 			instance = dialogs.PopupNotificationWindow(self, event_type, 
 				jid, account, msg_type, file_props)
 			self.roster.popup_notification_windows.append(instance)
+
+	def handle_event_stanza_arrived(self, account, stanza):
+		if self.windows[account].has_key('xml_console'):
+			self.windows[account]['xml_console'].print_incomming_stanza(stanza)
+
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -926,6 +931,7 @@ class Interface:
 		con.register_handler('BOOKMARKS', self.handle_event_bookmarks)
 		con.register_handler('CON_TYPE', self.handle_event_con_type)
 		con.register_handler('FILE_REQUEST', self.handle_event_file_request)
+		con.register_handler('STANZA_ARRIVED', self.handle_event_stanza_arrived)
 
 	def process_connections(self):
 		try:

@@ -1357,6 +1357,11 @@ class XMLConsoleWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def print_incomming_stanza(self, stanza):
+		buffer = self.stanzas_log_textview.get_buffer()
+		end_iter = buffer.get_end_iter()
+		buffer.insert(end_iter, stanza)
+
 	def on_send_button_clicked(self, widget):
 		begin_iter, end_iter = self.input_tv_buffer.get_bounds()
 		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter)
