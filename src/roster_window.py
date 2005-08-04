@@ -1040,7 +1040,7 @@ class RosterWindow:
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = Contact(jid = jid, name = pseudo, groups = [group],
-				show = 'requested', status = 'requested', ask = 'none',
+				show = 'requested', status = '', ask = 'none',
 				sub = 'subscribe', keyID = keyID)
 			gajim.contacts[account][jid] = [user1]
 		else:
