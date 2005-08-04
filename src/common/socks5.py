@@ -51,8 +51,10 @@ class SocksQueue:
 			self.listener = Socks5Listener(host, port)
 			self.listener.bind()
 			if self.listener.started is False:
+				print 'LISTENER IS NOT STARTED'
 				return None
 			self.connected += 1
+			print 'LISTENER STARTED'
 		return self.listener
 	
 	def result_sha(self, sha_str, idx):
@@ -463,14 +465,16 @@ class Socks5Listener:
 			self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 			self._serv.bind(('0.0.0.0', self.port))
 			self._serv.listen(socket.SOMAXCONN)
+			self._serv.setblocking(False)
 		except Exception, (errno, errstr):
+			print 'EXCEPTION BINDING', (errno, errstr)
 			return None
-		self._serv.setblocking(False)
 		self.started = True
 	
 	def accept_conn(self):
-		self._serv.accept.__doc__
+		print 'ACCEPTED CONNECTION', 
 		_sock  = self._serv.accept()
+		print _sock
 		_sock[0].setblocking(False)
 		return _sock
 	

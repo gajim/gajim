@@ -462,20 +462,24 @@ class Connection:
 		gajim.log.debug('_siResultCB')
 		id = iq_obj.getAttr('id')
 		if not self.files_props.has_key(id):
+			gajim.log.debug('files_props - no key' + str(id))
 			return 
 		file_props = self.files_props[id]
 		if file_props is None:
+			gajim.log.debug('files_props none')
 			return
 		file_props['receiver'] = str(iq_obj.getFrom())
 		jid = iq_obj.getFrom().getStripped().encode('utf8')
 		si = iq_obj.getTag('si')
 		feature = si.setTag('feature')
 		if feature.getNamespace() != common.xmpp.NS_FEATURE:
+			gajim.log.debug('wrong ns' + str(feature.getNamespace()))
 			return
 		form_tag = feature.getTag('x')
 		form = common.xmpp.DataForm(node=form_tag)
 		field = form.getField('stream-method')
 		if field.getValue() != common.xmpp.NS_BYTESTREAM:
+			gajim.log.debug('wrong field stream' + str(field.getValue()))
 			return
 		self.send_socks5_info(file_props)
 		raise common.xmpp.NodeProcessed
@@ -492,6 +496,7 @@ class Connection:
 		return
 	
 	def send_socks5_info(self, file_props):
+		gajim.log.debug('send_socks5_info' + str(file_props))
 		if type(self.peerhost) != tuple:
 			return
 		port = gajim.config.get('file_transfers_port')
@@ -501,6 +506,7 @@ class Connection:
 		listener = gajim.socks5queue.start_listener(self.peerhost[0], port, 
 			sha_str, self.result_socks5_sid, file_props['sid'])
 		if listener == None:
+			gajim.log.debug(_('UNABLE TO SET LISTENER ON %s %s') % (self.peerhost[0], port))
 			# FIXME - raise error dialog that address is in use
 			return
 		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['receiver']), 
