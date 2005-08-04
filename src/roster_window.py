@@ -271,7 +271,8 @@ class RosterWindow:
 				).get_response()
 			return
 		room, server = room_jid.split('@')
-		self.new_room(room_jid, nick, account)
+		if not room_jid in self.plugin.windows[account]['gc']:
+			self.new_room(room_jid, nick, account)
 		self.plugin.windows[account]['gc'][room_jid].set_active_tab(room_jid)
 		self.plugin.windows[account]['gc'][room_jid].window.present()
 		gajim.connections[account].join_gc(nick, room, server, password)
