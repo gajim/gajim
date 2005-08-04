@@ -365,7 +365,7 @@ class PreferencesWindow:
 			self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
 			if gajim.config.get('autodetect_browser_mailer'):
 				self.links_open_with_combobox.set_active(0)
-				gtkgui_helpers.plugin.autodetect_browser_mailer()
+				gtkgui_helpers.autodetect_browser_mailer()
 			# autodetect_browser_mailer is now False.
 			# so user has 'Always Use GNOME/KDE' or Custom
 			elif gajim.config.get('openwith') == 'gnome-open':

@@ -22,9 +22,14 @@
 
 import xml.sax.saxutils
 import gtk
+import os
 from common import i18n
-
+i18n.init()
 _ = i18n._
+from common import gajim
+
+
+
 
 def convert_bytes(string):
 	suffix = ''
@@ -60,7 +65,7 @@ def escape_for_pango_markup(string):
 	
 	return escaped_str
 
-def autodetect_browser_mailer(self):
+def autodetect_browser_mailer():
 	#recognize the environment for appropriate browser/mailer
 	if os.path.isdir('/proc'):
 		# under Linux: checking if 'gnome-session' or

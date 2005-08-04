@@ -1016,7 +1016,7 @@ class Interface:
 
 		
 		if gajim.config.get('autodetect_browser_mailer'):
-			gtkgui_helpers.plugin.autodetect_browser_mailer()
+			gtkgui_helpers.autodetect_browser_mailer()
 
 		if gajim.verbose:
 			gajim.log.setLevel(gajim.logging.DEBUG)

@@ -118,7 +118,8 @@ class Config:
 		'always_english_wikipedia': [opt_bool, False],
 		'use_dbus': [opt_bool, True], # allow control via dbus service
 		'send_receive_chat_state_notifications': [opt_bool, True],
-		'print_ichat_every_foo_minutes': [opt_int, 5], # default is every 5 minutes
+		'autodetect_browser_mailer': [opt_bool, True],
+		'print_ichat_every_foo_minutes': [opt_int, 5],
 		'confirm_close_muc': [opt_bool, True], # confirm closing MUC window
 		'notify_on_file_complete': [opt_bool, True], # notif. on file complete
 		'file_transfers_port': [opt_int, 28011],  # port, used for file transfers
