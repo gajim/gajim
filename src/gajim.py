@@ -716,16 +716,21 @@ class Interface:
 			return
 		file_props = array[1]
 		if gajim.config.get('notify_on_new_message'):
-			# check OUR status and if we allow notifications for that status
-			if gajim.config.get('autopopupaway') or \
-				gajim.connections[account].connected in (2, 3): # we're online or chat
-				instance = dialogs.PopupNotificationWindow(self,
-						_('File Transfer Request'), jid, account, 'file', file_props)
-				self.roster.popup_notification_windows.append(instance)
+			# check if we should be notified
+			instance = dialogs.PopupNotificationWindow(self,
+					_('File Transfer Request'), jid, account, 'file', file_props)
+			self.roster.popup_notification_windows.append(instance)
+		elif (gajim.connections[account].connected in (2, 3)
+			and gajim.config.get('autopopup')) or \
+			gajim.config.get('autopopupaway'):
+			contact = gajim.contacts[account][jid][0]
+			self.windows['file_transfers'].show_file_request(
+				account, contact, file_props)
+				
 	def handle_event_file_progress(self, account, file_props):
 		self.windows['file_transfers'].set_progress(file_props['type'], 
 			file_props['sid'], file_props['received-len'])
-	
+			
 	def handle_event_file_rcv_completed(self, account, file_props):
 		ft = self.windows['file_transfers']
 		if file_props['error'] == 0:
@@ -733,21 +738,28 @@ class Interface:
 				file_props['received-len'])
 		else:
 			ft.set_status(file_props['type'], file_props['sid'], 'stop')
-		if file_props['stalled'] or file_props['paused']:
+		if file_props.has_key('stalled') and file_props['stalled'] or \
+			file_props.has_key('paused') and file_props['paused']:
 			return
+		jid = str(file_props['sender'])
 		if gajim.config.get('notify_on_file_complete'):
-			if gajim.config.get('autopopupaway') or \
-				gajim.connections[account].connected in (2, 3): # we're online or chat
+			if (gajim.connections[account].connected in (2, 3)
+			and gajim.config.get('autopopup')) or \
+			gajim.config.get('autopopupaway'):
 				if file_props['error'] == 0:
-					msg_type = 'file-completed'
-					event_type = _('File Transfer Completed')
+					ft.show_completed(jid, file_props)
 				elif file_props['error'] == -1:
-					msg_type = 'file-stopped'
-					event_type = _('File Transfer Stopped')
-				instance = dialogs.PopupNotificationWindow(self, event_type, 
-					str(file_props['sender']), account, msg_type, file_props)
-				self.roster.popup_notification_windows.append(instance)
-	
+					ft.show_stopped(jid, file_props)
+				return
+			if file_props['error'] == 0:
+				msg_type = 'file-completed'
+				event_type = _('File Transfer Completed')
+			elif file_props['error'] == -1:
+				msg_type = 'file-stopped'
+				event_type = _('File Transfer Stopped')
+			instance = dialogs.PopupNotificationWindow(self, event_type, 
+				jid, account, msg_type, file_props)
+			self.roster.popup_notification_windows.append(instance)
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():

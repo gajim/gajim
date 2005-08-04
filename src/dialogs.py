@@ -1069,11 +1069,11 @@ class PopupNotificationWindow:
 			txt = gajim.contacts[account][self.jid][0].name
 		else:
 			txt = self.jid
-
 		event_description_label.set_text(txt)
 		
 		# set colors [ http://www.w3schools.com/html/html_colornames.asp ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
+		
 		if event_type == _('Contact Signed In'):
 			limegreen = gtk.gdk.color_parse('limegreen')
 			close_button.modify_bg(gtk.STATE_NORMAL, limegreen)
@@ -1093,6 +1093,7 @@ class PopupNotificationWindow:
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			txt = _('From %s') % txt
+		
 		elif event_type in [_('File Transfer Completed'), _('File Transfer Stopped')]:
 			bg_color = gtk.gdk.color_parse('coral')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
@@ -1160,17 +1161,10 @@ class PopupNotificationWindow:
 				self.account, contact, self.file_props)
 		
 		elif self.msg_type == 'file-completed': # it's file request # FIXME: comment
-			sectext = '\t' + _('Filename: %s') % self.file_props['name'] 
-			sectext += '\n\t' + _('Size: %s') % \
-				gtkgui_helpers.convert_bytes(self.file_props['size'])
-			sectext += '\n\t' +_('Sender: %s') % self.jid
-			InformationDialog(_('File transfer completed'), sectext).get_response()
-		
+			self.plugin.windows['file_transfers'].show_completed(self.jid, file_props)
+			
 		elif self.msg_type == 'file-stopped': # it's file request # FIXME: comment
-			sectext = '\t' + _('Filename: %s') % self.file_props['name']
-			sectext += '\n\t' + _('Sender: %s') % self.jid
-			ErrorDialog(_('File transfer stopped by the contact of the other side'), \
-				sectext).get_response()
+			self.plugin.windows['file_transfers'].show_stopped(self.jid, file_props)
 		
 		else: # 'chat'
 			self.plugin.roster.new_chat(contact, self.account)
@@ -1450,7 +1444,30 @@ class FileTransfersWindow:
 		self.set_images()
 		self.tree.get_selection().set_select_function(self.select_func)
 		self.xml.signal_autoconnect(self)
-	
+		
+	def show_completed(self, jid, file_props):
+		self.window.present()
+		self.window.window.focus()
+		sectext = '\t' + _('Filename: %s') % \
+			gtkgui_helpers.escape_for_pango_markup(file_props['name'])
+		sectext += '\n\t' + _('Size: %s') % \
+		gtkgui_helpers.convert_bytes(file_props['size'])
+		sectext += '\n\t' +_('Sender: %s') % \
+			gtkgui_helpers.escape_for_pango_markup(jid)
+		InformationDialog(_('File transfer completed'), sectext).get_response()
+		self.tree.get_selection().unselect_all()
+		
+	def show_stopped(self, jid, file_props):
+		self.window.present()
+		self.window.window.focus()
+		sectext = '\t' + _('Filename: %s') % \
+			gtkgui_helpers.escape_for_pango_markup(file_props['name'])
+		sectext += '\n\t' + _('Sender: %s') % \
+			gtkgui_helpers.escape_for_pango_markup(jid)
+		ErrorDialog(_('File transfer stopped by the contact of the other side'), \
+			sectext).get_response()
+		self.tree.get_selection().unselect_all()
+		
 	def show_file_send_request(self, account, contact):
 		dialog = gtk.FileChooserDialog(title=_('Open File...'), 
 			action=gtk.FILE_CHOOSER_ACTION_OPEN, 
@@ -1477,14 +1494,17 @@ class FileTransfersWindow:
 	def show_file_request(self, account, contact, file_props):
 		if file_props is None or not file_props.has_key('name'):
 			return
-		sec_text = '\t' + _('File: %s') % file_props['name']
+		sec_text = '\t' + _('File: %s') % \
+			gtkgui_helpers.escape_for_pango_markup(file_props['name'])
 		if file_props.has_key('size'):
 			sec_text += '\n\t' + _('Size: %s') % \
 				gtkgui_helpers.convert_bytes(file_props['size'])
 		if file_props.has_key('mime-type'):
-			sec_text += '\n\t' + _('Type: %s') % file_props['mime-type']
+			sec_text += '\n\t' + _('Type: %s') % \
+				gtkgui_helpers.escape_for_pango_markup(file_props['mime-type'])
 		if file_props.has_key('desc'):
-			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
+			sec_text += '\n\t' + _('Description: %s') % \
+				gtkgui_helpers.escape_for_pango_markup(file_props['desc'])
 		prim_text = _('%s wants to send you a file:') % contact.jid
 		dialog = ConfirmationDialog(prim_text, sec_text)
 		if dialog.get_response() == gtk.RESPONSE_OK:
@@ -1497,18 +1517,26 @@ class FileTransfersWindow:
 			if self.last_save_dir and os.path.exists(self.last_save_dir) \
 				and os.path.isdir(self.last_save_dir):
 				dialog.set_current_folder(self.last_save_dir)
-			response = dialog.run()
-			if response == gtk.RESPONSE_OK:
-				file_path = dialog.get_filename()
-				(file_dir, file_name) = os.path.split(file_path)
-				if file_dir:
-					self.last_save_dir = file_dir
-				file_props['file-name'] = file_path
-				self.add_transfer(account, contact, file_props)
-				gajim.connections[account].send_file_approval(file_props)
-			else:
-				gajim.connections[account].send_file_rejection(file_props)
-			dialog.destroy()
+			while True:
+				response = dialog.run()
+				if response == gtk.RESPONSE_OK:
+					file_path = dialog.get_filename()
+					if os.path.exists(file_path):
+						primtext = _('This file already exists')
+						sectext = _('Would you like to overwrite it?')
+						dialog2 = ConfirmationDialog(primtext, sectext)
+						if dialog2.get_response() != gtk.RESPONSE_OK:
+							continue
+					(file_dir, file_name) = os.path.split(file_path)
+					if file_dir:
+						self.last_save_dir = file_dir
+					file_props['file-name'] = file_path
+					self.add_transfer(account, contact, file_props)
+					gajim.connections[account].send_file_approval(file_props)
+				else:
+					gajim.connections[account].send_file_rejection(file_props)
+				dialog.destroy()
+				break
 		else:
 			gajim.connections[account].send_file_rejection(file_props)
 	
@@ -1605,8 +1633,8 @@ class FileTransfersWindow:
 			text_labels += '<b>' + _('Sender: ') + '</b>' 
 		else:
 			text_labels += '<b>' + _('Recipient: ') + '</b>' 
-		text_props = file_props['name'] + '\n'
-		text_props += contact.name
+		text_props = gtkgui_helpers.escape_for_pango_markup(file_props['name']) + '\n'
+		text_props += gtkgui_helpers.escape_for_pango_markup(contact.name)
 		self.model.set(iter, 1, text_labels, 2, text_props, 4, \
 			file_props['type'] + file_props['sid'])
 		self.set_progress(file_props['type'], file_props['sid'], 0, iter)
