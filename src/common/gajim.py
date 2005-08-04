@@ -95,7 +95,8 @@ def get_first_contact_instance_from_jid(account, jid):
 		#FIXME: problem see comment in next line
 		room, nick = \
 			get_room_and_nick_from_fjid(jid) # if we ban/kick we now real jid
-		if nick in gc_contacts[account][room]:
+		if gc_contacts[account].has_key(room) and \
+		nick in gc_contacts[account][room]:
 			contact = gc_contacts[account][room][nick] 
 	return contact
 

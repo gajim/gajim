@@ -549,9 +549,16 @@ class TabbedChatWindow(chat.Chat):
 		"""Send the given message to the active tab"""
 		if not message:
 			return
-		
+
 		jid = self.get_active_jid()
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
+		if contact is None:
+			# contact was from pm in MUC, and left the room, or we left the room
+			room, nick = gajim.get_room_and_nick_from_fjid(jid)
+			dialogs.ErrorDialog(_('Sending private message failed'),
+				_('You are no longer in room "%s" or "%s" has left.') % \
+				(room, nick)).get_response()
+			return
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
 		message_textview = self.xmls[jid].get_widget('message_textview')
 		message_buffer = message_textview.get_buffer()
