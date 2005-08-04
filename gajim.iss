@@ -5,7 +5,7 @@
 
 [Setup]
 AppName=Gajim
-AppVerName=Gajim version 0.7.1
+AppVerName=Gajim version 0.8
 DefaultDirName={pf}\Gajim
 DefaultGroupName=Gajim
 UninstallDisplayIcon={app}\src\Gajim.exe
@@ -26,20 +26,11 @@ Source: "COPYING"; DestDir: "{app}"
 Source: "dist\gajim.exe"; DestDir: "{app}\src"; components: main
 Source: "*.ico"; DestDir: "{app}"
 Source: "dist\*.glade"; DestDir: "{app}\src"
-Source: "data\iconsets\sun\*"; DestDir: "{app}\data\iconsets\sun"
-Source: "data\iconsets\stellar\*"; DestDir: "{app}\data\iconsets\stellar"
-Source: "data\iconsets\gossip\*"; DestDir: "{app}\data\iconsets\gossip"
-Source: "data\iconsets\transports\aim\*"; DestDir: "{app}\data\iconsets\transports\aim"
-Source: "data\iconsets\transports\gadugadu\*"; DestDir: "{app}\data\iconsets\transports\gadugadu"
-Source: "data\iconsets\transports\icq\*"; DestDir: "{app}\data\iconsets\transports\icq"
-Source: "data\iconsets\transports\msn\*"; DestDir: "{app}\data\iconsets\transports\msn"
-Source: "data\iconsets\transports\yahoo\*"; DestDir: "{app}\data\iconsets\transports\yahoo"
-Source: "data\emoticons\*"; DestDir: "{app}\data\emoticons"
-Source: "data\pixmaps\*"; DestDir: "{app}\data\pixmaps"
-Source: "data\sounds\*"; DestDir: "{app}\data\sounds"
+Source: "data\*"; DestDir: "{app}\data"; Flags: recursesubdirs
 
 [Icons]
-Name: "{group}\Gajim"; Filename: "{app}\src\Gajim.exe"; WorkingDir: "{app}\src"; IconFilename: "{app}\gajim.ico"
+Name: "{group}\Gajim"; Filename: "{app}\src\Gajim.exe"; WorkingDir: "{app}\src"
+Name: "{group}\Uninstall Gajim"; Filename: "{app}\unins000.exe"; WorkingDir: "{app}"
 Name: "{userdesktop}\Gajim"; Filename: "{app}\src\gajim.exe"; WorkingDir: "{app}\src"; IconFilename: "{app}\gajim.ico"; Components: main; Tasks: desktopicon
 
 [Run]
