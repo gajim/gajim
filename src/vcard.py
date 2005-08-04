@@ -246,9 +246,9 @@ class VcardWindow:
 			i += 1
 
 		if client == '':
-			client = 'N/A'
+			client = _('Unknown')
 		if os == '':
-			os = 'N/A'
+			os = _('Unknown')
 		self.xml.get_widget('client_name_version_label').set_text(client)
 		self.xml.get_widget('os_label').set_text(os)
 
@@ -260,14 +260,15 @@ class VcardWindow:
 		if self.contact.ask:
 			label.set_text(self.contact.ask)
 		else:
-			label.set_text('None')
+			label.set_text(_('None'))
 		self.xml.get_widget('nickname_entry').set_text(self.contact.name)
 		log = 1
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 			'no_log_for').split(' '):
 			log = 0
 		self.xml.get_widget('log_checkbutton').set_active(log)
-		resources = '%s (%s)' % (self.contact.resource, str(self.contact.priority))
+		resources = '%s (%s)' % (self.contact.resource, str(
+			self.contact.priority))
 		uf_resources = self.contact.resource + _(' resource with priority ')\
 			+ str(self.contact.priority)
 		if not self.contact.status:
@@ -311,7 +312,6 @@ class VcardWindow:
 			status_label.set_max_width_chars(15)
 		
 		status_label.set_text(stats)
-		
 		
 		gajim.connections[self.account].request_vcard(self.contact.jid)
 
