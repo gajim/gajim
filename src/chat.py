@@ -127,10 +127,11 @@ class Chat:
 			start = '* '
 			
 		child = self.childs[jid]
+		hb = self.notebook.get_tab_label(child).get_children()[0]
 		if self.widget_name == 'tabbed_chat_window':
-			nickname = self.notebook.get_tab_label(child).get_children()[1]
+			nickname = hb.get_children()[1]
 		elif self.widget_name == 'groupchat_window':
-			nickname = self.notebook.get_tab_label(child).get_children()[0]
+			nickname = hb.get_children()[0]
 
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+
 		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
@@ -413,7 +414,12 @@ class Chat:
 				message_scrolledwindow.set_property('height-request', -1)
 		self.bring_scroll_to_end(conversation_textview, diff_y - 18)
 		return True
-	
+
+	def on_tab_eventbox_button_press_event(self, widget, event, child):
+		if event.button == 3:
+			n = self.notebook.page_num(child)
+			self.notebook.set_current_page(n)
+
 	def new_tab(self, jid):
 		#FIXME: text formating buttons will be hidden in 0.8 release
 		for w in ['bold_togglebutton', 'italic_togglebutton', 'underline_togglebutton']:
@@ -495,16 +501,19 @@ class Chat:
 			self.notebook.set_show_tabs(True)
 
 		if self.widget_name == 'tabbed_chat_window':
-			xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_hbox', APP)
-			tab_hbox = xm.get_widget('chat_tab_hbox')
+			xm = gtk.glade.XML(GTKGUI_GLADE, 'chats_eventbox', APP)
+			tab_hbox = xm.get_widget('chats_eventbox')
 		elif self.widget_name == 'groupchat_window':
-			xm = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_tab_hbox', APP)
-			tab_hbox = xm.get_widget('groupchat_tab_hbox')
-			
-		xm.signal_connect('on_close_button_clicked',
-			self.on_close_button_clicked, jid)
+			xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_eventbox', APP)
+			tab_hbox = xm.get_widget('gc_eventbox')
 
 		child = self.childs[jid]
+
+		xm.signal_connect('on_close_button_clicked',
+			self.on_close_button_clicked, jid)
+		xm.signal_connect('on_tab_eventbox_button_press_event',
+			self.on_tab_eventbox_button_press_event, child)
+
 		self.notebook.append_page(child, tab_hbox)
 		message_textview = self.xmls[jid].get_widget('message_textview')
 		message_textview.connect('size-request', self.size_request, 

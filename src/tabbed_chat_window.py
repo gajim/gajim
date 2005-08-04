@@ -212,7 +212,8 @@ class TabbedChatWindow(chat.Chat):
 				show = u.show
 				keyID = u.keyID
 		child = self.childs[jid]
-		status_image = self.notebook.get_tab_label(child).get_children()[0]
+		hb = self.notebook.get_tab_label(child).get_children()[0]
+		status_image = hb.get_children()[0]
 		state_images = self.plugin.roster.get_appropriate_state_images(jid)
 		image = state_images[show]
 		banner_status_image = self.xmls[jid].get_widget('banner_status_image')
