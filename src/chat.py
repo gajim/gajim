@@ -178,8 +178,8 @@ class Chat:
 		if self.plugin.windows['logs'].has_key(jid):
 			self.plugin.windows['logs'][jid].window.present()
 		else:
-			self.plugin.windows['logs'][jid] = history_window.\
-				HistoryWindow(self.plugin, jid, self.account)
+			self.plugin.windows['logs'][jid] = history_window.HistoryWindow(
+				self.plugin, jid, self.account)
 
 	def on_chat_window_focus_in_event(self, widget, event):
 		"""When window gets focus"""
@@ -201,6 +201,12 @@ class Chat:
 	def on_compact_view_menuitem_activate(self, widget):
 		isactive = widget.get_active()
 		self.set_compact_view(isactive)
+
+	def on_actions_button_clicked(self, widget):
+		'''popup action menu'''
+		menu = self.prepare_context_menu()
+		menu.popup(None, None, None, 1, 0)
+		menu.show_all()
 
 	def remove_possible_switch_to_menuitems(self, menu):
 		''' remove duplicate 'Switch to' if they exist and return clean menu'''
@@ -228,28 +234,35 @@ class Chat:
 
 		return menu
 	
+	def prepare_context_menu(self):
+		'''sets compact view menuitem active state
+		sets active and sensitivity state for toggle_gpg_menuitem
+		and remove possible 'Switch to' menuitems'''
+		if self.widget_name == 'groupchat_window':
+			menu = self.gc_popup_menu
+			childs = menu.get_children()
+			# compact_view_menuitem
+			childs[5].set_active(self.compact_view_current_state)
+		elif self.widget_name == 'tabbed_chat_window':
+			menu = self.tabbed_chat_popup_menu
+			childs = menu.get_children()
+			# check if gpg capabitlies or else make gpg toggle insensitive
+			jid = self.get_active_jid()
+			gpg_btn = self.xmls[jid].get_widget('gpg_togglebutton')
+			isactive = gpg_btn.get_active()
+			issensitive = gpg_btn.get_property('sensitive')
+			childs[3].set_active(isactive)
+			childs[3].set_property('sensitive', issensitive)
+			# compact_view_menuitem
+			childs[4].set_active(self.compact_view_current_state)
+		menu = self.remove_possible_switch_to_menuitems(menu)
+		
+		return menu
+
 	def on_chat_window_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
-			if self.widget_name == 'groupchat_window':
-				menu = self.gc_popup_menu
-				childs = menu.get_children()
-				# compact_view_menuitem
-				childs[5].set_active(self.compact_view_current_state)
-			elif self.widget_name == 'tabbed_chat_window':
-				menu = self.tabbed_chat_popup_menu
-				childs = menu.get_children()
-				# check if gpg capabitlies or else make gpg toggle insensitive
-				jid = self.get_active_jid()
-				gpg_btn = self.xmls[jid].get_widget('gpg_togglebutton')
-				isactive = gpg_btn.get_active()
-				issensitive = gpg_btn.get_property('sensitive')
-				childs[3].set_active(isactive)
-				childs[3].set_property('sensitive', issensitive)
-				# compact_view_menuitem
-				childs[4].set_active(self.compact_view_current_state)
-			menu = self.remove_possible_switch_to_menuitems(menu)
-			
+			menu = self.prepare_context_menu()
 			# common menuitems (tab switches)
 			if len(self.xmls) > 1: # if there is more than one tab
 				menu.append(gtk.MenuItem()) # seperator
@@ -1132,7 +1145,7 @@ class Chat:
 			self.paint_banner(jid)
 
 	def set_compact_view(self, state):
-		'''Toggle compact view'''
+		'''Toggle compact view. state is bool'''
 		self.compact_view_current_state = state
 
 		for jid in self.xmls:

@@ -1063,16 +1063,6 @@ class GroupchatWindow(chat.Chat):
 		else: # it is root (eg. group)
 			bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
 		renderer.set_property('cell-background', bgcolor)
-			
-	def on_actions_button_clicked(self, widget):
-		"""popup action menu"""
-		menu = self.gc_popup_menu
-		childs = menu.get_children()
-		# compact_view_menuitem
-		childs[5].set_active(self.compact_view_current_state)
-		menu = self.remove_possible_switch_to_menuitems(menu)
-		menu.popup(None, None, None, 1, 0)
-		menu.show_all()
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		"""popup user's group's or agent menu"""
