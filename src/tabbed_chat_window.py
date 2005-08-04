@@ -284,6 +284,16 @@ class TabbedChatWindow(chat.Chat):
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
+	def on_send_file_menuitem_activate(self, widget):
+		jid = self.get_active_jid()
+		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
+		self.plugin.windows['file_transfers'].show_file_send_request( 
+			self.account, contact)
+
+	def on_add_to_roster_menuitem_activate(self, widget):
+		jid = self.get_active_jid()
+		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
+
 	def on_send_button_clicked(self, widget):
 		"""When send button is pressed: send the current message"""
 		jid = self.get_active_jid()

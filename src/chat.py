@@ -196,12 +196,6 @@ class Chat:
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(jid, self.account)
-
-	def on_send_file_menuitem_activate(self, widget):
-		jid = self.get_active_jid()
-		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
-		self.plugin.windows['file_transfers'].show_file_send_request( 
-			self.account, contact)
 	
 	def on_compact_view_menuitem_activate(self, widget):
 		isactive = widget.get_active()
@@ -210,22 +204,27 @@ class Chat:
 	def remove_possible_switch_to_menuitems(self, menu):
 		''' remove duplicate 'Switch to' if they exist and return clean menu'''
 		childs = menu.get_children()
-		childs_no = len(childs)
-		if self.widget_name == 'groupchat_window':
-			no_more_than = 6
-		elif self.widget_name == 'tabbed_chat_window':
-			no_more_than = 5
-			# FIXME: that is 7 for contact not in the roster..
-			# so loop in all open tabs find if one is 'not in the roster'
-			# etc..
-						
-		if childs_no > no_more_than:
-			# we have switch to which we should remove
-			how_many = childs_no - no_more_than # how many to remove
-			for child_cnt in range(how_many):
-				real_pos = child_cnt + no_more_than
-				menu.remove(childs[real_pos])
-		
+
+		if self.widget_name == 'tabbed_chat_window':
+			jid = self.get_active_jid()
+			c = gajim.get_first_contact_instance_from_jid(self.account, jid)
+			if _('not in the roster') in c.groups: # for add_to_roster_menuitem
+				childs[5].show()
+				childs[5].set_no_show_all(False)
+			else:
+				childs[5].hide()
+				childs[5].set_no_show_all(True)
+				
+		for child in childs[5:]: # start looping after Add to roster
+			grandchilds = child.get_children()
+			# check because seperator menuitem doesn't have childs
+			if len(grandchilds):
+				accel_label = grandchilds[0]
+				if accel_label.get_text().startswith(_('Switch to')):
+					menu.remove(child)
+			else: # remove the seperator
+				menu.remove(child)
+
 		return menu
 	
 	def on_chat_window_button_press_event(self, widget, event):
@@ -240,7 +239,13 @@ class Chat:
 			elif self.widget_name == 'tabbed_chat_window':
 				menu = self.tabbed_chat_popup_menu
 				childs = menu.get_children()
-				#FIXME: check if gpg capabitlies or else make gpg toggle insensitive it's childs[3]
+				# check if gpg capabitlies or else make gpg toggle insensitive
+				jid = self.get_active_jid()
+				gpg_btn = self.xmls[jid].get_widget('gpg_togglebutton')
+				isactive = gpg_btn.get_active()
+				issensitive = gpg_btn.get_property('sensitive')
+				childs[3].set_active(isactive)
+				childs[3].set_property('sensitive', issensitive)
 				# compact_view_menuitem
 				childs[4].set_active(self.compact_view_current_state)
 			menu = self.remove_possible_switch_to_menuitems(menu)
