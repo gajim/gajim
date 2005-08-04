@@ -23,7 +23,7 @@ import sre
 
 def get_uf_show(show):
 	'''returns a userfriendly string for dnd/xa/chat
-	and makes the rest translatable'''
+	and makes all strings translatable'''
 	if show == 'dnd':
 		uf_show = _('Busy')
 	elif show == 'xa':
@@ -47,6 +47,30 @@ def get_uf_show(show):
 	else:
 		uf_show = _('Has errors')
 	return unicode(uf_show)
+	
+def get_uf_sub(sub):
+	if sub == 'none':
+		uf_sub = _('None')
+	elif sub == 'to':
+		uf_sub = _('To')
+	elif sub == 'from':
+		uf_sub = _('From')
+	elif sub == 'both':
+		uf_sub = _('Both')
+	else:
+		uf_sub = sub
+	
+	return uf_sub
+
+def get_uf_ask(ask):
+	if ask is None:
+		uf_ask = _('None')
+	elif ask == 'subscribe':
+		uf_ask = _('Subscribe')
+	else:
+		uf_ask = ask
+	
+	return uf_ask
 
 def get_sorted_keys(adict):
 	keys = adict.keys()

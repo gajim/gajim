@@ -255,12 +255,12 @@ class VcardWindow:
 	def fill_jabber_page(self):
 		self.xml.get_widget('nickname_label').set_text(self.contact.name)
 		self.xml.get_widget('jid_label').set_text(self.contact.jid)
-		self.xml.get_widget('subscription_label').set_text(self.contact.sub)
+		uf_sub = helpers.get_uf_sub(self.contact.sub)
+		self.xml.get_widget('subscription_label').set_text(uf_sub)
 		label = self.xml.get_widget('ask_label')
-		if self.contact.ask:
-			label.set_text(self.contact.ask)
-		else:
-			label.set_text(_('None'))
+		
+		uf_ask = helpers.get_uf_ask(self.contact.ask)
+		label.set_text(uf_ask)
 		self.xml.get_widget('nickname_entry').set_text(self.contact.name)
 		log = 1
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
