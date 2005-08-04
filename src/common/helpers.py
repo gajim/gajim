@@ -60,8 +60,8 @@ def get_uf_sub(sub):
 	else:
 		uf_sub = sub
 	
-	return uf_sub
-
+	return unicode(uf_sub)
+	
 def get_uf_ask(ask):
 	if ask is None:
 		uf_ask = _('None')
@@ -70,7 +70,7 @@ def get_uf_ask(ask):
 	else:
 		uf_ask = ask
 	
-	return uf_ask
+	return unicode(uf_ask)
 
 def get_sorted_keys(adict):
 	keys = adict.keys()
