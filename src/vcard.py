@@ -286,7 +286,7 @@ class VcardWindow:
 		if gajim.contacts[self.account].has_key(self.contact.jid):
 			for c in gajim.contacts[self.account][self.contact.jid]:
 				if c.resource != self.contact.resource:
-					resources = '\n%s (%s)' % (c.resource, str(c.priority))
+					resources += '\n%s (%s)' % (c.resource, str(c.priority))
 					uf_resources += '\n' + c.resource + _(' resource with priority ')\
 						+ str(c.priority)
 					if not c.status:
