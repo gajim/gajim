@@ -197,6 +197,16 @@ class Interface:
 		#('INFORMATION', account, (title_text, section_text))
 		dialogs.InformationDialog(data[0], data[1]).get_response()
 
+	def handle_event_http_auth(self, account, data):
+		#('HTTP_AUTH', account, (method, url, iq_obj))
+		dialog = dialogs.ConfirmationDialog(_('HTTP (%s) Authorization for %s') \
+			% (array[0], array[1]), _('Do you accept this request?'))
+		if dialog.get_response() == gtk.RESPONSE_OK:
+			answer = 'yes'
+		else:
+			answer = 'no'
+		gajim.connections[account].build_http_auth_answer(data[2], answer)
+
 	def handle_event_error_answer(self, account, array):
 		id, jid_from, errmsg, errcode = array
 		if str(errcode) in ['403', '406'] and id:

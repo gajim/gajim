@@ -154,6 +154,7 @@ class Config:
 			# try for 2 minutes before giving up (aka. timeout after those seconds)
 			'try_connecting_for_foo_secs': [ opt_int, 60 ],
 			'max_stanza_per_sec': [ opt_int, 5],
+			'http_auth': [opt_str, 'ask'], # yes, no, ask
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],

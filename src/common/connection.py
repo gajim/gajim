@@ -127,7 +127,7 @@ class Connection:
 			'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],
 			'ROSTER_INFO': [], 'ERROR_ANSWER': [], 'BOOKMARKS': [], 'CON_TYPE': [],
 			'FILE_REQUEST': [], 'FILE_RCV_COMPLETED': [], 'FILE_PROGRESS': [],
-			'STANZA_ARRIVED': []
+			'STANZA_ARRIVED': [], 'HTTP_AUTH': []
 			}
 		self.name = name
 		self.connected = 0 # offline
@@ -859,7 +859,25 @@ class Connection:
 			#Preferences data
 			#http://www.jabber.org/jeps/jep-0049.html
 			#TODO: implement this
-			pass 
+			pass
+	
+	def build_http_auth_answer(self, iq_obj, answer):
+		if answer == 'yes':
+			iq = iq_obj.buildReply('result')
+		elif answer == 'no':
+			iq = iq_obj.buildReply('error')
+			iq.setError('not-authorized', 401)
+		self.to_be_sent.append(iq)
+	
+	def _HttpAuthCB(self, con, iq_obj):
+		opt = gajim.config.get_per('accounts', self.name, 'http_auth')
+		if opt in ['yes', 'no']:
+			self.build_http_auth_answer(iq_obj, opt)
+		else:
+			method = iq_obj.getTagAttr('confirm', 'method')
+			url = iq_obj.getTagAttr('confirm', 'url')
+			self.dispatch('HTTP_AUTH', (method, url, iq_obj));
+		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
 		errmsg = iq_obj.getError()
@@ -989,6 +1007,8 @@ class Connection:
 			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._PrivateCB, 'result',
 			common.xmpp.NS_PRIVATE)
+		con.RegisterHandler('iq', self._HttpAuthCB, 'get',
+			common.xmpp.NS_HTTP_AUTH)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._StanzaArrivedCB)
 		con.RegisterHandler('presence', self._StanzaArrivedCB)
