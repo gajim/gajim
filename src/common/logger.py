@@ -38,20 +38,20 @@ class Logger:
 	def __init__(self):
 		dot_gajim = os.path.dirname(LOGPATH)
 		if os.path.isfile(dot_gajim):
-			print dot_gajim, 'is file but it should be a directory'
-			print 'Gajim will now exit'
+			print dot_gajim, _('is file but it should be a directory')
+			print _('Gajim will now exit')
 			sys.exit()
 		if os.path.isdir(dot_gajim):
 			if os.path.isfile(LOGPATH):
-				print LOGPATH, 'is file but it should be a directory'
-				print 'Gajim will now exit'
+				print LOGPATH, _('is file but it should be a directory')
+				print _('Gajim will now exit')
 				sys.exit()
 		else: # dot_gajim doesn't exist
 			if dot_gajim: # is '' on win9x so avoid that
-				print 'creating', dot_gajim , 'directory'
+				print _('creating'), dot_gajim , _('directory')
 				os.mkdir(dot_gajim)
 			if not os.path.isdir(LOGPATH):
-				print 'creating', LOGPATH, 'directory'
+				print _('creating'), LOGPATH, _('directory')
 				os.mkdir(LOGPATH)
 
 	def write(self, kind, msg, jid, show = None, tim = None):
