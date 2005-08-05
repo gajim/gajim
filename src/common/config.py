@@ -355,7 +355,7 @@ class Config:
 		opt = self.__options_per_key[typename]
 		if opt[1].has_key(name):
 			# we already have added group name before
-			return 'you already have added %s before', % name
+			return 'you already have added %s before' % name
 		opt[1][name] = copy.deepcopy(opt[0])
 
 	def del_per(self, typename, name): # per_group_of_option
@@ -377,7 +377,7 @@ class Config:
 		subobj = obj[subname]
 		value = self.is_valid(subobj[OPT_TYPE], value)
 		if value is None:
-			raise RuntimeError, '%s of %s cannot be none' % optname
+			raise RuntimeError, '%s of %s cannot be None' % optname
 		subobj[OPT_VAL] = value
 
 	def get_per(self, optname, key = None, subname = None): # per_group_of_option
