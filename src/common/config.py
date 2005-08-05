@@ -335,11 +335,13 @@ class Config:
 
 	def set(self, optname, value):
 		if not self.__options.has_key(optname):
-			raise RuntimeError, 'option %s does not exist' % optname
+#			raise RuntimeError, 'option %s does not exist' % optname
+			return
 		opt = self.__options[optname]
 		value = self.is_valid(opt[OPT_TYPE], value)
 		if value is None:
-			raise RuntimeError, 'value of %s cannot be None' % optname
+#			raise RuntimeError, 'value of %s cannot be None' % optname
+			return
 
 		opt[OPT_VAL] = value
 
@@ -352,7 +354,8 @@ class Config:
 
 	def add_per(self, typename, name): # per_group_of_option
 		if not self.__options_per_key.has_key(typename):
-			raise RuntimeError, 'option %s does not exist' % typename
+#			raise RuntimeError, 'option %s does not exist' % typename
+			return
 		
 		opt = self.__options_per_key[typename]
 		if opt[1].has_key(name):
@@ -362,24 +365,29 @@ class Config:
 
 	def del_per(self, typename, name): # per_group_of_option
 		if not self.__options_per_key.has_key(typename):
-			raise RuntimeError, 'option %s does not exist' % typename
+#			raise RuntimeError, 'option %s does not exist' % typename
+			return
 		
 		opt = self.__options_per_key[typename]
 		del opt[1][name]
 
 	def set_per(self, optname, key, subname, value): # per_group_of_option
 		if not self.__options_per_key.has_key(optname):
-			raise RuntimeError, 'option %s does not exist' % optname
+#			raise RuntimeError, 'option %s does not exist' % optname
+			return
 		dict = self.__options_per_key[optname][1]
 		if not dict.has_key(key):
-			raise RuntimeError, '%s is not a key of %s' % (key, dict)
+#			raise RuntimeError, '%s is not a key of %s' % (key, dict)
+			return
 		obj = dict[key]
 		if not obj.has_key(subname):
-			raise RuntimeError, '%s is not a key of %s' % (subname, obj)
+#			raise RuntimeError, '%s is not a key of %s' % (subname, obj)
+			return
 		subobj = obj[subname]
 		value = self.is_valid(subobj[OPT_TYPE], value)
 		if value is None:
-			raise RuntimeError, '%s of %s cannot be None' % optname
+#			raise RuntimeError, '%s of %s cannot be None' % optname
+			return
 		subobj[OPT_VAL] = value
 
 	def get_per(self, optname, key = None, subname = None): # per_group_of_option
