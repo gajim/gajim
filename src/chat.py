@@ -222,7 +222,7 @@ class Chat:
 				childs[5].hide()
 				childs[5].set_no_show_all(True)
 				
-		for child in childs[5:]: # start looping after Add to roster
+		for child in childs[6:]: # start looping after Add to roster
 			grandchilds = child.get_children()
 			# check because seperator menuitem doesn't have childs
 			if len(grandchilds):
