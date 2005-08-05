@@ -710,9 +710,10 @@ class Chat:
 			
 			always_use_en = gajim.config.get('always_english_wikipedia')
 			if always_use_en:
-				link = 'http://en.wikipedia.org/wiki/%s' % self.selected_phrase
+				link = 'http://en.wikipedia.org/wiki/Special:Search?search=%s'\
+					% self.selected_phrase
 			else:
-				link = 'http://%s.wikipedia.org/wiki/%s'\
+				link = 'http://%s.wikipedia.org/wiki/Special:Search?search=%s'\
 					%(gajim.LANG, self.selected_phrase)
 			item = gtk.MenuItem(_('Read _Wikipedia Article'))
 			item.connect('activate', self.visit_url_from_menuitem, link)
