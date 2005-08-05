@@ -714,21 +714,42 @@ class Chat:
 					% self.selected_phrase
 			else:
 				link = 'http://%s.wikipedia.org/wiki/Special:Search?search=%s'\
-					%(gajim.LANG, self.selected_phrase)
+					% (gajim.LANG, self.selected_phrase)
 			item = gtk.MenuItem(_('Read _Wikipedia Article'))
 			item.connect('activate', self.visit_url_from_menuitem, link)
 			submenu.append(item)
 
 			item = gtk.MenuItem(_('Look it up in _Dictionary'))
-			link = gajim.config.get('dictionary_url') + self.selected_phrase
-			item.connect('activate', self.visit_url_from_menuitem, link)
+			dict_link = gajim.config.get('dictionary_url')
+			if dict_link == 'WIKTIONARY':
+				# special link (yeah undocumented but default)
+				always_use_en = gajim.config.get('always_english_wiktionary')
+				if always_use_en:
+					link = 'http://en.wiktionary.org/wiki/Special:Search?search=%s'\
+						% self.selected_phrase
+				else:
+					link = 'http://%s.wiktionary.org/wiki/Special:Search?search=%s'\
+						% (gajim.LANG, self.selected_phrase)
+				item.connect('activate', self.visit_url_from_menuitem, link)
+			else:
+				if dict_link.find('%s') == -1:
+					# we must have %s in the url if not WIKTIONARY
+					item = gtk.MenuItem(_('Dictionary url is not WIKTIONARY or is missing an "%s"'))
+					item.set_property('sensitive', False)
+				else:
+					link = dict_link % self.selected_phrase
+					item.connect('activate', self.visit_url_from_menuitem, link)
 			submenu.append(item)
 			
-			item = gtk.MenuItem(_('Web _Search for it'))
-			gajim.config.get('search_engine')
-			link = gajim.config.get('search_engine') + self.selected_phrase +\
-				'&sourceid=gajim'
-			item.connect('activate', self.visit_url_from_menuitem, link)
+			
+			search_link = gajim.config.get('search_engine')
+			if search_link.find('%s') == -1:	# we must have %s in the url
+				item = gtk.MenuItem(_('Web Search URL is missing an "%s"'))
+				item.set_property('sensitive', False)
+			else:
+				item = gtk.MenuItem(_('Web _Search for it'))
+				link =  search_link % self.selected_phrase
+				item.connect('activate', self.visit_url_from_menuitem, link)
 			submenu.append(item)
 			
 		menu.show_all()

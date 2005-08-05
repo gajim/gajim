@@ -113,9 +113,10 @@ class Config:
 		'key_up_lines': [opt_int, 25],  # how many lines to store for key up
 		'version': [ opt_str, '0.8' ],
 		'always_compact_view': [opt_bool, False], # initial compact view state
-		'search_engine': [opt_str, 'http://www.google.com/search?&q='],
-		'dictionary_url': [opt_str, 'http://dictionary.reference.com/search?q='],
+		'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
+		'dictionary_url': [opt_str, 'WIKTIONARY'], # by default use wiktionary
 		'always_english_wikipedia': [opt_bool, False],
+		'always_english_wiktionary': [opt_bool, False],
 		'use_dbus': [opt_bool, True], # allow control via dbus service
 		'send_receive_chat_state_notifications': [opt_bool, True],
 		'autodetect_browser_mailer': [opt_bool, True],
