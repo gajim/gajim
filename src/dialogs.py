@@ -1321,31 +1321,18 @@ class XMLConsoleWindow:
 		self.window = self.xml.get_widget('xml_console_window')
 		self.input_textview = self.xml.get_widget('input_textview')
 		self.stanzas_log_textview = self.xml.get_widget('stanzas_log_textview')
-		self.input_tv_buffer = self.input_textview.get_buffer()
 		
-		self.input_textview.modify_base(
-			gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
-		self.input_textview.modify_text(
-			gtk.STATE_NORMAL, gtk.gdk.color_parse('green'))
-		
-		
-		#st = self.input_textview.get_style()
-		
-		
-		#style = gtk.Style()
-		#style.font_desc = st.font_desc
-		
-		#self.input_textview.set_name('input')
-		#s = '''\
-#style "console" { GtkTextView::cursor-color="%s" }
-#widget "*.*.input" style : application "console"''' % '#FFFFFF'
-		#gtk.rc_parse_string(s)
-		
-		
-		self.stanzas_log_textview.modify_base(
-			gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
+		buffer = self.stanzas_log_textview.get_buffer()
+		self.tagIn = buffer.create_tag('incoming')
+		color = gajim.config.get('inmsgcolor')
+		self.tagIn.set_property('foreground', color)
+		self.tagOut = buffer.create_tag('outgoing')
+		color = gajim.config.get('outmsgcolor')
+		self.tagOut.set_property('foreground', color)
+
+
 		self.stanzas_log_textview.modify_text(
-			gtk.STATE_NORMAL, gtk.gdk.color_parse('green'))
+			gtk.STATE_NORMAL, gtk.gdk.color_parse(color))
 		
 		if len(gajim.connections) > 1:
 			title = _('XML Console for %s') % self.account
@@ -1357,10 +1344,11 @@ class XMLConsoleWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	def print_incomming_stanza(self, stanza):
+	def print_stanza(self, stanza, tag):
+		# tag must be 'incoming' or 'outgoing'
 		buffer = self.stanzas_log_textview.get_buffer()
 		end_iter = buffer.get_end_iter()
-		buffer.insert(end_iter, stanza)
+		buffer.insert_with_tags_by_name(end_iter, stanza + '\n\n', tag)
 
 	def on_send_button_clicked(self, widget):
 		begin_iter, end_iter = self.input_tv_buffer.get_bounds()

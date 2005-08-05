@@ -36,7 +36,9 @@ try:
     import dns.resolver
 except:
     pass
-        
+
+DATA_RECEIVED='DATA RECEIVED'
+DATA_SENT='DATA SENT'
 
 class error:
     """An exception to be raised in case of low-level errors in methods of 'transports' module."""
@@ -129,6 +131,7 @@ class TCPsocket(PlugIn):
 
         if len(received): # length of 0 means disconnect
             self.DEBUG(received,'got')
+            self._owner.Dispatcher.Event('', DATA_RECEIVED, received)
         else:
             self.DEBUG('Socket error while receiving data','error')
             self._owner.disconnected()
@@ -142,6 +145,7 @@ class TCPsocket(PlugIn):
         try:
             self._send(raw_data)
             self.DEBUG(raw_data,'sent')
+            self._owner.Dispatcher.Event('', DATA_SENT, raw_data)
         except:
             self.DEBUG("Socket error while sending data",'error')
             self._owner.disconnected()
