@@ -111,7 +111,7 @@ class Config:
 		'send_on_ctrl_enter': [opt_bool, False], # send on ctrl+enter
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25],  # how many lines to store for key up
-		'version': [ None, '0.8' ],
+		'version': [ opt_str, '0.8' ],
 		'always_compact_view': [opt_bool, False], # initial compact view state
 		'search_engine': [opt_str, 'http://www.google.com/search?&q='],
 		'dictionary_url': [opt_str, 'http://dictionary.reference.com/search?q='],
@@ -308,7 +308,7 @@ class Config:
 			ival = self.is_valid_int(val)
 			if ival:
 				return True
-			elif ival == None:
+			elif ival is None:
 				return None
 			return False
 		return None
@@ -333,15 +333,13 @@ class Config:
 
 	def set(self, optname, value):
 		if not self.__options.has_key(optname):
-#			print 'error: option %s does not exist' % optname
-			return -1
+			raise RuntimeError, 'option %s does not exist' % optname
 		opt = self.__options[optname]
 		value = self.is_valid(opt[OPT_TYPE], value)
-		if value == None:
-			return -1
+		if value is None:
+			raise RuntimeError, 'value of %s cannot be None' % optname
 
 		opt[OPT_VAL] = value
-		return 0
 
 	def get(self, optname = None):
 		if not optname:
@@ -352,39 +350,35 @@ class Config:
 
 	def add_per(self, typename, name): # per_group_of_option
 		if not self.__options_per_key.has_key(typename):
-#			print 'error: option %s doesn\'t exist' % (typename)
-			return -1
+			raise RuntimeError, 'option %s does not exist' % typename
 		
 		opt = self.__options_per_key[typename]
 		if opt[1].has_key(name):
-			return -2
+			# we already have added group name before
+			return 'you already have added %s before', % name
 		opt[1][name] = copy.deepcopy(opt[0])
-		return 0
 
 	def del_per(self, typename, name): # per_group_of_option
 		if not self.__options_per_key.has_key(typename):
-#			print 'error: option %s doesn\'t exist' % (typename)
-			return -1
+			raise RuntimeError, 'option %s does not exist' % typename
 		
 		opt = self.__options_per_key[typename]
 		del opt[1][name]
 
 	def set_per(self, optname, key, subname, value): # per_group_of_option
 		if not self.__options_per_key.has_key(optname):
-#			print 'error: option %s doesn\'t exist' % (optname)
-			return -1
+			raise RuntimeError, 'option %s does not exist' % optname
 		dict = self.__options_per_key[optname][1]
 		if not dict.has_key(key):
-			return -1
+			raise RuntimeError, '%s is not a key of %s' % (key, dict)
 		obj = dict[key]
 		if not obj.has_key(subname):
-			return -1
+			raise RuntimeError, '%s is not a key of %s' % (subname, obj)
 		subobj = obj[subname]
 		value = self.is_valid(subobj[OPT_TYPE], value)
-		if value == None:
-			return -1
+		if value is None:
+			raise RuntimeError, '%s of %s cannot be none' % optname
 		subobj[OPT_VAL] = value
-		return 0
 
 	def get_per(self, optname, key = None, subname = None): # per_group_of_option
 		if not self.__options_per_key.has_key(optname):
@@ -406,6 +400,6 @@ class Config:
 		for event in self.soundevents_default:
 			default = self.soundevents_default[event]
 			self.add_per('soundevents', event)
-			self.set_per('soundevents', event, 'enable', default[0])
+			self.set_per('soundevents', event, 'enabled', default[0])
 			self.set_per('soundevents', event, 'path', default[1])
 		return

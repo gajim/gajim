@@ -86,11 +86,9 @@ class AdvancedConfigurationWindow:
 			optname = optnamerow[0]
 			keyrow = self.model[modelpath[:2]]
 			key = keyrow[0]
-			if gajim.config.set_per(optname, key, option, text):
-				return
+			gajim.config.set_per(optname, key, option, text)
 		else:
-			if gajim.config.set(option, text):
-				return
+			gajim.config.set(option, text)
 		self.plugin.save_config()
 		modelrow[1] = text
 

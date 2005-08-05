@@ -81,7 +81,7 @@ class OptionsParser:
 		except IOError, e:
 			print e, dir(e), e.errno
 			if e.errno == 28:
-				err_str = _('No space left on device.')
+				err_str = _('No space left on device')
 			else:
 				err_str = e
 			print err_str
@@ -97,7 +97,7 @@ class OptionsParser:
 		try:
 			os.rename(self.__tempfile, self.__filename)
 		except:
-			err_str = _('Unable to open %s for writing.\n') % (self.__filename)
+			err_str = _('Unable to open %s for writing\n') % (self.__filename)
 			return err_str
 		return None
 		
