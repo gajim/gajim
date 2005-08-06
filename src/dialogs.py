@@ -1454,13 +1454,13 @@ class FileTransfersWindow:
 		self.stop_button = self.xml.get_widget('stop_button')
 		self.pause_button = self.xml.get_widget('pause_restore_button')
 		self.remove_button = self.xml.get_widget('remove_button')
-		self.notify_ft_checkbox = \
-			self.xml.get_widget('notify_ft_complete_checkbox')
+		self.notify_ft_checkbox = self.xml.get_widget(
+			'notify_ft_complete_checkbox')
 		notify = gajim.config.get('notify_on_file_complete')
 		if notify:
-			self.notify_ft_checkbox.set_active(1)
+			self.notify_ft_checkbox.set_active(True)
 		else:
-			self.notify_ft_checkbox.set_active(0)
+			self.notify_ft_checkbox.set_active(False)
 		self.model = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, str, str)
 		self.tree.set_model(self.model)
 		col = gtk.TreeViewColumn()
@@ -1471,7 +1471,7 @@ class FileTransfersWindow:
 		render_pixbuf.set_property('xpad', 3)
 		render_pixbuf.set_property('ypad', 3)
 		render_pixbuf.set_property('yalign', .0)
-		col.add_attribute(render_pixbuf, "pixbuf", 0)
+		col.add_attribute(render_pixbuf, 'pixbuf', 0)
 		self.tree.append_column(col)
 		
 		col = gtk.TreeViewColumn(_('File'))
@@ -1515,7 +1515,7 @@ class FileTransfersWindow:
 		self.window.present()
 		self.window.window.focus()
 		error_messages = {
-			-1: _('Remote host cannot connect to you. This may be due to nat network or missing file support on the remote host.'),
+			-1: _('Remote host cannot connect to you. He may be behind a NAT network or his clients does not support file transfer.'),
 			-2: _('File not specified.'),
 			-3: _('Unable to bind to transfer port. Check if you are running onother instance of Gajim'),
 			-4: _('Connection with peer cannot be established. Maybe you are behind a firewall. Set a file transfer proxy.'),
@@ -1526,7 +1526,8 @@ class FileTransfersWindow:
 	def show_send_error(self, jid, file_props):
 		self.window.present()
 		self.window.window.focus()
-		InformationDialog(_('File transfer canceled'), 'You are unable to connect to remote host. This may be due to nat network.').get_response()
+		InformationDialog(_('File transfer canceled'),
+_('You are unable to connect to remote host. He may be behind a NAT.')).get_response()
 		self.tree.get_selection().unselect_all()
 		
 	def show_stopped(self, jid, file_props):
@@ -1541,7 +1542,7 @@ class FileTransfersWindow:
 		self.tree.get_selection().unselect_all()
 		
 	def show_file_send_request(self, account, contact):
-		dialog = gtk.FileChooserDialog(title=_('Open File...'), 
+		dialog = gtk.FileChooserDialog(title=_('Choose File to Send...'), 
 			action=gtk.FILE_CHOOSER_ACTION_OPEN, 
 			buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
 			gtk.STOCK_OPEN, gtk.RESPONSE_OK))
@@ -1728,6 +1729,7 @@ class FileTransfersWindow:
 	
 	def on_transfers_list_row_activated(self, widget, path, col):
 		# try to open the file
+		#FIXME: plz remove this :)
 		pass
 		
 	def is_transfer_paused(self, file_props):
@@ -1764,21 +1766,21 @@ class FileTransfersWindow:
 				is_selected = True
 		sid = self.model[current_iter][4]
 		file_props = self.files_props[sid[0]][sid[1:]]
-		self.remove_button.set_property('sensitive', not is_selected)
+		self.remove_button.set_sensitive(not is_selected)
 		if self.is_transfer_stoped(file_props):
 			is_selected = True
-		self.stop_button.set_property('sensitive', not is_selected)
+		self.stop_button.set_sensitive(not is_selected)
 		if is_selected:
-			self.pause_button.set_property('sensitive', False)
+			self.pause_button.set_sensitive(False)
 		else:
 			if self.is_transfer_active(file_props):
-				self.pause_button.set_property('sensitive', True)
+				self.pause_button.set_sensitive(True)
 				self.pause_button.set_label(_('_Pause'))
 			elif self.is_transfer_paused(file_props):
-				self.pause_button.set_property('sensitive', True)
+				self.pause_button.set_sensitive(True)
 				self.pause_button.set_label(_('_Continue'))
 			else:
-				self.pause_button.set_property('sensitive', False)
+				self.pause_button.set_sensitive(False)
 		return True
 
 	def on_remove_button_clicked(self, widget):
@@ -1791,7 +1793,7 @@ class FileTransfersWindow:
 		if not self.is_transfer_stoped(file_props):
 			file_props['disconnect_cb']()
 		self.model.remove(s_iter)
-		self.remove_button.set_property('sensitive', False)
+		self.remove_button.set_sensitive(False)
 		
 	def on_pause_restore_button_clicked(self, widget):
 		selected = self.tree.get_selection().get_selected()
