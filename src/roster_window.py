@@ -352,6 +352,8 @@ class RosterWindow:
 		
 		delete_motd_menuitem.connect('activate',
 			self.on_delete_motd_menuitem_activate, account)
+		
+		advanced_menuitem_menu.show_all()
 			
 		return advanced_menuitem_menu
 
@@ -365,7 +367,7 @@ class RosterWindow:
 		show_offline_contacts_menuitem = self.xml.get_widget(
 			'show_offline_contacts_menuitem')
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
-		
+
 
 		if self.add_new_contact_handler_id:
 			add_new_contact_menuitem.handler_disconnect(
@@ -387,7 +389,6 @@ class RosterWindow:
 		service_disco_menuitem.remove_submenu()
 		join_gc_menuitem.remove_submenu()
 		new_message_menuitem.remove_submenu()
-		#advanced_menuitem.remove_submenu()
 
 		#remove the existing accelerator
 		if self.have_new_message_accel:
