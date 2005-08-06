@@ -122,7 +122,7 @@ class VcardWindow:
 
 	def on_set_avatar_button_clicked(self, widget):
 		f = None
-		dialog = gtk.FileChooserDialog(_('Choose avatar'), None,
+		dialog = gtk.FileChooserDialog(_('Choose Avatar'), None,
 			gtk.FILE_CHOOSER_ACTION_OPEN,
 			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 			gtk.STOCK_OPEN, gtk.RESPONSE_OK))
