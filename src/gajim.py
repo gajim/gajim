@@ -774,7 +774,7 @@ class Interface:
 			and gajim.config.get('autopopup')) or \
 			gajim.config.get('autopopupaway'):
 			contact = gajim.contacts[account][jid][0]
-			self.windows['file_transfers'].show_send_request(
+			self.windows['file_transfers'].show_file_request(
 				account, contact, file_props)
 				
 	def handle_event_file_progress(self, account, file_props):
