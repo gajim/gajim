@@ -183,17 +183,17 @@ class Config:
 			'jid': [ opt_str, ''],
 		}, {}),
 		'themes': ({
-			'accounttextcolor': [ opt_color, '' ],
-			'accountbgcolor': [ opt_color, '' ],
-			'accountfont': [ opt_str, '' ],
-			'grouptextcolor': [ opt_color, '' ],
-			'groupbgcolor': [ opt_color, '' ],
-			'groupfont': [ opt_str, '' ],
-			'contacttextcolor': [ opt_color, '' ],
-			'contactbgcolor': [ opt_color, '' ],
-			'contactfont': [ opt_str, '' ],
-			'bannertextcolor': [ opt_color, '' ],
-			'bannerbgcolor': [ opt_color, '' ],
+			'accounttextcolor': [ opt_color, '#ffffff' ],
+			'accountbgcolor': [ opt_color, '#000000' ],
+			'accountfont': [ opt_str, 'Sans 10' ],
+			'grouptextcolor': [ opt_color, '#ffffff' ],
+			'groupbgcolor': [ opt_color, '#000000' ],
+			'groupfont': [ opt_str, 'Sans 10' ],
+			'contacttextcolor': [ opt_color, '#ffffff' ],
+			'contactbgcolor': [ opt_color, '#000000' ],
+			'contactfont': [ opt_str, 'Sans 10' ],
+			'bannertextcolor': [ opt_color, '#ffffff' ],
+			'bannerbgcolor': [ opt_color, '#000000' ],
 		}, {}),
 	}
 
@@ -379,7 +379,7 @@ class Config:
 		if not self.__options_per_key.has_key(typename):
 #			raise RuntimeError, 'option %s does not exist' % typename
 			return
-		
+
 		opt = self.__options_per_key[typename]
 		del opt[1][name]
 
