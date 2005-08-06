@@ -671,11 +671,7 @@ class Connection:
 		listener = gajim.socks5queue.start_listener(self.peerhost[0], port, 
 			sha_str, self.result_socks5_sid, file_props['sid'])
 		if listener == None:
-			if streamhost == []:
-				file_props['error'] = -3
-				self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
-			print ''
-			# FIXME - raise error dialog that address is in use
+			#~ # FIXME - raise error dialog that address is in use
 			return
 		
 		iq = common.xmpp.Protocol(name = 'iq', to = str(receiver), 
