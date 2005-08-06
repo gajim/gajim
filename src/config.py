@@ -84,9 +84,12 @@ class PreferencesWindow:
 		self.auto_away_checkbutton = self.xml.get_widget('auto_away_checkbutton')
 		self.auto_away_time_spinbutton = self.xml.get_widget \
 			('auto_away_time_spinbutton')
+		self.auto_away_message_entry = self.xml.get_widget \
+			('auto_away_message_entry')
 		self.auto_xa_checkbutton = self.xml.get_widget('auto_xa_checkbutton')
 		self.auto_xa_time_spinbutton = self.xml.get_widget \
 			('auto_xa_time_spinbutton')
+		self.auto_xa_message_entry = self.xml.get_widget('auto_xa_message_entry')
 		self.trayicon_checkbutton = self.xml.get_widget('trayicon_checkbutton')
 		self.notebook = self.xml.get_widget('preferences_notebook')
 		
@@ -325,6 +328,11 @@ class PreferencesWindow:
 		self.auto_away_time_spinbutton.set_value(st)
 		self.auto_away_time_spinbutton.set_sensitive(gajim.config.get('autoaway'))
 
+		#autoaway message
+		st = gajim.config.get('autoaway_message')
+		self.auto_away_message_entry.set_text(st)
+		self.auto_away_message_entry.set_sensitive(gajim.config.get('autoaway'))
+
 		#Autoxa
 		st = gajim.config.get('autoxa')
 		self.auto_xa_checkbutton.set_active(st)
@@ -333,6 +341,11 @@ class PreferencesWindow:
 		st = gajim.config.get('autoxatime')
 		self.auto_xa_time_spinbutton.set_value(st)
 		self.auto_xa_time_spinbutton.set_sensitive(gajim.config.get('autoxa'))
+
+		#autoxa message
+		st = gajim.config.get('autoxa_message')
+		self.auto_xa_message_entry.set_text(st)
+		self.auto_xa_message_entry.set_sensitive(gajim.config.get('autoxa'))
 
 		#ask_status when online / offline
 		st = gajim.config.get('ask_online_status')
@@ -751,7 +764,7 @@ class PreferencesWindow:
 
 	def on_auto_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autoaway',
-					[self.auto_away_time_spinbutton])
+					[self.auto_away_time_spinbutton, self.auto_away_message_entry])
 
 	def on_auto_away_time_spinbutton_value_changed(self, widget):
 		aat = widget.get_value_as_int()
@@ -761,9 +774,12 @@ class PreferencesWindow:
 					gajim.config.get('autoxatime') * 60)
 		self.plugin.save_config()
 
+	def on_auto_away_message_entry_changed(self, widget):
+		gajim.config.set('autoaway_message', widget.get_text())
+
 	def on_auto_xa_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autoxa',
-					[self.auto_xa_time_spinbutton])
+					[self.auto_xa_time_spinbutton, self.auto_xa_message_entry])
 
 	def on_auto_xa_time_spinbutton_value_changed(self, widget):
 		axt = widget.get_value_as_int()
@@ -772,6 +788,9 @@ class PreferencesWindow:
 					gajim.config.get('autoawaytime') * 60,
 					gajim.config.get('autoxatime') * 60)
 		self.plugin.save_config()
+
+	def on_auto_xa_message_entry_changed(self, widget):
+		gajim.config.set('autoxa_message', widget.get_text())
 
 	def save_status_messages(self, model):
 		for msg in gajim.config.get_per('statusmsg'):
