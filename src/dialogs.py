@@ -1484,7 +1484,6 @@ class FileTransfersWindow:
 		col.add_attribute(renderer, 'markup' , 2)
 		renderer.set_property('xalign', 0.)
 		renderer.set_property('yalign', 0.)
-		col.set_expand(True)
 		col.set_resizable(True)
 		self.tree.append_column(col)
 		
