@@ -372,7 +372,7 @@ class TabbedChatWindow(chat.Chat):
 	def check_for_possible_paused_chatstate(self, contact):
 		''' did we move mouse of that window or kbd activity in that window
 		in the last 5 seconds?
-		if yes we go active
+		if yes we go active for mouse, composing for kbd
 		if no we go paused if we were previously composing '''
 		current_state = self.chatstates[contact.jid]
 		if current_state == False: # jid doesn't support chatstates
@@ -399,8 +399,8 @@ class TabbedChatWindow(chat.Chat):
 	def check_for_possible_inactive_chatstate(self, contact):
 		''' did we move mouse over that window or kbd activity in that window
 		in the last 30 seconds?
-		if yes we go active if not already
-		if no we go inactive if not already '''
+		if yes we go active
+		if no we go inactive '''
 		current_state = self.chatstates[contact.jid]
 		if current_state == False: # jid doesn't support chatstates
 			return False # stop looping
@@ -424,8 +424,8 @@ class TabbedChatWindow(chat.Chat):
 		and printed in the conversation"""
 
 		jid = self.get_active_jid()
-		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
-		message_buffer = widget.get_buffer()
+		conversation_textview = widget
+		message_buffer = conversation_textview.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
 		message = message_buffer.get_text(start_iter, end_iter, False)
 
@@ -461,8 +461,8 @@ class TabbedChatWindow(chat.Chat):
 			elif (event.state & gtk.gdk.SHIFT_MASK):
 					return False
 			if gajim.connections[self.account].connected < 2: #we are not connected
-				dialogs.ErrorDialog(_("A connection is not available"),
-					_("Your message can't be sent until you are connected.")).get_response()
+				dialogs.ErrorDialog(_('A connection is not available'),
+					_('Your message can not be sent until you are connected.')).get_response()
 				return True
 
 			# send the message
@@ -476,9 +476,24 @@ class TabbedChatWindow(chat.Chat):
 			# if really composing (eg. no Ctrl, or alt modifier, send chatstate
 			if not (event.state & gtk.gdk.CONTROL_MASK) and not\
 				(event.state & gtk.gdk.MOD1_MASK):
-				self.kbd_activity_in_last_5_secs = True
-				self.kbd_activity_in_last_30_secs = True
-				self.send_chatstate('composing')
+				# but what about Shift+ sth ?
+				# Shift + 'a' = A so we're composing
+				# Shift + Escape is not composing, so we let the gtk+ decide
+				# in an workaround way (we could also get somehow the listed shortcuts
+				# but I don't know if it's possible)
+				chars_no = len(message)
+				gobject.timeout_add(1000, self.on_timeout_for_check_composing,
+					message_buffer, jid, chars_no)
+				
+	def on_timeout_for_check_composing(self, message_buffer, jid, chars_no):
+		start_iter, end_iter = message_buffer.get_bounds()
+		message = message_buffer.get_text(start_iter, end_iter, False)
+		chars_no_after_one_sec = len(message)
+		if chars_no != chars_no_after_one_sec:
+			# so GTK+ decided key_press was for writing..
+			self.kbd_activity_in_last_5_secs = True
+			self.kbd_activity_in_last_30_secs = True
+			self.send_chatstate('composing')
 
 	def send_chatstate(self, state, jid = None):
 		''' sends our chatstate as STANDLONE chat state message (eg. no body)
