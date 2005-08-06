@@ -658,7 +658,7 @@ class Connection:
 				host_dict={
 					'state': 0, 
 					'target': str(receiver), 
-					'id': id, 
+					'id': file_props['sid'], 
 					'initiator': proxy,
 					'host': host,
 					'port': str(_port),
