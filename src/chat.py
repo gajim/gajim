@@ -146,7 +146,7 @@ class Chat:
 			windows = self.plugin.windows[self.account][kind]
 			if kind == 'chats':
 				# send 'gone' chatstate to every tabbed chat tab
-				windows[jid].send_chatstate('gone')
+				windows[jid].send_chatstate('gone', jid)
 				gobject.source_remove(self.possible_paused_timeout_id[jid])
 				gobject.source_remove(self.possible_inactive_timeout_id[jid])
 			if self.plugin.systray_enabled and self.nb_unread[jid] > 0:
