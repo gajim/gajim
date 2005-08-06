@@ -17148,7 +17148,7 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1107">
+	<widget class="GtkImage" id="image1109">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -17190,11 +17190,12 @@ Maybe I'll refactor later</property>
 
 	  <child>
 	    <widget class="GtkImageMenuItem" id="send_server_message_menuitem">
+	      <property name="tooltip" translatable="yes">Sends a message to currently connected users to this server</property>
 	      <property name="label" translatable="yes">_Send Server Message</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1108">
+		<widget class="GtkImage" id="image1110">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-new</property>
 		  <property name="icon_size">1</property>
@@ -17215,7 +17216,7 @@ Maybe I'll refactor later</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="set_motd_menuitem">
-	      <property name="tooltip" translatable="yes">Set Message of the Day</property>
+	      <property name="tooltip" translatable="yes">Sets Message of the Day</property>
 	      <property name="label" translatable="yes">Set MOTD</property>
 	      <property name="use_underline">True</property>
 	    </widget>
@@ -17223,7 +17224,7 @@ Maybe I'll refactor later</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="update_motd_menuitem">
-	      <property name="tooltip" translatable="yes">Update Message of the Day</property>
+	      <property name="tooltip" translatable="yes">Updates Message of the Day</property>
 	      <property name="label" translatable="yes">Update MOTD</property>
 	      <property name="use_underline">True</property>
 	    </widget>
@@ -17231,12 +17232,12 @@ Maybe I'll refactor later</property>
 
 	  <child>
 	    <widget class="GtkImageMenuItem" id="delete_motd_menuitem">
-	      <property name="tooltip" translatable="yes">Delete Message of the Day</property>
+	      <property name="tooltip" translatable="yes">Deletes Message of the Day</property>
 	      <property name="label" translatable="yes">Delete MOTD</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1109">
+		<widget class="GtkImage" id="image1111">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-clear</property>
 		  <property name="icon_size">1</property>

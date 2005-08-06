@@ -216,6 +216,7 @@ class RosterWindow:
 		elif host.startswith('yahoo'):
 			return 'yahoo'
 		return None
+
 	def get_appropriate_state_images(self, jid):
 		'''check jid and return the appropriate state images dict'''
 		transport = self.get_transport_name_by_jid(jid)
@@ -284,27 +285,75 @@ class RosterWindow:
 	def on_bm_header_changed_state(self, widget, event):
 		widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
 
-	def on_send_single_message_menuitem_activate(self, widget, account):
-		#FIXME: the same name func already exists and expects 4 args
-		pass
-	
-	def on_xml_console_menuitem_activate(self, widget, account):
-		pass
-
-	def on_online_users_menuitem_activate(self, widget, account):
-		pass
-
 	def on_send_server_message_menuitem_activate(self, widget, account):
-		pass
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		server += '/announce/online'
+		dialogs.SingleMessageWindow(self.plugin, account, server, 'send')
+
+	def on_xml_console_menuitem_activate(self, widget, account):
+		if self.plugin.windows[account].has_key('xml_console'):
+			self.plugin.windows[account]['xml_console'].window.present()
+		else:
+			self.plugin.windows[account]['xml_console'].window.show_all()
 
 	def on_set_motd_menuitem_activate(self, widget, account):
-		pass
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		server += '/announce/motd'
+		dialogs.SingleMessageWindow(self.plugin, account, server, 'send')
 
 	def on_update_motd_menuitem_activate(self, widget, account):
-		pass
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		server += '/announce/motd/update'
+		dialogs.SingleMessageWindow(self.plugin, account, server, 'send')
 
 	def on_delete_motd_menuitem_activate(self, widget, account):
-		pass
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		server += '/announce/motd/delete'
+		gajim.connections[account].send_motd(server)	
+	
+	def on_online_users_menuitem_activate(self, widget, account):
+		pass #FIXME: impement disco in users for 0.9
+
+	def get_and_connect_advanced_menuitem_menu(self, account):
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_menuitem_menu', APP)
+		advanced_menuitem_menu = xml.get_widget('advanced_menuitem_menu')
+		
+		send_single_message_menuitem = xml.get_widget(
+			'send_single_message_menuitem')
+		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
+		administrator_menuitem = xml.get_widget('administrator_menuitem')
+		online_users_menuitem = xml.get_widget('online_users_menuitem')
+		send_server_message_menuitem = xml.get_widget(
+			'send_server_message_menuitem')
+		set_motd_menuitem = xml.get_widget('set_motd_menuitem')
+		update_motd_menuitem = xml.get_widget('update_motd_menuitem')
+		delete_motd_menuitem = xml.get_widget('delete_motd_menuitem')
+		
+		send_single_message_menuitem.connect('activate',
+			self.on_send_single_message_menuitem_activate, account)
+
+		xml_console_menuitem.connect('activate',
+			self.on_xml_console_menuitem_activate, account)
+
+		#FIXME: 0.9 should have this: it does disco in the place where users are
+		online_users_menuitem.set_no_show_all(True)
+		online_users_menuitem.hide()
+		online_users_menuitem.connect('activate',
+			self.on_online_users_menuitem_activate, account)
+
+		send_server_message_menuitem.connect('activate',
+			self.on_send_server_message_menuitem_activate, account)
+
+		set_motd_menuitem.connect('activate',
+			self.on_set_motd_menuitem_activate, account)
+
+		update_motd_menuitem.connect('activate',
+			self.on_update_motd_menuitem_activate, account)
+		
+		delete_motd_menuitem.connect('activate',
+			self.on_delete_motd_menuitem_activate, account)
+			
+		return advanced_menuitem_menu
 
 	def make_menu(self):
 		'''create the main window's menus'''
@@ -317,31 +366,6 @@ class RosterWindow:
 			'show_offline_contacts_menuitem')
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
 		
-		'''
-		ui_description = """
-<ui>
-	<menu action='advanced_menuitem_menu'>
-		<menu action='A'>
-			%(menu)s
-		</menu>
-		<menu action='B'>
-			%(menu)s
-		</menu>
-		<menu action='C'>
-			%(menu)s
-		</menu>
-		<menuitem action="Quit" />
-	</menu>
-</ui>"""
-
-		menu_description = """
-			<menuitem action='Send Single Message' />
-			<menuitem action='XML Console' />
-			<separator />
-			<menuitem action='Administrator' />
-			<menuitem action='Test5' />
-"""
-'''
 
 		if self.add_new_contact_handler_id:
 			add_new_contact_menuitem.handler_disconnect(
@@ -363,12 +387,13 @@ class RosterWindow:
 		service_disco_menuitem.remove_submenu()
 		join_gc_menuitem.remove_submenu()
 		new_message_menuitem.remove_submenu()
-		advanced_menuitem.remove_submenu()
+		#advanced_menuitem.remove_submenu()
 
 		#remove the existing accelerator
 		if self.have_new_message_accel:
 			ag = gtk.accel_groups_from_object(self.window)[0]
-			new_message_menuitem.remove_accelerator(ag, gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
+			new_message_menuitem.remove_accelerator(ag, gtk.keysyms.n,
+				gtk.gdk.CONTROL_MASK)
 			self.have_new_message_accel = False
 
 		#join gc
@@ -390,14 +415,14 @@ class RosterWindow:
 				sub_menu.append(item)
 			
 			item = gtk.MenuItem(_('New _Room'))
-			sub_menu.append(item)
 			item.connect('activate', self.on_join_gc_activate, account)
+			sub_menu.append(item)
 
 			for bookmark in gajim.connections[account].bookmarks:
 				item = gtk.MenuItem(bookmark['name'])
-				sub_menu.append(item)
 				item.connect('activate', self.on_bookmark_menuitem_activate,
 					account, bookmark)
+				sub_menu.append(item)
 
 		if at_least_one_account_connected:
 			newitem = gtk.MenuItem() # seperator
@@ -407,14 +432,13 @@ class RosterWindow:
 			img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
 				gtk.ICON_SIZE_MENU)
 			newitem.set_image(img)
-			sub_menu.append(newitem)
 			newitem.connect('activate', self.on_bookmarks_menuitem_activate)
+			sub_menu.append(newitem)
 			sub_menu.show_all()
 
 		if multiple_accounts: # 2 or more accounts? make submenus
 			#add
 			sub_menu = gtk.Menu()
-			add_new_contact_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
 				if gajim.connections[account].connected <= 1:
 					#if offline or connecting
@@ -422,11 +446,11 @@ class RosterWindow:
 				item = gtk.MenuItem(_('to %s account') % account)
 				sub_menu.append(item)
 				item.connect('activate', self.on_add_new_contact, account)
+			add_new_contact_menuitem.set_submenu(sub_menu)
 			sub_menu.show_all()
 			
 			#disco
 			sub_menu = gtk.Menu()
-			service_disco_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
 				if gajim.connections[account].connected <= 1:
 					#if offline or connecting
@@ -435,11 +459,12 @@ class RosterWindow:
 				sub_menu.append(item)
 				item.connect('activate', self.on_service_disco_menuitem_activate,
 					account)
+
+			service_disco_menuitem.set_submenu(sub_menu)
 			sub_menu.show_all()
 			
 			#new message
 			sub_menu = gtk.Menu()
-			new_message_menuitem.set_submenu(sub_menu)
 			for account in gajim.connections:
 				if gajim.connections[account].connected <= 1:
 					#if offline or connecting
@@ -450,55 +475,20 @@ class RosterWindow:
 				sub_menu.append(item)
 				item.connect('activate', self.on_new_message_menuitem_activate, 
 									account)
+	
+			new_message_menuitem.set_submenu(sub_menu)
 			sub_menu.show_all()
 			
 			#Advanced Actions
 			sub_menu = gtk.Menu()
 			for account in gajim.connections:
-				if gajim.connections[account].connected <= 1: 
-					#if offline or connecting
-					continue
-				'''
-				childs = advanced_menuitem_menu.get_children()
-
-				send_single_message_menuitem = childs[0]
-				send_single_message_menuitem.connect('activate',
-					self.on_send_single_message_menuitem_activate, account)
-
-				xml_console_menuitem = childs[1]
-				xml_console_menuitem.connect('activate',
-					self.on_xml_console_menuitem_activate, account)
-
-				# skip the seperator
-				admin_childs = childs[3].get_submenu().get_children()
-
-				online_users_menuitem = admin_childs[0]
-				online_users_menuitem.connect('activate',
-					self.on_online_users_menuitem_activate, account)
-
-				send_server_message_menuitem = admin_childs[1]
-				send_server_message_menuitem.connect('activate',
-					self.on_send_server_message_menuitem_activate, account)
-
-				# skip the seperator
-				set_motd_menuitem = admin_childs[3]
-				set_motd_menuitem.connect('activate',
-					self.on_set_motd_menuitem_activate, account)
-
-				update_motd_menuitem = admin_childs[4]
-				update_motd_menuitem.connect('activate',
-					self.on_update_motd_menuitem_activate, account)
-				
-				delete_motd_menuitem = admin_childs[5]
-				delete_motd_menuitem.connect('activate',
-					self.on_delete_motd_menuitem_activate, account)
-
-				item = gtk.MenuItem(_('for %s ') % account)
-				item.set_submenu(advanced_menuitem_menu)
-				
+				item = gtk.MenuItem(_('for account %s') % account)
 				sub_menu.append(item)
-				advanced_menuitem.set_submenu(sub_menu)
-				'''
+				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
+					account)
+				item.set_submenu(advanced_menuitem_menu)
+			
+			advanced_menuitem.set_submenu(sub_menu)
 			sub_menu.show_all()
 			
 		else:
@@ -524,23 +514,29 @@ class RosterWindow:
 						gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 					self.have_new_message_accel = True
 				
-			#advanced_menuitem.set_submenu(advanced_menuitem_menu)
+				account = gajim.connections.keys()[0]
+				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
+					account)
+				print len(advanced_menuitem_menu.get_children())
+				advanced_menuitem.set_submenu(advanced_menuitem_menu)
 
+		
+		#FIXME: Gajim 0.9 should have this visible
+		profile_avatar_menuitem.set_no_show_all(True)
+		profile_avatar_menuitem.hide()
+		
 		if at_least_one_account_connected:
 			new_message_menuitem.set_sensitive(True)
 			join_gc_menuitem.set_sensitive(True)
 			add_new_contact_menuitem.set_sensitive(True)
 			service_disco_menuitem.set_sensitive(True)
-			advanced_menuitem.set_sensitive(True)
 			show_offline_contacts_menuitem.set_sensitive(True)
-			profile_avatar_menuitem.set_sensitive(True)
 		else:
 			# make the menuitems insensitive
 			new_message_menuitem.set_sensitive(False)
 			join_gc_menuitem.set_sensitive(False)
 			add_new_contact_menuitem.set_sensitive(False)
 			service_disco_menuitem.set_sensitive(False)
-			advanced_menuitem.set_sensitive(False)
 			show_offline_contacts_menuitem.set_sensitive(False)
 			profile_avatar_menuitem.set_sensitive(False)
 
@@ -776,8 +772,12 @@ class RosterWindow:
 			self.plugin.windows['logs'][contact.jid] = history_window.\
 				HistoryWindow(self.plugin, contact.jid, account)
 
-	def on_send_single_message_menuitem_activate(self, wiget, account, contact):
-		dialogs.SingleMessageWindow(self, account, contact.jid, 'send')
+	def on_send_single_message_menuitem_activate(self, wiget, account,
+	contact = None):
+		if contact is None:
+			dialogs.SingleMessageWindow(self, account, action = 'send')
+		else:
+			dialogs.SingleMessageWindow(self, account, contact.jid, 'send')
 		
 	def on_send_file_menuitem_activate(self, widget, account, contact):
 		self.plugin.windows['file_transfers'].show_file_send_request( 
@@ -932,27 +932,6 @@ class RosterWindow:
 		menu.popup(None, None, None, event_button, event.time)
 		menu.show_all()
 
-	def on_xml_console(self, widget, account):
-		if self.plugin.windows[account].has_key('xml_console'):
-			self.plugin.windows[account]['xml_console'].window.present()
-		else:
-			self.plugin.windows[account]['xml_console'].window.show_all()
-
-	def on_set_motd(self, widget, account):
-		server = gajim.config.get_per('accounts', account, 'hostname')
-		server += '/announce/motd'
-		dialogs.SingleMessageWindow(self.plugin, account, server, 'send')
-
-	def on_update_motd(self, widget, account):
-		server = gajim.config.get_per('accounts', account, 'hostname')
-		server += '/announce/motd/update'
-		dialogs.SingleMessageWindow(self.plugin, account, server, 'send')
-
-	def on_delete_motd(self, widget, account):
-		server = gajim.config.get_per('accounts', account, 'hostname')
-		server += '/announce/motd/delete'
-		gajim.connections[account].send_motd(server)
-
 	def on_edit_account(self, widget, account):
 		if self.plugin.windows[account].has_key('account_modification'):
 			self.plugin.windows[account]['account_modification'].window.present()
@@ -1018,10 +997,11 @@ class RosterWindow:
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, show)
 
-		xml_console_menuitem.connect('activate', self.on_xml_console, account)
-		set_motd_menuitem.connect('activate', self.on_set_motd, account)
-		update_motd_menuitem.connect('activate', self.on_update_motd, account)
-		delete_motd_menuitem.connect('activate', self.on_delete_motd, account)
+		xml_console_menuitem.connect('activate', self.on_xml_console_menuitem_activate,
+			account)
+		set_motd_menuitem.connect('activate', self.on_set_motd_menuitem_activate, account)
+		update_motd_menuitem.connect('activate', self.on_update_motd_menuitem_activate, account)
+		delete_motd_menuitem.connect('activate', self.on_delete_motd_menuitem_activate, account)
 		edit_account_menuitem.connect('activate', self.on_edit_account, account)
 		service_discovery_menuitem.connect('activate',
 			self.on_service_disco_menuitem_activate, account)

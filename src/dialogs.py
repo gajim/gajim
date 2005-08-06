@@ -1001,6 +1001,13 @@ class NewMessageDialog:
 			
 	def new_message_response(self, jid):
 		''' called when ok button is clicked '''
+		if gajim.connections[self.account].connected <= 1:
+			#if offline or connecting
+			ErrorDialog(_('Connection not available'),
+		_('Please make sure you are connected with "%s".' % self.account)
+			).get_response()
+			return
+	
 		if jid.find('@') == -1: # if no @ was given
 			ErrorDialog(_('Invalid contact ID'),
 	_('Contact ID must be of the form "username@servername".')).get_response()
@@ -1153,7 +1160,7 @@ class PopupNotificationWindow:
 
 		if self.msg_type == 'normal': # it's single message
 			return # FIXME: I think I should not print here but in new_chat?
-			contact = self.contacts[account][jid][0]
+			contact = get_contact_instance_with_highest_priority(account, jid)
 			SingleMessageWindow(self.plugin, self.account, contact.jid, 
 			action = 'receive', from_whom = jid, subject = subject, message = msg)
 		
@@ -1181,11 +1188,10 @@ class PopupNotificationWindow:
 class SingleMessageWindow:
 	'''SingleMessageWindow can send or show a received
 	singled message depending on action argument'''
-	def __init__(self, plugin, account, to='', action='', from_whom='',
-	subject='', message=''):
+	def __init__(self, plugin, account, to = '', action = '', from_whom = '',
+	subject = '', message = ''):
 		self.plugin = plugin
 		self.account = account
-		self.contact = contact
 		self.action = action
 
 		self.subject = subject
@@ -1279,15 +1285,22 @@ class SingleMessageWindow:
 		self.count_chars_label.set_text(str(characters_no))
 	
 	def send_single_message(self):
+		if gajim.connections[self.account].connected <= 1:
+			#if offline or connecting
+			ErrorDialog(_('Connection not available'),
+		_('Please make sure you are connected with "%s".' % self.account)
+			).get_response()
+			return
 		to_whom_jid = self.to_entry.get_text()
 		subject = self.subject_entry.get_text()
 		begin, end = self.message_tv_buffer.get_bounds()
 		message = self.message_tv_buffer.get_text(begin, end)
 
-		if to_whom_jid.find('/announce/motd') > -1:
+		if to_whom_jid.find('/announce/motd') != -1:
 			gajim.connections[self.account].send_motd(to_whom_jid, subject,
 				message)
 			return
+
 		if to_whom_jid.find('@') == -1: # if no @ was given
 			ErrorDialog(_('Invalid contact ID'),
 		_('Contact ID must be of the form "username@servername".')).get_response()
@@ -1341,7 +1354,7 @@ class XMLConsoleWindow:
 		color = gajim.config.get('outmsgcolor')
 		self.tagOut.set_property('foreground', color)
 
-		self.enable = False
+		self.enabled = False
 
 		self.input_textview.modify_text(
 			gtk.STATE_NORMAL, gtk.gdk.color_parse(color))
@@ -1364,7 +1377,7 @@ class XMLConsoleWindow:
 		buffer.set_text('')
 
 	def on_enable_checkbutton_toggled(self, widget):
-		self.enable = widget.get_active()
+		self.enabled = widget.get_active()
 
 	def scroll_to_end(self, ):
 		parent = self.stanzas_log_textview.get_parent()
@@ -1377,7 +1390,7 @@ class XMLConsoleWindow:
 
 	def print_stanza(self, stanza, kind):
 		# kind must be 'incoming' or 'outgoing'
-		if not self.enable:
+		if not self.enabled:
 			return
 
 		buffer = self.stanzas_log_textview.get_buffer()
@@ -1393,6 +1406,12 @@ class XMLConsoleWindow:
 			gobject.idle_add(self.scroll_to_end)
 
 	def on_send_button_clicked(self, widget):
+		if gajim.connections[self.account].connected <= 1:
+			#if offline or connecting
+			ErrorDialog(_('Connection not available'),
+		_('Please make sure you are connected with "%s".' % self.account)
+			).get_response()
+			return
 		begin_iter, end_iter = self.input_tv_buffer.get_bounds()
 		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter)
 		if stanza:
