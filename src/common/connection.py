@@ -127,6 +127,7 @@ class Connection:
 			'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],
 			'ROSTER_INFO': [], 'ERROR_ANSWER': [], 'BOOKMARKS': [], 'CON_TYPE': [],
 			'FILE_REQUEST': [], 'FILE_RCV_COMPLETED': [], 'FILE_PROGRESS': [],
+			'FILE_REQUEST_ERROR': [], 'FILE_SEND_ERROR': [],
 			'STANZA_ARRIVED': [], 'STANZA_SENT': [], 'HTTP_AUTH': []
 			}
 		self.name = name
@@ -378,7 +379,23 @@ class Connection:
 			(_('Connection with account "%s" has been lost') % self.name,
 			_('To continue sending and receiving messages, you will need to reconnect.')))
 		self.on_purpose = False
+		
 	# END disconenctedCB
+	def _bytestreamErrorCB(self, con, iq_obj):
+		gajim.log.debug('_bytestreamErrorCB')
+		frm = str(iq_obj.getFrom())
+		id = str(iq_obj.getAttr('id'))
+		query = iq_obj.getTag('query')
+		streamhost =  query.getTag('streamhost')
+		host = streamhost.getAttr('host')
+		port = streamhost.getAttr('port')
+		jid = iq_obj.getFrom().getStripped().encode('utf8')
+		id = id[3:]
+		if not self.files_props.has_key(id):
+			return
+		file_props = self.files_props[id]
+		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
+		raise common.xmpp.NodeProcessed
 	
 	def _bytestreamSetCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamSetCB')
@@ -388,13 +405,15 @@ class Connection:
 		sid = str(query.getAttr('sid'))
 		file_props = gajim.socks5queue.get_file_props(
 			self.name, sid)
-		if file_props is None:
-			raise common.xmpp.NodeProcessed
-			# todo - error
 		streamhosts=[]
 		for item in query.getChildren():
 			if item.getName() == 'streamhost':
-				host_dict={}
+				host_dict={
+					'state' : 0, 
+					'target' : target, 
+					'id' : id, 
+					'initiator' : str(iq_obj.getFrom())
+				}
 				for attr in item.getAttrs():
 					val = item.getAttr(attr)
 					if type(val) == unicode:
@@ -403,36 +422,163 @@ class Connection:
 						attr = attr.encode('utf-8')
 					host_dict[attr] = val
 				streamhosts.append(host_dict)
-		
-		for streamhost in streamhosts:
-			sock5 = socks5.Socks5Receiver(host = streamhost['host'], \
-				port = int(streamhost['port']), initiator = streamhost['jid'], 
-				target = target, sid = sid, file_props = file_props)
-			iq = common.xmpp.Iq(to = streamhost['jid'], typ = 'result', frm = target)
-			iq.setAttr('id', id)
-			query = iq.setTag('query')
-			query.setNamespace(common.xmpp.NS_BYTESTREAM)
-			stream_tag = query.setTag('streamhost-used')
-			stream_tag.setAttr('jid', streamhost['jid'])
-			ret = gajim.socks5queue.add_receiver(self.name, sock5, 
-				self.to_be_sent.append, iq)
-			if ret is None:
-				continue
-			raise common.xmpp.NodeProcessed
+		if file_props is None:
+			if self.files_props.has_key(sid):
+				file_props = self.files_props[sid]
+				file_props['fast'] = streamhosts
+				
+				# this is not good, but the only way to work with psi!
+				if len(gajim.socks5queue.readers) == 0 and \
+					len(gajim.socks5queue.senders) == 0:
+					self._connect_error(str(iq_obj.getFrom()), id, code = 406)
+				# END not good
+				
+				raise common.xmpp.NodeProcessed
+		fast = None
+		try:
+			fast = query.getTag('fast')
+		except Exception, e:
+			pass
+		if fast is not None:
+			if fast.getNamespace() == 'http://affinix.com/jabber/stream':
+				self.send_socks5_info(file_props, fast = False, \
+				receiver = file_props['sender'], sender = file_props['receiver'])
+				self.files_props[sid] = file_props
+		file_props['streamhosts'] = streamhosts
+		conn_err = False
+		if file_props['type'] == 'r':
+			gajim.socks5queue.connect_to_hosts(self.name, sid, 
+				self.send_success_connect_reply, self._connect_error)
+		raise common.xmpp.NodeProcessed
+	
+	def send_success_connect_reply(self, streamhost):
+		''' send reply to the initiator of FT that we 
+		made a connection
+		'''
+		if streamhost is None:
+			return None
+		iq = common.xmpp.Iq(to = streamhost['initiator'], typ = 'result', \
+			frm = streamhost['target'])
+		iq.setAttr('id', streamhost['id'])
+		query = iq.setTag('query')
+		query.setNamespace(common.xmpp.NS_BYTESTREAM)
+		stream_tag = query.setTag('streamhost-used')
+		stream_tag.setAttr('jid', streamhost['jid'])
+		self.to_be_sent.append(iq)
+	
+	def _connect_error(self, to, id, code = 404):
+		msg_dict = {
+			404 : 'Could not connect to given hosts', 
+			405 : 'Cancel', 
+			406 : 'Not acceptable', 
+		}
+		msg = msg_dict[code]
+		iq = None
+		iq = common.xmpp.Protocol(name = 'iq', to = to, 
+			typ = 'error')
+		iq.setAttr('id', id)
+		err = iq.setTag('error')
+		err.setAttr('code', str(code))
+		err.setData(msg)
+		self.to_be_sent.append(iq)
 		
 	def _bytestreamResultCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamResultCB')
 		frm = str(iq_obj.getFrom())
-		id = str(iq_obj.getAttr('id'))
+		real_id = str(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
+		id = real_id[3:]
+		if not self.files_props.has_key(id):
+			file_props = gajim.socks5queue.get_file_props(
+				self.name, id)
+			gajim.socks5queue.get_file_from_sender(file_props, self.name)
+			raise common.xmpp.NodeProcessed
+		file_props = self.files_props[id]
+		if real_id[:3] == 'au_':
+			gajim.socks5queue.send_file(file_props, self.name)
+			raise common.xmpp.NodeProcessed
+		elif real_id[:3] == 'px_':
+			proxyhosts = []
+			for item in query.getChildren():
+				if item.getName() == 'streamhost':
+					host_dict={
+						'state' : 0, 
+						'target' : str(iq_obj.getAttr('to')), 
+						'id' : id, 
+						'initiator' : str(iq_obj.getFrom())
+					}
+					for attr in item.getAttrs():
+						val = item.getAttr(attr)
+						host_dict[str(attr)] = str(val)
+					proxyhosts.append(host_dict)
+			file_props['proxyhosts'] = proxyhosts
+			iq = common.xmpp.Protocol(name = 'iq', to = \
+				str(file_props['proxy_receiver']), typ = 'set')
+			port = gajim.config.get('file_transfers_port')
+			file_props['request-id'] = 'id_' + file_props['sid']
+			iq.setID(file_props['request-id'])
+			query = iq.setTag('query')
+			query.setNamespace(common.xmpp.NS_BYTESTREAM)
+			query.setAttr('mode', 'tcp')
+			query.setAttr('sid', file_props['sid'])
+			streamhost = query.setTag('streamhost')
+			streamhost.setAttr('port', str(port))
+			streamhost.setAttr('host', self.peerhost[0])
+			streamhost.setAttr('jid', str(file_props['proxy_sender']))
+			for proxyhost in proxyhosts:
+				streamhost = common.xmpp.Node(tag = 'streamhost')
+				query.addChild(node=streamhost)
+				streamhost.setAttr('port', proxyhost['port'])
+				streamhost.setAttr('host', proxyhost['host'])
+				streamhost.setAttr('jid', proxyhost['jid'])
+				proxy = streamhost.setTag('proxy')
+				proxy.setNamespace(common.xmpp.NS_STREAM)
+				fast_tag = query.setTag('fast')
+				fast_tag.setNamespace(common.xmpp.NS_STREAM)
+			self.to_be_sent.append(iq)
+			raise common.xmpp.NodeProcessed
 		streamhost =  query.getTag('streamhost-used')
 		jid = streamhost.getAttr('jid')
-		id = id[3:]
-		if not self.files_props.has_key(id):
-			return
-		file_props = self.files_props[id]
-		gajim.socks5queue.send_file(file_props, self.name)
+		proxy = None
+		if file_props.has_key('proxyhosts'):
+			for proxyhost in file_props['proxyhosts']:
+				if proxyhost['jid'] == jid:
+					proxy = proxyhost
+		if proxy != None:
+			if not file_props.has_key('streamhosts'):
+				file_props['streamhosts'] =[]
+			file_props['streamhosts'].append(proxy)
+			file_props['is_a_proxy'] = True
+			receiver = socks5.Socks5Receiver(proxy, file_props['sid'], file_props)
+			gajim.socks5queue.add_receiver(self.name, receiver)
+			proxy['idx'] = receiver.queue_idx
+			gajim.socks5queue.on_success = self.proxy_auth_ok
+			raise common.xmpp.NodeProcessed
+		
+		elif not file_props.has_key('connected') or \
+			file_props['connected'] is False:
+			gajim.socks5queue.send_file(file_props, self.name)
+			if file_props.has_key('fast'):
+				fasts = file_props['fast']
+				if len(fasts) > 0:
+					self._connect_error(str(iq_obj.getFrom()), fasts[0]['id'], 
+						code = 406)
 		raise common.xmpp.NodeProcessed
+	
+	def proxy_auth_ok(self, proxy):
+		''' cb, called after authentication to proxy server '''
+		file_props = self.files_props[proxy['id']]
+		iq = common.xmpp.Protocol(name = 'iq', to = proxy['initiator'], 
+		typ = 'set')
+		auth_id = "au_" + proxy['id']
+		iq.setID(auth_id)
+		query = iq.setTag('query')
+		query.setNamespace(common.xmpp.NS_BYTESTREAM)
+		query.setAttr('sid',  proxy['id'])
+		activate = query.setTag('activate')
+		activate.setData(file_props['proxy_receiver'])
+		iq.setID(auth_id)
+		self.to_be_sent.append(iq)
 		
 	def _discoGetCB(self, con, iq_obj):
 		''' get disco info '''
@@ -480,7 +626,7 @@ class Connection:
 		field = form.getField('stream-method')
 		if field.getValue() != common.xmpp.NS_BYTESTREAM:
 			return
-		self.send_socks5_info(file_props)
+		self.send_socks5_info(file_props, fast = True)
 		raise common.xmpp.NodeProcessed
 	
 	def _get_sha(self, sid, initiator, target):
@@ -488,25 +634,47 @@ class Connection:
 		return sha.new("%s%s%s" % (sid, initiator, target)).hexdigest()
 		
 	def result_socks5_sid(self, sid, hash_id):
+		''' store the result of sha message from auth  '''
 		if not self.files_props.has_key(sid):
 			return
 		file_props = self.files_props[sid]
 		file_props['hash'] = hash_id
 		return
 	
-	def send_socks5_info(self, file_props):
+	def send_socks5_info(self, file_props, fast = True, receiver = None, 
+		sender = None):
 		if type(self.peerhost) != tuple:
 			return
 		port = gajim.config.get('file_transfers_port')
-		sha_str = self._get_sha(file_props['sid'], file_props['sender'], 
-			file_props['receiver'])
+		proxy = gajim.config.get_per('accounts', self.name, 'file_transfers_proxy')
+		#~ proxy = 'proxy.jabber.org'
+		if receiver is None:
+			receiver = file_props['receiver']
+		if sender is None:
+			sender = file_props['sender']
+
+		sha_str = self._get_sha(file_props['sid'], sender, 
+			receiver)
 		file_props['sha_str'] = sha_str
 		listener = gajim.socks5queue.start_listener(self.peerhost[0], port, 
 			sha_str, self.result_socks5_sid, file_props['sid'])
 		if listener == None:
 			# FIXME - raise error dialog that address is in use
 			return
-		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['receiver']), 
+		
+		if proxy:
+			iq = common.xmpp.Protocol(name = 'iq', to = str(proxy), 
+			typ = 'get')
+			proxy_id = 'px_' + file_props['sid']
+			iq.setID(proxy_id)
+			query = iq.setTag('query')
+			query.setNamespace(common.xmpp.NS_BYTESTREAM)
+			self.to_be_sent.append(iq)
+			file_props['proxy_receiver'] = str(receiver)
+			file_props['proxy_sender'] = str(sender)
+			return
+		
+		iq = common.xmpp.Protocol(name = 'iq', to = str(receiver), 
 			typ = 'set')
 		file_props['request-id'] = 'id_' + file_props['sid']
 		iq.setID(file_props['request-id'])
@@ -517,7 +685,12 @@ class Connection:
 		streamhost = query.setTag('streamhost')
 		streamhost.setAttr('port', str(port))
 		streamhost.setAttr('host', self.peerhost[0])
-		streamhost.setAttr('jid', str(file_props['sender']))
+		streamhost.setAttr('jid', sender)
+		
+		if fast:
+			fast_tag = query.setTag('fast')
+			fast_tag.setNamespace(common.xmpp.NS_STREAM)
+			
 		self.to_be_sent.append(iq)
 			
 	def _siSetCB(self, con, iq_obj):
@@ -546,7 +719,10 @@ class Connection:
 		
 		if mime_type is not None:
 			file_props['mime-type'] = mime_type
-			
+		name = gajim.config.get_per('accounts', self.name, 'name')
+		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+		resource = gajim.config.get_per('accounts', self.name, 'resource')
+		file_props['receiver'] = name + '@' + hostname + '/' + resource
 		file_props['sender'] = iq_obj.getFrom()
 		file_props['request-id'] = str(iq_obj.getAttr('id'))
 		file_props['sid'] = str(si.getAttr('id'))
@@ -993,6 +1169,8 @@ class Connection:
 		con.RegisterHandler('iq', self._bytestreamSetCB, 'set', 
 			common.xmpp.NS_BYTESTREAM)
 		con.RegisterHandler('iq', self._bytestreamResultCB, 'result', 
+			common.xmpp.NS_BYTESTREAM)
+		con.RegisterHandler('iq', self._bytestreamErrorCB, 'error',
 			common.xmpp.NS_BYTESTREAM)
 		con.RegisterHandler('iq', self._BrowseResultCB, 'result',
 			common.xmpp.NS_BROWSE)

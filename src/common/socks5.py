@@ -44,6 +44,8 @@ class SocksQueue:
 		self.sha_handlers = {}
 		self.complete_transfer_cb = complete_transfer_cb
 		self.progress_transfer_cb = progress_transfer_cb
+		self.on_success = None
+		self.on_failure = None
 		
 	def start_listener(self, host, port, sha_str, sha_handler, sid):
 		self.sha_handlers[sha_str] = (sha_handler, sid)
@@ -54,41 +56,88 @@ class SocksQueue:
 				return None
 			self.connected += 1
 		return self.listener
-	
+		
+	def connect_to_hosts(self, account, sid, on_success = None, 
+		on_failure = None):
+		self.on_success = on_success
+		self.on_failure = on_failure
+		if not self.files_props.has_key(account):
+			pass
+			# FIXME ---- show error dialog
+		else:
+			file_props = self.files_props[account][sid]
+		file_props['success_cb'] = on_success
+		file_props['failure_cb'] = on_failure
+		for streamhost in file_props['streamhosts']:
+			receiver = Socks5Receiver(streamhost, sid, file_props)
+			self.add_receiver(account, receiver)
+			streamhost['idx'] = receiver.queue_idx
+	def _socket_connected(self, streamhost, file_props):
+		streamhost['state'] = 0
+		for host in file_props['streamhosts']:
+			if host != streamhost and host.has_key('idx'):
+				host['state'] = -1
+				self.remove_receiver(host['idx'])
+		pass
+		
+	def _connection_refused(self, streamhost, file_props, idx):
+		if file_props is None:
+			return
+		streamhost['state'] = -1
+		self.remove_receiver(idx)
+		if file_props['failure_cb']:
+			file_props['failure_cb'](streamhost['initiator'], streamhost['id'], 
+			code = 404)
+		else:
+			# show error dialog, it seems to be the laast try
+			pass
+		
+	def add_receiver(self, account, sock5_receiver):
+		''' add new file request '''
+		self.readers[self.idx] = sock5_receiver
+		sock5_receiver.queue_idx = self.idx
+		sock5_receiver.queue = self
+		sock5_receiver.account = account
+		self.idx += 1
+		result = sock5_receiver.connect()
+		if result != None:
+			self.connected += 1
+			result = sock5_receiver.main()
+			self.process_result(result, sock5_receiver)
+			return 1
+			
+		return None
+		
+	def get_file_from_sender(self, file_props, account):
+		if file_props.has_key('hash') and \
+			self.senders.has_key(file_props['hash']):
+			sender = self.senders[file_props['hash']]
+			sender.account = account
+			result = get_file_contents(0)
+			self.process_result(result, sender)
+			
 	def result_sha(self, sha_str, idx):
 		if self.sha_handlers.has_key(sha_str):
 			props = self.sha_handlers[sha_str]
 			props[0](props[1], idx)
 			
 	def send_file(self, file_props, account):
-		if self.senders.has_key(file_props['hash']):
+		if file_props.has_key('hash') and \
+			self.senders.has_key(file_props['hash']):
 			sender = self.senders[file_props['hash']]
 			sender.account = account
-			result = sender.send_file(file_props)
-			self.process_result(result, sender)
-	
-	def add_receiver(self, account, sock5_receiver, auth_cb, auth_param):
-		''' add new file request '''
-		self.readers[self.idx] = sock5_receiver
-		sock5_receiver.queue_idx = self.idx
-		sock5_receiver.queue = self
-		sock5_receiver.account = account
-		sock5_receiver.auth_cb = auth_cb
-		sock5_receiver.auth_param = auth_param
-		self.idx += 1
-		result = sock5_receiver.connect()
-		if result != None:
-			sock5_receiver._sock.setblocking(False)
-			result = sock5_receiver.main()
-			self.process_result(result, sock5_receiver)
-			self.connected += 1
-			return 1
-		# we don't need blocking sockets anymore
-		# this unblocks ui! 
-		
-		return None
-	
+			if file_props['type'] == 's':
+				sender.file_props = file_props 
+				result = sender.send_file()
+				self.process_result(result, sender)
+			else:
+				file_props['received-len'] = 0
+				sender.file_props = file_props
+				
 	def add_file_props(self, account, file_props):
+		''' file_prop to the dict of current file_props.
+		It is identified by account name and sid
+		'''
 		if file_props is None or \
 			file_props.has_key('sid') is False:
 			return
@@ -96,7 +145,9 @@ class SocksQueue:
 		if not self.files_props.has_key(account):
 			self.files_props[account] = {}
 		self.files_props[account][id] = file_props
+		
 	def get_file_props(self, account, sid):
+		''' get fil_prop by account name and session id '''
 		if self.files_props.has_key(account):
 			fl_props = self.files_props[account]
 			if fl_props.has_key(sid):
@@ -104,7 +155,9 @@ class SocksQueue:
 		return None
 
 	def process(self, timeout=0):
-		''' process all file requests '''
+		''' Process all registered connection.
+		they can be receivers, senders and one listener 
+		'''
 		if self.listener is not None:
 			if self.listener.pending_connection():
 				_sock = self.listener.accept_conn()
@@ -117,9 +170,8 @@ class SocksQueue:
 		for idx in self.senders.keys():
 			sender = self.senders[idx]
 			if sender.connected:
-				
 				if sender.state < 5:
-					if sender.pending_data():
+					if sender.pending_data(timeout):
 						result = sender.main()
 						if sender.state == 4:
 							self.result_sha(sender.sha_msg, idx)
@@ -127,41 +179,57 @@ class SocksQueue:
 							continue
 						if result == -1:
 							sender.disconnect()
-				elif sender.state == 7:
-					for i in range(5):
-						if sender.file_props['paused']:
-							break
-						if not sender.connected:
-							self.process_result(-1, sender)
-							break
-						if sender.state == 8:
-							self.remove_sender(idx)
-							break
-						result = sender.write_next()
+				elif sender.state == 5:
+					if sender.file_props is not None and \
+					sender.file_props['type'] == 'r':
+						result = sender.get_file_contents(0)
 						self.process_result(result, sender)
-						if sender.file_props['stalled']:
-							break
+				elif sender.state == 7 and not sender.file_props['paused']:
+					if not sender.connected:
+						self.process_result(-1, sender)
+						break
+					if sender.state == 8:
+						self.remove_sender(idx)
+						break
+					result = sender.write_next()
+					self.process_result(result, sender)
+					if sender.file_props['stalled']:
+						break
 				elif sender.state == 8:
 					self.remove_sender(idx)
 			else:
 				self.remove_sender(idx)
-		for idx in self.readers.keys():
+		keys = self.readers.keys()
+		for idx in keys:
+			if not self.readers.has_key(idx):
+				continue
 			receiver = self.readers[idx]
+			if receiver.state == 0:
+				res = receiver.do_connect()
+				continue
 			if receiver.connected:
 				if receiver.file_props['paused']:
 					continue
-				if receiver.state == 5:
-					result = receiver.get_file_contents(timeout)
-					self.process_result(result, receiver)
-				else:
-					pd = receiver.pending_data()
+				if receiver.state < 5:
+					pd = receiver.pending_data(0)
 					if pd:
-						result = receiver.main(timeout)
+						result = receiver.main(0)
 						self.process_result(result, receiver)
+				else:
+					if receiver.file_props['type'] == 'r':
+						result = receiver.get_file_contents(timeout)
+					else:
+						result = receiver.write_next()
+					self.process_result(result, receiver)
 			else:
 				self.remove_receiver(idx)
 		
 	def process_result(self, result, actor):
+		''' Take appropriate actions upon the result:
+		[ 0, - 1 ] complete/end transfer
+		[ > 0 ] send progress message
+		[ None ] do nothing
+		'''
 		if result is None:
 			return
 		if result in [0, -1] and \
@@ -173,12 +241,17 @@ class SocksQueue:
 				actor.file_props)
 	
 	def remove_receiver(self, idx):
+		''' Remove reciver from the list and decrease 
+		the number of active connections with 1'''
 		if idx != -1:
 			if self.readers.has_key(idx):
+				if self.readers[idx].streamhost is not None:
+					self.readers[idx].streamhost['state'] = -1
 				del(self.readers[idx])
-			if self.connected > 0:
-				self.connected -= 1
+	
 	def remove_sender(self, idx):
+		''' Remove reciver from the list of senders and decrease the 
+		number of active connections with 1'''
 		if idx != -1:
 			if self.senders.has_key(idx):
 				del(self.senders[idx])
@@ -196,159 +269,69 @@ class Socks5:
 		self._sock = None
 		self.account = None
 		self.state = 0 # not connected
-	
-	def connect(self):
-		self._sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		try:
-			self._sock.connect((self.host, self.port))
-			self._sock.setblocking(False)
-			self._send=self._sock.send
-			self._recv=self._sock.recv
-		except Exception, e:
-			return None
-		self.buff = ''
-		self.connected = True
-		self.state = 1 # connected
-		return 1
-	
-	def receive(self):
-		''' Reads small pending incoming data. 
-			Calls owner's disconnected() method if appropriate.'''
+		self.pauses = 0
+		self.size = 0
+		self.remaining_buff = ''
 		
+	def get_fd(self):
+		''' Test if file is already open and return its fd,
+		or just open the file and return the fd.
+		'''
+		if self.file_props.has_key('fd'):
+			fd = self.file_props['fd']
+		else:
+			fd = open(self.file_props['file-name'],'w')
+			self.file_props['fd'] = fd
+			self.file_props['received-len'] = 0
+		return fd
+
+	def rem_fd(self, fd):
+		if self.file_props.has_key('fd'):
+			del(self.file_props['fd'])
+		try:
+			fd.close()
+		except:
+			pass
+			
+		
+	def receive(self):
+		''' Reads small chunks of data. 
+			Calls owner's disconnected() method if appropriate.'''
 		if self.pending_read():
 			received = ''
-			while self.pending_read():
-				try: 
-					add = self._recv(64)
-				except Exception, e: 
-					add=''
-				received +=add
-				if not add: 
-					break
-			if len(received) == 0:
+			try: 
+				add = self._recv(64)
+			except Exception, e: 
+				add=''
+			received +=add
+			if len(add) == 0:
 				self.disconnect()
 		else:
 			return None
-		return received
-		
-
-
+		return add
+	
 	def send_raw(self,raw_data):
-		''' Writes raw outgoing data. Blocks until done.
-			If supplied data is unicode string, encodes it to utf-8 before send.'''
+		''' Writes raw outgoing data. '''
 		try:
 			lenn = self._send(raw_data)
 		except Exception, e:
 			self.disconnect()
 		return len(raw_data)
-			
-	def disconnect(self):
-		''' Closes the socket. '''
-		self._sock.close()
-		self.connected = False
-		
-	def pending_read(self,timeout=0):
-		''' Returns true if there is a data ready to be read. '''
-		if self._sock is None:
-			return False
-		try:
-			return select.select([self._sock],[],[],timeout)[0]
-		except Exception, e:
-			return False
-		
-	def pending_write(self,timeout=0):
-		''' Returns true if there is a data ready to be read. '''
-		if self._sock is None:
-			return False
-		try:
-			return select.select([],[self._sock],[],timeout)[0]
-		except Exception, e:
-			return False
-			
-	def pending_connection(self,timeout=0):
-		''' Returns true if there is a data ready to be read. '''
-		if self._sock is None:
-			return False
-		try:
-			return select.select([],[self._sock],[],timeout)[0]
-		except Exception, e:
-			return False
 	
-	def _get_auth_buff(self):
-		''' Message, that we support 1 one auth mechanism: 
-		the 'no auth' mechanism. '''
-		return struct.pack('!BBB', 0x05, 0x01, 0x00)
-		
-	def _parse_auth_buff(self, buff):
-		''' Parse the initial message and create a list of auth
-		mechanisms '''
-		auth_mechanisms = []
-		ver, num_auth = struct.unpack('!BB', buff[:2])
-		for i in range(num_auth):
-			mechanism, = struct.unpack('!B', buff[1 + i])
-			auth_mechanisms.append(mechanism)
-		return auth_mechanisms
-	def _get_auth_response(self):
-		return struct.pack('!BB', 0x05, 0x00)
-		
-	def _get_connect_buff(self):
-		''' Connect request by domain name '''
-		buff = struct.pack('!BBBBB%dsBB' % len(self.host), \
-			0x05, 0x01, 0x00, 0x03, len(self.host), self.host, \
-			self.port >> 8, self.port & 0xff)
-		return buff
-	
-	def _get_request_buff(self, msg, command = 0x01):
-		''' Connect request by domain name, 
-		sid sha, instead of domain name (jep 0096) '''
-		buff = struct.pack('!BBBBB%dsBB' % len(msg), \
-			0x05, command, 0x00, 0x03, len(msg), msg, 0, 0)
-		return buff
-		
-	def _parse_request_buff(self, buff):
-		version, req_type, reserved, host_type,  = \
-			struct.unpack('!BBBB', buff[:4])
-		if host_type == 0x01:
-			host_arr = struct.unpack('!iiii', buff[4:8])
-			host, = reduce(lambda e1, e2: str(e1) + "." + str(e2), host_arr)
-			host_len = len(host)
-		elif host_type == 0x03:
-			host_len,  = struct.unpack('!B' , buff[4])
-			host, = struct.unpack('!%ds' % host_len, buff[5:5 + host_len])
-		portlen = len(buff[host_len + 5])
-		if portlen == 1: # Gaim bug :)
-			port, = struct.unpack('!B', buff[host_len + 5])
-		else: 
-			port, = struct.unpack('!H', buff[host_len + 5])
-		return (req_type, host, port)
-			
-		
-	def read_connect(self):
-		buff = self._recv()
-		version, method = struct.unpack('!BB', buff)
-		
-		if version != 0x05 or method == 0xff:
-			self.disconnect()
-	
-	def _get_sha1_auth(self):
-		return sha.new("%s%s%s" % (self.sid, self.initiator, self.target)).hexdigest()
-
-class Socks5Sender(Socks5):
-	''' class for sending file to socket over socks5 '''
-	def __init__(self, sock_hash, parent, _sock, host = None, port = None):
-		self.queue_idx = sock_hash
-		self.queue = parent
-		Socks5.__init__(self, host, port, None, None, None)
-		self._sock = _sock
-		self._sock.setblocking(False)
-		self._recv = _sock.recv
-		self._send = _sock.send
-		self.connected = True
-		self.state = 1 # waiting for first bytes
-		self.file_props = None
-		self.remaining_buff = ''
-		
-	def write_next(self):
+	def write_next(self, initial = False):
+		if initial:
+			try:
+				# send
+				lenn = self._send(self._get_nl_byte())
+			except Exception, e:
+				# peer cannot read
+				if e.args[0] != 11:
+					self.state = 8
+					self.disconnect()
+					self.file_props['error'] = -1
+					return -1
+			self.state = 7
+			return 1
 		if self.remaining_buff != '':
 			buff = self.remaining_buff
 			self.remaining_buff = ''
@@ -360,6 +343,7 @@ class Socks5Sender(Socks5):
 				lenn = self._send(buff)
 			except Exception, e:
 				if e.args[0] != 11:
+					# peer stopped reading
 					self.state = 8
 					self.fd.close()
 					self.disconnect()
@@ -393,57 +377,253 @@ class Socks5Sender(Socks5):
 			self.state = 8
 			self.disconnect()
 			return -1
+	
+	
+	
+	def get_file_contents(self, timeout):
+		''' read file contents from socket and write them to file ''', \
+			self.file_props['type'], self.file_props['sid']
+		if self.file_props is None or \
+			self.file_props.has_key('file-name') is False:
+			self.file_props['error'] = -2
+			return None
+		fd = None
+		if self.remaining_buff != '':
+			fd = self.get_fd()
+			fd.write(self.remaining_buff)
+			lenn = len(self.remaining_buff)
+			self.file_props['received-len'] += lenn
+			self.remaining_buff = ''
+			if self.file_props['received-len'] == int(self.file_props['size']):
+				self.rem_fd(fd)
+				self.disconnect()
+				self.file_props['error'] = 0
+				self.file_props['completed'] = True
+				return 0
+		else:
+			while self.pending_read(timeout):
+				fd = self.get_fd()
+				try: 
+					buff = self._recv(MAX_BUFF_LEN)
+				except Exception, e:
+					buff = ''
+				first_byte = False
+				if self.file_props['received-len'] == 0:
+					if len(buff) > 0:
+						# delimiter between auth and data
+						if ord(buff[0]) == 0xD:
+							first_byte = True
+							buff = buff[1:]
+				self.file_props['received-len'] += len(buff)
+				fd.write(buff)
+				if len(buff) == 0 and first_byte is False:
+					# Transfer stopped  somehow:
+					# reset, paused or network error
+					self.rem_fd(fd)
+					try:
+						# file is not complete, remove it
+						os.remove(self.file_props['file-name'])
+					except Exception, e:
+						# unable to remove the incomplete file
+						pass
+					self.disconnect(False)
+					self.file_props['error'] = -1
+					return 0
+				if self.file_props['received-len'] == int(self.file_props['size']):
+					# transfer completed
+					self.rem_fd(fd)
+					self.disconnect()
+					self.file_props['error'] = 0
+					self.file_props['completed'] = True
+					return 0
+			# return number of read bytes. It can be used in progressbar
+		if fd == None:
+			self.pauses +=1
+		else:
+			self.pauses = 0
+		if self.pauses > 24:
+			self.file_props['stalled'] = True
+		else:
+			self.file_props['stalled'] = False
+		if fd == None and self.file_props['stalled'] is False:
+			return None
+		if self.file_props.has_key('received-len'):
+			if self.file_props['received-len'] != 0:
+				return self.file_props['received-len']
+		return None
+	
+	def disconnect(self, cb = True):
+		''' Closes the socket. '''
+		self._sock.close()
+		self.connected = False
 		
-	def send_file(self, file_props):
-		self.fd = open(file_props['file-name'])
-		file_props['error'] = 0
-		file_props['disconnect_cb'] = self.disconnect
-		file_props['started'] = True
-		file_props['completed'] = False
-		file_props['paused'] = False
-		file_props['stalled'] = False
-		file_props['received-len'] = 0
+	def pending_read(self,timeout=0):
+		''' Returns true if there is a data ready to be read. '''
+		if self._sock is None:
+			return False
+		try:
+			return select.select([self._sock],[],[],timeout)[0]
+		except Exception, e:
+			return False
+			
+	def pending_connection(self,timeout=0):
+		''' Returns true if there is a data ready to be read. '''
+		if self._sock is None:
+			return False
+		try:
+			return select.select([],[self._sock],[],timeout)[0]
+		except Exception, e:
+			return False
+	
+	def _get_auth_buff(self):
+		''' Message, that we support 1 one auth mechanism: 
+		the 'no auth' mechanism. '''
+		return struct.pack('!BBB', 0x05, 0x01, 0x00)
 		
+	def _parse_auth_buff(self, buff):
+		''' Parse the initial message and create a list of auth
+		mechanisms '''
+		auth_mechanisms = []
+		ver, num_auth = struct.unpack('!BB', buff[:2])
+		for i in range(num_auth):
+			mechanism, = struct.unpack('!B', buff[1 + i])
+			auth_mechanisms.append(mechanism)
+		return auth_mechanisms
+	def _get_auth_response(self):
+		''' socks version(5), number of extra auth methods (we send
+		0x00 - no auth
+		) '''
+		return struct.pack('!BB', 0x05, 0x00)
+		
+	def _get_connect_buff(self):
+		''' Connect request by domain name '''
+		buff = struct.pack('!BBBBB%dsBB' % len(self.host), \
+			0x05, 0x01, 0x00, 0x03, len(self.host), self.host, \
+			self.port >> 8, self.port & 0xff)
+		return buff
+	
+	def _get_request_buff(self, msg, command = 0x01):
+		''' Connect request by domain name, 
+		sid sha, instead of domain name (jep 0096) '''
+		buff = struct.pack('!BBBBB%dsBB' % len(msg), \
+			0x05, command, 0x00, 0x03, len(msg), msg, 0, 0)
+		return buff
+	
+	def _get_nl_byte(self):
+		''' This is sent between auth and real data '''
+		return struct.pack('!B', 0x0D)
+		
+	def _parse_request_buff(self, buff):
+		try: # don't trust on what comes from the outside
+			version, req_type, reserved, host_type,  = \
+				struct.unpack('!BBBB', buff[:4])
+			if host_type == 0x01:
+				host_arr = struct.unpack('!iiii', buff[4:8])
+				host, = reduce(lambda e1, e2: str(e1) + "." + str(e2), host_arr)
+				host_len = len(host)
+			elif host_type == 0x03:
+				host_len,  = struct.unpack('!B' , buff[4])
+				host, = struct.unpack('!%ds' % host_len, buff[5:5 + host_len])
+			portlen = len(buff[host_len + 5:])
+			if portlen == 1: 
+				port, = struct.unpack('!B', buff[host_len + 5])
+			elif portlen == 2: 
+				port, = struct.unpack('!H', buff[host_len + 5:])
+			# file data, comes with auth message (Gaim bug)
+			else: 
+				port, = struct.unpack('!H', buff[host_len + 5 : host_len + 7])
+				self.remaining_buff = buff[host_len + 7:]
+		except:
+			return (None, None, None)
+		return (req_type, host, port)
+		
+	def read_connect(self):
+		''' connect responce: version, auth method '''
+		buff = self._recv()
+		try:
+			version, method = struct.unpack('!BB', buff)
+		except:
+			version, method = None, None
+		if version != 0x05 or method == 0xff:
+			self.disconnect()
+		
+	def _get_sha1_auth(self):
+		''' get sha of sid + Initiator jid + Target jid '''
+		if self.file_props.has_key('is_a_proxy'):
+			return sha.new('%s%s%s' % (self.sid, \
+				self.file_props['proxy_sender'], \
+				self.file_props['proxy_receiver'])).hexdigest()
+		return sha.new('%s%s%s' % (self.sid, self.initiator, self.target)).hexdigest()
+
+class Socks5Sender(Socks5):
+	''' class for sending file to socket over socks5 '''
+	def __init__(self, sock_hash, parent, _sock, host = None, port = None):
+		self.queue_idx = sock_hash
+		self.queue = parent
+		Socks5.__init__(self, host, port, None, None, None)
+		self._sock = _sock
+		self._sock.setblocking(False)
+		self._recv = _sock.recv
+		self._send = _sock.send
+		self.connected = True
+		self.state = 1 # waiting for first bytes
+		self.file_props = None
+		
+	def send_file(self):
+		''' start sending the file over verified connection ''' 
+		self.fd = open(self.file_props['file-name'])
+		self.file_props['error'] = 0
+		self.file_props['disconnect_cb'] = self.disconnect
+		self.file_props['started'] = True
+		self.file_props['completed'] = False
+		self.file_props['paused'] = False
+		self.file_props['stalled'] = False
+		self.file_props['connected'] = True
+		self.file_props['received-len'] = 0
 		self.pauses = 0
-		self.file_props = file_props
-		self.size = 0
-		return self.write_next()
+		return self.write_next(initial = True) # initial for nl byte
 		
 	def main(self):
+		''' initial requests for verifying the connection '''
 		if self.state == 1:
 			buff = self.receive()
 			if not self.connected:
 				return -1
 			mechs = self._parse_auth_buff(buff)
+			if mechs is None:
+				return -1 # invalid auth methods received
 		elif self.state == 2:
 			self.send_raw(self._get_auth_response())
 		elif self.state == 3:
 			buff = self.receive()
 			(req_type, self.sha_msg, port) = self._parse_request_buff(buff)
+			if req_type != 0x01:
+				return -1 # request is not of type 'connect'
 		elif self.state == 4:
 			self.send_raw(self._get_request_buff(self.sha_msg, 0x00))
-		self.state += 1
+		self.state += 1 # go to the next step
 		return None
 			
-	def pending_data(self,timeout=0):
-		''' Returns true if there is a data ready to be read. '''
+	def pending_data(self,timeout=0.01):
+		''' return true if there is a data ready to be read '''
 		if self._sock is None:
 			return False
 		try:
-			if self.state in [1, 3]:
-				return self.pending_read()
-			elif self.state in [2, 4, 5]:
+			if self.state in [1, 3, 5]:
+				return self.pending_read(timeout)
+			elif self.state in [2, 4]:
 				return True
 		except Exception, e:
 			return False
 		return False
 		
-	def disconnect(self):
+	def disconnect(self, cb = True):
 		''' Closes the socket. '''
 		# close connection and remove us from the queue
 		self._sock.close()
 		self.connected = False
 		if self.file_props is not None:
+			self.file_props['connected'] = False
 			self.file_props['disconnect_cb'] = None
 		if self.queue is not None:
 			self.queue.remove_sender(self.queue_idx)
@@ -475,7 +655,7 @@ class Socks5Listener:
 		_sock[0].setblocking(False)
 		return _sock
 	
-	def pending_connection(self,timeout=0):
+	def pending_connection(self,timeout=0.005):
 		''' Returns true if there is a data ready to be read. '''
 		if self._serv is None:
 			return False
@@ -487,10 +667,12 @@ class Socks5Listener:
 			return False
 
 class Socks5Receiver(Socks5):
-	def __init__(self, host, port, initiator, target, sid, file_props = None):
+	def __init__(self, streamhost, sid, file_props = None):
 		self.queue_idx = -1
+		self.streamhost = streamhost
 		self.queue = None
 		self.file_props = file_props
+		
 		self.connected = False
 		self.pauses = 0
 		if not self.file_props:
@@ -501,10 +683,38 @@ class Socks5Receiver(Socks5):
 		self.file_props['completed'] = False
 		self.file_props['paused'] = False
 		self.file_props['stalled'] = False
-		self.file_props['started'] = True
-		Socks5.__init__(self, host, port, initiator, target, sid)
+		Socks5.__init__(self, streamhost['host'], int(streamhost['port']), 
+			streamhost['initiator'], streamhost['target'], sid)
 	
-	
+	def connect(self):
+		''' create the socket and start the connect loop '''
+		self._sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self._sock.settimeout(5)
+		# this will not block the GUI
+		self._sock.setblocking(False)
+		self.state = 0 # about to be connected
+		res = self.do_connect()
+		return res
+		
+	def do_connect(self):
+		try:
+			self._sock.connect((self.host, self.port))
+			self._sock.setblocking(False)
+			self._send=self._sock.send
+			self._recv=self._sock.recv
+		except Exception, ee:
+			(errnum, errstr) = ee
+			if errnum == 111:
+				self.queue._connection_refused(self.streamhost, 
+					self.file_props, self.queue_idx)
+			return None
+		self.buff = ''
+		self.connected = True
+		self.file_props['connected'] = True
+		self.state = 1 # connected
+		self.queue._socket_connected(self.streamhost, self.file_props)
+		return 1
+		
 	def main(self, timeout = 0):
 		''' begin negotiation. on success 'address' != 0 '''
 		if self.state == 1:
@@ -522,103 +732,63 @@ class Socks5Receiver(Socks5):
 			buff = self.receive()
 			if buff == None:
 				return None
+			sub_buff = buff[:4]
+			if len(sub_buff) < 4:
+				return None
 			version, command, rsvd, address_type = struct.unpack('!BBBB', buff[:4])
 			addrlen, address, port = 0, 0, 0
 			if address_type == 0x03:
 				addrlen = ord(buff[4])
 				address = struct.unpack('!%ds' % addrlen, buff[5:addrlen + 5])
-				portlen = len(buff[addrlen + 5])
+				portlen = len(buff[addrlen + 5:])
 				if portlen == 1: # Gaim bug :)
 					port, = struct.unpack('!B', buff[addrlen + 5])
+				elif portlen == 2:
+					port, = struct.unpack('!H', buff[addrlen + 5:])
 				else:
-					port, = struct.unpack('!H', buff[addrlen + 5])
+					port, = struct.unpack('!H', buff[addrlen + 5:addrlen + 7])
+					self.remaining_buff = buff[addrlen + 7:]
 			self.state = 5
-			self.auth_cb(self.auth_param)
-			return None
-		if self.state < 5:
+			if self.queue.on_success:
+				self.queue.on_success(self.streamhost)
+		if self.state == 5:
+			if self.file_props['type'] == 's':
+				self.fd = open(self.file_props['file-name'])
+				self.file_props['error'] = 0
+				self.file_props['disconnect_cb'] = self.disconnect
+				self.file_props['started'] = True
+				self.file_props['completed'] = False
+				self.file_props['paused'] = False
+				self.file_props['stalled'] = False
+				self.file_props['received-len'] = 0
+				self.pauses = 0
+				self.send_raw(self._get_nl_byte())
+			self.state = 6
+		if self.state < 6:
 			self.state += 1
 			return None
-		# we have set the connection, retrieve file
-		
-		return self.get_file_contents(timeout)
-	
+		# we have set the connection set up, next - retrieve file
 	
 	def pending_data(self, timeout=0):
 		''' Returns true if there is a data ready to be read. ''', self.state
 		if self._sock is None:
 			return False
 		try:
-			if self.state in [2, 4]:
-				return self.pending_read()
+			if self.state in [2, 4, 6]:
+				return self.pending_read(0.01)
 			elif self.state in [1, 3, 5]:
 				return True
 		except Exception, e:
 			return False
 		return False
 		
-	def get_file_contents(self, timeout):
-		''' read file contents from socket and write them to file '''
-		if self.file_props is None or \
-			self.file_props.has_key('file-name') is False:
-			self.file_props['error'] = -2
-			return None
-		fd = None
-		while self.pending_read(timeout):
-			if self.file_props.has_key('fd'):
-				fd = self.file_props['fd']
-			else:
-				fd = open(self.file_props['file-name'],'w')
-				self.file_props['fd'] = fd
-				self.file_props['received-len'] = 0
-			try: 
-				buff = self._recv(MAX_BUFF_LEN)
-			except Exception, e:
-				buff = ''
-			self.file_props['received-len'] += len(buff)
-			fd.write(buff)
-			if len(buff) == 0:
-				# Transfer stopped  somehow:
-				# reset, paused or network error
-				fd.close()
-				try:
-					# file is not complete, remove it
-					os.remove(self.file_props['file-name'])
-				except Exception, e:
-					# unable to remove the incomplete file
-					pass
-				self.disconnect()
-				self.file_props['error'] = -1
-				return -1
-			
-			if self.file_props['received-len'] == int(self.file_props['size']):
-				# transfer completed
-				fd.close()
-				self.disconnect()
-				self.file_props['error'] = 0
-				self.file_props['completed'] = True
-				return 0
-		# return number of read bytes. It can be used in progressbar
-		if fd == None:
-			self.pauses +=1
-		else:
-			self.pauses = 0
-		if self.pauses > 24:
-			self.file_props['stalled'] = True
-		else:
-			self.file_props['stalled'] = False
-		if fd == None and self.file_props['stalled'] is False:
-			return None
-		if self.file_props.has_key('received-len'):
-			if self.file_props['received-len'] != 0:
-				return self.file_props['received-len']
-		return None
-		
-	def disconnect(self):
+	def disconnect(self, cb = True):
 		''' Closes the socket. '''
 		# close connection and remove us from the queue
-		self._sock.close()
+		if self._sock:
+			self._sock.close()
 		self.connected = False
-		self.file_props['disconnect_cb'] = None
+		if cb is True:
+			self.file_props['disconnect_cb'] = None
 		if self.queue is not None:
 			self.queue.remove_receiver(self.queue_idx)
-
