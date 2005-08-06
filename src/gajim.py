@@ -211,14 +211,26 @@ class Interface:
 		id, jid_from, errmsg, errcode = array
 		if str(errcode) in ['403', '406'] and id:
 			ft = self.windows['file_transfers']
-			if ft.files_props['s'].has_key(id):
-				file_props = ft.files_props['s'][id]
-				file_props['error'] = -1
-				if file_props.has_key('disconnect_cb') and \
-					file_props['disconnect_cb'] is not None:
-					file_props['disconnect_cb']()
-				self.handle_event_file_rcv_completed(account, file_props)
-				return
+			# show the error dialog
+			
+		elif str(errcode) == '404':
+			conn = gajim.connections[account]
+			sid = id[3:]
+			if conn.files_props.has_key(sid):
+				file_props = conn.files_props[sid]
+				if file_props.has_key('streamhosts'):
+					streamhosts = file_props['streamhosts']
+					gajim.socks5queue.add_file_props(account, file_props)
+					gajim.socks5queue.connect_to_hosts(account, sid, 
+						conn.send_success_connect_reply, None)
+				
+				if file_props.has_key('fast'):
+					streamhosts = file_props['fast']
+					file_props['streamhosts'] = streamhosts
+					gajim.socks5queue.add_file_props(account, file_props)
+					gajim.socks5queue.connect_to_hosts(account, sid, 
+						conn.send_success_connect_reply, None)
+			return
 		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		if jid_from in self.windows[account]['gc']:
 			self.windows[account]['gc'][jid_from].print_conversation(
@@ -712,14 +724,42 @@ class Interface:
 	def handle_event_bookmarks(self, account, bms):
 		#('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
 		#We received a bookmark item from the server (JEP48)
-
 		#Auto join GC windows if neccessary
 		for bm in bms:
 			if bm['autojoin'] == '1':
 				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
 					bm['password'])
 		self.roster.make_menu()
-										
+								
+	def handle_event_file_send_error(self, account, array):
+		jid = array[0]
+		file_props = array[1]
+		self.windows['file_transfers'].show_file_error(
+				account, contact, file_props)
+		if gajim.config.get('notify_on_new_message'):
+			# check if we should be notified
+			instance = dialogs.PopupNotificationWindow(self,
+					_('File Transfer Error'), jid, account, 'file-error', file_props)
+			self.roster.popup_notification_windows.append(instance)
+		elif (gajim.connections[account].connected in (2, 3)
+			and gajim.config.get('autopopup')) or \
+			gajim.config.get('autopopupaway'):
+			contact = gajim.contacts[account][jid][0]
+			self.windows['file_transfers'].show_send_error(file_props)
+		
+	def handle_event_file_request_error(self, account, array):
+		jid = array[0]
+		file_props = array[1]
+		if gajim.config.get('notify_on_new_message'):
+			# check if we should be notified
+			instance = dialogs.PopupNotificationWindow(self,
+					_('File Transfer Error'), jid, account, 'file-error', file_props)
+			self.roster.popup_notification_windows.append(instance)
+		elif (gajim.connections[account].connected in (2, 3)
+			and gajim.config.get('autopopup')) or \
+			gajim.config.get('autopopupaway'):
+			self.windows['file_transfers'].show_request_error(file_props)
+		
 	def handle_event_file_request(self, account, array):
 		jid = array[0]
 		if not gajim.contacts[account].has_key(jid):
@@ -734,7 +774,7 @@ class Interface:
 			and gajim.config.get('autopopup')) or \
 			gajim.config.get('autopopupaway'):
 			contact = gajim.contacts[account][jid][0]
-			self.windows['file_transfers'].show_file_request(
+			self.windows['file_transfers'].show_send_request(
 				account, contact, file_props)
 				
 	def handle_event_file_progress(self, account, file_props):
@@ -947,6 +987,10 @@ class Interface:
 		con.register_handler('BOOKMARKS', self.handle_event_bookmarks)
 		con.register_handler('CON_TYPE', self.handle_event_con_type)
 		con.register_handler('FILE_REQUEST', self.handle_event_file_request)
+		con.register_handler('FILE_REQUEST_ERROR', \
+		self.handle_event_file_request_error)
+		con.register_handler('FILE_SEND_ERROR', \
+			self.handle_event_file_send_error)
 		con.register_handler('STANZA_ARRIVED', self.handle_event_stanza_arrived)
 		con.register_handler('STANZA_SENT', self.handle_event_stanza_sent)
 
