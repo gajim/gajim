@@ -164,6 +164,9 @@ class GroupchatWindow(chat.Chat):
 	
 	def on_groupchat_window_destroy(self, widget):
 		chat.Chat.on_window_destroy(self, widget, 'gc')
+		for room_jid in self.xmls:
+			del gajim.gc_contacts[self.account][room_jid]
+			del gajim.gc_connected[self.account][room_jid]
 
 	def on_groupchat_window_focus_in_event(self, widget, event):
 		"""When window get focus"""
