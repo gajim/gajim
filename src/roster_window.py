@@ -1147,7 +1147,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 				if self.plugin.windows[account]['chats'].has_key(jid):
 					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 				elif gajim.contacts[account].has_key(jid):
-					self.new_chat(gajim.contacts[account][jid][0], account)
+					c = gajim.get_contact_instance_with_highest_priority(account, jid)
+					self.new_chat(c, account)
 					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 				self.plugin.windows[account]['chats'][jid].window.present()
 			return True
@@ -1346,37 +1347,37 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		self.update_status_comboxbox()
 		self.make_menu()
 	
-	def new_chat(self, user, account):
+	def new_chat(self, contact, account):
 		if gajim.config.get('usetabbedchat'):
 			if not self.plugin.windows[account]['chats'].has_key('tabbed'):
 				self.plugin.windows[account]['chats']['tabbed'] = \
-					tabbed_chat_window.TabbedChatWindow(user, self.plugin, account)
+					tabbed_chat_window.TabbedChatWindow(contact, self.plugin, account)
 			else:
-				self.plugin.windows[account]['chats']['tabbed'].new_user(user)
+				self.plugin.windows[account]['chats']['tabbed'].new_user(contact)
 				
-			self.plugin.windows[account]['chats'][user.jid] = \
+			self.plugin.windows[account]['chats'][contact.jid] = \
 				self.plugin.windows[account]['chats']['tabbed']
 		else:
-			self.plugin.windows[account]['chats'][user.jid] = \
-				tabbed_chat_window.TabbedChatWindow(user, self.plugin, account)
+			self.plugin.windows[account]['chats'][contact.jid] = \
+				tabbed_chat_window.TabbedChatWindow(contact, self.plugin, account)
 
 	def new_chat_from_jid(self, account, jid):
 		if gajim.contacts[account].has_key(jid):
-			user = gajim.contacts[account][jid][0]
+			contact = gajim.get_contact_instance_with_highest_priority(account, jid)
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user = Contact(jid = jid, name = jid.split('@')[0],
+			contact = Contact(jid = jid, name = jid.split('@')[0],
 				groups = [_('not in the roster')], show = 'not in the roster',
 				status = '', sub = 'none', keyID = keyID)
-			gajim.contacts[account][jid] = [user]
-			self.add_contact_to_roster(user.jid, account)			
+			gajim.contacts[account][jid] = [contact]
+			self.add_contact_to_roster(contact.jid, account)			
 
 		if not self.plugin.windows[account]['chats'].has_key(jid):
-			self.new_chat(user, account)
+			self.new_chat(contact, account)
 		self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 		self.plugin.windows[account]['chats'][jid].window.present()
 
@@ -1460,7 +1461,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			self.tree.set_cursor(path)
 		else:
 			if not self.plugin.windows[account]['chats'].has_key(jid):
-				self.new_chat(gajim.contacts[account][jid][0], account)
+				c = gajim.get_contact_instance_with_highest_priority(account, jid)
+				self.new_chat(c, account)
 				if path:
 					self.tree.expand_row(path[0:1], False)
 					self.tree.expand_row(path[0:2], False)
@@ -1621,7 +1623,8 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			if self.plugin.windows[account]['chats'].has_key(jid):
 				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 			elif gajim.contacts[account].has_key(jid):
-				self.new_chat(gajim.contacts[account][jid][0], account)
+				c = gajim.get_contact_instance_with_highest_priority(account, jid)
+				self.new_chat(c, account)
 				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 			self.plugin.windows[account]['chats'][jid].window.present()
 

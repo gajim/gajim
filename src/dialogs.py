@@ -1135,7 +1135,8 @@ class PopupNotificationWindow:
 		# use Contact class, new_chat expects it that way
 		# is it in the roster?
 		if gajim.contacts[self.account].has_key(self.jid):
-			contact = gajim.contacts[self.account][self.jid][0]
+			contact = gajim.get_contact_instance_with_highest_priority(
+				self.account, self.jid)
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', self.account,

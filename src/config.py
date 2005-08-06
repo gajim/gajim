@@ -516,8 +516,8 @@ class PreferencesWindow:
 			#open new tabbed chat windows
 			for jid in jids:
 				if kind == 'chats':
-					user = gajim.contacts[acct][jid][0]
-					self.plugin.roster.new_chat(user, acct)
+					c = gajim.get_contact_instance_with_highest_priority(acct, jid)
+					self.plugin.roster.new_chat(c, acct)
 				if kind == 'gc':
 					self.plugin.roster.new_room(jid, saved_var[jid]['nick'], acct)
 				window = windows[jid]
@@ -549,8 +549,8 @@ class PreferencesWindow:
 			#open new tabbed chat windows
 			for jid in jids:
 				if kind == 'chats':
-					user = gajim.contacts[acct][jid][0]
-					self.plugin.roster.new_chat(user, acct)
+					c = gajim.get_contact_instance_with_highest_priority(acct, jid)
+					self.plugin.roster.new_chat(c, acct)
 				if kind == 'gc':
 					self.plugin.roster.new_room(jid, saved_var[jid]['nick'], acct)
 				window = windows[jid]

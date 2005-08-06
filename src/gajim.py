@@ -472,12 +472,12 @@ class Interface:
 					model = tv.get_model()
 					i = gc.get_contact_iter(jid, nick)
 					if i:
-						show = model.get_value(i, 3)
+						show = model[i][3]
 					else:
 						show = 'offline'
-					u = Contact(jid = fjid, name = nick, groups = ['none'],
+					c = Contact(jid = fjid, name = nick, groups = ['none'],
 						show = show, ask = 'none')
-					self.roster.new_chat(u, account)
+					self.roster.new_chat(c, account)
 				self.windows[account]['chats'][fjid].print_conversation(
 					'Error %s: %s' % (array[1], array[2]), fjid, 'status')
 				return
