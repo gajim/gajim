@@ -693,7 +693,7 @@ class Connection:
 		streamhost.setAttr('port', str(port))
 		streamhost.setAttr('host', self.peerhost[0])
 		streamhost.setAttr('jid', sender)
-		if proxyhosts != []:
+		if fast and proxyhosts != []:
 			file_props['proxy_receiver'] = str(receiver)
 			file_props['proxy_sender'] = str(sender)
 			file_props['proxyhosts'] = proxyhosts
