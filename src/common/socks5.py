@@ -22,10 +22,6 @@
 import socket
 import select
 import os
-try:
-	import fcntl
-except:
-	pass
 import struct
 import sha
 
@@ -33,7 +29,7 @@ MAX_BUFF_LEN = 65536
 
 class SocksQueue:
 	''' queue for all file requests objects '''
-	def __init__(self, complete_transfer_cb = None, \
+	def __init__(self, complete_transfer_cb = None, 
 		progress_transfer_cb = None):
 		self.connected = 0
 		self.readers = {}
@@ -62,6 +58,7 @@ class SocksQueue:
 		self.on_success = on_success
 		self.on_failure = on_failure
 		if not self.files_props.has_key(account):
+			print '\n\nFIXME '
 			pass
 			# FIXME ---- show error dialog
 		else:
@@ -87,7 +84,7 @@ class SocksQueue:
 		self.remove_receiver(idx)
 		if file_props['failure_cb']:
 			file_props['failure_cb'](streamhost['initiator'], streamhost['id'], 
-			code = 404)
+				code = 404)
 		else:
 			# show error dialog, it seems to be the laast try
 			pass
@@ -109,6 +106,9 @@ class SocksQueue:
 		return None
 		
 	def get_file_from_sender(self, file_props, account):
+		if file_props is None:
+			return
+		
 		if file_props.has_key('hash') and \
 			self.senders.has_key(file_props['hash']):
 			sender = self.senders[file_props['hash']]
@@ -344,7 +344,7 @@ class Socks5:
 			except Exception, e:
 				if e.args[0] != 11:
 					# peer stopped reading
-					self.state = 8
+					self.state = 8 # end connection
 					self.fd.close()
 					self.disconnect()
 					self.file_props['error'] = -1
@@ -352,7 +352,7 @@ class Socks5:
 			self.size += lenn
 			self.file_props['received-len'] = self.size
 			if self.size == int(self.file_props['size']):
-				self.state = 8
+				self.state = 8 # end connection
 				self.file_props['error'] = 0
 				self.fd.close()
 				self.disconnect()
@@ -369,12 +369,12 @@ class Socks5:
 				self.file_props['stalled'] = True
 			else:
 				self.file_props['stalled'] = False
-			self.state = 7
+			self.state = 7 # continue to write in the socket
 			if lenn == 0 and self.file_props['stalled'] is False:
 				return None
 			return lenn
 		else:
-			self.state = 8
+			self.state = 8 # end connection
 			self.disconnect()
 			return -1
 	
@@ -497,15 +497,15 @@ class Socks5:
 		
 	def _get_connect_buff(self):
 		''' Connect request by domain name '''
-		buff = struct.pack('!BBBBB%dsBB' % len(self.host), \
-			0x05, 0x01, 0x00, 0x03, len(self.host), self.host, \
+		buff = struct.pack('!BBBBB%dsBB' % len(self.host), 
+			0x05, 0x01, 0x00, 0x03, len(self.host), self.host, 
 			self.port >> 8, self.port & 0xff)
 		return buff
 	
 	def _get_request_buff(self, msg, command = 0x01):
 		''' Connect request by domain name, 
 		sid sha, instead of domain name (jep 0096) '''
-		buff = struct.pack('!BBBBB%dsBB' % len(msg), \
+		buff = struct.pack('!BBBBB%dsBB' % len(msg), 
 			0x05, command, 0x00, 0x03, len(msg), msg, 0, 0)
 		return buff
 	
@@ -531,7 +531,7 @@ class Socks5:
 				port, = struct.unpack('!H', buff[host_len + 5:])
 			# file data, comes with auth message (Gaim bug)
 			else: 
-				port, = struct.unpack('!H', buff[host_len + 5 : host_len + 7])
+				port, = struct.unpack('!H', buff[host_len + 5: host_len + 7])
 				self.remaining_buff = buff[host_len + 7:]
 		except:
 			return (None, None, None)
@@ -550,8 +550,7 @@ class Socks5:
 	def _get_sha1_auth(self):
 		''' get sha of sid + Initiator jid + Target jid '''
 		if self.file_props.has_key('is_a_proxy'):
-			return sha.new('%s%s%s' % (self.sid, \
-				self.file_props['proxy_sender'], \
+			return sha.new('%s%s%s' % (self.sid, self.file_props['proxy_sender'], 
 				self.file_props['proxy_receiver'])).hexdigest()
 		return sha.new('%s%s%s' % (self.sid, self.initiator, self.target)).hexdigest()
 
@@ -585,21 +584,21 @@ class Socks5Sender(Socks5):
 		
 	def main(self):
 		''' initial requests for verifying the connection '''
-		if self.state == 1:
+		if self.state == 1: # initial read
 			buff = self.receive()
 			if not self.connected:
 				return -1
 			mechs = self._parse_auth_buff(buff)
 			if mechs is None:
 				return -1 # invalid auth methods received
-		elif self.state == 2:
+		elif self.state == 2: # send reply with desired auth type
 			self.send_raw(self._get_auth_response())
-		elif self.state == 3:
+		elif self.state == 3: # get next request
 			buff = self.receive()
 			(req_type, self.sha_msg, port) = self._parse_request_buff(buff)
 			if req_type != 0x01:
 				return -1 # request is not of type 'connect'
-		elif self.state == 4:
+		elif self.state == 4: # send positive response to the 'connect'
 			self.send_raw(self._get_request_buff(self.sha_msg, 0x00))
 		self.state += 1 # go to the next step
 		return None
@@ -609,9 +608,9 @@ class Socks5Sender(Socks5):
 		if self._sock is None:
 			return False
 		try:
-			if self.state in [1, 3, 5]:
+			if self.state in [1, 3, 5]:  # (initial, request, send file)
 				return self.pending_read(timeout)
-			elif self.state in [2, 4]:
+			elif self.state in [2, 4]: # send auth and positive response
 				return True
 		except Exception, e:
 			return False
@@ -627,7 +626,6 @@ class Socks5Sender(Socks5):
 			self.file_props['disconnect_cb'] = None
 		if self.queue is not None:
 			self.queue.remove_sender(self.queue_idx)
-
 	
 class Socks5Listener:
 	def __init__(self, host, port):
@@ -646,7 +644,8 @@ class Socks5Listener:
 			self._serv.bind(('0.0.0.0', self.port))
 			self._serv.listen(socket.SOMAXCONN)
 			self._serv.setblocking(False)
-		except Exception, (errno, errstr):
+		except Exception, e:
+			# unable to bind, show error dialog
 			return None
 		self.started = True
 	
@@ -713,22 +712,22 @@ class Socks5Receiver(Socks5):
 		self.file_props['connected'] = True
 		self.state = 1 # connected
 		self.queue._socket_connected(self.streamhost, self.file_props)
-		return 1
+		return 1 # we are connected
 		
 	def main(self, timeout = 0):
 		''' begin negotiation. on success 'address' != 0 '''
-		if self.state == 1:
+		if self.state == 1: # send initially: version and auth types
 			self.send_raw(self._get_auth_buff())
-		elif self.state == 2:
+		elif self.state == 2: # read auth response
 			buff = self.receive()
 			if buff is None or len(buff) != 2:
 				return None
 			version, method = struct.unpack('!BB', buff[:2])
 			if version != 0x05 or method == 0xff:
 				self.disconnect()
-		elif self.state == 3:
+		elif self.state == 3: # send 'connect' request
 			self.send_raw(self._get_request_buff(self._get_sha1_auth()))
-		elif self.state == 4:
+		elif self.state == 4: # get approve of our request
 			buff = self.receive()
 			if buff == None:
 				return None
@@ -741,17 +740,17 @@ class Socks5Receiver(Socks5):
 				addrlen = ord(buff[4])
 				address = struct.unpack('!%ds' % addrlen, buff[5:addrlen + 5])
 				portlen = len(buff[addrlen + 5:])
-				if portlen == 1: # Gaim bug :)
+				if portlen == 1: 
 					port, = struct.unpack('!B', buff[addrlen + 5])
 				elif portlen == 2:
 					port, = struct.unpack('!H', buff[addrlen + 5:])
-				else:
+				else: # Gaim bug :)
 					port, = struct.unpack('!H', buff[addrlen + 5:addrlen + 7])
 					self.remaining_buff = buff[addrlen + 7:]
-			self.state = 5
+			self.state = 5 # for senders: init file_props and send '\n'
 			if self.queue.on_success:
 				self.queue.on_success(self.streamhost)
-		if self.state == 5:
+		if self.state == 5: # for senders: init file_props and send '\n'
 			if self.file_props['type'] == 's':
 				self.fd = open(self.file_props['file-name'])
 				self.file_props['error'] = 0
@@ -763,20 +762,20 @@ class Socks5Receiver(Socks5):
 				self.file_props['received-len'] = 0
 				self.pauses = 0
 				self.send_raw(self._get_nl_byte())
-			self.state = 6
+			self.state = 6 # send/get file contents
 		if self.state < 6:
 			self.state += 1
 			return None
-		# we have set the connection set up, next - retrieve file
+		# we have set up the connection, next - retrieve file
 	
 	def pending_data(self, timeout=0):
-		''' Returns true if there is a data ready to be read. ''', self.state
+		''' Returns true if there is a data ready to be read. '''
 		if self._sock is None:
 			return False
 		try:
-			if self.state in [2, 4, 6]:
+			if self.state in [2, 4, 6]: # auth response, connect, file data
 				return self.pending_read(0.01)
-			elif self.state in [1, 3, 5]:
+			elif self.state in [1, 3, 5]: # auth types, connect request
 				return True
 		except Exception, e:
 			return False

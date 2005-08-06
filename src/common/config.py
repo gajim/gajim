@@ -158,6 +158,7 @@ class Config:
 			'try_connecting_for_foo_secs': [ opt_int, 60 ],
 			'max_stanza_per_sec': [ opt_int, 5],
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
+			'file_transfers_proxy': [opt_str, 'proxy.jabber.org'] # proxy65 for FT
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
@@ -175,6 +176,11 @@ class Config:
 			'port': [ opt_int, 3128 ],
 			'user': [ opt_str, '' ],
 			'pass': [ opt_str, '' ],
+		}, {}),
+		'proxies65_cache': ({
+			'host': [ opt_str, ''],
+			'port': [ opt_str, '7777'],
+			'jid': [ opt_str, ''],
 		}, {}),
 		'themes': ({
 			'accounttextcolor': [ opt_color, '' ],
@@ -283,6 +289,10 @@ class Config:
 		'human': [ '#ffffff', '#996442', 'Sans Bold 10', '#ab5920', '#e3ca94',
 					'Sans Italic 10', '#000000', '#ffffff', 'Sans 10', '#ffffff',
 					'#996442' ],
+	}
+	
+	proxies65_default = {
+		'proxy.jabber.org': [ '208.245.212.98', '7777', 'proxy.jabber.org' ],
 	}
 
 	def foreach(self, cb, data = None):
@@ -414,4 +424,12 @@ class Config:
 			self.add_per('soundevents', event)
 			self.set_per('soundevents', event, 'enabled', default[0])
 			self.set_per('soundevents', event, 'path', default[1])
+
+		# set initial cache values for proxie65 hosts
+		for proxy in self.proxies65_default:
+			default = self.proxies65_default[proxy]
+			self.add_per('proxies65_cache', proxy)
+			self.set_per('proxies65_cache', proxy, 'host', default[0])
+			self.set_per('proxies65_cache', proxy, 'port', default[1])
+			self.set_per('proxies65_cache', proxy, 'jid', default[2])
 		return
