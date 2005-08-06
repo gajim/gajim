@@ -987,9 +987,9 @@ class Interface:
 		con.register_handler('BOOKMARKS', self.handle_event_bookmarks)
 		con.register_handler('CON_TYPE', self.handle_event_con_type)
 		con.register_handler('FILE_REQUEST', self.handle_event_file_request)
-		con.register_handler('FILE_REQUEST_ERROR', \
-		self.handle_event_file_request_error)
-		con.register_handler('FILE_SEND_ERROR', \
+		con.register_handler('FILE_REQUEST_ERROR', 
+			self.handle_event_file_request_error)
+		con.register_handler('FILE_SEND_ERROR', 
 			self.handle_event_file_send_error)
 		con.register_handler('STANZA_ARRIVED', self.handle_event_stanza_arrived)
 		con.register_handler('STANZA_SENT', self.handle_event_stanza_sent)
