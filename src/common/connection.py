@@ -870,6 +870,7 @@ class Connection:
 		self.to_be_sent.append(iq)
 	
 	def _HttpAuthCB(self, con, iq_obj):
+		gajim.log.debug('HttpAuthCB')
 		opt = gajim.config.get_per('accounts', self.name, 'http_auth')
 		if opt in ['yes', 'no']:
 			self.build_http_auth_answer(iq_obj, opt)
