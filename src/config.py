@@ -2666,3 +2666,163 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 		for field in widgets:
 			field.set_text('')
 		self.autojoin_checkbutton.set_active(False)
+
+class FirstTimeWizardWindow:
+	def __init__(self, plugin):
+		self.plugin = plugin
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'wizard_window', APP)
+		self.window = self.xml.get_widget('wizard_window')
+		
+		#TODO: Parse servers.xml to server_comoboxentrys
+
+		self.notebook = self.xml.get_widget('notebook')
+		self.notebook.set_show_tabs(False)
+
+		self.nick_entry = self.xml.get_widget('nick_entry')
+		self.nick_entry.connect('changed', self.on_nick_entry_changed)
+		self.nick_entry.connect('key_press_event', self.on_nick_entry_key_pressed)
+		self.server_comboboxentry = self.xml.get_widget('server_comboboxentry')
+		self.server_comboboxentry.connect('changed', self.on_server_entry_changed)
+		self.server_comboboxentry.child.connect('key_press_event',
+			self.on_server_entry_key_pressed)
+		self.jid_label = self.xml.get_widget('jid_label')
+		
+		self.register_nick_entry = self.xml.get_widget('register_nick_entry')
+		self.register_nick_entry.connect('changed', self.on_register_nick_entry_changed)
+		self.register_nick_entry.connect('key_press_event',
+			self.on_register_nick_entry_key_pressed)
+		self.register_server_comboboxentry = self.xml.get_widget(
+			'register_server_comboboxentry')
+		self.register_server_comboboxentry.connect('changed',
+			self.on_register_server_entry_changed)
+		self.register_server_comboboxentry.child.connect('key_press_event',
+			self.on_register_server_entry_key_pressed)
+		self.register_jid_label = self.xml.get_widget('register_jid_label')
+
+		self.back_button = self.xml.get_widget('back_button')
+		self.back_button.set_sensitive(False)
+		
+		self.finish_button = self.xml.get_widget('finish_button')
+		self.finish_button.set_sensitive(False)
+
+		self.finish_label = self.xml.get_widget('finish_label')
+
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_server_features_button_clicked(self, widget):
+		pass
+
+	def on_save_password_checkbutton_toggled(self, widget):
+		pass
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+
+	def on_back_button_clicked(self, widget):
+		if self.notebook.get_current_page() == 1:
+			self.notebook.set_current_page(0)
+		elif self.notebook.get_current_page() == 2:
+			self.notebook.set_current_page(0)
+		self.back_button.set_sensitive(False)
+
+	def on_forward_button_clicked(self, widget):
+		cur_page = self.notebook.get_current_page()
+		
+		if cur_page == 0:
+			widget = self.xml.get_widget('use_existing_account_radiobutton')
+			if widget.get_active():
+				self.notebook.set_current_page(1)
+			else:
+				self.notebook.set_current_page(2)
+			self.back_button.set_sensitive(True)
+		
+		elif cur_page == 1:
+			user = self.nick_entry.get_text()
+			server = self.server_comboboxentry.get_active_text()
+			if self.check_data(user, server):
+				#TODO: write account to config file
+				self.finish_label.set_text(_('Your account has been added to your gajim configuration.\n' + 
+					'You can set advanced account options using \"Edit->Accounts\" in the menu.'))
+				self.go_to_last_page()
+
+		elif cur_page == 2:
+			user = self.register_nick_entry.get_text()
+			server = self.register_server_comboboxentry.get_active_text()
+			if self.check_data(user, server):
+				#TODO: Register account
+				#TODO: write account to config file
+				self.finish_label.set_text(_('Your new account has been created and added to your gajim configuration.\n' +
+					'You can set advanced account options using \"Edit->Accounts\" in the menu.'))
+				self.go_to_last_page()
+
+		else:
+			#Finish button clicked
+			self.window.destroy()
+
+	def on_finish_button_clicked(self, widget):
+		self.window.destroy()
+
+	def check_data(self, username, server):
+		if len(username) == 0: 
+			dialogs.ErrorDialog(_('You need to enter a username to add an account.')).get_response()
+			return False
+		elif len(server) == 0:
+			dialogs.ErrorDialog(_('You need to enter a valid server adress to add an account.')).get_response()
+			return False
+		else:
+			return True
+
+	def go_to_last_page(self):
+		self.xml.get_widget('cancel_button').hide()
+		self.back_button.hide()
+		self.xml.get_widget('forward_button').hide()
+		self.finish_button.set_sensitive(True)
+		self.notebook.set_current_page(3)
+
+	def on_nick_entry_changed(self, widget):
+		self.update_jid(self.nick_entry, self.server_comboboxentry, self.jid_label)
+
+	def on_nick_entry_key_pressed(self, widget, event):
+		return self.nick_entry_key_pressed(event, self.server_comboboxentry)
+
+	def on_server_entry_changed(self, widget):
+		self.update_jid(self.nick_entry, self.server_comboboxentry, self.jid_label)
+
+	def on_server_entry_key_pressed(self, widget, event):
+		return self.server_entry_key_pressed(event, self.nick_entry, self.server_comboboxentry)
+
+	def on_register_nick_entry_changed(self, widget):
+		self.update_jid(self.register_nick_entry, self.register_server_comboboxentry, self.register_jid_label)
+
+	def on_register_nick_entry_key_pressed(self, widget, event):
+		return self.nick_entry_key_pressed(event, self.register_server_comboboxentry)
+
+	def on_register_server_entry_changed(self, widget):
+		self.update_jid(self.register_nick_entry, self.register_server_comboboxentry, self.register_jid_label)
+
+	def on_register_server_entry_key_pressed(self, widget, event):
+		return self.server_entry_key_pressed(event, self.register_nick_entry, self.register_server_comboboxentry)
+
+	def nick_entry_key_pressed(self, event, server_widget):
+		#Check for pressed @ and jump to combobox if found
+		if event.keyval == gtk.keysyms.at:
+			server_widget.grab_focus()
+			server_widget.child.set_position(-1)
+			return True
+
+	def server_entry_key_pressed(self, event, nick_widget, server_widget):
+		#If field is empty and backspace is pressed, return to the nick entry field
+		if event.keyval == gtk.keysyms.BackSpace:
+			if len(server_widget.get_active_text()) == 0:
+				nick_widget.grab_focus()
+				nick_widget.set_position(-1)
+				return True
+
+	def update_jid(self, name_widget, server_widget, jid_widget):
+		name = name_widget.get_text()
+		server = server_widget.get_active_text()
+		if len(name) == 0 or len(server) == 0:
+			jid_widget.set_label('')
+		else:
+			jid_widget.set_label(name + '@' + server)
