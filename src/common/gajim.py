@@ -111,7 +111,6 @@ def get_contact_instance_with_highest_priority(account, jid):
 	return contacts[account][jid][which_has_highest_prio]
 
 def get_contact_name_from_jid(account, jid):
-	print `contacts[account][jid]`
 	return contacts[account][jid][0].name
 
 def get_jid_without_resource(jid):
