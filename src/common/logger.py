@@ -41,11 +41,14 @@ class Logger:
 			print _('%s is file but it should be a directory') % dot_gajim
 			print _('Gajim will now exit')
 			sys.exit()
-		if os.path.isdir(dot_gajim):
+		elif os.path.isdir(dot_gajim):
 			if os.path.isfile(LOGPATH):
 				print _('%s is file but it should be a directory') % LOGPATH
 				print _('Gajim will now exit')
 				sys.exit()
+			elif not os.path.exists(LOGPATH):
+				print _('creating %s directory') % LOGPATH
+				os.mkdir(LOGPATH)
 		else: # dot_gajim doesn't exist
 			if dot_gajim: # is '' on win9x so avoid that
 				print _('creating %s directory') % dot_gajim
