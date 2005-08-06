@@ -1168,12 +1168,12 @@ class PopupNotificationWindow:
 			self.plugin.windows['file_transfers'].show_file_request(
 				self.account, contact, self.file_props)
 		
-		elif self.msg_type == 'file-completed': # it's file request # FIXME: comment
-			self.plugin.windows['file_transfers'].show_completed(self.jid, \
+		elif self.msg_type == 'file-completed': # file transfer is complete
+			self.plugin.windows['file_transfers'].show_completed(self.jid, 
 				self.file_props)
 			
-		elif self.msg_type == 'file-stopped': # it's file request # FIXME: comment
-			self.plugin.windows['file_transfers'].show_stopped(self.jid, \
+		elif self.msg_type == 'file-stopped': # file transfer ended unexpectedly
+			self.plugin.windows['file_transfers'].show_stopped(self.jid, 
 				self.file_props)
 		
 		else: # 'chat'
@@ -1514,7 +1514,13 @@ class FileTransfersWindow:
 	def show_request_error(self, file_props):
 		self.window.present()
 		self.window.window.focus()
-		InformationDialog(_('File transfer canceled'), 'Remote host cannot connect to you. This may be due to nat network or missing file support on the remote host.').get_response()
+		error_messages = {
+			-1: _('Remote host cannot connect to you. This may be due to nat network or missing file support on the remote host.'),
+			-2: _('File not specified.'),
+			-3: _('Unable to bind to transfer port. Check if you are running onother instance of Gajim'),
+			-4: _('Connection with peer cannot be established. Maybe you are behind a firewall. Set a file transfer proxy.'),
+				}
+		InformationDialog(_('File transfer canceled'), error_messages[-1]).get_response()
 		self.tree.get_selection().unselect_all()
 		
 	def show_send_error(self, jid, file_props):
@@ -1523,7 +1529,7 @@ class FileTransfersWindow:
 		InformationDialog(_('File transfer canceled'), 'You are unable to connect to remote host. This may be due to nat network.').get_response()
 		self.tree.get_selection().unselect_all()
 		
-	def show_stopped(self, file_props):
+	def show_stopped(self, jid, file_props):
 		self.window.present()
 		self.window.window.focus()
 		sectext = '\t' + _('Filename: %s') % \
