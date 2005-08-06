@@ -1485,6 +1485,7 @@ class FileTransfersWindow:
 		renderer.set_property('xalign', 0.)
 		renderer.set_property('yalign', 0.)
 		col.set_expand(True)
+		col.set_resizable(True)
 		self.tree.append_column(col)
 		
 		col = gtk.TreeViewColumn(_('Progress'))
