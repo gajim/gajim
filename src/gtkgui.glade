@@ -16529,7 +16529,7 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image841">
+	<widget class="GtkImage" id="image1098">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-network</property>
 	  <property name="icon_size">1</property>
@@ -16555,7 +16555,7 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image842">
+	<widget class="GtkImage" id="image1099">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-dialog-warning</property>
 	  <property name="icon_size">1</property>
@@ -16576,9 +16576,57 @@ Maybe I'll refactor later</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image843">
+		<widget class="GtkImage" id="image1100">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-execute</property>
+		  <property name="icon_size">1</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorMenuItem" id="separator10">
+	      <property name="visible">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="set_motd_menuitem">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Set Message of the Day</property>
+	      <property name="label" translatable="yes">Set MOTD</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_set_motd_menuitem_activate" last_modification_time="Sat, 06 Aug 2005 10:28:39 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="update_motd_menuitem">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Update Message of the Day</property>
+	      <property name="label" translatable="yes">Update MOTD</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_update_motd_activate" last_modification_time="Sat, 06 Aug 2005 10:28:39 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkImageMenuItem" id="delete_motd_menuitem">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Delete Message of the Day</property>
+	      <property name="label" translatable="yes">Delete MOTD</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_delete_motd_activate" last_modification_time="Sat, 06 Aug 2005 10:28:39 GMT"/>
+
+	      <child internal-child="image">
+		<widget class="GtkImage" id="image1101">
+		  <property name="visible">True</property>
+		  <property name="stock">gtk-clear</property>
 		  <property name="icon_size">1</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
@@ -16600,7 +16648,7 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image844">
+	<widget class="GtkImage" id="image1102">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-preferences</property>
 	  <property name="icon_size">1</property>
@@ -16620,7 +16668,7 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image845">
+	<widget class="GtkImage" id="image1103">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -16640,7 +16688,7 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image846">
+	<widget class="GtkImage" id="image1104">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -16660,7 +16708,7 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image847">
+	<widget class="GtkImage" id="image1105">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-connect</property>
 	  <property name="icon_size">1</property>
@@ -16680,7 +16728,7 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image848">
+	<widget class="GtkImage" id="image1106">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -17056,7 +17104,7 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image937">
+	<widget class="GtkImage" id="image1107">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -17102,7 +17150,7 @@ Maybe I'll refactor later</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image938">
+		<widget class="GtkImage" id="image1108">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-new</property>
 		  <property name="icon_size">1</property>
@@ -17144,7 +17192,7 @@ Maybe I'll refactor later</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image939">
+		<widget class="GtkImage" id="image1109">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-clear</property>
 		  <property name="icon_size">1</property>

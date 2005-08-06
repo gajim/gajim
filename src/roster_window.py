@@ -777,7 +777,7 @@ class RosterWindow:
 				HistoryWindow(self.plugin, contact.jid, account)
 
 	def on_send_single_message_menuitem_activate(self, wiget, account, contact):
-		dialogs.SingleMessageWindow(self, account, contact, 'send')
+		dialogs.SingleMessageWindow(self, account, contact.jid, 'send')
 		
 	def on_send_file_menuitem_activate(self, widget, account, contact):
 		self.plugin.windows['file_transfers'].show_file_send_request( 
@@ -938,6 +938,21 @@ class RosterWindow:
 		else:
 			self.plugin.windows[account]['xml_console'].window.show_all()
 
+	def on_set_motd(self, widget, account):
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		server += '/announce/motd'
+		dialogs.SingleMessageWindow(self.plugin, account, server, 'send')
+
+	def on_update_motd(self, widget, account):
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		server += '/announce/motd/update'
+		dialogs.SingleMessageWindow(self.plugin, account, server, 'send')
+
+	def on_delete_motd(self, widget, account):
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		server += '/announce/motd/delete'
+		gajim.connections[account].send_motd(server)
+
 	def on_edit_account(self, widget, account):
 		if self.plugin.windows[account].has_key('account_modification'):
 			self.plugin.windows[account]['account_modification'].window.present()
@@ -977,8 +992,10 @@ class RosterWindow:
 		status_menuitem = childs[0]
 		#sep
 		advanced_actions_menuitem = childs[2]
-		xml_console_menuitem =\
-			advanced_actions_menuitem.get_submenu().get_children()[0]
+		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
+		set_motd_menuitem = xml.get_widget('set_motd_menuitem')
+		update_motd_menuitem = xml.get_widget('update_motd_menuitem')
+		delete_motd_menuitem = xml.get_widget('delete_motd_menuitem')
 		edit_account_menuitem = childs[3]
 		service_discovery_menuitem = childs[4]
 		add_contact_menuitem = childs[5]
@@ -1002,6 +1019,9 @@ class RosterWindow:
 			item.connect('activate', self.change_status, account, show)
 
 		xml_console_menuitem.connect('activate', self.on_xml_console, account)
+		set_motd_menuitem.connect('activate', self.on_set_motd, account)
+		update_motd_menuitem.connect('activate', self.on_update_motd, account)
+		delete_motd_menuitem.connect('activate', self.on_delete_motd, account)
 		edit_account_menuitem.connect('activate', self.on_edit_account, account)
 		service_discovery_menuitem.connect('activate',
 			self.on_service_disco_menuitem_activate, account)
@@ -1423,7 +1443,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 			#FIXME: take into account autopopup and autopopupaway
 			# if user doesn't want to be bugged do it as we do the 'chat'
 			contact = gajim.contacts[account][jid][0]
-			dialogs.SingleMessageWindow(self.plugin, account, contact,
+			dialogs.SingleMessageWindow(self.plugin, account, contact.jid,
 		action = 'receive', from_whom = jid, subject = subject, message = msg)
 			return
 		

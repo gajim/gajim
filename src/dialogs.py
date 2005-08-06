@@ -1154,7 +1154,7 @@ class PopupNotificationWindow:
 		if self.msg_type == 'normal': # it's single message
 			return # FIXME: I think I should not print here but in new_chat?
 			contact = self.contacts[account][jid][0]
-			SingleMessageWindow(self.plugin, self.account, contact, 
+			SingleMessageWindow(self.plugin, self.account, contact.jid, 
 			action = 'receive', from_whom = jid, subject = subject, message = msg)
 		
 		elif self.msg_type == 'file': # it's file request
@@ -1179,11 +1179,10 @@ class PopupNotificationWindow:
 class SingleMessageWindow:
 	'''SingleMessageWindow can send or show a received
 	singled message depending on action argument'''
-	def __init__(self, plugin, account, contact, action='', from_whom='',\
+	def __init__(self, plugin, account, to='', action='', from_whom='',
 	subject='', message=''):
 		self.plugin = plugin
 		self.account = account
-		self.contact = contact
 		self.action = action
 
 		self.subject = subject
@@ -1204,7 +1203,7 @@ class SingleMessageWindow:
 		self.send_and_close_button = self.xml.get_widget('send_and_close_button')
 		self.message_tv_buffer.connect('changed', self.update_char_counter)
 		
-		self.to_entry.set_text(self.contact.jid)
+		self.to_entry.set_text(to)
 		
 		self.send_button.set_no_show_all(True)
 		self.reply_button.set_no_show_all(True)
@@ -1278,13 +1277,18 @@ class SingleMessageWindow:
 	
 	def send_single_message(self):
 		to_whom_jid = self.to_entry.get_text()
+		subject = self.subject_entry.get_text()
+		begin, end = self.message_tv_buffer.get_bounds()
+		message = self.message_tv_buffer.get_text(begin, end)
+
+		if to_whom_jid.find('/announce/motd') > -1:
+			gajim.connections[self.account].send_motd(to_whom_jid, subject,
+				message)
+			return
 		if to_whom_jid.find('@') == -1: # if no @ was given
 			ErrorDialog(_('Invalid contact ID'),
 		_('Contact ID must be of the form "username@servername".')).get_response()
 			return
-		subject = self.subject_entry.get_text()
-		begin, end = self.message_tv_buffer.get_bounds()
-		message = self.message_tv_buffer.get_text(begin, end)
 
 		# FIXME: allow GPG message some day
 		gajim.connections[self.account].send_message(to_whom_jid, message,
@@ -1301,7 +1305,7 @@ class SingleMessageWindow:
 		self.subject = _('RE: %s') % self.subject
 		self.message = _('\n\n\n== Original Message ==\n%s') % self.message
 		self.window.destroy()
-		SingleMessageWindow(self.plugin, self.account, self.contact,
+		SingleMessageWindow(self.plugin, self.account, to = to,
 			action = 'send',	from_whom = self.from_whom, subject = self.subject,
 			message = self.message)
 

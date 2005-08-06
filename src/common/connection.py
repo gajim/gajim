@@ -1206,6 +1206,12 @@ class Connection:
 				self.connection.send(p)
 			self.dispatch('STATUS', show)
 
+	def send_motd(self, jid, subject = '', msg = ''):
+		if not self.connection:
+			return
+		msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject)
+		self.to_be_sent.append(msg_iq)
+
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='', chatstate = None):
 		if not self.connection:
 			return
