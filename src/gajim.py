@@ -1106,6 +1106,8 @@ class Interface:
 		self.windows['roster'] = self.roster
 		
 		for account in gajim.connections:
+			self.windows[account]['xml_console'] = \
+				dialogs.XMLConsoleWindow(self, account)
 			self.register_handlers(gajim.connections[account])
 
 		gobject.timeout_add(100, self.autoconnect)

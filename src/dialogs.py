@@ -1321,8 +1321,12 @@ class XMLConsoleWindow:
 		self.window = self.xml.get_widget('xml_console_window')
 		self.input_textview = self.xml.get_widget('input_textview')
 		self.stanzas_log_textview = self.xml.get_widget('stanzas_log_textview')
-		
+		self.input_tv_buffer = self.input_textview.get_buffer()
+
 		buffer = self.stanzas_log_textview.get_buffer()
+		end_iter = buffer.get_end_iter()
+		buffer.create_mark('end', end_iter, False)
+		
 		self.tagIn = buffer.create_tag('incoming')
 		color = gajim.config.get('inmsgcolor')
 		self.tagIn.set_property('foreground', color)
@@ -1330,8 +1334,9 @@ class XMLConsoleWindow:
 		color = gajim.config.get('outmsgcolor')
 		self.tagOut.set_property('foreground', color)
 
+		self.enable = False
 
-		self.stanzas_log_textview.modify_text(
+		self.input_textview.modify_text(
 			gtk.STATE_NORMAL, gtk.gdk.color_parse(color))
 		
 		if len(gajim.connections) > 1:
@@ -1342,13 +1347,43 @@ class XMLConsoleWindow:
 		self.window.set_title(title)
 		
 		self.xml.signal_autoconnect(self)
-		self.window.show_all()
 
-	def print_stanza(self, stanza, tag):
-		# tag must be 'incoming' or 'outgoing'
+	def on_xml_console_window_delete_event(self, widget, event):
+		self.window.hide()
+		return True # do NOT destroy the window
+
+	def on_clear_button_clicked(self, widget):
 		buffer = self.stanzas_log_textview.get_buffer()
+		buffer.set_text('')
+
+	def on_enable_checkbutton_toggled(self, widget):
+		self.enable = widget.get_active()
+
+	def scroll_to_end(self, ):
+		parent = self.stanzas_log_textview.get_parent()
+		buffer = self.stanzas_log_textview.get_buffer()
+		self.stanzas_log_textview.scroll_to_mark(buffer.get_mark('end'), 0, True,
+			0, 1)
+		adjustment = parent.get_hadjustment()
+		adjustment.set_value(0)
+		return False
+
+	def print_stanza(self, stanza, kind):
+		# kind must be 'incoming' or 'outgoing'
+		if not self.enable:
+			return
+
+		buffer = self.stanzas_log_textview.get_buffer()
+		at_the_end = False
 		end_iter = buffer.get_end_iter()
-		buffer.insert_with_tags_by_name(end_iter, stanza + '\n\n', tag)
+		end_rect = self.stanzas_log_textview.get_iter_location(end_iter)
+		visible_rect = self.stanzas_log_textview.get_visible_rect()
+		if end_rect.y <= (visible_rect.y + visible_rect.height):
+			at_the_end = True
+		end_iter = buffer.get_end_iter()
+		buffer.insert_with_tags_by_name(end_iter, stanza + '\n\n', kind)
+		if at_the_end:
+			gobject.idle_add(self.scroll_to_end)
 
 	def on_send_button_clicked(self, widget):
 		begin_iter, end_iter = self.input_tv_buffer.get_bounds()

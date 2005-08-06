@@ -936,8 +936,7 @@ class RosterWindow:
 		if self.plugin.windows[account].has_key('xml_console'):
 			self.plugin.windows[account]['xml_console'].window.present()
 		else:
-			self.plugin.windows[account]['xml_console'] = \
-				dialogs.XMLConsoleWindow(self.plugin, account)
+			self.plugin.windows[account]['xml_console'].window.show_all()
 
 	def on_edit_account(self, widget, account):
 		if self.plugin.windows[account].has_key('account_modification'):
