@@ -550,6 +550,7 @@ class Socks5:
 	def _get_sha1_auth(self):
 		''' get sha of sid + Initiator jid + Target jid '''
 		if self.file_props.has_key('is_a_proxy'):
+			del(self.file_props['is_a_proxy'])
 			return sha.new('%s%s%s' % (self.sid, self.file_props['proxy_sender'], 
 				self.file_props['proxy_receiver'])).hexdigest()
 		return sha.new('%s%s%s' % (self.sid, self.initiator, self.target)).hexdigest()

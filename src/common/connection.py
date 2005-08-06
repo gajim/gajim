@@ -484,7 +484,11 @@ class Connection:
 		except: 
 			pass
 		if streamhost is not None: # this is a result for proxy request
-			jid = streamhost.getAttr('jid')
+			jid = None
+			try:
+				jid = streamhost.getAttr('jid')
+			except:
+				raise common.xmpp.NodeProcessed
 			proxyhosts = []
 			for item in query.getChildren():
 				if item.getName() == 'streamhost':
@@ -500,6 +504,9 @@ class Connection:
 		try:
 			streamhost =  query.getTag('streamhost-used')
 		except: # this bytestream result is not what we need
+			pass
+		if streamhost is None: 
+			# proxy approves the activate query
 			raise common.xmpp.NodeProcessed
 		jid = streamhost.getAttr('jid')
 		id = real_id[3:]
@@ -671,7 +678,7 @@ class Connection:
 		listener = gajim.socks5queue.start_listener(self.peerhost[0], port, 
 			sha_str, self.result_socks5_sid, file_props['sid'])
 		if listener == None:
-			#~ # FIXME - raise error dialog that address is in use
+			# FIXME - raise error dialog that address is in use
 			return
 		
 		iq = common.xmpp.Protocol(name = 'iq', to = str(receiver), 
