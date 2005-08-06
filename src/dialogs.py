@@ -1162,10 +1162,12 @@ class PopupNotificationWindow:
 				self.account, contact, self.file_props)
 		
 		elif self.msg_type == 'file-completed': # it's file request # FIXME: comment
-			self.plugin.windows['file_transfers'].show_completed(self.jid, file_props)
+			self.plugin.windows['file_transfers'].show_completed(self.jid, \
+				self.file_props)
 			
 		elif self.msg_type == 'file-stopped': # it's file request # FIXME: comment
-			self.plugin.windows['file_transfers'].show_stopped(self.jid, file_props)
+			self.plugin.windows['file_transfers'].show_stopped(self.jid, \
+				self.file_props)
 		
 		else: # 'chat'
 			self.plugin.roster.new_chat(contact, self.account)
@@ -1183,6 +1185,7 @@ class SingleMessageWindow:
 	subject='', message=''):
 		self.plugin = plugin
 		self.account = account
+		self.contact = contact
 		self.action = action
 
 		self.subject = subject
@@ -1327,7 +1330,6 @@ class XMLConsoleWindow:
 		self.input_textview = self.xml.get_widget('input_textview')
 		self.stanzas_log_textview = self.xml.get_widget('stanzas_log_textview')
 		self.input_tv_buffer = self.input_textview.get_buffer()
-
 		buffer = self.stanzas_log_textview.get_buffer()
 		end_iter = buffer.get_end_iter()
 		buffer.create_mark('end', end_iter, False)
@@ -1490,7 +1492,19 @@ class FileTransfersWindow:
 		InformationDialog(_('File transfer completed'), sectext).get_response()
 		self.tree.get_selection().unselect_all()
 		
-	def show_stopped(self, jid, file_props):
+	def show_request_error(self, file_props):
+		self.window.present()
+		self.window.window.focus()
+		InformationDialog(_('File transfer canceled'), 'Remote host cannot connect to you. This may be due to nat network or missing file support on the remote host.').get_response()
+		self.tree.get_selection().unselect_all()
+		
+	def show_send_error(self, jid, file_props):
+		self.window.present()
+		self.window.window.focus()
+		InformationDialog(_('File transfer canceled'), 'You are unable to connect to remote host. This may be due to nat network.').get_response()
+		self.tree.get_selection().unselect_all()
+		
+	def show_stopped(self, file_props):
 		self.window.present()
 		self.window.window.focus()
 		sectext = '\t' + _('Filename: %s') % \
