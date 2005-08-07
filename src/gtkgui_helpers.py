@@ -40,13 +40,17 @@ def convert_bytes(string):
 			bytes = round(bytes/1024.,1)
 			if bytes >= 1024:
 				bytes = round(bytes/1024.,1)
+				#Mb means giga bytes
 				suffix = _('%s Gb') 
 			else:
-				suffix = _('%s Mb') 
+				#Mb means mega bytes
+				suffix = _('%s Mb')
 		else:
-			suffix = _('%s Kb') 
+			#Kb means kilo bytes
+			suffix = _('%s Kb')
 	else:
-		suffix = _('%s b') 
+		#b means bytes 
+		suffix = _('%s b')
 	return suffix % str(bytes)
 	
 def escape_for_pango_markup(string):
