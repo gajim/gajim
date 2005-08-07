@@ -2687,8 +2687,15 @@ class FirstTimeWizardWindow:
 			self.on_server_entry_key_pressed)
 		self.jid_label = self.xml.get_widget('jid_label')
 		
+		self.save_password_checkbutton = self.xml.get_widget(
+			'save_pass_checkbutton')
+		self.save_password_checkbutton.connect('toggled',
+			self.on_save_password_checkbutton_toggled)
+		self.password_entry = self.xml.get_widget('pass_entry')
+		
 		self.register_nick_entry = self.xml.get_widget('register_nick_entry')
-		self.register_nick_entry.connect('changed', self.on_register_nick_entry_changed)
+		self.register_nick_entry.connect('changed',
+			self.on_register_nick_entry_changed)
 		self.register_nick_entry.connect('key_press_event',
 			self.on_register_nick_entry_key_pressed)
 		self.register_server_comboboxentry = self.xml.get_widget(
@@ -2698,6 +2705,12 @@ class FirstTimeWizardWindow:
 		self.register_server_comboboxentry.child.connect('key_press_event',
 			self.on_register_server_entry_key_pressed)
 		self.register_jid_label = self.xml.get_widget('register_jid_label')
+		
+		self.register_save_password_checkbutton = self.xml.get_widget(
+			'register_save_password_checkbutton')
+		self.register_save_password_checkbutton.connect('toggled',
+			self.on_register_save_password_checkbutton_toggled)
+		self.register_password_entry = self.xml.get_widget('register_pass_entry')
 
 		self.back_button = self.xml.get_widget('back_button')
 		self.back_button.set_sensitive(False)
@@ -2714,7 +2727,16 @@ class FirstTimeWizardWindow:
 		pass
 
 	def on_save_password_checkbutton_toggled(self, widget):
-		pass
+		if self.password_entry.get_property('sensitive'):
+			self.password_entry.set_sensitive(False)
+		else:
+			self.password_entry.set_sensitive(True)
+
+	def on_register_save_password_checkbutton_toggled(self, widget):
+		if self.register_password_entry.get_property('sensitive'):
+			self.register_password_entry.set_sensitive(False)
+		else:
+			self.register_password_entry.set_sensitive(True)
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
