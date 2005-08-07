@@ -19,6 +19,7 @@
 ##
 
 import sys
+import sha
 import os
 import time
 import sre
@@ -134,6 +135,7 @@ class Connection:
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
 		self.gpg = None
+		self.vcard_sha = None
 		self.status = ''
 		self.myVCardID = []
 		self.new_account_info = None
@@ -160,6 +162,12 @@ class Connection:
 			return
 		for handler in self.handlers[event]:
 			handler(self.name, data)
+
+	def add_sha(self, p):
+		c = p.setTag('x', namespace = common.xmpp.NS_VCARD_UPDATE)
+		if self.vcard_sha is not None:
+			c.setTagData('photo', self.vcard_sha)
+		return p
 
 	# this is in features.py but it is blocking
 	def _discover(self, ns, jid, node = None): 
@@ -213,9 +221,20 @@ class Connection:
 					vcard[name] = {}
 					for c in info.getChildren():
 						 vcard[name][c.getName()] = c.getData()
-			if vc.getID() in self.myVCardID:
-				self.myVCardID.remove(vc.getID())
+			if int(vc.getID()) in self.myVCardID:
+				self.myVCardID.remove(int(vc.getID()))
+				if vcard.has_key('PHOTO') and type(vcard['PHOTO']) == type({}) and \
+				vcard['PHOTO'].has_key('BINVAL'):
+					photo = vcard['PHOTO']['BINVAL']
+					self.vcard_sha = sha.sha(photo).hexdigest()
+				else:
+					self.vcard_sha = ''
 				self.dispatch('MYVCARD', vcard)
+				#we re-send our presence with sha
+				sshow = STATUS_LIST[self.connected]
+				p = common.xmpp.Presence(typ = None, show = sshow)
+				p = self.add_sha(p)
+				self.to_be_sent.append(p)
 			else:
 				self.dispatch('VCARD', vcard)
 
@@ -319,8 +338,9 @@ class Connection:
 			gajim.log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0:
 				if self.connection:
-					self.to_be_sent.append(common.xmpp.Presence(who,
-						'subscribed'))
+					p = common.xmpp.Presence(who, 'subscribed')
+					p = self.add_sha(p)
+					self.to_be_sent.append(p)
 				if who.find("@") <= 0:
 					self.dispatch('NOTIFY',
 						(prs.getFrom().getStripped().encode('utf8'), 'offline',
@@ -1309,6 +1329,7 @@ class Connection:
 			self.activate_privacy_rule('invisible')
 		prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
 		p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
+		p = self.add_sha(p)
 		if msg:
 			p.setStatus(msg)
 		if signed:
@@ -1358,12 +1379,12 @@ class Connection:
 			if self.connected == 2:
 				self.connected = STATUS_LIST.index(show)
 				#send our presence
-				ptype = None
 				if show == 'invisible':
 					self.send_invisible_presence(msg, signed, True)
 					return
 				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
-				p = common.xmpp.Presence(typ = ptype, priority = prio, show = sshow)
+				p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
+				p = self.add_sha(p)
 				if msg:
 					p.setStatus(msg)
 				if signed:
@@ -1384,6 +1405,7 @@ class Connection:
 			if self.connection:
 				self.on_purpose = True
 				p = common.xmpp.Presence(typ = 'unavailable')
+				p = self.add_sha(p)
 				if msg:
 					p.setStatus(msg)
 				if self.connection:
@@ -1397,7 +1419,6 @@ class Connection:
 		elif show != 'offline' and self.connected:
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
-			ptype = None
 			if show == 'invisible':
 				self.send_invisible_presence(msg, signed)
 				return
@@ -1406,7 +1427,8 @@ class Connection:
 				self.connection.send(iq)
 				self.activate_privacy_rule('visible')
 			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
-			p = common.xmpp.Presence(typ = ptype, priority = prio, show = sshow)
+			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
+			p = self.add_sha(p)
 			if msg:
 				p.setStatus(msg)
 			if signed:
@@ -1470,21 +1492,26 @@ class Connection:
 		if not self.connection:
 			return
 		gajim.log.debug('subscription request for %s' % jid)
-		pres = common.xmpp.Presence(jid, 'subscribe')
+		p = common.xmpp.Presence(jid, 'subscribe')
+		p = self.add_sha(p)
 		if not msg:
 			msg = _('I would like to add you to my roster.')
-		pres.setStatus(msg)
-		self.to_be_sent.append(pres)
+		p.setStatus(msg)
+		self.to_be_sent.append(p)
 
 	def send_authorization(self, jid):
 		if not self.connection:
 			return
-		self.to_be_sent.append(common.xmpp.Presence(jid, 'subscribed'))
+		p = common.xmpp.Presence(jid, 'subscribed')
+		p = self.add_sha(p)
+		self.to_be_sent.append(p)
 
 	def refuse_authorization(self, jid):
 		if not self.connection:
 			return
-		self.to_be_sent.append(common.xmpp.Presence(jid, 'unsubscribed'))
+		p = common.xmpp.Presence(jid, 'unsubscribed')
+		p = self.add_sha(p)
+		self.to_be_sent.append(p)
 
 	def unsubscribe(self, jid):
 		if not self.connection:
@@ -1603,6 +1630,8 @@ class Connection:
 		if jid:
 			iq.setTo(jid)
 		iq.setTag(common.xmpp.NS_VCARD + ' vCard')
+		id = self.connection.getAnID()
+		iq.setID(id)
 		self.to_be_sent.append(iq)
 		return iq
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
@@ -1667,6 +1696,7 @@ class Connection:
 		if not self.connection:
 			return
 		p = common.xmpp.Presence(to = agent, typ = ptype)
+		p = self.add_sha(p)
 		self.to_be_sent.append(p)
 
 	def join_gc(self, nick, room, server, password):
@@ -1678,6 +1708,7 @@ class Connection:
 			show = None
 		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
 			show = show, status = self.status)
+		p = self.add_sha(p)
 		t = p.setTag(common.xmpp.NS_MUC + ' x')
 		if password:
 			t.setTagData('password', password)
@@ -1704,8 +1735,9 @@ class Connection:
 	def change_gc_nick(self, room_jid, nick):
 		if not self.connection:
 			return
-		self.to_be_sent.append(common.xmpp.Presence(to = '%s/%s' % (room_jid,
-			nick)))
+		p = common.xmpp.Presence(to = '%s/%s' % (room_jid, nick))
+		p = self.add_sha(p)
+		self.to_be_sent.append(p)
 
 	def send_gc_status(self, nick, jid, show, status):
 		if not self.connection:
@@ -1716,8 +1748,10 @@ class Connection:
 			show = None
 		if show == 'online':
 			show = None
-		self.to_be_sent.append(common.xmpp.Presence(to = '%s/%s' % (jid, nick),
-			typ = ptype, show = show, status = status))
+		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
+			show = show, status = status)
+		p = self.add_sha(p)
+		self.to_be_sent.append(p)
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		'''role is for all the life of the room so it's based on nick'''

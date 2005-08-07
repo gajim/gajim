@@ -62,6 +62,7 @@ NS_TIME         ='jabber:iq:time'
 NS_TLS          ='urn:ietf:params:xml:ns:xmpp-tls'
 NS_VACATION     ='http://jabber.org/protocol/vacation'
 NS_VCARD        ='vcard-temp'
+NS_VCARD_UPDATE =NS_VCARD+':x:update'
 NS_VERSION      ='jabber:iq:version'
 NS_ENCRYPTED    ='jabber:x:encrypted'                           # JEP-0027
 NS_XMPP_STREAMS ='urn:ietf:params:xml:ns:xmpp-streams'
