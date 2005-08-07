@@ -719,6 +719,71 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		self.text_lable.set_markup(text)
 		self.hbox.add(self.table)
 		self.win.add(self.hbox)
+	
+class FileTransfersTooltip(BaseTooltip):
+	''' Tooltip that is shown in the notification area '''
+	def __init__(self):
+		self.text_lable = gtk.Label()
+		self.text_lable.set_line_wrap(True)
+		self.text_lable.set_alignment(0, 0)
+		self.text_lable.set_selectable(False)
+		BaseTooltip.__init__(self)
+
+	def populate(self, file_props):
+		self.create_window()
+		self.hbox = gtk.HBox()
+		text = '<b>' + _('Name: ') + '</b>' 
+		name = file_props['name']
+		if not name and file_props['file-name']:
+			if os.path.exists(file_props['file-name']):
+				(path, name) = os.path.split(file_props['file-name'])
+		text += gtkgui_helpers.escape_for_pango_markup(name) 
+		text += '\n<b>' + _('Type: ') + '</b>'
+		if file_props['type'] == 'r':
+			text += _('Download')
+		else:
+			text += _('Upload')
+		if file_props['type'] == 'r':
+			text += '\n<b>' + _('Sender: ') + '</b>'
+			text +=  gtkgui_helpers.escape_for_pango_markup(str(file_props['sender']))
+		else:
+			text += '\n<b>' + _('Recipient: ') + '</b>' 
+			receiver = file_props['receiver']
+			if hasattr(receiver, 'name'):
+				receiver = receiver.name
+			text +=  gtkgui_helpers.escape_for_pango_markup(receiver)
+		text += '\n<b>' + _('Size: ') + '</b>' 
+		text += gtkgui_helpers.convert_bytes(file_props['size'])
+		text += '\n<b>' + _('Transfered: ') + '</b>' 
+		transfered_len = 0
+		if file_props.has_key('received-len'):
+			transfered_len = file_props['received-len']
+		text += gtkgui_helpers.convert_bytes(transfered_len)
+		text += '\n<b>' + _('Status: ') + '</b>' 
+		if not file_props.has_key('started') or not file_props['started']:
+			status =  'not started'
+		elif file_props.has_key('connected'):
+			if file_props['connected'] == False:
+				if file_props['completed']:
+					status = 'completed'
+				else:
+					status = 'stopped'
+			else:
+				if file_props.has_key('stopped') and \
+					file_props['stopped'] == True:
+					status = 'stopped'
+				elif file_props.has_key('paused') and  \
+					file_props['paused'] == True:
+					status = 'paused'
+				elif file_props.has_key('stalled') and \
+					file_props['stalled'] == True:
+					status = 'stalled'
+				else:
+					status = 'transfering'
+		text += status
+		self.text_lable.set_markup(text)
+		self.hbox.add(self.text_lable)
+		self.win.add(self.hbox)
 		
 class RosterTooltip(BaseTooltip, StatusTable):
 	''' Tooltip that is shown in the roster treeview '''
@@ -1447,6 +1512,7 @@ class FileTransfersWindow:
 	def __init__(self, plugin):
 		self.files_props = {'r' : {}, 's': {}}
 		self.plugin = plugin
+		self.height_diff = 0
 		self.last_save_dir = None
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_window', APP)
 		self.window = self.xml.get_widget('file_transfers_window')
@@ -1497,6 +1563,7 @@ class FileTransfersWindow:
 		self.tree.append_column(col)
 		self.set_images()
 		self.tree.get_selection().set_select_function(self.select_func)
+		self.tooltip = FileTransfersTooltip()
 		self.xml.signal_autoconnect(self)
 		
 	def show_completed(self, jid, file_props):
@@ -1517,7 +1584,7 @@ class FileTransfersWindow:
 		error_messages = {
 			-1: _('Remote host cannot connect to you. He may be behind a NAT network or his clients does not support file transfer.'),
 			-2: _('File not specified.'),
-			-3: _('Unable to bind to transfer port. Check if you are running onother instance of Gajim'),
+			-3: _('Unable to bind to transfer port. Check if you are running another instance of Gajim'),
 			-4: _('Connection with peer cannot be established. Maybe you are behind a firewall. Set a file transfer proxy.'),
 				}
 		InformationDialog(_('File transfer canceled'), error_messages[-1]).get_response()
@@ -1529,7 +1596,7 @@ class FileTransfersWindow:
 		InformationDialog(_('File transfer canceled'),
 _('You are unable to connect to remote host. He may be behind a NAT.')).get_response()
 		self.tree.get_selection().unselect_all()
-		
+	
 	def show_stopped(self, jid, file_props):
 		self.window.present()
 		self.window.window.focus()
@@ -1544,8 +1611,9 @@ _('You are unable to connect to remote host. He may be behind a NAT.')).get_resp
 	def show_file_send_request(self, account, contact):
 		dialog = gtk.FileChooserDialog(title=_('Choose File to Send...'), 
 			action=gtk.FILE_CHOOSER_ACTION_OPEN, 
-			buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
-			gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+			buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
+		butt = dialog.add_button(_('Send'), gtk.RESPONSE_OK)
+		butt.set_use_stock(True)
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		if self.last_save_dir and os.path.exists(self.last_save_dir) \
 			and os.path.isdir(self.last_save_dir):
@@ -1553,7 +1621,7 @@ _('You are unable to connect to remote host. He may be behind a NAT.')).get_resp
 		file_props = {}
 		response = dialog.run()
 		if response == gtk.RESPONSE_OK:
-			file_path = dialog.get_filename()
+			file_path = dialog.get_filename().decode('utf-8')
 			(file_dir, file_name) = os.path.split(file_path)
 			if file_dir:
 				self.last_save_dir = file_dir
@@ -1603,7 +1671,7 @@ _('You are unable to connect to remote host. He may be behind a NAT.')).get_resp
 					(file_dir, file_name) = os.path.split(file_path)
 					if file_dir:
 						self.last_save_dir = file_dir
-					file_props['file-name'] = file_path
+					file_props['file-name'] = file_path.decode('utf-8')
 					self.add_transfer(account, contact, file_props)
 					gajim.connections[account].send_file_approval(file_props)
 				else:
@@ -1630,6 +1698,10 @@ _('You are unable to connect to remote host. He may be behind a NAT.')).get_resp
 			
 	def set_status(self, typ, sid, status):
 		iter = self.get_iter_by_sid(typ, sid)
+		if status == 'stop':
+			sid = self.model[iter][4]
+			file_props = self.files_props[sid[0]][sid[1:]]
+			file_props['stopped'] = True
 		if iter is not None:
 			self.model.set(iter, 0, self.images[status])
 			
@@ -1697,6 +1769,7 @@ _('You are unable to connect to remote host. He may be behind a NAT.')).get_resp
 		return file_props
 		
 	def add_transfer(self, account, contact, file_props):
+		self.on_transfers_list_leave_notify_event(None)
 		if file_props is None:
 			return
 		self.files_props[file_props['type']][file_props['sid']] = file_props
@@ -1720,12 +1793,41 @@ _('You are unable to connect to remote host. He may be behind a NAT.')).get_resp
 		self.set_status(file_props['type'], file_props['sid'], status)
 		self.window.show_all()
 	
+	def on_transfers_list_motion_notify_event(self, widget, event):
+		pointer = self.tree.get_pointer()
+		orig = widget.window.get_origin()
+		props = widget.get_path_at_pos(int(event.x), int(event.y))
+		self.height_diff = pointer[1] - int(event.y)
+		if self.tooltip.timeout > 0:
+			if not props or self.tooltip.id != props[0]:
+				self.tooltip.hide_tooltip()
+		if props:
+			[row, col, x, y] = props
+			iter = None
+			try:
+				iter = self.model.get_iter(row)
+			except:
+				self.tooltip.hide_tooltip()
+				return
+			sid = self.model[iter][4]
+			file_props = self.files_props[sid[0]][sid[1:]]
+			if file_props is not None:
+				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+					self.tooltip.id = row
+					self.tooltip.timeout = gobject.timeout_add(500,
+						self.show_tooltip, widget)
 	
-	def on_transfers_list_enter_notify_event(self, widget, event):
-		pass
-	
-	def on_transfers_list_leave_notify_event(self, widget, event):
-		pass
+	def on_transfers_list_leave_notify_event(self, widget = None, event = None):
+		if event is not None:
+			self.height_diff = int(event.y)
+		elif self.height_diff is 0:
+			return
+		pointer = self.tree.get_pointer()
+		props = self.tree.get_path_at_pos(pointer[0], 
+			pointer[1] - self.height_diff)
+		if self.tooltip.timeout > 0:
+			if not props or self.tooltip.id == props[0]:
+				self.tooltip.hide_tooltip()
 	
 	def on_transfers_list_row_activated(self, widget, path, col):
 		# try to open the file
@@ -1823,12 +1925,30 @@ _('You are unable to connect to remote host. He may be behind a NAT.')).get_resp
 		if not self.is_transfer_stoped(file_props):
 			file_props['disconnect_cb']()
 		self.set_status(file_props['type'], file_props['sid'], 'stop')
-		
+	
+	def show_tooltip(self, widget):
+		pointer = self.tree.get_pointer()
+		props = self.tree.get_path_at_pos(pointer[0], 
+			pointer[1] - self.height_diff)
+		if props and self.tooltip.id == props[0]:
+			# check if the current pointer is at the same path
+			# as it was before setting the timeout
+			iter = self.model.get_iter(props[0])
+			sid = self.model[iter][4]
+			file_props = self.files_props[sid[0]][sid[1:]]
+			rect =  self.tree.get_cell_area(props[0],props[1])
+			position = widget.window.get_origin()
+			self.tooltip.show_tooltip(file_props , (pointer[0], rect.height ), 
+				 (position[0], position[1] + rect.y + self.height_diff))
+		else:
+			self.tooltip.hide_tooltip()
+	
 	def on_notify_ft_complete_checkbox_toggled(self, widget):
 		gajim.config.set('notify_on_file_complete', 
 			widget.get_active())
 		
 	def on_file_transfers_dialog_delete_event(self, widget, event):
+		self.on_transfers_list_leave_notify_event(widget, None)
 		self.window.hide()
 		return True # do NOT destory window
 	
