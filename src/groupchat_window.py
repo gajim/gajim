@@ -64,20 +64,26 @@ class GroupchatWindow(chat.Chat):
 		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 		self.new_room(room_jid, nick)
 		self.show_title()
-		self.xml.signal_connect('on_groupchat_window_destroy', 
-			self.on_groupchat_window_destroy)
-		self.xml.signal_connect('on_groupchat_window_delete_event', 
-			self.on_groupchat_window_delete_event)
-		self.xml.signal_connect('on_groupchat_window_focus_in_event', 
-			self.on_groupchat_window_focus_in_event)
-		self.xml.signal_connect('on_groupchat_window_button_press_event',
-			self.on_chat_window_button_press_event)
-		self.xml.signal_connect('on_chat_notebook_key_press_event', 
-			self.on_chat_notebook_key_press_event)
-		self.xml.signal_connect('on_chat_notebook_switch_page', 
-			self.on_chat_notebook_switch_page)
-		self.xml.signal_connect('on_close_window_activate',
-			self.on_close_window_activate)
+		
+		
+		# NOTE: if it not a window event, connect in new_room function
+		signal_dict = {
+'on_groupchat_window_destroy': self.on_groupchat_window_destroy,
+'on_groupchat_window_delete_event': self.on_groupchat_window_delete_event,
+'on_groupchat_window_focus_in_event': self.on_groupchat_window_focus_in_event,
+'on_groupchat_window_focus_out_event': self.on_groupchat_window_focus_out_event,
+'on_chat_notebook_key_press_event': self.on_chat_notebook_key_press_event,
+         }
+
+		self.xml.signal_autoconnect(signal_dict)
+
+
+		#FIXME: 0.9 implement you lost focus of MUC room here (Psi has a <hr/>)
+		# DO NOT CONNECT ABOVE but in glade..
+		#'on_chat_notebook_switch_page'
+		#'on_groupchat_popup_menu_destroy'
+
+
 
 		# get size and position from config
 		if gajim.config.get('saveposition'):
@@ -103,10 +109,6 @@ class GroupchatWindow(chat.Chat):
 		self.list_treeview[room_jid].expand_all()
 		self.set_subject(room_jid, var['subject'])
 		self.subjects[room_jid] = var['subject']
-
-	def on_close_window_activate(self, widget):
-		if not self.on_groupchat_window_delete_event(widget, None):
-			self.window.destroy()
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
@@ -169,12 +171,15 @@ class GroupchatWindow(chat.Chat):
 			del gajim.gc_connected[self.account][room_jid]
 
 	def on_groupchat_window_focus_in_event(self, widget, event):
-		"""When window get focus"""
+		'''When window gets focus'''
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
 
-	def on_groupchat_window_key_press_event(self, widget, event):
-		self.on_chat_window_button_press_event(widget, event)
-		return True
+	def on_groupchat_window_focus_out_event(self, widget, event):
+		'''When window loses focus'''
+		#chat.Chat.on_chat_window_focus_out_event(self, widget, event)
+		#FIXME: merge with on_tabbed_chat_window_focus_out_event in chat.py
+		#do the you were here in MUC conversation thing
+		pass
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
@@ -857,7 +862,7 @@ class GroupchatWindow(chat.Chat):
 			self.revoke_owner(widget, room_jid, jid)
 
 	def mk_menu(self, room_jid, event, iter):
-		"""Make user's popup menu"""
+		'''Make contact's popup menu'''
 		model = self.list_treeview[room_jid].get_model()
 		nick = model[iter][1]
 		c = gajim.gc_contacts[self.account][room_jid][nick]
@@ -944,6 +949,8 @@ class GroupchatWindow(chat.Chat):
 		# show the popup now!
 		menu = xml.get_widget('gc_occupants_menu')
 		menu.popup(None, None, None, event.button, event.time)
+		self.popup_is_shown = True
+		menu.connect('deactivate', self.on_popup_deactivate)
 		menu.show_all()
 
 	def remove_tab(self, room_jid):
@@ -1076,20 +1083,21 @@ class GroupchatWindow(chat.Chat):
 					int(event.y))
 			except TypeError:
 				widget.get_selection().unselect_all()
-				return False
+				return
 			widget.get_selection().select_path(path)
 			model = widget.get_model()
 			iter = model.get_iter(path)
 			if len(path) == 2:
 				self.mk_menu(room_jid, event, iter)
 			return True
-		if event.button == 2: # middle click
+		
+		elif event.button == 2: # middle click
 			try:
 				path, column, x, y = widget.get_path_at_pos(int(event.x),
 					int(event.y))
 			except TypeError:
 				widget.get_selection().unselect_all()
-				return False
+				return
 			widget.get_selection().select_path(path)
 			model = widget.get_model()
 			iter = model.get_iter(path)
@@ -1104,13 +1112,14 @@ class GroupchatWindow(chat.Chat):
 				self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
 				self.plugin.windows[self.account]['chats'][fjid].window.present()
 			return True
-		if event.button == 1: # left click
+			
+		elif event.button == 1: # left click
 			try:
 				path, column, x, y = widget.get_path_at_pos(int(event.x),
 					int(event.y))
 			except TypeError:
 				widget.get_selection().unselect_all()
-				return False
+				return
 
 			model = widget.get_model()
 			iter = model.get_iter(path)
@@ -1121,13 +1130,10 @@ class GroupchatWindow(chat.Chat):
 						widget.collapse_row(path)
 					else:
 						widget.expand_row(path, False)
-		
-		return False
 
 	def on_list_treeview_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
 			widget.get_selection().unselect_all()
-		return False
 
 	def on_list_treeview_row_activated(self, widget, path, col = 0):
 		"""When an iter is double clicked: open the chat window"""

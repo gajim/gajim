@@ -61,8 +61,9 @@ class Chat:
 		self.print_time_timeout_id = {}
 		self.names = {} # what is printed in the tab (eg. user.name)
 		self.childs = {} # holds the contents for every tab (VBox)
+		self.popup_is_shown = False # is a context menu shown or not?
 
-		#The following vars are used to keep history of user's messages
+		# the following vars are used to keep history of user's messages
 		self.sent_history = {}
 		self.sent_history_pos = {}
 		self.typing_new = {}
@@ -259,10 +260,13 @@ class Chat:
 		
 		return menu
 
-	def on_chat_window_button_press_event(self, widget, event):
+	def on_banner_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
+		print 'banner button press' #NEVER GETS CALLED!
 		if event.button == 3: # right click
+			self.popup_is_shown = True
 			menu = self.prepare_context_menu()
+			menu.connect('deactivate', self.on_popup_deactivate)
 			# common menuitems (tab switches)
 			if len(self.xmls) > 1: # if there is more than one tab
 				menu.append(gtk.MenuItem()) # seperator
@@ -279,6 +283,9 @@ class Chat:
 			# show the menu
 			menu.popup(None, None, None, event.button, event.time)
 			menu.show_all()
+
+	def on_popup_deactivate(self, widget):
+		self.popup_is_shown = False
 
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
 		# get the index of the page and then the page that we're leaving
@@ -435,6 +442,8 @@ class Chat:
 
 	def on_tab_eventbox_button_press_event(self, widget, event, child):
 		if event.button == 3:
+			self.popup_is_shown = True
+			menu.connect('deactivate', self.on_popup_deactivate)
 			n = self.notebook.page_num(child)
 			self.notebook.set_current_page(n)
 
@@ -446,7 +455,7 @@ class Chat:
 		self.set_compact_view(self.always_compact_view)
 		self.nb_unread[jid] = 0
 		gajim.last_message_time[self.account][jid] = 0
-		self.last_time_printout[jid] = float(0.0)
+		self.last_time_printout[jid] = 0.
 		
 		if gajim.config.get('use_speller') and 'gtkspell' in globals():
 			message_textview = self.xmls[jid].get_widget('message_textview')
@@ -567,7 +576,7 @@ class Chat:
 				message_textview.emit('key_press_event', event)
 				
 	def on_chat_notebook_key_press_event(self, widget, event):
-		st = '1234567890' # zero is here cause humans count from 1, pc from 0 :P
+		st = '1234567890' # alt+1 means the first tab (tab 0)
 		jid = self.get_active_jid()
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
 			if self.widget_name == 'tabbed_chat_window':
@@ -690,18 +699,24 @@ class Chat:
 		'''basically it filters out the widget instance'''
 		self.plugin.launch_browser_mailer('url', link)
 
+	def on_message_textview_populate_popup(self, textview, menu):
+		self.popup_is_shown = True
+		menu.connect('deactivate', self.on_popup_deactivate)
+
 	def on_conversation_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear
 		and if we have sth selected we show a submenu with actions on the phrase
 		(see on_conversation_textview_button_press_event)'''
-		item = gtk.MenuItem() # seperator
+		self.popup_is_shown = True
+		menu.connect('deactivate', self.on_popup_deactivate)
+		item = gtk.SeparatorMenuItem()
 		menu.prepend(item)
 		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
 		menu.prepend(item)
 		item.connect('activate', self.on_clear, textview)
 		if self.selected_phrase:
 			s = self.selected_phrase
-			if len(s) > 25: #FIXME: do me with pango ellipseEND when gtk24 is OLD
+			if len(s) > 25:
 				s = s[:21] + '...'
 			item = gtk.MenuItem(_('Actions for "%s"') % s)
 			menu.prepend(item)
@@ -839,6 +854,8 @@ class Chat:
 	def make_link_menu(self, event, kind, text):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_context_menu', APP)
 		menu = xml.get_widget('chat_context_menu')
+		self.popup_is_shown = True
+		menu.connect('deactivate', self.on_popup_deactivate)
 		childs = menu.get_children()
 		if kind == 'url':
 			childs[0].connect('activate', self.on_copy_link_activate, text)

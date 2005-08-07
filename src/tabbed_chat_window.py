@@ -52,22 +52,20 @@ class TabbedChatWindow(chat.Chat):
 		self.possible_inactive_timeout_id = {}
 		self.new_user(user)
 		self.show_title()
-		self.xml.signal_connect('on_tabbed_chat_window_destroy',
-			self.on_tabbed_chat_window_destroy)
-		self.xml.signal_connect('on_tabbed_chat_window_delete_event',
-			self.on_tabbed_chat_window_delete_event)
-		self.xml.signal_connect('on_tabbed_chat_window_focus_in_event',
-			self.on_tabbed_chat_window_focus_in_event)
-		self.xml.signal_connect('on_tabbed_chat_window_focus_out_event',
-			self.on_tabbed_chat_window_focus_out_event)
-		self.xml.signal_connect('on_tabbed_chat_window_button_press_event',
-			self.on_chat_window_button_press_event)
-		self.xml.signal_connect('on_chat_notebook_key_press_event',
-			self.on_chat_notebook_key_press_event)
-		self.xml.signal_connect('on_chat_notebook_switch_page',
-			self.on_chat_notebook_switch_page)
-		self.xml.signal_connect('on_tabbed_chat_window_motion_notify_event',
-			self.on_tabbed_chat_window_motion_notify_event)
+		
+		# NOTE: if it not a window event, connect in new_user function
+		signal_dict = {
+'on_tabbed_chat_window_destroy': self.on_tabbed_chat_window_destroy,
+'on_tabbed_chat_window_delete_event': self.on_tabbed_chat_window_delete_event,
+'on_tabbed_chat_window_focus_in_event': self.on_tabbed_chat_window_focus_in_event,
+'on_tabbed_chat_window_focus_out_event': self.on_tabbed_chat_window_focus_out_event,
+'on_chat_notebook_key_press_event': self.on_chat_notebook_key_press_event,
+'on_chat_notebook_switch_page': self.on_chat_notebook_switch_page, # in chat.py
+'on_tabbed_chat_window_motion_notify_event': self.on_tabbed_chat_window_motion_notify_event,
+         }
+
+		self.xml.signal_autoconnect(signal_dict)
+
 
 		if gajim.config.get('saveposition'):
 			# get window position and size from config
@@ -81,7 +79,7 @@ class TabbedChatWindow(chat.Chat):
 		self.window.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		
 		self.window.show_all()
-
+	
 	def save_var(self, jid):
 		'''return the specific variable of a jid, like gpg_enabled
 		the return value have to be compatible with wthe one given to load_var'''
@@ -232,7 +230,7 @@ class TabbedChatWindow(chat.Chat):
 			status_image.set_from_pixbuf(pix)
 
 	def on_tabbed_chat_window_delete_event(self, widget, event):
-		"""close window"""
+		'''close window'''
 		for jid in self.contacts:
 			if time.time() - gajim.last_message_time[self.account][jid] < 2:
 				# 2 seconds
@@ -269,17 +267,12 @@ class TabbedChatWindow(chat.Chat):
 		
 		# focus-out is also emitted by showing context menu
 		# so check to see if we're really not paying attention to window/tab
-		x, y, width, height, depth = widget.window.get_geometry()
-		mouse_x, mouse_y, state = widget.window.get_pointer()
-		# mouse_x, mouse_y are relative to window that is:
-		# (0, 0) is the left upper corner of the window
-		#  so just check if mouse_x is inside width value to see where the pointer
-		# is at the time of focus-out
 		# NOTE: if the user changes tab, (switch-tab send inactive to current tab
 		# so that's not a problem)
-		if mouse_x < 0 or mouse_x > width: # it's outside of window
-			# so no context menu, so sent inactive
-			self.send_chatstate('inactive')
+		if self.popup_is_shown is False: # we are outside of the window
+			# so no context menu, so send inactive to alls tabs
+			for jid in self.xmls:
+				self.send_chatstate('inactive', jid)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
@@ -321,7 +314,7 @@ class TabbedChatWindow(chat.Chat):
 		
 		chat.Chat.remove_tab(self, jid, 'chats')
 		del self.contacts[jid]
-
+	
 	def new_user(self, contact):
 		'''when new tab is created'''
 		self.names[contact.jid] = contact.name
