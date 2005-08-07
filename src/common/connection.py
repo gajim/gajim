@@ -410,6 +410,7 @@ class Connection:
 					'state': 0, 
 					'target': target, 
 					'id': id, 
+					'sid': sid,
 					'initiator': str(iq_obj.getFrom())
 				}
 				for attr in item.getAttrs():
@@ -562,8 +563,8 @@ class Connection:
 		raise common.xmpp.NodeProcessed
 	
 	def proxy_auth_ok(self, proxy):
-		''' cb, called after authentication to proxy server '''
-		file_props = self.files_props[proxy['id']]
+		'''cb, called after authentication to proxy server '''
+		file_props = self.files_props[proxy['sid']]
 		iq = common.xmpp.Protocol(name = 'iq', to = proxy['initiator'], 
 		typ = 'set')
 		auth_id = "au_" + proxy['id']
@@ -678,6 +679,7 @@ class Connection:
 					'state': 0, 
 					'target': str(receiver), 
 					'id': file_props['sid'], 
+					'sid': file_props['sid'], 
 					'initiator': proxy,
 					'host': host,
 					'port': str(_port),
