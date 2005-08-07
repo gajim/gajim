@@ -391,7 +391,7 @@ class TabbedChatWindow(chat.Chat):
 			self.send_chatstate('composing')
 		else:
 			if self.chatstates[contact.jid] == 'composing':
-				self.send_chatstate('paused') # pause composing
+				self.send_chatstate('paused', contact.jid) # pause composing
 		
 		# assume no activity and let the motion-notify or key_press make them True
 		self.mouse_over_in_last_5_secs = False
@@ -414,7 +414,7 @@ class TabbedChatWindow(chat.Chat):
 		
 		if not (self.mouse_over_in_last_30_secs or\
 		self.kbd_activity_in_last_30_secs):
-			self.send_chatstate('inactive')
+			self.send_chatstate('inactive', contact.jid)
 
 		# assume no activity and let the motion-notify or key_press make them True
 		self.mouse_over_in_last_5_secs = False
@@ -488,13 +488,18 @@ class TabbedChatWindow(chat.Chat):
 				# Shift + Escape is not composing, so we let the gtk+ decide
 				# in an workaround way (we could also get somehow the listed shortcuts
 				# but I don't know if it's possible)
+				
+				# get images too (eg. emoticons)
+				message = message_buffer.get_slice(start_iter, end_iter, True)
+				message = message.strip() # enter and space does not mean writing
 				chars_no = len(message)
 				gobject.timeout_add(1000, self.check_for_possible_composing,
 					message_buffer, jid, chars_no)
 				
 	def check_for_possible_composing(self, message_buffer, jid, chars_no):
 		start_iter, end_iter = message_buffer.get_bounds()
-		message = message_buffer.get_text(start_iter, end_iter, False)
+		message = message_buffer.get_slice(start_iter, end_iter, True)
+		message = message.strip() # enter and space does not mean writing
 		chars_no_after_one_sec = len(message)
 		if chars_no != chars_no_after_one_sec:
 			# so GTK+ decided key_press was for writing..
