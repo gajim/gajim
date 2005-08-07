@@ -410,7 +410,7 @@ class RosterWindow:
 			if multiple_accounts:
 				label = gtk.Label()
 				label.set_markup('<u>' + account.upper() +'</u>')
-				item = gtk.MenuItem()
+				item = gtk.SeparatorMenuItem()
 				item.add(label)
 				item.connect('state-changed', self.on_bm_header_changed_state)
 				sub_menu.append(item)
@@ -426,7 +426,7 @@ class RosterWindow:
 				sub_menu.append(item)
 
 		if at_least_one_account_connected:
-			newitem = gtk.MenuItem() # seperator
+			newitem = gtk.SeparatorMenuItem() # seperator
 			sub_menu.append(newitem)
 		
 			newitem = gtk.ImageMenuItem(_('Manage Bookmarks...'))
@@ -913,7 +913,7 @@ class RosterWindow:
 		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
 							account)
 
-		item = gtk.MenuItem() # seperator
+		item = gtk.SeparatorMenuItem() # seperator
 		menu.append(item)
 
 		item = gtk.ImageMenuItem(_('Edit'))
@@ -989,7 +989,7 @@ class RosterWindow:
 			'offline']:
 
 			if show == 'offline': # We add a sep before offline item
-				item = gtk.MenuItem()
+				item = gtk.SeparatorMenuItem()
 				sub_menu.append(item)
 
 			item = gtk.ImageMenuItem(helpers.get_uf_show(show))

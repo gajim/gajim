@@ -269,7 +269,7 @@ class Chat:
 			menu.connect('deactivate', self.on_popup_deactivate)
 			# common menuitems (tab switches)
 			if len(self.xmls) > 1: # if there is more than one tab
-				menu.append(gtk.MenuItem()) # seperator
+				menu.append(gtk.SeparatorMenuItem()) # seperator
 				for jid in self.xmls:
 					if jid != self.get_active_jid():
 						item = gtk.ImageMenuItem(_('Switch to %s') % self.names[jid])

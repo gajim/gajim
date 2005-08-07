@@ -145,10 +145,10 @@ class Systray:
 				'offline']:
 
 			if show == 'offline': # We add a sep before offline item
-				item = gtk.MenuItem()
+				item = gtk.SeparatorMenuItem()
 				sub_menu.append(item)
 
-			item = gtk.MenuItem()
+			item = gtk.SeparatorMenuItem()
 			icon = state_images[show]
 			label = gtk.Label(helpers.get_uf_show(show))
 			hbox = gtk.HBox(False, 3)
