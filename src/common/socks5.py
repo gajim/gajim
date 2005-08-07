@@ -58,7 +58,6 @@ class SocksQueue:
 		self.on_success = on_success
 		self.on_failure = on_failure
 		if not self.files_props.has_key(account):
-			print '\n\nFIXME '
 			pass
 			# FIXME ---- show error dialog
 		else:
@@ -141,10 +140,10 @@ class SocksQueue:
 		if file_props is None or \
 			file_props.has_key('sid') is False:
 			return
-		id = file_props['sid']
+		_id = file_props['sid']
 		if not self.files_props.has_key(account):
 			self.files_props[account] = {}
-		self.files_props[account][id] = file_props
+		self.files_props[account][_id] = file_props
 		
 	def get_file_props(self, account, sid):
 		''' get fil_prop by account name and session id '''
@@ -484,10 +483,13 @@ class Socks5:
 		''' Parse the initial message and create a list of auth
 		mechanisms '''
 		auth_mechanisms = []
-		ver, num_auth = struct.unpack('!BB', buff[:2])
-		for i in range(num_auth):
-			mechanism, = struct.unpack('!B', buff[1 + i])
-			auth_mechanisms.append(mechanism)
+		try:
+			ver, num_auth = struct.unpack('!BB', buff[:2])
+			for i in range(num_auth):
+				mechanism, = struct.unpack('!B', buff[1 + i])
+				auth_mechanisms.append(mechanism)
+		except:
+			return None
 		return auth_mechanisms
 	def _get_auth_response(self):
 		''' socks version(5), number of extra auth methods (we send

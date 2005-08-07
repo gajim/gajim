@@ -424,6 +424,17 @@ class Connection:
 			if self.files_props.has_key(sid):
 				file_props = self.files_props[sid]
 				file_props['fast'] = streamhosts
+				if file_props['type'] == 's':
+					# only psi do this
+
+					if file_props.has_key('streamhosts'):
+						file_props['streamhosts'].extend(streamhosts)
+					else:
+						file_props['streamhosts'] = streamhosts
+					if not gajim.socks5queue.get_file_props(self.name, sid):
+						gajim.socks5queue.add_file_props(self.name, file_props)
+					gajim.socks5queue.connect_to_hosts(self.name, sid, 
+						self.send_success_connect_reply, None)
 				raise common.xmpp.NodeProcessed
 		fast = None
 		try:
@@ -636,8 +647,9 @@ class Connection:
 		iq = common.xmpp.Protocol(name = 'iq', to = proxy, typ = 'get')
 		query = iq.setTag('query')
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
-		self.to_be_sent.append(iq)
-		
+		# FIXME bad logic - this should be somewhere else!
+		# this line should be put somewhere else
+		# self.to_be_sent.append(iq)
 		# ensure that we don;t return empty vars
 		if None not in (host, port, jid) or '' not in (host, port, jid):
 			return (host, port, jid)
@@ -656,7 +668,7 @@ class Connection:
 		if sender is None:
 			sender = file_props['sender']
 		proxyhosts = []
-		if proxy:
+		if fast and proxy:
 			proxies = map(lambda e:e.strip(), proxy.split(','))
 			for proxy in proxies:
 				(host, _port, jid) = self.get_cached_proxies(proxy)
