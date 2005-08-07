@@ -113,6 +113,7 @@ class Contact:
 		# None if no info about peer
 		# False if peer does not support jep85
 		# 'ask' if we sent the first 'active' chatstate and are waiting for reply
+		# this holds what WE SEND to contact (the current chatstate)
 		self.chatstate = chatstate
 
 import roster_window

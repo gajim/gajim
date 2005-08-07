@@ -164,7 +164,6 @@ class TabbedChatWindow(chat.Chat):
 					chatstate = helpers.get_uf_chatstate(chatstate)
 				else:
 					chatstate = ''
-			print chatstate
 			label_text = \
 			'<span weight="heavy" size="x-large">%s</span> %s' % (name, chatstate)
 		else:
@@ -276,7 +275,7 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
-		# on focus in, send 'active' chatstate
+		# on focus in, send 'active' chatstate to current tab
 		self.send_chatstate('active')
 
 	def on_tabbed_chat_window_focus_out_event(self, widget, event):
@@ -330,7 +329,7 @@ class TabbedChatWindow(chat.Chat):
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 
-		# chatstates - window is destroyed, send gone
+		# chatstates - tab is destroyed, send gone
 		self.send_chatstate('gone', jid)
 		
 		chat.Chat.remove_tab(self, jid, 'chats')
@@ -393,9 +392,9 @@ class TabbedChatWindow(chat.Chat):
 			return False # stop looping
 		
 		if self.mouse_over_in_last_5_secs:
-			self.send_chatstate('active')
+			self.send_chatstate('active', contact.jid)
 		elif self.kbd_activity_in_last_5_secs:
-			self.send_chatstate('composing')
+			self.send_chatstate('composing', contact.jid)
 		else:
 			if self.chatstates[contact.jid] == 'composing':
 				self.send_chatstate('paused', contact.jid) # pause composing
@@ -515,9 +514,10 @@ class TabbedChatWindow(chat.Chat):
 			self.send_chatstate('composing', jid)
 
 	def send_chatstate(self, state, jid = None):
-		''' sends our chatstate as STANDLONE chat state message (eg. no body)
-		to the current tab only if new chatstate is different
-		from the previous one'''
+		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
+		to jid only if new chatstate is different
+		from the previous one
+		if jid is not specified, send to active tab'''
 		# JEP 85 does not allow resending the same chatstate
 		# this function checks for that and just returns so it's safe to call it
 		# with same state.
@@ -545,7 +545,8 @@ class TabbedChatWindow(chat.Chat):
 		if contact.chatstate is False: # jid cannot do jep85
 			return
 
-		# if current state equals previous state, return
+		# if the new state we wanna send (state) equals 
+		# the current state (contact.chastate) then return
 		if contact.chatstate == state:
 			return
 
@@ -565,14 +566,17 @@ class TabbedChatWindow(chat.Chat):
 		if state == 'paused' and not contact.chatstate == 'composing':
 			gajim.connections[self.account].send_message(jid, None, None,
 				chatstate = 'active') # go active before
+			contact.chatstate = 'active'
 		
 		# if we're inactive prevent composing (JEP violation)
 		if contact.chatstate == 'inactive' and state == 'composing':
 			gajim.connections[self.account].send_message(jid, None, None,
 				chatstate = 'active') # go active before
+			contact.chatstate = 'active'
 
 		gajim.connections[self.account].send_message(jid, None, None,
 			chatstate = state)
+		contact.chatstate = state
 		
 	def send_message(self, message):
 		"""Send the given message to the active tab"""
@@ -631,8 +635,6 @@ class TabbedChatWindow(chat.Chat):
 			
 			gajim.connections[self.account].send_message(jid, message, keyID,
 				chatstate = chatstate_to_send)
-			
-			contact.chatstate = chatstate_to_send
 
 			message_buffer.set_text('')
 			self.print_conversation(message, jid, jid, encrypted = encrypted)
