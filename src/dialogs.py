@@ -1296,7 +1296,7 @@ class SingleMessageWindow:
 		begin, end = self.message_tv_buffer.get_bounds()
 		message = self.message_tv_buffer.get_text(begin, end)
 
-		if to_whom_jid.find('/announce/motd') != -1:
+		if to_whom_jid.find('/announce/') != -1:
 			gajim.connections[self.account].send_motd(to_whom_jid, subject,
 				message)
 			return
