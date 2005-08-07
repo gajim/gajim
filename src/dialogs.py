@@ -766,8 +766,6 @@ class FileTransfersTooltip(BaseTooltip):
 			if file_props['connected'] == False:
 				if file_props['completed']:
 					status = 'completed'
-				else:
-					status = 'stopped'
 			else:
 				if file_props.has_key('stopped') and \
 					file_props['stopped'] == True:
@@ -780,6 +778,9 @@ class FileTransfersTooltip(BaseTooltip):
 					status = 'stalled'
 				else:
 					status = 'transfering'
+		else:
+			status = 'stopped'
+		
 		text += status
 		self.text_lable.set_markup(text)
 		self.hbox.add(self.text_lable)
