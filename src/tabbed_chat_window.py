@@ -135,7 +135,14 @@ class TabbedChatWindow(chat.Chat):
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
 		#FIXME: remove me when gtk24 is OLD
 		elif status is not None and len(status) > 50:
-				status = status[:47] + '...'
+			def _cut_if_long(str):
+				if len(str) > 50:
+					str = str[:47] + '...'
+				return str
+			if len(status) > 50:
+				status = map(lambda e: _cut_if_long(e), status.split('\n'))
+				status = reduce(lambda e, e1: e + '\n' + e1, status)
+				
 		status = gtkgui_helpers.escape_for_pango_markup(status)
 
 		#FIXME: uncomment me when we support sending messages to specific resource

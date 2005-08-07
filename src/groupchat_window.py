@@ -390,7 +390,6 @@ class GroupchatWindow(chat.Chat):
 			# long subject makes window bigger than the screen
 			def _cut_if_long(str):
 				if len(str) > 80:
-					str = str
 					str = str[:77] + '...'
 				return str
 			if len(subject) > 80:
