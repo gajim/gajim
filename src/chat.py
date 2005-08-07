@@ -72,6 +72,15 @@ class Chat:
 		# we check that on opening new windows
 		self.always_compact_view = gajim.config.get('always_compact_view')
 
+	def update_font(self):
+		font = pango.FontDescription(gajim.config.get('conversation_font'))
+		for jid in self.tagIn:
+			conversation_textview = self.xmls[jid].get_widget(
+				'conversation_textview')
+			conversation_textview.modify_font(font)
+			message_textview = self.xmls[jid].get_widget('message_textview')
+			message_textview.modify_font(font)
+
 	def update_tags(self):
 		for jid in self.tagIn:
 			self.tagIn[jid].set_property('foreground',
@@ -456,6 +465,7 @@ class Chat:
 		self.nb_unread[jid] = 0
 		gajim.last_message_time[self.account][jid] = 0
 		self.last_time_printout[jid] = 0.
+		font = pango.FontDescription(gajim.config.get('conversation_font'))
 		
 		if gajim.config.get('use_speller') and 'gtkspell' in globals():
 			message_textview = self.xmls[jid].get_widget('message_textview')
@@ -467,6 +477,7 @@ class Chat:
 		
 		conversation_textview = self.xmls[jid].get_widget(
 			'conversation_textview')
+		conversation_textview.modify_font(font)
 		conversation_buffer = conversation_textview.get_buffer()
 		end_iter = conversation_buffer.get_end_iter()
 		
@@ -543,6 +554,7 @@ class Chat:
 
 		self.notebook.append_page(child, tab_hbox)
 		message_textview = self.xmls[jid].get_widget('message_textview')
+		message_textview.modify_font(font)
 		message_textview.connect('size-request', self.size_request, 
 			self.xmls[jid])
 		#init new sent history for this conversation

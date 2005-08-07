@@ -236,6 +236,10 @@ class PreferencesWindow:
 		self.xml.get_widget('status_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
 
+		#Font for messages
+		font = gajim.config.get('conversation_font')
+		self.xml.get_widget('conversation_fontbutton').set_font_name(font)
+
 		# on new message
 		only_in_roster = True
 		if gajim.config.get('notify_on_new_message'):
@@ -680,18 +684,36 @@ class PreferencesWindow:
 	def update_text_tags(self):
 		'''Update color tags in Opened Chat Windows'''
 		for a in gajim.connections:
-			window = self.plugin.windows[a]['chats']
-			if window.has_key('tabbed'):
-				window['tabbed'].update_tags()
-			else:
-				for jid in window.keys():
-					window[jid].update_tags()
+			for kind in ['chats', 'gc']:
+				windows = self.plugin.windows[a][kind]
+				if windows.has_key('tabbed'):
+					windows['tabbed'].update_tags()
+				else:
+					for jid in windows.keys():
+						windows[jid].update_tags()
+	
+	def update_text_font(self):
+		'''Update text font in Opened Chat Windows'''
+		for a in gajim.connections:
+			for kind in ['chats', 'gc']:
+				windows = self.plugin.windows[a][kind]
+				if windows.has_key('tabbed'):
+					windows['tabbed'].update_font()
+				else:
+					for jid in windows.keys():
+						windows[jid].update_font()
 	
 	def on_preference_widget_color_set(self, widget, text):
 		color = widget.get_color()
 		color_string = mk_color_string(color)
 		gajim.config.set(text, color_string)
 		self.update_text_tags()
+		self.plugin.save_config()
+
+	def on_preference_widget_font_set(self, widget, text):
+		font = widget.get_font_name()
+		gajim.config.set(text, text)
+		self.update_text_font()
 		self.plugin.save_config()
 	
 	def on_incoming_msg_colorbutton_color_set(self, widget):
@@ -702,6 +724,9 @@ class PreferencesWindow:
 	
 	def on_status_msg_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'statusmsgcolor')
+	
+	def on_conversation_fontbutton_font_set(self, widget):
+		self.on_preference_widget_font_set(widget, 'conversation_font')
 	
 	def on_reset_colors_button_clicked(self, widget):
 		for i in ['inmsgcolor', 'outmsgcolor', 'statusmsgcolor']:
