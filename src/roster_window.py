@@ -1063,6 +1063,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		self.tooltip.hide_tooltip()
 		if event.keyval == gtk.keysyms.Menu:
 			self.show_treeview_menu(event)
+			return True
 		if event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
 		if event.keyval == gtk.keysyms.F2:
