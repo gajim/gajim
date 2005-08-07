@@ -1535,7 +1535,7 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 					message = ''
 				for acct in accounts:
 					if gajim.connections[acct].connected:
-						self.send_status(acct, 'offline', message)
+						self.send_status(acct, 'offline', message, True)
 			self.quit_gtkgui_plugin()
 		return True # do NOT destory the window
 
