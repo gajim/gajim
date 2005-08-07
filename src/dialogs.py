@@ -1581,13 +1581,8 @@ class FileTransfersWindow:
 	def show_request_error(self, file_props):
 		self.window.present()
 		self.window.window.focus()
-		error_messages = {
-			-1: _('Remote host cannot connect to you. He may be behind a NAT network or his clients does not support file transfer.'),
-			-2: _('File not specified.'),
-			-3: _('Unable to bind to transfer port. Check if you are running another instance of Gajim'),
-			-4: _('Connection with peer cannot be established. Maybe you are behind a firewall. Set a file transfer proxy.'),
-				}
-		InformationDialog(_('File transfer canceled'), error_messages[-1]).get_response()
+		error_messages.has_keyfile_props['error']
+		InformationDialog(_('File transfer canceled'), _('Connection with peer cannot be established. Maybe you are behind a firewall. Try to Set a file transfer proxy.')).get_response()
 		self.tree.get_selection().unselect_all()
 		
 	def show_send_error(self, jid, file_props):
@@ -1621,11 +1616,12 @@ _('You are unable to connect to remote host. He may be behind a NAT.')).get_resp
 		file_props = {}
 		response = dialog.run()
 		if response == gtk.RESPONSE_OK:
-			file_path = dialog.get_filename().decode('utf-8')
+			file_path =  unicode(dialog.get_filename(), 'utf-8')
 			(file_dir, file_name) = os.path.split(file_path)
 			if file_dir:
 				self.last_save_dir = file_dir
-			file_props = self.get_send_file_props(account, contact, file_path, file_name)
+			file_props = self.get_send_file_props(account, contact, 
+				file_path, file_name)
 			dialog.destroy()
 			self.add_transfer(account, contact, file_props)
 			gajim.connections[account].send_file_request(file_props)
