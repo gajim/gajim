@@ -547,6 +547,8 @@ class TabbedChatWindow(chat.Chat):
 
 		# if the new state we wanna send (state) equals 
 		# the current state (contact.chastate) then return
+		print 'wanna send', state
+		print 'atm you have', contact.chatstate
 		if contact.chatstate == state:
 			return
 
