@@ -388,10 +388,14 @@ class GroupchatWindow(chat.Chat):
 
 		if gtk.gtk_version < (2, 6, 0) or gtk.pygtk_version < (2, 6, 0):
 			# long subject makes window bigger than the screen
-			# FIXME: check and do the same if we have more than one \n
+			def _cut_if_long(str):
+				if len(str) > 80:
+					str = str
+					str = str[:77] + '...'
+				return str
 			if len(subject) > 80:
-				full_subject = subject
-				subject = subject[:77] + '...'
+				subjects = map(lambda e: _cut_if_long(e), subject.split('\n'))
+				subject = reduce(lambda e, e1: e + '\n' + e1, subjects)
 				
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (room_jid, subject))
@@ -403,6 +407,7 @@ class GroupchatWindow(chat.Chat):
 			subject = full_subject # tooltip must always hold ALL the subject
 		self.subject_tooltip[room_jid].set_tip(event_box, subject)
 
+	
 	def on_change_subject_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
 		subject = self.subjects[room_jid]
