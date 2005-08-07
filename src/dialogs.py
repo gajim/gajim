@@ -760,26 +760,27 @@ class FileTransfersTooltip(BaseTooltip):
 			transfered_len = file_props['received-len']
 		text += gtkgui_helpers.convert_bytes(transfered_len)
 		text += '\n<b>' + _('Status: ') + '</b>' 
+		status = '' 
 		if not file_props.has_key('started') or not file_props['started']:
-			status =  'not started'
+			status =  _('not started')
 		elif file_props.has_key('connected'):
 			if file_props['connected'] == False:
 				if file_props['completed']:
-					status = 'completed'
+					status = _('completed')
 			else:
 				if file_props.has_key('stopped') and \
 					file_props['stopped'] == True:
-					status = 'stopped'
+					status = _('stopped')
 				elif file_props.has_key('paused') and  \
 					file_props['paused'] == True:
-					status = 'paused'
+					status = _('paused')
 				elif file_props.has_key('stalled') and \
 					file_props['stalled'] == True:
-					status = 'stalled'
+					status = _('stalled')
 				else:
-					status = 'transfering'
+					status = _('transfering')
 		else:
-			status = 'stopped'
+			status = _('stopped')
 		
 		text += status
 		self.text_lable.set_markup(text)
@@ -1166,7 +1167,10 @@ class PopupNotificationWindow:
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			txt = _('From %s') % txt
-		
+		elif event_type == _('File Transfer Error'):
+			g_color = gtk.gdk.color_parse('coral')
+			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
+			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 		elif event_type in [_('File Transfer Completed'), _('File Transfer Stopped')]:
 			bg_color = gtk.gdk.color_parse('coral')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
@@ -1241,7 +1245,9 @@ class PopupNotificationWindow:
 		elif self.msg_type == 'file-stopped': # file transfer ended unexpectedly
 			self.plugin.windows['file_transfers'].show_stopped(self.jid, 
 				self.file_props)
-		
+		elif self.msg_type == 'file-error': # file transfer ended unexpectedly
+			self.plugin.windows['file_transfers'].show_stopped(self.jid, 
+				self.file_props)
 		else: # 'chat'
 			self.plugin.roster.new_chat(contact, self.account)
 			chats_window = self.plugin.windows[self.account]['chats'][self.jid]
@@ -1582,7 +1588,7 @@ class FileTransfersWindow:
 	def show_request_error(self, file_props):
 		self.window.present()
 		self.window.window.focus()
-		InformationDialog(_('File transfer canceled'), _('Connection with peer cannot be established. Maybe you are behind a firewall. Try to Set a file transfer proxy.')).get_response()
+		InformationDialog(_('File transfer canceled'), _('Connection with peer cannot be established.')).get_response()
 		self.tree.get_selection().unselect_all()
 		
 	def show_send_error(self, jid, file_props):
