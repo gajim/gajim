@@ -567,11 +567,11 @@ class Connection:
 		file_props = self.files_props[proxy['sid']]
 		iq = common.xmpp.Protocol(name = 'iq', to = proxy['initiator'], 
 		typ = 'set')
-		auth_id = "au_" + proxy['id']
+		auth_id = "au_" + proxy['sid']
 		iq.setID(auth_id)
 		query = iq.setTag('query')
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
-		query.setAttr('sid',  proxy['id'])
+		query.setAttr('sid',  proxy['sid'])
 		activate = query.setTag('activate')
 		activate.setData(file_props['proxy_receiver'])
 		iq.setID(auth_id)
