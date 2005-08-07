@@ -564,7 +564,6 @@ class TabbedChatWindow(chat.Chat):
 			gajim.connections[self.account].send_message(jid, None, None,
 				chatstate = 'active') # go active before
 
-		contact.chatstate = state
 		gajim.connections[self.account].send_message(jid, None, None,
 			chatstate = state)
 		
