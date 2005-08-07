@@ -40,7 +40,7 @@ def convert_bytes(string):
 			bytes = round(bytes/1024.,1)
 			if bytes >= 1024:
 				bytes = round(bytes/1024.,1)
-				#Mb means giga bytes
+				#Gb means giga bytes
 				suffix = _('%s Gb') 
 			else:
 				#Mb means mega bytes
