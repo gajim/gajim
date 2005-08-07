@@ -433,13 +433,14 @@ class Chat:
 		diff_y =  message_height - requisition.height
 		if diff_y is not 0:
 			if  conversation_height + diff_y < min_height:
-				message_scrolledwindow.set_property('vscrollbar-policy', 
-					gtk.POLICY_AUTOMATIC)
-				message_scrolledwindow.set_property('hscrollbar-policy', 
-					gtk.POLICY_AUTOMATIC)
-				message_scrolledwindow.set_property('height-request', message_height + \
-					conversation_height - min_height)
-				self.bring_scroll_to_end(message_textview)
+				if message_height + conversation_height - min_height > min_height:
+					message_scrolledwindow.set_property('vscrollbar-policy', 
+						gtk.POLICY_AUTOMATIC)
+					message_scrolledwindow.set_property('hscrollbar-policy', 
+						gtk.POLICY_AUTOMATIC)
+					message_scrolledwindow.set_property('height-request', 
+						message_height + conversation_height - min_height)
+					self.bring_scroll_to_end(message_textview)
 			else:
 				message_scrolledwindow.set_property('vscrollbar-policy', 
 					gtk.POLICY_NEVER)
