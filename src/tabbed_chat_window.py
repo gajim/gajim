@@ -364,10 +364,7 @@ class TabbedChatWindow(chat.Chat):
 		self.childs[contact.jid].show_all()
 
 		# chatstates
-		self.kbd_activity_in_last_5_secs = False
-		self.mouse_over_in_last_5_secs = False
-		self.mouse_over_in_last_30_secs = False
-		self.kbd_activity_in_last_30_secs = False
+		self.reset_kbd_mouse_timeout_vars()
 		
 		self.chatstates[contact.jid] = None # our current chatstate with contact
 		self.possible_paused_timeout_id[contact.jid] =\
@@ -400,13 +397,8 @@ class TabbedChatWindow(chat.Chat):
 				self.send_chatstate('paused', contact.jid) # pause composing
 		
 		# assume no activity and let the motion-notify or key_press make them True
-		self.mouse_over_in_last_5_secs = False
-		self.kbd_activity_in_last_5_secs = False
-		
-		# refresh 30 seconds or else it's 30 - 5 = 25 seconds!
-		self.mouse_over_in_last_30_secs = True
-		self.kbd_activity_in_last_30_secs = True
-		
+		# refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
+		self.reset_kbd_mouse_timeout_vars()		
 		return True # loop forever
 
 	def check_for_possible_inactive_chatstate(self, contact):
@@ -423,11 +415,8 @@ class TabbedChatWindow(chat.Chat):
 			self.send_chatstate('inactive', contact.jid)
 
 		# assume no activity and let the motion-notify or key_press make them True
-		self.mouse_over_in_last_5_secs = False
-		self.kbd_activity_in_last_5_secs = False
-		
-		self.mouse_over_in_last_30_secs = False
-		self.kbd_activity_in_last_30_secs = False
+		# refresh 30 seconds too or else it's 30 - 5 = 25 seconds!
+		self.reset_kbd_mouse_timeout_vars()
 		
 		return True # loop forever
 
@@ -513,6 +502,13 @@ class TabbedChatWindow(chat.Chat):
 			self.kbd_activity_in_last_30_secs = True
 			self.send_chatstate('composing', jid)
 
+	def reset_kbd_mouse_timeout_vars(self):
+		self.kbd_activity_in_last_5_secs = False
+		self.mouse_over_in_last_5_secs = False
+		self.mouse_over_in_last_30_secs = False
+		self.kbd_activity_in_last_30_secs = False
+
+
 	def send_chatstate(self, state, jid = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
 		to jid only if new chatstate is different
@@ -569,16 +565,20 @@ class TabbedChatWindow(chat.Chat):
 			gajim.connections[self.account].send_message(jid, None, None,
 				chatstate = 'active') # go active before
 			contact.chatstate = 'active'
+			self.reset_kbd_mouse_timeout_vars()
 		
 		# if we're inactive prevent composing (JEP violation)
 		if contact.chatstate == 'inactive' and state == 'composing':
 			gajim.connections[self.account].send_message(jid, None, None,
 				chatstate = 'active') # go active before
 			contact.chatstate = 'active'
+			self.reset_kbd_mouse_timeout_vars()
 
 		gajim.connections[self.account].send_message(jid, None, None,
 			chatstate = state)
 		contact.chatstate = state
+		if contact.chatstate == 'active':
+			self.reset_kbd_mouse_timeout_vars()
 		
 	def send_message(self, message):
 		"""Send the given message to the active tab"""
@@ -635,6 +635,7 @@ class TabbedChatWindow(chat.Chat):
 					#send active chatstate on every message (as JEP says)
 					chatstate_to_send = 'active'
 					contact.chatstate = 'active'
+					self.reset_kbd_mouse_timeout_vars()
 			
 			gajim.connections[self.account].send_message(jid, message, keyID,
 				chatstate = chatstate_to_send)
