@@ -102,7 +102,6 @@ class GajimThemesWindow:
 		self.xml.get_widget('fonts_colors_table').set_sensitive(False)
 		model = self.themes_tree.get_model()
 		model.clear()
-		i = 0
 		for theme in gajim.config.get_per('themes'):
 			iter = model.append([theme])
 			if gajim.config.get('roster_theme') == theme:
