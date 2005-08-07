@@ -634,6 +634,7 @@ class TabbedChatWindow(chat.Chat):
 				elif contact.chatstate is not False:
 					#send active chatstate on every message (as JEP says)
 					chatstate_to_send = 'active'
+					contact.chatstate = 'active'
 			
 			gajim.connections[self.account].send_message(jid, message, keyID,
 				chatstate = chatstate_to_send)
