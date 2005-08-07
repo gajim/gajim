@@ -433,7 +433,7 @@ class RosterWindow:
 			img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
 				gtk.ICON_SIZE_MENU)
 			newitem.set_image(img)
-			newitem.connect('activate', self.on_bookmarks_menuitem_activate)
+			newitem.connect('activate', self.on_manage_bookmarks_menuitem_activate)
 			sub_menu.append(newitem)
 			sub_menu.show_all()
 
@@ -1506,8 +1506,9 @@ _('If "%s" accepts this request you will know his status.') %jid).get_response()
 		else:
 			self.plugin.windows['file_transfers'].window.show_all()
 
-	def on_bookmarks_menuitem_activate(self, widget):
+	def on_manage_bookmarks_menuitem_activate(self, widget):
 		config.ManageBookmarksWindow(self.plugin)
+		#config.FirstTimeWizardWindow(self.plugin)
 
 	def close_all(self, dic):
 		'''close all the windows in the given dictionary'''
