@@ -714,7 +714,7 @@ class PreferencesWindow:
 
 	def on_preference_widget_font_set(self, widget, text):
 		font = widget.get_font_name()
-		gajim.config.set(text, text)
+		gajim.config.set(text, font)
 		self.update_text_font()
 		self.plugin.save_config()
 	
