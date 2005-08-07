@@ -759,7 +759,7 @@ class PreferencesWindow:
 		gajim.config.set_per('soundevents', sound_event, 'enabled',
 					bool(model[path][1]))
 		gajim.config.set_per('soundevents', sound_event, 'path',
-					model.get_value(iter, 2))
+					model[iter][2])
 		self.plugin.save_config()
 
 	def on_auto_away_checkbutton_toggled(self, widget):
@@ -800,7 +800,7 @@ class PreferencesWindow:
 			val = model.get_value(iter, 0)
 			gajim.config.add_per('statusmsg', val)
 			gajim.config.set_per('statusmsg', val, 'message',
-						model.get_value(iter, 1))
+						model[iter][1])
 			iter = model.iter_next(iter)
 		self.plugin.save_config()
 
@@ -870,7 +870,7 @@ class PreferencesWindow:
 		self.xml.get_widget('delete_msg_button').set_sensitive(True)
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		name = model.get_value(iter, 0)
-		msg = model.get_value(iter, 1)
+		msg = model[iter][1]
 		buf.set_text(msg)
 
 	def on_new_msg_button_clicked(self, widget, data = None):
@@ -921,14 +921,14 @@ class PreferencesWindow:
 		if not iter:
 			sounds_entry.set_text('')
 			return
-		str = model.get_value(iter, 2)
+		str = model[iter][2]
 		sounds_entry.set_text(str)
 
 	def on_button_sounds_clicked(self, widget, data = None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
 		if not iter:
 			return
-		file = model.get_value(iter, 2)
+		file = model[iter][2]
 		dialog = gtk.FileChooserDialog(_('Choose Sound'), None,
 					gtk.FILE_CHOOSER_ACTION_OPEN,
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
@@ -1805,7 +1805,7 @@ class ManageEmoticonsWindow:
 		if not emot in emots:
 			gajim.config.add_per('emoticons', emot)
 			self.plugin.init_regexp() # update regexp [emoticons included]
-		gajim.config.set_per('emoticons', emot, 'path', model.get_value(iter, 1))
+		gajim.config.set_per('emoticons', emot, 'path', model[iter][1])
 		self.plugin.save_config()
 
 	def image_is_ok(self, image):
@@ -1862,7 +1862,7 @@ class ManageEmoticonsWindow:
 			gajim.config.add_per('emoticons', emot)
 			self.plugin.init_regexp() # update regexp [emoticons included]
 			gajim.config.set_per('emoticons', emot, 'path',
-				model.get_value(iter, 1))
+				model[iter][1])
 			model.set_value(iter, 0, emot)
 		self.plugin.save_config()
 
@@ -1874,7 +1874,7 @@ class ManageEmoticonsWindow:
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
-		file = model.get_value(iter, 1)
+		file = model[iter][1]
 		dialog = gtk.FileChooserDialog(_('Choose Image'), None,
 					gtk.FILE_CHOOSER_ACTION_OPEN,
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
@@ -2054,7 +2054,7 @@ _('Without a connection, you can not browse available services')).get_response()
 
 	def on_services_treeview_row_expanded(self, widget, iter, path):
 		model = self.services_treeview.get_model()
-		jid = model.get_value(iter, 1)
+		jid = model[iter][1]
 		child = model.iter_children(iter)
 		while child:
 			child_jid = model.get_value(child, 1)
@@ -2070,7 +2070,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		iter = model.get_iter_root()
 		# We look if this agent is in the treeview
 		while (iter):
-			if agent == model.get_value(iter, 1) and node == model.get_value(
+			if agent == model[iter][1] and node == model.get_value(
 					iter, 2):
 				break
 			if model.iter_has_child(iter):
@@ -2095,7 +2095,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		iter = model.get_iter_root()
 		# We look if this agent is in the treeview
 		while (iter):
-			if agent == model.get_value(iter, 1) and node == model.get_value(
+			if agent == model[iter][1] and node == model.get_value(
 					iter, 2):
 				break
 			if model.iter_has_child(iter):
@@ -2167,7 +2167,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter:
 			return
-		service = model.get_value(iter, 1)
+		service = model[iter][1]
 		room = ''
 		if service.find('@') != -1:
 			services = service.split('@')
@@ -2184,7 +2184,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter :
 			return
-		service = model.get_value(iter, 1)
+		service = model[iter][1]
 		gajim.connections[self.account].request_register_agent_info(service)
 
 		self.window.destroy()
@@ -2200,8 +2200,8 @@ _('Without a connection, you can not browse available services')).get_response()
 		path = model.get_path(iter)
 		if len(path) == 1: # we selected the jabber server
 			return
-		jid = model.get_value(iter, 1)
-		node = model.get_value(iter, 2)
+		jid = model[iter][1]
+		node = model[iter][2]
 		registered_transports = []
 		contacts = gajim.contacts[self.account]
 		for j in contacts:
@@ -2485,11 +2485,11 @@ class ManageBookmarksWindow:
 	def on_bookmarks_treeview_button_press_event(self, widget, event):
 		(model, iter) = self.selection.get_selected()
 		if not iter:
-			#Removed a bookmark before
+			# Removed a bookmark before
 			return
 
 		if model.iter_parent(iter):
-			#The currently selected node is a bookmark
+			# The currently selected node is a bookmark
 			return not self.check_valid_bookmark()
 
 	def on_manage_bookmarks_window_destroy(self, widget, event):
@@ -2499,19 +2499,19 @@ class ManageBookmarksWindow:
 		'''
 		Add a new bookmark.
 		'''
-		#Get the account that is currently used 
-		#(the parent of the currently selected item)
+		# Get the account that is currently used 
+		# (the parent of the currently selected item)
 		(model, iter) = self.selection.get_selected()
-		if not iter: #Nothing selected, do nothing
+		if not iter: # Nothing selected, do nothing
 			return
 
 		parent = model.iter_parent(iter)
 
 		if parent:
-			#We got a bookmark selected, so we add_to the parent
+			# We got a bookmark selected, so we add_to the parent
 			add_to = parent
 		else:
-			#No parent, so we got an account -> add to this.
+			# No parent, so we got an account -> add to this.
 			add_to = iter
 
 		account = model.get_value(add_to, 1)
@@ -2524,11 +2524,11 @@ class ManageBookmarksWindow:
 		Remove selected bookmark.
 		'''
 		(model, iter) = self.selection.get_selected()
-		if not iter: #Nothing selected
+		if not iter: # Nothing selected
 			return
 
 		if not model.iter_parent(iter):
-			#Don't remove account iters
+			# Don't remove account iters
 			return
 
 		model.remove(iter)
@@ -2609,8 +2609,8 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 			return
 
 		#Fill in the data for childs
-		self.title_entry.set_text(model.get_value(iter, 1))
-		room_jid = model.get_value(iter, 2)
+		self.title_entry.set_text(model[iter][1])
+		room_jid = model[iter][2]
 		try:
 			(room, server) = room_jid.split('@')
 		except ValueError:
@@ -2620,45 +2620,45 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 		self.room_entry.set_text(room)
 		self.server_entry.set_text(server)
 	
-		self.autojoin_checkbutton.set_active(model.get_value(iter, 3))
-		self.pass_entry.set_text(model.get_value(iter, 4))
-		self.nick_entry.set_text(model.get_value(iter, 5))
+		self.autojoin_checkbutton.set_active(model[iter][3])
+		self.pass_entry.set_text(model[iter][4])
+		self.nick_entry.set_text(model[iter][5])
 
 	def on_title_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter: #After removing a bookmark, we got nothing selected
 			if model.iter_parent(iter):
 				#Don't clear the title field for account nodes
-				model.set_value(iter, 1, self.title_entry.get_text())
+				model[iter][1] = self.title_entry.get_text()
 
 	def on_nick_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
-			model.set_value(iter, 5, self.nick_entry.get_text())
+			model[iter][5] = self.nick_entry.get_text()
 	
 	def on_server_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
 			room_jid = self.room_entry.get_text() + '@' + \
 				self.server_entry.get_text()
-			model.set_value(iter, 2, room_jid)
+			model[iter][2] = room_jid
 
 	def on_room_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
 			room_jid = self.room_entry.get_text() + '@' + \
 				self.server_entry.get_text()
-			model.set_value(iter, 2, room_jid)
+			model[iter][2] = room_jid
 
 	def on_pass_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
-			model.set_value(iter, 4, self.pass_entry.get_text())
+			model[iter][4] = self.pass_entry.get_text()
 
 	def on_autojoin_checkbutton_toggled(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
-			model.set_value(iter, 3, self.autojoin_checkbutton.get_active())
+			model[iter][3] = self.autojoin_checkbutton.get_active()
 
 	def clear_fields(self):
 		widgets = [ self.title_entry, self.nick_entry, self.room_entry,
@@ -2764,8 +2764,9 @@ class FirstTimeWizardWindow:
 			server = self.server_comboboxentry.get_active_text()
 			if self.check_data(user, server):
 				#TODO: write account to config file
-				self.finish_label.set_text(_('Your account has been added to your gajim configuration.\n' + 
-					'You can set advanced account options using \"Edit->Accounts\" in the menu.'))
+				self.finish_label.set_text(
+				_('Your account has been added to your gajim configuration.\n'
+'You can set advanced account options using "Edit->Accounts" in the main window menu.'))
 				self.go_to_last_page()
 
 		elif cur_page == 2:
@@ -2774,8 +2775,9 @@ class FirstTimeWizardWindow:
 			if self.check_data(user, server):
 				#TODO: Register account
 				#TODO: write account to config file
-				self.finish_label.set_text(_('Your new account has been created and added to your gajim configuration.\n' +
-					'You can set advanced account options using \"Edit->Accounts\" in the menu.'))
+				self.finish_label.set_text(
+_('Your new account has been created and added to your gajim configuration.\n'
+'You can set advanced account options using "Edit->Accounts" in the main window menu.'))
 				self.go_to_last_page()
 
 		else:
@@ -2787,10 +2789,12 @@ class FirstTimeWizardWindow:
 
 	def check_data(self, username, server):
 		if len(username) == 0: 
-			dialogs.ErrorDialog(_('You need to enter a username to add an account.')).get_response()
+			dialogs.ErrorDialog(
+			_('You need to enter a username to add an account.')).get_response()
 			return False
 		elif len(server) == 0:
-			dialogs.ErrorDialog(_('You need to enter a valid server adress to add an account.')).get_response()
+			dialogs.ErrorDialog(
+_('You need to enter a valid server address to add an account.')).get_response()
 			return False
 		else:
 			return True
