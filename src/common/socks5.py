@@ -53,6 +53,16 @@ class SocksQueue:
 			self.connected += 1
 		return self.listener
 		
+	def send_success_reply(self, file_props, streamhost):
+		if file_props.has_key('streamhosts'):
+			for streamhost in file_props['streamhosts']:
+				if streamhost['state'] == 1:
+					return False
+			streamhost['state'] = 1
+			self.on_success(streamhost)
+			return True
+		return False
+
 	def connect_to_hosts(self, account, sid, on_success = None, 
 		on_failure = None):
 		self.on_success = on_success
@@ -68,9 +78,11 @@ class SocksQueue:
 			receiver = Socks5Receiver(streamhost, sid, file_props)
 			self.add_receiver(account, receiver)
 			streamhost['idx'] = receiver.queue_idx
+		
 	def _socket_connected(self, streamhost, file_props):
 		streamhost['state'] = 0
 		for host in file_props['streamhosts']:
+			
 			if host != streamhost and host.has_key('idx'):
 				host['state'] = -1
 				self.remove_receiver(host['idx'])
@@ -79,13 +91,14 @@ class SocksQueue:
 	def _connection_refused(self, streamhost, file_props, idx):
 		if file_props is None:
 			return
+		
 		streamhost['state'] = -1
 		self.remove_receiver(idx)
 		if file_props['failure_cb']:
 			file_props['failure_cb'](streamhost['initiator'], streamhost['id'], 
 				code = 404)
 		else:
-			# show error dialog, it seems to be the laast try
+			# show error dialog, it seems to be the last try
 			pass
 		
 	def add_receiver(self, account, sock5_receiver):
@@ -752,7 +765,10 @@ class Socks5Receiver(Socks5):
 					self.remaining_buff = buff[addrlen + 7:]
 			self.state = 5 # for senders: init file_props and send '\n'
 			if self.queue.on_success:
-				self.queue.on_success(self.streamhost)
+				if not self.queue.send_success_reply(self.file_props, 
+					self.streamhost):
+					self.state = 8
+					self.disconnect()
 		if self.state == 5: # for senders: init file_props and send '\n'
 			if self.file_props['type'] == 's':
 				self.fd = open(self.file_props['file-name'])

@@ -1582,7 +1582,6 @@ class FileTransfersWindow:
 	def show_request_error(self, file_props):
 		self.window.present()
 		self.window.window.focus()
-		error_messages.has_keyfile_props['error']
 		InformationDialog(_('File transfer canceled'), _('Connection with peer cannot be established. Maybe you are behind a firewall. Try to Set a file transfer proxy.')).get_response()
 		self.tree.get_selection().unselect_all()
 		

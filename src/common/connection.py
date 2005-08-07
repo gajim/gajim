@@ -468,7 +468,7 @@ class Connection:
 		stream_tag = query.setTag('streamhost-used')
 		stream_tag.setAttr('jid', streamhost['jid'])
 		self.to_be_sent.append(iq)
-	
+		
 	def _connect_error(self, to, id, code = 404):
 		msg_dict = {
 			404: 'Could not connect to given hosts', 
