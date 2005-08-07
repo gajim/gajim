@@ -269,12 +269,14 @@ class PreferencesWindow:
 			set_active(gajim.config.get('ignore_unknown_contacts'))
 		
 		# send chat state notifications
-		st = gajim.config.get('send_receive_chat_state_notifications')
-		btn = self.xml.get_widget('send_receive_chat_state_checkbutton')
-		if st:
-			btn.set_active(True)
-		else:
-			btn.set_active(False)
+		st = gajim.config.get('chat_state_notifications')
+		combo = self.xml.get_widget('chat_states_combobox')
+		if st == 'composing_only':
+			combo.set_active(0)
+		elif st == 'all':
+			combo.set_active(1)
+		else: # disabled
+			btn.set_active(2)
 
 		#sounds
 		if os.name == 'nt': # if windows, player must not become visible on show_all
@@ -765,9 +767,15 @@ class PreferencesWindow:
 	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
 
-	def on_send_receive_chat_state_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget,
-			'send_receive_chat_state_notifications')
+	def on_chat_states_combobox_changed(self, widget):
+		active = widget.get_active()
+		if active == 0: # only composing
+			gajim.config.set('chat_state_notifications', 'composing_only')
+		elif active == 1: # all
+			gajim.config.set('chat_state_notifications', 'all')
+		else: # disabled
+			gajim.config.set('chat_state_notifications', 'disabled')
+			
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',

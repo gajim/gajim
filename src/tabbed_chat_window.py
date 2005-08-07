@@ -133,7 +133,7 @@ class TabbedChatWindow(chat.Chat):
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+  
 		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
-		#FIXME: do me with pango ellipseEND when gtk24 is OLD
+		#FIXME: remove me when gtk24 is OLD
 		elif status is not None and len(status) > 50:
 				status = status[:47] + '...'
 		status = gtkgui_helpers.escape_for_pango_markup(status)
@@ -146,8 +146,18 @@ class TabbedChatWindow(chat.Chat):
 		#label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
 		#	% (name, fulljid)
 		
-		if chatstate:
-			chatstate = helpers.get_uf_chatstate(chatstate)
+		
+		st = gajim.config.get('chat_state_notifications')
+		if chatstate and st in ('composing_only', 'all'):
+			if st == 'all':
+				chatstate = helpers.get_uf_chatstate(chatstate)
+			else: # 'composing_only'
+				if chatstate in ('composing', 'paused'):
+					# only print composing, paused
+					chatstate = helpers.get_uf_chatstate(chatstate)
+				else:
+					chatstate = ''
+			print chatstate
 			label_text = \
 			'<span weight="heavy" size="x-large">%s</span> %s' % (name, chatstate)
 		else:
@@ -200,10 +210,12 @@ class TabbedChatWindow(chat.Chat):
 			contacts_list = gajim.contacts[self.account][jid]
 		else:
 			contacts_list = [self.contacts[jid]]
+
 		user = contacts_list[0]
 		show = user.show
 		jid = user.jid
 		keyID = user.keyID
+
 		for u in contacts_list:
 			if u.priority > prio:
 				prio = u.priority
@@ -215,10 +227,12 @@ class TabbedChatWindow(chat.Chat):
 		state_images = self.plugin.roster.get_appropriate_state_images(jid)
 		image = state_images[show]
 		banner_status_image = self.xmls[jid].get_widget('banner_status_image')
+
 		if keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(True)
 		else:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
+
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			banner_status_image.set_from_animation(image.get_animation())
 			status_image.set_from_animation(image.get_animation())
@@ -475,10 +489,10 @@ class TabbedChatWindow(chat.Chat):
 				# in an workaround way (we could also get somehow the listed shortcuts
 				# but I don't know if it's possible)
 				chars_no = len(message)
-				gobject.timeout_add(1000, self.on_timeout_for_check_composing,
+				gobject.timeout_add(1000, self.check_for_possible_composing,
 					message_buffer, jid, chars_no)
 				
-	def on_timeout_for_check_composing(self, message_buffer, jid, chars_no):
+	def check_for_possible_composing(self, message_buffer, jid, chars_no):
 		start_iter, end_iter = message_buffer.get_bounds()
 		message = message_buffer.get_text(start_iter, end_iter, False)
 		chars_no_after_one_sec = len(message)
@@ -486,7 +500,7 @@ class TabbedChatWindow(chat.Chat):
 			# so GTK+ decided key_press was for writing..
 			self.kbd_activity_in_last_5_secs = True
 			self.kbd_activity_in_last_30_secs = True
-			self.send_chatstate('composing')
+			self.send_chatstate('composing', jid)
 
 	def send_chatstate(self, state, jid = None):
 		''' sends our chatstate as STANDLONE chat state message (eg. no body)
@@ -503,7 +517,7 @@ class TabbedChatWindow(chat.Chat):
 		# do not send nothing if we have chat state notifications disabled
 		# that means we won't reply to the <active/> from other peer
 		# so we do not broadcast jep85 capabalities
-		if not gajim.config.get('send_receive_chat_state_notifications'):
+		if gajim.config.get('chat_state_notifications') == 'disabled':
 			return
 
 		if jid is None:
@@ -585,7 +599,7 @@ class TabbedChatWindow(chat.Chat):
 				encrypted = True
 
 			chatstates_on = gajim.config.get(
-				'send_receive_chat_state_notifications')
+				'chat_state_notifications') != 'disabled'
 
 			chatstate_to_send = None
 			
@@ -606,6 +620,8 @@ class TabbedChatWindow(chat.Chat):
 			
 			gajim.connections[self.account].send_message(jid, message, keyID,
 				chatstate = chatstate_to_send)
+			
+			contact.chatstate = chatstate_to_send
 
 			message_buffer.set_text('')
 			self.print_conversation(message, jid, jid, encrypted = encrypted)
