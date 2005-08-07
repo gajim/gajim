@@ -15250,7 +15250,7 @@ the Jabber network.</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkFontButton" id="fontbutton1">
+		<widget class="GtkFontButton" id="banner_text_fontbutton">
 		  <property name="can_focus">True</property>
 		  <property name="show_style">True</property>
 		  <property name="show_size">True</property>

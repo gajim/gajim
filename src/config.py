@@ -167,19 +167,13 @@ class PreferencesWindow:
 		st = gajim.config.get('use_transports_iconsets')
 		self.xml.get_widget('transports_iconsets_checkbutton').set_active(st)
 
+		# Themes
 		theme_combobox = self.xml.get_widget('theme_combobox')
 		cell = gtk.CellRendererText()
 		theme_combobox.pack_start(cell, True)
 		theme_combobox.add_attribute(cell, 'text', 0)  
 		model = gtk.ListStore(str)
 		theme_combobox.set_model(model)
-		i = 0
-		for t in gajim.config.get_per('themes'):
-			model.append([t])
-			if gajim.config.get('roster_theme') == t:
-				theme_combobox.set_active(i)
-			i += 1
-		self.on_theme_combobox_changed(theme_combobox)
 
 		#use tabbed chat window
 		st = gajim.config.get('usetabbedchat')
@@ -427,6 +421,18 @@ class PreferencesWindow:
 		st = gajim.config.get('print_ichat_every_foo_minutes')
 		text = _('Every %s _minutes') % st
 		self.xml.get_widget('time_sometimes_radiobutton').set_label(text)
+
+		#Themes
+		theme_combobox = self.xml.get_widget('theme_combobox')
+		model = theme_combobox.get_model()
+		model.clear()
+		i = 0
+		for t in gajim.config.get_per('themes'):
+			model.append([t])
+			if gajim.config.get('roster_theme') == t:
+				theme_combobox.set_active(i)
+			i += 1
+		self.on_theme_combobox_changed(theme_combobox)
 		#FIXME: move code from __init__ here
 
 	def on_preferences_window_key_press_event(self, widget, event):

@@ -38,9 +38,8 @@ class GajimThemesWindow:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_themes_window', APP)
 		self.window = self.xml.get_widget('gajim_themes_window')
 		self.plugin = plugin
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
 		
+		self.xml.get_widget('banner_text_fontbutton').set_no_show_all(True)
 		
 		self.color_widgets = {
 			'account_text_colorbutton': 'accounttextcolor',
@@ -74,6 +73,9 @@ class GajimThemesWindow:
 		self.current_theme = gajim.config.get('roster_theme')
 		self.set_widgets(self.current_theme)
 
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
 	def on_theme_cell_edited(self, cell, row, new_name):
 		model = self.themes_tree.get_model()
 		iter = model.get_iter_from_string(row)
@@ -93,15 +95,20 @@ class GajimThemesWindow:
 				gajim.config.get_per('themes', old_name, option))
 		gajim.config.del_per('themes', old_name)
 		model.set_value(iter, 0, new_name)
+		self.plugin.windows['preferences'].update_preferences_window()
 
 	def fill_themes_treeview(self):
 		self.xml.get_widget('remove_button').set_sensitive(False)
 		self.xml.get_widget('fonts_colors_table').set_sensitive(False)
 		model = self.themes_tree.get_model()
 		model.clear()
+		i = 0
 		for theme in gajim.config.get_per('themes'):
-			iter = model.append()
-			model.set_value(iter, 0, theme)
+			iter = model.append([theme])
+			if gajim.config.get('roster_theme') == theme:
+				self.themes_tree.get_selection().select_iter(iter)
+				self.xml.get_widget('remove_button').set_sensitive(True)
+				self.xml.get_widget('fonts_colors_table').set_sensitive(True)
 	
 	def on_themes_treeview_cursor_changed(self, widget):
 		(model, iter) = self.themes_tree.get_selection().get_selected()
@@ -120,6 +127,7 @@ class GajimThemesWindow:
 			i += 1
 		model.set_value(iter, 0, _('theme_name') + str(i))
 		gajim.config.add_per('themes', _('theme_name') + str(i))
+		self.plugin.windows['preferences'].update_preferences_window()
 
 	def on_remove_button_clicked(self, widget):
 		(model, iter) = self.themes_tree.get_selection().get_selected()
@@ -128,6 +136,7 @@ class GajimThemesWindow:
 		name = model.get_value(iter, 0)
 		gajim.config.del_per('themes', name)
 		model.remove(iter)
+		self.plugin.windows['preferences'].update_preferences_window()
 
 	def set_widgets(self, theme):
 		for w in self.color_widgets:
@@ -143,6 +152,7 @@ class GajimThemesWindow:
 		color = widget.get_color()
 		color_string = mk_color_string(color)
 		gajim.config.set_per('themes', self.current_theme, option, color_string)
+		self.plugin.roster.repaint_themed_widgets()
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 	
