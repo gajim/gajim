@@ -120,7 +120,7 @@ class Config:
 		'always_english_wikipedia': [opt_bool, False],
 		'always_english_wiktionary': [opt_bool, False],
 		'use_dbus': [opt_bool, True], # allow control via dbus service
-		'chat_state_notifications': [opt_str, 'composing_only'], # 'all', 'all', 'disabled'
+		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
 		'autodetect_browser_mailer': [opt_bool, True],
 		'print_ichat_every_foo_minutes': [opt_int, 5],
 		'confirm_close_muc': [opt_bool, True], # confirm closing MUC window
