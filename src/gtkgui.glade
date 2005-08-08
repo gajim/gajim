@@ -4426,7 +4426,7 @@
 		    <widget class="GtkComboBox" id="chat_states_combobox">
 		      <property name="visible">True</property>
 		      <property name="items" translatable="yes">Composing only
-All
+All chat states
 Disabled</property>
 		      <signal name="changed" handler="on_chat_states_combobox_changed" last_modification_time="Sun, 07 Aug 2005 19:15:49 GMT"/>
 		    </widget>
