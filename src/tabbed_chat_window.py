@@ -133,16 +133,11 @@ class TabbedChatWindow(chat.Chat):
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+  
 		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
+			status = gtkgui_helpers.reduce_chars_newlines(status, 0, 2)
 		#FIXME: remove me when gtk24 is OLD
-		elif status is not None and len(status) > 50:
-			def _cut_if_long(str):
-				if len(str) > 50:
-					str = str[:47] + '...'
-				return str
-			if len(status) > 50:
-				status = map(lambda e: _cut_if_long(e), status.split('\n'))
-				status = reduce(lambda e, e1: e + '\n' + e1, status)
-				
+		elif status is not None:
+			status = gtkgui_helpers.reduce_chars_newlines(status, 50, 2)
+
 		status = gtkgui_helpers.escape_for_pango_markup(status)
 
 		#FIXME: uncomment me when we support sending messages to specific resource

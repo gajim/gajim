@@ -622,16 +622,11 @@ class StatusTable:
 			if status != '':
 				if gtk.gtk_version < (2, 6, 0) or gtk.pygtk_version < (2, 6, 0):
 					# FIXME: check and do the same if we have more than one \n 
-					status = self.strip_text(status, 50)
+					status = gtkgui_helpers.reduce_chars_newlines(status, 50, 1)
+				else:
+					status = gtkgui_helpers.reduce_chars_newlines(status, 0, 1)
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)
-	
-	# fix "too long status make the tooltip large than the screen" problem
-	def strip_text(self, text, max_length):
-		text = text.strip()
-		if len(text) > max_length:
-				text = text[:max_length - 3] + '...'
-		return text
 	
 	def add_status_row(self, file_path, show, str_status):
 		''' appends a new row with status icon to the table '''
@@ -706,14 +701,17 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				iconset = 'sun'
 			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			for acct in accounts:
-				mesage = gtkgui_helpers.escape_for_pango_markup(acct['message'])
-				mesage = self.strip_text(mesage, 50)
+				message = gtkgui_helpers.reduce_chars_newlines(acct['message'], 50, 1)
+				message = gtkgui_helpers.escape_for_pango_markup(message)
 				self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
 					gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>' 
-					+ ' - ' + mesage)
+					+ ' - ' + message)
 					
 		elif len(accounts) == 1:
-			text = _('Gajim - %s') % accounts[0]['status_line']
+			message = gtkgui_helpers.reduce_chars_newlines(accounts[0]['status_line'], 
+				50, 1)
+			message = gtkgui_helpers.escape_for_pango_markup(message)
+			text = _('Gajim - %s') % message
 		else:
 			text = _('Gajim - %s') % helpers.get_uf_show('offline')
 		self.text_lable.set_markup(text)

@@ -388,15 +388,9 @@ class GroupchatWindow(chat.Chat):
 		full_subject = None
 
 		if gtk.gtk_version < (2, 6, 0) or gtk.pygtk_version < (2, 6, 0):
-			# long subject makes window bigger than the screen
-			def _cut_if_long(str):
-				if len(str) > 80:
-					str = str[:77] + '...'
-				return str
-			if len(subject) > 80:
-				subjects = map(lambda e: _cut_if_long(e), subject.split('\n'))
-				subject = reduce(lambda e, e1: e + '\n' + e1, subjects)
-				
+			subject = gtkgui_helpers.reduce_chars_newlines(subject, 80, 2)
+		else:
+			subject = gtkgui_helpers.reduce_chars_newlines(subject, 0, 2)
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
 		name_label.set_markup(
 		'<span weight="heavy" size="x-large">%s</span>\n%s' % (room_jid, subject))
