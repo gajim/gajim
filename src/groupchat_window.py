@@ -397,7 +397,8 @@ class GroupchatWindow(chat.Chat):
 				subject = reduce(lambda e, e1: e + '\n' + e1, subjects)
 				
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
-		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (room_jid, subject))
+		name_label.set_markup(
+		'<span weight="heavy" size="x-large">%s</span>\n%s' % (room_jid, subject))
 		event_box = name_label.get_parent()
 		if subject == '':
 			subject = _('This room has no subject')
