@@ -29,17 +29,15 @@ _ = i18n._
 from common import gajim
 
 
-
-
 def convert_bytes(string):
 	suffix = ''
 	bytes = int(string)
-	if bytes >= 1024:
-		bytes = round(bytes/1024.,1)
-		if bytes >= 1024:
-			bytes = round(bytes/1024.,1)
-			if bytes >= 1024:
-				bytes = round(bytes/1024.,1)
+	if bytes >= 1000:
+		bytes = round(bytes/1000., 1)
+		if bytes >= 1000:
+			bytes = round(bytes/1000., 1)
+			if bytes >= 1000:
+				bytes = round(bytes/1000., 1)
 				#Gb means giga bytes
 				suffix = _('%s Gb') 
 			else:
