@@ -1177,5 +1177,4 @@ if __name__ == '__main__':
 		pass
 	
 	Interface()
-	gobject.threads_init()
 	gtk.main()
