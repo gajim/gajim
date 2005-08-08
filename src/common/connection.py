@@ -1525,7 +1525,6 @@ class Connection:
 
 	def _continue_unsubscribe(self, con, iq_obj, agent):
 		self.connection.getRoster().delItem(agent)
-		self.dispatch('AGENT_REMOVED', agent)
 
 	def unsubscribe_agent(self, agent):
 		if not self.connection:
