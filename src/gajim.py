@@ -361,7 +361,11 @@ class Interface:
 						self.roster.popup_notification_windows.append(instance)
 				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactPresence',
-						(account, array))						
+						(account, array))
+				
+				# when contact signs out we reset his chatstate
+				contact = gaim.get_first_contact_instance_from_jid(acccount, jid)
+				contact.chatstate = None
 						
 			elif old_show > 1 and new_show < 2:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
