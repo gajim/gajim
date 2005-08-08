@@ -272,9 +272,9 @@ class PreferencesWindow:
 		st = gajim.config.get('chat_state_notifications')
 		combo = self.xml.get_widget('chat_states_combobox')
 		if st == 'composing_only':
-			combo.set_active(0)
-		elif st == 'all':
 			combo.set_active(1)
+		elif st == 'all':
+			combo.set_active(0)
 		else: # disabled
 			btn.set_active(2)
 
@@ -769,9 +769,9 @@ class PreferencesWindow:
 
 	def on_chat_states_combobox_changed(self, widget):
 		active = widget.get_active()
-		if active == 0: # only composing
+		if active == 1: # only composing
 			gajim.config.set('chat_state_notifications', 'composing_only')
-		elif active == 1: # all
+		elif active == 0: # all
 			gajim.config.set('chat_state_notifications', 'all')
 		else: # disabled
 			gajim.config.set('chat_state_notifications', 'disabled')
