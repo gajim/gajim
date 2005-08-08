@@ -1168,7 +1168,7 @@ class PopupNotificationWindow:
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			txt = _('From %s') % txt
 		elif event_type == _('File Transfer Error'):
-			g_color = gtk.gdk.color_parse('coral')
+			bg_color = gtk.gdk.color_parse('coral')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 		elif event_type in [_('File Transfer Completed'), _('File Transfer Stopped')]:
