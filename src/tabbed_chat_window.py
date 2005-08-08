@@ -389,6 +389,9 @@ class TabbedChatWindow(chat.Chat):
 		in the last 5 seconds?
 		if yes we go active for mouse, composing for kbd
 		if no we go paused if we were previously composing '''
+		if jid not in self.xmls:
+			# the tab with jid is no longer open. stop timer
+			return False # stop looping
 		current_state = self.chatstates[jid]
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
@@ -412,6 +415,10 @@ class TabbedChatWindow(chat.Chat):
 		in the last 30 seconds?
 		if yes we go active
 		if no we go inactive '''
+		if jid not in self.xmls:
+			# the tab with jid is no longer open. stop timer
+			return False # stop looping
+
 		current_state = self.chatstates[jid]
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping

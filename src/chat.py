@@ -62,6 +62,7 @@ class Chat:
 		self.names = {} # what is printed in the tab (eg. user.name)
 		self.childs = {} # holds the contents for every tab (VBox)
 		self.popup_is_shown = False # is a context menu shown or not?
+		self.how_many_switch_to = 0 # how many switch to menuitems we have added
 
 		# the following vars are used to keep history of user's messages
 		self.sent_history = {}
@@ -233,14 +234,7 @@ class Chat:
 				childs[5].set_no_show_all(True)
 				
 		for child in childs[6:]: # start looping after Add to roster
-			grandchilds = child.get_children()
-			# check because seperator menuitem doesn't have childs
-			if len(grandchilds):
-				accel_label = grandchilds[0]
-				if accel_label.get_text().startswith(_('Switch to')):
-					menu.remove(child)
-			else: # remove the seperator
-				menu.remove(child)
+			menu.remove(child)
 
 		return menu
 	
@@ -285,6 +279,7 @@ class Chat:
 					item.connect('activate', lambda obj, jid:self.set_active_tab(
 						jid), jid)
 					menu.append(item)
+					self.how_many_switch_to += 1
 
 		# show the menu
 		menu.popup(None, None, None, event.button, event.time)
