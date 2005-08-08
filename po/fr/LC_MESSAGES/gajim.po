@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-09 00:11+0300\n"
+"POT-Creation-Date: 2005-08-09 00:49+0300\n"
 "PO-Revision-Date: 2005-06-01 20:37+0200\n"
 "Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
 "Language-Team:  none\n"
@@ -27,55 +27,55 @@ msgstr ""
 msgid "Not available as a result of being idle"
 msgstr ""
 
-#: ../src/common/config.py:263
+#: ../src/common/config.py:265
 msgid "Sleeping"
 msgstr "Dors"
 
-#: ../src/common/config.py:264
+#: ../src/common/config.py:266
 msgid "Back soon"
 msgstr "Bientôt de retour"
 
-#: ../src/common/config.py:264
+#: ../src/common/config.py:266
 msgid "Back in some minutes."
 msgstr "De retour dans quelques minutes."
 
-#: ../src/common/config.py:265
+#: ../src/common/config.py:267
 msgid "Eating"
 msgstr "Mange"
 
-#: ../src/common/config.py:265
+#: ../src/common/config.py:267
 msgid "I'm eating, so leave me a message."
 msgstr "Je mange, donc laissez moi un message."
 
-#: ../src/common/config.py:266
+#: ../src/common/config.py:268
 msgid "Movie"
 msgstr "Film"
 
-#: ../src/common/config.py:266
+#: ../src/common/config.py:268
 msgid "I'm watching a movie."
 msgstr "Je regarde un film."
 
-#: ../src/common/config.py:267
+#: ../src/common/config.py:269
 msgid "Working"
 msgstr "Travail"
 
-#: ../src/common/config.py:267
+#: ../src/common/config.py:269
 msgid "I'm working."
 msgstr "Je travaille."
 
-#: ../src/common/config.py:268
+#: ../src/common/config.py:270
 msgid "Phone"
 msgstr "Téléphone"
 
-#: ../src/common/config.py:268
+#: ../src/common/config.py:270
 msgid "I'm on the phone."
 msgstr "Je suis au téléphone."
 
-#: ../src/common/config.py:269
+#: ../src/common/config.py:271
 msgid "Out"
 msgstr "Dehors"
 
-#: ../src/common/config.py:269
+#: ../src/common/config.py:271
 msgid "I'm out enjoying life"
 msgstr "Je suis dehors à profiter de la vie"
 
@@ -1306,28 +1306,46 @@ msgstr "Bannissement de %s"
 msgid "If you close this tab, the message will be lost."
 msgstr "Si vous fermez cet onglet, le message sera perdu."
 
-#. Gb means giga bytes
-#: ../src/gtkgui_helpers.py:69
-#, python-format
-msgid "%s Gb"
+#. GiB means gibibyte
+#: ../src/gtkgui_helpers.py:73
+#, fuzzy, python-format
+msgid "%s GiB"
 msgstr "%s Go"
 
-#. Mb means mega bytes
-#: ../src/gtkgui_helpers.py:72
-#, python-format
-msgid "%s Mb"
+#. GB means gigabyte
+#: ../src/gtkgui_helpers.py:76
+#, fuzzy, python-format
+msgid "%s GB"
+msgstr "%s Go"
+
+#. MiB means mibibyte
+#: ../src/gtkgui_helpers.py:80
+#, fuzzy, python-format
+msgid "%s MiB"
 msgstr "%s Mo"
 
-#. Kb means kilo bytes
-#: ../src/gtkgui_helpers.py:75
-#, python-format
-msgid "%s Kb"
+#. MB means megabyte
+#: ../src/gtkgui_helpers.py:83
+#, fuzzy, python-format
+msgid "%s MB"
+msgstr "%s Mo"
+
+#. KiB means kibibyte
+#: ../src/gtkgui_helpers.py:87
+#, fuzzy, python-format
+msgid "%s KiB"
 msgstr "%s Ko"
 
-#. b means bytes
-#: ../src/gtkgui_helpers.py:78
+#. KB means kilo bytes
+#: ../src/gtkgui_helpers.py:90
 #, fuzzy, python-format
-msgid "%s b"
+msgid "%s KB"
+msgstr "%s Ko"
+
+#. B means bytes
+#: ../src/gtkgui_helpers.py:93
+#, fuzzy, python-format
+msgid "%s B"
 msgstr "%s Ko"
 
 #: ../src/history_window.py:138

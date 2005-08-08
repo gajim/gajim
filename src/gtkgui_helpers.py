@@ -58,24 +58,39 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0,
 	
 def convert_bytes(string):
 	suffix = ''
-	bytes = int(string)
-	if bytes >= 1000:
-		bytes = round(bytes/1000., 1)
-		if bytes >= 1000:
-			bytes = round(bytes/1000., 1)
-			if bytes >= 1000:
-				bytes = round(bytes/1000., 1)
-				#Gb means giga bytes
-				suffix = _('%s Gb') 
+	# IEC standard says KiB = 1024 bytes KB = 1000 bytes
+	use_kib_mib = gajim.config.get('use_kib_mib')
+	align = 1024.
+	bytes = float(string)
+	if bytes >= align:
+		bytes = round(bytes/align, 1)
+		if bytes >= align:
+			bytes = round(bytes/align, 1)
+			if bytes >= align:
+				bytes = round(bytes/align, 1)
+				if use_kib_mib:
+					#GiB means gibibyte
+					suffix = _('%s GiB') 
+				else:
+					#GB means gigabyte
+					suffix = _('%s GB')
 			else:
-				#Mb means mega bytes
-				suffix = _('%s Mb')
+				if use_kib_mib:
+					#MiB means mibibyte
+					suffix = _('%s MiB')
+				else:
+					#MB means megabyte
+					suffix = _('%s MB')
 		else:
-			#Kb means kilo bytes
-			suffix = _('%s Kb')
+			if use_kib_mib:
+					#KiB means kibibyte
+					suffix = _('%s KiB')
+			else:
+				#KB means kilo bytes
+				suffix = _('%s KB')
 	else:
-		#b means bytes 
-		suffix = _('%s b')
+		#B means bytes 
+		suffix = _('%s B')
 	return suffix % str(bytes)
 	
 def escape_for_pango_markup(string):

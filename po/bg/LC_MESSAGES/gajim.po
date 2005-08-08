@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-09 00:11+0300\n"
+"POT-Creation-Date: 2005-08-09 00:49+0300\n"
 "PO-Revision-Date: 2005-06-01 18:52+0300\n"
 "Last-Translator: Yavor Doganov <yavor@doganov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -26,55 +26,55 @@ msgstr ""
 msgid "Not available as a result of being idle"
 msgstr ""
 
-#: ../src/common/config.py:263
+#: ../src/common/config.py:265
 msgid "Sleeping"
 msgstr ""
 
-#: ../src/common/config.py:264
+#: ../src/common/config.py:266
 msgid "Back soon"
 msgstr ""
 
-#: ../src/common/config.py:264
+#: ../src/common/config.py:266
 msgid "Back in some minutes."
 msgstr "Ще се върна след малко."
 
-#: ../src/common/config.py:265
+#: ../src/common/config.py:267
 msgid "Eating"
 msgstr "Хапвам"
 
-#: ../src/common/config.py:265
+#: ../src/common/config.py:267
 msgid "I'm eating, so leave me a message."
 msgstr "Хапвам, оставете съобщение."
 
-#: ../src/common/config.py:266
+#: ../src/common/config.py:268
 msgid "Movie"
 msgstr "Филм"
 
-#: ../src/common/config.py:266
+#: ../src/common/config.py:268
 msgid "I'm watching a movie."
 msgstr "Гледам филм."
 
-#: ../src/common/config.py:267
+#: ../src/common/config.py:269
 msgid "Working"
 msgstr "Работя"
 
-#: ../src/common/config.py:267
+#: ../src/common/config.py:269
 msgid "I'm working."
 msgstr "Работя."
 
-#: ../src/common/config.py:268
+#: ../src/common/config.py:270
 msgid "Phone"
 msgstr "Телефон"
 
-#: ../src/common/config.py:268
+#: ../src/common/config.py:270
 msgid "I'm on the phone."
 msgstr "Говоря по телефона."
 
-#: ../src/common/config.py:269
+#: ../src/common/config.py:271
 msgid "Out"
 msgstr ""
 
-#: ../src/common/config.py:269
+#: ../src/common/config.py:271
 msgid "I'm out enjoying life"
 msgstr ""
 
@@ -1348,28 +1348,46 @@ msgstr ""
 msgid "If you close this tab, the message will be lost."
 msgstr ""
 
-#. Gb means giga bytes
-#: ../src/gtkgui_helpers.py:69
+#. GiB means gibibyte
+#: ../src/gtkgui_helpers.py:73
 #, python-format
-msgid "%s Gb"
+msgid "%s GiB"
 msgstr ""
 
-#. Mb means mega bytes
-#: ../src/gtkgui_helpers.py:72
+#. GB means gigabyte
+#: ../src/gtkgui_helpers.py:76
 #, python-format
-msgid "%s Mb"
+msgid "%s GB"
 msgstr ""
 
-#. Kb means kilo bytes
-#: ../src/gtkgui_helpers.py:75
+#. MiB means mibibyte
+#: ../src/gtkgui_helpers.py:80
 #, python-format
-msgid "%s Kb"
+msgid "%s MiB"
 msgstr ""
 
-#. b means bytes
-#: ../src/gtkgui_helpers.py:78
+#. MB means megabyte
+#: ../src/gtkgui_helpers.py:83
 #, python-format
-msgid "%s b"
+msgid "%s MB"
+msgstr ""
+
+#. KiB means kibibyte
+#: ../src/gtkgui_helpers.py:87
+#, python-format
+msgid "%s KiB"
+msgstr ""
+
+#. KB means kilo bytes
+#: ../src/gtkgui_helpers.py:90
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#. B means bytes
+#: ../src/gtkgui_helpers.py:93
+#, python-format
+msgid "%s B"
 msgstr ""
 
 #: ../src/history_window.py:138

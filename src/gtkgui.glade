@@ -3353,7 +3353,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="always_compact_view_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If checked, all chat and group chat windows will have the information area in the top and the buttons area in the bottom hidden. You can quick toggle compact view with Ctrl+C. NOTE: The last state you leave a window/tab is not a permanent one</property>
+		  <property name="tooltip" translatable="yes">If checked, all chat and group chat windows will have the information area in the top and the buttons area in the bottom hidden. You can quick toggle compact view with Alt+C. NOTE: The last state you leave a window/tab is not a permanent one</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Always use compact _view</property>
 		  <property name="use_underline">True</property>
