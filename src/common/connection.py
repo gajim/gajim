@@ -1879,7 +1879,7 @@ class Connection:
 							keep_alive_disconnect_after_foo_secs):
 						self.connection.disconnect() # disconnect if no answer
 						pritext = _('Gajim disconnected you from %s') % self.name
-						sectext = _('%s seconds have passed and server did not reply to our keepalive. If you believe such disconnection should not have happend, you can disable sending keepalive packets by modifying this account') % str(keep_alive_disconnect_after_foo_secs)
+						sectext = _('%s seconds have passed and server did not reply to our keep-alive. If you believe such disconnection should not have happend, you can disable sending keep-alive packets by modifying this account.') % str(keep_alive_disconnect_after_foo_secs)
 						self.dispatch('ERROR', (pritext, sectext))
 						return
 				if self.connection:

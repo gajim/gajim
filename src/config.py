@@ -2803,9 +2803,10 @@ class FirstTimeWizardWindow:
 			server = self.server_comboboxentry.get_active_text()
 			if self.check_data(user, server):
 				#TODO: write account to config file
+				# FIXME: do bold (markup)
 				self.finish_label.set_text(
-				_('Your account has been added to your gajim configuration.\n'
-'You can set advanced account options using "Edit->Accounts" in the main window menu.'))
+				_('Account has been added successfully.\n'
+'You can set advanced options by using "Edit->Accounts" from the main window.'))
 				self.go_to_last_page()
 
 		elif cur_page == 2:

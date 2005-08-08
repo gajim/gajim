@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-08 22:23+0300\n"
+"POT-Creation-Date: 2005-08-09 00:11+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,9 +174,9 @@ msgstr ""
 #: ../src/common/connection.py:1882
 #, python-format
 msgid ""
-"%s seconds have passed and server did not reply to our keepalive. If you "
+"%s seconds have passed and server did not reply to our keep-alive. If you "
 "believe such disconnection should not have happend, you can disable sending "
-"keepalive packets by modifying this account"
+"keep-alive packets by modifying this account."
 msgstr ""
 
 #: ../src/common/connection.py:1888 ../src/common/connection.py:1897
@@ -316,7 +316,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: ../src/chat.py:122 ../src/gtkgui.glade.h:64
+#: ../src/chat.py:122 ../src/gtkgui.glade.h:67
 msgid "Chat"
 msgstr ""
 
@@ -629,25 +629,25 @@ msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 
-#: ../src/config.py:2807
+#: ../src/config.py:2808
 msgid ""
-"Your account has been added to your gajim configuration.\n"
-"You can set advanced account options using \"Edit->Accounts\" in the main "
-"window menu."
+"Account has been added successfully.\n"
+"You can set advanced options by using \"Edit->Accounts\" from the main "
+"window."
 msgstr ""
 
-#: ../src/config.py:2818
+#: ../src/config.py:2819
 msgid ""
 "Your new account has been created and added to your gajim configuration.\n"
 "You can set advanced account options using \"Edit->Accounts\" in the main "
 "window menu."
 msgstr ""
 
-#: ../src/config.py:2832
+#: ../src/config.py:2833
 msgid "You need to enter a username to add an account."
 msgstr ""
 
-#: ../src/config.py:2836
+#: ../src/config.py:2837
 msgid "You need to enter a valid server address to add an account."
 msgstr ""
 
@@ -1692,50 +1692,57 @@ msgid "After time:"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:37
-msgid "Allow _OS information to be sent"
-msgstr ""
-
-#: ../src/gtkgui.glade.h:38
-msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
-msgstr ""
-
-#: ../src/gtkgui.glade.h:39
-msgid "Also known as iChat style"
+msgid ""
+"All chat states\n"
+"Composing only\n"
+"Disabled"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:40
-msgid "Always use compact _view"
+msgid "Allow _OS information to be sent"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:41
-msgid "Ask status message when I:"
+msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:42
-msgid "Ask:"
+msgid "Also known as iChat style"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:43
-msgid "Assign Open_PGP Key"
+msgid "Always use compact _view"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:44
-msgid "Authorize contact so he can know when you're connected"
+msgid "Ask status message when I:"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:45
-msgid "Auto _away after:"
+msgid "Ask:"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:46
-msgid "Auto _not available after:"
+msgid "Assign Open_PGP Key"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:47
-msgid "Auto join"
+msgid "Authorize contact so he can know when you're connected"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:48
+msgid "Auto _away after:"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:49
+msgid "Auto _not available after:"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:50
+msgid "Auto join"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:51
 msgid ""
 "Autodetect at every application startup\n"
 "Always use GNOME default applications\n"
@@ -1743,78 +1750,78 @@ msgid ""
 "Custom"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:52
+#: ../src/gtkgui.glade.h:55
 msgid "Automatically authorize contact"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:53
+#: ../src/gtkgui.glade.h:56
 msgid "Background color"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:54
+#: ../src/gtkgui.glade.h:57
 msgid "Banner:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:55
+#: ../src/gtkgui.glade.h:58
 msgid "Before nickname:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:56
+#: ../src/gtkgui.glade.h:59
 msgid "Before time:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:57
+#: ../src/gtkgui.glade.h:60
 msgid "Birthday:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:58
+#: ../src/gtkgui.glade.h:61
 msgid "Bold"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:59
+#: ../src/gtkgui.glade.h:62
 msgid "C_onnect at startup"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:60
+#: ../src/gtkgui.glade.h:63
 msgid "Chan_ge"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:61
+#: ../src/gtkgui.glade.h:64
 msgid "Change Password"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:62
+#: ../src/gtkgui.glade.h:65
 msgid "Change _Nickname"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:63
+#: ../src/gtkgui.glade.h:66
 msgid "Change _Subject"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:65
+#: ../src/gtkgui.glade.h:68
 msgid "Chat state noti_fications:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:66
+#: ../src/gtkgui.glade.h:69
 msgid "Chat with"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:67
+#: ../src/gtkgui.glade.h:70
 msgid "Check for new _version at application startup"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:68
+#: ../src/gtkgui.glade.h:71
 msgid "Check if you want to register for a new jabber account"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:69
+#: ../src/gtkgui.glade.h:72
 msgid ""
 "Check this option, only if someone you don't have in the roster spams/annoys "
 "you. Use with caution, cause it blocks all messages from any contact that is "
 "not in the roster"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:70
+#: ../src/gtkgui.glade.h:73
 msgid ""
 "Check this so Gajim will connect in port 5223 where legacy servers are "
 "expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
@@ -1822,47 +1829,40 @@ msgid ""
 "be disabled"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:71
+#: ../src/gtkgui.glade.h:74
 msgid "Choose _Key..."
 msgstr ""
 
-#: ../src/gtkgui.glade.h:72
+#: ../src/gtkgui.glade.h:75
 msgid "City:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:73
+#: ../src/gtkgui.glade.h:76
 msgid "Click to change account's password"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:74
+#: ../src/gtkgui.glade.h:77
 msgid "Click to get contact's extended information"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:75
+#: ../src/gtkgui.glade.h:78
 msgid "Click to see features like on jabber servers"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:76
+#: ../src/gtkgui.glade.h:79
 msgid "Click to see past conversation in this room"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:77
+#: ../src/gtkgui.glade.h:80
 msgid "Click to see past conversations with this contact"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:78
+#: ../src/gtkgui.glade.h:81
 msgid "Client:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:79
+#: ../src/gtkgui.glade.h:82
 msgid "Company:"
-msgstr ""
-
-#: ../src/gtkgui.glade.h:80
-msgid ""
-"Composing only\n"
-"All chat states\n"
-"Disabled"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:83
