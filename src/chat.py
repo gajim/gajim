@@ -452,8 +452,8 @@ class Chat:
 
 	def on_tab_eventbox_button_press_event(self, widget, event, child):
 		if event.button == 3:
-			self.popup_is_shown = True
-			menu.connect('deactivate', self.on_popup_deactivate)
+			#self.popup_is_shown = True
+			#menu.connect('deactivate', self.on_popup_deactivate)
 			n = self.notebook.page_num(child)
 			self.notebook.set_current_page(n)
 
