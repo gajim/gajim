@@ -119,10 +119,18 @@ class Chat:
 		chat = self.names[jid]
 		if len(self.xmls) > 1: # if more than one tab in the same window
 			if self.widget_name == 'tabbed_chat_window':
-				chat = _('Chat')
+				add = _('Chat')
 			elif self.widget_name == 'groupchat_window':
-				chat = _('Group Chat')
-		title = start + chat
+				add = _('Group Chat')
+		elif len(self.xmls) == 1: # just one tab
+			if self.widget_name == 'tabbed_chat_window':
+				c = gajim.get_first_contact_instance_from_jid(self.account, jid)
+				add = c.name
+			elif self.widget_name == 'groupchat_window':
+				name = gajim.get_nick_from_jid(jid)
+				add = name
+
+		title = start + add
 		if len(gajim.connections) >= 2: # if we have 2 or more accounts
 			title = title + ' (' + _('account: ') + self.account + ')'
 
@@ -342,7 +350,8 @@ class Chat:
 		self.notebook.set_current_page(self.notebook.page_num(self.childs[jid]))
 
 	def remove_tab(self, jid, kind): #kind is 'chats' or 'gc'
-		if len(self.xmls) == 1: # only one tab so destroy window
+		if len(self.xmls) == 1: # only one tab when we asked to remove
+			# so destroy window
 		
 			# we check and possibly save positions here, because Ctrl+W, Escape
 			# etc.. call remove_tab so similar code in delete_event callbacks
@@ -375,10 +384,8 @@ class Chat:
 				del self.print_time_timeout_id[jid]
 
 			self.notebook.remove_page(self.notebook.page_num(self.childs[jid]))
-			if len(self.xmls) == 2:
-				# one that remains and one that we'll remove, 1 tab remains
-				self.notebook.set_show_tabs(False)
-			self.show_title()
+				
+			
 
 		if self.plugin.windows[self.account][kind].has_key(jid):
 			del self.plugin.windows[self.account][kind][jid]
@@ -390,6 +397,10 @@ class Chat:
 		del self.tagIn[jid]
 		del self.tagOut[jid]
 		del self.tagStatus[jid]
+		
+		if len(self.xmls) == 1: # we now have only one tab
+			self.notebook.set_show_tabs(False)
+			self.show_title()
 	
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
@@ -946,7 +957,7 @@ class Chat:
 					text_before_special_text, *other_tags)
 			index = end # update index
 			
-			#now print it
+			# now print it
 			self.print_special_text(special_text, other_tags, textview)
 					
 		return index
