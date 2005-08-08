@@ -341,6 +341,11 @@ class TabbedChatWindow(chat.Chat):
 		self.xmls[contact.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[contact.jid] = self.xmls[contact.jid].get_widget('chats_vbox')
 		self.contacts[contact.jid] = contact
+		
+		message_textview = self.xmls[contact.jid].get_widget('message_textview')
+		message_tv_buffer = message_textview.get_buffer()
+		message_tv_buffer.connect('insert-text',
+			self.on_message_tv_buffer_insert_text, contact.jid)
 
 		if contact.jid in gajim.encrypted_chats[self.account]:
 			self.xmls[contact.jid].get_widget('gpg_togglebutton').set_active(True)
@@ -366,48 +371,48 @@ class TabbedChatWindow(chat.Chat):
 		# chatstates
 		self.reset_kbd_mouse_timeout_vars()
 		
-		self.chatstates[contact.jid] = None # our current chatstate with contact
+		self.chatstates[contact.jid] = None # OUR current chatstate with contact
 		self.possible_paused_timeout_id[contact.jid] =\
 			gobject.timeout_add(5000, self.check_for_possible_paused_chatstate,
-				contact)
+				contact.jid)
 		self.possible_inactive_timeout_id[contact.jid] =\
 			gobject.timeout_add(30000, self.check_for_possible_inactive_chatstate,
-				contact)
+				contact.jid)
 		
 	def handle_incoming_chatstate(self, account, jid, chatstate):
 		''' handle incoming chatstate that jid SENT TO us '''
 		contact = gajim.get_first_contact_instance_from_jid(account, jid)
 		self.draw_name_banner(contact, chatstate)
 
-	def check_for_possible_paused_chatstate(self, contact):
-		''' did we move mouse of that window or kbd activity in that window
+	def check_for_possible_paused_chatstate(self, jid):
+		''' did we move mouse of that window or wrote something in message textview
 		in the last 5 seconds?
 		if yes we go active for mouse, composing for kbd
 		if no we go paused if we were previously composing '''
-		current_state = self.chatstates[contact.jid]
-		if current_state == False: # jid doesn't support chatstates
+		current_state = self.chatstates[jid]
+		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
 		
 		if self.mouse_over_in_last_5_secs:
-			self.send_chatstate('active', contact.jid)
+			self.send_chatstate('active', jid)
 		elif self.kbd_activity_in_last_5_secs:
-			self.send_chatstate('composing', contact.jid)
+			self.send_chatstate('composing', jid)
 		else:
-			if self.chatstates[contact.jid] == 'composing':
-				self.send_chatstate('paused', contact.jid) # pause composing
+			if self.chatstates[jid] == 'composing':
+				self.send_chatstate('paused', jid) # pause composing
 		
-		# assume no activity and let the motion-notify or key_press make them True
+		# assume no activity and let the motion-notify or 'insert-text' make them True
 		# refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
 		self.reset_kbd_mouse_timeout_vars()
 		return True # loop forever
 
-	def check_for_possible_inactive_chatstate(self, contact):
-		''' did we move mouse over that window or kbd activity in that window
+	def check_for_possible_inactive_chatstate(self, jid):
+		''' did we move mouse over that window or wrote something in message textview
 		in the last 30 seconds?
 		if yes we go active
 		if no we go inactive '''
-		current_state = self.chatstates[contact.jid]
-		if current_state == False: # jid doesn't support chatstates
+		current_state = self.chatstates[jid]
+		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
 		
 		if self.mouse_over_in_last_5_secs or self.kbd_activity_in_last_5_secs:
@@ -415,13 +420,25 @@ class TabbedChatWindow(chat.Chat):
 		
 		if not (self.mouse_over_in_last_30_secs or\
 		self.kbd_activity_in_last_30_secs):
-			self.send_chatstate('inactive', contact.jid)
+			self.send_chatstate('inactive', jid)
 
-		# assume no activity and let the motion-notify or key_press make them True
+		# assume no activity and let the motion-notify or 'insert-text' make them True
 		# refresh 30 seconds too or else it's 30 - 5 = 25 seconds!
 		self.reset_kbd_mouse_timeout_vars()
 		
 		return True # loop forever
+
+	def on_message_tv_buffer_insert_text(self, textbuffer, textiter, text,
+	length, jid):
+		self.kbd_activity_in_last_5_secs = True
+		self.kbd_activity_in_last_30_secs = True
+		self.send_chatstate('composing', jid)
+
+	def reset_kbd_mouse_timeout_vars(self):
+		self.kbd_activity_in_last_5_secs = False
+		self.mouse_over_in_last_5_secs = False
+		self.mouse_over_in_last_30_secs = False
+		self.kbd_activity_in_last_30_secs = False
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:
@@ -475,48 +492,6 @@ class TabbedChatWindow(chat.Chat):
 
 			message_buffer.set_text('')
 			return True
-			
-		else:
-			# chatstates
-			# if really composing (eg. no Ctrl, or alt modifier, send chatstate
-			if not (event.state & gtk.gdk.CONTROL_MASK) and not\
-				(event.state & gtk.gdk.MOD1_MASK):
-				# but what about Shift+ sth ?
-				# Shift + 'a' = A so we're composing
-				# Shift + Escape is not composing, so we let the gtk+ decide
-				# in an workaround way (we could also get somehow the listed shortcuts
-				# but I don't know if it's possible)
-				
-				if event.state & gtk.gdk.SHIFT_MASK:
-					# get images too (eg. emoticons)
-					message = message_buffer.get_slice(start_iter, end_iter, True)
-					message = message.strip() # enter and space does not mean writing
-					chars_no = len(message)
-					gobject.timeout_add(1000, self.check_for_possible_composing,
-						message_buffer, jid, chars_no)
-				else:
-					self.kbd_activity_in_last_5_secs = True
-					self.kbd_activity_in_last_30_secs = True
-					self.send_chatstate('composing', jid)
-
-				
-	def check_for_possible_composing(self, message_buffer, jid, chars_no):
-		start_iter, end_iter = message_buffer.get_bounds()
-		message = message_buffer.get_slice(start_iter, end_iter, True)
-		message = message.strip() # enter and space does not mean writing
-		chars_no_after_one_sec = len(message)
-		if chars_no != chars_no_after_one_sec:
-			# so GTK+ decided key_press was for writing..
-			self.kbd_activity_in_last_5_secs = True
-			self.kbd_activity_in_last_30_secs = True
-			self.send_chatstate('composing', jid)
-
-	def reset_kbd_mouse_timeout_vars(self):
-		self.kbd_activity_in_last_5_secs = False
-		self.mouse_over_in_last_5_secs = False
-		self.mouse_over_in_last_30_secs = False
-		self.kbd_activity_in_last_30_secs = False
-
 
 	def send_chatstate(self, state, jid = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
@@ -561,7 +536,7 @@ class TabbedChatWindow(chat.Chat):
 			# we don't know anything about jid, so return
 			# NOTE:
 			# send 'active', set current state to 'ask' and return is done
-			# in send_message because we need REAL message (with <body>)
+			# in self.send_message() because we need REAL message (with <body>)
 			# for that procedure so return to make sure we send only once 'active'
 			# until we know peer supports jep85
 			return 
@@ -639,11 +614,24 @@ class TabbedChatWindow(chat.Chat):
 					chatstate_to_send = 'active'
 					contact.chatstate = 'ask' # pseudo state
 
-				# if peer supports jep85, send 'active'
-				elif contact.chatstate is not False:
+				# if peer supports jep85 and we are not 'ask', send 'active'
+				# NOTE: first active and 'ask' is set in gajim.py
+				elif contact.chatstate not in (False, 'ask'):
 					#send active chatstate on every message (as JEP says)
 					chatstate_to_send = 'active'
 					contact.chatstate = 'active'
+					
+					# refresh timers
+					# avoid sending composing in less than 5 seconds
+					# if we just send a message
+					gobject.source_remove(self.possible_paused_timeout_id[jid])
+					gobject.source_remove(self.possible_inactive_timeout_id[jid])
+					self.possible_paused_timeout_id[jid] =\
+			gobject.timeout_add(5000, self.check_for_possible_paused_chatstate,
+				jid)
+					self.possible_inactive_timeout_id[jid] =\
+			gobject.timeout_add(30000, self.check_for_possible_inactive_chatstate,
+				jid)
 					self.reset_kbd_mouse_timeout_vars()
 			
 			gajim.connections[self.account].send_message(jid, message, keyID,
