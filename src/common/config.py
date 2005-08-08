@@ -294,6 +294,7 @@ class Config:
 	
 	proxies65_default = {
 		'proxy.jabber.org': [ '208.245.212.98', '7777', 'proxy.jabber.org' ],
+		'proxy65.jabber.autocom.pl': ['213.134.161.52', '7777', 'proxy65.jabber.autocom.pl'],
 	}
 
 	def foreach(self, cb, data = None):
