@@ -39,7 +39,7 @@ import signal
 import getopt
 import time
 
-#gobject.threads_init()
+gobject.threads_init()
 
 from common import socks5
 import gtkgui_helpers
