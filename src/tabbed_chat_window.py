@@ -131,7 +131,8 @@ class TabbedChatWindow(chat.Chat):
 		
 		status = contact.status
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+  
-		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
+		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0) and \
+		status is not None:
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
 			status = gtkgui_helpers.reduce_chars_newlines(status, 0, 2)
 		#FIXME: remove me when gtk24 is OLD
