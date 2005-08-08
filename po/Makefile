@@ -8,7 +8,7 @@ all: $(LANGDIR)
 %.mo: %.po
 	msgfmt $< -o $@
 
-gajim.pot: ../src/*py ../src/common/*py
+gajim.pot: ../src/*py ../src/common/*py ../src/gtkgui.glade.h
 	intltool-update --pot --gettext-package=$(NAME)
 
 clean:
