@@ -130,9 +130,10 @@ class GroupchatWindow(chat.Chat):
 					names.append(gajim.get_nick_from_jid(room_jid))
 
 			if len(names): #if one or more rooms connected
+				joined_names = ', '.join(names)
 				pritext = ngettext('Are you sure you want to leave room "%s"?' % \
 					names[0], 'Are you sure you want to leave rooms "%s"?' % \
-					', '.join(names), len(names))
+					joined_names, len(names))
 			
 				sectext = ngettext(
 			'If you close this window, you will be disconnected from this room.',
