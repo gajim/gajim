@@ -546,8 +546,8 @@ class TabbedChatWindow(chat.Chat):
 
 		# if the new state we wanna send (state) equals 
 		# the current state (contact.chastate) then return
-		gajim.debug.log('wanna send' + state)
-		gajim.debug.log('atm you have' + contact.chatstate)
+		gajim.log.debug('wanna send ' + state +' to '+ jid)
+		gajim.log.debug('atm you have ' + str(contact.chatstate))
 		if contact.chatstate == state:
 			return
 
