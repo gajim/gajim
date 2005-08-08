@@ -192,19 +192,23 @@ class TabbedChatWindow(chat.Chat):
 				pass
 		if img_decoded:
 			pixbufloader = gtk.gdk.PixbufLoader()
-			pixbufloader.write(img_decoded)
-			pixbuf = pixbufloader.get_pixbuf()
-			pixbufloader.close()
-			scaled_buf = pixbuf.scale_simple(52, 52, gtk.gdk.INTERP_HYPER)
-			x = None
-			if self.xmls.has_key(vcard['jid']):
-				x = self.xmls[vcard['jid']]
-			# it can be xmls[jid/resource] if it's a vcard from pm
-			elif self.xmls.has_key(vcard['jid'] + '/' + vcard['resource']):
-				x = self.xmls[vcard['jid'] + '/' + vcard['resource']]
-			image = x.get_widget('avatar_image')
-			image.set_from_pixbuf(scaled_buf)
-			image.show_all()
+			try:
+				pixbufloader.write(img_decoded)
+				pixbuf = pixbufloader.get_pixbuf()
+				pixbufloader.close()
+			
+				scaled_buf = pixbuf.scale_simple(52, 52, gtk.gdk.INTERP_HYPER)
+				x = None
+				if self.xmls.has_key(vcard['jid']):
+					x = self.xmls[vcard['jid']]
+				# it can be xmls[jid/resource] if it's a vcard from pm
+				elif self.xmls.has_key(vcard['jid'] + '/' + vcard['resource']):
+					x = self.xmls[vcard['jid'] + '/' + vcard['resource']]
+				image = x.get_widget('avatar_image')
+				image.set_from_pixbuf(scaled_buf)
+				image.show_all()
+			except gobject.GError: # we may get "unknown image format"
+				pass
 
 	def set_state_image(self, jid):
 		prio = 0
