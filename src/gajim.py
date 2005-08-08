@@ -39,8 +39,6 @@ import signal
 import getopt
 import time
 
-gobject.threads_init()
-
 from common import socks5
 import gtkgui_helpers
 
@@ -1178,4 +1176,5 @@ if __name__ == '__main__':
 		pass
 	
 	Interface()
+	gobject.threads_init()
 	gtk.main()
