@@ -396,6 +396,7 @@ class TabbedChatWindow(chat.Chat):
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active', jid)
 		elif self.kbd_activity_in_last_5_secs:
+			print 'PAUSED sends COMPOSING'
 			self.send_chatstate('composing', jid)
 		else:
 			if self.chatstates[jid] == 'composing':
@@ -430,6 +431,7 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_message_tv_buffer_insert_text(self, textbuffer, textiter, text,
 	length, jid):
+		print 'insert-text'
 		self.kbd_activity_in_last_5_secs = True
 		self.kbd_activity_in_last_30_secs = True
 		self.send_chatstate('composing', jid)

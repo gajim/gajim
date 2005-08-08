@@ -204,7 +204,7 @@ class Interface:
 	def handle_event_http_auth(self, account, data):
 		#('HTTP_AUTH', account, (method, url, iq_obj))
 		dialog = dialogs.ConfirmationDialog(_('HTTP (%s) Authorization for %s') \
-			% (data[0], data[1]), _('Do you accept this request?'))
+			% (array[0], array[1]), _('Do you accept this request?'))
 		if dialog.get_response() == gtk.RESPONSE_OK:
 			answer = 'yes'
 		else:
@@ -367,7 +367,7 @@ class Interface:
 						(account, array))
 				
 				# when contact signs out we reset his chatstate
-				contact = gajim.get_first_contact_instance_from_jid(acccount, jid)
+				contact = gajim.get_first_contact_instance_from_jid(account, jid)
 				contact.chatstate = None
 						
 			elif old_show > 1 and new_show < 2:
@@ -1001,7 +1001,6 @@ class Interface:
 			self.handle_event_file_send_error)
 		con.register_handler('STANZA_ARRIVED', self.handle_event_stanza_arrived)
 		con.register_handler('STANZA_SENT', self.handle_event_stanza_sent)
-		con.register_handler('HTTP_AUTH', self.handle_event_http_auth)
 
 	def process_connections(self):
 		try:
