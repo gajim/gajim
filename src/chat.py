@@ -269,28 +269,31 @@ class Chat:
 		
 		return menu
 
+	def popup_menu(self, event):
+		self.popup_is_shown = True
+		menu = self.prepare_context_menu()
+		menu.connect('deactivate', self.on_popup_deactivate)
+		# common menuitems (tab switches)
+		if len(self.xmls) > 1: # if there is more than one tab
+			menu.append(gtk.SeparatorMenuItem()) # seperator
+			for jid in self.xmls:
+				if jid != self.get_active_jid():
+					item = gtk.ImageMenuItem(_('Switch to %s') % self.names[jid])
+					img = gtk.image_new_from_stock(gtk.STOCK_JUMP_TO,
+						gtk.ICON_SIZE_MENU)
+					item.set_image(img)
+					item.connect('activate', lambda obj, jid:self.set_active_tab(
+						jid), jid)
+					menu.append(item)
+
+		# show the menu
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
+
 	def on_banner_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
-			self.popup_is_shown = True
-			menu = self.prepare_context_menu()
-			menu.connect('deactivate', self.on_popup_deactivate)
-			# common menuitems (tab switches)
-			if len(self.xmls) > 1: # if there is more than one tab
-				menu.append(gtk.SeparatorMenuItem()) # seperator
-				for jid in self.xmls:
-					if jid != self.get_active_jid():
-						item = gtk.ImageMenuItem(_('Switch to %s') % self.names[jid])
-						img = gtk.image_new_from_stock(gtk.STOCK_JUMP_TO,
-							gtk.ICON_SIZE_MENU)
-						item.set_image(img)
-						item.connect('activate', lambda obj, jid:self.set_active_tab(
-							jid), jid)
-						menu.append(item)
-
-			# show the menu
-			menu.popup(None, None, None, event.button, event.time)
-			menu.show_all()
+			self.popup_menu(event)
 
 	def on_popup_deactivate(self, widget):
 		self.popup_is_shown = False
@@ -455,6 +458,7 @@ class Chat:
 			#menu.connect('deactivate', self.on_popup_deactivate)
 			n = self.notebook.page_num(child)
 			self.notebook.set_current_page(n)
+			self.popup_menu(event)
 
 	def new_tab(self, jid):
 		#FIXME: text formating buttons will be hidden in 0.8 release
