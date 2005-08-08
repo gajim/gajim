@@ -283,12 +283,11 @@ class TabbedChatWindow(chat.Chat):
 		
 		# focus-out is also emitted by showing context menu
 		# so check to see if we're really not paying attention to window/tab
-		# NOTE: if the user changes tab, (switch-tab send inactive to current tab
-		# so that's not a problem)
+		# NOTE: if the user changes tab, switch-tab sends inactive to the tab
+		# we are leaving so we just send to active tab here
 		if self.popup_is_shown is False: # we are outside of the window
-			# so no context menu, so send inactive to alls tabs
-			for jid in self.xmls:
-				self.send_chatstate('inactive', jid)
+			# so no context menu, so send 'inactive' to active tab
+			self.send_chatstate('inactive')
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
@@ -395,7 +394,6 @@ class TabbedChatWindow(chat.Chat):
 		if self.mouse_over_in_last_5_secs:
 			self.send_chatstate('active', jid)
 		elif self.kbd_activity_in_last_5_secs:
-			gajim.log.debug('PAUSED sends COMPOSING')
 			self.send_chatstate('composing', jid)
 		else:
 			if self.chatstates[jid] == 'composing':
@@ -531,8 +529,6 @@ class TabbedChatWindow(chat.Chat):
 
 		# if the new state we wanna send (state) equals 
 		# the current state (contact.chastate) then return
-		gajim.log.debug('wanna send ' + state +' to '+ jid)
-		gajim.log.debug('atm you have ' + str(contact.chatstate))
 		if contact.chatstate == state:
 			return
 
