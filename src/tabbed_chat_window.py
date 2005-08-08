@@ -398,7 +398,7 @@ class TabbedChatWindow(chat.Chat):
 		
 		# assume no activity and let the motion-notify or key_press make them True
 		# refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
-		self.reset_kbd_mouse_timeout_vars()		
+		self.reset_kbd_mouse_timeout_vars()
 		return True # loop forever
 
 	def check_for_possible_inactive_chatstate(self, contact):
@@ -487,12 +487,18 @@ class TabbedChatWindow(chat.Chat):
 				# in an workaround way (we could also get somehow the listed shortcuts
 				# but I don't know if it's possible)
 				
-				# get images too (eg. emoticons)
-				message = message_buffer.get_slice(start_iter, end_iter, True)
-				message = message.strip() # enter and space does not mean writing
-				chars_no = len(message)
-				gobject.timeout_add(1000, self.check_for_possible_composing,
-					message_buffer, jid, chars_no)
+				if event.state & gtk.gdk.SHIFT_MASK:
+					# get images too (eg. emoticons)
+					message = message_buffer.get_slice(start_iter, end_iter, True)
+					message = message.strip() # enter and space does not mean writing
+					chars_no = len(message)
+					gobject.timeout_add(1000, self.check_for_possible_composing,
+						message_buffer, jid, chars_no)
+				else:
+					self.kbd_activity_in_last_5_secs = True
+					self.kbd_activity_in_last_30_secs = True
+					self.send_chatstate('composing', jid)
+
 				
 	def check_for_possible_composing(self, message_buffer, jid, chars_no):
 		start_iter, end_iter = message_buffer.get_bounds()
