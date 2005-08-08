@@ -8685,6 +8685,7 @@ Custom</property>
 		  <property name="visible">True</property>
 		  <property name="visible_window">True</property>
 		  <property name="above_child">False</property>
+		  <signal name="button_press_event" handler="on_banner_eventbox_button_press_event" last_modification_time="Mon, 08 Aug 2005 15:32:39 GMT"/>
 
 		  <child>
 		    <widget class="GtkLabel" id="banner_name_label">
