@@ -137,7 +137,6 @@ class Connection:
 		self.gpg = None
 		self.vcard_sha = None
 		self.status = ''
-		self.myVCardID = []
 		self.new_account_info = None
 		self.bookmarks = []
 		self.on_purpose = False
@@ -193,14 +192,15 @@ class Connection:
 		"""Called when we receive a vCard
 		Parse the vCard and send it to plugins"""
 		frm_iq = vc.getFrom()
+		name = gajim.config.get_per('accounts', self.name, 'name')
+		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+		our_jid = name + '@' + hostname
 		resource = ''
 		if frm_iq:
 			frm = frm_iq.getStripped()
 			resource = frm_iq.getResource()
 		else:
-			name = gajim.config.get_per('accounts', self.name, 'name')
-			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-			frm = name + '@' + hostname
+			frm = our_jid
 		vcard = {'jid': frm, 'resource': resource}
 		if not vc.getTag('vCard'):
 			return
@@ -221,8 +221,7 @@ class Connection:
 					vcard[name] = {}
 					for c in info.getChildren():
 						 vcard[name][c.getName()] = c.getData()
-			if int(vc.getID()) in self.myVCardID:
-				self.myVCardID.remove(int(vc.getID()))
+			if frm == our_jid:
 				if vcard.has_key('PHOTO') and type(vcard['PHOTO']) == type({}) and \
 				vcard['PHOTO'].has_key('BINVAL'):
 					photo = vcard['PHOTO']['BINVAL']
@@ -1339,8 +1338,7 @@ class Connection:
 		self.dispatch('STATUS', 'invisible')
 		if initial:
 			#ask our VCard
-			iq = self.request_vcard(None)
-			self.myVCardID.append(iq.getID())
+			self.request_vcard(None)
 
 			#Get bookmarks from private namespace
 			self.get_bookmarks()
@@ -1395,8 +1393,7 @@ class Connection:
 					self.connection.send(p)
 				self.dispatch('STATUS', show)
 				#ask our VCard
-				iq = self.request_vcard(None)
-				self.myVCardID.append(iq.getID())
+				self.request_vcard(None)
 
 				#Get bookmarks from private namespace
 				self.get_bookmarks()
@@ -1630,10 +1627,7 @@ class Connection:
 		if jid:
 			iq.setTo(jid)
 		iq.setTag(common.xmpp.NS_VCARD + ' vCard')
-		id = self.connection.getAnID()
-		iq.setID(id)
 		self.to_be_sent.append(iq)
-		return iq
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 	
 	def send_vcard(self, vcard):
