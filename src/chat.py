@@ -269,9 +269,8 @@ class Chat:
 		
 		return menu
 
-	def on_banner_button_press_event(self, widget, event):
+	def on_banner_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
-		print 'banner button press' #NEVER GETS CALLED!
 		if event.button == 3: # right click
 			self.popup_is_shown = True
 			menu = self.prepare_context_menu()

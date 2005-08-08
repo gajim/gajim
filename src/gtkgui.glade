@@ -10074,13 +10074,13 @@ topic</property>
 		  <property name="visible">True</property>
 		  <property name="visible_window">True</property>
 		  <property name="above_child">False</property>
+		  <signal name="button_press_event" handler="on_banner_eventbox_button_press_event" last_modification_time="Mon, 08 Aug 2005 10:39:20 GMT"/>
 
 		  <child>
 		    <widget class="GtkHBox" id="banner_hbox">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">0</property>
-		      <signal name="button_press_event" handler="on_banner_button_press_event" last_modification_time="Sun, 07 Aug 2005 15:06:55 GMT"/>
 
 		      <child>
 			<widget class="GtkImage" id="banner_status_image">
