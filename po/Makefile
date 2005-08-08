@@ -1,7 +1,7 @@
 top_srcdir = ../src/
 NAME = gajim
 LANGS   := fr pt el pl es ru bg de
-LANGDIR := $(foreach lang, $(LANGS), $(subst ,/LC_MESSAGES/gajim.mo, $(lang)))
+LANGDIR := $(foreach LANG, $(LANGS),$(LANG)/LC_MESSAGES/gajim.mo)
 
 all: $(LANGDIR)
 
@@ -9,7 +9,7 @@ all: $(LANGDIR)
 	msgfmt $< -o $@
 
 gajim.pot: ../src/*py ../src/common/*py
-	 intltool-update --pot --gettext-package=$(NAME)
+	intltool-update --pot --gettext-package=$(NAME)
 
 clean:
 	find . -name '*.mo' -exec rm {} \;
