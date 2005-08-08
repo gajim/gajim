@@ -38,6 +38,9 @@ import sre
 import signal
 import getopt
 import time
+
+#gobject.threads_init()
+
 from common import socks5
 import gtkgui_helpers
 
@@ -364,7 +367,7 @@ class Interface:
 						(account, array))
 				
 				# when contact signs out we reset his chatstate
-				contact = gaim.get_first_contact_instance_from_jid(acccount, jid)
+				contact = gajim.get_first_contact_instance_from_jid(acccount, jid)
 				contact.chatstate = None
 						
 			elif old_show > 1 and new_show < 2:
