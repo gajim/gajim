@@ -410,6 +410,9 @@ class TabbedChatWindow(chat.Chat):
 		if current_state == False: # jid doesn't support chatstates
 			return False # stop looping
 		
+		if self.mouse_over_in_last_5_secs or self.kbd_activity_in_last_5_secs:
+			return True # loop forever
+		
 		if not (self.mouse_over_in_last_30_secs or\
 		self.kbd_activity_in_last_30_secs):
 			self.send_chatstate('inactive', contact.jid)
@@ -543,8 +546,8 @@ class TabbedChatWindow(chat.Chat):
 
 		# if the new state we wanna send (state) equals 
 		# the current state (contact.chastate) then return
-		print 'wanna send', state
-		print 'atm you have', contact.chatstate
+		gajim.debug.log('wanna send' + state)
+		gajim.debug.log('atm you have' + contact.chatstate)
 		if contact.chatstate == state:
 			return
 
