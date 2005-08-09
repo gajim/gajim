@@ -4,7 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
-##  - Dimitur Kirov <dkirov@gmail.com>
+##	- Dimitur Kirov <dkirov@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -148,13 +148,9 @@ class Systray:
 				item = gtk.SeparatorMenuItem()
 				sub_menu.append(item)
 
-			item = gtk.SeparatorMenuItem()
-			icon = state_images[show]
-			label = gtk.Label(helpers.get_uf_show(show))
-			hbox = gtk.HBox(False, 3)
-			hbox.pack_start(icon, False, False)
-			hbox.pack_start(label, False, False)
-			item.add(hbox)
+			uf_show = helpers.get_uf_show(show)
+			item = gtk.ImageMenuItem(uf_show)
+			item.set_image(state_images[show])
 			sub_menu.append(item)
 			item.connect('activate', self.on_show_menuitem_activate, show)
 

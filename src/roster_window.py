@@ -410,7 +410,7 @@ class RosterWindow:
 			if multiple_accounts:
 				label = gtk.Label()
 				label.set_markup('<u>' + account.upper() +'</u>')
-				item = gtk.SeparatorMenuItem()
+				item = gtk.MenuItem()
 				item.add(label)
 				item.connect('state-changed', self.on_bm_header_changed_state)
 				sub_menu.append(item)
