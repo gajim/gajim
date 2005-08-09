@@ -181,7 +181,7 @@ def is_in_path(name_of_command, return_abs_path = False):
 	else:
 		return is_in_dir
 
-def launch_browser_mailer(self, kind, uri):
+def launch_browser_mailer(kind, uri):
 	#kind = 'url' or 'mail'
 	if os.name == 'nt':
 		try:
@@ -209,12 +209,28 @@ def launch_browser_mailer(self, kind, uri):
 				return
 		# we add the uri in "" so we have good parsing from shell
 		command = command + ' "' + uri + '" &'
-		try: #FIXME: when we require 2.4+ use subprocess module
+		try: #FIXME: when we require python2.4+ use subprocess module
 			os.system(command)
 		except:
 			pass
 
-def play_sound(self, event):
+def launch_file_manager(path_to_open):
+	if gajim.config.get('openwith') == 'gnome-open':
+		command = 'gnome-open'
+	elif gajim.config.get('openwith') == 'kfmclient exec':
+		command = 'kfmclient exec'
+	elif gajim.config.get('openwith') == 'custom':
+		command = gajim.config.get('custom_file_manager')
+	if command == '': # if no app is configured
+		return
+	# we add the path in "" so we have good parsing from shell
+	command = command + ' "' + uri + '" &'
+	try: #FIXME: when we require python2.4+ use subprocess module
+		os.system(command)
+	except:
+		pass
+
+def play_sound(event):
 	if not gajim.config.get('sounds_on'):
 		return
 	path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
