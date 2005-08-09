@@ -1286,6 +1286,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 					gajim.last_message_time[self.account]
 				gajim.status_before_autoaway[name] = \
 					gajim.status_before_autoaway[self.account]
+				gajim.events_for_ui[name] = gajim.events_for_ui[self.account]
 
 				#upgrade account variable in opened windows
 				for kind in ['infos', 'chats', 'gc', 'gc_config']:
@@ -1312,6 +1313,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 				del gajim.encrypted_chats[self.account]
 				del gajim.last_message_time[self.account]
 				del gajim.status_before_autoaway[self.account]
+				del gajim.events_for_ui[self.account]
 				gajim.connections[self.account].name = name
 				gajim.connections[name] = gajim.connections[self.account]
 				del gajim.connections[self.account]
@@ -1366,6 +1368,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 		gajim.encrypted_chats[name] = []
 		gajim.last_message_time[name] = {}
 		gajim.status_before_autoaway[name] = ''
+		gajim.events_for_ui[name] = []
 		#refresh accounts window
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].init_accounts()
@@ -2465,6 +2468,7 @@ class RemoveAccountWindow:
 		del gajim.encrypted_chats[self.account]
 		del gajim.last_message_time[self.account]
 		del gajim.status_before_autoaway[self.account]
+		del gajim.events_for_ui[self.account]
 		self.plugin.roster.draw_roster()
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].init_accounts()

@@ -610,7 +610,8 @@ class Interface:
 		gajim.sleeper_state[name] = 'off'
 		gajim.encrypted_chats[name] = []
 		gajim.last_message_time[name] = {}
-		gajim.status_before_autoaway[name] = {}
+		gajim.status_before_autoaway[name] = ''
+		gajim.events_for_ui[name] = []
 		gajim.connections[name].change_status('offline', None, True)
 		gajim.connections[name].connected = 0
 		if self.windows.has_key('accounts'):
@@ -960,46 +961,43 @@ class Interface:
 		self.make_regexps()
 
 	def register_handlers(self, con):
-		con.register_handler('ROSTER', self.handle_event_roster)
-		con.register_handler('WARNING', self.handle_event_warning)
-		con.register_handler('ERROR', self.handle_event_error)
-		con.register_handler('INFORMATION', self.handle_event_information)
-		con.register_handler('ERROR_ANSWER', self.handle_event_error_answer)
-		con.register_handler('STATUS', self.handle_event_status)
-		con.register_handler('NOTIFY', self.handle_event_notify)
-		con.register_handler('MSG', self.handle_event_msg)
-		con.register_handler('MSGERROR', self.handle_event_msgerror)
-		con.register_handler('MSGSENT', self.handle_event_msgsent)
-		con.register_handler('SUBSCRIBED', self.handle_event_subscribed)
-		con.register_handler('UNSUBSCRIBED', self.handle_event_unsubscribed)
-		con.register_handler('SUBSCRIBE', self.handle_event_subscribe)
-		con.register_handler('AGENT_INFO', self.handle_event_agent_info)
-		con.register_handler('REGISTER_AGENT_INFO',
-			self.handle_event_register_agent_info)
-		con.register_handler('AGENT_INFO_ITEMS',
-			self.handle_event_agent_info_items)
-		con.register_handler('AGENT_INFO_INFO',
-			self.handle_event_agent_info_info)
-		con.register_handler('QUIT', self.handle_event_quit)
-		con.register_handler('ACC_OK', self.handle_event_acc_ok)
-		con.register_handler('MYVCARD', self.handle_event_myvcard)
-		con.register_handler('VCARD', self.handle_event_vcard)
-		con.register_handler('OS_INFO', self.handle_event_os_info)
-		con.register_handler('GC_MSG', self.handle_event_gc_msg)
-		con.register_handler('GC_SUBJECT', self.handle_event_gc_subject)
-		con.register_handler('GC_CONFIG', self.handle_event_gc_config)
-		con.register_handler('BAD_PASSPHRASE', self.handle_event_bad_passphrase)
-		con.register_handler('ROSTER_INFO', self.handle_event_roster_info)
-		con.register_handler('BOOKMARKS', self.handle_event_bookmarks)
-		con.register_handler('CON_TYPE', self.handle_event_con_type)
-		con.register_handler('FILE_REQUEST', self.handle_event_file_request)
-		con.register_handler('FILE_REQUEST_ERROR', 
-			self.handle_event_file_request_error)
-		con.register_handler('FILE_SEND_ERROR', 
-			self.handle_event_file_send_error)
-		con.register_handler('STANZA_ARRIVED', self.handle_event_stanza_arrived)
-		con.register_handler('STANZA_SENT', self.handle_event_stanza_sent)
-		con.register_handler('HTTP_AUTH', self.handle_event_http_auth)
+		self.handlers = {
+			'ROSTER': self.handle_event_roster,
+			'WARNING': self.handle_event_warning,
+			'ERROR': self.handle_event_error,
+			'INFORMATION': self.handle_event_information,
+			'ERROR_ANSWER': self.handle_event_error_answer,
+			'STATUS': self.handle_event_status,
+			'NOTIFY': self.handle_event_notify,
+			'MSG': self.handle_event_msg,
+			'MSGERROR': self.handle_event_msgerror,
+			'MSGSENT': self.handle_event_msgsent,
+			'SUBSCRIBED': self.handle_event_subscribed,
+			'UNSUBSCRIBED': self.handle_event_unsubscribed,
+			'SUBSCRIBE': self.handle_event_subscribe,
+			'AGENT_INFO': self.handle_event_agent_info,
+			'REGISTER_AGENT_INFO': self.handle_event_register_agent_info,
+			'AGENT_INFO_ITEMS': self.handle_event_agent_info_items,
+			'AGENT_INFO_INFO': self.handle_event_agent_info_info,
+			'QUIT': self.handle_event_quit,
+			'ACC_OK': self.handle_event_acc_ok,
+			'MYVCARD': self.handle_event_myvcard,
+			'VCARD': self.handle_event_vcard,
+			'OS_INFO': self.handle_event_os_info,
+			'GC_MSG': self.handle_event_gc_msg,
+			'GC_SUBJECT': self.handle_event_gc_subject,
+			'GC_CONFIG': self.handle_event_gc_config,
+			'BAD_PASSPHRASE': self.handle_event_bad_passphrase,
+			'ROSTER_INFO': self.handle_event_roster_info,
+			'BOOKMARKS': self.handle_event_bookmarks,
+			'CON_TYPE': self.handle_event_con_type,
+			'FILE_REQUEST': self.handle_event_file_request,
+			'FILE_REQUEST_ERROR': self.handle_event_file_request_error,
+			'FILE_SEND_ERROR': self.handle_event_file_send_error,
+			'STANZA_ARRIVED': self.handle_event_stanza_arrived,
+			'STANZA_SENT': self.handle_event_stanza_sent,
+			'HTTP_AUTH': self.handle_event_http_auth,
+		}
 
 	def process_connections(self):
 		try:
@@ -1013,6 +1011,9 @@ class Interface:
 					gajim.connections[account].process(0.01)
 				if gajim.socks5queue.connected:
 					gajim.socks5queue.process(0.01)
+				while len(gajim.events_for_ui[account]):
+					ev = gajim.events_for_ui[account].pop(0)
+					self.handlers[ev[0]](account, ev[1])
 			time.sleep(0.01) # so threads in connection.py have time to run
 			return True # renew timeout (loop for ever)
 		except KeyboardInterrupt:
@@ -1117,6 +1118,7 @@ class Interface:
 			gajim.encrypted_chats[a] = []
 			gajim.last_message_time[a] = {}
 			gajim.status_before_autoaway[a] = ''
+			gajim.events_for_ui[a] = []
 
 		self.roster = roster_window.RosterWindow(self)
 		if gajim.config.get('use_dbus'):

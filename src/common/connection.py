@@ -117,19 +117,6 @@ def get_os_info():
 class Connection:
 	"""Connection class"""
 	def __init__(self, name):
-		# dict of function to be called for each event
-		self.handlers = {'ROSTER': [], 'WARNING': [], 'ERROR': [], 
-			'INFORMATION': [], 'STATUS': [], 'NOTIFY': [], 'MSG': [],
-			'MSGERROR': [], 'MSGSENT': [] , 'SUBSCRIBED': [], 'UNSUBSCRIBED': [],
-			'SUBSCRIBE': [], 'AGENT_INFO': [], 'REGISTER_AGENT_INFO': [],
-			'AGENT_INFO_ITEMS': [], 'AGENT_INFO_INFO': [], 'QUIT': [],
-			'ACC_OK': [], 'MYVCARD': [], 'OS_INFO': [], 'VCARD': [], 'GC_MSG': [],
-			'GC_SUBJECT': [], 'GC_CONFIG': [], 'BAD_PASSPHRASE': [],
-			'ROSTER_INFO': [], 'ERROR_ANSWER': [], 'BOOKMARKS': [], 'CON_TYPE': [],
-			'FILE_REQUEST': [], 'FILE_RCV_COMPLETED': [], 'FILE_PROGRESS': [],
-			'FILE_REQUEST_ERROR': [], 'FILE_SEND_ERROR': [],
-			'STANZA_ARRIVED': [], 'STANZA_SENT': [], 'HTTP_AUTH': []
-			}
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
@@ -142,7 +129,6 @@ class Connection:
 		self.last_incoming = time.time()
 		self.keep_alive_sent = False
 		self.to_be_sent = []
-		self.for_gui = []
 		self.last_sent = []
 		self.files_props = {}
 		self.password = gajim.config.get_per('accounts', name, 'password')
@@ -156,11 +142,7 @@ class Connection:
 
 	def dispatch(self, event, data):
 		'''always passes account name as first param'''
-		if not event in self.handlers:
-			print event, 'is not in:', self.handlers
-			return
-		for handler in self.handlers[event]:
-			handler(self.name, data)
+		gajim.events_for_ui[self.name].append([event, data])
 
 	def add_sha(self, p):
 		c = p.setTag('x', namespace = common.xmpp.NS_VCARD_UPDATE)
@@ -1204,7 +1186,8 @@ class Connection:
 
 		gajim.log.debug(_('Connected to server with %s'), con_type)
 
-		self.for_gui.append(['CON_TYPE', con_type]) # notify the gui about con_type
+		# notify the gui about con_type
+		self.dispatch('CON_TYPE', con_type)
 
 		con.RegisterHandler('message', self._messageCB)
 		con.RegisterHandler('presence', self._presenceCB)
@@ -1273,15 +1256,6 @@ class Connection:
 			return None
 	# END connect
 
-	def register_handler(self, event, function):
-		if event in self.handlers:
-			self.handlers[event].append(function)
-
-	def unregister_handler(self, event, function):
-		if event in self.handlers:
-			if function in self.handlers[event]:
-				self.handlers[event].remove(function)
-
 	def quit(self, kill_core):
 		if kill_core:
 			if self.connected > 1:
@@ -1335,7 +1309,7 @@ class Connection:
 		if signed:
 			p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 		self.connection.send(p)
-		self.for_gui.append(['STATUS', 'invisible'])
+		self.dispatch('STATUS', 'invisible')
 		if initial:
 			#ask our VCard
 			self.request_vcard(None)
@@ -1364,14 +1338,14 @@ class Connection:
 		if keyID and USE_GPG:
 			if self.connected < 2 and self.gpg.passphrase is None:
 				# We didn't set a passphrase
-				self.for_gui.append(['ERROR', (_('OpenPGP Key was not given'),
-					_('You will be connected to %s without OpenPGP.') % self.name)])
+				self.dispatch('ERROR', (_('OpenPGP Key was not given'),
+					_('You will be connected to %s without OpenPGP.') % self.name))
 			else:
 				signed = self.gpg.sign(msg, keyID)
 				if signed == 'BAD_PASSPHRASE':
 					signed = ''
 					if self.connected < 2:
-						self.for_gui.append(['BAD_PASSPHRASE', ()])
+						self.dispatch('BAD_PASSPHRASE', ())
 		self.status = msg
 		if show != 'offline' and not self.connected:
 			self.connection = self.connect()
@@ -1391,7 +1365,7 @@ class Connection:
 
 				if self.connection:
 					self.connection.send(p)
-				self.for_gui.append(['STATUS', show])
+				self.dispatch('STATUS', show)
 				#ask our VCard
 				self.request_vcard(None)
 
@@ -1412,7 +1386,7 @@ class Connection:
 					self.connection.disconnect()
 				except:
 					pass
-			self.for_gui.append(['STATUS', 'offline'])
+			self.dispatch('STATUS', 'offline')
 			self.connection = None
 		elif show != 'offline' and self.connected:
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
@@ -1433,7 +1407,7 @@ class Connection:
 				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			if self.connection:
 				self.connection.send(p)
-			self.for_gui.append(['STATUS', show])
+			self.dispatch('STATUS', show)
 
 	def send_motd(self, jid, subject = '', msg = ''):
 		if not self.connection:
@@ -1861,10 +1835,6 @@ class Connection:
 				
 				self.connection.send(tosend)
 				self.last_sent.append(time.time())
-			while time.time() < t_limit and len(self.for_gui):
-				print len(self.for_gui)
-				tosend = self.for_gui.pop(0)
-				self.dispatch(tosend[0], tosend[1])
 			try:
 				if gajim.config.get_per('accounts', self.name,
 				'keep_alives_enabled'): # do we want keepalives?
