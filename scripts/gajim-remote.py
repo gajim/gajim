@@ -71,7 +71,9 @@ class GajimRemote:
 			'help':[
 					_('show a help on specific command'),
 					[
-						(_('on_command'), _('show help on command'), False)
+						#parameter, named "on_command". User gets help for the command, specified by this parameter
+						(_('on_command'), 
+						_('show help on command'), False)
 					]
 				], 
 			'toggle_roster_appearance' : [
