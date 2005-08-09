@@ -541,27 +541,29 @@ class Connection:
 			raise common.xmpp.NodeProcessed
 		jid = streamhost.getAttr('jid')
 		id = real_id[3:]
-		if not self.files_props.has_key(id):
-			file_props = gajim.socks5queue.get_file_props(self.name, id)
-			gajim.socks5queue.get_file_from_sender(file_props, self.name)
-			raise common.xmpp.NodeProcessed
-		file_props = None
 		if self.files_props.has_key(id):
 			file_props = self.files_props[id]
 		else:
 			raise common.xmpp.NodeProcessed
+			file_props['type']
+		if file_props.has_key('streamhost-used') and \
+			file_props['streamhost-used'] is True:
+			raise common.xmpp.NodeProcessed
+			
+		if real_id[:3] == 'au_':
+			gajim.socks5queue.send_file(file_props, self.name)
+			raise common.xmpp.NodeProcessed
+			
 		proxy = None
 		if file_props.has_key('proxyhosts'):
 			for proxyhost in file_props['proxyhosts']:
 				if proxyhost['jid'] == jid:
 					proxy = proxyhost
-		if real_id[:3] == 'au_':
-			gajim.socks5queue.send_file(file_props, self.name)
-			raise common.xmpp.NodeProcessed
 		
 		if proxy != None:
+			file_props['streamhost-used'] = True
 			if not file_props.has_key('streamhosts'):
-				file_props['streamhosts'] =[]
+				file_props['streamhosts'] = []
 			file_props['streamhosts'].append(proxy)
 			file_props['is_a_proxy'] = True
 			receiver = socks5.Socks5Receiver(proxy, file_props['sid'], file_props)
@@ -569,16 +571,15 @@ class Connection:
 			proxy['idx'] = receiver.queue_idx
 			gajim.socks5queue.on_success = self.proxy_auth_ok
 			raise common.xmpp.NodeProcessed
-		
-		elif not file_props.has_key('connected') or \
-			file_props['connected'] is False:
+			
+		else:
 			gajim.socks5queue.send_file(file_props, self.name)
 			if file_props.has_key('fast'):
 				fasts = file_props['fast']
 				if len(fasts) > 0:
 					self._connect_error(str(iq_obj.getFrom()), fasts[0]['id'], 
 						code = 406)
-		
+			
 		raise common.xmpp.NodeProcessed
 	
 	def proxy_auth_ok(self, proxy):

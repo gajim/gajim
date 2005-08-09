@@ -1698,12 +1698,13 @@ _('You are unable to connect to remote host. He may be behind a NAT.')).get_resp
 			
 	def set_status(self, typ, sid, status):
 		iter = self.get_iter_by_sid(typ, sid)
+		if iter is None:
+				return
 		if status == 'stop':
 			sid = self.model[iter][4]
 			file_props = self.files_props[sid[0]][sid[1:]]
 			file_props['stopped'] = True
-		if iter is not None:
-			self.model.set(iter, 0, self.images[status])
+		self.model.set(iter, 0, self.images[status])
 			
 	def set_progress(self, typ, sid, transfered_size, iter = None):
 		if not self.files_props[typ].has_key(sid):

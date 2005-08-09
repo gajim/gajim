@@ -54,9 +54,17 @@ class SocksQueue:
 		return self.listener
 		
 	def send_success_reply(self, file_props, streamhost):
+		if file_props.has_key('streamhost-used') and \
+			file_props['streamhost-used'] is True:
+				if file_props.has_key('proxyhosts'):
+					for proxy in file_props['proxyhosts']:
+						if proxy == streamhost:
+							self.on_success(streamhost)
+							return True
+				return False
 		if file_props.has_key('streamhosts'):
-			for streamhost in file_props['streamhosts']:
-				if streamhost['state'] == 1:
+			for host in file_props['streamhosts']:
+				if streamhost['state'] == 1 and host != streamhost:
 					return False
 			streamhost['state'] = 1
 			self.on_success(streamhost)
@@ -74,24 +82,27 @@ class SocksQueue:
 			file_props = self.files_props[account][sid]
 		file_props['success_cb'] = on_success
 		file_props['failure_cb'] = on_failure
+		# add streamhosts to the queue 
 		for streamhost in file_props['streamhosts']:
 			receiver = Socks5Receiver(streamhost, sid, file_props)
 			self.add_receiver(account, receiver)
 			streamhost['idx'] = receiver.queue_idx
 		
 	def _socket_connected(self, streamhost, file_props):
-		streamhost['state'] = 0
 		for host in file_props['streamhosts']:
-			
 			if host != streamhost and host.has_key('idx'):
-				host['state'] = -1
+				if host['state'] == 1:
+					self.remove_receiver(streamhost['idx'])
+					return
+				else:
+					host['state'] = -1
 				self.remove_receiver(host['idx'])
-		pass
+			streamhost
+		
 		
 	def _connection_refused(self, streamhost, file_props, idx):
 		if file_props is None:
 			return
-		
 		streamhost['state'] = -1
 		self.remove_receiver(idx)
 		if file_props['failure_cb']:
@@ -120,9 +131,10 @@ class SocksQueue:
 	def get_file_from_sender(self, file_props, account):
 		if file_props is None:
 			return
-		
+			file_props['hash']
 		if file_props.has_key('hash') and \
 			self.senders.has_key(file_props['hash']):
+			
 			sender = self.senders[file_props['hash']]
 			sender.account = account
 			result = get_file_contents(0)
@@ -137,6 +149,7 @@ class SocksQueue:
 		if file_props.has_key('hash') and \
 			self.senders.has_key(file_props['hash']):
 			sender = self.senders[file_props['hash']]
+			file_props['streamhost-used'] = True
 			sender.account = account
 			if file_props['type'] == 's':
 				sender.file_props = file_props 
