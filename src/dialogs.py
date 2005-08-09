@@ -754,15 +754,14 @@ class FileTransfersTooltip(BaseTooltip):
 			receiver = receiver.split('/')[0]
 			name = gajim.get_first_contact_instance_from_jid( 
 				file_props['tt_account'], receiver).name
-			text +=  gtkgui_helpers.escape_for_pango_markup(receiver)
 		text +=  gtkgui_helpers.escape_for_pango_markup(name)
 		text += '\n<b>' + _('Size: ') + '</b>' 
-		text += gtkgui_helpers.convert_bytes(file_props['size'])
+		text += helpers.convert_bytes(file_props['size'])
 		text += '\n<b>' + _('Transfered: ') + '</b>' 
 		transfered_len = 0
 		if file_props.has_key('received-len'):
 			transfered_len = file_props['received-len']
-		text += gtkgui_helpers.convert_bytes(transfered_len)
+		text += helpers.convert_bytes(transfered_len)
 		text += '\n<b>' + _('Status: ') + '</b>' 
 		status = '' 
 		if not file_props.has_key('started') or not file_props['started']:
@@ -1605,7 +1604,7 @@ class FileTransfersWindow:
 		sectext = '\t' + _('Filename: %s') % \
 			gtkgui_helpers.escape_for_pango_markup(file_props['name'])
 		sectext += '\n\t' + _('Size: %s') % \
-		gtkgui_helpers.convert_bytes(file_props['size'])
+		helpers.convert_bytes(file_props['size'])
 		sectext += '\n\t' +_('Sender: %s') % \
 			gtkgui_helpers.escape_for_pango_markup(jid)
 		InformationDialog(_('File transfer completed'), sectext).get_response()
@@ -1667,7 +1666,7 @@ _('Connection with peer cannot be established.')).get_response()
 			gtkgui_helpers.escape_for_pango_markup(file_props['name'])
 		if file_props.has_key('size'):
 			sec_text += '\n\t' + _('Size: %s') % \
-				gtkgui_helpers.convert_bytes(file_props['size'])
+				helpers.convert_bytes(file_props['size'])
 		if file_props.has_key('mime-type'):
 			sec_text += '\n\t' + _('Type: %s') % \
 				gtkgui_helpers.escape_for_pango_markup(file_props['mime-type'])
@@ -1752,8 +1751,8 @@ _('Connection with peer cannot be established.')).get_response()
 			if transfered_size == 0:
 				text += '0'
 			else:
-				text += gtkgui_helpers.convert_bytes(transfered_size)
-			text += '/' + gtkgui_helpers.convert_bytes(full_size)
+				text += helpers.convert_bytes(transfered_size)
+			text += '/' + helpers.convert_bytes(full_size)
 			self.model.set(iter, 3, text)
 			if file_props['type'] == 'r':
 				status = 'download'
