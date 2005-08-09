@@ -810,11 +810,9 @@ class RosterTooltip(BaseTooltip, StatusTable):
 		self.hbox = gtk.HBox()
 		self.hbox.set_homogeneous(False)
 		self.create_table()
-		prim_contact = None # primary contact
-		for contact in contacts:
-			if prim_contact == None or contact.priority > prim_contact.priority:
-				prim_contact = contact
-
+		# primary contact
+		prim_contact = helpers.get_prim_contact_from_list(contacts)
+		
 		# try to find the image for the contact status
 		state_file = prim_contact.show.replace(' ', '_')
 		transport = self.plugin.roster.get_transport_name_by_jid(prim_contact.jid)
@@ -1549,7 +1547,7 @@ class FileTransfersWindow:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_window', APP)
 		self.window = self.xml.get_widget('file_transfers_window')
 		self.tree = self.xml.get_widget('transfers_list')
-		self.stop_button = self.xml.get_widget('stop_button')
+		self.cancel_button = self.xml.get_widget('cancel_button')
 		self.pause_button = self.xml.get_widget('pause_restore_button')
 		self.remove_button = self.xml.get_widget('remove_button')
 		self.notify_ft_checkbox = self.xml.get_widget(
@@ -1902,7 +1900,7 @@ _('Connection with peer cannot be established.')).get_response()
 		self.remove_button.set_sensitive(not is_selected)
 		if self.is_transfer_stoped(file_props):
 			is_selected = True
-		self.stop_button.set_sensitive(not is_selected)
+		self.cancel_button.set_sensitive(not is_selected)
 		if is_selected:
 			self.pause_button.set_sensitive(False)
 		else:
