@@ -630,6 +630,9 @@ class Interface:
 			nick = array['NICKNAME']
 			if nick:
 				gajim.nicks[account] = nick
+		if self.windows[account]['infos'].has_key(array['jid']):
+			 win = self.windows[account]['infos'][array['jid']]
+			 win.set_values(array)
 
 	def handle_event_vcard(self, account, array):
 		win = None
