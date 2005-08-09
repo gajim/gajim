@@ -1165,6 +1165,7 @@ class PopupNotificationWindow:
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			txt = _('From %s') % txt
+			event_description_label.set_text(txt)
 		elif event_type == _('File Transfer Error'):
 			bg_color = gtk.gdk.color_parse('coral')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
@@ -1173,6 +1174,17 @@ class PopupNotificationWindow:
 			bg_color = gtk.gdk.color_parse('coral')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
+			if file_props is not None:
+				if file_props['type'] == 'r':
+					txt = _('From %s') % str(file_props['sender'])
+				else:
+					receiver = file_props['receiver']
+					if hasattr(receiver, 'name'):
+						receiver = receiver.name
+					txt = _('To %s') % receiver
+			else:
+				txt=''
+			event_description_label.set_text(txt)
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
 		self.plugin.roster.popups_notification_height += self.window_height
@@ -1593,7 +1605,7 @@ class FileTransfersWindow:
 		self.window.present()
 		self.window.window.focus()
 		InformationDialog(_('File transfer canceled'),
-_('You are unable to connect to remote host. He may be behind a NAT.')).get_response()
+_('Connection with peer cannot be established.')).get_response()
 		self.tree.get_selection().unselect_all()
 	
 	def show_stopped(self, jid, file_props):
