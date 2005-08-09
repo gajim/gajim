@@ -259,7 +259,8 @@ class SocksQueue:
 			return
 		if result in [0, -1] and \
 			self.complete_transfer_cb is not None:
-			self.complete_transfer_cb(actor.account, 
+			account = actor.account
+			self.complete_transfer_cb(account, 
 				actor.file_props)
 		elif self.progress_transfer_cb is not None:
 			self.progress_transfer_cb(actor.account, 

@@ -743,13 +743,19 @@ class FileTransfersTooltip(BaseTooltip):
 			text += _('Upload')
 		if file_props['type'] == 'r':
 			text += '\n<b>' + _('Sender: ') + '</b>'
-			text +=  gtkgui_helpers.escape_for_pango_markup(str(file_props['sender']))
+			sender = str(file_props['sender']).split('/')[0]
+			name = gajim.get_first_contact_instance_from_jid( 
+				file_props['tt_account'], sender).name
 		else:
 			text += '\n<b>' + _('Recipient: ') + '</b>' 
 			receiver = file_props['receiver']
 			if hasattr(receiver, 'name'):
 				receiver = receiver.name
+			receiver = receiver.split('/')[0]
+			name = gajim.get_first_contact_instance_from_jid( 
+				file_props['tt_account'], receiver).name
 			text +=  gtkgui_helpers.escape_for_pango_markup(receiver)
+		text +=  gtkgui_helpers.escape_for_pango_markup(name)
 		text += '\n<b>' + _('Size: ') + '</b>' 
 		text += gtkgui_helpers.convert_bytes(file_props['size'])
 		text += '\n<b>' + _('Transfered: ') + '</b>' 
@@ -775,6 +781,8 @@ class FileTransfersTooltip(BaseTooltip):
 				elif file_props.has_key('stalled') and \
 					file_props['stalled'] == True:
 					status = _('stalled')
+				elif file_props['completed']:
+					status = _('completed')
 				else:
 					status = _('transfering')
 		else:
@@ -1176,12 +1184,20 @@ class PopupNotificationWindow:
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			if file_props is not None:
 				if file_props['type'] == 'r':
-					txt = _('From %s') % str(file_props['sender'])
+					# get the name of the sender, as it is in the roster
+					sender = str(file_props['sender']).split('/')[0]
+					name = gajim.get_first_contact_instance_from_jid( 
+						account, sender).name
+					txt = _('From %s') % name
 				else:
 					receiver = file_props['receiver']
-					if hasattr(receiver, 'name'):
-						receiver = receiver.name
-					txt = _('To %s') % receiver
+					if hasattr(receiver, 'jid'):
+						receiver = receiver.jid
+					receiver = receiver.split('/')[0]
+					# get the name of the contact, as it is in the roster
+					name = gajim.get_first_contact_instance_from_jid( 
+						account, receiver).name
+					txt = _('To %s') % name
 			else:
 				txt=''
 			event_description_label.set_text(txt)
@@ -1712,10 +1728,12 @@ _('Connection with peer cannot be established.')).get_response()
 		iter = self.get_iter_by_sid(typ, sid)
 		if iter is None:
 			return
+		sid = self.model[iter][4]
+		file_props = self.files_props[sid[0]][sid[1:]]
 		if status == 'stop':
-			sid = self.model[iter][4]
-			file_props = self.files_props[sid[0]][sid[1:]]
 			file_props['stopped'] = True
+		elif status == 'ok':
+			file_props['completed'] = True
 		self.model.set(iter, 0, self.images[status])
 			
 	def set_progress(self, typ, sid, transfered_size, iter = None):
@@ -1803,6 +1821,7 @@ _('Connection with peer cannot be established.')).get_response()
 			status = 'download'
 		else:
 			status = 'upload'
+		file_props['tt_account'] = account
 		self.set_status(file_props['type'], file_props['sid'], status)
 		self.window.show_all()
 	
