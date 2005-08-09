@@ -1137,7 +1137,8 @@ class Chat:
 		if (jid != self.get_active_jid() or \
 		   not self.window.is_active() or \
 		   not end) and kind == 'incoming':
-			if self.widget_name == 'groupchat_window':
+			if self.widget_name == 'groupchat_window' and\
+			not gajim.config.get('notify_on_all_muc_messages'):
 				# Do not notify us for gc messages that are not for us
 				if text.find(self.nicks[jid]) == -1:
 					return
