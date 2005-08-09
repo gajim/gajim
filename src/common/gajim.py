@@ -108,16 +108,18 @@ def get_first_contact_instance_from_jid(account, jid):
 
 def get_contact_instance_with_highest_priority(account, jid):
 	contact_instances = contacts[account][jid]
-	which_has_highest_prio = 0 # which resource has highest priority?
-	which = 0
-	for c in contact_instances[1:]:
-		which += 1
-		if c.priority > which_has_highest_prio:
-			which_has_highest_prio = which
-	return contacts[account][jid][which_has_highest_prio]
+	return get_highest_prio_contact_from_contacts(contact_instances)
 
 def get_contact_name_from_jid(account, jid):
 	return contacts[account][jid][0].name
+	
+def get_highest_prio_contact_from_contacts(contacts):
+	prim_contact = None # primary contact
+	for contact in contacts:
+		if prim_contact == None or int(contact.priority) > \
+			int(prim_contact.priority):
+			prim_contact = contact
+	return prim_contact
 
 def get_jid_without_resource(jid):
 	return jid.split('/')[0]

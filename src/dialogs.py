@@ -814,7 +814,7 @@ class RosterTooltip(BaseTooltip, StatusTable):
 		self.hbox.set_homogeneous(False)
 		self.create_table()
 		# primary contact
-		prim_contact = helpers.get_prim_contact_from_list(contacts)
+		prim_contact = gajim.get_highest_prio_contact_from_contacts(contacts)
 		
 		# try to find the image for the contact status
 		state_file = prim_contact.show.replace(' ', '_')
