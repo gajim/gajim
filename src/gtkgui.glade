@@ -5287,13 +5287,14 @@ Disabled</property>
 	      <property name="spacing">6</property>
 
 	      <child>
-		<widget class="GtkFrame" id="links_frame">
+		<widget class="GtkFrame" id="applications_frame">
+		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
 		  <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 		  <child>
-		    <widget class="GtkAlignment" id="alignment42">
+		    <widget class="GtkAlignment" id="alignment89">
 		      <property name="border_width">6</property>
 		      <property name="visible">True</property>
 		      <property name="xalign">0.5</property>
@@ -5312,47 +5313,13 @@ Disabled</property>
 			  <property name="spacing">6</property>
 
 			  <child>
-			    <widget class="GtkHBox" id="hbox2918">
+			    <widget class="GtkComboBox" id="applications_combobox">
 			      <property name="visible">True</property>
-			      <property name="homogeneous">False</property>
-			      <property name="spacing">6</property>
-
-			      <child>
-				<widget class="GtkLabel" id="label197">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Open _with:</property>
-				  <property name="use_underline">True</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkComboBox" id="links_open_with_combobox">
-				  <property name="visible">True</property>
-				  <property name="items" translatable="yes">Autodetect at every application startup
+			      <property name="items" translatable="yes">Autodetect at every application startup
 Always use GNOME default applications
 Always use KDE default applications
 Custom</property>
-				  <signal name="changed" handler="on_links_open_with_combobox_changed" last_modification_time="Sat, 05 Mar 2005 16:44:57 GMT"/>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">True</property>
-				  <property name="fill">True</property>
-				</packing>
-			      </child>
+			      <signal name="changed" handler="on_applications_combobox_changed" last_modification_time="Tue, 09 Aug 2005 15:12:31 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -5385,7 +5352,7 @@ Custom</property>
 				  <child>
 				    <widget class="GtkTable" id="table22">
 				      <property name="visible">True</property>
-				      <property name="n_rows">2</property>
+				      <property name="n_rows">3</property>
 				      <property name="n_columns">2</property>
 				      <property name="homogeneous">False</property>
 				      <property name="row_spacing">6</property>
@@ -5484,6 +5451,52 @@ Custom</property>
 					  <property name="y_options"></property>
 					</packing>
 				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="label355">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">File manager:</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkEntry" id="custom_file_manager_entry">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="editable">True</property>
+					  <property name="visibility">True</property>
+					  <property name="max_length">0</property>
+					  <property name="text" translatable="yes"></property>
+					  <property name="has_frame">True</property>
+					  <property name="invisible_char">*</property>
+					  <property name="activates_default">False</property>
+					  <signal name="changed" handler="on_custom_file_manager_entry_changed" last_modification_time="Tue, 09 Aug 2005 14:55:18 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
 				    </widget>
 				  </child>
 				</widget>
@@ -5492,7 +5505,7 @@ Custom</property>
 			      <child>
 				<widget class="GtkLabel" id="label198">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">&lt;b&gt;Custom Applications&lt;/b&gt;</property>
+				  <property name="label" translatable="yes">&lt;b&gt;Custom&lt;/b&gt;</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">True</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5520,9 +5533,9 @@ Custom</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkLabel" id="label196">
+		    <widget class="GtkLabel" id="label355">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">&lt;b&gt;Links&lt;/b&gt;</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Applications&lt;/b&gt;</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>

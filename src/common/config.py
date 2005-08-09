@@ -83,6 +83,7 @@ class Config:
 		'openwith': [ opt_str, 'gnome-open' ],
 		'custombrowser': [ opt_str, 'firefox' ],
 		'custommailapp': [ opt_str, 'mozilla-thunderbird -compose' ],
+		'custom_file_manager': [ opt_str, 'xffm' ],
 		'gc-x-position': [opt_int, 0],
 		'gc-y-position': [opt_int, 0],
 		'gc-width': [opt_int, 675],

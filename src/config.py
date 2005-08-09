@@ -378,26 +378,28 @@ class PreferencesWindow:
 
 		#open links with
 		if os.name == 'nt':
-			self.links_frame = self.xml.get_widget('links_frame')
-			self.links_frame.set_no_show_all(True)
+			self.applications_frame = self.xml.get_widget('applications_frame')
+			self.applications_frame.set_no_show_all(True)
 		else:
-			self.links_open_with_combobox = self.xml.get_widget('links_open_with_combobox')
+			self.applications_combobox = self.xml.get_widget('applications_combobox')
 			if gajim.config.get('autodetect_browser_mailer'):
-				self.links_open_with_combobox.set_active(0)
+				self.applications_combobox.set_active(0)
 				gtkgui_helpers.autodetect_browser_mailer()
 			# autodetect_browser_mailer is now False.
 			# so user has 'Always Use GNOME/KDE' or Custom
 			elif gajim.config.get('openwith') == 'gnome-open':
-				self.links_open_with_combobox.set_active(1)
+				self.applications_combobox.set_active(1)
 			elif gajim.config.get('openwith') == 'kfmclient exec':
-				self.links_open_with_combobox.set_active(2)
+				self.applications_combobox.set_active(2)
 			elif gajim.config.get('openwith') == 'custom':
-				self.links_open_with_combobox.set_active(3)
+				self.applications_combobox.set_active(3)
 				self.xml.get_widget('custom_apps_frame').set_sensitive(True)
 			self.xml.get_widget('custom_browser_entry').set_text(
 				gajim.config.get('custombrowser'))
 			self.xml.get_widget('custom_mail_client_entry').set_text(
 				gajim.config.get('custommailapp'))
+			self.xml.get_widget('custom_file_manager_entry').set_text(
+			gajim.config.set('custom_file_manager', widget.get_text())
 				
 		#log presences in user file
 		st = gajim.config.get('log_notif_in_user_file')
@@ -855,7 +857,7 @@ class PreferencesWindow:
 	def on_msg_treemodel_row_deleted(self, model, path):
 		self.save_status_messages(model)
 
-	def on_links_open_with_combobox_changed(self, widget):
+	def on_applications_combobox_changed(self, widget):
 		gajim.config.set('autodetect_browser_mailer', False)
 		if widget.get_active() == 3:
 			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
@@ -876,6 +878,10 @@ class PreferencesWindow:
 
 	def on_custom_mail_client_entry_changed(self, widget):
 		gajim.config.set('custommailapp', widget.get_text())
+		self.plugin.save_config()
+
+	def on_custom_file_manager_entry_changed(self, widget):
+		gajim.config.set('custom_file_manager', widget.get_text())
 		self.plugin.save_config()
 
 	def on_log_in_contact_checkbutton_toggled(self, widget):
