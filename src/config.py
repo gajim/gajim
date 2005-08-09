@@ -272,12 +272,12 @@ class PreferencesWindow:
 		# send chat state notifications
 		st = gajim.config.get('chat_state_notifications')
 		combo = self.xml.get_widget('chat_states_combobox')
-		if st == 'composing_only':
-			combo.set_active(1)
-		elif st == 'all':
+		if st == 'all':
 			combo.set_active(0)
+		elif st == 'composing_only':
+			combo.set_active(1)
 		else: # disabled
-			btn.set_active(2)
+			combo.set_active(2)
 
 		#sounds
 		if os.name == 'nt': # if windows, player must not become visible on show_all
@@ -775,10 +775,10 @@ class PreferencesWindow:
 
 	def on_chat_states_combobox_changed(self, widget):
 		active = widget.get_active()
-		if active == 1: # only composing
-			gajim.config.set('chat_state_notifications', 'composing_only')
-		elif active == 0: # all
+		if active == 0: # all
 			gajim.config.set('chat_state_notifications', 'all')
+		elif active == 1: # only composing
+			gajim.config.set('chat_state_notifications', 'composing_only')
 		else: # disabled
 			gajim.config.set('chat_state_notifications', 'disabled')
 			
