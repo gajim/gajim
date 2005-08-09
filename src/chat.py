@@ -31,6 +31,7 @@ except:
 	pass
 
 from common import gajim
+from common import helpers
 from common import i18n
 
 _ = i18n._
@@ -722,7 +723,7 @@ class Chat:
 
 	def visit_url_from_menuitem(self, widget, link):
 		'''basically it filters out the widget instance'''
-		self.plugin.launch_browser_mailer('url', link)
+		helpers.launch_browser_mailer('url', link)
 
 	def on_message_textview_populate_popup(self, textview, menu):
 		self.popup_is_shown = True
@@ -850,7 +851,7 @@ class Chat:
 		return False
 
 	def on_open_link_activate(self, widget, kind, text):
-		self.plugin.launch_browser_mailer(kind, text)
+		helpers.launch_browser_mailer(kind, text)
 
 	def on_copy_link_activate(self, widget, text):
 		clip = gtk.clipboard_get()
@@ -932,7 +933,7 @@ class Chat:
 				self.make_link_menu(event, kind, word)
 			else:
 				#we launch the correct application
-				self.plugin.launch_browser_mailer(kind, word)
+				helpers.launch_browser_mailer(kind, word)
 
 	def detect_and_print_special_text(self, otext, jid, other_tags):
 		textview = self.xmls[jid].get_widget('conversation_textview')

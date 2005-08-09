@@ -21,6 +21,7 @@ import gtk
 import gtk.glade
 
 from common import gajim
+from common import helpers
 from common import i18n
 
 _ = i18n._
@@ -50,7 +51,7 @@ class Check_for_new_version_dialog:
 
 	def on_open_download_page_button_clicked(self, widget):
 		url = 'http://www.gajim.org/downloads.php?lang='
-		self.plugin.launch_browser_mailer('url', url)
+		helpers.launch_browser_mailer('url', url)
 		self.window.destroy()
 
 	def check_for_new_version(self):

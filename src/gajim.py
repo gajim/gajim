@@ -50,6 +50,7 @@ import common.sleepy
 import check_for_new_version
 from common import gajim
 from common import connection
+from common import helpers
 
 from common import optparser
 
@@ -126,60 +127,6 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 
 class Interface:
-	def launch_browser_mailer(self, kind, uri):
-		#kind = 'url' or 'mail'
-		if os.name == 'nt':
-			try:
-				os.startfile(uri) # if pywin32 is installed we open
-			except:
-				pass
-
-		else:
-			if kind == 'url' and not\
-				(uri.startswith('http://') or uri.startswith('https://')):
-				uri = 'http://' + uri
-			elif kind == 'mail' and not uri.startswith('mailto:'):
-				uri = 'mailto:' + uri
-
-			if gajim.config.get('openwith') == 'gnome-open':
-				command = 'gnome-open'
-			elif gajim.config.get('openwith') == 'kfmclient exec':
-				command = 'kfmclient exec'
-			elif gajim.config.get('openwith') == 'custom':
-				if kind == 'url':
-					command = gajim.config.get('custombrowser')
-				if kind == 'mail':
-					command = gajim.config.get('custommailapp')
-				if command == '': # if no app is configured
-					return
-			# we add the uri in "" so we have good parsing from shell
-			command = command + ' "' + uri + '" &'
-			try: #FIXME: when we require 2.4+ use subprocess module
-				os.system(command)
-			except:
-				pass
-
-	def play_sound(self, event):
-		if not gajim.config.get('sounds_on'):
-			return
-		path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
-		if not os.path.exists(path_to_soundfile):
-			return
-		if os.name  == 'nt':
-			try:
-				winsound.PlaySound(path_to_soundfile,
-									winsound.SND_FILENAME|winsound.SND_ASYNC)
-			except:
-				pass
-		elif os.name == 'posix':
-			if gajim.config.get('soundplayer') == '':
-				return
-			player = gajim.config.get('soundplayer')
-			# we add the path in "" so we have good parsing from shell
-			command = player + ' "' + path_to_soundfile + '" &'
-			#FIXME: when we require 2.4+ use subprocess module
-			os.system(command)
-
 	def handle_event_roster(self, account, data):
 		#('ROSTER', account, array)
 		self.roster.fill_contacts_and_groups_dicts(data, account)
@@ -345,7 +292,7 @@ class Interface:
 			if old_show < 2 and new_show > 1:
 				if gajim.config.get_per('soundevents', 'contact_connected',
 												'enabled'):
-					self.play_sound('contact_connected')
+					helpers.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not gajim.awaiting_messages[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
@@ -371,7 +318,7 @@ class Interface:
 			elif old_show > 1 and new_show < 2:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
 												'enabled'):
-					self.play_sound('contact_disconnected')
+					helpers.play_sound('contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not gajim.awaiting_messages[account].has_key(jid) and \
 					gajim.config.get('notify_on_signout'):
@@ -468,10 +415,10 @@ class Interface:
 			array[4], array[5])
 		if gajim.config.get_per('soundevents', 'first_message_received',
 			'enabled') and first:
-			self.play_sound('first_message_received')
+			helpers.play_sound('first_message_received')
 		if gajim.config.get_per('soundevents', 'next_message_received',
 			'enabled') and not first:
-			self.play_sound('next_message_received')
+			helpers.play_sound('next_message_received')
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('NewMessage', (account, array))
 
@@ -515,7 +462,7 @@ class Interface:
 		msg = array[1]
 		# do not play sound when standalone chatstate message (eg no msg)
 		if msg and gajim.config.get_per('soundevents', 'message_sent', 'enabled'):
-			self.play_sound('message_sent')
+			helpers.play_sound('message_sent')
 		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
@@ -948,7 +895,7 @@ class Interface:
 		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?]')
 
 	def on_launch_browser_mailer(self, widget, url, kind):
-		self.launch_browser_mailer(kind, url)
+		helpers.launch_browser_mailer(kind, url)
 
 	def init_regexp(self):
 		#initialize emoticons dictionary

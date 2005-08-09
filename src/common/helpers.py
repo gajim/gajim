@@ -180,3 +180,57 @@ def is_in_path(name_of_command, return_abs_path = False):
 		return abs_path
 	else:
 		return is_in_dir
+
+def launch_browser_mailer(self, kind, uri):
+	#kind = 'url' or 'mail'
+	if os.name == 'nt':
+		try:
+			os.startfile(uri) # if pywin32 is installed we open
+		except:
+			pass
+
+	else:
+		if kind == 'url' and not\
+			(uri.startswith('http://') or uri.startswith('https://')):
+			uri = 'http://' + uri
+		elif kind == 'mail' and not uri.startswith('mailto:'):
+			uri = 'mailto:' + uri
+
+		if gajim.config.get('openwith') == 'gnome-open':
+			command = 'gnome-open'
+		elif gajim.config.get('openwith') == 'kfmclient exec':
+			command = 'kfmclient exec'
+		elif gajim.config.get('openwith') == 'custom':
+			if kind == 'url':
+				command = gajim.config.get('custombrowser')
+			if kind == 'mail':
+				command = gajim.config.get('custommailapp')
+			if command == '': # if no app is configured
+				return
+		# we add the uri in "" so we have good parsing from shell
+		command = command + ' "' + uri + '" &'
+		try: #FIXME: when we require 2.4+ use subprocess module
+			os.system(command)
+		except:
+			pass
+
+def play_sound(self, event):
+	if not gajim.config.get('sounds_on'):
+		return
+	path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
+	if not os.path.exists(path_to_soundfile):
+		return
+	if os.name  == 'nt':
+		try:
+			winsound.PlaySound(path_to_soundfile,
+								winsound.SND_FILENAME|winsound.SND_ASYNC)
+		except:
+			pass
+	elif os.name == 'posix':
+		if gajim.config.get('soundplayer') == '':
+			return
+		player = gajim.config.get('soundplayer')
+		# we add the path in "" so we have good parsing from shell
+		command = player + ' "' + path_to_soundfile + '" &'
+		#FIXME: when we require 2.4+ use subprocess module
+		os.system(command)
