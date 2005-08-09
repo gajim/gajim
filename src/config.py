@@ -399,8 +399,8 @@ class PreferencesWindow:
 			self.xml.get_widget('custom_mail_client_entry').set_text(
 				gajim.config.get('custommailapp'))
 			self.xml.get_widget('custom_file_manager_entry').set_text(
-			gajim.config.set('custom_file_manager', widget.get_text())
-				
+				gajim.config.get('custom_file_manager'))
+
 		#log presences in user file
 		st = gajim.config.get('log_notif_in_user_file')
 		self.xml.get_widget('log_in_contact_checkbutton').set_active(st)
