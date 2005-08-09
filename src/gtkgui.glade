@@ -17589,11 +17589,12 @@ Maybe I'll refactor later</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="stop_button">
+	    <widget class="GtkButton" id="cancel_button">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Cancels the selected file transfer</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-stop</property>
+	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
@@ -17602,13 +17603,14 @@ Maybe I'll refactor later</property>
 		<atkproperty name="AtkObject::accessible_description" translatable="yes">Stops the selected file transfer. If there is an incomplete file, kept in the file system it will be removed. This operation is non reverseable. </atkproperty>
 		<atkaction action_name="click" description="Stoping transfer"/>
 	      </accessibility>
-	      <signal name="clicked" handler="on_stop_button_clicked" last_modification_time="Wed, 31 Aug 2005 22:31:38 GMT"/>
+	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Tue, 09 Aug 2005 17:07:31 GMT"/>
 	    </widget>
 	  </child>
 
 	  <child>
 	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Hides the window</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="has_focus">True</property>

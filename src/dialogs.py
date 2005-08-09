@@ -1946,7 +1946,7 @@ _('Connection with peer cannot be established.')).get_response()
 			self.set_status(file_props['type'], file_props['sid'], 'pause')
 			widget.set_label(_('_Continue'))
 		
-	def on_stop_button_clicked(self, widget):
+	def on_cancel_button_clicked(self, widget):
 		selected = self.tree.get_selection().get_selected()
 		if selected is None or selected[1] is None:
 			return 
