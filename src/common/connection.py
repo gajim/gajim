@@ -27,7 +27,6 @@ import traceback
 import threading
 import select
 
-
 from calendar import timegm
 
 import common.xmpp
@@ -84,18 +83,18 @@ def get_os_info():
 	elif os.name == 'posix':
 		executable = 'lsb_release'
 		params = ' --id --codename --release --short'
-		for path in os.environ['PATH'].split(':'):
-			full_path_to_executable = os.path.join(path, executable)
-			if os.path.exists(full_path_to_executable):
-				command = executable + params
-				child_stdin, child_stdout = os.popen2(command)
-				output = child_stdout.readline().strip()
-				child_stdout.close()
-				child_stdin.close()
-				# some distros put n/a in places so remove them
-				pattern = sre.compile(r' n/a', sre.IGNORECASE)
-				output = sre.sub(pattern, '', output)
-				return output
+		full_path_to_executable = helpers.is_in_path(executable, return_abs_path = True)
+		if full_path_to_executable:
+			command = executable + params
+			child_stdin, child_stdout = os.popen2(command)
+			output = child_stdout.readline().strip()
+			child_stdout.close()
+			child_stdin.close()
+			# some distros put n/a in places so remove them
+			pattern = sre.compile(r' n/a', sre.IGNORECASE)
+			output = sre.sub(pattern, '', output)
+			return output
+
 		# lsb_release executable not available, so parse files
 		for distro_name in distro_info:
 			path_to_file = distro_info[distro_name]
