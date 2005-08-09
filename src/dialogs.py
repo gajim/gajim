@@ -752,7 +752,10 @@ class FileTransfersTooltip(BaseTooltip):
 			if hasattr(receiver, 'name'):
 				receiver = receiver.name
 			receiver = receiver.split('/')[0]
-			name = gajim.get_first_contact_instance_from_jid( 
+			if receiver.find('@') == -1:
+				name = receiver
+			else:
+				name = gajim.get_first_contact_instance_from_jid( 
 				file_props['tt_account'], receiver).name
 		text +=  gtkgui_helpers.escape_for_pango_markup(name)
 		text += '\n<b>' + _('Size: ') + '</b>' 
@@ -1656,7 +1659,7 @@ _('Connection with peer cannot be established.')).get_response()
 			gajim.connections[account].send_file_request(file_props)
 		else:
 			dialog.destroy()
-		
+	
 	def show_file_request(self, account, contact, file_props):
 		if file_props is None or not file_props.has_key('name'):
 			return
@@ -1732,7 +1735,7 @@ _('Connection with peer cannot be established.')).get_response()
 		elif status == 'ok':
 			file_props['completed'] = True
 		self.model.set(iter, 0, self.images[status])
-			
+	
 	def set_progress(self, typ, sid, transfered_size, iter = None):
 		if not self.files_props[typ].has_key(sid):
 			return
@@ -1765,7 +1768,7 @@ _('Connection with peer cannot be established.')).get_response()
 			self.model.set(iter, 0, self.images[status])
 			if percent == 100:
 				self.set_status(typ, sid, 'ok')
-		
+	
 	def get_iter_by_sid(self, typ, sid):
 		'''returns iter to the row, which holds file transfer, identified by the
 		session id'''
@@ -1774,6 +1777,7 @@ _('Connection with peer cannot be established.')).get_response()
 			if typ + sid == self.model[iter][4]:
 				return iter
 			iter = self.model.iter_next(iter)
+	
 	def get_sid(self):
 		rng = range(65, 90)
 		rng.extend(range(48, 57))
@@ -1794,6 +1798,7 @@ _('Connection with peer cannot be established.')).get_response()
 		file_props['started'] = False
 		file_props['sender'] = account
 		file_props['receiver'] = contact
+		file_props['tt_account'] = account
 		return file_props
 		
 	def add_transfer(self, account, contact, file_props):
