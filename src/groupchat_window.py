@@ -100,6 +100,8 @@ class GroupchatWindow(chat.Chat):
 			'nick': self.nicks[room_jid],
 			'model': self.list_treeview[room_jid].get_model(),
 			'subject': self.subjects[room_jid],
+			'contacts': gajim.gc_contacts[self.account][room_jid],
+			'connected': gajim.gc_connected[self.account][room_jid],
 		}
 		
 	def load_var(self, room_jid, var):
@@ -109,6 +111,10 @@ class GroupchatWindow(chat.Chat):
 		self.list_treeview[room_jid].expand_all()
 		self.set_subject(room_jid, var['subject'])
 		self.subjects[room_jid] = var['subject']
+		gajim.gc_contacts[self.account][room_jid] = var['contacts']
+		gajim.gc_connected[self.account][room_jid] = var['connected']
+		if gajim.gc_connected[self.account][room_jid]:
+			self.got_connected(room_jid)
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
