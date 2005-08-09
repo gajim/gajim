@@ -142,6 +142,7 @@ class Connection:
 		self.last_incoming = time.time()
 		self.keep_alive_sent = False
 		self.to_be_sent = []
+		self.for_gui = []
 		self.last_sent = []
 		self.files_props = {}
 		self.password = gajim.config.get_per('accounts', name, 'password')
@@ -372,8 +373,8 @@ class Connection:
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
 					prs.getNewNick()))
 			else:
-				self.dispatch('ERROR_ANSWER', ('', prs.getFrom().getStripped(), errmsg,
-																					errcode))
+				self.dispatch('ERROR_ANSWER', ('', prs.getFrom().getStripped(),
+					errmsg, errcode))
 		if not ptype or ptype == 'unavailable':
 			jid = prs.getFrom()
 			gajim.logger.write('status', status, str(jid).encode('utf8'), show)
@@ -1203,7 +1204,7 @@ class Connection:
 
 		gajim.log.debug(_('Connected to server with %s'), con_type)
 
-		self.dispatch('CON_TYPE', con_type) # notify the gui about con_type
+		self.for_gui.append(['CON_TYPE', con_type]) # notify the gui about con_type
 
 		con.RegisterHandler('message', self._messageCB)
 		con.RegisterHandler('presence', self._presenceCB)
@@ -1267,8 +1268,7 @@ class Connection:
 			gajim.log.debug("Couldn't authenticate to %s" % self.name)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Authentication failed with "%s"') % \
-				self.name,
+			self.dispatch('ERROR', (_('Authentication failed with "%s"') % self.name,
 				_('Please check your login and password for correctness.')))
 			return None
 	# END connect
@@ -1335,7 +1335,7 @@ class Connection:
 		if signed:
 			p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 		self.connection.send(p)
-		self.dispatch('STATUS', 'invisible')
+		self.for_gui.append(['STATUS', 'invisible'])
 		if initial:
 			#ask our VCard
 			self.request_vcard(None)
@@ -1364,14 +1364,14 @@ class Connection:
 		if keyID and USE_GPG:
 			if self.connected < 2 and self.gpg.passphrase is None:
 				# We didn't set a passphrase
-				self.dispatch('ERROR', (_('OpenPGP Key was not given'),
-					_('You will be connected to %s without OpenPGP.') % self.name))
+				self.for_gui.append(['ERROR', (_('OpenPGP Key was not given'),
+					_('You will be connected to %s without OpenPGP.') % self.name)])
 			else:
 				signed = self.gpg.sign(msg, keyID)
 				if signed == 'BAD_PASSPHRASE':
 					signed = ''
 					if self.connected < 2:
-						self.dispatch('BAD_PASSPHRASE', ())
+						self.for_gui.append(['BAD_PASSPHRASE', ()])
 		self.status = msg
 		if show != 'offline' and not self.connected:
 			self.connection = self.connect()
@@ -1391,7 +1391,7 @@ class Connection:
 
 				if self.connection:
 					self.connection.send(p)
-				self.dispatch('STATUS', show)
+				self.for_gui.append(['STATUS', show])
 				#ask our VCard
 				self.request_vcard(None)
 
@@ -1412,7 +1412,7 @@ class Connection:
 					self.connection.disconnect()
 				except:
 					pass
-			self.dispatch('STATUS', 'offline')
+			self.for_gui.append(['STATUS', 'offline'])
 			self.connection = None
 		elif show != 'offline' and self.connected:
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
@@ -1433,7 +1433,7 @@ class Connection:
 				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			if self.connection:
 				self.connection.send(p)
-			self.dispatch('STATUS', show)
+			self.for_gui.append(['STATUS', show])
 
 	def send_motd(self, jid, subject = '', msg = ''):
 		if not self.connection:
@@ -1861,6 +1861,10 @@ class Connection:
 				
 				self.connection.send(tosend)
 				self.last_sent.append(time.time())
+			while time.time() < t_limit and len(self.for_gui):
+				print len(self.for_gui)
+				tosend = self.for_gui.pop(0)
+				self.dispatch(tosend[0], tosend[1])
 			try:
 				if gajim.config.get_per('accounts', self.name,
 				'keep_alives_enabled'): # do we want keepalives?
