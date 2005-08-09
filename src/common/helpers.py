@@ -25,6 +25,14 @@ from common import i18n
 
 _ = i18n._
 
+def get_prim_contact_from_list(contacts):
+	prim_contact = None # primary contact
+	for contact in contacts:
+		if prim_contact == None or int(contact.priority) > \
+			int(prim_contact.priority):
+			prim_contact = contact
+	return prim_contact
+
 def convert_bytes(string):
 	suffix = ''
 	# IEC standard says KiB = 1024 bytes KB = 1000 bytes
