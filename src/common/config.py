@@ -78,7 +78,8 @@ class Config:
 		'print_time': [ opt_str, 'always' ],
 		'useemoticons': [ opt_bool, True ],
 		'sounds_on': [ opt_bool, True ],
-		'soundplayer': [ opt_str, 'play' ],
+		# 'aplay', 'play', 'esdplay', 'artsplay' detected first time only
+		'soundplayer': [ opt_str, '' ],
 		'openwith': [ opt_str, 'gnome-open' ],
 		'custombrowser': [ opt_str, 'firefox' ],
 		'custommailapp': [ opt_str, 'mozilla-thunderbird -compose' ],

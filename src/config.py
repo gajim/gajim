@@ -35,6 +35,7 @@ except:
 	pass
 
 from gajim import Contact
+from common import helpers
 from common import gajim
 from common import connection
 from common import i18n
@@ -289,9 +290,14 @@ class PreferencesWindow:
 			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
 			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
 
-		#sound player
-		self.xml.get_widget('soundplayer_entry').set_text(
-			gajim.config.get('soundplayer'))
+		# sound player
+		player = gajim.config.get('soundplayer')
+		if player == '': # only on first time Gajim starts
+			commands = ('aplay', 'play', 'esdplay', 'artsplay')
+			for command in commands:
+				if helpers.is_in_path(command):
+					self.xml.get_widget('soundplayer_entry').set_text(command)
+					break
 
 		#sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
