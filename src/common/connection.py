@@ -527,10 +527,10 @@ class Connection:
 					port = item.getAttr('port')
 					jid = item.getAttr('jid')
 					conf = gajim.config
-					conf.add_per('proxies65_cache', jid)
-					conf.set_per('proxies65_cache', jid, 'host', str(host))
-					conf.set_per('proxies65_cache', jid, 'port', int(port))
-					conf.set_per('proxies65_cache', jid, 'jid', str(jid))
+					conf.add_per('ft_proxies65_cache', jid)
+					conf.set_per('ft_proxies65_cache', jid, 'host', str(host))
+					conf.set_per('ft_proxies65_cache', jid, 'port', int(port))
+					conf.set_per('ft_proxies65_cache', jid, 'jid', str(jid))
 			raise common.xmpp.NodeProcessed
 		try:
 			streamhost =  query.getTag('streamhost-used')
@@ -661,9 +661,9 @@ class Connection:
 	
 	def get_cached_proxies(self, proxy):
 		''' get cached entries for proxy and request the cache again '''
-		host = gajim.config.get_per('proxies65_cache', proxy, 'host')
-		port = gajim.config.get_per('proxies65_cache', proxy, 'port')
-		jid = gajim.config.get_per('proxies65_cache', proxy, 'jid')
+		host = gajim.config.get_per('ft_proxies65_cache', proxy, 'host')
+		port = gajim.config.get_per('ft_proxies65_cache', proxy, 'port')
+		jid = gajim.config.get_per('ft_proxies65_cache', proxy, 'jid')
 		
 		iq = common.xmpp.Protocol(name = 'iq', to = proxy, typ = 'get')
 		query = iq.setTag('query')

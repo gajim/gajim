@@ -181,7 +181,7 @@ class Config:
 			'user': [ opt_str, '' ],
 			'pass': [ opt_str, '' ],
 		}, {}),
-		'proxies65_cache': ({
+		'ft_proxies65_cache': ({
 			'host': [ opt_str, ''],
 			'port': [ opt_str, '7777'],
 			'jid': [ opt_str, ''],
@@ -295,9 +295,10 @@ class Config:
 					'#996442' ],
 	}
 	
-	proxies65_default = {
+	ft_proxies65_default = {
 		'proxy.jabber.org': [ '208.245.212.98', '7777', 'proxy.jabber.org' ],
 		'proxy65.jabber.autocom.pl': ['213.134.161.52', '7777', 'proxy65.jabber.autocom.pl'],
+		'proxy.jabber.cd.chalmers.se': ['129.16.79.37', '7777', 'proxy.jabber.cd.chalmers.se'],
 	}
 
 	def foreach(self, cb, data = None):
@@ -431,10 +432,10 @@ class Config:
 			self.set_per('soundevents', event, 'path', default[1])
 
 		# set initial cache values for proxie65 hosts
-		for proxy in self.proxies65_default:
-			default = self.proxies65_default[proxy]
-			self.add_per('proxies65_cache', proxy)
-			self.set_per('proxies65_cache', proxy, 'host', default[0])
-			self.set_per('proxies65_cache', proxy, 'port', default[1])
-			self.set_per('proxies65_cache', proxy, 'jid', default[2])
+		for proxy in self.ft_proxies65_default:
+			default = self.ft_proxies65_default[proxy]
+			self.add_per('ft_proxies65_cache', proxy)
+			self.set_per('ft_proxies65_cache', proxy, 'host', default[0])
+			self.set_per('ft_proxies65_cache', proxy, 'port', default[1])
+			self.set_per('ft_proxies65_cache', proxy, 'jid', default[2])
 		return
