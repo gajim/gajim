@@ -999,6 +999,10 @@ class Interface:
 			'HTTP_AUTH': self.handle_event_http_auth,
 		}
 
+	def exec_event(self, account):
+		ev = gajim.events_for_ui[account].pop(0)
+		self.handlers[ev[0]](account, ev[1])
+
 	def process_connections(self):
 		try:
 			# We copy the list of connections because one can disappear while we 
@@ -1012,8 +1016,8 @@ class Interface:
 				if gajim.socks5queue.connected:
 					gajim.socks5queue.process(0.01)
 				while len(gajim.events_for_ui[account]):
-					ev = gajim.events_for_ui[account].pop(0)
-					self.handlers[ev[0]](account, ev[1])
+					gajim.mutex_events_for_ui.lock(self.exec_event, account)
+					gajim.mutex_events_for_ui.unlock()
 			time.sleep(0.01) # so threads in connection.py have time to run
 			return True # renew timeout (loop for ever)
 		except KeyboardInterrupt:

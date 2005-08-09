@@ -140,9 +140,13 @@ class Connection:
 			gajim.config.set('usegpg', False)
 	# END __init__
 
+	def put_event(self, ev):
+		gajim.events_for_ui[self.name].append(ev)
+
 	def dispatch(self, event, data):
 		'''always passes account name as first param'''
-		gajim.events_for_ui[self.name].append([event, data])
+		gajim.mutex_events_for_ui.lock(self.put_event, [event, data])
+		gajim.mutex_events_for_ui.unlock()
 
 	def add_sha(self, p):
 		c = p.setTag('x', namespace = common.xmpp.NS_VCARD_UPDATE)

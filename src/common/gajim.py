@@ -19,6 +19,8 @@
 
 import os
 import logging
+import mutex
+
 import common.config
 import common.logger
 
@@ -63,8 +65,10 @@ sleeper_state = {} # whether we pass auto away / xa or not
 #'autoaway': autoaway and use sleeper
 #'autoxa': autoxa and use sleeper
 status_before_autoaway = {}
-#queues of events from connections
+#queues of events from connections...
 events_for_ui = {}
+#... and its mutex
+mutex_events_for_ui = mutex.mutex()
 
 socks5quue = None
 
