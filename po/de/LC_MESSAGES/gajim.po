@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-10 00:51+0300\n"
+"POT-Creation-Date: 2005-08-10 01:12+0300\n"
 "PO-Revision-Date: 2005-06-01 18:11+0200\n"
 "Last-Translator: Christoph Neuroth <delmonico@gmx.net>\n"
 "Language-Team: German\n"
@@ -321,6 +321,7 @@ msgid "has closed the chat window or tab"
 msgstr "hat das Chatfenster oder den Reiter geschlossen"
 
 #: ../src/common/logger.py:41 ../src/common/logger.py:46
+#, python-format
 msgid "%s is file but it should be a directory"
 msgstr "%s ist eine Datei, kein Verzeichnis"
 
@@ -332,14 +333,17 @@ msgstr "Gajim wird nun beendet"
 #. is '' on win9x so avoid that
 #: ../src/common/logger.py:50 ../src/common/logger.py:54
 #: ../src/common/logger.py:57
+#, python-format
 msgid "creating %s directory"
 msgstr "Erstelle Verzeichnis %s"
 
 #: ../src/common/optparser.py:50
+#, python-format
 msgid "error: cannot open %s for reading\n"
 msgstr "Fehler: %s kann nicht zum Lesen geöffnet werden\n"
 
 #: ../src/common/optparser.py:76
+#, python-format
 msgid "Unable to write file in %s\n"
 msgstr "Kann Datei nicht in %s schreiben\n"
 
@@ -380,6 +384,7 @@ msgid "not in the roster"
 msgstr "Nicht in der Liste"
 
 #: ../src/chat.py:287
+#, python-format
 msgid "Switch to %s"
 msgstr "Wechseln zu %s"
 
@@ -400,6 +405,7 @@ msgstr ""
 "Falschgeschriebene Wörter werden nicht hervorgehoben"
 
 #: ../src/chat.py:746
+#, python-format
 msgid "Actions for \"%s\""
 msgstr "Aktionen für \"%s\""
 
@@ -413,11 +419,13 @@ msgstr "Im Wörterbuch _suchen"
 
 #. we must have %s in the url if not WIKTIONARY
 #: ../src/chat.py:777
+#, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "In Wörterbuch URL fehlt ein \"%s\" und ist nicht Wiktionary"
 
 #. we must have %s in the url
 #: ../src/chat.py:787
+#, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "In Websuche URL fehlt ein \"%s\""
 
@@ -427,10 +435,12 @@ msgstr "Im _Internet suchen"
 
 #. if we have subject, show it too!
 #: ../src/chat.py:1115
+#, python-format
 msgid "Subject: %s\n"
 msgstr "Thema: %s\n"
 
 #: ../src/config.py:199 ../src/config.py:436
+#, python-format
 msgid "Every %s _minutes"
 msgstr "Alle %s _Minuten"
 
@@ -670,8 +680,7 @@ msgstr "Dieser Bookmark hat ungültige Daten"
 #: ../src/config.py:2604
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
-msgstr ""
-"Bitte Serverfeld und Raumfeld ausfüllen oder Bookmark löschen."
+msgstr "Bitte Serverfeld und Raumfeld ausfüllen oder Bookmark löschen."
 
 #: ../src/config.py:2824
 msgid ""
@@ -738,8 +747,11 @@ msgid "%s Status Message"
 msgstr "%s Status-Nachricht"
 
 #: ../src/dialogs.py:271
+#, python-format
 msgid "Please fill in the data of the contact you want to add in account %s"
-msgstr "Bitte füllen Sie die Daten aus für den Kontakt, den Sie dem Konto %s hinzufügen wollen"
+msgstr ""
+"Bitte füllen Sie die Daten aus für den Kontakt, den Sie dem Konto %s "
+"hinzufügen wollen"
 
 #: ../src/dialogs.py:273
 msgid "Please fill in the data of the contact you want to add"
@@ -1121,6 +1133,7 @@ msgstr "Pause"
 
 #. ('HTTP_AUTH', account, (method, url, iq_obj))
 #: ../src/gajim.py:204
+#, python-format
 msgid "HTTP (%s) Authorization for %s"
 msgstr "HTTP (%s) Autorisierung für %s"
 
@@ -1365,10 +1378,12 @@ msgid "Manage Bookmarks..."
 msgstr "Verwalte Bookmarks..."
 
 #: ../src/roster_window.py:447
+#, python-format
 msgid "to %s account"
 msgstr "an %s Konto"
 
 #: ../src/roster_window.py:459
+#, python-format
 msgid "using %s account"
 msgstr "mit %s Konto"
 
@@ -1378,6 +1393,7 @@ msgid "as %s"
 msgstr "als %s"
 
 #: ../src/roster_window.py:486
+#, python-format
 msgid "for account %s"
 msgstr "für Konto %s"
 
@@ -1392,10 +1408,10 @@ msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" wird entfernt"
 
 #: ../src/roster_window.py:702
+#, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from %s."
-msgstr ""
-"Sie können nun von %s keine Nachrichten mehr senden oder empfangen."
+msgstr "Sie können nun von %s keine Nachrichten mehr senden oder empfangen."
 
 #: ../src/roster_window.py:745
 msgid "Assign OpenPGP Key"
@@ -1904,7 +1920,7 @@ msgid "City:"
 msgstr "Stadt:"
 
 #: ../src/gtkgui.glade.h:77
-msgid "Clean up"
+msgid "Clean u_p"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:78
@@ -2141,8 +2157,8 @@ msgstr "HTTP Connect"
 msgid "Hides the window"
 msgstr ""
 "Wenn aktiviert, dann wird Gajim Meta-Information, die Unterhaltungen mit "
-"Dritten betreffen, an andere übermitteln, wie etwa das Erstellen einer "
-"neuen Nachricht."
+"Dritten betreffen, an andere übermitteln, wie etwa das Erstellen einer neuen "
+"Nachricht."
 
 #: ../src/gtkgui.glade.h:134
 msgid "Homepage:"
@@ -2500,9 +2516,9 @@ msgid ""
 "account with resource 'Home' and 'Work' at the same time. The resource which "
 "has the highest priority will get the events. (see below)"
 msgstr ""
-"Die Resource wird zum Jabber-Server geschickt, um die selbe JID in zwei "
-"oder mehr Teile zu separieren, abhängig von der Anzahl der Clients die mit "
-"dem selben Konto auf dem selben Server verbunden sind. Daher kann man "
+"Die Resource wird zum Jabber-Server geschickt, um die selbe JID in zwei oder "
+"mehr Teile zu separieren, abhängig von der Anzahl der Clients die mit dem "
+"selben Konto auf dem selben Server verbunden sind. Daher kann man "
 "gleichzeitig mit den Ressourcen \"Heim\" und \"Arbeit\" auf das selbe Konto "
 "verbinden. Die Ressource mit der höchsten Priorität wird die Nachrichten "
 "erhalten (siehe unten)"
@@ -3193,8 +3209,7 @@ msgstr "Zeige Fenster mit der nächsten ungelesenen Nachricht"
 msgid ""
 "Print a list of all contacts in the roster. Each contact appear on a "
 "separate line"
-msgstr ""
-"Gibt eine Liste aller Kontakte aus. Eine Zeile je Kontakt"
+msgstr "Gibt eine Liste aller Kontakte aus. Eine Zeile je Kontakt"
 
 #: ../scripts/gajim-remote.py:91 ../scripts/gajim-remote.py:106
 #: ../scripts/gajim-remote.py:118 ../scripts/gajim-remote.py:132
@@ -3235,7 +3250,8 @@ msgid ""
 "of all accounts that have \"sync with global status\" option set"
 msgstr ""
 "Ändere Status vom Konto \"account\". Falls nicht angegeben, ändere Status "
-"aller Konten für die \"Kontostatus mit globalem Status abgleichen\" aktiviert ist"
+"aller Konten für die \"Kontostatus mit globalem Status abgleichen\" "
+"aktiviert ist"
 
 #: ../scripts/gajim-remote.py:112
 msgid "Show the chat dialog so that you can send message to a contact"
@@ -3255,8 +3271,8 @@ msgid ""
 "are optional. If you want to set only 'account', whitout 'pgp key', just set "
 "'pgp key' to ''."
 msgstr ""
-"Sende neue Nachricht zu einem Kontakt. OpenPGP und Konto sind optional. Falls "
-"nur account gesetzt werden soll, muss 'pgp key' zu '' gesetzt werden."
+"Sende neue Nachricht zu einem Kontakt. OpenPGP und Konto sind optional. "
+"Falls nur account gesetzt werden soll, muss 'pgp key' zu '' gesetzt werden."
 
 #: ../scripts/gajim-remote.py:127
 msgid "jid of the contact that will receive the message"
@@ -3321,9 +3337,9 @@ msgstr "Unbekannte D-BUS-Version: %s"
 msgid ""
 "Usage: %s %s %s \n"
 "\t"
-msgstr "Benutzung: %s %s %s \n"
-"\t"
-"Verwendung: %s %s %s \n"
+msgstr ""
+"Benutzung: %s %s %s \n"
+"\tVerwendung: %s %s %s \n"
 "\t"
 
 #: ../scripts/gajim-remote.py:246

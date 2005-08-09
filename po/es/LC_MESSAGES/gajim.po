@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-10 00:51+0300\n"
+"POT-Creation-Date: 2005-08-10 01:12+0300\n"
 "PO-Revision-Date: 2005-05-21 20:03+0100\n"
 "Last-Translator: Membris Khan <membriskhan@gmail.com>\n"
 "Language-Team: none\n"
@@ -1982,7 +1982,7 @@ msgid "City:"
 msgstr "Ciudad:"
 
 #: ../src/gtkgui.glade.h:77
-msgid "Clean up"
+msgid "Clean u_p"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:78

@@ -17657,7 +17657,6 @@ Maybe I'll refactor later</property>
   </child>
 </widget>
 
-
 <widget class="GtkMenu" id="file_transfers_menu">
 
   <child>
@@ -17673,7 +17672,8 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1116">
+	<widget class="GtkImage" id="image1118">
+	  <property name="visible">True</property>
 	  <property name="stock">gtk-media-pause</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
@@ -17689,7 +17689,6 @@ Maybe I'll refactor later</property>
     <widget class="GtkImageMenuItem" id="stop_menuitem">
       <property name="label">gtk-cancel</property>
       <property name="use_stock">True</property>
-
     </widget>
   </child>
 
@@ -17705,7 +17704,8 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1117">
+	<widget class="GtkImage" id="image1119">
+	  <property name="visible">True</property>
 	  <property name="stock">gtk-directory</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
@@ -17720,11 +17720,11 @@ Maybe I'll refactor later</property>
   <child>
     <widget class="GtkImageMenuItem" id="clean_up_menuitem">
       <property name="tooltip" translatable="yes">Removes completed, canceled and failed file transfers from the list</property>
-      <property name="label" translatable="yes">Clean up</property>
+      <property name="label" translatable="yes">Clean u_p</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1118">
+	<widget class="GtkImage" id="image1120">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-clear</property>
 	  <property name="icon_size">1</property>
@@ -17737,4 +17737,5 @@ Maybe I'll refactor later</property>
     </widget>
   </child>
 </widget>
+
 </glade-interface>

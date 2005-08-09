@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-10 00:51+0300\n"
+"POT-Creation-Date: 2005-08-10 01:12+0300\n"
 "PO-Revision-Date: 2005-06-01 14:36+0700\n"
 "Last-Translator: Yakov Bezrukov <nebulam51@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -1985,7 +1985,7 @@ msgid "City:"
 msgstr "Город:"
 
 #: ../src/gtkgui.glade.h:77
-msgid "Clean up"
+msgid "Clean u_p"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:78

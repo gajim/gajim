@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-10 00:51+0300\n"
+"POT-Creation-Date: 2005-08-10 01:12+0300\n"
 "PO-Revision-Date: 2005-05-17 12:19+0300\n"
 "Last-Translator: Nikos Kouremenos <kourem@gmail.com>\n"
 "Language-Team: \n"
@@ -1978,7 +1978,7 @@ msgid "City:"
 msgstr "Πόλη:"
 
 #: ../src/gtkgui.glade.h:77
-msgid "Clean up"
+msgid "Clean u_p"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:78
