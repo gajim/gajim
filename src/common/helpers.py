@@ -17,9 +17,11 @@
 ## GNU General Public License for more details.
 ##
 
+import sre
+import os
+
 from common import i18n
 _ = i18n._
-import sre
 
 def get_uf_show(show):
 	'''returns a userfriendly string for dnd/xa/chat
@@ -111,6 +113,31 @@ def get_uf_chatstate(chatstate):
 	elif chatstate == 'composing':
 		return _('is composing a message...')
 	elif chatstate == 'paused':
-		return _('paused composing a message...')
+		#paused means he was compoing but has stopped for a while
+		return _('paused composing a message')
 	elif chatstate == 'gone':
 		return _('has closed the chat window or tab')
+
+def is_in_path(name_of_command, return_abs_path = False):
+	# if return_abs_path is True absolute path will be returned 
+	# for name_of_command
+	# on failures False is returned
+	is_in_dir = False
+	found_in_which_dir = None
+	path = os.getenv('PATH').split(':')
+	for path_to_directory in path:
+		try:
+			contents = os.listdir(path_to_directory)
+		except OSError: # user can have something in PATH that is not a dir
+			pass
+		is_in_dir = name_of_command in contents
+		if is_in_dir:
+			if return_abs_path:
+				found_in_which_dir = path_to_directory
+			break
+	
+	if found_in_which_dir:
+		abs_path = os.path.join(path_to_directory, name_of_command)
+		return abs_path
+	else:
+		return is_in_dir
