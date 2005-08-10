@@ -1602,7 +1602,7 @@ class FileTransfersWindow:
 			APP)
 		self.file_transfers_menu = popup_xml.get_widget('file_transfers_menu')
 		self.open_folder_menuitem = popup_xml.get_widget('open_folder_menuitem')
-		self.stop_menuitem = popup_xml.get_widget('stop_menuitem')
+		self.cancel_menuitem = popup_xml.get_widget('cancel_menuitem')
 		self.pause_menuitem = popup_xml.get_widget('pause_menuitem')
 		self.continue_menuitem = popup_xml.get_widget('continue_menuitem')
 		self.remove_menuitem = popup_xml.get_widget('remove_menuitem')
@@ -1917,7 +1917,7 @@ _('Connection with peer cannot be established.')).get_response()
 		self.remove_button.set_sensitive(False)
 		self.remove_menuitem.set_sensitive(False)
 		self.cancel_button.set_sensitive(False)
-		self.stop_menuitem.set_sensitive(False)
+		self.cancel_menuitem.set_sensitive(False)
 	
 	def set_buttons_sensitive(self, path, is_row_selected):
 		current_iter = self.model.get_iter(path)
@@ -1929,7 +1929,7 @@ _('Connection with peer cannot be established.')).get_response()
 		if self.is_transfer_stoped(file_props):
 			is_stopped = True
 		self.cancel_button.set_sensitive(not is_stopped)
-		self.stop_menuitem.set_sensitive(not is_stopped)
+		self.cancel_menuitem.set_sensitive(not is_stopped)
 		if not is_row_selected:
 			# no selection, disable the buttons
 			self.set_all_insensitive()
