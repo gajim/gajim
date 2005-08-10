@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-10 22:09+0300\n"
+"POT-Creation-Date: 2005-08-11 01:25+0300\n"
 "PO-Revision-Date: 2005-06-01 20:37+0200\n"
 "Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
 "Language-Team:  none\n"
@@ -279,7 +279,7 @@ msgid "Has errors"
 msgstr "À des erreurs"
 
 #: ../src/common/helpers.py:94 ../src/common/helpers.py:108
-#: ../src/groupchat_window.py:277 ../src/gtkgui.glade.h:177
+#: ../src/groupchat_window.py:277 ../src/gtkgui.glade.h:178
 msgid "None"
 msgstr "Aucun"
 
@@ -359,11 +359,11 @@ msgstr "Valeur"
 msgid "Type"
 msgstr "Type"
 
-#: ../src/chat.py:123 ../src/gtkgui.glade.h:68
+#: ../src/chat.py:123 ../src/gtkgui.glade.h:69
 msgid "Chat"
 msgstr "Discussion"
 
-#: ../src/chat.py:125 ../src/gtkgui.glade.h:130
+#: ../src/chat.py:125 ../src/gtkgui.glade.h:131
 msgid "Group Chat"
 msgstr "Groupes de Discussion"
 
@@ -558,7 +558,7 @@ msgstr "Erreur en récupérant les clés secrètes"
 msgid "There was a problem retrieving your GPG secret keys."
 msgstr "Il y a eut un problème durant la récupération de vos clés GPG privées."
 
-#: ../src/config.py:1443 ../src/gtkgui.glade.h:186
+#: ../src/config.py:1443 ../src/gtkgui.glade.h:187
 msgid "Passphrase"
 msgstr "Mot de passe"
 
@@ -566,7 +566,7 @@ msgstr "Mot de passe"
 msgid "Choose your OpenPGP key"
 msgstr "Choisissez votre clé OpenPGP"
 
-#: ../src/config.py:1452 ../src/gtkgui.glade.h:176
+#: ../src/config.py:1452 ../src/gtkgui.glade.h:177
 msgid "No key selected"
 msgstr "Pas de clé sélectionnée"
 
@@ -646,11 +646,11 @@ msgstr "Service"
 msgid "Node"
 msgstr "Noeud"
 
-#: ../src/config.py:2266 ../src/gtkgui.glade.h:310
+#: ../src/config.py:2266 ../src/gtkgui.glade.h:311
 msgid "_Edit"
 msgstr "_Éditer"
 
-#: ../src/config.py:2268 ../src/gtkgui.glade.h:204
+#: ../src/config.py:2268 ../src/gtkgui.glade.h:205
 msgid "Re_gister"
 msgstr "_Souscrire"
 
@@ -797,7 +797,7 @@ msgstr "Gajim - %s messages non-lus"
 msgid "Gajim - 1 unread message"
 msgstr "Gajim - 1 message non-lu"
 
-#: ../src/dialogs.py:696 ../src/gtkgui.glade.h:119
+#: ../src/dialogs.py:696 ../src/gtkgui.glade.h:120
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -901,7 +901,7 @@ msgstr ""
 msgid "Join Group Chat as %s"
 msgstr "Rejoindre un Groupe de Discussion en tant que %s"
 
-#: ../src/dialogs.py:1005 ../src/gtkgui.glade.h:157
+#: ../src/dialogs.py:1005 ../src/gtkgui.glade.h:158
 msgid "Join Group Chat"
 msgstr "Rejoindre un Groupe de Discussion"
 
@@ -911,7 +911,7 @@ msgid "New Message as %s"
 msgstr "Nouveau message en tant que %s"
 
 #: ../src/dialogs.py:1070 ../src/dialogs.py:1165 ../src/gajim.py:395
-#: ../src/gtkgui.glade.h:173
+#: ../src/gtkgui.glade.h:174
 msgid "New Message"
 msgstr "Nouveau message"
 
@@ -1129,7 +1129,7 @@ msgstr "Voulez-vous l'écraser ?"
 msgid "Pause"
 msgstr "Pause"
 
-#: ../src/dialogs.py:1992 ../src/gtkgui.glade.h:305
+#: ../src/dialogs.py:1992 ../src/gtkgui.glade.h:306
 msgid "_Continue"
 msgstr "_Continuer"
 
@@ -1148,7 +1148,7 @@ msgid "error while sending"
 msgstr "erreur en envoyant"
 
 #: ../src/gajim.py:469 ../src/gajim.py:479 ../src/roster_window.py:125
-#: ../src/roster_window.py:1029 ../src/gtkgui.glade.h:127
+#: ../src/roster_window.py:1029 ../src/gtkgui.glade.h:128
 msgid "General"
 msgstr "Général"
 
@@ -1439,7 +1439,7 @@ msgstr "_Déconnecter"
 msgid "Edit"
 msgstr "Éditer"
 
-#: ../src/roster_window.py:918 ../src/gtkgui.glade.h:356
+#: ../src/roster_window.py:918 ../src/gtkgui.glade.h:357
 msgid "_Remove from Roster"
 msgstr "_Enlever de la liste de contacts"
 
@@ -1689,66 +1689,74 @@ msgid "<span background=\"lightyellow\"></span>"
 msgstr "<span background=\"lightyellow\"></span>"
 
 #: ../src/gtkgui.glade.h:22
+#, fuzzy
+msgid "A list of active, completed and stopped file transfers"
+msgstr ""
+"Montre la liste des transferts de fichier actifs, terminés et arrêtés de et "
+"versa vos amis."
+
+#: ../src/gtkgui.glade.h:23
 msgid "A_ccounts"
 msgstr "_Comptes"
 
-#: ../src/gtkgui.glade.h:23
+#: ../src/gtkgui.glade.h:24
 msgid "About"
 msgstr "À Propos"
 
-#: ../src/gtkgui.glade.h:24
+#: ../src/gtkgui.glade.h:25
 msgid "Account"
 msgstr "Compte"
 
-#: ../src/gtkgui.glade.h:25
+#: ../src/gtkgui.glade.h:26
 msgid "Account Modification"
 msgstr "Modification du compte"
 
-#: ../src/gtkgui.glade.h:26
+#: ../src/gtkgui.glade.h:27
 msgid "Account:"
 msgstr "Comptes :"
 
-#: ../src/gtkgui.glade.h:27
+#: ../src/gtkgui.glade.h:28
 msgid "Accounts"
 msgstr "Comptes"
 
-#: ../src/gtkgui.glade.h:28
-msgid "Activate/Disable notification for complete transfer"
+#: ../src/gtkgui.glade.h:29
+#, fuzzy
+msgid "Activate/Disable notification for when a file transfer is complete"
 msgstr "Active/Désactive la notification de fin de transfert"
 
-#: ../src/gtkgui.glade.h:29
+#: ../src/gtkgui.glade.h:30
 msgid "Ad_vanced Actions"
 msgstr "Actions A_vancées"
 
-#: ../src/gtkgui.glade.h:30
+#: ../src/gtkgui.glade.h:31
 msgid "Add New Contact"
 msgstr "Ajouter un nouveau contact"
 
-#: ../src/gtkgui.glade.h:31
+#: ../src/gtkgui.glade.h:32
 msgid "Add _Contact"
 msgstr "Ajouter un _Contact"
 
-#: ../src/gtkgui.glade.h:32
+#: ../src/gtkgui.glade.h:33
 msgid "Address"
 msgstr "Adresse :"
 
-#: ../src/gtkgui.glade.h:33
+#: ../src/gtkgui.glade.h:34
 msgid "Advanced"
 msgstr "Avancé"
 
-#: ../src/gtkgui.glade.h:34
+#: ../src/gtkgui.glade.h:35
 msgid "Advanced Configuration Editor"
 msgstr "Éditeur de Configuration Avancé"
 
-#: ../src/gtkgui.glade.h:35
+#: ../src/gtkgui.glade.h:36
 msgid "After nickname:"
 msgstr "Après le surnom :"
 
-#: ../src/gtkgui.glade.h:36
+#: ../src/gtkgui.glade.h:37
 msgid "After time:"
 msgstr "Après l'heure :"
 
-#: ../src/gtkgui.glade.h:37
+#: ../src/gtkgui.glade.h:38
 msgid ""
 "All chat states\n"
 "Composing only\n"
@@ -1758,54 +1766,54 @@ msgstr ""
 "En train de composer seulement\n"
 "Aucun"
 
-#: ../src/gtkgui.glade.h:40
+#: ../src/gtkgui.glade.h:41
 msgid "Allow _OS information to be sent"
 msgstr ""
 "Autoriser l'envoi des informations concernant votre _système d'exploitation"
 
-#: ../src/gtkgui.glade.h:41
+#: ../src/gtkgui.glade.h:42
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
 "Autoriser les popups/notifications lorsque je suis _absent/indisponible/"
 "occupé/invisible"
 
-#: ../src/gtkgui.glade.h:42
+#: ../src/gtkgui.glade.h:43
 msgid "Also known as iChat style"
 msgstr "Aussi appellé style iChat"
 
-#: ../src/gtkgui.glade.h:43
+#: ../src/gtkgui.glade.h:44
 msgid "Always use compact _view"
 msgstr "Toujours utiliser la _vue compacte"
 
-#: ../src/gtkgui.glade.h:44
+#: ../src/gtkgui.glade.h:45
 msgid "Ask status message when I:"
 msgstr "Demander le message d'état lorsque l'on : "
 
-#: ../src/gtkgui.glade.h:45
+#: ../src/gtkgui.glade.h:46
 msgid "Ask:"
 msgstr "Demande :"
 
-#: ../src/gtkgui.glade.h:46
+#: ../src/gtkgui.glade.h:47
 msgid "Assign Open_PGP Key"
 msgstr "Assigner une clé Open_PGP"
 
-#: ../src/gtkgui.glade.h:47
+#: ../src/gtkgui.glade.h:48
 msgid "Authorize contact so he can know when you're connected"
 msgstr "Autoriser le contact pour qu'il sache quand vous êtes connecté"
 
-#: ../src/gtkgui.glade.h:48
+#: ../src/gtkgui.glade.h:49
 msgid "Auto _away after:"
 msgstr "Passer _absent après :"
 
-#: ../src/gtkgui.glade.h:49
+#: ../src/gtkgui.glade.h:50
 msgid "Auto _not available after:"
 msgstr "Passer _indisponible après :"
 
-#: ../src/gtkgui.glade.h:50
+#: ../src/gtkgui.glade.h:51
 msgid "Auto join"
 msgstr "Rejoindre automatiquement"
 
-#: ../src/gtkgui.glade.h:51
+#: ../src/gtkgui.glade.h:52
 msgid ""
 "Autodetect at every application startup\n"
 "Always use GNOME default applications\n"
@@ -1817,75 +1825,75 @@ msgstr ""
 "Toujours utiliser les applications par défaut de KDE\n"
 "Personnalisé"
 
-#: ../src/gtkgui.glade.h:55
+#: ../src/gtkgui.glade.h:56
 msgid "Automatically authorize contact"
 msgstr "Autoriser le contact automatiquement"
 
-#: ../src/gtkgui.glade.h:56
+#: ../src/gtkgui.glade.h:57
 msgid "Background color"
 msgstr "Couleur du fond"
 
-#: ../src/gtkgui.glade.h:57
+#: ../src/gtkgui.glade.h:58
 msgid "Banner:"
 msgstr "Bannière:"
 
-#: ../src/gtkgui.glade.h:58
+#: ../src/gtkgui.glade.h:59
 msgid "Before nickname:"
 msgstr "Avant le surnom :"
 
-#: ../src/gtkgui.glade.h:59
+#: ../src/gtkgui.glade.h:60
 msgid "Before time:"
 msgstr "Avant l'heure :"
 
-#: ../src/gtkgui.glade.h:60
+#: ../src/gtkgui.glade.h:61
 msgid "Birthday:"
 msgstr "Anniversaire :"
 
-#: ../src/gtkgui.glade.h:61
+#: ../src/gtkgui.glade.h:62
 msgid "Bold"
 msgstr "Gras"
 
-#: ../src/gtkgui.glade.h:62
+#: ../src/gtkgui.glade.h:63
 msgid "C_onnect at startup"
 msgstr "C_onnexion au démarrage"
 
-#: ../src/gtkgui.glade.h:63
+#: ../src/gtkgui.glade.h:64
 msgid "Cancels the selected file transfer"
 msgstr "Annule le transfert de fichier sélectionné"
 
-#: ../src/gtkgui.glade.h:64
+#: ../src/gtkgui.glade.h:65
 msgid "Chan_ge"
 msgstr "Chan_ger"
 
-#: ../src/gtkgui.glade.h:65
+#: ../src/gtkgui.glade.h:66
 msgid "Change Password"
 msgstr "Changer le mot de passe"
 
-#: ../src/gtkgui.glade.h:66
+#: ../src/gtkgui.glade.h:67
 msgid "Change _Nickname"
 msgstr "Changer de Sur_nom"
 
-#: ../src/gtkgui.glade.h:67
+#: ../src/gtkgui.glade.h:68
 msgid "Change _Subject"
 msgstr "Changer le _Sujet"
 
-#: ../src/gtkgui.glade.h:69
+#: ../src/gtkgui.glade.h:70
 msgid "Chat state noti_fications:"
 msgstr "Noti_fications d'état de discution"
 
-#: ../src/gtkgui.glade.h:70
+#: ../src/gtkgui.glade.h:71
 msgid "Chat with"
 msgstr "Discuter avec"
 
-#: ../src/gtkgui.glade.h:71
+#: ../src/gtkgui.glade.h:72
 msgid "Check for new _version at application startup"
 msgstr "_Vérifier l'existence d'une nouvelle version au démarrage"
 
-#: ../src/gtkgui.glade.h:72
+#: ../src/gtkgui.glade.h:73
 msgid "Check if you want to register for a new jabber account"
 msgstr "A cocher si vous voulez créer un nouveau compte Jabber"
 
-#: ../src/gtkgui.glade.h:73
+#: ../src/gtkgui.glade.h:74
 msgid ""
 "Check this option, only if someone you don't have in the roster spams/annoys "
 "you. Use with caution, cause it blocks all messages from any contact that is "
@@ -1895,7 +1903,7 @@ msgstr ""
 "vous spamme/ennuie. Utilisez avec précaution, car cette option bloque tous "
 "les messages des contacts qui ne sont pas dans votre liste"
 
-#: ../src/gtkgui.glade.h:74
+#: ../src/gtkgui.glade.h:75
 msgid ""
 "Check this so Gajim will connect in port 5223 where legacy servers are "
 "expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
@@ -1907,189 +1915,190 @@ msgstr ""
 "TLS par défaut si le serveur annonce qu'il le supporte, et avec cette option "
 "vous désactivez le TLS"
 
-#: ../src/gtkgui.glade.h:75
+#: ../src/gtkgui.glade.h:76
 msgid "Choose _Key..."
 msgstr "Choisissez une _clé"
 
-#: ../src/gtkgui.glade.h:76
+#: ../src/gtkgui.glade.h:77
 msgid "City:"
 msgstr "Ville :"
 
-#: ../src/gtkgui.glade.h:77
-msgid "Clean u_p"
+#: ../src/gtkgui.glade.h:78
+#, fuzzy
+msgid "Clean _up"
 msgstr "Nettoyer"
 
-#: ../src/gtkgui.glade.h:78
+#: ../src/gtkgui.glade.h:79
 msgid "Click to change account's password"
 msgstr "Cliquez pour changer le mot de passe du compte"
 
-#: ../src/gtkgui.glade.h:79
+#: ../src/gtkgui.glade.h:80
 msgid "Click to get contact's extended information"
 msgstr "Cliquez pour plus d'informations sur le contact"
 
-#: ../src/gtkgui.glade.h:80
+#: ../src/gtkgui.glade.h:81
 msgid "Click to see features like on jabber servers"
 msgstr "Cliquez pour voir les fonctionnalités du serveur jabber"
 
-#: ../src/gtkgui.glade.h:81
+#: ../src/gtkgui.glade.h:82
 msgid "Click to see past conversation in this room"
 msgstr "Cliquez ici pour voir les précédentes conversations de ce salon"
 
-#: ../src/gtkgui.glade.h:82
+#: ../src/gtkgui.glade.h:83
 msgid "Click to see past conversations with this contact"
 msgstr "Cliquez ici pour voir les précédentes conversations avec ce contact"
 
-#: ../src/gtkgui.glade.h:83
+#: ../src/gtkgui.glade.h:84
 msgid "Client:"
 msgstr "Client :"
 
-#: ../src/gtkgui.glade.h:84
+#: ../src/gtkgui.glade.h:85
 msgid "Company:"
 msgstr "Companie :"
 
-#: ../src/gtkgui.glade.h:85
+#: ../src/gtkgui.glade.h:86
 msgid "Configure _Room"
 msgstr "Configurer le _Groupe"
 
-#: ../src/gtkgui.glade.h:86
+#: ../src/gtkgui.glade.h:87
 msgid "Connection"
 msgstr "Connexion"
 
-#: ../src/gtkgui.glade.h:87
+#: ../src/gtkgui.glade.h:88
 msgid "Contact Information"
 msgstr "Informations"
 
-#: ../src/gtkgui.glade.h:88
+#: ../src/gtkgui.glade.h:89
 msgid "Contact _Info"
 msgstr "_Informations"
 
-#: ../src/gtkgui.glade.h:89
+#: ../src/gtkgui.glade.h:90
 msgid "Contact:"
 msgstr "Contact :"
 
-#: ../src/gtkgui.glade.h:90
+#: ../src/gtkgui.glade.h:91
 msgid "Conversation History"
 msgstr "Historique de Conversation"
 
-#: ../src/gtkgui.glade.h:91
+#: ../src/gtkgui.glade.h:92
 msgid "Country:"
 msgstr "Pays :"
 
-#: ../src/gtkgui.glade.h:92
+#: ../src/gtkgui.glade.h:93
 msgid "Default _status iconset:"
 msgstr "Icônes d'état par défaut :"
 
-#: ../src/gtkgui.glade.h:93
+#: ../src/gtkgui.glade.h:94
 msgid "Delete MOTD"
 msgstr "Supprimer MOTD"
 
-#: ../src/gtkgui.glade.h:94
+#: ../src/gtkgui.glade.h:95
 msgid "Delete Message of the Day"
 msgstr "Supprimer le Message du Jour"
 
-#: ../src/gtkgui.glade.h:95
+#: ../src/gtkgui.glade.h:96
 msgid "Deletes Message of the Day"
 msgstr "Supprime le Message du Jour"
 
-#: ../src/gtkgui.glade.h:96
+#: ../src/gtkgui.glade.h:97
 msgid "Deny authorization from contact so he cannot know when you're connected"
 msgstr ""
 "Refuser l'autorisation du contact pour qu'il ne puisse pas savoir quand vous "
 "êtes connecté"
 
-#: ../src/gtkgui.glade.h:97
+#: ../src/gtkgui.glade.h:98
 msgid "Department:"
 msgstr "Département :"
 
-#: ../src/gtkgui.glade.h:98
+#: ../src/gtkgui.glade.h:99
 msgid "E-Mail"
 msgstr "EMail"
 
-#: ../src/gtkgui.glade.h:99
+#: ../src/gtkgui.glade.h:100
 msgid "E-Mail:"
 msgstr "EMail :"
 
-#: ../src/gtkgui.glade.h:100
+#: ../src/gtkgui.glade.h:101
 msgid "Edit Groups"
 msgstr "Éditer les Groupes"
 
-#: ../src/gtkgui.glade.h:101
+#: ../src/gtkgui.glade.h:102
 msgid "Edit Personal Information..."
 msgstr "_Éditer les Informations Personnelles..."
 
-#: ../src/gtkgui.glade.h:102
+#: ../src/gtkgui.glade.h:103
 msgid "Edit _Groups"
 msgstr "Éditer les _Groupes"
 
-#: ../src/gtkgui.glade.h:103
+#: ../src/gtkgui.glade.h:104
 msgid "Enable"
 msgstr "Activer"
 
-#: ../src/gtkgui.glade.h:104
+#: ../src/gtkgui.glade.h:105
 msgid "Enter it again for confirmation:"
 msgstr "Entrez le de nouveau pour confirmer :"
 
-#: ../src/gtkgui.glade.h:105
+#: ../src/gtkgui.glade.h:106
 msgid "Enter new password:"
 msgstr "Entrez un nouveau mot de passe :"
 
-#: ../src/gtkgui.glade.h:106
+#: ../src/gtkgui.glade.h:107
 msgid "Enter your message:"
 msgstr "Entrez votre message :"
 
-#: ../src/gtkgui.glade.h:107
+#: ../src/gtkgui.glade.h:108
 msgid "Events"
 msgstr "Événements"
 
-#: ../src/gtkgui.glade.h:108
+#: ../src/gtkgui.glade.h:109
 msgid "Every 5 _minutes"
 msgstr "Toutes les 5 _minutes"
 
-#: ../src/gtkgui.glade.h:109
+#: ../src/gtkgui.glade.h:110
 msgid "Extra Address:"
 msgstr "Adresse 2 :"
 
-#: ../src/gtkgui.glade.h:110
+#: ../src/gtkgui.glade.h:111
 msgid "Family:"
 msgstr "Famille:"
 
-#: ../src/gtkgui.glade.h:111
+#: ../src/gtkgui.glade.h:112
 msgid "File Transfers"
 msgstr "Transfert de Fichier"
 
-#: ../src/gtkgui.glade.h:112
+#: ../src/gtkgui.glade.h:113
 msgid "File _Transfers"
 msgstr "_Transfert de Fichier"
 
-#: ../src/gtkgui.glade.h:113
+#: ../src/gtkgui.glade.h:114
 msgid "File manager:"
 msgstr "Gestionnaire de fichier :"
 
-#: ../src/gtkgui.glade.h:114
+#: ../src/gtkgui.glade.h:115
 msgid "Filter:"
 msgstr "Filtre :"
 
-#: ../src/gtkgui.glade.h:115
+#: ../src/gtkgui.glade.h:116
 msgid "Font:"
 msgstr "Police :"
 
-#: ../src/gtkgui.glade.h:116
+#: ../src/gtkgui.glade.h:117
 msgid "Format: YYYY-MM-DD"
 msgstr "Format : AAAA-MM-JJ"
 
-#: ../src/gtkgui.glade.h:117
+#: ../src/gtkgui.glade.h:118
 msgid "From:"
 msgstr "De :"
 
-#: ../src/gtkgui.glade.h:118
+#: ../src/gtkgui.glade.h:119
 msgid "GPG Encryption"
 msgstr "Cryptage GPG"
 
-#: ../src/gtkgui.glade.h:120
+#: ../src/gtkgui.glade.h:121
 msgid "Gajim Themes Customization"
 msgstr "Personalisation des Thèmes de Gajim"
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:122
 msgid ""
 "Gajim will automatically show the new received message in a new chat window "
 "or tab in an existing chat window"
@@ -2098,7 +2107,7 @@ msgstr ""
 "nouvelle fenêtre de discussion ou dans un onglet d'une fenêtre de discussion "
 "existante"
 
-#: ../src/gtkgui.glade.h:122
+#: ../src/gtkgui.glade.h:123
 msgid ""
 "Gajim will notify you for new message via a popup in the bottom right of the "
 "screen"
@@ -2106,7 +2115,7 @@ msgstr ""
 "Gajim vous signalera les nouveaux messages dans un popup en bas à droite de "
 "l'écran"
 
-#: ../src/gtkgui.glade.h:123
+#: ../src/gtkgui.glade.h:124
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed in"
@@ -2114,7 +2123,7 @@ msgstr ""
 "Gajim vous signalera par une fenêtre popup en bas à droite de l'écran qu'un "
 "contact s'est connecté"
 
-#: ../src/gtkgui.glade.h:124
+#: ../src/gtkgui.glade.h:125
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed out"
@@ -2122,63 +2131,63 @@ msgstr ""
 "Gajim vous signalera par une fenêtre popup en bas à droite de l'écran qu'un "
 "contact s'est déconnecté"
 
-#: ../src/gtkgui.glade.h:125
+#: ../src/gtkgui.glade.h:126
 msgid ""
 "Gajim will only change the icon of the contact that sent the new message"
 msgstr ""
 "Gajim ne fera que changer l'icône du contact qui a envoyé le nouveau message"
 
-#: ../src/gtkgui.glade.h:126
+#: ../src/gtkgui.glade.h:127
 msgid "Gajim: First Time Wizard"
 msgstr "Gajim : Assistant"
 
-#: ../src/gtkgui.glade.h:128
+#: ../src/gtkgui.glade.h:129
 msgid "Given:"
 msgstr "Prénom :"
 
-#: ../src/gtkgui.glade.h:129
+#: ../src/gtkgui.glade.h:130
 msgid "Go"
 msgstr "Parcourir"
 
-#: ../src/gtkgui.glade.h:131
+#: ../src/gtkgui.glade.h:132
 msgid "Group:"
 msgstr "Groupe :"
 
-#: ../src/gtkgui.glade.h:132
+#: ../src/gtkgui.glade.h:133
 msgid "HTTP Connect"
 msgstr "Connexion HTTP"
 
-#: ../src/gtkgui.glade.h:133
+#: ../src/gtkgui.glade.h:134
 msgid "Hides the window"
 msgstr "Cache la fenêtre"
 
-#: ../src/gtkgui.glade.h:134
+#: ../src/gtkgui.glade.h:135
 msgid "Homepage:"
 msgstr "Site perso :"
 
-#: ../src/gtkgui.glade.h:135
+#: ../src/gtkgui.glade.h:136
 msgid "Hostname: "
 msgstr "_Serveur :"
 
-#: ../src/gtkgui.glade.h:136
+#: ../src/gtkgui.glade.h:137
 msgid "I already have an account I want to use"
 msgstr "J'ai déjà un compte que je veux utiliser"
 
-#: ../src/gtkgui.glade.h:137
+#: ../src/gtkgui.glade.h:138
 msgid "I want to _register for a new account"
 msgstr "Je veux _créer un nouveau compte"
 
-#: ../src/gtkgui.glade.h:138
+#: ../src/gtkgui.glade.h:139
 msgid "I would like to add you to my contact list."
 msgstr "Je souhaiterais vous ajouter à ma liste de contacts."
 
-#: ../src/gtkgui.glade.h:139
+#: ../src/gtkgui.glade.h:140
 msgid "If checked, Gajim will also have a trayicon"
 msgstr ""
 "Si cette case est cochée, Gajim placera une icône dans la zone de "
 "notification"
 
-#: ../src/gtkgui.glade.h:140
+#: ../src/gtkgui.glade.h:141
 msgid ""
 "If checked, Gajim will broadcast capability to send and receive meta-"
 "information related to a conversation you may have with a contact such as "
@@ -2188,16 +2197,16 @@ msgstr ""
 "des meta-informations concernant les cnversation que vous avez avec vos "
 "contacts, telles que en train d'écrire un message"
 
-#: ../src/gtkgui.glade.h:141
+#: ../src/gtkgui.glade.h:142
 msgid "If checked, Gajim will join this groupchat on startup"
 msgstr "Si cette case est cochée, Gajim se connectera à ce salon au démarrage"
 
-#: ../src/gtkgui.glade.h:142
+#: ../src/gtkgui.glade.h:143
 msgid "If checked, Gajim will remember the password for this account"
 msgstr ""
 "Si cette case est cochée, Gajim va retenir le mot de passe pour ce compte"
 
-#: ../src/gtkgui.glade.h:143
+#: ../src/gtkgui.glade.h:144
 msgid ""
 "If checked, Gajim will remember the roster and chat window positions in the "
 "screen and the sizes of them next time you run it"
@@ -2206,7 +2215,7 @@ msgstr ""
 "principale et des fenêtres de discussion pour vos prochaines utilisations de "
 "Gajim"
 
-#: ../src/gtkgui.glade.h:144
+#: ../src/gtkgui.glade.h:145
 msgid ""
 "If checked, Gajim will replace ascii smilies like ':)' with equivalent "
 "graphical emoticons"
@@ -2214,7 +2223,7 @@ msgstr ""
 "Si cette case est cochée, Gajim va remplacer les frimousses ASCII comme « :) "
 "» par un équivalent graphique"
 
-#: ../src/gtkgui.glade.h:145
+#: ../src/gtkgui.glade.h:146
 msgid ""
 "If checked, Gajim will send keep-alive packets so it prevents connection "
 "timeout which results in disconnection"
@@ -2222,7 +2231,7 @@ msgstr ""
 "Si coché, Gajim enverra des paquets de maintien de connection pour prévenir "
 "des temps de latence pouvant entraîner des déconnections"
 
-#: ../src/gtkgui.glade.h:146
+#: ../src/gtkgui.glade.h:147
 msgid ""
 "If checked, Gajim will store the password in ~/.gajim/config with 'read' "
 "permission only for only you and of course the administrator"
@@ -2230,7 +2239,7 @@ msgstr ""
 "Si cette case est cochée, Gajim va sauvegarder le mot de passe dans ~/.gajim/"
 "config avec accès en lecture pour vous et l'administrateur uniquement"
 
-#: ../src/gtkgui.glade.h:147
+#: ../src/gtkgui.glade.h:148
 msgid ""
 "If checked, Gajim will use protocol-specific status icons. (eg. A contact "
 "from MSN will have the equivalent msn icon for status online, away, busy, "
@@ -2240,7 +2249,7 @@ msgstr ""
 "protocoles. (Par ex. un contat MSN aura les icônes de MSN pour les états "
 "disponible, absent, occupé, etc)"
 
-#: ../src/gtkgui.glade.h:148
+#: ../src/gtkgui.glade.h:149
 msgid ""
 "If checked, Gajim, when launched, will automatically connect to jabber using "
 "this account"
@@ -2248,7 +2257,7 @@ msgstr ""
 "Si cette case est cochée, au démarrage, Gajim se connectera automatiquement "
 "à jabber en utilisant ce compte."
 
-#: ../src/gtkgui.glade.h:149
+#: ../src/gtkgui.glade.h:150
 msgid ""
 "If checked, all chat and group chat windows will have the information area "
 "in the top and the buttons area in the bottom hidden. You can quick toggle "
@@ -2260,7 +2269,7 @@ msgstr ""
 "boutons. Vous pouvez rappidement basculer la vue compacte avec Alt+C. NOTE : "
 "Le dernier état quand vous fermez la fenêtre n'est pas permanent"
 
-#: ../src/gtkgui.glade.h:150
+#: ../src/gtkgui.glade.h:151
 msgid ""
 "If you have 2 or more accounts and it is checked, Gajim will list all "
 "contacts as if you had one account"
@@ -2268,185 +2277,185 @@ msgstr ""
 "Si vous avez 2 comptes ou plus et que cette case est cochée, Gajim va lister "
 "tous les contacts comme si vous n'aviez qu'un seul compte"
 
-#: ../src/gtkgui.glade.h:151
+#: ../src/gtkgui.glade.h:152
 msgid "Incoming message:"
 msgstr "Message entrant :"
 
-#: ../src/gtkgui.glade.h:152
+#: ../src/gtkgui.glade.h:153
 msgid "Info/Query"
 msgstr "Information/Demande"
 
-#: ../src/gtkgui.glade.h:153
+#: ../src/gtkgui.glade.h:154
 msgid "Information about you are stored on the server as vCard"
 msgstr ""
 "Les informations vous concernant sont stockées\n"
 "sur le serveur, dans une vCard"
 
-#: ../src/gtkgui.glade.h:154
+#: ../src/gtkgui.glade.h:155
 msgid "Italic"
 msgstr "Italique"
 
-#: ../src/gtkgui.glade.h:155
+#: ../src/gtkgui.glade.h:156
 msgid "Jabber"
 msgstr "Jabber"
 
-#: ../src/gtkgui.glade.h:156
+#: ../src/gtkgui.glade.h:157
 msgid "Jabber ID:"
 msgstr "Identifiant Jabber :"
 
-#: ../src/gtkgui.glade.h:158
+#: ../src/gtkgui.glade.h:159
 msgid "Join _Group Chat"
 msgstr "Rejoindre un _Groupe de Discussion"
 
-#: ../src/gtkgui.glade.h:159
+#: ../src/gtkgui.glade.h:160
 msgid "Join _Group Chat..."
 msgstr "Rejoindre un _Groupe de Discussion..."
 
-#: ../src/gtkgui.glade.h:160
+#: ../src/gtkgui.glade.h:161
 msgid "Location"
 msgstr "Adresse"
 
-#: ../src/gtkgui.glade.h:161
+#: ../src/gtkgui.glade.h:162
 msgid "Log history"
 msgstr "Historique"
 
-#: ../src/gtkgui.glade.h:162
+#: ../src/gtkgui.glade.h:163
 msgid "Log presences in _contact's log file"
 msgstr "Archiver les présences dans l'archive du _contact"
 
-#: ../src/gtkgui.glade.h:163
+#: ../src/gtkgui.glade.h:164
 msgid "Log presences in an _external file"
 msgstr "Archiver les présences dans un fichier e_xterne"
 
-#: ../src/gtkgui.glade.h:164
+#: ../src/gtkgui.glade.h:165
 msgid "Manage Accounts"
 msgstr "Gérer les comptes"
 
-#: ../src/gtkgui.glade.h:165
+#: ../src/gtkgui.glade.h:166
 msgid "Manage Bookmarks"
 msgstr "Gérer les Marque-pages"
 
-#: ../src/gtkgui.glade.h:166
+#: ../src/gtkgui.glade.h:167
 msgid "Manage Emoticons"
 msgstr "Gérer les frimousses"
 
-#: ../src/gtkgui.glade.h:167
+#: ../src/gtkgui.glade.h:168
 msgid "Manage Proxy Profiles"
 msgstr "Gérer les profils de Proxy"
 
-#: ../src/gtkgui.glade.h:168
+#: ../src/gtkgui.glade.h:169
 msgid "Manage..."
 msgstr "Modifier..."
 
-#: ../src/gtkgui.glade.h:169
+#: ../src/gtkgui.glade.h:170
 msgid "Middle:"
 msgstr "Racine:"
 
-#: ../src/gtkgui.glade.h:170
+#: ../src/gtkgui.glade.h:171
 msgid "Mo_derator"
 msgstr "Mo_dérateur"
 
-#: ../src/gtkgui.glade.h:171
+#: ../src/gtkgui.glade.h:172
 msgid "More"
 msgstr "Plus"
 
-#: ../src/gtkgui.glade.h:172
+#: ../src/gtkgui.glade.h:173
 msgid "Name:"
 msgstr "Nom :"
 
-#: ../src/gtkgui.glade.h:174
+#: ../src/gtkgui.glade.h:175
 msgid "New version of Gajim available"
 msgstr "Une nouvelle version de Gajim est disponible"
 
-#: ../src/gtkgui.glade.h:175
+#: ../src/gtkgui.glade.h:176
 msgid "Nickname:"
 msgstr "Surnom :"
 
-#: ../src/gtkgui.glade.h:178
+#: ../src/gtkgui.glade.h:179
 msgid "Notify me about contacts that: "
 msgstr "Me Signaler quand un contact : "
 
-#: ../src/gtkgui.glade.h:179
+#: ../src/gtkgui.glade.h:180
 msgid "OS:"
 msgstr "Syst. d'exploit. :"
 
-#: ../src/gtkgui.glade.h:180
+#: ../src/gtkgui.glade.h:181
 msgid "On every _message"
 msgstr "À chaque message"
 
-#: ../src/gtkgui.glade.h:181
+#: ../src/gtkgui.glade.h:182
 msgid "Open Download Page"
 msgstr "Ouvrir la page de téléchargement"
 
-#: ../src/gtkgui.glade.h:182
+#: ../src/gtkgui.glade.h:183
 msgid "Open..."
 msgstr "Ouvrir..."
 
-#: ../src/gtkgui.glade.h:183
+#: ../src/gtkgui.glade.h:184
 msgid "Or choose a preset message:"
 msgstr "Ou choisissez votre message :"
 
-#: ../src/gtkgui.glade.h:184
+#: ../src/gtkgui.glade.h:185
 msgid "Outgoing message:"
 msgstr "Message sortant :"
 
-#: ../src/gtkgui.glade.h:185
+#: ../src/gtkgui.glade.h:186
 msgid "Pass_word:"
 msgstr "_Mot de passe : "
 
-#: ../src/gtkgui.glade.h:187
+#: ../src/gtkgui.glade.h:188
 msgid "Password:"
 msgstr "Mot de passe :"
 
-#: ../src/gtkgui.glade.h:188
+#: ../src/gtkgui.glade.h:189
 msgid "Personal Details"
 msgstr "Informations Personnelles"
 
-#: ../src/gtkgui.glade.h:189
+#: ../src/gtkgui.glade.h:190
 msgid "Phone No.:"
 msgstr "Téléphone :"
 
-#: ../src/gtkgui.glade.h:190
+#: ../src/gtkgui.glade.h:191
 msgid "Play _sounds"
 msgstr "Jouer les sons"
 
-#: ../src/gtkgui.glade.h:191
+#: ../src/gtkgui.glade.h:192
 msgid "Please fill in the data for your existing account"
 msgstr "Remplissez les informations de votre compte existant"
 
-#: ../src/gtkgui.glade.h:192
+#: ../src/gtkgui.glade.h:193
 msgid "Please fill in the data for your new account"
 msgstr "Remplissez les informations pour votre nouveau compte"
 
-#: ../src/gtkgui.glade.h:193
+#: ../src/gtkgui.glade.h:194
 msgid "Port: "
 msgstr "Port : "
 
-#: ../src/gtkgui.glade.h:194
+#: ../src/gtkgui.glade.h:195
 msgid "Position:"
 msgstr "Position :"
 
-#: ../src/gtkgui.glade.h:195
+#: ../src/gtkgui.glade.h:196
 msgid "Postal Code:"
 msgstr "Code postal :"
 
-#: ../src/gtkgui.glade.h:196
+#: ../src/gtkgui.glade.h:197
 msgid "Preferences"
 msgstr "Préférences"
 
-#: ../src/gtkgui.glade.h:197
+#: ../src/gtkgui.glade.h:198
 msgid "Prefix:"
 msgstr "Préfixe:"
 
-#: ../src/gtkgui.glade.h:198
+#: ../src/gtkgui.glade.h:199
 msgid "Print time:"
 msgstr "Afficher l'heure :"
 
-#: ../src/gtkgui.glade.h:199
+#: ../src/gtkgui.glade.h:200
 msgid "Priori_ty:"
 msgstr "Priori_té:"
 
-#: ../src/gtkgui.glade.h:200
+#: ../src/gtkgui.glade.h:201
 msgid ""
 "Priority is used in Jabber to determine who gets the events from the jabber "
 "server when two or more clients are connected using the same account; The "
@@ -2456,60 +2465,65 @@ msgstr ""
 "du serveur quand plusieurs clients sont connectés avec le même compte. Le "
 "client ayant la plus haute priorité recevra les messages"
 
-#: ../src/gtkgui.glade.h:201
+#: ../src/gtkgui.glade.h:202
 msgid "Profile, Avatar"
 msgstr "Profil, Avatar"
 
-#: ../src/gtkgui.glade.h:202
+#: ../src/gtkgui.glade.h:203
 msgid "Protocol:"
 msgstr "Protocole :"
 
-#: ../src/gtkgui.glade.h:203
+#: ../src/gtkgui.glade.h:204
 msgid "Proxy:"
 msgstr "Proxy :"
 
-#: ../src/gtkgui.glade.h:205
+#: ../src/gtkgui.glade.h:206
 msgid "Re_quest Authorization from"
 msgstr "Demander l'Autorisation à"
 
-#: ../src/gtkgui.glade.h:206
+#: ../src/gtkgui.glade.h:207
 msgid "Recently:"
 msgstr "Récemment :"
 
-#: ../src/gtkgui.glade.h:207
+#: ../src/gtkgui.glade.h:208
 msgid "Register to"
 msgstr "S'enregistrer à"
 
-#: ../src/gtkgui.glade.h:208
+#: ../src/gtkgui.glade.h:209
 msgid "Remove account from Gajim and from server"
 msgstr "Supprimer le compte de Gajim et du serveur"
 
-#: ../src/gtkgui.glade.h:209
+#: ../src/gtkgui.glade.h:210
 msgid "Remove account only from Gajim"
 msgstr "Supprimer le compte de Gajim uniquement"
 
-#: ../src/gtkgui.glade.h:210
+#: ../src/gtkgui.glade.h:211
 msgid "Remove file transfer from the list."
 msgstr "Supprimer le transfert de fichier de la liste."
 
-#: ../src/gtkgui.glade.h:211
+#: ../src/gtkgui.glade.h:212
 msgid "Removes completed, canceled and failed file transfers from the list"
 msgstr ""
 "Supprimer les transferts de fichier terminés, annulés et échoués de la liste"
 
-#: ../src/gtkgui.glade.h:212
+#: ../src/gtkgui.glade.h:213
+#, fuzzy
+msgid "Removing selected file transfer"
+msgstr "Annule le transfert de fichier sélectionné"
+
+#: ../src/gtkgui.glade.h:214
 msgid "Reply to this message"
 msgstr "Repondre à de message"
 
-#: ../src/gtkgui.glade.h:213
+#: ../src/gtkgui.glade.h:215
 msgid "Reset to Default Colors"
 msgstr "Utiliser les Couleurs par Défaut"
 
-#: ../src/gtkgui.glade.h:214
+#: ../src/gtkgui.glade.h:216
 msgid "Resour_ce: "
 msgstr "Ressour_ce: "
 
-#: ../src/gtkgui.glade.h:215
+#: ../src/gtkgui.glade.h:217
 #, fuzzy
 msgid ""
 "Resource is sent to the Jabber server in order to separate the same JID in "
@@ -2524,225 +2538,215 @@ msgstr ""
 "en même temps. La ressource avec la plus haute priorité recevra les messages "
 "(voir plus bas)."
 
-#: ../src/gtkgui.glade.h:216
+#: ../src/gtkgui.glade.h:218
 msgid "Resource:"
 msgstr "Ressource :"
 
-#: ../src/gtkgui.glade.h:217
+#: ../src/gtkgui.glade.h:219
 msgid "Role:"
 msgstr "Rôle :"
 
-#: ../src/gtkgui.glade.h:218
+#: ../src/gtkgui.glade.h:220
 msgid "Room Configuration"
 msgstr "Configuration du Groupe de Discussion"
 
-#: ../src/gtkgui.glade.h:219
+#: ../src/gtkgui.glade.h:221
 msgid "Room:"
 msgstr "Salon :"
 
-#: ../src/gtkgui.glade.h:220
+#: ../src/gtkgui.glade.h:222
 msgid "Save _passphrase (insecure)"
 msgstr "Enregistrer votre mot de passe (non sécurisé)"
 
-#: ../src/gtkgui.glade.h:221
+#: ../src/gtkgui.glade.h:223
 msgid "Save _position and size for roster and chat windows"
 msgstr ""
 "Garder la _position et la taille pour la liste de contact et les fenêtres de "
 "discussion"
 
-#: ../src/gtkgui.glade.h:222
+#: ../src/gtkgui.glade.h:224
 msgid "Save conversation _logs for all contacts"
 msgstr "Archiver l'historique des conversations pour tous les contacts"
 
-#: ../src/gtkgui.glade.h:223
+#: ../src/gtkgui.glade.h:225
 msgid "Save pass_word"
 msgstr "Enregistrer le mot de _passe"
 
-#: ../src/gtkgui.glade.h:224
+#: ../src/gtkgui.glade.h:226
 msgid "Sen_d"
 msgstr "_Envoyer"
 
-#: ../src/gtkgui.glade.h:225
+#: ../src/gtkgui.glade.h:227
 msgid "Send Authorization to"
 msgstr "Envoyer l'Autorisation à"
 
-#: ../src/gtkgui.glade.h:226
+#: ../src/gtkgui.glade.h:228
 msgid "Send File"
 msgstr "Envoyer un Fichier"
 
-#: ../src/gtkgui.glade.h:227
+#: ../src/gtkgui.glade.h:229
 msgid "Send Single _Message"
 msgstr "Envoyer un _Message Simple"
 
-#: ../src/gtkgui.glade.h:228
+#: ../src/gtkgui.glade.h:230
 msgid "Send _File"
 msgstr "Envoyer un _Fichier"
 
-#: ../src/gtkgui.glade.h:229
+#: ../src/gtkgui.glade.h:231
 msgid "Send keep-alive packets"
 msgstr "Envoi des paquets de maintien de connexion"
 
-#: ../src/gtkgui.glade.h:230
+#: ../src/gtkgui.glade.h:232
 msgid "Send message"
 msgstr "Envoyer un message"
 
-#: ../src/gtkgui.glade.h:231
+#: ../src/gtkgui.glade.h:233
 msgid "Send message and close window"
 msgstr "Envoyer le message et fermer la fenêtre"
 
-#: ../src/gtkgui.glade.h:232
+#: ../src/gtkgui.glade.h:234
 msgid "Sends a message to currently connected users to this server"
 msgstr "Envoie un message aux utilisateurs actuellement connectés a ce serveur"
 
-#: ../src/gtkgui.glade.h:233
+#: ../src/gtkgui.glade.h:235
 msgid "Server:"
 msgstr "Serveur :"
 
-#: ../src/gtkgui.glade.h:234
+#: ../src/gtkgui.glade.h:236
 msgid "Servers Features"
 msgstr "Fonctionalités des Serveurs"
 
-#: ../src/gtkgui.glade.h:235
+#: ../src/gtkgui.glade.h:237
 msgid "Set MOTD"
 msgstr "Mettre MOTD"
 
-#: ../src/gtkgui.glade.h:236
+#: ../src/gtkgui.glade.h:238
 msgid "Set Message of the Day"
 msgstr "Mettre un Message du Jour"
 
-#: ../src/gtkgui.glade.h:237
+#: ../src/gtkgui.glade.h:239
 msgid "Set _Avatar"
 msgstr "Choisir un _Avatar"
 
-#: ../src/gtkgui.glade.h:238
+#: ../src/gtkgui.glade.h:240
 msgid "Sets Message of the Day"
 msgstr "Mets un Message du Jour"
 
-#: ../src/gtkgui.glade.h:239
+#: ../src/gtkgui.glade.h:241
 msgid "Show _Offline Contacts"
 msgstr "Montrer les contacts Déconnectés"
 
-#: ../src/gtkgui.glade.h:240
+#: ../src/gtkgui.glade.h:242
 msgid "Show only in _roster"
 msgstr "Ne montrer que dans la liste"
 
-#: ../src/gtkgui.glade.h:241
+#: ../src/gtkgui.glade.h:243
 msgid "Show roster window at application startup"
 msgstr "Afficher la fenêtre de contacts au démarrage"
 
-#: ../src/gtkgui.glade.h:242
-msgid ""
-"Show the list of active, completed and stopped file transfer from and to  "
-"your friends."
-msgstr ""
-"Montre la liste des transferts de fichier actifs, terminés et arrêtés de et "
-"versa vos amis."
-
-#: ../src/gtkgui.glade.h:243
-msgid ""
-"Shows list of files that you send to your friends, and files which you "
-"receive from your friends."
-msgstr ""
-"Montre la liste des fichiers que vous envoyez a vos amis, et que vous "
-"recevez de vos amis."
-
 #: ../src/gtkgui.glade.h:244
+msgid "Shows a list of file transfers between you and other"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:245
 msgid "Sign _in"
 msgstr "Se _connecte"
 
-#: ../src/gtkgui.glade.h:245
+#: ../src/gtkgui.glade.h:246
 msgid "Sign _out"
 msgstr "Se _déconnecte"
 
-#: ../src/gtkgui.glade.h:246
+#: ../src/gtkgui.glade.h:247
 msgid "Sort contacts by status"
 msgstr "Trier les contacts par status"
 
-#: ../src/gtkgui.glade.h:247
+#: ../src/gtkgui.glade.h:248
 msgid "Start _Chat"
 msgstr "Commencer une discussion"
 
-#: ../src/gtkgui.glade.h:248
+#: ../src/gtkgui.glade.h:249
 msgid "State:"
 msgstr "État :"
 
-#: ../src/gtkgui.glade.h:249
+#: ../src/gtkgui.glade.h:250
 msgid "Status"
 msgstr "État"
 
-#: ../src/gtkgui.glade.h:250
+#: ../src/gtkgui.glade.h:251
 msgid "Status message:"
 msgstr "Message d'état :"
 
-#: ../src/gtkgui.glade.h:251
+#: ../src/gtkgui.glade.h:252
 msgid "Status:"
 msgstr "État :"
 
-#: ../src/gtkgui.glade.h:252
+#: ../src/gtkgui.glade.h:253
 msgid "Stop file transfer"
 msgstr "Arrête le transfert de fichier"
 
-#: ../src/gtkgui.glade.h:253
-msgid "Stoping transfer"
-msgstr "arrête le transfert"
-
 #: ../src/gtkgui.glade.h:254
+#, fuzzy
+msgid "Stoping selected file transfer"
+msgstr "Annule le transfert de fichier sélectionné"
+
+#: ../src/gtkgui.glade.h:255
+#, fuzzy
 msgid ""
 "Stops the selected file transfer. If there is an incomplete file, kept in "
-"the file system it will be removed. This operation is non reverseable. "
+"the file system it will be removed. This operation is not reversable. "
 msgstr ""
 "Arrête le transfert de fichier sélectionné. Si un fichier incomplet a été "
 "enregistré, il sera supprimé. Cette opération est irréversible."
 
-#: ../src/gtkgui.glade.h:255
+#: ../src/gtkgui.glade.h:256
 msgid "Street:"
 msgstr "Rue :"
 
-#: ../src/gtkgui.glade.h:256
+#: ../src/gtkgui.glade.h:257
 msgid "Subject:"
 msgstr "Sujet :"
 
-#: ../src/gtkgui.glade.h:257
+#: ../src/gtkgui.glade.h:258
 msgid "Subscription Request"
 msgstr "Requête d'Inscription"
 
-#: ../src/gtkgui.glade.h:258
+#: ../src/gtkgui.glade.h:259
 msgid "Subscription:"
 msgstr "Inscription :"
 
-#: ../src/gtkgui.glade.h:259
+#: ../src/gtkgui.glade.h:260
 msgid "Suffix:"
 msgstr "Suffixe:"
 
-#: ../src/gtkgui.glade.h:260
+#: ../src/gtkgui.glade.h:261
 msgid "Synch_ronize account status with global status"
 msgstr "Synch_roniser l'état du compte avec l'état global"
 
-#: ../src/gtkgui.glade.h:261
+#: ../src/gtkgui.glade.h:262
 msgid "Text color"
 msgstr "Couleur du texte"
 
-#: ../src/gtkgui.glade.h:262
+#: ../src/gtkgui.glade.h:263
 msgid "Text font"
 msgstr "Police du texte"
 
-#: ../src/gtkgui.glade.h:263
+#: ../src/gtkgui.glade.h:264
 msgid "The auto away status message"
 msgstr "Le message d'état automatique absent"
 
-#: ../src/gtkgui.glade.h:264
+#: ../src/gtkgui.glade.h:265
 msgid "The auto not available status message"
 msgstr "Le message d'état automatique non disponible"
 
-#: ../src/gtkgui.glade.h:265
+#: ../src/gtkgui.glade.h:266
 msgid "The bar line which is on top of chat windows"
 msgstr "La barre horizontale en haut de la fenêtre de discussion"
 
-#: ../src/gtkgui.glade.h:266
+#: ../src/gtkgui.glade.h:267
 msgid "Theme:"
 msgstr "Thème :"
 
-#: ../src/gtkgui.glade.h:267
+#: ../src/gtkgui.glade.h:268
 msgid ""
 "This action removes single file transfer from the list. If the transfer is "
 "active, it is first stopped and then removed"
@@ -2750,67 +2754,74 @@ msgstr ""
 "Cette action supprime les transferts de fichier de la liste. Si le transfert "
 "est actif, il est d'abord arrêté puis supprimé"
 
-#: ../src/gtkgui.glade.h:268
+#: ../src/gtkgui.glade.h:269
 msgid "Title:"
 msgstr "Titre:"
 
-#: ../src/gtkgui.glade.h:269
+#: ../src/gtkgui.glade.h:270
 msgid "To:"
 msgstr "À:"
 
-#: ../src/gtkgui.glade.h:270
+#: ../src/gtkgui.glade.h:271
 msgid "Toggle _GPG Encryption"
 msgstr "Activer l'Encryption _GPG"
 
-#: ../src/gtkgui.glade.h:271
+#: ../src/gtkgui.glade.h:272
 msgid "Type:"
 msgstr "Type :"
 
-#: ../src/gtkgui.glade.h:272
+#: ../src/gtkgui.glade.h:273
 msgid "Underline"
 msgstr "Sousligner"
 
-#: ../src/gtkgui.glade.h:273
+#: ../src/gtkgui.glade.h:274
 msgid "Update MOTD"
 msgstr "Mettre à jour MOTD"
 
-#: ../src/gtkgui.glade.h:274
+#: ../src/gtkgui.glade.h:275
 msgid "Update Message of the Day"
 msgstr "Mettre à jour le Message du Jour"
 
-#: ../src/gtkgui.glade.h:275
+#: ../src/gtkgui.glade.h:276
 msgid "Updates Message of the Day"
 msgstr "Mets à jour le Message du Jour"
 
-#: ../src/gtkgui.glade.h:276
+#: ../src/gtkgui.glade.h:277
 msgid "Use _SSL (legacy)"
 msgstr "Utiliser _SSL"
 
-#: ../src/gtkgui.glade.h:277
+#: ../src/gtkgui.glade.h:278
 msgid "Use _emoticons"
 msgstr "Utiliser les _frimousses"
 
-#: ../src/gtkgui.glade.h:278
+#: ../src/gtkgui.glade.h:279
 msgid "Use _transports iconsets"
 msgstr "Utiliser les icônes des transports"
 
-#: ../src/gtkgui.glade.h:279
+#: ../src/gtkgui.glade.h:280
 msgid "Use a single chat window with _tabs"
 msgstr "Utiliser une seule fenê_tre de chat avec des onglets"
 
-#: ../src/gtkgui.glade.h:280
+#: ../src/gtkgui.glade.h:281
 msgid "Use authentication"
 msgstr "Utiliser l'authentification"
 
-#: ../src/gtkgui.glade.h:281
+#: ../src/gtkgui.glade.h:282
 msgid "Use custom hostname/port"
 msgstr "Utiliser un nom d'hôte/port personnalisé"
 
-#: ../src/gtkgui.glade.h:282
+#: ../src/gtkgui.glade.h:283
 msgid "User ID:"
 msgstr "Identifiant :"
 
-#: ../src/gtkgui.glade.h:283
+#: ../src/gtkgui.glade.h:284
+#, fuzzy
+msgid "When a file transfer is complete show a popup notification "
+msgstr ""
+"Quand le fichier est complétement transféré a son destinataire, montrer une "
+"fenêtre de notification"
+
+#: ../src/gtkgui.glade.h:285
 msgid ""
 "When a new message is received which is not from a contact already in a chat "
 "window, the three following actions may happen in order for you to be "
@@ -2819,23 +2830,15 @@ msgstr ""
 "Quand un nouveau message d'un contact n'ayant pas de fenêtre est reçu, l'une "
 "des trois actions suivantes est possible pour vous prévenir"
 
-#: ../src/gtkgui.glade.h:284
-msgid ""
-"When file is completely transfered to its recipient show a popup "
-"notification "
-msgstr ""
-"Quand le fichier est complétement transféré a son destinataire, montrer une "
-"fenêtre de notification"
-
-#: ../src/gtkgui.glade.h:285
+#: ../src/gtkgui.glade.h:286
 msgid "When new message is received"
 msgstr "Quand un nouveau message est reçu"
 
-#: ../src/gtkgui.glade.h:286
+#: ../src/gtkgui.glade.h:287
 msgid "Work"
 msgstr "Emploi"
 
-#: ../src/gtkgui.glade.h:287
+#: ../src/gtkgui.glade.h:288
 msgid ""
 "You need to have an account in order to connect to\n"
 "the Jabber network."
@@ -2843,355 +2846,355 @@ msgstr ""
 "Vous devez avoir un compte pour vous connecter\n"
 "au réseau Jabber."
 
-#: ../src/gtkgui.glade.h:289
+#: ../src/gtkgui.glade.h:290
 msgid "Your JID:"
 msgstr "Votre Identifiant Jabber :"
 
-#: ../src/gtkgui.glade.h:290
+#: ../src/gtkgui.glade.h:291
 msgid "_About"
 msgstr "_À Propos"
 
-#: ../src/gtkgui.glade.h:291
+#: ../src/gtkgui.glade.h:292
 msgid "_Actions"
 msgstr "_Actions"
 
-#: ../src/gtkgui.glade.h:292
+#: ../src/gtkgui.glade.h:293
 msgid "_Add Contact..."
 msgstr "_Ajouter un Contact..."
 
-#: ../src/gtkgui.glade.h:293
+#: ../src/gtkgui.glade.h:294
 msgid "_Add to Roster"
 msgstr "_Ajouter à la liste de contacts"
 
-#: ../src/gtkgui.glade.h:294
+#: ../src/gtkgui.glade.h:295
 msgid "_Address:"
 msgstr "Adresse :"
 
-#: ../src/gtkgui.glade.h:295
+#: ../src/gtkgui.glade.h:296
 msgid "_Admin"
 msgstr "_Admin"
 
-#: ../src/gtkgui.glade.h:296
+#: ../src/gtkgui.glade.h:297
 msgid "_Administrator"
 msgstr "_Administrateur"
 
-#: ../src/gtkgui.glade.h:297
+#: ../src/gtkgui.glade.h:298
 msgid "_Advanced"
 msgstr "_Avancé"
 
-#: ../src/gtkgui.glade.h:298
+#: ../src/gtkgui.glade.h:299
 msgid "_Authorize"
 msgstr "_Autoriser"
 
-#: ../src/gtkgui.glade.h:299
+#: ../src/gtkgui.glade.h:300
 msgid "_Ban"
 msgstr "_Bannir"
 
-#: ../src/gtkgui.glade.h:300
+#: ../src/gtkgui.glade.h:301
 msgid "_Bookmark This Room"
 msgstr "Ajouter ce salon aux _Marque-pages"
 
-#: ../src/gtkgui.glade.h:301
+#: ../src/gtkgui.glade.h:302
 msgid "_Browser:"
 msgstr "_Navigateur :"
 
-#: ../src/gtkgui.glade.h:302
+#: ../src/gtkgui.glade.h:303
 msgid "_Cancel"
 msgstr "_Annuler"
 
-#: ../src/gtkgui.glade.h:303
+#: ../src/gtkgui.glade.h:304
 msgid "_Compact View"
 msgstr "Vue _Compacte"
 
-#: ../src/gtkgui.glade.h:304
+#: ../src/gtkgui.glade.h:305
 msgid "_Compact View    Alt+C"
 msgstr "Vue _Compacte    Alt+C"
 
-#: ../src/gtkgui.glade.h:306
+#: ../src/gtkgui.glade.h:307
 msgid "_Copy JID/Email Address"
 msgstr "_Copier le JID/l'Adresse Email"
 
-#: ../src/gtkgui.glade.h:307
+#: ../src/gtkgui.glade.h:308
 msgid "_Copy Link Location"
 msgstr "_Copier l'Adresse du Lien"
 
-#: ../src/gtkgui.glade.h:308
+#: ../src/gtkgui.glade.h:309
 msgid "_Deny"
 msgstr "_Refuser"
 
-#: ../src/gtkgui.glade.h:309
+#: ../src/gtkgui.glade.h:310
 msgid "_Earliest"
 msgstr "P_remiers"
 
-#: ../src/gtkgui.glade.h:311
+#: ../src/gtkgui.glade.h:312
 msgid "_Edit Account..."
 msgstr "_Éditer le Compte..."
 
-#: ../src/gtkgui.glade.h:312
+#: ../src/gtkgui.glade.h:313
 msgid "_Finish"
 msgstr "_Finir"
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:314
 msgid "_Highlight misspelled words"
 msgstr "Souligner les fautes d'orthographe"
 
-#: ../src/gtkgui.glade.h:314
+#: ../src/gtkgui.glade.h:315
 msgid "_History"
 msgstr "_Historique"
 
-#: ../src/gtkgui.glade.h:315
+#: ../src/gtkgui.glade.h:316
 msgid "_Host:"
 msgstr "_Serveur :"
 
-#: ../src/gtkgui.glade.h:316
+#: ../src/gtkgui.glade.h:317
 msgid "_IQ"
 msgstr "_IQ"
 
-#: ../src/gtkgui.glade.h:317
+#: ../src/gtkgui.glade.h:318
 msgid "_Icon in systray (aka. notification area)"
 msgstr "_Icône dans la zone de notification"
 
-#: ../src/gtkgui.glade.h:318
+#: ../src/gtkgui.glade.h:319
 msgid "_Ignore events from contacts not in the roster"
 msgstr "_Ignorer les messages des contacts qui ne sont pas dans notre liste"
 
-#: ../src/gtkgui.glade.h:319
+#: ../src/gtkgui.glade.h:320
 msgid "_Jabber ID:"
 msgstr "Identifiant _Jabber : "
 
-#: ../src/gtkgui.glade.h:320
+#: ../src/gtkgui.glade.h:321
 msgid "_Join"
 msgstr "Re_joindre"
 
-#: ../src/gtkgui.glade.h:321
+#: ../src/gtkgui.glade.h:322
 msgid "_Join Group Chat"
 msgstr "Re_joindre un salon de Discussion"
 
-#: ../src/gtkgui.glade.h:322
+#: ../src/gtkgui.glade.h:323
 msgid "_Kick"
 msgstr "_Éjecter"
 
-#: ../src/gtkgui.glade.h:323
+#: ../src/gtkgui.glade.h:324
 msgid "_Latest"
 msgstr "_Derniers"
 
-#: ../src/gtkgui.glade.h:324
+#: ../src/gtkgui.glade.h:325
 msgid "_Mail client:"
 msgstr "Client e_mail :"
 
-#: ../src/gtkgui.glade.h:325
+#: ../src/gtkgui.glade.h:326
 msgid "_Member"
 msgstr "_Membre"
 
-#: ../src/gtkgui.glade.h:326
+#: ../src/gtkgui.glade.h:327
 msgid "_Merge accounts"
 msgstr "_Fusionner les comptes"
 
-#: ../src/gtkgui.glade.h:327
+#: ../src/gtkgui.glade.h:328
 msgid "_Message"
 msgstr "_Message"
 
-#: ../src/gtkgui.glade.h:328
+#: ../src/gtkgui.glade.h:329
 msgid "_Modify"
 msgstr "_Modifier"
 
-#: ../src/gtkgui.glade.h:329
+#: ../src/gtkgui.glade.h:330
 msgid "_Name: "
 msgstr "_Nom : "
 
-#: ../src/gtkgui.glade.h:330
+#: ../src/gtkgui.glade.h:331
 msgid "_Never"
 msgstr "_Jamais"
 
-#: ../src/gtkgui.glade.h:331
+#: ../src/gtkgui.glade.h:332
 msgid "_New Message"
 msgstr "_Nouveau message"
 
-#: ../src/gtkgui.glade.h:332
+#: ../src/gtkgui.glade.h:333
 msgid "_New Message..."
 msgstr "_Nouveau message..."
 
-#: ../src/gtkgui.glade.h:333
+#: ../src/gtkgui.glade.h:334
 msgid "_Nickname:"
 msgstr "_Surnom :"
 
-#: ../src/gtkgui.glade.h:334
+#: ../src/gtkgui.glade.h:335
 msgid "_Notify me about it"
 msgstr "Me le _signaler"
 
-#: ../src/gtkgui.glade.h:335
+#: ../src/gtkgui.glade.h:336
 msgid "_Notify me when a file transfer is complete"
 msgstr "Me _signaler quand un transfert de fichier est terminé"
 
-#: ../src/gtkgui.glade.h:336
+#: ../src/gtkgui.glade.h:337
 msgid "_OK"
 msgstr "_OK"
 
-#: ../src/gtkgui.glade.h:337
+#: ../src/gtkgui.glade.h:338
 msgid "_Occupant Actions"
 msgstr "_Pouvoirs du contact"
 
-#: ../src/gtkgui.glade.h:338
+#: ../src/gtkgui.glade.h:339
 msgid "_Online Users"
 msgstr "Utilisateurs En _Ligne"
 
-#: ../src/gtkgui.glade.h:339
+#: ../src/gtkgui.glade.h:340
 msgid "_Open Email Composer"
 msgstr "_Ouvrir le Compositeur d'Email"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Open Link in Browser"
 msgstr "_Ouvrir le Lien dans votre navigateur"
 
-#: ../src/gtkgui.glade.h:341
+#: ../src/gtkgui.glade.h:342
 msgid "_Open containing folder"
 msgstr "_Ouvrir le répertoire de destination"
 
-#: ../src/gtkgui.glade.h:342
+#: ../src/gtkgui.glade.h:343
 msgid "_Owner"
 msgstr "P_ossesseur"
 
-#: ../src/gtkgui.glade.h:343
+#: ../src/gtkgui.glade.h:344
 msgid "_Password:"
 msgstr "Mot de _passe : "
 
-#: ../src/gtkgui.glade.h:344
+#: ../src/gtkgui.glade.h:345
 msgid "_Pause"
 msgstr "_Pause"
 
-#: ../src/gtkgui.glade.h:345
+#: ../src/gtkgui.glade.h:346
 msgid "_Player:"
 msgstr "_Programme pour lire les sons :"
 
-#: ../src/gtkgui.glade.h:346
+#: ../src/gtkgui.glade.h:347
 msgid "_Pop it up"
 msgstr "L'_afficher"
 
-#: ../src/gtkgui.glade.h:347
+#: ../src/gtkgui.glade.h:348
 msgid "_Port:"
 msgstr "_Port :"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:349
 msgid "_Preferences"
 msgstr "_Préférences"
 
-#: ../src/gtkgui.glade.h:349
+#: ../src/gtkgui.glade.h:350
 msgid "_Presence"
 msgstr "_Présence"
 
-#: ../src/gtkgui.glade.h:350
+#: ../src/gtkgui.glade.h:351
 msgid "_Previous"
 msgstr "_Précédent"
 
-#: ../src/gtkgui.glade.h:351
+#: ../src/gtkgui.glade.h:352
 msgid "_Publish"
 msgstr "_Publier"
 
-#: ../src/gtkgui.glade.h:352
+#: ../src/gtkgui.glade.h:353
 msgid "_Quit"
 msgstr "_Quitter"
 
-#: ../src/gtkgui.glade.h:353
+#: ../src/gtkgui.glade.h:354
 msgid "_Refresh"
 msgstr "_Rafraîchir"
 
-#: ../src/gtkgui.glade.h:354
+#: ../src/gtkgui.glade.h:355
 msgid "_Register new account"
 msgstr "En_registrer un nouveau compte"
 
-#: ../src/gtkgui.glade.h:355
+#: ../src/gtkgui.glade.h:356
 msgid "_Remove"
 msgstr "_Supprimer"
 
-#: ../src/gtkgui.glade.h:357
+#: ../src/gtkgui.glade.h:358
 msgid "_Rename"
 msgstr "_Renommer"
 
-#: ../src/gtkgui.glade.h:358
+#: ../src/gtkgui.glade.h:359
 msgid "_Reply"
 msgstr "_Répondre"
 
-#: ../src/gtkgui.glade.h:359
+#: ../src/gtkgui.glade.h:360
 msgid "_Retrieve"
 msgstr "_Récupérer"
 
-#: ../src/gtkgui.glade.h:360
+#: ../src/gtkgui.glade.h:361
 msgid "_Send"
 msgstr "_Envoyer"
 
-#: ../src/gtkgui.glade.h:361
+#: ../src/gtkgui.glade.h:362
 msgid "_Send & Close"
 msgstr "_Envoyer et Fermer"
 
-#: ../src/gtkgui.glade.h:362
+#: ../src/gtkgui.glade.h:363
 msgid "_Send Private Message"
 msgstr "_Envoyer un message privé"
 
-#: ../src/gtkgui.glade.h:363
+#: ../src/gtkgui.glade.h:364
 msgid "_Send Server Message"
 msgstr "_Envoyer un Message au Serveur"
 
-#: ../src/gtkgui.glade.h:364
+#: ../src/gtkgui.glade.h:365
 msgid "_Send Single Message"
 msgstr "_Envoyer un Message Simple"
 
-#: ../src/gtkgui.glade.h:365
+#: ../src/gtkgui.glade.h:366
 msgid "_Server:"
 msgstr "_Serveur :"
 
-#: ../src/gtkgui.glade.h:366
+#: ../src/gtkgui.glade.h:367
 msgid "_Service Discovery"
 msgstr "Gestion des _Services"
 
-#: ../src/gtkgui.glade.h:367
+#: ../src/gtkgui.glade.h:368
 msgid "_Service Discovery..."
 msgstr "Gestion des _Services..."
 
-#: ../src/gtkgui.glade.h:368
+#: ../src/gtkgui.glade.h:369
 msgid "_Set Image..."
 msgstr "_Choisir une Image..."
 
-#: ../src/gtkgui.glade.h:369
+#: ../src/gtkgui.glade.h:370
 msgid "_Start Chat"
 msgstr "Commencer une discussion"
 
-#: ../src/gtkgui.glade.h:370
+#: ../src/gtkgui.glade.h:371
 msgid "_Status"
 msgstr "État"
 
-#: ../src/gtkgui.glade.h:371
+#: ../src/gtkgui.glade.h:372
 msgid "_Subscribe"
 msgstr "_Ajouter"
 
-#: ../src/gtkgui.glade.h:372
+#: ../src/gtkgui.glade.h:373
 msgid "_Subscription"
 msgstr "_Autorisation"
 
-#: ../src/gtkgui.glade.h:373
+#: ../src/gtkgui.glade.h:374
 msgid "_Use proxy"
 msgstr "_Utiliser un proxy"
 
-#: ../src/gtkgui.glade.h:374
+#: ../src/gtkgui.glade.h:375
 msgid "_Username:"
 msgstr "_Nom"
 
-#: ../src/gtkgui.glade.h:375
+#: ../src/gtkgui.glade.h:376
 msgid "_Voice"
 msgstr "_Voix"
 
-#: ../src/gtkgui.glade.h:376
+#: ../src/gtkgui.glade.h:377
 msgid "_XML Console"
 msgstr "Console _XML"
 
-#: ../src/gtkgui.glade.h:377
+#: ../src/gtkgui.glade.h:378
 msgid "_XML Console..."
 msgstr "Console _XML..."
 
-#: ../src/gtkgui.glade.h:378
+#: ../src/gtkgui.glade.h:379
 msgid "file transfers list"
 msgstr "liste des transferts de fichier"
 
-#: ../src/gtkgui.glade.h:379
+#: ../src/gtkgui.glade.h:380
 msgid "minutes"
 msgstr "minutes"
 
@@ -3386,3 +3389,13 @@ msgid ""
 msgstr ""
 "L'argument \"%s\" n'est pas précisé. \n"
 "Tappez \"%s help %s\" pour plus d'informations"
+
+#~ msgid ""
+#~ "Shows list of files that you send to your friends, and files which you "
+#~ "receive from your friends."
+#~ msgstr ""
+#~ "Montre la liste des fichiers que vous envoyez a vos amis, et que vous "
+#~ "recevez de vos amis."
+
+#~ msgid "Stoping transfer"
+#~ msgstr "arrête le transfert"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-10 22:09+0300\n"
+"POT-Creation-Date: 2005-08-11 01:25+0300\n"
 "PO-Revision-Date: 2005-06-01 18:52+0300\n"
 "Last-Translator: Yavor Doganov <yavor@doganov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -273,7 +273,7 @@ msgid "Has errors"
 msgstr "Има грешки"
 
 #: ../src/common/helpers.py:94 ../src/common/helpers.py:108
-#: ../src/groupchat_window.py:277 ../src/gtkgui.glade.h:177
+#: ../src/groupchat_window.py:277 ../src/gtkgui.glade.h:178
 #, fuzzy
 msgid "None"
 msgstr "Възел"
@@ -359,11 +359,11 @@ msgstr "Стойност"
 msgid "Type"
 msgstr "Тип"
 
-#: ../src/chat.py:123 ../src/gtkgui.glade.h:68
+#: ../src/chat.py:123 ../src/gtkgui.glade.h:69
 msgid "Chat"
 msgstr "Разговор"
 
-#: ../src/chat.py:125 ../src/gtkgui.glade.h:130
+#: ../src/chat.py:125 ../src/gtkgui.glade.h:131
 #, fuzzy
 msgid "Group Chat"
 msgstr "Стая"
@@ -577,7 +577,7 @@ msgstr "Грешка при извличане на частните ключо�
 msgid "There was a problem retrieving your GPG secret keys."
 msgstr ""
 
-#: ../src/config.py:1443 ../src/gtkgui.glade.h:186
+#: ../src/config.py:1443 ../src/gtkgui.glade.h:187
 msgid "Passphrase"
 msgstr "Парола"
 
@@ -586,7 +586,7 @@ msgstr "Парола"
 msgid "Choose your OpenPGP key"
 msgstr "<b>Изберете вашия OpenPGP ключ</b>"
 
-#: ../src/config.py:1452 ../src/gtkgui.glade.h:176
+#: ../src/config.py:1452 ../src/gtkgui.glade.h:177
 msgid "No key selected"
 msgstr "Няма избран ключ"
 
@@ -667,11 +667,11 @@ msgstr "Услуга"
 msgid "Node"
 msgstr "Възел"
 
-#: ../src/config.py:2266 ../src/gtkgui.glade.h:310
+#: ../src/config.py:2266 ../src/gtkgui.glade.h:311
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: ../src/config.py:2268 ../src/gtkgui.glade.h:204
+#: ../src/config.py:2268 ../src/gtkgui.glade.h:205
 msgid "Re_gister"
 msgstr "_Регистриране"
 
@@ -819,7 +819,7 @@ msgstr "Gajim - %s непрочетени съобщения"
 msgid "Gajim - 1 unread message"
 msgstr "Gajim - 1 непрочетено съобщение"
 
-#: ../src/dialogs.py:696 ../src/gtkgui.glade.h:119
+#: ../src/dialogs.py:696 ../src/gtkgui.glade.h:120
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -932,7 +932,7 @@ msgstr ""
 msgid "Join Group Chat as %s"
 msgstr "Влизане в стая като "
 
-#: ../src/dialogs.py:1005 ../src/gtkgui.glade.h:157
+#: ../src/dialogs.py:1005 ../src/gtkgui.glade.h:158
 #, fuzzy
 msgid "Join Group Chat"
 msgstr "Влизане в стая"
@@ -943,7 +943,7 @@ msgid "New Message as %s"
 msgstr "Ново съобщение като "
 
 #: ../src/dialogs.py:1070 ../src/dialogs.py:1165 ../src/gajim.py:395
-#: ../src/gtkgui.glade.h:173
+#: ../src/gtkgui.glade.h:174
 msgid "New Message"
 msgstr "Ново съобщение"
 
@@ -1171,7 +1171,7 @@ msgstr ""
 msgid "Pause"
 msgstr "Стойност"
 
-#: ../src/dialogs.py:1992 ../src/gtkgui.glade.h:305
+#: ../src/dialogs.py:1992 ../src/gtkgui.glade.h:306
 #, fuzzy
 msgid "_Continue"
 msgstr "Свъзване"
@@ -1191,7 +1191,7 @@ msgid "error while sending"
 msgstr "грешка при изпращане"
 
 #: ../src/gajim.py:469 ../src/gajim.py:479 ../src/roster_window.py:125
-#: ../src/roster_window.py:1029 ../src/gtkgui.glade.h:127
+#: ../src/roster_window.py:1029 ../src/gtkgui.glade.h:128
 msgid "General"
 msgstr "Общи"
 
@@ -1490,7 +1490,7 @@ msgstr "Изкл_ючване"
 msgid "Edit"
 msgstr "_Редактиране"
 
-#: ../src/roster_window.py:918 ../src/gtkgui.glade.h:356
+#: ../src/roster_window.py:918 ../src/gtkgui.glade.h:357
 msgid "_Remove from Roster"
 msgstr ""
 
@@ -1755,123 +1755,128 @@ msgid "<span background=\"lightyellow\"></span>"
 msgstr "<span background=\"светложълто\"></span>"
 
 #: ../src/gtkgui.glade.h:22
+msgid "A list of active, completed and stopped file transfers"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:23
 msgid "A_ccounts"
 msgstr "А_каунти"
 
-#: ../src/gtkgui.glade.h:23
+#: ../src/gtkgui.glade.h:24
 msgid "About"
 msgstr "Относно"
 
-#: ../src/gtkgui.glade.h:24
+#: ../src/gtkgui.glade.h:25
 msgid "Account"
 msgstr "Акаунт"
 
-#: ../src/gtkgui.glade.h:25
+#: ../src/gtkgui.glade.h:26
 msgid "Account Modification"
 msgstr "Промяна на акаунт"
 
-#: ../src/gtkgui.glade.h:26
+#: ../src/gtkgui.glade.h:27
 msgid "Account:"
 msgstr "Акаунт:"
 
-#: ../src/gtkgui.glade.h:27
+#: ../src/gtkgui.glade.h:28
 msgid "Accounts"
 msgstr "Акаунти"
 
-#: ../src/gtkgui.glade.h:28
-msgid "Activate/Disable notification for complete transfer"
-msgstr ""
-
 #: ../src/gtkgui.glade.h:29
+#, fuzzy
+msgid "Activate/Disable notification for when a file transfer is complete"
+msgstr "Използване на _набор икони на транспортите"
+
+#: ../src/gtkgui.glade.h:30
 #, fuzzy
 msgid "Ad_vanced Actions"
 msgstr "_Действия"
 
-#: ../src/gtkgui.glade.h:30
+#: ../src/gtkgui.glade.h:31
 msgid "Add New Contact"
 msgstr "Добавяне на нов контакт"
 
-#: ../src/gtkgui.glade.h:31
+#: ../src/gtkgui.glade.h:32
 msgid "Add _Contact"
 msgstr "Добавяне на _контакт"
 
-#: ../src/gtkgui.glade.h:32
+#: ../src/gtkgui.glade.h:33
 #, fuzzy
 msgid "Address"
 msgstr "_Адрес:"
 
-#: ../src/gtkgui.glade.h:33
+#: ../src/gtkgui.glade.h:34
 msgid "Advanced"
 msgstr "Напреднали"
 
-#: ../src/gtkgui.glade.h:34
+#: ../src/gtkgui.glade.h:35
 msgid "Advanced Configuration Editor"
 msgstr "Редактор на настройки за напреднали"
 
-#: ../src/gtkgui.glade.h:35
+#: ../src/gtkgui.glade.h:36
 msgid "After nickname:"
 msgstr "След псевдонима:"
 
-#: ../src/gtkgui.glade.h:36
+#: ../src/gtkgui.glade.h:37
 msgid "After time:"
 msgstr "След времето:"
 
-#: ../src/gtkgui.glade.h:37
+#: ../src/gtkgui.glade.h:38
 msgid ""
 "All chat states\n"
 "Composing only\n"
 "Disabled"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:40
+#: ../src/gtkgui.glade.h:41
 msgid "Allow _OS information to be sent"
 msgstr "Позволяване изпращането на информация за _ОС"
 
-#: ../src/gtkgui.glade.h:41
+#: ../src/gtkgui.glade.h:42
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
 "Позволяване на прозорци/уведомления при Отсъствам/Не съм на разположение/"
 "Зает/Невидим"
 
-#: ../src/gtkgui.glade.h:42
+#: ../src/gtkgui.glade.h:43
 msgid "Also known as iChat style"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:43
+#: ../src/gtkgui.glade.h:44
 msgid "Always use compact _view"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:44
+#: ../src/gtkgui.glade.h:45
 #, fuzzy
 msgid "Ask status message when I:"
 msgstr "Питане за съобщение за състояние при преминаване в режим: "
 
-#: ../src/gtkgui.glade.h:45
+#: ../src/gtkgui.glade.h:46
 msgid "Ask:"
 msgstr "Питане за:"
 
-#: ../src/gtkgui.glade.h:46
+#: ../src/gtkgui.glade.h:47
 #, fuzzy
 msgid "Assign Open_PGP Key"
 msgstr "Задаване на OpenPGP ключ"
 
-#: ../src/gtkgui.glade.h:47
+#: ../src/gtkgui.glade.h:48
 msgid "Authorize contact so he can know when you're connected"
 msgstr "Упълномощаване на контакта, така че да знае кога сте свързани"
 
-#: ../src/gtkgui.glade.h:48
+#: ../src/gtkgui.glade.h:49
 msgid "Auto _away after:"
 msgstr "Автоматично \"_Отсъствам\" след:"
 
-#: ../src/gtkgui.glade.h:49
+#: ../src/gtkgui.glade.h:50
 msgid "Auto _not available after:"
 msgstr "Автоматично \"_Не съм на разположение\" след:"
 
-#: ../src/gtkgui.glade.h:50
+#: ../src/gtkgui.glade.h:51
 msgid "Auto join"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:51
+#: ../src/gtkgui.glade.h:52
 #, fuzzy
 msgid ""
 "Autodetect at every application startup\n"
@@ -1880,77 +1885,77 @@ msgid ""
 "Custom"
 msgstr "Стандартни програми на GNOME"
 
-#: ../src/gtkgui.glade.h:55
+#: ../src/gtkgui.glade.h:56
 msgid "Automatically authorize contact"
 msgstr "Автоматично упълномощаване на контакта"
 
-#: ../src/gtkgui.glade.h:56
+#: ../src/gtkgui.glade.h:57
 msgid "Background color"
 msgstr "Цвят на фона"
 
-#: ../src/gtkgui.glade.h:57
+#: ../src/gtkgui.glade.h:58
 msgid "Banner:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:58
+#: ../src/gtkgui.glade.h:59
 msgid "Before nickname:"
 msgstr "Преди псевдонима:"
 
-#: ../src/gtkgui.glade.h:59
+#: ../src/gtkgui.glade.h:60
 msgid "Before time:"
 msgstr "Преди времето:"
 
-#: ../src/gtkgui.glade.h:60
+#: ../src/gtkgui.glade.h:61
 msgid "Birthday:"
 msgstr "Рожден ден:"
 
-#: ../src/gtkgui.glade.h:61
+#: ../src/gtkgui.glade.h:62
 msgid "Bold"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:62
+#: ../src/gtkgui.glade.h:63
 msgid "C_onnect at startup"
 msgstr "С_вързване при стартиране"
 
-#: ../src/gtkgui.glade.h:63
+#: ../src/gtkgui.glade.h:64
 msgid "Cancels the selected file transfer"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:64
+#: ../src/gtkgui.glade.h:65
 msgid "Chan_ge"
 msgstr "Пром_яна"
 
-#: ../src/gtkgui.glade.h:65
+#: ../src/gtkgui.glade.h:66
 msgid "Change Password"
 msgstr "Промяна на парола"
 
-#: ../src/gtkgui.glade.h:66
+#: ../src/gtkgui.glade.h:67
 #, fuzzy
 msgid "Change _Nickname"
 msgstr "Псе_вдоним:"
 
-#: ../src/gtkgui.glade.h:67
+#: ../src/gtkgui.glade.h:68
 msgid "Change _Subject"
 msgstr "Промяна на _темата"
 
-#: ../src/gtkgui.glade.h:69
+#: ../src/gtkgui.glade.h:70
 msgid "Chat state noti_fications:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:70
+#: ../src/gtkgui.glade.h:71
 msgid "Chat with"
 msgstr "Разговор с"
 
-#: ../src/gtkgui.glade.h:71
+#: ../src/gtkgui.glade.h:72
 #, fuzzy
 msgid "Check for new _version at application startup"
 msgstr "Проверка за нова в_ерсия при стартиране"
 
-#: ../src/gtkgui.glade.h:72
+#: ../src/gtkgui.glade.h:73
 msgid "Check if you want to register for a new jabber account"
 msgstr "Изберете, ако искате да регистрирате нов Jabber акаунт"
 
-#: ../src/gtkgui.glade.h:73
+#: ../src/gtkgui.glade.h:74
 #, fuzzy
 msgid ""
 "Check this option, only if someone you don't have in the roster spams/annoys "
@@ -1961,7 +1966,7 @@ msgstr ""
 "дразни. Използвайте я внимателно, тъй като блокира всички съобщения от всеки "
 "контакт, който не е в списъка."
 
-#: ../src/gtkgui.glade.h:74
+#: ../src/gtkgui.glade.h:75
 #, fuzzy
 msgid ""
 "Check this so Gajim will connect in port 5223 where legacy servers are "
@@ -1973,201 +1978,201 @@ msgstr ""
 "се очаква да предоставят възможности по SSL. Забележете, че Gajim използва "
 "TLS криптиране по подразбиране и избирайки тази опция, изключвате TLS"
 
-#: ../src/gtkgui.glade.h:75
+#: ../src/gtkgui.glade.h:76
 #, fuzzy
 msgid "Choose _Key..."
 msgstr "Избор на _ключ"
 
-#: ../src/gtkgui.glade.h:76
+#: ../src/gtkgui.glade.h:77
 msgid "City:"
 msgstr "Град:"
 
-#: ../src/gtkgui.glade.h:77
-msgid "Clean u_p"
+#: ../src/gtkgui.glade.h:78
+msgid "Clean _up"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:78
+#: ../src/gtkgui.glade.h:79
 msgid "Click to change account's password"
 msgstr "Натиснете, за да смените паролата на акаунта"
 
-#: ../src/gtkgui.glade.h:79
+#: ../src/gtkgui.glade.h:80
 #, fuzzy
 msgid "Click to get contact's extended information"
 msgstr "Натиснете за допълнителна информация за контакта"
 
-#: ../src/gtkgui.glade.h:80
+#: ../src/gtkgui.glade.h:81
 msgid "Click to see features like on jabber servers"
 msgstr "Натиснете, за да видите функционалностите на Jabber сървърите"
 
-#: ../src/gtkgui.glade.h:81
+#: ../src/gtkgui.glade.h:82
 #, fuzzy
 msgid "Click to see past conversation in this room"
 msgstr "Натиснете, за да видите стари разговори с този контакт"
 
-#: ../src/gtkgui.glade.h:82
+#: ../src/gtkgui.glade.h:83
 msgid "Click to see past conversations with this contact"
 msgstr "Натиснете, за да видите стари разговори с този контакт"
 
-#: ../src/gtkgui.glade.h:83
+#: ../src/gtkgui.glade.h:84
 msgid "Client:"
 msgstr "Клиент:"
 
-#: ../src/gtkgui.glade.h:84
+#: ../src/gtkgui.glade.h:85
 msgid "Company:"
 msgstr "Компания:"
 
-#: ../src/gtkgui.glade.h:85
+#: ../src/gtkgui.glade.h:86
 msgid "Configure _Room"
 msgstr "Настройки на _стаята"
 
-#: ../src/gtkgui.glade.h:86
+#: ../src/gtkgui.glade.h:87
 #, fuzzy
 msgid "Connection"
 msgstr "Свъзване"
 
-#: ../src/gtkgui.glade.h:87
+#: ../src/gtkgui.glade.h:88
 msgid "Contact Information"
 msgstr "Данни за контакта"
 
-#: ../src/gtkgui.glade.h:88
+#: ../src/gtkgui.glade.h:89
 msgid "Contact _Info"
 msgstr "_Данни за контакта"
 
-#: ../src/gtkgui.glade.h:89
+#: ../src/gtkgui.glade.h:90
 #, fuzzy
 msgid "Contact:"
 msgstr "Добавяне на _контакт"
 
-#: ../src/gtkgui.glade.h:90
+#: ../src/gtkgui.glade.h:91
 msgid "Conversation History"
 msgstr "История на разговорите"
 
-#: ../src/gtkgui.glade.h:91
+#: ../src/gtkgui.glade.h:92
 msgid "Country:"
 msgstr "Държава:"
 
-#: ../src/gtkgui.glade.h:92
+#: ../src/gtkgui.glade.h:93
 msgid "Default _status iconset:"
 msgstr "Стандартен _набор икони за състояние:"
 
-#: ../src/gtkgui.glade.h:93
+#: ../src/gtkgui.glade.h:94
 msgid "Delete MOTD"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:94
+#: ../src/gtkgui.glade.h:95
 msgid "Delete Message of the Day"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:95
+#: ../src/gtkgui.glade.h:96
 msgid "Deletes Message of the Day"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:96
+#: ../src/gtkgui.glade.h:97
 msgid "Deny authorization from contact so he cannot know when you're connected"
 msgstr ""
 "Отказване на упълномощаване на контакт, така че да не знае кога сте свързани"
 
-#: ../src/gtkgui.glade.h:97
+#: ../src/gtkgui.glade.h:98
 msgid "Department:"
 msgstr "Отдел:"
 
-#: ../src/gtkgui.glade.h:98
+#: ../src/gtkgui.glade.h:99
 #, fuzzy
 msgid "E-Mail"
 msgstr "Е-поща:"
 
-#: ../src/gtkgui.glade.h:99
+#: ../src/gtkgui.glade.h:100
 msgid "E-Mail:"
 msgstr "Е-поща:"
 
-#: ../src/gtkgui.glade.h:100
+#: ../src/gtkgui.glade.h:101
 msgid "Edit Groups"
 msgstr "Редактиране на групи"
 
-#: ../src/gtkgui.glade.h:101
+#: ../src/gtkgui.glade.h:102
 #, fuzzy
 msgid "Edit Personal Information..."
 msgstr "_Редактиране на личните данни..."
 
-#: ../src/gtkgui.glade.h:102
+#: ../src/gtkgui.glade.h:103
 #, fuzzy
 msgid "Edit _Groups"
 msgstr "Редактиране на групи"
 
-#: ../src/gtkgui.glade.h:103
+#: ../src/gtkgui.glade.h:104
 msgid "Enable"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:104
+#: ../src/gtkgui.glade.h:105
 msgid "Enter it again for confirmation:"
 msgstr "Въведете я отново за потвърждение:"
 
-#: ../src/gtkgui.glade.h:105
+#: ../src/gtkgui.glade.h:106
 msgid "Enter new password:"
 msgstr "Въведете нова парола:"
 
-#: ../src/gtkgui.glade.h:106
+#: ../src/gtkgui.glade.h:107
 msgid "Enter your message:"
 msgstr "Въведете съобщение за състояние:"
 
-#: ../src/gtkgui.glade.h:107
+#: ../src/gtkgui.glade.h:108
 msgid "Events"
 msgstr "Събития"
 
-#: ../src/gtkgui.glade.h:108
+#: ../src/gtkgui.glade.h:109
 msgid "Every 5 _minutes"
 msgstr "Всеки 5 _минути"
 
-#: ../src/gtkgui.glade.h:109
+#: ../src/gtkgui.glade.h:110
 msgid "Extra Address:"
 msgstr "Допълнителен адрес:"
 
-#: ../src/gtkgui.glade.h:110
+#: ../src/gtkgui.glade.h:111
 msgid "Family:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:111
+#: ../src/gtkgui.glade.h:112
 msgid "File Transfers"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:112
+#: ../src/gtkgui.glade.h:113
 #, fuzzy
 msgid "File _Transfers"
 msgstr "Използване на _набор икони на транспортите"
 
-#: ../src/gtkgui.glade.h:113
+#: ../src/gtkgui.glade.h:114
 #, fuzzy
 msgid "File manager:"
 msgstr "Използване на _набор икони на транспортите"
 
-#: ../src/gtkgui.glade.h:114
+#: ../src/gtkgui.glade.h:115
 msgid "Filter:"
 msgstr "Филтър:"
 
-#: ../src/gtkgui.glade.h:115
+#: ../src/gtkgui.glade.h:116
 #, fuzzy
 msgid "Font:"
 msgstr "Акаунт:"
 
-#: ../src/gtkgui.glade.h:116
+#: ../src/gtkgui.glade.h:117
 msgid "Format: YYYY-MM-DD"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:117
+#: ../src/gtkgui.glade.h:118
 #, fuzzy
 msgid "From:"
 msgstr "Стая:"
 
-#: ../src/gtkgui.glade.h:118
+#: ../src/gtkgui.glade.h:119
 #, fuzzy
 msgid "GPG Encryption"
 msgstr "Натиснете, за да конфигурирате стаята"
 
-#: ../src/gtkgui.glade.h:120
+#: ../src/gtkgui.glade.h:121
 msgid "Gajim Themes Customization"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:122
 msgid ""
 "Gajim will automatically show the new received message in a new chat window "
 "or tab in an existing chat window"
@@ -2175,13 +2180,13 @@ msgstr ""
 "Автоматично ще се показва новото съобщение в нов прозорец за разговор или "
 "страница в съществуващ прозорец"
 
-#: ../src/gtkgui.glade.h:122
+#: ../src/gtkgui.glade.h:123
 msgid ""
 "Gajim will notify you for new message via a popup in the bottom right of the "
 "screen"
 msgstr "Ще се появява съобщение за уведомяване в долния десен ъгъл на екрана"
 
-#: ../src/gtkgui.glade.h:123
+#: ../src/gtkgui.glade.h:124
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed in"
@@ -2189,7 +2194,7 @@ msgstr ""
 "Ще се появява съобщение за уведомяване в долния десен ъгъл на екрана при "
 "свързване на контакти"
 
-#: ../src/gtkgui.glade.h:124
+#: ../src/gtkgui.glade.h:125
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed out"
@@ -2197,79 +2202,79 @@ msgstr ""
 "Ще се появява съобщение за уведомяване в долния десен ъгъл на екрана при "
 "изключване на контакти"
 
-#: ../src/gtkgui.glade.h:125
+#: ../src/gtkgui.glade.h:126
 msgid ""
 "Gajim will only change the icon of the contact that sent the new message"
 msgstr "Само ще се променя иконата на контакта, който е изпратил съобщението"
 
-#: ../src/gtkgui.glade.h:126
+#: ../src/gtkgui.glade.h:127
 msgid "Gajim: First Time Wizard"
 msgstr "Gajim: Помощник при първоначално стартиране"
 
-#: ../src/gtkgui.glade.h:128
+#: ../src/gtkgui.glade.h:129
 #, fuzzy
 msgid "Given:"
 msgstr "Клиент:"
 
-#: ../src/gtkgui.glade.h:129
+#: ../src/gtkgui.glade.h:130
 msgid "Go"
 msgstr "Отиване"
 
-#: ../src/gtkgui.glade.h:131
+#: ../src/gtkgui.glade.h:132
 msgid "Group:"
 msgstr "Група:"
 
-#: ../src/gtkgui.glade.h:132
+#: ../src/gtkgui.glade.h:133
 #, fuzzy
 msgid "HTTP Connect"
 msgstr "Свъзване"
 
-#: ../src/gtkgui.glade.h:133
+#: ../src/gtkgui.glade.h:134
 msgid "Hides the window"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:134
+#: ../src/gtkgui.glade.h:135
 msgid "Homepage:"
 msgstr "Уеб страница:"
 
-#: ../src/gtkgui.glade.h:135
+#: ../src/gtkgui.glade.h:136
 #, fuzzy
 msgid "Hostname: "
 msgstr "_Хост:"
 
-#: ../src/gtkgui.glade.h:136
+#: ../src/gtkgui.glade.h:137
 msgid "I already have an account I want to use"
 msgstr "Вече има регистриран акаунт"
 
-#: ../src/gtkgui.glade.h:137
+#: ../src/gtkgui.glade.h:138
 msgid "I want to _register for a new account"
 msgstr "Искате да _регистрирате нов Jabber акаунт"
 
-#: ../src/gtkgui.glade.h:138
+#: ../src/gtkgui.glade.h:139
 msgid "I would like to add you to my contact list."
 msgstr "Бих искал(а) да ви добавя към списъка си."
 
-#: ../src/gtkgui.glade.h:139
+#: ../src/gtkgui.glade.h:140
 msgid "If checked, Gajim will also have a trayicon"
 msgstr "Ако е избрано, Gajim ще има и икона в областта за уведомяване"
 
-#: ../src/gtkgui.glade.h:140
+#: ../src/gtkgui.glade.h:141
 msgid ""
 "If checked, Gajim will broadcast capability to send and receive meta-"
 "information related to a conversation you may have with a contact such as "
 "composing a message"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:141
+#: ../src/gtkgui.glade.h:142
 #, fuzzy
 msgid "If checked, Gajim will join this groupchat on startup"
 msgstr "Ако е избрано, Gajim ще има и икона в областта за уведомяване"
 
-#: ../src/gtkgui.glade.h:142
+#: ../src/gtkgui.glade.h:143
 msgid "If checked, Gajim will remember the password for this account"
 msgstr "Ако е избрано, ще се запомни паролата за този акаунт"
 
-#: ../src/gtkgui.glade.h:143
+#: ../src/gtkgui.glade.h:144
 #, fuzzy
 msgid ""
 "If checked, Gajim will remember the roster and chat window positions in the "
@@ -2278,7 +2283,7 @@ msgstr ""
 "Ако е избрано, ще се запомни размера на списъка и позицията му на екрана за "
 "следващото стартиране на програмата"
 
-#: ../src/gtkgui.glade.h:144
+#: ../src/gtkgui.glade.h:145
 msgid ""
 "If checked, Gajim will replace ascii smilies like ':)' with equivalent "
 "graphical emoticons"
@@ -2286,13 +2291,13 @@ msgstr ""
 "Ако е избрано, усмивките в ASCII като \":)\" ще се изобразяват със "
 "съответните графични емотикони"
 
-#: ../src/gtkgui.glade.h:145
+#: ../src/gtkgui.glade.h:146
 msgid ""
 "If checked, Gajim will send keep-alive packets so it prevents connection "
 "timeout which results in disconnection"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:146
+#: ../src/gtkgui.glade.h:147
 msgid ""
 "If checked, Gajim will store the password in ~/.gajim/config with 'read' "
 "permission only for only you and of course the administrator"
@@ -2300,7 +2305,7 @@ msgstr ""
 "Ако е избрано, паролата ще се запази в ~/.gajim/config с права за четене "
 "само за потребителя и администратора"
 
-#: ../src/gtkgui.glade.h:147
+#: ../src/gtkgui.glade.h:148
 msgid ""
 "If checked, Gajim will use protocol-specific status icons. (eg. A contact "
 "from MSN will have the equivalent msn icon for status online, away, busy, "
@@ -2310,7 +2315,7 @@ msgstr ""
 "е. контакт от MSN ще има еквивалентната за MSN икона за състоянията \"На "
 "линия\", \"Отсъства\", \"Зает\" и т.н.)."
 
-#: ../src/gtkgui.glade.h:148
+#: ../src/gtkgui.glade.h:149
 msgid ""
 "If checked, Gajim, when launched, will automatically connect to jabber using "
 "this account"
@@ -2318,7 +2323,7 @@ msgstr ""
 "Ако е избрано, при стартиране Gajim ще се свързва автоматично, използвайки "
 "този акаунт"
 
-#: ../src/gtkgui.glade.h:149
+#: ../src/gtkgui.glade.h:150
 msgid ""
 "If checked, all chat and group chat windows will have the information area "
 "in the top and the buttons area in the bottom hidden. You can quick toggle "
@@ -2326,7 +2331,7 @@ msgid ""
 "a permanent one"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:150
+#: ../src/gtkgui.glade.h:151
 #, fuzzy
 msgid ""
 "If you have 2 or more accounts and it is checked, Gajim will list all "
@@ -2335,191 +2340,191 @@ msgstr ""
 "Ако имате 2 или повече акаунта и тази опция е избрана, Gajim ще изобразява "
 "всички контакти като от един акаунт"
 
-#: ../src/gtkgui.glade.h:151
+#: ../src/gtkgui.glade.h:152
 msgid "Incoming message:"
 msgstr "Входящо съобщение:"
 
-#: ../src/gtkgui.glade.h:152
+#: ../src/gtkgui.glade.h:153
 msgid "Info/Query"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:153
+#: ../src/gtkgui.glade.h:154
 msgid "Information about you are stored on the server as vCard"
 msgstr "Личните данни се запазват на сървъра като vCard"
 
-#: ../src/gtkgui.glade.h:154
+#: ../src/gtkgui.glade.h:155
 msgid "Italic"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:155
+#: ../src/gtkgui.glade.h:156
 msgid "Jabber"
 msgstr "Jabber"
 
-#: ../src/gtkgui.glade.h:156
+#: ../src/gtkgui.glade.h:157
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
 
-#: ../src/gtkgui.glade.h:158
+#: ../src/gtkgui.glade.h:159
 #, fuzzy
 msgid "Join _Group Chat"
 msgstr "Влизане в _стая"
 
-#: ../src/gtkgui.glade.h:159
+#: ../src/gtkgui.glade.h:160
 #, fuzzy
 msgid "Join _Group Chat..."
 msgstr "Влизане в _стая"
 
-#: ../src/gtkgui.glade.h:160
+#: ../src/gtkgui.glade.h:161
 msgid "Location"
 msgstr "Местонахождение"
 
-#: ../src/gtkgui.glade.h:161
+#: ../src/gtkgui.glade.h:162
 msgid "Log history"
 msgstr "Запазване на разговорите"
 
-#: ../src/gtkgui.glade.h:162
+#: ../src/gtkgui.glade.h:163
 msgid "Log presences in _contact's log file"
 msgstr "Запазване на състоянията в дневника на _контакта"
 
-#: ../src/gtkgui.glade.h:163
+#: ../src/gtkgui.glade.h:164
 msgid "Log presences in an _external file"
 msgstr "Запазване на състоянията във външен _файл"
 
-#: ../src/gtkgui.glade.h:164
+#: ../src/gtkgui.glade.h:165
 #, fuzzy
 msgid "Manage Accounts"
 msgstr "_Смесване на акаунти"
 
-#: ../src/gtkgui.glade.h:165
+#: ../src/gtkgui.glade.h:166
 msgid "Manage Bookmarks"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:166
+#: ../src/gtkgui.glade.h:167
 #, fuzzy
 msgid "Manage Emoticons"
 msgstr "Използване на _емотикони"
 
-#: ../src/gtkgui.glade.h:167
+#: ../src/gtkgui.glade.h:168
 msgid "Manage Proxy Profiles"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:168
+#: ../src/gtkgui.glade.h:169
 msgid "Manage..."
 msgstr ""
 
-#: ../src/gtkgui.glade.h:169
+#: ../src/gtkgui.glade.h:170
 msgid "Middle:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:170
+#: ../src/gtkgui.glade.h:171
 #, fuzzy
 msgid "Mo_derator"
 msgstr "Даване на _ръководни функции"
 
-#: ../src/gtkgui.glade.h:171
+#: ../src/gtkgui.glade.h:172
 #, fuzzy
 msgid "More"
 msgstr "Филм"
 
-#: ../src/gtkgui.glade.h:172
+#: ../src/gtkgui.glade.h:173
 msgid "Name:"
 msgstr "Име:"
 
-#: ../src/gtkgui.glade.h:174
+#: ../src/gtkgui.glade.h:175
 msgid "New version of Gajim available"
 msgstr "Има нова версия на Gajim"
 
-#: ../src/gtkgui.glade.h:175
+#: ../src/gtkgui.glade.h:176
 msgid "Nickname:"
 msgstr "Псевдоним:"
 
-#: ../src/gtkgui.glade.h:178
+#: ../src/gtkgui.glade.h:179
 msgid "Notify me about contacts that: "
 msgstr "Уведомяване за контакти при: "
 
-#: ../src/gtkgui.glade.h:179
+#: ../src/gtkgui.glade.h:180
 msgid "OS:"
 msgstr "ОС:"
 
-#: ../src/gtkgui.glade.h:180
+#: ../src/gtkgui.glade.h:181
 #, fuzzy
 msgid "On every _message"
 msgstr "На _всеки ред"
 
-#: ../src/gtkgui.glade.h:181
+#: ../src/gtkgui.glade.h:182
 msgid "Open Download Page"
 msgstr "Отваряне на страницата за изтегляне"
 
-#: ../src/gtkgui.glade.h:182
+#: ../src/gtkgui.glade.h:183
 msgid "Open..."
 msgstr "Отваряне..."
 
-#: ../src/gtkgui.glade.h:183
+#: ../src/gtkgui.glade.h:184
 msgid "Or choose a preset message:"
 msgstr "Или изберете настроено съобщение:"
 
-#: ../src/gtkgui.glade.h:184
+#: ../src/gtkgui.glade.h:185
 msgid "Outgoing message:"
 msgstr "Изходящо съобщение:"
 
-#: ../src/gtkgui.glade.h:185
+#: ../src/gtkgui.glade.h:186
 msgid "Pass_word:"
 msgstr "_Парола:"
 
-#: ../src/gtkgui.glade.h:187
+#: ../src/gtkgui.glade.h:188
 msgid "Password:"
 msgstr "Парола:"
 
-#: ../src/gtkgui.glade.h:188
+#: ../src/gtkgui.glade.h:189
 msgid "Personal Details"
 msgstr "Лични данни"
 
-#: ../src/gtkgui.glade.h:189
+#: ../src/gtkgui.glade.h:190
 msgid "Phone No.:"
 msgstr "Телефон:"
 
-#: ../src/gtkgui.glade.h:190
+#: ../src/gtkgui.glade.h:191
 msgid "Play _sounds"
 msgstr "Изпълнение на _звуци"
 
-#: ../src/gtkgui.glade.h:191
+#: ../src/gtkgui.glade.h:192
 msgid "Please fill in the data for your existing account"
 msgstr "Попълнете данните за съществуващия акаунт"
 
-#: ../src/gtkgui.glade.h:192
+#: ../src/gtkgui.glade.h:193
 msgid "Please fill in the data for your new account"
 msgstr "Попълнете данните за нов акаунт"
 
-#: ../src/gtkgui.glade.h:193
+#: ../src/gtkgui.glade.h:194
 #, fuzzy
 msgid "Port: "
 msgstr "По_рт:"
 
-#: ../src/gtkgui.glade.h:194
+#: ../src/gtkgui.glade.h:195
 msgid "Position:"
 msgstr "Длъжност:"
 
-#: ../src/gtkgui.glade.h:195
+#: ../src/gtkgui.glade.h:196
 msgid "Postal Code:"
 msgstr "Пощенски код:"
 
-#: ../src/gtkgui.glade.h:196
+#: ../src/gtkgui.glade.h:197
 msgid "Preferences"
 msgstr "Настройки"
 
-#: ../src/gtkgui.glade.h:197
+#: ../src/gtkgui.glade.h:198
 msgid "Prefix:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:198
+#: ../src/gtkgui.glade.h:199
 msgid "Print time:"
 msgstr "Изписване на времето:"
 
-#: ../src/gtkgui.glade.h:199
+#: ../src/gtkgui.glade.h:200
 msgid "Priori_ty:"
 msgstr "Приори_тет:"
 
-#: ../src/gtkgui.glade.h:200
+#: ../src/gtkgui.glade.h:201
 msgid ""
 "Priority is used in Jabber to determine who gets the events from the jabber "
 "server when two or more clients are connected using the same account; The "
@@ -2529,62 +2534,66 @@ msgstr ""
 "събитията от Jabber сървър, когато два или повече клиента са свързани с един "
 "и същ акаунт. Клиентът с най-голям приоритет ще получава събитията"
 
-#: ../src/gtkgui.glade.h:201
+#: ../src/gtkgui.glade.h:202
 msgid "Profile, Avatar"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:202
+#: ../src/gtkgui.glade.h:203
 msgid "Protocol:"
 msgstr "Протокол:"
 
-#: ../src/gtkgui.glade.h:203
+#: ../src/gtkgui.glade.h:204
 #, fuzzy
 msgid "Proxy:"
 msgstr "Сървър-посредник"
 
-#: ../src/gtkgui.glade.h:205
+#: ../src/gtkgui.glade.h:206
 #, fuzzy
 msgid "Re_quest Authorization from"
 msgstr "Повторно искане за упълномощаване от"
 
-#: ../src/gtkgui.glade.h:206
+#: ../src/gtkgui.glade.h:207
 msgid "Recently:"
 msgstr "Скоро посетени:"
 
-#: ../src/gtkgui.glade.h:207
+#: ../src/gtkgui.glade.h:208
 msgid "Register to"
 msgstr "Регистриране към"
 
-#: ../src/gtkgui.glade.h:208
+#: ../src/gtkgui.glade.h:209
 msgid "Remove account from Gajim and from server"
 msgstr "Премахване на акаунт от Gajim и от сървъра"
 
-#: ../src/gtkgui.glade.h:209
+#: ../src/gtkgui.glade.h:210
 msgid "Remove account only from Gajim"
 msgstr "Премахване на акаунт само от Gajim"
 
-#: ../src/gtkgui.glade.h:210
+#: ../src/gtkgui.glade.h:211
 msgid "Remove file transfer from the list."
 msgstr ""
 
-#: ../src/gtkgui.glade.h:211
+#: ../src/gtkgui.glade.h:212
 msgid "Removes completed, canceled and failed file transfers from the list"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:212
+#: ../src/gtkgui.glade.h:213
+msgid "Removing selected file transfer"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:214
 #, fuzzy
 msgid "Reply to this message"
 msgstr "Съобщение за състояние:"
 
-#: ../src/gtkgui.glade.h:213
+#: ../src/gtkgui.glade.h:215
 msgid "Reset to Default Colors"
 msgstr "Възстановяване на стандартните цветове"
 
-#: ../src/gtkgui.glade.h:214
+#: ../src/gtkgui.glade.h:216
 msgid "Resour_ce: "
 msgstr "Ре_сурс: "
 
-#: ../src/gtkgui.glade.h:215
+#: ../src/gtkgui.glade.h:217
 #, fuzzy
 msgid ""
 "Resource is sent to the Jabber server in order to separate the same JID in "
@@ -2599,319 +2608,310 @@ msgstr ""
 "ресурси \"Вкъщи\" и \"На работа\" по едно и също време. Ресурсът с най-голям "
 "приоритет ще получава събитията. (вижте по-долу)"
 
-#: ../src/gtkgui.glade.h:216
+#: ../src/gtkgui.glade.h:218
 msgid "Resource:"
 msgstr "Ресурс:"
 
-#: ../src/gtkgui.glade.h:217
+#: ../src/gtkgui.glade.h:219
 msgid "Role:"
 msgstr "Роля:"
 
-#: ../src/gtkgui.glade.h:218
+#: ../src/gtkgui.glade.h:220
 msgid "Room Configuration"
 msgstr "Настройки на стаята"
 
-#: ../src/gtkgui.glade.h:219
+#: ../src/gtkgui.glade.h:221
 msgid "Room:"
 msgstr "Стая:"
 
-#: ../src/gtkgui.glade.h:220
+#: ../src/gtkgui.glade.h:222
 msgid "Save _passphrase (insecure)"
 msgstr "Запазване на _паролата (несигурно)"
 
-#: ../src/gtkgui.glade.h:221
+#: ../src/gtkgui.glade.h:223
 msgid "Save _position and size for roster and chat windows"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:222
+#: ../src/gtkgui.glade.h:224
 #, fuzzy
 msgid "Save conversation _logs for all contacts"
 msgstr "История на _разговорите за всички контакти в този акаунт"
 
-#: ../src/gtkgui.glade.h:223
+#: ../src/gtkgui.glade.h:225
 msgid "Save pass_word"
 msgstr "Запазване на паро_ла"
 
-#: ../src/gtkgui.glade.h:224
+#: ../src/gtkgui.glade.h:226
 #, fuzzy
 msgid "Sen_d"
 msgstr "_Отказване"
 
-#: ../src/gtkgui.glade.h:225
+#: ../src/gtkgui.glade.h:227
 #, fuzzy
 msgid "Send Authorization to"
 msgstr "Повторно упълномощаване на"
 
-#: ../src/gtkgui.glade.h:226
+#: ../src/gtkgui.glade.h:228
 #, fuzzy
 msgid "Send File"
 msgstr "_Отказване"
 
-#: ../src/gtkgui.glade.h:227
+#: ../src/gtkgui.glade.h:229
 msgid "Send Single _Message"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:228
+#: ../src/gtkgui.glade.h:230
 msgid "Send _File"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:229
-msgid "Send keep-alive packets"
-msgstr ""
-
-#: ../src/gtkgui.glade.h:230
-#, fuzzy
-msgid "Send message"
-msgstr "Входящо съобщение:"
-
 #: ../src/gtkgui.glade.h:231
-msgid "Send message and close window"
+msgid "Send keep-alive packets"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:232
 #, fuzzy
+msgid "Send message"
+msgstr "Входящо съобщение:"
+
+#: ../src/gtkgui.glade.h:233
+msgid "Send message and close window"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:234
+#, fuzzy
 msgid "Sends a message to currently connected users to this server"
 msgstr "Трябва да сте свързани, за да разглеждате услугите"
 
-#: ../src/gtkgui.glade.h:233
+#: ../src/gtkgui.glade.h:235
 msgid "Server:"
 msgstr "Сървър:"
 
-#: ../src/gtkgui.glade.h:234
+#: ../src/gtkgui.glade.h:236
 msgid "Servers Features"
 msgstr "Функционалности на сървърите"
 
-#: ../src/gtkgui.glade.h:235
+#: ../src/gtkgui.glade.h:237
 msgid "Set MOTD"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:236
+#: ../src/gtkgui.glade.h:238
 msgid "Set Message of the Day"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:237
+#: ../src/gtkgui.glade.h:239
 msgid "Set _Avatar"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:238
+#: ../src/gtkgui.glade.h:240
 msgid "Sets Message of the Day"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:239
+#: ../src/gtkgui.glade.h:241
 msgid "Show _Offline Contacts"
 msgstr "Показване на _изключените контакти"
 
-#: ../src/gtkgui.glade.h:240
+#: ../src/gtkgui.glade.h:242
 msgid "Show only in _roster"
 msgstr "Показване само в спис_ъка"
 
-#: ../src/gtkgui.glade.h:241
+#: ../src/gtkgui.glade.h:243
 msgid "Show roster window at application startup"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:242
-msgid ""
-"Show the list of active, completed and stopped file transfer from and to  "
-"your friends."
-msgstr ""
-
-#: ../src/gtkgui.glade.h:243
-msgid ""
-"Shows list of files that you send to your friends, and files which you "
-"receive from your friends."
-msgstr ""
-
 #: ../src/gtkgui.glade.h:244
+msgid "Shows a list of file transfers between you and other"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:245
 msgid "Sign _in"
 msgstr "_Свързване"
 
-#: ../src/gtkgui.glade.h:245
+#: ../src/gtkgui.glade.h:246
 msgid "Sign _out"
 msgstr "_Изключване"
 
-#: ../src/gtkgui.glade.h:246
+#: ../src/gtkgui.glade.h:247
 msgid "Sort contacts by status"
 msgstr "Подреждане на контактите по състояние"
 
-#: ../src/gtkgui.glade.h:247
+#: ../src/gtkgui.glade.h:248
 #, fuzzy
 msgid "Start _Chat"
 msgstr "Започване на разговор"
 
-#: ../src/gtkgui.glade.h:248
+#: ../src/gtkgui.glade.h:249
 msgid "State:"
 msgstr "Щат:"
 
-#: ../src/gtkgui.glade.h:249
+#: ../src/gtkgui.glade.h:250
 msgid "Status"
 msgstr "Състояние"
 
-#: ../src/gtkgui.glade.h:250
+#: ../src/gtkgui.glade.h:251
 msgid "Status message:"
 msgstr "Съобщение за състояние:"
 
-#: ../src/gtkgui.glade.h:251
+#: ../src/gtkgui.glade.h:252
 msgid "Status:"
 msgstr "Състояние:"
 
-#: ../src/gtkgui.glade.h:252
+#: ../src/gtkgui.glade.h:253
 msgid "Stop file transfer"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:253
-msgid "Stoping transfer"
-msgstr ""
-
 #: ../src/gtkgui.glade.h:254
-msgid ""
-"Stops the selected file transfer. If there is an incomplete file, kept in "
-"the file system it will be removed. This operation is non reverseable. "
+msgid "Stoping selected file transfer"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:255
+msgid ""
+"Stops the selected file transfer. If there is an incomplete file, kept in "
+"the file system it will be removed. This operation is not reversable. "
+msgstr ""
+
+#: ../src/gtkgui.glade.h:256
 msgid "Street:"
 msgstr "Улица:"
 
-#: ../src/gtkgui.glade.h:256
+#: ../src/gtkgui.glade.h:257
 msgid "Subject:"
 msgstr "Тема:"
 
-#: ../src/gtkgui.glade.h:257
+#: ../src/gtkgui.glade.h:258
 msgid "Subscription Request"
 msgstr "Искане за записване"
 
-#: ../src/gtkgui.glade.h:258
+#: ../src/gtkgui.glade.h:259
 msgid "Subscription:"
 msgstr "Записване:"
 
-#: ../src/gtkgui.glade.h:259
+#: ../src/gtkgui.glade.h:260
 msgid "Suffix:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:260
+#: ../src/gtkgui.glade.h:261
 msgid "Synch_ronize account status with global status"
 msgstr "Син_хронизиране на състоянието на акаунта с общото състояние"
 
-#: ../src/gtkgui.glade.h:261
+#: ../src/gtkgui.glade.h:262
 msgid "Text color"
 msgstr "Цвят на текста"
 
-#: ../src/gtkgui.glade.h:262
+#: ../src/gtkgui.glade.h:263
 msgid "Text font"
 msgstr "Шрифт на текста"
 
-#: ../src/gtkgui.glade.h:263
+#: ../src/gtkgui.glade.h:264
 #, fuzzy
 msgid "The auto away status message"
 msgstr "Съобщение за състояние:"
 
-#: ../src/gtkgui.glade.h:264
+#: ../src/gtkgui.glade.h:265
 #, fuzzy
 msgid "The auto not available status message"
 msgstr "Автоматично \"_Не съм на разположение\" след:"
 
-#: ../src/gtkgui.glade.h:265
+#: ../src/gtkgui.glade.h:266
 msgid "The bar line which is on top of chat windows"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:266
+#: ../src/gtkgui.glade.h:267
 msgid "Theme:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:267
+#: ../src/gtkgui.glade.h:268
 msgid ""
 "This action removes single file transfer from the list. If the transfer is "
 "active, it is first stopped and then removed"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:268
+#: ../src/gtkgui.glade.h:269
 #, fuzzy
 msgid "Title:"
 msgstr "Филтър:"
 
-#: ../src/gtkgui.glade.h:269
+#: ../src/gtkgui.glade.h:270
 msgid "To:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:270
+#: ../src/gtkgui.glade.h:271
 msgid "Toggle _GPG Encryption"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:271
+#: ../src/gtkgui.glade.h:272
 #, fuzzy
 msgid "Type:"
 msgstr "Тип"
 
-#: ../src/gtkgui.glade.h:272
+#: ../src/gtkgui.glade.h:273
 #, fuzzy
 msgid "Underline"
 msgstr "На линия"
 
-#: ../src/gtkgui.glade.h:273
+#: ../src/gtkgui.glade.h:274
 msgid "Update MOTD"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:274
+#: ../src/gtkgui.glade.h:275
 msgid "Update Message of the Day"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:275
+#: ../src/gtkgui.glade.h:276
 msgid "Updates Message of the Day"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:276
+#: ../src/gtkgui.glade.h:277
 #, fuzzy
 msgid "Use _SSL (legacy)"
 msgstr "Използване на _SSL"
 
-#: ../src/gtkgui.glade.h:277
+#: ../src/gtkgui.glade.h:278
 msgid "Use _emoticons"
 msgstr "Използване на _емотикони"
 
-#: ../src/gtkgui.glade.h:278
+#: ../src/gtkgui.glade.h:279
 msgid "Use _transports iconsets"
 msgstr "Използване на _набор икони на транспортите"
 
-#: ../src/gtkgui.glade.h:279
+#: ../src/gtkgui.glade.h:280
 msgid "Use a single chat window with _tabs"
 msgstr "Използване на един прозорец за разговор със _страници"
 
-#: ../src/gtkgui.glade.h:280
+#: ../src/gtkgui.glade.h:281
 #, fuzzy
 msgid "Use authentication"
 msgstr "Използване на _емотикони"
 
-#: ../src/gtkgui.glade.h:281
+#: ../src/gtkgui.glade.h:282
 msgid "Use custom hostname/port"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:282
+#: ../src/gtkgui.glade.h:283
 msgid "User ID:"
 msgstr "Идентификатор на потребител:"
 
-#: ../src/gtkgui.glade.h:283
+#: ../src/gtkgui.glade.h:284
+#, fuzzy
+msgid "When a file transfer is complete show a popup notification "
+msgstr "Използване на _набор икони на транспортите"
+
+#: ../src/gtkgui.glade.h:285
 msgid ""
 "When a new message is received which is not from a contact already in a chat "
 "window, the three following actions may happen in order for you to be "
 "informed about it"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:284
-msgid ""
-"When file is completely transfered to its recipient show a popup "
-"notification "
-msgstr ""
-
-#: ../src/gtkgui.glade.h:285
+#: ../src/gtkgui.glade.h:286
 #, fuzzy
 msgid "When new message is received"
 msgstr "При получаване на ново съобщение"
 
-#: ../src/gtkgui.glade.h:286
+#: ../src/gtkgui.glade.h:287
 msgid "Work"
 msgstr "Работа"
 
-#: ../src/gtkgui.glade.h:287
+#: ../src/gtkgui.glade.h:288
 msgid ""
 "You need to have an account in order to connect to\n"
 "the Jabber network."
@@ -2919,386 +2919,386 @@ msgstr ""
 "Трябва да създадете акаунт, за да се свържете с\n"
 "Jabber сървър."
 
-#: ../src/gtkgui.glade.h:289
+#: ../src/gtkgui.glade.h:290
 msgid "Your JID:"
 msgstr "Вашия JID:"
 
-#: ../src/gtkgui.glade.h:290
+#: ../src/gtkgui.glade.h:291
 msgid "_About"
 msgstr "_Относно"
 
-#: ../src/gtkgui.glade.h:291
+#: ../src/gtkgui.glade.h:292
 msgid "_Actions"
 msgstr "_Действия"
 
-#: ../src/gtkgui.glade.h:292
+#: ../src/gtkgui.glade.h:293
 #, fuzzy
 msgid "_Add Contact..."
 msgstr "_Добавяне на контакт"
 
-#: ../src/gtkgui.glade.h:293
+#: ../src/gtkgui.glade.h:294
 #, fuzzy
 msgid "_Add to Roster"
 msgstr "Добавяне към списъка"
 
-#: ../src/gtkgui.glade.h:294
+#: ../src/gtkgui.glade.h:295
 msgid "_Address:"
 msgstr "_Адрес:"
 
-#: ../src/gtkgui.glade.h:295
+#: ../src/gtkgui.glade.h:296
 #, fuzzy
 msgid "_Admin"
 msgstr "Даване на _администраторски права"
 
-#: ../src/gtkgui.glade.h:296
+#: ../src/gtkgui.glade.h:297
 #, fuzzy
 msgid "_Administrator"
 msgstr "Даване на _администраторски права"
 
-#: ../src/gtkgui.glade.h:297
+#: ../src/gtkgui.glade.h:298
 #, fuzzy
 msgid "_Advanced"
 msgstr "Напреднали"
 
-#: ../src/gtkgui.glade.h:298
+#: ../src/gtkgui.glade.h:299
 msgid "_Authorize"
 msgstr "_Упълномощаване"
 
-#: ../src/gtkgui.glade.h:299
+#: ../src/gtkgui.glade.h:300
 msgid "_Ban"
 msgstr "_Забраняване на достъпа"
 
-#: ../src/gtkgui.glade.h:300
+#: ../src/gtkgui.glade.h:301
 msgid "_Bookmark This Room"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:301
+#: ../src/gtkgui.glade.h:302
 msgid "_Browser:"
 msgstr "_Браузър:"
 
-#: ../src/gtkgui.glade.h:302
+#: ../src/gtkgui.glade.h:303
 msgid "_Cancel"
 msgstr "_Отказ"
 
-#: ../src/gtkgui.glade.h:303
+#: ../src/gtkgui.glade.h:304
 msgid "_Compact View"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:304
+#: ../src/gtkgui.glade.h:305
 msgid "_Compact View    Alt+C"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:306
+#: ../src/gtkgui.glade.h:307
 #, fuzzy
 msgid "_Copy JID/Email Address"
 msgstr "_Копиране на адреса"
 
-#: ../src/gtkgui.glade.h:307
+#: ../src/gtkgui.glade.h:308
 msgid "_Copy Link Location"
 msgstr "_Копиране на адреса на връзката"
 
-#: ../src/gtkgui.glade.h:308
+#: ../src/gtkgui.glade.h:309
 msgid "_Deny"
 msgstr "_Отказване"
 
-#: ../src/gtkgui.glade.h:309
+#: ../src/gtkgui.glade.h:310
 msgid "_Earliest"
 msgstr "_Най-стара"
 
-#: ../src/gtkgui.glade.h:311
+#: ../src/gtkgui.glade.h:312
 #, fuzzy
 msgid "_Edit Account..."
 msgstr "_Редактиране на акаунт"
 
-#: ../src/gtkgui.glade.h:312
+#: ../src/gtkgui.glade.h:313
 msgid "_Finish"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:314
 msgid "_Highlight misspelled words"
 msgstr "_Осветяване на неправилно изписаните думи"
 
-#: ../src/gtkgui.glade.h:314
+#: ../src/gtkgui.glade.h:315
 msgid "_History"
 msgstr "_История"
 
-#: ../src/gtkgui.glade.h:315
+#: ../src/gtkgui.glade.h:316
 msgid "_Host:"
 msgstr "_Хост:"
 
-#: ../src/gtkgui.glade.h:316
+#: ../src/gtkgui.glade.h:317
 msgid "_IQ"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:317
+#: ../src/gtkgui.glade.h:318
 msgid "_Icon in systray (aka. notification area)"
 msgstr "_Икона в областта за уведомяване"
 
-#: ../src/gtkgui.glade.h:318
+#: ../src/gtkgui.glade.h:319
 msgid "_Ignore events from contacts not in the roster"
 msgstr "Прене_брегване на събития от контакти, които не са в списъка"
 
-#: ../src/gtkgui.glade.h:319
+#: ../src/gtkgui.glade.h:320
 msgid "_Jabber ID:"
 msgstr "_Jabber ID:"
 
-#: ../src/gtkgui.glade.h:320
+#: ../src/gtkgui.glade.h:321
 msgid "_Join"
 msgstr "_Влизане"
 
-#: ../src/gtkgui.glade.h:321
+#: ../src/gtkgui.glade.h:322
 #, fuzzy
 msgid "_Join Group Chat"
 msgstr "_Влизане в стая"
 
-#: ../src/gtkgui.glade.h:322
+#: ../src/gtkgui.glade.h:323
 msgid "_Kick"
 msgstr "_Изритване"
 
-#: ../src/gtkgui.glade.h:323
+#: ../src/gtkgui.glade.h:324
 msgid "_Latest"
 msgstr "По_следна"
 
-#: ../src/gtkgui.glade.h:324
+#: ../src/gtkgui.glade.h:325
 msgid "_Mail client:"
 msgstr "_Пощенска програма:"
 
-#: ../src/gtkgui.glade.h:325
+#: ../src/gtkgui.glade.h:326
 #, fuzzy
 msgid "_Member"
 msgstr "_Никога"
 
-#: ../src/gtkgui.glade.h:326
+#: ../src/gtkgui.glade.h:327
 msgid "_Merge accounts"
 msgstr "_Смесване на акаунти"
 
-#: ../src/gtkgui.glade.h:327
+#: ../src/gtkgui.glade.h:328
 #, fuzzy
 msgid "_Message"
 msgstr "_Ново съобщение"
 
-#: ../src/gtkgui.glade.h:328
+#: ../src/gtkgui.glade.h:329
 msgid "_Modify"
 msgstr "Пром_яна"
 
-#: ../src/gtkgui.glade.h:329
+#: ../src/gtkgui.glade.h:330
 msgid "_Name: "
 msgstr "_Име: "
 
-#: ../src/gtkgui.glade.h:330
+#: ../src/gtkgui.glade.h:331
 msgid "_Never"
 msgstr "_Никога"
 
-#: ../src/gtkgui.glade.h:331
+#: ../src/gtkgui.glade.h:332
 msgid "_New Message"
 msgstr "_Ново съобщение"
 
-#: ../src/gtkgui.glade.h:332
+#: ../src/gtkgui.glade.h:333
 #, fuzzy
 msgid "_New Message..."
 msgstr "_Ново съобщение"
 
-#: ../src/gtkgui.glade.h:333
+#: ../src/gtkgui.glade.h:334
 msgid "_Nickname:"
 msgstr "Псе_вдоним:"
 
-#: ../src/gtkgui.glade.h:334
+#: ../src/gtkgui.glade.h:335
 msgid "_Notify me about it"
 msgstr "_Уведомяване"
 
-#: ../src/gtkgui.glade.h:335
+#: ../src/gtkgui.glade.h:336
 #, fuzzy
 msgid "_Notify me when a file transfer is complete"
 msgstr "Използване на _набор икони на транспортите"
 
-#: ../src/gtkgui.glade.h:336
+#: ../src/gtkgui.glade.h:337
 msgid "_OK"
 msgstr "_Да"
 
-#: ../src/gtkgui.glade.h:337
+#: ../src/gtkgui.glade.h:338
 #, fuzzy
 msgid "_Occupant Actions"
 msgstr "_Действия"
 
-#: ../src/gtkgui.glade.h:338
+#: ../src/gtkgui.glade.h:339
 #, fuzzy
 msgid "_Online Users"
 msgstr "_Свързан"
 
-#: ../src/gtkgui.glade.h:339
+#: ../src/gtkgui.glade.h:340
 msgid "_Open Email Composer"
 msgstr "_Отваряне на пощенската програма"
 
-#: ../src/gtkgui.glade.h:340
-msgid "_Open Link in Browser"
-msgstr "_Отваряне на връзката в браузър"
-
 #: ../src/gtkgui.glade.h:341
-#, fuzzy
-msgid "_Open containing folder"
+msgid "_Open Link in Browser"
 msgstr "_Отваряне на връзката в браузър"
 
 #: ../src/gtkgui.glade.h:342
 #, fuzzy
+msgid "_Open containing folder"
+msgstr "_Отваряне на връзката в браузър"
+
+#: ../src/gtkgui.glade.h:343
+#, fuzzy
 msgid "_Owner"
 msgstr "Даване на права на _собственик"
 
-#: ../src/gtkgui.glade.h:343
+#: ../src/gtkgui.glade.h:344
 msgid "_Password:"
 msgstr "_Парола:"
 
-#: ../src/gtkgui.glade.h:344
+#: ../src/gtkgui.glade.h:345
 #, fuzzy
 msgid "_Pause"
 msgstr "Състояние"
 
-#: ../src/gtkgui.glade.h:345
+#: ../src/gtkgui.glade.h:346
 msgid "_Player:"
 msgstr "_Плейър:"
 
-#: ../src/gtkgui.glade.h:346
+#: ../src/gtkgui.glade.h:347
 msgid "_Pop it up"
 msgstr "_Показване"
 
-#: ../src/gtkgui.glade.h:347
+#: ../src/gtkgui.glade.h:348
 msgid "_Port:"
 msgstr "По_рт:"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:349
 msgid "_Preferences"
 msgstr "_Настройки"
 
-#: ../src/gtkgui.glade.h:349
+#: ../src/gtkgui.glade.h:350
 #, fuzzy
 msgid "_Presence"
 msgstr "_Настройки"
 
-#: ../src/gtkgui.glade.h:350
+#: ../src/gtkgui.glade.h:351
 msgid "_Previous"
 msgstr "_Предишна"
 
-#: ../src/gtkgui.glade.h:351
+#: ../src/gtkgui.glade.h:352
 msgid "_Publish"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:352
+#: ../src/gtkgui.glade.h:353
 msgid "_Quit"
 msgstr "_Изход"
 
-#: ../src/gtkgui.glade.h:353
+#: ../src/gtkgui.glade.h:354
 msgid "_Refresh"
 msgstr "_Актуализиране"
 
-#: ../src/gtkgui.glade.h:354
+#: ../src/gtkgui.glade.h:355
 msgid "_Register new account"
 msgstr "_Регистриране на нов акаунт"
 
-#: ../src/gtkgui.glade.h:355
+#: ../src/gtkgui.glade.h:356
 msgid "_Remove"
 msgstr "_Премахване"
 
-#: ../src/gtkgui.glade.h:357
+#: ../src/gtkgui.glade.h:358
 #, fuzzy
 msgid "_Rename"
 msgstr "Преименуване"
 
-#: ../src/gtkgui.glade.h:358
+#: ../src/gtkgui.glade.h:359
 msgid "_Reply"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:359
+#: ../src/gtkgui.glade.h:360
 #, fuzzy
 msgid "_Retrieve"
 msgstr "_Премахване"
 
-#: ../src/gtkgui.glade.h:360
+#: ../src/gtkgui.glade.h:361
 #, fuzzy
 msgid "_Send"
 msgstr "_Отказване"
 
-#: ../src/gtkgui.glade.h:361
+#: ../src/gtkgui.glade.h:362
 msgid "_Send & Close"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:362
+#: ../src/gtkgui.glade.h:363
 #, fuzzy
 msgid "_Send Private Message"
 msgstr "_Ново съобщение"
 
-#: ../src/gtkgui.glade.h:363
+#: ../src/gtkgui.glade.h:364
 #, fuzzy
 msgid "_Send Server Message"
 msgstr "_Ново съобщение"
 
-#: ../src/gtkgui.glade.h:364
+#: ../src/gtkgui.glade.h:365
 #, fuzzy
 msgid "_Send Single Message"
 msgstr "Входящо съобщение:"
 
-#: ../src/gtkgui.glade.h:365
+#: ../src/gtkgui.glade.h:366
 msgid "_Server:"
 msgstr "С_ървър:"
 
-#: ../src/gtkgui.glade.h:366
-msgid "_Service Discovery"
-msgstr "_Откриване на услуги"
-
 #: ../src/gtkgui.glade.h:367
-#, fuzzy
-msgid "_Service Discovery..."
+msgid "_Service Discovery"
 msgstr "_Откриване на услуги"
 
 #: ../src/gtkgui.glade.h:368
 #, fuzzy
+msgid "_Service Discovery..."
+msgstr "_Откриване на услуги"
+
+#: ../src/gtkgui.glade.h:369
+#, fuzzy
 msgid "_Set Image..."
 msgstr "Избор на изображение"
 
-#: ../src/gtkgui.glade.h:369
+#: ../src/gtkgui.glade.h:370
 #, fuzzy
 msgid "_Start Chat"
 msgstr "Започване на разговор"
 
-#: ../src/gtkgui.glade.h:370
+#: ../src/gtkgui.glade.h:371
 #, fuzzy
 msgid "_Status"
 msgstr "Състояние"
 
-#: ../src/gtkgui.glade.h:371
+#: ../src/gtkgui.glade.h:372
 msgid "_Subscribe"
 msgstr "_Записване"
 
-#: ../src/gtkgui.glade.h:372
+#: ../src/gtkgui.glade.h:373
 #, fuzzy
 msgid "_Subscription"
 msgstr "Записване"
 
-#: ../src/gtkgui.glade.h:373
+#: ../src/gtkgui.glade.h:374
 msgid "_Use proxy"
 msgstr "_Използване на сървър-посредник"
 
-#: ../src/gtkgui.glade.h:374
+#: ../src/gtkgui.glade.h:375
 msgid "_Username:"
 msgstr "И_ме на потребител:"
 
-#: ../src/gtkgui.glade.h:375
+#: ../src/gtkgui.glade.h:376
 #, fuzzy
 msgid "_Voice"
 msgstr "_Даване на глас"
 
-#: ../src/gtkgui.glade.h:376
+#: ../src/gtkgui.glade.h:377
 msgid "_XML Console"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:377
+#: ../src/gtkgui.glade.h:378
 msgid "_XML Console..."
 msgstr ""
 
-#: ../src/gtkgui.glade.h:378
+#: ../src/gtkgui.glade.h:379
 #, fuzzy
 msgid "file transfers list"
 msgstr "Използване на _набор икони на транспортите"
 
-#: ../src/gtkgui.glade.h:379
+#: ../src/gtkgui.glade.h:380
 msgid "minutes"
 msgstr "минути"
 

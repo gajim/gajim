@@ -17506,7 +17506,7 @@ Maybe I'll refactor later</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <accessibility>
     <atkproperty name="AtkObject::accessible_name" translatable="yes">File Transfers</atkproperty>
-    <atkproperty name="AtkObject::accessible_description" translatable="yes">Shows list of files that you send to your friends, and files which you receive from your friends.</atkproperty>
+    <atkproperty name="AtkObject::accessible_description" translatable="yes">Shows a list of file transfers between you and other</atkproperty>
   </accessibility>
   <signal name="delete_event" handler="on_file_transfers_dialog_delete_event" last_modification_time="Wed, 31 Aug 2005 22:17:01 GMT"/>
 
@@ -17537,7 +17537,7 @@ Maybe I'll refactor later</property>
 	      <property name="enable_search">False</property>
 	      <accessibility>
 		<atkproperty name="AtkObject::accessible_name" translatable="yes">file transfers list</atkproperty>
-		<atkproperty name="AtkObject::accessible_description" translatable="yes">Show the list of active, completed and stopped file transfer from and to  your friends.</atkproperty>
+		<atkproperty name="AtkObject::accessible_description" translatable="yes">A list of active, completed and stopped file transfers</atkproperty>
 	      </accessibility>
 	      <signal name="row_activated" handler="on_transfers_list_row_activated" last_modification_time="Wed, 31 Aug 2005 22:32:25 GMT"/>
 	      <signal name="motion_notify_event" handler="on_transfers_list_motion_notify_event" last_modification_time="Wed, 31 Aug 2005 22:33:10 GMT"/>
@@ -17573,7 +17573,7 @@ Maybe I'll refactor later</property>
 	      <accessibility>
 		<atkproperty name="AtkObject::accessible_name" translatable="yes">Remove file transfer from the list.</atkproperty>
 		<atkproperty name="AtkObject::accessible_description" translatable="yes">This action removes single file transfer from the list. If the transfer is active, it is first stopped and then removed</atkproperty>
-		<atkaction action_name="click" description="Stoping transfer"/>
+		<atkaction action_name="click" description="Removing selected file transfer"/>
 	      </accessibility>
 	      <signal name="clicked" handler="on_remove_button_clicked" last_modification_time="Wed, 03 Aug 2005 00:23:18 GMT"/>
 	    </widget>
@@ -17604,8 +17604,8 @@ Maybe I'll refactor later</property>
 	      <property name="focus_on_click">True</property>
 	      <accessibility>
 		<atkproperty name="AtkObject::accessible_name" translatable="yes">Stop file transfer</atkproperty>
-		<atkproperty name="AtkObject::accessible_description" translatable="yes">Stops the selected file transfer. If there is an incomplete file, kept in the file system it will be removed. This operation is non reverseable. </atkproperty>
-		<atkaction action_name="click" description="Stoping transfer"/>
+		<atkproperty name="AtkObject::accessible_description" translatable="yes">Stops the selected file transfer. If there is an incomplete file, kept in the file system it will be removed. This operation is not reversable. </atkproperty>
+		<atkaction action_name="click" description="Stoping selected file transfer"/>
 	      </accessibility>
 	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Tue, 09 Aug 2005 17:07:31 GMT"/>
 	    </widget>
@@ -17646,8 +17646,8 @@ Maybe I'll refactor later</property>
 	  <property name="inconsistent">False</property>
 	  <property name="draw_indicator">True</property>
 	  <accessibility>
-	    <atkproperty name="AtkObject::accessible_description" translatable="yes">When file is completely transfered to its recipient show a popup notification </atkproperty>
-	    <atkaction action_name="press" description="Activate/Disable notification for complete transfer"/>
+	    <atkproperty name="AtkObject::accessible_description" translatable="yes">When a file transfer is complete show a popup notification </atkproperty>
+	    <atkaction action_name="press" description="Activate/Disable notification for when a file transfer is complete"/>
 	  </accessibility>
 	  <signal name="toggled" handler="on_notify_ft_complete_checkbox_toggled" last_modification_time="Wed, 31 Aug 2005 22:52:01 GMT"/>
 	</widget>
