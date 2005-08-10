@@ -45,7 +45,9 @@ dist:
 	cp -r data src po gajim-$(VERSION)/
 	cp AUTHORS gajim.1 gajim.ico gajim.desktop COPYING Makefile Changelog README launch.sh gajim-$(VERSION)
 	mkdir gajim-$(VERSION)/scripts
-	cp scripts/gajim gajim-$(VERSION)/scripts/
+	for s in $(SCRIPTS) ; do \
+		cp $$s gajim-$(VERSION)/scripts/; \
+	done
 	find gajim-$(VERSION) -name '.svn' -type d | xargs rm -rf
 	find gajim-$(VERSION) -name '*.pyc' -exec rm {} \;
 	find gajim-$(VERSION) -name '*.pyo' -exec rm {} \;
