@@ -864,7 +864,7 @@
 	      <child>
 		<widget class="GtkEntry" id="resource_entry">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Resource is sent to the Jabber server in order to 'seperate' the same JID in two or more parts depending on the number of the clients connected in the same server with the same account. So you might be connected in the same account with resource 'Home' and 'Work' at the same time. The resource which has the highest priority will get the events. (see below)</property>
+		  <property name="tooltip" translatable="yes">Resource is sent to the Jabber server in order to separate the same JID in two or more parts depending on the number of the clients connected in the same server with the same account. So you might be connected in the same account with resource 'Home' and 'Work' at the same time. The resource which has the highest priority will get the events. (see below)</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
 		  <property name="visibility">True</property>
@@ -12165,7 +12165,7 @@ Status message</property>
 		  <property name="rules_hint">True</property>
 		  <property name="reorderable">False</property>
 		  <property name="enable_search">True</property>
-		  <signal name="row_activated" handler="on_advanced_treeview_row_activated" last_modification_time="Wed,  Aug 2005 02:13:30 GMT"/>
+		  <signal name="row_activated" handler="on_advanced_treeview_row_activated"/>
 		</widget>
 	      </child>
 	    </widget>
@@ -17543,7 +17543,7 @@ Maybe I'll refactor later</property>
 	      <signal name="motion_notify_event" handler="on_transfers_list_motion_notify_event" last_modification_time="Wed, 31 Aug 2005 22:33:10 GMT"/>
 	      <signal name="leave_notify_event" handler="on_transfers_list_leave_notify_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
 	      <signal name="button_press_event" handler="on_transfers_list_button_press_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
-		  <signal name="button_release_event" handler="on_transfers_list_button_release_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
+	      <signal name="button_release_event" handler="on_transfers_list_button_release_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
 	      <signal name="key_press_event" handler="on_transfers_list_key_press_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
 	    </widget>
 	  </child>
@@ -17678,7 +17678,7 @@ Maybe I'll refactor later</property>
       <signal name="activate" handler="on_continue_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="continue_image">
+	<widget class="GtkImage" id="image1124">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-media-play</property>
 	  <property name="icon_size">1</property>
@@ -17690,7 +17690,7 @@ Maybe I'll refactor later</property>
       </child>
     </widget>
   </child>
-  
+
   <child>
     <widget class="GtkImageMenuItem" id="pause_menuitem">
       <property name="label" translatable="yes">_Pause</property>
@@ -17698,7 +17698,7 @@ Maybe I'll refactor later</property>
       <signal name="activate" handler="on_pause_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1122">
+	<widget class="GtkImage" id="image1125">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-media-pause</property>
 	  <property name="icon_size">1</property>
@@ -17712,10 +17712,10 @@ Maybe I'll refactor later</property>
   </child>
 
   <child>
-    <widget class="GtkImageMenuItem" id="stop_menuitem">
+    <widget class="GtkImageMenuItem" id="cancel_menuitem">
       <property name="label">gtk-cancel</property>
       <property name="use_stock">True</property>
-      <signal name="activate" handler="on_stop_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
+      <signal name="activate" handler="on_cancel_menuitem_activate" last_modification_time="Wed, 10 Aug 2005 18:57:29 GMT"/>
     </widget>
   </child>
 
@@ -17732,7 +17732,7 @@ Maybe I'll refactor later</property>
       <signal name="activate" handler="on_open_folder_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1123">
+	<widget class="GtkImage" id="image1126">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-directory</property>
 	  <property name="icon_size">1</property>
@@ -17753,7 +17753,7 @@ Maybe I'll refactor later</property>
       <signal name="activate" handler="on_clean_up_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1124">
+	<widget class="GtkImage" id="image1127">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-clear</property>
 	  <property name="icon_size">1</property>

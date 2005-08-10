@@ -760,7 +760,7 @@ class FileTransfersTooltip(BaseTooltip):
 		text +=  gtkgui_helpers.escape_for_pango_markup(name)
 		text += '\n<b>' + _('Size: ') + '</b>' 
 		text += helpers.convert_bytes(file_props['size'])
-		text += '\n<b>' + _('Transfered: ') + '</b>' 
+		text += '\n<b>' + _('Transferred: ') + '</b>' 
 		transfered_len = 0
 		if file_props.has_key('received-len'):
 			transfered_len = file_props['received-len']
@@ -786,7 +786,7 @@ class FileTransfersTooltip(BaseTooltip):
 				elif file_props['completed']:
 					status = _('completed')
 				else:
-					status = _('transfering')
+					status = _('transferring')
 		else:
 			status = _('stopped')
 		
@@ -2145,7 +2145,7 @@ _('Connection with peer cannot be established.')).get_response()
 	def on_open_folder_menuitem_activate(self, widget):
 		pass
 		
-	def on_stop_menuitem_activate(self, widget):
+	def on_cancel_menuitem_activate(self, widget):
 		self.on_cancel_button_clicked(widget)
 		
 	def on_continue_menuitem_activate(self, widget):

@@ -121,14 +121,14 @@ the contact list of this account'), False)
 				],
 			'send_message':[
 					_('Send new message to a contact in the roster. Both OpenPGP \
-key and account are optional. If you want to set only \'account\', whitout \
+key and account are optional. If you want to set only \'account\', without \
 \'pgp key\', just set \'pgp key\' to \'\'.'), 
 					[
 						('jid', _('jid of the contact that will receive the \
 message'), True),
 						(_('message'), _('message contents'), True),
 						(_('pgp key'), _('if specified, the message will be \
-encrypted using this pulic key'), False),
+encrypted using this public key'), False),
 						(_('account'), _('if specified, the message will be \
 sent using this account'), False),
 					]
@@ -211,7 +211,7 @@ Please specify account for sending the message.') % sys.argv[2])
 			self.service = self.sbus.get_service(SERVICE)
 			self.interface = self.service.get_object(OBJ_PATH, INTERFACE)
 		else:
-			send_error(_('Unknow dbus version: %s') % _version)
+			send_error(_('Unknown dbus version: %s') % _version)
 		# get the function asked
 		if self.command == 'toggle_roster_appearance':
 			self.method = self.interface.toggle_roster_appearance
