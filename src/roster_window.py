@@ -230,18 +230,11 @@ class RosterWindow:
 		iters = self.get_contact_iter(jid, account)
 		if len(iters) == 0:
 			return
-		contact_instances = gajim.get_contact_instances_from_jid(account,
-			jid)
-		contact = contact_instances[0]
+		contact_instances = gajim.get_contact_instances_from_jid(account, jid)
+		contact = gajim.get_highest_prio_contact_from_contacts(contact_instances)
 		name = contact.name
 		if len(contact_instances) > 1:
 			name += ' (' + str(len(contact_instances)) + ')'
-
-		prio = 0 # FIXME: add a comment explain what you do here
-		for c in contact_instances:
-			if c.priority > prio:
-				prio = c.priority
-				contact = c
 
 		state_images = self.get_appropriate_state_images(jid)
 		if gajim.awaiting_messages[account].has_key(jid):
