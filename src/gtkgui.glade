@@ -17678,7 +17678,7 @@ Maybe I'll refactor later</property>
       <signal name="activate" handler="on_continue_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1124">
+	<widget class="GtkImage" id="image1127">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-media-play</property>
 	  <property name="icon_size">1</property>
@@ -17698,7 +17698,7 @@ Maybe I'll refactor later</property>
       <signal name="activate" handler="on_pause_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1125">
+	<widget class="GtkImage" id="image1128">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-media-pause</property>
 	  <property name="icon_size">1</property>
@@ -17732,7 +17732,7 @@ Maybe I'll refactor later</property>
       <signal name="activate" handler="on_open_folder_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1126">
+	<widget class="GtkImage" id="image1129">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-directory</property>
 	  <property name="icon_size">1</property>
@@ -17748,12 +17748,12 @@ Maybe I'll refactor later</property>
   <child>
     <widget class="GtkImageMenuItem" id="clean_up_menuitem">
       <property name="tooltip" translatable="yes">Removes completed, canceled and failed file transfers from the list</property>
-      <property name="label" translatable="yes">Clean u_p</property>
+      <property name="label" translatable="yes">Clean _up</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_clean_up_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1127">
+	<widget class="GtkImage" id="image1130">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-clear</property>
 	  <property name="icon_size">1</property>
