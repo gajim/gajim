@@ -1595,7 +1595,7 @@ class FileTransfersWindow:
 		col.add_attribute(renderer, 'text' , 3)
 		self.tree.append_column(col)
 		self.set_images()
-		self.tree.get_selection().set_select_function(self.select_func)
+		self.tree.get_selection().set_mode(gtk.SELECTION_SINGLE)
 		self.tooltip = FileTransfersTooltip()
 		self.xml.signal_autoconnect(self)
 		popup_xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_menu',
@@ -1604,8 +1604,11 @@ class FileTransfersWindow:
 		self.open_folder_menuitem = popup_xml.get_widget('open_folder_menuitem')
 		self.stop_menuitem = popup_xml.get_widget('stop_menuitem')
 		self.pause_menuitem = popup_xml.get_widget('pause_menuitem')
+		self.continue_menuitem = popup_xml.get_widget('continue_menuitem')
 		self.remove_menuitem = popup_xml.get_widget('remove_menuitem')
 		self.clean_up_menuitem = popup_xml.get_widget('clean_up_menuitem')
+		self.pause_button.set_image(gtk.image_new_from_stock(
+		gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_MENU))
 		popup_xml.signal_autoconnect(self)
 		
 	def show_completed(self, jid, file_props):
@@ -1729,6 +1732,8 @@ _('Connection with peer cannot be established.')).get_response()
 		self.images['waiting'] = self.window.render_icon(gtk.STOCK_REFRESH, 
 			gtk.ICON_SIZE_MENU)
 		self.images['pause'] = self.window.render_icon(gtk.STOCK_MEDIA_PAUSE, 
+			gtk.ICON_SIZE_MENU)
+		self.images['continue'] = self.window.render_icon(gtk.STOCK_MEDIA_PLAY, 
 			gtk.ICON_SIZE_MENU)
 		self.images['ok'] = self.window.render_icon(gtk.STOCK_APPLY, 
 			gtk.ICON_SIZE_MENU)
@@ -1878,20 +1883,21 @@ _('Connection with peer cannot be established.')).get_response()
 		pass
 		
 	def is_transfer_paused(self, file_props):
-		if file_props.has_key('error') and file_props['error'] != 0:
+		if file_props.has_key('stopped') and file_props['stopped']:
 			return False
 		if file_props['completed']:
 			return False
-		if file_props.has_key('disconnect_cb') or \
-			file_props['disconnect_cb'] is None:
+		if not file_props.has_key('disconnect_cb'):
 			return False
 		return file_props['paused']
 		
 	def is_transfer_active(self, file_props):
-		if file_props.has_key('error') and file_props['error'] != 0:
+		if file_props.has_key('stopped') and file_props['stopped']:
 			return False
-		if file_props['completed'] or file_props['disconnect_cb'] is None:
-			return False
+			
+		if file_props['completed']:
+			pass
+			
 		return not file_props['paused']
 		
 	def is_transfer_stoped(self, file_props):
@@ -1899,47 +1905,59 @@ _('Connection with peer cannot be established.')).get_response()
 			return True
 		if file_props.has_key('completed') and file_props['completed']:
 			return True
-		if file_props.has_key('disconnect_cb') and \
-			file_props['disconnect_cb'] is not None:
+		if not file_props.has_key('stopped') or not \
+			file_props['stopped']:
 			return False
+		return True
+		
+	def set_all_insensitive(self):
+		self.pause_button.set_sensitive(False)
+		self.pause_menuitem.set_sensitive(False)
+		self.continue_menuitem.set_sensitive(False)
+		self.remove_button.set_sensitive(False)
+		self.remove_menuitem.set_sensitive(False)
+		self.cancel_button.set_sensitive(False)
+		self.stop_menuitem.set_sensitive(False)
+	
+	def set_buttons_sensitive(self, path, is_row_selected):
+		current_iter = self.model.get_iter(path)
+		sid = self.model[current_iter][4]
+		file_props = self.files_props[sid[0]][sid[1:]]
+		self.remove_button.set_sensitive(is_row_selected)
+		self.remove_menuitem.set_sensitive(is_row_selected)
+		is_stopped = False
+		if self.is_transfer_stoped(file_props):
+			is_stopped = True
+		self.cancel_button.set_sensitive(not is_stopped)
+		self.stop_menuitem.set_sensitive(not is_stopped)
+		if not is_row_selected:
+			# no selection, disable the buttons
+			self.set_all_insensitive()
+		elif not is_stopped:
+			if self.is_transfer_active(file_props):
+				# file transfer is active
+				self.toggle_pause_continue(True)
+				self.pause_button.set_sensitive(True)
+			elif self.is_transfer_paused(file_props):
+				# file transfer is paused
+				self.toggle_pause_continue(False)
+				self.pause_button.set_sensitive(True)
+			else:
+				self.pause_button.set_sensitive(False)
+				self.pause_menuitem.set_sensitive(False)
+				self.continue_menuitem.set_sensitive(False)
 		return True
 	
 	def select_func(self, path):
 		is_selected = False
-		current_iter = self.model.get_iter(path)
-		selected = self.tree.get_selection().get_selected()
-		if selected[1] != None:
-			selected_path = self.model.get_path(selected[1])
+		selected = self.tree.get_selection().get_selected_rows()
+		if selected[1] != []:
+			selected_path = selected[1][0]
 			if selected_path == path:
 				is_selected = True
-		sid = self.model[current_iter][4]
-		file_props = self.files_props[sid[0]][sid[1:]]
-		self.remove_button.set_sensitive(not is_selected)
-		self.remove_menuitem.set_sensitive(not is_selected)
-		if self.is_transfer_stoped(file_props):
-			is_selected = True
-		self.cancel_button.set_sensitive(not is_selected)
-		self.stop_menuitem.set_sensitive(not is_selected)
-		if is_selected:
-			self.pause_button.set_sensitive(False)
-			self.pause_menuitem.set_sensitive(False)
-		else:
-			if self.is_transfer_active(file_props):
-				self.pause_button.set_sensitive(True)
-				self.pause_menuitem.set_sensitive(True)
-				label = _('_Pause')
-				self.pause_button.set_label(label)
-				self.pause_menuitem.set_label(label)
-			elif self.is_transfer_paused(file_props):
-				self.pause_button.set_sensitive(True)
-				label = _('_Continue')
-				self.pause_button.set_label(label)
-				self.pause_menuitem.set_label(label)
-			else:
-				self.pause_button.set_sensitive(False)
-				self.pause_menuitem.set_sensitive(False)
+		self.set_buttons_sensitive(path, is_selected)
 		return True
-
+	
 	def on_remove_button_clicked(self, widget):
 		selected = self.tree.get_selection().get_selected()
 		if selected is None or selected[1] is None:
@@ -1947,11 +1965,38 @@ _('Connection with peer cannot be established.')).get_response()
 		s_iter = selected[1]
 		sid = self.model[s_iter][4]
 		file_props = self.files_props[sid[0]][sid[1:]]
-		if not self.is_transfer_stoped(file_props):
-			file_props['disconnect_cb']()
+		if not file_props.has_key('tt_account'):
+			# file transfer is not set yet
+			return 
+		account = file_props['tt_account']
+		if not gajim.connections.has_key(account):
+			# no connection to the account
+			return
+		gajim.connections[account].remove_transfer(file_props)
 		self.model.remove(s_iter)
-		self.remove_button.set_sensitive(False)
-		self.remove_menuitem.set_sensitive(False)
+		self.set_all_insensitive()
+	
+	def toggle_pause_continue(self, status):
+		if status:
+			label = _('Pause')
+			self.pause_button.set_label(label)
+			self.pause_button.set_image(gtk.image_new_from_stock(
+			gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_MENU))
+			
+			self.pause_menuitem.set_sensitive(True)
+			self.pause_menuitem.set_no_show_all(False)
+			self.continue_menuitem.hide()
+			self.continue_menuitem.set_no_show_all(True)
+			
+		else:
+			label = _('_Continue')
+			self.pause_button.set_label(label)
+			self.pause_button.set_image(gtk.image_new_from_stock(
+			gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_MENU))
+			self.pause_menuitem.hide()
+			self.pause_menuitem.set_no_show_all(True)
+			self.continue_menuitem.set_sensitive(True)
+			self.continue_menuitem.set_no_show_all(False)
 	
 	def on_pause_restore_button_clicked(self, widget):
 		selected = self.tree.get_selection().get_selected()
@@ -1964,11 +2009,11 @@ _('Connection with peer cannot be established.')).get_response()
 			file_props['paused'] = False
 			types = {'r' : 'download', 's' : 'upload'}
 			self.set_status(file_props['type'], file_props['sid'], types[sid[0]])
-			widget.set_label(_('Pause'))
+			self.toggle_pause_continue(True)
 		elif self.is_transfer_active(file_props):
 			file_props['paused'] = True
 			self.set_status(file_props['type'], file_props['sid'], 'pause')
-			widget.set_label(_('_Continue'))
+			self.toggle_pause_continue(False)
 		
 	def on_cancel_button_clicked(self, widget):
 		selected = self.tree.get_selection().get_selected()
@@ -1976,10 +2021,13 @@ _('Connection with peer cannot be established.')).get_response()
 			return 
 		s_iter = selected[1]
 		sid = self.model[s_iter][4]
-		
 		file_props = self.files_props[sid[0]][sid[1:]]
-		if not self.is_transfer_stoped(file_props):
-			file_props['disconnect_cb']()
+		if not file_props.has_key('tt_account'):
+			return 
+		account = file_props['tt_account']
+		if not gajim.connections.has_key(account):
+			return
+		gajim.connections[account].disconnect_transfer(file_props)
 		self.set_status(file_props['type'], file_props['sid'], 'stop')
 	
 	def show_tooltip(self, widget):
@@ -2015,6 +2063,10 @@ _('Connection with peer cannot be established.')).get_response()
 		self.window.hide()
 
 	def show_context_menu(self, event, iter):
+		# change the sensitive propery of the buttons and menuitems
+		path = self.model.get_path(iter)
+		self.set_buttons_sensitive(path, True)
+		
 		event_button = self.get_possible_button_event(event)
 		self.file_transfers_menu.popup(None, self.tree, None, 
 			event_button, event.time)
@@ -2046,21 +2098,34 @@ _('Connection with peer cannot be established.')).get_response()
 			self.show_context_menu(event, iter)
 			return True
 			
+	
+	def on_transfers_list_button_release_event(self, widget, event):
+		# hide tooltip, no matter the button is pressed
+		self.tooltip.hide_tooltip()
+		try:
+			path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
+				int(event.y))
+		except TypeError:
+			self.tree.get_selection().unselect_all()
+			return
+		self.select_func(path)
+			
 	def on_transfers_list_button_press_event(self, widget, event):
 		# hide tooltip, no matter the button is pressed
 		self.tooltip.hide_tooltip()
+		try:
+			path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
+				int(event.y))
+		except TypeError:
+			self.tree.get_selection().unselect_all()
+			return
 		if event.button == 3: # Right click
-			try:
-				path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
-					int(event.y))
-			except TypeError:
-				self.tree.get_selection().unselect_all()
-				return
 			self.tree.get_selection().select_path(path)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			self.show_context_menu(event, iter)
 			return True
+		
 	
 	def on_clean_up_menuitem_activate(self, widget):
 		i = len(self.model) - 1
@@ -2069,6 +2134,8 @@ _('Connection with peer cannot be established.')).get_response()
 			sid = self.model[iter][4]
 			file_props = self.files_props[sid[0]][sid[1:]]
 			if file_props.has_key('completed') and file_props['completed']:
+				self.model.remove(iter)
+			elif file_props.has_key('stopped') and file_props['stopped']:
 				self.model.remove(iter)
 			i -= 1
 			
@@ -2081,6 +2148,9 @@ _('Connection with peer cannot be established.')).get_response()
 	def on_stop_menuitem_activate(self, widget):
 		self.on_cancel_button_clicked(widget)
 		
+	def on_continue_menuitem_activate(self, widget):
+		self.on_pause_restore_button_clicked(widget)
+	
 	def on_pause_menuitem_activate(self, widget):
 		self.on_pause_restore_button_clicked(widget)
 		# TODO change the stock
