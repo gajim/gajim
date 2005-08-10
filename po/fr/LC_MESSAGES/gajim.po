@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-10 01:12+0300\n"
+"POT-Creation-Date: 2005-08-10 02:45+0300\n"
 "PO-Revision-Date: 2005-06-01 20:37+0200\n"
 "Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
 "Language-Team:  none\n"
@@ -167,7 +167,7 @@ msgstr "Vous serez connecté à %s sans OpenPGP."
 msgid "[This message is encrypted]"
 msgstr "[ce message est chiffré]"
 
-#: ../src/common/connection.py:1577 ../src/gajim.py:574
+#: ../src/common/connection.py:1577 ../src/gajim.py:521
 msgid "Check your connection or try again later."
 msgstr "Vérifiez votre connexion ou réessayer plus tard."
 
@@ -360,24 +360,24 @@ msgstr "Valeur"
 msgid "Type"
 msgstr "Type"
 
-#: ../src/chat.py:122 ../src/gtkgui.glade.h:68
+#: ../src/chat.py:123 ../src/gtkgui.glade.h:68
 msgid "Chat"
 msgstr "Discussion"
 
-#: ../src/chat.py:124 ../src/gtkgui.glade.h:130
+#: ../src/chat.py:125 ../src/gtkgui.glade.h:130
 msgid "Group Chat"
 msgstr "Groupes de Discussion"
 
 #. if we have 2 or more accounts
-#: ../src/chat.py:135
+#: ../src/chat.py:136
 #, fuzzy
 msgid "account: "
 msgstr " (compte: "
 
 #. Groups maynot change name from or to 'not in the roster'
-#: ../src/chat.py:236 ../src/chat.py:904 ../src/dialogs.py:112
+#: ../src/chat.py:237 ../src/chat.py:905 ../src/dialogs.py:112
 #: ../src/dialogs.py:318 ../src/dialogs.py:1251 ../src/dialogs.py:1252
-#: ../src/gajim.py:533 ../src/gajim.py:534 ../src/roster_window.py:833
+#: ../src/gajim.py:480 ../src/gajim.py:481 ../src/roster_window.py:833
 #: ../src/roster_window.py:1049 ../src/roster_window.py:1187
 #: ../src/roster_window.py:1376 ../src/roster_window.py:1410
 #: ../src/roster_window.py:1735 ../src/roster_window.py:1932
@@ -385,12 +385,12 @@ msgstr " (compte: "
 msgid "not in the roster"
 msgstr "non dans la liste"
 
-#: ../src/chat.py:287
+#: ../src/chat.py:288
 #, python-format
 msgid "Switch to %s"
 msgstr "Basculer vers %s"
 
-#: ../src/chat.py:488
+#: ../src/chat.py:489
 msgid ""
 "If that is not your language for which you want to highlight misspelled "
 "words, then please set your $LANG as appropriate. Eg. for French do export "
@@ -406,37 +406,37 @@ msgstr ""
 "\n"
 "La vérification orthographique ne sera pas utilisée"
 
-#: ../src/chat.py:746
+#: ../src/chat.py:747
 #, python-format
 msgid "Actions for \"%s\""
 msgstr "Actions pour \"%s\""
 
-#: ../src/chat.py:758
+#: ../src/chat.py:759
 msgid "Read _Wikipedia Article"
 msgstr "Lire l'Article _Wikipédia"
 
-#: ../src/chat.py:762
+#: ../src/chat.py:763
 msgid "Look it up in _Dictionary"
 msgstr "Chercher dans le _Dictionnaire"
 
 #. we must have %s in the url if not WIKTIONARY
-#: ../src/chat.py:777
+#: ../src/chat.py:778
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr ""
 
 #. we must have %s in the url
-#: ../src/chat.py:787
+#: ../src/chat.py:788
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr ""
 
-#: ../src/chat.py:790
+#: ../src/chat.py:791
 msgid "Web _Search for it"
 msgstr "_Rechercher sur Internet"
 
 #. if we have subject, show it too!
-#: ../src/chat.py:1115
+#: ../src/chat.py:1116
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Sujet : %s\n"
@@ -910,7 +910,7 @@ msgstr "Rejoindre un Groupe de Discussion"
 msgid "New Message as %s"
 msgstr "Nouveau message en tant que %s"
 
-#: ../src/dialogs.py:1070 ../src/dialogs.py:1165 ../src/gajim.py:462
+#: ../src/dialogs.py:1070 ../src/dialogs.py:1165 ../src/gajim.py:409
 #: ../src/gtkgui.glade.h:173
 msgid "New Message"
 msgstr "Nouveau message"
@@ -960,15 +960,15 @@ msgstr "Les mots de passe ne correspondent pas"
 msgid "The passwords typed in both fields must be identical."
 msgstr "Les mots de passe tapés dans chaque champs doivent être identiques."
 
-#: ../src/dialogs.py:1157 ../src/gajim.py:361
+#: ../src/dialogs.py:1157 ../src/gajim.py:308
 msgid "Contact Signed In"
 msgstr "Contact connecté"
 
-#: ../src/dialogs.py:1161 ../src/gajim.py:386
+#: ../src/dialogs.py:1161 ../src/gajim.py:333
 msgid "Contact Signed Out"
 msgstr "Contact déconnecté"
 
-#: ../src/dialogs.py:1166 ../src/gajim.py:459
+#: ../src/dialogs.py:1166 ../src/gajim.py:406
 msgid "New Single Message"
 msgstr "Nouveau Message Simple"
 
@@ -977,20 +977,20 @@ msgstr "Nouveau Message Simple"
 msgid "From %s"
 msgstr "De %s"
 
-#: ../src/dialogs.py:1171 ../src/gajim.py:781
+#: ../src/dialogs.py:1171 ../src/gajim.py:728
 msgid "File Transfer Request"
 msgstr "Requête de Transfert de Fichier"
 
-#: ../src/dialogs.py:1177 ../src/gajim.py:752 ../src/gajim.py:766
+#: ../src/dialogs.py:1177 ../src/gajim.py:699 ../src/gajim.py:713
 #, fuzzy
 msgid "File Transfer Error"
 msgstr "Transfert de Fichier"
 
-#: ../src/dialogs.py:1181 ../src/gajim.py:816
+#: ../src/dialogs.py:1181 ../src/gajim.py:763
 msgid "File Transfer Completed"
 msgstr "Transfert de Fichier Terminé"
 
-#: ../src/dialogs.py:1181 ../src/gajim.py:819
+#: ../src/dialogs.py:1181 ../src/gajim.py:766
 msgid "File Transfer Stopped"
 msgstr "Transfert de Fichier Arrêté"
 
@@ -1144,66 +1144,66 @@ msgid "Pause"
 msgstr "Pause"
 
 #. ('HTTP_AUTH', account, (method, url, iq_obj))
-#: ../src/gajim.py:204
+#: ../src/gajim.py:151
 #, fuzzy, python-format
 msgid "HTTP (%s) Authorization for %s"
 msgstr "Demander l'Autorisation à"
 
-#: ../src/gajim.py:205
+#: ../src/gajim.py:152
 msgid "Do you accept this request?"
 msgstr ""
 
-#: ../src/gajim.py:510
+#: ../src/gajim.py:457
 msgid "error while sending"
 msgstr "erreur en envoyant"
 
-#: ../src/gajim.py:536 ../src/gajim.py:546 ../src/roster_window.py:125
+#: ../src/gajim.py:483 ../src/gajim.py:493 ../src/roster_window.py:125
 #: ../src/roster_window.py:1036 ../src/gtkgui.glade.h:127
 msgid "General"
 msgstr "Général"
 
-#: ../src/gajim.py:550
+#: ../src/gajim.py:497
 msgid "Authorization accepted"
 msgstr "Autorisation accepté"
 
-#: ../src/gajim.py:551
+#: ../src/gajim.py:498
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his status."
 msgstr "Le contact \"%s\" vous autorisé à voir sont statut."
 
-#: ../src/gajim.py:557
+#: ../src/gajim.py:504
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Le contact \"%s\" a cessé de vous souscrire à sa présence"
 
-#: ../src/gajim.py:558
+#: ../src/gajim.py:505
 msgid "You will always see him as offline."
 msgstr "Vous le verrez toujours en tant que déconnecté."
 
-#: ../src/gajim.py:573
+#: ../src/gajim.py:520
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Le contact avec \"%s\" ne peut être établi"
 
-#: ../src/gajim.py:591
+#: ../src/gajim.py:538
 msgid "Account registration successful"
 msgstr "Compté enregistré avec succès"
 
-#: ../src/gajim.py:592
+#: ../src/gajim.py:539
 #, python-format
 msgid "The account \"%s\" has been registered with the Jabber server."
 msgstr "Le compte \"%s\" a été enregistré sur le serveur Jabber."
 
-#: ../src/gajim.py:708
+#: ../src/gajim.py:655
 msgid "Your passphrase is incorrect"
 msgstr "Votre mot de passe est incorrecte"
 
-#: ../src/gajim.py:709
+#: ../src/gajim.py:656
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Vous êtes actuellement connecté sans votre clé OpenPGP."
 
 #. it is good to notify the user, in case he cannot see the output of the console
-#: ../src/gajim.py:1035
+#: ../src/gajim.py:982
 msgid "Cannot save your preferences"
 msgstr "Impossible de sauver vos préférences"
 
