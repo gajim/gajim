@@ -1598,6 +1598,15 @@ class FileTransfersWindow:
 		self.tree.get_selection().set_select_function(self.select_func)
 		self.tooltip = FileTransfersTooltip()
 		self.xml.signal_autoconnect(self)
+		popup_xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_menu',
+			APP)
+		self.file_transfers_menu = popup_xml.get_widget('file_transfers_menu')
+		self.open_folder_menuitem = popup_xml.get_widget('open_folder_menuitem')
+		self.stop_menuitem = popup_xml.get_widget('stop_menuitem')
+		self.pause_menuitem = popup_xml.get_widget('pause_menuitem')
+		self.remove_menuitem = popup_xml.get_widget('remove_menuitem')
+		self.clean_up_menuitem = popup_xml.get_widget('clean_up_menuitem')
+		popup_xml.signal_autoconnect(self)
 		
 	def show_completed(self, jid, file_props):
 		self.window.present()
@@ -1871,7 +1880,10 @@ _('Connection with peer cannot be established.')).get_response()
 	def is_transfer_paused(self, file_props):
 		if file_props.has_key('error') and file_props['error'] != 0:
 			return False
-		if file_props['completed'] or file_props['disconnect_cb'] is None:
+		if file_props['completed']:
+			return False
+		if file_props.has_key('disconnect_cb') or \
+			file_props['disconnect_cb'] is None:
 			return False
 		return file_props['paused']
 		
@@ -1903,20 +1915,29 @@ _('Connection with peer cannot be established.')).get_response()
 		sid = self.model[current_iter][4]
 		file_props = self.files_props[sid[0]][sid[1:]]
 		self.remove_button.set_sensitive(not is_selected)
+		self.remove_menuitem.set_sensitive(not is_selected)
 		if self.is_transfer_stoped(file_props):
 			is_selected = True
 		self.cancel_button.set_sensitive(not is_selected)
+		self.stop_menuitem.set_sensitive(not is_selected)
 		if is_selected:
 			self.pause_button.set_sensitive(False)
+			self.pause_menuitem.set_sensitive(False)
 		else:
 			if self.is_transfer_active(file_props):
 				self.pause_button.set_sensitive(True)
-				self.pause_button.set_label(_('_Pause'))
+				self.pause_menuitem.set_sensitive(True)
+				label = _('_Pause')
+				self.pause_button.set_label(label)
+				self.pause_menuitem.set_label(label)
 			elif self.is_transfer_paused(file_props):
 				self.pause_button.set_sensitive(True)
-				self.pause_button.set_label(_('_Continue'))
+				label = _('_Continue')
+				self.pause_button.set_label(label)
+				self.pause_menuitem.set_label(label)
 			else:
 				self.pause_button.set_sensitive(False)
+				self.pause_menuitem.set_sensitive(False)
 		return True
 
 	def on_remove_button_clicked(self, widget):
@@ -1930,7 +1951,8 @@ _('Connection with peer cannot be established.')).get_response()
 			file_props['disconnect_cb']()
 		self.model.remove(s_iter)
 		self.remove_button.set_sensitive(False)
-		
+		self.remove_menuitem.set_sensitive(False)
+	
 	def on_pause_restore_button_clicked(self, widget):
 		selected = self.tree.get_selection().get_selected()
 		if selected is None or selected[1] is None:
@@ -1961,6 +1983,9 @@ _('Connection with peer cannot be established.')).get_response()
 		self.set_status(file_props['type'], file_props['sid'], 'stop')
 	
 	def show_tooltip(self, widget):
+		if self.height_diff == 0:
+			self.tooltip.hide_tooltip()
+			return
 		pointer = self.tree.get_pointer()
 		props = self.tree.get_path_at_pos(pointer[0], 
 			pointer[1] - self.height_diff)
@@ -1988,3 +2013,77 @@ _('Connection with peer cannot be established.')).get_response()
 	
 	def on_close_button_clicked(self, widget):
 		self.window.hide()
+
+	def show_context_menu(self, event, iter):
+		event_button = self.get_possible_button_event(event)
+		self.file_transfers_menu.popup(None, self.tree, None, 
+			event_button, event.time)
+		self.file_transfers_menu.show_all()
+	
+	def get_possible_button_event(self, event):
+		'''mouse or keyboard caused the event?'''
+		if event.type == gtk.gdk.KEY_PRESS:
+			event_button = 0 # no event.button so pass 0
+		else: # BUTTON_PRESS event, so pass event.button
+			event_button = event.button
+		
+		return event_button
+	
+	def on_transfers_list_key_press_event(self, widget, event):
+		'''when a key is pressed in the treeviews'''
+		self.tooltip.hide_tooltip()
+		try:
+			store, iter = self.tree.get_selection().get_selected()
+		except TypeError:
+			self.tree.get_selection().unselect_all()
+			return
+		if iter is None:
+			return 
+		path = self.model.get_path(iter)
+		self.tree.get_selection().select_path(path)
+
+		if event.keyval == gtk.keysyms.Menu:
+			self.show_context_menu(event, iter)
+			return True
+			
+	def on_transfers_list_button_press_event(self, widget, event):
+		# hide tooltip, no matter the button is pressed
+		self.tooltip.hide_tooltip()
+		if event.button == 3: # Right click
+			try:
+				path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
+					int(event.y))
+			except TypeError:
+				self.tree.get_selection().unselect_all()
+				return
+			self.tree.get_selection().select_path(path)
+			model = self.tree.get_model()
+			iter = model.get_iter(path)
+			self.show_context_menu(event, iter)
+			return True
+	
+	def on_clean_up_menuitem_activate(self, widget):
+		i = len(self.model) - 1
+		while i >= 0:
+			iter = self.model.get_iter((i))
+			sid = self.model[iter][4]
+			file_props = self.files_props[sid[0]][sid[1:]]
+			if file_props.has_key('completed') and file_props['completed']:
+				self.model.remove(iter)
+			i -= 1
+			
+		self.remove_button.set_sensitive(False)
+		self.remove_menuitem.set_sensitive(False)
+		
+	def on_open_folder_menuitem_activate(self, widget):
+		pass
+		
+	def on_stop_menuitem_activate(self, widget):
+		self.on_cancel_button_clicked(widget)
+		
+	def on_pause_menuitem_activate(self, widget):
+		self.on_pause_restore_button_clicked(widget)
+		# TODO change the stock
+		
+	def on_remove_menuitem_activate(self, widget):
+		self.on_remove_button_clicked(widget)

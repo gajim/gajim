@@ -17541,6 +17541,8 @@ Maybe I'll refactor later</property>
 	      <signal name="row_activated" handler="on_transfers_list_row_activated" last_modification_time="Wed, 31 Aug 2005 22:32:25 GMT"/>
 	      <signal name="motion_notify_event" handler="on_transfers_list_motion_notify_event" last_modification_time="Wed, 31 Aug 2005 22:33:10 GMT"/>
 	      <signal name="leave_notify_event" handler="on_transfers_list_leave_notify_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
+	      <signal name="button_press_event" handler="on_transfers_list_button_press_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
+	      <signal name="key_press_event" handler="on_transfers_list_key_press_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -17663,6 +17665,7 @@ Maybe I'll refactor later</property>
     <widget class="GtkImageMenuItem" id="remove_menuitem">
       <property name="label">gtk-remove</property>
       <property name="use_stock">True</property>
+      <signal name="activate" handler="on_remove_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
     </widget>
   </child>
 
@@ -17670,9 +17673,10 @@ Maybe I'll refactor later</property>
     <widget class="GtkImageMenuItem" id="pause_menuitem">
       <property name="label" translatable="yes">_Pause</property>
       <property name="use_underline">True</property>
+      <signal name="activate" handler="on_pause_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1118">
+	<widget class="GtkImage" id="image1122">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-media-pause</property>
 	  <property name="icon_size">1</property>
@@ -17689,6 +17693,7 @@ Maybe I'll refactor later</property>
     <widget class="GtkImageMenuItem" id="stop_menuitem">
       <property name="label">gtk-cancel</property>
       <property name="use_stock">True</property>
+      <signal name="activate" handler="on_stop_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
     </widget>
   </child>
 
@@ -17702,9 +17707,10 @@ Maybe I'll refactor later</property>
     <widget class="GtkImageMenuItem" id="open_folder_menuitem">
       <property name="label" translatable="yes">_Open containing folder</property>
       <property name="use_underline">True</property>
+      <signal name="activate" handler="on_open_folder_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1119">
+	<widget class="GtkImage" id="image1123">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-directory</property>
 	  <property name="icon_size">1</property>
@@ -17722,9 +17728,10 @@ Maybe I'll refactor later</property>
       <property name="tooltip" translatable="yes">Removes completed, canceled and failed file transfers from the list</property>
       <property name="label" translatable="yes">Clean u_p</property>
       <property name="use_underline">True</property>
+      <signal name="activate" handler="on_clean_up_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1120">
+	<widget class="GtkImage" id="image1124">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-clear</property>
 	  <property name="icon_size">1</property>
