@@ -213,7 +213,24 @@ Please specify account for sending the message.') % sys.argv[2])
 		else:
 			send_error(_('Unknow dbus version: %s') % _version)
 		# get the function asked
-		self.method = eval('self.interface.'+self.command) 
+		if self.command == 'toggle_roster_appearance':
+			self.method = self.interface.toggle_roster_appearance
+		elif self.command == 'help':
+			self.method = self.interface.help
+		elif self.command == 'contact_info':
+			self.method = self.interface.contact_info
+		elif self.command == 'send_message':
+			self.method = self.interface.send_message
+		elif self.command == 'show_next_unread':
+			self.method = self.interface.show_next_unread
+		elif self.command == 'open_chat':
+			self.method = self.interface.open_chat
+		elif self.command == 'list_accounts':
+			self.method = self.interface.list_accounts
+		elif self.command == 'change_status':
+			self.method = self.interface.change_status
+		elif self.command == 'list_contacts':
+			self.method = self.interface.list_contacts
 		
 	def make_arguments_row(self, args):
 		''' return arguments list. Mandatory arguments are enclosed with:
