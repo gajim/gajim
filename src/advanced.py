@@ -52,12 +52,13 @@ class AdvancedConfigurationWindow:
 		col = treeview.insert_column_with_attributes(-1, _('Preference Name'),
 			renderer_text, text = 0)
 		col.set_resizable(True)
-					
+		
 		renderer_text = gtk.CellRendererText()
 		renderer_text.set_property('editable', 1)
 		renderer_text.connect('edited', self.on_config_edited)
 		col = treeview.insert_column_with_attributes(-1, _('Value'),
 			renderer_text, text = 1)
+		col.set_cell_data_func(renderer_text, self.cb_value_column_data)
 
 		#col.set_resizable(True) DO NOT REMOVE
 		# GTK+ bug http://bugzilla.gnome.org/show_bug.cgi?id=304139
@@ -76,8 +77,32 @@ class AdvancedConfigurationWindow:
 		self.window.show_all()
 		self.plugin.windows['advanced_config'] = self
 
+	def cb_value_column_data(self, col, cell, model, iter):
+		opttype = model[iter][2]
+		if opttype == 'boolean':
+			cell.set_property('editable', 0)
+		else:
+			cell.set_property('editable', 1)
+	
+	def on_advanced_treeview_row_activated(self, treeview, path, column):
+		modelpath = self.modelfilter.convert_path_to_child_path(path)
+		modelrow = self.model[modelpath]
+		option = modelrow[0]
+		if modelrow[2] == 'boolean':
+			newval = {'False': 'True', 'True': 'False'}[modelrow[1]]
+			if len(modelpath) > 1:
+				optnamerow = self.model[modelpath[0]]
+				optname = optnamerow[0]
+				keyrow = self.model[modelpath[:2]]
+				key = keyrow[0]
+				gajim.config.set_per(optname, key, option, newval)
+			else:
+				gajim.config.set(option, newval)
+			self.plugin.save_config()
+			modelrow[1] = newval
+
 	def on_config_edited(self, cell, path, text):
-		#convert modelfilter path to model path
+		# convert modelfilter path to model path
 		modelpath = self.modelfilter.convert_path_to_child_path(path)
 		modelrow = self.model[modelpath]
 		option = modelrow[0]

@@ -12165,6 +12165,7 @@ Status message</property>
 		  <property name="rules_hint">True</property>
 		  <property name="reorderable">False</property>
 		  <property name="enable_search">True</property>
+		  <signal name="row_activated" handler="on_advanced_treeview_row_activated" last_modification_time="Wed,  Aug 2005 02:13:30 GMT"/>
 		</widget>
 	      </child>
 	    </widget>
