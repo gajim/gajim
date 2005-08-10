@@ -523,16 +523,27 @@ class Connection:
 			streamhost =  query.getTag('streamhost-used')
 		except: # this bytestream result is not what we need
 			pass
-		if streamhost is None: 
-			# proxy approves the activate query
-			raise common.xmpp.NodeProcessed
-		jid = streamhost.getAttr('jid')
 		id = real_id[3:]
 		if self.files_props.has_key(id):
 			file_props = self.files_props[id]
 		else:
 			raise common.xmpp.NodeProcessed
-			file_props['type']
+		if streamhost is None: 
+			# proxy approves the activate query
+			if real_id[:3] == 'au_':
+				id = real_id[3:]
+				if not file_props.has_key('streamhost-used') or \
+					file_props['streamhost-used'] is False:
+					raise common.xmpp.NodeProcessed
+				if not file_props.has_key('proxyhosts'):
+					raise common.xmpp.NodeProcessed
+				for host in file_props['proxyhosts']:
+					if host['initiator'] == frm and \
+					str(query.getAttr('sid')) == file_props['sid']:
+						gajim.socks5queue.activate_proxy(host['idx'])
+						break
+			raise common.xmpp.NodeProcessed
+		jid = streamhost.getAttr('jid')
 		if file_props.has_key('streamhost-used') and \
 			file_props['streamhost-used'] is True:
 			raise common.xmpp.NodeProcessed
@@ -569,6 +580,39 @@ class Connection:
 			
 		raise common.xmpp.NodeProcessed
 	
+	def remove_all_transfers(self):
+		''' stops and removes all active connections from the socks5 pool '''
+		for file_props in self.files_props.values():
+			self.remove_transfer(file_props, remove_from_list = False)
+		del(self.files_props)
+		self.files_props = {}
+	
+	def remove_transfer(self, file_props, remove_from_list = True):
+		if file_props.has_key('hash'):
+			gajim.socks5queue.remove_sender(file_props['hash'])
+		
+		if file_props.has_key('streamhosts'):
+			for host in file_props['streamhosts']:
+				if host['idx'] > 0:
+					gajim.socks5queue.remove_receiver(host['idx'])
+					gajim.socks5queue.remove_sender(host['idx'])
+		sid = file_props['sid']
+		gajim.socks5queue.remove_file_props(self.name, sid)
+		
+		if remove_from_list:
+			if self.files_props.has_key('sid'):
+				del(self.files_props['sid'])
+				
+	def disconnect_transfer(self, file_props):
+		if file_props.has_key('hash'):
+			gajim.socks5queue.remove_sender(file_props['hash'])
+		
+		if file_props.has_key('streamhosts'):
+			for host in file_props['streamhosts']:
+				if host['idx'] > 0:
+					gajim.socks5queue.remove_receiver(host['idx'])
+					gajim.socks5queue.remove_sender(host['idx'])
+			
 	def proxy_auth_ok(self, proxy):
 		'''cb, called after authentication to proxy server '''
 		file_props = self.files_props[proxy['sid']]
@@ -1384,6 +1428,7 @@ class Connection:
 				p = self.add_sha(p)
 				if msg:
 					p.setStatus(msg)
+				self.remove_all_transfers()
 				if self.connection:
 					self.connection.send(p)
 				try:
