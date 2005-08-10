@@ -17543,6 +17543,7 @@ Maybe I'll refactor later</property>
 	      <signal name="motion_notify_event" handler="on_transfers_list_motion_notify_event" last_modification_time="Wed, 31 Aug 2005 22:33:10 GMT"/>
 	      <signal name="leave_notify_event" handler="on_transfers_list_leave_notify_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
 	      <signal name="button_press_event" handler="on_transfers_list_button_press_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
+		  <signal name="button_release_event" handler="on_transfers_list_button_release_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
 	      <signal name="key_press_event" handler="on_transfers_list_key_press_event" last_modification_time="Wed, 31 Aug 2005 22:33:23 GMT"/>
 	    </widget>
 	  </child>
@@ -17670,6 +17671,26 @@ Maybe I'll refactor later</property>
     </widget>
   </child>
 
+  <child>
+    <widget class="GtkImageMenuItem" id="continue_menuitem">
+      <property name="label" translatable="yes">_Continue</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_continue_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="continue_image">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-media-play</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+  
   <child>
     <widget class="GtkImageMenuItem" id="pause_menuitem">
       <property name="label" translatable="yes">_Pause</property>
