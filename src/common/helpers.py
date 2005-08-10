@@ -169,7 +169,8 @@ def is_in_path(name_of_command, return_abs_path = False):
 			contents = os.listdir(path_to_directory)
 		except OSError: # user can have something in PATH that is not a dir
 			pass
-		is_in_dir = name_of_command in contents
+		else:
+			is_in_dir = name_of_command in contents
 		if is_in_dir:
 			if return_abs_path:
 				found_in_which_dir = path_to_directory
