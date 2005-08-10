@@ -1342,6 +1342,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 		self.plugin.register_handlers(con)
 		#if we need to register a new account
 		if new_account:
+			gajim.events_for_ui[name] = []
 			con.new_account(name, config)
 			return
 		# The account we add already exists on the server

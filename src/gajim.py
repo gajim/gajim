@@ -769,10 +769,14 @@ class Interface:
 			self.roster.popup_notification_windows.append(instance)
 
 	def handle_event_stanza_arrived(self, account, stanza):
+		if not self.windows.has_key(account):
+			return
 		if self.windows[account].has_key('xml_console'):
 			self.windows[account]['xml_console'].print_stanza(stanza, 'incoming')
 
 	def handle_event_stanza_sent(self, account, stanza):
+		if not self.windows.has_key(account):
+			return
 		if self.windows[account].has_key('xml_console'):
 			self.windows[account]['xml_console'].print_stanza(stanza, 'outgoing')
 
@@ -965,6 +969,7 @@ class Interface:
 					gajim.connections[account].process(0.01)
 				if gajim.socks5queue.connected:
 					gajim.socks5queue.process(0.01)
+			for account in gajim.events_for_ui: #when we create a new account we don't have gajim.connection
 				while len(gajim.events_for_ui[account]):
 					gajim.mutex_events_for_ui.lock(self.exec_event, account)
 					gajim.mutex_events_for_ui.unlock()
