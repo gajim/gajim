@@ -165,20 +165,6 @@ class Interface:
 		elif str(errcode) == '404':
 			conn = gajim.connections[account]
 			sid = id[3:]
-			if conn.files_props.has_key(sid):
-				file_props = conn.files_props[sid]
-				if file_props.has_key('streamhosts'):
-					streamhosts = file_props['streamhosts']
-					gajim.socks5queue.add_file_props(account, file_props)
-					gajim.socks5queue.connect_to_hosts(account, sid, 
-						conn.send_success_connect_reply, None)
-				
-				if file_props.has_key('fast'):
-					streamhosts = file_props['fast']
-					file_props['streamhosts'] = streamhosts
-					gajim.socks5queue.add_file_props(account, file_props)
-					gajim.socks5queue.connect_to_hosts(account, sid, 
-						conn.send_success_connect_reply, None)
 			return
 		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		if jid_from in self.windows[account]['gc']:
@@ -314,7 +300,7 @@ class Interface:
 				# when contact signs out we reset his chatstate
 				contact = gajim.get_first_contact_instance_from_jid(account, jid)
 				contact.chatstate = None
-						
+				
 			elif old_show > 1 and new_show < 2:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
 												'enabled'):
