@@ -1607,7 +1607,8 @@ class FileTransfersWindow:
 		self.continue_menuitem = popup_xml.get_widget('continue_menuitem')
 		self.remove_menuitem = popup_xml.get_widget('remove_menuitem')
 		self.clean_up_menuitem = popup_xml.get_widget('clean_up_menuitem')
-		self.pause_button.set_image(gtk.image_new_from_stock(
+		if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
+			self.pause_button.set_image(gtk.image_new_from_stock(
 		gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_MENU))
 		popup_xml.signal_autoconnect(self)
 		
@@ -1980,7 +1981,8 @@ _('Connection with peer cannot be established.')).get_response()
 		if status:
 			label = _('Pause')
 			self.pause_button.set_label(label)
-			self.pause_button.set_image(gtk.image_new_from_stock(
+			if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
+				self.pause_button.set_image(gtk.image_new_from_stock(
 			gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_MENU))
 			
 			self.pause_menuitem.set_sensitive(True)
@@ -1991,7 +1993,8 @@ _('Connection with peer cannot be established.')).get_response()
 		else:
 			label = _('_Continue')
 			self.pause_button.set_label(label)
-			self.pause_button.set_image(gtk.image_new_from_stock(
+			if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
+				self.pause_button.set_image(gtk.image_new_from_stock(
 			gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_MENU))
 			self.pause_menuitem.hide()
 			self.pause_menuitem.set_no_show_all(True)
