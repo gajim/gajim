@@ -380,6 +380,7 @@ class PreferencesWindow:
 		if os.name == 'nt':
 			self.applications_frame = self.xml.get_widget('applications_frame')
 			self.applications_frame.set_no_show_all(True)
+			self.applications_frame.hide()
 		else:
 			self.applications_combobox = self.xml.get_widget('applications_combobox')
 			if gajim.config.get('autodetect_browser_mailer'):
