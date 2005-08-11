@@ -221,20 +221,21 @@ def launch_file_manager(path_to_open):
 			os.startfile(path_to_open) # if pywin32 is installed we open
 		except:
 			pass
-	if gajim.config.get('openwith') == 'gnome-open':
-		command = 'gnome-open'
-	elif gajim.config.get('openwith') == 'kfmclient exec':
-		command = 'kfmclient exec'
-	elif gajim.config.get('openwith') == 'custom':
-		command = gajim.config.get('custom_file_manager')
-	if command == '': # if no app is configured
-		return
-	# we add the path in "" so we have good parsing from shell
-	command = command + ' "' + uri + '" &'
-	try: #FIXME: when we require python2.4+ use subprocess module
-		os.system(command)
-	except:
-		pass
+	else:
+		if gajim.config.get('openwith') == 'gnome-open':
+			command = 'gnome-open'
+		elif gajim.config.get('openwith') == 'kfmclient exec':
+			command = 'kfmclient exec'
+		elif gajim.config.get('openwith') == 'custom':
+			command = gajim.config.get('custom_file_manager')
+		if command == '': # if no app is configured
+			return
+		# we add the path in "" so we have good parsing from shell
+		command = command + ' "' + path_to_open + '" &'
+		try: #FIXME: when we require python2.4+ use subprocess module
+			os.system(command)
+		except:
+			pass
 
 def play_sound(event):
 	if not gajim.config.get('sounds_on'):
