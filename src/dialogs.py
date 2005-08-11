@@ -770,25 +770,25 @@ class FileTransfersTooltip(BaseTooltip):
 		if not file_props.has_key('started') or not file_props['started']:
 			status =  _('not started')
 		elif file_props.has_key('connected'):
-			if file_props['connected'] == False:
+			if file_props.has_key('stopped') and \
+				file_props['stopped'] == True:
+				status = _('stopped')
+			elif file_props['completed']:
+					status = _('completed')
+			elif file_props['connected'] == False:
 				if file_props['completed']:
 					status = _('completed')
 			else:
-				if file_props.has_key('stopped') and \
-					file_props['stopped'] == True:
-					status = _('stopped')
-				elif file_props.has_key('paused') and  \
+				if file_props.has_key('paused') and  \
 					file_props['paused'] == True:
 					status = _('paused')
 				elif file_props.has_key('stalled') and \
 					file_props['stalled'] == True:
 					status = _('stalled')
-				elif file_props['completed']:
-					status = _('completed')
 				else:
 					status = _('transferring')
 		else:
-			status = _('stopped')
+			status =  _('not started')
 		
 		text += status
 		self.text_lable.set_markup(text)
@@ -1274,6 +1274,10 @@ class PopupNotificationWindow:
 		elif self.msg_type == 'file-error': # file transfer ended unexpectedly
 			self.plugin.windows['file_transfers'].show_stopped(self.jid, 
 				self.file_props)
+		elif self.msg_type == 'file-request-error': # file transfer ended unexpectedly
+			self.plugin.windows['file_transfers'].show_send_error(self.file_props)
+		elif self.msg_type == 'file-send-error': # file transfer ended unexpectedly
+			self.plugin.windows['file_transfers'].show_send_error(self.file_props)
 		else: # 'chat'
 			self.plugin.roster.new_chat(contact, self.account)
 			chats_window = self.plugin.windows[self.account]['chats'][self.jid]
@@ -1584,6 +1588,7 @@ class FileTransfersWindow:
 		renderer.set_property('xalign', 0.)
 		renderer.set_property('yalign', 0.)
 		col.set_resizable(True)
+
 		self.tree.append_column(col)
 		
 		col = gtk.TreeViewColumn(_('Progress'))
@@ -1630,7 +1635,7 @@ class FileTransfersWindow:
 		InformationDialog(_('File transfer canceled'), _('Connection with peer cannot be established.')).get_response()
 		self.tree.get_selection().unselect_all()
 		
-	def show_send_error(self, jid, file_props):
+	def show_send_error(self, file_props):
 		self.window.present()
 		self.window.window.focus()
 		InformationDialog(_('File transfer canceled'),
@@ -1886,7 +1891,7 @@ _('Connection with peer cannot be established.')).get_response()
 	def is_transfer_paused(self, file_props):
 		if file_props.has_key('stopped') and file_props['stopped']:
 			return False
-		if file_props['completed']:
+		if file_props.has_key('completed') and file_props['completed']:
 			return False
 		if not file_props.has_key('disconnect_cb'):
 			return False
@@ -1895,10 +1900,12 @@ _('Connection with peer cannot be established.')).get_response()
 	def is_transfer_active(self, file_props):
 		if file_props.has_key('stopped') and file_props['stopped']:
 			return False
-			
-		if file_props['completed']:
-			pass
-			
+		if file_props.has_key('completed') and file_props['completed']:
+			return False
+		if not file_props.has_key('started') or not file_props['started']:
+			return False
+		if not file_props.has_key('paused'):
+			return True
 		return not file_props['paused']
 		
 	def is_transfer_stoped(self, file_props):
@@ -1919,13 +1926,18 @@ _('Connection with peer cannot be established.')).get_response()
 		self.remove_menuitem.set_sensitive(False)
 		self.cancel_button.set_sensitive(False)
 		self.cancel_menuitem.set_sensitive(False)
+		self.open_folder_menuitem.set_sensitive(False)
 	
 	def set_buttons_sensitive(self, path, is_row_selected):
+		if path is None:
+			self.set_all_insensitive()
+			return
 		current_iter = self.model.get_iter(path)
 		sid = self.model[current_iter][4]
 		file_props = self.files_props[sid[0]][sid[1:]]
 		self.remove_button.set_sensitive(is_row_selected)
 		self.remove_menuitem.set_sensitive(is_row_selected)
+		self.open_folder_menuitem.set_sensitive(is_row_selected)
 		is_stopped = False
 		if self.is_transfer_stoped(file_props):
 			is_stopped = True
@@ -1947,6 +1959,10 @@ _('Connection with peer cannot be established.')).get_response()
 				self.pause_button.set_sensitive(False)
 				self.pause_menuitem.set_sensitive(False)
 				self.continue_menuitem.set_sensitive(False)
+		else:
+			self.pause_button.set_sensitive(False)
+			self.pause_menuitem.set_sensitive(False)
+			self.continue_menuitem.set_sensitive(False)
 		return True
 	
 	def select_func(self, path):
@@ -2067,7 +2083,13 @@ _('Connection with peer cannot be established.')).get_response()
 
 	def show_context_menu(self, event, iter):
 		# change the sensitive propery of the buttons and menuitems
-		path = self.model.get_path(iter)
+		if len(self.model) == 0:
+			self.clean_up_menuitem.set_sensitive(False)
+		else:
+			self.clean_up_menuitem.set_sensitive(True)
+		path = None
+		if iter is not None:
+			path = self.model.get_path(iter)
 		self.set_buttons_sensitive(path, True)
 		
 		event_button = self.get_possible_button_event(event)
@@ -2087,16 +2109,16 @@ _('Connection with peer cannot be established.')).get_response()
 	def on_transfers_list_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''
 		self.tooltip.hide_tooltip()
+		iter = None
 		try:
 			store, iter = self.tree.get_selection().get_selected()
 		except TypeError:
 			self.tree.get_selection().unselect_all()
-			return
-		if iter is None:
-			return 
-		path = self.model.get_path(iter)
-		self.tree.get_selection().select_path(path)
-
+		
+		if iter is not None:
+			path = self.model.get_path(iter)
+			self.tree.get_selection().select_path(path)
+		
 		if event.keyval == gtk.keysyms.Menu:
 			self.show_context_menu(event, iter)
 			return True
@@ -2105,29 +2127,33 @@ _('Connection with peer cannot be established.')).get_response()
 	def on_transfers_list_button_release_event(self, widget, event):
 		# hide tooltip, no matter the button is pressed
 		self.tooltip.hide_tooltip()
+		path = None
 		try:
 			path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
 				int(event.y))
 		except TypeError:
 			self.tree.get_selection().unselect_all()
-			return
-		self.select_func(path)
+		if path is None:
+			self.set_all_insensitive()
+		else:
+			self.select_func(path)
 			
 	def on_transfers_list_button_press_event(self, widget, event):
 		# hide tooltip, no matter the button is pressed
 		self.tooltip.hide_tooltip()
+		path, iter = None, None
 		try:
 			path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
 				int(event.y))
 		except TypeError:
 			self.tree.get_selection().unselect_all()
-			return
 		if event.button == 3: # Right click
-			self.tree.get_selection().select_path(path)
-			model = self.tree.get_model()
-			iter = model.get_iter(path)
+			if path is not None:
+				self.tree.get_selection().select_path(path)
+				iter = self.model.get_iter(path)
 			self.show_context_menu(event, iter)
-			return True
+			if path is not None:
+				return True
 		
 	
 	def on_clean_up_menuitem_activate(self, widget):
@@ -2141,14 +2167,23 @@ _('Connection with peer cannot be established.')).get_response()
 			elif file_props.has_key('stopped') and file_props['stopped']:
 				self.model.remove(iter)
 			i -= 1
-			
-		self.remove_button.set_sensitive(False)
-		self.remove_menuitem.set_sensitive(False)
+		self.tree.get_selection().unselect_all()
+		self.set_all_insensitive()
 		
 	def on_open_folder_menuitem_activate(self, widget):
-		pass
+		selected = self.tree.get_selection().get_selected()
+		if selected is None or selected[1] is None:
+			return 
+		s_iter = selected[1]
+		sid = self.model[s_iter][4]
+		file_props = self.files_props[sid[0]][sid[1:]]
+		if not file_props.has_key('file-name'):
+			return
+		(path, file) = os.path.split(file_props['file-name'])
+		if os.path.exists(path) and os.path.isdir(path):
+			helpers.launch_file_manager(path)
 		
-	def on_cancel_menuitem_activate(self, widget):
+	def on_stop_menuitem_activate(self, widget):
 		self.on_cancel_button_clicked(widget)
 		
 	def on_continue_menuitem_activate(self, widget):
