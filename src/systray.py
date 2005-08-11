@@ -182,7 +182,7 @@ class Systray:
 				account_menu_for_new_message.append(item)
 				
 		elif len(gajim.connections) == 1: # one account
-			# one account, no need to show 'as jid
+			# one account, no need to show 'as jid'
 			# for chat_with
 			account = gajim.connections.keys()[0]
 			
@@ -193,7 +193,7 @@ class Systray:
 			self.new_message_handler_id = new_message_menuitem.connect(
 				'activate', self.on_new_message_menuitem_activate, account)
 
-		if event is not None:
+		if event is not None: # None means windows (we explicitly popup in systraywin32.py)
 			self.systray_context_menu.popup(None, None, None, event.button, event.time)
 			self.systray_context_menu.show_all()
 
@@ -238,39 +238,46 @@ class Systray:
 
 		return groups_menu
 
-	def on_clicked(self, widget, event):
-		self.on_tray_leave_notify_event(widget, None)
+	def on_left_click(self):
 		win = self.plugin.roster.window
-		if event.button == 1: # Left click
-			if len(self.jids) == 0:
-				if win.get_property('visible'):
-					win.hide()
-				else:
-					win.present()
-			else:
-				account = self.jids[0][0]
-				jid = self.jids[0][1]
-				acc = self.plugin.windows[account]
-				w = None
-				if acc['gc'].has_key(jid):
-					w = acc['gc'][jid]
-				elif acc['chats'].has_key(jid):
-					w = acc['chats'][jid]
-				else:
-					self.plugin.roster.new_chat(
-						gajim.contacts[account][jid][0], account)
-					acc['chats'][jid].set_active_tab(jid)
-					acc['chats'][jid].window.present()
-				if w:
-					w.set_active_tab(jid)
-					w.window.present()
-					tv = w.xmls[jid].get_widget('conversation_textview')
-					w.scroll_to_end(tv)
-		if event.button == 2: # middle click
-			if win.is_active():
+		if len(self.jids) == 0:
+			if win.get_property('visible'):
 				win.hide()
 			else:
 				win.present()
+		else:
+			account = self.jids[0][0]
+			jid = self.jids[0][1]
+			acc = self.plugin.windows[account]
+			w = None
+			if acc['gc'].has_key(jid):
+				w = acc['gc'][jid]
+			elif acc['chats'].has_key(jid):
+				w = acc['chats'][jid]
+			else:
+				self.plugin.roster.new_chat(
+					gajim.contacts[account][jid][0], account)
+				acc['chats'][jid].set_active_tab(jid)
+				acc['chats'][jid].window.present()
+			if w:
+				w.set_active_tab(jid)
+				w.window.present()
+				tv = w.xmls[jid].get_widget('conversation_textview')
+				w.scroll_to_end(tv)
+	
+	def on_middle_click(self):
+		win = self.plugin.roster.window
+		if win.is_active():
+			win.hide()
+		else:
+			win.present()
+
+	def on_clicked(self, widget, event):
+		self.on_tray_leave_notify_event(widget, None)
+		if event.button == 1: # Left click
+			self.on_left_click()
+		if event.button == 2: # middle click
+			self.on_middle_click()
 		if event.button == 3: # right click
 			self.make_menu(event)
 	

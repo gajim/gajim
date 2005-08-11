@@ -20,6 +20,7 @@ WS_EX_LAYERED = 0x80000
 
 import gtk
 WM_LBUTTONUP = 0x0202
+WM_MBUTTONUP = 0x0208
 WM_RBUTTONUP = 0x0205
 
 from common import gajim
@@ -200,6 +201,7 @@ class NotifyIcon:
 class SystrayWin32(systray.Systray):
 	def __init__(self, plugin):
 		# Note: gtk window must be realized before installing extensions.
+		systray.Systray.__init__(self, plugin)
 		self.plugin = plugin
 		self.jids = []
 		self.status = 'offline'
@@ -224,62 +226,14 @@ class SystrayWin32(systray.Systray):
 	def hide_icon(self):
 		self.win32ext.remove_notify_icon()
 
-	def make_menu(self):
-		"""create chat with and new message (sub) menus/menuitems"""
-		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
-		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
-		
-		iskey = len(gajim.connections.keys()) > 0
-		chat_with_menuitem.set_sensitive(iskey)
-		new_message_menuitem.set_sensitive(iskey)
-		
-		if len(gajim.connections.keys()) >= 2: # 2 or more accounts? make submenus
-			account_menu_for_chat_with = gtk.Menu()
-			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
-
-			account_menu_for_new_message = gtk.Menu()
-			new_message_menuitem.set_submenu(account_menu_for_new_message)
-
-			for account in gajim.connections:
-				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
-					gajim.config.get_per('accounts', account, 'hostname')
-				#for chat_with
-				item = gtk.MenuItem(_('as ') + our_jid)
-				account_menu_for_chat_with.append(item)
-				group_menu = self.make_groups_submenus_for_chat_with(account)
-				item.set_submenu(group_menu)
-				#for new_message
-				item = gtk.MenuItem(_('as ') + our_jid)
-				item.connect('activate',\
-					self.on_new_message_menuitem_activate, account)
-				account_menu_for_new_message.append(item)
-
 	def on_clicked(self, hwnd, message, wparam, lparam):
 		if lparam == WM_RBUTTONUP: # Right click
 			self.make_menu()
 			self.win32ext.notify_icon.menu.popup(None, None, None, 0, 0)
+		elif lparam == WM_MBUTTONUP: # Middle click
+			self.on_middle_click()
 		elif lparam == WM_LBUTTONUP: # Left click
-			if len(self.jids) == 0:
-				win = self.plugin.roster.window
-				if win.is_active():
-					win.hide()
-				else:
-					win.present()
-			else:
-				account = self.jids[0][0]
-				jid = self.jids[0][1]
-				acc = self.plugin.windows[account]
-				if acc['gc'].has_key(jid):
-					acc['gc'][jid].set_active_tab(jid)
-					acc['gc'][jid].window.present()
-				elif acc['chats'].has_key(jid):
-					acc['chats'][jid].set_active_tab(jid)
-					acc['chats'][jid].window.present()
-				else:
-					self.plugin.roster.new_chat(
-						self.plugin.roster.contacts[account][jid][0], account)
-					acc['chats'][jid].set_active_tab(jid)
-					acc['chats'][jid].window.present()
+			self.on_left_click()
 			#self.win32ext.notify_icon.menu.popdown()
 			#self.win32ext.notify_icon.menu.popup(None, None, None, 0, 0)
 
