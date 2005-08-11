@@ -239,6 +239,12 @@ class PreferencesWindow:
 
 		#Font for messages
 		font = gajim.config.get('conversation_font')
+		# try to set default font for the current desktop env
+		if font == '':
+			font = gtkgui_helpers.get_default_font()
+			if font is None:
+				font = 'Sans 10'
+			gajim.config.set('conversation_font', font)
 		self.xml.get_widget('conversation_fontbutton').set_font_name(font)
 
 		# on new message

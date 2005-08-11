@@ -28,6 +28,16 @@ i18n.init()
 _ = i18n._
 from common import gajim
 
+def get_default_font():
+	''' Get the desktop setting for application font.
+	(Currently it works only for Gnome)	'''
+	try:
+		import gconf
+		client = gconf.client_get_default()
+	except:
+		return None
+	return client.get_string('/desktop/gnome/interface/font_name')
+	
 def reduce_chars_newlines(text, max_chars = 0, max_lines = 0, 
 	widget = None):
 	''' Cut the chars after 'max_chars' on each line

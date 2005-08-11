@@ -128,7 +128,7 @@ class Config:
 		'confirm_close_muc': [opt_bool, True], # confirm closing MUC window
 		'notify_on_file_complete': [opt_bool, True], # notif. on file complete
 		'file_transfers_port': [opt_int, 28011],  # port, used for file transfers
-		'conversation_font': [opt_str, 'Sans 10'],
+		'conversation_font': [opt_str, ''],
 		# IEC standard says KiB = 1024 bytes KB = 1000 bytes
 		'use_kib_mib': [opt_bool, False],
 		'notify_on_all_muc_messages': [opt_bool, False],
