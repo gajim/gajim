@@ -119,8 +119,10 @@ class Systray:
 		call the NewMessageDialog class"""
 		dialogs.NewMessageDialog(self.plugin, account)
 
-	def make_menu(self, event):
-		"""create chat with and new message (sub) menus/menuitems"""
+	def make_menu(self, event = None):
+		'''create chat with and new message (sub) menus/menuitems
+		event is None when we're in Windows
+		'''
 		
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
@@ -180,19 +182,20 @@ class Systray:
 				account_menu_for_new_message.append(item)
 				
 		elif len(gajim.connections) == 1: # one account
-			#one account, no need to show 'as jid
-			#for chat_with
+			# one account, no need to show 'as jid
+			# for chat_with
 			account = gajim.connections.keys()[0]
 			
 			group_menu = self.make_groups_submenus_for_chat_with(account)
 			chat_with_menuitem.set_submenu(group_menu)
 					
-			#for new message
+			# for new message
 			self.new_message_handler_id = new_message_menuitem.connect(
 				'activate', self.on_new_message_menuitem_activate, account)
 
-		self.systray_context_menu.popup(None, None, None, event.button, event.time)
-		self.systray_context_menu.show_all()
+		if event is not None:
+			self.systray_context_menu.popup(None, None, None, event.button, event.time)
+			self.systray_context_menu.show_all()
 
 	def on_preferences_menuitem_activate(self, widget):
 		if self.plugin.windows['preferences'].window.get_property('visible'):

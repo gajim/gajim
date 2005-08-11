@@ -1078,20 +1078,35 @@ class Interface:
 		self.sleeper = common.sleepy.Sleepy(
 			gajim.config.get('autoawaytime') * 60,
 			gajim.config.get('autoxatime') * 60)
+
 		self.systray_enabled = False
-		try:
-			import egg.trayicon # use gnomepythonextras trayicon
-		except:
+		self.systray_capabilities = False
+		
+		if os.name == 'nt':
+			if float(gajim.version) > 0.8: # atm it is not ready for 0.8
+				try:
+					import systraywin32
+				except:
+					pass
+				else:
+					self.systray_capabilities = True
+					#self.roster.window.realize()
+					self.systray = systraywin32.SystrayWin32(self)
+		else:
 			try:
-				import trayicon # use yann's
-			except: # user doesn't have trayicon capabilities
-				self.systray_capabilities = False
+				import egg.trayicon # use gnomepythonextras trayicon
+			except:
+				try:
+					import trayicon # use the one we distribute
+				except: # user doesn't have trayicon capabilities
+					pass
+				else:
+					self.systray_capabilities = True
+					self.systray = systray.Systray(self)
 			else:
 				self.systray_capabilities = True
 				self.systray = systray.Systray(self)
-		else:
-			self.systray_capabilities = True
-			self.systray = systray.Systray(self)
+
 		if self.systray_capabilities and gajim.config.get('trayicon'):
 			self.show_systray()
 		if gajim.config.get('check_for_new_version'):
@@ -1118,7 +1133,7 @@ class Interface:
 if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
-	try: 	# Import Psyco if available
+	try: # Import Psyco if available
 		import psyco
 		psyco.full()
 	except ImportError:

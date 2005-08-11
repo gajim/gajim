@@ -1,0 +1,335 @@
+#gtkwin32.py
+# code initially based on 
+# http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/334779
+
+__version__ = '1.01'
+
+
+import sys
+import win32gui
+import systray
+
+GWL_WNDPROC = -4
+GWL_EXSTYLE = -20
+IDI_APPLICATION = 32512
+LWA_ALPHA = 0x02
+WM_TASKBARCREATED = win32gui.RegisterWindowMessage('TaskbarCreated')
+WM_USER = 1024
+WM_TRAYMESSAGE = WM_USER + 20
+WS_EX_LAYERED = 0x80000
+
+import gtk
+WM_LBUTTONUP = 0x0202
+WM_RBUTTONUP = 0x0205
+
+from common import gajim
+from common import i18n
+_ = i18n._
+APP = i18n.APP
+gtk.glade.bindtextdomain(APP, i18n.DIR)
+gtk.glade.textdomain(APP)
+
+GTKGUI_GLADE = 'gtkgui.glade'
+
+class GTKWin32Ext:
+	def __init__(self, gtk_window):
+		self._window = gtk_window
+		self._hwnd = gtk_window.window.handle
+		self._message_map = {}
+
+		self.notify_icon = None            
+
+		# Sublass the window and inject a WNDPROC to process messages.
+		self._oldwndproc = win32gui.SetWindowLong(self._hwnd, GWL_WNDPROC,
+												self._wndproc)
+
+		gtk_window.connect('unrealize', self.remove)
+
+
+	def add_notify_icon(self, menu, hicon=None, tooltip=None):
+		""" Creates a notify icon for the gtk window. """
+		if not self.notify_icon:
+			if not hicon:
+				hicon = win32gui.LoadIcon(0, IDI_APPLICATION)
+			self.notify_icon = NotifyIcon(self._hwnd, hicon, tooltip)
+
+			# Makes redraw if the taskbar is restarted.   
+			self.message_map({WM_TASKBARCREATED: self.notify_icon._redraw})
+
+
+	def message_map(self, msg_map={}):
+		""" Maps message processing to callback functions ala win32gui. """
+		if msg_map:
+			if self._message_map:
+				duplicatekeys = [key for key in msg_map.keys()
+								if self._message_map.has_key(key)]
+				
+				for key in duplicatekeys:
+					new_value = msg_map[key]
+					
+					if isinstance(new_value, list):
+						raise TypeError('Dict cannot have list values')
+					
+					value = self._message_map[key]
+					
+					if new_value != value:
+						new_value = [new_value]
+						
+						if isinstance(value, list):
+							value += new_value
+						else:
+							value = [value] + new_value
+						
+						msg_map[key] = value
+			self._message_map.update(msg_map)
+
+
+	def message_unmap(self, msg, callback=None):
+		if self._message_map.has_key(msg):
+			if callback:
+				cblist = self._message_map[key]
+				if isinstance(cblist, list):
+					if not len(cblist) < 2:
+						for i in range(len(cblist)):
+							if cblist[i] == callback:
+								del self._message_map[key][i]
+								return
+			del self._message_map[key]
+		
+
+	def remove_notify_icon(self):
+		""" Removes the notify icon. """
+		if self.notify_icon:
+			self.notify_icon.remove()
+			self.notify_icon = None
+			
+
+	def remove(self, *args):
+		""" Unloads the extensions. """
+		self._message_map = {}
+		self.remove_notify_icon()
+		self = None            
+			
+
+	def show_balloon_tooltip(self, title, text, timeout=10,
+							icon=win32gui.NIIF_NONE):
+		""" Shows a baloon tooltip. """
+		if not self.notify_icon:
+			self.add_notifyicon()
+		self.notify_icon.show_balloon(title, text, timeout, icon)
+
+	def _wndproc(self, hwnd, msg, wparam, lparam):
+		""" A WINDPROC to process window messages. """
+		if self._message_map.has_key(msg):
+			callback = self._message_map[msg]
+			if isinstance(callback, list):
+				for cb in callback:
+					cb(hwnd, msg, wparam, lparam)
+			else:
+				callback(hwnd, msg, wparam, lparam)
+
+		return win32gui.CallWindowProc(self._oldwndproc, hwnd, msg, wparam,
+									lparam)
+									
+
+class NotifyIcon:
+
+	def __init__(self, hwnd, hicon, tooltip=None):
+
+		self._hwnd = hwnd
+		self._id = 0
+		self._flags = win32gui.NIF_MESSAGE | win32gui.NIF_ICON
+		self._callbackmessage = WM_TRAYMESSAGE
+		self._hicon = hicon
+
+		win32gui.Shell_NotifyIcon(win32gui.NIM_ADD, self._get_nid())
+		if tooltip: self.set_tooltip(tooltip)
+
+
+	def _get_nid(self):
+		""" Function to initialise & retrieve the NOTIFYICONDATA Structure. """
+		nid = (self._hwnd, self._id, self._flags, self._callbackmessage,
+			self._hicon)
+		nid = list(nid)
+
+		if not hasattr(self, '_tip'): self._tip = ''
+		nid.append(self._tip)
+
+		if not hasattr(self, '_info'): self._info = ''
+		nid.append(self._info)
+			
+		if not hasattr(self, '_timeout'): self._timeout = 0
+		nid.append(self._timeout)
+
+		if not hasattr(self, '_infotitle'): self._infotitle = ''
+		nid.append(self._infotitle)
+			
+		if not hasattr(self, '_infoflags'):self._infoflags = win32gui.NIIF_NONE
+		nid.append(self._infoflags)
+
+		return tuple(nid)
+		
+	
+	def remove(self):
+		""" Removes the tray icon. """
+		win32gui.Shell_NotifyIcon(win32gui.NIM_DELETE, self._get_nid())
+
+
+	def set_tooltip(self, tooltip):
+		""" Sets the tray icon tooltip. """
+		self._flags = self._flags | win32gui.NIF_TIP
+		self._tip = tooltip
+		win32gui.Shell_NotifyIcon(win32gui.NIM_MODIFY, self._get_nid())
+		
+		
+	def show_balloon(self, title, text, timeout=10, icon=win32gui.NIIF_NONE):
+		""" Shows a balloon tooltip from the tray icon. """
+		self._flags = self._flags | win32gui.NIF_INFO
+		self._infotitle = title
+		self._info = text
+		self._timeout = timeout * 1000
+		self._infoflags = icon
+		win32gui.Shell_NotifyIcon(win32gui.NIM_MODIFY, self._get_nid())
+
+	def _redraw(self, *args):
+		""" Redraws the tray icon. """
+		self.remove
+		win32gui.Shell_NotifyIcon(win32gui.NIM_ADD, self._get_nid())
+
+#FIXME: subclass us under Systray
+class SystrayWin32(systray.Systray):
+	def __init__(self, plugin):
+		# Note: gtk window must be realized before installing extensions.
+		self.plugin = plugin
+		self.jids = []
+		self.status = 'offline'
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
+		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
+		
+		self.win32ext = GTKWin32Ext(self.plugin.roster.window)
+		#self.win32ext.add_notify_icon(self.systray_context_menu)
+
+		self.xml.signal_autoconnect(self)
+		
+		# Set up the callback messages
+		self.win32ext.message_map({
+			WM_TRAYMESSAGE: self.on_clicked
+			}) 
+
+
+	def show_icon(self):
+		self.win32ext.add_notify_icon(self.systray_context_menu)
+		self.win32ext.notify_icon.menu = self.systray_context_menu
+
+	def hide_icon(self):
+		self.win32ext.remove_notify_icon()
+
+	def make_menu(self):
+		"""create chat with and new message (sub) menus/menuitems"""
+		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
+		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
+		
+		iskey = len(gajim.connections.keys()) > 0
+		chat_with_menuitem.set_sensitive(iskey)
+		new_message_menuitem.set_sensitive(iskey)
+		
+		if len(gajim.connections.keys()) >= 2: # 2 or more accounts? make submenus
+			account_menu_for_chat_with = gtk.Menu()
+			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
+
+			account_menu_for_new_message = gtk.Menu()
+			new_message_menuitem.set_submenu(account_menu_for_new_message)
+
+			for account in gajim.connections:
+				our_jid = gajim.config.get_per('accounts', account, 'name') + '@' +\
+					gajim.config.get_per('accounts', account, 'hostname')
+				#for chat_with
+				item = gtk.MenuItem(_('as ') + our_jid)
+				account_menu_for_chat_with.append(item)
+				group_menu = self.make_groups_submenus_for_chat_with(account)
+				item.set_submenu(group_menu)
+				#for new_message
+				item = gtk.MenuItem(_('as ') + our_jid)
+				item.connect('activate',\
+					self.on_new_message_menuitem_activate, account)
+				account_menu_for_new_message.append(item)
+
+	def on_clicked(self, hwnd, message, wparam, lparam):
+		if lparam == WM_RBUTTONUP: # Right click
+			self.make_menu()
+			self.win32ext.notify_icon.menu.popup(None, None, None, 0, 0)
+		elif lparam == WM_LBUTTONUP: # Left click
+			if len(self.jids) == 0:
+				win = self.plugin.roster.window
+				if win.is_active():
+					win.hide()
+				else:
+					win.present()
+			else:
+				account = self.jids[0][0]
+				jid = self.jids[0][1]
+				acc = self.plugin.windows[account]
+				if acc['gc'].has_key(jid):
+					acc['gc'][jid].set_active_tab(jid)
+					acc['gc'][jid].window.present()
+				elif acc['chats'].has_key(jid):
+					acc['chats'][jid].set_active_tab(jid)
+					acc['chats'][jid].window.present()
+				else:
+					self.plugin.roster.new_chat(
+						self.plugin.roster.contacts[account][jid][0], account)
+					acc['chats'][jid].set_active_tab(jid)
+					acc['chats'][jid].window.present()
+			#self.win32ext.notify_icon.menu.popdown()
+			#self.win32ext.notify_icon.menu.popup(None, None, None, 0, 0)
+
+
+	def add_jid(self, jid, account):
+		print 'FIXME: add_jid'
+		return
+		list = [account, jid]
+		if not list in self.jids:
+			self.jids.append(list)
+			self.set_img()
+		#we look for the number of unread messages
+		#in roster
+		nb = self.plugin.roster.nb_unread
+		for acct in gajim.connections:
+			#in chat / groupchat windows
+			for kind in ['chats', 'gc']:
+				jids = self.plugin.windows[acct][kind]
+				for jid in jids:
+					if jid != 'tabbed':
+						nb += jids[jid].nb_unread[jid]
+		if nb > 1:
+			label = _('Gajim - %s unread messages') % nb
+		else:
+			label = _('Gajim - 1 unread message')
+		self.tip.set_tip(self.t, label)
+
+	def set_img(self):
+		print 'FIXME: set_img in win32'
+
+	def remove_jid(self, jid, account):
+		print 'FIXME: remove_jid'
+		return
+		list = [account, jid]
+		if list in self.jids:
+			self.jids.remove(list)
+			self.set_img()
+		#we look for the number of unread messages
+		#in roster
+		nb = self.plugin.roster.nb_unread
+		for acct in gajim.connections:
+			#in chat / groupchat windows
+			for kind in ['chats', 'gc']:
+				for jid in self.plugin.windows[acct][kind]:
+					if jid != 'tabbed':
+						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
+		if nb > 1:
+			label = _('Gajim - %s unread messages') % nb
+		elif nb == 1:
+			label = _('Gajim - 1 unread message')
+		else:
+			label = 'Gajim'
+		self.tip.set_tip(self.t, label)
