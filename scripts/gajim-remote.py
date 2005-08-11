@@ -203,32 +203,16 @@ Please specify account for sending the message.') % sys.argv[2])
 			self.send_error(_('Session bus is not available.'))
 		
 		if _version[1] >= 30 and _version[1] <= 42:
-			self.object = self.sbus.get_object(SERVICE, OBJ_PATH)
-			self.interface = dbus.Interface(object, INTERFACE)
+			obj = self.sbus.get_object(SERVICE, OBJ_PATH)
+			interface = dbus.Interface(obj, INTERFACE)
 		elif _version[1] < 30:
 			self.service = self.sbus.get_service(SERVICE)
-			self.interface = self.service.get_object(OBJ_PATH, INTERFACE)
+			interface = self.service.get_object(OBJ_PATH, INTERFACE)
 		else:
 			send_error(_('Unknown dbus version: %s') % _version)
+			
 		# get the function asked
-		if self.command == 'toggle_roster_appearance':
-			self.method = self.interface.toggle_roster_appearance
-		elif self.command == 'help':
-			self.method = self.interface.help
-		elif self.command == 'contact_info':
-			self.method = self.interface.contact_info
-		elif self.command == 'send_message':
-			self.method = self.interface.send_message
-		elif self.command == 'show_next_unread':
-			self.method = self.interface.show_next_unread
-		elif self.command == 'open_chat':
-			self.method = self.interface.open_chat
-		elif self.command == 'list_accounts':
-			self.method = self.interface.list_accounts
-		elif self.command == 'change_status':
-			self.method = self.interface.change_status
-		elif self.command == 'list_contacts':
-			self.method = self.interface.list_contacts
+		self.method = interface.__getattr__(self.command)
 		
 	def make_arguments_row(self, args):
 		''' return arguments list. Mandatory arguments are enclosed with:
