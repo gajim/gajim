@@ -216,6 +216,11 @@ def launch_browser_mailer(kind, uri):
 			pass
 
 def launch_file_manager(path_to_open):
+	if os.name == 'nt':
+		try:
+			os.startfile(path_to_open) # if pywin32 is installed we open
+		except:
+			pass
 	if gajim.config.get('openwith') == 'gnome-open':
 		command = 'gnome-open'
 	elif gajim.config.get('openwith') == 'kfmclient exec':
