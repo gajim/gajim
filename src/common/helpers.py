@@ -209,6 +209,7 @@ def launch_browser_mailer(kind, uri):
 			if command == '': # if no app is configured
 				return
 		# we add the uri in "" so we have good parsing from shell
+		uri = uri.replace('"', '\\"') # escape "
 		command = command + ' "' + uri + '" &'
 		try: #FIXME: when we require python2.4+ use subprocess module
 			os.system(command)
@@ -231,7 +232,7 @@ def launch_file_manager(path_to_open):
 		if command == '': # if no app is configured
 			return
 		# we add the path in "" so we have good parsing from shell
-		path_to_open = path_to_open.replace('"', '\\"')
+		path_to_open = path_to_open.replace('"', '\\"') # escape "
 		command = command + ' "' + path_to_open + '" &'
 		try: #FIXME: when we require python2.4+ use subprocess module
 			os.system(command)
