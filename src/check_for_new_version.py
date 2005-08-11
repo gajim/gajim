@@ -71,7 +71,7 @@ class Check_for_new_version_dialog:
 		first_line = changelog.readline()
 		finish_version = first_line.find(' ', 6) # start search after 'Gajim'
 		latest_version = first_line[6:finish_version]
-		if latest_version > gajim.version:
+		if float(latest_version) > float(gajim.version):
 			start_date = finish_version + 2 # one space and one (
 			date = first_line[start_date:-2] # remove the last ) and \n
 			info = 'Gajim ' + latest_version + ' was released in ' + date + '!'
