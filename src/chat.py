@@ -1144,7 +1144,7 @@ class Chat:
 				if text.find(self.nicks[jid]) == -1:
 					return
 			self.nb_unread[jid] += 1
-			if self.plugin.systray_enabled and not gajim.config.get('autopopup'):
+			if self.plugin.systray_enabled and gajim.config.get('usetabbedchat'):
 				# if we 'pop it up' when we receive * [n] is enough
 				self.plugin.systray.add_jid(jid, self.account)
 			self.redraw_tab(jid)
