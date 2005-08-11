@@ -231,6 +231,7 @@ def launch_file_manager(path_to_open):
 		if command == '': # if no app is configured
 			return
 		# we add the path in "" so we have good parsing from shell
+		path_to_open = path_to_open.replace('"', '\\"')
 		command = command + ' "' + path_to_open + '" &'
 		try: #FIXME: when we require python2.4+ use subprocess module
 			os.system(command)
