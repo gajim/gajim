@@ -132,6 +132,7 @@ class Config:
 		# IEC standard says KiB = 1024 bytes KB = 1000 bytes
 		'use_kib_mib': [opt_bool, False],
 		'notify_on_all_muc_messages': [opt_bool, False],
+		'trayicon_notification_on_new_messages': [opt_bool, True],
 	}
 
 	__options_per_key = {
