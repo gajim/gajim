@@ -238,7 +238,7 @@ Please specify account for sending the message.') % sys.argv[2])
 			arguments_str = self.make_arguments_row(command_props[1])
 			str = _('Usage: %s %s %s \n\t') % (BASENAME, command, 
 					arguments_str)
-			str += command_props[0] + '\n\nArguments:\n'
+			str += command_props[0] + '\n\n' + _('Arguments:') + '\n'
 			for argument in command_props[1]:
 				str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
 			return str
