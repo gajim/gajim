@@ -159,13 +159,30 @@ class Interface:
 	def handle_event_error_answer(self, account, array):
 		id, jid_from, errmsg, errcode = array
 		if str(errcode) in ['403', '406'] and id:
-			ft = self.windows['file_transfers']
 			# show the error dialog
-			
+			ft = self.windows['file_transfers']
+			sid = id
+			if len(id) > 3 and id[2] == '_':
+				sid = id[3:]
+			if ft.files_props['s'].has_key(sid):
+				file_props = ft.files_props['s'][sid]
+				file_props['error'] = -4
+				self.handle_event_file_request_error(account, 
+					(jid_from, file_props))
+				conn = gajim.connections[account]
+				conn.disconnect_transfer(file_props)
+				return
 		elif str(errcode) == '404':
 			conn = gajim.connections[account]
-			sid = id[3:]
-			return
+			sid = id
+			if len(id) > 3 and id[2] == '_':
+				sid = id[3:]
+			if conn.files_props.has_key(sid):
+				file_props = conn.files_props[sid]
+				self.handle_event_file_send_error(account, 
+					(jid_from, file_props))
+				conn.disconnect_transfer(file_props)
+				return
 		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		if jid_from in self.windows[account]['gc']:
 			self.windows[account]['gc'][jid_from].print_conversation(
@@ -677,31 +694,40 @@ class Interface:
 	def handle_event_file_send_error(self, account, array):
 		jid = array[0]
 		file_props = array[1]
-		self.windows['file_transfers'].show_file_error(
-				account, contact, file_props)
+		ft = self.windows['file_transfers']
+		ft.set_status(file_props['type'], file_props['sid'], 'stop')
 		if gajim.config.get('notify_on_new_message'):
 			# check if we should be notified
 			instance = dialogs.PopupNotificationWindow(self,
-					_('File Transfer Error'), jid, account, 'file-error', file_props)
+					_('File Transfer Error'), jid, account, 'file-send-error', file_props)
 			self.roster.popup_notification_windows.append(instance)
 		elif (gajim.connections[account].connected in (2, 3)
 			and gajim.config.get('autopopup')) or \
 			gajim.config.get('autopopupaway'):
-			contact = gajim.contacts[account][jid][0]
 			self.windows['file_transfers'].show_send_error(file_props)
 		
 	def handle_event_file_request_error(self, account, array):
 		jid = array[0]
 		file_props = array[1]
+		errno = file_props['error']
+		ft = self.windows['file_transfers']
+		ft.set_status(file_props['type'], file_props['sid'], 'stop')
 		if gajim.config.get('notify_on_new_message'):
 			# check if we should be notified
+			if errno == -4:
+				msg_type = 'file-error'
+			else:
+				msg_type = 'file-request-error'
 			instance = dialogs.PopupNotificationWindow(self,
-					_('File Transfer Error'), jid, account, 'file-error', file_props)
+					_('File Transfer Error'), jid, account, msg_type, file_props)
 			self.roster.popup_notification_windows.append(instance)
 		elif (gajim.connections[account].connected in (2, 3)
 			and gajim.config.get('autopopup')) or \
 			gajim.config.get('autopopupaway'):
-			self.windows['file_transfers'].show_request_error(file_props)
+			if errno == -4:
+				self.windows['file_transfers'].show_stopped(file_props)
+			else:
+				self.windows['file_transfers'].show_request_error(file_props)
 		
 	def handle_event_file_request(self, account, array):
 		jid = array[0]
