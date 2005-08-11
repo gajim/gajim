@@ -179,7 +179,6 @@ msgid "Gajim disconnected you from %s"
 msgstr "Gajim hat die Verbindung nach %s unterbrochen"
 
 #: ../src/common/connection.py:1905
-#, fuzzy, python-format
 msgid ""
 "%s seconds have passed and server did not reply to our keep-alive. If you "
 "believe such disconnection should not have happened, you can disable sending "
@@ -834,7 +833,6 @@ msgid "Size: "
 msgstr "Größe: "
 
 #: ../src/dialogs.py:763
-#, fuzzy
 msgid "Transferred: "
 msgstr "Übertragen: "
 
@@ -863,7 +861,6 @@ msgid "stalled"
 msgstr "steht still"
 
 #: ../src/dialogs.py:789
-#, fuzzy
 msgid "transferring"
 msgstr "übertrage"
 
@@ -1014,9 +1011,8 @@ msgstr "%s empfangen"
 
 #. we create a new blank window to send and we preset RE: and to jid
 #: ../src/dialogs.py:1419
-#, fuzzy, python-format
 msgid "RE: %s"
-msgstr "%s ändern"
+msgstr "RE: %s"
 
 #: ../src/dialogs.py:1420
 #, python-format
@@ -1027,6 +1023,11 @@ msgid ""
 "== Original Message ==\n"
 "%s"
 msgstr ""
+"\n"
+"\n"
+"\n"
+"== Originalnachricht ==\n"
+"%s"
 
 #: ../src/dialogs.py:1461
 #, python-format
@@ -1684,10 +1685,9 @@ msgid "<span background=\"lightyellow\"></span>"
 msgstr "<span background=\"lightyellow\"></span>"
 
 #: ../src/gtkgui.glade.h:22
-#, fuzzy
 msgid "A list of active, completed and stopped file transfers"
 msgstr ""
-"Zeige die Liste der aktiven, fertigen und angehaltenen Dateitransfers von "
+"Eine Liste der aktiven, fertigen und angehaltenen Dateitransfers von "
 "und zu Ihren Freunden."
 
 #: ../src/gtkgui.glade.h:23
@@ -1715,7 +1715,6 @@ msgid "Accounts"
 msgstr "Konten"
 
 #: ../src/gtkgui.glade.h:29
-#, fuzzy
 msgid "Activate/Disable notification for when a file transfer is complete"
 msgstr "Benachrichtigung für beendete Dateitransfers ein/ausschalten"
 
@@ -1919,7 +1918,7 @@ msgstr "Stadt:"
 
 #: ../src/gtkgui.glade.h:78
 msgid "Clean _up"
-msgstr ""
+msgstr "Aufrä_umen"
 
 #: ../src/gtkgui.glade.h:79
 msgid "Click to change account's password"
@@ -2152,10 +2151,7 @@ msgstr "HTTP Connect"
 
 #: ../src/gtkgui.glade.h:134
 msgid "Hides the window"
-msgstr ""
-"Wenn aktiviert, dann wird Gajim Meta-Information, die Unterhaltungen mit "
-"Dritten betreffen, an andere übermitteln, wie etwa das Erstellen einer neuen "
-"Nachricht."
+msgstr "Schließt das Fenster"
 
 #: ../src/gtkgui.glade.h:135
 msgid "Homepage:"
@@ -2499,9 +2495,8 @@ msgstr ""
 "Liste"
 
 #: ../src/gtkgui.glade.h:213
-#, fuzzy
 msgid "Removing selected file transfer"
-msgstr "Bricht den ausgewählten Dateitransfer ab"
+msgstr "Ausgewählten Dateitransfer entfernen"
 
 #: ../src/gtkgui.glade.h:214
 msgid "Reply to this message"
@@ -2516,7 +2511,6 @@ msgid "Resour_ce: "
 msgstr "Ressour_ce: "
 
 #: ../src/gtkgui.glade.h:217
-#, fuzzy
 msgid ""
 "Resource is sent to the Jabber server in order to separate the same JID in "
 "two or more parts depending on the number of the clients connected in the "
@@ -2637,7 +2631,7 @@ msgstr "Kontaktliste beim Programmstart anzeigen"
 
 #: ../src/gtkgui.glade.h:244
 msgid "Shows a list of file transfers between you and other"
-msgstr ""
+msgstr "Zeigt eine Liste von Dateitransfers"
 
 #: ../src/gtkgui.glade.h:245
 msgid "Sign _in"
@@ -2676,12 +2670,10 @@ msgid "Stop file transfer"
 msgstr "Stopp Dateitransfer"
 
 #: ../src/gtkgui.glade.h:254
-#, fuzzy
 msgid "Stoping selected file transfer"
 msgstr "Bricht den ausgewählten Dateitransfer ab"
 
 #: ../src/gtkgui.glade.h:255
-#, fuzzy
 msgid ""
 "Stops the selected file transfer. If there is an incomplete file, kept in "
 "the file system it will be removed. This operation is not reversable. "
@@ -2707,7 +2699,7 @@ msgstr "Abonnement:"
 
 #: ../src/gtkgui.glade.h:260
 msgid "Suffix:"
-msgstr ""
+msgstr "Suffix:"
 
 #: ../src/gtkgui.glade.h:261
 msgid "Synch_ronize account status with global status"
@@ -2806,7 +2798,6 @@ msgid "User ID:"
 msgstr "Benutzer-ID:"
 
 #: ../src/gtkgui.glade.h:284
-#, fuzzy
 msgid "When a file transfer is complete show a popup notification "
 msgstr "Wenn die Datei komplett übertragen wurde, zeige eine Benachrichtigung"
 
@@ -3195,7 +3186,7 @@ msgstr "zeige Hilfe für einen bestimmten Befehl"
 #. parameter, named "on_command". User gets help for the command, specified by this parameter
 #: ../scripts/gajim-remote.py:75
 msgid "on_command"
-msgstr ""
+msgstr "Befehl"
 
 #: ../scripts/gajim-remote.py:76
 msgid "show help on command"
@@ -3270,13 +3261,12 @@ msgid "if specified, contact is taken from the contact list of this account"
 msgstr "falls angegeben, wird der Kontakt von der Liste dieses Kontos gewählt"
 
 #: ../scripts/gajim-remote.py:123
-#, fuzzy
 msgid ""
 "Send new message to a contact in the roster. Both OpenPGP key and account "
 "are optional. If you want to set only 'account', without 'pgp key', just set "
 "'pgp key' to ''."
 msgstr ""
-"Sende neue Nachricht zu einem Kontakt. OpenPGP und Konto sind optional. "
+"Sende neue Nachricht zu einem Kontakt. OpenPGP-Schlüssel und Konto sind optional. "
 "Falls nur account gesetzt werden soll, muss 'pgp key' zu '' gesetzt werden."
 
 #: ../scripts/gajim-remote.py:127
@@ -3289,12 +3279,11 @@ msgstr "Nachrichteninhalt"
 
 #: ../scripts/gajim-remote.py:130
 msgid "pgp key"
-msgstr ""
+msgstr "PGP-Schlüssel"
 
 #: ../scripts/gajim-remote.py:130
-#, fuzzy
 msgid "if specified, the message will be encrypted using this public key"
-msgstr "falls angegeben, wird die Nachricht verschlüsselt"
+msgstr "falls angegeben, wird die Nachricht damit verschlüsselt"
 
 #: ../scripts/gajim-remote.py:132
 msgid "if specified, the message will be sent using this account"
@@ -3334,7 +3323,6 @@ msgid "Session bus is not available."
 msgstr "Session-Bus nicht verfügbar."
 
 #: ../scripts/gajim-remote.py:214
-#, fuzzy, python-format
 msgid "Unknown dbus version: %s"
 msgstr "Unbekannte D-BUS-Version: %s"
 
@@ -3344,7 +3332,7 @@ msgid ""
 "Usage: %s %s %s \n"
 "\t"
 msgstr ""
-"Benutzung: %s %s %s \n"
+"Verwendung: %s %s %s \n"
 "\t"
 
 #: ../scripts/gajim-remote.py:263
@@ -3358,7 +3346,7 @@ msgid ""
 "Usage: %s command [arguments]\n"
 "Command is one of:\n"
 msgstr ""
-"Benutzung: %s Befehl [Argumente]\n"
+"Verwendung: %s Befehl [Argumente]\n"
 "Befehl ist einer von:\n"
 
 #: ../scripts/gajim-remote.py:326
@@ -3375,266 +3363,3 @@ msgstr ""
 "Argument \"%s\" wurde nicht angegeben. \n"
 "Geben Sie \"%s help %s\" ein für Hilfe"
 
-#~ msgid ""
-#~ "Shows list of files that you send to your friends, and files which you "
-#~ "receive from your friends."
-#~ msgstr "Zeige Liste der gesendeten und empfangenen Dateien"
-
-#~ msgid "Stoping transfer"
-#~ msgstr "Stoppe Transfer"
-
-#~ msgid "No space left on device"
-#~ msgstr "Keine Platz auf dem Gerät übrig"
-
-#~ msgid "Unable to open %s for writing\n"
-#~ msgstr "Kann %s nicht zum Schreiben öffnen\n"
-
-#~ msgid "<b>Links</b>"
-#~ msgstr "<b>Links</b>"
-
-#~ msgid "Open _with:"
-#~ msgstr "Öffnen _mit:"
-
-#~ msgid "Switch to"
-#~ msgstr "Wechseln zu"
-
-#, fuzzy
-#~ msgid "File Trasfer Request"
-#~ msgstr "_Transport-Symbole verwenden"
-
-#~ msgid "Of_fline"
-#~ msgstr "a_bmelden"
-
-#~ msgid "_Information"
-#~ msgstr "_Information"
-
-#~ msgid "_Online"
-#~ msgstr "_anmelden"
-
-#, fuzzy
-#~ msgid "Invalid password."
-#~ msgstr "Pass_wort speichern"
-
-#, fuzzy
-#~ msgid "Are you sure you want to leave rooms \"%s\"?"
-#~ msgstr "Möchten sie %s (%s) wirklich von Ihrer Liste entfernen?"
-
-#~ msgid "Join Groupchat"
-#~ msgstr "Betrete Chatraum"
-
-#, fuzzy
-#~ msgid "sync with global status"
-#~ msgstr "Konto-Status mit globalem Status abgleichen"
-
-#, fuzzy
-#~ msgid "%s help %s"
-#~ msgstr "%s ist %s"
-
-#, fuzzy
-#~ msgid "No accounts created"
-#~ msgstr " (Konto: "
-
-#~ msgid "to "
-#~ msgstr "zum "
-
-#~ msgid "using "
-#~ msgstr "mittels "
-
-#~ msgid "Nap"
-#~ msgstr "Nickerchen"
-
-#~ msgid "I'm taking a nap."
-#~ msgstr "Ich habe mich zu einem Nickerchen hingelegt."
-
-#, fuzzy
-#~ msgid "Hold_Account"
-#~ msgstr "Konto"
-
-#~ msgid "Join _Groupchat"
-#~ msgstr "_Chatraum betreten"
-
-#~ msgid "You must be offline to change the account's name"
-#~ msgstr "Sie müssen abgemeldet, sein um den Namen des Kontos zu ändern"
-
-#~ msgid "Spaces are not permited in account name"
-#~ msgstr "Leerzeichen sind im Konto-Namen nicht erlaubt"
-
-#~ msgid ""
-#~ "You must enter a Jabber ID for this account\n"
-#~ "For example: someone@someserver.org"
-#~ msgstr ""
-#~ "Sie müssen eine Jabber-ID für dieses Konto eingeben.\n"
-#~ "Beispiel: jemand@einserver.org"
-
-#~ msgid "You must enter a proxy port to use proxy"
-#~ msgstr "Sie müssen einen Proxy Port eingeben, um einen Proxy zu nutzen"
-
-#~ msgid "You must enter a proxy host to use proxy"
-#~ msgstr "Sie müssen einen Proxy-Host eingeben, um einen Proxy zu nutzen"
-
-#~ msgid "This name is taken by an another account of yours"
-#~ msgstr "Sie haben diesen Namen bereits für ein anderes Konto verwendet"
-
-#~ msgid ""
-#~ "You're currently connected with %s.\n"
-#~ "Are you sure you want to remove this account?"
-#~ msgstr ""
-#~ "Es besteht eine Verbindung mit %s.\n"
-#~ "Möchten Sie dieses Konto wirklich entfernen?"
-
-#~ msgid "A contact must belong at least to one group"
-#~ msgstr "3Ein Kontakt muss zu mindestens einer Gruppe gehören"
-
-#~ msgid "You must be connected to add a contact"
-#~ msgstr "Sie müssen angemeldet sein um einen Kontakt hinzuzufügen"
-
-#~ msgid "The contact's name must be something like login@hostname"
-#~ msgstr "Der Kontakt-Name muss in der Form login@hostname sein"
-
-#~ msgid "You must be connected to join a groupchat"
-#~ msgstr "Sie müssen angemeldet sein um einen Chatraum zu zu betreten"
-
-#~ msgid "User ID is not valid"
-#~ msgstr "Benutzer-ID ist ungültig"
-
-#~ msgid "Confirmation password is not the same"
-#~ msgstr "Bestätigtes Passwort ist nicht gleich"
-
-#~ msgid "bad arguments"
-#~ msgstr "Falsche Argumente"
-
-#~ msgid "You are now authorized by %s"
-#~ msgstr "Sie sind jetzt autorisiert von %s"
-
-#~ msgid "error contacting %s"
-#~ msgstr "Fehler beim Verbinden mit %s"
-
-#~ msgid ""
-#~ "You received a message in the room %s in the last two seconds.\n"
-#~ "Do you still want to close this window?"
-#~ msgstr ""
-#~ "Sie haben in den letzten zwei Sekunden eine Nachricht in Raum %s "
-#~ "empfangen.\n"
-#~ "Soll das Fenster wirklich geschlossen werden?"
-
-#~ msgid "_Privileges"
-#~ msgstr "_Privilegien"
-
-#~ msgid "_Revoke Voice"
-#~ msgstr "_Stimme enziehen"
-
-#~ msgid "_Revoke Moderator"
-#~ msgstr "_Moderator-Status entfernen"
-
-#~ msgid "_Grant Membership"
-#~ msgstr "_Als Mitglied aufnehmen"
-
-#~ msgid "_Revoke Membership"
-#~ msgstr "_Mitgliedschaft beenden"
-
-#~ msgid "_Revoke Admin"
-#~ msgstr "_Administrator-Status nehmen"
-
-#~ msgid "_Revoke Owner"
-#~ msgstr "_Besitzer-Status nehmen"
-
-#~ msgid ""
-#~ "You received a message in the room %s in the last two seconds.\n"
-#~ "Do you still want to close this tab?"
-#~ msgstr ""
-#~ "Sie haben in den letzten zwei Sekunden eine Nachricht in Raum %s "
-#~ "empfangen.\n"
-#~ "Soll der Reiter dennoch geschlossen werden?"
-
-#~ msgid "Are you sure you want to remove %s transport from your roster?"
-#~ msgstr "Soll der Transport %s wirklich von der Liste entfernt werden?"
-
-#~ msgid "Remove"
-#~ msgstr "Entfernen"
-
-#~ msgid "Information"
-#~ msgstr "Information"
-
-#~ msgid "Free for chat"
-#~ msgstr "Frei zum chatten"
-
-#~ msgid ""
-#~ "You have unread messages.\n"
-#~ "Are you sure you want to quit Gajim?"
-#~ msgstr ""
-#~ "Sie haben ungelesene Nachrichten.\n"
-#~ "Möchten Sie Gajim wirklich beenden?"
-
-#~ msgid ""
-#~ "You received a message in the last two seconds.\n"
-#~ "Are you sure you want to quit Gajim?"
-#~ msgstr ""
-#~ "Sie haben in den letzten zwei Sekunden eine Nachricht erhalten.\n"
-#~ "Möchten Sie Gajim wirklich beenden?"
-
-#~ msgid ""
-#~ "You received a message from %s in the last two seconds.\n"
-#~ "Do you still want to close this window?"
-#~ msgstr ""
-#~ "Sie haben in den letzten zwei Sekunden einee Nachricht von %s empfangen.\n"
-#~ "Soll dieses Fenster wirklich geschlossen werden?"
-
-#~ msgid ""
-#~ "You received a message from %s in the last two seconds.\n"
-#~ "Do you still want to close this tab?"
-#~ msgstr ""
-#~ "Sie haben in den letzten zwei Sekunden eine Nachricht von %s empfangen.\n"
-#~ "Soll dieser Reiter wirklich geschlossen werden?"
-
-#~ msgid "You are not connected, so you cannot send a message"
-#~ msgstr ""
-#~ "Sie sind nicht angemeldet, daher kann keine Nachricht verschickt werden"
-
-#~ msgid "Brb"
-#~ msgstr "BRB"
-
-#~ msgid "<b>SSL</b>"
-#~ msgstr "<b>SSL</b>"
-
-#~ msgid "Security"
-#~ msgstr "Sicherheit"
-
-#~ msgid "Subscription request from"
-#~ msgstr "Abonnement-Anfrage von"
-
-#~ msgid "Save roster _position and size"
-#~ msgstr "_Position und Größe der Kontaktliste speichern"
-
-#~ msgid "Add/Remove Emoticons..."
-#~ msgstr "Emoticons hinzufügen/entfernen..."
-
-#~ msgid "Roster theme:"
-#~ msgstr "Stil der Kontaktliste:"
-
-#~ msgid "User:"
-#~ msgstr "Benutzer:"
-
-#~ msgid "KDE default applications"
-#~ msgstr "KDE Standard-Anwendungen"
-
-#~ msgid "Custom"
-#~ msgstr "Benutzerdefiniert "
-
-#~ msgid "Click to change the subject of the room"
-#~ msgstr "Klicken um das Thema des Raumes zu ändern"
-
-#~ msgid "Close _Window"
-#~ msgstr "_Fenster schließen"
-
-#~ msgid "Click to clear conversation (won't delete it from history)"
-#~ msgstr ""
-#~ "Klicken, um die Unterhaltung zu löschen (löscht sie nicht aus dem Verlauf)"
-
-#~ msgid "Anonymous <nick@server/res>"
-#~ msgstr "Anonym <nick@server/res> "
-
-#~ msgid "_Chat"
-#~ msgstr "_Unterhaltung"
-
-#~ msgid "Add/Remove Emoticons"
-#~ msgstr "Emoticons hinzufügen/entfernen"
