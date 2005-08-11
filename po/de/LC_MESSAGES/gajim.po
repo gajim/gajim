@@ -1509,7 +1509,7 @@ msgstr ""
 
 #: ../src/roster_window.py:1590 ../src/roster_window.py:1596
 msgid "You have unread messages"
-msgstr "Sie haben %s ungelesene Nachrichten"
+msgstr "Sie haben ungelesene Nachrichten"
 
 #: ../src/roster_window.py:1591 ../src/roster_window.py:1597
 msgid ""
