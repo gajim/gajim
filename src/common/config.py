@@ -165,7 +165,9 @@ class Config:
 			'try_connecting_for_foo_secs': [ opt_int, 60 ],
 			'max_stanza_per_sec': [ opt_int, 5],
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
-			'file_transfers_proxy': [opt_str, 'proxy.jabber.org'] # proxy65 for FT
+			# proxy65 for FT
+			'file_transfer_proxies': [opt_str, 
+			'proxy.jabber.org, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se'] 
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
