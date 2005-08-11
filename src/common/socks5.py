@@ -120,10 +120,12 @@ class SocksQueue:
 		sock5_receiver.account = account
 		self.idx += 1
 		result = sock5_receiver.connect()
+		self.connected += 1
 		if result != None:
 			self.connected += 1
 			result = sock5_receiver.main()
 			self.process_result(result, sock5_receiver)
+			
 			return 1
 			
 		return None
@@ -443,8 +445,6 @@ class Socks5:
 			self.disconnect()
 			return -1
 	
-	
-	
 	def get_file_contents(self, timeout):
 		''' read file contents from socket and write them to file ''', \
 			self.file_props['type'], self.file_props['sid']
@@ -485,12 +485,6 @@ class Socks5:
 					# Transfer stopped  somehow:
 					# reset, paused or network error
 					self.rem_fd(fd)
-					try:
-						# file is not complete, remove it
-						os.remove(self.file_props['file-name'])
-					except Exception, e:
-						# unable to remove the incomplete file
-						pass
 					self.disconnect(False)
 					self.file_props['error'] = -1
 					return 0

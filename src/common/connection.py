@@ -398,6 +398,7 @@ class Connection:
 		if not self.files_props.has_key(id):
 			return
 		file_props = self.files_props[id]
+		file_props['error'] = -4
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
 		raise common.xmpp.NodeProcessed
 	
@@ -448,11 +449,6 @@ class Connection:
 			fast = query.getTag('fast')
 		except Exception, e:
 			pass
-		if fast is not None:
-			if fast.getNamespace() == common.xmpp.NS_STREAM:
-				self.send_socks5_info(file_props, fast = False, 
-				receiver = file_props['sender'], sender = file_props['receiver'])
-				self.files_props[sid] = file_props
 		file_props['streamhosts'] = streamhosts
 		conn_err = False
 		if file_props['type'] == 'r':
@@ -475,7 +471,7 @@ class Connection:
 		stream_tag.setAttr('jid', streamhost['jid'])
 		self.to_be_sent.append(iq)
 		
-	def _connect_error(self, to, id, code = 404):
+	def _connect_error(self, to, _id, code = 404):
 		msg_dict = {
 			404: 'Could not connect to given hosts', 
 			405: 'Cancel', 
@@ -485,11 +481,18 @@ class Connection:
 		iq = None
 		iq = common.xmpp.Protocol(name = 'iq', to = to, 
 			typ = 'error')
-		iq.setAttr('id', id)
+		iq.setAttr('id', _id)
 		err = iq.setTag('error')
 		err.setAttr('code', str(code))
 		err.setData(msg)
 		self.to_be_sent.append(iq)
+		if code == 404:
+			sid = _id[3:]
+			file_props = gajim.socks5queue.get_file_props(self.name, sid)
+			self.disconnect_transfer(file_props)
+			file_props['error'] = -3
+			self.dispatch('FILE_REQUEST_ERROR', (to, file_props))
+			
 		
 	def _bytestreamResultCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamResultCB')
@@ -713,15 +716,14 @@ class Connection:
 		if type(self.peerhost) != tuple:
 			return
 		port = gajim.config.get('file_transfers_port')
-		proxy = gajim.config.get_per('accounts', self.name, 'file_transfers_proxy')
-		
+		cfg_proxies = gajim.config.get_per('accounts', self.name, 'file_transfer_proxies')
 		if receiver is None:
 			receiver = file_props['receiver']
 		if sender is None:
 			sender = file_props['sender']
 		proxyhosts = []
-		if fast and proxy:
-			proxies = map(lambda e:e.strip(), proxy.split(','))
+		if fast and cfg_proxies:
+			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
 			for proxy in proxies:
 				(host, _port, jid) = self.get_cached_proxies(proxy)
 				if host is None:
@@ -770,9 +772,6 @@ class Connection:
 				streamhost.setAttr('jid', proxyhost['jid'])
 				proxy = streamhost.setTag('proxy')
 				proxy.setNamespace(common.xmpp.NS_STREAM)
-		if fast:
-			fast_tag = query.setTag('fast')
-			fast_tag.setNamespace(common.xmpp.NS_STREAM)
 		self.to_be_sent.append(iq)
 			
 	def _siSetCB(self, con, iq_obj):
