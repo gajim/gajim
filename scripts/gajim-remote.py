@@ -10,8 +10,6 @@ exec python -OOt "$0" ${1+"$@"}
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##
-## This file was initially written by Dimitur Kirov
-##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
 ## This program is free software; you can redistribute it and/or modify
