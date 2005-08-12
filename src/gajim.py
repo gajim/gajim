@@ -33,6 +33,7 @@ except RuntimeError, msg:
 		sys.exit()
 		
 import gobject
+import pango
 import os
 import sre
 import signal
@@ -1048,14 +1049,29 @@ class Interface:
 			d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
 				'grouptextcolor', 'groupbgcolor', 'groupfont', 'contacttextcolor',
 				'contactbgcolor', 'contactfont', 'bannertextcolor', 'bannerbgcolor']
+			
+			font_str = gtkgui_helpers.get_default_font()
+			if font_str == None:
+				font_str = 'Sans 10'
+			font = pango.FontDescription(font_str)
+			font_normal = font.to_string()
+			font.set_style(pango.STYLE_ITALIC)
+			font_italic = font.to_string()
+			font.set_style(pango.STYLE_NORMAL)
+			font.set_weight(pango.WEIGHT_BOLD)
+			font_bold = font.to_string()
+			
 			default = gajim.config.themes_default
-			for theme in default:
-				gajim.config.add_per('themes', theme)
+			for theme_name in default:
+				gajim.config.add_per('themes', theme_name)
+				theme = default[theme_name]
+				theme[d.index('accountfont')] = font_bold
+				theme[d.index('groupfont')] = font_italic
+				theme[d.index('contactfont')] = font_normal
 				for o in d:
-					gajim.config.set_per('themes', theme, o,
-						default[theme][d.index(o)])
-
-		
+					gajim.config.set_per('themes', theme_name, o,
+						theme[d.index(o)])
+			
 		if gajim.config.get('autodetect_browser_mailer'):
 			gtkgui_helpers.autodetect_browser_mailer()
 
