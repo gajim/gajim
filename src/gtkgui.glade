@@ -10285,7 +10285,7 @@ Status message</property>
 		  <child>
 		    <widget class="GtkEventBox" id="gpg_eventbox">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">GPG Encryption</property>
+		      <property name="tooltip" translatable="yes">OpenPGP Encryption</property>
 		      <property name="visible_window">True</property>
 		      <property name="above_child">False</property>
 
@@ -15650,7 +15650,7 @@ the Jabber network.</property>
   <child>
     <widget class="GtkCheckMenuItem" id="toggle_gpg_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Toggle _GPG Encryption</property>
+      <property name="label" translatable="yes">Toggle Open_PGP Encryption</property>
       <property name="use_underline">True</property>
       <property name="active">False</property>
       <signal name="activate" handler="on_toggle_gpg_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 10:43:11 GMT"/>

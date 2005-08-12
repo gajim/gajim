@@ -1444,7 +1444,7 @@ _('Without a connection, you can not edit your personal information.')
 				secret_keys = []
 		if not secret_keys:
 			dialogs.ErrorDialog(_('Failed to get secret keys'),
-_('There was a problem retrieving your GPG secret keys.')).get_response()
+_('There was a problem retrieving your OpenPGP secret keys.')).get_response()
 			return
 		secret_keys['None'] = 'None'
 		instance = dialogs.ChooseGPGKeyDialog(_('Passphrase'),
