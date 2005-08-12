@@ -1601,6 +1601,7 @@ class FileTransfersWindow:
 		self.tree.append_column(col)
 		self.set_images()
 		self.tree.get_selection().set_mode(gtk.SELECTION_SINGLE)
+		self.tree.get_selection().connect('changed', self.selection_changed)
 		self.tooltip = FileTransfersTooltip()
 		self.xml.signal_autoconnect(self)
 		popup_xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_menu',
@@ -1984,6 +1985,15 @@ _('Connection with peer cannot be established.')).get_response()
 			self.continue_menuitem.set_sensitive(False)
 		return True
 	
+	def selection_changed(self, args):
+		selection = args
+		selected = selection.get_selected_rows()
+		if selected[1] != []:
+			selected_path = selected[1][0]
+			self.select_func(selected_path)
+		else:
+			self.set_all_insensitive()
+	
 	def select_func(self, path):
 		is_selected = False
 		selected = self.tree.get_selection().get_selected_rows()
@@ -2202,7 +2212,7 @@ _('Connection with peer cannot be established.')).get_response()
 		if os.path.exists(path) and os.path.isdir(path):
 			helpers.launch_file_manager(path)
 		
-	def on_stop_menuitem_activate(self, widget):
+	def on_cancel_menuitem_activate(self, widget):
 		self.on_cancel_button_clicked(widget)
 		
 	def on_continue_menuitem_activate(self, widget):
