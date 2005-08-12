@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-12 14:59+0300\n"
+"POT-Creation-Date: 2005-08-12 16:21+0300\n"
 "PO-Revision-Date: 2005-06-01 14:36+0700\n"
 "Last-Translator: Yakov Bezrukov <nebulam51@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -1111,9 +1111,9 @@ msgstr "_Отклонить"
 msgid "File transfer completed"
 msgstr "Использовать иконки для _транспортов"
 
-#: ../src/dialogs.py:1634
+#: ../src/dialogs.py:1634 ../src/gtkgui.glade.h:340
 #, fuzzy
-msgid "Open containing folder"
+msgid "_Open Containing Folder"
 msgstr "_Просмотреть ссылку в Браузере"
 
 #: ../src/dialogs.py:1655 ../src/dialogs.py:1661
@@ -3126,17 +3126,12 @@ msgstr "_Действия"
 msgid "_Online Users"
 msgstr "_В сети"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Open Email Composer"
 msgstr "_Отправить Письмо"
 
-#: ../src/gtkgui.glade.h:341
-msgid "_Open Link in Browser"
-msgstr "_Просмотреть ссылку в Браузере"
-
 #: ../src/gtkgui.glade.h:342
-#, fuzzy
-msgid "_Open containing folder"
+msgid "_Open Link in Browser"
 msgstr "_Просмотреть ссылку в Браузере"
 
 #: ../src/gtkgui.glade.h:343
@@ -3490,6 +3485,10 @@ msgid ""
 "Argument \"%s\" is not specified. \n"
 "Type \"%s help %s\" for more info"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Open containing folder"
+#~ msgstr "_Просмотреть ссылку в Браузере"
 
 #, fuzzy
 #~ msgid "GPG Encryption"

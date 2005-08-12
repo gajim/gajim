@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-12 14:59+0300\n"
+"POT-Creation-Date: 2005-08-12 16:21+0300\n"
 "PO-Revision-Date: 2005-06-01 18:52+0300\n"
 "Last-Translator: Yavor Doganov <yavor@doganov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -1116,9 +1116,9 @@ msgstr "_Отказване"
 msgid "File transfer completed"
 msgstr "Използване на _набор икони на транспортите"
 
-#: ../src/dialogs.py:1634
+#: ../src/dialogs.py:1634 ../src/gtkgui.glade.h:340
 #, fuzzy
-msgid "Open containing folder"
+msgid "_Open Containing Folder"
 msgstr "_Отваряне на връзката в браузър"
 
 #: ../src/dialogs.py:1655 ../src/dialogs.py:1661
@@ -3131,17 +3131,12 @@ msgstr "_Действия"
 msgid "_Online Users"
 msgstr "_Свързан"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Open Email Composer"
 msgstr "_Отваряне на пощенската програма"
 
-#: ../src/gtkgui.glade.h:341
-msgid "_Open Link in Browser"
-msgstr "_Отваряне на връзката в браузър"
-
 #: ../src/gtkgui.glade.h:342
-#, fuzzy
-msgid "_Open containing folder"
+msgid "_Open Link in Browser"
 msgstr "_Отваряне на връзката в браузър"
 
 #: ../src/gtkgui.glade.h:343
@@ -3495,6 +3490,10 @@ msgid ""
 "Argument \"%s\" is not specified. \n"
 "Type \"%s help %s\" for more info"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Open containing folder"
+#~ msgstr "_Отваряне на връзката в браузър"
 
 #, fuzzy
 #~ msgid "GPG Encryption"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-12 14:59+0300\n"
+"POT-Creation-Date: 2005-08-12 16:21+0300\n"
 "PO-Revision-Date: 2005-06-01 18:11+0200\n"
 "Last-Translator: Christoph Neuroth <delmonico@gmx.net>\n"
 "Language-Team: German\n"
@@ -1073,9 +1073,9 @@ msgstr "Absender: %s"
 msgid "File transfer completed"
 msgstr "Dateitransfer abgeschlossen"
 
-#: ../src/dialogs.py:1634
+#: ../src/dialogs.py:1634 ../src/gtkgui.glade.h:340
 #, fuzzy
-msgid "Open containing folder"
+msgid "_Open Containing Folder"
 msgstr "_Öffne Ordner"
 
 #: ../src/dialogs.py:1655 ../src/dialogs.py:1661
@@ -3029,17 +3029,13 @@ msgstr "_Benutzer Aktionen"
 msgid "_Online Users"
 msgstr "_Angemeldete Benutzer"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Open Email Composer"
 msgstr "Email-Programm _öffnen"
 
-#: ../src/gtkgui.glade.h:341
+#: ../src/gtkgui.glade.h:342
 msgid "_Open Link in Browser"
 msgstr "Link _öffnen"
-
-#: ../src/gtkgui.glade.h:342
-msgid "_Open containing folder"
-msgstr "_Öffne Ordner"
 
 #: ../src/gtkgui.glade.h:343
 msgid "_Owner"
@@ -3378,6 +3374,10 @@ msgid ""
 msgstr ""
 "Argument \"%s\" wurde nicht angegeben. \n"
 "Geben Sie \"%s help %s\" ein für Hilfe"
+
+#, fuzzy
+#~ msgid "Open containing folder"
+#~ msgstr "_Öffne Ordner"
 
 #~ msgid "GPG Encryption"
 #~ msgstr "GPG Verschlüsselung"

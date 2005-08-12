@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-12 14:59+0300\n"
+"POT-Creation-Date: 2005-08-12 16:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1038,8 +1038,8 @@ msgstr ""
 msgid "File transfer completed"
 msgstr ""
 
-#: ../src/dialogs.py:1634
-msgid "Open containing folder"
+#: ../src/dialogs.py:1634 ../src/gtkgui.glade.h:340
+msgid "_Open Containing Folder"
 msgstr ""
 
 #: ../src/dialogs.py:1655 ../src/dialogs.py:1661
@@ -2906,16 +2906,12 @@ msgstr ""
 msgid "_Online Users"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Open Email Composer"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:341
-msgid "_Open Link in Browser"
-msgstr ""
-
 #: ../src/gtkgui.glade.h:342
-msgid "_Open containing folder"
+msgid "_Open Link in Browser"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:343

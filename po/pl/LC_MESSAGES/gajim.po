@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-12 14:59+0300\n"
+"POT-Creation-Date: 2005-08-12 16:21+0300\n"
 "PO-Revision-Date: 2005-08-01 21:46+0200\n"
 "Last-Translator: Witek Kieraś <pambuk@gmail.com>\n"
 "Language-Team: none\n"
@@ -1082,9 +1082,9 @@ msgstr "Nadawca: %s"
 msgid "File transfer completed"
 msgstr "Zakończono przesyłanie pliku."
 
-#: ../src/dialogs.py:1634
+#: ../src/dialogs.py:1634 ../src/gtkgui.glade.h:340
 #, fuzzy
-msgid "Open containing folder"
+msgid "_Open Containing Folder"
 msgstr "_Otwórz Link w przeglądarce"
 
 #: ../src/dialogs.py:1655 ../src/dialogs.py:1661
@@ -3070,17 +3070,12 @@ msgstr "Działania użytk_ownika"
 msgid "_Online Users"
 msgstr "D_ostępni użytkownicy"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Open Email Composer"
 msgstr "_Otwórz Klienta Poczty"
 
-#: ../src/gtkgui.glade.h:341
-msgid "_Open Link in Browser"
-msgstr "_Otwórz Link w przeglądarce"
-
 #: ../src/gtkgui.glade.h:342
-#, fuzzy
-msgid "_Open containing folder"
+msgid "_Open Link in Browser"
 msgstr "_Otwórz Link w przeglądarce"
 
 #: ../src/gtkgui.glade.h:343
@@ -3431,6 +3426,10 @@ msgid ""
 msgstr ""
 "Argument \"%s\" nie jest określony. \n"
 "Wpisz \"%s·help·%s\" aby uzyskać więcej informacji."
+
+#, fuzzy
+#~ msgid "Open containing folder"
+#~ msgstr "_Otwórz Link w przeglądarce"
 
 #, fuzzy
 #~ msgid "GPG Encryption"

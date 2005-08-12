@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-12 14:59+0300\n"
+"POT-Creation-Date: 2005-08-12 16:21+0300\n"
 "PO-Revision-Date: 2005-08-10 01:45+0300\n"
 "Last-Translator: Filippos Papadopoulos <filip@cs.uoi.gr>\n"
 "Language-Team: Hellenic-Ελληνικά-Greek <filip@cs.uoi.gr>\n"
@@ -1095,9 +1095,9 @@ msgstr "Αποστολέας: %s"
 msgid "File transfer completed"
 msgstr "Η μεταφορά αρχείου ολοκληρώθηκε"
 
-#: ../src/dialogs.py:1634
+#: ../src/dialogs.py:1634 ../src/gtkgui.glade.h:340
 #, fuzzy
-msgid "Open containing folder"
+msgid "_Open Containing Folder"
 msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
 #: ../src/dialogs.py:1655 ../src/dialogs.py:1661
@@ -3118,17 +3118,13 @@ msgstr "_Ενέργειες"
 msgid "_Online Users"
 msgstr "_Συνδεδεμένοι Χρήστες"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Open Email Composer"
 msgstr "_Άνοιγμα Προγράμματος Αλληλογραφίας"
 
-#: ../src/gtkgui.glade.h:341
+#: ../src/gtkgui.glade.h:342
 msgid "_Open Link in Browser"
 msgstr "_Άνοιγμα Δεσμού σε Φυλλομετρητή"
-
-#: ../src/gtkgui.glade.h:342
-msgid "_Open containing folder"
-msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
 #: ../src/gtkgui.glade.h:343
 msgid "_Owner"
@@ -3482,6 +3478,10 @@ msgid ""
 msgstr ""
 "Το όρισμα \"%s\" δεν έχει οριστεί. \n"
 "Πληκτρολογήστε \"%s help %s\" για περισσότερες πληροφορίες"
+
+#, fuzzy
+#~ msgid "Open containing folder"
+#~ msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
 #, fuzzy
 #~ msgid "GPG Encryption"

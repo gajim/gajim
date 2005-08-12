@@ -17727,7 +17727,7 @@ Maybe I'll refactor later</property>
 
   <child>
     <widget class="GtkImageMenuItem" id="open_folder_menuitem">
-      <property name="label" translatable="yes">_Open containing folder</property>
+      <property name="label" translatable="yes">_Open Containing Folder</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_open_folder_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 

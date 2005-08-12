@@ -1631,7 +1631,7 @@ class FileTransfersWindow:
 			sectext += '\n\t' +_('Saved in: %s') % \
 				gtkgui_helpers.escape_for_pango_markup(path)
 		dialog = HigDialog(None, _('File transfer completed'), sectext, 
-			gtk.STOCK_DIALOG_INFO, [[_('Open containing folder'), gtk.RESPONSE_ACCEPT], [ gtk.STOCK_OK, gtk.RESPONSE_OK ]])
+			gtk.STOCK_DIALOG_INFO, [[_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT], [ gtk.STOCK_OK, gtk.RESPONSE_OK ]])
 		button = dialog.get_button(1)
 		if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
 			button.set_image(gtk.image_new_from_stock(
