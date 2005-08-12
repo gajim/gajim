@@ -368,7 +368,7 @@
 </widget>
 
 <widget class="GtkWindow" id="accounts_window">
-  <property name="border_width">6</property>
+  <property name="border_width">12</property>
   <property name="title" translatable="yes">Accounts</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -388,7 +388,7 @@
     <widget class="GtkVBox" id="vbox5">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">6</property>
+      <property name="spacing">12</property>
 
       <child>
 	<widget class="GtkScrolledWindow" id="scrolledwindow5">
@@ -396,7 +396,7 @@
 	  <property name="can_focus">True</property>
 	  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 	  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-	  <property name="shadow_type">GTK_SHADOW_NONE</property>
+	  <property name="shadow_type">GTK_SHADOW_IN</property>
 	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	  <child>
@@ -421,8 +421,8 @@
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox15">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
-	  <property name="spacing">10</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkButton" id="new_button">
@@ -589,7 +589,7 @@
 	  </child>
 	</widget>
 	<packing>
-	  <property name="padding">5</property>
+	  <property name="padding">0</property>
 	  <property name="expand">False</property>
 	  <property name="fill">True</property>
 	</packing>
@@ -599,7 +599,7 @@
 </widget>
 
 <widget class="GtkWindow" id="account_modification_window">
-  <property name="border_width">6</property>
+  <property name="border_width">12</property>
   <property name="title" translatable="yes">Account Modification</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -17496,7 +17496,6 @@ Maybe I'll refactor later</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_height">400</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
@@ -17519,7 +17518,7 @@ Maybe I'll refactor later</property>
       <child>
 	<widget class="GtkScrolledWindow" id="transfers_scrolledwindow">
 	  <property name="width_request">460</property>
-	  <property name="height_request">100</property>
+	  <property name="height_request">150</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
 	  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -17564,6 +17563,7 @@ Maybe I'll refactor later</property>
 	  <child>
 	    <widget class="GtkButton" id="remove_button">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-remove</property>
@@ -17582,6 +17582,7 @@ Maybe I'll refactor later</property>
 	  <child>
 	    <widget class="GtkButton" id="pause_restore_button">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label" translatable="yes">_Pause</property>
@@ -17595,6 +17596,7 @@ Maybe I'll refactor later</property>
 	  <child>
 	    <widget class="GtkButton" id="cancel_button">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
 	      <property name="tooltip" translatable="yes">Cancels the selected file transfer</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -17675,6 +17677,7 @@ Maybe I'll refactor later</property>
     <widget class="GtkImageMenuItem" id="continue_menuitem">
       <property name="label" translatable="yes">_Continue</property>
       <property name="use_underline">True</property>
+      <property name="visible">False</property>
       <signal name="activate" handler="on_continue_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
