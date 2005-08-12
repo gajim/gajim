@@ -549,9 +549,8 @@ msgid "Failed to get secret keys"
 msgstr "Klarte ikke å hente hemmelig nøkkel"
 
 #: ../src/config.py:1447
-#, fuzzy
 msgid "There was a problem retrieving your OpenPGP secret keys."
-msgstr "Det oppsto et problem ved henting av dine OpenPGP hemmelige nøkler."
+msgstr "Det oppsto et problem ved henting av dine OpenPGP nøkkel."
 
 #: ../src/config.py:1450 ../src/gtkgui.glade.h:187
 msgid "Passphrase"
@@ -1057,18 +1056,17 @@ msgid "Sender: %s"
 msgstr "Sender: %s"
 
 #: ../src/dialogs.py:1631
-#, fuzzy, python-format
+#, python-format
 msgid "Saved in: %s"
-msgstr "Sender: %s"
+msgstr "Lagret i: %s"
 
 #: ../src/dialogs.py:1633
 msgid "File transfer completed"
 msgstr "Fil overføring komplett"
 
 #: ../src/dialogs.py:1634 ../src/gtkgui.glade.h:340
-#, fuzzy
 msgid "_Open Containing Folder"
-msgstr "_Åpne katalog"
+msgstr "_Åpne Foreldre Katalog"
 
 #: ../src/dialogs.py:1655 ../src/dialogs.py:1661
 msgid "File transfer canceled"
@@ -2728,9 +2726,8 @@ msgid "To:"
 msgstr "Til:"
 
 #: ../src/gtkgui.glade.h:271
-#, fuzzy
 msgid "Toggle Open_PGP Encryption"
-msgstr "Endre _OpenPGP Kryptering"
+msgstr "Endre Open_PGP Kryptering"
 
 #: ../src/gtkgui.glade.h:272
 msgid "Type:"
@@ -3321,7 +3318,7 @@ msgstr ""
 
 #: ../scripts/gajim-remote.py:241
 msgid "Arguments:"
-msgstr ""
+msgstr "Argumenter:"
 
 #: ../scripts/gajim-remote.py:245
 #, python-format
