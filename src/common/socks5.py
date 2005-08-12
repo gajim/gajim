@@ -105,12 +105,13 @@ class SocksQueue:
 			return
 		streamhost['state'] = -1
 		self.remove_receiver(idx)
+		if file_props.has_key('streamhosts'):
+			for host in file_props['streamhosts']:
+				if host['state'] != -1:
+					return
 		if file_props['failure_cb']:
 			file_props['failure_cb'](streamhost['initiator'], streamhost['id'], 
 				code = 404)
-		else:
-			# show error dialog, it seems to be the last try
-			pass
 		
 	def add_receiver(self, account, sock5_receiver):
 		''' add new file request '''
@@ -737,7 +738,7 @@ class Socks5Receiver(Socks5):
 		self.streamhost = streamhost
 		self.queue = None
 		self.file_props = file_props
-		
+		self.connect_timeout = 0
 		self.connected = False
 		self.pauses = 0
 		if not self.file_props:
@@ -754,7 +755,7 @@ class Socks5Receiver(Socks5):
 	def connect(self):
 		''' create the socket and start the connect loop '''
 		self._sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self._sock.settimeout(5)
+		self._sock.settimeout(50)
 		# this will not block the GUI
 		self._sock.setblocking(False)
 		self.state = 0 # about to be connected
@@ -769,7 +770,8 @@ class Socks5Receiver(Socks5):
 			self._recv=self._sock.recv
 		except Exception, ee:
 			(errnum, errstr) = ee
-			if errnum == 111:
+			self.connect_timeout += 1
+			if errnum == 111 or self.connect_timeout > 1000:
 				self.queue._connection_refused(self.streamhost, 
 					self.file_props, self.queue_idx)
 			return None
