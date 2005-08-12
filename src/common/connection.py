@@ -716,7 +716,7 @@ class Connection:
 		if type(self.peerhost) != tuple:
 			return
 		port = gajim.config.get('file_transfers_port')
-		custom_host = gajim.config.get('ft_custom_host')
+		ft_override_host_to_send = gajim.config.get('ft_override_host_to_send')
 		cfg_proxies = gajim.config.get_per('accounts', self.name, 'file_transfer_proxies')
 		if receiver is None:
 			receiver = file_props['receiver']
@@ -743,8 +743,8 @@ class Connection:
 		sha_str = self._get_sha(file_props['sid'], sender, 
 			receiver)
 		file_props['sha_str'] = sha_str
-		if not custom_host:
-			custom_host = self.peerhost[0]
+		if not ft_override_host_to_send:
+			ft_override_host_to_send = self.peerhost[0]
 		listener = gajim.socks5queue.start_listener(self.peerhost[0], port, 
 			sha_str, self.result_socks5_sid, file_props['sid'])
 		if listener == None:
@@ -761,7 +761,7 @@ class Connection:
 		query.setAttr('sid', file_props['sid'])
 		streamhost = query.setTag('streamhost')
 		streamhost.setAttr('port', str(port))
-		streamhost.setAttr('host', custom_host)
+		streamhost.setAttr('host', ft_override_host_to_send)
 		streamhost.setAttr('jid', sender)
 		if fast and proxyhosts != []:
 			file_props['proxy_receiver'] = str(receiver)

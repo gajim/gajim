@@ -128,8 +128,8 @@ class Config:
 		'confirm_close_muc': [opt_bool, True], # confirm closing MUC window
 		'notify_on_file_complete': [opt_bool, True], # notif. on file complete
 		'file_transfers_port': [opt_int, 28011],  # port, used for file transfers
-		# custom host in case user did address translation/port forward
-		'ft_custom_host': [opt_str, ''], 
+		# override the host we send for FT in case of address translation/port forward
+		'ft_override_host_to_send': [opt_str, ''], 
 		'conversation_font': [opt_str, ''],
 		# IEC standard says KiB = 1024 bytes KB = 1000 bytes
 		'use_kib_mib': [opt_bool, False],
