@@ -715,7 +715,7 @@ class Interface:
 		ft.set_status(file_props['type'], file_props['sid'], 'stop')
 		if gajim.config.get('notify_on_new_message'):
 			# check if we should be notified
-			if errno == -4:
+			if errno == -4 or errno == -5:
 				msg_type = 'file-error'
 			else:
 				msg_type = 'file-request-error'
@@ -725,7 +725,7 @@ class Interface:
 		elif (gajim.connections[account].connected in (2, 3)
 			and gajim.config.get('autopopup')) or \
 			gajim.config.get('autopopupaway'):
-			if errno == -4:
+			if errno == -4 or errno == -5:
 				self.windows['file_transfers'].show_stopped(jid, file_props)
 			else:
 				self.windows['file_transfers'].show_request_error(file_props)

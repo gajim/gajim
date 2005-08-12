@@ -493,7 +493,6 @@ class Connection:
 			self.disconnect_transfer(file_props)
 			file_props['error'] = -3
 			self.dispatch('FILE_REQUEST_ERROR', (to, file_props))
-			
 		
 	def _bytestreamResultCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamResultCB')
@@ -592,6 +591,8 @@ class Connection:
 		self.files_props = {}
 	
 	def remove_transfer(self, file_props, remove_from_list = True):
+		if file_props is None:
+			return
 		if file_props.has_key('hash'):
 			gajim.socks5queue.remove_sender(file_props['hash'])
 		
@@ -608,6 +609,8 @@ class Connection:
 				del(self.files_props['sid'])
 				
 	def disconnect_transfer(self, file_props):
+		if file_props is None:
+			return
 		if file_props.has_key('hash'):
 			gajim.socks5queue.remove_sender(file_props['hash'])
 		
@@ -750,7 +753,10 @@ class Connection:
 		listener = gajim.socks5queue.start_listener(self.peerhost[0], port, 
 			sha_str, self.result_socks5_sid, file_props['sid'])
 		if listener == None:
-			# FIXME - raise error dialog that address is in use
+			file_props['error'] = -5
+			self.dispatch('FILE_REQUEST_ERROR', (str(receiver), file_props))
+			self._connect_error(str(receiver), file_props['sid'], 
+				code = 406)
 			return
 		
 		iq = common.xmpp.Protocol(name = 'iq', to = str(receiver), 

@@ -49,6 +49,12 @@ class SocksQueue:
 			self.listener = Socks5Listener(host, port)
 			self.listener.bind()
 			if self.listener.started is False:
+				self.listener = None
+				import sys
+				sys.stderr.write('\n\n\n========================================\
+========================\nUnable to bind to port %s. \nMaybe you have another \
+running instance of Gajim. \nFile Transfer will be canceled.\n==================\
+==============================================\n\n\n' % port)
 				return None
 			self.connected += 1
 		return self.listener
@@ -82,6 +88,7 @@ class SocksQueue:
 			file_props = self.files_props[account][sid]
 		file_props['success_cb'] = on_success
 		file_props['failure_cb'] = on_failure
+		
 		# add streamhosts to the queue 
 		for streamhost in file_props['streamhosts']:
 			receiver = Socks5Receiver(streamhost, sid, file_props)
@@ -123,12 +130,9 @@ class SocksQueue:
 		result = sock5_receiver.connect()
 		self.connected += 1
 		if result != None:
-			self.connected += 1
 			result = sock5_receiver.main()
 			self.process_result(result, sock5_receiver)
-			
 			return 1
-			
 		return None
 		
 	def get_file_from_sender(self, file_props, account):
