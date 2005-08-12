@@ -30,7 +30,25 @@ from common import gajim
 
 def get_default_font():
 	''' Get the desktop setting for application font.
-	(Currently it works only for Gnome)	'''
+	(Currently it works only for Gnome and Xfce) '''
+
+	# try to get xfce default font
+	# Xfce 4.2 adopts freedesktop.org's Base Directory Specification
+	# see http://www.xfce.org/~benny/xfce/file-locations.html
+	# and http://freedesktop.org/Standards/basedir-spec
+	xdg_config_home = os.environ.get('XDG_CONFIG_HOME', '')
+	if xdg_config_home == '':
+		xdg_config_home = os.path.expanduser('~/.config') # default	
+	xfce_config_file = os.path.join(xdg_config_home, 'xfce4/mcs_settings/gtk.xml')
+	if os.path.exists(xfce_config_file):
+		try:
+			for line in file(xfce_config_file):
+				if line.find('name="Gtk/FontName"') != -1:
+					start = line.find('value="') + 7
+					return line[start:line.find('"', start)]
+		except:
+			print _('error: cannot open %s for reading\n') % (xfce_config_file)
+	
 	try:
 		import gconf
 		client = gconf.client_get_default()
