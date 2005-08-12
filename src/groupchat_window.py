@@ -35,6 +35,7 @@ from gettext import ngettext
 from common import i18n
 
 _ = i18n._
+Q_ = i18n.Q_
 APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
@@ -274,7 +275,7 @@ class GroupchatWindow(chat.Chat):
 		image = self.plugin.roster.jabber_state_images[show]
 		resource = ''
 		if role == 'none':
-			role_name = _('None')
+			role_name = Q_('?Group Chat Contact Role:None')
 		elif role == 'moderator':
 			role_name = _('Moderators')
 		elif role == 'participant':

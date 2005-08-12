@@ -1291,7 +1291,7 @@
 		  <child>
 		    <widget class="GtkComboBox" id="proxies_combobox">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">None</property>
+		      <property name="items" translatable="yes" comments="None means no proxy profile selected">None</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -17677,7 +17677,6 @@ Maybe I'll refactor later</property>
     <widget class="GtkImageMenuItem" id="continue_menuitem">
       <property name="label" translatable="yes">_Continue</property>
       <property name="use_underline">True</property>
-      <property name="visible">False</property>
       <signal name="activate" handler="on_continue_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">

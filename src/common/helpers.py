@@ -24,6 +24,7 @@ import gajim
 from common import i18n
 
 _ = i18n._
+Q_ = i18n.Q_
 
 def convert_bytes(string):
 	suffix = ''
@@ -91,7 +92,7 @@ def get_uf_show(show):
 	
 def get_uf_sub(sub):
 	if sub == 'none':
-		uf_sub = _('None')
+		uf_sub = Q_('?Subscription we already have:None')
 	elif sub == 'to':
 		uf_sub = _('To')
 	elif sub == 'from':
@@ -105,7 +106,7 @@ def get_uf_sub(sub):
 	
 def get_uf_ask(ask):
 	if ask is None:
-		uf_ask = _('None')
+		uf_ask = Q_('?Ask (for Subscription):None')
 	elif ask == 'subscribe':
 		uf_ask = _('Subscribe')
 	else:
