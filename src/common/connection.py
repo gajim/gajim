@@ -26,6 +26,7 @@ import sre
 import traceback
 import threading
 import select
+import socket
 
 from calendar import timegm
 
@@ -745,6 +746,7 @@ class Connection:
 		file_props['sha_str'] = sha_str
 		if not ft_override_host_to_send:
 			ft_override_host_to_send = self.peerhost[0]
+		ft_override_host_to_send = socket.gethostbyname(ft_override_host_to_send)
 		listener = gajim.socks5queue.start_listener(self.peerhost[0], port, 
 			sha_str, self.result_socks5_sid, file_props['sid'])
 		if listener == None:
