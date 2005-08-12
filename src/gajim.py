@@ -726,7 +726,7 @@ class Interface:
 			and gajim.config.get('autopopup')) or \
 			gajim.config.get('autopopupaway'):
 			if errno == -4:
-				self.windows['file_transfers'].show_stopped(file_props)
+				self.windows['file_transfers'].show_stopped(jid, file_props)
 			else:
 				self.windows['file_transfers'].show_request_error(file_props)
 		

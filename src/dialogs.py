@@ -1588,7 +1588,7 @@ class FileTransfersWindow:
 		renderer.set_property('xalign', 0.)
 		renderer.set_property('yalign', 0.)
 		col.set_resizable(True)
-
+		col.set_expand(True)
 		self.tree.append_column(col)
 		
 		col = gtk.TreeViewColumn(_('Progress'))
@@ -1626,8 +1626,18 @@ class FileTransfersWindow:
 		helpers.convert_bytes(file_props['size'])
 		sectext += '\n\t' +_('Sender: %s') % \
 			gtkgui_helpers.escape_for_pango_markup(jid)
-		InformationDialog(_('File transfer completed'), sectext).get_response()
-		self.tree.get_selection().unselect_all()
+		dialog = HigDialog(None, _('File transfer completed'), sectext, 
+			gtk.STOCK_DIALOG_INFO, [[_('Open containing folder'), gtk.RESPONSE_ACCEPT], [ gtk.STOCK_OK, gtk.RESPONSE_OK ]])
+		dialog.show_all()
+		response = dialog.run()
+		dialog.destroy()
+		if response == gtk.RESPONSE_ACCEPT:
+			if not file_props.has_key('file-name'):
+				return
+			(path, file) = os.path.split(file_props['file-name'])
+			if os.path.exists(path) and os.path.isdir(path):
+				helpers.launch_file_manager(path)
+			self.tree.get_selection().unselect_all()
 		
 	def show_request_error(self, file_props):
 		self.window.present()
@@ -1884,9 +1894,8 @@ _('Connection with peer cannot be established.')).get_response()
 				self.tooltip.hide_tooltip()
 	
 	def on_transfers_list_row_activated(self, widget, path, col):
-		# try to open the file
-		#FIXME: plz remove this :)
-		pass
+		# try to open the containing folder
+		self.on_open_folder_menuitem_activate(widget)
 		
 	def is_transfer_paused(self, file_props):
 		if file_props.has_key('stopped') and file_props['stopped']:
