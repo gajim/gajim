@@ -131,7 +131,8 @@ class TCPsocket(PlugIn):
 
         if len(received): # length of 0 means disconnect
             self.DEBUG(received,'got')
-            self._owner.Dispatcher.Event('', DATA_RECEIVED, received)
+            if hasattr(self._owner, 'Dispatcher'):
+                self._owner.Dispatcher.Event('', DATA_RECEIVED, received)
         else:
             self.DEBUG('Socket error while receiving data','error')
             self._owner.disconnected()
