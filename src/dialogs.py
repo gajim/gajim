@@ -1626,9 +1626,19 @@ class FileTransfersWindow:
 		helpers.convert_bytes(file_props['size'])
 		sectext += '\n\t' +_('Sender: %s') % \
 			gtkgui_helpers.escape_for_pango_markup(jid)
+		if file_props['type'] == 'r':
+			(path, file) = os.path.split(file_props['file-name'])
+			sectext += '\n\t' +_('Saved in: %s') % \
+				gtkgui_helpers.escape_for_pango_markup(path)
 		dialog = HigDialog(None, _('File transfer completed'), sectext, 
 			gtk.STOCK_DIALOG_INFO, [[_('Open containing folder'), gtk.RESPONSE_ACCEPT], [ gtk.STOCK_OK, gtk.RESPONSE_OK ]])
+		button = dialog.get_button(1)
+		if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
+			button.set_image(gtk.image_new_from_stock(
+		gtk.STOCK_DIRECTORY, gtk.ICON_SIZE_BUTTON))
 		dialog.show_all()
+		if file_props['type'] == 's':
+			button.hide()
 		response = dialog.run()
 		dialog.destroy()
 		if response == gtk.RESPONSE_ACCEPT:
