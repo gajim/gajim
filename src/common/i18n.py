@@ -37,3 +37,17 @@ def _(s):
 	if s == '':
 		return s
 	return _translation.gettext(s)
+
+def Q_(s):
+	# Qualified translatable strings
+	# Some strings are too ambiguous to be easily translated.
+	# so we must use as:
+	# s = Q_('?vcard:Unknown')
+	# widget.set_text(s)
+	# Q_() removes the ?vcard: 
+	# but gettext while parsing the file detects ?vcard:Unknown as a whole string.
+	# translator can either put the ?vcard: part or no (easier for him to no)
+	# nothing fails
+	if s[0] == '?':
+		s = s[s.index(':')+1:] # remove ?abc: part
+	return s
