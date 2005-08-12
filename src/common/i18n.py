@@ -48,6 +48,7 @@ def Q_(s):
 	# but gettext while parsing the file detects ?vcard:Unknown as a whole string.
 	# translator can either put the ?vcard: part or no (easier for him to no)
 	# nothing fails
+	s = _(s)
 	if s[0] == '?':
-		s = s[s.index(':')+1:] # remove ?abc: part
+		s = s[s.find(':')+1:] # remove ?abc: part
 	return s
