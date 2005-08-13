@@ -85,9 +85,9 @@ def get_uf_show(show):
 	elif show == 'not in the roster':
 		uf_show = _('Not in the roster')
 	elif show == 'requested':
-		uf_show = _('Unknown')
+		uf_show = Q_('?contact has status:Unknown')
 	else:
-		uf_show = _('Has errors')
+		uf_show = Q__('?contact has status:Has errors')
 	return unicode(uf_show)
 	
 def get_uf_sub(sub):

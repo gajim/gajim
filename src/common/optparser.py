@@ -47,7 +47,8 @@ class OptionsParser:
 			fd = open(self.__filename)
 		except:
 			if os.path.exists(self.__filename):
-				print _('error: cannot open %s for reading\n') % (self.__filename)
+				#it is file about file
+				print _('error: cannot open %s for reading\n') % self.__filename
 			return
 
 		for line in fd.readlines():
@@ -65,15 +66,16 @@ class OptionsParser:
 		if value == None:
 			return
 		s += opt
-		fd.write(s + " = " + str(value[1]) + "\n")
+		fd.write(s + ' = ' + str(value[1]) + '\n')
 	
 	def write(self):
 		(base_dir, filename) = os.path.split(self.__filename)
-		self.__tempfile = os.path.join(base_dir, '.'+filename)
+		self.__tempfile = os.path.join(base_dir, '.' + filename)
 		try:
 			fd = open(self.__tempfile, 'w')
 		except:
-			err_str = _('Unable to write file in %s\n') % (base_dir)
+			#we cannot write file in a directory
+			err_str = _('Unable to write file in %s\n') % base_dir
 			print err_str
 			return err_str
 		try:

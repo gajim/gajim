@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-13 13:43+0300\n"
+"POT-Creation-Date: 2005-08-13 14:16+0300\n"
 "PO-Revision-Date: 2005-08-01 21:46+0200\n"
 "Last-Translator: Witek Kieraś <pambuk@gmail.com>\n"
 "Language-Team: none\n"
@@ -266,12 +266,8 @@ msgstr "Spoza listy kontaktów"
 
 #: ../src/common/helpers.py:88
 #, fuzzy
-msgid "Unknown"
-msgstr "Nieznany typ %s "
-
-#: ../src/common/helpers.py:90
-msgid "Has errors"
-msgstr "Wystąpiły błądy"
+msgid "?contact has status:Unknown"
+msgstr "Sortuj kontakty wydług statusu"
 
 #: ../src/common/helpers.py:95
 #, fuzzy
@@ -341,12 +337,14 @@ msgstr ""
 msgid "creating %s directory"
 msgstr ""
 
-#: ../src/common/optparser.py:50 ../src/gtkgui_helpers.py:50
+#. it is file about file
+#: ../src/common/optparser.py:51 ../src/gtkgui_helpers.py:50
 #, python-format
 msgid "error: cannot open %s for reading\n"
 msgstr "błąd: nie można otworzyć %s do odczytu\n"
 
-#: ../src/common/optparser.py:76
+#. we cannot write file in a directory
+#: ../src/common/optparser.py:78
 #, python-format
 msgid "Unable to write file in %s\n"
 msgstr "Nie można zapisać pliku w %s\n"
@@ -783,7 +781,8 @@ msgid "A GTK jabber client"
 msgstr "Klient jabbera w GTK."
 
 #: ../src/dialogs.py:415
-msgid "translator_credits"
+#, fuzzy
+msgid "translator-credits"
 msgstr "Tłumaczenie na język polski: Witold Kieraś <pambuk@gmail.com>"
 
 #: ../src/dialogs.py:692
@@ -1087,7 +1086,7 @@ msgstr "Nadawca: %s"
 msgid "File transfer completed"
 msgstr "Zakończono przesyłanie pliku."
 
-#: ../src/dialogs.py:1635 ../src/gtkgui.glade.h:341
+#: ../src/dialogs.py:1635 ../src/gtkgui.glade.h:342
 #, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Otwórz Link w przeglądarce"
@@ -1471,7 +1470,7 @@ msgstr "R_ozłącz"
 msgid "Edit"
 msgstr "Modyfikuj"
 
-#: ../src/roster_window.py:918 ../src/gtkgui.glade.h:358
+#: ../src/roster_window.py:918 ../src/gtkgui.glade.h:359
 msgid "_Remove from Roster"
 msgstr "_Usuń z listy kontaktów"
 
@@ -3003,252 +3002,253 @@ msgstr "_Historia"
 msgid "_Host:"
 msgstr "_Host:"
 
-#: ../src/gtkgui.glade.h:318
+#. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
+#: ../src/gtkgui.glade.h:319
 msgid "_IQ"
 msgstr "_IQ"
 
-#: ../src/gtkgui.glade.h:319
+#: ../src/gtkgui.glade.h:320
 msgid "_Icon in systray (aka. notification area)"
 msgstr "_Ikona w tacce systemowej"
 
-#: ../src/gtkgui.glade.h:320
+#: ../src/gtkgui.glade.h:321
 msgid "_Ignore events from contacts not in the roster"
 msgstr "_Ignoruj wiadomości od osób spoza listy kontaktów"
 
-#: ../src/gtkgui.glade.h:321
+#: ../src/gtkgui.glade.h:322
 msgid "_Jabber ID:"
 msgstr "_Jabber ID:"
 
-#: ../src/gtkgui.glade.h:322
+#: ../src/gtkgui.glade.h:323
 msgid "_Join"
 msgstr "_Dołącz"
 
-#: ../src/gtkgui.glade.h:323
+#: ../src/gtkgui.glade.h:324
 msgid "_Join Group Chat"
 msgstr "_Dołącz do chatu"
 
-#: ../src/gtkgui.glade.h:324
+#: ../src/gtkgui.glade.h:325
 msgid "_Kick"
 msgstr "Wy_rzuć"
 
-#: ../src/gtkgui.glade.h:325
+#: ../src/gtkgui.glade.h:326
 msgid "_Latest"
 msgstr "_Najnowsze"
 
-#: ../src/gtkgui.glade.h:326
+#: ../src/gtkgui.glade.h:327
 msgid "_Mail client:"
 msgstr "Klient _poczty:"
 
-#: ../src/gtkgui.glade.h:327
+#: ../src/gtkgui.glade.h:328
 msgid "_Member"
 msgstr "_Uczestnik"
 
-#: ../src/gtkgui.glade.h:328
+#: ../src/gtkgui.glade.h:329
 msgid "_Merge accounts"
 msgstr "_Połącz konta"
 
-#: ../src/gtkgui.glade.h:329
+#: ../src/gtkgui.glade.h:330
 msgid "_Message"
 msgstr "Wiado_mość"
 
-#: ../src/gtkgui.glade.h:330
+#: ../src/gtkgui.glade.h:331
 msgid "_Modify"
 msgstr "_Modyfikuj"
 
-#: ../src/gtkgui.glade.h:331
+#: ../src/gtkgui.glade.h:332
 msgid "_Name: "
 msgstr "_Nazwa: "
 
-#: ../src/gtkgui.glade.h:332
+#: ../src/gtkgui.glade.h:333
 msgid "_Never"
 msgstr "_Nigdy"
 
-#: ../src/gtkgui.glade.h:333
+#: ../src/gtkgui.glade.h:334
 msgid "_New Message"
 msgstr "_Nowa wiadomość"
 
-#: ../src/gtkgui.glade.h:334
+#: ../src/gtkgui.glade.h:335
 msgid "_New Message..."
 msgstr "_Nowa wiadomość..."
 
-#: ../src/gtkgui.glade.h:335
+#: ../src/gtkgui.glade.h:336
 msgid "_Nickname:"
 msgstr "Pseudo_nim:"
 
-#: ../src/gtkgui.glade.h:336
+#: ../src/gtkgui.glade.h:337
 msgid "_Notify me about it"
 msgstr "Powiadom mnie o tym"
 
-#: ../src/gtkgui.glade.h:337
+#: ../src/gtkgui.glade.h:338
 #, fuzzy
 msgid "_Notify me when a file transfer is complete"
 msgstr "_Powiadom mnie gdy przesyłanie pliku dobiegnie końca."
 
-#: ../src/gtkgui.glade.h:338
+#: ../src/gtkgui.glade.h:339
 msgid "_OK"
 msgstr "_OK"
 
-#: ../src/gtkgui.glade.h:339
+#: ../src/gtkgui.glade.h:340
 msgid "_Occupant Actions"
 msgstr "Działania użytk_ownika"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Online Users"
 msgstr "D_ostępni użytkownicy"
 
-#: ../src/gtkgui.glade.h:342
+#: ../src/gtkgui.glade.h:343
 msgid "_Open Email Composer"
 msgstr "_Otwórz Klienta Poczty"
 
-#: ../src/gtkgui.glade.h:343
+#: ../src/gtkgui.glade.h:344
 msgid "_Open Link in Browser"
 msgstr "_Otwórz Link w przeglądarce"
 
-#: ../src/gtkgui.glade.h:344
+#: ../src/gtkgui.glade.h:345
 msgid "_Owner"
 msgstr "_Właściciel"
 
-#: ../src/gtkgui.glade.h:345
+#: ../src/gtkgui.glade.h:346
 msgid "_Password:"
 msgstr "_Hasło:"
 
-#: ../src/gtkgui.glade.h:346
+#: ../src/gtkgui.glade.h:347
 msgid "_Pause"
 msgstr "_Zatrzymaj"
 
-#: ../src/gtkgui.glade.h:347
+#: ../src/gtkgui.glade.h:348
 msgid "_Player:"
 msgstr "_Program odtwarzający dźwięk:"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:349
 msgid "_Pop it up"
 msgstr "_Wyświetl"
 
-#: ../src/gtkgui.glade.h:349
+#: ../src/gtkgui.glade.h:350
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../src/gtkgui.glade.h:350
+#: ../src/gtkgui.glade.h:351
 msgid "_Preferences"
 msgstr "_Ustawienia"
 
-#: ../src/gtkgui.glade.h:351
+#: ../src/gtkgui.glade.h:352
 msgid "_Presence"
 msgstr "_Obecność"
 
-#: ../src/gtkgui.glade.h:352
+#: ../src/gtkgui.glade.h:353
 msgid "_Previous"
 msgstr "_Wcześniejsze"
 
-#: ../src/gtkgui.glade.h:353
+#: ../src/gtkgui.glade.h:354
 msgid "_Publish"
 msgstr "_Publikuj"
 
-#: ../src/gtkgui.glade.h:354
+#: ../src/gtkgui.glade.h:355
 msgid "_Quit"
 msgstr "_Zakończ"
 
-#: ../src/gtkgui.glade.h:355
+#: ../src/gtkgui.glade.h:356
 msgid "_Refresh"
 msgstr "_Odśwież"
 
-#: ../src/gtkgui.glade.h:356
+#: ../src/gtkgui.glade.h:357
 msgid "_Register new account"
 msgstr "Za_rejestruj nowe konto"
 
-#: ../src/gtkgui.glade.h:357
+#: ../src/gtkgui.glade.h:358
 msgid "_Remove"
 msgstr "_Usuń"
 
-#: ../src/gtkgui.glade.h:359
+#: ../src/gtkgui.glade.h:360
 msgid "_Rename"
 msgstr "_Zmień nazwę"
 
-#: ../src/gtkgui.glade.h:360
+#: ../src/gtkgui.glade.h:361
 msgid "_Reply"
 msgstr "_Odpowiedz"
 
-#: ../src/gtkgui.glade.h:361
+#: ../src/gtkgui.glade.h:362
 msgid "_Retrieve"
 msgstr "_Przywróć"
 
-#: ../src/gtkgui.glade.h:362
+#: ../src/gtkgui.glade.h:363
 msgid "_Send"
 msgstr "_Wyślij"
 
-#: ../src/gtkgui.glade.h:363
+#: ../src/gtkgui.glade.h:364
 msgid "_Send & Close"
 msgstr "_Wyślij i Zamknij"
 
-#: ../src/gtkgui.glade.h:364
+#: ../src/gtkgui.glade.h:365
 msgid "_Send Private Message"
 msgstr "_Wyślij prywatną wiadomość"
 
-#: ../src/gtkgui.glade.h:365
+#: ../src/gtkgui.glade.h:366
 msgid "_Send Server Message"
 msgstr "_Wyślij wiadomość do serwera"
 
-#: ../src/gtkgui.glade.h:366
+#: ../src/gtkgui.glade.h:367
 msgid "_Send Single Message"
 msgstr "_Wyjślij pojedynczą wiadomość"
 
-#: ../src/gtkgui.glade.h:367
+#: ../src/gtkgui.glade.h:368
 msgid "_Server:"
 msgstr "_Serwer:"
 
-#: ../src/gtkgui.glade.h:368
+#: ../src/gtkgui.glade.h:369
 msgid "_Service Discovery"
 msgstr "Przeglądanie U_sług"
 
-#: ../src/gtkgui.glade.h:369
+#: ../src/gtkgui.glade.h:370
 msgid "_Service Discovery..."
 msgstr "Przeglądanie U_sług..."
 
-#: ../src/gtkgui.glade.h:370
+#: ../src/gtkgui.glade.h:371
 msgid "_Set Image..."
 msgstr "U_staw obrazek..."
 
-#: ../src/gtkgui.glade.h:371
+#: ../src/gtkgui.glade.h:372
 msgid "_Start Chat"
 msgstr "_Rozpocznij rozmowę"
 
-#: ../src/gtkgui.glade.h:372
+#: ../src/gtkgui.glade.h:373
 msgid "_Status"
 msgstr "_Status"
 
-#: ../src/gtkgui.glade.h:373
+#: ../src/gtkgui.glade.h:374
 msgid "_Subscribe"
 msgstr "_Autoryzuj"
 
-#: ../src/gtkgui.glade.h:374
+#: ../src/gtkgui.glade.h:375
 msgid "_Subscription"
 msgstr "_Autoryzacja"
 
-#: ../src/gtkgui.glade.h:375
+#: ../src/gtkgui.glade.h:376
 msgid "_Use proxy"
 msgstr "_Korzystaj z pośrednika"
 
-#: ../src/gtkgui.glade.h:376
+#: ../src/gtkgui.glade.h:377
 msgid "_Username:"
 msgstr "_Nazwa użytkownika:"
 
-#: ../src/gtkgui.glade.h:377
+#: ../src/gtkgui.glade.h:378
 msgid "_Voice"
 msgstr "_Głos"
 
-#: ../src/gtkgui.glade.h:378
+#: ../src/gtkgui.glade.h:379
 msgid "_XML Console"
 msgstr "Konsola _XML"
 
-#: ../src/gtkgui.glade.h:379
+#: ../src/gtkgui.glade.h:380
 msgid "_XML Console..."
 msgstr "Konsola _XML..."
 
-#: ../src/gtkgui.glade.h:380
+#: ../src/gtkgui.glade.h:381
 msgid "file transfers list"
 msgstr "Lista przesyłanych plików"
 
-#: ../src/gtkgui.glade.h:381
+#: ../src/gtkgui.glade.h:382
 msgid "minutes"
 msgstr "minutach"
 
@@ -3452,6 +3452,13 @@ msgid ""
 msgstr ""
 "Argument \"%s\" nie jest określony. \n"
 "Wpisz \"%s·help·%s\" aby uzyskać więcej informacji."
+
+#, fuzzy
+#~ msgid "Unknown"
+#~ msgstr "Nieznany typ %s "
+
+#~ msgid "Has errors"
+#~ msgstr "Wystąpiły błądy"
 
 #, fuzzy
 #~ msgid "Open containing folder"

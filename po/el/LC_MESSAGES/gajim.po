@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-13 13:43+0300\n"
+"POT-Creation-Date: 2005-08-13 14:16+0300\n"
 "PO-Revision-Date: 2005-08-13 12:17+0300\n"
 "Last-Translator: Filippos Papadopoulos <filip@cs.uoi.gr>\n"
 "Language-Team: Hellenic-Ελληνικά-Greek <filip@cs.uoi.gr>\n"
@@ -271,12 +271,9 @@ msgid "Not in the roster"
 msgstr "Εκτός λίστας επαφών"
 
 #: ../src/common/helpers.py:88
-msgid "Unknown"
-msgstr "Άγνωστο"
-
-#: ../src/common/helpers.py:90
-msgid "Has errors"
-msgstr "Έχει προβλήματα"
+#, fuzzy
+msgid "?contact has status:Unknown"
+msgstr "Ταξινόμηση επαφών βάσει κατάστασης"
 
 #: ../src/common/helpers.py:95
 #, fuzzy
@@ -342,12 +339,14 @@ msgstr "To Gajim τώρα θα κλείσει"
 msgid "creating %s directory"
 msgstr "δημιουργία φακέλου %s"
 
-#: ../src/common/optparser.py:50 ../src/gtkgui_helpers.py:50
+#. it is file about file
+#: ../src/common/optparser.py:51 ../src/gtkgui_helpers.py:50
 #, python-format
 msgid "error: cannot open %s for reading\n"
 msgstr "σφάλμα: αδύνατη η ανάγνωση του %s\n"
 
-#: ../src/common/optparser.py:76
+#. we cannot write file in a directory
+#: ../src/common/optparser.py:78
 #, python-format
 msgid "Unable to write file in %s\n"
 msgstr "Αδύνατη η εγγραφή αρχείου σε %s\n"
@@ -795,7 +794,8 @@ msgid "A GTK jabber client"
 msgstr "Ένα πρόγραμμα για το Jabber γραμμένο σε GTK+"
 
 #: ../src/dialogs.py:415
-msgid "translator_credits"
+#, fuzzy
+msgid "translator-credits"
 msgstr "Νίκος Κουρεμένος <kourem@gmail.com>"
 
 #: ../src/dialogs.py:692
@@ -1087,7 +1087,7 @@ msgstr "Αποθηκεύτηκε στο: %s"
 msgid "File transfer completed"
 msgstr "Η μεταφορά αρχείου ολοκληρώθηκε"
 
-#: ../src/dialogs.py:1635 ../src/gtkgui.glade.h:341
+#: ../src/dialogs.py:1635 ../src/gtkgui.glade.h:342
 msgid "_Open Containing Folder"
 msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
@@ -1461,7 +1461,7 @@ msgstr "_Αποσύνδεση"
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: ../src/roster_window.py:918 ../src/gtkgui.glade.h:358
+#: ../src/roster_window.py:918 ../src/gtkgui.glade.h:359
 msgid "_Remove from Roster"
 msgstr ""
 
@@ -3000,256 +3000,257 @@ msgstr "_Ιστορικό"
 msgid "_Host:"
 msgstr "_Κεντρικός υπολογιστής:"
 
-#: ../src/gtkgui.glade.h:318
+#. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
+#: ../src/gtkgui.glade.h:319
 msgid "_IQ"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:319
+#: ../src/gtkgui.glade.h:320
 msgid "_Icon in systray (aka. notification area)"
 msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
 
-#: ../src/gtkgui.glade.h:320
+#: ../src/gtkgui.glade.h:321
 msgid "_Ignore events from contacts not in the roster"
 msgstr "_Αγνόησε γεγονότα από επαφές που δεν είναι στη λίστα επαφών"
 
-#: ../src/gtkgui.glade.h:321
+#: ../src/gtkgui.glade.h:322
 msgid "_Jabber ID:"
 msgstr "_Jabber ID:"
 
-#: ../src/gtkgui.glade.h:322
+#: ../src/gtkgui.glade.h:323
 msgid "_Join"
 msgstr "_Συμμετοχή"
 
-#: ../src/gtkgui.glade.h:323
+#: ../src/gtkgui.glade.h:324
 #, fuzzy
 msgid "_Join Group Chat"
 msgstr "_Συμμετοχή σε Ομαδική Κουβέντα"
 
-#: ../src/gtkgui.glade.h:324
+#: ../src/gtkgui.glade.h:325
 msgid "_Kick"
 msgstr "_Ξεφορτώσου τον"
 
-#: ../src/gtkgui.glade.h:325
+#: ../src/gtkgui.glade.h:326
 msgid "_Latest"
 msgstr "_Τέλος"
 
-#: ../src/gtkgui.glade.h:326
+#: ../src/gtkgui.glade.h:327
 msgid "_Mail client:"
 msgstr "_Εφαρμογή Αλληλογραφίας:"
 
-#: ../src/gtkgui.glade.h:327
+#: ../src/gtkgui.glade.h:328
 #, fuzzy
 msgid "_Member"
 msgstr "_Ποτέ"
 
-#: ../src/gtkgui.glade.h:328
+#: ../src/gtkgui.glade.h:329
 msgid "_Merge accounts"
 msgstr "_Συνένωση λογαριασμών"
 
-#: ../src/gtkgui.glade.h:329
+#: ../src/gtkgui.glade.h:330
 #, fuzzy
 msgid "_Message"
 msgstr "_Νέο Μήνυμα"
 
-#: ../src/gtkgui.glade.h:330
+#: ../src/gtkgui.glade.h:331
 msgid "_Modify"
 msgstr "_Τροποποίηση"
 
-#: ../src/gtkgui.glade.h:331
+#: ../src/gtkgui.glade.h:332
 msgid "_Name: "
 msgstr "_Όνομα: "
 
-#: ../src/gtkgui.glade.h:332
+#: ../src/gtkgui.glade.h:333
 msgid "_Never"
 msgstr "_Ποτέ"
 
-#: ../src/gtkgui.glade.h:333
+#: ../src/gtkgui.glade.h:334
 msgid "_New Message"
 msgstr "_Νέο Μήνυμα"
 
-#: ../src/gtkgui.glade.h:334
+#: ../src/gtkgui.glade.h:335
 msgid "_New Message..."
 msgstr "_Νέο Μήνυμα..."
 
-#: ../src/gtkgui.glade.h:335
+#: ../src/gtkgui.glade.h:336
 msgid "_Nickname:"
 msgstr "_Όνομα χρήστη:"
 
-#: ../src/gtkgui.glade.h:336
+#: ../src/gtkgui.glade.h:337
 msgid "_Notify me about it"
 msgstr "_Ειδοποίησε με για αυτό"
 
-#: ../src/gtkgui.glade.h:337
+#: ../src/gtkgui.glade.h:338
 msgid "_Notify me when a file transfer is complete"
 msgstr "_Ειδοποίησε με όταν έχει ολοκληρωθεί μια μεταφορά αρχείου"
 
-#: ../src/gtkgui.glade.h:338
+#: ../src/gtkgui.glade.h:339
 msgid "_OK"
 msgstr "_Εντάξει"
 
-#: ../src/gtkgui.glade.h:339
+#: ../src/gtkgui.glade.h:340
 #, fuzzy
 msgid "_Occupant Actions"
 msgstr "_Ενέργειες"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Online Users"
 msgstr "_Συνδεδεμένοι Χρήστες"
 
-#: ../src/gtkgui.glade.h:342
+#: ../src/gtkgui.glade.h:343
 msgid "_Open Email Composer"
 msgstr "_Άνοιγμα Προγράμματος Αλληλογραφίας"
 
-#: ../src/gtkgui.glade.h:343
+#: ../src/gtkgui.glade.h:344
 msgid "_Open Link in Browser"
 msgstr "_Άνοιγμα Δεσμού σε Φυλλομετρητή"
 
-#: ../src/gtkgui.glade.h:344
+#: ../src/gtkgui.glade.h:345
 msgid "_Owner"
 msgstr "_Ιδιοκτήτης"
 
-#: ../src/gtkgui.glade.h:345
+#: ../src/gtkgui.glade.h:346
 msgid "_Password:"
 msgstr "_Κωδικός:"
 
-#: ../src/gtkgui.glade.h:346
+#: ../src/gtkgui.glade.h:347
 #, fuzzy
 msgid "_Pause"
 msgstr "_Παύση"
 
-#: ../src/gtkgui.glade.h:347
+#: ../src/gtkgui.glade.h:348
 msgid "_Player:"
 msgstr "_Αναπαραγωγέας:"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:349
 msgid "_Pop it up"
 msgstr "_Εμφάνισε το"
 
-#: ../src/gtkgui.glade.h:349
+#: ../src/gtkgui.glade.h:350
 msgid "_Port:"
 msgstr "_Θύρα:"
 
-#: ../src/gtkgui.glade.h:350
+#: ../src/gtkgui.glade.h:351
 msgid "_Preferences"
 msgstr "_Προτιμήσεις"
 
-#: ../src/gtkgui.glade.h:351
+#: ../src/gtkgui.glade.h:352
 msgid "_Presence"
 msgstr "_Παρουσία"
 
-#: ../src/gtkgui.glade.h:352
+#: ../src/gtkgui.glade.h:353
 msgid "_Previous"
 msgstr "_Πίσω"
 
-#: ../src/gtkgui.glade.h:353
+#: ../src/gtkgui.glade.h:354
 msgid "_Publish"
 msgstr "_Δημοσιοποίηση"
 
-#: ../src/gtkgui.glade.h:354
+#: ../src/gtkgui.glade.h:355
 msgid "_Quit"
 msgstr "_Έξοδος"
 
-#: ../src/gtkgui.glade.h:355
+#: ../src/gtkgui.glade.h:356
 msgid "_Refresh"
 msgstr "_Ανανέωση"
 
-#: ../src/gtkgui.glade.h:356
+#: ../src/gtkgui.glade.h:357
 msgid "_Register new account"
 msgstr "_Καταχώρηση νέου λογαριασμού"
 
-#: ../src/gtkgui.glade.h:357
+#: ../src/gtkgui.glade.h:358
 msgid "_Remove"
 msgstr "_Αφαίρεση"
 
-#: ../src/gtkgui.glade.h:359
+#: ../src/gtkgui.glade.h:360
 msgid "_Rename"
 msgstr "_Μετονομασία"
 
-#: ../src/gtkgui.glade.h:360
+#: ../src/gtkgui.glade.h:361
 msgid "_Reply"
 msgstr "_Απάντηση"
 
-#: ../src/gtkgui.glade.h:361
+#: ../src/gtkgui.glade.h:362
 msgid "_Retrieve"
 msgstr "_Ανάκτηση"
 
-#: ../src/gtkgui.glade.h:362
+#: ../src/gtkgui.glade.h:363
 msgid "_Send"
 msgstr "_Αποστολή"
 
-#: ../src/gtkgui.glade.h:363
+#: ../src/gtkgui.glade.h:364
 msgid "_Send & Close"
 msgstr "_Στείλε & Κλείσε"
 
-#: ../src/gtkgui.glade.h:364
+#: ../src/gtkgui.glade.h:365
 msgid "_Send Private Message"
 msgstr "_Αποστολή Προσωπικού Μηνύματος"
 
-#: ../src/gtkgui.glade.h:365
+#: ../src/gtkgui.glade.h:366
 msgid "_Send Server Message"
 msgstr "_Αποστολή Μηνύματος Διακομιστή"
 
-#: ../src/gtkgui.glade.h:366
+#: ../src/gtkgui.glade.h:367
 msgid "_Send Single Message"
 msgstr "_Αποστολή Απλού Μηνύματος"
 
-#: ../src/gtkgui.glade.h:367
+#: ../src/gtkgui.glade.h:368
 msgid "_Server:"
 msgstr "_Διακομιστής:"
 
-#: ../src/gtkgui.glade.h:368
+#: ../src/gtkgui.glade.h:369
 msgid "_Service Discovery"
 msgstr "Ανακάλυψη _Υπηρεσιών"
 
-#: ../src/gtkgui.glade.h:369
+#: ../src/gtkgui.glade.h:370
 msgid "_Service Discovery..."
 msgstr "Ανακάλυψη _Υπηρεσιών..."
 
-#: ../src/gtkgui.glade.h:370
+#: ../src/gtkgui.glade.h:371
 msgid "_Set Image..."
 msgstr "_Ορισμός Φωτογραφίας..."
 
-#: ../src/gtkgui.glade.h:371
+#: ../src/gtkgui.glade.h:372
 msgid "_Start Chat"
 msgstr "_Έναρξη κουβέντας"
 
-#: ../src/gtkgui.glade.h:372
+#: ../src/gtkgui.glade.h:373
 msgid "_Status"
 msgstr "_Κατάσταση"
 
-#: ../src/gtkgui.glade.h:373
+#: ../src/gtkgui.glade.h:374
 msgid "_Subscribe"
 msgstr "_Εγγραφή"
 
-#: ../src/gtkgui.glade.h:374
+#: ../src/gtkgui.glade.h:375
 msgid "_Subscription"
 msgstr "_Εγγραφή"
 
-#: ../src/gtkgui.glade.h:375
+#: ../src/gtkgui.glade.h:376
 msgid "_Use proxy"
 msgstr "_Χρήση μεσολαβητή"
 
-#: ../src/gtkgui.glade.h:376
+#: ../src/gtkgui.glade.h:377
 msgid "_Username:"
 msgstr "_Όνομα χρήστη:"
 
-#: ../src/gtkgui.glade.h:377
+#: ../src/gtkgui.glade.h:378
 msgid "_Voice"
 msgstr "_Φωνή"
 
-#: ../src/gtkgui.glade.h:378
+#: ../src/gtkgui.glade.h:379
 msgid "_XML Console"
 msgstr "Κονσόλα _XML"
 
-#: ../src/gtkgui.glade.h:379
+#: ../src/gtkgui.glade.h:380
 msgid "_XML Console..."
 msgstr "Κονσόλα _XML..."
 
-#: ../src/gtkgui.glade.h:380
+#: ../src/gtkgui.glade.h:381
 msgid "file transfers list"
 msgstr "λίστα μεταφορών αρχείων"
 
-#: ../src/gtkgui.glade.h:381
+#: ../src/gtkgui.glade.h:382
 msgid "minutes"
 msgstr "λεπτά"
 
@@ -3456,3 +3457,9 @@ msgid ""
 msgstr ""
 "Το όρισμα \"%s\" δεν έχει οριστεί. \n"
 "Πληκτρολογήστε \"%s help %s\" για περισσότερες πληροφορίες"
+
+#~ msgid "Unknown"
+#~ msgstr "Άγνωστο"
+
+#~ msgid "Has errors"
+#~ msgstr "Έχει προβλήματα"

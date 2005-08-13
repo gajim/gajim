@@ -412,7 +412,7 @@ class AboutDialog:
 		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps/gajim_about.png'))			
 
 		dlg.set_logo(pixbuf)
-		dlg.set_translator_credits(_('translator_credits'))
+		dlg.set_translator_credits(_('translator-credits'))
 
 		rep = dlg.run()
 		dlg.destroy()
