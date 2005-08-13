@@ -51,8 +51,8 @@ class TabbedChatWindow(chat.Chat):
 		self.possible_paused_timeout_id = {}
 		# keep check for possible inactive timeouts per jid
 		self.possible_inactive_timeout_id = {}
-		self.TARGET_TYPE_TEXT = 80
-		self.dnd_list = [ ( 'text/plain', 0, self.TARGET_TYPE_TEXT ) ]
+		self.TARGET_TYPE_URI_LIST = 80
+		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
 		self.new_user(user)
 		self.show_title()
 		
@@ -104,9 +104,10 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_drag_data_received(self, widget, context, x, y, selection, target_type,
 timestamp, contact):
-		if target_type == self.TARGET_TYPE_TEXT:
-			path = selection.data.strip() # get path to file
-			if path.startswith('file://'):
+		if target_type == self.TARGET_TYPE_URI_LIST:
+			uri = selection.data.strip()
+			path = urllib.url2pathname(uri) # escape special chars
+			if path.startswith('file://'): # get the path to file
 				path = path[7:] # 7 is len('file://')
 				if os.path.isfile(path): # is it file?
 					self.plugin.windows['file_transfers'].send_file(self.account,
