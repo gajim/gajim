@@ -24,6 +24,7 @@ import gobject
 import time
 import urllib
 import base64
+import os
 
 import dialogs
 import chat
@@ -50,6 +51,8 @@ class TabbedChatWindow(chat.Chat):
 		self.possible_paused_timeout_id = {}
 		# keep check for possible inactive timeouts per jid
 		self.possible_inactive_timeout_id = {}
+		self.TARGET_TYPE_TEXT = 80
+		self.dnd_list = [ ( 'text/plain', 0, self.TARGET_TYPE_TEXT ) ]
 		self.new_user(user)
 		self.show_title()
 		
@@ -98,6 +101,16 @@ class TabbedChatWindow(chat.Chat):
 			# change chatstate only if window is the active one
 			self.mouse_over_in_last_5_secs = True
 			self.mouse_over_in_last_30_secs = True
+
+	def on_drag_data_received(self, widget, context, x, y, selection, target_type,
+timestamp, contact):
+		if target_type == self.TARGET_TYPE_TEXT:
+			path = selection.data.strip() # get path to file
+			if path.startswith('file://'):
+				path = path[7:] # 7 is len('file://')
+				if os.path.isfile(path): # is it file?
+					self.plugin.windows['file_transfers'].send_file(self.account,
+						contact, path)
 
 	def draw_widgets(self, contact):
 		"""draw the widgets in a tab (status_image, contact_button ...)
@@ -340,6 +353,13 @@ class TabbedChatWindow(chat.Chat):
 		self.xmls[contact.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[contact.jid] = self.xmls[contact.jid].get_widget('chats_vbox')
 		self.contacts[contact.jid] = contact
+		
+		
+		self.childs[contact.jid].connect('drag_data_received',
+			self.on_drag_data_received, contact)
+		self.childs[contact.jid].drag_dest_set( gtk.DEST_DEFAULT_MOTION |
+			gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP,
+				 self.dnd_list, gtk.gdk.ACTION_COPY)
 		
 		message_textview = self.xmls[contact.jid].get_widget('message_textview')
 		message_tv_buffer = message_textview.get_buffer()

@@ -1675,6 +1675,8 @@ _('Connection with peer cannot be established.')).get_response()
 		self.tree.get_selection().unselect_all()
 		
 	def show_file_send_request(self, account, contact):
+		#FIXME: user better name for this function
+		#atm it's like it shows popup for incoming file transfer request
 		dialog = gtk.FileChooserDialog(title=_('Choose File to Send...'), 
 			action=gtk.FILE_CHOOSER_ACTION_OPEN, 
 			buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
@@ -1688,16 +1690,19 @@ _('Connection with peer cannot be established.')).get_response()
 		response = dialog.run()
 		if response == gtk.RESPONSE_OK:
 			file_path =  unicode(dialog.get_filename(), 'utf-8')
-			(file_dir, file_name) = os.path.split(file_path)
 			if file_dir:
 				self.last_save_dir = file_dir
-			file_props = self.get_send_file_props(account, contact, 
-				file_path, file_name)
 			dialog.destroy()
-			self.add_transfer(account, contact, file_props)
-			gajim.connections[account].send_file_request(file_props)
+			self.send_file(account, contact, file_path)
 		else:
 			dialog.destroy()
+
+	def send_file(self, account, contact, file_path):
+		(file_dir, file_name) = os.path.split(file_path)
+		file_props = self.get_send_file_props(account, contact, 
+				file_path, file_name)
+		self.add_transfer(account, contact, file_props)
+		gajim.connections[account].send_file_request(file_props)
 	
 	def show_file_request(self, account, contact, file_props):
 		if file_props is None or not file_props.has_key('name'):
