@@ -1690,6 +1690,7 @@ _('Connection with peer cannot be established.')).get_response()
 		response = dialog.run()
 		if response == gtk.RESPONSE_OK:
 			file_path =  unicode(dialog.get_filename(), 'utf-8')
+			(file_dir, file_name) = os.path.split(file_path)
 			if file_dir:
 				self.last_save_dir = file_dir
 			dialog.destroy()
