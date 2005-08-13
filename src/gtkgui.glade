@@ -17112,14 +17112,14 @@ Maybe I'll refactor later</property>
 	    <widget class="GtkCheckButton" id="enable_checkbutton">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">Enable</property>
+	      <property name="label" translatable="yes" comments="XML Console enable checkbutton">Enable</property>
 	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <property name="active">False</property>
 	      <property name="inconsistent">False</property>
 	      <property name="draw_indicator">True</property>
-	      <signal name="toggled" handler="on_enable_checkbutton_toggled" last_modification_time="Sat, 06 Aug 2005 00:13:30 GMT"/>
+	      <signal name="toggled" handler="on_enable_checkbutton_toggled" last_modification_time="Sat, 13 Aug 2005 14:36:52 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
