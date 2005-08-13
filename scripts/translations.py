@@ -22,7 +22,7 @@ def visit(arg, dirname, names):
 				os.system('msgmerge -q -U ../po/'+name+'/LC_MESSAGES/gajim.po ../po/gajim.pot')
 			if stats:
 				print name, 'has now:'
-				os.system('msgfmt --statistics ' + path_to_po)
+				os.system('msgfmt --statistics -c --check-accelerators="_" ' + path_to_po)
 
 def show_help():
 	print sys.argv[0], '[help] [stats] [update]'
