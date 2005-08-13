@@ -1396,7 +1396,8 @@ class Connection:
 		if keyID and USE_GPG:
 			if self.connected < 2 and self.gpg.passphrase is None:
 				# We didn't set a passphrase
-				self.dispatch('ERROR', (_('OpenPGP Key was not given'),
+				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
+					#%s is the account name here
 					_('You will be connected to %s without OpenPGP.') % self.name))
 			else:
 				signed = self.gpg.sign(msg, keyID)
