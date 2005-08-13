@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-13 01:27+0300\n"
+"POT-Creation-Date: 2005-08-13 13:43+0300\n"
 "PO-Revision-Date: 2005-08-01 21:46+0200\n"
 "Last-Translator: Witek Kieraś <pambuk@gmail.com>\n"
 "Language-Team: none\n"
@@ -804,7 +804,7 @@ msgstr "Gajim"
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
-#: ../src/dialogs.py:733 ../src/dialogs.py:842 ../src/dialogs.py:1851
+#: ../src/dialogs.py:733 ../src/dialogs.py:842 ../src/dialogs.py:1856
 msgid "Name: "
 msgstr "Nazwa: "
 
@@ -822,11 +822,11 @@ msgstr "Otwórz stronę pobierania"
 msgid "Upload"
 msgstr ""
 
-#: ../src/dialogs.py:745 ../src/dialogs.py:1853
+#: ../src/dialogs.py:745 ../src/dialogs.py:1858
 msgid "Sender: "
 msgstr "Nadawca: "
 
-#: ../src/dialogs.py:750 ../src/dialogs.py:1855
+#: ../src/dialogs.py:750 ../src/dialogs.py:1860
 #, fuzzy
 msgid "Recipient: "
 msgstr "Ostatnio:"
@@ -1067,7 +1067,7 @@ msgstr "Postęp"
 msgid "Filename: %s"
 msgstr "Nazwa Pliku: %s"
 
-#: ../src/dialogs.py:1626 ../src/dialogs.py:1708
+#: ../src/dialogs.py:1626 ../src/dialogs.py:1713
 #, python-format
 msgid "Size: %s"
 msgstr "Rozmiar: %s"
@@ -1107,54 +1107,56 @@ msgstr "Nie można ustanowić połączenia z \"%s\""
 msgid "File transfer stopped by the contact of the other side"
 msgstr "Przesyłanie pliku zostało zatrzymane przez drugą osobę."
 
-#: ../src/dialogs.py:1678
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/dialogs.py:1680
 #, fuzzy
 msgid "Choose File to Send..."
 msgstr "Wybierz _Klucz..."
 
-#: ../src/dialogs.py:1681
+#: ../src/dialogs.py:1683
 #, fuzzy
 msgid "Send"
 msgstr "_Wyślij"
 
-#: ../src/dialogs.py:1705
+#: ../src/dialogs.py:1710
 #, python-format
 msgid "File: %s"
 msgstr "Plik: %s"
 
-#: ../src/dialogs.py:1711
+#: ../src/dialogs.py:1716
 #, python-format
 msgid "Type: %s"
 msgstr "Typ: %s"
 
-#: ../src/dialogs.py:1714
+#: ../src/dialogs.py:1719
 #, python-format
 msgid "Description: %s"
 msgstr "Opis: %s"
 
-#: ../src/dialogs.py:1716
+#: ../src/dialogs.py:1721
 #, fuzzy, python-format
 msgid "%s wants to send you a file:"
 msgstr "% chce przesłać plik"
 
-#: ../src/dialogs.py:1719
+#: ../src/dialogs.py:1724
 #, fuzzy
 msgid "Save File as..."
 msgstr "Zapisz plik jako..."
 
-#: ../src/dialogs.py:1733
+#: ../src/dialogs.py:1738
 msgid "This file already exists"
 msgstr ""
 
-#: ../src/dialogs.py:1734
+#: ../src/dialogs.py:1739
 msgid "Would you like to overwrite it?"
 msgstr ""
 
-#: ../src/dialogs.py:2027
+#: ../src/dialogs.py:2032
 msgid "Pause"
 msgstr "Zatrzymaj"
 
-#: ../src/dialogs.py:2039 ../src/gtkgui.glade.h:307
+#: ../src/dialogs.py:2044 ../src/gtkgui.glade.h:307
 msgid "_Continue"
 msgstr "_Kontynuuj"
 
@@ -1357,7 +1359,7 @@ msgstr "Podaj przyczynę:"
 msgid "Banning %s"
 msgstr "Zabanuj %s"
 
-#: ../src/groupchat_window.py:968 ../src/tabbed_chat_window.py:327
+#: ../src/groupchat_window.py:968 ../src/tabbed_chat_window.py:340
 msgid "If you close this tab, the message will be lost."
 msgstr "Jeśłi zamkniesz kartę, to utracisz tę wiadomość."
 
@@ -1563,51 +1565,51 @@ msgid "All contacts in this group are offline or have errors"
 msgstr ""
 "Wszystkie kontakty w tej grupie są niedostępne lub wystąpiły w nich błędy"
 
-#: ../src/tabbed_chat_window.py:112 ../src/gtkgui.glade.h:184
+#: ../src/tabbed_chat_window.py:125 ../src/gtkgui.glade.h:184
 msgid "OpenPGP Encryption"
 msgstr "Szyfrowanie OpenPGP"
 
-#: ../src/tabbed_chat_window.py:115
+#: ../src/tabbed_chat_window.py:128
 #, python-format
 msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
 msgstr ""
 "Ani %s nie przesyła swojego klucza OpenPGP ani Ty nie przypisałeś mu żadnego "
 "klucza."
 
-#: ../src/tabbed_chat_window.py:258 ../src/tabbed_chat_window.py:326
+#: ../src/tabbed_chat_window.py:271 ../src/tabbed_chat_window.py:339
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Właśnie otrzymałeś nową wiadomość od \"%s\""
 
-#: ../src/tabbed_chat_window.py:259
+#: ../src/tabbed_chat_window.py:272
 msgid "If you close the window, this message will be lost."
 msgstr "Jeśli zamkniesz okno, to utracisz tę wiadomość."
 
 #. we are not connected
-#: ../src/tabbed_chat_window.py:492
+#: ../src/tabbed_chat_window.py:512
 msgid "A connection is not available"
 msgstr "Połączenie jest niemożliwe"
 
-#: ../src/tabbed_chat_window.py:493
+#: ../src/tabbed_chat_window.py:513
 #, fuzzy
 msgid "Your message can not be sent until you are connected."
 msgstr "Nie możesz wysłać wiadomości dopóki nie będziesz połączony."
 
-#: ../src/tabbed_chat_window.py:581
+#: ../src/tabbed_chat_window.py:601
 #, fuzzy
 msgid "Sending private message failed"
 msgstr "_Wyślij prywatną wiadomość"
 
-#: ../src/tabbed_chat_window.py:582
+#: ../src/tabbed_chat_window.py:602
 #, python-format
 msgid "You are no longer in room \"%s\" or \"%s\" has left."
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:685
+#: ../src/tabbed_chat_window.py:705
 msgid "Encryption enabled"
 msgstr "Szyfrowanie włączone"
 
-#: ../src/tabbed_chat_window.py:690
+#: ../src/tabbed_chat_window.py:710
 msgid "Encryption disabled"
 msgstr "Szyfrowanie wyłączone"
 

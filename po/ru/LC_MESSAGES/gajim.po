@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-13 01:27+0300\n"
+"POT-Creation-Date: 2005-08-13 13:43+0300\n"
 "PO-Revision-Date: 2005-06-01 14:36+0700\n"
 "Last-Translator: Yakov Bezrukov <nebulam51@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -829,7 +829,7 @@ msgstr "Gajim"
 msgid "Gajim - %s"
 msgstr "Gajim"
 
-#: ../src/dialogs.py:733 ../src/dialogs.py:842 ../src/dialogs.py:1851
+#: ../src/dialogs.py:733 ../src/dialogs.py:842 ../src/dialogs.py:1856
 #, fuzzy
 msgid "Name: "
 msgstr "_Имя: "
@@ -848,12 +848,12 @@ msgstr "Открыть Страницу Загрузки"
 msgid "Upload"
 msgstr ""
 
-#: ../src/dialogs.py:745 ../src/dialogs.py:1853
+#: ../src/dialogs.py:745 ../src/dialogs.py:1858
 #, fuzzy
 msgid "Sender: "
 msgstr "Сервер:"
 
-#: ../src/dialogs.py:750 ../src/dialogs.py:1855
+#: ../src/dialogs.py:750 ../src/dialogs.py:1860
 #, fuzzy
 msgid "Recipient: "
 msgstr "Недавно:"
@@ -1095,7 +1095,7 @@ msgstr ""
 msgid "Filename: %s"
 msgstr "_Имя: "
 
-#: ../src/dialogs.py:1626 ../src/dialogs.py:1708
+#: ../src/dialogs.py:1626 ../src/dialogs.py:1713
 #, fuzzy, python-format
 msgid "Size: %s"
 msgstr "_Отклонить"
@@ -1133,54 +1133,56 @@ msgstr ""
 msgid "File transfer stopped by the contact of the other side"
 msgstr ""
 
-#: ../src/dialogs.py:1678
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/dialogs.py:1680
 #, fuzzy
 msgid "Choose File to Send..."
 msgstr "Использовать _ключ"
 
-#: ../src/dialogs.py:1681
+#: ../src/dialogs.py:1683
 #, fuzzy
 msgid "Send"
 msgstr "_Отклонить"
 
-#: ../src/dialogs.py:1705
+#: ../src/dialogs.py:1710
 #, fuzzy, python-format
 msgid "File: %s"
 msgstr "Фильтр:"
 
-#: ../src/dialogs.py:1711
+#: ../src/dialogs.py:1716
 #, fuzzy, python-format
 msgid "Type: %s"
 msgstr "Тип"
 
-#: ../src/dialogs.py:1714
+#: ../src/dialogs.py:1719
 #, fuzzy, python-format
 msgid "Description: %s"
 msgstr "Подписка:"
 
-#: ../src/dialogs.py:1716
+#: ../src/dialogs.py:1721
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr ""
 
-#: ../src/dialogs.py:1719
+#: ../src/dialogs.py:1724
 msgid "Save File as..."
 msgstr ""
 
-#: ../src/dialogs.py:1733
+#: ../src/dialogs.py:1738
 msgid "This file already exists"
 msgstr ""
 
-#: ../src/dialogs.py:1734
+#: ../src/dialogs.py:1739
 msgid "Would you like to overwrite it?"
 msgstr ""
 
-#: ../src/dialogs.py:2027
+#: ../src/dialogs.py:2032
 #, fuzzy
 msgid "Pause"
 msgstr "Значение"
 
-#: ../src/dialogs.py:2039 ../src/gtkgui.glade.h:307
+#: ../src/dialogs.py:2044 ../src/gtkgui.glade.h:307
 #, fuzzy
 msgid "_Continue"
 msgstr "Соединяюсь"
@@ -1390,7 +1392,7 @@ msgstr ""
 msgid "Banning %s"
 msgstr ""
 
-#: ../src/groupchat_window.py:968 ../src/tabbed_chat_window.py:327
+#: ../src/groupchat_window.py:968 ../src/tabbed_chat_window.py:340
 msgid "If you close this tab, the message will be lost."
 msgstr ""
 
@@ -1602,50 +1604,50 @@ msgstr "как "
 msgid "All contacts in this group are offline or have errors"
 msgstr "Все контакты в это группе отключены или имеют ошибки"
 
-#: ../src/tabbed_chat_window.py:112 ../src/gtkgui.glade.h:184
+#: ../src/tabbed_chat_window.py:125 ../src/gtkgui.glade.h:184
 #, fuzzy
 msgid "OpenPGP Encryption"
 msgstr "Настройки комнаты"
 
-#: ../src/tabbed_chat_window.py:115
+#: ../src/tabbed_chat_window.py:128
 #, python-format
 msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:258 ../src/tabbed_chat_window.py:326
+#: ../src/tabbed_chat_window.py:271 ../src/tabbed_chat_window.py:339
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:259
+#: ../src/tabbed_chat_window.py:272
 msgid "If you close the window, this message will be lost."
 msgstr ""
 
 #. we are not connected
-#: ../src/tabbed_chat_window.py:492
+#: ../src/tabbed_chat_window.py:512
 #, fuzzy
 msgid "A connection is not available"
 msgstr "_Недоступен после:"
 
-#: ../src/tabbed_chat_window.py:493
+#: ../src/tabbed_chat_window.py:513
 msgid "Your message can not be sent until you are connected."
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:581
+#: ../src/tabbed_chat_window.py:601
 #, fuzzy
 msgid "Sending private message failed"
 msgstr "_Новое Сообщение"
 
-#: ../src/tabbed_chat_window.py:582
+#: ../src/tabbed_chat_window.py:602
 #, python-format
 msgid "You are no longer in room \"%s\" or \"%s\" has left."
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:685
+#: ../src/tabbed_chat_window.py:705
 msgid "Encryption enabled"
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:690
+#: ../src/tabbed_chat_window.py:710
 msgid "Encryption disabled"
 msgstr ""
 

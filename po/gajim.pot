@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-13 01:27+0300\n"
+"POT-Creation-Date: 2005-08-13 13:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -781,7 +781,7 @@ msgstr ""
 msgid "Gajim - %s"
 msgstr ""
 
-#: ../src/dialogs.py:733 ../src/dialogs.py:842 ../src/dialogs.py:1851
+#: ../src/dialogs.py:733 ../src/dialogs.py:842 ../src/dialogs.py:1856
 msgid "Name: "
 msgstr ""
 
@@ -797,11 +797,11 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
-#: ../src/dialogs.py:745 ../src/dialogs.py:1853
+#: ../src/dialogs.py:745 ../src/dialogs.py:1858
 msgid "Sender: "
 msgstr ""
 
-#: ../src/dialogs.py:750 ../src/dialogs.py:1855
+#: ../src/dialogs.py:750 ../src/dialogs.py:1860
 msgid "Recipient: "
 msgstr ""
 
@@ -1022,7 +1022,7 @@ msgstr ""
 msgid "Filename: %s"
 msgstr ""
 
-#: ../src/dialogs.py:1626 ../src/dialogs.py:1708
+#: ../src/dialogs.py:1626 ../src/dialogs.py:1713
 #, python-format
 msgid "Size: %s"
 msgstr ""
@@ -1057,51 +1057,53 @@ msgstr ""
 msgid "File transfer stopped by the contact of the other side"
 msgstr ""
 
-#: ../src/dialogs.py:1678
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/dialogs.py:1680
 msgid "Choose File to Send..."
 msgstr ""
 
-#: ../src/dialogs.py:1681
+#: ../src/dialogs.py:1683
 msgid "Send"
 msgstr ""
 
-#: ../src/dialogs.py:1705
+#: ../src/dialogs.py:1710
 #, python-format
 msgid "File: %s"
 msgstr ""
 
-#: ../src/dialogs.py:1711
+#: ../src/dialogs.py:1716
 #, python-format
 msgid "Type: %s"
 msgstr ""
 
-#: ../src/dialogs.py:1714
+#: ../src/dialogs.py:1719
 #, python-format
 msgid "Description: %s"
 msgstr ""
 
-#: ../src/dialogs.py:1716
+#: ../src/dialogs.py:1721
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr ""
 
-#: ../src/dialogs.py:1719
+#: ../src/dialogs.py:1724
 msgid "Save File as..."
 msgstr ""
 
-#: ../src/dialogs.py:1733
+#: ../src/dialogs.py:1738
 msgid "This file already exists"
 msgstr ""
 
-#: ../src/dialogs.py:1734
+#: ../src/dialogs.py:1739
 msgid "Would you like to overwrite it?"
 msgstr ""
 
-#: ../src/dialogs.py:2027
+#: ../src/dialogs.py:2032
 msgid "Pause"
 msgstr ""
 
-#: ../src/dialogs.py:2039 ../src/gtkgui.glade.h:307
+#: ../src/dialogs.py:2044 ../src/gtkgui.glade.h:307
 msgid "_Continue"
 msgstr ""
 
@@ -1300,7 +1302,7 @@ msgstr ""
 msgid "Banning %s"
 msgstr ""
 
-#: ../src/groupchat_window.py:968 ../src/tabbed_chat_window.py:327
+#: ../src/groupchat_window.py:968 ../src/tabbed_chat_window.py:340
 msgid "If you close this tab, the message will be lost."
 msgstr ""
 
@@ -1500,47 +1502,47 @@ msgstr ""
 msgid "All contacts in this group are offline or have errors"
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:112 ../src/gtkgui.glade.h:184
+#: ../src/tabbed_chat_window.py:125 ../src/gtkgui.glade.h:184
 msgid "OpenPGP Encryption"
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:115
+#: ../src/tabbed_chat_window.py:128
 #, python-format
 msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:258 ../src/tabbed_chat_window.py:326
+#: ../src/tabbed_chat_window.py:271 ../src/tabbed_chat_window.py:339
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:259
+#: ../src/tabbed_chat_window.py:272
 msgid "If you close the window, this message will be lost."
 msgstr ""
 
 #. we are not connected
-#: ../src/tabbed_chat_window.py:492
+#: ../src/tabbed_chat_window.py:512
 msgid "A connection is not available"
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:493
+#: ../src/tabbed_chat_window.py:513
 msgid "Your message can not be sent until you are connected."
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:581
+#: ../src/tabbed_chat_window.py:601
 msgid "Sending private message failed"
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:582
+#: ../src/tabbed_chat_window.py:602
 #, python-format
 msgid "You are no longer in room \"%s\" or \"%s\" has left."
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:685
+#: ../src/tabbed_chat_window.py:705
 msgid "Encryption enabled"
 msgstr ""
 
-#: ../src/tabbed_chat_window.py:690
+#: ../src/tabbed_chat_window.py:710
 msgid "Encryption disabled"
 msgstr ""
 
