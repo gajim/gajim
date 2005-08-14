@@ -85,7 +85,10 @@ def get_room_and_nick_from_fjid(jid):
 	# fake jid is the jid for a contact in a room
 	# gaim@conference.jabber.org/nick/nick-continued
 	# return ('gaim@conference.jabber.org', 'nick/nick-continued')
-	return jid.split('/', 1)
+	l = jid.split('/', 1)
+	if len(l) = 1: #No nick
+		l.append('')
+	return l
 
 def get_contact_instances_from_jid(account, jid):
 	''' we may have two or more resources on that jid '''
