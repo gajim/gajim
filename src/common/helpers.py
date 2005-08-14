@@ -19,6 +19,7 @@
 
 import sre
 import os
+import urllib
 
 import gajim
 from common import i18n
@@ -260,3 +261,13 @@ def play_sound(event):
 		command = player + ' "' + path_to_soundfile + '" &'
 		#FIXME: when we require 2.4+ use subprocess module
 		os.system(command)
+
+def get_file_path_from_dnd_dropped_uri(uri):
+	path = urllib.url2pathname(uri) # escape special chars
+	path = path.strip('\r\n\x00') # remove \r\n and NULL
+	# get the path to file
+	if path.startswith('file://'): # nautilus, rox
+		path = path[7:] # 7 is len('file://')
+	elif path.startswith('file:'): # xffm
+		path = path[5:] # 5 is len('file:')
+	return path

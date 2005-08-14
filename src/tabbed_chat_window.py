@@ -106,12 +106,10 @@ class TabbedChatWindow(chat.Chat):
 timestamp, contact):
 		if target_type == self.TARGET_TYPE_URI_LIST:
 			uri = selection.data.strip()
-			path = urllib.url2pathname(uri) # escape special chars
-			if path.startswith('file://'): # get the path to file
-				path = path[7:] # 7 is len('file://')
-				if os.path.isfile(path): # is it file?
-					self.plugin.windows['file_transfers'].send_file(self.account,
-						contact, path)
+			path = helpers.get_file_path_from_dnd_dropped_uri(uri)
+			if os.path.isfile(path): # is it file?
+				self.plugin.windows['file_transfers'].send_file(self.account,
+					contact, path)
 
 	def draw_widgets(self, contact):
 		"""draw the widgets in a tab (status_image, contact_button ...)
