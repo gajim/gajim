@@ -1195,9 +1195,12 @@ class InvitationDialog:
 			string += '\n' + _('Comment: %s') % comment
 		
 		self.invitation_label.set_text(string)
+		
+		self.window.show_all()
+		self.xml.signal_autoconnect(self)
 
 	def on_accept_button_clicked(self, widget):
-		pass # join room
+		pass # FIXME: join room
 		
 	def on_decline_button_clicked(self, widget):
 		self.window.destroy()
