@@ -33,10 +33,11 @@ def get_default_font():
 	
 	try:
 		import gconf
+		# in try because daemon may not be there
+		client = gconf.client_get_default()
 	except:
 		pass
 	else:
-		client = gconf.client_get_default()
 		return client.get_string('/desktop/gnome/interface/font_name')
 
 	# try to get xfce default font
