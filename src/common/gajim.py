@@ -86,7 +86,7 @@ def get_room_and_nick_from_fjid(jid):
 	# gaim@conference.jabber.org/nick/nick-continued
 	# return ('gaim@conference.jabber.org', 'nick/nick-continued')
 	l = jid.split('/', 1)
-	if len(l) = 1: #No nick
+	if len(l) == 1: #No nick
 		l.append('')
 	return l
 
