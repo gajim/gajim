@@ -12,6 +12,9 @@ libgtk2.0-dev		# aka. gtk2-devel
 libxss-dev			# for idle detection module (Some distributions (f.e. Debian) split xscreensaver)
 libgtkspell-dev	# for gtkspell module
 
+NOTE:
+if you still have problems compiling, you may want to try removing the gtk1 series of the above dependencies
+
 Optionally:
 gtkspell and aspell-LANG where lang is your locale eg. en, fr etc
 dnspython for SRV support; if you don't know what that is, you don't need it)
