@@ -258,6 +258,7 @@ def play_sound(event):
 			return
 		player = gajim.config.get('soundplayer')
 		# we add the path in "" so we have good parsing from shell
+		path_to_soundfile = path_to_soundfile.replace('"', '\\"') # escape "
 		command = player + ' "' + path_to_soundfile + '" &'
 		#FIXME: when we require 2.4+ use subprocess module
 		os.system(command)
