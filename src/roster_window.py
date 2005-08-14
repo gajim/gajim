@@ -542,7 +542,8 @@ class RosterWindow:
 			self.add_account_to_roster(acct)
 			for jid in gajim.contacts[acct].keys():
 				self.add_contact_to_roster(jid, acct)
-		self.make_menu()
+		self.make_menu() # re-make menu in case an account was removed
+		#FIXME: maybe move thie make_menu() in where we remove the account?
 	
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
