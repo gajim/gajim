@@ -118,7 +118,7 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 					return
 		if file_props['failure_cb']:
 			file_props['failure_cb'](streamhost['initiator'], streamhost['id'], 
-				code = 404)
+				file_props['sid'], code = 404)
 		
 	def add_receiver(self, account, sock5_receiver):
 		''' add new file request '''

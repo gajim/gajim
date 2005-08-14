@@ -472,7 +472,7 @@ class Connection:
 		stream_tag.setAttr('jid', streamhost['jid'])
 		self.to_be_sent.append(iq)
 		
-	def _connect_error(self, to, _id, code = 404):
+	def _connect_error(self, to, _id, sid, code = 404):
 		msg_dict = {
 			404: 'Could not connect to given hosts', 
 			405: 'Cancel', 
@@ -488,11 +488,11 @@ class Connection:
 		err.setData(msg)
 		self.to_be_sent.append(iq)
 		if code == 404:
-			sid = _id[3:]
 			file_props = gajim.socks5queue.get_file_props(self.name, sid)
-			self.disconnect_transfer(file_props)
-			file_props['error'] = -3
-			self.dispatch('FILE_REQUEST_ERROR', (to, file_props))
+			if file_props is not None:
+				self.disconnect_transfer(file_props)
+				file_props['error'] = -3
+				self.dispatch('FILE_REQUEST_ERROR', (to, file_props))
 		
 	def _bytestreamResultCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamResultCB')
@@ -579,7 +579,7 @@ class Connection:
 				fasts = file_props['fast']
 				if len(fasts) > 0:
 					self._connect_error(str(iq_obj.getFrom()), fasts[0]['id'], 
-						code = 406)
+						file_props['sid'], code = 406)
 			
 		raise common.xmpp.NodeProcessed
 	
@@ -598,7 +598,7 @@ class Connection:
 		
 		if file_props.has_key('streamhosts'):
 			for host in file_props['streamhosts']:
-				if host['idx'] > 0:
+				if host.has_key('idx') and host['idx'] > 0:
 					gajim.socks5queue.remove_receiver(host['idx'])
 					gajim.socks5queue.remove_sender(host['idx'])
 		sid = file_props['sid']
@@ -616,7 +616,7 @@ class Connection:
 		
 		if file_props.has_key('streamhosts'):
 			for host in file_props['streamhosts']:
-				if host['idx'] > 0:
+				if host.has_key('idx') and host['idx'] > 0:
 					gajim.socks5queue.remove_receiver(host['idx'])
 					gajim.socks5queue.remove_sender(host['idx'])
 			
@@ -756,7 +756,7 @@ class Connection:
 			file_props['error'] = -5
 			self.dispatch('FILE_REQUEST_ERROR', (str(receiver), file_props))
 			self._connect_error(str(receiver), file_props['sid'], 
-				code = 406)
+				file_props['sid'], code = 406)
 			return
 		
 		iq = common.xmpp.Protocol(name = 'iq', to = str(receiver), 
