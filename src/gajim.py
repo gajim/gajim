@@ -145,7 +145,7 @@ class Interface:
 
 	def handle_event_information(self, unused, data):
 		#('INFORMATION', account, (title_text, section_text))
-		dialogs.InformationDialog(data[0], data[1]).get_response()
+		dialogs.InformationDialog(data[0], data[1])
 
 	def handle_event_http_auth(self, account, data):
 		#('HTTP_AUTH', account, (method, url, iq_obj))
@@ -500,13 +500,13 @@ class Interface:
 			self.roster.add_contact_to_roster(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his status.')
-				% jid).get_response()
+				% jid)
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Subscribed', (account, array))
 
 	def handle_event_unsubscribed(self, account, jid):
 		dialogs.InformationDialog(_('Contact "%s" removed subscription from you') % jid,
-				_('You will always see him as offline.')).get_response()
+				_('You will always see him as offline.'))
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Unsubscribed', (account, jid))
 
@@ -540,7 +540,7 @@ class Interface:
 		#('ACC_OK', account, (name, config))
 		name = array[0]
 		dialogs.InformationDialog(_('Account registration successful'),
-			_('The account "%s" has been registered with the Jabber server.') % name).get_response()
+			_('The account "%s" has been registered with the Jabber server.') % name)
 		gajim.config.add_per('accounts', name)
 		for opt in array[1]:
 			gajim.config.set_per('accounts', name, opt, array[1][opt])

@@ -1018,7 +1018,7 @@ class RosterWindow:
 		'''Authorize a user (by re-sending auth menuitem)'''
 		gajim.connections[account].send_authorization(jid)
 		dialogs.InformationDialog(_('Authorization has been sent'),
-			_('Now "%s" will know your status.') %jid).get_response()
+			_('Now "%s" will know your status.') %jid)
 
 	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None):
 		'''Request subscription to a user'''
@@ -1041,7 +1041,7 @@ class RosterWindow:
 			user1 = gajim.contacts[account][jid][0]
 			if not _('not in the roster') in user1.groups:
 				dialogs.InformationDialog(_('Subscription request has been sent'),
-_('If "%s" accepts this request you will know his status.') %jid).get_response()
+_('If "%s" accepts this request you will know his status.') %jid)
 				return
 			user1.groups = [group]
 			user1.name = pseudo

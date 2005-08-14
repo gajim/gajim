@@ -438,12 +438,12 @@ class GroupchatWindow(chat.Chat):
 		room_jid = self.get_active_jid()
 		bm = {
 				'name': room_jid,
-			   'jid': room_jid,
-			   'autojoin': '0',
-			   'password': '',
-			   'nick': self.nicks[room_jid]
-			 }
-		
+				'jid': room_jid,
+				'autojoin': '0',
+				'password': '',
+				'nick': self.nicks[room_jid]
+			}
+
 		for bookmark in gajim.connections[self.account].bookmarks:
 			if bookmark['jid'] == bm['jid']:
 				dialogs.ErrorDialog(
@@ -458,7 +458,7 @@ class GroupchatWindow(chat.Chat):
 
 		dialogs.InformationDialog(
 				_('Bookmark has been added successfully'),
-				_('You can manage your bookmarks via Actions menu in your roster.')).get_response()
+				_('You can manage your bookmarks via Actions menu in your roster.'))
 
 	def on_message_textview_key_press_event(self, widget, event):
 		"""When a key is pressed:

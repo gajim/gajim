@@ -392,7 +392,7 @@ class AboutDialog:
 	def __init__(self):
 		if gtk.pygtk_version < (2, 6, 0) or gtk.gtk_version < (2, 6, 0):
 			InformationDialog(_('Gajim - a GTK+ Jabber client'),
-				_('Version %s') % gajim.version).get_response()
+				_('Version %s') % gajim.version)
 			return
 
 		dlg = gtk.AboutDialog()
@@ -513,6 +513,14 @@ class InformationDialog(HigDialog):
 			self, None, pritext, sectext, gtk.STOCK_DIALOG_INFO,
 			[ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
 		)
+		hbox = self.action_area
+		ok_button = hbox.get_children()[0]
+		ok_button.connect('clicked', self.on_ok_button_clicked)
+		self.show_all()
+
+	def on_ok_button_clicked(self, widget):
+		self.destroy()
+
 class BaseTooltip:
 	''' Base Tooltip . Usage:
 		tooltip = BaseTooltip()
@@ -1653,14 +1661,14 @@ class FileTransfersWindow:
 	def show_request_error(self, file_props):
 		self.window.present()
 		self.window.window.focus()
-		InformationDialog(_('File transfer canceled'), _('Connection with peer cannot be established.')).get_response()
+		InformationDialog(_('File transfer canceled'), _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 		
 	def show_send_error(self, file_props):
 		self.window.present()
 		self.window.window.focus()
 		InformationDialog(_('File transfer canceled'),
-_('Connection with peer cannot be established.')).get_response()
+_('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 	
 	def show_stopped(self, jid, file_props):
