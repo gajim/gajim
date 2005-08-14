@@ -32,6 +32,7 @@ import dialogs
 import config
 import gtkgui_helpers
 import cell_renderer_image
+import tooltips
 
 from gajim import Contact
 from common import gajim
@@ -2156,7 +2157,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.on_status_combobox_changed)
 
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
-		self.tooltip = dialogs.RosterTooltip(self.plugin)
+		self.tooltip = tooltips.RosterTooltip(self.plugin)
 		self.make_menu()
 		self.draw_roster()
 

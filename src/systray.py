@@ -24,6 +24,8 @@ import gobject
 import dialogs
 import os
 
+import tooltips
+
 from common import gajim
 from common.connection import STATUS_LIST
 from common import helpers
@@ -321,7 +323,7 @@ class Systray:
 			eb.connect('button-press-event', self.on_clicked)
 			eb.connect('motion-notify-event', self.on_tray_motion_notify_event)
 			eb.connect('leave-notify-event', self.on_tray_leave_notify_event)
-			self.tooltip = dialogs.NotificationAreaTooltip(self.plugin)
+			self.tooltip = tooltips.NotificationAreaTooltip(self.plugin)
 
 			self.img_tray = gtk.Image()
 			eb.add(self.img_tray)
