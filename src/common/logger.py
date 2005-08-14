@@ -119,6 +119,8 @@ class Logger:
 			show = nick
 		for f in files:
 			path_to_file = os.path.join(LOGPATH, f)
+			if not os.path.isfile(path_to_file):
+				return
 			fil = open(path_to_file, 'a')
 			fil.write('%s:%s:%s' % (tim, jid, show))
 			if msg:
@@ -140,7 +142,7 @@ class Logger:
 		'''return total number of lines in a log file
 		return 0 if log file does not exist'''
 		path_to_file = self.__get_path_to_file(fjid)
-		if not os.path.exists(path_to_file):
+		if not os.path.isfile(path_to_file):
 			return 0
 		fil = open(path_to_file, 'r')
 		no_of_lines = 0 # number of lines
@@ -153,7 +155,7 @@ class Logger:
 		'''return number of lines read and the text in the lines
 		return 0 and empty respectively if log file does not exist'''
 		path_to_file = self.__get_path_to_file(fjid)
-		if not os.path.exists(path_to_file):
+		if not os.path.isfile(path_to_file):
 			return 0, []
 		fil = open(path_to_file, 'r')
 		no_of_lines = 0 # number of lines
