@@ -2101,7 +2101,7 @@ msgstr "Datei_transfers"
 
 #: ../src/gtkgui.glade.h:115
 msgid "File manager:"
-msgstr "Dateitransfer"
+msgstr "Dateimanager"
 
 #: ../src/gtkgui.glade.h:116
 msgid "Filter:"
