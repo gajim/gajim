@@ -87,7 +87,7 @@ def get_uf_show(show):
 	elif show == 'requested':
 		uf_show = Q_('?contact has status:Unknown')
 	else:
-		uf_show = Q__('?contact has status:Has errors')
+		uf_show = Q_('?contact has status:Has errors')
 	return unicode(uf_show)
 	
 def get_uf_sub(sub):
