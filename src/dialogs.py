@@ -2238,3 +2238,27 @@ _('Connection with peer cannot be established.'))
 		
 	def on_remove_menuitem_activate(self, widget):
 		self.on_remove_button_clicked(widget)
+
+
+class InvitationDialog:
+	def __init__(self, plugin, account, room_jid, contact_jid, password = None, comment = None):
+		self.plugin = plugin
+		self.account = account
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'invitation_dialog', APP)
+		self.window = self.xml.get_widget('invitation_dialog')
+		self.invitation_label = self.xml.get_widget('invitation_label')
+		
+		#FIXME: add pango markup
+		#DO_NOT_TRANSLATE_4_08
+		string = _('You have been invited to the %s room by %s') % (room_jid, contact_jid)
+		if comment is not None:
+			#DO_NOT_TRANSLATE_4_08
+			string += '\n' + _('Comment: %s') % comment
+		
+		self.invitation_label.set_text(string)
+
+	def on_accept_button_clicked(self, widget):
+		pass # join room
+		
+	def on_decline_button_clicked(self, widget):
+		self.window.destroy()
