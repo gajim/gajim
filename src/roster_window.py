@@ -382,6 +382,7 @@ class RosterWindow:
 		service_disco_menuitem.remove_submenu()
 		join_gc_menuitem.remove_submenu()
 		new_message_menuitem.remove_submenu()
+		advanced_menuitem.remove_submenu()
 
 		#remove the existing accelerator
 		if self.have_new_message_accel:
@@ -541,6 +542,7 @@ class RosterWindow:
 			self.add_account_to_roster(acct)
 			for jid in gajim.contacts[acct].keys():
 				self.add_contact_to_roster(jid, acct)
+		self.make_menu()
 	
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
