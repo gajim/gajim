@@ -1051,7 +1051,7 @@ class Interface:
 				'contactbgcolor', 'contactfont', 'bannertextcolor', 'bannerbgcolor']
 			
 			font_str = gtkgui_helpers.get_default_font()
-			if font_str == None:
+			if font_str is None:
 				font_str = 'Sans 10'
 			font = pango.FontDescription(font_str)
 			font_normal = font.to_string()

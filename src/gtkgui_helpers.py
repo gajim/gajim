@@ -6,8 +6,6 @@
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##
-## This file was initially written by Dimitur Kirov
-##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -29,8 +27,17 @@ _ = i18n._
 from common import gajim
 
 def get_default_font():
-	''' Get the desktop setting for application font.
-	(Currently it works only for Gnome and Xfce) '''
+	''' Get the desktop setting for application font
+	first check for GNOME, then XFCE and last KDE
+	it returns None on failure or else a string 'Font Size' '''
+	
+	try:
+		import gconf
+	except:
+		pass
+	else:
+		client = gconf.client_get_default()
+		return client.get_string('/desktop/gnome/interface/font_name')
 
 	# try to get xfce default font
 	# Xfce 4.2 adopts freedesktop.org's Base Directory Specification
@@ -40,6 +47,9 @@ def get_default_font():
 	if xdg_config_home == '':
 		xdg_config_home = os.path.expanduser('~/.config') # default	
 	xfce_config_file = os.path.join(xdg_config_home, 'xfce4/mcs_settings/gtk.xml')
+	
+	kde_config_file = os.path.expanduser('~/.kde/share/config/kdeglobals')
+	
 	if os.path.exists(xfce_config_file):
 		try:
 			for line in file(xfce_config_file):
@@ -47,14 +57,23 @@ def get_default_font():
 					start = line.find('value="') + 7
 					return line[start:line.find('"', start)]
 		except:
-			print _('error: cannot open %s for reading\n') % (xfce_config_file)
+			print _('error: cannot open %s for reading') % xfce_config_file
 	
-	try:
-		import gconf
-		client = gconf.client_get_default()
-	except:
-		return None
-	return client.get_string('/desktop/gnome/interface/font_name')
+	elif os.path.exists(kde_config_file):
+		try:
+			for line in file(kde_config_file):
+				if line.find('font=') == 0: # font=Verdana,9,other_numbers
+					start = 5 # 5 is len('font=')
+					line = line[start:]
+					values = line.split(',')
+					font_name = values[0]
+					font_size = values[1]
+					font_string = '%s %s' % (font_name, font_size) # Verdana 9
+					return font_string
+		except:
+			print _('error: cannot open %s for reading') % kde_config_file
+	
+	return None
 	
 def reduce_chars_newlines(text, max_chars = 0, max_lines = 0, 
 	widget = None):
