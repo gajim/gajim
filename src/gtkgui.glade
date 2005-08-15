@@ -6761,7 +6761,7 @@ Custom</property>
 		<widget class="GtkExpander" id="expander4">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="expanded">False</property>
+		  <property name="expanded">True</property>
 		  <property name="spacing">0</property>
 
 		  <child>
@@ -6777,7 +6777,7 @@ Custom</property>
 		      <child>
 			<widget class="GtkLabel" id="label298">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Family:</property>
+			  <property name="label" translatable="yes" comments="Family Name">Family:</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6801,7 +6801,7 @@ Custom</property>
 		      <child>
 			<widget class="GtkLabel" id="label299">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Given:</property>
+			  <property name="label" translatable="yes" comments="Given Name">Given:</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6825,7 +6825,7 @@ Custom</property>
 		      <child>
 			<widget class="GtkLabel" id="label300">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Middle:</property>
+			  <property name="label" translatable="yes" comments="Middle Name">Middle:</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6849,7 +6849,7 @@ Custom</property>
 		      <child>
 			<widget class="GtkLabel" id="label301">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Prefix:</property>
+			  <property name="label" translatable="yes" comments="Prefix in Name">Prefix:</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6873,7 +6873,7 @@ Custom</property>
 		      <child>
 			<widget class="GtkLabel" id="label302">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Suffix:</property>
+			  <property name="label" translatable="yes" comments="Suffix in Name">Suffix:</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -17797,7 +17797,6 @@ Maybe I'll refactor later</property>
 	  <child>
 	    <widget class="GtkButton" id="decline_button">
 	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
@@ -17870,7 +17869,9 @@ Maybe I'll refactor later</property>
 	    <widget class="GtkButton" id="accept_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
+	      <property name="has_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-10</property>
