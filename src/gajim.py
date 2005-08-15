@@ -24,7 +24,6 @@ exec python -OOt "$0" ${1+"$@"}
 		
 import sys
 import pygtk
-pygtk.require('2.0')
 try:
 	import gtk
 except RuntimeError, msg:
@@ -35,6 +34,8 @@ except RuntimeError, msg:
 import gobject
 import pango
 import os
+if not os.name == 'nt': # py2exe only in windows
+		pygtk.require('2.0') # py2exe fails on this
 import sre
 import signal
 import getopt
