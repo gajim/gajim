@@ -26,17 +26,12 @@ __version__ = '1.01'
 
 import sys
 import win32gui
-import win32con
+import win32con # winapi contants
 import systray
-
-GWL_WNDPROC = -4
-GWL_EXSTYLE = -20
-WM_TASKBARCREATED = win32gui.RegisterWindowMessage('TaskbarCreated')
-WM_USER = 1024
-WM_TRAYMESSAGE = WM_USER + 20
-
 import gtk
-WM_LBUTTONUP = 0x0202
+
+WM_TASKBARCREATED = win32gui.RegisterWindowMessage('TaskbarCreated')
+WM_TRAYMESSAGE = win32con.WM_USER + 20
 
 from common import gajim
 from common import i18n
@@ -56,7 +51,7 @@ class SystrayWINAPI:
 		self.notify_icon = None            
 
 		# Sublass the window and inject a WNDPROC to process messages.
-		self._oldwndproc = win32gui.SetWindowLong(self._hwnd, GWL_WNDPROC,
+		self._oldwndproc = win32gui.SetWindowLong(self._hwnd, win32con.GWL_WNDPROC,
 												self._wndproc)
 
 		gtk_window.connect('unrealize', self.remove)
@@ -147,7 +142,6 @@ class SystrayWINAPI:
 class NotifyIcon:
 
 	def __init__(self, hwnd, hicon, tooltip=None):
-
 		self._hwnd = hwnd
 		self._id = 0
 		self._flags = win32gui.NIF_MESSAGE | win32gui.NIF_ICON
@@ -243,7 +237,7 @@ class SystrayWin32(systray.Systray):
 			self.systray_winapi.notify_icon.menu.popup(None, None, None, 0, 0)
 		elif lparam == win32con.WM_MBUTTONUP: # Middle click
 			self.on_middle_click()
-		elif lparam == WM_LBUTTONUP: # Left click
+		elif lparam == win32con.WM_LBUTTONUP: # Left click
 			self.on_left_click()
 			#self.systray_winapi.notify_icon.menu.popdown()
 			#self.systray_winapi.notify_icon.menu.popup(None, None, None, 0, 0)
