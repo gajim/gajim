@@ -19,6 +19,7 @@
 
 import gobject
 import gtk
+import os
 
 from common import gajim
 from time import time
@@ -48,7 +49,7 @@ SERVICE = 'org.gajim.dbus'
 class Remote:
 	def __init__(self, plugin):
 		self.signal_object = None
-		if 'dbus' not in globals():
+		if 'dbus' not in globals() and not os.name == 'nt':
 			print _('D-Bus python bindings are missing in this computer')
 			print _('D-Bus capabilities of Gajim cannot be used')
 			raise DbusNotSupported()
