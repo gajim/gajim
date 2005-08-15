@@ -2516,7 +2516,7 @@ msgstr "Afficher la fenêtre de contacts au démarrage"
 
 #: ../src/gtkgui.glade.h:250
 msgid "Shows a list of file transfers between you and other"
-msgstr ""
+msgstr "Affiche une liste des transferts de fichiers entre vous et les autres"
 
 #: ../src/gtkgui.glade.h:251
 msgid "Sign _in"
@@ -2555,9 +2555,8 @@ msgid "Stop file transfer"
 msgstr "Arrête le transfert de fichier"
 
 #: ../src/gtkgui.glade.h:260
-#, fuzzy
 msgid "Stoping selected file transfer"
-msgstr "Annule le transfert de fichier sélectionné"
+msgstr "Arrête le transfert de fichier sélectionné"
 
 #: ../src/gtkgui.glade.h:261
 msgid ""
@@ -3183,9 +3182,9 @@ msgid "Sender: %s"
 msgstr "Expéditeur : %s"
 
 #: ../src/filetransfers_window.py:125
-#, fuzzy, python-format
+#, python-format
 msgid "Saved in: %s"
-msgstr ""
+msgstr "sauvé dans : %s"
 
 #: ../src/filetransfers_window.py:127
 msgid "File transfer completed"
