@@ -277,15 +277,15 @@ msgstr "Ikke i kontaktlisten"
 
 #: ../src/common/helpers.py:89
 msgid "?contact has status:Unknown"
-msgstr "?kontakt har status:Ukjent"
+msgstr "?contact has status:Ukjent"
 
 #: ../src/common/helpers.py:91
 msgid "?contact has status:Has errors"
-msgstr "?kontakt har status:Har feil"
+msgstr "?contact has status:Har feilmeldinger"
 
 #: ../src/common/helpers.py:96
 msgid "?Subscription we already have:None"
-msgstr "?Abbonement vi allerede har:Ingen"
+msgstr "?Subscription we already have:Ingen"
 
 #: ../src/common/helpers.py:98
 msgid "To"
@@ -301,7 +301,7 @@ msgstr "Begge"
 
 #: ../src/common/helpers.py:110
 msgid "?Ask (for Subscription):None"
-msgstr "?Spør (etter abbonement):Ingen"
+msgstr "?Ask (for Subscription):Ingen"
 
 #: ../src/common/helpers.py:112
 msgid "Subscribe"
@@ -686,9 +686,8 @@ msgid "This bookmark has invalid data"
 msgstr "Dette bokmerket har ugyldig innhold"
 
 #: ../src/config.py:2612
-msgid ""
-"Please be sure to fill out server and room fields or remove this bookmark."
-msgstr "Vennligst fyll inn server rom feltene for å fjerne dette bokmerket."
+msgid "Please be sure to fill out server and room fields or remove this bookmark."
+msgstr "Vennligst fyll inn server og rom feltene for å fjerne dette bokmerket."
 
 #: ../src/config.py:2832
 msgid ""
@@ -762,8 +761,7 @@ msgstr "%s Status Melding"
 #: ../src/dialogs.py:272
 #, python-format
 msgid "Please fill in the data of the contact you want to add in account %s"
-msgstr ""
-"Vennligst fyll inn dataene til kontakten du ønsker å legge til kontoen %s"
+msgstr "Vennligst fyll inn dataene til kontakten du ønsker å legge til kontoen %s"
 
 #: ../src/dialogs.py:274
 msgid "Please fill in the data of the contact you want to add"
@@ -1078,7 +1076,7 @@ msgstr "Dette rommet har ingen tittel"
 
 #: ../src/groupchat_window.py:278
 msgid "?Group Chat Contact Role:None"
-msgstr "?Gruppe Samtale Kontakt Rolle:Ingen"
+msgstr "?Group Chat Contact Role:Ingen"
 
 #: ../src/groupchat_window.py:280
 msgid "Moderators"
@@ -1437,7 +1435,7 @@ msgstr "Filen må ikke være mer enn 8 kilobyte"
 
 #: ../src/vcard.py:250
 msgid "?Client:Unknown"
-msgstr "?Klient:Ukjent"
+msgstr "?Client:Ukjent"
 
 #: ../src/vcard.py:252
 msgid "?OS:Unknown"
