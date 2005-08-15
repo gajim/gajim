@@ -1125,15 +1125,13 @@ class Interface:
 		self.systray_capabilities = False
 		
 		if os.name == 'nt':
-			if float(gajim.version) > 0.8: # atm it is not ready for 0.8
-				try:
-					import systraywin32
-				except:
-					pass
-				else:
-					self.systray_capabilities = True
-					#self.roster.window.realize()
-					self.systray = systraywin32.SystrayWin32(self)
+			try:
+				import systraywin32
+			except: # user doesn't have trayicon capabilities
+				pass
+			else:
+				self.systray_capabilities = True
+				self.systray = systraywin32.SystrayWin32(self)
 		else:
 			try:
 				import egg.trayicon # use gnomepythonextras trayicon
