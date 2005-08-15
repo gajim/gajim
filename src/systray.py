@@ -48,7 +48,10 @@ gtk.glade.textdomain(APP)
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class Systray:
-	"""Class for icon in the systray"""
+	'''Class for icon in the notification area
+	This class is both base class (for systraywin32.py) and normal class
+	for trayicon in GNU/Linux'''
+	
 	def __init__(self, plugin):
 		self.plugin = plugin
 		self.jids = []
@@ -197,7 +200,7 @@ class Systray:
 
 		if event is not None: # None means windows (we explicitly popup in systraywin32.py)
 			self.systray_context_menu.popup(None, None, None, event.button, event.time)
-			self.systray_context_menu.show_all()
+		self.systray_context_menu.show_all()
 
 	def on_preferences_menuitem_activate(self, widget):
 		if self.plugin.windows['preferences'].window.get_property('visible'):
