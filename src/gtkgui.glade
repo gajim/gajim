@@ -17508,6 +17508,7 @@ Maybe I'll refactor later</property>
     <atkproperty name="AtkObject::accessible_description" translatable="yes">Shows a list of file transfers between you and other</atkproperty>
   </accessibility>
   <signal name="delete_event" handler="on_file_transfers_dialog_delete_event" last_modification_time="Wed, 31 Aug 2005 22:17:01 GMT"/>
+  <signal name="key_press_event" handler="on_file_transfers_window_key_press_event" last_modification_time="Mon, 15 Aug 2005 12:42:20 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox1">

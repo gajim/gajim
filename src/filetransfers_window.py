@@ -719,7 +719,12 @@ _('Connection with peer cannot be established.'))
 	
 	def on_pause_menuitem_activate(self, widget):
 		self.on_pause_restore_button_clicked(widget)
-		# TODO change the stock
+		#FIXME: change the stock
 		
 	def on_remove_menuitem_activate(self, widget):
 		self.on_remove_button_clicked(widget)
+
+	def on_file_transfers_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			self.window.hide()
+		
