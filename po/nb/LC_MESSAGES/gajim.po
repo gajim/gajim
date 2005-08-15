@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 0.9.1"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-13 18:04+0300\n"
-"PO-Revision-Date: 2005-08-12 14:31+0100\n"
+"PO-Revision-Date: 2005-08-15 08:30+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -149,9 +149,8 @@ msgstr "Jeg er %s"
 
 #. We didn't set a passphrase
 #: ../src/common/connection.py:1399
-#, fuzzy
 msgid "OpenPGP passphrase was not given"
-msgstr "OpenPGP nøkkel ble ikke gitt"
+msgstr "OpenPGP passordsetning ble ikke gitt"
 
 #. %s is the account name here
 #: ../src/common/connection.py:1401
@@ -268,14 +267,12 @@ msgid "Not in the roster"
 msgstr "Ikke i kontaktlisten"
 
 #: ../src/common/helpers.py:88
-#, fuzzy
 msgid "?contact has status:Unknown"
-msgstr "Sorter kontakter etter status"
+msgstr "?kontakt har status:Ukjent"
 
 #: ../src/common/helpers.py:95
-#, fuzzy
 msgid "?Subscription we already have:None"
-msgstr "Abbonerings forespørsel er sendt"
+msgstr "?Abbonement vi allerede har:Ingen"
 
 #: ../src/common/helpers.py:97
 msgid "To"
@@ -290,9 +287,8 @@ msgid "Both"
 msgstr "Begge"
 
 #: ../src/common/helpers.py:109
-#, fuzzy
 msgid "?Ask (for Subscription):None"
-msgstr "Abbonement:"
+msgstr "?Spør (etter abbonement):Ingen"
 
 #: ../src/common/helpers.py:111
 msgid "Subscribe"
@@ -585,7 +581,7 @@ msgstr "Server"
 #: ../src/roster_window.py:1921 ../src/roster_window.py:1923
 #: ../src/roster_window.py:2000 ../src/systray.py:213
 msgid "Transports"
-msgstr "Trasporter"
+msgstr "Transporter"
 
 #: ../src/config.py:1813
 #, python-format
@@ -782,9 +778,8 @@ msgid "A GTK jabber client"
 msgstr "En GTK jabber klient"
 
 #: ../src/dialogs.py:415
-#, fuzzy
 msgid "translator-credits"
-msgstr "oversetter_kreditter"
+msgstr "oversetter-informasjon"
 
 #: ../src/dialogs.py:692
 #, python-format
@@ -915,7 +910,7 @@ msgid ""
 "to send a chat message to:"
 msgstr ""
 "Fyll kontakt ID til den kontakten du ønsker\n"
-"å sende en samtale melding til:"
+"å sende en melding til:"
 
 #. if offline or connecting
 #: ../src/dialogs.py:1079 ../src/dialogs.py:1392 ../src/dialogs.py:1513
@@ -1245,7 +1240,7 @@ msgstr "Dette rommet har ingen tittel"
 
 #: ../src/groupchat_window.py:278
 msgid "?Group Chat Contact Role:None"
-msgstr ""
+msgstr "?Gruppe Samtale Kontakt Rolle:Ingen"
 
 #: ../src/groupchat_window.py:280
 msgid "Moderators"
@@ -1598,14 +1593,12 @@ msgid "The file must not be more than 8 kilobytes."
 msgstr "Filen må ikke være mer enn 8 kilobyte"
 
 #: ../src/vcard.py:250
-#, fuzzy
 msgid "?Client:Unknown"
-msgstr "Klient:"
+msgstr "?Klient:Ukjent"
 
 #: ../src/vcard.py:252
-#, fuzzy
 msgid "?OS:Unknown"
-msgstr "Ukjent"
+msgstr "?OS:Ukjent"
 
 #: ../src/vcard.py:273 ../src/vcard.py:291
 msgid " resource with priority "
@@ -1629,7 +1622,7 @@ msgstr "0"
 
 #: ../src/gtkgui.glade.h:3
 msgid "<b>Advanced Configuration Editor</b>"
-msgstr "<b>Avanserte valg Editering</b>"
+msgstr "<b>Editering av Avanserte Instillinger</b>"
 
 #: ../src/gtkgui.glade.h:4
 msgid "<b>Applications</b>"
@@ -1745,7 +1738,7 @@ msgstr "Legg til ny Kontakt"
 
 #: ../src/gtkgui.glade.h:32
 msgid "Add _Contact"
-msgstr "Ny_Kontakt"
+msgstr "Ny _Kontakt"
 
 #: ../src/gtkgui.glade.h:33
 msgid "Address"
@@ -1796,7 +1789,7 @@ msgstr "Alltid bruk kompakt _utseende"
 
 #: ../src/gtkgui.glade.h:45
 msgid "Ask status message when I:"
-msgstr "Spør status melding når jeg:"
+msgstr "Spør etter status melding når jeg:"
 
 #: ../src/gtkgui.glade.h:46
 msgid "Ask:"
@@ -1930,7 +1923,7 @@ msgstr "Velg _Nøkkel..."
 
 #: ../src/gtkgui.glade.h:77
 msgid "City:"
-msgstr "by:"
+msgstr "By:"
 
 #: ../src/gtkgui.glade.h:78
 msgid "Clean _up"
@@ -2067,7 +2060,7 @@ msgstr "Ekstra Adresse:"
 
 #: ../src/gtkgui.glade.h:112
 msgid "Family:"
-msgstr "Familie"
+msgstr "Etternavn:"
 
 #: ../src/gtkgui.glade.h:113
 msgid "File Transfers"
@@ -2145,7 +2138,7 @@ msgstr "Gajim: Første Gangs Veiviser"
 
 #: ../src/gtkgui.glade.h:129
 msgid "Given:"
-msgstr "Gitt:"
+msgstr "Fornavn:"
 
 #: ../src/gtkgui.glade.h:130
 msgid "Go"
@@ -2343,7 +2336,7 @@ msgstr "Behandle..."
 
 #: ../src/gtkgui.glade.h:170
 msgid "Middle:"
-msgstr "Midten:"
+msgstr "Mellomnavn:"
 
 #: ../src/gtkgui.glade.h:171
 msgid "Mo_derator"
@@ -2444,7 +2437,7 @@ msgstr "Tilstedeværelse"
 
 #: ../src/gtkgui.glade.h:200
 msgid "Prefix:"
-msgstr "Prefix:"
+msgstr "Tittel:"
 
 #: ../src/gtkgui.glade.h:201
 msgid "Print time:"
@@ -2644,11 +2637,11 @@ msgstr "Viser en liste over overføringer mellom deg og andre"
 
 #: ../src/gtkgui.glade.h:247
 msgid "Sign _in"
-msgstr "Logg _inn"
+msgstr "Logger _inn"
 
 #: ../src/gtkgui.glade.h:248
 msgid "Sign _out"
-msgstr "Logg _ut"
+msgstr "Logger _ut"
 
 #: ../src/gtkgui.glade.h:249
 msgid "Sort contacts by status"
@@ -2660,7 +2653,7 @@ msgstr "Start _Samtale"
 
 #: ../src/gtkgui.glade.h:251
 msgid "State:"
-msgstr "Tilstand:"
+msgstr "Fylke:"
 
 #: ../src/gtkgui.glade.h:252
 msgid "Status"
