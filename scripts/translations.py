@@ -9,6 +9,7 @@ import sys
 
 stats = False
 update = False
+check = False
 
 def visit(arg, dirname, names):
 	if dirname.find('.svn') != -1:
@@ -22,10 +23,12 @@ def visit(arg, dirname, names):
 				os.system('msgmerge -q -U ../po/'+name+'/LC_MESSAGES/gajim.po ../po/gajim.pot')
 			if stats:
 				print name, 'has now:'
-				os.system('msgfmt --statistics -c --check-accelerators="_" ' + path_to_po)
+				os.system('msgfmt --statistics ' + path_to_po)
+			if check:
+				os.system('msgfmt -c --check-accelerators="_" ' + path_to_po)
 
 def show_help():
-	print sys.argv[0], '[help] [stats] [update]'
+	print sys.argv[0], '[help] [stats] [update] [check]'
 	sys.exit(0)
 
 def update_pot():
@@ -50,13 +53,16 @@ if __name__ == '__main__':
 		if param == 'stats': # stats only
 			stats = True
 			os.path.walk(path_to_dir, visit, None)
-		elif param == 'update': # update and no stats
+		elif param == 'update': # update only
 			update_pot()
 			update = True
 			os.path.walk(path_to_dir, visit, None) # update each po & no stats
 			print 'Done'
+		elif param == 'check':
+			check = True
+			os.path.walk(path_to_dir, visit, None)
 
-	elif len(sys.argv) == 1: # update & stats
+	elif len(sys.argv) == 1: # update & stats & no check
 		update_pot()
 		update = True
 		stats = True
