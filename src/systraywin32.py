@@ -214,7 +214,6 @@ class SystrayWin32(systray.Systray):
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
 		
 		self.systray_winapi = SystrayWINAPI(self.plugin.roster.window)
-		#self.systray_winapi.add_notify_icon(self.systray_context_menu)
 
 		self.xml.signal_autoconnect(self)
 		
@@ -239,9 +238,6 @@ class SystrayWin32(systray.Systray):
 			self.on_middle_click()
 		elif lparam == win32con.WM_LBUTTONUP: # Left click
 			self.on_left_click()
-			#self.systray_winapi.notify_icon.menu.popdown()
-			#self.systray_winapi.notify_icon.menu.popup(None, None, None, 0, 0)
-
 
 	def add_jid(self, jid, account):
 		print 'FIXME: add_jid'
