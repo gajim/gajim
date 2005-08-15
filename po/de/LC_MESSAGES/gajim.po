@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-15 13:20+0300\n"
+"POT-Creation-Date: 2005-08-15 14:28+0300\n"
 "PO-Revision-Date: 2005-06-01 18:11+0200\n"
 "Last-Translator: Christoph Neuroth <delmonico@gmx.net>\n"
 "Language-Team: German\n"
@@ -1965,7 +1965,7 @@ msgstr "Format: JJJJ-MM-TT"
 msgid "From:"
 msgstr "Von:"
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:121 ../src/tooltips.py:214
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -2784,7 +2784,7 @@ msgstr "_Kompakte Ansicht"
 msgid "_Compact View    Alt+C"
 msgstr "_Kompakte Ansicht Alt+C"
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:313 ../src/filetransfers_window.py:538
 msgid "_Continue"
 msgstr "_Fortsetzen"
 
@@ -2917,7 +2917,7 @@ msgstr "_Benutzer Aktionen"
 msgid "_Online Users"
 msgstr "_Angemeldete Benutzer"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:348 ../src/filetransfers_window.py:128
 #, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Öffne Ordner"
@@ -3077,6 +3077,183 @@ msgstr "Dateitransfer-Liste"
 #: ../src/gtkgui.glade.h:388
 msgid "minutes"
 msgstr "Minuten"
+
+#: ../src/tooltips.py:210
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr "Gajim - %s ungelesene Nachrichten"
+
+#: ../src/tooltips.py:212
+msgid "Gajim - 1 unread message"
+msgstr "Gajim - Eine ungelesene Nachricht"
+
+#: ../src/tooltips.py:232 ../src/tooltips.py:234
+#, python-format
+msgid "Gajim - %s"
+msgstr "Gajim - %s"
+
+#: ../src/tooltips.py:283 ../src/tooltips.py:344
+#: ../src/filetransfers_window.py:350
+msgid "Name: "
+msgstr "Name: "
+
+#: ../src/tooltips.py:285
+msgid "Subscription: "
+msgstr "Abonnement: "
+
+#: ../src/tooltips.py:295
+msgid "OpenPGP: "
+msgstr "OpenPGP: "
+
+#: ../src/tooltips.py:306 ../src/tooltips.py:319 ../src/tooltips.py:379
+msgid "Status: "
+msgstr "Status: "
+
+#: ../src/tooltips.py:315
+msgid "Resource: "
+msgstr "Ressource: "
+
+#: ../src/tooltips.py:350
+msgid "Type: "
+msgstr "Typ: "
+
+#: ../src/tooltips.py:352
+msgid "Download"
+msgstr "Download"
+
+#: ../src/tooltips.py:354
+msgid "Upload"
+msgstr "Upload"
+
+#: ../src/tooltips.py:356 ../src/filetransfers_window.py:352
+msgid "Sender: "
+msgstr "Absender: "
+
+#: ../src/tooltips.py:361 ../src/filetransfers_window.py:354
+msgid "Recipient: "
+msgstr "Empfänger: "
+
+#: ../src/tooltips.py:372
+msgid "Size: "
+msgstr "Größe: "
+
+#: ../src/tooltips.py:374
+msgid "Transferred: "
+msgstr "Übertragen: "
+
+#: ../src/tooltips.py:382 ../src/tooltips.py:402
+msgid "not started"
+msgstr "nicht gestartet"
+
+#: ../src/tooltips.py:386
+msgid "stopped"
+msgstr "angehalten"
+
+#: ../src/tooltips.py:388 ../src/tooltips.py:391
+msgid "completed"
+msgstr "abgeschlossen"
+
+#: ../src/tooltips.py:395
+msgid "paused"
+msgstr "pausiert"
+
+#: ../src/tooltips.py:398
+msgid "stalled"
+msgstr "steht still"
+
+#: ../src/tooltips.py:400
+msgid "transferring"
+msgstr "übertrage"
+
+#: ../src/filetransfers_window.py:73
+msgid "File"
+msgstr "Datei"
+
+#: ../src/filetransfers_window.py:87
+msgid "Progress"
+msgstr "Fortschritt"
+
+#: ../src/filetransfers_window.py:117 ../src/filetransfers_window.py:162
+#, python-format
+msgid "Filename: %s"
+msgstr "Dateiname: %s"
+
+#: ../src/filetransfers_window.py:119 ../src/filetransfers_window.py:207
+#, python-format
+msgid "Size: %s"
+msgstr "Größe: %s"
+
+#: ../src/filetransfers_window.py:121 ../src/filetransfers_window.py:164
+#, python-format
+msgid "Sender: %s"
+msgstr "Absender: %s"
+
+#: ../src/filetransfers_window.py:125
+#, fuzzy, python-format
+msgid "Saved in: %s"
+msgstr "Absender: %s"
+
+#: ../src/filetransfers_window.py:127
+msgid "File transfer completed"
+msgstr "Dateitransfer abgeschlossen"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:155
+msgid "File transfer canceled"
+msgstr "Dateitranfer abgebrochen"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:156
+msgid "Connection with peer cannot be established."
+msgstr "Verbindung zum Teilnehmer kann nicht hergestellt werden"
+
+#: ../src/filetransfers_window.py:166
+msgid "File transfer stopped by the contact of the other side"
+msgstr "Gegenseite hat Dateitransfer gestoppt"
+
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/filetransfers_window.py:173
+msgid "Choose File to Send..."
+msgstr "Datei auswählen..."
+
+#: ../src/filetransfers_window.py:176
+msgid "Send"
+msgstr "Senden"
+
+#: ../src/filetransfers_window.py:204
+#, python-format
+msgid "File: %s"
+msgstr "Datei: %s"
+
+#: ../src/filetransfers_window.py:210
+#, python-format
+msgid "Type: %s"
+msgstr "Typ: %s"
+
+#: ../src/filetransfers_window.py:213
+#, python-format
+msgid "Description: %s"
+msgstr "Beschreibung: %s"
+
+#: ../src/filetransfers_window.py:215
+#, python-format
+msgid "%s wants to send you a file:"
+msgstr "%s möchte ihnen eine Datei senden:"
+
+#: ../src/filetransfers_window.py:218
+msgid "Save File as..."
+msgstr "Datei speichern unter..."
+
+#: ../src/filetransfers_window.py:232
+msgid "This file already exists"
+msgstr "Diese Datei existiert schon"
+
+#: ../src/filetransfers_window.py:233
+msgid "Would you like to overwrite it?"
+msgstr "Möchten Sie die Datei überschreiben?"
+
+#: ../src/filetransfers_window.py:526
+msgid "Pause"
+msgstr "Pause"
 
 #: ../scripts/gajim-remote.py:70
 msgid "show a help on specific command"
@@ -3267,130 +3444,6 @@ msgid ""
 msgstr ""
 "Argument \"%s\" wurde nicht angegeben. \n"
 "Geben Sie \"%s help %s\" ein für Hilfe"
-
-#~ msgid "Gajim - %s unread messages"
-#~ msgstr "Gajim - %s ungelesene Nachrichten"
-
-#~ msgid "Gajim - 1 unread message"
-#~ msgstr "Gajim - Eine ungelesene Nachricht"
-
-#~ msgid "Gajim - %s"
-#~ msgstr "Gajim - %s"
-
-#~ msgid "Name: "
-#~ msgstr "Name: "
-
-#~ msgid "Type: "
-#~ msgstr "Typ: "
-
-#~ msgid "Download"
-#~ msgstr "Download"
-
-#~ msgid "Upload"
-#~ msgstr "Upload"
-
-#~ msgid "Sender: "
-#~ msgstr "Absender: "
-
-#~ msgid "Recipient: "
-#~ msgstr "Empfänger: "
-
-#~ msgid "Size: "
-#~ msgstr "Größe: "
-
-#~ msgid "Transferred: "
-#~ msgstr "Übertragen: "
-
-#~ msgid "Status: "
-#~ msgstr "Status: "
-
-#~ msgid "not started"
-#~ msgstr "nicht gestartet"
-
-#~ msgid "stopped"
-#~ msgstr "angehalten"
-
-#~ msgid "completed"
-#~ msgstr "abgeschlossen"
-
-#~ msgid "paused"
-#~ msgstr "pausiert"
-
-#~ msgid "stalled"
-#~ msgstr "steht still"
-
-#~ msgid "transferring"
-#~ msgstr "übertrage"
-
-#~ msgid "Subscription: "
-#~ msgstr "Abonnement: "
-
-#~ msgid "OpenPGP: "
-#~ msgstr "OpenPGP: "
-
-#~ msgid "Resource: "
-#~ msgstr "Ressource: "
-
-#~ msgid "File"
-#~ msgstr "Datei"
-
-#~ msgid "Progress"
-#~ msgstr "Fortschritt"
-
-#~ msgid "Filename: %s"
-#~ msgstr "Dateiname: %s"
-
-#~ msgid "Size: %s"
-#~ msgstr "Größe: %s"
-
-#~ msgid "Sender: %s"
-#~ msgstr "Absender: %s"
-
-#, fuzzy
-#~ msgid "Saved in: %s"
-#~ msgstr "Absender: %s"
-
-#~ msgid "File transfer completed"
-#~ msgstr "Dateitransfer abgeschlossen"
-
-#~ msgid "File transfer canceled"
-#~ msgstr "Dateitranfer abgebrochen"
-
-#~ msgid "Connection with peer cannot be established."
-#~ msgstr "Verbindung zum Teilnehmer kann nicht hergestellt werden"
-
-#~ msgid "File transfer stopped by the contact of the other side"
-#~ msgstr "Gegenseite hat Dateitransfer gestoppt"
-
-#~ msgid "Choose File to Send..."
-#~ msgstr "Datei auswählen..."
-
-#~ msgid "Send"
-#~ msgstr "Senden"
-
-#~ msgid "File: %s"
-#~ msgstr "Datei: %s"
-
-#~ msgid "Type: %s"
-#~ msgstr "Typ: %s"
-
-#~ msgid "Description: %s"
-#~ msgstr "Beschreibung: %s"
-
-#~ msgid "%s wants to send you a file:"
-#~ msgstr "%s möchte ihnen eine Datei senden:"
-
-#~ msgid "Save File as..."
-#~ msgstr "Datei speichern unter..."
-
-#~ msgid "This file already exists"
-#~ msgstr "Diese Datei existiert schon"
-
-#~ msgid "Would you like to overwrite it?"
-#~ msgstr "Möchten Sie die Datei überschreiben?"
-
-#~ msgid "Pause"
-#~ msgstr "Pause"
 
 #~ msgid "Unknown"
 #~ msgstr "Unbekannt"

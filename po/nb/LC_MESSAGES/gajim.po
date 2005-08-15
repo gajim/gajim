@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.9.1Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: 0.9.2Report-Msgid-Bugs-To: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-15 13:20+0300\n"
+"POT-Creation-Date: 2005-08-15 14:28+0300\n"
 "PO-Revision-Date: 2005-08-15 08:30+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
@@ -143,15 +143,13 @@ msgid "Please check your login and password for correctness."
 msgstr "Vennligst sjekk at brukernavn og passord er korrekt."
 
 #: ../src/common/connection.py:1394
-#, fuzzy
 msgid "invisible"
-msgstr "Usynlig"
+msgstr "usynlig"
 
 #. do not show I'm invisible!
 #: ../src/common/connection.py:1395
-#, fuzzy
 msgid "offline"
-msgstr "Frakoblet"
+msgstr "frakoblet"
 
 #: ../src/common/connection.py:1396 ../src/roster_window.py:1270
 #, python-format
@@ -282,9 +280,8 @@ msgid "?contact has status:Unknown"
 msgstr "?kontakt har status:Ukjent"
 
 #: ../src/common/helpers.py:91
-#, fuzzy
 msgid "?contact has status:Has errors"
-msgstr "?kontakt har status:Ukjent"
+msgstr "?kontakt har status:Har feil"
 
 #: ../src/common/helpers.py:96
 msgid "?Subscription we already have:None"
@@ -795,7 +792,7 @@ msgstr "En GTK jabber klient"
 
 #: ../src/dialogs.py:416
 msgid "translator-credits"
-msgstr "oversetter-informasjon"
+msgstr "Stian B. Barmen <stian@barmen.nu>"
 
 #: ../src/dialogs.py:578
 #, python-format
@@ -1175,9 +1172,9 @@ msgid "If you close this tab, the message will be lost."
 msgstr "Dersom du lukke denne fanen, vil meldingen bli borte."
 
 #: ../src/gtkgui_helpers.py:61 ../src/gtkgui_helpers.py:75
-#, fuzzy, python-format
+#, python-format
 msgid "error: cannot open %s for reading"
-msgstr "feil: kan ikke åpne %s for lesing \n"
+msgstr "feil: kan ikke åpne %s for lesing"
 
 #: ../src/history_window.py:138
 #, python-format
@@ -1781,7 +1778,7 @@ msgstr "Klikk for å forandre kontoens passord"
 
 #: ../src/gtkgui.glade.h:80
 msgid "Click to get contact's extended information"
-msgstr "Vlkg for å få kontaktens utvidede informasjon"
+msgstr "Velg for å få kontaktens utvidede informasjon"
 
 #: ../src/gtkgui.glade.h:81
 msgid "Click to see features like on jabber servers"
@@ -1937,7 +1934,7 @@ msgstr "Format: YYYY-MM-DD"
 msgid "From:"
 msgstr "Fra:"
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:121 ../src/tooltips.py:214
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -2747,7 +2744,7 @@ msgstr "_Compact Utseende"
 msgid "_Compact View    Alt+C"
 msgstr "_Kompakt Utseende    Alt+C"
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:313 ../src/filetransfers_window.py:538
 msgid "_Continue"
 msgstr "_Fortsett"
 
@@ -2880,7 +2877,7 @@ msgstr "_Beboer Handling"
 msgid "_Online Users"
 msgstr "_Online Brukere"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:348 ../src/filetransfers_window.py:128
 msgid "_Open Containing Folder"
 msgstr "_Åpne Foreldre Katalog"
 
@@ -3039,6 +3036,183 @@ msgstr "fil overførings liste"
 #: ../src/gtkgui.glade.h:388
 msgid "minutes"
 msgstr "minutter"
+
+#: ../src/tooltips.py:210
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr "Gajim - %s uleste meldinger"
+
+#: ../src/tooltips.py:212
+msgid "Gajim - 1 unread message"
+msgstr "Gajim - 1 ulest melding"
+
+#: ../src/tooltips.py:232 ../src/tooltips.py:234
+#, python-format
+msgid "Gajim - %s"
+msgstr "Gajim - %s"
+
+#: ../src/tooltips.py:283 ../src/tooltips.py:344
+#: ../src/filetransfers_window.py:350
+msgid "Name: "
+msgstr "Navn: "
+
+#: ../src/tooltips.py:285
+msgid "Subscription: "
+msgstr "Abbonement: "
+
+#: ../src/tooltips.py:295
+msgid "OpenPGP: "
+msgstr "OpenPGP: "
+
+#: ../src/tooltips.py:306 ../src/tooltips.py:319 ../src/tooltips.py:379
+msgid "Status: "
+msgstr "Status: "
+
+#: ../src/tooltips.py:315
+msgid "Resource: "
+msgstr "Ressurs: "
+
+#: ../src/tooltips.py:350
+msgid "Type: "
+msgstr "Type: "
+
+#: ../src/tooltips.py:352
+msgid "Download"
+msgstr "Last ned"
+
+#: ../src/tooltips.py:354
+msgid "Upload"
+msgstr "Last opp"
+
+#: ../src/tooltips.py:356 ../src/filetransfers_window.py:352
+msgid "Sender: "
+msgstr "Avsender: "
+
+#: ../src/tooltips.py:361 ../src/filetransfers_window.py:354
+msgid "Recipient: "
+msgstr "Mottaker: "
+
+#: ../src/tooltips.py:372
+msgid "Size: "
+msgstr "Størrelse: "
+
+#: ../src/tooltips.py:374
+msgid "Transferred: "
+msgstr "Overført: "
+
+#: ../src/tooltips.py:382 ../src/tooltips.py:402
+msgid "not started"
+msgstr "ikke startet"
+
+#: ../src/tooltips.py:386
+msgid "stopped"
+msgstr "stoppet"
+
+#: ../src/tooltips.py:388 ../src/tooltips.py:391
+msgid "completed"
+msgstr "komplett"
+
+#: ../src/tooltips.py:395
+msgid "paused"
+msgstr "pauset"
+
+#: ../src/tooltips.py:398
+msgid "stalled"
+msgstr "henger"
+
+#: ../src/tooltips.py:400
+msgid "transferring"
+msgstr "overfører"
+
+#: ../src/filetransfers_window.py:73
+msgid "File"
+msgstr "Fil"
+
+#: ../src/filetransfers_window.py:87
+msgid "Progress"
+msgstr "Fremdrift"
+
+#: ../src/filetransfers_window.py:117 ../src/filetransfers_window.py:162
+#, python-format
+msgid "Filename: %s"
+msgstr "Filnavn: %s"
+
+#: ../src/filetransfers_window.py:119 ../src/filetransfers_window.py:207
+#, python-format
+msgid "Size: %s"
+msgstr "Størrelse: %s"
+
+#: ../src/filetransfers_window.py:121 ../src/filetransfers_window.py:164
+#, python-format
+msgid "Sender: %s"
+msgstr "Sender: %s"
+
+#: ../src/filetransfers_window.py:125
+#, python-format
+msgid "Saved in: %s"
+msgstr "Lagret i: %s"
+
+#: ../src/filetransfers_window.py:127
+msgid "File transfer completed"
+msgstr "Fil overføring komplett"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:155
+msgid "File transfer canceled"
+msgstr "Fil overføring avbrutt"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:156
+msgid "Connection with peer cannot be established."
+msgstr "Tilkoblingen kan ikke opprettes."
+
+#: ../src/filetransfers_window.py:166
+msgid "File transfer stopped by the contact of the other side"
+msgstr "Fil overføringen ble stoppet av kontakten på den andre siden"
+
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/filetransfers_window.py:173
+msgid "Choose File to Send..."
+msgstr "Velg Fil for Sending..."
+
+#: ../src/filetransfers_window.py:176
+msgid "Send"
+msgstr "Send"
+
+#: ../src/filetransfers_window.py:204
+#, python-format
+msgid "File: %s"
+msgstr "Fil: %s"
+
+#: ../src/filetransfers_window.py:210
+#, python-format
+msgid "Type: %s"
+msgstr "Type: %s"
+
+#: ../src/filetransfers_window.py:213
+#, python-format
+msgid "Description: %s"
+msgstr "Beskrivelse: %s"
+
+#: ../src/filetransfers_window.py:215
+#, python-format
+msgid "%s wants to send you a file:"
+msgstr "%s ønsker å sende deg en fil:"
+
+#: ../src/filetransfers_window.py:218
+msgid "Save File as..."
+msgstr "Lagre Fil som..."
+
+#: ../src/filetransfers_window.py:232
+msgid "This file already exists"
+msgstr "Denne filen finnes fra før"
+
+#: ../src/filetransfers_window.py:233
+msgid "Would you like to overwrite it?"
+msgstr "Ønsker du å overskrive den?"
+
+#: ../src/filetransfers_window.py:526
+msgid "Pause"
+msgstr "Pause"
 
 #: ../scripts/gajim-remote.py:70
 msgid "show a help on specific command"
@@ -3233,129 +3407,6 @@ msgid ""
 msgstr ""
 "Argumenteet \"%s\" er ikke spesifisert. \n"
 "Skriv \"%s hjelp %s\" for mer informasjon"
-
-#~ msgid "Gajim - %s unread messages"
-#~ msgstr "Gajim - %s uleste meldinger"
-
-#~ msgid "Gajim - 1 unread message"
-#~ msgstr "Gajim - 1 ulest melding"
-
-#~ msgid "Gajim - %s"
-#~ msgstr "Gajim - %s"
-
-#~ msgid "Name: "
-#~ msgstr "Navn: "
-
-#~ msgid "Type: "
-#~ msgstr "Type: "
-
-#~ msgid "Download"
-#~ msgstr "Last ned"
-
-#~ msgid "Upload"
-#~ msgstr "Last opp"
-
-#~ msgid "Sender: "
-#~ msgstr "Avsender: "
-
-#~ msgid "Recipient: "
-#~ msgstr "Mottaker: "
-
-#~ msgid "Size: "
-#~ msgstr "Størrelse: "
-
-#~ msgid "Transferred: "
-#~ msgstr "Overført: "
-
-#~ msgid "Status: "
-#~ msgstr "Status: "
-
-#~ msgid "not started"
-#~ msgstr "ikke startet"
-
-#~ msgid "stopped"
-#~ msgstr "stoppet"
-
-#~ msgid "completed"
-#~ msgstr "komplett"
-
-#~ msgid "paused"
-#~ msgstr "pauset"
-
-#~ msgid "stalled"
-#~ msgstr "henger"
-
-#~ msgid "transferring"
-#~ msgstr "overfører"
-
-#~ msgid "Subscription: "
-#~ msgstr "Abbonement: "
-
-#~ msgid "OpenPGP: "
-#~ msgstr "OpenPGP: "
-
-#~ msgid "Resource: "
-#~ msgstr "Ressurs: "
-
-#~ msgid "File"
-#~ msgstr "Fil"
-
-#~ msgid "Progress"
-#~ msgstr "Fremdrift"
-
-#~ msgid "Filename: %s"
-#~ msgstr "Filnavn: %s"
-
-#~ msgid "Size: %s"
-#~ msgstr "Størrelse: %s"
-
-#~ msgid "Sender: %s"
-#~ msgstr "Sender: %s"
-
-#~ msgid "Saved in: %s"
-#~ msgstr "Lagret i: %s"
-
-#~ msgid "File transfer completed"
-#~ msgstr "Fil overføring komplett"
-
-#~ msgid "File transfer canceled"
-#~ msgstr "Fil overføring avbrutt"
-
-#~ msgid "Connection with peer cannot be established."
-#~ msgstr "Tilkoblingen kan ikke opprettes."
-
-#~ msgid "File transfer stopped by the contact of the other side"
-#~ msgstr "Fil overføringen ble stoppet av kontakten på den andre siden"
-
-#~ msgid "Choose File to Send..."
-#~ msgstr "Velg Fil for Sending..."
-
-#~ msgid "Send"
-#~ msgstr "Send"
-
-#~ msgid "File: %s"
-#~ msgstr "Fil: %s"
-
-#~ msgid "Type: %s"
-#~ msgstr "Type: %s"
-
-#~ msgid "Description: %s"
-#~ msgstr "Beskrivelse: %s"
-
-#~ msgid "%s wants to send you a file:"
-#~ msgstr "%s ønsker å sende deg en fil:"
-
-#~ msgid "Save File as..."
-#~ msgstr "Lagre Fil som..."
-
-#~ msgid "This file already exists"
-#~ msgstr "Denne filen finnes fra før"
-
-#~ msgid "Would you like to overwrite it?"
-#~ msgstr "Ønsker du å overskrive den?"
-
-#~ msgid "Pause"
-#~ msgstr "Pause"
 
 #~ msgid "Unknown"
 #~ msgstr "Ukjent"

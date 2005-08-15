@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-15 13:20+0300\n"
+"POT-Creation-Date: 2005-08-15 14:28+0300\n"
 "PO-Revision-Date: 2005-06-01 18:52+0300\n"
 "Last-Translator: Yavor Doganov <yavor@doganov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -2020,7 +2020,7 @@ msgstr ""
 msgid "From:"
 msgstr "Стая:"
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:121 ../src/tooltips.py:214
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -2855,7 +2855,7 @@ msgstr ""
 msgid "_Compact View    Alt+C"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:313 ../src/filetransfers_window.py:538
 #, fuzzy
 msgid "_Continue"
 msgstr "Свъзване"
@@ -2998,7 +2998,7 @@ msgstr "_Действия"
 msgid "_Online Users"
 msgstr "_Свързан"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:348 ../src/filetransfers_window.py:128
 #, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Отваряне на връзката в браузър"
@@ -3174,6 +3174,202 @@ msgstr "Използване на _набор икони на транспорт
 #: ../src/gtkgui.glade.h:388
 msgid "minutes"
 msgstr "минути"
+
+#: ../src/tooltips.py:210
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr "Gajim - %s непрочетени съобщения"
+
+#: ../src/tooltips.py:212
+msgid "Gajim - 1 unread message"
+msgstr "Gajim - 1 непрочетено съобщение"
+
+#: ../src/tooltips.py:232 ../src/tooltips.py:234
+#, fuzzy, python-format
+msgid "Gajim - %s"
+msgstr "Gajim"
+
+#: ../src/tooltips.py:283 ../src/tooltips.py:344
+#: ../src/filetransfers_window.py:350
+#, fuzzy
+msgid "Name: "
+msgstr "_Име: "
+
+#: ../src/tooltips.py:285
+#, fuzzy
+msgid "Subscription: "
+msgstr "Записване:"
+
+#: ../src/tooltips.py:295
+#, fuzzy
+msgid "OpenPGP: "
+msgstr "<b>OpenPGP</b>"
+
+#: ../src/tooltips.py:306 ../src/tooltips.py:319 ../src/tooltips.py:379
+#, fuzzy
+msgid "Status: "
+msgstr "Състояние:"
+
+#: ../src/tooltips.py:315
+#, fuzzy
+msgid "Resource: "
+msgstr "Ре_сурс: "
+
+#: ../src/tooltips.py:350
+#, fuzzy
+msgid "Type: "
+msgstr "Тип"
+
+#: ../src/tooltips.py:352
+#, fuzzy
+msgid "Download"
+msgstr "Отваряне на страницата за изтегляне"
+
+#: ../src/tooltips.py:354
+msgid "Upload"
+msgstr ""
+
+#: ../src/tooltips.py:356 ../src/filetransfers_window.py:352
+#, fuzzy
+msgid "Sender: "
+msgstr "_Отказване"
+
+#: ../src/tooltips.py:361 ../src/filetransfers_window.py:354
+#, fuzzy
+msgid "Recipient: "
+msgstr "Скоро посетени:"
+
+#: ../src/tooltips.py:372
+#, fuzzy
+msgid "Size: "
+msgstr "_Отказване"
+
+#: ../src/tooltips.py:374
+#, fuzzy
+msgid "Transferred: "
+msgstr "Използване на _набор икони на транспортите"
+
+#: ../src/tooltips.py:382 ../src/tooltips.py:402
+msgid "not started"
+msgstr ""
+
+#: ../src/tooltips.py:386
+msgid "stopped"
+msgstr ""
+
+#: ../src/tooltips.py:388 ../src/tooltips.py:391
+msgid "completed"
+msgstr ""
+
+#: ../src/tooltips.py:395
+#, fuzzy
+msgid "paused"
+msgstr "Стойност"
+
+#: ../src/tooltips.py:398
+msgid "stalled"
+msgstr ""
+
+#: ../src/tooltips.py:400
+#, fuzzy
+msgid "transferring"
+msgstr "Използване на _набор икони на транспортите"
+
+#: ../src/filetransfers_window.py:73
+#, fuzzy
+msgid "File"
+msgstr "Филтър:"
+
+#: ../src/filetransfers_window.py:87
+msgid "Progress"
+msgstr ""
+
+#: ../src/filetransfers_window.py:117 ../src/filetransfers_window.py:162
+#, fuzzy, python-format
+msgid "Filename: %s"
+msgstr "_Име: "
+
+#: ../src/filetransfers_window.py:119 ../src/filetransfers_window.py:207
+#, fuzzy, python-format
+msgid "Size: %s"
+msgstr "_Отказване"
+
+#: ../src/filetransfers_window.py:121 ../src/filetransfers_window.py:164
+#, fuzzy, python-format
+msgid "Sender: %s"
+msgstr "_Отказване"
+
+#: ../src/filetransfers_window.py:125
+#, fuzzy, python-format
+msgid "Saved in: %s"
+msgstr "_Отказване"
+
+#: ../src/filetransfers_window.py:127
+#, fuzzy
+msgid "File transfer completed"
+msgstr "Използване на _набор икони на транспортите"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:155
+#, fuzzy
+msgid "File transfer canceled"
+msgstr "Използване на _набор икони на транспортите"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:156
+msgid "Connection with peer cannot be established."
+msgstr ""
+
+#: ../src/filetransfers_window.py:166
+msgid "File transfer stopped by the contact of the other side"
+msgstr ""
+
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/filetransfers_window.py:173
+#, fuzzy
+msgid "Choose File to Send..."
+msgstr "Избор на _ключ"
+
+#: ../src/filetransfers_window.py:176
+#, fuzzy
+msgid "Send"
+msgstr "_Отказване"
+
+#: ../src/filetransfers_window.py:204
+#, fuzzy, python-format
+msgid "File: %s"
+msgstr "Филтър:"
+
+#: ../src/filetransfers_window.py:210
+#, fuzzy, python-format
+msgid "Type: %s"
+msgstr "Тип"
+
+#: ../src/filetransfers_window.py:213
+#, fuzzy, python-format
+msgid "Description: %s"
+msgstr "Записване:"
+
+#: ../src/filetransfers_window.py:215
+#, python-format
+msgid "%s wants to send you a file:"
+msgstr ""
+
+#: ../src/filetransfers_window.py:218
+msgid "Save File as..."
+msgstr ""
+
+#: ../src/filetransfers_window.py:232
+msgid "This file already exists"
+msgstr ""
+
+#: ../src/filetransfers_window.py:233
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+#: ../src/filetransfers_window.py:526
+#, fuzzy
+msgid "Pause"
+msgstr "Стойност"
 
 #: ../scripts/gajim-remote.py:70
 msgid "show a help on specific command"
@@ -3362,120 +3558,6 @@ msgid ""
 "Argument \"%s\" is not specified. \n"
 "Type \"%s help %s\" for more info"
 msgstr ""
-
-#~ msgid "Gajim - %s unread messages"
-#~ msgstr "Gajim - %s непрочетени съобщения"
-
-#~ msgid "Gajim - 1 unread message"
-#~ msgstr "Gajim - 1 непрочетено съобщение"
-
-#, fuzzy
-#~ msgid "Gajim - %s"
-#~ msgstr "Gajim"
-
-#, fuzzy
-#~ msgid "Name: "
-#~ msgstr "_Име: "
-
-#, fuzzy
-#~ msgid "Type: "
-#~ msgstr "Тип"
-
-#, fuzzy
-#~ msgid "Download"
-#~ msgstr "Отваряне на страницата за изтегляне"
-
-#, fuzzy
-#~ msgid "Sender: "
-#~ msgstr "_Отказване"
-
-#, fuzzy
-#~ msgid "Recipient: "
-#~ msgstr "Скоро посетени:"
-
-#, fuzzy
-#~ msgid "Size: "
-#~ msgstr "_Отказване"
-
-#, fuzzy
-#~ msgid "Transferred: "
-#~ msgstr "Използване на _набор икони на транспортите"
-
-#, fuzzy
-#~ msgid "Status: "
-#~ msgstr "Състояние:"
-
-#, fuzzy
-#~ msgid "paused"
-#~ msgstr "Стойност"
-
-#, fuzzy
-#~ msgid "transferring"
-#~ msgstr "Използване на _набор икони на транспортите"
-
-#, fuzzy
-#~ msgid "Subscription: "
-#~ msgstr "Записване:"
-
-#, fuzzy
-#~ msgid "OpenPGP: "
-#~ msgstr "<b>OpenPGP</b>"
-
-#, fuzzy
-#~ msgid "Resource: "
-#~ msgstr "Ре_сурс: "
-
-#, fuzzy
-#~ msgid "File"
-#~ msgstr "Филтър:"
-
-#, fuzzy
-#~ msgid "Filename: %s"
-#~ msgstr "_Име: "
-
-#, fuzzy
-#~ msgid "Size: %s"
-#~ msgstr "_Отказване"
-
-#, fuzzy
-#~ msgid "Sender: %s"
-#~ msgstr "_Отказване"
-
-#, fuzzy
-#~ msgid "Saved in: %s"
-#~ msgstr "_Отказване"
-
-#, fuzzy
-#~ msgid "File transfer completed"
-#~ msgstr "Използване на _набор икони на транспортите"
-
-#, fuzzy
-#~ msgid "File transfer canceled"
-#~ msgstr "Използване на _набор икони на транспортите"
-
-#, fuzzy
-#~ msgid "Choose File to Send..."
-#~ msgstr "Избор на _ключ"
-
-#, fuzzy
-#~ msgid "Send"
-#~ msgstr "_Отказване"
-
-#, fuzzy
-#~ msgid "File: %s"
-#~ msgstr "Филтър:"
-
-#, fuzzy
-#~ msgid "Type: %s"
-#~ msgstr "Тип"
-
-#, fuzzy
-#~ msgid "Description: %s"
-#~ msgstr "Записване:"
-
-#, fuzzy
-#~ msgid "Pause"
-#~ msgstr "Стойност"
 
 #~ msgid "Has errors"
 #~ msgstr "Има грешки"

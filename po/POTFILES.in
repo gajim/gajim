@@ -27,4 +27,6 @@ src/systray.py
 src/tabbed_chat_window.py
 src/vcard.py
 src/gtkgui.glade.h
+src/tooltips.py
+src/filetransfers_window.py
 scripts/gajim-remote.py

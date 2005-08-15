@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-15 13:20+0300\n"
+"POT-Creation-Date: 2005-08-15 14:28+0300\n"
 "PO-Revision-Date: 2005-05-21 20:03+0100\n"
 "Last-Translator: Membris Khan <membriskhan@gmail.com>\n"
 "Language-Team: none\n"
@@ -2015,7 +2015,7 @@ msgstr ""
 msgid "From:"
 msgstr "Salón:"
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:121 ../src/tooltips.py:214
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -2855,7 +2855,7 @@ msgstr ""
 msgid "_Compact View    Alt+C"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:313 ../src/filetransfers_window.py:538
 #, fuzzy
 msgid "_Continue"
 msgstr "Conexión"
@@ -2998,7 +2998,7 @@ msgstr "_Acciones"
 msgid "_Online Users"
 msgstr "_Conectado"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:348 ../src/filetransfers_window.py:128
 #, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Abrir enlace en navegador"
@@ -3174,6 +3174,202 @@ msgstr "_Usar los iconos del transporte"
 #: ../src/gtkgui.glade.h:388
 msgid "minutes"
 msgstr "minutos"
+
+#: ../src/tooltips.py:210
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr "Gajim - %s mensajes sin leer"
+
+#: ../src/tooltips.py:212
+msgid "Gajim - 1 unread message"
+msgstr "Gajim - 1 mensaje sin leer"
+
+#: ../src/tooltips.py:232 ../src/tooltips.py:234
+#, fuzzy, python-format
+msgid "Gajim - %s"
+msgstr "Gajim"
+
+#: ../src/tooltips.py:283 ../src/tooltips.py:344
+#: ../src/filetransfers_window.py:350
+#, fuzzy
+msgid "Name: "
+msgstr "_Nombre: "
+
+#: ../src/tooltips.py:285
+#, fuzzy
+msgid "Subscription: "
+msgstr "Subscripción:"
+
+#: ../src/tooltips.py:295
+#, fuzzy
+msgid "OpenPGP: "
+msgstr "<b>OpenPGP</b>"
+
+#: ../src/tooltips.py:306 ../src/tooltips.py:319 ../src/tooltips.py:379
+#, fuzzy
+msgid "Status: "
+msgstr "Estado:"
+
+#: ../src/tooltips.py:315
+#, fuzzy
+msgid "Resource: "
+msgstr "Re_curso: "
+
+#: ../src/tooltips.py:350
+#, fuzzy
+msgid "Type: "
+msgstr "Tipo"
+
+#: ../src/tooltips.py:352
+#, fuzzy
+msgid "Download"
+msgstr "Abrir página de descarga"
+
+#: ../src/tooltips.py:354
+msgid "Upload"
+msgstr ""
+
+#: ../src/tooltips.py:356 ../src/filetransfers_window.py:352
+#, fuzzy
+msgid "Sender: "
+msgstr "_Denegar"
+
+#: ../src/tooltips.py:361 ../src/filetransfers_window.py:354
+#, fuzzy
+msgid "Recipient: "
+msgstr "Recientemente:"
+
+#: ../src/tooltips.py:372
+#, fuzzy
+msgid "Size: "
+msgstr "_Denegar"
+
+#: ../src/tooltips.py:374
+#, fuzzy
+msgid "Transferred: "
+msgstr "_Usar los iconos del transporte"
+
+#: ../src/tooltips.py:382 ../src/tooltips.py:402
+msgid "not started"
+msgstr ""
+
+#: ../src/tooltips.py:386
+msgid "stopped"
+msgstr ""
+
+#: ../src/tooltips.py:388 ../src/tooltips.py:391
+msgid "completed"
+msgstr ""
+
+#: ../src/tooltips.py:395
+#, fuzzy
+msgid "paused"
+msgstr "Valor"
+
+#: ../src/tooltips.py:398
+msgid "stalled"
+msgstr ""
+
+#: ../src/tooltips.py:400
+#, fuzzy
+msgid "transferring"
+msgstr "_Usar los iconos del transporte"
+
+#: ../src/filetransfers_window.py:73
+#, fuzzy
+msgid "File"
+msgstr "Filtro:"
+
+#: ../src/filetransfers_window.py:87
+msgid "Progress"
+msgstr ""
+
+#: ../src/filetransfers_window.py:117 ../src/filetransfers_window.py:162
+#, fuzzy, python-format
+msgid "Filename: %s"
+msgstr "_Nombre: "
+
+#: ../src/filetransfers_window.py:119 ../src/filetransfers_window.py:207
+#, fuzzy, python-format
+msgid "Size: %s"
+msgstr "_Denegar"
+
+#: ../src/filetransfers_window.py:121 ../src/filetransfers_window.py:164
+#, fuzzy, python-format
+msgid "Sender: %s"
+msgstr "_Denegar"
+
+#: ../src/filetransfers_window.py:125
+#, fuzzy, python-format
+msgid "Saved in: %s"
+msgstr "_Denegar"
+
+#: ../src/filetransfers_window.py:127
+#, fuzzy
+msgid "File transfer completed"
+msgstr "_Usar los iconos del transporte"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:155
+#, fuzzy
+msgid "File transfer canceled"
+msgstr "_Usar los iconos del transporte"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:156
+msgid "Connection with peer cannot be established."
+msgstr ""
+
+#: ../src/filetransfers_window.py:166
+msgid "File transfer stopped by the contact of the other side"
+msgstr ""
+
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/filetransfers_window.py:173
+#, fuzzy
+msgid "Choose File to Send..."
+msgstr "Elegir _clave"
+
+#: ../src/filetransfers_window.py:176
+#, fuzzy
+msgid "Send"
+msgstr "_Denegar"
+
+#: ../src/filetransfers_window.py:204
+#, fuzzy, python-format
+msgid "File: %s"
+msgstr "Filtro:"
+
+#: ../src/filetransfers_window.py:210
+#, fuzzy, python-format
+msgid "Type: %s"
+msgstr "Tipo"
+
+#: ../src/filetransfers_window.py:213
+#, fuzzy, python-format
+msgid "Description: %s"
+msgstr "Subscripción:"
+
+#: ../src/filetransfers_window.py:215
+#, python-format
+msgid "%s wants to send you a file:"
+msgstr ""
+
+#: ../src/filetransfers_window.py:218
+msgid "Save File as..."
+msgstr ""
+
+#: ../src/filetransfers_window.py:232
+msgid "This file already exists"
+msgstr ""
+
+#: ../src/filetransfers_window.py:233
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+#: ../src/filetransfers_window.py:526
+#, fuzzy
+msgid "Pause"
+msgstr "Valor"
 
 #: ../scripts/gajim-remote.py:70
 msgid "show a help on specific command"
@@ -3362,120 +3558,6 @@ msgid ""
 "Argument \"%s\" is not specified. \n"
 "Type \"%s help %s\" for more info"
 msgstr ""
-
-#~ msgid "Gajim - %s unread messages"
-#~ msgstr "Gajim - %s mensajes sin leer"
-
-#~ msgid "Gajim - 1 unread message"
-#~ msgstr "Gajim - 1 mensaje sin leer"
-
-#, fuzzy
-#~ msgid "Gajim - %s"
-#~ msgstr "Gajim"
-
-#, fuzzy
-#~ msgid "Name: "
-#~ msgstr "_Nombre: "
-
-#, fuzzy
-#~ msgid "Type: "
-#~ msgstr "Tipo"
-
-#, fuzzy
-#~ msgid "Download"
-#~ msgstr "Abrir página de descarga"
-
-#, fuzzy
-#~ msgid "Sender: "
-#~ msgstr "_Denegar"
-
-#, fuzzy
-#~ msgid "Recipient: "
-#~ msgstr "Recientemente:"
-
-#, fuzzy
-#~ msgid "Size: "
-#~ msgstr "_Denegar"
-
-#, fuzzy
-#~ msgid "Transferred: "
-#~ msgstr "_Usar los iconos del transporte"
-
-#, fuzzy
-#~ msgid "Status: "
-#~ msgstr "Estado:"
-
-#, fuzzy
-#~ msgid "paused"
-#~ msgstr "Valor"
-
-#, fuzzy
-#~ msgid "transferring"
-#~ msgstr "_Usar los iconos del transporte"
-
-#, fuzzy
-#~ msgid "Subscription: "
-#~ msgstr "Subscripción:"
-
-#, fuzzy
-#~ msgid "OpenPGP: "
-#~ msgstr "<b>OpenPGP</b>"
-
-#, fuzzy
-#~ msgid "Resource: "
-#~ msgstr "Re_curso: "
-
-#, fuzzy
-#~ msgid "File"
-#~ msgstr "Filtro:"
-
-#, fuzzy
-#~ msgid "Filename: %s"
-#~ msgstr "_Nombre: "
-
-#, fuzzy
-#~ msgid "Size: %s"
-#~ msgstr "_Denegar"
-
-#, fuzzy
-#~ msgid "Sender: %s"
-#~ msgstr "_Denegar"
-
-#, fuzzy
-#~ msgid "Saved in: %s"
-#~ msgstr "_Denegar"
-
-#, fuzzy
-#~ msgid "File transfer completed"
-#~ msgstr "_Usar los iconos del transporte"
-
-#, fuzzy
-#~ msgid "File transfer canceled"
-#~ msgstr "_Usar los iconos del transporte"
-
-#, fuzzy
-#~ msgid "Choose File to Send..."
-#~ msgstr "Elegir _clave"
-
-#, fuzzy
-#~ msgid "Send"
-#~ msgstr "_Denegar"
-
-#, fuzzy
-#~ msgid "File: %s"
-#~ msgstr "Filtro:"
-
-#, fuzzy
-#~ msgid "Type: %s"
-#~ msgstr "Tipo"
-
-#, fuzzy
-#~ msgid "Description: %s"
-#~ msgstr "Subscripción:"
-
-#, fuzzy
-#~ msgid "Pause"
-#~ msgstr "Valor"
 
 #~ msgid "Has errors"
 #~ msgstr "Tiene errores"

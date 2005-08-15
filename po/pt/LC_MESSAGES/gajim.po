@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-15 13:20+0300\n"
+"POT-Creation-Date: 2005-08-15 14:28+0300\n"
 "PO-Revision-Date: 2005-03-22 17:47-0300\n"
 "Last-Translator: Junix <junix@infolink.com.br>\n"
 "Language-Team: none\n"
@@ -2009,7 +2009,7 @@ msgstr ""
 msgid "From:"
 msgstr "Sala:"
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:121 ../src/tooltips.py:214
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -2846,7 +2846,7 @@ msgstr ""
 msgid "_Compact View    Alt+C"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:313 ../src/filetransfers_window.py:538
 #, fuzzy
 msgid "_Continue"
 msgstr "Conectando"
@@ -2989,7 +2989,7 @@ msgstr "_Ações"
 msgid "_Online Users"
 msgstr "_Online"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:348 ../src/filetransfers_window.py:128
 #, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Abrir link"
@@ -3166,6 +3166,202 @@ msgstr "_Mensagem de status:"
 #: ../src/gtkgui.glade.h:388
 msgid "minutes"
 msgstr "minutos"
+
+#: ../src/tooltips.py:210
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr "Gajim - %s mensagens não lidas"
+
+#: ../src/tooltips.py:212
+msgid "Gajim - 1 unread message"
+msgstr "Gajim - 1 mensagem não lida"
+
+#: ../src/tooltips.py:232 ../src/tooltips.py:234
+#, fuzzy, python-format
+msgid "Gajim - %s"
+msgstr "Gajim"
+
+#: ../src/tooltips.py:283 ../src/tooltips.py:344
+#: ../src/filetransfers_window.py:350
+#, fuzzy
+msgid "Name: "
+msgstr "_Nome: "
+
+#: ../src/tooltips.py:285
+#, fuzzy
+msgid "Subscription: "
+msgstr "Inscrição:"
+
+#: ../src/tooltips.py:295
+#, fuzzy
+msgid "OpenPGP: "
+msgstr "<b>OpenPGP</b>"
+
+#: ../src/tooltips.py:306 ../src/tooltips.py:319 ../src/tooltips.py:379
+#, fuzzy
+msgid "Status: "
+msgstr "Status:"
+
+#: ../src/tooltips.py:315
+#, fuzzy
+msgid "Resource: "
+msgstr "_Recurso: "
+
+#: ../src/tooltips.py:350
+#, fuzzy
+msgid "Type: "
+msgstr "Tipo"
+
+#: ../src/tooltips.py:352
+#, fuzzy
+msgid "Download"
+msgstr "Abrir Página para Download"
+
+#: ../src/tooltips.py:354
+msgid "Upload"
+msgstr ""
+
+#: ../src/tooltips.py:356 ../src/filetransfers_window.py:352
+#, fuzzy
+msgid "Sender: "
+msgstr "_Negar"
+
+#: ../src/tooltips.py:361 ../src/filetransfers_window.py:354
+#, fuzzy
+msgid "Recipient: "
+msgstr "Recentemente:"
+
+#: ../src/tooltips.py:372
+#, fuzzy
+msgid "Size: "
+msgstr "_Negar"
+
+#: ../src/tooltips.py:374
+#, fuzzy
+msgid "Transferred: "
+msgstr "_Mensagem de status:"
+
+#: ../src/tooltips.py:382 ../src/tooltips.py:402
+msgid "not started"
+msgstr ""
+
+#: ../src/tooltips.py:386
+msgid "stopped"
+msgstr ""
+
+#: ../src/tooltips.py:388 ../src/tooltips.py:391
+msgid "completed"
+msgstr ""
+
+#: ../src/tooltips.py:395
+#, fuzzy
+msgid "paused"
+msgstr "Valor"
+
+#: ../src/tooltips.py:398
+msgid "stalled"
+msgstr ""
+
+#: ../src/tooltips.py:400
+#, fuzzy
+msgid "transferring"
+msgstr "_Mensagem de status:"
+
+#: ../src/filetransfers_window.py:73
+#, fuzzy
+msgid "File"
+msgstr "Filtro:"
+
+#: ../src/filetransfers_window.py:87
+msgid "Progress"
+msgstr ""
+
+#: ../src/filetransfers_window.py:117 ../src/filetransfers_window.py:162
+#, fuzzy, python-format
+msgid "Filename: %s"
+msgstr "_Nome: "
+
+#: ../src/filetransfers_window.py:119 ../src/filetransfers_window.py:207
+#, fuzzy, python-format
+msgid "Size: %s"
+msgstr "_Negar"
+
+#: ../src/filetransfers_window.py:121 ../src/filetransfers_window.py:164
+#, fuzzy, python-format
+msgid "Sender: %s"
+msgstr "_Negar"
+
+#: ../src/filetransfers_window.py:125
+#, fuzzy, python-format
+msgid "Saved in: %s"
+msgstr "_Negar"
+
+#: ../src/filetransfers_window.py:127
+#, fuzzy
+msgid "File transfer completed"
+msgstr "_Mensagem de status:"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:155
+#, fuzzy
+msgid "File transfer canceled"
+msgstr "_Mensagem de status:"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:156
+msgid "Connection with peer cannot be established."
+msgstr ""
+
+#: ../src/filetransfers_window.py:166
+msgid "File transfer stopped by the contact of the other side"
+msgstr ""
+
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/filetransfers_window.py:173
+#, fuzzy
+msgid "Choose File to Send..."
+msgstr "_Escolha chave"
+
+#: ../src/filetransfers_window.py:176
+#, fuzzy
+msgid "Send"
+msgstr "_Negar"
+
+#: ../src/filetransfers_window.py:204
+#, fuzzy, python-format
+msgid "File: %s"
+msgstr "Filtro:"
+
+#: ../src/filetransfers_window.py:210
+#, fuzzy, python-format
+msgid "Type: %s"
+msgstr "Tipo"
+
+#: ../src/filetransfers_window.py:213
+#, fuzzy, python-format
+msgid "Description: %s"
+msgstr "Inscrição:"
+
+#: ../src/filetransfers_window.py:215
+#, python-format
+msgid "%s wants to send you a file:"
+msgstr ""
+
+#: ../src/filetransfers_window.py:218
+msgid "Save File as..."
+msgstr ""
+
+#: ../src/filetransfers_window.py:232
+msgid "This file already exists"
+msgstr ""
+
+#: ../src/filetransfers_window.py:233
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+#: ../src/filetransfers_window.py:526
+#, fuzzy
+msgid "Pause"
+msgstr "Valor"
 
 #: ../scripts/gajim-remote.py:70
 msgid "show a help on specific command"
@@ -3354,120 +3550,6 @@ msgid ""
 "Argument \"%s\" is not specified. \n"
 "Type \"%s help %s\" for more info"
 msgstr ""
-
-#~ msgid "Gajim - %s unread messages"
-#~ msgstr "Gajim - %s mensagens não lidas"
-
-#~ msgid "Gajim - 1 unread message"
-#~ msgstr "Gajim - 1 mensagem não lida"
-
-#, fuzzy
-#~ msgid "Gajim - %s"
-#~ msgstr "Gajim"
-
-#, fuzzy
-#~ msgid "Name: "
-#~ msgstr "_Nome: "
-
-#, fuzzy
-#~ msgid "Type: "
-#~ msgstr "Tipo"
-
-#, fuzzy
-#~ msgid "Download"
-#~ msgstr "Abrir Página para Download"
-
-#, fuzzy
-#~ msgid "Sender: "
-#~ msgstr "_Negar"
-
-#, fuzzy
-#~ msgid "Recipient: "
-#~ msgstr "Recentemente:"
-
-#, fuzzy
-#~ msgid "Size: "
-#~ msgstr "_Negar"
-
-#, fuzzy
-#~ msgid "Transferred: "
-#~ msgstr "_Mensagem de status:"
-
-#, fuzzy
-#~ msgid "Status: "
-#~ msgstr "Status:"
-
-#, fuzzy
-#~ msgid "paused"
-#~ msgstr "Valor"
-
-#, fuzzy
-#~ msgid "transferring"
-#~ msgstr "_Mensagem de status:"
-
-#, fuzzy
-#~ msgid "Subscription: "
-#~ msgstr "Inscrição:"
-
-#, fuzzy
-#~ msgid "OpenPGP: "
-#~ msgstr "<b>OpenPGP</b>"
-
-#, fuzzy
-#~ msgid "Resource: "
-#~ msgstr "_Recurso: "
-
-#, fuzzy
-#~ msgid "File"
-#~ msgstr "Filtro:"
-
-#, fuzzy
-#~ msgid "Filename: %s"
-#~ msgstr "_Nome: "
-
-#, fuzzy
-#~ msgid "Size: %s"
-#~ msgstr "_Negar"
-
-#, fuzzy
-#~ msgid "Sender: %s"
-#~ msgstr "_Negar"
-
-#, fuzzy
-#~ msgid "Saved in: %s"
-#~ msgstr "_Negar"
-
-#, fuzzy
-#~ msgid "File transfer completed"
-#~ msgstr "_Mensagem de status:"
-
-#, fuzzy
-#~ msgid "File transfer canceled"
-#~ msgstr "_Mensagem de status:"
-
-#, fuzzy
-#~ msgid "Choose File to Send..."
-#~ msgstr "_Escolha chave"
-
-#, fuzzy
-#~ msgid "Send"
-#~ msgstr "_Negar"
-
-#, fuzzy
-#~ msgid "File: %s"
-#~ msgstr "Filtro:"
-
-#, fuzzy
-#~ msgid "Type: %s"
-#~ msgstr "Tipo"
-
-#, fuzzy
-#~ msgid "Description: %s"
-#~ msgstr "Inscrição:"
-
-#, fuzzy
-#~ msgid "Pause"
-#~ msgstr "Valor"
 
 #~ msgid "Has errors"
 #~ msgstr "Com erros"

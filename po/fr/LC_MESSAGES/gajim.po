@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-15 13:20+0300\n"
+"POT-Creation-Date: 2005-08-15 14:28+0300\n"
 "PO-Revision-Date: 2005-06-01 20:37+0200\n"
 "Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
 "Language-Team:  none\n"
@@ -1969,7 +1969,7 @@ msgstr "Format : AAAA-MM-JJ"
 msgid "From:"
 msgstr "De :"
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:121 ../src/tooltips.py:214
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -2799,7 +2799,7 @@ msgstr "Vue _Compacte"
 msgid "_Compact View    Alt+C"
 msgstr "Vue _Compacte    Alt+C"
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:313 ../src/filetransfers_window.py:538
 msgid "_Continue"
 msgstr "_Continuer"
 
@@ -2932,7 +2932,7 @@ msgstr "_Pouvoirs du contact"
 msgid "_Online Users"
 msgstr "Utilisateurs En _Ligne"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:348 ../src/filetransfers_window.py:128
 #, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Ouvrir le répertoire de destination"
@@ -3092,6 +3092,185 @@ msgstr "liste des transferts de fichier"
 #: ../src/gtkgui.glade.h:388
 msgid "minutes"
 msgstr "minutes"
+
+#: ../src/tooltips.py:210
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr "Gajim - %s messages non-lus"
+
+#: ../src/tooltips.py:212
+msgid "Gajim - 1 unread message"
+msgstr "Gajim - 1 message non-lu"
+
+#: ../src/tooltips.py:232 ../src/tooltips.py:234
+#, python-format
+msgid "Gajim - %s"
+msgstr "Gajim - %s"
+
+#: ../src/tooltips.py:283 ../src/tooltips.py:344
+#: ../src/filetransfers_window.py:350
+msgid "Name: "
+msgstr "Nom : "
+
+#: ../src/tooltips.py:285
+msgid "Subscription: "
+msgstr "Inscription : "
+
+#: ../src/tooltips.py:295
+msgid "OpenPGP: "
+msgstr "OpenPGP : "
+
+#: ../src/tooltips.py:306 ../src/tooltips.py:319 ../src/tooltips.py:379
+msgid "Status: "
+msgstr "État : "
+
+#: ../src/tooltips.py:315
+msgid "Resource: "
+msgstr "Ressource : "
+
+#: ../src/tooltips.py:350
+msgid "Type: "
+msgstr "Type : "
+
+#: ../src/tooltips.py:352
+msgid "Download"
+msgstr "Télécharger"
+
+#: ../src/tooltips.py:354
+msgid "Upload"
+msgstr "Envoyer"
+
+#: ../src/tooltips.py:356 ../src/filetransfers_window.py:352
+msgid "Sender: "
+msgstr "Expéditeur : "
+
+#: ../src/tooltips.py:361 ../src/filetransfers_window.py:354
+msgid "Recipient: "
+msgstr "Destinataire : "
+
+#: ../src/tooltips.py:372
+msgid "Size: "
+msgstr "Taille : "
+
+#: ../src/tooltips.py:374
+#, fuzzy
+msgid "Transferred: "
+msgstr "Transféré : "
+
+#: ../src/tooltips.py:382 ../src/tooltips.py:402
+msgid "not started"
+msgstr "non commencé"
+
+#: ../src/tooltips.py:386
+msgid "stopped"
+msgstr "arrêté"
+
+#: ../src/tooltips.py:388 ../src/tooltips.py:391
+msgid "completed"
+msgstr "terminé"
+
+#: ../src/tooltips.py:395
+msgid "paused"
+msgstr "pause"
+
+#: ../src/tooltips.py:398
+msgid "stalled"
+msgstr "calé"
+
+#: ../src/tooltips.py:400
+#, fuzzy
+msgid "transferring"
+msgstr "en train de transférer"
+
+#: ../src/filetransfers_window.py:73
+msgid "File"
+msgstr "Fichier"
+
+#: ../src/filetransfers_window.py:87
+msgid "Progress"
+msgstr "Progression"
+
+#: ../src/filetransfers_window.py:117 ../src/filetransfers_window.py:162
+#, python-format
+msgid "Filename: %s"
+msgstr "Nom du Fichier : %s"
+
+#: ../src/filetransfers_window.py:119 ../src/filetransfers_window.py:207
+#, python-format
+msgid "Size: %s"
+msgstr "Taille : %s"
+
+#: ../src/filetransfers_window.py:121 ../src/filetransfers_window.py:164
+#, python-format
+msgid "Sender: %s"
+msgstr "Expéditeur : %s"
+
+#: ../src/filetransfers_window.py:125
+#, fuzzy, python-format
+msgid "Saved in: %s"
+msgstr "Expéditeur : %s"
+
+#: ../src/filetransfers_window.py:127
+msgid "File transfer completed"
+msgstr "Transfert de fichier terminé"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:155
+msgid "File transfer canceled"
+msgstr "Transfert de fichier annulé"
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:156
+msgid "Connection with peer cannot be established."
+msgstr "La connexion avec le contact ne peut être établi."
+
+#: ../src/filetransfers_window.py:166
+msgid "File transfer stopped by the contact of the other side"
+msgstr "Transfert de fichier arrêté par le contact de l'autre coté"
+
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/filetransfers_window.py:173
+msgid "Choose File to Send..."
+msgstr "Choisissez un Fichier à Envoyer..."
+
+#: ../src/filetransfers_window.py:176
+msgid "Send"
+msgstr "Envoyer"
+
+#: ../src/filetransfers_window.py:204
+#, python-format
+msgid "File: %s"
+msgstr "Fichier : %s"
+
+#: ../src/filetransfers_window.py:210
+#, python-format
+msgid "Type: %s"
+msgstr "Type : %s"
+
+#: ../src/filetransfers_window.py:213
+#, python-format
+msgid "Description: %s"
+msgstr "Description : %s"
+
+#: ../src/filetransfers_window.py:215
+#, python-format
+msgid "%s wants to send you a file:"
+msgstr "%s souhaite vous envoyer un fichier :"
+
+#: ../src/filetransfers_window.py:218
+msgid "Save File as..."
+msgstr "Enregistrer le Fichier sous..."
+
+#: ../src/filetransfers_window.py:232
+msgid "This file already exists"
+msgstr "Ce fichier existe déjà"
+
+#: ../src/filetransfers_window.py:233
+msgid "Would you like to overwrite it?"
+msgstr "Voulez-vous l'écraser ?"
+
+#: ../src/filetransfers_window.py:526
+msgid "Pause"
+msgstr "Pause"
 
 #: ../scripts/gajim-remote.py:70
 msgid "show a help on specific command"
@@ -3288,132 +3467,6 @@ msgid ""
 msgstr ""
 "L'argument \"%s\" n'est pas précisé. \n"
 "Tappez \"%s help %s\" pour plus d'informations"
-
-#~ msgid "Gajim - %s unread messages"
-#~ msgstr "Gajim - %s messages non-lus"
-
-#~ msgid "Gajim - 1 unread message"
-#~ msgstr "Gajim - 1 message non-lu"
-
-#~ msgid "Gajim - %s"
-#~ msgstr "Gajim - %s"
-
-#~ msgid "Name: "
-#~ msgstr "Nom : "
-
-#~ msgid "Type: "
-#~ msgstr "Type : "
-
-#~ msgid "Download"
-#~ msgstr "Télécharger"
-
-#~ msgid "Upload"
-#~ msgstr "Envoyer"
-
-#~ msgid "Sender: "
-#~ msgstr "Expéditeur : "
-
-#~ msgid "Recipient: "
-#~ msgstr "Destinataire : "
-
-#~ msgid "Size: "
-#~ msgstr "Taille : "
-
-#, fuzzy
-#~ msgid "Transferred: "
-#~ msgstr "Transféré : "
-
-#~ msgid "Status: "
-#~ msgstr "État : "
-
-#~ msgid "not started"
-#~ msgstr "non commencé"
-
-#~ msgid "stopped"
-#~ msgstr "arrêté"
-
-#~ msgid "completed"
-#~ msgstr "terminé"
-
-#~ msgid "paused"
-#~ msgstr "pause"
-
-#~ msgid "stalled"
-#~ msgstr "calé"
-
-#, fuzzy
-#~ msgid "transferring"
-#~ msgstr "en train de transférer"
-
-#~ msgid "Subscription: "
-#~ msgstr "Inscription : "
-
-#~ msgid "OpenPGP: "
-#~ msgstr "OpenPGP : "
-
-#~ msgid "Resource: "
-#~ msgstr "Ressource : "
-
-#~ msgid "File"
-#~ msgstr "Fichier"
-
-#~ msgid "Progress"
-#~ msgstr "Progression"
-
-#~ msgid "Filename: %s"
-#~ msgstr "Nom du Fichier : %s"
-
-#~ msgid "Size: %s"
-#~ msgstr "Taille : %s"
-
-#~ msgid "Sender: %s"
-#~ msgstr "Expéditeur : %s"
-
-#, fuzzy
-#~ msgid "Saved in: %s"
-#~ msgstr "Expéditeur : %s"
-
-#~ msgid "File transfer completed"
-#~ msgstr "Transfert de fichier terminé"
-
-#~ msgid "File transfer canceled"
-#~ msgstr "Transfert de fichier annulé"
-
-#~ msgid "Connection with peer cannot be established."
-#~ msgstr "La connexion avec le contact ne peut être établi."
-
-#~ msgid "File transfer stopped by the contact of the other side"
-#~ msgstr "Transfert de fichier arrêté par le contact de l'autre coté"
-
-#~ msgid "Choose File to Send..."
-#~ msgstr "Choisissez un Fichier à Envoyer..."
-
-#~ msgid "Send"
-#~ msgstr "Envoyer"
-
-#~ msgid "File: %s"
-#~ msgstr "Fichier : %s"
-
-#~ msgid "Type: %s"
-#~ msgstr "Type : %s"
-
-#~ msgid "Description: %s"
-#~ msgstr "Description : %s"
-
-#~ msgid "%s wants to send you a file:"
-#~ msgstr "%s souhaite vous envoyer un fichier :"
-
-#~ msgid "Save File as..."
-#~ msgstr "Enregistrer le Fichier sous..."
-
-#~ msgid "This file already exists"
-#~ msgstr "Ce fichier existe déjà"
-
-#~ msgid "Would you like to overwrite it?"
-#~ msgstr "Voulez-vous l'écraser ?"
-
-#~ msgid "Pause"
-#~ msgstr "Pause"
 
 #~ msgid "Unknown"
 #~ msgstr "Inconnu"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-15 13:20+0300\n"
+"POT-Creation-Date: 2005-08-15 14:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1887,7 +1887,7 @@ msgstr ""
 msgid "From:"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:121 ../src/tooltips.py:214
 msgid "Gajim"
 msgstr ""
 
@@ -2652,7 +2652,7 @@ msgstr ""
 msgid "_Compact View    Alt+C"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:313 ../src/filetransfers_window.py:538
 msgid "_Continue"
 msgstr ""
 
@@ -2785,7 +2785,7 @@ msgstr ""
 msgid "_Online Users"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:348 ../src/filetransfers_window.py:128
 msgid "_Open Containing Folder"
 msgstr ""
 
@@ -2943,6 +2943,183 @@ msgstr ""
 
 #: ../src/gtkgui.glade.h:388
 msgid "minutes"
+msgstr ""
+
+#: ../src/tooltips.py:210
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr ""
+
+#: ../src/tooltips.py:212
+msgid "Gajim - 1 unread message"
+msgstr ""
+
+#: ../src/tooltips.py:232 ../src/tooltips.py:234
+#, python-format
+msgid "Gajim - %s"
+msgstr ""
+
+#: ../src/tooltips.py:283 ../src/tooltips.py:344
+#: ../src/filetransfers_window.py:350
+msgid "Name: "
+msgstr ""
+
+#: ../src/tooltips.py:285
+msgid "Subscription: "
+msgstr ""
+
+#: ../src/tooltips.py:295
+msgid "OpenPGP: "
+msgstr ""
+
+#: ../src/tooltips.py:306 ../src/tooltips.py:319 ../src/tooltips.py:379
+msgid "Status: "
+msgstr ""
+
+#: ../src/tooltips.py:315
+msgid "Resource: "
+msgstr ""
+
+#: ../src/tooltips.py:350
+msgid "Type: "
+msgstr ""
+
+#: ../src/tooltips.py:352
+msgid "Download"
+msgstr ""
+
+#: ../src/tooltips.py:354
+msgid "Upload"
+msgstr ""
+
+#: ../src/tooltips.py:356 ../src/filetransfers_window.py:352
+msgid "Sender: "
+msgstr ""
+
+#: ../src/tooltips.py:361 ../src/filetransfers_window.py:354
+msgid "Recipient: "
+msgstr ""
+
+#: ../src/tooltips.py:372
+msgid "Size: "
+msgstr ""
+
+#: ../src/tooltips.py:374
+msgid "Transferred: "
+msgstr ""
+
+#: ../src/tooltips.py:382 ../src/tooltips.py:402
+msgid "not started"
+msgstr ""
+
+#: ../src/tooltips.py:386
+msgid "stopped"
+msgstr ""
+
+#: ../src/tooltips.py:388 ../src/tooltips.py:391
+msgid "completed"
+msgstr ""
+
+#: ../src/tooltips.py:395
+msgid "paused"
+msgstr ""
+
+#: ../src/tooltips.py:398
+msgid "stalled"
+msgstr ""
+
+#: ../src/tooltips.py:400
+msgid "transferring"
+msgstr ""
+
+#: ../src/filetransfers_window.py:73
+msgid "File"
+msgstr ""
+
+#: ../src/filetransfers_window.py:87
+msgid "Progress"
+msgstr ""
+
+#: ../src/filetransfers_window.py:117 ../src/filetransfers_window.py:162
+#, python-format
+msgid "Filename: %s"
+msgstr ""
+
+#: ../src/filetransfers_window.py:119 ../src/filetransfers_window.py:207
+#, python-format
+msgid "Size: %s"
+msgstr ""
+
+#: ../src/filetransfers_window.py:121 ../src/filetransfers_window.py:164
+#, python-format
+msgid "Sender: %s"
+msgstr ""
+
+#: ../src/filetransfers_window.py:125
+#, python-format
+msgid "Saved in: %s"
+msgstr ""
+
+#: ../src/filetransfers_window.py:127
+msgid "File transfer completed"
+msgstr ""
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:155
+msgid "File transfer canceled"
+msgstr ""
+
+#: ../src/filetransfers_window.py:149 ../src/filetransfers_window.py:156
+msgid "Connection with peer cannot be established."
+msgstr ""
+
+#: ../src/filetransfers_window.py:166
+msgid "File transfer stopped by the contact of the other side"
+msgstr ""
+
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/filetransfers_window.py:173
+msgid "Choose File to Send..."
+msgstr ""
+
+#: ../src/filetransfers_window.py:176
+msgid "Send"
+msgstr ""
+
+#: ../src/filetransfers_window.py:204
+#, python-format
+msgid "File: %s"
+msgstr ""
+
+#: ../src/filetransfers_window.py:210
+#, python-format
+msgid "Type: %s"
+msgstr ""
+
+#: ../src/filetransfers_window.py:213
+#, python-format
+msgid "Description: %s"
+msgstr ""
+
+#: ../src/filetransfers_window.py:215
+#, python-format
+msgid "%s wants to send you a file:"
+msgstr ""
+
+#: ../src/filetransfers_window.py:218
+msgid "Save File as..."
+msgstr ""
+
+#: ../src/filetransfers_window.py:232
+msgid "This file already exists"
+msgstr ""
+
+#: ../src/filetransfers_window.py:233
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+#: ../src/filetransfers_window.py:526
+msgid "Pause"
 msgstr ""
 
 #: ../scripts/gajim-remote.py:70
