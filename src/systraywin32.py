@@ -26,21 +26,17 @@ __version__ = '1.01'
 
 import sys
 import win32gui
+import win32con
 import systray
 
 GWL_WNDPROC = -4
 GWL_EXSTYLE = -20
-IDI_APPLICATION = 32512
-LWA_ALPHA = 0x02
 WM_TASKBARCREATED = win32gui.RegisterWindowMessage('TaskbarCreated')
 WM_USER = 1024
 WM_TRAYMESSAGE = WM_USER + 20
-WS_EX_LAYERED = 0x80000
 
 import gtk
 WM_LBUTTONUP = 0x0202
-WM_MBUTTONUP = 0x0208
-WM_RBUTTONUP = 0x0205
 
 from common import gajim
 from common import i18n
@@ -51,7 +47,7 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class GTKWin32Ext:
+class SystrayWINAPI:
 	def __init__(self, gtk_window):
 		self._window = gtk_window
 		self._hwnd = gtk_window.window.handle
@@ -70,7 +66,7 @@ class GTKWin32Ext:
 		""" Creates a notify icon for the gtk window. """
 		if not self.notify_icon:
 			if not hicon:
-				hicon = win32gui.LoadIcon(0, IDI_APPLICATION)
+				hicon = win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
 			self.notify_icon = NotifyIcon(self._hwnd, hicon, tooltip)
 
 			# Makes redraw if the taskbar is restarted.   
@@ -103,7 +99,6 @@ class GTKWin32Ext:
 						msg_map[key] = value
 			self._message_map.update(msg_map)
 
-
 	def message_unmap(self, msg, callback=None):
 		if self._message_map.has_key(msg):
 			if callback:
@@ -115,21 +110,18 @@ class GTKWin32Ext:
 								del self._message_map[key][i]
 								return
 			del self._message_map[key]
-		
 
 	def remove_notify_icon(self):
 		""" Removes the notify icon. """
 		if self.notify_icon:
 			self.notify_icon.remove()
 			self.notify_icon = None
-			
 
 	def remove(self, *args):
 		""" Unloads the extensions. """
 		self._message_map = {}
 		self.remove_notify_icon()
-		self = None            
-			
+		self = None
 
 	def show_balloon_tooltip(self, title, text, timeout=10,
 							icon=win32gui.NIIF_NONE):
@@ -227,34 +219,34 @@ class SystrayWin32(systray.Systray):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
 		
-		self.win32ext = GTKWin32Ext(self.plugin.roster.window)
-		#self.win32ext.add_notify_icon(self.systray_context_menu)
+		self.systray_winapi = SystrayWINAPI(self.plugin.roster.window)
+		#self.systray_winapi.add_notify_icon(self.systray_context_menu)
 
 		self.xml.signal_autoconnect(self)
 		
 		# Set up the callback messages
-		self.win32ext.message_map({
+		self.systray_winapi.message_map({
 			WM_TRAYMESSAGE: self.on_clicked
 			}) 
 
-
 	def show_icon(self):
-		self.win32ext.add_notify_icon(self.systray_context_menu)
-		self.win32ext.notify_icon.menu = self.systray_context_menu
+		self.systray_winapi.add_notify_icon(self.systray_context_menu, tooltip = 'Gajim')
+		self.systray_winapi.notify_icon.menu = self.systray_context_menu
+		self.set_img()
 
 	def hide_icon(self):
-		self.win32ext.remove_notify_icon()
+		self.systray_winapi.remove_notify_icon()
 
 	def on_clicked(self, hwnd, message, wparam, lparam):
-		if lparam == WM_RBUTTONUP: # Right click
+		if lparam == win32con.WM_RBUTTONUP: # Right click
 			self.make_menu()
-			self.win32ext.notify_icon.menu.popup(None, None, None, 0, 0)
-		elif lparam == WM_MBUTTONUP: # Middle click
+			self.systray_winapi.notify_icon.menu.popup(None, None, None, 0, 0)
+		elif lparam == win32con.WM_MBUTTONUP: # Middle click
 			self.on_middle_click()
 		elif lparam == WM_LBUTTONUP: # Left click
 			self.on_left_click()
-			#self.win32ext.notify_icon.menu.popdown()
-			#self.win32ext.notify_icon.menu.popup(None, None, None, 0, 0)
+			#self.systray_winapi.notify_icon.menu.popdown()
+			#self.systray_winapi.notify_icon.menu.popup(None, None, None, 0, 0)
 
 
 	def add_jid(self, jid, account):
@@ -281,7 +273,23 @@ class SystrayWin32(systray.Systray):
 		self.tip.set_tip(self.t, label)
 
 	def set_img(self):
-		print 'FIXME: set_img in win32'
+		print 'set_img'
+		self.systray_winapi.remove_notify_icon()
+		if len(self.jids) > 0:
+			status = 'message'
+		else:
+			#status = self.status
+			path_to_ico = '../data/pixmaps/gajim.ico'
+		hinst = win32gui.GetModuleHandle(None)
+		icon_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
+		hicon = win32gui.LoadImage(hinst, 
+								path_to_ico,  #FIXME: path
+								win32con.IMAGE_ICON, 
+								0, 
+								0, 
+								icon_flags)
+		self.systray_winapi.add_notify_icon(self.systray_context_menu, hicon, 'Gajim')
+		self.systray_winapi.notify_icon.menu = self.systray_context_menu
 
 	def remove_jid(self, jid, account):
 		print 'FIXME: remove_jid'
