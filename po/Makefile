@@ -1,6 +1,6 @@
 top_srcdir = ../src/
 NAME = gajim
-LANGS   := fr pt el pl es ru bg de nb
+LANGS   := fr pt el pl es ru bg de nb cz
 LANGDIR := $(foreach LANG, $(LANGS),$(LANG)/LC_MESSAGES/gajim.mo)
 
 all: $(LANGDIR)

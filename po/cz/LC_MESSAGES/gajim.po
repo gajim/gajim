@@ -1,0 +1,3351 @@
+# translation of gajim.po to 
+# translation of gajim.po to Czech
+# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# Pihhan <pihhan@seznam.cz>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gajim\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-08-13 18:04+0300\n"
+"PO-Revision-Date: 2005-08-15 22:47+0200\n"
+"Last-Translator: Pihhan <pihhan@seznam.cz>\n"
+"Language-Team:  <cs@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==1) ? 0 : 1;\n"
+"X-Generator: KBabel 1.9.1\n"
+
+#: ../src/common/config.py:51
+msgid "Away as a result of being idle"
+msgstr "Pryč jako výsledek nečinnosti"
+
+#: ../src/common/config.py:54
+msgid "Not available as a result of being idle"
+msgstr "Nedostupný jako výsledek nečinnosti"
+
+#: ../src/common/config.py:273
+msgid "Sleeping"
+msgstr "Spím"
+
+#: ../src/common/config.py:274
+msgid "Back soon"
+msgstr "Hned jsem zpět"
+
+#: ../src/common/config.py:274
+msgid "Back in some minutes."
+msgstr "Jsem zpátky za pár minut."
+
+#: ../src/common/config.py:275
+msgid "Eating"
+msgstr "Jím"
+
+#: ../src/common/config.py:275
+msgid "I'm eating, so leave me a message."
+msgstr "Právě jím, prosím zanechte mi zprávu."
+
+#: ../src/common/config.py:276
+msgid "Movie"
+msgstr "Film"
+
+#: ../src/common/config.py:276
+msgid "I'm watching a movie."
+msgstr "Dívám se na film."
+
+#: ../src/common/config.py:277
+msgid "Working"
+msgstr "Pracuji"
+
+#: ../src/common/config.py:277
+msgid "I'm working."
+msgstr "Právě pracuji."
+
+#: ../src/common/config.py:278
+msgid "Phone"
+msgstr "Telefon"
+
+#: ../src/common/config.py:278
+msgid "I'm on the phone."
+msgstr "Zrovna telefonuji."
+
+#: ../src/common/config.py:279
+msgid "Out"
+msgstr "Venku"
+
+#: ../src/common/config.py:279
+msgid "I'm out enjoying life"
+msgstr "Užívám si života venku"
+
+#: ../src/common/connection.py:278 ../src/common/connection.py:288
+#, python-format
+msgid ""
+"Subject: %s\n"
+"%s"
+msgstr ""
+"Předmět: %s\n"
+"%s"
+
+#: ../src/common/connection.py:338 ../src/common/connection.py:1530
+msgid "I would like to add you to my roster."
+msgstr "Rád(a) bych si tě přidal(a) do seznamu."
+
+#. BE CAREFUL: no con.updateRosterItem() in a callback
+#: ../src/common/connection.py:345
+#, python-format
+#, fuzzy
+msgid "we are now subscribed to %s"
+msgstr "přijata autorizace od %s"
+
+#: ../src/common/connection.py:347
+#, python-format
+msgid "unsubscribe request from %s"
+msgstr "žádost o zrušení autorizace od %s"
+
+#: ../src/common/connection.py:349
+#, python-format
+msgid "we are now unsubscribed from %s"
+msgstr "autorizace zrušena od %s"
+
+#: ../src/common/connection.py:386
+#, python-format
+msgid "Connection with account \"%s\" has been lost"
+msgstr "Spojení s účtem \"%s\" bylo ztraceno"
+
+#: ../src/common/connection.py:387
+msgid "To continue sending and receiving messages, you will need to reconnect."
+msgstr "Pro pokračování v přijímání a odesílání zpráv se musíte znovu připojit."
+
+#: ../src/common/connection.py:1174
+msgid "Error:"
+msgstr "Chyba:"
+
+#: ../src/common/connection.py:1241 ../src/common/connection.py:1300
+#: ../src/common/connection.py:1632
+#, python-format
+msgid "Could not connect to \"%s\""
+msgstr "Nemůžu se připojit k \"%s\""
+
+#: ../src/common/connection.py:1242 ../src/common/connection.py:1301
+msgid "Check your connection or try again later"
+msgstr "Ověřte připojení nebo zkuste později"
+
+#: ../src/common/connection.py:1245 ../src/common/connection.py:1635
+#, python-format
+msgid "Connected to server with %s"
+msgstr "Připojen k server s %s"
+
+#: ../src/common/connection.py:1312
+#, python-format
+msgid "Authentication failed with \"%s\""
+msgstr "Autentizace selhala s \"%s\""
+
+#: ../src/common/connection.py:1313
+msgid "Please check your login and password for correctness."
+msgstr "Prosím zkontrolujte správnost jména a hesla."
+
+#: ../src/common/connection.py:1394 ../src/roster_window.py:1266
+#, python-format
+msgid "I'm %s"
+msgstr "Jsem %s"
+
+#. We didn't set a passphrase
+#: ../src/common/connection.py:1399
+msgid "OpenPGP passphrase was not given"
+msgstr "OpenPGP heslo nebylo zadáno"
+
+#. %s is the account name here
+#: ../src/common/connection.py:1401
+#, python-format
+msgid "You will be connected to %s without OpenPGP."
+msgstr "Budete připojen(a) k %s bez OpenPGP."
+
+#. we're not english
+#: ../src/common/connection.py:1492
+msgid "[This message is encrypted]"
+msgstr "[Tato zpráva je zašifrovaná]"
+
+#: ../src/common/connection.py:1633 ../src/gajim.py:525
+msgid "Check your connection or try again later."
+msgstr "Ověřte spojení nebo zkuste později."
+
+#. disconnect if no answer
+#: ../src/common/connection.py:1915
+#, python-format
+msgid "Gajim disconnected you from %s"
+msgstr "Gajim tě odpojil od %s"
+
+#: ../src/common/connection.py:1916
+#, python-format
+msgid ""
+"%s seconds have passed and server did not reply to our keep-alive. If you "
+"believe such disconnection should not have happened, you can disable sending "
+"keep-alive packets by modifying this account."
+msgstr "%s sekund uběhlo a server neodpověděl na náš keep-alive. Pokud věříte, že takové odpojení by nemělo nastat, můžete vypnout posílání keep-alive v nastavení účtu."
+
+#: ../src/common/connection.py:1922 ../src/common/connection.py:1931
+msgid "error appeared while processing xmpp:"
+msgstr "vyskytla se chyba při zpracování xmpp:"
+
+#. GiB means gibibyte
+#: ../src/common/helpers.py:43
+#, python-format
+msgid "%s GiB"
+msgstr "%s GiB"
+
+#. GB means gigabyte
+#: ../src/common/helpers.py:46
+#, python-format
+msgid "%s GB"
+msgstr "%s GB"
+
+#. MiB means mibibyte
+#: ../src/common/helpers.py:50
+#, python-format
+msgid "%s MiB"
+msgstr "%s MiB"
+
+#. MB means megabyte
+#: ../src/common/helpers.py:53
+#, python-format
+msgid "%s MB"
+msgstr "%s MB"
+
+#. KiB means kibibyte
+#: ../src/common/helpers.py:57
+#, python-format
+msgid "%s KiB"
+msgstr "%s KiB"
+
+#. KB means kilo bytes
+#: ../src/common/helpers.py:60
+#, python-format
+msgid "%s KB"
+msgstr "%s KB"
+
+#. B means bytes
+#: ../src/common/helpers.py:63
+#, python-format
+msgid "%s B"
+msgstr "%s B"
+
+#: ../src/common/helpers.py:70
+msgid "Busy"
+msgstr "Nerušit"
+
+#: ../src/common/helpers.py:72
+msgid "Not Available"
+msgstr "Nedostupný"
+
+#: ../src/common/helpers.py:74
+msgid "Free for Chat"
+msgstr "Ukecaný"
+
+#: ../src/common/helpers.py:76
+msgid "Available"
+msgstr "Připojen"
+
+#: ../src/common/helpers.py:78
+msgid "Connecting"
+msgstr "Připojuji se"
+
+#: ../src/common/helpers.py:80
+msgid "Away"
+msgstr "Pryč"
+
+#: ../src/common/helpers.py:82
+msgid "Offline"
+msgstr "Odpojen"
+
+#: ../src/common/helpers.py:84
+msgid "Invisible"
+msgstr "Neviditelný"
+
+#: ../src/common/helpers.py:86
+msgid "Not in the roster"
+msgstr "Není v seznamu"
+
+#: ../src/common/helpers.py:88
+msgid "?contact has status:Unknown"
+msgstr "?contact has status:Neznámý"
+
+#: ../src/common/helpers.py:95
+msgid "?Subscription we already have:None"
+msgstr "?Subscription we already have: Žádná"
+
+#: ../src/common/helpers.py:97
+#, fuzzy
+msgid "To"
+msgstr "Příjemce"
+
+#: ../src/common/helpers.py:99
+#, fuzzy
+msgid "From"
+msgstr "Odesílatel"
+
+#: ../src/common/helpers.py:101
+msgid "Both"
+msgstr "Obojí"
+
+#: ../src/common/helpers.py:109
+msgid "?Ask (for Subscription):None"
+msgstr "?Ask (for Subscription): Žádná"
+
+#: ../src/common/helpers.py:111
+msgid "Subscribe"
+msgstr "Žádat autorizaci"
+
+#: ../src/common/helpers.py:150
+msgid "is paying attention to the conversation"
+msgstr "věnuje pozornost rozhovoru"
+
+#: ../src/common/helpers.py:152
+msgid "is doing something else"
+msgstr "dělá něco jiného"
+
+#: ../src/common/helpers.py:154
+msgid "is composing a message..."
+msgstr "píše zprávu..."
+
+#. paused means he was compoing but has stopped for a while
+#: ../src/common/helpers.py:157
+msgid "paused composing a message"
+msgstr "pozastavil(a) psaní zprávy"
+
+#: ../src/common/helpers.py:159
+msgid "has closed the chat window or tab"
+msgstr "zavřel(a) okno zprávy"
+
+#: ../src/common/logger.py:41 ../src/common/logger.py:46
+#, python-format
+msgid "%s is file but it should be a directory"
+msgstr "%s je soubor, ale měl by být adresář"
+
+#: ../src/common/logger.py:42 ../src/common/logger.py:47
+msgid "Gajim will now exit"
+msgstr "Gajim se nyní ukončí"
+
+#. dot_gajim doesn't exist
+#. is '' on win9x so avoid that
+#: ../src/common/logger.py:50 ../src/common/logger.py:54
+#: ../src/common/logger.py:57
+#, python-format
+msgid "creating %s directory"
+msgstr "vytvářím adresář %s "
+
+#. it is file about file
+#: ../src/common/optparser.py:51 ../src/gtkgui_helpers.py:50
+#, python-format
+msgid "error: cannot open %s for reading\n"
+msgstr "chyba: nelze otevřít %s pro čtení\n"
+
+#. we cannot write file in a directory
+#: ../src/common/optparser.py:78
+#, python-format
+msgid "Unable to write file in %s\n"
+msgstr "Nelze zapsat soubor %s\n"
+
+#: ../src/advanced.py:52
+#, fuzzy
+msgid "Preference Name"
+msgstr "Jméno nastavení"
+
+#: ../src/advanced.py:59
+msgid "Value"
+msgstr "Hodnota"
+
+#: ../src/advanced.py:68
+msgid "Type"
+msgstr "Typ"
+
+#: ../src/chat.py:123 ../src/gtkgui.glade.h:69
+msgid "Chat"
+msgstr "Rozhovor"
+
+#: ../src/chat.py:125 ../src/gtkgui.glade.h:131
+msgid "Group Chat"
+msgstr "Diskuze"
+
+#. if we have 2 or more accounts
+#: ../src/chat.py:136
+msgid "account: "
+msgstr "účet: "
+
+#. Groups maynot change name from or to 'not in the roster'
+#: ../src/chat.py:237 ../src/chat.py:905 ../src/dialogs.py:112
+#: ../src/dialogs.py:318 ../src/dialogs.py:1251 ../src/dialogs.py:1252
+#: ../src/gajim.py:484 ../src/gajim.py:485 ../src/roster_window.py:826
+#: ../src/roster_window.py:1042 ../src/roster_window.py:1180
+#: ../src/roster_window.py:1369 ../src/roster_window.py:1403
+#: ../src/roster_window.py:1728 ../src/roster_window.py:1925
+#: ../src/roster_window.py:1927 ../src/roster_window.py:2000
+msgid "not in the roster"
+msgstr "není v seznamu"
+
+#: ../src/chat.py:288
+#, python-format
+msgid "Switch to %s"
+msgstr "Přepnout na %s"
+
+#: ../src/chat.py:489
+msgid ""
+"If that is not your language for which you want to highlight misspelled "
+"words, then please set your $LANG as appropriate. Eg. for French do export "
+"LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it "
+"global in /etc/profile.\n"
+"\n"
+"Highlighting misspelled words feature will not be used"
+msgstr ""
+"Pokud to není Váš jazyk, pro který chcete zvýrazňovat slova s překlepy, potom prosím nastavte proměnnou $LANG na správnou. Například. pro Češtinu spusťte export LANG=cs_CZ nebo export LANG=cs_CZ zapište do ~/.bash_profile nebo pro nastavení globálně do /etc/profile.\n"
+"\n"
+"Vlastnost zvýrazňování překlepů nebude použita"
+
+#: ../src/chat.py:747
+#, python-format
+msgid "Actions for \"%s\""
+msgstr "Akce pro \"%s\""
+
+#: ../src/chat.py:759
+msgid "Read _Wikipedia Article"
+msgstr "Číst článkek na _Wikipedia"
+
+#: ../src/chat.py:763
+msgid "Look it up in _Dictionary"
+msgstr "Vyhle_dat ve slovníku"
+
+#. we must have %s in the url if not WIKTIONARY
+#: ../src/chat.py:778
+#, python-format
+msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
+msgstr "URL slovníku chybí \"%s\" a není to WIKTIONARY"
+
+#. we must have %s in the url
+#: ../src/chat.py:788
+#, python-format
+msgid "Web Search URL is missing an \"%s\""
+msgstr "URL pro hledání na webu chybí \"%s\""
+
+#: ../src/chat.py:791
+msgid "Web _Search for it"
+msgstr "_Hledat na Webu"
+
+#. if we have subject, show it too!
+#: ../src/chat.py:1116
+#, python-format
+msgid "Subject: %s\n"
+msgstr "Předmět: %s\n"
+
+#: ../src/config.py:199 ../src/config.py:443
+#, python-format
+msgid "Every %s _minutes"
+msgstr "Každých %s _minut"
+
+#: ../src/config.py:313
+msgid "Active"
+msgstr "Aktivní"
+
+#: ../src/config.py:321
+msgid "Event"
+msgstr "Událost"
+
+#: ../src/config.py:327
+msgid "Sound"
+msgstr "Zvuk"
+
+#: ../src/config.py:937
+msgid "status message title"
+msgstr "titulek stavu"
+
+#: ../src/config.py:937
+msgid "status message text"
+msgstr "text stavu"
+
+#: ../src/config.py:990
+msgid "Choose Sound"
+msgstr "Vyberte zvuk"
+
+#: ../src/config.py:997 ../src/config.py:1946 ../src/vcard.py:132
+msgid "All files"
+msgstr "Všechny soubory"
+
+#: ../src/config.py:1002
+msgid "Wav Sounds"
+msgstr "Waw soubory"
+
+#: ../src/config.py:1171
+msgid "OpenPGP is not usable in this computer"
+msgstr "OpenPGP není použitelné na tomto počítači"
+
+#: ../src/config.py:1196
+msgid "You are currently connected to the server"
+msgstr "Nejste přávě připojen(a) k serveru"
+
+#: ../src/config.py:1197
+msgid "To change the account name, you must be disconnected."
+msgstr "Ke změně jména účtu se musite odpojit."
+
+#: ../src/config.py:1200 ../src/config.py:1204
+msgid "Invalid account name"
+msgstr "Neplatné jméno účtu"
+
+#: ../src/config.py:1201
+msgid "Account name cannot be empty."
+msgstr "Jméno účtu nemůže být prázdné."
+
+#: ../src/config.py:1205
+msgid "Account name cannot contain spaces."
+msgstr "Jméno účtu nesmí obsahovat mezery."
+
+#: ../src/config.py:1209
+msgid "Invalid Jabber ID"
+msgstr "Neplatné Jabber ID"
+
+#: ../src/config.py:1210
+msgid "A Jabber ID must be in the form \"user@servername\"."
+msgstr "Jabber ID musí být ve tvaru \"uživatel@jménoserveru\"."
+
+#: ../src/config.py:1217 ../src/dialogs.py:1115
+msgid "Invalid password"
+msgstr "Neplatné heslo"
+
+#: ../src/config.py:1218
+msgid "You must enter a password for the new account."
+msgstr "Musíte zadat heslo pro nový účet."
+
+#: ../src/config.py:1255
+msgid "Invalid entry"
+msgstr "Neplatný záznam"
+
+#: ../src/config.py:1256
+msgid "Custom port must be a port number."
+msgstr "Vlastní port musí být číslo portu."
+
+#: ../src/config.py:1345
+msgid "Account name is in use"
+msgstr "Jméno účtu se používá"
+
+#: ../src/config.py:1346
+msgid "You already have an account using this name."
+msgstr "Již máte účet s tímto jménem."
+
+#: ../src/config.py:1410
+msgid "No such account available"
+msgstr "Takový účet není dostupný"
+
+#: ../src/config.py:1411
+msgid "You must create your account before editing your personal information."
+msgstr "Musíte vytvořit účet před úpravou vašich osobních údajů."
+
+#: ../src/config.py:1418 ../src/config.py:2028 ../src/dialogs.py:989
+#: ../src/dialogs.py:1095 ../src/vcard.py:375 ../src/vcard.py:403
+msgid "You are not connected to the server"
+msgstr "Nejste připojen(a) k serveru"
+
+#: ../src/config.py:1419
+msgid "Without a connection, you can not edit your personal information."
+msgstr "Bez připojení nemůžete upravovat osobní údaje."
+
+#: ../src/config.py:1446
+msgid "Failed to get secret keys"
+msgstr "Selhalo získání privátního klíče"
+
+#: ../src/config.py:1447
+msgid "There was a problem retrieving your OpenPGP secret keys."
+msgstr "Nastala chyba při získávání Vašich OpenPGP privátních klíčů."
+
+#: ../src/config.py:1450 ../src/gtkgui.glade.h:189
+msgid "Passphrase"
+msgstr "Heslo"
+
+#: ../src/config.py:1451
+msgid "Choose your OpenPGP key"
+msgstr "Vyberte Váš OpenPGP klíč"
+
+#: ../src/config.py:1459 ../src/gtkgui.glade.h:177
+msgid "No key selected"
+msgstr "Není zvolen žádný klíč"
+
+#: ../src/config.py:1690 ../src/config.py:2051
+msgid "Name"
+msgstr "Jméno"
+
+#: ../src/config.py:1693
+msgid "Server"
+msgstr "Server"
+
+#. if not '@' or '@' starts the jid ==> agent
+#: ../src/config.py:1798 ../src/config.py:2270 ../src/dialogs.py:112
+#: ../src/dialogs.py:282 ../src/dialogs.py:318 ../src/roster_window.py:123
+#: ../src/roster_window.py:128 ../src/roster_window.py:152
+#: ../src/roster_window.py:1921 ../src/roster_window.py:1923
+#: ../src/roster_window.py:2000 ../src/systray.py:213
+msgid "Transports"
+msgstr "Transporty"
+
+#: ../src/config.py:1813
+#, python-format
+msgid "Edit %s"
+msgstr "Uprav %s"
+
+#: ../src/config.py:1815
+#, python-format
+msgid "Register to %s"
+msgstr "Registrovat k %s"
+
+#: ../src/config.py:1835
+msgid "Text"
+msgstr "Text"
+
+#: ../src/config.py:1843
+msgid "Image"
+msgstr "Obrázek"
+
+#: ../src/config.py:1890
+msgid "Image is too big"
+msgstr "Obrázek je příliš velký"
+
+#: ../src/config.py:1890
+msgid ""
+"Image for emoticon has to be less than or equal to 24 pixels in width and 24 "
+"in height."
+msgstr "Obrázek pro smajlík musí být menší nebo roven 24 pixelů na šířku a 24 pixelů na výšku."
+
+#: ../src/config.py:1940
+msgid "Choose Image"
+msgstr "Vyberte obrázek"
+
+#: ../src/config.py:1951 ../src/vcard.py:137
+msgid "Images"
+msgstr "Obrázky"
+
+#: ../src/config.py:2029
+msgid "Without a connection, you can not browse available services"
+msgstr "Bez spojení nemůžete prohlížet dostupné služby"
+
+#: ../src/config.py:2034
+#, python-format
+#, fuzzy
+msgid "Service Discovery using %s account"
+msgstr "Service Discovery s použitím účtu %s"
+
+#: ../src/config.py:2036
+#, fuzzy
+msgid "Service Discovery"
+msgstr "Služba"
+
+#: ../src/config.py:2056
+msgid "Service"
+msgstr "Služba"
+
+#: ../src/config.py:2061
+msgid "Node"
+msgstr "Nód"
+
+#: ../src/config.py:2273 ../src/gtkgui.glade.h:313
+msgid "_Edit"
+msgstr "_Editace"
+
+#: ../src/config.py:2275 ../src/gtkgui.glade.h:207
+msgid "Re_gister"
+msgstr "Re_gistrace"
+
+#: ../src/config.py:2447
+#, python-format
+msgid "Removing %s account"
+msgstr "Odstraňuju účet %s"
+
+#: ../src/config.py:2454
+#, python-format
+msgid "Account \"%s\" is connected to the server"
+msgstr "Účet \"%s\" se připojil k serveru"
+
+#: ../src/config.py:2455
+msgid "If you remove it, the connection will be lost."
+msgstr "Pokud jej smažete, připojení bude ztraceno."
+
+#: ../src/config.py:2581
+msgid "New Room"
+msgstr "Nová místnost"
+
+#: ../src/config.py:2611
+msgid "This bookmark has invalid data"
+msgstr "Tato záložka má neplatná data"
+
+#: ../src/config.py:2612
+msgid "Please be sure to fill out server and room fields or remove this bookmark."
+msgstr "Prosím nezapomeňte vyplnit políčka server a místnost, nebo smažte tuto záložku."
+
+#: ../src/config.py:2832
+msgid ""
+"Account has been added successfully.\n"
+"You can set advanced options by using \"Edit->Accounts\" from the main "
+"window."
+msgstr ""
+"Váš účet byl úspěšně přidán.\n"
+"Můžete nastavit pokročilá nastaveníá použitím \"Úpravy->Účty\" z hlavního okna."
+
+#: ../src/config.py:2843
+msgid ""
+"Your new account has been created and added to your gajim configuration.\n"
+"You can set advanced account options using \"Edit->Accounts\" in the main "
+"window menu."
+msgstr ""
+"Váš nový účet byl vytvořen a přidání do nastavení Gajimu.\n"
+"Nyní můžete upravit další nastavení použitím \"Úpravy->Účty\" v menu hlavního okna."
+
+#: ../src/config.py:2857
+msgid "You need to enter a username to add an account."
+msgstr "Musíte zadat uživatelské jméno při přidání účtu."
+
+#: ../src/config.py:2861
+msgid "You need to enter a valid server address to add an account."
+msgstr "Musíte zadat platnou adresu server pro přidání účtu."
+
+#: ../src/dialogs.py:54
+#, python-format
+msgid "Contact's name: <i>%s</i>"
+msgstr "Jméno kontaktu: <i>%s</i>"
+
+#: ../src/dialogs.py:56
+#, python-format
+msgid "JID: <i>%s</i>"
+msgstr "JID: <i>%s</i>"
+
+#. we try to remove
+#. the last group
+#: ../src/dialogs.py:98
+msgid "Cannot remove last group"
+msgstr "Nelze smazat poslední skupinu"
+
+#: ../src/dialogs.py:99
+msgid "At least one contact group must be present."
+msgstr "Alespoň jedna skupina kontaktů musí zůstat."
+
+#: ../src/dialogs.py:120
+msgid "Group"
+msgstr "Skupina"
+
+#: ../src/dialogs.py:126
+msgid "In the group"
+msgstr "Ve skupině"
+
+#: ../src/dialogs.py:174
+msgid "KeyID"
+msgstr "ID klíče"
+
+#: ../src/dialogs.py:177
+msgid "Contact name"
+msgstr "Jméno kontaktu"
+
+#: ../src/dialogs.py:208
+#, python-format
+#, fuzzy
+msgid "%s Status Message"
+msgstr "%s Status"
+
+#: ../src/dialogs.py:271
+#, python-format
+msgid "Please fill in the data of the contact you want to add in account %s"
+msgstr "Prosím vyplňte údaje kontaktu, který chcete přidat do účtu %s"
+
+#: ../src/dialogs.py:273
+msgid "Please fill in the data of the contact you want to add"
+msgstr "Prosím vyplňte údaje o kontaktu, který chcete přidat"
+
+#: ../src/dialogs.py:339
+msgid "Invalid user name"
+msgstr "Neplatné uživatelské jméno"
+
+#: ../src/dialogs.py:340
+msgid "Contact names must be of the form \"user@servername\"."
+msgstr "Jména kontaktů musí být ve tvaru \"uživatel@jménoserveru\""
+
+#: ../src/dialogs.py:394
+msgid "Gajim - a GTK+ Jabber client"
+msgstr "Gajim - GTK+ Jabber client"
+
+#: ../src/dialogs.py:395
+#, python-format
+msgid "Version %s"
+msgstr "Verze %s"
+
+#: ../src/dialogs.py:406
+msgid "A GTK jabber client"
+msgstr "GTK jabber client"
+
+#: ../src/dialogs.py:415
+#, fuzzy
+msgid "translator-credits"
+msgstr "Petr Menšík <pihhan@seznam.cz>"
+
+#: ../src/dialogs.py:692
+#, python-format
+msgid "Gajim - %s unread messages"
+msgstr "Gajim - %s nepřečtených zpráv"
+
+#: ../src/dialogs.py:694
+msgid "Gajim - 1 unread message"
+msgstr "Gajim - 1 nepřečtená zpráva"
+
+#: ../src/dialogs.py:696 ../src/gtkgui.glade.h:120
+msgid "Gajim"
+msgstr "Gajim"
+
+#: ../src/dialogs.py:714 ../src/dialogs.py:716
+#, python-format
+msgid "Gajim - %s"
+msgstr "Gajim - %s"
+
+#: ../src/dialogs.py:733 ../src/dialogs.py:842 ../src/dialogs.py:1857
+msgid "Name: "
+msgstr "Jméno: "
+
+#: ../src/dialogs.py:739
+msgid "Type: "
+msgstr "Typ: "
+
+#: ../src/dialogs.py:741
+#, fuzzy
+msgid "Download"
+msgstr "Download"
+
+#: ../src/dialogs.py:743
+#, fuzzy
+msgid "Upload"
+msgstr "Upload"
+
+#: ../src/dialogs.py:745 ../src/dialogs.py:1859
+msgid "Sender: "
+msgstr "Odesílatel: "
+
+#: ../src/dialogs.py:750 ../src/dialogs.py:1861
+msgid "Recipient: "
+msgstr "Příjemce: "
+
+#: ../src/dialogs.py:761
+msgid "Size: "
+msgstr "Velikost: "
+
+#: ../src/dialogs.py:763
+msgid "Transferred: "
+msgstr "Přeneseno: "
+
+#: ../src/dialogs.py:768 ../src/dialogs.py:865 ../src/dialogs.py:878
+msgid "Status: "
+msgstr "Stav: "
+
+#: ../src/dialogs.py:771 ../src/dialogs.py:791
+msgid "not started"
+msgstr "nezačalo"
+
+#: ../src/dialogs.py:775
+msgid "stopped"
+msgstr "zastaveno"
+
+#: ../src/dialogs.py:777 ../src/dialogs.py:780
+msgid "completed"
+msgstr "dokončeno"
+
+#: ../src/dialogs.py:784
+msgid "paused"
+msgstr "pozastaveno"
+
+#: ../src/dialogs.py:787
+msgid "stalled"
+msgstr "zamrzlé"
+
+#: ../src/dialogs.py:789
+msgid "transferring"
+msgstr "přenáším"
+
+#: ../src/dialogs.py:844
+#, fuzzy
+msgid "Subscription: "
+msgstr "Autorizace: "
+
+#: ../src/dialogs.py:854
+msgid "OpenPGP: "
+msgstr "OpenPGP: "
+
+#: ../src/dialogs.py:874
+msgid "Resource: "
+msgstr "Zdroj: "
+
+#: ../src/dialogs.py:944
+#, python-format
+msgid "Subscription request for account %s from %s"
+msgstr "Žádost o autorizaci pro účet %s od %s"
+
+#: ../src/dialogs.py:947
+#, python-format
+msgid "Subscription request from %s"
+msgstr "Žádost o autorizaci od %s"
+
+#: ../src/dialogs.py:990
+msgid "You can not join a group chat unless you are connected."
+msgstr "Nemůžete vstoupit do diskuze pokud nejste připojen(a)."
+
+#: ../src/dialogs.py:1003
+#, python-format
+msgid "Join Group Chat as %s"
+msgstr "Připojit se do diskuze jako %s"
+
+#: ../src/dialogs.py:1005 ../src/gtkgui.glade.h:158
+msgid "Join Group Chat"
+msgstr "Připojit se do diskuze"
+
+#: ../src/dialogs.py:1068
+#, python-format
+msgid "New Message as %s"
+msgstr "Nová zpráva jako %s"
+
+#: ../src/dialogs.py:1070 ../src/dialogs.py:1165 ../src/gajim.py:413
+#: ../src/gtkgui.glade.h:174
+msgid "New Message"
+msgstr "Nová zpráva"
+
+#: ../src/dialogs.py:1071
+msgid ""
+"Fill in the contact ID of the contact you would like\n"
+"to send a chat message to:"
+msgstr "Vyplňte ID kontaktu se kterým chcete začít rozhovor:"
+
+#. if offline or connecting
+#: ../src/dialogs.py:1079 ../src/dialogs.py:1392 ../src/dialogs.py:1513
+msgid "Connection not available"
+msgstr "Spojení není dostupné"
+
+#: ../src/dialogs.py:1080 ../src/dialogs.py:1393 ../src/dialogs.py:1514
+#, python-format
+msgid "Please make sure you are connected with \"%s\"."
+msgstr "Prosím ujistěte se že jste připojen s účtem \"%s\"."
+
+#. if no @ was given
+#: ../src/dialogs.py:1085 ../src/dialogs.py:1407
+msgid "Invalid contact ID"
+msgstr "Neplatné ID kontaktu"
+
+#: ../src/dialogs.py:1086 ../src/dialogs.py:1408
+msgid "Contact ID must be of the form \"username@servername\"."
+msgstr "ID kontaktu musí být ve tvaru \"uživatel@jménoserver\"."
+
+#: ../src/dialogs.py:1096
+msgid "Without a connection, you can not change your password."
+msgstr "Nemůžete měnit heslo, pokud nejste připojen(a)."
+
+#: ../src/dialogs.py:1116
+msgid "You must enter a password."
+msgstr "Musíte zadat heslo."
+
+#: ../src/dialogs.py:1120
+msgid "Passwords do not match"
+msgstr "Hesla se neshodují"
+
+#: ../src/dialogs.py:1121
+msgid "The passwords typed in both fields must be identical."
+msgstr "Hesla zadaná v obou políčkách musí být identická."
+
+#: ../src/dialogs.py:1157 ../src/gajim.py:312
+msgid "Contact Signed In"
+msgstr "Kontakt se přihlásil"
+
+#: ../src/dialogs.py:1161 ../src/gajim.py:337
+#, fuzzy
+msgid "Contact Signed Out"
+msgstr "Kontakt se odhlásil"
+
+#: ../src/dialogs.py:1166 ../src/gajim.py:410
+msgid "New Single Message"
+msgstr "Nová jednoduché zpráva"
+
+#: ../src/dialogs.py:1170 ../src/dialogs.py:1175 ../src/dialogs.py:1191
+#, python-format
+msgid "From %s"
+msgstr "Od %s"
+
+#: ../src/dialogs.py:1171 ../src/gajim.py:741
+msgid "File Transfer Request"
+msgstr "Žádost o přenos souboru"
+
+#: ../src/dialogs.py:1177 ../src/gajim.py:703 ../src/gajim.py:723
+msgid "File Transfer Error"
+msgstr "Chyba přenosu souboru"
+
+#: ../src/dialogs.py:1181 ../src/gajim.py:776
+msgid "File Transfer Completed"
+msgstr "Přenos souboru dokončen"
+
+#: ../src/dialogs.py:1181 ../src/gajim.py:779
+msgid "File Transfer Stopped"
+msgstr "Přenos souboru zastaven"
+
+#: ../src/dialogs.py:1200
+#, python-format
+msgid "To %s"
+msgstr "Příjemce %s"
+
+#: ../src/dialogs.py:1357
+#, python-format
+msgid "Single Message as %s"
+msgstr "Jednoduchá zpráva jako %s"
+
+#: ../src/dialogs.py:1359
+msgid "Single Message"
+msgstr "Jednoduchá zpráva"
+
+#: ../src/dialogs.py:1362
+#, python-format
+msgid "Send %s"
+msgstr "Odeslat %s"
+
+#: ../src/dialogs.py:1371
+#, python-format
+msgid "Received %s"
+msgstr "Přijaté %s"
+
+#. we create a new blank window to send and we preset RE: and to jid
+#: ../src/dialogs.py:1423
+#, python-format
+msgid "RE: %s"
+msgstr "RE: %s"
+
+#: ../src/dialogs.py:1424
+#, python-format
+msgid ""
+"\n"
+"\n"
+"\n"
+"== Original Message ==\n"
+"%s"
+msgstr ""
+"\n"
+"\n"
+"\n"
+"== Původní zpráva ==\n"
+"%s"
+
+#: ../src/dialogs.py:1465
+#, python-format
+msgid "XML Console for %s"
+msgstr "XML Konzole pro %s"
+
+#: ../src/dialogs.py:1467
+msgid "XML Console"
+msgstr "XML Konzole"
+
+#: ../src/dialogs.py:1580
+msgid "File"
+msgstr "Soubor"
+
+#: ../src/dialogs.py:1594
+msgid "Progress"
+msgstr "Průběh"
+
+#: ../src/dialogs.py:1624 ../src/dialogs.py:1669
+#, python-format
+msgid "Filename: %s"
+msgstr "Soubor: %s"
+
+#: ../src/dialogs.py:1626 ../src/dialogs.py:1714
+#, python-format
+msgid "Size: %s"
+msgstr "Velikost: %s"
+
+#: ../src/dialogs.py:1628 ../src/dialogs.py:1671
+#, python-format
+msgid "Sender: %s"
+msgstr "Odesílatel: %s"
+
+#: ../src/dialogs.py:1632
+#, python-format
+msgid "Saved in: %s"
+msgstr "Uloženo do: %s"
+
+#: ../src/dialogs.py:1634
+msgid "File transfer completed"
+msgstr "Přenos soubor dokončen"
+
+#: ../src/dialogs.py:1635 ../src/gtkgui.glade.h:343
+#, fuzzy
+msgid "_Open Containing Folder"
+msgstr "_Otevřít obsahující složku"
+
+#: ../src/dialogs.py:1656 ../src/dialogs.py:1662
+msgid "File transfer canceled"
+msgstr "Přenos souboru zrušen"
+
+#: ../src/dialogs.py:1656 ../src/dialogs.py:1663
+msgid "Connection with peer cannot be established."
+msgstr "Spojení s protistranou se nepodařilo navázat."
+
+#: ../src/dialogs.py:1673
+msgid "File transfer stopped by the contact of the other side"
+msgstr "Přenos souboru byl ukončen protistranou"
+
+#. FIXME: user better name for this function
+#. atm it's like it shows popup for incoming file transfer request
+#: ../src/dialogs.py:1680
+msgid "Choose File to Send..."
+msgstr "Vyber soubor k odeslání..."
+
+#: ../src/dialogs.py:1683
+msgid "Send"
+msgstr "Odelat"
+
+#: ../src/dialogs.py:1711
+#, python-format
+msgid "File: %s"
+msgstr "Soubor: %s"
+
+#: ../src/dialogs.py:1717
+#, python-format
+msgid "Type: %s"
+msgstr "Typ: %s"
+
+#: ../src/dialogs.py:1720
+#, python-format
+msgid "Description: %s"
+msgstr "Popis: %s"
+
+#: ../src/dialogs.py:1722
+#, python-format
+msgid "%s wants to send you a file:"
+msgstr "%s Vám chce poslat soubor:"
+
+#: ../src/dialogs.py:1725
+msgid "Save File as..."
+msgstr "Uložit jako..."
+
+#: ../src/dialogs.py:1739
+msgid "This file already exists"
+msgstr "Tento soubor už existuje"
+
+#: ../src/dialogs.py:1740
+msgid "Would you like to overwrite it?"
+msgstr "Chcete jej přepsat?"
+
+#: ../src/dialogs.py:2033
+msgid "Pause"
+msgstr "Pauza"
+
+#: ../src/dialogs.py:2045 ../src/gtkgui.glade.h:308
+msgid "_Continue"
+msgstr "_Pokračovat"
+
+#. ('HTTP_AUTH', account, (method, url, iq_obj))
+#: ../src/gajim.py:152
+#, python-format
+msgid "HTTP (%s) Authorization for %s"
+msgstr "HTTP (%s) Autorizace pro %s"
+
+#: ../src/gajim.py:153
+msgid "Do you accept this request?"
+msgstr "Chcete přijmout tuto žádost?"
+
+#: ../src/gajim.py:461
+msgid "error while sending"
+msgstr "chyba při odesílání"
+
+#: ../src/gajim.py:487 ../src/gajim.py:497 ../src/roster_window.py:125
+#: ../src/roster_window.py:1029 ../src/gtkgui.glade.h:128
+msgid "General"
+msgstr "Obecné"
+
+#: ../src/gajim.py:501
+msgid "Authorization accepted"
+msgstr "Autorizace přijata"
+
+#: ../src/gajim.py:502
+#, python-format
+#, fuzzy
+msgid "The contact \"%s\" has authorized you to see his status."
+msgstr "Kontakt \"%s\" Vás autorizoval k zobrazení jeho stavu."
+
+#: ../src/gajim.py:508
+#, python-format
+msgid "Contact \"%s\" removed subscription from you"
+msgstr "Kontakt \"%s\" Vám odebral autorizaci"
+
+#: ../src/gajim.py:509
+msgid "You will always see him as offline."
+msgstr "Uvidíte jej vždy jako odpojeného."
+
+#: ../src/gajim.py:524
+#, python-format
+msgid "Contact with \"%s\" cannot be established"
+msgstr "Kontakt s \"%s\" nebyl navázán"
+
+#: ../src/gajim.py:542
+msgid "Account registration successful"
+msgstr "Registrace účtu úspěšná"
+
+#: ../src/gajim.py:543
+#, python-format
+msgid "The account \"%s\" has been registered with the Jabber server."
+msgstr "Účet \"%s\" byl registrování na Jabber serveru."
+
+#: ../src/gajim.py:659
+msgid "Your passphrase is incorrect"
+msgstr "Vaše heslo je neplatné"
+
+#: ../src/gajim.py:660
+msgid "You are currently connected without your OpenPGP key."
+msgstr "Momentálně jste připojen(a) bez vašeho OpenPGP klíče."
+
+#. it is good to notify the user, in case he cannot see the output of the console
+#: ../src/gajim.py:1000
+msgid "Cannot save your preferences"
+msgstr "Nelze uložit Vaše nastavení"
+
+#: ../src/gajim_themes_window.py:63
+msgid "Theme"
+msgstr "Téma"
+
+#: ../src/gajim_themes_window.py:125 ../src/gajim_themes_window.py:127
+#: ../src/gajim_themes_window.py:128
+#, fuzzy
+msgid "theme_name"
+msgstr "nazev_tematu"
+
+#: ../src/groupchat_window.py:125 ../src/groupchat_window.py:967
+#, python-format
+msgid "You just received a new message in room \"%s\""
+msgstr "Právě jste obdržel(a) novou zprávu v místnosti \"%s\""
+
+#: ../src/groupchat_window.py:126
+msgid "If you close this window, this message will be lost."
+msgstr "Pokud zavřete toto okno, tato zpráva bude ztracena."
+
+#: ../src/groupchat_window.py:141
+#, python-format
+msgid "Are you sure you want to leave room \"%s\"?"
+msgid_plural "Are you sure you want to leave rooms \"%s\"?"
+msgstr[0] "Jste si jistý(á), že chcete opustit místnost \"%s\"?"
+msgstr[1] "Jste si jistý(á), že chcete opustit místnosti \"%s\"?"
+
+#: ../src/groupchat_window.py:146
+msgid "If you close this window, you will be disconnected from this room."
+msgid_plural "If you close this window, you will be disconnected from these rooms."
+msgstr[0] "Pokud zavřete toto okno, budete odpojen(a) z této místnosti."
+msgstr[1] "Pokud zavřete toto okno, budete odpojen(a) z těchto místností."
+
+#: ../src/groupchat_window.py:151
+msgid "Do not ask me again"
+msgstr "Příště nezobrazovat"
+
+#: ../src/groupchat_window.py:212 ../src/groupchat_window.py:406
+msgid "This room has no subject"
+msgstr "Místnost nemá žádné téma"
+
+#: ../src/groupchat_window.py:278
+msgid "?Group Chat Contact Role:None"
+msgstr "?Group Chat Contact Role:Žádná"
+
+#: ../src/groupchat_window.py:280
+msgid "Moderators"
+msgstr "Moderátoři"
+
+#: ../src/groupchat_window.py:282
+msgid "Participants"
+msgstr "Účastníci"
+
+#: ../src/groupchat_window.py:284
+msgid "Visitors"
+msgstr "Návštěvníci"
+
+#: ../src/groupchat_window.py:344
+#, python-format
+msgid "%s has been kicked by %s: %s"
+msgstr "%s byl vyhozen od %s: %s"
+
+#: ../src/groupchat_window.py:350
+#, python-format
+msgid "%s has been banned by %s: %s"
+msgstr "%s byl zabanován od %s: %s"
+
+#. Someone changed his nick
+#: ../src/groupchat_window.py:353
+#, python-format
+msgid "%s is now known as %s"
+msgstr "%s se přejmenoval na %s"
+
+#: ../src/groupchat_window.py:384
+#, python-format
+msgid "%s has left"
+msgstr "%s odešel(a)"
+
+#: ../src/groupchat_window.py:386
+#, python-format
+msgid "%s is now %s"
+msgstr "%s je nyní %s"
+
+#: ../src/groupchat_window.py:416
+msgid "Changing Subject"
+msgstr "Měním Téma"
+
+#: ../src/groupchat_window.py:417
+msgid "Please specify the new subject:"
+msgstr "Prosím zadejte nové téma:"
+
+#: ../src/groupchat_window.py:426
+msgid "Changing Nickname"
+msgstr "Měním přezdívku"
+
+#: ../src/groupchat_window.py:427
+msgid "Please specify the new nickname you want to use:"
+msgstr "Prosím zadejte novou přezdívku, kterou chcete používat:"
+
+#: ../src/groupchat_window.py:450
+msgid "Bookmark already set"
+msgstr "Záložka je už nastavena"
+
+#: ../src/groupchat_window.py:451
+#, python-format
+msgid "Room \"%s\" is already in your bookmarks."
+msgstr "Místnost \"%s\" už je ve Vašich záložkách."
+
+#: ../src/groupchat_window.py:460
+msgid "Bookmark has been added successfully"
+msgstr "Záložka byla úspěšně přidána"
+
+#: ../src/groupchat_window.py:461
+msgid "You can manage your bookmarks via Actions menu in your roster."
+msgstr "Můžete spravovat Vaše záložky přes menu Akce ve vašem Seznamu."
+
+#. ask for reason
+#: ../src/groupchat_window.py:719
+#, python-format
+msgid "Kicking %s"
+msgstr "Vyhazuji %s"
+
+#: ../src/groupchat_window.py:720 ../src/groupchat_window.py:751
+msgid "You may specify a reason below:"
+msgstr "Můžete uvést důvod níže:"
+
+#. ask for reason
+#: ../src/groupchat_window.py:750
+#, python-format
+#, fuzzy
+msgid "Banning %s"
+msgstr "Banuji %s"
+
+#: ../src/groupchat_window.py:968 ../src/tabbed_chat_window.py:340
+msgid "If you close this tab, the message will be lost."
+msgstr "Pokud zavřete tuto záložku, zpráva bude ztracena."
+
+#: ../src/history_window.py:138
+#, python-format
+msgid "%s is now %s: %s"
+msgstr "%s je nyní %s: %s"
+
+#: ../src/history_window.py:155
+#, python-format
+msgid "Status is now: %s: %s"
+msgstr "Status je nyní %s: %s"
+
+#: ../src/history_window.py:177 ../src/history_window.py:179
+#, python-format
+msgid "Conversation History with %s"
+msgstr "Historie rozhovorů s %s"
+
+#: ../src/remote_control.py:52
+msgid "D-Bus python bindings are missing in this computer"
+msgstr "D-Bus python bindings chybí na tomto počítači"
+
+#: ../src/remote_control.py:53
+msgid "D-Bus capabilities of Gajim cannot be used"
+msgstr "Možnosti D-Bus nemohou být použity"
+
+#: ../src/remote_control.py:404
+#, fuzzy
+msgid "Session bus is not available"
+msgstr "Rozhraní sezení není dostupné"
+
+#: ../src/remote_control.py:412
+msgid "D-Bus is not present on this machine"
+msgstr "D-Bus není přítomna na tohto stroji"
+
+#: ../src/roster_window.py:264
+#, python-format
+msgid "You are already in room %s"
+msgstr "Už jsi v místnosti %s"
+
+#: ../src/roster_window.py:411
+msgid "New _Room"
+msgstr "Nová _Místnost"
+
+#: ../src/roster_window.py:425
+msgid "Manage Bookmarks..."
+msgstr "Spravovat záložky..."
+
+#: ../src/roster_window.py:440
+#, python-format
+#, fuzzy
+msgid "to %s account"
+msgstr "k %s účtu"
+
+#: ../src/roster_window.py:452
+#, python-format
+msgid "using %s account"
+msgstr "používám účet %s"
+
+#: ../src/roster_window.py:468
+#, python-format
+msgid "as %s"
+msgstr "jako %s"
+
+#: ../src/roster_window.py:479
+#, python-format
+msgid "for account %s"
+msgstr "pro účet %s"
+
+#: ../src/roster_window.py:620
+#, python-format
+msgid "%s is now %s (%s)"
+msgstr "%s je nyní %s (%s)"
+
+#: ../src/roster_window.py:695
+#, python-format
+msgid "Transport \"%s\" will be removed"
+msgstr "Transport \"%s\" bude smazán"
+
+#: ../src/roster_window.py:695
+#, python-format
+msgid "You will no longer be able to send and receive messages to contacts from %s."
+msgstr "Už více nebudete moci posílat i přijímat zprávy od kontaktů z %s."
+
+#: ../src/roster_window.py:738
+msgid "Assign OpenPGP Key"
+msgstr "Přiřadit OpenPGP klíč"
+
+#: ../src/roster_window.py:739
+msgid "Select a key to apply to the contact"
+msgstr "Vybrat klíč k použítí s kontaktem"
+
+#: ../src/roster_window.py:842
+msgid "I would like to add you to my roster"
+msgstr "Rád bych si Vás přidal(a) do svého seznamu"
+
+#: ../src/roster_window.py:870
+msgid "Rename"
+msgstr "Přejmenovat"
+
+#: ../src/roster_window.py:891
+msgid "_Log on"
+msgstr "Přih_lásit"
+
+#: ../src/roster_window.py:900
+msgid "Log _off"
+msgstr "_Odhlásit"
+
+#: ../src/roster_window.py:912
+msgid "Edit"
+msgstr "Upravit"
+
+#: ../src/roster_window.py:918 ../src/gtkgui.glade.h:360
+msgid "_Remove from Roster"
+msgstr "Odst_ranit ze Seznamu"
+
+#: ../src/roster_window.py:1020
+msgid "Authorization has been sent"
+msgstr "Autorizace byla odeslána"
+
+#: ../src/roster_window.py:1021
+#, python-format
+msgid "Now \"%s\" will know your status."
+msgstr "Nyní bude \"%s\" znát váš status."
+
+#: ../src/roster_window.py:1043
+msgid "Subscription request has been sent"
+msgstr "Žádost o autorizaci byla odeslána"
+
+#: ../src/roster_window.py:1044
+#, python-format
+msgid "If \"%s\" accepts this request you will know his status."
+msgstr "Pokud \"%s\" povolí Vaši žádost o autorizaci, budete vidět jeho status."
+
+#: ../src/roster_window.py:1171
+#, python-format
+msgid "Contact \"%s\" will be removed from your roster"
+msgstr "Kontakt \"%s\" bude smazán z Vašeho rosteru"
+
+#: ../src/roster_window.py:1172
+#, python-format
+msgid ""
+"By removing this contact you also remove authorization. Contact \"%s\" will "
+"always see you as offline."
+msgstr "Smazáním kontaktu také zrušíte autorizaci. Kontakt \"%s\" Váš uvidí vždy jako odpojen."
+
+#: ../src/roster_window.py:1204
+msgid "Password Required"
+msgstr "Vyžadováno heslo"
+
+#: ../src/roster_window.py:1205
+#, python-format
+msgid "Enter your password for account %s"
+msgstr "Zadejte heslo pro účet %s"
+
+#: ../src/roster_window.py:1206
+msgid "Save password"
+msgstr "Uložit heslo"
+
+#: ../src/roster_window.py:1236
+msgid "Passphrase Required"
+msgstr "Heslo Vyžadováno"
+
+#: ../src/roster_window.py:1237
+#, python-format
+msgid "Enter GPG key passphrase for account %s"
+msgstr "Zadej heslo GPG klíče pro účet %s"
+
+#: ../src/roster_window.py:1238
+msgid "Save passphrase"
+msgstr "Uložit heslo"
+
+#: ../src/roster_window.py:1285
+msgid "No account available"
+msgstr "Žádný účet není dostupný"
+
+#: ../src/roster_window.py:1286
+msgid "You must create an account before you can chat with other contacts."
+msgstr "Musíte vytvořit účet před tím, než budete moci hovořit s jinými uživateli."
+
+#: ../src/roster_window.py:1590 ../src/roster_window.py:1596
+msgid "You have unread messages"
+msgstr "Máte nepřečtené zprávy"
+
+#: ../src/roster_window.py:1591 ../src/roster_window.py:1597
+msgid ""
+"Messages will only be available for reading them later if you have history "
+"enabled."
+msgstr "Zprávy bude možné číst později pouze v případě, budete-li mít povolenou historii."
+
+#. for chat_with
+#. for new_message
+#: ../src/systray.py:174 ../src/systray.py:179
+msgid "as "
+msgstr "jako "
+
+#: ../src/systray.py:234
+msgid "All contacts in this group are offline or have errors"
+msgstr "Všechny kontakty v této skupině jsou odpojeni nebo mají závadu"
+
+#: ../src/tabbed_chat_window.py:125 ../src/gtkgui.glade.h:185
+msgid "OpenPGP Encryption"
+msgstr "OpenPGP Šifrování"
+
+#: ../src/tabbed_chat_window.py:128
+#, python-format
+msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
+msgstr "%s nerozesílá OpenPGP klíč nebo jste žádný nepřiřadil(a)"
+
+#: ../src/tabbed_chat_window.py:271 ../src/tabbed_chat_window.py:339
+#, python-format
+msgid "You just received a new message from \"%s\""
+msgstr "Právě jsi obdržela novou zprávu od \"%s\""
+
+#: ../src/tabbed_chat_window.py:272
+msgid "If you close the window, this message will be lost."
+msgstr "Pokud zavřete okno, tato zpráva bude ztracena."
+
+#. we are not connected
+#: ../src/tabbed_chat_window.py:512
+msgid "A connection is not available"
+msgstr "Spojení není dostupné"
+
+#: ../src/tabbed_chat_window.py:513
+msgid "Your message can not be sent until you are connected."
+msgstr "Va¹e zpráva nemù¾e být odeslána dokud se nepøipojíte."
+
+#: ../src/tabbed_chat_window.py:601
+msgid "Sending private message failed"
+msgstr "Odesílání soukromé zprávy selhalo"
+
+#: ../src/tabbed_chat_window.py:602
+#, python-format
+msgid "You are no longer in room \"%s\" or \"%s\" has left."
+msgstr "U¾ nejste v místnosti \"%s\" nebo \"%s\" ode¹el(a)."
+
+#: ../src/tabbed_chat_window.py:705
+msgid "Encryption enabled"
+msgstr "Šifrování zapnuto"
+
+#: ../src/tabbed_chat_window.py:710
+msgid "Encryption disabled"
+msgstr "Šifrování vypnuto"
+
+#: ../src/vcard.py:126
+msgid "Choose Avatar"
+msgstr "Vyber Avatara"
+
+#. in bytes
+#. 8 kb
+#: ../src/vcard.py:166
+#, python-format
+msgid "The filesize of image \"%s\" is too large"
+msgstr "Velikost souboru s obrázkem \"%s\" je příliš velká"
+
+#: ../src/vcard.py:168
+msgid "The file must not be more than 8 kilobytes."
+msgstr "Soubor nesmí být větší než 8 kilobajtů"
+
+#: ../src/vcard.py:250
+msgid "?Client:Unknown"
+msgstr "?Client:Neznámý"
+
+#: ../src/vcard.py:252
+msgid "?OS:Unknown"
+msgstr "?OS:Neznámý"
+
+#: ../src/vcard.py:273 ../src/vcard.py:291
+msgid " resource with priority "
+msgstr "zdroj s prioritou "
+
+#: ../src/vcard.py:376
+msgid "Without a connection you can not publish your contact information."
+msgstr "Bez opětovného připojení nemůžete zveřejnit Vaše osobní údaje."
+
+#: ../src/vcard.py:404
+msgid "Without a connection, you can not get your contact information."
+msgstr "Bez opětovného připojení nemůžete získat Vaše osobní údaje."
+
+#: ../src/gtkgui.glade.h:1
+msgid "..."
+msgstr "..."
+
+#: ../src/gtkgui.glade.h:2
+msgid "0"
+msgstr "0"
+
+#: ../src/gtkgui.glade.h:3
+msgid "<b>Advanced Configuration Editor</b>"
+msgstr "<b>Editor rozšířeného nastavení</b>"
+
+#: ../src/gtkgui.glade.h:4
+msgid "<b>Applications</b>"
+msgstr "<b>Aplikace</b>"
+
+#: ../src/gtkgui.glade.h:5
+msgid "<b>Changes in latest version</b>"
+msgstr "<b>Změny v poslední verzi</b>"
+
+#: ../src/gtkgui.glade.h:6
+msgid "<b>Custom</b>"
+msgstr "<b>Vlastní</b>"
+
+#: ../src/gtkgui.glade.h:7
+msgid "<b>Format of a chat line</b>"
+msgstr "<b>Formát řádky rozhovoru</b>"
+
+#: ../src/gtkgui.glade.h:8
+msgid "<b>Interface Customization</b>"
+msgstr "<b>Přizpůsobení rozhraní</b>"
+
+#: ../src/gtkgui.glade.h:9
+msgid "<b>Jabber Traffic</b>"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:10
+msgid "<b>Log</b>"
+msgstr "<b>Archiv</b>"
+
+#: ../src/gtkgui.glade.h:11
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>Příslušenství</b>"
+
+#: ../src/gtkgui.glade.h:12
+msgid "<b>Notifications</b>"
+msgstr "<b>Notifikace</b>"
+
+#: ../src/gtkgui.glade.h:13
+msgid "<b>OpenPGP</b>"
+msgstr "<b>OpenPGP</b>"
+
+#: ../src/gtkgui.glade.h:14
+#, fuzzy
+msgid "<b>Please choose on of the options below:</b>"
+msgstr "<b>Prosím zvolte z následujících možností:</b>"
+
+#: ../src/gtkgui.glade.h:15
+msgid "<b>Preset Status Messages</b>"
+msgstr "<b>Přednastavené stavy</b>"
+
+#: ../src/gtkgui.glade.h:16
+msgid "<b>Properties</b>"
+msgstr "<b>Vlastnosti</b>"
+
+#: ../src/gtkgui.glade.h:17
+msgid "<b>Settings</b>"
+msgstr "<b>Nastavení</b>"
+
+#: ../src/gtkgui.glade.h:18
+msgid "<b>Sounds</b>"
+msgstr "<b>Zvuky</b>"
+
+#: ../src/gtkgui.glade.h:19
+#, fuzzy
+msgid "<b>What do you want to do?</b>"
+msgstr "<b>Co by jste rád(a) dělal(a)?</b>"
+
+#: ../src/gtkgui.glade.h:20
+msgid "<b>XML Input</b>"
+msgstr "<b>Vstup XML</b>"
+
+#: ../src/gtkgui.glade.h:21
+msgid "<span background=\"lightyellow\"></span>"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:22
+msgid "A list of active, completed and stopped file transfers"
+msgstr "Seznam aktivních, dokončených a zastavených přenosů souborů"
+
+#: ../src/gtkgui.glade.h:23
+msgid "A_ccounts"
+msgstr "Ú_čty"
+
+#: ../src/gtkgui.glade.h:24
+msgid "About"
+msgstr "O aplikaci"
+
+#: ../src/gtkgui.glade.h:25
+msgid "Account"
+msgstr "Účet"
+
+#: ../src/gtkgui.glade.h:26
+msgid "Account Modification"
+msgstr "Úprava účtu"
+
+#: ../src/gtkgui.glade.h:27
+msgid "Account:"
+msgstr "Účet:"
+
+#: ../src/gtkgui.glade.h:28
+msgid "Accounts"
+msgstr "Účty"
+
+#: ../src/gtkgui.glade.h:29
+msgid "Activate/Disable notification for when a file transfer is complete"
+msgstr "Zapnout/vypnout upozornění při dokončení přenosu souboru"
+
+#: ../src/gtkgui.glade.h:30
+#, fuzzy
+msgid "Ad_vanced Actions"
+msgstr "_Další akce"
+
+#: ../src/gtkgui.glade.h:31
+msgid "Add New Contact"
+msgstr "Přidat nový kontakt"
+
+#: ../src/gtkgui.glade.h:32
+msgid "Add _Contact"
+msgstr "Přidat _kontakt"
+
+#: ../src/gtkgui.glade.h:33
+msgid "Address"
+msgstr "Adresa"
+
+#: ../src/gtkgui.glade.h:34
+#, fuzzy
+msgid "Advanced"
+msgstr "Rozšířené"
+
+#: ../src/gtkgui.glade.h:35
+#, fuzzy
+msgid "Advanced Configuration Editor"
+msgstr "Editor rozšířeného nastavení"
+
+#: ../src/gtkgui.glade.h:36
+msgid "After nickname:"
+msgstr "Po přezdívce:"
+
+#: ../src/gtkgui.glade.h:37
+msgid "After time:"
+msgstr "Po čase:"
+
+#: ../src/gtkgui.glade.h:38
+msgid ""
+"All chat states\n"
+"Composing only\n"
+"Disabled"
+msgstr ""
+"Všechny stavy rozhovoru\n"
+"Pouze píšu zprávu\n"
+"Vypnuto"
+
+#: ../src/gtkgui.glade.h:41
+msgid "Allow _OS information to be sent"
+msgstr "Povolit odeslání informace o _OS"
+
+#: ../src/gtkgui.glade.h:42
+msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
+msgstr "Povolit popup/upozornění pokud jsem pryč/nedostupný/nerušit/neviditelný"
+
+#: ../src/gtkgui.glade.h:43
+msgid "Also known as iChat style"
+msgstr "Známý také jako iChat styl"
+
+#: ../src/gtkgui.glade.h:44
+#, fuzzy
+msgid "Always use compact _view"
+msgstr "_Vždy použij zjednodušený pohled"
+
+#: ../src/gtkgui.glade.h:45
+#, fuzzy
+msgid "Ask status message when I:"
+msgstr "Získej stav pokud já:"
+
+#: ../src/gtkgui.glade.h:46
+#, fuzzy
+msgid "Ask:"
+msgstr "Žádost:"
+
+#: ../src/gtkgui.glade.h:47
+msgid "Assign Open_PGP Key"
+msgstr "Přiřaď Open_PGP klíč"
+
+#: ../src/gtkgui.glade.h:48
+msgid "Authorize contact so he can know when you're connected"
+msgstr "Autorizovat kontakt, aby věděl kdy jste připojen(a)"
+
+#: ../src/gtkgui.glade.h:49
+msgid "Auto _away after:"
+msgstr "_Automaticky pryč po:"
+
+#: ../src/gtkgui.glade.h:50
+msgid "Auto _not available after:"
+msgstr "Automaticky _nedostupný po:"
+
+#: ../src/gtkgui.glade.h:51
+#, fuzzy
+msgid "Auto join"
+msgstr "Automaticky vstoupit"
+
+#: ../src/gtkgui.glade.h:52
+msgid ""
+"Autodetect at every application startup\n"
+"Always use GNOME default applications\n"
+"Always use KDE default applications\n"
+"Custom"
+msgstr ""
+"Automaticky zjistit při každém startu aplikace\n"
+"Vždy použít výchozí aplikace z GNOME\n"
+"Vždy použít výchozí aplikace z KDE\n"
+"Vlastní"
+
+#: ../src/gtkgui.glade.h:56
+msgid "Automatically authorize contact"
+msgstr "Automaticky autorizovat kontakt"
+
+#: ../src/gtkgui.glade.h:57
+msgid "Background color"
+msgstr "Barva pozadí"
+
+#: ../src/gtkgui.glade.h:58
+msgid "Banner:"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:59
+msgid "Before nickname:"
+msgstr "Před přezdívkou:"
+
+#: ../src/gtkgui.glade.h:60
+msgid "Before time:"
+msgstr "Před časem:"
+
+#: ../src/gtkgui.glade.h:61
+msgid "Birthday:"
+msgstr "Narozeniny:"
+
+#: ../src/gtkgui.glade.h:62
+msgid "Bold"
+msgstr "Tučné"
+
+#: ../src/gtkgui.glade.h:63
+msgid "C_onnect at startup"
+msgstr "Přip_ojit při spuštění"
+
+#: ../src/gtkgui.glade.h:64
+msgid "Cancels the selected file transfer"
+msgstr "Zruší vybraný přenos souboru"
+
+#: ../src/gtkgui.glade.h:65
+#, fuzzy
+msgid "Chan_ge"
+msgstr "Z_měnit"
+
+#: ../src/gtkgui.glade.h:66
+msgid "Change Password"
+msgstr "Změnit heslo"
+
+#: ../src/gtkgui.glade.h:67
+msgid "Change _Nickname"
+msgstr "Změ_nit přezdívku"
+
+#: ../src/gtkgui.glade.h:68
+msgid "Change _Subject"
+msgstr "Změnit _předmět"
+
+#: ../src/gtkgui.glade.h:70
+#, fuzzy
+msgid "Chat state noti_fications:"
+msgstr "Upozornění o stavu rozhovoru:"
+
+#: ../src/gtkgui.glade.h:71
+msgid "Chat with"
+msgstr "Rozhovor s"
+
+#: ../src/gtkgui.glade.h:72
+msgid "Check for new _version at application startup"
+msgstr "Ověř dostupnost nové verze při spuštění aplikace"
+
+#: ../src/gtkgui.glade.h:73
+msgid "Check if you want to register for a new jabber account"
+msgstr "Zaškrtněte pokud chcete zaregistrovat nový jabber účet"
+
+#: ../src/gtkgui.glade.h:74
+msgid ""
+"Check this option, only if someone you don't have in the roster spams/annoys "
+"you. Use with caution, cause it blocks all messages from any contact that is "
+"not in the roster"
+msgstr "Zaškrtněte pouze pokud Vás obtěžuje někdo, koho nemáte v Seznamu. Použijte s rozvahou, protože tato volba zakáže všechny zprávy od kontaktů, které ještě nemáte v Seznamu"
+
+#: ../src/gtkgui.glade.h:75
+msgid ""
+"Check this so Gajim will connect in port 5223 where legacy servers are "
+"expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
+"default if broadcasted by the server, and with this option enabled TLS will "
+"be disabled"
+msgstr "Zaškrtněte pokud se má Gajim připojit na port 5223, kde obvykle nabízejí starší servery SSL. Pozor- Gajim použije TLS šifrování standardně, pokud server ohlásí jeho podporu. Touto volbou bude TLS vypnuto"
+
+#: ../src/gtkgui.glade.h:76
+msgid "Choose _Key..."
+msgstr "Vyberte _klíč..."
+
+#: ../src/gtkgui.glade.h:77
+msgid "City:"
+msgstr "Obec:"
+
+#: ../src/gtkgui.glade.h:78
+msgid "Clean _up"
+msgstr "_Vymazat"
+
+#: ../src/gtkgui.glade.h:79
+msgid "Click to change account's password"
+msgstr "Klikněte pro změnu hesla k účtu"
+
+#: ../src/gtkgui.glade.h:80
+#, fuzzy
+msgid "Click to get contact's extended information"
+msgstr "Klikněte pro získání dalších informací"
+
+#: ../src/gtkgui.glade.h:81
+#, fuzzy
+msgid "Click to see features like on jabber servers"
+msgstr "Klikněte pro seznam vlastností na jabber serverech"
+
+#: ../src/gtkgui.glade.h:82
+msgid "Click to see past conversation in this room"
+msgstr "Klikněte pro starší konverzaci v této místnosti"
+
+#: ../src/gtkgui.glade.h:83
+msgid "Click to see past conversations with this contact"
+msgstr "Klikněte pro starší konverzaci s tímto kontaktem"
+
+#: ../src/gtkgui.glade.h:84
+msgid "Client:"
+msgstr "Klient:"
+
+#: ../src/gtkgui.glade.h:85
+msgid "Company:"
+msgstr "Společnost:"
+
+#: ../src/gtkgui.glade.h:86
+msgid "Configure _Room"
+msgstr "Nastavit _místnost"
+
+#: ../src/gtkgui.glade.h:87
+msgid "Connection"
+msgstr "Spojení"
+
+#: ../src/gtkgui.glade.h:88
+msgid "Contact Information"
+msgstr "Informace o kontaktu"
+
+#: ../src/gtkgui.glade.h:89
+msgid "Contact _Info"
+msgstr "_Informace o kontaktu"
+
+#: ../src/gtkgui.glade.h:90
+msgid "Contact:"
+msgstr "Kontakt:"
+
+#: ../src/gtkgui.glade.h:91
+msgid "Conversation History"
+msgstr "Historie konverzace"
+
+#: ../src/gtkgui.glade.h:92
+#, fuzzy
+msgid "Country:"
+msgstr "Země:"
+
+#: ../src/gtkgui.glade.h:93
+msgid "Default _status iconset:"
+msgstr "Výchozí ikony _stavů:"
+
+#: ../src/gtkgui.glade.h:94
+msgid "Delete MOTD"
+msgstr "Smazat MOTD"
+
+#: ../src/gtkgui.glade.h:95
+msgid "Delete Message of the Day"
+msgstr "Smazat Zprávu dne"
+
+#: ../src/gtkgui.glade.h:96
+msgid "Deletes Message of the Day"
+msgstr "Smaže zprávu dne"
+
+#: ../src/gtkgui.glade.h:97
+msgid "Deny authorization from contact so he cannot know when you're connected"
+msgstr "Odmítne autorizaci od kontaktu, takže nebude vidět kdy jste připojen(a)"
+
+#: ../src/gtkgui.glade.h:98
+msgid "Department:"
+msgstr "Oddělení:"
+
+#: ../src/gtkgui.glade.h:99
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: ../src/gtkgui.glade.h:100
+msgid "E-Mail:"
+msgstr "E-Mail:"
+
+#: ../src/gtkgui.glade.h:101
+msgid "Edit Groups"
+msgstr "Upravit skupiny"
+
+#: ../src/gtkgui.glade.h:102
+#, fuzzy
+msgid "Edit Personal Information..."
+msgstr "Upravit osobní informace..."
+
+#: ../src/gtkgui.glade.h:103
+msgid "Edit _Groups"
+msgstr "Upravit _skupiny"
+
+#. XML Console enable checkbutton
+#: ../src/gtkgui.glade.h:105
+msgid "Enable"
+msgstr "Povolit"
+
+#: ../src/gtkgui.glade.h:106
+msgid "Enter it again for confirmation:"
+msgstr "Zadejte znovu pro ověření:"
+
+#: ../src/gtkgui.glade.h:107
+msgid "Enter new password:"
+msgstr "Zadejte heslo:"
+
+#: ../src/gtkgui.glade.h:108
+msgid "Enter your message:"
+msgstr "Zadejte zprávu:"
+
+#: ../src/gtkgui.glade.h:109
+msgid "Events"
+msgstr "Události"
+
+#: ../src/gtkgui.glade.h:110
+msgid "Every 5 _minutes"
+msgstr "Každých 5 _minut"
+
+#: ../src/gtkgui.glade.h:111
+#, fuzzy
+msgid "Extra Address:"
+msgstr "Další adresa:"
+
+#: ../src/gtkgui.glade.h:112
+msgid "Family:"
+msgstr "Rodina:"
+
+#: ../src/gtkgui.glade.h:113
+msgid "File Transfers"
+msgstr "Přenosy souborů"
+
+#: ../src/gtkgui.glade.h:114
+msgid "File _Transfers"
+msgstr "_Přenosy souborů"
+
+#: ../src/gtkgui.glade.h:115
+msgid "File manager:"
+msgstr "Správce souborů:"
+
+#: ../src/gtkgui.glade.h:116
+msgid "Filter:"
+msgstr "Filtr:"
+
+#: ../src/gtkgui.glade.h:117
+msgid "Font:"
+msgstr "Písmo:"
+
+#: ../src/gtkgui.glade.h:118
+msgid "Format: YYYY-MM-DD"
+msgstr "Formát: RRRR-MM-DD"
+
+#: ../src/gtkgui.glade.h:119
+#, fuzzy
+msgid "From:"
+msgstr "Odesílatel:"
+
+#: ../src/gtkgui.glade.h:121
+msgid "Gajim Themes Customization"
+msgstr "Úprava témat Gajimu"
+
+#: ../src/gtkgui.glade.h:122
+msgid ""
+"Gajim will automatically show the new received message in a new chat window "
+"or tab in an existing chat window"
+msgstr "Gajim automaticky zobrazí nově přijatou zprávu v novém okně nebo v záložce existujícího rozhovoru"
+
+#: ../src/gtkgui.glade.h:123
+msgid ""
+"Gajim will notify you for new message via a popup in the bottom right of the "
+"screen"
+msgstr "Gajim Vás upozorní o nové zprávě pomocí popupu v pravém dolním rohu obrazovky"
+
+#: ../src/gtkgui.glade.h:124
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed in"
+msgstr "Gajim Vás upozorní o nově připojených kontaktech pomocí popupu v pravém dolním rohu obrazovky"
+
+#: ../src/gtkgui.glade.h:125
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed out"
+msgstr "Gajim Vás upozorní o přávě odpojených kontaktech pomocí popupu v pravém dolním rohu obrazovky"
+
+#: ../src/gtkgui.glade.h:126
+msgid "Gajim will only change the icon of the contact that sent the new message"
+msgstr "Gajim pouze změní ikonu kontaktu, který odeslal novou zprávu"
+
+#: ../src/gtkgui.glade.h:127
+msgid "Gajim: First Time Wizard"
+msgstr "Gajim: Průvodce prvními krůčky"
+
+#: ../src/gtkgui.glade.h:129
+#, fuzzy
+msgid "Given:"
+msgstr "Křestní:"
+
+#: ../src/gtkgui.glade.h:130
+#, fuzzy
+msgid "Go"
+msgstr "Jdi"
+
+#: ../src/gtkgui.glade.h:132
+#, fuzzy
+msgid "Group:"
+msgstr "Skupina:"
+
+#: ../src/gtkgui.glade.h:133
+msgid "HTTP Connect"
+msgstr "HTTP připojení"
+
+#: ../src/gtkgui.glade.h:134
+msgid "Hides the window"
+msgstr "Skryje okno"
+
+#: ../src/gtkgui.glade.h:135
+msgid "Homepage:"
+msgstr "Dom. Stránka:"
+
+#: ../src/gtkgui.glade.h:136
+msgid "Hostname: "
+msgstr "Počítač: "
+
+#: ../src/gtkgui.glade.h:137
+msgid "I already have an account I want to use"
+msgstr "Už mám účet který bych rád(a) použil(a)"
+
+#: ../src/gtkgui.glade.h:138
+msgid "I want to _register for a new account"
+msgstr "Chtěl(a) bych za_registrovat nový účet"
+
+#: ../src/gtkgui.glade.h:139
+msgid "I would like to add you to my contact list."
+msgstr "Chtěla bych si Vás přidat do mého Seznamu."
+
+#: ../src/gtkgui.glade.h:140
+msgid "If checked, Gajim will also have a trayicon"
+msgstr "Pokud bude zaškrtnuto, Gajim bude mít také ikonu v traybaru"
+
+#: ../src/gtkgui.glade.h:141
+#, fuzzy
+msgid ""
+"If checked, Gajim will broadcast capability to send and receive meta-"
+"information related to a conversation you may have with a contact such as "
+"composing a message"
+msgstr "Pokud bude zaškrtnuto, Gajim bude ohlašovat svoji schopnost posílat a přijímat meta-informace vztahující se k rozhovoru, například píšu zprávu"
+
+#: ../src/gtkgui.glade.h:142
+msgid "If checked, Gajim will join this groupchat on startup"
+msgstr "Pokud je zaškrtnuto, Gajim se připojí do této místnosti při spuštění"
+
+#: ../src/gtkgui.glade.h:143
+msgid "If checked, Gajim will remember the password for this account"
+msgstr "Pokud bude zaškrtnuto, Gajim si bude pamatovat heslo pro tento účet"
+
+#: ../src/gtkgui.glade.h:144
+msgid ""
+"If checked, Gajim will remember the roster and chat window positions in the "
+"screen and the sizes of them next time you run it"
+msgstr "Pokud bude zaškrtnuto, Gajim si bude pamatovat polohy a velikosti Seznamu a oken rozhovorů po příštím spuštění"
+
+#: ../src/gtkgui.glade.h:145
+msgid ""
+"If checked, Gajim will replace ascii smilies like ':)' with equivalent "
+"graphical emoticons"
+msgstr "Pokud zaškrtnuto, Gajim nahradí ascii smajlíky jako ':)' za ekvivalentní grafické smajlíky"
+
+#: ../src/gtkgui.glade.h:146
+msgid ""
+"If checked, Gajim will send keep-alive packets so it prevents connection "
+"timeout which results in disconnection"
+msgstr "Pokud zaškrtnuto, Gajim bude posílat keep-alive pakety, aby předešel ztrátě spojení způsobenou nečinností"
+
+#: ../src/gtkgui.glade.h:147
+msgid ""
+"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
+"permission only for only you and of course the administrator"
+msgstr "Pokud zaškrtnuto, Gajim uloží heslo v ~/.gajim/config s právem čtení pouze pro Vás a samosebou administrátora"
+
+#: ../src/gtkgui.glade.h:148
+msgid ""
+"If checked, Gajim will use protocol-specific status icons. (eg. A contact "
+"from MSN will have the equivalent msn icon for status online, away, busy, "
+"etc...)"
+msgstr "Pokud zaškrtnuto, Gajim použije ikony specifické pro protokol (např. kontakt z MSN bude mít odpovídající ikonu msn pro stavy připojen, pryč, nerušit, atd...)"
+
+#: ../src/gtkgui.glade.h:149
+msgid ""
+"If checked, Gajim, when launched, will automatically connect to jabber using "
+"this account"
+msgstr "Pokud zaškrtnuto, Gajim po spuštění se automaticky připojí pomocí tohoto účtu"
+
+#: ../src/gtkgui.glade.h:150
+msgid ""
+"If checked, all chat and group chat windows will have the information area "
+"in the top and the buttons area in the bottom hidden. You can quick toggle "
+"compact view with Alt+C. NOTE: The last state you leave a window/tab is not "
+"a permanent one"
+msgstr "Pokud zaškrtnuto, všechny okna rozhovorů a diskuzí budou mít informační oblast nahoře a tlačítka dole skrytá. Můžete rychle změnit zjednodušený pohled pomocí Alt+C. Upozornění: Poslední stav, ve kterém zanecháte okno/záložku není permanentní"
+
+#: ../src/gtkgui.glade.h:151
+#, fuzzy
+msgid ""
+"If you have 2 or more accounts and it is checked, Gajim will list all "
+"contacts as if you had one account"
+msgstr "Máte-li 2 nebo více účtů a je zaškrtnuto, Gajim zobrazí všechny kontakty jako by byly z jednoho účtu"
+
+#: ../src/gtkgui.glade.h:152
+msgid "Incoming message:"
+msgstr "Příchozí zpráva:"
+
+#: ../src/gtkgui.glade.h:153
+msgid "Info/Query"
+msgstr "Info/Query"
+
+#: ../src/gtkgui.glade.h:154
+msgid "Information about you are stored on the server as vCard"
+msgstr "Informace o Váš, uložené na serveru jako vCard"
+
+#: ../src/gtkgui.glade.h:155
+msgid "Italic"
+msgstr "Latinka"
+
+#: ../src/gtkgui.glade.h:156
+msgid "Jabber"
+msgstr "Jabber"
+
+#: ../src/gtkgui.glade.h:157
+msgid "Jabber ID:"
+msgstr "Jabber ID:"
+
+#: ../src/gtkgui.glade.h:159
+msgid "Join _Group Chat"
+msgstr "Vstoupit do _Diskuze"
+
+#: ../src/gtkgui.glade.h:160
+msgid "Join _Group Chat..."
+msgstr "Vstoupit do _Diskuze..."
+
+#: ../src/gtkgui.glade.h:161
+msgid "Location"
+msgstr "Poloha"
+
+#: ../src/gtkgui.glade.h:162
+msgid "Log history"
+msgstr "Ukládej historii"
+
+#: ../src/gtkgui.glade.h:163
+msgid "Log presences in _contact's log file"
+msgstr "Ukládej stavy v logu _konaktu"
+
+#: ../src/gtkgui.glade.h:164
+msgid "Log presences in an _external file"
+msgstr "Zaznamenávej stavy v _externím souboru"
+
+#: ../src/gtkgui.glade.h:165
+msgid "Manage Accounts"
+msgstr "Spravuj účty"
+
+#: ../src/gtkgui.glade.h:166
+msgid "Manage Bookmarks"
+msgstr "Spravuj záložky"
+
+#: ../src/gtkgui.glade.h:167
+msgid "Manage Emoticons"
+msgstr "Spravuj smajlíky"
+
+#: ../src/gtkgui.glade.h:168
+msgid "Manage Proxy Profiles"
+msgstr "Spravuj profily Proxy"
+
+#: ../src/gtkgui.glade.h:169
+msgid "Manage..."
+msgstr "Spravuj..."
+
+#: ../src/gtkgui.glade.h:170
+msgid "Middle:"
+msgstr "Střední:"
+
+#: ../src/gtkgui.glade.h:171
+msgid "Mo_derator"
+msgstr "Mo_derátor"
+
+#: ../src/gtkgui.glade.h:172
+msgid "More"
+msgstr "Více"
+
+#: ../src/gtkgui.glade.h:173
+#, fuzzy
+msgid "Name:"
+msgstr "Jméno:"
+
+#: ../src/gtkgui.glade.h:175
+msgid "New version of Gajim available"
+msgstr "Nová verze Gajimu je k dispozici"
+
+#: ../src/gtkgui.glade.h:176
+msgid "Nickname:"
+msgstr "Přezdívka"
+
+#. None means no proxy profile selected
+#: ../src/gtkgui.glade.h:179
+msgid "None"
+msgstr "Žádný"
+
+#: ../src/gtkgui.glade.h:180
+msgid "Notify me about contacts that: "
+msgstr "Upozorni mě na kontakty které: "
+
+#: ../src/gtkgui.glade.h:181
+msgid "OS:"
+msgstr "OS:"
+
+#: ../src/gtkgui.glade.h:182
+msgid "On every _message"
+msgstr "Při každé _zprávě"
+
+#: ../src/gtkgui.glade.h:183
+#, fuzzy
+msgid "Open Download Page"
+msgstr "Otevři stránku stahování"
+
+#: ../src/gtkgui.glade.h:184
+msgid "Open..."
+msgstr "Otevřít..."
+
+#: ../src/gtkgui.glade.h:186
+msgid "Or choose a preset message:"
+msgstr "Nebo vyberte předdefinovanou zprávu:"
+
+#: ../src/gtkgui.glade.h:187
+msgid "Outgoing message:"
+msgstr "Odchozí zpráva:"
+
+#: ../src/gtkgui.glade.h:188
+msgid "Pass_word:"
+msgstr "He_slo:"
+
+#: ../src/gtkgui.glade.h:190
+msgid "Password:"
+msgstr "Heslo:"
+
+#: ../src/gtkgui.glade.h:191
+#, fuzzy
+msgid "Personal Details"
+msgstr "Osobní detaily"
+
+#: ../src/gtkgui.glade.h:192
+#, fuzzy
+msgid "Phone No.:"
+msgstr "Telefon:"
+
+#: ../src/gtkgui.glade.h:193
+msgid "Play _sounds"
+msgstr "Přehrávat _zvuky"
+
+#: ../src/gtkgui.glade.h:194
+msgid "Please fill in the data for your existing account"
+msgstr "Prosím vyplňte údaje pro Váš existující účet"
+
+#: ../src/gtkgui.glade.h:195
+msgid "Please fill in the data for your new account"
+msgstr "Prosím vyplňte údaje pro Váš nový účet"
+
+#: ../src/gtkgui.glade.h:196
+msgid "Port: "
+msgstr "Port: "
+
+#: ../src/gtkgui.glade.h:197
+msgid "Position:"
+msgstr "Poloha:"
+
+#: ../src/gtkgui.glade.h:198
+msgid "Postal Code:"
+msgstr "PSČ:"
+
+#: ../src/gtkgui.glade.h:199
+msgid "Preferences"
+msgstr "Nastavení"
+
+#: ../src/gtkgui.glade.h:200
+#, fuzzy
+msgid "Prefix:"
+msgstr "Předpona:"
+
+#: ../src/gtkgui.glade.h:201
+#, fuzzy
+msgid "Print time:"
+msgstr "Čas tisku:"
+
+#: ../src/gtkgui.glade.h:202
+msgid "Priori_ty:"
+msgstr "Priori_ta:"
+
+#: ../src/gtkgui.glade.h:203
+msgid ""
+"Priority is used in Jabber to determine who gets the events from the jabber "
+"server when two or more clients are connected using the same account; The "
+"client with the highest priority gets the events"
+msgstr "Priorita je v Jabberu použita ke zjištění, kdo obdrží zprávu od jabber serveru, pokud je připojeno více klientů přes stejný účet. Zprávu obdrží klient s vyšší prioritou"
+
+#: ../src/gtkgui.glade.h:204
+msgid "Profile, Avatar"
+msgstr "Profil, Avatar"
+
+#: ../src/gtkgui.glade.h:205
+msgid "Protocol:"
+msgstr "Protokol:"
+
+#: ../src/gtkgui.glade.h:206
+msgid "Proxy:"
+msgstr "Proxy:"
+
+#: ../src/gtkgui.glade.h:208
+msgid "Re_quest Authorization from"
+msgstr "Žádat autorizaci od"
+
+#: ../src/gtkgui.glade.h:209
+msgid "Recently:"
+msgstr "Nedávno:"
+
+#: ../src/gtkgui.glade.h:210
+msgid "Register to"
+msgstr "Zaregistrovat"
+
+#: ../src/gtkgui.glade.h:211
+msgid "Remove account from Gajim and from server"
+msgstr "Odstranit účet z Gajimu i ze serveru"
+
+#: ../src/gtkgui.glade.h:212
+msgid "Remove account only from Gajim"
+msgstr "Odstranit účet pouze z Gajimu"
+
+#: ../src/gtkgui.glade.h:213
+msgid "Remove file transfer from the list."
+msgstr "Odstranit přenos souboru ze výpisu."
+
+#: ../src/gtkgui.glade.h:214
+msgid "Removes completed, canceled and failed file transfers from the list"
+msgstr "Odstraní dokončené, zrušené nebo přenosy které selhaly, z výpisu"
+
+#: ../src/gtkgui.glade.h:215
+msgid "Removing selected file transfer"
+msgstr "Odstraňuji vybraný přenos souboru"
+
+#: ../src/gtkgui.glade.h:216
+msgid "Reply to this message"
+msgstr "Odpovědět na tuto zprávu"
+
+#: ../src/gtkgui.glade.h:217
+msgid "Reset to Default Colors"
+msgstr "Vrátit k výchozím barvám"
+
+#: ../src/gtkgui.glade.h:218
+msgid "Resour_ce: "
+msgstr "Zd_roj: "
+
+#: ../src/gtkgui.glade.h:219
+#, fuzzy
+msgid ""
+"Resource is sent to the Jabber server in order to separate the same JID in "
+"two or more parts depending on the number of the clients connected in the "
+"same server with the same account. So you might be connected in the same "
+"account with resource 'Home' and 'Work' at the same time. The resource which "
+"has the highest priority will get the events. (see below)"
+msgstr "Zdroj je odeslán Jabber serveru pro oddělení stejné JID na dvě nebo více částí závisejících na počtu připojených klientů na stejný server se stejným účtem. Takže můžete být připojeni ke stejnému účtu se zdroji 'Domov' a 'Práce' zároveň. Zdroj, který má nejvyšší prioritu obdrží zprávy. (více následuje)"
+
+#: ../src/gtkgui.glade.h:220
+msgid "Resource:"
+msgstr "Zdroj:"
+
+#: ../src/gtkgui.glade.h:221
+#, fuzzy
+msgid "Role:"
+msgstr "Role:"
+
+#: ../src/gtkgui.glade.h:222
+msgid "Room Configuration"
+msgstr "Nastavení místnosti"
+
+#: ../src/gtkgui.glade.h:223
+msgid "Room:"
+msgstr "Místnost:"
+
+#: ../src/gtkgui.glade.h:224
+msgid "Save _passphrase (insecure)"
+msgstr "Uložit _heslo (nebezpečné)"
+
+#: ../src/gtkgui.glade.h:225
+msgid "Save _position and size for roster and chat windows"
+msgstr "Uložit pozici a velikost pro seznam a okna rozhovorů"
+
+#: ../src/gtkgui.glade.h:226
+msgid "Save conversation _logs for all contacts"
+msgstr "Uložit _historii pro všechny kontakty"
+
+#: ../src/gtkgui.glade.h:227
+#, fuzzy
+msgid "Save pass_word"
+msgstr "Uložit heslo"
+
+#: ../src/gtkgui.glade.h:228
+msgid "Sen_d"
+msgstr "O_deslat"
+
+#: ../src/gtkgui.glade.h:229
+msgid "Send Authorization to"
+msgstr "Odeslat autorizaci"
+
+#: ../src/gtkgui.glade.h:230
+msgid "Send File"
+msgstr "Odeslat Soubor"
+
+#: ../src/gtkgui.glade.h:231
+msgid "Send Single _Message"
+msgstr "Odeslat jednoduchou _zprávu"
+
+#: ../src/gtkgui.glade.h:232
+msgid "Send _File"
+msgstr "Odeslat Soubor"
+
+#: ../src/gtkgui.glade.h:233
+msgid "Send keep-alive packets"
+msgstr "Odesílat keep-alive pakety"
+
+#: ../src/gtkgui.glade.h:234
+msgid "Send message"
+msgstr "Odeslat zprávu"
+
+#: ../src/gtkgui.glade.h:235
+msgid "Send message and close window"
+msgstr "Odeslat zprávu a zavřít okno"
+
+#: ../src/gtkgui.glade.h:236
+msgid "Sends a message to currently connected users to this server"
+msgstr "Poslat zprávu momentálně připojeným uživatelům tohoto serveru"
+
+#: ../src/gtkgui.glade.h:237
+#, fuzzy
+msgid "Server:"
+msgstr "Server:"
+
+#: ../src/gtkgui.glade.h:238
+msgid "Servers Features"
+msgstr "Vlastnosti serveru"
+
+#: ../src/gtkgui.glade.h:239
+msgid "Set MOTD"
+msgstr "Nastavit MOTD"
+
+#: ../src/gtkgui.glade.h:240
+msgid "Set Message of the Day"
+msgstr "Nastavit Zprávu dne"
+
+#: ../src/gtkgui.glade.h:241
+msgid "Set _Avatar"
+msgstr "Nastavit _Avatara"
+
+#: ../src/gtkgui.glade.h:242
+msgid "Sets Message of the Day"
+msgstr "Nastaví Zprávu dne"
+
+#: ../src/gtkgui.glade.h:243
+msgid "Show _Offline Contacts"
+msgstr "Zobrazit _odpojené kontakty"
+
+#: ../src/gtkgui.glade.h:244
+msgid "Show only in _roster"
+msgstr "Zobrazit pouze v seznamu"
+
+#: ../src/gtkgui.glade.h:245
+msgid "Show roster window at application startup"
+msgstr "Zobrazit okno seznamu po spuštění aplikace"
+
+#: ../src/gtkgui.glade.h:246
+msgid "Shows a list of file transfers between you and other"
+msgstr "Zobrazí výpis přenosů souborů mezi Vámi a ostatními"
+
+#: ../src/gtkgui.glade.h:247
+msgid "Sign _in"
+msgstr "Přihlás_it"
+
+#: ../src/gtkgui.glade.h:248
+msgid "Sign _out"
+msgstr "_Odhlásit"
+
+#: ../src/gtkgui.glade.h:249
+msgid "Sort contacts by status"
+msgstr "Seřadit podle stavu"
+
+#: ../src/gtkgui.glade.h:250
+msgid "Start _Chat"
+msgstr "Začít _rozhovor"
+
+#: ../src/gtkgui.glade.h:251
+msgid "State:"
+msgstr "Stav:"
+
+#: ../src/gtkgui.glade.h:252
+msgid "Status"
+msgstr "Stav"
+
+#: ../src/gtkgui.glade.h:253
+msgid "Status message:"
+msgstr "Stav:"
+
+#: ../src/gtkgui.glade.h:254
+msgid "Status:"
+msgstr "Stav:"
+
+#: ../src/gtkgui.glade.h:255
+msgid "Stop file transfer"
+msgstr "Zastavit přenos souboru"
+
+#: ../src/gtkgui.glade.h:256
+msgid "Stoping selected file transfer"
+msgstr "Zastavuji přenos souboru"
+
+#: ../src/gtkgui.glade.h:257
+msgid ""
+"Stops the selected file transfer. If there is an incomplete file, kept in "
+"the file system it will be removed. This operation is not reversable. "
+msgstr "Zastaví vybraný přenos souboru. Pokud existuje nedokončený soubor, bude odstraněn. Tato operace je nevratná. "
+
+#: ../src/gtkgui.glade.h:258
+msgid "Street:"
+msgstr "Ulice:"
+
+#: ../src/gtkgui.glade.h:259
+msgid "Subject:"
+msgstr "Předmět:"
+
+#: ../src/gtkgui.glade.h:260
+msgid "Subscription Request"
+msgstr "Žádost o autorizaci"
+
+#: ../src/gtkgui.glade.h:261
+msgid "Subscription:"
+msgstr "Autorizace:"
+
+#: ../src/gtkgui.glade.h:262
+#, fuzzy
+msgid "Suffix:"
+msgstr "Přípona:"
+
+#: ../src/gtkgui.glade.h:263
+msgid "Synch_ronize account status with global status"
+msgstr "Synch_ronizovat stav účtu s globálním stavem"
+
+#: ../src/gtkgui.glade.h:264
+msgid "Text color"
+msgstr "Barva textu"
+
+#: ../src/gtkgui.glade.h:265
+msgid "Text font"
+msgstr "Písmo textu"
+
+#: ../src/gtkgui.glade.h:266
+msgid "The auto away status message"
+msgstr "Text stavu automaticky pryč"
+
+#: ../src/gtkgui.glade.h:267
+msgid "The auto not available status message"
+msgstr "Text stavu nedostupný"
+
+#: ../src/gtkgui.glade.h:268
+#, fuzzy
+msgid "The bar line which is on top of chat windows"
+msgstr "Čára která je na vrchu oken rozhovorů"
+
+#: ../src/gtkgui.glade.h:269
+#, fuzzy
+msgid "Theme:"
+msgstr "Téma:"
+
+#: ../src/gtkgui.glade.h:270
+msgid ""
+"This action removes single file transfer from the list. If the transfer is "
+"active, it is first stopped and then removed"
+msgstr "Tato akce smaže jeden přenos souboru z výpisu. Pokud je přenos aktivní, bude nejdříve zastaven a potom smazán"
+
+#: ../src/gtkgui.glade.h:271
+msgid "Title:"
+msgstr "Titul:"
+
+#: ../src/gtkgui.glade.h:272
+#, fuzzy
+msgid "To:"
+msgstr "Příjemce:"
+
+#: ../src/gtkgui.glade.h:273
+msgid "Toggle Open_PGP Encryption"
+msgstr "Přepnout Open_PGP šifrování"
+
+#: ../src/gtkgui.glade.h:274
+#, fuzzy
+msgid "Type:"
+msgstr "Typ:"
+
+#: ../src/gtkgui.glade.h:275
+msgid "Underline"
+msgstr "Podtržení"
+
+#: ../src/gtkgui.glade.h:276
+msgid "Update MOTD"
+msgstr "Upravit MOTD"
+
+#: ../src/gtkgui.glade.h:277
+msgid "Update Message of the Day"
+msgstr "Upravit Zprávu dne"
+
+#: ../src/gtkgui.glade.h:278
+msgid "Updates Message of the Day"
+msgstr "Upraví Zprávu dne"
+
+#: ../src/gtkgui.glade.h:279
+msgid "Use _SSL (legacy)"
+msgstr "Použít _SSL (staré)"
+
+#: ../src/gtkgui.glade.h:280
+msgid "Use _emoticons"
+msgstr "Používat _smajlíky"
+
+#: ../src/gtkgui.glade.h:281
+msgid "Use _transports iconsets"
+msgstr "Používej ikony _transportů"
+
+#: ../src/gtkgui.glade.h:282
+msgid "Use a single chat window with _tabs"
+msgstr "Používat jedno okno se _záložkami"
+
+#: ../src/gtkgui.glade.h:283
+msgid "Use authentication"
+msgstr "Použij autentifikaci"
+
+#: ../src/gtkgui.glade.h:284
+msgid "Use custom hostname/port"
+msgstr "Použít vlastní jméno počítače/port"
+
+#: ../src/gtkgui.glade.h:285
+msgid "User ID:"
+msgstr "Uživatel:"
+
+#: ../src/gtkgui.glade.h:286
+msgid "When a file transfer is complete show a popup notification "
+msgstr "Zobraz upozornění, až bude přenos souboru dokončen"
+
+#: ../src/gtkgui.glade.h:287
+msgid ""
+"When a new message is received which is not from a contact already in a chat "
+"window, the three following actions may happen in order for you to be "
+"informed about it"
+msgstr "Pokud dorazí nová zpráva od kontaktu, který už je v okně rozhovoru, mohou nastat tři následující akce, kterými o tom budete informováni"
+
+#: ../src/gtkgui.glade.h:288
+msgid "When new message is received"
+msgstr "Když je přijata nový zpráva"
+
+#: ../src/gtkgui.glade.h:289
+msgid "Work"
+msgstr "Práce"
+
+#: ../src/gtkgui.glade.h:290
+msgid ""
+"You need to have an account in order to connect to\n"
+"the Jabber network."
+msgstr "Potřebujete účet pro připojení k síti Jabber."
+
+#: ../src/gtkgui.glade.h:292
+msgid "Your JID:"
+msgstr "Vaše JID:"
+
+#: ../src/gtkgui.glade.h:293
+msgid "_About"
+msgstr "_O"
+
+#: ../src/gtkgui.glade.h:294
+msgid "_Actions"
+msgstr "_Akce"
+
+#: ../src/gtkgui.glade.h:295
+msgid "_Add Contact..."
+msgstr "Přid_at kontakt..."
+
+#: ../src/gtkgui.glade.h:296
+msgid "_Add to Roster"
+msgstr "Přid_at do Seznamu"
+
+#: ../src/gtkgui.glade.h:297
+msgid "_Address:"
+msgstr "_Adresa:"
+
+#: ../src/gtkgui.glade.h:298
+msgid "_Admin"
+msgstr "_Správce"
+
+#: ../src/gtkgui.glade.h:299
+msgid "_Administrator"
+msgstr "_Správce"
+
+#: ../src/gtkgui.glade.h:300
+msgid "_Advanced"
+msgstr "_Rozšířené"
+
+#: ../src/gtkgui.glade.h:301
+msgid "_Authorize"
+msgstr "_Autorizuj"
+
+#: ../src/gtkgui.glade.h:302
+msgid "_Ban"
+msgstr "_Zakaž"
+
+#: ../src/gtkgui.glade.h:303
+msgid "_Bookmark This Room"
+msgstr "Přidej do záložek"
+
+#: ../src/gtkgui.glade.h:304
+msgid "_Browser:"
+msgstr "_Prohlížeč:"
+
+#: ../src/gtkgui.glade.h:305
+msgid "_Cancel"
+msgstr "_Zrušit"
+
+#: ../src/gtkgui.glade.h:306
+msgid "_Compact View"
+msgstr "_Zjednodušený pohled"
+
+#: ../src/gtkgui.glade.h:307
+msgid "_Compact View    Alt+C"
+msgstr "Zjednodušený pohled    Alt+C"
+
+#: ../src/gtkgui.glade.h:309
+msgid "_Copy JID/Email Address"
+msgstr "_Kopírovat JID/Emailovou adresu"
+
+#: ../src/gtkgui.glade.h:310
+msgid "_Copy Link Location"
+msgstr "_Kopírovat odkaz"
+
+#: ../src/gtkgui.glade.h:311
+msgid "_Deny"
+msgstr "O_dmítnout"
+
+#: ../src/gtkgui.glade.h:312
+msgid "_Earliest"
+msgstr "N_ejnovější"
+
+#: ../src/gtkgui.glade.h:314
+msgid "_Edit Account..."
+msgstr "Upravit úč_et..."
+
+#: ../src/gtkgui.glade.h:315
+msgid "_Finish"
+msgstr "_Dokončit"
+
+#: ../src/gtkgui.glade.h:316
+msgid "_Highlight misspelled words"
+msgstr "Zvýrazňovat slova s překlepy"
+
+#: ../src/gtkgui.glade.h:317
+msgid "_History"
+msgstr "_Historie"
+
+#: ../src/gtkgui.glade.h:318
+msgid "_Host:"
+msgstr "_Počítač:"
+
+#. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
+#: ../src/gtkgui.glade.h:320
+msgid "_IQ"
+msgstr "_IQ"
+
+#: ../src/gtkgui.glade.h:321
+#, fuzzy
+msgid "_Icon in systray (aka. notification area)"
+msgstr "_Ikona v systrayi (jinak oznamovací oblast)"
+
+#: ../src/gtkgui.glade.h:322
+msgid "_Ignore events from contacts not in the roster"
+msgstr "_Ignorovat události od kontaktů mimo můj Seznam"
+
+#: ../src/gtkgui.glade.h:323
+msgid "_Jabber ID:"
+msgstr "_Jabber ID:"
+
+#: ../src/gtkgui.glade.h:324
+msgid "_Join"
+msgstr "V_stoupit"
+
+#: ../src/gtkgui.glade.h:325
+msgid "_Join Group Chat"
+msgstr "V_stoupit do místnosti"
+
+#: ../src/gtkgui.glade.h:326
+#, fuzzy
+msgid "_Kick"
+msgstr "Vy_kopnout"
+
+#: ../src/gtkgui.glade.h:327
+msgid "_Latest"
+msgstr "_Poslední"
+
+#: ../src/gtkgui.glade.h:328
+msgid "_Mail client:"
+msgstr "E-_mailový klient:"
+
+#: ../src/gtkgui.glade.h:329
+msgid "_Member"
+msgstr "Člen"
+
+#: ../src/gtkgui.glade.h:330
+msgid "_Merge accounts"
+msgstr "Spojit účty"
+
+#: ../src/gtkgui.glade.h:331
+msgid "_Message"
+msgstr "_Zpráva"
+
+#: ../src/gtkgui.glade.h:332
+msgid "_Modify"
+msgstr "_Upravit"
+
+#: ../src/gtkgui.glade.h:333
+msgid "_Name: "
+msgstr "_Jméno: "
+
+#: ../src/gtkgui.glade.h:334
+msgid "_Never"
+msgstr "_Nikdy"
+
+#: ../src/gtkgui.glade.h:335
+msgid "_New Message"
+msgstr "_Nová zpráva"
+
+#: ../src/gtkgui.glade.h:336
+msgid "_New Message..."
+msgstr "_Nová zpráva..."
+
+#: ../src/gtkgui.glade.h:337
+msgid "_Nickname:"
+msgstr "_Přezdívka:"
+
+#: ../src/gtkgui.glade.h:338
+msgid "_Notify me about it"
+msgstr "_Upozornit mě"
+
+#: ../src/gtkgui.glade.h:339
+msgid "_Notify me when a file transfer is complete"
+msgstr "_Upozornit mě po dokončení přenosu souboru"
+
+#: ../src/gtkgui.glade.h:340
+msgid "_OK"
+msgstr "_OK"
+
+#: ../src/gtkgui.glade.h:341
+msgid "_Occupant Actions"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:342
+msgid "_Online Users"
+msgstr "Připojení uživatelé"
+
+#: ../src/gtkgui.glade.h:344
+msgid "_Open Email Composer"
+msgstr "_Otevři Emailový editor"
+
+#: ../src/gtkgui.glade.h:345
+msgid "_Open Link in Browser"
+msgstr "_Otevřít v prohlížeči"
+
+#: ../src/gtkgui.glade.h:346
+msgid "_Owner"
+msgstr "_Vlastník"
+
+#: ../src/gtkgui.glade.h:347
+msgid "_Password:"
+msgstr "_Heslo:"
+
+#: ../src/gtkgui.glade.h:348
+msgid "_Pause"
+msgstr "_Pauza"
+
+#: ../src/gtkgui.glade.h:349
+msgid "_Player:"
+msgstr "_Hráč:"
+
+#: ../src/gtkgui.glade.h:350
+#, fuzzy
+msgid "_Pop it up"
+msgstr "_Zobrazit popup"
+
+#: ../src/gtkgui.glade.h:351
+msgid "_Port:"
+msgstr "_Port:"
+
+#: ../src/gtkgui.glade.h:352
+msgid "_Preferences"
+msgstr "_Nastavení"
+
+#: ../src/gtkgui.glade.h:353
+msgid "_Presence"
+msgstr "_Status"
+
+#: ../src/gtkgui.glade.h:354
+msgid "_Previous"
+msgstr "_Předchozí"
+
+#: ../src/gtkgui.glade.h:355
+msgid "_Publish"
+msgstr "_Zveřejnit"
+
+#: ../src/gtkgui.glade.h:356
+msgid "_Quit"
+msgstr "_Konec"
+
+#: ../src/gtkgui.glade.h:357
+msgid "_Refresh"
+msgstr "_Obnovit"
+
+#: ../src/gtkgui.glade.h:358
+msgid "_Register new account"
+msgstr "_Registrovat nový účet"
+
+#: ../src/gtkgui.glade.h:359
+msgid "_Remove"
+msgstr "Odst_ranit"
+
+#: ../src/gtkgui.glade.h:361
+msgid "_Rename"
+msgstr "_Přejmenovat"
+
+#: ../src/gtkgui.glade.h:362
+msgid "_Reply"
+msgstr "_Odpovědět"
+
+#: ../src/gtkgui.glade.h:363
+msgid "_Retrieve"
+msgstr "_Získat"
+
+#: ../src/gtkgui.glade.h:364
+msgid "_Send"
+msgstr "Ode_slat"
+
+#: ../src/gtkgui.glade.h:365
+msgid "_Send & Close"
+msgstr "Ode_slat a zavřít"
+
+#: ../src/gtkgui.glade.h:366
+msgid "_Send Private Message"
+msgstr "_Odeslat soukromou zprávu"
+
+#: ../src/gtkgui.glade.h:367
+msgid "_Send Server Message"
+msgstr "Ode_slat zprávu serveru"
+
+#: ../src/gtkgui.glade.h:368
+msgid "_Send Single Message"
+msgstr "Ode_slat jednoduchou zprávu"
+
+#: ../src/gtkgui.glade.h:369
+msgid "_Server:"
+msgstr "_Server:"
+
+#: ../src/gtkgui.glade.h:370
+msgid "_Service Discovery"
+msgstr "_Service Discovery"
+
+#: ../src/gtkgui.glade.h:371
+msgid "_Service Discovery..."
+msgstr "_Service Discovery..."
+
+#: ../src/gtkgui.glade.h:372
+msgid "_Set Image..."
+msgstr "_Nastavit obrázek..."
+
+#: ../src/gtkgui.glade.h:373
+msgid "_Start Chat"
+msgstr "_Začít rozhovor"
+
+#: ../src/gtkgui.glade.h:374
+msgid "_Status"
+msgstr "_Stav"
+
+#: ../src/gtkgui.glade.h:375
+msgid "_Subscribe"
+msgstr "_Žádat autorizaci"
+
+#: ../src/gtkgui.glade.h:376
+msgid "_Subscription"
+msgstr "_Autorizace"
+
+#: ../src/gtkgui.glade.h:377
+msgid "_Use proxy"
+msgstr "_Používat proxy"
+
+#: ../src/gtkgui.glade.h:378
+msgid "_Username:"
+msgstr "_Uživatel:"
+
+#: ../src/gtkgui.glade.h:379
+msgid "_Voice"
+msgstr "_Hlas"
+
+#: ../src/gtkgui.glade.h:380
+msgid "_XML Console"
+msgstr "_XML konzole"
+
+#: ../src/gtkgui.glade.h:381
+msgid "_XML Console..."
+msgstr "_XML konzole..."
+
+#: ../src/gtkgui.glade.h:382
+msgid "file transfers list"
+msgstr "výpis přenosů souborů"
+
+#: ../src/gtkgui.glade.h:383
+msgid "minutes"
+msgstr "minut"
+
+#: ../scripts/gajim-remote.py:70
+msgid "show a help on specific command"
+msgstr "zobraz nápovědu pro konkrétní příkaz"
+
+#. parameter, named "on_command". User gets help for the command, specified by this parameter
+#: ../scripts/gajim-remote.py:73
+msgid "on_command"
+msgstr ""
+
+#: ../scripts/gajim-remote.py:74
+#, fuzzy
+msgid "show help on command"
+msgstr "zobraz nápovědu při příkazu"
+
+#: ../scripts/gajim-remote.py:78
+msgid "Shows or hides the roster window"
+msgstr "Zobrazí nebo skryje okno Seznamu"
+
+#: ../scripts/gajim-remote.py:82
+msgid "Popup a window with the next unread message"
+msgstr "Otevře okno s další nepřečtenou zprávou"
+
+#: ../scripts/gajim-remote.py:86
+msgid ""
+"Print a list of all contacts in the roster. Each contact appear on a "
+"separate line"
+msgstr "Soupis všech kontaktů v Seznamu. Každý kontakt se objeví na samostatném řádku"
+
+#: ../scripts/gajim-remote.py:89 ../scripts/gajim-remote.py:104
+#: ../scripts/gajim-remote.py:116 ../scripts/gajim-remote.py:130
+msgid "account"
+msgstr "účet"
+
+#: ../scripts/gajim-remote.py:89
+msgid "show only contacts of the given account"
+msgstr "zobraz pouze kontakty zadaného účtu"
+
+#: ../scripts/gajim-remote.py:95
+msgid "Print a list of registered accounts"
+msgstr "Vypiš seznam registrovaných účtů"
+
+#: ../scripts/gajim-remote.py:99
+msgid "Change the status of account or accounts"
+msgstr "Změň stav účtu nebo účtů"
+
+#: ../scripts/gajim-remote.py:101
+msgid "status"
+msgstr "stav"
+
+#: ../scripts/gajim-remote.py:101
+msgid "one of: offline, online, chat, away, xa, dnd, invisible "
+msgstr "jeden z: odpojen, připojen, ukecaný, pryč, nedostupný, nerušit, neviditelný "
+
+#: ../scripts/gajim-remote.py:103 ../scripts/gajim-remote.py:127
+msgid "message"
+msgstr "zpráva"
+
+#: ../scripts/gajim-remote.py:103
+msgid "status message"
+msgstr "text stavu"
+
+#: ../scripts/gajim-remote.py:104
+#, fuzzy
+msgid ""
+"change status of account \"account\". If not specified, try to change status "
+"of all accounts that have \"sync with global status\" option set"
+msgstr "změit stav účtu \"account\". Pokud není uveden, zkuste změnit stav všech účtů které mají povolenu volbu \"sync with global status\" "
+
+#: ../scripts/gajim-remote.py:110
+msgid "Show the chat dialog so that you can send message to a contact"
+msgstr "Zobrazte okno rozhovoru, aby jste mohl(a) poslat zprávu kontaktu"
+
+#: ../scripts/gajim-remote.py:113
+msgid "jid of the contact that you want to chat with"
+msgstr "JID kontaktu, se kterým chcete komunikovat"
+
+#: ../scripts/gajim-remote.py:116
+#, fuzzy
+msgid "if specified, contact is taken from the contact list of this account"
+msgstr "pokud uvedeno, kontakt bude vzít ze seznamu kontaktů pro tento účet"
+
+#: ../scripts/gajim-remote.py:121
+msgid ""
+"Send new message to a contact in the roster. Both OpenPGP key and account "
+"are optional. If you want to set only 'account', without 'pgp key', just set "
+"'pgp key' to ''."
+msgstr "Poslat novou zprávu kontaktu v Seznamu. Obojí OpenPGP klíč a účet jsou volitelné. Pokud chcete nastavit pouze 'account' bez 'pgp-key', nastavte prostě 'pgp-key' na ''."
+
+#: ../scripts/gajim-remote.py:125
+msgid "jid of the contact that will receive the message"
+msgstr "JID kontaktu, který obdrží zprávu"
+
+#: ../scripts/gajim-remote.py:127
+msgid "message contents"
+msgstr "Tělo zprávy"
+
+#: ../scripts/gajim-remote.py:128
+msgid "pgp key"
+msgstr "pgp klíč"
+
+#: ../scripts/gajim-remote.py:128
+msgid "if specified, the message will be encrypted using this public key"
+msgstr "pokud bude uvedeno, zpráva bude zašifrována tímto veřejným klíčem"
+
+#: ../scripts/gajim-remote.py:130
+msgid "if specified, the message will be sent using this account"
+msgstr "pokud bude uvedeno, zpráva bude odeslána z tohoto účtu"
+
+#: ../scripts/gajim-remote.py:135
+msgid "Get detailed info on a contact"
+msgstr "Získej detailnější informace o kontaktu"
+
+#: ../scripts/gajim-remote.py:137
+msgid "jid of the contact"
+msgstr "JID kontaktu"
+
+#: ../scripts/gajim-remote.py:158
+msgid "Missing argument \"contact_jid\""
+msgstr "Chybí parametry \"contact_jid\""
+
+#: ../scripts/gajim-remote.py:163 ../scripts/gajim-remote.py:477
+msgid "Service not available"
+msgstr "Služba není dostupná"
+
+#: ../scripts/gajim-remote.py:181
+#, python-format
+msgid ""
+"'%s' is not in your roster.\n"
+"Please specify account for sending the message."
+msgstr ""
+"'%s' není ve vašem Seznamu.\n"
+"Prosím uveďte účet, přes který bude odeslána zpráva."
+
+#: ../scripts/gajim-remote.py:184
+msgid "You have no active account"
+msgstr "Nemáte aktivní účet"
+
+#: ../scripts/gajim-remote.py:203
+msgid "Session bus is not available."
+msgstr "Rozhraní sezení není dostupné."
+
+#: ../scripts/gajim-remote.py:212
+#, python-format
+msgid "Unknown dbus version: %s"
+msgstr "Neznámá verze dbus: %s"
+
+#: ../scripts/gajim-remote.py:239
+#, python-format
+msgid ""
+"Usage: %s %s %s \n"
+"\t"
+msgstr ""
+"Použití: %s %s %s \n"
+"\t"
+
+#: ../scripts/gajim-remote.py:241
+msgid "Arguments:"
+msgstr "Parametry:"
+
+#: ../scripts/gajim-remote.py:245
+#, python-format
+msgid "%s not found"
+msgstr "%s nebyl nalezen"
+
+#: ../scripts/gajim-remote.py:249
+#, python-format
+msgid ""
+"Usage: %s command [arguments]\n"
+"Command is one of:\n"
+msgstr ""
+"Použití: %s příkaz [parametry]\n"
+"Příkaz je jeden z:\n"
+
+#: ../scripts/gajim-remote.py:308
+#, python-format
+msgid "Unknown type %s "
+msgstr "Neznámý typ %s "
+
+#: ../scripts/gajim-remote.py:450
+#, python-format
+msgid ""
+"Argument \"%s\" is not specified. \n"
+"Type \"%s help %s\" for more info"
+msgstr ""
+"Parametry \"%s\" nebyl uveden. \n"
+"Napište \"%s help %s\" pro více informací"
+
+
