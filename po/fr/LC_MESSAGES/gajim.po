@@ -148,13 +148,11 @@ msgid "Please check your login and password for correctness."
 msgstr "Vérifiez si votre identifiant et votre mot de passe sont corrects."
 
 #: ../src/common/connection.py:1394
-#, fuzzy
 msgid "invisible"
-msgstr "Invisible"
+msgstr "invisible"
 
 #. do not show I'm invisible!
 #: ../src/common/connection.py:1395
-#, fuzzy
 msgid "offline"
 msgstr "Déconnecté"
 
@@ -165,9 +163,8 @@ msgstr "Je suis %s"
 
 #. We didn't set a passphrase
 #: ../src/common/connection.py:1401
-#, fuzzy
 msgid "OpenPGP passphrase was not given"
-msgstr "Clé OpenPGP non renseignée"
+msgstr "Mot de pqsse OpenPGP non renseignée"
 
 #. %s is the account name here
 #: ../src/common/connection.py:1403
@@ -188,10 +185,10 @@ msgstr "Vérifiez votre connexion ou réessayer plus tard."
 #: ../src/common/connection.py:1917
 #, python-format
 msgid "Gajim disconnected you from %s"
-msgstr "Gajim vous a déconnecté de $s"
+msgstr "Gajim vous a déconnecté de %s"
 
 #: ../src/common/connection.py:1918
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%s seconds have passed and server did not reply to our keep-alive. If you "
 "believe such disconnection should not have happened, you can disable sending "
@@ -199,7 +196,7 @@ msgid ""
 msgstr ""
 "%s secondes se sont écoulées et le serveur n'a pas répondu à nos paquets "
 "keepalive. Si vous pensez qu'une telle déconnexion ne dois pas arriver, vous "
-"pouvez désactiver l'envoie de paquets keepalive en modifiant ce compte"
+"pouvez désactiver l'envoie de paquets keepalive en modifiant ce compte."
 
 #: ../src/common/connection.py:1924 ../src/common/connection.py:1933
 msgid "error appeared while processing xmpp:"
@@ -284,19 +281,16 @@ msgid "Not in the roster"
 msgstr "Non dans la liste"
 
 #: ../src/common/helpers.py:89
-#, fuzzy
 msgid "?contact has status:Unknown"
-msgstr "Trier les contacts par status"
+msgstr "Inconnu"
 
 #: ../src/common/helpers.py:91
-#, fuzzy
 msgid "?contact has status:Has errors"
-msgstr "Trier les contacts par status"
+msgstr "a une erreur"
 
 #: ../src/common/helpers.py:96
-#, fuzzy
 msgid "?Subscription we already have:None"
-msgstr "La requête d'inscription a été envoyée"
+msgstr "Aucune"
 
 #: ../src/common/helpers.py:98
 msgid "To"
@@ -311,9 +305,8 @@ msgid "Both"
 msgstr "Les deux"
 
 #: ../src/common/helpers.py:110
-#, fuzzy
 msgid "?Ask (for Subscription):None"
-msgstr "Inscription :"
+msgstr "Aucune"
 
 #: ../src/common/helpers.py:112
 msgid "Subscribe"
@@ -444,7 +437,7 @@ msgstr "Chercher dans le _Dictionnaire"
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr ""
-"Il manque un \"$s\" dans l'URL du dictionnaire et ce n'est pas WIKTIONARY"
+"Il manque un \"%s\" dans l'URL du dictionnaire et ce n'est pas WIKTIONARY"
 
 #. we must have %s in the url
 #: ../src/chat.py:788
@@ -577,9 +570,9 @@ msgid "Failed to get secret keys"
 msgstr "Erreur en récupérant les clés secrètes"
 
 #: ../src/config.py:1447
-#, fuzzy
 msgid "There was a problem retrieving your OpenPGP secret keys."
-msgstr "Il y a eut un problème durant la récupération de vos clés GPG privées."
+msgstr "Il y a eut un problème durant la récupération de vos clés OpenPGP "
+"privées."
 
 #: ../src/config.py:1450 ../src/gtkgui.glade.h:192
 msgid "Passphrase"
@@ -808,7 +801,6 @@ msgid "A GTK jabber client"
 msgstr "Un client Jabber en GTK"
 
 #: ../src/dialogs.py:416
-#, fuzzy
 msgid "translator-credits"
 msgstr "traduction francaise proposée par Yann Le Boulanger"
 
@@ -1062,7 +1054,7 @@ msgstr "Thème"
 #: ../src/gajim_themes_window.py:125 ../src/gajim_themes_window.py:127
 #: ../src/gajim_themes_window.py:128
 msgid "theme_name"
-msgstr "nom_du_theme"
+msgstr "nom_theme"
 
 #: ../src/groupchat_window.py:125 ../src/groupchat_window.py:967
 #, python-format
@@ -1097,7 +1089,7 @@ msgstr "Ce salon n'a pas de sujet"
 
 #: ../src/groupchat_window.py:278
 msgid "?Group Chat Contact Role:None"
-msgstr ""
+msgstr "Aucun"
 
 #: ../src/groupchat_window.py:280
 msgid "Moderators"
@@ -1193,9 +1185,9 @@ msgid "If you close this tab, the message will be lost."
 msgstr "Si vous fermez cet onglet, le message sera perdu."
 
 #: ../src/gtkgui_helpers.py:61 ../src/gtkgui_helpers.py:75
-#, fuzzy, python-format
+#, python-format
 msgid "error: cannot open %s for reading"
-msgstr "erreur: impossible d'ouvrir %s en lecture\n"
+msgstr "erreur: impossible d'ouvrir %s en lecture"
 
 #: ../src/history_window.py:138
 #, python-format
@@ -1460,12 +1452,10 @@ msgid "The file must not be more than 8 kilobytes."
 msgstr "Le fichier ne doit pas excéder les 8 kilobytes."
 
 #: ../src/vcard.py:250
-#, fuzzy
 msgid "?Client:Unknown"
-msgstr "Client :"
+msgstr "Inconnu"
 
 #: ../src/vcard.py:252
-#, fuzzy
 msgid "?OS:Unknown"
 msgstr "Inconnu"
 
@@ -1566,11 +1556,8 @@ msgid "<span background=\"lightyellow\"></span>"
 msgstr "<span background=\"lightyellow\"></span>"
 
 #: ../src/gtkgui.glade.h:22
-#, fuzzy
 msgid "A list of active, completed and stopped file transfers"
-msgstr ""
-"Montre la liste des transferts de fichier actifs, terminés et arrêtés de et "
-"versa vos amis."
+msgstr "Une liste des transferts de fichier actifs, terminés et arrêtés"
 
 #: ../src/gtkgui.glade.h:23
 msgid "A_ccounts"
@@ -1597,7 +1584,6 @@ msgid "Accounts"
 msgstr "Comptes"
 
 #: ../src/gtkgui.glade.h:29
-#, fuzzy
 msgid "Activate/Disable notification for when a file transfer is complete"
 msgstr "Active/Désactive la notification de fin de transfert"
 
@@ -1801,9 +1787,8 @@ msgid "City:"
 msgstr "Ville :"
 
 #: ../src/gtkgui.glade.h:78
-#, fuzzy
 msgid "Clean _up"
-msgstr "Nettoyer"
+msgstr "_Nettoyer"
 
 #: ../src/gtkgui.glade.h:79
 msgid "Click to change account's password"
@@ -1863,7 +1848,7 @@ msgstr "Pays :"
 
 #: ../src/gtkgui.glade.h:93
 msgid "Default _status iconset:"
-msgstr "Icônes d'état par défaut :"
+msgstr "Icônes d'é_tat par défaut :"
 
 #: ../src/gtkgui.glade.h:94
 msgid "Delete MOTD"
@@ -2267,7 +2252,7 @@ msgstr "Syst. d'exploit. :"
 
 #: ../src/gtkgui.glade.h:185
 msgid "On every _message"
-msgstr "À chaque message"
+msgstr "À chaque _message"
 
 #: ../src/gtkgui.glade.h:186
 msgid "Open Download Page"
@@ -2303,7 +2288,7 @@ msgstr "Téléphone :"
 
 #: ../src/gtkgui.glade.h:196
 msgid "Play _sounds"
-msgstr "Jouer les sons"
+msgstr "Jouer les _sons"
 
 #: ../src/gtkgui.glade.h:197
 msgid "Please fill in the data for your existing account"
@@ -2366,7 +2351,7 @@ msgstr "Proxy :"
 
 #: ../src/gtkgui.glade.h:212
 msgid "Re_quest Authorization from"
-msgstr "Demander l'Autorisation à"
+msgstr "_Demander l'Autorisation à"
 
 #: ../src/gtkgui.glade.h:213
 msgid "Recently:"
@@ -2394,9 +2379,8 @@ msgstr ""
 "Supprimer les transferts de fichier terminés, annulés et échoués de la liste"
 
 #: ../src/gtkgui.glade.h:219
-#, fuzzy
 msgid "Removing selected file transfer"
-msgstr "Annule le transfert de fichier sélectionné"
+msgstr "Supprime le transfert de fichier sélectionné"
 
 #: ../src/gtkgui.glade.h:220
 msgid "Reply to this message"
@@ -2411,7 +2395,6 @@ msgid "Resour_ce: "
 msgstr "Ressour_ce: "
 
 #: ../src/gtkgui.glade.h:223
-#, fuzzy
 msgid ""
 "Resource is sent to the Jabber server in order to separate the same JID in "
 "two or more parts depending on the number of the clients connected in the "
@@ -2443,7 +2426,7 @@ msgstr "Salon :"
 
 #: ../src/gtkgui.glade.h:228
 msgid "Save _passphrase (insecure)"
-msgstr "Enregistrer votre mot de passe (non sécurisé)"
+msgstr "Enregistrer votre mot de _passe (non sécurisé)"
 
 #: ../src/gtkgui.glade.h:229
 msgid "Save _position and size for roster and chat windows"
@@ -2453,7 +2436,7 @@ msgstr ""
 
 #: ../src/gtkgui.glade.h:230
 msgid "Save conversation _logs for all contacts"
-msgstr "Archiver l'historique des conversations pour tous les contacts"
+msgstr "Archiver l'_historique des conversations pour tous les contacts"
 
 #: ../src/gtkgui.glade.h:231
 msgid "Save pass_word"
@@ -2521,11 +2504,11 @@ msgstr "Mets un Message du Jour"
 
 #: ../src/gtkgui.glade.h:247
 msgid "Show _Offline Contacts"
-msgstr "Montrer les contacts Déconnectés"
+msgstr "Montrer les contacts Déc_onnectés"
 
 #: ../src/gtkgui.glade.h:248
 msgid "Show only in _roster"
-msgstr "Ne montrer que dans la liste"
+msgstr "Ne montrer que dans la _liste"
 
 #: ../src/gtkgui.glade.h:249
 msgid "Show roster window at application startup"
@@ -2549,7 +2532,7 @@ msgstr "Trier les contacts par status"
 
 #: ../src/gtkgui.glade.h:254
 msgid "Start _Chat"
-msgstr "Commencer une discussion"
+msgstr "Commencer une _discussion"
 
 #: ../src/gtkgui.glade.h:255
 msgid "State:"
@@ -2577,13 +2560,12 @@ msgid "Stoping selected file transfer"
 msgstr "Annule le transfert de fichier sélectionné"
 
 #: ../src/gtkgui.glade.h:261
-#, fuzzy
 msgid ""
 "Stops the selected file transfer. If there is an incomplete file, kept in "
 "the file system it will be removed. This operation is not reversable. "
 msgstr ""
 "Arrête le transfert de fichier sélectionné. Si un fichier incomplet a été "
-"enregistré, il sera supprimé. Cette opération est irréversible."
+"enregistré, il sera supprimé. Cette opération est irréversible. "
 
 #: ../src/gtkgui.glade.h:262
 msgid "Street:"
@@ -2651,9 +2633,8 @@ msgid "To:"
 msgstr "À:"
 
 #: ../src/gtkgui.glade.h:278
-#, fuzzy
 msgid "Toggle Open_PGP Encryption"
-msgstr "Activer l'Encryption _GPG"
+msgstr "Bascule l'Encryption _GPG"
 
 #: ../src/gtkgui.glade.h:279
 msgid "Type:"
@@ -2685,7 +2666,7 @@ msgstr "Utiliser les _frimousses"
 
 #: ../src/gtkgui.glade.h:286
 msgid "Use _transports iconsets"
-msgstr "Utiliser les icônes des transports"
+msgstr "Utiliser les icônes des _transports"
 
 #: ../src/gtkgui.glade.h:287
 msgid "Use a single chat window with _tabs"
@@ -2704,11 +2685,10 @@ msgid "User ID:"
 msgstr "Identifiant :"
 
 #: ../src/gtkgui.glade.h:291
-#, fuzzy
 msgid "When a file transfer is complete show a popup notification "
 msgstr ""
-"Quand le fichier est complétement transféré a son destinataire, montrer une "
-"fenêtre de notification"
+"Quand le Transfert de fichier est terminé, montrer une fenêtre de "
+"notification"
 
 #: ../src/gtkgui.glade.h:292
 msgid ""
@@ -2757,7 +2737,7 @@ msgstr "_Ajouter à la liste de contacts"
 
 #: ../src/gtkgui.glade.h:302
 msgid "_Address:"
-msgstr "Adresse :"
+msgstr "_Adresse :"
 
 #: ../src/gtkgui.glade.h:303
 msgid "_Admin"
@@ -2829,7 +2809,7 @@ msgstr "_Finir"
 
 #: ../src/gtkgui.glade.h:321
 msgid "_Highlight misspelled words"
-msgstr "Souligner les fautes d'orthographe"
+msgstr "_Souligner les fautes d'orthographe"
 
 #: ../src/gtkgui.glade.h:322
 msgid "_History"
@@ -2933,7 +2913,6 @@ msgid "_Online Users"
 msgstr "Utilisateurs En _Ligne"
 
 #: ../src/gtkgui.glade.h:348 ../src/filetransfers_window.py:128
-#, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Ouvrir le répertoire de destination"
 
@@ -3051,11 +3030,11 @@ msgstr "_Choisir une Image..."
 
 #: ../src/gtkgui.glade.h:378
 msgid "_Start Chat"
-msgstr "Commencer une discussion"
+msgstr "_Commencer une discussion"
 
 #: ../src/gtkgui.glade.h:379
 msgid "_Status"
-msgstr "État"
+msgstr "É_tat"
 
 #: ../src/gtkgui.glade.h:380
 msgid "_Subscribe"
@@ -3153,7 +3132,6 @@ msgid "Size: "
 msgstr "Taille : "
 
 #: ../src/tooltips.py:374
-#, fuzzy
 msgid "Transferred: "
 msgstr "Transféré : "
 
@@ -3178,7 +3156,6 @@ msgid "stalled"
 msgstr "calé"
 
 #: ../src/tooltips.py:400
-#, fuzzy
 msgid "transferring"
 msgstr "en train de transférer"
 
@@ -3208,7 +3185,7 @@ msgstr "Expéditeur : %s"
 #: ../src/filetransfers_window.py:125
 #, fuzzy, python-format
 msgid "Saved in: %s"
-msgstr "Expéditeur : %s"
+msgstr ""
 
 #: ../src/filetransfers_window.py:127
 msgid "File transfer completed"
@@ -3279,7 +3256,7 @@ msgstr "montrer l'aide d'une commande"
 #. parameter, named "on_command". User gets help for the command, specified by this parameter
 #: ../scripts/gajim-remote.py:73
 msgid "on_command"
-msgstr "commande"
+msgstr "_commande"
 
 #: ../scripts/gajim-remote.py:74
 msgid "show help on command"
@@ -3358,7 +3335,6 @@ msgid "if specified, contact is taken from the contact list of this account"
 msgstr "Si spécifié, le contact est pris dan la liste de contact de ce compte"
 
 #: ../scripts/gajim-remote.py:121
-#, fuzzy
 msgid ""
 "Send new message to a contact in the roster. Both OpenPGP key and account "
 "are optional. If you want to set only 'account', without 'pgp key', just set "
@@ -3381,7 +3357,6 @@ msgid "pgp key"
 msgstr "clé pgp"
 
 #: ../scripts/gajim-remote.py:128
-#, fuzzy
 msgid "if specified, the message will be encrypted using this public key"
 msgstr "Si spécifié, le message sera crypté en utilisant cette clé public"
 
@@ -3399,7 +3374,7 @@ msgstr "jid du contact"
 
 #: ../scripts/gajim-remote.py:158
 msgid "Missing argument \"contact_jid\""
-msgstr "Argument manquant \"jid_du_contact\""
+msgstr "Argument manquant \"jid_contact\""
 
 #: ../scripts/gajim-remote.py:163 ../scripts/gajim-remote.py:477
 msgid "Service not available"
@@ -3423,7 +3398,7 @@ msgid "Session bus is not available."
 msgstr "Le bus de session n'est pas disponible."
 
 #: ../scripts/gajim-remote.py:212
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown dbus version: %s"
 msgstr "Version de dbus inconnu : %s"
 
@@ -3433,12 +3408,12 @@ msgid ""
 "Usage: %s %s %s \n"
 "\t"
 msgstr ""
-"Utilisation : %S %S %S \n"
+"Utilisation : %s %s %s \n"
 "\t"
 
 #: ../scripts/gajim-remote.py:241
 msgid "Arguments:"
-msgstr ""
+msgstr "Arguments :"
 
 #: ../scripts/gajim-remote.py:245
 #, python-format
@@ -3467,26 +3442,3 @@ msgid ""
 msgstr ""
 "L'argument \"%s\" n'est pas précisé. \n"
 "Tappez \"%s help %s\" pour plus d'informations"
-
-#~ msgid "Unknown"
-#~ msgstr "Inconnu"
-
-#~ msgid "Has errors"
-#~ msgstr "À des erreurs"
-
-#, fuzzy
-#~ msgid "Open containing folder"
-#~ msgstr "_Ouvrir le répertoire de destination"
-
-#~ msgid "GPG Encryption"
-#~ msgstr "Cryptage GPG"
-
-#~ msgid ""
-#~ "Shows list of files that you send to your friends, and files which you "
-#~ "receive from your friends."
-#~ msgstr ""
-#~ "Montre la liste des fichiers que vous envoyez a vos amis, et que vous "
-#~ "recevez de vos amis."
-
-#~ msgid "Stoping transfer"
-#~ msgstr "arrête le transfert"
