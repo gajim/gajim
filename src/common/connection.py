@@ -1300,6 +1300,7 @@ class Connection:
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
 				_('Check your connection or try again later')))
 			return None
+		con.RegisterEventHandler(self._event_dispatcher)
 		if auth:
 			con.initRoster()
 			self.last_incoming = time.time()
