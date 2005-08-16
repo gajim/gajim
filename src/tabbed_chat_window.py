@@ -736,10 +736,10 @@ timestamp, contact):
 		# How many lines to restore and when to time them out
 		restore	= gajim.config.get('restore_lines')
 		time_out = gajim.config.get('restore_timeout')
-		pos		= 0	# position, while reading from history
-		size		= 0	# how many lines we alreay retreived
-		lines		= []	# we'll need to reverse the lines from history
-		count		= gajim.logger.get_no_of_lines(jid)
+		pos = 0 # position, while reading from history
+		size = 0 # how many lines we alreay retreived
+		lines = [] # we'll need to reverse the lines from history
+		count = gajim.logger.get_no_of_lines(jid)
 
 
 		if gajim.awaiting_messages[self.account].has_key(jid):
@@ -757,19 +757,22 @@ timestamp, contact):
 			pos = pos + 1
 
 			# line is [] if log file for jid is not a file (does not exist or dir)
-			if line != []:
-				if (now - float(line[0][0]))/60 >= time_out:
-					# stop looking for messages if we found something too old
-					break
+			if line == []:
+				break
+			
+			if (now - float(line[0][0]))/60 >= time_out:
+				# stop looking for messages if we found something too old
+				break
 	
-				if line[0][1] != 'sent' and line[0][1] != 'recv':
-					# we don't want to display status lines, do we?
-					continue
+			if line[0][1] != 'sent' and line[0][1] != 'recv':
+				# we don't want to display status lines, do we?
+				continue
 	
 				lines.append(line[0])
 				size = size + 1
 	
-		lines.reverse()
+		if lines != []:
+			lines.reverse()
 		
 		for msg in lines:
 			if msg[1] == 'sent':
