@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.9.2Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: 0.9.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-15 14:28+0300\n"
 "PO-Revision-Date: 2005-08-15 08:30+0100\n"
@@ -2821,7 +2821,7 @@ msgstr "_Post klient:"
 
 #: ../src/gtkgui.glade.h:334
 msgid "_Member"
-msgstr "_Meldem"
+msgstr "_Medlem"
 
 #: ../src/gtkgui.glade.h:335
 msgid "_Merge accounts"
