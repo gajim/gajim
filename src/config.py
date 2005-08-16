@@ -1346,6 +1346,8 @@ _('To change the account name, you must be disconnected.')).get_response()
 				_('You already have an account using this name.')).get_response()
 			return
 		con = connection.Connection(name)
+		self.windows[name]['xml_console'] = \
+			dialogs.XMLConsoleWindow(self, name)
 		self.plugin.register_handlers(con)
 		#if we need to register a new account
 		if new_account:
