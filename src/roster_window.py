@@ -1506,7 +1506,6 @@ _('If "%s" accepts this request you will know his status.') %jid)
 
 	def on_manage_bookmarks_menuitem_activate(self, widget):
 		config.ManageBookmarksWindow(self.plugin)
-		#config.FirstTimeWizardWindow(self.plugin)
 
 	def close_all(self, dic):
 		'''close all the windows in the given dictionary'''
@@ -1769,7 +1768,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			image = gtk.Image()
 			image.show()
 			imgs[state] = image
-			for file in files:
+			for file in files: # loop seeking for either gif or png
 				if os.path.exists(file):
 					image.set_from_file(file)
 					break

@@ -88,8 +88,8 @@ class PreferencesWindow:
 		self.auto_away_message_entry = self.xml.get_widget \
 			('auto_away_message_entry')
 		self.auto_xa_checkbutton = self.xml.get_widget('auto_xa_checkbutton')
-		self.auto_xa_time_spinbutton = self.xml.get_widget \
-			('auto_xa_time_spinbutton')
+		self.auto_xa_time_spinbutton = self.xml.get_widget(
+			'auto_xa_time_spinbutton')
 		self.auto_xa_message_entry = self.xml.get_widget('auto_xa_message_entry')
 		self.trayicon_checkbutton = self.xml.get_widget('trayicon_checkbutton')
 		self.notebook = self.xml.get_widget('preferences_notebook')
@@ -99,10 +99,7 @@ class PreferencesWindow:
 			st = gajim.config.get('trayicon')
 			self.trayicon_checkbutton.set_active(st)
 		else:
-			if os.name == 'nt':
-				self.trayicon_checkbutton.set_no_show_all(True)
-			else:
-				self.trayicon_checkbutton.set_sensitive(False)
+			self.trayicon_checkbutton.set_sensitive(False)
 
 		#Show roster on Gajim startup
 		st = gajim.config.get('show_roster_on_startup')

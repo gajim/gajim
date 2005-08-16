@@ -27,7 +27,6 @@ import os
 import tooltips
 
 from common import gajim
-from common.connection import STATUS_LIST
 from common import helpers
 from common import i18n
 
@@ -65,10 +64,10 @@ class Systray:
 
 	def set_img(self):
 		if len(self.jids) > 0:
-			status = 'message'
+			state = 'message'
 		else:
-			status = self.status
-		image = self.plugin.roster.jabber_state_images[status]
+			state = self.status
+		image = self.plugin.roster.jabber_state_images[state]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			self.img_tray.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
@@ -79,10 +78,10 @@ class Systray:
 		if not l in self.jids:
 			self.jids.append(l)
 			self.set_img()
-		#we append to the number of unread messages
+		# we append to the number of unread messages
 		nb = self.plugin.roster.nb_unread
 		for acct in gajim.connections:
-			#in chat / groupchat windows
+			# in chat / groupchat windows
 			for kind in ['chats', 'gc']:
 				jids = self.plugin.windows[acct][kind]
 				for jid in jids:
@@ -94,10 +93,10 @@ class Systray:
 		if l in self.jids:
 			self.jids.remove(l)
 			self.set_img()
-		#we remove from the number of unread messages
+		# we remove from the number of unread messages
 		nb = self.plugin.roster.nb_unread
 		for acct in gajim.connections:
-			#in chat / groupchat windows
+			# in chat / groupchat windows
 			for kind in ['chats', 'gc']:
 				for jid in self.plugin.windows[acct][kind]:
 					if jid != 'tabbed':

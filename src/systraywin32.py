@@ -21,14 +21,12 @@
 ## GNU General Public License for more details.
 ##
 
-__version__ = '1.01'
 
-
-import sys
 import win32gui
 import win32con # winapi contants
 import systray
 import gtk
+import os
 
 WM_TASKBARCREATED = win32gui.RegisterWindowMessage('TaskbarCreated')
 WM_TRAYMESSAGE = win32con.WM_USER + 20
@@ -202,7 +200,7 @@ class NotifyIcon:
 		self.remove
 		win32gui.Shell_NotifyIcon(win32gui.NIM_ADD, self._get_nid())
 
-#FIXME: subclass us under Systray
+
 class SystrayWin32(systray.Systray):
 	def __init__(self, plugin):
 		# Note: gtk window must be realized before installing extensions.
@@ -212,6 +210,8 @@ class SystrayWin32(systray.Systray):
 		self.status = 'offline'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
+		
+		self.tray_ico_imgs = self.load_icos()
 		
 		self.systray_winapi = SystrayWINAPI(self.plugin.roster.window)
 
@@ -223,8 +223,10 @@ class SystrayWin32(systray.Systray):
 			}) 
 
 	def show_icon(self):
-		self.systray_winapi.add_notify_icon(self.systray_context_menu, tooltip = 'Gajim')
-		self.systray_winapi.notify_icon.menu = self.systray_context_menu
+		#self.systray_winapi.add_notify_icon(self.systray_context_menu, tooltip = 'Gajim')
+		#self.systray_winapi.notify_icon.menu = self.systray_context_menu
+		# do not remove set_img does both above. maybe I can only change img without readding
+		# the notify icon? F$ck WINAPI
 		self.set_img()
 
 	def hide_icon(self):
@@ -240,67 +242,81 @@ class SystrayWin32(systray.Systray):
 			self.on_left_click()
 
 	def add_jid(self, jid, account):
-		print 'FIXME: add_jid'
-		return
-		list = [account, jid]
-		if not list in self.jids:
-			self.jids.append(list)
+		l = [account, jid]
+		if not l in self.jids:
+			self.jids.append(l)
 			self.set_img()
-		#we look for the number of unread messages
-		#in roster
+		# we append to the number of unread messages
 		nb = self.plugin.roster.nb_unread
 		for acct in gajim.connections:
-			#in chat / groupchat windows
+			# in chat / groupchat windows
 			for kind in ['chats', 'gc']:
 				jids = self.plugin.windows[acct][kind]
 				for jid in jids:
 					if jid != 'tabbed':
 						nb += jids[jid].nb_unread[jid]
+		
+		#FIXME: prepare me for transltaion (ngeetext() and all) for 0.9
 		if nb > 1:
-			label = _('Gajim - %s unread messages') % nb
+			text = 'Gajim - %s unread messages' % nb
 		else:
-			label = _('Gajim - 1 unread message')
-		self.tip.set_tip(self.t, label)
-
-	def set_img(self):
-		print 'set_img'
-		self.systray_winapi.remove_notify_icon()
-		if len(self.jids) > 0:
-			status = 'message'
-		else:
-			#status = self.status
-			path_to_ico = '../data/pixmaps/gajim.ico'
-		hinst = win32gui.GetModuleHandle(None)
-		icon_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
-		hicon = win32gui.LoadImage(hinst, 
-								path_to_ico,  #FIXME: path
-								win32con.IMAGE_ICON, 
-								0, 
-								0, 
-								icon_flags)
-		self.systray_winapi.add_notify_icon(self.systray_context_menu, hicon, 'Gajim')
-		self.systray_winapi.notify_icon.menu = self.systray_context_menu
+			text = 'Gajim - 1 unread message'
+		self.systray_winapi.notify_icon.set_tooltip(text)
 
 	def remove_jid(self, jid, account):
-		print 'FIXME: remove_jid'
-		return
-		list = [account, jid]
-		if list in self.jids:
-			self.jids.remove(list)
+		l = [account, jid]
+		if l in self.jids:
+			self.jids.remove(l)
 			self.set_img()
-		#we look for the number of unread messages
-		#in roster
+		# we remove from the number of unread messages
 		nb = self.plugin.roster.nb_unread
 		for acct in gajim.connections:
-			#in chat / groupchat windows
+			# in chat / groupchat windows
 			for kind in ['chats', 'gc']:
 				for jid in self.plugin.windows[acct][kind]:
 					if jid != 'tabbed':
 						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
+		
+		#FIXME: prepare me for transltaion (ngeetext() and all) for 0.9
 		if nb > 1:
-			label = _('Gajim - %s unread messages') % nb
+			text = 'Gajim - %s unread messages' % nb
 		elif nb == 1:
-			label = _('Gajim - 1 unread message')
+			text = 'Gajim - 1 unread message'
 		else:
-			label = 'Gajim'
-		self.tip.set_tip(self.t, label)
+			text = 'Gajim'
+		self.systray_winapi.notify_icon.set_tooltip(text)
+		
+
+	def set_img(self):
+		self.systray_winapi.remove_notify_icon()
+		if len(self.jids) > 0:
+			state = 'message'
+		else:
+			state = self.status # FIXME: get LoadImage code to images[] dict in systray.py
+		hicon = self.tray_ico_imgs[state]
+		
+		self.systray_winapi.add_notify_icon(self.systray_context_menu, hicon, 'Gajim')
+		self.systray_winapi.notify_icon.menu = self.systray_context_menu
+
+	def load_icos(self):
+		'''load .ico files and return them to a dic of SHOW --> img_obj'''
+		#iconset = gajim.config.get('iconset')
+		#if not iconset:
+		#	iconset = 'sun'
+		
+		iconset = 'gnome' # FIXME: add icos in all folders (icos are not as good as pngs in colors etc..)
+		
+		imgs = {}
+		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/icos/')
+		states_list = gajim.SHOW_LIST
+		states_list.append('message') # trayicon apart from show holds message state too
+		for state in states_list:
+			path_to_ico = path + state + '.ico'
+			if os.path.exists(path_to_ico):
+				hinst = win32gui.GetModuleHandle(None)
+				img_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
+				image = win32gui.LoadImage(hinst, path_to_ico, win32con.IMAGE_ICON, 
+					0, 0, img_flags)
+				imgs[state] = image
+		
+		return imgs
