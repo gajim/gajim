@@ -190,8 +190,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				status_idx = gajim.connections[account].connected
 				# uncomment the following to hide offline accounts
 				# if status_idx == 0: continue
-				from common.connection import STATUS_LIST
-				status = STATUS_LIST[status_idx]
+				status = gajim.SHOW_LIST[status_idx]
 				message = gajim.connections[account].status
 				single_line = helpers.get_uf_show(status)
 				if message is None:
