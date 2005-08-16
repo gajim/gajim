@@ -1,4 +1,3 @@
-# translation of gajim-2.po to 
 # translation of gajim.po to 
 # translation of gajim.po to
 # translation of gajim.po to Czech
@@ -8,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gajim-2\n"
+"Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-13 18:04+0300\n"
-"PO-Revision-Date: 2005-08-16 12:53+0200\n"
+"PO-Revision-Date: 2005-08-16 15:16+0200\n"
 "Last-Translator: Pihhan <pihhan@seznam.cz>\n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -770,9 +769,8 @@ msgid "A GTK jabber client"
 msgstr "GTK jabber client"
 
 #: ../src/dialogs.py:415
-#, fuzzy
 msgid "translator-credits"
-msgstr "kredity-překladatele"
+msgstr "Petr Menšík <pihhan@seznam.cz>"
 
 #: ../src/dialogs.py:692
 #, python-format
@@ -1629,7 +1627,7 @@ msgstr "<b>Přizpůsobení rozhraní</b>"
 
 #: ../src/gtkgui.glade.h:9
 msgid "<b>Jabber Traffic</b>"
-msgstr ""
+msgstr "<b>Provoz Jabberu</b>"
 
 #: ../src/gtkgui.glade.h:10
 msgid "<b>Log</b>"
@@ -1819,7 +1817,7 @@ msgstr "Barva pozadí"
 
 #: ../src/gtkgui.glade.h:58
 msgid "Banner:"
-msgstr ""
+msgstr "Nadpis:"
 
 #: ../src/gtkgui.glade.h:59
 msgid "Before nickname:"
@@ -2660,7 +2658,7 @@ msgstr "Text stavu nedostupný"
 
 #: ../src/gtkgui.glade.h:268
 msgid "The bar line which is on top of chat windows"
-msgstr "Čára, která je nad okny rozhovorů"
+msgstr "Nadpis, který je nad okny rozhovorů"
 
 #: ../src/gtkgui.glade.h:269
 msgid "Theme:"
