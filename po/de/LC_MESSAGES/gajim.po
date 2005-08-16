@@ -1947,7 +1947,7 @@ msgstr "Datei_transfers"
 
 #: ../src/gtkgui.glade.h:116
 msgid "File manager:"
-msgstr "Dateimanager"
+msgstr "Dateimanager:"
 
 #: ../src/gtkgui.glade.h:117
 msgid "Filter:"
