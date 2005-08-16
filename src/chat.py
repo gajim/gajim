@@ -464,6 +464,7 @@ class Chat:
 
 	def on_tab_eventbox_button_press_event(self, widget, event, child):
 		if event.button == 3:
+			#FIXME: uncomment this code and make sure we do not send inactive chatstate
 			#self.popup_is_shown = True
 			#menu.connect('deactivate', self.on_popup_deactivate)
 			n = self.notebook.page_num(child)
