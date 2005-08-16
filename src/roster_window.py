@@ -1780,8 +1780,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
-		self.path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
-		self.jabber_state_images = self.load_iconset(self.path)
+		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
+		self.jabber_state_images = self.load_iconset(path)
 
 	def reload_jabber_state_images(self):
 		self.make_jabber_state_images()
