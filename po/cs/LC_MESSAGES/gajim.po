@@ -1,4 +1,6 @@
+# translation of gajim-2.po to 
 # translation of gajim.po to 
+# translation of gajim.po to
 # translation of gajim.po to Czech
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
@@ -6,10 +8,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gajim\n"
+"Project-Id-Version: gajim-2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-13 18:04+0300\n"
-"PO-Revision-Date: 2005-08-15 22:47+0200\n"
+"PO-Revision-Date: 2005-08-16 12:53+0200\n"
 "Last-Translator: Pihhan <pihhan@seznam.cz>\n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -94,9 +96,8 @@ msgstr "Rád(a) bych si tě přidal(a) do seznamu."
 #. BE CAREFUL: no con.updateRosterItem() in a callback
 #: ../src/common/connection.py:345
 #, python-format
-#, fuzzy
 msgid "we are now subscribed to %s"
-msgstr "přijata autorizace od %s"
+msgstr "jsme registrování k %s"
 
 #: ../src/common/connection.py:347
 #, python-format
@@ -275,12 +276,10 @@ msgid "?Subscription we already have:None"
 msgstr "?Subscription we already have: Žádná"
 
 #: ../src/common/helpers.py:97
-#, fuzzy
 msgid "To"
 msgstr "Příjemce"
 
 #: ../src/common/helpers.py:99
-#, fuzzy
 msgid "From"
 msgstr "Odesílatel"
 
@@ -347,9 +346,8 @@ msgid "Unable to write file in %s\n"
 msgstr "Nelze zapsat soubor %s\n"
 
 #: ../src/advanced.py:52
-#, fuzzy
 msgid "Preference Name"
-msgstr "Jméno nastavení"
+msgstr "Název volby"
 
 #: ../src/advanced.py:59
 msgid "Value"
@@ -625,14 +623,12 @@ msgstr "Bez spojení nemůžete prohlížet dostupné služby"
 
 #: ../src/config.py:2034
 #, python-format
-#, fuzzy
 msgid "Service Discovery using %s account"
 msgstr "Service Discovery s použitím účtu %s"
 
 #: ../src/config.py:2036
-#, fuzzy
 msgid "Service Discovery"
-msgstr "Služba"
+msgstr "Service Discovery"
 
 #: ../src/config.py:2056
 msgid "Service"
@@ -740,9 +736,8 @@ msgstr "Jméno kontaktu"
 
 #: ../src/dialogs.py:208
 #, python-format
-#, fuzzy
 msgid "%s Status Message"
-msgstr "%s Status"
+msgstr "Text stavu %s"
 
 #: ../src/dialogs.py:271
 #, python-format
@@ -777,7 +772,7 @@ msgstr "GTK jabber client"
 #: ../src/dialogs.py:415
 #, fuzzy
 msgid "translator-credits"
-msgstr "Petr Menšík <pihhan@seznam.cz>"
+msgstr "kredity-překladatele"
 
 #: ../src/dialogs.py:692
 #, python-format
@@ -806,12 +801,10 @@ msgid "Type: "
 msgstr "Typ: "
 
 #: ../src/dialogs.py:741
-#, fuzzy
 msgid "Download"
 msgstr "Download"
 
 #: ../src/dialogs.py:743
-#, fuzzy
 msgid "Upload"
 msgstr "Upload"
 
@@ -860,7 +853,6 @@ msgid "transferring"
 msgstr "přenáším"
 
 #: ../src/dialogs.py:844
-#, fuzzy
 msgid "Subscription: "
 msgstr "Autorizace: "
 
@@ -951,7 +943,6 @@ msgid "Contact Signed In"
 msgstr "Kontakt se přihlásil"
 
 #: ../src/dialogs.py:1161 ../src/gajim.py:337
-#, fuzzy
 msgid "Contact Signed Out"
 msgstr "Kontakt se odhlásil"
 
@@ -1067,7 +1058,6 @@ msgid "File transfer completed"
 msgstr "Přenos soubor dokončen"
 
 #: ../src/dialogs.py:1635 ../src/gtkgui.glade.h:343
-#, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Otevřít obsahující složku"
 
@@ -1158,7 +1148,6 @@ msgstr "Autorizace přijata"
 
 #: ../src/gajim.py:502
 #, python-format
-#, fuzzy
 msgid "The contact \"%s\" has authorized you to see his status."
 msgstr "Kontakt \"%s\" Vás autorizoval k zobrazení jeho stavu."
 
@@ -1204,7 +1193,6 @@ msgstr "Téma"
 
 #: ../src/gajim_themes_window.py:125 ../src/gajim_themes_window.py:127
 #: ../src/gajim_themes_window.py:128
-#, fuzzy
 msgid "theme_name"
 msgstr "nazev_tematu"
 
@@ -1326,9 +1314,8 @@ msgstr "Můžete uvést důvod níže:"
 #. ask for reason
 #: ../src/groupchat_window.py:750
 #, python-format
-#, fuzzy
 msgid "Banning %s"
-msgstr "Banuji %s"
+msgstr "Zakazuji %s"
 
 #: ../src/groupchat_window.py:968 ../src/tabbed_chat_window.py:340
 msgid "If you close this tab, the message will be lost."
@@ -1358,9 +1345,8 @@ msgid "D-Bus capabilities of Gajim cannot be used"
 msgstr "Možnosti D-Bus nemohou být použity"
 
 #: ../src/remote_control.py:404
-#, fuzzy
 msgid "Session bus is not available"
-msgstr "Rozhraní sezení není dostupné"
+msgstr "Rozhraní (bus) sezení není dostupné"
 
 #: ../src/remote_control.py:412
 msgid "D-Bus is not present on this machine"
@@ -1381,7 +1367,6 @@ msgstr "Spravovat záložky..."
 
 #: ../src/roster_window.py:440
 #, python-format
-#, fuzzy
 msgid "to %s account"
 msgstr "k %s účtu"
 
@@ -1663,7 +1648,6 @@ msgid "<b>OpenPGP</b>"
 msgstr "<b>OpenPGP</b>"
 
 #: ../src/gtkgui.glade.h:14
-#, fuzzy
 msgid "<b>Please choose on of the options below:</b>"
 msgstr "<b>Prosím zvolte z následujících možností:</b>"
 
@@ -1684,7 +1668,6 @@ msgid "<b>Sounds</b>"
 msgstr "<b>Zvuky</b>"
 
 #: ../src/gtkgui.glade.h:19
-#, fuzzy
 msgid "<b>What do you want to do?</b>"
 msgstr "<b>Co by jste rád(a) dělal(a)?</b>"
 
@@ -1694,7 +1677,7 @@ msgstr "<b>Vstup XML</b>"
 
 #: ../src/gtkgui.glade.h:21
 msgid "<span background=\"lightyellow\"></span>"
-msgstr ""
+msgstr "<span background=\"lightyellow\"></span>"
 
 #: ../src/gtkgui.glade.h:22
 msgid "A list of active, completed and stopped file transfers"
@@ -1729,7 +1712,6 @@ msgid "Activate/Disable notification for when a file transfer is complete"
 msgstr "Zapnout/vypnout upozornění při dokončení přenosu souboru"
 
 #: ../src/gtkgui.glade.h:30
-#, fuzzy
 msgid "Ad_vanced Actions"
 msgstr "_Další akce"
 
@@ -1746,12 +1728,10 @@ msgid "Address"
 msgstr "Adresa"
 
 #: ../src/gtkgui.glade.h:34
-#, fuzzy
 msgid "Advanced"
 msgstr "Rozšířené"
 
 #: ../src/gtkgui.glade.h:35
-#, fuzzy
 msgid "Advanced Configuration Editor"
 msgstr "Editor rozšířeného nastavení"
 
@@ -1786,19 +1766,16 @@ msgid "Also known as iChat style"
 msgstr "Známý také jako iChat styl"
 
 #: ../src/gtkgui.glade.h:44
-#, fuzzy
 msgid "Always use compact _view"
 msgstr "_Vždy použij zjednodušený pohled"
 
 #: ../src/gtkgui.glade.h:45
-#, fuzzy
 msgid "Ask status message when I:"
 msgstr "Získej stav pokud já:"
 
 #: ../src/gtkgui.glade.h:46
-#, fuzzy
 msgid "Ask:"
-msgstr "Žádost:"
+msgstr "Žádá:"
 
 #: ../src/gtkgui.glade.h:47
 msgid "Assign Open_PGP Key"
@@ -1817,7 +1794,6 @@ msgid "Auto _not available after:"
 msgstr "Automaticky _nedostupný po:"
 
 #: ../src/gtkgui.glade.h:51
-#, fuzzy
 msgid "Auto join"
 msgstr "Automaticky vstoupit"
 
@@ -1855,7 +1831,7 @@ msgstr "Před časem:"
 
 #: ../src/gtkgui.glade.h:61
 msgid "Birthday:"
-msgstr "Narozeniny:"
+msgstr "Den narození:"
 
 #: ../src/gtkgui.glade.h:62
 msgid "Bold"
@@ -1870,7 +1846,6 @@ msgid "Cancels the selected file transfer"
 msgstr "Zruší vybraný přenos souboru"
 
 #: ../src/gtkgui.glade.h:65
-#, fuzzy
 msgid "Chan_ge"
 msgstr "Z_měnit"
 
@@ -1887,9 +1862,8 @@ msgid "Change _Subject"
 msgstr "Změnit _předmět"
 
 #: ../src/gtkgui.glade.h:70
-#, fuzzy
 msgid "Chat state noti_fications:"
-msgstr "Upozornění o stavu rozhovoru:"
+msgstr "_Upozornění o stavu rozhovoru:"
 
 #: ../src/gtkgui.glade.h:71
 msgid "Chat with"
@@ -1935,12 +1909,10 @@ msgid "Click to change account's password"
 msgstr "Klikněte pro změnu hesla k účtu"
 
 #: ../src/gtkgui.glade.h:80
-#, fuzzy
 msgid "Click to get contact's extended information"
-msgstr "Klikněte pro získání dalších informací"
+msgstr "Klikněte pro získání dalších informací o kontaktu"
 
 #: ../src/gtkgui.glade.h:81
-#, fuzzy
 msgid "Click to see features like on jabber servers"
 msgstr "Klikněte pro seznam vlastností na jabber serverech"
 
@@ -1985,7 +1957,6 @@ msgid "Conversation History"
 msgstr "Historie konverzace"
 
 #: ../src/gtkgui.glade.h:92
-#, fuzzy
 msgid "Country:"
 msgstr "Země:"
 
@@ -2026,7 +1997,6 @@ msgid "Edit Groups"
 msgstr "Upravit skupiny"
 
 #: ../src/gtkgui.glade.h:102
-#, fuzzy
 msgid "Edit Personal Information..."
 msgstr "Upravit osobní informace..."
 
@@ -2060,7 +2030,6 @@ msgid "Every 5 _minutes"
 msgstr "Každých 5 _minut"
 
 #: ../src/gtkgui.glade.h:111
-#, fuzzy
 msgid "Extra Address:"
 msgstr "Další adresa:"
 
@@ -2093,7 +2062,6 @@ msgid "Format: YYYY-MM-DD"
 msgstr "Formát: RRRR-MM-DD"
 
 #: ../src/gtkgui.glade.h:119
-#, fuzzy
 msgid "From:"
 msgstr "Odesílatel:"
 
@@ -2134,17 +2102,14 @@ msgid "Gajim: First Time Wizard"
 msgstr "Gajim: Průvodce prvními krůčky"
 
 #: ../src/gtkgui.glade.h:129
-#, fuzzy
 msgid "Given:"
 msgstr "Křestní:"
 
 #: ../src/gtkgui.glade.h:130
-#, fuzzy
 msgid "Go"
 msgstr "Jdi"
 
 #: ../src/gtkgui.glade.h:132
-#, fuzzy
 msgid "Group:"
 msgstr "Skupina:"
 
@@ -2181,7 +2146,6 @@ msgid "If checked, Gajim will also have a trayicon"
 msgstr "Pokud bude zaškrtnuto, Gajim bude mít také ikonu v traybaru"
 
 #: ../src/gtkgui.glade.h:141
-#, fuzzy
 msgid ""
 "If checked, Gajim will broadcast capability to send and receive meta-"
 "information related to a conversation you may have with a contact such as "
@@ -2242,7 +2206,6 @@ msgid ""
 msgstr "Pokud zaškrtnuto, všechny okna rozhovorů a diskuzí budou mít informační oblast nahoře a tlačítka dole skrytá. Můžete rychle změnit zjednodušený pohled pomocí Alt+C. Upozornění: Poslední stav, ve kterém zanecháte okno/záložku není permanentní"
 
 #: ../src/gtkgui.glade.h:151
-#, fuzzy
 msgid ""
 "If you have 2 or more accounts and it is checked, Gajim will list all "
 "contacts as if you had one account"
@@ -2329,7 +2292,6 @@ msgid "More"
 msgstr "Více"
 
 #: ../src/gtkgui.glade.h:173
-#, fuzzy
 msgid "Name:"
 msgstr "Jméno:"
 
@@ -2359,7 +2321,6 @@ msgid "On every _message"
 msgstr "Při každé _zprávě"
 
 #: ../src/gtkgui.glade.h:183
-#, fuzzy
 msgid "Open Download Page"
 msgstr "Otevři stránku stahování"
 
@@ -2384,12 +2345,10 @@ msgid "Password:"
 msgstr "Heslo:"
 
 #: ../src/gtkgui.glade.h:191
-#, fuzzy
 msgid "Personal Details"
 msgstr "Osobní detaily"
 
 #: ../src/gtkgui.glade.h:192
-#, fuzzy
 msgid "Phone No.:"
 msgstr "Telefon:"
 
@@ -2411,7 +2370,7 @@ msgstr "Port: "
 
 #: ../src/gtkgui.glade.h:197
 msgid "Position:"
-msgstr "Poloha:"
+msgstr "Pozice:"
 
 #: ../src/gtkgui.glade.h:198
 msgid "Postal Code:"
@@ -2422,12 +2381,10 @@ msgid "Preferences"
 msgstr "Nastavení"
 
 #: ../src/gtkgui.glade.h:200
-#, fuzzy
 msgid "Prefix:"
 msgstr "Předpona:"
 
 #: ../src/gtkgui.glade.h:201
-#, fuzzy
 msgid "Print time:"
 msgstr "Čas tisku:"
 
@@ -2499,7 +2456,6 @@ msgid "Resour_ce: "
 msgstr "Zd_roj: "
 
 #: ../src/gtkgui.glade.h:219
-#, fuzzy
 msgid ""
 "Resource is sent to the Jabber server in order to separate the same JID in "
 "two or more parts depending on the number of the clients connected in the "
@@ -2513,9 +2469,8 @@ msgid "Resource:"
 msgstr "Zdroj:"
 
 #: ../src/gtkgui.glade.h:221
-#, fuzzy
 msgid "Role:"
-msgstr "Role:"
+msgstr "Postavení:"
 
 #: ../src/gtkgui.glade.h:222
 msgid "Room Configuration"
@@ -2538,9 +2493,8 @@ msgid "Save conversation _logs for all contacts"
 msgstr "Uložit _historii pro všechny kontakty"
 
 #: ../src/gtkgui.glade.h:227
-#, fuzzy
 msgid "Save pass_word"
-msgstr "Uložit heslo"
+msgstr "Uložit _heslo"
 
 #: ../src/gtkgui.glade.h:228
 msgid "Sen_d"
@@ -2579,7 +2533,6 @@ msgid "Sends a message to currently connected users to this server"
 msgstr "Poslat zprávu momentálně připojeným uživatelům tohoto serveru"
 
 #: ../src/gtkgui.glade.h:237
-#, fuzzy
 msgid "Server:"
 msgstr "Server:"
 
@@ -2682,7 +2635,6 @@ msgid "Subscription:"
 msgstr "Autorizace:"
 
 #: ../src/gtkgui.glade.h:262
-#, fuzzy
 msgid "Suffix:"
 msgstr "Přípona:"
 
@@ -2707,12 +2659,10 @@ msgid "The auto not available status message"
 msgstr "Text stavu nedostupný"
 
 #: ../src/gtkgui.glade.h:268
-#, fuzzy
 msgid "The bar line which is on top of chat windows"
-msgstr "Čára která je na vrchu oken rozhovorů"
+msgstr "Čára, která je nad okny rozhovorů"
 
 #: ../src/gtkgui.glade.h:269
-#, fuzzy
 msgid "Theme:"
 msgstr "Téma:"
 
@@ -2727,7 +2677,6 @@ msgid "Title:"
 msgstr "Titul:"
 
 #: ../src/gtkgui.glade.h:272
-#, fuzzy
 msgid "To:"
 msgstr "Příjemce:"
 
@@ -2736,7 +2685,6 @@ msgid "Toggle Open_PGP Encryption"
 msgstr "Přepnout Open_PGP šifrování"
 
 #: ../src/gtkgui.glade.h:274
-#, fuzzy
 msgid "Type:"
 msgstr "Typ:"
 
@@ -2915,9 +2863,8 @@ msgid "_IQ"
 msgstr "_IQ"
 
 #: ../src/gtkgui.glade.h:321
-#, fuzzy
 msgid "_Icon in systray (aka. notification area)"
-msgstr "_Ikona v systrayi (jinak oznamovací oblast)"
+msgstr "_Ikona v systrayi (jinak - v oznamovací oblasti)"
 
 #: ../src/gtkgui.glade.h:322
 msgid "_Ignore events from contacts not in the roster"
@@ -2936,7 +2883,6 @@ msgid "_Join Group Chat"
 msgstr "V_stoupit do místnosti"
 
 #: ../src/gtkgui.glade.h:326
-#, fuzzy
 msgid "_Kick"
 msgstr "Vy_kopnout"
 
@@ -2998,7 +2944,7 @@ msgstr "_OK"
 
 #: ../src/gtkgui.glade.h:341
 msgid "_Occupant Actions"
-msgstr ""
+msgstr "_Akce účastníků"
 
 #: ../src/gtkgui.glade.h:342
 msgid "_Online Users"
@@ -3029,9 +2975,8 @@ msgid "_Player:"
 msgstr "_Hráč:"
 
 #: ../src/gtkgui.glade.h:350
-#, fuzzy
 msgid "_Pop it up"
-msgstr "_Zobrazit popup"
+msgstr "Zobrazit _popup"
 
 #: ../src/gtkgui.glade.h:351
 msgid "_Port:"
@@ -3168,12 +3113,11 @@ msgstr "zobraz nápovědu pro konkrétní příkaz"
 #. parameter, named "on_command". User gets help for the command, specified by this parameter
 #: ../scripts/gajim-remote.py:73
 msgid "on_command"
-msgstr ""
+msgstr "k_příkazu"
 
 #: ../scripts/gajim-remote.py:74
-#, fuzzy
 msgid "show help on command"
-msgstr "zobraz nápovědu při příkazu"
+msgstr "zobraz nápovědu k příkazu"
 
 #: ../scripts/gajim-remote.py:78
 msgid "Shows or hides the roster window"
@@ -3223,11 +3167,10 @@ msgid "status message"
 msgstr "text stavu"
 
 #: ../scripts/gajim-remote.py:104
-#, fuzzy
 msgid ""
 "change status of account \"account\". If not specified, try to change status "
 "of all accounts that have \"sync with global status\" option set"
-msgstr "změit stav účtu \"account\". Pokud není uveden, zkuste změnit stav všech účtů které mají povolenu volbu \"sync with global status\" "
+msgstr "změnit stav účtu \"account\". Pokud není uveden, zkuste změnit stav všech účtů které mají povolenu volbu \"sync with global status\" "
 
 #: ../scripts/gajim-remote.py:110
 msgid "Show the chat dialog so that you can send message to a contact"
@@ -3238,7 +3181,6 @@ msgid "jid of the contact that you want to chat with"
 msgstr "JID kontaktu, se kterým chcete komunikovat"
 
 #: ../scripts/gajim-remote.py:116
-#, fuzzy
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "pokud uvedeno, kontakt bude vzít ze seznamu kontaktů pro tento účet"
 
