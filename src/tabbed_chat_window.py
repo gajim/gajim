@@ -756,7 +756,6 @@ timestamp, contact):
 			nb, line = gajim.logger.read(jid, count - 1 - pos, count - pos)
 			pos = pos + 1
 
-			print line
 			# line is [] if log file for jid is not a file (does not exist or dir)
 			if line != []:
 				if (now - float(line[0][0]))/60 >= time_out:
