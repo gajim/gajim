@@ -73,7 +73,7 @@ class Logger:
 			ji = jid
 			nick = ''
 		files = []
-		if kind == 'status': #we save time:jid:show:msg
+		if kind == 'status': # we save time:jid:show:msg
 			if not show:
 				show = 'online'
 			if common.gajim.config.get('log_notif_in_user_file'):

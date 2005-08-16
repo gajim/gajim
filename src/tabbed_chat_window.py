@@ -733,12 +733,12 @@ timestamp, contact):
 		if is_transport:
 			return	
 
-		#How many lines to restore and when to time them out
+		# How many lines to restore and when to time them out
 		restore	= gajim.config.get('restore_lines')
 		time_out = gajim.config.get('restore_timeout')
-		pos		= 0	#position, while reading from history
-		size		= 0	#how many lines we alreay retreived
-		lines		= []	#we'll need to reverse the lines from history
+		pos		= 0	# position, while reading from history
+		size		= 0	# how many lines we alreay retreived
+		lines		= []	# we'll need to reverse the lines from history
 		count		= gajim.logger.get_no_of_lines(jid)
 
 
@@ -750,23 +750,26 @@ timestamp, contact):
 		now = time.time()
 		while size <= restore:
 			if pos == count or size > restore - 1:
-				#don't try to read beyond history, not read more than required
+				# don't try to read beyond history, not read more than required
 				break
 			
 			nb, line = gajim.logger.read(jid, count - 1 - pos, count - pos)
 			pos = pos + 1
 
-			if (now - float(line[0][0]))/60 >= time_out:
-				#stop looking for messages if we found something too old
-				break
-
-			if line[0][1] != 'sent' and line[0][1] != 'recv':
-				# we don't want to display status lines, do we?
-				continue
-
-			lines.append(line[0])
-			size = size + 1
-
+			print line
+			# line is [] if log file for jid is not a file (does not exist or dir)
+			if line != []:
+				if (now - float(line[0][0]))/60 >= time_out:
+					# stop looking for messages if we found something too old
+					break
+	
+				if line[0][1] != 'sent' and line[0][1] != 'recv':
+					# we don't want to display status lines, do we?
+					continue
+	
+				lines.append(line[0])
+				size = size + 1
+	
 		lines.reverse()
 		
 		for msg in lines:
