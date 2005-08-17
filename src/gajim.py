@@ -748,6 +748,7 @@ class Interface:
 #			contact = gajim.contacts[account][jid][0]
 #			self.windows['file_transfers'].show_file_request(
 #				account, contact, file_props)
+		contact = gajim.contacts[account][jid][0]
 		self.windows['file_transfers'].show_file_request(
 			account, contact, file_props)
 				
