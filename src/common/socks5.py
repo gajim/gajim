@@ -351,7 +351,6 @@ class Socks5:
 		
 	def open_file_for_reading(self):
 		self.fd = open(self.file_props['file-name'])
-		self.fd.seek(self.size)
 		
 	def close_file(self):
 		try:
@@ -425,9 +424,7 @@ class Socks5:
 			buff = self.remaining_buff
 			self.remaining_buff = ''
 		else:
-			self.open_file_for_reading()
 			buff = self.fd.read(MAX_BUFF_LEN)
-			self.close_file()
 		if len(buff) > 0:
 			lenn = 0
 			try:
@@ -656,6 +653,7 @@ class Socks5Sender(Socks5):
 		
 	def send_file(self):
 		''' start sending the file over verified connection ''' 
+		self.open_file_for_reading()
 		self.file_props['error'] = 0
 		self.file_props['disconnect_cb'] = self.disconnect
 		self.file_props['started'] = True
