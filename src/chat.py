@@ -775,7 +775,7 @@ class Chat:
 				item.connect('activate', self.visit_url_from_menuitem, link)
 			else:
 				if dict_link.find('%s') == -1:
-					# we must have %s in the url if not WIKTIONARY
+					#we must have %s in the url if not WIKTIONARY
 					item = gtk.MenuItem(_('Dictionary URL is missing an "%s" and it is not WIKTIONARY'))
 					item.set_property('sensitive', False)
 				else:
@@ -785,7 +785,8 @@ class Chat:
 			
 			
 			search_link = gajim.config.get('search_engine')
-			if search_link.find('%s') == -1: # we must have %s in the url
+			if search_link.find('%s') == -1:
+				#we must have %s in the url
 				item = gtk.MenuItem(_('Web Search URL is missing an "%s"'))
 				item.set_property('sensitive', False)
 			else:
