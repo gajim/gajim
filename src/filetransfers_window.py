@@ -120,9 +120,9 @@ class FileTransfersWindow:
 		helpers.convert_bytes(file_props['size'])
 		if file_props['type'] == 'r':
 			jid = str(file_props['sender']).split('/')[0]
-			real_jid = gajim.get_first_contact_instance_from_jid( 
+			sender_name = gajim.get_first_contact_instance_from_jid( 
 				file_props['tt_account'], jid).name
-			sender = gtkgui_helpers.escape_for_pango_markup(real_jid)
+			sender = gtkgui_helpers.escape_for_pango_markup(sender_name)
 		else:
 			if float(gajim.version) > 0.8:
 				sender = 'You' # FIXME _(gettext this)
@@ -132,9 +132,9 @@ class FileTransfersWindow:
 		sectext += '\n\t' +_('Recipient: ')
 		if file_props['type'] == 's':
 			jid = str(file_props['receiver']).split('/')[0]
-			real_jid = gajim.get_first_contact_instance_from_jid( 
+			receiver_name = gajim.get_first_contact_instance_from_jid( 
 				file_props['tt_account'], jid).name
-			recipient = gtkgui_helpers.escape_for_pango_markup(real_jid)
+			recipient = gtkgui_helpers.escape_for_pango_markup(receiver_name)
 		else:
 			if float(gajim.version) > 0.8:
 				recipient = 'You' # FIXME _(gettext this)
@@ -146,7 +146,8 @@ class FileTransfersWindow:
 			sectext += '\n\t' +_('Saved in: %s') % \
 				gtkgui_helpers.escape_for_pango_markup(path)
 		dialog = dialogs.HigDialog(None, _('File transfer completed'), sectext, 
-			gtk.STOCK_DIALOG_INFO, [[_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT], [ gtk.STOCK_OK, gtk.RESPONSE_OK ]])
+			gtk.STOCK_DIALOG_INFO, [[_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT], 
+				[ gtk.STOCK_OK, gtk.RESPONSE_OK ]])
 		button = dialog.get_button(1)
 		if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
 			button.set_image(gtk.image_new_from_stock(
