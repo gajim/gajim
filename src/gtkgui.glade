@@ -17177,7 +17177,7 @@ Maybe I'll refactor later</property>
 	<widget class="GtkExpander" id="expander">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="expanded">True</property>
+	  <property name="expanded">False</property>
 	  <property name="spacing">6</property>
 	  <signal name="activate" handler="on_expander_activate" last_modification_time="Mon, 04 Jul 2005 22:24:33 GMT"/>
 
