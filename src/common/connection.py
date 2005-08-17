@@ -781,8 +781,10 @@ class Connection:
 				streamhost.setAttr('port', proxyhost['port'])
 				streamhost.setAttr('host', proxyhost['host'])
 				streamhost.setAttr('jid', proxyhost['jid'])
-				proxy = streamhost.setTag('proxy')
-				proxy.setNamespace(common.xmpp.NS_STREAM)
+				
+				# don't add the proxy child tag for streamhosts, which are proxies
+				# proxy = streamhost.setTag('proxy')
+				# proxy.setNamespace(common.xmpp.NS_STREAM)
 		self.to_be_sent.append(iq)
 			
 	def _siSetCB(self, con, iq_obj):
