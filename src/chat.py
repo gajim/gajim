@@ -224,6 +224,8 @@ class Chat:
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''
 		menu = self.prepare_context_menu()
+		self.popup_is_shown = True
+		menu.connect('deactivate', self.on_popup_deactivate)
 		menu.popup(None, None, None, 1, 0)
 		menu.show_all()
 
@@ -464,9 +466,6 @@ class Chat:
 
 	def on_tab_eventbox_button_press_event(self, widget, event, child):
 		if event.button == 3:
-			#FIXME: uncomment this code and make sure we do not send inactive chatstate
-			#self.popup_is_shown = True
-			#menu.connect('deactivate', self.on_popup_deactivate)
 			n = self.notebook.page_num(child)
 			self.notebook.set_current_page(n)
 			self.popup_menu(event)
