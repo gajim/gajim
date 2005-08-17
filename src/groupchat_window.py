@@ -138,9 +138,10 @@ class GroupchatWindow(chat.Chat):
 
 			if len(names): #if one or more rooms connected
 				joined_names = ', '.join(names)
-				pritext = i18n._translation.ngettext('Are you sure you want to leave room "%s"?' % \
-					names[0], 'Are you sure you want to leave rooms "%s"?' % \
-					joined_names, len(names))
+				pritext = i18n._translation.ngettext(
+					'Are you sure you want to leave room "%s"?' % names[0],
+					'Are you sure you want to leave rooms "%s"?' % joined_names,
+					len(names))
 			
 				sectext = i18n._translation.ngettext(
 			'If you close this window, you will be disconnected from this room.',
