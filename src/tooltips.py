@@ -387,14 +387,15 @@ class FileTransfersTooltip(BaseTooltip):
 					status = _('completed')
 			elif file_props['connected'] == False:
 				if file_props['completed']:
-					status = _('completed')
+					status = _('completed') # FIXME: all those make them Completed
 			else:
 				if file_props.has_key('paused') and  \
 					file_props['paused'] == True:
 					status = _('paused')
 				elif file_props.has_key('stalled') and \
 					file_props['stalled'] == True:
-					status = _('stalled')
+					#stalled is not paused. it is like 'frozen' it stopped alone
+					status = _('stalled') # FIXME: all those make them Stalled
 				else:
 					status = _('transferring')
 		else:

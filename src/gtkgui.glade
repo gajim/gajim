@@ -4615,7 +4615,7 @@ Disabled</property>
 				<widget class="GtkButton" id="sounds_button">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">...</property>
+				  <property name="label">...</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -5505,7 +5505,7 @@ Custom</property>
 			      <child>
 				<widget class="GtkLabel" id="label198">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">&lt;b&gt;Custom&lt;/b&gt;</property>
+				  <property name="label" translatable="yes" comments="a header for custom browser/client/file manager. so translate sth like: Custom Settings">&lt;b&gt;Custom&lt;/b&gt;</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">True</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -13116,7 +13116,7 @@ the Jabber network.</property>
 		    <widget class="GtkLabel" id="jid_label">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label">&lt;span background=&quot;lightyellow&quot;&gt;&lt;/span&gt;</property>
+		      <property name="label" translatable="yes">&lt;span background=&quot;lightyellow&quot;&gt;&lt;/span&gt;</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -13292,7 +13292,7 @@ the Jabber network.</property>
 		  <child>
 		    <widget class="GtkButton" id="server_features_button">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Click to see features like on jabber servers</property>
+		      <property name="tooltip" translatable="yes" comments="remind to nkour that this string has typo">Click to see features like on jabber servers</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Servers Features</property>
 		      <property name="use_underline">True</property>
@@ -13433,7 +13433,7 @@ the Jabber network.</property>
 		    <widget class="GtkLabel" id="register_jid_label">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">&lt;span background=&quot;lightyellow&quot;&gt;&lt;/span&gt;</property>
+		      <property name="label">&lt;span background=&quot;lightyellow&quot;&gt;&lt;/span&gt;</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -14041,7 +14041,7 @@ the Jabber network.</property>
 	      <child>
 		<widget class="GtkCheckButton" id="autojoin_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If checked, Gajim will join this groupchat on startup</property>
+		  <property name="tooltip" translatable="yes" comments="that should be changed to group chat from groupchat. if it stills says groupchat and we are preparing for 0.9 please remind me (nkour)">If checked, Gajim will join this groupchat on startup</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Auto join</property>
 		  <property name="use_underline">True</property>
@@ -17177,7 +17177,7 @@ Maybe I'll refactor later</property>
 	<widget class="GtkExpander" id="expander">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="expanded">False</property>
+	  <property name="expanded">True</property>
 	  <property name="spacing">6</property>
 	  <signal name="activate" handler="on_expander_activate" last_modification_time="Mon, 04 Jul 2005 22:24:33 GMT"/>
 
@@ -17232,7 +17232,7 @@ Maybe I'll refactor later</property>
 		  <child>
 		    <widget class="GtkButton" id="iq_button">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Info/Query</property>
+		      <property name="tooltip" translatable="yes" comments="Info/Query make the &quot;IQ&quot; initials. So translate like this 'YourLang/YourLang (Info/Query)'. Thanks (it's a tooltip so width is not a problem)">Info/Query</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes" comments="Info/Query: all(?) jabber xml start with &lt;iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say &lt;iq in your language (of course))">_IQ</property>
 		      <property name="use_underline">True</property>
@@ -17606,8 +17606,8 @@ Maybe I'll refactor later</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <accessibility>
-		<atkproperty name="AtkObject::accessible_name" translatable="yes">Stop file transfer</atkproperty>
-		<atkproperty name="AtkObject::accessible_description" translatable="yes">Stops the selected file transfer. If there is an incomplete file, kept in the file system it will be removed. This operation is not reversable. </atkproperty>
+		<atkproperty name="AtkObject::accessible_name" translatable="yes" comments="Ι'm a atk sting that should say Cancel instead of stop. say that to nkoukr">Stop file transfer</atkproperty>
+		<atkproperty name="AtkObject::accessible_description" translatable="yes" comments="Ι'm a atk sting that should say Cancel instead of stop and should not have space at the end nor dot. say that to nkour">Stops the selected file transfer. If there is an incomplete file, kept in the file system it will be removed. This operation is not reversable. </atkproperty>
 		<atkaction action_name="click" description="Stoping selected file transfer"/>
 	      </accessibility>
 	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Tue, 09 Aug 2005 17:07:31 GMT"/>
@@ -17649,7 +17649,7 @@ Maybe I'll refactor later</property>
 	  <property name="inconsistent">False</property>
 	  <property name="draw_indicator">True</property>
 	  <accessibility>
-	    <atkproperty name="AtkObject::accessible_description" translatable="yes">When a file transfer is complete show a popup notification </atkproperty>
+	    <atkproperty name="AtkObject::accessible_description" translatable="yes" comments="I'm atk string. please remove my last space for 0.9. Remind that to nkour (he's a poor man)">When a file transfer is complete show a popup notification </atkproperty>
 	    <atkaction action_name="press" description="Activate/Disable notification for when a file transfer is complete"/>
 	  </accessibility>
 	  <signal name="toggled" handler="on_notify_ft_complete_checkbox_toggled" last_modification_time="Wed, 31 Aug 2005 22:52:01 GMT"/>

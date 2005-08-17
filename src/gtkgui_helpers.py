@@ -58,6 +58,7 @@ def get_default_font():
 					start = line.find('value="') + 7
 					return line[start:line.find('"', start)]
 		except:
+			#we talk about file
 			print _('error: cannot open %s for reading') % xfce_config_file
 	
 	elif os.path.exists(kde_config_file):
@@ -72,6 +73,7 @@ def get_default_font():
 					font_string = '%s %s' % (font_name, font_size) # Verdana 9
 					return font_string
 		except:
+			#we talk about file
 			print _('error: cannot open %s for reading') % kde_config_file
 	
 	return None

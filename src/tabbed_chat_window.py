@@ -124,6 +124,7 @@ timestamp, contact):
 			tt = _('OpenPGP Encryption')
 		else:
 			tb.set_sensitive(False)
+			#we talk about a contact here
 			tt = _('%s has not broadcasted an OpenPGP key nor you have assigned one') % contact.name
 		tip = gtk.Tooltips()
 		tip.set_tip(self.xmls[jid].get_widget('gpg_eventbox'), tt)
@@ -267,6 +268,7 @@ timestamp, contact):
 			if time.time() - gajim.last_message_time[self.account][jid] < 2:
 				# 2 seconds
 				dialog = dialogs.ConfirmationDialog(
+					#%s is being replaced in the code with JID
 					_('You just received a new message from "%s"' % jid),
 					_('If you close the window, this message will be lost.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
@@ -598,6 +600,7 @@ timestamp, contact):
 			# contact was from pm in MUC, and left the room, or we left the room
 			room, nick = gajim.get_room_and_nick_from_fjid(jid)
 			dialogs.ErrorDialog(_('Sending private message failed'),
+				#in second %s code replaces with nickname
 				_('You are no longer in room "%s" or "%s" has left.') % \
 				(room, nick)).get_response()
 			return
