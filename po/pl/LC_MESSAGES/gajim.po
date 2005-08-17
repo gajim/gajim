@@ -10,13 +10,13 @@ msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-17 15:15+0300\n"
-"PO-Revision-Date: 2005-08-17 13:52+0200\n"
+"PO-Revision-Date: 2005-08-17 14:23+0200\n"
 "Last-Translator: Witek Kieraś <pambuk@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
 
 #: ../src/common/config.py:51
 msgid "Away as a result of being idle"
@@ -1063,13 +1063,9 @@ msgstr[0] "Czy jesteś pewien, że chcesz opuścić pokój \"%s\"?"
 msgstr[1] "Czy jesteś pewien, że chcesz opuścić pokój \"%s\"?"
 
 #: ../src/groupchat_window.py:146
-#, fuzzy
 msgid "If you close this window, you will be disconnected from this room."
-msgid_plural ""
 "If you close this window, you will be disconnected from these rooms."
-msgstr[0] ""
-"Jeśli zamkniesz okno, to połączenie z tymi pokojami zostanie zerwane."
-msgstr[1] ""
+msgstr "Jeśli zamkniesz okno, to połączenie z tymi pokojami zostanie zerwane."
 "Jeśli zamkniesz okno, to połączenie z tymi pokojami zostanie zerwane."
 
 #: ../src/groupchat_window.py:151
@@ -1582,7 +1578,7 @@ msgstr "Włącz/Wyłącz powiadomienie o zakończeniu przesyłania pliku."
 
 #: ../src/gtkgui.glade.h:30
 msgid "Ad_vanced Actions"
-msgstr "Zaawansowane działania"
+msgstr "Z_aawansowane działania"
 
 #: ../src/gtkgui.glade.h:31
 msgid "Add New Contact"
@@ -1629,7 +1625,7 @@ msgstr "Zezwól na wysyłanie informacji o systemie _operacyjnym"
 #: ../src/gtkgui.glade.h:42
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
-"Pokazuj powiadomienia gdy mam status zaraz wracam/nieobecny/zajęty/"
+"Pokazuj powiadomienia gdy mam status _zaraz wracam/nieobecny/zajęty/"
 "niewidoczny"
 
 #: ../src/gtkgui.glade.h:43
@@ -1658,11 +1654,11 @@ msgstr "Autoryzuj kontakt - będzie wówczas wiedział, kiedy jesteś połączon
 
 #: ../src/gtkgui.glade.h:49
 msgid "Auto _away after:"
-msgstr "Automatyczny status 'Zaraz wracam' po:"
+msgstr "Automatyczny status '_Zaraz wracam' po:"
 
 #: ../src/gtkgui.glade.h:50
 msgid "Auto _not available after:"
-msgstr "Automatyczny status 'Nieobecny' po:"
+msgstr "Automatyczny status '_Nieobecny' po:"
 
 #: ../src/gtkgui.glade.h:51
 msgid "Auto join"
@@ -2030,7 +2026,7 @@ msgstr "Mam już konto i chcę z niego korzystać."
 
 #: ../src/gtkgui.glade.h:141
 msgid "I want to _register for a new account"
-msgstr "Chcę zarejestrować nowe konto Jabbera."
+msgstr "Chcę za_rejestrować nowe konto Jabbera."
 
 #: ../src/gtkgui.glade.h:142
 msgid "I would like to add you to my contact list."
@@ -2174,7 +2170,7 @@ msgstr "Historia"
 
 #: ../src/gtkgui.glade.h:168
 msgid "Log presences in _contact's log file"
-msgstr "Zapisuj zmiany statusu w logach kontaktu"
+msgstr "Zapisuj zmiany statusu w logach _kontaktu"
 
 #: ../src/gtkgui.glade.h:169
 msgid "Log presences in an _external file"
@@ -2339,7 +2335,7 @@ msgstr "Pośrednik:"
 
 #: ../src/gtkgui.glade.h:215
 msgid "Re_quest Authorization from"
-msgstr "Poproś o autoryzację od"
+msgstr "P_oproś o autoryzację od"
 
 #: ../src/gtkgui.glade.h:216
 msgid "Recently:"
@@ -2417,7 +2413,7 @@ msgstr "Zapisz _hasło (nie jest to bezpieczne)"
 
 #: ../src/gtkgui.glade.h:232
 msgid "Save _position and size for roster and chat windows"
-msgstr "Zapisz pozycję i rozmiar okna kontaktów i okna rozmowy"
+msgstr "Zapisz _pozycję i rozmiar okna kontaktów i okna rozmowy"
 
 #: ../src/gtkgui.glade.h:233
 msgid "Save conversation _logs for all contacts"
@@ -2425,7 +2421,7 @@ msgstr "Zapisz _logi rozmów dla wszystkich kontaktów"
 
 #: ../src/gtkgui.glade.h:234
 msgid "Save pass_word"
-msgstr "Zapisz hasło"
+msgstr "Zapisz _hasło"
 
 #: ../src/gtkgui.glade.h:235
 msgid "Sen_d"
@@ -2727,7 +2723,7 @@ msgstr "_Adres:"
 
 #: ../src/gtkgui.glade.h:309
 msgid "_Admin"
-msgstr "Administrator"
+msgstr "_Administrator"
 
 #: ../src/gtkgui.glade.h:310
 msgid "_Administrator"
@@ -2747,11 +2743,11 @@ msgstr "Za_banuj"
 
 #: ../src/gtkgui.glade.h:314
 msgid "_Bookmark This Room"
-msgstr "Dodaj zakładkę dla tego pokoju"
+msgstr "Dodaj _zakładkę dla tego pokoju"
 
 #: ../src/gtkgui.glade.h:315
 msgid "_Browser:"
-msgstr "Przeglądarka:"
+msgstr "Prze_glądarka:"
 
 #: ../src/gtkgui.glade.h:316
 msgid "_Cancel"
@@ -2775,7 +2771,7 @@ msgstr "_Kopiuj JID/Adres e-mail"
 
 #: ../src/gtkgui.glade.h:321
 msgid "_Copy Link Location"
-msgstr "Kopiuj adres odnośnika"
+msgstr "_Kopiuj adres odnośnika"
 
 #: ../src/gtkgui.glade.h:322
 msgid "_Deny"
@@ -2795,7 +2791,7 @@ msgstr "_Zakończ"
 
 #: ../src/gtkgui.glade.h:327
 msgid "_Highlight misspelled words"
-msgstr "Podświetlaj błędy w pisowni"
+msgstr "Podś_wietlaj błędy w pisowni"
 
 #: ../src/gtkgui.glade.h:328
 msgid "_History"
@@ -2880,7 +2876,7 @@ msgstr "Pseudo_nim:"
 
 #: ../src/gtkgui.glade.h:349
 msgid "_Notify me about it"
-msgstr "Powiadom mnie o tym"
+msgstr "Powia_dom mnie o tym"
 
 #: ../src/gtkgui.glade.h:350
 msgid "_Notify me when a file transfer is complete"
@@ -3218,7 +3214,7 @@ msgstr "Opis: %s"
 #: ../src/filetransfers_window.py:215
 #, python-format
 msgid "%s wants to send you a file:"
-msgstr "% chce przesłać Ci plik:"
+msgstr "%s chce przesłać Ci plik:"
 
 #: ../src/filetransfers_window.py:218
 msgid "Save File as..."
@@ -3432,144 +3428,3 @@ msgstr ""
 "Argument \"%s\" nie jest określony. \n"
 "Wpisz \"%s·help·%s\" aby uzyskać więcej informacji."
 
-#~ msgid ""
-#~ "If you close this window, you will be disconnected from this room.If you "
-#~ "close this window, you will be disconnected from these rooms."
-#~ msgstr ""
-#~ "Jeśli zamkniesz to okno, to połączenie z tym pokojem zostanie zerwane."
-#~ "Jeśli zamkniesz to okno, to połączenie z tymi pokojami zostanie zerwane."
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#, fuzzy
-#~ msgid "Unknown"
-#~ msgstr "Nieznany typ %s "
-
-#~ msgid "Has errors"
-#~ msgstr "Wystąpiły błądy"
-
-#, fuzzy
-#~ msgid "Open containing folder"
-#~ msgstr "_Otwórz Link w przeglądarce"
-
-#, fuzzy
-#~ msgid "GPG Encryption"
-#~ msgstr "Szyfrowanie OpenPGP"
-
-#~ msgid ""
-#~ "Shows list of files that you send to your friends, and files which you "
-#~ "receive from your friends."
-#~ msgstr ""
-#~ "Pokazuje listę plików, które wysyłasz znajomym i które od nich "
-#~ "otrzymujesz."
-
-#~ msgid "Stoping transfer"
-#~ msgstr "Zatrzymanie przesyłania"
-
-#, fuzzy
-#~ msgid "No space left on device"
-#~ msgstr "Brak miejsca na dysku."
-
-#, fuzzy
-#~ msgid "Unable to open %s for writing\n"
-#~ msgstr "Nie można otworzyć %s do zapisu\n"
-
-#~ msgid "<b>Links</b>"
-#~ msgstr "<b>Linki</b>"
-
-#~ msgid "Open _with:"
-#~ msgstr "Ot_wórz przy pomocy:"
-
-#, fuzzy
-#~ msgid "Switch to"
-#~ msgstr "Zmień na %s"
-
-#~ msgid ""
-#~ "%s seconds have passed and server did not reply to our keepalive. Gajim "
-#~ "disconnected from %s"
-#~ msgstr ""
-#~ "Od % sekund serwer nie odpowiedział na nasz pakiet podtrzymujący. "
-#~ "Gajimprzerywa połączenie z %s."
-
-#, fuzzy
-#~ msgid "File Trasfer Request"
-#~ msgstr "Przesyłane pliki."
-
-#~ msgid "%s byte"
-#~ msgstr "%s bajt"
-
-#~ msgid "%s bytes"
-#~ msgstr "%s bajtów"
-
-#~ msgid "Gajim theme:"
-#~ msgstr "Motywy dla Gajim:"
-
-#~ msgid "Of_fline"
-#~ msgstr "_Rozłączony"
-
-#~ msgid "_Information"
-#~ msgstr "_Informacje"
-
-#~ msgid "_Online"
-#~ msgstr "D_ostępny"
-
-#~ msgid "Invalid password."
-#~ msgstr "Niepoprawne hasło."
-
-#~ msgid "Are you sure you want to leave rooms \"%s\"?"
-#~ msgstr "Jesteś pewien, że chcesz opuścić pokoje \"\"%s?"
-
-#~ msgid "Join Groupchat"
-#~ msgstr "Dołącz do chatu"
-
-#~ msgid "File Request"
-#~ msgstr "Zgłoszenie pliku do przesłania"
-
-#, fuzzy
-#~ msgid "sync with global status"
-#~ msgstr "Synch_ronizuj status konta z globalnym statusem"
-
-#, fuzzy
-#~ msgid "%s help %s"
-#~ msgstr "%s ma status %s"
-
-#~ msgid "Please install dbus if you want to use remote control."
-#~ msgstr "Jeśli chcesz używać zdalnego sterowania, zainstaluj D-Bus."
-
-#~ msgid "Session bus is not started"
-#~ msgstr "Magistrala sesji nie została uruchomiona"
-
-#~ msgid ""
-#~ "Your system is running without session bus daemon. \n"
-#~ " See: for instructions how to do it."
-#~ msgstr ""
-#~ "Twój system działa bez uruchomionego demona D-Bus. \n"
-#~ "Sprawdź, jak go uruchomić."
-
-#~ msgid "No accounts created"
-#~ msgstr "Nie utworzono konta"
-
-#~ msgid "Enable DBus capabilities"
-#~ msgstr "Włącz DBus"
-
-#~ msgid ""
-#~ "If checked, Gajim can be controlled by other programs that support DBus"
-#~ msgstr ""
-#~ "Dzięki tej opcji Gajim może być kontrolowany przez inne programy "
-#~ "posiadające obsługę DBus."
-
-#~ msgid "to "
-#~ msgstr "do "
-
-#~ msgid "using "
-#~ msgstr "używając konta "
-
-#~ msgid "Nap"
-#~ msgstr "Drzemka"
-
-#~ msgid "I'm taking a nap."
-#~ msgstr "Śpię"
-
-#~ msgid "Click to toggle OpenPGP encryption"
-#~ msgstr "Kliknij by włączyć szyfrowanie PGP"
