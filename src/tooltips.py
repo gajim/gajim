@@ -138,8 +138,10 @@ class StatusTable:
 		if status:
 			status = status.strip()
 			if status != '':
+				# make sure 'status' is unicode before we send to to reduce_chars...
+				if type(status) == str:
+					status = unicode(status, encoding='utf-8')
 				if gtk.gtk_version < (2, 6, 0) or gtk.pygtk_version < (2, 6, 0):
-					# FIXME: check and do the same if we have more than one \n 
 					status = gtkgui_helpers.reduce_chars_newlines(status, 50, 1)
 				else:
 					status = gtkgui_helpers.reduce_chars_newlines(status, 0, 1)
@@ -218,7 +220,12 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				iconset = 'sun'
 			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			for acct in accounts:
-				message = gtkgui_helpers.reduce_chars_newlines(acct['message'], 50, 1)
+				message = acct['message']
+				# before reducing the chars we should assure we send unicode, else 
+				# there are possible pango TBs on 'set_markup'
+				if type(message) == str:
+					message = unicode(message, encoding='utf-8')
+				message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
 				message = gtkgui_helpers.escape_for_pango_markup(message)
 				self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
 					gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>' 
