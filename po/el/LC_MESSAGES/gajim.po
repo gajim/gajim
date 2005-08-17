@@ -3,20 +3,22 @@
 # Copyright (C) 2005 Nikos Kouremenos
 # This file is distributed under the same license as the Gajim Project.
 # Nikos Kouremenos <kourem@gmail.com>, 2005.
+# Stavros Giannouris <stavrosg2002@freemai.gr>, 2005.
 # Filippos Papadopoulos <filip@cs.uoi.gr>, 2005.
-# Stavros Giannouris <stavrosg2002@freemai.gr>, 2005
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-17 15:15+0300\n"
-"PO-Revision-Date: 2005-08-15 20:00+0200\n"
-"Last-Translator: Nikos Kouremenos <kourem@gmail.com>\n"
+"PO-Revision-Date: 2005-08-17 16:57+0300\n"
+"Last-Translator: Filippos Papadopoulos <filip@cs.uoi.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Team: Hellenic-Ελληνικά-Greek\n"
+"X-Generator: KBabel 1.10\n"
 
 #: ../src/common/config.py:51
 msgid "Away as a result of being idle"
@@ -435,17 +437,17 @@ msgstr "Εύρεση στο _Λεξικό"
 #: ../src/chat.py:778
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
-msgstr ""
+msgstr "Λείπει ένα \"%s\" από το URL του λεξικού και δεν είναι WIKTIONARY"
 
 #. we must have %s in the url
 #: ../src/chat.py:789
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
-msgstr ""
+msgstr "Λείπει ένα \"%s\" από το URL της Δικτυακής Αναζήτησης"
 
 #: ../src/chat.py:792
 msgid "Web _Search for it"
-msgstr "Δικτυακή Αναζήτηση γι' αυτό"
+msgstr "Δικτυακή Ανα_ζήτηση γι' αυτό"
 
 #. if we have subject, show it too!
 #: ../src/chat.py:1117
@@ -508,7 +510,7 @@ msgstr "Μη έγκυρο όνομα λογαριασμού"
 
 #: ../src/config.py:1198
 msgid "Account name cannot be empty."
-msgstr "Το όνομα λογαριασμού δεν μπορεί να ειναι κενό."
+msgstr "Το όνομα λογαριασμού δεν μπορεί να είναι κενό."
 
 #: ../src/config.py:1202
 msgid "Account name cannot contain spaces."
@@ -520,8 +522,7 @@ msgstr "Μη έγκυρο Jabber ID"
 
 #: ../src/config.py:1207
 msgid "A Jabber ID must be in the form \"user@servername\"."
-msgstr ""
-"Ένα Jabber ID πρέπει να είναι στην μορφή \"όνομα_χρήστη@όνομα_διακομιστήs\"."
+msgstr "Ένα Jabber ID πρέπει να είναι στην μορφή \"όνομα_χρήστη@όνομα_διακομιστήs\"."
 
 #: ../src/config.py:1214 ../src/dialogs.py:749
 msgid "Invalid password"
@@ -695,8 +696,7 @@ msgid "This bookmark has invalid data"
 msgstr "Αυτός ο σελιδοδείκτης έχει μη έγκυρα δεδομένα"
 
 #: ../src/config.py:2611
-msgid ""
-"Please be sure to fill out server and room fields or remove this bookmark."
+msgid "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Παρακαλώ συμπληρώστε τα πεδία του διακομιστή και του δωματίου ή διαφορετικά "
 "αφαιρέστε τον σελιδοδείκτη."
@@ -809,7 +809,9 @@ msgstr "Ένα πρόγραμμα για το Jabber γραμμένο σε GTK+"
 
 #: ../src/dialogs.py:416
 msgid "translator-credits"
-msgstr "Νίκος Κουρεμένος <kourem@gmail.com>"
+msgstr ""
+"Νίκος Κουρεμένος <kourem@gmail.com>\n"
+"Φίλιππος Παπαδόπουλος <psybases@gmail.com>"
 
 #: ../src/dialogs.py:578
 #, python-format
@@ -1067,7 +1069,7 @@ msgstr "όνομα_θέματος"
 #: ../src/groupchat_window.py:125 ../src/groupchat_window.py:967
 #, python-format
 msgid "You just received a new message in room \"%s\""
-msgstr ""
+msgstr "Μόλις λάβατε ένα νέο μήνυμα στο δωμάτιο \"%s\""
 
 #: ../src/groupchat_window.py:126
 msgid "If you close this window, this message will be lost."
@@ -1082,8 +1084,7 @@ msgstr[1] "Είστε σίγουροι ότι θέλετε να φύγετε α�
 
 #: ../src/groupchat_window.py:146
 msgid "If you close this window, you will be disconnected from this room."
-msgid_plural ""
-"If you close this window, you will be disconnected from these rooms."
+msgid_plural "If you close this window, you will be disconnected from these rooms."
 msgstr[0] "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτό το δωμάτιο."
 msgstr[1] "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτά τα δωμάτια."
 
@@ -1097,7 +1098,7 @@ msgstr "Αυτό το δωμάτιο δεν έχει θέμα"
 
 #: ../src/groupchat_window.py:278
 msgid "?Group Chat Contact Role:None"
-msgstr ""
+msgstr "Κανένας"
 
 #: ../src/groupchat_window.py:280
 msgid "Moderators"
@@ -1130,7 +1131,7 @@ msgstr "Ο %s είναι τώρα γνωστός ως %s"
 #: ../src/groupchat_window.py:384
 #, python-format
 msgid "%s has left"
-msgstr "Ο %s έχει φύγει"
+msgstr "Ο %s έφυγε"
 
 #: ../src/groupchat_window.py:386
 #, python-format
@@ -1219,7 +1220,7 @@ msgstr "Δεν υπάρχει υποστήριξη D-Bus για την python σ
 
 #: ../src/remote_control.py:54
 msgid "D-Bus capabilities of Gajim cannot be used"
-msgstr "Οι δυνατότητς του Gajim για D-Bus δε θα χρησιμοποιηθούν"
+msgstr "Οι δυνατότητες του Gajim για D-Bus δε θα χρησιμοποιηθούν"
 
 #: ../src/remote_control.py:405
 msgid "Session bus is not available"
@@ -1274,10 +1275,8 @@ msgstr "Η μεταφορά \"%s\" θα αφαιρεθεί"
 
 #: ../src/roster_window.py:699
 #, python-format
-msgid ""
-"You will no longer be able to send and receive messages to contacts from %s."
-msgstr ""
-"Δεν θα μπορείτε να στείλετε και να λάβετε μηνύματα στις επαφές από το %s."
+msgid "You will no longer be able to send and receive messages to contacts from %s."
+msgstr "Δεν θα μπορείτε να στείλετε και να λάβετε μηνύματα στις επαφές από το %s."
 
 #: ../src/roster_window.py:742
 msgid "Assign OpenPGP Key"
@@ -1309,7 +1308,7 @@ msgstr "Επεξεργασία"
 
 #: ../src/roster_window.py:922 ../src/gtkgui.glade.h:371
 msgid "_Remove from Roster"
-msgstr "Αφαίρεση από την Λίστα Επαφών"
+msgstr "Α_φαίρεση από την Λίστα Επαφών"
 
 #: ../src/roster_window.py:1024
 msgid "Authorization has been sent"
@@ -1327,13 +1326,12 @@ msgstr "Η αίτηση εγγραφής έχει σταλεί"
 #: ../src/roster_window.py:1048
 #, python-format
 msgid "If \"%s\" accepts this request you will know his status."
-msgstr ""
-"Εάν ο \"%s\" αποδεχθεί αυτή την αίτηση, θα γνωρίζετε την κατάσταση του."
+msgstr "Εάν ο \"%s\" αποδεχθεί αυτή την αίτηση, θα γνωρίζετε την κατάσταση του."
 
 #: ../src/roster_window.py:1175
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
-msgstr "Η επαφρή \"%s\" θα αφαιρεθεί από την λίστα επαφών σας"
+msgstr "Η επαφή \"%s\" θα αφαιρεθεί από την λίστα επαφών σας"
 
 #: ../src/roster_window.py:1176
 #, python-format
@@ -1341,7 +1339,7 @@ msgid ""
 "By removing this contact you also remove authorization. Contact \"%s\" will "
 "always see you as offline."
 msgstr ""
-"Αφαιρώντας αυτή την επαφή αφαιρείται επισής και την εξουσιοδότηση. Η επαφή "
+"Αφαιρώντας αυτή την επαφή αφαιρείται επίσης και την εξουσιοδότηση. Η επαφή "
 "\"%s\" θα σας βλέπει πάντα αποσυνδεδεμένο/η."
 
 #: ../src/roster_window.py:1208
@@ -1400,8 +1398,7 @@ msgstr "ως "
 
 #: ../src/systray.py:238
 msgid "All contacts in this group are offline or have errors"
-msgstr ""
-"Όλες οι επαφές σε αυτή την ομάδα είναι αποσυνδεδέμενες ή έχουν πρόβλημα"
+msgstr "Όλες οι επαφές σε αυτή την ομάδα είναι αποσυνδεδέμενες ή έχουν πρόβλημα"
 
 #: ../src/tabbed_chat_window.py:124 ../src/gtkgui.glade.h:191
 msgid "OpenPGP Encryption"
@@ -1411,8 +1408,7 @@ msgstr "Κρυπτογράφηση OpenPGP"
 #: ../src/tabbed_chat_window.py:128
 #, python-format
 msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
-msgstr ""
-"Ο/η %s δεν έχει στείλει ένα κλειδί OpenPGP ούτε εσείς έχετε εφαρμόσει κάποιο"
+msgstr "Ο/η %s δεν έχει στείλει ένα κλειδί OpenPGP ούτε εσείς έχετε εφαρμόσει κάποιο"
 
 #. %s is being replaced in the code with JID
 #: ../src/tabbed_chat_window.py:272 ../src/tabbed_chat_window.py:340
@@ -1441,11 +1437,11 @@ msgstr "Αποτυχία αποστολής προσωπικού μηνύματ�
 #: ../src/tabbed_chat_window.py:604
 #, python-format
 msgid "You are no longer in room \"%s\" or \"%s\" has left."
-msgstr "Δεν είστε πια στο δωμάτιο \"%s\" ή ο/η \"%s\" έχει φύγει."
+msgstr "Δεν είστε πια στο δωμάτιο \"%s\" ή ο/η \"%s\" έφυγε."
 
 #: ../src/tabbed_chat_window.py:707
 msgid "Encryption enabled"
-msgstr "Ενεργοποιήθηκε η κρυποτογράφηση"
+msgstr "Ενεργοποιήθηκε η κρυπτογράφηση"
 
 #: ../src/tabbed_chat_window.py:712
 msgid "Encryption disabled"
@@ -1468,11 +1464,11 @@ msgstr "Το αρχείο δεν μπορεί να είναι πάνω από 8 
 
 #: ../src/vcard.py:250
 msgid "?Client:Unknown"
-msgstr "?Client:Άγνωστος"
+msgstr "Άγνωστος"
 
 #: ../src/vcard.py:252
 msgid "?OS:Unknown"
-msgstr "?OS:Άγνωστο"
+msgstr "Άγνωστο"
 
 #: ../src/vcard.py:273 ../src/vcard.py:291
 msgid " resource with priority "
@@ -1486,12 +1482,11 @@ msgstr ""
 
 #: ../src/vcard.py:404
 msgid "Without a connection, you can not get your contact information."
-msgstr ""
-"Πρέπει να είστε συνδεδεμένος για να λάβετε τις πληροφορίες της επαφής σας"
+msgstr "Πρέπει να είστε συνδεδεμένος για να λάβετε τις πληροφορίες της επαφής σας"
 
 #: ../src/gtkgui.glade.h:1
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../src/gtkgui.glade.h:2
 msgid "<b>Advanced Configuration Editor</b>"
@@ -1568,7 +1563,7 @@ msgstr "<b>Είσοδος δεδομένων XML</b>"
 
 #: ../src/gtkgui.glade.h:21
 msgid "<span background=\"lightyellow\"></span>"
-msgstr ""
+msgstr "<span background=\"lightyellow\"></span>"
 
 #: ../src/gtkgui.glade.h:22
 msgid "A list of active, completed and stopped file transfers"
@@ -1648,12 +1643,12 @@ msgstr ""
 
 #: ../src/gtkgui.glade.h:41
 msgid "Allow _OS information to be sent"
-msgstr "Επίτρεψη αποστολής πληροφοριών για το λειτ. σύστημα"
+msgstr "Επίτρεψη α_ποστολής πληροφοριών για το λειτ. σύστημα"
 
 #: ../src/gtkgui.glade.h:42
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
-"Επίτρεψη εμφανίσεων/γνωστοποιήσεων όταν είμαι απομακρ./μη διαθ./απασχολ./"
+"Επίτρεψη εμφανίσεων/γνωστοποιήσεων όταν είμαι _απομακρ./μη διαθ./απασχολ./"
 "αφανής"
 
 #: ../src/gtkgui.glade.h:43
@@ -1662,7 +1657,7 @@ msgstr "Επίσης γνωστό ως στυλ iChat"
 
 #: ../src/gtkgui.glade.h:44
 msgid "Always use compact _view"
-msgstr "Να χρησιμοποιείται πάντα η συμπαγής όψη"
+msgstr "Να χρησιμοποιείται _πάντα η συμπαγής όψη"
 
 #: ../src/gtkgui.glade.h:45
 msgid "Ask status message when I:"
@@ -1670,7 +1665,7 @@ msgstr "Ερώτηση μηνύματος κατάστασης όταν γίνο
 
 #: ../src/gtkgui.glade.h:46
 msgid "Ask:"
-msgstr "Ζήτα:"
+msgstr "Ζητείται:"
 
 #: ../src/gtkgui.glade.h:47
 msgid "Assign Open_PGP Key"
@@ -1678,8 +1673,7 @@ msgstr "Ανάθεση Open_PGP Κλειδιού"
 
 #: ../src/gtkgui.glade.h:48
 msgid "Authorize contact so he can know when you're connected"
-msgstr ""
-"Εξουσιοδοτήστε μια επαφή ώστε να μπορεί να ξέρει πότε είστε συνδεδεμένος"
+msgstr "Εξουσιοδοτήστε μια επαφή ώστε να μπορεί να ξέρει πότε είστε συνδεδεμένος"
 
 #: ../src/gtkgui.glade.h:49
 msgid "Auto _away after:"
@@ -1759,7 +1753,7 @@ msgstr "Αλλαγή _Θέματος"
 
 #: ../src/gtkgui.glade.h:70
 msgid "Chat state noti_fications:"
-msgstr "Ειδοποιήσεις για κατάσταση κουβέντας:"
+msgstr "Ειδοπ_οιήσεις για κατάσταση κουβέντας:"
 
 #: ../src/gtkgui.glade.h:71
 msgid "Chat with"
@@ -1771,7 +1765,7 @@ msgstr "Έλεγχος για _νέα έκδοση κατά την εκκίνη�
 
 #: ../src/gtkgui.glade.h:73
 msgid "Check if you want to register for a new jabber account"
-msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαρισμό"
+msgstr "Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαριασμό"
 
 #: ../src/gtkgui.glade.h:74
 msgid ""
@@ -1793,7 +1787,7 @@ msgstr ""
 "Επιλέξτε το ώστε το Gajim να συνδεθεί στην θύρα 5223 όπου οι παλαιότεροι "
 "διακομιστές αναμένουν SSL σύνδεση. Σημειώστε ότι το Gajim χρησιμοποιεί "
 "κρυπτογράφηση TLS αυτόματα αν αυτή η δυνατότητα του γνωστοποιηθεί από τον "
-"διακομιστή, και ότι με αυτή την επιλογή απενεργοποιήτε το TLS"
+"διακομιστή, και ότι με αυτή την επιλογή απενεργοποιείτε το TLS"
 
 #: ../src/gtkgui.glade.h:76
 msgid "Choose _Key..."
@@ -1818,7 +1812,7 @@ msgstr "Πατήστε για να έχετε περισσότερες πληρ�
 #. remind to nkour that this string has typo
 #: ../src/gtkgui.glade.h:82
 msgid "Click to see features like on jabber servers"
-msgstr "Πατήστε για να δείτε τα χαρακτηρστικά των διακομιστών του jabber"
+msgstr "Πατήστε για να δείτε τα χαρακτηριστικά των διακομιστών του jabber"
 
 #: ../src/gtkgui.glade.h:83
 msgid "Click to see past conversation in this room"
@@ -1850,7 +1844,7 @@ msgstr "Πληροφορίες Επαφής"
 
 #: ../src/gtkgui.glade.h:90
 msgid "Contact _Info"
-msgstr "Πληροφορίες Επαφής"
+msgstr "Πλη_ροφορίες Επαφής"
 
 #: ../src/gtkgui.glade.h:91
 msgid "Contact:"
@@ -2013,13 +2007,12 @@ msgstr ""
 "μέρος της οθόνης για τις επαφές που μόλις αποσυνδέθηκαν στο Jabber"
 
 #: ../src/gtkgui.glade.h:128
-msgid ""
-"Gajim will only change the icon of the contact that sent the new message"
+msgid "Gajim will only change the icon of the contact that sent the new message"
 msgstr "Το Gajim θα αλλάξει μόνο το εικονίδιο της επαφής που έστειλε το μήνυμα"
 
 #: ../src/gtkgui.glade.h:129
 msgid "Gajim: First Time Wizard"
-msgstr ""
+msgstr "Gajim: Οδηγός Πρώτης Φοράς"
 
 #. Given Name
 #: ../src/gtkgui.glade.h:132
@@ -2056,7 +2049,7 @@ msgstr "Έχω ήδη ένα λογαριασμό που θέλω να χρησ�
 
 #: ../src/gtkgui.glade.h:141
 msgid "I want to _register for a new account"
-msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαρισμό"
+msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαριασμό"
 
 #: ../src/gtkgui.glade.h:142
 msgid "I would like to add you to my contact list."
@@ -2064,8 +2057,7 @@ msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφ�
 
 #: ../src/gtkgui.glade.h:143
 msgid "If checked, Gajim will also have a trayicon"
-msgstr ""
-"Αν επιλεγεί, το Gajim θα έχει δικό του ειδονίδιο στην περιοχή γνωστοποίησης"
+msgstr "Αν επιλεγεί, το Gajim θα έχει δικό του εικονίδιο στην περιοχή γνωστοποίησης"
 
 #: ../src/gtkgui.glade.h:144
 msgid ""
@@ -2073,16 +2065,16 @@ msgid ""
 "information related to a conversation you may have with a contact such as "
 "composing a message"
 msgstr ""
-"Αν επιλεγεί, το Gajim θα γνωστοποιεί την ικανονότητα του να στέλνει και να "
-"λαμβάνειμετα-πληροφορίες σχετικές με μια συζήτηση που έχετε με μια επαφή. "
+"Αν επιλεγεί, το Gajim θα γνωστοποιεί την ικανότητα του να στέλνει και να "
+"λαμβάνει μετα-πληροφορίες σχετικές με μια συζήτηση που έχετε με μια επαφή. "
 "Μια τέτοια πληροφορία είναι π.χ. ότι κάποιος από τους δυο γράφει ένα μήνυμα"
 
 #. that should be changed to group chat from groupchat. if it stills says groupchat and we are preparing for 0.9 please remind me (nkour)
 #: ../src/gtkgui.glade.h:146
 msgid "If checked, Gajim will join this groupchat on startup"
 msgstr ""
-"Αν επιλεγεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτή την ομαδική συζήτηση "
-"κατά την εκκινήση"
+"Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτή την ομαδική συζήτηση "
+"κατά την εκκίνηση"
 
 #: ../src/gtkgui.glade.h:147
 msgid "If checked, Gajim will remember the password for this account"
@@ -2145,6 +2137,10 @@ msgid ""
 "compact view with Alt+C. NOTE: The last state you leave a window/tab is not "
 "a permanent one"
 msgstr ""
+"Εάν ενεργοποιηθεί, όλα τα παράθυρα συνομιλίας και ομαδικής συνομιλίας θα έχουν κρυμμένες την "
+"περιοχή κουμπιών στο κάτω μέρος και την περιοχή πληροφοριών στο πάνω μέρος. Μπορείτε να "
+"εναλλάσετε σε συμπαγή όψη με το Alt+C. ΣΗΜΕΙΩΣΗ: Η τελευταία κατάσταση στην οποία αφήνετε "
+"ένα παράθυρο/καρτέλα δεν είναι μόνιμη"
 
 #: ../src/gtkgui.glade.h:155
 msgid ""
@@ -2205,23 +2201,23 @@ msgstr "Αποθήκευση παρουσιών σε _εξωτερικό αρχ�
 
 #: ../src/gtkgui.glade.h:170
 msgid "Manage Accounts"
-msgstr "Διαχείρηση Λογαριασμών"
+msgstr "Διαχείριση Λογαριασμών"
 
 #: ../src/gtkgui.glade.h:171
 msgid "Manage Bookmarks"
-msgstr "Διαχείρηση Σελιδοδεικτών"
+msgstr "Διαχείριση Σελιδοδεικτών"
 
 #: ../src/gtkgui.glade.h:172
 msgid "Manage Emoticons"
-msgstr "Διαχείρηση Συμβόλων"
+msgstr "Διαχείριση Συμβόλων"
 
 #: ../src/gtkgui.glade.h:173
 msgid "Manage Proxy Profiles"
-msgstr "Διαχείρηση Προφίλ Μεσολαβητή"
+msgstr "Διαχείριση Προφίλ Μεσολαβητή"
 
 #: ../src/gtkgui.glade.h:174
 msgid "Manage..."
-msgstr "Διαχείρηση..."
+msgstr "Διαχείριση..."
 
 #. Middle Name
 #: ../src/gtkgui.glade.h:176
@@ -2267,7 +2263,7 @@ msgstr "Σε κάθε _μήνυμα"
 
 #: ../src/gtkgui.glade.h:189
 msgid "Open Download Page"
-msgstr "Άνοιγμα Σελίδας για Μεταφόρτωση"
+msgstr "Άνοιγμα Σελίδας Λήψης"
 
 #: ../src/gtkgui.glade.h:190
 msgid "Open..."
@@ -2303,11 +2299,11 @@ msgstr "Αναπαραγωγή _ήχων"
 
 #: ../src/gtkgui.glade.h:200
 msgid "Please fill in the data for your existing account"
-msgstr ""
+msgstr "Παρακαλώ συμπληρώστε τα δεδομένα για τον υπάρχων λογαριασμό σας"
 
 #: ../src/gtkgui.glade.h:201
 msgid "Please fill in the data for your new account"
-msgstr ""
+msgstr "Παρακαλώ συμπληρώστε τα δεδομένα για τον νέο λογαριασμό σας"
 
 #: ../src/gtkgui.glade.h:202
 msgid "Port: "
@@ -2344,14 +2340,14 @@ msgid ""
 "server when two or more clients are connected using the same account; The "
 "client with the highest priority gets the events"
 msgstr ""
-"Η προταιρεότητα χρησιμοποιείται στο Jabber για να καθορίσει ποιος λαμβάνει "
+"Η προτεραιότητα χρησιμοποιείται στο Jabber για να καθορίσει ποιος λαμβάνει "
 "τα γεγονότα από τον jabber διακομιστή όταν δύο ή περισσότερες εφαρμογές "
 "είναι συνδεδεμένες χρησιμοποιώντας τον ίδιο λογαριασμό· Η εφαρμογή με την "
 "μεγαλύτερη προτεραιότητα λαμβάνει τα γεγονότα"
 
 #: ../src/gtkgui.glade.h:211
 msgid "Profile, Avatar"
-msgstr ""
+msgstr "Προφίλ, Avatar"
 
 #: ../src/gtkgui.glade.h:212
 msgid "Protocol:"
@@ -2363,7 +2359,7 @@ msgstr "Μεσολαβητής:"
 
 #: ../src/gtkgui.glade.h:215
 msgid "Re_quest Authorization from"
-msgstr "Aίτηση για εξουσιοδότηση από"
+msgstr "Aί_τηση για εξουσιοδότηση από"
 
 #: ../src/gtkgui.glade.h:216
 msgid "Recently:"
@@ -2387,8 +2383,7 @@ msgstr "Αφαίρεση της μεταφοράς αρχείου από τη λ
 
 #: ../src/gtkgui.glade.h:221
 msgid "Removes completed, canceled and failed file transfers from the list"
-msgstr ""
-"Αφαιρεί τις ολοκληρωμένες, ακυρωμένες και αποτυχημένες μεταφορές από τη λίστα"
+msgstr "Αφαιρεί τις ολοκληρωμένες, ακυρωμένες και αποτυχημένες μεταφορές από τη λίστα"
 
 #: ../src/gtkgui.glade.h:222
 msgid "Removing selected file transfer"
@@ -2396,11 +2391,11 @@ msgstr "Αφαίρεση επιλεγμένης μεταφοράς αρχείο�
 
 #: ../src/gtkgui.glade.h:223
 msgid "Reply to this message"
-msgstr "Απάντηση σε αυτό το μύνημα"
+msgstr "Απάντηση σε αυτό το μήνυμα"
 
 #: ../src/gtkgui.glade.h:224
 msgid "Reset to Default Colors"
-msgstr "Επαφορά Προεπιλεγμένων Χρωμάτων"
+msgstr "Επαναφορά Προεπιλεγμένων Χρωμάτων"
 
 #: ../src/gtkgui.glade.h:225
 msgid "Resour_ce: "
@@ -2416,9 +2411,9 @@ msgid ""
 msgstr ""
 "Ο πόρος στέλνεται στον jabber διακομιστή ώστε να διαχωριστεί το ίδιο JID σε "
 "δύο ή περισσότερα μέρη ανάλογα με τον αριθμό των εφαρμογών που είναι "
-"συνδεδεμένες στον ίδιο διακομιστή με τον ίδιο λαγαριασμό. Έτσι μπορείτε να "
-"είστε συνδεδεμένος με τον ίδιο λαγαριασμό με πόρο 'Σπίτι' και 'Δουλειά' την "
-"ίδια στιγμή. Ο πόρος με την μεγαλύτερη προταιρεότητα θα λαμβάνει τα "
+"συνδεδεμένες στον ίδιο διακομιστή με τον ίδιο λογαριασμό. Έτσι μπορείτε να "
+"είστε συνδεδεμένος με τον ίδιο λογαριασμό με πόρο 'Σπίτι' και 'Δουλειά' την "
+"ίδια στιγμή. Ο πόρος με την μεγαλύτερη προτεραιότητα θα λαμβάνει τα "
 "γεγονότα. (βλέπε και πιο κάτω)"
 
 #: ../src/gtkgui.glade.h:227
@@ -2443,11 +2438,11 @@ msgstr "Αποθήκευση _κωδικοφράσης (περιορισμένη
 
 #: ../src/gtkgui.glade.h:232
 msgid "Save _position and size for roster and chat windows"
-msgstr ""
+msgstr "Αποθήκευση _θέσης και μεγέθους για την λίστα επαφών και για τα παράθυρα συνομιλίας"
 
 #: ../src/gtkgui.glade.h:233
 msgid "Save conversation _logs for all contacts"
-msgstr "Ιστορικό συζητήσεων για όλες τις επαφές"
+msgstr "Αποθήκευση ιστορι_κού συνομιλιών για όλες τις επαφές"
 
 #: ../src/gtkgui.glade.h:234
 msgid "Save pass_word"
@@ -2467,7 +2462,7 @@ msgstr "Αποστολή Αρχείου"
 
 #: ../src/gtkgui.glade.h:238
 msgid "Send Single _Message"
-msgstr "Αποστολή Α μηνύματος"
+msgstr "Αποστολή ενός _μηνύματος"
 
 #: ../src/gtkgui.glade.h:239
 msgid "Send _File"
@@ -2479,16 +2474,15 @@ msgstr "Αποστολή πακέτων keep-alive"
 
 #: ../src/gtkgui.glade.h:241
 msgid "Send message"
-msgstr "Αποστολή μυνήματος"
+msgstr "Αποστολή μηνύματος"
 
 #: ../src/gtkgui.glade.h:242
 msgid "Send message and close window"
-msgstr "Αποστολή μυνήματος και κλείσιμο παραθύρου"
+msgstr "Αποστολή μηνύματος και κλείσιμο παραθύρου"
 
 #: ../src/gtkgui.glade.h:243
 msgid "Sends a message to currently connected users to this server"
-msgstr ""
-"Στέλνει ένα μήνυμα στου χρήστες που είναι συνδεδεμένοι σε αυτό το διακομιστή"
+msgstr "Στέλνει ένα μήνυμα στους χρήστες που είναι συνδεδεμένοι σε αυτό το διακομιστή"
 
 #: ../src/gtkgui.glade.h:244
 msgid "Server:"
@@ -2508,7 +2502,7 @@ msgstr "Ορισμός Μηνύματος της Ημέρας"
 
 #: ../src/gtkgui.glade.h:248
 msgid "Set _Avatar"
-msgstr "Καθορισμός Avatar"
+msgstr "Κα_θορισμός Avatar"
 
 #: ../src/gtkgui.glade.h:249
 msgid "Sets Message of the Day"
@@ -2520,7 +2514,7 @@ msgstr "Εμφάνιση _Αποσυνδεδεμένων Χρηστών"
 
 #: ../src/gtkgui.glade.h:251
 msgid "Show only in _roster"
-msgstr "Εμφάνισε το μόνο στο κύριο παράθυρο"
+msgstr "Εμφά_νισε το μόνο στο κύριο παράθυρο"
 
 #: ../src/gtkgui.glade.h:252
 msgid "Show roster window at application startup"
@@ -2532,11 +2526,11 @@ msgstr "Δείχνει τη λίστα μεταφορών αρχείων μετ�
 
 #: ../src/gtkgui.glade.h:254
 msgid "Sign _in"
-msgstr "Συνδέεται"
+msgstr "Σύν_δεση"
 
 #: ../src/gtkgui.glade.h:255
 msgid "Sign _out"
-msgstr "Αποσυνδέεται"
+msgstr "Αποσ_ύνδεση"
 
 #: ../src/gtkgui.glade.h:256
 msgid "Sort contacts by status"
@@ -2578,7 +2572,7 @@ msgid ""
 "the file system it will be removed. This operation is not reversable. "
 msgstr ""
 "Σταματάει την επιλεγμένη μεταφορά αρχείου. Αν το αρχείο είναι ημιτελές, τότε "
-"αφαιρείταιΑυτή η ενέργεια είναι δίχως επιστροφή"
+"αφαιρείται. Αυτή η ενέργεια είναι μη αναστρέψιμη"
 
 #: ../src/gtkgui.glade.h:267
 msgid "Street:"
@@ -2603,7 +2597,7 @@ msgstr "Κατάληξη:"
 
 #: ../src/gtkgui.glade.h:273
 msgid "Synch_ronize account status with global status"
-msgstr "Συγχρονισμός κατάστασης λογαριασμού με την γενική κατάσταση"
+msgstr "Συγχρο_νισμός κατάστασης λογαριασμού με την γενική κατάσταση"
 
 #: ../src/gtkgui.glade.h:274
 msgid "Text color"
@@ -2623,7 +2617,7 @@ msgstr "Αυτόματο μήνυμα για κατάσταση μη διαθέ�
 
 #: ../src/gtkgui.glade.h:278
 msgid "The bar line which is on top of chat windows"
-msgstr "Η μπάρα που είναι στο πάνω μέρος των παραθύρουν κουβέντας"
+msgstr "Η μπάρα που είναι στο πάνω μέρος των παραθύρων κουβέντας"
 
 #: ../src/gtkgui.glade.h:279
 msgid "Theme:"
@@ -2635,7 +2629,7 @@ msgid ""
 "active, it is first stopped and then removed"
 msgstr ""
 "Αυτή η ενέργεια αφαιρεί μια μεταφορά αρχείου από τη λίστα. Αν η μεταφορά "
-"είναι ενεργή, τότε πρώτα διακόπτεται και μετά αφαιρείτε"
+"είναι ενεργή, τότε πρώτα διακόπτεται και μετά αφαιρείται"
 
 #: ../src/gtkgui.glade.h:281
 msgid "Title:"
@@ -2675,7 +2669,7 @@ msgstr "Χρήση _SSL (legacy)"
 
 #: ../src/gtkgui.glade.h:290
 msgid "Use _emoticons"
-msgstr "Χρήση Συμβόλων"
+msgstr "_Χρήση Συμβόλων"
 
 #: ../src/gtkgui.glade.h:291
 msgid "Use _transports iconsets"
@@ -2683,7 +2677,7 @@ msgstr "Χρήση Σετ _εικονιδίων κατάστασης:"
 
 #: ../src/gtkgui.glade.h:292
 msgid "Use a single chat window with _tabs"
-msgstr "Χρήση ενός παραθύρου για κουβέντες με καρτέλες"
+msgstr "Χρήση ενός παραθύρου κουβέντας με _καρτέλες"
 
 #: ../src/gtkgui.glade.h:293
 msgid "Use authentication"
@@ -2708,6 +2702,9 @@ msgid ""
 "window, the three following actions may happen in order for you to be "
 "informed about it"
 msgstr ""
+"Όταν έχει ληφθεί ένα νέο μήνυμα που δεν προέρχεται από μια επαφή που βρίσκεται ήδη "
+"σε ένα παράθυρο συνομιλίας, οι τρεις ακόλουθες ενέργειες μπορεί να συμβούν για να "
+"ενημερωθείτε για αυτό"
 
 #: ../src/gtkgui.glade.h:299
 msgid "When new message is received"
@@ -2795,7 +2792,7 @@ msgstr "_Συνέχεια"
 
 #: ../src/gtkgui.glade.h:320
 msgid "_Copy JID/Email Address"
-msgstr "Ατιγραφή JID/Διεύθυνσης αλληλογραφίας"
+msgstr "Α_ντιγραφή JID/Email Διεύθυνσης"
 
 #: ../src/gtkgui.glade.h:321
 msgid "_Copy Link Location"
@@ -2852,7 +2849,7 @@ msgstr "_Συμμετοχή"
 
 #: ../src/gtkgui.glade.h:336
 msgid "_Join Group Chat"
-msgstr "Είσοδος σε Ομαδική Συζήτηση"
+msgstr "_Είσοδος σε Ομαδική Συζήτηση"
 
 #: ../src/gtkgui.glade.h:337
 msgid "_Kick"
@@ -3008,7 +3005,7 @@ msgstr "_Αποστολή"
 
 #: ../src/gtkgui.glade.h:376
 msgid "_Send & Close"
-msgstr "_Στείλε & Κλείσε"
+msgstr "_Αποστολή & Κλείσιμο"
 
 #: ../src/gtkgui.glade.h:377
 msgid "_Send Private Message"
@@ -3036,7 +3033,7 @@ msgstr "Ανακάλυψη _Υπηρεσιών..."
 
 #: ../src/gtkgui.glade.h:383
 msgid "_Set Image..."
-msgstr "_Ορισμός Φωτογραφίας..."
+msgstr "_Ορισμός Εικόνας..."
 
 #: ../src/gtkgui.glade.h:384
 msgid "_Start Chat"
@@ -3314,7 +3311,7 @@ msgstr "κατάσταση"
 msgid "one of: offline, online, chat, away, xa, dnd, invisible "
 msgstr ""
 "μία από τις: αποσυνδεδεμένος, συνδεδεμένος, κουβέντα, απομακρυσμένος, "
-"εκτετεμένα-απομακρυσμένος, dnd, αόρατος "
+"εκτεταμένα-απομακρυσμένος, dnd, αόρατος "
 
 #: ../scripts/gajim-remote.py:103 ../scripts/gajim-remote.py:127
 msgid "message"
@@ -3379,8 +3376,7 @@ msgstr ""
 
 #: ../scripts/gajim-remote.py:130
 msgid "if specified, the message will be sent using this account"
-msgstr ""
-"εάν καθοριστεί, το μήνυμα θα σταλεί χρησιμοποιώντας αυτόν τον λογαριασμό"
+msgstr "εάν καθοριστεί, το μήνυμα θα σταλεί χρησιμοποιώντας αυτόν τον λογαριασμό"
 
 #: ../scripts/gajim-remote.py:135
 msgid "Get detailed info on a contact"
@@ -3461,8 +3457,3 @@ msgstr ""
 "Το όρισμα \"%s\" δεν έχει οριστεί. \n"
 "Πληκτρολογήστε \"%s help %s\" για περισσότερες πληροφορίες"
 
-#~ msgid "Unknown"
-#~ msgstr "Άγνωστο"
-
-#~ msgid "Has errors"
-#~ msgstr "Έχει προβλήματα"
