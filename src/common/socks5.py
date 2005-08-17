@@ -25,6 +25,10 @@ import os
 import struct
 import sha
 
+from errno import EWOULDBLOCK
+from errno import ENOBUFS
+from errno import EINTR
+
 MAX_BUFF_LEN = 65536
 
 class SocksQueue:
@@ -345,6 +349,16 @@ class Socks5:
 		self.size = 0
 		self.remaining_buff = ''
 		
+	def open_file_for_reading(self):
+		self.fd = open(self.file_props['file-name'])
+		self.fd.seek(self.size)
+		
+	def close_file(self):
+		try:
+			self.fd.close()
+		except:
+			pass
+		
 	def get_fd(self):
 		''' Test if file is already open and return its fd,
 		or just open the file and return the fd.
@@ -396,8 +410,11 @@ class Socks5:
 				# send
 				lenn = self._send(self._get_nl_byte())
 			except Exception, e:
-				# peer cannot read
-				if e.args[0] != 11:
+				errnum = e.args[0]
+				# peer cannot read at the moment, continue later
+				if errnum in [EINTR, ENOBUFS, EWOULDBLOCK]:
+					pass
+				else: # peer will not be able to read anymore
 					self.state = 8
 					self.disconnect()
 					self.file_props['error'] = -1
@@ -408,16 +425,18 @@ class Socks5:
 			buff = self.remaining_buff
 			self.remaining_buff = ''
 		else:
+			self.open_file_for_reading()
 			buff = self.fd.read(MAX_BUFF_LEN)
+			self.close_file()
 		if len(buff) > 0:
 			lenn = 0
 			try:
 				lenn = self._send(buff)
 			except Exception, e:
-				if e.args[0] != 11:
+				if e.args[0] not in [EINTR, ENOBUFS, EWOULDBLOCK]:
 					# peer stopped reading
 					self.state = 8 # end connection
-					self.fd.close()
+					self.close_file()
 					self.disconnect()
 					self.file_props['error'] = -1
 					return -1
@@ -426,7 +445,6 @@ class Socks5:
 			if self.size == int(self.file_props['size']):
 				self.state = 8 # end connection
 				self.file_props['error'] = 0
-				self.fd.close()
 				self.disconnect()
 				return -1
 			if lenn != len(buff):
@@ -638,7 +656,6 @@ class Socks5Sender(Socks5):
 		
 	def send_file(self):
 		''' start sending the file over verified connection ''' 
-		self.fd = open(self.file_props['file-name'])
 		self.file_props['error'] = 0
 		self.file_props['disconnect_cb'] = self.disconnect
 		self.file_props['started'] = True
