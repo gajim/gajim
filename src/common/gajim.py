@@ -70,8 +70,6 @@ events_for_ui = {}
 #... and its mutex
 mutex_events_for_ui = mutex.mutex()
 
-socks5quue = None # FIXME: this var has a typo in queue but I think it is also not used!
-
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
 
