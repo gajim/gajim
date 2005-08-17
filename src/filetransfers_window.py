@@ -118,8 +118,29 @@ class FileTransfersWindow:
 			gtkgui_helpers.escape_for_pango_markup(file_props['name'])
 		sectext += '\n\t' + _('Size: %s') % \
 		helpers.convert_bytes(file_props['size'])
-		sectext += '\n\t' +_('Sender: %s') % \
-			gtkgui_helpers.escape_for_pango_markup(jid)
+		if file_props['type'] == 'r':
+			jid = str(file_props['sender']).split('/')[0]
+			real_jid = gajim.get_first_contact_instance_from_jid( 
+				file_props['tt_account'], jid).name
+			sender = gtkgui_helpers.escape_for_pango_markup(real_jid)
+		else:
+			if float(gajim.version) > 0.8:
+				sender = 'You' # FIXME _(gettext this)
+			else:
+				sender = file_props['tt_account']
+		sectext += '\n\t' +_('Sender: %s') % sender
+		sectext += '\n\t' +_('Recipient: ')
+		if file_props['type'] == 's':
+			jid = str(file_props['receiver']).split('/')[0]
+			real_jid = gajim.get_first_contact_instance_from_jid( 
+				file_props['tt_account'], jid).name
+			recipient = gtkgui_helpers.escape_for_pango_markup(real_jid)
+		else:
+			if float(gajim.version) > 0.8:
+				recipient = 'You' # FIXME _(gettext this)
+			else:
+				recipient = file_props['tt_account']
+		sectext += recipient
 		if file_props['type'] == 'r':
 			(path, file) = os.path.split(file_props['file-name'])
 			sectext += '\n\t' +_('Saved in: %s') % \
