@@ -86,6 +86,10 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0,
 	If any of the params is not present(None or 0) the action
 	on it is not performed
 	'''
+	# assure that we have only unicode text
+	if type(text) == str:
+		text = unicode(text, encoding='utf-8')
+		
 	def _cut_if_long(str):
 		if len(str) > max_chars:
 			str = str[:max_chars - 3] + '...'
