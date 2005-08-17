@@ -773,8 +773,8 @@ timestamp, contact):
 				# we don't want to display status lines, do we?
 				continue
 	
-				lines.append(line[0])
-				size = size + 1
+			lines.append(line[0])
+			size = size + 1
 	
 		if lines != []:
 			lines.reverse()
