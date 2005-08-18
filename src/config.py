@@ -2500,13 +2500,14 @@ class ManageBookmarksWindow:
 
 			for bookmark in gajim.connections[account].bookmarks:
 				if bookmark['name'] == '':
-					#No name was given for this bookmark.
-					#Use the first part of JID instead...
+					# No name was given for this bookmark.
+					# Use the first part of JID instead...
 					name = bookmark['jid'].split("@")[0]
 					bookmark['name'] = name
 
-				#Convert '1'/'0' to True/False
-				autojoin = bool(int(bookmark['autojoin']))
+				# make '1', '0', 'true', 'false' (or other) to True/False
+				autojoin = helpers.from_xs_boolean_to_python_boolean(
+					bookmark['autojoin'])
 				
 				self.treestore.append( iter, [
 						account,

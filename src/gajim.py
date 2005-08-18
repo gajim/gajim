@@ -685,11 +685,11 @@ class Interface:
 			self.remote.raise_signal('RosterInfo', (account, array))
 
 	def handle_event_bookmarks(self, account, bms):
-		#('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
-		#We received a bookmark item from the server (JEP48)
-		#Auto join GC windows if neccessary
+		# ('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
+		# We received a bookmark item from the server (JEP48)
+		# Auto join GC windows if neccessary
 		for bm in bms:
-			if bm['autojoin'] == '1':
+			if bm['autojoin'] in ('1', 'true'):
 				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
 					bm['password'])
 		self.roster.make_menu()

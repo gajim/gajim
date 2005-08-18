@@ -1117,9 +1117,12 @@ class Connection:
 			confs = storage.getTags('conference')
 			urls = storage.getTags('url')
 			for conf in confs:
+				autojoin_val = conf.getAttr('autojoin')
+				if autojoin_val is None: # not there (it's optional)
+					autojoin_val == False
 				bm = { 'name': conf.getAttr('name'),
 				       'jid': conf.getAttr('jid'),
-				       'autojoin': conf.getAttr('autojoin'),
+				       'autojoin': autojoin_val,
 				       'password': conf.getTagData('password'),
 				       'nick': conf.getTagData('nick') }
 
