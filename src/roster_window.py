@@ -513,7 +513,6 @@ class RosterWindow:
 				account = gajim.connections.keys()[0]
 				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
 					account)
-				print len(advanced_menuitem_menu.get_children())
 				advanced_menuitem.set_submenu(advanced_menuitem_menu)
 
 		
