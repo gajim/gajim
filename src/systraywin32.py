@@ -176,7 +176,10 @@ class NotifyIcon:
 	
 	def remove(self):
 		""" Removes the tray icon. """
-		win32gui.Shell_NotifyIcon(win32gui.NIM_DELETE, self._get_nid())
+		try:
+			win32gui.Shell_NotifyIcon(win32gui.NIM_DELETE, self._get_nid())
+		except: # maybe except just pywintypes.error ? anyways..
+			pass
 
 
 	def set_tooltip(self, tooltip):
