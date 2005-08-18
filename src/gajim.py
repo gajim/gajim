@@ -548,6 +548,7 @@ class Interface:
 		if self.windows.has_key('account_modification'):
 			self.windows['account_modification'].account_is_ok(array[0])
 		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
+		self.windows[name]['xml_console'] = dialogs.XMLConsoleWindow(self, name)
 		gajim.awaiting_messages[name] = {}
 		# disconnect from server - our status in roster is offline
 		gajim.connections[name].connected = 1
