@@ -3,7 +3,7 @@
 ## Gajim Team:
 ## - Yann Le Boulanger <asterix@lagaule.org>
 ## - Vincent Hanquez <tab@snarc.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
+## - Nikos Kouremenos <kourem@gmail.com>
 ##
 ## Copyright (C) 2003-2005 Gajim Team
 ##
@@ -41,7 +41,7 @@ opts = {
 
 setup(
     name = 'Gajim',
-    version = '0.7.1',
+    version = '8',
     description = 'A Jabber client written in PyGTK',
     windows = [{'script': 'src/gajim.py',
                 'icon_resources': [(1, 'gajim.ico')]}],
