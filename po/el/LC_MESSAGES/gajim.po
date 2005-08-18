@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 21:59+0300\n"
+"POT-Creation-Date: 2005-08-18 22:11+0300\n"
 "PO-Revision-Date: 2005-08-17 16:57+0300\n"
 "Last-Translator: Filippos Papadopoulos <filip@cs.uoi.gr>\n"
 "Language-Team: Hellenic-Ελληνικά-Greek\n"
@@ -89,7 +89,7 @@ msgstr ""
 "Θέμα: %s\n"
 "%s"
 
-#: ../src/common/connection.py:339 ../src/common/connection.py:1536
+#: ../src/common/connection.py:339 ../src/common/connection.py:1539
 msgid "I would like to add you to my roster."
 msgstr "Επιθυμώ να σε προσθέσω στην λίστα επαφών μου."
 
@@ -120,75 +120,75 @@ msgstr ""
 "Για να συνεχίσετε να στέλνετε και να λαμβάνετε μηνύματα, πρέπει να "
 "επανασυνδεθείτε."
 
-#: ../src/common/connection.py:1177
+#: ../src/common/connection.py:1180
 msgid "Error:"
 msgstr "Σφάλμα:"
 
-#: ../src/common/connection.py:1244 ../src/common/connection.py:1303
-#: ../src/common/connection.py:1638
+#: ../src/common/connection.py:1247 ../src/common/connection.py:1306
+#: ../src/common/connection.py:1641
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Η σύνδεση με \"%s\" στάθηκε αδύνατη."
 
-#: ../src/common/connection.py:1245 ../src/common/connection.py:1304
+#: ../src/common/connection.py:1248 ../src/common/connection.py:1307
 msgid "Check your connection or try again later"
 msgstr "Ελέγξτε την σύνδεση σας ή δοκιμάστε αργότερα"
 
-#: ../src/common/connection.py:1248 ../src/common/connection.py:1641
+#: ../src/common/connection.py:1251 ../src/common/connection.py:1644
 #, python-format
 msgid "Connected to server with %s"
 msgstr "Σύνδεση με τον διακομιστή με %s"
 
-#: ../src/common/connection.py:1316
+#: ../src/common/connection.py:1319
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Η πιστοποίηση ταυτότητας με \"%s\" απέτυχε"
 
-#: ../src/common/connection.py:1317
+#: ../src/common/connection.py:1320
 msgid "Please check your login and password for correctness."
 msgstr "Παρακαλώ ελέγξτε το συνθηματικό σας."
 
-#: ../src/common/connection.py:1398
+#: ../src/common/connection.py:1401
 msgid "invisible"
 msgstr "αόρατος"
 
 #. do not show I'm invisible!
-#: ../src/common/connection.py:1399
+#: ../src/common/connection.py:1402
 msgid "offline"
 msgstr "αποσυνδεδεμένος"
 
-#: ../src/common/connection.py:1400 ../src/roster_window.py:1275
+#: ../src/common/connection.py:1403 ../src/roster_window.py:1275
 #, python-format
 msgid "I'm %s"
 msgstr "Είμαι %s"
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:1405
+#: ../src/common/connection.py:1408
 msgid "OpenPGP passphrase was not given"
 msgstr "Δεν δώθηκε κωδική-φράση για το OpenPGP"
 
 #. %s is the account name here
-#: ../src/common/connection.py:1407
+#: ../src/common/connection.py:1410
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Θα συνδεθείτε με %s χωρίς OpenPGP."
 
 #. we're not english
-#: ../src/common/connection.py:1498
+#: ../src/common/connection.py:1501
 msgid "[This message is encrypted]"
 msgstr "[Aυτό το μήνυμα είναι κρυπτογραφημένο]"
 
-#: ../src/common/connection.py:1639 ../src/gajim.py:526
+#: ../src/common/connection.py:1642 ../src/gajim.py:526
 msgid "Check your connection or try again later."
 msgstr "Ελέγξτε την σύνδεση σας ή δοκιμάστε αργότερα."
 
 #. disconnect if no answer
-#: ../src/common/connection.py:1921
+#: ../src/common/connection.py:1924
 #, python-format
 msgid "Gajim disconnected you from %s"
 msgstr "Το Gajim σας αποσύνδεσε από %s"
 
-#: ../src/common/connection.py:1922
+#: ../src/common/connection.py:1925
 #, python-format
 msgid ""
 "%s seconds have passed and server did not reply to our keep-alive. If you "
@@ -199,7 +199,7 @@ msgstr ""
 "πιστεύετε ότι δεν θα έπρεπε να έχετε αποσυνδεθεί, τότε απενεργοποιήστε την "
 "αποστολή πακέτων keepalive στις επιλογές αυτού του λογαριασμού."
 
-#: ../src/common/connection.py:1928 ../src/common/connection.py:1937
+#: ../src/common/connection.py:1931 ../src/common/connection.py:1940
 msgid "error appeared while processing xmpp:"
 msgstr "σφάλμα κατά την επεξεργασία xmpp:"
 

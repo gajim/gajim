@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 21:59+0300\n"
+"POT-Creation-Date: 2005-08-18 22:11+0300\n"
 "PO-Revision-Date: 2005-06-01 18:11+0200\n"
 "Last-Translator: Christoph Neuroth <delmonico@gmx.net>\n"
 "Language-Team: German\n"
@@ -89,7 +89,7 @@ msgstr ""
 "Thema: %s\n"
 "%s"
 
-#: ../src/common/connection.py:339 ../src/common/connection.py:1536
+#: ../src/common/connection.py:339 ../src/common/connection.py:1539
 msgid "I would like to add you to my roster."
 msgstr "Ich würde dich gerne zu meiner Liste hinzufügen."
 
@@ -119,79 +119,79 @@ msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr ""
 "Um weiter Senden um Empfangen zu können, müssen Sie sich erneut verbinden."
 
-#: ../src/common/connection.py:1177
+#: ../src/common/connection.py:1180
 msgid "Error:"
 msgstr "Fehler:"
 
-#: ../src/common/connection.py:1244 ../src/common/connection.py:1303
-#: ../src/common/connection.py:1638
+#: ../src/common/connection.py:1247 ../src/common/connection.py:1306
+#: ../src/common/connection.py:1641
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Konnte nicht mit %s verbinden"
 
-#: ../src/common/connection.py:1245 ../src/common/connection.py:1304
+#: ../src/common/connection.py:1248 ../src/common/connection.py:1307
 msgid "Check your connection or try again later"
 msgstr "Überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal"
 
-#: ../src/common/connection.py:1248 ../src/common/connection.py:1641
+#: ../src/common/connection.py:1251 ../src/common/connection.py:1644
 #, python-format
 msgid "Connected to server with %s"
 msgstr "Verbindung zu Server mit %s"
 
-#: ../src/common/connection.py:1316
+#: ../src/common/connection.py:1319
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Authentifizierung mit \"%s\" fehlgeschlagen"
 
-#: ../src/common/connection.py:1317
+#: ../src/common/connection.py:1320
 msgid "Please check your login and password for correctness."
 msgstr "Bitte überprüfen Sie ihren Benutzernamen und Passwort."
 
-#: ../src/common/connection.py:1398
+#: ../src/common/connection.py:1401
 #, fuzzy
 msgid "invisible"
 msgstr "Unsichtbar"
 
 #. do not show I'm invisible!
-#: ../src/common/connection.py:1399
+#: ../src/common/connection.py:1402
 #, fuzzy
 msgid "offline"
 msgstr "Abgemeldet"
 
-#: ../src/common/connection.py:1400 ../src/roster_window.py:1275
+#: ../src/common/connection.py:1403 ../src/roster_window.py:1275
 #, python-format
 msgid "I'm %s"
 msgstr "Ich bin %s"
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:1405
+#: ../src/common/connection.py:1408
 #, fuzzy
 msgid "OpenPGP passphrase was not given"
 msgstr "Kein OpenPGP-Schlüssel gewählt"
 
 #. %s is the account name here
-#: ../src/common/connection.py:1407
+#: ../src/common/connection.py:1410
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Sie werden ohne OpenPGP mit %s verbunden."
 
 #. we're not english
-#: ../src/common/connection.py:1498
+#: ../src/common/connection.py:1501
 msgid "[This message is encrypted]"
 msgstr "[Diese Nachricht ist verschlüsselt]"
 
-#: ../src/common/connection.py:1639 ../src/gajim.py:526
+#: ../src/common/connection.py:1642 ../src/gajim.py:526
 msgid "Check your connection or try again later."
 msgstr ""
 "Überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal."
 
 #. disconnect if no answer
-#: ../src/common/connection.py:1921
+#: ../src/common/connection.py:1924
 #, python-format
 msgid "Gajim disconnected you from %s"
 msgstr "Gajim hat die Verbindung nach %s unterbrochen"
 
-#: ../src/common/connection.py:1922
+#: ../src/common/connection.py:1925
 #, python-format
 msgid ""
 "%s seconds have passed and server did not reply to our keep-alive. If you "
@@ -202,7 +202,7 @@ msgstr ""
 "Sie solch einen Verbindungsabbruch verhindern möchten, können Sie das Senden "
 "von keep-alive-Paketen in den Konto-Einstellungen abschalten."
 
-#: ../src/common/connection.py:1928 ../src/common/connection.py:1937
+#: ../src/common/connection.py:1931 ../src/common/connection.py:1940
 msgid "error appeared while processing xmpp:"
 msgstr "Fehler während der Verarbeitung von xmpp:"
 

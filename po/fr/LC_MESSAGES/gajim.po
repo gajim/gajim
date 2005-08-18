@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 21:59+0300\n"
+"POT-Creation-Date: 2005-08-18 22:11+0300\n"
 "PO-Revision-Date: 2005-06-01 20:37+0200\n"
 "Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
 "Language-Team:  none\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Sujet : %s\n"
 "%s"
 
-#: ../src/common/connection.py:339 ../src/common/connection.py:1536
+#: ../src/common/connection.py:339 ../src/common/connection.py:1539
 msgid "I would like to add you to my roster."
 msgstr "Je souhaiterais vous ajouter à ma liste de contacts"
 
@@ -119,75 +119,75 @@ msgstr ""
 "Pour continuer à envoyer et recevoir des messages, vous devez vous "
 "reconnecter."
 
-#: ../src/common/connection.py:1177
+#: ../src/common/connection.py:1180
 msgid "Error:"
 msgstr "Erreur :"
 
-#: ../src/common/connection.py:1244 ../src/common/connection.py:1303
-#: ../src/common/connection.py:1638
+#: ../src/common/connection.py:1247 ../src/common/connection.py:1306
+#: ../src/common/connection.py:1641
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Impossible de se connecter à \"%s\""
 
-#: ../src/common/connection.py:1245 ../src/common/connection.py:1304
+#: ../src/common/connection.py:1248 ../src/common/connection.py:1307
 msgid "Check your connection or try again later"
 msgstr "Vérifiez votre connexion ou réessayer plus tard"
 
-#: ../src/common/connection.py:1248 ../src/common/connection.py:1641
+#: ../src/common/connection.py:1251 ../src/common/connection.py:1644
 #, python-format
 msgid "Connected to server with %s"
 msgstr "Connecté au serveur avec %s"
 
-#: ../src/common/connection.py:1316
+#: ../src/common/connection.py:1319
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Echec de l'authentification avec \"%s\""
 
-#: ../src/common/connection.py:1317
+#: ../src/common/connection.py:1320
 msgid "Please check your login and password for correctness."
 msgstr "Vérifiez si votre identifiant et votre mot de passe sont corrects."
 
-#: ../src/common/connection.py:1398
+#: ../src/common/connection.py:1401
 msgid "invisible"
 msgstr "invisible"
 
 #. do not show I'm invisible!
-#: ../src/common/connection.py:1399
+#: ../src/common/connection.py:1402
 msgid "offline"
 msgstr "Déconnecté"
 
-#: ../src/common/connection.py:1400 ../src/roster_window.py:1275
+#: ../src/common/connection.py:1403 ../src/roster_window.py:1275
 #, python-format
 msgid "I'm %s"
 msgstr "Je suis %s"
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:1405
+#: ../src/common/connection.py:1408
 msgid "OpenPGP passphrase was not given"
 msgstr "Mot de pqsse OpenPGP non renseignée"
 
 #. %s is the account name here
-#: ../src/common/connection.py:1407
+#: ../src/common/connection.py:1410
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Vous serez connecté à %s sans OpenPGP."
 
 #. we're not english
-#: ../src/common/connection.py:1498
+#: ../src/common/connection.py:1501
 msgid "[This message is encrypted]"
 msgstr "[ce message est chiffré]"
 
-#: ../src/common/connection.py:1639 ../src/gajim.py:526
+#: ../src/common/connection.py:1642 ../src/gajim.py:526
 msgid "Check your connection or try again later."
 msgstr "Vérifiez votre connexion ou réessayer plus tard."
 
 #. disconnect if no answer
-#: ../src/common/connection.py:1921
+#: ../src/common/connection.py:1924
 #, python-format
 msgid "Gajim disconnected you from %s"
 msgstr "Gajim vous a déconnecté de %s"
 
-#: ../src/common/connection.py:1922
+#: ../src/common/connection.py:1925
 #, python-format
 msgid ""
 "%s seconds have passed and server did not reply to our keep-alive. If you "
@@ -198,7 +198,7 @@ msgstr ""
 "keepalive. Si vous pensez qu'une telle déconnexion ne dois pas arriver, vous "
 "pouvez désactiver l'envoie de paquets keepalive en modifiant ce compte."
 
-#: ../src/common/connection.py:1928 ../src/common/connection.py:1937
+#: ../src/common/connection.py:1931 ../src/common/connection.py:1940
 msgid "error appeared while processing xmpp:"
 msgstr "une erreur est survenue en traitant xmpp :"
 

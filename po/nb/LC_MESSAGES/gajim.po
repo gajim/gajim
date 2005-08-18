@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.9.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 21:59+0300\n"
+"POT-Creation-Date: 2005-08-18 22:11+0300\n"
 "PO-Revision-Date: 2005-08-15 08:30+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
@@ -85,7 +85,7 @@ msgstr ""
 "Tittel: %s\n"
 "%s"
 
-#: ../src/common/connection.py:339 ../src/common/connection.py:1536
+#: ../src/common/connection.py:339 ../src/common/connection.py:1539
 msgid "I would like to add you to my roster."
 msgstr "Jeg vil legge deg til min kontaktliste."
 
@@ -114,75 +114,75 @@ msgstr "Tilkobling til konto \"%s\" har blitt mistet"
 msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr "For å sende og motta meldinger må du koble til på nytt."
 
-#: ../src/common/connection.py:1177
+#: ../src/common/connection.py:1180
 msgid "Error:"
 msgstr "Feil:"
 
-#: ../src/common/connection.py:1244 ../src/common/connection.py:1303
-#: ../src/common/connection.py:1638
+#: ../src/common/connection.py:1247 ../src/common/connection.py:1306
+#: ../src/common/connection.py:1641
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Kunne ikke koble til \"%s\""
 
-#: ../src/common/connection.py:1245 ../src/common/connection.py:1304
+#: ../src/common/connection.py:1248 ../src/common/connection.py:1307
 msgid "Check your connection or try again later"
 msgstr "Sjekk nettverkstilgangen din og prøv igjen senere "
 
-#: ../src/common/connection.py:1248 ../src/common/connection.py:1641
+#: ../src/common/connection.py:1251 ../src/common/connection.py:1644
 #, python-format
 msgid "Connected to server with %s"
 msgstr "Tilkoblet til server med %s"
 
-#: ../src/common/connection.py:1316
+#: ../src/common/connection.py:1319
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Autentisering feilet med \"%s\""
 
-#: ../src/common/connection.py:1317
+#: ../src/common/connection.py:1320
 msgid "Please check your login and password for correctness."
 msgstr "Vennligst sjekk at brukernavn og passord er korrekt."
 
-#: ../src/common/connection.py:1398
+#: ../src/common/connection.py:1401
 msgid "invisible"
 msgstr "usynlig"
 
 #. do not show I'm invisible!
-#: ../src/common/connection.py:1399
+#: ../src/common/connection.py:1402
 msgid "offline"
 msgstr "frakoblet"
 
-#: ../src/common/connection.py:1400 ../src/roster_window.py:1275
+#: ../src/common/connection.py:1403 ../src/roster_window.py:1275
 #, python-format
 msgid "I'm %s"
 msgstr "Jeg er %s"
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:1405
+#: ../src/common/connection.py:1408
 msgid "OpenPGP passphrase was not given"
 msgstr "OpenPGP passordsetning ble ikke gitt"
 
 #. %s is the account name here
-#: ../src/common/connection.py:1407
+#: ../src/common/connection.py:1410
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Du vil bli tilbkoblet til %s uten OpenPGP."
 
 #. we're not english
-#: ../src/common/connection.py:1498
+#: ../src/common/connection.py:1501
 msgid "[This message is encrypted]"
 msgstr "[Denne meldingen er kryptert]"
 
-#: ../src/common/connection.py:1639 ../src/gajim.py:526
+#: ../src/common/connection.py:1642 ../src/gajim.py:526
 msgid "Check your connection or try again later."
 msgstr "Sjekk nettverkstilkoblingen eller prøv igjen senere."
 
 #. disconnect if no answer
-#: ../src/common/connection.py:1921
+#: ../src/common/connection.py:1924
 #, python-format
 msgid "Gajim disconnected you from %s"
 msgstr "Gajim frakoblet deg fra %s"
 
-#: ../src/common/connection.py:1922
+#: ../src/common/connection.py:1925
 #, python-format
 msgid ""
 "%s seconds have passed and server did not reply to our keep-alive. If you "
@@ -193,7 +193,7 @@ msgstr ""
 "Dersom du mener at frakoblingen ikke skulle skjedd, så kan du stoppe "
 "sendinge av hold-i-live pakker ved å endre denne kontoen."
 
-#: ../src/common/connection.py:1928 ../src/common/connection.py:1937
+#: ../src/common/connection.py:1931 ../src/common/connection.py:1940
 msgid "error appeared while processing xmpp:"
 msgstr "feil skjedde under prosessering av xmpp."
 
