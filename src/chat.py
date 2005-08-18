@@ -126,14 +126,17 @@ class Chat:
 		elif len(self.xmls) == 1: # just one tab
 			if self.widget_name == 'tabbed_chat_window':
 				c = gajim.get_first_contact_instance_from_jid(self.account, jid)
-				add = c.name
+				if c is None: # FIXME: I don't know why but c can be None!
+					add = ''
+				else:
+					add = c.name
 			elif self.widget_name == 'groupchat_window':
 				name = gajim.get_nick_from_jid(jid)
 				add = name
 
 		title = start + add
 		if len(gajim.connections) >= 2: # if we have 2 or more accounts
-			title = title + ' (' + _('account: ') + self.account + ')'
+			title += ' (' + _('account: ') + self.account + ')'
 
 		self.window.set_title(title)
 
