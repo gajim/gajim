@@ -1,24 +1,26 @@
+# translation of gajim.po to 
 # translation of gajim.po to Czech
 # Czech translations for Gajim package.
 # 	Copyright (C) 2003-2005 Gajim Team
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published
 # by the Free Software Foundation; version 2 only.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 # This file is distributed under the same license as the Gajim package.
 # Petr Mensik <pihhan@seznam.cz>, 2005.
-# 
+# Pihhan <pihhan@seznam.cz>, 2005.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Gajim\n"
+"Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 22:11+0300\n"
-"PO-Revision-Date: 2005-08-16 16:31+0200\n"
+"POT-Creation-Date: 2005-08-18 21:59+0300\n"
+"PO-Revision-Date: 2005-08-18 21:28+0200\n"
 "Last-Translator: Pihhan <pihhan@seznam.cz>\n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -96,7 +98,7 @@ msgstr ""
 "Předmět: %s\n"
 "%s"
 
-#: ../src/common/connection.py:339 ../src/common/connection.py:1539
+#: ../src/common/connection.py:339 ../src/common/connection.py:1536
 msgid "I would like to add you to my roster."
 msgstr "Rád(a) bych si tě přidal(a) do seznamu."
 
@@ -126,75 +128,75 @@ msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr ""
 "Pro pokračování v přijímání a odesílání zpráv se musíte znovu připojit."
 
-#: ../src/common/connection.py:1180
+#: ../src/common/connection.py:1177
 msgid "Error:"
 msgstr "Chyba:"
 
-#: ../src/common/connection.py:1247 ../src/common/connection.py:1306
-#: ../src/common/connection.py:1641
+#: ../src/common/connection.py:1244 ../src/common/connection.py:1303
+#: ../src/common/connection.py:1638
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Nemůžu se připojit k \"%s\""
 
-#: ../src/common/connection.py:1248 ../src/common/connection.py:1307
+#: ../src/common/connection.py:1245 ../src/common/connection.py:1304
 msgid "Check your connection or try again later"
 msgstr "Ověřte připojení nebo zkuste později"
 
-#: ../src/common/connection.py:1251 ../src/common/connection.py:1644
+#: ../src/common/connection.py:1248 ../src/common/connection.py:1641
 #, python-format
 msgid "Connected to server with %s"
 msgstr "Připojen k server s %s"
 
-#: ../src/common/connection.py:1319
+#: ../src/common/connection.py:1316
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Autentizace selhala s \"%s\""
 
-#: ../src/common/connection.py:1320
+#: ../src/common/connection.py:1317
 msgid "Please check your login and password for correctness."
 msgstr "Prosím zkontrolujte správnost jména a hesla."
 
-#: ../src/common/connection.py:1401
+#: ../src/common/connection.py:1398
 msgid "invisible"
 msgstr "neviditelný"
 
 #. do not show I'm invisible!
-#: ../src/common/connection.py:1402
+#: ../src/common/connection.py:1399
 msgid "offline"
 msgstr "odpojen"
 
-#: ../src/common/connection.py:1403 ../src/roster_window.py:1275
+#: ../src/common/connection.py:1400 ../src/roster_window.py:1275
 #, python-format
 msgid "I'm %s"
 msgstr "Jsem %s"
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:1408
+#: ../src/common/connection.py:1405
 msgid "OpenPGP passphrase was not given"
 msgstr "OpenPGP heslo nebylo zadáno"
 
 #. %s is the account name here
-#: ../src/common/connection.py:1410
+#: ../src/common/connection.py:1407
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Budete připojen(a) k %s bez OpenPGP."
 
 #. we're not english
-#: ../src/common/connection.py:1501
+#: ../src/common/connection.py:1498
 msgid "[This message is encrypted]"
 msgstr "[Tato zpráva je zašifrovaná]"
 
-#: ../src/common/connection.py:1642 ../src/gajim.py:526
+#: ../src/common/connection.py:1639 ../src/gajim.py:526
 msgid "Check your connection or try again later."
 msgstr "Ověřte spojení nebo zkuste později."
 
 #. disconnect if no answer
-#: ../src/common/connection.py:1924
+#: ../src/common/connection.py:1921
 #, python-format
 msgid "Gajim disconnected you from %s"
 msgstr "Gajim tě odpojil od %s"
 
-#: ../src/common/connection.py:1925
+#: ../src/common/connection.py:1922
 #, python-format
 msgid ""
 "%s seconds have passed and server did not reply to our keep-alive. If you "
@@ -205,7 +207,7 @@ msgstr ""
 "takové odpojení by nemělo nastat, můžete vypnout posílání keep-alive v "
 "nastavení účtu."
 
-#: ../src/common/connection.py:1931 ../src/common/connection.py:1940
+#: ../src/common/connection.py:1928 ../src/common/connection.py:1937
 msgid "error appeared while processing xmpp:"
 msgstr "vyskytla se chyba při zpracování xmpp:"
 
@@ -806,7 +808,7 @@ msgstr "GTK jabber client"
 
 #: ../src/dialogs.py:416
 msgid "translator-credits"
-msgstr "kredity-překladatele"
+msgstr "Petr Menšík <pihhan@seznam.cz>"
 
 #: ../src/dialogs.py:578
 #, python-format
@@ -1236,12 +1238,12 @@ msgstr "Spravovat záložky..."
 #: ../src/roster_window.py:446
 #, python-format
 msgid "to %s account"
-msgstr "k %s účtu"
+msgstr "do účtu %s"
 
 #: ../src/roster_window.py:458
 #, python-format
 msgid "using %s account"
-msgstr "používám účet %s"
+msgstr "pomocí účtu %s"
 
 #: ../src/roster_window.py:474
 #, python-format
@@ -1556,7 +1558,7 @@ msgstr "Seznam aktivních, dokončených a zastavených přenosů souborů"
 
 #: ../src/gtkgui.glade.h:22
 msgid "A_ccounts"
-msgstr "Ú_čty"
+msgstr "Úč_ty"
 
 #: ../src/gtkgui.glade.h:23
 msgid "About"
@@ -1643,7 +1645,7 @@ msgstr "_Vždy použij zjednodušený pohled"
 
 #: ../src/gtkgui.glade.h:44
 msgid "Ask status message when I:"
-msgstr "Získej stav pokud já:"
+msgstr "Ptej se na stav při:"
 
 #: ../src/gtkgui.glade.h:45
 msgid "Ask:"
@@ -1841,7 +1843,7 @@ msgstr "Země:"
 
 #: ../src/gtkgui.glade.h:93
 msgid "Default _status iconset:"
-msgstr "Výchozí ikony _stavů:"
+msgstr "_Výchozí ikony stavů:"
 
 #: ../src/gtkgui.glade.h:94
 msgid "Delete MOTD"
@@ -2169,7 +2171,7 @@ msgstr "Ukládej historii"
 
 #: ../src/gtkgui.glade.h:167
 msgid "Log presences in _contact's log file"
-msgstr "Ukládej stavy v logu _konaktu"
+msgstr "Ukládej stavy v logu _konaktů"
 
 #: ../src/gtkgui.glade.h:168
 msgid "Log presences in an _external file"
@@ -2383,6 +2385,7 @@ msgid ""
 "same server with the same account. So you might be connected in the same "
 "account with resource 'Home' and 'Work' at the same time. The resource which "
 "has the highest priority will get the events. (see below)"
+
 msgstr ""
 "Zdroj je odeslán Jabber serveru pro oddělení stejné JID na dvě nebo více "
 "částí závisejících na počtu připojených klientů na stejný server se stejným "
@@ -2500,7 +2503,7 @@ msgstr "Zobrazí výpis přenosů souborů mezi Vámi a ostatními"
 
 #: ../src/gtkgui.glade.h:253
 msgid "Sign _in"
-msgstr "Přihlás_it"
+msgstr "_Přihlášení"
 
 #: ../src/gtkgui.glade.h:254
 msgid "Sign _out"
@@ -2643,7 +2646,7 @@ msgstr "Použít _SSL (staré)"
 
 #: ../src/gtkgui.glade.h:289
 msgid "Use _emoticons"
-msgstr "Používat _smajlíky"
+msgstr "_Používat smajlíky"
 
 #: ../src/gtkgui.glade.h:290
 msgid "Use _transports iconsets"
@@ -2651,7 +2654,7 @@ msgstr "Používej ikony _transportů"
 
 #: ../src/gtkgui.glade.h:291
 msgid "Use a single chat window with _tabs"
-msgstr "Používat jedno okno se _záložkami"
+msgstr "Používa_t jedno okno se záložkami"
 
 #: ../src/gtkgui.glade.h:292
 msgid "Use authentication"
@@ -2787,7 +2790,7 @@ msgstr "_Dokončit"
 
 #: ../src/gtkgui.glade.h:326
 msgid "_Highlight misspelled words"
-msgstr "Z_výrazňovat slova s překlepy"
+msgstr "Zvýrazňovat _slova s překlepy"
 
 #: ../src/gtkgui.glade.h:327
 msgid "_History"
@@ -2816,11 +2819,11 @@ msgstr "_Jabber ID:"
 
 #: ../src/gtkgui.glade.h:334
 msgid "_Join"
-msgstr "V_stoupit"
+msgstr "_Vstoupit"
 
 #: ../src/gtkgui.glade.h:335
 msgid "_Join Group Chat"
-msgstr "V_stoupit do místnosti"
+msgstr "_Vstoupit do místnosti"
 
 #: ../src/gtkgui.glade.h:336
 msgid "_Kick"
@@ -2916,7 +2919,7 @@ msgstr "_Pauza"
 
 #: ../src/gtkgui.glade.h:359
 msgid "_Player:"
-msgstr "_Hráč:"
+msgstr "_Přehrávač:"
 
 #: ../src/gtkgui.glade.h:360
 msgid "_Pop it up"
@@ -3426,8 +3429,9 @@ msgstr ""
 "Parametry \"%s\" nebyl uveden. \n"
 "Napište \"%s help %s\" pro více informací"
 
+#~ msgid "..."
+#~ msgstr "..."
+
 #~ msgid "<span background=\"lightyellow\"></span>"
 #~ msgstr "<span background=\"lightyellow\"></span>"
 
-#~ msgid "..."
-#~ msgstr "..."
