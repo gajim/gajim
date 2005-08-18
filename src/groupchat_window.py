@@ -136,12 +136,21 @@ class GroupchatWindow(chat.Chat):
 				if gajim.gc_connected[self.account][room_jid]:
 					names.append(gajim.get_nick_from_jid(room_jid))
 
-			if len(names): #if one or more rooms connected
-				joined_names = ', '.join(names)
+			if len(names): # if one or more rooms connected
+				#FIXME: wrap this function to OUR function called ngettext()
+				#this hopefully will fool xgettext and we'll have a signature we like
+				#eg. ngettext('do %s' % 'one', 'do %s' % 'two', len(jobs))
+				#so we do not have to do this madness that follows allover we use
+				#ngettext()
 				pritext = i18n._translation.ngettext(
-					'Are you sure you want to leave room "%s"?' % names[0],
-					'Are you sure you want to leave rooms "%s"?' % joined_names,
+					'Are you sure you want to leave room "%s"?',
+					'Are you sure you want to leave rooms "%s"?',
 					len(names))
+				if len(names) == 1:
+					pritext = pritext % names[0]
+				else:
+					joined_names = ', '.join(names)
+					pritext = pritext % joined_names
 			
 				sectext = i18n._translation.ngettext(
 			'If you close this window, you will be disconnected from this room.',
