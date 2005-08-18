@@ -1130,14 +1130,14 @@ class Interface:
 		self.systray_enabled = False
 		self.systray_capabilities = False
 		
-		if os.name == 'nt':
-			try:
-				import systraywin32
-			except: # user doesn't have trayicon capabilities
-				pass
-			else:
-				self.systray_capabilities = True
-				self.systray = systraywin32.SystrayWin32(self)
+		if False: #os.name == 'nt':
+			#try:
+			#	import systraywin32
+			#except: # user doesn't have trayicon capabilities
+			#	pass
+			#else:
+			#	self.systray_capabilities = True
+			#	self.systray = systraywin32.SystrayWin32(self)
 		else:
 			try:
 				import egg.trayicon # use gnomepythonextras trayicon
