@@ -209,6 +209,7 @@ Please specify account for sending the message.') % sys.argv[2])
 			self.service = self.sbus.get_service(SERVICE)
 			interface = self.service.get_object(OBJ_PATH, INTERFACE)
 		else:
+			#say to nkour that this should be Unknown D-Bus version: %s (thanks nebulam)
 			send_error(_('Unknown dbus version: %s') % _version)
 			
 		# get the function asked
