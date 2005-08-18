@@ -119,8 +119,6 @@ class Logger:
 			show = nick
 		for f in files:
 			path_to_file = os.path.join(LOGPATH, f)
-			if not os.path.isfile(path_to_file):
-				return
 			fil = open(path_to_file, 'a')
 			fil.write('%s:%s:%s' % (tim, jid, show))
 			if msg:
