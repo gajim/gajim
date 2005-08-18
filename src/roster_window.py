@@ -361,6 +361,9 @@ class RosterWindow:
 		show_offline_contacts_menuitem = self.xml.get_widget(
 			'show_offline_contacts_menuitem')
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
+		
+		# make it sensitive. it is insensitive only if no accounts are *available*
+		advanced_menuitem.set_sensitive(True)
 
 
 		if self.add_new_contact_handler_id:
@@ -396,7 +399,7 @@ class RosterWindow:
 		sub_menu = gtk.Menu()
 		join_gc_menuitem.set_submenu(sub_menu)
 		at_least_one_account_connected = False
-		multiple_accounts = len(gajim.connections) >= 2
+		multiple_accounts = len(gajim.connections) >= 2 #FIXME: stop using bool var here
 		for account in gajim.connections:
 			if gajim.connections[account].connected <= 1: #if offline or connecting
 				continue
@@ -420,7 +423,8 @@ class RosterWindow:
 					account, bookmark)
 				sub_menu.append(item)
 
-		if at_least_one_account_connected:
+		if at_least_one_account_connected: #FIXME: move this below where we do this check
+			#and make sure it works
 			newitem = gtk.SeparatorMenuItem() # seperator
 			sub_menu.append(newitem)
 		
@@ -514,6 +518,8 @@ class RosterWindow:
 				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
 					account)
 				advanced_menuitem.set_submenu(advanced_menuitem_menu)
+			elif len(gajim.connections) == 0: # user has no accounts
+				advanced_menuitem.set_sensitive(False)
 
 		
 		#FIXME: Gajim 0.9 should have this visible
