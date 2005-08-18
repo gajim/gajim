@@ -1131,6 +1131,7 @@ class Interface:
 		self.systray_capabilities = False
 		
 		if False: #os.name == 'nt':
+			pass
 			#try:
 			#	import systraywin32
 			#except: # user doesn't have trayicon capabilities
