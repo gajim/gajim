@@ -218,7 +218,8 @@ class Connection:
 				self.dispatch('MYVCARD', vcard)
 				#we re-send our presence with sha
 				sshow = STATUS_LIST[self.connected]
-				p = common.xmpp.Presence(typ = None, show = sshow,
+				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
+				p = common.xmpp.Presence(typ = None, priority = prio, show = sshow,
 					status = self.status)
 				p = self.add_sha(p)
 				self.to_be_sent.append(p)
