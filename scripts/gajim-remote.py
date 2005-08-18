@@ -110,6 +110,7 @@ have "sync with global status" option set'), False)
 					_('Show the chat dialog so that you can send message to a \
 contact'), 
 					[
+						#tell nkour that should be JID of the contact
 						('jid', _('jid of the contact that you want to chat \
 with'),
 							True), 
@@ -118,13 +119,16 @@ the contact list of this account'), False)
 					]
 				],
 			'send_message':[
+					#OpenPGP key here too (tlel that to nkour)
 					_('Send new message to a contact in the roster. Both OpenPGP \
 key and account are optional. If you want to set only \'account\', without \
 \'pgp key\', just set \'pgp key\' to \'\'.'), 
 					[
+						#tell nkour that should be JID of the contact
 						('jid', _('jid of the contact that will receive the \
 message'), True),
 						(_('message'), _('message contents'), True),
+						#tell to nkour it should be OpenPGP key
 						(_('pgp key'), _('if specified, the message will be \
 encrypted using this public key'), False),
 						(_('account'), _('if specified, the message will be \
@@ -134,6 +138,7 @@ sent using this account'), False),
 			'contact_info': [
 					_('Get detailed info on a contact'), 
 					[
+						#JID of the contact (tell that to nkour)
 						('jid', _('jid of the contact'), True)
 					]
 				]
