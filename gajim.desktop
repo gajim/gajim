@@ -1,9 +1,9 @@
 [Desktop Entry]
-Categories=Network;InstantMessaging;Application;
+Categories=Network;InstantMessaging;Application;GTK;GNOME;
 Name=Gajim
 GenericName=Jabber IM Client
 Comment=A GTK+ Jabber client
-Version=0.7.1
+Version=0.8
 Encoding=UTF-8
 Exec=gajim
 Icon=gajim.png
