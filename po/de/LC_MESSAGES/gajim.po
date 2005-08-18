@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-18 22:11+0300\n"
+"POT-Creation-Date: 2005-08-18 23:39+0300\n"
 "PO-Revision-Date: 2005-06-01 18:11+0200\n"
 "Last-Translator: Christoph Neuroth <delmonico@gmx.net>\n"
 "Language-Team: German\n"
@@ -148,15 +148,13 @@ msgid "Please check your login and password for correctness."
 msgstr "Bitte überprüfen Sie ihren Benutzernamen und Passwort."
 
 #: ../src/common/connection.py:1401
-#, fuzzy
 msgid "invisible"
-msgstr "Unsichtbar"
+msgstr "unsichtbar"
 
 #. do not show I'm invisible!
 #: ../src/common/connection.py:1402
-#, fuzzy
 msgid "offline"
-msgstr "Abgemeldet"
+msgstr "abgemeldet"
 
 #: ../src/common/connection.py:1403 ../src/roster_window.py:1275
 #, python-format
@@ -165,9 +163,8 @@ msgstr "Ich bin %s"
 
 #. We didn't set a passphrase
 #: ../src/common/connection.py:1408
-#, fuzzy
 msgid "OpenPGP passphrase was not given"
-msgstr "Kein OpenPGP-Schlüssel gewählt"
+msgstr "Keine OpenPGP-Passphrase gewählt"
 
 #. %s is the account name here
 #: ../src/common/connection.py:1410
@@ -210,43 +207,43 @@ msgstr "Fehler während der Verarbeitung von xmpp:"
 #: ../src/common/helpers.py:44
 #, python-format
 msgid "%s GiB"
-msgstr ""
+msgstr "%s GiB"
 
 #. GB means gigabyte
 #: ../src/common/helpers.py:47
 #, python-format
 msgid "%s GB"
-msgstr ""
+msgstr "%s GB"
 
 #. MiB means mibibyte
 #: ../src/common/helpers.py:51
 #, python-format
 msgid "%s MiB"
-msgstr ""
+msgstr "%s MiB"
 
 #. MB means megabyte
 #: ../src/common/helpers.py:54
 #, python-format
 msgid "%s MB"
-msgstr ""
+msgstr "%s MB"
 
 #. KiB means kibibyte
 #: ../src/common/helpers.py:58
 #, python-format
 msgid "%s KiB"
-msgstr ""
+msgstr "%s KiB"
 
 #. KB means kilo bytes
 #: ../src/common/helpers.py:61
 #, python-format
 msgid "%s KB"
-msgstr ""
+msgstr "%s KB"
 
 #. B means bytes
 #: ../src/common/helpers.py:64
 #, python-format
 msgid "%s B"
-msgstr ""
+msgstr "%s B"
 
 #: ../src/common/helpers.py:71
 msgid "Busy"
@@ -285,19 +282,16 @@ msgid "Not in the roster"
 msgstr "Nicht in der Liste"
 
 #: ../src/common/helpers.py:89
-#, fuzzy
 msgid "?contact has status:Unknown"
-msgstr "Kontakte nach Status sortieren"
+msgstr "Unbekannt"
 
 #: ../src/common/helpers.py:91
-#, fuzzy
 msgid "?contact has status:Has errors"
-msgstr "Kontakte nach Status sortieren"
+msgstr "Hat Fehler"
 
 #: ../src/common/helpers.py:96
-#, fuzzy
 msgid "?Subscription we already have:None"
-msgstr "Abonnement-Anforderung wurde gesendet"
+msgstr "Keine"
 
 #: ../src/common/helpers.py:98
 msgid "To"
@@ -312,9 +306,8 @@ msgid "Both"
 msgstr "Beide"
 
 #: ../src/common/helpers.py:110
-#, fuzzy
 msgid "?Ask (for Subscription):None"
-msgstr "Abonnement:"
+msgstr "Keine:"
 
 #: ../src/common/helpers.py:112
 msgid "Subscribe"
@@ -581,9 +574,8 @@ msgid "Failed to get secret keys"
 msgstr "Holen der geheimen Schlüssel fehlgeschlagen"
 
 #: ../src/config.py:1446
-#, fuzzy
 msgid "There was a problem retrieving your OpenPGP secret keys."
-msgstr "Es gab ein Problem beim Holen ihres geheimen GPG Schlüssels."
+msgstr "Es gab ein Problem beim Holen ihres geheimen OpenPGP Schlüssels."
 
 #: ../src/config.py:1449 ../src/gtkgui.glade.h:194
 msgid "Passphrase"
@@ -808,9 +800,8 @@ msgid "A GTK jabber client"
 msgstr "Ein GTK Jabber-Client"
 
 #: ../src/dialogs.py:416
-#, fuzzy
 msgid "translator-credits"
-msgstr "Ins Deutsche übersetzt von Christoph Neuroth"
+msgstr "Ins Deutsche übersetzt von Christoph Neuroth und Fabian Neumann"
 
 #: ../src/dialogs.py:578
 #, python-format
@@ -1098,7 +1089,7 @@ msgstr "Dieser Raum hat kein Thema"
 
 #: ../src/groupchat_window.py:288
 msgid "?Group Chat Contact Role:None"
-msgstr ""
+msgstr "Keine"
 
 #: ../src/groupchat_window.py:290
 msgid "Moderators"
@@ -1195,9 +1186,9 @@ msgstr "Wenn Sie diesen Reiter schließen, ist die Nachricht verloren."
 
 #. we talk about file
 #: ../src/gtkgui_helpers.py:62 ../src/gtkgui_helpers.py:77
-#, fuzzy, python-format
+#, python-format
 msgid "error: cannot open %s for reading"
-msgstr "Fehler: %s kann nicht zum Lesen geöffnet werden\n"
+msgstr "Fehler: %s kann nicht zum Lesen geöffnet werden"
 
 #: ../src/history_window.py:138
 #, python-format
@@ -1464,12 +1455,10 @@ msgid "The file must not be more than 8 kilobytes."
 msgstr "Die Datei darf nicht größer als 8 Kilobytes sein."
 
 #: ../src/vcard.py:250
-#, fuzzy
 msgid "?Client:Unknown"
-msgstr "Client:"
+msgstr "Unbekannt"
 
 #: ../src/vcard.py:252
-#, fuzzy
 msgid "?OS:Unknown"
 msgstr "Unbekannt"
 
@@ -2641,9 +2630,8 @@ msgid "To:"
 msgstr "An:"
 
 #: ../src/gtkgui.glade.h:282
-#, fuzzy
 msgid "Toggle Open_PGP Encryption"
-msgstr "_GPG Verschlüsselung aktivieren"
+msgstr "OpenG_PG Verschlüsselung aktivieren"
 
 #: ../src/gtkgui.glade.h:283
 msgid "Type:"
@@ -2922,7 +2910,6 @@ msgid "_Online Users"
 msgstr "_Angemeldete Benutzer"
 
 #: ../src/gtkgui.glade.h:353 ../src/filetransfers_window.py:150
-#, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Öffne Ordner"
 
@@ -3192,10 +3179,9 @@ msgstr "Größe: %s"
 #: ../src/filetransfers_window.py:132 ../src/filetransfers_window.py:191
 #, python-format
 msgid "Sender: %s"
-msgstr "Absender: %s"
+msgstr "Gespeichert in: %s"
 
 #: ../src/filetransfers_window.py:147
-#, fuzzy, python-format
 msgid "Saved in: %s"
 msgstr "Absender: %s"
 
@@ -3427,7 +3413,7 @@ msgstr ""
 
 #: ../scripts/gajim-remote.py:247
 msgid "Arguments:"
-msgstr ""
+msgstr "Parameter:"
 
 #: ../scripts/gajim-remote.py:251
 #, python-format
@@ -3456,22 +3442,3 @@ msgid ""
 msgstr ""
 "Argument \"%s\" wurde nicht angegeben. \n"
 "Geben Sie \"%s help %s\" ein für Hilfe"
-
-#~ msgid "<span background=\"lightyellow\"></span>"
-#~ msgstr "<span background=\"lightyellow\"></span>"
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgid "Unknown"
-#~ msgstr "Unbekannt"
-
-#~ msgid "Has errors"
-#~ msgstr "Hat Fehler"
-
-#, fuzzy
-#~ msgid "Open containing folder"
-#~ msgstr "_Öffne Ordner"
-
-#~ msgid "GPG Encryption"
-#~ msgstr "GPG Verschlüsselung"
