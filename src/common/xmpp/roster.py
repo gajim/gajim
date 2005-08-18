@@ -85,7 +85,8 @@ class Roster(PlugIn):
             internal roster representation. """
         jid=JID(pres.getFrom())
         if not self._data.has_key(jid.getStripped()): self._data[jid.getStripped()]={'name':None,'ask':None,'subscription':'none','groups':['Not in roster'],'resources':{}}
-
+        if type(self._data[jid.getStripped()]['resources'])!=type(dict()):
+            self._data[jid.getStripped()]['resources']={}
         item=self._data[jid.getStripped()]
         typ=pres.getType()
 
