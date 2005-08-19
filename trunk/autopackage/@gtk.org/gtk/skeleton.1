@@ -1,0 +1,25 @@
+# -*- shell-script-mode -*-
+
+[Meta]
+RootName: @gtk.org/gtk
+DisplayName: GTK+ user interface toolkit
+ShortName: gtk+
+Skeleton-Author: Hongli Lai <h.lai@chello.nl>
+Skeleton-Version: 1
+
+[Notes] 
+Interface versions correspond to GTK released versions, as GTK version
+numbering sensibly tracks the interfaces, ie GTK2.2 has an interface
+version of 2.2, not 2.1 as would be the normal rules.
+
+Earliest detected version is GTK 1.2
+
+[Test]
+testForLib libgtk-1.2.so.0 && INTERFACE_VERSIONS=" 1.2"
+gtk2versions=`testForLib -v libgtk-x11-2.0.so.0`
+for v in $gtk2versions; do
+    minor=$( IFS=.; v=( $v ); echo ${v[1]} )
+    minor=$[ $minor / 100 ]
+    INTERFACE_VERSIONS="2.$minor $INTERFACE_VERSIONS"
+done
+SOFTWARE_VERSIONS="$INTERFACE_VERSIONS" # this time......

@@ -1,0 +1,13 @@
+[Meta]
+RootName: @glade.gnome.org/libglade
+DisplayName: Glade user interface loader library
+ShortName: libglade
+Skeleton-Author: Mike Hearn <mike@theoretic.com>
+Skeleton-Version: 1
+
+[Notes]
+This skeleton only detects libglade1 and 2, which are assigned interface numbers 1 and 2 respectively
+
+[Test]
+testForLib libglade.so.0 && INTERFACE_VERSIONS="1"
+testForLib libglade-2.0.so.0 && INTERFACE_VERSIONS="2 $INTERFACE_VERSIONS"

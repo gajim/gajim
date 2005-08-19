@@ -1,0 +1,24 @@
+# -*- shell-script-mode -*-
+
+[Meta]
+RootName: @gnome.org/pygtk
+DisplayName: Python bindings for GTK+
+ShortName: pygtk
+Skeleton-Author: Tom Cato Amundsen <tca@gnu.org>
+Skeleton-Version: 1
+
+[Notes]
+Matchces GTK2 interface versioning
+
+[Test]
+INTERFACE_VERSIONS=`python - <<EOF
+try:
+    import pygtk
+    pygtk.require("2.0")
+    import gtk
+    print "%i.%i" % (gtk.pygtk_version[0], gtk.pygtk_version[1])
+except:
+    pass
+EOF
+`
+SOFTWARE_VERSIONS="$INTERFACE_VERSIONS"

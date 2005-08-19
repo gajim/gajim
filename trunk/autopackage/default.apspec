@@ -1,0 +1,76 @@
+# -*-shell-script-*-
+
+[Meta]
+RootName: @gajim.org/gajim:$SOFTWAREVERSION
+DisplayName: Gajim Jabber Client
+ShortName: gajim
+Maintainer: The Gajim Developers <gajim-devel-subscribe@gajim.org>
+Packager: Filippos Papadopoulos <filip@cs.uoi.gr>
+Summary: Gajim is a Jabber client written in Python.
+URL: http://www.gajim.org/
+License: GNU General Public License, Version 2
+SoftwareVersion: 0.7.1
+AutopackageTarget: 1.0
+PackageVersion: 1
+
+# Only uncomment InterfaceVersion if your package exposes interfaces to other software,
+# for instance if it includes DSOs or python/perl modules. See the developer guide for more info,
+# or ask on autopackage-dev if you don't understand interface versioning in autopackage.
+#
+# InterfaceVersion: 0.0
+
+[Description]
+Gajim is a jabber client written in PyGTK. The goal of Gajim is to provide a full featured and easy to use xmpp client for the GTK+ users. Gajim does not require GNOME to run, eventhough it exists with it nicely. Gajim is released under the GNU General Public License. Features: Tabbed chat windows, Groupchat support (with MUC protocol), Emoticons, URL grabber, Systray icon, GPG support, Multiple accounts support and much more!
+
+
+[BuildPrepare]
+echo "-------==========$USER i am making the package...===============------"
+export build_root="/tmp/build-root.$$"
+echo "Build root is $build_root"
+mkdir "$build_root"
+make PREFIX=$build_root CC=apgcc CXX=apg++ || exit 1
+make install PREFIX=$build_root CC=apgcc CXX=apg++ || exit 1
+
+
+
+[BuildUnprepare]
+unprepareBuild
+
+
+[Imports]
+echo '*' | import
+import <<EOF
+$source_dir/gajim.desktop
+$source_dir/gajim.1
+EOF
+
+
+[Prepare]
+# Dependency checking
+#PyGTK 2.4 requires python 2.3
+
+require @python.org/python 2.3
+require @gtk.org/gtk 2.4
+require @gnome.org/pygtk 2.4
+require @glade.gnome.org/libglade 2
+recommend @gtkspell.sourceforge.net/gtkspell 0
+
+[Install]
+# Put your installation script here
+
+copyFiles  lib/gajim "$PREFIX/lib"
+copyFiles  share/gajim "$PREFIX/share/"
+installIcon share/pixmaps/gajim.png
+installDesktop "Network/Instant Messaging" gajim.desktop
+installMan 1 gajim.1
+#In the following safeSed we assume that the original Makefile is a bit modified so that to be relocatable by AP
+#so you have to manually remove the sed in Makefile for AP to work
+safeSed bin/gajim "s!PREFIX!$PREFIX!g"
+installExe bin/*
+chmod +x "$PREFIX/bin/gajim"
+
+
+
+[Uninstall]
+# Usually just the following line is enough to uninstall everything
+uninstallFromLog
