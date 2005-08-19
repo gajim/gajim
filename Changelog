@@ -1,3 +1,18 @@
+Gajim 0.8 (18 Aug 2005)
+
+  * Tabbed chat windows
+  * Group chat support (with MUC protocol)
+  * Emoticons, Avatars, File transfer, URL grabber, Bookmarks
+  * Systray icon, Speller
+  * TLS and GPG support (with SSL legacy support)
+  * Transport Registration support
+  * Service Discovery including Nodes
+  * Wikipedia, dictionary and search engine lookup
+  * Multiple accounts support
+  * DBus Capabilities. Read more information
+  * XML Console
+  * Gajim is available in 11 languages: English, French, German, Russian, Spanish, Polish, Portugese, Greek, Bulgarian, Czech and Norwegian
+
 Gajim 0.7.1 (5 Jun 2005)  
 
   * Transports icon as an option and error/mesage icon for transports  
