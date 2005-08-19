@@ -75,6 +75,7 @@ install:
 	cp gajim.desktop "$(DESTDIR)$(PREFIX)/share/applications/";
 	mkdir -p "$(MANDIR)/man1";
 	cp gajim.1 "$(MANDIR)/man1";
+	cp gajim-remote.1 "$(MANDIR)/man1";
 	mkdir -p "$(DESTDIR)$(PREFIX)$(LIBDIR)/gajim";
 	for f in $(FILES_LIB) ; do \
 		cp "$$f" "$(DESTDIR)$(PREFIX)$(LIBDIR)/gajim/"; \
