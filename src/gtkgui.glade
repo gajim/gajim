@@ -13292,7 +13292,7 @@ the Jabber network.</property>
 		  <child>
 		    <widget class="GtkButton" id="server_features_button">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes" comments="remind to nkour that this string has typo">Click to see features like on jabber servers</property>
+		      <property name="tooltip" translatable="yes">Click to see features (like MSN, ICQ transports) of jabber servers</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Servers Features</property>
 		      <property name="use_underline">True</property>
@@ -14041,7 +14041,7 @@ the Jabber network.</property>
 	      <child>
 		<widget class="GtkCheckButton" id="autojoin_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes" comments="that should be changed to group chat from groupchat. if it stills says groupchat and we are preparing for 0.9 please remind me (nkour)">If checked, Gajim will join this groupchat on startup</property>
+		  <property name="tooltip" translatable="yes">If checked, Gajim will join this group chat on startup</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Auto join</property>
 		  <property name="use_underline">True</property>
@@ -17606,8 +17606,8 @@ Maybe I'll refactor later</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <accessibility>
-		<atkproperty name="AtkObject::accessible_name" translatable="yes" comments="Ι'm a atk sting that should say Cancel instead of stop. say that to nkoukr">Stop file transfer</atkproperty>
-		<atkproperty name="AtkObject::accessible_description" translatable="yes" comments="Ι'm a atk sting that should say Cancel instead of stop and should not have space at the end nor dot. say that to nkour">Stops the selected file transfer. If there is an incomplete file, kept in the file system it will be removed. This operation is not reversable. </atkproperty>
+		<atkproperty name="AtkObject::accessible_name" translatable="yes">Cancel file transfer</atkproperty>
+		<atkproperty name="AtkObject::accessible_description" translatable="yes">Cancels the selected file transfer. If there is an incomplete file, kept in the file system it will be removed. This operation is not reversable</atkproperty>
 		<atkaction action_name="click" description="Stoping selected file transfer"/>
 	      </accessibility>
 	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Tue, 09 Aug 2005 17:07:31 GMT"/>
@@ -17649,7 +17649,7 @@ Maybe I'll refactor later</property>
 	  <property name="inconsistent">False</property>
 	  <property name="draw_indicator">True</property>
 	  <accessibility>
-	    <atkproperty name="AtkObject::accessible_description" translatable="yes" comments="I'm atk string. please remove my last space for 0.9. Remind that to nkour (he's a poor man)">When a file transfer is complete show a popup notification </atkproperty>
+	    <atkproperty name="AtkObject::accessible_description" translatable="yes">When a file transfer is complete show a popup notification</atkproperty>
 	    <atkaction action_name="press" description="Activate/Disable notification for when a file transfer is complete"/>
 	  </accessibility>
 	  <signal name="toggled" handler="on_notify_ft_complete_checkbox_toggled" last_modification_time="Wed, 31 Aug 2005 22:52:01 GMT"/>

@@ -122,9 +122,9 @@ class GajimThemesWindow:
 		model = self.themes_tree.get_model()
 		iter = model.append()
 		i = 0
-		while _('theme_name') + str(i) in gajim.config.get_per('themes'):
+		while _('theme name') + str(i) in gajim.config.get_per('themes'):
 			i += 1
-		model.set_value(iter, 0, _('theme_name') + str(i))
+		model.set_value(iter, 0, _('theme name') + str(i))
 		gajim.config.add_per('themes', _('theme_name') + str(i))
 		self.plugin.windows['preferences'].update_preferences_window()
 
