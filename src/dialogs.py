@@ -1179,28 +1179,36 @@ class XMLConsoleWindow:
 		del self.plugin.windows[self.account]['xml_console']
 		widget.destroy()
 
-class InvitationDialog:
+class InvitationReceivedDialog(HigDialog):
 	def __init__(self, plugin, account, room_jid, contact_jid, password = None, comment = None):
 		self.plugin = plugin
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'invitation_dialog', APP)
-		self.window = self.xml.get_widget('invitation_dialog')
-		self.invitation_label = self.xml.get_widget('invitation_label')
 		
-		#FIXME: add pango markup
-		#DO_NOT_TRANSLATE_4_08
-		string = _('You have been invited to the %s room by %s') % (room_jid, contact_jid)
+		items = [('inv-deny', _('_Deny'), 0, 0, None),
+					('inv-accept', ('_Accept'), 0, 0, None)]
+
+		# use regular stock icons.
+		aliases = [('inv-deny', gtk.STOCK_CANCEL),
+						('inv-accept', gtk.STOCK_APPLY),]
+
+		gtk.stock_add(items)
+		factory = gtk.IconFactory()
+		factory.add_default()
+		style= window.get_style()
+		for new_stock, alias in aliases:
+			icon_set = style.lookup_icon_set(alias)
+			factory.add(new_stock, icon_set)
+
+		# Create the relabeled buttons
+		btn_deny = gtk.Button(stock = 'inv-deny') 
+		btn_accept = gtk.Button(stock = 'inv-accept')
+
+		#FIXME: add pano markup
+		pritext = _('You have been invited to the %s room by %s') % (room_jid, contact_jid)
 		if comment is not None:
-			#DO_NOT_TRANSLATE_4_08
 			string += '\n' + _('Comment: %s') % comment
 		
-		self.invitation_label.set_text(string)
+		HigDialog.__init__(self, None, pritext, sectext,
+			gtk.STOCK_DIALOG_WARNING, [ [btn_deny, gtk.RESPONSE_NO],
+			[ btn_accept, gtk.RESPONSE_YES ] ])
 		
-		self.window.show_all()
-		self.xml.signal_autoconnect(self)
-
-	def on_accept_button_clicked(self, widget):
-		pass # FIXME: join room
-		
-	def on_decline_button_clicked(self, widget):
-		self.window.destroy()
