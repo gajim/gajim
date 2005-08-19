@@ -682,14 +682,14 @@ class GroupchatWindow(chat.Chat):
 				splitted_text_after_ban_command = text_after_ban_command.split()
 				if len(splitted_text_after_ban_command) == 1:
 					# reason is optional so accept just nick
-					nick_to_ban = splitted_text_after_msg_command[0]
+					nick_to_ban = splitted_text_after_ban_command[0]
 					if nick_to_ban in nicks:
 						fjid = gajim.construct_fjid(room_jid, nick_to_ban)
 						gajim.connections[self.account].gc_set_affiliation(room_jid,
 							fjid, 'outcast')
 				elif len(splitted_text_after_ban_command) >= 2:
 					# a reason was given
-					nick_to_ban = splitted_text_after_msg_command[0]
+					nick_to_ban = splitted_text_after_ban_command[0]
 					if nick_to_ban in nicks:
 						reason = splitted_text_after_msg_command[1:]
 						fjid = gajim.construct_fjid(room_jid, nick_to_ban)
