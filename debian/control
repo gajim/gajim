@@ -3,7 +3,7 @@ Section: net
 Priority: optional
 Maintainer: Yann Le Boulanger <asterix@lagaule.org>
 Build-Depends: debhelper (>= 4.0.0), cdbs, python-dev, libgtk2.0-dev, python-gtk2-dev, libgtkspell-dev, gettext, libxss-dev
-Standards-Version: 3.6.1
+Standards-Version: 3.6.2
 
 Package: gajim
 Architecture: any
