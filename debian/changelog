@@ -1,3 +1,9 @@
+gajim (0.8-2) unstable; urgency=low
+
+  * build-depend list now works with sarge
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Sun, 21 Aug 2005 14:56:48 +0200
+
 gajim (0.8-1) unstable; urgency=low
 
   * new upstream release

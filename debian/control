@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 4.1.0), cdbs, python-dev, libgtk2.0-dev, python-gtk
 Standards-Version: 3.6.2
 
 Package: gajim
-Architecture: all
+Architecture: any
 Depends: ${shlibs:Depends}, python (>= 2.3), python-glade2 (>= 2.4.0), python-gtk2 (>= 2.4.0)
 Suggests: python-gnupginterface
 Description: Jabber client written in PyGTK
