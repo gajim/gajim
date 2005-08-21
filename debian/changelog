@@ -3,6 +3,8 @@ gajim (0.8-1) unstable; urgency=low
   * new upstream release
   * use cdbs
   * build-depend on libxss-dev Closes: #323524
+  * translation improved Closes: #324094,#323993
+  * Standards-version updated to 3.6.2 (no changes needed).
 
  -- Yann Le Boulanger <asterix@lagaule.org>  Fri,  1 Jul 2005 18:35:02 +0200
 
