@@ -202,6 +202,7 @@ _('Connection with peer cannot be established.'))
 		butt = dialog.add_button(_('Send'), gtk.RESPONSE_OK)
 		butt.set_use_stock(True)
 		dialog.set_default_response(gtk.RESPONSE_OK)
+		dialog.set_select_multiple(True) # we can select many files to send
 		if last_send_dir and os.path.isdir(last_send_dir):
 			dialog.set_current_folder(last_send_dir)
 		else:
@@ -210,12 +211,14 @@ _('Connection with peer cannot be established.'))
 		file_props = {}
 		response = dialog.run()
 		if response == gtk.RESPONSE_OK:
-			file_path =  unicode(dialog.get_filename(), 'utf-8')
-			(file_dir, file_name) = os.path.split(file_path)
+			files_path_list = dialog.get_filenames()
+			dialog.destroy()
+			for file_path in files_path_list:
+				if os.path.isfile(file_path):
+					file_dir = os.path.dirname(file_path)
+					self.send_file(account, contact, file_path)
 			if file_dir:
 				gajim.config.set('last_send_dir', file_dir)
-			dialog.destroy()
-			self.send_file(account, contact, file_path)
 		else:
 			dialog.destroy()
 
@@ -268,7 +271,7 @@ _('Connection with peer cannot be established.'))
 						dialog2 = dialogs.ConfirmationDialog(primtext, sectext)
 						if dialog2.get_response() != gtk.RESPONSE_OK:
 							continue
-					(file_dir, file_name) = os.path.split(file_path)
+					file_dir = os.path.dirname(file_path)
 					if file_dir:
 						gajim.config.set('last_save_dir', file_dir)
 					file_props['file-name'] = file_path.decode('utf-8')
