@@ -8,6 +8,7 @@
 ##
 ## code initially based on 
 ## http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/334779
+## with some ideas/help from pysystray.sf.net
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -51,8 +52,6 @@ class SystrayWINAPI:
 		# Sublass the window and inject a WNDPROC to process messages.
 		self._oldwndproc = win32gui.SetWindowLong(self._hwnd, win32con.GWL_WNDPROC,
 												self._wndproc)
-
-		gtk_window.connect('unrealize', self.remove)
 
 
 	def add_notify_icon(self, menu, hicon=None, tooltip=None):
@@ -152,9 +151,7 @@ class NotifyIcon:
 
 	def _get_nid(self):
 		""" Function to initialise & retrieve the NOTIFYICONDATA Structure. """
-		nid = (self._hwnd, self._id, self._flags, self._callbackmessage,
-			self._hicon)
-		nid = list(nid)
+		nid = [self._hwnd, self._id, self._flags, self._callbackmessage, self._hicon]
 
 		if not hasattr(self, '_tip'): self._tip = ''
 		nid.append(self._tip)
@@ -172,7 +169,6 @@ class NotifyIcon:
 		nid.append(self._infoflags)
 
 		return tuple(nid)
-		
 	
 	def remove(self):
 		""" Removes the tray icon. """
@@ -200,7 +196,7 @@ class NotifyIcon:
 
 	def _redraw(self, *args):
 		""" Redraws the tray icon. """
-		self.remove
+		self.remove()
 		win32gui.Shell_NotifyIcon(win32gui.NIM_ADD, self._get_nid())
 
 
@@ -216,7 +212,15 @@ class SystrayWin32(systray.Systray):
 		
 		self.tray_ico_imgs = self.load_icos()
 		
-		self.systray_winapi = SystrayWINAPI(self.plugin.roster.window)
+		#self.plugin.roster.window.realize()
+		#self.plugin.roster.window.show_all()
+		w = gtk.Window() # just a window to pass
+		w.realize() # realize it so gtk window exists
+		self.systray_winapi = SystrayWINAPI(w)
+		
+		# this fails if you move the window
+		#self.systray_winapi = SystrayWINAPI(self.plugin.roster.window)
+		
 
 		self.xml.signal_autoconnect(self)
 		
@@ -233,7 +237,7 @@ class SystrayWin32(systray.Systray):
 		self.set_img()
 
 	def hide_icon(self):
-		self.systray_winapi.remove_notify_icon()
+		self.systray_winapi.remove()
 
 	def on_clicked(self, hwnd, message, wparam, lparam):
 		if lparam == win32con.WM_RBUTTONUP: # Right click
