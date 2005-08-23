@@ -78,7 +78,6 @@ class OptionsParser:
 			err_str = _('Unable to write file in %s') % base_dir
 			print err_str
 			return err_str
-		os.chmod(self.__filename, 0600)
 		try:
 			gajim.config.foreach(self.write_line, fd)
 		except IOError, e:
@@ -95,5 +94,4 @@ class OptionsParser:
 			os.rename(self.__tempfile, self.__filename)
 		except IOError, e:
 			return e.errno
-		return None
-		
+		os.chmod(self.__filename, 0600)
