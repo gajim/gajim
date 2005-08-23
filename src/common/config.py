@@ -173,7 +173,7 @@ class Config:
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
 			# proxy65 for FT
 			'file_transfer_proxies': [opt_str, 
-			'proxy.jabber.org, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se'] 
+			'proxy.jabber.org, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se, proxy.netlab.cz'] 
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
@@ -310,6 +310,7 @@ class Config:
 		'proxy.jabber.org': [ '208.245.212.98', '7777', 'proxy.jabber.org' ],
 		'proxy65.jabber.autocom.pl': ['213.134.161.52', '7777', 'proxy65.jabber.autocom.pl'],
 		'proxy.jabber.cd.chalmers.se': ['129.16.79.37', '7777', 'proxy.jabber.cd.chalmers.se'],
+		'proxy.netlab.cz': ['82.119.241.3', '7777', 'proxy.netlab.cz'],
 	}
 
 	def foreach(self, cb, data = None):
