@@ -48,14 +48,14 @@ class Logger:
 				sys.exit()
 			elif not os.path.exists(LOGPATH):
 				print _('creating %s directory') % LOGPATH
-				os.mkdir(LOGPATH)
+				os.mkdir(LOGPATH, 0700)
 		else: # dot_gajim doesn't exist
 			if dot_gajim: # is '' on win9x so avoid that
 				print _('creating %s directory') % dot_gajim
-				os.mkdir(dot_gajim)
+				os.mkdir(dot_gajim, 0700)
 			if not os.path.isdir(LOGPATH):
 				print _('creating %s directory') % LOGPATH
-				os.mkdir(LOGPATH)
+				os.mkdir(LOGPATH, 0700)
 
 	def write(self, kind, msg, jid, show = None, tim = None):
 		if not tim:
