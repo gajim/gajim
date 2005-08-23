@@ -971,6 +971,7 @@ class Chat:
 	def print_special_text(self, special_text, other_tags, textview):
 		tags = []
 		use_other_tags = True
+		show_ascii_formatting_chars=gajim.config.get('show_ascii_formatting_chars')
 		buffer = textview.get_buffer()
 
 		possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
@@ -996,32 +997,41 @@ class Chat:
 			tags.append('bold')
 			if special_text[1] == '/': # it's also italic
 				tags.append('italic')
-				special_text = special_text[2:-2] # remove */ /*
+				if not show_ascii_formatting_chars:
+					special_text = special_text[2:-2] # remove */ /*
 			elif special_text[1] == '_': # it's also underlined
 				tags.append('underline')
-				special_text = special_text[2:-2] # remove *_ _*
+				if not show_ascii_formatting_chars:
+					special_text = special_text[2:-2] # remove *_ _*
 			else:
-				special_text = special_text[1:-1] # remove * *
+				if not show_ascii_formatting_chars:
+					special_text = special_text[1:-1] # remove * *
 		elif special_text.startswith('/'): # it's an italic text
 			tags.append('italic')
 			if special_text[1] == '*': # it's also bold
 				tags.append('bold')
-				special_text = special_text[2:-2] # remove /* */
+				if not show_ascii_formatting_chars:
+					special_text = special_text[2:-2] # remove /* */
 			elif special_text[1] == '_': # it's also underlined
 				tags.append('underline')
-				special_text = special_text[2:-2] # remove /_ _/
+				if not show_ascii_formatting_chars:
+					special_text = special_text[2:-2] # remove /_ _/
 			else:
-				special_text = special_text[1:-1] # remove / /
+				if not show_ascii_formatting_chars:
+					special_text = special_text[1:-1] # remove / /
 		elif special_text.startswith('_'): # it's an underlined text
 			tags.append('underline')
 			if special_text[1] == '*': # it's also bold
 				tags.append('bold')
-				special_text = special_text[2:-2] # remove _* *_
+				if not show_ascii_formatting_chars:
+					special_text = special_text[2:-2] # remove _* *_
 			elif special_text[1] == '/': # it's also italic
 				tags.append('italic')
-				special_text = special_text[2:-2] # remove _/ /_
+				if not show_ascii_formatting_chars:
+					special_text = special_text[2:-2] # remove _/ /_
 			else:
-				special_text = special_text[1:-1] # remove _ _
+				if not show_ascii_formatting_chars:
+					special_text = special_text[1:-1] # remove _ _
 		else:
 			#it's a url
 			tags.append('url')
