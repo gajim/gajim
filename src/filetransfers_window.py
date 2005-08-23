@@ -125,10 +125,8 @@ class FileTransfersWindow:
 				file_props['tt_account'], jid).name
 			sender = gtkgui_helpers.escape_for_pango_markup(sender_name)
 		else:
-			if float(gajim.version) > 0.8:
-				sender = 'You' # FIXME _(gettext this)
-			else:
-				sender = file_props['tt_account']
+			#You is a reply of who send a file
+			sender = _('You')
 		sectext += '\n\t' +_('Sender: %s') % sender
 		sectext += '\n\t' +_('Recipient: ')
 		if file_props['type'] == 's':
@@ -147,7 +145,8 @@ class FileTransfersWindow:
 			sectext += '\n\t' +_('Saved in: %s') % \
 				gtkgui_helpers.escape_for_pango_markup(path)
 		dialog = dialogs.HigDialog(None, _('File transfer completed'), sectext, 
-			gtk.STOCK_DIALOG_INFO, [[_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT], 
+			gtk.STOCK_DIALOG_INFO, [
+				[_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT], 
 				[ gtk.STOCK_OK, gtk.RESPONSE_OK ]])
 		button = dialog.get_button(1)
 		if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
