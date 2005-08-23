@@ -44,6 +44,7 @@ class FileTransfersWindow:
 		self.plugin = plugin
 		self.height_diff = 0
 		self.last_save_dir = None
+		self.last_send_dir = None
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_window', APP)
 		self.window = self.xml.get_widget('file_transfers_window')
 		self.tree = self.xml.get_widget('transfers_list')
@@ -202,16 +203,18 @@ _('Connection with peer cannot be established.'))
 		butt = dialog.add_button(_('Send'), gtk.RESPONSE_OK)
 		butt.set_use_stock(True)
 		dialog.set_default_response(gtk.RESPONSE_OK)
-		if self.last_save_dir and os.path.exists(self.last_save_dir) \
-			and os.path.isdir(self.last_save_dir):
-			dialog.set_current_folder(self.last_save_dir)
+		if self.last_send_dir and os.path.isdir(self.last_send_dir):
+			dialog.set_current_folder(self.last_send_dir)
+		else:
+			home_dir = os.path.expanduser('~')
+			dialog.set_current_folder(home_dir)
 		file_props = {}
 		response = dialog.run()
 		if response == gtk.RESPONSE_OK:
 			file_path =  unicode(dialog.get_filename(), 'utf-8')
 			(file_dir, file_name) = os.path.split(file_path)
 			if file_dir:
-				self.last_save_dir = file_dir
+				self.last_send_dir = file_dir
 			dialog.destroy()
 			self.send_file(account, contact, file_path)
 		else:
@@ -250,9 +253,11 @@ _('Connection with peer cannot be established.'))
 				gtk.STOCK_SAVE, gtk.RESPONSE_OK))
 			dialog.set_current_name(file_props['name'])
 			dialog.set_default_response(gtk.RESPONSE_OK)
-			if self.last_save_dir and os.path.exists(self.last_save_dir) \
-				and os.path.isdir(self.last_save_dir):
+			if self.last_save_dir and os.path.isdir(self.last_save_dir):
 				dialog.set_current_folder(self.last_save_dir)
+			else:
+				home_dir = os.path.expanduser('~')
+				dialog.set_current_folder(home_dir)
 			while True:
 				response = dialog.run()
 				if response == gtk.RESPONSE_OK:
