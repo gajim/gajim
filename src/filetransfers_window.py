@@ -253,6 +253,11 @@ _('Connection with peer cannot be established.'))
 
 	def send_file(self, account, contact, file_path):
 		''' start the real transfer(upload) of the file '''
+		if type(contact) == str:
+			if contact.find('/') == -1:
+				return
+			(jid, resource) = contact.split("/", 1)
+			contact = gajim.Contact(jid = jid, resource = resource)
 		(file_dir, file_name) = os.path.split(file_path)
 		file_props = self.get_send_file_props(account, contact, 
 				file_path, file_name)

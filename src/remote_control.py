@@ -100,7 +100,8 @@ class SignalObject(DbusPrototype):
 				self.change_status,
 				self.open_chat,
 				self.send_message,
-				self.contact_info
+				self.contact_info,
+				self.send_file
 			])
 
 	def raise_signal(self, signal, arg):
@@ -121,6 +122,39 @@ class SignalObject(DbusPrototype):
 	def VcardInfo(self, *vcard):
 		pass
 
+	def send_file(self, *args):
+		''' send_file(file_path, jid, account=None) 
+		send file, located at 'file_path' to 'jid', using account 
+		(optional) 'account' '''
+		file_path, jid, account = self._get_real_arguments(args, 3)
+		accounts = gajim.contacts.keys()
+		
+		# if there is only one account in roster, take it as default
+		if not account and len(accounts) == 1:
+			account = accounts[0]
+		if account:
+			if gajim.connections[account].connected > 1: # account is  online
+				connected_account = gajim.connections[account]
+		else:
+			for account in accounts:
+				if gajim.contacts[account].has_key(jid) and \
+					gajim.connections[account].connected > 1: # account is  online
+					connected_account = gajim.connections[account]
+					break
+		if gajim.contacts.has_key(account) and \
+			gajim.contacts[account].has_key(jid):
+			contact = gajim.get_highest_prio_contact_from_contacts(
+				gajim.contacts[account][jid])
+		else:
+			contact = jid
+		
+		if connected_account:
+			if os.path.isfile(file_path): # is it file?
+				self.plugin.windows['file_transfers'].send_file(account, 
+					contact, file_path)
+				return True
+		return False
+		
 	def send_message(self, *args):
 		''' send_message(jid, message, keyID=None, account=None)
 		send 'message' to 'jid', using account (optional) 'account'.
@@ -394,6 +428,7 @@ class SignalObject(DbusPrototype):
 		open_chat = method(INTERFACE)(open_chat)
 		contact_info = method(INTERFACE)(contact_info)
 		send_message = method(INTERFACE)(send_message)
+		send_file = method(INTERFACE)(send_file)
 		VcardInfo = signal(INTERFACE)(VcardInfo)
 
 class SessionBusNotPresent(Exception):

@@ -339,6 +339,7 @@ class Interface:
 						self.roster.popup_notification_windows.append(instance)
 				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactAbsence', (account, array))
+				# stop non active file transfers
 				
 		elif self.windows[account]['gc'].has_key(ji):
 			#it is a groupchat presence

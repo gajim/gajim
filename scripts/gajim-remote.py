@@ -136,6 +136,15 @@ sent using this account'), False),
 					[
 						('jid', _('JID of the contact'), True)
 					]
+				],
+			'send_file': [
+					_('Send file to a contact'),
+					[
+						(_('file'), _('File path'), True),
+						('jid', _('JID of the contact'), True),
+						(_('account'), _('if specified, file will be sent \
+using this account'), False)
+					]
 				]
 			}
 		if self.argv_len  < 2 or \
