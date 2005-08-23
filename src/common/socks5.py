@@ -323,16 +323,21 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 					del(self.readers[idx])
 	
 	def remove_sender(self, idx, do_disconnect = True):
-		''' Remove reciver from the list of senders and decrease the 
+		''' Remove sender from the list of senders and decrease the 
 		number of active connections with 1'''
 		if idx != -1:
 			if self.senders.has_key(idx):
 				if do_disconnect:
 					self.senders[idx].disconnect()
+					return
 				else:
 					del(self.senders[idx])
 					if self.connected > 0:
 						self.connected -= 1
+			if len(self.senders) == 0 and self.listener is not None:
+				self.listener.disconnect()
+				self.listener = None
+				self.connected -= 1
 	
 class Socks5:
 	def __init__(self, host, port, initiator, target, sid):
@@ -712,7 +717,7 @@ class Socks5Sender(Socks5):
 			self.file_props['disconnect_cb'] = None
 		if self.queue is not None:
 			self.queue.remove_sender(self.queue_idx, False)
-	
+
 class Socks5Listener:
 	def __init__(self, host, port):
 		self.host, self.port = host, port
@@ -734,6 +739,12 @@ class Socks5Listener:
 			# unable to bind, show error dialog
 			return None
 		self.started = True
+	
+	def disconnect(self):
+		try:
+			self._serv.close()
+		except:
+			pass
 	
 	def accept_conn(self):
 		_sock  = self._serv.accept()

@@ -825,6 +825,25 @@ class Connection:
 		self.dispatch('FILE_REQUEST', (jid, file_props))
 		raise common.xmpp.NodeProcessed
 	
+	def _siErrorCB(self, con, iq_obj):
+		gajim.log.debug('_siErrorCB')
+		si = iq_obj.getTag('si')
+		profile = si.getAttr('profile')
+		if profile != common.xmpp.NS_FILE:
+			return
+		id = iq_obj.getAttr('id')
+		if not self.files_props.has_key(id):
+			# no such jid
+			return 
+		file_props = self.files_props[id]
+		if file_props is None:
+			# file properties for jid is none
+			return
+		jid = iq_obj.getFrom().getStripped().encode('utf8')
+		file_props['error'] = -3
+		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
+		raise common.xmpp.NodeProcessed
+	
 	def send_file_rejection(self, file_props):
 		''' informs sender that we refuse to download the file '''
 		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['sender']), 
@@ -1260,6 +1279,8 @@ class Connection:
 		con.RegisterHandler('iq', self._rosterSetCB, 'set',
 			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._siSetCB, 'set', 
+			common.xmpp.NS_SI)
+		con.RegisterHandler('iq', self._siErrorCB, 'error', 
 			common.xmpp.NS_SI)
 		con.RegisterHandler('iq', self._siResultCB, 'result', 
 			common.xmpp.NS_SI)
