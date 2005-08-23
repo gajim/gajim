@@ -135,6 +135,10 @@ class Config:
 		'use_kib_mib': [opt_bool, False],
 		'notify_on_all_muc_messages': [opt_bool, False],
 		'trayicon_notification_on_new_messages': [opt_bool, True],
+		'last_save_dir': [opt_str, ''],
+		'last_send_dir': [opt_str, ''],
+		'last_emoticons_dir': [opt_str, ''],
+		'last_sounds_dir': [opt_str, ''],
 	}
 
 	__options_per_key = {

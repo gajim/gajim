@@ -43,8 +43,6 @@ class FileTransfersWindow:
 		self.files_props = {'r' : {}, 's': {}}
 		self.plugin = plugin
 		self.height_diff = 0
-		self.last_save_dir = None
-		self.last_send_dir = None
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_window', APP)
 		self.window = self.xml.get_widget('file_transfers_window')
 		self.tree = self.xml.get_widget('transfers_list')
@@ -197,14 +195,15 @@ _('Connection with peer cannot be established.'))
 	def show_file_send_request(self, account, contact):
 		#FIXME: user better name for this function
 		#atm it's like it shows popup for incoming file transfer request
+		last_send_dir = gajim.config.get('last_send_dir')
 		dialog = gtk.FileChooserDialog(title=_('Choose File to Send...'), 
 			action=gtk.FILE_CHOOSER_ACTION_OPEN, 
 			buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
 		butt = dialog.add_button(_('Send'), gtk.RESPONSE_OK)
 		butt.set_use_stock(True)
 		dialog.set_default_response(gtk.RESPONSE_OK)
-		if self.last_send_dir and os.path.isdir(self.last_send_dir):
-			dialog.set_current_folder(self.last_send_dir)
+		if last_send_dir and os.path.isdir(last_send_dir):
+			dialog.set_current_folder(last_send_dir)
 		else:
 			home_dir = os.path.expanduser('~')
 			dialog.set_current_folder(home_dir)
@@ -214,7 +213,7 @@ _('Connection with peer cannot be established.'))
 			file_path =  unicode(dialog.get_filename(), 'utf-8')
 			(file_dir, file_name) = os.path.split(file_path)
 			if file_dir:
-				self.last_send_dir = file_dir
+				gajim.config.set('last_send_dir', file_dir)
 			dialog.destroy()
 			self.send_file(account, contact, file_path)
 		else:
@@ -233,6 +232,7 @@ _('Connection with peer cannot be established.'))
 		file requested by a contact'''
 		if file_props is None or not file_props.has_key('name'):
 			return
+		last_save_dir = gajim.config.get('last_save_dir')
 		sec_text = '\t' + _('File: %s') % \
 			gtkgui_helpers.escape_for_pango_markup(file_props['name'])
 		if file_props.has_key('size'):
@@ -253,8 +253,8 @@ _('Connection with peer cannot be established.'))
 				gtk.STOCK_SAVE, gtk.RESPONSE_OK))
 			dialog.set_current_name(file_props['name'])
 			dialog.set_default_response(gtk.RESPONSE_OK)
-			if self.last_save_dir and os.path.isdir(self.last_save_dir):
-				dialog.set_current_folder(self.last_save_dir)
+			if last_save_dir and os.path.isdir(last_save_dir):
+				dialog.set_current_folder(last_save_dir)
 			else:
 				home_dir = os.path.expanduser('~')
 				dialog.set_current_folder(home_dir)
@@ -270,7 +270,7 @@ _('Connection with peer cannot be established.'))
 							continue
 					(file_dir, file_name) = os.path.split(file_path)
 					if file_dir:
-						self.last_save_dir = file_dir
+						gajim.config.set('last_save_dir', file_dir)
 					file_props['file-name'] = file_path.decode('utf-8')
 					self.add_transfer(account, contact, file_props)
 					gajim.connections[account].send_file_approval(file_props)

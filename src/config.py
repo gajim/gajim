@@ -991,6 +991,12 @@ class PreferencesWindow:
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 					gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
+		last_sounds_dir = gajim.config.get('last_sounds_dir')
+		if last_sounds_dir and os.path.isdir('last_sounds_dir'):
+			dialog.set_current_folder(last_sounds_dir)
+		else:
+			home_dir = os.path.expanduser('~')
+			dialog.set_current_folder(home_dir)
 
 		filter = gtk.FileFilter()
 		filter.set_name(_('All files'))
@@ -1015,6 +1021,8 @@ class PreferencesWindow:
 				break
 		dialog.destroy()
 		if file:
+			directory = os.path.dirname(file)
+			gajim.config.set('last_sounds_dir', directory)
 			self.xml.get_widget('sounds_entry').set_text(file)
 			model.set_value(iter, 2, file)
 			model.set_value(iter, 1, 1)
@@ -1943,6 +1951,12 @@ class ManageEmoticonsWindow:
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 					gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
+		last_emoticons_dir = gajim.config.get('last_emoticons_dir')
+		if last_emoticons_dir and os.path.isdir('last_emoticons_dir'):
+			dialog.set_current_folder(last_emoticons_dir)
+		else:
+			home_dir = os.path.expanduser('~')
+			dialog.set_current_folder(home_dir)
 		filter = gtk.FileFilter()
 		filter.set_name(_('All files'))
 		filter.add_pattern('*')
@@ -1979,6 +1993,8 @@ class ManageEmoticonsWindow:
 				ok = True
 		dialog.destroy()
 		if file:
+			directory = os.path.dirname(file)
+			gajim.config.set('last_emoticons_dir', directory)
 			model.set_value(iter, 1, file)
 			img = gtk.Image()
 			img.show()
