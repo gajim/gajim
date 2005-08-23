@@ -1001,9 +1001,12 @@ class Interface:
 	def save_config(self):
 		err_code = parser.write()
 		if err_code is not None:
-			os.strerror(err_code)
-			# it is good to notify the user, in case he cannot see the output of the console
-			dialogs.ErrorDialog(_('Cannot save your preferences')).get_response()
+			strerr = os.strerror(err_code)
+			print strerr
+			# it is good to notify the user
+			# in case he cannot see the output of the console
+			dialogs.ErrorDialog(_('Cannot save your preferences'),
+				strerr).get_response()
 			sys.exit(1)
 
 	def enable_dbus(self):
