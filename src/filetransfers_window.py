@@ -110,12 +110,37 @@ class FileTransfersWindow:
 		gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_MENU))
 		popup_xml.signal_autoconnect(self)
 		
+	def find_transfer_by_jid(self, account, jid):
+		''' find all transfers with peer 'jid' that belong to 'account' '''
+		active_transfers = [[],[]] # ['senders', 'receivers']
+		
+		# 'account' is the sender
+		for file_props in self.files_props['s'].values():
+			if file_props['tt_account'] == account:
+				receiver_jid = str(file_props['receiver']).split('/')[0]
+				if jid == receiver_jid:
+					if not self.is_transfer_stoped(file_props):
+						active_transfers[0].append(file_props)
+		
+		# 'account' is the recipient
+		for file_props in self.files_props['r'].values():
+			if file_props['tt_account'] == account:
+				sender_jid = str(file_props['sender']).split('/')[0]
+				if jid == sender_jid:
+					if not self.is_transfer_stoped(file_props):
+						active_transfers[1].append(file_props)
+		return active_transfers
+	
 	def show_completed(self, jid, file_props):
 		''' show a dialog saying that file (file_props) has been transferred'''
 		self.window.present()
 		self.window.window.focus()
+		if file_props['type'] == 'r':
+			(file_path, file_name) = os.path.split(file_props['file-name'])
+		else:
+			file_name = file_props['name']
 		sectext = '\t' + _('Filename: %s') % \
-			gtkgui_helpers.escape_for_pango_markup(file_props['name'])
+			gtkgui_helpers.escape_for_pango_markup(file_name)
 		sectext += '\n\t' + _('Size: %s') % \
 		helpers.convert_bytes(file_props['size'])
 		if file_props['type'] == 'r':
@@ -184,8 +209,12 @@ _('Connection with peer cannot be established.'))
 	def show_stopped(self, jid, file_props):
 		self.window.present()
 		self.window.window.focus()
+		if file_props['type'] == 'r':
+			(file_path, file_name) = os.path.split(file_props['file-name'])
+		else:
+			file_name = file_props['name']
 		sectext = '\t' + _('Filename: %s') % \
-			gtkgui_helpers.escape_for_pango_markup(file_props['name'])
+			gtkgui_helpers.escape_for_pango_markup(file_name)
 		sectext += '\n\t' + _('Sender: %s') % \
 			gtkgui_helpers.escape_for_pango_markup(jid)
 		dialogs.ErrorDialog(_('File transfer stopped by the contact of the other side'), \
@@ -396,7 +425,12 @@ _('Connection with peer cannot be established.'))
 			text_labels += '<b>' + _('Sender: ') + '</b>' 
 		else:
 			text_labels += '<b>' + _('Recipient: ') + '</b>' 
-		text_props = gtkgui_helpers.escape_for_pango_markup(file_props['name']) + '\n'
+			
+		if file_props['type'] == 'r':
+			(file_path, file_name) = os.path.split(file_props['file-name'])
+		else:
+			file_name = file_props['name']
+		text_props = gtkgui_helpers.escape_for_pango_markup(file_name) + '\n'
 		text_props += gtkgui_helpers.escape_for_pango_markup(contact.name)
 		self.model.set(iter, 1, text_labels, 2, text_props, 4, \
 			file_props['type'] + file_props['sid'])

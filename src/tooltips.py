@@ -349,10 +349,11 @@ class FileTransfersTooltip(BaseTooltip):
 		self.hbox = gtk.HBox()
 		text = '<b>' + _('Name: ') + '</b>' 
 		name = file_props['name']
-		if not name and file_props['file-name']:
-			if os.path.exists(file_props['file-name']):
-				(path, name) = os.path.split(file_props['file-name'])
-		text += gtkgui_helpers.escape_for_pango_markup(name) 
+		if file_props['type'] == 'r':
+			(file_path, file_name) = os.path.split(file_props['file-name'])
+		else:
+			file_name = file_props['name']
+		text += gtkgui_helpers.escape_for_pango_markup(file_name) 
 		text += '\n<b>' + _('Type: ') + '</b>'
 		if file_props['type'] == 'r':
 			text += _('Download')
