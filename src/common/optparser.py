@@ -2,7 +2,7 @@
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
-##  - Nikos Kouremenos <kourem@gmail.com>
+##	- Nikos Kouremenos <kourem@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -47,8 +47,8 @@ class OptionsParser:
 			fd = open(self.__filename)
 		except:
 			if os.path.exists(self.__filename):
-				#it is file about file
-				print _('error: cannot open %s for reading\n') % self.__filename
+				#it is file about file FIXME: bad comment
+				print _('error: cannot open %s for reading') % self.__filename
 			return
 
 		for line in fd.readlines():
@@ -74,10 +74,11 @@ class OptionsParser:
 		try:
 			fd = open(self.__tempfile, 'w')
 		except:
-			#we cannot write file in a directory
-			err_str = _('Unable to write file in %s\n') % base_dir
+			#chances are we cannot write file in a directory
+			err_str = _('Unable to write file in %s') % base_dir
 			print err_str
 			return err_str
+		os.chmod(self.__filename, 0600)
 		try:
 			gajim.config.foreach(self.write_line, fd)
 		except IOError, e:
