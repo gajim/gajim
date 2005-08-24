@@ -142,7 +142,8 @@ class Connection:
 	# END __init__
 
 	def put_event(self, ev):
-		gajim.events_for_ui[self.name].append(ev)
+		if gajim.events_for_ui.has_key(self.name):
+			gajim.events_for_ui[self.name].append(ev)
 
 	def dispatch(self, event, data):
 		'''always passes account name as first param'''
