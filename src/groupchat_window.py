@@ -1118,10 +1118,11 @@ class GroupchatWindow(chat.Chat):
 			# check if the current pointer is at the same path
 			# as it was before setting the timeout
 			rect =  self.list_treeview[room_jid].get_cell_area(props[0],props[1])
-			position = self.list_treeview[room_jid].window.get_origin()
+			position_height = self.list_treeview[room_jid].window.get_origin()[1]
+			position_width = self.list_treeview[room_jid].window.get_root_origin()[0]
 			pointer = self.window.get_pointer()
 			self.tooltip.show_tooltip(contact, (pointer[0], rect.height),
-				 (position[0], position[1] + rect.y))
+				 (position_width, position_height + rect.y))
 		else:
 			self.tooltip.hide_tooltip()
 	
