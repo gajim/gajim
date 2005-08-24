@@ -492,7 +492,7 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 		# add ok button manually, because we need to focus on it 
 		ok_button = self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
 		self.checkbutton = gtk.CheckButton(checktext)
-		self.vbox.pack_start(self.checkbutton, expand=False, fill=True)
+		self.vbox.pack_start(self.checkbutton, expand = False, fill = True)
 		ok_button.grab_focus()
 	
 	def is_checked(self):

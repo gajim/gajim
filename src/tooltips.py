@@ -386,28 +386,28 @@ class FileTransfersTooltip(BaseTooltip):
 		text += '\n<b>' + _('Status: ') + '</b>' 
 		status = '' 
 		if not file_props.has_key('started') or not file_props['started']:
-			status =  _('not started')
+			status =  _('Not started')
 		elif file_props.has_key('connected'):
 			if file_props.has_key('stopped') and \
 				file_props['stopped'] == True:
-				status = _('stopped')
+				status = _('Stopped')
 			elif file_props['completed']:
-					status = _('completed')
+					status = _('Completed')
 			elif file_props['connected'] == False:
 				if file_props['completed']:
-					status = _('completed') # FIXME: all those make them Completed
+					status = _('Completed')
 			else:
 				if file_props.has_key('paused') and  \
 					file_props['paused'] == True:
-					status = _('paused')
+					status = _('Paused')
 				elif file_props.has_key('stalled') and \
 					file_props['stalled'] == True:
 					#stalled is not paused. it is like 'frozen' it stopped alone
-					status = _('stalled') # FIXME: all those make them Stalled
+					status = _('Stalled')
 				else:
-					status = _('transferring')
+					status = _('Transferring')
 		else:
-			status =  _('not started')
+			status =  _('Not started')
 		
 		text += status
 		self.text_lable.set_markup(text)
