@@ -115,7 +115,7 @@ def get_uf_ask(ask):
 	
 	return unicode(uf_ask)
 
-def get_uf_role(role, plural = False)
+def get_uf_role(role, plural = False):
 	''' plural determines if you get Moderators or Moderator'''
 	if role == 'none':
 		role_name = Q_('?Group Chat Contact Role:None')
