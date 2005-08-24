@@ -694,8 +694,8 @@ class GroupchatWindow(chat.Chat):
 		"""Print a line in the conversation:
 		if contact is set: it's a message from someone
 		if contact is not set: it's a message from the server"""
-		if type(text) == unicode:
-			text = text.encode('utf-8')
+		if type(text) == str:
+			text = unicode(text, 'utf-8')
 		other_tags_for_name = []
 		other_tags_for_text = []
 		if contact:
@@ -706,8 +706,13 @@ class GroupchatWindow(chat.Chat):
 		else:
 			kind = 'status'
 
+		# nick can be unicode or utf-8
+		nick = self.nicks[room_jid]
+		if type(nick) == str:
+			nick = unicode(nick, 'utf-8')
+		
 		if kind == 'incoming' and \
-				text.lower().find(self.nicks[room_jid].lower()) != -1:
+				text.lower().find(nick.lower()) != -1:
 			other_tags_for_name.append('bold')
 			other_tags_for_text.append('marked')
 		
