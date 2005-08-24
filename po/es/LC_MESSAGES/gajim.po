@@ -2414,7 +2414,7 @@ msgstr ""
 
 #: ../src/gtkgui.glade.h:232
 msgid "Save conversation _logs for all contacts"
-msgstr "Gravar conversaciones para todos los contactos"
+msgstr "Grabar conversaciones para todos los contactos"
 
 #: ../src/gtkgui.glade.h:233
 msgid "Save pass_word"
@@ -3428,3 +3428,4 @@ msgid ""
 msgstr ""
 "El argumento \"%s\" no se ha especificado. \n"
 "Escribe \"%s help %s\" para más información"
+
