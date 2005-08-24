@@ -1119,7 +1119,8 @@ class GroupchatWindow(chat.Chat):
 			# as it was before setting the timeout
 			rect =  self.list_treeview[room_jid].get_cell_area(props[0],props[1])
 			position_height = self.list_treeview[room_jid].window.get_origin()[1]
-			position_width = self.list_treeview[room_jid].window.get_root_origin()[0]
+			# temorary for testing purposes on Win32
+			position_width = self.list_treeview[room_jid].window.get_origin()[0]
 			pointer = self.window.get_pointer()
 			self.tooltip.show_tooltip(contact, (pointer[0], rect.height),
 				 (position_width, position_height + rect.y))
