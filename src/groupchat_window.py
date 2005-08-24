@@ -1114,8 +1114,6 @@ class GroupchatWindow(chat.Chat):
 			rect =  self.list_treeview[room_jid].get_cell_area(props[0],props[1])
 			position = self.list_treeview[room_jid].window.get_origin()
 			pointer = self.window.get_pointer()
-			#self.tooltip.show_tooltip(contact, (pointer[0], rect.height),
-			#	 (position[0], position[1] + rect.y))
 			self.tooltip.show_tooltip(contact, (0, rect.height),
 				(self.window.get_screen().get_display().get_pointer()[1],
 				position[1] + rect.y))
