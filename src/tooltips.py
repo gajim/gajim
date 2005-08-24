@@ -207,10 +207,12 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				accounts.append({'name': account, 'status_line': single_line, 
 						'show': status, 'message': message})
 		unread_messages_no = self.plugin.roster.nb_unread
-		if unread_messages_no > 1:
-			text = _('Gajim - %s unread messages') % unread_messages_no
-		elif unread_messages_no == 1:
-			text = _('Gajim - 1 unread message')
+
+		if unread_messages_no > 0:
+			text = i18n.ngettext(
+					'Gajim - one unread message',
+					'Gajim - %d unread messages',
+					unread_messages_no, None, unread_messages_no)
 		elif len(accounts) > 1:
 			text = _('Gajim')
 			self.current_row = 1

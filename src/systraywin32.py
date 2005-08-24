@@ -263,11 +263,11 @@ class SystrayWin32(systray.Systray):
 					if jid != 'tabbed':
 						nb += jids[jid].nb_unread[jid]
 		
-		#FIXME: prepare me for transltaion (ngeetext() and all) for 0.9
-		if nb > 1:
-			text = 'Gajim - %s unread messages' % nb
-		else:
-			text = 'Gajim - 1 unread message'
+		text = i18n.ngettext(
+					'Gajim - one unread message',
+					'Gajim - %d unread messages',
+					nb, None, nb)
+
 		self.systray_winapi.notify_icon.set_tooltip(text)
 
 	def remove_jid(self, jid, account):
