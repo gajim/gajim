@@ -596,6 +596,7 @@ class Chat:
 				self.notebook.emit('key_press_event', event)
 			elif event.keyval == gtk.keysyms.l or \
 				event.keyval == gtk.keysyms.L: # CTRL + L
+				jid = self.get_active_jid()
 				message_textview = self.xmls[jid].get_widget('message_textview')
 				conversation_textview.get_buffer().set_text('')
 			elif event.keyval == gtk.keysyms.v: # CTRL + V
