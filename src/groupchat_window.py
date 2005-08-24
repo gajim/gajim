@@ -275,14 +275,7 @@ class GroupchatWindow(chat.Chat):
 		model = self.list_treeview[room_jid].get_model()
 		image = self.plugin.roster.jabber_state_images[show]
 		resource = ''
-		if role == 'none':
-			role_name = Q_('?Group Chat Contact Role:None')
-		elif role == 'moderator':
-			role_name = _('Moderators')
-		elif role == 'participant':
-			role_name = _('Participants')
-		elif role == 'visitor':
-			role_name = _('Visitors')
+		role_name = helpers.get_uf_role(role, plural = True)
 
 		if jid:
 			jids = jid.split('/', 1)
@@ -361,7 +354,8 @@ class GroupchatWindow(chat.Chat):
 		else:
 			iter = self.get_contact_iter(room_jid, nick)
 			if not iter:
-				iter = self.add_contact_to_roster(room_jid, nick, show, role, jid, affiliation)
+				iter = self.add_contact_to_roster(room_jid, nick, show, role, jid,
+					affiliation)
 			else:
 				actual_role = self.get_role(room_jid, nick)
 				if role != actual_role:

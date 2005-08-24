@@ -115,6 +115,27 @@ def get_uf_ask(ask):
 	
 	return unicode(uf_ask)
 
+def get_uf_role(role, plural = False)
+	''' plural determines if you get Moderators or Moderator'''
+	if role == 'none':
+		role_name = Q_('?Group Chat Contact Role:None')
+	elif role == 'moderator':
+		if plural:
+			role_name = _('Moderators')
+		else:
+			role_name = _('Moderator')
+	elif role == 'participant':
+		if plural:
+			role_name = _('Participants')
+		else:
+			role_name = _('Participant')
+	elif role == 'visitor':
+		if plural:
+			role_name = _('Visitors')
+		else:
+			role_name = _('Visitor')
+	return role_name
+
 def get_sorted_keys(adict):
 	keys = adict.keys()
 	keys.sort()

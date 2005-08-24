@@ -265,10 +265,10 @@ class GCTooltip(BaseTooltip, StatusTable):
 	
 		info = '<span size="large" weight="bold">' + contact.name + '</span>'
 		info += '\n<span weight="bold">' + _('Role: ') + '</span>' + \
-			gtkgui_helpers.escape_for_pango_markup(contact.role)
+			 helpers.get_uf_role(contact.role)
 
 		info += '\n<span weight="bold">' + _('Affiliation: ') + '</span>' + \
-			gtkgui_helpers.escape_for_pango_markup(contact.affiliation)
+			contact.affiliation.capitalize()
 
 		info += '\n<span weight="bold">' + _('Status: ') + \
 					'</span>' + helpers.get_uf_show(contact.show)
@@ -276,12 +276,9 @@ class GCTooltip(BaseTooltip, StatusTable):
 		if contact.status:
 			status = contact.status.strip()
 			if status != '':
-				# escape markup entities. Is it posible to have markup in status?
+				# escape markup entities
 				info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
-		
-		#single_line, resource_str, multiple_resource= '', '', False
-		
-	
+
 		self.text_lable.set_markup(info)
 		self.hbox.pack_start(self.image, False, False)
 		self.hbox.pack_start(self.table, True, True)
