@@ -52,3 +52,16 @@ def Q_(s):
 	if s[0] == '?':
 		s = s[s.find(':')+1:] # remove ?abc: part
 	return s
+
+def ngettext(s_sing, s_plural, n, replace_sing = None, replace_plural = None):
+	'''use as:
+	i18n.ngettext('leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
+	
+	in other words this is a hack to ngettext() to support %s %d etc..
+	'''
+	text = _translation.ngettext(s_sing, s_plural, n)
+	if n == 1:
+		text = text % replace_sing
+	else:
+		text = text % replace_plural
+	return text
