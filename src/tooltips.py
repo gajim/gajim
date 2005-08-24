@@ -243,7 +243,51 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		self.text_lable.set_markup(text)
 		self.hbox.add(self.table)
 		self.win.add(self.hbox)
+class GCTooltip(BaseTooltip, StatusTable):
+	''' Tooltip that is shown in the GC treeview '''
+	def __init__(self, plugin):
+		self.account = None
+		self.plugin = plugin
 		
+		self.image = gtk.Image()
+		self.image.set_alignment(0.5, 0.025)
+		BaseTooltip.__init__(self)
+		StatusTable.__init__(self)
+		
+	def populate(self, contact):
+		if not contact :
+			return
+		self.create_window()
+		self.hbox = gtk.HBox()
+		self.hbox.set_homogeneous(False)
+		self.create_table()
+	
+	
+		info = '<span size="large" weight="bold">' + contact.name + '</span>'
+		info += '\n<span weight="bold">' + _('Role: ') + '</span>' + \
+			gtkgui_helpers.escape_for_pango_markup(contact.role)
+
+		info += '\n<span weight="bold">' + _('Affiliation: ') + '</span>' + \
+			gtkgui_helpers.escape_for_pango_markup(contact.affiliation)
+
+		info += '\n<span weight="bold">' + _('Status: ') + \
+					'</span>' + helpers.get_uf_show(contact.show)
+		
+		if contact.status:
+			status = contact.status.strip()
+			if status != '':
+				# escape markup entities. Is it posible to have markup in status?
+				info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
+		
+		#single_line, resource_str, multiple_resource= '', '', False
+		
+	
+		self.text_lable.set_markup(info)
+		self.hbox.pack_start(self.image, False, False)
+		self.hbox.pack_start(self.table, True, True)
+		self.win.add(self.hbox)	
+
+
 class RosterTooltip(BaseTooltip, StatusTable):
 	''' Tooltip that is shown in the roster treeview '''
 	def __init__(self, plugin):

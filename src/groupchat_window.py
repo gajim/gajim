@@ -27,6 +27,7 @@ import chat
 import cell_renderer_image
 import gtkgui_helpers
 import history_window
+import tooltips
 
 from gajim import Contact
 from common import gajim
@@ -65,6 +66,7 @@ class GroupchatWindow(chat.Chat):
 		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 		self.new_room(room_jid, nick)
 		self.show_title()
+		self.tooltip = tooltips.GCTooltip(plugin)
 		
 		
 		# NOTE: if it not a window event, connect in new_room function
@@ -1073,7 +1075,56 @@ class GroupchatWindow(chat.Chat):
 		self.got_disconnected(room_jid) #init some variables
 		conversation_textview.grab_focus()
 		self.childs[room_jid].show_all()
-
+	
+	def on_list_treeview_motion_notify_event(self, widget, event):
+		model = widget.get_model()
+		props = widget.get_path_at_pos(int(event.x), int(event.y))
+		if self.tooltip.timeout > 0:
+			if not props or self.tooltip.id != props[0]:
+				self.tooltip.hide_tooltip()
+		if props:
+			[row, col, x, y] = props
+			iter = None
+			try:
+				iter = model.get_iter(row)
+			except:
+				self.tooltip.hide_tooltip()
+				return
+			room_jid = self.get_active_jid()
+			nick = model[iter][1]
+			if nick != 'moderator' and nick !='participant' :
+				account = self.account
+				
+				img = model[iter][0]
+				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+					self.tooltip.id = row
+					self.tooltip.timeout = gobject.timeout_add(500,
+						self.show_tooltip, gajim.gc_contacts[account][room_jid][nick])
+		pass
+		
+	def on_list_treeview_leave_notify_event(self, widget, event):
+		model = widget.get_model()
+		props = widget.get_path_at_pos(int(event.x), int(event.y))
+		if self.tooltip.timeout > 0:
+			if not props or self.tooltip.id == props[0]:
+				self.tooltip.hide_tooltip()
+		pass
+		
+	def show_tooltip(self, contact):
+		room_jid = self.get_active_jid()
+		pointer = self.list_treeview[room_jid].get_pointer()
+		props = self.list_treeview[room_jid].get_path_at_pos(pointer[0], pointer[1])
+		if props and self.tooltip.id == props[0]:
+			# check if the current pointer is at the same path
+			# as it was before setting the timeout
+			rect =  self.list_treeview[room_jid].get_cell_area(props[0],props[1])
+			position = self.list_treeview[room_jid].window.get_origin()
+			pointer = self.window.get_pointer()
+			self.tooltip.show_tooltip(contact, (pointer[0], rect.height),
+				 (position[0], position[1] + rect.y))
+		else:
+			self.tooltip.hide_tooltip()
+	
 	def on_treeview_size_allocate(self, widget, allocation):
 		"""The MUC treeview has resized. Move the hpaneds in all tabs to match"""
 		thisroom_jid = self.get_active_jid()
