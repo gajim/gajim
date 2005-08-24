@@ -243,25 +243,21 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		self.text_lable.set_markup(text)
 		self.hbox.add(self.table)
 		self.win.add(self.hbox)
+
 class GCTooltip(BaseTooltip, StatusTable):
 	''' Tooltip that is shown in the GC treeview '''
 	def __init__(self, plugin):
 		self.account = None
 		self.plugin = plugin
 		
-		self.image = gtk.Image()
-		self.image.set_alignment(0.5, 0.025)
 		BaseTooltip.__init__(self)
 		StatusTable.__init__(self)
 		
 	def populate(self, contact):
-		if not contact :
+		if not contact:
 			return
 		self.create_window()
-		self.hbox = gtk.HBox()
-		self.hbox.set_homogeneous(False)
 		self.create_table()
-	
 	
 		info = '<span size="large" weight="bold">' + contact.name + '</span>'
 		info += '\n<span weight="bold">' + _('Role: ') + '</span>' + \
@@ -280,9 +276,7 @@ class GCTooltip(BaseTooltip, StatusTable):
 				info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 
 		self.text_lable.set_markup(info)
-		self.hbox.pack_start(self.image, False, False)
-		self.hbox.pack_start(self.table, True, True)
-		self.win.add(self.hbox)	
+		self.win.add(self.table)	
 
 
 class RosterTooltip(BaseTooltip, StatusTable):
