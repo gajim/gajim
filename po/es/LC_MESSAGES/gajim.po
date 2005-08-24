@@ -1572,7 +1572,7 @@ msgstr "Activa/Desactiva la notificación de archivo transferido"
 
 #: ../src/gtkgui.glade.h:29
 msgid "Ad_vanced Actions"
-msgstr "Accioines A_vanzadas"
+msgstr "Acciones A_vanzadas"
 
 #: ../src/gtkgui.glade.h:30
 msgid "Add New Contact"
@@ -3428,4 +3428,5 @@ msgid ""
 msgstr ""
 "El argumento \"%s\" no se ha especificado. \n"
 "Escribe \"%s help %s\" para más información"
+
 
