@@ -201,9 +201,8 @@ class GroupchatWindow(chat.Chat):
 				break
 		subject = self.subjects[new_jid]
 
-		# escape chars when necessary
-		subject = subject.replace('&', '&amp;')
-		new_jid = new_jid.replace('&', '&amp;')
+		subject = gtkgui_helpers.escape_for_pango_markup(subject)
+		new_jid = gtkgui_helpers.escape_for_pango_markup(new_jid)
 
 		name_label = self.name_labels[new_jid]
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (new_jid, subject))
