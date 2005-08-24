@@ -159,10 +159,8 @@ class FileTransfersWindow:
 				file_props['tt_account'], jid).name
 			recipient = gtkgui_helpers.escape_for_pango_markup(receiver_name)
 		else:
-			if float(gajim.version) > 0.8:
-				recipient = 'You' # FIXME _(gettext this)
-			else:
-				recipient = file_props['tt_account']
+			#You is a reply of who received a file
+			recipient = ('You')
 		sectext += recipient
 		if file_props['type'] == 'r':
 			(path, file) = os.path.split(file_props['file-name'])

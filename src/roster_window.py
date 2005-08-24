@@ -957,7 +957,7 @@ class RosterWindow:
 		model = self.tree.get_model()
 		account = model[iter][3]
 		
-		#FIXME: made this menu insensitive if we're offline
+		#FIXME: make most menuitems of this menu insensitive if account is offline
 
 		# we have to create our own set of icons for the menu
 		# using self.jabber_status_images is poopoo

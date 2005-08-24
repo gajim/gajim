@@ -286,14 +286,14 @@ class SystrayWin32(systray.Systray):
 						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
 		
 		#FIXME: prepare me for transltaion (ngeetext() and all) for 0.9
-		if nb > 1:
-			text = 'Gajim - %s unread messages' % nb
-		elif nb == 1:
-			text = 'Gajim - 1 unread message'
+		if nb > 0:
+			text = i18n.ngettext(
+					'Gajim - one unread message',
+					'Gajim - %d unread messages',
+					nb, None, nb)
 		else:
 			text = 'Gajim'
 		self.systray_winapi.notify_icon.set_tooltip(text)
-		
 
 	def set_img(self):
 		self.systray_winapi.remove_notify_icon()
