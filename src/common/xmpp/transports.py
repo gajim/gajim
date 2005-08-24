@@ -62,10 +62,7 @@ class TCPsocket(PlugIn):
         # SRV resolver
         if 'dns' in globals(): # if dnspython is available support SRV
             host, port = server
-            possible_queries = [
-                "_xmpp-client._tcp." + host,
-                "_jabber._tcp." + host,
-            ]
+            possible_queries = ['_xmpp-client._tcp.' + host]
 
             for query in possible_queries:
                 try:
