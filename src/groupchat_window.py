@@ -695,6 +695,8 @@ class GroupchatWindow(chat.Chat):
 		"""Print a line in the conversation:
 		if contact is set: it's a message from someone
 		if contact is not set: it's a message from the server"""
+		if type(text) == unicode:
+			text = text.encode('utf-8')
 		other_tags_for_name = []
 		other_tags_for_text = []
 		if contact:
