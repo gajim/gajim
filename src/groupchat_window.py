@@ -122,8 +122,8 @@ class GroupchatWindow(chat.Chat):
 		for room_jid in self.xmls:
 			if time.time() - gajim.last_message_time[self.account][room_jid] < 2:
 				dialog = dialogs.ConfirmationDialog(
-		_('You just received a new message in room "%s"') %room_jid.split('@')[0],
-			_('If you close this window, this message will be lost.')
+	_('You just received a new message in room "%s"') % room_jid.split('@')[0],
+	_('If you close this window and you have history disabled, this message will be lost.')
 					)
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					dialog.destroy()
@@ -967,7 +967,7 @@ class GroupchatWindow(chat.Chat):
 			name = gajim.get_nick_from_jid(room_jid)
 			dialog = dialogs.ConfirmationDialog(
 				_('You just received a new message in room "%s"') % name,
-				_('If you close this tab, the message will be lost.'))
+		_('If you close this tab and you have history disabled, the message will be lost.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 

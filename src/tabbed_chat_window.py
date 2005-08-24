@@ -272,7 +272,7 @@ timestamp, contact):
 				dialog = dialogs.ConfirmationDialog(
 					#%s is being replaced in the code with JID
 					_('You just received a new message from "%s"' % jid),
-					_('If you close the window, this message will be lost.'))
+					_('If you close this tab and you have history disabled, this message will be lost.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return True #stop the propagation of the event
 
@@ -340,7 +340,7 @@ timestamp, contact):
 		if time.time() - gajim.last_message_time[self.account][jid] < 2:
 			dialog = dialogs.ConfirmationDialog(
 				_('You just received a new message from "%s"' % jid),
-				_('If you close this tab, the message will be lost.'))
+				_('If you close this tab and you have history disabled, the message will be lost.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 

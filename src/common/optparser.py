@@ -47,7 +47,7 @@ class OptionsParser:
 			fd = open(self.__filename)
 		except:
 			if os.path.exists(self.__filename):
-				#it is file about file FIXME: bad comment
+				#we talk about a file
 				print _('error: cannot open %s for reading') % self.__filename
 			return
 
