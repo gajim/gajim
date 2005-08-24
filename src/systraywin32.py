@@ -232,8 +232,9 @@ class SystrayWin32(systray.Systray):
 	def show_icon(self):
 		#self.systray_winapi.add_notify_icon(self.systray_context_menu, tooltip = 'Gajim')
 		#self.systray_winapi.notify_icon.menu = self.systray_context_menu
-		# do not remove set_img does both above. maybe I can only change img without readding
-		# the notify icon? F$ck WINAPI
+		# do not remove set_img does both above. 
+		# maybe I can only change img without readding
+		# the notify icon? HOW??
 		self.set_img()
 
 	def hide_icon(self):
@@ -299,10 +300,11 @@ class SystrayWin32(systray.Systray):
 		if len(self.jids) > 0:
 			state = 'message'
 		else:
-			state = self.status # FIXME: get LoadImage code to images[] dict in systray.py
+			state = self.status
 		hicon = self.tray_ico_imgs[state]
 		
-		self.systray_winapi.add_notify_icon(self.systray_context_menu, hicon, 'Gajim')
+		self.systray_winapi.add_notify_icon(self.systray_context_menu, hicon,
+			'Gajim')
 		self.systray_winapi.notify_icon.menu = self.systray_context_menu
 
 	def load_icos(self):
@@ -310,13 +312,13 @@ class SystrayWin32(systray.Systray):
 		#iconset = gajim.config.get('iconset')
 		#if not iconset:
 		#	iconset = 'sun'
-		
-		iconset = 'gnome' # FIXME: add icos in all folders (icos are not as good as pngs in colors etc..)
+		iconset = 'gnome'
 		
 		imgs = {}
 		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/icos/')
 		states_list = gajim.SHOW_LIST
-		states_list.append('message') # trayicon apart from show holds message state too
+		# trayicon apart from show holds message state too
+		states_list.append('message')
 		for state in states_list:
 			path_to_ico = path + state + '.ico'
 			if os.path.exists(path_to_ico):
