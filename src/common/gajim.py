@@ -24,7 +24,7 @@ import mutex
 import common.config
 import common.logger
 
-version = '0.9'
+version = '0.8.1'
 config = common.config.Config()
 connections = {}
 verbose = False
