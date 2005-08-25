@@ -46,7 +46,7 @@ class Logger:
 		elif os.path.isdir(dot_gajim):
 			s = os.stat(dot_gajim)
 			if s.st_mode & stat.S_IROTH: # others have read permission!
-				os.chmod(fname, 0700) # rwx------
+				os.chmod(dot_gajim, 0700) # rwx------
 
 			if not os.path.exists(LOGPATH):
 				print _('creating %s directory') % LOGPATH
@@ -123,7 +123,7 @@ class Logger:
 			if os.path.isfile(ji_fn):
 				os.remove(ji_fn)
 			if not os.path.isdir(ji_fn):
-				os.mkdir(ji_fn)
+				os.mkdir(ji_fn, 0700)
 			files.append(ji + '/' + ji)
 			jid = 'gc'
 			show = nick
@@ -131,7 +131,7 @@ class Logger:
 			path_to_file = os.path.join(LOGPATH, f)
 			if os.path.isdir(path_to_file):
 				return
-			fil = open(path_to_file, 'a')
+			fil = open(path_to_file, 'a') #FIXME this does it rw-r-r by default
 			fil.write('%s:%s:%s' % (tim, jid, show))
 			if msg:
 				fil.write(':' + msg)
