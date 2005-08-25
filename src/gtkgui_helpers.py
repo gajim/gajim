@@ -86,8 +86,8 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0,
 	If any of the params is not present(None or 0) the action
 	on it is not performed
 	'''
-	# assure that we have only unicode text
-	text = ensure_unicode_string(text)
+	# make sure that we have only unicode text
+	text = text.decode('utf-8')
 	
 	def _cut_if_long(str):
 		if len(str) > max_chars:
@@ -121,11 +121,6 @@ def escape_for_pango_markup(string):
 			'"': '&quot;'})
 	
 	return escaped_str
-
-def ensure_unicode_string(string):
-	if type(string) == str:  
-		return unicode(string, encoding = 'utf-8')  
-	return string
 
 def autodetect_browser_mailer():
 	#recognize the environment for appropriate browser/mailer

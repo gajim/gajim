@@ -1003,7 +1003,7 @@ class GroupchatWindow(chat.Chat):
 		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'gc_vbox', APP)
 		self.childs[room_jid] = self.xmls[room_jid].get_widget('gc_vbox')
 		chat.Chat.new_tab(self, room_jid)
-		self.nicks[room_jid] = gtkgui_helpers.ensure_unicode_string(nick)
+		self.nicks[room_jid] = nick.decode('utf-8')
 		self.subjects[room_jid] = ''
 		self.room_creation[room_jid] = time.time()
 		self.nick_hits[room_jid] = []
