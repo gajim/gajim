@@ -108,8 +108,6 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 				else:
 					host['state'] = -1
 				self.remove_receiver(host['idx'])
-			streamhost
-		
 		
 	def _connection_refused(self, streamhost, file_props, idx):
 		if file_props is None:
@@ -165,7 +163,6 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 			return
 		reader.state = 6
 		if reader.connected:
-			reader.fd = open(reader.file_props['file-name'])
 			reader.file_props['error'] = 0
 			reader.file_props['disconnect_cb'] = reader.disconnect
 			reader.file_props['started'] = True
@@ -355,8 +352,8 @@ class Socks5:
 		self.remaining_buff = ''
 		
 	def open_file_for_reading(self):
-		self.fd = open(self.file_props['file-name'])
-		
+		self.fd = open(self.file_props['file-name'],'rb')
+		self.fd.seek(self.size)
 	def close_file(self):
 		try:
 			self.fd.close()
@@ -370,7 +367,7 @@ class Socks5:
 		if self.file_props.has_key('fd'):
 			fd = self.file_props['fd']
 		else:
-			fd = open(self.file_props['file-name'],'w')
+			fd = open(self.file_props['file-name'],'wb')
 			self.file_props['fd'] = fd
 			self.file_props['received-len'] = 0
 		return fd
@@ -429,7 +426,9 @@ class Socks5:
 			buff = self.remaining_buff
 			self.remaining_buff = ''
 		else:
+			self.open_file_for_reading()
 			buff = self.fd.read(MAX_BUFF_LEN)
+			self.close_file()
 		if len(buff) > 0:
 			lenn = 0
 			try:
@@ -466,7 +465,9 @@ class Socks5:
 				return None
 			return lenn
 		else:
+			return 0
 			self.state = 8 # end connection
+			
 			self.disconnect()
 			return -1
 	
@@ -803,7 +804,15 @@ class Socks5Receiver(Socks5):
 			if errnum == 111 or self.connect_timeout > 1000:
 				self.queue._connection_refused(self.streamhost, 
 					self.file_props, self.queue_idx)
-			return None
+				return None
+			# win32 needs this
+			elif errnum != 10056 or self.state != 0:
+				return None
+			else: # socket is already connected
+				self._sock.setblocking(False)
+				self._send=self._sock.send
+				self._recv=self._sock.recv
+				pass
 		self.buff = ''
 		self.connected = True
 		self.file_props['connected'] = True
@@ -857,7 +866,6 @@ class Socks5Receiver(Socks5):
 		# for senders: init file_props and send '\n'
 		if result == 1 and self.state == 5: 
 			if self.file_props['type'] == 's':
-				self.fd = open(self.file_props['file-name'])
 				self.file_props['error'] = 0
 				self.file_props['disconnect_cb'] = self.disconnect
 				self.file_props['started'] = True
