@@ -354,8 +354,8 @@ class Connection:
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
 			if errcode == '409':	#conflict: Nick Conflict
-				self.dispatch('ERROR', _('Unable to join room'), 
-					_('Server response:') + '\n' + errmsg)
+				self.dispatch('ERROR', (_('Unable to join room'), 
+					_('Server response:') + '\n' + errmsg))
 			elif errcode == '502': # Internal Timeout:
 				self.dispatch('NOTIFY', (prs.getFrom().getStripped().encode('utf8'),
 					'error', errmsg, prs.getFrom().getResource().encode('utf8'),
