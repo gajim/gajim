@@ -2,7 +2,7 @@ Welcome and thanks for trying out Gajim.
 
 =RUNTIME REQUIREMENTS=
 python2.4 (python2.3 should work too)
-pygtk2.5 or upper (NOTE: pygtk2.5 is devel so pygtk2.6 in case of problems)
+pygtk2.5 or higher (NOTE: pygtk2.5 is devel so pygtk2.6 in case of problems)
 python-libglade
 
 =COMPILE-TIME REQUIREMENTS=
