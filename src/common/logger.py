@@ -131,7 +131,8 @@ class Logger:
 			path_to_file = os.path.join(LOGPATH, f)
 			if os.path.isdir(path_to_file):
 				return
-			fil = open(path_to_file, 'a') #FIXME this does it rw-r-r by default
+			# this does it rw-r-r by default but is in a dir with 700 so it's ok
+			fil = open(path_to_file, 'a')
 			fil.write('%s:%s:%s' % (tim, jid, show))
 			if msg:
 				fil.write(':' + msg)
