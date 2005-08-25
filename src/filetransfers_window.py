@@ -299,6 +299,8 @@ _('Connection with peer cannot be established.'))
 					file_path = dialog.get_filename()
 					if os.path.exists(file_path):
 						#FIXME: pango does not work here.
+						#FIXME: if gtk2.8 do this via signal
+#http://developer.gnome.org/doc/API/2.0/gtk/GtkFileChooser.html#GtkFileChooser--do-overwrite-confirmation
 						primtext = _('This file already exists')
 						sectext = _('Would you like to overwrite it?')
 						dialog2 = dialogs.ConfirmationDialog(primtext, sectext)
