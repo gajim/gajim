@@ -343,7 +343,7 @@ class Connection:
 			jid = prs.getFrom()
 			self.dispatch('SUBSCRIBED', (jid.getStripped().encode('utf8'),
 				jid.getResource().encode('utf8')))
-			#BE CAREFUL: no con.updateRosterItem() in a callback
+			# BE CAREFUL: no con.updateRosterItem() in a callback
 			gajim.log.debug(_('we are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
 			gajim.log.debug(_('unsubscribe request from %s') % who)
@@ -353,8 +353,9 @@ class Connection:
 		elif ptype == 'error':
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
-			if errcode == '409':	#conflict:	Nick Conflict
-				self.dispatch('ERROR', (errmsg, ''))
+			if errcode == '409':	#conflict: Nick Conflict
+				self.dispatch('ERROR', _('Unable to join room'), 
+					_('Server response:') + '\n' + errmsg)
 			elif errcode == '502': # Internal Timeout:
 				self.dispatch('NOTIFY', (prs.getFrom().getStripped().encode('utf8'),
 					'error', errmsg, prs.getFrom().getResource().encode('utf8'),
