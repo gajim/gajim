@@ -1370,7 +1370,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, \
 			'gc_config': {}}
 		self.plugin.windows[name]['xml_console'] = \
-			dialogs.XMLConsoleWindow(self, name)
+			dialogs.XMLConsoleWindow(self.plugin, name)
 		gajim.awaiting_messages[name] = {}
 		gajim.connections[name].connected = 0
 		gajim.groups[name] = {}
