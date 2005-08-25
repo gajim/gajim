@@ -249,16 +249,17 @@ class GCTooltip(BaseTooltip, StatusTable):
 	def __init__(self, plugin):
 		self.account = None
 		self.plugin = plugin
-		
+		self.text_lable = gtk.Label()
+		self.text_lable.set_line_wrap(True)
+		self.text_lable.set_alignment(0, 0)
+		self.text_lable.set_selectable(False)
 		BaseTooltip.__init__(self)
-		StatusTable.__init__(self)
 		
 	def populate(self, contact):
 		if not contact:
 			return
 		self.create_window()
-		self.create_table()
-	
+		hbox = gtk.HBox()
 		info = '<span size="large" weight="bold">' + contact.name + '</span>'
 		info += '\n<span weight="bold">' + _('Role: ') + '</span>' + \
 			 helpers.get_uf_role(contact.role)
@@ -276,7 +277,8 @@ class GCTooltip(BaseTooltip, StatusTable):
 				info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 
 		self.text_lable.set_markup(info)
-		self.win.add(self.table)	
+		hbox.add(self.text_lable)
+		self.win.add(hbox)
 
 
 class RosterTooltip(BaseTooltip, StatusTable):
@@ -364,7 +366,9 @@ class RosterTooltip(BaseTooltip, StatusTable):
 				if contact.status:
 					status = contact.status.strip()
 					if status != '':
-						# escape markup entities. Is it posible to have markup in status?
+						# reduce long status (no more than 130 chars on line and no more than 5 lines)
+						status = gtkgui_helpers.reduce_chars_newlines(status, 130, 5)
+						# escape markup entities. 
 						info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 		
 		self.text_lable.set_markup(info)
