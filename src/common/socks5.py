@@ -759,7 +759,6 @@ class Socks5Listener:
 			res = select.select([self._serv],[],[],timeout)
 			return res[0]
 		except Exception, e:
-			self.file_props['started'] = True
 			return False
 
 class Socks5Receiver(Socks5):

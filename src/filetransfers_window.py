@@ -136,6 +136,7 @@ class FileTransfersWindow:
 		self.window.present()
 		self.window.window.focus()
 		if file_props['type'] == 'r':
+			# file path is used below in 'Save in'
 			(file_path, file_name) = os.path.split(file_props['file-name'])
 		else:
 			file_name = file_props['name']
@@ -163,9 +164,8 @@ class FileTransfersWindow:
 			recipient = ('You')
 		sectext += recipient
 		if file_props['type'] == 'r':
-			(path, file) = os.path.split(file_props['file-name'])
 			sectext += '\n\t' +_('Saved in: %s') % \
-				gtkgui_helpers.escape_for_pango_markup(path)
+				gtkgui_helpers.escape_for_pango_markup(file_path)
 		dialog = dialogs.HigDialog(None, _('File transfer completed'), sectext, 
 			gtk.STOCK_DIALOG_INFO, [
 				[_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT], 
@@ -208,7 +208,7 @@ _('Connection with peer cannot be established.'))
 		self.window.present()
 		self.window.window.focus()
 		if file_props['type'] == 'r':
-			(file_path, file_name) = os.path.split(file_props['file-name'])
+			file_name = os.path.basename(file_props['file-name'])
 		else:
 			file_name = file_props['name']
 		sectext = '\t' + _('Filename: %s') % \
