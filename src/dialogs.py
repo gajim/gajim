@@ -514,8 +514,7 @@ class InformationDialog(HigDialog):
 			self, None, pritext, sectext, gtk.STOCK_DIALOG_INFO,
 			[ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
 		)
-		hbox = self.action_area
-		ok_button = hbox.get_children()[0]
+		ok_button = self.action_area.get_children()[0]
 		ok_button.connect('clicked', self.on_ok_button_clicked)
 		self.show_all()
 
