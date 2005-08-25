@@ -20,6 +20,8 @@
 import os
 import sys
 import time
+import stat
+
 import common.gajim
 from common import i18n
 _ = i18n._
@@ -42,13 +44,21 @@ class Logger:
 			print _('Gajim will now exit')
 			sys.exit()
 		elif os.path.isdir(dot_gajim):
-			if os.path.isfile(LOGPATH):
+			s = os.stat(dot_gajim)
+			if s.st_mode & stat.S_IROTH: # others have read permission!
+				os.chmod(fname, 0700) # rwx------
+
+			if not os.path.exists(LOGPATH):
+				print _('creating %s directory') % LOGPATH
+				os.mkdir(LOGPATH, 0700)
+			elif os.path.isfile(LOGPATH):
 				print _('%s is file but it should be a directory') % LOGPATH
 				print _('Gajim will now exit')
 				sys.exit()
-			elif not os.path.exists(LOGPATH):
-				print _('creating %s directory') % LOGPATH
-				os.mkdir(LOGPATH, 0700)
+			elif os.path.isdir(LOGPATH):
+					s = os.stat(LOGPATH)
+					if s.st_mode & stat.S_IROTH: # others have read permission!
+						os.chmod(LOGPATH, 0700) # rwx------
 		else: # dot_gajim doesn't exist
 			if dot_gajim: # is '' on win9x so avoid that
 				print _('creating %s directory') % dot_gajim
