@@ -295,6 +295,7 @@ class PreferencesWindow:
 
 		# sound player
 		player = gajim.config.get('soundplayer')
+		self.xml.get_widget('soundplayer_entry').set_text(command)
 		if player == '': # only on first time Gajim starts
 			commands = ('esdplay', 'artsplay', 'aplay', 'play')
 			for command in commands:
@@ -302,6 +303,7 @@ class PreferencesWindow:
 					self.xml.get_widget('soundplayer_entry').set_text(command)
 					gajim.config.set('soundplayer', command)
 					break
+		
 		
 
 		#sounds treeview
