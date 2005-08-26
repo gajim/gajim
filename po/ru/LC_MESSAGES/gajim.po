@@ -11,17 +11,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gajim2\n"
+"Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-26 01:15+0300\n"
-"PO-Revision-Date: 2005-08-19 21:43+0700\n"
+"PO-Revision-Date: 2005-08-27 02:25+0700\n"
 "Last-Translator: Yakov Bezrukov <nebulam51@gmail.com>\n"
 "Language-Team: Русский <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: KBabel 1.10.1\n"
 
 #: ../src/common/config.py:51
@@ -116,12 +115,11 @@ msgstr "%s отменил подписку с вами"
 #. conflict: Nick Conflict
 #: ../src/common/connection.py:357
 msgid "Unable to join room"
-msgstr ""
+msgstr "Не могу войти в комнату"
 
 #: ../src/common/connection.py:358
-#, fuzzy
 msgid "Server response:"
-msgstr "Параметры Сервера"
+msgstr "Ответ сервера:"
 
 #: ../src/common/connection.py:389
 #, python-format
@@ -334,27 +332,24 @@ msgid "Moderators"
 msgstr "Модераторы"
 
 #: ../src/common/helpers.py:126
-#, fuzzy
 msgid "Moderator"
-msgstr "_Модератор"
+msgstr "Модератор"
 
 #: ../src/common/helpers.py:129
 msgid "Participants"
 msgstr "Участники"
 
 #: ../src/common/helpers.py:131
-#, fuzzy
 msgid "Participant"
-msgstr "Участники"
+msgstr "Участник"
 
 #: ../src/common/helpers.py:134
 msgid "Visitors"
 msgstr "Посетители"
 
 #: ../src/common/helpers.py:136
-#, fuzzy
 msgid "Visitor"
-msgstr "Посетители"
+msgstr "Посетитель"
 
 #: ../src/common/helpers.py:172
 msgid "is paying attention to the conversation"
@@ -406,9 +401,9 @@ msgstr "ошибка: не могу открыть %s для чтения"
 
 #. chances are we cannot write file in a directory
 #: ../src/common/optparser.py:78
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to write file in %s"
-msgstr "Не могу записать файл в %s\n"
+msgstr "Не могу записать файл в %s"
 
 #: ../src/advanced.py:52
 msgid "Preference Name"
@@ -603,8 +598,7 @@ msgstr "Такой аккаунт недоступен"
 
 #: ../src/config.py:1422
 msgid "You must create your account before editing your personal information."
-msgstr ""
-"Перед редактированием личных данных необходимо сначала создать аккаунт."
+msgstr "Перед редактированием личных данных необходимо сначала создать аккаунт."
 
 #: ../src/config.py:1429 ../src/config.py:2047 ../src/dialogs.py:622
 #: ../src/dialogs.py:728 ../src/vcard.py:375 ../src/vcard.py:403
@@ -613,8 +607,7 @@ msgstr "Вы не подключены к серверу"
 
 #: ../src/config.py:1430
 msgid "Without a connection, you can not edit your personal information."
-msgstr ""
-"Чтобы отредактировать личную информацию нужно подсоединиться к серверу."
+msgstr "Чтобы отредактировать личную информацию нужно подсоединиться к серверу."
 
 #: ../src/config.py:1457
 msgid "Failed to get secret keys"
@@ -741,8 +734,7 @@ msgid "This bookmark has invalid data"
 msgstr "Эта закладка содержит неверные данные"
 
 #: ../src/config.py:2632
-msgid ""
-"Please be sure to fill out server and room fields or remove this bookmark."
+msgid "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Пожалуйста, удостоверьтесь что заполнены поля с именем сервера и комнаты "
 "либо удалите эту закладку."
@@ -1096,9 +1088,8 @@ msgid "Theme"
 msgstr "Тема"
 
 #: ../src/gajim_themes_window.py:125 ../src/gajim_themes_window.py:127
-#, fuzzy
 msgid "theme name"
-msgstr "имя_тeмы"
+msgstr "имя тeмы"
 
 #: ../src/gajim_themes_window.py:128
 msgid "theme_name"
@@ -1110,11 +1101,10 @@ msgid "You just received a new message in room \"%s\""
 msgstr "Вы только что получили сообщение в комнате \"%s\""
 
 #: ../src/groupchat_window.py:128
-#, fuzzy
 msgid ""
 "If you close this window and you have history disabled, this message will be "
 "lost."
-msgstr "Если вы закроете окно, это сообщение будет потеряно."
+msgstr "Если вы закроете окно и у вас отключена функция ведения истории сообщений, то это сообщение будет потеряно."
 
 #: ../src/groupchat_window.py:143
 #, python-format
@@ -1126,8 +1116,7 @@ msgstr[2] ""
 
 #: ../src/groupchat_window.py:148
 msgid "If you close this window, you will be disconnected from this room."
-msgid_plural ""
-"If you close this window, you will be disconnected from these rooms."
+msgid_plural "If you close this window, you will be disconnected from these rooms."
 msgstr[0] "Если вы закроете это окно, то вы выйдете из этой комнаты."
 msgstr[1] "Если вы закроете это окно, то вы выйдете из этих комнат."
 msgstr[2] ""
@@ -1216,11 +1205,10 @@ msgid "Banning %s"
 msgstr "Забанить %s"
 
 #: ../src/groupchat_window.py:970 ../src/tabbed_chat_window.py:343
-#, fuzzy
 msgid ""
 "If you close this tab and you have history disabled, the message will be "
 "lost."
-msgstr "Если вы закроете эту вкладку, сообщение будет потеряно."
+msgstr "Если вы закроете эту вкладку и у вас отключена функция ведения истории сообщений, то  сообщение будет потеряно."
 
 #: ../src/history_window.py:138
 #, python-format
@@ -1298,10 +1286,8 @@ msgstr "Транспорт \"%s\" будет удален"
 
 #: ../src/roster_window.py:704
 #, python-format
-msgid ""
-"You will no longer be able to send and receive messages to contacts from %s."
-msgstr ""
-"У вас теперь не будет возможности приема и отправки сообщения контактам с %s."
+msgid "You will no longer be able to send and receive messages to contacts from %s."
+msgstr "У вас теперь не будет возможности приема и отправки сообщения контактам с %s."
 
 #: ../src/roster_window.py:747
 msgid "Assign OpenPGP Key"
@@ -1440,11 +1426,10 @@ msgid "You just received a new message from \"%s\""
 msgstr "Вы получили новое сообщение от \"%s\""
 
 #: ../src/tabbed_chat_window.py:275
-#, fuzzy
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
-msgstr "Если вы закроете окно, это сообщение будет потеряно."
+msgstr "Если вы закроете эту вкладку и у вас отключена функция ведения истории сообщений, то это сообщение будет потеряно."
 
 #. we are not connected
 #: ../src/tabbed_chat_window.py:515
@@ -1506,8 +1491,7 @@ msgstr "Необходимо присоединиться к серверу дл
 
 #: ../src/vcard.py:404
 msgid "Without a connection, you can not get your contact information."
-msgstr ""
-"Необходимо присоединиться к серверу для получения информации о контакте"
+msgstr "Необходимо присоединиться к серверу для получения информации о контакте"
 
 #: ../src/gtkgui.glade.h:1
 msgid "0"
@@ -1575,7 +1559,6 @@ msgid "<b>Sounds</b>"
 msgstr "<b>Звуки</b>"
 
 #: ../src/gtkgui.glade.h:18
-#, fuzzy
 msgid "<b>Visual Notifications</b>"
 msgstr "<b>Уведомления</b>"
 
@@ -1706,14 +1689,13 @@ msgid "Auto join"
 msgstr "Автоматическое присоединение"
 
 #: ../src/gtkgui.glade.h:51
-#, fuzzy
 msgid ""
 "Autodetect on every Gajim startup\n"
 "Always use GNOME default applications\n"
 "Always use KDE default applications\n"
 "Custom"
 msgstr ""
-"Определять автоматически при каждом старте\n"
+"Определять автоматически при каждом запуске Gajim\n"
 "Всегда использовать приложения GNOME по умолчанию\n"
 "Всегда использовать приложения KDE по умолчанию\n"
 "Другое"
@@ -1747,27 +1729,22 @@ msgid "Bold"
 msgstr "Жирный"
 
 #: ../src/gtkgui.glade.h:62
-#, fuzzy
 msgid "C_onnect on Gajim startup"
-msgstr "_Соединяться при старте"
+msgstr "_Соединяться при запуске Gajim"
 
 #: ../src/gtkgui.glade.h:63
-#, fuzzy
 msgid "Cancel file transfer"
-msgstr "Отменяет выбранную передачу"
+msgstr "Отменить передачу"
 
 #: ../src/gtkgui.glade.h:64
 msgid "Cancels the selected file transfer"
 msgstr "Отменяет выбранную передачу"
 
 #: ../src/gtkgui.glade.h:65
-#, fuzzy
 msgid ""
 "Cancels the selected file transfer. If there is an incomplete file, kept in "
 "the file system it will be removed. This operation is not reversable"
-msgstr ""
-"Останавливает выбранную передачу. Если есть незавершенный файл, то он будет "
-"удален. Операцию нельзя отменить."
+msgstr "Останавливает выбранную передачу. Если есть незавершенный файл, то он будет удален. Операцию нельзя отменить."
 
 #: ../src/gtkgui.glade.h:66
 msgid "Chan_ge"
@@ -1794,9 +1771,8 @@ msgid "Chat with"
 msgstr "Чат с"
 
 #: ../src/gtkgui.glade.h:73
-#, fuzzy
 msgid "Check for new _version on Gajim startup"
-msgstr "Проверять на обновление при _старте"
+msgstr "Проверять наличие новой версии Gajim при _запуске"
 
 #: ../src/gtkgui.glade.h:74
 msgid "Check if you want to register for a new jabber account"
@@ -1845,9 +1821,8 @@ msgid "Click to get contact's extended information"
 msgstr "Щелкните здесь для получения расширенной информации о контакте"
 
 #: ../src/gtkgui.glade.h:82
-#, fuzzy
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr "Click to see features like on jabber servers"
+msgstr "Щелкните чтобы просмотреть сервисы предоставляемые jabber сервером (например MSN, ICQ транспорты)"
 
 #: ../src/gtkgui.glade.h:83
 msgid "Click to see past conversation in this room"
@@ -1969,7 +1944,7 @@ msgstr "Дополнительный Адрес:"
 #. Family Name
 #: ../src/gtkgui.glade.h:114
 msgid "Family:"
-msgstr "Семейное положение:"
+msgstr "Фамилия:"
 
 #: ../src/gtkgui.glade.h:115
 msgid "File Transfers"
@@ -2040,10 +2015,8 @@ msgstr ""
 "правом нижнем углу экрана"
 
 #: ../src/gtkgui.glade.h:128
-msgid ""
-"Gajim will only change the icon of the contact that sent the new message"
-msgstr ""
-"Gajim будет лишь менять иконку у контакта, от которого пришло сообщение"
+msgid "Gajim will only change the icon of the contact that sent the new message"
+msgstr "Gajim будет лишь менять иконку у контакта, от которого пришло сообщение"
 
 #: ../src/gtkgui.glade.h:129
 msgid "Gajim: First Time Wizard"
@@ -2105,9 +2078,8 @@ msgstr ""
 "печати сообщения"
 
 #: ../src/gtkgui.glade.h:145
-#, fuzzy
 msgid "If checked, Gajim will join this group chat on startup"
-msgstr "Если отмечено, Gajim будет входить в комнату при старте"
+msgstr "Если отмечено, Gajim будет входить в комнату при запуске"
 
 #: ../src/gtkgui.glade.h:146
 msgid "If checked, Gajim will remember the password for this account"
@@ -2216,7 +2188,7 @@ msgstr "Войти в _Комнату..."
 
 #: ../src/gtkgui.glade.h:165
 msgid "Location"
-msgstr "Расположение:"
+msgstr "Расположение"
 
 #: ../src/gtkgui.glade.h:166
 msgid "Log history"
@@ -2342,7 +2314,7 @@ msgstr "Порт: "
 
 #: ../src/gtkgui.glade.h:202
 msgid "Position:"
-msgstr "Позиция:"
+msgstr "Должность:"
 
 #: ../src/gtkgui.glade.h:203
 msgid "Postal Code:"
@@ -2451,7 +2423,7 @@ msgstr "Ресурс:"
 
 #: ../src/gtkgui.glade.h:227
 msgid "Role:"
-msgstr "Должность:"
+msgstr "Обязанности:"
 
 #: ../src/gtkgui.glade.h:228
 msgid "Room Configuration"
@@ -2511,8 +2483,7 @@ msgstr "Отправить сообщение и закрыть окно"
 
 #: ../src/gtkgui.glade.h:242
 msgid "Sends a message to currently connected users to this server"
-msgstr ""
-"Отправляет сообщение пользователям подсоединенным к серверу в данный момент"
+msgstr "Отправляет сообщение пользователям подсоединенным к серверу в данный момент"
 
 #: ../src/gtkgui.glade.h:243
 msgid "Server:"
@@ -2547,9 +2518,8 @@ msgid "Show only in _roster"
 msgstr "Показывать только в _ростере"
 
 #: ../src/gtkgui.glade.h:251
-#, fuzzy
 msgid "Show roster window on Gajim startup"
-msgstr "Показывать окно ростера при старте"
+msgstr "Показывать окно ростера при запуске"
 
 #: ../src/gtkgui.glade.h:252
 msgid "Shows a list of file transfers between you and other"
@@ -2709,7 +2679,6 @@ msgid "User ID:"
 msgstr "ID пользователя:"
 
 #: ../src/gtkgui.glade.h:291
-#, fuzzy
 msgid "When a file transfer is complete show a popup notification"
 msgstr "Показать уведомление по окончании загрузки"
 
@@ -3086,12 +3055,12 @@ msgid "minutes"
 msgstr "минут"
 
 #: ../src/tooltips.py:213
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim - one unread message"
 msgid_plural "Gajim - %d unread messages"
-msgstr[0] "Gajim - 1 непрочитанное сообщение"
-msgstr[1] "Gajim - 1 непрочитанное сообщение"
-msgstr[2] "Gajim - 1 непрочитанное сообщение"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/tooltips.py:240 ../src/tooltips.py:242
 #, python-format
@@ -3099,13 +3068,12 @@ msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
 #: ../src/tooltips.py:264
-#, fuzzy
 msgid "Role: "
-msgstr "Должность:"
+msgstr "Должность: "
 
 #: ../src/tooltips.py:267
 msgid "Affiliation: "
-msgstr ""
+msgstr "Ранг: "
 
 #: ../src/tooltips.py:270 ../src/tooltips.py:351 ../src/tooltips.py:364
 #: ../src/tooltips.py:427
@@ -3159,35 +3127,29 @@ msgid "Transferred: "
 msgstr "Передано: "
 
 #: ../src/tooltips.py:430 ../src/tooltips.py:451
-#, fuzzy
 msgid "Not started"
-msgstr "не начато"
+msgstr "Не начато"
 
 #: ../src/tooltips.py:434
-#, fuzzy
 msgid "Stopped"
-msgstr "остановлено"
+msgstr "Остановлено"
 
 #: ../src/tooltips.py:436 ../src/tooltips.py:439
-#, fuzzy
 msgid "Completed"
-msgstr "завершено"
+msgstr "Завершено"
 
 #: ../src/tooltips.py:443
-#, fuzzy
 msgid "Paused"
-msgstr "Пауза"
+msgstr "Приостановлено"
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
 #: ../src/tooltips.py:447
-#, fuzzy
 msgid "Stalled"
-msgstr "застопорилось"
+msgstr "Ожидание"
 
 #: ../src/tooltips.py:449
-#, fuzzy
 msgid "Transferring"
-msgstr "передается"
+msgstr "Передается"
 
 #: ../src/filetransfers_window.py:72
 msgid "File"
@@ -3210,7 +3172,7 @@ msgstr "Размер: %s"
 #. You is a reply of who send a file
 #: ../src/filetransfers_window.py:154
 msgid "You"
-msgstr ""
+msgstr "Вы"
 
 #: ../src/filetransfers_window.py:155 ../src/filetransfers_window.py:216
 #, python-format
@@ -3338,8 +3300,7 @@ msgstr "статус"
 
 #: ../scripts/gajim-remote.py:101
 msgid "one of: offline, online, chat, away, xa, dnd, invisible "
-msgstr ""
-"один из: отключен, в сети, чат, отошел, недоступен, не беспокоить, невидимка"
+msgstr "один из: отключен, в сети, чат, отошел, недоступен, не беспокоить, невидимка"
 
 #: ../scripts/gajim-remote.py:103 ../scripts/gajim-remote.py:127
 msgid "message"
@@ -3363,7 +3324,6 @@ msgid "Show the chat dialog so that you can send message to a contact"
 msgstr "Показать диалог чата чтобы вы могли отправлять сообщения контакту"
 
 #: ../scripts/gajim-remote.py:113
-#, fuzzy
 msgid "JID of the contact that you want to chat with"
 msgstr "JID контакта с которым вы хотели бы побеседовать"
 
@@ -3372,18 +3332,16 @@ msgid "if specified, contact is taken from the contact list of this account"
 msgstr "если указано, контакт будет взят из контакт-листа этого аккаунта"
 
 #: ../scripts/gajim-remote.py:121
-#, fuzzy
 msgid ""
 "Send new message to a contact in the roster. Both OpenPGP key and account "
 "are optional. If you want to set only 'account', without 'OpenPGP key', just "
 "set 'OpenPGP key' to ''."
 msgstr ""
 "Отправить новое сообщение контакту в ростере. Как OpenPGP ключ, так и "
-"аккаунт опциональны. Если вы хотите настроить лишь 'аккаунт', без 'PGP "
-"ключа', просто установите 'PGP ключ' в ''."
+"аккаунт опциональны. Если вы хотите настроить лишь 'аккаунт', без 'OpenPGP "
+"ключа', просто установите 'OpenPGP ключ' в ''."
 
 #: ../scripts/gajim-remote.py:125
-#, fuzzy
 msgid "JID of the contact that will receive the message"
 msgstr "JID контакта, который получит сообщение"
 
@@ -3397,43 +3355,35 @@ msgstr "PGP ключ"
 
 #: ../scripts/gajim-remote.py:128
 msgid "if specified, the message will be encrypted using this public key"
-msgstr ""
-"если указано, сообщение будет зашифровано с использование открытого ключа"
+msgstr "если указано, сообщение будет зашифровано с использование открытого ключа"
 
 #: ../scripts/gajim-remote.py:130
 msgid "if specified, the message will be sent using this account"
-msgstr ""
-"если указано, сообщение будет отправлено с использованием этого аккаунта"
+msgstr "если указано, сообщение будет отправлено с использованием этого аккаунта"
 
 #: ../scripts/gajim-remote.py:135
 msgid "Get detailed info on a contact"
 msgstr "Получить детальную информацию о контакте"
 
 #: ../scripts/gajim-remote.py:137 ../scripts/gajim-remote.py:144
-#, fuzzy
 msgid "JID of the contact"
 msgstr "JID контакта"
 
 #: ../scripts/gajim-remote.py:141
-#, fuzzy
 msgid "Send file to a contact"
-msgstr "Получить детальную информацию о контакте"
+msgstr "Отправить контакту файл"
 
 #: ../scripts/gajim-remote.py:143
-#, fuzzy
 msgid "file"
-msgstr "Файл"
+msgstr "файл"
 
 #: ../scripts/gajim-remote.py:143
-#, fuzzy
 msgid "File path"
-msgstr "Файл"
+msgstr "Путь до файла"
 
 #: ../scripts/gajim-remote.py:145
-#, fuzzy
 msgid "if specified, file will be sent using this account"
-msgstr ""
-"если указано, сообщение будет отправлено с использованием этого аккаунта"
+msgstr "если указано, файл будет отправлен с использованием этого аккаунта"
 
 #: ../scripts/gajim-remote.py:167
 msgid "Missing argument \"contact_jid\""
@@ -3461,7 +3411,7 @@ msgid "Session bus is not available."
 msgstr "D-Bus сервер недоступен."
 
 #: ../scripts/gajim-remote.py:221
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown D-Bus version: %s"
 msgstr "Неизвестная версия D-Bus: %s"
 
@@ -3506,20 +3456,3 @@ msgstr ""
 "Аргумент \"%s\" не задан. \n"
 "На берите \"%s\" help \"%s\" для справки"
 
-#~ msgid "error: cannot open %s for reading\n"
-#~ msgstr "ошибка: не могу открыть %s для чтения\n"
-
-#~ msgid "If you close the window, this message will be lost."
-#~ msgstr "Если вы закроете окно, это сообщение пропадет."
-
-#~ msgid "Stop file transfer"
-#~ msgstr "Остановить передачу"
-
-#~ msgid "_About"
-#~ msgstr "_Подробнее"
-
-#~ msgid "Gajim - %s unread messages"
-#~ msgstr "Gajim - %s непрочитанных сообщений"
-
-#~ msgid "paused"
-#~ msgstr "пауза"
