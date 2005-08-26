@@ -112,14 +112,14 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0,
 	return reduced_text
 
 def escape_for_pango_markup(string):
-	# escapes < > & \ "
+	# escapes < > & ' "
 	# for pango markup not to break
 	if string is None:
 		return
 	if gtk.pygtk_version >= (2, 8, 0) and gtk.gtk_version >= (2, 8, 0):
 		escaped_str = gobject.markup_escape_text(string)
 	else:
-		escaped_str =xml.sax.saxutils.escape(string, {'\\': '&apos;',
+		escaped_str =xml.sax.saxutils.escape(string, {"'": '&apos;',
 			'"': '&quot;'})
 	
 	return escaped_str
