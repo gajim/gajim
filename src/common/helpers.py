@@ -309,7 +309,7 @@ def from_xs_boolean_to_python_boolean(value):
 def ensure_unicode_string(s):
 	# py23 u'abc'.decode('utf-8') raises
 	# python24 does not. is python23 is ooold we can remove this func
-	if isistance(s, str):
+	if isinstance(s, str):
 		s = s.decode('utf-8')
 	return s
 		
