@@ -62,7 +62,7 @@ def convert_bytes(string):
 	else:
 		#B means bytes 
 		suffix = _('%s B')
-	return suffix % str(bytes)
+	return suffix % unicode(bytes)
 
 def get_uf_show(show):
 	'''returns a userfriendly string for dnd/xa/chat

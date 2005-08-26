@@ -117,7 +117,7 @@ class FileTransfersWindow:
 		# 'account' is the sender
 		for file_props in self.files_props['s'].values():
 			if file_props['tt_account'] == account:
-				receiver_jid = str(file_props['receiver']).split('/')[0]
+				receiver_jid = unicode(file_props['receiver']).split('/')[0]
 				if jid == receiver_jid:
 					if not self.is_transfer_stoped(file_props):
 						active_transfers[0].append(file_props)
@@ -125,7 +125,7 @@ class FileTransfersWindow:
 		# 'account' is the recipient
 		for file_props in self.files_props['r'].values():
 			if file_props['tt_account'] == account:
-				sender_jid = str(file_props['sender']).split('/')[0]
+				sender_jid = unicode(file_props['sender']).split('/')[0]
 				if jid == sender_jid:
 					if not self.is_transfer_stoped(file_props):
 						active_transfers[1].append(file_props)
@@ -145,7 +145,7 @@ class FileTransfersWindow:
 		sectext += '\n\t' + _('Size: %s') % \
 		helpers.convert_bytes(file_props['size'])
 		if file_props['type'] == 'r':
-			jid = str(file_props['sender']).split('/')[0]
+			jid = unicode(file_props['sender']).split('/')[0]
 			sender_name = gajim.get_first_contact_instance_from_jid( 
 				file_props['tt_account'], jid).name
 			sender = gtkgui_helpers.escape_for_pango_markup(sender_name)
@@ -155,7 +155,7 @@ class FileTransfersWindow:
 		sectext += '\n\t' +_('Sender: %s') % sender
 		sectext += '\n\t' +_('Recipient: ')
 		if file_props['type'] == 's':
-			jid = str(file_props['receiver']).split('/')[0]
+			jid = unicode(file_props['receiver']).split('/')[0]
 			receiver_name = gajim.get_first_contact_instance_from_jid( 
 				file_props['tt_account'], jid).name
 			recipient = gtkgui_helpers.escape_for_pango_markup(receiver_name)
@@ -342,7 +342,7 @@ _('Connection with peer cannot be established.'))
 		iter = self.get_iter_by_sid(typ, sid)
 		if iter is None:
 			return
-		sid = self.model[iter][4]
+		sid = self.model[iter][4].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if status == 'stop':
 			file_props['stopped'] = True
@@ -363,7 +363,7 @@ _('Connection with peer cannot be established.'))
 		if iter is None:
 			iter = self.get_iter_by_sid(typ, sid)
 		if iter is not None:
-			text = str(percent) + '%\n' 
+			text = unicode(percent) + '%\n' 
 			if transfered_size == 0:
 				text += '0'
 			else:
@@ -389,7 +389,7 @@ _('Connection with peer cannot be established.'))
 		session id'''
 		iter = self.model.get_iter_root()
 		while iter:
-			if typ + sid == self.model[iter][4]:
+			if typ + sid == self.model[iter][4].decode('utf-8'):
 				return iter
 			iter = self.model.iter_next(iter)
 	
@@ -410,7 +410,7 @@ _('Connection with peer cannot be established.'))
 		if os.path.exists(file_path) and os.path.isfile(file_path):
 			stat = os.stat(file_path)
 		os.stat(file_path)
-		file_props['size'] = str(stat[6])
+		file_props['size'] = unicode(stat[6])
 		file_props['sid'] = self.get_sid()
 		file_props['completed'] = False
 		file_props['started'] = False
@@ -467,7 +467,7 @@ _('Connection with peer cannot be established.'))
 			except:
 				self.tooltip.hide_tooltip()
 				return
-			sid = self.model[iter][4]
+			sid = self.model[iter][4].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
 			if file_props is not None:
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
@@ -539,7 +539,7 @@ _('Connection with peer cannot be established.'))
 			self.set_all_insensitive()
 			return
 		current_iter = self.model.get_iter(path)
-		sid = self.model[current_iter][4]
+		sid = self.model[current_iter][4].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		self.remove_button.set_sensitive(is_row_selected)
 		self.remove_menuitem.set_sensitive(is_row_selected)
@@ -597,7 +597,7 @@ _('Connection with peer cannot be established.'))
 		if selected is None or selected[1] is None:
 			return 
 		s_iter = selected[1]
-		sid = self.model[s_iter][4]
+		sid = self.model[s_iter][4].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if not file_props.has_key('tt_account'):
 			# file transfer is not set yet
@@ -639,7 +639,7 @@ _('Connection with peer cannot be established.'))
 		if selected is None or selected[1] is None:
 			return 
 		s_iter = selected[1]
-		sid = self.model[s_iter][4]
+		sid = self.model[s_iter][4].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if self.is_transfer_paused(file_props):
 			file_props['paused'] = False
@@ -656,7 +656,7 @@ _('Connection with peer cannot be established.'))
 		if selected is None or selected[1] is None:
 			return 
 		s_iter = selected[1]
-		sid = self.model[s_iter][4]
+		sid = self.model[s_iter][4].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if not file_props.has_key('tt_account'):
 			return 
@@ -677,7 +677,7 @@ _('Connection with peer cannot be established.'))
 			# check if the current pointer is at the same path
 			# as it was before setting the timeout
 			iter = self.model.get_iter(props[0])
-			sid = self.model[iter][4]
+			sid = self.model[iter][4].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
 			rect =  self.tree.get_cell_area(props[0],props[1])
 			position = widget.window.get_origin()
@@ -777,7 +777,7 @@ _('Connection with peer cannot be established.'))
 		i = len(self.model) - 1
 		while i >= 0:
 			iter = self.model.get_iter((i))
-			sid = self.model[iter][4]
+			sid = self.model[iter][4].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
 			if file_props.has_key('completed') and file_props['completed']:
 				self.model.remove(iter)
@@ -792,7 +792,7 @@ _('Connection with peer cannot be established.'))
 		if selected is None or selected[1] is None:
 			return 
 		s_iter = selected[1]
-		sid = self.model[s_iter][4]
+		sid = self.model[s_iter][4].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if not file_props.has_key('file-name'):
 			return

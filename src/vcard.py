@@ -84,7 +84,7 @@ class VcardWindow:
 			return
 		#update contact.name if it's not ''
 		name_entry = self.xml.get_widget('nickname_entry')
-		new_name = name_entry.get_text()
+		new_name = name_entry.get_text().decode('utf-8')
 		if new_name != self.contact.name and new_name != '':
 			self.contact.name = new_name
 			for i in self.plugin.roster.get_contact_iter(self.contact.jid, self.account):
@@ -268,10 +268,10 @@ class VcardWindow:
 			'no_log_for').split(' '):
 			log = 0
 		self.xml.get_widget('log_checkbutton').set_active(log)
-		resources = '%s (%s)' % (self.contact.resource, str(
+		resources = '%s (%s)' % (self.contact.resource, unicode(
 			self.contact.priority))
 		uf_resources = self.contact.resource + _(' resource with priority ')\
-			+ str(self.contact.priority)
+			+ unicode(self.contact.priority)
 		if not self.contact.status:
 			self.contact.status = ''
 		
@@ -287,9 +287,10 @@ class VcardWindow:
 		if gajim.contacts[self.account].has_key(self.contact.jid):
 			for c in gajim.contacts[self.account][self.contact.jid]:
 				if c.resource != self.contact.resource:
-					resources += '\n%s (%s)' % (c.resource, str(c.priority))
+					resources += '\n%s (%s)' % (c.resource,
+						unicode(c.priority))
 					uf_resources += '\n' + c.resource + _(' resource with priority ')\
-						+ str(c.priority)
+						+ unicode(c.priority)
 					if not c.status:
 						c.status = ''
 					stats += '\n' + c.show + ': ' + c.status
@@ -352,7 +353,7 @@ class VcardWindow:
 			'ADR_WORK_REGION', 'ADR_WORK_PCODE', 'ADR_WORK_CTRY']
 		vcard = {}
 		for e in entries: 
-			txt = self.xml.get_widget(e + '_entry').get_text()
+			txt = self.xml.get_widget(e + '_entry').get_text().decode('utf-8')
 			if txt != '':
 				vcard = self.add_to_vcard(vcard, e, txt)
 
@@ -362,7 +363,7 @@ class VcardWindow:
 		end_iter = buff.get_end_iter()
 		txt = buff.get_text(start_iter, end_iter, 0)
 		if txt != '':
-			vcard['DESC'] = txt
+			vcard['DESC'] = txt.decode('utf-8')
 
 		# Avatar
 		if self.avatar_encoded:

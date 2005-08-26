@@ -52,21 +52,31 @@ class OptionsParser:
 			return
 
 		for line in fd.readlines():
+			line = line.decode('utf-8')
 			self.read_line(line)
 
 		fd.close()
 
 	def write_line(self, fd, opt, parents, value):
+		if value == None:
+			return
+		value = value[1]
+		if type(value) == unicode:
+			value = value.encode('utf-8')
+		else:
+			value = str(value)
+		if type(opt) == unicode:
+			opt = opt.encode('utf-8')
 		s = ''
 		if parents:
 			if len(parents) == 1:
 				return
 			for p in parents:
+				if type(p) == unicode:
+					p = p.encode('utf-8')
 				s += p + '.'
-		if value == None:
-			return
 		s += opt
-		fd.write(s + ' = ' + str(value[1]) + '\n')
+		fd.write(s + ' = ' + value + '\n')
 	
 	def write(self):
 		(base_dir, filename) = os.path.split(self.__filename)

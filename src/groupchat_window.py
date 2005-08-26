@@ -221,7 +221,7 @@ class GroupchatWindow(chat.Chat):
 		if not iter:
 			return None
 		while not fin:
-			role_name = model.get_value(iter, 1)
+			role_name = model.get_value(iter, 1).decode('utf-8')
 			if role == role_name:
 				return iter
 			iter = model.iter_next(iter)
@@ -241,7 +241,7 @@ class GroupchatWindow(chat.Chat):
 			if not user_iter:
 				fin2 = True
 			while not fin2:
-				if nick == model.get_value(user_iter, 1):
+				if nick == model.get_value(user_iter, 1).decode('utf-8'):
 					return user_iter
 				user_iter = model.iter_next(user_iter)
 				if not user_iter:
@@ -317,7 +317,7 @@ class GroupchatWindow(chat.Chat):
 				if not user_iter:
 					continue
 				while user_iter:
-					nick = model.get_value(user_iter, 1)
+					nick = model.get_value(user_iter, 1).decode('utf-8')
 					show = gajim.gc_contacts[self.account][room_jid][nick].show
 					state_images = roster.get_appropriate_state_images(room_jid)
 					image = state_images[show] #FIXME: always Jabber why?
@@ -412,7 +412,7 @@ class GroupchatWindow(chat.Chat):
 			_('Please specify the new subject:'), subject)
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
-			subject = instance.input_entry.get_text()
+			subject = instance.input_entry.get_text().decode('utf-8')
 			gajim.connections[self.account].send_gc_subject(room_jid, subject)
 
 	def on_change_nick_menuitem_activate(self, widget):
@@ -422,7 +422,7 @@ class GroupchatWindow(chat.Chat):
 			_('Please specify the new nickname you want to use:'), nick)
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
-			nick = instance.input_entry.get_text()
+			nick = instance.input_entry.get_text().decode('utf-8')
 			gajim.connections[self.account].change_gc_nick(room_jid, nick)
 	
 	def on_configure_room_menuitem_activate(self, widget):
@@ -464,7 +464,7 @@ class GroupchatWindow(chat.Chat):
 			'conversation_textview')
 		message_buffer = widget.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
-		message = message_buffer.get_text(start_iter, end_iter, False)
+		message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
 
 		if event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
 			if (event.state & gtk.gdk.CONTROL_MASK): # CTRL + SHIFT + TAB  
@@ -475,7 +475,7 @@ class GroupchatWindow(chat.Chat):
 			else:
 				cursor_position = message_buffer.get_insert()
 				end_iter = message_buffer.get_iter_at_mark(cursor_position)
-				text = message_buffer.get_text(start_iter, end_iter, False)
+				text = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
 				if not text or text.endswith(' '):
 					if not self.last_key_tabs[room_jid]: # if we are nick cycling, last char will always be space
 						return False
@@ -577,7 +577,7 @@ class GroupchatWindow(chat.Chat):
 		message_buffer = message_textview.get_buffer()
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
-		message = message_buffer.get_text(start_iter, end_iter, 0)
+		message = message_buffer.get_text(start_iter, end_iter, 0).decode('utf-8')
 
 		# send the message
 		self.send_gc_message(message)
@@ -702,11 +702,7 @@ class GroupchatWindow(chat.Chat):
 		else:
 			kind = 'status'
 
-		# nick can be unicode or utf-8
 		nick = self.nicks[room_jid]
-		if type(nick) == str:
-			nick = unicode(nick, 'utf-8')
-		
 		if kind == 'incoming' and \
 				text.lower().find(nick.lower()) != -1:
 			other_tags_for_name.append('bold')
@@ -722,7 +718,7 @@ class GroupchatWindow(chat.Chat):
 			_('You may specify a reason below:'))
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
-			reason = instance.input_entry.get_text()
+			reason = instance.input_entry.get_text().decode('utf-8')
 		else:
 			return # stop kicking procedure
 		gajim.connections[self.account].gc_set_role(room_jid, nick, 'none',
@@ -753,7 +749,7 @@ class GroupchatWindow(chat.Chat):
 			_('You may specify a reason below:'))
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
-			reason = instance.input_entry.get_text()
+			reason = instance.input_entry.get_text().decode('utf-8')
 		else:
 			return # stop banning procedure
 		gajim.connections[self.account].gc_set_affiliation(room_jid, jid,
@@ -824,7 +820,7 @@ class GroupchatWindow(chat.Chat):
 		'''opens a chat window and msg is not None sends private message to a 
 		contact in a room'''
 		if nick is None:
-			nick = model[iter][1]
+			nick = model[iter][1].decode('utf-8')
 		room_jid = self.get_active_jid()
 		fjid = gajim.construct_fjid(room_jid, nick) # 'fake' jid
 		if not self.plugin.windows[self.account]['chats'].has_key(fjid):
@@ -873,7 +869,7 @@ class GroupchatWindow(chat.Chat):
 	def mk_menu(self, room_jid, event, iter):
 		'''Make contact's popup menu'''
 		model = self.list_treeview[room_jid].get_model()
-		nick = model[iter][1]
+		nick = model[iter][1].decode('utf-8')
 		c = gajim.gc_contacts[self.account][room_jid][nick]
 		jid = c.jid
 		target_affiliation = c.affiliation
@@ -1003,7 +999,7 @@ class GroupchatWindow(chat.Chat):
 		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'gc_vbox', APP)
 		self.childs[room_jid] = self.xmls[room_jid].get_widget('gc_vbox')
 		chat.Chat.new_tab(self, room_jid)
-		self.nicks[room_jid] = nick.decode('utf-8')
+		self.nicks[room_jid] = nick
 		self.subjects[room_jid] = ''
 		self.room_creation[room_jid] = time.time()
 		self.nick_hits[room_jid] = []
@@ -1085,7 +1081,7 @@ class GroupchatWindow(chat.Chat):
 				self.tooltip.hide_tooltip()
 				return
 			room_jid = self.get_active_jid()
-			nick = model[iter][1]
+			nick = model[iter][1].decode('utf-8')
 			if nick != 'moderator' and nick != 'participant':
 				account = self.account
 				
@@ -1163,7 +1159,7 @@ class GroupchatWindow(chat.Chat):
 			model = widget.get_model()
 			iter = model.get_iter(path)
 			if len(path) == 2:
-				nick = model[iter][1]
+				nick = model[iter][1].decode('utf-8')
 				fjid = gajim.construct_fjid(room_jid, nick)
 				if not self.plugin.windows[self.account]['chats'].has_key(fjid):
 					show = gajim.gc_contacts[self.account][room_jid][nick].show
@@ -1184,7 +1180,7 @@ class GroupchatWindow(chat.Chat):
 
 			model = widget.get_model()
 			iter = model.get_iter(path)
-			nick = model[iter][1]
+			nick = model[iter][1].decode('utf-8')
 			if not nick in gajim.gc_contacts[self.account][room_jid]: #it's a group
 				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 					if (widget.row_expanded(path)):
@@ -1207,7 +1203,7 @@ class GroupchatWindow(chat.Chat):
 				widget.expand_row(path, False)
 		else: # We want to send a private message
 			room_jid = self.get_active_jid()
-			nick = model[iter][1]
+			nick = model[iter][1].decode('utf-8')
 			fjid = gajim.construct_fjid(room_jid, nick)
 			if not self.plugin.windows[self.account]['chats'].has_key(fjid):
 				show = gajim.gc_contacts[self.account][room_jid][nick].show

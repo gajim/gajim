@@ -78,7 +78,7 @@ class AdvancedConfigurationWindow:
 		self.plugin.windows['advanced_config'] = self
 
 	def cb_value_column_data(self, col, cell, model, iter):
-		opttype = model[iter][2]
+		opttype = model[iter][2].decode('utf-8')
 		if opttype == 'boolean':
 			cell.set_property('editable', 0)
 		else:
@@ -87,14 +87,14 @@ class AdvancedConfigurationWindow:
 	def on_advanced_treeview_row_activated(self, treeview, path, column):
 		modelpath = self.modelfilter.convert_path_to_child_path(path)
 		modelrow = self.model[modelpath]
-		option = modelrow[0]
+		option = modelrow[0].decode('utf-8')
 		if modelrow[2] == 'boolean':
 			newval = {'False': 'True', 'True': 'False'}[modelrow[1]]
 			if len(modelpath) > 1:
 				optnamerow = self.model[modelpath[0]]
-				optname = optnamerow[0]
+				optname = optnamerow[0].decode('utf-8')
 				keyrow = self.model[modelpath[:2]]
-				key = keyrow[0]
+				key = keyrow[0].decode('utf-8')
 				gajim.config.set_per(optname, key, option, newval)
 			else:
 				gajim.config.set(option, newval)
@@ -105,12 +105,13 @@ class AdvancedConfigurationWindow:
 		# convert modelfilter path to model path
 		modelpath = self.modelfilter.convert_path_to_child_path(path)
 		modelrow = self.model[modelpath]
-		option = modelrow[0]
+		option = modelrow[0].decode('utf-8')
+		text = text.decode('utf-8')
 		if len(modelpath) > 1:
 			optnamerow = self.model[modelpath[0]]
-			optname = optnamerow[0]
+			optname = optnamerow[0].decode('utf-8')
 			keyrow = self.model[modelpath[:2]]
-			key = keyrow[0]
+			key = keyrow[0].decode('utf-8')
 			gajim.config.set_per(optname, key, option, text)
 		else:
 			gajim.config.set(option, text)
@@ -131,7 +132,7 @@ class AdvancedConfigurationWindow:
 		else:
 			iter = model.iter_children(parent_iter)
 		while iter:
-			if model[iter][0] == name:
+			if model[iter][0].decode('utf-8') == name:
 				break
 			iter = model.iter_next(iter)
 		return iter
@@ -153,19 +154,19 @@ class AdvancedConfigurationWindow:
 		model.append(iter, [name, val[OPT_VAL], type])
 
 	def visible_func(self, model, iter):
-		str = self.entry.get_text()
+		str = self.entry.get_text().decode('utf-8')
 		if str is None or str == '':
 			return True # show all
-		name = model[iter][0]
+		name = model[iter][0].decode('utf-8')
 		# If a child of the iter matches, we return True
 		if model.iter_has_child(iter):
 			iterC = model.iter_children(iter)
 			while iterC:
-				nameC = model[iterC][0]
+				nameC = model[iterC][0].decode('utf-8')
 				if model.iter_has_child(iterC):
 					iterCC = model.iter_children(iterC)
 					while iterCC:
-						nameCC = model[iterCC][0]
+						nameCC = model[iterCC][0].decode('utf-8')
 						if nameCC.find(str) != -1:
 							return True
 						iterCC = model.iter_next(iterCC)
@@ -177,5 +178,5 @@ class AdvancedConfigurationWindow:
 		return False
 		
 	def on_advanced_entry_changed(self, widget):
-		text = widget.get_text()
+		text = widget.get_text().decode('utf-8')
 		self.modelfilter.refilter()

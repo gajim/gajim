@@ -219,7 +219,8 @@ class Connection:
 				self.dispatch('MYVCARD', vcard)
 				#we re-send our presence with sha
 				sshow = STATUS_LIST[self.connected]
-				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
+				prio = unicode(gajim.config.get_per('accounts', self.name,
+					'priority'))
 				p = common.xmpp.Presence(typ = None, priority = prio, show = sshow,
 					status = self.status)
 				p = self.add_sha(p)
@@ -264,24 +265,25 @@ class Connection:
 			msgtxt = decmsg
 			encrypted = True
 		if mtype == 'error':
-			self.dispatch('MSGERROR', (str(msg.getFrom()),
+			self.dispatch('MSGERROR', (unicode(msg.getFrom()),
 				msg.getErrorCode(), msg.getError(), msgtxt, tim))
 		elif mtype == 'groupchat':
 			if subject:
-				self.dispatch('GC_SUBJECT', (str(msg.getFrom()), subject))
+				self.dispatch('GC_SUBJECT', (unicode(msg.getFrom()), subject))
 			else:
 				if not msg.getTag('body'): #no <body>
 					return
-				self.dispatch('GC_MSG', (str(msg.getFrom()), msgtxt, tim))
-				gajim.logger.write('gc', msgtxt, str(msg.getFrom()), tim = tim)
+				self.dispatch('GC_MSG', (unicode(msg.getFrom()), msgtxt, tim))
+				gajim.logger.write('gc', msgtxt, unicode(msg.getFrom()),
+					tim = tim)
 		elif mtype == 'normal': # it's single message
 			log_msgtxt = msgtxt
 			if subject:
 				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
-			gajim.logger.write('incoming', log_msgtxt, str(msg.getFrom()),
+			gajim.logger.write('incoming', log_msgtxt, unicode(msg.getFrom()),
 				tim = tim)
-			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted,
-				mtype, subject, None))
+			self.dispatch('MSG', (unicode(msg.getFrom()), msgtxt, tim,
+				encrypted, mtype, subject, None))
 		else: # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
 				return
@@ -289,15 +291,15 @@ class Connection:
 			if subject:
 				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
 			if msg.getTag('body'):
-				gajim.logger.write('incoming', log_msgtxt, str(msg.getFrom()),
-					tim = tim)
-			self.dispatch('MSG', (str(msg.getFrom()), msgtxt, tim, encrypted,
-				mtype, subject, chatstate))
+				gajim.logger.write('incoming', log_msgtxt,
+					unicode(msg.getFrom()), tim = tim)
+			self.dispatch('MSG', (unicode(msg.getFrom()), msgtxt, tim,
+				encrypted, mtype, subject, chatstate))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
 		"""Called when we receive a presence"""
-		who = str(prs.getFrom())
+		who = unicode(prs.getFrom())
 		prio = prs.getPriority()
 		if not prio:
 			prio = 0
@@ -332,17 +334,16 @@ class Connection:
 					self.to_be_sent.append(p)
 				if who.find("@") <= 0:
 					self.dispatch('NOTIFY',
-						(prs.getFrom().getStripped().encode('utf8'), 'offline',
-						'offline', prs.getFrom().getResource().encode('utf8'), prio,
-						keyID, None, None, None, None, None, None))
+						(prs.getFrom().getStripped(), 'offline', 'offline',
+						prs.getFrom().getResource(), prio, keyID, None, None,
+						None, None, None, None))
 			else:
 				if not status:
 					status = _('I would like to add you to my roster.')
 				self.dispatch('SUBSCRIBE', (who, status))
 		elif ptype == 'subscribed':
 			jid = prs.getFrom()
-			self.dispatch('SUBSCRIBED', (jid.getStripped().encode('utf8'),
-				jid.getResource().encode('utf8')))
+			self.dispatch('SUBSCRIBED', (jid.getStripped(), jid.getResource()))
 			# BE CAREFUL: no con.updateRosterItem() in a callback
 			gajim.log.debug(_('we are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
@@ -357,8 +358,8 @@ class Connection:
 				self.dispatch('ERROR', (_('Unable to join room'), 
 					_('Server response:') + '\n' + errmsg))
 			elif errcode == '502': # Internal Timeout:
-				self.dispatch('NOTIFY', (prs.getFrom().getStripped().encode('utf8'),
-					'error', errmsg, prs.getFrom().getResource().encode('utf8'),
+				self.dispatch('NOTIFY', (prs.getFrom().getStripped(),
+					'error', errmsg, prs.getFrom().getResource(),
 					prio, keyID, prs.getRole(), prs.getAffiliation(), prs.getJid(),
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
 					prs.getNewNick()))
@@ -366,10 +367,10 @@ class Connection:
 				self.dispatch('ERROR_ANSWER', ('', prs.getFrom().getStripped(),
 					errmsg, errcode))
 		if not ptype or ptype == 'unavailable':
-			jid = prs.getFrom()
-			gajim.logger.write('status', status, str(jid).encode('utf8'), show)
-			account = prs.getFrom().getStripped().encode('utf8')
-			resource =  prs.getFrom().getResource().encode('utf8')
+			jid = unicode(prs.getFrom())
+			gajim.logger.write('status', status, jid, show)
+			account = prs.getFrom().getStripped()
+			resource =  prs.getFrom().getResource()
 			self.dispatch('NOTIFY', ( account, show, status,
 				resource, prio, keyID, prs.getRole(),
 				prs.getAffiliation(), prs.getJid(), prs.getReason(),
@@ -393,11 +394,11 @@ class Connection:
 	# END disconenctedCB
 	def _bytestreamErrorCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamErrorCB')
-		frm = str(iq_obj.getFrom())
-		id = str(iq_obj.getAttr('id'))
+		frm = unicode(iq_obj.getFrom())
+		id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
 		streamhost =  query.getTag('streamhost')
-		jid = iq_obj.getFrom().getStripped().encode('utf8')
+		jid = iq_obj.getFrom().getStripped()
 		id = id[3:]
 		if not self.files_props.has_key(id):
 			return
@@ -408,10 +409,10 @@ class Connection:
 	
 	def _bytestreamSetCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamSetCB')
-		target = str(iq_obj.getAttr('to'))
-		id = str(iq_obj.getAttr('id'))
+		target = unicode(iq_obj.getAttr('to'))
+		id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
-		sid = str(query.getAttr('sid'))
+		sid = unicode(query.getAttr('sid'))
 		file_props = gajim.socks5queue.get_file_props(
 			self.name, sid)
 		streamhosts=[]
@@ -422,15 +423,10 @@ class Connection:
 					'target': target, 
 					'id': id, 
 					'sid': sid,
-					'initiator': str(iq_obj.getFrom())
+					'initiator': unicode(iq_obj.getFrom())
 				}
 				for attr in item.getAttrs():
-					val = item.getAttr(attr)
-					if type(val) == unicode:
-						val = val.encode('utf-8')
-					if type(attr) == unicode:
-						attr = attr.encode('utf-8')
-					host_dict[attr] = val
+					host_dict[attr] = item.getAttr(attr)
 				streamhosts.append(host_dict)
 		if file_props is None:
 			if self.files_props.has_key(sid):
@@ -487,7 +483,7 @@ class Connection:
 			typ = 'error')
 		iq.setAttr('id', _id)
 		err = iq.setTag('error')
-		err.setAttr('code', str(code))
+		err.setAttr('code', unicode(code))
 		err.setData(msg)
 		self.to_be_sent.append(iq)
 		if code == 404:
@@ -499,8 +495,8 @@ class Connection:
 		
 	def _bytestreamResultCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamResultCB')
-		frm = str(iq_obj.getFrom())
-		real_id = str(iq_obj.getAttr('id'))
+		frm = unicode(iq_obj.getFrom())
+		real_id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
 		streamhost = None
 		try:
@@ -521,9 +517,12 @@ class Connection:
 					jid = item.getAttr('jid')
 					conf = gajim.config
 					conf.add_per('ft_proxies65_cache', jid)
-					conf.set_per('ft_proxies65_cache', jid, 'host', str(host))
-					conf.set_per('ft_proxies65_cache', jid, 'port', int(port))
-					conf.set_per('ft_proxies65_cache', jid, 'jid', str(jid))
+					conf.set_per('ft_proxies65_cache', jid,
+						'host', unicode(host))
+					conf.set_per('ft_proxies65_cache', jid,
+						'port', int(port))
+					conf.set_per('ft_proxies65_cache', jid,
+						'jid', unicode(jid))
 			raise common.xmpp.NodeProcessed
 		try:
 			streamhost =  query.getTag('streamhost-used')
@@ -545,7 +544,7 @@ class Connection:
 					raise common.xmpp.NodeProcessed
 				for host in file_props['proxyhosts']:
 					if host['initiator'] == frm and \
-					str(query.getAttr('sid')) == file_props['sid']:
+					unicode(query.getAttr('sid')) == file_props['sid']:
 						gajim.socks5queue.activate_proxy(host['idx'])
 						break
 			raise common.xmpp.NodeProcessed
@@ -581,8 +580,8 @@ class Connection:
 			if file_props.has_key('fast'):
 				fasts = file_props['fast']
 				if len(fasts) > 0:
-					self._connect_error(str(iq_obj.getFrom()), fasts[0]['id'], 
-						file_props['sid'], code = 406)
+					self._connect_error(unicode(iq_obj.getFrom()),
+						fasts[0]['id'], file_props['sid'], code = 406)
 			
 		raise common.xmpp.NodeProcessed
 	
@@ -640,9 +639,9 @@ class Connection:
 		
 	def _discoGetCB(self, con, iq_obj):
 		''' get disco info '''
-		frm = str(iq_obj.getFrom())
-		to = str(iq_obj.getAttr('to'))
-		id = str(iq_obj.getAttr('id'))
+		frm = unicode(iq_obj.getFrom())
+		to = unicode(iq_obj.getAttr('to'))
+		id = unicode(iq_obj.getAttr('id'))
 		iq = common.xmpp.Iq(to = frm, typ = 'result', queryNS =\
 			common.xmpp.NS_DISCO, frm = to)
 		iq.setAttr('id', id)
@@ -673,8 +672,8 @@ class Connection:
 		if file_props is None:
 			# file properties for jid is none
 			return
-		file_props['receiver'] = str(iq_obj.getFrom())
-		jid = iq_obj.getFrom().getStripped().encode('utf8')
+		file_props['receiver'] = unicode(iq_obj.getFrom())
+		jid = iq_obj.getFrom().getStripped()
 		si = iq_obj.getTag('si')
 		feature = si.setTag('feature')
 		if feature.getNamespace() != common.xmpp.NS_FEATURE:
@@ -738,12 +737,12 @@ class Connection:
 					continue
 				host_dict={
 					'state': 0, 
-					'target': str(receiver), 
+					'target': unicode(receiver), 
 					'id': file_props['sid'], 
 					'sid': file_props['sid'], 
 					'initiator': proxy,
 					'host': host,
-					'port': str(_port),
+					'port': unicode(_port),
 					'jid': jid
 				}
 				proxyhosts.append(host_dict)
@@ -757,12 +756,12 @@ class Connection:
 			sha_str, self.result_socks5_sid, file_props['sid'])
 		if listener == None:
 			file_props['error'] = -5
-			self.dispatch('FILE_REQUEST_ERROR', (str(receiver), file_props))
-			self._connect_error(str(receiver), file_props['sid'], 
+			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props))
+			self._connect_error(unicode(receiver), file_props['sid'], 
 				file_props['sid'], code = 406)
 			return
 		
-		iq = common.xmpp.Protocol(name = 'iq', to = str(receiver), 
+		iq = common.xmpp.Protocol(name = 'iq', to = unicode(receiver), 
 			typ = 'set')
 		file_props['request-id'] = 'id_' + file_props['sid']
 		iq.setID(file_props['request-id'])
@@ -771,12 +770,12 @@ class Connection:
 		query.setAttr('mode', 'tcp')
 		query.setAttr('sid', file_props['sid'])
 		streamhost = query.setTag('streamhost')
-		streamhost.setAttr('port', str(port))
+		streamhost.setAttr('port', unicode(port))
 		streamhost.setAttr('host', ft_override_host_to_send)
 		streamhost.setAttr('jid', sender)
 		if fast and proxyhosts != []:
-			file_props['proxy_receiver'] = str(receiver)
-			file_props['proxy_sender'] = str(sender)
+			file_props['proxy_receiver'] = unicode(receiver)
+			file_props['proxy_sender'] = unicode(sender)
 			file_props['proxyhosts'] = proxyhosts
 			for proxyhost in proxyhosts:
 				streamhost = common.xmpp.Node(tag = 'streamhost')
@@ -792,7 +791,7 @@ class Connection:
 			
 	def _siSetCB(self, con, iq_obj):
 		gajim.log.debug('_siSetCB')
-		jid = iq_obj.getFrom().getStripped().encode('utf8')
+		jid = iq_obj.getFrom().getStripped()
 		si = iq_obj.getTag('si')
 		profile = si.getAttr('profile')
 		mime_type = si.getAttr('mime-type')
@@ -802,13 +801,10 @@ class Connection:
 		file_tag = si.getTag('file')
 		file_props = {'type': 'r'}
 		for attribute in file_tag.getAttrs():
-			attribute = attribute.encode('utf-8')
 			if attribute in ['name', 'size', 'hash', 'date']:
 				val = file_tag.getAttr(attribute)
 				if val is None:
 					continue
-				if type(val) is unicode:
-					val = val.encode('utf-8')
 				file_props[attribute] = val
 		file_desc_tag = file_tag.getTag('desc')
 		if file_desc_tag is not None:
@@ -821,8 +817,8 @@ class Connection:
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
 		file_props['receiver'] = name + '@' + hostname + '/' + resource
 		file_props['sender'] = iq_obj.getFrom()
-		file_props['request-id'] = str(iq_obj.getAttr('id'))
-		file_props['sid'] = str(si.getAttr('id'))
+		file_props['request-id'] = unicode(iq_obj.getAttr('id'))
+		file_props['sid'] = unicode(si.getAttr('id'))
 		gajim.socks5queue.add_file_props(self.name, file_props)
 		self.dispatch('FILE_REQUEST', (jid, file_props))
 		raise common.xmpp.NodeProcessed
@@ -841,15 +837,15 @@ class Connection:
 		if file_props is None:
 			# file properties for jid is none
 			return
-		jid = iq_obj.getFrom().getStripped().encode('utf8')
+		jid = iq_obj.getFrom().getStripped()
 		file_props['error'] = -3
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
 		raise common.xmpp.NodeProcessed
 	
 	def send_file_rejection(self, file_props):
 		''' informs sender that we refuse to download the file '''
-		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['sender']), 
-			typ = 'error')
+		iq = common.xmpp.Protocol(name = 'iq',
+			to = unicode(file_props['sender']), typ = 'error')
 		iq.setAttr('id', file_props['request-id'])
 		err = common.xmpp.ErrorNode(code = '406', typ = 'auth', name = 'not-acceptable')
 		iq.addChild(node=err)
@@ -857,8 +853,8 @@ class Connection:
 
 	def send_file_approval(self, file_props):
 		''' comfirm that we want to download the file '''
-		iq = common.xmpp.Protocol(name = 'iq', to = str(file_props['sender']), 
-			typ = 'result')
+		iq = common.xmpp.Protocol(name = 'iq',
+			to = unicode(file_props['sender']), typ = 'result')
 		iq.setAttr('id', file_props['request-id'])
 		si = iq.setTag('si')
 		si.setNamespace(common.xmpp.NS_SI)
@@ -908,17 +904,13 @@ class Connection:
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
-			jid  = item.getAttr('jid').encode('utf8')
+			jid  = item.getAttr('jid')
 			name = item.getAttr('name')
-			if name:
-				name = name.encode('utf8')
-			sub  = item.getAttr('subscription').encode('utf8')
+			sub  = item.getAttr('subscription')
 			ask  = item.getAttr('ask')
-			if ask:
-				ask = ask.encode('utf8')
 			groups = []
 			for group in item.getTags('group'):
-				groups.append(group.getData().encode('utf8'))
+				groups.append(group.getData())
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
 		raise common.xmpp.NodeProcessed
 
@@ -930,7 +922,7 @@ class Connection:
 				continue
 			attr = {}
 			for key in q.getAttrs().keys():
-				attr[key.encode('utf8')] = q.getAttr(key).encode('utf8')
+				attr[key] = q.getAttr(key)
 			identities = [attr]
 			for node in q.getChildren():
 				if node.getName() == 'ns':
@@ -938,10 +930,10 @@ class Connection:
 				else:
 					infos = {}
 					for key in node.getAttrs().keys():
-						infos[key.encode('utf8')] = node.getAttr(key).encode('utf8')
+						infos[key] = node.getAttr(key)
 					infos['category'] = node.getName()
 					items.append(infos)
-			jid = str(iq_obj.getFrom())
+			jid = unicode(iq_obj.getFrom())
 			self.dispatch('AGENT_INFO', (jid, identities, features, items))
 
 	def _DiscoverItemsCB(self, con, iq_obj):
@@ -957,9 +949,9 @@ class Connection:
 		for i in qp:
 			attr = {}
 			for key in i.getAttrs():
-				attr[key.encode('utf8')] = i.getAttrs()[key].encode('utf8')
+				attr[key] = i.getAttrs()[key]
 			items.append(attr)
-		jid = str(iq_obj.getFrom())
+		jid = unicode(iq_obj.getFrom())
 		self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
@@ -985,11 +977,11 @@ class Connection:
 			if i.getName() == 'identity':
 				attr = {}
 				for key in i.getAttrs().keys():
-					attr[key.encode('utf8')] = i.getAttr(key).encode('utf8')
+					attr[key] = i.getAttr(key)
 				identities.append(attr)
 			elif i.getName() == 'feature':
 				features.append(i.getAttr('var'))
-		jid = str(iq_obj.getFrom())
+		jid = unicode(iq_obj.getFrom())
 		if not identities:
 			self.to_be_sent.append(common.xmpp.Iq(typ = 'get', queryNS = \
 				common.xmpp.NS_AGENTS))
@@ -1086,11 +1078,11 @@ class Connection:
 						dic[i]['options'][j]['values'].append(tag.getData())
 					j += 1
 			i += 1
-		self.dispatch('GC_CONFIG', (str(iq_obj.getFrom()), dic))
+		self.dispatch('GC_CONFIG', (unicode(iq_obj.getFrom()), dic))
 
 	def _MucErrorCB(self, con, iq_obj):
 		gajim.log.debug('MucErrorCB')
-		jid = str(iq_obj.getFrom())
+		jid = unicode(iq_obj.getFrom())
 		errmsg = iq_obj.getError()
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('MSGERROR', (jid, errcode, errmsg))
@@ -1101,18 +1093,6 @@ class Connection:
 		roster = self.connection.getRoster().getRaw()
 		if not roster:
 			roster = {}
-		else:
-			for i in roster.keys():
-				props = roster[i]
-				if props.has_key('name') and props['name']:
-					props['name'] = props['name'].encode('utf8')
-				if props.has_key('groups') and props['groups']:
-					props['groups'] = map(lambda e:e.encode('utf8'), props['groups'])
-				if props.has_key('resources') and props['resources']:
-					props['resources'] = map(lambda e:e.encode('utf8'),
-						props['resources'])
-				del roster[i]
-				roster[i.encode('utf8')] = props
 				
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
@@ -1178,8 +1158,8 @@ class Connection:
 	def _ErrorCB(self, con, iq_obj):
 		errmsg = iq_obj.getError()
 		errcode = iq_obj.getErrorCode()
-		jid_from = str(iq_obj.getFrom())
-		id = str(iq_obj.getID())
+		jid_from = unicode(iq_obj.getFrom())
+		id = unicode(iq_obj.getID())
 		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
 		
 	def _StanzaArrivedCB(self, con, obj):
@@ -1214,9 +1194,9 @@ class Connection:
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], data[1].asDict()))
 		elif realm == '':
 			if event == common.xmpp.transports.DATA_RECEIVED:
-				self.dispatch('STANZA_ARRIVED', str(data))
+				self.dispatch('STANZA_ARRIVED', unicode(data))
 			elif event == common.xmpp.transports.DATA_SENT:
-				self.dispatch('STANZA_SENT', str(data))
+				self.dispatch('STANZA_SENT', unicode(data))
 
 	def connect(self):
 		"""Connect and authenticate to the Jabber server
@@ -1389,7 +1369,7 @@ class Connection:
 			# active the privacy rule
 			self.privacy_rules_supported = True
 			self.activate_privacy_rule('invisible')
-		prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
+		prio = unicode(gajim.config.get_per('accounts', self.name, 'priority'))
 		p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
 		p = self.add_sha(p)
 		if msg:
@@ -1446,7 +1426,8 @@ class Connection:
 				if show == 'invisible':
 					self.send_invisible_presence(msg, signed, True)
 					return
-				prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
+				prio = unicode(gajim.config.get_per('accounts', self.name,
+					'priority'))
 				p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
 				p = self.add_sha(p)
 				if msg:
@@ -1490,7 +1471,8 @@ class Connection:
 				iq = self.build_privacy_rule('visible', 'allow')
 				self.connection.send(iq)
 				self.activate_privacy_rule('visible')
-			prio = str(gajim.config.get_per('accounts', self.name, 'priority'))
+			prio = unicode(gajim.config.get_per('accounts', self.name,
+				'priority'))
 			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
 			p = self.add_sha(p)
 			if msg:
@@ -1945,7 +1927,7 @@ class Connection:
 							keep_alive_disconnect_after_foo_secs):
 						self.connection.disconnect() # disconnect if no answer
 						pritext = _('Gajim disconnected you from %s') % self.name
-						sectext = _('%s seconds have passed and server did not reply to our keep-alive. If you believe such disconnection should not have happened, you can disable sending keep-alive packets by modifying this account.') % str(keep_alive_disconnect_after_foo_secs)
+						sectext = _('%s seconds have passed and server did not reply to our keep-alive. If you believe such disconnection should not have happened, you can disable sending keep-alive packets by modifying this account.') % unicode(keep_alive_disconnect_after_foo_secs)
 						self.dispatch('ERROR', (pritext, sectext))
 						return
 				if self.connection:

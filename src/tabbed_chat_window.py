@@ -329,7 +329,7 @@ timestamp, contact):
 		message_buffer = message_textview.get_buffer()
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
-		message = message_buffer.get_text(start_iter, end_iter, 0)
+		message = message_buffer.get_text(start_iter, end_iter, 0).decode('utf-8')
 
 		# send the message
 		self.send_message(message)
@@ -478,7 +478,7 @@ timestamp, contact):
 		conversation_textview = widget
 		message_buffer = conversation_textview.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
-		message = message_buffer.get_text(start_iter, end_iter, False)
+		message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
 
 		if event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + SHIFT + TAB

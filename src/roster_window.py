@@ -57,7 +57,7 @@ class RosterWindow:
 			return
 		account = model.get_iter_root()
 		while account:
-			account_name = model.get_value(account, 3)
+			account_name = model.get_value(account, 3).decode('utf-8')
 			if name == account_name:
 				break
 			account = model.iter_next(account)
@@ -68,7 +68,7 @@ class RosterWindow:
 		root = self.get_account_iter(account)
 		group = model.iter_children(root)
 		while group:
-			group_name = model.get_value(group, 3)
+			group_name = model.get_value(group, 3).decode('utf-8')
 			if name == group_name:
 				break
 			group = model.iter_next(group)
@@ -83,7 +83,7 @@ class RosterWindow:
 		while group:
 			user = model.iter_children(group)
 			while user:
-				if jid == model.get_value(user, 3):
+				if jid == model.get_value(user, 3).decode('utf-8'):
 					found.append(user)
 				user = model.iter_next(user)
 			group = model.iter_next(group)
@@ -157,8 +157,7 @@ class RosterWindow:
 					typestr, user.jid, account, False, None]) # FIXME None --> avatar
 			
 			if gajim.groups[account][g]['expand']:
-				self.tree.expand_row(model.get_path(iterG),
-							False)
+				self.tree.expand_row(model.get_path(iterG), False)
 		self.draw_contact(jid, account)
 	
 	def really_remove_contact(self, user, account):
@@ -180,7 +179,7 @@ class RosterWindow:
 		model = self.tree.get_model()
 		for i in self.get_contact_iter(user.jid, account):
 			parent_i = model.iter_parent(i)
-			group = model.get_value(parent_i, 3)
+			group = model.get_value(parent_i, 3).decode('utf-8')
 			model.remove(i)
 			if model.iter_n_children(parent_i) == 0:
 				model.remove(parent_i)
@@ -235,7 +234,7 @@ class RosterWindow:
 		contact = gajim.get_highest_prio_contact_from_contacts(contact_instances)
 		name = contact.name
 		if len(contact_instances) > 1:
-			name += ' (' + str(len(contact_instances)) + ')'
+			name += ' (' + unicode(len(contact_instances)) + ')'
 
 		state_images = self.get_appropriate_state_images(jid)
 		if gajim.awaiting_messages[account].has_key(jid):
@@ -676,8 +675,8 @@ class RosterWindow:
 				self.tooltip.hide_tooltip()
 				return
 			if model[iter][2] == 'contact':
-				account = model[iter][4]
-				jid = model[iter][3]
+				account = model[iter][4].decode('utf-8')
+				jid = model[iter][3].decode('utf-8')
 				img = model[iter][0]
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
@@ -721,8 +720,8 @@ class RosterWindow:
 		model = self.tree.get_model()
 		
 		row_type = model[iter][2]
-		jid = model[iter][3]
-		account = model[iter][4]
+		jid = model[iter][3].decode('utf-8')
+		account = model[iter][4].decode('utf-8')
 		if row_type == 'contact':
 			# it's jid
 			#Remove resource indicator (Name (2))
@@ -789,9 +788,9 @@ class RosterWindow:
 	def mk_menu_user(self, event, iter):
 		'''Make contact's popup menu'''
 		model = self.tree.get_model()
-		jid = model[iter][3]
+		jid = model[iter][3].decode('utf-8')
 		path = model.get_path(iter)
-		account = model[iter][4]
+		account = model[iter][4].decode('utf-8')
 		contact = gajim.contacts[account][jid][0]
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_contact_context_menu',
@@ -891,9 +890,9 @@ class RosterWindow:
 	def mk_menu_agent(self, event, iter):
 		'''Make agent's popup menu'''
 		model = self.tree.get_model()
-		jid = model[iter][3]
+		jid = model[iter][3].decode('utf-8')
 		path = model.get_path(iter)
-		account = model[iter][4]
+		account = model[iter][4].decode('utf-8')
 		user = gajim.contacts[account][jid][0]
 		menu = gtk.Menu()
 		
@@ -955,7 +954,7 @@ class RosterWindow:
 	def mk_menu_account(self, event, iter):
 		'''Make account's popup menu'''
 		model = self.tree.get_model()
-		account = model[iter][3]
+		account = model[iter][3].decode('utf-8')
 		
 		#FIXME: make most menuitems of this menu insensitive if account is offline
 
@@ -1083,8 +1082,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			model, iter = treeselection.get_selected()
 			if not iter:
 				return
-			jid = model[iter][3]
-			account = model[iter][4]
+			jid = model[iter][3].decode('utf-8')
+			account = model[iter][4].decode('utf-8')
 			type = model[iter][2]
 			user = gajim.contacts[account][jid][0]
 			if type == 'contact':
@@ -1146,8 +1145,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			iter = model.get_iter(path)
 			type = model[iter][2]
 			if type in ('agent', 'contact'):
-				account = model[iter][4]
-				jid = model[iter][3]
+				account = model[iter][4].decode('utf-8')
+				jid = model[iter][3].decode('utf-8')
 				if self.plugin.windows[account]['chats'].has_key(jid):
 					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 				elif gajim.contacts[account].has_key(jid):
@@ -1296,7 +1295,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		).get_response()
 			self.update_status_comboxbox()
 			return
-		status = model[active][2]
+		status = model[active][2].decode('utf-8')
 		message = self.get_status_message(status)
 		if message == -1:
 			self.update_status_comboxbox()
@@ -1615,9 +1614,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		'''When an iter is double clicked: open the chat window'''
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
-		account = model[iter][4]
+		account = model[iter][4].decode('utf-8')
 		type = model[iter][2]
-		jid = model[iter][3]
+		jid = model[iter][3].decode('utf-8')
 		if type in ('group', 'account'):
 			if self.tree.row_expanded(path):
 				self.tree.collapse_row(path)
@@ -1638,11 +1637,11 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if gajim.config.get('mergeaccounts') or len(gajim.connections) == 1:
 			accounts = gajim.connections.keys()
 		else:
-			accounts = [model[iter][4]]
+			accounts = [model[iter][4].decode('utf-8')]
 		type = model[iter][2]
 		if type == 'group':
 			model.set_value(iter, 0, self.jabber_state_images['opened'])
-			jid = model[iter][3]
+			jid = model[iter][3].decode('utf-8')
 			for account in accounts:
 				if gajim.groups[account].has_key(jid): # This account has this group
 					gajim.groups[account][jid]['expand'] = True
@@ -1665,11 +1664,11 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if gajim.config.get('mergeaccounts') or len(gajim.connections) == 1:
 			accounts = gajim.connections.keys()
 		else:
-			accounts = [model[iter][4]]
+			accounts = [model[iter][4].decode('utf-8')]
 		type = model[iter][2]
 		if type == 'group':
 			model.set_value(iter, 0, self.jabber_state_images['closed'])
-			jid = model[iter][3]
+			jid = model[iter][3].decode('utf-8')
 			for account in accounts:
 				if gajim.groups[account].has_key(jid): # This account has this group
 					gajim.groups[account][jid]['expand'] = False
@@ -1695,8 +1694,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.editing_path = None
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
-		account = model[iter][4]
-		jid = model[iter][3]
+		account = model[iter][4].decode('utf-8')
+		jid = model[iter][3].decode('utf-8')
 		type = model[iter][2]
 		# restore the number of resources string at the end of contact name
 		if type == 'contact' and len(gajim.contacts[account][jid]) > 1:
@@ -1720,8 +1719,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.editing_path = None
 			return
 		self.editing_path = None
-		account = model[iter][4]
-		jid = model[iter][3]
+		account = model[iter][4].decode('utf-8')
+		jid = model[iter][3].decode('utf-8')
 		type = model[iter][2]
 		if type == 'contact':
 			old_text = gajim.contacts[account][jid][0].name
@@ -1731,7 +1730,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.connections[account].update_contact(jid, new_text, u.groups)
 			self.draw_contact(jid, account)
 		elif type == 'group':
-			old_name = model[iter][1]
+			old_name = model[iter][1].decode('utf-8')
 			#  Groups maynot change name from or to 'not in the roster'
 			if _('not in the roster') in (new_text, old_name):
 				return
@@ -1838,8 +1837,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.config.get_per('themes', theme, 'groupbgcolor'))
 			renderer.set_property('xalign', 0.5)
 		else:
-			jid = model[iter][3]
-			account = model[iter][4]
+			jid = model[iter][3].decode('utf-8')
+			account = model[iter][4].decode('utf-8')
 			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in gajim.to_be_removed[account]:
@@ -1871,8 +1870,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.config.get_per('themes', theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
 		else:
-			jid = model[iter][3]
-			account = model[iter][4]
+			jid = model[iter][3].decode('utf-8')
+			account = model[iter][4].decode('utf-8')
 			renderer.set_property('foreground', 
 				gajim.config.get_per('themes', theme, 'contacttextcolor'))
 			if jid in gajim.newly_added[account]:
@@ -1896,8 +1895,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'groupbgcolor'))
 		else:
-			jid = model[iter][3]
-			account = model[iter][4]
+			jid = model[iter][3].decode('utf-8')
+			account = model[iter][4].decode('utf-8')
 			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in gajim.to_be_removed[account]:
@@ -1923,6 +1922,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		name2 = model.get_value(iter2, 1)
 		if not name1 or not name2:
 			return 0
+		else:
+			name1 = name1.decode('utf-8')
+			name2 = name2.decode('utf-8')
 		type1 = model.get_value(iter1, 2)
 		type2 = model.get_value(iter2, 2)
 		if type1 == 'group':
@@ -1938,8 +1940,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.config.get('sort_by_show'):
 			account = model.get_value(iter1, 4)
 			if account and model.get_value(iter2, 4) == account:
-				jid1 = model.get_value(iter1, 3)
-				jid2 = model.get_value(iter2, 3)
+				account = account.decode('utf-8')
+				jid1 = model.get_value(iter1, 3).decode('utf-8')
+				jid2 = model.get_value(iter2, 3).decode('utf-8')
 				luser1 = gajim.contacts[account][jid1]
 				luser2 = gajim.contacts[account][jid2]
 				cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
@@ -2004,15 +2007,16 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			#droped in another account
 			return
 		iter_group_source = model.iter_parent(iter_source)
-		grp_source = model.get_value(iter_group_source, 3)
+		grp_source = model.get_value(iter_group_source, 3).decode('utf-8')
 		if grp_source == _('Transports') or grp_source == _('not in the roster'):
 			return
-		account = model.get_value(iter_dest, 4)
+		account = model.get_value(iter_dest, 4).decode('utf-8')
 		type_dest = model.get_value(iter_dest, 2)
 		if type_dest == 'group':
-			grp_dest = model.get_value(iter_dest, 3)
+			grp_dest = model.get_value(iter_dest, 3).decode('utf-8')
 		else:
-			grp_dest = model.get_value(model.iter_parent(iter_dest), 3)
+			grp_dest = model.get_value(model.iter_parent(iter_dest), 3).\
+				decode('utf-8')
 		if grp_source == grp_dest:
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
@@ -2042,7 +2046,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if change_title_allowed:
 			start = ''
 			if self.nb_unread > 1:
-				start = '[' + str(self.nb_unread) + ']  '
+				start = '[' + unicode(self.nb_unread) + ']  '
 			elif self.nb_unread == 1:
 				start = '*  '
 			self.window.set_title(start + 'Gajim')

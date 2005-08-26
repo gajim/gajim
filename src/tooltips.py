@@ -134,7 +134,7 @@ class StatusTable:
 		self.table.attach(self.text_lable, 1, 4, 1, 2)
 		
 	def get_status_info(self, resource, priority, show, status):
-		str_status = resource + ' (' + str(priority) + ')'
+		str_status = resource + ' (' + unicode(priority) + ')'
 		if status:
 			status = status.strip()
 			if status != '':
@@ -359,7 +359,7 @@ class RosterTooltip(BaseTooltip, StatusTable):
 			if contact.resource:
 				info += '\n<span weight="bold">' + _('Resource: ') + \
 					'</span>' + gtkgui_helpers.escape_for_pango_markup(
-						contact.resource) + ' (' + str(contact.priority) + ')'
+						contact.resource) + ' (' + unicode(contact.priority) + ')'
 			if contact.show:
 				info += '\n<span weight="bold">' + _('Status: ') + \
 					'</span>' + helpers.get_uf_show(contact.show) 
@@ -402,7 +402,7 @@ class FileTransfersTooltip(BaseTooltip):
 			text += _('Upload')
 		if file_props['type'] == 'r':
 			text += '\n<b>' + _('Sender: ') + '</b>'
-			sender = str(file_props['sender']).split('/')[0]
+			sender = unicode(file_props['sender']).split('/')[0]
 			name = gajim.get_first_contact_instance_from_jid( 
 				file_props['tt_account'], sender).name
 		else:

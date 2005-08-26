@@ -86,8 +86,7 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0,
 	If any of the params is not present(None or 0) the action
 	on it is not performed
 	'''
-	# make sure that we have only unicode text
-	text = text.decode('utf-8')
+	text = text
 	
 	def _cut_if_long(str):
 		if len(str) > max_chars:

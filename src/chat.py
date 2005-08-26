@@ -114,7 +114,7 @@ class Chat:
 			unread += self.nb_unread[jid]
 		start = ""
 		if unread > 1:
-			start = '[' + str(unread) + '] '
+			start = '[' + unicode(unread) + '] '
 		elif unread == 1:
 			start = '* '
 		chat = self.names[jid]
@@ -144,7 +144,7 @@ class Chat:
 		"""redraw the label of the tab"""
 		start = ''
 		if self.nb_unread[jid] > 1:
-			start = '[' + str(self.nb_unread[jid]) + '] '
+			start = '[' + unicode(self.nb_unread[jid]) + '] '
 		elif self.nb_unread[jid] == 1:
 			start = '* '
 			
@@ -490,7 +490,7 @@ class Chat:
 				gtkspell.Spell(message_textview)
 			except gobject.GError, msg:
 				#FIXME: add a ui for this use spell.set_language()
-				dialogs.ErrorDialog(str(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
+				dialogs.ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
 				gajim.config.set('use_speller', False)
 		
 		conversation_textview = self.xmls[jid].get_widget(
@@ -831,7 +831,7 @@ class Chat:
 		if return_val: # if sth was selected when we right-clicked
 			# get the selected text
 			start_sel, finish_sel = return_val[0], return_val[1]
-			self.selected_phrase = buffer.get_text(start_sel, finish_sel)
+			self.selected_phrase = buffer.get_text(start_sel, finish_sel).decode('utf-8')
 
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
@@ -934,7 +934,7 @@ class Chat:
 			#we get the end of the tag
 			while not end_iter.ends_tag(texttag):
 				end_iter.forward_char()
-			word = begin_iter.get_text(end_iter)
+			word = begin_iter.get_text(end_iter).decode('utf-8')
 			if event.button == 3: # right click
 				self.make_link_menu(event, kind, word)
 			else:
@@ -1193,7 +1193,7 @@ class Chat:
 				#whatever is already typed
 				start_iter = conv_buf.get_start_iter()
 				end_iter = conv_buf.get_end_iter()
-				self.orig_msg[jid] = conv_buf.get_text(start_iter, end_iter, 0)
+				self.orig_msg[jid] = conv_buf.get_text(start_iter, end_iter, 0).decode('utf-8')
 				self.typing_new[jid] = False
 
 			self.sent_history_pos[jid] = self.sent_history_pos[jid] - 1

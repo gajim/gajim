@@ -160,7 +160,7 @@ class Interface:
 
 	def handle_event_error_answer(self, account, array):
 		id, jid_from, errmsg, errcode = array
-		if str(errcode) in ['403', '406'] and id:
+		if unicode(errcode) in ['403', '406'] and id:
 			# show the error dialog
 			ft = self.windows['file_transfers']
 			sid = id
@@ -174,7 +174,7 @@ class Interface:
 				conn = gajim.connections[account]
 				conn.disconnect_transfer(file_props)
 				return
-		elif str(errcode) == '404':
+		elif unicode(errcode) == '404':
 			conn = gajim.connections[account]
 			sid = id
 			if len(id) > 3 and id[2] == '_':
@@ -768,7 +768,7 @@ class Interface:
 		if file_props.has_key('stalled') and file_props['stalled'] or \
 			file_props.has_key('paused') and file_props['paused']:
 			return
-		jid = str(file_props['sender'])
+		jid = unicode(file_props['sender'])
 		if gajim.config.get('notify_on_file_complete'):
 			if (gajim.connections[account].connected in (2, 3)
 			and gajim.config.get('autopopup')) or \

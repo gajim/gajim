@@ -514,7 +514,7 @@ class PreferencesWindow:
 	def on_iconset_combobox_changed(self, widget):
 		model = widget.get_model()
 		active = widget.get_active()
-		icon_string = model[active][1]
+		icon_string = model[active][1].decode('utf-8')
 		gajim.config.set('iconset', icon_string)
 		self.plugin.roster.reload_jabber_state_images()
 		self.plugin.save_config()
@@ -529,7 +529,7 @@ class PreferencesWindow:
 	def on_theme_combobox_changed(self, widget):
 		model = widget.get_model()
 		active = widget.get_active()
-		theme = model[active][0]
+		theme = model[active][0].decode('utf-8')
 				
 		gajim.config.set('roster_theme', theme)
 
@@ -684,19 +684,19 @@ class PreferencesWindow:
 		self.plugin.save_config()
 
 	def on_before_time_entry_focus_out_event(self, widget, event):
-		gajim.config.set('before_time', widget.get_text())
+		gajim.config.set('before_time', widget.get_text().decode('utf-8'))
 		self.plugin.save_config()
 	
 	def on_after_time_entry_focus_out_event(self, widget, event):
-		gajim.config.set('after_time', widget.get_text())
+		gajim.config.set('after_time', widget.get_text().decode('utf-8'))
 		self.plugin.save_config()
 
 	def on_before_nickname_entry_focus_out_event(self, widget, event):
-		gajim.config.set('before_nickname', widget.get_text())
+		gajim.config.set('before_nickname', widget.get_text().decode('utf-8'))
 		self.plugin.save_config()
 
 	def on_after_nickname_entry_focus_out_event(self, widget, event):
-		gajim.config.set('after_nickname', widget.get_text())
+		gajim.config.set('after_nickname', widget.get_text().decode('utf-8'))
 		self.plugin.save_config()
 
 	def update_text_tags(self):
@@ -800,7 +800,7 @@ class PreferencesWindow:
 				self.xml.get_widget('browse_sounds_hbox')])
 	
 	def on_soundplayer_entry_changed(self, widget):
-		gajim.config.set('soundplayer', widget.get_text())
+		gajim.config.set('soundplayer', widget.get_text().decode('utf-8'))
 		self.plugin.save_config()
 		
 	def on_prompt_online_status_message_checkbutton_toggled(self, widget):
@@ -810,11 +810,11 @@ class PreferencesWindow:
 		self.on_checkbutton_toggled(widget, 'ask_offline_status')
 	
 	def on_sounds_treemodel_row_changed(self, model, path, iter):
-		sound_event = model.get_value(iter, 0)
+		sound_event = model.get_value(iter, 0).decode('utf-8')
 		gajim.config.set_per('soundevents', sound_event, 'enabled',
 					bool(model[path][1]))
 		gajim.config.set_per('soundevents', sound_event, 'path',
-					model[iter][2])
+					model[iter][2].decode('utf-8'))
 		self.plugin.save_config()
 
 	def on_auto_away_checkbutton_toggled(self, widget):
@@ -830,7 +830,7 @@ class PreferencesWindow:
 		self.plugin.save_config()
 
 	def on_auto_away_message_entry_changed(self, widget):
-		gajim.config.set('autoaway_message', widget.get_text())
+		gajim.config.set('autoaway_message', widget.get_text().decode('utf-8'))
 
 	def on_auto_xa_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autoxa',
@@ -845,17 +845,17 @@ class PreferencesWindow:
 		self.plugin.save_config()
 
 	def on_auto_xa_message_entry_changed(self, widget):
-		gajim.config.set('autoxa_message', widget.get_text())
+		gajim.config.set('autoxa_message', widget.get_text().decode('utf-8'))
 
 	def save_status_messages(self, model):
 		for msg in gajim.config.get_per('statusmsg'):
 			gajim.config.del_per('statusmsg', msg)
 		iter = model.get_iter_first()
 		while iter:
-			val = model.get_value(iter, 0)
+			val = model.get_value(iter, 0).decode('utf-8')
 			gajim.config.add_per('statusmsg', val)
 			gajim.config.set_per('statusmsg', val, 'message',
-						model[iter][1])
+						model[iter][1].decode('utf-8'))
 			iter = model.iter_next(iter)
 		self.plugin.save_config()
 
@@ -881,15 +881,15 @@ class PreferencesWindow:
 		self.plugin.save_config()
 
 	def on_custom_browser_entry_changed(self, widget):
-		gajim.config.set('custombrowser', widget.get_text())
+		gajim.config.set('custombrowser', widget.get_text().decode('utf-8'))
 		self.plugin.save_config()
 
 	def on_custom_mail_client_entry_changed(self, widget):
-		gajim.config.set('custommailapp', widget.get_text())
+		gajim.config.set('custommailapp', widget.get_text().decode('utf-8'))
 		self.plugin.save_config()
 
 	def on_custom_file_manager_entry_changed(self, widget):
-		gajim.config.set('custom_file_manager', widget.get_text())
+		gajim.config.set('custom_file_manager', widget.get_text().decode('utf-8'))
 		self.plugin.save_config()
 
 	def on_log_in_contact_checkbutton_toggled(self, widget):
@@ -987,7 +987,7 @@ class PreferencesWindow:
 		(model, iter) = self.sound_tree.get_selection().get_selected()
 		if not iter:
 			return
-		file = model[iter][2]
+		file = model[iter][2].decode('utf-8')
 		dialog = gtk.FileChooserDialog(_('Choose Sound'), None,
 					gtk.FILE_CHOOSER_ACTION_OPEN,
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
@@ -1171,7 +1171,7 @@ class AccountModificationWindow:
 			'custom_port')
 		if not custom_port:
 			custom_port = 5222
-		self.xml.get_widget('custom_port_entry').set_text(str(custom_port))
+		self.xml.get_widget('custom_port_entry').set_text(unicode(custom_port))
 
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		if gajim.config.get('usegpg'):
@@ -1198,7 +1198,7 @@ class AccountModificationWindow:
 	def on_save_button_clicked(self, widget):
 		'''When save button is clicked: Save information in config file'''
 		config = {}
-		name = self.xml.get_widget('name_entry').get_text()
+		name = self.xml.get_widget('name_entry').get_text().decode('utf-8')
 		if gajim.connections.has_key(self.account):
 			if name != self.account and \
 			   gajim.connections[self.account].connected != 0:
@@ -1213,7 +1213,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 			dialogs.ErrorDialog(_('Invalid account name'),
 				_('Account name cannot contain spaces.')).get_response()
 			return
-		jid = self.xml.get_widget('jid_entry').get_text()
+		jid = self.xml.get_widget('jid_entry').get_text().decode('utf-8')
 		if jid == '' or jid.count('@') != 1:
 			dialogs.ErrorDialog(_('Invalid Jabber ID'),
            _('A Jabber ID must be in the form "user@servername".')).get_response()
@@ -1221,12 +1221,12 @@ _('To change the account name, you must be disconnected.')).get_response()
 		new_account = self.xml.get_widget('new_account_checkbutton').get_active()
 		config['savepass'] = self.xml.get_widget(
 				'save_password_checkbutton').get_active()
-		config['password'] = self.xml.get_widget('password_entry').get_text()
+		config['password'] = self.xml.get_widget('password_entry').get_text().decode('utf-8')
 		if new_account and config['password'] == '':
 			dialogs.ErrorDialog(_('Invalid password'),
 				_('You must enter a password for the new account.')).get_response()
 			return
-		config['resource'] = self.xml.get_widget('resource_entry').get_text()
+		config['resource'] = self.xml.get_widget('resource_entry').get_text().decode('utf-8')
 		config['priority'] = self.xml.get_widget('priority_spinbutton').\
 																			get_value_as_int()
 		config['autoconnect'] = self.xml.get_widget('autoconnect_checkbutton').\
@@ -1247,7 +1247,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 				'sync_with_global_status_checkbutton').get_active()
 		
 		active = self.proxy_combobox.get_active()
-		proxy = self.proxy_combobox.get_model()[active][0]
+		proxy = self.proxy_combobox.get_model()[active][0].decode('utf-8')
 		if proxy == 'None':
 			proxy = ''
 		config['proxy'] = proxy
@@ -1266,19 +1266,19 @@ _('To change the account name, you must be disconnected.')).get_response()
 			return
 		config['custom_port'] = custom_port
 		config['custom_host'] = self.xml.get_widget(
-			'custom_host_entry').get_text()
+			'custom_host_entry').get_text().decode('utf-8')
 
-		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text()
+		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().decode('utf-8')
 		if config['keyname'] == '': #no key selected
 			config['keyid'] = ''
 			config['savegpgpass'] = False
 			config['gpgpassword'] = ''
 		else:
-			config['keyid'] = self.xml.get_widget('gpg_key_label').get_text()
+			config['keyid'] = self.xml.get_widget('gpg_key_label').get_text().decode('utf-8')
 			config['savegpgpass'] = self.xml.get_widget(
 					'gpg_save_password_checkbutton').get_active()
 			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry').\
-																						get_text()
+																		get_text().decode('utf-8')
 		#if we are modifying an account
 		if self.modify:
 			#if we modify the name of the account
@@ -1421,7 +1421,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 			dialogs.ErrorDialog(_('No such account available'),
 				_('You must create your account before editing your personal information.')).get_response()
 			return
-		jid = self.xml.get_widget('jid_entry').get_text()
+		jid = self.xml.get_widget('jid_entry').get_text().decode('utf-8')
 
 		# show error dialog if account is newly created (not in gajim.connections)
 		if not gajim.connections.has_key(self.account) or \
@@ -1567,17 +1567,17 @@ class ManageProxiesWindow:
 		model = self.proxies_treeview.get_model()
 		proxies = gajim.config.get_per('proxies')
 		i = 1
-		while ('proxy' + str(i)) in proxies:
+		while ('proxy' + unicode(i)) in proxies:
 			i += 1
 		iter = model.append()
-		model.set(iter, 0, 'proxy' + str(i))
-		gajim.config.add_per('proxies', 'proxy' + str(i))
+		model.set(iter, 0, 'proxy' + unicode(i))
+		gajim.config.add_per('proxies', 'proxy' + unicode(i))
 
 	def on_remove_proxy_button_clicked(self, widget):
 		(model, iter) = self.proxies_treeview.get_selection().get_selected()
 		if not iter:
 			return
-		proxy = model.get_value(iter, 0)
+		proxy = model.get_value(iter, 0).decode('utf-8')
 		model.remove(iter)
 		gajim.config.del_per('proxies', proxy)
 		self.xml.get_widget('remove_proxy_button').set_sensitive(False)
@@ -1619,8 +1619,8 @@ class ManageProxiesWindow:
 			self.xml.get_widget('proxy_table').set_sensitive(True)
 			proxyhost_entry.set_text(gajim.config.get_per('proxies', proxy,
 				'host'))
-			proxyport_entry.set_text(str(gajim.config.get_per('proxies', proxy,
-				'port')))
+			proxyport_entry.set_text(unicode(gajim.config.get_per('proxies',
+				proxy, 'port')))
 			proxyuser_entry.set_text(gajim.config.get_per('proxies', proxy,
 				'user'))
 			proxypass_entry.set_text(gajim.config.get_per('proxies', proxy,
@@ -1637,8 +1637,8 @@ class ManageProxiesWindow:
 		(model, iter) = self.proxies_treeview.get_selection().get_selected()
 		if not iter:
 			return
-		old_name = model.get_value(iter, 0)
-		new_name = widget.get_text()
+		old_name = model.get_value(iter, 0).decode('utf-8')
+		new_name = widget.get_text().decode('utf-8')
 		if new_name == '':
 			return
 		if new_name == old_name:
@@ -1656,23 +1656,23 @@ class ManageProxiesWindow:
 		pass
 
 	def on_proxyhost_entry_changed(self, widget):
-		value = widget.get_text()
-		proxy = self.proxyname_entry.get_text()
+		value = widget.get_text().decode('utf-8')
+		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'host', value)
 
 	def on_proxyport_entry_changed(self, widget):
-		value = widget.get_text()
-		proxy = self.proxyname_entry.get_text()
+		value = widget.get_text().decode('utf-8')
+		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'port', value)
 
 	def on_proxyuser_entry_changed(self, widget):
-		value = widget.get_text()
-		proxy = self.proxyname_entry.get_text()
+		value = widget.get_text().decode('utf-8')
+		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'user', value)
 
 	def on_proxypass_entry_changed(self, widget):
-		value = widget.get_text()
-		proxy = self.proxyname_entry.get_text()
+		value = widget.get_text().decode('utf-8')
+		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'pass', value)
 
 
@@ -1741,7 +1741,7 @@ class AccountsWindow:
 		(model, iter) = sel.get_selected()
 		if not iter:
 			return
-		account = model.get_value(iter, 0)
+		account = model.get_value(iter, 0).decode('utf-8')
 		if self.plugin.windows[account].has_key('remove_account'):
 			self.plugin.windows[account]['remove_account'].window.present()
 		else:
@@ -1755,7 +1755,7 @@ class AccountsWindow:
 		(model, iter) = sel.get_selected()
 		if not iter:
 			return
-		account = model.get_value(iter, 0)
+		account = model.get_value(iter, 0).decode('utf-8')
 		if self.plugin.windows[account].has_key('account_modification'):
 			self.plugin.windows[account]['account_modification'].window.present()
 		else:
@@ -1799,7 +1799,7 @@ class ServiceRegistrationWindow:
 		'''When Ok button is clicked:
 		send registration info to the core'''
 		for name in self.entries.keys():
-			self.infos[name] = self.entries[name].get_text()
+			self.infos[name] = self.entries[name].get_text().decode('utf-8')
 		if self.infos.has_key('instructions'):
 			del self.infos['instructions']
 		if self.infos.has_key('registered'):
@@ -1874,11 +1874,12 @@ class ManageEmoticonsWindow:
 
 	def on_emoticons_treemodel_row_changed(self, model, path, iter):
 		emots = gajim.config.get_per('emoticons')
-		emot = model.get_value(iter, 0).upper()
+		emot = model.get_value(iter, 0).decode('utf-8').upper()
 		if not emot in emots:
 			gajim.config.add_per('emoticons', emot)
 			self.plugin.init_regexp() # update regexp [emoticons included]
-		gajim.config.set_per('emoticons', emot, 'path', model[iter][1])
+		gajim.config.set_per('emoticons', emot, 'path',
+			model[iter][1].decode('utf-8'))
 		self.plugin.save_config()
 
 	def image_is_ok(self, image):
@@ -1925,17 +1926,17 @@ class ManageEmoticonsWindow:
 		emots = gajim.config.get_per('emoticons')
 		model = self.emot_tree.get_model()
 		iter = model.get_iter_from_string(row)
-		old_text = model.get_value(iter, 0)
+		old_text = model.get_value(iter, 0).decode('utf-8')
 		if old_text in emots:
 			gajim.config.del_per('emoticons', old_text)
-		emot = new_text.upper()
+		emot = new_text.decode('utf-8').upper()
 		if emot in emots:
 			model.remove(iter)
 		else:
 			gajim.config.add_per('emoticons', emot)
 			self.plugin.init_regexp() # update regexp [emoticons included]
 			gajim.config.set_per('emoticons', emot, 'path',
-				model[iter][1])
+				model[iter][1].decode('utf-8'))
 			model.set_value(iter, 0, emot)
 		self.plugin.save_config()
 
@@ -1947,7 +1948,7 @@ class ManageEmoticonsWindow:
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
-		file = model[iter][1]
+		file = model[iter][1].decode('utf-8')
 		dialog = gtk.FileChooserDialog(_('Choose Image'), None,
 					gtk.FILE_CHOOSER_ACTION_OPEN,
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
@@ -2019,7 +2020,7 @@ class ManageEmoticonsWindow:
 		(model, iter) = self.emot_tree.get_selection().get_selected()
 		if not iter:
 			return
-		gajim.config.del_per('emoticons', model.get_value(iter, 0))
+		gajim.config.del_per('emoticons', model.get_value(iter, 0).decode('utf-8'))
 		self.plugin.init_regexp() # update regexp [emoticons included]
 		self.plugin.save_config()
 		model.remove(iter)
@@ -2135,11 +2136,11 @@ _('Without a connection, you can not browse available services')).get_response()
 
 	def on_services_treeview_row_expanded(self, widget, iter, path):
 		model = self.services_treeview.get_model()
-		jid = model[iter][1]
+		jid = model[iter][1].decode('utf-8')
 		child = model.iter_children(iter)
 		while child:
-			child_jid = model.get_value(child, 1)
-			child_node = model.get_value(child, 2)
+			child_jid = model.get_value(child, 1).decode('utf-8')
+			child_node = model.get_value(child, 2).decode('utf-8')
 			# We never requested its infos
 			if not self.agent_infos[child_jid + child_node].has_key('features'):
 				self.browse(child_jid, child_node)
@@ -2151,8 +2152,8 @@ _('Without a connection, you can not browse available services')).get_response()
 		iter = model.get_iter_root()
 		# We look if this agent is in the treeview
 		while (iter):
-			if agent == model[iter][1] and node == model.get_value(
-					iter, 2):
+			if agent == model[iter][1].decode('utf-8') and\
+				node == model.get_value(iter, 2).decode('utf-8'):
 				break
 			if model.iter_has_child(iter):
 				iter = model.iter_children(iter)
@@ -2176,8 +2177,8 @@ _('Without a connection, you can not browse available services')).get_response()
 		iter = model.get_iter_root()
 		# We look if this agent is in the treeview
 		while (iter):
-			if agent == model[iter][1] and node == model.get_value(
-					iter, 2):
+			if agent == model[iter][1].decode('utf-8') and\
+				node == model.get_value(iter, 2).decode('utf-8'):
 				break
 			if model.iter_has_child(iter):
 				iter = model.iter_children(iter)
@@ -2201,8 +2202,8 @@ _('Without a connection, you can not browse available services')).get_response()
 			# We look if this item is already in the treeview
 			iter_child = model.iter_children(iter)
 			while iter_child:
-				if item['jid'] == model.get_value(iter_child, 1) and \
-						node == model.get_value(iter_child, 2):
+				if item['jid'] == model.get_value(iter_child, 1).decode('utf-8') and\
+						node == model.get_value(iter_child, 2).decode('utf-8'):
 					break
 				iter_child = model.iter_next(iter_child)
 			if not iter_child: # If it is not we add it
@@ -2223,7 +2224,7 @@ _('Without a connection, you can not browse available services')).get_response()
 	def on_refresh_button_clicked(self, widget):
 		'''When refresh button is clicked: refresh list: clear and rerequest it'''
 		self.services_treeview.get_model().clear()
-		jid = self.address_comboboxentry.child.get_text()
+		jid = self.address_comboboxentry.child.get_text().decode('utf-8')
 		self.browse(jid)
 
 	def on_address_comboboxentry_changed(self, widget):
@@ -2231,7 +2232,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		if self.address_comboboxentry.get_active() != -1:
 			# user selected one of the entries so do auto-visit
 			self.services_treeview.get_model().clear()
-			server_address = self.address_comboboxentry.child.get_text()
+			server_address = self.address_comboboxentry.child.get_text().decode('utf-8')
 			self.browse(server_address)
 
 	def on_services_treeview_row_activated(self, widget, path, col = 0):
@@ -2248,7 +2249,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter:
 			return
-		service = model[iter][1]
+		service = model[iter][1].decode('utf-8')
 		room = ''
 		if service.find('@') != -1:
 			services = service.split('@')
@@ -2265,7 +2266,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter :
 			return
-		service = model[iter][1]
+		service = model[iter][1].decode('utf-8')
 		gajim.connections[self.account].request_register_agent_info(service)
 
 		self.window.destroy()
@@ -2281,8 +2282,8 @@ _('Without a connection, you can not browse available services')).get_response()
 		path = model.get_path(iter)
 		if len(path) == 1: # we selected the jabber server
 			return
-		jid = model[iter][1]
-		node = model[iter][2]
+		jid = model[iter][1].decode('utf-8')
+		node = model[iter][2].decode('utf-8')
 		registered_transports = []
 		contacts = gajim.contacts[self.account]
 		for j in contacts:
@@ -2303,7 +2304,7 @@ _('Without a connection, you can not browse available services')).get_response()
 					self.join_button.set_sensitive(True)
 	
 	def on_go_button_clicked(self, widget):
-		server_address = self.address_comboboxentry.child.get_text()
+		server_address = self.address_comboboxentry.child.get_text().decode('utf-8')
 		if server_address in self.latest_addresses:
 			self.latest_addresses.remove(server_address)
 		self.latest_addresses.insert(0, server_address)
@@ -2351,7 +2352,7 @@ class GroupchatConfigWindow:
 			widget.get_active()]['values'][0]
 
 	def on_entry_changed(self, widget, index):
-		self.config[index]['values'][0] = widget.get_text()
+		self.config[index]['values'][0] = widget.get_text().decode('utf-8')
 
 	def on_textbuffer_changed(self, widget, index):
 		begin, end = widget.get_bounds()
@@ -2627,7 +2628,7 @@ class ManageBookmarksWindow:
 			#Account data can't be changed
 			return
 
-		if self.server_entry.get_text() == '' or self.room_entry.get_text() == '':
+		if self.server_entry.get_text().decode('utf-8') == '' or self.room_entry.get_text().decode('utf-8') == '':
 			dialogs.ErrorDialog(_('This bookmark has invalid data'),
 _('Please be sure to fill out server and room fields or remove this bookmark.')).get_response()
 			return False
@@ -2650,7 +2651,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 
 			for bm in account.iterchildren():
 				#Convert True/False/None to '1' or '0'
-				autojoin = str(int(bm[3]))
+				autojoin = unicode(int(bm[3]))
 				
 				#create the bookmark-dict
 				bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
@@ -2693,7 +2694,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 
 		#Fill in the data for childs
 		self.title_entry.set_text(model[iter][1])
-		room_jid = model[iter][2]
+		room_jid = model[iter][2].decode('utf-8')
 		try:
 			(room, server) = room_jid.split('@')
 		except ValueError:
@@ -2722,15 +2723,15 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 	def on_server_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
-			room_jid = self.room_entry.get_text() + '@' + \
-				self.server_entry.get_text()
+			room_jid = self.room_entry.get_text().decode('utf-8') + '@' + \
+				self.server_entry.get_text().decode('utf-8')
 			model[iter][2] = room_jid
 
 	def on_room_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
-			room_jid = self.room_entry.get_text() + '@' + \
-				self.server_entry.get_text()
+			room_jid = self.room_entry.get_text().decode('utf-8') + '@' + \
+				self.server_entry.get_text().decode('utf-8')
 			model[iter][2] = room_jid
 
 	def on_pass_entry_changed(self, widget):
@@ -2843,7 +2844,7 @@ class FirstTimeWizardWindow:
 			self.back_button.set_sensitive(True)
 		
 		elif cur_page == 1:
-			user = self.nick_entry.get_text()
+			user = self.nick_entry.get_text().decode('utf-8')
 			server = self.server_comboboxentry.get_active_text()
 			if self.check_data(user, server):
 				#TODO: write account to config file
@@ -2854,7 +2855,7 @@ class FirstTimeWizardWindow:
 				self.go_to_last_page()
 
 		elif cur_page == 2:
-			user = self.register_nick_entry.get_text()
+			user = self.register_nick_entry.get_text().decode('utf-8')
 			server = self.register_server_comboboxentry.get_active_text()
 			if self.check_data(user, server):
 				#TODO: Register account
@@ -2930,7 +2931,7 @@ _('You need to enter a valid server address to add an account.')).get_response()
 				return True
 
 	def update_jid(self, name_widget, server_widget, jid_widget):
-		name = name_widget.get_text()
+		name = name_widget.get_text().decode('utf-8')
 		server = server_widget.get_active_text()
 		if len(name) == 0 or len(server) == 0:
 			jid_widget.set_label('')

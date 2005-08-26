@@ -79,7 +79,7 @@ class GajimThemesWindow:
 	def on_theme_cell_edited(self, cell, row, new_name):
 		model = self.themes_tree.get_model()
 		iter = model.get_iter_from_string(row)
-		old_name = model.get_value(iter, 0)
+		old_name = model.get_value(iter, 0).decode('utf-8')
 		if old_name == new_name:
 			return
 		if new_name in gajim.config.get_per('themes'):
@@ -115,24 +115,24 @@ class GajimThemesWindow:
 			return
 		self.xml.get_widget('remove_button').set_sensitive(True)
 		self.xml.get_widget('fonts_colors_table').set_sensitive(True)
-		self.current_theme = model.get_value(iter, 0)
+		self.current_theme = model.get_value(iter, 0).decode('utf-8')
 		self.set_widgets(self.current_theme)
 
 	def on_add_button_clicked(self, widget):
 		model = self.themes_tree.get_model()
 		iter = model.append()
 		i = 0
-		while _('theme name') + str(i) in gajim.config.get_per('themes'):
+		while _('theme name') + unicode(i) in gajim.config.get_per('themes'):
 			i += 1
-		model.set_value(iter, 0, _('theme name') + str(i))
-		gajim.config.add_per('themes', _('theme_name') + str(i))
+		model.set_value(iter, 0, _('theme name') + unicode(i))
+		gajim.config.add_per('themes', _('theme_name') + unicode(i))
 		self.plugin.windows['preferences'].update_preferences_window()
 
 	def on_remove_button_clicked(self, widget):
 		(model, iter) = self.themes_tree.get_selection().get_selected()
 		if not iter:
 			return
-		name = model.get_value(iter, 0)
+		name = model.get_value(iter, 0).decode('utf-8')
 		gajim.config.del_per('themes', name)
 		model.remove(iter)
 		self.plugin.windows['preferences'].update_preferences_window()

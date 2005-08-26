@@ -127,6 +127,14 @@ class Logger:
 			files.append(ji + '/' + ji)
 			jid = 'gc'
 			show = nick
+		if type(tim) == unicode:
+			tim = tim.encode('utf-8')
+		if type(jid) == unicode:
+			jid = jid.encode('utf-8')
+		if type(show) == unicode:
+			show = show.encode('utf-8')
+		if msg and type(msg) == unicode:
+			msg = msg.encode('utf-8')
 		for f in files:
 			path_to_file = os.path.join(LOGPATH, f)
 			if os.path.isdir(path_to_file):
@@ -174,7 +182,7 @@ class Logger:
 		while (no_of_lines < begin_line and fil.readline()):
 			no_of_lines += 1
 		while no_of_lines < end_line:
-			line = fil.readline()
+			line = fil.readline().decode('utf-8')
 			if line:
 				line = helpers.from_one_line(line)
 				lineSplited = line.split(':')

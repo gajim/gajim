@@ -76,14 +76,14 @@ class EditGroupsDialog:
 			self.user.name, self.user.groups)
 
 	def on_add_button_clicked(self, widget):
-		group = self.xml.get_widget('group_entry').get_text()
+		group = self.xml.get_widget('group_entry').get_text().decode('utf-8')
 		if not group:
 			return
 		# check if it already exists
 		model = self.list.get_model()
 		iter = model.get_iter_root()
 		while iter:
-			if model.get_value(iter, 0) == group:
+			if model.get_value(iter, 0).decode('utf-8') == group:
 				return
 			iter = model.iter_next(iter)
 		self.changes_made = True
@@ -101,9 +101,9 @@ class EditGroupsDialog:
 			return
 		model[path][1] = not model[path][1]
 		if model[path][1]:
-			self.user.groups.append(model[path][0])
+			self.user.groups.append(model[path][0].decode('utf-8'))
 		else:
-			self.user.groups.remove(model[path][0])
+			self.user.groups.remove(model[path][0].decode('utf-8'))
 		self.update_contact()
 
 	def init_list(self):
@@ -138,7 +138,7 @@ class PassphraseDialog:
 		'''Wait for OK button to be pressed and return passphrase/password'''
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
-			passphrase = self.passphrase_entry.get_text()
+			passphrase = self.passphrase_entry.get_text().decode('utf-8')
 		else:
 			passphrase = -1
 		save_passphrase_checkbutton = self.xml.\
@@ -185,7 +185,7 @@ class ChooseGPGKeyDialog:
 		if rep == gtk.RESPONSE_OK:
 			selection = self.keys_treeview.get_selection()
 			(model, iter) = selection.get_selected()
-			keyID = [ model[iter][0], model[iter][1] ]
+			keyID = [ model[iter][0].decode('utf-8'), model[iter][1] ]
 		else:
 			keyID = None
 		self.window.destroy()
@@ -234,7 +234,7 @@ class ChangeStatusMessageDialog:
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
-			message = self.message_buffer.get_text(beg, end, 0).strip()
+			message = self.message_buffer.get_text(beg, end, 0).decode('utf-8').strip()
 			msg = helpers.to_one_line(message)
 			gajim.config.set('last_status_msg_' + self.show, msg)
 		else:
@@ -247,7 +247,7 @@ class ChangeStatusMessageDialog:
 		active = widget.get_active()
 		if active < 0:
 			return None
-		name = model[active][0]
+		name = model[active][0].decode('utf-8')
 		self.message_buffer.set_text(self.values[name])
 	
 	def on_change_status_message_dialog_key_press_event(self, widget, event):
@@ -332,8 +332,8 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 
 	def on_subscribe_button_clicked(self, widget):
 		'''When Subscribe button is clicked'''
-		jid = self.jid_entry.get_text()
-		nickname = self.nickname_entry.get_text()
+		jid = self.jid_entry.get_text().decode('utf-8')
+		nickname = self.nickname_entry.get_text().decode('utf-8')
 		if not jid:
 			return
 		if jid.find('@') < 0:
@@ -343,8 +343,8 @@ _('Contact names must be of the form "user@servername".')).get_response()
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
-		message = message_buffer.get_text(start_iter, end_iter, 0)
-		group = self.group_comboboxentry.child.get_text()
+		message = message_buffer.get_text(start_iter, end_iter, 0).decode('utf-8')
+		group = self.group_comboboxentry.child.get_text().decode('utf-8')
 		self.plugin.roster.req_sub(self, jid, message, self.account,
 			group = group, pseudo = nickname)
 		if self.xml.get_widget('auto_authorize_checkbutton').get_active():
@@ -354,10 +354,10 @@ _('Contact names must be of the form "user@servername".')).get_response()
 	def fill_jid(self):
 		model = self.protocol_combobox.get_model()
 		index = self.protocol_combobox.get_active()
-		jid = self.uid_entry.get_text().strip()
+		jid = self.uid_entry.get_text().decode('utf-8').strip()
 		if index > 0: # it's not jabber but a transport
 			jid = jid.replace('@', '%')
-		agent = model[index][1]
+		agent = model[index][1].decode('utf-8')
 		if agent:
 			jid += '@' + agent
 		self.jid_entry.set_text(jid)
@@ -366,7 +366,7 @@ _('Contact names must be of the form "user@servername".')).get_response()
 		self.fill_jid()
 
 	def guess_agent(self):
-		uid = self.uid_entry.get_text()
+		uid = self.uid_entry.get_text().decode('utf-8')
 		model = self.protocol_combobox.get_model()
 		
 		#If login contains only numbers, it's probably an ICQ number
@@ -376,13 +376,13 @@ _('Contact names must be of the form "user@servername".')).get_response()
 				return
 
 	def set_nickname(self):
-		uid = self.uid_entry.get_text()
-		nickname = self.nickname_entry.get_text()
+		uid = self.uid_entry.get_text().decode('utf-8')
+		nickname = self.nickname_entry.get_text().decode('utf-8')
 		if nickname == self.old_uid_value:
 			self.nickname_entry.set_text(uid.split('@')[0])
 			
 	def on_uid_entry_changed(self, widget):
-		uid = self.uid_entry.get_text()
+		uid = self.uid_entry.get_text().decode('utf-8')
 		self.guess_agent()
 		self.set_nickname()
 		self.fill_jid()
@@ -544,7 +544,7 @@ class InputDialog:
 			self.dialog.show_all()
 
 	def on_okbutton_clicked(self,  widget):
-		response = self.input_entry.get_text()
+		response = self.input_entry.get_text().decode('utf-8')
 		self.dialog.destroy()
 		self.ok_handler(response)
 	
@@ -664,7 +664,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 	def on_recently_combobox_changed(self, widget):
 		model = widget.get_model()
 		iter = widget.get_active_iter()
-		gid = model[iter][0]
+		gid = model[iter][0].decode('utf-8')
 		self.xml.get_widget('room_entry').set_text(gid.split('@')[0])
 		self.xml.get_widget('server_entry').set_text(gid.split('@')[1])
 
@@ -674,10 +674,10 @@ _('You can not join a group chat unless you are connected.')).get_response()
 
 	def on_join_button_clicked(self, widget):
 		'''When Join button is clicked'''
-		nickname = self.xml.get_widget('nickname_entry').get_text()
-		room = self.xml.get_widget('room_entry').get_text()
-		server = self.xml.get_widget('server_entry').get_text()
-		password = self.xml.get_widget('password_entry').get_text()
+		nickname = self.xml.get_widget('nickname_entry').get_text().decode('utf-8')
+		room = self.xml.get_widget('room_entry').get_text().decode('utf-8')
+		server = self.xml.get_widget('server_entry').get_text().decode('utf-8')
+		password = self.xml.get_widget('password_entry').get_text().decode('utf-8')
 		jid = '%s@%s' % (room, server)
 		if jid in self.recently_groupchat:
 			self.recently_groupchat.remove(jid)
@@ -743,12 +743,12 @@ _('Without a connection, you can not change your password.')).get_response()
 		while not end:
 			rep = self.dialog.run()
 			if rep == gtk.RESPONSE_OK:
-				password1 = self.password1_entry.get_text()
+				password1 = self.password1_entry.get_text().decode('utf-8')
 				if not password1:
 					ErrorDialog(_('Invalid password'),
 							_('You must enter a password.')).get_response()
 					continue
-				password2 = self.password2_entry.get_text()
+				password2 = self.password2_entry.get_text().decode('utf-8')
 				if password1 != password2:
 					ErrorDialog(_('Passwords do not match'),
 							_('The passwords typed in both fields must be identical.')).get_response()
@@ -818,7 +818,7 @@ class PopupNotificationWindow:
 			if file_props is not None:
 				if file_props['type'] == 'r':
 					# get the name of the sender, as it is in the roster
-					sender = str(file_props['sender']).split('/')[0]
+					sender = unicode(file_props['sender']).split('/')[0]
 					name = gajim.get_first_contact_instance_from_jid( 
 						account, sender).name
 					txt = _('From %s') % name
@@ -1017,7 +1017,7 @@ class SingleMessageWindow:
 
 	def update_char_counter(self, widget):
 		characters_no = self.message_tv_buffer.get_char_count()
-		self.count_chars_label.set_text(str(characters_no))
+		self.count_chars_label.set_text(unicode(characters_no))
 	
 	def send_single_message(self):
 		if gajim.connections[self.account].connected <= 1:
@@ -1026,10 +1026,10 @@ class SingleMessageWindow:
 		_('Please make sure you are connected with "%s".' % self.account)
 			).get_response()
 			return
-		to_whom_jid = self.to_entry.get_text()
-		subject = self.subject_entry.get_text()
+		to_whom_jid = self.to_entry.get_text().decode('utf-8')
+		subject = self.subject_entry.get_text().decode('utf-8')
 		begin, end = self.message_tv_buffer.get_bounds()
-		message = self.message_tv_buffer.get_text(begin, end)
+		message = self.message_tv_buffer.get_text(begin, end).decode('utf-8')
 
 		if to_whom_jid.find('/announce/') != -1:
 			gajim.connections[self.account].send_motd(to_whom_jid, subject,
@@ -1148,7 +1148,7 @@ class XMLConsoleWindow:
 			).get_response()
 			return
 		begin_iter, end_iter = self.input_tv_buffer.get_bounds()
-		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter)
+		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter).decode('utf-8')
 		if stanza:
 			gajim.connections[self.account].send_stanza(stanza)
 			self.input_tv_buffer.set_text('') # we sent ok, clear the textview
