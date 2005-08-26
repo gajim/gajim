@@ -148,7 +148,7 @@ def get_resource_from_jid(jid):
 def get_number_of_accounts():
 	return len(connections.keys())
 
-def get_transport_name_from_jid(self, jid, use_config_setting = True):
+def get_transport_name_from_jid(jid, use_config_setting = True):
 	'''returns 'aim', 'gg', 'irc' etc'''
 	if use_config_setting or not gajim.config.get('use_transports_iconsets'):
 		return
