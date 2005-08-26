@@ -150,7 +150,10 @@ def get_number_of_accounts():
 
 def get_transport_name_from_jid(jid, use_config_setting = True):
 	'''returns 'aim', 'gg', 'irc' etc'''
-	if use_config_setting and not config.get('use_transports_iconsets'):
+	#FIXME: jid can be None! one TB I saw had this problem:
+	# in the code block # it is a groupchat presence in handle_event_notify
+	# jid was None. Yann why?
+	if not jid or (use_config_setting and not config.get('use_transports_iconsets')):
 		return
 	host = jid.split('@')[-1]
 	if host.startswith('aim'):

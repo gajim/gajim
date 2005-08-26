@@ -341,9 +341,10 @@ class Interface:
 					self.remote.raise_signal('ContactAbsence', (account, array))
 				# stop non active file transfers
 				
-		elif self.windows[account]['gc'].has_key(ji):
+		elif self.windows[account]['gc'].has_key(ji): # ji is then room_jid
 			#it is a groupchat presence
-			#TODO: upgrade the chat instances (for pm)
+			#FIXME: upgrade the chat instances (for pm)
+			#FIXME: real_jid can be None
 			self.windows[account]['gc'][ji].chg_contact_status(ji, resource,
 				array[1], array[2], array[6], array[7], array[8], array[9],
 				array[10], array[11], array[12], account)
