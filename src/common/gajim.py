@@ -147,3 +147,34 @@ def get_resource_from_jid(jid):
 
 def get_number_of_accounts():
 	return len(connections.keys())
+
+def get_transport_name_from_jid(self, jid, use_config_setting = True):
+	'''returns 'aim', 'gg', 'irc' etc'''
+	if use_config_setting or not gajim.config.get('use_transports_iconsets'):
+		return
+	host = jid.split('@')[-1]
+	if host.startswith('aim'):
+		return 'aim'
+	elif host.startswith('gadugadu'):
+		return 'gadugadu'
+	elif host.startswith('gg'):
+		return 'gadugadu'
+	elif host.startswith('irc'):
+		return 'irc'
+	# abc@icqsucks.org will match as ICQ, but what to do..
+	elif host.startswith('icq'):
+		return 'icq'
+	elif host.startswith('msn'):
+		return 'msn'
+	elif host.startswith('sms'):
+		return 'sms'
+	elif host.startswith('tlen'):
+		return 'tlen'
+	elif host.startswith('yahoo'):
+		return 'yahoo'
+
+def jid_is_transport(jid):
+	is_transport = jid.startswith('aim') or jid.startswith('gadugadu') or\
+			jid.startswith('irc') or jid.startswith('icq') or\
+			jid.startswith('msn') or jid.startswith('sms') or\
+			jid.startswith('yahoo')

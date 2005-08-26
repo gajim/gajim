@@ -730,13 +730,8 @@ timestamp, contact):
 
 	def restore_conversation(self, jid):
 		# don't restore lines if it's a transport
-		is_transport = jid.startswith('aim') or jid.startswith('gadugadu') or\
-			jid.startswith('irc') or jid.startswith('icq') or\
-			jid.startswith('msn') or jid.startswith('sms') or\
-			jid.startswith('yahoo')
-
-		if is_transport:
-			return	
+		if gajim.jid_is_transport(jid):
+			return
 
 		# How many lines to restore and when to time them out
 		restore	= gajim.config.get('restore_lines')

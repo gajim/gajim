@@ -304,7 +304,7 @@ class RosterTooltip(BaseTooltip, StatusTable):
 		
 		# try to find the image for the contact status
 		state_file = prim_contact.show.replace(' ', '_')
-		transport = self.plugin.roster.get_transport_name_by_jid(prim_contact.jid)
+		transport = gajim.get_transport_name_from_jid(prim_contact.jid)
 		if transport:
 			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports', 
 				transport , '16x16')

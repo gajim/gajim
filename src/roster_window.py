@@ -192,34 +192,9 @@ class RosterWindow:
 				if group_empty:
 					del gajim.groups[account][group]
 
-	def get_transport_name_by_jid(self,jid):
-		if not jid or not gajim.config.get('use_transports_iconsets'):
-			return None
-		host = jid.split('@')[-1]
-		if host.startswith('aim'):
-			return 'aim'
-		elif host.startswith('gadugadu'):
-			return 'gadugadu'
-		elif host.startswith('gg'):
-			return 'gadugadu'
-		elif host.startswith('irc'):
-			return 'irc'
-		# abc@icqsucks.org will match as ICQ, but what to do..
-		elif host.startswith('icq'):
-			return 'icq'
-		elif host.startswith('msn'):
-			return 'msn'
-		elif host.startswith('sms'):
-			return 'sms'
-		elif host.startswith('tlen'):
-			return 'tlen'
-		elif host.startswith('yahoo'):
-			return 'yahoo'
-		return None
-
 	def get_appropriate_state_images(self, jid):
 		'''check jid and return the appropriate state images dict'''
-		transport = self.get_transport_name_by_jid(jid)
+		transport = gajim.get_transport_name_from_jid(jid)
 		if transport:
 			return self.transports_state_images[transport]
 		return self.jabber_state_images
@@ -248,7 +223,7 @@ class RosterWindow:
 				if contact.ask == 'subscribe':
 					img = state_images['requested']
 				else:
-					transport = self.get_transport_name_by_jid(jid)
+					transport = gajim.get_transport_name_from_jid(jid)
 					if transport and state_images.has_key(contact.show):
 						img = state_images[contact.show]
 					else:
