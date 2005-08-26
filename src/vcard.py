@@ -167,7 +167,7 @@ class VcardWindow:
 					% f,
 					_('The file must not be more than 8 kilobytes.')).get_response()
 				return
-			fd = open(f)
+			fd = open(f, 'rb')
 			data = fd.read()
 			pixbufloader = gtk.gdk.PixbufLoader()
 			pixbufloader.write(data)
