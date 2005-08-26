@@ -126,7 +126,7 @@ class StatusTable:
 		
 	def create_table(self):
 		self.table = gtk.Table(3, 1)
-		self.table.set_property('column-spacing', 6)
+		self.table.set_property('column-spacing', 2)
 		self.text_lable = gtk.Label()
 		self.text_lable.set_line_wrap(True)
 		self.text_lable.set_alignment(0, 0)
@@ -162,15 +162,14 @@ class StatusTable:
 			if os.path.exists(file):
 				image.set_from_file(file)
 				break
-		image.set_alignment(0.01, 1)
+		image.set_alignment(0., 1.)
 		self.table.attach(spacer, 1, 2, self.current_row, 
 			self.current_row + 1, 0, 0, 0, 0)
-		self.table.attach(image,2,3,self.current_row, 
+		self.table.attach(image, 2, 3, self.current_row, 
 			self.current_row + 1, 0, 0, 3, 0)
-		image.set_alignment(0.01, 1)
 		status_label = gtk.Label()
 		status_label.set_markup(str_status)
-		status_label.set_alignment(00, 0)
+		status_label.set_alignment(0., 0.)
 		self.table.attach(status_label, 3, 4, self.current_row,
 			self.current_row + 1, gtk.EXPAND | gtk.FILL, 0, 0, 0)
 	
@@ -251,7 +250,7 @@ class GCTooltip(BaseTooltip, StatusTable):
 		self.plugin = plugin
 		self.text_lable = gtk.Label()
 		self.text_lable.set_line_wrap(True)
-		self.text_lable.set_alignment(0, 0)
+		self.text_lable.set_alignment(0., 0.)
 		self.text_lable.set_selectable(False)
 		BaseTooltip.__init__(self)
 		
@@ -288,7 +287,9 @@ class RosterTooltip(BaseTooltip, StatusTable):
 		self.plugin = plugin
 		
 		self.image = gtk.Image()
-		self.image.set_alignment(0.5, 0.025)
+		self.image.set_alignment(0., 0.)
+		# padding is independent of the total length and better than alignment
+		self.image.set_padding(1, 2) 
 		BaseTooltip.__init__(self)
 		StatusTable.__init__(self)
 		
@@ -298,6 +299,7 @@ class RosterTooltip(BaseTooltip, StatusTable):
 		self.create_window()
 		self.hbox = gtk.HBox()
 		self.hbox.set_homogeneous(False)
+		self.hbox.set_spacing(0)
 		self.create_table()
 		# primary contact
 		prim_contact = gajim.get_highest_prio_contact_from_contacts(contacts)
