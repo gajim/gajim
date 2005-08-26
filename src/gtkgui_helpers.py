@@ -25,6 +25,7 @@ from common import i18n
 i18n.init()
 _ = i18n._
 from common import gajim
+from common import helpers
 
 def get_default_font():
 	''' Get the desktop setting for application font
@@ -38,7 +39,8 @@ def get_default_font():
 	except:
 		pass
 	else:
-		return client.get_string('/desktop/gnome/interface/font_name')
+		return helpers.ensure_unicode_string(
+			client.get_string('/desktop/gnome/interface/font_name'))
 
 	# try to get xfce default font
 	# Xfce 4.2 adopts freedesktop.org's Base Directory Specification
@@ -56,7 +58,8 @@ def get_default_font():
 			for line in file(xfce_config_file):
 				if line.find('name="Gtk/FontName"') != -1:
 					start = line.find('value="') + 7
-					return line[start:line.find('"', start)]
+					return helpers.ensure_unicode_string(
+						line[start:line.find('"', start)])
 		except:
 			#we talk about file
 			print _('error: cannot open %s for reading') % xfce_config_file
@@ -71,7 +74,7 @@ def get_default_font():
 					font_name = values[0]
 					font_size = values[1]
 					font_string = '%s %s' % (font_name, font_size) # Verdana 9
-					return font_string
+					return helpers.ensure_unicode_string(font_string)
 		except:
 			#we talk about file
 			print _('error: cannot open %s for reading') % kde_config_file
