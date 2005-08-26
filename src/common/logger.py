@@ -127,13 +127,14 @@ class Logger:
 			files.append(ji + '/' + ji)
 			jid = 'gc'
 			show = nick
-		if type(tim) == unicode:
+		# convert to utf8 before writing to file if needed
+		if isinstance(tim, unicode):
 			tim = tim.encode('utf-8')
-		if type(jid) == unicode:
+		if isinstance(jid, unicode):
 			jid = jid.encode('utf-8')
-		if type(show) == unicode:
+		if isinstance(show, unicode):
 			show = show.encode('utf-8')
-		if msg and type(msg) == unicode:
+		if msg and isinstance(msg, unicode):
 			msg = msg.encode('utf-8')
 		for f in files:
 			path_to_file = os.path.join(LOGPATH, f)

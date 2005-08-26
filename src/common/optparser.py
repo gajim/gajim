@@ -61,18 +61,19 @@ class OptionsParser:
 		if value == None:
 			return
 		value = value[1]
-		if type(value) == unicode:
+		# convert to utf8 before writing to file if needed
+		if isinstance(value, unicode):
 			value = value.encode('utf-8')
 		else:
 			value = str(value)
-		if type(opt) == unicode:
+		if isinstance(opt, unicode):
 			opt = opt.encode('utf-8')
 		s = ''
 		if parents:
 			if len(parents) == 1:
 				return
 			for p in parents:
-				if type(p) == unicode:
+				if isinstance(p, unicode):
 					p = p.encode('utf-8')
 				s += p + '.'
 		s += opt
