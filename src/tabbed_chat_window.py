@@ -222,7 +222,8 @@ timestamp, contact):
 				image = x.get_widget('avatar_image')
 				image.set_from_pixbuf(scaled_buf)
 				image.show_all()
-			except gobject.GError: # we may get "unknown image format"
+			# we may get "unknown image format" and/or something like pixbuf can be None
+			except (gobject.GError, AttributeError):
 				pass
 
 	def set_state_image(self, jid):
