@@ -1520,7 +1520,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		'''When we quit the gtk plugin :
 		tell that to the core and exit gtk'''
 		if gajim.config.get('saveposition'):
-			x, y = self.window.get_position()
+			x, y = self.window.window.get_root_origin()
 			gajim.config.set('roster_x-position', x)
 			gajim.config.set('roster_y-position', y)
 			width, height = self.window.get_size()
