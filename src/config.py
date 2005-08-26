@@ -241,7 +241,7 @@ class PreferencesWindow:
 			font = gtkgui_helpers.get_default_font()
 			if font is None:
 				font = 'Sans 10'
-			gajim.config.set('conversation_font', font)
+			gajim.config.set('conversation_font', font.decode('utf-8'))
 		self.xml.get_widget('conversation_fontbutton').set_font_name(font)
 
 		# on new message
@@ -730,7 +730,7 @@ class PreferencesWindow:
 
 	def on_preference_widget_font_set(self, widget, text):
 		font = widget.get_font_name()
-		gajim.config.set(text, font)
+		gajim.config.set(text, font.decode('utf-8'))
 		self.update_text_font()
 		self.plugin.save_config()
 	
