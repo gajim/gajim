@@ -209,6 +209,7 @@ class SystrayWin32(systray.Systray):
 		self.status = 'offline'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
+		self.added_hide_menuitem = False
 		
 		self.tray_ico_imgs = self.load_icos()
 		

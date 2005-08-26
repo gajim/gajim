@@ -197,7 +197,14 @@ class Systray:
 			self.new_message_handler_id = new_message_menuitem.connect(
 				'activate', self.on_new_message_menuitem_activate, account)
 
-		if event is not None: # None means windows (we explicitly popup in systraywin32.py)
+		if event is None: # None means windows (we explicitly popup in systraywin32.py)
+			#fixme: make me translatable or find a good way to workaround this
+			if self.added_hide_menuitem is False:
+				item = gtk.MenuItem('Hide this menu')
+				self.systray_context_menu.append(item)
+				self.added_hide_menuitem = True
+			
+		else: # GNU and Unices
 			self.systray_context_menu.popup(None, None, None, event.button, event.time)
 		self.systray_context_menu.show_all()
 
