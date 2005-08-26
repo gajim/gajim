@@ -150,7 +150,7 @@ def get_number_of_accounts():
 
 def get_transport_name_from_jid(jid, use_config_setting = True):
 	'''returns 'aim', 'gg', 'irc' etc'''
-	if use_config_setting and not common.config.get('use_transports_iconsets'):
+	if use_config_setting and not config.get('use_transports_iconsets'):
 		return
 	host = jid.split('@')[-1]
 	if host.startswith('aim'):
