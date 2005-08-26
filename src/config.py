@@ -2647,7 +2647,8 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 				return
 
 		for account in self.treestore:
-			gajim.connections[account[1]].bookmarks = []
+			account_unicode = account[1].decode('utf-8')
+			gajim.connections[account_unicode].bookmarks = []
 
 			for bm in account.iterchildren():
 				#Convert True/False/None to '1' or '0'
@@ -2657,9 +2658,9 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 				bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
 					'password': bm[4], 'nick': bm[5] }
 				
-				gajim.connections[account[1]].bookmarks.append(bmdict)
+				gajim.connections[account_unicode].bookmarks.append(bmdict)
 
-			gajim.connections[account[1]].store_bookmarks()
+			gajim.connections[account_unicode].store_bookmarks()
 		self.plugin.roster.make_menu()
 		self.window.destroy()
 
