@@ -192,7 +192,7 @@ Please specify account for sending the message.') % sys.argv[2])
 					else:
 						self.send_error(_('You have no active account'))
 			elif self.command == 'list_accounts':
-				if type(res) == list:
+				if isinstance(res, list):
 					for account in res:
 						print account
 			elif self.command == 'list_contacts':
@@ -284,32 +284,30 @@ Please specify account for sending the message.') % sys.argv[2])
 			for val in prop_dict:
 				if val is None:
 					ret_str +='\t'
-				elif type(val) == unicode or type(val) == int or \
-					type(val) == str:
+				elif type(val) in (unicode, int, str):
 					ret_str +='\t' + str(val)
-				elif type(val) == list or type(val) == tuple:
+				elif type(val) in (list, tuple):
 					res = ''
 					for items in val:
 						res += self.print_info(level+1, items)
 					if res != '':
 						ret_str += '\t' + res
 			ret_str = '%s(%s)\n' % (spacing, ret_str[1:])
-		elif type(prop_dict) is dict:
+		elif isinstance(prop_dict, dict):
 			for key in prop_dict.keys():
 				val = prop_dict[key]
 				spacing = ' ' * level * 4
-				if type(val) == unicode or type(val) == int or \
-					type(val) == str:
+				elif type(val) in (unicode, int, str):
 					if val is not None:
 						val = val.strip()
 						ret_str += '%s%-10s: %s\n' % (spacing, key, val)
-				elif type(val) == list or type(val) == tuple:
+				elif type(val) in (list, tuple):
 					res = ''
 					for items in val:
 						res += self.print_info(level+1, items)
 					if res != '':
 						ret_str += '%s%s: \n%s' % (spacing, key, res)
-				elif type(val) == dict:
+				elif isinstance(val, dict):
 					res = self.print_info(level+1, val)
 					if res != '':
 						ret_str += '%s%s: \n%s' % (spacing, key, res)
@@ -395,7 +393,7 @@ Please specify account for sending the message.') % sys.argv[2])
 				if value[1] == '}':
 					break
 				key, next = self.unrepr(value[1:])
-				if type(key) != str and type(key) != unicode:
+				if type(key) not in (str, unicode):
 					send_error('Wrong string: %s' % value)
 				next = next.strip()
 				if not next or next[0] != ':':
