@@ -1258,7 +1258,7 @@ msgstr "til %s kontoen"
 #: ../src/roster_window.py:458
 #, python-format
 msgid "using %s account"
-msgstr "bruker %s kontoen"
+msgstr "på %s kontoen"
 
 #: ../src/roster_window.py:474
 #, python-format
@@ -1720,7 +1720,7 @@ msgstr "Før tid:"
 
 #: ../src/gtkgui.glade.h:60
 msgid "Birthday:"
-msgstr "Bursdag:"
+msgstr "Fødselsdag:"
 
 #: ../src/gtkgui.glade.h:61
 msgid "Bold"
@@ -2666,7 +2666,7 @@ msgstr "Bruk _transportenes ikoner"
 
 #: ../src/gtkgui.glade.h:287
 msgid "Use a single chat window with _tabs"
-msgstr "Bruk et enkelt samtalevinduer med _faner"
+msgstr "Bruk et enkelt samtalevindu med _faner"
 
 #: ../src/gtkgui.glade.h:288
 msgid "Use authentication"
@@ -2751,7 +2751,7 @@ msgstr "_Utvis"
 
 #: ../src/gtkgui.glade.h:307
 msgid "_Bookmark This Room"
-msgstr "_Bokmerke Dette Rommet"
+msgstr "Lag _Bokmerke til Rommet"
 
 #: ../src/gtkgui.glade.h:308
 msgid "_Browser:"
@@ -2763,7 +2763,7 @@ msgstr "_Avbryt"
 
 #: ../src/gtkgui.glade.h:310
 msgid "_Compact View"
-msgstr "_Compact Utseende"
+msgstr "_Kompakt Utseende"
 
 #: ../src/gtkgui.glade.h:311
 msgid "_Compact View    Alt+C"
