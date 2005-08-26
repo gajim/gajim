@@ -1356,7 +1356,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				self.plugin.windows[account]['chats']['tabbed'] = \
 					tabbed_chat_window.TabbedChatWindow(contact, self.plugin, account)
 			else:
-				self.plugin.windows[account]['chats']['tabbed'].new_user(contact)
+				self.plugin.windows[account]['chats']['tabbed'].new_tab(contact)
 				
 			self.plugin.windows[account]['chats'][contact.jid] = \
 				self.plugin.windows[account]['chats']['tabbed']

@@ -53,10 +53,10 @@ class TabbedChatWindow(chat.Chat):
 		self.possible_inactive_timeout_id = {}
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
-		self.new_user(user)
+		self.new_tab(user)
 		self.show_title()
 		
-		# NOTE: if it not a window event, connect in new_user function
+		# NOTE: if it not a window event, connect in new_tab function
 		signal_dict = {
 'on_tabbed_chat_window_destroy': self.on_tabbed_chat_window_destroy,
 'on_tabbed_chat_window_delete_event': self.on_tabbed_chat_window_delete_event,
@@ -350,7 +350,7 @@ timestamp, contact):
 		chat.Chat.remove_tab(self, jid, 'chats')
 		del self.contacts[jid]
 	
-	def new_user(self, contact):
+	def new_tab(self, contact):
 		'''when new tab is created'''
 		self.names[contact.jid] = contact.name
 		self.xmls[contact.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
