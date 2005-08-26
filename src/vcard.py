@@ -187,7 +187,7 @@ class VcardWindow:
 	def set_values(self, vcard):
 		for i in vcard.keys():
 			if i == 'PHOTO':
-				if not type(vcard[i]) == type({}):
+				if not isinstance(vcard[i], dict):
 					continue
 				img_decoded = None
 				if vcard[i].has_key('BINVAL') and vcard[i].has_key('TYPE'):
@@ -220,7 +220,7 @@ class VcardWindow:
 						add_on = '_WORK'
 					for j in entry.keys():
 						self.set_value(i + add_on + '_' + j + '_entry', entry[j])
-			if type(vcard[i]) == type({}):
+			if isinstance(vcard[i], dict):
 				for j in vcard[i].keys():
 					self.set_value(i + '_' + j + '_entry', vcard[i][j])
 			else:
