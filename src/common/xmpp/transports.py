@@ -142,8 +142,10 @@ class TCPsocket(PlugIn):
         elif type(raw_data)<>type(''): raw_data = ustr(raw_data).encode('utf-8')
         try:
             self._send(raw_data)
-            self.DEBUG(raw_data,'sent')
-            self._owner.Dispatcher.Event('', DATA_SENT, raw_data)
+            # Avoid printing messages that are empty keepalive packets.
+            if raw_data.strip():
+                self.DEBUG(raw_data,'sent')
+                self._owner.Dispatcher.Event('', DATA_SENT, raw_data)
         except:
             self.DEBUG("Socket error while sending data",'error')
             self._owner.disconnected()

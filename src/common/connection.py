@@ -127,8 +127,7 @@ class Connection:
 		self.new_account_info = None
 		self.bookmarks = []
 		self.on_purpose = False
-		self.last_incoming = time.time()
-		self.keep_alive_sent = False
+		self.last_io = time.time()
 		self.to_be_sent = []
 		self.last_sent = []
 		self.files_props = {}
@@ -1163,8 +1162,7 @@ class Connection:
 		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
 		
 	def _StanzaArrivedCB(self, con, obj):
-		self.last_incoming = time.time()
-		self.keep_alive_sent = False
+		self.last_io = time.time()
 
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
@@ -1312,7 +1310,7 @@ class Connection:
 		con.RegisterEventHandler(self._event_dispatcher)
 		if auth:
 			con.initRoster()
-			self.last_incoming = time.time()
+			self.last_io = time.time()
 			self.connected = 2
 			return con # return connection
 		else:
@@ -1884,12 +1882,8 @@ class Connection:
 			self.to_be_sent.append(iq)
 
 	def send_keepalive(self):
-		# we received nothing for the last foo seconds (60 secs by default)
-		hostname = gajim.config.get_per('accounts', self.name,
-			'hostname')
-		iq = common.xmpp.Iq('get', common.xmpp.NS_LAST, to = hostname)
-		self.to_be_sent.append(iq)
-		self.keep_alive_sent = True
+		# nothing received for the last foo seconds (60 secs by default)
+		self.to_be_sent.append(' ')
 
 	def process(self, timeout):
 		if not self.connection:
@@ -1908,28 +1902,18 @@ class Connection:
 				tosend = self.to_be_sent.pop(0)
 				
 				self.connection.send(tosend)
-				self.last_sent.append(time.time())
+				t = time.time()
+				self.last_io = t
+				self.last_sent.append(t)
 			try:
-				if gajim.config.get_per('accounts', self.name,
-				'keep_alives_enabled'): # do we want keepalives?
-					keep_alive_every_foo_secs = gajim.config.get_per('accounts',
-						self.name,'keep_alive_every_foo_secs')
-					#should we send keepalive?
-					if time.time() > (self.last_incoming + \
-							keep_alive_every_foo_secs) and not self.keep_alive_sent:
+				# do we want keepalives?
+				if gajim.config.get_per('accounts', self.name, 														'keep_alives_enabled'):
+					t = gajim.config.get_per('accounts', self.name,
+													'keep_alive_every_foo_secs')
+					# should we send keepalive?
+					if time.time() > (self.last_io + t):
 						self.send_keepalive()
 
-					# did the server reply to the keepalive? if no disconnect
-					keep_alive_disconnect_after_foo_secs = gajim.config.get_per(
-						'accounts', self.name,
-						'keep_alive_disconnect_after_foo_secs') # 2 mins by default
-					if time.time() > (self.last_incoming + \
-							keep_alive_disconnect_after_foo_secs):
-						self.connection.disconnect() # disconnect if no answer
-						pritext = _('Gajim disconnected you from %s') % self.name
-						sectext = _('%s seconds have passed and server did not reply to our keep-alive. If you believe such disconnection should not have happened, you can disable sending keep-alive packets by modifying this account.') % unicode(keep_alive_disconnect_after_foo_secs)
-						self.dispatch('ERROR', (pritext, sectext))
-						return
 				if self.connection:
 					self.connection.Process(timeout)
 			except:
