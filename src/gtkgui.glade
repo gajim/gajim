@@ -1749,7 +1749,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkLabel" id="label186">
+	    <widget class="GtkLabel" id="protocol_label">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Protocol:</property>
 	      <property name="use_underline">False</property>

@@ -319,6 +319,14 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			if g != _('not in the roster') and g != _('Transports'):
 				self.group_comboboxentry.append_text(g)
 
+		if not jid_agents:
+			# There are no transports, just hide the protocol combobox
+			self.protocol_combobox.hide()
+			self.protocol_combobox.set_no_show_all(True)
+			protocol_label = self.xml.get_widget('protocol_label')
+			protocol_label.hide()
+			protocol_label.set_no_show_all(True)
+
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
