@@ -1060,6 +1060,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			jid = model[iter][3].decode('utf-8')
 			account = model[iter][4].decode('utf-8')
 			type = model[iter][2]
+			 if type in ('account', 'group'):
+				return
 			user = gajim.contacts[account][jid][0]
 			if type == 'contact':
 				self.on_req_usub(widget, user, account)
