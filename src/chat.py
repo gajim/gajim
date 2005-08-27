@@ -934,7 +934,8 @@ class Chat:
 			#we get the end of the tag
 			while not end_iter.ends_tag(texttag):
 				end_iter.forward_char()
-			word = begin_iter.get_text(end_iter).decode('utf-8')
+			word = widget.get_buffer().get_text(begin_iter, end_iter).decode(
+				'utf-8')
 			if event.button == 3: # right click
 				self.make_link_menu(event, kind, word)
 			else:
