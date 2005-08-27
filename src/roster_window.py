@@ -1732,7 +1732,6 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					config.ServiceDiscoveryWindow(self.plugin, account)
 			except RuntimeError:
 				pass
-				
 
 	def load_iconset(self, path):
 		imgs = {}
@@ -2002,13 +2001,11 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if model.iter_n_children(iter_group_source) == 1: #this was the only child
 			model.remove(iter_group_source)
 		#delete the group if it is empty (need to look for offline users too)
-		group_empty = True
 		for jid in gajim.contacts[account]:
-			if grp_source in gajim.contacts[account][jid][0].groups:
-				group_empty = False
+			if group in gajim.contacts[account][jid][0].groups:
 				break
-		if group_empty:
-			del gajim.groups[account][grp_source]
+		else:
+			del gajim.groups[account][group]
 		if not grp_dest in u.groups:
 			u.groups.append(grp_dest)
 			self.add_contact_to_roster(data, account)
