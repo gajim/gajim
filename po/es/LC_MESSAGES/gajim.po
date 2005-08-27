@@ -20,7 +20,7 @@ msgstr ""
 #: ../src/common/config.py:51
 msgid "Away as a result of being idle"
 msgstr "Ausente por inactividad"
-
+e
 #: ../src/common/config.py:54
 msgid "Not available as a result of being idle"
 msgstr "No disponible por inactividad"
@@ -349,7 +349,7 @@ msgstr "Visitante"
 
 #: ../src/common/helpers.py:172
 msgid "is paying attention to the conversation"
-msgstr "estás prestando atención a la conversación"
+msgstr "está prestando atención a la conversación"
 
 #: ../src/common/helpers.py:174
 msgid "is doing something else"
