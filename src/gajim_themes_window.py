@@ -80,6 +80,7 @@ class GajimThemesWindow:
 		model = self.themes_tree.get_model()
 		iter = model.get_iter_from_string(row)
 		old_name = model.get_value(iter, 0).decode('utf-8')
+		new_name = new_name.decode('utf-8')
 		if old_name == new_name:
 			return
 		if new_name in gajim.config.get_per('themes'):

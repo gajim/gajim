@@ -920,7 +920,7 @@ class Interface:
 		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?]')
 
 	def on_launch_browser_mailer(self, widget, url, kind):
-		helpers.launch_browser_mailer(kind, url)
+		helpers.launch_browser_mailer(kind, url.decode('utf-8'))
 
 	def init_regexp(self):
 		#initialize emoticons dictionary

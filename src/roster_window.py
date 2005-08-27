@@ -184,12 +184,10 @@ class RosterWindow:
 			if model.iter_n_children(parent_i) == 0:
 				model.remove(parent_i)
 				# We need to check all contacts, even offline contacts
-				group_empty = True
 				for jid in gajim.contacts[account]:
 					if group in gajim.contacts[account][jid][0].groups:
-						group_empty = False
 						break
-				if group_empty:
+				else:
 					del gajim.groups[account][group]
 
 	def get_appropriate_state_images(self, jid):
@@ -2002,10 +2000,10 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			model.remove(iter_group_source)
 		#delete the group if it is empty (need to look for offline users too)
 		for jid in gajim.contacts[account]:
-			if group in gajim.contacts[account][jid][0].groups:
+			if grp_source in gajim.contacts[account][jid][0].groups:
 				break
 		else:
-			del gajim.groups[account][group]
+			del gajim.groups[account][grp_source]
 		if not grp_dest in u.groups:
 			u.groups.append(grp_dest)
 			self.add_contact_to_roster(data, account)
