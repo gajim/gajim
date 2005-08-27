@@ -20,7 +20,7 @@ msgstr ""
 #: ../src/common/config.py:51
 msgid "Away as a result of being idle"
 msgstr "Ausente por inactividad"
-e
+
 #: ../src/common/config.py:54
 msgid "Not available as a result of being idle"
 msgstr "No disponible por inactividad"
