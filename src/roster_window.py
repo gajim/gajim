@@ -1060,7 +1060,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			jid = model[iter][3].decode('utf-8')
 			account = model[iter][4].decode('utf-8')
 			type = model[iter][2]
-			 if type in ('account', 'group'):
+			if type in ('account', 'group'):
 				return
 			user = gajim.contacts[account][jid][0]
 			if type == 'contact':
@@ -1684,18 +1684,17 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		'''When an iter is edited:
 		if text has changed, rename the contact'''
 		model = self.tree.get_model()
+		self.editing_path = None
 		# if this is a last item in the group, row is invalid
 		try:
 			iter = model.get_iter_from_string(row)
 		except:
-			self.editing_path = None
 			return
 		path = model.get_path(iter)
 		# do not set new name if row order has changed
 		if path != self.editing_path:
-			self.editing_path = None
 			return
-		self.editing_path = None
+		new_text = new_text.decode('utf-8')
 		account = model[iter][4].decode('utf-8')
 		jid = model[iter][3].decode('utf-8')
 		type = model[iter][2]
