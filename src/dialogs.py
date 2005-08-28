@@ -422,6 +422,9 @@ class AboutDialog:
 
 		dlg.set_logo(pixbuf)
 		dlg.set_translator_credits(_('translator-credits'))
+		
+		artists = ['Denis Craven', 'Membris Khan', 'Guillaume Morin']
+		dlg.set_artists(artists)
 
 		rep = dlg.run()
 		dlg.destroy()
