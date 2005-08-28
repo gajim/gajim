@@ -17,6 +17,7 @@
 ##
 
 import os
+import locale
 from common import gajim
 from common import i18n
 _ = i18n._
@@ -52,7 +53,10 @@ class OptionsParser:
 			return
 
 		for line in fd.readlines():
-			line = line.decode('utf-8')
+			try:
+				line = line.decode('utf-8')
+			except UnicodeDecodeError:
+				line = line.decode(locale.getpreferredencoding())
 			self.read_line(line)
 
 		fd.close()
