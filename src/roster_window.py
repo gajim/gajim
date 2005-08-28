@@ -2040,14 +2040,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		# no need of this variable
 		self.have_new_message_accel = False # Is the "Ctrl+N" shown ?
 		if gajim.config.get('saveposition'):
-			x = gajim.config.get('roster_x-position')
-			y = gajim.config.get('roster_y-position')
-			if x < 0:
-				x = 0
-			if y < 0:
-				y = 0
-			self.window.move(x, y)
-			self.window.resize(gajim.config.get('roster_width'),
+			gtkgui_helpers.move_window(self.window, gajim.config.get('roster_x-position'),
+				gajim.config.get('roster_y-position'))
+			gtkgui_helpers.resize_window(self.window, gajim.config.get('roster_width'),
 				gajim.config.get('roster_height'))
 
 		self.popups_notification_height = 0

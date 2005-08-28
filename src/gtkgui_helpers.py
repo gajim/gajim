@@ -27,6 +27,10 @@ _ = i18n._
 from common import gajim
 from common import helpers
 
+screen = gtk.gdk.Screen()
+screen_w, screen_h = screen.get_width(), screen.get_height()
+del screen
+
 def get_default_font():
 	''' Get the desktop setting for application font
 	first check for GNOME, then XFCE and last KDE
@@ -161,3 +165,19 @@ def autodetect_browser_mailer():
 			gajim.config.set('openwith', 'kfmclient exec')
 		else:
 			gajim.config.set('openwith', 'custom')
+
+def move_window(window, x, y):
+	''' moves the window but also checks if out of screen '''
+	if x < 0:
+		x = 0
+	if y < 0:
+		y = 0
+	window.move(x, y)
+
+def resize_window(window, w, h):
+	''' resizes window but also checks if huge window or negative values '''
+	if w > screen_w:
+		w = screen_w
+	if h > screen_h:
+		h = screen_h
+	window.resize(abs(w), abs(h))
