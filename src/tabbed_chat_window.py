@@ -74,7 +74,7 @@ class TabbedChatWindow(chat.Chat):
 			# get window position and size from config
 			gtkgui_helpers.move_window(self.window, gajim.config.get('chat-x-position'),
 				gajim.config.get('chat-y-position'))
-			gtkgui_helpers.resize(self.window, gajim.config.get('chat-width'),
+			gtkgui_helpers.resize_window(self.window, gajim.config.get('chat-width'),
 					gajim.config.get('chat-height'))
 
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default

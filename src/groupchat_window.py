@@ -92,7 +92,7 @@ class GroupchatWindow(chat.Chat):
 		if gajim.config.get('saveposition'):
 			gtkgui_helpers.move_window(self.window, gajim.config.get('gc-x-position'),
 				gajim.config.get('gc-y-position'))
-			gtkgui_helpers.resize(self.window, gajim.config.get('gc-width'),
+			gtkgui_helpers.resize_window(self.window, gajim.config.get('gc-width'),
 					gajim.config.get('gc-height'))
 		self.window.show_all()
 
