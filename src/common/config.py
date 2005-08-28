@@ -142,7 +142,7 @@ class Config:
 		'last_sounds_dir': [opt_str, ''],
 		#FIXME: add combobox in prefs for this in .9
 		'tabs_position': [opt_str, 'top'], # top, bottom, left, right
-		'tabs_always_show': [opt_bool, False], # show tab if one tab?
+		'tabs_always_visible': [opt_bool, False], # show tab if one tab?
 		'tabs_border': [opt_bool, False], # border if one tab?
 		'tabs_close_button': [opt_bool, True], # close button in tab?
 	}

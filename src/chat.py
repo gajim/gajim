@@ -88,7 +88,7 @@ class Chat:
 		else:
 			nb_pos = gtk.POS_TOP
 		self.notebook.set_tab_pos(nb_pos)
-		self.notebook.set_show_tabs(gajim.config.get('tabs_always_show'))
+		self.notebook.set_show_tabs(gajim.config.get('tabs_always_visible'))
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
 	def update_font(self):
@@ -175,7 +175,9 @@ class Chat:
 			nickname = hb.get_children()[0]
 			close_button = hb.get_children()[1]
 
-		if not gajim.config.get('tab_close_button'):
+		if gajim.config.get('tabs_close_button'):
+			close_button.show()
+		else:
 			close_button.hide()
 
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+
