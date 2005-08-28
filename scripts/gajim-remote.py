@@ -297,7 +297,7 @@ Please specify account for sending the message.') % sys.argv[2])
 			for key in prop_dict.keys():
 				val = prop_dict[key]
 				spacing = ' ' * level * 4
-				elif type(val) in (unicode, int, str):
+				if type(val) in (unicode, int, str):
 					if val is not None:
 						val = val.strip()
 						ret_str += '%s%-10s: %s\n' % (spacing, key, val)
