@@ -48,8 +48,7 @@ class Chat:
 		self.window = self.xml.get_widget(widget_name)
 
 		self.widget_name = widget_name
-		self.notebook = self.xml.get_widget('chat_notebook')
-		self.notebook.remove_page(0)
+
 		self.plugin = plugin
 		self.account = account
 		self.change_cursor = None
@@ -72,6 +71,25 @@ class Chat:
 		
 		# we check that on opening new windows
 		self.always_compact_view = gajim.config.get('always_compact_view')
+
+		# notebook customizations
+		self.notebook = self.xml.get_widget('chat_notebook')
+		self.notebook.remove_page(0)
+		pref_pos = gajim.config.get('tabs_position')
+		if pref_pos != 'top':
+			if pref_pos == 'bottom':
+				nb_pos = gtk.POS_BOTTOM
+			elif pref_pos == 'left':
+				nb_pos = gtk.POS_LEFT
+			elif pref_pos == 'right':
+				nb_pos = gtk.POS_RIGHT
+			else:
+				nb_pos = gtk.POS_TOP
+		else:
+			nb_pos = gtk.POS_TOP
+		self.notebook.set_tab_pos(nb_pos)
+		self.notebook.set_show_tabs(gajim.config.get('tabs_always_show'))
+		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
 	def update_font(self):
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
@@ -152,8 +170,13 @@ class Chat:
 		hb = self.notebook.get_tab_label(child).get_children()[0]
 		if self.widget_name == 'tabbed_chat_window':
 			nickname = hb.get_children()[1]
+			close_button = hb.get_children()[2]
 		elif self.widget_name == 'groupchat_window':
 			nickname = hb.get_children()[0]
+			close_button = hb.get_children()[1]
+
+		if not gajim.config.get('tab_close_button'):
+			close_button.hide()
 
 		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+
 		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
@@ -405,7 +428,7 @@ class Chat:
 		del self.tagStatus[jid]
 		
 		if len(self.xmls) == 1: # we now have only one tab
-			self.notebook.set_show_tabs(False)
+			self.notebook.set_show_tabs(self.notebook.get_show_tabs())
 			self.show_title()
 	
 	def bring_scroll_to_end(self, textview, diff_y = 0):

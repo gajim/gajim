@@ -140,6 +140,11 @@ class Config:
 		'last_send_dir': [opt_str, ''],
 		'last_emoticons_dir': [opt_str, ''],
 		'last_sounds_dir': [opt_str, ''],
+		#FIXME: add combobox in prefs for this in .9
+		'tabs_position': [opt_str, 'top'], # top, bottom, left, right
+		'tabs_always_show': [opt_bool, False], # show tab if one tab?
+		'tabs_border': [opt_bool, False], # border if one tab?
+		'tabs_close_button': [opt_bool, True], # close button in tab?
 	}
 
 	__options_per_key = {
