@@ -79,13 +79,13 @@ def get_nick_from_jid(jid):
 
 def get_nick_from_fjid(jid):
 	# fake jid is the jid for a contact in a room
-	# gaim@conference.jabber.org/nick/nick-continued
+	# gaim@conference.jabber.no/nick/nick-continued
 	return jid.split('/', 1)[1]
 	
 def get_room_and_nick_from_fjid(jid):
 	# fake jid is the jid for a contact in a room
-	# gaim@conference.jabber.org/nick/nick-continued
-	# return ('gaim@conference.jabber.org', 'nick/nick-continued')
+	# gaim@conference.jabber.no/nick/nick-continued
+	# return ('gaim@conference.jabber.no', 'nick/nick-continued')
 	l = jid.split('/', 1)
 	if len(l) == 1: #No nick
 		l.append('')
@@ -173,6 +173,8 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 		return 'sms'
 	elif host.startswith('tlen'):
 		return 'tlen'
+	elif host.startswith('weather'):
+		return 'weather'
 	elif host.startswith('yahoo'):
 		return 'yahoo'
 

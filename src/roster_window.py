@@ -2056,7 +2056,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.tree.set_model(model)
 		self.make_jabber_state_images()
 		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'irc': {},
-			'icq': {}, 'msn': {}, 'sms': {}, 'yahoo': {} }
+			'icq': {}, 'msn': {}, 'sms': {}, 'weather': {}, 'yahoo': {} }
 		
 		path = os.path.join(gajim.DATA_DIR, 'iconsets/transports')
 		folders = os.listdir(path)
@@ -2065,7 +2065,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				continue
 			folder = os.path.join(path, transport)
 			self.transports_state_images[transport] = self.load_iconset(
-				folder +	'/16x16/')
+				folder + '/16x16/')
 
 		liststore = gtk.ListStore(str, gtk.Image, str)
 		self.status_combobox = self.xml.get_widget('status_combobox')
