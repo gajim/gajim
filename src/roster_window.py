@@ -764,7 +764,8 @@ class RosterWindow:
 		jid = model[iter][3].decode('utf-8')
 		path = model.get_path(iter)
 		account = model[iter][4].decode('utf-8')
-		contact = gajim.contacts[account][jid][0]
+		contact = gajim.get_highest_prio_contact_from_contacts(
+			gajim.contacts[account][jid])
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_contact_context_menu',
 			APP)
