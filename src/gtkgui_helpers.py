@@ -180,3 +180,4 @@ def resize_window(window, w, h):
 	if h > screen_h:
 		h = screen_h
 	window.resize(abs(w), abs(h))
+
