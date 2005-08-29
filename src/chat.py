@@ -430,7 +430,8 @@ class Chat:
 		del self.tagStatus[jid]
 		
 		if len(self.xmls) == 1: # we now have only one tab
-			self.notebook.set_show_tabs(self.notebook.get_show_tabs())
+			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
+			self.notebook.set_show_tabs(show_tabs_if_one_tab)
 			self.show_title()
 	
 	def bring_scroll_to_end(self, textview, diff_y = 0):
