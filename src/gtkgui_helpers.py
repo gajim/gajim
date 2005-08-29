@@ -27,9 +27,8 @@ _ = i18n._
 from common import gajim
 from common import helpers
 
-screen = gtk.gdk.Screen()
-screen_w, screen_h = screen.get_width(), screen.get_height()
-del screen
+screen_w = gtk.gdk.screen_width()
+screen_h = gtk.gdk.screen_height()
 
 def get_default_font():
 	''' Get the desktop setting for application font
