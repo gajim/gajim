@@ -119,12 +119,14 @@ class EditGroupsDialog:
 			else:
 				store.set(iter, 1, False)
 		column = gtk.TreeViewColumn(_('Group'))
+		column.set_expand(True)
 		self.list.append_column(column)
 		renderer = gtk.CellRendererText()
 		column.pack_start(renderer)
 		column.set_attributes(renderer, text = 0)
 		
 		column = gtk.TreeViewColumn(_('In the group'))
+		column.set_expand(False)
 		self.list.append_column(column)
 		renderer = gtk.CellRendererToggle()
 		column.pack_start(renderer)
