@@ -200,8 +200,9 @@ class Systray:
 		if event is None: # None means windows (we explicitly popup in systraywin32.py)
 			#fixme: make me translatable or find a good way to workaround this
 			if self.added_hide_menuitem is False:
+			    	self.systray_context_menu.prepend(gtk.SeparatorMenuItem())
 				item = gtk.MenuItem('Hide this menu')
-				self.systray_context_menu.append(item)
+				self.systray_context_menu.prepend(item)
 				self.added_hide_menuitem = True
 			
 		else: # GNU and Unices
