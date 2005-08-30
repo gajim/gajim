@@ -2,22 +2,22 @@
 # translation of de.po to German
 # translation of gajim-de.po to German
 # This file is distributed under the same license as the PACKAGE package.
+# aldafu@gmail.com, 2005
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 # Christoph Neuroth <delmonico@gmx.net>, 2005.
-# aldafu@gmail.com, 2005
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-30 01:36+0300\n"
-"PO-Revision-Date: 2005-06-01 18:11+0200\n"
+"PO-Revision-Date: 2005-08-30 19:40+0200\n"
 "Last-Translator: Christoph Neuroth <delmonico@gmx.net>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.1\n"
+"X-Generator: KBabel 1.10.2\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../src/common/config.py:51
@@ -112,12 +112,11 @@ msgstr "%s hat das Abonnement beendet"
 #. conflict: Nick Conflict
 #: ../src/common/connection.py:357
 msgid "Unable to join room"
-msgstr ""
+msgstr "Fehler beim Betreten des Raum"
 
 #: ../src/common/connection.py:358
-#, fuzzy
 msgid "Server response:"
-msgstr "Fähigkeiten des Servers"
+msgstr "Server-Antwort:"
 
 #: ../src/common/connection.py:389
 #, python-format
@@ -126,8 +125,7 @@ msgstr "Verbindung mit Konto \"%s\" abgebrochen"
 
 #: ../src/common/connection.py:390
 msgid "To continue sending and receiving messages, you will need to reconnect."
-msgstr ""
-"Um weiter Senden um Empfangen zu können, müssen Sie sich erneut verbinden."
+msgstr "Um weiter Senden um Empfangen zu können, müssen Sie sich erneut verbinden."
 
 #: ../src/common/connection.py:1179
 msgid "Error:"
@@ -189,8 +187,7 @@ msgstr "[Diese Nachricht ist verschlüsselt]"
 
 #: ../src/common/connection.py:1645 ../src/gajim.py:528
 msgid "Check your connection or try again later."
-msgstr ""
-"Überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal."
+msgstr "Überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal."
 
 #: ../src/common/connection.py:1920 ../src/common/connection.py:1929
 msgid "error appeared while processing xmpp:"
@@ -315,16 +312,14 @@ msgid "Moderators"
 msgstr "Moderatoren"
 
 #: ../src/common/helpers.py:126
-#, fuzzy
 msgid "Moderator"
-msgstr "Mo_derator"
+msgstr "Moderator"
 
 #: ../src/common/helpers.py:129
 msgid "Participants"
 msgstr "Teilnehmer"
 
 #: ../src/common/helpers.py:131
-#, fuzzy
 msgid "Participant"
 msgstr "Teilnehmer"
 
@@ -333,7 +328,6 @@ msgid "Visitors"
 msgstr "Besucher"
 
 #: ../src/common/helpers.py:136
-#, fuzzy
 msgid "Visitor"
 msgstr "Besucher"
 
@@ -387,9 +381,9 @@ msgstr "Fehler: %s kann nicht zum Lesen geöffnet werden"
 
 #. chances are we cannot write file in a directory
 #: ../src/common/optparser.py:93
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to write file in %s"
-msgstr "Kann Datei nicht in %s schreiben\n"
+msgstr "Kann Datei nicht in %s schreiben"
 
 #: ../src/advanced.py:52
 msgid "Preference Name"
@@ -594,8 +588,7 @@ msgstr "Sie sind nicht mit dem Server verbunden"
 
 #: ../src/config.py:1430
 msgid "Without a connection, you can not edit your personal information."
-msgstr ""
-"Sie müssen angemeldet sein, um Ihre persönlichen Informationen zu bearbeiten"
+msgstr "Sie müssen angemeldet sein, um Ihre persönlichen Informationen zu bearbeiten"
 
 #: ../src/config.py:1457
 msgid "Failed to get secret keys"
@@ -660,8 +653,7 @@ msgstr "Das Bild ist zu groß"
 msgid ""
 "Image for emoticon has to be less than or equal to 24 pixels in width and 24 "
 "in height."
-msgstr ""
-"Das Bild darf eine Höhe und Breite von je 24 Pixeln nicht überschreiten."
+msgstr "Das Bild darf eine Höhe und Breite von je 24 Pixeln nicht überschreiten."
 
 #: ../src/config.py:1952
 msgid "Choose Image"
@@ -723,8 +715,7 @@ msgid "This bookmark has invalid data"
 msgstr "Dieser Bookmark hat ungültige Daten"
 
 #: ../src/config.py:2633
-msgid ""
-"Please be sure to fill out server and room fields or remove this bookmark."
+msgid "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "Bitte Serverfeld und Raumfeld ausfüllen oder Bookmark löschen."
 
 #: ../src/config.py:2854
@@ -751,8 +742,7 @@ msgstr "Sie müssen einen Namen für dieses Konto eingeben"
 
 #: ../src/config.py:2883
 msgid "You need to enter a valid server address to add an account."
-msgstr ""
-"Sie müssen einen gültigen Server angeben, um ein neues Konto zu erstellen."
+msgstr "Sie müssen einen gültigen Server angeben, um ein neues Konto zu erstellen."
 
 #: ../src/dialogs.py:55
 #, python-format
@@ -1002,12 +992,12 @@ msgstr "_Ablehnen"
 #: ../src/dialogs.py:1219
 #, python-format
 msgid "You have been invited to the %s room by %s"
-msgstr ""
+msgstr "Sie wurden in den Raum %s von %s eingeladen"
 
 #: ../src/dialogs.py:1221
 #, python-format
 msgid "Comment: %s"
-msgstr ""
+msgstr "Kommentar: %s"
 
 #. ('HTTP_AUTH', account, (method, url, iq_obj))
 #: ../src/gajim.py:153
@@ -1079,9 +1069,8 @@ msgid "Theme"
 msgstr "Thema"
 
 #: ../src/gajim_themes_window.py:126 ../src/gajim_themes_window.py:128
-#, fuzzy
 msgid "theme name"
-msgstr "thema_name"
+msgstr "Name des Themas"
 
 #: ../src/gajim_themes_window.py:129
 msgid "theme_name"
@@ -1093,11 +1082,10 @@ msgid "You just received a new message in room \"%s\""
 msgstr "Sie haben eine neue Nachricht im Raum \"%s\" erhalten"
 
 #: ../src/groupchat_window.py:128
-#, fuzzy
 msgid ""
 "If you close this window and you have history disabled, this message will be "
 "lost."
-msgstr "Wenn sie das Fenster schließen, geht die Nachricht verloren."
+msgstr "Wenn sie das Fenster schließen und die History abgeschaltet haben, geht die Nachricht verloren."
 
 #: ../src/groupchat_window.py:143
 #, python-format
@@ -1108,8 +1096,7 @@ msgstr[1] "Möchten Sie die Räume \"%s\" wirklich verlassen?"
 
 #: ../src/groupchat_window.py:148
 msgid "If you close this window, you will be disconnected from this room."
-msgid_plural ""
-"If you close this window, you will be disconnected from these rooms."
+msgid_plural "If you close this window, you will be disconnected from these rooms."
 msgstr[0] ""
 "Wenn Sie dieses Fenster schließen, wird die Verbindung zu diesem Raum "
 "abgebrochen."
@@ -1203,11 +1190,10 @@ msgid "Banning %s"
 msgstr "%s verbannen"
 
 #: ../src/groupchat_window.py:966 ../src/tabbed_chat_window.py:344
-#, fuzzy
 msgid ""
 "If you close this tab and you have history disabled, the message will be "
 "lost."
-msgstr "Wenn Sie diesen Reiter schließen, ist die Nachricht verloren."
+msgstr "Wenn Sie diesen Reiter schließen und die History abgeschaltet haben, ist die Nachricht verloren."
 
 #: ../src/history_window.py:138
 #, python-format
@@ -1285,8 +1271,7 @@ msgstr "Transport \"%s\" wird entfernt"
 
 #: ../src/roster_window.py:676
 #, python-format
-msgid ""
-"You will no longer be able to send and receive messages to contacts from %s."
+msgid "You will no longer be able to send and receive messages to contacts from %s."
 msgstr "Sie können nun von %s keine Nachrichten mehr senden oder empfangen."
 
 #: ../src/roster_window.py:719
@@ -1337,8 +1322,7 @@ msgstr "Abonnement-Anforderung wurde gesendet"
 #: ../src/roster_window.py:1026
 #, python-format
 msgid "If \"%s\" accepts this request you will know his status."
-msgstr ""
-"Wenn der Kontakt \"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
+msgstr "Wenn der Kontakt \"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
 
 #: ../src/roster_window.py:1155
 #, python-format
@@ -1418,8 +1402,7 @@ msgstr "OpenPGP-Verschlüsselung"
 #: ../src/tabbed_chat_window.py:130
 #, python-format
 msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
-msgstr ""
-"%s hat keinen OpenPGP-Schlüssel verbreitet und Sie haben keinen zugewiesen"
+msgstr "%s hat keinen OpenPGP-Schlüssel verbreitet und Sie haben keinen zugewiesen"
 
 #. %s is being replaced in the code with JID
 #: ../src/tabbed_chat_window.py:275 ../src/tabbed_chat_window.py:343
@@ -1428,11 +1411,10 @@ msgid "You just received a new message from \"%s\""
 msgstr "Sie haben eine neue Nachricht von \"%s\""
 
 #: ../src/tabbed_chat_window.py:276
-#, fuzzy
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
-msgstr "Wenn sie das Fenster schließen, geht die Nachricht verloren."
+msgstr "Wenn sie das Fenster schließen und die History abgeschaltet haben, geht die Nachricht verloren."
 
 #. we are not connected
 #: ../src/tabbed_chat_window.py:516
@@ -1490,8 +1472,7 @@ msgstr " resource mit Priorität "
 
 #: ../src/vcard.py:377
 msgid "Without a connection you can not publish your contact information."
-msgstr ""
-"Sie müssen angemeldet sein, um Kontakt-Informationen zu veröffentlichen"
+msgstr "Sie müssen angemeldet sein, um Kontakt-Informationen zu veröffentlichen"
 
 #: ../src/vcard.py:405
 msgid "Without a connection, you can not get your contact information."
@@ -1563,9 +1544,8 @@ msgid "<b>Sounds</b>"
 msgstr "<b>Klänge</b>"
 
 #: ../src/gtkgui.glade.h:18
-#, fuzzy
 msgid "<b>Visual Notifications</b>"
-msgstr "<b>Benachrichtigungen</b>"
+msgstr "<b>Visuelle Benachrichtigungen</b>"
 
 #: ../src/gtkgui.glade.h:19
 msgid "<b>What do you want to do?</b>"
@@ -1698,16 +1678,15 @@ msgid "Auto join"
 msgstr "Automatisch verbinden"
 
 #: ../src/gtkgui.glade.h:51
-#, fuzzy
 msgid ""
 "Autodetect on every Gajim startup\n"
 "Always use GNOME default applications\n"
 "Always use KDE default applications\n"
 "Custom"
 msgstr ""
-"Automatisch Erkennen bei jedem Programmstart\n"
-"Verwende GNOME Standard-Anwendungen\n"
-"Verwende KDE Standard-Anwendungen\n"
+"Bei jedem Programmstart automatisch erkennen\n"
+"Immer GNOME Standard-Anwendungen verwenden\n"
+"Immer KDE Standard-Anwendungen verwenden\n"
 "Benutzerdefiniert"
 
 #: ../src/gtkgui.glade.h:55
@@ -1739,21 +1718,18 @@ msgid "Bold"
 msgstr "Fett"
 
 #: ../src/gtkgui.glade.h:62
-#, fuzzy
 msgid "C_onnect on Gajim startup"
 msgstr "Beim Pr_ogrammstart verbinden"
 
 #: ../src/gtkgui.glade.h:63
-#, fuzzy
 msgid "Cancel file transfer"
-msgstr "Bricht den ausgewählten Dateitransfer ab"
+msgstr "Dateitransfer abbrechen"
 
 #: ../src/gtkgui.glade.h:64
 msgid "Cancels the selected file transfer"
 msgstr "Bricht den ausgewählten Dateitransfer ab"
 
 #: ../src/gtkgui.glade.h:65
-#, fuzzy
 msgid ""
 "Cancels the selected file transfer. If there is an incomplete file, kept in "
 "the file system it will be removed. This operation is not reversable"
@@ -1786,9 +1762,8 @@ msgid "Chat with"
 msgstr "Unterhalten mit"
 
 #: ../src/gtkgui.glade.h:73
-#, fuzzy
 msgid "Check for new _version on Gajim startup"
-msgstr "Beim Start auf neue _Versionen prüfen"
+msgstr "Beim Start von Gajim auf neue _Versionen prüfen"
 
 #: ../src/gtkgui.glade.h:74
 msgid "Check if you want to register for a new jabber account"
@@ -1837,9 +1812,8 @@ msgid "Click to get contact's extended information"
 msgstr "Klicken, um erweiterte Informationen des Kontaktes einzusehen"
 
 #: ../src/gtkgui.glade.h:82
-#, fuzzy
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr "Klicken, um die Fähigkeiten auf Jabber-Servern zu sehen."
+msgstr "Klicken, um die Fähigkeiten (z.B. MSN, ICQ Transporte) auf Jabber-Servern zu sehen."
 
 #: ../src/gtkgui.glade.h:83
 msgid "Click to see past conversation in this room"
@@ -2034,8 +2008,7 @@ msgstr ""
 "über Kontakte informieren, die sich gerade abgemeldet haben"
 
 #: ../src/gtkgui.glade.h:128
-msgid ""
-"Gajim will only change the icon of the contact that sent the new message"
+msgid "Gajim will only change the icon of the contact that sent the new message"
 msgstr ""
 "Gajim wird nur das Symbol des Kontaktes ändern, von dem die neue Nachricht "
 "kommt"
@@ -2100,7 +2073,6 @@ msgstr ""
 "Nachricht."
 
 #: ../src/gtkgui.glade.h:145
-#, fuzzy
 msgid "If checked, Gajim will join this group chat on startup"
 msgstr "Wenn gewählt tritt Gajim dem Chatraum beim Programmstart bei"
 
@@ -2547,9 +2519,8 @@ msgid "Show only in _roster"
 msgstr "Nur in der Kontaktliste anzeigen"
 
 #: ../src/gtkgui.glade.h:251
-#, fuzzy
 msgid "Show roster window on Gajim startup"
-msgstr "Kontaktliste beim Programmstart anzeigen"
+msgstr "Kontaktliste beim Start von Gajim anzeigen"
 
 #: ../src/gtkgui.glade.h:252
 msgid "Shows a list of file transfers between you and other"
@@ -2709,9 +2680,8 @@ msgid "User ID:"
 msgstr "Benutzer-ID:"
 
 #: ../src/gtkgui.glade.h:291
-#, fuzzy
 msgid "When a file transfer is complete show a popup notification"
-msgstr "Wenn die Datei komplett übertragen wurde, zeige eine Benachrichtigung"
+msgstr "Zeige eine Benachrichtigung, wenn die Datei komplett übertragen wurde."
 
 #: ../src/gtkgui.glade.h:292
 msgid ""
@@ -3089,7 +3059,7 @@ msgid "minutes"
 msgstr "Minuten"
 
 #: ../src/tooltips.py:212
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim - one unread message"
 msgid_plural "Gajim - %d unread messages"
 msgstr[0] "Gajim - Eine ungelesene Nachricht"
@@ -3101,13 +3071,12 @@ msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
 #: ../src/tooltips.py:263
-#, fuzzy
 msgid "Role: "
 msgstr "Rolle:"
 
 #: ../src/tooltips.py:266
 msgid "Affiliation: "
-msgstr ""
+msgstr "Zugehörigkeit: "
 
 #: ../src/tooltips.py:269 ../src/tooltips.py:353 ../src/tooltips.py:366
 #: ../src/tooltips.py:429
@@ -3161,35 +3130,29 @@ msgid "Transferred: "
 msgstr "Übertragen: "
 
 #: ../src/tooltips.py:432 ../src/tooltips.py:453
-#, fuzzy
 msgid "Not started"
-msgstr "nicht gestartet"
+msgstr "Nicht gestartet"
 
 #: ../src/tooltips.py:436
-#, fuzzy
 msgid "Stopped"
-msgstr "angehalten"
+msgstr "Angehalten"
 
 #: ../src/tooltips.py:438 ../src/tooltips.py:441
-#, fuzzy
 msgid "Completed"
-msgstr "abgeschlossen"
+msgstr "Abgeschlossen"
 
 #: ../src/tooltips.py:445
-#, fuzzy
 msgid "Paused"
-msgstr "Pause"
+msgstr "Unterbrochen"
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
 #: ../src/tooltips.py:449
-#, fuzzy
 msgid "Stalled"
-msgstr "steht still"
+msgstr "Steht still"
 
 #: ../src/tooltips.py:451
-#, fuzzy
 msgid "Transferring"
-msgstr "übertrage"
+msgstr "Übertrage"
 
 #: ../src/filetransfers_window.py:72
 msgid "File"
@@ -3212,7 +3175,7 @@ msgstr "Größe: %s"
 #. You is a reply of who send a file
 #: ../src/filetransfers_window.py:154
 msgid "You"
-msgstr ""
+msgstr "Sie"
 
 #: ../src/filetransfers_window.py:155 ../src/filetransfers_window.py:216
 #, python-format
@@ -3362,29 +3325,26 @@ msgid "Show the chat dialog so that you can send message to a contact"
 msgstr "Zeige Chatfenster, so dass eine Nachricht gesendet werden kann"
 
 #: ../scripts/gajim-remote.py:113
-#, fuzzy
 msgid "JID of the contact that you want to chat with"
-msgstr "jabber id des Kontakts mit dem gechattet werden soll"
+msgstr "JID des Kontakts mit Sie chatten möchten"
 
 #: ../scripts/gajim-remote.py:116
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "falls angegeben, wird der Kontakt von der Liste dieses Kontos gewählt"
 
 #: ../scripts/gajim-remote.py:121
-#, fuzzy
 msgid ""
 "Send new message to a contact in the roster. Both OpenPGP key and account "
 "are optional. If you want to set only 'account', without 'OpenPGP key', just "
 "set 'OpenPGP key' to ''."
 msgstr ""
 "Sende neue Nachricht zu einem Kontakt. OpenPGP-Schlüssel und Konto sind "
-"optional. Falls nur account gesetzt werden soll, muss 'pgp key' zu '' "
+"optional. Falls nur Konto gesetzt werden soll, muss 'pgp key' zu '' "
 "gesetzt werden."
 
 #: ../scripts/gajim-remote.py:125
-#, fuzzy
 msgid "JID of the contact that will receive the message"
-msgstr "jabber id des Kontakts, der die Nachricht empfängt"
+msgstr "JID des Kontakts, der die Nachricht empfängt"
 
 #: ../scripts/gajim-remote.py:127
 msgid "message contents"
@@ -3407,29 +3367,24 @@ msgid "Get detailed info on a contact"
 msgstr "Zeige Informationen über Kontakt"
 
 #: ../scripts/gajim-remote.py:137 ../scripts/gajim-remote.py:144
-#, fuzzy
 msgid "JID of the contact"
-msgstr "jabber id des Kontakts"
+msgstr "JID des Kontakts"
 
 #: ../scripts/gajim-remote.py:141
-#, fuzzy
 msgid "Send file to a contact"
-msgstr "Zeige Informationen über Kontakt"
+msgstr "Dem Kontakt eine Datei senden"
 
 #: ../scripts/gajim-remote.py:143
-#, fuzzy
 msgid "file"
 msgstr "Datei"
 
 #: ../scripts/gajim-remote.py:143
-#, fuzzy
 msgid "File path"
-msgstr "Datei"
+msgstr "Dateipfad"
 
 #: ../scripts/gajim-remote.py:145
-#, fuzzy
 msgid "if specified, file will be sent using this account"
-msgstr "falls angegeben, wird die Nachricht über dieses Konto gesendet"
+msgstr "Falls angegeben, wird die Nachricht über dieses Konto gesendet"
 
 #: ../scripts/gajim-remote.py:167
 msgid "Missing argument \"contact_jid\""
@@ -3457,7 +3412,7 @@ msgid "Session bus is not available."
 msgstr "Session-Bus nicht verfügbar."
 
 #: ../scripts/gajim-remote.py:221
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown D-Bus version: %s"
 msgstr "Unbekannte D-BUS-Version: %s"
 
@@ -3502,32 +3457,3 @@ msgstr ""
 "Argument \"%s\" wurde nicht angegeben. \n"
 "Geben Sie \"%s help %s\" ein für Hilfe"
 
-#~ msgid "Gajim disconnected you from %s"
-#~ msgstr "Gajim hat die Verbindung nach %s unterbrochen"
-
-#~ msgid ""
-#~ "%s seconds have passed and server did not reply to our keep-alive. If you "
-#~ "believe such disconnection should not have happened, you can disable "
-#~ "sending keep-alive packets by modifying this account."
-#~ msgstr ""
-#~ "Nach %s Sekunden hat der Server nicht auf keep-alive-Pakete reagiert. "
-#~ "Wenn Sie solch einen Verbindungsabbruch verhindern möchten, können Sie "
-#~ "das Senden von keep-alive-Paketen in den Konto-Einstellungen abschalten."
-
-#~ msgid "error: cannot open %s for reading\n"
-#~ msgstr "Fehler: %s kann nicht zum Lesen geöffnet werden\n"
-
-#~ msgid "If you close the window, this message will be lost."
-#~ msgstr "Wenn Sie das Fenster schließen, ist die Nachricht verloren."
-
-#~ msgid "Stop file transfer"
-#~ msgstr "Stopp Dateitransfer"
-
-#~ msgid "_About"
-#~ msgstr "_Über"
-
-#~ msgid "Gajim - %s unread messages"
-#~ msgstr "Gajim - %s ungelesene Nachrichten"
-
-#~ msgid "paused"
-#~ msgstr "pausiert"
