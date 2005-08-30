@@ -23,6 +23,7 @@ import urllib
 import base64
 import mimetypes
 import os
+import sys
 import dialogs
 
 from common import helpers
@@ -154,6 +155,7 @@ class VcardWindow:
 			response = dialog.run()
 			if response == gtk.RESPONSE_OK:
 				f = dialog.get_filename()
+				f = f.decode(sys.getfilesystemencoding())
 				if self.image_is_ok(f):
 					ok = True
 			else:

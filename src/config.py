@@ -21,6 +21,7 @@ import gtk
 import gtk.glade
 import gobject
 import os
+import sys
 import common.config
 import common.sleepy
 
@@ -1019,6 +1020,7 @@ class PreferencesWindow:
 			if response != gtk.RESPONSE_OK:
 				break
 			file = dialog.get_filename()
+			file = file.decode(sys.getfilesystemencoding())
 			if os.path.exists(file):
 				break
 		dialog.destroy()
@@ -1989,6 +1991,7 @@ class ManageEmoticonsWindow:
 			response = dialog.run()
 			if response == gtk.RESPONSE_OK:
 				file = dialog.get_filename()
+				file = file.decode(sys.getfilesystemencoding())
 				if self.image_is_ok(file):
 					ok = True
 			else:

@@ -22,6 +22,7 @@ import gtk
 import gtk.glade
 import gobject
 import os
+import sys
 
 import gtkgui_helpers
 import tooltips
@@ -241,6 +242,7 @@ _('Connection with peer cannot be established.'))
 			files_path_list = dialog.get_filenames()
 			dialog.destroy()
 			for file_path in files_path_list:
+				file_path = file_path.decode(sys.getfilesystemencoding())
 				if os.path.isfile(file_path):
 					file_dir = os.path.dirname(file_path)
 					self.send_file(account, contact, file_path)
@@ -297,6 +299,7 @@ _('Connection with peer cannot be established.'))
 				response = dialog.run()
 				if response == gtk.RESPONSE_OK:
 					file_path = dialog.get_filename()
+					file_path = file_path.decode('utf-8')
 					if os.path.exists(file_path):
 						#FIXME: pango does not work here.
 						#FIXME: if gtk2.8 do this via signal
