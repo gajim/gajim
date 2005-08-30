@@ -17,7 +17,7 @@
 ## GNU General Public License for more details.
 ##
 
-from tempfile import *
+from os import tmpfile
 
 USE_GPG = True
 
@@ -115,7 +115,7 @@ else:
 
 			try: proc.wait()
 			except IOError: pass
-			if resp.has_key('GOOD_PASSPHRASE'):
+			if resp.has_key('GOOD_PASSPHRASE') or resp.has_key('SIG_CREATED'):
 				return self._stripHeaderFooter(output)
 			return 'BAD_PASSPHRASE'
 
@@ -124,7 +124,7 @@ else:
 				return str
 			if not str:
 				return ''
-			f = TemporaryFile(prefix='gajim')
+			f = tmpfile()
 			fd = f.fileno()
 			f.write(str)
 			f.seek(0)
@@ -147,8 +147,6 @@ else:
 			keyid = ''
 			if resp.has_key('GOODSIG'):
 				keyid = resp['GOODSIG'].split()[0]
-			elif resp.has_key('BADSIG'):
-				keyid = resp['BADSIG'].split()[0]
 			return keyid
 
 		def get_keys(self, secret = False):

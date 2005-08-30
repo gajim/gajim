@@ -1383,33 +1383,35 @@ class Connection:
 			#Get bookmarks from private namespace
 			self.get_bookmarks()
 	
-	def change_status(self, show, msg, sync = False):
+	def change_status(self, show, msg, sync = False, auto = False):
 		if sync:
-			self.change_status2(show, msg)
+			self.change_status2(show, msg, auto)
 		else:
-			t = threading.Thread(target=self.change_status2, args = (show, msg))
+			t = threading.Thread(target=self.change_status2, args = (show, msg, auto))
 			t.start()
 
-	def change_status2(self, show, msg):
+	def change_status2(self, show, msg, auto = False):
 		if not show in STATUS_LIST:
 			return -1
 		sshow = show # show to be send
 		if show == 'online':
 			sshow = None
-		signed = ''
 		if not msg:
 			lowered_uf_status_msg = helpers.get_uf_show(show).lower()
 			if lowered_uf_status_msg == _('invisible'): # do not show I'm invisible!
 				lowered_uf_status_msg = _('offline')
 			msg = _("I'm %s") % lowered_uf_status_msg
+
+		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		if keyID and USE_GPG:
-			if self.connected < 2 and self.gpg.passphrase is None:
+		if keyID and USE_GPG and not auto and not show == 'offline':
+			use_gpg_agent = gajim.config.get('use_gpg_agent')
+			if self.connected < 2 and self.gpg.passphrase is None and not use_gpg_agent:
 				# We didn't set a passphrase
 				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
 					#%s is the account name here
 					_('You will be connected to %s without OpenPGP.') % self.name))
-			else:
+			elif self.gpg.passphrase is not None or use_gpg_agent:
 				signed = self.gpg.sign(msg, keyID)
 				if signed == 'BAD_PASSPHRASE':
 					signed = ''
@@ -1848,7 +1850,11 @@ class Connection:
 
 	def gpg_passphrase(self, passphrase):
 		if USE_GPG:
-			self.gpg.passphrase = passphrase
+			use_gpg_agent = gajim.config.get('use_gpg_agent')
+			if use_gpg_agent:
+				self.gpg.passphrase = None
+			else:
+				self.gpg.passphrase = passphrase
 
 	def ask_gpg_keys(self):
 		if USE_GPG:

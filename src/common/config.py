@@ -108,6 +108,7 @@ class Config:
 		'send_os_info': [ opt_bool, True ],
 		'check_for_new_version': [ opt_bool, False ],
 		'usegpg': [ opt_bool, False ],
+		'use_gpg_agent': [ opt_bool, False ],
 		'log_notif_in_user_file': [ opt_bool, True ],
 		'log_notif_in_sep_file': [ opt_bool, True ],
 		'change_roster_title': [ opt_bool, True ],

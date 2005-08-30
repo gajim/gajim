@@ -1171,7 +1171,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			del self.gpg_passphrase[keyid]
 		return False
 
-	def send_status(self, account, status, txt, sync = False):
+	def send_status(self, account, status, txt, sync = False, auto = False):
 		if status != 'offline':
 			if gajim.connections[account].connected < 2:
 				model = self.tree.get_model()
@@ -1202,36 +1202,44 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					gajim.config.set_per('accounts', account, 'password', passphrase)
 
 			keyid = None
-			save_gpg_pass = True
-			save_gpg_pass = gajim.config.get_per('accounts', account, 
-				'savegpgpass')
+			use_gpg_agent = gajim.config.get('use_gpg_agent')
+			# we don't need to bother with the passphrase if we use the agent
+			if use_gpg_agent:
+				save_gpg_pass = False
+			else:
+			        save_gpg_pass = gajim.config.get_per('accounts', account, 
+				        'savegpgpass')
 			keyid = gajim.config.get_per('accounts', account, 'keyid')
 			if keyid and gajim.connections[account].connected < 2 and \
 				gajim.config.get('usegpg'):
-				if save_gpg_pass:
-					passphrase = gajim.config.get_per('accounts', account, 
-																	'gpgpassword')
+				
+				if use_gpg_agent:
+					self.gpg_passphrase[keyid] = None
 				else:
-					if self.gpg_passphrase.has_key(keyid):
-						passphrase = self.gpg_passphrase[keyid]
-						save = False
+					if save_gpg_pass:
+						passphrase = gajim.config.get_per('accounts', account, 'gpgpassword')
 					else:
-						w = dialogs.PassphraseDialog(
-							_('Passphrase Required'),
-							_('Enter GPG key passphrase for account %s') % account, 
-							_('Save passphrase'))
-						passphrase, save = w.run()
-					if passphrase == -1:
-						passphrase = None
-					else:
-						self.gpg_passphrase[keyid] = passphrase
-						gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
-					if save:
-						gajim.config.set_per('accounts', account, 'savegpgpass', True)
-						gajim.config.set_per('accounts', account, 'gpgpassword', 
-													passphrase)
-				gajim.connections[account].gpg_passphrase(passphrase)
-		gajim.connections[account].change_status(status, txt, sync)
+						if self.gpg_passphrase.has_key(keyid):
+							passphrase = self.gpg_passphrase[keyid]
+							save = False
+						else:
+							w = dialogs.PassphraseDialog(
+								_('Passphrase Required'),
+								_('Enter GPG key passphrase for account %s') % account, 
+								_('Save passphrase'))
+							passphrase, save = w.run()
+						if passphrase == -1:
+							passphrase = None
+						else:
+							self.gpg_passphrase[keyid] = passphrase
+							gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
+						if save:
+							gajim.config.set_per('accounts', account, 'savegpgpass', True)
+							gajim.config.set_per('accounts', account, 'gpgpassword', 
+														passphrase)
+					gajim.connections[account].gpg_passphrase(passphrase)
+					
+		gajim.connections[account].change_status(status, txt, sync, auto)
 		for room_jid in self.plugin.windows[account]['gc']:
 			if room_jid != 'tabbed':
 				nick = self.plugin.windows[account]['gc'][room_jid].nicks[room_jid]

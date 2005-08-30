@@ -658,6 +658,9 @@ class Interface:
 			config.GroupchatConfigWindow(self, account, jid, array[1])
 
 	def handle_event_bad_passphrase(self, account, array):
+		use_gpg_agent = gajim.config.get('use_gpg_agent')
+		if use_gpg_agent:
+		  return
 		keyID = gajim.config.get_per('accounts', account, 'keyid')
 		self.roster.forget_gpg_passphrase(keyID)
 		dialogs.WarningDialog(_('Your passphrase is incorrect'),
@@ -822,7 +825,7 @@ class Interface:
 				#we save out online status
 				gajim.status_before_autoaway[account] = \
 					gajim.connections[account].status
-				#we go away
+				#we go away (no auto status)
 				self.roster.send_status(account, 'away',
 					gajim.config.get('autoaway_message'))
 				gajim.sleeper_state[account] = 'autoaway'
