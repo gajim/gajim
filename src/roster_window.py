@@ -1961,9 +1961,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if gajim.config.get('mergeaccounts') or len(gajim.connections) == 1:
 			merge = 1
 		model = treeview.get_model()
-		data = selection.data
-		if not data:
+		if not selection.data:
 			return
+		data = selection.data.decode('utf-8')
 		drop_info = treeview.get_dest_row_at_pos(x, y)
 		if not drop_info:
 			return
