@@ -218,6 +218,8 @@ class Connection:
 				self.dispatch('MYVCARD', vcard)
 				#we re-send our presence with sha
 				sshow = STATUS_LIST[self.connected]
+				if sshow == 'online':
+					sshow = None
 				prio = unicode(gajim.config.get_per('accounts', self.name,
 					'priority'))
 				p = common.xmpp.Presence(typ = None, priority = prio, show = sshow,
