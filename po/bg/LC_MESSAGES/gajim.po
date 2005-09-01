@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-30 01:36+0300\n"
+"POT-Creation-Date: 2005-09-01 20:45+0300\n"
 "PO-Revision-Date: 2005-08-26 21:22+0300\n"
 "Last-Translator: Yavor Doganov <yavor@doganov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -26,59 +26,59 @@ msgstr "Автоматично състояние поради липса на �
 msgid "Not available as a result of being idle"
 msgstr "Автоматично състояние поради липса на активност"
 
-#: ../src/common/config.py:283
+#: ../src/common/config.py:286
 msgid "Sleeping"
 msgstr "Спя"
 
-#: ../src/common/config.py:284
+#: ../src/common/config.py:287
 msgid "Back soon"
 msgstr "Връщам се скоро"
 
-#: ../src/common/config.py:284
+#: ../src/common/config.py:287
 msgid "Back in some minutes."
 msgstr "Ще се върна след малко."
 
-#: ../src/common/config.py:285
+#: ../src/common/config.py:288
 msgid "Eating"
 msgstr "Хапвам"
 
-#: ../src/common/config.py:285
+#: ../src/common/config.py:288
 msgid "I'm eating, so leave me a message."
 msgstr "Хапвам, оставете съобщение."
 
-#: ../src/common/config.py:286
+#: ../src/common/config.py:289
 msgid "Movie"
 msgstr "Филм"
 
-#: ../src/common/config.py:286
+#: ../src/common/config.py:289
 msgid "I'm watching a movie."
 msgstr "Гледам филм."
 
-#: ../src/common/config.py:287
+#: ../src/common/config.py:290
 msgid "Working"
 msgstr "Работя"
 
-#: ../src/common/config.py:287
+#: ../src/common/config.py:290
 msgid "I'm working."
 msgstr "Работя."
 
-#: ../src/common/config.py:288
+#: ../src/common/config.py:291
 msgid "Phone"
 msgstr "Телефон"
 
-#: ../src/common/config.py:288
+#: ../src/common/config.py:291
 msgid "I'm on the phone."
 msgstr "Говоря по телефона."
 
-#: ../src/common/config.py:289
+#: ../src/common/config.py:292
 msgid "Out"
 msgstr "Навън"
 
-#: ../src/common/config.py:289
+#: ../src/common/config.py:292
 msgid "I'm out enjoying life"
 msgstr "Наслаждавам се на живота навън"
 
-#: ../src/common/connection.py:281 ../src/common/connection.py:291
+#: ../src/common/connection.py:283 ../src/common/connection.py:293
 #, python-format
 msgid ""
 "Subject: %s\n"
@@ -87,111 +87,111 @@ msgstr ""
 "Тема: %s\n"
 "%s"
 
-#: ../src/common/connection.py:341 ../src/common/connection.py:1542
+#: ../src/common/connection.py:343 ../src/common/connection.py:1546
 msgid "I would like to add you to my roster."
 msgstr ""
 "Бих искал(а) да ви добавя към списъка си. I would like to add you to my "
 "roster."
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection.py:347
+#: ../src/common/connection.py:349
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr "вече сме записани за %s"
 
-#: ../src/common/connection.py:349
+#: ../src/common/connection.py:351
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "искане за отписване от %s"
 
-#: ../src/common/connection.py:351
+#: ../src/common/connection.py:353
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "вече сме отписани от %s"
 
 #. conflict: Nick Conflict
-#: ../src/common/connection.py:357
+#: ../src/common/connection.py:359
 msgid "Unable to join room"
 msgstr "Неуспех при влизането в стаята"
 
-#: ../src/common/connection.py:358
+#: ../src/common/connection.py:360
 msgid "Server response:"
 msgstr "Отговор от сървъра:"
 
-#: ../src/common/connection.py:389
+#: ../src/common/connection.py:391
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Връзката на акаунт „%s“ се разпадна"
 
-#: ../src/common/connection.py:390
+#: ../src/common/connection.py:392
 msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr ""
 "За да продължите да изпращате и получавате съобщения, трябва да се свържете "
 "наново."
 
-#: ../src/common/connection.py:1179
+#: ../src/common/connection.py:1181
 msgid "Error:"
 msgstr "Грешка:"
 
-#: ../src/common/connection.py:1246 ../src/common/connection.py:1307
-#: ../src/common/connection.py:1644
+#: ../src/common/connection.py:1247 ../src/common/connection.py:1309
+#: ../src/common/connection.py:1648
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Не може да се осъществи свързване с „%s“"
 
-#: ../src/common/connection.py:1247 ../src/common/connection.py:1308
+#: ../src/common/connection.py:1248 ../src/common/connection.py:1310
 msgid "Check your connection or try again later"
 msgstr "Проверете връзката или опитайте отново по-късно"
 
-#: ../src/common/connection.py:1250 ../src/common/connection.py:1647
+#: ../src/common/connection.py:1252 ../src/common/connection.py:1651
 #, python-format
 msgid "Connected to server with %s"
 msgstr "Свързан към сървър с %s"
 
-#: ../src/common/connection.py:1320
+#: ../src/common/connection.py:1322
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Неуспех при удостоверяването с „%s“"
 
-#: ../src/common/connection.py:1321
+#: ../src/common/connection.py:1323
 msgid "Please check your login and password for correctness."
 msgstr "Проверете дали името и паролата са правилни."
 
-#: ../src/common/connection.py:1402
+#: ../src/common/connection.py:1403
 msgid "invisible"
 msgstr "невидим"
 
 #. do not show I'm invisible!
-#: ../src/common/connection.py:1403
+#: ../src/common/connection.py:1404
 msgid "offline"
 msgstr "изключен"
 
-#: ../src/common/connection.py:1404 ../src/roster_window.py:1250
+#: ../src/common/connection.py:1405 ../src/roster_window.py:1258
 #, python-format
 msgid "I'm %s"
 msgstr "%s"
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:1409
+#: ../src/common/connection.py:1413
 msgid "OpenPGP passphrase was not given"
 msgstr "Не беше зададена парола за OpenPGP"
 
 #. %s is the account name here
-#: ../src/common/connection.py:1411
+#: ../src/common/connection.py:1415
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Ще бъдете свързани към „%s“ без OpenPGP."
 
 #. we're not english
-#: ../src/common/connection.py:1504
+#: ../src/common/connection.py:1508
 msgid "[This message is encrypted]"
 msgstr "[Това съобщение е криптирано]"
 
-#: ../src/common/connection.py:1645 ../src/gajim.py:528
+#: ../src/common/connection.py:1649 ../src/gajim.py:528
 msgid "Check your connection or try again later."
 msgstr "Проверете връзката или опитайте отново по-късно."
 
-#: ../src/common/connection.py:1920 ../src/common/connection.py:1929
+#: ../src/common/connection.py:1928 ../src/common/connection.py:1937
 msgid "error appeared while processing xmpp:"
 msgstr "грешка при обработката на xmpp:"
 
@@ -417,9 +417,9 @@ msgstr "акаунт: "
 #: ../src/dialogs.py:321 ../src/dialogs.py:897 ../src/dialogs.py:898
 #: ../src/gajim.py:487 ../src/gajim.py:488 ../src/roster_window.py:808
 #: ../src/roster_window.py:1024 ../src/roster_window.py:1164
-#: ../src/roster_window.py:1353 ../src/roster_window.py:1387
-#: ../src/roster_window.py:1712 ../src/roster_window.py:1911
-#: ../src/roster_window.py:1913 ../src/roster_window.py:1987
+#: ../src/roster_window.py:1361 ../src/roster_window.py:1395
+#: ../src/roster_window.py:1720 ../src/roster_window.py:1919
+#: ../src/roster_window.py:1921 ../src/roster_window.py:1995
 msgid "not in the roster"
 msgstr "не е в списъка"
 
@@ -480,177 +480,177 @@ msgstr "_Търсене в уеб"
 msgid "Subject: %s\n"
 msgstr "Тема: %s\n"
 
-#: ../src/config.py:196 ../src/config.py:444
+#: ../src/config.py:197 ../src/config.py:445
 #, python-format
 msgid "Every %s _minutes"
 msgstr "Всеки %s _минути"
 
-#: ../src/config.py:314
+#: ../src/config.py:315
 msgid "Active"
 msgstr "Активен"
 
-#: ../src/config.py:322
+#: ../src/config.py:323
 msgid "Event"
 msgstr "Събитие"
 
-#: ../src/config.py:328
+#: ../src/config.py:329
 msgid "Sound"
 msgstr "Звук"
 
-#: ../src/config.py:938
+#: ../src/config.py:940
 msgid "status message title"
 msgstr "заглавие на съобщението за състояние"
 
-#: ../src/config.py:938
+#: ../src/config.py:940
 msgid "status message text"
 msgstr "текст на съобщението за състояние"
 
-#: ../src/config.py:991
+#: ../src/config.py:993
 msgid "Choose Sound"
 msgstr "Избор на звук"
 
-#: ../src/config.py:1004 ../src/config.py:1964 ../src/vcard.py:132
+#: ../src/config.py:1006 ../src/config.py:1967 ../src/vcard.py:133
 msgid "All files"
 msgstr "Всички файлове"
 
-#: ../src/config.py:1009
+#: ../src/config.py:1011
 msgid "Wav Sounds"
 msgstr "Формат WAV"
 
-#: ../src/config.py:1180
+#: ../src/config.py:1183
 msgid "OpenPGP is not usable in this computer"
 msgstr "OpenPGP не може да бъде използван на този компютър"
 
-#: ../src/config.py:1205
+#: ../src/config.py:1208
 msgid "You are currently connected to the server"
 msgstr "В момента сте свързани със сървъра"
 
-#: ../src/config.py:1206
+#: ../src/config.py:1209
 msgid "To change the account name, you must be disconnected."
 msgstr "Трябва да сте изключени, за да смените името на акаунта."
 
-#: ../src/config.py:1209 ../src/config.py:1213
+#: ../src/config.py:1212 ../src/config.py:1216
 msgid "Invalid account name"
 msgstr "Невалидно име на акаунт"
 
-#: ../src/config.py:1210
+#: ../src/config.py:1213
 msgid "Account name cannot be empty."
 msgstr "Трябва да посочите някакво име на акаунта."
 
-#: ../src/config.py:1214
+#: ../src/config.py:1217
 msgid "Account name cannot contain spaces."
 msgstr "Името на акаунта не може да съдържа интервали."
 
-#: ../src/config.py:1218
+#: ../src/config.py:1221
 msgid "Invalid Jabber ID"
 msgstr "Невалиден Jabber ID"
 
-#: ../src/config.py:1219
+#: ../src/config.py:1222
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Jabber ID трябва да бъде под формата на „user@server“"
 
-#: ../src/config.py:1226 ../src/dialogs.py:761
+#: ../src/config.py:1229 ../src/dialogs.py:761
 msgid "Invalid password"
 msgstr "Невалидна парола"
 
-#: ../src/config.py:1227
+#: ../src/config.py:1230
 msgid "You must enter a password for the new account."
 msgstr "Трябва да въведете парола за новия акаунт."
 
-#: ../src/config.py:1264
+#: ../src/config.py:1267
 msgid "Invalid entry"
 msgstr "Невалиден формат"
 
-#: ../src/config.py:1265
+#: ../src/config.py:1268
 msgid "Custom port must be a port number."
 msgstr "Портът по избор трябва все пак да е номер на порт"
 
-#: ../src/config.py:1354
+#: ../src/config.py:1357
 msgid "Account name is in use"
 msgstr "Името на акаунта се използва"
 
-#: ../src/config.py:1355
+#: ../src/config.py:1358
 msgid "You already have an account using this name."
 msgstr "Вече има регистриран акаунт с това име."
 
-#: ../src/config.py:1421
+#: ../src/config.py:1424
 msgid "No such account available"
 msgstr "Няма такъв наличен акаунт"
 
-#: ../src/config.py:1422
+#: ../src/config.py:1425
 msgid "You must create your account before editing your personal information."
 msgstr ""
 "Трябва първо да създадете акаунт и след това да редактирате личните данни."
 
-#: ../src/config.py:1429 ../src/config.py:2048 ../src/dialogs.py:635
-#: ../src/dialogs.py:741 ../src/vcard.py:376 ../src/vcard.py:404
+#: ../src/config.py:1432 ../src/config.py:2052 ../src/dialogs.py:635
+#: ../src/dialogs.py:741 ../src/vcard.py:378 ../src/vcard.py:406
 msgid "You are not connected to the server"
 msgstr "Не сте свързани към сървъра."
 
-#: ../src/config.py:1430
+#: ../src/config.py:1433
 msgid "Without a connection, you can not edit your personal information."
 msgstr "Трябва да сте свързани, за да редактирате личните данни."
 
-#: ../src/config.py:1457
+#: ../src/config.py:1460
 msgid "Failed to get secret keys"
 msgstr "Неуспех при извличането на частните ключове"
 
-#: ../src/config.py:1458
+#: ../src/config.py:1461
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "Възникна проблем при извличането на частните ви OpenPGP ключове."
 
-#: ../src/config.py:1461 ../src/gtkgui.glade.h:194
+#: ../src/config.py:1464 ../src/gtkgui.glade.h:194
 msgid "Passphrase"
 msgstr "Парола"
 
-#: ../src/config.py:1462
+#: ../src/config.py:1465
 msgid "Choose your OpenPGP key"
 msgstr "Изберете вашия OpenPGP ключ"
 
-#: ../src/config.py:1470 ../src/gtkgui.glade.h:182
+#: ../src/config.py:1473 ../src/gtkgui.glade.h:182
 msgid "No key selected"
 msgstr "Няма избран ключ"
 
-#: ../src/config.py:1701 ../src/config.py:2071
+#: ../src/config.py:1704 ../src/config.py:2075
 msgid "Name"
 msgstr "Име"
 
-#: ../src/config.py:1704
+#: ../src/config.py:1707
 msgid "Server"
 msgstr "Сървър"
 
 #. if not '@' or '@' starts the jid ==> agent
-#: ../src/config.py:1809 ../src/config.py:2290 ../src/dialogs.py:113
+#: ../src/config.py:1812 ../src/config.py:2294 ../src/dialogs.py:113
 #: ../src/dialogs.py:285 ../src/dialogs.py:321 ../src/roster_window.py:124
 #: ../src/roster_window.py:129 ../src/roster_window.py:153
-#: ../src/roster_window.py:1907 ../src/roster_window.py:1909
-#: ../src/roster_window.py:1987 ../src/systray.py:225
+#: ../src/roster_window.py:1915 ../src/roster_window.py:1917
+#: ../src/roster_window.py:1995 ../src/systray.py:225
 msgid "Transports"
 msgstr "Транспорти"
 
-#: ../src/config.py:1824
+#: ../src/config.py:1827
 #, python-format
 msgid "Edit %s"
 msgstr "Редактиране на %s"
 
-#: ../src/config.py:1826
+#: ../src/config.py:1829
 #, python-format
 msgid "Register to %s"
 msgstr "Регистриране в %s"
 
-#: ../src/config.py:1846
+#: ../src/config.py:1849
 msgid "Text"
 msgstr "Текст"
 
-#: ../src/config.py:1854
+#: ../src/config.py:1857
 msgid "Image"
 msgstr "Изображение"
 
-#: ../src/config.py:1902
+#: ../src/config.py:1905
 msgid "Image is too big"
 msgstr "Изображението е твърде голямо"
 
-#: ../src/config.py:1902
+#: ../src/config.py:1905
 msgid ""
 "Image for emoticon has to be less than or equal to 24 pixels in width and 24 "
 "in height."
@@ -658,71 +658,71 @@ msgstr ""
 "Изображението на емотиконата трябва да бъде по-малко или равно на 24 пиксела "
 "по ширина и височина."
 
-#: ../src/config.py:1952
+#: ../src/config.py:1955
 msgid "Choose Image"
 msgstr "Избор на изображение"
 
-#: ../src/config.py:1969 ../src/vcard.py:137
+#: ../src/config.py:1972 ../src/vcard.py:138
 msgid "Images"
 msgstr "Изображения"
 
-#: ../src/config.py:2049
+#: ../src/config.py:2053
 msgid "Without a connection, you can not browse available services"
 msgstr "Трябва да сте свързани, за да разглеждате наличните услуги"
 
-#: ../src/config.py:2054
+#: ../src/config.py:2058
 #, python-format
 msgid "Service Discovery using %s account"
 msgstr "Откриване на налични услуги за акаунт „%s“"
 
-#: ../src/config.py:2056
+#: ../src/config.py:2060
 msgid "Service Discovery"
 msgstr "Откриване на услуги"
 
-#: ../src/config.py:2076
+#: ../src/config.py:2080
 msgid "Service"
 msgstr "Услуга"
 
-#: ../src/config.py:2081
+#: ../src/config.py:2085
 msgid "Node"
 msgstr "Възел"
 
-#: ../src/config.py:2293 ../src/gtkgui.glade.h:317
+#: ../src/config.py:2297 ../src/gtkgui.glade.h:317
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: ../src/config.py:2295 ../src/gtkgui.glade.h:213
+#: ../src/config.py:2299 ../src/gtkgui.glade.h:213
 msgid "Re_gister"
 msgstr "_Регистриране"
 
-#: ../src/config.py:2467
+#: ../src/config.py:2471
 #, python-format
 msgid "Removing %s account"
 msgstr "Премахване на акаунт %s"
 
-#: ../src/config.py:2474
+#: ../src/config.py:2478
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Акаунт „%s“ е свързан към сървъра"
 
-#: ../src/config.py:2475
+#: ../src/config.py:2479
 msgid "If you remove it, the connection will be lost."
 msgstr "Ако го премахнете, връзката ще се разпадне."
 
-#: ../src/config.py:2602
+#: ../src/config.py:2606
 msgid "New Room"
 msgstr "Нова стая"
 
-#: ../src/config.py:2632
+#: ../src/config.py:2636
 msgid "This bookmark has invalid data"
 msgstr "Тази отметка съдържа невалидни данни"
 
-#: ../src/config.py:2633
+#: ../src/config.py:2637
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "Попълнете полетата за сървър и стая или изтрийте тази отметка."
 
-#: ../src/config.py:2854
+#: ../src/config.py:2858
 msgid ""
 "Account has been added successfully.\n"
 "You can set advanced options by using \"Edit->Accounts\" from the main "
@@ -732,7 +732,7 @@ msgstr ""
 "Може да настроите допълнителните опции от менюто „Редактиране“->„Акаунти“ в "
 "основния прозорец."
 
-#: ../src/config.py:2865
+#: ../src/config.py:2869
 msgid ""
 "Your new account has been created and added to your gajim configuration.\n"
 "You can set advanced account options using \"Edit->Accounts\" in the main "
@@ -742,11 +742,11 @@ msgstr ""
 "Може да настроите допълнителните опции от менюто „Редактиране“->„Акаунти“ в "
 "основния прозорец."
 
-#: ../src/config.py:2879
+#: ../src/config.py:2883
 msgid "You need to enter a username to add an account."
 msgstr "Трябва да въведете име на потребител за новия акаунт."
 
-#: ../src/config.py:2883
+#: ../src/config.py:2887
 msgid "You need to enter a valid server address to add an account."
 msgstr "Трябва да въведете валиден адрес на сървър за добавяне на акаунт."
 
@@ -929,15 +929,15 @@ msgstr "От %s"
 msgid "File Transfer Request"
 msgstr "Запитване за файлов трансфер"
 
-#: ../src/dialogs.py:823 ../src/gajim.py:707 ../src/gajim.py:727
+#: ../src/dialogs.py:823 ../src/gajim.py:710 ../src/gajim.py:730
 msgid "File Transfer Error"
 msgstr "Грешка при файловия трансфер"
 
-#: ../src/dialogs.py:827 ../src/gajim.py:784
+#: ../src/dialogs.py:827 ../src/gajim.py:787
 msgid "File Transfer Completed"
 msgstr "Файловият трансфер е приключен"
 
-#: ../src/dialogs.py:827 ../src/gajim.py:787
+#: ../src/dialogs.py:827 ../src/gajim.py:790
 msgid "File Transfer Stopped"
 msgstr "Файловият трансфер е преустановен"
 
@@ -1061,17 +1061,17 @@ msgstr "Регистрацията на акаунта е успешна"
 msgid "The account \"%s\" has been registered with the Jabber server."
 msgstr "Акаунтът „%s“ беше регистриран в Jabber сървъра."
 
-#: ../src/gajim.py:663
+#: ../src/gajim.py:666
 msgid "Your passphrase is incorrect"
 msgstr "Паролата е грешна"
 
-#: ../src/gajim.py:664
+#: ../src/gajim.py:667
 msgid "You are currently connected without your OpenPGP key."
 msgstr "В момента сте свързани без OpenPGP ключ."
 
 #. it is good to notify the user
 #. in case he cannot see the output of the console
-#: ../src/gajim.py:1010
+#: ../src/gajim.py:1013
 msgid "Cannot save your preferences"
 msgstr "Настройките на могат да бъдат запазени"
 
@@ -1079,13 +1079,13 @@ msgstr "Настройките на могат да бъдат запазени"
 msgid "Theme"
 msgstr "Тема"
 
-#: ../src/gajim_themes_window.py:126 ../src/gajim_themes_window.py:128
-msgid "theme name"
-msgstr "име на тема"
-
-#: ../src/gajim_themes_window.py:129
+#: ../src/gajim_themes_window.py:130 ../src/gajim_themes_window.py:133
 msgid "theme_name"
 msgstr "име_на_тема"
+
+#: ../src/gajim_themes_window.py:132
+msgid "theme name"
+msgstr "име на тема"
 
 #: ../src/groupchat_window.py:127 ../src/groupchat_window.py:965
 #, python-format
@@ -1199,7 +1199,7 @@ msgstr "Може да уточните причина по-долу:"
 msgid "Banning %s"
 msgstr "Изритване на %s"
 
-#: ../src/groupchat_window.py:966 ../src/tabbed_chat_window.py:344
+#: ../src/groupchat_window.py:966 ../src/tabbed_chat_window.py:346
 msgid ""
 "If you close this tab and you have history disabled, the message will be "
 "lost."
@@ -1367,33 +1367,33 @@ msgstr "Въведете парола за акаунт „%s“"
 msgid "Save password"
 msgstr "Запазване на паролата"
 
-#: ../src/roster_window.py:1220
+#: ../src/roster_window.py:1227
 msgid "Passphrase Required"
 msgstr "Необходима е парола"
 
-#: ../src/roster_window.py:1221
+#: ../src/roster_window.py:1228
 #, python-format
 msgid "Enter GPG key passphrase for account %s"
 msgstr "Въведете парола за GPG ключ за акаунт „%s“"
 
-#: ../src/roster_window.py:1222
+#: ../src/roster_window.py:1229
 msgid "Save passphrase"
 msgstr "Запазване на паролата"
 
-#: ../src/roster_window.py:1269
+#: ../src/roster_window.py:1277
 msgid "No account available"
 msgstr "Няма наличен акаунт"
 
-#: ../src/roster_window.py:1270
+#: ../src/roster_window.py:1278
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 "За да разговаряте с други контакти, първо трябва да създадете Jabber акаунт."
 
-#: ../src/roster_window.py:1573 ../src/roster_window.py:1579
+#: ../src/roster_window.py:1581 ../src/roster_window.py:1587
 msgid "You have unread messages"
 msgstr "Имате непрочетени съобщения"
 
-#: ../src/roster_window.py:1574 ../src/roster_window.py:1580
+#: ../src/roster_window.py:1582 ../src/roster_window.py:1588
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
@@ -1422,12 +1422,12 @@ msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
 msgstr "%s не предлага OpenPGP ключ и не сте задавали такъв"
 
 #. %s is being replaced in the code with JID
-#: ../src/tabbed_chat_window.py:275 ../src/tabbed_chat_window.py:343
+#: ../src/tabbed_chat_window.py:277 ../src/tabbed_chat_window.py:345
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Току-що получихте ново съобщение от „%s“"
 
-#: ../src/tabbed_chat_window.py:276
+#: ../src/tabbed_chat_window.py:278
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -1436,64 +1436,64 @@ msgstr ""
 "историята, съобщението ще бъде загубено."
 
 #. we are not connected
-#: ../src/tabbed_chat_window.py:516
+#: ../src/tabbed_chat_window.py:518
 msgid "A connection is not available"
 msgstr "В момента няма връзка"
 
-#: ../src/tabbed_chat_window.py:517
+#: ../src/tabbed_chat_window.py:519
 msgid "Your message can not be sent until you are connected."
 msgstr "Съобщението не може да бъде изпратено, докато не се свържете."
 
-#: ../src/tabbed_chat_window.py:605
+#: ../src/tabbed_chat_window.py:607
 msgid "Sending private message failed"
 msgstr "Неуспех при изпращането на частно съобщение"
 
 #. in second %s code replaces with nickname
-#: ../src/tabbed_chat_window.py:607
+#: ../src/tabbed_chat_window.py:609
 #, python-format
 msgid "You are no longer in room \"%s\" or \"%s\" has left."
 msgstr "Вече не сте в стая „%s“ или „%s“ е напуснал(а)."
 
-#: ../src/tabbed_chat_window.py:710
+#: ../src/tabbed_chat_window.py:712
 msgid "Encryption enabled"
 msgstr "Криптирането е включено"
 
-#: ../src/tabbed_chat_window.py:715
+#: ../src/tabbed_chat_window.py:717
 msgid "Encryption disabled"
 msgstr "Криптирането е изключено"
 
-#: ../src/vcard.py:126
+#: ../src/vcard.py:127
 msgid "Choose Avatar"
 msgstr "Избор на аватар"
 
 #. in bytes
 #. 8 kb
-#: ../src/vcard.py:166
+#: ../src/vcard.py:168
 #, python-format
 msgid "The filesize of image \"%s\" is too large"
 msgstr "Размерът на изображението „%s“ е твърде голям"
 
-#: ../src/vcard.py:168
+#: ../src/vcard.py:170
 msgid "The file must not be more than 8 kilobytes."
 msgstr "Максималният размер е 8 килобайта."
 
-#: ../src/vcard.py:250
+#: ../src/vcard.py:252
 msgid "?Client:Unknown"
 msgstr "Неизвестен"
 
-#: ../src/vcard.py:252
+#: ../src/vcard.py:254
 msgid "?OS:Unknown"
 msgstr "Неизвестна"
 
-#: ../src/vcard.py:273 ../src/vcard.py:292
+#: ../src/vcard.py:275 ../src/vcard.py:294
 msgid " resource with priority "
 msgstr " ресурс с приоритет "
 
-#: ../src/vcard.py:377
+#: ../src/vcard.py:379
 msgid "Without a connection you can not publish your contact information."
 msgstr "Трябва да сте свързани, за да публикувате визитката."
 
-#: ../src/vcard.py:405
+#: ../src/vcard.py:407
 msgid "Without a connection, you can not get your contact information."
 msgstr "Трябва да сте свързани, за да изтеглите визитката"
 
@@ -2784,7 +2784,7 @@ msgstr "_Компактен изглед"
 msgid "_Compact View    Alt+C"
 msgstr "_Компактен изглед (Alt+C)"
 
-#: ../src/gtkgui.glade.h:312 ../src/filetransfers_window.py:627
+#: ../src/gtkgui.glade.h:312 ../src/filetransfers_window.py:630
 msgid "_Continue"
 msgstr "П_родължаване"
 
@@ -2913,7 +2913,7 @@ msgstr "_Действия"
 msgid "_Online Users"
 msgstr "_Свързани потребители"
 
-#: ../src/gtkgui.glade.h:347 ../src/filetransfers_window.py:171
+#: ../src/gtkgui.glade.h:347 ../src/filetransfers_window.py:172
 msgid "_Open Containing Folder"
 msgstr "_Отваряне на папката"
 
@@ -3099,7 +3099,7 @@ msgid "Status: "
 msgstr "Състояние: "
 
 #: ../src/tooltips.py:330 ../src/tooltips.py:393
-#: ../src/filetransfers_window.py:429
+#: ../src/filetransfers_window.py:432
 msgid "Name: "
 msgstr "Име: "
 
@@ -3127,12 +3127,12 @@ msgstr "Изтегляне"
 msgid "Upload"
 msgstr "Качване"
 
-#: ../src/tooltips.py:406 ../src/filetransfers_window.py:431
+#: ../src/tooltips.py:406 ../src/filetransfers_window.py:434
 msgid "Sender: "
 msgstr "Изпращач: "
 
-#: ../src/tooltips.py:411 ../src/filetransfers_window.py:156
-#: ../src/filetransfers_window.py:433
+#: ../src/tooltips.py:411 ../src/filetransfers_window.py:157
+#: ../src/filetransfers_window.py:436
 msgid "Recipient: "
 msgstr "Получател: "
 
@@ -3169,99 +3169,99 @@ msgstr "Блокирал"
 msgid "Transferring"
 msgstr "Прехвърляне"
 
-#: ../src/filetransfers_window.py:72
+#: ../src/filetransfers_window.py:73
 msgid "File"
 msgstr "Файл:"
 
-#: ../src/filetransfers_window.py:86
+#: ../src/filetransfers_window.py:87
 msgid "Progress"
 msgstr "Напредък"
 
-#: ../src/filetransfers_window.py:143 ../src/filetransfers_window.py:214
+#: ../src/filetransfers_window.py:144 ../src/filetransfers_window.py:215
 #, python-format
 msgid "Filename: %s"
 msgstr "Име на файл: %s"
 
-#: ../src/filetransfers_window.py:145 ../src/filetransfers_window.py:274
+#: ../src/filetransfers_window.py:146 ../src/filetransfers_window.py:276
 #, python-format
 msgid "Size: %s"
 msgstr "Размер: %s"
 
 #. You is a reply of who send a file
-#: ../src/filetransfers_window.py:154
+#: ../src/filetransfers_window.py:155
 msgid "You"
 msgstr "Вие"
 
-#: ../src/filetransfers_window.py:155 ../src/filetransfers_window.py:216
+#: ../src/filetransfers_window.py:156 ../src/filetransfers_window.py:217
 #, python-format
 msgid "Sender: %s"
 msgstr "Изпращач: %s"
 
-#: ../src/filetransfers_window.py:167
+#: ../src/filetransfers_window.py:168
 #, python-format
 msgid "Saved in: %s"
 msgstr "Запазен в: %s"
 
-#: ../src/filetransfers_window.py:169
+#: ../src/filetransfers_window.py:170
 msgid "File transfer completed"
 msgstr "Файловият трансфер завърши"
 
-#: ../src/filetransfers_window.py:195 ../src/filetransfers_window.py:203
+#: ../src/filetransfers_window.py:196 ../src/filetransfers_window.py:204
 msgid "File transfer canceled"
 msgstr "Файловият трансфер е прекъснат"
 
-#: ../src/filetransfers_window.py:195 ../src/filetransfers_window.py:204
+#: ../src/filetransfers_window.py:196 ../src/filetransfers_window.py:205
 msgid "Connection with peer cannot be established."
 msgstr "Не може да бъде установен контакт с отсрещната машина."
 
-#: ../src/filetransfers_window.py:218
+#: ../src/filetransfers_window.py:219
 msgid "File transfer stopped by the contact of the other side"
 msgstr "Файловият трансфер е преустановен от отсрещната страна"
 
-#: ../src/filetransfers_window.py:226
+#: ../src/filetransfers_window.py:227
 msgid "Choose File to Send..."
 msgstr "Избор на файл за изпращане..."
 
-#: ../src/filetransfers_window.py:229
+#: ../src/filetransfers_window.py:230
 msgid "Send"
 msgstr "Изпращане"
 
-#: ../src/filetransfers_window.py:271
+#: ../src/filetransfers_window.py:273
 #, python-format
 msgid "File: %s"
 msgstr "Файл: %s"
 
-#: ../src/filetransfers_window.py:277
+#: ../src/filetransfers_window.py:279
 #, python-format
 msgid "Type: %s"
 msgstr "Тип: %s"
 
-#: ../src/filetransfers_window.py:280
+#: ../src/filetransfers_window.py:282
 #, python-format
 msgid "Description: %s"
 msgstr "Описание: %s"
 
-#: ../src/filetransfers_window.py:282
+#: ../src/filetransfers_window.py:284
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr "%s иска да ви изпрати файл:"
 
-#: ../src/filetransfers_window.py:285
+#: ../src/filetransfers_window.py:287
 msgid "Save File as..."
 msgstr "Запазване на файла като..."
 
 #. FIXME: pango does not work here.
 #. FIXME: if gtk2.8 do this via signal
 #. http://developer.gnome.org/doc/API/2.0/gtk/GtkFileChooser.html#GtkFileChooser--do-overwrite-confirmation
-#: ../src/filetransfers_window.py:304
+#: ../src/filetransfers_window.py:307
 msgid "This file already exists"
 msgstr "Този файл вече съществува"
 
-#: ../src/filetransfers_window.py:305
+#: ../src/filetransfers_window.py:308
 msgid "Would you like to overwrite it?"
 msgstr "Искате ли да го презапишете?"
 
-#: ../src/filetransfers_window.py:615
+#: ../src/filetransfers_window.py:618
 msgid "Pause"
 msgstr "Пауза"
 
