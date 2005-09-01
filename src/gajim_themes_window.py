@@ -83,18 +83,20 @@ class GajimThemesWindow:
 		new_name = new_name.decode('utf-8')
 		if old_name == new_name:
 			return
-		if new_name in gajim.config.get_per('themes'):
+		new_config_name = new_name.replace(' ', '_')
+		if new_config_name in gajim.config.get_per('themes'):
 			#ErrorDialog()
 			return
-		gajim.config.add_per('themes', new_name)
+		gajim.config.add_per('themes', new_config_name)
 		#Copy old theme values
+		old_config_name = old_name.replace(' ', '_')
 		for option in self.color_widgets.values():
-			gajim.config.set_per('themes', new_name, option,
-				gajim.config.get_per('themes', old_name, option))
+			gajim.config.set_per('themes', new_config_name, option,
+				gajim.config.get_per('themes', old_config_name, option))
 		for option in self.font_widgets.values():
-			gajim.config.set_per('themes', new_name, option,
-				gajim.config.get_per('themes', old_name, option))
-		gajim.config.del_per('themes', old_name)
+			gajim.config.set_per('themes', new_config_name, option,
+				gajim.config.get_per('themes', old_config_name, option))
+		gajim.config.del_per('themes', old_config_name)
 		model.set_value(iter, 0, new_name)
 		self.plugin.windows['preferences'].update_preferences_window()
 
@@ -103,9 +105,10 @@ class GajimThemesWindow:
 		self.xml.get_widget('fonts_colors_table').set_sensitive(False)
 		model = self.themes_tree.get_model()
 		model.clear()
-		for theme in gajim.config.get_per('themes'):
+		for config_theme in gajim.config.get_per('themes'):
+			theme = config_theme.replace('_', ' ')
 			iter = model.append([theme])
-			if gajim.config.get('roster_theme') == theme:
+			if gajim.config.get('roster_theme') == config_theme:
 				self.themes_tree.get_selection().select_iter(iter)
 				self.xml.get_widget('remove_button').set_sensitive(True)
 				self.xml.get_widget('fonts_colors_table').set_sensitive(True)
@@ -117,13 +120,14 @@ class GajimThemesWindow:
 		self.xml.get_widget('remove_button').set_sensitive(True)
 		self.xml.get_widget('fonts_colors_table').set_sensitive(True)
 		self.current_theme = model.get_value(iter, 0).decode('utf-8')
+		self.current_theme = self.current_theme.replace(' ', '_')
 		self.set_widgets(self.current_theme)
 
 	def on_add_button_clicked(self, widget):
 		model = self.themes_tree.get_model()
 		iter = model.append()
 		i = 0
-		while _('theme name') + unicode(i) in gajim.config.get_per('themes'):
+		while _('theme_name') + unicode(i) in gajim.config.get_per('themes'):
 			i += 1
 		model.set_value(iter, 0, _('theme name') + unicode(i))
 		gajim.config.add_per('themes', _('theme_name') + unicode(i))
@@ -133,8 +137,9 @@ class GajimThemesWindow:
 		(model, iter) = self.themes_tree.get_selection().get_selected()
 		if not iter:
 			return
-		name = model.get_value(iter, 0).decode('utf-8')
-		gajim.config.del_per('themes', name)
+		config_name = model.get_value(iter, 0).decode('utf-8')
+		config_name = config_name.replace(' ', '_')
+		gajim.config.del_per('themes', config_name)
 		model.remove(iter)
 		self.plugin.windows['preferences'].update_preferences_window()
 

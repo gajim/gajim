@@ -450,9 +450,10 @@ class PreferencesWindow:
 		model = theme_combobox.get_model()
 		model.clear()
 		i = 0
-		for t in gajim.config.get_per('themes'):
-			model.append([t])
-			if gajim.config.get('roster_theme') == t:
+		for config_theme in gajim.config.get_per('themes'):
+			theme = config_theme.replace('_', ' ')
+			model.append([theme])
+			if gajim.config.get('roster_theme') == config_theme:
 				theme_combobox.set_active(i)
 			i += 1
 		self.on_theme_combobox_changed(theme_combobox)
@@ -530,9 +531,9 @@ class PreferencesWindow:
 	def on_theme_combobox_changed(self, widget):
 		model = widget.get_model()
 		active = widget.get_active()
-		theme = model[active][0].decode('utf-8')
+		config_theme = model[active][0].decode('utf-8').replace(' ', '_')
 				
-		gajim.config.set('roster_theme', theme)
+		gajim.config.set('roster_theme', config_theme)
 
 		# begin repainting themed widgets throughout
 		self.plugin.roster.repaint_themed_widgets()
