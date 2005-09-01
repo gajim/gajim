@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-01 21:45+0300\n"
-"PO-Revision-Date: 2005-08-26 03:12+0300\n"
+"POT-Creation-Date: 2005-09-01 22:42+0300\n"
+"PO-Revision-Date: 2005-09-01 20:31+0200\n"
 "Last-Translator: Stéphan Kochen <stephan@kochen.nl>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -134,7 +134,7 @@ msgstr "Fout:"
 #: ../src/common/connection.py:1648
 #, python-format
 msgid "Could not connect to \"%s\""
-msgstr "Kon geen verbinding krijgen met \"%s\""
+msgstr "Kon geen verbinding maken met \"%s\""
 
 #: ../src/common/connection.py:1248 ../src/common/connection.py:1310
 msgid "Check your connection or try again later"
@@ -148,11 +148,11 @@ msgstr "Verbonden met server met %s"
 #: ../src/common/connection.py:1322
 #, python-format
 msgid "Authentication failed with \"%s\""
-msgstr "Authentificatie mislukt met \"%s\""
+msgstr "Inloggen mislukt met \"%s\""
 
 #: ../src/common/connection.py:1323
 msgid "Please check your login and password for correctness."
-msgstr "Controleer je gebruikersnaam en wachtwoord."
+msgstr "Controleer gebruikersnaam en wachtwoord."
 
 #: ../src/common/connection.py:1403
 msgid "invisible"
@@ -171,7 +171,7 @@ msgstr "Ik ben %s"
 #. We didn't set a passphrase
 #: ../src/common/connection.py:1413
 msgid "OpenPGP passphrase was not given"
-msgstr "OpenPGP wachtwoord was niet opgegeven"
+msgstr "OpenPGP wachtwoord niet opgegeven"
 
 #. %s is the account name here
 #: ../src/common/connection.py:1415
@@ -182,15 +182,15 @@ msgstr "Je zult verbonden worden met %s zonder OpenPGP."
 #. we're not english
 #: ../src/common/connection.py:1508
 msgid "[This message is encrypted]"
-msgstr "[The bericht is gecodeerd]"
+msgstr "[Dit bericht is versleuteld]"
 
 #: ../src/common/connection.py:1649 ../src/gajim.py:528
 msgid "Check your connection or try again later."
-msgstr "Controleer je verbinding of probeer later nogmaals."
+msgstr "Controleer de verbinding of probeer later nogmaals."
 
 #: ../src/common/connection.py:1928 ../src/common/connection.py:1937
 msgid "error appeared while processing xmpp:"
-msgstr "fout trad op tijdens het verwerken van xmpp:"
+msgstr "Er is een fout opgetreden tijdens het verwerken van xmpp:"
 
 #. GiB means gibibyte
 #: ../src/common/helpers.py:44
@@ -435,12 +435,12 @@ msgid ""
 "\n"
 "Highlighting misspelled words feature will not be used"
 msgstr ""
-"Als dit niet de taal is waarin verkeerd gespelde woorden gecontroleerd "
-"moetenworden, stel dan $LANG opnieuw in op jouw taal. Bijv. voor frans doe "
-"je export LANG=fr_FR of export LANG=fr_FR.UTF-8 in ~/.bash_profile of in /"
-"etc/profile als je het systeem globaal op frans wilt instellen.\n"
+"Als dit niet de taal is waarvoor je spelfouten wilt aanmerken, stel dan "
+"$LANG opnieuw in op jouw taal. Bijv. voor frans doe je export LANG=fr_FR of "
+"export LANG=fr_FR.UTF-8 in ~/.bash_profile of in /etc/profile als je het "
+"systeem globaal op frans wilt instellen.\n"
 "\n"
-"De markering van verkeerd gespelde woorden zal nu niet gebruikt worden."
+"De markering van spelfouten zal niet worden gebruikt."
 
 #: ../src/chat.py:778
 #, python-format
@@ -449,18 +449,18 @@ msgstr "Acties voor \"%s\""
 
 #: ../src/chat.py:790
 msgid "Read _Wikipedia Article"
-msgstr "Lees _Wikipedia Artiekel"
+msgstr "Lees _Wikipedia Artikel"
 
 #: ../src/chat.py:794
 msgid "Look it up in _Dictionary"
-msgstr "Zoek het op in het _Woordenboek"
+msgstr "Zoek op in het _Woordenboek"
 
 #. we must have %s in the url if not WIKTIONARY
 #: ../src/chat.py:809
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr ""
-"\"%s\" ontbreekt in de URL van het woordenboek of het is geen WIKTIONARY"
+"\"%s\" ontbreekt in de URL van het woordenboek en het is geen WIKTIONARY"
 
 #. we must have %s in the url
 #: ../src/chat.py:820
@@ -497,11 +497,11 @@ msgstr "Geluid"
 
 #: ../src/config.py:940
 msgid "status message title"
-msgstr "titel status bericht"
+msgstr "titel statusbericht"
 
 #: ../src/config.py:940
 msgid "status message text"
-msgstr "status bericht tekst"
+msgstr "statusbericht"
 
 #: ../src/config.py:993
 msgid "Choose Sound"
@@ -525,7 +525,7 @@ msgstr "Je bent momenteel verbonden met de server"
 
 #: ../src/config.py:1209
 msgid "To change the account name, you must be disconnected."
-msgstr "Om de account naam te veranderen moet je de verbinding verbreken"
+msgstr "Om de account naam te veranderen moet de verbinding verbroken zijn"
 
 #: ../src/config.py:1212 ../src/config.py:1216
 msgid "Invalid account name"
@@ -537,7 +537,7 @@ msgstr "Account naam kan niet leeg zijn."
 
 #: ../src/config.py:1217
 msgid "Account name cannot contain spaces."
-msgstr "Account naam kan geen spaties bevatten."
+msgstr "Account naam mag geen spaties bevatten."
 
 #: ../src/config.py:1221
 msgid "Invalid Jabber ID"
@@ -561,7 +561,7 @@ msgstr "Ongeldige invoer"
 
 #: ../src/config.py:1268
 msgid "Custom port must be a port number."
-msgstr "Aangepaste poort moet een geldig poort nummer zijn."
+msgstr "Aangepaste poort moet een geldig poortnummer zijn."
 
 #: ../src/config.py:1357
 msgid "Account name is in use"
@@ -578,18 +578,18 @@ msgstr "Account bestaat niet"
 #: ../src/config.py:1425
 msgid "You must create your account before editing your personal information."
 msgstr ""
-"Je moet een account aanmaken voordat je je persoonlijke informatie aanpast."
+"Je moet een account aanmaken voordat persoonlijke informatie kan worden "
+"aangepast."
 
 #: ../src/config.py:1432 ../src/config.py:2052 ../src/dialogs.py:635
 #: ../src/dialogs.py:741 ../src/vcard.py:378 ../src/vcard.py:406
 msgid "You are not connected to the server"
-msgstr "Je hebt geen verbinding met de server"
+msgstr "Er is geen verbinding met de server"
 
 #: ../src/config.py:1433
 msgid "Without a connection, you can not edit your personal information."
 msgstr ""
-"Zonder verbinding is het niet mogelijk je persoonlijke informatie aan te "
-"passen."
+"Zonder verbinding is het niet mogelijk persoonlijke informatie aan te passen."
 
 #: ../src/config.py:1460
 msgid "Failed to get secret keys"
@@ -723,7 +723,7 @@ msgstr "Deze bladwijzer bevat ongeldige informatie"
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
-"Zorg ervoor dat de server en ruimte velden ingevuld zijn, of verwijder deze "
+"Zorg ervoor dat de server- en ruimtevelden ingevuld zijn, of verwijder deze "
 "bladwijzer."
 
 #: ../src/config.py:2858
@@ -733,7 +733,7 @@ msgid ""
 "window."
 msgstr ""
 "Account is met succes toegevoegd.\n"
-"Je kunt geavanceerde opties instellen via \"Bewerken->Accounts\" vanaf het "
+"Geavanceerde opties zijn in te stellen via \"Bewerken->Accounts\" vanaf het "
 "hoofdvenster."
 
 #: ../src/config.py:2869
@@ -743,7 +743,7 @@ msgid ""
 "window menu."
 msgstr ""
 "Je nieuwe account is aangemaakt en aan de gajim configuratie toegevoegd.\n"
-"Je kunt geavanceerde opties instellen via \"Bewerken->Accounts\" vanaf het "
+"Geavanceerde opties zijn in te stellen via \"Bewerken->Accounts\" vanaf het "
 "hoofdvenster."
 
 #: ../src/config.py:2883
@@ -752,8 +752,7 @@ msgstr "Je moet een gebruikersnaam invullen om een account toe te voegen."
 
 #: ../src/config.py:2887
 msgid "You need to enter a valid server address to add an account."
-msgstr ""
-"Je moet een geldig server address invullen om een account toe te voegen."
+msgstr "Je moet een geldig serveradres invullen om een account toe te voegen."
 
 #: ../src/dialogs.py:55
 #, python-format
@@ -789,12 +788,12 @@ msgstr "SleutelID"
 
 #: ../src/dialogs.py:180
 msgid "Contact name"
-msgstr "Contact naam"
+msgstr "Contactnaam"
 
 #: ../src/dialogs.py:211
 #, python-format
 msgid "%s Status Message"
-msgstr "%s Status Bericht"
+msgstr "%s Statusbericht"
 
 #: ../src/dialogs.py:274
 #, python-format
@@ -813,7 +812,7 @@ msgstr "Ongeldige gebruikersnaam"
 
 #: ../src/dialogs.py:351
 msgid "Contact names must be of the form \"user@servername\"."
-msgstr "Contactnamen moet in de vorm \"gebruiker@servernaam\" zijn."
+msgstr "Contactnamen moeten in de vorm \"gebruiker@servernaam\" zijn."
 
 #: ../src/dialogs.py:405
 msgid "Gajim - a GTK+ Jabber client"
@@ -845,7 +844,8 @@ msgstr "Abonnering aangevraagd van %s"
 #: ../src/dialogs.py:636
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
-"Het is niet mogelijk aan een groepsgesprek deel te nemen zonder verbinding."
+"Het is niet mogelijk aan een groepsgesprek deel te nemen zonder verbonden te "
+"zijn."
 
 #: ../src/dialogs.py:649
 #, python-format
@@ -870,7 +870,9 @@ msgstr "Nieuw Bericht"
 msgid ""
 "Fill in the contact ID of the contact you would like\n"
 "to send a chat message to:"
-msgstr "Vul de contact ID in van de persoon waaraan het bericht gericht is:"
+msgstr ""
+"Vul de contact ID in van de persoon waaraan het bericht verstuurd moet "
+"worden:"
 
 #. if offline or connecting
 #: ../src/dialogs.py:725 ../src/dialogs.py:1038 ../src/dialogs.py:1159
@@ -1021,7 +1023,7 @@ msgstr "Neem je dit verzoek aan?"
 
 #: ../src/gajim.py:464
 msgid "error while sending"
-msgstr "fout tijdens sturen"
+msgstr "fout tijdens versturen"
 
 #: ../src/gajim.py:490 ../src/gajim.py:500 ../src/roster_window.py:126
 #: ../src/roster_window.py:1011 ../src/gtkgui.glade.h:130
@@ -1035,12 +1037,12 @@ msgstr "Machtiging geaccepteerd"
 #: ../src/gajim.py:505
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his status."
-msgstr "Contact \"%s\" heeft je geen toestemming gegeven zijn status te zien."
+msgstr "Contact \"%s\" heeft geen toestemming gegeven zijn status te zien."
 
 #: ../src/gajim.py:511
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
-msgstr "Contact \"%s\" heeft het abonnement op jou verwijdert"
+msgstr "Contact \"%s\" heeft het abonnement op jou opgezegd"
 
 #: ../src/gajim.py:512
 msgid "You will always see him as offline."
@@ -1066,13 +1068,13 @@ msgstr "Je wachtwoord is incorrect"
 
 #: ../src/gajim.py:667
 msgid "You are currently connected without your OpenPGP key."
-msgstr "Je bent momenteel verbonden zonder je OpenPGP sleutel."
+msgstr "Je bent momenteel verbonden zonder OpenPGP sleutel."
 
 #. it is good to notify the user
 #. in case he cannot see the output of the console
 #: ../src/gajim.py:1013
 msgid "Cannot save your preferences"
-msgstr "Kan je instellingen niet opslaan"
+msgstr "Kan instellingen niet opslaan"
 
 #: ../src/gajim_themes_window.py:63
 msgid "Theme"
@@ -1097,7 +1099,7 @@ msgid ""
 "lost."
 msgstr ""
 "Als je dit venster sluit en geschiedenis uitgeschakeld hebt, zal dit bericht "
-"verlorgen gaan."
+"verloren gaan."
 
 #: ../src/groupchat_window.py:143
 #, python-format
@@ -1117,7 +1119,7 @@ msgstr[1] ""
 
 #: ../src/groupchat_window.py:153
 msgid "Do not ask me again"
-msgstr "Vraag mij dit niet nogmaals"
+msgstr "Vraag dit niet nogmaals"
 
 #: ../src/groupchat_window.py:213 ../src/groupchat_window.py:401
 msgid "This room has no subject"
@@ -1137,7 +1139,7 @@ msgstr "%s is uit de ruimte verbannen door %s: %s"
 #: ../src/groupchat_window.py:347
 #, python-format
 msgid "%s is now known as %s"
-msgstr "%s heeft zijn bijnaam verandert naar %s"
+msgstr "%s heet nu %s"
 
 #: ../src/groupchat_window.py:379
 #, python-format
@@ -1180,7 +1182,7 @@ msgstr "Bladwijzer is met succes toegevoegd"
 
 #: ../src/groupchat_window.py:456
 msgid "You can manage your bookmarks via Actions menu in your roster."
-msgstr "Je kunt je bladwijzers beheren via het Acties menu in je rooster."
+msgstr "Je kunt bladwijzers beheren via het Acties menu in je rooster."
 
 #. ask for reason
 #: ../src/groupchat_window.py:717
@@ -1298,7 +1300,7 @@ msgstr "Selecteer een sleutel om aan de contact toe te wijzen"
 
 #: ../src/roster_window.py:824
 msgid "I would like to add you to my roster"
-msgstr "I zou je graag aan mijn rooster toe willen voegen"
+msgstr "Ik zou je graag aan mijn rooster toe willen voegen"
 
 #: ../src/roster_window.py:852
 msgid "Rename"
@@ -1412,13 +1414,14 @@ msgstr "Alle contacten in deze groep zijn offline of hebben fouten"
 
 #: ../src/tabbed_chat_window.py:126 ../src/gtkgui.glade.h:190
 msgid "OpenPGP Encryption"
-msgstr "OpenPGP Codering"
+msgstr "OpenPGP Versleuteling"
 
 #. we talk about a contact here
 #: ../src/tabbed_chat_window.py:130
 #, python-format
 msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
-msgstr "%s heeft geen OpenPGP sleutel uitgezonden en je hebt geen toegewezen"
+msgstr ""
+"%s heeft geen OpenPGP sleutel uitgezonden en je hebt er geen toegewezen"
 
 #. %s is being replaced in the code with JID
 #: ../src/tabbed_chat_window.py:277 ../src/tabbed_chat_window.py:345
@@ -1437,7 +1440,7 @@ msgstr ""
 #. we are not connected
 #: ../src/tabbed_chat_window.py:518
 msgid "A connection is not available"
-msgstr "Een verbinding is nu beschikbaar"
+msgstr "Er is geen verbinding beschikbaar"
 
 #: ../src/tabbed_chat_window.py:519
 msgid "Your message can not be sent until you are connected."
@@ -1455,11 +1458,11 @@ msgstr "Je bent niet meer in ruimte \"%s\" of \"%s\" heeft de ruimte verlaten."
 
 #: ../src/tabbed_chat_window.py:712
 msgid "Encryption enabled"
-msgstr "Codering ingeschakeld"
+msgstr "Versleuteling ingeschakeld"
 
 #: ../src/tabbed_chat_window.py:717
 msgid "Encryption disabled"
-msgstr "Codering uitgeschakeld"
+msgstr "Versleuteling uitgeschakeld"
 
 #: ../src/vcard.py:127
 msgid "Choose Avatar"
@@ -1474,7 +1477,7 @@ msgstr "De bestandsgrootte van afbeelding \"%s\" is te groot"
 
 #: ../src/vcard.py:170
 msgid "The file must not be more than 8 kilobytes."
-msgstr "Het bestand mag niet groter zijn dan 8 kilobytes."
+msgstr "Het bestand mag niet groter zijn dan 8 kilobyte."
 
 #: ../src/vcard.py:252
 msgid "?Client:Unknown"
@@ -1565,7 +1568,7 @@ msgstr "<b>Geluiden</b>"
 
 #: ../src/gtkgui.glade.h:18
 msgid "<b>Visual Notifications</b>"
-msgstr "<b>Visuele Terugkoppeling</b>"
+msgstr "<b>Visuele Meldingen</b>"
 
 #: ../src/gtkgui.glade.h:19
 msgid "<b>What do you want to do?</b>"
@@ -1697,6 +1700,7 @@ msgstr "Automatisch _niet beschikbaar na:"
 msgid "Auto join"
 msgstr "Automatisch binnengaan"
 
+# deelnemen?
 #: ../src/gtkgui.glade.h:51
 msgid ""
 "Autodetect on every Gajim startup\n"
@@ -1704,7 +1708,7 @@ msgid ""
 "Always use KDE default applications\n"
 "Custom"
 msgstr ""
-"Zoek automatisch telkens als Gajim opstart\n"
+"Herken automatisch als Gajim opstart\n"
 "Gebruik altijd standaard GNOME toepassingen\n"
 "Gebruik altijd standaard KDE toepassingen\n"
 "Aangepast"
@@ -1931,11 +1935,11 @@ msgstr "Inschakelen"
 
 #: ../src/gtkgui.glade.h:107
 msgid "Enter it again for confirmation:"
-msgstr "Voeg opnieuw in ter bevestiging:"
+msgstr "Geef opnieuw op ter bevestiging:"
 
 #: ../src/gtkgui.glade.h:108
 msgid "Enter new password:"
-msgstr "Voeg nieuwe wachtwoord in:"
+msgstr "Geef nieuw wachtwoord op:"
 
 #: ../src/gtkgui.glade.h:109
 msgid "Enter your message:"
@@ -2078,7 +2082,8 @@ msgstr "Ik wil je graag toevoegen aan mijn contactlijst"
 #: ../src/gtkgui.glade.h:143
 msgid "If checked, Gajim will also have a trayicon"
 msgstr ""
-"Indien aangevinkt zal Gajim een icoon in het mededelingengebied weergeven"
+"Indien aangevinkt zal Gajim een icoon in het mededelingengebied (systray) "
+"weergeven"
 
 #: ../src/gtkgui.glade.h:144
 msgid ""
@@ -2138,9 +2143,9 @@ msgid ""
 "from MSN will have the equivalent msn icon for status online, away, busy, "
 "etc...)"
 msgstr ""
-"Indien aangevinkt zal Gajim iconen gebruiken die bij de protocol horen. "
-"(Bijv. contacten van MSN zullen met msn-gerelateerde iconen weergegeven "
-"worden voor status online, afwezig, bezig, enz...)"
+"Indien aangevinkt zal Gajim iconen gebruiken die bij het protocol horen. "
+"(Bijv. contacten van MSN zullen met msn iconen weergegeven worden voor "
+"status online, afwezig, bezig, enz...)"
 
 #: ../src/gtkgui.glade.h:152
 msgid ""
@@ -2197,11 +2202,11 @@ msgstr "Jabber ID:"
 
 #: ../src/gtkgui.glade.h:163
 msgid "Join _Group Chat"
-msgstr "Neem deel aan _Groupsgesprek"
+msgstr "Neem deel aan _Groepsgesprek"
 
 #: ../src/gtkgui.glade.h:164
 msgid "Join _Group Chat..."
-msgstr "Neem deel aan _Groupsgesprek..."
+msgstr "Neem deel aan _Groepsgesprek..."
 
 #: ../src/gtkgui.glade.h:165
 msgid "Location"
@@ -2209,11 +2214,11 @@ msgstr "Locatie"
 
 #: ../src/gtkgui.glade.h:166
 msgid "Log history"
-msgstr "Logboek geschiedenis"
+msgstr "Logboek"
 
 #: ../src/gtkgui.glade.h:167
 msgid "Log presences in _contact's log file"
-msgstr "Noteer aanwezigheid in _contact logboekbestand"
+msgstr "Noteer aanwezigheid in _contact logboek"
 
 #: ../src/gtkgui.glade.h:168
 msgid "Log presences in an _external file"
@@ -2360,8 +2365,9 @@ msgid ""
 "server when two or more clients are connected using the same account; The "
 "client with the highest priority gets the events"
 msgstr ""
-"Prioriteit wordt in Jabber gebruikt om te bepalen wie berichten ontvangt als "
-"er twee keer op dezelfde account ingelogd is; de hoogste prioriteit wint."
+"Prioriteit wordt in Jabber gebruikt om te bepalen welke client berichten  "
+"ontvangt als er twee keer op dezelfde account ingelogd is; de hoogste  "
+"prioriteit wint."
 
 #: ../src/gtkgui.glade.h:210
 msgid "Profile, Avatar"
@@ -2387,6 +2393,7 @@ msgstr "Recent:"
 msgid "Register to"
 msgstr "Registreer naar"
 
+# registreer met?
 #: ../src/gtkgui.glade.h:217
 msgid "Remove account from Gajim and from server"
 msgstr "Verwijder account van Gajim en van de server"
@@ -2605,19 +2612,19 @@ msgstr "Synch_roniseer account status met globale status"
 
 #: ../src/gtkgui.glade.h:269
 msgid "Text color"
-msgstr "Tekst kleur"
+msgstr "Tekstkleur"
 
 #: ../src/gtkgui.glade.h:270
 msgid "Text font"
-msgstr "Tekst lettertype"
+msgstr "Lettertype"
 
 #: ../src/gtkgui.glade.h:271
 msgid "The auto away status message"
-msgstr "Het status bericht voor automatische afwezigheid"
+msgstr "Het statusbericht voor automatische afwezigheid"
 
 #: ../src/gtkgui.glade.h:272
 msgid "The auto not available status message"
-msgstr "Het status bericht voor automatisch niet beschikbaar"
+msgstr "Het statusbericht voor automatisch niet beschikbaar"
 
 #: ../src/gtkgui.glade.h:273
 msgid "The bar line which is on top of chat windows"
@@ -2685,7 +2692,7 @@ msgstr "Gebruik enkel gespreksvenster met _tabs"
 
 #: ../src/gtkgui.glade.h:288
 msgid "Use authentication"
-msgstr "Gebruik authentificatie"
+msgstr "Gebruik aanmelding"
 
 #: ../src/gtkgui.glade.h:289
 msgid "Use custom hostname/port"
@@ -2706,7 +2713,7 @@ msgid ""
 "informed about it"
 msgstr ""
 "Als een nieuw bericht ontvangen wordt van een contact die niet al een "
-"gespreksvenster open heeft, zullen de in volgorde de volgende drie acties "
+"gespreksvenster open heeft, zullen in volgorde de volgende drie acties "
 "plaatsvinden om je op de hoogte te stellen"
 
 #: ../src/gtkgui.glade.h:293
@@ -3164,7 +3171,7 @@ msgstr "Gepauzeerd"
 #. stalled is not paused. it is like 'frozen' it stopped alone
 #: ../src/tooltips.py:449
 msgid "Stalled"
-msgstr "Oponthouden"
+msgstr "Vastgelopen"
 
 #: ../src/tooltips.py:451
 msgid "Transferring"
@@ -3217,7 +3224,7 @@ msgstr "Kon geen verbinding maken met gebruiker."
 
 #: ../src/filetransfers_window.py:219
 msgid "File transfer stopped by the contact of the other side"
-msgstr "Bestandsoverdracht gestopt door andere contact"
+msgstr "Bestandsoverdracht gestopt door andere gebruiker"
 
 #: ../src/filetransfers_window.py:227
 msgid "Choose File to Send..."
@@ -3327,7 +3334,7 @@ msgstr "bericht"
 
 #: ../scripts/gajim-remote.py:103
 msgid "status message"
-msgstr "status bericht"
+msgstr "statusbericht"
 
 #: ../scripts/gajim-remote.py:104
 msgid ""
@@ -3370,7 +3377,7 @@ msgstr "JID of contact die het bericht zal ontvangen"
 
 #: ../scripts/gajim-remote.py:127
 msgid "message contents"
-msgstr "bericht inhoud"
+msgstr "inhoud bericht"
 
 #: ../scripts/gajim-remote.py:128
 msgid "pgp key"
@@ -3379,7 +3386,7 @@ msgstr "pgp sleutel"
 #: ../scripts/gajim-remote.py:128
 msgid "if specified, the message will be encrypted using this public key"
 msgstr ""
-"indien opgegeven zal het bericht gecodeerd worden met deze publieke sleutel"
+"indien opgegeven zal het bericht versleuteld worden met deze publieke sleutel"
 
 #: ../scripts/gajim-remote.py:130
 msgid "if specified, the message will be sent using this account"
@@ -3395,7 +3402,7 @@ msgstr "JID van contact"
 
 #: ../scripts/gajim-remote.py:141
 msgid "Send file to a contact"
-msgstr "Stuur een bestaan aan contact"
+msgstr "Stuur een bestand aan contact"
 
 #: ../scripts/gajim-remote.py:143
 msgid "file"
@@ -3478,7 +3485,7 @@ msgid ""
 "Type \"%s help %s\" for more info"
 msgstr ""
 "Argument \"%s\" is niet gespecificeerd. \n"
-"Typ \"%s help %s\" voor meer info"
+"Type \"%s help %s\" voor meer info"
 
 #~ msgid "Gajim disconnected you from %s"
 #~ msgstr "Gajim heeft de verbinding verbroken met %s"
