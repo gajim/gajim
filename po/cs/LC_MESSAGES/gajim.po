@@ -1,14 +1,15 @@
 # translation of gajim.po to 
 # translation of gajim.po to
 # translation of gajim.po to
+# translation of gajim.po to
 # translation of gajim.po to Czech
 # Czech translations for Gajim package.
 # 	Copyright (C) 2003-2005 Gajim Team
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published
 # by the Free Software Foundation; version 2 only.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,20 +17,23 @@
 # This file is distributed under the same license as the Gajim package.
 # Petr Mensik <pihhan@seznam.cz>, 2005.
 # Pihhan <pihhan@seznam.cz>, 2005.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-01 20:45+0300\n"
-"PO-Revision-Date: 2005-08-18 23:26+0200\n"
-"Last-Translator: Pihhan <pihhan@seznam.cz>\n"
+"POT-Creation-Date: 2005-09-01 23:54+0300\n"
+"PO-Revision-Date: 2005-09-01 22:36+0100\n"
+"Last-Translator: Petr Mensik <pihham@cipis.net>\n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: KBabel 1.9.1\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-Country: CZECH REPUBLIC\n"
+"X-Poedit-SourceCharset: iso-8859-2\n"
 
 #: ../src/common/config.py:51
 msgid "Away as a result of being idle"
@@ -123,11 +127,11 @@ msgstr "autorizace zrušena od %s"
 #. conflict: Nick Conflict
 #: ../src/common/connection.py:359
 msgid "Unable to join room"
-msgstr "Není možné vstoupit do mísnosti"
+msgstr "Nelze vstoupit do místnosti"
 
 #: ../src/common/connection.py:360
 msgid "Server response:"
-msgstr "Vlastnosti serveru:"
+msgstr "Odpověď serveru:"
 
 #: ../src/common/connection.py:391
 #, python-format
@@ -293,7 +297,7 @@ msgstr "stav"
 
 #: ../src/common/helpers.py:96
 msgid "?Subscription we already have:None"
-msgstr "?Subscription we already have: Žádná"
+msgstr "?Subscription we already have:Žádná"
 
 #: ../src/common/helpers.py:98
 msgid "To"
@@ -309,7 +313,7 @@ msgstr "Obojí"
 
 #: ../src/common/helpers.py:110
 msgid "?Ask (for Subscription):None"
-msgstr "?Ask (for Subscription): Žádná"
+msgstr "?Ask (for Subscription):Žádná"
 
 #: ../src/common/helpers.py:112
 msgid "Subscribe"
@@ -395,7 +399,7 @@ msgstr "chyba: nemůžu otevřít %s pro čtení"
 #: ../src/common/optparser.py:93
 #, python-format
 msgid "Unable to write file in %s"
-msgstr "Nelze zapsat do souboru v adresáři %s"
+msgstr "Nemohu zapsat soubor do %s"
 
 #: ../src/advanced.py:52
 msgid "Preference Name"
@@ -466,7 +470,7 @@ msgstr "Číst článkek na _Wikipedia"
 
 #: ../src/chat.py:794
 msgid "Look it up in _Dictionary"
-msgstr "Vyhle_dat ve slovníku"
+msgstr "Vyhledat ve _slovníku"
 
 #. we must have %s in the url if not WIKTIONARY
 #: ../src/chat.py:809
@@ -698,7 +702,7 @@ msgstr "Nód"
 
 #: ../src/config.py:2297 ../src/gtkgui.glade.h:317
 msgid "_Edit"
-msgstr "_Editace"
+msgstr "_Úpravy"
 
 #: ../src/config.py:2299 ../src/gtkgui.glade.h:213
 msgid "Re_gister"
@@ -1087,7 +1091,7 @@ msgstr "nazev_tematu"
 
 #: ../src/gajim_themes_window.py:132
 msgid "theme name"
-msgstr "název tématu"
+msgstr "jméno tématu"
 
 #: ../src/groupchat_window.py:127 ../src/groupchat_window.py:965
 #, python-format
@@ -1099,7 +1103,8 @@ msgid ""
 "If you close this window and you have history disabled, this message will be "
 "lost."
 msgstr ""
-"Pokud zavřete toto okno a máte vypnutou historii, tato zpráva bude ztracena."
+"Pokud zavřete toto okno a historie je vypnutá, bude zpráva nenávratně "
+"ztracena."
 
 #: ../src/groupchat_window.py:143
 #, python-format
@@ -1205,7 +1210,7 @@ msgid ""
 "If you close this tab and you have history disabled, the message will be "
 "lost."
 msgstr ""
-"Pokud zavřete tuto záložku a máte vypnutou historii, zpráva bude ztracena."
+"Pokud zavřete tuto záložku a historie je vypnutá, zpráva bude ztracena."
 
 #: ../src/history_window.py:138
 #, python-format
@@ -1430,7 +1435,7 @@ msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
 msgstr ""
-"Pokud zavřete toto okno a máte vypnutou historii, tato zpráva bude ztracena."
+"Pokud zavřete toto okno a historie je vypnutá, tato zpráva bude ztracena."
 
 #. we are not connected
 #: ../src/tabbed_chat_window.py:518
@@ -1439,7 +1444,7 @@ msgstr "Spojení není dostupné"
 
 #: ../src/tabbed_chat_window.py:519
 msgid "Your message can not be sent until you are connected."
-msgstr "Va1e zpráva nemu3e být odeslána dokud se nepoipojíte."
+msgstr "Va¹e zpráva nemù¾e být odeslána dokud se nepøipojíte."
 
 #: ../src/tabbed_chat_window.py:607
 msgid "Sending private message failed"
@@ -1449,7 +1454,7 @@ msgstr "Odesílání soukromé zprávy selhalo"
 #: ../src/tabbed_chat_window.py:609
 #, python-format
 msgid "You are no longer in room \"%s\" or \"%s\" has left."
-msgstr "U3 nejste v místnosti \"%s\" nebo \"%s\" ode1el(a)."
+msgstr "U¾ nejste v místnosti \"%s\" nebo \"%s\" ode¹el(a)."
 
 #: ../src/tabbed_chat_window.py:712
 msgid "Encryption enabled"
@@ -1561,7 +1566,7 @@ msgstr "<b>Zvuky</b>"
 
 #: ../src/gtkgui.glade.h:18
 msgid "<b>Visual Notifications</b>"
-msgstr "<b>Grafické notifikace</b>"
+msgstr "<b>Vizuální upozornění</b>"
 
 #: ../src/gtkgui.glade.h:19
 msgid "<b>What do you want to do?</b>"
@@ -1732,7 +1737,7 @@ msgstr "Tučné"
 
 #: ../src/gtkgui.glade.h:62
 msgid "C_onnect on Gajim startup"
-msgstr "Přip_ojit při spuštění"
+msgstr "_Připojit po startu Gajimu"
 
 #: ../src/gtkgui.glade.h:63
 msgid "Cancel file transfer"
@@ -1747,7 +1752,7 @@ msgid ""
 "Cancels the selected file transfer. If there is an incomplete file, kept in "
 "the file system it will be removed. This operation is not reversable"
 msgstr ""
-"Zastaví vybraný přenos souboru. Pokud existuje nedokončený soubor, bude "
+"Zruší vybraný přenos souboru. Pokud existuje nedokončený soubor, bude "
 "odstraněn. Tato operace je nevratná. "
 
 #: ../src/gtkgui.glade.h:66
@@ -1776,7 +1781,7 @@ msgstr "Rozhovor s"
 
 #: ../src/gtkgui.glade.h:73
 msgid "Check for new _version on Gajim startup"
-msgstr "Ověřit dostupnost nové _verze při spuštění aplikace"
+msgstr "Ověř dostupnost nové _verze při spuštění aplikace"
 
 #: ../src/gtkgui.glade.h:74
 msgid "Check if you want to register for a new jabber account"
@@ -1825,7 +1830,8 @@ msgstr "Klikněte pro získání dalších informací o kontaktu"
 
 #: ../src/gtkgui.glade.h:82
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr "Klikněte pro seznam služeb na jabber serverech"
+msgstr ""
+"Klikněte pro seznam vlastností (jako MSN, ICQ transporty) jabber serverů"
 
 #: ../src/gtkgui.glade.h:83
 msgid "Click to see past conversation in this room"
@@ -1898,7 +1904,7 @@ msgstr "Oddělení:"
 
 #: ../src/gtkgui.glade.h:100
 msgid "E-Mail"
-msgstr "E-Mail"
+msgstr "E-mail"
 
 #: ../src/gtkgui.glade.h:101
 msgid "E-Mail:"
@@ -2049,7 +2055,7 @@ msgstr "Skryje okno"
 
 #: ../src/gtkgui.glade.h:138
 msgid "Homepage:"
-msgstr "Dom. Stránka:"
+msgstr "Dom. stránka:"
 
 #: ../src/gtkgui.glade.h:139
 msgid "Hostname: "
@@ -2258,7 +2264,7 @@ msgstr "Žádný"
 
 #: ../src/gtkgui.glade.h:185
 msgid "Notify me about contacts that: "
-msgstr "Upozorni mě na kontakty které: "
+msgstr "Upozorni mě na kontakty které se: "
 
 #: ../src/gtkgui.glade.h:186
 msgid "OS:"
@@ -2331,7 +2337,7 @@ msgstr "Nastavení"
 #. Prefix in Name
 #: ../src/gtkgui.glade.h:206
 msgid "Prefix:"
-msgstr "Předpona:"
+msgstr "Titul:"
 
 #: ../src/gtkgui.glade.h:207
 msgid "Print time:"
@@ -2531,11 +2537,11 @@ msgstr "Zobrazí výpis přenosů souborů mezi Vámi a ostatními"
 
 #: ../src/gtkgui.glade.h:253
 msgid "Sign _in"
-msgstr "_Přihlášení"
+msgstr "_Přihlásí"
 
 #: ../src/gtkgui.glade.h:254
 msgid "Sign _out"
-msgstr "_Odhlásit"
+msgstr "_Odhlásí"
 
 #: ../src/gtkgui.glade.h:255
 msgid "Sort contacts by status"
@@ -2584,7 +2590,7 @@ msgstr "Autorizace:"
 #. Suffix in Name
 #: ../src/gtkgui.glade.h:267
 msgid "Suffix:"
-msgstr "Přípona:"
+msgstr "Za jménem:"
 
 #: ../src/gtkgui.glade.h:268
 msgid "Synch_ronize account status with global status"
@@ -2684,7 +2690,7 @@ msgstr "Uživatel:"
 
 #: ../src/gtkgui.glade.h:291
 msgid "When a file transfer is complete show a popup notification"
-msgstr "Zobrazit upozornění, až bude přenos souboru dokončen"
+msgstr "Zobraz upozornění, až bude přenos souboru dokončen"
 
 #: ../src/gtkgui.glade.h:292
 msgid ""
@@ -2747,7 +2753,7 @@ msgstr "_Autorizuj"
 
 #: ../src/gtkgui.glade.h:306
 msgid "_Ban"
-msgstr "_Zakaž"
+msgstr "_Zakázat"
 
 #: ../src/gtkgui.glade.h:307
 msgid "_Bookmark This Room"
@@ -2812,7 +2818,7 @@ msgstr "_IQ"
 
 #: ../src/gtkgui.glade.h:325
 msgid "_Icon in systray (aka. notification area)"
-msgstr "_Ikona v systrayi (jinak - v oznamovací oblasti)"
+msgstr "_Ikona v systrayi (jinak řečeno v oznamovací oblasti)"
 
 #: ../src/gtkgui.glade.h:326
 msgid "_Ignore events from contacts not in the roster"
@@ -3062,9 +3068,9 @@ msgstr "minut"
 #, python-format
 msgid "Gajim - one unread message"
 msgid_plural "Gajim - %d unread messages"
-msgstr[0] "Gajim - %d nepřečtená zpráva"
-msgstr[1] "Gajim - %d nepřečtená zpráva"
-msgstr[2] "Gajim - %d nepřečtená zpráva"
+msgstr[0] "Gajim - %d nepřečtenou zprávu"
+msgstr[1] "Gajim - %d nepřečtené zprávy"
+msgstr[2] "Gajim - %d nepřečtených zpráv"
 
 #: ../src/tooltips.py:239 ../src/tooltips.py:241
 #, python-format
@@ -3072,13 +3078,12 @@ msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
 #: ../src/tooltips.py:263
-#, fuzzy
 msgid "Role: "
-msgstr "Postavení: "
+msgstr "Role:"
 
 #: ../src/tooltips.py:266
 msgid "Affiliation: "
-msgstr "Vztah: "
+msgstr "Přidružení:"
 
 #: ../src/tooltips.py:269 ../src/tooltips.py:353 ../src/tooltips.py:366
 #: ../src/tooltips.py:429
@@ -3133,7 +3138,7 @@ msgstr "Přeneseno: "
 
 #: ../src/tooltips.py:432 ../src/tooltips.py:453
 msgid "Not started"
-msgstr "Nezačalo"
+msgstr "Nespuštěno"
 
 #: ../src/tooltips.py:436
 msgid "Stopped"
@@ -3145,16 +3150,16 @@ msgstr "Dokončeno"
 
 #: ../src/tooltips.py:445
 msgid "Paused"
-msgstr "Pauza"
+msgstr "Pozastaveno"
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
 #: ../src/tooltips.py:449
 msgid "Stalled"
-msgstr "Zamrzlé"
+msgstr "Stagnuje"
 
 #: ../src/tooltips.py:451
 msgid "Transferring"
-msgstr "Přenos"
+msgstr "Přenáším"
 
 #: ../src/filetransfers_window.py:73
 msgid "File"
@@ -3177,7 +3182,7 @@ msgstr "Velikost: %s"
 #. You is a reply of who send a file
 #: ../src/filetransfers_window.py:155
 msgid "You"
-msgstr "Vám"
+msgstr "Vy"
 
 #: ../src/filetransfers_window.py:156 ../src/filetransfers_window.py:217
 #, python-format
@@ -3342,8 +3347,8 @@ msgid ""
 "set 'OpenPGP key' to ''."
 msgstr ""
 "Poslat novou zprávu kontaktu v Seznamu. Obojí OpenPGP klíč a účet jsou "
-"volitelné. Pokud chcete nastavit pouze 'account' bez 'pgp-key', nastavte "
-"prostě 'pgp-key' na ''."
+"volitelné. Pokud chcete nastavit pouze 'account' bez 'OpenPGP key', nastavte "
+"prostě 'OpenPGP key' na ''."
 
 #: ../scripts/gajim-remote.py:125
 msgid "JID of the contact that will receive the message"
@@ -3379,7 +3384,7 @@ msgstr "Poslat soubor kontaktu"
 
 #: ../scripts/gajim-remote.py:143
 msgid "file"
-msgstr "Soubor"
+msgstr "soubor"
 
 #: ../scripts/gajim-remote.py:143
 msgid "File path"
@@ -3417,7 +3422,7 @@ msgstr "Rozhraní sezení není dostupné."
 #: ../scripts/gajim-remote.py:221
 #, python-format
 msgid "Unknown D-Bus version: %s"
-msgstr "Neznámá verze dbus: %s"
+msgstr "Neznámá verze D-Bus: %s"
 
 #: ../scripts/gajim-remote.py:248
 #, python-format
@@ -3459,33 +3464,3 @@ msgid ""
 msgstr ""
 "Parametry \"%s\" nebyl uveden. \n"
 "Napište \"%s help %s\" pro více informací"
-
-#~ msgid "Gajim disconnected you from %s"
-#~ msgstr "Gajim tě odpojil od %s"
-
-#~ msgid ""
-#~ "%s seconds have passed and server did not reply to our keep-alive. If you "
-#~ "believe such disconnection should not have happened, you can disable "
-#~ "sending keep-alive packets by modifying this account."
-#~ msgstr ""
-#~ "%s sekund uběhlo a server neodpověděl na náš keep-alive. Pokud věříte, že "
-#~ "takové odpojení by nemělo nastat, můžete vypnout posílání keep-alive v "
-#~ "nastavení účtu."
-
-#~ msgid "error: cannot open %s for reading\n"
-#~ msgstr "chyba: nelze otevřít %s pro čtení\n"
-
-#~ msgid "If you close the window, this message will be lost."
-#~ msgstr "Pokud zavřete okno, tato zpráva bude ztracena."
-
-#~ msgid "Stop file transfer"
-#~ msgstr "Zastavit přenos souboru"
-
-#~ msgid "_About"
-#~ msgstr "_O aplikaci"
-
-#~ msgid "Gajim - %s unread messages"
-#~ msgstr "Gajim - %s nepřečtených zpráv"
-
-#~ msgid "paused"
-#~ msgstr "pozastaveno"
