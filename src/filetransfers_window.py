@@ -312,7 +312,7 @@ _('Connection with peer cannot be established.'))
 					file_dir = os.path.dirname(file_path)
 					if file_dir:
 						gajim.config.set('last_save_dir', file_dir)
-					file_props['file-name'] = file_path.decode('utf-8')
+					file_props['file-name'] = file_path
 					self.add_transfer(account, contact, file_props)
 					gajim.connections[account].send_file_approval(file_props)
 				else:
