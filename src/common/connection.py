@@ -1240,7 +1240,6 @@ class Connection:
 			p = gajim.config.get_per('accounts', self.name, 'custom_port')
 
 		con_type = con.connect((h, p), proxy = proxy, secure=secur) #FIXME: blocking
-		self.peerhost = con.get_peerhost()
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
 			self.connected = 0
@@ -1249,7 +1248,8 @@ class Connection:
 				_('Check your connection or try again later')))
 			return None
 
-		gajim.log.debug(_('Connected to server with %s'), con_type)
+		self.peerhost = con.get_peerhost()
+		gajim.log.debug(_('Connected to server with %s') % con_type)
 
 		# notify the gui about con_type
 		self.dispatch('CON_TYPE', con_type)
