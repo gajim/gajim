@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-30 01:36+0300\n"
-"PO-Revision-Date: 2005-08-17 16:57+0300\n"
+"PO-Revision-Date: 2005-09-01 17:31+0300\n"
 "Last-Translator: Filippos Papadopoulos <filip@cs.uoi.gr>\n"
 "Language-Team: Hellenic-Ελληνικά-Greek\n"
 "MIME-Version: 1.0\n"
@@ -112,12 +112,11 @@ msgstr "πραγματοποιήθηκε αφαίρεση εξουσιοδότη
 #. conflict: Nick Conflict
 #: ../src/common/connection.py:357
 msgid "Unable to join room"
-msgstr ""
+msgstr "Αδυναμία συμμετοχής στο δωμάτιο"
 
 #: ../src/common/connection.py:358
-#, fuzzy
 msgid "Server response:"
-msgstr "Χαρακτηριστικά Διακομιστή"
+msgstr "Απάντηση του διακομιστή:"
 
 #: ../src/common/connection.py:389
 #, python-format
@@ -175,7 +174,7 @@ msgstr "Είμαι %s"
 #. We didn't set a passphrase
 #: ../src/common/connection.py:1409
 msgid "OpenPGP passphrase was not given"
-msgstr "Δεν δώθηκε κωδική-φράση για το OpenPGP"
+msgstr "Δεν δόθηκε κωδική-φράση για το OpenPGP"
 
 #. %s is the account name here
 #: ../src/common/connection.py:1411
@@ -315,27 +314,24 @@ msgid "Moderators"
 msgstr "Διαχειριστές"
 
 #: ../src/common/helpers.py:126
-#, fuzzy
 msgid "Moderator"
-msgstr "_Παροχή Δικαιώματος Συντονισμού"
+msgstr "Διαχειριστής"
 
 #: ../src/common/helpers.py:129
 msgid "Participants"
 msgstr "Συμμετέχοντες"
 
 #: ../src/common/helpers.py:131
-#, fuzzy
 msgid "Participant"
-msgstr "Συμμετέχοντες"
+msgstr "Συμμετέχων"
 
 #: ../src/common/helpers.py:134
 msgid "Visitors"
 msgstr "Επισκέπτες"
 
 #: ../src/common/helpers.py:136
-#, fuzzy
 msgid "Visitor"
-msgstr "Επισκέπτες"
+msgstr "Επισκέπτης"
 
 #: ../src/common/helpers.py:172
 msgid "is paying attention to the conversation"
@@ -365,7 +361,7 @@ msgstr "Το %s είναι αρχείο αλλά πρέπει να είναι φ
 
 #: ../src/common/logger.py:44 ../src/common/logger.py:56
 msgid "Gajim will now exit"
-msgstr "To Gajim τώρα θα κλείσει"
+msgstr "Το Gajim τώρα θα κλείσει"
 
 #. others have read permission!
 #. rwx------
@@ -387,9 +383,9 @@ msgstr "Το αρχείο %s δε μπορεί να ανοιχθεί για αν
 
 #. chances are we cannot write file in a directory
 #: ../src/common/optparser.py:93
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to write file in %s"
-msgstr "Αδύνατη η εγγραφή αρχείου σε %s\n"
+msgstr "Αδύνατη η εγγραφή αρχείου στο %s"
 
 #: ../src/advanced.py:52
 msgid "Preference Name"
@@ -551,8 +547,7 @@ msgstr "Μη έγκυρο Jabber ID"
 
 #: ../src/config.py:1219
 msgid "A Jabber ID must be in the form \"user@servername\"."
-msgstr ""
-"Ένα Jabber ID πρέπει να είναι στην μορφή \"όνομα_χρήστη@όνομα_διακομιστήs\"."
+msgstr "Ένα Jabber ID πρέπει να είναι στην μορφή \"όνομα_χρήστη@όνομα_διακομιστή\"."
 
 #: ../src/config.py:1226 ../src/dialogs.py:761
 msgid "Invalid password"
@@ -664,7 +659,7 @@ msgid ""
 "in height."
 msgstr ""
 "Η εικόνα για τα σύμβολα πρέπει να είναι μικρότερη ή ίση με 24 pixel σε μήκος "
-"και 24 pixel se ύψος."
+"και 24 pixel σε ύψος."
 
 #: ../src/config.py:1952
 msgid "Choose Image"
@@ -726,8 +721,7 @@ msgid "This bookmark has invalid data"
 msgstr "Αυτός ο σελιδοδείκτης έχει μη έγκυρα δεδομένα"
 
 #: ../src/config.py:2633
-msgid ""
-"Please be sure to fill out server and room fields or remove this bookmark."
+msgid "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Παρακαλώ συμπληρώστε τα πεδία του διακομιστή και του δωματίου ή διαφορετικά "
 "αφαιρέστε τον σελιδοδείκτη."
@@ -1096,9 +1090,8 @@ msgid "Theme"
 msgstr "Θέμα"
 
 #: ../src/gajim_themes_window.py:126 ../src/gajim_themes_window.py:128
-#, fuzzy
 msgid "theme name"
-msgstr "όνομα_θέματος"
+msgstr "όνομα θέματος"
 
 #: ../src/gajim_themes_window.py:129
 msgid "theme_name"
@@ -1110,11 +1103,12 @@ msgid "You just received a new message in room \"%s\""
 msgstr "Μόλις λάβατε ένα νέο μήνυμα στο δωμάτιο \"%s\""
 
 #: ../src/groupchat_window.py:128
-#, fuzzy
 msgid ""
 "If you close this window and you have history disabled, this message will be "
 "lost."
-msgstr "Εάν κλείσετε αυτό το παράθυρο, το μήνυμα θα χαθεί."
+msgstr ""
+"Εάν κλείσετε αυτό το παράθυρο και έχετε απενεργοποιημένο το ιστορικό, αυτό το "
+"μήνυμα θα χαθεί."
 
 #: ../src/groupchat_window.py:143
 #, python-format
@@ -1125,8 +1119,7 @@ msgstr[1] "Είστε σίγουροι ότι θέλετε να φύγετε α�
 
 #: ../src/groupchat_window.py:148
 msgid "If you close this window, you will be disconnected from this room."
-msgid_plural ""
-"If you close this window, you will be disconnected from these rooms."
+msgid_plural "If you close this window, you will be disconnected from these rooms."
 msgstr[0] "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτό το δωμάτιο."
 msgstr[1] "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτά τα δωμάτια."
 
@@ -1216,11 +1209,10 @@ msgid "Banning %s"
 msgstr "Απαγορεύοντας την πρόσβαση στον %s"
 
 #: ../src/groupchat_window.py:966 ../src/tabbed_chat_window.py:344
-#, fuzzy
 msgid ""
 "If you close this tab and you have history disabled, the message will be "
 "lost."
-msgstr "Εάν κλείσετε αυτή την καρτέλα, το μήνυμα θα χαθεί."
+msgstr "Εάν κλείσετε αυτή την καρτέλα και έχετε απενεργοποιημένο το ιστορικό, το μήνυμα θα χαθεί."
 
 #: ../src/history_window.py:138
 #, python-format
@@ -1298,10 +1290,8 @@ msgstr "Η μεταφορά \"%s\" θα αφαιρεθεί"
 
 #: ../src/roster_window.py:676
 #, python-format
-msgid ""
-"You will no longer be able to send and receive messages to contacts from %s."
-msgstr ""
-"Δεν θα μπορείτε να στείλετε και να λάβετε μηνύματα στις επαφές από το %s."
+msgid "You will no longer be able to send and receive messages to contacts from %s."
+msgstr "Δεν θα μπορείτε να στείλετε και να λάβετε μηνύματα στις επαφές από το %s."
 
 #: ../src/roster_window.py:719
 msgid "Assign OpenPGP Key"
@@ -1351,8 +1341,7 @@ msgstr "Η αίτηση εγγραφής έχει σταλεί"
 #: ../src/roster_window.py:1026
 #, python-format
 msgid "If \"%s\" accepts this request you will know his status."
-msgstr ""
-"Εάν ο \"%s\" αποδεχθεί αυτή την αίτηση, θα γνωρίζετε την κατάσταση του."
+msgstr "Εάν ο \"%s\" αποδεχθεί αυτή την αίτηση, θα γνωρίζετε την κατάσταση του."
 
 #: ../src/roster_window.py:1155
 #, python-format
@@ -1424,8 +1413,7 @@ msgstr "ως "
 
 #: ../src/systray.py:246
 msgid "All contacts in this group are offline or have errors"
-msgstr ""
-"Όλες οι επαφές σε αυτή την ομάδα είναι αποσυνδεδέμενες ή έχουν πρόβλημα"
+msgstr "Όλες οι επαφές σε αυτή την ομάδα είναι αποσυνδεδέμενες ή έχουν πρόβλημα"
 
 #: ../src/tabbed_chat_window.py:126 ../src/gtkgui.glade.h:190
 msgid "OpenPGP Encryption"
@@ -1435,8 +1423,7 @@ msgstr "Κρυπτογράφηση OpenPGP"
 #: ../src/tabbed_chat_window.py:130
 #, python-format
 msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
-msgstr ""
-"Ο/η %s δεν έχει στείλει ένα κλειδί OpenPGP ούτε εσείς έχετε εφαρμόσει κάποιο"
+msgstr "Ο/η %s δεν έχει στείλει ένα κλειδί OpenPGP ούτε εσείς έχετε εφαρμόσει κάποιο"
 
 #. %s is being replaced in the code with JID
 #: ../src/tabbed_chat_window.py:275 ../src/tabbed_chat_window.py:343
@@ -1445,11 +1432,10 @@ msgid "You just received a new message from \"%s\""
 msgstr "Mόλις λάβατε ένα μήνυμα από \"%s\""
 
 #: ../src/tabbed_chat_window.py:276
-#, fuzzy
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
-msgstr "Εάν κλείσετε αυτό το παράθυρο, το μήνυμα θα χαθεί."
+msgstr "Εάν κλείσετε αυτήν την καρτέλα και έχετε απενεργοποιημένο το ιστορικό, το μήνυμα θα χαθεί."
 
 #. we are not connected
 #: ../src/tabbed_chat_window.py:516
@@ -1513,8 +1499,7 @@ msgstr ""
 
 #: ../src/vcard.py:405
 msgid "Without a connection, you can not get your contact information."
-msgstr ""
-"Πρέπει να είστε συνδεδεμένος για να λάβετε τις πληροφορίες της επαφής σας"
+msgstr "Πρέπει να είστε συνδεδεμένος για να λάβετε τις πληροφορίες της επαφής σας"
 
 #: ../src/gtkgui.glade.h:1
 msgid "0"
@@ -1567,7 +1552,7 @@ msgstr "<b>Παρακαλώ επιλέξτε ένα από τα παρακάτω
 
 #: ../src/gtkgui.glade.h:14
 msgid "<b>Preset Status Messages</b>"
-msgstr "<b>Προκαθορισμένα Μηνύματα Καταστάσης</b>"
+msgstr "<b>Προκαθορισμένα Μηνύματα Κατάστασης</b>"
 
 #: ../src/gtkgui.glade.h:15
 msgid "<b>Properties</b>"
@@ -1582,9 +1567,8 @@ msgid "<b>Sounds</b>"
 msgstr "<b>Ήχοι</b>"
 
 #: ../src/gtkgui.glade.h:18
-#, fuzzy
 msgid "<b>Visual Notifications</b>"
-msgstr "<b>Γνωστοποιήσεις</b>"
+msgstr "<b>Οπτικές γνωστοποιήσεις</b>"
 
 #: ../src/gtkgui.glade.h:19
 msgid "<b>What do you want to do?</b>"
@@ -1702,8 +1686,7 @@ msgstr "Ανάθεση Open_PGP Κλειδιού"
 
 #: ../src/gtkgui.glade.h:47
 msgid "Authorize contact so he can know when you're connected"
-msgstr ""
-"Εξουσιοδοτήστε μια επαφή ώστε να μπορεί να ξέρει πότε είστε συνδεδεμένος"
+msgstr "Εξουσιοδοτήστε μια επαφή ώστε να μπορεί να ξέρει πότε είστε συνδεδεμένος"
 
 #: ../src/gtkgui.glade.h:48
 msgid "Auto _away after:"
@@ -1718,7 +1701,6 @@ msgid "Auto join"
 msgstr "Αυτόματη είσοδος"
 
 #: ../src/gtkgui.glade.h:51
-#, fuzzy
 msgid ""
 "Autodetect on every Gajim startup\n"
 "Always use GNOME default applications\n"
@@ -1759,21 +1741,18 @@ msgid "Bold"
 msgstr "Έντονα"
 
 #: ../src/gtkgui.glade.h:62
-#, fuzzy
 msgid "C_onnect on Gajim startup"
-msgstr "Σύνδεση κατά την ε_κκίνηση"
+msgstr "Σύνδεση κατά την ε_κκίνηση του Gajim"
 
 #: ../src/gtkgui.glade.h:63
-#, fuzzy
 msgid "Cancel file transfer"
-msgstr "Ακυρώνει την επιλεγμένη μεταφορά αρχείου"
+msgstr "Ακύρωση της μεταφοράς αρχείου"
 
 #: ../src/gtkgui.glade.h:64
 msgid "Cancels the selected file transfer"
 msgstr "Ακυρώνει την επιλεγμένη μεταφορά αρχείου"
 
 #: ../src/gtkgui.glade.h:65
-#, fuzzy
 msgid ""
 "Cancels the selected file transfer. If there is an incomplete file, kept in "
 "the file system it will be removed. This operation is not reversable"
@@ -1806,9 +1785,8 @@ msgid "Chat with"
 msgstr "Κουβέντα με"
 
 #: ../src/gtkgui.glade.h:73
-#, fuzzy
 msgid "Check for new _version on Gajim startup"
-msgstr "Έλεγχος για _νέα έκδοση κατά την εκκίνηση"
+msgstr "Έλεγχος για _νέα έκδοση κατά την εκκίνηση του Gajim"
 
 #: ../src/gtkgui.glade.h:74
 msgid "Check if you want to register for a new jabber account"
@@ -1857,9 +1835,8 @@ msgid "Click to get contact's extended information"
 msgstr "Πατήστε για να έχετε περισσότερες πληροφορίες για αυτή την επαφή"
 
 #: ../src/gtkgui.glade.h:82
-#, fuzzy
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr "Πατήστε για να δείτε τα χαρακτηριστικά των διακομιστών του jabber"
+msgstr "Πατήστε για να δείτε τα χαρακτηριστικά (όπως μεταφορές MSN, ICQ) των διακομιστών του jabber"
 
 #: ../src/gtkgui.glade.h:83
 msgid "Click to see past conversation in this room"
@@ -2054,8 +2031,7 @@ msgstr ""
 "μέρος της οθόνης για τις επαφές που μόλις αποσυνδέθηκαν στο Jabber"
 
 #: ../src/gtkgui.glade.h:128
-msgid ""
-"Gajim will only change the icon of the contact that sent the new message"
+msgid "Gajim will only change the icon of the contact that sent the new message"
 msgstr "Το Gajim θα αλλάξει μόνο το εικονίδιο της επαφής που έστειλε το μήνυμα"
 
 #: ../src/gtkgui.glade.h:129
@@ -2105,8 +2081,7 @@ msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφ�
 
 #: ../src/gtkgui.glade.h:143
 msgid "If checked, Gajim will also have a trayicon"
-msgstr ""
-"Αν επιλεγεί, το Gajim θα έχει δικό του εικονίδιο στην περιοχή γνωστοποίησης"
+msgstr "Αν επιλεγεί, το Gajim θα έχει δικό του εικονίδιο στην περιοχή γνωστοποίησης"
 
 #: ../src/gtkgui.glade.h:144
 msgid ""
@@ -2119,7 +2094,6 @@ msgstr ""
 "Μια τέτοια πληροφορία είναι π.χ. ότι κάποιος από τους δυο γράφει ένα μήνυμα"
 
 #: ../src/gtkgui.glade.h:145
-#, fuzzy
 msgid "If checked, Gajim will join this group chat on startup"
 msgstr ""
 "Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτή την ομαδική συζήτηση "
@@ -2433,8 +2407,7 @@ msgstr "Αφαίρεση της μεταφοράς αρχείου από τη λ
 
 #: ../src/gtkgui.glade.h:220
 msgid "Removes completed, canceled and failed file transfers from the list"
-msgstr ""
-"Αφαιρεί τις ολοκληρωμένες, ακυρωμένες και αποτυχημένες μεταφορές από τη λίστα"
+msgstr "Αφαιρεί τις ολοκληρωμένες, ακυρωμένες και αποτυχημένες μεταφορές από τη λίστα"
 
 #: ../src/gtkgui.glade.h:221
 msgid "Removing selected file transfer"
@@ -2535,8 +2508,7 @@ msgstr "Αποστολή μηνύματος και κλείσιμο παραθύ
 
 #: ../src/gtkgui.glade.h:242
 msgid "Sends a message to currently connected users to this server"
-msgstr ""
-"Στέλνει ένα μήνυμα στους χρήστες που είναι συνδεδεμένοι σε αυτό το διακομιστή"
+msgstr "Στέλνει ένα μήνυμα στους χρήστες που είναι συνδεδεμένοι σε αυτό το διακομιστή"
 
 #: ../src/gtkgui.glade.h:243
 msgid "Server:"
@@ -2571,9 +2543,8 @@ msgid "Show only in _roster"
 msgstr "Εμφά_νισε το μόνο στο κύριο παράθυρο"
 
 #: ../src/gtkgui.glade.h:251
-#, fuzzy
 msgid "Show roster window on Gajim startup"
-msgstr "Εμφάνιση του κεντρικού παραθύρου κατά την εκκίνηση"
+msgstr "Εμφάνιση του κεντρικού παραθύρου κατά την εκκίνηση του Gajim"
 
 #: ../src/gtkgui.glade.h:252
 msgid "Shows a list of file transfers between you and other"
@@ -2733,7 +2704,6 @@ msgid "User ID:"
 msgstr "Ταυτότητα Χρήστη:"
 
 #: ../src/gtkgui.glade.h:291
-#, fuzzy
 msgid "When a file transfer is complete show a popup notification"
 msgstr "Ειδοποίησε με όταν έχει ολοκληρωθεί μια μεταφορά αρχείου"
 
@@ -2962,7 +2932,7 @@ msgstr "_Άνοιγμα Προγράμματος Αλληλογραφίας"
 
 #: ../src/gtkgui.glade.h:349
 msgid "_Open Link in Browser"
-msgstr "_Άνοιγμα Δεσμού σε Φυλλομετρητή"
+msgstr "_Άνοιγμα Δεσμού σε Περιηγητή"
 
 #: ../src/gtkgui.glade.h:350
 msgid "_Owner"
@@ -3113,11 +3083,11 @@ msgid "minutes"
 msgstr "λεπτά"
 
 #: ../src/tooltips.py:212
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim - one unread message"
 msgid_plural "Gajim - %d unread messages"
-msgstr[0] "Gajim - 1 μη αναγνωσμένο μήνυμα"
-msgstr[1] "Gajim - 1 μη αναγνωσμένο μήνυμα"
+msgstr[0] "Gajim - ένα μη αναγνωσμένο μήνυμα"
+msgstr[1] "Gajim - %d μη αναγνωσμένα μηνύματα"
 
 #: ../src/tooltips.py:239 ../src/tooltips.py:241
 #, python-format
@@ -3125,13 +3095,12 @@ msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
 #: ../src/tooltips.py:263
-#, fuzzy
 msgid "Role: "
-msgstr "Ρόλος:"
+msgstr "Ρόλος: "
 
 #: ../src/tooltips.py:266
 msgid "Affiliation: "
-msgstr ""
+msgstr "Συσχέτιση: "
 
 #: ../src/tooltips.py:269 ../src/tooltips.py:353 ../src/tooltips.py:366
 #: ../src/tooltips.py:429
@@ -3185,33 +3154,27 @@ msgid "Transferred: "
 msgstr "Μεταφέρθηκαν: "
 
 #: ../src/tooltips.py:432 ../src/tooltips.py:453
-#, fuzzy
 msgid "Not started"
-msgstr "δεν έχει ξεκινήσει"
+msgstr "Δεν έχει ξεκινήσει"
 
 #: ../src/tooltips.py:436
-#, fuzzy
 msgid "Stopped"
 msgstr "Διακόπηκε"
 
 #: ../src/tooltips.py:438 ../src/tooltips.py:441
-#, fuzzy
 msgid "Completed"
 msgstr "Ολοκληρώθηκε"
 
 #: ../src/tooltips.py:445
-#, fuzzy
 msgid "Paused"
 msgstr "Παύση"
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
 #: ../src/tooltips.py:449
-#, fuzzy
 msgid "Stalled"
 msgstr "Πάγωσε"
 
 #: ../src/tooltips.py:451
-#, fuzzy
 msgid "Transferring"
 msgstr "Μεταφέρεται"
 
@@ -3236,7 +3199,7 @@ msgstr "Mέγεθος: %s"
 #. You is a reply of who send a file
 #: ../src/filetransfers_window.py:154
 msgid "You"
-msgstr ""
+msgstr "You"
 
 #: ../src/filetransfers_window.py:155 ../src/filetransfers_window.py:216
 #, python-format
@@ -3383,7 +3346,7 @@ msgid ""
 msgstr ""
 "αλλαγή κατάστασης του λογαριασμού \"account\". Εάν δεν έχει καθοριστεί, "
 "δοκιμάστε να αλλάξετε την κατάσταση όλων των λογαριασμών με έχουν "
-"ενεργοποιημένη την επιλογή \"sync with global status\""
+"ενεργοποιημένη την επιλογή \"συγχρονισμός με την γενική κατάσταση\""
 
 #: ../scripts/gajim-remote.py:110
 msgid "Show the chat dialog so that you can send message to a contact"
@@ -3392,9 +3355,8 @@ msgstr ""
 "μια επαφή"
 
 #: ../scripts/gajim-remote.py:113
-#, fuzzy
 msgid "JID of the contact that you want to chat with"
-msgstr "το jid της επαφής με την οποία θέλετε να συνομιλήσετε"
+msgstr "το JID της επαφής με την οποία θέλετε να συνομιλήσετε"
 
 #: ../scripts/gajim-remote.py:116
 msgid "if specified, contact is taken from the contact list of this account"
@@ -3403,7 +3365,6 @@ msgstr ""
 "λογαριασμού"
 
 #: ../scripts/gajim-remote.py:121
-#, fuzzy
 msgid ""
 "Send new message to a contact in the roster. Both OpenPGP key and account "
 "are optional. If you want to set only 'account', without 'OpenPGP key', just "
@@ -3411,12 +3372,11 @@ msgid ""
 msgstr ""
 "Αποστολή νέου μηνύματος σε μια επαφή από την λίστα επαφών. Το κλειδί OpenPGP "
 "και ο λογαριασμός είναι προαιρετικά. Εάν θέλετε να καθορίσετε μόνο τον "
-"'λογαριασμό', χωρίς το 'κλειδί pgp', απλώς θέστε το 'κλειδί pgp' σε ''."
+"'λογαριασμό', χωρίς το 'κλειδί OpenPGP', απλώς θέστε το 'κλειδί OpenPGP' σε ''."
 
 #: ../scripts/gajim-remote.py:125
-#, fuzzy
 msgid "JID of the contact that will receive the message"
-msgstr "το jid της επαφής που θα λάβει το μήνυμα"
+msgstr "το JID της επαφής που θα λάβει το μήνυμα"
 
 #: ../scripts/gajim-remote.py:127
 msgid "message contents"
@@ -3434,38 +3394,31 @@ msgstr ""
 
 #: ../scripts/gajim-remote.py:130
 msgid "if specified, the message will be sent using this account"
-msgstr ""
-"εάν καθοριστεί, το μήνυμα θα σταλεί χρησιμοποιώντας αυτόν τον λογαριασμό"
+msgstr "εάν καθοριστεί, το μήνυμα θα σταλεί χρησιμοποιώντας αυτόν τον λογαριασμό"
 
 #: ../scripts/gajim-remote.py:135
 msgid "Get detailed info on a contact"
 msgstr "Λήψη αναλυτικών πληροφοριών για μία επαφή"
 
 #: ../scripts/gajim-remote.py:137 ../scripts/gajim-remote.py:144
-#, fuzzy
 msgid "JID of the contact"
-msgstr "jid της επαφής"
+msgstr "το JID της επαφής"
 
 #: ../scripts/gajim-remote.py:141
-#, fuzzy
 msgid "Send file to a contact"
-msgstr "Λήψη αναλυτικών πληροφοριών για μία επαφή"
+msgstr "Αποστολή αρχείου σε μία επαφή"
 
 #: ../scripts/gajim-remote.py:143
-#, fuzzy
 msgid "file"
-msgstr "Αρχείο"
+msgstr "αρχείο"
 
 #: ../scripts/gajim-remote.py:143
-#, fuzzy
 msgid "File path"
-msgstr "Αρχείο"
+msgstr "Διαδρομή αρχείου"
 
 #: ../scripts/gajim-remote.py:145
-#, fuzzy
 msgid "if specified, file will be sent using this account"
-msgstr ""
-"εάν καθοριστεί, το μήνυμα θα σταλεί χρησιμοποιώντας αυτόν τον λογαριασμό"
+msgstr "εάν καθοριστεί, το αρχείο θα σταλεί χρησιμοποιώντας αυτόν τον λογαριασμό"
 
 #: ../scripts/gajim-remote.py:167
 msgid "Missing argument \"contact_jid\""
@@ -3493,9 +3446,9 @@ msgid "Session bus is not available."
 msgstr "Ο δίαυλος του session δεν είναι διαθέσιμος."
 
 #: ../scripts/gajim-remote.py:221
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown D-Bus version: %s"
-msgstr "Άγνωστη έκδοση dbus: %s"
+msgstr "Άγνωστη έκδοση του D-Bus: %s"
 
 #: ../scripts/gajim-remote.py:248
 #, python-format
@@ -3538,35 +3491,3 @@ msgstr ""
 "Το όρισμα \"%s\" δεν έχει οριστεί. \n"
 "Πληκτρολογήστε \"%s help %s\" για περισσότερες πληροφορίες"
 
-#~ msgid "Gajim disconnected you from %s"
-#~ msgstr "Το Gajim σας αποσύνδεσε από %s"
-
-#~ msgid ""
-#~ "%s seconds have passed and server did not reply to our keep-alive. If you "
-#~ "believe such disconnection should not have happened, you can disable "
-#~ "sending keep-alive packets by modifying this account."
-#~ msgstr ""
-#~ "Πέρασαν %s δευτερόλεπτα και ο διακομιστής δεν απάντησε στο keep-alive. Αν "
-#~ "πιστεύετε ότι δεν θα έπρεπε να έχετε αποσυνδεθεί, τότε απενεργοποιήστε "
-#~ "την αποστολή πακέτων keepalive στις επιλογές αυτού του λογαριασμού."
-
-#~ msgid "error: cannot open %s for reading\n"
-#~ msgstr "σφάλμα: αδύνατη η ανάγνωση του %s\n"
-
-#~ msgid "If you close the window, this message will be lost."
-#~ msgstr "Εάν κλείσετε το αυτό παράθυρο, το μήνυμα θα χαθεί"
-
-#~ msgid "Stop file transfer"
-#~ msgstr "Διακοπή της μεταφοράς αρχείου"
-
-#~ msgid "_About"
-#~ msgstr "_Περί"
-
-#~ msgid "Gajim - %s unread messages"
-#~ msgstr "Gajim - %s μη αναγνωσμένα μηνύματα"
-
-#~ msgid "paused"
-#~ msgstr "Σε παύση"
-
-#~ msgid "<span background=\"lightyellow\"></span>"
-#~ msgstr "<span background=\"lightyellow\"></span>"
