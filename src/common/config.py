@@ -117,7 +117,7 @@ class Config:
 		'send_on_ctrl_enter': [opt_bool, False], # send on ctrl+enter
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25],  # how many lines to store for key up
-		'version': [ opt_str, '0.8' ],
+		'version': [ opt_str, '0.8.1' ],
 		'always_compact_view': [opt_bool, False], # initial compact view state
 		'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
 		'dictionary_url': [opt_str, 'WIKTIONARY'], # by default use wiktionary
@@ -146,6 +146,8 @@ class Config:
 		'tabs_always_visible': [opt_bool, False], # show tab if one tab?
 		'tabs_border': [opt_bool, False], # border if one tab?
 		'tabs_close_button': [opt_bool, True], # close button in tab?
+		'avatar_width': [opt_int, 52],
+		'avatar_height': [opt_int, 52],
 	}
 
 	__options_per_key = {

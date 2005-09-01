@@ -212,7 +212,9 @@ timestamp, contact):
 				pixbuf = pixbufloader.get_pixbuf()
 				pixbufloader.close()
 			
-				scaled_buf = pixbuf.scale_simple(52, 52, gtk.gdk.INTERP_HYPER)
+				w = gajim.config.get('avatar_width')
+				h = gajim.config.get('avatar_height')
+				scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 				x = None
 				if self.xmls.has_key(vcard['jid']):
 					x = self.xmls[vcard['jid']]
