@@ -2268,7 +2268,7 @@ msgstr "Μέσο:"
 
 #: ../src/gtkgui.glade.h:176
 msgid "Mo_derator"
-msgstr "_Παροχή Δικαιώματος Συντονισμού"
+msgstr "_Συντονιστής"
 
 #: ../src/gtkgui.glade.h:177
 msgid "More"
