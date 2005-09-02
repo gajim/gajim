@@ -117,7 +117,7 @@ class Config:
 		'send_on_ctrl_enter': [opt_bool, False], # send on ctrl+enter
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25],  # how many lines to store for key up
-		'version': [ opt_str, '0.8.1' ],
+		'version': [ opt_str, '0.9' ], # what version first created the config
 		'always_compact_view': [opt_bool, False], # initial compact view state
 		'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
 		'dictionary_url': [opt_str, 'WIKTIONARY'], # by default use wiktionary
