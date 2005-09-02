@@ -1,5 +1,5 @@
---- gajim-0.8.orig/data/pixmaps/gajim.xpm
-+++ gajim-0.8/data/pixmaps/gajim.xpm
+--- data/pixmaps/gajim.xpm
++++ data/pixmaps/gajim.xpm
 @@ -0,0 +1,332 @@
 +/* XPM */
 +static char * gajim_xpm[] = {
@@ -332,9 +332,9 @@
 +"          V+o.W+X+Y+Z+y.k+l+x+y+z+A+q+r+=+j.6.7.k.t.`+          ",
 +"           @.@+@@@#@$@%@&@*@=@-@;@>@,@'@)@)@!@~@{@]@^@*.        ",
 +"          *.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.        ",
-+"                                                                "};
---- gajim-0.8.orig/Makefile
-+++ gajim-0.8/Makefile
++"                                                                "}
+--- Makefile
++++ Makefile
 @@ -69,7 +69,7 @@
  	done
  	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
