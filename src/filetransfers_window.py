@@ -242,6 +242,7 @@ _('Connection with peer cannot be established.'))
 			files_path_list = dialog.get_filenames()
 			file_dir = None
 			dialog.destroy()
+			file_dir = None
 			for file_path in files_path_list:
 				file_path = file_path.decode(sys.getfilesystemencoding())
 				if os.path.isfile(file_path):
