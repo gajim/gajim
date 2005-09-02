@@ -1,3 +1,9 @@
+Gajim 0.8.1 (02 Sep 2005)
+
+  * Systray icon for windows
+  * Gajim is available in Dutch
+  * Gajim can use gpg-agent
+
 Gajim 0.8 (18 Aug 2005)
 
   * Tabbed chat windows
