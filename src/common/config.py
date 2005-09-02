@@ -172,10 +172,8 @@ class Config:
 			'no_log_for': [ opt_str, '' ],
 			'attached_gpg_keys': [ opt_str, '' ],
 			'keep_alives_enabled': [ opt_bool, True],
-			# send keepalive every 60 seconds of inactivity
+			# send keepalive every N seconds of inactivity
 			'keep_alive_every_foo_secs': [ opt_int, 55 ],
-			# disconnect if 2 minutes have passed and server didn't reply
-			'keep_alive_disconnect_after_foo_secs': [ opt_int, 120 ],
 			# try for 2 minutes before giving up (aka. timeout after those seconds)
 			'try_connecting_for_foo_secs': [ opt_int, 60 ],
 			'max_stanza_per_sec': [ opt_int, 5],
