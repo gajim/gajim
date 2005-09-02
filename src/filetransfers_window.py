@@ -240,7 +240,6 @@ _('Connection with peer cannot be established.'))
 		response = dialog.run()
 		if response == gtk.RESPONSE_OK:
 			files_path_list = dialog.get_filenames()
-			file_dir = None
 			dialog.destroy()
 			file_dir = None
 			for file_path in files_path_list:
