@@ -4,7 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
-##  - Dimitur Kirov <dkirov@gmail.com>
+##	- Dimitur Kirov <dkirov@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -166,7 +166,7 @@ class Connection:
 
 	def discoverItems(self, jid, node = None):
 		'''According to JEP-0030: jid is mandatory, 
-											name, node, action is optional.'''
+		name, node, action is optional.'''
 		self._discover(common.xmpp.NS_DISCO_ITEMS, jid, node)
 	
 	def discoverInfo(self, jid, node = None):

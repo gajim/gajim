@@ -48,7 +48,7 @@ class Config:
 		'ignore_unknown_contacts': [ opt_bool, False ],
 		'showoffline': [ opt_bool, False ],
 		'autoaway': [ opt_bool, True ],
-		'autoawaytime': [ opt_int, 5, 'Time after which you are displayed as being away.' ],
+		'autoawaytime': [ opt_int, 5, _('Time after which you are displayed as being away.') ],
 		'autoaway_message': [ opt_str, _('Away as a result of being idle') ],
 		'autoxa': [ opt_bool, True ],
 		'autoxatime': [ opt_int, 15 ],
@@ -115,27 +115,25 @@ class Config:
 		'change_roster_title': [ opt_bool, True ],
 		'restore_lines': [opt_int, 4],
 		'restore_timeout': [opt_int, 60],
-		'send_on_ctrl_enter': [opt_bool, False], # send on ctrl+enter
+		'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter.')],
 		'show_roster_on_startup': [opt_bool, True],
-		'key_up_lines': [opt_int, 25],  # how many lines to store for key up
-		'version': [ opt_str, '0.9' ], # what version first created the config
+		'key_up_lines': [opt_int, 25, _('How many lines to store for key up.')],
+		'version': [ opt_str, '0.9' ], # what version created the config
 		'always_compact_view': [opt_bool, False], # initial compact view state
 		'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
-		'dictionary_url': [opt_str, 'WIKTIONARY'], # by default use wiktionary
+		'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
 		'always_english_wikipedia': [opt_bool, False],
 		'always_english_wiktionary': [opt_bool, False],
-		'use_dbus': [opt_bool, True], # allow control via dbus service
+		'use_dbus': [opt_bool, True, _('Allow controlling Gajim via D-Bus service.')],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
 		'autodetect_browser_mailer': [opt_bool, True],
 		'print_ichat_every_foo_minutes': [opt_int, 5],
-		'confirm_close_muc': [opt_bool, True], # confirm closing MUC window
+		'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
 		'notify_on_file_complete': [opt_bool, True], # notif. on file complete
 		'file_transfers_port': [opt_int, 28011],  # port, used for file transfers
-		# override the host we send for FT in case of address translation/port forward
-		'ft_override_host_to_send': [opt_str, ''], 
+		'ft_override_host_to_send': [opt_str, '', _('Overrides the host we send for File Transfer in case of address translation/port forwarding.')], 
 		'conversation_font': [opt_str, ''],
-		# IEC standard says KiB = 1024 bytes KB = 1000 bytes
-		'use_kib_mib': [opt_bool, False],
+		'use_kib_mib': [opt_bool, False, _('IEC standard says KiB = 1024 bytes, KB = 1000 bytes.')],
 		'notify_on_all_muc_messages': [opt_bool, False],
 		'trayicon_notification_on_new_messages': [opt_bool, True],
 		'last_save_dir': [opt_str, ''],
@@ -143,10 +141,10 @@ class Config:
 		'last_emoticons_dir': [opt_str, ''],
 		'last_sounds_dir': [opt_str, ''],
 		#FIXME: add combobox in prefs for this in .9
-		'tabs_position': [opt_str, 'top'], # top, bottom, left, right
-		'tabs_always_visible': [opt_bool, False], # show tab if one tab?
-		'tabs_border': [opt_bool, False], # border if one tab?
-		'tabs_close_button': [opt_bool, True], # close button in tab?
+		'tabs_position': [opt_str, 'top', _('Where to show tabs. Values are:')+" 'top', 'bottom', 'left', 'right'."],
+		'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
+		'tabs_border': [opt_bool, False, _('Show tab border if one conversation?')],
+		'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
 		'avatar_width': [opt_int, 52],
 		'avatar_height': [opt_int, 52],
 	}
