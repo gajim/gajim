@@ -141,10 +141,11 @@ class GroupchatWindow(chat.Chat):
 			rooms_no = len(names)
 			if rooms_no >= 2: # if we are in many rooms
 				pritext = _('Are you sure you want to leave rooms "%s"?') % ', '.join(names)
-				sectext = _('If you close this window, you will be disconnected from this room.')
+				sectext = _('If you close this window, you will be disconnected from these rooms.')
+
 			elif rooms_no == 1: # just in one room
 				pritext = _('Are you sure you want to leave room "%s"?') % names[0]
-				sectext = _('If you close this window, you will be disconnected from these rooms.')
+				sectext = _('If you close this window, you will be disconnected from this room.')
 			
 			if rooms_no > 0:
 				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
