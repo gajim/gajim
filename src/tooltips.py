@@ -209,9 +209,9 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 
 		if unread_messages_no > 0:
 			text = i18n.ngettext(
-					'Gajim - one unread message',
+					'Gajim - %d unread message',
 					'Gajim - %d unread messages',
-					unread_messages_no, None, unread_messages_no)
+					unread_messages_no, unread_messages_no, unread_messages_no)
 		elif len(accounts) > 1:
 			text = _('Gajim')
 			self.current_row = 1
