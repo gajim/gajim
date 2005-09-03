@@ -433,6 +433,7 @@ class GroupchatWindow(chat.Chat):
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
 			nick = instance.input_entry.get_text().decode('utf-8')
+			self.nicks[room_jid] = nick
 			gajim.connections[self.account].change_gc_nick(room_jid, nick)
 	
 	def on_configure_room_menuitem_activate(self, widget):
