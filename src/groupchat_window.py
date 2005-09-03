@@ -1020,9 +1020,6 @@ class GroupchatWindow(chat.Chat):
 		self.name_labels[room_jid] = self.xmls[room_jid].get_widget(
 			'banner_name_label')
 		self.paint_banner(room_jid)
-		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+  
-		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
-			self.name_labels[room_jid].set_ellipsize(pango.ELLIPSIZE_END)
 		
 		# connect the menuitems to their respective functions
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_popup_menu', APP)

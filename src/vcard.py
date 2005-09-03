@@ -307,14 +307,11 @@ class VcardWindow:
 			'resource_prio_label_eventbox')
 		tip.set_tip(resource_prio_label_eventbox, uf_resources)
 		
+		tip = gtk.Tooltips()
+		status_label_eventbox = self.xml.get_widget('status_label_eventbox')
+		tip.set_tip(status_label_eventbox, stats)
 		status_label = self.xml.get_widget('status_label')
-		#FIXME: when gtk2.4 is OOOOLD do it via glade2.10+
-		if gtk.pygtk_version >= (2, 6, 0) and gtk.gtk_version >= (2, 6, 0):
-			tip = gtk.Tooltips()
-			status_label_eventbox = self.xml.get_widget('status_label_eventbox')
-			tip.set_tip(status_label_eventbox, stats)
-			status_label.set_max_width_chars(15)
-		
+		status_label.set_max_width_chars(15)
 		status_label.set_text(stats)
 		
 		gajim.connections[self.account].request_vcard(self.contact.jid)
