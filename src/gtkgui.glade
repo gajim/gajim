@@ -18648,13 +18648,12 @@ Maybe I'll refactor later</property>
 	  <property name="spacing">6</property>
 
 	  <child>
-	    <widget class="GtkButton" id="remove_button">
+	    <widget class="GtkButton" id="cleanup_button">
 	      <property name="visible">True</property>
 	      <property name="sensitive">False</property>
+	      <property name="tooltip" translatable="yes">Removes completed, canceled and failed file transfers from the list</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-remove</property>
-	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <accessibility>
@@ -18662,7 +18661,71 @@ Maybe I'll refactor later</property>
 		<atkproperty name="AtkObject::accessible_description" translatable="yes">This action removes single file transfer from the list. If the transfer is active, it is first stopped and then removed</atkproperty>
 		<atkaction action_name="click" description="Removing selected file transfer"/>
 	      </accessibility>
-	      <signal name="clicked" handler="on_remove_button_clicked" last_modification_time="Wed, 03 Aug 2005 00:23:18 GMT"/>
+	      <signal name="clicked" handler="on_cleanup_button_clicked" last_modification_time="Sat, 03 Sep 2005 14:03:13 GMT"/>
+
+	      <child>
+		<widget class="GtkAlignment" id="alignment91">
+		  <property name="visible">True</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xscale">0</property>
+		  <property name="yscale">0</property>
+		  <property name="top_padding">0</property>
+		  <property name="bottom_padding">0</property>
+		  <property name="left_padding">0</property>
+		  <property name="right_padding">0</property>
+
+		  <child>
+		    <widget class="GtkHBox" id="hbox2992">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">2</property>
+
+		      <child>
+			<widget class="GtkImage" id="image1143">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-clear</property>
+			  <property name="icon_size">4</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label358">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Clean _up</property>
+			  <property name="use_underline">True</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
 	    </widget>
 	  </child>
 
@@ -18672,11 +18735,73 @@ Maybe I'll refactor later</property>
 	      <property name="sensitive">False</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">_Pause</property>
-	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <signal name="clicked" handler="on_pause_restore_button_clicked" last_modification_time="Wed, 31 Aug 2005 22:31:50 GMT"/>
+
+	      <child>
+		<widget class="GtkAlignment" id="alignment92">
+		  <property name="visible">True</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xscale">0</property>
+		  <property name="yscale">0</property>
+		  <property name="top_padding">0</property>
+		  <property name="bottom_padding">0</property>
+		  <property name="left_padding">0</property>
+		  <property name="right_padding">0</property>
+
+		  <child>
+		    <widget class="GtkHBox" id="hbox2993">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">2</property>
+
+		      <child>
+			<widget class="GtkImage" id="image1147">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-media-pause</property>
+			  <property name="icon_size">4</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label359">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Pause</property>
+			  <property name="use_underline">True</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
 	    </widget>
 	  </child>
 
@@ -18767,7 +18892,7 @@ Maybe I'll refactor later</property>
       <signal name="activate" handler="on_continue_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1127">
+	<widget class="GtkImage" id="image1144">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-media-play</property>
 	  <property name="icon_size">1</property>
@@ -18787,7 +18912,7 @@ Maybe I'll refactor later</property>
       <signal name="activate" handler="on_pause_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1128">
+	<widget class="GtkImage" id="image1145">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-media-pause</property>
 	  <property name="icon_size">1</property>
@@ -18821,30 +18946,9 @@ Maybe I'll refactor later</property>
       <signal name="activate" handler="on_open_folder_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1129">
+	<widget class="GtkImage" id="image1146">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-directory</property>
-	  <property name="icon_size">1</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	</widget>
-      </child>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkImageMenuItem" id="clean_up_menuitem">
-      <property name="tooltip" translatable="yes">Removes completed, canceled and failed file transfers from the list</property>
-      <property name="label" translatable="yes">Clean _up</property>
-      <property name="use_underline">True</property>
-      <signal name="activate" handler="on_clean_up_menuitem_activate" last_modification_time="Fri, 09 Sep 2005 22:48:03 GMT"/>
-
-      <child internal-child="image">
-	<widget class="GtkImage" id="image1130">
-	  <property name="visible">True</property>
-	  <property name="stock">gtk-clear</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
 	  <property name="yalign">0.5</property>

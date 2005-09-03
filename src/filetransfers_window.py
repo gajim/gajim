@@ -49,7 +49,7 @@ class FileTransfersWindow:
 		self.tree = self.xml.get_widget('transfers_list')
 		self.cancel_button = self.xml.get_widget('cancel_button')
 		self.pause_button = self.xml.get_widget('pause_restore_button')
-		self.remove_button = self.xml.get_widget('remove_button')
+		self.cleanup_button = self.xml.get_widget('cleanup_button')
 		self.notify_ft_checkbox = self.xml.get_widget(
 			'notify_ft_complete_checkbox')
 		notify = gajim.config.get('notify_on_file_complete')
@@ -105,10 +105,6 @@ class FileTransfersWindow:
 		self.pause_menuitem = popup_xml.get_widget('pause_menuitem')
 		self.continue_menuitem = popup_xml.get_widget('continue_menuitem')
 		self.remove_menuitem = popup_xml.get_widget('remove_menuitem')
-		self.clean_up_menuitem = popup_xml.get_widget('clean_up_menuitem')
-		if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
-			self.pause_button.set_image(gtk.image_new_from_stock(
-		gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_MENU))
 		popup_xml.signal_autoconnect(self)
 		
 	def find_transfer_by_jid(self, account, jid):
@@ -172,9 +168,8 @@ class FileTransfersWindow:
 				[_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT], 
 				[ gtk.STOCK_OK, gtk.RESPONSE_OK ]])
 		button = dialog.get_button(1)
-		if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
-			button.set_image(gtk.image_new_from_stock(
-		gtk.STOCK_DIRECTORY, gtk.ICON_SIZE_BUTTON))
+		button.set_image(gtk.image_new_from_stock(
+			gtk.STOCK_DIRECTORY, gtk.ICON_SIZE_BUTTON))
 		dialog.show_all()
 		if file_props['type'] == 's':
 			button.hide()
@@ -530,7 +525,7 @@ _('Connection with peer cannot be established.'))
 		self.pause_button.set_sensitive(False)
 		self.pause_menuitem.set_sensitive(False)
 		self.continue_menuitem.set_sensitive(False)
-		self.remove_button.set_sensitive(False)
+		self.cleanup_button.set_sensitive(False)
 		self.remove_menuitem.set_sensitive(False)
 		self.cancel_button.set_sensitive(False)
 		self.cancel_menuitem.set_sensitive(False)
@@ -545,7 +540,6 @@ _('Connection with peer cannot be established.'))
 		current_iter = self.model.get_iter(path)
 		sid = self.model[current_iter][4].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
-		self.remove_button.set_sensitive(is_row_selected)
 		self.remove_menuitem.set_sensitive(is_row_selected)
 		self.open_folder_menuitem.set_sensitive(is_row_selected)
 		is_stopped = False
@@ -596,31 +590,26 @@ _('Connection with peer cannot be established.'))
 		self.set_buttons_sensitive(path, is_selected)
 		return True
 	
-	def on_remove_button_clicked(self, widget):
-		selected = self.tree.get_selection().get_selected()
-		if selected is None or selected[1] is None:
-			return 
-		s_iter = selected[1]
-		sid = self.model[s_iter][4].decode('utf-8')
-		file_props = self.files_props[sid[0]][sid[1:]]
-		if not file_props.has_key('tt_account'):
-			# file transfer is not set yet
-			return 
-		account = file_props['tt_account']
-		if not gajim.connections.has_key(account):
-			# no connection to the account
-			return
-		gajim.connections[account].remove_transfer(file_props)
-		self.model.remove(s_iter)
+	def on_cleanup_button_clicked(self, widget):
+		i = len(self.model) - 1
+		while i >= 0:
+			iter = self.model.get_iter((i))
+			sid = self.model[iter][4].decode('utf-8')
+			file_props = self.files_props[sid[0]][sid[1:]]
+			if file_props.has_key('completed') and file_props['completed']:
+				self.model.remove(iter)
+			elif file_props.has_key('stopped') and file_props['stopped']:
+				self.model.remove(iter)
+			i -= 1
+		self.tree.get_selection().unselect_all()
 		self.set_all_insensitive()
 	
 	def toggle_pause_continue(self, status):
 		if status:
 			label = _('Pause')
 			self.pause_button.set_label(label)
-			if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
-				self.pause_button.set_image(gtk.image_new_from_stock(
-			gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_MENU))
+			self.pause_button.set_image(gtk.image_new_from_stock(
+				gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_MENU))
 			
 			self.pause_menuitem.set_sensitive(True)
 			self.pause_menuitem.set_no_show_all(False)
@@ -630,9 +619,8 @@ _('Connection with peer cannot be established.'))
 		else:
 			label = _('_Continue')
 			self.pause_button.set_label(label)
-			if gtk.gtk_version >= (2, 6, 0) and gtk.pygtk_version >= (2, 6, 0):
-				self.pause_button.set_image(gtk.image_new_from_stock(
-			gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_MENU))
+			self.pause_button.set_image(gtk.image_new_from_stock(
+				gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_MENU))
 			self.pause_menuitem.hide()
 			self.pause_menuitem.set_no_show_all(True)
 			self.continue_menuitem.set_sensitive(True)
@@ -705,9 +693,9 @@ _('Connection with peer cannot be established.'))
 	def show_context_menu(self, event, iter):
 		# change the sensitive propery of the buttons and menuitems
 		if len(self.model) == 0:
-			self.clean_up_menuitem.set_sensitive(False)
+			self.cleanup_button.set_sensitive(False)
 		else:
-			self.clean_up_menuitem.set_sensitive(True)
+			self.cleanup_button.set_sensitive(True)
 		path = None
 		if iter is not None:
 			path = self.model.get_path(iter)
@@ -776,21 +764,6 @@ _('Connection with peer cannot be established.'))
 			if path is not None:
 				return True
 		
-	
-	def on_clean_up_menuitem_activate(self, widget):
-		i = len(self.model) - 1
-		while i >= 0:
-			iter = self.model.get_iter((i))
-			sid = self.model[iter][4].decode('utf-8')
-			file_props = self.files_props[sid[0]][sid[1:]]
-			if file_props.has_key('completed') and file_props['completed']:
-				self.model.remove(iter)
-			elif file_props.has_key('stopped') and file_props['stopped']:
-				self.model.remove(iter)
-			i -= 1
-		self.tree.get_selection().unselect_all()
-		self.set_all_insensitive()
-		
 	def on_open_folder_menuitem_activate(self, widget):
 		selected = self.tree.get_selection().get_selected()
 		if selected is None or selected[1] is None:
@@ -815,7 +788,22 @@ _('Connection with peer cannot be established.'))
 		#FIXME: change the stock
 		
 	def on_remove_menuitem_activate(self, widget):
-		self.on_remove_button_clicked(widget)
+		selected = self.tree.get_selection().get_selected()
+		if selected is None or selected[1] is None:
+			return 
+		s_iter = selected[1]
+		sid = self.model[s_iter][4].decode('utf-8')
+		file_props = self.files_props[sid[0]][sid[1:]]
+		if not file_props.has_key('tt_account'):
+			# file transfer is not set yet
+			return 
+		account = file_props['tt_account']
+		if not gajim.connections.has_key(account):
+			# no connection to the account
+			return
+		gajim.connections[account].remove_transfer(file_props)
+		self.model.remove(s_iter)
+		self.set_all_insensitive()
 
 	def on_file_transfers_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
