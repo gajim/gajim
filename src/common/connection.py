@@ -355,16 +355,37 @@ class Connection:
 		elif ptype == 'error':
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
-			if errcode == '409':	#conflict: Nick Conflict
-				self.dispatch('ERROR', (_('Unable to join room'), 
-					_('Server response:') + '\n' + errmsg))
-			elif errcode == '502': # Internal Timeout:
+			if errcode == '502': # Internal Timeout:
 				self.dispatch('NOTIFY', (prs.getFrom().getStripped(),
 					'error', errmsg, prs.getFrom().getResource(),
 					prio, keyID, prs.getRole(), prs.getAffiliation(), prs.getJid(),
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
 					prs.getNewNick()))
+			elif errcode == '401': # password required to join
+				self.dispatch('ERROR', (_('Unable to join room'), 
+					_('A password is required to join this room.')))
+			elif errcode == '403': # we are banned
+				self.dispatch('ERROR', (_('Unable to join room'), 
+					_('You are banned from this room.')))
+			elif errcode == '404': # room does not exist
+				self.dispatch('ERROR', (_('Unable to join room'), 
+					_('Such room does not exist.')))
+			elif errcode == '405':
+				self.dispatch('ERROR', (_('Unable to join room'), 
+					_('Room creation is restricted,')))
+			elif errcode == '406':
+				self.dispatch('ERROR', (_('Unable to join room'), 
+					_('Your registered nickname must be used.')))
+			elif errcode == '407':
+				self.dispatch('ERROR', (_('Unable to join room'), 
+					_('You are not in the members list.')))
+			elif errcode == '409': # nick conflict
+				self.dispatch('ERROR', (_('Unable to join room'), 
+				_('Your desired nickname is in use or registered by another user.')))
 			else:
+				#FIXME: wtf is ERROR_ANSWER? maybe I should handle there?
+				#some comments in the code ARE VITAL ppl :( :( :(
+				#other ppl read your code. do not make their life miserable
 				self.dispatch('ERROR_ANSWER', ('', prs.getFrom().getStripped(),
 					errmsg, errcode))
 		if not ptype or ptype == 'unavailable':

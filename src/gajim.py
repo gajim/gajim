@@ -188,7 +188,7 @@ class Interface:
 		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		if jid_from in self.windows[account]['gc']:
 			self.windows[account]['gc'][jid_from].print_conversation(
-				'Error %s: %s' % (array[2], array[1]), jid_from)
+				_('Error %s: %s') % (array[2], array[1]), jid_from)
 
 	def handle_event_con_type(self, account, con_type):
 		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
