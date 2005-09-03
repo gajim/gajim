@@ -41,6 +41,7 @@ class AdvancedConfigurationWindow:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_configuration_window', None)
 		self.window = self.xml.get_widget('advanced_configuration_window')
 		self.entry = self.xml.get_widget('advanced_entry')
+		self.desc_label = self.xml.get_widget('advanced_desc_label')
 
 		treeview = self.xml.get_widget('advanced_treeview')
 		self.model = gtk.TreeStore(str, str, str)
@@ -73,6 +74,9 @@ class AdvancedConfigurationWindow:
 		
 		treeview.set_model(self.modelfilter)
 		
+		# connect signal for selection change
+		treeview.get_selection().connect('changed', self.on_advanced_treeview_selection_changed)
+		
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 		self.plugin.windows['advanced_config'] = self
@@ -83,6 +87,16 @@ class AdvancedConfigurationWindow:
 			cell.set_property('editable', 0)
 		else:
 			cell.set_property('editable', 1)
+	
+	def on_advanced_treeview_selection_changed(self, treeselection):
+		iter = treeselection.get_selected()
+		# Get text from first column in this row
+		opt = iter[0][iter[1]][0]
+		desc = gajim.config.get_desc(opt)
+		if desc:
+			self.desc_label.set_text(_(desc))
+		else:
+			self.desc_label.set_text(_('(None)'))
 	
 	def on_advanced_treeview_row_activated(self, treeview, path, column):
 		modelpath = self.modelfilter.convert_path_to_child_path(path)

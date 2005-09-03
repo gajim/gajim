@@ -25,6 +25,7 @@ _ = i18n._
 
 OPT_TYPE = 0
 OPT_VAL = 1
+OPT_DESC = 2
 
 opt_int = [ 'integer', 0 ]
 opt_str = [ 'string', 0 ]
@@ -47,7 +48,7 @@ class Config:
 		'ignore_unknown_contacts': [ opt_bool, False ],
 		'showoffline': [ opt_bool, False ],
 		'autoaway': [ opt_bool, True ],
-		'autoawaytime': [ opt_int, 5 ],
+		'autoawaytime': [ opt_int, 5, 'Time after which you are displayed as being away.' ],
 		'autoaway_message': [ opt_str, _('Away as a result of being idle') ],
 		'autoxa': [ opt_bool, True ],
 		'autoxatime': [ opt_int, 15 ],
@@ -388,6 +389,12 @@ class Config:
 		if not self.__options.has_key(optname):
 			return None
 		return self.__options[optname][OPT_VAL]
+		
+	def get_desc(self, optname):
+		if not self.__options.has_key(optname):
+			return None
+		if len(self.__options[optname]) > OPT_DESC:
+			return self.__options[optname][OPT_DESC]
 
 	def add_per(self, typename, name): # per_group_of_option
 		if not self.__options_per_key.has_key(typename):
