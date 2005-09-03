@@ -1215,8 +1215,9 @@ class InvitationReceivedDialog(HigDialog):
 		btn_deny = gtk.Button(stock = 'inv-deny') 
 		btn_accept = gtk.Button(stock = 'inv-accept')
 
-		#FIXME: add pano markup
-		pritext = _('You have been invited to the %s room by %s') % (room_jid, contact_jid)
+		#FIXME: add pango markup
+		pritext = _('You have been invited to the %(room_jid)s room by %(contact_jid)s') % {
+		 'room_jid': room_jid, 'contact_jid': contact_jid }
 		if comment is not None:
 			string += '\n' + _('Comment: %s') % comment
 		

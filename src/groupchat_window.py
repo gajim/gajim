@@ -335,19 +335,28 @@ class GroupchatWindow(chat.Chat):
 		model = self.list_treeview[room_jid].get_model()
 		if show in ('offline', 'error'):
 			if statusCode == '307':
-				self.print_conversation(_('%s has been kicked by %s: %s') % (nick,
-					actor, reason), room_jid)
-					#FIXME: this produced foo has been kciked by JID: reason
-					#Should we show the JID to everyone? the same for ban
-					#I propose we use nick
+				s = _('%(nick)s has been kicked by %(who)s: %(reason)s') % {
+					'nick': nick,
+					'who': actor,
+					'reason': reason }
+				self.print_conversation(s, room_jid)
+				#FIXME: this produced foo has been kicked by JID: reason
+				# Should we show the JID to everyone? the same for ban
+				# I propose we use nick
 			elif statusCode == '301':
-				self.print_conversation(_('%s has been banned by %s: %s') % (nick,
-					actor, reason), room_jid)
+				s = _('%(nick)s has been banned by %(who)s: %(reason)s') % {
+					'nick': nick,
+					'who': actor,
+					'reason': reason }
+				self.print_conversation(s, room_jid)
 			elif statusCode == '303': # Someone changed his nick
-				self.print_conversation(_('%s is now known as %s') % (nick,
-					new_nick), room_jid)
 				if nick == self.nicks[room_jid]: # We changed our nick
 					self.nicks[room_jid] = new_nick
+					s = _('You are now known as %s') % new_nick
+				else:
+					s = _('%s is now known as %s') % (nick, new_nick)
+				self.print_conversation(s, room_jid)
+
 			self.remove_contact(room_jid, nick)
 			if nick == self.nicks[room_jid] and statusCode != '303': # We became offline
 				self.got_disconnected(room_jid)
