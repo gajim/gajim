@@ -1925,7 +1925,7 @@ class Connection:
 				if self.connection:
 					self.connection.Process(timeout)
 			except:
-				gajim.log.debug(_('error appeared while processing xmpp:'))
+				gajim.log.debug(_('A protocol error has occured:'))
 				traceback.print_exc()
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
@@ -1934,7 +1934,7 @@ class Connection:
 				try:
 					self.connection.disconnect()
 				except:
-					gajim.log.debug(_('error appeared while processing xmpp:'))
+					gajim.log.debug(_('A protocol error has occured:'))
 					traceback.print_exc()
 				self.connection = None
 # END Connection
