@@ -470,4 +470,4 @@ class FileTransfersTooltip(BaseTooltip):
 		text += status
 		self.text_lable.set_markup(text)
 		self.hbox.add(self.text_lable)
-		
+		self.win.add(self.hbox)
