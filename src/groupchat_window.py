@@ -138,17 +138,15 @@ class GroupchatWindow(chat.Chat):
 				if gajim.gc_connected[self.account][room_jid]:
 					names.append(gajim.get_nick_from_jid(room_jid))
 
-			if len(names): # if one or more rooms connected
-				pritext = i18n.ngettext(
-					'Are you sure you want to leave room "%s"?',
-					'Are you sure you want to leave rooms "%s"?',
-					len(names), names[0], ', '.join(names))
+			rooms_no = len(names)
+			if rooms_no >= 2: # if we are in many rooms
+				pritext = _('Are you sure you want to leave rooms "%s"?') % ', '.join(names)
+				sectext = _('If you close this window, you will be disconnected from this room.')
+			elif rooms_no == 1: # just in one room
+				pritext = _('Are you sure you want to leave room "%s"?') % names[0]
+				sectext = _('If you close this window, you will be disconnected from these rooms.')
 			
-				sectext = i18n.ngettext(
-			'If you close this window, you will be disconnected from this room.',
-			'If you close this window, you will be disconnected from these rooms.',
-					len(names))
-			
+			if rooms_no > 0:
 				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
 					_('Do not ask me again') )
 			
