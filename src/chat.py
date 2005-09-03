@@ -1208,18 +1208,16 @@ class Chat:
 	
 	def sent_messages_scroll(self, jid, direction, conv_buf):
 		size = len(self.sent_history[jid]) 
+		if self.typing_new[jid]:
+			#user was typing something and then went into history, so save
+			#whatever is already typed
+			start_iter = conv_buf.get_start_iter()
+			end_iter = conv_buf.get_end_iter()
+			self.orig_msg[jid] = conv_buf.get_text(start_iter, end_iter, 0).decode('utf-8')
+			self.typing_new[jid] = False
 		if direction == 'up':
 			if self.sent_history_pos[jid] == 0:
 				return
-	
-			if self.typing_new[jid]:
-				#user was typing something and then went into history, so save
-				#whatever is already typed
-				start_iter = conv_buf.get_start_iter()
-				end_iter = conv_buf.get_end_iter()
-				self.orig_msg[jid] = conv_buf.get_text(start_iter, end_iter, 0).decode('utf-8')
-				self.typing_new[jid] = False
-
 			self.sent_history_pos[jid] = self.sent_history_pos[jid] - 1
 			conv_buf.set_text(self.sent_history[jid][self.sent_history_pos[jid]])
 
