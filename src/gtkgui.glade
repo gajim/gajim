@@ -18675,7 +18675,7 @@ Maybe I'll refactor later</property>
 	    <widget class="GtkButton" id="cancel_button">
 	      <property name="visible">True</property>
 	      <property name="sensitive">False</property>
-	      <property name="tooltip" translatable="yes">Cancels the selected file transfer</property>
+	      <property name="tooltip" translatable="yes">Cancels the selected file transfer and removes incomplete file</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-cancel</property>
@@ -18684,7 +18684,7 @@ Maybe I'll refactor later</property>
 	      <property name="focus_on_click">True</property>
 	      <accessibility>
 		<atkproperty name="AtkObject::accessible_name" translatable="yes">Cancel file transfer</atkproperty>
-		<atkproperty name="AtkObject::accessible_description" translatable="yes">Cancels the selected file transfer. If there is an incomplete file, kept in the file system it will be removed. This operation is not reversable</atkproperty>
+		<atkproperty name="AtkObject::accessible_description" translatable="yes">Cancels the selected file transfer</atkproperty>
 		<atkaction action_name="click" description="Stoping selected file transfer"/>
 	      </accessibility>
 	      <signal name="clicked" handler="on_cancel_button_clicked" last_modification_time="Tue, 09 Aug 2005 17:07:31 GMT"/>
