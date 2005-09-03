@@ -248,10 +248,12 @@ class GCTooltip(BaseTooltip, StatusTable):
 	def __init__(self, plugin):
 		self.account = None
 		self.plugin = plugin
+
 		self.text_lable = gtk.Label()
 		self.text_lable.set_line_wrap(True)
 		self.text_lable.set_alignment(0., 0.)
 		self.text_lable.set_selectable(False)
+
 		BaseTooltip.__init__(self)
 		
 	def populate(self, contact):
@@ -259,7 +261,12 @@ class GCTooltip(BaseTooltip, StatusTable):
 			return
 		self.create_window()
 		hbox = gtk.HBox()
-		info = '<span size="large" weight="bold">' + contact.name + '</span>'
+		
+		if contact.jid.strip() != '':
+			info = '<span size="large" weight="bold">' + contact.jid + '</span>'
+		else:
+			info = '<span size="large" weight="bold">' + contact.name + '</span>'
+			
 		info += '\n<span weight="bold">' + _('Role: ') + '</span>' + \
 			 helpers.get_uf_role(contact.role)
 
@@ -274,10 +281,18 @@ class GCTooltip(BaseTooltip, StatusTable):
 			if status != '':
 				# escape markup entities
 				info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
+		
+		if contact.resource.strip() != '':
+			info += '\n<span weight="bold">' + _('Resource: ') + \
+					'</span>' + gtkgui_helpers.escape_for_pango_markup(
+						contact.resource) 
 
+			
+		
 		self.text_lable.set_markup(info)
 		hbox.add(self.text_lable)
 		self.win.add(hbox)
+
 
 
 class RosterTooltip(BaseTooltip, StatusTable):
@@ -455,4 +470,4 @@ class FileTransfersTooltip(BaseTooltip):
 		text += status
 		self.text_lable.set_markup(text)
 		self.hbox.add(self.text_lable)
-		self.win.add(self.hbox)
+		

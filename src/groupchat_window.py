@@ -270,7 +270,7 @@ class GroupchatWindow(chat.Chat):
 	def escape(self, s):
 		return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 	
-	def add_contact_to_roster(self, room_jid, nick, show, role, jid, affiliation):
+	def add_contact_to_roster(self, room_jid, nick, show, role, jid, affiliation, status):
 		model = self.list_treeview[room_jid].get_model()
 		image = self.plugin.roster.jabber_state_images[show]
 		resource = ''
@@ -291,7 +291,7 @@ class GroupchatWindow(chat.Chat):
 		iter = model.append(role_iter, (image, nick, self.escape(nick)))
 		gajim.gc_contacts[self.account][room_jid][nick] = \
 			Contact(jid = j, name = nick, show = show, resource = resource,
-			role = role, affiliation = affiliation)
+			role = role, affiliation = affiliation, status = status)
 		if nick == self.nicks[room_jid]: # we became online
 			self.got_connected(room_jid)
 		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)),
@@ -363,13 +363,13 @@ class GroupchatWindow(chat.Chat):
 			iter = self.get_contact_iter(room_jid, nick)
 			if not iter:
 				iter = self.add_contact_to_roster(room_jid, nick, show, role, jid,
-					affiliation)
+					affiliation, status)
 			else:
 				actual_role = self.get_role(room_jid, nick)
 				if role != actual_role:
 					self.remove_contact(room_jid, nick)
 					self.add_contact_to_roster(room_jid, nick, show, role, jid,
-						affiliation)
+						affiliation, status)
 				else:
 					c = gajim.gc_contacts[self.account][room_jid][nick]
 					if c.show == show and c.status == status and \
@@ -377,6 +377,7 @@ class GroupchatWindow(chat.Chat):
 						return
 					c.show = show
 					c.affiliation = affiliation
+					c.status = status
 					roster = self.plugin.roster
 					state_images = roster.get_appropriate_state_images(jid)
 					image = state_images[show]
@@ -390,6 +391,7 @@ class GroupchatWindow(chat.Chat):
 			if status:
 				st += ' (' + status + ')'
 			self.print_conversation(st, room_jid)
+
 
 	
 	def set_subject(self, room_jid, subject):
@@ -1070,7 +1072,6 @@ class GroupchatWindow(chat.Chat):
 		self.got_disconnected(room_jid) #init some variables
 		conversation_textview.grab_focus()
 		self.childs[room_jid].show_all()
-	
 	def on_list_treeview_motion_notify_event(self, widget, event):
 		model = widget.get_model()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))
