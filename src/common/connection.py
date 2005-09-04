@@ -382,10 +382,7 @@ class Connection:
 			elif errcode == '409': # nick conflict
 				self.dispatch('ERROR', (_('Unable to join room'), 
 				_('Your desired nickname is in use or registered by another user.')))
-			else:
-				#FIXME: wtf is ERROR_ANSWER? maybe I should handle there?
-				#some comments in the code ARE VITAL ppl :( :( :(
-				#other ppl read your code. do not make their life miserable
+			else:	# print in Groupchat window the error
 				self.dispatch('ERROR_ANSWER', ('', prs.getFrom().getStripped(),
 					errmsg, errcode))
 		if not ptype or ptype == 'unavailable':

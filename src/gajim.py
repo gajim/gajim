@@ -159,6 +159,7 @@ class Interface:
 		gajim.connections[account].build_http_auth_answer(data[2], answer)
 
 	def handle_event_error_answer(self, account, array):
+		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		id, jid_from, errmsg, errcode = array
 		if unicode(errcode) in ['403', '406'] and id:
 			# show the error dialog
@@ -185,7 +186,7 @@ class Interface:
 					(jid_from, file_props))
 				conn.disconnect_transfer(file_props)
 				return
-		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
+		
 		if jid_from in self.windows[account]['gc']:
 			self.windows[account]['gc'][jid_from].print_conversation(
 				_('Error %s: %s') % (array[2], array[1]), jid_from)
