@@ -55,7 +55,7 @@ class TabbedChatWindow(chat.Chat):
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
 		self.new_tab(user)
 		self.show_title()
-		
+	
 		# NOTE: if it not a window event, connect in new_tab function
 		signal_dict = {
 'on_tabbed_chat_window_destroy': self.on_tabbed_chat_window_destroy,

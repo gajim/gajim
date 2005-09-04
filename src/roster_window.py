@@ -1525,6 +1525,14 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.quit_gtkgui_plugin()
 		return True # do NOT destory the window
 
+	def on_roster_window_focus_in_event(self, widget, event):
+		'''roster received focus, so if we had urgency REMOVE IT
+		NOTE: we do not have to read the message to remove urgency
+		so this functions does that'''
+		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
+			if widget.props.urgency_hint:
+				widget.props.urgency_hint = False
+
 	def quit_gtkgui_plugin(self):
 		'''When we quit the gtk plugin :
 		tell that to the core and exit gtk'''
@@ -2028,10 +2036,12 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if change_title_allowed:
 			start = ''
 			if self.nb_unread > 1:
-				start = '[' + unicode(self.nb_unread) + ']  '
+				start = '[' + str(self.nb_unread) + ']  '
 			elif self.nb_unread == 1:
 				start = '*  '
 			self.window.set_title(start + 'Gajim')
+		
+		gtkgui_helpers.set_unset_urgency_hint(self.window, self.nb_unread)
 
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)

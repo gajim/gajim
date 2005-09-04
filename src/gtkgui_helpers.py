@@ -167,7 +167,7 @@ def autodetect_browser_mailer():
 			gajim.config.set('openwith', 'custom')
 
 def move_window(window, x, y):
-	''' moves the window but also checks if out of screen '''
+	'''moves the window but also checks if out of screen'''
 	if x < 0:
 		x = 0
 	if y < 0:
@@ -175,10 +175,18 @@ def move_window(window, x, y):
 	window.move(x, y)
 
 def resize_window(window, w, h):
-	''' resizes window but also checks if huge window or negative values '''
+	'''resizes window but also checks if huge window or negative values'''
 	if w > screen_w:
 		w = screen_w
 	if h > screen_h:
 		h = screen_h
 	window.resize(abs(w), abs(h))
 
+def set_unset_urgency_hint(window, unread_messages_no):
+	'''sets/unsets urgency hint in window argument
+	depending if we have unread messages or not'''
+	if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
+		if unread_messages_no > 0:
+			window.props.urgency_hint = True
+		else:
+			window.props.urgency_hint = False

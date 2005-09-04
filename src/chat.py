@@ -24,6 +24,7 @@ import gobject
 import time
 import dialogs
 import history_window
+import gtkgui_helpers
 
 try:
 	import gtkspell
@@ -157,6 +158,7 @@ class Chat:
 			title += ' (' + _('account: ') + self.account + ')'
 
 		self.window.set_title(title)
+		gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
 
 	def redraw_tab(self, jid):
 		"""redraw the label of the tab"""
@@ -241,6 +243,13 @@ class Chat:
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(jid, self.account)
+		
+		'''TC/GC window received focus, so if we had urgency REMOVE IT
+		NOTE: we do not have to read the message (it maybe in a bg tab)
+		to remove urgency hint so this functions does that'''
+		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
+			if widget.props.urgency_hint:
+				widget.props.urgency_hint = False
 	
 	def on_compact_view_menuitem_activate(self, widget):
 		isactive = widget.get_active()
