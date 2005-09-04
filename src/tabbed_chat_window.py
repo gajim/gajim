@@ -46,7 +46,6 @@ class TabbedChatWindow(chat.Chat):
 	def __init__(self, user, plugin, account):
 		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
 		self.contacts = {}
-		self.chatstates = {}
 		# keep check for possible paused timeouts per jid
 		self.possible_paused_timeout_id = {}
 		# keep check for possible inactive timeouts per jid
@@ -245,6 +244,9 @@ timestamp, contact):
 		hb = self.notebook.get_tab_label(child).get_children()[0]
 		status_image = hb.get_children()[0]
 		state_images = self.plugin.roster.get_appropriate_state_images(jid)
+		# If messages are unread show the 'message' image
+		if self.nb_unread[jid]:
+			show = 'message'
 		image = state_images[show]
 		banner_status_image = self.xmls[jid].get_widget('banner_status_image')
 
@@ -296,18 +298,11 @@ timestamp, contact):
 	def on_tabbed_chat_window_focus_out_event(self, widget, event):
 		'''catch focus out and minimized and send inactive chatstate;
 		minimize action also focuses out first so it's catched here'''
+		chat.Chat.on_chat_window_focus_out_event(self, widget, event)
 		window_state = widget.window.get_state()
 		if window_state is None:
 			return
 		
-		# focus-out is also emitted by showing context menu
-		# so check to see if we're really not paying attention to window/tab
-		# NOTE: if the user changes tab, switch-tab sends inactive to the tab
-		# we are leaving so we just send to active tab here
-		if self.popup_is_shown is False: # we are outside of the window
-			# so no context menu, so send 'inactive' to active tab
-			self.send_chatstate('inactive')
-
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
@@ -367,6 +362,8 @@ timestamp, contact):
 		message_tv_buffer = message_textview.get_buffer()
 		message_tv_buffer.connect('insert-text',
 			self.on_message_tv_buffer_insert_text, contact.jid)
+		message_tv_buffer.connect('changed',
+			self.on_message_tv_buffer_changed, contact)
 
 		if contact.jid in gajim.encrypted_chats[self.account]:
 			self.xmls[contact.jid].get_widget('gpg_togglebutton').set_active(True)
@@ -376,13 +373,12 @@ timestamp, contact):
 		self.tabbed_chat_popup_menu = xm.get_widget('tabbed_chat_popup_menu')
 		
 		chat.Chat.new_tab(self, contact.jid)
-		self.redraw_tab(contact.jid)
+		self.redraw_tab(contact)
 		self.draw_widgets(contact)
 
 		# restore previous conversation
 		self.restore_conversation(contact.jid)
 
-		# print queued messages
 		if gajim.awaiting_messages[self.account].has_key(contact.jid):
 			self.read_queue(contact.jid)
 
@@ -392,7 +388,6 @@ timestamp, contact):
 		# chatstates
 		self.reset_kbd_mouse_timeout_vars()
 		
-		self.chatstates[contact.jid] = None # OUR current chatstate with contact
 		self.possible_paused_timeout_id[contact.jid] =\
 			gobject.timeout_add(5000, self.check_for_possible_paused_chatstate,
 				contact.jid)
@@ -404,25 +399,33 @@ timestamp, contact):
 		''' handle incoming chatstate that jid SENT TO us '''
 		contact = gajim.get_first_contact_instance_from_jid(account, jid)
 		self.draw_name_banner(contact, chatstate)
+		# update chatstate in tab for this chat
+		self.redraw_tab(contact, chatstate)
 
 	def check_for_possible_paused_chatstate(self, jid):
-		''' did we move mouse of that window or wrote something in message textview
+		''' did we move mouse of that window or write something in message
+		textview
 		in the last 5 seconds?
 		if yes we go active for mouse, composing for kbd
 		if no we go paused if we were previously composing '''
 		if jid not in self.xmls:
 			# the tab with jid is no longer open. stop timer
 			return False # stop looping
-		current_state = self.chatstates[jid]
+
+		# FIXME: Why don't we just pass contact?
+		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
+		current_state = contact.chatstate
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
 		
-		if self.mouse_over_in_last_5_secs:
-			self.send_chatstate('active', jid)
-		elif self.kbd_activity_in_last_5_secs:
+		message_buffer = self.xmls[jid].get_widget('message_textview').get_buffer()
+		if self.kbd_activity_in_last_5_secs and message_buffer.get_char_count():
+			# Only composing if the keyboard activity was in text entry
 			self.send_chatstate('composing', jid)
+		elif self.mouse_over_in_last_5_secs:
+			self.send_chatstate('active', jid)
 		else:
-			if self.chatstates[jid] == 'composing':
+			if current_state == 'composing':
 				self.send_chatstate('paused', jid) # pause composing
 		
 		# assume no activity and let the motion-notify or 'insert-text' make them True
@@ -431,7 +434,8 @@ timestamp, contact):
 		return True # loop forever
 
 	def check_for_possible_inactive_chatstate(self, jid):
-		''' did we move mouse over that window or wrote something in message textview
+		''' did we move mouse over that window or wrote something in message
+		textview
 		in the last 30 seconds?
 		if yes we go active
 		if no we go inactive '''
@@ -439,7 +443,9 @@ timestamp, contact):
 			# the tab with jid is no longer open. stop timer
 			return False # stop looping
 
-		current_state = self.chatstates[jid]
+		# FIXME: Why don't we just pass contact?
+		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
+		current_state = contact.chatstate
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
 		
@@ -447,7 +453,7 @@ timestamp, contact):
 			return True # loop forever
 		
 		if not (self.mouse_over_in_last_30_secs or\
-		self.kbd_activity_in_last_30_secs):
+		   self.kbd_activity_in_last_30_secs):
 			self.send_chatstate('inactive', jid)
 
 		# assume no activity and let the motion-notify or 'insert-text' make them True
@@ -456,11 +462,18 @@ timestamp, contact):
 		
 		return True # loop forever
 
-	def on_message_tv_buffer_insert_text(self, textbuffer, textiter, text,
-	length, jid):
+	def on_message_tv_buffer_insert_text(self, textbuffer, textiter, text, length, jid):
 		self.kbd_activity_in_last_5_secs = True
 		self.kbd_activity_in_last_30_secs = True
+		# XXX: only send the event every N'th character after the first N... optimization
 		self.send_chatstate('composing', jid)
+
+	def on_message_tv_buffer_changed(self, textbuffer, contact):
+		self.kbd_activity_in_last_5_secs = True
+		self.kbd_activity_in_last_30_secs = True
+		# All characters have been erased, undo composing
+		if textbuffer.get_char_count() == 0:
+			self.send_chatstate('active', contact.jid)
 
 	def reset_kbd_mouse_timeout_vars(self):
 		self.kbd_activity_in_last_5_secs = False
@@ -563,8 +576,8 @@ timestamp, contact):
 			# NOTE:
 			# send 'active', set current state to 'ask' and return is done
 			# in self.send_message() because we need REAL message (with <body>)
-			# for that procedure so return to make sure we send only once 'active'
-			# until we know peer supports jep85
+			# for that procedure so return to make sure we send only once
+			# 'active' until we know peer supports jep85
 			return 
 
 		if contact.chatstate == 'ask':

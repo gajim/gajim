@@ -1073,6 +1073,11 @@ class GroupchatWindow(chat.Chat):
 		self.got_disconnected(room_jid) #init some variables
 		conversation_textview.grab_focus()
 		self.childs[room_jid].show_all()
+
+	def set_state_image(self, jid):
+		# FIXME: Tab notifications?
+		pass
+	
 	def on_list_treeview_motion_notify_event(self, widget, event):
 		model = widget.get_model()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))

@@ -215,6 +215,13 @@ class Config:
 			'contactfont': [ opt_str, 'Sans 10' ],
 			'bannertextcolor': [ opt_color, '#ffffff' ],
 			'bannerbgcolor': [ opt_color, '#000000' ],
+
+			'state_unread_color': [ opt_color, '#000000' ],
+			'state_active_color': [ opt_color, '#000000' ],
+			'state_inactive_color': [ opt_color, '#9e9e9e' ],
+			'state_composing_color': [ opt_color, '#008b00' ],
+			'state_paused_color': [ opt_color, '#0000cd' ],
+			'state_gone_color': [ opt_color, '#bebebe' ],
 		}, {}),
 	}
 

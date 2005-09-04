@@ -160,19 +160,59 @@ class Chat:
 		self.window.set_title(title)
 		gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
 
-	def redraw_tab(self, jid):
-		"""redraw the label of the tab"""
-		start = ''
+	def redraw_tab(self, contact, chatstate = None):
+		'''redraw the label of the tab
+		if chatstate is given that means we have HE SENT US a chatstate'''
+		if isinstance(contact, unicode):
+			jid = contact
+		else:
+			jid = contact.jid
+
+		unread = ''
 		if self.nb_unread[jid] > 1:
-			start = '[' + unicode(self.nb_unread[jid]) + '] '
-		elif self.nb_unread[jid] == 1:
-			start = '* '
+			unread = '[' + unicode(self.nb_unread[jid]) + '] '
+		# Update status images
+		self.set_state_image(jid)
 			
 		child = self.childs[jid]
 		hb = self.notebook.get_tab_label(child).get_children()[0]
 		if self.widget_name == 'tabbed_chat_window':
 			nickname = hb.get_children()[1]
 			close_button = hb.get_children()[2]
+
+			# Draw tab label using chatstate 
+			theme = gajim.config.get('roster_theme')
+			color = None
+			if unread and chatstate == 'active':
+				color = gajim.config.get_per('themes', theme,
+							     'state_unread_color')
+  			elif chatstate is not None:
+  				if chatstate == 'composing':
+					color = gajim.config.get_per('themes', theme,
+								     'state_composing_color')
+				elif unread and self.has_focus:
+					color = gajim.config.get_per('themes', theme,
+								     'state_active_color')
+				elif unread:
+					color = gajim.config.get_per('themes', theme,
+								     'state_unread_color')
+  				elif chatstate == 'inactive':
+					color = gajim.config.get_per('themes', theme,
+								     'state_inactive_color')
+  				elif chatstate == 'gone':
+					color = gajim.config.get_per('themes', theme,
+								     'state_gone_color')
+  				elif chatstate == 'paused':
+					color = gajim.config.get_per('themes', theme,
+								     'state_paused_color')
+				else:
+					color = gajim.config.get_per('themes', theme,
+								     'state_active_color')
+			if color:
+				# FIXME: When tabs are in the "background" the color change has
+				# no affect
+				#print jid, chatstate, color
+				nickname.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse(color))
 		elif self.widget_name == 'groupchat_window':
 			nickname = hb.get_children()[0]
 			close_button = hb.get_children()[1]
@@ -183,7 +223,7 @@ class Chat:
 			close_button.hide()
 
 		nickname.set_max_width_chars(10)
-		nickname.set_text(start + self.names[jid])
+		nickname.set_text(unread + self.names[jid])
 
 
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
@@ -227,9 +267,14 @@ class Chat:
 			self.plugin.windows['logs'][jid] = history_window.HistoryWindow(
 				self.plugin, jid, self.account)
 
+	def on_chat_window_focus_out_event(self, widget, event):
+		self.has_focus = False
+
 	def on_chat_window_focus_in_event(self, widget, event):
 		"""When window gets focus"""
+		self.has_focus = True
 		jid = self.get_active_jid()
+		
 		textview = self.xmls[jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
 		end_iter = buffer.get_end_iter()
@@ -239,7 +284,6 @@ class Chat:
 			#we are at the end
 			if self.nb_unread[jid] > 0:
 				self.nb_unread[jid] = 0
-				self.redraw_tab(jid)
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(jid, self.account)
@@ -250,6 +294,8 @@ class Chat:
 		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
 			if widget.props.urgency_hint:
 				widget.props.urgency_hint = False
+		# Undo "unread" state display, etc.  But note, there is not chatstate past here
+		self.redraw_tab(jid)
 	
 	def on_compact_view_menuitem_activate(self, widget):
 		isactive = widget.get_active()
@@ -1108,6 +1154,8 @@ class Chat:
 
 		# FIXME: who gives us text that is not a string?
 		if not text:
+			# FIXME: Let's find out...
+			assert(False)
 			text = ''
 		
 		if buffer.get_char_count() > 0:
