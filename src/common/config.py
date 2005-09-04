@@ -48,10 +48,10 @@ class Config:
 		'ignore_unknown_contacts': [ opt_bool, False ],
 		'showoffline': [ opt_bool, False ],
 		'autoaway': [ opt_bool, True ],
-		'autoawaytime': [ opt_int, 5, _('Time in minutes, after which you are displayed as being away.') ],
+		'autoawaytime': [ opt_int, 5, _('Time in minutes, after which your status changes to away.') ],
 		'autoaway_message': [ opt_str, _('Away as a result of being idle') ],
 		'autoxa': [ opt_bool, True ],
-		'autoxatime': [ opt_int, 15, _('Time in minutes, after which you are displayed as being not available.') ],
+		'autoxatime': [ opt_int, 15, _('Time in minutes, after which your status changes to not available.') ],
 		'autoxa_message': [ opt_str, _('Not available as a result of being idle') ],
 		'ask_online_status': [ opt_bool, False ],
 		'ask_offline_status': [ opt_bool, False ],
@@ -146,7 +146,7 @@ class Config:
 		'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
 		'avatar_width': [opt_int, 52],
 		'avatar_height': [opt_int, 52],
-		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This option make sense only if trayicon is used')], 
+		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This option make sense only if trayicon is used.')], 
 	}
 
 	__options_per_key = {
