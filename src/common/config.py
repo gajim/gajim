@@ -78,7 +78,7 @@ class Config:
 		'use_speller': [ opt_bool, False ],
 		'print_time': [ opt_str, 'always' ],
 		'useemoticons': [ opt_bool, True ],
-		'show_ascii_formatting_chars': [ opt_bool, False , _('If True, show *abc* as bold but with * * not removed')],
+		'show_ascii_formatting_chars': [ opt_bool, False , _('If True, do not remove */_ . So *abc* will be bold but with * * not removed.')],
 		'sounds_on': [ opt_bool, True ],
 		# 'aplay', 'play', 'esdplay', 'artsplay' detected first time only
 		'soundplayer': [ opt_str, '' ],
