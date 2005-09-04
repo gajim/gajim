@@ -140,7 +140,7 @@ class Config:
 		'last_send_dir': [opt_str, ''],
 		'last_emoticons_dir': [opt_str, ''],
 		'last_sounds_dir': [opt_str, ''],
-		'tabs_position': [opt_str, 'top', _('Where to show tabs. Values are:')+" 'top', 'bottom', 'left', 'right'."],
+		'tabs_position': [opt_str, 'top'],
 		'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
 		'tabs_border': [opt_bool, False, _('Show tab border if one conversation?')],
 		'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
