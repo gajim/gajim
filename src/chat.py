@@ -186,8 +186,8 @@ class Chat:
 			if unread and chatstate == 'active':
 				color = gajim.config.get_per('themes', theme,
 							     'state_unread_color')
-  			elif chatstate is not None:
-  				if chatstate == 'composing':
+			elif chatstate is not None:
+				if chatstate == 'composing':
 					color = gajim.config.get_per('themes', theme,
 								     'state_composing_color')
 				elif unread and self.has_focus:
@@ -196,13 +196,13 @@ class Chat:
 				elif unread:
 					color = gajim.config.get_per('themes', theme,
 								     'state_unread_color')
-  				elif chatstate == 'inactive':
+				elif chatstate == 'inactive':
 					color = gajim.config.get_per('themes', theme,
 								     'state_inactive_color')
-  				elif chatstate == 'gone':
+				elif chatstate == 'gone':
 					color = gajim.config.get_per('themes', theme,
 								     'state_gone_color')
-  				elif chatstate == 'paused':
+				elif chatstate == 'paused':
 					color = gajim.config.get_per('themes', theme,
 								     'state_paused_color')
 				else:
