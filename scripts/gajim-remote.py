@@ -215,7 +215,7 @@ Please specify account for sending the message.') % sys.argv[2])
 		except:
 			send_error(_('Session bus is not available.'))
 		
-		if _version[1] >= 30 and _version[1] <= 42:
+		if _version[1] >= 30:
 			obj = self.sbus.get_object(SERVICE, OBJ_PATH)
 			interface = dbus.Interface(obj, INTERFACE)
 		elif _version[1] < 30:
