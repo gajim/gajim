@@ -33,9 +33,13 @@ from client import PlugIn
 from protocol import *
 
 try:
-    import dns.resolver
+    import DNS, random
+    DNS.ParseResolvConf()
+    HAVE_DNS = True
 except:
-    pass
+    HAVE_DNS = False
+    self.DEBUG("Warning: cannot perform SRV queries because 'dns' module is unavailable", 'warn')
+
 
 DATA_RECEIVED='DATA RECEIVED'
 DATA_SENT='DATA SENT'
@@ -60,19 +64,23 @@ class TCPsocket(PlugIn):
         self._exported_methods=[self.send,self.disconnect]
 
         # SRV resolver
-        if 'dns' in globals(): # if dnspython is available support SRV
+        if HAVE_DNS : # if dnspython is available support SRV
             host, port = server
             possible_queries = ['_xmpp-client._tcp.' + host]
 
+            dnsrequest = DNS.Request()
             for query in possible_queries:
                 try:
-                    answers = [x for x in dns.resolver.query(query, 'SRV')]
+                    response = dnsrequest.req(query, qtype='SRV')
+                    answers = [x for x in response.answers]
                     if answers:
-                        host = str (answers[0].target)
-                        port = int (answers[0].port)
+                        # extract the data from a random SRV RR
+                        rr = random.choice(answers)
+                        _, _, port, host = rr['data']
+                        port = int(port)
                         break
-                except:
-                    pass
+                except DNS.DNSError, err :
+                    self.DEBUG("An error occurred querying SRV record for %s" % query, 'warn')
 
             server = (host, port)
         # end of SRV resolver
