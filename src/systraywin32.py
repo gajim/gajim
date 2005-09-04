@@ -266,9 +266,9 @@ class SystrayWin32(systray.Systray):
 						nb += jids[jid].nb_unread[jid]
 		
 		text = i18n.ngettext(
-					'Gajim - one unread message',
+					'Gajim - %d unread message',
 					'Gajim - %d unread messages',
-					nb, None, nb)
+					nb, nb, nb)
 
 		self.systray_winapi.notify_icon.set_tooltip(text)
 
