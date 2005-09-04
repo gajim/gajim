@@ -140,7 +140,6 @@ class Config:
 		'last_send_dir': [opt_str, ''],
 		'last_emoticons_dir': [opt_str, ''],
 		'last_sounds_dir': [opt_str, ''],
-		#FIXME: add combobox in prefs for this in .9
 		'tabs_position': [opt_str, 'top', _('Where to show tabs. Values are:')+" 'top', 'bottom', 'left', 'right'."],
 		'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
 		'tabs_border': [opt_bool, False, _('Show tab border if one conversation?')],
