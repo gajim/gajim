@@ -3,7 +3,7 @@ Categories=Network;InstantMessaging;Application;GTK;GNOME;
 Name=Gajim
 GenericName=Jabber IM Client
 Comment=A GTK+ Jabber client
-Version=0.8.1
+Version=0.9
 Encoding=UTF-8
 Exec=gajim
 Icon=gajim.png
@@ -17,7 +17,7 @@ X-DCOP-ServiceType=Unique
 X-DCOP-ServiceName=Gajim
 
 
-GenericName[bg]=Jabber Съобщения в реално време
+GenericName[bg]=Бързи съобщения (Gajim)
 GenericName[ca]=Jabber Missatger a l'instant
 GenericName[cy]=Jabber Negesydd Chwim
 GenericName[el]=Jabber Στιγμιαίος αποστολέας
