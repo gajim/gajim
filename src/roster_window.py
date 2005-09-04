@@ -1505,7 +1505,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	
 	def on_roster_window_delete_event(self, widget, event):
 		'''When we want to close the window'''
-		if self.plugin.systray_enabled:
+		if self.plugin.systray_enabled and not gajim.config.get('quit_on_roster_x_button'):
 			self.tooltip.hide_tooltip()
 			self.window.hide()
 		else:
