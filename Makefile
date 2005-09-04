@@ -15,7 +15,9 @@ DIRS		= `$(FIND) -exec dirname {} \; | sort -u`
 FIND_LIB	= find . -name '*.so'
 FILES_LIB	= `$(FIND_LIB)`
 
-SCRIPTS = scripts/gajim
+SCRIPTS = \
+	scripts/gajim
+	scripts/gajim-remote
 
 all: translation trayicon gtkspell idle
 
@@ -46,7 +48,6 @@ dist:
 	for s in $(SCRIPTS) ; do \
 		cp $$s gajim-$(VERSION)/scripts/; \
 	done
-	cp src/gajim-remote.py gajim-$(VERSION)/src/; \
 	find gajim-$(VERSION) -name '.svn' -type d | xargs rm -rf
 	find gajim-$(VERSION) -name '*.pyc' -exec rm {} \;
 	find gajim-$(VERSION) -name '*.pyo' -exec rm {} \;
@@ -117,6 +118,7 @@ uninstall:
 	rm -f	"$(DESTDIR)$(PREFIX)/bin/gajim" # the bash script
 	rm -f	"$(DESTDIR)$(PREFIX)/bin/gajim-remote" # remote-control script
 	rm -f	"$(MANDIR)/man1/gajim.1.gz" # the man page
+	rm -f	"$(MANDIR)/man1/gajim-remote.1.gz" # the man page
 	rm -f	"$(DESTDIR)$(PREFIX)/share/pixmaps/gajim.png" # the icon
 	rm -f	"$(DESTDIR)$(PREFIX)/share/applications/gajim.desktop" #the desktop
 	@echo done uninstalling
