@@ -32,7 +32,7 @@ import signal
 
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
-import i18n
+from common import i18n
 
 _ = i18n._
 i18n.init()
