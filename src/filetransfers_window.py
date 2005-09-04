@@ -286,6 +286,10 @@ _('Connection with peer cannot be established.'))
 				gtk.STOCK_SAVE, gtk.RESPONSE_OK))
 			dialog.set_current_name(file_props['name'])
 			dialog.set_default_response(gtk.RESPONSE_OK)
+			gtk28 = False
+			if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
+				dialog.props.do_overwrite_confirmation = True
+				gtk28 = True
 			if last_save_dir and os.path.isdir(last_save_dir):
 				dialog.set_current_folder(last_save_dir)
 			else:
@@ -296,10 +300,8 @@ _('Connection with peer cannot be established.'))
 				if response == gtk.RESPONSE_OK:
 					file_path = dialog.get_filename()
 					file_path = file_path.decode('utf-8')
-					if os.path.exists(file_path):
+					if not gtk28 and os.path.exists(file_path):
 						#FIXME: pango does not work here.
-						#FIXME: if gtk2.8 do this via signal
-#http://developer.gnome.org/doc/API/2.0/gtk/GtkFileChooser.html#GtkFileChooser--do-overwrite-confirmation
 						primtext = _('This file already exists')
 						sectext = _('Would you like to overwrite it?')
 						dialog2 = dialogs.ConfirmationDialog(primtext, sectext)
