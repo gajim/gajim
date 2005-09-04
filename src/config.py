@@ -178,6 +178,7 @@ class PreferencesWindow:
 		st = gajim.config.get('usetabbedchat')
 		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
 		
+		# tabs position
 		st = gajim.config.get('tabs_position')
 		sel = 0
 		if st == 'bottom':
