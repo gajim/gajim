@@ -1,11 +1,6 @@
-; -- Example1.iss --
-; Demonstrates copying 3 files and creating an icon.
-
-; SEE THE DOCUMENTATION FOR DETAILS ON CREATING .ISS SCRIPT FILES!
-
 [Setup]
 AppName=Gajim
-AppVerName=Gajim version 0.8.1
+AppVerName=Gajim version 0.9
 DefaultDirName={pf}\Gajim
 DefaultGroupName=Gajim
 UninstallDisplayIcon={app}\src\Gajim.exe
