@@ -287,13 +287,9 @@ class GCTooltip(BaseTooltip, StatusTable):
 					'</span>' + gtkgui_helpers.escape_for_pango_markup(
 						contact.resource) 
 
-			
-		
 		self.text_lable.set_markup(info)
 		hbox.add(self.text_lable)
 		self.win.add(hbox)
-
-
 
 class RosterTooltip(BaseTooltip, StatusTable):
 	''' Tooltip that is shown in the roster treeview '''
@@ -383,7 +379,8 @@ class RosterTooltip(BaseTooltip, StatusTable):
 				if contact.status:
 					status = contact.status.strip()
 					if status != '':
-						# reduce long status (no more than 130 chars on line and no more than 5 lines)
+						# reduce long status
+						# (no more than 130 chars on line and no more than 5 lines)
 						status = gtkgui_helpers.reduce_chars_newlines(status, 130, 5)
 						# escape markup entities. 
 						info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
