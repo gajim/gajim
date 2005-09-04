@@ -51,7 +51,7 @@ class Config:
 		'autoawaytime': [ opt_int, 5, _('Time in minutes, after which you are displayed as being away.') ],
 		'autoaway_message': [ opt_str, _('Away as a result of being idle') ],
 		'autoxa': [ opt_bool, True ],
-		'autoxatime': [ opt_int, 15 _('Time in minutes, after which you are displayed as being not available.') ],
+		'autoxatime': [ opt_int, 15, _('Time in minutes, after which you are displayed as being not available.') ],
 		'autoxa_message': [ opt_str, _('Not available as a result of being idle') ],
 		'ask_online_status': [ opt_bool, False ],
 		'ask_offline_status': [ opt_bool, False ],
