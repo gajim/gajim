@@ -204,17 +204,17 @@ class Config:
 			'jid': [ opt_str, ''],
 		}, {}),
 		'themes': ({
-			'accounttextcolor': [ opt_color, '#ffffff' ],
-			'accountbgcolor': [ opt_color, '#000000' ],
+			'accounttextcolor': [ opt_color, 'white' ],
+			'accountbgcolor': [ opt_color, 'black' ],
 			'accountfont': [ opt_str, 'Sans 10' ],
-			'grouptextcolor': [ opt_color, '#ffffff' ],
-			'groupbgcolor': [ opt_color, '#000000' ],
+			'grouptextcolor': [ opt_color, 'white' ],
+			'groupbgcolor': [ opt_color, 'black' ],
 			'groupfont': [ opt_str, 'Sans 10' ],
-			'contacttextcolor': [ opt_color, '#ffffff' ],
-			'contactbgcolor': [ opt_color, '#000000' ],
+			'contacttextcolor': [ opt_color, 'white' ],
+			'contactbgcolor': [ opt_color, 'black' ],
 			'contactfont': [ opt_str, 'Sans 10' ],
-			'bannertextcolor': [ opt_color, '#ffffff' ],
-			'bannerbgcolor': [ opt_color, '#000000' ],
+			'bannertextcolor': [ opt_color, 'white' ],
+			'bannerbgcolor': [ opt_color, 'black' ],
 
 			# http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html
 			# FIXME: not black but the default color from gtk+ theme
