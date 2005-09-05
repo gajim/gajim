@@ -38,11 +38,11 @@ HAVE_PYDNS = False
 try:
     import dns.resolver # http://dnspython.org/
     HAVE_DNSPYTHON = True
-except ImportError :
-    try :
+except ImportError:
+    try:
         import DNS # http://pydns.sf.net/
         HAVE_PYDNS = True
-    except ImportError :
+    except ImportError:
 	     #TODO: use self.DEBUG()
         print "Couldn't load a supported DNS library. SRV records will not be queried and some servers may not be accessible."
 
@@ -69,23 +69,23 @@ class TCPsocket(PlugIn):
         self._exported_methods=[self.send,self.disconnect]
 
         # SRV resolver
-        if HAVE_DNSPYTHON or HAVE_PYDNS :
+        if HAVE_DNSPYTHON or HAVE_PYDNS:
             host, port = server
             possible_queries = ['_xmpp-client._tcp.' + host]
 
             for query in possible_queries:
                 try:
-                    if HAVE_DNSPYTHON :
+                    if HAVE_DNSPYTHON:
                         answers = [x for x in dns.resolver.query(query, 'SRV')]
                         if answers:
                             host = str (answers[0].target)
                             port = int (answers[0].port)
                             break
-                    elif HAVE_PYDNS :
+                    elif HAVE_PYDNS:
                         DNS.ParseResolvConf() # ensure we haven't cached an old configuration
                         response = DNS.Request().req(query, qtype='SRV')
                         answers = response.answers
-                        if len(answers) > 0 :
+                        if len(answers) > 0:
                             _, _, port, host = answers[0]['data'] # ignore the priority and weight for now
                             port = int(port)
                             break
