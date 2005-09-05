@@ -43,8 +43,7 @@ except ImportError :
         import DNS # http://pydns.sf.net/
         HAVE_PYDNS = True
     except ImportError :
-        self.DEBUG("Couldn't load a supported DNS library.", 'warn')
-                      "SRV records will not be queried and some servers may not be accessible.")
+        self.DEBUG("Couldn't load a supported DNS library. SRV records will not be queried and some servers may not be accessible.", 'warn')
 
 DATA_RECEIVED='DATA RECEIVED'
 DATA_SENT='DATA SENT'
