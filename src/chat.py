@@ -190,7 +190,7 @@ class Chat:
 				if chatstate == 'composing':
 					color = gajim.config.get_per('themes', theme,
 								     'state_composing_color')
-				elif unread and self.has_focus:
+				elif unread and self.window.get_property('has-toplevel-focus')::
 					color = gajim.config.get_per('themes', theme,
 								     'state_active_color')
 				elif unread:
@@ -267,12 +267,8 @@ class Chat:
 			self.plugin.windows['logs'][jid] = history_window.HistoryWindow(
 				self.plugin, jid, self.account)
 
-	def on_chat_window_focus_out_event(self, widget, event):
-		self.has_focus = False
-
 	def on_chat_window_focus_in_event(self, widget, event):
 		"""When window gets focus"""
-		self.has_focus = True
 		jid = self.get_active_jid()
 		
 		textview = self.xmls[jid].get_widget('conversation_textview')
