@@ -6,7 +6,7 @@ LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0`
 all: idle.so
 
 idle.so:
-	$(CC) $(CFLAGS) $(LDFLAGS) -shared idle.c $^ -o $@ -L/usr/X11R6$(LIBDIR) -lX11 -lXss -lXext
+	$(CC) $(OPTFLAGS) $(CFLAGS) $(LDFLAGS) -shared idle.c $^ -o $@ -L/usr/X11R6$(LIBDIR) -lX11 -lXss -lXext
 
 clean:
 	rm -f *.so

@@ -5,6 +5,8 @@ GAJIM_AP	= 0 # do we build Autopackage?
 MODULES		= src src/common po
 PREFIX		= /usr/local
 DESTDIR		= 
+OPTFLAGS	= 
+export OPTFLAGS
 LIBDIR		= /lib
 export LIBDIR
 MANDIR		= $(DESTDIR)$(PREFIX)/share/man
