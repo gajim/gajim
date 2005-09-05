@@ -126,6 +126,7 @@ class Config:
 		'always_english_wiktionary': [opt_bool, False],
 		'use_dbus': [opt_bool, True, _('Allow controlling Gajim via D-Bus service.')],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
+		'chat_state_send_inactive_on_focus_out': [opt_str, True, _('Should Gajim send inactive ("is doing something else") on just focus out of window or when we switch to another tab')],
 		'autodetect_browser_mailer': [opt_bool, True],
 		'print_ichat_every_foo_minutes': [opt_int, 5],
 		'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
@@ -146,7 +147,7 @@ class Config:
 		'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
 		'avatar_width': [opt_int, 52],
 		'avatar_height': [opt_int, 52],
-		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This option make sense only if trayicon is used.')], 
+		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This option make sense only if trayicon is used.')],
 	}
 
 	__options_per_key = {
