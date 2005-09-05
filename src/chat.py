@@ -190,7 +190,7 @@ class Chat:
 				if chatstate == 'composing':
 					color = gajim.config.get_per('themes', theme,
 								     'state_composing_color')
-				elif unread and self.window.get_property('has-toplevel-focus')::
+				elif unread and self.window.get_property('has-toplevel-focus'):
 					color = gajim.config.get_per('themes', theme,
 								     'state_active_color')
 				elif unread:
