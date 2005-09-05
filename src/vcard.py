@@ -120,7 +120,8 @@ class VcardWindow:
 
 	def update_preview(self, widget):
 		path_to_file = widget.get_preview_filename()
-		widget.get_preview_widget().set_from_file(path_to_file)
+		pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(path_to_file, 100, 100)
+		widget.get_preview_widget().set_from_pixbuf(pixbuf)
 
 	def on_set_avatar_button_clicked(self, widget):
 		f = None
