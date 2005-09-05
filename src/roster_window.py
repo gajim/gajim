@@ -1180,6 +1180,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.plugin.systray.change_status('connecting')
 
 	def send_status(self, account, status, txt, sync = False, auto = False):
+		accountIter = self.get_account_iter(account)
 		if status != 'offline':
 			if gajim.connections[account].connected < 2:
 				self.set_connecting_state(account)
