@@ -43,8 +43,8 @@ except ImportError:
         import DNS # http://pydns.sf.net/
         HAVE_PYDNS = True
     except ImportError:
-	     #TODO: use self.DEBUG()
-        print "Couldn't load a supported DNS library. SRV records will not be queried and you may need to set custom hostname/port for some servers to be accessible."
+        #TODO: use self.DEBUG()
+        print "Could not load a supported DNS library. SRV records will not be queried and you may need to set custom hostname/port for some servers to be accessible."
 
 DATA_RECEIVED='DATA RECEIVED'
 DATA_SENT='DATA SENT'
@@ -82,16 +82,19 @@ class TCPsocket(PlugIn):
                             port = int (answers[0].port)
                             break
                     elif HAVE_PYDNS:
-                        DNS.ParseResolvConf() # ensure we haven't cached an old configuration
+                        # ensure we haven't cached an old configuration
+                        DNS.ParseResolvConf()
                         response = DNS.Request().req(query, qtype='SRV')
                         answers = response.answers
                         if len(answers) > 0:
-                            _, _, port, host = answers[0]['data'] # ignore the priority and weight for now
+                            # ignore the priority and weight for now
+                            _, _, port, host = answers[0]['data']
+                            del _
                             port = int(port)
                             break
                 except:
-	                 #TODO: use self.DEBUG()
-                    print 'An error occurred looking up %s' % query
+                    #TODO: use self.DEBUG()
+                    print 'An error occurred while looking up %s' % query
             server = (host, port)
         # end of SRV resolver
 
