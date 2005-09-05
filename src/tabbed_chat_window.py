@@ -244,26 +244,31 @@ timestamp, contact):
 		hb = self.notebook.get_tab_label(child).get_children()[0]
 		status_image = hb.get_children()[0]
 		state_images = self.plugin.roster.get_appropriate_state_images(jid)
-		# If messages are unread show the 'message' image
-		if self.nb_unread[jid]:
-			show = 'message'
-		image = state_images[show]
+
+		# Set banner image
+		banner_image = state_images[show]
 		banner_status_image = self.xmls[jid].get_widget('banner_status_image')
+		if banner_image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			banner_status_image.set_from_animation(banner_image.get_animation())
+		else:
+			pix = banner_image.get_pixbuf()
+			scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
+			banner_status_image.set_from_pixbuf(scaled_pix)
+
+		# Set tab image; unread messages show the 'message' image
+		if self.nb_unread[jid]:
+			tab_image = state_images['message']
+		else:
+			tab_image = banner_image
+		if tab_image.get_storage_type() == gtk.IMAGE_ANIMATION:
+			status_image.set_from_animation(tab_image.get_animation())
+		else:
+			status_image.set_from_pixbuf(tab_image.get_pixbuf())
 
 		if keyID:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(True)
 		else:
 			self.xmls[jid].get_widget('gpg_togglebutton').set_sensitive(False)
-
-		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			banner_status_image.set_from_animation(image.get_animation())
-			status_image.set_from_animation(image.get_animation())
-		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
-			# make a copy because one will be scaled, one not (tab icon)
-			pix = image.get_pixbuf()
-			scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
-			banner_status_image.set_from_pixbuf(scaled_pix)
-			status_image.set_from_pixbuf(pix)
 
 	def on_tabbed_chat_window_delete_event(self, widget, event):
 		'''close window'''
