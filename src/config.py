@@ -1967,15 +1967,18 @@ class ManageEmoticonsWindow:
 			model.remove(iter)
 		else:
 			gajim.config.add_per('emoticons', emot)
-			self.plugin.init_regexp() # update regexp [emoticons included]
+			self.plugin.init_regexp() # update regexp (emoticons included)
 			gajim.config.set_per('emoticons', emot, 'path',
 				model[iter][1].decode('utf-8'))
-			model.set_value(iter, 0, emot)
+			model[iter][0] = emot
 		self.plugin.save_config()
 
 	def update_preview(self, widget):
 		path_to_file = widget.get_preview_filename()
-		if os.path.isdir(path_to_file):
+		if path_to_file is None or os.path.isdir(path_to_file):
+			# nothing to preview or directory
+			# make sure you clean image do show nothing
+			widget.get_preview_widget().set_from_file(None)
 			return
 		try:
 			pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(path_to_file, 32, 32)
