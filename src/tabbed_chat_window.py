@@ -368,8 +368,6 @@ timestamp, contact):
 		
 		message_textview = self.xmls[contact.jid].get_widget('message_textview')
 		message_tv_buffer = message_textview.get_buffer()
-		message_tv_buffer.connect('insert-text',
-			self.on_message_tv_buffer_insert_text, contact.jid)
 		message_tv_buffer.connect('changed',
 			self.on_message_tv_buffer_changed, contact)
 
@@ -381,7 +379,7 @@ timestamp, contact):
 		self.tabbed_chat_popup_menu = xm.get_widget('tabbed_chat_popup_menu')
 		
 		chat.Chat.new_tab(self, contact.jid)
-		self.redraw_tab(contact)
+		self.redraw_tab(contact.jid)
 		self.draw_widgets(contact)
 
 		# restore previous conversation
@@ -408,7 +406,7 @@ timestamp, contact):
 		contact = gajim.get_first_contact_instance_from_jid(account, jid)
 		self.draw_name_banner(contact, chatstate)
 		# update chatstate in tab for this chat
-		self.redraw_tab(contact, chatstate)
+		self.redraw_tab(contact.jid, chatstate)
 
 	def check_for_possible_paused_chatstate(self, jid):
 		''' did we move mouse of that window or write something in message
@@ -470,17 +468,12 @@ timestamp, contact):
 		
 		return True # loop forever
 
-	def on_message_tv_buffer_insert_text(self, textbuffer, textiter, text, length, jid):
-		self.kbd_activity_in_last_5_secs = True
-		self.kbd_activity_in_last_30_secs = True
-		# XXX: only send the event every N'th character after the first N... optimization
-		self.send_chatstate('composing', jid)
-
 	def on_message_tv_buffer_changed(self, textbuffer, contact):
 		self.kbd_activity_in_last_5_secs = True
 		self.kbd_activity_in_last_30_secs = True
-		# All characters have been erased, undo composing
-		if textbuffer.get_char_count() == 0:
+		if textbuffer.get_char_count():
+			self.send_chatstate('composing', contact.jid)
+		else:
 			self.send_chatstate('active', contact.jid)
 
 	def reset_kbd_mouse_timeout_vars(self):

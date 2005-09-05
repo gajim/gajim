@@ -160,14 +160,9 @@ class Chat:
 		self.window.set_title(title)
 		gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
 
-	def redraw_tab(self, contact, chatstate = None):
+	def redraw_tab(self, jid, chatstate = None):
 		'''redraw the label of the tab
 		if chatstate is given that means we have HE SENT US a chatstate'''
-		if isinstance(contact, unicode):
-			jid = contact
-		else:
-			jid = contact.jid
-
 		unread = ''
 		if self.nb_unread[jid] > 1:
 			unread = '[' + unicode(self.nb_unread[jid]) + '] '
