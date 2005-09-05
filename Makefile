@@ -16,7 +16,7 @@ FIND_LIB	= find . -name '*.so'
 FILES_LIB	= `$(FIND_LIB)`
 
 SCRIPTS = \
-	scripts/gajim
+	scripts/gajim \
 	scripts/gajim-remote
 
 all: translation trayicon gtkspell idle
