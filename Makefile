@@ -8,10 +8,13 @@ DESTDIR		=
 LIBDIR		= /lib
 MANDIR		= $(DESTDIR)$(PREFIX)/share/man
 
-FIND		= find . \( -name '*.glade' -o -name '*.py' -o -name '*.xpm' -o -name '*.gif' -o -name '*.png' -o -name '*.mo' -o -name '*.wav' \)
+FIND		= find . \( -name '*.glade' -o -name '*.py' -o -name '*.xpm' -o -name '*.gif' -o -name '*.png' -o -name '*.wav' \)
 
 FILES		= `$(FIND)`
 DIRS		= `$(FIND) -exec dirname {} \; | sort -u`
+FIND_PO		= find ./po \( -name '*.mo' \)
+FILES_PO	= `$(FIND_PO) | sed -e 's/^\.\/po/\./g'`
+DIRS_PO		= `$(FIND_PO) -exec dirname {} \; | sort -u | sed -e 's/^\.\/po/\./g'`
 FIND_LIB	= find . -name '*.so'
 FILES_LIB	= `$(FIND_LIB)`
 
@@ -58,6 +61,10 @@ dist:
 	rm -rf gajim-$(VERSION)
 
 install:
+	# Remove the old po folder if it exists
+	if [ -d $(DESTDIR)$(PREFIX)/share/gajim/po ] ; then \
+		rm -rf $(DESTDIR)$(PREFIX)/share/gajim/po; \
+	fi
 	for d in $(DIRS) ; do \
 		if [ ! -d $(DESTDIR)$(PREFIX)/share/gajim/$$d ] ; then \
 			mkdir -p "$(DESTDIR)$(PREFIX)/share/gajim/$$d"; \
@@ -66,6 +73,15 @@ install:
 	for f in $(FILES) ; do \
 		DST=`dirname "$$f"`; \
 		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
+	done
+	for d in $(DIRS_PO) ; do \
+		if [ ! -d $(DESTDIR)$(PREFIX)/share/locale/$$d ] ; then \
+			mkdir -p "$(DESTDIR)$(PREFIX)/share/locale/$$d"; \
+		fi; \
+	done
+	for f in $(FILES_PO) ; do \
+		DST=`dirname "$$f"`; \
+		cp "./po/$$f" "$(DESTDIR)$(PREFIX)/share/locale/$$DST/"; \
 	done
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
