@@ -1210,6 +1210,8 @@ class AccountModificationWindow:
 			self.xml.get_widget('gpg_choose_button').set_sensitive(False)
 		self.xml.get_widget('autoconnect_checkbutton').set_active(gajim.config.\
 			get_per('accounts', self.account, 'autoconnect'))
+		self.xml.get_widget('autoreconnect_checkbutton').set_active(gajim.config.\
+			get_per('accounts', self.account, 'autoreconnect'))
 
 		if len(gajim.connections) != 0:
 			# only if we already have one account already
@@ -1259,6 +1261,8 @@ _('To change the account name, you must be disconnected.')).get_response()
 		config['priority'] = self.xml.get_widget('priority_spinbutton').\
 																			get_value_as_int()
 		config['autoconnect'] = self.xml.get_widget('autoconnect_checkbutton').\
+																					get_active()
+		config['autoreconnect'] = self.xml.get_widget('autoreconnect_checkbutton').\
 																					get_active()
 
 		if self.account:

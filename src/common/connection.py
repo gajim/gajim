@@ -124,6 +124,8 @@ class Connection:
 		self.gpg = None
 		self.vcard_sha = None
 		self.status = ''
+		self.old_show = ''
+		self.time_to_reconnect = None
 		self.new_account_info = None
 		self.bookmarks = []
 		self.on_purpose = False
@@ -138,6 +140,7 @@ class Connection:
 			gajim.config.set('usegpg', True)
 		else:
 			gajim.config.set('usegpg', False)
+		self.retrycount = 0
 	# END __init__
 
 	def put_event(self, ev):
@@ -217,9 +220,7 @@ class Connection:
 					self.vcard_sha = ''
 				self.dispatch('MYVCARD', vcard)
 				#we re-send our presence with sha
-				sshow = STATUS_LIST[self.connected]
-				if sshow == 'online':
-					sshow = None
+				sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
 				prio = unicode(gajim.config.get_per('accounts', self.name,
 					'priority'))
 				p = common.xmpp.Presence(typ = None, priority = prio, show = sshow,
@@ -409,8 +410,54 @@ class Connection:
 			(_('Connection with account "%s" has been lost') % self.name,
 			_('To continue sending and receiving messages, you will need to reconnect.')))
 		self.on_purpose = False
-		
+	
 	# END disconenctedCB
+
+	def _reconnect(self):
+		gajim.log.debug('reconnect')
+		signed = self.get_signed_msg(self.status)
+		self.connect_and_init(self.old_show, self.status, signed)
+		if self.connected < 2: #connection failed
+			if self.retrycount > 10:
+				self.connected = 0
+				self.dispatch('STATUS', 'offline')
+				self.dispatch('ERROR', 
+				(_('Connection with account "%s" has been lost') % self.name,
+				_('To continue sending and receiving messages, you will need to reconnect.')))
+				self.time_to_reconnect = None
+				self.retrycount = 0
+				return
+			self.retrycount = self.retrycount + 1
+			if self.retrycount > 5:
+				self.time_to_reconnect = time.time() + 20
+			else:
+				self.time_to_reconnect = time.time() + 10
+		else:
+			#reconnect succeeded
+			self.time_to_reconnect = None
+			self.retrycount = 0
+	
+	def _disconnectedReconnCB(self):
+		"""Called when we are disconnected"""
+		gajim.log.debug('disconnectedReconnCB')
+		if not self.connection:
+			return
+		self.old_show = STATUS_LIST[self.connected]
+		self.connected = 0
+		self.dispatch('STATUS', 'offline')
+		self.connection = None
+		if not self.on_purpose:
+			if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
+				self.connected = 1
+				self.dispatch('STATUS', 'connecting')
+				self.time_to_reconnect = time.time() + 10
+			else:
+				self.dispatch('ERROR', 
+				(_('Connection with account "%s" has been lost') % self.name,
+				_('To continue sending and receiving messages, you will need to reconnect.')))
+		self.on_purpose = False
+	# END disconenctedReconnCB
+		
 	def _bytestreamErrorCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamErrorCB')
 		frm = unicode(iq_obj.getFrom())
@@ -1244,7 +1291,7 @@ class Connection:
 			con = common.xmpp.Client(hostname, debug = [])
 		common.xmpp.dispatcher.DefaultTimeout = try_connecting_for_foo_secs
 		con.UnregisterDisconnectHandler(con.DisconnectHandler)
-		con.RegisterDisconnectHandler(self._disconnectedCB)
+		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
 
 		h = hostname
 		p = 5222
@@ -1260,10 +1307,11 @@ class Connection:
 		con_type = con.connect((h, p), proxy = proxy, secure=secur) #FIXME: blocking
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
-			self.connected = 0
-			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
-				_('Check your connection or try again later')))
+			if not self.time_to_reconnect:
+				self.connected = 0
+				self.dispatch('STATUS', 'offline')
+				self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
+					_('Check your connection or try again later')))
 			return None
 
 		self.peerhost = con.get_peerhost()
@@ -1402,29 +1450,11 @@ class Connection:
 
 			#Get bookmarks from private namespace
 			self.get_bookmarks()
-	
-	def change_status(self, show, msg, sync = False, auto = False):
-		if sync:
-			self.change_status2(show, msg, auto)
-		else:
-			t = threading.Thread(target=self.change_status2, args = (show, msg, auto))
-			t.start()
 
-	def change_status2(self, show, msg, auto = False):
-		if not show in STATUS_LIST:
-			return -1
-		sshow = show # show to be send
-		if show == 'online':
-			sshow = None
-		if not msg:
-			lowered_uf_status_msg = helpers.get_uf_show(show).lower()
-			if lowered_uf_status_msg == _('invisible'): # do not show I'm invisible!
-				lowered_uf_status_msg = _('offline')
-			msg = _("I'm %s") % lowered_uf_status_msg
-
+	def get_signed_msg(self, msg):
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		if keyID and USE_GPG and not auto and not show == 'offline':
+		if keyID and USE_GPG:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
 			if self.connected < 2 and self.gpg.passphrase is None and not use_gpg_agent:
 				# We didn't set a passphrase
@@ -1437,33 +1467,59 @@ class Connection:
 					signed = ''
 					if self.connected < 2:
 						self.dispatch('BAD_PASSPHRASE', ())
+		return signed
+
+	def connect_and_init(self, show, msg, signed):
+		self.connection = self.connect()
+		if self.connected == 2:
+			self.connected = STATUS_LIST.index(show)
+			sshow = helpers.get_xmpp_show(show)
+			#send our presence
+			if show == 'invisible':
+				self.send_invisible_presence(msg, signed, True)
+				return
+			prio = unicode(gajim.config.get_per('accounts', self.name,
+				'priority'))
+			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
+			p = self.add_sha(p)
+			if msg:
+				p.setStatus(msg)
+			if signed:
+			    p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+
+			if self.connection:
+				self.connection.send(p)
+			self.dispatch('STATUS', show)
+			#ask our VCard
+			self.request_vcard(None)
+
+			#Get bookmarks from private namespace
+			self.get_bookmarks()
+
+	def change_status(self, show, msg, sync = False, auto = False):
+		if sync:
+			self.change_status2(show, msg, auto)
+		else:
+			t = threading.Thread(target=self.change_status2, args = (show, msg, auto))
+			t.start()
+
+	def change_status2(self, show, msg, auto = False):
+		if not show in STATUS_LIST:
+			return -1
+		sshow = helpers.get_xmpp_show(show)
+		if not msg:
+			lowered_uf_status_msg = helpers.get_uf_show(show).lower()
+			if lowered_uf_status_msg == _('invisible'): # do not show I'm invisible!
+				lowered_uf_status_msg = _('offline')
+			msg = _("I'm %s") % lowered_uf_status_msg
+
+		signed = ''
+		if not auto and not show == 'offline':
+			signed = self.get_signed_msg(msg)
 		self.status = msg
 		if show != 'offline' and not self.connected:
-			self.connection = self.connect()
-			if self.connected == 2:
-				self.connected = STATUS_LIST.index(show)
-				#send our presence
-				if show == 'invisible':
-					self.send_invisible_presence(msg, signed, True)
-					return
-				prio = unicode(gajim.config.get_per('accounts', self.name,
-					'priority'))
-				p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
-				p = self.add_sha(p)
-				if msg:
-					p.setStatus(msg)
-				if signed:
-				    p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+			self.connect_and_init(show, msg, signed)
 
-				if self.connection:
-					self.connection.send(p)
-				self.dispatch('STATUS', show)
-				#ask our VCard
-				self.request_vcard(None)
-
-				#Get bookmarks from private namespace
-				self.get_bookmarks()
-				
 		elif show == 'offline' and self.connected:
 			self.connected = 0
 			if self.connection:
@@ -1764,10 +1820,8 @@ class Connection:
 	def join_gc(self, nick, room, server, password):
 		if not self.connection:
 			return
-		show = STATUS_LIST[self.connected]
+		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
 		ptype = None
-		if show == 'online':
-			show = None
 		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
 			show = show, status = self.status)
 		p = self.add_sha(p)
@@ -1807,9 +1861,7 @@ class Connection:
 		ptype = None
 		if show == 'offline':
 			ptype = 'unavailable'
-			show = None
-		if show == 'online':
-			show = None
+		show = helpers.get_xmpp_show(show)
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
 			show = show, status = status)
 		p = self.add_sha(p)
@@ -1912,6 +1964,12 @@ class Connection:
 		self.to_be_sent.append(' ')
 
 	def process(self, timeout):
+		if self.time_to_reconnect:
+			if self.connected < 2:
+				if time.time() > self.time_to_reconnect:
+					self._reconnect()
+			else:
+				self.time_to_reconnect = None
 		if not self.connection:
 			return
 		if self.connected:

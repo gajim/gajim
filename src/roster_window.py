@@ -1171,15 +1171,18 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			del self.gpg_passphrase[keyid]
 		return False
 
+	def set_connecting_state(self, account):
+		model = self.tree.get_model()
+		accountIter = self.get_account_iter(account)
+		if accountIter:
+			model[accountIter][0] =	self.jabber_state_images['connecting']
+		if self.plugin.systray_enabled:
+			self.plugin.systray.change_status('connecting')
+
 	def send_status(self, account, status, txt, sync = False, auto = False):
 		if status != 'offline':
 			if gajim.connections[account].connected < 2:
-				model = self.tree.get_model()
-				accountIter = self.get_account_iter(account)
-				if accountIter:
-					model[accountIter][0] =	self.jabber_state_images['connecting']
-				if self.plugin.systray_enabled:
-					self.plugin.systray.change_status('connecting')
+				self.set_connecting_state(account)
 
 			save_pass = gajim.config.get_per('accounts', account, 'savepass')
 			if not save_pass and gajim.connections[account].connected < 2:

@@ -312,4 +312,9 @@ def ensure_unicode_string(s):
 	if isinstance(s, str):
 		s = s.decode('utf-8')
 	return s
+
+def get_xmpp_show(show):
+	if show in ['online', 'offline']:
+		return None
+	return show
 		

@@ -200,6 +200,8 @@ class Interface:
 
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
+		if status == 'connecting':
+			self.roster.set_connecting_state(account)
 		if status != 'offline':
 			gobject.timeout_add(30000, self.allow_notif, account)
 		else:
