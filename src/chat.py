@@ -290,7 +290,8 @@ class Chat:
 		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
 			if widget.props.urgency_hint:
 				widget.props.urgency_hint = False
-		# Undo "unread" state display, etc.  But note, there is not chatstate past here
+		# Undo "unread" state display, etc.
+		# NOTE: we do not send any chatstate
 		self.redraw_tab(jid)
 	
 	def on_compact_view_menuitem_activate(self, widget):
