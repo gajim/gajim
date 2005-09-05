@@ -216,12 +216,14 @@ class Config:
 			'bannertextcolor': [ opt_color, '#ffffff' ],
 			'bannerbgcolor': [ opt_color, '#000000' ],
 
-			'state_unread_color': [ opt_color, '#000000' ],
-			'state_active_color': [ opt_color, '#000000' ],
-			'state_inactive_color': [ opt_color, '#9e9e9e' ],
-			'state_composing_color': [ opt_color, '#008b00' ],
-			'state_paused_color': [ opt_color, '#0000cd' ],
-			'state_gone_color': [ opt_color, '#bebebe' ],
+			# http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html
+			# FIXME: not black but the default color from gtk+ theme
+			'state_unread_color': [ opt_color, 'black' ],
+			'state_active_color': [ opt_color, 'black' ],
+			'state_inactive_color': [ opt_color, 'grey62' ],
+			'state_composing_color': [ opt_color, 'green4' ],
+			'state_paused_color': [ opt_color, 'mediumblue' ],
+			'state_gone_color': [ opt_color, 'grey' ],
 		}, {}),
 	}
 

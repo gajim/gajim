@@ -797,7 +797,7 @@ class PopupNotificationWindow:
 			txt = self.jid
 		event_description_label.set_text(txt)
 		
-		# set colors [ http://www.w3schools.com/html/html_colornames.asp ]
+		# set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
 		
 		if event_type == _('Contact Signed In'):
