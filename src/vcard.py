@@ -19,6 +19,7 @@
 
 import gtk
 import gtk.glade
+import gobject
 import urllib
 import base64
 import mimetypes
@@ -120,7 +121,12 @@ class VcardWindow:
 
 	def update_preview(self, widget):
 		path_to_file = widget.get_preview_filename()
-		pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(path_to_file, 100, 100)
+		if os.path.isdir(path_to_file):
+			return
+		try:
+			pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(path_to_file, 100, 100)
+		except gobject.GError:
+			return
 		widget.get_preview_widget().set_from_pixbuf(pixbuf)
 
 	def on_set_avatar_button_clicked(self, widget):

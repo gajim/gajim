@@ -206,7 +206,7 @@ timestamp, contact):
 				pixbufloader.write(img_decoded)
 				pixbuf = pixbufloader.get_pixbuf()
 				pixbufloader.close()
-			
+
 				w = gajim.config.get('avatar_width')
 				h = gajim.config.get('avatar_height')
 				scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
