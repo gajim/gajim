@@ -527,7 +527,6 @@ _('Connection with peer cannot be established.'))
 		self.pause_button.set_sensitive(False)
 		self.pause_menuitem.set_sensitive(False)
 		self.continue_menuitem.set_sensitive(False)
-		self.cleanup_button.set_sensitive(False)
 		self.remove_menuitem.set_sensitive(False)
 		self.cancel_button.set_sensitive(False)
 		self.cancel_menuitem.set_sensitive(False)
@@ -694,10 +693,6 @@ _('Connection with peer cannot be established.'))
 
 	def show_context_menu(self, event, iter):
 		# change the sensitive propery of the buttons and menuitems
-		if len(self.model) == 0:
-			self.cleanup_button.set_sensitive(False)
-		else:
-			self.cleanup_button.set_sensitive(True)
 		path = None
 		if iter is not None:
 			path = self.model.get_path(iter)

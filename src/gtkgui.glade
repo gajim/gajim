@@ -18727,7 +18727,6 @@ Maybe I'll refactor later</property>
 	  <child>
 	    <widget class="GtkButton" id="cleanup_button">
 	      <property name="visible">True</property>
-	      <property name="sensitive">False</property>
 	      <property name="tooltip" translatable="yes">Removes completed, canceled and failed file transfers from the list</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
