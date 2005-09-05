@@ -6,6 +6,7 @@ MODULES		= src src/common po
 PREFIX		= /usr/local
 DESTDIR		= 
 LIBDIR		= /lib
+export LIBDIR
 MANDIR		= $(DESTDIR)$(PREFIX)/share/man
 
 FIND		= find . \( -name '*.glade' -o -name '*.py' -o -name '*.xpm' -o -name '*.gif' -o -name '*.png' -o -name '*.wav' \)
