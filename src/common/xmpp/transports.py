@@ -43,7 +43,6 @@ except ImportError:
         import DNS # http://pydns.sf.net/
         HAVE_PYDNS = True
     except ImportError:
-        #TODO: use self.DEBUG()
         print "Could not load one of the supported DNS libraries (dnspython or pydns). SRV records will not be queried and you may need to set custom hostname/port for some servers to be accessible."
 
 DATA_RECEIVED='DATA RECEIVED'
@@ -93,7 +92,6 @@ class TCPsocket(PlugIn):
                             port = int(port)
                             break
                 except:
-                    #TODO: use self.DEBUG()
                     print 'An error occurred while looking up %s' % query
             server = (host, port)
         # end of SRV resolver
