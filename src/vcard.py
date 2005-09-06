@@ -121,7 +121,10 @@ class VcardWindow:
 
 	def update_preview(self, widget):
 		path_to_file = widget.get_preview_filename()
-		if os.path.isdir(path_to_file):
+		if path_to_file is None or os.path.isdir(path_to_file):
+			# nothing to preview or directory
+			# make sure you clean image do show nothing
+			widget.get_preview_widget().set_from_file(None)
 			return
 		try:
 			pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(path_to_file, 100, 100)
