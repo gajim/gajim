@@ -1,17 +1,23 @@
-VERSION		?= 0.8.1
+VERSION		?= 0.9
 
 GAJIM_AP	= 0 # do we build Autopackage?
 
 MODULES		= src src/common po
 PREFIX		= /usr/local
 DESTDIR		= 
+OPTFLAGS	= 
+export OPTFLAGS
 LIBDIR		= /lib
+export LIBDIR
 MANDIR		= $(DESTDIR)$(PREFIX)/share/man
 
-FIND		= find . \( -name '*.glade' -o -name '*.py' -o -name '*.xpm' -o -name '*.gif' -o -name '*.png' -o -name '*.mo' -o -name '*.wav' \)
+FIND		= find . \( -name '*.glade' -o -name '*.py' -o -name '*.xpm' -o -name '*.gif' -o -name '*.png' -o -name '*.wav' \)
 
 FILES		= `$(FIND)`
 DIRS		= `$(FIND) -exec dirname {} \; | sort -u`
+FIND_PO		= find ./po \( -name '*.mo' \)
+FILES_PO	= `$(FIND_PO) | sed -e 's/^\.\/po/\./g'`
+DIRS_PO		= `$(FIND_PO) -exec dirname {} \; | sort -u | sed -e 's/^\.\/po/\./g'`
 FIND_LIB	= find . -name '*.so'
 FILES_LIB	= `$(FIND_LIB)`
 
@@ -48,7 +54,6 @@ dist:
 	for s in $(SCRIPTS) ; do \
 		cp $$s gajim-$(VERSION)/scripts/; \
 	done
-	cp scripts/gajim-remote.py gajim-$(VERSION)/scripts/; \
 	find gajim-$(VERSION) -name '.svn' -type d | xargs rm -rf
 	find gajim-$(VERSION) -name '*.pyc' -exec rm {} \;
 	find gajim-$(VERSION) -name '*.pyo' -exec rm {} \;
@@ -59,6 +64,10 @@ dist:
 	rm -rf gajim-$(VERSION)
 
 install:
+	# Remove the old po folder if it exists
+	if [ -d $(DESTDIR)$(PREFIX)/share/gajim/po ] ; then \
+		rm -rf $(DESTDIR)$(PREFIX)/share/gajim/po; \
+	fi
 	for d in $(DIRS) ; do \
 		if [ ! -d $(DESTDIR)$(PREFIX)/share/gajim/$$d ] ; then \
 			mkdir -p "$(DESTDIR)$(PREFIX)/share/gajim/$$d"; \
@@ -67,6 +76,16 @@ install:
 	for f in $(FILES) ; do \
 		DST=`dirname "$$f"`; \
 		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
+	done
+	rm "$(DESTDIR)$(PREFIX)/share/gajim/src/systraywin32.py"
+	for d in $(DIRS_PO) ; do \
+		if [ ! -d $(DESTDIR)$(PREFIX)/share/locale/$$d ] ; then \
+			mkdir -p "$(DESTDIR)$(PREFIX)/share/locale/$$d"; \
+		fi; \
+	done
+	for f in $(FILES_PO) ; do \
+		DST=`dirname "$$f"`; \
+		cp "./po/$$f" "$(DESTDIR)$(PREFIX)/share/locale/$$DST/"; \
 	done
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
@@ -116,9 +135,10 @@ help:
 uninstall:
 	rm -rf	"$(DESTDIR)$(PREFIX)/share/gajim" # the main files are here
 	rm -rf	"$(DESTDIR)$(PREFIX)/lib/gajim" # the .so files are here
-	rm -f		"$(DESTDIR)$(PREFIX)/bin/gajim" # the bash script
-	rm -f		"$(DESTDIR)$(PREFIX)/bin/gajim-remote" # remote-control script
-	rm -f		"$(MANDIR)/man1/gajim.1.gz" # the man page
-	rm -f		"$(DESTDIR)$(PREFIX)/share/pixmaps/gajim.png" # the icon
-	rm -f		"$(DESTDIR)$(PREFIX)/share/applications/gajim.desktop" #the desktop
+	rm -f	"$(DESTDIR)$(PREFIX)/bin/gajim" # the bash script
+	rm -f	"$(DESTDIR)$(PREFIX)/bin/gajim-remote" # remote-control script
+	rm -f	"$(MANDIR)/man1/gajim.1.gz" # the man page
+	rm -f	"$(MANDIR)/man1/gajim-remote.1.gz" # the man page
+	rm -f	"$(DESTDIR)$(PREFIX)/share/pixmaps/gajim.png" # the icon
+	rm -f	"$(DESTDIR)$(PREFIX)/share/applications/gajim.desktop" #the desktop
 	@echo done uninstalling

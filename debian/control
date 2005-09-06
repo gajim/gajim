@@ -8,6 +8,7 @@ Standards-Version: 3.6.2
 Package: gajim
 Architecture: any
 Depends: ${shlibs:Depends}, python (>= 2.3), python-glade2 (>= 2.4.0), python-gtk2 (>= 2.4.0)
+Recommends: python-dns
 Suggests: python-gnupginterface
 Description: Jabber client written in PyGTK
  Gajim is a jabber client written in python, with a GTK frontend. It supports
