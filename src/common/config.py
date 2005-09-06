@@ -159,7 +159,7 @@ class Config:
 			'resource': [ opt_str, 'gajim' ],
 			'priority': [ opt_int, 5 ],
 			'autoconnect': [ opt_bool, False ],
-			'autoreconnect': [ opt_bool, False ],
+			'autoreconnect': [ opt_bool, True ],
 			'proxy': [ opt_str, '' ],
 			'keyid': [ opt_str, '' ],
 			'keyname': [ opt_str, '' ],
