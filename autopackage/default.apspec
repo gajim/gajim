@@ -9,7 +9,7 @@ Packager: Filippos Papadopoulos <filip@cs.uoi.gr>
 Summary: Gajim is a Jabber client written in Python.
 URL: http://www.gajim.org/
 License: GNU General Public License, Version 2
-SoftwareVersion: 0.8.1
+SoftwareVersion: 0.8.2
 AutopackageTarget: 1.0
 PackageVersion: 1
 
@@ -60,6 +60,7 @@ recommend @gtkspell.sourceforge.net/gtkspell 0
 
 copyFiles  lib/gajim "$PREFIX/lib"
 copyFiles  share/gajim "$PREFIX/share/"
+installLocale share/locale
 installIcon share/pixmaps/gajim.png
 installDesktop "Network/Instant Messaging" gajim.desktop
 installMan 1 gajim.1
