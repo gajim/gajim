@@ -36,6 +36,8 @@ if os.name == 'nt':
 		# win9x, ./logs
 		LOGPATH = 'Logs'
 
+LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
+
 class Logger:
 	def __init__(self):
 		dot_gajim = os.path.dirname(LOGPATH)
