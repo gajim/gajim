@@ -32,12 +32,16 @@ import signal
 
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
-import i18n
+from common import i18n
 
 _ = i18n._
 i18n.init()
 
-
+def send_error(error_message):
+	'''  Writes error message to stderr and exits '''
+	sys.stderr.write(error_message + '\n')
+	sys.stderr.flush()
+	sys.exit(1)
 try:
 	import dbus
 except:
@@ -149,7 +153,7 @@ using this account'), False)
 			}
 		if self.argv_len  < 2 or \
 			sys.argv[1] not in self.commands.keys(): # no args or bad args
-			self.send_error(self.compose_help())
+			send_error(self.compose_help())
 		self.command = sys.argv[1]
 		
 		if self.command == 'help':
@@ -164,12 +168,12 @@ using this account'), False)
 		
 		if self.command == 'contact_info':
 			if self.argv_len < 3:
-				self.send_error(_('Missing argument "contact_jid"'))
+				send_error(_('Missing argument "contact_jid"'))
 			try:
 				id = self.sbus.add_signal_receiver(self.show_vcard_info, 
 					'VcardInfo', INTERFACE, SERVICE, OBJ_PATH)
 			except:
-				self.send_error(_('Service not available'))
+				send_error(_('Service not available'))
 		
 		res = self.call_remote_method()
 		self.print_result(res)
@@ -187,10 +191,10 @@ using this account'), False)
 				
 				if res == False:
 					if self.argv_len < 4:
-						self.send_error(_('\'%s\' is not in your roster.\n\
+						send_error(_('\'%s\' is not in your roster.\n\
 Please specify account for sending the message.') % sys.argv[2])
 					else:
-						self.send_error(_('You have no active account'))
+						send_error(_('You have no active account'))
 			elif self.command == 'list_accounts':
 				if isinstance(res, list):
 					for account in res:
@@ -209,9 +213,9 @@ Please specify account for sending the message.') % sys.argv[2])
 		try:
 			self.sbus = dbus.SessionBus()
 		except:
-			self.send_error(_('Session bus is not available.'))
+			send_error(_('Session bus is not available.'))
 		
-		if _version[1] >= 30 and _version[1] <= 42:
+		if _version[1] >= 30:
 			obj = self.sbus.get_object(SERVICE, OBJ_PATH)
 			interface = dbus.Interface(obj, INTERFACE)
 		elif _version[1] < 30:
@@ -251,7 +255,7 @@ Please specify account for sending the message.') % sys.argv[2])
 			for argument in command_props[1]:
 				str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
 			return str
-		self.send_error(_('%s not found') % command)
+		send_error(_('%s not found') % command)
 			
 	def compose_help(self):
 		''' print usage, and list available commands '''
@@ -454,7 +458,7 @@ Please specify account for sending the message.') % sys.argv[2])
 		args = self.commands[self.command][1]
 		if len(args) > argv_len:
 			if args[argv_len][2]:
-				self.send_error(_('Argument "%s" is not specified. \n\
+				send_error(_('Argument "%s" is not specified. \n\
 Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 
 	def gtk_quit(self):
@@ -481,14 +485,8 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 					sys.argv[5])
 			return res
 		except:
-			self.send_error(_('Service not available'))
+			send_error(_('Service not available'))
 		return None
-
-	def send_error(self, error_message):
-		'''  Writes error message to stderr and exits '''
-		sys.stderr.write(error_message + '\n')
-		sys.stderr.flush()
-		sys.exit(1)
 
 if __name__ == '__main__':
 	GajimRemote()
