@@ -309,7 +309,7 @@ class PreferencesWindow:
 		player = gajim.config.get('soundplayer')
 		self.xml.get_widget('soundplayer_entry').set_text(player)
 		if player == '': # only on first time Gajim starts
-			commands = ('aplay', 'play'. 'esdplay', 'artsplay')
+			commands = ('aplay', 'play', 'esdplay', 'artsplay')
 			for command in commands:
 				if helpers.is_in_path(command):
 					self.xml.get_widget('soundplayer_entry').set_text(command)
