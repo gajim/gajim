@@ -373,7 +373,7 @@ class Connection:
 					_('Such room does not exist.')))
 			elif errcode == '405':
 				self.dispatch('ERROR', (_('Unable to join room'), 
-					_('Room creation is restricted,')))
+					_('Room creation is restricted.')))
 			elif errcode == '406':
 				self.dispatch('ERROR', (_('Unable to join room'), 
 					_('Your registered nickname must be used.')))
@@ -1311,7 +1311,7 @@ class Connection:
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
 				self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
-					_('Check your connection or try again later')))
+					_('Check your connection or try again later.')))
 			return None
 
 		self.peerhost = con.get_peerhost()
