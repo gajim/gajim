@@ -1172,6 +1172,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		return False
 
 	def send_status(self, account, status, txt, sync = False, auto = False):
+		accountIter = self.get_account_iter(account)
 		if status != 'offline':
 			if gajim.connections[account].connected < 2:
 				model = self.tree.get_model()
