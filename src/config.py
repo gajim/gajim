@@ -1948,7 +1948,13 @@ class ManageEmoticonsWindow:
 
 	def update_preview(self, widget):
 		path_to_file = widget.get_preview_filename()
-		widget.get_preview_widget().set_from_file(path_to_file)
+		if os.path.isdir(path_to_file):
+			return
+		try:
+			pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(path_to_file, 32, 32)
+		except (gobject.GError, TypeError):
+			return
+		widget.get_preview_widget().set_from_pixbuf(pixbuf)
 
 	def on_set_image_button_clicked(self, widget, data=None):
 		(model, iter) = self.emot_tree.get_selection().get_selected()
