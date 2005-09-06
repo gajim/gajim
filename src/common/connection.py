@@ -37,6 +37,7 @@ from common import gajim
 from common import GnuPG
 import socks5
 USE_GPG = GnuPG.USE_GPG
+print USE_GPG
 
 from common import i18n
 _ = i18n._
@@ -980,28 +981,6 @@ class Connection:
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
 		raise common.xmpp.NodeProcessed
 
-	def _BrowseResultCB(self, con, iq_obj):
-		gajim.log.debug('BrowseResultCB')
-		identities, features, items = [], [], []
-		for q in iq_obj.getChildren():
-			if q.getNamespace() != common.xmpp.NS_BROWSE:
-				continue
-			attr = {}
-			for key in q.getAttrs().keys():
-				attr[key] = q.getAttr(key)
-			identities = [attr]
-			for node in q.getChildren():
-				if node.getName() == 'ns':
-					features.append(node.getData())
-				else:
-					infos = {}
-					for key in node.getAttrs().keys():
-						infos[key] = node.getAttr(key)
-					infos['category'] = node.getName()
-					items.append(infos)
-			jid = unicode(iq_obj.getFrom())
-			self.dispatch('AGENT_INFO', (jid, identities, features, items))
-
 	def _DiscoverItemsCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsCB')
 		q = iq_obj.getTag('query')
@@ -1019,12 +998,6 @@ class Connection:
 			items.append(attr)
 		jid = unicode(iq_obj.getFrom())
 		self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
-
-	def _DiscoverInfoErrorCB(self, con, iq_obj):
-		gajim.log.debug('DiscoverInfoErrorCB')
-		iq = common.xmpp.Iq(to = iq_obj.getFrom(), typ = 'get', queryNS =\
-			common.xmpp.NS_AGENTS)
-		self.to_be_sent.append(iq)
 
 	def _DiscoverInfoCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoCB')
@@ -1048,12 +1021,8 @@ class Connection:
 			elif i.getName() == 'feature':
 				features.append(i.getAttr('var'))
 		jid = unicode(iq_obj.getFrom())
-		if not identities:
-			self.to_be_sent.append(common.xmpp.Iq(typ = 'get', queryNS = \
-				common.xmpp.NS_AGENTS))
-		else:
+		if identities: #if not: an error occured
 			self.dispatch('AGENT_INFO_INFO', (jid, node, identities, features))
-			self.discoverItems(jid, node)
 
 	def _VersionCB(self, con, iq_obj):
 		gajim.log.debug('VersionCB')
@@ -1340,13 +1309,9 @@ class Connection:
 			common.xmpp.NS_BYTESTREAM)
 		con.RegisterHandler('iq', self._bytestreamErrorCB, 'error',
 			common.xmpp.NS_BYTESTREAM)
-		con.RegisterHandler('iq', self._BrowseResultCB, 'result',
-			common.xmpp.NS_BROWSE)
 		con.RegisterHandler('iq', self._DiscoverItemsCB, 'result',
 			common.xmpp.NS_DISCO_ITEMS)
 		con.RegisterHandler('iq', self._DiscoverInfoCB, 'result',
-			common.xmpp.NS_DISCO_INFO)
-		con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',
 			common.xmpp.NS_DISCO_INFO)
 		con.RegisterHandler('iq', self._VersionCB, 'get',
 			common.xmpp.NS_VERSION)
@@ -1665,8 +1630,7 @@ class Connection:
 	def request_agents(self, jid, node):
 		if self.connection:
 			self.to_be_sent.append(common.xmpp.Iq(to = jid, typ = 'get', 
-				queryNS = common.xmpp.NS_BROWSE))
-			self.discoverInfo(jid, node)
+				queryNS = common.xmpp.NS_DISCO_ITEMS))
 
 	def request_register_agent_info(self, agent):
 		if not self.connection:

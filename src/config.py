@@ -2090,6 +2090,7 @@ class ServiceDiscoveryWindow:
 		self.plugin = plugin
 		self.account = account
 		self.agent_infos = {}
+		self.items_asked = [] #we already asked items to these jids
 		if gajim.connections[account].connected < 2:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
 _('Without a connection, you can not browse available services')).get_response()
@@ -2157,6 +2158,7 @@ _('Without a connection, you can not browse available services')).get_response()
 			iter = model.append(None, (jid, jid, node))
 			self.agent_infos[jid] = {'features' : []}
 		gajim.connections[self.account].request_agents(jid, node)
+		self.items_asked.append(jid+node)
 	
 	def agents(self, agents):
 		'''When list of available agent arrive:
@@ -2182,13 +2184,14 @@ _('Without a connection, you can not browse available services')).get_response()
 
 	def on_services_treeview_row_expanded(self, widget, iter, path):
 		model = self.services_treeview.get_model()
-		jid = model[iter][1].decode('utf-8')
+		if model.iter_n_children(iter) > 15:
+			return
 		child = model.iter_children(iter)
 		while child:
 			child_jid = model.get_value(child, 1).decode('utf-8')
 			child_node = model.get_value(child, 2).decode('utf-8')
 			# We never requested its infos
-			if not self.agent_infos[child_jid + child_node].has_key('features'):
+			if child_jid + child_node not in self.items_asked:
 				self.browse(child_jid, child_node)
 			child = model.iter_next(child)
 	
@@ -2215,7 +2218,7 @@ _('Without a connection, you can not browse available services')).get_response()
 			self.agent_infos[agent + node]['identities'] = identities
 			if identities[0].has_key('name'):
 				model.set_value(iter, 0, identities[0]['name'])
-		self.on_services_treeview_cursor_changed(self.services_treeview)
+		self.update_buttons()
 
 	def agent_info_items(self, agent, node, items, do_browse = True):
 		'''When we recieve items about an agent'''
@@ -2316,10 +2319,8 @@ _('Without a connection, you can not browse available services')).get_response()
 		gajim.connections[self.account].request_register_agent_info(service)
 
 		self.window.destroy()
-	
-	def on_services_treeview_cursor_changed(self, widget):
-		'''When we select a row :
-		activate buttons if needed'''
+
+	def update_buttons(self):
 		self.join_button.set_sensitive(False)
 		self.register_button.set_sensitive(False)
 		model, iter = self.services_treeview.get_selection().get_selected()
@@ -2348,6 +2349,24 @@ _('Without a connection, you can not browse available services')).get_response()
 				if self.agent_infos[jid + node]['identities'][0]['category'] == \
 						'conference':
 					self.join_button.set_sensitive(True)
+
+	def on_services_treeview_cursor_changed(self, widget):
+		'''When we select a row :
+		activate buttons if needed'''
+		print 'changed'
+		self.update_buttons()
+		model, iter = self.services_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		path = model.get_path(iter)
+		if len(path) == 1: # we selected the jabber server
+			return
+		jid = model[iter][1].decode('utf-8')
+		node = model[iter][2].decode('utf-8')
+		if jid+node not in self.items_asked:
+			self.browse(jid, node)
+		if not self.agent_infos[jid + node].has_key('features'):
+			gajim.connections[self.account].discoverInfo(jid, node)
 	
 	def on_go_button_clicked(self, widget):
 		server_address = self.address_comboboxentry.child.get_text().decode('utf-8')
