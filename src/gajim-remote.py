@@ -38,10 +38,11 @@ _ = i18n._
 i18n.init()
 
 def send_error(error_message):
-	'''  Writes error message to stderr and exits '''
-	sys.stderr.write(error_message + '\n')
-	sys.stderr.flush()
-	sys.exit(1)
+		'''  Writes error message to stderr and exits '''
+		sys.stderr.write(error_message + '\n')
+		sys.stderr.flush()
+		sys.exit(1)
+
 try:
 	import dbus
 except:
@@ -155,7 +156,6 @@ using this account'), False)
 			sys.argv[1] not in self.commands.keys(): # no args or bad args
 			send_error(self.compose_help())
 		self.command = sys.argv[1]
-		
 		if self.command == 'help':
 			if self.argv_len == 3:
 				print self.help_on_command(sys.argv[2])
@@ -172,7 +172,7 @@ using this account'), False)
 			try:
 				id = self.sbus.add_signal_receiver(self.show_vcard_info, 
 					'VcardInfo', INTERFACE, SERVICE, OBJ_PATH)
-			except:
+			except Exception, e:
 				send_error(_('Service not available'))
 		
 		res = self.call_remote_method()
@@ -222,7 +222,7 @@ Please specify account for sending the message.') % sys.argv[2])
 			self.service = self.sbus.get_service(SERVICE)
 			interface = self.service.get_object(OBJ_PATH, INTERFACE)
 		else:
-			send_error(_('Unknown D-Bus version: %s') % _version)
+			send_error(_('Unknown D-Bus version: %s') % _version[1])
 			
 		# get the function asked
 		self.method = interface.__getattr__(self.command)
@@ -296,6 +296,8 @@ Please specify account for sending the message.') % sys.argv[2])
 						res += self.print_info(level+1, items)
 					if res != '':
 						ret_str += '\t' + res
+				elif type(val) == dict:
+					ret_str += self.print_info(level+1, val)
 			ret_str = '%s(%s)\n' % (spacing, ret_str[1:])
 		elif isinstance(prop_dict, dict):
 			for key in prop_dict.keys():
@@ -315,8 +317,6 @@ Please specify account for sending the message.') % sys.argv[2])
 					res = self.print_info(level+1, val)
 					if res != '':
 						ret_str += '%s%s: \n%s' % (spacing, key, res)
-				else:
-					self.send_warning(_('Unknown type %s ') % type(val))
 		return ret_str
 		
 	def unrepr(self, serialized_data):
@@ -441,13 +441,12 @@ Please specify account for sending the message.') % sys.argv[2])
 		else:
 			if args and len(args) >= 5:
 				props_dict = self.unrepr(args[4].get_args_list()[0])
-
 		if props_dict:
 			print self.print_info(0,props_dict[0])
 		# remove_signal_receiver is broken in lower versions (< 0.35), 
 		# so we leave the leak - nothing can be done
 		if _version[1] >= 41:
-			self.sbus.remove_signal_receiver(show_vcard_info, 'VcardInfo', 
+			self.sbus.remove_signal_receiver(self.show_vcard_info, 'VcardInfo', 
 				INTERFACE, SERVICE, OBJ_PATH)
 	
 		gtk.main_quit()
@@ -463,7 +462,7 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 
 	def gtk_quit(self):
 		if _version[1] >= 41:
-			self.sbus.remove_signal_receiver(show_vcard_info, 'VcardInfo', 
+			self.sbus.remove_signal_receiver(self.show_vcard_info, 'VcardInfo', 
 				INTERFACE, SERVICE, OBJ_PATH)
 		gtk.main_quit()
 	
@@ -487,6 +486,7 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 		except:
 			send_error(_('Service not available'))
 		return None
+
 
 if __name__ == '__main__':
 	GajimRemote()

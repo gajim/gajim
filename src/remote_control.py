@@ -278,8 +278,9 @@ class SignalObject(DbusPrototype):
 		You have to register the 'VcardInfo' signal to get the real vcard. '''
 		if self.disabled:
 			return
-		
 		[jid] = self._get_real_arguments(args, 1)
+		if not isinstance(jid, unicode):
+			jid = unicode(jid)
 		if not jid:
 			# FIXME: raise exception for missing argument (0.3+)
 			return None
@@ -287,10 +288,8 @@ class SignalObject(DbusPrototype):
 		accounts = gajim.contacts.keys()
 		
 		for account in accounts:
-			if gajim.contacts[account].has_key(jid):
+			if gajim.contacts[account].__contains__(jid):
 				self.vcard_account =  account
-				gajim.connections[account].register_handler('VCARD', 
-					self._receive_vcard)
 				gajim.connections[account].request_vcard(jid)
 				break
 		return None
@@ -302,7 +301,10 @@ class SignalObject(DbusPrototype):
 		if gajim.contacts:
 			result = gajim.contacts.keys()
 			if result and len(result) > 0:
-				return result
+				result_array = []
+				for account in result:
+					result_array.append(account.encode('utf-8'))
+				return result_array
 		return None
 
 
@@ -324,7 +326,6 @@ class SignalObject(DbusPrototype):
 						result.append(item)
 			else:
 				# 'for_account: is not recognised:', 
-				# FIXME: there can be a return status for this [0.3+]
 				return None
 		else:
 			for account in gajim.contacts:
@@ -357,19 +358,6 @@ class SignalObject(DbusPrototype):
 			self.first_show = False
 			return True
 		return False
-
-	def _receive_vcard(self,account, array):
-		if self.vcard_account:
-			gajim.connections[self.vcard_account].unregister_handler('VCARD', 
-				self._receive_vcard)
-			self.unregistered_vcard = None
-			if self.disabled:
-				return
-			if _version[1] >=30:
-				self.VcardInfo(repr(array))
-			else:
-				self.emit_signal(INTERFACE, 'VcardInfo', 
-					repr(array))
 
 	def _get_real_arguments(self, args, desired_length):
 		# supresses the first 'message' argument, which is set in dbus 0.23

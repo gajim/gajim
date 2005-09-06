@@ -159,7 +159,6 @@ class Interface:
 		gajim.connections[account].build_http_auth_answer(data[2], answer)
 
 	def handle_event_error_answer(self, account, array):
-		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		id, jid_from, errmsg, errcode = array
 		if unicode(errcode) in ['403', '406'] and id:
 			# show the error dialog
@@ -186,10 +185,10 @@ class Interface:
 					(jid_from, file_props))
 				conn.disconnect_transfer(file_props)
 				return
-		
+		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		if jid_from in self.windows[account]['gc']:
 			self.windows[account]['gc'][jid_from].print_conversation(
-				_('Error %s: %s') % (array[2], array[1]), jid_from)
+				'Error %s: %s' % (array[2], array[1]), jid_from)
 
 	def handle_event_con_type(self, account, con_type):
 		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
@@ -200,8 +199,6 @@ class Interface:
 
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
-		if status == 'connecting':
-			self.roster.set_connecting_state(account)
 		if status != 'offline':
 			gobject.timeout_add(30000, self.allow_notif, account)
 		else:
@@ -384,10 +381,9 @@ class Interface:
 			not gajim.contacts[account].has_key(jid):
 			return
 
-		# Handle chat states
-		contact = gajim.get_first_contact_instance_from_jid(account, jid)
 		if self.windows[account]['chats'].has_key(jid):
 			chat_win = self.windows[account]['chats'][jid]
+			contact = gajim.get_first_contact_instance_from_jid(account, jid)
 			if chatstate is not None: # he sent us reply, so he supports jep85
 				if contact.chatstate == 'ask': # we were jep85 disco?
 					contact.chatstate = 'active' # no more
@@ -396,10 +392,6 @@ class Interface:
 			else:
 				# got no valid jep85 answer, peer does not support it
 				contact.chatstate = False
-		else:
-			# Brand new message, incoming.
-			if chatstate == 'active':
-				contact.chatstate = chatstate
 
 		if not array[1]: #empty message text
 			return
@@ -618,6 +610,7 @@ class Interface:
 				array['resource']]
 		if win:
 			win.set_avatar(array)
+		self.remote.raise_signal('VcardInfo', (account, array))
 
 	def handle_event_os_info(self, account, array):
 		win = None
