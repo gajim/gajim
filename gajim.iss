@@ -26,7 +26,7 @@ Source: "COPYING"; DestDir: "{app}"
 Source: "dist\gajim.exe"; DestDir: "{app}\src"; components: main
 Source: "dist\*.glade"; DestDir: "{app}\src"
 Source: "data\*"; DestDir: "{app}\data"; Flags: recursesubdirs
-Source: "po\*"; DestDir: "{app}\po"; Flags: recursesubdirs
+Source: "po\*.mo"; DestDir: "{app}\po"; Flags: recursesubdirs
 
 [Icons]
 Name: "{group}\Gajim"; Filename: "{app}\src\Gajim.exe"; WorkingDir: "{app}\src"
