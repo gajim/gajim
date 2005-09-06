@@ -18,7 +18,8 @@ def visit(arg, dirname, names):
 		if 'gajim.po' in names:
 			path_to_po = os.path.join(dirname, 'gajim.po')
 			pos = path_to_po.find('po/') + 3 #3 = len('po/')
-			name = path_to_po[pos:pos+2]
+			endpos = path_to_po.find('/', pos)
+			name = path_to_po[pos:endpos]
 			if update: # update an existing po file)
 				os.system('msgmerge -q -U ../po/'+name+'/LC_MESSAGES/gajim.po ../po/gajim.pot')
 			if stats:
