@@ -610,7 +610,8 @@ class Interface:
 				array['resource']]
 		if win:
 			win.set_avatar(array)
-		self.remote.raise_signal('VcardInfo', (account, array))
+		if self.remote is not None:
+			self.remote.raise_signal('VcardInfo', (account, array))
 
 	def handle_event_os_info(self, account, array):
 		win = None
