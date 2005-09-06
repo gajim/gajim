@@ -10,7 +10,7 @@ trayicon.so: trayicon.o eggtrayicon.o trayiconmodule.o
 	$(CC) $(LDFLAGS) -shared $^ -o $@
 
 gtkspell.so:
-	$(CC) $(CFLAGS) $(LDFLAGS) `pkg-config --libs --cflags gtkspell-2.0` -shared gtkspellmodule.c $^ -o $@
+	$(CC) $(OPTFLAGS) $(CFLAGS) $(LDFLAGS) `pkg-config --libs --cflags gtkspell-2.0` -shared gtkspellmodule.c $^ -o $@
 
 # The path to the GTK+ python types
 DEFS=`pkg-config --variable=defsdir pygtk-2.0`

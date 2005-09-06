@@ -1932,6 +1932,7 @@ class ManageEmoticonsWindow:
 		old_text = model.get_value(iter, 0).decode('utf-8')
 		if old_text in emots:
 			gajim.config.del_per('emoticons', old_text)
+		emots = gajim.config.get_per('emoticons')
 		emot = new_text.decode('utf-8').upper()
 		if emot in emots:
 			model.remove(iter)
