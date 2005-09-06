@@ -20,6 +20,7 @@
 
 import xml.sax.saxutils
 import gtk
+import gobject
 import os
 from common import i18n
 i18n.init()
