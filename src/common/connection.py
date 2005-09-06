@@ -37,7 +37,6 @@ from common import gajim
 from common import GnuPG
 import socks5
 USE_GPG = GnuPG.USE_GPG
-print USE_GPG
 
 from common import i18n
 _ = i18n._
