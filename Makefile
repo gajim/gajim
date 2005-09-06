@@ -77,6 +77,7 @@ install:
 		DST=`dirname "$$f"`; \
 		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
 	done
+	rm "$(DESTDIR)$(PREFIX)/share/gajim/src/systraywin32.py"
 	for d in $(DIRS_PO) ; do \
 		if [ ! -d $(DESTDIR)$(PREFIX)/share/locale/$$d ] ; then \
 			mkdir -p "$(DESTDIR)$(PREFIX)/share/locale/$$d"; \
