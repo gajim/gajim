@@ -459,9 +459,7 @@ class Chat:
 				del self.print_time_timeout_id[jid]
 
 			self.notebook.remove_page(self.notebook.page_num(self.childs[jid]))
-				
-			
-
+		
 		if self.plugin.windows[self.account][kind].has_key(jid):
 			del self.plugin.windows[self.account][kind][jid]
 		del self.nb_unread[jid]
@@ -472,6 +470,10 @@ class Chat:
 		del self.tagIn[jid]
 		del self.tagOut[jid]
 		del self.tagStatus[jid]
+		del self.sent_history[jid]
+		del self.sent_history_pos[jid]
+		del self.typing_new[jid]
+		del orig_msg[jid]
 		
 		if len(self.xmls) == 1: # we now have only one tab
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
