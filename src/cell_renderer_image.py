@@ -121,4 +121,5 @@ class CellRendererImage(gtk.GenericCellRenderer):
 					self.get_property('ypad'))
 		return x_offset, y_offset, calc_width, calc_height
 
-gobject.type_register(CellRendererImage)
+if gtk.pygtk_version < (2, 8, 0):  
+	gobject.type_register(CellRendererImage)
