@@ -5,7 +5,7 @@
 
 [Setup]
 AppName=Gajim
-AppVerName=Gajim version 0.8.1
+AppVerName=Gajim version 0.8.2
 DefaultDirName={pf}\Gajim
 DefaultGroupName=Gajim
 UninstallDisplayIcon={app}\src\Gajim.exe
