@@ -22,6 +22,6 @@ if [ `id -u` -eq 0 ]; then
 	echo "You must not launch gajim-remote as root, it is INSECURE"
 fi
 
-cd PREFIX/share/gajim/scripts
+cd PREFIX/share/gajim/src
 export PYTHONPATH="$PYTHONPATH:PREFIXLIB/gajim"
 python gajim-remote.py $@
