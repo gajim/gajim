@@ -1,17 +1,29 @@
+Gajim 0.8.1 (02 Sep 2005)
+
+  * Systray icon for windows
+  * Gajim is available in Dutch
+  * Gajim can use gpg-agent
+
 Gajim 0.8 (18 Aug 2005)
 
-  * Tabbed chat windows
-  * Group chat support (with MUC protocol)
-  * Emoticons, Avatars, File transfer, URL grabber, Bookmarks
-  * Systray icon, Speller
-  * TLS and GPG support (with SSL legacy support)
-  * Transport Registration support
-  * Service Discovery including Nodes
-  * Wikipedia, dictionary and search engine lookup
-  * Multiple accounts support
-  * DBus Capabilities. Read more information
+  * Avatars (JEP-0153)
+  * Chat state notifications aka. typing notification (JEP-0085)
+  * Bookmark storage (JEP-0048)
+  * File Transfer (JEP-0096)
+  * Major changes to adhere to GNOME HIG
+  * Complete vcard fields support
+  * New and better user interface for chat and groupchat windows
+  * SRV capabilities and custom hostname/port
+  * Many improvements in group chat and IRC emulation (eg. nick autocompletation and cycling)
+  * Gajim can now send and receive single messages
+  * New iconsets and new dialog for customizing the user interface
+  * Mouseover information for contacts in the roster window (aka tooltips)
+  * DBus Capabilities. Now Gajim can be remote controlled
+  * Authenticating HTTP Requests via XMPP (JEP-0070)
+  * Now you can lookup a word in Wikipedia, dictionary or in search engine
   * XML Console
-  * Gajim is available in 11 languages: English, French, German, Russian, Spanish, Polish, Portugese, Greek, Bulgarian, Czech and Norwegian
+  * Gajim is now also available in norwegian and czech language
+
 
 Gajim 0.7.1 (5 Jun 2005)  
 
