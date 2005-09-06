@@ -1,6 +1,7 @@
-gajim (0.8.1-1) unstable; urgency=low
+gajim (0.8.2-1) unstable; urgency=low
 
-  * new upstream release Closes: #325080,#324481,#325126,#324493
+  * new upstream release Closes: #325080,#324481,#325126,#324493,#326655
+  * Gajim now depends on python-gtk2 >= 2.6.0
 
  -- Yann Le Boulanger <asterix@lagaule.org>  Sun, 02 Sep 2005 14:56:48 +0200
 
