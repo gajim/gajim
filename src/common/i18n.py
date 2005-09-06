@@ -17,11 +17,15 @@
 ## GNU General Public License for more details.
 ##
 
-APP = 'gajim'
-DIR = '../po'
-
 import locale
 import gettext
+import os
+
+APP = 'gajim'
+if os.path.isdir('../po'):
+	DIR = '../po'
+else:
+	DIR = '../../locale'
 
 locale.setlocale(locale.LC_ALL, '')
 _translation = None
