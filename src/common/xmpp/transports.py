@@ -32,10 +32,18 @@ from simplexml import ustr
 from client import PlugIn
 from protocol import *
 
+# determine which DNS resolution library is available
+HAVE_DNSPYTHON = False
+HAVE_PYDNS = False
 try:
-    import dns.resolver
-except:
-    pass
+    import dns.resolver # http://dnspython.org/
+    HAVE_DNSPYTHON = True
+except ImportError:
+    try:
+        import DNS # http://pydns.sf.net/
+        HAVE_PYDNS = True
+    except ImportError:
+        print "Could not load one of the supported DNS libraries (dnspython or pydns). SRV records will not be queried and you may need to set custom hostname/port for some servers to be accessible."
 
 DATA_RECEIVED='DATA RECEIVED'
 DATA_SENT='DATA SENT'
@@ -60,20 +68,31 @@ class TCPsocket(PlugIn):
         self._exported_methods=[self.send,self.disconnect]
 
         # SRV resolver
-        if 'dns' in globals(): # if dnspython is available support SRV
+        if HAVE_DNSPYTHON or HAVE_PYDNS:
             host, port = server
             possible_queries = ['_xmpp-client._tcp.' + host]
 
             for query in possible_queries:
                 try:
-                    answers = [x for x in dns.resolver.query(query, 'SRV')]
-                    if answers:
-                        host = str (answers[0].target)
-                        port = int (answers[0].port)
-                        break
+                    if HAVE_DNSPYTHON:
+                        answers = [x for x in dns.resolver.query(query, 'SRV')]
+                        if answers:
+                            host = str (answers[0].target)
+                            port = int (answers[0].port)
+                            break
+                    elif HAVE_PYDNS:
+                        # ensure we haven't cached an old configuration
+                        DNS.ParseResolvConf()
+                        response = DNS.Request().req(query, qtype='SRV')
+                        answers = response.answers
+                        if len(answers) > 0:
+                            # ignore the priority and weight for now
+                            _, _, port, host = answers[0]['data']
+                            del _
+                            port = int(port)
+                            break
                 except:
-                    pass
-
+                    print 'An error occurred while looking up %s' % query
             server = (host, port)
         # end of SRV resolver
 
