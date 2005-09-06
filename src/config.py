@@ -1881,8 +1881,10 @@ class ManageEmoticonsWindow:
 		if not emot in emots:
 			gajim.config.add_per('emoticons', emot)
 			self.plugin.init_regexp() # update regexp [emoticons included]
-		gajim.config.set_per('emoticons', emot, 'path',
-			model[iter][1].decode('utf-8'))
+		image = model[iter][1]
+		if image:
+			image = image.decode('utf-8')
+		gajim.config.set_per('emoticons', emot, 'path', image)
 		self.plugin.save_config()
 
 	def image_is_ok(self, image):
