@@ -315,8 +315,6 @@ class PreferencesWindow:
 					self.xml.get_widget('soundplayer_entry').set_text(command)
 					gajim.config.set('soundplayer', command)
 					break
-		
-		
 
 		#sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
