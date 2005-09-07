@@ -112,7 +112,7 @@ have "sync with global status" option set'), False)
 					]
 				],
 			'open_chat': [ 
-					_('Show the chat dialog so that you can send message to a \
+					_('Show the chat dialog so that you can send messages to a \
 contact'), 
 					[
 						('jid', _('JID of the contact that you want to chat \
@@ -189,7 +189,7 @@ using this account'), False)
 				if self.command == 'send_message':
 					self.argv_len -= 2
 				
-				if res == False:
+				if res is False:
 					if self.argv_len < 4:
 						send_error(_('\'%s\' is not in your roster.\n\
 Please specify account for sending the message.') % sys.argv[2])

@@ -1,9 +1,10 @@
-##	roster_window.py
+##	remote_control.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
+##	- Dimitur Kirov <dkirov@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -188,13 +189,17 @@ class SignalObject(DbusPrototype):
 
 	def open_chat(self, *args):
 		''' start_chat(jid, account=None) -> shows the tabbed window for new 
-		message to 'jid', using account(optional) 'account ' '''
+		message to 'jid', using account(optional) 'account' '''
 		if self.disabled:
 			return
 		jid, account = self._get_real_arguments(args, 2)
 		if not jid:
-			# FIXME: raise exception for missing argument (dbus0.35+ - released last week)
+			# FIXME: raise exception for missing argument (dbus0.35+)
 			return None
+		if jid.startswith('xmpp://'):
+			jid = jid[7:] # len('xmpp://') = 7
+			#FIXME: does not work :(((
+
 		if account:
 			accounts = [account]
 		else:

@@ -147,6 +147,7 @@ class Config:
 		'avatar_width': [opt_int, 52],
 		'avatar_height': [opt_int, 52],
 		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This option make sense only if trayicon is used.')],
+		'set_xmpp://_handler_everytime': [opt_bool, False, _('If True, Gajim registers for xmpp:// on each startup.')],
 	}
 
 	__options_per_key = {

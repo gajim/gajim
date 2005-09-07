@@ -59,7 +59,7 @@ from common import optparser
 
 profile = ''
 try:
-	opts, args = getopt.getopt(sys.argv[2:], 'hvp:', ['help', 'verbose',
+	opts, args = getopt.getopt(sys.argv[1:], 'hvp:', ['help', 'verbose',
 		'profile=', 'sm-config-prefix=', 'sm-client-id='])
 except getopt.error, msg:
 	print msg
@@ -1211,41 +1211,38 @@ if __name__ == '__main__':
 		cli = gnome.ui.master_client()
 		cli.connect('die', die_cb)
 		
-		if os.path.isdir('.svn'): # we are svn user
-			cwd = os.getcwd()
-			svn_src = False
-			svn_trunk = False
-			
-			script = '#!/bin/sh\n'
-			if cwd.endswith('trunk'): # we run with ./launch.sh
-				script += 'cd %s/src' % cwd
-				svn_trunk = True
-			elif cwd.endswith('src'): # we run with ./gajim.py in src/
-				script += 'cd %s' % cwd
-				svn_src = True
-
-			if svn_src or svn_trunk:
-				if svn_trunk:
-					path_to_gajim_script = cwd + '/scripts/gajim_sm_script'
-				elif svn_src:
-					path_to_gajim_script = cwd + '/../scripts/gajim_sm_script'
-					
-				if os.path.exists(path_to_gajim_script):
-					os.remove(path_to_gajim_script)
-				f = open(path_to_gajim_script, 'w')
-				script += '\nexec python -OOt gajim.py $0 $@\n'
-				f.write(script)
-				f.close()
-				os.chmod(path_to_gajim_script, 0700)
-
-		else: # normal user (not svn user)
-			# always make it like '/usr/local/bin/gajim'
-			path_to_gajim_script = helpers.is_in_path('gajim', True)
-
+		path_to_gajim_script = gtkgui_helpers.get_abspath_for_script('gajim')
 		
 		if path_to_gajim_script:
 			argv = [path_to_gajim_script]
 			cli.set_restart_command(len(argv), argv)
+	
+	try:
+		import gconf
+		# in try because daemon may not be there
+		client = gconf.client_get_default()
+	except:
+		pass
+	else:
+		we_set = False
+		print client.get_string('/desktop/gnome/url-handlers/xmpp/command')
+		if client.get_string('/desktop/gnome/url-handlers/xmpp/command') is None:
+			we_set = True
+		elif gajim.config.get('set_xmpp://_handler_everytime'):
+			we_set = True
+		
+		print we_set
+		if we_set:
+			path_to_gajim_script, type = gtkgui_helpers.get_abspath_for_script(
+				'gajim-remote', True)
+			print path_to_gajim_script
+			if path_to_gajim_script:
+				if type == 'svn':
+					command = path_to_gajim_script + 'open_chat %s'
+					print command
+				else: # 'installed'
+					command = 'gajim-remote open_chat %s'
+				client.set_string('/desktop/gnome/url-handlers/xmpp/command', command)
 	
 	Interface()
 	gtk.main()

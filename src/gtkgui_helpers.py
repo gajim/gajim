@@ -190,3 +190,37 @@ def set_unset_urgency_hint(window, unread_messages_no):
 			window.props.urgency_hint = True
 		else:
 			window.props.urgency_hint = False
+
+def get_abspath_for_script(scriptname, want_type = False):
+	'''checks if we are svn or normal user and returns abspath to asked script
+	if want_type is True we return 'svn' or 'install' '''
+	if os.path.isdir('.svn'): # we are svn user
+		type = 'svn'
+		cwd = os.getcwd() # it's always ending with src
+
+		if scriptname == 'gajim-remote':
+			path_to_script = cwd + '/gajim-remote.py'
+		
+		elif scriptname == 'gajim':
+			script = '#!/bin/sh\n' # the script we may create
+			script += 'cd %s' % cwd
+			path_to_script = cwd + '/../scripts/gajim_sm_script'
+				
+			if os.path.exists(path_to_script):
+				os.remove(path_to_script)
+			f = open(path_to_script, 'w')
+			script += '\nexec python -OOt gajim.py $0 $@\n'
+			f.write(script)
+			f.close()
+			os.chmod(path_to_script, 0700)
+
+	else: # normal user (not svn user)
+		type = 'install'
+		# always make it like '/usr/local/bin/gajim'
+		path_to_script = helpers.is_in_path(scriptname, True)
+		
+	
+	if want_type:
+		return path_to_script, type
+	else:
+		return path_to_script
