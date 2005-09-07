@@ -106,6 +106,8 @@ class FileTransfersWindow:
 		self.cancel_menuitem = popup_xml.get_widget('cancel_menuitem')
 		self.pause_menuitem = popup_xml.get_widget('pause_menuitem')
 		self.continue_menuitem = popup_xml.get_widget('continue_menuitem')
+		self.continue_menuitem.hide()
+		self.continue_menuitem.set_no_show_all(True)
 		self.remove_menuitem = popup_xml.get_widget('remove_menuitem')
 		popup_xml.signal_autoconnect(self)
 		
@@ -452,6 +454,7 @@ _('Connection with peer cannot be established.'))
 			status = 'upload'
 		file_props['tt_account'] = account
 		self.set_status(file_props['type'], file_props['sid'], status)
+		self.set_cleanup_sensitivity()
 		self.window.show_all()
 	
 	def on_transfers_list_motion_notify_event(self, widget, event):
@@ -523,7 +526,16 @@ _('Connection with peer cannot be established.'))
 			file_props['stopped']:
 			return False
 		return True
-		
+
+	def set_cleanup_sensitivity(self):
+		''' check if there are transfer rows and set cleanup_button 
+		sensitive, or insensitive if model is empty
+		'''
+		if len(self.model) == 0:
+			self.cleanup_button.set_sensitive(False)
+		else:
+			self.cleanup_button.set_sensitive(True)
+	
 	def set_all_insensitive(self):
 		''' make all buttons/menuitems insensitive '''
 		self.pause_button.set_sensitive(False)
@@ -533,6 +545,7 @@ _('Connection with peer cannot be established.'))
 		self.cancel_button.set_sensitive(False)
 		self.cancel_menuitem.set_sensitive(False)
 		self.open_folder_menuitem.set_sensitive(False)
+		self.set_cleanup_sensitivity()
 	
 	def set_buttons_sensitive(self, path, is_row_selected):
 		''' make buttons/menuitems sensitive as appropriate to 
@@ -591,6 +604,7 @@ _('Connection with peer cannot be established.'))
 			if selected_path == path:
 				is_selected = True
 		self.set_buttons_sensitive(path, is_selected)
+		self.set_cleanup_sensitivity()
 		return True
 	
 	def on_cleanup_button_clicked(self, widget):
