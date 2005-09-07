@@ -25,6 +25,7 @@ exec python -OOt "$0" ${1+"$@"}
 import sys
 import pygtk
 import os
+
 if not os.name == 'nt': # py2exe only in windows
 		pygtk.require('2.0') # py2exe fails on this
 try:
@@ -58,8 +59,8 @@ from common import optparser
 
 profile = ''
 try:
-	opts, args = getopt.getopt(sys.argv[1:], 'hvp:', ['help', 'verbose',
-		'profile='])
+	opts, args = getopt.getopt(sys.argv[2:], 'hvp:', ['help', 'verbose',
+		'profile=', 'sm-config-prefix=', 'sm-client-id='])
 except getopt.error, msg:
 	print msg
 	print 'for help use --help'
@@ -1197,6 +1198,53 @@ if __name__ == '__main__':
 		psyco.full()
 	except ImportError:
 		pass
+
+	# Session Management support
+	try:
+		import gnome.ui
+	except ImportError:
+		print >> sys.stderr, _('session management not available (missing gnome.ui module)')
+	else:
+		def die_cb(cli):
+			gtk.main_quit()
+		gnome.program_init('gajim', gajim.version)
+		cli = gnome.ui.master_client()
+		cli.connect('die', die_cb)
+		
+		if os.path.isdir('.svn'): # we are svn user
+			cwd = os.getcwd()
+			svn_src = False
+			svn_trunk = False
+			
+			script = '#!/bin/sh\n'
+			if cwd.endswith('trunk'): # we run with ./launch.sh
+				script += 'cd %s/src' % cwd
+				svn_trunk = True
+			elif cwd.endswith('src'): # we run with ./gajim.py in src/
+				script += 'cd %s' % cwd
+				svn_src = True
+
+			if svn_src or svn_trunk:
+				if svn_trunk:
+					path_to_gajim_script = cwd + '/scripts/gajim_sm_script'
+				elif svn_src:
+					path_to_gajim_script = cwd + '/../scripts/gajim_sm_script'
+					
+				os.remove(path_to_gajim_script)
+				f = open(path_to_gajim_script, 'w')
+				script += '\nexec python -OOt gajim.py $0 $@\n'
+				f.write(script)
+				f.close()
+				os.chmod(path_to_gajim_script, 0700)
+
+		else: # normal user (not svn user)
+			# always make it like '/usr/local/bin/gajim'
+			path_to_gajim_script = helpers.is_in_path('gajim', True)
+
+		
+		if path_to_gajim_script:
+			argv = [path_to_gajim_script]
+			cli.set_restart_command(len(argv), argv)
 	
 	Interface()
 	gtk.main()

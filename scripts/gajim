@@ -23,4 +23,4 @@ fi
 
 cd PREFIX/share/gajim/src
 export PYTHONPATH="$PYTHONPATH:PREFIXLIB/gajim"
-exec python -OOt gajim.py $@
+exec python -OOt gajim.py $0 $@
