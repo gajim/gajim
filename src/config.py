@@ -1442,7 +1442,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 				self.xml.get_widget('password_entry').set_text(new_password)
 
 	def account_is_ok(self, acct):
-		'''When the account has been created with sucess'''
+		'''When the account has been created with success'''
 		self.xml.get_widget('new_account_checkbutton').set_active(False)
 		self.modify = True
 		self.account = acct
