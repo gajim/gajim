@@ -1,3 +1,3 @@
 #!/bin/sh
 cd src
-./gajim.py $@
+exec python -OOt gajim.py $@
