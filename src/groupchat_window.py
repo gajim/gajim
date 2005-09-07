@@ -900,7 +900,10 @@ class GroupchatWindow(chat.Chat):
 		# these conditions were taken from JEP 0045
 		item = xml.get_widget('kick_menuitem')
 		item.connect('activate', self.kick, room_jid, nick)
-		if user_role != 'moderator' or target_role == 'moderator':
+		if user_role != 'moderator' or \
+		   (user_affiliation == 'admin' and target_affiliation == 'owner') or \
+		   (user_affiliation == 'member' and target_affiliation in ('admin', 'owner')) or \
+		   (user_affiliation == 'none' and target_affiliation != 'none'):
 			item.set_sensitive(False)
 
 		item = xml.get_widget('voice_checkmenuitem')
