@@ -1230,7 +1230,8 @@ if __name__ == '__main__':
 				elif svn_src:
 					path_to_gajim_script = cwd + '/../scripts/gajim_sm_script'
 					
-				os.remove(path_to_gajim_script)
+				if os.path.exists(path_to_gajim_script):
+					os.remove(path_to_gajim_script)
 				f = open(path_to_gajim_script, 'w')
 				script += '\nexec python -OOt gajim.py $0 $@\n'
 				f.write(script)
