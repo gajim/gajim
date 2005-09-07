@@ -10,13 +10,13 @@ msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-09-01 20:45+0300\n"
-"PO-Revision-Date: 2005-08-26 11:42+0200\n"
+"PO-Revision-Date: 2005-09-07 13:48+0200\n"
 "Last-Translator: Witek Kieraś <pambuk@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
 
 #: ../src/common/config.py:51
 msgid "Away as a result of being idle"
@@ -1098,16 +1098,10 @@ msgstr[0] "Czy jesteś pewien, że chcesz opuścić pokój \"%s\"?"
 msgstr[1] "Czy jesteś pewien, że chcesz opuścić pokój \"%s\"?"
 
 #: ../src/groupchat_window.py:148
-#, fuzzy
 msgid "If you close this window, you will be disconnected from this room."
-msgid_plural ""
 "If you close this window, you will be disconnected from these rooms."
-msgstr[0] ""
-"Jeśli zamkniesz to okno, to połączenie z tym pokojem zostanie zerwane.Jeśli "
-"zamkniesz to okno, to połączenie z tymi pokojami zostanie zerwane."
-msgstr[1] ""
-"Jeśli zamkniesz to okno, to połączenie z tym pokojem zostanie zerwane.Jeśli "
-"zamkniesz to okno, to połączenie z tymi pokojami zostanie zerwane."
+msgstr "Jeśli zamkniesz to okno, to połączenie z tym pokojem zostanie zerwane."
+"Jeśli zamkniesz to okno, to połączenie z tymi pokojami zostanie zerwane."
 
 #: ../src/groupchat_window.py:153
 msgid "Do not ask me again"
@@ -3083,7 +3077,7 @@ msgstr "Funkcja: "
 
 #: ../src/tooltips.py:266
 msgid "Affiliation: "
-msgstr ""
+msgstr "Afiliacja: "
 
 #: ../src/tooltips.py:269 ../src/tooltips.py:353 ../src/tooltips.py:366
 #: ../src/tooltips.py:429
