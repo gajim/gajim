@@ -473,7 +473,7 @@ class Chat:
 		del self.sent_history[jid]
 		del self.sent_history_pos[jid]
 		del self.typing_new[jid]
-		del orig_msg[jid]
+		del self.orig_msg[jid]
 		
 		if len(self.xmls) == 1: # we now have only one tab
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
