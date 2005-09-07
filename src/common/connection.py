@@ -1607,12 +1607,10 @@ class Connection:
 	def unsubscribe(self, jid):
 		if not self.connection:
 			return
-		delauth = gajim.config.get('delauth')
-		delroster = gajim.config.get('delroster')
-		if delauth:
-			self.connection.getRoster().Unsubscribe(jid)
-		if delroster:
+		if gajim.config.get('contact_mutual_removal'):
 			self.connection.getRoster().delItem(jid)
+		else:
+			self.connection.getRoster().Unsubscribe(jid)
 
 	def _continue_unsubscribe(self, con, iq_obj, agent):
 		self.connection.getRoster().delItem(agent)
