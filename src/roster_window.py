@@ -215,7 +215,7 @@ class RosterWindow:
 		elif jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 			img = state_images[contact.show]					
 		else:
-			if contact.sub == 'both':
+			if contact.sub in ['both', 'to']:
 				img = state_images[contact.show]
 			else:
 				if contact.ask == 'subscribe':
