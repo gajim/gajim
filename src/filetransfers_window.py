@@ -21,6 +21,7 @@
 import gtk
 import gtk.glade
 import gobject
+import pango
 import os
 import sys
 
@@ -80,6 +81,7 @@ class FileTransfersWindow:
 		col.add_attribute(renderer, 'markup' , 2)
 		renderer.set_property('xalign', 0.)
 		renderer.set_property('yalign', 0.)
+		renderer.set_property('ellipsize', pango.ELLIPSIZE_END)
 		col.set_resizable(True)
 		col.set_expand(True)
 		self.tree.append_column(col)
