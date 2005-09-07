@@ -134,6 +134,7 @@ class Connection:
 		self.last_sent = []
 		self.files_props = {}
 		self.password = gajim.config.get_per('accounts', name, 'password')
+		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
 		self.privacy_rules_supported = False
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
@@ -882,7 +883,7 @@ class Connection:
 			file_props['mime-type'] = mime_type
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-		resource = gajim.config.get_per('accounts', self.name, 'resource')
+		resource = self.server_resource
 		file_props['receiver'] = name + '@' + hostname + '/' + resource
 		file_props['sender'] = iq_obj.getFrom()
 		file_props['request-id'] = unicode(iq_obj.getAttr('id'))
@@ -940,7 +941,7 @@ class Connection:
 	def send_file_request(self, file_props):
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-		resource = gajim.config.get_per('accounts', self.name, 'resource')
+		resource = self.server_resource
 		frm = name + '@' + hostname + '/' + resource
 		file_props['sender'] = frm
 		fjid = file_props['receiver'].jid + '/' + file_props['receiver'].resource
@@ -1129,7 +1130,9 @@ class Connection:
 		roster = self.connection.getRoster().getRaw()
 		if not roster:
 			roster = {}
-				
+			
+		if iq_obj.getTo() is not None:
+			self.server_resource = iq_obj.getTo().getResource()
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		if roster.has_key(name + '@' + hostname):
