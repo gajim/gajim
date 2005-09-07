@@ -1225,21 +1225,17 @@ if __name__ == '__main__':
 		pass
 	else:
 		we_set = False
-		print client.get_string('/desktop/gnome/url-handlers/xmpp/command')
 		if client.get_string('/desktop/gnome/url-handlers/xmpp/command') is None:
 			we_set = True
 		elif gajim.config.get('set_xmpp://_handler_everytime'):
 			we_set = True
 		
-		print we_set
 		if we_set:
 			path_to_gajim_script, type = gtkgui_helpers.get_abspath_for_script(
 				'gajim-remote', True)
-			print path_to_gajim_script
 			if path_to_gajim_script:
 				if type == 'svn':
 					command = path_to_gajim_script + 'open_chat %s'
-					print command
 				else: # 'installed'
 					command = 'gajim-remote open_chat %s'
 				client.set_string('/desktop/gnome/url-handlers/xmpp/command', command)
