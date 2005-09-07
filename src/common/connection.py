@@ -219,7 +219,9 @@ class Connection:
 				else:
 					self.vcard_sha = ''
 				self.dispatch('MYVCARD', vcard)
-				#we re-send our presence with sha
+				#we re-send our presence with sha if we are not invisible
+				if STATUS_LIST[self.connected] == 'invisible':
+					return
 				sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
 				prio = unicode(gajim.config.get_per('accounts', self.name,
 					'priority'))
