@@ -137,8 +137,10 @@ uninstall:
 	rm -rf	"$(DESTDIR)$(PREFIX)/lib/gajim" # the .so files are here
 	rm -f	"$(DESTDIR)$(PREFIX)/bin/gajim" # the bash script
 	rm -f	"$(DESTDIR)$(PREFIX)/bin/gajim-remote" # remote-control script
-	rm -f	"$(MANDIR)/man1/gajim.1.gz" # the man page
-	rm -f	"$(MANDIR)/man1/gajim-remote.1.gz" # the man page
+	rm -f	"$(MANDIR)/man1/gajim.1" # the man page
+	rm -f	"$(MANDIR)/man1/gajim-remote.1" # the man page
 	rm -f	"$(DESTDIR)$(PREFIX)/share/pixmaps/gajim.png" # the icon
+	rm -f	"$(DESTDIR)$(PREFIX)/share/pixmaps/gajim_about.png" # the icon
 	rm -f	"$(DESTDIR)$(PREFIX)/share/applications/gajim.desktop" #the desktop
+	find "$(DESTDIR)$(PREFIX)/share/locale" -name 'gajim.mo' -exec rm {} \; #the .mo files
 	@echo done uninstalling
