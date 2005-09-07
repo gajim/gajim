@@ -361,6 +361,7 @@ Please specify account for sending the message.') % sys.argv[2])
 				return ('',value[1:])
 			_str = ''
 			previous_slash = False
+			slashes = 0
 			for i in range(len(value) - 1):
 				chr = value[i+1]
 				if previous_slash:
@@ -379,15 +380,19 @@ Please specify account for sending the message.') % sys.argv[2])
 						_str += '\''
 					elif chr == '\"':
 						_str += '\"'
-					elif chr == 'u' and is_unicode:
-						_str += '\\u'
+					elif chr in ['u', 'x'] and is_unicode:
+						slashes -= 1
+						_str += '\\' + chr
+					else:
+						_str += chr
 				elif chr == first_char:
 					break
 				elif chr == '\\':
 					previous_slash = True
+					slashes += 1
 				else:
 					_str += chr
-			substr_len = len(_str)+2
+			substr_len = len(_str) + 2 + slashes
 			if is_unicode and _str:
 				_str = _str.decode('unicode-escape').encode('utf-8')
 			return (_str, value[substr_len :])
