@@ -520,35 +520,37 @@ class GroupchatWindow(chat.Chat):
 				if len(splitted_text): # if there are any words
 					begin = splitted_text[-1] # last word we typed
 
-				if len(self.nick_hits[room_jid]) and \
-						self.nick_hits[room_jid][0].startswith(begin.replace(
-						self.gc_refer_to_nick_char, '')) and \
-						self.last_key_tabs[room_jid]: # we should cycle
-					self.nick_hits[room_jid].append(self.nick_hits[room_jid][0])
-					self.nick_hits[room_jid].pop(0)
-				else:
-					self.nick_hits[room_jid] = [] # clear the hit list
-					list_nick = self.get_nick_list(room_jid)
-					for nick in list_nick: 
-						if nick.lower().startswith(begin.lower()): # the word is the begining of a nick
-							self.nick_hits[room_jid].append(nick)
-				if len(self.nick_hits[room_jid]):
-					if len(splitted_text) == 1: # This is the 1st word of the line
-						add = self.gc_refer_to_nick_char + ' '
+					if len(self.nick_hits[room_jid]) and \
+							self.nick_hits[room_jid][0].startswith(begin.replace(
+							self.gc_refer_to_nick_char, '')) and \
+							self.last_key_tabs[room_jid]: # we should cycle
+						self.nick_hits[room_jid].append(self.nick_hits[room_jid][0])
+						self.nick_hits[room_jid].pop(0)
 					else:
-						add = ' '
-					start_iter = end_iter.copy()
-					if self.last_key_tabs[room_jid] and begin.endswith(', '):
-						start_iter.backward_chars(len(begin) + 2) # have to accomodate for the added space from last completion
-					elif self.last_key_tabs[room_jid]:
-						start_iter.backward_chars(len(begin) + 1) # have to accomodate for the added space from last completion
-					else:
-						start_iter.backward_chars(len(begin))
+						self.nick_hits[room_jid] = [] # clear the hit list
+						list_nick = self.get_nick_list(room_jid)
+						for nick in list_nick: 
+							if nick.lower().startswith(begin.lower()): # the word is the begining of a nick
+								self.nick_hits[room_jid].append(nick)
+					if len(self.nick_hits[room_jid]):
+						if len(splitted_text) == 1: # This is the 1st word of the line
+							add = self.gc_refer_to_nick_char + ' '
+						else:
+							add = ' '
+						start_iter = end_iter.copy()
+						if self.last_key_tabs[room_jid] and begin.endswith(', '):
+							# have to accomodate for the added space from last completion
+							start_iter.backward_chars(len(begin) + 2)
+						elif self.last_key_tabs[room_jid]:
+							# have to accomodate for the added space from last completion
+							start_iter.backward_chars(len(begin) + 1)
+						else:
+							start_iter.backward_chars(len(begin))
 
-					message_buffer.delete(start_iter, end_iter)
-					message_buffer.insert_at_cursor(self.nick_hits[room_jid][0] + add)
-					self.last_key_tabs[room_jid] = True
-					return True
+						message_buffer.delete(start_iter, end_iter)
+						message_buffer.insert_at_cursor(self.nick_hits[room_jid][0] + add)
+						self.last_key_tabs[room_jid] = True
+						return True
 				self.last_key_tabs[room_jid] = False
 				return False
 		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
