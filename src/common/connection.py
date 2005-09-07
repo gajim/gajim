@@ -1131,8 +1131,6 @@ class Connection:
 		if not roster:
 			roster = {}
 			
-		if iq_obj.getTo() is not None:
-			self.server_resource = iq_obj.getTo().getResource()
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		if roster.has_key(name + '@' + hostname):
@@ -1344,6 +1342,7 @@ class Connection:
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
 				_('Check your connection or try again later')))
 			return None
+		self.server_resource = con.Resource
 		con.RegisterEventHandler(self._event_dispatcher)
 		if auth:
 			con.initRoster()
