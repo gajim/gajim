@@ -44,6 +44,18 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
+#(icon, name, type, jid, account, editable, s)
+(
+C_IMG, # image to show state (online, new message etc)
+C_NAME, # cellrenderer text that holds contact nickame
+C_TYPE, # account, group or contact?
+C_JID, # the jid of the row <nk is not sure>
+C_ACCOUNT, # cellrenderer text that holds account name
+C_EDITABLE, # cellrenderer text that holds name editable or not?
+C_SECPIXBUF, # econdary_pixbuf
+) = range(7)
+
+
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class RosterWindow:
@@ -647,10 +659,10 @@ class RosterWindow:
 			except:
 				self.tooltip.hide_tooltip()
 				return
-			if model[iter][2] == 'contact':
-				account = model[iter][4].decode('utf-8')
-				jid = model[iter][3].decode('utf-8')
-				img = model[iter][0]
+			if model[iter][C_TYPE] == 'contact':
+				account = model[iter][C_ACCOUNT].decode('utf-8')
+				jid = model[iter][C_JID].decode('utf-8')
+				img = model[iter][C_IMG]
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
 					self.tooltip.timeout = gobject.timeout_add(500,
@@ -692,17 +704,17 @@ class RosterWindow:
 	def on_rename(self, widget, iter, path):
 		model = self.tree.get_model()
 		
-		row_type = model[iter][2]
-		jid = model[iter][3].decode('utf-8')
-		account = model[iter][4].decode('utf-8')
+		row_type = model[iter][C_TYPE]
+		jid = model[iter][C_JID].decode('utf-8')
+		account = model[iter][C_ACCOUNT].decode('utf-8')
 		if row_type == 'contact':
 			# it's jid
 			#Remove resource indicator (Name (2))
 			contacts = gajim.contacts[account][jid]
 			name = contacts[0].name
-			model[iter][1] = name
+			model[iter][C_NAME] = name
 
-		model[iter][5] = True # set 'editable' to True
+		model[iter][C_EDITABLE] = True # set 'editable' to True
 		self.tree.set_cursor(path, self.tree.get_column(0), True)
 		
 	def on_assign_pgp_key(self, widget, user, account):
@@ -761,9 +773,9 @@ class RosterWindow:
 	def mk_menu_user(self, event, iter):
 		'''Make contact's popup menu'''
 		model = self.tree.get_model()
-		jid = model[iter][3].decode('utf-8')
+		jid = model[iter][C_JID].decode('utf-8')
 		path = model.get_path(iter)
-		account = model[iter][4].decode('utf-8')
+		account = model[iter][C_ACCOUNT].decode('utf-8')
 		contact = gajim.get_highest_prio_contact_from_contacts(
 			gajim.contacts[account][jid])
 		
@@ -864,9 +876,9 @@ class RosterWindow:
 	def mk_menu_agent(self, event, iter):
 		'''Make agent's popup menu'''
 		model = self.tree.get_model()
-		jid = model[iter][3].decode('utf-8')
+		jid = model[iter][C_JID].decode('utf-8')
 		path = model.get_path(iter)
-		account = model[iter][4].decode('utf-8')
+		account = model[iter][C_ACCOUNT].decode('utf-8')
 		user = gajim.contacts[account][jid][0]
 		menu = gtk.Menu()
 		
@@ -928,7 +940,7 @@ class RosterWindow:
 	def mk_menu_account(self, event, iter):
 		'''Make account's popup menu'''
 		model = self.tree.get_model()
-		account = model[iter][3].decode('utf-8')
+		account = model[iter][C_JID].decode('utf-8')
 		
 		#FIXME: make most menuitems of this menu insensitive if account is offline
 
@@ -1046,7 +1058,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			model, iter = treeselection.get_selected()
 			if not iter:
 				return
-			type = model[iter][2]
+			type = model[iter][C_TYPE]
 			if type in ('contact', 'group'):
 				path = model.get_path(iter)
 				self.on_rename(widget, iter, path)
@@ -1056,9 +1068,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			model, iter = treeselection.get_selected()
 			if not iter:
 				return
-			jid = model[iter][3].decode('utf-8')
-			account = model[iter][4].decode('utf-8')
-			type = model[iter][2]
+			jid = model[iter][C_JID].decode('utf-8')
+			account = model[iter][C_ACCOUNT].decode('utf-8')
+			type = model[iter][C_TYPE]
 			if type in ('account', 'group'):
 				return
 			user = gajim.contacts[account][jid][0]
@@ -1069,7 +1081,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 
 	def show_appropriate_context_menu(self, event, iter):
 		model = self.tree.get_model()
-		type = model[iter][2]
+		type = model[iter][C_TYPE]
 		if type == 'group':
 			self.mk_menu_g(event, iter)
 		elif type == 'agent':
@@ -1119,10 +1131,10 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.tree.get_selection().select_path(path)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
-			type = model[iter][2]
+			type = model[iter][C_TYPE]
 			if type in ('agent', 'contact'):
-				account = model[iter][4].decode('utf-8')
-				jid = model[iter][3].decode('utf-8')
+				account = model[iter][C_ACCOUNT].decode('utf-8')
+				jid = model[iter][C_JID].decode('utf-8')
 				if self.plugin.windows[account]['chats'].has_key(jid):
 					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 				elif gajim.contacts[account].has_key(jid):
@@ -1141,7 +1153,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				return False
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
-			type = model[iter][2]
+			type = model[iter][C_TYPE]
 			if type == 'group':
 				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 					if (self.tree.row_expanded(path)):
@@ -1609,9 +1621,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		'''When an iter is double clicked: open the chat window'''
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
-		account = model[iter][4].decode('utf-8')
-		type = model[iter][2]
-		jid = model[iter][3].decode('utf-8')
+		account = model[iter][C_ACCOUNT].decode('utf-8')
+		type = model[iter][C_TYPE]
+		jid = model[iter][C_JID].decode('utf-8')
 		if type in ('group', 'account'):
 			if self.tree.row_expanded(path):
 				self.tree.collapse_row(path)
@@ -1632,11 +1644,11 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if gajim.config.get('mergeaccounts') or len(gajim.connections) == 1:
 			accounts = gajim.connections.keys()
 		else:
-			accounts = [model[iter][4].decode('utf-8')]
-		type = model[iter][2]
+			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
+		type = model[iter][C_TYPE]
 		if type == 'group':
 			model.set_value(iter, 0, self.jabber_state_images['opened'])
-			jid = model[iter][3].decode('utf-8')
+			jid = model[iter][C_JID].decode('utf-8')
 			for account in accounts:
 				if gajim.groups[account].has_key(jid): # This account has this group
 					gajim.groups[account][jid]['expand'] = True
@@ -1659,11 +1671,11 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if gajim.config.get('mergeaccounts') or len(gajim.connections) == 1:
 			accounts = gajim.connections.keys()
 		else:
-			accounts = [model[iter][4].decode('utf-8')]
-		type = model[iter][2]
+			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
+		type = model[iter][C_TYPE]
 		if type == 'group':
 			model.set_value(iter, 0, self.jabber_state_images['closed'])
-			jid = model[iter][3].decode('utf-8')
+			jid = model[iter][C_JID].decode('utf-8')
 			for account in accounts:
 				if gajim.groups[account].has_key(jid): # This account has this group
 					gajim.groups[account][jid]['expand'] = False
@@ -1689,14 +1701,14 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.editing_path = None
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
-		account = model[iter][4].decode('utf-8')
-		jid = model[iter][3].decode('utf-8')
-		type = model[iter][2]
+		account = model[iter][C_ACCOUNT].decode('utf-8')
+		jid = model[iter][C_JID].decode('utf-8')
+		type = model[iter][C_TYPE]
 		# restore the number of resources string at the end of contact name
 		if type == 'contact' and len(gajim.contacts[account][jid]) > 1:
 			self.draw_contact(jid, account)
 		# reset editable to False
-		model[iter][5] = False
+		model[iter][C_EDITABLE] = False
 
 	def on_cell_edited(self, cell, row, new_text):
 		'''When an iter is edited:
@@ -1715,9 +1727,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			return
 		self.editing_path = None
 		new_text = new_text.decode('utf-8')
-		account = model[iter][4].decode('utf-8')
-		jid = model[iter][3].decode('utf-8')
-		type = model[iter][2]
+		account = model[iter][C_ACCOUNT].decode('utf-8')
+		jid = model[iter][C_JID].decode('utf-8')
+		type = model[iter][C_TYPE]
 		if type == 'contact':
 			old_text = gajim.contacts[account][jid][0].name
 			if old_text != new_text:
@@ -1726,7 +1738,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.connections[account].update_contact(jid, new_text, u.groups)
 			self.draw_contact(jid, account)
 		elif type == 'group':
-			old_name = model[iter][1].decode('utf-8')
+			old_name = model[iter][C_NAME].decode('utf-8')
 			#  Groups maynot change name from or to 'not in the roster'
 			if _('not in the roster') in (new_text, old_name):
 				return
@@ -1789,7 +1801,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		model = self.status_combobox.get_model()
 		iter = model.get_iter_root()
 		while iter:
-			model.set_value(iter, 1, self.jabber_state_images[model[iter][2]])
+			model.set_value(iter, 1, self.jabber_state_images[model[iter][C_TYPE]])
 			iter = model.iter_next(iter)
 		# Update the systray
 		if self.plugin.systray_enabled:
@@ -1823,17 +1835,17 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	def iconCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for icon renderer'''
 		theme = gajim.config.get('roster_theme')
-		if model[iter][2] == 'account':
+		if model[iter][C_TYPE] == 'account':
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'accountbgcolor'))
 			renderer.set_property('xalign', 0)
-		elif model[iter][2] == 'group':
+		elif model[iter][C_TYPE] == 'group':
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'groupbgcolor'))
 			renderer.set_property('xalign', 0.5)
 		else:
-			jid = model[iter][3].decode('utf-8')
-			account = model[iter][4].decode('utf-8')
+			jid = model[iter][C_JID].decode('utf-8')
+			account = model[iter][C_ACCOUNT].decode('utf-8')
 			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in gajim.to_be_removed[account]:
@@ -1847,7 +1859,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	def nameCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for name renderer'''
 		theme = gajim.config.get('roster_theme')
-		if model[iter][2] == 'account':
+		if model[iter][C_TYPE] == 'account':
 			renderer.set_property('foreground', 
 				gajim.config.get_per('themes', theme, 'accounttextcolor'))
 			renderer.set_property('cell-background', 
@@ -1856,7 +1868,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.config.get_per('themes', theme, 'accountfont'))
 			renderer.set_property('xpad', 0)
 			renderer.set_property('width', 3)
-		elif model[iter][2] == 'group':
+		elif model[iter][C_TYPE] == 'group':
 			renderer.set_property('foreground', 
 				gajim.config.get_per('themes', theme, 'grouptextcolor'))
 			renderer.set_property('cell-background', 
@@ -1865,8 +1877,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.config.get_per('themes', theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
 		else:
-			jid = model[iter][3].decode('utf-8')
-			account = model[iter][4].decode('utf-8')
+			jid = model[iter][C_JID].decode('utf-8')
+			account = model[iter][C_ACCOUNT].decode('utf-8')
 			renderer.set_property('foreground', 
 				gajim.config.get_per('themes', theme, 'contacttextcolor'))
 			if jid in gajim.newly_added[account]:
@@ -1883,15 +1895,15 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	def fill_secondary_pixbuf_rederer(self, column, renderer, model, iter, data=None):
 		'''When a row is added, set properties for secondary renderer (avatar or tls)'''
 		theme = gajim.config.get('roster_theme')
-		if model[iter][2] == 'account':
+		if model[iter][C_TYPE] == 'account':
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'accountbgcolor'))
-		elif model[iter][2] == 'group':
+		elif model[iter][C_TYPE] == 'group':
 			renderer.set_property('cell-background', 
 				gajim.config.get_per('themes', theme, 'groupbgcolor'))
 		else:
-			jid = model[iter][3].decode('utf-8')
-			account = model[iter][4].decode('utf-8')
+			jid = model[iter][C_JID].decode('utf-8')
+			account = model[iter][C_ACCOUNT].decode('utf-8')
 			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in gajim.to_be_removed[account]:
@@ -1971,7 +1983,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if gajim.config.get('mergeaccounts') or len(gajim.connections) == 1:
 			merge = 1
 		if len(path) == 3 - merge:
-			data = model[iter][3]
+			data = model[iter][C_JID]
 		selection.set(selection.target, 8, data)
 
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
