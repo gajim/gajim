@@ -38,7 +38,7 @@ class AdvancedConfigurationWindow:
 	def __init__(self, plugin):
 		self.plugin = plugin
 
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_configuration_window', None)
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_configuration_window', APP)
 		self.window = self.xml.get_widget('advanced_configuration_window')
 		self.entry = self.xml.get_widget('advanced_entry')
 		self.desc_label = self.xml.get_widget('advanced_desc_label')
