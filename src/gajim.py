@@ -1243,7 +1243,9 @@ if __name__ == '__main__':
 					command = path_to_gajim_script + ' open_chat %s'
 				else: # 'installed'
 					command = 'gajim-remote open_chat %s'
+				client.set_bool('/desktop/gnome/url-handlers/xmpp/enabled', True)
 				client.set_string('/desktop/gnome/url-handlers/xmpp/command', command)
+				client.set_bool('/desktop/gnome/url-handlers/xmpp/needs_terminal', False)
 	
 	Interface()
 	gtk.main()
