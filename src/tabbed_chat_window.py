@@ -419,13 +419,13 @@ timestamp, contact):
 		in the last 5 seconds?
 		if yes we go active for mouse, composing for kbd
 		if no we go paused if we were previously composing '''
+		
+		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 		if jid not in self.xmls or contact is None:
 			# the tab with jid is no longer open or contact left
 			# stop timer
 			return False # stop looping
 
-		# FIXME: Why don't we just pass contact?
-		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 		current_state = contact.chatstate
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
@@ -451,12 +451,11 @@ timestamp, contact):
 		in the last 30 seconds?
 		if yes we go active
 		if no we go inactive '''
+		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
  		if jid not in self.xmls or contact is None:
 			# the tab with jid is no longer open or contact left
 			return False # stop looping
 
-		# FIXME: Why don't we just pass contact?
-		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 		current_state = contact.chatstate
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
