@@ -1674,12 +1674,12 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			if not account in self.collapsed_rows:
 				self.collapsed_rows.append(account)
 
-	def on_editing_started (self, cell, event, row):
+	def on_editing_started(self, cell, event, row):
 		''' start editing a cell in the tree  '''
 		path = self.tree.get_cursor()[0]
 		self.editing_path = path
 		
-	def on_editing_canceled (self, cell):
+	def on_editing_canceled(self, cell):
 		'''editing has been canceled'''
 		path = self.tree.get_cursor()[0]
 		# do not set new name if row order has changed
@@ -1695,7 +1695,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		# restore the number of resources string at the end of contact name
 		if type == 'contact' and len(gajim.contacts[account][jid]) > 1:
 			self.draw_contact(jid, account)
-		# reset editing to False
+		# reset editable to False
 		model[iter][5] = False
 
 	def on_cell_edited(self, cell, row, new_text):

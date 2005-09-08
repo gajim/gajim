@@ -75,15 +75,18 @@ class AdvancedConfigurationWindow:
 		treeview.set_model(self.modelfilter)
 		
 		# connect signal for selection change
-		treeview.get_selection().connect('changed', self.on_advanced_treeview_selection_changed)
+		treeview.get_selection().connect('changed',
+			self.on_advanced_treeview_selection_changed)
 		
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 		self.plugin.windows['advanced_config'] = self
 
 	def cb_value_column_data(self, col, cell, model, iter):
-		opttype = model[iter][2].decode('utf-8')
-		if opttype == 'boolean':
+		optname = model[iter][0]
+		opttype = model[iter][2]
+		if opttype == 'boolean' or optname.find('password') != -1 or\
+			optname.find('passphrase') != -1:
 			cell.set_property('editable', 0)
 		else:
 			cell.set_property('editable', 1)
@@ -166,8 +169,7 @@ class AdvancedConfigurationWindow:
 		if val[OPT_TYPE]:
 			type = val[OPT_TYPE][0]
 		if name.find('password') != -1 or name.find('passphrase') != -1:
-			print name
-			val[OPT_VAL] = _('Hidden')
+			val[OPT_VAL] = _('Hidden') # override passwords with this string
 		model.append(iter, [name, val[OPT_VAL], type])
 
 	def visible_func(self, model, iter):
