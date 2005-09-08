@@ -198,7 +198,6 @@ class SignalObject(DbusPrototype):
 			return None
 		if jid.startswith('xmpp://'):
 			jid = jid[7:] # len('xmpp://') = 7
-			#FIXME: does not work :(((
 
 		if account:
 			accounts = [account]
