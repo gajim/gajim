@@ -1240,7 +1240,7 @@ if __name__ == '__main__':
 				'gajim-remote', True)
 			if path_to_gajim_script:
 				if type == 'svn':
-					command = path_to_gajim_script + 'open_chat %s'
+					command = path_to_gajim_script + ' open_chat %s'
 				else: # 'installed'
 					command = 'gajim-remote open_chat %s'
 				client.set_string('/desktop/gnome/url-handlers/xmpp/command', command)
