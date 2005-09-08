@@ -175,7 +175,10 @@ class AdvancedConfigurationWindow:
 		if val[OPT_TYPE]:
 			type = val[OPT_TYPE][0]
 		if name.find('password') != -1 or name.find('passphrase') != -1:
-			val[OPT_VAL] = _('Hidden') # override passwords with this string
+			pass # FIXME: do not save Hidden as our pass!
+			# just opening once the advanced editor and then closing
+			# f$$cks it all up
+			#val[OPT_VAL] = _('Hidden') # override passwords with this string
 		model.append(iter, [name, val[OPT_VAL], type])
 
 	def visible_func(self, model, iter):
