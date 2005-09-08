@@ -135,9 +135,9 @@ class Connection:
 		self.files_props = {}
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
-		self.privacy_rules_supported = None
+		self.privacy_rules_supported = False
 		#Do we continue connection when we get roster (send presence,get vcard...)
-		self.continue_connect = False
+		self.continue_connect_info = None
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
 			gajim.config.set('usegpg', True)
