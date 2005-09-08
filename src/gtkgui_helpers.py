@@ -22,6 +22,7 @@ import xml.sax.saxutils
 import gtk
 import gobject
 import os
+import sys
 from common import i18n
 i18n.init()
 _ = i18n._
