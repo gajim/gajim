@@ -1374,7 +1374,8 @@ class Connection:
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
 				_('Check your connection or try again later')))
 			return None
-		self.server_resource = con.Resource
+		if hasattr(con, 'Resource'):
+			self.server_resource = con.Resource
 		con.RegisterEventHandler(self._event_dispatcher)
 		if auth:
 			con.initRoster()
