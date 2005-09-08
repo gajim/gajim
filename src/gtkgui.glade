@@ -13470,14 +13470,14 @@ Status message</property>
 	      <child>
 		<widget class="GtkLabel" id="label256">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">You need to have an account in order to connect to
-the Jabber network.</property>
+		  <property name="label" translatable="yes">You need to have an account in order to connect
+to the Jabber network.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
 		  <property name="wrap">False</property>
 		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
+		  <property name="xalign">0</property>
 		  <property name="yalign">0.5</property>
 		  <property name="xpad">0</property>
 		  <property name="ypad">0</property>
@@ -13622,6 +13622,7 @@ the Jabber network.</property>
 
 	  <child>
 	    <widget class="GtkVBox" id="existing_vbox">
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">5</property>
@@ -13629,13 +13630,13 @@ the Jabber network.</property>
 	      <child>
 		<widget class="GtkLabel" id="label268">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Please fill in the data for your existing account</property>
+		  <property name="label" translatable="yes">&lt;b&gt;Please fill in the data for your existing account&lt;/b&gt;</property>
 		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
+		  <property name="use_markup">True</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
 		  <property name="wrap">False</property>
 		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
+		  <property name="xalign">0</property>
 		  <property name="yalign">0.5</property>
 		  <property name="xpad">0</property>
 		  <property name="ypad">0</property>
@@ -13661,7 +13662,7 @@ the Jabber network.</property>
 		  <property name="column_spacing">12</property>
 
 		  <child>
-		    <widget class="GtkEntry" id="nick_entry">
+		    <widget class="GtkEntry" id="existing_nick_entry">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="editable">True</property>
@@ -13711,7 +13712,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkComboBoxEntry" id="server_comboboxentry">
+		    <widget class="GtkComboBoxEntry" id="existing_server_comboboxentry">
 		      <property name="visible">True</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
@@ -13740,7 +13741,7 @@ the Jabber network.</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">pass_entry</property>
+		      <property name="mnemonic_widget">existing_pass_entry</property>
 		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 		      <property name="width_chars">-1</property>
 		      <property name="single_line_mode">False</property>
@@ -13757,7 +13758,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="save_pass_checkbutton">
+		    <widget class="GtkCheckButton" id="existing_save_pass_checkbutton">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">If checked, Gajim will remember the password for this account</property>
 		      <property name="can_focus">True</property>
@@ -13780,7 +13781,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkEntry" id="pass_entry">
+		    <widget class="GtkEntry" id="existing_pass_entry">
 		      <property name="visible">True</property>
 		      <property name="sensitive">False</property>
 		      <property name="can_focus">True</property>
@@ -13814,7 +13815,7 @@ the Jabber network.</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">nick_entry</property>
+		      <property name="mnemonic_widget">existing_nick_entry</property>
 		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 		      <property name="width_chars">-1</property>
 		      <property name="single_line_mode">False</property>
@@ -13861,7 +13862,7 @@ the Jabber network.</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">proxyhost_entry</property>
+			      <property name="mnemonic_widget">existing_proxyhost_entry</property>
 			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			      <property name="width_chars">-1</property>
 			      <property name="single_line_mode">False</property>
@@ -13890,7 +13891,7 @@ the Jabber network.</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">proxyport_entry</property>
+			      <property name="mnemonic_widget">existing_proxyport_entry</property>
 			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			      <property name="width_chars">-1</property>
 			      <property name="single_line_mode">False</property>
@@ -13919,7 +13920,7 @@ the Jabber network.</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">proxyuser_entry</property>
+			      <property name="mnemonic_widget">existing_proxyuser_entry</property>
 			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			      <property name="width_chars">-1</property>
 			      <property name="single_line_mode">False</property>
@@ -13948,7 +13949,7 @@ the Jabber network.</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">proxypass_entry</property>
+			      <property name="mnemonic_widget">existing_proxypass_entry</property>
 			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			      <property name="width_chars">-1</property>
 			      <property name="single_line_mode">False</property>
@@ -13965,7 +13966,7 @@ the Jabber network.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="proxyhost_entry">
+			    <widget class="GtkEntry" id="existing_proxyhost_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -13986,7 +13987,7 @@ the Jabber network.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="proxyport_entry">
+			    <widget class="GtkEntry" id="existing_proxyport_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -14007,7 +14008,7 @@ the Jabber network.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="proxyuser_entry">
+			    <widget class="GtkEntry" id="existing_proxyuser_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -14028,7 +14029,7 @@ the Jabber network.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="proxypass_entry">
+			    <widget class="GtkEntry" id="existing_proxypass_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -14083,7 +14084,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkLabel" id="jid_label">
+		    <widget class="GtkLabel" id="existing_jid_label">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label">&lt;span background=&quot;lightyellow&quot;&gt;&lt;/span&gt;</property>
@@ -14177,6 +14178,7 @@ the Jabber network.</property>
 
 	  <child>
 	    <widget class="GtkVBox" id="register_vbox">
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">5</property>
@@ -14184,13 +14186,13 @@ the Jabber network.</property>
 	      <child>
 		<widget class="GtkLabel" id="label270">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Please fill in the data for your new account</property>
+		  <property name="label" translatable="yes">&lt;b&gt;Please fill in the data for your new account&lt;/b&gt;</property>
 		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
+		  <property name="use_markup">True</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
 		  <property name="wrap">False</property>
 		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
+		  <property name="xalign">0</property>
 		  <property name="yalign">0.5</property>
 		  <property name="xpad">0</property>
 		  <property name="ypad">0</property>
@@ -14216,7 +14218,7 @@ the Jabber network.</property>
 		  <property name="column_spacing">12</property>
 
 		  <child>
-		    <widget class="GtkEntry" id="nick_entry">
+		    <widget class="GtkEntry" id="register_nick_entry">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="editable">True</property>
@@ -14226,7 +14228,7 @@ the Jabber network.</property>
 		      <property name="has_frame">True</property>
 		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
-		      <signal name="changed" handler="on_register_nick_entry_changed" last_modification_time="Sun, 24 Jul 2005 14:30:37 GMT"/>
+		      <signal name="changed" handler="on_nick_entry_changed" last_modification_time="Thu, 08 Sep 2005 15:49:27 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -14266,7 +14268,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkComboBoxEntry" id="server_comboboxentry">
+		    <widget class="GtkComboBoxEntry" id="register_server_comboboxentry">
 		      <property name="visible">True</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
@@ -14283,7 +14285,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkButton" id="server_features_button">
+		    <widget class="GtkButton" id="register_server_features_button">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Click to see features (like MSN, ICQ transports) of jabber servers</property>
 		      <property name="can_focus">True</property>
@@ -14291,7 +14293,7 @@ the Jabber network.</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
-		      <signal name="clicked" handler="on_server_features_button_clicked" last_modification_time="Sun, 24 Jul 2005 14:24:18 GMT"/>
+		      <signal name="clicked" handler="on_register_server_features_button_clicked" last_modification_time="Thu, 08 Sep 2005 15:49:45 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">2</property>
@@ -14316,7 +14318,7 @@ the Jabber network.</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">pass_entry</property>
+		      <property name="mnemonic_widget">register_pass_entry</property>
 		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 		      <property name="width_chars">-1</property>
 		      <property name="single_line_mode">False</property>
@@ -14333,7 +14335,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="save_password_checkbutton">
+		    <widget class="GtkCheckButton" id="register_save_password_checkbutton">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">If checked, Gajim will remember the password for this account</property>
 		      <property name="can_focus">True</property>
@@ -14356,7 +14358,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkEntry" id="pass_entry">
+		    <widget class="GtkEntry" id="register_pass_entry">
 		      <property name="visible">True</property>
 		      <property name="sensitive">False</property>
 		      <property name="can_focus">True</property>
@@ -14390,7 +14392,7 @@ the Jabber network.</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">nick_entry</property>
+		      <property name="mnemonic_widget">register_nick_entry</property>
 		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 		      <property name="width_chars">-1</property>
 		      <property name="single_line_mode">False</property>
@@ -14435,7 +14437,7 @@ the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkLabel" id="jid_label">
+		    <widget class="GtkLabel" id="register_jid_label">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label">&lt;span background=&quot;lightyellow&quot;&gt;&lt;/span&gt;</property>
@@ -14494,7 +14496,7 @@ the Jabber network.</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">proxyhost_entry</property>
+			      <property name="mnemonic_widget">register_register_proxyhost_entry</property>
 			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			      <property name="width_chars">-1</property>
 			      <property name="single_line_mode">False</property>
@@ -14523,7 +14525,7 @@ the Jabber network.</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">proxyport_entry</property>
+			      <property name="mnemonic_widget">register_proxyport_entry</property>
 			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			      <property name="width_chars">-1</property>
 			      <property name="single_line_mode">False</property>
@@ -14552,7 +14554,7 @@ the Jabber network.</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">proxyuser_entry</property>
+			      <property name="mnemonic_widget">register_proxyuser_entry</property>
 			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			      <property name="width_chars">-1</property>
 			      <property name="single_line_mode">False</property>
@@ -14581,7 +14583,7 @@ the Jabber network.</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">proxypass_entry</property>
+			      <property name="mnemonic_widget">register_proxypass_entry</property>
 			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			      <property name="width_chars">-1</property>
 			      <property name="single_line_mode">False</property>
@@ -14598,7 +14600,7 @@ the Jabber network.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="register_proxyhost_entry">
+			    <widget class="GtkEntry" id="register_register_proxyhost_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -14619,7 +14621,7 @@ the Jabber network.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="proxyport_entry">
+			    <widget class="GtkEntry" id="register_proxyport_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -14640,7 +14642,7 @@ the Jabber network.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="proxyuser_entry">
+			    <widget class="GtkEntry" id="register_proxyuser_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -14661,7 +14663,7 @@ the Jabber network.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="proxypass_entry">
+			    <widget class="GtkEntry" id="register_proxypass_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
