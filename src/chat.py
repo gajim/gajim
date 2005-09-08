@@ -164,8 +164,11 @@ class Chat:
 		'''redraw the label of the tab
 		if chatstate is given that means we have HE SENT US a chatstate'''
 		unread = ''
-		if self.nb_unread[jid] > 1:
-			unread = '[' + unicode(self.nb_unread[jid]) + '] '
+		num_unread = self.nb_unread[jid]
+		if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
+			unread = '* '
+		elif num_unread > 1:
+			unread = '[' + unicode(num_unread) + '] '
 		# Update status images
 		self.set_state_image(jid)
 			
@@ -185,12 +188,6 @@ class Chat:
 				if chatstate == 'composing':
 					color = gajim.config.get_per('themes', theme,
 								     'state_composing_color')
-				elif unread and self.window.get_property('has-toplevel-focus'):
-					color = gajim.config.get_per('themes', theme,
-								     'state_active_color')
-				elif unread:
-					color = gajim.config.get_per('themes', theme,
-								     'state_unread_color')
 				elif chatstate == 'inactive':
 					color = gajim.config.get_per('themes', theme,
 								     'state_inactive_color')
@@ -200,6 +197,12 @@ class Chat:
 				elif chatstate == 'paused':
 					color = gajim.config.get_per('themes', theme,
 								     'state_paused_color')
+				elif unread and self.window.get_property('has-toplevel-focus'):
+					color = gajim.config.get_per('themes', theme,
+								     'state_active_color')
+				elif unread:
+					color = gajim.config.get_per('themes', theme,
+								     'state_unread_color')
 				else:
 					color = gajim.config.get_per('themes', theme,
 								     'state_active_color')

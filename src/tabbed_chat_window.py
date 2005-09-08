@@ -256,7 +256,7 @@ timestamp, contact):
 			banner_status_image.set_from_pixbuf(scaled_pix)
 
 		# Set tab image; unread messages show the 'message' image
-		if self.nb_unread[jid]:
+		if self.nb_unread[jid] and gajim.config.get('show_unread_tab_icon'):
 			tab_image = state_images['message']
 		else:
 			tab_image = banner_image
