@@ -165,6 +165,9 @@ class AdvancedConfigurationWindow:
 		type = ''
 		if val[OPT_TYPE]:
 			type = val[OPT_TYPE][0]
+		if name.find('password') != -1 or name.find('passphrase') != -1:
+			print name
+			val[OPT_VAL] = _('Hidden')
 		model.append(iter, [name, val[OPT_VAL], type])
 
 	def visible_func(self, model, iter):
