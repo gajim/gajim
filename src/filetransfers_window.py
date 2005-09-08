@@ -442,15 +442,17 @@ _('Connection with peer cannot be established.'))
 			eta, speed = self._get_eta_and_speed(full_size, transfered_size, 
 				file_props['elapsed-time'])
 			
+			self.model.set(iter, C_PROGRESS, text)
+			self.model.set(iter, C_PERCENT, int(percent))
+			text = self._format_time(eta)
 			#This should make the string Kb/s, 
 			#where 'Kb' part is taken from %s.
 			#Only the last 's' should be translated.
-			text += _(' (%s/s)') % helpers.convert_bytes(speed)
-			self.model.set(iter, C_PROGRESS, text)
-			self.model.set(iter, C_PERCENT, int(percent))
+			text += '\n'
+			text += _('(%s/s)') % helpers.convert_bytes(speed)
+			self.model.set(iter, C_TIME, text)
 			
-			self.model.set(iter, C_TIME, 
-				self._format_time(eta))
+			# try to guess what should be the status image
 			if file_props['type'] == 'r':
 				status = 'download'
 			else:
