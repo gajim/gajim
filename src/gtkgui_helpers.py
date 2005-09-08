@@ -206,13 +206,19 @@ def get_abspath_for_script(scriptname, want_type = False):
 			script += 'cd %s' % cwd
 			path_to_script = cwd + '/../scripts/gajim_sm_script'
 				
-			if os.path.exists(path_to_script):
-				os.remove(path_to_script)
-			f = open(path_to_script, 'w')
-			script += '\nexec python -OOt gajim.py $0 $@\n'
-			f.write(script)
-			f.close()
-			os.chmod(path_to_script, 0700)
+			try:
+				if os.path.exists(path_to_script):
+					os.remove(path_to_script)
+
+				f = open(path_to_script, 'w')
+				script += '\nexec python -OOt gajim.py $0 $@\n'
+				f.write(script)
+				f.close()
+				os.chmod(path_to_script, 0700)
+			except OSError: # do not traceback (could be a permission problem)
+				#we talk about a file here
+				s = _('Could not write to %s. Session Management support will not work') % path_to_script
+				print >> sys.stderr, s
 
 	else: # normal user (not svn user)
 		type = 'install'
