@@ -941,7 +941,7 @@ class Interface:
 			emot_file = gajim.config.get_per('emoticons', emot, 'path')
 			if not self.image_is_ok(emot_file):
 				continue
-			self.emoticons[emot] = emot_file
+			self.emoticons[emot.upper()] = emot_file
 		
 		# update regular expressions
 		self.make_regexps()
