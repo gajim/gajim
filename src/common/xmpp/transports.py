@@ -31,6 +31,7 @@ import socket,select,base64,dispatcher
 from simplexml import ustr
 from client import PlugIn
 from protocol import *
+import sys
 
 # determine which DNS resolution library is available
 HAVE_DNSPYTHON = False
