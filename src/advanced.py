@@ -32,6 +32,12 @@ gtk.glade.textdomain(APP)
 OPT_TYPE = 0
 OPT_VAL = 1
 
+(
+C_PREFNAME,
+C_VALUE,
+C_TYPE
+) = range(3)
+
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class AdvancedConfigurationWindow:
@@ -83,8 +89,8 @@ class AdvancedConfigurationWindow:
 		self.plugin.windows['advanced_config'] = self
 
 	def cb_value_column_data(self, col, cell, model, iter):
-		optname = model[iter][0]
-		opttype = model[iter][2]
+		optname = model[iter][C_PREFNAME]
+		opttype = model[iter][C_TYPE]
 		if opttype == 'boolean' or optname.find('password') != -1 or\
 			optname.find('passphrase') != -1:
 			cell.set_property('editable', 0)
@@ -149,7 +155,7 @@ class AdvancedConfigurationWindow:
 		else:
 			iter = model.iter_children(parent_iter)
 		while iter:
-			if model[iter][0].decode('utf-8') == name:
+			if model[iter][C_PREFNAME].decode('utf-8') == name:
 				break
 			iter = model.iter_next(iter)
 		return iter
@@ -176,16 +182,16 @@ class AdvancedConfigurationWindow:
 		str = self.entry.get_text().decode('utf-8')
 		if str is None or str == '':
 			return True # show all
-		name = model[iter][0].decode('utf-8')
+		name = model[iter][C_PREFNAME].decode('utf-8')
 		# If a child of the iter matches, we return True
 		if model.iter_has_child(iter):
 			iterC = model.iter_children(iter)
 			while iterC:
-				nameC = model[iterC][0].decode('utf-8')
+				nameC = model[iterC][C_PREFNAME].decode('utf-8')
 				if model.iter_has_child(iterC):
 					iterCC = model.iter_children(iterC)
 					while iterCC:
-						nameCC = model[iterCC][0].decode('utf-8')
+						nameCC = model[iterCC][C_PREFNAME].decode('utf-8')
 						if nameCC.find(str) != -1:
 							return True
 						iterCC = model.iter_next(iterCC)
