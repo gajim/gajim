@@ -921,7 +921,7 @@ class Interface:
 		emoticons_pattern = ''
 		for emoticon in self.emoticons: # travel thru emoticons list
 			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
-			emoticons_pattern += '^' + emoticon_escaped + '$|'# | means or in regexp
+			emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
 
 		emot_and_basic_pattern = emoticons_pattern + basic_pattern
 		self.emot_and_basic_re = sre.compile(emot_and_basic_pattern,
