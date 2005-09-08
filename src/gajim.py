@@ -920,9 +920,9 @@ class Interface:
 		
 		emoticons_pattern = ''
 		# sort keys by length so :qwe emot is checked before :q
-		keys = self.self.emoticons.keys()
-		sorted_keys = keys.sort(self.on_emoticon_sort)
-		for emoticon in sorted_keys: # travel thru emoticons list
+		keys = self.emoticons.keys()
+		keys.sort(self.on_emoticon_sort)
+		for emoticon in keys: # travel thru emoticons list
 			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
 			emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
 
