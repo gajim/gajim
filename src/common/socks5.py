@@ -174,7 +174,6 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 			reader.file_props['last-time'] = time.time()
 			reader.file_props['received-len'] = 0
 			reader.pauses = 0
-			reader.send_raw(reader._get_nl_byte())
 			result = reader.write_next()
 			self.process_result(result, reader)
 	
@@ -417,19 +416,6 @@ class Socks5:
 	
 	def write_next(self, initial = False):
 		if initial:
-			try:
-				# send
-				lenn = self._send(self._get_nl_byte())
-			except Exception, e:
-				errnum = e.args[0]
-				# peer cannot read at the moment, continue later
-				if errnum in [EINTR, ENOBUFS, EWOULDBLOCK]:
-					pass
-				else: # peer will not be able to read anymore
-					self.state = 8
-					self.disconnect()
-					self.file_props['error'] = -1
-					return -1
 			self.state = 7
 			return 1
 		if self.remaining_buff != '':
@@ -517,13 +503,6 @@ class Socks5:
 				except Exception, e:
 					buff = ''
 				first_byte = False
-				if self.file_props['received-len'] == 0:
-					if len(buff) > 0:
-						# delimiter between auth and data
-						if ord(buff[0]) == 0xD:
-							first_byte = True
-							buff = buff[1:]
-				
 				current_time = time.time()
 				self.file_props['elapsed-time'] += current_time - \
 					self.file_props['last-time']
@@ -619,10 +598,6 @@ class Socks5:
 		buff = struct.pack('!BBBBB%dsBB' % len(msg), 
 			0x05, command, 0x00, 0x03, len(msg), msg, 0, 0)
 		return buff
-	
-	def _get_nl_byte(self):
-		''' This is sent between auth and real data '''
-		return struct.pack('!B', 0x0D)
 		
 	def _parse_request_buff(self, buff):
 		try: # don't trust on what comes from the outside
@@ -901,7 +876,6 @@ class Socks5Receiver(Socks5):
 				self.file_props['last-time'] = time.time()
 				self.file_props['received-len'] = 0
 				self.pauses = 0
-				self.send_raw(self._get_nl_byte())
 			self.state = 6 # send/get file contents
 		if self.state < 5:
 			self.state += 1
