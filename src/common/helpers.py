@@ -30,6 +30,7 @@ Q_ = i18n.Q_
 def convert_bytes(string):
 	suffix = ''
 	# IEC standard says KiB = 1024 bytes KB = 1000 bytes
+	# but do we use the standard?
 	use_kib_mib = gajim.config.get('use_kib_mib')
 	align = 1024.
 	bytes = float(string)
