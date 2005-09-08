@@ -419,8 +419,9 @@ timestamp, contact):
 		in the last 5 seconds?
 		if yes we go active for mouse, composing for kbd
 		if no we go paused if we were previously composing '''
-		if jid not in self.xmls:
-			# the tab with jid is no longer open. stop timer
+		if jid not in self.xmls or contact is None:
+			# the tab with jid is no longer open or contact left
+			# stop timer
 			return False # stop looping
 
 		# FIXME: Why don't we just pass contact?
@@ -450,8 +451,8 @@ timestamp, contact):
 		in the last 30 seconds?
 		if yes we go active
 		if no we go inactive '''
-		if jid not in self.xmls:
-			# the tab with jid is no longer open. stop timer
+ 		if jid not in self.xmls or contact is None:
+			# the tab with jid is no longer open or contact left
 			return False # stop looping
 
 		# FIXME: Why don't we just pass contact?
