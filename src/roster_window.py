@@ -1258,8 +1258,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	def get_status_message(self, show):
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
 			(show == 'offline' and not gajim.config.get('ask_offline_status')):
-			lowered_uf_status_msg = helpers.get_uf_show(show).lower()
-			return _("I'm %s") % lowered_uf_status_msg
+			return ''
 		dlg = dialogs.ChangeStatusMessageDialog(self.plugin, show)
 		message = dlg.run()
 		return message
