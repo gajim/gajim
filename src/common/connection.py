@@ -135,7 +135,9 @@ class Connection:
 		self.files_props = {}
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
-		self.privacy_rules_supported = False
+		self.privacy_rules_supported = None
+		#Do we continue connection when we get roster (send presence,get vcard...)
+		self.continue_connect = False
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
 			gajim.config.set('usegpg', True)
@@ -1137,6 +1139,36 @@ class Connection:
 			del roster[name + '@' + hostname]
 		self.dispatch('ROSTER', roster)
 
+		#continue connection
+		if self.connected > 1 and self.continue_connect_info:
+			show = self.continue_connect_info[0]
+			msg = self.continue_connect_info[1]
+			signed = self.continue_connect_info[2]
+			self.connected = STATUS_LIST.index(show)
+			sshow = helpers.get_xmpp_show(show)
+			#send our presence
+			if show == 'invisible':
+				self.send_invisible_presence(msg, signed, True)
+				return
+			prio =  unicode(gajim.config.get_per('accounts', self.name,
+				'priority'))
+			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
+			p = self.add_sha(p)
+			if msg:
+				p.setStatus(msg)
+			if signed:
+			    p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+
+			if self.connection:
+				self.connection.send(p)
+			self.dispatch('STATUS', show)
+			#ask our VCard
+			self.request_vcard(None)
+
+			#Get bookmarks from private namespace
+			self.get_bookmarks()
+		self.continue_connect_info = None
+
 	def _PrivateCB(self, con, iq_obj):
 		'''
 		Private Data (JEP 048 and 049)
@@ -1438,31 +1470,8 @@ class Connection:
 		return signed
 
 	def connect_and_init(self, show, msg, signed):
+		self.continue_connect_info = [show, msg, signed]
 		self.connection = self.connect()
-		if self.connected == 2:
-			self.connected = STATUS_LIST.index(show)
-			sshow = helpers.get_xmpp_show(show)
-			#send our presence
-			if show == 'invisible':
-				self.send_invisible_presence(msg, signed, True)
-				return
-			prio = unicode(gajim.config.get_per('accounts', self.name,
-				'priority'))
-			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
-			p = self.add_sha(p)
-			if msg:
-				p.setStatus(msg)
-			if signed:
-			    p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
-
-			if self.connection:
-				self.connection.send(p)
-			self.dispatch('STATUS', show)
-			#ask our VCard
-			self.request_vcard(None)
-
-			#Get bookmarks from private namespace
-			self.get_bookmarks()
 
 	def change_status(self, show, msg, sync = False, auto = False):
 		if sync:
