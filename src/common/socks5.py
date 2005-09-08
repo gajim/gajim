@@ -24,6 +24,7 @@ import select
 import os
 import struct
 import sha
+import time
 
 from errno import EWOULDBLOCK
 from errno import ENOBUFS
@@ -169,6 +170,8 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 			reader.file_props['completed'] = False
 			reader.file_props['paused'] = False
 			reader.file_props['stalled'] = False
+			reader.file_props['elapsed-time'] = 0
+			reader.file_props['last-time'] = time.time()
 			reader.file_props['received-len'] = 0
 			reader.pauses = 0
 			reader.send_raw(reader._get_nl_byte())
@@ -186,6 +189,8 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 				result = sender.send_file()
 				self.process_result(result, sender)
 			else:
+				file_props['elapsed-time'] = 0
+				file_props['last-time'] = time.time()
 				file_props['received-len'] = 0
 				sender.file_props = file_props
 				
@@ -248,7 +253,9 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 					sender.file_props['type'] == 'r':
 						result = sender.get_file_contents(0)
 						self.process_result(result, sender)
-				elif sender.state == 7 and not sender.file_props['paused']:
+				elif sender.state == 7:
+					if sender.file_props['paused']:
+						break
 					if not sender.connected:
 						self.process_result(-1, sender)
 						break
@@ -354,6 +361,7 @@ class Socks5:
 	def open_file_for_reading(self):
 		self.fd = open(self.file_props['file-name'],'rb')
 		self.fd.seek(self.size)
+		
 	def close_file(self):
 		try:
 			self.fd.close()
@@ -369,6 +377,8 @@ class Socks5:
 		else:
 			fd = open(self.file_props['file-name'],'wb')
 			self.file_props['fd'] = fd
+			self.file_props['elapsed-time'] = 0
+			self.file_props['last-time'] = time.time()
 			self.file_props['received-len'] = 0
 		return fd
 
@@ -442,6 +452,10 @@ class Socks5:
 					self.file_props['error'] = -1
 					return -1
 			self.size += lenn
+			current_time = time.time()
+			self.file_props['elapsed-time'] += current_time - \
+				self.file_props['last-time']
+			self.file_props['last-time'] = current_time
 			self.file_props['received-len'] = self.size
 			if self.size == int(self.file_props['size']):
 				self.state = 8 # end connection
@@ -483,6 +497,10 @@ class Socks5:
 			fd = self.get_fd()
 			fd.write(self.remaining_buff)
 			lenn = len(self.remaining_buff)
+			current_time = time.time()
+			self.file_props['elapsed-time'] += current_time - \
+				self.file_props['last-time']
+			self.file_props['last-time'] = current_time
 			self.file_props['received-len'] += lenn
 			self.remaining_buff = ''
 			if self.file_props['received-len'] == int(self.file_props['size']):
@@ -505,6 +523,11 @@ class Socks5:
 						if ord(buff[0]) == 0xD:
 							first_byte = True
 							buff = buff[1:]
+				
+				current_time = time.time()
+				self.file_props['elapsed-time'] += current_time - \
+					self.file_props['last-time']
+				self.file_props['last-time'] = current_time
 				self.file_props['received-len'] += len(buff)
 				fd.write(buff)
 				if len(buff) == 0 and first_byte is False:
@@ -667,6 +690,8 @@ class Socks5Sender(Socks5):
 		self.file_props['paused'] = False
 		self.file_props['stalled'] = False
 		self.file_props['connected'] = True
+		self.file_props['elapsed-time'] = 0
+		self.file_props['last-time'] = time.time()
 		self.file_props['received-len'] = 0
 		self.pauses = 0
 		return self.write_next(initial = True) # initial for nl byte
@@ -692,7 +717,7 @@ class Socks5Sender(Socks5):
 		self.state += 1 # go to the next step
 		return None
 			
-	def pending_data(self,timeout=0.01):
+	def pending_data(self,timeout=0):
 		''' return true if there is a data ready to be read '''
 		if self._sock is None:
 			return False
@@ -752,7 +777,7 @@ class Socks5Listener:
 		_sock[0].setblocking(False)
 		return _sock
 	
-	def pending_connection(self,timeout=0.005):
+	def pending_connection(self,timeout=0):
 		''' Returns true if there is a data ready to be read. '''
 		if self._serv is None:
 			return False
@@ -872,6 +897,8 @@ class Socks5Receiver(Socks5):
 				self.file_props['completed'] = False
 				self.file_props['paused'] = False
 				self.file_props['stalled'] = False
+				self.file_props['elapsed-time'] = 0
+				self.file_props['last-time'] = time.time()
 				self.file_props['received-len'] = 0
 				self.pauses = 0
 				self.send_raw(self._get_nl_byte())
@@ -887,7 +914,7 @@ class Socks5Receiver(Socks5):
 			return False
 		try:
 			if self.state in [2, 4, 6]: # auth response, connect, file data
-				return self.pending_read(0.01)
+				return self.pending_read(0)
 			elif self.state in [1, 3, 5]: # auth types, connect request
 				return True
 		except Exception, e:

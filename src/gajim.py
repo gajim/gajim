@@ -1012,7 +1012,7 @@ class Interface:
 				if gajim.connections[account].connected:
 					gajim.connections[account].process(0.01)
 				if gajim.socks5queue.connected:
-					gajim.socks5queue.process(0.01)
+					gajim.socks5queue.process(0)
 			for account in gajim.events_for_ui: #when we create a new account we don't have gajim.connection
 				while len(gajim.events_for_ui[account]):
 					gajim.mutex_events_for_ui.lock(self.exec_event, account)

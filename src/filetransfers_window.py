@@ -24,6 +24,7 @@ import gobject
 import pango
 import os
 import sys
+import time
 
 import gtkgui_helpers
 import tooltips
@@ -39,7 +40,16 @@ gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
-SID_INDEX = 5
+
+C_IMAGE = 0
+C_LABELS = 1
+C_FILE = 2
+C_PROGRESS = 3
+C_PERCENT = 4
+C_TIME = 5
+C_SID = 6
+
+
 class FileTransfersWindow:
 	def __init__(self, plugin):
 		self.files_props = {'r' : {}, 's': {}}
@@ -58,7 +68,7 @@ class FileTransfersWindow:
 			self.notify_ft_checkbox.set_active(True)
 		else:
 			self.notify_ft_checkbox.set_active(False)
-		self.model = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, int, str)
+		self.model = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, int, str, str)
 		self.tree.set_model(self.model)
 		col = gtk.TreeViewColumn()
 		
@@ -74,11 +84,11 @@ class FileTransfersWindow:
 		col = gtk.TreeViewColumn(_('File'))
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer, expand=False)
-		col.add_attribute(renderer, 'markup' , 1)
+		col.add_attribute(renderer, 'markup' , C_LABELS)
 		renderer.set_property('yalign', 0.)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer, expand=True)
-		col.add_attribute(renderer, 'markup' , 2)
+		col.add_attribute(renderer, 'markup' , C_FILE)
 		renderer.set_property('xalign', 0.)
 		renderer.set_property('yalign', 0.)
 		renderer.set_property('ellipsize', pango.ELLIPSIZE_END)
@@ -92,9 +102,24 @@ class FileTransfersWindow:
 		renderer.set_property('xalign', 0.5)
 		col.pack_start(renderer, expand = False)
 		col.set_expand(False)
-		col.add_attribute(renderer, 'text' , 3)
-		col.add_attribute(renderer, 'value' , 4)
+		col.add_attribute(renderer, 'text' , C_PROGRESS)
+		col.add_attribute(renderer, 'value' , C_PERCENT)
+		col.set_resizable(True)
 		self.tree.append_column(col)
+		
+		col = gtk.TreeViewColumn(_('Time'))
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, expand=False)
+		col.add_attribute(renderer, 'markup' , C_TIME)
+		renderer.set_property('yalign', 0.5)
+		renderer.set_property('xalign', 0.5)
+		renderer = gtk.CellRendererText()
+		renderer.set_property('ellipsize', pango.ELLIPSIZE_END)
+		col.set_resizable(True)
+		col.set_expand(False)
+		self.tree.append_column(col)
+		
+		
 		self.set_images()
 		self.tree.get_selection().set_mode(gtk.SELECTION_SINGLE)
 		self.tree.get_selection().connect('changed', self.selection_changed)
@@ -348,14 +373,15 @@ _('Connection with peer cannot be established.'))
 		iter = self.get_iter_by_sid(typ, sid)
 		if iter is None:
 			return
-		sid = self.model[iter][SID_INDEX].decode('utf-8')
+		sid = self.model[iter][C_SID].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if status == 'stop':
 			file_props['stopped'] = True
 		elif status == 'ok':
 			file_props['completed'] = True
-		self.model.set(iter, 0, self.images[status])
-	def format_percent(self, percent):
+		self.model.set(iter, C_IMAGE, self.images[status])
+		
+	def _format_percent(self, percent):
 		''' add extra spaces from both sides of the percent, so that
 		progress string has always a fixed size'''
 		_str = '          '
@@ -365,6 +391,32 @@ _('Connection with peer cannot be established.'))
 			_str += ' '
 		_str += unicode(percent) + '%          \n'
 		return _str
+		
+	def _format_time(self, _time):
+		
+		times = { 'hours': 0, 'minutes': 0, 'seconds': 0 }
+		_time = int(_time)
+		times['seconds'] = _time % 60
+		if _time >= 60:
+			_time /= 60
+			times['minutes'] = _time % 60
+			if _time >= 60:
+				times['hours'] = _time / 60
+		
+		#Print remaining time in format 00:00:00
+		#You can change the places of hours, minutes, seconds -
+		#they are not translatable.
+		return _('%(hours)02.d:%(minutes)02.d:%(seconds)02.d')  % times
+		
+	def _get_eta_and_speed(self, full_size, transfered_size, elapsed_time):
+		if elapsed_time == 0:
+			return 0., 0.
+		speed = round(float(transfered_size) / elapsed_time)
+		if speed == 0.:
+			return 0., 0.
+		remaining_size = full_size - transfered_size
+		eta = remaining_size / speed
+		return eta, speed
 		
 	def set_progress(self, typ, sid, transfered_size, iter = None):
 		''' change the progress of a transfer with new transfered size'''
@@ -379,14 +431,27 @@ _('Connection with peer cannot be established.'))
 		if iter is None:
 			iter = self.get_iter_by_sid(typ, sid)
 		if iter is not None:
-			text = self.format_percent(percent)
+			text = self._format_percent(percent)
 			if transfered_size == 0:
 				text += '0'
 			else:
 				text += helpers.convert_bytes(transfered_size)
 			text += '/' + helpers.convert_bytes(full_size)
-			self.model.set(iter, 3, text)
-			self.model.set(iter, 4, int(percent))
+			# Kb/s
+			
+			# remaining time
+			eta, speed = self._get_eta_and_speed(full_size, transfered_size, 
+				file_props['elapsed-time'])
+			
+			#This should make the string Kb/s, 
+			#where 'Kb' part is taken from %s.
+			#Only the last 's' should be translated.
+			text += _(' (%s/s)') % helpers.convert_bytes(speed)
+			self.model.set(iter, C_PROGRESS, text)
+			self.model.set(iter, C_PERCENT, int(percent))
+			
+			self.model.set(iter, C_TIME, 
+				self._format_time(eta))
 			if file_props['type'] == 'r':
 				status = 'download'
 			else:
@@ -406,7 +471,7 @@ _('Connection with peer cannot be established.'))
 		session id'''
 		iter = self.model.get_iter_root()
 		while iter:
-			if typ + sid == self.model[iter][SID_INDEX].decode('utf-8'):
+			if typ + sid == self.model[iter][C_SID].decode('utf-8'):
 				return iter
 			iter = self.model.iter_next(iter)
 	
@@ -427,6 +492,7 @@ _('Connection with peer cannot be established.'))
 		if os.path.exists(file_path) and os.path.isfile(file_path):
 			stat = os.stat(file_path)
 		os.stat(file_path)
+		file_props['elapsed-time'] = 0
 		file_props['size'] = unicode(stat[6])
 		file_props['sid'] = self.get_sid()
 		file_props['completed'] = False
@@ -441,6 +507,7 @@ _('Connection with peer cannot be established.'))
 		self.on_transfers_list_leave_notify_event(None)
 		if file_props is None:
 			return
+		file_props['elapsed-time'] = 0
 		self.files_props[file_props['type']][file_props['sid']] = file_props
 		iter = self.model.append()
 		text_labels = '<b>' + _('Name: ') + '</b>\n' 
@@ -455,9 +522,8 @@ _('Connection with peer cannot be established.'))
 			file_name = file_props['name']
 		text_props = gtkgui_helpers.escape_for_pango_markup(file_name) + '\n'
 		text_props += gtkgui_helpers.escape_for_pango_markup(contact.name)
-		self.model.set(iter, 1, text_labels, 2, text_props, SID_INDEX, \
+		self.model.set(iter, 1, text_labels, 2, text_props, C_SID, \
 			file_props['type'] + file_props['sid'])
-		#~ self.model.set(iter, 4, 40)
 		self.set_progress(file_props['type'], file_props['sid'], 0, iter)
 		if file_props.has_key('started') and file_props['started'] is False:
 			status = 'waiting'
@@ -486,7 +552,7 @@ _('Connection with peer cannot be established.'))
 			except:
 				self.tooltip.hide_tooltip()
 				return
-			sid = self.model[iter][SID_INDEX].decode('utf-8')
+			sid = self.model[iter][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
 			if file_props is not None:
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
@@ -567,7 +633,7 @@ _('Connection with peer cannot be established.'))
 			self.set_all_insensitive()
 			return
 		current_iter = self.model.get_iter(path)
-		sid = self.model[current_iter][SID_INDEX].decode('utf-8')
+		sid = self.model[current_iter][C_SID].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		self.remove_menuitem.set_sensitive(is_row_selected)
 		self.open_folder_menuitem.set_sensitive(is_row_selected)
@@ -624,7 +690,7 @@ _('Connection with peer cannot be established.'))
 		i = len(self.model) - 1
 		while i >= 0:
 			iter = self.model.get_iter((i))
-			sid = self.model[iter][SID_INDEX].decode('utf-8')
+			sid = self.model[iter][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
 			if file_props.has_key('completed') and file_props['completed']:
 				self.model.remove(iter)
@@ -661,9 +727,10 @@ _('Connection with peer cannot be established.'))
 		if selected is None or selected[1] is None:
 			return 
 		s_iter = selected[1]
-		sid = self.model[s_iter][SID_INDEX].decode('utf-8')
+		sid = self.model[s_iter][C_SID].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if self.is_transfer_paused(file_props):
+			file_props['last-time'] = time.time()
 			file_props['paused'] = False
 			types = {'r' : 'download', 's' : 'upload'}
 			self.set_status(file_props['type'], file_props['sid'], types[sid[0]])
@@ -678,7 +745,7 @@ _('Connection with peer cannot be established.'))
 		if selected is None or selected[1] is None:
 			return 
 		s_iter = selected[1]
-		sid = self.model[s_iter][SID_INDEX].decode('utf-8')
+		sid = self.model[s_iter][C_SID].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if not file_props.has_key('tt_account'):
 			return 
@@ -699,7 +766,7 @@ _('Connection with peer cannot be established.'))
 			# check if the current pointer is at the same path
 			# as it was before setting the timeout
 			iter = self.model.get_iter(props[0])
-			sid = self.model[iter][SID_INDEX].decode('utf-8')
+			sid = self.model[iter][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
 			rect =  self.tree.get_cell_area(props[0],props[1])
 			position = widget.window.get_origin()
@@ -795,7 +862,7 @@ _('Connection with peer cannot be established.'))
 		if selected is None or selected[1] is None:
 			return 
 		s_iter = selected[1]
-		sid = self.model[s_iter][SID_INDEX].decode('utf-8')
+		sid = self.model[s_iter][C_SID].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if not file_props.has_key('file-name'):
 			return
@@ -818,7 +885,7 @@ _('Connection with peer cannot be established.'))
 		if selected is None or selected[1] is None:
 			return 
 		s_iter = selected[1]
-		sid = self.model[s_iter][SID_INDEX].decode('utf-8')
+		sid = self.model[s_iter][C_SID].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if not file_props.has_key('tt_account'):
 			# file transfer is not set yet
