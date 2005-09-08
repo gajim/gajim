@@ -382,9 +382,10 @@ class Interface:
 			not gajim.contacts[account].has_key(jid):
 			return
 
+		# Handle chat states  
+		contact = gajim.get_first_contact_instance_from_jid(account, jid)
 		if self.windows[account]['chats'].has_key(jid):
 			chat_win = self.windows[account]['chats'][jid]
-			contact = gajim.get_first_contact_instance_from_jid(account, jid)
 			if chatstate is not None: # he sent us reply, so he supports jep85
 				if contact.chatstate == 'ask': # we were jep85 disco?
 					contact.chatstate = 'active' # no more
@@ -393,6 +394,10 @@ class Interface:
 			else:
 				# got no valid jep85 answer, peer does not support it
 				contact.chatstate = False
+		else:
+			# Brand new message, incoming.  
+			if chatstate == 'active':  
+				contact.chatstate = chatstate
 
 		if not array[1]: #empty message text
 			return
