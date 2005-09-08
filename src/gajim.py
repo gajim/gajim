@@ -32,7 +32,7 @@ try:
 	import gtk
 except RuntimeError, msg:
 	if str(msg) == 'could not open display':
-		print 'Gajim needs Xserver to run. Exiting...'
+		print >> sys.stderr, _('Gajim needs Xserver to run. Quiting...')
 		sys.exit()
 		
 import gobject
@@ -1208,7 +1208,7 @@ if __name__ == '__main__':
 	try:
 		import gnome.ui
 	except ImportError:
-		print >> sys.stderr, _('session management not available (missing gnome.ui module)')
+		print >> sys.stderr, _('Session Management support not available (missing gnome.ui module)')
 	else:
 		def die_cb(cli):
 			gtk.main_quit()
