@@ -919,7 +919,10 @@ class Interface:
 		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
 		
 		emoticons_pattern = ''
-		for emoticon in self.emoticons: # travel thru emoticons list
+		# sort keys by length so :qwe emot is checked before :q
+		keys = self.self.emoticons.keys()
+		sorted_keys = keys.sort(self.on_emoticon_sort)
+		for emoticon in sorted_keys: # travel thru emoticons list
 			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
 			emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
 
@@ -929,6 +932,15 @@ class Interface:
 		
 		# at least one character in 3 parts (before @, after @, after .)
 		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?]')
+
+	def on_emoticon_sort (self, emot1, emot2):
+		len1 = len(emot1)
+		len2 = len(emot2)
+		if len1 < len2:
+			return 1
+		elif len1 > len2:
+			return -1
+		return 0
 
 	def on_launch_browser_mailer(self, widget, url, kind):
 		helpers.launch_browser_mailer(kind, url)
