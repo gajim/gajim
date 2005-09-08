@@ -198,6 +198,8 @@ class SignalObject(DbusPrototype):
 			return None
 		if jid.startswith('xmpp://'):
 			jid = jid[7:] # len('xmpp://') = 7
+		elif jid.startswith('xmpp:'):
+			jid = jid[5:] # len('xmpp:') = 5
 
 		if account:
 			accounts = [account]
