@@ -44,9 +44,9 @@ GTKGUI_GLADE = 'gtkgui.glade'
 C_IMAGE = 0
 C_LABELS = 1
 C_FILE = 2
-C_PROGRESS = 3
-C_PERCENT = 4
-C_TIME = 5
+C_TIME = 3
+C_PROGRESS = 4
+C_PERCENT = 5
 C_SID = 6
 
 
@@ -68,7 +68,7 @@ class FileTransfersWindow:
 			self.notify_ft_checkbox.set_active(True)
 		else:
 			self.notify_ft_checkbox.set_active(False)
-		self.model = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, int, str, str)
+		self.model = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, str, int, str)
 		self.tree.set_model(self.model)
 		col = gtk.TreeViewColumn()
 		
@@ -96,17 +96,6 @@ class FileTransfersWindow:
 		col.set_expand(True)
 		self.tree.append_column(col)
 		
-		col = gtk.TreeViewColumn(_('Progress'))
-		renderer = gtk.CellRendererProgress()
-		renderer.set_property('yalign', 0.5)
-		renderer.set_property('xalign', 0.5)
-		col.pack_start(renderer, expand = False)
-		col.set_expand(False)
-		col.add_attribute(renderer, 'text' , C_PROGRESS)
-		col.add_attribute(renderer, 'value' , C_PERCENT)
-		col.set_resizable(True)
-		self.tree.append_column(col)
-		
 		col = gtk.TreeViewColumn(_('Time'))
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer, expand=False)
@@ -119,6 +108,16 @@ class FileTransfersWindow:
 		col.set_expand(False)
 		self.tree.append_column(col)
 		
+		col = gtk.TreeViewColumn(_('Progress'))
+		renderer = gtk.CellRendererProgress()
+		renderer.set_property('yalign', 0.5)
+		renderer.set_property('xalign', 0.5)
+		col.pack_start(renderer, expand = False)
+		col.set_expand(False)
+		col.add_attribute(renderer, 'text' , C_PROGRESS)
+		col.add_attribute(renderer, 'value' , C_PERCENT)
+		col.set_resizable(True)
+		self.tree.append_column(col)
 		
 		self.set_images()
 		self.tree.get_selection().set_mode(gtk.SELECTION_SINGLE)
