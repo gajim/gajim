@@ -49,7 +49,7 @@ gtk.glade.textdomain(APP)
 C_IMG, # image to show state (online, new message etc)
 C_NAME, # cellrenderer text that holds contact nickame
 C_TYPE, # account, group or contact?
-C_JID, # the jid of the row <nk is not sure>
+C_JID, # the jid of the row
 C_ACCOUNT, # cellrenderer text that holds account name
 C_EDITABLE, # cellrenderer text that holds name editable or not?
 C_SECPIXBUF, # econdary_pixbuf
