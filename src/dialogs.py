@@ -425,7 +425,7 @@ class AboutDialog:
 		dlg.set_logo(pixbuf)
 		dlg.set_translator_credits(_('translator-credits'))
 		
-		artists = ['Denis Craven', 'Membris Khan', 'Guillaume Morin']
+		artists = ['Dennis Craven', 'Membris Khan', 'Guillaume Morin']
 		dlg.set_artists(artists)
 
 		rep = dlg.run()
@@ -450,6 +450,20 @@ class Dialog(gtk.Dialog):
 	def get_button(self, index):
 		buttons = self.action_area.get_children()
 		return index < len(buttons) and buttons[index] or None
+
+class Alert(gtk.MessageDialog):
+	def __init__(self, parent, type, buttons, primary, secondary):
+		gtk.MessageDialog.__init__(self, parent, 
+				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
+				type, buttons, message_format=primary)
+
+		self.format_secondary_text(secondary)
+
+	def get_response(self):
+		self.show_all()
+		response = gtk.Dialog.run(self)
+		self.destroy()
+		return response
 
 
 class HigDialog(Dialog):
@@ -489,18 +503,40 @@ class HigDialog(Dialog):
 		self.destroy()
 		return response
 
-class ConfirmationDialog(HigDialog):
+class ConfirmationDialog(Alert):
 	"""HIG compliant confirmation dialog."""
 	def __init__(self, pritext, sectext=''):
-		HigDialog.__init__(self, None, pritext, sectext,
-			gtk.STOCK_DIALOG_WARNING, [ [gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL],
-			[ gtk.STOCK_OK, gtk.RESPONSE_OK ] ])
+		Alert.__init__(self, None, 
+			gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL, pritext, sectext)
 			
+class WarningDialog(Alert):
+	def __init__(self, pritext, sectext=''):
+		"""HIG compliant warning dialog."""
+		Alert.__init__( self, None, 
+				gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, pritext, sectext)
+
+class InformationDialog(Alert):
+	def __init__(self, pritext, sectext=''):
+		"""HIG compliant info dialog."""
+		Alert.__init__( self, None, 
+				gtk.MESSAGE_INFO, gtk.BUTTONS_OK, pritext, sectext)
+		ok_button = self.action_area.get_children()[0]
+		ok_button.connect('clicked', self.on_ok_button_clicked)
+		self.show_all()
+
+	def on_ok_button_clicked(self, widget):
+		self.destroy()
+
+class ErrorDialog(Alert):
+	def __init__(self, pritext, sectext=''):
+		"""HIG compliant error dialog."""
+		Alert.__init__( self, None, 
+				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, pritext, sectext)
+
 class ConfirmationDialogCheck(ConfirmationDialog):
 	'''HIG compliant confirmation dialog with checkbutton.'''
 	def __init__(self, pritext, sectext='', checktext = ''):
-		HigDialog.__init__(self, None, pritext, sectext,
-			gtk.STOCK_DIALOG_WARNING, [ [gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL] ])
+		Alert.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_CANCEL, pritext, sectext)
 		
 		# add ok button manually, because we need to focus on it 
 		ok_button = self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
@@ -512,28 +548,6 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 		''' Get active state of the checkbutton '''
 		return self.checkbutton.get_active()
 		
-class WarningDialog(HigDialog):
-	def __init__(self, pritext, sectext=''):
-		"""HIG compliant warning dialog."""
-		HigDialog.__init__(
-			self, None, pritext, sectext, gtk.STOCK_DIALOG_WARNING,
-			[ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
-		)
-
-class InformationDialog(HigDialog):
-	def __init__(self, pritext, sectext=''):
-		"""HIG compliant info dialog."""
-		HigDialog.__init__(
-			self, None, pritext, sectext, gtk.STOCK_DIALOG_INFO,
-			[ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
-		)
-		ok_button = self.action_area.get_children()[0]
-		ok_button.connect('clicked', self.on_ok_button_clicked)
-		self.show_all()
-
-	def on_ok_button_clicked(self, widget):
-		self.destroy()
-
 class InputDialog:
 	'''Class for Input dialog'''
 	def __init__(self, title, label_str, input_str = None, is_modal = True, ok_handler = None):
@@ -570,14 +584,6 @@ class InputDialog:
 			self.dialog.destroy()
 		return response
 	
-class ErrorDialog(HigDialog):
-	def __init__(self, pritext, sectext=''):
-		"""HIG compliant error dialog."""
-		HigDialog.__init__(
-			self, None, pritext, sectext, gtk.STOCK_DIALOG_ERROR,
-			[ [ gtk.STOCK_OK, gtk.RESPONSE_OK ] ]
-		)
-
 
 class SubscriptionRequestWindow:
 	def __init__(self, plugin, jid, text, account):
@@ -1220,7 +1226,7 @@ class InvitationReceivedDialog(HigDialog):
 		 'room_jid': room_jid, 'contact_jid': contact_jid }
 		if comment is not None:
 			string += '\n' + _('Comment: %s') % comment
-		
+
 		HigDialog.__init__(self, None, pritext, sectext,
 			gtk.STOCK_DIALOG_WARNING, [ [btn_deny, gtk.RESPONSE_NO],
 			[ btn_accept, gtk.RESPONSE_YES ] ])
