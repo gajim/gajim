@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-01 20:45+0300\n"
+"POT-Creation-Date: 2005-09-09 21:10+0200\n"
 "PO-Revision-Date: 2005-09-01 17:31+0300\n"
 "Last-Translator: Filippos Papadopoulos <filip@cs.uoi.gr>\n"
 "Language-Team: Hellenic-Ελληνικά-Greek\n"
@@ -20,67 +20,187 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.10\n"
 
+#: ../gajim.desktop.in.h:1
+#, fuzzy
+msgid "A GTK+ Jabber client"
+msgstr "Ένα πρόγραμμα για το Jabber γραμμένο σε GTK+"
+
+#: ../gajim.desktop.in.h:2 ../src/gtkgui.glade.h:129 ../src/tooltips.py:216
+msgid "Gajim"
+msgstr "Gajim"
+
+#: ../gajim.desktop.in.h:3
+#, fuzzy
+msgid "Jabber IM Client"
+msgstr "Ένα πρόγραμμα για το Jabber γραμμένο σε GTK+"
+
+#: ../src/common/config.py:40
+msgid ""
+"When we remove a contact, remove both his and our subscription, so we do not "
+"receive his presence anymore and he ours."
+msgstr ""
+
+#: ../src/common/config.py:50
+msgid "Time in minutes, after which your status changes to away."
+msgstr ""
+
 #: ../src/common/config.py:51
 msgid "Away as a result of being idle"
 msgstr "Απομακρυσμένος λόγω αδράνειας"
+
+#: ../src/common/config.py:53
+msgid "Time in minutes, after which your status changes to not available."
+msgstr ""
 
 #: ../src/common/config.py:54
 msgid "Not available as a result of being idle"
 msgstr "Μη διαθέσιμος λόγω αδράνειας"
 
-#: ../src/common/config.py:286
+#: ../src/common/config.py:80
+msgid ""
+"If True, do not remove */_ . So *abc* will be bold but with * * not removed."
+msgstr ""
+
+#: ../src/common/config.py:114
+msgid "Add * and [n] in roster title?"
+msgstr ""
+
+#: ../src/common/config.py:115
+msgid ""
+"How many lines to remember from previous conversation when a chat tab/window "
+"is reopened."
+msgstr ""
+
+#: ../src/common/config.py:116
+msgid "How many minutes should last lines from previous conversation last."
+msgstr ""
+
+#: ../src/common/config.py:117
+msgid ""
+"Send message on Ctrl+Enter and with Enter make new line (Miribalis ICQ "
+"Client default behaviour)."
+msgstr ""
+
+#: ../src/common/config.py:119
+msgid "How many lines to store for key up."
+msgstr ""
+
+#: ../src/common/config.py:123
+#, python-format
+msgid ""
+"Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
+"which means use wiktionary."
+msgstr ""
+
+#: ../src/common/config.py:126
+msgid "Allow controlling Gajim via D-Bus service."
+msgstr ""
+
+#. 'all', 'composing_only', 'disabled'
+#: ../src/common/config.py:128
+msgid ""
+"Should Gajim send inactive (\"is doing something else\") on just focus out "
+"of window/switch to another tab?"
+msgstr ""
+
+#: ../src/common/config.py:131
+msgid "Ask before closing a group chat tab/window."
+msgstr ""
+
+#. notif. on file complete
+#. port, used for file transfers
+#: ../src/common/config.py:134
+msgid ""
+"Overrides the host we send for File Transfer in case of address translation/"
+"port forwarding."
+msgstr ""
+
+#: ../src/common/config.py:136
+msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
+msgstr ""
+
+#: ../src/common/config.py:144
+#, fuzzy
+msgid "Show tab when only one conversation?"
+msgstr "έχει την προσοχή του στην κουβέντα"
+
+#: ../src/common/config.py:145
+msgid "Show tab border if one conversation?"
+msgstr ""
+
+#: ../src/common/config.py:146
+msgid "Show close button in tab?"
+msgstr ""
+
+#: ../src/common/config.py:149
+msgid ""
+"If True, quits Gajim when X button of Window Manager is clicked. This option "
+"make sense only if trayicon is used."
+msgstr ""
+
+#: ../src/common/config.py:150
+msgid "If True, Gajim registers for xmpp:// on each startup."
+msgstr ""
+
+#: ../src/common/config.py:151
+msgid ""
+"If True, Gajim will display an icon on each tab containing unread messages. "
+"Depending on the theme, this icon may be animated."
+msgstr ""
+
+#: ../src/common/config.py:296
 msgid "Sleeping"
 msgstr "Κοιμάμαι"
 
-#: ../src/common/config.py:287
+#: ../src/common/config.py:297
 msgid "Back soon"
 msgstr "Πίσω σύντομα"
 
-#: ../src/common/config.py:287
+#: ../src/common/config.py:297
 msgid "Back in some minutes."
 msgstr "Πίσω σε λίγα λεπτά."
 
-#: ../src/common/config.py:288
+#: ../src/common/config.py:298
 msgid "Eating"
 msgstr "Τρώω"
 
-#: ../src/common/config.py:288
+#: ../src/common/config.py:298
 msgid "I'm eating, so leave me a message."
 msgstr "Τώρα τρώω, οπότε αφήστε μήνυμα."
 
-#: ../src/common/config.py:289
+#: ../src/common/config.py:299
 msgid "Movie"
 msgstr "Ταινία"
 
-#: ../src/common/config.py:289
+#: ../src/common/config.py:299
 msgid "I'm watching a movie."
 msgstr "Βλέπω μια ταινία."
 
-#: ../src/common/config.py:290
+#: ../src/common/config.py:300
 msgid "Working"
 msgstr "Δουλειά"
 
-#: ../src/common/config.py:290
+#: ../src/common/config.py:300
 msgid "I'm working."
 msgstr "Δουλεύω."
 
-#: ../src/common/config.py:291
+#: ../src/common/config.py:301
 msgid "Phone"
 msgstr "Τηλέφωνο"
 
-#: ../src/common/config.py:291
+#: ../src/common/config.py:301
 msgid "I'm on the phone."
 msgstr "Είμαι στο τηλέφωνο."
 
-#: ../src/common/config.py:292
+#: ../src/common/config.py:302
 msgid "Out"
 msgstr "Έξω"
 
-#: ../src/common/config.py:292
+#: ../src/common/config.py:302
 msgid "I'm out enjoying life"
 msgstr "Είμαι έξω στην ζωή"
 
-#: ../src/common/connection.py:283 ../src/common/connection.py:293
+#: ../src/common/connection.py:289 ../src/common/connection.py:299
 #, python-format
 msgid ""
 "Subject: %s\n"
@@ -89,277 +209,312 @@ msgstr ""
 "Θέμα: %s\n"
 "%s"
 
-#: ../src/common/connection.py:343 ../src/common/connection.py:1546
+#: ../src/common/connection.py:349 ../src/common/connection.py:1601
 msgid "I would like to add you to my roster."
 msgstr "Επιθυμώ να σε προσθέσω στην λίστα επαφών μου."
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection.py:349
+#: ../src/common/connection.py:355
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr "Ο %s μόλις σας εξουσιοδότησε"
 
-#: ../src/common/connection.py:351
+#: ../src/common/connection.py:357
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "αίτηση αφαίρεσης εξουσιοδότησης από %s"
 
-#: ../src/common/connection.py:353
+#: ../src/common/connection.py:359
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "πραγματοποιήθηκε αφαίρεση εξουσιοδότησης από %s"
 
-#. conflict: Nick Conflict
-#: ../src/common/connection.py:359
+#. password required to join
+#. we are banned
+#. room does not exist
+#. nick conflict
+#: ../src/common/connection.py:371 ../src/common/connection.py:374
+#: ../src/common/connection.py:377 ../src/common/connection.py:380
+#: ../src/common/connection.py:383 ../src/common/connection.py:386
+#: ../src/common/connection.py:389
 msgid "Unable to join room"
 msgstr "Αδυναμία συμμετοχής στο δωμάτιο"
 
-#: ../src/common/connection.py:360
-msgid "Server response:"
-msgstr "Απάντηση του διακομιστή:"
+#: ../src/common/connection.py:372
+msgid "A password is required to join this room."
+msgstr ""
 
-#: ../src/common/connection.py:391
+#: ../src/common/connection.py:375
+#, fuzzy
+msgid "You are banned from this room."
+msgstr "Βρίσκεστε ήδη στο δωμάτιο %s"
+
+#: ../src/common/connection.py:378
+msgid "Such room does not exist."
+msgstr ""
+
+#: ../src/common/connection.py:381
+msgid "Room creation is restricted."
+msgstr ""
+
+#: ../src/common/connection.py:384
+msgid "Your registered nickname must be used."
+msgstr ""
+
+#: ../src/common/connection.py:387
+#, fuzzy
+msgid "You are not in the members list."
+msgstr "Δεν είστε συνδεδεμένος στον διακομιστή"
+
+#: ../src/common/connection.py:390
+msgid "Your desired nickname is in use or registered by another user."
+msgstr ""
+
+#: ../src/common/connection.py:415 ../src/common/connection.py:430
+#: ../src/common/connection.py:461
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Η σύνδεση με τον λογαριασμό \"%s\" χάθηκε"
 
-#: ../src/common/connection.py:392
+#: ../src/common/connection.py:416 ../src/common/connection.py:431
+#: ../src/common/connection.py:462
 msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr ""
 "Για να συνεχίσετε να στέλνετε και να λαμβάνετε μηνύματα, πρέπει να "
 "επανασυνδεθείτε."
 
-#: ../src/common/connection.py:1181
+#: ../src/common/connection.py:1249
 msgid "Error:"
 msgstr "Σφάλμα:"
 
-#: ../src/common/connection.py:1247 ../src/common/connection.py:1309
-#: ../src/common/connection.py:1648
+#: ../src/common/connection.py:1316 ../src/common/connection.py:1374
+#: ../src/common/connection.py:1700
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Η σύνδεση με \"%s\" στάθηκε αδύνατη."
 
-#: ../src/common/connection.py:1248 ../src/common/connection.py:1310
-msgid "Check your connection or try again later"
-msgstr "Ελέγξτε την σύνδεση σας ή δοκιμάστε αργότερα"
+#: ../src/common/connection.py:1317 ../src/common/connection.py:1701
+#: ../src/gajim.py:535
+msgid "Check your connection or try again later."
+msgstr "Ελέγξτε την σύνδεση σας ή δοκιμάστε αργότερα."
 
-#: ../src/common/connection.py:1252 ../src/common/connection.py:1651
+#: ../src/common/connection.py:1321 ../src/common/connection.py:1703
 #, python-format
 msgid "Connected to server with %s"
 msgstr "Σύνδεση με τον διακομιστή με %s"
 
-#: ../src/common/connection.py:1322
+#: ../src/common/connection.py:1375
+msgid "Check your connection or try again later"
+msgstr "Ελέγξτε την σύνδεση σας ή δοκιμάστε αργότερα"
+
+#: ../src/common/connection.py:1389
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Η πιστοποίηση ταυτότητας με \"%s\" απέτυχε"
 
-#: ../src/common/connection.py:1323
+#: ../src/common/connection.py:1390
 msgid "Please check your login and password for correctness."
 msgstr "Παρακαλώ ελέγξτε το συνθηματικό σας."
 
-#: ../src/common/connection.py:1403
-msgid "invisible"
-msgstr "αόρατος"
-
-#. do not show I'm invisible!
-#: ../src/common/connection.py:1404
-msgid "offline"
-msgstr "αποσυνδεδεμένος"
-
-#: ../src/common/connection.py:1405 ../src/roster_window.py:1258
-#, python-format
-msgid "I'm %s"
-msgstr "Είμαι %s"
-
 #. We didn't set a passphrase
-#: ../src/common/connection.py:1413
+#: ../src/common/connection.py:1462
 msgid "OpenPGP passphrase was not given"
 msgstr "Δεν δόθηκε κωδική-φράση για το OpenPGP"
 
 #. %s is the account name here
-#: ../src/common/connection.py:1415
+#: ../src/common/connection.py:1464
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Θα συνδεθείτε με %s χωρίς OpenPGP."
 
+#. do not show I'm invisible!
+#: ../src/common/connection.py:1494
+msgid "invisible"
+msgstr "αόρατος"
+
+#: ../src/common/connection.py:1495
+msgid "offline"
+msgstr "αποσυνδεδεμένος"
+
+#: ../src/common/connection.py:1496
+#, python-format
+msgid "I'm %s"
+msgstr "Είμαι %s"
+
 #. we're not english
-#: ../src/common/connection.py:1508
+#: ../src/common/connection.py:1563
 msgid "[This message is encrypted]"
 msgstr "[Aυτό το μήνυμα είναι κρυπτογραφημένο]"
 
-#: ../src/common/connection.py:1649 ../src/gajim.py:528
-msgid "Check your connection or try again later."
-msgstr "Ελέγξτε την σύνδεση σας ή δοκιμάστε αργότερα."
-
-#: ../src/common/connection.py:1928 ../src/common/connection.py:1937
-msgid "error appeared while processing xmpp:"
-msgstr "σφάλμα κατά την επεξεργασία xmpp:"
+#: ../src/common/connection.py:1982 ../src/common/connection.py:1991
+msgid "A protocol error has occured:"
+msgstr ""
 
 #. GiB means gibibyte
-#: ../src/common/helpers.py:44
+#: ../src/common/helpers.py:45
 #, python-format
 msgid "%s GiB"
 msgstr "%s GiB"
 
 #. GB means gigabyte
-#: ../src/common/helpers.py:47
+#: ../src/common/helpers.py:48
 #, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
 #. MiB means mibibyte
-#: ../src/common/helpers.py:51
+#: ../src/common/helpers.py:52
 #, python-format
 msgid "%s MiB"
 msgstr "%s MiB"
 
 #. MB means megabyte
-#: ../src/common/helpers.py:54
+#: ../src/common/helpers.py:55
 #, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
 #. KiB means kibibyte
-#: ../src/common/helpers.py:58
+#: ../src/common/helpers.py:59
 #, python-format
 msgid "%s KiB"
 msgstr "%s KiB"
 
 #. KB means kilo bytes
-#: ../src/common/helpers.py:61
+#: ../src/common/helpers.py:62
 #, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
 #. B means bytes
-#: ../src/common/helpers.py:64
+#: ../src/common/helpers.py:65
 #, python-format
 msgid "%s B"
 msgstr "%s B"
 
-#: ../src/common/helpers.py:71
+#: ../src/common/helpers.py:72
 msgid "Busy"
 msgstr "Απασχολημένος"
 
-#: ../src/common/helpers.py:73
+#: ../src/common/helpers.py:74
 msgid "Not Available"
 msgstr "Μη διαθέσιμος"
 
-#: ../src/common/helpers.py:75
+#: ../src/common/helpers.py:76
 msgid "Free for Chat"
 msgstr "Διαθέσιμος για Κουβέντα"
 
-#: ../src/common/helpers.py:77
+#: ../src/common/helpers.py:78
 msgid "Available"
 msgstr "Διαθέσιμος"
 
-#: ../src/common/helpers.py:79
+#: ../src/common/helpers.py:80
 msgid "Connecting"
 msgstr "Συνδέεται"
 
-#: ../src/common/helpers.py:81
+#: ../src/common/helpers.py:82
 msgid "Away"
 msgstr "Απομακρυσμένος"
 
-#: ../src/common/helpers.py:83
+#: ../src/common/helpers.py:84
 msgid "Offline"
 msgstr "Αποσυνδεδεμένος"
 
-#: ../src/common/helpers.py:85
+#: ../src/common/helpers.py:86
 msgid "Invisible"
 msgstr "Αφανής"
 
-#: ../src/common/helpers.py:87
+#: ../src/common/helpers.py:88
 msgid "Not in the roster"
 msgstr "Εκτός λίστας επαφών"
 
-#: ../src/common/helpers.py:89
+#: ../src/common/helpers.py:90
 msgid "?contact has status:Unknown"
 msgstr "Άγνωστη"
 
-#: ../src/common/helpers.py:91
+#: ../src/common/helpers.py:92
 msgid "?contact has status:Has errors"
 msgstr "Έχει σφάλμα"
 
-#: ../src/common/helpers.py:96
+#: ../src/common/helpers.py:97
 msgid "?Subscription we already have:None"
 msgstr "Καμία"
 
-#: ../src/common/helpers.py:98
+#: ../src/common/helpers.py:99
 msgid "To"
 msgstr "Προς"
 
-#: ../src/common/helpers.py:100
+#: ../src/common/helpers.py:101
 msgid "From"
 msgstr "Από"
 
-#: ../src/common/helpers.py:102
+#: ../src/common/helpers.py:103
 msgid "Both"
 msgstr "Και τα δυο"
 
-#: ../src/common/helpers.py:110
+#: ../src/common/helpers.py:111
 msgid "?Ask (for Subscription):None"
 msgstr "Τίποτα"
 
-#: ../src/common/helpers.py:112
+#: ../src/common/helpers.py:113
 msgid "Subscribe"
 msgstr "Εγγραφή"
 
-#: ../src/common/helpers.py:121
+#: ../src/common/helpers.py:122
 msgid "?Group Chat Contact Role:None"
 msgstr "Κανένας"
 
-#: ../src/common/helpers.py:124
+#: ../src/common/helpers.py:125
 msgid "Moderators"
 msgstr "Διαχειριστές"
 
-#: ../src/common/helpers.py:126
+#: ../src/common/helpers.py:127
 msgid "Moderator"
 msgstr "Διαχειριστής"
 
-#: ../src/common/helpers.py:129
+#: ../src/common/helpers.py:130
 msgid "Participants"
 msgstr "Συμμετέχοντες"
 
-#: ../src/common/helpers.py:131
+#: ../src/common/helpers.py:132
 msgid "Participant"
 msgstr "Συμμετέχων"
 
-#: ../src/common/helpers.py:134
+#: ../src/common/helpers.py:135
 msgid "Visitors"
 msgstr "Επισκέπτες"
 
-#: ../src/common/helpers.py:136
+#: ../src/common/helpers.py:137
 msgid "Visitor"
 msgstr "Επισκέπτης"
 
-#: ../src/common/helpers.py:172
+#: ../src/common/helpers.py:173
 msgid "is paying attention to the conversation"
 msgstr "έχει την προσοχή του στην κουβέντα"
 
-#: ../src/common/helpers.py:174
+#: ../src/common/helpers.py:175
 msgid "is doing something else"
 msgstr "κάνει κάτι άλλο"
 
-#: ../src/common/helpers.py:176
+#: ../src/common/helpers.py:177
 msgid "is composing a message..."
 msgstr "γράφει ένα μήνυμα..."
 
 #. paused means he was compoing but has stopped for a while
-#: ../src/common/helpers.py:179
+#: ../src/common/helpers.py:180
 msgid "paused composing a message"
 msgstr "σταμάτησε για λίγο να γράφει ένα μήνυμα"
 
-#: ../src/common/helpers.py:181
+#: ../src/common/helpers.py:182
 msgid "has closed the chat window or tab"
 msgstr "έκλεισε το παράθυρο ή την καρτέλα"
 
-#: ../src/common/logger.py:43 ../src/common/logger.py:55
+#: ../src/common/logger.py:45 ../src/common/logger.py:57
 #, python-format
 msgid "%s is file but it should be a directory"
 msgstr "Το %s είναι αρχείο αλλά πρέπει να είναι φάκελος"
 
-#: ../src/common/logger.py:44 ../src/common/logger.py:56
+#: ../src/common/logger.py:46 ../src/common/logger.py:58
 msgid "Gajim will now exit"
 msgstr "Το Gajim τώρα θα κλείσει"
 
@@ -367,69 +522,75 @@ msgstr "Το Gajim τώρα θα κλείσει"
 #. rwx------
 #. dot_gajim doesn't exist
 #. is '' on win9x so avoid that
-#: ../src/common/logger.py:52 ../src/common/logger.py:64
-#: ../src/common/logger.py:67
+#: ../src/common/logger.py:54 ../src/common/logger.py:66
+#: ../src/common/logger.py:69
 #, python-format
 msgid "creating %s directory"
 msgstr "δημιουργία φακέλου %s"
 
 #. we talk about a file
 #. we talk about file
-#: ../src/common/optparser.py:52 ../src/gtkgui_helpers.py:68
-#: ../src/gtkgui_helpers.py:83
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:70
+#: ../src/gtkgui_helpers.py:85
 #, python-format
 msgid "error: cannot open %s for reading"
 msgstr "Το αρχείο %s δε μπορεί να ανοιχθεί για ανάγνωση"
 
 #. chances are we cannot write file in a directory
-#: ../src/common/optparser.py:93
+#: ../src/common/optparser.py:96
 #, python-format
 msgid "Unable to write file in %s"
 msgstr "Αδύνατη η εγγραφή αρχείου στο %s"
 
-#: ../src/advanced.py:52
+#: ../src/advanced.py:59
 msgid "Preference Name"
 msgstr "Όνομα Προτίμησης"
 
-#: ../src/advanced.py:59
+#: ../src/advanced.py:66
 msgid "Value"
 msgstr "Τιμή"
 
-#: ../src/advanced.py:68
+#: ../src/advanced.py:75
 msgid "Type"
 msgstr "Είδος"
 
-#: ../src/chat.py:141 ../src/gtkgui.glade.h:70
+#. we talk about Description
+#: ../src/advanced.py:108 ../src/gtkgui.glade.h:2
+#, fuzzy
+msgid "(None)"
+msgstr "Τίποτα"
+
+#: ../src/chat.py:142 ../src/gtkgui.glade.h:77
 msgid "Chat"
 msgstr "Κουβέντα"
 
-#: ../src/chat.py:143 ../src/gtkgui.glade.h:134
+#: ../src/chat.py:144 ../src/gtkgui.glade.h:141
 msgid "Group Chat"
 msgstr "Ομαδική Κουβέντα"
 
 #. if we have 2 or more accounts
-#: ../src/chat.py:157
+#: ../src/chat.py:158
 msgid "account: "
 msgstr "λογαριασμός: "
 
 #. Groups maynot change name from or to 'not in the roster'
-#: ../src/chat.py:267 ../src/chat.py:937 ../src/dialogs.py:113
+#: ../src/chat.py:315 ../src/chat.py:987 ../src/dialogs.py:113
 #: ../src/dialogs.py:321 ../src/dialogs.py:897 ../src/dialogs.py:898
-#: ../src/gajim.py:487 ../src/gajim.py:488 ../src/roster_window.py:808
-#: ../src/roster_window.py:1024 ../src/roster_window.py:1164
-#: ../src/roster_window.py:1361 ../src/roster_window.py:1395
-#: ../src/roster_window.py:1720 ../src/roster_window.py:1919
-#: ../src/roster_window.py:1921 ../src/roster_window.py:1995
+#: ../src/gajim.py:494 ../src/gajim.py:495 ../src/roster_window.py:820
+#: ../src/roster_window.py:1036 ../src/roster_window.py:1176
+#: ../src/roster_window.py:1376 ../src/roster_window.py:1410
+#: ../src/roster_window.py:1746 ../src/roster_window.py:1945
+#: ../src/roster_window.py:1947 ../src/roster_window.py:2021
 msgid "not in the roster"
 msgstr "εκτός λίστας επαφών"
 
-#: ../src/chat.py:318
+#: ../src/chat.py:366
 #, python-format
 msgid "Switch to %s"
 msgstr "Αλλαγή σε %s"
 
 #. FIXME: add a ui for this use spell.set_language()
-#: ../src/chat.py:519
+#: ../src/chat.py:569
 msgid ""
 "If that is not your language for which you want to highlight misspelled "
 "words, then please set your $LANG as appropriate. Eg. for French do export "
@@ -445,216 +606,216 @@ msgstr ""
 "\n"
 "Η υπογράμμιση τυπογραφικών λαθών απενεργοποιήθηκε"
 
-#: ../src/chat.py:778
+#: ../src/chat.py:828
 #, python-format
 msgid "Actions for \"%s\""
 msgstr "Ενέργειες για \"%s\""
 
-#: ../src/chat.py:790
+#: ../src/chat.py:840
 msgid "Read _Wikipedia Article"
 msgstr "Ανάγνωση Άρθρου της _Wikipedia"
 
-#: ../src/chat.py:794
+#: ../src/chat.py:844
 msgid "Look it up in _Dictionary"
 msgstr "Εύρεση στο _Λεξικό"
 
 #. we must have %s in the url if not WIKTIONARY
-#: ../src/chat.py:809
+#: ../src/chat.py:859
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "Λείπει ένα \"%s\" από το URL του λεξικού και δεν είναι WIKTIONARY"
 
 #. we must have %s in the url
-#: ../src/chat.py:820
+#: ../src/chat.py:870
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "Λείπει ένα \"%s\" από το URL της Δικτυακής Αναζήτησης"
 
-#: ../src/chat.py:823
+#: ../src/chat.py:873
 msgid "Web _Search for it"
 msgstr "Δικτυακή Ανα_ζήτηση γι' αυτό"
 
 #. if we have subject, show it too!
-#: ../src/chat.py:1159
+#: ../src/chat.py:1211
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Θέμα: %s\n"
 
-#: ../src/config.py:197 ../src/config.py:445
+#: ../src/config.py:208 ../src/config.py:454
 #, python-format
 msgid "Every %s _minutes"
 msgstr "Κάθε %s _λεπτά"
 
-#: ../src/config.py:315
+#: ../src/config.py:324
 msgid "Active"
 msgstr "Ενεργοποιημένο"
 
-#: ../src/config.py:323
+#: ../src/config.py:332
 msgid "Event"
 msgstr "Γεγονός"
 
-#: ../src/config.py:329
+#: ../src/config.py:338
 msgid "Sound"
 msgstr "Ήχος"
 
-#: ../src/config.py:940
+#: ../src/config.py:964
 msgid "status message title"
 msgstr "τίτλος μηνύματος κατάστασης"
 
-#: ../src/config.py:940
+#: ../src/config.py:964
 msgid "status message text"
 msgstr "κείμενο μηνύματος κατάστασης"
 
-#: ../src/config.py:993
+#: ../src/config.py:1017
 msgid "Choose Sound"
 msgstr "Επιλογή Ήχου"
 
-#: ../src/config.py:1006 ../src/config.py:1967 ../src/vcard.py:133
+#: ../src/config.py:1030 ../src/config.py:2007 ../src/vcard.py:143
 msgid "All files"
 msgstr "Όλα τα αρχεία"
 
-#: ../src/config.py:1011
+#: ../src/config.py:1035
 msgid "Wav Sounds"
 msgstr "Αρχεία Wav"
 
-#: ../src/config.py:1183
+#: ../src/config.py:1207
 msgid "OpenPGP is not usable in this computer"
 msgstr "Το OpenPGP δεν είναι διαθέσιμο σε αυτόν τον Η/Υ"
 
-#: ../src/config.py:1208
+#: ../src/config.py:1234
 msgid "You are currently connected to the server"
 msgstr "Αυτή τη στιγμή είστε συνδεδεμένος στον διακομιστή"
 
-#: ../src/config.py:1209
+#: ../src/config.py:1235
 msgid "To change the account name, you must be disconnected."
 msgstr "Για να αλλάξετε το όνομα λογαριασμού, πρέπει να αποσυνδεθείτε."
 
-#: ../src/config.py:1212 ../src/config.py:1216
+#: ../src/config.py:1238 ../src/config.py:1242
 msgid "Invalid account name"
 msgstr "Μη έγκυρο όνομα λογαριασμού"
 
-#: ../src/config.py:1213
+#: ../src/config.py:1239
 msgid "Account name cannot be empty."
 msgstr "Το όνομα λογαριασμού δεν μπορεί να είναι κενό."
 
-#: ../src/config.py:1217
+#: ../src/config.py:1243
 msgid "Account name cannot contain spaces."
 msgstr "Το όνομα λογαριασμού δεν μπορεί να έχει κενά."
 
-#: ../src/config.py:1221
+#: ../src/config.py:1247
 msgid "Invalid Jabber ID"
 msgstr "Μη έγκυρο Jabber ID"
 
-#: ../src/config.py:1222
+#: ../src/config.py:1248
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr ""
 "Ένα Jabber ID πρέπει να είναι στην μορφή \"όνομα_χρήστη@όνομα_διακομιστή\"."
 
-#: ../src/config.py:1229 ../src/dialogs.py:761
+#: ../src/config.py:1255 ../src/dialogs.py:761
 msgid "Invalid password"
 msgstr "Μη έγκυρος κωδικός"
 
-#: ../src/config.py:1230
+#: ../src/config.py:1256
 msgid "You must enter a password for the new account."
 msgstr "Πρέπει να δώσετε έναν κωδικό για τον νέο λογαριασμό."
 
-#: ../src/config.py:1267
+#: ../src/config.py:1295
 msgid "Invalid entry"
 msgstr "Μη έγκυρη καταχώρηση"
 
-#: ../src/config.py:1268
+#: ../src/config.py:1296
 msgid "Custom port must be a port number."
 msgstr "Ο προσαρμοσμένος αριθμός θύρας του μεσολαβητή πρέπει να είναι αριθμός."
 
-#: ../src/config.py:1357
+#: ../src/config.py:1385
 msgid "Account name is in use"
 msgstr "Το όνομα λογαριασμού είναι ήδη σε χρήση"
 
-#: ../src/config.py:1358
+#: ../src/config.py:1386
 msgid "You already have an account using this name."
 msgstr "Έχετε ήδη ένα λογαριασμό με αυτό το όνομα."
 
-#: ../src/config.py:1424
+#: ../src/config.py:1452
 msgid "No such account available"
 msgstr "Τέτοιος λογαριασμός δεν είναι διαθέσιμος"
 
-#: ../src/config.py:1425
+#: ../src/config.py:1453
 msgid "You must create your account before editing your personal information."
 msgstr ""
 "Πρέπει πρώτα να δημιουργήσετε τον λογαριασμό σας προτού ξεκινήσετε να "
 "τροποποιείτε τις προσωπικές σας πληροφορίες"
 
-#: ../src/config.py:1432 ../src/config.py:2052 ../src/dialogs.py:635
-#: ../src/dialogs.py:741 ../src/vcard.py:378 ../src/vcard.py:406
+#: ../src/config.py:1460 ../src/config.py:2093 ../src/dialogs.py:635
+#: ../src/dialogs.py:741 ../src/vcard.py:385 ../src/vcard.py:413
 msgid "You are not connected to the server"
 msgstr "Δεν είστε συνδεδεμένος στον διακομιστή"
 
-#: ../src/config.py:1433
+#: ../src/config.py:1461
 msgid "Without a connection, you can not edit your personal information."
 msgstr ""
 "Πρέπει να είστε συνδεδεμένος για να τροποποιήσετε τις προσωπικές σας "
 "πληροφορίες"
 
-#: ../src/config.py:1460
+#: ../src/config.py:1488
 msgid "Failed to get secret keys"
 msgstr "Σφάλμα κατά την λήψη μυστικών κλειδιών"
 
-#: ../src/config.py:1461
+#: ../src/config.py:1489
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "Σφάλμα κατά την λήψη του OpenPGP μυστικών κλειδιών σας."
 
-#: ../src/config.py:1464 ../src/gtkgui.glade.h:194
+#: ../src/config.py:1492 ../src/gtkgui.glade.h:202
 msgid "Passphrase"
 msgstr "Κωδικοφράση"
 
-#: ../src/config.py:1465
+#: ../src/config.py:1493
 msgid "Choose your OpenPGP key"
 msgstr "Επιλέξτε το OpenPGP κλειδί σας"
 
-#: ../src/config.py:1473 ../src/gtkgui.glade.h:182
+#: ../src/config.py:1501 ../src/gtkgui.glade.h:190
 msgid "No key selected"
 msgstr "Καμία επιλογή κλειδιού"
 
-#: ../src/config.py:1704 ../src/config.py:2075
+#: ../src/config.py:1732 ../src/config.py:2116
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../src/config.py:1707
+#: ../src/config.py:1735
 msgid "Server"
 msgstr "Διακομιστής"
 
 #. if not '@' or '@' starts the jid ==> agent
-#: ../src/config.py:1812 ../src/config.py:2294 ../src/dialogs.py:113
-#: ../src/dialogs.py:285 ../src/dialogs.py:321 ../src/roster_window.py:124
-#: ../src/roster_window.py:129 ../src/roster_window.py:153
-#: ../src/roster_window.py:1915 ../src/roster_window.py:1917
-#: ../src/roster_window.py:1995 ../src/systray.py:225
+#: ../src/config.py:1840 ../src/config.py:2335 ../src/dialogs.py:113
+#: ../src/dialogs.py:285 ../src/dialogs.py:321 ../src/roster_window.py:136
+#: ../src/roster_window.py:141 ../src/roster_window.py:165
+#: ../src/roster_window.py:1941 ../src/roster_window.py:1943
+#: ../src/roster_window.py:2021 ../src/systray.py:225
 msgid "Transports"
 msgstr "Μεταφορές"
 
-#: ../src/config.py:1827
+#: ../src/config.py:1855
 #, python-format
 msgid "Edit %s"
 msgstr "Επεξεργασία %s"
 
-#: ../src/config.py:1829
+#: ../src/config.py:1857
 #, python-format
 msgid "Register to %s"
 msgstr "Εγγραφή στο %s"
 
-#: ../src/config.py:1849
+#: ../src/config.py:1877
 msgid "Text"
 msgstr "Κείμενο"
 
-#: ../src/config.py:1857
+#: ../src/config.py:1885
 msgid "Image"
 msgstr "Εικόνα"
 
-#: ../src/config.py:1905
+#: ../src/config.py:1935
 msgid "Image is too big"
 msgstr "Η εικόνα είναι πολύ μεγάλη"
 
-#: ../src/config.py:1905
+#: ../src/config.py:1935
 msgid ""
 "Image for emoticon has to be less than or equal to 24 pixels in width and 24 "
 "in height."
@@ -662,73 +823,73 @@ msgstr ""
 "Η εικόνα για τα σύμβολα πρέπει να είναι μικρότερη ή ίση με 24 pixel σε μήκος "
 "και 24 pixel σε ύψος."
 
-#: ../src/config.py:1955
+#: ../src/config.py:1995
 msgid "Choose Image"
 msgstr "Επιλογή Εικόνας"
 
-#: ../src/config.py:1972 ../src/vcard.py:138
+#: ../src/config.py:2012 ../src/vcard.py:148
 msgid "Images"
 msgstr "Εικόνες"
 
-#: ../src/config.py:2053
+#: ../src/config.py:2094
 msgid "Without a connection, you can not browse available services"
 msgstr "Πρέπει να συνδεθείτε για να περιηγηθείτε στις υπηρεσίες"
 
-#: ../src/config.py:2058
+#: ../src/config.py:2099
 #, python-format
 msgid "Service Discovery using %s account"
 msgstr "Ανακάλυψη Υπηρεσιών χρησιμοποιώντας τον λογαριασμό %s"
 
-#: ../src/config.py:2060
+#: ../src/config.py:2101
 msgid "Service Discovery"
 msgstr "Ανακάλυψη Υπηρεσιών"
 
-#: ../src/config.py:2080
+#: ../src/config.py:2121
 msgid "Service"
 msgstr "Υπηρεσία"
 
-#: ../src/config.py:2085
+#: ../src/config.py:2126
 msgid "Node"
 msgstr "Κόμβος"
 
-#: ../src/config.py:2297 ../src/gtkgui.glade.h:317
+#: ../src/config.py:2338 ../src/gtkgui.glade.h:328
 msgid "_Edit"
 msgstr "Επε_ξεργασία"
 
-#: ../src/config.py:2299 ../src/gtkgui.glade.h:213
+#: ../src/config.py:2340 ../src/gtkgui.glade.h:220
 msgid "Re_gister"
 msgstr "_Εγγραφή"
 
-#: ../src/config.py:2471
+#: ../src/config.py:2530
 #, python-format
 msgid "Removing %s account"
 msgstr "Aφαιρώντας τον λογαριασμό %s"
 
-#: ../src/config.py:2478
+#: ../src/config.py:2537
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με τον διακομιστή"
 
-#: ../src/config.py:2479
+#: ../src/config.py:2538
 msgid "If you remove it, the connection will be lost."
 msgstr "Αν αφαιρεθεί, η σύνδεση θα χαθεί."
 
-#: ../src/config.py:2606
+#: ../src/config.py:2665
 msgid "New Room"
 msgstr "Νέο Δωμάτιο"
 
-#: ../src/config.py:2636
+#: ../src/config.py:2695
 msgid "This bookmark has invalid data"
 msgstr "Αυτός ο σελιδοδείκτης έχει μη έγκυρα δεδομένα"
 
-#: ../src/config.py:2637
+#: ../src/config.py:2696
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Παρακαλώ συμπληρώστε τα πεδία του διακομιστή και του δωματίου ή διαφορετικά "
 "αφαιρέστε τον σελιδοδείκτη."
 
-#: ../src/config.py:2858
+#: ../src/config.py:2917
 msgid ""
 "Account has been added successfully.\n"
 "You can set advanced options by using \"Edit->Accounts\" from the main "
@@ -738,7 +899,7 @@ msgstr ""
 "Μπορείτε να δείτε όλες τις ρυθμίσεις του λογαριασμού σας κάνοντας "
 "\"Επεξεργασία->Λογαριασμοί\" από το κεντρικό παράθυρο"
 
-#: ../src/config.py:2869
+#: ../src/config.py:2928
 msgid ""
 "Your new account has been created and added to your gajim configuration.\n"
 "You can set advanced account options using \"Edit->Accounts\" in the main "
@@ -749,11 +910,11 @@ msgstr ""
 "Μπορείτε να ορίσετε προχωρημένες επιλογές από το \"Επεξεργασία->Λογαριασμοί"
 "\" στο μενού στο κύριου παραθύρου."
 
-#: ../src/config.py:2883
+#: ../src/config.py:2942
 msgid "You need to enter a username to add an account."
 msgstr "Πρέπει να δώσετε ένα όνομα χρήστη για προσθήκη νέου λογαριασμού."
 
-#: ../src/config.py:2887
+#: ../src/config.py:2946
 msgid "You need to enter a valid server address to add an account."
 msgstr ""
 "Πρέπει να δώσετε μία έγκυρη διεύθυνση διακομιστή για προσθήκη νέου "
@@ -861,7 +1022,7 @@ msgstr ""
 msgid "Join Group Chat as %s"
 msgstr "Συμμετοχή σε Ομαδική Συζήτηση ως %s"
 
-#: ../src/dialogs.py:651 ../src/gtkgui.glade.h:162
+#: ../src/dialogs.py:651 ../src/gtkgui.glade.h:170
 msgid "Join Group Chat"
 msgstr "Συμμετοχή σε Ομαδική Συζήτηση"
 
@@ -870,8 +1031,8 @@ msgstr "Συμμετοχή σε Ομαδική Συζήτηση"
 msgid "New Message as %s"
 msgstr "Νέο Μήνυμα ως %s"
 
-#: ../src/dialogs.py:716 ../src/dialogs.py:811 ../src/gajim.py:416
-#: ../src/gtkgui.glade.h:179
+#: ../src/dialogs.py:716 ../src/dialogs.py:811 ../src/gajim.py:423
+#: ../src/gtkgui.glade.h:187
 msgid "New Message"
 msgstr "Νέο Μήνυμα"
 
@@ -920,15 +1081,15 @@ msgstr "Οι κωδικοί δεν ταιριάζουν"
 msgid "The passwords typed in both fields must be identical."
 msgstr "Οι κωδικοί των δυο πεδίων πρέπει να είναι ίδιοι."
 
-#: ../src/dialogs.py:803 ../src/gajim.py:313
+#: ../src/dialogs.py:803 ../src/gajim.py:315
 msgid "Contact Signed In"
 msgstr "Σύνδεση Επαφής"
 
-#: ../src/dialogs.py:807 ../src/gajim.py:338
+#: ../src/dialogs.py:807 ../src/gajim.py:340
 msgid "Contact Signed Out"
 msgstr "Αποσύνδεση Επαφής"
 
-#: ../src/dialogs.py:812 ../src/gajim.py:413
+#: ../src/dialogs.py:812 ../src/gajim.py:420
 msgid "New Single Message"
 msgstr "Νέο Μονό Μήνυμα"
 
@@ -941,15 +1102,15 @@ msgstr "Από %s"
 msgid "File Transfer Request"
 msgstr "Αίτηση μεταφοράς αρχείου"
 
-#: ../src/dialogs.py:823 ../src/gajim.py:710 ../src/gajim.py:730
+#: ../src/dialogs.py:823 ../src/gajim.py:719 ../src/gajim.py:739
 msgid "File Transfer Error"
 msgstr "Σφάλμα μεταφοράς αρχείου"
 
-#: ../src/dialogs.py:827 ../src/gajim.py:787
+#: ../src/dialogs.py:827 ../src/gajim.py:796
 msgid "File Transfer Completed"
 msgstr "Η Μεταφορά Αρχείου Ολοκληρώθηκε"
 
-#: ../src/dialogs.py:827 ../src/gajim.py:790
+#: ../src/dialogs.py:827 ../src/gajim.py:799
 msgid "File Transfer Stopped"
 msgstr "Η Μεταφορά Αρχείου Διακόπηκε"
 
@@ -1007,85 +1168,93 @@ msgstr "XML Κονσόλα για %s"
 msgid "XML Console"
 msgstr "XML Κονσόλα"
 
-#: ../src/dialogs.py:1199 ../src/gtkgui.glade.h:315
+#: ../src/dialogs.py:1199 ../src/gtkgui.glade.h:326
 msgid "_Deny"
 msgstr "_Άρνηση"
 
-#. FIXME: add pano markup
+#. FIXME: add pango markup
 #: ../src/dialogs.py:1219
-#, python-format
-msgid "You have been invited to the %s room by %s"
+#, fuzzy, python-format
+msgid "You have been invited to the %(room_jid)s room by %(contact_jid)s"
 msgstr "Έχετε προσκληθεί στο δωμάτιο %s από τον/την %s"
 
-#: ../src/dialogs.py:1221
+#: ../src/dialogs.py:1222
 #, python-format
 msgid "Comment: %s"
 msgstr "Σχόλιο: %s"
 
+#: ../src/gajim.py:36
+msgid "Gajim needs Xserver to run. Quiting..."
+msgstr ""
+
 #. ('HTTP_AUTH', account, (method, url, iq_obj))
-#: ../src/gajim.py:153
+#: ../src/gajim.py:155
 #, python-format
 msgid "HTTP (%s) Authorization for %s"
 msgstr "HTTP (%s) Εξουσιοδότηση για %s"
 
-#: ../src/gajim.py:154
+#: ../src/gajim.py:156
 msgid "Do you accept this request?"
 msgstr "Δέχεστε αυτό το αίτημα;"
 
-#: ../src/gajim.py:464
+#: ../src/gajim.py:471
 msgid "error while sending"
 msgstr "σφάλμα κατά την αποστολή"
 
-#: ../src/gajim.py:490 ../src/gajim.py:500 ../src/roster_window.py:126
-#: ../src/roster_window.py:1011 ../src/gtkgui.glade.h:130
+#: ../src/gajim.py:497 ../src/gajim.py:507 ../src/roster_window.py:138
+#: ../src/roster_window.py:1023 ../src/gtkgui.glade.h:137
 msgid "General"
 msgstr "Γενικά"
 
-#: ../src/gajim.py:504
+#: ../src/gajim.py:511
 msgid "Authorization accepted"
 msgstr "Λήψη εξουσιοδότησης"
 
-#: ../src/gajim.py:505
+#: ../src/gajim.py:512
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his status."
 msgstr "Η επαφή \"%s\" σας εξουσιοδότησε να βλέπετε την κατάσταση της"
 
-#: ../src/gajim.py:511
+#: ../src/gajim.py:518
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Η επαφή \"%s\" αφαίρεσαι την εγγραφή από εσάς"
 
-#: ../src/gajim.py:512
+#: ../src/gajim.py:519
 msgid "You will always see him as offline."
 msgstr "Θα βλέπετε την επαφή πάντα ως αποσυνδεδεμένη"
 
-#: ../src/gajim.py:527
+#: ../src/gajim.py:534
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Δεν ήταν δυνατή η επαφή με \"%s\""
 
-#: ../src/gajim.py:545
+#: ../src/gajim.py:552
 msgid "Account registration successful"
 msgstr "Επιτυχής καταχώρηση λογαριασμού"
 
-#: ../src/gajim.py:546
+#: ../src/gajim.py:553
 #, python-format
 msgid "The account \"%s\" has been registered with the Jabber server."
 msgstr "Ο λογαριασμός \"%s\" καταχωρήθηκε στον Jabber διακομιστή"
 
-#: ../src/gajim.py:666
+#: ../src/gajim.py:675
 msgid "Your passphrase is incorrect"
 msgstr "H κωδική φράση είναι λανθασμένη"
 
-#: ../src/gajim.py:667
+#: ../src/gajim.py:676
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Είστε συνδεδεμένοι χωρίς την χρήση του OpenPGP κλειδιού σας"
 
 #. it is good to notify the user
 #. in case he cannot see the output of the console
-#: ../src/gajim.py:1013
+#: ../src/gajim.py:1034
 msgid "Cannot save your preferences"
 msgstr "Αδυναμία αποθήκευσης των προτιμήσεων σας"
+
+#: ../src/gajim.py:1224
+msgid "Session Management support not available (missing gnome.ui module)"
+msgstr ""
 
 #: ../src/gajim_themes_window.py:63
 msgid "Theme"
@@ -1099,7 +1268,7 @@ msgstr "όνομα_θέματος"
 msgid "theme name"
 msgstr "όνομα θέματος"
 
-#: ../src/groupchat_window.py:127 ../src/groupchat_window.py:965
+#: ../src/groupchat_window.py:127 ../src/groupchat_window.py:981
 #, python-format
 msgid "You just received a new message in room \"%s\""
 msgstr "Μόλις λάβατε ένα νέο μήνυμα στο δωμάτιο \"%s\""
@@ -1112,112 +1281,131 @@ msgstr ""
 "Εάν κλείσετε αυτό το παράθυρο και έχετε απενεργοποιημένο το ιστορικό, αυτό "
 "το μήνυμα θα χαθεί."
 
+#. if we are in many rooms
 #: ../src/groupchat_window.py:143
-#, python-format
+#, fuzzy, python-format
+msgid "Are you sure you want to leave rooms \"%s\"?"
+msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από το δωμάτιο \"%s\";"
+
+#: ../src/groupchat_window.py:144
+#, fuzzy
+msgid "If you close this window, you will be disconnected from these rooms."
+msgstr "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτό το δωμάτιο."
+
+#. just in one room
+#: ../src/groupchat_window.py:147
+#, fuzzy, python-format
 msgid "Are you sure you want to leave room \"%s\"?"
-msgid_plural "Are you sure you want to leave rooms \"%s\"?"
-msgstr[0] "Είστε σίγουροι ότι θέλετε να φύγετε από το δωμάτιο \"%s\";"
-msgstr[1] "Είστε σίγουροι ότι θέλετε να φύγετε από τα δωμάτια \"%s\";"
+msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από το δωμάτιο \"%s\";"
 
 #: ../src/groupchat_window.py:148
+#, fuzzy
 msgid "If you close this window, you will be disconnected from this room."
-msgid_plural ""
-"If you close this window, you will be disconnected from these rooms."
-msgstr[0] "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτό το δωμάτιο."
-msgstr[1] "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτά τα δωμάτια."
+msgstr "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτό το δωμάτιο."
 
-#: ../src/groupchat_window.py:153
+#: ../src/groupchat_window.py:152
 msgid "Do not ask me again"
 msgstr "Μην με ξαναρωτήσεις"
 
-#: ../src/groupchat_window.py:213 ../src/groupchat_window.py:401
+#: ../src/groupchat_window.py:212 ../src/groupchat_window.py:411
 msgid "This room has no subject"
 msgstr "Αυτό το δωμάτιο δεν έχει θέμα"
 
-#: ../src/groupchat_window.py:338
-#, python-format
-msgid "%s has been kicked by %s: %s"
+#: ../src/groupchat_window.py:337
+#, fuzzy, python-format
+msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "Ο %s πετάχτηκε έξω από τον %s: %s"
 
-#: ../src/groupchat_window.py:344
-#, python-format
-msgid "%s has been banned by %s: %s"
+#: ../src/groupchat_window.py:346
+#, fuzzy, python-format
+msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "Ο %s έχει απαγορευτεί από τον %s: %s"
 
-#. Someone changed his nick
-#: ../src/groupchat_window.py:347
+#: ../src/groupchat_window.py:354
+#, fuzzy, python-format
+msgid "You are now known as %s"
+msgstr "Ο %s είναι τώρα γνωστός ως %s"
+
+#: ../src/groupchat_window.py:356
 #, python-format
 msgid "%s is now known as %s"
 msgstr "Ο %s είναι τώρα γνωστός ως %s"
 
-#: ../src/groupchat_window.py:379
+#: ../src/groupchat_window.py:388
 #, python-format
 msgid "%s has left"
 msgstr "Ο %s έφυγε"
 
-#: ../src/groupchat_window.py:381
+#: ../src/groupchat_window.py:390
 #, python-format
 msgid "%s is now %s"
 msgstr "Ο %s είναι τώρα %s"
 
-#: ../src/groupchat_window.py:411
+#: ../src/groupchat_window.py:421
 msgid "Changing Subject"
 msgstr "Αλλαγή Θέματος"
 
-#: ../src/groupchat_window.py:412
+#: ../src/groupchat_window.py:422
 msgid "Please specify the new subject:"
 msgstr "Παρακαλώ καθορίστε το νέο θέμα:"
 
-#: ../src/groupchat_window.py:421
+#: ../src/groupchat_window.py:431
 msgid "Changing Nickname"
 msgstr "Αλλαγή Ψευδωνύμου"
 
-#: ../src/groupchat_window.py:422
+#: ../src/groupchat_window.py:432
 msgid "Please specify the new nickname you want to use:"
 msgstr "Παρακαλώ καθορίστε το νέο ψευδώνυμο που θέλετε να χρησιμοποιείτε:"
 
-#: ../src/groupchat_window.py:445
+#: ../src/groupchat_window.py:456
 msgid "Bookmark already set"
 msgstr "Ο σελιδοδείκτης έχει οριστεί ήδη"
 
-#: ../src/groupchat_window.py:446
+#: ../src/groupchat_window.py:457
 #, python-format
 msgid "Room \"%s\" is already in your bookmarks."
 msgstr "Το δωμάτιο \"%s\" υπάρχει ήδη στους σελιδοδείκτες σας."
 
-#: ../src/groupchat_window.py:455
+#: ../src/groupchat_window.py:466
 msgid "Bookmark has been added successfully"
 msgstr "Ο σελιδοδείκτης προστέθηκε με επιτυχία"
 
-#: ../src/groupchat_window.py:456
+#: ../src/groupchat_window.py:467
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "Μπορείτε να διαχειριστείτε τους σελιδοδείκτες από το μενού Ενέργειας στο "
 "κεντρικό παράθυρο."
 
 #. ask for reason
-#: ../src/groupchat_window.py:717
+#: ../src/groupchat_window.py:730
 #, python-format
 msgid "Kicking %s"
 msgstr "Διώχνοντας τον %s"
 
-#: ../src/groupchat_window.py:718 ../src/groupchat_window.py:749
+#: ../src/groupchat_window.py:731 ../src/groupchat_window.py:762
 msgid "You may specify a reason below:"
 msgstr "Μπορείτε να προσδιορίσετε ένα λόγο παρακάτω:"
 
 #. ask for reason
-#: ../src/groupchat_window.py:748
+#: ../src/groupchat_window.py:761
 #, python-format
 msgid "Banning %s"
 msgstr "Απαγορεύοντας την πρόσβαση στον %s"
 
-#: ../src/groupchat_window.py:966 ../src/tabbed_chat_window.py:346
+#: ../src/groupchat_window.py:982 ../src/tabbed_chat_window.py:350
 msgid ""
 "If you close this tab and you have history disabled, the message will be "
 "lost."
 msgstr ""
 "Εάν κλείσετε αυτή την καρτέλα και έχετε απενεργοποιημένο το ιστορικό, το "
 "μήνυμα θα χαθεί."
+
+#. do not traceback (could be a permission problem)
+#. we talk about a file here
+#: ../src/gtkgui_helpers.py:221
+#, python-format
+msgid "Could not write to %s. Session Management support will not work"
+msgstr ""
 
 #: ../src/history_window.py:138
 #, python-format
@@ -1234,129 +1422,129 @@ msgstr "Η κατάσταση είναι τώρα: %s: %s"
 msgid "Conversation History with %s"
 msgstr "Ιστορικό Κουβέντας με τον %s"
 
-#: ../src/remote_control.py:53
+#: ../src/remote_control.py:54
 msgid "D-Bus python bindings are missing in this computer"
 msgstr "Δεν υπάρχει υποστήριξη D-Bus για την python σε αυτόν τον υπολογιστή"
 
-#: ../src/remote_control.py:54
+#: ../src/remote_control.py:55
 msgid "D-Bus capabilities of Gajim cannot be used"
 msgstr "Οι δυνατότητες του Gajim για D-Bus δε θα χρησιμοποιηθούν"
 
-#: ../src/remote_control.py:440
+#: ../src/remote_control.py:469
 msgid "Session bus is not available"
 msgstr "To Session bus δεν είναι διαθέσιμο"
 
-#: ../src/remote_control.py:448
+#: ../src/remote_control.py:477
 msgid "D-Bus is not present on this machine"
 msgstr "Δεν υπάρχει D-Bus διαθέσιμο σε αυτό το μηχάνημα"
 
-#: ../src/roster_window.py:237
+#: ../src/roster_window.py:249
 #, python-format
 msgid "You are already in room %s"
 msgstr "Βρίσκεστε ήδη στο δωμάτιο %s"
 
-#: ../src/roster_window.py:388
+#: ../src/roster_window.py:400
 msgid "New _Room"
 msgstr "Νέο _Δωμάτιο"
 
-#: ../src/roster_window.py:403
+#: ../src/roster_window.py:415
 msgid "Manage Bookmarks..."
 msgstr "Διαχείριση Σελιδοδεικτών..."
 
-#: ../src/roster_window.py:418
+#: ../src/roster_window.py:430
 #, python-format
 msgid "to %s account"
 msgstr "στον λογαριασμό %s"
 
-#: ../src/roster_window.py:430
+#: ../src/roster_window.py:442
 #, python-format
 msgid "using %s account"
 msgstr "χρήση του λογαριασμού %s"
 
-#: ../src/roster_window.py:446
+#: ../src/roster_window.py:458
 #, python-format
 msgid "as %s"
 msgstr "ως %s"
 
-#: ../src/roster_window.py:457
+#: ../src/roster_window.py:469
 #, python-format
 msgid "for account %s"
 msgstr "για τον λογαριασμό %s"
 
-#: ../src/roster_window.py:601
+#: ../src/roster_window.py:613
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "Ο %s είναι τώρα %s (%s)"
 
-#: ../src/roster_window.py:676
+#: ../src/roster_window.py:688
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "Η μεταφορά \"%s\" θα αφαιρεθεί"
 
-#: ../src/roster_window.py:676
+#: ../src/roster_window.py:688
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from %s."
 msgstr ""
 "Δεν θα μπορείτε να στείλετε και να λάβετε μηνύματα στις επαφές από το %s."
 
-#: ../src/roster_window.py:719
+#: ../src/roster_window.py:731
 msgid "Assign OpenPGP Key"
 msgstr "Ανάθεση OpenPGP κλειδιού"
 
-#: ../src/roster_window.py:720
+#: ../src/roster_window.py:732
 msgid "Select a key to apply to the contact"
 msgstr "Επιλέξτε το κλειδί που θέλετε να εφαρμόσετε στην επαφή"
 
-#: ../src/roster_window.py:824
+#: ../src/roster_window.py:836
 msgid "I would like to add you to my roster"
 msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφών μου"
 
-#: ../src/roster_window.py:852
+#: ../src/roster_window.py:864
 msgid "Rename"
 msgstr "Μετονομασία"
 
-#: ../src/roster_window.py:873
+#: ../src/roster_window.py:885
 msgid "_Log on"
 msgstr "_Σύνδεση"
 
-#: ../src/roster_window.py:882
+#: ../src/roster_window.py:894
 msgid "Log _off"
 msgstr "_Αποσύνδεση"
 
-#: ../src/roster_window.py:894
+#: ../src/roster_window.py:906
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: ../src/roster_window.py:900 ../src/gtkgui.glade.h:364
+#: ../src/roster_window.py:912 ../src/gtkgui.glade.h:375
 msgid "_Remove from Roster"
 msgstr "Α_φαίρεση από την Λίστα Επαφών"
 
-#: ../src/roster_window.py:1002
+#: ../src/roster_window.py:1014
 msgid "Authorization has been sent"
 msgstr "Η εξουσιοδότηση έχει σταλεί"
 
-#: ../src/roster_window.py:1003
+#: ../src/roster_window.py:1015
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "Τώρα ο/η \"%s\" θα γνωρίζει την κατάσταση σας."
 
-#: ../src/roster_window.py:1025
+#: ../src/roster_window.py:1037
 msgid "Subscription request has been sent"
 msgstr "Η αίτηση εγγραφής έχει σταλεί"
 
-#: ../src/roster_window.py:1026
+#: ../src/roster_window.py:1038
 #, python-format
 msgid "If \"%s\" accepts this request you will know his status."
 msgstr ""
 "Εάν ο \"%s\" αποδεχθεί αυτή την αίτηση, θα γνωρίζετε την κατάσταση του."
 
-#: ../src/roster_window.py:1155
+#: ../src/roster_window.py:1167
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Η επαφή \"%s\" θα αφαιρεθεί από την λίστα επαφών σας"
 
-#: ../src/roster_window.py:1156
+#: ../src/roster_window.py:1168
 #, python-format
 msgid ""
 "By removing this contact you also remove authorization. Contact \"%s\" will "
@@ -1365,47 +1553,47 @@ msgstr ""
 "Αφαιρώντας αυτή την επαφή αφαιρείται επίσης και την εξουσιοδότηση. Η επαφή "
 "\"%s\" θα σας βλέπει πάντα αποσυνδεδεμένο/η."
 
-#: ../src/roster_window.py:1188
+#: ../src/roster_window.py:1204
 msgid "Password Required"
 msgstr "Απαιτείται Κωδικός"
 
-#: ../src/roster_window.py:1189
+#: ../src/roster_window.py:1205
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Πληκτρολογήστε τον κωδικό σας για το λογαριασμό %s"
 
-#: ../src/roster_window.py:1190
+#: ../src/roster_window.py:1206
 msgid "Save password"
 msgstr "Αποθήκευση κωδικού"
 
-#: ../src/roster_window.py:1227
+#: ../src/roster_window.py:1243
 msgid "Passphrase Required"
 msgstr "Απαιτείται κωδικοφράση"
 
-#: ../src/roster_window.py:1228
+#: ../src/roster_window.py:1244
 #, python-format
 msgid "Enter GPG key passphrase for account %s"
 msgstr "Πληκτρολογήστε την GPG κωδικοφράση για το λογαριασμό %s"
 
-#: ../src/roster_window.py:1229
+#: ../src/roster_window.py:1245
 msgid "Save passphrase"
 msgstr "Αποθήκευση της Κωδικοφράσης"
 
-#: ../src/roster_window.py:1277
+#: ../src/roster_window.py:1292
 msgid "No account available"
 msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
 
-#: ../src/roster_window.py:1278
+#: ../src/roster_window.py:1293
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 "Πρέπει να δημιουργήσετε ένα λογαριασμό για να μπορέσετε να συνομιλείτε με "
 "άλλες επαφές."
 
-#: ../src/roster_window.py:1581 ../src/roster_window.py:1587
+#: ../src/roster_window.py:1607 ../src/roster_window.py:1613
 msgid "You have unread messages"
 msgstr "Έχετε μη-αναγνωσμένα μηνύματα"
 
-#: ../src/roster_window.py:1582 ../src/roster_window.py:1588
+#: ../src/roster_window.py:1608 ../src/roster_window.py:1614
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
@@ -1424,24 +1612,24 @@ msgid "All contacts in this group are offline or have errors"
 msgstr ""
 "Όλες οι επαφές σε αυτή την ομάδα είναι αποσυνδεδέμενες ή έχουν πρόβλημα"
 
-#: ../src/tabbed_chat_window.py:126 ../src/gtkgui.glade.h:190
+#: ../src/tabbed_chat_window.py:125 ../src/gtkgui.glade.h:198
 msgid "OpenPGP Encryption"
 msgstr "Κρυπτογράφηση OpenPGP"
 
 #. we talk about a contact here
-#: ../src/tabbed_chat_window.py:130
+#: ../src/tabbed_chat_window.py:129
 #, python-format
 msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
 msgstr ""
 "Ο/η %s δεν έχει στείλει ένα κλειδί OpenPGP ούτε εσείς έχετε εφαρμόσει κάποιο"
 
 #. %s is being replaced in the code with JID
-#: ../src/tabbed_chat_window.py:277 ../src/tabbed_chat_window.py:345
+#: ../src/tabbed_chat_window.py:280 ../src/tabbed_chat_window.py:349
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Mόλις λάβατε ένα μήνυμα από \"%s\""
 
-#: ../src/tabbed_chat_window.py:278
+#: ../src/tabbed_chat_window.py:281
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -1450,214 +1638,234 @@ msgstr ""
 "μήνυμα θα χαθεί."
 
 #. we are not connected
-#: ../src/tabbed_chat_window.py:518
+#: ../src/tabbed_chat_window.py:533
 msgid "A connection is not available"
 msgstr "Δεν υπάρχει διαθέσιμη σύνδεση"
 
-#: ../src/tabbed_chat_window.py:519
+#: ../src/tabbed_chat_window.py:534
 msgid "Your message can not be sent until you are connected."
 msgstr "Δεν μπορεί να από το μήνυμα σας εκτός αν είστε συνδεδεμένος."
 
-#: ../src/tabbed_chat_window.py:607
+#: ../src/tabbed_chat_window.py:622
 msgid "Sending private message failed"
 msgstr "Αποτυχία αποστολής προσωπικού μηνύματος"
 
 #. in second %s code replaces with nickname
-#: ../src/tabbed_chat_window.py:609
+#: ../src/tabbed_chat_window.py:624
 #, python-format
 msgid "You are no longer in room \"%s\" or \"%s\" has left."
 msgstr "Δεν είστε πια στο δωμάτιο \"%s\" ή ο/η \"%s\" έφυγε."
 
-#: ../src/tabbed_chat_window.py:712
+#: ../src/tabbed_chat_window.py:727
 msgid "Encryption enabled"
 msgstr "Ενεργοποιήθηκε η κρυπτογράφηση"
 
-#: ../src/tabbed_chat_window.py:717
+#: ../src/tabbed_chat_window.py:732
 msgid "Encryption disabled"
 msgstr "Απενεργοποιήθηκε η κρυπτογράφηση"
 
-#: ../src/vcard.py:127
+#: ../src/vcard.py:137
 msgid "Choose Avatar"
 msgstr "Επιλογή Εικόνας"
 
 #. in bytes
 #. 8 kb
-#: ../src/vcard.py:168
+#: ../src/vcard.py:178
 #, python-format
 msgid "The filesize of image \"%s\" is too large"
 msgstr "Το μέγεθος αρχείου της εικόνας \"%s\" είναι πολύ μεγάλο"
 
-#: ../src/vcard.py:170
+#: ../src/vcard.py:180
 msgid "The file must not be more than 8 kilobytes."
 msgstr "Το αρχείο δεν μπορεί να είναι πάνω από 8 kilobytes."
 
-#: ../src/vcard.py:252
+#: ../src/vcard.py:262
 msgid "?Client:Unknown"
 msgstr "Άγνωστος"
 
-#: ../src/vcard.py:254
+#: ../src/vcard.py:264
 msgid "?OS:Unknown"
 msgstr "Άγνωστο"
 
-#: ../src/vcard.py:275 ../src/vcard.py:294
+#: ../src/vcard.py:285 ../src/vcard.py:304
 msgid " resource with priority "
 msgstr " πόρος με προτεραιότητα"
 
-#: ../src/vcard.py:379
+#: ../src/vcard.py:386
 msgid "Without a connection you can not publish your contact information."
 msgstr ""
 "Πρέπει να είστε συνδεδεμένος για να δημοσιεύσετε τις πληροφορίες της επαφής "
 "σας"
 
-#: ../src/vcard.py:407
+#: ../src/vcard.py:414
 msgid "Without a connection, you can not get your contact information."
 msgstr ""
 "Πρέπει να είστε συνδεδεμένος για να λάβετε τις πληροφορίες της επαφής σας"
 
-#: ../src/gtkgui.glade.h:1
+#: ../src/gtkgui.glade.h:3
 msgid "0"
 msgstr "0"
 
-#: ../src/gtkgui.glade.h:2
+#: ../src/gtkgui.glade.h:4
 msgid "<b>Advanced Configuration Editor</b>"
 msgstr "<b>Επεξεργασία Ρυθμίσεων για Προχωρημένους</b>"
 
-#: ../src/gtkgui.glade.h:3
+#: ../src/gtkgui.glade.h:5
 msgid "<b>Applications</b>"
 msgstr "<b>Εφαρμογές</b>"
 
-#: ../src/gtkgui.glade.h:4
+#: ../src/gtkgui.glade.h:6
 msgid "<b>Changes in latest version</b>"
 msgstr "<b>Αλλαγές στην τελευταία έκδοση</b>"
 
 #. a header for custom browser/client/file manager. so translate sth like: Custom Settings
-#: ../src/gtkgui.glade.h:6
+#: ../src/gtkgui.glade.h:8
 msgid "<b>Custom</b>"
 msgstr "<b>Προσαρμοσμένες Ρυθμίσεις</b>"
 
-#: ../src/gtkgui.glade.h:7
+#: ../src/gtkgui.glade.h:9
+#, fuzzy
+msgid "<b>Description</b>"
+msgstr "Περιγραφή: %s"
+
+#: ../src/gtkgui.glade.h:10
 msgid "<b>Format of a chat line</b>"
 msgstr "<b>Μορφή μια γραμμής κουβέντας</b>"
 
-#: ../src/gtkgui.glade.h:8
+#: ../src/gtkgui.glade.h:11
 msgid "<b>Interface Customization</b>"
 msgstr "<b>Προσαρμογή Διεπαφής</b>"
 
-#: ../src/gtkgui.glade.h:9
+#: ../src/gtkgui.glade.h:12
 msgid "<b>Jabber Traffic</b>"
 msgstr "<b>Κίνηση Jabber</b>"
 
-#: ../src/gtkgui.glade.h:10
+#: ../src/gtkgui.glade.h:13
 msgid "<b>Log</b>"
 msgstr "<b>Ιστορικό</b>"
 
-#: ../src/gtkgui.glade.h:11
+#: ../src/gtkgui.glade.h:14
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Διάφορα</b>"
 
-#: ../src/gtkgui.glade.h:12
+#: ../src/gtkgui.glade.h:15
 msgid "<b>OpenPGP</b>"
 msgstr "<b>OpenPGP</b>"
 
-#: ../src/gtkgui.glade.h:13
+#: ../src/gtkgui.glade.h:16
+#, fuzzy
+msgid "<b>Personal Information</b>"
+msgstr "Τροποποίηση Προσωπικών Πληροφοριών..."
+
+#: ../src/gtkgui.glade.h:17
 msgid "<b>Please choose on of the options below:</b>"
 msgstr "<b>Παρακαλώ επιλέξτε ένα από τα παρακάτω:</b>"
 
-#: ../src/gtkgui.glade.h:14
+#: ../src/gtkgui.glade.h:18
+#, fuzzy
+msgid "<b>Please fill in the data for your existing account</b>"
+msgstr "Παρακαλώ συμπληρώστε τα δεδομένα για τον υπάρχων λογαριασμό σας"
+
+#: ../src/gtkgui.glade.h:19
+#, fuzzy
+msgid "<b>Please fill in the data for your new account</b>"
+msgstr "Παρακαλώ συμπληρώστε τα δεδομένα για τον νέο λογαριασμό σας"
+
+#: ../src/gtkgui.glade.h:20
 msgid "<b>Preset Status Messages</b>"
 msgstr "<b>Προκαθορισμένα Μηνύματα Κατάστασης</b>"
 
-#: ../src/gtkgui.glade.h:15
+#: ../src/gtkgui.glade.h:21
 msgid "<b>Properties</b>"
 msgstr "<b>Ιδιότητες</b>"
 
-#: ../src/gtkgui.glade.h:16
+#: ../src/gtkgui.glade.h:22
 msgid "<b>Settings</b>"
 msgstr "<b>Ρυθμίσεις</b>"
 
-#: ../src/gtkgui.glade.h:17
+#: ../src/gtkgui.glade.h:23
 msgid "<b>Sounds</b>"
 msgstr "<b>Ήχοι</b>"
 
-#: ../src/gtkgui.glade.h:18
+#: ../src/gtkgui.glade.h:24
 msgid "<b>Visual Notifications</b>"
 msgstr "<b>Οπτικές γνωστοποιήσεις</b>"
 
-#: ../src/gtkgui.glade.h:19
+#: ../src/gtkgui.glade.h:25
 msgid "<b>What do you want to do?</b>"
 msgstr "<b>Παρακαλώ επιλέξτε την ακριβή ενέργεια</b>"
 
-#: ../src/gtkgui.glade.h:20
+#: ../src/gtkgui.glade.h:26
 msgid "<b>XML Input</b>"
 msgstr "<b>Είσοδος δεδομένων XML</b>"
 
-#: ../src/gtkgui.glade.h:21
+#: ../src/gtkgui.glade.h:27
 msgid "A list of active, completed and stopped file transfers"
 msgstr "Λίστα ενεργών, ολοκληρωμένων και σταματημένων μεταφορών αρχείων"
 
-#: ../src/gtkgui.glade.h:22
+#: ../src/gtkgui.glade.h:28
 msgid "A_ccounts"
 msgstr "_Λογαριασμοί"
 
-#: ../src/gtkgui.glade.h:23
+#: ../src/gtkgui.glade.h:29
 msgid "About"
 msgstr "Περί"
 
-#: ../src/gtkgui.glade.h:24
+#: ../src/gtkgui.glade.h:30
 msgid "Account"
 msgstr "Λογαριασμός"
 
-#: ../src/gtkgui.glade.h:25
+#: ../src/gtkgui.glade.h:31
 msgid "Account Modification"
 msgstr "Τροποποίηση Λογαριασμού"
 
-#: ../src/gtkgui.glade.h:26
+#: ../src/gtkgui.glade.h:32
 msgid "Account:"
 msgstr "Λογαριασμός:"
 
-#: ../src/gtkgui.glade.h:27
+#: ../src/gtkgui.glade.h:33
 msgid "Accounts"
 msgstr "Λογαριασμοί"
 
-#: ../src/gtkgui.glade.h:28
+#: ../src/gtkgui.glade.h:34
 msgid "Activate/Disable notification for when a file transfer is complete"
 msgstr ""
 "Ενεργοποίηση/Απενεργοποίηση ειδοποίησης για όταν ολοκληρωθεί μια μεταφορά "
 "αρχείου"
 
-#: ../src/gtkgui.glade.h:29
+#: ../src/gtkgui.glade.h:35
 msgid "Ad_vanced Actions"
 msgstr "Ενέργειες για Προ_χωρημένους"
 
-#: ../src/gtkgui.glade.h:30
+#: ../src/gtkgui.glade.h:36
 msgid "Add New Contact"
 msgstr "Προσθήκη Νέας Επαφής"
 
-#: ../src/gtkgui.glade.h:31
+#: ../src/gtkgui.glade.h:37
 msgid "Add _Contact"
 msgstr "Προσθήκη _Επαφής"
 
-#: ../src/gtkgui.glade.h:32
+#: ../src/gtkgui.glade.h:38
 msgid "Address"
 msgstr "Διεύθυνση"
 
-#: ../src/gtkgui.glade.h:33
+#: ../src/gtkgui.glade.h:39
 msgid "Advanced"
 msgstr "Προχωρημένοι"
 
-#: ../src/gtkgui.glade.h:34
+#: ../src/gtkgui.glade.h:40
 msgid "Advanced Configuration Editor"
 msgstr "Επεξεργασία Ρυθμίσεων για Προχωρημένους"
 
-#: ../src/gtkgui.glade.h:35
+#: ../src/gtkgui.glade.h:41
 msgid "After nickname:"
 msgstr "Μετά από ψευδώνυμο:"
 
-#: ../src/gtkgui.glade.h:36
+#: ../src/gtkgui.glade.h:42
 msgid "After time:"
 msgstr "Μετά από χρόνο:"
 
-#: ../src/gtkgui.glade.h:37
+#: ../src/gtkgui.glade.h:43
 msgid ""
 "All chat states\n"
 "Composing only\n"
@@ -1667,54 +1875,54 @@ msgstr ""
 "Μόνο αν κάποιος γράφει ένα μήνυμα\n"
 "Απενεργοποιημένες"
 
-#: ../src/gtkgui.glade.h:40
+#: ../src/gtkgui.glade.h:46
 msgid "Allow _OS information to be sent"
 msgstr "Επίτρεψη α_ποστολής πληροφοριών για το λειτ. σύστημα"
 
-#: ../src/gtkgui.glade.h:41
+#: ../src/gtkgui.glade.h:47
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
 "Επίτρεψη εμφανίσεων/γνωστοποιήσεων όταν είμαι _απομακρ./μη διαθ./απασχολ./"
 "αφανής"
 
-#: ../src/gtkgui.glade.h:42
+#: ../src/gtkgui.glade.h:48
 msgid "Also known as iChat style"
 msgstr "Επίσης γνωστό ως στυλ iChat"
 
-#: ../src/gtkgui.glade.h:43
+#: ../src/gtkgui.glade.h:49
 msgid "Always use compact _view"
 msgstr "Να χρησιμοποιείται _πάντα η συμπαγής όψη"
 
-#: ../src/gtkgui.glade.h:44
+#: ../src/gtkgui.glade.h:50
 msgid "Ask status message when I:"
 msgstr "Ερώτηση μηνύματος κατάστασης όταν γίνομαι:"
 
-#: ../src/gtkgui.glade.h:45
+#: ../src/gtkgui.glade.h:51
 msgid "Ask:"
 msgstr "Ζητείται:"
 
-#: ../src/gtkgui.glade.h:46
+#: ../src/gtkgui.glade.h:52
 msgid "Assign Open_PGP Key"
 msgstr "Ανάθεση Open_PGP Κλειδιού"
 
-#: ../src/gtkgui.glade.h:47
+#: ../src/gtkgui.glade.h:53
 msgid "Authorize contact so he can know when you're connected"
 msgstr ""
 "Εξουσιοδοτήστε μια επαφή ώστε να μπορεί να ξέρει πότε είστε συνδεδεμένος"
 
-#: ../src/gtkgui.glade.h:48
+#: ../src/gtkgui.glade.h:54
 msgid "Auto _away after:"
 msgstr "Αυτόματα _απομακρυσμένος μετά:"
 
-#: ../src/gtkgui.glade.h:49
+#: ../src/gtkgui.glade.h:55
 msgid "Auto _not available after:"
 msgstr "Αυτόματα _μη διαθέσιμος μετά:"
 
-#: ../src/gtkgui.glade.h:50
+#: ../src/gtkgui.glade.h:56
 msgid "Auto join"
 msgstr "Αυτόματη είσοδος"
 
-#: ../src/gtkgui.glade.h:51
+#: ../src/gtkgui.glade.h:57
 msgid ""
 "Autodetect on every Gajim startup\n"
 "Always use GNOME default applications\n"
@@ -1726,87 +1934,90 @@ msgstr ""
 "Πάντα χρήση των προεπιλεγμένων εφαρμογών του KDE\n"
 "Προσαρμοσμένες ρυθμίσεις"
 
-#: ../src/gtkgui.glade.h:55
+#: ../src/gtkgui.glade.h:61
 msgid "Automatically authorize contact"
 msgstr "Αυτόματη εξουσιοδότηση επαφής"
 
-#: ../src/gtkgui.glade.h:56
+#: ../src/gtkgui.glade.h:62
+#, fuzzy
+msgid "Autoreconnect when connection is lost"
+msgstr "Αν αφαιρεθεί, η σύνδεση θα χαθεί."
+
+#: ../src/gtkgui.glade.h:63
 msgid "Background color"
 msgstr "Χρώμα φόντου"
 
-#: ../src/gtkgui.glade.h:57
+#: ../src/gtkgui.glade.h:64
 msgid "Banner:"
 msgstr "Πανό:"
 
-#: ../src/gtkgui.glade.h:58
+#: ../src/gtkgui.glade.h:65
 msgid "Before nickname:"
 msgstr "Πριν το ψευδώνυμο:"
 
-#: ../src/gtkgui.glade.h:59
+#: ../src/gtkgui.glade.h:66
 msgid "Before time:"
 msgstr "Πριν από χρόνο:"
 
-#: ../src/gtkgui.glade.h:60
+#: ../src/gtkgui.glade.h:67
 msgid "Birthday:"
 msgstr "Γενέθλια:"
 
-#: ../src/gtkgui.glade.h:61
+#: ../src/gtkgui.glade.h:68
 msgid "Bold"
 msgstr "Έντονα"
 
-#: ../src/gtkgui.glade.h:62
+#: ../src/gtkgui.glade.h:69
 msgid "C_onnect on Gajim startup"
 msgstr "Σύνδεση κατά την ε_κκίνηση του Gajim"
 
-#: ../src/gtkgui.glade.h:63
+#: ../src/gtkgui.glade.h:70
 msgid "Cancel file transfer"
 msgstr "Ακύρωση της μεταφοράς αρχείου"
 
-#: ../src/gtkgui.glade.h:64
+#: ../src/gtkgui.glade.h:71
 msgid "Cancels the selected file transfer"
 msgstr "Ακυρώνει την επιλεγμένη μεταφορά αρχείου"
 
-#: ../src/gtkgui.glade.h:65
-msgid ""
-"Cancels the selected file transfer. If there is an incomplete file, kept in "
-"the file system it will be removed. This operation is not reversable"
-msgstr ""
-"Σταματάει την επιλεγμένη μεταφορά αρχείου. Αν το αρχείο είναι ημιτελές, τότε "
-"αφαιρείται. Αυτή η ενέργεια είναι μη αναστρέψιμη"
+#: ../src/gtkgui.glade.h:72
+#, fuzzy
+msgid "Cancels the selected file transfer and removes incomplete file"
+msgstr "Ακυρώνει την επιλεγμένη μεταφορά αρχείου"
 
-#: ../src/gtkgui.glade.h:66
-msgid "Chan_ge"
-msgstr "Α_λλαγή"
+#: ../src/gtkgui.glade.h:73
+#, fuzzy
+msgid "Chan_ge Password"
+msgstr "Αλλαγή Κωδικού"
 
-#: ../src/gtkgui.glade.h:67
+#: ../src/gtkgui.glade.h:74
 msgid "Change Password"
 msgstr "Αλλαγή Κωδικού"
 
-#: ../src/gtkgui.glade.h:68
+#: ../src/gtkgui.glade.h:75
 msgid "Change _Nickname"
 msgstr "Αλλαγή _Ψευδώνυμου"
 
-#: ../src/gtkgui.glade.h:69
+#: ../src/gtkgui.glade.h:76
 msgid "Change _Subject"
 msgstr "Αλλαγή _Θέματος"
 
-#: ../src/gtkgui.glade.h:71
+#: ../src/gtkgui.glade.h:78
 msgid "Chat state noti_fications:"
 msgstr "Ειδοπ_οιήσεις για κατάσταση κουβέντας:"
 
-#: ../src/gtkgui.glade.h:72
+#: ../src/gtkgui.glade.h:79
 msgid "Chat with"
 msgstr "Κουβέντα με"
 
-#: ../src/gtkgui.glade.h:73
+#: ../src/gtkgui.glade.h:80
 msgid "Check for new _version on Gajim startup"
 msgstr "Έλεγχος για _νέα έκδοση κατά την εκκίνηση του Gajim"
 
-#: ../src/gtkgui.glade.h:74
+#: ../src/gtkgui.glade.h:81
 msgid "Check if you want to register for a new jabber account"
 msgstr "Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαριασμό"
 
-#: ../src/gtkgui.glade.h:75
+#: ../src/gtkgui.glade.h:82
 msgid ""
 "Check this option, only if someone you don't have in the roster spams/annoys "
 "you. Use with caution, cause it blocks all messages from any contact that is "
@@ -1816,7 +2027,7 @@ msgstr ""
 "ή άλλα ενοχλητικά μηνύματα. Χρησιμοποιήστε το με προσοχή, γιατί μπλοκάρει "
 "όλα τα μηνύματα από κάθε επαφή που δεν έχετε στην λίστα επαφών σας"
 
-#: ../src/gtkgui.glade.h:76
+#: ../src/gtkgui.glade.h:83
 msgid ""
 "Check this so Gajim will connect in port 5223 where legacy servers are "
 "expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
@@ -1828,193 +2039,189 @@ msgstr ""
 "κρυπτογράφηση TLS αυτόματα αν αυτή η δυνατότητα του γνωστοποιηθεί από τον "
 "διακομιστή, και ότι με αυτή την επιλογή απενεργοποιείτε το TLS"
 
-#: ../src/gtkgui.glade.h:77
+#: ../src/gtkgui.glade.h:84
 msgid "Choose _Key..."
 msgstr "Επιλογή _Κλειδιού..."
 
-#: ../src/gtkgui.glade.h:78
+#: ../src/gtkgui.glade.h:85
 msgid "City:"
 msgstr "Πόλη:"
 
-#: ../src/gtkgui.glade.h:79
+#: ../src/gtkgui.glade.h:86
 msgid "Clean _up"
 msgstr "Εκκα_θάριση"
 
-#: ../src/gtkgui.glade.h:80
+#: ../src/gtkgui.glade.h:87
 msgid "Click to change account's password"
 msgstr "Πατήστε για να αλλάξετε τον κωδικό του λογαριασμού"
 
-#: ../src/gtkgui.glade.h:81
+#: ../src/gtkgui.glade.h:88
 msgid "Click to get contact's extended information"
 msgstr "Πατήστε για να έχετε περισσότερες πληροφορίες για αυτή την επαφή"
 
-#: ../src/gtkgui.glade.h:82
+#: ../src/gtkgui.glade.h:89
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
 msgstr ""
 "Πατήστε για να δείτε τα χαρακτηριστικά (όπως μεταφορές MSN, ICQ) των "
 "διακομιστών του jabber"
 
-#: ../src/gtkgui.glade.h:83
+#: ../src/gtkgui.glade.h:90
 msgid "Click to see past conversation in this room"
 msgstr "Πατήστε για να δείτε παλιότερες συζητήσεις σε αυτό το δωμάτιο"
 
-#: ../src/gtkgui.glade.h:84
+#: ../src/gtkgui.glade.h:91
 msgid "Click to see past conversations with this contact"
 msgstr "Πατήστε για να δείτε παλιότερες συζητήσεις με αυτή την επαφή"
 
-#: ../src/gtkgui.glade.h:85
+#: ../src/gtkgui.glade.h:92
 msgid "Client:"
 msgstr "Εφαρμογή:"
 
-#: ../src/gtkgui.glade.h:86
+#: ../src/gtkgui.glade.h:93
 msgid "Company:"
 msgstr "Εταιρία:"
 
-#: ../src/gtkgui.glade.h:87
+#: ../src/gtkgui.glade.h:94
 msgid "Configure _Room"
 msgstr "Τροποποίηση _Δωματίου"
 
-#: ../src/gtkgui.glade.h:88
+#: ../src/gtkgui.glade.h:95
 msgid "Connection"
 msgstr "Σύνδεση"
 
-#: ../src/gtkgui.glade.h:89
+#: ../src/gtkgui.glade.h:96
 msgid "Contact Information"
 msgstr "Πληροφορίες Επαφής"
 
-#: ../src/gtkgui.glade.h:90
+#: ../src/gtkgui.glade.h:97
 msgid "Contact _Info"
 msgstr "Πλη_ροφορίες Επαφής"
 
-#: ../src/gtkgui.glade.h:91
+#: ../src/gtkgui.glade.h:98
 msgid "Contact:"
 msgstr "Επαφή:"
 
-#: ../src/gtkgui.glade.h:92
+#: ../src/gtkgui.glade.h:99
 msgid "Conversation History"
 msgstr "Ιστορικό Κουβέντας"
 
-#: ../src/gtkgui.glade.h:93
+#: ../src/gtkgui.glade.h:100
 msgid "Country:"
 msgstr "Χώρα:"
 
-#: ../src/gtkgui.glade.h:94
+#: ../src/gtkgui.glade.h:101
 msgid "Default _status iconset:"
 msgstr "_Σετ εικονιδίων κατάστασης:"
 
-#: ../src/gtkgui.glade.h:95
+#: ../src/gtkgui.glade.h:102
 msgid "Delete MOTD"
 msgstr "Διαγραφή MOTD"
 
-#: ../src/gtkgui.glade.h:96
+#: ../src/gtkgui.glade.h:103
 msgid "Delete Message of the Day"
 msgstr "Διαγραφή Μηνύματος της Ημέρας"
 
-#: ../src/gtkgui.glade.h:97
+#: ../src/gtkgui.glade.h:104
 msgid "Deletes Message of the Day"
 msgstr "Διαγράφει το Μήνυμα της Ημέρας (MOTD)"
 
-#: ../src/gtkgui.glade.h:98
+#: ../src/gtkgui.glade.h:105
 msgid "Deny authorization from contact so he cannot know when you're connected"
 msgstr ""
 "Αρνηθείτε εξουσιοδότηση σε μια επαφή ώστε να μην μπορεί να γνωρίζει πότε "
 "είστε συνδεδεμένος"
 
-#: ../src/gtkgui.glade.h:99
+#: ../src/gtkgui.glade.h:106
 msgid "Department:"
 msgstr "Τμήμα"
 
-#: ../src/gtkgui.glade.h:100
+#: ../src/gtkgui.glade.h:107
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: ../src/gtkgui.glade.h:101
+#: ../src/gtkgui.glade.h:108
 msgid "E-Mail:"
 msgstr "Ε-Mail"
 
-#: ../src/gtkgui.glade.h:102
+#: ../src/gtkgui.glade.h:109
 msgid "Edit Groups"
 msgstr "Τροποποίηση Ομάδων"
 
-#: ../src/gtkgui.glade.h:103
+#: ../src/gtkgui.glade.h:110
 msgid "Edit Personal Information..."
 msgstr "Τροποποίηση Προσωπικών Πληροφοριών..."
 
-#: ../src/gtkgui.glade.h:104
+#: ../src/gtkgui.glade.h:111
 msgid "Edit _Groups"
 msgstr "Επεξεργασία _Ομάδων"
 
 #. XML Console enable checkbutton
-#: ../src/gtkgui.glade.h:106
+#: ../src/gtkgui.glade.h:113
 msgid "Enable"
 msgstr "Ενεργοποίηση"
 
-#: ../src/gtkgui.glade.h:107
+#: ../src/gtkgui.glade.h:114
 msgid "Enter it again for confirmation:"
 msgstr "Επαναπληκτρολογήστε για επιβεβαίωση:"
 
-#: ../src/gtkgui.glade.h:108
+#: ../src/gtkgui.glade.h:115
 msgid "Enter new password:"
 msgstr "Πληκτρολογήστε νέο κωδικό:"
 
-#: ../src/gtkgui.glade.h:109
+#: ../src/gtkgui.glade.h:116
 msgid "Enter your message:"
 msgstr "Πληκτρολογήστε το μήνυμα σας:"
 
-#: ../src/gtkgui.glade.h:110
+#: ../src/gtkgui.glade.h:117
 msgid "Events"
 msgstr "Γεγονότα"
 
-#: ../src/gtkgui.glade.h:111
+#: ../src/gtkgui.glade.h:118
 msgid "Every 5 _minutes"
 msgstr "Κάθε 5 _λεπτά"
 
-#: ../src/gtkgui.glade.h:112
+#: ../src/gtkgui.glade.h:119
 msgid "Extra Address:"
 msgstr "Επιπλέον Οδός:"
 
 #. Family Name
-#: ../src/gtkgui.glade.h:114
+#: ../src/gtkgui.glade.h:121
 msgid "Family:"
 msgstr "Οικογένεια:"
 
-#: ../src/gtkgui.glade.h:115
+#: ../src/gtkgui.glade.h:122
 msgid "File Transfers"
 msgstr "Μεταφορές Αρχείων"
 
-#: ../src/gtkgui.glade.h:116
+#: ../src/gtkgui.glade.h:123
 msgid "File _Transfers"
 msgstr "_Μεταφορές Αρχείων"
 
-#: ../src/gtkgui.glade.h:117
+#: ../src/gtkgui.glade.h:124
 msgid "File manager:"
 msgstr "Διαχειριστής αρχείων:"
 
-#: ../src/gtkgui.glade.h:118
+#: ../src/gtkgui.glade.h:125
 msgid "Filter:"
 msgstr "Φιλτράρισμα:"
 
-#: ../src/gtkgui.glade.h:119
+#: ../src/gtkgui.glade.h:126
 msgid "Font:"
 msgstr "Γραμματοσειρά:"
 
-#: ../src/gtkgui.glade.h:120
+#: ../src/gtkgui.glade.h:127
 msgid "Format: YYYY-MM-DD"
 msgstr "Μορφή: ΕΕΕΕ-ΜΜ-ΗΗ"
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:128
 msgid "From:"
 msgstr "Από:"
 
-#: ../src/gtkgui.glade.h:122 ../src/tooltips.py:216
-msgid "Gajim"
-msgstr "Gajim"
-
-#: ../src/gtkgui.glade.h:123
+#: ../src/gtkgui.glade.h:130
 msgid "Gajim Themes Customization"
 msgstr "Προσαρμογή Θεμάτων Gajim"
 
-#: ../src/gtkgui.glade.h:124
+#: ../src/gtkgui.glade.h:131
 msgid ""
 "Gajim will automatically show the new received message in a new chat window "
 "or tab in an existing chat window"
@@ -2022,7 +2229,7 @@ msgstr ""
 "Το Gajim θα εμφανίσει αυτόματα το νέο εισερχόμενο μήνυμα σε ένα νέο παράθυρο "
 "κουβέντας ή σε μια καρτέλα ενός ήδη υπάρχοντος παραθύρου κουβέντας"
 
-#: ../src/gtkgui.glade.h:125
+#: ../src/gtkgui.glade.h:132
 msgid ""
 "Gajim will notify you for new message via a popup in the bottom right of the "
 "screen"
@@ -2030,7 +2237,7 @@ msgstr ""
 "Το Gajim θα σας ειδοποιήσει για το νέο μήνυμα μέσω ενός αναδυόμενου "
 "παραθύρου στο κάτω δεξιά μέρος της οθόνης"
 
-#: ../src/gtkgui.glade.h:126
+#: ../src/gtkgui.glade.h:133
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed in"
@@ -2038,7 +2245,7 @@ msgstr ""
 "Το Gajim θα σας ειδοποιήσει μέσω ενός αναδυόμενου παραθύρου στο κάτω δεξιά "
 "μέρος της οθόνης για τις επαφές που μόλις συνδέθηκαν στο Jabber"
 
-#: ../src/gtkgui.glade.h:127
+#: ../src/gtkgui.glade.h:134
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed out"
@@ -2046,62 +2253,62 @@ msgstr ""
 "Το Gajim θα σας ειδοποιήσει μέσω ενός αναδυόμενου παραθύρου στο κάτω δεξιά "
 "μέρος της οθόνης για τις επαφές που μόλις αποσυνδέθηκαν στο Jabber"
 
-#: ../src/gtkgui.glade.h:128
+#: ../src/gtkgui.glade.h:135
 msgid ""
 "Gajim will only change the icon of the contact that sent the new message"
 msgstr "Το Gajim θα αλλάξει μόνο το εικονίδιο της επαφής που έστειλε το μήνυμα"
 
-#: ../src/gtkgui.glade.h:129
+#: ../src/gtkgui.glade.h:136
 msgid "Gajim: First Time Wizard"
 msgstr "Gajim: Οδηγός Πρώτης Φοράς"
 
 #. Given Name
-#: ../src/gtkgui.glade.h:132
+#: ../src/gtkgui.glade.h:139
 msgid "Given:"
 msgstr "Δοθέν Όνομα"
 
-#: ../src/gtkgui.glade.h:133
+#: ../src/gtkgui.glade.h:140
 msgid "Go"
 msgstr "Πάμε"
 
-#: ../src/gtkgui.glade.h:135
+#: ../src/gtkgui.glade.h:142
 msgid "Group:"
 msgstr "Ομάδα:"
 
-#: ../src/gtkgui.glade.h:136
+#: ../src/gtkgui.glade.h:143
 msgid "HTTP Connect"
 msgstr "Σύνδεση HTTP"
 
-#: ../src/gtkgui.glade.h:137
+#: ../src/gtkgui.glade.h:144
 msgid "Hides the window"
 msgstr "Αποκρύπτει το παράθυρο"
 
-#: ../src/gtkgui.glade.h:138
+#: ../src/gtkgui.glade.h:145
 msgid "Homepage:"
 msgstr "Προσωπ. Σελίδα:"
 
-#: ../src/gtkgui.glade.h:139
+#: ../src/gtkgui.glade.h:146
 msgid "Hostname: "
 msgstr "Κεντρικός υπολογιστής:"
 
-#: ../src/gtkgui.glade.h:140
+#: ../src/gtkgui.glade.h:147
 msgid "I already have an account I want to use"
 msgstr "Έχω ήδη ένα λογαριασμό που θέλω να χρησιμοποιήσω"
 
-#: ../src/gtkgui.glade.h:141
+#: ../src/gtkgui.glade.h:148
 msgid "I want to _register for a new account"
 msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαριασμό"
 
-#: ../src/gtkgui.glade.h:142
+#: ../src/gtkgui.glade.h:149
 msgid "I would like to add you to my contact list."
 msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφών μου."
 
-#: ../src/gtkgui.glade.h:143
+#: ../src/gtkgui.glade.h:150
 msgid "If checked, Gajim will also have a trayicon"
 msgstr ""
 "Αν επιλεγεί, το Gajim θα έχει δικό του εικονίδιο στην περιοχή γνωστοποίησης"
 
-#: ../src/gtkgui.glade.h:144
+#: ../src/gtkgui.glade.h:151
 msgid ""
 "If checked, Gajim will broadcast capability to send and receive meta-"
 "information related to a conversation you may have with a contact such as "
@@ -2111,17 +2318,17 @@ msgstr ""
 "λαμβάνει μετα-πληροφορίες σχετικές με μια συζήτηση που έχετε με μια επαφή. "
 "Μια τέτοια πληροφορία είναι π.χ. ότι κάποιος από τους δυο γράφει ένα μήνυμα"
 
-#: ../src/gtkgui.glade.h:145
+#: ../src/gtkgui.glade.h:152
 msgid "If checked, Gajim will join this group chat on startup"
 msgstr ""
 "Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτή την ομαδική συζήτηση "
 "κατά την εκκίνηση"
 
-#: ../src/gtkgui.glade.h:146
+#: ../src/gtkgui.glade.h:153
 msgid "If checked, Gajim will remember the password for this account"
 msgstr "Αν επιλεγεί, το Gajim θα θυμάται τον κωδικό για αυτόν το λογαριασμό"
 
-#: ../src/gtkgui.glade.h:147
+#: ../src/gtkgui.glade.h:154
 msgid ""
 "If checked, Gajim will remember the roster and chat window positions in the "
 "screen and the sizes of them next time you run it"
@@ -2129,7 +2336,7 @@ msgstr ""
 "Αν επιλεγεί, το Gajim θα θυμάται την θέση και το μέγεθος του κύριου "
 "παραθύρου την επόμενη φορά που θα εκτελεστεί"
 
-#: ../src/gtkgui.glade.h:148
+#: ../src/gtkgui.glade.h:155
 msgid ""
 "If checked, Gajim will replace ascii smilies like ':)' with equivalent "
 "graphical emoticons"
@@ -2137,7 +2344,7 @@ msgstr ""
 "Αν επιλεγεί, το Gajim θα μετατρέπει όλα ascii σύμβολα όπως το ':)' με τα "
 "αντίστοιχα γραφικά σύμβολα"
 
-#: ../src/gtkgui.glade.h:149
+#: ../src/gtkgui.glade.h:156
 msgid ""
 "If checked, Gajim will send keep-alive packets so it prevents connection "
 "timeout which results in disconnection"
@@ -2145,15 +2352,16 @@ msgstr ""
 "Αν επιλεγεί, το Gajim θα στέλνει πακέτα keep-alive ώστε να αποφύγει την "
 "διακοπή της σύνδεσης"
 
-#: ../src/gtkgui.glade.h:150
+#: ../src/gtkgui.glade.h:157
+#, fuzzy
 msgid ""
 "If checked, Gajim will store the password in ~/.gajim/config with 'read' "
-"permission only for only you and of course the administrator"
+"permission only for only you"
 msgstr ""
 "Εάν επιλεγεί, το Gajim θα αποθηκεύσει τον κωδικό στο ~/.gajim/config με "
 "δικαίωμα ανάγνωσης μόνο για εσάς και φυσικά τον διαχειριστή του Η/Υ σας"
 
-#: ../src/gtkgui.glade.h:151
+#: ../src/gtkgui.glade.h:158
 msgid ""
 "If checked, Gajim will use protocol-specific status icons. (eg. A contact "
 "from MSN will have the equivalent msn icon for status online, away, busy, "
@@ -2163,7 +2371,7 @@ msgstr ""
 "πρωτόκολλο της επαφής. (πχ. Μια επαφή από το MSN θα έχει το αντίστοιχο msn "
 "εικονίδιο για τις καταστάσεις διαθέσιμος, απομακρυσμένος κλπ..)"
 
-#: ../src/gtkgui.glade.h:152
+#: ../src/gtkgui.glade.h:159
 msgid ""
 "If checked, Gajim, when launched, will automatically connect to jabber using "
 "this account"
@@ -2171,7 +2379,7 @@ msgstr ""
 "Εάν επιλεγεί, το Gajim, όταν εκτελεστεί, θα συνδεθεί αυτόματα στο Jabber "
 "χρησιμοποιώντας αυτόν το λογαριασμό"
 
-#: ../src/gtkgui.glade.h:153
+#: ../src/gtkgui.glade.h:160
 msgid ""
 "If checked, all chat and group chat windows will have the information area "
 "in the top and the buttons area in the bottom hidden. You can quick toggle "
@@ -2184,7 +2392,7 @@ msgstr ""
 "Η τελευταία κατάσταση στην οποία αφήνετε ένα παράθυρο/καρτέλα δεν είναι "
 "μόνιμη"
 
-#: ../src/gtkgui.glade.h:154
+#: ../src/gtkgui.glade.h:161
 msgid ""
 "If you have 2 or more accounts and it is checked, Gajim will list all "
 "contacts as if you had one account"
@@ -2192,191 +2400,195 @@ msgstr ""
 "Αν έχετε 2 ή περισσότερους λογαριασμούς και έχει επιλεγεί, το Gajim θα "
 "εμφανίζει τις επαφές σας σαν να είχατε ένα λογαριασμό"
 
-#: ../src/gtkgui.glade.h:155
+#: ../src/gtkgui.glade.h:162
+#, fuzzy
+msgid "Inactivate account"
+msgstr "Δεν έχετε κανέναν ενεργό λογαριασμό"
+
+#: ../src/gtkgui.glade.h:163
 msgid "Incoming message:"
 msgstr "Εισερχόμενο μήνυμα:"
 
 #. Info/Query make the "IQ" initials. So translate like this 'YourLang/YourLang (Info/Query)'. Thanks (it's a tooltip so width is not a problem)
-#: ../src/gtkgui.glade.h:157
+#: ../src/gtkgui.glade.h:165
 msgid "Info/Query"
 msgstr "Πληροφορία/Ερώτηση (Info/Query)"
 
-#: ../src/gtkgui.glade.h:158
-msgid "Information about you are stored on the server as vCard"
+#: ../src/gtkgui.glade.h:166
+#, fuzzy
+msgid "Information about you, as stored in the server"
 msgstr "Οι πληροφορίες για εσάς αποθηκεύονται στον διακομιστή ως vCard"
 
-#: ../src/gtkgui.glade.h:159
+#: ../src/gtkgui.glade.h:167
 msgid "Italic"
 msgstr "Πλάγια"
 
-#: ../src/gtkgui.glade.h:160
+#: ../src/gtkgui.glade.h:168
 msgid "Jabber"
 msgstr "Jabber"
 
-#: ../src/gtkgui.glade.h:161
+#: ../src/gtkgui.glade.h:169
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
 
-#: ../src/gtkgui.glade.h:163
+#: ../src/gtkgui.glade.h:171
 msgid "Join _Group Chat"
 msgstr "Συμμετοχή σε _Ομαδική Συζήτηση"
 
-#: ../src/gtkgui.glade.h:164
+#: ../src/gtkgui.glade.h:172
 msgid "Join _Group Chat..."
 msgstr "Συμμετοχή σε _Ομαδική Συζήτηση..."
 
-#: ../src/gtkgui.glade.h:165
+#: ../src/gtkgui.glade.h:173
 msgid "Location"
 msgstr "Περιοχή"
 
-#: ../src/gtkgui.glade.h:166
+#: ../src/gtkgui.glade.h:174
 msgid "Log history"
 msgstr "Καταγραφή ιστορικού"
 
-#: ../src/gtkgui.glade.h:167
+#: ../src/gtkgui.glade.h:175
 msgid "Log presences in _contact's log file"
 msgstr "Αποθήκευση παρουσιών στο αρ_χείο με το ιστορικό της επαφής"
 
-#: ../src/gtkgui.glade.h:168
+#: ../src/gtkgui.glade.h:176
 msgid "Log presences in an _external file"
 msgstr "Αποθήκευση παρουσιών σε _εξωτερικό αρχείο"
 
-#: ../src/gtkgui.glade.h:169
+#: ../src/gtkgui.glade.h:177
 msgid "Manage Accounts"
 msgstr "Διαχείριση Λογαριασμών"
 
-#: ../src/gtkgui.glade.h:170
+#: ../src/gtkgui.glade.h:178
 msgid "Manage Bookmarks"
 msgstr "Διαχείριση Σελιδοδεικτών"
 
-#: ../src/gtkgui.glade.h:171
+#: ../src/gtkgui.glade.h:179
 msgid "Manage Emoticons"
 msgstr "Διαχείριση Συμβόλων"
 
-#: ../src/gtkgui.glade.h:172
+#: ../src/gtkgui.glade.h:180
 msgid "Manage Proxy Profiles"
 msgstr "Διαχείριση Προφίλ Μεσολαβητή"
 
-#: ../src/gtkgui.glade.h:173
+#: ../src/gtkgui.glade.h:181
 msgid "Manage..."
 msgstr "Διαχείριση..."
 
 #. Middle Name
-#: ../src/gtkgui.glade.h:175
+#: ../src/gtkgui.glade.h:183
 msgid "Middle:"
 msgstr "Μέσο:"
 
-#: ../src/gtkgui.glade.h:176
+#: ../src/gtkgui.glade.h:184
 msgid "Mo_derator"
 msgstr "_Συντονιστής"
 
-#: ../src/gtkgui.glade.h:177
+#: ../src/gtkgui.glade.h:185
 msgid "More"
 msgstr "Περισσότερα"
 
-#: ../src/gtkgui.glade.h:178
+#: ../src/gtkgui.glade.h:186
 msgid "Name:"
 msgstr "Όνομα:"
 
-#: ../src/gtkgui.glade.h:180
+#: ../src/gtkgui.glade.h:188
 msgid "New version of Gajim available"
 msgstr "Μια νέα έκδοση του Gajim είναι διαθέσιμη"
 
-#: ../src/gtkgui.glade.h:181
+#: ../src/gtkgui.glade.h:189
 msgid "Nickname:"
 msgstr "Όνομα χρήστη:"
 
 #. None means no proxy profile selected
-#: ../src/gtkgui.glade.h:184
+#: ../src/gtkgui.glade.h:192
 msgid "None"
 msgstr "Τίποτα"
 
-#: ../src/gtkgui.glade.h:185
+#: ../src/gtkgui.glade.h:193
 msgid "Notify me about contacts that: "
 msgstr "Ειδοποίηση όταν μια επαφή:"
 
-#: ../src/gtkgui.glade.h:186
+#: ../src/gtkgui.glade.h:194
 msgid "OS:"
 msgstr "Λειτ. Σύστημα:"
 
-#: ../src/gtkgui.glade.h:187
+#: ../src/gtkgui.glade.h:195
 msgid "On every _message"
 msgstr "Σε κάθε _μήνυμα"
 
-#: ../src/gtkgui.glade.h:188
+#: ../src/gtkgui.glade.h:196
 msgid "Open Download Page"
 msgstr "Άνοιγμα Σελίδας Λήψης"
 
-#: ../src/gtkgui.glade.h:189
+#: ../src/gtkgui.glade.h:197
 msgid "Open..."
 msgstr "Άνοιγμα..."
 
-#: ../src/gtkgui.glade.h:191
+#: ../src/gtkgui.glade.h:199
 msgid "Or choose a preset message:"
 msgstr "Ή διαλέξτε από τα προκαθορισμένα μηνύματα:"
 
-#: ../src/gtkgui.glade.h:192
+#: ../src/gtkgui.glade.h:200
 msgid "Outgoing message:"
 msgstr "Εξερχόμενο μήνυμα:"
 
-#: ../src/gtkgui.glade.h:193
+#: ../src/gtkgui.glade.h:201
 msgid "Pass_word:"
 msgstr "_Κωδικός:"
 
-#: ../src/gtkgui.glade.h:195
+#: ../src/gtkgui.glade.h:203
 msgid "Password:"
 msgstr "Κωδικός:"
 
-#: ../src/gtkgui.glade.h:196
-msgid "Personal Details"
-msgstr "Προσωπικές Πληροφορίες"
+#: ../src/gtkgui.glade.h:204
+#, fuzzy
+msgid "Personal Information"
+msgstr "Τροποποίηση Προσωπικών Πληροφοριών..."
 
-#: ../src/gtkgui.glade.h:197
+#: ../src/gtkgui.glade.h:205
 msgid "Phone No.:"
 msgstr "Τηλέφωνο:"
 
-#: ../src/gtkgui.glade.h:198
+#: ../src/gtkgui.glade.h:206
 msgid "Play _sounds"
 msgstr "Αναπαραγωγή _ήχων"
 
-#: ../src/gtkgui.glade.h:199
-msgid "Please fill in the data for your existing account"
-msgstr "Παρακαλώ συμπληρώστε τα δεδομένα για τον υπάρχων λογαριασμό σας"
+#: ../src/gtkgui.glade.h:207
+#, fuzzy
+msgid "Po_sition:"
+msgstr "Θέση:"
 
-#: ../src/gtkgui.glade.h:200
-msgid "Please fill in the data for your new account"
-msgstr "Παρακαλώ συμπληρώστε τα δεδομένα για τον νέο λογαριασμό σας"
-
-#: ../src/gtkgui.glade.h:201
+#: ../src/gtkgui.glade.h:208
 msgid "Port: "
 msgstr "Θύρα: "
 
-#: ../src/gtkgui.glade.h:202
+#: ../src/gtkgui.glade.h:209
 msgid "Position:"
 msgstr "Θέση:"
 
-#: ../src/gtkgui.glade.h:203
+#: ../src/gtkgui.glade.h:210
 msgid "Postal Code:"
 msgstr "Τ.Κ.:"
 
-#: ../src/gtkgui.glade.h:204
+#: ../src/gtkgui.glade.h:211
 msgid "Preferences"
 msgstr "Προτιμήσεις"
 
 #. Prefix in Name
-#: ../src/gtkgui.glade.h:206
+#: ../src/gtkgui.glade.h:213
 msgid "Prefix:"
 msgstr "Πρόθεμα:"
 
-#: ../src/gtkgui.glade.h:207
+#: ../src/gtkgui.glade.h:214
 msgid "Print time:"
 msgstr "Εμφάνιση χρόνου:"
 
-#: ../src/gtkgui.glade.h:208
+#: ../src/gtkgui.glade.h:215
 msgid "Priori_ty:"
 msgstr "Π_ροτεραιότητα:"
 
-#: ../src/gtkgui.glade.h:209
+#: ../src/gtkgui.glade.h:216
 msgid ""
 "Priority is used in Jabber to determine who gets the events from the jabber "
 "server when two or more clients are connected using the same account; The "
@@ -2387,64 +2599,64 @@ msgstr ""
 "είναι συνδεδεμένες χρησιμοποιώντας τον ίδιο λογαριασμό· Η εφαρμογή με την "
 "μεγαλύτερη προτεραιότητα λαμβάνει τα γεγονότα"
 
-#: ../src/gtkgui.glade.h:210
+#: ../src/gtkgui.glade.h:217
 msgid "Profile, Avatar"
 msgstr "Προφίλ, Avatar"
 
-#: ../src/gtkgui.glade.h:211
+#: ../src/gtkgui.glade.h:218
 msgid "Protocol:"
 msgstr "Πρωτόκολλο:"
 
-#: ../src/gtkgui.glade.h:212
+#: ../src/gtkgui.glade.h:219
 msgid "Proxy:"
 msgstr "Μεσολαβητής:"
 
-#: ../src/gtkgui.glade.h:214
+#: ../src/gtkgui.glade.h:221
 msgid "Re_quest Authorization from"
 msgstr "Aί_τηση για εξουσιοδότηση από"
 
-#: ../src/gtkgui.glade.h:215
+#: ../src/gtkgui.glade.h:222
 msgid "Recently:"
 msgstr "Πρόσφατα:"
 
-#: ../src/gtkgui.glade.h:216
+#: ../src/gtkgui.glade.h:223
 msgid "Register to"
 msgstr "Εγγραφή σε"
 
-#: ../src/gtkgui.glade.h:217
+#: ../src/gtkgui.glade.h:224
 msgid "Remove account from Gajim and from server"
 msgstr "Αφαίρεση λογαριασμού από το Gajim και από τον διακομιστή"
 
-#: ../src/gtkgui.glade.h:218
+#: ../src/gtkgui.glade.h:225
 msgid "Remove account only from Gajim"
 msgstr "Αφαίρεση λογαριασμού μόνο από το Gajim"
 
-#: ../src/gtkgui.glade.h:219
+#: ../src/gtkgui.glade.h:226
 msgid "Remove file transfer from the list."
 msgstr "Αφαίρεση της μεταφοράς αρχείου από τη λίστα."
 
-#: ../src/gtkgui.glade.h:220
+#: ../src/gtkgui.glade.h:227
 msgid "Removes completed, canceled and failed file transfers from the list"
 msgstr ""
 "Αφαιρεί τις ολοκληρωμένες, ακυρωμένες και αποτυχημένες μεταφορές από τη λίστα"
 
-#: ../src/gtkgui.glade.h:221
+#: ../src/gtkgui.glade.h:228
 msgid "Removing selected file transfer"
 msgstr "Αφαίρεση επιλεγμένης μεταφοράς αρχείου"
 
-#: ../src/gtkgui.glade.h:222
+#: ../src/gtkgui.glade.h:229
 msgid "Reply to this message"
 msgstr "Απάντηση σε αυτό το μήνυμα"
 
-#: ../src/gtkgui.glade.h:223
+#: ../src/gtkgui.glade.h:230
 msgid "Reset to Default Colors"
 msgstr "Επαναφορά Προεπιλεγμένων Χρωμάτων"
 
-#: ../src/gtkgui.glade.h:224
+#: ../src/gtkgui.glade.h:231
 msgid "Resour_ce: "
 msgstr "_Πόρος: "
 
-#: ../src/gtkgui.glade.h:225
+#: ../src/gtkgui.glade.h:232
 msgid ""
 "Resource is sent to the Jabber server in order to separate the same JID in "
 "two or more parts depending on the number of the clients connected in the "
@@ -2459,203 +2671,203 @@ msgstr ""
 "ίδια στιγμή. Ο πόρος με την μεγαλύτερη προτεραιότητα θα λαμβάνει τα "
 "γεγονότα. (βλέπε και πιο κάτω)"
 
-#: ../src/gtkgui.glade.h:226
+#: ../src/gtkgui.glade.h:233
 msgid "Resource:"
 msgstr "Πόρος:"
 
-#: ../src/gtkgui.glade.h:227
+#: ../src/gtkgui.glade.h:234
 msgid "Role:"
 msgstr "Ρόλος:"
 
-#: ../src/gtkgui.glade.h:228
+#: ../src/gtkgui.glade.h:235
 msgid "Room Configuration"
 msgstr "Ρυθμίσεις Δωματίου"
 
-#: ../src/gtkgui.glade.h:229
+#: ../src/gtkgui.glade.h:236
 msgid "Room:"
 msgstr "Δωμάτιο:"
 
-#: ../src/gtkgui.glade.h:230
+#: ../src/gtkgui.glade.h:237
 msgid "Save _passphrase (insecure)"
 msgstr "Αποθήκευση _κωδικοφράσης (περιορισμένη ασφάλεια)"
 
-#: ../src/gtkgui.glade.h:231
+#: ../src/gtkgui.glade.h:238
 msgid "Save _position and size for roster and chat windows"
 msgstr ""
 "Αποθήκευση _θέσης και μεγέθους για την λίστα επαφών και για τα παράθυρα "
 "κουβέντας"
 
-#: ../src/gtkgui.glade.h:232
+#: ../src/gtkgui.glade.h:239
 msgid "Save conversation _logs for all contacts"
 msgstr "Αποθήκευση ιστορι_κού συνομιλιών για όλες τις επαφές"
 
-#: ../src/gtkgui.glade.h:233
+#: ../src/gtkgui.glade.h:240
 msgid "Save pass_word"
 msgstr "_Αποθήκευση"
 
-#: ../src/gtkgui.glade.h:234
+#: ../src/gtkgui.glade.h:241
 msgid "Sen_d"
 msgstr "Α_ποστολή"
 
-#: ../src/gtkgui.glade.h:235
+#: ../src/gtkgui.glade.h:242
 msgid "Send Authorization to"
 msgstr "Αποστολή Εξουσιοδότησης σε"
 
-#: ../src/gtkgui.glade.h:236
+#: ../src/gtkgui.glade.h:243
 msgid "Send File"
 msgstr "Αποστολή Αρχείου"
 
-#: ../src/gtkgui.glade.h:237
+#: ../src/gtkgui.glade.h:244
 msgid "Send Single _Message"
 msgstr "Αποστολή ενός _μηνύματος"
 
-#: ../src/gtkgui.glade.h:238
+#: ../src/gtkgui.glade.h:245
 msgid "Send _File"
 msgstr "Αποστολή _Αρχείου"
 
-#: ../src/gtkgui.glade.h:239
+#: ../src/gtkgui.glade.h:246
 msgid "Send keep-alive packets"
 msgstr "Αποστολή πακέτων keep-alive"
 
-#: ../src/gtkgui.glade.h:240
+#: ../src/gtkgui.glade.h:247
 msgid "Send message"
 msgstr "Αποστολή μηνύματος"
 
-#: ../src/gtkgui.glade.h:241
+#: ../src/gtkgui.glade.h:248
 msgid "Send message and close window"
 msgstr "Αποστολή μηνύματος και κλείσιμο παραθύρου"
 
-#: ../src/gtkgui.glade.h:242
+#: ../src/gtkgui.glade.h:249
 msgid "Sends a message to currently connected users to this server"
 msgstr ""
 "Στέλνει ένα μήνυμα στους χρήστες που είναι συνδεδεμένοι σε αυτό το διακομιστή"
 
-#: ../src/gtkgui.glade.h:243
+#: ../src/gtkgui.glade.h:250
 msgid "Server:"
 msgstr "Διακομιστής:"
 
-#: ../src/gtkgui.glade.h:244
+#: ../src/gtkgui.glade.h:251
 msgid "Servers Features"
 msgstr "Χαρακτηριστικά Διακομιστή"
 
-#: ../src/gtkgui.glade.h:245
+#: ../src/gtkgui.glade.h:252
 msgid "Set MOTD"
 msgstr "Ορισμός MOTD"
 
-#: ../src/gtkgui.glade.h:246
+#: ../src/gtkgui.glade.h:253
 msgid "Set Message of the Day"
 msgstr "Ορισμός Μηνύματος της Ημέρας"
 
-#: ../src/gtkgui.glade.h:247
+#: ../src/gtkgui.glade.h:254
 msgid "Set _Avatar"
 msgstr "Κα_θορισμός Avatar"
 
-#: ../src/gtkgui.glade.h:248
+#: ../src/gtkgui.glade.h:255
 msgid "Sets Message of the Day"
 msgstr "Ορίζει το Μήνυμα της Ημέρας (MOTD)"
 
-#: ../src/gtkgui.glade.h:249
+#: ../src/gtkgui.glade.h:256
 msgid "Show _Offline Contacts"
 msgstr "Εμφάνιση _Αποσυνδεδεμένων Χρηστών"
 
-#: ../src/gtkgui.glade.h:250
+#: ../src/gtkgui.glade.h:257
 msgid "Show only in _roster"
 msgstr "Εμφά_νισε το μόνο στο κύριο παράθυρο"
 
-#: ../src/gtkgui.glade.h:251
+#: ../src/gtkgui.glade.h:258
 msgid "Show roster window on Gajim startup"
 msgstr "Εμφάνιση του κεντρικού παραθύρου κατά την εκκίνηση του Gajim"
 
-#: ../src/gtkgui.glade.h:252
+#: ../src/gtkgui.glade.h:259
 msgid "Shows a list of file transfers between you and other"
 msgstr "Δείχνει τη λίστα μεταφορών αρχείων μεταξύ εσάς και άλλων"
 
-#: ../src/gtkgui.glade.h:253
+#: ../src/gtkgui.glade.h:260
 msgid "Sign _in"
 msgstr "Σύν_δεση"
 
-#: ../src/gtkgui.glade.h:254
+#: ../src/gtkgui.glade.h:261
 msgid "Sign _out"
 msgstr "Αποσ_ύνδεση"
 
-#: ../src/gtkgui.glade.h:255
+#: ../src/gtkgui.glade.h:262
 msgid "Sort contacts by status"
 msgstr "Ταξινόμηση επαφών βάσει κατάστασης"
 
-#: ../src/gtkgui.glade.h:256
+#: ../src/gtkgui.glade.h:263
 msgid "Start _Chat"
 msgstr "Έναρξη _Συζήτησης"
 
-#: ../src/gtkgui.glade.h:257
+#: ../src/gtkgui.glade.h:264
 msgid "State:"
 msgstr "Νομός:"
 
-#: ../src/gtkgui.glade.h:258
+#: ../src/gtkgui.glade.h:265
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: ../src/gtkgui.glade.h:259
+#: ../src/gtkgui.glade.h:266
 msgid "Status message:"
 msgstr "Μήνυμα κατάστασης:"
 
-#: ../src/gtkgui.glade.h:260
+#: ../src/gtkgui.glade.h:267
 msgid "Status:"
 msgstr "Κατάσταση:"
 
-#: ../src/gtkgui.glade.h:261
+#: ../src/gtkgui.glade.h:268
 msgid "Stoping selected file transfer"
 msgstr "Διακόπτεται η επιλεγμένη μεταφορά αρχείου"
 
-#: ../src/gtkgui.glade.h:262
+#: ../src/gtkgui.glade.h:269
 msgid "Street:"
 msgstr "Οδός:"
 
-#: ../src/gtkgui.glade.h:263
+#: ../src/gtkgui.glade.h:270
 msgid "Subject:"
 msgstr "Θέμα:"
 
-#: ../src/gtkgui.glade.h:264
+#: ../src/gtkgui.glade.h:271
 msgid "Subscription Request"
 msgstr "Αίτηση Εγγραφής"
 
-#: ../src/gtkgui.glade.h:265
+#: ../src/gtkgui.glade.h:272
 msgid "Subscription:"
 msgstr "Εγγραφή:"
 
 #. Suffix in Name
-#: ../src/gtkgui.glade.h:267
+#: ../src/gtkgui.glade.h:274
 msgid "Suffix:"
 msgstr "Κατάληξη:"
 
-#: ../src/gtkgui.glade.h:268
+#: ../src/gtkgui.glade.h:275
 msgid "Synch_ronize account status with global status"
 msgstr "Συγχρο_νισμός κατάστασης λογαριασμού με την γενική κατάσταση"
 
-#: ../src/gtkgui.glade.h:269
+#: ../src/gtkgui.glade.h:276
 msgid "Text color"
 msgstr "Χρώμα κειμένου"
 
-#: ../src/gtkgui.glade.h:270
+#: ../src/gtkgui.glade.h:277
 msgid "Text font"
 msgstr "Γραμματοσειρά Κειμένου"
 
-#: ../src/gtkgui.glade.h:271
+#: ../src/gtkgui.glade.h:278
 msgid "The auto away status message"
 msgstr "Αυτόματο μήνυμα για κατάσταση απομακρυσμένος"
 
-#: ../src/gtkgui.glade.h:272
+#: ../src/gtkgui.glade.h:279
 msgid "The auto not available status message"
 msgstr "Αυτόματο μήνυμα για κατάσταση μη διαθέσιμος"
 
-#: ../src/gtkgui.glade.h:273
+#: ../src/gtkgui.glade.h:280
 msgid "The bar line which is on top of chat windows"
 msgstr "Η μπάρα που είναι στο πάνω μέρος των παραθύρων κουβέντας"
 
-#: ../src/gtkgui.glade.h:274
+#: ../src/gtkgui.glade.h:281
 msgid "Theme:"
 msgstr "Θέμα:"
 
-#: ../src/gtkgui.glade.h:275
+#: ../src/gtkgui.glade.h:282
 msgid ""
 "This action removes single file transfer from the list. If the transfer is "
 "active, it is first stopped and then removed"
@@ -2663,71 +2875,79 @@ msgstr ""
 "Αυτή η ενέργεια αφαιρεί μια μεταφορά αρχείου από τη λίστα. Αν η μεταφορά "
 "είναι ενεργή, τότε πρώτα διακόπτεται και μετά αφαιρείται"
 
-#: ../src/gtkgui.glade.h:276
+#: ../src/gtkgui.glade.h:283
 msgid "Title:"
 msgstr "Τίτλος:"
 
-#: ../src/gtkgui.glade.h:277
+#: ../src/gtkgui.glade.h:284
 msgid "To:"
 msgstr "Προς:"
 
-#: ../src/gtkgui.glade.h:278
+#: ../src/gtkgui.glade.h:285
 msgid "Toggle Open_PGP Encryption"
 msgstr "Εν/Απενεργοποίηση _Κρυπτογράφησης OpenPGP"
 
-#: ../src/gtkgui.glade.h:279
+#: ../src/gtkgui.glade.h:286
+msgid ""
+"Top\n"
+"Bottom\n"
+"Left\n"
+"Right"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:290
 msgid "Type:"
 msgstr "Τύπος:"
 
-#: ../src/gtkgui.glade.h:280
+#: ../src/gtkgui.glade.h:291
 msgid "Underline"
 msgstr "Υπογράμμιση"
 
-#: ../src/gtkgui.glade.h:281
+#: ../src/gtkgui.glade.h:292
 msgid "Update MOTD"
 msgstr "Ενημέρωση MOTD"
 
-#: ../src/gtkgui.glade.h:282
+#: ../src/gtkgui.glade.h:293
 msgid "Update Message of the Day"
 msgstr "Ενημέρωση Μηνύματος της Ημέρας"
 
-#: ../src/gtkgui.glade.h:283
+#: ../src/gtkgui.glade.h:294
 msgid "Updates Message of the Day"
 msgstr "Ενημερώνει το Μήνυμα της Ημέρας (MOTD)"
 
-#: ../src/gtkgui.glade.h:284
+#: ../src/gtkgui.glade.h:295
 msgid "Use _SSL (legacy)"
 msgstr "Χρήση _SSL (για λόγους συμβατότητας)"
 
-#: ../src/gtkgui.glade.h:285
+#: ../src/gtkgui.glade.h:296
 msgid "Use _emoticons"
 msgstr "_Χρήση συμβόλων"
 
-#: ../src/gtkgui.glade.h:286
+#: ../src/gtkgui.glade.h:297
 msgid "Use _transports iconsets"
 msgstr "Χρήση σετ _εικονιδίων κατάστασης:"
 
-#: ../src/gtkgui.glade.h:287
+#: ../src/gtkgui.glade.h:298
 msgid "Use a single chat window with _tabs"
 msgstr "Χρήση ενός παραθύρου κουβέντας με _καρτέλες"
 
-#: ../src/gtkgui.glade.h:288
+#: ../src/gtkgui.glade.h:299
 msgid "Use authentication"
 msgstr "Χρήση πιστοποίησης"
 
-#: ../src/gtkgui.glade.h:289
+#: ../src/gtkgui.glade.h:300
 msgid "Use custom hostname/port"
 msgstr "Χρήση προαρμοσμένου διακομιστή/θύρας"
 
-#: ../src/gtkgui.glade.h:290
+#: ../src/gtkgui.glade.h:301
 msgid "User ID:"
 msgstr "Ταυτότητα Χρήστη:"
 
-#: ../src/gtkgui.glade.h:291
+#: ../src/gtkgui.glade.h:302
 msgid "When a file transfer is complete show a popup notification"
 msgstr "Ειδοποίησε με όταν έχει ολοκληρωθεί μια μεταφορά αρχείου"
 
-#: ../src/gtkgui.glade.h:292
+#: ../src/gtkgui.glade.h:303
 msgid ""
 "When a new message is received which is not from a contact already in a chat "
 "window, the three following actions may happen in order for you to be "
@@ -2737,374 +2957,375 @@ msgstr ""
 "βρίσκεται ήδη σε ένα παράθυρο κουβέντας, οι τρεις ακόλουθες ενέργειες μπορεί "
 "να συμβούν για να ενημερωθείτε για αυτό"
 
-#: ../src/gtkgui.glade.h:293
+#: ../src/gtkgui.glade.h:304
 msgid "When new message is received"
 msgstr "Όταν λαμβάνεται ένα νέο μήνυμα"
 
-#: ../src/gtkgui.glade.h:294
+#: ../src/gtkgui.glade.h:305
 msgid "Work"
 msgstr "Δουλειά"
 
-#: ../src/gtkgui.glade.h:295
+#: ../src/gtkgui.glade.h:306
+#, fuzzy
 msgid ""
-"You need to have an account in order to connect to\n"
-"the Jabber network."
+"You need to have an account in order to connect\n"
+"to the Jabber network."
 msgstr ""
 "Πρέπει να δημιουργήσετε ένα λογαριασμό προτού μπορέσετε να συνδεθείτε στο "
 "Jabber"
 
-#: ../src/gtkgui.glade.h:297
+#: ../src/gtkgui.glade.h:308
 msgid "Your JID:"
 msgstr "Το JID σας:"
 
-#: ../src/gtkgui.glade.h:298
+#: ../src/gtkgui.glade.h:309
 msgid "_Actions"
 msgstr "_Ενέργειες"
 
-#: ../src/gtkgui.glade.h:299
+#: ../src/gtkgui.glade.h:310
 msgid "_Add Contact..."
 msgstr "_Προσθήκη Επαφής..."
 
-#: ../src/gtkgui.glade.h:300
+#: ../src/gtkgui.glade.h:311
 msgid "_Add to Roster"
 msgstr "_Προσθήκη στην Λίστα Επαφών"
 
-#: ../src/gtkgui.glade.h:301
+#: ../src/gtkgui.glade.h:312
 msgid "_Address:"
 msgstr "_Διεύθυνση:"
 
-#: ../src/gtkgui.glade.h:302
+#: ../src/gtkgui.glade.h:313
 msgid "_Admin"
 msgstr "_Διαχειριστής"
 
-#: ../src/gtkgui.glade.h:303
+#: ../src/gtkgui.glade.h:314
 msgid "_Administrator"
 msgstr "_Διαχειριστής"
 
-#: ../src/gtkgui.glade.h:304
+#: ../src/gtkgui.glade.h:315
 msgid "_Advanced"
 msgstr "Για Προ_χωρημένους"
 
-#: ../src/gtkgui.glade.h:305
+#: ../src/gtkgui.glade.h:316
 msgid "_Authorize"
 msgstr "_Εξουσιοδότηση"
 
-#: ../src/gtkgui.glade.h:306
+#: ../src/gtkgui.glade.h:317
 msgid "_Ban"
 msgstr "_Απαγόρευση Πρόσβασης"
 
-#: ../src/gtkgui.glade.h:307
+#: ../src/gtkgui.glade.h:318
 msgid "_Bookmark This Room"
 msgstr "_Τοποθέτηση Σελιδοδείκτη για αυτό το Δωμάτιο"
 
-#: ../src/gtkgui.glade.h:308
+#: ../src/gtkgui.glade.h:319
 msgid "_Browser:"
 msgstr "_Περιηγητής:"
 
-#: ../src/gtkgui.glade.h:309
+#: ../src/gtkgui.glade.h:320
 msgid "_Cancel"
 msgstr "_Ακύρωση"
 
-#: ../src/gtkgui.glade.h:310
+#: ../src/gtkgui.glade.h:321
 msgid "_Compact View"
 msgstr "_Συμπαγής Όψη"
 
-#: ../src/gtkgui.glade.h:311
+#: ../src/gtkgui.glade.h:322
 msgid "_Compact View    Alt+C"
 msgstr "_Συμπαγής Όψη   Alt+C"
 
-#: ../src/gtkgui.glade.h:312 ../src/filetransfers_window.py:630
+#: ../src/gtkgui.glade.h:323 ../src/filetransfers_window.py:717
 msgid "_Continue"
 msgstr "_Συνέχεια"
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:324
 msgid "_Copy JID/Email Address"
 msgstr "Α_ντιγραφή JID/Email Διεύθυνσης"
 
-#: ../src/gtkgui.glade.h:314
+#: ../src/gtkgui.glade.h:325
 msgid "_Copy Link Location"
 msgstr "_Αντιγραφή Τοποθεσίας Δεσμού"
 
-#: ../src/gtkgui.glade.h:316
+#: ../src/gtkgui.glade.h:327
 msgid "_Earliest"
 msgstr "_Αρχή"
 
-#: ../src/gtkgui.glade.h:318
+#: ../src/gtkgui.glade.h:329
 msgid "_Edit Account..."
 msgstr "_Επεξεργασία Λογαριασμού..."
 
-#: ../src/gtkgui.glade.h:319
+#: ../src/gtkgui.glade.h:330
 msgid "_Finish"
 msgstr "_Τέλος"
 
-#: ../src/gtkgui.glade.h:320
+#: ../src/gtkgui.glade.h:331
 msgid "_Highlight misspelled words"
 msgstr "_Υπογράμμιση λέξεων με τυπογραφικά λάθη"
 
-#: ../src/gtkgui.glade.h:321
+#: ../src/gtkgui.glade.h:332
 msgid "_History"
 msgstr "_Ιστορικό"
 
-#: ../src/gtkgui.glade.h:322
+#: ../src/gtkgui.glade.h:333
 msgid "_Host:"
 msgstr "_Κεντρικός υπολογιστής:"
 
 #. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
-#: ../src/gtkgui.glade.h:324
+#: ../src/gtkgui.glade.h:335
 msgid "_IQ"
 msgstr "_IQ"
 
-#: ../src/gtkgui.glade.h:325
+#: ../src/gtkgui.glade.h:336
 msgid "_Icon in systray (aka. notification area)"
 msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
 
-#: ../src/gtkgui.glade.h:326
+#: ../src/gtkgui.glade.h:337
 msgid "_Ignore events from contacts not in the roster"
 msgstr "_Αγνόησε γεγονότα από επαφές που δεν είναι στη λίστα επαφών"
 
-#: ../src/gtkgui.glade.h:327
+#: ../src/gtkgui.glade.h:338
 msgid "_Jabber ID:"
 msgstr "_Jabber ID:"
 
-#: ../src/gtkgui.glade.h:328
+#: ../src/gtkgui.glade.h:339
 msgid "_Join"
 msgstr "_Συμμετοχή"
 
-#: ../src/gtkgui.glade.h:329
+#: ../src/gtkgui.glade.h:340
 msgid "_Join Group Chat"
 msgstr "_Είσοδος σε Ομαδική Συζήτηση"
 
-#: ../src/gtkgui.glade.h:330
+#: ../src/gtkgui.glade.h:341
 msgid "_Kick"
 msgstr "_Ξεφορτώσου τον"
 
-#: ../src/gtkgui.glade.h:331
+#: ../src/gtkgui.glade.h:342
 msgid "_Latest"
 msgstr "_Τέλος"
 
-#: ../src/gtkgui.glade.h:332
+#: ../src/gtkgui.glade.h:343
 msgid "_Mail client:"
 msgstr "_Εφαρμογή Αλληλογραφίας:"
 
-#: ../src/gtkgui.glade.h:333
+#: ../src/gtkgui.glade.h:344
 msgid "_Member"
 msgstr "_Μέλος"
 
-#: ../src/gtkgui.glade.h:334
+#: ../src/gtkgui.glade.h:345
 msgid "_Merge accounts"
 msgstr "_Συνένωση λογαριασμών"
 
-#: ../src/gtkgui.glade.h:335
+#: ../src/gtkgui.glade.h:346
 msgid "_Message"
 msgstr "_Μήνυμα"
 
-#: ../src/gtkgui.glade.h:336
+#: ../src/gtkgui.glade.h:347
 msgid "_Modify"
 msgstr "_Τροποποίηση"
 
-#: ../src/gtkgui.glade.h:337
+#: ../src/gtkgui.glade.h:348
 msgid "_Name: "
 msgstr "_Όνομα: "
 
-#: ../src/gtkgui.glade.h:338
+#: ../src/gtkgui.glade.h:349
 msgid "_Never"
 msgstr "_Ποτέ"
 
-#: ../src/gtkgui.glade.h:339
+#: ../src/gtkgui.glade.h:350
 msgid "_New Message"
 msgstr "_Νέο Μήνυμα"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:351
 msgid "_New Message..."
 msgstr "_Νέο Μήνυμα..."
 
-#: ../src/gtkgui.glade.h:341
+#: ../src/gtkgui.glade.h:352
 msgid "_Nickname:"
 msgstr "_Όνομα χρήστη:"
 
-#: ../src/gtkgui.glade.h:342
+#: ../src/gtkgui.glade.h:353
 msgid "_Notify me about it"
 msgstr "_Ειδοποίησε με για αυτό"
 
-#: ../src/gtkgui.glade.h:343
+#: ../src/gtkgui.glade.h:354
 msgid "_Notify me when a file transfer is complete"
 msgstr "_Ειδοποίησε με όταν έχει ολοκληρωθεί μια μεταφορά αρχείου"
 
-#: ../src/gtkgui.glade.h:344
+#: ../src/gtkgui.glade.h:355
 msgid "_OK"
 msgstr "_Εντάξει"
 
-#: ../src/gtkgui.glade.h:345
+#: ../src/gtkgui.glade.h:356
 msgid "_Occupant Actions"
 msgstr "_Ενέργειες για τους Συμμετέχοντες"
 
-#: ../src/gtkgui.glade.h:346
+#: ../src/gtkgui.glade.h:357
 msgid "_Online Users"
 msgstr "_Συνδεδεμένοι Χρήστες"
 
-#: ../src/gtkgui.glade.h:347 ../src/filetransfers_window.py:172
+#: ../src/gtkgui.glade.h:358 ../src/filetransfers_window.py:197
 msgid "_Open Containing Folder"
 msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:359
 msgid "_Open Email Composer"
 msgstr "_Άνοιγμα Προγράμματος Αλληλογραφίας"
 
-#: ../src/gtkgui.glade.h:349
+#: ../src/gtkgui.glade.h:360
 msgid "_Open Link in Browser"
 msgstr "_Άνοιγμα Δεσμού σε Περιηγητή"
 
-#: ../src/gtkgui.glade.h:350
+#: ../src/gtkgui.glade.h:361
 msgid "_Owner"
 msgstr "_Ιδιοκτήτης"
 
-#: ../src/gtkgui.glade.h:351
+#: ../src/gtkgui.glade.h:362
 msgid "_Password:"
 msgstr "_Κωδικός:"
 
-#: ../src/gtkgui.glade.h:352
+#: ../src/gtkgui.glade.h:363
 msgid "_Pause"
 msgstr "_Παύση"
 
-#: ../src/gtkgui.glade.h:353
+#: ../src/gtkgui.glade.h:364
 msgid "_Player:"
 msgstr "_Αναπαραγωγέας:"
 
-#: ../src/gtkgui.glade.h:354
+#: ../src/gtkgui.glade.h:365
 msgid "_Pop it up"
 msgstr "_Εμφάνισε το"
 
-#: ../src/gtkgui.glade.h:355
+#: ../src/gtkgui.glade.h:366
 msgid "_Port:"
 msgstr "_Θύρα:"
 
-#: ../src/gtkgui.glade.h:356
+#: ../src/gtkgui.glade.h:367
 msgid "_Preferences"
 msgstr "_Προτιμήσεις"
 
-#: ../src/gtkgui.glade.h:357
+#: ../src/gtkgui.glade.h:368
 msgid "_Presence"
 msgstr "_Παρουσία"
 
-#: ../src/gtkgui.glade.h:358
+#: ../src/gtkgui.glade.h:369
 msgid "_Previous"
 msgstr "_Πίσω"
 
-#: ../src/gtkgui.glade.h:359
+#: ../src/gtkgui.glade.h:370
 msgid "_Publish"
 msgstr "_Δημοσιοποίηση"
 
-#: ../src/gtkgui.glade.h:360
+#: ../src/gtkgui.glade.h:371
 msgid "_Quit"
 msgstr "_Έξοδος"
 
-#: ../src/gtkgui.glade.h:361
+#: ../src/gtkgui.glade.h:372
 msgid "_Refresh"
 msgstr "_Ανανέωση"
 
-#: ../src/gtkgui.glade.h:362
+#: ../src/gtkgui.glade.h:373
 msgid "_Register new account"
 msgstr "_Καταχώρηση νέου λογαριασμού"
 
-#: ../src/gtkgui.glade.h:363
+#: ../src/gtkgui.glade.h:374
 msgid "_Remove"
 msgstr "_Αφαίρεση"
 
-#: ../src/gtkgui.glade.h:365
+#: ../src/gtkgui.glade.h:376
 msgid "_Rename"
 msgstr "_Μετονομασία"
 
-#: ../src/gtkgui.glade.h:366
+#: ../src/gtkgui.glade.h:377
 msgid "_Reply"
 msgstr "_Απάντηση"
 
-#: ../src/gtkgui.glade.h:367
+#: ../src/gtkgui.glade.h:378
 msgid "_Retrieve"
 msgstr "_Ανάκτηση"
 
-#: ../src/gtkgui.glade.h:368
+#: ../src/gtkgui.glade.h:379
 msgid "_Send"
 msgstr "_Αποστολή"
 
-#: ../src/gtkgui.glade.h:369
+#: ../src/gtkgui.glade.h:380
 msgid "_Send & Close"
 msgstr "_Αποστολή & Κλείσιμο"
 
-#: ../src/gtkgui.glade.h:370
+#: ../src/gtkgui.glade.h:381
 msgid "_Send Private Message"
 msgstr "_Αποστολή Προσωπικού Μηνύματος"
 
-#: ../src/gtkgui.glade.h:371
+#: ../src/gtkgui.glade.h:382
 msgid "_Send Server Message"
 msgstr "_Αποστολή Μηνύματος Διακομιστή"
 
-#: ../src/gtkgui.glade.h:372
+#: ../src/gtkgui.glade.h:383
 msgid "_Send Single Message"
 msgstr "_Αποστολή Μονού Μηνύματος"
 
-#: ../src/gtkgui.glade.h:373
+#: ../src/gtkgui.glade.h:384
 msgid "_Server:"
 msgstr "_Διακομιστής:"
 
-#: ../src/gtkgui.glade.h:374
+#: ../src/gtkgui.glade.h:385
 msgid "_Service Discovery"
 msgstr "Ανακάλυψη _Υπηρεσιών"
 
-#: ../src/gtkgui.glade.h:375
+#: ../src/gtkgui.glade.h:386
 msgid "_Service Discovery..."
 msgstr "Ανακάλυψη _Υπηρεσιών..."
 
-#: ../src/gtkgui.glade.h:376
+#: ../src/gtkgui.glade.h:387
 msgid "_Set Image..."
 msgstr "_Ορισμός Εικόνας..."
 
-#: ../src/gtkgui.glade.h:377
+#: ../src/gtkgui.glade.h:388
 msgid "_Start Chat"
 msgstr "_Έναρξη κουβέντας"
 
-#: ../src/gtkgui.glade.h:378
+#: ../src/gtkgui.glade.h:389
 msgid "_Status"
 msgstr "_Κατάσταση"
 
-#: ../src/gtkgui.glade.h:379
+#: ../src/gtkgui.glade.h:390
 msgid "_Subscribe"
 msgstr "_Εγγραφή"
 
-#: ../src/gtkgui.glade.h:380
+#: ../src/gtkgui.glade.h:391
 msgid "_Subscription"
 msgstr "_Εγγραφή"
 
-#: ../src/gtkgui.glade.h:381
+#: ../src/gtkgui.glade.h:392
 msgid "_Use proxy"
 msgstr "_Χρήση μεσολαβητή"
 
-#: ../src/gtkgui.glade.h:382
+#: ../src/gtkgui.glade.h:393
 msgid "_Username:"
 msgstr "_Όνομα χρήστη:"
 
-#: ../src/gtkgui.glade.h:383
+#: ../src/gtkgui.glade.h:394
 msgid "_Voice"
 msgstr "_Φωνή"
 
-#: ../src/gtkgui.glade.h:384
+#: ../src/gtkgui.glade.h:395
 msgid "_XML Console"
 msgstr "Κονσόλα _XML"
 
-#: ../src/gtkgui.glade.h:385
+#: ../src/gtkgui.glade.h:396
 msgid "_XML Console..."
 msgstr "Κονσόλα _XML..."
 
-#: ../src/gtkgui.glade.h:386
+#: ../src/gtkgui.glade.h:397
 msgid "file transfers list"
 msgstr "λίστα μεταφορών αρχείων"
 
-#: ../src/gtkgui.glade.h:387
+#: ../src/gtkgui.glade.h:398
 msgid "minutes"
 msgstr "λεπτά"
 
 #: ../src/tooltips.py:212
-#, python-format
-msgid "Gajim - one unread message"
+#, fuzzy, python-format
+msgid "Gajim - %d unread message"
 msgid_plural "Gajim - %d unread messages"
 msgstr[0] "Gajim - ένα μη αναγνωσμένο μήνυμα"
 msgstr[1] "Gajim - %d μη αναγνωσμένα μηνύματα"
@@ -3114,208 +3335,224 @@ msgstr[1] "Gajim - %d μη αναγνωσμένα μηνύματα"
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
-#: ../src/tooltips.py:263
+#: ../src/tooltips.py:270
 msgid "Role: "
 msgstr "Ρόλος: "
 
-#: ../src/tooltips.py:266
+#: ../src/tooltips.py:273
 msgid "Affiliation: "
 msgstr "Συσχέτιση: "
 
-#: ../src/tooltips.py:269 ../src/tooltips.py:353 ../src/tooltips.py:366
-#: ../src/tooltips.py:429
+#: ../src/tooltips.py:276 ../src/tooltips.py:364 ../src/tooltips.py:377
+#: ../src/tooltips.py:441
 msgid "Status: "
 msgstr "Κατάσταση: "
 
-#: ../src/tooltips.py:330 ../src/tooltips.py:393
-#: ../src/filetransfers_window.py:432
-msgid "Name: "
-msgstr "Όνομα: "
-
-#: ../src/tooltips.py:332
-msgid "Subscription: "
-msgstr "Εγγραφή: "
-
-#: ../src/tooltips.py:342
-msgid "OpenPGP: "
-msgstr "OpenPGP: "
-
-#: ../src/tooltips.py:362
+#: ../src/tooltips.py:286 ../src/tooltips.py:373
 msgid "Resource: "
 msgstr "Πόρος: "
 
-#: ../src/tooltips.py:400
+#: ../src/tooltips.py:341 ../src/tooltips.py:405
+#: ../src/filetransfers_window.py:514
+msgid "Name: "
+msgstr "Όνομα: "
+
+#: ../src/tooltips.py:343
+msgid "Subscription: "
+msgstr "Εγγραφή: "
+
+#: ../src/tooltips.py:353
+msgid "OpenPGP: "
+msgstr "OpenPGP: "
+
+#: ../src/tooltips.py:412
 msgid "Type: "
 msgstr "Τύπος: "
 
-#: ../src/tooltips.py:402
+#: ../src/tooltips.py:414
 msgid "Download"
 msgstr "Λήψη"
 
-#: ../src/tooltips.py:404
+#: ../src/tooltips.py:416
 msgid "Upload"
 msgstr "Αποστολή"
 
-#: ../src/tooltips.py:406 ../src/filetransfers_window.py:434
+#: ../src/tooltips.py:418 ../src/filetransfers_window.py:516
 msgid "Sender: "
 msgstr "Αποστολέας: "
 
-#: ../src/tooltips.py:411 ../src/filetransfers_window.py:157
-#: ../src/filetransfers_window.py:436
+#: ../src/tooltips.py:423 ../src/filetransfers_window.py:182
+#: ../src/filetransfers_window.py:518
 msgid "Recipient: "
 msgstr "Παραλήπτης: "
 
-#: ../src/tooltips.py:422
+#: ../src/tooltips.py:434
 msgid "Size: "
 msgstr "Mέγεθος: "
 
-#: ../src/tooltips.py:424
+#: ../src/tooltips.py:436
 msgid "Transferred: "
 msgstr "Μεταφέρθηκαν: "
 
-#: ../src/tooltips.py:432 ../src/tooltips.py:453
+#: ../src/tooltips.py:444 ../src/tooltips.py:465
 msgid "Not started"
 msgstr "Δεν έχει ξεκινήσει"
 
-#: ../src/tooltips.py:436
+#: ../src/tooltips.py:448
 msgid "Stopped"
 msgstr "Διακόπηκε"
 
-#: ../src/tooltips.py:438 ../src/tooltips.py:441
+#: ../src/tooltips.py:450 ../src/tooltips.py:453
 msgid "Completed"
 msgstr "Ολοκληρώθηκε"
 
-#: ../src/tooltips.py:445
+#: ../src/tooltips.py:457
 msgid "Paused"
 msgstr "Παύση"
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
-#: ../src/tooltips.py:449
+#: ../src/tooltips.py:461
 msgid "Stalled"
 msgstr "Πάγωσε"
 
-#: ../src/tooltips.py:451
+#: ../src/tooltips.py:463
 msgid "Transferring"
 msgstr "Μεταφέρεται"
 
-#: ../src/filetransfers_window.py:73
+#: ../src/filetransfers_window.py:84
 msgid "File"
 msgstr "Αρχείο"
 
-#: ../src/filetransfers_window.py:87
+#: ../src/filetransfers_window.py:99
+#, fuzzy
+msgid "Time"
+msgstr "Θέμα"
+
+#: ../src/filetransfers_window.py:111
 msgid "Progress"
 msgstr "Πρόοδος"
 
-#: ../src/filetransfers_window.py:144 ../src/filetransfers_window.py:215
+#: ../src/filetransfers_window.py:169 ../src/filetransfers_window.py:239
 #, python-format
 msgid "Filename: %s"
 msgstr "Όνομα αρχείου: %s"
 
-#: ../src/filetransfers_window.py:146 ../src/filetransfers_window.py:276
+#: ../src/filetransfers_window.py:171 ../src/filetransfers_window.py:301
 #, python-format
 msgid "Size: %s"
 msgstr "Mέγεθος: %s"
 
 #. You is a reply of who send a file
-#: ../src/filetransfers_window.py:155
+#: ../src/filetransfers_window.py:180
 msgid "You"
 msgstr "You"
 
-#: ../src/filetransfers_window.py:156 ../src/filetransfers_window.py:217
+#: ../src/filetransfers_window.py:181 ../src/filetransfers_window.py:241
 #, python-format
 msgid "Sender: %s"
 msgstr "Αποστολέας: %s"
 
-#: ../src/filetransfers_window.py:168
+#: ../src/filetransfers_window.py:193
 #, python-format
 msgid "Saved in: %s"
 msgstr "Αποθηκεύτηκε στο: %s"
 
-#: ../src/filetransfers_window.py:170
+#: ../src/filetransfers_window.py:195
 msgid "File transfer completed"
 msgstr "Η μεταφορά αρχείου ολοκληρώθηκε"
 
-#: ../src/filetransfers_window.py:196 ../src/filetransfers_window.py:204
+#: ../src/filetransfers_window.py:220 ../src/filetransfers_window.py:228
 msgid "File transfer canceled"
 msgstr "Η μεταφορά αρχείου ακυρώθηκε"
 
-#: ../src/filetransfers_window.py:196 ../src/filetransfers_window.py:205
+#: ../src/filetransfers_window.py:220 ../src/filetransfers_window.py:229
 msgid "Connection with peer cannot be established."
 msgstr "Η σύνδεση με τον τον απομακρυσμένο ομότιμο δεν ήταν εφικτή."
 
-#: ../src/filetransfers_window.py:219
+#: ../src/filetransfers_window.py:243
 msgid "File transfer stopped by the contact of the other side"
 msgstr "Η μεταφορά αρχείου σταμάτησε από την επαφή της άλλης πλευράς"
 
-#: ../src/filetransfers_window.py:227
+#: ../src/filetransfers_window.py:251
 msgid "Choose File to Send..."
 msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
 
-#: ../src/filetransfers_window.py:230
+#: ../src/filetransfers_window.py:254
 msgid "Send"
 msgstr "Αποστολή"
 
-#: ../src/filetransfers_window.py:273
+#: ../src/filetransfers_window.py:298
 #, python-format
 msgid "File: %s"
 msgstr "Αρχείο: %s"
 
-#: ../src/filetransfers_window.py:279
+#: ../src/filetransfers_window.py:304
 #, python-format
 msgid "Type: %s"
 msgstr "Τύπος: %s"
 
-#: ../src/filetransfers_window.py:282
+#: ../src/filetransfers_window.py:307
 #, python-format
 msgid "Description: %s"
 msgstr "Περιγραφή: %s"
 
-#: ../src/filetransfers_window.py:284
+#: ../src/filetransfers_window.py:309
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr "O %s επιθυμεί να σας στείλει ένα αρχείο:"
 
-#: ../src/filetransfers_window.py:287
+#: ../src/filetransfers_window.py:312
 msgid "Save File as..."
 msgstr "Αποθήκευση Αρχείου ως..."
 
 #. FIXME: pango does not work here.
-#. FIXME: if gtk2.8 do this via signal
-#. http://developer.gnome.org/doc/API/2.0/gtk/GtkFileChooser.html#GtkFileChooser--do-overwrite-confirmation
-#: ../src/filetransfers_window.py:307
+#: ../src/filetransfers_window.py:334
 msgid "This file already exists"
 msgstr "Αυτό το αρχείο υπάρχει ήδη."
 
-#: ../src/filetransfers_window.py:308
+#: ../src/filetransfers_window.py:335
 msgid "Would you like to overwrite it?"
 msgstr "Θέλετε να αντικατασταθεί;"
 
-#: ../src/filetransfers_window.py:618
+#. Print remaining time in format 00:00:00
+#. You can change the places of hours, minutes, seconds -
+#. they are not translatable.
+#: ../src/filetransfers_window.py:408
+#, python-format
+msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
+msgstr ""
+
+#: ../src/filetransfers_window.py:452
+#, python-format
+msgid "(%s/s)"
+msgstr ""
+
+#: ../src/filetransfers_window.py:706
 msgid "Pause"
 msgstr "Παύση"
 
-#: ../scripts/gajim-remote.py:70
+#: ../src/gajim-remote.py:75
 msgid "show a help on specific command"
 msgstr "εμφάνιση βοήθειας στην συγκεκριμένη εντολή"
 
 #. parameter, named "on_command". User gets help for the command, specified by this parameter
-#: ../scripts/gajim-remote.py:73
+#: ../src/gajim-remote.py:78
 msgid "on_command"
 msgstr "στην_εντολή"
 
-#: ../scripts/gajim-remote.py:74
+#: ../src/gajim-remote.py:79
 msgid "show help on command"
 msgstr "εμφάνιση βοήθειας στην εντολή"
 
-#: ../scripts/gajim-remote.py:78
+#: ../src/gajim-remote.py:83
 msgid "Shows or hides the roster window"
 msgstr "Εμφανίζει ή αποκρύπτει το παράθυρο λίστας επαφών"
 
-#: ../scripts/gajim-remote.py:82
+#: ../src/gajim-remote.py:87
 msgid "Popup a window with the next unread message"
 msgstr "Εμφάνιση ενός παραθύρου κατά το επόμενο αδιάβαστο μήνυμα"
 
-#: ../scripts/gajim-remote.py:86
+#: ../src/gajim-remote.py:91
 msgid ""
 "Print a list of all contacts in the roster. Each contact appear on a "
 "separate line"
@@ -3323,43 +3560,43 @@ msgstr ""
 "Εμφάνιση όλων των επαφών στην λίστα επαφών. Κάθε επαφή εμφανίζεται σε μια "
 "ξεχωριστή γραμμή"
 
-#: ../scripts/gajim-remote.py:89 ../scripts/gajim-remote.py:104
-#: ../scripts/gajim-remote.py:116 ../scripts/gajim-remote.py:130
-#: ../scripts/gajim-remote.py:145
+#: ../src/gajim-remote.py:94 ../src/gajim-remote.py:109
+#: ../src/gajim-remote.py:121 ../src/gajim-remote.py:135
+#: ../src/gajim-remote.py:150
 msgid "account"
 msgstr "λογαριασμός"
 
-#: ../scripts/gajim-remote.py:89
+#: ../src/gajim-remote.py:94
 msgid "show only contacts of the given account"
 msgstr "εμφάνιση μόνο των επαφών του συγκεκριμένου λογαριασμού"
 
-#: ../scripts/gajim-remote.py:95
+#: ../src/gajim-remote.py:100
 msgid "Print a list of registered accounts"
 msgstr "Εμφάνιση λίστας των καταχωρημένων λογαριασμών"
 
-#: ../scripts/gajim-remote.py:99
+#: ../src/gajim-remote.py:104
 msgid "Change the status of account or accounts"
 msgstr "Αλλαγή της κατάστασης ενός ή πολλών λογαριασμών"
 
-#: ../scripts/gajim-remote.py:101
+#: ../src/gajim-remote.py:106
 msgid "status"
 msgstr "κατάσταση"
 
-#: ../scripts/gajim-remote.py:101
+#: ../src/gajim-remote.py:106
 msgid "one of: offline, online, chat, away, xa, dnd, invisible "
 msgstr ""
 "μία από τις: αποσυνδεδεμένος, συνδεδεμένος, κουβέντα, απομακρυσμένος, "
 "εκτεταμένα-απομακρυσμένος, dnd, αόρατος "
 
-#: ../scripts/gajim-remote.py:103 ../scripts/gajim-remote.py:127
+#: ../src/gajim-remote.py:108 ../src/gajim-remote.py:132
 msgid "message"
 msgstr "μήνυμα"
 
-#: ../scripts/gajim-remote.py:103
+#: ../src/gajim-remote.py:108
 msgid "status message"
 msgstr "μήνυμα κατάστασης"
 
-#: ../scripts/gajim-remote.py:104
+#: ../src/gajim-remote.py:109
 msgid ""
 "change status of account \"account\". If not specified, try to change status "
 "of all accounts that have \"sync with global status\" option set"
@@ -3368,23 +3605,24 @@ msgstr ""
 "δοκιμάστε να αλλάξετε την κατάσταση όλων των λογαριασμών με έχουν "
 "ενεργοποιημένη την επιλογή \"συγχρονισμός με την γενική κατάσταση\""
 
-#: ../scripts/gajim-remote.py:110
-msgid "Show the chat dialog so that you can send message to a contact"
+#: ../src/gajim-remote.py:115
+#, fuzzy
+msgid "Show the chat dialog so that you can send messages to a contact"
 msgstr ""
 "Εμφάνιση του διαλόγου κουβέντας έτσι ώστε να μπορείτε να στέλνετε μήνυμα σε "
 "μια επαφή"
 
-#: ../scripts/gajim-remote.py:113
+#: ../src/gajim-remote.py:118
 msgid "JID of the contact that you want to chat with"
 msgstr "το JID της επαφής με την οποία θέλετε να συνομιλήσετε"
 
-#: ../scripts/gajim-remote.py:116
+#: ../src/gajim-remote.py:121
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
 "εάν έχει καθοριστεί, η επαφή λαμβάνεται από την λίστα επαφών αυτού του "
 "λογαριασμού"
 
-#: ../scripts/gajim-remote.py:121
+#: ../src/gajim-remote.py:126
 msgid ""
 "Send new message to a contact in the roster. Both OpenPGP key and account "
 "are optional. If you want to set only 'account', without 'OpenPGP key', just "
@@ -3395,63 +3633,98 @@ msgstr ""
 "'λογαριασμό', χωρίς το 'κλειδί OpenPGP', απλώς θέστε το 'κλειδί OpenPGP' σε "
 "''."
 
-#: ../scripts/gajim-remote.py:125
+#: ../src/gajim-remote.py:130
 msgid "JID of the contact that will receive the message"
 msgstr "το JID της επαφής που θα λάβει το μήνυμα"
 
-#: ../scripts/gajim-remote.py:127
+#: ../src/gajim-remote.py:132
 msgid "message contents"
 msgstr "περιεχόμενα μηνύματος"
 
-#: ../scripts/gajim-remote.py:128
+#: ../src/gajim-remote.py:133
 msgid "pgp key"
 msgstr "κλειδί pgp"
 
-#: ../scripts/gajim-remote.py:128
+#: ../src/gajim-remote.py:133
 msgid "if specified, the message will be encrypted using this public key"
 msgstr ""
 "εάν καθοριστεί, το μήνυμα θα κρυπτογραφηθεί χρησιμοποιώντας αυτό το δημόσιο "
 "κλειδί"
 
-#: ../scripts/gajim-remote.py:130
+#: ../src/gajim-remote.py:135
 msgid "if specified, the message will be sent using this account"
 msgstr ""
 "εάν καθοριστεί, το μήνυμα θα σταλεί χρησιμοποιώντας αυτόν τον λογαριασμό"
 
-#: ../scripts/gajim-remote.py:135
+#: ../src/gajim-remote.py:140
 msgid "Get detailed info on a contact"
 msgstr "Λήψη αναλυτικών πληροφοριών για μία επαφή"
 
-#: ../scripts/gajim-remote.py:137 ../scripts/gajim-remote.py:144
+#: ../src/gajim-remote.py:142 ../src/gajim-remote.py:149
 msgid "JID of the contact"
 msgstr "το JID της επαφής"
 
-#: ../scripts/gajim-remote.py:141
+#: ../src/gajim-remote.py:146
 msgid "Send file to a contact"
 msgstr "Αποστολή αρχείου σε μία επαφή"
 
-#: ../scripts/gajim-remote.py:143
+#: ../src/gajim-remote.py:148
 msgid "file"
 msgstr "αρχείο"
 
-#: ../scripts/gajim-remote.py:143
+#: ../src/gajim-remote.py:148
 msgid "File path"
 msgstr "Διαδρομή αρχείου"
 
-#: ../scripts/gajim-remote.py:145
+#: ../src/gajim-remote.py:150
 msgid "if specified, file will be sent using this account"
 msgstr ""
 "εάν καθοριστεί, το αρχείο θα σταλεί χρησιμοποιώντας αυτόν τον λογαριασμό"
 
-#: ../scripts/gajim-remote.py:167
+#: ../src/gajim-remote.py:155
+msgid "List all preferences and their values"
+msgstr ""
+
+#: ../src/gajim-remote.py:159
+msgid ""
+"Set value of 'key' to 'value'. If there is no such key, new item in the "
+"preferences is inserted."
+msgstr ""
+
+#: ../src/gajim-remote.py:162
+msgid "key=value"
+msgstr ""
+
+#: ../src/gajim-remote.py:162
+msgid "'key' is the name of the preference, 'value' is the value to set it to"
+msgstr ""
+
+#: ../src/gajim-remote.py:167
+msgid "Delete a preference item"
+msgstr ""
+
+#: ../src/gajim-remote.py:169
+#, fuzzy
+msgid "key"
+msgstr "κλειδί pgp"
+
+#: ../src/gajim-remote.py:169
+msgid "name of the preference to be deleted"
+msgstr ""
+
+#: ../src/gajim-remote.py:173
+msgid "Write the current state of Gajim preferences to the .config file"
+msgstr ""
+
+#: ../src/gajim-remote.py:194
 msgid "Missing argument \"contact_jid\""
 msgstr "Λείπει το όρισμα \"contact_jid\""
 
-#: ../scripts/gajim-remote.py:172 ../scripts/gajim-remote.py:484
+#: ../src/gajim-remote.py:199 ../src/gajim-remote.py:524
 msgid "Service not available"
 msgstr "Η υπηρεσία δεν είναι διαθέσιμη"
 
-#: ../scripts/gajim-remote.py:190
+#: ../src/gajim-remote.py:217
 #, python-format
 msgid ""
 "'%s' is not in your roster.\n"
@@ -3460,20 +3733,20 @@ msgstr ""
 "Η επαφή '%s' δεν είναι στην λίστα σας.\n"
 "Παρακαλώ καθορίστε τον λογαριασμό που θα σταλεί το μήνυμα."
 
-#: ../scripts/gajim-remote.py:193
+#: ../src/gajim-remote.py:220
 msgid "You have no active account"
 msgstr "Δεν έχετε κανέναν ενεργό λογαριασμό"
 
-#: ../scripts/gajim-remote.py:212
+#: ../src/gajim-remote.py:245
 msgid "Session bus is not available."
 msgstr "Ο δίαυλος του session δεν είναι διαθέσιμος."
 
-#: ../scripts/gajim-remote.py:221
+#: ../src/gajim-remote.py:254
 #, python-format
 msgid "Unknown D-Bus version: %s"
 msgstr "Άγνωστη έκδοση του D-Bus: %s"
 
-#: ../scripts/gajim-remote.py:248
+#: ../src/gajim-remote.py:281
 #, python-format
 msgid ""
 "Usage: %s %s %s \n"
@@ -3482,16 +3755,16 @@ msgstr ""
 "Χρήση: %s %s %s \n"
 "\t"
 
-#: ../scripts/gajim-remote.py:250
+#: ../src/gajim-remote.py:284
 msgid "Arguments:"
 msgstr "Ορίσματα:"
 
-#: ../scripts/gajim-remote.py:254
+#: ../src/gajim-remote.py:288
 #, python-format
 msgid "%s not found"
 msgstr "μη υπαρκτό %s"
 
-#: ../scripts/gajim-remote.py:258
+#: ../src/gajim-remote.py:292
 #, python-format
 msgid ""
 "Usage: %s command [arguments]\n"
@@ -3500,12 +3773,7 @@ msgstr ""
 "Χρήση: %s εντολή [ορίσματα]\n"
 "Η εντολή είναι μία από τις:\n"
 
-#: ../scripts/gajim-remote.py:315
-#, python-format
-msgid "Unknown type %s "
-msgstr "Άγνωστος τύπος %s "
-
-#: ../scripts/gajim-remote.py:457
+#: ../src/gajim-remote.py:497
 #, python-format
 msgid ""
 "Argument \"%s\" is not specified. \n"
@@ -3513,3 +3781,25 @@ msgid ""
 msgstr ""
 "Το όρισμα \"%s\" δεν έχει οριστεί. \n"
 "Πληκτρολογήστε \"%s help %s\" για περισσότερες πληροφορίες"
+
+#~ msgid "Server response:"
+#~ msgstr "Απάντηση του διακομιστή:"
+
+#~ msgid "error appeared while processing xmpp:"
+#~ msgstr "σφάλμα κατά την επεξεργασία xmpp:"
+
+#~ msgid ""
+#~ "Cancels the selected file transfer. If there is an incomplete file, kept "
+#~ "in the file system it will be removed. This operation is not reversable"
+#~ msgstr ""
+#~ "Σταματάει την επιλεγμένη μεταφορά αρχείου. Αν το αρχείο είναι ημιτελές, "
+#~ "τότε αφαιρείται. Αυτή η ενέργεια είναι μη αναστρέψιμη"
+
+#~ msgid "Chan_ge"
+#~ msgstr "Α_λλαγή"
+
+#~ msgid "Personal Details"
+#~ msgstr "Προσωπικές Πληροφορίες"
+
+#~ msgid "Unknown type %s "
+#~ msgstr "Άγνωστος τύπος %s "

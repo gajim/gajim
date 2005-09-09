@@ -25,7 +25,7 @@ SCRIPTS = \
 	scripts/gajim \
 	scripts/gajim-remote
 
-all: translation trayicon gtkspell idle
+all: translation trayicon gtkspell idle gajim.desktop
 
 translation:
 	${MAKE} -C po all
@@ -43,6 +43,7 @@ clean:
 	find . -name '*.pyc' -exec rm {} \;
 	find . -name '*.pyo' -exec rm {} \;
 	find . -name '*.mo' -exec rm {} \;
+	rm -f gajim.desktop \;
 	$(foreach sdir, $(MODULES), ${MAKE} -C $(sdir) clean;)
 
 dist:
@@ -111,6 +112,9 @@ install:
 		echo "$$F" > "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 		chmod +x "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 	done
+
+gajim.desktop: gajim.desktop.in
+	intltool-merge -d po gajim.desktop.in gajim.desktop
 
 #
 # show make params we accept

@@ -1,4 +1,5 @@
 [encoding: UTF-8]
+gajim.desktop.in
 src/common/GnuPG.py
 src/common/GnuPGInterface.py
 src/common/config.py
