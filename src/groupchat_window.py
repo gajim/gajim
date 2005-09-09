@@ -49,8 +49,8 @@ class GroupchatWindow(chat.Chat):
 		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
 		
 		# alphanum sorted
-		self.muc_cmds = ['ban', 'chat', 'clear', 'close', 'compact', 'kick', 
-			'leave', 'me', 'msg', 'nick', 'part', 'topic']
+		self.muc_cmds = ['ban', 'chat', 'clear', 'close', 'compact', 'invite',
+			'kick', 'leave', 'me', 'msg', 'nick', 'part', 'topic']
 		
 		self.nicks = {} # our nick for each groupchat we are in
 		self.list_treeview = {}
@@ -663,6 +663,17 @@ class GroupchatWindow(chat.Chat):
 					 # print it as green text
 					self.print_conversation(self.subjects[room_jid], room_jid)
 				return # don't print the command
+			
+			elif message.startswith('/invite'):
+				# /invite JID reason
+				after_command = message[7:] # 7 is len('/invite')
+				splitted_arg = after_command.split()
+				if len(splitted_arg): 
+					jid_to_invite = splitted_arg[0]
+					reason = ' '.join(a[1:])
+					gajim.connections[self.account].send_invite(room_jid,
+						jid_to_invite, reason)
+					return # don't print the command
 			
 			#FIXME: we lack /join to adhere to JEP
 			

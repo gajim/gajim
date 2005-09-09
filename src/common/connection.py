@@ -1935,6 +1935,16 @@ class Connection:
 			q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
 			self.to_be_sent.append(iq)
 
+	def send_invite(self, room, to, reason=''):
+		'''sends invitation'''
+		message=common.xmpp.Message(to = room)
+		message.addChild(name = 'x',namespace = common.xmpp.NS_MUC_USER)
+		message.getChildren()[0].addChild(name = 'invite', attrs={'to' : to})
+		if reason != '':
+			message.getChildren()[0].getChildren()[0].addChild(name = 'reason')
+			message.getChildren()[0].getChildren()[0].getChildren()[0].addData(reason)
+		self.to_be_sent.append(message)
+
 	def send_keepalive(self):
 		# nothing received for the last foo seconds (60 secs by default)
 		self.to_be_sent.append(' ')
