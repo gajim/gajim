@@ -253,7 +253,7 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 						result = sender.get_file_contents(0)
 						self.process_result(result, sender)
 				elif sender.state == 7:
-					while(True):
+					while True:
 						if sender.file_props['paused']:
 							break
 						if not sender.connected:
