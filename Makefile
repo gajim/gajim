@@ -113,7 +113,7 @@ install:
 		chmod +x "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 	done
 
-gajim.desktop: gajim.desktop.in
+gajim.desktop:
 	intltool-merge -d po gajim.desktop.in gajim.desktop
 
 #
