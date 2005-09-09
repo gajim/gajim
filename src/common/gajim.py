@@ -183,3 +183,9 @@ def jid_is_transport(jid):
 			jid.startswith('irc') or jid.startswith('icq') or\
 			jid.startswith('msn') or jid.startswith('sms') or\
 			jid.startswith('yahoo')
+
+def get_jid_from_account(account_name):
+	name = config.get_per('accounts', account_name, 'name')
+	hostname = gajim.config.get_per('accounts', account_name, 'hostname')
+	jid = name + '@' + hostname
+	return jid
