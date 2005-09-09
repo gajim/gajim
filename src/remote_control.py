@@ -102,7 +102,11 @@ class SignalObject(DbusPrototype):
 				self.open_chat,
 				self.send_message,
 				self.contact_info,
-				self.send_file
+				self.send_file,
+				self.prefs_list,
+				self.prefs_store,
+				self.prefs_del,
+				self.prefs_put,
 			])
 
 	def raise_signal(self, signal, arg):
@@ -359,6 +363,33 @@ class SignalObject(DbusPrototype):
 			else:
 				win.window.focus(long(time()))
 
+	def prefs_list(self, *args):
+		prefs_dict = {}
+		def get_prefs(data, name, path, value):
+			if value is None:
+				return
+			key = ""
+			if path is not None:
+				for node in path:
+					key += node + "->"
+			key += name
+			prefs_dict[key] = unicode(value[1])
+		gajim.config.foreach(get_prefs)
+		return repr(prefs_dict)
+		
+	def prefs_store(self, *args):
+		try:
+			self.plugin.save_config()
+		except Exception, e:
+			return False
+		return True
+	
+	def prefs_del(self, *args):
+		return ['Not implemented yet']
+		
+	def prefs_put(self, *args):
+		return ['Not implemented yet']
+		
 	def _is_first(self):
 		if self.first_show:
 			self.first_show = False
@@ -424,6 +455,10 @@ class SignalObject(DbusPrototype):
 		send_message = method(INTERFACE)(send_message)
 		send_file = method(INTERFACE)(send_file)
 		VcardInfo = signal(INTERFACE)(VcardInfo)
+		prefs_list = method(INTERFACE)(prefs_list)
+		prefs_put = method(INTERFACE)(prefs_put)
+		prefs_del = method(INTERFACE)(prefs_del)
+		prefs_store = method(INTERFACE)(prefs_store)
 
 class SessionBusNotPresent(Exception):
 	''' This exception indicates that there is no session daemon '''

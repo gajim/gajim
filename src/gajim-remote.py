@@ -150,6 +150,29 @@ sent using this account'), False),
 						(_('account'), _('if specified, file will be sent \
 using this account'), False)
 					]
+				],
+			'prefs_list': [
+					_('List all preferences and their values'),
+					[ ]
+				],
+			'prefs_put': [
+					_('Set value of \'key\' to \'value\'. If there is no such key, \
+new item in the preferences is inserted.'),
+					[
+						(_('key=value'), _('\'key\' is the name of the preference, \
+\'value\' is the value to set it to'), True)
+					]
+				],
+			'prefs_del': [
+					_('Delete a preference item'),
+					[ 
+						(_('key'), _('name of the preference to be deleted'), True) 
+					]
+				],
+			'prefs_store': [
+					_('Write the current state of Gajim preferences to the \
+.config file'),
+					[ ]
 				]
 			}
 		if self.argv_len  < 2 or \
@@ -204,6 +227,12 @@ Please specify account for sending the message.') % sys.argv[2])
 					accounts = self.unrepr(single_res)
 					for account_dict in accounts:
 						print self.print_info(0, account_dict)
+			elif self.command == 'prefs_list':
+				prefs_dict = self.unrepr(res)
+				pref_keys = prefs_dict[0].keys()
+				pref_keys.sort()
+				for pref_key in pref_keys:
+					print pref_key, '=', prefs_dict[0	][pref_key]
 			elif res:
 				print res
 	
@@ -251,16 +280,19 @@ Please specify account for sending the message.') % sys.argv[2])
 			arguments_str = self.make_arguments_row(command_props[1])
 			str = _('Usage: %s %s %s \n\t') % (BASENAME, command, 
 					arguments_str)
-			str += command_props[0] + '\n\n' + _('Arguments:') + '\n'
-			for argument in command_props[1]:
-				str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
+			if len(command_props[1]) > 0:
+				str += command_props[0] + '\n\n' + _('Arguments:') + '\n'
+				for argument in command_props[1]:
+					str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
 			return str
 		send_error(_('%s not found') % command)
 			
 	def compose_help(self):
 		''' print usage, and list available commands '''
 		str = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % BASENAME
-		for command in self.commands.keys():
+		commands = self.commands.keys()
+		commands.sort()
+		for command in commands:
 			str += '  ' + command 
 			for argument in self.commands[command][1]:
 				str += ' '
@@ -488,7 +520,7 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 				res = self.method(sys.argv[2], sys.argv[3], sys.argv[4], 
 					sys.argv[5])
 			return res
-		except:
+		except Exception, e:
 			send_error(_('Service not available'))
 		return None
 
