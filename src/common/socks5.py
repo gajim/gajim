@@ -253,18 +253,19 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 						result = sender.get_file_contents(0)
 						self.process_result(result, sender)
 				elif sender.state == 7:
-					if sender.file_props['paused']:
-						break
-					if not sender.connected:
-						self.process_result(-1, sender)
-						break
-					if sender.state == 8:
-						self.remove_sender(idx)
-						break
-					result = sender.write_next()
-					self.process_result(result, sender)
-					if sender.file_props['stalled']:
-						break
+					while(True):
+						if sender.file_props['paused']:
+							break
+						if not sender.connected:
+							self.process_result(-1, sender)
+							break
+						if sender.state == 8:
+							self.remove_sender(idx)
+							break
+						result = sender.write_next()
+						self.process_result(result, sender)
+						if result <= 0:
+							break
 				elif sender.state == 8:
 					self.remove_sender(idx)
 			else:
@@ -414,10 +415,7 @@ class Socks5:
 			self.disconnect()
 		return len(raw_data)
 	
-	def write_next(self, initial = False):
-		if initial:
-			self.state = 7
-			return 1
+	def write_next(self):
 		if self.remaining_buff != '':
 			buff = self.remaining_buff
 			self.remaining_buff = ''
@@ -508,7 +506,13 @@ class Socks5:
 					self.file_props['last-time']
 				self.file_props['last-time'] = current_time
 				self.file_props['received-len'] += len(buff)
-				fd.write(buff)
+				try:
+					fd.write(buff)
+				except IOError, e:
+					self.rem_fd(fd)
+					self.disconnect(False)
+					self.file_props['error'] = -6 # file system error
+					return 0
 				if len(buff) == 0 and first_byte is False:
 					# Transfer stopped  somehow:
 					# reset, paused or network error
@@ -669,7 +673,8 @@ class Socks5Sender(Socks5):
 		self.file_props['last-time'] = time.time()
 		self.file_props['received-len'] = 0
 		self.pauses = 0
-		return self.write_next(initial = True) # initial for nl byte
+		self.state = 7
+		return self.write_next() # initial for nl byte
 		
 	def main(self):
 		''' initial requests for verifying the connection '''
