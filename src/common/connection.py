@@ -185,9 +185,7 @@ class Connection:
 		"""Called when we receive a vCard
 		Parse the vCard and send it to plugins"""
 		frm_iq = vc.getFrom()
-		name = gajim.config.get_per('accounts', self.name, 'name')
-		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-		our_jid = name + '@' + hostname
+		our_jid = gajim.get_jid_from_account(self.name)
 		resource = ''
 		if frm_iq:
 			frm = frm_iq.getStripped()
@@ -1133,10 +1131,10 @@ class Connection:
 		if not roster:
 			roster = {}
 			
-		name = gajim.config.get_per('accounts', self.name, 'name')
-		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-		if roster.has_key(name + '@' + hostname):
-			del roster[name + '@' + hostname]
+		jid = gajim.get_jid_from_account(self.name)
+		
+		if roster.has_key(jid):
+			del roster[jid]
 		self.dispatch('ROSTER', roster)
 
 		#continue connection
