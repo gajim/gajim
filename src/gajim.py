@@ -1242,9 +1242,9 @@ if __name__ == '__main__':
 		pass
 	else:
 		we_set = False
-		if client.get_string('/desktop/gnome/url-handlers/xmpp/command') is None:
+		if gajim.config.get('set_xmpp://_handler_everytime'):
 			we_set = True
-		elif gajim.config.get('set_xmpp://_handler_everytime'):
+		elif client.get_string('/desktop/gnome/url-handlers/xmpp/command') is None:
 			we_set = True
 		
 		if we_set:
