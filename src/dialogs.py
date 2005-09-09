@@ -451,7 +451,7 @@ class Dialog(gtk.Dialog):
 		buttons = self.action_area.get_children()
 		return index < len(buttons) and buttons[index] or None
 
-class Alert(gtk.MessageDialog):
+class HigDialog(gtk.MessageDialog):
 	def __init__(self, parent, type, buttons, primary, secondary):
 		gtk.MessageDialog.__init__(self, parent, 
 				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
@@ -465,60 +465,22 @@ class Alert(gtk.MessageDialog):
 		self.destroy()
 		return response
 
-
-class HigDialog(Dialog):
-	def __init__(self, parent, pritext, sectext, stockimage, buttons, default = None):
-		"""GNOME higified version of the Dialog object. Inherit
-		from here if possible when you need a new dialog."""
-		Dialog.__init__(self, parent, "", buttons, default)
-
-		# hbox separating dialog image and contents
-		hbox = gtk.HBox()
-		hbox.set_spacing(12)
-		hbox.set_border_width(6)
-		self.vbox.pack_start(hbox)
-
-		# set up image
-		if stockimage is not None:
-			image = gtk.Image()
-			image.set_from_stock(stockimage, gtk.ICON_SIZE_DIALOG)
-			image.set_alignment(0.5, 0)
-			hbox.pack_start(image, False, False)
-
-		# set up main content area
-		self.contents = gtk.VBox()
-		self.contents.set_spacing(10)
-		hbox.pack_start(self.contents)
-
-		label = gtk.Label()
-		label.set_markup("<span size=\"larger\" weight=\"bold\">" + pritext + "</span>\n\n" + sectext)
-		label.set_line_wrap(True)
-		label.set_alignment(0, 0)
-		label.set_selectable(True)
-		self.contents.pack_start(label)
-
-	def get_response(self):
-		self.show_all()
-		response = gtk.Dialog.run(self)
-		self.destroy()
-		return response
-
-class ConfirmationDialog(Alert):
+class ConfirmationDialog(HigDialog):
 	"""HIG compliant confirmation dialog."""
 	def __init__(self, pritext, sectext=''):
-		Alert.__init__(self, None, 
+		HigDialog.__init__(self, None, 
 			gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL, pritext, sectext)
 			
-class WarningDialog(Alert):
+class WarningDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		"""HIG compliant warning dialog."""
-		Alert.__init__( self, None, 
+		HigDialog.__init__( self, None, 
 				gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, pritext, sectext)
 
-class InformationDialog(Alert):
+class InformationDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		"""HIG compliant info dialog."""
-		Alert.__init__( self, None, 
+		HigDialog.__init__( self, None, 
 				gtk.MESSAGE_INFO, gtk.BUTTONS_OK, pritext, sectext)
 		ok_button = self.action_area.get_children()[0]
 		ok_button.connect('clicked', self.on_ok_button_clicked)
@@ -527,16 +489,16 @@ class InformationDialog(Alert):
 	def on_ok_button_clicked(self, widget):
 		self.destroy()
 
-class ErrorDialog(Alert):
+class ErrorDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		"""HIG compliant error dialog."""
-		Alert.__init__( self, None, 
+		HigDialog.__init__( self, None, 
 				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, pritext, sectext)
 
 class ConfirmationDialogCheck(ConfirmationDialog):
 	'''HIG compliant confirmation dialog with checkbutton.'''
 	def __init__(self, pritext, sectext='', checktext = ''):
-		Alert.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_CANCEL, pritext, sectext)
+		HigDialog.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_CANCEL, pritext, sectext)
 		
 		# add ok button manually, because we need to focus on it 
 		ok_button = self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
