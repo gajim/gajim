@@ -498,7 +498,8 @@ class ErrorDialog(HigDialog):
 class ConfirmationDialogCheck(ConfirmationDialog):
 	'''HIG compliant confirmation dialog with checkbutton.'''
 	def __init__(self, pritext, sectext='', checktext = ''):
-		HigDialog.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_CANCEL, pritext, sectext)
+		HigDialog.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_CANCEL,
+			pritext, sectext)
 		
 		# add ok button manually, because we need to focus on it 
 		ok_button = self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
@@ -512,7 +513,8 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 		
 class InputDialog:
 	'''Class for Input dialog'''
-	def __init__(self, title, label_str, input_str = None, is_modal = True, ok_handler = None):
+	def __init__(self, title, label_str, input_str = None, is_modal = True,
+ok_handler = None):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'input_dialog', APP)
 		self.dialog = xml.get_widget('input_dialog')
 		label = xml.get_widget('label')
@@ -636,7 +638,8 @@ _('You can not join a group chat unless you are connected.')).get_response()
 
 	def on_join_groupchat_window_destroy(self, widget):
 		'''close window'''
-		del self.plugin.windows[self.account]['join_gc'] # remove us from open windows
+		# remove us from open windows
+		del self.plugin.windows[self.account]['join_gc']
 
 	def on_join_groupchat_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE

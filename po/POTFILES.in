@@ -31,3 +31,4 @@ src/gtkgui.glade.h
 src/tooltips.py
 src/filetransfers_window.py
 src/gajim-remote.py
+src/gtkexcepthook.py
