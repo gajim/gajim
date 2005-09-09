@@ -71,9 +71,9 @@ for o, a in opts:
 		sys.exit()
 	elif o in ('-v', '--verbose'):
 		gajim.verbose = True
+		import gtkexcepthook
 	elif o in ('-p', '--profile'): # gajim --profile name
 		profile = a
-
 
 config_filename = os.path.expanduser('~/.gajim/config')
 if os.name == 'nt':
