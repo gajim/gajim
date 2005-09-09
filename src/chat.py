@@ -126,7 +126,7 @@ class Chat:
 							self.print_time_timeout,
 							jid)
 
-	def show_title(self):
+	def show_title(self, urgent = True):
 		"""redraw the window's title"""
 		unread = 0
 		for jid in self.nb_unread:
@@ -158,7 +158,8 @@ class Chat:
 			title += ' (' + _('account: ') + self.account + ')'
 
 		self.window.set_title(title)
-		gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
+		if urgent:
+			gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
 
 	def redraw_tab(self, jid, chatstate = None):
 		'''redraw the label of the tab
@@ -1229,20 +1230,22 @@ class Chat:
 			return
 		if kind == 'incoming' and update_time:
 			gajim.last_message_time[self.account][jid] = time.time()
+		urgent = True
 		if (jid != self.get_active_jid() or \
 		   not self.window.is_active() or \
 		   not end) and kind == 'incoming':
-			if self.widget_name == 'groupchat_window' and\
-			not gajim.config.get('notify_on_all_muc_messages'):
-				# Do not notify us for gc messages that are not for us
+			if self.widget_name == 'groupchat_window':
 				if text.find(self.nicks[jid]) == -1:
-					return
+					# Do not notify us for gc messages that are not for us
+					urgent = False
+					if not gajim.config.get('notify_on_all_muc_messages'):
+						return
 			self.nb_unread[jid] += 1
 			if self.plugin.systray_enabled and gajim.config.get(
 				'trayicon_notification_on_new_messages'):
 				self.plugin.systray.add_jid(jid, self.account)
 			self.redraw_tab(jid)
-			self.show_title()
+			self.show_title(urgent)
 
 	def save_sent_message(self, jid, message):
 		#save the message, so user can scroll though the list with key up/down
