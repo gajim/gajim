@@ -371,7 +371,7 @@ class SignalObject(DbusPrototype):
 			key = ""
 			if path is not None:
 				for node in path:
-					key += node + "->"
+					key += node + "#"
 			key += name
 			prefs_dict[key] = unicode(value[1])
 		gajim.config.foreach(get_prefs)
@@ -385,10 +385,30 @@ class SignalObject(DbusPrototype):
 		return True
 	
 	def prefs_del(self, *args):
-		return ['Not implemented yet']
+		[key] = self._get_real_arguments(args, 1)
+		if not key:
+			return False
+		key_path = key.split('#', 2)
+		if len(key_path) != 3:
+			return False
+		if key_path[2] == '*':
+			gajim.config.del_per(key_path[0], key_path[1])
+		else:
+			gajim.config.del_per(key_path[0], key_path[1], key_path[2])
+		return True
 		
 	def prefs_put(self, *args):
-		return ['Not implemented yet']
+		[key] = self._get_real_arguments(args, 1)
+		if not key:
+			return False
+		key_path = key.split('#', 2)
+		if len(key_path) < 3:
+			subname, value = key.split('=', 1)
+			gajim.config.set(subname, value)
+			return True
+		subname, value = key_path[2].split('=', 1)
+		gajim.config.set_per(key_path[0], key_path[1], subname, value)
+		return True
 		
 	def _is_first(self):
 		if self.first_show:

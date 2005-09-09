@@ -418,13 +418,17 @@ class Config:
 			return 'you already have added %s before' % name
 		opt[1][name] = copy.deepcopy(opt[0])
 
-	def del_per(self, typename, name): # per_group_of_option
+	def del_per(self, typename, name, subname = None): # per_group_of_option
 		if not self.__options_per_key.has_key(typename):
 #			raise RuntimeError, 'option %s does not exist' % typename
 			return
 
 		opt = self.__options_per_key[typename]
-		del opt[1][name]
+		if item is None:
+			del opt[1][name]
+		# if subname is specified, delete the item in the group.	
+		elif opt[1][name].has_key(subname):
+			del opt[1][name][subname]
 
 	def set_per(self, optname, key, subname, value): # per_group_of_option
 		if not self.__options_per_key.has_key(optname):
