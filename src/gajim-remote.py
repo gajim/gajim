@@ -430,6 +430,8 @@ Please specify account for sending the message.') % sys.argv[2])
 			return (_str, value[substr_len :])
 		elif first_char == '{': # dict
 			_dict = {}
+			if value[1] == '}':
+				return ({}, value[2:])
 			while True:
 				if value[1] == '}':
 					break
@@ -453,6 +455,8 @@ Please specify account for sending the message.') % sys.argv[2])
 			return (_dict, next[1:])
 		elif first_char in ['[', '(']: # return list 
 			_tuple = []
+			if value[1] == ']':
+				return ([], value[2:])
 			while True:
 				if value[1] == ']':
 					break
