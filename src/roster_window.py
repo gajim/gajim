@@ -1552,12 +1552,15 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		'''When we quit the gtk plugin :
 		tell that to the core and exit gtk'''
 		if gajim.config.get('saveposition'):
-			x, y = self.window.window.get_root_origin()
-			gajim.config.set('roster_x-position', x)
-			gajim.config.set('roster_y-position', y)
-			width, height = self.window.get_size()
-			gajim.config.set('roster_width', width)
-			gajim.config.set('roster_height', height)
+			# in case show_roster_on_start is False and roster is never shown
+			# window.window is None
+			if self.window.window is not None:
+				x, y = self.window.window.get_root_origin()
+				gajim.config.set('roster_x-position', x)
+				gajim.config.set('roster_y-position', y)
+				width, height = self.window.get_size()
+				gajim.config.set('roster_width', width)
+				gajim.config.set('roster_height', height)
 
 		gajim.config.set('collapsed_rows', '\t'.join(self.collapsed_rows))
 		self.plugin.save_config()
