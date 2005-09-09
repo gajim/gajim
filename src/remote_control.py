@@ -25,7 +25,7 @@ import os
 from common import gajim
 from time import time
 from common import i18n
-
+from dialogs import AddNewContactWindow
 _ = i18n._
 
 try:
@@ -107,6 +107,8 @@ class SignalObject(DbusPrototype):
 				self.prefs_store,
 				self.prefs_del,
 				self.prefs_put,
+				self.add_contact,
+				self.remove_contact
 			])
 
 	def raise_signal(self, signal, arg):
@@ -410,6 +412,32 @@ class SignalObject(DbusPrototype):
 		gajim.config.set_per(key_path[0], key_path[1], subname, value)
 		return True
 		
+	def add_contact(self, *args):
+		[account] = self._get_real_arguments(args, 1)
+		if gajim.contacts.has_key(account):
+			AddNewContactWindow(self.plugin, account)
+			return True
+		return False
+	
+	def remove_contact(self, *args):
+		[jid, account] = self._get_real_arguments(args, 2)
+		accounts = gajim.contacts.keys()
+		
+		# if there is only one account in roster, take it as default
+		if account:
+			accounts = [account]
+		else:
+			accounts = gajim.contacts.keys()
+		contact_exists = False
+		for account in accounts:
+			if gajim.contacts[account].has_key(jid):
+				gajim.connections[account].unsubscribe(jid)
+				for contact in gajim.contacts[account][jid]:
+					self.plugin.roster.remove_contact(contact, account)
+				del gajim.contacts[account][jid]
+				contact_exists = True
+		return contact_exists
+		
 	def _is_first(self):
 		if self.first_show:
 			self.first_show = False
@@ -479,6 +507,8 @@ class SignalObject(DbusPrototype):
 		prefs_put = method(INTERFACE)(prefs_put)
 		prefs_del = method(INTERFACE)(prefs_del)
 		prefs_store = method(INTERFACE)(prefs_store)
+		remove_contact = method(INTERFACE)(remove_contact)
+		add_contact = method(INTERFACE)(add_contact)
 
 class SessionBusNotPresent(Exception):
 	''' This exception indicates that there is no session daemon '''

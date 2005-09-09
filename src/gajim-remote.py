@@ -173,7 +173,23 @@ new item in the preferences is inserted.'),
 					_('Write the current state of Gajim preferences to the \
 .config file'),
 					[ ]
+				],
+			'remove_contact': [
+					_('Remove contact from roster'),
+					[ 
+						('jid', _('JID of the contact'), True),
+						(_('account'), _('if specified, contact is taken from \
+the contact list of this account'), False)
+						
+					]
+				],
+			'add_contact': [
+					_('Add contact to roster'),
+					[ 
+						(_('account'), _('Add new contact to this account.'), True)
+					]
 				]
+				
 			}
 		if self.argv_len  < 2 or \
 			sys.argv[1] not in self.commands.keys(): # no args or bad args
