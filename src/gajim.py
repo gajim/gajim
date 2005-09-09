@@ -22,6 +22,7 @@ exec python -OOt "$0" ${1+"$@"}
 ## GNU General Public License for more details.
 ##
 		
+import gtkexcepthook
 import sys
 import pygtk
 import os
@@ -51,6 +52,7 @@ _ = i18n._
 
 import common.sleepy
 import check_for_new_version
+
 from common import gajim
 from common import connection
 from common import helpers
@@ -71,7 +73,6 @@ for o, a in opts:
 		sys.exit()
 	elif o in ('-v', '--verbose'):
 		gajim.verbose = True
-		import gtkexcepthook
 	elif o in ('-p', '--profile'): # gajim --profile name
 		profile = a
 
