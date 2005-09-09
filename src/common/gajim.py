@@ -186,6 +186,6 @@ def jid_is_transport(jid):
 
 def get_jid_from_account(account_name):
 	name = config.get_per('accounts', account_name, 'name')
-	hostname = gajim.config.get_per('accounts', account_name, 'hostname')
+	hostname = config.get_per('accounts', account_name, 'hostname')
 	jid = name + '@' + hostname
 	return jid
