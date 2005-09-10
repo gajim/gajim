@@ -22,7 +22,6 @@ exec python -OOt "$0" ${1+"$@"}
 ## GNU General Public License for more details.
 ##
 		
-import gtkexcepthook
 import sys
 import pygtk
 import os
@@ -36,6 +35,7 @@ except RuntimeError, msg:
 		print >> sys.stderr, _('Gajim needs Xserver to run. Quiting...')
 		sys.exit()
 		
+import gtkexcepthook
 import gobject
 import pango
 import sre
