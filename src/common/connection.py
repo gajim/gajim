@@ -422,7 +422,14 @@ class Connection:
 	# END disconenctedCB
 
 	def _reconnect(self):
+		# Do not try to reco while we are already trying
+		self.time_to_reconnect = None
+		t = threading.Thread(target=self._reconnect2)
+		t.start()
+
+	def _reconnect2(self):
 		gajim.log.debug('reconnect')
+		self.retrycount += 1
 		signed = self.get_signed_msg(self.status)
 		self.connect_and_init(self.old_show, self.status, signed)
 		if self.connected < 2: #connection failed
@@ -432,10 +439,8 @@ class Connection:
 				self.dispatch('ERROR', 
 				(_('Connection with account "%s" has been lost') % self.name,
 				_('To continue sending and receiving messages, you will need to reconnect.')))
-				self.time_to_reconnect = None
 				self.retrycount = 0
 				return
-			self.retrycount = self.retrycount + 1
 			if self.retrycount > 5:
 				self.time_to_reconnect = time.time() + 20
 			else:
@@ -1325,7 +1330,7 @@ class Connection:
 		con_type = con.connect((h, p), proxy = proxy, secure=secur) #FIXME: blocking
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
-			if not self.time_to_reconnect:
+			if not self.retrycount:
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
 				self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
