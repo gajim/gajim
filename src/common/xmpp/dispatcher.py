@@ -43,7 +43,12 @@ class Dispatcher(PlugIn):
         self.RegisterEventHandler,self.UnregisterCycleHandler,self.RegisterCycleHandler,\
         self.RegisterHandlerOnce,self.UnregisterHandler,self.RegisterProtocol,\
         self.WaitForResponse,self.SendAndWaitForResponse,self.send,self.disconnect,\
-        self.SendAndCallForResponse, ]
+        self.SendAndCallForResponse, self.getAnID, ]
+
+    def getAnID(self):
+        global ID
+        ID+=1
+        return ID
 
     def dumpHandlers(self):
         """ Return set of user-registered callbacks in it's internal format.
