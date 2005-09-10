@@ -1,3 +1,4 @@
+
 ##	common/xmpp/socks5.py
 ##
 ## Gajim Team:
@@ -264,7 +265,7 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 							break
 						result = sender.write_next()
 						self.process_result(result, sender)
-						if result <= 0:
+						if result is None or result <= 0:
 							break
 				elif sender.state == 8:
 					self.remove_sender(idx)
@@ -357,10 +358,15 @@ class Socks5:
 		self.pauses = 0
 		self.size = 0
 		self.remaining_buff = ''
+		self.fd = None
 		
 	def open_file_for_reading(self):
-		self.fd = open(self.file_props['file-name'],'rb')
-		self.fd.seek(self.size)
+		if self.fd == None:
+			try:
+				self.fd = open(self.file_props['file-name'],'rb')
+			except IOError, e:
+				self.close_file()
+				raise IOError, e
 		
 	def close_file(self):
 		try:
@@ -420,9 +426,14 @@ class Socks5:
 			buff = self.remaining_buff
 			self.remaining_buff = ''
 		else:
-			self.open_file_for_reading()
+			try:
+				self.open_file_for_reading()
+			except IOError, e:
+				self.state = 8 # end connection
+				self.disconnect()
+				self.file_props['error'] = -7 # unable to read from file
+				return -1
 			buff = self.fd.read(MAX_BUFF_LEN)
-			self.close_file()
 		if len(buff) > 0:
 			lenn = 0
 			try:
@@ -444,6 +455,7 @@ class Socks5:
 			if self.size == int(self.file_props['size']):
 				self.state = 8 # end connection
 				self.file_props['error'] = 0
+				self.close_file()
 				self.disconnect()
 				return -1
 			if lenn != len(buff):
@@ -463,9 +475,8 @@ class Socks5:
 				return None
 			return lenn
 		else:
-			return 0
 			self.state = 8 # end connection
-			
+			self.close_file()
 			self.disconnect()
 			return -1
 	
@@ -661,7 +672,6 @@ class Socks5Sender(Socks5):
 		
 	def send_file(self):
 		''' start sending the file over verified connection ''' 
-		self.open_file_for_reading()
 		self.file_props['error'] = 0
 		self.file_props['disconnect_cb'] = self.disconnect
 		self.file_props['started'] = True
