@@ -18234,7 +18234,6 @@ Maybe I'll refactor later</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <signal name="destroy" handler="on_xml_console_window_destroy" last_modification_time="Mon, 04 Jul 2005 20:12:04 GMT"/>
   <signal name="delete_event" handler="on_xml_console_window_delete_event" last_modification_time="Sat, 06 Aug 2005 00:03:05 GMT"/>
 
   <child>

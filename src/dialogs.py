@@ -1156,11 +1156,6 @@ class XMLConsoleWindow:
 		if not widget.get_expanded(): # it's the opposite!
 			# it's expanded!!
 			self.input_textview.grab_focus()
-	
-	def on_xml_console_window_destroy(self, widget):
-		# remove us from open windows
-		del self.plugin.windows[self.account]['xml_console']
-		widget.destroy()
 
 class InvitationReceivedDialog(HigDialog):
 	def __init__(self, plugin, account, room_jid, contact_jid, password = None, comment = None):
