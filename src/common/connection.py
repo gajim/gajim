@@ -18,6 +18,9 @@
 ## GNU General Public License for more details.
 ##
 
+# kind of events we can wait for an answer
+VCARD_PUBLISHED = 'vcard_published'
+
 import sys
 import sha
 import os
@@ -138,6 +141,8 @@ class Connection:
 		self.privacy_rules_supported = False
 		#Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
+		#List of IDs we are waiting answers for {id: type_of_request, }
+		self.awaiting_answers = {}
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
 			gajim.config.set('usegpg', True)
@@ -1232,6 +1237,22 @@ class Connection:
 	def _StanzaArrivedCB(self, con, obj):
 		self.last_io = time.time()
 
+	def _IqCB(self, con, iq_obj):
+		id = iq_obj.getID()
+		print 'a'
+		if id not in self.awaiting_answers:
+			return
+		print self.awaiting_answers[id]
+		print VCARD_PUBLISHED
+		if self.awaiting_answers[id] == VCARD_PUBLISHED:
+			typ = iq_obj.getType()
+			print typ
+			if iq_obj.getType() == 'result':
+				self.dispatch('VCARD_PUBLISHED', ())
+			elif iq_obj.getType() == 'error':
+				self.dispatch('VCARD_NOT_PUBLISHED', ())
+		del self.awaiting_answers[id]
+
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
 			if event == common.xmpp.features.REGISTER_DATA_RECEIVED:
@@ -1358,6 +1379,7 @@ class Connection:
 		con.RegisterHandler('iq', self._HttpAuthCB, 'get',
 			common.xmpp.NS_HTTP_AUTH)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
+		con.RegisterHandler('iq', self._IqCB)
 		con.RegisterHandler('iq', self._StanzaArrivedCB)
 		con.RegisterHandler('presence', self._StanzaArrivedCB)
 		con.RegisterHandler('message', self._StanzaArrivedCB)
@@ -1749,6 +1771,9 @@ class Connection:
 						iq3.addChild(k).setData(j[k])
 			else:
 				iq2.addChild(i).setData(vcard[i])
+		id = self.connection.getAnID()
+		iq.setID(id)
+		self.awaiting_answers[str(id)] = VCARD_PUBLISHED
 		self.to_be_sent.append(iq)
 
 	def get_settings(self):

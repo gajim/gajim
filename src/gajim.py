@@ -813,6 +813,12 @@ class Interface:
 		if self.windows[account].has_key('xml_console'):
 			self.windows[account]['xml_console'].print_stanza(stanza, 'outgoing')
 
+	def handle_event_vcard_published(self, account, array):
+		dialogs.InformationDialog(_('vCard publication succeeded'), _('Your vCard has been published successfuly.'))
+
+	def handle_event_vcard_not_published(self, account, array):
+		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your vCard, try again later.'))
+
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -996,6 +1002,8 @@ class Interface:
 			'STANZA_ARRIVED': self.handle_event_stanza_arrived,
 			'STANZA_SENT': self.handle_event_stanza_sent,
 			'HTTP_AUTH': self.handle_event_http_auth,
+			'VCARD_PUBLISHED': self.handle_event_vcard_published,
+			'VCARD_NOT_PUBLISHED': self.handle_event_vcard_not_published,
 		}
 
 	def exec_event(self, account):
