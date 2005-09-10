@@ -37,6 +37,7 @@ except RuntimeError, msg:
 		
 import gtkexcepthook
 import gobject
+gobject.threads_init()
 import pango
 import sre
 import signal
