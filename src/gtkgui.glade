@@ -4683,7 +4683,7 @@
 		  <child>
 		    <widget class="GtkEventBox" id="eventbox4">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">If checked, Gajim will broadcast capability to send and receive meta-information related to a conversation you may have with a contact such as composing a message</property>
+		      <property name="tooltip" translatable="yes">Gajim can send and receive meta-information related to a conversation you may have with a contact</property>
 		      <property name="visible_window">True</property>
 		      <property name="above_child">False</property>
 
