@@ -823,7 +823,8 @@ class Interface:
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
-			return True # renew timeout (loop for ever)
+			# idle detection is not supported in that OS
+			return False # stop looping in vain
 		state = self.sleeper.getState()
 		for account in gajim.connections:
 			if not gajim.sleeper_state.has_key(account) or \
@@ -845,7 +846,7 @@ class Interface:
 				self.roster.send_status(account, 'away',
 					gajim.config.get('autoaway_message'), True)
 				gajim.sleeper_state[account] = 'autoaway'
-			elif state == common.sleepy.STATE_XAWAY and (\
+			elif state == common.sleepy.STATE_XA and (\
 				gajim.sleeper_state[account] == 'autoaway' or \
 				gajim.sleeper_state[account] == 'online') and \
 				gajim.config.get('autoxa'):
@@ -1165,7 +1166,7 @@ class Interface:
 		gtk.window_set_default_icon(pix) # set the icon to all newly opened windows
 		self.roster.window.set_icon_from_file(path_to_file) # and to roster window
 		self.sleeper = common.sleepy.Sleepy(
-			gajim.config.get('autoawaytime') * 60,
+			gajim.config.get('autoawaytime') * 60, # make minutes to seconds
 			gajim.config.get('autoxatime') * 60)
 
 		self.systray_enabled = False

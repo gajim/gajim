@@ -1,8 +1,9 @@
-##      common/sleepy.py
+## common/sleepy.py
 ##
 ## Gajim Team:
 ##      - Yann Le Boulanger <asterix@lagaule.org>
 ##      - Vincent Hanquez <tab@snarc.org>
+##      - Nikos Kouremenos <kourem@gmail.com>
 ##
 ##      Copyright (C) 2003-2005 Gajim Team
 ##
@@ -20,11 +21,11 @@ from common import gajim
 
 
 STATE_UNKNOWN  = 'OS probably not supported'
-STATE_XAWAY   = 'extanted away'
+STATE_XA   = 'extanted away'
 STATE_AWAY   = 'away'
 STATE_AWAKE    = 'awake'
 
-SUPPORTED = 1
+SUPPORTED = True
 try:
 	import common.idle as idle # when we launch gajim from sources
 except:
@@ -32,32 +33,32 @@ except:
 		import idle # when Gajim is installed
 	except:
 		gajim.log.debug('Unable to load idle module')
-		SUPPORTED = 0
+		SUPPORTED = False
 
 class Sleepy:
 
-	def __init__(self, interval1 = 60, interval2 = 120):
-
-		self.interval1 = interval1
-		self.interval2 = interval2
-		self.state         = STATE_AWAKE ## assume were awake to stake with
+	def __init__(self, away_interval = 60, xa_interval = 120):
+		self.away_interval = away_interval
+		self.xa_interval = xa_interval
+		self.state = STATE_AWAKE # assume we are awake
 		try:
 			idle.init()
 		except:
-			SUPPORTED = 0
+			SUPPORTED = False
 			self.state = STATE_UNKNOWN
 
 	def poll(self):
-		if not SUPPORTED: return 0
+		if not SUPPORTED:
+			return False
 
 		idleTime = idle.getIdleSec()
-		if idleTime > self.interval2:
-			self.state = STATE_XAWAY
-		elif idleTime > self.interval1:
+		if idleTime > self.xa_interval:
+			self.state = STATE_XA
+		elif idleTime > self.away_interval:
 			self.state = STATE_AWAY
 		else:
 			self.state = STATE_AWAKE
-		return 1
+		return True
 
 	def getState(self):
 		return self.state
