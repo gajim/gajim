@@ -452,7 +452,7 @@ class Socks5:
 				self.file_props['last-time']
 			self.file_props['last-time'] = current_time
 			self.file_props['received-len'] = self.size
-			if self.size == int(self.file_props['size']):
+			if self.size >= int(self.file_props['size']):
 				self.state = 8 # end connection
 				self.file_props['error'] = 0
 				self.close_file()
@@ -512,6 +512,12 @@ class Socks5:
 				except Exception, e:
 					buff = ''
 				first_byte = False
+				if self.file_props['received-len'] == 0:  
+					if len(buff) > 0:  
+						# delimiter between auth and data  
+						if ord(buff[0]) == 0xD:  
+							first_byte = True  
+							buff = buff[1:]
 				current_time = time.time()
 				self.file_props['elapsed-time'] += current_time - \
 					self.file_props['last-time']
@@ -531,7 +537,7 @@ class Socks5:
 					self.disconnect(False)
 					self.file_props['error'] = -1
 					return 0
-				if self.file_props['received-len'] == int(self.file_props['size']):
+				if self.file_props['received-len'] >= int(self.file_props['size']):
 					# transfer completed
 					self.rem_fd(fd)
 					self.disconnect()
