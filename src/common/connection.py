@@ -1239,14 +1239,10 @@ class Connection:
 
 	def _IqCB(self, con, iq_obj):
 		id = iq_obj.getID()
-		print 'a'
 		if id not in self.awaiting_answers:
 			return
-		print self.awaiting_answers[id]
-		print VCARD_PUBLISHED
 		if self.awaiting_answers[id] == VCARD_PUBLISHED:
 			typ = iq_obj.getType()
-			print typ
 			if iq_obj.getType() == 'result':
 				self.dispatch('VCARD_PUBLISHED', ())
 			elif iq_obj.getType() == 'error':
