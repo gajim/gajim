@@ -178,21 +178,6 @@ class PreferencesWindow:
 		st = gajim.config.get('usetabbedchat')
 		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
 		
-		# tabs position
-		st = gajim.config.get('tabs_position')
-		sel = 0
-		if st == 'bottom':
-			sel = 1
-		elif st == 'left':
-			sel = 2
-		elif st == 'right':
-			sel = 3
-		self.xml.get_widget('tabs_pos_combobox').set_active(sel)
-		
-		# always compact view
-		st = gajim.config.get('always_compact_view')
-		self.xml.get_widget('always_compact_view_checkbutton').set_active(st)
-		
 		#use speller
 		if os.name == 'nt':
 			self.xml.get_widget('speller_checkbutton').set_no_show_all(True)
@@ -631,21 +616,6 @@ class PreferencesWindow:
 			self.split_windows('gc')
 		self.plugin.save_config()
 
-	def on_tabs_pos_combobox_changed(self, widget):
-		sel = widget.get_active()
-		if sel == 1:
-			st = 'bottom'
-		elif sel == 2:
-			st = 'left'
-		elif sel == 3:
-			st = 'right'
-		else:
-			st = 'top'
-		gajim.config.set('tabs_position', st)
-
-	def on_always_compact_view_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'always_compact_view')
-	
 	def apply_speller(self, kind):
 		for acct in gajim.connections:
 			windows = self.plugin.windows[acct][kind]
