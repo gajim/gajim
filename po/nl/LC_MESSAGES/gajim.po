@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-09 21:10+0200\n"
+"POT-Creation-Date: 2005-09-10 16:55+0200\n"
 "PO-Revision-Date: 2005-09-01 20:31+0200\n"
 "Last-Translator: Stéphan Kochen <stephan@kochen.nl>\n"
 "Language-Team: none\n"
@@ -197,7 +197,7 @@ msgstr "Uit"
 msgid "I'm out enjoying life"
 msgstr "Ik ben uit van het leven genieten"
 
-#: ../src/common/connection.py:289 ../src/common/connection.py:299
+#: ../src/common/connection.py:292 ../src/common/connection.py:302
 #, python-format
 msgid ""
 "Subject: %s\n"
@@ -206,22 +206,22 @@ msgstr ""
 "Onderwerp: %s\n"
 "%s"
 
-#: ../src/common/connection.py:349 ../src/common/connection.py:1601
+#: ../src/common/connection.py:352 ../src/common/connection.py:1622
 msgid "I would like to add you to my roster."
 msgstr "Ik zou je graag aan mijn rooster willen toevoegen."
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection.py:355
+#: ../src/common/connection.py:358
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr "we zijn nu op %s geabonneert"
 
-#: ../src/common/connection.py:357
+#: ../src/common/connection.py:360
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "afmelding verzocht van %s"
 
-#: ../src/common/connection.py:359
+#: ../src/common/connection.py:362
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "we zijn nu van %s afgemeld"
@@ -230,120 +230,120 @@ msgstr "we zijn nu van %s afgemeld"
 #. we are banned
 #. room does not exist
 #. nick conflict
-#: ../src/common/connection.py:371 ../src/common/connection.py:374
-#: ../src/common/connection.py:377 ../src/common/connection.py:380
-#: ../src/common/connection.py:383 ../src/common/connection.py:386
-#: ../src/common/connection.py:389
+#: ../src/common/connection.py:374 ../src/common/connection.py:377
+#: ../src/common/connection.py:380 ../src/common/connection.py:383
+#: ../src/common/connection.py:386 ../src/common/connection.py:389
+#: ../src/common/connection.py:392
 msgid "Unable to join room"
 msgstr "Niet in staat de ruimte binnen te gaan"
 
-#: ../src/common/connection.py:372
+#: ../src/common/connection.py:375
 msgid "A password is required to join this room."
 msgstr ""
 
-#: ../src/common/connection.py:375
+#: ../src/common/connection.py:378
 #, fuzzy
 msgid "You are banned from this room."
 msgstr "Je bent al in ruimte %s"
 
-#: ../src/common/connection.py:378
+#: ../src/common/connection.py:381
 msgid "Such room does not exist."
 msgstr ""
 
-#: ../src/common/connection.py:381
+#: ../src/common/connection.py:384
 msgid "Room creation is restricted."
 msgstr ""
 
-#: ../src/common/connection.py:384
+#: ../src/common/connection.py:387
 msgid "Your registered nickname must be used."
 msgstr ""
 
-#: ../src/common/connection.py:387
+#: ../src/common/connection.py:390
 #, fuzzy
 msgid "You are not in the members list."
 msgstr "Er is geen verbinding met de server"
 
-#: ../src/common/connection.py:390
+#: ../src/common/connection.py:393
 msgid "Your desired nickname is in use or registered by another user."
 msgstr ""
 
-#: ../src/common/connection.py:415 ../src/common/connection.py:430
-#: ../src/common/connection.py:461
+#: ../src/common/connection.py:418 ../src/common/connection.py:440
+#: ../src/common/connection.py:469
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Verbinding met account \"%s\" verbroken"
 
-#: ../src/common/connection.py:416 ../src/common/connection.py:431
-#: ../src/common/connection.py:462
+#: ../src/common/connection.py:419 ../src/common/connection.py:441
+#: ../src/common/connection.py:470
 msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr ""
 "Om verdere berichten te versturen en ontvangen, moet je de verbinding "
 "opnieuw in stand brengen."
 
-#: ../src/common/connection.py:1249
+#: ../src/common/connection.py:1269
 msgid "Error:"
 msgstr "Fout:"
 
-#: ../src/common/connection.py:1316 ../src/common/connection.py:1374
-#: ../src/common/connection.py:1700
+#: ../src/common/connection.py:1336 ../src/common/connection.py:1395
+#: ../src/common/connection.py:1721
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Kon geen verbinding maken met \"%s\""
 
-#: ../src/common/connection.py:1317 ../src/common/connection.py:1701
+#: ../src/common/connection.py:1337 ../src/common/connection.py:1722
 #: ../src/gajim.py:535
 msgid "Check your connection or try again later."
 msgstr "Controleer de verbinding of probeer later nogmaals."
 
-#: ../src/common/connection.py:1321 ../src/common/connection.py:1703
+#: ../src/common/connection.py:1341 ../src/common/connection.py:1724
 #, python-format
 msgid "Connected to server with %s"
 msgstr "Verbonden met server met %s"
 
-#: ../src/common/connection.py:1375
+#: ../src/common/connection.py:1396
 msgid "Check your connection or try again later"
 msgstr "Controleer je verbinding of probeer later nogmaals"
 
-#: ../src/common/connection.py:1389
+#: ../src/common/connection.py:1410
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Inloggen mislukt met \"%s\""
 
-#: ../src/common/connection.py:1390
+#: ../src/common/connection.py:1411
 msgid "Please check your login and password for correctness."
 msgstr "Controleer gebruikersnaam en wachtwoord."
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:1462
+#: ../src/common/connection.py:1483
 msgid "OpenPGP passphrase was not given"
 msgstr "OpenPGP wachtwoord niet opgegeven"
 
 #. %s is the account name here
-#: ../src/common/connection.py:1464
+#: ../src/common/connection.py:1485
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Je zult verbonden worden met %s zonder OpenPGP."
 
 #. do not show I'm invisible!
-#: ../src/common/connection.py:1494
+#: ../src/common/connection.py:1515
 msgid "invisible"
 msgstr "onzichtbaar"
 
-#: ../src/common/connection.py:1495
+#: ../src/common/connection.py:1516
 msgid "offline"
 msgstr "offline"
 
-#: ../src/common/connection.py:1496
+#: ../src/common/connection.py:1517
 #, python-format
 msgid "I'm %s"
 msgstr "Ik ben %s"
 
 #. we're not english
-#: ../src/common/connection.py:1563
+#: ../src/common/connection.py:1584
 msgid "[This message is encrypted]"
 msgstr "[Dit bericht is versleuteld]"
 
-#: ../src/common/connection.py:1982 ../src/common/connection.py:1991
+#: ../src/common/connection.py:2016 ../src/common/connection.py:2025
 msgid "A protocol error has occured:"
 msgstr ""
 
@@ -572,7 +572,7 @@ msgstr "account: "
 
 #. Groups maynot change name from or to 'not in the roster'
 #: ../src/chat.py:315 ../src/chat.py:987 ../src/dialogs.py:113
-#: ../src/dialogs.py:321 ../src/dialogs.py:897 ../src/dialogs.py:898
+#: ../src/dialogs.py:321 ../src/dialogs.py:868 ../src/dialogs.py:869
 #: ../src/gajim.py:494 ../src/gajim.py:495 ../src/roster_window.py:820
 #: ../src/roster_window.py:1036 ../src/roster_window.py:1176
 #: ../src/roster_window.py:1376 ../src/roster_window.py:1410
@@ -708,7 +708,7 @@ msgstr "Ongeldige Jabber ID"
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Een Jabber ID moet in de vorm \"gebruiker@servernaam\" zijn."
 
-#: ../src/config.py:1255 ../src/dialogs.py:761
+#: ../src/config.py:1255 ../src/dialogs.py:732
 msgid "Invalid password"
 msgstr "Ongeldig wachtwoord"
 
@@ -742,8 +742,8 @@ msgstr ""
 "Je moet een account aanmaken voordat persoonlijke informatie kan worden "
 "aangepast."
 
-#: ../src/config.py:1460 ../src/config.py:2093 ../src/dialogs.py:635
-#: ../src/dialogs.py:741 ../src/vcard.py:385 ../src/vcard.py:413
+#: ../src/config.py:1460 ../src/config.py:2093 ../src/dialogs.py:605
+#: ../src/dialogs.py:712 ../src/vcard.py:385 ../src/vcard.py:413
 msgid "You are not connected to the server"
 msgstr "Er is geen verbinding met de server"
 
@@ -992,42 +992,42 @@ msgstr "Een GTK jabber client"
 msgid "translator-credits"
 msgstr "Stéphan Kochen <stephan@kochen.nl>"
 
-#: ../src/dialogs.py:590
+#: ../src/dialogs.py:560
 #, python-format
 msgid "Subscription request for account %s from %s"
 msgstr "Abonnerings aanvraag voor account %s van %s"
 
-#: ../src/dialogs.py:593
+#: ../src/dialogs.py:563
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Abonnering aangevraagd van %s"
 
-#: ../src/dialogs.py:636
+#: ../src/dialogs.py:606
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
 "Het is niet mogelijk aan een groepsgesprek deel te nemen zonder verbonden te "
 "zijn."
 
-#: ../src/dialogs.py:649
+#: ../src/dialogs.py:619
 #, python-format
 msgid "Join Group Chat as %s"
 msgstr "Neem deel aan Groepsgesprek als %s"
 
-#: ../src/dialogs.py:651 ../src/gtkgui.glade.h:170
+#: ../src/dialogs.py:621 ../src/gtkgui.glade.h:170
 msgid "Join Group Chat"
 msgstr "Neem deel aan Groepsgesprek"
 
-#: ../src/dialogs.py:714
+#: ../src/dialogs.py:685
 #, python-format
 msgid "New Message as %s"
 msgstr "Nieuw Bericht als %s"
 
-#: ../src/dialogs.py:716 ../src/dialogs.py:811 ../src/gajim.py:423
+#: ../src/dialogs.py:687 ../src/dialogs.py:782 ../src/gajim.py:423
 #: ../src/gtkgui.glade.h:187
 msgid "New Message"
 msgstr "Nieuw Bericht"
 
-#: ../src/dialogs.py:717
+#: ../src/dialogs.py:688
 msgid ""
 "Fill in the contact ID of the contact you would like\n"
 "to send a chat message to:"
@@ -1036,104 +1036,104 @@ msgstr ""
 "worden:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:725 ../src/dialogs.py:1038 ../src/dialogs.py:1159
+#: ../src/dialogs.py:696 ../src/dialogs.py:1009 ../src/dialogs.py:1130
 msgid "Connection not available"
 msgstr "Verbinding niet beschikbaar"
 
-#: ../src/dialogs.py:726 ../src/dialogs.py:1039 ../src/dialogs.py:1160
+#: ../src/dialogs.py:697 ../src/dialogs.py:1010 ../src/dialogs.py:1131
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Zorg ervoor dat je verbinding hebt met \"%s\"."
 
 #. if no @ was given
-#: ../src/dialogs.py:731 ../src/dialogs.py:1053
+#: ../src/dialogs.py:702 ../src/dialogs.py:1024
 msgid "Invalid contact ID"
 msgstr "Ongeldige contact ID"
 
-#: ../src/dialogs.py:732 ../src/dialogs.py:1054
+#: ../src/dialogs.py:703 ../src/dialogs.py:1025
 msgid "Contact ID must be of the form \"username@servername\"."
 msgstr "Contact ID moet in de vorm \"gebruikersnaam@servernaam\" zijn."
 
-#: ../src/dialogs.py:742
+#: ../src/dialogs.py:713
 msgid "Without a connection, you can not change your password."
 msgstr "Zonder verbinding is het niet mogelijk je wachtwoord te veranderen."
 
-#: ../src/dialogs.py:762
+#: ../src/dialogs.py:733
 msgid "You must enter a password."
 msgstr "Je moet een wachtwoord opgeven."
 
-#: ../src/dialogs.py:766
+#: ../src/dialogs.py:737
 msgid "Passwords do not match"
 msgstr "Wachtwoord komt niet overeen"
 
-#: ../src/dialogs.py:767
+#: ../src/dialogs.py:738
 msgid "The passwords typed in both fields must be identical."
 msgstr "De wachtwoorden in beide velden moeten identiek zijn"
 
-#: ../src/dialogs.py:803 ../src/gajim.py:315
+#: ../src/dialogs.py:774 ../src/gajim.py:315
 msgid "Contact Signed In"
 msgstr "Contact is Ingelogd"
 
-#: ../src/dialogs.py:807 ../src/gajim.py:340
+#: ../src/dialogs.py:778 ../src/gajim.py:340
 msgid "Contact Signed Out"
 msgstr "Contact is Uitgelogd"
 
-#: ../src/dialogs.py:812 ../src/gajim.py:420
+#: ../src/dialogs.py:783 ../src/gajim.py:420
 msgid "New Single Message"
 msgstr "Nieuw Enkel Bericht"
 
-#: ../src/dialogs.py:816 ../src/dialogs.py:821 ../src/dialogs.py:837
+#: ../src/dialogs.py:787 ../src/dialogs.py:792 ../src/dialogs.py:808
 #, python-format
 msgid "From %s"
 msgstr "Van %s"
 
-#: ../src/dialogs.py:817
+#: ../src/dialogs.py:788
 msgid "File Transfer Request"
 msgstr "Bestandsoverdracht Verzoek"
 
-#: ../src/dialogs.py:823 ../src/gajim.py:719 ../src/gajim.py:739
+#: ../src/dialogs.py:794 ../src/gajim.py:719 ../src/gajim.py:739
 msgid "File Transfer Error"
 msgstr "Bestandsoverdracht Fout"
 
-#: ../src/dialogs.py:827 ../src/gajim.py:796
+#: ../src/dialogs.py:798 ../src/gajim.py:796
 msgid "File Transfer Completed"
 msgstr "Bestandsoverdracht Voltooid"
 
-#: ../src/dialogs.py:827 ../src/gajim.py:799
+#: ../src/dialogs.py:798 ../src/gajim.py:799
 msgid "File Transfer Stopped"
 msgstr "Bestandsoverdracht Gestopt"
 
-#: ../src/dialogs.py:846
+#: ../src/dialogs.py:817
 #, python-format
 msgid "To %s"
 msgstr "Aan %s"
 
-#: ../src/dialogs.py:1003
+#: ../src/dialogs.py:974
 #, python-format
 msgid "Single Message as %s"
 msgstr "Enkel Bericht als %s"
 
-#: ../src/dialogs.py:1005
+#: ../src/dialogs.py:976
 msgid "Single Message"
 msgstr "Enkel Bericht"
 
-#: ../src/dialogs.py:1008
+#: ../src/dialogs.py:979
 #, python-format
 msgid "Send %s"
 msgstr "Stuur %s"
 
-#: ../src/dialogs.py:1017
+#: ../src/dialogs.py:988
 #, python-format
 msgid "Received %s"
 msgstr "Ontvangen %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:1069
+#: ../src/dialogs.py:1040
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: ../src/dialogs.py:1070
+#: ../src/dialogs.py:1041
 #, python-format
 msgid ""
 "\n"
@@ -1148,26 +1148,26 @@ msgstr ""
 "== Oorspronkelijk Bericht ==\n"
 "%s"
 
-#: ../src/dialogs.py:1111
+#: ../src/dialogs.py:1082
 #, python-format
 msgid "XML Console for %s"
 msgstr "XML Console voor %s"
 
-#: ../src/dialogs.py:1113
+#: ../src/dialogs.py:1084
 msgid "XML Console"
 msgstr "XML Console"
 
-#: ../src/dialogs.py:1199 ../src/gtkgui.glade.h:326
+#: ../src/dialogs.py:1165 ../src/gtkgui.glade.h:326
 msgid "_Deny"
 msgstr "_Weigeren"
 
 #. FIXME: add pango markup
-#: ../src/dialogs.py:1219
+#: ../src/dialogs.py:1185
 #, fuzzy, python-format
 msgid "You have been invited to the %(room_jid)s room by %(contact_jid)s"
 msgstr "Je bent uitgenodigd naar ruimte %s te komen door %s"
 
-#: ../src/dialogs.py:1222
+#: ../src/dialogs.py:1188
 #, python-format
 msgid "Comment: %s"
 msgstr "Commentaar: %s"
@@ -1235,13 +1235,30 @@ msgstr "Je wachtwoord is incorrect"
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Je bent momenteel verbonden zonder OpenPGP sleutel."
 
+#: ../src/gajim.py:817
+msgid "vCard publication succeeded"
+msgstr ""
+
+#: ../src/gajim.py:817
+#, fuzzy
+msgid "Your vCard has been published successfuly."
+msgstr "Bladwijzer is met succes toegevoegd"
+
+#: ../src/gajim.py:820
+msgid "vCard publication failed"
+msgstr ""
+
+#: ../src/gajim.py:820
+msgid "There was an error while publishing your vCard, try again later."
+msgstr ""
+
 #. it is good to notify the user
 #. in case he cannot see the output of the console
-#: ../src/gajim.py:1034
+#: ../src/gajim.py:1042
 msgid "Cannot save your preferences"
 msgstr "Kan instellingen niet opslaan"
 
-#: ../src/gajim.py:1224
+#: ../src/gajim.py:1232
 msgid "Session Management support not available (missing gnome.ui module)"
 msgstr ""
 
@@ -1257,7 +1274,7 @@ msgstr "thema_naam"
 msgid "theme name"
 msgstr "thema naam"
 
-#: ../src/groupchat_window.py:127 ../src/groupchat_window.py:981
+#: ../src/groupchat_window.py:127 ../src/groupchat_window.py:992
 #, python-format
 msgid "You just received a new message in room \"%s\""
 msgstr "Je hebt zojuist een nieuw bericht ontvangen in ruimte \"%s\""
@@ -1366,22 +1383,22 @@ msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "Je kunt bladwijzers beheren via het Acties menu in je rooster."
 
 #. ask for reason
-#: ../src/groupchat_window.py:730
+#: ../src/groupchat_window.py:741
 #, python-format
 msgid "Kicking %s"
 msgstr "%s uit de ruimte schoppen"
 
-#: ../src/groupchat_window.py:731 ../src/groupchat_window.py:762
+#: ../src/groupchat_window.py:742 ../src/groupchat_window.py:773
 msgid "You may specify a reason below:"
 msgstr "Je kunt hieronder een reden opgeven:"
 
 #. ask for reason
-#: ../src/groupchat_window.py:761
+#: ../src/groupchat_window.py:772
 #, python-format
 msgid "Banning %s"
 msgstr "%s verbannen"
 
-#: ../src/groupchat_window.py:982 ../src/tabbed_chat_window.py:350
+#: ../src/groupchat_window.py:993 ../src/tabbed_chat_window.py:350
 msgid ""
 "If you close this tab and you have history disabled, the message will be "
 "lost."
@@ -1419,11 +1436,11 @@ msgstr "D-Bus python koppeling ontbreekt op deze computer"
 msgid "D-Bus capabilities of Gajim cannot be used"
 msgstr "D-Bus mogelijkheden van Gajim kunnen niet worden gebruikt"
 
-#: ../src/remote_control.py:469
+#: ../src/remote_control.py:519
 msgid "Session bus is not available"
 msgstr "Sessiebus is niet beschikbaar"
 
-#: ../src/remote_control.py:477
+#: ../src/remote_control.py:527
 msgid "D-Bus is not present on this machine"
 msgstr "D-Bus bevindt zich niet op deze machine"
 
@@ -1506,7 +1523,7 @@ msgstr "Log _uit"
 msgid "Edit"
 msgstr "Bewerk"
 
-#: ../src/roster_window.py:912 ../src/gtkgui.glade.h:375
+#: ../src/roster_window.py:912 ../src/gtkgui.glade.h:376
 msgid "_Remove from Roster"
 msgstr "_Verwijder van Rooster"
 
@@ -3037,267 +3054,271 @@ msgid "_Finish"
 msgstr "_Afronden"
 
 #: ../src/gtkgui.glade.h:331
+msgid "_Help"
+msgstr ""
+
+#: ../src/gtkgui.glade.h:332
 msgid "_Highlight misspelled words"
 msgstr "Verkeerd gespelde woorden _markeren"
 
-#: ../src/gtkgui.glade.h:332
+#: ../src/gtkgui.glade.h:333
 msgid "_History"
 msgstr "_Geschiedenis"
 
-#: ../src/gtkgui.glade.h:333
+#: ../src/gtkgui.glade.h:334
 msgid "_Host:"
 msgstr "_Host:"
 
 #. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
-#: ../src/gtkgui.glade.h:335
+#: ../src/gtkgui.glade.h:336
 msgid "_IQ"
 msgstr "_IQ"
 
-#: ../src/gtkgui.glade.h:336
+#: ../src/gtkgui.glade.h:337
 msgid "_Icon in systray (aka. notification area)"
 msgstr "_Icoon in mededelingsgebied"
 
-#: ../src/gtkgui.glade.h:337
+#: ../src/gtkgui.glade.h:338
 msgid "_Ignore events from contacts not in the roster"
 msgstr "_Negeer gebeurtenissen van contacten die niet op mijn rooster staan"
 
-#: ../src/gtkgui.glade.h:338
+#: ../src/gtkgui.glade.h:339
 msgid "_Jabber ID:"
 msgstr "_Jabber ID:"
 
-#: ../src/gtkgui.glade.h:339
+#: ../src/gtkgui.glade.h:340
 msgid "_Join"
 msgstr "_Binnengaan"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Join Group Chat"
 msgstr "Groepsgesprek _Binnengaan"
 
-#: ../src/gtkgui.glade.h:341
+#: ../src/gtkgui.glade.h:342
 msgid "_Kick"
 msgstr "Uit_schoppen"
 
-#: ../src/gtkgui.glade.h:342
+#: ../src/gtkgui.glade.h:343
 msgid "_Latest"
 msgstr "_Laatste"
 
-#: ../src/gtkgui.glade.h:343
+#: ../src/gtkgui.glade.h:344
 msgid "_Mail client:"
 msgstr "_Mail client:"
 
-#: ../src/gtkgui.glade.h:344
+#: ../src/gtkgui.glade.h:345
 msgid "_Member"
 msgstr "_Lid"
 
-#: ../src/gtkgui.glade.h:345
+#: ../src/gtkgui.glade.h:346
 msgid "_Merge accounts"
 msgstr "Accounts _samenvoegen"
 
-#: ../src/gtkgui.glade.h:346
+#: ../src/gtkgui.glade.h:347
 msgid "_Message"
 msgstr "_Bericht"
 
-#: ../src/gtkgui.glade.h:347
+#: ../src/gtkgui.glade.h:348
 msgid "_Modify"
 msgstr "Be_werk"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:349
 msgid "_Name: "
 msgstr "_Naam: "
 
-#: ../src/gtkgui.glade.h:349
+#: ../src/gtkgui.glade.h:350
 msgid "_Never"
 msgstr "_Nooit"
 
-#: ../src/gtkgui.glade.h:350
+#: ../src/gtkgui.glade.h:351
 msgid "_New Message"
 msgstr "_Nieuw Bericht"
 
-#: ../src/gtkgui.glade.h:351
+#: ../src/gtkgui.glade.h:352
 msgid "_New Message..."
 msgstr "_Nieuw Bericht..."
 
-#: ../src/gtkgui.glade.h:352
+#: ../src/gtkgui.glade.h:353
 msgid "_Nickname:"
 msgstr "Bij_naam:"
 
-#: ../src/gtkgui.glade.h:353
+#: ../src/gtkgui.glade.h:354
 msgid "_Notify me about it"
 msgstr "_Stel mij ervan op de hoogte"
 
-#: ../src/gtkgui.glade.h:354
+#: ../src/gtkgui.glade.h:355
 msgid "_Notify me when a file transfer is complete"
 msgstr "_Stel mij op de hoogte als een bestandsoverdracht voltooid is"
 
-#: ../src/gtkgui.glade.h:355
+#: ../src/gtkgui.glade.h:356
 msgid "_OK"
 msgstr "_OK"
 
-#: ../src/gtkgui.glade.h:356
+#: ../src/gtkgui.glade.h:357
 msgid "_Occupant Actions"
 msgstr "_Bezitter Acties"
 
-#: ../src/gtkgui.glade.h:357
+#: ../src/gtkgui.glade.h:358
 msgid "_Online Users"
 msgstr "_Online Gebruikers"
 
-#: ../src/gtkgui.glade.h:358 ../src/filetransfers_window.py:197
+#: ../src/gtkgui.glade.h:359 ../src/filetransfers_window.py:197
 msgid "_Open Containing Folder"
 msgstr "_Open Bovenliggende Map"
 
-#: ../src/gtkgui.glade.h:359
+#: ../src/gtkgui.glade.h:360
 msgid "_Open Email Composer"
 msgstr "_Open Email Samensteller"
 
-#: ../src/gtkgui.glade.h:360
+#: ../src/gtkgui.glade.h:361
 msgid "_Open Link in Browser"
 msgstr "_Open Link in Browser"
 
-#: ../src/gtkgui.glade.h:361
+#: ../src/gtkgui.glade.h:362
 msgid "_Owner"
 msgstr "_Eigenaar"
 
-#: ../src/gtkgui.glade.h:362
+#: ../src/gtkgui.glade.h:363
 msgid "_Password:"
 msgstr "_Wachtwoord:"
 
-#: ../src/gtkgui.glade.h:363
+#: ../src/gtkgui.glade.h:364
 msgid "_Pause"
 msgstr "_Pauze"
 
-#: ../src/gtkgui.glade.h:364
+#: ../src/gtkgui.glade.h:365
 msgid "_Player:"
 msgstr "_Speler:"
 
-#: ../src/gtkgui.glade.h:365
+#: ../src/gtkgui.glade.h:366
 msgid "_Pop it up"
 msgstr "_Opduiken"
 
-#: ../src/gtkgui.glade.h:366
+#: ../src/gtkgui.glade.h:367
 msgid "_Port:"
 msgstr "_Poort:"
 
-#: ../src/gtkgui.glade.h:367
+#: ../src/gtkgui.glade.h:368
 msgid "_Preferences"
 msgstr "_Voorkeuren"
 
-#: ../src/gtkgui.glade.h:368
+#: ../src/gtkgui.glade.h:369
 msgid "_Presence"
 msgstr "_Aanwezigheid"
 
-#: ../src/gtkgui.glade.h:369
+#: ../src/gtkgui.glade.h:370
 msgid "_Previous"
 msgstr "_Terug"
 
-#: ../src/gtkgui.glade.h:370
+#: ../src/gtkgui.glade.h:371
 msgid "_Publish"
 msgstr "_Publiceren"
 
-#: ../src/gtkgui.glade.h:371
+#: ../src/gtkgui.glade.h:372
 msgid "_Quit"
 msgstr "A_fsluiten"
 
-#: ../src/gtkgui.glade.h:372
+#: ../src/gtkgui.glade.h:373
 msgid "_Refresh"
 msgstr "_Vernieuwen"
 
-#: ../src/gtkgui.glade.h:373
+#: ../src/gtkgui.glade.h:374
 msgid "_Register new account"
 msgstr "_Registreer nieuwe account"
 
-#: ../src/gtkgui.glade.h:374
+#: ../src/gtkgui.glade.h:375
 msgid "_Remove"
 msgstr "_Verwijder"
 
-#: ../src/gtkgui.glade.h:376
+#: ../src/gtkgui.glade.h:377
 msgid "_Rename"
 msgstr "_Hernoem"
 
-#: ../src/gtkgui.glade.h:377
+#: ../src/gtkgui.glade.h:378
 msgid "_Reply"
 msgstr "Be_antwoord"
 
-#: ../src/gtkgui.glade.h:378
+#: ../src/gtkgui.glade.h:379
 msgid "_Retrieve"
 msgstr "_Haal op"
 
-#: ../src/gtkgui.glade.h:379
+#: ../src/gtkgui.glade.h:380
 msgid "_Send"
 msgstr "Ver_stuur"
 
-#: ../src/gtkgui.glade.h:380
+#: ../src/gtkgui.glade.h:381
 msgid "_Send & Close"
 msgstr "Ver_stuur & Sluit"
 
-#: ../src/gtkgui.glade.h:381
+#: ../src/gtkgui.glade.h:382
 msgid "_Send Private Message"
 msgstr "Ver_stuur Privé Bericht"
 
-#: ../src/gtkgui.glade.h:382
+#: ../src/gtkgui.glade.h:383
 msgid "_Send Server Message"
 msgstr "Ver_stuur Server Bericht"
 
-#: ../src/gtkgui.glade.h:383
+#: ../src/gtkgui.glade.h:384
 msgid "_Send Single Message"
 msgstr "Ver_stuur Enkel Bericht"
 
-#: ../src/gtkgui.glade.h:384
+#: ../src/gtkgui.glade.h:385
 msgid "_Server:"
 msgstr "_Server:"
 
-#: ../src/gtkgui.glade.h:385
+#: ../src/gtkgui.glade.h:386
 msgid "_Service Discovery"
 msgstr "_Service Ontdekking"
 
-#: ../src/gtkgui.glade.h:386
+#: ../src/gtkgui.glade.h:387
 msgid "_Service Discovery..."
 msgstr "_Service Ontdekking..."
 
-#: ../src/gtkgui.glade.h:387
+#: ../src/gtkgui.glade.h:388
 msgid "_Set Image..."
 msgstr "_Stel Afbeelding in..."
 
-#: ../src/gtkgui.glade.h:388
+#: ../src/gtkgui.glade.h:389
 msgid "_Start Chat"
 msgstr "_Start Gesprek"
 
-#: ../src/gtkgui.glade.h:389
+#: ../src/gtkgui.glade.h:390
 msgid "_Status"
 msgstr "_Status"
 
-#: ../src/gtkgui.glade.h:390
+#: ../src/gtkgui.glade.h:391
 msgid "_Subscribe"
 msgstr "_Abonneer"
 
-#: ../src/gtkgui.glade.h:391
+#: ../src/gtkgui.glade.h:392
 msgid "_Subscription"
 msgstr "_Abonnement"
 
-#: ../src/gtkgui.glade.h:392
+#: ../src/gtkgui.glade.h:393
 msgid "_Use proxy"
 msgstr "_Gebruik proxy"
 
-#: ../src/gtkgui.glade.h:393
+#: ../src/gtkgui.glade.h:394
 msgid "_Username:"
 msgstr "_Gebruikersnaam:"
 
-#: ../src/gtkgui.glade.h:394
+#: ../src/gtkgui.glade.h:395
 msgid "_Voice"
 msgstr "_Stem"
 
-#: ../src/gtkgui.glade.h:395
+#: ../src/gtkgui.glade.h:396
 msgid "_XML Console"
 msgstr "_XML Console"
 
-#: ../src/gtkgui.glade.h:396
+#: ../src/gtkgui.glade.h:397
 msgid "_XML Console..."
 msgstr "_XML Console..."
 
-#: ../src/gtkgui.glade.h:397
+#: ../src/gtkgui.glade.h:398
 msgid "file transfers list"
 msgstr "bestandsoverdrachtlijst"
 
-#: ../src/gtkgui.glade.h:398
+#: ../src/gtkgui.glade.h:399
 msgid "minutes"
 msgstr "minuten"
 
@@ -3540,7 +3561,8 @@ msgstr ""
 
 #: ../src/gajim-remote.py:94 ../src/gajim-remote.py:109
 #: ../src/gajim-remote.py:121 ../src/gajim-remote.py:135
-#: ../src/gajim-remote.py:150
+#: ../src/gajim-remote.py:150 ../src/gajim-remote.py:181
+#: ../src/gajim-remote.py:189
 msgid "account"
 msgstr "account"
 
@@ -3592,7 +3614,7 @@ msgstr ""
 msgid "JID of the contact that you want to chat with"
 msgstr "JID van de contact waar je me in gesprek wilt gaan"
 
-#: ../src/gajim-remote.py:121
+#: ../src/gajim-remote.py:121 ../src/gajim-remote.py:181
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
 "Indien opgegeven zal contact van de contactlijst van deze account gehaald "
@@ -3634,6 +3656,7 @@ msgid "Get detailed info on a contact"
 msgstr "Haal gedetaileerde informatie op van een contact"
 
 #: ../src/gajim-remote.py:142 ../src/gajim-remote.py:149
+#: ../src/gajim-remote.py:180
 msgid "JID of the contact"
 msgstr "JID van contact"
 
@@ -3688,15 +3711,30 @@ msgstr ""
 msgid "Write the current state of Gajim preferences to the .config file"
 msgstr ""
 
-#: ../src/gajim-remote.py:194
+#: ../src/gajim-remote.py:178
+#, fuzzy
+msgid "Remove contact from roster"
+msgstr "_Verwijder van Rooster"
+
+#: ../src/gajim-remote.py:187
+#, fuzzy
+msgid "Add contact to roster"
+msgstr "_Toevoegen aan Roster"
+
+#: ../src/gajim-remote.py:189
+#, fuzzy
+msgid "Add new contact to this account."
+msgstr "geef alleen contacten weer van de gegeven account"
+
+#: ../src/gajim-remote.py:210
 msgid "Missing argument \"contact_jid\""
 msgstr "Argument \"contact_jid\" ontbreekt"
 
-#: ../src/gajim-remote.py:199 ../src/gajim-remote.py:524
+#: ../src/gajim-remote.py:215 ../src/gajim-remote.py:544
 msgid "Service not available"
 msgstr "Service niet beschikbaar"
 
-#: ../src/gajim-remote.py:217
+#: ../src/gajim-remote.py:233
 #, python-format
 msgid ""
 "'%s' is not in your roster.\n"
@@ -3705,20 +3743,20 @@ msgstr ""
 "'%s' staat niet op je rooster.\n"
 "Geef een account op om het bericht mee te sturen."
 
-#: ../src/gajim-remote.py:220
+#: ../src/gajim-remote.py:236
 msgid "You have no active account"
 msgstr "Je hebt geen actieve account"
 
-#: ../src/gajim-remote.py:245
+#: ../src/gajim-remote.py:261
 msgid "Session bus is not available."
 msgstr "Sessiebus is niet beschikbaar."
 
-#: ../src/gajim-remote.py:254
+#: ../src/gajim-remote.py:270
 #, python-format
 msgid "Unknown D-Bus version: %s"
 msgstr "Onbekende D-Bus versie: %s"
 
-#: ../src/gajim-remote.py:281
+#: ../src/gajim-remote.py:297
 #, python-format
 msgid ""
 "Usage: %s %s %s \n"
@@ -3727,16 +3765,16 @@ msgstr ""
 "Gebruik: %s %s %s \n"
 "\t"
 
-#: ../src/gajim-remote.py:284
+#: ../src/gajim-remote.py:300
 msgid "Arguments:"
 msgstr "Argumenten:"
 
-#: ../src/gajim-remote.py:288
+#: ../src/gajim-remote.py:304
 #, python-format
 msgid "%s not found"
 msgstr "%s niet gevonden"
 
-#: ../src/gajim-remote.py:292
+#: ../src/gajim-remote.py:308
 #, python-format
 msgid ""
 "Usage: %s command [arguments]\n"
@@ -3745,7 +3783,7 @@ msgstr ""
 "Gebruik: %s commando [argumenten]\n"
 "Commando is een van:\n"
 
-#: ../src/gajim-remote.py:497
+#: ../src/gajim-remote.py:517
 #, python-format
 msgid ""
 "Argument \"%s\" is not specified. \n"
@@ -3753,6 +3791,21 @@ msgid ""
 msgstr ""
 "Argument \"%s\" is niet gespecificeerd. \n"
 "Type \"%s help %s\" voor meer info"
+
+#: ../src/gtkexcepthook.py:52
+msgid "A programming error has been detected"
+msgstr ""
+
+#: ../src/gtkexcepthook.py:55
+msgid ""
+"It probably is not fatal, but should be reported to the developers "
+"nonetheless."
+msgstr ""
+
+#: ../src/gtkexcepthook.py:77
+#, fuzzy
+msgid "Details"
+msgstr "Persoonlijke Details"
 
 #~ msgid "Server response:"
 #~ msgstr "Server antwoord:"
@@ -3770,9 +3823,6 @@ msgstr ""
 
 #~ msgid "Chan_ge"
 #~ msgstr "_Wijzig"
-
-#~ msgid "Personal Details"
-#~ msgstr "Persoonlijke Details"
 
 #~ msgid "Unknown type %s "
 #~ msgstr "Onbekend type %s"
