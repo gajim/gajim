@@ -424,7 +424,7 @@ class Config:
 			return
 
 		opt = self.__options_per_key[typename]
-		if item is None:
+		if subname is None:
 			del opt[1][name]
 		# if subname is specified, delete the item in the group.	
 		elif opt[1][name].has_key(subname):
