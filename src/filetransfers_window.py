@@ -192,13 +192,10 @@ class FileTransfersWindow:
 		if file_props['type'] == 'r':
 			sectext += '\n\t' +_('Saved in: %s') % \
 				gtkgui_helpers.escape_for_pango_markup(file_path)
-		dialog = dialogs.HigDialog(None, _('File transfer completed'), sectext, 
-			gtk.STOCK_DIALOG_INFO, [
-				[_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT], 
-				[ gtk.STOCK_OK, gtk.RESPONSE_OK ]])
-		button = dialog.get_button(1)
-		button.set_image(gtk.image_new_from_stock(
-			gtk.STOCK_DIRECTORY, gtk.ICON_SIZE_BUTTON))
+		dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, 
+				_('File transfer completed'), sectext)
+		dialog.add_buttons(_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT, 
+				 gtk.STOCK_OK, gtk.RESPONSE_OK )
 		dialog.show_all()
 		if file_props['type'] == 's':
 			button.hide()
