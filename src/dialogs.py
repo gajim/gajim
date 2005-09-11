@@ -499,6 +499,9 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 
 		self.set_default_response(gtk.RESPONSE_OK)
 		
+		ok_button = self.action_area.get_children()[0] # right to left
+		ok_button.grab_focus()
+		
 		self.checkbutton = gtk.CheckButton(checktext)
 		self.vbox.pack_start(self.checkbutton, expand = False, fill = True)
 	
