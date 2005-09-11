@@ -48,10 +48,13 @@ class Sleepy:
 			self.state = STATE_UNKNOWN
 
 	def poll(self):
+		'''checks to see if we should change state'''
 		if not SUPPORTED:
 			return False
 
 		idleTime = idle.getIdleSec()
+		
+		# xa is stronger than away so check for xa first
 		if idleTime > self.xa_interval:
 			self.state = STATE_XA
 		elif idleTime > self.away_interval:
