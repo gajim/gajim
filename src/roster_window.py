@@ -397,7 +397,7 @@ class RosterWindow:
 				item.connect('state-changed', self.on_bm_header_changed_state)
 				sub_menu.append(item)
 			
-			item = gtk.MenuItem(_('New _Room'))
+			item = gtk.MenuItem(_('_Join New Room'))
 			item.connect('activate', self.on_join_gc_activate, account)
 			sub_menu.append(item)
 
