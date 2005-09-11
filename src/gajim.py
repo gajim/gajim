@@ -752,18 +752,6 @@ class Interface:
 		if not gajim.contacts[account].has_key(jid):
 			return
 		file_props = array[1]
-		# FIXME: in 0.9 we'll have a queue for that
-#		if gajim.config.get('notify_on_new_message'):
-#			# check if we should be notified
-#			instance = dialogs.PopupNotificationWindow(self,
-#					_('File Transfer Request'), jid, account, 'file', file_props)
-#			self.roster.popup_notification_windows.append(instance)
-#		elif (gajim.connections[account].connected in (2, 3)
-#			and gajim.config.get('autopopup')) or \
-#			gajim.config.get('autopopupaway'):
-#			contact = gajim.contacts[account][jid][0]
-#			self.windows['file_transfers'].show_file_request(
-#				account, contact, file_props)
 		contact = gajim.contacts[account][jid][0]
 		self.windows['file_transfers'].show_file_request(
 			account, contact, file_props)
