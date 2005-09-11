@@ -78,7 +78,7 @@ def get_nick_from_jid(jid):
 	return jid[:pos]
 
 def get_server_from_jid(jid):
-	pos = jid.find('@')
+	pos = jid.find('@') + 1 # after @
 	return jid[pos:]
 
 def get_nick_from_fjid(jid):
