@@ -1105,6 +1105,7 @@ class GroupchatWindow(chat.Chat):
 				return
 			room_jid = self.get_active_jid()
 			nick = model[iter][1].decode('utf-8')
+			# FIXME: UGLY!!!! see http://trac.gajim.org/ticket/920
 			if nick != 'moderator' and nick != 'participant':
 				account = self.account
 				
@@ -1113,7 +1114,6 @@ class GroupchatWindow(chat.Chat):
 					self.tooltip.id = row
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, gajim.gc_contacts[account][room_jid][nick])
-		pass
 		
 	def on_list_treeview_leave_notify_event(self, widget, event):
 		model = widget.get_model()
@@ -1121,7 +1121,6 @@ class GroupchatWindow(chat.Chat):
 		if self.tooltip.timeout > 0:
 			if not props or self.tooltip.id == props[0]:
 				self.tooltip.hide_tooltip()
-		pass
 		
 	def show_tooltip(self, contact):
 		room_jid = self.get_active_jid()
