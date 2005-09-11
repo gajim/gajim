@@ -1694,8 +1694,7 @@ class AccountsWindow:
 		model.clear()
 		for account in gajim.connections:
 			iter = model.append()
-			model.set(iter, 0, account, 1, gajim.config.get_per('accounts',
-				account, 'hostname'))
+			model.set(iter, 0, account, 1, gajim.get_hostname_from_account(account))
 
 	def on_accounts_treeview_cursor_changed(self, widget):
 		'''Activate delete and modify buttons when a row is selected'''
@@ -2076,8 +2075,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.address_comboboxentry.set_model(liststore)
 		self.address_comboboxentry.set_text_column(0)
 		self.latest_addresses = gajim.config.get('latest_disco_addresses').split()
-		server_address = gajim.config.get_per('accounts', self.account,
-			'hostname')
+		server_address = gajim.get_hostname_from_account(self.account)
 		if server_address in self.latest_addresses:
 			self.latest_addresses.remove(server_address)
 		self.latest_addresses.insert(0, server_address)

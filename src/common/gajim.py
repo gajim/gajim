@@ -189,3 +189,11 @@ def get_jid_from_account(account_name):
 	hostname = config.get_per('accounts', account_name, 'hostname')
 	jid = name + '@' + hostname
 	return jid
+
+def get_hostname_from_account(account_name):
+	'''returns hostname (if custom hostname is used, that is returned)'''
+	hostname = config.get_per('accounts', account_name, 'custom_host')
+	if hostname == '':
+		hostname = config.get_per('accounts', account_name, 'hostname')
+	return hostname
+	
