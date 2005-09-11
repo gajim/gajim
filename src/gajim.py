@@ -26,15 +26,20 @@ import sys
 import pygtk
 import os
 
-if not os.name == 'nt': # py2exe only in windows
-		pygtk.require('2.0') # py2exe fails on this
 try:
 	import gtk
 except RuntimeError, msg:
 	if str(msg) == 'could not open display':
 		print >> sys.stderr, _('Gajim needs Xserver to run. Quiting...')
 		sys.exit()
-		
+
+if gtk.pygtk_version < (2, 6, 0):
+	print >> sys.stderr, _('Gajim needs PyGTK 2.6+ to run. Quiting...')
+	sys.exit()
+elif gtk.gtk_version < (2, 6, 0):
+	print >> sys.stderr, _('Gajim needs GTK 2.6+ to run. Quiting...')
+	sys.exit()
+
 import gtkexcepthook
 import gobject
 gobject.threads_init()
