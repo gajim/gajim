@@ -26,13 +26,11 @@ import traceback
 import gtk
 import pango
 
-from common import i18n
 from cStringIO import StringIO
+from common import helpers
+from common import i18n
 
-
-i18n.init()
 _ = i18n._
-APP = i18n.APP
 _exception_in_progress = False
 
 def _info(type, value, tb):
@@ -45,16 +43,17 @@ def _info(type, value, tb):
 
 	_exception_in_progress = True
 
-	dialog = gtk.MessageDialog(parent = None,
-					flags = 0,
-					type = gtk.MESSAGE_WARNING,
-					buttons = gtk.BUTTONS_CLOSE,
-					message_format = _('A programming error has been detected'))
-
-	dialog.format_secondary_text(
-		_('It probably is not fatal, but should be reported '
-			'to the developers nonetheless.'))
-	dialog.set_default_response(gtk.RESPONSE_CLOSE)
+	dialog = dialogs.HigDialog(None, gtk.MESSAGE_WARNING, gtk.BUTTONS_NONE, 
+				_('A programming error has been detected'),
+				_('It probably is not fatal, but should be reported '
+				'to the developers nonetheless.'))
+	
+	#FIXME: add icon to this button
+	RESPONSE_REPORT_BUG = 42
+	dialog.add_button(_('_Report Bug'), RESPONSE_REPORT_BUG)
+	btn = dialog.add_button(gtk.STOCK_CLOSE, gtk.BUTTONS_CLOSE)
+	
+	btn.grab_focus()
 
 	# Details
 	textview = gtk.TextView()
@@ -81,8 +80,13 @@ def _info(type, value, tb):
 	dialog.set_position(gtk.WIN_POS_CENTER)
 
 	dialog.show_all()
-	dialog.run()
+	resp = dialog.run()
 	dialog.destroy()
+
+	if resp == RESPONSE_REPORT_BUG:
+		url = 'http://trac.gajim.org/wiki/WikiStart#howto_report_ticket'
+		helpers.launch_browser_mailer('url', url)
+
 	_exception_in_progress = False
 	
 if not sys.stderr.isatty(): # gdb/kdm etc if we use startx this is not True

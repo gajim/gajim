@@ -194,6 +194,7 @@ class FileTransfersWindow:
 				gtkgui_helpers.escape_for_pango_markup(file_path)
 		dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, 
 				_('File transfer completed'), sectext)
+		#FIXME: add folder icon to Open Containgin Folder button
 		dialog.add_buttons(_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT, 
 				 gtk.STOCK_OK, gtk.RESPONSE_OK )
 		dialog.show_all()

@@ -37,6 +37,8 @@ def init():
 	except IOError:
 		_translation = gettext.NullTranslations()
 
+init()
+
 def _(s):
 	if s == '':
 		return s

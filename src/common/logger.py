@@ -25,7 +25,7 @@ import stat
 import common.gajim
 from common import i18n
 _ = i18n._
-from common import helpers
+import helpers
 
 LOGPATH = os.path.expanduser('~/.gajim/logs')
 if os.name == 'nt':
