@@ -139,12 +139,9 @@ class StatusTable:
 			status = status.strip()
 			if status != '':
 				# make sure 'status' is unicode before we send to to reduce_chars...
-				if type(status) == str:
+				if isinstance(status, str):
 					status = unicode(status, encoding='utf-8')
-				if gtk.gtk_version < (2, 6, 0) or gtk.pygtk_version < (2, 6, 0):
-					status = gtkgui_helpers.reduce_chars_newlines(status, 50, 1)
-				else:
-					status = gtkgui_helpers.reduce_chars_newlines(status, 0, 1)
+				status = gtkgui_helpers.reduce_chars_newlines(status, 0, 1)
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)
 	

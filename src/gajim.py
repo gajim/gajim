@@ -1121,9 +1121,8 @@ class Interface:
 		for account in gajim.config.get_per('accounts'):
 			gajim.connections[account] = common.connection.Connection(account)
 															
-		if gtk.pygtk_version >= (2, 6, 0):
-			gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
-			gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
+		gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
+		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
 		self.windows = {'logs':{}}
 		
 		for a in gajim.connections:

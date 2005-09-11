@@ -401,11 +401,6 @@ _('Contact names must be of the form "user@servername".')).get_response()
 class AboutDialog:
 	'''Class for about dialog'''
 	def __init__(self):
-		if gtk.pygtk_version < (2, 6, 0) or gtk.gtk_version < (2, 6, 0):
-			InformationDialog(_('Gajim - a GTK+ Jabber client'),
-				_('Version %s') % gajim.version)
-			return
-
 		dlg = gtk.AboutDialog()
 		dlg.set_name('Gajim')
 		dlg.set_version(gajim.version)

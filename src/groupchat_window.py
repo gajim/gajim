@@ -392,17 +392,12 @@ class GroupchatWindow(chat.Chat):
 				st += ' (' + status + ')'
 			self.print_conversation(st, room_jid)
 
-
-	
 	def set_subject(self, room_jid, subject):
 		self.subjects[room_jid] = subject
 		name_label = self.name_labels[room_jid]
 		full_subject = None
 
-		if gtk.gtk_version < (2, 6, 0) or gtk.pygtk_version < (2, 6, 0):
-			subject = gtkgui_helpers.reduce_chars_newlines(subject, 80, 2)
-		else:
-			subject = gtkgui_helpers.reduce_chars_newlines(subject, 0, 2)
+		subject = gtkgui_helpers.reduce_chars_newlines(subject, 0, 2)
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
 		name_label.set_markup(
 		'<span weight="heavy" size="x-large">%s</span>\n%s' % (room_jid, subject))
