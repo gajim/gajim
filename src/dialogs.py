@@ -450,7 +450,7 @@ class HigDialog(gtk.MessageDialog):
 	def __init__(self, parent, type, buttons, primary, secondary):
 		gtk.MessageDialog.__init__(self, parent, 
 				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-				type, buttons, message_format=primary)
+				type, buttons, message_format = primary)
 
 		self.format_secondary_text(secondary)
 
@@ -493,14 +493,13 @@ class ErrorDialog(HigDialog):
 class ConfirmationDialogCheck(ConfirmationDialog):
 	'''HIG compliant confirmation dialog with checkbutton.'''
 	def __init__(self, pritext, sectext='', checktext = ''):
-		HigDialog.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_CANCEL,
+		HigDialog.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL,
 			pritext, sectext)
+
+		self.set_default_response(gtk.RESPONSE_OK)
 		
-		# add ok button manually, because we need to focus on it 
-		ok_button = self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
 		self.checkbutton = gtk.CheckButton(checktext)
 		self.vbox.pack_start(self.checkbutton, expand = False, fill = True)
-		ok_button.grab_focus()
 	
 	def is_checked(self):
 		''' Get active state of the checkbutton '''

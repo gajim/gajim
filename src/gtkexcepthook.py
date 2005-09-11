@@ -25,6 +25,7 @@ import traceback
 
 import gtk
 import pango
+import dialogs
 
 from cStringIO import StringIO
 from common import helpers
@@ -50,10 +51,9 @@ def _info(type, value, tb):
 	
 	#FIXME: add icon to this button
 	RESPONSE_REPORT_BUG = 42
-	dialog.add_button(_('_Report Bug'), RESPONSE_REPORT_BUG)
-	btn = dialog.add_button(gtk.STOCK_CLOSE, gtk.BUTTONS_CLOSE)
-	
-	btn.grab_focus()
+	dialog.add_buttons(_('_Report Bug'), RESPONSE_REPORT_BUG,
+		gtk.STOCK_CLOSE, gtk.BUTTONS_CLOSE)
+	dialog.set_default_response(RESPONSE_REPORT_BUG)
 
 	# Details
 	textview = gtk.TextView()
