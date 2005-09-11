@@ -665,7 +665,7 @@ class GroupchatWindow(chat.Chat):
 				splitted_arg = after_command.split()
 				if len(splitted_arg): 
 					jid_to_invite = splitted_arg[0]
-					reason = ' '.join(a[1:])
+					reason = ' '.join(splitted_arg[1:])
 					gajim.connections[self.account].send_invite(room_jid,
 						jid_to_invite, reason)
 					return # don't print the command

@@ -77,11 +77,20 @@ def get_nick_from_jid(jid):
 	pos = jid.find('@')
 	return jid[:pos]
 
+def get_server_from_jid(jid):
+	pos = jid.find('@')
+	return jid[pos:]
+
 def get_nick_from_fjid(jid):
 	# fake jid is the jid for a contact in a room
 	# gaim@conference.jabber.no/nick/nick-continued
 	return jid.split('/', 1)[1]
 	
+def get_room_name_and_server_from_room_jid(jid):
+	room_name = get_nick_from_jid(jid)
+	server = get_server_from_jid(jid)
+	return room_name, server
+
 def get_room_and_nick_from_fjid(jid):
 	# fake jid is the jid for a contact in a room
 	# gaim@conference.jabber.no/nick/nick-continued
@@ -132,7 +141,7 @@ def construct_fjid(room_jid, nick):
 	''' nick is in utf8 (taken from treeview); room_jid is in unicode'''
 	# fake jid is the jid for a contact in a room
 	# gaim@conference.jabber.org/nick
-	if type(nick) is str:
+	if isinstance(nick, str):
 		nick = unicode(nick, 'utf-8')
 	return room_jid + '/' + nick
 	

@@ -456,7 +456,8 @@ class HigDialog(gtk.MessageDialog):
 
 	def get_response(self):
 		self.show_all()
-		response = gtk.Dialog.run(self)
+		response = self.run()
+		#response = gtk.Dialog.run(self)
 		self.destroy()
 		return response
 
@@ -1151,37 +1152,23 @@ class XMLConsoleWindow:
 			# it's expanded!!
 			self.input_textview.grab_focus()
 
-class InvitationReceivedDialog(HigDialog):
+class InvitationReceivedDialog:
 	def __init__(self, plugin, account, room_jid, contact_jid, password = None, comment = None):
-		self.plugin = plugin
-		self.account = account
 		
-		items = [('inv-deny', _('_Deny'), 0, 0, None),
-					('inv-accept', ('_Accept'), 0, 0, None)]
-
-		# use regular stock icons.
-		aliases = [('inv-deny', gtk.STOCK_CANCEL),
-						('inv-accept', gtk.STOCK_APPLY),]
-
-		gtk.stock_add(items)
-		factory = gtk.IconFactory()
-		factory.add_default()
-		style= window.get_style()
-		for new_stock, alias in aliases:
-			icon_set = style.lookup_icon_set(alias)
-			factory.add(new_stock, icon_set)
-
-		# Create the relabeled buttons
-		btn_deny = gtk.Button(stock = 'inv-deny') 
-		btn_accept = gtk.Button(stock = 'inv-accept')
-
-		#FIXME: add pango markup
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'invitation_received_dialog', APP)
+		dialog = xml.get_widget('invitation_received_dialog')
+		
 		pritext = _('You have been invited to the %(room_jid)s room by %(contact_jid)s') % {
 		 'room_jid': room_jid, 'contact_jid': contact_jid }
 		if comment is not None:
-			string += '\n' + _('Comment: %s') % comment
+			sectext = _('Comment: %s') % comment
 
-		HigDialog.__init__(self, None, pritext, sectext,
-			gtk.STOCK_DIALOG_WARNING, [ [btn_deny, gtk.RESPONSE_NO],
-			[ btn_accept, gtk.RESPONSE_YES ] ])
+		xml.get_widget('label').set_markup(
+			'<span size="larger" weight="bold">' + pritext + '</span>\n\n' + sectext)
 		
+		response = dialog.run()
+		dialog.destroy()
+		if response == gtk.RESPONSE_YES:
+			room, server = gajim.get_room_name_and_server_from_room_jid(room_jid)
+			JoinGroupchatWindow(plugin, account, server = server, room = room)
+			

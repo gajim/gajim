@@ -252,11 +252,16 @@ class Connection:
 		xtags = msg.getTags('x')
 		encTag = None
 		decmsg = ''
+		invite = None
 		for xtag in xtags:
 			if xtag.getNamespace() == common.xmpp.NS_ENCRYPTED:
 				encTag = xtag
 				break
-
+		#invitations
+		for xtag in xtags: 
+			if xtag.getNamespace() == common.xmpp.NS_MUC_USER and xtag.getTag('invite'): 
+				invite = xtag
+				
 		# chatstates - look for chatstate tags in a message
 		children = msg.getChildren()
 		for child in children:
@@ -292,7 +297,10 @@ class Connection:
 				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
 			gajim.logger.write('incoming', log_msgtxt, unicode(msg.getFrom()),
 				tim = tim)
-			self.dispatch('MSG', (unicode(msg.getFrom()), msgtxt, tim,
+			if invite is not None:
+				self.dispatch('GC_INVITATION',(unicode(msg.getFrom()), invite))
+			else:
+				self.dispatch('MSG', (unicode(msg.getFrom()), msgtxt, tim,
 				encrypted, mtype, subject, None))
 		else: # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>

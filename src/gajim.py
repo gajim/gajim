@@ -671,7 +671,22 @@ class Interface:
 		if not self.windows[account]['gc_config'].has_key(jid):
 			self.windows[account]['gc_config'][jid] = \
 			config.GroupchatConfigWindow(self, account, jid, array[1])
+	
+	def handle_event_gc_invitation(self, account, array):
+		#('GC_INVITATION', (unicode(msg.getFrom()), invite))
+		items = array[1].getChildren()
+		password = None
+		reason = None
+		for item in items:
+			if item.getName() == 'invite':
+				contact_jid = item.getAttr('from')
+				reason = item.getTagData('reason')
+			if item.getName() == 'password':
+				password = item.getData()
 
+		dialogs.InvitationReceivedDialog(self, account, array[0], contact_jid,
+			password, reason)
+	
 	def handle_event_bad_passphrase(self, account, array):
 		use_gpg_agent = gajim.config.get('use_gpg_agent')
 		if use_gpg_agent:
@@ -987,6 +1002,7 @@ class Interface:
 			'GC_MSG': self.handle_event_gc_msg,
 			'GC_SUBJECT': self.handle_event_gc_subject,
 			'GC_CONFIG': self.handle_event_gc_config,
+			'GC_INVITATION': self.handle_event_gc_invitation,
 			'BAD_PASSPHRASE': self.handle_event_bad_passphrase,
 			'ROSTER_INFO': self.handle_event_roster_info,
 			'BOOKMARKS': self.handle_event_bookmarks,
