@@ -334,19 +334,29 @@ class GroupchatWindow(chat.Chat):
 		model = self.list_treeview[room_jid].get_model()
 		if show in ('offline', 'error'):
 			if statusCode == '307':
-				s = _('%(nick)s has been kicked by %(who)s: %(reason)s') % {
-					'nick': nick,
-					'who': actor,
-					'reason': reason }
+				if actor is None: # do not print 'kicked by None'
+					s = _('%(nick)s has been kicked: %(reason)s') % {
+						'nick': nick,
+						'reason': reason }
+				else:
+					s = _('%(nick)s has been kicked by %(who)s: %(reason)s') % {
+						'nick': nick,
+						'who': actor,
+						'reason': reason }
 				self.print_conversation(s, room_jid)
 				#FIXME: this produced foo has been kicked by JID: reason
 				# Should we show the JID to everyone? the same for ban
 				# I propose we use nick
 			elif statusCode == '301':
-				s = _('%(nick)s has been banned by %(who)s: %(reason)s') % {
-					'nick': nick,
-					'who': actor,
-					'reason': reason }
+				if actor is None: # do not print 'banned by None'
+					s = _('%(nick)s has been banned: %(reason)s') % {
+						'nick': nick,
+						'reason': reason }
+				else:
+					s = _('%(nick)s has been banned by %(who)s: %(reason)s') % {
+						'nick': nick,
+						'who': actor,
+						'reason': reason }
 				self.print_conversation(s, room_jid)
 			elif statusCode == '303': # Someone changed his nick
 				if nick == self.nicks[room_jid]: # We changed our nick
