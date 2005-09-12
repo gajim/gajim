@@ -121,16 +121,6 @@ class GroupchatWindow(chat.Chat):
 
 	def on_groupchat_window_delete_event(self, widget, event):
 		"""close window"""
-		for room_jid in self.xmls:
-			if time.time() - gajim.last_message_time[self.account][room_jid] < 2:
-				dialog = dialogs.ConfirmationDialog(
-	_('You just received a new message in room "%s"') % room_jid.split('@')[0],
-	_('If you close this window and you have history disabled, this message will be lost.')
-					)
-				if dialog.get_response() != gtk.RESPONSE_OK:
-					dialog.destroy()
-					return True # stop the propagation of the delete event
-		
 		# whether to ask for comfirmation before closing muc
 		if gajim.config.get('confirm_close_muc'):
 			names = []
@@ -991,14 +981,6 @@ class GroupchatWindow(chat.Chat):
 		menu.show_all()
 
 	def remove_tab(self, room_jid):
-		if time.time() - gajim.last_message_time[self.account][room_jid] < 2:
-			name = gajim.get_nick_from_jid(room_jid)
-			dialog = dialogs.ConfirmationDialog(
-				_('You just received a new message in room "%s"') % name,
-		_('If you close this tab and you have history disabled, the message will be lost.'))
-			if dialog.get_response() != gtk.RESPONSE_OK:
-				return
-
 		chat.Chat.remove_tab(self, room_jid, 'gc')
 		if len(self.xmls) > 0:
 			gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
