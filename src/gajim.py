@@ -42,7 +42,8 @@ elif gtk.gtk_version < (2, 6, 0):
 
 import gtkexcepthook
 import gobject
-gobject.threads_init()
+if sys.version[:4] >= '2.4':
+	gobject.threads_init()
 import pango
 import sre
 import signal
