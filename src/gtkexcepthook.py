@@ -83,11 +83,13 @@ def _info(type, value, tb):
 
 	dialog.show_all()
 	resp = dialog.run()
-	dialog.destroy()
 
 	if resp == RESPONSE_REPORT_BUG:
 		url = 'http://trac.gajim.org/wiki/WikiStart#howto_report_ticket'
 		helpers.launch_browser_mailer('url', url)
+		#FIXME: it always get destroyed! why??
+	else:
+		dialog.destroy()
 
 	_exception_in_progress = False
 	
