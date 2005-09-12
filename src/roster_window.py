@@ -1958,8 +1958,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			account = model.get_value(iter1, 4)
 			if account and model.get_value(iter2, 4) == account:
 				account = account.decode('utf-8')
-				jid1 = model.get_value(iter1, 3).decode('utf-8')
-				jid2 = model.get_value(iter2, 3).decode('utf-8')
+				jid1 = model[iter1][C_JID].decode('utf-8')
+				jid2 = model[iter2][C_JID].decode('utf-8')
 				luser1 = gajim.contacts[account][jid1]
 				luser2 = gajim.contacts[account][jid2]
 				cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
@@ -2024,16 +2024,15 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			#droped in another account
 			return
 		iter_group_source = model.iter_parent(iter_source)
-		grp_source = model.get_value(iter_group_source, 3).decode('utf-8')
+		grp_source = model[iter_group_source][C_JID].decode('utf-8')
 		if grp_source == _('Transports') or grp_source == _('not in the roster'):
 			return
-		account = model.get_value(iter_dest, 4).decode('utf-8')
-		type_dest = model.get_value(iter_dest, 2)
+		account = model[iter_dest][C_ACCOUNT].decode('utf-8')
+		type_dest = model.get_value(iter_dest, C_TYPE)
 		if type_dest == 'group':
-			grp_dest = model.get_value(iter_dest, 3).decode('utf-8')
+			grp_dest = model[iter_dest][C_JID].decode('utf-8')
 		else:
-			grp_dest = model.get_value(model.iter_parent(iter_dest), 3).\
-				decode('utf-8')
+			grp_dest = model[model.iter_parent(iter_dest)][C_JID].decode('utf-8')
 		if grp_source == grp_dest:
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
