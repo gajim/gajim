@@ -212,7 +212,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		elif len(accounts) > 1:
 			text = _('Gajim')
 			self.current_row = 1
-			self.table.resize(2,1)
+			self.table.resize(2, 1)
 			iconset = gajim.config.get('iconset')
 			if not iconset:
 				iconset = 'sun'
@@ -221,13 +221,17 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				message = acct['message']
 				# before reducing the chars we should assure we send unicode, else 
 				# there are possible pango TBs on 'set_markup'
-				if type(message) == str:
-					message = unicode(message, encoding='utf-8')
+				if isinstance(message, str):
+					message = unicode(message, encoding = 'utf-8')
 				message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
 				message = gtkgui_helpers.escape_for_pango_markup(message)
-				self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
-					gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>' 
-					+ ' - ' + message)
+				if message:
+					self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
+						gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>' 
+						+ ' - ' + message)
+				else:
+					self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
+						gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>')
 					
 		elif len(accounts) == 1:
 			message = gtkgui_helpers.reduce_chars_newlines(accounts[0]['status_line'], 
