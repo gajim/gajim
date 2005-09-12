@@ -117,8 +117,12 @@ class RosterWindow:
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
 
+		name = gajim.config.get_per('accounts', account, 'name')
+    hostname = gajim.config.get_per('accounts', account, 'hostname')
+		our_jid = name + '@' + hostname
+
 		model.append(None, [self.jabber_state_images[status], account,
-			'account', account, account, False, tls_pixbuf])
+			'account', our_jid, account, False, tls_pixbuf])
 
 	def remove_newly_added(self, jid, account):
 		if jid in gajim.newly_added[account]:
