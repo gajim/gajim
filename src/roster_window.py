@@ -67,38 +67,38 @@ class RosterWindow:
 		model = self.tree.get_model()
 		if model is None:
 			return
-		account = model.get_iter_root()
-		while account:
-			account_name = model.get_value(account, 3).decode('utf-8')
+		account_iter = model.get_iter_root()
+		while account_iter:
+			account_name = model[account_iter][C_NAME].decode('utf-8')
 			if name == account_name:
 				break
-			account = model.iter_next(account)
-		return account
+			account_iter = model.iter_next(account_iter)
+		return account_iter
 
 	def get_group_iter(self, name, account):
 		model = self.tree.get_model()
 		root = self.get_account_iter(account)
-		group = model.iter_children(root)
-		while group:
-			group_name = model.get_value(group, 3).decode('utf-8')
+		group_iter = model.iter_children(root)
+		while group_iter:
+			group_name = model[group_iter][C_NAME].decode('utf-8')
 			if name == group_name:
 				break
-			group = model.iter_next(group)
-		return group
+			group_iter = model.iter_next(group_iter)
+		return group_iter
 
 	def get_contact_iter(self, jid, account):
 		model = self.tree.get_model()
 		acct = self.get_account_iter(account)
 		found = []
 		fin = False
-		group = model.iter_children(acct)
-		while group:
-			user = model.iter_children(group)
-			while user:
-				if jid == model.get_value(user, 3).decode('utf-8'):
-					found.append(user)
-				user = model.iter_next(user)
-			group = model.iter_next(group)
+		group_iter = model.iter_children(acct)
+		while group_iter:
+			user_iter = model.iter_children(group_iter)
+			while user_iter:
+				if jid == model[user_iter][C_JID].decode('utf-8'):
+					found.append(user_iter)
+				user_iter = model.iter_next(user_iter)
+			group_iter = model.iter_next(group_iter)
 		return found
 
 	def add_account_to_roster(self, account):
@@ -117,9 +117,7 @@ class RosterWindow:
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
 
-		name = gajim.config.get_per('accounts', account, 'name')
-		hostname = gajim.config.get_per('accounts', account, 'hostname')
-		our_jid = name + '@' + hostname
+		our_jid = gajim.get_jid_from_account(account)
 
 		model.append(None, [self.jabber_state_images[status], account,
 			'account', our_jid, account, False, tls_pixbuf])
@@ -946,7 +944,7 @@ class RosterWindow:
 	def mk_menu_account(self, event, iter):
 		'''Make account's popup menu'''
 		model = self.tree.get_model()
-		account = model[iter][C_JID].decode('utf-8')
+		account = model[iter][C_ACCOUNT].decode('utf-8')
 		
 		#FIXME: make most menuitems of this menu insensitive if account is offline
 

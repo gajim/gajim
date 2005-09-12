@@ -899,10 +899,9 @@ class Connection:
 		
 		if mime_type is not None:
 			file_props['mime-type'] = mime_type
-		name = gajim.config.get_per('accounts', self.name, 'name')
-		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+		our_jid = get_jid_from_account(self.name)
 		resource = self.server_resource
-		file_props['receiver'] = name + '@' + hostname + '/' + resource
+		file_props['receiver'] = our_jid + '/' + resource
 		file_props['sender'] = iq_obj.getFrom()
 		file_props['request-id'] = unicode(iq_obj.getAttr('id'))
 		file_props['sid'] = unicode(si.getAttr('id'))
@@ -957,10 +956,9 @@ class Connection:
 		self.to_be_sent.append(iq)
 		
 	def send_file_request(self, file_props):
-		name = gajim.config.get_per('accounts', self.name, 'name')
-		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+		our_jid = get_jid_from_account(self.name)
 		resource = self.server_resource
-		frm = name + '@' + hostname + '/' + resource
+		frm = our_jid + '/' + resource
 		file_props['sender'] = frm
 		fjid = file_props['receiver'].jid + '/' + file_props['receiver'].resource
 		iq = common.xmpp.Protocol(name = 'iq', to = fjid, 
