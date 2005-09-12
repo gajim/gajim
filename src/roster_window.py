@@ -243,8 +243,8 @@ class RosterWindow:
 					else:
 						img = state_images['not in the roster']
 		for iter in iters:
-			model.set_value(iter, 0, img)
-			model.set_value(iter, 1, name)
+			model[iter][C_IMG] = img
+			model[iter][C_NAME] = name
 			#FIXME: add avatar
 
 	def join_gc_room(self, account, room_jid, nick, password):
