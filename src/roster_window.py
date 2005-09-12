@@ -118,7 +118,7 @@ class RosterWindow:
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
 
 		name = gajim.config.get_per('accounts', account, 'name')
-    hostname = gajim.config.get_per('accounts', account, 'hostname')
+		hostname = gajim.config.get_per('accounts', account, 'hostname')
 		our_jid = name + '@' + hostname
 
 		model.append(None, [self.jabber_state_images[status], account,
