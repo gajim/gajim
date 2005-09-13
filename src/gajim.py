@@ -97,11 +97,6 @@ if profile:
 
 parser = optparser.OptionsParser(config_filename)
 
-try:
-	import winsound # windows-only built-in module for playing wav
-except ImportError:
-	pass
-
 class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',\
