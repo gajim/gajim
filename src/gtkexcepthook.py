@@ -80,14 +80,17 @@ def _info(type, value, tb):
 	dialog.set_position(gtk.WIN_POS_CENTER)
 
 	dialog.show_all()
-	resp = dialog.run()
 
-	if resp == RESPONSE_REPORT_BUG:
-		url = 'http://trac.gajim.org/wiki/WikiStart#howto_report_ticket'
-		helpers.launch_browser_mailer('url', url)
-		#FIXME: it always get destroyed! why??
-	else:
-		dialog.destroy()
+	close_clicked = False
+	while not close_clicked:
+		resp = dialog.run()
+		if resp == RESPONSE_REPORT_BUG:
+			url = 'http://trac.gajim.org/wiki/WikiStart#howto_report_ticket'
+			helpers.launch_browser_mailer('url', url)
+		else:
+			close_clicked = True
+	
+	dialog.destroy()
 
 	_exception_in_progress.release()
 	
