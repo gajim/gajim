@@ -1279,7 +1279,19 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		message = dlg.run()
 		return message
 
+	def connected_rooms(self, account):
+		accounts = gajim.connections.keys()
+		if True in gajim.gc_connected[account].values():
+			return True
+		return False
+
 	def change_status(self, widget, account, status):
+		if status == 'invisible':
+			if self.connected_rooms(account):
+				dialog = dialogs.ConfirmationDialog(_('You are connected in rooms'),
+					_('Changiing status to invisible will disconnect you from all your rooms. Are you sure you want to go invisible?'))
+				if dialog.get_response() != gtk.RESPONSE_OK:
+					return
 		message = self.get_status_message(status)
 		if message == -1:
 			return
@@ -1299,15 +1311,31 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.update_status_comboxbox()
 			return
 		status = model[active][2].decode('utf-8')
-		message = self.get_status_message(status)
-		if message == -1:
-			self.update_status_comboxbox()
-			return
 		one_connected = False
 		for acct in accounts:
 			if gajim.connections[acct].connected > 1:
 				one_connected = True
 				break
+		if status == 'invisible':
+			bug_user = False
+			for acct in accounts:
+				if not one_connected or gajim.connections[acct].connected > 1:
+					if not gajim.config.get_per('accounts', acct, 
+							'sync_with_global_status'):
+						continue
+					# We're going ti change our status to invisible
+					if self.connected_rooms(acct):
+						bug_user = True
+						break
+			if bug_user:
+				dialog = dialogs.ConfirmationDialog(_('You are connected in rooms'),
+					_('Changiing status to invisible will disconnect you from all your rooms. Are you sure you want to go invisible?'))
+				if dialog.get_response() != gtk.RESPONSE_OK:
+					return
+		message = self.get_status_message(status)
+		if message == -1:
+			self.update_status_comboxbox()
+			return
 		for acct in accounts:
 			if not gajim.config.get_per('accounts', acct, 
 													'sync_with_global_status'):
