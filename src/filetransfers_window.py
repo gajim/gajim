@@ -176,7 +176,7 @@ class FileTransfersWindow:
 				file_props['tt_account'], jid).name
 			sender = gtkgui_helpers.escape_for_pango_markup(sender_name)
 		else:
-			#You is a reply of who send a file
+			#You is a reply of who sent a file
 			sender = _('You')
 		sectext += '\n\t' +_('Sender: %s') % sender
 		sectext += '\n\t' +_('Recipient: ')
@@ -187,7 +187,7 @@ class FileTransfersWindow:
 			recipient = gtkgui_helpers.escape_for_pango_markup(receiver_name)
 		else:
 			#You is a reply of who received a file
-			recipient = ('You')
+			recipient = _('You')
 		sectext += recipient
 		if file_props['type'] == 'r':
 			sectext += '\n\t' +_('Saved in: %s') % \
@@ -195,6 +195,7 @@ class FileTransfersWindow:
 		dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, 
 				_('File transfer completed'), sectext)
 		if file_props['type'] == 'r':
+			#FIXME: add folder icon to Open Containgin Folder button
 			dialog.add_buttons(_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT)
 		dialog.add_buttons(gtk.STOCK_OK, gtk.RESPONSE_OK)
 		dialog.show_all()
