@@ -341,8 +341,9 @@ class RosterTooltip(BaseTooltip, StatusTable):
 		info = '<span size="large" weight="bold">' + prim_contact.jid + '</span>'
 		info += '\n<span weight="bold">' + _('Name: ') + '</span>' + \
 			gtkgui_helpers.escape_for_pango_markup(prim_contact.name)
-		info += '\n<span weight="bold">' + _('Subscription: ') + '</span>' + \
-			gtkgui_helpers.escape_for_pango_markup(prim_contact.sub)
+		if prim_contact.sub:
+			info += '\n<span weight="bold">' + _('Subscription: ') + '</span>' + \
+				gtkgui_helpers.escape_for_pango_markup(prim_contact.sub)
 
 		if prim_contact.keyID:
 			keyID = None
