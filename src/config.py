@@ -2294,7 +2294,6 @@ _('Without a connection, you can not browse available services')).get_response()
 	def on_services_treeview_cursor_changed(self, widget):
 		'''When we select a row :
 		activate buttons if needed'''
-		print 'changed'
 		self.update_buttons()
 		model, iter = self.services_treeview.get_selection().get_selected()
 		if not iter:
