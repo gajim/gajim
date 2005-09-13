@@ -24,6 +24,11 @@ import urllib
 import gajim
 from common import i18n
 
+try:
+	import winsound
+except:
+	pass
+
 _ = i18n._
 Q_ = i18n.Q_
 
