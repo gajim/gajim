@@ -899,7 +899,7 @@ class Connection:
 		
 		if mime_type is not None:
 			file_props['mime-type'] = mime_type
-		our_jid = get_jid_from_account(self.name)
+		our_jid = gajim.get_jid_from_account(self.name)
 		resource = self.server_resource
 		file_props['receiver'] = our_jid + '/' + resource
 		file_props['sender'] = iq_obj.getFrom()
@@ -956,7 +956,7 @@ class Connection:
 		self.to_be_sent.append(iq)
 		
 	def send_file_request(self, file_props):
-		our_jid = get_jid_from_account(self.name)
+		our_jid = gajim.get_jid_from_account(self.name)
 		resource = self.server_resource
 		frm = our_jid + '/' + resource
 		file_props['sender'] = frm
