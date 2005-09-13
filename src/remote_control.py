@@ -214,7 +214,7 @@ class SignalObject(DbusPrototype):
 			if len(accounts) == 1:
 				account = accounts[0]
 		connected_account = None
-		first_connected = None
+		first_connected_acct = None
 		for acct in accounts:
 			if gajim.connections[acct].connected > 1: # account is  online
 				if self.plugin.windows[acct]['chats'].has_key(jid):
@@ -228,12 +228,12 @@ class SignalObject(DbusPrototype):
 				# or there is only one account
 				elif account: 
 					connected_account = acct
-				elif first_connected is None:
-					first_connected = acct
+				elif first_connected_acct is None:
+					first_connected_acct = acct
 		
 		# if jid is not a conntact, open-chat with first connected account
-		if connected_account is None and first_connected:
-			connected_account = first_connected
+		if connected_account is None and first_connected_acct:
+			connected_account = first_connected_acct
 		
 		if connected_account:
 			self.plugin.roster.new_chat_from_jid(connected_account, jid)
