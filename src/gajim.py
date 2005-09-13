@@ -1250,7 +1250,7 @@ if __name__ == '__main__':
 		
 		if path_to_gajim_script:
 			argv = [path_to_gajim_script]
-			cli.set_restart_command(argv)
+			cli.set_restart_command(len(argv), argv)
 	
 	try:
 		import gconf
