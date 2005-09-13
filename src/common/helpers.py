@@ -25,7 +25,7 @@ import gajim
 from common import i18n
 
 try:
-	import winsound
+	import winsound # windows-only built-in module for playing wav
 except:
 	pass
 
