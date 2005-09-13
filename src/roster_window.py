@@ -1298,8 +1298,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	def change_status(self, widget, account, status):
 		if status == 'invisible':
 			if self.connected_rooms(account):
-				dialog = dialogs.ConfirmationDialog(_('You are connected in rooms'),
-					_('Changiing status to invisible will disconnect you from all your rooms. Are you sure you want to go invisible?'))
+				dialog = dialogs.ConfirmationDialog(
+		_('You are participating in one or more group chats'),
+		_('Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 		message = self.get_status_message(status)
@@ -1338,8 +1339,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 						bug_user = True
 						break
 			if bug_user:
-				dialog = dialogs.ConfirmationDialog(_('You are connected in rooms'),
-					_('Changiing status to invisible will disconnect you from all your rooms. Are you sure you want to go invisible?'))
+				dialog = dialogs.ConfirmationDialog(
+		_('You are participating in one or more group chats'),
+		_('Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 		message = self.get_status_message(status)
