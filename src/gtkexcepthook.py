@@ -22,6 +22,7 @@
 
 import sys
 import traceback
+import threading
 
 import gtk
 import pango
@@ -32,17 +33,14 @@ from common import helpers
 from common import i18n
 
 _ = i18n._
-_exception_in_progress = False
+_exception_in_progress = threading.Lock()
 
 def _info(type, value, tb):
-	global _exception_in_progress
-	if _exception_in_progress:
+        if not _exception_in_progress.acquire(False):
 		# Exceptions have piled up, so we use the default exception
 		# handler for such exceptions
 		_excepthook_save(type, value, tb)
 		return
-
-	_exception_in_progress = True
 
 	dialog = dialogs.HigDialog(None, gtk.MESSAGE_WARNING, gtk.BUTTONS_NONE, 
 				_('A programming error has been detected'),
@@ -91,7 +89,7 @@ def _info(type, value, tb):
 	else:
 		dialog.destroy()
 
-	_exception_in_progress = False
+	_exception_in_progress.release()
 	
 if not sys.stderr.isatty(): # gdb/kdm etc if we use startx this is not True
 	#FIXME: maybe always show dialog?
@@ -103,4 +101,3 @@ if __name__ == '__main__':
 	_excepthook_save = sys.excepthook
 	sys.excepthook = _info
 	print x # this always tracebacks
-
