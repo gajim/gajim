@@ -1,7 +1,7 @@
 Gajim 0.8.2 (06 Sep 2005)
 
   * Fix so Gajim runs in pygtk2.8.x
-  * Gajim now uses pydns too to do SRV lookup
+  * Gajim can use pydns too (apart from dnspython) to do SRV lookup
   * Other minor fixes
 
 Gajim 0.8.1 (02 Sep 2005)
