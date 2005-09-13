@@ -670,6 +670,18 @@ class RosterWindow:
 					self.tooltip.id = row
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, gajim.contacts[account][jid])
+			if model[iter][C_TYPE] == 'account':
+				account = model[iter][C_NAME].decode('utf-8')
+				jid = gajim.get_jid_from_account(account)
+				self_contact = Contact(jid=jid, name=account, show = gajim.connections[account].get_status(), status=gajim.connections[account].status, resource=gajim.config.get_per('accounts', gajim.connections[account].name, 'resource'), keyID = gajim.config.get_per('accounts', gajim.connections[account].name, 'keyid'))
+				contacts = [self_contact]
+				if gajim.contacts[account].has_key(jid):
+					for contact in gajim.contacts[account][jid]:
+						contacts = [contact]
+				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+					self.tooltip.id = row
+					self.tooltip.timeout = gobject.timeout_add(500,
+						self.show_tooltip, contacts)
 
 	def on_agent_logging(self, widget, jid, state, account):
 		'''When an agent is requested to log in or off'''

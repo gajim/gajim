@@ -294,6 +294,9 @@ class Interface:
 			if gajim.contacts[account].has_key(ji):
 				#Update existing iter
 				self.roster.draw_contact(ji, account)
+		elif jid == gajim.get_jid_from_account(account):
+			#It's another of our resources.  We don't need to see that!
+			return
 		elif gajim.contacts[account].has_key(ji):
 			#It isn't an agent
 			self.roster.chg_contact_status(user1, array[1], array[2], account)
@@ -344,7 +347,7 @@ class Interface:
 				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactAbsence', (account, array))
 				# stop non active file transfers
-				
+		
 		elif self.windows[account]['gc'].has_key(ji): # ji is then room_jid
 			#it is a groupchat presence
 			#FIXME: upgrade the chat instances (for pm)

@@ -1566,6 +1566,9 @@ class Connection:
 			if self.connection:
 				self.connection.send(p)
 			self.dispatch('STATUS', show)
+	
+	def get_status(self):
+		return STATUS_LIST[self.connected]
 
 	def send_motd(self, jid, subject = '', msg = ''):
 		if not self.connection:
