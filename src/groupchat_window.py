@@ -628,6 +628,7 @@ class GroupchatWindow(chat.Chat):
 				elif command == 'nick':
 					# example: /nick foo
 					if len(message_array):
+						nick = message_array[0]
 						gajim.connections[self.account].change_gc_nick(room_jid,
 							nick)
 					else:
