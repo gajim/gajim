@@ -569,6 +569,10 @@ timestamp, contact):
 			# so we cannot send chatstate anymore
 			return
 
+		# Don't send chatstates to offline contacts
+		if contact.show == 'offline':
+			return
+
 		if contact.chatstate is False: # jid cannot do jep85
 			return
 
