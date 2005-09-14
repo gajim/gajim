@@ -76,6 +76,7 @@ class GroupchatWindow(chat.Chat):
 'on_groupchat_window_focus_in_event': self.on_groupchat_window_focus_in_event,
 'on_groupchat_window_focus_out_event': self.on_groupchat_window_focus_out_event,
 'on_chat_notebook_key_press_event': self.on_chat_notebook_key_press_event,
+'on_chat_notebook_switch_page': self.on_chat_notebook_switch_page,
          }
 
 		self.xml.signal_autoconnect(signal_dict)
@@ -184,23 +185,32 @@ class GroupchatWindow(chat.Chat):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 	
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
+		old_child = notebook.get_nth_page(notebook.get_current_page())
 		new_child = notebook.get_nth_page(page_num)
+		old_jid = ''
 		new_jid = ''
 		for room_jid in self.xmls:
-			if self.childs[room_jid] == new_child: 
+			if self.childs[room_jid] == new_child:
 				new_jid = room_jid
-				break
-		subject = self.subjects[new_jid]
+				self.redraw_tab(new_jid, 'active')
+			elif self.childs[room_jid] == old_child:
+				old_jid = room_jid
+				self.redraw_tab(old_jid, 'active')
+			if old_jid != '' and new_jid != '': # we found both jids
+				break # so stop looping
 
+		subject = self.subjects[new_jid]
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
 		new_jid = gtkgui_helpers.escape_for_pango_markup(new_jid)
 
 		name_label = self.name_labels[new_jid]
-		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' % (new_jid, subject))
+		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' %\
+					(new_jid, subject))
 		event_box = name_label.get_parent()
 		if subject == '':
 			subject = _('This room has no subject')
 		self.subject_tooltip[new_jid].set_tip(event_box, subject)
+
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
@@ -718,12 +728,15 @@ class GroupchatWindow(chat.Chat):
 				kind = 'outgoing'
 			else:
 				kind = 'incoming'
+				# muc-specific chatstate
+				self.redraw_tab(room_jid, 'newmsg')
 		else:
 			kind = 'status'
 
 		nick = self.nicks[room_jid]
-		if kind == 'incoming' and \
-				text.lower().find(nick.lower()) != -1:
+		if kind == 'incoming' and text.lower().find(nick.lower()) != -1:
+			# muc-specific chatstate
+			self.redraw_tab(room_jid, 'attention')
 			other_tags_for_name.append('bold')
 			other_tags_for_text.append('marked')
 		

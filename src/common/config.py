@@ -228,6 +228,10 @@ class Config:
 			'state_composing_color': [ opt_color, 'green4' ],
 			'state_paused_color': [ opt_color, 'mediumblue' ],
 			'state_gone_color': [ opt_color, 'grey' ],
+
+			# MUC chat states
+			'state_muc_msg': [ opt_color, 'mediumblue' ],
+			'state_muc_directed_msg': [ opt_color, 'red2' ],
 		}, {}),
 	}
 

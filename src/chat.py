@@ -92,6 +92,10 @@ class Chat:
 		self.notebook.set_show_tabs(gajim.config.get('tabs_always_visible'))
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
+		# muc attention states (when we are mentioned in a muc)
+		# if the room jid is in the list, the room has mentioned us
+		self.muc_attentions = []
+
 	def update_font(self):
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
 		for jid in self.tagIn:
@@ -164,12 +168,6 @@ class Chat:
 	def redraw_tab(self, jid, chatstate = None):
 		'''redraw the label of the tab
 		if chatstate is given that means we have HE SENT US a chatstate'''
-		unread = ''
-		num_unread = self.nb_unread[jid]
-		if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
-			unread = '* '
-		elif num_unread > 1:
-			unread = '[' + unicode(num_unread) + '] '
 		# Update status images
 		self.set_state_image(jid)
 			
@@ -178,6 +176,13 @@ class Chat:
 		if self.widget_name == 'tabbed_chat_window':
 			nickname = hb.get_children()[1]
 			close_button = hb.get_children()[2]
+
+			unread = ''
+			num_unread = self.nb_unread[jid]
+			if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
+				unread = '* '
+			elif num_unread > 1:
+				unread = '[' + unicode(num_unread) + '] '
 
 			# Draw tab label using chatstate 
 			theme = gajim.config.get('roster_theme')
@@ -226,6 +231,31 @@ class Chat:
 		elif self.widget_name == 'groupchat_window':
 			nickname = hb.get_children()[0]
 			close_button = hb.get_children()[1]
+
+			unread = ''
+			has_focus = self.window.get_property('has-toplevel-focus')
+			current_tab = (self.notebook.page_num(child) == self.notebook.get_current_page())
+			color = None
+			theme = gajim.config.get('roster_theme')
+			if chatstate == 'attention' and (not has_focus or not current_tab):
+				if jid not in self.muc_attentions:
+					self.muc_attentions.append(jid)
+				color = gajim.config.get_per('themes', theme, 'state_muc_directed_msg')
+			elif chatstate:
+				if chatstate == 'active' or (current_tab and has_focus):
+					if jid in self.muc_attentions:
+						self.muc_attentions.remove(jid)
+					color = gajim.config.get_per('themes', theme, 'state_active_color')
+				elif chatstate == 'newmsg' and (not has_focus or not current_tab) and\
+				     jid not in self.muc_attentions:
+					color = gajim.config.get_per('themes', theme, 'state_muc_msg')
+			if color:
+				color = gtk.gdk.colormap_get_system().alloc_color(color)
+				# The widget state depend on whether this tab is the "current" tab
+				if current_tab:
+					nickname.modify_fg(gtk.STATE_NORMAL, color)
+				else:
+					nickname.modify_fg(gtk.STATE_ACTIVE, color)
 
 		if gajim.config.get('tabs_close_button'):
 			close_button.show()
@@ -301,8 +331,11 @@ class Chat:
 			if widget.props.urgency_hint:
 				widget.props.urgency_hint = False
 		# Undo "unread" state display, etc.
-		# NOTE: we do not send any chatstate
-		self.redraw_tab(jid)
+		if self.widget_name == 'groupchat_window':
+			self.redraw_tab(jid, 'active')
+		else:
+			# NOTE: we do not send any chatstate to preserve inactive, gone, etc.
+			self.redraw_tab(jid)
 	
 	def on_compact_view_menuitem_activate(self, widget):
 		isactive = widget.get_active()
