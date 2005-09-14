@@ -663,6 +663,7 @@ class RosterWindow:
 				self.tooltip.hide_tooltip()
 				return
 			if model[iter][C_TYPE] == 'contact':
+				# we're on a contact entry in the roster
 				account = model[iter][C_ACCOUNT].decode('utf-8')
 				jid = model[iter][C_JID].decode('utf-8')
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
@@ -670,16 +671,29 @@ class RosterWindow:
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, gajim.contacts[account][jid])
 			elif model[iter][C_TYPE] == 'account':
+				# we're on an account entry in the roster
 				account = model[iter][C_NAME].decode('utf-8')
 				jid = gajim.get_jid_from_account(account)
 				contacts = []
-				contact = Contact(jid=jid, name=account, show=gajim.connections[account].get_status(), status=gajim.connections[account].status, resource=gajim.config.get_per('accounts', gajim.connections[account].name, 'resource'), keyID=gajim.config.get_per('accounts', gajim.connections[account].name, 'keyid'))
+				connection = gajim.connections[account]
+				# get our current contact info
+				contact = Contact(jid=jid, name=account, 
+					show=connection.get_status(), 
+					status=connection.status, 
+					resource=gajim.config.get_per('accounts', connection.name, 'resource'), 
+					keyID=gajim.config.get_per('accounts', connection.name, 'keyid'))
 				contacts.append(contact)
-				if gajim.connections[account].connection:
-					if gajim.connections[account].connection.getRoster().getItem(jid):
-						resources = gajim.connections[account].connection.getRoster().getResources(jid)
+				# if we're online ...
+				if connection.connection:
+					roster = connection.connection.getRoster()
+					if roster.getItem(jid):
+						resources = roster.getResources(jid)
+						# ...get the contact info for our other online resources
 						for resource in resources:
-							contact = Contact(jid=jid, name=account, show=gajim.connections[account].connection.getRoster().getShow(jid+'/'+resource), status=gajim.connections[account].connection.getRoster().getStatus(jid+'/'+resource), resource=resource, priority=gajim.connections[account].connection.getRoster().getPriority(jid+'/'+resource))
+							contact = Contact(jid=jid, name=account, 
+								show=roster.getShow(jid+'/'+resource),
+								status=roster.getStatus(jid+'/'+resource), resource=resource, 
+								priority=roster.getPriority(jid+'/'+resource))
 							contacts.append(contact)
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
