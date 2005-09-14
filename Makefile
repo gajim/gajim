@@ -50,7 +50,7 @@ dist:
 	rm -rf gajim-$(VERSION)
 	mkdir gajim-$(VERSION)
 	cp -r data src po gajim-$(VERSION)/
-	cp AUTHORS gajim.1 gajim-remote.1 gajim.desktop COPYING Makefile Changelog README launch.sh gajim-$(VERSION)
+	cp AUTHORS gajim.1 gajim-remote.1 gajim.desktop.in COPYING Makefile Changelog README launch.sh gajim-$(VERSION)
 	mkdir gajim-$(VERSION)/scripts
 	for s in $(SCRIPTS) ; do \
 		cp $$s gajim-$(VERSION)/scripts/; \
