@@ -596,9 +596,11 @@ class SubscriptionRequestWindow:
 		self.window.destroy()
 
 class JoinGroupchatWindow:
-	def __init__(self, plugin, account, server = '', room = ''):
+	def __init__(self, plugin, account, server = '', room = '', nick = ''):
 		self.plugin = plugin
 		self.account = account
+		if nick == '':
+			nick = gajim.nicks[self.account]
 		if gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
 _('You can not join a group chat unless you are connected.')).get_response()
@@ -608,7 +610,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		self.window = self.xml.get_widget('join_groupchat_window')
 		self.xml.get_widget('server_entry').set_text(server)
 		self.xml.get_widget('room_entry').set_text(room)
-		self.xml.get_widget('nickname_entry').set_text(gajim.nicks[self.account])
+		self.xml.get_widget('nickname_entry').set_text(nick)
 		self.xml.signal_autoconnect(self)
 		self.plugin.windows[account]['join_gc'] = self #now add us to open windows
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
