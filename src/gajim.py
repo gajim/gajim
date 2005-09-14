@@ -839,9 +839,9 @@ class Interface:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
 				gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
-				#we go online [we pass True to auto param]
+				#we go online
 				self.roster.send_status(account, 'online',
-					gajim.status_before_autoaway[account], True)
+					gajim.status_before_autoaway[account])
 				gajim.sleeper_state[account] = 'online'
 			elif state == common.sleepy.STATE_AWAY and \
 				gajim.sleeper_state[account] == 'online' and \
@@ -851,7 +851,7 @@ class Interface:
 					gajim.connections[account].status
 				#we go away (no auto status) [we pass True to auto param]
 				self.roster.send_status(account, 'away',
-					gajim.config.get('autoaway_message'), True)
+					gajim.config.get('autoaway_message'), auto=True)
 				gajim.sleeper_state[account] = 'autoaway'
 			elif state == common.sleepy.STATE_XA and (\
 				gajim.sleeper_state[account] == 'autoaway' or \
@@ -859,7 +859,7 @@ class Interface:
 				gajim.config.get('autoxa'):
 				#we go extended away [we pass True to auto param]
 				self.roster.send_status(account, 'xa',
-					gajim.config.get('autoxa_message'), True)
+					gajim.config.get('autoxa_message'), auto=True)
 				gajim.sleeper_state[account] = 'autoxa'
 		return True # renew timeout (loop for ever)
 
