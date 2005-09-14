@@ -64,7 +64,7 @@ class TabbedChatWindow(chat.Chat):
 'on_chat_notebook_key_press_event': self.on_chat_notebook_key_press_event,
 'on_chat_notebook_switch_page': self.on_chat_notebook_switch_page, # in chat.py
 'on_tabbed_chat_window_motion_notify_event': self.on_tabbed_chat_window_motion_notify_event,
-         }
+		}
 
 		self.xml.signal_autoconnect(signal_dict)
 
@@ -369,7 +369,7 @@ timestamp, contact):
 			self.on_drag_data_received, contact)
 		self.childs[contact.jid].drag_dest_set( gtk.DEST_DEFAULT_MOTION |
 			gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP,
-				 self.dnd_list, gtk.gdk.ACTION_COPY)
+			self.dnd_list, gtk.gdk.ACTION_COPY)
 		
 		message_textview = self.xmls[contact.jid].get_widget('message_textview')
 		message_tv_buffer = message_textview.get_buffer()
@@ -452,7 +452,7 @@ timestamp, contact):
 		if yes we go active
 		if no we go inactive '''
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
- 		if jid not in self.xmls or contact is None:
+		if jid not in self.xmls or contact is None:
 			# the tab with jid is no longer open or contact left
 			return False # stop looping
 
@@ -464,7 +464,7 @@ timestamp, contact):
 			return True # loop forever
 		
 		if not (self.mouse_over_in_last_30_secs or\
-		   self.kbd_activity_in_last_30_secs):
+			self.kbd_activity_in_last_30_secs):
 			self.send_chatstate('inactive', jid)
 
 		# assume no activity and let the motion-notify or 'insert-text' make them True

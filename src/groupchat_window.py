@@ -77,7 +77,7 @@ class GroupchatWindow(chat.Chat):
 'on_groupchat_window_focus_out_event': self.on_groupchat_window_focus_out_event,
 'on_chat_notebook_key_press_event': self.on_chat_notebook_key_press_event,
 'on_chat_notebook_switch_page': self.on_chat_notebook_switch_page,
-         }
+		}
 
 		self.xml.signal_autoconnect(signal_dict)
 
@@ -707,7 +707,7 @@ class GroupchatWindow(chat.Chat):
 						message_array = message_array[0].split()
 						nick = message_array.pop(0)
 						room_nicks = self.get_nick_list(room_jid)
-					 	reason = ' '.join(message_array)
+						reason = ' '.join(message_array)
 						if nick in room_nicks:
 							ban_jid = gajim.construct_fjid(room_jid, nick)
 							gajim.connections[self.account].gc_set_affiliation(room_jid, ban_jid, 'outcast', reason)
@@ -982,17 +982,17 @@ class GroupchatWindow(chat.Chat):
 		item = xml.get_widget('kick_menuitem')
 		item.connect('activate', self.kick, room_jid, nick)
 		if user_role != 'moderator' or \
-		   (user_affiliation == 'admin' and target_affiliation == 'owner') or \
-		   (user_affiliation == 'member' and target_affiliation in ('admin', 'owner')) or \
-		   (user_affiliation == 'none' and target_affiliation != 'none'):
+			(user_affiliation == 'admin' and target_affiliation == 'owner') or \
+			(user_affiliation == 'member' and target_affiliation in ('admin', 'owner')) or \
+			(user_affiliation == 'none' and target_affiliation != 'none'):
 			item.set_sensitive(False)
 
 		item = xml.get_widget('voice_checkmenuitem')
 		item.set_active(target_role != 'visitor')
 		if user_role != 'moderator' or \
-		   user_affiliation == 'none' or \
-		   (user_affiliation=='member' and target_affiliation!='none') or \
-		   target_affiliation in ('admin', 'owner'):
+			user_affiliation == 'none' or \
+			(user_affiliation=='member' and target_affiliation!='none') or \
+			target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
 		item.connect('activate', self.on_voice_checkmenuitem_activate, room_jid,
 			nick)
@@ -1000,22 +1000,22 @@ class GroupchatWindow(chat.Chat):
 		item = xml.get_widget('moderator_checkmenuitem')
 		item.set_active(target_role == 'moderator')
 		if not user_affiliation in ('admin', 'owner') or \
-		   target_affiliation in ('admin', 'owner'):
+			target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
 		item.connect('activate', self.on_moderator_checkmenuitem_activate,
 			room_jid, nick)
 
 		item = xml.get_widget('ban_menuitem')
 		if not user_affiliation in ('admin', 'owner') or \
-		   (target_affiliation in ('admin', 'owner') and\
-		   user_affiliation != 'owner'):
+			(target_affiliation in ('admin', 'owner') and\
+			user_affiliation != 'owner'):
 			item.set_sensitive(False)
 		item.connect('activate', self.ban, room_jid, jid)
 
 		item = xml.get_widget('member_checkmenuitem')
 		item.set_active(target_affiliation != 'none')
 		if not user_affiliation in ('admin', 'owner') or \
-		   (user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
+			(user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
 			item.set_sensitive(False)
 		item.connect('activate', self.on_member_checkmenuitem_activate,
 			room_jid, jid)
