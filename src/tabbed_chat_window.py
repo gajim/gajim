@@ -493,8 +493,9 @@ timestamp, contact):
 		and printed in the conversation"""
 
 		jid = self.get_active_jid()
-		conversation_textview = widget
-		message_buffer = conversation_textview.get_buffer()
+		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		message_textview = widget
+		message_buffer = message_textview.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
 		message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
 
