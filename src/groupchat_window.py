@@ -642,9 +642,9 @@ class GroupchatWindow(chat.Chat):
 						nick = message_array.pop(0)
 						nicks = self.get_nick_list(room_jid)
 						if nick in nicks:
-							self.on_send_pm(nick=nick)
+							self.on_send_pm(nick = nick)
 						else:
-							self.print_conversation(_('Nick not found: %s') % nick, room_jid)
+							self.print_conversation(_('Nickname not found: %s') % nick, room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'msg':
@@ -658,7 +658,7 @@ class GroupchatWindow(chat.Chat):
 							privmsg = ' '.join(message_array)
 							self.on_send_pm(nick=nick, msg=privmsg)
 						else:
-							self.print_conversation(_('Nick not found: %s') % nick, room_jid)
+							self.print_conversation(_('Nickname not found: %s') % nick, room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'topic':
@@ -679,9 +679,14 @@ class GroupchatWindow(chat.Chat):
 						if invitee.find('@') >= 0:
 							reason = ' '.join(message_array)
 							gajim.connections[self.account].send_invite(room_jid, invitee, reason)
-							self.print_conversation(_('Invited %s to %s.') % (invitee, room_jid), room_jid)
+							s = _('Invited %(contact_jid)s to %(room_jid)s.') % {
+								'contact_jid': invitee,
+								'room_jid': room_jid}
+							self.print_conversation(s, room_jid)
 						else:
-							self.print_conversation(_('%s doesn\'t appear to be a JID') % invitee, room_jid)
+							#%s is something the user wrote but it is not a jid so we inform
+							s = _('%s does not appear to be a JID') % invitee
+							self.print_conversation(s, room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'join':
@@ -691,19 +696,25 @@ class GroupchatWindow(chat.Chat):
 						if message_array.find('@') >= 0:
 							room, servernick = message_array.split('@')
 							if servernick.find('/') >= 0:
-								server, nick = servernick.split('/',1)
+								server, nick = servernick.split('/', 1)
 							else:
 								server = servernick
 								nick = ''
+							#FIXME: autojoin with current nick or with the nick specified
+							#do not open join_gc window
 							if self.plugin.windows[self.account].has_key('join_gc'):
 								self.plugin.windows[self.account]['join_gc'].window.present()
 							else:
 								try:
-									self.plugin.windows[self.account]['join_gc'] = dialogs.JoinGroupchatWindow(self.plugin, self.account, server=server, room=room, nick=nick)
+									self.plugin.windows[self.account]['join_gc'] =\
+										dialogs.JoinGroupchatWindow(self.plugin, self.account,
+											server = server, room = room, nick = nick)
 								except RuntimeError:
 									pass
 						else:
-							self.print_conversation(_('%s doesn\'t appear to be a JID') % message_array, room_jid)
+							#%s is something the user wrote but it is not a jid so we inform
+							s = _('%s does not appear to be a JID') % message_array
+							self.print_conversation(s, room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'leave' or command == 'part' or command == 'close':	
@@ -721,11 +732,14 @@ class GroupchatWindow(chat.Chat):
 						reason = ' '.join(message_array)
 						if nick in room_nicks:
 							ban_jid = gajim.construct_fjid(room_jid, nick)
-							gajim.connections[self.account].gc_set_affiliation(room_jid, ban_jid, 'outcast', reason)
+							gajim.connections[self.account].gc_set_affiliation(room_jid,
+								ban_jid, 'outcast', reason)
 						elif nick.find('@') >= 0:
-							gajim.connections[self.account].gc_set_affiliation(room_jid, nick, 'outcast', reason)
+							gajim.connections[self.account].gc_set_affiliation(room_jid,
+								nick, 'outcast', reason)
 						else:
-							self.print_conversation(_('Nick not found: %s') % nick, room_jid)
+							self.print_conversation(_('Nickname not found: %s') % nick,
+								room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'kick':
@@ -735,9 +749,11 @@ class GroupchatWindow(chat.Chat):
 						room_nicks = self.get_nick_list(room_jid)
 						reason = ' '.join(message_array)
 						if nick in room_nicks:
-							gajim.connections[self.account].gc_set_role(room_jid, nick, 'none', reason)
+							gajim.connections[self.account].gc_set_role(room_jid, nick,
+								'none', reason)
 						else:
-							self.print_conversation(_('Nick not found: %s') % nick, room_jid)
+							self.print_conversation(_('Nickname not found: %s') % nick,
+								room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'help':
@@ -748,12 +764,15 @@ class GroupchatWindow(chat.Chat):
 						self.get_command_help(command)
 				elif command == 'me':
 					if len(message_array):
-						gajim.connections[self.account].send_gc_message(room_jid, '/'+message)
+						gajim.connections[self.account].send_gc_message(room_jid,
+							'/' + message)
 					else:
 						self.get_command_help(command)
 				else:
-					self.print_conversation(_('No such command: /%s') % command, room_jid)
+					self.print_conversation(_('No such command: /%s') % command,
+						room_jid)
 				return # don't print the command
+
 		gajim.connections[self.account].send_gc_message(room_jid, message)
 		message_textview.grab_focus()
 
@@ -762,12 +781,13 @@ class GroupchatWindow(chat.Chat):
 		if command == 'help':
 			self.print_conversation(_('Commands: %s') % self.muc_cmds, room_jid)
 		elif command == 'ban':
-			self.print_conversation(_('Usage: /%s <nick|JID> [reason], bans the JID \
-from the room.  The nick of an occupant may be substituted, but not if it \
-contains \'@\'. If the JID is currently in the room, he/she/it will also be \
-kicked. Does NOT support spaces in nick.') % command, room_jid)
+			s = _('Usage: /%s <nickname|JID> [reason], bans the JID from the room.'
+			' The nickname of an occupant may be substituted, but not if it contains "@".'
+			' If the JID is currently in the room, he/she/it will also be kicked.'
+			' Does NOT support spaces in nickname.') % command
+			self.print_conversation(s, room_jid)
 		elif command == 'chat' or command == 'query':
-			self.print_conversation(_('Usage: /%s <nick>, opens a private chat window \
+			self.print_conversation(_('Usage: /%s <nickname>, opens a private chat window \
 to the specified occupant.') % command, room_jid)
 		elif command == 'clear':
 			self.print_conversation(_('Usage: /%s, clears the text window.') % command,
@@ -782,23 +802,22 @@ compact	mode.') % command, room_jid)
 			self.print_conversation(_('Usage: /%s <JID> [reason], invites JID to the \
 current room, optionally providing a reason.') % command, room_jid)
 		elif command == 'join':
-			self.print_conversation(_('Usage: /%s <room>@<server>[/nick], offers to \
-join room@server optionally using specified nick.') % command, room_jid)
+			self.print_conversation(_('Usage: /%s <room>@<server>[/nickname], offers to \
+join room@server optionally using specified nickname.') % command, room_jid)
 		elif command == 'kick':
-			self.print_conversation(_('Usage: /%s <nick> [reason], removes the \
-occupant specified by nick from the room and optionally displays a \
-reason. Does NOT support spaces in nick.') % command, room_jid)
+			self.print_conversation(_('Usage: /%s <nickname> [reason], removes the \
+occupant specified by nickname from the room and optionally displays a \
+reason. Does NOT support spaces in nickname.') % command, room_jid)
 		elif command == 'me':
 			self.print_conversation(_('Usage: /%s <action>, sends action to the \
-current room. Use third person. (e.g. /%s explodes.)') % 
+current room. Use third person. (e.g. /%s explodes)') % 
 				(command, command), room_jid)
 		elif command == 'msg':
-			self.print_conversation(_('Usage: /%s <nick> [message], opens a private \
-message window and sends message to the occupant specified by nick.') % 
-				command, room_jid)
+			s = _('Usage: /%s <nickname> [message], opens a private message window and sends message to the occupant specified by nickname.') % command
+			self.print_conversation(s, room_jid)
 		elif command == 'nick':
-			self.print_conversation(_('Usage: /%s <nick>, changes your nick in current \
-room.') % command, room_jid)
+			s = _('Usage: /%s <nickname>, changes your nickname in current room.') % command
+			self.print_conversation(s, room_jid)
 		elif command == 'topic':
 			self.print_conversation(_('Usage: /%s [topic], displays or updatesthe \
 current room topic.') % command, room_jid)
