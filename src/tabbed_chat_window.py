@@ -700,8 +700,13 @@ timestamp, contact):
 		l = gajim.awaiting_messages[self.account][jid]
 		user = self.contacts[jid]
 		for event in l:
-			self.print_conversation(event[0], jid, tim = event[1],
-				encrypted = event[2], contact='print_queue')
+			ev1 = event[1]
+			if ev1 != 'error':
+				ev1 = 'print_queue'
+			else:
+				ev1 = 'status'
+			self.print_conversation(event[0], jid, ev1,
+				tim = event[2],	encrypted = event[3])
 			self.plugin.roster.nb_unread -= 1
 		self.plugin.roster.show_title()
 		del gajim.awaiting_messages[self.account][jid]

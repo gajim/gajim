@@ -474,7 +474,8 @@ class Interface:
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
 		self.roster.on_message(jid, _('error while sending') + \
-			' \"%s\" ( %s )' % (array[3], array[2]), array[4], account)
+			' \"%s\" ( %s )' % (array[3], array[2]), array[4], account, \
+			msg_type='error')
 		
 	def handle_event_msgsent(self, account, array):
 		#('MSGSENT', account, (jid, msg, keyID))

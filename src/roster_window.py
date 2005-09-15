@@ -1498,14 +1498,17 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if qs.has_key(jid):
 			no_queue = False
 		if self.plugin.windows[account]['chats'].has_key(jid):
+			typ = ''
+			if msg_type == 'error':
+				typ = 'status'
 			self.plugin.windows[account]['chats'][jid].print_conversation(msg, 
-				jid, tim = tim, encrypted = encrypted, subject = subject)
+				jid, typ, tim = tim, encrypted = encrypted, subject = subject)
 			return
 
 		#We save it in a queue
 		if no_queue:
 			qs[jid] = []
-		qs[jid].append((msg, tim, encrypted))
+		qs[jid].append((msg, msg_type, tim, encrypted))
 		self.nb_unread += 1
 		if (not autopopup or ( not autopopupaway and \
 			gajim.connections[account].connected > 2)) and not \
