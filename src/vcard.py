@@ -188,6 +188,7 @@ class VcardWindow:
 			image = self.xml.get_widget('PHOTO_image')
 			image.set_from_pixbuf(pixbuf)
 			self.avatar_encoded = base64.encodestring(data)
+			# returns None if unknown type
 			self.avatar_mime_type = mimetypes.guess_type(f)[0]
 
 	def set_value(self, entry_name, value):
@@ -376,8 +377,9 @@ class VcardWindow:
 
 		# Avatar
 		if self.avatar_encoded:
-			vcard['PHOTO'] = {'TYPE': self.avatar_mime_type,
-				'BINVAL': self.avatar_encoded}
+			vcard['PHOTO'] = {'BINVAL': self.avatar_encoded}
+			if self.avatar_mime_type:
+				vcard['PHOTO']['TYPE'] = self.avatar_mime_type
 		return vcard
 
 	def on_publish_button_clicked(self, widget):
