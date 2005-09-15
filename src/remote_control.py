@@ -21,6 +21,7 @@
 import gobject
 import gtk
 import os
+import sys
 
 from common import gajim
 from time import time
@@ -54,6 +55,10 @@ class Remote:
 			print _('D-Bus python bindings are missing in this computer')
 			print _('D-Bus capabilities of Gajim cannot be used')
 			raise DbusNotSupported()
+		# dbus 0.23 leads to segfault with threads_init()
+		if sys.version[:4] >= '2.4' and _version[1] < 30:
+			raise DbusNotSupported()
+			
 		try:
 			session_bus = dbus.SessionBus()
 		except:
