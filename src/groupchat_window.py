@@ -620,9 +620,11 @@ class GroupchatWindow(chat.Chat):
 				message_array = message.split(' ',1)
 				command = message_array.pop(0).lower()
 				if command == 'clear':
+					# clear the groupchat window
 					self.on_clear(None, conversation_textview)
 					self.on_clear(None, message_textview)
 				elif command == 'compact':
+					# set compact mode
 					self.set_compact_view(not self.compact_view_current_state)
 					self.on_clear(None, message_textview)
 				elif command == 'nick':
@@ -634,6 +636,7 @@ class GroupchatWindow(chat.Chat):
 					else:
 						self.get_command_help(command)
 				elif command == 'query' or command == 'chat':
+					# Open a chat window to the specified nick
 					# example: /query foo
 					if len(message_array):
 						nick = message_array.pop(0)
@@ -641,10 +644,11 @@ class GroupchatWindow(chat.Chat):
 						if nick in nicks:
 							self.on_send_pm(nick=nick)
 						else:
-							self.print_conversation('Nick not found: %s'%nick, room_jid)
+							self.print_conversation(_('Nick not found: %s') % nick, room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'msg':
+					# Send a message to a nick.  Also opens a private message window.
 					# example: /msg foo Hey, what's up?
 					if len(message_array):
 						message_array = message_array[0].split()
@@ -654,10 +658,11 @@ class GroupchatWindow(chat.Chat):
 							privmsg = ' '.join(message_array)
 							self.on_send_pm(nick=nick, msg=privmsg)
 						else:
-							self.print_conversation('Nick not found: %s'%nick, room_jid)
+							self.print_conversation(_('Nick not found: %s') % nick, room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'topic':
+					# display or change the room topic
 					# example: /topic : print topic
 					# /topic foo : change topic to foo
 					if len(message_array):
@@ -666,6 +671,7 @@ class GroupchatWindow(chat.Chat):
 					else:
 						self.print_conversation(self.subjects[room_jid], room_jid)
 				elif command == 'invite':
+					# invite a user to a room for a reason
 					# example: /invite user@example.com reason
 					if len(message_array):
 						message_array = message_array[0].split()
@@ -673,9 +679,9 @@ class GroupchatWindow(chat.Chat):
 						if invitee.find('@') >= 0:
 							reason = ' '.join(message_array)
 							gajim.connections[self.account].send_invite(room_jid, invitee, reason)
-							self.print_conversation('invited %s.'%invitee, room_jid)
+							self.print_conversation(_('Invited %s to %s.') % (invitee, room_jid), room_jid)
 						else:
-							self.print_conversation('%s doesn\'t appear to be a JID'%invitee, room_jid)
+							self.print_conversation(_('%s doesn\'t appear to be a JID') % invitee, room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'join':
@@ -697,12 +703,16 @@ class GroupchatWindow(chat.Chat):
 								except RuntimeError:
 									pass
 						else:
-							self.print_conversation('%s doesn\'t appear to be a JID'%message_array, room_jid)
+							self.print_conversation(_('%s doesn\'t appear to be a JID') % message_array, room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'leave' or command == 'part' or command == 'close':	
-					# FIXME: This doesn't work, we don't leave the room.  ick.
-					self.remove_tab(room_jid)
+					# Leave the room and close the tab or window
+					# FIXME: Sometimes this doesn't actually leave the room.  Why?
+					reason = 'offline'
+					if len(message_array):
+						reason = message_array.pop(0)
+					self.remove_tab(room_jid, reason)
 				elif command == 'ban':
 					if len(message_array):
 						message_array = message_array[0].split()
@@ -715,7 +725,7 @@ class GroupchatWindow(chat.Chat):
 						elif nick.find('@') >= 0:
 							gajim.connections[self.account].gc_set_affiliation(room_jid, nick, 'outcast', reason)
 						else:
-							self.print_conversation('Nick not found: %s'%nick, room_jid)
+							self.print_conversation(_('Nick not found: %s') % nick, room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'kick':
@@ -727,7 +737,7 @@ class GroupchatWindow(chat.Chat):
 						if nick in room_nicks:
 							gajim.connections[self.account].gc_set_role(room_jid, nick, 'none', reason)
 						else:
-							self.print_conversation('Nick not found: %s'%nick, room_jid)
+							self.print_conversation(_('Nick not found: %s') % nick, room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'help':
@@ -742,7 +752,7 @@ class GroupchatWindow(chat.Chat):
 					else:
 						self.get_command_help(command)
 				else:
-					self.print_conversation('No such command: /%s'%command, room_jid)
+					self.print_conversation(_('No such command: /%s') % command, room_jid)
 				return # don't print the command
 		gajim.connections[self.account].send_gc_message(room_jid, message)
 		message_textview.grab_focus()
@@ -750,33 +760,50 @@ class GroupchatWindow(chat.Chat):
 	def get_command_help(self, command):
 		room_jid = self.get_active_jid()
 		if command == 'help':
-			self.print_conversation('Commands: %s'%self.muc_cmds, room_jid)
+			self.print_conversation(_('Commands: %s') % self.muc_cmds, room_jid)
 		elif command == 'ban':
-			self.print_conversation('Usage: /%s <nick|JID> [reason], bans the JID from the room.  A nick may be used if present.  If user is currently in the room, he/she/it will also be kicked. Does NOT support spaces in nick.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s <nick|JID> [reason], bans the JID \
+from the room.  The nick of an occupant may be substituted, but not if it \
+contains \'@\'. If the JID is currently in the room, he/she/it will also be \
+kicked. Does NOT support spaces in nick.') % command, room_jid)
 		elif command == 'chat' or command == 'query':
-			self.print_conversation('Usage: /%s <nick>, opens a private chat window to the specified user.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s <nick>, opens a private chat window \
+to the specified occupant.') % command, room_jid)
 		elif command == 'clear':
-			self.print_conversation('Usage: /%s, clears the text window.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s, clears the text window.') % command,
+				room_jid)
 		elif command == 'close' or command == 'leave' or command == 'part':
-			self.print_conversation('Usage: /%s, closes the current window or tab.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s [reason], closes the current window \
+or tab, displaying reason if specified.') % command, room_jid)
 		elif command == 'compact':
-			self.print_conversation('Usage: /%s, sets the groupchat window to compact mode.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s, sets the groupchat window to \
+compact	mode.') % command, room_jid)
 		elif command == 'invite':
-			self.print_conversation('Usage: /%s <JID> [reason], invites JID to the current room with optional reason.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s <JID> [reason], invites JID to the \
+current room, optionally providing a reason.') % command, room_jid)
 		elif command == 'join':
-			self.print_conversation('Usage: /%s <room>@<server>[/nick], offers to join room@server optionally using nick.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s <room>@<server>[/nick], offers to \
+join room@server optionally using specified nick.') % command, room_jid)
 		elif command == 'kick':
-			self.print_conversation('Usage: /%s <nick> [reason], removes the user specified by nick from the room with optional reason. Does NOT support spaces in nick.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s <nick> [reason], removes the \
+occupant specified by nick from the room and optionally displays a \
+reason. Does NOT support spaces in nick.') % command, room_jid)
 		elif command == 'me':
-			self.print_conversation('Usage: /%s <action>, sends the action to the current room. Use third person (e.g. /%s explodes)'%(command,command), room_jid)
+			self.print_conversation(_('Usage: /%s <action>, sends action to the \
+current room. Use third person. (e.g. /%s explodes.)') % 
+				(command, command), room_jid)
 		elif command == 'msg':
-			self.print_conversation('Usage: /%s <nick> [message], opens a private message window and sends message to nick.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s <nick> [message], opens a private \
+message window and sends message to the occupant specified by nick.') % 
+				command, room_jid)
 		elif command == 'nick':
-			self.print_conversation('Usage: /%s <nick>, changes your nickname.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s <nick>, changes your nick in current \
+room.') % command, room_jid)
 		elif command == 'topic':
-			self.print_conversation('Usage: /%s [topic], displays the current room topic or changes it if specified.'%command, room_jid)
+			self.print_conversation(_('Usage: /%s [topic], displays or updatesthe \
+current room topic.') % command, room_jid)
 		else:
-			self.print_conversation('No help info for /%s'%command, room_jid)
+			self.print_conversation(_('No help info for /%s') % command, room_jid)
 
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
 		"""Print a line in the conversation:
@@ -1056,11 +1083,11 @@ class GroupchatWindow(chat.Chat):
 		menu.connect('deactivate', self.on_popup_deactivate)
 		menu.show_all()
 
-	def remove_tab(self, room_jid):
+	def remove_tab(self, room_jid, reason = 'offline'):
 		chat.Chat.remove_tab(self, room_jid, 'gc')
 		if len(self.xmls) > 0:
 			gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
-				room_jid, 'offline', 'offline')
+				room_jid, show='offline', status=reason)
 		del self.nicks[room_jid]
 		# They can already be removed by the destroy function
 		if gajim.gc_contacts[self.account].has_key(room_jid):
