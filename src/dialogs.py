@@ -1040,7 +1040,7 @@ class SingleMessageWindow:
 		self.subject = _('RE: %s') % self.subject
 		self.message = _('\n\n\n== Original Message ==\n%s') % self.message
 		self.window.destroy()
-		SingleMessageWindow(self.plugin, self.account, to = to,
+		SingleMessageWindow(self.plugin, self.account, to = self.from_whom,
 			action = 'send',	from_whom = self.from_whom, subject = self.subject,
 			message = self.message)
 
