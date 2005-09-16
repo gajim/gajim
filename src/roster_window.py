@@ -1905,12 +1905,14 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		'''When a row is added, set properties for icon renderer'''
 		theme = gajim.config.get('roster_theme')
 		if model[iter][C_TYPE] == 'account':
-			renderer.set_property('cell-background', 
-				gajim.config.get_per('themes', theme, 'accountbgcolor'))
+			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
+			if color:
+				renderer.set_property('cell-background', color)
 			renderer.set_property('xalign', 0)
 		elif model[iter][C_TYPE] == 'group':
-			renderer.set_property('cell-background', 
-				gajim.config.get_per('themes', theme, 'groupbgcolor'))
+			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
+			if color:
+				renderer.set_property('cell-background', color)
 			renderer.set_property('xalign', 0.5)
 		else:
 			jid = model[iter][C_JID].decode('utf-8')
@@ -1920,8 +1922,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			elif jid in gajim.to_be_removed[account]:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
-				renderer.set_property('cell-background', 
-					gajim.config.get_per('themes', theme, 'contactbgcolor'))
+				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
+				if color:
+					renderer.set_property('cell-background', color)
 			renderer.set_property('xalign', 1)
 		renderer.set_property('width', 20)
 	
@@ -1929,34 +1932,40 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		'''When a row is added, set properties for name renderer'''
 		theme = gajim.config.get('roster_theme')
 		if model[iter][C_TYPE] == 'account':
-			renderer.set_property('foreground', 
-				gajim.config.get_per('themes', theme, 'accounttextcolor'))
-			renderer.set_property('cell-background', 
-				gajim.config.get_per('themes', theme, 'accountbgcolor'))
+			color = gajim.config.get_per('themes', theme, 'accounttextcolor')
+			if color:
+				renderer.set_property('foreground', color)
+			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
+			if color:
+				renderer.set_property('cell-background', color)
 			renderer.set_property('font',
 				gajim.config.get_per('themes', theme, 'accountfont'))
 			renderer.set_property('xpad', 0)
 			renderer.set_property('width', 3)
 		elif model[iter][C_TYPE] == 'group':
-			renderer.set_property('foreground', 
-				gajim.config.get_per('themes', theme, 'grouptextcolor'))
-			renderer.set_property('cell-background', 
-				gajim.config.get_per('themes', theme, 'groupbgcolor'))
+			color = gajim.config.get_per('themes', theme, 'grouptextcolor')
+			if color:
+				renderer.set_property('foreground', color)
+			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
+			if color:
+				renderer.set_property('cell-background', color)
 			renderer.set_property('font',
 				gajim.config.get_per('themes', theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
 		else:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
-			renderer.set_property('foreground', 
-				gajim.config.get_per('themes', theme, 'contacttextcolor'))
+			color = gajim.config.get_per('themes', theme, 'contacttextcolor')
+			if color:
+				renderer.set_property('foreground', color)
 			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in gajim.to_be_removed[account]:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
-				renderer.set_property('cell-background', 
-					gajim.config.get_per('themes', theme, 'contactbgcolor'))
+				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
+				if color:
+					renderer.set_property('cell-background', color)
 			renderer.set_property('font',
 				gajim.config.get_per('themes', theme, 'contactfont'))
 			renderer.set_property('xpad', 8)
@@ -1965,11 +1974,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		'''When a row is added, set properties for secondary renderer (avatar or tls)'''
 		theme = gajim.config.get('roster_theme')
 		if model[iter][C_TYPE] == 'account':
-			renderer.set_property('cell-background', 
-				gajim.config.get_per('themes', theme, 'accountbgcolor'))
+			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
+			if color:
+				renderer.set_property('cell-background', color)
 		elif model[iter][C_TYPE] == 'group':
-			renderer.set_property('cell-background', 
-				gajim.config.get_per('themes', theme, 'groupbgcolor'))
+			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
+			if color:
+				renderer.set_property('cell-background', color)
 		else:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
@@ -1978,8 +1989,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			elif jid in gajim.to_be_removed[account]:
 				renderer.set_property('cell-background', '#ab6161')
 			else:
-				renderer.set_property('cell-background', 
-					gajim.config.get_per('themes', theme, 'contactbgcolor'))
+				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
+				if color:
+					renderer.set_property('cell-background', color)
 		#renderer.set_property('width', 20)
 		#renderer.set_property('xalign', 0)
 
