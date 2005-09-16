@@ -30,7 +30,7 @@ OPT_DESC = 2
 opt_int = [ 'integer', 0 ]
 opt_str = [ 'string', 0 ]
 opt_bool = [ 'boolean', 0 ]
-opt_color = [ 'color', '^#[0-9a-fA-F]{6}$' ]
+opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
 
 class Config:
 

@@ -19,6 +19,8 @@
 
 import gtk
 import gtk.glade
+import gobject
+import pango
 from config import mk_color_string
 
 from common import gajim
@@ -39,24 +41,17 @@ class GajimThemesWindow:
 		self.window = self.xml.get_widget('gajim_themes_window')
 		self.plugin = plugin
 		
-		self.xml.get_widget('banner_text_fontbutton').set_no_show_all(True)
-		
-		self.color_widgets = {
-			'account_text_colorbutton': 'accounttextcolor',
-			'group_text_colorbutton': 'grouptextcolor',
-			'user_text_colorbutton': 'contacttextcolor',
-			'banner_colorbutton': 'bannertextcolor',
-			'account_text_bg_colorbutton': 'accountbgcolor',
-			'group_text_bg_colorbutton': 'groupbgcolor',
-			'user_text_bg_colorbutton': 'contactbgcolor',
-			'banner_bg_colorbutton': 'bannerbgcolor',
-		}
-		self.font_widgets = {
-			'account_text_fontbutton': 'accountfont',
-			'group_text_fontbutton': 'groupfont',
-			'user_text_fontbutton': 'contactfont',
-		}
-
+		self.options = ['account', 'group', 'contact', 'banner', 'lastmessage']
+		self.options_combobox = self.xml.get_widget('options_combobox')
+		self.textcolor_checkbutton = self.xml.get_widget('textcolor_checkbutton')
+		self.background_checkbutton = self.xml.get_widget('background_checkbutton')
+		self.textfont_checkbutton = self.xml.get_widget('textfont_checkbutton')
+		self.text_colorbutton = self.xml.get_widget('text_colorbutton')
+		self.background_colorbutton = self.xml.get_widget('background_colorbutton')
+		self.text_fontbutton = self.xml.get_widget('text_fontbutton')
+		self.bold_togglebutton = self.xml.get_widget('bold_togglebutton')
+		self.italic_togglebutton = self.xml.get_widget('italic_togglebutton')
+		self.underline_togglebutton = self.xml.get_widget('underline_togglebutton')
 		self.themes_tree = self.xml.get_widget('themes_treeview')
 		model = gtk.ListStore(str)
 		self.themes_tree.set_model(model)
@@ -67,11 +62,8 @@ class GajimThemesWindow:
 		col.set_attributes(renderer, text = 0)
 		renderer.connect('edited', self.on_theme_cell_edited)
 		renderer.set_property('editable', True)
-		self.fill_themes_treeview()
-		
-		
 		self.current_theme = gajim.config.get('roster_theme')
-		self.set_widgets(self.current_theme)
+		self.fill_themes_treeview()
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -102,7 +94,7 @@ class GajimThemesWindow:
 
 	def fill_themes_treeview(self):
 		self.xml.get_widget('remove_button').set_sensitive(False)
-		self.xml.get_widget('fonts_colors_table').set_sensitive(False)
+		self.xml.get_widget('theme_options_vbox').set_sensitive(False)
 		model = self.themes_tree.get_model()
 		model.clear()
 		for config_theme in gajim.config.get_per('themes'):
@@ -111,17 +103,17 @@ class GajimThemesWindow:
 			if gajim.config.get('roster_theme') == config_theme:
 				self.themes_tree.get_selection().select_iter(iter)
 				self.xml.get_widget('remove_button').set_sensitive(True)
-				self.xml.get_widget('fonts_colors_table').set_sensitive(True)
+				self.xml.get_widget('theme_options_vbox').set_sensitive(True)
 	
 	def on_themes_treeview_cursor_changed(self, widget):
 		(model, iter) = self.themes_tree.get_selection().get_selected()
 		if not iter:
 			return
 		self.xml.get_widget('remove_button').set_sensitive(True)
-		self.xml.get_widget('fonts_colors_table').set_sensitive(True)
+		self.xml.get_widget('theme_options_vbox').set_sensitive(True)
 		self.current_theme = model.get_value(iter, 0).decode('utf-8')
 		self.current_theme = self.current_theme.replace(' ', '_')
-		self.set_widgets(self.current_theme)
+		self.set_theme_options(self.current_theme)
 
 	def on_add_button_clicked(self, widget):
 		model = self.themes_tree.get_model()
@@ -142,60 +134,96 @@ class GajimThemesWindow:
 		gajim.config.del_per('themes', config_name)
 		model.remove(iter)
 		self.plugin.windows['preferences'].update_preferences_window()
-
-	def set_widgets(self, theme):
-		for w in self.color_widgets:
-			widg = self.xml.get_widget(w)
-			widg.set_color(gtk.gdk.color_parse(gajim.config.get_per('themes',
-				theme, self.color_widgets[w])))
-		for w in self.font_widgets:
-			widg = self.xml.get_widget(w)
-			widg.set_font_name(gajim.config.get_per('themes', theme,
-				self.font_widgets[w]))
 	
-	def on_roster_widget_color_set(self, widget, option):
-		color = widget.get_color()
-		color_string = mk_color_string(color)
-		gajim.config.set_per('themes', self.current_theme, option, color_string)
-		self.plugin.roster.repaint_themed_widgets()
+	def set_theme_options(self, theme, option = 'account'):
+		self.options_combobox.set_active(self.options.index(option))
+		textcolor = gajim.config.get_per('themes', theme, 
+			option + 'textcolor')
+		if textcolor:
+			state = True
+			self.text_colorbutton.set_color(gtk.gdk.color_parse(textcolor))
+		else:
+			state = False
+		self.textcolor_checkbutton.set_active(state)
+		self.text_colorbutton.set_sensitive(state)
+		bgcolor = gajim.config.get_per('themes', theme, 
+			option + 'bgcolor')
+		if bgcolor:
+			state = True
+			self.background_colorbutton.set_color(gtk.gdk.color_parse(
+				bgcolor))
+		else:
+			state = False
+		self.background_checkbutton.set_active(state)
+		self.background_colorbutton.set_sensitive(state)
+		font_name = gajim.config.get_per('themes', theme, 
+			option + 'font')
+		if font_name:
+			state = True
+			self.text_fontbutton.set_font_name(font_name)
+		else:
+			state = False
+		self.textfont_checkbutton.set_active(state)
+		self.text_fontbutton.set_sensitive(state)	
+		
+	def on_textcolor_checkbutton_toggled(self, widget):
+		state = widget.get_active()
+		self.text_colorbutton.set_sensitive(state)
+		self._set_color(state, self.text_colorbutton, 
+			'textcolor')
+	
+	def on_background_checkbutton_toggled(self, widget):
+		state = widget.get_active()
+		self.background_colorbutton.set_sensitive(state)
+		self._set_color(state, self.background_colorbutton, 
+			'bgcolor')
+		
+	def on_textfont_checkbutton_toggled(self, widget):
+		state = widget.get_active()
+		self.text_fontbutton.set_sensitive(state)
+		self._set_font(state, self.text_fontbutton, 'font')
+	
+	def on_text_colorbutton_color_set(self, widget):
+		self._set_color(True, widget, 'textcolor')
+			
+	def on_background_colorbutton_color_set(self, widget):
+		self._set_color(True, widget, 'bgcolor')
+	
+	def on_text_fontbutton_font_set(self, widget):
+		self._set_font(True, widget, 'font')
+	
+	def on_options_combobox_changed(self, widget):
+		index = self.options_combobox.get_active()
+		if index == -1:
+			return
+		self.current_option = self.options[index]
+		self.set_theme_options(self.current_theme,
+			self.current_option)
+		
+	
+	def _set_color(self, state, widget, option):
+		''' set color value in prefs and update the UI '''
+		if state:
+			color = widget.get_color()
+			color_string = mk_color_string(color)
+		else:
+			color_string = ''
+		gajim.config.set_per('themes', self.current_theme, 
+			self.current_option + option, color_string)
+		if option == 'banner':
+			self.plugin.roster.repaint_themed_widgets()
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
-	
-	def on_account_text_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'accounttextcolor')
-	
-	def on_group_text_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'grouptextcolor')
-
-	def on_user_text_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'contacttextcolor')
-
-	def on_account_text_bg_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'accountbgcolor')
-	
-	def on_group_text_bg_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'groupbgcolor')
-	
-	def on_user_text_bg_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'contactbgcolor')
-	
-	def on_banner_text_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'bannertextcolor')
-	
-	def on_banner_bg_colorbutton_color_set(self, widget):
-		self.on_roster_widget_color_set(widget, 'bannerbgcolor')
-	
-	def on_widget_font_set(self, widget, option):
-		font_string = widget.get_font_name()
-		gajim.config.set_per('themes', self.current_theme, option, font_string)
+		
+	def _set_font(self, state, widget, option):
+		''' set font value in prefs and update the UI '''
+		if state:
+			font_string = widget.get_font_name()
+		else:
+			font_string = ''
+		gajim.config.set_per('themes', self.current_theme, 
+			self.current_option + option, font_string)
+		if option == 'banner':
+			self.plugin.roster.repaint_themed_widgets()
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
-
-	def on_account_text_fontbutton_font_set(self, widget):
-		self.on_widget_font_set(widget, 'accountfont')
-
-	def on_group_text_fontbutton_font_set(self, widget):
-		self.on_widget_font_set(widget, 'groupfont')
-	
-	def on_user_text_fontbutton_font_set(self, widget):
-		self.on_widget_font_set(widget, 'contactfont')
