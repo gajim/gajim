@@ -166,6 +166,7 @@ class Config:
 			'keyid': [ opt_str, '' ],
 			'keyname': [ opt_str, '' ],
 			'usessl': [ opt_bool, False ],
+			'use_srv': [ opt_bool, True ],
 			'use_custom_host': [ opt_bool, False ],
 			'custom_port': [ opt_int, 5222 ],
 			'custom_host': [ opt_str, '' ],

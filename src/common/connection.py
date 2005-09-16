@@ -1326,14 +1326,17 @@ class Connection:
 		p = 5222
 		# autodetect [for SSL in 5223/443 and for TLS if broadcasted]
 		secur = None
+		use_srv = gajim.config.get_per('accounts', self.name, 'use_srv')
 		if usessl:
 			p = 5223
-			secur=1 #1 means force SSL no matter what the port will be
+			secur = 1 #1 means force SSL no matter what the port will be
+			use_srv = False # wants ssl? disable srv lookup
 		if gajim.config.get_per('accounts', self.name, 'use_custom_host'):
 			h = gajim.config.get_per('accounts', self.name, 'custom_host')
 			p = gajim.config.get_per('accounts', self.name, 'custom_port')
+			use_srv = False
 
-		con_type = con.connect((h, p), proxy = proxy, secure=secur) #FIXME: blocking
+		con_type = con.connect((h, p), proxy=proxy, secure=secur, use_srv=use_srv)
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
 			if not self.retrycount:
