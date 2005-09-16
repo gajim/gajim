@@ -376,7 +376,7 @@ class Interface:
 			qs = gajim.awaiting_messages[account]
 			if not qs.has_key(fjid):
 				qs[fjid] = []
-			qs[fjid].append((array[1], array[2], array[3]))
+			qs[fjid].append((array[1], 'incoming', array[2], array[3]))
 			self.roster.nb_unread += 1
 			show = gajim.gc_contacts[account][jid][nick].show
 			c = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
