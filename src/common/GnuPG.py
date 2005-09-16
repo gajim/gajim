@@ -18,8 +18,10 @@
 ##
 
 from os import tmpfile
+from dialogs import *
 
 USE_GPG = True
+GPG_DEBUG = True
 
 try:
 	import GnuPGInterface # Debian package doesn't distribute 'our' file
@@ -54,18 +56,22 @@ else:
 			resp = {}
 			while 1:
 				line = child_stdout.readline()
-				if line == "": break
+				if line == '': break
 				line = line.rstrip()
 				if line[0:9] == '[GNUPG:] ':
-					# Chop off the prefix
 					line = line[9:]
 					L = line.split(None, 1)
-					keyword = L[0]
-					if len(L) > 1:
-						resp[ keyword ] = L[1]
-					else:
-						resp[ keyword ] = ""
+		#			self._handle_response(L.pop(0), L)
 			return resp
+
+		def _handle_response(self, response, parameters):
+			return
+			#if response == 'NEED_PASSPHRASE':
+				#w = dialogs.PassphraseDialog(
+				#  _('Password Required'),
+				#  _('Enter your password for key %s') % parameters[0][:8],
+				#  _('Save password'))
+            	#self.passphrase[parameters[0][:8]], save = w.run()
 
 		def encrypt(self, str, recipients):
 			if not USE_GPG:
@@ -98,25 +104,34 @@ else:
 			except IOError: pass
 			return output
 
-		def sign(self, str, keyID):
+		def sign(self, data, keyID):
 			if not USE_GPG:
-				return str
-			proc = self.run(['-b', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status', 'stderr'])
-			proc.handles['stdin'].write(str)
+				return data
+			proc = self.run(['-b', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status', 'stderr', 'passphrase'])
+			proc.handles['stdin'].write(data)
 			proc.handles['stdin'].close()
+			proc.handles['passphrase'].close()
+			stat = proc.handles['status']
+			while 1:
+				line = stat.readline()
+				print line
+				if line == '': break
+				line = line.rstrip()
+				if line[0:9] == '[GNUPG:] ':
+					line = line[9:]
+					L = line.split(None, 1)
+					print L
+					#self._handle_response(L.pop(0), L)
+			proc.handles['status'].close()
 
 			output = proc.handles['stdout'].read()
 			proc.handles['stdout'].close()
 			proc.handles['stderr'].close()
 
-			stat = proc.handles['status']
-			resp = self._read_response(stat)
-			proc.handles['status'].close()
-
 			try: proc.wait()
 			except IOError: pass
-			if resp.has_key('GOOD_PASSPHRASE') or resp.has_key('SIG_CREATED'):
-				return self._stripHeaderFooter(output)
+			#if resp.has_key('GOOD_PASSPHRASE') or resp.has_key('SIG_CREATED'):
+			#	return self._stripHeaderFooter(output)
 			return 'BAD_PASSPHRASE'
 
 		def verify(self, str, sign):

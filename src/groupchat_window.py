@@ -700,8 +700,7 @@ class GroupchatWindow(chat.Chat):
 							else:
 								server = servernick
 								nick = ''
-							#FIXME: autojoin with current nick or with the nick specified
-							#do not open join_gc window
+							#join_gc window is needed in order to provide for password entry.
 							if self.plugin.windows[self.account].has_key('join_gc'):
 								self.plugin.windows[self.account]['join_gc'].window.present()
 							else:
@@ -810,7 +809,7 @@ occupant specified by nickname from the room and optionally displays a \
 reason. Does NOT support spaces in nickname.') % command, room_jid)
 		elif command == 'me':
 			self.print_conversation(_('Usage: /%s <action>, sends action to the \
-current room. Use third person. (e.g. /%s explodes)') % 
+current room. Use third person. (e.g. /%s explodes.)') % 
 				(command, command), room_jid)
 		elif command == 'msg':
 			s = _('Usage: /%s <nickname> [message], opens a private message window and sends message to the occupant specified by nickname.') % command
