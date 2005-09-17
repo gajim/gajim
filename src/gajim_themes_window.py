@@ -36,6 +36,10 @@ class GajimThemesWindow:
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
+	def on_gajim_themes_window_destroy_event(self, widget):
+		''' save settings only on exit - this makes UI faster'''
+		self.plugin.save_config()
+	
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_themes_window', APP)
 		self.window = self.xml.get_widget('gajim_themes_window')
@@ -63,6 +67,7 @@ class GajimThemesWindow:
 		renderer.connect('edited', self.on_theme_cell_edited)
 		renderer.set_property('editable', True)
 		self.current_theme = gajim.config.get('roster_theme')
+		self.no_update = False
 		self.fill_themes_treeview()
 
 		self.xml.signal_autoconnect(self)
@@ -136,6 +141,7 @@ class GajimThemesWindow:
 		self.plugin.windows['preferences'].update_preferences_window()
 	
 	def set_theme_options(self, theme, option = 'account'):
+		self.no_update = True
 		self.options_combobox.set_active(self.options.index(option))
 		textcolor = gajim.config.get_per('themes', theme, 
 			option + 'textcolor')
@@ -146,8 +152,7 @@ class GajimThemesWindow:
 			state = False
 		self.textcolor_checkbutton.set_active(state)
 		self.text_colorbutton.set_sensitive(state)
-		bgcolor = gajim.config.get_per('themes', theme, 
-			option + 'bgcolor')
+		bgcolor = gajim.config.get_per('themes', theme, option + 'bgcolor')
 		if bgcolor:
 			state = True
 			self.background_colorbutton.set_color(gtk.gdk.color_parse(
@@ -156,8 +161,11 @@ class GajimThemesWindow:
 			state = False
 		self.background_checkbutton.set_active(state)
 		self.background_colorbutton.set_sensitive(state)
-		font_name = gajim.config.get_per('themes', theme, 
-			option + 'font')
+		
+		#get the font name before we set widgets ant it will not be overriden
+		font_name = gajim.config.get_per('themes', theme, option + 'font')
+		font_attrs = gajim.config.get_per('themes', theme, option + 'fontattrs')
+		self._set_font_widgets(font_attrs)
 		if font_name:
 			state = True
 			self.text_fontbutton.set_font_name(font_name)
@@ -165,8 +173,8 @@ class GajimThemesWindow:
 			state = False
 		self.textfont_checkbutton.set_active(state)
 		self.text_fontbutton.set_sensitive(state)
-		font_attrs = gajim.config.get_per('themes', theme, 
-			option + 'fontattrs')
+		self.no_update = False
+		self.plugin.roster.draw_roster()
 		
 	def on_textcolor_checkbutton_toggled(self, widget):
 		state = widget.get_active()
@@ -219,10 +227,13 @@ class GajimThemesWindow:
 			color_string = ''
 		gajim.config.set_per('themes', self.current_theme, 
 			self.current_option + option, color_string)
+		# use faster functions for this
 		if self.current_option == 'banner':
 			self.plugin.roster.repaint_themed_widgets()
+		if self.no_update:
+			return
+		# FIXME check if this is currently selected theme
 		self.plugin.roster.draw_roster()
-		self.plugin.save_config()
 		
 	def _set_font(self):
 		''' set font value in prefs and update the UI '''
@@ -236,12 +247,16 @@ class GajimThemesWindow:
 		font_attrs = self._get_font_attrs()
 		gajim.config.set_per('themes', self.current_theme, 
 			self.current_option + 'fontattrs', font_attrs)
+		# use faster functions for this
 		if self.current_option == 'banner':
 			self.plugin.roster.repaint_themed_widgets()
+		if self.no_update:
+			return
+		# FIXME check if this is currently selected theme
 		self.plugin.roster.draw_roster()
-		self.plugin.save_config()
 	
 	def _toggle_font_widgets(self, font_props):
+		''' toggle font buttons with the bool values of font_props tuple'''
 		self.bold_togglebutton.set_active(font_props[0])
 		self.italic_togglebutton.set_active(font_props[1])
 		self.underline_togglebutton.set_active(font_props[2])
@@ -256,7 +271,21 @@ class GajimThemesWindow:
 			fd.set_style(pango.STYLE_ITALIC)
 		return fd
 		
+	def _set_font_widgets(self, font_attrs):
+		''' set the correct toggle state of font style buttons by
+		a font string of type 'BIU' '''
+		font_props = [False, False, False]
+		if font_attrs:
+			if font_attrs.find('B') != -1:
+				font_props[0] = True
+			if font_attrs.find('I') != -1:
+				font_props[1] = True
+			if font_attrs.find('U') != -1:
+				font_props[2] = True
+		self._toggle_font_widgets(font_props)
+		
 	def _get_font_attrs(self):
+		''' get a string with letters of font attribures: 'BUI' '''
 		attrs = ''
 		if self.bold_togglebutton.get_active():
 			attrs += 'B'
@@ -266,7 +295,7 @@ class GajimThemesWindow:
 			attrs += 'U'
 		return attrs
 		
-	
+
 	def _get_font_props(self, font_name):
 		''' get tuple of font properties: Weight, Style, Underline '''
 		font_props = [False, False, False]

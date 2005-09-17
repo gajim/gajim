@@ -32,6 +32,7 @@ from common import helpers
 
 screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()
+
 def get_theme_font_for_option(theme, option):
 	''' return string description of the font, stored in
 	theme preferences'''

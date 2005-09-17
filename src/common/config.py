@@ -216,7 +216,7 @@ class Config:
 			'grouptextcolor': [ opt_color, 'white' ],
 			'groupbgcolor': [ opt_color, 'black' ],
 			'groupfont': [ opt_str, '' ],
-			'groupfontattr': [ opt_str, '' ],
+			'groupfontattrs': [ opt_str, '' ],
 			'contacttextcolor': [ opt_color, 'white' ],
 			'contactbgcolor': [ opt_color, 'black' ],
 			'contactfont': [ opt_str, '' ],
