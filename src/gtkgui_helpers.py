@@ -21,6 +21,7 @@
 import xml.sax.saxutils
 import gtk
 import gobject
+import pango
 import os
 import sys
 from common import i18n
@@ -31,7 +32,20 @@ from common import helpers
 
 screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()
-
+def get_theme_font_for_option(theme, option):
+	''' return string description of the font, stored in
+	theme preferences'''
+	font_name = gajim.config.get_per('themes', theme, option)
+	font_desc = pango.FontDescription()
+	font_prop_str =  gajim.config.get_per('themes', theme, option + 'attrs')
+	if font_prop_str.find('B') != -1:
+		font_desc.set_weight(pango.WEIGHT_BOLD)
+	if font_prop_str.find('I') != -1:
+		font_desc.set_style(pango.STYLE_ITALIC)
+	fd = pango.FontDescription(font_name)
+	fd.merge(font_desc, True)
+	return fd.to_string()
+	
 def get_default_font():
 	''' Get the desktop setting for application font
 	first check for GNOME, then XFCE and last KDE
