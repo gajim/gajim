@@ -27,6 +27,8 @@ def visit(arg, dirname, names):
 				os.system('msgfmt --statistics ' + path_to_po)
 			if check:
 				os.system('msgfmt -c --check-accelerators="_" ' + path_to_po)
+		else:
+			print 'PROBLEM: cannot find gajim.po in', dirname
 
 def show_help():
 	print sys.argv[0], '[help] [stats] [update] [check]'
