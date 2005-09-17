@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-17 14:57+0300\n"
+"POT-Creation-Date: 2005-09-17 15:18+0300\n"
 "PO-Revision-Date: 2005-08-18 18:21-0300\n"
 "Last-Translator: Miguel Fonseca <miguelcsf@gmail.com>\n"
 "Language-Team: none\n"
@@ -3629,9 +3629,10 @@ msgstr "Pausa"
 msgid "show a help on specific command"
 msgstr "Mostrar ajuda sobre um comando específico"
 
-#. parameter, named "on_command". User gets help for the command, specified by this parameter
+#. User gets help for the command, specified by this parameter
 #: ../src/gajim-remote.py:78
-msgid "on_command"
+#, fuzzy
+msgid "command"
 msgstr "no_comando"
 
 #: ../src/gajim-remote.py:79

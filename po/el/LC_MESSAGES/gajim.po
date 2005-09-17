@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-17 14:57+0300\n"
+"POT-Creation-Date: 2005-09-17 15:18+0300\n"
 "PO-Revision-Date: 2005-09-01 17:31+0300\n"
 "Last-Translator: Filippos Papadopoulos <filip@cs.uoi.gr>\n"
 "Language-Team: Hellenic-Ελληνικά-Greek\n"
@@ -3669,9 +3669,10 @@ msgstr "Παύση"
 msgid "show a help on specific command"
 msgstr "εμφάνιση βοήθειας στην συγκεκριμένη εντολή"
 
-#. parameter, named "on_command". User gets help for the command, specified by this parameter
+#. User gets help for the command, specified by this parameter
 #: ../src/gajim-remote.py:78
-msgid "on_command"
+#, fuzzy
+msgid "command"
 msgstr "στην_εντολή"
 
 #: ../src/gajim-remote.py:79

@@ -74,8 +74,8 @@ class GajimRemote:
 			'help':[
 					_('show a help on specific command'),
 					[
-						#parameter, named "on_command". User gets help for the command, specified by this parameter
-						(_('on_command'), 
+						#User gets help for the command, specified by this parameter
+						(_('command'), 
 						_('show help on command'), False)
 					]
 				], 
