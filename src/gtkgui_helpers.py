@@ -38,10 +38,11 @@ def get_theme_font_for_option(theme, option):
 	font_name = gajim.config.get_per('themes', theme, option)
 	font_desc = pango.FontDescription()
 	font_prop_str =  gajim.config.get_per('themes', theme, option + 'attrs')
-	if font_prop_str.find('B') != -1:
-		font_desc.set_weight(pango.WEIGHT_BOLD)
-	if font_prop_str.find('I') != -1:
-		font_desc.set_style(pango.STYLE_ITALIC)
+	if font_prop_str:
+		if font_prop_str.find('B') != -1:
+			font_desc.set_weight(pango.WEIGHT_BOLD)
+		if font_prop_str.find('I') != -1:
+			font_desc.set_style(pango.STYLE_ITALIC)
 	fd = pango.FontDescription(font_name)
 	fd.merge(font_desc, True)
 	return fd.to_string()
