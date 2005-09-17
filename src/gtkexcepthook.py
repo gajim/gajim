@@ -78,6 +78,9 @@ def _info(type, value, tb):
 	dialog.vbox.add(expander)
 
 	dialog.set_position(gtk.WIN_POS_CENTER)
+	
+	# on expand the details the dialog remains centered on screen
+	dialog.set_gravity(gtk.gdk.GRAVITY_CENTER)
 
 	dialog.show_all()
 
