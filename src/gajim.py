@@ -1103,28 +1103,19 @@ class Interface:
 		if not theme in gajim.config.get_per('themes'):
 			gajim.config.set('roster_theme', 'green')
 		if len(gajim.config.get_per('themes')) == 0:
-			d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
-				'grouptextcolor', 'groupbgcolor', 'groupfont', 'contacttextcolor',
-				'contactbgcolor', 'contactfont', 'bannertextcolor', 'bannerbgcolor']
+			d = ['accounttextcolor', 'accountbgcolor', 'accountfont', 'accountfontattrs',
+				'grouptextcolor', 'groupbgcolor', 'groupfont', 'groupfontattrs', 
+				'contacttextcolor', 'contactbgcolor', 'contactfont', 'contactfontattrs', 
+				'bannertextcolor', 'bannerbgcolor']
 			
 			font_str = gtkgui_helpers.get_default_font()
 			if font_str is None:
 				font_str = 'Sans 10'
-			font = pango.FontDescription(font_str)
-			font_normal = font.to_string()
-			font.set_style(pango.STYLE_ITALIC)
-			font_italic = font.to_string()
-			font.set_style(pango.STYLE_NORMAL)
-			font.set_weight(pango.WEIGHT_BOLD)
-			font_bold = font.to_string()
 			
 			default = gajim.config.themes_default
 			for theme_name in default:
 				gajim.config.add_per('themes', theme_name)
 				theme = default[theme_name]
-				theme[d.index('accountfont')] = font_bold
-				theme[d.index('groupfont')] = font_italic
-				theme[d.index('contactfont')] = font_normal
 				for o in d:
 					gajim.config.set_per('themes', theme_name, o,
 						theme[d.index(o)])

@@ -164,7 +164,9 @@ class GajimThemesWindow:
 		else:
 			state = False
 		self.textfont_checkbutton.set_active(state)
-		self.text_fontbutton.set_sensitive(state)	
+		self.text_fontbutton.set_sensitive(state)
+		font_attrs = gajim.config.get_per('themes', theme, 
+			option + 'fontattrs')
 		
 	def on_textcolor_checkbutton_toggled(self, widget):
 		state = widget.get_active()
@@ -179,9 +181,8 @@ class GajimThemesWindow:
 			'bgcolor')
 		
 	def on_textfont_checkbutton_toggled(self, widget):
-		state = widget.get_active()
-		self.text_fontbutton.set_sensitive(state)
-		self._set_font(state, self.text_fontbutton, 'font')
+		self.text_fontbutton.set_sensitive(widget.get_active())
+		self._set_font()
 	
 	def on_text_colorbutton_color_set(self, widget):
 		self._set_color(True, widget, 'textcolor')
@@ -190,7 +191,7 @@ class GajimThemesWindow:
 		self._set_color(True, widget, 'bgcolor')
 	
 	def on_text_fontbutton_font_set(self, widget):
-		self._set_font(True, widget, 'font')
+		self._set_font()
 	
 	def on_options_combobox_changed(self, widget):
 		index = self.options_combobox.get_active()
@@ -200,6 +201,14 @@ class GajimThemesWindow:
 		self.set_theme_options(self.current_theme,
 			self.current_option)
 		
+	def on_bold_togglebutton_toggled(self, widget):
+		self._set_font()
+	
+	def on_italic_togglebutton_toggled(self, widget):
+		self._set_font()
+	
+	def on_underline_togglebutton_toggled(self, widget):
+		self._set_font()
 	
 	def _set_color(self, state, widget, option):
 		''' set color value in prefs and update the UI '''
@@ -210,20 +219,60 @@ class GajimThemesWindow:
 			color_string = ''
 		gajim.config.set_per('themes', self.current_theme, 
 			self.current_option + option, color_string)
-		if option == 'banner':
+		if self.current_option == 'banner':
 			self.plugin.roster.repaint_themed_widgets()
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
 		
-	def _set_font(self, state, widget, option):
+	def _set_font(self):
 		''' set font value in prefs and update the UI '''
+		state = self.textfont_checkbutton.get_active()
 		if state:
-			font_string = widget.get_font_name()
+			font_string = self.text_fontbutton.get_font_name()
 		else:
 			font_string = ''
 		gajim.config.set_per('themes', self.current_theme, 
-			self.current_option + option, font_string)
-		if option == 'banner':
+			self.current_option + 'font', font_string)
+		font_attrs = self._get_font_attrs()
+		gajim.config.set_per('themes', self.current_theme, 
+			self.current_option + 'fontattrs', font_attrs)
+		if self.current_option == 'banner':
 			self.plugin.roster.repaint_themed_widgets()
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
+	
+	def _toggle_font_widgets(self, font_props):
+		self.bold_togglebutton.set_active(font_props[0])
+		self.italic_togglebutton.set_active(font_props[1])
+		self.underline_togglebutton.set_active(font_props[2])
+	
+	def _get_font_description(self):
+		''' return a FontDescription from togglebuttons 
+		states'''
+		fd = pango.FontDescription()
+		if self.bold_togglebutton.get_active():
+			fd.set_weight(pango.WEIGHT_BOLD)
+		if self.italic_togglebutton.get_active():
+			fd.set_style(pango.STYLE_ITALIC)
+		return fd
+		
+	def _get_font_attrs(self):
+		attrs = ''
+		if self.bold_togglebutton.get_active():
+			attrs += 'B'
+		if self.italic_togglebutton.get_active():
+			attrs += 'I'
+		if self.underline_togglebutton.get_active():
+			attrs += 'U'
+		return attrs
+		
+	
+	def _get_font_props(self, font_name):
+		''' get tuple of font properties: Weight, Style, Underline '''
+		font_props = [False, False, False]
+		font_description = pango.FontDescription(font_name)
+		if font_description.get_weight() != pango.WEIGHT_NORMAL:
+			font_props[0] = True
+		if font_description.get_style() != pango.STYLE_ITALIC:
+			font_props[1] = True
+		return font_props
