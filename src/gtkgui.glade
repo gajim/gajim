@@ -1589,7 +1589,7 @@
 				<widget class="GtkCheckButton" id="gpg_save_password_checkbutton">
 				  <property name="visible">True</property>
 				  <property name="sensitive">False</property>
-				  <property name="tooltip" translatable="yes">If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for only you</property>
+				  <property name="tooltip" translatable="yes">If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Save _passphrase (insecure)</property>
 				  <property name="use_underline">True</property>

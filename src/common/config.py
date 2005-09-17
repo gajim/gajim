@@ -114,7 +114,7 @@ class Config:
 		'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
 		'restore_lines': [opt_int, 4, _('How many lines to remember from previous conversation when a chat tab/window is reopened.')],
 		'restore_timeout': [opt_int, 60, _('How many minutes should last lines from previous conversation last.')],
-		'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Miribalis ICQ Client default behaviour).')],
+		'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25, _('How many lines to store for key up.')],
 		'version': [ opt_str, '0.9' ], # which version created the config
