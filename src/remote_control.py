@@ -207,9 +207,7 @@ class SignalObject(DbusPrototype):
 		if not jid:
 			# FIXME: raise exception for missing argument (dbus0.35+)
 			return None
-		if jid.startswith('xmpp://'):
-			jid = jid[7:] # len('xmpp://') = 7
-		elif jid.startswith('xmpp:'):
+		if jid.startswith('xmpp:'):
 			jid = jid[5:] # len('xmpp:') = 5
 
 		if account:

@@ -34,7 +34,7 @@ screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()
 
 def get_theme_font_for_option(theme, option):
-	''' return string description of the font, stored in
+	'''return string description of the font, stored in
 	theme preferences'''
 	font_name = gajim.config.get_per('themes', theme, option)
 	font_desc = pango.FontDescription()
@@ -49,7 +49,7 @@ def get_theme_font_for_option(theme, option):
 	return fd.to_string()
 	
 def get_default_font():
-	''' Get the desktop setting for application font
+	'''Get the desktop setting for application font
 	first check for GNOME, then XFCE and last KDE
 	it returns None on failure or else a string 'Font Size' '''
 	
@@ -104,12 +104,11 @@ def get_default_font():
 	
 def reduce_chars_newlines(text, max_chars = 0, max_lines = 0, 
 	widget = None):
-	''' Cut the chars after 'max_chars' on each line
+	'''Cut the chars after 'max_chars' on each line
 	and show only the first 'max_lines'. If there is more text
 	to be shown, display the whole text in tooltip on 'widget'
 	If any of the params is not present(None or 0) the action
-	on it is not performed
-	'''
+	on it is not performed'''
 	text = text
 	
 	def _cut_if_long(str):
