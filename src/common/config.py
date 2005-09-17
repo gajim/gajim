@@ -211,13 +211,16 @@ class Config:
 		'themes': ({
 			'accounttextcolor': [ opt_color, 'white' ],
 			'accountbgcolor': [ opt_color, 'black' ],
-			'accountfont': [ opt_str, 'Sans 10' ],
+			'accountfont': [ opt_str, '' ],
+			'accountfontattrs': [ opt_str, '' ],
 			'grouptextcolor': [ opt_color, 'white' ],
 			'groupbgcolor': [ opt_color, 'black' ],
-			'groupfont': [ opt_str, 'Sans 10' ],
+			'groupfont': [ opt_str, '' ],
+			'groupfontattr': [ opt_str, '' ],
 			'contacttextcolor': [ opt_color, 'white' ],
 			'contactbgcolor': [ opt_color, 'black' ],
-			'contactfont': [ opt_str, 'Sans 10' ],
+			'contactfont': [ opt_str, '' ],
+			'contactfontattrs': [ opt_str, '' ],
 			'bannertextcolor': [ opt_color, 'white' ],
 			'bannerbgcolor': [ opt_color, 'black' ],
 
@@ -316,17 +319,17 @@ class Config:
 	}
 
 	themes_default = {
-		'green': [ '#ffffff', '#94aa8c', 'Sans Bold 10', '#0000ff', '#eff3e7',
-					'Sans Italic 10', '#000000', '#ffffff', 'Sans 10', '#ffffff',
+		'green': [ '#ffffff', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',
+					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#94aa8c' ],
-		'cyan': [ '#ff0000', '#9fdfff', 'Sans Bold 10', '#0000ff', '#ffffff',
-					'Sans Italic 10', '#000000', '#ffffff', 'Sans 10', '#ffffff',
+		'cyan': [ '#ff0000', '#9fdfff', '', 'B', '#0000ff', '#ffffff',
+					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#9fdfff' ],
-		'marine': [ '#ffffff', '#918caa', 'Sans Bold 10', '#0000ff', '#e9e7f3',
-					'Sans Italic 10', '#000000', '#ffffff', 'Sans 10', '#ffffff',
+		'marine': [ '#ffffff', '#918caa', '', 'B', '#0000ff', '#e9e7f3',
+					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#918caa' ],
-		'human': [ '#ffffff', '#996442', 'Sans Bold 10', '#ab5920', '#e3ca94',
-					'Sans Italic 10', '#000000', '#ffffff', 'Sans 10', '#ffffff',
+		'human': [ '#ffffff', '#996442', '', 'B', '#ab5920', '#e3ca94',
+					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#996442' ],
 	}
 	
@@ -335,6 +338,7 @@ class Config:
 		'proxy65.jabber.autocom.pl': ['213.134.161.52', '7777', 'proxy65.jabber.autocom.pl'],
 		'proxy.jabber.cd.chalmers.se': ['129.16.79.37', '7777', 'proxy.jabber.cd.chalmers.se'],
 		'proxy.netlab.cz': ['82.119.241.3', '7777', 'proxy.netlab.cz'],
+		'proxy65.unstable.nl': ['84.107.143.192', '7777', 'proxy65.unstable.nl']
 	}
 
 	def foreach(self, cb, data = None):
