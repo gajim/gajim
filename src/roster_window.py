@@ -1938,8 +1938,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
-			renderer.set_property('font',
-				gajim.config.get_per('themes', theme, 'accountfont'))
+			renderer.set_property('font', 
+				gtkgui_helpers.get_theme_font_for_option(theme, 'accountfont'))
 			renderer.set_property('xpad', 0)
 			renderer.set_property('width', 3)
 		elif model[iter][C_TYPE] == 'group':
@@ -1950,7 +1950,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			if color:
 				renderer.set_property('cell-background', color)
 			renderer.set_property('font',
-				gajim.config.get_per('themes', theme, 'groupfont'))
+				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
 		else:
 			jid = model[iter][C_JID].decode('utf-8')
@@ -1967,7 +1967,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				if color:
 					renderer.set_property('cell-background', color)
 			renderer.set_property('font',
-				gajim.config.get_per('themes', theme, 'contactfont'))
+				gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
 			renderer.set_property('xpad', 8)
 
 	def fill_secondary_pixbuf_rederer(self, column, renderer, model, iter, data=None):
