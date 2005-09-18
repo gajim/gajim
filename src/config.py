@@ -2765,7 +2765,7 @@ class FirstTimeWizardWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-		# Connect events from comoboboxentry.child (can't be done via glade)
+		# Connect events from comboboxentry.child
 		server_comboboxentry = self.xml.get_widget('existing_server_comboboxentry')
 		server_comboboxentry.child.connect('key_press_event',
 				self.on_server_comboboxentry_key_press_event)
@@ -2775,13 +2775,13 @@ class FirstTimeWizardWindow:
 				self.on_server_comboboxentry_key_press_event)
 
 		# parse servers.xml
-		servers_xml = os.path.join(gajim.DATA_DIR, 'other/servers.xml')
+		servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
 		servers = gtkgui_helpers.parse_server_xml(servers_xml) 
 		servers_model = gtk.ListStore(str, int)
 		for server in servers:
 			servers_model.append((str(server[0]), int(server[1])))
 		
-		# Put servers into comboboxes
+		# Put servers into comboboxentries
 		server_comboboxentry.set_model(servers_model)
 		server_comboboxentry.set_text_column(0)
 		register_server_comboboxentry.set_model(servers_model)
@@ -2795,7 +2795,7 @@ class FirstTimeWizardWindow:
 
 
 	def on_server_features_button_clicked(self, widget): 
-		pass
+		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
 
 	def on_save_password_checkbutton_toggled(self, widget):
 		if widget.get_name() == 'save_password_checkbutton':
@@ -2851,12 +2851,14 @@ class FirstTimeWizardWindow:
 			if cur_page == 1:
 				widgets = self.get_widgets('existing_')
 				register_new = False
+				#FIXME: pango me
 				finish_text = _('Account has been added successfully.\n'
 'You can set advanced options by using "Edit->Accounts" from the main window.')
 			elif cur_page == 2:
 				widgets = self.get_widgets('register_')
 				register_new = True
-				finish_text = _('Your new account has been created and added to your gajim configuration.\n'
+				#FIXME: pango me
+				finish_text = _('Your new account has been created successfully.\n'
 'You can set advanced account options using "Edit->Accounts" in the main window menu.') 
 
 			user = widgets['nick_entry'].get_text().decode('utf-8')
@@ -2877,11 +2879,11 @@ class FirstTimeWizardWindow:
 
 	def check_data(self, username, server):
 		if len(username) == 0: 
-			dialogs.ErrorDialog(
+			dialogs.ErrorDialog(_('Username is missing'),
 			_('You need to enter a username to add an account.')).get_response()
 			return False
 		elif len(server) == 0:
-			dialogs.ErrorDialog(
+			dialogs.ErrorDialog(_('Server address is missing'),
 _('You need to enter a valid server address to add an account.')).get_response()
 			return False
 		else:
@@ -2894,7 +2896,7 @@ _('You need to enter a valid server address to add an account.')).get_response()
 		self.update_jid(widget)
 
 	def on_nick_entry_key_press_event(self, widget, event):
-		#Check for pressed @ and jump to combobox if found
+		# Check for pressed @ and jump to combobox if found
 		if event.keyval == gtk.keysyms.at:
 			widgets = self.get_matching_widgets(widget)
 			widgets['server_comboboxentry'].grab_focus()
@@ -2902,7 +2904,7 @@ _('You need to enter a valid server address to add an account.')).get_response()
 			return True
 
 	def on_server_comboboxentry_key_press_event(self, widget, event):
-		#If backspace is pressed in empty field, return to the nick entry field
+		# If backspace is pressed in empty field, return to the nick entry field
 		widgets = self.get_matching_widgets(widget.parent)
 		key = event.keyval == gtk.keysyms.BackSpace
 		empty = len(widgets['server_comboboxentry'].get_active_text()) == 0
@@ -2913,7 +2915,6 @@ _('You need to enter a valid server address to add an account.')).get_response()
 
 	def on_useproxy_expander_activate(self, widget):
 		widgets = self.get_matching_widgets(widget)
-		#FIXME: Nikos? Gtk.Entrys are sensitive and editable, but greyed out? Christoph
 
 	def update_jid(self,widget):
 		widgets = self.get_matching_widgets(widget)
@@ -2925,7 +2926,7 @@ _('You need to enter a valid server address to add an account.')).get_response()
 			widgets['jid_label'].set_label(name + '@' + server)
 
 	def save_account(self, name, server, savepass, password, new_account):
-		config={}
+		config = {}
 		config['name'] = name
 		config['hostname'] = server
 		config['savepass'] = savepass
@@ -2959,15 +2960,15 @@ _('You need to enter a valid server address to add an account.')).get_response()
 			gajim.events_for_ui[name] = []
 			con.new_account(name, config)
 			return
-		#The account we add already exists on the server
+		# The account we add already exists on the server
 		gajim.connections[name] = con
 		gajim.config.add_per('accounts', name)
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
 			if config['savepass']:
 				gajim.connections[name].password = config['password']
-		#update variables
-		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, \
+		# update variables
+		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, 
 			'gc_config': {}}
 		self.plugin.windows[name]['xml_console'] = \
 			dialogs.XMLConsoleWindow(self.plugin, name)
@@ -2986,9 +2987,9 @@ _('You need to enter a valid server address to add an account.')).get_response()
 		gajim.last_message_time[name] = {}
 		gajim.status_before_autoaway[name] = ''
 		gajim.events_for_ui[name] = []
-		#refresh accounts window
+		# refresh accounts window
 		if self.plugin.windows.has_key('accounts'):
 			self.plugin.windows['accounts'].init_accounts()
-		#refresh roster
+		# refresh roster
 		self.plugin.roster.draw_roster()
 		self.plugin.save_config()
