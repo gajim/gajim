@@ -33,19 +33,6 @@ from client import PlugIn
 from protocol import *
 import sys
 
-# determine which DNS resolution library is available
-HAVE_DNSPYTHON = False
-HAVE_PYDNS = False
-try:
-    import dns.resolver # http://dnspython.org/
-    HAVE_DNSPYTHON = True
-except ImportError:
-    try:
-        import DNS # http://pydns.sf.net/
-        HAVE_PYDNS = True
-    except ImportError:
-        print >> sys.stderr, "Could not load one of the supported DNS libraries (dnspython or pydns). SRV records will not be queried and you may need to set custom hostname/port for some servers to be accessible."
-
 DATA_RECEIVED='DATA RECEIVED'
 DATA_SENT='DATA SENT'
 
@@ -61,41 +48,12 @@ class error:
 
 class TCPsocket(PlugIn):
     """ This class defines direct TCP connection method. """
-    def __init__(self, server=None, use_srv=True):
+    def __init__(self, server=None):
         """ Cache connection point 'server'. 'server' is the tuple of (host, port)
             absolutely the same as standart tcp socket uses. """
         PlugIn.__init__(self)
         self.DBG_LINE='socket'
         self._exported_methods=[self.send,self.disconnect]
-
-        # SRV resolver
-        if use_srv and (HAVE_DNSPYTHON or HAVE_PYDNS):
-            host, port = server
-            possible_queries = ['_xmpp-client._tcp.' + host]
-
-            for query in possible_queries:
-                try:
-                    if HAVE_DNSPYTHON:
-                        answers = [x for x in dns.resolver.query(query, 'SRV')]
-                        if answers:
-                            host = str(answers[0].target)
-                            port = int(answers[0].port)
-                            break
-                    elif HAVE_PYDNS:
-                        # ensure we haven't cached an old configuration
-                        DNS.ParseResolvConf()
-                        response = DNS.Request().req(query, qtype='SRV')
-                        answers = response.answers
-                        if len(answers) > 0:
-                            # ignore the priority and weight for now
-                            _, _, port, host = answers[0]['data']
-                            del _
-                            port = int(port)
-                            break
-                except:
-                    print >> sys.stderr, 'An error occurred while looking up %s' % query
-            server = (host, port)
-        # end of SRV resolver
 
         self._server = server
 
@@ -189,12 +147,12 @@ class HTTPPROXYsocket(TCPsocket):
     """ HTTP (CONNECT) proxy connection class. Uses TCPsocket as the base class
         redefines only connect method. Allows to use HTTP proxies like squid with
         (optionally) simple authentication (using login and password). """
-    def __init__(self,proxy,server,use_srv=True):
+    def __init__(self,proxy,server):
         """ Caches proxy and target addresses.
             'proxy' argument is a dictionary with mandatory keys 'host' and 'port' (proxy address)
             and optional keys 'user' and 'password' to use for authentication.
             'server' argument is a tuple of host and port - just like TCPsocket uses. """
-        TCPsocket.__init__(self,server,use_srv)
+        TCPsocket.__init__(self,server)
         self.DBG_LINE=DBG_CONNECT_PROXY
         self._proxy=proxy
 

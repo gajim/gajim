@@ -44,6 +44,19 @@ USE_GPG = GnuPG.USE_GPG
 from common import i18n
 _ = i18n._
 
+# determine which DNS resolution library is available
+HAVE_DNSPYTHON = False
+HAVE_PYDNS = False
+try:
+	import dns.resolver # http://dnspython.org/
+	HAVE_DNSPYTHON = True
+except ImportError:
+	try:
+		import DNS # http://pydns.sf.net/
+		HAVE_PYDNS = True
+	except ImportError:
+		gajim.log.debug("Could not load one of the supported DNS libraries (dnspython or pydns). SRV records will not be queried and you may need to set custom hostname/port for some servers to be accessible.")
+
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
@@ -1171,7 +1184,7 @@ class Connection:
 			if msg:
 				p.setStatus(msg)
 			if signed:
-			    p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 
 			if self.connection:
 				self.connection.send(p)
@@ -1205,10 +1218,10 @@ class Connection:
 				if autojoin_val is None: # not there (it's optional)
 					autojoin_val == False
 				bm = { 'name': conf.getAttr('name'),
-				       'jid': conf.getAttr('jid'),
-				       'autojoin': autojoin_val,
-				       'password': conf.getTagData('password'),
-				       'nick': conf.getTagData('nick') }
+					   'jid': conf.getAttr('jid'),
+					   'autojoin': autojoin_val,
+					   'password': conf.getTagData('password'),
+					   'nick': conf.getTagData('nick') }
 
 				self.bookmarks.append(bm)
 			self.dispatch('BOOKMARKS', self.bookmarks)
@@ -1336,7 +1349,34 @@ class Connection:
 			p = gajim.config.get_per('accounts', self.name, 'custom_port')
 			use_srv = False
 
-		con_type = con.connect((h, p), proxy=proxy, secure=secur, use_srv=use_srv)
+		# SRV resolver
+		if use_srv and (HAVE_DNSPYTHON or HAVE_PYDNS):
+			possible_queries = ['_xmpp-client._tcp.' + h]
+
+			for query in possible_queries:
+				try:
+					if HAVE_DNSPYTHON:
+						answers = [x for x in dns.resolver.query(query, 'SRV')]
+						if answers:
+							h = str(answers[0].target)
+							p = int(answers[0].port)
+							break
+					elif HAVE_PYDNS:
+						# ensure we haven't cached an old configuration
+						DNS.ParseResolvConf()
+						response = DNS.Request().req(query, qtype='SRV')
+						answers = response.answers
+						if len(answers) > 0:
+							# ignore the priority and weight for now
+							_t, _t, p, h = answers[0]['data']
+							del _t
+							p = int(port)
+							break
+				except:
+					gajim.log.debug('An error occurred while looking up %s' % query)
+		# end of SRV resolver
+
+		con_type = con.connect((h, p), proxy=proxy, secure=secur)
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
 			if not self.retrycount:
