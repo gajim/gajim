@@ -36,7 +36,7 @@ _ = i18n._
 _exception_in_progress = threading.Lock()
 
 def _info(type, value, tb):
-        if not _exception_in_progress.acquire(False):
+	if not _exception_in_progress.acquire(False):
 		# Exceptions have piled up, so we use the default exception
 		# handler for such exceptions
 		_excepthook_save(type, value, tb)
