@@ -2794,7 +2794,7 @@ class FirstTimeWizardWindow:
 		self.finish_label = self.xml.get_widget('finish_label')
 
 
-	def on_server_features_button_clicked(self, widget): 
+	def on_register_server_features_button_clicked(self, widget): 
 		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
 
 	def on_save_password_checkbutton_toggled(self, widget):
@@ -2880,11 +2880,11 @@ class FirstTimeWizardWindow:
 	def check_data(self, username, server):
 		if len(username) == 0: 
 			dialogs.ErrorDialog(_('Username is missing'),
-			_('You need to enter a username to add an account.')).get_response()
+			_('You need to enter a username to continue.')).get_response()
 			return False
 		elif len(server) == 0:
 			dialogs.ErrorDialog(_('Server address is missing'),
-_('You need to enter a valid server address to add an account.')).get_response()
+_('You need to enter a valid server address to continue.')).get_response()
 			return False
 		else:
 			return True

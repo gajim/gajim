@@ -14208,7 +14208,7 @@ to the Jabber network.</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
-		      <signal name="clicked" handler="on_register_server_features_button_clicked" last_modification_time="Thu, 08 Sep 2005 15:49:45 GMT"/>
+		      <signal name="clicked" handler="on_register_server_features_button_clicked" last_modification_time="Sun, 18 Sep 2005 18:32:19 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">2</property>
