@@ -13359,8 +13359,7 @@ Status message</property>
       <child>
 	<widget class="GtkNotebook" id="notebook">
 	  <property name="visible">True</property>
-	  <property name="can_focus">True</property>
-	  <property name="show_tabs">True</property>
+	  <property name="show_tabs">False</property>
 	  <property name="show_border">False</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
 	  <property name="scrollable">False</property>
@@ -13419,6 +13418,7 @@ to the Jabber network.</property>
 
 		      <child>
 			<widget class="GtkVBox" id="vbox83">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">6</property>
@@ -13530,12 +13530,12 @@ to the Jabber network.</property>
 	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">12</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label268">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">&lt;b&gt;Please fill in the data for your existing account&lt;/b&gt;</property>
+		  <property name="label" translatable="yes">&lt;b&gt;Fill in the data for your existing account&lt;/b&gt;</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">True</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -13578,6 +13578,7 @@ to the Jabber network.</property>
 		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		      <signal name="changed" handler="on_nick_entry_changed" last_modification_time="Sun, 24 Jul 2005 14:30:31 GMT"/>
+		      <signal name="key_press_event" handler="on_nick_entry_key_press_event" last_modification_time="Mon, 12 Sep 2005 18:51:46 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -13622,6 +13623,7 @@ to the Jabber network.</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="changed" handler="on_server_comboboxentry_changed" last_modification_time="Thu, 08 Sep 2005 09:12:24 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -13663,7 +13665,7 @@ to the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="existing_save_pass_checkbutton">
+		    <widget class="GtkCheckButton" id="existing_save_password_checkbutton">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">If checked, Gajim will remember the password for this account</property>
 		      <property name="can_focus">True</property>
@@ -13674,6 +13676,7 @@ to the Jabber network.</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
+		      <signal name="toggled" handler="on_save_password_checkbutton_toggled" last_modification_time="Thu, 08 Sep 2005 09:13:20 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">2</property>
@@ -13697,6 +13700,7 @@ to the Jabber network.</property>
 		      <property name="has_frame">True</property>
 		      <property name="invisible_char">*</property>
 		      <property name="activates_default">True</property>
+		      <signal name="changed" handler="on_pass_entry_changed" last_modification_time="Thu, 08 Sep 2005 09:12:35 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -13737,17 +13741,17 @@ to the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkExpander" id="expander1">
+		    <widget class="GtkExpander" id="existing_useproxy_expander">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="expanded">False</property>
 		      <property name="spacing">0</property>
+		      <signal name="activate" handler="on_useproxy_expander_activate" last_modification_time="Mon, 12 Sep 2005 12:34:27 GMT"/>
 
 		      <child>
 			<widget class="GtkTable" id="table29">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
-			  <property name="sensitive">False</property>
 			  <property name="n_rows">4</property>
 			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
@@ -13881,6 +13885,7 @@ to the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxyhost_entry_changed" last_modification_time="Thu, 08 Sep 2005 09:12:43 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -13902,6 +13907,7 @@ to the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxyport_entry_changed" last_modification_time="Thu, 08 Sep 2005 09:12:50 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -13923,6 +13929,7 @@ to the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxyuser_entry_changed" last_modification_time="Thu, 08 Sep 2005 09:13:04 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -13944,6 +13951,7 @@ to the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxypass_entry_changed" last_modification_time="Thu, 08 Sep 2005 09:13:12 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -14086,7 +14094,7 @@ to the Jabber network.</property>
 	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">12</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label270">
@@ -14134,6 +14142,7 @@ to the Jabber network.</property>
 		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		      <signal name="changed" handler="on_nick_entry_changed" last_modification_time="Thu, 08 Sep 2005 15:49:27 GMT"/>
+		      <signal name="key_press_event" handler="on_nick_entry_key_press_event" last_modification_time="Mon, 12 Sep 2005 18:51:33 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -14178,6 +14187,7 @@ to the Jabber network.</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="has_frame">True</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="changed" handler="on_server_comboboxentry_changed" last_modification_time="Thu, 08 Sep 2005 09:49:18 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -14251,6 +14261,7 @@ to the Jabber network.</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
+		      <signal name="toggled" handler="on_save_password_checkbutton_toggled" last_modification_time="Thu, 08 Sep 2005 09:50:11 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">2</property>
@@ -14265,7 +14276,6 @@ to the Jabber network.</property>
 		  <child>
 		    <widget class="GtkEntry" id="register_pass_entry">
 		      <property name="visible">True</property>
-		      <property name="sensitive">False</property>
 		      <property name="can_focus">True</property>
 		      <property name="editable">True</property>
 		      <property name="visibility">False</property>
@@ -14274,6 +14284,7 @@ to the Jabber network.</property>
 		      <property name="has_frame">True</property>
 		      <property name="invisible_char">*</property>
 		      <property name="activates_default">True</property>
+		      <signal name="changed" handler="on_pass_entry_changed" last_modification_time="Thu, 08 Sep 2005 09:48:57 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -14371,17 +14382,17 @@ to the Jabber network.</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkExpander" id="expander3">
+		    <widget class="GtkExpander" id="register_useproxy_expander">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="expanded">False</property>
 		      <property name="spacing">0</property>
+		      <signal name="activate" handler="on_useproxy_expander_activate" last_modification_time="Mon, 12 Sep 2005 12:31:43 GMT"/>
 
 		      <child>
 			<widget class="GtkTable" id="table30">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
-			  <property name="sensitive">False</property>
 			  <property name="n_rows">4</property>
 			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
@@ -14401,7 +14412,7 @@ to the Jabber network.</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">register_register_proxyhost_entry</property>
+			      <property name="mnemonic_widget">proxyhost_entry</property>
 			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			      <property name="width_chars">-1</property>
 			      <property name="single_line_mode">False</property>
@@ -14505,7 +14516,7 @@ to the Jabber network.</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="register_register_proxyhost_entry">
+			    <widget class="GtkEntry" id="proxyhost_entry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -14536,6 +14547,7 @@ to the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxyport_entry_changed" last_modification_time="Thu, 08 Sep 2005 09:49:40 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -14557,6 +14569,7 @@ to the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxyuser_entry_changed" last_modification_time="Thu, 08 Sep 2005 09:49:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -14578,6 +14591,7 @@ to the Jabber network.</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_proxypass_entry_changed" last_modification_time="Thu, 08 Sep 2005 09:49:56 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -14765,6 +14779,7 @@ to the Jabber network.</property>
 	  <child>
 	    <widget class="GtkButton" id="back_button">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-go-back</property>
@@ -14791,6 +14806,7 @@ to the Jabber network.</property>
 	  <child>
 	    <widget class="GtkButton" id="finish_button">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -14800,6 +14816,7 @@ to the Jabber network.</property>
 	      <child>
 		<widget class="GtkAlignment" id="alignment87">
 		  <property name="visible">True</property>
+		  <property name="sensitive">False</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
 		  <property name="xscale">0</property>

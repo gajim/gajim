@@ -2762,71 +2762,48 @@ class FirstTimeWizardWindow:
 		self.plugin = plugin
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'wizard_window', APP)
 		self.window = self.xml.get_widget('wizard_window')
-		
-		#TODO: Parse servers.xml to server_comoboxentrys
-
-		self.notebook = self.xml.get_widget('notebook')
-		self.notebook.set_show_tabs(False)
-
-		self.nick_entry = self.xml.get_widget('nick_entry')
-		self.nick_entry.connect('changed', self.on_nick_entry_changed)
-		self.nick_entry.connect('key_press_event', self.on_nick_entry_key_pressed)
-		self.server_comboboxentry = self.xml.get_widget('server_comboboxentry')
-		self.server_comboboxentry.connect('changed', self.on_server_entry_changed)
-		self.server_comboboxentry.child.connect('key_press_event',
-			self.on_server_entry_key_pressed)
-		self.jid_label = self.xml.get_widget('jid_label')
-		
-		self.save_password_checkbutton = self.xml.get_widget(
-			'save_pass_checkbutton')
-		self.save_password_checkbutton.connect('toggled',
-			self.on_save_password_checkbutton_toggled)
-		self.password_entry = self.xml.get_widget('pass_entry')
-		
-		self.register_nick_entry = self.xml.get_widget('register_nick_entry')
-		self.register_nick_entry.connect('changed',
-			self.on_register_nick_entry_changed)
-		self.register_nick_entry.connect('key_press_event',
-			self.on_register_nick_entry_key_pressed)
-		self.register_server_comboboxentry = self.xml.get_widget(
-			'register_server_comboboxentry')
-		self.register_server_comboboxentry.connect('changed',
-			self.on_register_server_entry_changed)
-		self.register_server_comboboxentry.child.connect('key_press_event',
-			self.on_register_server_entry_key_pressed)
-		self.register_jid_label = self.xml.get_widget('register_jid_label')
-		
-		self.register_save_password_checkbutton = self.xml.get_widget(
-			'register_save_password_checkbutton')
-		self.register_save_password_checkbutton.connect('toggled',
-			self.on_register_save_password_checkbutton_toggled)
-		self.register_password_entry = self.xml.get_widget('register_pass_entry')
-
-		self.back_button = self.xml.get_widget('back_button')
-		self.back_button.set_sensitive(False)
-		
-		self.finish_button = self.xml.get_widget('finish_button')
-		self.finish_button.set_sensitive(False)
-
-		self.finish_label = self.xml.get_widget('finish_label')
-
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	def on_server_features_button_clicked(self, widget):
+		# Connect events from comoboboxentry.child (can't be done via glade)
+		server_comboboxentry = self.xml.get_widget('existing_server_comboboxentry')
+		server_comboboxentry.child.connect('key_press_event',
+				self.on_server_comboboxentry_key_press_event)
+		register_server_comboboxentry = self.xml.get_widget(
+				'register_server_comboboxentry')
+		register_server_comboboxentry.child.connect('key_press_event', 
+				self.on_server_comboboxentry_key_press_event)
+
+		# parse servers.xml
+		servers_xml = os.path.join(gajim.DATA_DIR, 'other/servers.xml')
+		servers = gtkgui_helpers.parse_server_xml(servers_xml) 
+		servers_model = gtk.ListStore(str, int)
+		for server in servers:
+			servers_model.append((str(server[0]), int(server[1])))
+		
+		# Put servers into comboboxes
+		server_comboboxentry.set_model(servers_model)
+		server_comboboxentry.set_text_column(0)
+		register_server_comboboxentry.set_model(servers_model)
+		register_server_comboboxentry.set_text_column(0)
+
+		# Generic widgets
+		self.notebook = self.xml.get_widget('notebook')
+		self.back_button = self.xml.get_widget('back_button')
+		self.finish_button = self.xml.get_widget('finish_button')
+		self.finish_label = self.xml.get_widget('finish_label')
+
+
+	def on_server_features_button_clicked(self, widget): 
 		pass
 
 	def on_save_password_checkbutton_toggled(self, widget):
-		if self.password_entry.get_property('sensitive'):
-			self.password_entry.set_sensitive(False)
-		else:
-			self.password_entry.set_sensitive(True)
-
-	def on_register_save_password_checkbutton_toggled(self, widget):
-		if self.register_password_entry.get_property('sensitive'):
-			self.register_password_entry.set_sensitive(False)
-		else:
-			self.register_password_entry.set_sensitive(True)
+		if widget.get_name() == 'save_password_checkbutton':
+			widget2 = self.xml.get_widget('existing_pass_entry')
+			if widget2.get_property('sensitive'):
+				widget2.set_sensitive(False)
+			else:
+				widget2.set_sensitive(True)
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
@@ -2838,9 +2815,29 @@ class FirstTimeWizardWindow:
 			self.notebook.set_current_page(0)
 		self.back_button.set_sensitive(False)
 
+	def get_widgets(self, prefix):
+		widgets = {} 
+		for widget in [ 'nick_entry',
+						'server_comboboxentry',
+						'pass_entry',
+						'save_password_checkbutton',
+						'proxyhost_entry',
+						'proxyport_entry',
+						'proxyuser_entry',
+						'proxypass_entry',
+						'jid_label' ]:
+			widgets[widget] = self.xml.get_widget(prefix + widget)
+		return widgets
+
+	def get_matching_widgets(self, widget): 
+		if widget.get_name().startswith('existing_'):
+			return self.get_widgets('existing_')
+		elif widget.get_name().startswith('register_'):
+			return self.get_widgets('register_')
+
 	def on_forward_button_clicked(self, widget):
 		cur_page = self.notebook.get_current_page()
-		
+
 		if cur_page == 0:
 			widget = self.xml.get_widget('use_existing_account_radiobutton')
 			if widget.get_active():
@@ -2848,32 +2845,32 @@ class FirstTimeWizardWindow:
 			else:
 				self.notebook.set_current_page(2)
 			self.back_button.set_sensitive(True)
+			return
 		
-		elif cur_page == 1:
-			user = self.nick_entry.get_text().decode('utf-8')
-			server = self.server_comboboxentry.get_active_text()
-			if self.check_data(user, server):
-				#TODO: write account to config file
-				# FIXME: do bold (markup)
-				self.finish_label.set_text(
-				_('Account has been added successfully.\n'
-'You can set advanced options by using "Edit->Accounts" from the main window.'))
-				self.go_to_last_page()
-
-		elif cur_page == 2:
-			user = self.register_nick_entry.get_text().decode('utf-8')
-			server = self.register_server_comboboxentry.get_active_text()
-			if self.check_data(user, server):
-				#TODO: Register account
-				#TODO: write account to config file
-				self.finish_label.set_text(
-_('Your new account has been created and added to your gajim configuration.\n'
-'You can set advanced account options using "Edit->Accounts" in the main window menu.'))
-				self.go_to_last_page()
-
 		else:
-			#Finish button clicked
-			self.window.destroy()
+			if cur_page == 1:
+				widgets = self.get_widgets('existing_')
+				register_new = False
+				finish_text = _('Account has been added successfully.\n'
+'You can set advanced options by using "Edit->Accounts" from the main window.')
+			elif cur_page == 2:
+				widgets = self.get_widgets('register_')
+				register_new = True
+				finish_text = _('Your new account has been created and added to your gajim configuration.\n'
+'You can set advanced account options using "Edit->Accounts" in the main window menu.') 
+
+			user = widgets['nick_entry'].get_text().decode('utf-8')
+			server = widgets['server_comboboxentry'].child.get_text()
+			savepass = widgets['save_password_checkbutton'].get_active()
+			password = widgets['pass_entry'].get_text()
+			if self.check_data(user, server):
+				self.save_accoount(user, server, savepass, password, register_new)
+				self.finish_label.set_text(finish_text)
+				self.xml.get_widget('cancel_button').hide()
+				self.back_button.hide()
+				self.xml.get_widget('forward_button').hide()
+				self.finish_button.set_sensitive(True)
+				self.notebook.set_current_page(3)
 
 	def on_finish_button_clicked(self, widget):
 		self.window.destroy()
@@ -2890,56 +2887,108 @@ _('You need to enter a valid server address to add an account.')).get_response()
 		else:
 			return True
 
-	def go_to_last_page(self):
-		self.xml.get_widget('cancel_button').hide()
-		self.back_button.hide()
-		self.xml.get_widget('forward_button').hide()
-		self.finish_button.set_sensitive(True)
-		self.notebook.set_current_page(3)
-
 	def on_nick_entry_changed(self, widget):
-		self.update_jid(self.nick_entry, self.server_comboboxentry, self.jid_label)
+		self.update_jid(widget)
 
-	def on_nick_entry_key_pressed(self, widget, event):
-		return self.nick_entry_key_pressed(event, self.server_comboboxentry)
+	def on_server_comboboxentry_changed(self, widget):
+		self.update_jid(widget)
 
-	def on_server_entry_changed(self, widget):
-		self.update_jid(self.nick_entry, self.server_comboboxentry, self.jid_label)
-
-	def on_server_entry_key_pressed(self, widget, event):
-		return self.server_entry_key_pressed(event, self.nick_entry, self.server_comboboxentry)
-
-	def on_register_nick_entry_changed(self, widget):
-		self.update_jid(self.register_nick_entry, self.register_server_comboboxentry, self.register_jid_label)
-
-	def on_register_nick_entry_key_pressed(self, widget, event):
-		return self.nick_entry_key_pressed(event, self.register_server_comboboxentry)
-
-	def on_register_server_entry_changed(self, widget):
-		self.update_jid(self.register_nick_entry, self.register_server_comboboxentry, self.register_jid_label)
-
-	def on_register_server_entry_key_pressed(self, widget, event):
-		return self.server_entry_key_pressed(event, self.register_nick_entry, self.register_server_comboboxentry)
-
-	def nick_entry_key_pressed(self, event, server_widget):
+	def on_nick_entry_key_press_event(self, widget, event):
 		#Check for pressed @ and jump to combobox if found
 		if event.keyval == gtk.keysyms.at:
-			server_widget.grab_focus()
-			server_widget.child.set_position(-1)
+			widgets = self.get_matching_widgets(widget)
+			widgets['server_comboboxentry'].grab_focus()
+			widgets['server_comboboxentry'].child.set_position(-1)
 			return True
 
-	def server_entry_key_pressed(self, event, nick_widget, server_widget):
-		#If field is empty and backspace is pressed, return to the nick entry field
-		if event.keyval == gtk.keysyms.BackSpace:
-			if len(server_widget.get_active_text()) == 0:
-				nick_widget.grab_focus()
-				nick_widget.set_position(-1)
-				return True
+	def on_server_comboboxentry_key_press_event(self, widget, event):
+		#If backspace is pressed in empty field, return to the nick entry field
+		widgets = self.get_matching_widgets(widget.parent)
+		key = event.keyval == gtk.keysyms.BackSpace
+		empty = len(widgets['server_comboboxentry'].get_active_text()) == 0
+		if key and empty:
+			widgets['nick_entry'].grab_focus()
+			widgets['nick_entry'].set_position(-1)
+			return True
 
-	def update_jid(self, name_widget, server_widget, jid_widget):
-		name = name_widget.get_text().decode('utf-8')
-		server = server_widget.get_active_text()
+	def on_useproxy_expander_activate(self, widget):
+		widgets = self.get_matching_widgets(widget)
+		#FIXME: Nikos? Gtk.Entrys are sensitive and editable, but greyed out? Christoph
+
+	def update_jid(self,widget):
+		widgets = self.get_matching_widgets(widget)
+		name = widgets['nick_entry'].get_text().decode('utf-8')
+		server = widgets['server_comboboxentry'].get_active_text()
 		if len(name) == 0 or len(server) == 0:
-			jid_widget.set_label('')
+			widgets['jid_label'].set_label('')
 		else:
-			jid_widget.set_label(name + '@' + server)
+			widgets['jid_label'].set_label(name + '@' + server)
+
+	def save_account(self, name, server, savepass, password, new_account):
+		config={}
+		config['name'] = name
+		config['hostname'] = server
+		config['savepass'] = savepass
+		config['password'] = password
+		if new_account and config['password'] == '':
+			dialogs.ErrorDialog(_('Invalid password'),
+				_('You must enter a password for the new account.')).get_response()
+			return
+		config['resource'] = 'Gajim'
+		config['priority'] = 5
+		config['autoconnect'] = True 
+		config['no_log_for'] = ''
+		config['sync_with_global_status'] = True
+		config['proxy'] = ''
+		config['usessl'] = False
+		config['use_custom_host'] = False
+		config['custom_port'] = 0
+		config['custom_host'] = ''
+		config['keyname'] = ''
+		config['keyid'] = ''
+		config['savegpgpass'] = False
+		config['gpgpassword'] = ''
+
+		if name in gajim.connections:
+			dialogs.ErrorDialog(_('Account name is in use'),
+				_('You already have an account using this name.')).get_response()
+			return
+		con = connection.Connection(name)
+		self.plugin.register_handlers(con)
+		if new_account:
+			gajim.events_for_ui[name] = []
+			con.new_account(name, config)
+			return
+		#The account we add already exists on the server
+		gajim.connections[name] = con
+		gajim.config.add_per('accounts', name)
+		for opt in config:
+			gajim.config.set_per('accounts', name, opt, config[opt])
+			if config['savepass']:
+				gajim.connections[name].password = config['password']
+		#update variables
+		self.plugin.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, \
+			'gc_config': {}}
+		self.plugin.windows[name]['xml_console'] = \
+			dialogs.XMLConsoleWindow(self.plugin, name)
+		gajim.awaiting_messages[name] = {}
+		gajim.connections[name].connected = 0
+		gajim.groups[name] = {}
+		gajim.contacts[name] = {}
+		gajim.gc_contacts[name] = {}
+		gajim.gc_connected[name] = {}
+		gajim.newly_added[name] = []
+		gajim.to_be_removed[name] = []
+		gajim.nicks[name] = config['name']
+		gajim.allow_notifications[name] = False
+		gajim.sleeper_state[name] = 'off'
+		gajim.encrypted_chats[name] = []
+		gajim.last_message_time[name] = {}
+		gajim.status_before_autoaway[name] = ''
+		gajim.events_for_ui[name] = []
+		#refresh accounts window
+		if self.plugin.windows.has_key('accounts'):
+			self.plugin.windows['accounts'].init_accounts()
+		#refresh roster
+		self.plugin.roster.draw_roster()
+		self.plugin.save_config()

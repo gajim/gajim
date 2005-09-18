@@ -2265,5 +2265,5 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.config.set('show_roster_on_startup', True)
 
 		if len(gajim.connections) == 0: # if we have no account
-			self.plugin.windows['account_modification'] = \
-				config.AccountModificationWindow(self.plugin)
+			self.plugin.windows['wizard_window'] = \
+				config.FirstTimeWizardWindow(self.plugin)

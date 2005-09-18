@@ -198,7 +198,44 @@ def resize_window(window, w, h):
 		h = screen_h
 	window.resize(abs(w), abs(h))
 
+class TagInfoHandler(xml.sax.ContentHandler):
+	def __init__(self, tagname1, tagname2):
+		xml.sax.ContentHandler.__init__(self)
+		self.tagname1 = tagname1
+		self.tagname2 = tagname2
+		self.servers = []
+
+	def startElement(self, name, attributes):
+		if name == self.tagname1:
+			for attribute in attributes.getNames():
+				if attribute == 'jid':
+					jid = attributes.getValue(attribute)
+					#We will get the port next time so we just set it 0 here
+					self.servers.append([jid, 0])
+		elif name == self.tagname2:
+			for attribute in attributes.getNames():
+				if attribute == 'port':
+					port = attributes.getValue(attribute)
+					#We received the jid last time, so we now assign the port
+					#number to the last jid in the list
+					self.servers[-1][1] = port
+
+	def endElement(self, name):
+		pass
+
+def parse_server_xml(path_to_file):
+	try:
+		handler = TagInfoHandler('item', 'active')
+		xml.sax.parse(path_to_file, handler)
+		return handler.servers
+	# handle exception if unable to open file
+	except IOError, message:
+		print "Error reading file:", message
+	# handle exception parsing file
+	except xml.sax.SAXParseException, message:
+		print "Error parsing file:", message
 def set_unset_urgency_hint(window, unread_messages_no):
+
 	'''sets/unsets urgency hint in window argument
 	depending if we have unread messages or not'''
 	if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
