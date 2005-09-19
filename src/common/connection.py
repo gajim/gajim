@@ -330,25 +330,22 @@ class Connection:
 
 	def _presenceCB(self, con, prs):
 		"""Called when we receive a presence"""
-		who = unicode(prs.getFrom())
-		prio = prs.getPriority()
-		if not prio:
-			prio = 0
 		ptype = prs.getType()
 		if ptype == 'available': ptype = None
 		gajim.log.debug('PresenceCB: %s' % ptype)
-		xtags = prs.getTags('x')
+		is_gc = False # is it a GC presence ?
 		sigTag = None
-		keyID = ''
-		status = prs.getStatus()
-		for xtag in xtags:
-			if xtag.getNamespace() == common.xmpp.NS_SIGNED:
+		xtags = prs.getTags('x')
+		for x in xtags:
+			if x.getNamespace() == common.xmpp.NS_MUC_USER:
+				is_gc = True
+			if x.getNamespace() == common.xmpp.NS_SIGNED:
 				sigTag = xtag
-				break
-		if sigTag and USE_GPG:
-			#verify
-			sigmsg = sigTag.getData()
-			keyID = self.gpg.verify(status, sigmsg)
+		jid_from = prs.getFrom()
+		who = unicode(jid_from)
+		jid_stripped = jid_from.getStripped()
+		resource =  jid_from.getResource()
+		status = prs.getStatus()
 		show = prs.getShow()
 		if not show in STATUS_LIST:
 			show = '' # We ignore unknown show
@@ -356,7 +353,57 @@ class Connection:
 			show = 'online'
 		elif ptype == 'unavailable':
 			show = 'offline'
-		elif ptype == 'subscribe':
+
+		if is_gc:
+			if ptype == 'error':
+				errmsg = prs.getError()
+				errcode = prs.getErrorCode()
+				if errcode == '502': # Internal Timeout:
+					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
+						prio, keyID))
+				elif errcode == '401': # password required to join
+					self.dispatch('ERROR', (_('Unable to join room'), 
+						_('A password is required to join this room.')))
+				elif errcode == '403': # we are banned
+					self.dispatch('ERROR', (_('Unable to join room'), 
+						_('You are banned from this room.')))
+				elif errcode == '404': # room does not exist
+					self.dispatch('ERROR', (_('Unable to join room'), 
+						_('Such room does not exist.')))
+				elif errcode == '405':
+					self.dispatch('ERROR', (_('Unable to join room'), 
+						_('Room creation is restricted.')))
+				elif errcode == '406':
+					self.dispatch('ERROR', (_('Unable to join room'), 
+						_('Your registered nickname must be used.')))
+				elif errcode == '407':
+					self.dispatch('ERROR', (_('Unable to join room'), 
+						_('You are not in the members list.')))
+				elif errcode == '409': # nick conflict
+					self.dispatch('ERROR', (_('Unable to join room'), 
+						_('Your desired nickname is in use or registered by another user.')))
+				else:	# print in the window the error
+					self.dispatch('ERROR_ANSWER', ('', jid_stripped,
+						errmsg, errcode))
+			if not ptype or ptype == 'unavailable':
+				gajim.logger.write('status', status, who, show)
+				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
+					prs.getRole(), prs.getAffiliation(), prs.getJid(),
+					prs.getReason(), prs.getActor(), prs.getStatusCode(),
+					prs.getNewNick()))
+			return
+
+		prio = prs.getPriority()
+		try:
+			prio = int(prio)
+		except:
+			prio = 0
+		keyID = ''
+		if sigTag and USE_GPG:
+			#verify
+			sigmsg = sigTag.getData()
+			keyID = self.gpg.verify(status, sigmsg)
+		if ptype == 'subscribe':
 			gajim.log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0:
 				if self.connection:
@@ -365,65 +412,33 @@ class Connection:
 					self.to_be_sent.append(p)
 				if who.find("@") <= 0:
 					self.dispatch('NOTIFY',
-						(prs.getFrom().getStripped(), 'offline', 'offline',
-						prs.getFrom().getResource(), prio, keyID, None, None,
-						None, None, None, None))
+						(jid_stripped, 'offline', 'offline', resource, prio, keyID))
 			else:
 				if not status:
 					status = _('I would like to add you to my roster.')
 				self.dispatch('SUBSCRIBE', (who, status))
 		elif ptype == 'subscribed':
-			jid = prs.getFrom()
-			self.dispatch('SUBSCRIBED', (jid.getStripped(), jid.getResource()))
+			self.dispatch('SUBSCRIBED', (jid_stripped, resource))
 			# BE CAREFUL: no con.updateRosterItem() in a callback
 			gajim.log.debug(_('we are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
 			gajim.log.debug(_('unsubscribe request from %s') % who)
 		elif ptype == 'unsubscribed':
 			gajim.log.debug(_('we are now unsubscribed from %s') % who)
-			self.dispatch('UNSUBSCRIBED', prs.getFrom().getStripped())
+			self.dispatch('UNSUBSCRIBED', jid_stripped)
 		elif ptype == 'error':
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
 			if errcode == '502': # Internal Timeout:
-				self.dispatch('NOTIFY', (prs.getFrom().getStripped(),
-					'error', errmsg, prs.getFrom().getResource(),
-					prio, keyID, prs.getRole(), prs.getAffiliation(), prs.getJid(),
-					prs.getReason(), prs.getActor(), prs.getStatusCode(),
-					prs.getNewNick()))
-			elif errcode == '401': # password required to join
-				self.dispatch('ERROR', (_('Unable to join room'), 
-					_('A password is required to join this room.')))
-			elif errcode == '403': # we are banned
-				self.dispatch('ERROR', (_('Unable to join room'), 
-					_('You are banned from this room.')))
-			elif errcode == '404': # room does not exist
-				self.dispatch('ERROR', (_('Unable to join room'), 
-					_('Such room does not exist.')))
-			elif errcode == '405':
-				self.dispatch('ERROR', (_('Unable to join room'), 
-					_('Room creation is restricted.')))
-			elif errcode == '406':
-				self.dispatch('ERROR', (_('Unable to join room'), 
-					_('Your registered nickname must be used.')))
-			elif errcode == '407':
-				self.dispatch('ERROR', (_('Unable to join room'), 
-					_('You are not in the members list.')))
-			elif errcode == '409': # nick conflict
-				self.dispatch('ERROR', (_('Unable to join room'), 
-				_('Your desired nickname is in use or registered by another user.')))
+				self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
+					prio, keyID))
 			else:	# print in the window the error
-				self.dispatch('ERROR_ANSWER', ('', prs.getFrom().getStripped(),
+				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
 		if not ptype or ptype == 'unavailable':
-			jid = unicode(prs.getFrom())
-			gajim.logger.write('status', status, jid, show)
-			account = prs.getFrom().getStripped()
-			resource =  prs.getFrom().getResource()
-			self.dispatch('NOTIFY', ( account, show, status,
-				resource, prio, keyID, prs.getRole(),
-				prs.getAffiliation(), prs.getJid(), prs.getReason(),
-				prs.getActor(), prs.getStatusCode(), prs.getNewNick()))
+			gajim.logger.write('status', status, jid_stripped, show)
+			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
+				keyID))
 	# END presenceCB
 
 	def _disconnectedCB(self):

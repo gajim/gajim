@@ -163,6 +163,7 @@ class Interface:
 		gajim.connections[account].build_http_auth_answer(data[2], answer)
 
 	def handle_event_error_answer(self, account, array):
+		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		id, jid_from, errmsg, errcode = array
 		if unicode(errcode) in ['403', '406'] and id:
 			# show the error dialog
@@ -189,7 +190,6 @@ class Interface:
 					(jid_from, file_props))
 				conn.disconnect_transfer(file_props)
 				return
-		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		if jid_from in self.windows[account]['gc']:
 			self.windows[account]['gc'][jid_from].print_conversation(
 				'Error %s: %s' % (array[2], array[1]), jid_from)
@@ -216,8 +216,7 @@ class Interface:
 			self.remote.raise_signal('AccountPresence', (status, account))
 	
 	def handle_event_notify(self, account, array):
-		#('NOTIFY', account, (jid, status, message, resource, priority, keyID, 
-		# role, affiliation, real_jid, reason, actor, statusCode, new_nick))
+		#('NOTIFY', account, (jid, status, message, resource, priority, keyID))
 		# if we're here it means contact changed show
 		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
 			'invisible']
@@ -347,16 +346,6 @@ class Interface:
 				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactAbsence', (account, array))
 				# stop non active file transfers
-		
-		elif self.windows[account]['gc'].has_key(ji): # ji is then room_jid
-			#it is a groupchat presence
-			#FIXME: upgrade the chat instances (for pm)
-			#FIXME: real_jid can be None
-			self.windows[account]['gc'][ji].chg_contact_status(ji, resource,
-				array[1], array[2], array[6], array[7], array[8], array[9],
-				array[10], array[11], array[12], account)
-			if self.remote and self.remote.is_enabled():
-				self.remote.raise_signal('GCPresence', (account, array))
 
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (jid, msg, time, encrypted, msg_type, subject, chatstate))
@@ -636,6 +625,22 @@ class Interface:
 			win.set_os_info(array[1], array[2], array[3])
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('OsInfo', (account, array))
+
+	def handle_event_gc_notify(self, account, array):
+		#('GC_NOTIFY', account, (jid, status, message, resource,
+		# role, affiliation, jid, reason, actor, statusCode, newNick))
+		jid = array[0].split('/')[0]
+		resource = array[3]
+		if not resource:
+			resource = ''
+		if self.windows[account]['gc'].has_key(jid): # ji is then room_jid
+			#FIXME: upgrade the chat instances (for pm)
+			#FIXME: real_jid can be None
+			self.windows[account]['gc'][jid].chg_contact_status(jid, resource,
+				array[1], array[2], array[4], array[5], array[6], array[7],
+				array[8], array[9], array[10], account)
+			if self.remote and self.remote.is_enabled():
+				self.remote.raise_signal('GCPresence', (account, array))
 
 	def handle_event_gc_msg(self, account, array):
 		#('GC_MSG', account, (jid, msg, time))
@@ -999,6 +1004,7 @@ class Interface:
 			'MYVCARD': self.handle_event_myvcard,
 			'VCARD': self.handle_event_vcard,
 			'OS_INFO': self.handle_event_os_info,
+			'GC_NOTIFY': self.handle_event_gc_notify,
 			'GC_MSG': self.handle_event_gc_msg,
 			'GC_SUBJECT': self.handle_event_gc_subject,
 			'GC_CONFIG': self.handle_event_gc_config,
