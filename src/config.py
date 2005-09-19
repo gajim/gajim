@@ -2866,7 +2866,7 @@ class FirstTimeWizardWindow:
 			savepass = widgets['save_password_checkbutton'].get_active()
 			password = widgets['pass_entry'].get_text()
 			if self.check_data(user, server):
-				self.save_accoount(user, server, savepass, password, register_new)
+				self.save_account(user, server, savepass, password, register_new)
 				self.finish_label.set_text(finish_text)
 				self.xml.get_widget('cancel_button').hide()
 				self.back_button.hide()
