@@ -35,13 +35,7 @@ gtk.glade.textdomain (APP)
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class GajimThemesWindow:
-	def on_close_button_clicked(self, widget):
-		self.window.destroy()
 
-	def on_gajim_themes_window_destroy_event(self, widget):
-		''' save settings only on exit - this makes UI faster'''
-		self.plugin.save_config()
-	
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_themes_window', APP)
 		self.window = self.xml.get_widget('gajim_themes_window')
@@ -79,6 +73,9 @@ class GajimThemesWindow:
 		self.themes_tree.get_selection().connect('changed', 
 				self.selection_changed)
 		self.window.show_all()
+
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()
 
 	def on_theme_cell_edited(self, cell, row, new_name):
 		model = self.themes_tree.get_model()
@@ -250,10 +247,12 @@ class GajimThemesWindow:
 		# use faster functions for this
 		if self.current_option == 'banner':
 			self.plugin.roster.repaint_themed_widgets()
+			self.plugin.save_config()
 			return
 		if self.no_update:
 			return
 		self.plugin.roster.change_roster_style(self.current_option)
+		self.plugin.save_config()
 		
 	def _set_font(self):
 		''' set font value in prefs and update the UI '''
@@ -273,6 +272,7 @@ class GajimThemesWindow:
 		if self.no_update:
 			return
 		self.plugin.roster.change_roster_style(self.current_option)
+		self.plugin.save_config()
 	
 	def _toggle_font_widgets(self, font_props):
 		''' toggle font buttons with the bool values of font_props tuple'''
