@@ -4,6 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
+##	- Dimitur Kirov <dkirov@gmail.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -526,6 +527,23 @@ class RosterWindow:
 			show_offline_contacts_menuitem.set_sensitive(False)
 			profile_avatar_menuitem.set_sensitive(False)
 
+	def _change_style(self, model, path, iter, option):
+		if option is None:
+			model[iter][C_NAME] = model[iter][C_NAME]
+		elif model[iter][C_TYPE] == 'account':
+			if option == 'account':
+				model[iter][C_NAME] = model[iter][C_NAME]
+		elif model[iter][C_TYPE] == 'group':
+			if option == 'group':
+				model[iter][C_NAME] = model[iter][C_NAME]
+		elif model[iter][C_TYPE] == 'contact':
+			if option == 'contact':
+				model[iter][C_NAME] = model[iter][C_NAME]
+
+	def change_roster_style(self, option):
+		model = self.tree.get_model()
+		model.foreach(self._change_style, option)
+	
 	def draw_roster(self):
 		'''Clear and draw roster'''
 		self.tree.get_model().clear()
@@ -1908,11 +1926,15 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
+			else:
+				renderer.set_property('cell-background', None)
 			renderer.set_property('xalign', 0)
 		elif model[iter][C_TYPE] == 'group':
 			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
+			else:
+				renderer.set_property('cell-background', None)
 			renderer.set_property('xalign', 0.5)
 		else:
 			jid = model[iter][C_JID].decode('utf-8')
@@ -1925,6 +1947,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
 				if color:
 					renderer.set_property('cell-background', color)
+				else:
+					renderer.set_property('cell-background', None)
 			renderer.set_property('xalign', 1)
 		renderer.set_property('width', 20)
 	
@@ -1935,9 +1959,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			color = gajim.config.get_per('themes', theme, 'accounttextcolor')
 			if color:
 				renderer.set_property('foreground', color)
+			else:
+				renderer.set_property('foreground', None)
 			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
+			else:
+				renderer.set_property('cell-background', None)
 			renderer.set_property('font', 
 				gtkgui_helpers.get_theme_font_for_option(theme, 'accountfont'))
 			renderer.set_property('xpad', 0)
@@ -1946,9 +1974,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			color = gajim.config.get_per('themes', theme, 'grouptextcolor')
 			if color:
 				renderer.set_property('foreground', color)
+			else:
+				renderer.set_property('foreground', None)
 			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
+			else:
+				renderer.set_property('cell-background', None)
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
@@ -1958,6 +1990,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			color = gajim.config.get_per('themes', theme, 'contacttextcolor')
 			if color:
 				renderer.set_property('foreground', color)
+			else:
+				renderer.set_property('foreground', None)
 			if jid in gajim.newly_added[account]:
 				renderer.set_property('cell-background', '#adc3c6')
 			elif jid in gajim.to_be_removed[account]:
@@ -1966,6 +2000,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
 				if color:
 					renderer.set_property('cell-background', color)
+				else:
+					renderer.set_property('cell-background', None)
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
 			renderer.set_property('xpad', 8)
@@ -1977,10 +2013,14 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
+			else:
+				renderer.set_property('cell-background', None)
 		elif model[iter][C_TYPE] == 'group':
 			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
+			else:
+				renderer.set_property('cell-background', None)
 		else:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
@@ -1992,6 +2032,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
 				if color:
 					renderer.set_property('cell-background', color)
+				else:
+					renderer.set_property('cell-background', None)
 		#renderer.set_property('width', 20)
 		#renderer.set_property('xalign', 0)
 
@@ -2211,7 +2253,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		
 		render_image = cell_renderer_image.CellRendererImage() # show img or +-
 		col.pack_start(render_image, expand = False)
-		col.add_attribute(render_image, 'image', 0)
+		col.add_attribute(render_image, 'image', C_IMG)
 		col.set_cell_data_func(render_image, self.iconCellDataFunc, None)
 
 		render_text = gtk.CellRendererText() # contact or group or account name
@@ -2219,14 +2261,14 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		render_text.connect('editing-canceled', self.on_editing_canceled)
 		render_text.connect('editing-started', self.on_editing_started)
 		col.pack_start(render_text, expand = True)
-		col.add_attribute(render_text, 'text', 1) # where we hold the name
-		col.add_attribute(render_text, 'editable', 5)
+		col.add_attribute(render_text, 'text', C_NAME) # where we hold the name
+		col.add_attribute(render_text, 'editable', C_EDITABLE)
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
 
 		
 		render_pixbuf = gtk.CellRendererPixbuf() # tls or avatar img
 		col.pack_start(render_pixbuf, expand = False)
-		col.add_attribute(render_pixbuf, 'pixbuf', 6)
+		col.add_attribute(render_pixbuf, 'pixbuf', C_SECPIXBUF)
 		col.set_cell_data_func(render_pixbuf, self.fill_secondary_pixbuf_rederer,
 			None)
 

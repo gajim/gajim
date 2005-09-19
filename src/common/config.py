@@ -4,6 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
+##	- Dimitur Kirov <dkirov@gmail.com>
 ##
 ## Copyright (C) 2003-2005 Gajim Team
 ##
@@ -69,7 +70,7 @@ class Config:
 		'statusmsgcolor': [ opt_color, '#1eaa1e' ],
 		'markedmsgcolor': [ opt_color, '#ff8080' ],
 		'collapsed_rows': [ opt_str, '' ],
-		'roster_theme': [ opt_str, 'green' ],
+		'roster_theme': [ opt_str, 'GTK+' ],
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False ],
 		'sort_by_show': [ opt_bool, True ],
@@ -209,20 +210,20 @@ class Config:
 			'jid': [ opt_str, ''],
 		}, {}),
 		'themes': ({
-			'accounttextcolor': [ opt_color, 'white' ],
-			'accountbgcolor': [ opt_color, 'black' ],
+			'accounttextcolor': [ opt_color, 'black' ],
+			'accountbgcolor': [ opt_color, 'white' ],
 			'accountfont': [ opt_str, '' ],
-			'accountfontattrs': [ opt_str, '' ],
-			'grouptextcolor': [ opt_color, 'white' ],
-			'groupbgcolor': [ opt_color, 'black' ],
+			'accountfontattrs': [ opt_str, 'B' ],
+			'grouptextcolor': [ opt_color, 'black' ],
+			'groupbgcolor': [ opt_color, 'white' ],
 			'groupfont': [ opt_str, '' ],
-			'groupfontattrs': [ opt_str, '' ],
-			'contacttextcolor': [ opt_color, 'white' ],
-			'contactbgcolor': [ opt_color, 'black' ],
+			'groupfontattrs': [ opt_str, 'I' ],
+			'contacttextcolor': [ opt_color, 'black' ],
+			'contactbgcolor': [ opt_color, 'white' ],
 			'contactfont': [ opt_str, '' ],
 			'contactfontattrs': [ opt_str, '' ],
-			'bannertextcolor': [ opt_color, 'white' ],
-			'bannerbgcolor': [ opt_color, 'black' ],
+			'bannertextcolor': [ opt_color, 'black' ],
+			'bannerbgcolor': [ opt_color, '' ],
 
 			# http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html
 			# FIXME: not black but the default color from gtk+ theme
@@ -319,6 +320,7 @@ class Config:
 	}
 
 	themes_default = {
+		'GTK+': [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','' ],
 		'green': [ '#ffffff', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',
 					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#94aa8c' ],

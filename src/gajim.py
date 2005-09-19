@@ -1101,7 +1101,7 @@ class Interface:
 		#add default themes if there is not in the config file
 		theme = gajim.config.get('roster_theme')
 		if not theme in gajim.config.get_per('themes'):
-			gajim.config.set('roster_theme', 'green')
+			gajim.config.set('roster_theme', 'GTK+')
 		if len(gajim.config.get_per('themes')) == 0:
 			d = ['accounttextcolor', 'accountbgcolor', 'accountfont', 'accountfontattrs',
 				'grouptextcolor', 'groupbgcolor', 'groupfont', 'groupfontattrs', 
