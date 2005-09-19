@@ -340,7 +340,7 @@ class Connection:
 			if x.getNamespace() == common.xmpp.NS_MUC_USER:
 				is_gc = True
 			if x.getNamespace() == common.xmpp.NS_SIGNED:
-				sigTag = xtag
+				sigTag = x
 		jid_from = prs.getFrom()
 		who = unicode(jid_from)
 		jid_stripped = jid_from.getStripped()
