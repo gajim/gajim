@@ -1,4 +1,4 @@
-##	dialogs.py
+##	gtkexcepthook.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -77,6 +77,7 @@ def _info(type, value, tb):
 	expander.add(frame)
 	dialog.vbox.add(expander)
 
+	dialog.set_resizable(True)
 	dialog.set_position(gtk.WIN_POS_CENTER)
 	
 	# on expand the details the dialog remains centered on screen
