@@ -9639,6 +9639,23 @@ topic</property>
 				  <property name="fill">False</property>
 				</packing>
 			      </child>
+
+			      <child>
+				<widget class="GtkArrow" id="arrow">
+				  <property name="visible">True</property>
+				  <property name="arrow_type">GTK_ARROW_DOWN</property>
+				  <property name="shadow_type">GTK_SHADOW_OUT</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
 			    </widget>
 			  </child>
 			</widget>
@@ -11081,7 +11098,7 @@ Status message</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox2972">
+		<widget class="GtkHBox" id="buttons_hbox">
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
@@ -11147,6 +11164,23 @@ Status message</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
 				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkArrow" id="arrow">
+				  <property name="visible">True</property>
+				  <property name="arrow_type">GTK_ARROW_DOWN</property>
+				  <property name="shadow_type">GTK_SHADOW_OUT</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -11254,6 +11288,10 @@ Status message</property>
 		      <property name="expand">False</property>
 		      <property name="fill">False</property>
 		    </packing>
+		  </child>
+
+		  <child>
+		    <placeholder/>
 		  </child>
 		</widget>
 		<packing>
