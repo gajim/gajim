@@ -1632,6 +1632,12 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			if widget.props.urgency_hint:
 				widget.props.urgency_hint = False
 
+	def on_roster_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			if self.plugin.systray_enabled and not gajim.config.get('quit_on_roster_x_button'):
+				self.tooltip.hide_tooltip()
+				self.window.hide()
+
 	def quit_gtkgui_plugin(self):
 		'''When we quit the gtk plugin :
 		tell that to the core and exit gtk'''
