@@ -546,7 +546,10 @@ timestamp, contact):
 		# do not send nothing if we have chat state notifications disabled
 		# that means we won't reply to the <active/> from other peer
 		# so we do not broadcast jep85 capabalities
-		if gajim.config.get('chat_state_notifications') == 'disabled':
+		chatstate_setting = gajim.config.get('chat_state_notifications')
+		if chatstate_setting == 'disabled':
+			return
+		elif chatstate_setting == 'composing_only' and state != 'active' and state != 'composing':
 			return
 
 		if jid is None:
