@@ -343,11 +343,35 @@ class Chat:
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''
+		
+		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
+		self.actions_button = widget
+		
 		menu = self.prepare_context_menu()
 		self.popup_is_shown = True
 		menu.connect('deactivate', self.on_popup_deactivate)
-		menu.popup(None, None, None, 1, 0)
+		menu.popup(None, None, self.position_actions_menu, 1, 0)
+		#menu.popup(None, None, None, 1, 0)
 		menu.show_all()
+
+	def position_actions_menu(self, menu):
+		# here I get the coordinates of the button using
+		# translate_coordinates and by passing 0, 0 so I go from
+		# top-left of window (self.window) to top-left of button
+		button_x, button_y = \
+			self.actions_button.translate_coordinates(
+				self.window, 0, 0)
+		
+		# now convert them to X11-relative
+		window_x, window_y = self.window.window.get_origin()
+		x = window_x + button_x
+		y = window_y + button_y
+		
+		# now move the menu below the button
+		y += self.actions_button.allocation.height
+
+		push_in = True
+		return (x, y, push_in)
 
 	def remove_possible_switch_to_menuitems(self, menu):
 		''' remove duplicate 'Switch to' if they exist and return clean menu'''
