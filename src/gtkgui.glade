@@ -11088,34 +11088,6 @@ Status message</property>
 		  <property name="spacing">6</property>
 
 		  <child>
-		    <widget class="GtkButton" id="contact_button">
-		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Click to get contact's extended information</property>
-		      <property name="can_focus">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">True</property>
-		      <signal name="clicked" handler="on_contact_button_clicked" last_modification_time="Tue, 07 Jun 2005 19:49:24 GMT"/>
-
-		      <child>
-			<widget class="GtkImage" id="image612">
-			  <property name="visible">True</property>
-			  <property name="stock">gtk-dialog-info</property>
-			  <property name="icon_size">4</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
-		  </child>
-
-		  <child>
 		    <widget class="GtkButton" id="actions_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>

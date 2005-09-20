@@ -113,12 +113,10 @@ timestamp, contact):
 						contact, path)
 
 	def draw_widgets(self, contact):
-		"""draw the widgets in a tab (status_image, contact_button ...)
+		"""draw the widgets in a tab (f.e. gpg togglebutton)
 		according to the the information in the contact variable"""
 		jid = contact.jid
 		self.set_state_image(jid)
-		contact_button = self.xmls[jid].get_widget('contact_button')
-		contact_button.set_use_underline(False)
 		tb = self.xmls[jid].get_widget('gpg_togglebutton')
 		if contact.keyID: # we can do gpg
 			tb.set_sensitive(True)
@@ -682,7 +680,7 @@ timestamp, contact):
 			message_buffer.set_text('')
 			self.print_conversation(message, jid, jid, encrypted = encrypted)
 
-	def on_contact_button_clicked(self, widget):
+	def on_contact_information_menuitem_clicked(self, widget):
 		jid = self.get_active_jid()
 		contact = self.contacts[jid]
 		self.plugin.roster.on_info(widget, contact, self.account)
