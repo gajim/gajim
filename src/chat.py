@@ -354,12 +354,9 @@ class Chat:
 		menu.show_all()
 
 	def position_actions_menu(self, menu):
-		# here I get the coordinates of the button using
-		# translate_coordinates and by passing 0, 0 so I go from
-		# top-left of window (self.window) to top-left of button
-		button_x, button_y = \
-			self.actions_button.translate_coordinates(
-				self.window, 0, 0)
+		# here I get the coordinates of the button relative to
+		# window (self.window)
+		button_x, button_y = self.actions_button.allocation.x, self.actions_button.allocation.y
 		
 		# now convert them to X11-relative
 		window_x, window_y = self.window.window.get_origin()
