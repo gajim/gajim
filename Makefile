@@ -113,7 +113,7 @@ install:
 		chmod +x "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 	done
 
-gajim.desktop:
+gajim.desktop: gajim.desktop.in
 	intltool-merge -d po gajim.desktop.in gajim.desktop
 
 #
@@ -121,16 +121,17 @@ gajim.desktop:
 #
 help:
 	@echo Usage:
-	@echo make					- builds all modules
-	@echo make clean			- delete built modules and object files
-	@echo make install		- install binaries into the official directories
-	@echo make uninstall		- uninstall binaries from the official directories
-	@echo make help			- prints this help
-	@echo 
-	@echo make trayicon		- makes only trayicon module
-	@echo make idle			- makes only idle detection module
+	@echo make		- builds all modules
+	@echo make clean	- delete built modules and object files
+	@echo make install	- install binaries into the official directories
+	@echo make uninstall	- uninstall binaries from the official directories
+	@echo make help		- prints this help
+	@echo
+	@echo make trayicon	- makes only trayicon module
+	@echo make idle		- makes only idle detection module
 	@echo make translation	- makes only translation \(mo files\)
-	@echo make gtkspell		- makes only gtkspell detection module
+	@echo make gtkspell	- makes only gtkspell detection module
+	@echo make tags		- makes 'tags' file for use with ctags
 	@echo
 
 #
@@ -148,3 +149,10 @@ uninstall:
 	rm -f	"$(DESTDIR)$(PREFIX)/share/applications/gajim.desktop" #the desktop
 	find "$(DESTDIR)$(PREFIX)/share/locale" -name 'gajim.mo' -exec rm {} \; #the .mo files
 	@echo done uninstalling
+
+tags:
+	-rm tags
+	exuberant-ctags -R
+
+.PHONY: all translation trayicon gtkspell idle clean dist install help\
+	uninstall tags
