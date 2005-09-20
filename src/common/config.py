@@ -126,7 +126,6 @@ class Config:
 		'always_english_wiktionary': [opt_bool, False],
 		'use_dbus': [opt_bool, True, _('Allow controlling Gajim via D-Bus service.')],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
-		'chat_state_send_inactive_on_focus_out': [opt_bool, True, _('Should Gajim send inactive ("is doing something else") on just focus out of window/switch to another tab?')],
 		'autodetect_browser_mailer': [opt_bool, True],
 		'print_ichat_every_foo_minutes': [opt_int, 5],
 		'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],

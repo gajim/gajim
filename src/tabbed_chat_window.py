@@ -307,15 +307,6 @@ timestamp, contact):
 		if window_state is None:
 			return
 		
-		# focus-out is also emitted by showing context menu
-		# so check to see if we're really not paying attention to window/tab
-		# NOTE: if the user changes tab, switch-tab sends inactive to the tab
-		# we are leaving so we just send to active tab here
-		if self.popup_is_shown is False and gajim.config.get('chat_state_send_inactive_on_focus_out'):
-			# we are outside of the window
-			# so no context menu, so send 'inactive' to active tab
-			self.send_chatstate('inactive')
-		
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
