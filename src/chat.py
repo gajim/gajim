@@ -69,9 +69,6 @@ class Chat:
 		self.sent_history_pos = {}
 		self.typing_new = {}
 		self.orig_msg = {}
-		
-		# we check that on opening new windows
-		self.always_compact_view = gajim.config.get('always_compact_view')
 
 		# notebook customizations
 		self.notebook = self.xml.get_widget('chat_notebook')

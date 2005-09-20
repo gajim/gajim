@@ -119,7 +119,8 @@ class Config:
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25, _('How many lines to store for key up.')],
 		'version': [ opt_str, '0.9' ], # which version created the config
-		'always_compact_view': [opt_bool, False], # initial compact view state
+		'always_compact_view_chat': [opt_bool, False, _('Use compact view when you open a chat window')],
+		'always_compact_view_gc': [opt_bool, False, _('Use compact view when you open a group chat window')],
 		'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
 		'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
 		'always_english_wikipedia': [opt_bool, False],

@@ -46,6 +46,8 @@ GTKGUI_GLADE = 'gtkgui.glade'
 class GroupchatWindow(chat.Chat):
 	"""Class for Groupchat window"""
 	def __init__(self, room_jid, nick, plugin, account):
+		# we check that on opening new windows
+		self.always_compact_view = gajim.config.get('always_compact_view_gc')
 		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
 		
 		# alphanum sorted

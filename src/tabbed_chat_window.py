@@ -44,6 +44,8 @@ GTKGUI_GLADE = 'gtkgui.glade'
 class TabbedChatWindow(chat.Chat):
 	"""Class for tabbed chat window"""
 	def __init__(self, user, plugin, account):
+		# we check that on opening new windows
+		self.always_compact_view = gajim.config.get('always_compact_view_chat')
 		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
 		self.contacts = {}
 		# keep check for possible paused timeouts per jid
