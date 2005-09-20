@@ -386,7 +386,7 @@ class Interface:
 					contact.chatstate = 'active' # no more
 				
 				chat_win.handle_incoming_chatstate(account, jid, chatstate)
-			else:
+			elif contact.chatstate != 'active':
 				# got no valid jep85 answer, peer does not support it
 				contact.chatstate = False
 		else:
