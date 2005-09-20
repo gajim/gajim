@@ -351,7 +351,6 @@ class Chat:
 		self.popup_is_shown = True
 		menu.connect('deactivate', self.on_popup_deactivate)
 		menu.popup(None, None, self.position_actions_menu, 1, 0)
-		#menu.popup(None, None, None, 1, 0)
 		menu.show_all()
 
 	def position_actions_menu(self, menu):
@@ -370,6 +369,7 @@ class Chat:
 		# now move the menu below the button
 		y += self.actions_button.allocation.height
 
+		# push_in is True so all menu is always inside screen
 		push_in = True
 		return (x, y, push_in)
 
