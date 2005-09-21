@@ -26,6 +26,10 @@ import sys
 import pygtk
 import os
 
+from common import i18n
+i18n.init()
+_ = i18n._
+
 try:
 	import gtk
 except RuntimeError, msg:
@@ -52,10 +56,6 @@ import time
 
 from common import socks5
 import gtkgui_helpers
-
-from common import i18n
-i18n.init()
-_ = i18n._
 
 import common.sleepy
 import check_for_new_version
