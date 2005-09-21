@@ -99,13 +99,15 @@ class AdvancedConfigurationWindow:
 	
 	def on_advanced_treeview_selection_changed(self, treeselection):
 		iter = treeselection.get_selected()
-		# Get text from first column in this row
-		opt = iter[0][iter[1]][0]
-		desc = gajim.config.get_desc(opt)
-		if desc:
-			self.desc_label.set_text(_(desc))
-		else:
-			self.desc_label.set_text(_('(None)'))
+		# Check for GtkTreeIter
+		if iter[1]:
+			# Get text from first column in this row
+			opt = iter[0][iter[1]][0]
+			desc = gajim.config.get_desc(opt)
+			if desc:
+				self.desc_label.set_text(_(desc))
+			else:
+				self.desc_label.set_text(_('(None)'))
 	
 	def on_advanced_treeview_row_activated(self, treeview, path, column):
 		modelpath = self.modelfilter.convert_path_to_child_path(path)
