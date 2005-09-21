@@ -147,6 +147,8 @@ class Chat:
 			if self.widget_name == 'tabbed_chat_window':
 				c = gajim.get_first_contact_instance_from_jid(self.account, jid)
 				if c is None: # FIXME: I don't know why but c can be None!
+					# FIXME: let's find out
+					assert(False)
 					add = ''
 				else:
 					add = c.name
