@@ -1634,7 +1634,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 
 	def on_roster_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
-			if self.plugin.systray_enabled and not gajim.config.get('quit_on_roster_x_button'):
+			treeselection = self.tree.get_selection()
+			model, iter = treeselection.get_selected()
+			if not iter and self.plugin.systray_enabled and not gajim.config.get('quit_on_roster_x_button'):
 				self.tooltip.hide_tooltip()
 				self.window.hide()
 
