@@ -1,7 +1,7 @@
 # German translations for gajim package.
 # Copyright (C) 2005 THE gajim'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gajim package.
-# Fridtjof Busse <fridtjof@fbunet.de>, 2005.
+# Fridtjof Busse <fbusse@gmx.de>, 2005.
 #
 msgid ""
 msgstr ""
@@ -10,7 +10,7 @@ msgstr ""
 "POT-Creation-Date: 2005-02-06 13:07+0700\n"
 "PO-Revision-Date: 2005-09-21 07:46+0200\n"
 "Last-Translator: Fridtjof Busse <fbusse@gmx.de>\n"
-"Language-Team: German <de@li.org>\n"
+"Language-Team: German <translators@gajim.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,7 +38,7 @@ msgstr ""
 
 #: ../src/common/config.py:50
 msgid "Time in minutes, after which your status changes to away."
-msgstr "Zeit in Minutne, nach der Ihr Status auf abwesend gesetzt wird"
+msgstr "Zeit in Minuten, nach der Ihr Status auf abwesend gesetzt wird"
 
 #: ../src/common/config.py:51
 msgid "Away as a result of being idle"
@@ -46,7 +46,7 @@ msgstr "Abwesend, da untätig"
 
 #: ../src/common/config.py:53
 msgid "Time in minutes, after which your status changes to not available."
-msgstr "Zeit in Minuten, nach der Ihr status auf nicht verfügbar gesetzt wird."
+msgstr "Zeit in Minuten, nach der Ihr Status auf nicht verfügbar gesetzt wird."
 
 #: ../src/common/config.py:54
 msgid "Not available as a result of being idle"
@@ -80,11 +80,11 @@ msgid ""
 "Client default behaviour)."
 msgstr ""
 "Sende Nachricht mit Strg+Enter und mache bei Enter einen Zeilenumbruch "
-"(Mirabilies ICQ-Client Standardeinstellung)."
+"(Mirabilis ICQ-Client Standardeinstellung)."
 
 #: ../src/common/config.py:119
 msgid "How many lines to store for key up."
-msgstr ""
+msgstr "Wie viele Zeilen im Scrollpuffer gespeichert werden."
 
 #: ../src/common/config.py:123
 #, python-format
@@ -93,7 +93,7 @@ msgid ""
 "which means use wiktionary."
 msgstr ""
 "Entweder eine spezielle URL mit %s, wobei %s das Word/Phrase ist oder 'WIKTIONARY', "
-"was bedeutet, dass ein wiktionary verwendet wird."
+"was bedeutet, dass ein Wörterbuch verwendet wird."
 
 #: ../src/common/config.py:126
 msgid "Allow controlling Gajim via D-Bus service."
@@ -106,7 +106,7 @@ msgid ""
 "of window/switch to another tab?"
 msgstr ""
 "Soll Gajim Inaktivitätsbenachrichtungen von Tabs im Fokus an andere Fenster/"
-"wechsele in anderes Tab?"
+"Tabs senden?"
 
 #: ../src/common/config.py:131
 msgid "Ask before closing a group chat tab/window."
@@ -127,7 +127,7 @@ msgstr "IEC-Standard sagt KiB = 1024 Byte, KB = 1000 Byte."
 
 #: ../src/common/config.py:144
 msgid "Show tab when only one conversation?"
-msgstr "Tab bei nur einer Unterhaltung anzeigen"
+msgstr "Tab bei einer einzelnen Unterhaltung anzeigen?"
 
 #: ../src/common/config.py:145
 msgid "Show tab border if one conversation?"
@@ -984,7 +984,7 @@ msgstr "Ein GTK Jabber-Client"
 
 #: ../src/dialogs.py:421
 msgid "translator-credits"
-msgstr "Ins Deutsche übersetzt von Christoph Neuroth, Fabian Neumann und Fridtjof Busse"
+msgstr "Ins Deutsche übersetzt von Fridtjof Busse"
 
 #: ../src/dialogs.py:558
 #, python-format
@@ -3177,11 +3177,11 @@ msgstr "_Beenden"
 
 #: ../src/gtkgui.glade.h:331
 msgid "_Group Chat"
-msgstr "_Gruppen Chat"
+msgstr "_Gruppenchat"
 
 #: ../src/gtkgui.glade.h:332
 msgid "_Help"
-msgstr "Hilfe"
+msgstr "_Hilfe"
 
 #: ../src/gtkgui.glade.h:333
 msgid "_Highlight misspelled words"
@@ -3202,7 +3202,7 @@ msgstr "_Info/Query"
 
 #: ../src/gtkgui.glade.h:338
 msgid "_Icon in systray (aka. notification area)"
-msgstr "_Symbol im Systemabschnitt (Benachrichtigungs-Bereich)"
+msgstr "Symbol im Systemabschn_itt (Benachrichtigungs-Bereich)"
 
 #: ../src/gtkgui.glade.h:339
 msgid "_Ignore events from contacts not in the roster"
@@ -3218,7 +3218,7 @@ msgstr "_Betreten"
 
 #: ../src/gtkgui.glade.h:342
 msgid "_Join New Room..."
-msgstr "Neuern Raum betreten"
+msgstr "_Neuen Raum betreten"
 
 #: ../src/gtkgui.glade.h:343
 msgid "_Kick"
