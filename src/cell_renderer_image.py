@@ -30,6 +30,7 @@ class CellRendererImage(gtk.GenericCellRenderer):
 	def __init__(self):
 		self.__gobject_init__()
 		self.image = None
+		self.iters = {}
 
 	def do_set_property(self, pspec, value):
 		setattr(self, pspec.name, value)
@@ -49,15 +50,15 @@ class CellRendererImage(gtk.GenericCellRenderer):
 		if image.get_storage_type() != gtk.IMAGE_ANIMATION:
 			return
 		self.redraw = 0
-		image.get_data('iter').advance()
+		iter = self.iters[image]
+		iter.advance()
 		model = tree.get_model()
 		model.foreach(self.func, (image, tree))
 		if self.redraw:
-			i = image.get_data('iter')
-			gobject.timeout_add(i.get_delay_time(),
+			gobject.timeout_add(iter.get_delay_time(),
 					self.animation_timeout, tree, image)
-		else:
-			image.set_data('iter', None)
+		elif image in self.iters:
+			del self.iters[image]
 				
 	def on_render(self, window, widget, background_area, cell_area,
 					expose_area, flags):
@@ -65,7 +66,7 @@ class CellRendererImage(gtk.GenericCellRenderer):
 			return
 		pix_rect = gtk.gdk.Rectangle()
 		pix_rect.x, pix_rect.y, pix_rect.width, pix_rect.height = \
-					self.on_get_size(widget, cell_area)
+			self.on_get_size(widget, cell_area)
 
 		pix_rect.x += cell_area.x
 		pix_rect.y += cell_area.y
@@ -76,15 +77,14 @@ class CellRendererImage(gtk.GenericCellRenderer):
 		draw_rect = expose_area.intersect(draw_rect)
 
 		if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
-			if not self.image.get_data('iter'):
+			if self.image not in self.iters:
 				animation = self.image.get_animation()
-				self.image.set_data('iter', animation.get_iter())
-				i = self.image.get_data('iter')
-				gobject.timeout_add(i.get_delay_time(),
-						self.animation_timeout,
-						widget, self.image)
+				iter =  animation.get_iter()
+				self.iters[self.image] = iter
+				gobject.timeout_add(iter.get_delay_time(),
+					self.animation_timeout, widget, self.image)
 
-			pix = self.image.get_data('iter').get_pixbuf()
+			pix = self.iters[self.image].get_pixbuf()
 		elif self.image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			pix = self.image.get_pixbuf()
 		else:

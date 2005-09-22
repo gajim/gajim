@@ -41,6 +41,14 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
+#(status_image, type, nick, shown_nick)
+(
+C_IMG, # image to show state (online, new message etc)
+C_TYPE, # type of the row ('contact' or 'group')
+C_NICK, # contact nickame or group name
+C_SHOWN, # text shown in the cellrenderer
+) = range(4)
+
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class GroupchatWindow(chat.Chat):
@@ -93,10 +101,12 @@ class GroupchatWindow(chat.Chat):
 
 		# get size and position from config
 		if gajim.config.get('saveposition'):
-			gtkgui_helpers.move_window(self.window, gajim.config.get('gc-x-position'),
+			gtkgui_helpers.move_window(self.window,
+				gajim.config.get('gc-x-position'),
 				gajim.config.get('gc-y-position'))
-			gtkgui_helpers.resize_window(self.window, gajim.config.get('gc-width'),
-					gajim.config.get('gc-height'))
+			gtkgui_helpers.resize_window(self.window,
+				gajim.config.get('gc-width'),
+				gajim.config.get('gc-height'))
 		self.window.show_all()
 
 	def save_var(self, room_jid):
@@ -206,8 +216,8 @@ class GroupchatWindow(chat.Chat):
 		new_jid = gtkgui_helpers.escape_for_pango_markup(new_jid)
 
 		name_label = self.name_labels[new_jid]
-		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s' %\
-					(new_jid, subject))
+		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s'\
+			% (new_jid, subject))
 		event_box = name_label.get_parent()
 		if subject == '':
 			subject = _('This room has no subject')
@@ -222,7 +232,8 @@ class GroupchatWindow(chat.Chat):
 		if not iter:
 			return None
 		while not fin:
-			role_name = model.get_value(iter, 1).decode('utf-8')
+			# FIXME: why decode ?
+			role_name = model[iter][C_NICK].decode('utf-8')
 			if role == role_name:
 				return iter
 			iter = model.iter_next(iter)
@@ -242,7 +253,7 @@ class GroupchatWindow(chat.Chat):
 			if not user_iter:
 				fin2 = True
 			while not fin2:
-				if nick == model.get_value(user_iter, 1).decode('utf-8'):
+				if nick == model[user_iter][C_NICK].decode('utf-8'):
 					return user_iter
 				user_iter = model.iter_next(user_iter)
 				if not user_iter:
@@ -288,9 +299,10 @@ class GroupchatWindow(chat.Chat):
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(self.plugin.roster.jabber_state_images['closed'], role,
+				(self.plugin.roster.jabber_state_images['closed'], 'role', role,
 				'<b>%s</b>' % role_name))
-		iter = model.append(role_iter, (image, nick, self.escape(nick)))
+		iter = model.append(role_iter, (image, 'contact', nick,
+			self.escape(nick)))
 		gajim.gc_contacts[self.account][room_jid][nick] = \
 			Contact(jid = j, name = nick, show = show, resource = resource,
 			role = role, affiliation = affiliation, status = status)
@@ -318,11 +330,11 @@ class GroupchatWindow(chat.Chat):
 				if not user_iter:
 					continue
 				while user_iter:
-					nick = model.get_value(user_iter, 1).decode('utf-8')
+					nick = model[user_iter][C_NICK].decode('utf-8')
 					show = gajim.gc_contacts[self.account][room_jid][nick].show
 					state_images = roster.get_appropriate_state_images(room_jid)
 					image = state_images[show] #FIXME: always Jabber why?
-					model.set_value(user_iter, 0, image)
+					model[user_iter][C_IMG] = image
 					user_iter = model.iter_next(user_iter)
 				role_iter = model.iter_next(role_iter)
 
@@ -393,7 +405,7 @@ class GroupchatWindow(chat.Chat):
 					roster = self.plugin.roster
 					state_images = roster.get_appropriate_state_images(jid)
 					image = state_images[show]
-					model.set_value(iter, 0, image)
+					model[iter][C_IMG] = image
 		if (time.time() - self.room_creation[room_jid]) > 30 and \
 				nick != self.nicks[room_jid] and statusCode != '303':
 			if show == 'offline':
@@ -461,7 +473,8 @@ class GroupchatWindow(chat.Chat):
 			if bookmark['jid'] == bm['jid']:
 				dialogs.ErrorDialog(
 					_('Bookmark already set'),
-					_('Room "%s" is already in your bookmarks.') %bm['jid']).get_response()
+					_('Room "%s" is already in your bookmarks.') %bm['jid']).\
+						get_response()
 				return
 
 		gajim.connections[self.account].bookmarks.append(bm)
@@ -482,7 +495,8 @@ class GroupchatWindow(chat.Chat):
 			'conversation_textview')
 		message_buffer = widget.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
-		message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+		message = message_buffer.get_text(start_iter, end_iter,
+			False).decode('utf-8')
 
 		if event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
 			if (event.state & gtk.gdk.CONTROL_MASK): # CTRL + SHIFT + TAB  
@@ -493,7 +507,8 @@ class GroupchatWindow(chat.Chat):
 			else:
 				cursor_position = message_buffer.get_insert()
 				end_iter = message_buffer.get_iter_at_mark(cursor_position)
-				text = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+				text = message_buffer.get_text(start_iter, end_iter,
+					False).decode('utf-8')
 				if not text or text.endswith(' '):
 					if not self.last_key_tabs[room_jid]: # if we are nick cycling, last char will always be space
 						return False
@@ -536,7 +551,7 @@ class GroupchatWindow(chat.Chat):
 					else:
 						self.nick_hits[room_jid] = [] # clear the hit list
 						list_nick = self.get_nick_list(room_jid)
-						for nick in list_nick: 
+						for nick in list_nick:
 							if nick.lower().startswith(begin.lower()): # the word is the begining of a nick
 								self.nick_hits[room_jid].append(nick)
 					if len(self.nick_hits[room_jid]):
@@ -555,7 +570,8 @@ class GroupchatWindow(chat.Chat):
 							start_iter.backward_chars(len(begin))
 
 						message_buffer.delete(start_iter, end_iter)
-						message_buffer.insert_at_cursor(self.nick_hits[room_jid][0] + add)
+						message_buffer.insert_at_cursor(self.nick_hits[room_jid][0] \
+							+ add)
 						self.last_key_tabs[room_jid] = True
 						return True
 				self.last_key_tabs[room_jid] = False
@@ -619,7 +635,7 @@ class GroupchatWindow(chat.Chat):
 			
 			if message.startswith('/') and not message.startswith('/me'):
 				message = message[1:]
-				message_array = message.split(' ',1)
+				message_array = message.split(' ', 1)
 				command = message_array.pop(0).lower()
 				if command == 'clear':
 					# clear the groupchat window
@@ -646,7 +662,8 @@ class GroupchatWindow(chat.Chat):
 						if nick in nicks:
 							self.on_send_pm(nick = nick)
 						else:
-							self.print_conversation(_('Nickname not found: %s') % nick, room_jid)
+							self.print_conversation(_('Nickname not found: %s') % nick,
+								room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'msg':
@@ -660,7 +677,8 @@ class GroupchatWindow(chat.Chat):
 							privmsg = ' '.join(message_array)
 							self.on_send_pm(nick=nick, msg=privmsg)
 						else:
-							self.print_conversation(_('Nickname not found: %s') % nick, room_jid)
+							self.print_conversation(_('Nickname not found: %s') % nick,
+								room_jid)
 					else:
 						self.get_command_help(command)
 				elif command == 'topic':
@@ -669,7 +687,8 @@ class GroupchatWindow(chat.Chat):
 					# /topic foo : change topic to foo
 					if len(message_array):
 						new_topic = message_array.pop(0)
-						gajim.connections[self.account].send_gc_subject(room_jid, new_topic)
+						gajim.connections[self.account].send_gc_subject(room_jid,
+							new_topic)
 					else:
 						self.print_conversation(self.subjects[room_jid], room_jid)
 				elif command == 'invite':
@@ -680,7 +699,8 @@ class GroupchatWindow(chat.Chat):
 						invitee = message_array.pop(0)
 						if invitee.find('@') >= 0:
 							reason = ' '.join(message_array)
-							gajim.connections[self.account].send_invite(room_jid, invitee, reason)
+							gajim.connections[self.account].send_invite(room_jid,
+								invitee, reason)
 							s = _('Invited %(contact_jid)s to %(room_jid)s.') % {
 								'contact_jid': invitee,
 								'room_jid': room_jid}
@@ -704,11 +724,13 @@ class GroupchatWindow(chat.Chat):
 								nick = ''
 							#join_gc window is needed in order to provide for password entry.
 							if self.plugin.windows[self.account].has_key('join_gc'):
-								self.plugin.windows[self.account]['join_gc'].window.present()
+								self.plugin.windows[self.account]['join_gc'].\
+									window.present()
 							else:
 								try:
 									self.plugin.windows[self.account]['join_gc'] =\
-										dialogs.JoinGroupchatWindow(self.plugin, self.account,
+										dialogs.JoinGroupchatWindow(self.plugin,
+											self.account,
 											server = server, room = room, nick = nick)
 								except RuntimeError:
 									pass
@@ -962,7 +984,7 @@ current room topic.') % command, room_jid)
 		'''opens a chat window and msg is not None sends private message to a 
 		contact in a room'''
 		if nick is None:
-			nick = model[iter][1].decode('utf-8')
+			nick = model[iter][C_NICK].decode('utf-8')
 		room_jid = self.get_active_jid()
 		fjid = gajim.construct_fjid(room_jid, nick) # 'fake' jid
 		if not self.plugin.windows[self.account]['chats'].has_key(fjid):
@@ -1011,7 +1033,7 @@ current room topic.') % command, room_jid)
 	def mk_menu(self, room_jid, event, iter):
 		'''Make contact's popup menu'''
 		model = self.list_treeview[room_jid].get_model()
-		nick = model[iter][1].decode('utf-8')
+		nick = model[iter][C_NICK].decode('utf-8')
 		c = gajim.gc_contacts[self.account][room_jid][nick]
 		jid = c.jid
 		target_affiliation = c.affiliation
@@ -1163,8 +1185,8 @@ current room topic.') % command, room_jid)
 		xm.signal_autoconnect(self)
 		self.gc_popup_menu = xm.get_widget('gc_popup_menu')
 
-		#status_image, nickname, shown_nick
-		store = gtk.TreeStore(gtk.Image, str, str)
+		#status_image, type, nickname, shown_nick
+		store = gtk.TreeStore(gtk.Image, str, str, str)
 		store.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		column = gtk.TreeViewColumn('contacts')
 		renderer_image = cell_renderer_image.CellRendererImage()
@@ -1219,14 +1241,14 @@ current room topic.') % command, room_jid)
 				self.tooltip.hide_tooltip()
 				return
 			room_jid = self.get_active_jid()
-			nick = model[iter][1].decode('utf-8')
-			# FIXME: UGLY!!!! see http://trac.gajim.org/ticket/920
-			if nick != 'moderator' and nick != 'participant':
+			typ = model[iter][C_TYPE].decode('utf-8')
+			if typ == 'contact':
 				account = self.account
 				
-				img = model[iter][0]
+				img = model[iter][C_IMG]
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
+					nick = model[iter][C_NICK].decode('utf-8')
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, gajim.gc_contacts[account][room_jid][nick])
 		
@@ -1296,7 +1318,7 @@ current room topic.') % command, room_jid)
 			model = widget.get_model()
 			iter = model.get_iter(path)
 			if len(path) == 2:
-				nick = model[iter][1].decode('utf-8')
+				nick = model[iter][C_NICK].decode('utf-8')
 				fjid = gajim.construct_fjid(room_jid, nick)
 				if not self.plugin.windows[self.account]['chats'].has_key(fjid):
 					show = gajim.gc_contacts[self.account][room_jid][nick].show
@@ -1317,7 +1339,7 @@ current room topic.') % command, room_jid)
 
 			model = widget.get_model()
 			iter = model.get_iter(path)
-			nick = model[iter][1].decode('utf-8')
+			nick = model[iter][C_NICK].decode('utf-8')
 			if not nick in gajim.gc_contacts[self.account][room_jid]: #it's a group
 				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 					if (widget.row_expanded(path)):
@@ -1340,7 +1362,7 @@ current room topic.') % command, room_jid)
 				widget.expand_row(path, False)
 		else: # We want to send a private message
 			room_jid = self.get_active_jid()
-			nick = model[iter][1].decode('utf-8')
+			nick = model[iter][C_NICK].decode('utf-8')
 			fjid = gajim.construct_fjid(room_jid, nick)
 			if not self.plugin.windows[self.account]['chats'].has_key(fjid):
 				show = gajim.gc_contacts[self.account][room_jid][nick].show
@@ -1354,10 +1376,10 @@ current room topic.') % command, room_jid)
 		"""When a row is expanded: change the icon of the arrow"""
 		model = widget.get_model()
 		image = self.plugin.roster.jabber_state_images['opened']
-		model.set_value(iter, 0, image)
+		model[iter][C_IMG] = image
 	
 	def on_list_treeview_row_collapsed(self, widget, iter, path):
 		"""When a row is collapsed: change the icon of the arrow"""
 		model = widget.get_model()
 		image = self.plugin.roster.jabber_state_images['closed']
-		model.set_value(iter, 0, image)
+		model[iter][C_IMG] = image
