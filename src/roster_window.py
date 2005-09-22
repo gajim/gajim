@@ -712,7 +712,7 @@ class RosterWindow:
 							if not show:
 								show = 'online'
 							contact = Contact(jid=jid, name=account, 
-								show=roster.getShow(jid+'/'+resource),
+								show=show,
 								status=roster.getStatus(jid+'/'+resource), resource=resource, 
 								priority=roster.getPriority(jid+'/'+resource))
 							contacts.append(contact)
