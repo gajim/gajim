@@ -44,6 +44,24 @@ elif gtk.gtk_version < (2, 6, 0):
 	print >> sys.stderr, _('Gajim needs GTK 2.6+ to run. Quiting...')
 	sys.exit()
 
+try:
+	import gtk.glade # check if user has libglade (in pygtk and in gtk)
+except ImportError:
+	pritext = _('GTK+ runtime is missing libglade support')
+	if os.name == 'nt':
+		sectext = _('Please download remove your current GTK+ runtime and install the latest stable version from %s') % 'http://gladewin32.sourceforge.net'
+	else:
+		sectext = _('Please make sure that gtk and pygtk have libglade support in your system.')
+	
+	dlg = gtk.MessageDialog(None, 
+				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
+				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = pritext)
+
+	dlg.format_secondary_text(sectext)
+	dlg.run()
+	dlg.destroy()
+	sys.exit()
+
 import gtkexcepthook
 import gobject
 if sys.version[:4] >= '2.4':
@@ -1249,7 +1267,7 @@ if __name__ == '__main__':
 		if path_to_gajim_script:
 			argv = [path_to_gajim_script]
 			cli.set_restart_command(len(argv), argv)
-	
+
 	try:
 		import gconf
 		# in try because daemon may not be there
