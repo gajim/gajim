@@ -447,17 +447,16 @@ class Dialog(gtk.Dialog):
 		return index < len(buttons) and buttons[index] or None
 
 class HigDialog(gtk.MessageDialog):
-	def __init__(self, parent, type, buttons, primary, secondary):
+	def __init__(self, parent, type, buttons, pritext, sectext):
 		gtk.MessageDialog.__init__(self, parent, 
 				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-				type, buttons, message_format = primary)
+				type, buttons, message_format = pritext)
 
-		self.format_secondary_text(secondary)
+		self.format_secondary_text(sectext)
 
 	def get_response(self):
 		self.show_all()
 		response = self.run()
-		#response = gtk.Dialog.run(self)
 		self.destroy()
 		return response
 
