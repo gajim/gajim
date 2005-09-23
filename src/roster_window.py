@@ -1518,6 +1518,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		no_queue = True
 		if qs.has_key(jid):
 			no_queue = False
+
+		# We print if window is opened
 		if self.plugin.windows[account]['chats'].has_key(jid):
 			typ = ''
 			if msg_type == 'error':
@@ -1534,7 +1536,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if (not autopopup or ( not autopopupaway and \
 			gajim.connections[account].connected > 2)) and not \
 			self.plugin.windows[account]['chats'].has_key(jid):
-			if no_queue: #We didn't have a queue: we change icons
+			if no_queue: # We didn't have a queue: we change icons
 				model = self.tree.get_model()
 				self.draw_contact(jid, account)
 				if self.plugin.systray_enabled:

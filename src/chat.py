@@ -318,7 +318,7 @@ class Chat:
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			#we are at the end
 			if self.nb_unread[jid] > 0:
-				self.nb_unread[jid] = 0
+				self.nb_unread[jid] = 0 + self.get_specific_unread(jid)
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(jid, self.account)

@@ -373,22 +373,26 @@ class Interface:
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
 
+		show_notification = False
+		if gajim.config.get('notify_on_new_message'):
+			# check OUR status and if we allow notifications for that status
+			if gajim.config.get('autopopupaway'): # always show notification
+				show_notification = True
+			elif gajim.connections[account].connected in (2, 3): # we're online or chat
+				show_notification = True
+
 		if self.windows[account]['gc'].has_key(jid): # it's a Private Message
 			nick = array[0].split('/', 1)[1]
 			fjid = jid + '/' + nick
-			if self.windows[account]['chats'].has_key(fjid):
-				chat_win = self.windows[account]['chats'][fjid]
-				chat_win.print_conversation(array[1], fjid, tim = array[2])
-				return
-			qs = gajim.awaiting_messages[account]
-			if not qs.has_key(fjid):
-				qs[fjid] = []
-			qs[fjid].append((array[1], 'incoming', array[2], array[3]))
-			self.roster.nb_unread += 1
-			show = gajim.gc_contacts[account][jid][nick].show
-			c = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
-				ask = 'none')
-			self.roster.new_chat(c, account)
+			if not self.windows[account]['chats'].has_key(fjid) and \
+				not gajim.awaiting_messages[account].has_key(fjid):
+				if show_notification:
+					instance = dialogs.PopupNotificationWindow(self,
+						_('New Private Message'), fjid, account, 'pm')
+					self.roster.popup_notification_windows.append(instance)
+
+			self.windows[account]['gc'][jid].on_private_message(jid, nick,
+				array[1], array[2])
 			return
 				
 		if gajim.config.get('ignore_unknown_contacts') and \
@@ -661,19 +665,19 @@ class Interface:
 				self.remote.raise_signal('GCPresence', (account, array))
 
 	def handle_event_gc_msg(self, account, array):
-		#('GC_MSG', account, (jid, msg, time))
+		# ('GC_MSG', account, (jid, msg, time))
 		jids = array[0].split('/', 1)
-		jid = jids[0]
-		if not self.windows[account]['gc'].has_key(jid):
+		room_jid = jids[0]
+		if not self.windows[account]['gc'].has_key(room_jid):
 			return
 		if len(jids) == 1:
-			#message from server
-			self.windows[account]['gc'][jid].print_conversation(array[1], jid, \
-				tim = array[2])
+			# message from server
+			nick = ''
 		else:
-			#message from someone
-			self.windows[account]['gc'][jid].print_conversation(array[1], jid, \
-				jids[1], array[2])
+			# message from someone
+			nick = jids[1]
+		self.windows[account]['gc'][room_jid].on_message(room_jid, nick, array[1],
+			array[2])
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('GCMessage', (account, array))
 

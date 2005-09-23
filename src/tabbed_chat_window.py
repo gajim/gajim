@@ -182,6 +182,9 @@ timestamp, contact):
 		banner_name_label.set_markup(label_text)
 		self.paint_banner(jid)
 
+	def get_specific_unread(self, jid):
+		return 0
+
 	def set_avatar(self, vcard):
 		if not vcard.has_key('PHOTO'):
 			return
@@ -694,6 +697,12 @@ timestamp, contact):
 		"""read queue and print messages containted in it"""
 		l = gajim.awaiting_messages[self.account][jid]
 		user = self.contacts[jid]
+		# Is it a pm ?
+		is_pm = False
+		room_jid = jid.split('/', 1)[0]
+		gcs = self.plugin.windows[self.account]['gc']
+		if gcs.has_key(room_jid):
+			is_pm = True
 		for event in l:
 			ev1 = event[1]
 			if ev1 != 'error':
@@ -702,9 +711,23 @@ timestamp, contact):
 				ev1 = 'status'
 			self.print_conversation(event[0], jid, ev1,
 				tim = event[2],	encrypted = event[3])
-			self.plugin.roster.nb_unread -= 1
-		self.plugin.roster.show_title()
+
+			# remove from gc nb_unread if it's pm or from roster
+			if is_pm:
+				gcs[room_jid].nb_unread[room_jid] -= 1
+			else:
+				self.plugin.roster.nb_unread -= 1
+		if is_pm:
+			gcs[room_jid].show_title()
+		else:
+			self.plugin.roster.show_title()
 		del gajim.awaiting_messages[self.account][jid]
+		# reset to status image in gc if it is a pm
+		room_jid = jid.split('/', 1)[0]
+		gcs = self.plugin.windows[self.account]['gc']
+		if gcs.has_key(room_jid):
+			gcs[room_jid].update_state_images()
+
 		self.plugin.roster.draw_contact(jid, self.account)
 		if self.plugin.systray_enabled:
 			self.plugin.systray.remove_jid(jid, self.account)

@@ -778,12 +778,15 @@ class PopupNotificationWindow:
 			red = gtk.gdk.color_parse('red')
 			close_button.modify_bg(gtk.STATE_NORMAL, red)
 			eventbox.modify_bg(gtk.STATE_NORMAL, red)
-		elif event_type == _('New Message') or\
-		event_type == _('New Single Message'):
+		elif event_type in [_('New Message'), _('New Single Message'),
+			_('New Private Message')]:
 			dodgerblue = gtk.gdk.color_parse('dodgerblue')
 			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
-			txt = _('From %s') % txt
+			if event_type == _('New Private Message'):
+				txt = _('From %s') % jid.split('/', 1)[1] # Nickname
+			else:
+				txt = _('From %s') % txt
 		elif event_type == _('File Transfer Request'):
 			bg_color = gtk.gdk.color_parse('khaki')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
@@ -822,7 +825,7 @@ class PopupNotificationWindow:
 		self.plugin.roster.popups_notification_height += self.window_height
 		self.window.move(gtk.gdk.screen_width() - window_width,
 			gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
-		
+
 		xml.signal_autoconnect(self)
 		self.window.show_all()
 		gobject.timeout_add(5000, self.on_timeout)
@@ -832,12 +835,12 @@ class PopupNotificationWindow:
 
 	def on_timeout(self):
 		self.adjust_height_and_move_popup_notification_windows()
-		
+
 	def adjust_height_and_move_popup_notification_windows(self):
 		#remove
 		self.plugin.roster.popups_notification_height -= self.window_height
 		self.window.destroy()
-		
+
 		if len(self.plugin.roster.popup_notification_windows) > 0:
 			# we want to remove the first window added in the list
 			self.plugin.roster.popup_notification_windows.pop(0) # remove 1st item
@@ -869,21 +872,31 @@ class PopupNotificationWindow:
 				gajim.contacts[self.account][self.jid] = [contact]
 				self.plugin.roster.add_contact_to_roster(contact.jid,
 					self.account)
+			elif self.msg_type == 'pm':
+				room_jid, nick = self.jid.split('/', 1)
+				show = gajim.gc_contacts[self.account][room_jid][nick].show
+				contact = Contact(jid = self.jid, name = nick, groups = ['none'],
+					show = show, sub = 'none')
 
 		if self.msg_type == 'normal': # it's single message
 			return # FIXME: I think I should not print here but in new_chat?
 			contact = get_contact_instance_with_highest_priority(account, jid)
 			SingleMessageWindow(self.plugin, self.account, contact.jid, 
 			action = 'receive', from_whom = jid, subject = subject, message = msg)
-		
+
+		elif self.msg_type == 'pm': # It's a private message
+			self.plugin.roster.new_chat(contact, self.account)
+			chats_window = self.plugin.windows[self.account]['chats'][self.jid]
+			chats_window.set_active_tab(self.jid)
+			chats_window.window.present()
 		elif self.msg_type == 'file': # it's file request
 			self.plugin.windows['file_transfers'].show_file_request(
 				self.account, contact, self.file_props)
-		
+
 		elif self.msg_type == 'file-completed': # file transfer is complete
 			self.plugin.windows['file_transfers'].show_completed(self.jid, 
 				self.file_props)
-			
+
 		elif self.msg_type == 'file-stopped': # file transfer ended unexpectedly
 			self.plugin.windows['file_transfers'].show_stopped(self.jid, 
 				self.file_props)

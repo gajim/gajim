@@ -333,7 +333,11 @@ class GroupchatWindow(chat.Chat):
 					nick = model[user_iter][C_NICK].decode('utf-8')
 					show = gajim.gc_contacts[self.account][room_jid][nick].show
 					state_images = roster.get_appropriate_state_images(room_jid)
-					image = state_images[show] #FIXME: always Jabber why?
+					if gajim.awaiting_messages[self.account].has_key(room_jid + '/'\
+						+ nick):
+						image = state_images['message']
+					else:
+						image = state_images[show]
 					model[user_iter][C_IMG] = image
 					user_iter = model.iter_next(user_iter)
 				role_iter = model.iter_next(role_iter)
@@ -433,7 +437,14 @@ class GroupchatWindow(chat.Chat):
 			subject = full_subject # tooltip must always hold ALL the subject
 		self.subject_tooltip[room_jid].set_tip(event_box, subject)
 
-	
+	def get_specific_unread(self, room_jid):
+		nb = 0
+		for nick in self.get_nick_list(room_jid):
+			fjid = room_jid + '/' + nick
+			if gajim.awaiting_messages[self.account].has_key(fjid):
+				nb += len(gajim.awaiting_messages[self.account][fjid])
+		return nb
+
 	def on_change_subject_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
 		subject = self.subjects[room_jid]
@@ -1221,6 +1232,57 @@ current room topic.') % command, room_jid)
 		self.got_disconnected(room_jid) #init some variables
 		conversation_textview.grab_focus()
 		self.childs[room_jid].show_all()
+
+	def on_message(self, room_jid, nick, msg, tim):
+		if not nick:
+			# message from server
+			self.print_conversation(msg, room_jid, tim = tim)
+		else:
+			# message from someone
+			self.print_conversation(msg, room_jid, nick, tim)
+
+	def on_private_message(self, room_jid, nick, msg, tim):
+		# Do we have a queue?
+		fjid = room_jid + '/' + nick
+		qs = gajim.awaiting_messages[self.account]
+		no_queue = True
+		if qs.has_key(fjid):
+			no_queue = False
+
+		# We print if window is opened
+		if self.plugin.windows[self.account]['chats'].has_key(fjid):
+			chat_win = self.plugin.windows[self.account]['chats'][fjid]
+			chat_win.print_conversation(msg, fjid, tim = tim)
+			return
+
+		if no_queue:
+			qs[fjid] = []
+		qs[fjid].append((msg, 'incoming', tim, False)) # False is for encrypted
+		self.nb_unread[room_jid] += 1
+		#FIXME: when we scroll to end we set nb_unread to 0
+		
+		autopopup = gajim.config.get('autopopup')
+		autopopupaway = gajim.config.get('autopopupaway')
+		iter = self.get_contact_iter(room_jid, nick)
+		path = self.list_treeview[room_jid].get_model().get_path(iter)
+		if not autopopup or ( not autopopupaway and \
+			gajim.connections[self.account].connected > 2):
+			if no_queue: # We didn't have a queue: we change icons
+				model = self.list_treeview[room_jid].get_model()
+				state_images = self.plugin.roster.get_appropriate_state_images(room_jid)
+				image = state_images['message']
+				model[iter][C_IMG] = image
+			self.show_title()
+		else:
+			show = gajim.gc_contacts[self.account][room_jid][nick].show
+			c = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
+				ask = 'none')
+			self.plugin.roster.new_chat(c, self.account)
+		# Scroll to line
+		self.list_treeview[room_jid].expand_row(path[0:1], False)
+		self.list_treeview[room_jid].scroll_to_cell(path)
+		self.list_treeview[room_jid].set_cursor(path)
+			
 
 	def set_state_image(self, jid):
 		# FIXME: Tab notifications?
