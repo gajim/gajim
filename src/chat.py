@@ -481,12 +481,12 @@ class Chat:
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			#we are at the end
 			if self.nb_unread[new_jid] > 0:
-				self.nb_unread[new_jid] = 0
+				self.nb_unread[new_jid] = 0 + self.get_specific_unread(new_jid)
 				self.redraw_tab(new_jid)
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(new_jid, self.account)
-		
+
 		conversation_textview.grab_focus()
 
 	def set_active_tab(self, jid):
@@ -495,7 +495,7 @@ class Chat:
 	def remove_tab(self, jid, kind): #kind is 'chats' or 'gc'
 		if len(self.xmls) == 1: # only one tab when we asked to remove
 			# so destroy window
-		
+
 			# we check and possibly save positions here, because Ctrl+W, Escape
 			# etc.. call remove_tab so similar code in delete_event callbacks
 			# is not enough
@@ -527,7 +527,7 @@ class Chat:
 				del self.print_time_timeout_id[jid]
 
 			self.notebook.remove_page(self.notebook.page_num(self.childs[jid]))
-		
+
 		if self.plugin.windows[self.account][kind].has_key(jid):
 			del self.plugin.windows[self.account][kind][jid]
 		del self.nb_unread[jid]
@@ -542,12 +542,12 @@ class Chat:
 		del self.sent_history_pos[jid]
 		del self.typing_new[jid]
 		del self.orig_msg[jid]
-		
+
 		if len(self.xmls) == 1: # we now have only one tab
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
 			self.show_title()
-	
+
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
 		buffer = textview.get_buffer()
@@ -559,13 +559,13 @@ class Chat:
 		# scroll only if expected end is not visible
 		if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
 			gobject.idle_add(self.scroll_to_end_iter, textview)
-			
+
 	def scroll_to_end_iter(self, textview):
 		buffer = textview.get_buffer()
 		end_iter = buffer.get_end_iter()
 		textview.scroll_to_iter(end_iter, 0, False, 1, 1)
 		return False
-		
+
 	def size_request(self, message_textview , requisition, xml_top):
 		''' When message_textview changes its size. If the new height
 		will enlarge the window, enable the scrollbar automatic policy'''
@@ -583,10 +583,10 @@ class Chat:
 		# new tab is not exposed yet
 		if conversation_height < 2:
 			return
-		
+
 		if conversation_height < min_height:
 			min_height = conversation_height
-			
+
 		diff_y =  message_height - requisition.height
 		if diff_y is not 0:
 			if  conversation_height + diff_y < min_height:
@@ -836,7 +836,7 @@ class Chat:
 		if end_rect.y <= (visible_rect.y + visible_rect.height) and \
 		   self.window.is_active():
 			#we are at the end
-			self.nb_unread[jid] = 0
+			self.nb_unread[jid] = 0 + self.get_specific_unread(jid)
 			self.redraw_tab(jid)
 			self.show_title()
 			if self.plugin.systray_enabled:
