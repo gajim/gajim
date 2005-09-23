@@ -18,6 +18,7 @@
 ##
 
 from os import tmpfile
+import locale
 
 USE_GPG = True
 
@@ -167,7 +168,9 @@ else:
 				sline = line.split(':')
 				if (sline[0] == 'sec' and secret) or \
 						(sline[0] == 'pub' and not secret):
-					keys[sline[4][8:]] = sline[9]
+					# make it unicode instance
+					keys[sline[4][8:]] = sline[9].decode(
+						locale.getpreferredencoding())
 			return keys
 			try: proc.wait()
 			except IOError: pass
