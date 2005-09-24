@@ -26,6 +26,7 @@ import os
 
 import tooltips
 
+from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n
@@ -53,7 +54,7 @@ class Systray:
 	
 	def __init__(self, plugin):
 		self.plugin = plugin
-		self.jids = []
+		self.jids = [] # Contain things like [account, jid, type_of_msg]
 		self.new_message_handler_id = None
 		self.t = None
 		self.img_tray = gtk.Image()
@@ -73,8 +74,8 @@ class Systray:
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			self.img_tray.set_from_pixbuf(image.get_pixbuf())
 
-	def add_jid(self, jid, account):
-		l = [account, jid]
+	def add_jid(self, jid, account, typ):
+		l = [account, jid, typ]
 		if not l in self.jids:
 			self.jids.append(l)
 			self.set_img()
@@ -88,8 +89,8 @@ class Systray:
 					if jid != 'tabbed':
 						nb += jids[jid].nb_unread[jid]
 
-	def remove_jid(self, jid, account):
-		l = [account, jid]
+	def remove_jid(self, jid, account, typ):
+		l = [account, jid, typ]
 		if l in self.jids:
 			self.jids.remove(l)
 			self.set_img()
@@ -260,17 +261,31 @@ class Systray:
 		else:
 			account = self.jids[0][0]
 			jid = self.jids[0][1]
-			acc = self.plugin.windows[account]
+			typ = self.jids[0][2]
+			wins = self.plugin.windows[account]
 			w = None
-			if acc['gc'].has_key(jid):
-				w = acc['gc'][jid]
-			elif acc['chats'].has_key(jid):
-				w = acc['chats'][jid]
-			else:
-				self.plugin.roster.new_chat(
-					gajim.contacts[account][jid][0], account)
-				acc['chats'][jid].set_active_tab(jid)
-				acc['chats'][jid].window.present()
+			if typ == 'gc':
+				if wins['gc'].has_key(jid):
+					w = wins['gc'][jid]
+			elif typ == 'chat':
+				if wins['chats'].has_key(jid):
+					w = wins['chats'][jid]
+				else:
+					self.plugin.roster.new_chat(
+						gajim.contacts[account][jid][0], account)
+					w = wins['chats'][jid]
+			elif typ == 'single_chat':
+				pass
+			elif typ == 'pm':
+				if wins['chats'].has_key(jid):
+					w = wins['chats'][jid]
+				else:
+					room_jid, nick = jid.split('/', 1)
+					show = gajim.gc_contacts[account][room_jid][nick].show
+					c = Contact(jid = jid, name = nick, groups = ['none'],
+						show = show, ask = 'none')
+					self.plugin.roster.new_chat(c, account)
+					w = wins['chats'][jid]
 			if w:
 				w.set_active_tab(jid)
 				w.window.present()

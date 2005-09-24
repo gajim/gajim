@@ -1540,7 +1540,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				model = self.tree.get_model()
 				self.draw_contact(jid, account)
 				if self.plugin.systray_enabled:
-					self.plugin.systray.add_jid(jid, account)
+					self.plugin.systray.add_jid(jid, account, 'chat')
 			self.show_title() # we show the * or [n]
 			if not path:
 				self.add_contact_to_roster(jid, account)

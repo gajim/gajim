@@ -1259,7 +1259,6 @@ current room topic.') % command, room_jid)
 			qs[fjid] = []
 		qs[fjid].append((msg, 'incoming', tim, False)) # False is for encrypted
 		self.nb_unread[room_jid] += 1
-		#FIXME: when we scroll to end we set nb_unread to 0
 		
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
@@ -1272,6 +1271,8 @@ current room topic.') % command, room_jid)
 				state_images = self.plugin.roster.get_appropriate_state_images(room_jid)
 				image = state_images['message']
 				model[iter][C_IMG] = image
+				if self.plugin.systray_enabled:
+					self.plugin.systray.add_jid(fjid, self.account, 'pm')
 			self.show_title()
 		else:
 			show = gajim.gc_contacts[self.account][room_jid][nick].show

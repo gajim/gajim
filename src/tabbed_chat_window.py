@@ -722,15 +722,17 @@ timestamp, contact):
 		else:
 			self.plugin.roster.show_title()
 		del gajim.awaiting_messages[self.account][jid]
+		typ = 'chat' # Is it a normal chat or a pm ?
 		# reset to status image in gc if it is a pm
 		room_jid = jid.split('/', 1)[0]
 		gcs = self.plugin.windows[self.account]['gc']
 		if gcs.has_key(room_jid):
 			gcs[room_jid].update_state_images()
+			typ = 'pm'
 
 		self.plugin.roster.draw_contact(jid, self.account)
 		if self.plugin.systray_enabled:
-			self.plugin.systray.remove_jid(jid, self.account)
+			self.plugin.systray.remove_jid(jid, self.account, typ)
 		showOffline = gajim.config.get('showoffline')
 		if (user.show == 'offline' or user.show == 'error') and \
 			not showOffline:

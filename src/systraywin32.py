@@ -250,8 +250,8 @@ class SystrayWin32(systray.Systray):
 		elif lparam == win32con.WM_LBUTTONUP: # Left click
 			self.on_left_click()
 
-	def add_jid(self, jid, account):
-		l = [account, jid]
+	def add_jid(self, jid, account, typ):
+		l = [account, jid, typ]
 		if not l in self.jids:
 			self.jids.append(l)
 			self.set_img()
@@ -272,8 +272,8 @@ class SystrayWin32(systray.Systray):
 
 		self.systray_winapi.notify_icon.set_tooltip(text)
 
-	def remove_jid(self, jid, account):
-		l = [account, jid]
+	def remove_jid(self, jid, account, typ):
+		l = [account, jid, typ]
 		if l in self.jids:
 			self.jids.remove(l)
 			self.set_img()
