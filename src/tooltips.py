@@ -202,13 +202,57 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 					message = helpers.get_uf_show(status)
 				accounts.append({'name': account, 'status_line': single_line, 
 						'show': status, 'message': message})
-		unread_messages_no = self.plugin.roster.nb_unread
 
-		if unread_messages_no > 0:
-			text = i18n.ngettext(
+		unread_chat = self.plugin.roster.nb_unread
+		unread_single_chat = 0
+		unread_gc = 0
+		unread_pm = 0
+
+		for acct in gajim.connections:
+			# we count unread chat/pm messages
+			chat_wins = self.plugin.windows[acct]['chats']
+			for jid in chat_wins:
+				if jid != 'tabbed':
+					if gajim.contacts[acct].has_key(jid):
+						unread_chat += chat_wins[jid].nb_unread[jid]
+					else:
+						unread_pm += chat_wins[jid].nb_unread[jid]
+			# we count unread gc/pm messages
+			gc_wins = self.plugin.windows[acct]['gc']
+			for jid in gc_wins:
+				if jid != 'tabbed':
+					pm_msgs = gc_wins[jid].get_specific_unread(jid)
+					unread_gc += gc_wins[jid].nb_unread[jid]
+					unread_gc -= pm_msgs
+					unread_pm += pm_msgs
+
+		if unread_chat or unread_single_chat or unread_gc or unread_pm:
+			text = ''
+			if unread_chat:
+				text += i18n.ngettext(
 					'Gajim - %d unread message',
 					'Gajim - %d unread messages',
-					unread_messages_no, unread_messages_no, unread_messages_no)
+					unread_chat, unread_chat, unread_chat)
+				text += '\n'
+			if unread_single_chat:
+				text += i18n.ngettext(
+					'Gajim - %d unread single message',
+					'Gajim - %d unread single messages',
+					unread_single_chat, unread_single_chat, unread_single_chat)
+				text += '\n'
+			if unread_gc:
+				text += i18n.ngettext(
+					'Gajim - %d unread group chat message',
+					'Gajim - %d unread group chat messages',
+					unread_gc, unread_gc, unread_gc)
+				text += '\n'
+			if unread_pm:
+				text += i18n.ngettext(
+					'Gajim - %d unread private message',
+					'Gajim - %d unread private messages',
+					unread_pm, unread_pm, unread_pm)
+				text += '\n'
+			text = text[:-1] # remove latest \n
 		elif len(accounts) > 1:
 			text = _('Gajim')
 			self.current_row = 1
