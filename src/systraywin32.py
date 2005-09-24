@@ -251,11 +251,8 @@ class SystrayWin32(systray.Systray):
 			self.on_left_click()
 
 	def add_jid(self, jid, account, typ):
-		l = [account, jid, typ]
-		if not l in self.jids:
-			self.jids.append(l)
-			self.set_img()
-		# we append to the number of unread messages
+		systray.Systray.add_jid(self, jid, account, typ)
+
 		nb = self.plugin.roster.nb_unread
 		for acct in gajim.connections:
 			# in chat / groupchat windows
@@ -273,11 +270,8 @@ class SystrayWin32(systray.Systray):
 		self.systray_winapi.notify_icon.set_tooltip(text)
 
 	def remove_jid(self, jid, account, typ):
-		l = [account, jid, typ]
-		if l in self.jids:
-			self.jids.remove(l)
-			self.set_img()
-		# we remove from the number of unread messages
+		systray.Systray.remove_jid(self, jid, account, typ)
+
 		nb = self.plugin.roster.nb_unread
 		for acct in gajim.connections:
 			# in chat / groupchat windows
