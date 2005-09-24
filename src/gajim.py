@@ -1270,7 +1270,10 @@ if __name__ == '__main__':
 		
 		if path_to_gajim_script:
 			argv = [path_to_gajim_script]
-			cli.set_restart_command(len(argv), argv)
+			if gnome.gnome_python_version >= (2, 12, 0):
+				cli.set_restart_command(argv)
+			else:
+				cli.set_restart_command(len(argv), argv)
 
 	try:
 		import gconf
