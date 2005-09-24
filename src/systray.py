@@ -79,30 +79,13 @@ class Systray:
 		if not l in self.jids:
 			self.jids.append(l)
 			self.set_img()
-		# we append to the number of unread messages
-		nb = self.plugin.roster.nb_unread
-		for acct in gajim.connections:
-			# in chat / groupchat windows
-			for kind in ['chats', 'gc']:
-				jids = self.plugin.windows[acct][kind]
-				for jid in jids:
-					if jid != 'tabbed':
-						nb += jids[jid].nb_unread[jid]
 
 	def remove_jid(self, jid, account, typ):
 		l = [account, jid, typ]
 		if l in self.jids:
 			self.jids.remove(l)
 			self.set_img()
-		# we remove from the number of unread messages
-		nb = self.plugin.roster.nb_unread
-		for acct in gajim.connections:
-			# in chat / groupchat windows
-			for kind in ['chats', 'gc']:
-				for jid in self.plugin.windows[acct][kind]:
-					if jid != 'tabbed':
-						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
-	
+
 	def change_status(self, global_status):
 		''' set tray image to 'global_status' '''
 		# change image and status, only if it is different 
