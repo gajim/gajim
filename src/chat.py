@@ -264,7 +264,7 @@ class Chat:
 		nickname.set_max_width_chars(10)
 		nickname.set_text(unread + self.names[jid])
 
-	def get_type(self, jid):
+	def get_message_type(self, jid):
 		if self.widget_name == 'groupchat_window':
 			return 'gc'
 		if gajim.contacts[self.account].has_key(jid):
@@ -282,7 +282,7 @@ class Chat:
 				gobject.source_remove(self.possible_inactive_timeout_id[jid])
 			if self.plugin.systray_enabled and self.nb_unread[jid] > 0:
 				self.plugin.systray.remove_jid(jid, self.account,
-					self.get_type(jid))
+					self.get_message_type(jid))
 			del windows[jid]
 			if self.print_time_timeout_id.has_key(jid):
 				gobject.source_remove(self.print_time_timeout_id[jid])
@@ -329,7 +329,7 @@ class Chat:
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(jid, self.account,
-						self.get_type(jid))
+						self.get_message_type(jid))
 		
 		'''TC/GC window received focus, so if we had urgency REMOVE IT
 		NOTE: we do not have to read the message (it maybe in a bg tab)
@@ -494,7 +494,7 @@ class Chat:
 				self.show_title()
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(new_jid, self.account,
-						self.get_type(new_jid))
+						self.get_message_type(new_jid))
 
 		conversation_textview.grab_focus()
 
@@ -531,7 +531,7 @@ class Chat:
 				self.nb_unread[jid] = 0
 				if self.plugin.systray_enabled:
 					self.plugin.systray.remove_jid(jid, self.account,
-						self.get_type(jid))
+						self.get_message_type(jid))
 			if self.print_time_timeout_id.has_key(jid):
 				gobject.source_remove(self.print_time_timeout_id[jid])
 				del self.print_time_timeout_id[jid]
@@ -851,7 +851,7 @@ class Chat:
 			self.show_title()
 			if self.plugin.systray_enabled:
 				self.plugin.systray.remove_jid(jid, self.account,
-					self.get_type(jid))
+					self.get_message_type(jid))
 	
 	def on_conversation_textview_motion_notify_event(self, widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
@@ -1318,7 +1318,7 @@ class Chat:
 			self.nb_unread[jid] += 1
 			if self.plugin.systray_enabled and gajim.config.get(
 				'trayicon_notification_on_new_messages'):
-				self.plugin.systray.add_jid(jid, self.account, self.get_type(jid))
+				self.plugin.systray.add_jid(jid, self.account, self.get_message_type(jid))
 			self.redraw_tab(jid)
 			self.show_title(urgent)
 
