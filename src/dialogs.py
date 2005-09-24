@@ -418,6 +418,7 @@ class AboutDialog:
 		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps/gajim_about.png'))			
 
 		dlg.set_logo(pixbuf)
+		#here you write your name in the form Name FamilyName <someone@somewhere>
 		dlg.set_translator_credits(_('translator-credits'))
 		
 		artists = ['Dennis Craven', 'Membris Khan', 'Guillaume Morin']
