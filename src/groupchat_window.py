@@ -362,9 +362,6 @@ class GroupchatWindow(chat.Chat):
 						'who': actor,
 						'reason': reason }
 				self.print_conversation(s, room_jid)
-				#FIXME: this produced foo has been kicked by JID: reason
-				# Should we show the JID to everyone? the same for ban
-				# I propose we use nick
 			elif statusCode == '301':
 				if actor is None: # do not print 'banned by None'
 					s = _('%(nick)s has been banned: %(reason)s') % {
