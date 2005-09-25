@@ -16607,7 +16607,7 @@ Last Message</property>
       <signal name="activate" handler="on_history_menuitem_clicked" last_modification_time="Thu, 04 Aug 2005 13:53:23 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1239">
+	<widget class="GtkImage" id="image1241">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
@@ -16637,7 +16637,7 @@ Last Message</property>
       <signal name="activate" handler="on_send_file_menuitem_activate" last_modification_time="Wed, 03 Aug 2005 15:21:47 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1240">
+	<widget class="GtkImage" id="image1242">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-file</property>
 	  <property name="icon_size">1</property>
@@ -16663,7 +16663,7 @@ Last Message</property>
   <child>
     <widget class="GtkCheckMenuItem" id="compact_view_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Compact View</property>
+      <property name="label" translatable="yes">_Compact View    Alt+C</property>
       <property name="use_underline">True</property>
       <property name="active">False</property>
       <signal name="activate" handler="on_compact_view_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 13:07:17 GMT"/>
@@ -16678,7 +16678,7 @@ Last Message</property>
       <signal name="activate" handler="on_add_to_roster_menuitem_activate" last_modification_time="Thu, 21 Jul 2005 22:46:10 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1241">
+	<widget class="GtkImage" id="image1243">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
