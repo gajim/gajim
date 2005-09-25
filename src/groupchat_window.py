@@ -232,8 +232,7 @@ class GroupchatWindow(chat.Chat):
 		if not iter:
 			return None
 		while not fin:
-			# FIXME: why decode ?
-			role_name = model[iter][C_NICK].decode('utf-8')
+			role_name = model[iter][C_NICK]
 			if role == role_name:
 				return iter
 			iter = model.iter_next(iter)

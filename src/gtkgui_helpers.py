@@ -234,8 +234,8 @@ def parse_server_xml(path_to_file):
 	# handle exception parsing file
 	except xml.sax.SAXParseException, message:
 		print "Error parsing file:", message
-def set_unset_urgency_hint(window, unread_messages_no):
 
+def set_unset_urgency_hint(window, unread_messages_no):
 	'''sets/unsets urgency hint in window argument
 	depending if we have unread messages or not'''
 	if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
