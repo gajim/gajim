@@ -794,7 +794,7 @@ msgstr "GTK jabber bezeroa"
 
 #: ../src/dialogs.py:426
 msgid "translator-credits"
-msgstr "hitzultzailearen-kredituak"
+msgstr "Urtzi Alfaro <urtzi@altza.net>"
 
 #: ../src/dialogs.py:590
 #, python-format
