@@ -169,6 +169,11 @@ class Interface:
 	def handle_event_information(self, unused, data):
 		#('INFORMATION', account, (title_text, section_text))
 		dialogs.InformationDialog(data[0], data[1])
+		
+	def handle_event_ask_new_nick(self, unused, data):
+		#('ASK_NEW_NICK', account, (room_jid, title_text, prompt_text))
+		pass
+		# FIXME: find a way to call show_change_nick_input_dialog in GC.py
 
 	def handle_event_http_auth(self, account, data):
 		#('HTTP_AUTH', account, (method, url, iq_obj))
@@ -1043,6 +1048,7 @@ class Interface:
 			'HTTP_AUTH': self.handle_event_http_auth,
 			'VCARD_PUBLISHED': self.handle_event_vcard_published,
 			'VCARD_NOT_PUBLISHED': self.handle_event_vcard_not_published,
+			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
 		}
 
 	def exec_event(self, account):

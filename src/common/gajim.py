@@ -96,9 +96,12 @@ def get_room_and_nick_from_fjid(jid):
 	# gaim@conference.jabber.no/nick/nick-continued
 	# return ('gaim@conference.jabber.no', 'nick/nick-continued')
 	l = jid.split('/', 1)
-	if len(l) == 1: #No nick
+	if len(l) == 1: # No nick
 		l.append('')
 	return l
+	
+def get_room_from_fjid(jid):
+	return get_room_and_nick_from_fjid(jid)[0]
 
 def get_contact_instances_from_jid(account, jid):
 	''' we may have two or more resources on that jid '''

@@ -380,8 +380,10 @@ class Connection:
 					self.dispatch('ERROR', (_('Unable to join room'), 
 						_('You are not in the members list.')))
 				elif errcode == '409': # nick conflict
-					self.dispatch('ERROR', (_('Unable to join room'), 
-						_('Your desired nickname is in use or registered by another user.')))
+					# the jid_from in this case is FAKE JID: room_jid/nick
+					room_jid = gajim.get_room_from_fjid(jid_from)
+					self.dispatch('ASK_NEW_NICK', (room_jid, _('Unable to join room'), 
+		_('Your desired nickname is in use or registered by another occupant. Please use another:')))
 				else:	# print in the window the error
 					self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 						errmsg, errcode))

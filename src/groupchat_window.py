@@ -454,8 +454,14 @@ class GroupchatWindow(chat.Chat):
 	def on_change_nick_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
 		nick = self.nicks[room_jid]
-		instance = dialogs.InputDialog(_('Changing Nickname'),
-			_('Please specify the new nickname you want to use:'), nick)
+		title = _('Changing Nickname')
+		prompt = _('Please specify the new nickname you want to use:')
+		self.show_change_nick_input_dialog(title, prompt, nick, room_jid)
+
+	def show_change_nick_input_dialog(self, title, prompt, proposed_nick,
+		room_jid):
+		'''asks user for new nick and on ok it sets it on room'''
+		instance = dialogs.InputDialog(title, prompt, proposed_nick)
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
 			nick = instance.input_entry.get_text().decode('utf-8')
