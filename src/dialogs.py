@@ -422,6 +422,9 @@ class AboutDialog:
 		]
 		
 		dlg.set_authors(authors)
+		
+		if gtk.pygtk_version >= (2, 8, 0) and gtk.gtk_version >= (2, 8, 0):
+			dlg.props.wrap_license = True
 
 		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(
 			gajim.DATA_DIR, 'pixmaps/gajim_about.png'))			
