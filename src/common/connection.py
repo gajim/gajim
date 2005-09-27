@@ -354,6 +354,17 @@ class Connection:
 		elif ptype == 'unavailable':
 			show = 'offline'
 
+		prio = prs.getPriority()
+		try:
+			prio = int(prio)
+		except:
+			prio = 0
+		keyID = ''
+		if sigTag and USE_GPG:
+			#verify
+			sigmsg = sigTag.getData()
+			keyID = self.gpg.verify(status, sigmsg)
+
 		if is_gc:
 			if ptype == 'error':
 				errmsg = prs.getError()
@@ -395,16 +406,6 @@ class Connection:
 					prs.getNewNick()))
 			return
 
-		prio = prs.getPriority()
-		try:
-			prio = int(prio)
-		except:
-			prio = 0
-		keyID = ''
-		if sigTag and USE_GPG:
-			#verify
-			sigmsg = sigTag.getData()
-			keyID = self.gpg.verify(status, sigmsg)
 		if ptype == 'subscribe':
 			gajim.log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0:
