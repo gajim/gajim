@@ -38,7 +38,6 @@ class Config:
 	__options = {
 		# name: [ type, value ]
 		'verbose': [ opt_bool, False ],
-		'contact_mutual_removal': [ opt_bool, True, _('When we remove a contact, remove both his and our subscription, so we do not receive his presence anymore and he ours.')],
 		'alwaysauth': [ opt_bool, False ],
 		'autopopup': [ opt_bool, False ],
 		'notify_on_signin': [ opt_bool, True ],

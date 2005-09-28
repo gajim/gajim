@@ -1216,11 +1216,15 @@ _('If "%s" accepts this request you will know his status.') %jid)
 
 	def on_req_usub(self, widget, user, account):
 		'''Remove a user'''
-		window = dialogs.ConfirmationDialog(\
+		window = dialogs.ConfirmationDialogCheck(\
 			_('Contact "%s" will be removed from your roster') % (user.name),
-			_('By removing this contact you also remove authorization. Contact "%s" will always see you as offline.') % user.name)
+			_('By removing this contact you also remove authorization. Contact "%s" will always see you as offline.') % user.name,
+			_('Allow my contact to still know my status'))
 		if window.get_response() == gtk.RESPONSE_OK:
-			gajim.connections[account].unsubscribe(user.jid)
+			remove_auth = True
+			if window.is_checked():
+				remove_auth = False
+			gajim.connections[account].unsubscribe(user.jid, remove_auth)
 			for u in gajim.contacts[account][user.jid]:
 				self.remove_contact(u, account)
 			del gajim.contacts[account][u.jid]

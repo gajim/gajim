@@ -1710,10 +1710,10 @@ class Connection:
 		p = self.add_sha(p)
 		self.to_be_sent.append(p)
 
-	def unsubscribe(self, jid):
+	def unsubscribe(self, jid, remove_auth = True):
 		if not self.connection:
 			return
-		if gajim.config.get('contact_mutual_removal'):
+		if remove_auth:
 			self.connection.getRoster().delItem(jid)
 		else:
 			self.connection.getRoster().Unsubscribe(jid)
