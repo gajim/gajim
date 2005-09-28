@@ -104,7 +104,7 @@ def get_os_info():
 		if full_path_to_executable:
 			command = executable + params
 			child_stdin, child_stdout = os.popen2(command)
-			output = child_stdout.readline().strip()
+			output = helpers.temp_failure_retry(child_stdout.readline).strip()
 			child_stdout.close()
 			child_stdin.close()
 			# some distros put n/a in places so remove them

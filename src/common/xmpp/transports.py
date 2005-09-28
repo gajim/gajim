@@ -32,9 +32,21 @@ from simplexml import ustr
 from client import PlugIn
 from protocol import *
 import sys
+import os
+import errno
 
 DATA_RECEIVED='DATA RECEIVED'
 DATA_SENT='DATA SENT'
+
+def temp_failure_retry(func, *args, **kwargs):
+    while True:
+        try:
+            return func(*args, **kwargs)
+        except (os.error, IOError), ex:
+            if ex.errno == errno.EINTR:
+                continue
+            else:
+                raise
 
 class error:
     """An exception to be raised in case of low-level errors in methods of 'transports' module."""
@@ -98,7 +110,7 @@ class TCPsocket(PlugIn):
         try: received = self._recv(1024000)
         except: received = ''
 
-        while select.select([self._sock],[],[],0)[0]:
+        while temp_failure_retry(select.select,[self._sock],[],[],0)[0]:
             try: add = self._recv(1024000)
             except: add=''
             received +=add
@@ -130,7 +142,7 @@ class TCPsocket(PlugIn):
 
     def pending_data(self,timeout=0):
         """ Returns true if there is a data ready to be read. """
-        return select.select([self._sock],[],[],timeout)[0]
+        return temp_failure_retry(select.select,[self._sock],[],[],timeout)[0]
 
     def disconnect(self):
         """ Closes the socket. """

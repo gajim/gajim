@@ -20,6 +20,7 @@
 import sre
 import os
 import urllib
+import errno
 
 import gajim
 from common import i18n
@@ -31,6 +32,17 @@ except:
 
 _ = i18n._
 Q_ = i18n.Q_
+
+def temp_failure_retry(func, *args, **kwargs):
+    while True:
+        try:
+            return func(*args, **kwargs)
+        except (os.error, IOError), ex:
+            if ex.errno == errno.EINTR:
+                continue
+            else:
+                raise
+
 
 def convert_bytes(string):
 	suffix = ''
