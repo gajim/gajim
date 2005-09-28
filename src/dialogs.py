@@ -477,7 +477,7 @@ class ConfirmationDialog(HigDialog):
 	"""HIG compliant confirmation dialog."""
 	def __init__(self, pritext, sectext=''):
 		HigDialog.__init__(self, None, 
-			gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL, pritext, sectext)
+			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext)
 			
 class WarningDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
@@ -506,7 +506,7 @@ class ErrorDialog(HigDialog):
 class ConfirmationDialogCheck(ConfirmationDialog):
 	'''HIG compliant confirmation dialog with checkbutton.'''
 	def __init__(self, pritext, sectext='', checktext = ''):
-		HigDialog.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL,
+		HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL,
 			pritext, sectext)
 
 		self.set_default_response(gtk.RESPONSE_OK)
