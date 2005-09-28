@@ -331,13 +331,14 @@ class Connection:
 	def _presenceCB(self, con, prs):
 		"""Called when we receive a presence"""
 		ptype = prs.getType()
-		if ptype == 'available': ptype = None
+		if ptype == 'available':
+			ptype = None
 		gajim.log.debug('PresenceCB: %s' % ptype)
 		is_gc = False # is it a GC presence ?
 		sigTag = None
 		xtags = prs.getTags('x')
 		for x in xtags:
-			if x.getNamespace() == common.xmpp.NS_MUC_USER:
+			if x.getNamespace().startswith(common.xmpp.NS_MUC):
 				is_gc = True
 			if x.getNamespace() == common.xmpp.NS_SIGNED:
 				sigTag = x
@@ -392,7 +393,7 @@ class Connection:
 						_('You are not in the members list.')))
 				elif errcode == '409': # nick conflict
 					# the jid_from in this case is FAKE JID: room_jid/nick
-					room_jid = gajim.get_room_from_fjid(jid_from)
+					room_jid = gajim.get_room_from_fjid(who)
 					self.dispatch('ASK_NEW_NICK', (room_jid, _('Unable to join room'), 
 		_('Your desired nickname is in use or registered by another occupant. Please use another:')))
 				else:	# print in the window the error
