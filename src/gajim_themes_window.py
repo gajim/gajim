@@ -141,7 +141,9 @@ class GajimThemesWindow:
 		model.set_value(iter, 0, theme_name + unicode(i))
 		gajim.config.add_per('themes', theme_name_ns + unicode(i))
 		self.themes_tree.get_selection().select_iter(iter)
-		gobject.emit_signal_by_name(editing-started)
+		col = self.themes_tree.get_column(0)
+		path = model.get_path(iter)
+		self.themes_tree.set_cursor(path, col, True)
 		self.plugin.windows['preferences'].update_preferences_window()
 
 	def on_remove_button_clicked(self, widget):
