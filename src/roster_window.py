@@ -1224,7 +1224,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		window = dialogs.ConfirmationDialogCheck(\
 			_('Contact "%s" will be removed from your roster') % (user.name),
 			_('By removing this contact you also remove authorization. Contact "%s" will always see you as offline.') % user.name,
-			_('Allow my contact to still know my status'))
+			_('Allow this contact to still know my status'))
 		if window.get_response() == gtk.RESPONSE_OK:
 			remove_auth = True
 			if window.is_checked():
