@@ -1220,11 +1220,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 						self.tree.expand_row(path, False)
 
 	def on_req_usub(self, widget, user, account):
-		'''Remove a user'''
-		window = dialogs.ConfirmationDialogCheck(\
+		'''Remove a contact'''
+		window = dialogs.ConfirmationDialogCheck(
 			_('Contact "%s" will be removed from your roster') % (user.name),
-			_('By removing this contact you also remove authorization. Contact "%s" will always see you as offline.') % user.name,
-			_('Allow this contact to still know my status'))
+			_('By removing this contact you also by default remove authorization resulting in him/her always seeing you as offline.'),
+			_('I want this contact to know my status after removal'))
+		# FIXME:
+		# maybe use 2 optionboxes from which the user can select? (better)
 		if window.get_response() == gtk.RESPONSE_OK:
 			remove_auth = True
 			if window.is_checked():
