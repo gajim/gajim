@@ -251,6 +251,11 @@ class RosterWindow:
 			dialogs.ErrorDialog(_('You are already in room %s') %room_jid
 				).get_response()
 			return
+		invisible_show = gajim.SHOW_LIST.index('invisible')
+		if gajim.connections[account].connected == invisible_show:
+			dialogs.ErrorDialog(_("You can't join a room while you are invisible")
+				).get_response()
+			return
 		room, server = room_jid.split('@')
 		if not room_jid in self.plugin.windows[account]['gc']:
 			self.new_room(room_jid, nick, account)
@@ -1574,9 +1579,15 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		dialogs.AddNewContactWindow(self.plugin, account)
 
 	def on_join_gc_activate(self, widget, account):
+		invisible_show = gajim.SHOW_LIST.index('invisible')
+		if gajim.connections[account].connected == invisible_show:
+			dialogs.ErrorDialog(_("You can't join a room while you are invisible")
+				).get_response()
+			return
 		if self.plugin.windows[account].has_key('join_gc'):
 			self.plugin.windows[account]['join_gc'].window.present()		
 		else:
+			#FIXME: Why this try/except?
 			try:
 				self.plugin.windows[account]['join_gc'] = dialogs.JoinGroupchatWindow(self.plugin, account)
 			except RuntimeError:
