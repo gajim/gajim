@@ -704,6 +704,7 @@ class RosterWindow:
 					show=connection.get_status(), 
 					status=connection.status, 
 					resource=gajim.config.get_per('accounts', connection.name, 'resource'), 
+					priority=gajim.config.get_per('accounts', connection.name, 'priority'),
 					keyID=gajim.config.get_per('accounts', connection.name, 'keyid'))
 				contacts.append(contact)
 				# if we're online ...
