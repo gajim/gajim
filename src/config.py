@@ -2798,7 +2798,7 @@ class FirstTimeWizardWindow:
 		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
 
 	def on_save_password_checkbutton_toggled(self, widget):
-		if widget.get_name() == 'save_password_checkbutton':
+		if widget.get_name() == 'existing_save_password_checkbutton':
 			widget2 = self.xml.get_widget('existing_pass_entry')
 			if widget2.get_property('sensitive'):
 				widget2.set_sensitive(False)
