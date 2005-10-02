@@ -172,8 +172,11 @@ class Interface:
 		
 	def handle_event_ask_new_nick(self, unused, data):
 		#('ASK_NEW_NICK', account, (room_jid, title_text, prompt_text))
-		pass
-		# FIXME: find a way to call show_change_nick_input_dialog in GC.py
+		room_jid = data[0]
+		title = data[1]
+		prompt = data[2]
+		self.plugin.windows[account]['gc'][room_jid].show_change_nick_input_dialog(
+			title, prompt, room_jid = room_jid)
 
 	def handle_event_http_auth(self, account, data):
 		#('HTTP_AUTH', account, (method, url, iq_obj))
@@ -855,10 +858,10 @@ class Interface:
 			self.windows[account]['xml_console'].print_stanza(stanza, 'outgoing')
 
 	def handle_event_vcard_published(self, account, array):
-		dialogs.InformationDialog(_('vCard publication succeeded'), _('Your vCard has been published successfuly.'))
+		dialogs.InformationDialog(_('vCard publication succeeded'), _('Your personal information has been published successfully.'))
 
 	def handle_event_vcard_not_published(self, account, array):
-		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your vCard, try again later.'))
+		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))
 
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''

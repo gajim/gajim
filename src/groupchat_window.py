@@ -458,8 +458,8 @@ class GroupchatWindow(chat.Chat):
 		prompt = _('Please specify the new nickname you want to use:')
 		self.show_change_nick_input_dialog(title, prompt, nick, room_jid)
 
-	def show_change_nick_input_dialog(self, title, prompt, proposed_nick,
-		room_jid):
+	def show_change_nick_input_dialog(self, title, prompt, proposed_nick = None,
+		room_jid = None):
 		'''asks user for new nick and on ok it sets it on room'''
 		instance = dialogs.InputDialog(title, prompt, proposed_nick)
 		response = instance.get_response()
