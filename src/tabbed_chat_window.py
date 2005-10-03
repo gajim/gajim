@@ -141,22 +141,8 @@ timestamp, contact):
 		image = gtk.Image()
 		image.set_from_pixbuf(avatar_pixbuf)
 		window.add(image)
-		
-		# get coordiantes of eventbox_avatar relative to tabbed-chat window
-		eventbox_x, eventbox_y = widget.allocation.x, widget.allocation.y
-		
-		# now convert them to X11-relative
-		window_x, window_y = widget.window.get_origin()
-		x = window_x + eventbox_x
-		y = window_y + eventbox_y
-		
-		# now adjust the popup so it looks like it starts from top-right corner
-		# and to the left of tabbed chat window
-		# FIXME: make it always align correctly and not just for 52x52
-		eventbox_w = widget.allocation.width
-		x = x - 45
-		
-		window.move(int(x), y)
+
+		window.set_position(gtk.WIN_POS_MOUSE)
 		window.show_all()
 		window.connect('leave_notify_event', self.on_window_avatar_leave_notify_event)
 
