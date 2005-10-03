@@ -806,7 +806,6 @@ class Connection:
 		raise common.xmpp.NodeProcessed
 	
 	def _get_sha(self, sid, initiator, target):
-		import sha
 		return sha.new("%s%s%s" % (sid, initiator, target)).hexdigest()
 		
 	def result_socks5_sid(self, sid, hash_id):
