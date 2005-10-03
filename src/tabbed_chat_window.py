@@ -52,12 +52,21 @@ class TabbedChatWindow(chat.Chat):
 		self.possible_paused_timeout_id = {}
 		# keep check for possible inactive timeouts per jid
 		self.possible_inactive_timeout_id = {}
+		
+		# keep timeout id and window obj for possible big avatar
+		# it is on enter-notify and leave-notify so no need to be per jid
+		self.show_bigger_avatar_timeout_id = None
+		self.bigger_avatar_window = None
+		
+		# keep avatar (pixbuf) per jid. FIXME: move this when we cache avatars
+		self.avatar_pixbufs = {}
+		
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
 		self.new_tab(user)
 		self.show_title()
 	
-		# NOTE: if it not a window event, connect in new_tab function
+		# NOTE: if it not a window event, do not connect here (new_tab() autoconnects)
 		signal_dict = {
 'on_tabbed_chat_window_destroy': self.on_tabbed_chat_window_destroy,
 'on_tabbed_chat_window_delete_event': self.on_tabbed_chat_window_delete_event,
@@ -113,6 +122,47 @@ timestamp, contact):
 				if os.path.isfile(path): # is it file?
 					self.plugin.windows['file_transfers'].send_file(self.account,
 						contact, path)
+
+	def on_avatar_eventbox_enter_notify_event(self, widget, event):
+		'''we enter the eventbox area'''
+		# wait for 0.5 sec in case we leave earlier
+		self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
+			self.show_bigger_avatar, widget)
+		
+	def on_avatar_eventbox_leave_notify_event(self, widget, event):
+		'''we left the eventbox area'''
+		gobject.source_remove(self.show_bigger_avatar_timeout_id)
+
+	def show_bigger_avatar(self, widget):
+		jid = self.get_active_jid()
+		avatar_pixbuf = self.avatar_pixbufs[jid]
+		window = gtk.Window(gtk.WINDOW_POPUP)
+		self.bigger_avatar_window = window
+		image = gtk.Image()
+		image.set_from_pixbuf(avatar_pixbuf)
+		window.add(image)
+		
+		# get coordiantes of eventbox_avatar relative to tabbed-chat window
+		eventbox_x, eventbox_y = widget.allocation.x, widget.allocation.y
+		
+		# now convert them to X11-relative
+		window_x, window_y = widget.window.get_origin()
+		x = window_x + eventbox_x
+		y = window_y + eventbox_y
+		
+		# now adjust the popup so it looks like it starts from top-right corner
+		# and to the left of tabbed chat window
+		# FIXME: make it always align correctly and not just for 52x52
+		eventbox_w = widget.allocation.width
+		x = x - 45
+		
+		window.move(int(x), y)
+		window.show_all()
+		window.connect('leave_notify_event', self.on_window_avatar_leave_notify_event)
+
+	def on_window_avatar_leave_notify_event(self, widget, event):
+		'''we just left the popup window that holds avatar'''
+		self.bigger_avatar_window.hide()
 
 	def draw_widgets(self, contact):
 		"""draw the widgets in a tab (f.e. gpg togglebutton)
@@ -183,12 +233,12 @@ timestamp, contact):
 		self.paint_banner(jid)
 
 	def get_specific_unread(self, jid):
-		return 0
+		return 0 # FIXME: always zero why??
 
 	def set_avatar(self, vcard):
 		if not vcard.has_key('PHOTO'):
 			return
-		if type(vcard['PHOTO']) != type({}):
+		if not isinstance(vcard['PHOTO'], dict):
 			return
 		img_decoded = None
 		if vcard['PHOTO'].has_key('BINVAL'):
@@ -209,16 +259,21 @@ timestamp, contact):
 				pixbufloader.write(img_decoded)
 				pixbuf = pixbufloader.get_pixbuf()
 				pixbufloader.close()
+				
+				jid = vcard['jid']
+				self.avatar_pixbufs[jid] = pixbuf
 
 				w = gajim.config.get('avatar_width')
 				h = gajim.config.get('avatar_height')
+
 				scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 				x = None
-				if self.xmls.has_key(vcard['jid']):
-					x = self.xmls[vcard['jid']]
+				if self.xmls.has_key(jid):
+					x = self.xmls[jid]
 				# it can be xmls[jid/resource] if it's a vcard from pm
-				elif self.xmls.has_key(vcard['jid'] + '/' + vcard['resource']):
-					x = self.xmls[vcard['jid'] + '/' + vcard['resource']]
+				elif self.xmls.has_key(jid + '/' + vcard['resource']):
+					x = self.xmls[jid + '/' + vcard['resource']]
+
 				image = x.get_widget('avatar_image')
 				image.set_from_pixbuf(scaled_buf)
 				image.show_all()
