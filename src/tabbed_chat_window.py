@@ -136,7 +136,7 @@ timestamp, contact):
 
 	def show_bigger_avatar(self, widget):
 		jid = self.get_active_jid()
-		avatar_pixbuf = self.avatar_pixbufs[jid]
+		avatar_pixbuf = self.plugin.avatar_pixbufs[jid]
 		window = gtk.Window(gtk.WINDOW_POPUP)
 		self.bigger_avatar_window = window
 		image = gtk.Image()
