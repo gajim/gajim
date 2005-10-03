@@ -66,11 +66,13 @@ import gtkexcepthook
 import gobject
 if sys.version[:4] >= '2.4':
 	gobject.threads_init()
+
 import pango
 import sre
 import signal
 import getopt
 import time
+import base64
 
 from common import socks5
 import gtkgui_helpers
@@ -621,29 +623,30 @@ class Interface:
 			 win = self.windows[account]['infos'][array['jid']]
 			 win.set_values(array)
 
-	def handle_event_vcard(self, account, array):
+	def handle_event_vcard(self, account, vcard):
+		'''vcard holds the vcard data'''
+		jid = vcard['jid']
+		self.store_avatar(vcard)
+		
+		# vcard window
 		win = None
-		if self.windows[account]['infos'].has_key(array['jid']):
-			win = self.windows[account]['infos'][array['jid']]
-		elif self.windows[account]['infos'].has_key(array['jid'] + '/' + \
-				array['resource']):
-			win = self.windows[account]['infos'][array['jid'] + '/' + \
-				array['resource']]
+		if self.windows[account]['infos'].has_key(jid):
+			win = self.windows[account]['infos'][jid]
+		elif self.windows[account]['infos'].has_key(jid + '/' +vcard['resource']):
+			win = self.windows[account]['infos'][jid + '/' + vcard['resource']]
 		if win:
-			win.set_values(array)
+			win.set_values(vcard) #FIXME: maybe store all vcard data?
 
-		#show avatar in chat
+		# show avatar in chat
 		win = None
-		if self.windows[account]['chats'].has_key(array['jid']):
-			win = self.windows[account]['chats'][array['jid']]
-		elif self.windows[account]['chats'].has_key(array['jid'] + '/' + \
-				array['resource']):
-			win = self.windows[account]['chats'][array['jid'] + '/' + \
-				array['resource']]
+		if self.windows[account]['chats'].has_key(jid):
+			win = self.windows[account]['chats'][jid]
+		elif self.windows[account]['chats'].has_key(jid + '/' +vcard['resource']):
+			win = self.windows[account]['chats'][jid + '/' + vcard['resource']]
 		if win:
-			win.set_avatar(array)
+			win.show_avatar(jid)
 		if self.remote is not None:
-			self.remote.raise_signal('VcardInfo', (account, array))
+			self.remote.raise_signal('VcardInfo', (account, vcard))
 
 	def handle_event_os_info(self, account, array):
 		win = None
@@ -863,6 +866,42 @@ class Interface:
 	def handle_event_vcard_not_published(self, account, array):
 		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))
 
+	def store_avatar(self, vcard):
+		'''stores avatar per jid so we do not have to ask everytime for vcard'''
+		jid = vcard['jid']
+		# we assume contact has no avatar
+		self.avatar_pixbufs[jid] = None
+		if not vcard.has_key('PHOTO'):
+			return
+		if not isinstance(vcard['PHOTO'], dict):
+			return
+		img_decoded = None
+		if vcard['PHOTO'].has_key('BINVAL'):
+			try:
+				img_decoded = base64.decodestring(vcard['PHOTO']['BINVAL'])
+			except:
+				pass
+		elif vcard['PHOTO'].has_key('EXTVAL'):
+			url = vcard['PHOTO']['EXTVAL']
+			try:
+				fd = urllib.urlopen(url)
+				img_decoded = fd.read()
+			except:
+				pass
+		if img_decoded:
+			pixbufloader = gtk.gdk.PixbufLoader()
+			try:
+				pixbufloader.write(img_decoded)
+				pixbuf = pixbufloader.get_pixbuf()
+				pixbufloader.close()
+
+				# store avatar for jid
+				self.avatar_pixbufs[jid] = pixbuf
+
+			# we may get "unknown image format" and/or something like pixbuf can be None
+			except (gobject.GError, AttributeError):
+				pass
+	
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -1121,6 +1160,7 @@ class Interface:
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
 			'statusmsgcolor': gajim.config.get('statusmsgcolor'),
 		}
+
 		parser.read()
 		# Do not set gajim.verbose to False if -v option was given
 		if gajim.config.get('verbose'):
@@ -1172,7 +1212,11 @@ class Interface:
 															
 		gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
-		self.windows = {'logs':{}}
+		
+		self.windows = {'logs': {}}
+		
+		# keep avatar (pixbuf) per jid
+		self.avatar_pixbufs = {}
 		
 		for a in gajim.connections:
 			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}

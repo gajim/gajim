@@ -58,8 +58,9 @@ class TabbedChatWindow(chat.Chat):
 		self.show_bigger_avatar_timeout_id = None
 		self.bigger_avatar_window = None
 		
-		# keep avatar (pixbuf) per jid. FIXME: move this when we cache avatars
-		self.avatar_pixbufs = {}
+		# list that holds all the jid we have asked vcard once
+		# (so we do not have to ask again)
+		self.jids_for_which_we_asked_vcard_already = list()
 		
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
@@ -221,51 +222,30 @@ timestamp, contact):
 	def get_specific_unread(self, jid):
 		return 0 # FIXME: always zero why??
 
-	def set_avatar(self, vcard):
-		if not vcard.has_key('PHOTO'):
-			return
-		if not isinstance(vcard['PHOTO'], dict):
-			return
-		img_decoded = None
-		if vcard['PHOTO'].has_key('BINVAL'):
-			try:
-				img_decoded = base64.decodestring(vcard['PHOTO']['BINVAL'])
-			except:
-				pass
-		elif vcard['PHOTO'].has_key('EXTVAL'):
-			url = vcard['PHOTO']['EXTVAL']
-			try:
-				fd = urllib.urlopen(url)
-				img_decoded = fd.read()
-			except:
-				pass
-		if img_decoded:
-			pixbufloader = gtk.gdk.PixbufLoader()
-			try:
-				pixbufloader.write(img_decoded)
-				pixbuf = pixbufloader.get_pixbuf()
-				pixbufloader.close()
-				
-				jid = vcard['jid']
-				self.avatar_pixbufs[jid] = pixbuf
+	def show_avatar(self, jid):
+		assert(not self.plugin.avatar_pixbufs.has_key(jid))
+		if not self.plugin.avatar_pixbufs.has_key(jid) or\
+			self.plugin.avatar_pixbufs[jid] is None:
+			return # contact does not have avatar stored (can this happen?) or has no avatar
 
-				w = gajim.config.get('avatar_width')
-				h = gajim.config.get('avatar_height')
+		pixbuf = self.plugin.avatar_pixbufs[jid]
+		w = gajim.config.get('avatar_width')
+		h = gajim.config.get('avatar_height')
+		scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 
-				scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
-				x = None
-				if self.xmls.has_key(jid):
-					x = self.xmls[jid]
-				# it can be xmls[jid/resource] if it's a vcard from pm
-				elif self.xmls.has_key(jid + '/' + vcard['resource']):
-					x = self.xmls[jid + '/' + vcard['resource']]
+		x = None
+		if self.xmls.has_key(jid):
+			x = self.xmls[jid]
+		else:
+			# it can be xmls[jid/resource] if it's a vcard from pm
+			jid_with_resource = jid + '/' + vcard['resource']
+			if self.xmls.has_key(jid_with_resource):
+				x = self.xmls[jid_with_resource]
 
-				image = x.get_widget('avatar_image')
-				image.set_from_pixbuf(scaled_buf)
-				image.show_all()
-			# we may get "unknown image format" and/or something like pixbuf can be None
-			except (gobject.GError, AttributeError):
-				pass
+		if x is not None:
+			image = x.get_widget('avatar_image')
+			image.set_from_pixbuf(scaled_buf)
+			image.show_all()
 
 	def set_state_image(self, jid):
 		prio = 0
@@ -399,6 +379,18 @@ timestamp, contact):
 		self.childs[contact.jid] = self.xmls[contact.jid].get_widget('chats_vbox')
 		self.contacts[contact.jid] = contact
 		
+		#FIXME: request in thread or idle and show in roster
+		
+		# this is to prove cache code works:
+		# should we ask vcard? (only the first time we should ask)
+		if not self.plugin.avatar_pixbufs.has_key(contact.jid):
+			# it's the first time, so we should ask vcard
+			gajim.connections[self.account].request_vcard(contact.jid)
+			#please do not remove this commented print until I'm done with showing
+			#avatars in roster
+			#print 'REQUESTING VCARD for', contact.jid
+		else:
+			self.show_avatar(contact.jid) # show avatar from stored place
 		
 		self.childs[contact.jid].connect('drag_data_received',
 			self.on_drag_data_received, contact)
@@ -428,7 +420,6 @@ timestamp, contact):
 		if gajim.awaiting_messages[self.account].has_key(contact.jid):
 			self.read_queue(contact.jid)
 
-		gajim.connections[self.account].request_vcard(contact.jid)
 		self.childs[contact.jid].show_all()
 
 		# chatstates

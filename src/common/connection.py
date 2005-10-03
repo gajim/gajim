@@ -1185,14 +1185,14 @@ class Connection:
 			del roster[jid]
 		self.dispatch('ROSTER', roster)
 
-		#continue connection
+		# continue connection
 		if self.connected > 1 and self.continue_connect_info:
 			show = self.continue_connect_info[0]
 			msg = self.continue_connect_info[1]
 			signed = self.continue_connect_info[2]
 			self.connected = STATUS_LIST.index(show)
 			sshow = helpers.get_xmpp_show(show)
-			#send our presence
+			# send our presence
 			if show == 'invisible':
 				self.send_invisible_presence(msg, signed, True)
 				return
@@ -1208,10 +1208,10 @@ class Connection:
 			if self.connection:
 				self.connection.send(p)
 			self.dispatch('STATUS', show)
-			#ask our VCard
+			# ask our VCard
 			self.request_vcard(None)
 
-			#Get bookmarks from private namespace
+			# Get bookmarks from private namespace
 			self.get_bookmarks()
 		self.continue_connect_info = None
 
