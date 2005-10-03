@@ -26,6 +26,7 @@ import mimetypes
 import os
 import sys
 import dialogs
+import gtkgui_helpers
 
 from common import helpers
 from common import gajim
