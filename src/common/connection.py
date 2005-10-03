@@ -345,7 +345,7 @@ class Connection:
 		jid_from = prs.getFrom()
 		who = unicode(jid_from)
 		jid_stripped = jid_from.getStripped()
-		resource =  jid_from.getResource()
+		resource = jid_from.getResource()
 		status = prs.getStatus()
 		show = prs.getShow()
 		if not show in STATUS_LIST:
@@ -393,9 +393,11 @@ class Connection:
 						_('You are not in the members list.')))
 				elif errcode == '409': # nick conflict
 					# the jid_from in this case is FAKE JID: room_jid/nick
+					# resource holds the bad nick so propose a new one
+					proposed_nickname = resource + '_'
 					room_jid = gajim.get_room_from_fjid(who)
 					self.dispatch('ASK_NEW_NICK', (room_jid, _('Unable to join room'), 
-		_('Your desired nickname is in use or registered by another occupant. Please use another:')))
+		_('Your desired nickname is in use or registered by another occupant.\nPlease specify another nickname below:'), proposed_nickname))
 				else:	# print in the window the error
 					self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 						errmsg, errcode))

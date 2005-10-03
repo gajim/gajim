@@ -172,13 +172,14 @@ class Interface:
 		#('INFORMATION', account, (title_text, section_text))
 		dialogs.InformationDialog(data[0], data[1])
 		
-	def handle_event_ask_new_nick(self, unused, data):
-		#('ASK_NEW_NICK', account, (room_jid, title_text, prompt_text))
+	def handle_event_ask_new_nick(self, account, data):
+		#('ASK_NEW_NICK', account, (room_jid, title_text, prompt_text, proposed_nick))
 		room_jid = data[0]
 		title = data[1]
 		prompt = data[2]
-		self.plugin.windows[account]['gc'][room_jid].show_change_nick_input_dialog(
-			title, prompt, room_jid = room_jid)
+		proposed_nick = data[3]
+		self.windows[account]['gc'][room_jid].show_change_nick_input_dialog(
+			title, prompt, proposed_nick, room_jid)
 
 	def handle_event_http_auth(self, account, data):
 		#('HTTP_AUTH', account, (method, url, iq_obj))
@@ -889,18 +890,9 @@ class Interface:
 			except:
 				pass
 		if img_decoded:
-			pixbufloader = gtk.gdk.PixbufLoader()
-			try:
-				pixbufloader.write(img_decoded)
-				pixbuf = pixbufloader.get_pixbuf()
-				pixbufloader.close()
-
-				# store avatar for jid
-				self.avatar_pixbufs[jid] = pixbuf
-
-			# we may get "unknown image format" and/or something like pixbuf can be None
-			except (gobject.GError, AttributeError):
-				pass
+			pixbuf = gtkgui_helpers.get_pixbuf_from_data(img_decoded)
+			# store avatar for jid
+			self.avatar_pixbufs[jid] = pixbuf
 	
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''

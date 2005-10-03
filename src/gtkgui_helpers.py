@@ -283,3 +283,15 @@ def get_abspath_for_script(scriptname, want_type = False):
 		return path_to_script, type
 	else:
 		return path_to_script
+
+def get_pixbuf_from_data(file_data):
+	'''wants img data and returns gtk pixbuf'''
+	pixbufloader = gtk.gdk.PixbufLoader()
+	try:
+		pixbufloader.write(file_data)
+		pixbufloader.close()
+		pixbuf = pixbufloader.get_pixbuf()
+	except gobject.GError: # 'unknown image format'
+		pixbuf = None
+
+	return pixbuf

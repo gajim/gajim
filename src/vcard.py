@@ -181,10 +181,7 @@ class VcardWindow:
 				return
 			fd = open(f, 'rb')
 			data = fd.read()
-			pixbufloader = gtk.gdk.PixbufLoader()
-			pixbufloader.write(data)
-			pixbufloader.close()
-			pixbuf = pixbufloader.get_pixbuf()
+			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
 			image = self.xml.get_widget('PHOTO_image')
 			image.set_from_pixbuf(pixbuf)
 			self.avatar_encoded = base64.encodestring(data)
@@ -219,10 +216,7 @@ class VcardWindow:
 					except:
 						pass
 				if img_decoded:
-					pixbufloader = gtk.gdk.PixbufLoader()
-					pixbufloader.write(img_decoded)
-					pixbufloader.close()
-					pixbuf = pixbufloader.get_pixbuf()
+					pixbuf = gtkgui_helpers.get_pixbuf_from_data(img_decoded)
 					image = self.xml.get_widget('PHOTO_image')
 					image.set_from_pixbuf(pixbuf)
 				continue
