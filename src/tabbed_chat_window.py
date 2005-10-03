@@ -223,10 +223,8 @@ timestamp, contact):
 		return 0 # FIXME: always zero why??
 
 	def show_avatar(self, jid):
-		assert(not self.plugin.avatar_pixbufs.has_key(jid))
-		if not self.plugin.avatar_pixbufs.has_key(jid) or\
-			self.plugin.avatar_pixbufs[jid] is None:
-			return # contact does not have avatar stored (can this happen?) or has no avatar
+		if self.plugin.avatar_pixbufs[jid] is None:
+			return # contact has no avatar
 
 		pixbuf = self.plugin.avatar_pixbufs[jid]
 		w = gajim.config.get('avatar_width')
