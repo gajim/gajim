@@ -222,7 +222,7 @@ timestamp, contact):
 	def get_specific_unread(self, jid):
 		return 0 # FIXME: always zero why??
 
-	def show_avatar(self, jid):
+	def show_avatar(self, jid, resource):
 		if self.plugin.avatar_pixbufs[jid] is None:
 			return # contact has no avatar
 
@@ -236,7 +236,7 @@ timestamp, contact):
 			x = self.xmls[jid]
 		else:
 			# it can be xmls[jid/resource] if it's a vcard from pm
-			jid_with_resource = jid + '/' + vcard['resource']
+			jid_with_resource = jid + '/' + resource
 			if self.xmls.has_key(jid_with_resource):
 				x = self.xmls[jid_with_resource]
 
@@ -388,7 +388,8 @@ timestamp, contact):
 			#avatars in roster
 			#print 'REQUESTING VCARD for', contact.jid
 		else:
-			self.show_avatar(contact.jid) # show avatar from stored place
+			# show avatar from stored place
+			self.show_avatar(contact.jid, contact.resource)
 		
 		self.childs[contact.jid].connect('drag_data_received',
 			self.on_drag_data_received, contact)

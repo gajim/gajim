@@ -627,14 +627,15 @@ class Interface:
 	def handle_event_vcard(self, account, vcard):
 		'''vcard holds the vcard data'''
 		jid = vcard['jid']
+		resource = vcard['resource']
 		self.store_avatar(vcard)
 		
 		# vcard window
 		win = None
 		if self.windows[account]['infos'].has_key(jid):
 			win = self.windows[account]['infos'][jid]
-		elif self.windows[account]['infos'].has_key(jid + '/' +vcard['resource']):
-			win = self.windows[account]['infos'][jid + '/' + vcard['resource']]
+		elif self.windows[account]['infos'].has_key(jid + '/' + resource):
+			win = self.windows[account]['infos'][jid + '/' + resource]
 		if win:
 			win.set_values(vcard) #FIXME: maybe store all vcard data?
 
@@ -642,10 +643,10 @@ class Interface:
 		win = None
 		if self.windows[account]['chats'].has_key(jid):
 			win = self.windows[account]['chats'][jid]
-		elif self.windows[account]['chats'].has_key(jid + '/' +vcard['resource']):
-			win = self.windows[account]['chats'][jid + '/' + vcard['resource']]
+		elif self.windows[account]['chats'].has_key(jid + '/' + resource):
+			win = self.windows[account]['chats'][jid + '/' + resource]
 		if win:
-			win.show_avatar(jid)
+			win.show_avatar(jid, resource)
 		if self.remote is not None:
 			self.remote.raise_signal('VcardInfo', (account, vcard))
 
