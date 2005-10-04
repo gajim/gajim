@@ -276,6 +276,10 @@ class Connection:
 			if xtag.getNamespace() == common.xmpp.NS_MUC_USER and xtag.getTag('invite'): 
 				invite = xtag
 				
+			elif xtag.getNamespace() == common.xmpp.NS_CONFERENCE:
+				room_jid = xtag.getAttr('jid')
+				self.dispatch('GC_INVITATION', (room_jid, frm, '', None))
+				return
 		# chatstates - look for chatstate tags in a message
 		children = msg.getChildren()
 		for child in children:

@@ -375,6 +375,10 @@ class Interface:
 				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactAbsence', (account, array))
 				# stop non active file transfers
+		else:
+			# It's maybe a GC_NOTIFY
+			self.handle_event_gc_notify(account, (jid, array[1], array[2], array[3], None, None, None, None, None, None, None))
+			
 
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (jid, msg, time, encrypted, msg_type, subject, chatstate))
