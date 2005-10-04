@@ -1730,7 +1730,16 @@ class AccountsWindow:
 		(model, iter) = sel.get_selected()
 		if not iter:
 			return
-		account = model.get_value(iter, 0).decode('utf-8')
+		account = model[iter][0].decode('utf-8')
+		self.show_modification_window(account)
+
+	def on_accounts_treeview_row_activated(self, widget, path, column):
+		model = widget.get_model()
+		iter = model.get_iter(path)
+		account = model[iter][0].decode('utf-8')
+		self.show_modification_window(account)
+
+	def show_modification_window(self, account):
 		if self.plugin.windows[account].has_key('account_modification'):
 			self.plugin.windows[account]['account_modification'].window.present()
 		else:

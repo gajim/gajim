@@ -415,6 +415,7 @@
 	      <property name="hover_selection">False</property>
 	      <property name="hover_expand">False</property>
 	      <signal name="cursor_changed" handler="on_accounts_treeview_cursor_changed" last_modification_time="Tue, 01 Mar 2005 18:21:26 GMT"/>
+	      <signal name="row_activated" handler="on_accounts_treeview_row_activated" last_modification_time="Tue, 04 Oct 2005 07:09:52 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
