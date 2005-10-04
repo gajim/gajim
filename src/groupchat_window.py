@@ -349,6 +349,8 @@ class GroupchatWindow(chat.Chat):
 			return
 		if not role:
 			role = 'visitor'
+		if not affiliation:
+			affiliation = 'none'
 		model = self.list_treeview[room_jid].get_model()
 		if show in ('offline', 'error'):
 			if statusCode == '307':
