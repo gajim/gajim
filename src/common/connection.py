@@ -30,6 +30,8 @@ import traceback
 import threading
 import select
 import socket
+import signal
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 from calendar import timegm
 
