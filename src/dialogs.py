@@ -710,7 +710,8 @@ class NewMessageDialog:
 			).get_response()
 			return
 	
-		if jid.find('@') == -1: # if no @ was given
+		if jid.find('@') == -1 and not jid.endswith('/echo'):
+			# if no @ was given and jid is not server.tld/echo
 			ErrorDialog(_('Invalid contact ID'),
 	_('Contact ID must be of the form "username@servername".')).get_response()
 			return
@@ -1045,7 +1046,8 @@ class SingleMessageWindow:
 				message)
 			return
 
-		if to_whom_jid.find('@') == -1: # if no @ was given
+		if to_whom_jid.find('@') == -1 and not to_whom_jid.endswith('/echo'):
+			# if no @ was given and jid is not server.tld/echo
 			ErrorDialog(_('Invalid contact ID'),
 		_('Contact ID must be of the form "username@servername".')).get_response()
 			return
