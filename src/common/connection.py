@@ -260,6 +260,7 @@ class Connection:
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
+		frm = unicode(msg.getFrom())
 		encrypted = False
 		chatstate = None
 		xtags = msg.getTags('x')
@@ -293,28 +294,27 @@ class Connection:
 			msgtxt = decmsg
 			encrypted = True
 		if mtype == 'error':
-			self.dispatch('MSGERROR', (unicode(msg.getFrom()),
-				msg.getErrorCode(), msg.getError(), msgtxt, tim))
+			self.dispatch('MSGERROR', (frm, msg.getErrorCode(), msg.getError(),
+				msgtxt, tim))
 		elif mtype == 'groupchat':
 			if subject:
-				self.dispatch('GC_SUBJECT', (unicode(msg.getFrom()), subject))
+				self.dispatch('GC_SUBJECT', (frm, subject))
 			else:
 				if not msg.getTag('body'): #no <body>
 					return
-				self.dispatch('GC_MSG', (unicode(msg.getFrom()), msgtxt, tim))
+				self.dispatch('GC_MSG', (frm, msgtxt, tim))
 				gajim.logger.write('gc', msgtxt, unicode(msg.getFrom()),
 					tim = tim)
 		elif mtype == 'normal': # it's single message
 			log_msgtxt = msgtxt
 			if subject:
 				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
-			gajim.logger.write('incoming', log_msgtxt, unicode(msg.getFrom()),
-				tim = tim)
+			gajim.logger.write('incoming', log_msgtxt, frm, tim = tim)
 			if invite is not None:
-				self.dispatch('GC_INVITATION',(unicode(msg.getFrom()), invite))
+				self.dispatch('GC_INVITATION',(frm, invite))
 			else:
-				self.dispatch('MSG', (unicode(msg.getFrom()), msgtxt, tim,
-				encrypted, mtype, subject, None))
+				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
+					None))
 		else: # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
 				return
@@ -322,10 +322,9 @@ class Connection:
 			if subject:
 				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
 			if msg.getTag('body'):
-				gajim.logger.write('incoming', log_msgtxt,
-					unicode(msg.getFrom()), tim = tim)
-			self.dispatch('MSG', (unicode(msg.getFrom()), msgtxt, tim,
-				encrypted, mtype, subject, chatstate))
+				gajim.logger.write('incoming', log_msgtxt, frm, tim = tim)
+			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
+				chatstate))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
@@ -1328,6 +1327,9 @@ class Connection:
 	def connect(self):
 		"""Connect and authenticate to the Jabber server
 		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')"""
+		if self.connection:
+			return self.connection
+
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
@@ -1336,8 +1338,6 @@ class Connection:
 			'try_connecting_for_foo_secs')
 
 		#create connection if it doesn't already exist
-		if self.connection:
-			return self.connection
 		self.connected = 1
 		p = gajim.config.get_per('accounts', self.name, 'proxy')
 		if p and p in gajim.config.get_per('proxies'):
@@ -1456,7 +1456,6 @@ class Connection:
 		con.RegisterEventHandler(self._event_dispatcher)
 
 		try:
-			#FIXME: blocking
 			auth = con.auth(name, self.password, resource, 1)
 		except IOError: #probably a timeout
 			self.connected = 0
