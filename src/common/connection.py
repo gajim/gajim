@@ -276,8 +276,8 @@ class Connection:
 			if xtag.getNamespace() == common.xmpp.NS_MUC_USER and xtag.getTag('invite'): 
 				invite = xtag
 				
-			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) doesn't follow the JEP
-			# remove in 2007
+			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED invitation
+			# stanza (MUC JEP) remove in 2007, as we do not do NOT RECOMMENDED
 			elif xtag.getNamespace() == common.xmpp.NS_CONFERENCE:
 				room_jid = xtag.getAttr('jid')
 				self.dispatch('GC_INVITATION', (room_jid, frm, '', None))
