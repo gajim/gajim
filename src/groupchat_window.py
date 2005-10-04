@@ -28,6 +28,7 @@ import cell_renderer_image
 import gtkgui_helpers
 import history_window
 import tooltips
+import re
 
 from gajim import Contact
 from common import gajim
@@ -878,15 +879,59 @@ current room topic.') % command, room_jid)
 		else:
 			kind = 'status'
 
+
+		# Highlighting and sounds
+		
 		nick = self.nicks[room_jid]
-		if kind == 'incoming' and text.lower().find(nick.lower()) != -1:
-			# muc-specific chatstate
-			self.redraw_tab(room_jid, 'attention')
-			other_tags_for_name.append('bold')
-			other_tags_for_text.append('marked')
+		
+		if kind == 'incoming':
+			(highlight, sound) = self.highlighting_for_message(text, nick, tim)
+			if highlight:	
+				other_tags_for_name.append('bold')
+				other_tags_for_text.append('marked')
+			if sound == 'received':
+				helpers.play_sound('muc_message_received')
+			elif sound == 'highlight':
+				helpers.play_sound('muc_message_highlight')
+
 		
 		chat.Chat.print_conversation_line(self, text, room_jid, kind, contact,
 			tim, other_tags_for_name, [], other_tags_for_text)
+			
+	def highlighting_for_message(self, text, nick, tim):
+		"""Returns a 2-Tuple. The first says whether or not to highlight the
+		text, the second, what sound to play."""
+		highlight, sound = (None, None)
+		
+		# Do we play a sound on every muc message?		
+		if gajim.config.get_per('soundevents', 'muc_message_received', 'enabled'):
+			if gajim.config.get('notify_on_all_muc_messages'):
+				sound = 'received'
+		
+		# Are any of the defined highlighting words in the text?
+		if self.need_highlight(text, nick):
+			highlight = True
+			if gajim.config.get_per('soundevents', 'muc_message_highlight',
+									'enabled'):
+				sound = 'highlight'
+				
+		# Is it a history message? Don't want ping-floods when we join.
+		if not tim == time.localtime():
+			sound = None
+			
+		return (highlight, sound)
+
+	def need_highlight(self, text, nick):
+		"""checks text to see whether any of the words in muc_highlight_words
+		appear"""
+		
+		words = gajim.config.get('muc_highlight_words') + " " + nick
+		
+		for word in words.split():
+			if re.search(r'\b(' + word + r')+\b', text, re.IGNORECASE | re.UNICODE):
+				return True
+				
+		return False
 
 	def kick(self, widget, room_jid, nick):
 		"""kick a user"""
