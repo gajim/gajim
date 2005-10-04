@@ -311,7 +311,12 @@ class Connection:
 				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
 			gajim.logger.write('incoming', log_msgtxt, frm, tim = tim)
 			if invite is not None:
-				self.dispatch('GC_INVITATION',(frm, invite))
+				item = invite.getTag('invite')
+				jid_from = item.getAttr('from')
+				reason = item.getTagData('reason')
+				item = invite.getTag('password')
+				password = invite.getTagData('password')
+				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
 			else:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
 					None))

@@ -713,19 +713,9 @@ class Interface:
 			config.GroupchatConfigWindow(self, account, jid, array[1])
 	
 	def handle_event_gc_invitation(self, account, array):
-		#('GC_INVITATION', (unicode(msg.getFrom()), invite))
-		items = array[1].getChildren()
-		password = None
-		reason = None
-		for item in items:
-			if item.getName() == 'invite':
-				contact_jid = item.getAttr('from')
-				reason = item.getTagData('reason')
-			if item.getName() == 'password':
-				password = item.getData()
-
-		dialogs.InvitationReceivedDialog(self, account, array[0], contact_jid,
-			password, reason)
+		#('GC_INVITATION', (room_jid, jid_from, reason, password))
+		dialogs.InvitationReceivedDialog(self, account, array[0], array[1],
+			array[3], array[2])
 	
 	def handle_event_bad_passphrase(self, account, array):
 		use_gpg_agent = gajim.config.get('use_gpg_agent')
