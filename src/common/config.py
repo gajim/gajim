@@ -147,7 +147,7 @@ class Config:
 		'avatar_width': [opt_int, 52],
 		'avatar_height': [opt_int, 52],
 		'muc_highlight_words': [opt_str, '', _('A space-separated list of words that will be highlighted in multi-user chat.')],
-		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This option make sense only if trayicon is used.')],
+		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used.')],
 		'set_xmpp://_handler_everytime': [opt_bool, False, _('If True, Gajim registers for xmpp:// on each startup.')],
 		'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
 	}
@@ -317,8 +317,8 @@ class Config:
 		'contact_connected': [ True, '../data/sounds/connected.wav' ],
 		'contact_disconnected': [ True, '../data/sounds/disconnected.wav' ],
 		'message_sent': [ True, '../data/sounds/sent.wav' ],
-		'muc_message_highlight': [ True, '../data/sounds/gcmessage1.wav', _('Sound to play when a MUC message contains one of the words in muc_highlight_words, or when a MUC message contains your nickname.')],
-		'muc_message_received': [ True, '../data/sounds/gcmessage2.wav', _('Sound to play when a MUC message arrives. (Only if notify_on_all_muc_messages is on)') ],
+		'muc_message_highlight': [ True, '../data/sounds/gc_message1.wav', _('Sound to play when a MUC message contains one of the words in muc_highlight_words, or when a MUC message contains your nickname.')],
+		'muc_message_received': [ True, '../data/sounds/gc_message2.wav', _('Sound to play when any MUC message arrives. (This setting is taken into account only if notify_on_all_muc_messages is True)') ],
 	}
 
 	themes_default = {
