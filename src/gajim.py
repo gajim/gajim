@@ -376,7 +376,9 @@ class Interface:
 					self.remote.raise_signal('ContactAbsence', (account, array))
 				# stop non active file transfers
 		else:
-			# It's maybe a GC_NOTIFY
+			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) doesn't follow the JEP
+			# remove in 2007
+			# It's maybe a GC_NOTIFY (specialy for MSN gc)
 			self.handle_event_gc_notify(account, (jid, array[1], array[2], array[3], None, None, None, None, None, None, None))
 			
 
