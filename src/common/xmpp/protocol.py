@@ -30,6 +30,7 @@ NS_BROWSE       ='jabber:iq:browse'
 NS_CLIENT       ='jabber:client'
 NS_COMMANDS     ='http://jabber.org/protocol/commands'
 NS_COMPONENT_ACCEPT='jabber:component:accept'
+NS_CONFERENCE   ='jabber:x:conference'
 NS_DATA         ='jabber:x:data'                                # JEP-0004
 NS_DELAY        ='jabber:x:delay'
 NS_DIALBACK     ='jabber:server:dialback'
