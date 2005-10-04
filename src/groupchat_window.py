@@ -28,7 +28,7 @@ import cell_renderer_image
 import gtkgui_helpers
 import history_window
 import tooltips
-import re
+import sre
 
 from gajim import Contact
 from common import gajim
@@ -930,7 +930,7 @@ current room topic.') % command, room_jid)
 		words = gajim.config.get('muc_highlight_words') + " " + nick
 		
 		for word in words.split():
-			if re.search(r'\b(' + word + r')+\b', text, re.IGNORECASE | re.UNICODE):
+			if sre.search(r'\b(' + word + r')+\b', text, sre.IGNORECASE | sre.UNICODE):
 				return True
 				
 		return False
