@@ -1255,7 +1255,7 @@ current room topic.') % command, room_jid)
 		column.add_attribute(renderer_image, 'image', 0)
 		renderer_text = gtk.CellRendererText()
 		column.pack_start(renderer_text, expand = True)
-		column.set_attributes(renderer_text, markup = 2)
+		column.set_attributes(renderer_text, markup = C_SHOWN)
 		column.set_cell_data_func(renderer_image, self.tree_cell_data_func, None)
 		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
 
