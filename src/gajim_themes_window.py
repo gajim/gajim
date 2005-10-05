@@ -86,10 +86,9 @@ class GajimThemesWindow:
 			return
 		new_config_name = new_name.replace(' ', '_')
 		if new_config_name in gajim.config.get_per('themes'):
-			#ErrorDialog()
 			return
 		gajim.config.add_per('themes', new_config_name)
-		#Copy old theme values
+		# Copy old theme values
 		old_config_name = old_name.replace(' ', '_')
 		properties = ['textcolor', 'bgcolor', 'font', 'fontattrs']
 		gajim.config.add_per('themes', new_config_name)
@@ -102,6 +101,7 @@ class GajimThemesWindow:
 		if old_config_name == gajim.config.get('roster_theme'):
 			gajim.config.set('roster_theme', new_config_name)
 		model.set_value(iter, 0, new_name)
+		self.current_theme = new_name
 		self.plugin.windows['preferences'].update_preferences_window()
 
 	def fill_themes_treeview(self):
