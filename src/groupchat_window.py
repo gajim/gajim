@@ -1247,7 +1247,7 @@ current room topic.') % command, room_jid)
 
 		#status_image, type, nickname, shown_nick
 		store = gtk.TreeStore(gtk.Image, str, str, str)
-		store.set_sort_column_id(3, gtk.SORT_ASCENDING)
+		store.set_sort_column_id(C_SHOWN, gtk.SORT_ASCENDING)
 		column = gtk.TreeViewColumn('contacts')
 		renderer_image = cell_renderer_image.CellRendererImage()
 		renderer_image.set_property('width', 20)
