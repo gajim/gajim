@@ -2333,31 +2333,24 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.browse(server_address)
 		self.plugin.save_config()
 
-#---------- GroupchatConfigWindow class -------------#
-class GroupchatConfigWindow:
-	'''GroupchatConfigWindow class'''
-	def __init__(self, plugin, account, room_jid, config):
+class DataFormWindow:
+	def __init__(self, plugin, account, config):
 		self.plugin = plugin
 		self.account = account
-		self.room_jid = room_jid
 		self.config = config
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'groupchat_config_window', APP)
-		self.window = self.xml.get_widget('groupchat_config_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'data_form_window', APP)
+		self.window = self.xml.get_widget('data_form_window')
 		self.config_table = self.xml.get_widget('config_table')
 		self.fill_table()
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	def on_groupchat_config_window_destroy(self, widget):
-		del self.plugin.windows[self.account]['gc_config'][self.room_jid]
+	def on_data_form_window_destroy(self, widget):
+		pass
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 	
-	def on_change_button_clicked(self, widget):
-		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
-		self.window.destroy()
-
 	def on_checkbutton_toggled(self, widget, index):
 		self.config[index]['values'][0] = widget.get_active()
 
@@ -2458,6 +2451,20 @@ class GroupchatConfigWindow:
 				self.config_table.attach(widget, 1, max,
 							nbrows, nbrows + 1)
 		self.config_table.show_all()
+
+#---------- GroupchatConfigWindow class -------------#
+class GroupchatConfigWindow(DataFormWindow):
+	'''GroupchatConfigWindow class'''
+	def __init__(self, plugin, account, room_jid, config):
+		DataFormWindow.__init__(self, plugin, account, config)
+		self.room_jid = room_jid
+
+	def on_data_form_window_destroy(self, widget):
+		del self.plugin.windows[self.account]['gc_config'][self.room_jid]
+
+	def on_apply_button_clicked(self, widget):
+		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
+		self.window.destroy()
 
 #---------- RemoveAccountWindow class -------------#
 class RemoveAccountWindow:

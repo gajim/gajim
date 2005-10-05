@@ -12366,7 +12366,7 @@ Status message</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="groupchat_config_window">
+<widget class="GtkWindow" id="data_form_window">
   <property name="border_width">6</property>
   <property name="title" translatable="yes">Room Configuration</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -12382,7 +12382,7 @@ Status message</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <signal name="destroy" handler="on_groupchat_config_window_destroy" last_modification_time="Wed, 20 Apr 2005 10:20:50 GMT"/>
+  <signal name="destroy" handler="on_data_form_window_destroy" last_modification_time="Wed, 05 Oct 2005 08:52:41 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox68">
@@ -12487,77 +12487,15 @@ Status message</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="change_button">
+	    <widget class="GtkButton" id="apply_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
+	      <property name="label">gtk-apply</property>
+	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_change_button_clicked" last_modification_time="Wed, 20 Apr 2005 21:22:05 GMT"/>
-
-	      <child>
-		<widget class="GtkAlignment" id="alignment63">
-		  <property name="visible">True</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xscale">0</property>
-		  <property name="yscale">0</property>
-		  <property name="top_padding">0</property>
-		  <property name="bottom_padding">0</property>
-		  <property name="left_padding">0</property>
-		  <property name="right_padding">0</property>
-
-		  <child>
-		    <widget class="GtkHBox" id="hbox2955">
-		      <property name="visible">True</property>
-		      <property name="homogeneous">False</property>
-		      <property name="spacing">2</property>
-
-		      <child>
-			<widget class="GtkImage" id="image502">
-			  <property name="visible">True</property>
-			  <property name="stock">gtk-apply</property>
-			  <property name="icon_size">4</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label246">
-			  <property name="visible">True</property>
-			  <property name="label">Chan_ge</property>
-			  <property name="use_underline">True</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			  <property name="width_chars">-1</property>
-			  <property name="single_line_mode">False</property>
-			  <property name="angle">0</property>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
+	      <signal name="clicked" handler="on_apply_button_clicked" last_modification_time="Wed, 05 Oct 2005 08:56:12 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
