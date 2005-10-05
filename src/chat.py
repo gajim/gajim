@@ -1369,13 +1369,18 @@ class Chat:
 		textcolor = gajim.config.get_per('themes', theme, 'bannertextcolor')
 		# the backgrounds are colored by using an eventbox by
 		# setting the bg color of the eventbox and the fg of the name_label
+		banner_eventbox = self.xmls[jid].get_widget('banner_eventbox')
+		banner_name_label = self.xmls[jid].get_widget('banner_name_label')
 		if bgcolor:
-			self.xmls[jid].get_widget('banner_eventbox').modify_bg(
-				gtk.STATE_NORMAL, gtk.gdk.color_parse(bgcolor))
+			banner_eventbox.modify_bg(gtk.STATE_NORMAL, 
+				gtk.gdk.color_parse(bgcolor))
+		else:
+			banner_eventbox.modify_bg(gtk.STATE_NORMAL, None)
 		if textcolor:
-			banner_name_label = self.xmls[jid].get_widget('banner_name_label')
 			banner_name_label.modify_fg(gtk.STATE_NORMAL,
 				gtk.gdk.color_parse(textcolor))
+		else:
+			banner_name_label.modify_fg(gtk.STATE_NORMAL, None)
 
 	def repaint_colored_widgets(self):
 		"""Repaint widgets (banner) in the window/tab with theme color"""

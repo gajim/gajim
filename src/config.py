@@ -511,8 +511,8 @@ class PreferencesWindow:
 
 		# begin repainting themed widgets throughout
 		self.plugin.roster.repaint_themed_widgets()
+		self.plugin.roster.change_roster_style(None)
 		self.plugin.save_config()
-		self.plugin.roster.draw_roster()
 
 	def merge_windows(self, kind):
 		for acct in gajim.connections:
