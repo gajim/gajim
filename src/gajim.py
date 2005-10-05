@@ -561,9 +561,10 @@ class Interface:
 				array[2], array[3])
 
 	def handle_event_register_agent_info(self, account, array):
-		#('AGENT_INFO', account, (agent, infos))
+		#('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
 		if array[1].has_key('instructions'):
-			config.ServiceRegistrationWindow(array[0], array[1], self, account)
+			config.ServiceRegistrationWindow(array[0], array[1], self, account,
+				array[2])
 		else:
 			dialogs.ErrorDialog(_('Contact with "%s" cannot be established'\
 % array[0]), _('Check your connection or try again later.')).get_response()

@@ -1114,16 +1114,7 @@ class Connection:
 		resource = iq_obj.getFrom().getResource()
 		self.dispatch('OS_INFO', (jid, resource, client_info, os_info))
 	
-	def _MucOwnerCB(self, con, iq_obj):
-		gajim.log.debug('MucOwnerCB')
-		qp = iq_obj.getQueryPayload()
-		node = None
-		for q in qp:
-			if q.getNamespace() == common.xmpp.NS_DATA:
-				node = q
-		if not node:
-			return
-		# Parse the form
+	def parse_data_form(self, node):
 		dic = {}
 		tag = node.getTag('title')
 		if tag:
@@ -1176,6 +1167,18 @@ class Connection:
 						dic[i]['options'][j]['values'].append(tag.getData())
 					j += 1
 			i += 1
+		return dic
+		
+	def _MucOwnerCB(self, con, iq_obj):
+		gajim.log.debug('MucOwnerCB')
+		qp = iq_obj.getQueryPayload()
+		node = None
+		for q in qp:
+			if q.getNamespace() == common.xmpp.NS_DATA:
+				node = q
+		if not node:
+			return
+		dic = self.parse_data_form(node)
 		self.dispatch('GC_CONFIG', (unicode(iq_obj.getFrom()), dic))
 
 	def _MucErrorCB(self, con, iq_obj):
@@ -1308,7 +1311,7 @@ class Connection:
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
 			if event == common.xmpp.features.REGISTER_DATA_RECEIVED:
-				# data is (agent, DataFrom)
+				# data is (agent, DataFrom, is_form)
 				if self.new_account_info and\
 				self.new_account_info['hostname'] == data[0]:
 					#it's a new account
@@ -1330,7 +1333,12 @@ class Connection:
 					self.dispatch('ACC_OK', (self.name, self.new_account_info))
 					self.new_account_info = None
 					return
-				self.dispatch('REGISTER_AGENT_INFO', (data[0], data[1].asDict()))
+				is_form = data[2]
+				if is_form:
+					conf = self.parse_data_form(data[1])
+				else:
+					conf = data[1].asDict()
+				self.dispatch('REGISTER_AGENT_INFO', (data[0], conf, is_form))
 		elif realm == '':
 			if event == common.xmpp.transports.DATA_RECEIVED:
 				self.dispatch('STANZA_ARRIVED', unicode(data))
@@ -1759,11 +1767,17 @@ class Connection:
 			return None
 		common.xmpp.features.getRegInfo(self.connection, agent, sync = False)
 
-	def register_agent(self, agent, info):
+	def register_agent(self, agent, info, is_form = False):
 		if not self.connection:
 			return
-		# FIXME: Blocking
-		common.xmpp.features.register(self.connection, agent, info)
+		if is_form:
+			iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
+			query = iq.getTag('query')
+			self.build_data_from_dict(query, info)
+			self.to_be_sent.append(iq)
+		else:
+			# FIXME: Blocking
+			common.xmpp.features.register(self.connection, agent, info)
 
 	def new_account(self, name, config, sync = False):
 		if sync:
@@ -1979,11 +1993,7 @@ class Connection:
 			item.addChild(name = 'reason', payload = reason)
 		self.to_be_sent.append(iq)
 
-	def send_gc_config(self, room_jid, config):
-		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
-			common.xmpp.NS_MUC_OWNER)
-		query = iq.getTag('query')
-		# FIXME: should really use XData class
+	def build_data_from_dict(self, query, config):
 		x = query.setTag(common.xmpp.NS_DATA + ' x', attrs = {'type': 'submit'})
 		i = 0
 		while config.has_key(i):
@@ -2004,6 +2014,12 @@ class Connection:
 						val = '1'
 					tag.setTagData('value', val)
 			i += 1
+
+	def send_gc_config(self, room_jid, config):
+		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
+			common.xmpp.NS_MUC_OWNER)
+		query = iq.getTag('query')
+		self.build_data_from_dict(query, config)
 		self.to_be_sent.append(iq)
 
 	def gpg_passphrase(self, passphrase):

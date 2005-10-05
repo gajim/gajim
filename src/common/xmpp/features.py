@@ -94,14 +94,14 @@ def _ReceivedRegInfo(con, resp, agent):
     if not isResultNode(resp): return
     df=resp.getTag('query',namespace=NS_REGISTER).getTag('x',namespace=NS_DATA)
     if df:
-        con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent, DataForm(node=df)))
+        con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,DataForm(node=df),True))
         return
     df=DataForm(typ='form')
     for i in resp.getQueryPayload():
         if type(i)<>type(iq): pass
         elif i.getName()=='instructions': df.addInstructions(i.getData())
         else: df.setField(i.getName()).setValue(i.getData())
-    con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent, df))
+    con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,df,False))
 
 def register(disp,host,info):
     """ Perform registration on remote server with provided info.

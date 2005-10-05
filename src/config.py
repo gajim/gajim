@@ -1746,13 +1746,134 @@ class AccountsWindow:
 			self.plugin.windows[account]['account_modification'] = \
 				AccountModificationWindow(self.plugin, account)
 
-#---------- ServiceRegistrationWindow class -------------#
-class ServiceRegistrationWindow:
+class DataFormWindow:
+	def __init__(self, plugin, account, config):
+		self.plugin = plugin
+		self.account = account
+		self.config = config
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'data_form_window', APP)
+		self.window = self.xml.get_widget('data_form_window')
+		self.config_table = self.xml.get_widget('config_table')
+		self.fill_table()
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_data_form_window_destroy(self, widget):
+		pass
+
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()
+	
+	def on_checkbutton_toggled(self, widget, index):
+		self.config[index]['values'][0] = widget.get_active()
+
+	def on_combobox_changed(self, widget, index):
+		self.config[index]['values'][0] = self.config[index]['options'][ \
+			widget.get_active()]['values'][0]
+
+	def on_entry_changed(self, widget, index):
+		self.config[index]['values'][0] = widget.get_text().decode('utf-8')
+
+	def on_textbuffer_changed(self, widget, index):
+		begin, end = widget.get_bounds()
+		self.config[index]['values'][0] = widget.get_text(begin, end)
+		
+	def fill_table(self):
+		if self.config.has_key('title'):
+			self.window.set_title(self.config['title'])
+		if self.config.has_key('instructions'):
+			self.xml.get_widget('instructions_label').set_text(
+				self.config['instructions'])
+		i = 0
+		while self.config.has_key(i):
+			if not self.config[i].has_key('type'):
+				i += 1
+				continue
+			ctype = self.config[i]['type']
+			if ctype == 'hidden':
+				i += 1
+				continue
+			nbrows = self.config_table.get_property('n-rows')
+			self.config_table.resize(nbrows + 1, 2)
+			if self.config[i].has_key('label'):
+				label = gtk.Label(self.config[i]['label'])
+				label.set_alignment(0.0, 0.5)
+				self.config_table.attach(label, 0, 1, nbrows, nbrows + 1, 
+					gtk.FILL	| gtk.SHRINK)
+			desc = None
+			if self.config[i].has_key('desc'):
+				desc = self.config[i]['desc']
+			max = 1
+			if ctype == 'boolean':
+				widget = gtk.CheckButton(desc, False)
+				widget.set_active(self.config[i]['values'][0])
+				widget.connect('toggled', self.on_checkbutton_toggled, i)
+				max = 2
+			elif ctype == 'fixed':
+				widget = gtk.Label('\n'.join(self.config[i]['values']))
+				widget.set_alignment(0.0, 0.5)
+				max = 4
+			elif ctype == 'jid-multi':
+				#TODO
+				widget = gtk.Label('')
+			elif ctype == 'jid-single':
+				#TODO
+				widget = gtk.Label('')
+			elif ctype == 'list-multi':
+				#TODO
+				widget = gtk.Label('')
+			elif ctype == 'list-single':
+				widget = gtk.combo_box_new_text()
+				widget.connect('changed', self.on_combobox_changed, i)
+				index = 0
+				j = 0
+				while self.config[i]['options'].has_key(j):
+					if self.config[i]['options'][j]['values'][0] == \
+						self.config[i]['values'][0]:
+						index = j
+					widget.append_text(self.config[i]['options'][j]['label'])
+					j += 1
+				widget.set_active(index)
+				max = 3
+			elif ctype == 'text-multi':
+				widget = gtk.TextView()
+				widget.get_buffer().connect('changed', self.on_textbuffer_changed, \
+					i)
+				widget.get_buffer().set_text('\n'.join(self.config[i]['values']))
+				max = 4
+			elif ctype == 'text-private':
+				widget = gtk.Entry()
+				widget.connect('changed', self.on_entry_changed, i)
+				if not self.config[i].has_key('values'):
+					self.config[i]['values'] = ['']
+				widget.set_text(self.config[i]['values'][0])
+				widget.set_visibility(False)
+				max = 3
+			elif ctype == 'text-single':
+				widget = gtk.Entry()
+				widget.connect('changed', self.on_entry_changed, i)
+				if not self.config[i].has_key('values'):
+					self.config[i]['values'] = ['']
+				max = 3
+			i += 1
+			if max < 4:
+				self.config_table.attach(widget, 1, max,
+							nbrows, nbrows + 1,
+							gtk.FILL | gtk.SHRINK)
+				widget = gtk.Label()
+				self.config_table.attach(widget, max, 4,
+							nbrows, nbrows + 1)
+			else:
+				self.config_table.attach(widget, 1, max,
+							nbrows, nbrows + 1)
+		self.config_table.show_all()
+
+class ServiceRegistrationWindow(DataFormWindow):
 	'''Class for Service registration window:
 	Window that appears when we want to subscribe to a service'''
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
-		
+
 	def draw_table(self):
 		'''Draw the table in the window'''
 		nbrow = 0
@@ -1778,7 +1899,14 @@ class ServiceRegistrationWindow:
 			if nbrow == 1:
 				entry.grab_focus()
 		table.show_all()
-	
+
+	def add_transport_to_roster(self):
+		user1 = Contact(jid = self.service, name = self.service,
+			groups = [_('Transports')], show = 'offline', status = 'offline',
+			sub = 'from')
+		gajim.contacts[self.account][self.service] = [user1]
+		self.plugin.roster.add_contact_to_roster(self.service, self.account)
+
 	def on_ok_button_clicked(self, widget):
 		'''When Ok button is clicked:
 		send registration info to the core'''
@@ -1789,30 +1917,39 @@ class ServiceRegistrationWindow:
 		if self.infos.has_key('registered'):
 			del self.infos['registered']
 		else:
-			user1 = Contact(jid = self.service, name = self.service,
-			groups = [_('Transports')], show = 'offline', status = 'offline',
-			sub = 'from')
-			gajim.contacts[self.account][self.service] = [user1]
-			self.plugin.roster.add_contact_to_roster(self.service, self.account)
+			self.add_transport_to_roster()
 		gajim.connections[self.account].register_agent(self.service, self.infos)
 		self.window.destroy()
-	
-	def __init__(self, service, infos, plugin, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE,	'service_registration_window', APP)
+
+	def on_apply_button_clicked(self, widget):
+		# We press apply button of the FormDataWindow
+		if self.infos.has_key('registered'):
+			del self.infos['registered']
+		else:
+			self.add_transport_to_roster()
+		gajim.connections[self.account].register_agent(self.service, self.infos,
+			True) # True is for is_form
+		self.window.destroy()
+
+	def __init__(self, service, infos, plugin, account, is_form):
 		self.service = service
 		self.infos = infos
 		self.plugin = plugin
 		self.account = account
-		self.window = self.xml.get_widget('service_registration_window')
-		if infos.has_key('registered'):
-			self.window.set_title(_('Edit %s' % service))
+		if is_form:
+			DataFormWindow.__init__(self, plugin, account, infos)
 		else:
-			self.window.set_title(_('Register to %s' % service))
-		self.xml.get_widget('label').set_text(infos['instructions'])
-		self.entries = {}
-		self.draw_table()
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
+			self.xml = gtk.glade.XML(GTKGUI_GLADE,	'service_registration_window', APP)
+			self.window = self.xml.get_widget('service_registration_window')
+			if infos.has_key('registered'):
+				self.window.set_title(_('Edit %s' % service))
+			else:
+				self.window.set_title(_('Register to %s' % service))
+			self.xml.get_widget('label').set_text(infos['instructions'])
+			self.entries = {}
+			self.draw_table()
+			self.xml.signal_autoconnect(self)
+			self.window.show_all()
 
 
 #---------- ManageEmoticonsWindow class -------------#
@@ -2333,126 +2470,6 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.browse(server_address)
 		self.plugin.save_config()
 
-class DataFormWindow:
-	def __init__(self, plugin, account, config):
-		self.plugin = plugin
-		self.account = account
-		self.config = config
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'data_form_window', APP)
-		self.window = self.xml.get_widget('data_form_window')
-		self.config_table = self.xml.get_widget('config_table')
-		self.fill_table()
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
-
-	def on_data_form_window_destroy(self, widget):
-		pass
-
-	def on_close_button_clicked(self, widget):
-		self.window.destroy()
-	
-	def on_checkbutton_toggled(self, widget, index):
-		self.config[index]['values'][0] = widget.get_active()
-
-	def on_combobox_changed(self, widget, index):
-		self.config[index]['values'][0] = self.config[index]['options'][ \
-			widget.get_active()]['values'][0]
-
-	def on_entry_changed(self, widget, index):
-		self.config[index]['values'][0] = widget.get_text().decode('utf-8')
-
-	def on_textbuffer_changed(self, widget, index):
-		begin, end = widget.get_bounds()
-		self.config[index]['values'][0] = widget.get_text(begin, end)
-		
-	def fill_table(self):
-		if self.config.has_key('title'):
-			self.window.set_title(self.config['title'])
-		if self.config.has_key('instructions'):
-			self.xml.get_widget('instructions_label').set_text(
-				self.config['instructions'])
-		i = 0
-		while self.config.has_key(i):
-			if not self.config[i].has_key('type'):
-				i += 1
-				continue
-			ctype = self.config[i]['type']
-			if ctype == 'hidden':
-				i += 1
-				continue
-			nbrows = self.config_table.get_property('n-rows')
-			self.config_table.resize(nbrows + 1, 2)
-			if self.config[i].has_key('label'):
-				label = gtk.Label(self.config[i]['label'])
-				label.set_alignment(0.0, 0.5)
-				self.config_table.attach(label, 0, 1, nbrows, nbrows + 1, 
-					gtk.FILL	| gtk.SHRINK)
-			desc = None
-			if self.config[i].has_key('desc'):
-				desc = self.config[i]['desc']
-			max = 1
-			if ctype == 'boolean':
-				widget = gtk.CheckButton(desc, False)
-				widget.set_active(self.config[i]['values'][0])
-				widget.connect('toggled', self.on_checkbutton_toggled, i)
-				max = 2
-			elif ctype == 'fixed':
-				widget = gtk.Label('\n'.join(self.config[i]['values']))
-				widget.set_alignment(0.0, 0.5)
-				max = 4
-			elif ctype == 'jid-multi':
-				#TODO
-				widget = gtk.Label('')
-			elif ctype == 'jid-single':
-				#TODO
-				widget = gtk.Label('')
-			elif ctype == 'list-multi':
-				#TODO
-				widget = gtk.Label('')
-			elif ctype == 'list-single':
-				widget = gtk.combo_box_new_text()
-				widget.connect('changed', self.on_combobox_changed, i)
-				index = 0
-				j = 0
-				while self.config[i]['options'].has_key(j):
-					if self.config[i]['options'][j]['values'][0] == \
-						self.config[i]['values'][0]:
-						index = j
-					widget.append_text(self.config[i]['options'][j]['label'])
-					j += 1
-				widget.set_active(index)
-				max = 3
-			elif ctype == 'text-multi':
-				widget = gtk.TextView()
-				widget.get_buffer().connect('changed', self.on_textbuffer_changed, \
-					i)
-				widget.get_buffer().set_text('\n'.join(self.config[i]['values']))
-				max = 4
-			elif ctype == 'text-private':
-				widget = gtk.Entry()
-				widget.connect('changed', self.on_entry_changed, i)
-				widget.set_text(self.config[i]['values'][0])
-				widget.set_visibility(False)
-				max = 3
-			elif ctype == 'text-single':
-				widget = gtk.Entry()
-				widget.connect('changed', self.on_entry_changed, i)
-				widget.set_text(self.config[i]['values'][0])
-				max = 3
-			i += 1
-			if max < 4:
-				self.config_table.attach(widget, 1, max,
-							nbrows, nbrows + 1,
-							gtk.FILL | gtk.SHRINK)
-				widget = gtk.Label()
-				self.config_table.attach(widget, max, 4,
-							nbrows, nbrows + 1)
-			else:
-				self.config_table.attach(widget, 1, max,
-							nbrows, nbrows + 1)
-		self.config_table.show_all()
-
-#---------- GroupchatConfigWindow class -------------#
 class GroupchatConfigWindow(DataFormWindow):
 	'''GroupchatConfigWindow class'''
 	def __init__(self, plugin, account, room_jid, config):
