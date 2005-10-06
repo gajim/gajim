@@ -60,7 +60,7 @@ class Chat:
 		self.nb_unread = {}
 		self.last_time_printout = {}
 		self.print_time_timeout_id = {}
-		self.names = {} # what is printed in the tab (eg. user.name)
+		self.names = {} # what is printed in the tab (eg. contact.name)
 		self.childs = {} # holds the contents for every tab (VBox)
 
 		# the following vars are used to keep history of user's messages
@@ -145,12 +145,7 @@ class Chat:
 		elif len(self.xmls) == 1: # just one tab
 			if self.widget_name == 'tabbed_chat_window':
 				c = gajim.get_first_contact_instance_from_jid(self.account, jid)
-				if c is None: # FIXME: I don't know why but c can be None!
-					# FIXME: let's find out
-					assert(False)
-					add = ''
-				else:
-					add = c.name
+				add = c.name
 			elif self.widget_name == 'groupchat_window':
 				name = gajim.get_nick_from_jid(jid)
 				add = name
@@ -1211,12 +1206,6 @@ class Chat:
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			at_the_end = True
 
-		# FIXME: who gives us text that is not a string?
-		if not text:
-			# FIXME: Let's find out...
-			assert(False)
-			text = ''
-		
 		if buffer.get_char_count() > 0:
 			buffer.insert(end_iter, '\n')
 		update_time = True
