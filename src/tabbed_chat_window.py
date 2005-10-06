@@ -72,7 +72,6 @@ class TabbedChatWindow(chat.Chat):
 'on_tabbed_chat_window_destroy': self.on_tabbed_chat_window_destroy,
 'on_tabbed_chat_window_delete_event': self.on_tabbed_chat_window_delete_event,
 'on_tabbed_chat_window_focus_in_event': self.on_tabbed_chat_window_focus_in_event,
-'on_tabbed_chat_window_focus_out_event': self.on_tabbed_chat_window_focus_out_event,
 'on_chat_notebook_key_press_event': self.on_chat_notebook_key_press_event,
 'on_chat_notebook_switch_page': self.on_chat_notebook_switch_page, # in chat.py
 'on_tabbed_chat_window_motion_notify_event': self.on_tabbed_chat_window_motion_notify_event,
