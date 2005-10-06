@@ -43,7 +43,7 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 class TabbedChatWindow(chat.Chat):
 	"""Class for tabbed chat window"""
-	def __init__(self, user, plugin, account):
+	def __init__(self, contact, plugin, account):
 		# we check that on opening new windows
 		self.always_compact_view = gajim.config.get('always_compact_view_chat')
 		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
@@ -64,7 +64,7 @@ class TabbedChatWindow(chat.Chat):
 		
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
-		self.new_tab(user)
+		self.new_tab(contact)
 		self.show_title()
 	
 		# NOTE: if it not a window event, do not connect here (new_tab() autoconnects)
@@ -251,10 +251,10 @@ timestamp, contact):
 		else:
 			contacts_list = [self.contacts[jid]]
 
-		user = contacts_list[0]
-		show = user.show
-		jid = user.jid
-		keyID = user.keyID
+		contact = contacts_list[0]
+		show = contact.show
+		jid = contact.jid
+		keyID = contact.keyID
 
 		for u in contacts_list:
 			if u.priority > prio:
@@ -533,11 +533,11 @@ timestamp, contact):
 			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
 				conversation_textview.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Up:
-			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
+			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+UP
 				self.sent_messages_scroll(jid, 'up', widget.get_buffer())
 				return True # override the default gtk+ thing for ctrl+up
 		elif event.keyval == gtk.keysyms.Down:
-			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+Down
+			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+Down
 				self.sent_messages_scroll(jid, 'down', widget.get_buffer())
 				return True # override the default gtk+ thing for ctrl+down
 		elif event.keyval == gtk.keysyms.Return or \
@@ -547,7 +547,7 @@ timestamp, contact):
 					return False
 			elif (event.state & gtk.gdk.SHIFT_MASK):
 					return False
-			if gajim.connections[self.account].connected < 2: #we are not connected
+			if gajim.connections[self.account].connected < 2: # we are not connected
 				dialogs.ErrorDialog(_('A connection is not available'),
 					_('Your message can not be sent until you are connected.')).get_response()
 				return True
@@ -719,7 +719,7 @@ timestamp, contact):
 	def read_queue(self, jid):
 		"""read queue and print messages containted in it"""
 		l = gajim.awaiting_messages[self.account][jid]
-		user = self.contacts[jid]
+		contact = self.contacts[jid]
 		# Is it a pm ?
 		is_pm = False
 		room_jid = jid.split('/', 1)[0]
@@ -757,10 +757,10 @@ timestamp, contact):
 		if self.plugin.systray_enabled:
 			self.plugin.systray.remove_jid(jid, self.account, typ)
 		showOffline = gajim.config.get('showoffline')
-		if (user.show == 'offline' or user.show == 'error') and \
+		if (contact.show == 'offline' or contact.show == 'error') and \
 			not showOffline:
 			if len(gajim.contacts[self.account][jid]) == 1:
-				self.plugin.roster.really_remove_contact(user, self.account)
+				self.plugin.roster.really_remove_contact(contact, self.account)
 
 	def print_conversation(self, text, jid, contact = '', tim = None,
 		encrypted = False, subject = None):
@@ -769,7 +769,7 @@ timestamp, contact):
 		if contact is set to another value: it's an outgoing message
 		if contact is set to print_queue: it is incomming from queue
 		if contact is not set: it's an incomming message"""
-		user = self.contacts[jid]
+		contact = self.contacts[jid]
 		if contact == 'status':
 			kind = 'status'
 			name = ''
@@ -788,10 +788,10 @@ timestamp, contact):
 			self.xmls[jid].get_widget('gpg_togglebutton').set_active(encrypted)
 			if not contact:
 				kind = 'incoming'
-				name = user.name
+				name = contact.name
 			elif contact == 'print_queue': # incoming message, but do not update time
 				kind = 'incoming_queue'
-				name = user.name
+				name = contact.name
 			else:
 				kind = 'outgoing'
 				name = gajim.nicks[self.account] 
