@@ -9393,7 +9393,6 @@ topic</property>
 			      <property name="indent">0</property>
 			      <property name="text" translatable="yes"></property>
 			      <signal name="key_press_event" handler="on_message_textview_key_press_event" last_modification_time="Sat, 05 Mar 2005 00:31:14 GMT"/>
-			      <signal name="populate_popup" handler="on_message_textview_populate_popup" last_modification_time="Sun, 07 Aug 2005 14:10:41 GMT"/>
 			    </widget>
 			  </child>
 			</widget>
