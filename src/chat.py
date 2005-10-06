@@ -349,7 +349,6 @@ class Chat:
 		self.actions_button = widget
 		
 		menu = self.prepare_context_menu()
-		menu.connect('deactivate', self.on_popup_deactivate)
 		menu.popup(None, None, self.position_actions_menu, 1, 0)
 		menu.show_all()
 
@@ -421,7 +420,6 @@ class Chat:
 
 	def popup_menu(self, event):
 		menu = self.prepare_context_menu()
-		menu.connect('deactivate', self.on_popup_deactivate)
 		# common menuitems (tab switches)
 		if len(self.xmls) > 1: # if there is more than one tab
 			menu.append(gtk.SeparatorMenuItem()) # seperator
