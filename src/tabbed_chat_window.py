@@ -321,13 +321,6 @@ timestamp, contact):
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
 		# on focus in, send 'active' chatstate to current tab
 		self.send_chatstate('active')
-
-	def on_tabbed_chat_window_focus_out_event(self, widget, event):
-		'''catch focus out and minimized and send inactive chatstate;
-		minimize action also focuses out first so it's catched here'''
-		window_state = widget.window.get_state()
-		if window_state is None:
-			return
 		
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)

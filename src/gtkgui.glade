@@ -10941,7 +10941,6 @@ Status message</property>
 		      <property name="indent">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <signal name="key_press_event" handler="on_message_textview_key_press_event" last_modification_time="Wed, 02 Mar 2005 21:05:35 GMT"/>
-		      <signal name="populate_popup" handler="on_message_textview_populate_popup" last_modification_time="Sun, 07 Aug 2005 14:10:24 GMT"/>
 		    </widget>
 		  </child>
 		</widget>

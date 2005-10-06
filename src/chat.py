@@ -43,7 +43,7 @@ gtk.glade.textdomain(APP)
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class Chat:
-	"""Class for chat/groupchat windows"""
+	'''Class for chat/groupchat windows'''
 	def __init__(self, plugin, account, widget_name):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.window = self.xml.get_widget(widget_name)
@@ -62,7 +62,6 @@ class Chat:
 		self.print_time_timeout_id = {}
 		self.names = {} # what is printed in the tab (eg. user.name)
 		self.childs = {} # holds the contents for every tab (VBox)
-		self.popup_is_shown = False # is a context menu shown or not?
 
 		# the following vars are used to keep history of user's messages
 		self.sent_history = {}
@@ -128,7 +127,7 @@ class Chat:
 							jid)
 
 	def show_title(self, urgent = True):
-		"""redraw the window's title"""
+		'''redraw the window's title'''
 		unread = 0
 		for jid in self.nb_unread:
 			unread += self.nb_unread[jid]
@@ -300,11 +299,11 @@ class Chat:
 		return active_jid
 
 	def on_close_button_clicked(self, button, jid):
-		"""When close button is pressed: close a tab"""
+		'''When close button is pressed: close a tab'''
 		self.remove_tab(jid)
 
 	def on_history_menuitem_clicked(self, widget = None, jid = None):
-		"""When history menuitem is pressed: call history window"""
+		'''When history menuitem is pressed: call history window'''
 		if jid is None:
 			jid = self.get_active_jid()
 		if self.plugin.windows['logs'].has_key(jid):
@@ -314,7 +313,7 @@ class Chat:
 				self.plugin, jid, self.account)
 
 	def on_chat_window_focus_in_event(self, widget, event):
-		"""When window gets focus"""
+		'''When window gets focus'''
 		jid = self.get_active_jid()
 		
 		textview = self.xmls[jid].get_widget('conversation_textview')
@@ -355,7 +354,6 @@ class Chat:
 		self.actions_button = widget
 		
 		menu = self.prepare_context_menu()
-		self.popup_is_shown = True
 		menu.connect('deactivate', self.on_popup_deactivate)
 		menu.popup(None, None, self.position_actions_menu, 1, 0)
 		menu.show_all()
@@ -427,7 +425,6 @@ class Chat:
 		return menu
 
 	def popup_menu(self, event):
-		self.popup_is_shown = True
 		menu = self.prepare_context_menu()
 		menu.connect('deactivate', self.on_popup_deactivate)
 		# common menuitems (tab switches)
@@ -451,9 +448,6 @@ class Chat:
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
 			self.popup_menu(event)
-
-	def on_popup_deactivate(self, widget):
-		self.popup_is_shown = False
 
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
 		# get the index of the page and then the page that we're leaving
@@ -734,7 +728,7 @@ class Chat:
 		self.show_title()
 
 	def on_conversation_textview_key_press_event(self, widget, event):
-		"""Do not block these events and send them to the notebook"""
+		'''Do not block these events and send them to the notebook'''
 		if event.state & gtk.gdk.CONTROL_MASK:
 			if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
@@ -881,16 +875,10 @@ class Chat:
 		'''basically it filters out the widget instance'''
 		helpers.launch_browser_mailer('url', link)
 
-	def on_message_textview_populate_popup(self, textview, menu):
-		self.popup_is_shown = True
-		menu.connect('deactivate', self.on_popup_deactivate)
-
 	def on_conversation_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear
 		and if we have sth selected we show a submenu with actions on the phrase
 		(see on_conversation_textview_button_press_event)'''
-		self.popup_is_shown = True
-		menu.connect('deactivate', self.on_popup_deactivate)
 		item = gtk.SeparatorMenuItem()
 		menu.prepend(item)
 		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
@@ -1037,8 +1025,6 @@ class Chat:
 	def make_link_menu(self, event, kind, text):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_context_menu', APP)
 		menu = xml.get_widget('chat_context_menu')
-		self.popup_is_shown = True
-		menu.connect('deactivate', self.on_popup_deactivate)
 		childs = menu.get_children()
 		if kind == 'url':
 			childs[0].connect('activate', self.on_copy_link_activate, text)
@@ -1383,7 +1369,7 @@ class Chat:
 			banner_name_label.modify_fg(gtk.STATE_NORMAL, None)
 
 	def repaint_colored_widgets(self):
-		"""Repaint widgets (banner) in the window/tab with theme color"""
+		'''Repaint widgets (banner) in the window/tab with theme color'''
 		# iterate through tabs/windows and repaint
 		for jid in self.xmls:
 			self.paint_banner(jid)
