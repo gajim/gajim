@@ -1600,6 +1600,12 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	def on_new_message_menuitem_activate(self, widget, account):
 		dialogs.NewMessageDialog(self.plugin, account)
 			
+	def on_contents_menuitem_activate(self, widget):
+		helpers.launch_browser_mailer('url', 'http://trac.gajim.org/wiki')
+		
+	def on_faq_menuitem_activate(self, widget):
+		helpers.launch_browser_mailer('url', 'http://trac.gajim.org/wiki/GajimFaq')
+
 	def on_about_menuitem_activate(self, widget):
 		dialogs.AboutDialog()
 
