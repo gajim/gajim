@@ -274,12 +274,13 @@ class Connection:
 			if xtag.getNamespace() == common.xmpp.NS_ENCRYPTED:
 				encTag = xtag
 				break
-		#invitations
-		for xtag in xtags: 
-			if xtag.getNamespace() == common.xmpp.NS_MUC_USER and xtag.getTag('invite'): 
+			#invitations
+			elif xtag.getNamespace() == common.xmpp.NS_MUC_USER and \
+				xtag.getTag('invite'): 
 				invite = xtag
 				
-			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED invitation
+			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
+			# invitation
 			# stanza (MUC JEP) remove in 2007, as we do not do NOT RECOMMENDED
 			elif xtag.getNamespace() == common.xmpp.NS_CONFERENCE:
 				room_jid = xtag.getAttr('jid')

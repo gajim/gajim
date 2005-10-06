@@ -459,7 +459,7 @@ class Interface:
 
 		# array : (contact, msg, time, encrypted, msg_type, subject)
 		self.roster.on_message(jid, array[1], array[2], account, array[3],
-			array[4], array[5])
+			msg_type, array[5])
 		if gajim.config.get_per('soundevents', 'first_message_received',
 			'enabled') and first:
 			helpers.play_sound('first_message_received')

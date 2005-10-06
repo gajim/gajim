@@ -112,8 +112,8 @@ class TabbedChatWindow(chat.Chat):
 			self.mouse_over_in_last_5_secs = True
 			self.mouse_over_in_last_30_secs = True
 
-	def on_drag_data_received(self, widget, context, x, y, selection, target_type,
-timestamp, contact):
+	def on_drag_data_received(self, widget, context, x, y, selection,
+		target_type, timestamp, contact):
 		if target_type == self.TARGET_TYPE_URI_LIST:
 			uri = selection.data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
@@ -418,7 +418,7 @@ timestamp, contact):
 		
 		self.possible_paused_timeout_id[contact.jid] =\
 			gobject.timeout_add(5000, self.check_for_possible_paused_chatstate,
-				contact.jid)
+			contact.jid)
 		self.possible_inactive_timeout_id[contact.jid] =\
 			gobject.timeout_add(30000, self.check_for_possible_inactive_chatstate,
 				contact.jid)
