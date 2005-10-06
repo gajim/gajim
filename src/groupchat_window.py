@@ -1181,8 +1181,6 @@ current room topic.') % command, room_jid)
 		# show the popup now!
 		menu = xml.get_widget('gc_occupants_menu')
 		menu.popup(None, None, None, event.button, event.time)
-		self.popup_is_shown = True
-		menu.connect('deactivate', self.on_popup_deactivate)
 		menu.show_all()
 
 	def remove_tab(self, room_jid, reason = 'offline'):
