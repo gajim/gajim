@@ -53,7 +53,7 @@ C_SHOWN, # text shown in the cellrenderer
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class GroupchatWindow(chat.Chat):
-	"""Class for Groupchat window"""
+	'''Class for Groupchat window'''
 	def __init__(self, room_jid, nick, plugin, account):
 		# we check that on opening new windows
 		self.always_compact_view = gajim.config.get('always_compact_view_gc')
@@ -134,7 +134,7 @@ class GroupchatWindow(chat.Chat):
 			self.got_connected(room_jid)
 
 	def on_groupchat_window_delete_event(self, widget, event):
-		"""close window"""
+		'''close window'''
 		# whether to ask for comfirmation before closing muc
 		if gajim.config.get('confirm_close_muc'):
 			names = []
@@ -268,7 +268,7 @@ class GroupchatWindow(chat.Chat):
 		return gajim.gc_contacts[self.account][room_jid].keys()
 
 	def remove_contact(self, room_jid, nick):
-		"""Remove a user from the contacts_list"""
+		'''Remove a user from the contacts_list'''
 		model = self.list_treeview[room_jid].get_model()
 		iter = self.get_contact_iter(room_jid, nick)
 		if not iter:
@@ -344,7 +344,7 @@ class GroupchatWindow(chat.Chat):
 
 	def chg_contact_status(self, room_jid, nick, show, status, role, affiliation,
 		jid, reason, actor, statusCode, new_nick, account):
-		"""When a user changes his status"""
+		'''When a user changes his status'''
 		if show == 'invisible':
 			return
 		if not role:
@@ -503,9 +503,9 @@ class GroupchatWindow(chat.Chat):
 				_('You can manage your bookmarks via Actions menu in your roster.'))
 
 	def on_message_textview_key_press_event(self, widget, event):
-		"""When a key is pressed:
+		'''When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
-		and printed in the conversation. Tab does autocomplete in nicknames"""
+		and printed in the conversation. Tab does autocomplete in nicknames'''
 		room_jid = self.get_active_jid()
 		conversation_textview = self.xmls[room_jid].get_widget(
 			'conversation_textview')
@@ -622,7 +622,7 @@ class GroupchatWindow(chat.Chat):
 			self.last_key_tabs[room_jid] = False
 
 	def on_send_button_clicked(self, widget):
-		"""When send button is pressed: send the current message"""
+		'''When send button is pressed: send the current message'''
 		room_jid = self.get_active_jid()
 		message_textview = self.xmls[room_jid].get_widget(
 			'message_textview')
@@ -864,9 +864,9 @@ current room topic.') % command, room_jid)
 			self.print_conversation(_('No help info for /%s') % command, room_jid)
 
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
-		"""Print a line in the conversation:
+		'''Print a line in the conversation:
 		if contact is set: it's a message from someone
-		if contact is not set: it's a message from the server"""
+		if contact is not set: it's a message from the server'''
 		if type(text) == str:
 			text = unicode(text, 'utf-8')
 		other_tags_for_name = []
@@ -901,8 +901,8 @@ current room topic.') % command, room_jid)
 			tim, other_tags_for_name, [], other_tags_for_text)
 			
 	def highlighting_for_message(self, text, nick, tim):
-		"""Returns a 2-Tuple. The first says whether or not to highlight the
-		text, the second, what sound to play."""
+		'''Returns a 2-Tuple. The first says whether or not to highlight the
+		text, the second, what sound to play.'''
 		highlight, sound = (None, None)
 		
 		# Do we play a sound on every muc message?		
@@ -911,7 +911,7 @@ current room topic.') % command, room_jid)
 				sound = 'received'
 		
 		# Are any of the defined highlighting words in the text?
-		if self.need_highlight(text, nick):
+		if self.needs_highlight(text, nick):
 			highlight = True
 			if gajim.config.get_per('soundevents', 'muc_message_highlight',
 									'enabled'):
@@ -923,20 +923,21 @@ current room topic.') % command, room_jid)
 			
 		return (highlight, sound)
 
-	def need_highlight(self, text, nick):
-		"""checks text to see whether any of the words in muc_highlight_words
-		appear"""
+	def needs_highlight(self, text, nick):
+		'''checks text to see whether any of the words in muc_highlight_words
+		appear'''
 		
-		words = gajim.config.get('muc_highlight_words') + " " + nick
+		words = gajim.config.get('muc_highlight_words') + ' ' + nick
 		
 		for word in words.split():
-			if sre.search(r'\b(' + word + r')+\b', text, sre.IGNORECASE | sre.UNICODE):
+			pattern = r'\b(' + sre.escape(word) + r')+\b'
+			if sre.search(pattern, text, sre.IGNORECASE | sre.UNICODE):
 				return True
 				
 		return False
 
 	def kick(self, widget, room_jid, nick):
-		"""kick a user"""
+		'''kick a user'''
 		# ask for reason
 		instance = dialogs.InputDialog(_('Kicking %s') % nick,
 			_('You may specify a reason below:'))
@@ -949,23 +950,23 @@ current room topic.') % command, room_jid)
 			reason)
 
 	def grant_voice(self, widget, room_jid, nick):
-		"""grant voice privilege to a user"""
+		'''grant voice privilege to a user'''
 		gajim.connections[self.account].gc_set_role(room_jid, nick, 'participant')
 
 	def revoke_voice(self, widget, room_jid, nick):
-		"""revoke voice privilege to a user"""
+		'''revoke voice privilege to a user'''
 		gajim.connections[self.account].gc_set_role(room_jid, nick, 'visitor')
 
 	def grant_moderator(self, widget, room_jid, nick):
-		"""grant moderator privilege to a user"""
+		'''grant moderator privilege to a user'''
 		gajim.connections[self.account].gc_set_role(room_jid, nick, 'moderator')
 
 	def revoke_moderator(self, widget, room_jid, nick):
-		"""revoke moderator privilege to a user"""
+		'''revoke moderator privilege to a user'''
 		gajim.connections[self.account].gc_set_role(room_jid, nick, 'participant')
 
 	def ban(self, widget, room_jid, jid):
-		"""ban a user"""
+		'''ban a user'''
 		# to ban we know the real jid. so jid is not fakejid
 		nick = gajim.get_nick_from_jid(jid)
 		# ask for reason
@@ -980,34 +981,34 @@ current room topic.') % command, room_jid)
 			'outcast', reason)
 
 	def grant_membership(self, widget, room_jid, jid):
-		"""grant membership privilege to a user"""
+		'''grant membership privilege to a user'''
 		gajim.connections[self.account].gc_set_affiliation(room_jid, jid,
 			'member')
 
 	def revoke_membership(self, widget, room_jid, jid):
-		"""revoke membership privilege to a user"""
+		'''revoke membership privilege to a user'''
 		gajim.connections[self.account].gc_set_affiliation(room_jid, jid,
 			'none')
 
 	def grant_admin(self, widget, room_jid, jid):
-		"""grant administrative privilege to a user"""
+		'''grant administrative privilege to a user'''
 		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, 'admin')
 
 	def revoke_admin(self, widget, room_jid, jid):
-		"""revoke administrative privilege to a user"""
+		'''revoke administrative privilege to a user'''
 		gajim.connections[self.account].gc_set_affiliation(room_jid, jid,
 			'member')
 
 	def grant_owner(self, widget, room_jid, jid):
-		"""grant owner privilege to a user"""
+		'''grant owner privilege to a user'''
 		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, 'owner')
 
 	def revoke_owner(self, widget, room_jid, jid):
-		"""revoke owner privilege to a user"""
+		'''revoke owner privilege to a user'''
 		gajim.connections[self.account].gc_set_affiliation(room_jid, jid, 'admin')
 
 	def on_info(self, widget, room_jid, nick):
-		"""Call vcard_information_window class to display user's information"""
+		'''Call vcard_information_window class to display user's information'''
 		c = gajim.gc_contacts[self.account][room_jid][nick]
 		if c.jid and c.resource:
 			# on GC, we know resource only if we're mod and up
@@ -1386,7 +1387,7 @@ current room topic.') % command, room_jid)
 			self.tooltip.hide_tooltip()
 	
 	def on_treeview_size_allocate(self, widget, allocation):
-		"""The MUC treeview has resized. Move the hpaneds in all tabs to match"""
+		'''The MUC treeview has resized. Move the hpaneds in all tabs to match'''
 		thisroom_jid = self.get_active_jid()
 		self.hpaned_position = self.hpaneds[thisroom_jid].get_position()
 		for room_jid in self.xmls:
@@ -1401,7 +1402,7 @@ current room topic.') % command, room_jid)
 		renderer.set_property('cell-background', bgcolor)
 
 	def on_list_treeview_button_press_event(self, widget, event):
-		"""popup user's group's or agent menu"""
+		'''popup user's group's or agent menu'''
 		room_jid = self.get_active_jid()
 		if event.button == 3: # right click
 			try:
@@ -1462,7 +1463,7 @@ current room topic.') % command, room_jid)
 			widget.get_selection().unselect_all()
 
 	def on_list_treeview_row_activated(self, widget, path, col = 0):
-		"""When an iter is double clicked: open the chat window"""
+		'''When an iter is double clicked: open the chat window'''
 		model = widget.get_model()
 		iter = model.get_iter(path)
 		if len(path) == 1: # It's a group
@@ -1483,13 +1484,13 @@ current room topic.') % command, room_jid)
 			self.plugin.windows[self.account]['chats'][fjid].window.present()
 
 	def on_list_treeview_row_expanded(self, widget, iter, path):
-		"""When a row is expanded: change the icon of the arrow"""
+		'''When a row is expanded: change the icon of the arrow'''
 		model = widget.get_model()
 		image = self.plugin.roster.jabber_state_images['opened']
 		model[iter][C_IMG] = image
 	
 	def on_list_treeview_row_collapsed(self, widget, iter, path):
-		"""When a row is collapsed: change the icon of the arrow"""
+		'''When a row is collapsed: change the icon of the arrow'''
 		model = widget.get_model()
 		image = self.plugin.roster.jabber_state_images['closed']
 		model[iter][C_IMG] = image
