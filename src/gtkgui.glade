@@ -50,7 +50,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1218">
+			<widget class="GtkImage" id="image1253">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -70,7 +70,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1219">
+			<widget class="GtkImage" id="image1254">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>
@@ -96,7 +96,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1220">
+			<widget class="GtkImage" id="image1255">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -116,7 +116,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1221">
+			<widget class="GtkImage" id="image1256">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find</property>
 			  <property name="icon_size">1</property>
@@ -163,7 +163,7 @@
 		      <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1222">
+			<widget class="GtkImage" id="image1257">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-quit</property>
 			  <property name="icon_size">1</property>
@@ -198,7 +198,7 @@
 		      <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1223">
+			<widget class="GtkImage" id="image1258">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-network</property>
 			  <property name="icon_size">1</property>
@@ -220,7 +220,7 @@
 		      <accelerator key="T" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1224">
+			<widget class="GtkImage" id="image1259">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-file</property>
 			  <property name="icon_size">1</property>
@@ -241,7 +241,7 @@
 		      <signal name="activate" handler="on_profile_avatar_activate" last_modification_time="Thu, 09 Jun 2005 22:22:16 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1225">
+			<widget class="GtkImage" id="image1260">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-properties</property>
 			  <property name="icon_size">1</property>
@@ -269,7 +269,7 @@
 		      <accelerator key="P" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1226">
+			<widget class="GtkImage" id="image1261">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-preferences</property>
 			  <property name="icon_size">1</property>
@@ -294,6 +294,38 @@
 
 	      <child>
 		<widget class="GtkMenu" id="help_menu_menu">
+
+		  <child>
+		    <widget class="GtkImageMenuItem" id="contents_menuitem">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Help online</property>
+		      <property name="label" translatable="yes">_Contents</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_contents_menuitem_activate" last_modification_time="Thu, 06 Oct 2005 23:29:10 GMT"/>
+
+		      <child internal-child="image">
+			<widget class="GtkImage" id="image1262">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-help</property>
+			  <property name="icon_size">1</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="faq_menuitem">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Frequently Asked Questions (online)</property>
+		      <property name="label" translatable="yes">_FAQ</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_faq_menuitem_activate" last_modification_time="Thu, 06 Oct 2005 23:29:10 GMT"/>
+		    </widget>
+		  </child>
 
 		  <child>
 		    <widget class="GtkImageMenuItem" id="about_menuitem">
