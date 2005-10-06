@@ -1522,7 +1522,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			# if user doesn't want to be bugged do it as we do the 'chat'
 			contact = gajim.contacts[account][jid][0]
 			dialogs.SingleMessageWindow(self.plugin, account, contact.jid,
-		action = 'receive', from_whom = jid, subject = subject, message = msg)
+				action = 'receive', from_whom = jid, subject = subject,
+				message = msg)
 			return
 		
 		# Do we have a queue?
