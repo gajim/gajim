@@ -762,7 +762,7 @@ class TabbedChatWindow(chat.Chat):
 			if len(gajim.contacts[self.account][jid]) == 1:
 				self.plugin.roster.really_remove_contact(contact, self.account)
 
-	def print_conversation(self, text, jid, contact = '', tim = None,
+	def print_conversation(self, text, jid, frm = '', tim = None,
 		encrypted = False, subject = None):
 		"""Print a line in the conversation:
 		if contact is set to status: it's a status message
@@ -770,7 +770,7 @@ class TabbedChatWindow(chat.Chat):
 		if contact is set to print_queue: it is incomming from queue
 		if contact is not set: it's an incomming message"""
 		contact = self.contacts[jid]
-		if contact == 'status':
+		if frm == 'status':
 			kind = 'status'
 			name = ''
 		else:
@@ -786,10 +786,10 @@ class TabbedChatWindow(chat.Chat):
 					'status', '', tim)
 				ec.remove(jid)
 			self.xmls[jid].get_widget('gpg_togglebutton').set_active(encrypted)
-			if not contact:
+			if not frm:
 				kind = 'incoming'
 				name = contact.name
-			elif contact == 'print_queue': # incoming message, but do not update time
+			elif frm == 'print_queue': # incoming message, but do not update time
 				kind = 'incoming_queue'
 				name = contact.name
 			else:
