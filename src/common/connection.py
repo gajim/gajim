@@ -1413,7 +1413,7 @@ class Connection:
 							# ignore the priority and weight for now
 							_t, _t, p, h = answers[0]['data']
 							del _t
-							p = int(port)
+							p = int(p)
 							break
 				except:
 					gajim.log.debug('An error occurred while looking up %s' % query)
