@@ -113,10 +113,10 @@ class FileTransfersWindow:
 		renderer.set_property('yalign', 0.5)
 		renderer.set_property('xalign', 0.5)
 		col.pack_start(renderer, expand = False)
-		col.set_expand(False)
 		col.add_attribute(renderer, 'text' , C_PROGRESS)
 		col.add_attribute(renderer, 'value' , C_PERCENT)
 		col.set_resizable(True)
+		col.set_expand(False)
 		self.tree.append_column(col)
 		
 		self.set_images()
@@ -195,7 +195,6 @@ class FileTransfersWindow:
 		dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, 
 				_('File transfer completed'), sectext)
 		if file_props['type'] == 'r':
-			#FIXME: add folder icon to Open Containgin Folder button
 			dialog.add_buttons(_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT)
 		dialog.add_buttons(gtk.STOCK_OK, gtk.RESPONSE_OK)
 		dialog.show_all()
@@ -242,8 +241,6 @@ _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 		
 	def show_file_send_request(self, account, contact):
-		#FIXME: user better name for this function
-		#atm it's like it shows popup for incoming file transfer request
 		last_send_dir = gajim.config.get('last_send_dir')
 		dialog = gtk.FileChooserDialog(title=_('Choose File to Send...'), 
 			action=gtk.FILE_CHOOSER_ACTION_OPEN, 
@@ -258,21 +255,23 @@ _('Connection with peer cannot be established.'))
 			home_dir = os.path.expanduser('~')
 			dialog.set_current_folder(home_dir)
 		file_props = {}
-		response = dialog.run()
-		if response == gtk.RESPONSE_OK:
-			files_path_list = dialog.get_filenames()
-			dialog.destroy()
-			file_dir = None
-			for file_path in files_path_list:
-				file_path = file_path.decode(sys.getfilesystemencoding())
-				if os.path.isfile(file_path):
-					file_dir = os.path.dirname(file_path)
-					self.send_file(account, contact, file_path)
-			if file_dir:
-				gajim.config.set('last_send_dir', file_dir)
-		else:
-			dialog.destroy()
-
+		while True:
+			response = dialog.run()
+			if response == gtk.RESPONSE_OK:
+				file_dir = None
+				files_path_list = dialog.get_filenames()
+				for file_path in files_path_list:
+					file_path = file_path.decode(sys.getfilesystemencoding())
+					if self.send_file(account, contact, file_path) and file_dir is None:
+						file_dir = os.path.dirname(file_path)
+				if file_dir:
+					gajim.config.set('last_send_dir', file_dir)
+					dialog.destroy()
+					break
+			else:
+				dialog.destroy()
+				break
+		
 	def send_file(self, account, contact, file_path):
 		''' start the real transfer(upload) of the file '''
 		if type(contact) == str:
@@ -283,8 +282,11 @@ _('Connection with peer cannot be established.'))
 		(file_dir, file_name) = os.path.split(file_path)
 		file_props = self.get_send_file_props(account, contact, 
 				file_path, file_name)
+		if file_props is None:
+			return False
 		self.add_transfer(account, contact, file_props)
 		gajim.connections[account].send_file_request(file_props)
+		return True
 	
 	def show_file_request(self, account, contact, file_props):
 		''' show dialog asking for comfirmation and store location of new
@@ -389,7 +391,6 @@ _('Connection with peer cannot be established.'))
 		return _str
 		
 	def _format_time(self, _time):
-		
 		times = { 'hours': 0, 'minutes': 0, 'seconds': 0 }
 		_time = int(_time)
 		times['seconds'] = _time % 60
@@ -400,7 +401,7 @@ _('Connection with peer cannot be established.'))
 				times['hours'] = _time / 60
 		
 		#Print remaining time in format 00:00:00
-		#You can change the places of hours, minutes, seconds -
+		#You can change the places of (hours), (minutes), (seconds) -
 		#they are not translatable.
 		return _('%(hours)02.d:%(minutes)02.d:%(seconds)02.d')  % times
 		
@@ -413,6 +414,17 @@ _('Connection with peer cannot be established.'))
 		remaining_size = full_size - transfered_size
 		eta = remaining_size / speed
 		return eta, speed
+		
+	def _remove_transfer(self, iter, sid, file_props):
+		self.model.remove(iter)
+		if  file_props.has_key('tt_account'):
+			# file transfer is set
+			account = file_props['tt_account']
+			if gajim.connections.has_key(account):
+				# there is a connection to the account
+				gajim.connections[account].remove_transfer(file_props)
+		del(self.files_props[sid[0]][sid[1:]])
+		del(file_props)
 		
 	def set_progress(self, typ, sid, transfered_size, iter = None):
 		''' change the progress of a transfer with new transfered size'''
@@ -442,10 +454,10 @@ _('Connection with peer cannot be established.'))
 			self.model.set(iter, C_PROGRESS, text)
 			self.model.set(iter, C_PERCENT, int(percent))
 			text = self._format_time(eta)
+			text += '\n'
 			#This should make the string Kb/s, 
 			#where 'Kb' part is taken from %s.
 			#Only the last 's' should be translated.
-			text += '\n'
 			text += _('(%s/s)') % helpers.convert_bytes(speed)
 			self.model.set(iter, C_TIME, text)
 			
@@ -487,9 +499,16 @@ _('Connection with peer cannot be established.'))
 		properties in it'''
 		file_props = {'file-name' : file_path, 'name' : file_name, 
 			'type' : 's'}
-		if os.path.exists(file_path) and os.path.isfile(file_path):
+		if os.path.isfile(file_path):
+			
 			stat = os.stat(file_path)
-		os.stat(file_path)
+		else:
+			dialogs.ErrorDialog(_('Invalid File'), _('File: ')  + file_path).get_response()
+			return None
+		if stat[6] == 0:
+			dialogs.ErrorDialog(_('Invalid File'), 
+			_('It is not possible to send files with length of 0 bytes')).get_response()
+			return None
 		file_props['elapsed-time'] = 0
 		file_props['size'] = unicode(stat[6])
 		file_props['sid'] = self.get_sid()
@@ -599,15 +618,15 @@ _('Connection with peer cannot be established.'))
 			return True
 		if file_props.has_key('completed') and file_props['completed']:
 			return True
-		if not file_props.has_key('stopped') or not \
-			file_props['stopped']:
+		if file_props.has_key('connected') and file_props['connected'] == False:
+			return True
+		if not file_props.has_key('stopped') or not file_props['stopped']:
 			return False
 		return True
 
 	def set_cleanup_sensitivity(self):
 		''' check if there are transfer rows and set cleanup_button 
-		sensitive, or insensitive if model is empty
-		'''
+		sensitive, or insensitive if model is empty'''
 		if len(self.model) == 0:
 			self.cleanup_button.set_sensitive(False)
 		else:
@@ -690,10 +709,8 @@ _('Connection with peer cannot be established.'))
 			iter = self.model.get_iter((i))
 			sid = self.model[iter][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
-			if file_props.has_key('completed') and file_props['completed']:
-				self.model.remove(iter)
-			elif file_props.has_key('stopped') and file_props['stopped']:
-				self.model.remove(iter)
+			if self.is_transfer_stoped(file_props):
+				self._remove_transfer(iter, sid, file_props)
 			i -= 1
 		self.tree.get_selection().unselect_all()
 		self.set_all_insensitive()
@@ -876,7 +893,6 @@ _('Connection with peer cannot be established.'))
 	
 	def on_pause_menuitem_activate(self, widget):
 		self.on_pause_restore_button_clicked(widget)
-		#FIXME: change the stock
 		
 	def on_remove_menuitem_activate(self, widget):
 		selected = self.tree.get_selection().get_selected()
@@ -885,15 +901,7 @@ _('Connection with peer cannot be established.'))
 		s_iter = selected[1]
 		sid = self.model[s_iter][C_SID].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
-		if not file_props.has_key('tt_account'):
-			# file transfer is not set yet
-			return 
-		account = file_props['tt_account']
-		if not gajim.connections.has_key(account):
-			# no connection to the account
-			return
-		gajim.connections[account].remove_transfer(file_props)
-		self.model.remove(s_iter)
+		self._remove_transfer(s_iter, sid, file_props)
 		self.set_all_insensitive()
 
 	def on_file_transfers_window_key_press_event(self, widget, event):
