@@ -1933,6 +1933,7 @@ class Connection:
 		ptype = None
 		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
 			show = show, status = self.status)
+		p = self.add_sha(p)
 		t = p.setTag(common.xmpp.NS_MUC + ' x')
 		if password:
 			t.setTagData('password', password)
@@ -1960,6 +1961,7 @@ class Connection:
 		if not self.connection:
 			return
 		p = common.xmpp.Presence(to = '%s/%s' % (room_jid, nick))
+		p = self.add_sha(p)
 		self.to_be_sent.append(p)
 
 	def send_gc_status(self, nick, jid, show, status):
@@ -1971,6 +1973,7 @@ class Connection:
 		show = helpers.get_xmpp_show(show)
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
 			show = show, status = status)
+		p = self.add_sha(p)
 		self.to_be_sent.append(p)
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
