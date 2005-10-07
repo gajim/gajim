@@ -862,8 +862,12 @@ class RosterWindow:
 		information_menuitem = childs[12]
 		history_menuitem = childs[13]
 		
-		send_file_menuitem.connect('activate',
-			self.on_send_file_menuitem_activate, account, contact)
+		if contact.resource:
+			send_file_menuitem.hide()
+			send_file_menuitem.set_no_show_all(True)
+		else:
+			send_file_menuitem.connect('activate',
+				self.on_send_file_menuitem_activate, account, contact)
 		start_chat_menuitem.connect('activate',
 			self.on_roster_treeview_row_activated, path)
 		send_single_message_menuitem.connect('activate',
