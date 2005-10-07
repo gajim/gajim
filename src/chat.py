@@ -548,7 +548,6 @@ class Chat:
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
 		buffer = textview.get_buffer()
-		buffer.begin_user_action()
 		at_the_end = False
 		end_iter = buffer.get_end_iter()
 		end_rect = textview.get_iter_location(end_iter)
@@ -1193,7 +1192,7 @@ class Chat:
 	def print_conversation_line(self, text, jid, kind, name, tim,
 			other_tags_for_name = [], other_tags_for_time = [], 
 			other_tags_for_text = [], count_as_new = True, subject = None):
-		'''' prints 'chat' type messages '''
+		'''prints 'chat' type messages'''
 		textview = self.xmls[jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
 		buffer.begin_user_action()
@@ -1232,11 +1231,11 @@ class Chat:
 				buffer.insert_with_tags_by_name(end_iter,
 							tim_format + '\n',
 							'time_sometimes')
-				#scroll to the end of the textview
+				# scroll to the end of the textview
 				end_rect = textview.get_iter_location(end_iter)
 				visible_rect = textview.get_visible_rect()
 
-		text_tags = other_tags_for_text[:]
+		text_tags = other_tags_for_text[:] # create a new list
 		if kind == 'status':
 			text_tags.append(kind)
 		elif text.startswith('/me ') or text.startswith('/me\n'):
@@ -1245,7 +1244,7 @@ class Chat:
 
 		if name and len(text_tags) == len(other_tags_for_text):
 			# not status nor /me
-			name_tags = other_tags_for_name[:] #create a new list
+			name_tags = other_tags_for_name[:] # create a new list
 			name_tags.append(kind)
 			before_str = gajim.config.get('before_nickname')
 			after_str = gajim.config.get('after_nickname')
@@ -1267,9 +1266,9 @@ class Chat:
 		#scroll to the end of the textview
 		end = False
 		if at_the_end or kind == 'outgoing':
-			#we are at the end or we are sending something
+			# we are at the end or we are sending something
 			end = True
-			# We scroll to the end after the scrollbar has appeared
+			# scroll to the end (via idle in case the scrollbar has appeared)
 			gobject.idle_add(self.scroll_to_end, textview)
 
 		buffer.end_user_action()

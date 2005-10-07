@@ -29,6 +29,7 @@ import gtkgui_helpers
 import history_window
 import tooltips
 import sre
+import unicodedata
 
 from gajim import Contact
 from common import gajim
@@ -73,6 +74,8 @@ class GroupchatWindow(chat.Chat):
 		self.cmd_hits = {} # possible candidates for command completion
 		self.last_key_tabs = {}
 		self.hpaneds = {} # used for auto positioning
+		# holds the iter's offset which points to the end of --- line per jid
+		self.focus_out_end_iter_offset = {}
 		self.hpaned_position = gajim.config.get('gc-hpaned-position')
 		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 		self.new_room(room_jid, nick)
@@ -187,12 +190,60 @@ class GroupchatWindow(chat.Chat):
 		'''When window gets focus'''
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
 
+	def check_and_possibly_add_focus_out_line(self, room_jid):
+		'''checks and possibly adds focus out line for room(s) that need it
+		and do not already have it as last event'''
+		print_focus_out_line = False
+		textview = self.xmls[room_jid].get_widget('conversation_textview')
+		buffer = textview.get_buffer()
+
+		if self.focus_out_end_iter_offset[room_jid] is None:
+			# this happens only first time we focus out on this room
+			print_focus_out_line = True
+			
+		else:
+			if self.focus_out_end_iter_offset[room_jid] != buffer.get_end_iter().get_offset():
+				# this means after last-focus something was printed
+				# (else end_iter's offset is the same as before)
+				# only then print ---- line (eg. we avoid printing many following
+				# ---- lines)
+				print_focus_out_line = True
+				
+		if print_focus_out_line and buffer.get_char_count() > 0:
+			buffer.begin_user_action()
+			
+			# remove previous focus out line if such focus out line exists
+			if self.focus_out_end_iter_offset[room_jid] is not None:
+				end_iter_for_previous_line = buffer.get_iter_at_offset(
+					self.focus_out_end_iter_offset[room_jid])
+				begin_iter_for_previous_line = end_iter_for_previous_line.copy()
+				begin_iter_for_previous_line.backward_chars(16) # FIXME: position stuff not always 15+1 (the '\n') after fix
+				
+				# remove focus out line
+				buffer.delete(begin_iter_for_previous_line,
+					end_iter_for_previous_line)
+				
+			
+			# add the new focus out line
+			dash_char = unicodedata.lookup(
+				'BOX DRAWINGS LIGHT QUADRUPLE DASH HORIZONTAL').encode('utf-8')
+			focus_out_line = '\n' + dash_char * 15 # FIXME: do better position stuff
+			end_iter = buffer.get_end_iter()
+			buffer.insert(end_iter, focus_out_line)
+			
+			# update the iter we hold to make comparison the next time
+			self.focus_out_end_iter_offset[room_jid] = buffer.get_end_iter(
+				).get_offset()
+				
+			buffer.end_user_action()
+			
+			# scroll to the end (via idle in case the scrollbar has appeared)
+			gobject.idle_add(self.scroll_to_end, textview)
+	
 	def on_groupchat_window_focus_out_event(self, widget, event):
-		'''When window loses focus'''
-		#chat.Chat.on_chat_window_focus_out_event(self, widget, event)
-		#FIXME: merge with on_tabbed_chat_window_focus_out_event in chat.py
-		#do the you were here in MUC conversation thing
-		pass
+		'''When window loses focus, we print focus-out-line in every tab'''
+		for room_jid in self.xmls:
+			self.check_and_possibly_add_focus_out_line(room_jid)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
@@ -224,6 +275,9 @@ class GroupchatWindow(chat.Chat):
 			subject = _('This room has no subject')
 		self.subject_tooltip[new_jid].set_tip(event_box, subject)
 
+		if len(self.xmls) > 1: # if we have more than one tab
+			# then add the focus-out line to the tab we are leaving
+			self.check_and_possibly_add_focus_out_line(old_jid)
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
 
 	def get_role_iter(self, room_jid, role):
@@ -858,7 +912,7 @@ current room. Use third person. (e.g. /%s explodes.)') %
 			s = _('Usage: /%s <nickname>, changes your nickname in current room.') % command
 			self.print_conversation(s, room_jid)
 		elif command == 'topic':
-			self.print_conversation(_('Usage: /%s [topic], displays or updatesthe \
+			self.print_conversation(_('Usage: /%s [topic], displays or updates the \
 current room topic.') % command, room_jid)
 		else:
 			self.print_conversation(_('No help info for /%s') % command, room_jid)
@@ -866,8 +920,8 @@ current room topic.') % command, room_jid)
 	def print_conversation(self, text, room_jid, contact = '', tim = None):
 		'''Print a line in the conversation:
 		if contact is set: it's a message from someone
-		if contact is not set: it's a message from the server'''
-		if type(text) == str:
+		if contact is not set: it's a message from the server or help'''
+		if isinstance(text, str):
 			text = unicode(text, 'utf-8')
 		other_tags_for_name = []
 		other_tags_for_text = []
@@ -1222,6 +1276,7 @@ current room topic.') % command, room_jid)
 		self.room_creation[room_jid] = time.time()
 		self.nick_hits[room_jid] = []
 		self.cmd_hits[room_jid] = []
+		self.focus_out_end_iter_offset[room_jid] = None
 		self.last_key_tabs[room_jid] = False
 		self.hpaneds[room_jid] = self.xmls[room_jid].get_widget('hpaned')
 		self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
