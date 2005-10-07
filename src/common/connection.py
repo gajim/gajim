@@ -1420,6 +1420,8 @@ class Connection:
 		# end of SRV resolver
 
 		con_type = con.connect((h, p), proxy=proxy, secure=secur)
+		if not self.connected: # We went offline during connecting process
+			return None
 		if not con_type:
 			gajim.log.debug("Couldn't connect to %s" % self.name)
 			if not self.retrycount:
@@ -1485,6 +1487,8 @@ class Connection:
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
 				_('Check your connection or try again later')))
+			return None
+		if not self.connected: # We went offline during connecting process
 			return None
 		if hasattr(con, 'Resource'):
 			self.server_resource = con.Resource
