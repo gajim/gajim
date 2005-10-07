@@ -862,12 +862,17 @@ class RosterWindow:
 		information_menuitem = childs[12]
 		history_menuitem = childs[13]
 		
-		if not contact.resource:
-			send_file_menuitem.hide()
-			send_file_menuitem.set_no_show_all(True)
-		else:
+		
+		if contact.resource:
 			send_file_menuitem.connect('activate',
 				self.on_send_file_menuitem_activate, account, contact)
+		else: # if we do not have resource we cannot send file
+			send_file_menuitem.hide()
+			send_file_menuitem.set_no_show_all(True)
+			# FIXME: drag_unset() to clear DND stuff
+			# FIXME: and drag_set (see new_tab() in TC) 
+			# for when we get resource for the first time
+			
 		start_chat_menuitem.connect('activate',
 			self.on_roster_treeview_row_activated, path)
 		send_single_message_menuitem.connect('activate',

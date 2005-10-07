@@ -1378,7 +1378,7 @@ class Connection:
 		use_srv = gajim.config.get_per('accounts', self.name, 'use_srv')
 		if usessl:
 			p = 5223
-			secur = 1 #1 means force SSL no matter what the port will be
+			secur = 1 # 1 means force SSL no matter what the port will be
 			use_srv = False # wants ssl? disable srv lookup
 		if gajim.config.get_per('accounts', self.name, 'use_custom_host'):
 			h = gajim.config.get_per('accounts', self.name, 'custom_host')
@@ -1400,7 +1400,7 @@ class Connection:
 					elif HAVE_PYDNS:
 						# ensure we haven't cached an old configuration
 						DNS.ParseResolvConf()
-						response = DNS.Request().req(query, qtype='SRV')
+						response = DNS.Request().req(query, qtype = 'SRV')
 						answers = response.answers
 						if len(answers) > 0:
 							# ignore the priority and weight for now
@@ -1412,11 +1412,11 @@ class Connection:
 					gajim.log.debug('An error occurred while looking up %s' % query)
 		# end of SRV resolver
 
-		con_type = con.connect((h, p), proxy=proxy, secure=secur)
+		con_type = con.connect((h, p), proxy = proxy, secure = secur)
 		if not self.connected: # We went offline during connecting process
 			return None
 		if not con_type:
-			gajim.log.debug("Couldn't connect to %s" % self.name)
+			gajim.log.debug('Could not connect to %s' % self.name)
 			if not self.retrycount:
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')

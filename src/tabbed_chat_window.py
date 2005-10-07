@@ -42,7 +42,7 @@ gtk.glade.textdomain(APP)
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class TabbedChatWindow(chat.Chat):
-	"""Class for tabbed chat window"""
+	'''Class for tabbed chat window'''
 	def __init__(self, contact, plugin, account):
 		# we check that on opening new windows
 		self.always_compact_view = gajim.config.get('always_compact_view_chat')
@@ -151,8 +151,8 @@ class TabbedChatWindow(chat.Chat):
 		self.bigger_avatar_window.hide()
 
 	def draw_widgets(self, contact):
-		"""draw the widgets in a tab (f.e. gpg togglebutton)
-		according to the the information in the contact variable"""
+		'''draw the widgets in a tab (f.e. gpg togglebutton)
+		according to the the information in the contact variable'''
 		jid = contact.jid
 		self.set_state_image(jid)
 		tb = self.xmls[jid].get_widget('gpg_togglebutton')
@@ -335,7 +335,7 @@ class TabbedChatWindow(chat.Chat):
 		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
 
 	def on_send_button_clicked(self, widget):
-		"""When send button is pressed: send the current message"""
+		'''When send button is pressed: send the current message'''
 		jid = self.get_active_jid()
 		message_textview = self.xmls[jid].get_widget('message_textview')
 		message_buffer = message_textview.get_buffer()
@@ -505,9 +505,9 @@ class TabbedChatWindow(chat.Chat):
 		self.kbd_activity_in_last_30_secs = False
 
 	def on_message_textview_key_press_event(self, widget, event):
-		"""When a key is pressed:
+		'''When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
-		and printed in the conversation"""
+		and printed in the conversation'''
 
 		jid = self.get_active_jid()
 		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
@@ -635,7 +635,7 @@ class TabbedChatWindow(chat.Chat):
 			self.reset_kbd_mouse_timeout_vars()
 		
 	def send_message(self, message):
-		"""Send the given message to the active tab"""
+		'''Send the given message to the active tab'''
 		if not message:
 			return
 
@@ -717,7 +717,7 @@ class TabbedChatWindow(chat.Chat):
 		self.plugin.roster.on_info(widget, contact, self.account)
 
 	def read_queue(self, jid):
-		"""read queue and print messages containted in it"""
+		'''read queue and print messages containted in it'''
 		l = gajim.awaiting_messages[self.account][jid]
 		contact = self.contacts[jid]
 		# Is it a pm ?
@@ -764,11 +764,11 @@ class TabbedChatWindow(chat.Chat):
 
 	def print_conversation(self, text, jid, frm = '', tim = None,
 		encrypted = False, subject = None):
-		"""Print a line in the conversation:
+		'''Print a line in the conversation:
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message
 		if contact is set to print_queue: it is incomming from queue
-		if contact is not set: it's an incomming message"""
+		if contact is not set: it's an incomming message'''
 		contact = self.contacts[jid]
 		if frm == 'status':
 			kind = 'status'
