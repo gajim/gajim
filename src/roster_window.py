@@ -862,7 +862,7 @@ class RosterWindow:
 		information_menuitem = childs[12]
 		history_menuitem = childs[13]
 		
-		if contact.resource:
+		if not contact.resource:
 			send_file_menuitem.hide()
 			send_file_menuitem.set_no_show_all(True)
 		else:
