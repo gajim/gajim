@@ -32,8 +32,8 @@ gtk.glade.textdomain(APP)
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class HistoryWindow:
-	"""Class for bowser agent window:
-	to know the agents on the selected server"""
+	'''Class for bowser agent window:
+	to know the agents on the selected server'''
 	def on_history_window_destroy(self, widget):
 		del self.plugin.windows['logs'][self.jid]
 
@@ -119,7 +119,7 @@ class HistoryWindow:
 			self.latest_button.set_sensitive(False)
 
 	def new_line(self, date, type, data):
-		"""write a new line"""
+		'''write a new line'''
 		buff = self.history_buffer
 		start_iter = buff.get_start_iter()
 		tim = time.strftime('[%x %X] ', time.localtime(float(date)))

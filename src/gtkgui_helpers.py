@@ -139,13 +139,13 @@ def escape_for_pango_markup(string):
 	if gtk.pygtk_version >= (2, 8, 0) and gtk.gtk_version >= (2, 8, 0):
 		escaped_str = gobject.markup_escape_text(string)
 	else:
-		escaped_str =xml.sax.saxutils.escape(string, {"'": '&apos;',
+		escaped_str = xml.sax.saxutils.escape(string, {"'": '&apos;',
 			'"': '&quot;'})
 	
 	return escaped_str
 
 def autodetect_browser_mailer():
-	#recognize the environment for appropriate browser/mailer
+	# recognize the environment for appropriate browser/mailer
 	if os.path.isdir('/proc'):
 		# under Linux: checking if 'gnome-session' or
 		# 'startkde' programs were run before gajim, by
@@ -210,14 +210,14 @@ class TagInfoHandler(xml.sax.ContentHandler):
 			for attribute in attributes.getNames():
 				if attribute == 'jid':
 					jid = attributes.getValue(attribute)
-					#We will get the port next time so we just set it 0 here
+					# we will get the port next time so we just set it 0 here
 					self.servers.append([jid, 0])
 		elif name == self.tagname2:
 			for attribute in attributes.getNames():
 				if attribute == 'port':
 					port = attributes.getValue(attribute)
-					#We received the jid last time, so we now assign the port
-					#number to the last jid in the list
+					# we received the jid last time, so we now assign the port
+					# number to the last jid in the list
 					self.servers[-1][1] = port
 
 	def endElement(self, name):
@@ -230,10 +230,10 @@ def parse_server_xml(path_to_file):
 		return handler.servers
 	# handle exception if unable to open file
 	except IOError, message:
-		print "Error reading file:", message
+		print >> sys.stderr, _('Error reading file:'), message
 	# handle exception parsing file
 	except xml.sax.SAXParseException, message:
-		print "Error parsing file:", message
+		print >> sys.stderr, _('Error parsing file:'), message
 
 def set_unset_urgency_hint(window, unread_messages_no):
 	'''sets/unsets urgency hint in window argument
@@ -285,7 +285,7 @@ def get_abspath_for_script(scriptname, want_type = False):
 		return path_to_script
 
 def get_pixbuf_from_data(file_data):
-	'''wants img data and returns gtk pixbuf'''
+	'''wants img data and returns gtk.gdk.Pixbuf'''
 	pixbufloader = gtk.gdk.PixbufLoader()
 	try:
 		pixbufloader.write(file_data)
