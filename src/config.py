@@ -1553,7 +1553,7 @@ class ManageProxiesWindow:
 		(model, iter) = self.proxies_treeview.get_selection().get_selected()
 		if not iter:
 			return
-		proxy = model.get_value(iter, 0).decode('utf-8')
+		proxy = model[iter][0].decode('utf-8')
 		model.remove(iter)
 		gajim.config.del_per('proxies', proxy)
 		self.xml.get_widget('remove_proxy_button').set_sensitive(False)
@@ -1567,12 +1567,11 @@ class ManageProxiesWindow:
 		self.xml.get_widget('proxypass_entry').set_sensitive(act)
 
 	def on_proxies_treeview_cursor_changed(self, widget):
-		#TODO: check if off proxy settings are correct (see http://trac.gajim.org/changeset/1921#file2 line 1221
+		#FIXME: check if off proxy settings are correct (see http://trac.gajim.org/changeset/1921#file2 line 1221
 		(model, iter) = widget.get_selection().get_selected()
 		if not iter:
 			return
-		self.xml.get_widget('remove_proxy_button').set_sensitive(True)
-		proxy = model.get_value(iter, 0)
+		proxy = model[iter][0]
 		self.xml.get_widget('proxyname_entry').set_text(proxy)
 		proxyhost_entry = self.xml.get_widget('proxyhost_entry')
 		proxyport_entry = self.xml.get_widget('proxyport_entry')
@@ -1585,12 +1584,14 @@ class ManageProxiesWindow:
 		proxypass_entry.set_text('')
 		useauth_checkbutton.set_active(False)
 		self.on_useauth_checkbutton_toggled(useauth_checkbutton)
-		if proxy == 'None':
+		if proxy == 'None': # special proxy None
 			self.proxyname_entry.set_editable(False)
+			self.xml.get_widget('remove_proxy_button').set_sensitive(False)
 			self.xml.get_widget('proxytype_combobox').set_sensitive(False)
 			self.xml.get_widget('proxy_table').set_sensitive(False)
 		else:
 			self.proxyname_entry.set_editable(True)
+			self.xml.get_widget('remove_proxy_button').set_sensitive(True)
 			self.xml.get_widget('proxytype_combobox').set_sensitive(True)
 			self.xml.get_widget('proxy_table').set_sensitive(True)
 			proxyhost_entry.set_text(gajim.config.get_per('proxies', proxy,
@@ -1601,7 +1602,7 @@ class ManageProxiesWindow:
 				'user'))
 			proxypass_entry.set_text(gajim.config.get_per('proxies', proxy,
 				'pass'))
-			#TODO: if we have several proxy type, set the combobox
+			#FIXME: if we have several proxy types, set the combobox
 			if gajim.config.get_per('proxies', proxy, 'user'):
 				useauth_checkbutton.set_active(True)
 
@@ -1628,7 +1629,7 @@ class ManageProxiesWindow:
 		model.set_value(iter, 0, new_name)
 
 	def on_proxytype_combobox_changed(self, widget):
-		#TODO: if we have several proxy type
+		#FIXME: if we have several proxy types take them into account
 		pass
 
 	def on_proxyhost_entry_changed(self, widget):
