@@ -1494,7 +1494,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				groupchat_window.GroupchatWindow(jid, nick, self.plugin, account)
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,\
-		msg_type = '', subject = None):
+		msg_type = '', subject = None, resource = ''):
 		'''when we receive a message'''
 		if not gajim.contacts[account].has_key(jid):
 			keyID = ''
@@ -1504,7 +1504,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			user1 = Contact(jid = jid, name = jid.split('@')[0],
 				groups = [_('not in the roster')], show = 'not in the roster',
-				status = '', ask = 'none', keyID = keyID)
+				status = '', ask = 'none', keyID = keyID, resource = resource)
 			gajim.contacts[account][jid] = [user1] 
 			self.add_contact_to_roster(jid, account)
 

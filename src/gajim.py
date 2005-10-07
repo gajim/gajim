@@ -385,6 +385,7 @@ class Interface:
 	def handle_event_msg(self, account, array):
 		#('MSG', account, (jid, msg, time, encrypted, msg_type, subject, chatstate))
 		jid = gajim.get_jid_without_resource(array[0])
+		resource = gajim.get_resource_from_jid(array[0])
 		msg_type = array[4]
 		chatstate = array[6]
 		if jid.find('@') <= 0:
@@ -399,8 +400,8 @@ class Interface:
 				show_notification = True
 
 		if self.windows[account]['gc'].has_key(jid): # it's a Private Message
-			nick = array[0].split('/', 1)[1]
-			fjid = jid + '/' + nick
+			nick = get_nick_from_fjid(array[0])
+			fjid = array[0]
 			if not self.windows[account]['chats'].has_key(fjid) and \
 				not gajim.awaiting_messages[account].has_key(fjid):
 				if show_notification:
@@ -459,7 +460,7 @@ class Interface:
 
 		# array : (contact, msg, time, encrypted, msg_type, subject)
 		self.roster.on_message(jid, array[1], array[2], account, array[3],
-			msg_type, array[5])
+			msg_type, array[5], resource)
 		if gajim.config.get_per('soundevents', 'first_message_received',
 			'enabled') and first:
 			helpers.play_sound('first_message_received')
