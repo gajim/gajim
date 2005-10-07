@@ -730,14 +730,7 @@ class Connection:
 	def remove_transfer(self, file_props, remove_from_list = True):
 		if file_props is None:
 			return
-		if file_props.has_key('hash'):
-			gajim.socks5queue.remove_sender(file_props['hash'])
-		
-		if file_props.has_key('streamhosts'):
-			for host in file_props['streamhosts']:
-				if host.has_key('idx') and host['idx'] > 0:
-					gajim.socks5queue.remove_receiver(host['idx'])
-					gajim.socks5queue.remove_sender(host['idx'])
+		self.disconnect_transfer(file_props)
 		sid = file_props['sid']
 		gajim.socks5queue.remove_file_props(self.name, sid)
 		
@@ -1030,7 +1023,7 @@ class Connection:
 		feature.addChild(node=_feature)
 		field = _feature.setField('stream-method')
 		field.setAttr('type', 'list-single')
-		field.addOption('http://jabber.org/protocol/bytestreams')
+		field.addOption(common.xmpp.NS_BYTESTREAM)
 		self.to_be_sent.append(iq)
 		
 	def _rosterSetCB(self, con, iq_obj):
