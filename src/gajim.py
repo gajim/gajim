@@ -430,7 +430,7 @@ class Interface:
 				contact.chatstate = False
 		else:
 			# Brand new message, incoming.  
-			if chatstate == 'active':  
+			if contact and chatstate == 'active':  
 				contact.chatstate = chatstate
 
 		if not array[1]: #empty message text
