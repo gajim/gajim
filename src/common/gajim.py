@@ -149,7 +149,11 @@ def construct_fjid(room_jid, nick):
 	return room_jid + '/' + nick
 	
 def get_resource_from_jid(jid):
-	return jid.split('/', 1)[1] # abc@doremi.org/res/res-continued
+	jids = jid.split('/', 1)
+	if len(jids) > 1:
+		return jids[1] # abc@doremi.org/res/res-continued
+	else:
+		return ''
 	'''\
 [15:34:28] <asterix> we should add contact.fake_jid I think
 [15:34:46] <asterix> so if we know real jid, it wil be in contact.jid, or we look in contact.fake_jid
