@@ -625,7 +625,7 @@ class RosterWindow:
 			if not self.get_contact_iter(contact.jid, account):
 				self.add_contact_to_roster(contact.jid, account)
 			self.draw_contact(contact.jid, account)
-		#print status in chat window and update status/GPG image
+		# print status in chat window and update status/GPG image
 		if self.plugin.windows[account]['chats'].has_key(contact.jid):
 			jid = contact.jid
 			self.plugin.windows[account]['chats'][jid].set_state_image(jid)
@@ -744,7 +744,7 @@ class RosterWindow:
 			del gajim.contacts[account][contact.jid]
 			return
 
-		window = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % contact.jid, _('You will no longer be able to send and receive messages to contacts from %s.' % contact.jid))
+		window = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % contact.jid, _('You will no longer be able to send and receive messages to contacts from this transport.'))
 		if window.get_response() == gtk.RESPONSE_OK:
 			gajim.connections[account].unsubscribe_agent(contact.jid + '/' \
 																		+ contact.resource)
