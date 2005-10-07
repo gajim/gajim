@@ -192,7 +192,14 @@ class GroupchatWindow(chat.Chat):
 
 	def check_and_possibly_add_focus_out_line(self, room_jid):
 		'''checks and possibly adds focus out line for room(s) that need it
-		and do not already have it as last event'''
+		and do not already have it as last event. If it goes to add this line
+		it removes previous line first'''
+		
+		if room_jid == self.get_active_jid() and self.window.get_property('has-toplevel-focus'):
+			# it's the current room and it's the focused window.
+			# we have full focus (we are reading it!)
+			return
+		
 		print_focus_out_line = False
 		textview = self.xmls[room_jid].get_widget('conversation_textview')
 		buffer = textview.get_buffer()
@@ -208,7 +215,7 @@ class GroupchatWindow(chat.Chat):
 				# only then print ---- line (eg. we avoid printing many following
 				# ---- lines)
 				print_focus_out_line = True
-				
+		
 		if print_focus_out_line and buffer.get_char_count() > 0:
 			buffer.begin_user_action()
 			
@@ -222,7 +229,6 @@ class GroupchatWindow(chat.Chat):
 				# remove focus out line
 				buffer.delete(begin_iter_for_previous_line,
 					end_iter_for_previous_line)
-				
 			
 			# add the new focus out line
 			dash_char = unicodedata.lookup(
@@ -242,8 +248,9 @@ class GroupchatWindow(chat.Chat):
 	
 	def on_groupchat_window_focus_out_event(self, widget, event):
 		'''When window loses focus, we print focus-out-line in every tab'''
-		for room_jid in self.xmls:
-			self.check_and_possibly_add_focus_out_line(room_jid)
+		pass
+		#for room_jid in self.xmls:
+		#	self.check_and_possibly_add_focus_out_line(room_jid)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
@@ -936,11 +943,10 @@ current room topic.') % command, room_jid)
 			kind = 'status'
 
 
-		# Highlighting and sounds
-		
 		nick = self.nicks[room_jid]
 		
-		if kind == 'incoming':
+		if kind == 'incoming': # it's a message NOT from us
+			# highlighting and sounds
 			(highlight, sound) = self.highlighting_for_message(text, nick, tim)
 			if highlight:	
 				other_tags_for_name.append('bold')
@@ -949,6 +955,8 @@ current room topic.') % command, room_jid)
 				helpers.play_sound('muc_message_received')
 			elif sound == 'highlight':
 				helpers.play_sound('muc_message_highlight')
+				
+			self.check_and_possibly_add_focus_out_line(room_jid)
 
 		
 		chat.Chat.print_conversation_line(self, text, room_jid, kind, contact,
