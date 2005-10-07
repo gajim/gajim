@@ -400,7 +400,7 @@ class Interface:
 				show_notification = True
 
 		if self.windows[account]['gc'].has_key(jid): # it's a Private Message
-			nick = get_nick_from_fjid(array[0])
+			nick = gajim.get_nick_from_fjid(array[0])
 			fjid = array[0]
 			if not self.windows[account]['chats'].has_key(fjid) and \
 				not gajim.awaiting_messages[account].has_key(fjid):
