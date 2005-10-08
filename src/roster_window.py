@@ -656,10 +656,10 @@ class RosterWindow:
 		if props and self.tooltip.id == props[0]:
 			# check if the current pointer is at the same path
 			# as it was before setting the timeout
-			rect =  self.tree.get_cell_area(props[0],props[1])
+			rect =  self.tree.get_cell_area(props[0], props[1])
 			position = self.tree.window.get_origin()
 			pointer = self.window.get_pointer()
-			self.tooltip.show_tooltip(contact, (pointer[0], rect.height ),
+			self.tooltip.show_tooltip(contact, (pointer[0], rect.height),
 				 (position[0], position[1] + rect.y))
 		else:
 			self.tooltip.hide_tooltip()

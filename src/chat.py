@@ -25,6 +25,7 @@ import time
 import dialogs
 import history_window
 import gtkgui_helpers
+import tooltips
 
 try:
 	import gtkspell
@@ -844,8 +845,9 @@ class Chat:
 	def on_conversation_textview_motion_notify_event(self, widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
 		jid = self.get_active_jid()
-		x, y, spam = widget.window.get_pointer()
-		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
+		pointer_x, pointer_y, spam = widget.window.get_pointer()
+		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
+			pointer_y)
 		tags = widget.get_iter_at_location(x, y).get_tags()
 		if self.change_cursor:
 			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
@@ -853,11 +855,24 @@ class Chat:
 			self.change_cursor = None
 		tag_table = widget.get_buffer().get_tag_table()
 		for tag in tags:
-			if tag == tag_table.lookup('url') or tag == tag_table.lookup('mail'):
+			if tag in (tag_table.lookup('url'), tag_table.lookup('mail')):
 				widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 					gtk.gdk.Cursor(gtk.gdk.HAND2))
 				self.change_cursor = tag
-		return False
+			elif self.widget_name == 'groupchat_window' and \
+			tag == tag_table.lookup('focus-out-line'):
+				widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
+					gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+				self.change_cursor = tag
+				tooltip = tooltips.BaseTooltip()
+				message = _('abcdoremi')
+				# FIXME: found out (dkirov can help) what those params are supposed to be
+				# FIXME: also fix tooltips.py docstrings and comments (imporve and add more)
+				# to explain it better as atm it's poor
+				#tooltip.show_tooltip(message, (pointer_x, pointer_y), (pointer_x, pointer_y))
+
+				if tooltip.timeout != 0:
+					tooltip.hide_tooltip()
 
 	def on_clear(self, widget, textview):
 		'''clear text in the given textview'''

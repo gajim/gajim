@@ -32,10 +32,11 @@ _ = i18n._
 APP = i18n.APP
 
 class BaseTooltip:
-	''' Base Tooltip . Usage:
+	''' Base Tooltip; Usage:
 		tooltip = BaseTooltip()
 		.... 
-		tooltip.show_tooltip('', window_postions, widget_postions)
+		tooltip.show_tooltip('', window_positions, widget_positions)
+		#FIXME: what is window, what is widget?
 		....
 		if tooltip.timeout != 0:
 			tooltip.hide_tooltip()
@@ -108,7 +109,7 @@ class BaseTooltip:
 		self.win.show_all()
 
 	def hide_tooltip(self):
-		if(self.timeout > 0):
+		if self.timeout > 0:
 			gobject.source_remove(self.timeout)
 			self.timeout = 0
 		if self.win:
