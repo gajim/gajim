@@ -9265,7 +9265,6 @@ Custom</property>
   <signal name="focus_in_event" handler="on_groupchat_window_focus_in_event" last_modification_time="Sat, 05 Mar 2005 00:34:51 GMT"/>
   <signal name="delete_event" handler="on_groupchat_window_delete_event" last_modification_time="Mon, 07 Mar 2005 11:19:05 GMT"/>
   <signal name="destroy" handler="on_groupchat_window_destroy" last_modification_time="Mon, 07 Mar 2005 16:46:37 GMT"/>
-  <signal name="focus_out_event" handler="on_groupchat_window_focus_out_event" last_modification_time="Sun, 07 Aug 2005 13:21:39 GMT"/>
 
   <child>
     <widget class="GtkNotebook" id="chat_notebook">

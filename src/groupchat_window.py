@@ -88,20 +88,11 @@ class GroupchatWindow(chat.Chat):
 'on_groupchat_window_destroy': self.on_groupchat_window_destroy,
 'on_groupchat_window_delete_event': self.on_groupchat_window_delete_event,
 'on_groupchat_window_focus_in_event': self.on_groupchat_window_focus_in_event,
-'on_groupchat_window_focus_out_event': self.on_groupchat_window_focus_out_event,
 'on_chat_notebook_key_press_event': self.on_chat_notebook_key_press_event,
 'on_chat_notebook_switch_page': self.on_chat_notebook_switch_page,
 		}
 
 		self.xml.signal_autoconnect(signal_dict)
-
-
-		#FIXME: 0.9 implement you lost focus of MUC room here (Psi has a <hr/>)
-		# DO NOT CONNECT ABOVE but in glade..
-		#'on_chat_notebook_switch_page'
-		#'on_groupchat_popup_menu_destroy'
-
-
 
 		# get size and position from config
 		if gajim.config.get('saveposition'):
@@ -245,12 +236,6 @@ class GroupchatWindow(chat.Chat):
 			
 			# scroll to the end (via idle in case the scrollbar has appeared)
 			gobject.idle_add(self.scroll_to_end, textview)
-	
-	def on_groupchat_window_focus_out_event(self, widget, event):
-		'''When window loses focus, we print focus-out-line in every tab'''
-		pass
-		#for room_jid in self.xmls:
-		#	self.check_and_possibly_add_focus_out_line(room_jid)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
