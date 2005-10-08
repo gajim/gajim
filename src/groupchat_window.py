@@ -231,7 +231,9 @@ class GroupchatWindow(chat.Chat):
 			
 			# add the new focus out line
 			dash_char = unicodedata.lookup(
-				'BOX DRAWINGS LIGHT QUADRUPLE DASH HORIZONTAL').encode('utf-8')
+				'BOX DRAWINGS HEAVY HORIZONTAL').encode('utf-8')
+			
+			# maybe add gtk.JUSTIFY_FILL on 'justify' in texttag
 			focus_out_line = '\n' + dash_char * 15 # FIXME: do better position stuff
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, focus_out_line)
