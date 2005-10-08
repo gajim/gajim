@@ -76,6 +76,7 @@ class GroupchatWindow(chat.Chat):
 		self.hpaneds = {} # used for auto positioning
 		# holds the iter's offset which points to the end of --- line per jid
 		self.focus_out_end_iter_offset = {}
+		self.allow_focus_out_line = {}
 		self.hpaned_position = gajim.config.get('gc-hpaned-position')
 		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 		self.new_room(room_jid, nick)
@@ -147,7 +148,7 @@ class GroupchatWindow(chat.Chat):
 			
 			if rooms_no > 0:
 				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
-					_('Do not ask me again') )
+					_('Do not ask me again'))
 			
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return True  # stop propagation of the delete event
@@ -179,16 +180,23 @@ class GroupchatWindow(chat.Chat):
 
 	def on_groupchat_window_focus_in_event(self, widget, event):
 		'''When window gets focus'''
+		room_jid = self.get_active_jid()
+		self.allow_focus_out_line[room_jid] = True
 		chat.Chat.on_chat_window_focus_in_event(self, widget, event)
 
 	def check_and_possibly_add_focus_out_line(self, room_jid):
-		'''checks and possibly adds focus out line for room(s) that need it
-		and do not already have it as last event. If it goes to add this line
+		'''checks and possibly adds focus out line for room_jid if it needs it
+		and does not already have it as last event. If it goes to add this line
 		it removes previous line first'''
 		
 		if room_jid == self.get_active_jid() and self.window.get_property('has-toplevel-focus'):
 			# it's the current room and it's the focused window.
 			# we have full focus (we are reading it!)
+			return
+		
+		if not self.allow_focus_out_line[room_jid]:
+			# if room did not receive focus-in from the last time we added
+			# --- line then do not readd
 			return
 		
 		print_focus_out_line = False
@@ -227,6 +235,8 @@ class GroupchatWindow(chat.Chat):
 			focus_out_line = '\n' + dash_char * 15 # FIXME: do better position stuff
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, focus_out_line)
+			
+			self.allow_focus_out_line[room_jid] = False
 			
 			# update the iter we hold to make comparison the next time
 			self.focus_out_end_iter_offset[room_jid] = buffer.get_end_iter(
@@ -1270,6 +1280,7 @@ current room topic.') % command, room_jid)
 		self.nick_hits[room_jid] = []
 		self.cmd_hits[room_jid] = []
 		self.focus_out_end_iter_offset[room_jid] = None
+		self.allow_focus_out_line[room_jid] = True
 		self.last_key_tabs[room_jid] = False
 		self.hpaneds[room_jid] = self.xmls[room_jid].get_widget('hpaned')
 		self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
