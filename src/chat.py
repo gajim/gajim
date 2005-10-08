@@ -682,12 +682,14 @@ class Chat:
 		tag = conversation_buffer.create_tag('underline')
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 		
+		conversation_buffer.create_tag('focus-out-line', 
+			justification = gtk.JUSTIFY_CENTER) # FIXME: make it gtk.JUSTIFY_FILL when GTK+ REALLY supports it
+		
 		self.xmls[jid].signal_autoconnect(self)
 		conversation_scrolledwindow = self.xmls[jid].get_widget(
 			'conversation_scrolledwindow')
 		conversation_scrolledwindow.get_vadjustment().connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
-		
 
 		if len(self.xmls) > 1:
 			self.notebook.set_show_tabs(True)

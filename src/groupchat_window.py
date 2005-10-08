@@ -223,7 +223,7 @@ class GroupchatWindow(chat.Chat):
 				end_iter_for_previous_line = buffer.get_iter_at_offset(
 					self.focus_out_end_iter_offset[room_jid])
 				begin_iter_for_previous_line = end_iter_for_previous_line.copy()
-				begin_iter_for_previous_line.backward_chars(16) # FIXME: position stuff not always 15+1 (the '\n') after fix
+				begin_iter_for_previous_line.backward_chars(16) # 15+1 (the '\n')
 				
 				# remove focus out line
 				buffer.delete(begin_iter_for_previous_line,
@@ -232,11 +232,10 @@ class GroupchatWindow(chat.Chat):
 			# add the new focus out line
 			dash_char = unicodedata.lookup(
 				'BOX DRAWINGS HEAVY HORIZONTAL').encode('utf-8')
-			
-			# maybe add gtk.JUSTIFY_FILL on 'justify' in texttag
-			focus_out_line = '\n' + dash_char * 15 # FIXME: do better position stuff
+			focus_out_line = '\n' + dash_char * 15
 			end_iter = buffer.get_end_iter()
-			buffer.insert(end_iter, focus_out_line)
+			buffer.insert_with_tags_by_name(end_iter, focus_out_line,
+				'focus-out-line')
 			
 			self.allow_focus_out_line[room_jid] = False
 			
