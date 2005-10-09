@@ -55,7 +55,7 @@ else:
 
 			resp = {}
 			while 1:
-				line = helpers.temp_failure_retry(child_stdout.readline())
+				line = helpers.temp_failure_retry(child_stdout.readline)
 				if line == "": break
 				line = line.rstrip()
 				if line[0:9] == '[GNUPG:] ':
