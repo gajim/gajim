@@ -141,7 +141,11 @@ class Systray:
 		item = gtk.SeparatorMenuItem()
 		sub_menu.append(item)
 
-		item = gtk.MenuItem(_('_Change status message'))
+		item = gtk.ImageMenuItem(_('_Change status message'))
+		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'rename.png')
+		img = gtk.Image()
+		img.set_from_file(path)
+		item.set_image(img)
 		sub_menu.append(item)
 		item.connect('activate', self.on_change_status_message_activate)
 		if not helpers.one_account_connected():
