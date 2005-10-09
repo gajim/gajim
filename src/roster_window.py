@@ -253,7 +253,7 @@ class RosterWindow:
 			return
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
-			dialogs.ErrorDialog(_("You can't join a room while you are invisible")
+			dialogs.ErrorDialog(_('You cannot join a room while you are invisible')
 				).get_response()
 			return
 		room, server = room_jid.split('@')
@@ -1594,11 +1594,11 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	def on_join_gc_activate(self, widget, account):
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
-			dialogs.ErrorDialog(_("You can't join a room while you are invisible")
+			dialogs.ErrorDialog(_('You cannot join a room while you are invisible')
 				).get_response()
 			return
 		if self.plugin.windows[account].has_key('join_gc'):
-			self.plugin.windows[account]['join_gc'].window.present()		
+			self.plugin.windows[account]['join_gc'].window.present()
 		else:
 			#FIXME: Why this try/except?
 			try:
