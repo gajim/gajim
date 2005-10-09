@@ -353,6 +353,7 @@ def from_xs_boolean_to_python_boolean(value):
 def ensure_unicode_string(s):
 	# py23 u'abc'.decode('utf-8') raises
 	# python24 does not. is python23 is ooold we can remove this func
+	# FIXME: remove this when we abandon py23
 	if isinstance(s, str):
 		s = s.decode('utf-8')
 	return s
@@ -363,6 +364,7 @@ def get_xmpp_show(show):
 	return show
 
 def one_account_connected():
+	'''returns True if at least one account is connected, else False'''
 	one_connected = False
 	accounts = gajim.connections.keys()
 	for acct in accounts:
