@@ -1008,7 +1008,8 @@ class RosterWindow:
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
 		dlg = dialogs.ChangeStatusMessageDialog(self.plugin, show)
 		message = dlg.run()
-		self.send_status(account, show, message)
+		if message is not None: # None if user pressed Cancel
+			self.send_status(account, show, message)
 
 	def mk_menu_account(self, event, iter):
 		'''Make account's popup menu'''
@@ -1421,9 +1422,10 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				return
 			dlg = dialogs.ChangeStatusMessageDialog(self.plugin)
 			message = dlg.run()
-			for acct in accounts:
-				show = gajim.SHOW_LIST[gajim.connections[acct].connected]
-				self.send_status(acct, show, message)
+			if message is not None: # None if user pressed Cancel
+				for acct in accounts:
+					show = gajim.SHOW_LIST[gajim.connections[acct].connected]
+					self.send_status(acct, show, message)
 		return
 		if status == 'invisible':
 			bug_user = False
@@ -2266,7 +2268,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		gtkgui_helpers.set_unset_urgency_hint(self.window, self.nb_unread)
 
 	def iter_is_separator(self, model, iter):
-		if not model[iter][0]:
+		if model[iter][0] == 'SEPARATOR':
 			return True
 		return False
 
@@ -2312,7 +2314,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.transports_state_images[transport] = self.load_iconset(
 				folder + '/16x16/')
 
-		liststore = gtk.ListStore(str, gtk.Image, str)
+		liststore = gtk.ListStore(str, gtk.Image, str) # uf_show, img, show
 		self.status_combobox = self.xml.get_widget('status_combobox')
 
 		cell = cell_renderer_image.CellRendererImage()
@@ -2329,15 +2331,15 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
 			uf_show = helpers.get_uf_show(show)
 			liststore.append([uf_show, self.jabber_state_images[show], show])
-		# Add a Separator
-		liststore.append(['', None, ''])
+		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
+		liststore.append(['SEPARATOR', None, ''])
 
 		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'rename.png')
 		img = gtk.Image()
 		img.set_from_file(path)
-		liststore.append([_('Change Status Message'), img, ''])
-		# Add a Separator
-		liststore.append(['', None, ''])
+		liststore.append([_('_Change Status Message...'), img, ''])
+		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
+		liststore.append(['SEPARATOR', None, ''])
 
 		uf_show = helpers.get_uf_show('offline')
 		liststore.append([uf_show, self.jabber_state_images['offline'],

@@ -141,7 +141,7 @@ class Systray:
 		item = gtk.SeparatorMenuItem()
 		sub_menu.append(item)
 
-		item = gtk.ImageMenuItem(_('_Change Status Message'))
+		item = gtk.ImageMenuItem(_('_Change Status Message...'))
 		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'rename.png')
 		img = gtk.Image()
 		img.set_from_file(path)
@@ -315,10 +315,11 @@ class Systray:
 	def on_change_status_message_activate(self, widget):
 		dlg = dialogs.ChangeStatusMessageDialog(self.plugin)
 		message = dlg.run()
-		accounts = gajim.connections.keys()
-		for acct in accounts:
-			show = gajim.SHOW_LIST[gajim.connections[acct].connected]
-			self.plugin.roster.send_status(acct, show, message)
+		if message is not None: # None if user press Cancel
+			accounts = gajim.connections.keys()
+			for acct in accounts:
+				show = gajim.SHOW_LIST[gajim.connections[acct].connected]
+				self.plugin.roster.send_status(acct, show, message)
 
 	def show_tooltip(self, widget):
 		position = widget.window.get_origin()

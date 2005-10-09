@@ -239,16 +239,17 @@ class ChangeStatusMessageDialog:
 		self.window.show_all()
 
 	def run(self):
-		'''Wait for OK button to be pressed and return status messsage'''
+		'''Wait for OK or Cancel button to be pressed and return status messsage
+		(None if users pressed Cancel or x button of WM'''
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
-			message = self.message_buffer.get_text(beg, end, 0).decode('utf-8').strip()
+			message = self.message_buffer.get_text(beg, end).decode('utf-8').strip()
 			msg = helpers.to_one_line(message)
 			if self.show:
 				gajim.config.set('last_status_msg_' + self.show, msg)
 		else:
-			message = -1
+			message = None # user pressed Cancel button or X wm button
 		self.window.destroy()
 		return message
 
@@ -361,7 +362,7 @@ _('Contact names must be of the form "user@servername".')).get_response()
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
-		message = message_buffer.get_text(start_iter, end_iter, 0).decode('utf-8')
+		message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
 		self.plugin.roster.req_sub(self, jid, message, self.account,
 			group = group, pseudo = nickname)
