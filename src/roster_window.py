@@ -1030,7 +1030,7 @@ class RosterWindow:
 		childs = account_context_menu.get_children()
 		
 		status_menuitem = childs[0]
-		#sep
+		# we skip the seperator
 		advanced_actions_menuitem = childs[2]
 		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
 		set_motd_menuitem = xml.get_widget('set_motd_menuitem')
