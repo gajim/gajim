@@ -1759,7 +1759,7 @@ class Connection:
 	def request_agents(self, jid, node):
 		if self.connection:
 			iq = common.xmpp.Iq(to = jid, typ = 'get',
-				queryNS = common.xmpp.NS_DISCO_ITEMS))
+				queryNS = common.xmpp.NS_DISCO_ITEMS)
 			if node: iq.setQuerynode(node)
 			self.to_be_sent.append(iq)
 
