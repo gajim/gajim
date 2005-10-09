@@ -32,8 +32,53 @@ gtk.glade.textdomain(APP)
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class HistoryWindow:
-	'''Class for bowser agent window:
-	to know the agents on the selected server'''
+	'''Class for browsing logs of conversations with contacts'''
+
+	def __init__(self, plugin, jid, account):
+		self.plugin = plugin
+		self.jid = jid
+		self.account = account
+		self.no_of_lines = gajim.logger.get_no_of_lines(jid)
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
+		self.window = xml.get_widget('history_window')
+		if account and gajim.contacts[account].has_key(jid):
+			contact = gajim.get_first_contact_instance_from_jid(account, jid)
+			title = _('Conversation History with %s') % contact.name
+		else:
+			title = _('Conversation History with %s') % jid
+		self.window.set_title(title)
+		self.history_buffer = xml.get_widget('history_textview').get_buffer()
+		self.earliest_button = xml.get_widget('earliest_button')
+		self.previous_button = xml.get_widget('previous_button')
+		self.forward_button = xml.get_widget('forward_button')
+		self.latest_button = xml.get_widget('latest_button')
+		xml.signal_autoconnect(self)
+
+		tag = self.history_buffer.create_tag('incoming')
+		color = gajim.config.get('inmsgcolor')
+		tag.set_property('foreground', color)
+
+		tag = self.history_buffer.create_tag('outgoing')
+		color = gajim.config.get('outmsgcolor')
+		tag.set_property('foreground', color)
+
+		tag = self.history_buffer.create_tag('status')
+		color = gajim.config.get('statusmsgcolor')
+		tag.set_property('foreground', color)
+
+		begin = 0
+		#FIXME: 50 is very bad. find a way to always fill size of window
+		#or come up with something better in general.
+		#investigate how other clients do this window
+		if self.no_of_lines > 50:
+			begin = self.no_of_lines - 50
+		nb, lines = gajim.logger.read(self.jid, begin, self.no_of_lines)
+		self.set_buttons_sensitivity(nb)
+		for line in lines:
+			self.new_line(line[0], line[1], line[2:])
+		self.num_begin = begin
+		self.window.show_all()
+
 	def on_history_window_destroy(self, widget):
 		del self.plugin.windows['logs'][self.jid]
 
@@ -164,45 +209,3 @@ class HistoryWindow:
 			buff.insert_with_tags_by_name(start_iter, msg, tag_msg)
 		else:
 			buff.insert(start_iter, msg)
-	
-	def __init__(self, plugin, jid, account):
-		self.plugin = plugin
-		self.jid = jid
-		self.account = account
-		self.no_of_lines = gajim.logger.get_no_of_lines(jid)
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
-		self.window = xml.get_widget('history_window')
-		if account and gajim.contacts[account].has_key(jid):
-			contact = gajim.get_first_contact_instance_from_jid(account, jid)
-			title = _('Conversation History with %s') % contact.name
-		else:
-			title = _('Conversation History with %s') % jid
-		self.window.set_title(title)
-		self.history_buffer = xml.get_widget('history_textview').get_buffer()
-		self.earliest_button = xml.get_widget('earliest_button')
-		self.previous_button = xml.get_widget('previous_button')
-		self.forward_button = xml.get_widget('forward_button')
-		self.latest_button = xml.get_widget('latest_button')
-		xml.signal_autoconnect(self)
-
-		tag = self.history_buffer.create_tag('incoming')
-		color = gajim.config.get('inmsgcolor')
-		tag.set_property('foreground', color)
-
-		tag = self.history_buffer.create_tag('outgoing')
-		color = gajim.config.get('outmsgcolor')
-		tag.set_property('foreground', color)
-
-		tag = self.history_buffer.create_tag('status')
-		color = gajim.config.get('statusmsgcolor')
-		tag.set_property('foreground', color)
-
-		begin = 0
-		if self.no_of_lines > 50:
-			begin = self.no_of_lines - 50
-		nb, lines = gajim.logger.read(self.jid, begin, self.no_of_lines)
-		self.set_buttons_sensitivity(nb)
-		for line in lines:
-			self.new_line(line[0], line[1], line[2:])
-		self.num_begin = begin
-		self.window.show_all()

@@ -8947,7 +8947,7 @@ Custom</property>
 	<widget class="GtkHButtonBox" id="hbuttonbox11">
 	  <property name="border_width">4</property>
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_START</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 	  <property name="spacing">6</property>
 
 	  <child>
