@@ -1004,7 +1004,7 @@ class RosterWindow:
 		
 		return event_button
 
-	def change_status_message(self, widget, account):
+	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
 		dlg = dialogs.ChangeStatusMessageDialog(self.plugin, show)
 		message = dlg.run()
@@ -1062,7 +1062,7 @@ class RosterWindow:
 		img.set_from_file(path)
 		item.set_image(img)
 		sub_menu.append(item)
-		item.connect('activate', self.change_status_message, account)
+		item.connect('activate', self.on_change_status_message_activate, account)
 		if gajim.connections[account].connected < 2:
 			item.set_sensitive(False)
 
@@ -1233,6 +1233,11 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					self.new_chat(c, account)
 					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 				self.plugin.windows[account]['chats'][jid].window.present()
+			elif type == 'account':
+				account = model[iter][C_ACCOUNT]
+				show = gajim.connections[account].connected
+				if show > 1: # We are connected
+					self.on_change_status_message_activate(widget, account)
 			return True
 		
 		if event.button == 1: # Left click
