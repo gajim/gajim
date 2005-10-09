@@ -269,7 +269,10 @@ class GnuPG:
     """
 
     def __init__(self):
-        self.call = 'gpg'
+        if os.name == 'nt':    
+            self.call = 'gpg.exe'
+        else:    
+            self.call = 'gpg'
         self.passphrase = None
         self.options = Options()
     
