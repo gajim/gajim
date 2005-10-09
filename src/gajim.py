@@ -1314,9 +1314,12 @@ if __name__ == '__main__':
 		
 		if path_to_gajim_script:
 			argv = [path_to_gajim_script]
-			if gnome.gnome_python_version >= (2, 12, 0):
+			# FIXME: remove this typeerror catch when gnome python is old and
+			# not bad patched by distro men [2.12.0 + should not need all that
+			# NORMALLY]
+			try:
 				cli.set_restart_command(argv)
-			else:
+			except TypeError:
 				cli.set_restart_command(len(argv), argv)
 
 	try:
