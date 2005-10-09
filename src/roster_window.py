@@ -1407,6 +1407,19 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			return
 		status = model[active][2].decode('utf-8')
 		one_connected = helpers.one_account_connected()
+		if not status: # We choose change status message
+			if not one_connected:
+				dialogs.ErrorDialog(_('No account connected'),
+					_('You must be connected to change your status message.')
+					).get_response()
+				self.update_status_comboxbox()
+				return
+			dlg = dialogs.ChangeStatusMessageDialog(self.plugin)
+			message = dlg.run()
+			for acct in accounts:
+				show = gajim.SHOW_LIST[gajim.connections[acct].connected]
+				self.send_status(acct, show, message)
+		return
 		if status == 'invisible':
 			bug_user = False
 			for acct in accounts:
@@ -1437,7 +1450,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	
 	def update_status_comboxbox(self):
 		#table to change index in plugin.connected to index in combobox
-		table = {0:6, 1:6, 2:0, 3:1, 4:2, 5:3, 6:4, 7:5}
+		table = {0:9, 1:9, 2:0, 3:1, 4:2, 5:3, 6:4, 7:5}
 		maxi = 0
 		for account in gajim.connections:
 			if gajim.connections[account].connected > maxi:
@@ -1954,7 +1967,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		model = self.status_combobox.get_model()
 		iter = model.get_iter_root()
 		while iter:
-			model.set_value(iter, 1, self.jabber_state_images[model[iter][C_TYPE]])
+			if model[iter][2]: # If it's not change status message iter
+				model.set_value(iter, 1, self.jabber_state_images[model[iter][2]])
 			iter = model.iter_next(iter)
 		# Update the systray
 		if self.plugin.systray_enabled:
@@ -2246,6 +2260,11 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		
 		gtkgui_helpers.set_unset_urgency_hint(self.window, self.nb_unread)
 
+	def iter_is_separator(self, model, iter):
+		if not model[iter][0]:
+			return True
+		return False
+
 	def __init__(self, plugin):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
 		self.window = self.xml.get_widget('roster_window')
@@ -2290,23 +2309,33 @@ _('If "%s" accepts this request you will know his status.') %jid)
 
 		liststore = gtk.ListStore(str, gtk.Image, str)
 		self.status_combobox = self.xml.get_widget('status_combobox')
-		
+
 		cell = cell_renderer_image.CellRendererImage()
 		self.status_combobox.pack_start(cell, False)
 		self.status_combobox.add_attribute(cell, 'image', 1)
-		
+
 		cell = gtk.CellRendererText()
 		cell.set_property('xpad', 5) # padding for status text
 		self.status_combobox.pack_start(cell, True)
 		self.status_combobox.add_attribute(cell, 'text', 0)
 
-		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
-			'offline']:
+		self.status_combobox.set_row_separator_func(self.iter_is_separator)
+
+		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
 			uf_show = helpers.get_uf_show(show)
-			iter = liststore.append([uf_show, self.jabber_state_images[show],
-				show])
+			liststore.append([uf_show, self.jabber_state_images[show], show])
+		# Add a Separator
+		liststore.append(['', None, ''])
+
+		liststore.append([_('Change status message'), None, ''])
+		# Add a Separator
+		liststore.append(['', None, ''])
+
+		uf_show = helpers.get_uf_show('offline')
+		liststore.append([uf_show, self.jabber_state_images['offline'],
+			'offline'])
 		self.status_combobox.set_model(liststore)
-		self.status_combobox.set_active(6) # default to offline
+		self.status_combobox.set_active(9) # default to offline
 
 		showOffline = gajim.config.get('showoffline')
 		self.xml.get_widget('show_offline_contacts_menuitem').set_active(
