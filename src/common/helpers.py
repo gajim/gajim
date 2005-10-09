@@ -338,4 +338,12 @@ def get_xmpp_show(show):
 	if show in ['online', 'offline']:
 		return None
 	return show
-		
+
+def one_account_connected():
+	one_connected = False
+	accounts = gajim.connections.keys()
+	for acct in accounts:
+		if gajim.connections[acct].connected > 1:
+			one_connected = True
+			break
+	return one_connected

@@ -1003,7 +1003,12 @@ class RosterWindow:
 			event_button = event.button
 		
 		return event_button
-		
+
+	def change_status_message(self, widget, account):
+		show = gajim.SHOW_LIST[gajim.connections[account].connected]
+		dlg = dialogs.ChangeStatusMessageDialog(self.plugin, show)
+		message = dlg.run()
+		self.send_status(account, show, message)
 
 	def mk_menu_account(self, event, iter):
 		'''Make account's popup menu'''
@@ -1040,18 +1045,30 @@ class RosterWindow:
 		sub_menu = gtk.Menu()
 		status_menuitem.set_submenu(sub_menu)
 
-		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
-			'offline']:
-
-			if show == 'offline': # We add a sep before offline item
-				item = gtk.SeparatorMenuItem()
-				sub_menu.append(item)
-
+		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
 			item = gtk.ImageMenuItem(helpers.get_uf_show(show))
 			icon = state_images[show]
 			item.set_image(icon)
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, show)
+
+		item = gtk.SeparatorMenuItem()
+		sub_menu.append(item)
+
+		item = gtk.MenuItem(_('Change status message'))
+		sub_menu.append(item)
+		item.connect('activate', self.change_status_message, account)
+		if gajim.connections[account].connected < 2:
+			item.set_sensitive(False)
+
+		item = gtk.SeparatorMenuItem()
+		sub_menu.append(item)
+
+		item = gtk.ImageMenuItem(helpers.get_uf_show('offline'))
+		icon = state_images['offline']
+		item.set_image(icon)
+		sub_menu.append(item)
+		item.connect('activate', self.change_status, account, 'offline')
 
 		xml_console_menuitem.connect('activate', self.on_xml_console_menuitem_activate,
 			account)
@@ -1383,11 +1400,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.update_status_comboxbox()
 			return
 		status = model[active][2].decode('utf-8')
-		one_connected = False
-		for acct in accounts:
-			if gajim.connections[acct].connected > 1:
-				one_connected = True
-				break
+		one_connected = helpers.one_account_connected()
 		if status == 'invisible':
 			bug_user = False
 			for acct in accounts:

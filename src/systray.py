@@ -130,19 +130,31 @@ class Systray:
 			iconset = 'sun'
 		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
 		state_images = self.plugin.roster.load_iconset(path)
-		
-		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
-				'offline']:
 
-			if show == 'offline': # We add a sep before offline item
-				item = gtk.SeparatorMenuItem()
-				sub_menu.append(item)
-
+		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
 			uf_show = helpers.get_uf_show(show)
 			item = gtk.ImageMenuItem(uf_show)
 			item.set_image(state_images[show])
 			sub_menu.append(item)
 			item.connect('activate', self.on_show_menuitem_activate, show)
+
+		item = gtk.SeparatorMenuItem()
+		sub_menu.append(item)
+
+		item = gtk.MenuItem(_('Change status message'))
+		sub_menu.append(item)
+		item.connect('activate', self.on_change_status_message_activate)
+		if not helpers.one_account_connected():
+			item.set_sensitive(False)
+
+		item = gtk.SeparatorMenuItem()
+		sub_menu.append(item)
+
+		uf_show = helpers.get_uf_show('offline')
+		item = gtk.ImageMenuItem(uf_show)
+		item.set_image(state_images['offline'])
+		sub_menu.append(item)
+		item.connect('activate', self.on_show_menuitem_activate, 'offline')
 
 		iskey = len(gajim.connections) > 0
 		chat_with_menuitem.set_sensitive(iskey)
@@ -295,7 +307,15 @@ class Systray:
 		l = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'offline']
 		index = l.index(show)
 		self.plugin.roster.status_combobox.set_active(index)
-	
+
+	def on_change_status_message_activate(self, widget):
+		dlg = dialogs.ChangeStatusMessageDialog(self.plugin)
+		message = dlg.run()
+		accounts = gajim.connections.keys()
+		for acct in accounts:
+			show = gajim.SHOW_LIST[gajim.connections[acct].connected]
+			self.plugin.roster.send_status(acct, show, message)
+
 	def show_tooltip(self, widget):
 		position = widget.window.get_origin()
 		if self.tooltip.id == position:
