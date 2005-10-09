@@ -1,4 +1,4 @@
-## $Id: commands.py,v 1.9 2005/09/23 18:32:21 normanr Exp $
+## $Id: commands.py,v 1.10 2005/10/07 23:17:09 normanr Exp $
 
 ## Ad-Hoc Command manager
 ## Mike Albon (c) 5th January 2005
@@ -118,6 +118,7 @@ class Commands(PlugIn):
                     if i != None:
                         list.append(Node(tag='item',attrs={'jid':i[0],'node':i[1],'name':i[2]}))
                 iq = request.buildReply('result')
+                if request.getQuerynode(): iq.setQuerynode(request.getQuerynode())
                 iq.setQueryPayload(list)
                 conn.send(iq)
             else:
