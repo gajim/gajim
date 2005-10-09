@@ -82,25 +82,48 @@ def convert_bytes(string):
 		suffix = _('%s B')
 	return suffix % unicode(bytes)
 
-def get_uf_show(show):
+def get_uf_show(show, use_mnemonic = False):
 	'''returns a userfriendly string for dnd/xa/chat
-	and makes all strings translatable'''
+	and makes all strings translatable
+	if use_mnemonic is True, it adds _ so GUI should call with True
+	for accessibility issues'''
 	if show == 'dnd':
-		uf_show = _('Busy')
+		if use_mnemonic:
+			uf_show = _('_Busy')
+		else:
+			uf_show = _('Busy')
 	elif show == 'xa':
-		uf_show = _('Not Available')
+		if use_mnemonic:
+			uf_show = _('_Not Available')
+		else:
+			uf_show = _('Not Available')
 	elif show == 'chat':
-		uf_show = _('Free for Chat')
+		if use_mnemonic:
+			uf_show = _('_Free for Chat')
+		else:
+			uf_show = _('Free for Chat')
 	elif show == 'online':
-		uf_show = _('Available')
+		if use_mnemonic:
+			uf_show = _('_Available')
+		else:
+			uf_show = _('Available')
 	elif show == 'connecting':
-		uf_show = _('Connecting')
+			uf_show = _('Connecting')
 	elif show == 'away':
-		uf_show = _('Away')
+		if use_mnemonic:
+			uf_show = _('A_way')
+		else:
+			uf_show = _('Away')
 	elif show == 'offline':
-		uf_show = _('Offline')
+		if use_mnemonic:
+			uf_show = _('_Offline')
+		else:
+			uf_show = _('Offline')
 	elif show == 'invisible':
-		uf_show = _('Invisible')
+		if use_mnemonic:
+			uf_show = _('_Invisible')
+		else:
+			uf_show = _('Invisible')
 	elif show == 'not in the roster':
 		uf_show = _('Not in the roster')
 	elif show == 'requested':

@@ -1046,7 +1046,8 @@ class RosterWindow:
 		status_menuitem.set_submenu(sub_menu)
 
 		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
-			item = gtk.ImageMenuItem(helpers.get_uf_show(show))
+			uf_show = helpers.get_uf_show(show, use_mnemonic = True)
+			item = gtk.ImageMenuItem(uf_show)
 			icon = state_images[show]
 			item.set_image(icon)
 			sub_menu.append(item)
@@ -1055,7 +1056,7 @@ class RosterWindow:
 		item = gtk.SeparatorMenuItem()
 		sub_menu.append(item)
 
-		item = gtk.MenuItem(_('Change status message'))
+		item = gtk.MenuItem(_('_Change status message'))
 		sub_menu.append(item)
 		item.connect('activate', self.change_status_message, account)
 		if gajim.connections[account].connected < 2:
@@ -1064,7 +1065,8 @@ class RosterWindow:
 		item = gtk.SeparatorMenuItem()
 		sub_menu.append(item)
 
-		item = gtk.ImageMenuItem(helpers.get_uf_show('offline'))
+		uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
+		item = gtk.ImageMenuItem(uf_show)
 		icon = state_images['offline']
 		item.set_image(icon)
 		sub_menu.append(item)

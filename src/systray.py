@@ -132,7 +132,7 @@ class Systray:
 		state_images = self.plugin.roster.load_iconset(path)
 
 		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
-			uf_show = helpers.get_uf_show(show)
+			uf_show = helpers.get_uf_show(show, use_mnemonic = True)
 			item = gtk.ImageMenuItem(uf_show)
 			item.set_image(state_images[show])
 			sub_menu.append(item)
@@ -141,7 +141,7 @@ class Systray:
 		item = gtk.SeparatorMenuItem()
 		sub_menu.append(item)
 
-		item = gtk.MenuItem(_('Change status message'))
+		item = gtk.MenuItem(_('_Change status message'))
 		sub_menu.append(item)
 		item.connect('activate', self.on_change_status_message_activate)
 		if not helpers.one_account_connected():
@@ -150,7 +150,7 @@ class Systray:
 		item = gtk.SeparatorMenuItem()
 		sub_menu.append(item)
 
-		uf_show = helpers.get_uf_show('offline')
+		uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
 		item = gtk.ImageMenuItem(uf_show)
 		item.set_image(state_images['offline'])
 		sub_menu.append(item)
