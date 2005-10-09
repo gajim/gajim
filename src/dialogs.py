@@ -210,9 +210,10 @@ class ChangeStatusMessageDialog:
 		self.window = self.xml.get_widget('change_status_message_dialog')
 		if show:
 			uf_show = helpers.get_uf_show(show)
+			title_text = _('%s Status Message') % uf_show
 		else:
-			uf_show = ''
-		self.window.set_title(_('%s Status Message') % uf_show)
+			title_text = _('Status Message')
+		self.window.set_title()
 		
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
