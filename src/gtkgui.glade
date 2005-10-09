@@ -14831,7 +14831,6 @@ to the Jabber network.</property>
 	      <child>
 		<widget class="GtkAlignment" id="alignment87">
 		  <property name="visible">True</property>
-		  <property name="sensitive">False</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
 		  <property name="xscale">0</property>
