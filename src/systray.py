@@ -141,7 +141,7 @@ class Systray:
 		item = gtk.SeparatorMenuItem()
 		sub_menu.append(item)
 
-		item = gtk.ImageMenuItem(_('_Change status message'))
+		item = gtk.ImageMenuItem(_('_Change Status Message'))
 		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'rename.png')
 		img = gtk.Image()
 		img.set_from_file(path)
