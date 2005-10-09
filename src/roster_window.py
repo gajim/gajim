@@ -2327,7 +2327,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		# Add a Separator
 		liststore.append(['', None, ''])
 
-		liststore.append([_('Change status message'), None, ''])
+		liststore.append([_('Change Status Message'), None, ''])
 		# Add a Separator
 		liststore.append(['', None, ''])
 
