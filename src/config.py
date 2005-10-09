@@ -2361,6 +2361,7 @@ _('Without a connection, you can not browse available services')).get_response()
 	def on_refresh_button_clicked(self, widget):
 		'''When refresh button is clicked: refresh list: clear and rerequest it'''
 		self.services_treeview.get_model().clear()
+		self.items_asked = []
 		jid = self.address_comboboxentry.child.get_text().decode('utf-8')
 		self.browse(jid)
 
@@ -2369,6 +2370,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		if self.address_comboboxentry.get_active() != -1:
 			# user selected one of the entries so do auto-visit
 			self.services_treeview.get_model().clear()
+			self.items_asked = []
 			server_address = self.address_comboboxentry.child.get_text().decode('utf-8')
 			self.browse(server_address)
 
@@ -2468,6 +2470,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		gajim.config.set('latest_disco_addresses',
 			' '.join(self.latest_addresses))
 		self.services_treeview.get_model().clear()
+		self.items_asked = []
 		self.browse(server_address)
 		self.plugin.save_config()
 
