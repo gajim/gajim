@@ -318,6 +318,9 @@ class Systray:
 		if message is not None: # None if user press Cancel
 			accounts = gajim.connections.keys()
 			for acct in accounts:
+				if not gajim.config.get_per('accounts', acct,
+					'sync_with_global_status'):
+					continue
 				show = gajim.SHOW_LIST[gajim.connections[acct].connected]
 				self.plugin.roster.send_status(acct, show, message)
 

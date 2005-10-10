@@ -1424,6 +1424,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			message = dlg.run()
 			if message is not None: # None if user pressed Cancel
 				for acct in accounts:
+					if not gajim.config.get_per('accounts', acct,
+						'sync_with_global_status'):
+						continue
 					show = gajim.SHOW_LIST[gajim.connections[acct].connected]
 					self.send_status(acct, show, message)
 			return
