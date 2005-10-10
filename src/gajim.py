@@ -1298,8 +1298,8 @@ if __name__ == '__main__':
 	except ImportError:
 		pass
 
-	# Session Management support
 	if os.name != 'nt':
+		# Session Management support
 		try:
 			import gnome.ui
 		except ImportError:
@@ -1323,6 +1323,7 @@ if __name__ == '__main__':
 				except TypeError:
 					cli.set_restart_command(len(argv), argv)
 	
+		# register (by default only the first time) xmmpi: to Gajim
 		try:
 			import gconf
 			# in try because daemon may not be there
