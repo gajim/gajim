@@ -230,16 +230,20 @@ class Interface:
 	def allow_notif(self, account):
 		gajim.allow_notifications[account] = True
 
+	
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
-		if status != 'offline':
-			gobject.timeout_add(30000, self.allow_notif, account)
-		else:
+		model = self.roster.status_combobox.get_model()
+		if status == 'offline':
+			model[self.roster.status_message_menuitem_iter][3] = False # sensitivity for this menuitem
 			gajim.allow_notifications[account] = False
 			# we are disconnected from all gc
 			for room_jid in gajim.gc_connected[account]:
 				if self.windows[account]['gc'].has_key(room_jid):
 					self.windows[account]['gc'][room_jid].got_disconnected(room_jid)
+		else:
+			gobject.timeout_add(30000, self.allow_notif, account)
+			model[self.roster.status_message_menuitem_iter][3] = True # sensitivity for this menuitem
 		self.roster.on_status_changed(account, status)
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('AccountPresence', (status, account))
@@ -262,11 +266,11 @@ class Interface:
 			resource = ''
 		priority = array[4]
 		if jid.find('@') <= 0:
-			#It must be an agent
+			# It must be an agent
 			ji = jid.replace('@', '')
 		else:
 			ji = jid
-		#Update user
+		# Update contact
 		if gajim.contacts[account].has_key(ji):
 			luser = gajim.contacts[account][ji]
 			user1 = None
@@ -318,17 +322,17 @@ class Interface:
 			user1.priority = priority
 			user1.keyID = keyID
 		if jid.find('@') <= 0:
-			#It must be an agent
+			# It must be an agent
 			if gajim.contacts[account].has_key(ji):
-				#Update existing iter
+				# Update existing iter
 				self.roster.draw_contact(ji, account)
 		elif jid == gajim.get_jid_from_account(account):
-			#It's another of our resources.  We don't need to see that!
+			# It's another of our resources.  We don't need to see that!
 			return
 		elif gajim.contacts[account].has_key(ji):
-			#It isn't an agent
+			# It isn't an agent
 			self.roster.chg_contact_status(user1, array[1], array[2], account)
-			#play sound
+			# play sound
 			if old_show < 2 and new_show > 1:
 				if gajim.config.get_per('soundevents', 'contact_connected',
 												'enabled'):

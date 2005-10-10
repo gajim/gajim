@@ -1437,7 +1437,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					if not gajim.config.get_per('accounts', acct, 
 							'sync_with_global_status'):
 						continue
-					# We're going ti change our status to invisible
+					# We're going to change our status to invisible
 					if self.connected_rooms(acct):
 						bug_user = True
 						break
@@ -1454,22 +1454,19 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		for acct in accounts:
 			if not gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
 				continue
-			# FIXME: not here why?
+			# we are connected or we want to connect
 			if not one_connected or gajim.connections[acct].connected > 1:
 				self.send_status(acct, status, message)
-		
-		model = self.status_combobox.get_model()
-		model[self.status_message_menuitem_iter][3] = True # sensitivity for this menuitem
 	
 	def update_status_comboxbox(self):
-		#table to change index in plugin.connected to index in combobox
+		# table to change index in plugin.connected to index in combobox
 		table = {0:9, 1:9, 2:0, 3:1, 4:2, 5:3, 6:4, 7:5}
 		maxi = 0
 		for account in gajim.connections:
 			if gajim.connections[account].connected > maxi:
 				maxi = gajim.connections[account].connected
-		#temporarily block signal in order not to send status that we show
-		#in the combobox
+		# temporarily block signal in order not to send status that we show
+		# in the combobox
 		self.status_combobox.handler_block(self.id_signal_cb)
 		self.status_combobox.set_active(table[maxi])
 		self.status_combobox.handler_unblock(self.id_signal_cb)
@@ -1645,7 +1642,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if self.plugin.windows[account].has_key('join_gc'):
 			self.plugin.windows[account]['join_gc'].window.present()
 		else:
-			#FIXME: Why this try/except?
+			# c http://nkour.blogspot.com/2005/05/pythons-init-return-none-doesnt-return.html
 			try:
 				self.plugin.windows[account]['join_gc'] = dialogs.JoinGroupchatWindow(self.plugin, account)
 			except RuntimeError:
@@ -1938,6 +1935,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if self.plugin.windows[account].has_key('disco'):
 			self.plugin.windows[account]['disco'].window.present()
 		else:
+			# c http://nkour.blogspot.com/2005/05/pythons-init-return-none-doesnt-return.html
 			try:
 				self.plugin.windows[account]['disco'] = \
 					config.ServiceDiscoveryWindow(self.plugin, account)
