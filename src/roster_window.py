@@ -1008,7 +1008,7 @@ class RosterWindow:
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
 		dlg = dialogs.ChangeStatusMessageDialog(self.plugin, show)
 		message = dlg.run()
-		if message is not None: # None if user pressed Cancel
+		if message is not None: # None is if user pressed Cancel
 			self.send_status(account, show, message)
 
 	def mk_menu_account(self, event, iter):
@@ -1394,7 +1394,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 		message = self.get_status_message(status)
-		if message == -1:
+		if message is None: # user pressed Cancel to change status message dialog
 			return
 		self.send_status(account, status, message)
 
@@ -1448,15 +1448,18 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 		message = self.get_status_message(status)
-		if message == -1:
+		if message is None: # user pressed Cancel to change status message dialog
 			self.update_status_comboxbox()
 			return
 		for acct in accounts:
-			if not gajim.config.get_per('accounts', acct, 
-													'sync_with_global_status'):
+			if not gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
 				continue
+			# FIXME: not here why?
 			if not one_connected or gajim.connections[acct].connected > 1:
 				self.send_status(acct, status, message)
+		
+		model = self.status_combobox.get_model()
+		model[self.status_message_menuitem_iter][3] = True # sensitivity for this menuitem
 	
 	def update_status_comboxbox(self):
 		#table to change index in plugin.connected to index in combobox
@@ -1544,7 +1547,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.plugin.windows[account]['gc'][jid] = \
 				groupchat_window.GroupchatWindow(jid, nick, self.plugin, account)
 
-	def on_message(self, jid, msg, tim, account, encrypted = False,\
+	def on_message(self, jid, msg, tim, account, encrypted = False,
 		msg_type = '', subject = None, resource = ''):
 		'''when we receive a message'''
 		if not gajim.contacts[account].has_key(jid):
@@ -1592,7 +1595,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				jid, typ, tim = tim, encrypted = encrypted, subject = subject)
 			return
 
-		#We save it in a queue
+		# We save it in a queue
 		if no_queue:
 			qs[jid] = []
 		qs[jid].append((msg, msg_type, tim, encrypted))
@@ -1697,7 +1700,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					break
 			if get_msg:
 				message = self.get_status_message('offline')
-				if message == -1:
+				if message is None: # user pressed Cancel to change status message dialog
 					message = ''
 				for acct in accounts:
 					if gajim.connections[acct].connected:
@@ -1753,7 +1756,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				break
 		if get_msg:
 			message = self.get_status_message('offline')
-			if message == -1:
+			if message is None: # user pressed Cancel to change status message dialog
 				return
 			# check if we have unread or recent mesages
 			unread = False
@@ -1977,8 +1980,10 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		model = self.status_combobox.get_model()
 		iter = model.get_iter_root()
 		while iter:
-			if model[iter][2]: # If it's not change status message iter
-				model.set_value(iter, 1, self.jabber_state_images[model[iter][2]])
+			if model[iter][2] != '':
+				# If it's not change status message iter
+				# eg. if it has show parameter not ''
+				model[iter][1] = self.jabber_state_images[model[iter][2]]
 			iter = model.iter_next(iter)
 		# Update the systray
 		if self.plugin.systray_enabled:
@@ -2317,7 +2322,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.transports_state_images[transport] = self.load_iconset(
 				folder + '/16x16/')
 
-		liststore = gtk.ListStore(str, gtk.Image, str) # uf_show, img, show
+		# uf_show, img, show, sensitive
+		liststore = gtk.ListStore(str, gtk.Image, str, bool)
 		self.status_combobox = self.xml.get_widget('status_combobox')
 
 		cell = cell_renderer_image.CellRendererImage()
@@ -2327,26 +2333,31 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		cell = gtk.CellRendererText()
 		cell.set_property('xpad', 5) # padding for status text
 		self.status_combobox.pack_start(cell, True)
+		# text to show is in in first column of liststore
 		self.status_combobox.add_attribute(cell, 'text', 0)
+		# if it will be sensitive or not it is in the fourth column
+		self.status_combobox.add_attribute(cell, 'sensitive', 3)
 
 		self.status_combobox.set_row_separator_func(self.iter_is_separator)
 
 		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
 			uf_show = helpers.get_uf_show(show)
-			liststore.append([uf_show, self.jabber_state_images[show], show])
+			liststore.append([uf_show, self.jabber_state_images[show], show, True])
 		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
-		liststore.append(['SEPARATOR', None, ''])
+		liststore.append(['SEPARATOR', None, '', True])
 
 		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'rename.png')
 		img = gtk.Image()
 		img.set_from_file(path)
-		liststore.append([_('Change Status Message...'), img, ''])
+		# sensitivity to False because by default we're offline
+		self.status_message_menuitem_iter = liststore.append(
+			[_('Change Status Message...'), img, '', False])
 		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
-		liststore.append(['SEPARATOR', None, ''])
+		liststore.append(['SEPARATOR', None, '', True])
 
 		uf_show = helpers.get_uf_show('offline')
 		liststore.append([uf_show, self.jabber_state_images['offline'],
-			'offline'])
+			'offline', True])
 		self.status_combobox.set_model(liststore)
 		self.status_combobox.set_active(9) # default to offline
 
@@ -2354,9 +2365,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.xml.get_widget('show_offline_contacts_menuitem').set_active(
 			showOffline)
 
-		#columns
+		# columns
 		
-		#this col has two cells: first one img, second one text
+		# this col has two cells: first one img, second one text
 		col = gtk.TreeViewColumn()
 		
 		render_image = cell_renderer_image.CellRendererImage() # show img or +-
@@ -2370,7 +2381,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		render_text.connect('editing-started', self.on_editing_started)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'text', C_NAME) # where we hold the name
-		col.add_attribute(render_text, 'editable', C_EDITABLE)
+		col.add_attribute(render_text, 'editable', C_EDITABLE) # where we hold if the row is editable
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
 
 		
