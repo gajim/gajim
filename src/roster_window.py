@@ -1426,7 +1426,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				for acct in accounts:
 					show = gajim.SHOW_LIST[gajim.connections[acct].connected]
 					self.send_status(acct, show, message)
-		return
+			return
 		if status == 'invisible':
 			bug_user = False
 			for acct in accounts:
