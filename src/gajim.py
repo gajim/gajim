@@ -1299,53 +1299,54 @@ if __name__ == '__main__':
 		pass
 
 	# Session Management support
-	try:
-		import gnome.ui
-	except ImportError:
-		print >> sys.stderr, _('Session Management support not available (missing gnome.ui module)')
-	else:
-		def die_cb(cli):
-			gtk.main_quit()
-		gnome.program_init('gajim', gajim.version)
-		cli = gnome.ui.master_client()
-		cli.connect('die', die_cb)
-		
-		path_to_gajim_script = gtkgui_helpers.get_abspath_for_script('gajim')
-		
-		if path_to_gajim_script:
-			argv = [path_to_gajim_script]
-			# FIXME: remove this typeerror catch when gnome python is old and
-			# not bad patched by distro men [2.12.0 + should not need all that
-			# NORMALLY]
-			try:
-				cli.set_restart_command(argv)
-			except TypeError:
-				cli.set_restart_command(len(argv), argv)
-
-	try:
-		import gconf
-		# in try because daemon may not be there
-		client = gconf.client_get_default()
-	except:
-		pass
-	else:
-		we_set = False
-		if gajim.config.get('set_xmpp://_handler_everytime'):
-			we_set = True
-		elif client.get_string('/desktop/gnome/url-handlers/xmpp/command') is None:
-			we_set = True
-		
-		if we_set:
-			path_to_gajim_script, type = gtkgui_helpers.get_abspath_for_script(
-				'gajim-remote', True)
+	if os.name != 'nt':
+		try:
+			import gnome.ui
+		except ImportError:
+			print >> sys.stderr, _('Session Management support not available (missing gnome.ui module)')
+		else:
+			def die_cb(cli):
+				gtk.main_quit()
+			gnome.program_init('gajim', gajim.version)
+			cli = gnome.ui.master_client()
+			cli.connect('die', die_cb)
+			
+			path_to_gajim_script = gtkgui_helpers.get_abspath_for_script('gajim')
+			
 			if path_to_gajim_script:
-				if type == 'svn':
-					command = path_to_gajim_script + ' open_chat %s'
-				else: # 'installed'
-					command = 'gajim-remote open_chat %s'
-				client.set_bool('/desktop/gnome/url-handlers/xmpp/enabled', True)
-				client.set_string('/desktop/gnome/url-handlers/xmpp/command', command)
-				client.set_bool('/desktop/gnome/url-handlers/xmpp/needs_terminal', False)
+				argv = [path_to_gajim_script]
+				# FIXME: remove this typeerror catch when gnome python is old and
+				# not bad patched by distro men [2.12.0 + should not need all that
+				# NORMALLY]
+				try:
+					cli.set_restart_command(argv)
+				except TypeError:
+					cli.set_restart_command(len(argv), argv)
+	
+		try:
+			import gconf
+			# in try because daemon may not be there
+			client = gconf.client_get_default()
+		except:
+			pass
+		else:
+			we_set = False
+			if gajim.config.get('set_xmpp://_handler_everytime'):
+				we_set = True
+			elif client.get_string('/desktop/gnome/url-handlers/xmpp/command') is None:
+				we_set = True
+			
+			if we_set:
+				path_to_gajim_script, type = gtkgui_helpers.get_abspath_for_script(
+					'gajim-remote', True)
+				if path_to_gajim_script:
+					if type == 'svn':
+						command = path_to_gajim_script + ' open_chat %s'
+					else: # 'installed'
+						command = 'gajim-remote open_chat %s'
+					client.set_bool('/desktop/gnome/url-handlers/xmpp/enabled', True)
+					client.set_string('/desktop/gnome/url-handlers/xmpp/command', command)
+					client.set_bool('/desktop/gnome/url-handlers/xmpp/needs_terminal', False)
 	
 	Interface()
 	gtk.main()
