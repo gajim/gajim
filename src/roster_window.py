@@ -2337,7 +2337,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'rename.png')
 		img = gtk.Image()
 		img.set_from_file(path)
-		liststore.append([_('_Change Status Message...'), img, ''])
+		liststore.append([_('Change Status Message...'), img, ''])
 		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
 		liststore.append(['SEPARATOR', None, ''])
 
