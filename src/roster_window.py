@@ -1454,7 +1454,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		for acct in accounts:
 			if not gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
 				continue
-			# we are connected or we want to connect
+			# we are connected (so we wanna change show and status)
+			# or no account is connected and we want to connect with new show and status
 			if not one_connected or gajim.connections[acct].connected > 1:
 				self.send_status(acct, status, message)
 	
