@@ -202,7 +202,8 @@ class RosterWindow:
 					if group in gajim.contacts[account][jid][0].groups:
 						break
 				else:
-					del gajim.groups[account][group]
+					if gajim.groups[account].has_key(group):
+						del gajim.groups[account][group]
 
 	def get_appropriate_state_images(self, jid):
 		'''check jid and return the appropriate state images dict'''
