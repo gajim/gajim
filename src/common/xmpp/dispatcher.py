@@ -21,7 +21,7 @@ Contains one tunable attribute: DefaultTimeout (25 seconds by default). It defin
 Dispatcher.SendAndWaitForResponce method will wait for reply stanza before giving up.
 """
 
-import simplexml,time
+import simplexml,time,sys
 from protocol import *
 from client import PlugIn
 
@@ -37,6 +37,7 @@ class Dispatcher(PlugIn):
         self.handlers={}
         self._expected={}
         self._defaultHandler=None
+        self._pendingExceptions=[]
         self._eventHandler=None
         self._cycleHandlers=[]
         self._exported_methods=[self.Process,self.RegisterHandler,self.RegisterDefaultHandler,\
@@ -114,10 +115,16 @@ class Dispatcher(PlugIn):
             2) '0' string if no data were processed but link is alive;
             3) 0 (zero) if underlying connection is closed."""
         for handler in self._cycleHandlers: handler(self)
+        if len(self._pendingExceptions) > 0:
+            _pendingException = self._pendingExceptions.pop()
+            raise _pendingException[0], _pendingException[1], _pendingException[2]
         if self._owner.Connection.pending_data(timeout):
             try: data=self._owner.Connection.receive()  
             except IOError: return
-            self.Stream.Parse(data) 
+            self.Stream.Parse(data)
+            if len(self._pendingExceptions) > 0:
+  	             _pendingException = self._pendingExceptions.pop()
+  	             raise _pendingException[0], _pendingException[1], _pendingException[2]
             return len(data)
         return '0'      # It means that nothing is received but link is alive.
         
@@ -272,6 +279,7 @@ class Dispatcher(PlugIn):
                 try: cb(session,stanza,**args)
                 except Exception, typ:
                     if typ.__class__.__name__<>'NodeProcessed': raise
+                        
             else:
                 session.DEBUG("Expected stanza arrived!",'ok')
                 session._expected[ID]=stanza
@@ -281,7 +289,9 @@ class Dispatcher(PlugIn):
                 try:
                     handler['func'](session,stanza)
                 except Exception, typ:
-                    if typ.__class__.__name__<>'NodeProcessed': raise
+                    if typ.__class__.__name__<>'NodeProcessed':
+                        self._pendingExceptions.insert(0, sys.exc_info())
+                        return
                     user=0
         if user and self._defaultHandler: self._defaultHandler(session,stanza)
 
