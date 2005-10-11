@@ -787,19 +787,20 @@ class PopupNotificationWindow:
 			txt = gajim.contacts[account][self.jid][0].name
 		else:
 			txt = self.jid
-		event_description_label.set_text(txt)
-		
+
 		# set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
-		
+
 		if event_type == _('Contact Signed In'):
 			limegreen = gtk.gdk.color_parse('limegreen')
 			close_button.modify_bg(gtk.STATE_NORMAL, limegreen)
 			eventbox.modify_bg(gtk.STATE_NORMAL, limegreen)
+			event_description_label.set_text(txt)
 		elif event_type == _('Contact Signed Out'):
 			red = gtk.gdk.color_parse('red')
 			close_button.modify_bg(gtk.STATE_NORMAL, red)
 			eventbox.modify_bg(gtk.STATE_NORMAL, red)
+			event_description_label.set_text(txt)
 		elif event_type in [_('New Message'), _('New Single Message'),
 			_('New Private Message')]:
 			dodgerblue = gtk.gdk.color_parse('dodgerblue')
@@ -809,6 +810,7 @@ class PopupNotificationWindow:
 				txt = _('From %s') % jid.split('/', 1)[1] # Nickname
 			else:
 				txt = _('From %s') % txt
+			event_description_label.set_text(txt)
 		elif event_type == _('File Transfer Request'):
 			bg_color = gtk.gdk.color_parse('khaki')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
@@ -819,6 +821,7 @@ class PopupNotificationWindow:
 			bg_color = gtk.gdk.color_parse('firebrick')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
+			event_description_label.set_text(txt)
 		elif event_type in [_('File Transfer Completed'), _('File Transfer Stopped')]:
 			bg_color = gtk.gdk.color_parse('yellowgreen')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
