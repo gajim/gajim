@@ -134,8 +134,20 @@ class TabbedChatWindow(chat.Chat):
 		gobject.source_remove(self.show_bigger_avatar_timeout_id)
 
 	def show_bigger_avatar(self, widget):
+		'''resizes the avatar, if needed, so it has at max half the screen size
+		and shows it'''
 		jid = self.get_active_jid()
 		avatar_pixbuf = self.plugin.avatar_pixbufs[jid]
+		screen_w = gtk.gdk.screen_width()
+		screen_h = gtk.gdk.screen_height()
+		avatar_w = avatar_pixbuf.get_property('width')
+		avatar_h = avatar_pixbuf.get_property('height')
+		half_scr_w = screen_w / 2
+		half_scr_h = screen_h / 2
+		if avatar_w > half_scr_w:
+			avatar_w = half_scr_w
+		if avatar_h > half_scr_h:
+			avatar_h = half_scr_h
 		window = gtk.Window(gtk.WINDOW_POPUP)
 		self.bigger_avatar_window = window
 		image = gtk.Image()
