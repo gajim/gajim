@@ -29,7 +29,7 @@ import gtkgui_helpers
 import history_window
 import tooltips
 import sre
-import unicodedata
+import os
 
 from gajim import Contact
 from common import gajim
@@ -230,12 +230,18 @@ class GroupchatWindow(chat.Chat):
 					end_iter_for_previous_line)
 			
 			# add the new focus out line
-			dash_char = unicodedata.lookup(
-				'BOX DRAWINGS HEAVY HORIZONTAL').encode('utf-8')
-			focus_out_line = '\n' + dash_char * 15
+			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+			focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 			end_iter = buffer.get_end_iter()
-			buffer.insert_with_tags_by_name(end_iter, focus_out_line,
-				'focus-out-line')
+			buffer.insert(end_iter, '\n')
+			buffer.insert_pixbuf(end_iter, focus_out_line_pixbuf)
+			
+			end_iter = buffer.get_end_iter()
+			before_img_iter = end_iter.copy()
+			before_img_iter.backward_char() # one char back (an image also takes one char)
+			buffer.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
+			#FIXME: remove this workaround when bug is fixed
+			# c http://bugzilla.gnome.org/show_bug.cgi?id=318569
 			
 			self.allow_focus_out_line[room_jid] = False
 			
