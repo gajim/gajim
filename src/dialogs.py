@@ -807,7 +807,9 @@ class PopupNotificationWindow:
 			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			if event_type == _('New Private Message'):
-				txt = _('From %s') % jid.split('/', 1)[1] # Nickname
+				room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+				room_name = room_jid.split('@', 1)[0]
+				txt = _('From %s in room %s') % (nick, room_name)
 			else:
 				txt = _('From %s') % txt
 			event_description_label.set_text(txt)
