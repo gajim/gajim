@@ -1186,14 +1186,15 @@ class Connection:
 	def _getRosterCB(self, con, iq_obj):
 		if not self.connection:
 			return
-		roster = self.connection.getRoster().getRaw()
+		roster = self.connection.getRoster().getRaw().copy()
 		if not roster:
 			roster = {}
-			
+
 		jid = gajim.get_jid_from_account(self.name)
-		
+
 		if roster.has_key(jid):
 			del roster[jid]
+
 		self.dispatch('ROSTER', roster)
 
 		# continue connection
@@ -1506,12 +1507,6 @@ class Connection:
 				self.connected = 0
 				self.connection.disconnect()
 			return
-
-	def ask_roster(self):
-		roster = {}
-		if self.connection:
-			roster = self.connection.getRoster().getRaw()
-		return roster
 
 	def build_privacy_rule(self, name, action):
 		'''Build a Privacy rule stanza for invisibility'''
