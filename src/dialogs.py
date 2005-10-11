@@ -808,7 +808,7 @@ class PopupNotificationWindow:
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			if event_type == _('New Private Message'):
 				room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-				room_name = room_jid.split('@', 1)[0]
+				room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
 				txt = _('From %s in room %s') % (nick, room_name)
 			else:
 				txt = _('From %s') % txt
@@ -893,17 +893,18 @@ class PopupNotificationWindow:
 			if self.jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			if self.msg_type.find('file') != 0:
-				contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
-					groups = [_('not in the roster')], show = 'not in the roster',
-					status = _('not in the roster'), sub = 'none', keyID = keyID)
-				gajim.contacts[self.account][self.jid] = [contact]
-				self.plugin.roster.add_contact_to_roster(contact.jid,
-					self.account)
-			elif self.msg_type == 'pm':
-				room_jid, nick = self.jid.split('/', 1)
-				show = gajim.gc_contacts[self.account][room_jid][nick].show
-				contact = Contact(jid = self.jid, name = nick, groups = ['none'],
-					show = show, sub = 'none')
+				if self.msg_type == 'pm':
+					room_jid, nick = self.jid.split('/', 1)
+					show = gajim.gc_contacts[self.account][room_jid][nick].show
+					contact = Contact(jid = self.jid, name = nick, groups = ['none'],
+						show = show, sub = 'none')
+				else:
+					contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
+						groups = [_('not in the roster')], show = 'not in the roster',
+						status = _('not in the roster'), sub = 'none', keyID = keyID)
+					gajim.contacts[self.account][self.jid] = [contact]
+					self.plugin.roster.add_contact_to_roster(contact.jid,
+						self.account)
 
 		if self.msg_type == 'normal': # it's single message
 			return # FIXME: I think I should not print here but in new_chat?
