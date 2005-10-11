@@ -2162,13 +2162,15 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				return -1
 		if type1 == 'contact' and type2 == 'contact' and \
 				gajim.config.get('sort_by_show'):
-			account = model.get_value(iter1, 4)
-			if account and model.get_value(iter2, 4) == account:
-				account = account.decode('utf-8')
+			account1 = model.get_value(iter1, 4)
+			account2 = model.get_value(iter2, 4)
+			if account1 and account2:
+				account1 = account1.decode('utf-8')
+				account2 = account2.decode('utf-8')
 				jid1 = model[iter1][C_JID].decode('utf-8')
 				jid2 = model[iter2][C_JID].decode('utf-8')
-				luser1 = gajim.contacts[account][jid1]
-				luser2 = gajim.contacts[account][jid2]
+				luser1 = gajim.contacts[account1][jid1]
+				luser2 = gajim.contacts[account2][jid2]
 				cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
 					'invisible': 5, 'offline': 6, 'not in the roster': 7, 'error': 8}
 				s = self.get_show(luser1)
