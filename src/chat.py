@@ -819,9 +819,10 @@ class Chat:
 			pass
 		else: # it's a normal key press make sure message_textview has focus
 			message_textview = self.xmls[jid].get_widget('message_textview')
-			if not message_textview.is_focus():
-				message_textview.grab_focus()
-			message_textview.emit('key_press_event', event)
+			if message_textview.get_property('sensitive'):
+				if not message_textview.is_focus():
+					message_textview.grab_focus()
+				message_textview.emit('key_press_event', event)
 
 	def on_conversation_vadjustment_value_changed(self, widget):
 		jid = self.get_active_jid()
