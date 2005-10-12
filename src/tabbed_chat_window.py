@@ -114,6 +114,7 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_drag_data_received(self, widget, context, x, y, selection,
 		target_type, timestamp, contact):
+		# If not resource, we can't send file
 		if not contact.resource:
 			return
 		if target_type == self.TARGET_TYPE_URI_LIST:
