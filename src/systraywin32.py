@@ -24,7 +24,8 @@
 
 
 import win32gui
-import win32con # winapi contants
+import pywintypes
+import win32con # winapi constants
 import systray
 import gtk
 import os
@@ -145,7 +146,10 @@ class NotifyIcon:
 		self._callbackmessage = WM_TRAYMESSAGE
 		self._hicon = hicon
 
-		win32gui.Shell_NotifyIcon(win32gui.NIM_ADD, self._get_nid())
+		try:
+			win32gui.Shell_NotifyIcon(win32gui.NIM_ADD, self._get_nid())
+		except pywintypes.error:
+			pass
 		if tooltip: self.set_tooltip(tooltip)
 
 
@@ -174,7 +178,7 @@ class NotifyIcon:
 		""" Removes the tray icon. """
 		try:
 			win32gui.Shell_NotifyIcon(win32gui.NIM_DELETE, self._get_nid())
-		except: # maybe except just pywintypes.error ? anyways..
+		except pywintypes.error:
 			pass
 
 
@@ -182,7 +186,10 @@ class NotifyIcon:
 		""" Sets the tray icon tooltip. """
 		self._flags = self._flags | win32gui.NIF_TIP
 		self._tip = tooltip
-		win32gui.Shell_NotifyIcon(win32gui.NIM_MODIFY, self._get_nid())
+		try:
+			win32gui.Shell_NotifyIcon(win32gui.NIM_MODIFY, self._get_nid())
+		except pywintypes.error:
+			pass
 		
 		
 	def show_balloon(self, title, text, timeout=10, icon=win32gui.NIIF_NONE):
@@ -192,12 +199,18 @@ class NotifyIcon:
 		self._info = text
 		self._timeout = timeout * 1000
 		self._infoflags = icon
-		win32gui.Shell_NotifyIcon(win32gui.NIM_MODIFY, self._get_nid())
+		try:
+			win32gui.Shell_NotifyIcon(win32gui.NIM_MODIFY, self._get_nid())
+		except pywintypes.error:
+			pass
 
 	def _redraw(self, *args):
 		""" Redraws the tray icon. """
 		self.remove()
-		win32gui.Shell_NotifyIcon(win32gui.NIM_ADD, self._get_nid())
+		try:
+			win32gui.Shell_NotifyIcon(win32gui.NIM_ADD, self._get_nid())
+		except pywintypes.error:
+			pass
 
 
 class SystrayWin32(systray.Systray):
