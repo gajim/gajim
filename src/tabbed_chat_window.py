@@ -237,27 +237,30 @@ class TabbedChatWindow(chat.Chat):
 		return 0 # FIXME: always zero why??
 
 	def show_avatar(self, jid, resource):
-		if self.plugin.avatar_pixbufs[jid] is None:
-			return # contact has no avatar
-
-		pixbuf = self.plugin.avatar_pixbufs[jid]
-		w = gajim.config.get('avatar_width')
-		h = gajim.config.get('avatar_height')
-		scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
-
-		x = None
+		# Get the XML instance
+		xml = None
 		if self.xmls.has_key(jid):
-			x = self.xmls[jid]
+			xml = self.xmls[jid]
 		else:
 			# it can be xmls[jid/resource] if it's a vcard from pm
 			jid_with_resource = jid + '/' + resource
 			if self.xmls.has_key(jid_with_resource):
-				x = self.xmls[jid_with_resource]
+				xml = self.xmls[jid_with_resource]
+		if not xml:
+			return
+		
+		if self.plugin.avatar_pixbufs[jid] is None:
+			# contact has no avatar
+			scaled_buf = None
+		else:
+			pixbuf = self.plugin.avatar_pixbufs[jid]
+			w = gajim.config.get('avatar_width')
+			h = gajim.config.get('avatar_height')
+			scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 
-		if x is not None:
-			image = x.get_widget('avatar_image')
-			image.set_from_pixbuf(scaled_buf)
-			image.show_all()
+		image = xml.get_widget('avatar_image')
+		image.set_from_pixbuf(scaled_buf)
+		image.show_all()
 
 	def set_state_image(self, jid):
 		prio = 0
