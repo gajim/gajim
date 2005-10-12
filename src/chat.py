@@ -413,6 +413,12 @@ class Chat:
 			issensitive = gpg_btn.get_property('sensitive')
 			childs[3].set_active(isactive)
 			childs[3].set_property('sensitive', issensitive)
+			# If we don't have resource, we can't do file transfert
+			c = gajim.get_first_contact_instance_from_jid(self.account, jid)
+			if not c.resource:
+				childs[2].set_sensitive(False)
+			else:
+				childs[2].set_sensitive(True)
 			# compact_view_menuitem
 			childs[4].set_active(self.compact_view_current_state)
 		menu = self.remove_possible_switch_to_menuitems(menu)
