@@ -542,9 +542,11 @@ class Interface:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			contact1 = Contact(jid = jid, name = jid.split('@')[0],
-				groups = [_('General')], show = 'online', status = 'online',
-				ask = 'to', resource = array[1], keyID = keyID)
+			name = jid.split('@', 1)[0]
+			name = name.split('%', 1)[0]
+			contact1 = Contact(jid = jid, name = name, groups = [_('General')],
+				show = 'online', status = 'online', ask = 'to',
+				resource = array[1], keyID = keyID)
 			gajim.contacts[account][jid] = [contact1]
 			self.roster.add_contact_to_roster(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),
