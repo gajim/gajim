@@ -639,6 +639,7 @@ class Interface:
 			 win.set_values(array)
 
 	def handle_event_vcard(self, account, vcard):
+		# ('VCARD', account, data)
 		'''vcard holds the vcard data'''
 		jid = vcard['jid']
 		resource = vcard['resource']
