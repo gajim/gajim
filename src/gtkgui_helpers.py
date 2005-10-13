@@ -57,11 +57,11 @@ def get_default_font():
 		import gconf
 		# in try because daemon may not be there
 		client = gconf.client_get_default()
-	except:
-		pass
-	else:
+
 		return helpers.ensure_unicode_string(
 			client.get_string('/desktop/gnome/interface/font_name'))
+	except:
+		pass
 
 	# try to get xfce default font
 	# Xfce 4.2 adopts freedesktop.org's Base Directory Specification
