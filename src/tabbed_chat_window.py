@@ -255,13 +255,14 @@ class TabbedChatWindow(chat.Chat):
 			scaled_buf = None
 		else:
 			pixbuf = self.plugin.avatar_pixbufs[jid]
+			# compute width / height of the avatar without distorting it
 			ratio = float(pixbuf.get_width()) / float(pixbuf.get_height())
 			if ratio > 1:
 				w = gajim.config.get('avatar_width')
-				h = w/ratio
+				h = int(w/ratio)
 			else:
 				h = gajim.config.get('avatar_height')
-				w = h*ratio
+				w = int(h*ratio)
 			scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 
 		image = xml.get_widget('avatar_image')
