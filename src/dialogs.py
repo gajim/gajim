@@ -482,20 +482,20 @@ class HigDialog(gtk.MessageDialog):
 		return response
 
 class ConfirmationDialog(HigDialog):
-	"""HIG compliant confirmation dialog."""
+	'''HIG compliant confirmation dialog.'''
 	def __init__(self, pritext, sectext=''):
 		HigDialog.__init__(self, None, 
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext)
 			
 class WarningDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
-		"""HIG compliant warning dialog."""
+		'''HIG compliant warning dialog.'''
 		HigDialog.__init__( self, None, 
 				gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, pritext, sectext)
 
 class InformationDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
-		"""HIG compliant info dialog."""
+		'''HIG compliant info dialog.'''
 		HigDialog.__init__( self, None, 
 				gtk.MESSAGE_INFO, gtk.BUTTONS_OK, pritext, sectext)
 		ok_button = self.action_area.get_children()[0]
@@ -507,7 +507,7 @@ class InformationDialog(HigDialog):
 
 class ErrorDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
-		"""HIG compliant error dialog."""
+		'''HIG compliant error dialog.'''
 		HigDialog.__init__( self, None, 
 				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, pritext, sectext)
 
