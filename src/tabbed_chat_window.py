@@ -127,14 +127,33 @@ class TabbedChatWindow(chat.Chat):
 						contact, path)
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
-		'''we enter the eventbox area'''
-		# wait for 0.5 sec in case we leave earlier
-		self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
-			self.show_bigger_avatar, widget)
+		'''we enter the eventbox area so we under conditions add a timeout
+		to show a bigger avatar after 0.5 sec'''
+		jid = self.get_active_jid()
+		avatar_pixbuf = self.plugin.avatar_pixbufs[jid]
+		avatar_w = avatar_pixbuf.get_width()
+		avatar_h = avatar_pixbuf.get_height()
+		
+		print avatar_w, avatar_h
+		
+		scaled_buf = self.xmls[jid].get_widget('avatar_image').get_pixbuf()
+		scaled_buf_w = scaled_buf.get_width()
+		scaled_buf_h = scaled_buf.get_height()
+		
+		print scaled_buf_w, scaled_buf_h
+		
+		# do we have something bigger to show?
+		if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
+			print 'SHOW BIGGER'
+			# wait for 0.5 sec in case we leave earlier
+			self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
+				self.show_bigger_avatar, widget)
 		
 	def on_avatar_eventbox_leave_notify_event(self, widget, event):
-		'''we left the eventbox area'''
-		gobject.source_remove(self.show_bigger_avatar_timeout_id)
+		'''we left the eventbox area that holds the avatar img'''
+		# did we add a timeout? if yes remove it
+		if self.show_bigger_avatar_timeout_id is not None:
+			gobject.source_remove(self.show_bigger_avatar_timeout_id)
 
 	def show_bigger_avatar(self, widget):
 		'''resizes the avatar, if needed, so it has at max half the screen size
@@ -143,8 +162,8 @@ class TabbedChatWindow(chat.Chat):
 		avatar_pixbuf = self.plugin.avatar_pixbufs[jid]
 		screen_w = gtk.gdk.screen_width()
 		screen_h = gtk.gdk.screen_height()
-		avatar_w = avatar_pixbuf.get_property('width')
-		avatar_h = avatar_pixbuf.get_property('height')
+		avatar_w = avatar_pixbuf.get_width()
+		avatar_h = avatar_pixbuf.get_height()
 		half_scr_w = screen_w / 2
 		half_scr_h = screen_h / 2
 		if avatar_w > half_scr_w:
@@ -255,7 +274,9 @@ class TabbedChatWindow(chat.Chat):
 			scaled_buf = None
 		else:
 			pixbuf = self.plugin.avatar_pixbufs[jid]
-			# compute width / height of the avatar without distorting it
+
+			# resize to a  width / height for the avatar not to have distortion
+			# (keep aspect ratio)
 			ratio = float(pixbuf.get_width()) / float(pixbuf.get_height())
 			if ratio > 1:
 				w = gajim.config.get('avatar_width')
@@ -263,7 +284,7 @@ class TabbedChatWindow(chat.Chat):
 			else:
 				h = gajim.config.get('avatar_height')
 				w = int(h*ratio)
-			scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
+			scaled_buf = pixbuf.scale_simple(int(w), int(h), gtk.gdk.INTERP_HYPER)
 
 		image = xml.get_widget('avatar_image')
 		image.set_from_pixbuf(scaled_buf)
