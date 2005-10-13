@@ -639,8 +639,7 @@ class RosterWindow:
 			
 			if contact == gajim.get_contact_instance_with_highest_priority(\
 				account, contact.jid):
-				self.plugin.windows[account]['chats'][jid].draw_name_banner(
-					contact, chatstate = None)
+				self.plugin.windows[account]['chats'][jid].draw_name_banner(contact)
 
 	def on_info(self, widget, user, account):
 		'''Call vcard_information_window class to display user's information'''

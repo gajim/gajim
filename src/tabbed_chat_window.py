@@ -184,7 +184,7 @@ class TabbedChatWindow(chat.Chat):
 		# add the fat line at the top
 		self.draw_name_banner(contact)
 
-	def draw_name_banner(self, contact, chatstate = None):
+	def draw_name_banner(self, contact):
 		'''Draw the fat line at the top of the window that 
 		houses the status icon, name, jid, and avatar'''
 		# this is the text for the big brown bar
@@ -212,6 +212,7 @@ class TabbedChatWindow(chat.Chat):
 		
 		
 		st = gajim.config.get('chat_state_notifications')
+		chatstate = contact.chatstate
 		if chatstate and st in ('composing_only', 'all'):
 			if st == 'all':
 				chatstate = helpers.get_uf_chatstate(chatstate)
@@ -444,7 +445,7 @@ class TabbedChatWindow(chat.Chat):
 	def handle_incoming_chatstate(self, account, jid, chatstate):
 		''' handle incoming chatstate that jid SENT TO us '''
 		contact = gajim.get_first_contact_instance_from_jid(account, jid)
-		self.draw_name_banner(contact, chatstate)
+		self.draw_name_banner(contact)
 		# update chatstate in tab for this chat
 		self.redraw_tab(contact.jid, chatstate)
 
