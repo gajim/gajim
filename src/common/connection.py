@@ -1815,7 +1815,6 @@ class Connection:
 		# If a connection already exist we cannot create a new account
 		if self.connection:
 			return
-		config['name'] = name
 		con, con_type = self.connect(config)
 		if not con_type:
 			return None
