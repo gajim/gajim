@@ -285,7 +285,9 @@ class GroupchatWindow(chat.Chat):
 			subject = _('This room has no subject')
 		self.subject_tooltip[new_jid].set_tip(event_box, subject)
 
-		if len(self.xmls) > 1: # if we have more than one tab
+		if len(self.xmls) > 1 and old_jid != '': # if we have more than one tab
+			# and we have the old_jid (eg we did NOT close the tab
+			# but we just switched)
 			# then add the focus-out line to the tab we are leaving
 			self.check_and_possibly_add_focus_out_line(old_jid)
 		chat.Chat.on_chat_notebook_switch_page(self, notebook, page, page_num)
