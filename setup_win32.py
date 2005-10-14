@@ -1,4 +1,4 @@
-## setup_win32.py (run me as python setup_win32.py py2exe)
+## setup_win32.py (run me as python setup_win32.py py2exe -O2)
 ##
 ## Gajim Team:
 ## - Yann Le Boulanger <asterix@lagaule.org>
