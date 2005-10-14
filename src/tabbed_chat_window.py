@@ -134,17 +134,12 @@ class TabbedChatWindow(chat.Chat):
 		avatar_w = avatar_pixbuf.get_width()
 		avatar_h = avatar_pixbuf.get_height()
 		
-		print avatar_w, avatar_h
-		
 		scaled_buf = self.xmls[jid].get_widget('avatar_image').get_pixbuf()
 		scaled_buf_w = scaled_buf.get_width()
 		scaled_buf_h = scaled_buf.get_height()
 		
-		print scaled_buf_w, scaled_buf_h
-		
 		# do we have something bigger to show?
 		if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
-			print 'SHOW BIGGER'
 			# wait for 0.5 sec in case we leave earlier
 			self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
 				self.show_bigger_avatar, widget)
