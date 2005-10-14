@@ -1341,22 +1341,43 @@ class Connection:
 			elif event == common.xmpp.transports.DATA_SENT:
 				self.dispatch('STANZA_SENT', unicode(data))
 
-	def connect(self):
+	def connect(self, data = None):
 		"""Connect and authenticate to the Jabber server
-		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')"""
+		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')
+		data MUST contain name, hostname, resource, usessl, proxy,
+		use_custom_host, custom_host (if use_custom_host), custom_port (if
+		use_custom_host), """
 		if self.connection:
 			return self.connection
 
-		name = gajim.config.get_per('accounts', self.name, 'name')
-		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-		resource = gajim.config.get_per('accounts', self.name, 'resource')
-		usessl = gajim.config.get_per('accounts', self.name, 'usessl')
-		try_connecting_for_foo_secs = gajim.config.get_per('accounts', self.name,
-			'try_connecting_for_foo_secs')
+		if data:
+			name = data['name']
+			hostname = data['hostname']
+			resource = data['resource']
+			usessl = data['usessl']
+			try_connecting_for_foo_secs = 45
+			p = data['proxy']
+			use_srv = True
+			use_custom = data['use_custom_host']
+			if use_custom:
+				custom_h = data['custom_host']
+				custom_p = data['custom_port']
+		else:
+			name = gajim.config.get_per('accounts', self.name, 'name')
+			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+			resource = gajim.config.get_per('accounts', self.name, 'resource')
+			usessl = gajim.config.get_per('accounts', self.name, 'usessl')
+			try_connecting_for_foo_secs = gajim.config.get_per('accounts',
+				self.name, 'try_connecting_for_foo_secs')
+			p = gajim.config.get_per('accounts', self.name, 'proxy')
+			use_srv = gajim.config.get_per('accounts', self.name, 'use_srv')
+			use_custom = gajim.config.get_per('accounts', self.name,
+				'use_custom_host')
+			custom_h = gajim.config.get_per('accounts', self.name, 'custom_host')
+			custom_p = gajim.config.get_per('accounts', self.name, 'custom_port')
 
 		#create connection if it doesn't already exist
 		self.connected = 1
-		p = gajim.config.get_per('accounts', self.name, 'proxy')
 		if p and p in gajim.config.get_per('proxies'):
 			proxy = {'host': gajim.config.get_per('proxies', p, 'host')}
 			proxy['port'] = gajim.config.get_per('proxies', p, 'port')
@@ -1376,14 +1397,13 @@ class Connection:
 		p = 5222
 		# autodetect [for SSL in 5223/443 and for TLS if broadcasted]
 		secur = None
-		use_srv = gajim.config.get_per('accounts', self.name, 'use_srv')
 		if usessl:
 			p = 5223
 			secur = 1 # 1 means force SSL no matter what the port will be
 			use_srv = False # wants ssl? disable srv lookup
-		if gajim.config.get_per('accounts', self.name, 'use_custom_host'):
-			h = gajim.config.get_per('accounts', self.name, 'custom_host')
-			p = gajim.config.get_per('accounts', self.name, 'custom_port')
+		if use_custom:
+			h = custom_h
+			p = custom_p
 			use_srv = False
 
 		# SRV resolver
@@ -1417,16 +1437,21 @@ class Connection:
 		if not self.connected: # We went offline during connecting process
 			return None
 		if not con_type:
-			gajim.log.debug('Could not connect to %s' % self.name)
+			gajim.log.debug('Could not connect to %s' % h)
 			if not self.retrycount:
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
-				self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
+				self.dispatch('ERROR', (_('Could not connect to "%s"') % h,
 					_('Check your connection or try again later.')))
 			return None
-
-		self.peerhost = con.get_peerhost()
 		gajim.log.debug(_('Connected to server with %s') % con_type)
+		return con, con_type
+
+	def connect_and_auth(self):
+		con, con_type = self.connect()
+		if not con_type:
+			return None
+		self.peerhost = con.get_peerhost()
 
 		# notify the gui about con_type
 		self.dispatch('CON_TYPE', con_type)
@@ -1474,12 +1499,16 @@ class Connection:
 		con.RegisterHandler('message', self._StanzaArrivedCB)
 		con.RegisterEventHandler(self._event_dispatcher)
 
+		name = gajim.config.get_per('accounts', self.name, 'name')
+		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+		resource = gajim.config.get_per('accounts', self.name, 'resource')
+
 		try:
 			auth = con.auth(name, self.password, resource, 1)
 		except IOError: #probably a timeout
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Could not connect to "%s"') % self.name,
+			self.dispatch('ERROR', (_('Could not connect to "%s"') % hostname,
 				_('Check your connection or try again later')))
 			return None
 		if not self.connected: # We went offline during connecting process
@@ -1493,10 +1522,10 @@ class Connection:
 			self.connected = 2
 			return con # return connection
 		else:
-			gajim.log.debug("Couldn't authenticate to %s" % self.name)
+			gajim.log.debug("Couldn't authenticate to %s" % hostname)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Authentication failed with "%s"') % self.name,
+			self.dispatch('ERROR', (_('Authentication failed with "%s"') % hostname,
 				_('Please check your login and password for correctness.')))
 			return None
 	# END connect
@@ -1576,7 +1605,7 @@ class Connection:
 
 	def connect_and_init(self, show, msg, signed):
 		self.continue_connect_info = [show, msg, signed]
-		self.connection = self.connect()
+		self.connection = self.connect_and_auth()
 
 	def change_status(self, show, msg, sync = False, auto = False):
 		if sync:
@@ -1786,45 +1815,16 @@ class Connection:
 		# If a connection already exist we cannot create a new account
 		if self.connection:
 			return
-		p = config['proxy']
-		if p and p in gajim.config.get_per('proxies'):
-			proxy = {'host': gajim.config.get_per('proxies', p, 'host')}
-			proxy['port'] = gajim.config.get_per('proxies', p, 'port')
-			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
-			proxy['password'] = gajim.config.get_per('proxies', p, 'pass')
-		else:
-			proxy = None
-		if gajim.verbose:
-			c = common.xmpp.Client(server = config['hostname'])
-		else:
-			c = common.xmpp.Client(server = config['hostname'], debug = [])
-		common.xmpp.dispatcher.DefaultTimeout = 45
-		c.UnregisterDisconnectHandler(c.DisconnectHandler)
-		c.RegisterDisconnectHandler(self._disconnectedCB)
-		h = config['hostname']
-		p = 5222
-		usessl = None
-		if usessl: #FIXME: we cannot create an account if we want ssl connection to create it
-			p = 5223
-		if config['use_custom_host']:
-			h = config['custom_host']
-			p = config['custom_port']
-		secur = None # autodetect [for SSL in 5223/443 and for TLS if broadcasted]
-		if usessl:
-			secur=1 #1 means force SSL no matter what the port is
-		con_type = c.connect((h, p), proxy = proxy, secure=secur)#FIXME: blocking
+		config['name'] = name
+		con, con_type = self.connect(config)
 		if not con_type:
-			gajim.log.debug("Couldn't connect to %s" % name)
-			self.dispatch('ERROR', (_('Could not connect to "%s"') % name,
-				_('Check your connection or try again later.')))
-			return False
-		gajim.log.debug(_('Connected to server with %s'), con_type)
+			return None
 
-		c.RegisterEventHandler(self._event_dispatcher)
+		con.RegisterEventHandler(self._event_dispatcher)
 		self.new_account_info = config
-		self.connection = c
+		self.connection = con
 		self.name = name
-		common.xmpp.features.getRegInfo(c, config['hostname'])
+		common.xmpp.features.getRegInfo(con, config['hostname'])
 
 	def account_changed(self, new_name):
 		self.name = new_name
@@ -2053,7 +2053,7 @@ class Connection:
 
 	def unregister_account(self):
 		if self.connected == 0:
-			self.connection = self.connect()
+			self.connection = self.connect_and_auth()
 		if self.connected > 1:
 			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 			iq = common.xmpp.Iq(typ = 'set', to = hostname)
