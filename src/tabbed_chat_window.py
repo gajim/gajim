@@ -280,11 +280,11 @@ class TabbedChatWindow(chat.Chat):
 			ratio = float(pixbuf.get_width()) / float(pixbuf.get_height())
 			if ratio > 1:
 				w = gajim.config.get('avatar_width')
-				h = int(w/ratio)
+				h = int(w / ratio)
 			else:
 				h = gajim.config.get('avatar_height')
-				w = int(h*ratio)
-			scaled_buf = pixbuf.scale_simple(int(w), int(h), gtk.gdk.INTERP_HYPER)
+				w = int(h * ratio)
+			scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 
 		image = xml.get_widget('avatar_image')
 		image.set_from_pixbuf(scaled_buf)
