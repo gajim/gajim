@@ -4,6 +4,7 @@
 ## - Yann Le Boulanger <asterix@lagaule.org>
 ## - Vincent Hanquez <tab@snarc.org>
 ## - Nikos Kouremenos <kourem@gmail.com>
+## - Travis Shirk <travis@pobox.com>
 ##
 ## Copyright (C) 2003-2005 Gajim Team
 ##
@@ -951,6 +952,7 @@ current room topic.') % command, room_jid)
 			# highlighting and sounds
 			(highlight, sound) = self.highlighting_for_message(text, nick, tim)
 			if highlight:	
+				self.redraw_tab(room_jid, 'attention')
 				other_tags_for_name.append('bold')
 				other_tags_for_text.append('marked')
 			if sound == 'received':
