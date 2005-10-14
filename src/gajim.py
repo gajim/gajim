@@ -238,6 +238,8 @@ class Interface:
 			model[self.roster.status_message_menuitem_iter][3] = False # sensitivity for this menuitem
 			gajim.allow_notifications[account] = False
 			# we are disconnected from all gc
+			if not gajim.gc_connected.has_key(account):
+				return
 			for room_jid in gajim.gc_connected[account]:
 				if self.windows[account]['gc'].has_key(room_jid):
 					self.windows[account]['gc'][room_jid].got_disconnected(room_jid)
