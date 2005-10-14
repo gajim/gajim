@@ -951,8 +951,8 @@ current room topic.') % command, room_jid)
 		if kind == 'incoming': # it's a message NOT from us
 			# highlighting and sounds
 			(highlight, sound) = self.highlighting_for_message(text, nick, tim)
-			if highlight:	
-				self.redraw_tab(room_jid, 'attention')
+			if highlight:
+				self.redraw_tab(room_jid, 'attention') # muc-specific chatstate
 				other_tags_for_name.append('bold')
 				other_tags_for_text.append('marked')
 			if sound == 'received':
