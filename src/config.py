@@ -1261,8 +1261,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 			if name != self.account:
 				#update variables
 				self.plugin.windows[name] = self.plugin.windows[self.account]
-				gajim.awaiting_messages[name] = \
-					gajim.awaiting_messages[self.account]
+				gajim.awaiting_events[name] = gajim.awaiting_events[self.account]
 				gajim.nicks[name] = gajim.nicks[self.account]
 				gajim.allow_notifications[name] = \
 					gajim.allow_notifications[self.account]
@@ -1292,7 +1291,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 							list[0] = name
 
 				del self.plugin.windows[self.account]
-				del gajim.awaiting_messages[self.account]
+				del gajim.awaiting_events[self.account]
 				del gajim.nicks[self.account]
 				del gajim.allow_notifications[self.account]
 				del gajim.groups[self.account]
@@ -1349,7 +1348,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 			'gc_config': {}}
 		self.plugin.windows[name]['xml_console'] = \
 			dialogs.XMLConsoleWindow(self.plugin, name)
-		gajim.awaiting_messages[name] = {}
+		gajim.awaiting_events[name] = {}
 		gajim.connections[name].connected = 0
 		gajim.groups[name] = {}
 		gajim.contacts[name] = {}
@@ -2525,7 +2524,7 @@ class RemoveAccountWindow:
 		gajim.config.del_per('accounts', self.account)
 		self.plugin.save_config()
 		del self.plugin.windows[self.account]
-		del gajim.awaiting_messages[self.account]
+		del gajim.awaiting_events[self.account]
 		del gajim.nicks[self.account]
 		del gajim.allow_notifications[self.account]
 		del gajim.groups[self.account]
@@ -3009,7 +3008,7 @@ _('You need to enter a valid server address to continue.')).get_response()
 			'gc_config': {}}
 		self.plugin.windows[name]['xml_console'] = \
 			dialogs.XMLConsoleWindow(self.plugin, name)
-		gajim.awaiting_messages[name] = {}
+		gajim.awaiting_events[name] = {}
 		gajim.connections[name].connected = 0
 		gajim.groups[name] = {}
 		gajim.contacts[name] = {}

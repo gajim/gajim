@@ -399,7 +399,8 @@ class GroupchatWindow(chat.Chat):
 					nick = model[user_iter][C_NICK].decode('utf-8')
 					show = gajim.gc_contacts[self.account][room_jid][nick].show
 					state_images = roster.get_appropriate_state_images(room_jid)
-					if gajim.awaiting_messages[self.account].has_key(room_jid + '/'\
+					# We can't have FT events in gc, so if we have events, it's messages
+					if gajim.awaiting_events[self.account].has_key(room_jid + '/'\
 						+ nick):
 						image = state_images['message']
 					else:
@@ -506,8 +507,9 @@ class GroupchatWindow(chat.Chat):
 		nb = 0
 		for nick in self.get_nick_list(room_jid):
 			fjid = room_jid + '/' + nick
-			if gajim.awaiting_messages[self.account].has_key(fjid):
-				nb += len(gajim.awaiting_messages[self.account][fjid])
+			if gajim.awaiting_events[self.account].has_key(fjid):
+				# gc can only have messages as event
+				nb += len(gajim.awaiting_events[self.account][fjid])
 		return nb
 
 	def on_change_subject_menuitem_activate(self, widget):
@@ -1362,7 +1364,7 @@ current room topic.') % command, room_jid)
 	def on_private_message(self, room_jid, nick, msg, tim):
 		# Do we have a queue?
 		fjid = room_jid + '/' + nick
-		qs = gajim.awaiting_messages[self.account]
+		qs = gajim.awaiting_events[self.account]
 		no_queue = True
 		if qs.has_key(fjid):
 			no_queue = False
@@ -1375,7 +1377,7 @@ current room topic.') % command, room_jid)
 
 		if no_queue:
 			qs[fjid] = []
-		qs[fjid].append((msg, 'incoming', tim, False)) # False is for encrypted
+		qs[fjid].append(('message', (msg, '', 'incoming', tim, False)))
 		self.nb_unread[room_jid] += 1
 		
 		autopopup = gajim.config.get('autopopup')

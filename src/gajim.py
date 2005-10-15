@@ -316,7 +316,7 @@ class Interface:
 					if user1.jid in gajim.newly_added[account]:
 						gajim.newly_added[account].remove(user1.jid)
 					self.roster.draw_contact(user1.jid, account)
-					if not gajim.awaiting_messages[account].has_key(jid):
+					if not gajim.awaiting_events[account].has_key(jid):
 						gobject.timeout_add(5000, self.roster.really_remove_contact, \
 							user1, account)
 			user1.show = array[1]
@@ -340,7 +340,7 @@ class Interface:
 												'enabled'):
 					helpers.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
-					not gajim.awaiting_messages[account].has_key(jid) and \
+					not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
 					gajim.allow_notifications[account]:
 					show_notification = False
@@ -366,7 +366,7 @@ class Interface:
 												'enabled'):
 					helpers.play_sound('contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
-					not gajim.awaiting_messages[account].has_key(jid) and \
+					not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signout'):
 					show_notification = False
 					# check OUR status and if we allow notifications for that status
@@ -409,7 +409,7 @@ class Interface:
 			nick = gajim.get_nick_from_fjid(array[0])
 			fjid = array[0]
 			if not self.windows[account]['chats'].has_key(fjid) and \
-				not gajim.awaiting_messages[account].has_key(fjid):
+				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
 					instance = dialogs.PopupNotificationWindow(self,
 						_('New Private Message'), fjid, account, 'pm')
@@ -445,7 +445,7 @@ class Interface:
 
 		first = False
 		if not self.windows[account]['chats'].has_key(jid) and \
-						not gajim.awaiting_messages[account].has_key(jid):
+			not gajim.awaiting_events[account].has_key(jid):
 			first = True
 			if gajim.config.get('notify_on_new_message'):
 				show_notification = False
@@ -602,7 +602,7 @@ class Interface:
 			self.windows['account_modification'].account_is_ok(array[0])
 		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
 		self.windows[name]['xml_console'] = dialogs.XMLConsoleWindow(self, name)
-		gajim.awaiting_messages[name] = {}
+		gajim.awaiting_events[name] = {}
 		# disconnect from server - our status in roster is offline
 		gajim.connections[name].connected = 1
 		gajim.gc_contacts[name] = {}
@@ -1226,7 +1226,7 @@ class Interface:
 			gajim.gc_connected[a] = {}
 			gajim.newly_added[a] = []
 			gajim.to_be_removed[a] = []
-			gajim.awaiting_messages[a] = {}
+			gajim.awaiting_events[a] = {}
 			gajim.nicks[a] = gajim.config.get_per('accounts', a, 'name')
 			gajim.allow_notifications[a] = False
 			gajim.sleeper_state[a] = 0

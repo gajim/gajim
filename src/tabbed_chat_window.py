@@ -449,7 +449,7 @@ class TabbedChatWindow(chat.Chat):
 		# restore previous conversation
 		self.restore_conversation(contact.jid)
 
-		if gajim.awaiting_messages[self.account].has_key(contact.jid):
+		if gajim.awaiting_events[self.account].has_key(contact.jid):
 			self.read_queue(contact.jid)
 
 		self.childs[contact.jid].show_all()
@@ -759,7 +759,7 @@ class TabbedChatWindow(chat.Chat):
 
 	def read_queue(self, jid):
 		'''read queue and print messages containted in it'''
-		l = gajim.awaiting_messages[self.account][jid]
+		l = gajim.awaiting_events[self.account][jid]
 		contact = self.contacts[jid]
 		# Is it a pm ?
 		is_pm = False
@@ -767,25 +767,36 @@ class TabbedChatWindow(chat.Chat):
 		gcs = self.plugin.windows[self.account]['gc']
 		if gcs.has_key(room_jid):
 			is_pm = True
+		events_to_keep = []
 		for event in l:
-			ev1 = event[1]
-			if ev1 != 'error':
-				ev1 = 'print_queue'
+			typ = event[0]
+			if typ != 'message':
+				events_to_keep.append(event)
+				continue
+			data = event[1]
+			kind = data[2]
+			if kind == 'error':
+				kind = 'status'
 			else:
-				ev1 = 'status'
-			self.print_conversation(event[0], jid, ev1,
-				tim = event[2],	encrypted = event[3])
+				kind = 'print_queue'
+			self.print_conversation(data[0], jid, kind, tim = data[3],
+				encrypted = data[4], subject = data[1])
 
 			# remove from gc nb_unread if it's pm or from roster
 			if is_pm:
 				gcs[room_jid].nb_unread[room_jid] -= 1
 			else:
 				self.plugin.roster.nb_unread -= 1
+
 		if is_pm:
 			gcs[room_jid].show_title()
 		else:
 			self.plugin.roster.show_title()
-		del gajim.awaiting_messages[self.account][jid]
+		# Keep only non-messages events
+		if len(events_to_keep):
+			gajim.awaiting_events[self.account][jid] = events_to_keep
+		else:
+			del gajim.awaiting_events[self.account][jid]
 		typ = 'chat' # Is it a normal chat or a pm ?
 		# reset to status image in gc if it is a pm
 		room_jid = jid.split('/', 1)[0]
@@ -852,11 +863,13 @@ class TabbedChatWindow(chat.Chat):
 		lines = [] # we'll need to reverse the lines from history
 		count = gajim.logger.get_no_of_lines(jid)
 
-
-		if gajim.awaiting_messages[self.account].has_key(jid):
-			pos = len(gajim.awaiting_messages[self.account][jid])
-		else:
-			pos = 0
+		# pos: number of messages that are in queue and are printed in log file
+		pos = 0
+		if gajim.awaiting_events[self.account].has_key(jid):
+			l = gajim.awaiting_events[self.account][jid]
+			for event in l:
+				if event[0] == 'message':
+					pos += 1
 
 		now = time.time()
 		while size <= restore:

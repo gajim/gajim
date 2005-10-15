@@ -143,7 +143,7 @@ class RosterWindow:
 		if user.show in ('offline', 'error') and \
 		   not showOffline and (not _('Transports') in user.groups or \
 			gajim.connections[account].connected < 2) and \
-		   not gajim.awaiting_messages[account].has_key(user.jid):
+		   not gajim.awaiting_events[account].has_key(user.jid):
 			return
 
 		model = self.tree.get_model()
@@ -225,7 +225,8 @@ class RosterWindow:
 			name += ' (' + unicode(len(contact_instances)) + ')'
 
 		state_images = self.get_appropriate_state_images(jid)
-		if gajim.awaiting_messages[account].has_key(jid):
+		if gajim.awaiting_events[account].has_key(jid):
+			#TODO: change icon for FT
 			img = state_images['message']
 		elif jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 			img = state_images[contact.show]					
@@ -614,7 +615,7 @@ class RosterWindow:
 		contact.show = show
 		contact.status = status
 		if show in ('offline', 'error') and \
-		   not gajim.awaiting_messages[account].has_key(contact.jid):
+		   not gajim.awaiting_events[account].has_key(contact.jid):
 			if len(contact_instances) > 1: # if multiple resources
 				contact_instances.remove(contact)
 				self.draw_contact(contact.jid, account)
@@ -1579,7 +1580,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			return
 		
 		# Do we have a queue?
-		qs = gajim.awaiting_messages[account]
+		qs = gajim.awaiting_events[account]
 		no_queue = True
 		if qs.has_key(jid):
 			no_queue = False
@@ -1596,7 +1597,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		# We save it in a queue
 		if no_queue:
 			qs[jid] = []
-		qs[jid].append((msg, msg_type, tim, encrypted))
+		qs[jid].append(('message', (msg, subject, msg_type, tim, encrypted)))
 		self.nb_unread += 1
 		if (not autopopup or ( not autopopupaway and \
 			gajim.connections[account].connected > 2)) and not \
