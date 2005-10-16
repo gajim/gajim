@@ -1009,6 +1009,15 @@ class SingleMessageWindow:
 		self.message_tv_buffer.place_cursor(begin_iter)
 
 		self.xml.signal_autoconnect(self)
+
+		if gajim.config.get('saveposition'):
+			# get window position and size from config
+			gtkgui_helpers.move_window(self.window,
+				gajim.config.get('single-x-position'),
+				gajim.config.get('single-y-position'))
+			gtkgui_helpers.resize_window(self.window,
+				gajim.config.get('single-width'),
+				gajim.config.get('single-height'))
 		self.window.show_all()
 
 	def prepare_widgets_for(self, action):
