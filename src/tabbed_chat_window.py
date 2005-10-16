@@ -770,7 +770,7 @@ class TabbedChatWindow(chat.Chat):
 		events_to_keep = []
 		for event in l:
 			typ = event[0]
-			if typ != 'message':
+			if typ != 'chat':
 				events_to_keep.append(event)
 				continue
 			data = event[1]
@@ -868,7 +868,7 @@ class TabbedChatWindow(chat.Chat):
 		if gajim.awaiting_events[self.account].has_key(jid):
 			l = gajim.awaiting_events[self.account][jid]
 			for event in l:
-				if event[0] == 'message':
+				if event[0] == 'chat':
 					pos += 1
 
 		now = time.time()

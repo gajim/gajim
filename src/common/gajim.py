@@ -56,7 +56,8 @@ newly_added = {} # list of contacts that has just signed in
 to_be_removed = {} # list of contacts that has just signed out
 awaiting_events = {} # list of messages/FT reveived but not printed
 	# awaiting_events[jid] = (type, (data1, data2, ...))
-	# if type == 'message': data = (message, subject, kind, time, encrypted)
+	# if type in ('chat', 'normal'): data = (message, subject, kind, time,
+		# encrypted)
 		# kind can be (incoming, error)
 nicks = {} # list of our nick names in each account
 allow_notifications = {} # do we allow notifications for each account ?

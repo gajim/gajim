@@ -1568,25 +1568,29 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			path = None
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
-		
-		
-		if msg_type == 'normal': # it's single message
-			#FIXME: take into account autopopup and autopopupaway
-			# if user doesn't want to be bugged do it as we do the 'chat'
-			contact = gajim.contacts[account][jid][0]
-			dialogs.SingleMessageWindow(self.plugin, account, contact.jid,
-				action = 'receive', from_whom = jid, subject = subject,
-				message = msg)
-			return
-		
+		save_in_queue = False
+
 		# Do we have a queue?
 		qs = gajim.awaiting_events[account]
 		no_queue = True
 		if qs.has_key(jid):
 			no_queue = False
+		popup = False
+		if autopopupaway or (autopopup and gajim.connections[account].connected \
+			in (2, 3)):
+			popup = True
 
-		# We print if window is opened
-		if self.plugin.windows[account]['chats'].has_key(jid):
+		if msg_type == 'normal': # it's single message
+			if popup:
+				contact = gajim.contacts[account][jid][0]
+				dialogs.SingleMessageWindow(self.plugin, account, contact.jid,
+					action = 'receive', from_whom = jid, subject = subject,
+					message = msg)
+				return
+		
+		# We print if window is opened and it's not a single message
+		if self.plugin.windows[account]['chats'].has_key(jid) and \
+			msg_type != 'normal':
 			typ = ''
 			if msg_type == 'error':
 				typ = 'status'
@@ -1597,16 +1601,25 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		# We save it in a queue
 		if no_queue:
 			qs[jid] = []
-		qs[jid].append(('message', (msg, subject, msg_type, tim, encrypted)))
+		kind = 'chat'
+		if msg_type == 'normal':
+			kind = 'normal'
+		qs[jid].append((kind, (msg, subject, msg_type, tim, encrypted)))
 		self.nb_unread += 1
-		if (not autopopup or ( not autopopupaway and \
-			gajim.connections[account].connected > 2)) and not \
-			self.plugin.windows[account]['chats'].has_key(jid):
+		if popup:
+			if not self.plugin.windows[account]['chats'].has_key(jid):
+				c = gajim.get_contact_instance_with_highest_priority(account, jid)
+				self.new_chat(c, account)
+				if path:
+					self.tree.expand_row(path[0:1], False)
+					self.tree.expand_row(path[0:2], False)
+					self.tree.scroll_to_cell(path)
+					self.tree.set_cursor(path)
+		else:
 			if no_queue: # We didn't have a queue: we change icons
-				model = self.tree.get_model()
 				self.draw_contact(jid, account)
-				if self.plugin.systray_enabled:
-					self.plugin.systray.add_jid(jid, account, 'chat')
+			if self.plugin.systray_enabled:
+				self.plugin.systray.add_jid(jid, account, kind)
 			self.show_title() # we show the * or [n]
 			if not path:
 				self.add_contact_to_roster(jid, account)
@@ -1616,15 +1629,6 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.tree.expand_row(path[0:2], False)
 			self.tree.scroll_to_cell(path)
 			self.tree.set_cursor(path)
-		else:
-			if not self.plugin.windows[account]['chats'].has_key(jid):
-				c = gajim.get_contact_instance_with_highest_priority(account, jid)
-				self.new_chat(c, account)
-				if path:
-					self.tree.expand_row(path[0:1], False)
-					self.tree.expand_row(path[0:2], False)
-					self.tree.scroll_to_cell(path)
-					self.tree.set_cursor(path)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if self.plugin.windows['preferences'].window.get_property('visible'):
@@ -1795,8 +1799,23 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					self.send_status(acct, 'offline', message, True)
 		self.quit_gtkgui_plugin()
 
+	def open_single_message_window_from_event(self, jid, account, event):
+		qs = gajim.awaiting_events[account]
+		data = event[1]
+		dialogs.SingleMessageWindow(self.plugin, account, jid, action = 'receive',
+			from_whom = jid, subject = data[1], message = data[0])
+		qs[jid].remove(event)
+		self.nb_unread -= 1
+		self.show_title()
+		# Is it the last event?
+		if not len(qs[jid]):
+			del qs[jid]
+		self.draw_contact(jid, account)
+		if self.plugin.systray_enabled:
+			self.plugin.systray.remove_jid(jid, account, 'normal')
+
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
-		'''When an iter is double clicked: open the chat window'''
+		'''When an iter is double clicked: open the first event window'''
 		model = self.tree.get_model()
 		iter = model.get_iter(path)
 		account = model[iter][C_ACCOUNT].decode('utf-8')
@@ -1808,6 +1827,14 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			else:
 				self.tree.expand_row(path, False)
 		else:
+			qs = gajim.awaiting_events[account]
+			if qs.has_key(jid):
+				first_ev = qs[jid][0]
+				typ = first_ev[0]
+				if typ == 'normal':
+					self.open_single_message_window_from_event(jid, account, first_ev)
+					return
+
 			if self.plugin.windows[account]['chats'].has_key(jid):
 				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
 			elif gajim.contacts[account].has_key(jid):

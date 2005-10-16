@@ -907,10 +907,14 @@ class PopupNotificationWindow:
 						self.account)
 
 		if self.msg_type == 'normal': # it's single message
-			return # FIXME: I think I should not print here but in new_chat?
-			contact = get_contact_instance_with_highest_priority(account, jid)
-			SingleMessageWindow(self.plugin, self.account, contact.jid, 
-			action = 'receive', from_whom = jid, subject = subject, message = msg)
+			# Get the first single message event
+			q = gajim.awaiting_events[self.account][self.jid]
+			for ev in q:
+				if ev[0] == 'normal':
+					break
+			# Open the window
+			self.plugin.roster.open_single_message_window_from_event(self.jid,
+				self.account, ev)
 
 		elif self.msg_type == 'pm': # It's a private message
 			self.plugin.roster.new_chat(contact, self.account)

@@ -76,7 +76,8 @@ class Systray:
 
 	def add_jid(self, jid, account, typ):
 		l = [account, jid, typ]
-		if not l in self.jids:
+		# We can keep several single message 'cause we open them one by one
+		if not l in self.jids or typ == 'normal':
 			self.jids.append(l)
 			self.set_img()
 
@@ -273,8 +274,15 @@ class Systray:
 					self.plugin.roster.new_chat(
 						gajim.contacts[account][jid][0], account)
 					w = wins['chats'][jid]
-			elif typ == 'single_chat':
-				pass
+			elif typ == 'normal': # single message
+				# Get the first single message event
+				q = gajim.awaiting_events[account][jid]
+				for ev in q:
+					if ev[0] == 'normal':
+						break
+				# Open the window
+				self.plugin.roster.open_single_message_window_from_event(jid,
+					account, ev)
 			elif typ == 'pm':
 				if wins['chats'].has_key(jid):
 					w = wins['chats'][jid]
