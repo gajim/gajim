@@ -295,3 +295,9 @@ def get_pixbuf_from_data(file_data):
 		pixbuf = None
 
 	return pixbuf
+
+def get_invisible_cursor():
+	pixmap = gtk.gdk.Pixmap(None, 1, 1, 1)
+	color = gtk.gdk.Color()
+	cursor = gtk.gdk.Cursor(pixmap, pixmap, color, color, 0, 0)
+	return cursor

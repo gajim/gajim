@@ -172,12 +172,34 @@ class TabbedChatWindow(chat.Chat):
 		window.add(image)
 
 		window.set_position(gtk.WIN_POS_MOUSE)
+		# we should make the cursor visible
+		# gtk+ doesn't make use of the motion notify on gtkwindow by default
+		# so this line adds that
+		window.set_events(gtk.gdk.POINTER_MOTION_MASK)
+		window.realize()
+		
+		# make the cursor invisible so we can see the image
+		invisible_cursor = gtkgui_helpers.get_invisible_cursor()
+		window.window.set_cursor(invisible_cursor)
+
+		# we should hide the window
+		window.connect('leave_notify_event',
+			self.on_window_avatar_leave_notify_event)
+		
+		
+		window.connect('motion-notify-event',
+			self.on_window_motion_notify_event)
+
 		window.show_all()
-		window.connect('leave_notify_event', self.on_window_avatar_leave_notify_event)
 
 	def on_window_avatar_leave_notify_event(self, widget, event):
 		'''we just left the popup window that holds avatar'''
 		self.bigger_avatar_window.hide()
+
+	def on_window_motion_notify_event(self, widget, event):
+		'''we just moved the mouse so show the cursor'''
+		cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)
+		self.bigger_avatar_window.window.set_cursor(cursor)
 
 	def draw_widgets(self, contact):
 		'''draw the widgets in a tab (f.e. gpg togglebutton)
