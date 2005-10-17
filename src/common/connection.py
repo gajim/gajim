@@ -1348,7 +1348,7 @@ class Connection:
 		use_custom_host, custom_host (if use_custom_host), custom_port (if
 		use_custom_host), """
 		if self.connection:
-			return self.connection
+			return self.connection, ''
 
 		if data:
 			name = data['name']
@@ -1435,7 +1435,7 @@ class Connection:
 
 		con_type = con.connect((h, p), proxy = proxy, secure = secur)
 		if not self.connected: # We went offline during connecting process
-			return None
+			return None, ''
 		if not con_type:
 			gajim.log.debug('Could not connect to %s' % h)
 			if not self.retrycount:
@@ -1443,7 +1443,7 @@ class Connection:
 				self.dispatch('STATUS', 'offline')
 				self.dispatch('ERROR', (_('Could not connect to "%s"') % h,
 					_('Check your connection or try again later.')))
-			return None
+			return None, ''
 		gajim.log.debug(_('Connected to server with %s') % con_type)
 		return con, con_type
 
