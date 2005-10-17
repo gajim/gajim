@@ -1013,22 +1013,22 @@ class SingleMessageWindow:
 		if gajim.config.get('saveposition'):
 			# get window position and size from config
 			gtkgui_helpers.move_window(self.window,
-				gajim.config.get('single-x-position'),
-				gajim.config.get('single-y-position'))
+				gajim.config.get('single_msg-x-position'),
+				gajim.config.get('single_msg-y-position'))
 			gtkgui_helpers.resize_window(self.window,
-				gajim.config.get('single-width'),
-				gajim.config.get('single-height'))
+				gajim.config.get('single_msg-width'),
+				gajim.config.get('single_msg-height'))
 		self.window.show_all()
 
 	def on_single_message_window_destroy(self, window):
 		if gajim.config.get('saveposition'):
 			# save the window size and position
 			x, y = self.window.get_position()
-			gajim.config.set('single-x-position', x)
-			gajim.config.set('single-y-position', y)
+			gajim.config.set('single_msg-x-position', x)
+			gajim.config.set('single_msg-y-position', y)
 			width, height = self.window.get_size()
-			gajim.config.set('single-width', width)
-			gajim.config.set('single-height', height)
+			gajim.config.set('single_msg-width', width)
+			gajim.config.set('single_msg-height', height)
 
 	def prepare_widgets_for(self, action):
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
