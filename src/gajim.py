@@ -49,7 +49,7 @@ try:
 except ImportError:
 	pritext = _('GTK+ runtime is missing libglade support')
 	if os.name == 'nt':
-		sectext = _('Please download remove your current GTK+ runtime and install the latest stable version from %s') % 'http://gladewin32.sourceforge.net'
+		sectext = _('Please remove your current GTK+ runtime and install the latest stable version from %s') % 'http://gladewin32.sourceforge.net'
 	else:
 		sectext = _('Please make sure that gtk and pygtk have libglade support in your system.')
 	

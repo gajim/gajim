@@ -16968,7 +16968,7 @@ Last Message</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
   <signal name="key_press_event" handler="on_single_message_window_key_press_event" last_modification_time="Tue, 05 Jul 2005 22:02:15 GMT"/>
-  <signal name="destroy" handler="on_single_message_window_destroy" last_modification_time="Mon, 17 Oct 2005 08:22:51 GMT"/>
+  <signal name="delete_event" handler="on_single_message_window_delete_event" last_modification_time="Mon, 17 Oct 2005 15:32:50 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox97">

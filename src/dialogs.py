@@ -1020,7 +1020,7 @@ class SingleMessageWindow:
 				gajim.config.get('single_msg-height'))
 		self.window.show_all()
 
-	def on_single_message_window_destroy(self, window):
+	def save_pos(self):
 		if gajim.config.get('saveposition'):
 			# save the window size and position
 			x, y = self.window.get_position()
@@ -1029,6 +1029,9 @@ class SingleMessageWindow:
 			width, height = self.window.get_size()
 			gajim.config.set('single_msg-width', width)
 			gajim.config.set('single_msg-height', height)
+
+	def on_single_message_window_delete_event(self, window, ev):
+		self.save_pos()
 
 	def prepare_widgets_for(self, action):
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
@@ -1060,6 +1063,7 @@ class SingleMessageWindow:
 		self.window.set_title(title)
 
 	def on_cancel_button_clicked(self, widget):
+		self.save_pos()
 		self.window.destroy()
 
 	def update_char_counter(self, widget):
@@ -1110,10 +1114,12 @@ class SingleMessageWindow:
 
 	def on_send_and_close_button_clicked(self, widget):
 		self.send_single_message()
+		self.save_pos()
 		self.window.destroy()
 
 	def on_single_message_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			self.save_pos()
 			self.window.destroy()
 
 class XMLConsoleWindow:
