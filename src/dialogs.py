@@ -1020,6 +1020,16 @@ class SingleMessageWindow:
 				gajim.config.get('single-height'))
 		self.window.show_all()
 
+	def on_single_message_window_destroy(self, window):
+		if gajim.config.get('saveposition'):
+			# save the window size and position
+			x, y = self.window.get_position()
+			gajim.config.set('single-x-position', x)
+			gajim.config.set('single-y-position', y)
+			width, height = self.window.get_size()
+			gajim.config.set('single-width', width)
+			gajim.config.set('single-height', height)
+
 	def prepare_widgets_for(self, action):
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
