@@ -1576,8 +1576,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if qs.has_key(jid):
 			no_queue = False
 		popup = False
-		if autopopupaway or (autopopup and gajim.connections[account].connected \
-			in (2, 3)):
+		if autopopup and (autopopupaway or gajim.connections[account].connected \
+			> 3):
 			popup = True
 
 		if msg_type == 'normal': # it's single message
