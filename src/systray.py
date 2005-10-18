@@ -274,12 +274,6 @@ class Systray:
 					self.plugin.roster.new_chat(
 						gajim.contacts[account][jid][0], account)
 					w = wins['chats'][jid]
-			elif typ == 'normal': # single message
-				# Get the first single message event
-				ev = gajim.get_first_event(account, jid, 'normal')
-				# Open the window
-				self.plugin.roster.open_single_message_window_from_event(jid,
-					account, ev)
 			elif typ == 'pm':
 				if wins['chats'].has_key(jid):
 					w = wins['chats'][jid]
@@ -290,11 +284,11 @@ class Systray:
 						show = show, ask = 'none')
 					self.plugin.roster.new_chat(c, account)
 					w = wins['chats'][jid]
-			elif typ == 'file-request':
+			elif typ in ('normal', 'file-request', 'file-request-error'):
 				# Get the first single message event
-				ev = gajim.get_first_event(account, jid, 'file-request')
+				ev = gajim.get_first_event(account, jid, typ)
 				# Open the window
-				self.plugin.roster.open_file_request_from_event(jid, account, ev)
+				self.plugin.roster.open_event(account, jid, ev)
 			if w:
 				w.set_active_tab(jid)
 				w.window.present()

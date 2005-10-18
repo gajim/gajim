@@ -59,6 +59,7 @@ awaiting_events = {} # list of messages/FT reveived but not printed
 	# if type in ('chat', 'normal'): data = (message, subject, kind, time,
 		# encrypted)
 		# kind can be (incoming, error)
+	# if typw in file-request, file-request-error: data = file_props
 nicks = {} # list of our nick names in each account
 allow_notifications = {} # do we allow notifications for each account ?
 con_types = {} # type of each connection (ssl, tls, tcp, ...)
@@ -227,3 +228,19 @@ def get_first_event(account, jid, typ = None):
 		if ev[0] == typ:
 			return ev
 	return None
+
+def popup_window(account):
+	autopopup = config.get('autopopup')
+	autopopupaway = config.get('autopopupaway')
+	if autopopup and (autopopupaway or connections[account].connected > 3):
+		return True
+	return False
+
+def show_notification(account):
+	if config.get('notify_on_new_message'):
+		# check OUR status and if we allow notifications for that status
+		if config.get('autopopupaway'): # always show notification
+			return True
+		if connections[account].connected in (2, 3): # we're online or chat
+			return True
+	return False

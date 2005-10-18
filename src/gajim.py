@@ -790,49 +790,9 @@ class Interface:
 			and gajim.config.get('autopopup')) or \
 			gajim.config.get('autopopupaway'):
 			self.windows['file_transfers'].show_send_error(file_props)
-		
-	def handle_event_file_request_error(self, account, array):
-		jid = array[0]
-		file_props = array[1]
-		errno = file_props['error']
-		ft = self.windows['file_transfers']
-		ft.set_status(file_props['type'], file_props['sid'], 'stop')
-		if gajim.config.get('notify_on_new_message'):
-			# check if we should be notified
-			if errno == -4 or errno == -5:
-				msg_type = 'file-error'
-			else:
-				msg_type = 'file-request-error'
-			instance = dialogs.PopupNotificationWindow(self,
-					_('File Transfer Error'), jid, account, msg_type, file_props)
-			self.roster.popup_notification_windows.append(instance)
-		elif (gajim.connections[account].connected in (2, 3)
-			and gajim.config.get('autopopup')) or \
-			gajim.config.get('autopopupaway'):
-			if errno == -4 or errno == -5:
-				self.windows['file_transfers'].show_stopped(jid, file_props)
-			else:
-				self.windows['file_transfers'].show_request_error(file_props)
-		
-	def handle_event_file_request(self, account, array):
-		jid = array[0]
-		if not gajim.contacts[account].has_key(jid):
-			return
-		file_props = array[1]
-		contact = gajim.contacts[account][jid][0]
 
-		autopopup = gajim.config.get('autopopup')
-		autopopupaway = gajim.config.get('autopopupaway')
-		popup = False
-		if autopopup and (autopopupaway or gajim.connections[account].connected \
-			> 3):
-			popup = True
-
-		if popup:
-			self.windows['file_transfers'].show_file_request(account, contact,
-				file_props)
-			return
-
+	def add_event(self, account, jid, typ, args):
+		'''add an event to the awaiting_events var'''
 		# We add it to the awaiting_events queue
 		# Do we have a queue?
 		qs = gajim.awaiting_events[account]
@@ -840,24 +800,69 @@ class Interface:
 		if not qs.has_key(jid):
 			no_queue = True
 			qs[jid] = []
-		qs[jid].append(('file-request', (file_props)))
+		qs[jid].append((typ, args))
 		self.roster.nb_unread += 1
 
 		self.roster.show_title()
 		if no_queue: # We didn't have a queue: we change icons
 			self.roster.draw_contact(jid, account)
 		if self.systray_enabled:
-			self.systray.add_jid(jid, account, 'file-request')
+			self.systray.add_jid(jid, account, typ)
 
-		show_notification = False
-		if gajim.config.get('notify_on_new_message'):
-			# check OUR status and if we allow notifications for that status
-			if gajim.config.get('autopopupaway'): # always show notification
-				show_notification = True
-			elif gajim.connections[account].connected in (2, 3): # we're online or chat
-				show_notification = True
+	def remove_first_event(self, account, jid, typ = None):
+		qs = gajim.awaiting_events[account]
+		event = gajim.get_first_event(account, jid, typ)
+		qs[jid].remove(event)
+		self.roster.nb_unread -= 1
+		self.roster.show_title()
+		# Is it the last event?
+		if not len(qs[jid]):
+			del qs[jid]
+		self.roster.draw_contact(jid, account)
+		if self.systray_enabled:
+			self.systray.remove_jid(jid, account, typ)
 
-		if show_notification:
+	def handle_event_file_request_error(self, account, array):
+		jid = array[0]
+		file_props = array[1]
+		ft = self.windows['file_transfers']
+		ft.set_status(file_props['type'], file_props['sid'], 'stop')
+
+		if gajim.popup_window(account):
+			errno = file_props['error']
+			if errno in (-4, -5):
+				ft.show_stopped(jid, file_props)
+			else:
+				ft.show_request_error(file_props)
+			return
+
+		self.plugin.add_event(account, jid, 'file-request-error', file_props)
+
+		if gajim.show_notification(account):
+			# check if we should be notified
+			if errno in (-4, -5):
+				msg_type = 'file-error'
+			else:
+				msg_type = 'file-request-error'
+			instance = dialogs.PopupNotificationWindow(self,
+					_('File Transfer Error'), jid, account, msg_type, file_props)
+			self.roster.popup_notification_windows.append(instance)
+
+	def handle_event_file_request(self, account, array):
+		jid = array[0]
+		if not gajim.contacts[account].has_key(jid):
+			return
+		file_props = array[1]
+		contact = gajim.contacts[account][jid][0]
+
+		if gajim.popup_window(account):
+			self.windows['file_transfers'].show_file_request(account, contact,
+				file_props)
+			return
+
+		self.plugin.add_event(account, jid, 'file-request', file_props)
+
+		if gajim.show_notification(account):
 			instance = dialogs.PopupNotificationWindow(self,
 				_('File Transfer Request'), jid, account, 'file-request')
 			self.roster.popup_notification_windows.append(instance)

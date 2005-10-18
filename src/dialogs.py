@@ -910,8 +910,7 @@ class PopupNotificationWindow:
 			# Get the first single message event
 			ev = gajim.get_first_event(self.account, self.jid, 'normal')
 			# Open the window
-			self.plugin.roster.open_single_message_window_from_event(self.jid,
-				self.account, ev)
+			self.plugin.roster.open_event(self.account, self.jid, ev)
 
 		elif self.msg_type == 'pm': # It's a private message
 			self.plugin.roster.new_chat(contact, self.account)
@@ -921,8 +920,7 @@ class PopupNotificationWindow:
 		elif self.msg_type == 'file-request': # it's file request
 			# Get the first single message event
 			ev = gajim.get_first_event(self.account, self.jid, 'file-request')
-			self.plugin.roster.open_file_request_from_event(self.jid, self.account,
-				ev)
+			self.plugin.roster.open_event(self.account, self.jid, ev)
 
 		elif self.msg_type == 'file-completed': # file transfer is complete
 			self.plugin.windows['file_transfers'].show_completed(self.jid, 

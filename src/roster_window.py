@@ -1799,38 +1799,25 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					self.send_status(acct, 'offline', message, True)
 		self.quit_gtkgui_plugin()
 
-	def open_file_request_from_event(self, jid, account, event):
-		qs = gajim.awaiting_events[account]
-		file_props = event[1]
-		qs[jid].remove(event)
-		self.nb_unread -= 1
-		self.show_title()
-		# Is it the last event?
-		if not len(qs[jid]):
-			del qs[jid]
-		self.draw_contact(jid, account)
-		if self.plugin.systray_enabled:
-			self.plugin.systray.remove_jid(jid, account, 'file-request')
-		# We remove the event from roster and systray before showing the window
-		# cause it's a dialog, and we wait for answer, so it's long.
-		contact = gajim.get_contact_instance_with_highest_priority(account, jid)
-		self.plugin.windows['file_transfers'].show_file_request(account, contact,
-			file_props)
-
-	def open_single_message_window_from_event(self, jid, account, event):
-		qs = gajim.awaiting_events[account]
+	def open_event(self, account, jid, event):
+		'''If an event was handled, return True, else return False'''
+		typ = event[0]
 		data = event[1]
-		dialogs.SingleMessageWindow(self.plugin, account, jid, action = 'receive',
-			from_whom = jid, subject = data[1], message = data[0])
-		qs[jid].remove(event)
-		self.nb_unread -= 1
-		self.show_title()
-		# Is it the last event?
-		if not len(qs[jid]):
-			del qs[jid]
-		self.draw_contact(jid, account)
-		if self.plugin.systray_enabled:
-			self.plugin.systray.remove_jid(jid, account, 'normal')
+		ft = self.plugin.windows['file_transfers']
+		self.plugin.remove_first_event(account, jid, typ)
+		if typ == 'normal':
+			dialogs.SingleMessageWindow(self.plugin, account, jid,
+				action = 'receive', from_whom = jid, subject = data[1],
+				message = data[0])
+			return True
+		elif typ == 'file-request':
+			contact = gajim.get_contact_instance_with_highest_priority(account, jid)
+			ft.show_file_request(account, contact, data)
+			return True
+		elif typ == 'file-request-error':
+			ft.show_send_error(data)
+			return True
+		return False
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the first event window'''
@@ -1847,12 +1834,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		else:
 			first_ev = gajim.get_first_event(account, jid)
 			if first_ev:
-				typ = first_ev[0]
-				if typ == 'normal':
-					self.open_single_message_window_from_event(jid, account, first_ev)
-					return
-				elif typ == 'file-request':
-					self.open_file_request_from_event(jid, account, first_ev)
+				if self.open_event(account, jid, first_ev):
 					return
 
 			if self.plugin.windows[account]['chats'].has_key(jid):
