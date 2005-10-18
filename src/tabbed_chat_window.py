@@ -271,7 +271,8 @@ class TabbedChatWindow(chat.Chat):
 		self.paint_banner(jid)
 
 	def get_specific_unread(self, jid):
-		return 0 # FIXME: always zero why??
+		# return the number of unread for contacts in the room when gc, 0 in tc
+		return 0
 
 	def show_avatar(self, jid, resource):
 		# Get the XML instance
