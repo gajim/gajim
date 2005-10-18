@@ -271,7 +271,9 @@ class TabbedChatWindow(chat.Chat):
 		self.paint_banner(jid)
 
 	def get_specific_unread(self, jid):
-		# return the number of unread for contacts in the room when gc, 0 in tc
+		# return the number of unread (private) msgs with contacts in the room
+		# when gc, and that is 0 in tc
+		# FIXME: maybe refactor so this func is not called at all if TC?
 		return 0
 
 	def show_avatar(self, jid, resource):

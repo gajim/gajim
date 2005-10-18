@@ -504,6 +504,9 @@ class GroupchatWindow(chat.Chat):
 		self.subject_tooltip[room_jid].set_tip(event_box, subject)
 
 	def get_specific_unread(self, room_jid):
+		# returns the number of the number of unread msgs
+		# for room_jid & number of unread private msgs with each contact
+		# that we have
 		nb = 0
 		for nick in self.get_nick_list(room_jid):
 			fjid = room_jid + '/' + nick
