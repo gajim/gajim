@@ -1799,6 +1799,24 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					self.send_status(acct, 'offline', message, True)
 		self.quit_gtkgui_plugin()
 
+	def open_file_request_from_event(self, jid, account, event):
+		qs = gajim.awaiting_events[account]
+		file_props = event[1]
+		qs[jid].remove(event)
+		self.nb_unread -= 1
+		self.show_title()
+		# Is it the last event?
+		if not len(qs[jid]):
+			del qs[jid]
+		self.draw_contact(jid, account)
+		if self.plugin.systray_enabled:
+			self.plugin.systray.remove_jid(jid, account, 'file-request')
+		# We remove the event from roster and systray before showing the window
+		# cause it's a dialog, and we wait for answer, so it's long.
+		contact = gajim.get_contact_instance_with_highest_priority(account, jid)
+		self.plugin.windows['file_transfers'].show_file_request(account, contact,
+			file_props)
+
 	def open_single_message_window_from_event(self, jid, account, event):
 		qs = gajim.awaiting_events[account]
 		data = event[1]
@@ -1827,12 +1845,14 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			else:
 				self.tree.expand_row(path, False)
 		else:
-			qs = gajim.awaiting_events[account]
-			if qs.has_key(jid):
-				first_ev = qs[jid][0]
+			first_ev = gajim.get_first_event(account, jid)
+			if first_ev:
 				typ = first_ev[0]
 				if typ == 'normal':
 					self.open_single_message_window_from_event(jid, account, first_ev)
+					return
+				elif typ == 'file-request':
+					self.open_file_request_from_event(jid, account, first_ev)
 					return
 
 			if self.plugin.windows[account]['chats'].has_key(jid):

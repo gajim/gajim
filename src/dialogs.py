@@ -908,10 +908,7 @@ class PopupNotificationWindow:
 
 		if self.msg_type == 'normal': # it's single message
 			# Get the first single message event
-			q = gajim.awaiting_events[self.account][self.jid]
-			for ev in q:
-				if ev[0] == 'normal':
-					break
+			ev = gajim.get_first_event(self.account, self.jid, 'normal')
 			# Open the window
 			self.plugin.roster.open_single_message_window_from_event(self.jid,
 				self.account, ev)
@@ -921,9 +918,11 @@ class PopupNotificationWindow:
 			chats_window = self.plugin.windows[self.account]['chats'][self.jid]
 			chats_window.set_active_tab(self.jid)
 			chats_window.window.present()
-		elif self.msg_type == 'file': # it's file request
-			self.plugin.windows['file_transfers'].show_file_request(
-				self.account, contact, self.file_props)
+		elif self.msg_type == 'file-request': # it's file request
+			# Get the first single message event
+			ev = gajim.get_first_event(self.account, self.jid, 'file-request')
+			self.plugin.roster.open_file_request_from_event(self.jid, self.account,
+				ev)
 
 		elif self.msg_type == 'file-completed': # file transfer is complete
 			self.plugin.windows['file_transfers'].show_completed(self.jid, 

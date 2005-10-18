@@ -215,4 +215,15 @@ def get_hostname_from_account(account_name):
 	if config.get_per('accounts', account_name, 'use_custom_host'):
 		return config.get_per('accounts', account_name, 'custom_host')
 	return config.get_per('accounts', account_name, 'hostname')
-	
+
+def get_first_event(account, jid, typ = None):
+	'''returns the first event of the given type from the awaiting_events queue'''
+	if not awaiting_events[account].has_key(jid):
+		return None
+	q = awaiting_events[account][jid]
+	if not typ:
+		return q[0]
+	for ev in q:
+		if ev[0] == typ:
+			return ev
+	return None

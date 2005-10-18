@@ -820,9 +820,48 @@ class Interface:
 			return
 		file_props = array[1]
 		contact = gajim.contacts[account][jid][0]
-		self.windows['file_transfers'].show_file_request(
-			account, contact, file_props)
-				
+
+		autopopup = gajim.config.get('autopopup')
+		autopopupaway = gajim.config.get('autopopupaway')
+		popup = False
+		if autopopup and (autopopupaway or gajim.connections[account].connected \
+			> 3):
+			popup = True
+
+		if popup:
+			self.windows['file_transfers'].show_file_request(account, contact,
+				file_props)
+			return
+
+		# We add it to the awaiting_events queue
+		# Do we have a queue?
+		qs = gajim.awaiting_events[account]
+		no_queue = False
+		if not qs.has_key(jid):
+			no_queue = True
+			qs[jid] = []
+		qs[jid].append(('file-request', (file_props)))
+		self.roster.nb_unread += 1
+
+		self.roster.show_title()
+		if no_queue: # We didn't have a queue: we change icons
+			self.roster.draw_contact(jid, account)
+		if self.systray_enabled:
+			self.systray.add_jid(jid, account, 'file-request')
+
+		show_notification = False
+		if gajim.config.get('notify_on_new_message'):
+			# check OUR status and if we allow notifications for that status
+			if gajim.config.get('autopopupaway'): # always show notification
+				show_notification = True
+			elif gajim.connections[account].connected in (2, 3): # we're online or chat
+				show_notification = True
+
+		if show_notification:
+			instance = dialogs.PopupNotificationWindow(self,
+				_('File Transfer Request'), jid, account, 'file-request')
+			self.roster.popup_notification_windows.append(instance)
+
 	def handle_event_file_progress(self, account, file_props):
 		self.windows['file_transfers'].set_progress(file_props['type'], 
 			file_props['sid'], file_props['received-len'])
