@@ -906,20 +906,14 @@ class PopupNotificationWindow:
 					self.plugin.roster.add_contact_to_roster(contact.jid,
 						self.account)
 
-		if self.msg_type == 'normal': # it's single message
-			# Get the first single message event
-			ev = gajim.get_first_event(self.account, self.jid, 'normal')
-			# Open the window
-			self.plugin.roster.open_event(self.account, self.jid, ev)
-
-		elif self.msg_type == 'pm': # It's a private message
+		if self.msg_type == 'pm': # It's a private message
 			self.plugin.roster.new_chat(contact, self.account)
 			chats_window = self.plugin.windows[self.account]['chats'][self.jid]
 			chats_window.set_active_tab(self.jid)
 			chats_window.window.present()
-		elif self.msg_type == 'file-request': # it's file request
+		elif self.msg_type in ('normal', 'file-request', 'file-request-error'):
 			# Get the first single message event
-			ev = gajim.get_first_event(self.account, self.jid, 'file-request')
+			ev = gajim.get_first_event(self.account, self.jid, self.msg_type)
 			self.plugin.roster.open_event(self.account, self.jid, ev)
 
 		elif self.msg_type == 'file-completed': # file transfer is complete
@@ -932,8 +926,6 @@ class PopupNotificationWindow:
 		elif self.msg_type == 'file-error': # file transfer ended unexpectedly
 			self.plugin.windows['file_transfers'].show_stopped(self.jid, 
 				self.file_props)
-		elif self.msg_type == 'file-request-error': # file transfer ended unexpectedly
-			self.plugin.windows['file_transfers'].show_send_error(self.file_props)
 		elif self.msg_type == 'file-send-error': # file transfer ended unexpectedly
 			self.plugin.windows['file_transfers'].show_send_error(self.file_props)
 		else: # 'chat'
