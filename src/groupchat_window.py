@@ -224,7 +224,7 @@ class GroupchatWindow(chat.Chat):
 				end_iter_for_previous_line = buffer.get_iter_at_offset(
 					self.focus_out_end_iter_offset[room_jid])
 				begin_iter_for_previous_line = end_iter_for_previous_line.copy()
-				begin_iter_for_previous_line.backward_chars(16) # 15+1 (the '\n')
+				begin_iter_for_previous_line.backward_chars(2) # img_char+1 (the '\n')
 				
 				# remove focus out line
 				buffer.delete(begin_iter_for_previous_line,
