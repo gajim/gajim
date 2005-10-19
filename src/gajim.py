@@ -119,8 +119,8 @@ parser = optparser.OptionsParser(config_filename)
 
 class Contact:
 	'''Information concerning each contact'''
-	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',\
-			ask='', resource='', priority=5, keyID='', role='', affiliation='',\
+	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
+			ask='', resource='', priority=5, keyID='', role='', affiliation='',
 			chatstate=None):
 		self.jid = jid
 		self.name = name
@@ -836,7 +836,7 @@ class Interface:
 				ft.show_request_error(file_props)
 			return
 
-		self.plugin.add_event(account, jid, 'file-request-error', file_props)
+		self.add_event(account, jid, 'file-request-error', file_props)
 
 		if gajim.show_notification(account):
 			# check if we should be notified
@@ -860,7 +860,7 @@ class Interface:
 				file_props)
 			return
 
-		self.plugin.add_event(account, jid, 'file-request', file_props)
+		self.add_event(account, jid, 'file-request', file_props)
 
 		if gajim.show_notification(account):
 			instance = dialogs.PopupNotificationWindow(self,
