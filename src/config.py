@@ -1106,7 +1106,7 @@ class AccountModificationWindow:
 		self.xml.get_widget('name_entry').set_text(self.account)
 		jid = gajim.config.get_per('accounts', self.account, 'name') \
 			+ '@' + gajim.config.get_per('accounts',
-						self.account, 'hostname')
+						self.account, 'hostname').decode('idna')
 		self.xml.get_widget('jid_entry').set_text(jid)
 		self.xml.get_widget('save_password_checkbutton').set_active(
 			gajim.config.get_per('accounts', self.account, 'savepass'))
@@ -1134,13 +1134,13 @@ class AccountModificationWindow:
 		self.xml.get_widget('custom_host_port_checkbutton').set_active(
 			use_custom_host)
 		custom_host = gajim.config.get_per('accounts', self.account,
-			'custom_host')
+			'custom_host').decode('idna')
 		if not custom_host:
 			custom_host = gajim.config.get_per('accounts',
-				self.account, 'hostname')
+				self.account, 'hostname').decode('idna')
 		self.xml.get_widget('custom_host_entry').set_text(custom_host)
 		custom_port = gajim.config.get_per('accounts', self.account,
-			'custom_port')
+			'custom_port').decode('idna')
 		if not custom_port:
 			custom_port = 5222
 		self.xml.get_widget('custom_port_entry').set_text(unicode(custom_port))
@@ -1229,7 +1229,9 @@ _('To change the account name, you must be disconnected.')).get_response()
 		config['proxy'] = proxy
 		
 		config['usessl'] = self.xml.get_widget('use_ssl_checkbutton').get_active()
-		(config['name'], config['hostname']) = jid.split('@')
+		n, hn = jid.split('@')
+		config['name'] = n
+		config['hostname'] = hn.encode('idna')
 
 		config['use_custom_host'] = self.xml.get_widget(
 			'custom_host_port_checkbutton').get_active()
@@ -1242,7 +1244,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 			return
 		config['custom_port'] = custom_port
 		config['custom_host'] = self.xml.get_widget(
-			'custom_host_entry').get_text().decode('utf-8')
+			'custom_host_entry').get_text().decode('utf-8').encode('idna')
 
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().decode('utf-8')
 		if config['keyname'] == '': #no key selected
