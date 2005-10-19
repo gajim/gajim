@@ -912,18 +912,11 @@ class PopupNotificationWindow:
 			chats_window.set_active_tab(self.jid)
 			chats_window.window.present()
 		elif self.msg_type in ('normal', 'file-request', 'file-request-error',
-			'file-send-error', 'file-error'):
+			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
 			# Get the first single message event
 			ev = gajim.get_first_event(self.account, self.jid, self.msg_type)
 			self.plugin.roster.open_event(self.account, self.jid, ev)
 
-		elif self.msg_type == 'file-completed': # file transfer is complete
-			self.plugin.windows['file_transfers'].show_completed(self.jid, 
-				self.file_props)
-
-		elif self.msg_type == 'file-stopped': # file transfer ended unexpectedly
-			self.plugin.windows['file_transfers'].show_stopped(self.jid, 
-				self.file_props)
 		else: # 'chat'
 			self.plugin.roster.new_chat(contact, self.account)
 			chats_window = self.plugin.windows[self.account]['chats'][self.jid]

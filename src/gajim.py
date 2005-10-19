@@ -885,21 +885,26 @@ class Interface:
 			file_props.has_key('paused') and file_props['paused']:
 			return
 		jid = unicode(file_props['sender'])
-		if gajim.config.get('notify_on_file_complete'):
-			if (gajim.connections[account].connected in (2, 3)
-			and gajim.config.get('autopopup')) or \
-			gajim.config.get('autopopupaway'):
-				if file_props['error'] == 0:
-					ft.show_completed(jid, file_props)
-				elif file_props['error'] == -1:
-					ft.show_stopped(jid, file_props)
-				return
+
+		if gajim.popup_window(account):
 			if file_props['error'] == 0:
-				msg_type = 'file-completed'
-				event_type = _('File Transfer Completed')
+				ft.show_completed(jid, file_props)
 			elif file_props['error'] == -1:
-				msg_type = 'file-stopped'
-				event_type = _('File Transfer Stopped')
+				ft.show_stopped(jid, file_props)
+			return
+
+		if file_props['error'] == 0:
+			msg_type = 'file-completed'
+			event_type = _('File Transfer Completed')
+		elif file_props['error'] == -1:
+			msg_type = 'file-stopped'
+			event_type = _('File Transfer Stopped')
+
+		self.add_event(account, jid, msg_typ, file_props)
+
+		if gajim.config.get('notify_on_file_complete') and \
+			gajim.config.get('autopopupaway') or \
+			gajim.connections[account].connected in (2, 3):
 			instance = dialogs.PopupNotificationWindow(self, event_type, 
 				jid, account, msg_type, file_props)
 			self.roster.popup_notification_windows.append(instance)

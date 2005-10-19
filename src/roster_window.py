@@ -1823,8 +1823,11 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		elif typ in ('file-request-error', 'file-send-error'):
 			ft.show_send_error(data)
 			return True
-		elif typ == 'file-error':
+		elif typ in ('file-error', 'file-stopped'):
 			ft.show_stopped(jid, data)
+			return True
+		elif typ == 'file-completed':
+			ft.show_completed(jid, data)
 			return True
 		return False
 
