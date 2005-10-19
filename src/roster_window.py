@@ -2389,7 +2389,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		# sensitivity to False because by default we're offline
 		self.status_message_menuitem_iter = liststore.append(
 			[_('Change Status Message...'), img, '', False])
-		# Add a Separator (self.itFer_is_separator() checks on string SEPARATOR)
+		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
 		liststore.append(['SEPARATOR', None, '', True])
 
 		uf_show = helpers.get_uf_show('offline')
