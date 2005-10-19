@@ -1140,7 +1140,7 @@ class AccountModificationWindow:
 				self.account, 'hostname').decode('idna')
 		self.xml.get_widget('custom_host_entry').set_text(custom_host)
 		custom_port = gajim.config.get_per('accounts', self.account,
-			'custom_port').decode('idna')
+			'custom_port')
 		if not custom_port:
 			custom_port = 5222
 		self.xml.get_widget('custom_port_entry').set_text(unicode(custom_port))
