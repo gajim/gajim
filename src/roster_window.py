@@ -1400,7 +1400,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.send_status(account, status, message)
 
 	def on_status_combobox_changed(self, widget):
-		'''When we change our status'''
+		'''When we change our status via the combobox'''
 		model = self.status_combobox.get_model()
 		active = self.status_combobox.get_active()
 		if active == -1: # no active item
@@ -1414,7 +1414,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			return
 		status = model[active][2].decode('utf-8')
 		one_connected = helpers.one_account_connected()
-		if not status: # We choose change status message
+		if active == 7: # We choose change status message (7 is that)
+			# do not change show, just show change status dialog
+			#FIXME: remove this if block when http://bugzilla.gnome.org/show_bug.cgi?id=318518 is fixed
 			if not one_connected:
 				dialogs.ErrorDialog(_('No account connected'),
 					_('You must be connected to change your status message.')
@@ -1428,9 +1430,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					if not gajim.config.get_per('accounts', acct,
 						'sync_with_global_status'):
 						continue
-					show = gajim.SHOW_LIST[gajim.connections[acct].connected]
-					self.send_status(acct, show, message)
+					current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
+					self.send_status(acct, current_show, message)
+			self.status_combobox.set_active(self.previous_status_combobox_active)
 			return
+		# we are about to change show, so save this new show so in case
+		# after user chooses "Change status" menuitem we can return to this show
+		self.previous_status_combobox_active = active
 		if status == 'invisible':
 			bug_user = False
 			for acct in accounts:
@@ -2383,14 +2389,25 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		# sensitivity to False because by default we're offline
 		self.status_message_menuitem_iter = liststore.append(
 			[_('Change Status Message...'), img, '', False])
-		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
+		# Add a Separator (self.itFer_is_separator() checks on string SEPARATOR)
 		liststore.append(['SEPARATOR', None, '', True])
 
 		uf_show = helpers.get_uf_show('offline')
 		liststore.append([uf_show, self.jabber_state_images['offline'],
 			'offline', True])
+			
+		status_combobox_items = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
+			'separator1', 'change_status_msg', 'separator2', 'offline']
 		self.status_combobox.set_model(liststore)
-		self.status_combobox.set_active(9) # default to offline
+		
+		# default to offline
+		number_of_menuitem = status_combobox_items.index('offline')
+		self.status_combobox.set_active(number_of_menuitem)
+		
+		# holds index to previously selected item so if "change status message..."
+		# is selected we can fallback to previously selected item and not stay
+		# with that item selected
+		self.previous_status_combobox_active = number_of_menuitem
 
 		showOffline = gajim.config.get('showoffline')
 		self.xml.get_widget('show_offline_contacts_menuitem').set_active(
