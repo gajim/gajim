@@ -284,7 +284,8 @@ class Systray:
 						show = show, ask = 'none')
 					self.plugin.roster.new_chat(c, account)
 					w = wins['chats'][jid]
-			elif typ in ('normal', 'file-request', 'file-request-error'):
+			elif typ in ('normal', 'file-request', 'file-request-error',
+				'file-send-error', 'file-error'):
 				# Get the first single message event
 				ev = gajim.get_first_event(account, jid, typ)
 				# Open the window

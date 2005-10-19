@@ -59,7 +59,8 @@ awaiting_events = {} # list of messages/FT reveived but not printed
 	# if type in ('chat', 'normal'): data = (message, subject, kind, time,
 		# encrypted)
 		# kind can be (incoming, error)
-	# if type in file-request, file-request-error: data = file_props
+	# if type in file-request, file-request-error, file-send-error, file-error:
+		# data = file_props
 nicks = {} # list of our nick names in each account
 allow_notifications = {} # do we allow notifications for each account ?
 con_types = {} # type of each connection (ssl, tls, tcp, ...)

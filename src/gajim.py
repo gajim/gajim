@@ -781,15 +781,17 @@ class Interface:
 		file_props = array[1]
 		ft = self.windows['file_transfers']
 		ft.set_status(file_props['type'], file_props['sid'], 'stop')
-		if gajim.config.get('notify_on_new_message'):
-			# check if we should be notified
+
+		if gajim.popup_window(account):
+			ft.show_send_error(file_props)
+			return
+
+		self.add_event(account, jid, 'file-send-error', file_props)
+
+		if gajim.show_notification(account):
 			instance = dialogs.PopupNotificationWindow(self,
-					_('File Transfer Error'), jid, account, 'file-send-error', file_props)
+				_('File Transfer Error'), jid, account, 'file-send-error', file_props)
 			self.roster.popup_notification_windows.append(instance)
-		elif (gajim.connections[account].connected in (2, 3)
-			and gajim.config.get('autopopup')) or \
-			gajim.config.get('autopopupaway'):
-			self.windows['file_transfers'].show_send_error(file_props)
 
 	def add_event(self, account, jid, typ, args):
 		'''add an event to the awaiting_events var'''
@@ -827,23 +829,24 @@ class Interface:
 		file_props = array[1]
 		ft = self.windows['file_transfers']
 		ft.set_status(file_props['type'], file_props['sid'], 'stop')
+		errno = file_props['error']
 
 		if gajim.popup_window(account):
-			errno = file_props['error']
 			if errno in (-4, -5):
 				ft.show_stopped(jid, file_props)
 			else:
 				ft.show_request_error(file_props)
 			return
 
-		self.add_event(account, jid, 'file-request-error', file_props)
+		if errno in (-4, -5):
+			msg_type = 'file-error'
+		else:
+			msg_type = 'file-request-error'
+
+		self.add_event(account, jid, msg_typ, file_props)
 
 		if gajim.show_notification(account):
 			# check if we should be notified
-			if errno in (-4, -5):
-				msg_type = 'file-error'
-			else:
-				msg_type = 'file-request-error'
 			instance = dialogs.PopupNotificationWindow(self,
 					_('File Transfer Error'), jid, account, msg_type, file_props)
 			self.roster.popup_notification_windows.append(instance)
