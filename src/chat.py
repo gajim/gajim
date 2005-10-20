@@ -208,20 +208,17 @@ class Chat:
 								     'state_active_color')
 			if color:
 				color = gtk.gdk.colormap_get_system().alloc_color(color)
-				# The widget state depend on whether this tab is the "current" tab
-				if self.notebook.page_num(child) == self.notebook.get_current_page():
-					widget_state = gtk.STATE_NORMAL 
-				else:
-					widget_state = gtk.STATE_ACTIVE 
-					if chatstate in ['inactive', 'gone']:
-						# Adjust color to be lighter against the darker inactive
-						# background
-						p = 0.4
-						mask = 0
-						color.red = int((color.red * p) + (mask * (1 - p)))
-						color.green = int((color.green * p) + (mask * (1 - p)))
-						color.blue = int((color.blue * p) + (mask * (1 - p)))
-				nickname.modify_fg(widget_state, color)
+				# We set the color for when it's the current tab or not
+				nickname.modify_fg(gtk.STATE_NORMAL, color)
+				if chatstate in ['inactive', 'gone']:
+					# Adjust color to be lighter against the darker inactive
+					# background
+					p = 0.4
+					mask = 0
+					color.red = int((color.red * p) + (mask * (1 - p)))
+					color.green = int((color.green * p) + (mask * (1 - p)))
+					color.blue = int((color.blue * p) + (mask * (1 - p)))
+				nickname.modify_fg(gtk.STATE_ACTIVE, color)
 		elif self.widget_name == 'groupchat_window':
 			nickname = hb.get_children()[0]
 			close_button = hb.get_children()[1]
