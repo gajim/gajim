@@ -905,7 +905,7 @@ class Interface:
 			msg_type = 'file-stopped'
 			event_type = _('File Transfer Stopped')
 
-		self.add_event(account, jid, msg_typ, file_props)
+		self.add_event(account, jid, msg_type, file_props)
 
 		if gajim.config.get('notify_on_file_complete') and \
 			gajim.config.get('autopopupaway') or \
