@@ -430,6 +430,8 @@ class Interface:
 			if chatstate is not None: # he sent us reply, so he supports jep85
 				if contact.chatstate == 'ask': # we were jep85 disco?
 					contact.chatstate = 'active' # no more
+				else:
+					contact.chatstate = chatstate
 				
 				chat_win.handle_incoming_chatstate(account, jid, chatstate)
 			elif contact.chatstate != 'active':
