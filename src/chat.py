@@ -1,4 +1,4 @@
-##	plugins/tabbed_chat_window.py
+##	chat.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -45,13 +45,12 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 class Chat:
 	'''Class for chat/groupchat windows'''
-	def __init__(self, plugin, account, widget_name):
+	def __init__(self, account, widget_name):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.window = self.xml.get_widget(widget_name)
 
 		self.widget_name = widget_name
 
-		self.plugin = plugin
 		self.account = account
 		self.change_cursor = None
 		self.xmls = {}
@@ -264,16 +263,16 @@ class Chat:
 		return 'pm'
 
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
-		'''clean self.plugin.windows[self.account][kind]'''
+		'''clean gajim.interface.windows[self.account][kind]'''
 		for jid in self.xmls:
-			windows = self.plugin.windows[self.account][kind]
+			windows = gajim.interface.windows[self.account][kind]
 			if kind == 'chats':
 				# send 'gone' chatstate to every tabbed chat tab
 				windows[jid].send_chatstate('gone', jid)
 				gobject.source_remove(self.possible_paused_timeout_id[jid])
 				gobject.source_remove(self.possible_inactive_timeout_id[jid])
-			if self.plugin.systray_enabled and self.nb_unread[jid] > 0:
-				self.plugin.systray.remove_jid(jid, self.account,
+			if gajim.interface.systray_enabled and self.nb_unread[jid] > 0:
+				gajim.interface.systray.remove_jid(jid, self.account,
 					self.get_message_type(jid))
 			del windows[jid]
 			if self.print_time_timeout_id.has_key(jid):
@@ -299,11 +298,11 @@ class Chat:
 		'''When history menuitem is pressed: call history window'''
 		if jid is None:
 			jid = self.get_active_jid()
-		if self.plugin.windows['logs'].has_key(jid):
-			self.plugin.windows['logs'][jid].window.present()
+		if gajim.interface.windows['logs'].has_key(jid):
+			gajim.interface.windows['logs'][jid].window.present()
 		else:
-			self.plugin.windows['logs'][jid] = history_window.HistoryWindow(
-				self.plugin, jid, self.account)
+			gajim.interface.windows['logs'][jid] = history_window.HistoryWindow(jid,
+				self.account)
 
 	def on_chat_window_focus_in_event(self, widget, event):
 		'''When window gets focus'''
@@ -319,8 +318,8 @@ class Chat:
 			if self.nb_unread[jid] > 0:
 				self.nb_unread[jid] = 0 + self.get_specific_unread(jid)
 				self.show_title()
-				if self.plugin.systray_enabled:
-					self.plugin.systray.remove_jid(jid, self.account,
+				if gajim.interface.systray_enabled:
+					gajim.interface.systray.remove_jid(jid, self.account,
 						self.get_message_type(jid))
 		
 		'''TC/GC window received focus, so if we had urgency REMOVE IT
@@ -483,8 +482,8 @@ class Chat:
 				self.nb_unread[new_jid] = 0 + self.get_specific_unread(new_jid)
 				self.redraw_tab(new_jid)
 				self.show_title()
-				if self.plugin.systray_enabled:
-					self.plugin.systray.remove_jid(new_jid, self.account,
+				if gajim.interface.systray_enabled:
+					gajim.interface.systray.remove_jid(new_jid, self.account,
 						self.get_message_type(new_jid))
 
 		conversation_textview.grab_focus()
@@ -520,8 +519,8 @@ class Chat:
 		else:
 			if self.nb_unread[jid] > 0:
 				self.nb_unread[jid] = 0
-				if self.plugin.systray_enabled:
-					self.plugin.systray.remove_jid(jid, self.account,
+				if gajim.interface.systray_enabled:
+					gajim.interface.systray.remove_jid(jid, self.account,
 						self.get_message_type(jid))
 			if self.print_time_timeout_id.has_key(jid):
 				gobject.source_remove(self.print_time_timeout_id[jid])
@@ -529,8 +528,8 @@ class Chat:
 
 			self.notebook.remove_page(self.notebook.page_num(self.childs[jid]))
 
-		if self.plugin.windows[self.account][kind].has_key(jid):
-			del self.plugin.windows[self.account][kind][jid]
+		if gajim.interface.windows[self.account][kind].has_key(jid):
+			del gajim.interface.windows[self.account][kind][jid]
 		del self.nb_unread[jid]
 		del gajim.last_message_time[self.account][jid]
 		del self.last_time_printout[jid]
@@ -842,8 +841,8 @@ class Chat:
 			self.nb_unread[jid] = 0 + self.get_specific_unread(jid)
 			self.redraw_tab(jid)
 			self.show_title()
-			if self.plugin.systray_enabled:
-				self.plugin.systray.remove_jid(jid, self.account,
+			if gajim.interface.systray_enabled:
+				gajim.interface.systray.remove_jid(jid, self.account,
 					self.get_message_type(jid))
 	
 	def on_conversation_textview_motion_notify_event(self, widget, event):
@@ -1016,24 +1015,24 @@ class Chat:
 		clip.set_text(text)
 
 	def on_start_chat_activate(self, widget, jid):
-		self.plugin.roster.new_chat_from_jid(self.account, jid)
+		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
 	def on_join_group_chat_menuitem_activate(self, widget, jid):
 		room, server = jid.split('@')
-		if self.plugin.windows[self.account].has_key('join_gc'):
-			instance = self.plugin.windows[self.account]['join_gc']
+		if gajim.interface.windows[self.account].has_key('join_gc'):
+			instance = gajim.interface.windows[self.account]['join_gc']
 			instance.xml.get_widget('server_entry').set_text(server)
 			instance.xml.get_widget('room_entry').set_text(room)
-			self.plugin.windows[self.account]['join_gc'].window.present()		
+			gajim.interface.windows[self.account]['join_gc'].window.present()		
 		else:
 			try:
-				self.plugin.windows[self.account]['join_gc'] = \
-				dialogs.JoinGroupchatWindow(self.plugin, self.account, server, room)
+				gajim.interface.windows[self.account]['join_gc'] = \
+				dialogs.JoinGroupchatWindow(self.account, server, room)
 			except RuntimeError:
 				pass
 
 	def on_add_to_roster_activate(self, widget, jid):
-		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
+		dialogs.AddNewContactWindow(self.account, jid)
 
 	def make_link_menu(self, event, kind, text):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_context_menu', APP)
@@ -1102,9 +1101,9 @@ class Chat:
 		
 		# basic: links + mail + formatting is always checked (we like that)
 		if gajim.config.get('useemoticons'): # search for emoticons & urls
-			iterator = self.plugin.emot_and_basic_re.finditer(otext)
+			iterator = gajim.interface.emot_and_basic_re.finditer(otext)
 		else: # search for just urls + mail + formatting
-			iterator = self.plugin.basic_pattern_re.finditer(otext)
+			iterator = gajim.interface.basic_pattern_re.finditer(otext)
 		for match in iterator:
 			start, end = match.span()
 			special_text = otext[start:end]
@@ -1127,13 +1126,13 @@ class Chat:
 		buffer = textview.get_buffer()
 
 		possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
-		if possible_emot_ascii_caps in self.plugin.emoticons.keys():
+		if possible_emot_ascii_caps in gajim.interface.emoticons.keys():
 			#it's an emoticon
 			emot_ascii = possible_emot_ascii_caps
 			end_iter = buffer.get_end_iter()
 			anchor = buffer.create_child_anchor(end_iter)
 			img = gtk.Image()
-			img.set_from_file(self.plugin.emoticons[emot_ascii])
+			img.set_from_file(gajim.interface.emoticons[emot_ascii])
 			img.show()
 			#add with possible animation
 			textview.add_child_at_anchor(img, anchor)
@@ -1141,7 +1140,7 @@ class Chat:
 			#it's a mail
 			tags.append('mail')
 			use_other_tags = False
-		elif self.plugin.sth_at_sth_dot_sth_re.match(special_text):
+		elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text):
 			#it's a mail
 			tags.append('mail')
 			use_other_tags = False
@@ -1309,9 +1308,9 @@ class Chat:
 					if not gajim.config.get('notify_on_all_muc_messages'):
 						return
 			self.nb_unread[jid] += 1
-			if self.plugin.systray_enabled and gajim.config.get(
+			if gajim.interface.systray_enabled and gajim.config.get(
 				'trayicon_notification_on_new_messages'):
-				self.plugin.systray.add_jid(jid, self.account, self.get_message_type(jid))
+				gajim.interface.systray.add_jid(jid, self.account, self.get_message_type(jid))
 			self.redraw_tab(jid)
 			self.show_title(urgent)
 

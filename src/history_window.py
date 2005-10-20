@@ -34,8 +34,7 @@ GTKGUI_GLADE = 'gtkgui.glade'
 class HistoryWindow:
 	'''Class for browsing logs of conversations with contacts'''
 
-	def __init__(self, plugin, jid, account):
-		self.plugin = plugin
+	def __init__(self, jid, account):
 		self.jid = jid
 		self.account = account
 		self.no_of_lines = gajim.logger.get_no_of_lines(jid)
@@ -80,7 +79,7 @@ class HistoryWindow:
 		self.window.show_all()
 
 	def on_history_window_destroy(self, widget):
-		del self.plugin.windows['logs'][self.jid]
+		del gajim.interface.windows['logs'][self.jid]
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()

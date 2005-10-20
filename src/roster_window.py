@@ -60,7 +60,7 @@ C_SECPIXBUF, # econdary_pixbuf
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class RosterWindow:
-	'''Class for main window of gtkgui plugin'''
+	'''Class for main window of gtkgui interface'''
 
 	def get_account_iter(self, name):
 		if self.regroup:
@@ -248,7 +248,7 @@ class RosterWindow:
 			#FIXME: add avatar
 
 	def join_gc_room(self, account, room_jid, nick, password):
-		if room_jid in self.plugin.windows[account]['gc'] and \
+		if room_jid in gajim.interface.windows[account]['gc'] and \
 		gajim.gc_connected[account][room_jid]:
 			dialogs.ErrorDialog(_('You are already in room %s') %room_jid
 				).get_response()
@@ -259,10 +259,10 @@ class RosterWindow:
 				).get_response()
 			return
 		room, server = room_jid.split('@')
-		if not room_jid in self.plugin.windows[account]['gc']:
+		if not room_jid in gajim.interface.windows[account]['gc']:
 			self.new_room(room_jid, nick, account)
-		self.plugin.windows[account]['gc'][room_jid].set_active_tab(room_jid)
-		self.plugin.windows[account]['gc'][room_jid].window.present()
+		gajim.interface.windows[account]['gc'][room_jid].set_active_tab(room_jid)
+		gajim.interface.windows[account]['gc'][room_jid].window.present()
 		gajim.connections[account].join_gc(nick, room, server, password)
 
 	def on_bookmark_menuitem_activate(self, widget, account, bookmark):
@@ -275,23 +275,23 @@ class RosterWindow:
 	def on_send_server_message_menuitem_activate(self, widget, account):
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		server += '/announce/online'
-		dialogs.SingleMessageWindow(self.plugin, account, server, 'send')
+		dialogs.SingleMessageWindow(account, server, 'send')
 
 	def on_xml_console_menuitem_activate(self, widget, account):
-		if self.plugin.windows[account].has_key('xml_console'):
-			self.plugin.windows[account]['xml_console'].window.present()
+		if gajim.interface.windows[account].has_key('xml_console'):
+			gajim.interface.windows[account]['xml_console'].window.present()
 		else:
-			self.plugin.windows[account]['xml_console'].window.show_all()
+			gajim.interface.windows[account]['xml_console'].window.show_all()
 
 	def on_set_motd_menuitem_activate(self, widget, account):
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		server += '/announce/motd'
-		dialogs.SingleMessageWindow(self.plugin, account, server, 'send')
+		dialogs.SingleMessageWindow(account, server, 'send')
 
 	def on_update_motd_menuitem_activate(self, widget, account):
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		server += '/announce/motd/update'
-		dialogs.SingleMessageWindow(self.plugin, account, server, 'send')
+		dialogs.SingleMessageWindow(account, server, 'send')
 
 	def on_delete_motd_menuitem_activate(self, widget, account):
 		server = gajim.config.get_per('accounts', account, 'hostname')
@@ -628,28 +628,27 @@ class RosterWindow:
 				self.add_contact_to_roster(contact.jid, account)
 			self.draw_contact(contact.jid, account)
 		# print status in chat window and update status/GPG image
-		if self.plugin.windows[account]['chats'].has_key(contact.jid):
+		if gajim.interface.windows[account]['chats'].has_key(contact.jid):
 			jid = contact.jid
-			self.plugin.windows[account]['chats'][jid].set_state_image(jid)
+			gajim.interface.windows[account]['chats'][jid].set_state_image(jid)
 			name = contact.name
 			if contact.resource != '':
 				name += '/' + contact.resource
 			uf_show = helpers.get_uf_show(show)
-			self.plugin.windows[account]['chats'][jid].print_conversation(
+			gajim.interface.windows[account]['chats'][jid].print_conversation(
 				_('%s is now %s (%s)') % (name, uf_show, status), jid, 'status')
 			
 			if contact == gajim.get_contact_instance_with_highest_priority(\
 				account, contact.jid):
-				self.plugin.windows[account]['chats'][jid].draw_name_banner(contact)
+				gajim.interface.windows[account]['chats'][jid].draw_name_banner(contact)
 
 	def on_info(self, widget, user, account):
 		'''Call vcard_information_window class to display user's information'''
-		info = self.plugin.windows[account]['infos']
+		info = gajim.interface.windows[account]['infos']
 		if info.has_key(user.jid):
 			info[user.jid].window.present()
 		else:
-			info[user.jid] = dialogs.VcardWindow(user, self.plugin,
-								account)
+			info[user.jid] = dialogs.VcardWindow(user, account)
 
 	def show_tooltip(self, contact):
 		pointer = self.tree.get_pointer()
@@ -800,24 +799,24 @@ class RosterWindow:
 			keys[user.jid] = keyID[0]
 			for u in gajim.contacts[account][user.jid]:
 				u.keyID = keyID[0]
-			if self.plugin.windows[account]['chats'].has_key(user.jid):
-				self.plugin.windows[account]['chats'][user.jid].draw_widgets(user)
+			if gajim.interface.windows[account]['chats'].has_key(user.jid):
+				gajim.interface.windows[account]['chats'][user.jid].draw_widgets(user)
 		keys_str = ''
 		for jid in keys:
 			keys_str += jid + ' ' + keys[jid] + ' '
 		gajim.config.set_per('accounts', account, 'attached_gpg_keys', keys_str)
 
 	def on_edit_groups(self, widget, user, account):
-		dlg = dialogs.EditGroupsDialog(user, account, self.plugin)
+		dlg = dialogs.EditGroupsDialog(user, account)
 		dlg.run()
 		
 	def on_history(self, widget, contact, account):
 		'''When history menuitem is activated: call log window'''
-		if self.plugin.windows['logs'].has_key(contact.jid):
-			self.plugin.windows['logs'][contact.jid].window.present()
+		if gajim.interface.windows['logs'].has_key(contact.jid):
+			gajim.interface.windows['logs'][contact.jid].window.present()
 		else:
-			self.plugin.windows['logs'][contact.jid] = history_window.\
-				HistoryWindow(self.plugin, contact.jid, account)
+			gajim.interface.windows['logs'][contact.jid] = history_window.\
+				HistoryWindow(contact.jid, account)
 
 	def on_send_single_message_menuitem_activate(self, wiget, account,
 	contact = None):
@@ -827,7 +826,7 @@ class RosterWindow:
 			dialogs.SingleMessageWindow(self, account, contact.jid, 'send')
 		
 	def on_send_file_menuitem_activate(self, widget, account, contact):
-		self.plugin.windows['file_transfers'].show_file_send_request( 
+		gajim.interface.windows['file_transfers'].show_file_send_request( 
 			account, contact)
 		
 	def mk_menu_user(self, event, iter):
@@ -990,11 +989,11 @@ class RosterWindow:
 		menu.show_all()
 
 	def on_edit_account(self, widget, account):
-		if self.plugin.windows[account].has_key('account_modification'):
-			self.plugin.windows[account]['account_modification'].window.present()
+		if gajim.interface.windows[account].has_key('account_modification'):
+			gajim.interface.windows[account]['account_modification'].window.present()
 		else:
-			self.plugin.windows[account]['account_modification'] = \
-				config.AccountModificationWindow(self.plugin, account)
+			gajim.interface.windows[account]['account_modification'] = \
+				config.AccountModificationWindow(account)
 	
 	def get_possible_button_event(self, event):
 		'''mouse or keyboard caused the event?'''
@@ -1007,7 +1006,7 @@ class RosterWindow:
 
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
-		dlg = dialogs.ChangeStatusMessageDialog(self.plugin, show)
+		dlg = dialogs.ChangeStatusMessageDialog(show)
 		message = dlg.run()
 		if message is not None: # None is if user pressed Cancel
 			self.send_status(account, show, message)
@@ -1099,7 +1098,7 @@ class RosterWindow:
 		account_context_menu.show_all()
 
 	def on_add_to_roster(self, widget, user, account):
-		dialogs.AddNewContactWindow(self.plugin, account, user.jid)
+		dialogs.AddNewContactWindow(account, user.jid)
 	
 	def authorize(self, widget, jid, account):
 		'''Authorize a user (by re-sending auth menuitem)'''
@@ -1228,13 +1227,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			if type in ('agent', 'contact'):
 				account = model[iter][C_ACCOUNT].decode('utf-8')
 				jid = model[iter][C_JID].decode('utf-8')
-				if self.plugin.windows[account]['chats'].has_key(jid):
-					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
+				if gajim.interface.windows[account]['chats'].has_key(jid):
+					gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
 				elif gajim.contacts[account].has_key(jid):
 					c = gajim.get_contact_instance_with_highest_priority(account, jid)
 					self.new_chat(c, account)
-					self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
-				self.plugin.windows[account]['chats'][jid].window.present()
+					gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
+				gajim.interface.windows[account]['chats'][jid].window.present()
 			elif type == 'account':
 				account = model[iter][C_ACCOUNT]
 				show = gajim.connections[account].connected
@@ -1275,7 +1274,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			for u in gajim.contacts[account][user.jid]:
 				self.remove_contact(u, account)
 			del gajim.contacts[account][u.jid]
-			if user.jid in self.plugin.windows[account]['chats']:
+			if user.jid in gajim.interface.windows[account]['chats']:
 				user1 = Contact(jid = user.jid, name = user.name,
 					groups = [_('not in the roster')], show = 'not in the roster',
 					status = '', ask = 'none', keyID = user.keyID)
@@ -1292,8 +1291,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		accountIter = self.get_account_iter(account)
 		if accountIter:
 			model[accountIter][0] =	self.jabber_state_images['connecting']
-		if self.plugin.systray_enabled:
-			self.plugin.systray.change_status('connecting')
+		if gajim.interface.systray_enabled:
+			gajim.interface.systray.change_status('connecting')
 
 	def send_status(self, account, status, txt, sync = False, auto = False):
 		model = self.tree.get_model()
@@ -1313,8 +1312,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				if passphrase == -1:
 					if accountIter:
 						model[accountIter][0] =	self.jabber_state_images['offline']
-					if self.plugin.systray_enabled:
-						self.plugin.systray.change_status('offline')
+					if gajim.interface.systray_enabled:
+						gajim.interface.systray.change_status('offline')
 					self.update_status_comboxbox()
 					return
 				gajim.connections[account].password = passphrase
@@ -1361,12 +1360,12 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					gajim.connections[account].gpg_passphrase(passphrase)
 					
 		gajim.connections[account].change_status(status, txt, sync, auto)
-		for room_jid in self.plugin.windows[account]['gc']:
+		for room_jid in gajim.interface.windows[account]['gc']:
 			if room_jid != 'tabbed':
-				nick = self.plugin.windows[account]['gc'][room_jid].nicks[room_jid]
+				nick = gajim.interface.windows[account]['gc'][room_jid].nicks[room_jid]
 				gajim.connections[account].send_gc_status(nick, room_jid, status, 
 					txt)
-		if status == 'online' and self.plugin.sleeper.getState() != \
+		if status == 'online' and gajim.interface.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
 			gajim.sleeper_state[account] = 'online'
 		else:
@@ -1376,7 +1375,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
 			(show == 'offline' and not gajim.config.get('ask_offline_status')):
 			return ''
-		dlg = dialogs.ChangeStatusMessageDialog(self.plugin, show)
+		dlg = dialogs.ChangeStatusMessageDialog(show)
 		message = dlg.run()
 		return message
 
@@ -1423,7 +1422,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					).get_response()
 				self.update_status_comboxbox()
 				return
-			dlg = dialogs.ChangeStatusMessageDialog(self.plugin)
+			dlg = dialogs.ChangeStatusMessageDialog()
 			message = dlg.run()
 			if message is not None: # None if user pressed Cancel
 				for acct in accounts:
@@ -1467,7 +1466,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				self.send_status(acct, status, message)
 	
 	def update_status_comboxbox(self):
-		# table to change index in plugin.connected to index in combobox
+		# table to change index in connection.connected to index in combobox
 		table = {0:9, 1:9, 2:0, 3:1, 4:2, 5:3, 6:4, 7:5}
 		maxi = 0
 		for account in gajim.connections:
@@ -1480,8 +1479,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.status_combobox.handler_unblock(self.id_signal_cb)
 		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 
 						'xa', 'dnd', 'invisible']
-		if self.plugin.systray_enabled:
-			self.plugin.systray.change_status(statuss[maxi])
+		if gajim.interface.systray_enabled:
+			gajim.interface.systray.change_status(statuss[maxi])
 
 	def on_status_changed(self, account, status):
 		'''the core tells us that our status has changed'''
@@ -1506,17 +1505,17 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	
 	def new_chat(self, contact, account):
 		if gajim.config.get('usetabbedchat'):
-			if not self.plugin.windows[account]['chats'].has_key('tabbed'):
-				self.plugin.windows[account]['chats']['tabbed'] = \
-					tabbed_chat_window.TabbedChatWindow(contact, self.plugin, account)
+			if not gajim.interface.windows[account]['chats'].has_key('tabbed'):
+				gajim.interface.windows[account]['chats']['tabbed'] = \
+					tabbed_chat_window.TabbedChatWindow(contact, account)
 			else:
-				self.plugin.windows[account]['chats']['tabbed'].new_tab(contact)
-				
-			self.plugin.windows[account]['chats'][contact.jid] = \
-				self.plugin.windows[account]['chats']['tabbed']
+				gajim.interface.windows[account]['chats']['tabbed'].new_tab(contact)
+
+			gajim.interface.windows[account]['chats'][contact.jid] = \
+				gajim.interface.windows[account]['chats']['tabbed']
 		else:
-			self.plugin.windows[account]['chats'][contact.jid] = \
-				tabbed_chat_window.TabbedChatWindow(contact, self.plugin, account)
+			gajim.interface.windows[account]['chats'][contact.jid] = \
+				tabbed_chat_window.TabbedChatWindow(contact, account)
 
 	def new_chat_from_jid(self, account, jid):
 		if gajim.contacts[account].has_key(jid):
@@ -1533,24 +1532,23 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			gajim.contacts[account][jid] = [contact]
 			self.add_contact_to_roster(contact.jid, account)			
 
-		if not self.plugin.windows[account]['chats'].has_key(jid):
+		if not gajim.interface.windows[account]['chats'].has_key(jid):
 			self.new_chat(contact, account)
-		self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
-		self.plugin.windows[account]['chats'][jid].window.present()
+		gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
+		gajim.interface.windows[account]['chats'][jid].window.present()
 
 	def new_room(self, jid, nick, account):
 		if gajim.config.get('usetabbedchat'):
-			if not self.plugin.windows[account]['gc'].has_key('tabbed'):
-				self.plugin.windows[account]['gc']['tabbed'] = \
-					groupchat_window.GroupchatWindow(jid, nick, self.plugin, 
-																	account)
+			if not gajim.interface.windows[account]['gc'].has_key('tabbed'):
+				gajim.interface.windows[account]['gc']['tabbed'] = \
+					groupchat_window.GroupchatWindow(jid, nick, account)
 			else:
-				self.plugin.windows[account]['gc']['tabbed'].new_room(jid, nick)
-			self.plugin.windows[account]['gc'][jid] = \
-				self.plugin.windows[account]['gc']['tabbed']
+				gajim.interface.windows[account]['gc']['tabbed'].new_room(jid, nick)
+			gajim.interface.windows[account]['gc'][jid] = \
+				gajim.interface.windows[account]['gc']['tabbed']
 		else:
-			self.plugin.windows[account]['gc'][jid] = \
-				groupchat_window.GroupchatWindow(jid, nick, self.plugin, account)
+			gajim.interface.windows[account]['gc'][jid] = \
+				groupchat_window.GroupchatWindow(jid, nick, account)
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,
 		msg_type = '', subject = None, resource = ''):
@@ -1589,18 +1587,18 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if msg_type == 'normal': # it's single message
 			if popup:
 				contact = gajim.contacts[account][jid][0]
-				dialogs.SingleMessageWindow(self.plugin, account, contact.jid,
+				dialogs.SingleMessageWindow(account, contact.jid,
 					action = 'receive', from_whom = jid, subject = subject,
 					message = msg)
 				return
 		
 		# We print if window is opened and it's not a single message
-		if self.plugin.windows[account]['chats'].has_key(jid) and \
+		if gajim.interface.windows[account]['chats'].has_key(jid) and \
 			msg_type != 'normal':
 			typ = ''
 			if msg_type == 'error':
 				typ = 'status'
-			self.plugin.windows[account]['chats'][jid].print_conversation(msg, 
+			gajim.interface.windows[account]['chats'][jid].print_conversation(msg, 
 				jid, typ, tim = tim, encrypted = encrypted, subject = subject)
 			return
 
@@ -1613,7 +1611,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		qs[jid].append((kind, (msg, subject, msg_type, tim, encrypted)))
 		self.nb_unread += 1
 		if popup:
-			if not self.plugin.windows[account]['chats'].has_key(jid):
+			if not gajim.interface.windows[account]['chats'].has_key(jid):
 				c = gajim.get_contact_instance_with_highest_priority(account, jid)
 				self.new_chat(c, account)
 				if path:
@@ -1624,8 +1622,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		else:
 			if no_queue: # We didn't have a queue: we change icons
 				self.draw_contact(jid, account)
-			if self.plugin.systray_enabled:
-				self.plugin.systray.add_jid(jid, account, kind)
+			if gajim.interface.systray_enabled:
+				gajim.interface.systray.add_jid(jid, account, kind)
 			self.show_title() # we show the * or [n]
 			if not path:
 				self.add_contact_to_roster(jid, account)
@@ -1637,13 +1635,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.tree.set_cursor(path)
 
 	def on_preferences_menuitem_activate(self, widget):
-		if self.plugin.windows['preferences'].window.get_property('visible'):
-			self.plugin.windows['preferences'].window.present()
+		if gajim.interface.windows['preferences'].window.get_property('visible'):
+			gajim.interface.windows['preferences'].window.present()
 		else:
-			self.plugin.windows['preferences'].window.show_all()
+			gajim.interface.windows['preferences'].window.show_all()
 
 	def on_add_new_contact(self, widget, account):
-		dialogs.AddNewContactWindow(self.plugin, account)
+		dialogs.AddNewContactWindow(account)
 
 	def on_join_gc_activate(self, widget, account):
 		invisible_show = gajim.SHOW_LIST.index('invisible')
@@ -1651,17 +1649,18 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			dialogs.ErrorDialog(_('You cannot join a room while you are invisible')
 				).get_response()
 			return
-		if self.plugin.windows[account].has_key('join_gc'):
-			self.plugin.windows[account]['join_gc'].window.present()
+		if gajim.interface.windows[account].has_key('join_gc'):
+			gajim.interface.windows[account]['join_gc'].window.present()
 		else:
 			# c http://nkour.blogspot.com/2005/05/pythons-init-return-none-doesnt-return.html
 			try:
-				self.plugin.windows[account]['join_gc'] = dialogs.JoinGroupchatWindow(self.plugin, account)
+				gajim.interface.windows[account]['join_gc'] = \
+					dialogs.JoinGroupchatWindow(account)
 			except RuntimeError:
 				pass
 
 	def on_new_message_menuitem_activate(self, widget, account):
-		dialogs.NewMessageDialog(self.plugin, account)
+		dialogs.NewMessageDialog(account)
 			
 	def on_contents_menuitem_activate(self, widget):
 		helpers.launch_browser_mailer('url', 'http://trac.gajim.org/wiki')
@@ -1673,19 +1672,19 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		dialogs.AboutDialog()
 
 	def on_accounts_menuitem_activate(self, widget):
-		if self.plugin.windows.has_key('accounts'):
-			self.plugin.windows['accounts'].window.present()
+		if gajim.interface.windows.has_key('accounts'):
+			gajim.interface.windows['accounts'].window.present()
 		else:
-			self.plugin.windows['accounts'] = config.AccountsWindow(self.plugin) 
+			gajim.interface.windows['accounts'] = config.AccountsWindow() 
 
 	def on_file_transfers_menuitem_activate(self, widget):
-		if self.plugin.windows['file_transfers'].window.get_property('visible'):
-			self.plugin.windows['file_transfers'].window.present()
+		if gajim.interface.windows['file_transfers'].window.get_property('visible'):
+			gajim.interface.windows['file_transfers'].window.present()
 		else:
-			self.plugin.windows['file_transfers'].window.show_all()
+			gajim.interface.windows['file_transfers'].window.show_all()
 
 	def on_manage_bookmarks_menuitem_activate(self, widget):
-		config.ManageBookmarksWindow(self.plugin)
+		config.ManageBookmarksWindow()
 
 	def close_all(self, dic):
 		'''close all the windows in the given dictionary'''
@@ -1697,7 +1696,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 	
 	def on_roster_window_delete_event(self, widget, event):
 		'''When we want to close the window'''
-		if self.plugin.systray_enabled and not gajim.config.get('quit_on_roster_x_button'):
+		if gajim.interface.systray_enabled and not gajim.config.get('quit_on_roster_x_button'):
 			self.tooltip.hide_tooltip()
 			self.window.hide()
 		else:
@@ -1714,7 +1713,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				for acct in accounts:
 					if gajim.connections[acct].connected:
 						self.send_status(acct, 'offline', message, True)
-			self.quit_gtkgui_plugin()
+			self.quit_gtkgui_interface()
 		return True # do NOT destory the window
 
 	def on_roster_window_focus_in_event(self, widget, event):
@@ -1729,12 +1728,12 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if event.keyval == gtk.keysyms.Escape:
 			treeselection = self.tree.get_selection()
 			model, iter = treeselection.get_selected()
-			if not iter and self.plugin.systray_enabled and not gajim.config.get('quit_on_roster_x_button'):
+			if not iter and gajim.interface.systray_enabled and not gajim.config.get('quit_on_roster_x_button'):
 				self.tooltip.hide_tooltip()
 				self.window.hide()
 
-	def quit_gtkgui_plugin(self):
-		'''When we quit the gtk plugin :
+	def quit_gtkgui_interface(self):
+		'''When we quit the gtk interface :
 		tell that to the core and exit gtk'''
 		if gajim.config.get('saveposition'):
 			# in case show_roster_on_start is False and roster is never shown
@@ -1748,12 +1747,12 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.config.set('roster_height', height)
 
 		gajim.config.set('collapsed_rows', '\t'.join(self.collapsed_rows))
-		self.plugin.save_config()
+		gajim.interface.save_config()
 		for account in gajim.connections:
 			gajim.connections[account].quit(True)
-		self.close_all(self.plugin.windows)
-		if self.plugin.systray_enabled:
-			self.plugin.hide_systray()
+		self.close_all(gajim.interface.windows)
+		if gajim.interface.systray_enabled:
+			gajim.interface.hide_systray()
 		gtk.main_quit()
 
 	def on_quit_menuitem_activate(self, widget):
@@ -1773,10 +1772,10 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			if self.nb_unread > 0:
 				unread = True
 			for account in accounts:
-				if self.plugin.windows[account]['chats'].has_key('tabbed'):
-					wins = [self.plugin.windows[account]['chats']['tabbed']]
+				if gajim.interface.windows[account]['chats'].has_key('tabbed'):
+					wins = [gajim.interface.windows[account]['chats']['tabbed']]
 				else:
-					wins = self.plugin.windows[account]['chats'].values()
+					wins = gajim.interface.windows[account]['chats'].values()
 				for win in wins:
 					unrd = 0
 					for jid in win.nb_unread:
@@ -1803,16 +1802,16 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				if gajim.connections[acct].connected:
 					# send status asynchronously
 					self.send_status(acct, 'offline', message, True)
-		self.quit_gtkgui_plugin()
+		self.quit_gtkgui_interface()
 
 	def open_event(self, account, jid, event):
 		'''If an event was handled, return True, else return False'''
 		typ = event[0]
 		data = event[1]
-		ft = self.plugin.windows['file_transfers']
-		self.plugin.remove_first_event(account, jid, typ)
+		ft = gajim.interface.windows['file_transfers']
+		gajim.interface.remove_first_event(account, jid, typ)
 		if typ == 'normal':
-			dialogs.SingleMessageWindow(self.plugin, account, jid,
+			dialogs.SingleMessageWindow(account, jid,
 				action = 'receive', from_whom = jid, subject = data[1],
 				message = data[0])
 			return True
@@ -1849,13 +1848,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				if self.open_event(account, jid, first_ev):
 					return
 
-			if self.plugin.windows[account]['chats'].has_key(jid):
-				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
+			if gajim.interface.windows[account]['chats'].has_key(jid):
+				gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
 			elif gajim.contacts[account].has_key(jid):
 				c = gajim.get_contact_instance_with_highest_priority(account, jid)
 				self.new_chat(c, account)
-				self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
-			self.plugin.windows[account]['chats'][jid].window.present()
+				gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
+			gajim.interface.windows[account]['chats'][jid].window.present()
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''
@@ -1975,13 +1974,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		model.set_value(iter, 5, False)
 		
 	def on_service_disco_menuitem_activate(self, widget, account):
-		if self.plugin.windows[account].has_key('disco'):
-			self.plugin.windows[account]['disco'].window.present()
+		if gajim.interface.windows[account].has_key('disco'):
+			gajim.interface.windows[account]['disco'].window.present()
 		else:
 			# c http://nkour.blogspot.com/2005/05/pythons-init-return-none-doesnt-return.html
 			try:
-				self.plugin.windows[account]['disco'] = \
-					config.ServiceDiscoveryWindow(self.plugin, account)
+				gajim.interface.windows[account]['disco'] = \
+					config.ServiceDiscoveryWindow(account)
 			except RuntimeError:
 				pass
 
@@ -2027,27 +2026,27 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				model[iter][1] = self.jabber_state_images[model[iter][2]]
 			iter = model.iter_next(iter)
 		# Update the systray
-		if self.plugin.systray_enabled:
-			self.plugin.systray.set_img()
+		if gajim.interface.systray_enabled:
+			gajim.interface.systray.set_img()
 		for account in gajim.connections:
 			# Update opened chat windows
-			for jid in self.plugin.windows[account]['chats']:
+			for jid in gajim.interface.windows[account]['chats']:
 				if jid != 'tabbed':
-					self.plugin.windows[account]['chats'][jid].set_state_image(jid)
+					gajim.interface.windows[account]['chats'][jid].set_state_image(jid)
 			# Update opened groupchat windows
-			for jid in self.plugin.windows[account]['gc']:
+			for jid in gajim.interface.windows[account]['gc']:
 				if jid != 'tabbed':
-					self.plugin.windows[account]['gc'][jid].update_state_images()
+					gajim.interface.windows[account]['gc'][jid].update_state_images()
 		self.update_status_comboxbox()
 
 	def repaint_themed_widgets(self):
 		"""Notify windows that contain themed widgets to repaint them"""
 		for account in gajim.connections:
 			# Update opened chat windows/tabs
-			for jid in self.plugin.windows[account]['chats']:
-				self.plugin.windows[account]['chats'][jid].repaint_colored_widgets()
-			for jid in self.plugin.windows[account]['gc']:
-				self.plugin.windows[account]['gc'][jid].repaint_colored_widgets()
+			for jid in gajim.interface.windows[account]['chats']:
+				gajim.interface.windows[account]['chats'][jid].repaint_colored_widgets()
+			for jid in gajim.interface.windows[account]['gc']:
+				gajim.interface.windows[account]['gc'][jid].repaint_colored_widgets()
 
 	def on_show_offline_contacts_menuitem_activate(self, widget):
 		'''when show offline option is changed:
@@ -2323,11 +2322,10 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			return True
 		return False
 
-	def __init__(self, plugin):
+	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
 		self.window = self.xml.get_widget('roster_window')
 		self.tree = self.xml.get_widget('roster_treeview')
-		self.plugin = plugin
 		self.nb_unread = 0
 		self.last_save_dir = None
 		self.editing_path = None  # path of row with cell in edit mode
@@ -2467,7 +2465,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			self.on_status_combobox_changed)
 
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
-		self.tooltip = tooltips.RosterTooltip(self.plugin)
+		self.tooltip = tooltips.RosterTooltip()
 		self.make_menu()
 		self.draw_roster()
 
@@ -2480,5 +2478,5 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.config.set('show_roster_on_startup', True)
 
 		if len(gajim.connections) == 0: # if we have no account
-			self.plugin.windows['wizard_window'] = \
-				config.FirstTimeWizardWindow(self.plugin)
+			gajim.interface.windows['wizard_window'] = \
+				config.FirstTimeWizardWindow()

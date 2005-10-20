@@ -49,7 +49,7 @@ OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 SERVICE = 'org.gajim.dbus'
 
 class Remote:
-	def __init__(self, plugin):
+	def __init__(self):
 		self.signal_object = None
 		if 'dbus' not in globals() and not os.name == 'nt':
 			print _('D-Bus python bindings are missing in this computer')
@@ -66,10 +66,10 @@ class Remote:
 		
 		if _version[1] >= 41:
 			service = dbus.service.BusName(SERVICE, bus=session_bus)
-			self.signal_object = SignalObject(service, plugin)
+			self.signal_object = SignalObject(service)
 		elif _version[1] <= 40 and _version[1] >= 20:
 			service=dbus.Service(SERVICE, session_bus)
-			self.signal_object = SignalObject(service, plugin)
+			self.signal_object = SignalObject(service)
 	
 	def set_enabled(self, status):
 		self.signal_object.disabled = not status
@@ -86,8 +86,7 @@ class SignalObject(DbusPrototype):
 	''' Local object definition for /org/gajim/dbus/RemoteObject. This doc must 
 	not be visible, because the clients can access only the remote object. '''
 	
-	def __init__(self, service, plugin):
-		self.plugin = plugin
+	def __init__(self, service):
 		self.first_show = True
 		self.vcard_account = None
 		self.disabled = False
@@ -162,7 +161,7 @@ class SignalObject(DbusPrototype):
 		
 		if connected_account:
 			if os.path.isfile(file_path): # is it file?
-				self.plugin.windows['file_transfers'].send_file(account, 
+				gajim.interface.windows['file_transfers'].send_file(account, 
 					contact, file_path)
 				return True
 		return False
@@ -220,7 +219,7 @@ class SignalObject(DbusPrototype):
 		first_connected_acct = None
 		for acct in accounts:
 			if gajim.connections[acct].connected > 1: # account is  online
-				if self.plugin.windows[acct]['chats'].has_key(jid):
+				if gajim.interface.windows[acct]['chats'].has_key(jid):
 					connected_account = acct
 					break
 				# jid is in roster
@@ -239,9 +238,9 @@ class SignalObject(DbusPrototype):
 			connected_account = first_connected_acct
 		
 		if connected_account:
-			self.plugin.roster.new_chat_from_jid(connected_account, jid)
+			gajim.interface.roster.new_chat_from_jid(connected_account, jid)
 			# preserve the 'steal focus preservation'
-			win = self.plugin.windows[connected_account]['chats'][jid].window
+			win = gajim.interface.windows[connected_account]['chats'][jid].window
 			if win.get_property('visible'):
 				win.window.focus()
 			return True
@@ -258,12 +257,12 @@ class SignalObject(DbusPrototype):
 			# FIXME: raise exception for bad status (dbus0.35)
 			return None
 		if account:
-			gobject.idle_add(self.plugin.roster.send_status, account, 
+			gobject.idle_add(gajim.interface.roster.send_status, account, 
 				status, message)
 		else:
 			# account not specified, so change the status of all accounts
 			for acc in gajim.contacts.keys():
-				gobject.idle_add(self.plugin.roster.send_status, acc, 
+				gobject.idle_add(gajim.interface.roster.send_status, acc, 
 					status, message)
 		return None
 
@@ -273,17 +272,17 @@ class SignalObject(DbusPrototype):
 			return
 		#FIXME: when systray is disabled this method does nothing.
 		#FIXME: show message from GC that refer to us (like systray does)
-		if len(self.plugin.systray.jids) != 0:
-			account = self.plugin.systray.jids[0][0]
-			jid = self.plugin.systray.jids[0][1]
-			acc = self.plugin.windows[account]
+		if len(gajim.interface.systray.jids) != 0:
+			account = gajim.interface.systray.jids[0][0]
+			jid = gajim.interface.systray.jids[0][1]
+			acc = gajim.interface.windows[account]
 			jid_tab = None
 			if acc['gc'].has_key(jid):
 				jid_tab = acc['gc'][jid]
 			elif acc['chats'].has_key(jid):
 				jid_tab = acc['chats'][jid]
 			else:
-				self.plugin.roster.new_chat(
+				gajim.interface.roster.new_chat(
 					gajim.contacts[account][jid][0], account)
 				jid_tab = acc['chats'][jid]
 			if jid_tab:
@@ -365,7 +364,7 @@ class SignalObject(DbusPrototype):
 		''' shows/hides the roster window '''
 		if self.disabled:
 			return
-		win = self.plugin.roster.window
+		win = gajim.interface.roster.window
 		if win.get_property('visible'):
 			gobject.idle_add(win.hide)
 		else:
@@ -392,7 +391,7 @@ class SignalObject(DbusPrototype):
 		
 	def prefs_store(self, *args):
 		try:
-			self.plugin.save_config()
+			gajim.interface.save_config()
 		except Exception, e:
 			return False
 		return True
@@ -426,7 +425,7 @@ class SignalObject(DbusPrototype):
 	def add_contact(self, *args):
 		[account] = self._get_real_arguments(args, 1)
 		if gajim.contacts.has_key(account):
-			AddNewContactWindow(self.plugin, account)
+			AddNewContactWindow(account)
 			return True
 		return False
 	
@@ -444,7 +443,7 @@ class SignalObject(DbusPrototype):
 			if gajim.contacts[account].has_key(jid):
 				gajim.connections[account].unsubscribe(jid)
 				for contact in gajim.contacts[account][jid]:
-					self.plugin.roster.remove_contact(contact, account)
+					gajim.interface.roster.remove_contact(contact, account)
 				del gajim.contacts[account][jid]
 				contact_exists = True
 		return contact_exists

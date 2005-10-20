@@ -52,8 +52,7 @@ class Systray:
 	This class is both base class (for systraywin32.py) and normal class
 	for trayicon in GNU/Linux'''
 	
-	def __init__(self, plugin):
-		self.plugin = plugin
+	def __init__(self):
 		self.jids = [] # Contain things like [account, jid, type_of_msg]
 		self.new_message_handler_id = None
 		self.t = None
@@ -68,7 +67,7 @@ class Systray:
 			state = 'message'
 		else:
 			state = self.status
-		image = self.plugin.roster.jabber_state_images[state]
+		image = gajim.interface.roster.jabber_state_images[state]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			self.img_tray.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
@@ -95,18 +94,18 @@ class Systray:
 		self.set_img()
 	
 	def start_chat(self, widget, account, jid):
-		if self.plugin.windows[account]['chats'].has_key(jid):
-			self.plugin.windows[account]['chats'][jid].window.present()
-			self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
+		if gajim.interface.windows[account]['chats'].has_key(jid):
+			gajim.interface.windows[account]['chats'][jid].window.present()
+			gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
 		elif gajim.contacts[account].has_key(jid):
-			self.plugin.roster.new_chat(
+			gajim.interface.roster.new_chat(
 				gajim.contacts[account][jid][0], account)
-			self.plugin.windows[account]['chats'][jid].set_active_tab(jid)
+			gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
 	
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When new message menuitem is activated:
 		call the NewMessageDialog class"""
-		dialogs.NewMessageDialog(self.plugin, account)
+		dialogs.NewMessageDialog(account)
 
 	def make_menu(self, event = None):
 		'''create chat with and new message (sub) menus/menuitems
@@ -130,7 +129,7 @@ class Systray:
 		if not iconset:
 			iconset = 'sun'
 		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
-		state_images = self.plugin.roster.load_iconset(path)
+		state_images = gajim.interface.roster.load_iconset(path)
 
 		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
 			uf_show = helpers.get_uf_show(show, use_mnemonic = True)
@@ -211,13 +210,13 @@ class Systray:
 		self.systray_context_menu.show_all()
 
 	def on_preferences_menuitem_activate(self, widget):
-		if self.plugin.windows['preferences'].window.get_property('visible'):
-			self.plugin.windows['preferences'].window.present()
+		if gajim.interface.windows['preferences'].window.get_property('visible'):
+			gajim.interface.windows['preferences'].window.present()
 		else:
-			self.plugin.windows['preferences'].window.show_all()
+			gajim.interface.windows['preferences'].window.show_all()
 
 	def on_quit_menuitem_activate(self, widget):	
-		self.plugin.roster.on_quit_menuitem_activate(widget)
+		gajim.interface.roster.on_quit_menuitem_activate(widget)
 
 	def make_groups_submenus_for_chat_with(self, account):
 		groups_menu = gtk.Menu()
@@ -252,7 +251,7 @@ class Systray:
 		return groups_menu
 
 	def on_left_click(self):
-		win = self.plugin.roster.window
+		win = gajim.interface.roster.window
 		if len(self.jids) == 0:
 			if win.get_property('visible'):
 				win.hide()
@@ -262,7 +261,7 @@ class Systray:
 			account = self.jids[0][0]
 			jid = self.jids[0][1]
 			typ = self.jids[0][2]
-			wins = self.plugin.windows[account]
+			wins = gajim.interface.windows[account]
 			w = None
 			if typ == 'gc':
 				if wins['gc'].has_key(jid):
@@ -271,7 +270,7 @@ class Systray:
 				if wins['chats'].has_key(jid):
 					w = wins['chats'][jid]
 				else:
-					self.plugin.roster.new_chat(
+					gajim.interface.roster.new_chat(
 						gajim.contacts[account][jid][0], account)
 					w = wins['chats'][jid]
 			elif typ == 'pm':
@@ -282,14 +281,14 @@ class Systray:
 					show = gajim.gc_contacts[account][room_jid][nick].show
 					c = Contact(jid = jid, name = nick, groups = ['none'],
 						show = show, ask = 'none')
-					self.plugin.roster.new_chat(c, account)
+					gajim.interface.roster.new_chat(c, account)
 					w = wins['chats'][jid]
 			elif typ in ('normal', 'file-request', 'file-request-error',
 				'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
 				# Get the first single message event
 				ev = gajim.get_first_event(account, jid, typ)
 				# Open the window
-				self.plugin.roster.open_event(account, jid, ev)
+				gajim.interface.roster.open_event(account, jid, ev)
 			if w:
 				w.set_active_tab(jid)
 				w.window.present()
@@ -297,7 +296,7 @@ class Systray:
 				w.scroll_to_end(tv)
 	
 	def on_middle_click(self):
-		win = self.plugin.roster.window
+		win = gajim.interface.roster.window
 		if win.is_active():
 			win.hide()
 		else:
@@ -315,10 +314,10 @@ class Systray:
 	def on_show_menuitem_activate(self, widget, show):
 		l = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'offline']
 		index = l.index(show)
-		self.plugin.roster.status_combobox.set_active(index)
+		gajim.interface.roster.status_combobox.set_active(index)
 
 	def on_change_status_message_activate(self, widget):
-		dlg = dialogs.ChangeStatusMessageDialog(self.plugin)
+		dlg = dialogs.ChangeStatusMessageDialog()
 		message = dlg.run()
 		if message is not None: # None if user press Cancel
 			accounts = gajim.connections.keys()
@@ -327,7 +326,7 @@ class Systray:
 					'sync_with_global_status'):
 					continue
 				show = gajim.SHOW_LIST[gajim.connections[acct].connected]
-				self.plugin.roster.send_status(acct, show, message)
+				gajim.interface.roster.send_status(acct, show, message)
 
 	def show_tooltip(self, widget):
 		position = widget.window.get_origin()
@@ -364,7 +363,7 @@ class Systray:
 			eb.connect('button-press-event', self.on_clicked)
 			eb.connect('motion-notify-event', self.on_tray_motion_notify_event)
 			eb.connect('leave-notify-event', self.on_tray_leave_notify_event)
-			self.tooltip = tooltips.NotificationAreaTooltip(self.plugin)
+			self.tooltip = tooltips.NotificationAreaTooltip()
 
 			self.img_tray = gtk.Image()
 			eb.add(self.img_tray)

@@ -43,10 +43,9 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 class EditGroupsDialog:
 	'''Class for the edit group dialog window'''
-	def __init__(self, user, account, plugin):
+	def __init__(self, user, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'edit_groups_dialog', APP)
 		self.dialog = self.xml.get_widget('edit_groups_dialog')
-		self.plugin = plugin
 		self.account = account
 		self.user = user
 		self.changes_made = False
@@ -70,8 +69,8 @@ class EditGroupsDialog:
 			self.dialog.destroy()
 
 	def update_contact(self):
-		self.plugin.roster.remove_contact(self.user, self.account)
-		self.plugin.roster.add_contact_to_roster(self.user.jid, self.account)
+		gajim.interface.roster.remove_contact(self.user, self.account)
+		gajim.interface.roster.add_contact_to_roster(self.user.jid, self.account)
 		gajim.connections[self.account].update_contact(self.user.jid,
 			self.user.name, self.user.groups)
 
@@ -204,7 +203,7 @@ class ChooseGPGKeyDialog:
 
 
 class ChangeStatusMessageDialog:
-	def __init__(self, plugin, show = None):
+	def __init__(self, show = None):
 		self.show = show
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
 		self.window = self.xml.get_widget('change_status_message_dialog')
@@ -269,8 +268,7 @@ class ChangeStatusMessageDialog:
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
-	def __init__(self, plugin, account, jid = None):
-		self.plugin = plugin
+	def __init__(self, account, jid = None):
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_new_contact_window', APP)
 		self.window = self.xml.get_widget('add_new_contact_window')
@@ -364,7 +362,7 @@ _('Contact names must be of the form "user@servername".')).get_response()
 		end_iter = message_buffer.get_end_iter()
 		message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
-		self.plugin.roster.req_sub(self, jid, message, self.account,
+		gajim.interface.roster.req_sub(self, jid, message, self.account,
 			group = group, pseudo = nickname)
 		if self.xml.get_widget('auto_authorize_checkbutton').get_active():
 			gajim.connections[self.account].send_authorization(jid)
@@ -568,10 +566,9 @@ ok_handler = None):
 	
 
 class SubscriptionRequestWindow:
-	def __init__(self, plugin, jid, text, account):
+	def __init__(self, jid, text, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'subscription_request_window', APP)
 		self.window = xml.get_widget('subscription_request_window')
-		self.plugin = plugin
 		self.jid = jid
 		self.account = account
 		if len(gajim.connections) >= 2:
@@ -592,17 +589,17 @@ class SubscriptionRequestWindow:
 		gajim.connections[self.account].send_authorization(self.jid)
 		self.window.destroy()
 		if not gajim.contacts[self.account].has_key(self.jid):
-			AddNewContactWindow(self.plugin, self.account, self.jid)
+			AddNewContactWindow(self.account, self.jid)
 
 	def on_contact_info_button_clicked(self, widget):
 		'''ask vcard'''
-		if self.plugin.windows[self.account]['infos'].has_key(self.jid):
-			self.plugin.windows[self.account]['infos'][self.jid].window.present()
+		if gajim.interface.windows[self.account]['infos'].has_key(self.jid):
+			gajim.interface.windows[self.account]['infos'][self.jid].window.present()
 		else:
-			self.plugin.windows[self.account]['infos'][self.jid] = \
-				VcardWindow(self.jid, self.plugin, self.account, True)
+			gajim.interface.windows[self.account]['infos'][self.jid] = \
+				VcardWindow(self.jid, self.account, True)
 			#remove the publish / retrieve buttons
-			vcard_xml = self.plugin.windows[self.account]['infos'][self.jid].xml
+			vcard_xml = gajim.interface.windows[self.account]['infos'][self.jid].xml
 			hbuttonbox = vcard_xml.get_widget('information_hbuttonbox')
 			children = hbuttonbox.get_children()
 			hbuttonbox.remove(children[0])
@@ -616,8 +613,7 @@ class SubscriptionRequestWindow:
 		self.window.destroy()
 
 class JoinGroupchatWindow:
-	def __init__(self, plugin, account, server = '', room = '', nick = ''):
-		self.plugin = plugin
+	def __init__(self, account, server = '', room = '', nick = ''):
 		self.account = account
 		if nick == '':
 			nick = gajim.nicks[self.account]
@@ -632,7 +628,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		self.xml.get_widget('room_entry').set_text(room)
 		self.xml.get_widget('nickname_entry').set_text(nick)
 		self.xml.signal_autoconnect(self)
-		self.plugin.windows[account]['join_gc'] = self #now add us to open windows
+		gajim.interface.windows[account]['join_gc'] = self #now add us to open windows
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
@@ -659,7 +655,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 	def on_join_groupchat_window_destroy(self, widget):
 		'''close window'''
 		# remove us from open windows
-		del self.plugin.windows[self.account]['join_gc']
+		del gajim.interface.windows[self.account]['join_gc']
 
 	def on_join_groupchat_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
@@ -690,13 +686,12 @@ _('You can not join a group chat unless you are connected.')).get_response()
 			self.recently_groupchat = self.recently_groupchat[0:10]
 		gajim.config.set('recently_groupchat', ' '.join(self.recently_groupchat))
 		
-		self.plugin.roster.join_gc_room(self.account, jid, nickname, password)
+		gajim.interface.roster.join_gc_room(self.account, jid, nickname, password)
 
 		self.window.destroy()
 
 class NewMessageDialog:
-	def __init__(self, plugin, account):
-		self.plugin = plugin
+	def __init__(self, account):
 		self.account = account
 		
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
@@ -724,16 +719,15 @@ class NewMessageDialog:
 	_('Contact ID must be of the form "username@servername".')).get_response()
 			return
 
-		self.plugin.roster.new_chat_from_jid(self.account, jid)
+		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
 class ChangePasswordDialog:
-	def __init__(self, plugin, account):
+	def __init__(self, account):
 		# 'account' can be None if we are about to create our first one
 		if not account or gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
 _('Without a connection, you can not change your password.')).get_response()
 			raise RuntimeError, 'You are not connected to the server'
-		self.plugin = plugin
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_password_dialog', APP)
 		self.dialog = self.xml.get_widget('change_password_dialog')
@@ -767,8 +761,7 @@ _('Without a connection, you can not change your password.')).get_response()
 
 
 class PopupNotificationWindow:
-	def __init__(self, plugin, event_type, jid, account, msg_type = '', file_props = None):
-		self.plugin = plugin
+	def __init__(self, event_type, jid, account, msg_type = '', file_props = None):
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
@@ -849,9 +842,9 @@ class PopupNotificationWindow:
 			event_description_label.set_text(txt)
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
-		self.plugin.roster.popups_notification_height += self.window_height
+		gajim.interface.roster.popups_notification_height += self.window_height
 		self.window.move(gtk.gdk.screen_width() - window_width,
-			gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
+			gtk.gdk.screen_height() - gajim.interface.roster.popups_notification_height)
 
 		xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -865,20 +858,20 @@ class PopupNotificationWindow:
 
 	def adjust_height_and_move_popup_notification_windows(self):
 		#remove
-		self.plugin.roster.popups_notification_height -= self.window_height
+		gajim.interface.roster.popups_notification_height -= self.window_height
 		self.window.destroy()
 
-		if len(self.plugin.roster.popup_notification_windows) > 0:
+		if len(gajim.interface.roster.popup_notification_windows) > 0:
 			# we want to remove the first window added in the list
-			self.plugin.roster.popup_notification_windows.pop(0) # remove 1st item
+			gajim.interface.roster.popup_notification_windows.pop(0) # remove 1st item
 		
 		# move the rest of popup windows
-		self.plugin.roster.popups_notification_height = 0
-		for window_instance in self.plugin.roster.popup_notification_windows:
+		gajim.interface.roster.popups_notification_height = 0
+		for window_instance in gajim.interface.roster.popup_notification_windows:
 			window_width, window_height = window_instance.window.get_size()
-			self.plugin.roster.popups_notification_height += window_height
+			gajim.interface.roster.popups_notification_height += window_height
 			window_instance.window.move(gtk.gdk.screen_width() - window_width,
-		gtk.gdk.screen_height() - self.plugin.roster.popups_notification_height)
+		gtk.gdk.screen_height() - gajim.interface.roster.popups_notification_height)
 
 	def on_popup_notification_window_button_press_event(self, widget, event):
 		# use Contact class, new_chat expects it that way
@@ -903,23 +896,23 @@ class PopupNotificationWindow:
 						groups = [_('not in the roster')], show = 'not in the roster',
 						status = _('not in the roster'), sub = 'none', keyID = keyID)
 					gajim.contacts[self.account][self.jid] = [contact]
-					self.plugin.roster.add_contact_to_roster(contact.jid,
+					gajim.interface.roster.add_contact_to_roster(contact.jid,
 						self.account)
 
 		if self.msg_type == 'pm': # It's a private message
-			self.plugin.roster.new_chat(contact, self.account)
-			chats_window = self.plugin.windows[self.account]['chats'][self.jid]
+			gajim.interface.roster.new_chat(contact, self.account)
+			chats_window = gajim.interface.windows[self.account]['chats'][self.jid]
 			chats_window.set_active_tab(self.jid)
 			chats_window.window.present()
 		elif self.msg_type in ('normal', 'file-request', 'file-request-error',
 			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
 			# Get the first single message event
 			ev = gajim.get_first_event(self.account, self.jid, self.msg_type)
-			self.plugin.roster.open_event(self.account, self.jid, ev)
+			gajim.interface.roster.open_event(self.account, self.jid, ev)
 
 		else: # 'chat'
-			self.plugin.roster.new_chat(contact, self.account)
-			chats_window = self.plugin.windows[self.account]['chats'][self.jid]
+			gajim.interface.roster.new_chat(contact, self.account)
+			chats_window = gajim.interface.windows[self.account]['chats'][self.jid]
 			chats_window.set_active_tab(self.jid)
 			chats_window.window.present()
 
@@ -929,9 +922,8 @@ class PopupNotificationWindow:
 class SingleMessageWindow:
 	'''SingleMessageWindow can send or show a received
 	singled message depending on action argument'''
-	def __init__(self, plugin, account, to = '', action = '', from_whom = '',
+	def __init__(self, account, to = '', action = '', from_whom = '',
 	subject = '', message = ''):
-		self.plugin = plugin
 		self.account = account
 		self.action = action
 
@@ -1086,7 +1078,7 @@ class SingleMessageWindow:
 		self.subject = _('RE: %s') % self.subject
 		self.message = _('\n\n\n== Original Message ==\n%s') % self.message
 		self.window.destroy()
-		SingleMessageWindow(self.plugin, self.account, to = self.from_whom,
+		SingleMessageWindow(self.account, to = self.from_whom,
 			action = 'send',	from_whom = self.from_whom, subject = self.subject,
 			message = self.message)
 
@@ -1101,8 +1093,7 @@ class SingleMessageWindow:
 			self.window.destroy()
 
 class XMLConsoleWindow:
-	def __init__(self, plugin, account):
-		self.plugin = plugin
+	def __init__(self, account):
 		self.account = account
 		
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'xml_console_window', APP)
@@ -1206,7 +1197,7 @@ class XMLConsoleWindow:
 			self.input_textview.grab_focus()
 
 class InvitationReceivedDialog:
-	def __init__(self, plugin, account, room_jid, contact_jid, password = None, comment = None):
+	def __init__(self, account, room_jid, contact_jid, password = None, comment = None):
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'invitation_received_dialog', APP)
 		dialog = xml.get_widget('invitation_received_dialog')
@@ -1223,5 +1214,5 @@ class InvitationReceivedDialog:
 		dialog.destroy()
 		if response == gtk.RESPONSE_YES:
 			room, server = gajim.get_room_name_and_server_from_room_jid(room_jid)
-			JoinGroupchatWindow(plugin, account, server = server, room = room)
+			JoinGroupchatWindow(account, server = server, room = room)
 			

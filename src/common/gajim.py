@@ -24,6 +24,7 @@ import mutex
 import common.config
 import common.logger
 
+interface = None # The actual interface (the gtk one for the moment)
 version = '0.9'
 config = common.config.Config()
 connections = {}

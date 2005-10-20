@@ -526,7 +526,7 @@ class Interface:
 		
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
-		dialogs.SubscriptionRequestWindow(self, array[0], array[1], account)
+		dialogs.SubscriptionRequestWindow(array[0], array[1], account)
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Subscribe', (account, array))
 
@@ -577,7 +577,7 @@ class Interface:
 	def handle_event_register_agent_info(self, account, array):
 		#('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
 		if array[1].has_key('instructions'):
-			config.ServiceRegistrationWindow(array[0], array[1], self, account,
+			config.ServiceRegistrationWindow(array[0], array[1], account,
 				array[2])
 		else:
 			dialogs.ErrorDialog(_('Contact with "%s" cannot be established'\
@@ -606,7 +606,7 @@ class Interface:
 		if self.windows.has_key('account_modification'):
 			self.windows['account_modification'].account_is_ok(array[0])
 		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
-		self.windows[name]['xml_console'] = dialogs.XMLConsoleWindow(self, name)
+		self.windows[name]['xml_console'] = dialogs.XMLConsoleWindow(name)
 		gajim.awaiting_events[name] = {}
 		# disconnect from server - our status in roster is offline
 		gajim.connections[name].connected = 1
@@ -633,7 +633,7 @@ class Interface:
 			self.remote.raise_signal('NewAccount', (account, array))
 
 	def handle_event_quit(self, p1, p2):
-		self.roster.quit_gtkgui_plugin()
+		self.roster.quit_gtkgui_interface()
 
 	def handle_event_myvcard(self, account, array):
 		nick = ''
@@ -732,11 +732,11 @@ class Interface:
 		jid = array[0].split('/')[0]
 		if not self.windows[account]['gc_config'].has_key(jid):
 			self.windows[account]['gc_config'][jid] = \
-			config.GroupchatConfigWindow(self, account, jid, array[1])
+			config.GroupchatConfigWindow(account, jid, array[1])
 	
 	def handle_event_gc_invitation(self, account, array):
 		#('GC_INVITATION', (room_jid, jid_from, reason, password))
-		dialogs.InvitationReceivedDialog(self, account, array[0], array[1],
+		dialogs.InvitationReceivedDialog(account, array[0], array[1],
 			array[3], array[2])
 	
 	def handle_event_bad_passphrase(self, account, array):
@@ -910,7 +910,7 @@ class Interface:
 		if gajim.config.get('notify_on_file_complete') and \
 			gajim.config.get('autopopupaway') or \
 			gajim.connections[account].connected in (2, 3):
-			instance = dialogs.PopupNotificationWindow(self, event_type, 
+			instance = dialogs.PopupNotificationWindow(event_type, 
 				jid, account, msg_type, file_props)
 			self.roster.popup_notification_windows.append(instance)
 
@@ -1192,7 +1192,7 @@ class Interface:
 			import remote_control
 		if not hasattr(self, 'remote') or not self.remote:
 			try:
-				self.remote = remote_control.Remote(self)
+				self.remote = remote_control.Remote()
 			except remote_control.DbusNotSupported:
 				self.remote = None
 				return False
@@ -1212,6 +1212,7 @@ class Interface:
 			self.remote = None
 
 	def __init__(self):
+		gajim.interface = self
 		self.default_values = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
@@ -1292,7 +1293,7 @@ class Interface:
 			gajim.status_before_autoaway[a] = ''
 			gajim.events_for_ui[a] = []
 
-		self.roster = roster_window.RosterWindow(self)
+		self.roster = roster_window.RosterWindow()
 		if gajim.config.get('use_dbus'):
 			self.enable_dbus()
 		else:
@@ -1316,7 +1317,7 @@ class Interface:
 				pass
 			else:
 				self.systray_capabilities = True
-				self.systray = systraywin32.SystrayWin32(self)
+				self.systray = systraywin32.SystrayWin32()
 		else:
 			try:
 				import egg.trayicon # use gnomepythonextras trayicon
@@ -1327,28 +1328,28 @@ class Interface:
 					pass
 				else:
 					self.systray_capabilities = True
-					self.systray = systray.Systray(self)
+					self.systray = systray.Systray()
 			else:
 				self.systray_capabilities = True
-				self.systray = systray.Systray(self)
+				self.systray = systray.Systray()
 
 		if self.systray_capabilities and gajim.config.get('trayicon'):
 			self.show_systray()
 		if gajim.config.get('check_for_new_version'):
-			check_for_new_version.Check_for_new_version_dialog(self)
+			check_for_new_version.Check_for_new_version_dialog()
 
 		self.init_regexp()
 		
 		# get instances for windows/dialogs that will show_all()/hide()
-		self.windows['file_transfers'] = dialogs.FileTransfersWindow(self)
-		self.windows['preferences'] = config.PreferencesWindow(self)
+		self.windows['file_transfers'] = dialogs.FileTransfersWindow()
+		self.windows['preferences'] = config.PreferencesWindow()
 		self.windows['add_remove_emoticons'] = \
-			config.ManageEmoticonsWindow(self)
+			config.ManageEmoticonsWindow()
 		self.windows['roster'] = self.roster
 		
 		for account in gajim.connections:
 			self.windows[account]['xml_console'] = \
-				dialogs.XMLConsoleWindow(self, account)
+				dialogs.XMLConsoleWindow(account)
 			self.register_handlers(gajim.connections[account])
 
 		gobject.timeout_add(100, self.autoconnect)

@@ -173,8 +173,7 @@ class StatusTable:
 	
 class NotificationAreaTooltip(BaseTooltip, StatusTable):
 	''' Tooltip that is shown in the notification area '''
-	def __init__(self, plugin):
-		self.plugin = plugin
+	def __init__(self):
 		BaseTooltip.__init__(self)
 		StatusTable.__init__(self)
 
@@ -204,14 +203,14 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				accounts.append({'name': account, 'status_line': single_line, 
 						'show': status, 'message': message})
 
-		unread_chat = self.plugin.roster.nb_unread
+		unread_chat = gajim.interface.roster.nb_unread
 		unread_single_chat = 0
 		unread_gc = 0
 		unread_pm = 0
 
 		for acct in gajim.connections:
 			# we count unread chat/pm messages
-			chat_wins = self.plugin.windows[acct]['chats']
+			chat_wins = gajim.interface.windows[acct]['chats']
 			for jid in chat_wins:
 				if jid != 'tabbed':
 					if gajim.contacts[acct].has_key(jid):
@@ -219,7 +218,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 					else:
 						unread_pm += chat_wins[jid].nb_unread[jid]
 			# we count unread gc/pm messages
-			gc_wins = self.plugin.windows[acct]['gc']
+			gc_wins = gajim.interface.windows[acct]['gc']
 			for jid in gc_wins:
 				if jid != 'tabbed':
 					pm_msgs = gc_wins[jid].get_specific_unread(jid)
@@ -291,9 +290,8 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 
 class GCTooltip(BaseTooltip, StatusTable):
 	''' Tooltip that is shown in the GC treeview '''
-	def __init__(self, plugin):
+	def __init__(self):
 		self.account = None
-		self.plugin = plugin
 
 		self.text_lable = gtk.Label()
 		self.text_lable.set_line_wrap(True)
@@ -339,9 +337,8 @@ class GCTooltip(BaseTooltip, StatusTable):
 
 class RosterTooltip(BaseTooltip, StatusTable):
 	''' Tooltip that is shown in the roster treeview '''
-	def __init__(self, plugin):
+	def __init__(self):
 		self.account = None
-		self.plugin = plugin
 		
 		self.image = gtk.Image()
 		self.image.set_alignment(0., 0.)

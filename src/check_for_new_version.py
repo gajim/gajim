@@ -32,8 +32,7 @@ gtk.glade.textdomain(APP)
 GTKGUI_GLADE='gtkgui.glade'
 
 class Check_for_new_version_dialog:
-	def __init__(self, plugin):
-		self.plugin = plugin
+	def __init__(self):
 		try:
 			self.check_for_new_version()
 		except:

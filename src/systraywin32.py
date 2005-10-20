@@ -214,10 +214,9 @@ class NotifyIcon:
 
 
 class SystrayWin32(systray.Systray):
-	def __init__(self, plugin):
+	def __init__(self):
 		# Note: gtk window must be realized before installing extensions.
-		systray.Systray.__init__(self, plugin)
-		self.plugin = plugin
+		systray.Systray.__init__(self)
 		self.jids = []
 		self.status = 'offline'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
@@ -226,14 +225,14 @@ class SystrayWin32(systray.Systray):
 		
 		self.tray_ico_imgs = self.load_icos()
 		
-		#self.plugin.roster.window.realize()
-		#self.plugin.roster.window.show_all()
+		#gajim.interface.roster.window.realize()
+		#gajim.interface.roster.window.show_all()
 		w = gtk.Window() # just a window to pass
 		w.realize() # realize it so gtk window exists
 		self.systray_winapi = SystrayWINAPI(w)
 		
 		# this fails if you move the window
-		#self.systray_winapi = SystrayWINAPI(self.plugin.roster.window)
+		#self.systray_winapi = SystrayWINAPI(gajim.interface.roster.window)
 		
 
 		self.xml.signal_autoconnect(self)
@@ -266,11 +265,11 @@ class SystrayWin32(systray.Systray):
 	def add_jid(self, jid, account, typ):
 		systray.Systray.add_jid(self, jid, account, typ)
 
-		nb = self.plugin.roster.nb_unread
+		nb = gajim.interface.roster.nb_unread
 		for acct in gajim.connections:
 			# in chat / groupchat windows
 			for kind in ['chats', 'gc']:
-				jids = self.plugin.windows[acct][kind]
+				jids = gajim.interface.windows[acct][kind]
 				for jid in jids:
 					if jid != 'tabbed':
 						nb += jids[jid].nb_unread[jid]
@@ -285,13 +284,13 @@ class SystrayWin32(systray.Systray):
 	def remove_jid(self, jid, account, typ):
 		systray.Systray.remove_jid(self, jid, account, typ)
 
-		nb = self.plugin.roster.nb_unread
+		nb = gajim.interface.roster.nb_unread
 		for acct in gajim.connections:
 			# in chat / groupchat windows
 			for kind in ['chats', 'gc']:
-				for jid in self.plugin.windows[acct][kind]:
+				for jid in gajim.interface.windows[acct][kind]:
 					if jid != 'tabbed':
-						nb += self.plugin.windows[acct][kind][jid].nb_unread[jid]
+						nb += gajim.interface.windows[acct][kind][jid].nb_unread[jid]
 		
 		if nb > 0:
 			text = i18n.ngettext(

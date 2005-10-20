@@ -51,9 +51,8 @@ C_SID = 6
 
 
 class FileTransfersWindow:
-	def __init__(self, plugin):
+	def __init__(self):
 		self.files_props = {'r' : {}, 's': {}}
-		self.plugin = plugin
 		self.height_diff = 0
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_window', APP)
 		self.window = self.xml.get_widget('file_transfers_window')

@@ -42,7 +42,7 @@ GTKGUI_GLADE = 'gtkgui.glade'
 class VcardWindow:
 	'''Class for contact's information window'''
 
-	def __init__(self, contact, plugin, account, vcard = False):
+	def __init__(self, contact, account, vcard = False):
 		#the contact variable is the jid if vcard is true
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
 		self.window = self.xml.get_widget('vcard_information_window')
@@ -53,7 +53,6 @@ class VcardWindow:
 		self.publish_button.set_no_show_all(True)
 		self.retrieve_button.set_no_show_all(True)
 		
-		self.plugin = plugin
 		self.contact = contact #don't use it if vcard is true
 		self.account = account
 		self.vcard = vcard
@@ -74,7 +73,7 @@ class VcardWindow:
 		self.window.show_all()
 
 	def on_vcard_information_window_destroy(self, widget = None):
-		del self.plugin.windows[self.account]['infos'][self.jid]
+		del gajim.interface.windows[self.account]['infos'][self.jid]
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
@@ -90,8 +89,9 @@ class VcardWindow:
 		new_name = name_entry.get_text().decode('utf-8')
 		if new_name != self.contact.name and new_name != '':
 			self.contact.name = new_name
-			for i in self.plugin.roster.get_contact_iter(self.contact.jid, self.account):
-				self.plugin.roster.tree.get_model().set_value(i, 1, new_name)
+			for i in gajim.interface.roster.get_contact_iter(self.contact.jid,
+				self.account):
+				gajim.interface.roster.tree.get_model().set_value(i, 1, new_name)
 			gajim.connections[self.account].update_contact(self.contact.jid,
 				self.contact.name, self.contact.groups)
 		#log history ?

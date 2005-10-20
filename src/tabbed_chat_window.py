@@ -43,10 +43,10 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 class TabbedChatWindow(chat.Chat):
 	'''Class for tabbed chat window'''
-	def __init__(self, contact, plugin, account):
+	def __init__(self, contact, account):
 		# we check that on opening new windows
 		self.always_compact_view = gajim.config.get('always_compact_view_chat')
-		chat.Chat.__init__(self, plugin, account, 'tabbed_chat_window')
+		chat.Chat.__init__(self, account, 'tabbed_chat_window')
 		self.contacts = {}
 		# keep check for possible paused timeouts per jid
 		self.possible_paused_timeout_id = {}
@@ -123,14 +123,14 @@ class TabbedChatWindow(chat.Chat):
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 				if os.path.isfile(path): # is it file?
-					self.plugin.windows['file_transfers'].send_file(self.account,
+					gajim.interface.windows['file_transfers'].send_file(self.account,
 						contact, path)
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''we enter the eventbox area so we under conditions add a timeout
 		to show a bigger avatar after 0.5 sec'''
 		jid = self.get_active_jid()
-		avatar_pixbuf = self.plugin.avatar_pixbufs[jid]
+		avatar_pixbuf = gajim.interface.avatar_pixbufs[jid]
 		avatar_w = avatar_pixbuf.get_width()
 		avatar_h = avatar_pixbuf.get_height()
 		
@@ -154,7 +154,7 @@ class TabbedChatWindow(chat.Chat):
 		'''resizes the avatar, if needed, so it has at max half the screen size
 		and shows it'''
 		jid = self.get_active_jid()
-		avatar_pixbuf = self.plugin.avatar_pixbufs[jid]
+		avatar_pixbuf = gajim.interface.avatar_pixbufs[jid]
 		screen_w = gtk.gdk.screen_width()
 		screen_h = gtk.gdk.screen_height()
 		avatar_w = avatar_pixbuf.get_width()
@@ -289,11 +289,11 @@ class TabbedChatWindow(chat.Chat):
 		if not xml:
 			return
 		
-		if self.plugin.avatar_pixbufs[jid] is None:
+		if gajim.interface.avatar_pixbufs[jid] is None:
 			# contact has no avatar
 			scaled_buf = None
 		else:
-			pixbuf = self.plugin.avatar_pixbufs[jid]
+			pixbuf = gajim.interface.avatar_pixbufs[jid]
 
 			# resize to a  width / height for the avatar not to have distortion
 			# (keep aspect ratio)
@@ -330,7 +330,7 @@ class TabbedChatWindow(chat.Chat):
 		child = self.childs[jid]
 		hb = self.notebook.get_tab_label(child).get_children()[0]
 		status_image = hb.get_children()[0]
-		state_images = self.plugin.roster.get_appropriate_state_images(jid)
+		state_images = gajim.interface.roster.get_appropriate_state_images(jid)
 
 		# Set banner image
 		banner_image = state_images[show]
@@ -379,7 +379,7 @@ class TabbedChatWindow(chat.Chat):
 			gajim.config.set('chat-height', height)
 
 	def on_tabbed_chat_window_destroy(self, widget):
-		#clean self.plugin.windows[self.account]['chats']
+		#clean gajim.interface.windows[self.account]['chats']
 		chat.Chat.on_window_destroy(self, widget, 'chats')
 
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
@@ -393,12 +393,12 @@ class TabbedChatWindow(chat.Chat):
 	def on_send_file_menuitem_activate(self, widget):
 		jid = self.get_active_jid()
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
-		self.plugin.windows['file_transfers'].show_file_send_request( 
+		gajim.interface.windows['file_transfers'].show_file_send_request( 
 			self.account, contact)
 
 	def on_add_to_roster_menuitem_activate(self, widget):
 		jid = self.get_active_jid()
-		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
+		dialogs.AddNewContactWindow(self.account, jid)
 
 	def on_send_button_clicked(self, widget):
 		'''When send button is pressed: send the current message'''
@@ -439,7 +439,7 @@ class TabbedChatWindow(chat.Chat):
 		
 		# this is to prove cache code works:
 		# should we ask vcard? (only the first time we should ask)
-		if not self.plugin.avatar_pixbufs.has_key(contact.jid):
+		if not gajim.interface.avatar_pixbufs.has_key(contact.jid):
 			# it's the first time, so we should ask vcard
 			gajim.connections[self.account].request_vcard(contact.jid)
 			#please do not remove this commented print until I'm done with showing
@@ -780,7 +780,7 @@ class TabbedChatWindow(chat.Chat):
 	def on_contact_information_menuitem_clicked(self, widget):
 		jid = self.get_active_jid()
 		contact = self.contacts[jid]
-		self.plugin.roster.on_info(widget, contact, self.account)
+		gajim.interface.roster.on_info(widget, contact, self.account)
 
 	def read_queue(self, jid):
 		'''read queue and print messages containted in it'''
@@ -789,7 +789,7 @@ class TabbedChatWindow(chat.Chat):
 		# Is it a pm ?
 		is_pm = False
 		room_jid = jid.split('/', 1)[0]
-		gcs = self.plugin.windows[self.account]['gc']
+		gcs = gajim.interface.windows[self.account]['gc']
 		if gcs.has_key(room_jid):
 			is_pm = True
 		events_to_keep = []
@@ -811,12 +811,12 @@ class TabbedChatWindow(chat.Chat):
 			if is_pm:
 				gcs[room_jid].nb_unread[room_jid] -= 1
 			else:
-				self.plugin.roster.nb_unread -= 1
+				gajim.interface.roster.nb_unread -= 1
 
 		if is_pm:
 			gcs[room_jid].show_title()
 		else:
-			self.plugin.roster.show_title()
+			gajim.interface.roster.show_title()
 		# Keep only non-messages events
 		if len(events_to_keep):
 			gajim.awaiting_events[self.account][jid] = events_to_keep
@@ -825,19 +825,19 @@ class TabbedChatWindow(chat.Chat):
 		typ = 'chat' # Is it a normal chat or a pm ?
 		# reset to status image in gc if it is a pm
 		room_jid = jid.split('/', 1)[0]
-		gcs = self.plugin.windows[self.account]['gc']
+		gcs = gajim.interface.windows[self.account]['gc']
 		if gcs.has_key(room_jid):
 			gcs[room_jid].update_state_images()
 			typ = 'pm'
 
-		self.plugin.roster.draw_contact(jid, self.account)
-		if self.plugin.systray_enabled:
-			self.plugin.systray.remove_jid(jid, self.account, typ)
+		gajim.interface.roster.draw_contact(jid, self.account)
+		if gajim.interface.systray_enabled:
+			gajim.interface.systray.remove_jid(jid, self.account, typ)
 		showOffline = gajim.config.get('showoffline')
 		if (contact.show == 'offline' or contact.show == 'error') and \
 			not showOffline:
 			if len(gajim.contacts[self.account][jid]) == 1:
-				self.plugin.roster.really_remove_contact(contact, self.account)
+				gajim.interface.roster.really_remove_contact(contact, self.account)
 
 	def print_conversation(self, text, jid, frm = '', tim = None,
 		encrypted = False, subject = None):

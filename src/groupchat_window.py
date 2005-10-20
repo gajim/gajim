@@ -56,10 +56,10 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 class GroupchatWindow(chat.Chat):
 	'''Class for Groupchat window'''
-	def __init__(self, room_jid, nick, plugin, account):
+	def __init__(self, room_jid, nick, account):
 		# we check that on opening new windows
 		self.always_compact_view = gajim.config.get('always_compact_view_gc')
-		chat.Chat.__init__(self, plugin, account, 'groupchat_window')
+		chat.Chat.__init__(self, account, 'groupchat_window')
 		
 		# alphanum sorted
 		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact', 'help', 'invite',
@@ -82,7 +82,8 @@ class GroupchatWindow(chat.Chat):
 		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 		self.new_room(room_jid, nick)
 		self.show_title()
-		self.tooltip = tooltips.GCTooltip(plugin)
+		self.tooltip = tooltips.GCTooltip()
+		self.line_tooltip = tooltips.BaseTooltip()
 		
 		
 		# NOTE: if it not a window event, connect in new_room function
@@ -351,7 +352,7 @@ class GroupchatWindow(chat.Chat):
 	
 	def add_contact_to_roster(self, room_jid, nick, show, role, jid, affiliation, status):
 		model = self.list_treeview[room_jid].get_model()
-		image = self.plugin.roster.jabber_state_images[show]
+		image = gajim.interface.roster.jabber_state_images[show]
 		resource = ''
 		role_name = helpers.get_uf_role(role, plural = True)
 
@@ -365,7 +366,7 @@ class GroupchatWindow(chat.Chat):
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(self.plugin.roster.jabber_state_images['closed'], 'role', role,
+				(gajim.interface.roster.jabber_state_images['closed'], 'role', role,
 				'<b>%s</b>' % role_name))
 		iter = model.append(role_iter, (image, 'contact', nick,
 			self.escape(nick)))
@@ -385,7 +386,7 @@ class GroupchatWindow(chat.Chat):
 			return 'visitor'
 
 	def update_state_images(self):
-		roster = self.plugin.roster
+		roster = gajim.interface.roster
 		for room_jid in self.list_treeview:
 			model = self.list_treeview[room_jid].get_model()
 			role_iter = model.get_iter_root()
@@ -472,7 +473,7 @@ class GroupchatWindow(chat.Chat):
 					c.show = show
 					c.affiliation = affiliation
 					c.status = status
-					roster = self.plugin.roster
+					roster = gajim.interface.roster
 					state_images = roster.get_appropriate_state_images(jid)
 					image = state_images[show]
 					model[iter][C_IMG] = image
@@ -567,7 +568,7 @@ class GroupchatWindow(chat.Chat):
 		gajim.connections[self.account].bookmarks.append(bm)
 		gajim.connections[self.account].store_bookmarks()
 
-		self.plugin.roster.make_menu()
+		gajim.interface.roster.make_menu()
 
 		dialogs.InformationDialog(
 				_('Bookmark has been added successfully'),
@@ -810,14 +811,13 @@ class GroupchatWindow(chat.Chat):
 								server = servernick
 								nick = ''
 							#join_gc window is needed in order to provide for password entry.
-							if self.plugin.windows[self.account].has_key('join_gc'):
-								self.plugin.windows[self.account]['join_gc'].\
+							if gajim.interface.windows[self.account].has_key('join_gc'):
+								gajim.interface.windows[self.account]['join_gc'].\
 									window.present()
 							else:
 								try:
-									self.plugin.windows[self.account]['join_gc'] =\
-										dialogs.JoinGroupchatWindow(self.plugin,
-											self.account,
+									gajim.interface.windows[self.account]['join_gc'] =\
+										dialogs.JoinGroupchatWindow(self.account,
 											server = server, room = room, nick = nick)
 								except RuntimeError:
 									pass
@@ -1090,15 +1090,15 @@ current room topic.') % command, room_jid)
 		else:
 			fjid = gajim.construct_fjid(room_jid, nick)
 			jid = fjid
-		if self.plugin.windows[self.account]['infos'].has_key(jid):
-			self.plugin.windows[self.account]['infos'][jid].window.present()
+		if gajim.interface.windows[self.account]['infos'].has_key(jid):
+			gajim.interface.windows[self.account]['infos'][jid].window.present()
 		else:
 			# we copy contact because c.jid must contain the fakeJid for vcard
 			c2 = Contact(jid = jid, name = c.name, groups = c.groups, 
 				show = c.show, status = c.status, sub = c.sub, 
 				resource = c.resource, role = c.role, affiliation = c.affiliation)
-			self.plugin.windows[self.account]['infos'][jid] = \
-				dialogs.VcardWindow(c2, self.plugin, self.account, False)
+			gajim.interface.windows[self.account]['infos'][jid] = \
+				dialogs.VcardWindow(c2, self.account, False)
 
 	def on_history(self, widget, room_jid, nick):
 		c = gajim.gc_contacts[self.account][room_jid][nick]
@@ -1112,7 +1112,7 @@ current room topic.') % command, room_jid)
 		self.on_history_menuitem_clicked(jid = jid)
 
 	def on_add_to_roster(self, widget, jid):
-		dialogs.AddNewContactWindow(self.plugin, self.account, jid)
+		dialogs.AddNewContactWindow(self.account, jid)
 
 	def on_send_pm(self, widget=None, model=None, iter=None, nick=None, msg=None):
 		'''opens a chat window and msg is not None sends private message to a 
@@ -1121,18 +1121,18 @@ current room topic.') % command, room_jid)
 			nick = model[iter][C_NICK].decode('utf-8')
 		room_jid = self.get_active_jid()
 		fjid = gajim.construct_fjid(room_jid, nick) # 'fake' jid
-		if not self.plugin.windows[self.account]['chats'].has_key(fjid):
+		if not gajim.interface.windows[self.account]['chats'].has_key(fjid):
 			show = gajim.gc_contacts[self.account][room_jid][nick].show
 			u = Contact(jid = fjid, name =  nick, groups = ['none'], show = show,
 				sub = 'none')
-			self.plugin.roster.new_chat(u, self.account)
+			gajim.interface.roster.new_chat(u, self.account)
 		
 		#make active here in case we need to send a message
-		self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
+		gajim.interface.windows[self.account]['chats'][fjid].set_active_tab(fjid)
 
 		if msg:
-			self.plugin.windows[self.account]['chats'][fjid].send_message(msg)
-		self.plugin.windows[self.account]['chats'][fjid].window.present()
+			gajim.interface.windows[self.account]['chats'][fjid].send_message(msg)
+		gajim.interface.windows[self.account]['chats'][fjid].window.present()
 
 	def on_voice_checkmenuitem_activate(self, widget, room_jid, nick):
 		if widget.get_active():
@@ -1373,8 +1373,8 @@ current room topic.') % command, room_jid)
 			no_queue = False
 
 		# We print if window is opened
-		if self.plugin.windows[self.account]['chats'].has_key(fjid):
-			chat_win = self.plugin.windows[self.account]['chats'][fjid]
+		if gajim.interface.windows[self.account]['chats'].has_key(fjid):
+			chat_win = gajim.interface.windows[self.account]['chats'][fjid]
 			chat_win.print_conversation(msg, fjid, tim = tim)
 			return
 
@@ -1391,17 +1391,17 @@ current room topic.') % command, room_jid)
 			gajim.connections[self.account].connected > 2):
 			if no_queue: # We didn't have a queue: we change icons
 				model = self.list_treeview[room_jid].get_model()
-				state_images = self.plugin.roster.get_appropriate_state_images(room_jid)
+				state_images = gajim.interface.roster.get_appropriate_state_images(room_jid)
 				image = state_images['message']
 				model[iter][C_IMG] = image
-				if self.plugin.systray_enabled:
-					self.plugin.systray.add_jid(fjid, self.account, 'pm')
+				if gajim.interface.systray_enabled:
+					gajim.interface.systray.add_jid(fjid, self.account, 'pm')
 			self.show_title()
 		else:
 			show = gajim.gc_contacts[self.account][room_jid][nick].show
 			c = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
 				ask = 'none')
-			self.plugin.roster.new_chat(c, self.account)
+			gajim.interface.roster.new_chat(c, self.account)
 		# Scroll to line
 		self.list_treeview[room_jid].expand_row(path[0:1], False)
 		self.list_treeview[room_jid].scroll_to_cell(path)
@@ -1506,13 +1506,13 @@ current room topic.') % command, room_jid)
 			if len(path) == 2:
 				nick = model[iter][C_NICK].decode('utf-8')
 				fjid = gajim.construct_fjid(room_jid, nick)
-				if not self.plugin.windows[self.account]['chats'].has_key(fjid):
+				if not gajim.interface.windows[self.account]['chats'].has_key(fjid):
 					show = gajim.gc_contacts[self.account][room_jid][nick].show
 					u = Contact(jid = fjid, name = nick, groups = ['none'],
 						show = show, sub = 'none')
-					self.plugin.roster.new_chat(u, self.account)
-				self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
-				self.plugin.windows[self.account]['chats'][fjid].window.present()
+					gajim.interface.roster.new_chat(u, self.account)
+				gajim.interface.windows[self.account]['chats'][fjid].set_active_tab(fjid)
+				gajim.interface.windows[self.account]['chats'][fjid].window.present()
 			return True
 			
 		elif event.button == 1: # left click
@@ -1550,22 +1550,22 @@ current room topic.') % command, room_jid)
 			room_jid = self.get_active_jid()
 			nick = model[iter][C_NICK].decode('utf-8')
 			fjid = gajim.construct_fjid(room_jid, nick)
-			if not self.plugin.windows[self.account]['chats'].has_key(fjid):
+			if not gajim.interface.windows[self.account]['chats'].has_key(fjid):
 				show = gajim.gc_contacts[self.account][room_jid][nick].show
 				u = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
 					sub = 'none')
-				self.plugin.roster.new_chat(u, self.account)
-			self.plugin.windows[self.account]['chats'][fjid].set_active_tab(fjid)
-			self.plugin.windows[self.account]['chats'][fjid].window.present()
+				gajim.interface.roster.new_chat(u, self.account)
+			gajim.interface.windows[self.account]['chats'][fjid].set_active_tab(fjid)
+			gajim.interface.windows[self.account]['chats'][fjid].window.present()
 
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded: change the icon of the arrow'''
 		model = widget.get_model()
-		image = self.plugin.roster.jabber_state_images['opened']
+		image = gajim.interface.roster.jabber_state_images['opened']
 		model[iter][C_IMG] = image
 	
 	def on_list_treeview_row_collapsed(self, widget, iter, path):
 		'''When a row is collapsed: change the icon of the arrow'''
 		model = widget.get_model()
-		image = self.plugin.roster.jabber_state_images['closed']
+		image = gajim.interface.roster.jabber_state_images['closed']
 		model[iter][C_IMG] = image

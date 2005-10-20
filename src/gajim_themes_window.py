@@ -36,10 +36,9 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 class GajimThemesWindow:
 
-	def __init__(self, plugin):
+	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_themes_window', APP)
 		self.window = self.xml.get_widget('gajim_themes_window')
-		self.plugin = plugin
 		
 		self.options = ['account', 'group', 'contact', 'banner', 'lastmessage']
 		self.options_combobox = self.xml.get_widget('options_combobox')
@@ -102,7 +101,7 @@ class GajimThemesWindow:
 			gajim.config.set('roster_theme', new_config_name)
 		model.set_value(iter, 0, new_name)
 		self.current_theme = new_name
-		self.plugin.windows['preferences'].update_preferences_window()
+		gajim.interface.windows['preferences'].update_preferences_window()
 
 	def fill_themes_treeview(self):
 		self.xml.get_widget('remove_button').set_sensitive(False)
@@ -144,7 +143,7 @@ class GajimThemesWindow:
 		col = self.themes_tree.get_column(0)
 		path = model.get_path(iter)
 		self.themes_tree.set_cursor(path, col, True)
-		self.plugin.windows['preferences'].update_preferences_window()
+		gajim.interface.windows['preferences'].update_preferences_window()
 
 	def on_remove_button_clicked(self, widget):
 		(model, iter) = self.themes_tree.get_selection().get_selected()
@@ -157,7 +156,7 @@ class GajimThemesWindow:
 		self.theme_options_vbox.set_sensitive(False)
 		gajim.config.del_per('themes', self.current_theme)
 		model.remove(iter)
-		self.plugin.windows['preferences'].update_preferences_window()
+		gajim.interface.windows['preferences'].update_preferences_window()
 	
 	def set_theme_options(self, theme, option = 'account'):
 		self.no_update = True
@@ -193,7 +192,7 @@ class GajimThemesWindow:
 		self.textfont_checkbutton.set_active(state)
 		self.text_fontbutton.set_sensitive(state)
 		self.no_update = False
-		self.plugin.roster.change_roster_style(None)
+		gajim.interface.roster.change_roster_style(None)
 		
 	def on_textcolor_checkbutton_toggled(self, widget):
 		state = widget.get_active()
@@ -248,13 +247,13 @@ class GajimThemesWindow:
 			self.current_option + option, color_string)
 		# use faster functions for this
 		if self.current_option == 'banner':
-			self.plugin.roster.repaint_themed_widgets()
-			self.plugin.save_config()
+			gajim.interface.roster.repaint_themed_widgets()
+			gajim.interface.save_config()
 			return
 		if self.no_update:
 			return
-		self.plugin.roster.change_roster_style(self.current_option)
-		self.plugin.save_config()
+		gajim.interface.roster.change_roster_style(self.current_option)
+		gajim.interface.save_config()
 		
 	def _set_font(self):
 		''' set font value in prefs and update the UI '''
@@ -270,11 +269,11 @@ class GajimThemesWindow:
 			self.current_option + 'fontattrs', font_attrs)
 		# use faster functions for this
 		if self.current_option == 'banner':
-			self.plugin.roster.repaint_themed_widgets()
+			gajim.interface.roster.repaint_themed_widgets()
 		if self.no_update:
 			return
-		self.plugin.roster.change_roster_style(self.current_option)
-		self.plugin.save_config()
+		gajim.interface.roster.change_roster_style(self.current_option)
+		gajim.interface.save_config()
 	
 	def _toggle_font_widgets(self, font_props):
 		''' toggle font buttons with the bool values of font_props tuple'''

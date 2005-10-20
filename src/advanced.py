@@ -41,9 +41,7 @@ C_TYPE
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class AdvancedConfigurationWindow:
-	def __init__(self, plugin):
-		self.plugin = plugin
-
+	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_configuration_window', APP)
 		self.window = self.xml.get_widget('advanced_configuration_window')
 		self.entry = self.xml.get_widget('advanced_entry')
@@ -86,7 +84,7 @@ class AdvancedConfigurationWindow:
 		
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
-		self.plugin.windows['advanced_config'] = self
+		gajim.interface.windows['advanced_config'] = self
 
 	def cb_value_column_data(self, col, cell, model, iter):
 		optname = model[iter][C_PREFNAME]
@@ -123,7 +121,7 @@ class AdvancedConfigurationWindow:
 				gajim.config.set_per(optname, key, option, newval)
 			else:
 				gajim.config.set(option, newval)
-			self.plugin.save_config()
+			gajim.interface.save_config()
 			modelrow[1] = newval
 
 	def on_config_edited(self, cell, path, text):
@@ -140,13 +138,13 @@ class AdvancedConfigurationWindow:
 			gajim.config.set_per(optname, key, option, text)
 		else:
 			gajim.config.set(option, text)
-		self.plugin.save_config()
+		gajim.interface.save_config()
 		modelrow[1] = text
 
 	def on_advanced_configuration_window_destroy(self, widget):
 		# update ui of preferences window to get possible changes we did
-		self.plugin.windows['preferences'].update_preferences_window()
-		del self.plugin.windows['advanced_config']
+		gajim.interface.windows['preferences'].update_preferences_window()
+		del gajim.interface.windows['advanced_config']
 
 	def on_advanced_close_button_clicked(self, widget):
 		self.window.destroy()
