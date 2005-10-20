@@ -333,6 +333,9 @@ class Interface:
 			return
 		elif gajim.contacts[account].has_key(ji):
 			# It isn't an agent
+			# reset chatstate if needed:
+			if array[1] in ('offline', 'error'):
+				user1.chatstate = None
 			self.roster.chg_contact_status(user1, array[1], array[2], account)
 			# play sound
 			if old_show < 2 and new_show > 1:
