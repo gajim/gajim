@@ -861,22 +861,13 @@ class Chat:
 				break
 		if over_line and not self.line_tooltip.win:
 			# check if the current pointer is still over the line
-#			rect =  textview.get_cell_area(x, y)
 			pointer_x, pointer_y, spam = textview.window.get_pointer()
 			x, y = textview.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
 				pointer_y)
 			position = textview.window.get_origin()
-			print x
-			print y
-			print textview.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT, x, y)
-#			pointer = self.window.get_pointer()
-#			self.line_tooltip.show_tooltip('qwe', (0, 50), (x, y))
-			print self.window.get_screen().get_display().get_pointer()[1]
-			print position[1]
-			#FIXME: fix position
-			self.line_tooltip.show_tooltip('qwe', (0, 10),
+			self.line_tooltip.show_tooltip(_('Below this ruler is what is new since you last payed attention to this group chat'), (0, 8),
 				(self.window.get_screen().get_display().get_pointer()[1],
-				position[1] + 10))
+				position[1] + pointer_y))
 
 	def on_conversation_textview_motion_notify_event(self, widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
