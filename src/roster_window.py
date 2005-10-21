@@ -821,9 +821,9 @@ class RosterWindow:
 	def on_send_single_message_menuitem_activate(self, wiget, account,
 	contact = None):
 		if contact is None:
-			dialogs.SingleMessageWindow(self, account, action = 'send')
+			dialogs.SingleMessageWindow(account, action = 'send')
 		else:
-			dialogs.SingleMessageWindow(self, account, contact.jid, 'send')
+			dialogs.SingleMessageWindow(account, contact.jid, 'send')
 		
 	def on_send_file_menuitem_activate(self, widget, account, contact):
 		gajim.interface.windows['file_transfers'].show_file_send_request( 
