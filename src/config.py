@@ -2938,9 +2938,9 @@ _('You need to enter a valid server address to continue.')).get_response()
 	def on_server_comboboxentry_key_press_event(self, widget, event):
 		# If backspace is pressed in empty field, return to the nick entry field
 		widgets = self.get_matching_widgets(widget.parent)
-		key = event.keyval == gtk.keysyms.BackSpace
+		backspace = event.keyval == gtk.keysyms.BackSpace
 		empty = len(widgets['server_comboboxentry'].get_active_text()) == 0
-		if key and empty:
+		if backspace and empty:
 			widgets['nick_entry'].grab_focus()
 			widgets['nick_entry'].set_position(-1)
 			return True
@@ -2955,7 +2955,8 @@ _('You need to enter a valid server address to continue.')).get_response()
 		if len(name) == 0 or len(server) == 0:
 			widgets['jid_label'].set_label('')
 		else:
-			widgets['jid_label'].set_label(name + '@' + server)
+			string = '<span background="lightyellow">%s@%s</span>' % (name, server)
+			widgets['jid_label'].set_label(string)
 
 	def save_account(self, name, server, savepass, password, new_account):
 		config = {}
