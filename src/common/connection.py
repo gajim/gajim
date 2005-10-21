@@ -89,6 +89,8 @@ distro_info = {
 
 def get_os_info():
 	if os.name == 'nt':
+		ver = os.sys.getwindowsversion()
+		ver_format = ver[3], ver[0], ver[1]
 		win_version = {
 			(1, 4, 0): '95',
 			(1, 4, 10): '98',
@@ -97,10 +99,11 @@ def get_os_info():
 			(2, 5, 0): '2000',
 			(2, 5, 1): 'XP',
 			(2, 5, 2): '2003'
-		}[	os.sys.getwindowsversion()[3],
-			os.sys.getwindowsversion()[0],
-			os.sys.getwindowsversion()[1] ]
-		return 'Windows' + ' ' + win_version
+		}
+		if win_version.has_key(ver_format):
+			return 'Windows' + ' ' + win_version[ver_format]
+		else:
+			return 'Windows'
 	elif os.name == 'posix':
 		executable = 'lsb_release'
 		params = ' --id --codename --release --short'
