@@ -1014,7 +1014,7 @@ class PreferencesWindow:
 			gajim.interface.windows['advanced_config'].window.present()
 		else:
 			gajim.interface.windows['advanced_config'] = \
-				dialogs.AdvancedConfigurationWindow(gajim.interface)
+				dialogs.AdvancedConfigurationWindow()
 
 #---------- AccountModificationWindow class -------------#
 class AccountModificationWindow:
