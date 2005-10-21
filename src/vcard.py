@@ -166,7 +166,10 @@ class VcardWindow:
 			response = dialog.run()
 			if response == gtk.RESPONSE_OK:
 				f = dialog.get_filename()
-				f = f.decode(sys.getfilesystemencoding())
+				try:
+					f = f.decode(sys.getfilesystemencoding())
+				except:
+					pass
 				if self.image_is_ok(f):
 					ok = True
 			else:

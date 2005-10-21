@@ -989,7 +989,10 @@ class PreferencesWindow:
 			if response != gtk.RESPONSE_OK:
 				break
 			file = dialog.get_filename()
-			file = file.decode(sys.getfilesystemencoding())
+			try:
+				file = file.decode(sys.getfilesystemencoding())
+			except:
+				pass
 			if os.path.exists(file):
 				break
 		dialog.destroy()
@@ -2116,7 +2119,10 @@ class ManageEmoticonsWindow:
 			response = dialog.run()
 			if response == gtk.RESPONSE_OK:
 				file = dialog.get_filename()
-				file = file.decode(sys.getfilesystemencoding())
+				try:
+					file = file.decode(sys.getfilesystemencoding())
+				except:
+					pass
 				if self.image_is_ok(file):
 					ok = True
 			else:

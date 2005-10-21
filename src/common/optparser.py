@@ -86,8 +86,11 @@ class OptionsParser:
 	
 	def write(self):
 		(base_dir, filename) = os.path.split(self.__filename)
-		base_dir = base_dir.decode(sys.getfilesystemencoding())
-		filename = filename.decode(sys.getfilesystemencoding())
+		try:
+			base_dir = base_dir.decode(sys.getfilesystemencoding())
+			filename = filename.decode(sys.getfilesystemencoding())
+		except:
+			pass
 		self.__tempfile = os.path.join(base_dir, '.' + filename)
 		try:
 			fd = open(self.__tempfile, 'w')

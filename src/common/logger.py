@@ -36,7 +36,10 @@ if os.name == 'nt':
 		# win9x, ./logs
 		LOGPATH = 'Logs'
 
-LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
+try:
+	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
+except:
+	pass
 
 class Logger:
 	def __init__(self):
