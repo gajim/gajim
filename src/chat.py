@@ -865,7 +865,7 @@ class Chat:
 			x, y = textview.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
 				pointer_y)
 			position = textview.window.get_origin()
-			self.line_tooltip.show_tooltip(_('Below this ruler is what has been said since you last payed attention to this group chat'), (0, 8),
+			self.line_tooltip.show_tooltip(_('The text below this ruler is what has been said since the last time you paid attention to this group chat'), (0, 8),
 				(self.window.get_screen().get_display().get_pointer()[1],
 				position[1] + pointer_y))
 
