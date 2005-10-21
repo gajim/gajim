@@ -91,6 +91,7 @@ class Chat:
 		# muc attention states (when we are mentioned in a muc)
 		# if the room jid is in the list, the room has mentioned us
 		self.muc_attentions = []
+		self.line_tooltip = tooltips.BaseTooltip()
 
 	def update_font(self):
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
@@ -845,6 +846,38 @@ class Chat:
 				gajim.interface.systray.remove_jid(jid, self.account,
 					self.get_message_type(jid))
 	
+	def show_line_tooltip(self):
+		jid = self.get_active_jid()
+		textview = self.xmls[jid].get_widget('conversation_textview')
+		pointer = textview.get_pointer()
+		x, y = textview.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer[0],
+			pointer[1])
+		tags = textview.get_iter_at_location(x, y).get_tags()
+		tag_table = textview.get_buffer().get_tag_table()
+		over_line = False
+		for tag in tags:
+			if tag == tag_table.lookup('focus-out-line'):
+				over_line = True
+				break
+		if over_line and not self.line_tooltip.win:
+			# check if the current pointer is still over the line
+#			rect =  textview.get_cell_area(x, y)
+			pointer_x, pointer_y, spam = textview.window.get_pointer()
+			x, y = textview.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
+				pointer_y)
+			position = textview.window.get_origin()
+			print x
+			print y
+			print textview.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT, x, y)
+#			pointer = self.window.get_pointer()
+#			self.line_tooltip.show_tooltip('qwe', (0, 50), (x, y))
+			print self.window.get_screen().get_display().get_pointer()[1]
+			print position[1]
+			#FIXME: fix position
+			self.line_tooltip.show_tooltip('qwe', (0, 10),
+				(self.window.get_screen().get_display().get_pointer()[1],
+				position[1] + 10))
+
 	def on_conversation_textview_motion_notify_event(self, widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
 		jid = self.get_active_jid()
@@ -857,6 +890,7 @@ class Chat:
 				gtk.gdk.Cursor(gtk.gdk.XTERM))
 			self.change_cursor = None
 		tag_table = widget.get_buffer().get_tag_table()
+		over_line = False
 		for tag in tags:
 			if tag in (tag_table.lookup('url'), tag_table.lookup('mail')):
 				widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
@@ -864,18 +898,19 @@ class Chat:
 				self.change_cursor = tag
 			elif self.widget_name == 'groupchat_window' and \
 			tag == tag_table.lookup('focus-out-line'):
-				widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-					gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
-				self.change_cursor = tag
-				tooltip = tooltips.BaseTooltip()
-				message = _('abcdoremi')
+				over_line = True
 				# FIXME: found out (dkirov can help) what those params are supposed to be
-				# FIXME: also fix tooltips.py docstrings and comments (imporve and add more)
-				# to explain it better as atm it's poor
-				#tooltip.show_tooltip(message, (pointer_x, pointer_y), (pointer_x, pointer_y))
 
-				if tooltip.timeout != 0:
-					tooltip.hide_tooltip()
+		if self.line_tooltip.timeout != 0:
+			# Check if we should hide the line tooltip
+			if not over_line:
+				self.line_tooltip.hide_tooltip()
+		if over_line and not self.line_tooltip.win:
+			self.line_tooltip.timeout = gobject.timeout_add(500,
+				self.show_line_tooltip)
+			widget.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
+				gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+			self.change_cursor = tag
 
 	def on_clear(self, widget, textview):
 		'''clear text in the given textview'''

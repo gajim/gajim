@@ -83,7 +83,6 @@ class GroupchatWindow(chat.Chat):
 		self.new_room(room_jid, nick)
 		self.show_title()
 		self.tooltip = tooltips.GCTooltip()
-		self.line_tooltip = tooltips.BaseTooltip()
 		
 		
 		# NOTE: if it not a window event, connect in new_room function
