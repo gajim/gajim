@@ -95,7 +95,8 @@ def get_os_info():
 			(1, 4, 90): 'ME',
 			(2, 4, 0): 'NT',
 			(2, 5, 0): '2000',
-			(2, 5, 1): 'XP'
+			(2, 5, 1): 'XP',
+			(2, 5, 2): '2003'
 		}[	os.sys.getwindowsversion()[3],
 			os.sys.getwindowsversion()[0],
 			os.sys.getwindowsversion()[1] ]
