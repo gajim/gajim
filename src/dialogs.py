@@ -170,6 +170,7 @@ class ChooseGPGKeyDialog:
 		prompt_label = xml.get_widget('prompt_label')
 		prompt_label.set_text(prompt_text)
 		model = gtk.ListStore(str, str)
+		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.keys_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
