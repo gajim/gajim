@@ -54,10 +54,14 @@ If you want to remove it from custom directory provide it as:
 make PREFIX=custom_path uninstall
 
 =MISCELLANEOUS=
+XML & Debugging:
 If you want to see the xml stanzas and/or help us debugging 
 you're advised to enable verbose via advanced configuration window.
 If you don't want to make this permanent, execute gajim with --verbose
 everytime you want to have verbose output.
+
+Cannot join room with password:
+please read the FAQ for the reply on this issue
 
 =FAQ=
 FAQ can be found in http://trac.gajim.org/wiki/GajimFaq
