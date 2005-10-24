@@ -201,12 +201,24 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 		return 'weather'
 	elif host.startswith('yahoo'):
 		return 'yahoo'
+	else:
+		return None
 
 def jid_is_transport(jid):
-	is_transport = jid.startswith('aim') or jid.startswith('gadugadu') or\
-			jid.startswith('irc') or jid.startswith('icq') or\
-			jid.startswith('msn') or jid.startswith('sms') or\
-			jid.startswith('yahoo')
+	aim = jid.startswith('aim')
+	gg = jid.startswith('gadugadu')
+	irc = jid.startswith('irc')
+	icq = jid.startswith('icq')
+	msn = jid.startswith('msn')
+	sms = jid.startswith('sms')
+	yahoo = jid.startswith('yahoo')
+	
+	if aim or gg or irc or icq or msn or sms or yahoo:
+		is_transport = True
+	else:
+		is_transport = False
+
+	return is_transport
 
 def get_jid_from_account(account_name):
 	name = config.get_per('accounts', account_name, 'name')
