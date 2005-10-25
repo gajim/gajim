@@ -136,6 +136,11 @@ def get_os_info():
 				elif path_to_file.endswith('lfs-release'): # file just has version
 					text = distro_name + ' ' + text
 				return text
+		
+		# our last chance, ask uname and strip it
+		uname_output = helpers.get_output_of_command('uname -a | cut -d" " -f1,3')
+		if uname_output is not None:
+			return uname_output
 	return 'N/A'
 
 class Connection:

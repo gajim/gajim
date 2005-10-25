@@ -372,3 +372,15 @@ def one_account_connected():
 			one_connected = True
 			break
 	return one_connected
+
+def get_output_of_command(command):
+    try:
+        child_stdin, child_stdout = os.popen2(command)
+    except ValueError:
+        return None
+
+    output = child_stdout.readlines()
+    child_stdout.close()
+    child_stdin.close()
+    
+    return output
