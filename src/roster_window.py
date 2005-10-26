@@ -869,9 +869,6 @@ class RosterWindow:
 		else: # if we do not have resource we cannot send file
 			send_file_menuitem.hide()
 			send_file_menuitem.set_no_show_all(True)
-			# FIXME: drag_unset() to clear DND stuff
-			# FIXME: and drag_set (see new_tab() in TC) 
-			# for when we get resource for the first time
 			
 		start_chat_menuitem.connect('activate',
 			self.on_roster_treeview_row_activated, path)
@@ -1415,13 +1412,6 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		one_connected = helpers.one_account_connected()
 		if active == 7: # We choose change status message (7 is that)
 			# do not change show, just show change status dialog
-			#FIXME: remove this if block when http://bugzilla.gnome.org/show_bug.cgi?id=318518 is fixed
-			if not one_connected:
-				dialogs.ErrorDialog(_('No account connected'),
-					_('You must be connected to change your status message.')
-					).get_response()
-				self.update_status_comboxbox()
-				return
 			dlg = dialogs.ChangeStatusMessageDialog()
 			message = dlg.run()
 			if message is not None: # None if user pressed Cancel
@@ -2337,9 +2327,11 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		# no need of this variable
 		self.have_new_message_accel = False # Is the "Ctrl+N" shown ?
 		if gajim.config.get('saveposition'):
-			gtkgui_helpers.move_window(self.window, gajim.config.get('roster_x-position'),
+			gtkgui_helpers.move_window(self.window,
+				gajim.config.get('roster_x-position'),
 				gajim.config.get('roster_y-position'))
-			gtkgui_helpers.resize_window(self.window, gajim.config.get('roster_width'),
+			gtkgui_helpers.resize_window(self.window,
+				gajim.config.get('roster_width'),
 				gajim.config.get('roster_height'))
 
 		self.popups_notification_height = 0
@@ -2369,7 +2361,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 
 		cell = cell_renderer_image.CellRendererImage()
 		self.status_combobox.pack_start(cell, False)
+		
+		# img to show is in in 2nd column of liststore
 		self.status_combobox.add_attribute(cell, 'image', 1)
+		# if it will be sensitive or not it is in the fourth column
+		# all items in the 'row' must have sensitive to False
+		# if we want False (so we add it for img_cell too)
+		self.status_combobox.add_attribute(cell, 'sensitive', 3)
 
 		cell = gtk.CellRendererText()
 		cell.set_property('xpad', 5) # padding for status text
