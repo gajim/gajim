@@ -1421,10 +1421,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 						continue
 					current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
 					self.send_status(acct, current_show, message)
+			self.status_combobox.handler_block(self.id_signal_cb)
 			self.status_combobox.set_active(self.previous_status_combobox_active)
+			self.status_combobox.handler_unblock(self.id_signal_cb)
 			return
 		# we are about to change show, so save this new show so in case
-		# after user chooses "Change status" menuitem we can return to this show
+		# after user chooses "Change status message" menuitem
+		# we can return to this show
 		self.previous_status_combobox_active = active
 		if status == 'invisible':
 			bug_user = False
