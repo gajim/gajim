@@ -231,7 +231,7 @@ class RosterWindow:
 		elif jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 			img = state_images[contact.show]					
 		else:
-			if contact.sub in ['both', 'to']:
+			if contact.sub in ('both', 'to'):
 				img = state_images[contact.show]
 			else:
 				if contact.ask == 'subscribe':
@@ -1043,7 +1043,7 @@ class RosterWindow:
 		sub_menu = gtk.Menu()
 		status_menuitem.set_submenu(sub_menu)
 
-		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
+		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
 			uf_show = helpers.get_uf_show(show, use_mnemonic = True)
 			item = gtk.ImageMenuItem(uf_show)
 			icon = state_images[show]
@@ -2382,7 +2382,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 
 		self.status_combobox.set_row_separator_func(self.iter_is_separator)
 
-		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
+		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
 			uf_show = helpers.get_uf_show(show)
 			liststore.append([uf_show, self.jabber_state_images[show], show, True])
 		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)

@@ -224,7 +224,7 @@ the contact list of this account'), False)
 	def print_result(self, res):
 		''' Print retrieved result to the output '''
 		if res is not None:
-			if self.command in ['open_chat', 'send_message']:
+			if self.command in ('open_chat', 'send_message'):
 				if self.command == 'send_message':
 					self.argv_len -= 2
 				
@@ -327,10 +327,10 @@ Please specify account for sending the message.') % sys.argv[2])
 	def print_info(self, level, prop_dict):
 		''' return formated string from serialized vcard data '''
 		if prop_dict is None or type(prop_dict) \
-			not in [dict, list, tuple]:
+			not in (dict, list, tuple):
 			return ''
 		ret_str = ''
-		if type(prop_dict) in [list, tuple]:
+		if type(prop_dict) in (list, tuple):
 			ret_str = ''
 			spacing = ' ' * level * 4
 			for val in prop_dict:
@@ -428,7 +428,7 @@ Please specify account for sending the message.') % sys.argv[2])
 						_str += '\''
 					elif chr == '\"':
 						_str += '\"'
-					elif chr in ['u', 'x'] and is_unicode:
+					elif chr in ('u', 'x') and is_unicode:
 						slashes -= 1
 						_str += '\\' + chr
 					else:
@@ -469,7 +469,7 @@ Please specify account for sending the message.') % sys.argv[2])
 				else:
 					break
 			return (_dict, next[1:])
-		elif first_char in ['[', '(']: # return list 
+		elif first_char in ('[', '('): # return list 
 			_tuple = []
 			if value[1] == ']':
 				return ([], value[2:])
@@ -486,7 +486,7 @@ Please specify account for sending the message.') % sys.argv[2])
 					break
 				if next[0] == ',':
 					value = next
-				elif next[0] in [']', ')']:
+				elif next[0] in (']', ')'):
 					break
 			return (_tuple, next[1:])
 		

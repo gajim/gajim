@@ -268,7 +268,7 @@ class SystrayWin32(systray.Systray):
 		nb = gajim.interface.roster.nb_unread
 		for acct in gajim.connections:
 			# in chat / groupchat windows
-			for kind in ['chats', 'gc']:
+			for kind in ('chats', 'gc'):
 				jids = gajim.interface.windows[acct][kind]
 				for jid in jids:
 					if jid != 'tabbed':
@@ -287,7 +287,7 @@ class SystrayWin32(systray.Systray):
 		nb = gajim.interface.roster.nb_unread
 		for acct in gajim.connections:
 			# in chat / groupchat windows
-			for kind in ['chats', 'gc']:
+			for kind in ('chats', 'gc'):
 				for jid in gajim.interface.windows[acct][kind]:
 					if jid != 'tabbed':
 						nb += gajim.interface.windows[acct][kind][jid].nb_unread[jid]

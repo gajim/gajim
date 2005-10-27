@@ -210,7 +210,7 @@ class Chat:
 				color = gtk.gdk.colormap_get_system().alloc_color(color)
 				# We set the color for when it's the current tab or not
 				nickname.modify_fg(gtk.STATE_NORMAL, color)
-				if chatstate in ['inactive', 'gone']:
+				if chatstate in ('inactive', 'gone'):
 					# Adjust color to be lighter against the darker inactive
 					# background
 					p = 0.4
@@ -615,7 +615,8 @@ class Chat:
 
 	def new_tab(self, jid):
 		#FIXME: text formating buttons will be hidden in 0.8 release
-		for w in ['bold_togglebutton', 'italic_togglebutton', 'underline_togglebutton']:
+		for w in ('bold_togglebutton', 'italic_togglebutton',
+			'underline_togglebutton'):
 			self.xmls[jid].get_widget(w).set_no_show_all(True)
 
 		self.set_compact_view(self.always_compact_view)

@@ -109,7 +109,7 @@ class EditGroupsDialog:
 		store = gtk.ListStore(str, bool)
 		self.list.set_model(store)
 		for g in gajim.groups[self.account].keys():
-			if g in [_('Transports'), _('not in the roster')]:
+			if g in (_('Transports'), _('not in the roster')):
 				continue
 			iter = store.append()
 			store.set(iter, 0, g)
@@ -795,8 +795,8 @@ class PopupNotificationWindow:
 			close_button.modify_bg(gtk.STATE_NORMAL, red)
 			eventbox.modify_bg(gtk.STATE_NORMAL, red)
 			event_description_label.set_text(txt)
-		elif event_type in [_('New Message'), _('New Single Message'),
-			_('New Private Message')]:
+		elif event_type in (_('New Message'), _('New Single Message'),
+			_('New Private Message')):
 			dodgerblue = gtk.gdk.color_parse('dodgerblue')
 			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
@@ -818,7 +818,7 @@ class PopupNotificationWindow:
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			event_description_label.set_text(txt)
-		elif event_type in [_('File Transfer Completed'), _('File Transfer Stopped')]:
+		elif event_type in (_('File Transfer Completed'), _('File Transfer Stopped')):
 			bg_color = gtk.gdk.color_parse('yellowgreen')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)

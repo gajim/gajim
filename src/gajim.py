@@ -194,7 +194,7 @@ class Interface:
 	def handle_event_error_answer(self, account, array):
 		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
 		id, jid_from, errmsg, errcode = array
-		if unicode(errcode) in ['403', '406'] and id:
+		if unicode(errcode) in ('403', '406') and id:
 			# show the error dialog
 			ft = self.windows['file_transfers']
 			sid = id

@@ -131,7 +131,7 @@ class Systray:
 		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
 		state_images = gajim.interface.roster.load_iconset(path)
 
-		for show in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible']:
+		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
 			uf_show = helpers.get_uf_show(show, use_mnemonic = True)
 			item = gtk.ImageMenuItem(uf_show)
 			item.set_image(state_images[show])

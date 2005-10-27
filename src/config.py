@@ -672,7 +672,7 @@ class PreferencesWindow:
 	def update_text_tags(self):
 		'''Update color tags in Opened Chat Windows'''
 		for a in gajim.connections:
-			for kind in ['chats', 'gc']:
+			for kind in ('chats', 'gc'):
 				windows = gajim.interface.windows[a][kind]
 				if windows.has_key('tabbed'):
 					windows['tabbed'].update_tags()
@@ -683,7 +683,7 @@ class PreferencesWindow:
 	def update_text_font(self):
 		'''Update text font in Opened Chat Windows'''
 		for a in gajim.connections:
-			for kind in ['chats', 'gc']:
+			for kind in ('chats', 'gc'):
 				windows = gajim.interface.windows[a][kind]
 				if windows.has_key('tabbed'):
 					windows['tabbed'].update_font()
@@ -717,7 +717,7 @@ class PreferencesWindow:
 		self.on_preference_widget_font_set(widget, 'conversation_font')
 	
 	def on_reset_colors_button_clicked(self, widget):
-		for i in ['inmsgcolor', 'outmsgcolor', 'statusmsgcolor']:
+		for i in ('inmsgcolor', 'outmsgcolor', 'statusmsgcolor'):
 			gajim.config.set(i, gajim.interface.default_values[i])
 
 		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
@@ -1283,7 +1283,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 				gajim.events_for_ui[name] = gajim.events_for_ui[self.account]
 
 				#upgrade account variable in opened windows
-				for kind in ['infos', 'chats', 'gc', 'gc_config']:
+				for kind in ('infos', 'chats', 'gc', 'gc_config'):
 					for j in gajim.interface.windows[name][kind]:
 						gajim.interface.windows[name][kind][j].account = name
 
@@ -1879,7 +1879,7 @@ class ServiceRegistrationWindow(DataFormWindow):
 		nbrow = 0
 		table = self.xml.get_widget('table')
 		for name in self.infos.keys():
-			if name in ['key', 'instructions', 'x', 'registered']:
+			if name in ('key', 'instructions', 'x', 'registered'):
 				continue
 			if not name:
 				continue
@@ -2849,7 +2849,8 @@ class FirstTimeWizardWindow:
 
 	def get_widgets(self, prefix):
 		widgets = {} 
-		for widget in [ 'nick_entry',
+		for widget in (
+						'nick_entry',
 						'server_comboboxentry',
 						'pass_entry',
 						'save_password_checkbutton',
@@ -2857,7 +2858,7 @@ class FirstTimeWizardWindow:
 						'proxyport_entry',
 						'proxyuser_entry',
 						'proxypass_entry',
-						'jid_label' ]:
+						'jid_label'):
 			widgets[widget] = self.xml.get_widget(prefix + widget)
 		return widgets
 
