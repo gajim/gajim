@@ -1346,7 +1346,7 @@ class Chat:
 		#we don't want size of the buffer to grow indefinately
 		max_size = gajim.config.get('key_up_lines')
 		if size >= max_size:
-			for i in range(0, size - 1): 
+			for i in xrange(0, size - 1): 
 				self.sent_history[jid][i] = self.sent_history[jid][i+1]
 			self.sent_history[jid][max_size - 1] = message
 		else:

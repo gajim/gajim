@@ -98,7 +98,7 @@ class SystrayWINAPI:
 				cblist = self._message_map[key]
 				if isinstance(cblist, list):
 					if not len(cblist) < 2:
-						for i in range(len(cblist)):
+						for i in xrange(len(cblist)):
 							if cblist[i] == callback:
 								del self._message_map[key][i]
 								return

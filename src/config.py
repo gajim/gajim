@@ -136,7 +136,7 @@ class PreferencesWindow:
 				l.append(dir)
 		if l.count == 0:
 			l.append(' ')
-		for i in range(len(l)):
+		for i in xrange(len(l)):
 			preview = gtk.Image()
 			files = []
 			files.append(os.path.join(gajim.DATA_DIR, 'iconsets', l[i], '16x16', 'online.png'))
@@ -1097,7 +1097,7 @@ class AccountModificationWindow:
 		self.proxy_combobox.set_model(model)
 		l = gajim.config.get_per('proxies')
 		l.insert(0, 'None')
-		for i in range(len(l)):
+		for i in xrange(len(l)):
 			model.append([l[i]])
 			if our_proxy == l[i]:
 				self.proxy_combobox.set_active(i)

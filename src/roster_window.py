@@ -781,7 +781,7 @@ class RosterWindow:
 			'attached_gpg_keys').split()
 		keys = {}
 		keyID = 'None'
-		for i in range(0, len(attached_keys)/2):
+		for i in xrange(0, len(attached_keys)/2):
 			keys[attached_keys[2*i]] = attached_keys[2*i+1]
 			if attached_keys[2*i] == user.jid:
 				keyID = attached_keys[2*i+1]

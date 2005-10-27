@@ -388,7 +388,7 @@ Please specify account for sending the message.') % sys.argv[2])
 				is_float = True
 			else:
 				is_float =  False
-			for i in range(len(value) - 1):
+			for i in xrange(len(value) - 1):
 				chr = value[i+1]
 				if chr == '.':
 					is_float = True
@@ -410,7 +410,7 @@ Please specify account for sending the message.') % sys.argv[2])
 			_str = ''
 			previous_slash = False
 			slashes = 0
-			for i in range(len(value) - 1):
+			for i in xrange(len(value) - 1):
 				chr = value[i+1]
 				if previous_slash:
 					previous_slash = False
