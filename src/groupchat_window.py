@@ -999,9 +999,10 @@ current room topic.') % command, room_jid)
 		'''checks text to see whether any of the words in muc_highlight_words
 		appear'''
 		
-		words = gajim.config.get('muc_highlight_words') + ' ' + nick
+		words = gajim.config.get('muc_highlight_words').split()
+		words.append(nick)
 		
-		for word in words.split():
+		for word in words:
 			pattern = r'\b(' + sre.escape(word) + r')+\b'
 			if sre.search(pattern, text, sre.IGNORECASE | sre.UNICODE):
 				return True
