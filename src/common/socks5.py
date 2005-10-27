@@ -306,7 +306,7 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 		'''
 		if result is None:
 			return
-		if result in [0, -1] and \
+		if result in (0, -1) and \
 			self.complete_transfer_cb is not None:
 			account = actor.account
 			self.complete_transfer_cb(account, 
@@ -439,7 +439,7 @@ class Socks5:
 			try:
 				lenn = self._send(buff)
 			except Exception, e:
-				if e.args[0] not in [EINTR, ENOBUFS, EWOULDBLOCK]:
+				if e.args[0] not in (EINTR, ENOBUFS, EWOULDBLOCK):
 					# peer stopped reading
 					self.state = 8 # end connection
 					self.close_file()
@@ -594,7 +594,7 @@ class Socks5:
 		auth_mechanisms = []
 		try:
 			ver, num_auth = struct.unpack('!BB', buff[:2])
-			for i in range(num_auth):
+			for i in xrange(num_auth):
 				mechanism, = struct.unpack('!B', buff[1 + i])
 				auth_mechanisms.append(mechanism)
 		except:
@@ -718,9 +718,9 @@ class Socks5Sender(Socks5):
 		if self._sock is None:
 			return False
 		try:
-			if self.state in [1, 3, 5]:  # (initial, request, send file)
+			if self.state in (1, 3, 5):  # (initial, request, send file)
 				return self.pending_read(timeout)
-			elif self.state in [2, 4]: # send auth and positive response
+			elif self.state in (2, 4): # send auth and positive response
 				return True
 		except Exception, e:
 			return False
@@ -908,9 +908,9 @@ class Socks5Receiver(Socks5):
 		if self._sock is None:
 			return False
 		try:
-			if self.state in [2, 4, 6]: # auth response, connect, file data
+			if self.state in (2, 4, 6): # auth response, connect, file data
 				return self.pending_read(0)
-			elif self.state in [1, 3, 5]: # auth types, connect request
+			elif self.state in (1, 3, 5): # auth types, connect request
 				return True
 		except Exception, e:
 			return False

@@ -229,7 +229,7 @@ class Connection:
 			card = vc.getChildren()[0]
 			for info in card.getChildren():
 				name = info.getName()
-				if name in ['ADR', 'TEL', 'EMAIL']: # we can have several
+				if name in ('ADR', 'TEL', 'EMAIL'): # we can have several
 					if not vcard.has_key(name):
 						vcard[name] = []
 					entry = {}
@@ -937,7 +937,7 @@ class Connection:
 		file_tag = si.getTag('file')
 		file_props = {'type': 'r'}
 		for attribute in file_tag.getAttrs():
-			if attribute in ['name', 'size', 'hash', 'date']:
+			if attribute in ('name', 'size', 'hash', 'date'):
 				val = file_tag.getAttr(attribute)
 				if val is None:
 					continue
@@ -1148,7 +1148,7 @@ class Connection:
 				for tag in tags:
 					data = tag.getData()
 					if ctype == 'boolean':
-						if data in ['yes', 'true', 'assent', '1']:
+						if data in ('yes', 'true', 'assent', '1'):
 							data = True
 						else:
 							data = False
@@ -1283,7 +1283,7 @@ class Connection:
 	def _HttpAuthCB(self, con, iq_obj):
 		gajim.log.debug('HttpAuthCB')
 		opt = gajim.config.get_per('accounts', self.name, 'http_auth')
-		if opt in ['yes', 'no']:
+		if opt in ('yes', 'no'):
 			self.build_http_auth_answer(iq_obj, opt)
 		else:
 			method = iq_obj.getTagAttr('confirm', 'method')
