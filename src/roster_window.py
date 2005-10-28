@@ -1497,18 +1497,18 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.make_menu()
 	
 	def new_chat(self, contact, account):
+		chats = gajim.interface.windows[account]['chats']
 		if gajim.config.get('usetabbedchat'):
-			if not gajim.interface.windows[account]['chats'].has_key('tabbed'):
-				gajim.interface.windows[account]['chats']['tabbed'] = \
-					tabbed_chat_window.TabbedChatWindow(contact, account)
+			if not chats.has_key('tabbed'):
+				chats['tabbed'] = tabbed_chat_window.TabbedChatWindow(contact,
+					account)
 			else:
-				gajim.interface.windows[account]['chats']['tabbed'].new_tab(contact)
+				chats['tabbed'].new_tab(contact)
 
-			gajim.interface.windows[account]['chats'][contact.jid] = \
-				gajim.interface.windows[account]['chats']['tabbed']
+			chats[contact.jid] = chats['tabbed']
 		else:
-			gajim.interface.windows[account]['chats'][contact.jid] = \
-				tabbed_chat_window.TabbedChatWindow(contact, account)
+			chats[contact.jid] = tabbed_chat_window.TabbedChatWindow(contact,
+				account)
 
 	def new_chat_from_jid(self, account, jid):
 		if gajim.contacts[account].has_key(jid):
@@ -1840,14 +1840,14 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			if first_ev:
 				if self.open_event(account, jid, first_ev):
 					return
-
-			if gajim.interface.windows[account]['chats'].has_key(jid):
-				gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
+			chats = gajim.interface.windows[account]['chats']
+			if chats.has_key(jid):
+				chats[jid].set_active_tab(jid)
 			elif gajim.contacts[account].has_key(jid):
 				c = gajim.get_contact_instance_with_highest_priority(account, jid)
 				self.new_chat(c, account)
-				gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
-			gajim.interface.windows[account]['chats'][jid].window.present()
+				chats[jid].set_active_tab(jid)
+			chats[jid].window.present()
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''
