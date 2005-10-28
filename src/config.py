@@ -28,7 +28,6 @@ import common.sleepy
 import gtkgui_helpers
 import dialogs
 import cell_renderer_image
-import cell_renderer_image
 
 try:
 	import gtkspell
@@ -2886,13 +2885,14 @@ class FirstTimeWizardWindow:
 				register_new = False
 				#FIXME: pango me
 				finish_text = _('Account has been added successfully.\n'
-'You can set advanced options by using "Edit->Accounts" from the main window.')
+'You can set advanced account options by clicking in Accounts menuitem under Edit menu from the main window.')
 			elif cur_page == 2:
 				widgets = self.get_widgets('register_')
 				register_new = True
 				#FIXME: pango me
 				finish_text = _('Your new account has been created successfully.\n'
-'You can set advanced account options using "Edit->Accounts" in the main window menu.') 
+'You can set advanced account options by clicking in Accounts menuitem under Edit menu from the main window.')
+
 
 			user = widgets['nick_entry'].get_text().decode('utf-8')
 			server = widgets['server_comboboxentry'].child.get_text()
@@ -2945,9 +2945,6 @@ _('You need to enter a valid server address to continue.')).get_response()
 			widgets['nick_entry'].grab_focus()
 			widgets['nick_entry'].set_position(-1)
 			return True
-
-	def on_useproxy_expander_activate(self, widget):
-		widgets = self.get_matching_widgets(widget)
 
 	def update_jid(self,widget):
 		widgets = self.get_matching_widgets(widget)
