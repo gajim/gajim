@@ -201,7 +201,7 @@ class GroupchatWindow(chat.Chat):
 			return
 		
 		print_focus_out_line = False
-		textview = self.xmls[room_jid].get_widget('conversation_textview')
+		textview = self.conversation_textviews[room_jid]
 		buffer = textview.get_buffer()
 
 		if self.focus_out_end_iter_offset[room_jid] is None:
@@ -253,7 +253,7 @@ class GroupchatWindow(chat.Chat):
 			buffer.end_user_action()
 			
 			# scroll to the end (via idle in case the scrollbar has appeared)
-			gobject.idle_add(self.scroll_to_end, textview)
+			gobject.idle_add(textview.scroll_to_end)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
@@ -578,8 +578,7 @@ class GroupchatWindow(chat.Chat):
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation. Tab does autocomplete in nicknames'''
 		room_jid = self.get_active_jid()
-		conversation_textview = self.xmls[room_jid].get_widget(
-			'conversation_textview')
+		conv_textview = self.conversation_textviews[room_jid]
 		message_buffer = widget.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
 		message = message_buffer.get_text(start_iter, end_iter,
@@ -667,12 +666,12 @@ class GroupchatWindow(chat.Chat):
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				self.notebook.emit('key_press_event', event)
 			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
-				conversation_textview.emit('key_press_event', event)
+				conv_textview.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
 				self.notebook.emit('key_press_event', event)
 			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
-				conversation_textview.emit('key_press_event', event)
+				conv_textview.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			if (event.state & gtk.gdk.SHIFT_MASK):
@@ -714,8 +713,7 @@ class GroupchatWindow(chat.Chat):
 		room_jid = self.get_active_jid()
 		message_textview = self.xmls[room_jid].get_widget(
 			'message_textview')
-		conversation_textview = self.xmls[room_jid].get_widget(
-			'conversation_textview')
+		conv_textview = self.conversation_textviews[room_jid]
 		message_buffer = message_textview.get_buffer()
 		if message != '' or message != '\n':
 			self.save_sent_message(room_jid, message)
@@ -726,12 +724,12 @@ class GroupchatWindow(chat.Chat):
 				command = message_array.pop(0).lower()
 				if command == 'clear':
 					# clear the groupchat window
-					self.on_clear(None, conversation_textview)
-					self.on_clear(None, message_textview)
+					conv_textview.clear()
+					self.clear(message_textview)
 				elif command == 'compact':
 					# set compact mode
 					self.set_compact_view(not self.compact_view_current_state)
-					self.on_clear(None, message_textview)
+					self.clear(message_textview)
 				elif command == 'nick':
 					# example: /nick foo
 					if len(message_array):
@@ -1308,8 +1306,7 @@ current room topic.') % command, room_jid)
 		# FIXME: Find a better indicator that the hpaned has moved.
 		self.list_treeview[room_jid].connect('size-allocate',
 			self.on_treeview_size_allocate)
-		conversation_textview = self.xmls[room_jid].get_widget(
-			'conversation_textview')
+		conv_textview = self.conversation_textviews[room_jid]
 		self.name_labels[room_jid] = self.xmls[room_jid].get_widget(
 			'banner_name_label')
 		self.paint_banner(room_jid)
@@ -1353,7 +1350,7 @@ current room topic.') % command, room_jid)
 		# set an empty subject to show the room_jid
 		self.set_subject(room_jid, '')
 		self.got_disconnected(room_jid) #init some variables
-		conversation_textview.grab_focus()
+		conv_textview.grab_focus()
 		self.childs[room_jid].show_all()
 
 	def on_message(self, room_jid, nick, msg, tim):

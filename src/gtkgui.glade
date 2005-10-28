@@ -9365,28 +9365,7 @@ topic</property>
 			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 			  <child>
-			    <widget class="GtkTextView" id="conversation_textview">
-			      <property name="border_width">1</property>
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="editable">False</property>
-			      <property name="overwrite">False</property>
-			      <property name="accepts_tab">True</property>
-			      <property name="justification">GTK_JUSTIFY_LEFT</property>
-			      <property name="wrap_mode">GTK_WRAP_WORD</property>
-			      <property name="cursor_visible">False</property>
-			      <property name="pixels_above_lines">0</property>
-			      <property name="pixels_below_lines">0</property>
-			      <property name="pixels_inside_wrap">0</property>
-			      <property name="left_margin">2</property>
-			      <property name="right_margin">2</property>
-			      <property name="indent">0</property>
-			      <property name="text" translatable="yes"></property>
-			      <signal name="motion_notify_event" handler="on_conversation_textview_motion_notify_event" last_modification_time="Sat, 19 Mar 2005 14:59:33 GMT"/>
-			      <signal name="button_press_event" handler="on_conversation_textview_button_press_event" last_modification_time="Sat, 19 Mar 2005 14:59:45 GMT"/>
-			      <signal name="key_press_event" handler="on_conversation_textview_key_press_event" last_modification_time="Sun, 03 Apr 2005 08:53:17 GMT"/>
-			      <signal name="populate_popup" handler="on_conversation_textview_populate_popup" last_modification_time="Wed, 11 May 2005 19:23:10 GMT"/>
-			    </widget>
+			    <placeholder/>
 			  </child>
 			</widget>
 			<packing>
@@ -10937,28 +10916,7 @@ Status message</property>
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkTextView" id="conversation_textview">
-		      <property name="border_width">1</property>
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="editable">False</property>
-		      <property name="overwrite">False</property>
-		      <property name="accepts_tab">True</property>
-		      <property name="justification">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap_mode">GTK_WRAP_WORD</property>
-		      <property name="cursor_visible">False</property>
-		      <property name="pixels_above_lines">0</property>
-		      <property name="pixels_below_lines">0</property>
-		      <property name="pixels_inside_wrap">0</property>
-		      <property name="left_margin">2</property>
-		      <property name="right_margin">2</property>
-		      <property name="indent">0</property>
-		      <property name="text" translatable="yes"></property>
-		      <signal name="motion_notify_event" handler="on_conversation_textview_motion_notify_event" last_modification_time="Thu, 10 Mar 2005 16:07:43 GMT"/>
-		      <signal name="button_press_event" handler="on_conversation_textview_button_press_event" last_modification_time="Thu, 10 Mar 2005 17:54:22 GMT"/>
-		      <signal name="key_press_event" handler="on_conversation_textview_key_press_event" last_modification_time="Thu, 31 Mar 2005 14:50:51 GMT"/>
-		      <signal name="populate_popup" handler="on_conversation_textview_populate_popup" last_modification_time="Wed, 11 May 2005 19:39:04 GMT"/>
-		    </widget>
+		    <placeholder/>
 		  </child>
 		</widget>
 		<packing>

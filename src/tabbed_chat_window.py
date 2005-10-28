@@ -576,7 +576,7 @@ class TabbedChatWindow(chat.Chat):
 		and printed in the conversation'''
 
 		jid = self.get_active_jid()
-		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		conv_textview = self.conversation_textviews[jid]
 		message_textview = widget
 		message_buffer = message_textview.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
@@ -592,12 +592,12 @@ class TabbedChatWindow(chat.Chat):
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
 				self.notebook.emit('key_press_event', event)
 			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
-				conversation_textview.emit('key_press_event', event)
+				conv_textview.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
 				self.notebook.emit('key_press_event', event)
 			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
-				conversation_textview.emit('key_press_event', event)
+				conv_textview.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+UP
 				self.sent_messages_scroll(jid, 'up', widget.get_buffer())
@@ -699,7 +699,7 @@ class TabbedChatWindow(chat.Chat):
 		contact.chatstate = state
 		if contact.chatstate == 'active':
 			self.reset_kbd_mouse_timeout_vars()
-		
+
 	def send_message(self, message):
 		'''Send the given message to the active tab'''
 		if not message:
@@ -716,19 +716,19 @@ class TabbedChatWindow(chat.Chat):
 				(room, nick)).get_response()
 			return
 
-		conversation_textview = self.xmls[jid].get_widget('conversation_textview')
+		conv_textview = self.conversation_textviews[jid]
 		message_textview = self.xmls[jid].get_widget('message_textview')
 		message_buffer = message_textview.get_buffer()
 
 		if message != '' or message != '\n':
 			self.save_sent_message(jid, message)
 			if message == '/clear':
-				self.on_clear(None, conversation_textview) # clear conversation
-				self.on_clear(None, message_textview) # clear message textview too
+				conv_textview.clear() # clear conversation
+				self.clear(message_textview) # clear message textview too
 				return True
 			elif message == '/compact':
 				self.set_compact_view(not self.compact_view_current_state)
-				self.on_clear(None, message_textview)
+				self.clear(message_textview)
 				return True
 			keyID = ''
 			encrypted = False
@@ -938,4 +938,5 @@ class TabbedChatWindow(chat.Chat):
 				['small'], ['small', 'grey'], ['small', 'grey'], False)
 
 		if len(lines):
-			self.print_empty_line(jid)
+			conv_textview = self.conversation_textviews[jid]
+			conv_textview.print_empty_line()
