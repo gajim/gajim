@@ -1802,24 +1802,28 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		typ = event[0]
 		data = event[1]
 		ft = gajim.interface.windows['file_transfers']
-		gajim.interface.remove_first_event(account, jid, typ)
 		if typ == 'normal':
 			dialogs.SingleMessageWindow(account, jid,
 				action = 'receive', from_whom = jid, subject = data[1],
 				message = data[0])
+			gajim.interface.remove_first_event(account, jid, typ)
 			return True
 		elif typ == 'file-request':
 			contact = gajim.get_contact_instance_with_highest_priority(account, jid)
 			ft.show_file_request(account, contact, data)
+			gajim.interface.remove_first_event(account, jid, typ)
 			return True
 		elif typ in ('file-request-error', 'file-send-error'):
 			ft.show_send_error(data)
+			gajim.interface.remove_first_event(account, jid, typ)
 			return True
 		elif typ in ('file-error', 'file-stopped'):
 			ft.show_stopped(jid, data)
+			gajim.interface.remove_first_event(account, jid, typ)
 			return True
 		elif typ == 'file-completed':
 			ft.show_completed(jid, data)
+			gajim.interface.remove_first_event(account, jid, typ)
 			return True
 		return False
 
