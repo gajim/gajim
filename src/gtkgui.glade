@@ -13719,7 +13719,6 @@ to the Jabber network.</property>
 		      <property name="can_focus">True</property>
 		      <property name="expanded">False</property>
 		      <property name="spacing">0</property>
-		      <signal name="activate" handler="on_useproxy_expander_activate" last_modification_time="Mon, 12 Sep 2005 12:34:27 GMT"/>
 
 		      <child>
 			<widget class="GtkTable" id="table29">
@@ -14360,7 +14359,6 @@ to the Jabber network.</property>
 		      <property name="can_focus">True</property>
 		      <property name="expanded">False</property>
 		      <property name="spacing">0</property>
-		      <signal name="activate" handler="on_useproxy_expander_activate" last_modification_time="Mon, 12 Sep 2005 12:31:43 GMT"/>
 
 		      <child>
 			<widget class="GtkTable" id="table30">
