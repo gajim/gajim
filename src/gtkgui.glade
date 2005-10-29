@@ -11314,10 +11314,6 @@ Status message</property>
 		      <property name="fill">False</property>
 		    </packing>
 		  </child>
-
-		  <child>
-		    <placeholder/>
-		  </child>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
