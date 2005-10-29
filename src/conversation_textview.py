@@ -60,9 +60,8 @@ class ConversationTextview(gtk.TextView):
 		self.connect('populate_popup', self.on_textview_populate_popup)
 		self.connect('button_press_event', self.on_textview_button_press_event)
 		
-		# FIXME: 0.8.2 glade had this, are we sure it got removed in svn 
-		# before this patch was ocmmited?
-		#self.connect('key_press_event', on_conversation_textview_key_press_event)
+		# FIXME: svn glade file had this
+		#self.connect('key_press_event', self.on_conversation_textview_key_press_event)
 		
 		self.account = account
 		self.change_cursor = None
