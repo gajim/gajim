@@ -42,7 +42,8 @@ gtk.glade.textdomain(APP)
 GTKGUI_GLADE = 'gtkgui.glade'
 
 class ConversationTextview(gtk.TextView):
-	'''Class for chat/groupchat windows'''
+	'''Class for the conversation textview (where user reads already said messages)
+	for chat/groupchat windows'''
 	def __init__(self, account):
 		gtk.TextView.__init__(self)
 		

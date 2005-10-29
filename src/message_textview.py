@@ -20,6 +20,8 @@ import gtk
 import gobject
 
 class MessageTextView(gtk.TextView):
+	'''Class for the message textview (where user writes new messages)
+	for chat/groupchat windows'''
 	__gsignals__ = dict(
 		mykeypress = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION,
 				None, # return value
