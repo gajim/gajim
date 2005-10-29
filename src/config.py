@@ -2824,7 +2824,6 @@ class FirstTimeWizardWindow:
 		self.finish_button = self.xml.get_widget('finish_button')
 		self.finish_label = self.xml.get_widget('finish_label')
 
-
 	def on_register_server_features_button_clicked(self, widget): 
 		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
 
@@ -2893,13 +2892,12 @@ class FirstTimeWizardWindow:
 				finish_text = _('Your new account has been created successfully.\n'
 'You can set advanced account options by clicking in Accounts menuitem under Edit menu from the main window.')
 
-
 			user = widgets['nick_entry'].get_text().decode('utf-8')
 			server = widgets['server_comboboxentry'].child.get_text()
 			savepass = widgets['save_password_checkbutton'].get_active()
 			password = widgets['pass_entry'].get_text()
 			if self.check_data(user, server):
-				self.save_account(user, server, savepass, password, register_new)
+				self.save_account(_('Main'), server, savepass, password, register_new)
 				self.finish_label.set_text(finish_text)
 				self.xml.get_widget('cancel_button').hide()
 				self.back_button.hide()
