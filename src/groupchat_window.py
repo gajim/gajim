@@ -23,14 +23,16 @@ import gtk.glade
 import pango
 import gobject
 import time
+import sre
+import os
+
 import dialogs
 import chat
 import cell_renderer_image
 import gtkgui_helpers
 import history_window
 import tooltips
-import sre
-import os
+import message_textview
 
 from gajim import Contact
 from common import gajim
@@ -573,16 +575,25 @@ class GroupchatWindow(chat.Chat):
 				_('Bookmark has been added successfully'),
 				_('You can manage your bookmarks via Actions menu in your roster.'))
 
-	def on_message_textview_key_press_event(self, widget, event):
+	def on_message_textview_mykeypress_event(self, widget, event_keyval,
+	event_keymod):
 		'''When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation. Tab does autocomplete in nicknames'''
+		# NOTE: handles mykeypress which is custom signal connected to this
+		# CB in new_room(). for this singal see message_textview.py
 		room_jid = self.get_active_jid()
 		conv_textview = self.conversation_textviews[room_jid]
 		message_buffer = widget.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
 		message = message_buffer.get_text(start_iter, end_iter,
 			False).decode('utf-8')
+			
+		# construct event instance from binding
+		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
+		event.keyval = event_keyval
+		event.state = event_keymod
+		event.time = 0 # assign current time
 
 		if event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
 			if (event.state & gtk.gdk.CONTROL_MASK): # CTRL + SHIFT + TAB  
@@ -590,13 +601,14 @@ class GroupchatWindow(chat.Chat):
 		elif event.keyval == gtk.keysyms.Tab: # TAB
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
-			else:
+			else: # just TAB
 				cursor_position = message_buffer.get_insert()
 				end_iter = message_buffer.get_iter_at_mark(cursor_position)
 				text = message_buffer.get_text(start_iter, end_iter,
 					False).decode('utf-8')
 				if not text or text.endswith(' '):
-					if not self.last_key_tabs[room_jid]: # if we are nick cycling, last char will always be space
+					# if we are nick cycling, last char will always be space
+					if not self.last_key_tabs[room_jid]:
 						return False
 
 				splitted_text = text.split()
@@ -681,11 +693,11 @@ class GroupchatWindow(chat.Chat):
 			message_buffer.set_text('')
 			return True
 		elif event.keyval == gtk.keysyms.Up:
-			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+UP
+			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+UP
 				self.sent_messages_scroll(room_jid, 'up', widget.get_buffer())
 				return True # override the default gtk+ thing for ctrl+up
 		elif event.keyval == gtk.keysyms.Down:
-			if event.state & gtk.gdk.CONTROL_MASK: #Ctrl+Down
+			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+Down
 				self.sent_messages_scroll(room_jid, 'down', widget.get_buffer())
 				return True # override the default gtk+ thing for ctrl+down
 		else:
@@ -694,8 +706,9 @@ class GroupchatWindow(chat.Chat):
 	def on_send_button_clicked(self, widget):
 		'''When send button is pressed: send the current message'''
 		room_jid = self.get_active_jid()
-		message_textview = self.xmls[room_jid].get_widget(
-			'message_textview')
+		message_scrolledwindow = self.xmls[room_jid].get_widget(
+			'message_scrolledwindow')
+		message_textview = message_scrolledwindow.get_children()[0]
 		message_buffer = message_textview.get_buffer()
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
@@ -711,8 +724,9 @@ class GroupchatWindow(chat.Chat):
 		if not message:
 			return
 		room_jid = self.get_active_jid()
-		message_textview = self.xmls[room_jid].get_widget(
-			'message_textview')
+		message_scrolledwindow = self.xmls[room_jid].get_widget(
+			'message_scrolledwindow')
+		message_textview = message_scrolledwindow.get_children()[0]
 		conv_textview = self.conversation_textviews[room_jid]
 		message_buffer = message_textview.get_buffer()
 		if message != '' or message != '\n':
@@ -1272,7 +1286,10 @@ current room topic.') % command, room_jid)
 
 	def got_connected(self, room_jid):
 		gajim.gc_connected[self.account][room_jid] = True
-		self.xmls[room_jid].get_widget('message_textview').set_sensitive(True)
+		message_scrolledwindow = self.xmls[room_jid].get_widget(
+			'message_scrolledwindow')
+		message_textview = message_scrolledwindow.get_children()[0]
+		message_textview.set_sensitive(True)
 		self.xmls[room_jid].get_widget('send_button').set_sensitive(True)
 
 	def got_disconnected(self, room_jid):
@@ -1280,14 +1297,16 @@ current room topic.') % command, room_jid)
 		model.clear()
 		gajim.gc_contacts[self.account][room_jid] = {}
 		gajim.gc_connected[self.account][room_jid] = False
-		self.xmls[room_jid].get_widget('message_textview').set_sensitive(False)
+		message_scrolledwindow = self.xmls[room_jid].get_widget(
+			'message_scrolledwindow')
+		message_textview = message_scrolledwindow.get_children()[0]
+		message_textview.set_sensitive(False)
 		self.xmls[room_jid].get_widget('send_button').set_sensitive(False)
 
 	def new_room(self, room_jid, nick):
 		self.names[room_jid] = room_jid.split('@')[0]
 		self.xmls[room_jid] = gtk.glade.XML(GTKGUI_GLADE, 'gc_vbox', APP)
 		self.childs[room_jid] = self.xmls[room_jid].get_widget('gc_vbox')
-		chat.Chat.new_tab(self, room_jid)
 		self.nicks[room_jid] = nick
 		self.subjects[room_jid] = ''
 		self.room_creation[room_jid] = time.time()
@@ -1301,6 +1320,17 @@ current room topic.') % command, room_jid)
 			'list_treeview')
 		self.subject_tooltip[room_jid] = gtk.Tooltips()
 		
+		# add MessageTextView to UI
+		message_scrolledwindow = self.xmls[room_jid].get_widget(
+			'message_scrolledwindow')
+		
+		msg_textview = message_textview.MessageTextView()
+		msg_textview.connect('mykeypress',
+			self.on_message_textview_mykeypress_event)
+		message_scrolledwindow.add(msg_textview)
+		
+		chat.Chat.new_tab(self, room_jid)
+				
 		# we want to know when the the widget resizes, because that is
 		# an indication that the hpaned has moved...
 		# FIXME: Find a better indicator that the hpaned has moved.

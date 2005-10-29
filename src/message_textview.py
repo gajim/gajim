@@ -59,6 +59,10 @@ gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.ISO_Left_Tab,
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Tab, 
 	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.Tab,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
+	
+# TAB
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Tab, 
+	0, 'mykeypress', int, gtk.keysyms.Tab,	gtk.gdk.ModifierType, 0)
 
 # CTRL + PAGE DOWN
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Page_Down, 

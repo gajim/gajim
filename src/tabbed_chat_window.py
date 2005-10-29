@@ -438,12 +438,14 @@ class TabbedChatWindow(chat.Chat):
 		self.childs[contact.jid] = self.xmls[contact.jid].get_widget('chats_vbox')
 		self.contacts[contact.jid] = contact
 		
+		
+		# add MessageTextView to UI
 		message_scrolledwindow = self.xmls[contact.jid].get_widget(
 			'message_scrolledwindow')
 		
 		msg_textview = message_textview.MessageTextView()
 		msg_textview.connect('mykeypress',
-			self.on_message_textview_key_press_event)
+			self.on_message_textview_mykeypress_event)
 		message_scrolledwindow.add(msg_textview)
 		
 		#FIXME: request in thread or idle and show in roster
@@ -581,11 +583,13 @@ class TabbedChatWindow(chat.Chat):
 		self.mouse_over_in_last_30_secs = False
 		self.kbd_activity_in_last_30_secs = False
 
-	def on_message_textview_key_press_event(self, widget, event_keyval, event_keymod):
+	def on_message_textview_mykeypress_event(self, widget, event_keyval,
+	event_keymod):
 		'''When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation'''
-
+		# NOTE: handles mykeypress which is custom signal connected to this
+		# CB in new_tab(). for this singal see message_textview.py
 		jid = self.get_active_jid()
 		conv_textview = self.conversation_textviews[jid]
 		message_textview = widget
