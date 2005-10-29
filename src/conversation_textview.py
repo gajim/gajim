@@ -47,6 +47,7 @@ class ConversationTextview(gtk.TextView):
 		gtk.TextView.__init__(self)
 		self.account = account
 		self.change_cursor = None
+		self.last_time_printout = 0
 
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
 		self.modify_font(font)
@@ -528,9 +529,9 @@ class ConversationTextview(gtk.TextView):
 		elif gajim.config.get('print_time') == 'sometimes':
 			every_foo_seconds = 60 * gajim.config.get(
 				'print_ichat_every_foo_minutes')
-			seconds_passed = time.time() - self.last_time_printout[jid]
+			seconds_passed = time.time() - self.last_time_printout
 			if seconds_passed > every_foo_seconds:
-				self.last_time_printout[jid] = time.time()
+				self.last_time_printout = time.time()
 				end_iter = buffer.get_end_iter()
 				tim = time.localtime()
 				tim_format = time.strftime('%H:%M', tim)

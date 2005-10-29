@@ -57,7 +57,6 @@ class Chat:
 		self.xmls = {}
 		self.conversation_textviews = {}
 		self.nb_unread = {}
-		self.last_time_printout = {}
 		self.print_time_timeout_id = {}
 		self.names = {} # what is printed in the tab (eg. contact.name)
 		self.childs = {} # holds the contents for every tab (VBox)
@@ -528,7 +527,6 @@ class Chat:
 			del gajim.interface.windows[self.account][kind][jid]
 		del self.nb_unread[jid]
 		del gajim.last_message_time[self.account][jid]
-		del self.last_time_printout[jid]
 		del self.xmls[jid]
 		del self.childs[jid]
 		del self.sent_history[jid]
@@ -620,7 +618,6 @@ class Chat:
 		self.set_compact_view(self.always_compact_view)
 		self.nb_unread[jid] = 0
 		gajim.last_message_time[self.account][jid] = 0
-		self.last_time_printout[jid] = 0.
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
 		
 		if gajim.config.get('use_speller') and 'gtkspell' in globals():
