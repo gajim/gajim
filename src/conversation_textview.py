@@ -45,6 +45,25 @@ class ConversationTextview(gtk.TextView):
 	'''Class for chat/groupchat windows'''
 	def __init__(self, account):
 		gtk.TextView.__init__(self)
+		
+		# set properties
+		self.set_border_width(1)
+		self.set_accepts_tab(True)
+		self.set_editable(False)
+		self.set_cursor_visible(True)
+		self.set_wrap_mode(gtk.WRAP_WORD)
+		self.set_left_margin(2)
+		self.set_right_margin(2)
+		
+		# connect signals
+		self.connect('motion_notify_event', self.on_textview_motion_notify_event)
+		self.connect('populate_popup', self.on_textview_populate_popup)
+		self.connect('button_press_event', self.on_textview_button_press_event)
+		
+		# FIXME: 0.8.2 glade had this, are we sure it got removed in svn 
+		# before this patch was ocmmited?
+		#self.connect('key_press_event', on_conversation_textview_key_press_event)
+		
 		self.account = account
 		self.change_cursor = None
 		self.last_time_printout = 0
@@ -100,13 +119,8 @@ class ConversationTextview(gtk.TextView):
 		tag = buffer.create_tag('underline')
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 
-		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER) # FIXME: make it gtk.JUSTIFY_FILL when GTK+ REALLY supports it
-
-		self.set_wrap_mode(gtk.WRAP_WORD)
-		self.set_editable(False)
-		self.connect('motion_notify_event', self.on_textview_motion_notify_event)
-		self.connect('populate_popup', self.on_textview_populate_popup)
-		self.connect('button_press_event', self.on_textview_button_press_event)
+		# FIXME: make it gtk.JUSTIFY_FILL when GTK+ REALLY supports it
+		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
 
 		# muc attention states (when we are mentioned in a muc)
 		# if the room jid is in the list, the room has mentioned us
