@@ -28,10 +28,10 @@ class MessageTextView(gtk.TextView):
 		)
 		
 	def __init__(self):
-		self.set_property('left-margin', 2)
-		self.set_property('right-margin', 2)
-		self.set_property('pixels-above-lines', 2)
-		self.set_property('pixels-below-lines', 2)
+		self.set_left_margin(2)
+		self.set_right_margin(2)
+		self.set_pixels_above_lines(2)
+		self.set_pixels_below_lines(2)
 
 if gobject.pygtk_version < (2, 8, 0):
 	gobject.type_register(MessageTextView)
