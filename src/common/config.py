@@ -69,7 +69,7 @@ class Config:
 		'statusmsgcolor': [ opt_color, '#1eaa1e' ],
 		'markedmsgcolor': [ opt_color, '#ff8080' ],
 		'collapsed_rows': [ opt_str, '' ],
-		'roster_theme': [ opt_str, 'GTK+' ],
+		'roster_theme': [ opt_str, 'green' ],
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False ],
 		'sort_by_show': [ opt_bool, True ],
@@ -326,19 +326,25 @@ class Config:
 	}
 
 	themes_default = {
-		'GTK+': [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','' ],
-		'green': [ '#ffffff', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',
-					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
-					'#94aa8c' ],
+		# sorted alphanum
 		'cyan': [ '#ff0000', '#9fdfff', '', 'B', '#0000ff', '#ffffff',
 					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#9fdfff' ],
-		'marine': [ '#ffffff', '#918caa', '', 'B', '#0000ff', '#e9e7f3',
+					
+		'green': [ '#ffffff', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',
 					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
-					'#918caa' ],
+					'#94aa8c' ],
+		
 		'human': [ '#ffffff', '#996442', '', 'B', '#ab5920', '#e3ca94',
 					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#996442' ],
+					
+		'marine': [ '#ffffff', '#918caa', '', 'B', '#0000ff', '#e9e7f3',
+					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
+					'#918caa' ],
+					
+		'plain': [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','' ],
+		
 	}
 	
 	ft_proxies65_default = {

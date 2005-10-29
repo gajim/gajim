@@ -442,7 +442,7 @@ class PreferencesWindow:
 		if event.keyval == gtk.keysyms.Escape:
 			self.window.hide()
 
-	def on_checkbutton_toggled(self, widget, config_name, \
+	def on_checkbutton_toggled(self, widget, config_name,
 		change_sensitivity_widgets = None):
 		gajim.config.set(config_name, widget.get_active())
 		if change_sensitivity_widgets:
