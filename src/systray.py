@@ -292,8 +292,8 @@ class Systray:
 			if w:
 				w.set_active_tab(jid)
 				w.window.present()
-				tv = w.xmls[jid].get_widget('conversation_textview')
-				w.scroll_to_end(tv)
+				tv = w.conversation_textviews[jid]
+				tv.scroll_to_end()
 	
 	def on_middle_click(self):
 		win = gajim.interface.roster.window
