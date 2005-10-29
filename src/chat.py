@@ -94,7 +94,9 @@ class Chat:
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
 		for jid in self.xmls:
 			self.conversation_textviews[jid].modify_font(font)
-			message_textview = self.xmls[jid].get_widget('message_textview')
+			message_scrolledwindow = self.xmls[jid].get_widget(
+				'message_scrolledwindow')
+			message_textview = message_scrolledwindow.get_children()[0]
 			message_textview.modify_font(font)
 
 	def update_tags(self):
@@ -561,8 +563,9 @@ class Chat:
 		if message_textview.window is None:
 			return
 		message_scrolledwindow = xml_top.get_widget('message_scrolledwindow')
-		conversation_scrolledwindow = \
-			xml_top.get_widget('conversation_scrolledwindow')
+
+		conversation_scrolledwindow = xml_top.get_widget(
+			'conversation_scrolledwindow')
 		conv_textview = conversation_scrolledwindow.get_children()[0]
 
 		min_height = conversation_scrolledwindow.get_property('height-request')
@@ -621,7 +624,9 @@ class Chat:
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
 		
 		if gajim.config.get('use_speller') and 'gtkspell' in globals():
-			message_textview = self.xmls[jid].get_widget('message_textview')
+			message_scrolledwindow = self.xmls[jid].get_widget(
+				'message_scrolledwindow')
+			message_textview = message_scrolledwindow.get_children()[0]
 			try:
 				gtkspell.Spell(message_textview)
 			except gobject.GError, msg:
@@ -655,9 +660,12 @@ class Chat:
 			self.on_tab_eventbox_button_press_event, child)
 
 		self.notebook.append_page(child, tab_hbox)
-		message_textview = self.xmls[jid].get_widget('message_textview')
+		message_scrolledwindow = self.xmls[jid].get_widget(
+			'message_scrolledwindow')
+		message_textview = message_scrolledwindow.get_children()[0]
+		
 		message_textview.modify_font(font)
-		message_textview.connect('size-request', self.size_request, 
+		message_textview.connect('size-request', self.size_request,
 			self.xmls[jid])
 		# init new sent history for this conversation
 		self.sent_history[jid] = []
@@ -685,7 +693,9 @@ class Chat:
 				conv_textview.get_buffer().set_text('')
 			elif event.keyval == gtk.keysyms.v: # CTRL + V
 				jid = self.get_active_jid()
-				message_textview = self.xmls[jid].get_widget('message_textview')
+				message_scrolledwindow = self.xmls[jid].get_widget(
+					'message_scrolledwindow')
+				message_textview = message_scrolledwindow.get_children()[0]
 				if not message_textview.is_focus():
 					message_textview.grab_focus()
 				message_textview.emit('key_press_event', event)
@@ -748,7 +758,9 @@ class Chat:
 		elif event.keyval == gtk.keysyms.v and event.state & gtk.gdk.CONTROL_MASK:
 			# CTRL + V
 			jid = self.get_active_jid()
-			message_textview = self.xmls[jid].get_widget('message_textview')
+			message_scrolledwindow = self.xmls[jid].get_widget(
+				'message_scrolledwindow')
+			message_textview = message_scrolledwindow.get_children()[0]
 			if not message_textview.is_focus():
 				message_textview.grab_focus()
 			message_textview.emit('key_press_event', event)
@@ -760,7 +772,9 @@ class Chat:
 			# others do their default work
 			pass
 		else: # it's a normal key press make sure message_textview has focus
-			message_textview = self.xmls[jid].get_widget('message_textview')
+			message_scrolledwindow = self.xmls[jid].get_widget(
+				'message_scrolledwindow')
+			message_textview = message_scrolledwindow.get_children()[0]
 			if message_textview.get_property('sensitive'):
 				if not message_textview.is_focus():
 					message_textview.grab_focus()
