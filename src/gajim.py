@@ -378,7 +378,7 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
-						instance = dialogs.PopupNotificationWindow(\
+						instance = dialogs.PopupNotificationWindow(
 											 		_('Contact Signed Out'), jid, account)
 						self.roster.popup_notification_windows.append(instance)
 				if self.remote and self.remote.is_enabled():
