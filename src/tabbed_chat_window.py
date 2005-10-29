@@ -29,6 +29,7 @@ import os
 import dialogs
 import chat
 import gtkgui_helpers
+import message_textview
 
 from common import gajim
 from common import helpers
@@ -403,7 +404,9 @@ class TabbedChatWindow(chat.Chat):
 	def on_send_button_clicked(self, widget):
 		'''When send button is pressed: send the current message'''
 		jid = self.get_active_jid()
-		message_textview = self.xmls[jid].get_widget('message_textview')
+		message_scrolledwindow = self.xmls[jid].get_widget(
+			'message_scrolledwindow')
+		message_textview = message_scrolledwindow.get_children()[0]
 		message_buffer = message_textview.get_buffer()
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
@@ -435,6 +438,14 @@ class TabbedChatWindow(chat.Chat):
 		self.childs[contact.jid] = self.xmls[contact.jid].get_widget('chats_vbox')
 		self.contacts[contact.jid] = contact
 		
+		message_scrolledwindow = self.xmls[contact.jid].get_widget(
+			'message_scrolledwindow')
+		
+		msg_textview = message_textview.MessageTextView()
+		msg_textview.connect('mykeypress',
+			self.on_message_textview_key_press_event)
+		message_scrolledwindow.add(msg_textview)
+		
 		#FIXME: request in thread or idle and show in roster
 		
 		# this is to prove cache code works:
@@ -455,8 +466,7 @@ class TabbedChatWindow(chat.Chat):
 			gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP,
 			self.dnd_list, gtk.gdk.ACTION_COPY)
 		
-		message_textview = self.xmls[contact.jid].get_widget('message_textview')
-		message_tv_buffer = message_textview.get_buffer()
+		message_tv_buffer = msg_textview.get_buffer()
 		message_tv_buffer.connect('changed',
 			self.on_message_tv_buffer_changed, contact)
 
@@ -482,12 +492,10 @@ class TabbedChatWindow(chat.Chat):
 		# chatstates
 		self.reset_kbd_mouse_timeout_vars()
 		
-		self.possible_paused_timeout_id[contact.jid] =\
-			gobject.timeout_add(5000, self.check_for_possible_paused_chatstate,
-			contact.jid)
-		self.possible_inactive_timeout_id[contact.jid] =\
-			gobject.timeout_add(30000, self.check_for_possible_inactive_chatstate,
-				contact.jid)
+		self.possible_paused_timeout_id[contact.jid] = gobject.timeout_add(
+			5000, self.check_for_possible_paused_chatstate, contact.jid)
+		self.possible_inactive_timeout_id[contact.jid] = gobject.timeout_add(
+			30000, self.check_for_possible_inactive_chatstate, contact.jid)
 		
 	def handle_incoming_chatstate(self, account, jid, chatstate):
 		''' handle incoming chatstate that jid SENT TO us '''
@@ -513,7 +521,10 @@ class TabbedChatWindow(chat.Chat):
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
 		
-		message_buffer = self.xmls[jid].get_widget('message_textview').get_buffer()
+		message_scrolledwindow = self.xmls[jid].get_widget(
+			'message_scrolledwindow')
+		message_textview = message_scrolledwindow.get_children()[0]
+		message_buffer = message_textview.get_buffer()
 		if self.kbd_activity_in_last_5_secs and message_buffer.get_char_count():
 			# Only composing if the keyboard activity was in text entry
 			self.send_chatstate('composing', jid)
@@ -570,7 +581,7 @@ class TabbedChatWindow(chat.Chat):
 		self.mouse_over_in_last_30_secs = False
 		self.kbd_activity_in_last_30_secs = False
 
-	def on_message_textview_key_press_event(self, widget, event):
+	def on_message_textview_key_press_event(self, widget, event_keyval, event_keymod):
 		'''When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation'''
@@ -580,7 +591,14 @@ class TabbedChatWindow(chat.Chat):
 		message_textview = widget
 		message_buffer = message_textview.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
-		message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+		message = message_buffer.get_text(start_iter, end_iter, False).decode(
+			'utf-8')
+
+		# construct event instance from binding
+		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
+		event.keyval = event_keyval
+		event.state = event_keymod
+		event.time = 0 # assign current time
 
 		if event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + SHIFT + TAB
@@ -717,7 +735,9 @@ class TabbedChatWindow(chat.Chat):
 			return
 
 		conv_textview = self.conversation_textviews[jid]
-		message_textview = self.xmls[jid].get_widget('message_textview')
+		message_scrolledwindow = self.xmls[jid].get_widget(
+			'message_scrolledwindow')
+		message_textview = message_scrolledwindow.get_children()[0]
 		message_buffer = message_textview.get_buffer()
 
 		if message != '' or message != '\n':

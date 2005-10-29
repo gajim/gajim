@@ -25,11 +25,13 @@ class MessageTextView(gtk.TextView):
 	__gsignals__ = dict(
 		mykeypress = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION,
 				None, # return value
-				(str, int, gtk.gdk.ModifierType ) # arguments
+				(int, gtk.gdk.ModifierType ) # arguments
 			)
 		)
 		
 	def __init__(self):
+		gtk.TextView.__init__(self)
+		
 		# set properties
 		self.set_border_width(1)
 		self.set_accepts_tab(True)
@@ -93,7 +95,7 @@ gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Return,
 	0, 'mykeypress', int, gtk.keysyms.Return,
 	gtk.gdk.ModifierType, 0)
 
-# Ctrl+Enter
+# Ctrl + Enter
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Return, 
 	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.Return,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
@@ -103,7 +105,7 @@ gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.KP_Enter,
 	0, 'mykeypress', int, gtk.keysyms.KP_Enter,
 	gtk.gdk.ModifierType, 0)
 
-# Ctrl+ Keypad Enter
+# Ctrl + Keypad Enter
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.KP_Enter, 
 	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.KP_Enter,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
