@@ -703,7 +703,7 @@ class NewMessageDialog:
 			title = _('New Message')
 		prompt_text = _('Fill in the contact ID of the contact you would like\nto send a chat message to:')
 
-		instance = InputDialog(title, prompt_text, is_modal = False, ok_handler = self.new_message_response)
+		InputDialog(title, prompt_text, is_modal = False, ok_handler = self.new_message_response)
 			
 	def new_message_response(self, jid):
 		''' called when ok button is clicked '''
