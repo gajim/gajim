@@ -93,6 +93,8 @@ class RosterWindow:
 		acct = self.get_account_iter(account)
 		found = []
 		fin = False
+		if model is None: # when closing Gajim model can be none (async pbs?)
+			return found
 		group_iter = model.iter_children(acct)
 		while group_iter:
 			user_iter = model.iter_children(group_iter)
