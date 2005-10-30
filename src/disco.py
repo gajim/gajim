@@ -681,7 +681,6 @@ class AgentBrowser:
 		# Set the banner and window title
 		if identities[0].has_key('name'):
 			name = identities[0]['name']
-			self.window.window.set_title(_('Browsing %s') % name)
 			self.window.banner.set_markup('<span weight="heavy" size="large">'\
 				'%s</span>\n%s' % (name, self._get_agent_address()))
 		
