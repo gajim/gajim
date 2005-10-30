@@ -407,7 +407,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.progressbar.set_no_show_all(True)
 		self.progressbar.hide()
 		self.banner = self.xml.get_widget('banner_agent_label')
-		self.banner_hbox = self.xml.get_widget('banner_agent_hbox')
+		self.banner_icon = self.xml.get_widget('banner_agent_icon')
 		self.banner_eventbox = self.xml.get_widget('banner_agent_eventbox')
 		self.paint_banner()
 		self.filter_hbox = self.xml.get_widget('filter_hbox')
@@ -463,6 +463,8 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.window.set_title(_('Service Discovery'))
 		self.banner.set_markup('<span weight="heavy" size="large">'\
 			'%s</span>\n' % _('Service Discovery'))
+		self.banner_icon.clear()
+		self.banner_icon.hide()		# Just clearing it doesn't work
 
 	def paint_banner(self):
 		"""Repaint the banner with theme color"""
@@ -621,7 +623,6 @@ class AgentBrowser:
 			self._get_agent_address())
 		self.window.banner.set_markup('<span weight="heavy" size="large">'\
 			'%s</span>\n' % self._get_agent_address())
-		self._image = None
 
 	def _create_treemodel(self):
 		"""Create the treemodel for the services treeview. When subclassing,
@@ -685,18 +686,13 @@ class AgentBrowser:
 		
 		# Add an icon to the banner.
 		pix = self.cache.get_icon(identities)
-		# Clear the old one if there is one (shouldn't happen, but just in case)
-		self._clean_title()
-		self._image = gtk.Image()
-		self._image.set_from_pixbuf(pix)
-		self._image.set_padding(6, 6)
-		self.window.banner_hbox.pack_start(self._image, False, False)
-		self._image.show()
+		self.window.banner_icon.set_from_pixbuf(pix)
+		self.window.banner_icon.show()
 	
 	def _clean_title(self):
-		if self._image:
-			self._image.destroy()
-			self._image = None
+		# Everything done here is done in window._initial_state
+		# This is for subclasses.
+		pass
 
 	def prepare_window(self, window):
 		"""Prepare the service discovery window. Called when a browser is hooked
