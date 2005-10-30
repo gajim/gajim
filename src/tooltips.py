@@ -512,3 +512,19 @@ class FileTransfersTooltip(BaseTooltip):
 		self.text_lable.set_markup(text)
 		self.hbox.add(self.text_lable)
 		self.win.add(self.hbox)
+
+
+class ServiceDiscoveryTooltip(BaseTooltip):
+	''' Tooltip that is shown when hovering over a service discovery row '''
+	def populate(self, status):
+		self.create_window()
+		label = gtk.Label()
+		label.set_line_wrap(True)
+		label.set_alignment(0, 0)
+		label.set_selectable(False)
+		if status == 1:
+			label.set_text(_('This service has not yet responded with detailed information.'))
+		elif status == 2:
+			label.set_text(_('This service could not respond with detailed information.\n'
+							 'It is most likely legacy or broken, and may not work as expected.'))
+		self.win.add(label)

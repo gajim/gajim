@@ -52,6 +52,7 @@ import gtk
 import gtk.glade
 
 import dialogs
+import tooltips
 
 from gajim import Contact
 from common import helpers
@@ -887,7 +888,11 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self._progressbar_sourceid = None
 		self._renderer = None
 		self._progress = 0
+		self.tooltip = tooltips.ServiceDiscoveryTooltip()
 		self.register_button = None
+		# Keep track of our treeview signals
+		self._view_signals = []
+		self._scroll_signal = None
 
 	def _pixbuf_renderer_data_func(self, col, cell, model, iter):
 		"""Callback for setting the pixbuf renderer's properties."""
@@ -933,13 +938,65 @@ class ToplevelAgentBrowser(AgentBrowser):
 			return cmp(descr1, descr2)
 		return statecmp
 
+	def _show_tooltip(self, state):
+		view = self.window.services_treeview
+		pointer = view.get_pointer()
+		props = view.get_path_at_pos(pointer[0], pointer[1])
+		if props and self.tooltip.id == props[0]:
+			# check if the current pointer is at the same path
+			# as it was before setting the timeout
+			rect =  view.get_cell_area(props[0], props[1])
+			position = view.window.get_origin()
+			pointer = self.window.window.get_pointer()
+			self.tooltip.show_tooltip(state, (pointer[0], rect.height),
+				 (position[0], position[1] + rect.y))
+		else:
+			self.tooltip.hide_tooltip()
+	
+	# These are all callbacks to make tooltips work
+	def on_treeview_leave_notify_event(self, widget, event):
+		model = widget.get_model()
+		props = widget.get_path_at_pos(int(event.x), int(event.y))
+		if self.tooltip.timeout > 0:
+			if not props or self.tooltip.id == props[0]:
+				self.tooltip.hide_tooltip()
+
+	def on_treeview_motion_notify_event(self, widget, event):
+		model = widget.get_model()
+		props = widget.get_path_at_pos(int(event.x), int(event.y))
+		if self.tooltip.timeout > 0:
+			if not props or self.tooltip.id != props[0]:
+				self.tooltip.hide_tooltip()
+		if props:
+			[row, col, x, y] = props
+			iter = None
+			try:
+				iter = model.get_iter(row)
+			except:
+				self.tooltip.hide_tooltip()
+				return
+			jid = model[iter][0]
+			state = model[iter][4]
+			# Not a category, and we have something to say about state
+			if jid and state > 0 and \
+					(self.tooltip.timeout == 0 or self.tooltip.id != props[0]):
+				self.tooltip.id = row
+				self.tooltip.timeout = gobject.timeout_add(500,
+					self._show_tooltip, state)
+
+	def on_treeview_event_hide_tooltip(self, widget, event):
+		''' This happens on scroll_event, key_press_event
+			and button_press_event '''
+		self.tooltip.hide_tooltip()
+
 	def _create_treemodel(self):
 		# JID, node, icon, description, state
 		# State means 2 when error, 1 when fetching, 0 when succes.
 		model = gtk.TreeStore(str, str, gtk.gdk.Pixbuf, str, int)
 		model.set_sort_func(4, self._treemodel_sort_func)
 		model.set_sort_column_id(4, gtk.SORT_ASCENDING)
-		self.window.services_treeview.set_model(model)
+		view = self.window.services_treeview
+		view.set_model(model)
 		
 		col = gtk.TreeViewColumn()
 		# Icon Renderer
@@ -956,8 +1013,33 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self._renderer = renderer
 		self.update_theme()
 		
-		self.window.services_treeview.insert_column(col, -1)
+		view.insert_column(col, -1)
 		col.set_resizable(True)
+		
+		# Connect signals
+		scrollwin = self.window.services_scrollwin
+		self._view_signals.append(view.connect('leave-notify-event',
+										self.on_treeview_leave_notify_event))
+		self._view_signals.append(view.connect('motion-notify-event',
+										self.on_treeview_motion_notify_event))
+		self._view_signals.append(view.connect('key-press-event',
+										self.on_treeview_event_hide_tooltip))
+		self._view_signals.append(view.connect('button-press-event',
+										self.on_treeview_event_hide_tooltip))
+		self._scroll_signal = scrollwin.connect('scroll-event',
+										self.on_treeview_event_hide_tooltip)
+	
+	def _clean_treemodel(self):
+		# Disconnect signals
+		view = self.window.services_treeview
+		for sig in self._view_signals:
+			view.disconnect(sig)
+		self._view_signals = []
+		if self._scroll_signal:
+			scrollwin = self.window.services_scrollwin
+			scrollwin.disconnect(self._scroll_signal)
+			self._scroll_signal = None
+		AgentBrowser._clean_treemodel(self)
 	
 	def _add_actions(self):
 		AgentBrowser._add_actions(self)
@@ -972,6 +1054,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 			self.register_button.destroy()
 			self.register_button = None
 		AgentBrowser._clean_actions(self)
+
+	def cleanup(self):
+		self.tooltip.hide_tooltip()
+		AgentBrowser.cleanup(self)
 	
 	def update_theme(self):
 		theme = gajim.config.get('roster_theme')
