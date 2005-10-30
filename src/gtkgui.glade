@@ -2661,11 +2661,12 @@
 </widget>
 
 <widget class="GtkWindow" id="service_discovery_window">
-  <property name="border_width">13</property>
+  <property name="border_width">6</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
+  <property name="default_height">450</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
@@ -2680,7 +2681,7 @@
     <widget class="GtkVBox" id="vbox11">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">12</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkEventBox" id="banner_agent_eventbox">
@@ -2778,7 +2779,6 @@ Agent JID - node</property>
 
 	  <child>
 	    <widget class="GtkComboBoxEntry" id="address_comboboxentry">
-	      <property name="width_request">250</property>
 	      <property name="visible">True</property>
 	      <property name="add_tearoffs">False</property>
 	      <property name="has_frame">True</property>
