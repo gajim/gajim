@@ -181,8 +181,10 @@ class Interface:
 		title = data[1]
 		prompt = data[2]
 		proposed_nick = data[3]
-		self.windows[account]['gc'][room_jid].show_change_nick_input_dialog(
-			title, prompt, proposed_nick, room_jid)
+		w = self.windows[account]['gc']
+		if w.has_key(room_jid): # user may close the window before we are here
+			w[room_jid].show_change_nick_input_dialog(title, prompt, proposed_nick,
+				room_jid)
 
 	def handle_event_http_auth(self, account, data):
 		#('HTTP_AUTH', account, (method, url, iq_obj))
