@@ -464,7 +464,8 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.window.set_title(_('Service Discovery'))
 		self.banner.set_markup('<span weight="heavy" size="large">'\
 			'%s</span>\n' % _('Service Discovery'))
-		self.banner_icon.clear()
+		# FIXME: use self.banner_icon.clear() when we switch to GTK 2.8
+		self.banner_icon.set_from_file(None)
 		self.banner_icon.hide()		# Just clearing it doesn't work
 
 	def paint_banner(self):
