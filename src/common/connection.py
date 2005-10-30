@@ -227,6 +227,10 @@ class Connection:
 			return
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
+			path_to_file = os.path.join(gajim.VCARDPATH, frm)
+			fil = open(path_to_file, 'w')
+			fil.write(str(card))
+			fil.close()
 			for info in card.getChildren():
 				name = info.getName()
 				if name in ('ADR', 'TEL', 'EMAIL'): # we can have several
