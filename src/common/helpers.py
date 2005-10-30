@@ -21,6 +21,8 @@ import sre
 import os
 import urllib
 import errno
+import sys
+import stat
 
 import gajim
 from common import i18n
@@ -43,6 +45,52 @@ def temp_failure_retry(func, *args, **kwargs):
             else:
                 raise
 
+def check_paths():
+	LOGPATH = gajim.LOGPATH
+	VCARDPATH = gajim.VCARDPATH
+	dot_gajim = os.path.dirname(LOGPATH)
+	if os.path.isfile(dot_gajim):
+		print _('%s is file but it should be a directory') % dot_gajim
+		print _('Gajim will now exit')
+		sys.exit()
+	elif os.path.isdir(dot_gajim):
+		s = os.stat(dot_gajim)
+		if s.st_mode & stat.S_IROTH: # others have read permission!
+			os.chmod(dot_gajim, 0700) # rwx------
+
+		if not os.path.exists(LOGPATH):
+			print _('creating %s directory') % LOGPATH
+			os.mkdir(LOGPATH, 0700)
+		elif os.path.isfile(LOGPATH):
+			print _('%s is file but it should be a directory') % LOGPATH
+			print _('Gajim will now exit')
+			sys.exit()
+		elif os.path.isdir(LOGPATH):
+				s = os.stat(LOGPATH)
+				if s.st_mode & stat.S_IROTH: # others have read permission!
+					os.chmod(LOGPATH, 0700) # rwx------
+
+		if not os.path.exists(VCARDPATH):
+			print _('creating %s directory') % VCARDPATH
+			os.mkdir(VCARDPATH, 0700)
+		elif os.path.isfile(VCARDPATH):
+			print _('%s is file but it should be a directory') % VCARDPATH
+			print _('Gajim will now exit')
+			sys.exit()
+		elif os.path.isdir(VCARDPATH):
+				s = os.stat(VCARDPATH)
+				if s.st_mode & stat.S_IROTH: # others have read permission!
+					os.chmod(VCARDPATH, 0700) # rwx------
+	else: # dot_gajim doesn't exist
+		if dot_gajim: # is '' on win9x so avoid that
+			print _('creating %s directory') % dot_gajim
+			os.mkdir(dot_gajim, 0700)
+		if not os.path.isdir(LOGPATH):
+			print _('creating %s directory') % LOGPATH
+			os.mkdir(LOGPATH, 0700)
+		if not os.path.isdir(VCARDPATH):
+			print _('creating %s directory') % VCARDPATH
+			os.mkdir(VCARDPATH, 0700)
 
 def convert_bytes(string):
 	suffix = ''

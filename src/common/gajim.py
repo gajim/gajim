@@ -18,6 +18,7 @@
 ##
 
 import os
+import sys
 import logging
 import mutex
 
@@ -38,6 +39,23 @@ log.addHandler(h)
 
 logger = common.logger.Logger()
 DATA_DIR = '../data'
+LOGPATH = os.path.expanduser('~/.gajim/logs')
+VCARDPATH = os.path.expanduser('~/.gajim/vcards')
+if os.name == 'nt':
+	try:
+		# Documents and Settings\[User Name]\Application Data\Gajim\logs
+		LOGPATH = os.environ['appdata'] + '/Gajim/Logs'
+		VCARDPATH = os.environ['appdata'] + '/Gajim/Vcards'
+	except KeyError:
+		# win9x, ./logs
+		LOGPATH = 'Logs'
+		LOGPATH = 'Vcards'
+try:
+	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
+	VCARDPATH = VCARDPATH.decode(sys.getfilesystemencoding())
+except:
+	pass
+
 LANG = os.getenv('LANG') # en_US, fr_FR, el_GR etc..
 if LANG:
 	LANG = LANG[:2] # en, fr, el etc..

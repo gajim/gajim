@@ -1224,6 +1224,7 @@ class Interface:
 			self.remote = None
 
 	def __init__(self):
+		helpers.check_paths()
 		gajim.interface = self
 		self.default_values = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),

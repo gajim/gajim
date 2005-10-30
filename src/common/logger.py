@@ -18,59 +18,17 @@
 ##
 
 import os
-import sys
 import time
-import stat
 
 import common.gajim
 from common import i18n
 _ = i18n._
 import helpers
 
-LOGPATH = os.path.expanduser('~/.gajim/logs')
-if os.name == 'nt':
-	try:
-		# Documents and Settings\[User Name]\Application Data\Gajim\logs
-		LOGPATH = os.environ['appdata'] + '/Gajim/Logs'
-	except KeyError:
-		# win9x, ./logs
-		LOGPATH = 'Logs'
-
-try:
-	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
-except:
-	pass
 
 class Logger:
 	def __init__(self):
-		dot_gajim = os.path.dirname(LOGPATH)
-		if os.path.isfile(dot_gajim):
-			print _('%s is file but it should be a directory') % dot_gajim
-			print _('Gajim will now exit')
-			sys.exit()
-		elif os.path.isdir(dot_gajim):
-			s = os.stat(dot_gajim)
-			if s.st_mode & stat.S_IROTH: # others have read permission!
-				os.chmod(dot_gajim, 0700) # rwx------
-
-			if not os.path.exists(LOGPATH):
-				print _('creating %s directory') % LOGPATH
-				os.mkdir(LOGPATH, 0700)
-			elif os.path.isfile(LOGPATH):
-				print _('%s is file but it should be a directory') % LOGPATH
-				print _('Gajim will now exit')
-				sys.exit()
-			elif os.path.isdir(LOGPATH):
-					s = os.stat(LOGPATH)
-					if s.st_mode & stat.S_IROTH: # others have read permission!
-						os.chmod(LOGPATH, 0700) # rwx------
-		else: # dot_gajim doesn't exist
-			if dot_gajim: # is '' on win9x so avoid that
-				print _('creating %s directory') % dot_gajim
-				os.mkdir(dot_gajim, 0700)
-			if not os.path.isdir(LOGPATH):
-				print _('creating %s directory') % LOGPATH
-				os.mkdir(LOGPATH, 0700)
+		pass
 
 	def write(self, kind, msg, jid, show = None, tim = None):
 		if not tim:
@@ -92,7 +50,7 @@ class Logger:
 			if not show:
 				show = 'online'
 			if common.gajim.config.get('log_notif_in_user_file'):
-				path_to_file = os.path.join(LOGPATH, ji)
+				path_to_file = os.path.join(common.gajim.LOGPATH, ji)
 				if os.path.isdir(path_to_file):
 					jid = 'gcstatus'
 					msg = show + ':' + msg
@@ -105,7 +63,7 @@ class Logger:
 			if common.gajim.config.get('log_notif_in_sep_file'):
 				files.append('notify.log')
 		elif kind == 'incoming': # we save time:recv:message
-			path_to_file = os.path.join(LOGPATH, ji)
+			path_to_file = os.path.join(common.gajim.LOGPATH, ji)
 			if os.path.isdir(path_to_file):
 				files.append(jid)
 			else:
@@ -114,7 +72,7 @@ class Logger:
 			show = msg
 			msg = ''
 		elif kind == 'outgoing': # we save time:sent:message
-			path_to_file = os.path.join(LOGPATH, ji)
+			path_to_file = os.path.join(common.gajim.LOGPATH, ji)
 			if os.path.isdir(path_to_file):
 				files.append(jid)
 			else:
@@ -124,7 +82,7 @@ class Logger:
 			msg = ''
 		elif kind == 'gc': # we save time:gc:nick:message
 			# create the folder if needed
-			ji_fn = os.path.join(LOGPATH, ji)
+			ji_fn = os.path.join(common.gajim.LOGPATH, ji)
 			if os.path.isfile(ji_fn):
 				os.remove(ji_fn)
 			if not os.path.isdir(ji_fn):
@@ -142,7 +100,7 @@ class Logger:
 		if msg and isinstance(msg, unicode):
 			msg = msg.encode('utf-8')
 		for f in files:
-			path_to_file = os.path.join(LOGPATH, f)
+			path_to_file = os.path.join(common.gajim.LOGPATH, f)
 			if os.path.isdir(path_to_file):
 				return
 			# this does it rw-r-r by default but is in a dir with 700 so it's ok
@@ -155,12 +113,12 @@ class Logger:
 
 	def __get_path_to_file(self, fjid):
 		jid = fjid.split('/')[0]
-		path_to_file = os.path.join(LOGPATH, jid)
+		path_to_file = os.path.join(common.gajim.LOGPATH, jid)
 		if os.path.isdir(path_to_file):
 			if fjid == jid: # we want to read the gc history
-				path_to_file = os.path.join(LOGPATH, jid + '/' + jid)
+				path_to_file = os.path.join(common.gajim.LOGPATH, jid + '/' + jid)
 			else: #we want to read pm history
-				path_to_file = os.path.join(LOGPATH, fjid)
+				path_to_file = os.path.join(common.gajim.LOGPATH, fjid)
 		return path_to_file
 
 	def get_no_of_lines(self, fjid):
