@@ -523,8 +523,8 @@ class ServiceDiscoveryTooltip(BaseTooltip):
 		label.set_alignment(0, 0)
 		label.set_selectable(False)
 		if status == 1:
-			label.set_text(_('This service has not yet responded with detailed information.'))
+			label.set_text(_('This service has not yet responded with detailed information'))
 		elif status == 2:
-			label.set_text(_('This service could not respond with detailed information.\n'
-							 'It is most likely legacy or broken, and may not work as expected.'))
+			label.set_text(_('This service could not respond with detailed information\n'
+							 'It is most likely legacy or broken, and may not work as expected'))
 		self.win.add(label)
