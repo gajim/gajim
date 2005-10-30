@@ -1379,7 +1379,7 @@ class MucBrowser(AgentBrowser):
 			iter = model.iter_next(iter)
 		self._fetch_source = None
 
-	def _channel_altinfo(self, jid, node, items, name):
+	def _channel_altinfo(self, jid, node, items, name = None):
 		"""Callback for the alternate disco#items query. We try to atleast get
 		the amount of users in the room if the service does not support MUC
 		dataforms."""
@@ -1400,7 +1400,8 @@ class MucBrowser(AgentBrowser):
 			model = self.window.services_treeview.get_model()
 			iter = self._find_item(jid, node)
 			if iter:
-				model[iter][2] = name
+				if name:
+					model[iter][2] = name
 				model[iter][3] = len(items)		# The number of users
 				model[iter][5] = True
 		self._fetch_source = None
@@ -1440,7 +1441,7 @@ class MucBrowser(AgentBrowser):
 
 	def _update_error(self, model, iter, jid, node):
 		# switch to alternate query mode
-		self.cache.get_items(jid, node, self._channel_altinfo, args = (name,))
+		self.cache.get_items(jid, node, self._channel_altinfo)
 
 
 # Fill the global agent type info dictionary
