@@ -417,7 +417,7 @@ class AboutDialog:
 		text = open('../COPYING').read()
 		dlg.set_license(text)
 
-		dlg.set_comments(_('A GTK jabber client'))
+		dlg.set_comments(_('A GTK+ jabber client'))
 		dlg.set_website('http://www.gajim.org')
 
 		authors = [
