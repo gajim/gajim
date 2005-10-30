@@ -1011,7 +1011,9 @@ current room topic.') % command, room_jid)
 		'''checks text to see whether any of the words in muc_highlight_words
 		appear'''
 		
-		words = gajim.config.get('muc_highlight_words').split()
+		words = gajim.config.get('muc_highlight_words').split(';')
+		# Strip empties. ''.split(';') == [''] and would highlight everything.
+		words = [word for word in words if word]
 		words.append(nick)
 		
 		for word in words:

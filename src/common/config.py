@@ -150,7 +150,7 @@ class Config:
 		'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
 		'avatar_width': [opt_int, 52],
 		'avatar_height': [opt_int, 52],
-		'muc_highlight_words': [opt_str, '', _('A space-separated list of words that will be highlighted in multi-user chat.')],
+		'muc_highlight_words': [opt_str, '', _('A semicolon-separated list of words that will be highlighted in multi-user chat.')],
 		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used.')],
 		'set_xmpp://_handler_everytime': [opt_bool, False, _('If True, Gajim registers for xmpp:// on each startup.')],
 		'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
