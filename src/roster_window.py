@@ -31,6 +31,7 @@ import groupchat_window
 import history_window
 import dialogs
 import config
+import disco
 import gtkgui_helpers
 import cell_renderer_image
 import tooltips
@@ -1971,13 +1972,13 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		model.set_value(iter, 5, False)
 		
 	def on_service_disco_menuitem_activate(self, widget, account):
-		if gajim.interface.windows[account].has_key('disco'):
-			gajim.interface.windows[account]['disco'].window.present()
+		server_jid = gajim.config.get_per('accounts', account, 'hostname')
+		if gajim.interface.windows[account]['disco'].has_key(server_jid):
+			gajim.interface.windows[account]['disco'][server_jid].window.present()
 		else:
-			# c http://nkour.blogspot.com/2005/05/pythons-init-return-none-doesnt-return.html
 			try:
-				gajim.interface.windows[account]['disco'] = \
-					config.ServiceDiscoveryWindow(account)
+				# Object will add itself to the window dict
+				disco.ServiceDiscoveryWindow(account, address_entry=True)
 			except RuntimeError:
 				pass
 
@@ -2044,6 +2045,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.interface.windows[account]['chats'][jid].repaint_colored_widgets()
 			for jid in gajim.interface.windows[account]['gc']:
 				gajim.interface.windows[account]['gc'][jid].repaint_colored_widgets()
+			for addr in gajim.interface.windows[account]['disco']:
+				gajim.interface.windows[account]['disco'][addr].paint_banner()
 
 	def on_show_offline_contacts_menuitem_activate(self, widget):
 		'''when show offline option is changed:

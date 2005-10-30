@@ -207,7 +207,7 @@ class Connection:
 	
 	def discoverInfo(self, jid, node = None):
 		'''According to JEP-0030:
-			For identity: category, name is mandatory, type is optional.
+			For identity: category, type is mandatory, name is optional.
 			For feature: var is mandatory'''
 		self._discover(common.xmpp.NS_DISCO_INFO, jid, node)
 
@@ -1048,6 +1048,11 @@ class Connection:
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
 		raise common.xmpp.NodeProcessed
 
+	def _DiscoverItemsErrorCB(self, con, iq_obj):
+		gajim.log.debug('DiscoverItemsErrorCB')
+		jid = iq_obj.getFrom()
+		self.dispatch('AGENT_ERROR_ITEMS', (jid))
+
 	def _DiscoverItemsCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsCB')
 		q = iq_obj.getTag('query')
@@ -1066,12 +1071,17 @@ class Connection:
 		jid = unicode(iq_obj.getFrom())
 		self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
+	def _DiscoverInfoErrorCB(self, con, iq_obj):
+		gajim.log.debug('DiscoverInfoErrorCB')
+		jid = iq_obj.getFrom()
+		self.dispatch('AGENT_ERROR_INFO', (jid))
+
 	def _DiscoverInfoCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoCB')
 		# According to JEP-0030:
-		# For identity: category, name is mandatory, type is optional.
+		# For identity: category, type is mandatory, name is optional.
 		# For feature: var is mandatory
-		identities, features = [], []
+		identities, features, data = [], [], []
 		q = iq_obj.getTag('query')
 		node = q.getAttr('node')
 		if not node:
@@ -1087,9 +1097,12 @@ class Connection:
 				identities.append(attr)
 			elif i.getName() == 'feature':
 				features.append(i.getAttr('var'))
+			elif i.getName() == 'x' and i.getAttr('xmlns') == NS_DATA:
+				data.append(common.xmpp.DataForm(node=i))
 		jid = unicode(iq_obj.getFrom())
 		if identities: #if not: an error occured
-			self.dispatch('AGENT_INFO_INFO', (jid, node, identities, features))
+			self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
+				features, data))
 
 	def _VersionCB(self, con, iq_obj):
 		gajim.log.debug('VersionCB')
@@ -1487,7 +1500,11 @@ class Connection:
 			common.xmpp.NS_BYTESTREAM)
 		con.RegisterHandler('iq', self._DiscoverItemsCB, 'result',
 			common.xmpp.NS_DISCO_ITEMS)
+		con.RegisterHandler('iq', self._DiscoverItemsErrorCB, 'error',
+			common.xmpp.NS_DISCO_ITEMS)
 		con.RegisterHandler('iq', self._DiscoverInfoCB, 'result',
+			common.xmpp.NS_DISCO_INFO)
+		con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',
 			common.xmpp.NS_DISCO_INFO)
 		con.RegisterHandler('iq', self._VersionCB, 'get',
 			common.xmpp.NS_VERSION)
@@ -1788,13 +1805,6 @@ class Connection:
 		if self.connection:
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
-
-	def request_agents(self, jid, node):
-		if self.connection:
-			iq = common.xmpp.Iq(to = jid, typ = 'get',
-				queryNS = common.xmpp.NS_DISCO_ITEMS)
-			if node: iq.setQuerynode(node)
-			self.to_be_sent.append(iq)
 
 	def request_register_agent_info(self, agent):
 		if not self.connection:

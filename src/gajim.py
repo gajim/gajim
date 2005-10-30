@@ -148,6 +148,7 @@ import roster_window
 import systray
 import dialogs
 import config
+import disco
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
@@ -230,7 +231,6 @@ class Interface:
 	def allow_notif(self, account):
 		gajim.allow_notifications[account] = True
 
-	
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
 		model = self.roster.status_combobox.get_model()
@@ -565,12 +565,20 @@ class Interface:
 				_('You will always see him as offline.'))
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Unsubscribed', (account, jid))
-
-	def handle_event_agent_info(self, account, array):
-		#('AGENT_INFO', account, (agent, identities, features, items))
-		if self.windows[account].has_key('disco'):
-			self.windows[account]['disco'].agent_info(array[0], array[1], \
-				array[2], array[3])
+	
+	def handle_event_agent_info_error(self, account, agent):
+		#('AGENT_ERROR_INFO', account, (agent))
+		try:
+			gajim.connections[account].services_cache.agent_info_error(agent)
+		except AttributeError:
+			return
+	
+	def handle_event_agent_items_error(self, account, agent):
+		#('AGENT_ERROR_INFO', account, (agent))
+		try:
+			gajim.connections[account].services_cache.agent_items_error(agent)
+		except AttributeError:
+			return
 
 	def handle_event_register_agent_info(self, account, array):
 		#('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
@@ -583,15 +591,19 @@ class Interface:
 
 	def handle_event_agent_info_items(self, account, array):
 		#('AGENT_INFO_ITEMS', account, (agent, node, items))
-		if self.windows[account].has_key('disco'):
-			self.windows[account]['disco'].agent_info_items(array[0], array[1], 
-				array[2])
+		try:
+			gajim.connections[account].services_cache.agent_items(array[0],
+				array[1], array[2])
+		except AttributeError:
+			return
 
 	def handle_event_agent_info_info(self, account, array):
-		#('AGENT_INFO_INFO', account, (agent, node, identities, features))
-		if self.windows[account].has_key('disco'):
-			self.windows[account]['disco'].agent_info_info(array[0], array[1], \
-				array[2], array[3])
+		#('AGENT_INFO_INFO', account, (agent, node, identities, features, data))
+		try:
+			gajim.connections[account].services_cache.agent_info(array[0],
+				array[1], array[2], array[3], array[4])
+		except AttributeError:
+			return
 
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (name, config))
@@ -603,7 +615,8 @@ class Interface:
 			gajim.config.set_per('accounts', name, opt, array[1][opt])
 		if self.windows.has_key('account_modification'):
 			self.windows['account_modification'].account_is_ok(array[0])
-		self.windows[name] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
+		self.windows[name] = {'infos': {}, 'disco': {}, 'chats': {},
+			'gc': {}, 'gc_config': {}}
 		self.windows[name]['xml_console'] = dialogs.XMLConsoleWindow(name)
 		gajim.awaiting_events[name] = {}
 		# disconnect from server - our status in roster is offline
@@ -1119,7 +1132,8 @@ class Interface:
 			'SUBSCRIBED': self.handle_event_subscribed,
 			'UNSUBSCRIBED': self.handle_event_unsubscribed,
 			'SUBSCRIBE': self.handle_event_subscribe,
-			'AGENT_INFO': self.handle_event_agent_info,
+			'AGENT_ERROR_INFO': self.handle_event_agent_info_error,
+			'AGENT_ERROR_ITEMS': self.handle_event_agent_items_error,
 			'REGISTER_AGENT_INFO': self.handle_event_register_agent_info,
 			'AGENT_INFO_ITEMS': self.handle_event_agent_info_items,
 			'AGENT_INFO_INFO': self.handle_event_agent_info_info,
@@ -1275,7 +1289,8 @@ class Interface:
 		self.avatar_pixbufs = {}
 		
 		for a in gajim.connections:
-			self.windows[a] = {'infos': {}, 'chats': {}, 'gc': {}, 'gc_config': {}}
+			self.windows[a] = {'infos': {}, 'disco': {}, 'chats': {},
+				'gc': {}, 'gc_config': {}}
 			gajim.contacts[a] = {}
 			gajim.groups[a] = {}
 			gajim.gc_contacts[a] = {}
