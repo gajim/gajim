@@ -1382,8 +1382,7 @@ _('To change the account name, you must be disconnected.')).get_response()
 			
 		new_password = dialog.run()
 		if new_password != -1:
-			gajim.connections[self.account].change_password(new_password, \
-				gajim.nicks[self.account])
+			gajim.connections[self.account].change_password(new_password)
 			if self.xml.get_widget('save_password_checkbutton').get_active():
 				self.xml.get_widget('password_entry').set_text(new_password)
 

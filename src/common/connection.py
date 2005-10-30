@@ -2063,10 +2063,11 @@ class Connection:
 			return keys
 		return None
 
-	def change_password(self, password, username):
+	def change_password(self, password):
 		if not self.connection:
 			return
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+		username = gajim.config.get_per('accounts', self.name, 'name')
 		iq = common.xmpp.Iq(typ = 'set', to = hostname)
 		q = iq.setTag(common.xmpp.NS_REGISTER + ' query')
 		q.setTagData('username',username)
