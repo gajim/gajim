@@ -131,7 +131,7 @@ class TabbedChatWindow(chat.Chat):
 		'''we enter the eventbox area so we under conditions add a timeout
 		to show a bigger avatar after 0.5 sec'''
 		jid = self.get_active_jid()
-		avatar_pixbuf = gajim.interface.avatar_pixbufs[jid]
+		avatar_pixbuf = gajim.interface.get_avatar_pixbuf(jid)
 		avatar_w = avatar_pixbuf.get_width()
 		avatar_h = avatar_pixbuf.get_height()
 		
@@ -155,7 +155,7 @@ class TabbedChatWindow(chat.Chat):
 		'''resizes the avatar, if needed, so it has at max half the screen size
 		and shows it'''
 		jid = self.get_active_jid()
-		avatar_pixbuf = gajim.interface.avatar_pixbufs[jid]
+		avatar_pixbuf = gajim.interface.get_avatar_pixbuf(jid)
 		screen_w = gtk.gdk.screen_width()
 		screen_h = gtk.gdk.screen_height()
 		avatar_w = avatar_pixbuf.get_width()
@@ -290,13 +290,12 @@ class TabbedChatWindow(chat.Chat):
 		if not xml:
 			return
 		
-		if gajim.interface.avatar_pixbufs[jid] is None:
-			# contact has no avatar
-			scaled_buf = None
-		else:
-			pixbuf = gajim.interface.avatar_pixbufs[jid]
+		# we assume contact has no avatar
+		scaled_buf = None
 
-			# resize to a  width / height for the avatar not to have distortion
+		pixbuf = gajim.interface.get_avatar_pixbuf(jid)
+		if pixbuf is not None:
+			# resize to a width / height for the avatar not to have distortion
 			# (keep aspect ratio)
 			ratio = float(pixbuf.get_width()) / float(pixbuf.get_height())
 			if ratio > 1:
@@ -438,7 +437,6 @@ class TabbedChatWindow(chat.Chat):
 		self.childs[contact.jid] = self.xmls[contact.jid].get_widget('chats_vbox')
 		self.contacts[contact.jid] = contact
 		
-		
 		# add MessageTextView to UI
 		message_scrolledwindow = self.xmls[contact.jid].get_widget(
 			'message_scrolledwindow')
@@ -448,19 +446,13 @@ class TabbedChatWindow(chat.Chat):
 			self.on_message_textview_mykeypress_event)
 		message_scrolledwindow.add(msg_textview)
 		
-		#FIXME: request in thread or idle and show in roster
-		
-		# this is to prove cache code works:
 		# should we ask vcard? (only the first time we should ask)
-		if not gajim.interface.avatar_pixbufs.has_key(contact.jid):
+		if contact.jid in os.listdir(gajim.VCARDPATH):
+			# show avatar from HD
+			self.show_avatar(contact.jid, contact.resource)			
+		else:
 			# it's the first time, so we should ask vcard
 			gajim.connections[self.account].request_vcard(contact.jid)
-			#please do not remove this commented print until I'm done with showing
-			#avatars in roster
-			#print 'REQUESTING VCARD for', contact.jid
-		else:
-			# show avatar from stored place
-			self.show_avatar(contact.jid, contact.resource)
 		
 		self.childs[contact.jid].connect('drag_data_received',
 			self.on_drag_data_received, contact)

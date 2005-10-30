@@ -285,7 +285,7 @@ def get_abspath_for_script(scriptname, want_type = False):
 		return path_to_script
 
 def get_pixbuf_from_data(file_data):
-	'''wants img data and returns gtk.gdk.Pixbuf'''
+	'''Gets image data and returns gtk.gdk.Pixbuf'''
 	pixbufloader = gtk.gdk.PixbufLoader()
 	try:
 		pixbufloader.write(file_data)

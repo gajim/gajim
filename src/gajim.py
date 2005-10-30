@@ -26,6 +26,8 @@ import sys
 import pygtk
 import os
 
+import common.BeautifulSoup as BeautifulSoup
+
 from common import i18n
 i18n.init()
 _ = i18n._
@@ -661,7 +663,6 @@ class Interface:
 		'''vcard holds the vcard data'''
 		jid = vcard['jid']
 		resource = vcard['resource']
-		self.store_avatar(vcard)
 		
 		# vcard window
 		win = None
@@ -670,7 +671,7 @@ class Interface:
 		elif self.windows[account]['infos'].has_key(jid + '/' + resource):
 			win = self.windows[account]['infos'][jid + '/' + resource]
 		if win:
-			win.set_values(vcard) #FIXME: maybe store all vcard data?
+			win.set_values(vcard)
 
 		# show avatar in chat
 		win = None
@@ -679,6 +680,7 @@ class Interface:
 		elif self.windows[account]['chats'].has_key(jid + '/' + resource):
 			win = self.windows[account]['chats'][jid + '/' + resource]
 		if win:
+			# FIXME: this will be removed when we have the thread working
 			win.show_avatar(jid, resource)
 		if self.remote is not None:
 			self.remote.raise_signal('VcardInfo', (account, vcard))
@@ -943,32 +945,41 @@ class Interface:
 	def handle_event_vcard_not_published(self, account, array):
 		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))
 
-	def store_avatar(self, vcard):
-		'''stores avatar per jid so we do not have to ask everytime for vcard'''
-		jid = vcard['jid']
-		# we assume contact has no avatar
-		self.avatar_pixbufs[jid] = None
-		if not vcard.has_key('PHOTO'):
+	def get_avatar_pixbuf(self, jid):
+		'''checks if jid has avatar and if that avatar is valid image
+		(can be shown)'''
+		if jid not in os.listdir(gajim.VCARDPATH):
 			return
-		if not isinstance(vcard['PHOTO'], dict):
-			return
-		img_decoded = None
-		if vcard['PHOTO'].has_key('BINVAL'):
+
+		path_to_file = os.path.join(gajim.VCARDPATH, jid)
+		vcard_data = open(path_to_file).read()
+		xmldoc = BeautifulSoup.BeautifulSoup(vcard_data)
+		
+		# check for BINVAL
+		if isinstance(xmldoc.vcard.photo.binval, BeautifulSoup.NullType):
+			# no BINVAL, check for EXTVAL
+			if isinstance(xmldoc.vcard.photo.extval, BeautifulSoup.NullType):
+				return # no EXTVAL, contact has no avatar in his vcard
+			else:
+				# we have EXTVAL
+				url = xmldoc.vcard.photo.extval
+				try:
+					fd = urllib.urlopen(url)
+					img_decoded = fd.read()
+				except:
+					img_decoded = None
+		
+		else:
+			# we have BINVAL
 			try:
-				img_decoded = base64.decodestring(vcard['PHOTO']['BINVAL'])
+				text = xmldoc.vcard.photo.binval.string
+				img_decoded = base64.decodestring(text)
 			except:
-				pass
-		elif vcard['PHOTO'].has_key('EXTVAL'):
-			url = vcard['PHOTO']['EXTVAL']
-			try:
-				fd = urllib.urlopen(url)
-				img_decoded = fd.read()
-			except:
-				pass
-		if img_decoded:
+				img_decoded = None
+
+		if img_decoded is not None:
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(img_decoded)
-			# store avatar for jid
-			self.avatar_pixbufs[jid] = pixbuf
+			return pixbuf
 	
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
@@ -1285,9 +1296,6 @@ class Interface:
 		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
 		
 		self.windows = {'logs': {}}
-		
-		# keep avatar (pixbuf) per jid
-		self.avatar_pixbufs = {}
 		
 		for a in gajim.connections:
 			self.windows[a] = {'infos': {}, 'disco': {}, 'chats': {},
