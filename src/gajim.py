@@ -1059,7 +1059,17 @@ class Interface:
 		# (?!\S) is the same thing but it's a lookahead assertion
 		# \S*[^\s\W] --> in the matching string don't match ? or ) etc.. if at the end
 		# so http://be) will match http://be and http://be)be) will match http://be)be
-		links = r'\bhttp://\S*[^\s\W]|' r'\bhttps://\S*[^\s\W]|' r'\bnews://\S*[^\s\W]|' r'\bftp://\S*[^\s\W]|' r'\bed2k://\S*[^\s\W]|' r'\bwww\.\S*[^\s\W]|' r'\bftp\.\S*[^\s\W]|'
+
+		prefixes = ('http://', 'https://', 'news://', 'ftp://', 'ed2k://', 'www\.', 'ftp\.')
+		#FIXME: ftp and www to have check if ftp.fooDOTHERE (see mail pattern)
+		
+		prefix_pattern = ''
+		for prefix in prefixes:
+			prefix_pattern += prefix + '|'
+		
+		prefix_pattern = '(' + prefix_pattern + ')'
+			
+		links = r'\b' + prefix_pattern + r'\S*[^\s\W]|'
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
 		mail = r'\bmailto:\S*[^\s\W]|' r'\b\S+@\S+\.\S*[^\s\W]|'
 
