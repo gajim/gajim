@@ -327,10 +327,6 @@ class Config:
 
 	themes_default = {
 		# sorted alphanum
-		_('cyan'): [ '#ff0000', '#9fdfff', '', 'B', '#0000ff', '#ffffff',
-					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
-					'#9fdfff' ],
-					
 		_('green'): [ '#ffffff', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',
 					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#94aa8c' ],
