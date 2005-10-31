@@ -26,8 +26,6 @@ import sys
 import pygtk
 import os
 
-import common.BeautifulSoup as BeautifulSoup
-
 from common import i18n
 i18n.init()
 _ = i18n._
@@ -78,6 +76,8 @@ import base64
 
 from common import socks5
 import gtkgui_helpers
+import vcard
+
 
 import common.sleepy
 import check_for_new_version
@@ -947,41 +947,17 @@ class Interface:
 	def handle_event_vcard_not_published(self, account, array):
 		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))
 
-	def get_avatar_pixbuf(self, jid):
-		'''checks if jid has avatar and if that avatar is valid image
+	def get_avatar_pixbuf_from_cache(self, account, jid):
+		'''checks if jid has avatar cached and if that avatar is valid image
 		(can be shown)'''
 		if jid not in os.listdir(gajim.VCARDPATH):
-			return
+			return None
 
-		path_to_file = os.path.join(gajim.VCARDPATH, jid)
-		vcard_data = open(path_to_file).read()
-		xmldoc = BeautifulSoup.BeautifulSoup(vcard_data)
-		
-		# check for BINVAL
-		if isinstance(xmldoc.vcard.photo.binval, BeautifulSoup.NullType):
-			# no BINVAL, check for EXTVAL
-			if isinstance(xmldoc.vcard.photo.extval, BeautifulSoup.NullType):
-				return # no EXTVAL, contact has no avatar in his vcard
-			else:
-				# we have EXTVAL
-				url = xmldoc.vcard.photo.extval
-				try:
-					fd = urllib.urlopen(url)
-					img_decoded = fd.read()
-				except:
-					img_decoded = None
-		
-		else:
-			# we have BINVAL
-			try:
-				text = xmldoc.vcard.photo.binval.string
-				img_decoded = base64.decodestring(text)
-			except:
-				img_decoded = None
-
-		if img_decoded is not None:
-			pixbuf = gtkgui_helpers.get_pixbuf_from_data(img_decoded)
-			return pixbuf
+		vcard_dict = gajim.connections[account].get_cached_vcard(jid)
+		if not vcard_dict.has_key('PHOTO'):
+			return None
+		pix, _t, _t = vcard.get_avatar_pixbuf(vcard_dict['PHOTO'])
+		return pix
 	
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''

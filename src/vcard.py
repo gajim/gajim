@@ -39,6 +39,31 @@ gtk.glade.textdomain (APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
+def get_avatar_pixbuf(photo):
+	'''return the pixbuf of the image
+	photo is a dictionary containing PHOTO information'''
+	if not isinstance(photo, dict):
+		return None, None, None
+	img_decoded = None
+	if photo.has_key('BINVAL') and photo.has_key('TYPE'):
+		img_encoded = photo['BINVAL']
+		avatar_encoded = img_encoded
+		avatar_mime_type = photo['TYPE']
+		try:
+			img_decoded = base64.decodestring(img_encoded)
+		except:
+			pass
+	elif photo.has_key('EXTVAL'):
+		url = photo['EXTVAL']
+		try:
+			fd = urllib.urlopen(url)
+			img_decoded = fd.read()
+		except:
+			pass
+	if img_decoded:
+		return gtkgui_helpers.get_pixbuf_from_data(img_decoded), avatar_encoded, avatar_mime_type
+	return None, None, None
+
 class VcardWindow:
 	'''Class for contact's information window'''
 
@@ -201,28 +226,10 @@ class VcardWindow:
 	def set_values(self, vcard):
 		for i in vcard.keys():
 			if i == 'PHOTO':
-				if not isinstance(vcard[i], dict):
-					continue
-				img_decoded = None
-				if vcard[i].has_key('BINVAL') and vcard[i].has_key('TYPE'):
-					img_encoded = vcard[i]['BINVAL']
-					self.avatar_encoded = img_encoded
-					self.avatar_mime_type = vcard[i]['TYPE']
-					try:
-						img_decoded = base64.decodestring(img_encoded)
-					except:
-						pass
-				elif vcard[i].has_key('EXTVAL'):
-					url = vcard[i]['EXTVAL']
-					try:
-						fd = urllib.urlopen(url)
-						img_decoded = fd.read()
-					except:
-						pass
-				if img_decoded:
-					pixbuf = gtkgui_helpers.get_pixbuf_from_data(img_decoded)
-					image = self.xml.get_widget('PHOTO_image')
-					image.set_from_pixbuf(pixbuf)
+				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
+					get_avatar_pixbuf(vcard[i])
+				image = self.xml.get_widget('PHOTO_image')
+				image.set_from_pixbuf(pixbuf)
 				continue
 			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
 				for entry in vcard[i]:

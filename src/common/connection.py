@@ -211,9 +211,30 @@ class Connection:
 			For feature: var is mandatory'''
 		self._discover(common.xmpp.NS_DISCO_INFO, jid, node)
 
+	def node_to_dict(self, node):
+		dict = {}
+		for info in node.getChildren():
+			name = info.getName()
+			if name in ('ADR', 'TEL', 'EMAIL'): # we can have several
+				if not dict.has_key(name):
+					dict[name] = []
+				entry = {}
+				for c in info.getChildren():
+					 entry[c.getName()] = c.getData()
+				dict[name].append(entry)
+			elif info.getChildren() == []:
+				dict[name] = info.getData()
+			else:
+				dict[name] = {}
+				for c in info.getChildren():
+					 dict[name][c.getName()] = c.getData()
+		return dict
+
 	def _vCardCB(self, con, vc):
 		"""Called when we receive a vCard
 		Parse the vCard and send it to plugins"""
+		if not vc.getTag('vCard'):
+			return
 		frm_iq = vc.getFrom()
 		our_jid = gajim.get_jid_from_account(self.name)
 		resource = ''
@@ -222,30 +243,15 @@ class Connection:
 			resource = frm_iq.getResource()
 		else:
 			frm = our_jid
-		vcard = {'jid': frm, 'resource': resource}
-		if not vc.getTag('vCard'):
-			return
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
 			path_to_file = os.path.join(gajim.VCARDPATH, frm)
 			fil = open(path_to_file, 'w')
 			fil.write(str(card))
 			fil.close()
-			for info in card.getChildren():
-				name = info.getName()
-				if name in ('ADR', 'TEL', 'EMAIL'): # we can have several
-					if not vcard.has_key(name):
-						vcard[name] = []
-					entry = {}
-					for c in info.getChildren():
-						 entry[c.getName()] = c.getData()
-					vcard[name].append(entry)
-				elif info.getChildren() == []:
-					vcard[name] = info.getData()
-				else:
-					vcard[name] = {}
-					for c in info.getChildren():
-						 vcard[name][c.getName()] = c.getData()
+			vcard = self.node_to_dict(card)
+			vcard['jid'] = frm
+			vcard['resource'] = resource
 			if frm == our_jid:
 				if vcard.has_key('PHOTO') and type(vcard['PHOTO']) == type({}) and \
 				vcard['PHOTO'].has_key('BINVAL'):
@@ -1861,8 +1867,21 @@ class Connection:
 			common.xmpp.NS_VERSION)
 		self.to_be_sent.append(iq)
 
+	def get_cached_vcard(self, jid):
+		j = gajim.get_jid_without_resource(jid)
+		path_to_file = os.path.join(gajim.VCARDPATH, j)
+		if os.path.isfile(path_to_file):
+			# We have the vcard cached
+			f = open(path_to_file)
+			c = f.read()
+			card = common.xmpp.Node(node = c)
+			vcard = self.node_to_dict(card)
+			vcard['jid'] = j
+			vcard['resource'] = gajim.get_resource_from_jid(jid)
+			return vcard
+
 	def request_vcard(self, jid = None):
-		'''request the VCARD and return the iq'''
+		'''request the VCARD'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'get')

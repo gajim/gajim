@@ -131,7 +131,8 @@ class TabbedChatWindow(chat.Chat):
 		'''we enter the eventbox area so we under conditions add a timeout
 		to show a bigger avatar after 0.5 sec'''
 		jid = self.get_active_jid()
-		avatar_pixbuf = gajim.interface.get_avatar_pixbuf(jid)
+		avatar_pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(self.account,
+			jid)
 		avatar_w = avatar_pixbuf.get_width()
 		avatar_h = avatar_pixbuf.get_height()
 		
@@ -155,7 +156,8 @@ class TabbedChatWindow(chat.Chat):
 		'''resizes the avatar, if needed, so it has at max half the screen size
 		and shows it'''
 		jid = self.get_active_jid()
-		avatar_pixbuf = gajim.interface.get_avatar_pixbuf(jid)
+		avatar_pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(self.account,
+			jid)
 		screen_w = gtk.gdk.screen_width()
 		screen_h = gtk.gdk.screen_height()
 		avatar_w = avatar_pixbuf.get_width()
@@ -293,7 +295,8 @@ class TabbedChatWindow(chat.Chat):
 		# we assume contact has no avatar
 		scaled_buf = None
 
-		pixbuf = gajim.interface.get_avatar_pixbuf(jid)
+		pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(self.account,
+			jid)
 		if pixbuf is not None:
 			# resize to a width / height for the avatar not to have distortion
 			# (keep aspect ratio)
