@@ -1060,13 +1060,14 @@ class Interface:
 		# \S*[^\s\W] --> in the matching string don't match ? or ) etc.. if at the end
 		# so http://be) will match http://be and http://be)be) will match http://be)be
 
-		prefixes = ('http://', 'https://', 'news://', 'ftp://', 'ed2k://', 'www\.', 'ftp\.')
+		prefixes = (r'http://', r'https://', r'news://', r'ftp://', r'ed2k://', r'www\.', r'ftp\.')
 		# NOTE: it's ok to catch www.gr such stuff exist!
 		
 		prefix_pattern = ''
 		for prefix in prefixes:
 			prefix_pattern += prefix + '|'
 		
+		prefix_pattern = prefix_pattern[:-1] # remove last |
 		prefix_pattern = '(' + prefix_pattern + ')'
 			
 		links = r'\b' + prefix_pattern + r'\S*[^\s\W]|'
@@ -1095,7 +1096,7 @@ class Interface:
 		# at least one character in 3 parts (before @, after @, after .)
 		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?]')
 
-	def on_emoticon_sort (self, emot1, emot2):
+	def on_emoticon_sort(self, emot1, emot2):
 		len1 = len(emot1)
 		len2 = len(emot2)
 		if len1 < len2:
