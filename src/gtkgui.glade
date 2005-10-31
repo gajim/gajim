@@ -9354,7 +9354,7 @@ Custom</property>
       </child>
 
       <child>
-	<widget class="GtkHBox" id="hbox2996">
+	<widget class="GtkHBox" id="filter_hbox">
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">6</property>

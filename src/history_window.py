@@ -56,6 +56,12 @@ class HistoryWindow:
 		self.forward_button = xml.get_widget('forward_button')
 		self.latest_button = xml.get_widget('latest_button')
 		self.filter_entry = xml.get_widget('filter_entry')
+		
+		# FIXME: someday..
+		filter_hbox = xml.get_widget('filter_hbox')
+		filter_hbox.hide()
+		filter_hbox.set_no_show_all(True)
+		
 		xml.signal_autoconnect(self)
 
 		tag = self.history_buffer.create_tag('incoming')
