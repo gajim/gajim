@@ -956,7 +956,7 @@ class Interface:
 		vcard_dict = gajim.connections[account].get_cached_vcard(jid)
 		if not vcard_dict.has_key('PHOTO'):
 			return None
-		pixbuf = vcard.get_avatar_pixbuf(vcard_dict['PHOTO'])[0]
+		pixbuf = vcard.get_avatar_pixbuf_encoded_mime(vcard_dict['PHOTO'])[0]
 		return pixbuf
 	
 	def read_sleepy(self):	
