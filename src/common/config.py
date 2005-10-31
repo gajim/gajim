@@ -327,23 +327,27 @@ class Config:
 
 	themes_default = {
 		# sorted alphanum
-		'cyan': [ '#ff0000', '#9fdfff', '', 'B', '#0000ff', '#ffffff',
+		_('cyan'): [ '#ff0000', '#9fdfff', '', 'B', '#0000ff', '#ffffff',
 					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#9fdfff' ],
 					
-		'green': [ '#ffffff', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',
+		_('green'): [ '#ffffff', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',
 					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#94aa8c' ],
 		
-		'human': [ '#ffffff', '#996442', '', 'B', '#ab5920', '#e3ca94',
+		_('grocery'): [ '#ffffff', '#6bbe18', '', 'B', '#12125a', '#ceefad',
+					'', 'I', '#000000', '#efb26b', '', '', '#ffffff',
+					'#108abd' ],
+		
+		_('human'): [ '#ffffff', '#996442', '', 'B', '#ab5920', '#e3ca94',
 					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#996442' ],
 					
-		'marine': [ '#ffffff', '#918caa', '', 'B', '#0000ff', '#e9e7f3',
+		_('marine'): [ '#ffffff', '#918caa', '', 'B', '#0000ff', '#e9e7f3',
 					'', 'I', '#000000', '#ffffff', '', '', '#ffffff',
 					'#918caa' ],
-					
-		'plain': [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','' ],
+		
+		_('plain'): [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','' ],
 		
 	}
 	
