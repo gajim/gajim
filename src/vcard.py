@@ -39,7 +39,7 @@ gtk.glade.textdomain (APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-def get_avatar_pixbuf(photo):
+def get_avatar_pixbuf_encoded_mime(photo):
 	'''return the pixbuf of the image
 	photo is a dictionary containing PHOTO information'''
 	if not isinstance(photo, dict):
@@ -227,7 +227,7 @@ class VcardWindow:
 		for i in vcard.keys():
 			if i == 'PHOTO':
 				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
-					get_avatar_pixbuf(vcard[i])
+					get_avatar_pixbuf_encoded_mime(vcard[i])
 				image = self.xml.get_widget('PHOTO_image')
 				image.set_from_pixbuf(pixbuf)
 				continue
