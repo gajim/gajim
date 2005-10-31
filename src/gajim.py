@@ -1060,7 +1060,8 @@ class Interface:
 		# \S*[^\s\W] --> in the matching string don't match ? or ) etc.. if at the end
 		# so http://be) will match http://be and http://be)be) will match http://be)be
 
-		prefixes = (r'http://', r'https://', r'news://', r'ftp://', r'ed2k://', r'www\.', r'ftp\.')
+		prefixes = (r'http://', r'https://', r'news://', r'ftp://', r'ed2k://',
+			r'www\.', r'ftp\.')
 		# NOTE: it's ok to catch www.gr such stuff exist!
 		
 		prefix_pattern = ''
@@ -1076,7 +1077,9 @@ class Interface:
 
 		#detects eg. *b* *bold* *bold bold* test *bold*
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
-		formatting = r'(?<!\S)\*[^\s*]([^*]*[^\s*])?\*(?!\S)|' r'(?<!\S)/[^\s/]([^/]*[^\s/])?/(?!\S)|' r'(?<!\S)_[^\s_]([^_]*[^\s_])?_(?!\S)'
+		formatting = r'(?<!\S)' r'\*[^\s*]' r'([^*]*[^\s*])?' r'\*(?!\S)|'\
+						 r'(?<!\S)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\S)|'\
+						 r'(?<!\S)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\S)'
 
 		basic_pattern = links + mail + formatting
 		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
