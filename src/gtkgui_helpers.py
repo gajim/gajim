@@ -314,3 +314,26 @@ def get_current_desktop(window):
 		# f.e. prop is ('CARDINAL', 32, [0]) we want 0 or 1.. from [0]
 		current_virtual_desktop_no = prop[2][0]
 		return current_virtual_desktop_no
+
+def possibly_move_window_in_current_desktop(window):
+	'''moves GTK window to current virtual desktop if it is not in the
+	current virtual desktop
+	window is GTK window'''
+	if os.name == 'nt':
+		return
+
+	root_window = gtk.gdk.screen_get_default().get_root_window()
+	# current user's vd
+	current_virtual_desktop_no = get_current_desktop(root_window)
+	
+	# vd roster window is in
+	window_virtual_desktop = get_current_desktop(window.window)
+
+	# if one of those is None, something went wrong and we cannot know
+	# VD info, just hide it (default action) and not show it afterwards
+	if None not in (window_virtual_desktop, current_virtual_desktop_no):
+		if current_virtual_desktop_no != window_virtual_desktop:
+			# we are in another VD that the window was
+			# so show it in current VD
+			window.show()
+	

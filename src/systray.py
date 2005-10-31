@@ -265,27 +265,10 @@ class Systray:
 			# no pending events, so toggle visible/hidden for roster window
 			if win.get_property('visible'): # visible in ANY virtual desktop?
 				win.hide() # we hide it from VD that was visible in
+				
 				# but we could be in another VD right now. eg vd2
 				# and we want not only to hide it in vd1 but also show it in vd2
-
-				if os.name != 'nt':
-					root_window = gtk.gdk.screen_get_default().get_root_window()
-					# current user's vd
-					current_virtual_desktop_no = gtkgui_helpers.get_current_desktop(
-						root_window)
-				
-					# vd roster window is in
-					window_virtual_desktop = gtkgui_helpers.get_current_desktop(
-						win.window)
-				
-				# if one of those is None, something went wrong and we cannot know
-				# VD info, just hide it (default action) and not show it afterwards
-				if None not in (window_virtual_desktop, current_virtual_desktop_no):
-					if current_virtual_desktop_no != window_virtual_desktop:
-						# we are in another VD that the window was
-						# so show it in current VD
-						win.show()
-						
+				gtkgui_helpers.possibly_move_window_in_current_desktop(win)
 			else:
 				win.present()
 		else:
@@ -333,8 +316,10 @@ class Systray:
 			tv.scroll_to_end()
 
 	def on_middle_click(self):
+		'''middle click raises window to have complete focus (fe. get kbd events)
+		but if already raised, it hides it'''
 		win = gajim.interface.roster.window
-		if win.is_active():
+		if win.is_active(): # is it fully raised? (eg does it receive kbd events?)
 			win.hide()
 		else:
 			win.present()
