@@ -344,7 +344,7 @@ class Interface:
 			# play sound
 			if old_show < 2 and new_show > 1:
 				if gajim.config.get_per('soundevents', 'contact_connected',
-												'enabled'):
+					'enabled'):
 					helpers.play_sound('contact_connected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
@@ -357,7 +357,7 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
-						instance = dialogs.PopupNotificationWindow(\
+						instance = dialogs.PopupNotificationWindow(
 							_('Contact Signed In'), jid, account)
 						self.roster.popup_notification_windows.append(instance)
 				if self.remote and self.remote.is_enabled():
@@ -370,7 +370,7 @@ class Interface:
 				
 			elif old_show > 1 and new_show < 2:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
-												'enabled'):
+						'enabled'):
 					helpers.play_sound('contact_disconnected')
 				if not self.windows[account]['chats'].has_key(jid) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
@@ -383,7 +383,7 @@ class Interface:
 						show_notification = True
 					if show_notification:
 						instance = dialogs.PopupNotificationWindow(
-											 		_('Contact Signed Out'), jid, account)
+							_('Contact Signed Out'), jid, account)
 						self.roster.popup_notification_windows.append(instance)
 				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactAbsence', (account, array))
@@ -418,7 +418,7 @@ class Interface:
 			if not self.windows[account]['chats'].has_key(fjid) and \
 				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
-					instance = dialogs.PopupNotificationWindow(\
+					instance = dialogs.PopupNotificationWindow(
 						_('New Private Message'), fjid, account, 'pm')
 					self.roster.popup_notification_windows.append(instance)
 
@@ -463,10 +463,10 @@ class Interface:
 					show_notification = True
 				if show_notification:
 					if msg_type == 'normal': # single message
-						instance = dialogs.PopupNotificationWindow(\
+						instance = dialogs.PopupNotificationWindow(
 							_('New Single Message'), jid, account, msg_type)
 					else: # chat message
-						instance = dialogs.PopupNotificationWindow(\
+						instance = dialogs.PopupNotificationWindow(
 							_('New Message'), jid, account, msg_type)
 
 					self.roster.popup_notification_windows.append(instance)
