@@ -140,7 +140,7 @@ def get_os_info():
 		# our last chance, ask uname and strip it
 		uname_output = helpers.get_output_of_command('uname -a | cut -d" " -f1,3')
 		if uname_output is not None:
-			return uname_output
+			return uname_output[0] # only first line
 	return 'N/A'
 
 class Connection:
