@@ -20,8 +20,12 @@
 import gtk
 import gtk.glade
 import time
+import os
+
+import dialogs
 
 from common import gajim
+from common import helpers
 from common import i18n
 
 _ = i18n._
@@ -51,6 +55,7 @@ class HistoryWindow:
 		self.previous_button = xml.get_widget('previous_button')
 		self.forward_button = xml.get_widget('forward_button')
 		self.latest_button = xml.get_widget('latest_button')
+		self.filter_entry = xml.get_widget('filter_entry')
 		xml.signal_autoconnect(self)
 
 		tag = self.history_buffer.create_tag('incoming')
@@ -83,6 +88,26 @@ class HistoryWindow:
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+
+	def on_apply_filter_button_clicked(self, widget):
+		filter = self.filter_entry.get_text()
+		if len(filter) < 3:
+			dialogs.ErrorDialog(_('Filter query too short'),
+				_('Query must be at least 3 characters long.')).get_response()
+			return
+
+		# FIXME: what if jid is fake (pm)?
+		path_to_file = os.path.join(gajim.LOGPATH, self.jid)
+		# FIXME: ship grep.exe for windoz?
+		command = 'grep %s %s' % (filter, path_to_file)
+		stdout = helpers.get_output_of_command(command)
+		if stdout is not None:
+			text = ' '.join(stdout)
+			self.history_buffer.set_text(text)
+
+	def on_clear_filter_button_clicked(self, widget):
+		pass
+		# FIXME: reread from scratch (if it's possible to save current page it's even better)
 
 	def on_earliest_button_clicked(self, widget):
 		start, end = self.history_buffer.get_bounds()
@@ -163,7 +188,7 @@ class HistoryWindow:
 			self.latest_button.set_sensitive(False)
 
 	def new_line(self, date, type, data):
-		'''write a new line'''
+		'''add a new line in textbuffer'''
 		buff = self.history_buffer
 		start_iter = buff.get_start_iter()
 		tim = time.strftime('[%x %X] ', time.localtime(float(date)))
