@@ -1061,7 +1061,7 @@ class Interface:
 		# so http://be) will match http://be and http://be)be) will match http://be)be
 
 		prefixes = ('http://', 'https://', 'news://', 'ftp://', 'ed2k://', 'www\.', 'ftp\.')
-		#FIXME: ftp and www to have check if ftp.fooDOTHERE (see mail pattern)
+		# NOTE: it's ok to catch www.gr such stuff exist!
 		
 		prefix_pattern = ''
 		for prefix in prefixes:
