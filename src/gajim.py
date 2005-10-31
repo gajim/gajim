@@ -956,8 +956,8 @@ class Interface:
 		vcard_dict = gajim.connections[account].get_cached_vcard(jid)
 		if not vcard_dict.has_key('PHOTO'):
 			return None
-		pix, _t, _t = vcard.get_avatar_pixbuf(vcard_dict['PHOTO'])
-		return pix
+		pixbuf = vcard.get_avatar_pixbuf(vcard_dict['PHOTO'])[0]
+		return pixbuf
 	
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
