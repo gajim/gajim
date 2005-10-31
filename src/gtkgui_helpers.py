@@ -301,3 +301,16 @@ def get_invisible_cursor():
 	color = gtk.gdk.Color()
 	cursor = gtk.gdk.Cursor(pixmap, pixmap, color, color, 0, 0)
 	return cursor
+
+def get_current_desktop(window):
+	'''returns the current virtual desktop for given window
+	NOTE: window is GDK window'''
+	prop = window.property_get('_NET_CURRENT_DESKTOP')
+	if prop is None: # it means it's normal window (not root window)
+		# so we look for it's current virtual desktop in another property
+		prop = window.property_get('_NET_WM_DESKTOP')
+
+	if prop is not None:
+		# f.e. prop is ('CARDINAL', 32, [0]) we want 0 or 1.. from [0]
+		current_virtual_desktop_no = prop[2][0]
+		return current_virtual_desktop_no
