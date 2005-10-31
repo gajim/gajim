@@ -271,9 +271,12 @@ class Connection:
 			vcard['jid'] = frm
 			vcard['resource'] = resource
 			if frm == our_jid:
-				self.vcard_sha = avatar_sha
 				self.dispatch('MYVCARD', vcard)
-				#we re-send our presence with sha if we are not invisible
+				# we re-send our presence with sha if has changed and if we are
+				# not invisible
+				if self.vcard_sha == avatar_sha:
+					return
+				self.vcard_sha = avatar_sha
 				if STATUS_LIST[self.connected] == 'invisible':
 					return
 				sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
@@ -1268,6 +1271,9 @@ class Connection:
 				return
 			prio =  unicode(gajim.config.get_per('accounts', self.name,
 				'priority'))
+			vcard = self.get_cached_vcard(jid)
+			if vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
+				self.vcard_sha = vcard['PHOTO']['SHA']
 			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
 			p = self.add_sha(p)
 			if msg:
@@ -1907,7 +1913,6 @@ class Connection:
 			vcard = self.node_to_dict(card)
 			if vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
 				cached_sha = vcard['PHOTO']['SHA']
-				del vcard['PHOTO']['SHA']
 				if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
 					cached_sha:
 					# we had an old cached vcard
