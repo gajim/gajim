@@ -151,6 +151,7 @@ class Connection:
 		self.connection = None # xmpppy instance
 		self.gpg = None
 		self.vcard_sha = None
+		self.vcard_shas = {} # sha of contacts
 		self.status = ''
 		self.old_show = ''
 		self.time_to_reconnect = None
@@ -245,20 +246,32 @@ class Connection:
 			frm = our_jid
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
+			vcard = self.node_to_dict(card)
+			if vcard.has_key('PHOTO') and type(vcard['PHOTO']) == type({}) and \
+			vcard['PHOTO'].has_key('BINVAL'):
+				photo = vcard['PHOTO']['BINVAL']
+				avatar_sha = sha.sha(photo).hexdigest()
+			else:
+				avatar_sha = ''
+
+			if avatar_sha:
+				card.getTag('PHOTO').setTagData('SHA', avatar_sha)
+			if frm != our_jid:
+				if avatar_sha:
+					self.vcard_shas[frm] = avatar_sha
+				elif self.vcard_shas.has_key(frm):
+					del self.vcard_shas[frm]
+
+			# Save it to file
 			path_to_file = os.path.join(gajim.VCARDPATH, frm)
 			fil = open(path_to_file, 'w')
 			fil.write(str(card))
 			fil.close()
-			vcard = self.node_to_dict(card)
+
 			vcard['jid'] = frm
 			vcard['resource'] = resource
 			if frm == our_jid:
-				if vcard.has_key('PHOTO') and type(vcard['PHOTO']) == type({}) and \
-				vcard['PHOTO'].has_key('BINVAL'):
-					photo = vcard['PHOTO']['BINVAL']
-					self.vcard_sha = sha.sha(photo).hexdigest()
-				else:
-					self.vcard_sha = ''
+				self.vcard_sha = avatar_sha
 				self.dispatch('MYVCARD', vcard)
 				#we re-send our presence with sha if we are not invisible
 				if STATUS_LIST[self.connected] == 'invisible':
@@ -369,12 +382,16 @@ class Connection:
 		gajim.log.debug('PresenceCB: %s' % ptype)
 		is_gc = False # is it a GC presence ?
 		sigTag = None
+		avatar_sha = None
 		xtags = prs.getTags('x')
 		for x in xtags:
 			if x.getNamespace().startswith(common.xmpp.NS_MUC):
 				is_gc = True
 			if x.getNamespace() == common.xmpp.NS_SIGNED:
 				sigTag = x
+			if x.getNamespace() == common.xmpp.NS_VCARD_UPDATE:
+				avatar_sha = x.getTagData('photo')
+				
 		jid_from = prs.getFrom()
 		who = unicode(jid_from)
 		jid_stripped = jid_from.getStripped()
@@ -474,6 +491,15 @@ class Connection:
 			else:	# print in the window the error
 				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
+
+		avatar_sha = None
+		if avatar_sha:
+			if self.vcard_shas.has_key(jid_stripped):
+				if avatar_sha != self.vcard_shas[jid_stripped]:
+					# avatar has been updated
+					self.request_vcard(self.name, jid_stripped)
+			else:
+				self.vcard_shas[jid_stripped] = avatar_sha
 		if not ptype or ptype == 'unavailable':
 			gajim.logger.write('status', status, jid_stripped, show)
 			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
@@ -1867,18 +1893,29 @@ class Connection:
 			common.xmpp.NS_VERSION)
 		self.to_be_sent.append(iq)
 
-	def get_cached_vcard(self, jid):
-		j = gajim.get_jid_without_resource(jid)
-		path_to_file = os.path.join(gajim.VCARDPATH, j)
+	def get_cached_vcard(self, fjid):
+		'''return the vcard as a dict
+		return {} if vcard was too old
+		return None if we don't have cached vcard'''
+		jid = gajim.get_jid_without_resource(fjid)
+		path_to_file = os.path.join(gajim.VCARDPATH, jid)
 		if os.path.isfile(path_to_file):
 			# We have the vcard cached
 			f = open(path_to_file)
 			c = f.read()
 			card = common.xmpp.Node(node = c)
 			vcard = self.node_to_dict(card)
-			vcard['jid'] = j
-			vcard['resource'] = gajim.get_resource_from_jid(jid)
+			if vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
+				cached_sha = vcard['PHOTO']['SHA']
+				del vcard['PHOTO']['SHA']
+				if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
+					cached_sha:
+					# we had an old cached vcard
+					return {}
+			vcard['jid'] = jid
+			vcard['resource'] = gajim.get_resource_from_jid(fjid)
 			return vcard
+		return None
 
 	def request_vcard(self, jid = None):
 		'''request the VCARD'''
