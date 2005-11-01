@@ -442,6 +442,8 @@ class ConversationTextview(gtk.TextView):
 		return index # the position after *last* special text
 
 	def print_special_text(self, special_text, other_tags):
+		'''is called by detect_and_print_special_text and prints
+		special text (emots, links, formatting)'''
 		tags = []
 		use_other_tags = True
 		show_ascii_formatting_chars = \
