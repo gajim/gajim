@@ -247,7 +247,7 @@ class Connection:
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
 			vcard = self.node_to_dict(card)
-			if vcard and vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
+			if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
 			vcard['PHOTO'].has_key('BINVAL'):
 				photo = vcard['PHOTO']['BINVAL']
 				avatar_sha = sha.sha(photo).hexdigest()
@@ -898,7 +898,8 @@ class Connection:
 			return
 		port = gajim.config.get('file_transfers_port')
 		ft_override_host_to_send = gajim.config.get('ft_override_host_to_send')
-		cfg_proxies = gajim.config.get_per('accounts', self.name, 'file_transfer_proxies')
+		cfg_proxies = gajim.config.get_per('accounts', self.name,
+			'file_transfer_proxies')
 		if receiver is None:
 			receiver = file_props['receiver']
 		if sender is None:
@@ -1021,7 +1022,8 @@ class Connection:
 		iq = common.xmpp.Protocol(name = 'iq',
 			to = unicode(file_props['sender']), typ = 'error')
 		iq.setAttr('id', file_props['request-id'])
-		err = common.xmpp.ErrorNode(code = '406', typ = 'auth', name = 'not-acceptable')
+		err = common.xmpp.ErrorNode(code = '406', typ = 'auth', name =
+			'not-acceptable')
 		iq.addChild(node=err)
 		self.to_be_sent.append(iq)
 
@@ -1658,7 +1660,8 @@ class Connection:
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if keyID and USE_GPG:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
-			if self.connected < 2 and self.gpg.passphrase is None and not use_gpg_agent:
+			if self.connected < 2 and self.gpg.passphrase is None and \
+				not use_gpg_agent:
 				# We didn't set a passphrase
 				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
 					#%s is the account name here
@@ -1679,7 +1682,8 @@ class Connection:
 		if sync:
 			self.change_status2(show, msg, auto)
 		else:
-			t = threading.Thread(target=self.change_status2, args = (show, msg, auto))
+			t = threading.Thread(target=self.change_status2, args = (show, msg,
+				auto))
 			t.start()
 
 	def change_status2(self, show, msg, auto = False):
@@ -1911,7 +1915,7 @@ class Connection:
 			c = f.read()
 			card = common.xmpp.Node(node = c)
 			vcard = self.node_to_dict(card)
-			if vcard and vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
+			if vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
 				cached_sha = vcard['PHOTO']['SHA']
 				if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
 					cached_sha:
@@ -2147,11 +2151,10 @@ class Connection:
 	def send_invite(self, room, to, reason=''):
 		'''sends invitation'''
 		message=common.xmpp.Message(to = room)
-		message.addChild(name = 'x',namespace = common.xmpp.NS_MUC_USER)
-		message.getChildren()[0].addChild(name = 'invite', attrs={'to' : to})
+		c = message.addChild(name = 'x', namespace = common.xmpp.NS_MUC_USER)
+		c = c.addChild(name = 'invite', attrs={'to' : to})
 		if reason != '':
-			message.getChildren()[0].getChildren()[0].addChild(name = 'reason')
-			message.getChildren()[0].getChildren()[0].getChildren()[0].addData(reason)
+			c.setTagData('reason', reason)
 		self.to_be_sent.append(message)
 
 	def send_keepalive(self):
