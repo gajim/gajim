@@ -739,7 +739,7 @@ class Interface:
 			return
 		self.windows[account]['gc'][jid].set_subject(jid, array[1])
 		if len(jids) > 1:
-			self.windows[account]['gc'][jid].print_conversation(\
+			self.windows[account]['gc'][jid].print_conversation(
 				'%s has set the subject to %s' % (jids[1], array[1]), jid)
 
 	def handle_event_gc_config(self, account, array):
@@ -809,8 +809,8 @@ class Interface:
 		self.add_event(account, jid, 'file-send-error', file_props)
 
 		if gajim.show_notification(account):
-			instance = dialogs.PopupNotificationWindow(_('File Transfer Error'), jid,
-				account, 'file-send-error', file_props)
+			instance = dialogs.PopupNotificationWindow(_('File Transfer Error'),
+				jid, account, 'file-send-error', file_props)
 			self.roster.popup_notification_windows.append(instance)
 
 	def add_event(self, account, jid, typ, args):
@@ -867,8 +867,8 @@ class Interface:
 
 		if gajim.show_notification(account):
 			# check if we should be notified
-			instance = dialogs.PopupNotificationWindow(_('File Transfer Error'), jid,
-				account, msg_type, file_props)
+			instance = dialogs.PopupNotificationWindow(_('File Transfer Error'),
+				jid, account, msg_type, file_props)
 			self.roster.popup_notification_windows.append(instance)
 
 	def handle_event_file_request(self, account, array):
@@ -1361,8 +1361,7 @@ class Interface:
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.windows['file_transfers'] = dialogs.FileTransfersWindow()
 		self.windows['preferences'] = config.PreferencesWindow()
-		self.windows['add_remove_emoticons'] = \
-			config.ManageEmoticonsWindow()
+		self.windows['add_remove_emoticons'] = config.ManageEmoticonsWindow()
 		self.windows['roster'] = self.roster
 		
 		for account in gajim.connections:
