@@ -99,7 +99,8 @@ class GroupchatWindow(chat.Chat):
 		self.xml.signal_autoconnect(signal_dict)
 
 		# get size and position from config
-		if gajim.config.get('saveposition'):
+		if gajim.config.get('saveposition') and \
+			not gtkgui_helpers.one_window_opened('gc'):
 			gtkgui_helpers.move_window(self.window,
 				gajim.config.get('gc-x-position'),
 				gajim.config.get('gc-y-position'))

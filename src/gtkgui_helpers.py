@@ -198,6 +198,14 @@ def resize_window(window, w, h):
 		h = screen_h
 	window.resize(abs(w), abs(h))
 
+def one_window_opened(typ):
+	for account in gajim.connections:
+		if not gajim.interface.windows[account].has_key(typ):
+			continue
+		if len(gajim.interface.windows[account][typ]):
+			return True
+	return False
+
 class TagInfoHandler(xml.sax.ContentHandler):
 	def __init__(self, tagname1, tagname2):
 		xml.sax.ContentHandler.__init__(self)
