@@ -576,6 +576,8 @@ class GroupchatWindow(chat.Chat):
 				_('You can manage your bookmarks via Actions menu in your roster.'))
 
 	def on_message_textview_key_press_event(self, widget, event):
+		'''we use this cb instead of my_key_press to catch everything else
+		that is not registred as binding (see message_textview.py)'''
 		if event.keyval not in (gtk.keysyms.ISO_Left_Tab, gtk.keysyms.Tab):
 			room_jid = self.get_active_jid()
 			self.last_key_tabs[room_jid] = False

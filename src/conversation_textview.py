@@ -407,6 +407,13 @@ class ConversationTextview(gtk.TextView):
 				helpers.launch_browser_mailer(kind, word)
 
 	def detect_and_print_special_text(self, otext, jid, other_tags):
+		'''detects special text (emots & links & formatting)
+		prints normal text before any special text it founts,
+		then print special text (that happens many times until
+		last special text is printed) and then returns the index
+		after *last* special text, so we can print it in
+		print_conversation_line()'''
+		
 		buffer = self.get_buffer()
 
 		start = 0
@@ -424,6 +431,7 @@ class ConversationTextview(gtk.TextView):
 			if start != 0:
 				text_before_special_text = otext[index:start]
 				end_iter = buffer.get_end_iter()
+				# we insert normal text
 				buffer.insert_with_tags_by_name(end_iter,
 					text_before_special_text, *other_tags)
 			index = end # update index
@@ -431,7 +439,7 @@ class ConversationTextview(gtk.TextView):
 			# now print it
 			self.print_special_text(special_text, other_tags)
 
-		return index
+		return index # the position after *last* special text
 
 	def print_special_text(self, special_text, other_tags):
 		tags = []
