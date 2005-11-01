@@ -247,7 +247,7 @@ class Connection:
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
 			vcard = self.node_to_dict(card)
-			if vcard and vcard.has_key('PHOTO') and type(vcard['PHOTO']) == type({}) and \
+			if vcard and vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
 			vcard['PHOTO'].has_key('BINVAL'):
 				photo = vcard['PHOTO']['BINVAL']
 				avatar_sha = sha.sha(photo).hexdigest()
@@ -1941,7 +1941,7 @@ class Connection:
 		for i in vcard:
 			if i == 'jid':
 				continue
-			if type(vcard[i]) == type({}):
+			if isinstance(vcard[i], dict):
 				iq3 = iq2.addChild(i)
 				for j in vcard[i]:
 					iq3.addChild(j).setData(vcard[i][j])
