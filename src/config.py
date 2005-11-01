@@ -576,10 +576,7 @@ class PreferencesWindow:
 				window.load_var(jid, saved_var[jid])
 
 	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
-		tabs_pos_label = self.xml.get_widget('tabs_pos_label')
-		tabs_pos_combobox = self.xml.get_widget('tabs_pos_combobox')
-		self.on_checkbutton_toggled(widget, 'usetabbedchat',
-					[tabs_pos_label, tabs_pos_combobox])
+		self.on_checkbutton_toggled(widget, 'usetabbedchat')
 		
 		if widget.get_active():
 			self.merge_windows('chats')
