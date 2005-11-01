@@ -2290,20 +2290,22 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		# We upgrade only the first user because user2.groups is a pointer to
 		# user1.groups
 		u = gajim.contacts[account][data][0]
-		u.groups.remove(grp_source)
-		if model.iter_n_children(iter_group_source) == 1: #this was the only child
-			model.remove(iter_group_source)
-		#delete the group if it is empty (need to look for offline users too)
-		for jid in gajim.contacts[account]:
-			if grp_source in gajim.contacts[account][jid][0].groups:
-				break
-		else:
-			del gajim.groups[account][grp_source]
+		if context.action != gtk.gdk.ACTION_COPY:
+			u.groups.remove(grp_source)
+			if model.iter_n_children(iter_group_source) == 1:
+				# this was the only child
+				model.remove(iter_group_source)
+			# delete the group if it is empty (need to look for offline users too)
+			for jid in gajim.contacts[account]:
+				if grp_source in gajim.contacts[account][jid][0].groups:
+					break
+			else:
+				del gajim.groups[account][grp_source]
 		if not grp_dest in u.groups:
 			u.groups.append(grp_dest)
 			self.add_contact_to_roster(data, account)
 		gajim.connections[account].update_contact(u.jid, u.name, u.groups)
-		if context.action == gtk.gdk.ACTION_MOVE:
+		if context.action in (gtk.gdk.ACTION_MOVE, gtk.gdk.ACTION_COPY):
 			context.finish(True, True, etime)
 		return
 
@@ -2466,7 +2468,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		#signals
 		TARGETS = [('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0)]
 		self.tree.enable_model_drag_source( gtk.gdk.BUTTON1_MASK, TARGETS,
-			gtk.gdk.ACTION_DEFAULT| gtk.gdk.ACTION_MOVE)
+			gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_COPY)
 		self.tree.enable_model_drag_dest(TARGETS, gtk.gdk.ACTION_DEFAULT)
 		self.tree.connect('drag_data_get', self.drag_data_get_data)
 		self.tree.connect('drag_data_received', self.drag_data_received_data)
