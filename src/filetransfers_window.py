@@ -273,10 +273,16 @@ _('Connection with peer cannot be established.'))
 		
 	def send_file(self, account, contact, file_path):
 		''' start the real transfer(upload) of the file '''
-		if type(contact) == str:
+		if gtkgui_helpers.file_is_locked(file_path):
+			pritext = _('Gajim cannot access this file')
+			sextext = _('This file is being used by another process.')
+			dialogs.ErrorDialog(pritext, sextext).get_response()
+			return
+		
+		if isinstance(contact, str):
 			if contact.find('/') == -1:
 				return
-			(jid, resource) = contact.split("/", 1)
+			(jid, resource) = contact.split('/', 1)
 			contact = gajim.Contact(jid = jid, resource = resource)
 		(file_dir, file_name) = os.path.split(file_path)
 		file_props = self.get_send_file_props(account, contact, 
@@ -785,7 +791,7 @@ _('Connection with peer cannot be established.'))
 			rect =  self.tree.get_cell_area(props[0],props[1])
 			position = widget.window.get_origin()
 			self.tooltip.show_tooltip(file_props , (pointer[0], rect.height ), 
-				 (position[0], position[1] + rect.y + self.height_diff))
+				(position[0], position[1] + rect.y + self.height_diff))
 		else:
 			self.tooltip.hide_tooltip()
 	

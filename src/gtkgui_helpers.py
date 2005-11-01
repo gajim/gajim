@@ -24,6 +24,12 @@ import gobject
 import pango
 import os
 import sys
+
+if os.name == 'nt':
+	import win32file
+	import win32con
+	import pywintypes
+
 from common import i18n
 i18n.init()
 _ = i18n._
@@ -83,7 +89,7 @@ def get_default_font():
 						line[start:line.find('"', start)])
 		except:
 			#we talk about file
-			print _('error: cannot open %s for reading') % xfce_config_file
+			print >> sys.stderr, _('Error: cannot open %s for reading') % xfce_config_file
 	
 	elif os.path.exists(kde_config_file):
 		try:
@@ -98,7 +104,7 @@ def get_default_font():
 					return helpers.ensure_unicode_string(font_string)
 		except:
 			#we talk about file
-			print _('error: cannot open %s for reading') % kde_config_file
+			print >> sys.stderr, _('Error: cannot open %s for reading') % kde_config_file
 	
 	return None
 	
@@ -344,4 +350,28 @@ def possibly_move_window_in_current_desktop(window):
 			# we are in another VD that the window was
 			# so show it in current VD
 			window.show()
+
+def file_is_locked(path_to_file):
+	'''returns True if file is locked (WINDOWS ONLY)'''
+	if os.name != 'nt': # just in case
+		return
 	
+	secur_att = pywintypes.SECURITY_ATTRIBUTES()
+	secur_att.Initialize()
+	
+	try:
+		# try make a handle for READING the file
+		hfile = win32file.CreateFile(
+			path_to_file,					# path to file
+			win32con.GENERIC_READ,			# open for reading
+			0,								# do not share with other proc
+			secur_att,
+			win32con.OPEN_EXISTING,			# existing file only
+			win32con.FILE_ATTRIBUTE_NORMAL,	# normal file
+			0								# no attr. template
+		)
+	except pywintypes.error, e:
+		return True
+	else: # in case all went ok, close file handle (go to hell WinAPI)
+		hfile.Close()
+		return False
