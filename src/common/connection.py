@@ -247,7 +247,7 @@ class Connection:
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
 			vcard = self.node_to_dict(card)
-			if vcard.has_key('PHOTO') and type(vcard['PHOTO']) == type({}) and \
+			if vcard and vcard.has_key('PHOTO') and type(vcard['PHOTO']) == type({}) and \
 			vcard['PHOTO'].has_key('BINVAL'):
 				photo = vcard['PHOTO']['BINVAL']
 				avatar_sha = sha.sha(photo).hexdigest()
@@ -1272,7 +1272,7 @@ class Connection:
 			prio =  unicode(gajim.config.get_per('accounts', self.name,
 				'priority'))
 			vcard = self.get_cached_vcard(jid)
-			if vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
+			if vcard and vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
 				self.vcard_sha = vcard['PHOTO']['SHA']
 			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
 			p = self.add_sha(p)
@@ -1911,7 +1911,7 @@ class Connection:
 			c = f.read()
 			card = common.xmpp.Node(node = c)
 			vcard = self.node_to_dict(card)
-			if vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
+			if vcard and vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
 				cached_sha = vcard['PHOTO']['SHA']
 				if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
 					cached_sha:
