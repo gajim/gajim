@@ -860,7 +860,7 @@ class Interface:
 		else:
 			msg_type = 'file-request-error'
 
-		self.add_event(account, jid, msg_typ, file_props)
+		self.add_event(account, jid, msg_type, file_props)
 
 		if gajim.show_notification(account):
 			# check if we should be notified
