@@ -575,6 +575,11 @@ class GroupchatWindow(chat.Chat):
 				_('Bookmark has been added successfully'),
 				_('You can manage your bookmarks via Actions menu in your roster.'))
 
+	def on_message_textview_key_press_event(self, widget, event):
+		if event.keyval not in [gtk.keysyms.ISO_Left_Tab, gtk.keysyms.Tab]:
+			room_jid = self.get_active_jid()
+			self.last_key_tabs[room_jid] = False
+
 	def on_message_textview_mykeypress_event(self, widget, event_keyval,
 	event_keymod):
 		'''When a key is pressed:
@@ -700,8 +705,6 @@ class GroupchatWindow(chat.Chat):
 			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+Down
 				self.sent_messages_scroll(room_jid, 'down', widget.get_buffer())
 				return True # override the default gtk+ thing for ctrl+down
-		else:
-			self.last_key_tabs[room_jid] = False
 
 	def on_send_button_clicked(self, widget):
 		'''When send button is pressed: send the current message'''
@@ -1329,6 +1332,8 @@ current room topic.') % command, room_jid)
 		msg_textview = message_textview.MessageTextView()
 		msg_textview.connect('mykeypress',
 			self.on_message_textview_mykeypress_event)
+		msg_textview.connect('key_press_event',
+			self.on_message_textview_key_press_event)
 		message_scrolledwindow.add(msg_textview)
 		
 		chat.Chat.new_tab(self, room_jid)
