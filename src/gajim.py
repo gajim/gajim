@@ -278,55 +278,55 @@ class Interface:
 			ji = jid
 		# Update contact
 		if gajim.contacts[account].has_key(ji):
-			luser = gajim.contacts[account][ji]
-			user1 = None
+			lcontact = gajim.contacts[account][ji]
+			contact1 = None
 			resources = []
-			for u in luser:
+			for c in lcontact:
 				resources.append(u.resource)
-				if u.resource == resource:
-					user1 = u
+				if c.resource == resource:
+					contact1 = c
 					break
-			if user1:
-				if user1.show in statuss:
-					old_show = statuss.index(user1.show)
-				if old_show == new_show and user1.status == array[2]: #no change
+			if contact1:
+				if contact1.show in statuss:
+					old_show = statuss.index(contact1.show)
+				if old_show == new_show and contact1.status == array[2]: #no change
 					return
 			else:
-				user1 = gajim.contacts[account][ji][0]
-				if user1.show in statuss:
-					old_show = statuss.index(user1.show)
-				if (resources != [''] and (len(luser) != 1 or 
-					luser[0].show != 'offline')) and jid.find('@') > 0:
+				contact1 = gajim.contacts[account][ji][0]
+				if contact1.show in statuss:
+					old_show = statuss.index(contact1.show)
+				if (resources != [''] and (len(lcontact) != 1 or 
+					lcontact[0].show != 'offline')) and jid.find('@') > 0:
 					old_show = 0
-					user1 = Contact(jid = user1.jid, name = user1.name,
-						groups = user1.groups, show = user1.show,
-						status = user1.status, sub = user1.sub, ask = user1.ask,
-						resource = user1.resource, priority = user1.priority,
-						keyID = user1.keyID)
-					luser.append(user1)
-				user1.resource = resource
-			if user1.jid.find('@') > 0 and len(luser) == 1: # It's not an agent
+					contact1 = Contact(jid = contact1.jid, name = contact1.name,
+						groups = contact1.groups, show = contact1.show,
+						status = contact1.status, sub = contact1.sub, ask = contact1.ask,
+						resource = contact1.resource, priority = contact1.priority,
+						keyID = contact1.keyID)
+					lcontact.append(contact1)
+				contact1.resource = resource
+			if contact1.jid.find('@') > 0 and len(lcontact) == 1: # It's not an agent
 				if old_show == 0 and new_show > 1:
-					if not user1.jid in gajim.newly_added[account]:
-						gajim.newly_added[account].append(user1.jid)
-					if user1.jid in gajim.to_be_removed[account]:
-						gajim.to_be_removed[account].remove(user1.jid)
-					gobject.timeout_add(5000, self.roster.remove_newly_added, \
-						user1.jid, account)
+					if not contact1.jid in gajim.newly_added[account]:
+						gajim.newly_added[account].append(contact1.jid)
+					if contact1.jid in gajim.to_be_removed[account]:
+						gajim.to_be_removed[account].remove(contact1.jid)
+					gobject.timeout_add(5000, self.roster.remove_newly_added,
+						contact1.jid, account)
 				if old_show > 1 and new_show == 0 and gajim.connections[account].\
 					connected > 1:
-					if not user1.jid in gajim.to_be_removed[account]:
-						gajim.to_be_removed[account].append(user1.jid)
-					if user1.jid in gajim.newly_added[account]:
-						gajim.newly_added[account].remove(user1.jid)
-					self.roster.draw_contact(user1.jid, account)
+					if not contact1.jid in gajim.to_be_removed[account]:
+						gajim.to_be_removed[account].append(contact1.jid)
+					if contact1.jid in gajim.newly_added[account]:
+						gajim.newly_added[account].remove(contact1.jid)
+					self.roster.draw_contact(contact1.jid, account)
 					if not gajim.awaiting_events[account].has_key(jid):
-						gobject.timeout_add(5000, self.roster.really_remove_contact, \
-							user1, account)
-			user1.show = array[1]
-			user1.status = array[2]
-			user1.priority = priority
-			user1.keyID = keyID
+						gobject.timeout_add(5000, self.roster.really_remove_contact,
+							contact1, account)
+			contact1.show = array[1]
+			contact1.status = array[2]
+			contact1.priority = priority
+			contact1.keyID = keyID
 		if jid.find('@') <= 0:
 			# It must be an agent
 			if gajim.contacts[account].has_key(ji):
@@ -338,9 +338,10 @@ class Interface:
 		elif gajim.contacts[account].has_key(ji):
 			# It isn't an agent
 			# reset chatstate if needed:
+			# (when contact signs out or has errors)
 			if array[1] in ('offline', 'error'):
-				user1.chatstate = None
-			self.roster.chg_contact_status(user1, array[1], array[2], account)
+				contact1.chatstate = None
+			self.roster.chg_contact_status(contact1, array[1], array[2], account)
 			# play sound
 			if old_show < 2 and new_show > 1:
 				if gajim.config.get_per('soundevents', 'contact_connected',
@@ -363,10 +364,6 @@ class Interface:
 				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactPresence',
 						(account, array))
-				
-				# when contact signs out we reset his chatstate
-				contact = gajim.get_first_contact_instance_from_jid(account, jid)
-				contact.chatstate = None
 				
 			elif old_show > 1 and new_show < 2:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
@@ -768,20 +765,20 @@ class Interface:
 		jid = array[0]
 		if not gajim.contacts[account].has_key(jid):
 			return
-		users = gajim.contacts[account][jid]
+		contacts = gajim.contacts[account][jid]
 		if not (array[2] or array[3]):
-			self.roster.remove_contact(users[0], account)
+			self.roster.remove_contact(contacts[0], account)
 			del gajim.contacts[account][jid]
 			#TODO if it was the only one in its group, remove the group
 			return
-		for user in users:
+		for contact in contacts:
 			name = array[1]
 			if name:
-				user.name = name
-			user.sub = array[2]
-			user.ask = array[3]
+				contact.name = name
+			contact.sub = array[2]
+			contact.ask = array[3]
 			if array[4]:
-				user.groups = array[4]
+				contact.groups = array[4]
 		self.roster.draw_contact(jid, account)
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('RosterInfo', (account, array))
