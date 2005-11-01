@@ -132,7 +132,16 @@ class TabbedChatWindow(chat.Chat):
 		'''we enter the eventbox area so we under conditions add a timeout
 		to show a bigger avatar after 0.5 sec'''
 		jid = self.get_active_jid()
-		avatar_pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(jid)
+		real_jid = jid
+		# Is it a pm ? if it is we get the real jid
+		room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+		gcs = gajim.interface.windows[self.account]['gc']
+		if gcs.has_key(room_jid):
+			contact = gajim.gc_contacts[self.account][room_jid][nick]
+			real_jid = contact.jid
+		if not real_jid:
+			return
+		avatar_pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(real_jid)
 		avatar_w = avatar_pixbuf.get_width()
 		avatar_h = avatar_pixbuf.get_height()
 		
@@ -156,7 +165,16 @@ class TabbedChatWindow(chat.Chat):
 		'''resizes the avatar, if needed, so it has at max half the screen size
 		and shows it'''
 		jid = self.get_active_jid()
-		avatar_pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(jid)
+		real_jid = jid
+		# Is it a pm ? if it is we get the real jid
+		room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+		gcs = gajim.interface.windows[self.account]['gc']
+		if gcs.has_key(room_jid):
+			contact = gajim.gc_contacts[self.account][room_jid][nick]
+			real_jid = contact.jid
+		if not real_jid:
+			return
+		avatar_pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(real_jid)
 		screen_w = gtk.gdk.screen_width()
 		screen_h = gtk.gdk.screen_height()
 		avatar_w = avatar_pixbuf.get_width()
@@ -280,7 +298,10 @@ class TabbedChatWindow(chat.Chat):
 
 	def show_avatar(self, jid, resource):
 		# Get the XML instance
-		jid_with_resource = jid + '/' + resource
+		jid_with_resource = jid
+		if resource:
+			jid_with_resource += '/' + resource
+
 		xml = None
 		if self.xmls.has_key(jid):
 			xml = self.xmls[jid]
@@ -294,8 +315,19 @@ class TabbedChatWindow(chat.Chat):
 		# we assume contact has no avatar
 		scaled_buf = None
 
-		pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(jid)
-		if pixbuf == 'ask': # we don't have the vcard or it's too old
+		real_jid = jid
+		# Is it a pm ? if it is we get the real jid
+		room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+		if nick:
+			gcs = gajim.interface.windows[self.account]['gc']
+			if gcs.has_key(room_jid):
+				contact = gajim.gc_contacts[self.account][room_jid][nick]
+				real_jid = contact.jid
+
+		pixbuf = None
+		if real_jid:
+			pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(real_jid)
+		if not real_jid or pixbuf == 'ask': # we don't have the vcard or it's too old
 			gajim.connections[self.account].request_vcard(jid_with_resource)
 			return
 		if pixbuf is not None:
