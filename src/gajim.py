@@ -282,7 +282,7 @@ class Interface:
 			contact1 = None
 			resources = []
 			for c in lcontact:
-				resources.append(u.resource)
+				resources.append(c.resource)
 				if c.resource == resource:
 					contact1 = c
 					break
