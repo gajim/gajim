@@ -181,7 +181,7 @@ class ConversationTextview(gtk.TextView):
 			# check if the current pointer is still over the line
 			position = self.window.get_origin()
 			win = self.get_toplevel()
-			self.line_tooltip.show_tooltip(_('The text below this ruler is what has been said since the last time you paid attention to this group chat'), (0, 8),
+			self.line_tooltip.show_tooltip(_('Text below this ruler is new since you last used this window'), (0, 8),
 				(win.get_screen().get_display().get_pointer()[1],
 				position[1] + pointer[1]))
 
