@@ -908,19 +908,22 @@ class Interface:
 
 		if gajim.popup_window(account):
 			if file_props['error'] == 0:
-				ft.show_completed(jid, file_props)
+				if gajim.config.get('notify_on_file_complete'):
+					ft.show_completed(jid, file_props)
 			elif file_props['error'] == -1:
 				ft.show_stopped(jid, file_props)
 			return
 
-		if file_props['error'] == 0:
+		msg_type = ''
+		if file_props['error'] == 0 and gajim.config.get('notify_on_file_complete'):
 			msg_type = 'file-completed'
 			event_type = _('File Transfer Completed')
 		elif file_props['error'] == -1:
 			msg_type = 'file-stopped'
 			event_type = _('File Transfer Stopped')
 
-		self.add_event(account, jid, msg_type, file_props)
+		if msg_type:
+			self.add_event(account, jid, msg_type, file_props)
 
 		if gajim.config.get('notify_on_file_complete') and \
 			gajim.config.get('autopopupaway') or \
