@@ -17,6 +17,7 @@ src/gajim.py
 src/gajim_themes_window.py
 src/groupchat_window.py
 src/gtkexcepthook.py
+src/gtkgui.glade.h
 src/gtkgui_helpers.py
 src/history_window.py
 src/message_textview.py
