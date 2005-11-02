@@ -1,4 +1,4 @@
-# ls gajim.desktop.in src/*py src/common/*py -1 -U in trunk
+# ls gajim.desktop.in src/gtkgui.glade.h src/*py src/common/*py -1 -U in trunk
 # to produce this list
 
 [encoding: UTF-8]
