@@ -364,7 +364,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		# check if contact is already in roster (user@server == UsEr@server)
 		already_in = False
 		for rjid in gajim.contacts[self.account]:
-			if jid.lowercase() == rjid.lowercase():
+			if jid.lower() == rjid.lower():
 				already_in = True
 				break
 		if already_in:
