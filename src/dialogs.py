@@ -355,9 +355,21 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		if not jid:
 			return
 		if jid.find('@') < 0:
-			ErrorDialog(_("Invalid user name"),
-_('Contact names must be of the form "user@servername".')).get_response()
+			ErrorDialog(_('Invalid user name'),
+		_('Contact names must be of the form "user@servername".')).get_response()
 			return
+
+		# check if contact is already in roster (user@server == UsEr@server)
+		already_in = False
+		for rjid in gajim.contacts[self.account]:
+			if jid.lowercase() == rjid.lowercase():
+				already_in = True
+				break
+		if already_in:
+			ErrorDialog(_('Contact already in roster'),
+			_('The contact is already registered in your roster.')).get_response()
+			return
+
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
