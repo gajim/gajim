@@ -157,7 +157,10 @@ class Chat:
 		elif len(self.xmls) == 1: # just one tab
 			if self.widget_name == 'tabbed_chat_window':
 				c = gajim.get_first_contact_instance_from_jid(self.account, jid)
-				add = c.name
+				if c is None:
+					add = ''
+				else:
+					add = c.name
 			elif self.widget_name == 'groupchat_window':
 				name = gajim.get_nick_from_jid(jid)
 				add = name
