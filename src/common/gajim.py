@@ -131,7 +131,7 @@ def get_real_jid_from_fjid(account, fjid):
 	if we don't know the real jid'''
 	room_jid, nick = get_room_and_nick_from_fjid(fjid)
 	if not nick: # It's not a fake_jid, it is a real jid
-		return fjid # we are mods for example so we know the real jid
+		return fjid # we return the real jid
 	real_jid = fjid
 	gcs = interface.windows[account]['gc']
 	if gcs.has_key(room_jid):
