@@ -49,6 +49,11 @@ if gobject.pygtk_version < (2, 8, 0):
 
 # We register depending on keysym and modifier some bindings
 # but we also pass those as param so we can construct fake Event
+# Here we register bindings for those combinations that there is NO DEFAULT
+# action to be done by gtk TextView. In such case we should not add a binding
+# as the default action comes first and our bindings is useless. In that case
+# we catch and do stuff before default action in normal key_press_event
+# and we also return True there to stop the default action from running
 
 # CTRL + SHIFT + TAB
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.ISO_Left_Tab,
@@ -63,26 +68,6 @@ gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Tab,
 # TAB
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Tab, 
 	0, 'mykeypress', int, gtk.keysyms.Tab,	gtk.gdk.ModifierType, 0)
-
-# CTRL + PAGE DOWN
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Page_Down, 
-	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.Page_Down,
-	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
-
-# SHIFT + PAGE DOWN
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Page_Down, 
-	gtk.gdk.SHIFT_MASK, 'mykeypress', int, gtk.keysyms.Page_Down,
-	gtk.gdk.ModifierType, gtk.gdk.SHIFT_MASK)
-
-# CTRL + PAGE UP
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Page_Up,
-	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.Page_Up,
-	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
-
-# SHIFT + PAGE UP
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Page_Up, 
-	gtk.gdk.SHIFT_MASK, 'mykeypress', int, gtk.keysyms.Page_Up,
-	gtk.gdk.ModifierType, gtk.gdk.SHIFT_MASK)
 
 # CTRL + UP
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Up, 
