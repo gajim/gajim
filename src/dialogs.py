@@ -330,7 +330,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				self.group_comboboxentry.append_text(g)
 
 		if not jid_agents:
-			# There are no transports, just hide the protocol combobox
+			# There are no transports, so hide the protocol combobox and label
 			self.protocol_combobox.hide()
 			self.protocol_combobox.set_no_show_all(True)
 			protocol_label = self.xml.get_widget('protocol_label')
@@ -354,9 +354,11 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		nickname = self.nickname_entry.get_text().decode('utf-8')
 		if not jid:
 			return
+	
 		if jid.find('@') < 0:
-			ErrorDialog(_('Invalid user name'),
-		_('Contact names must be of the form "user@servername".')).get_response()
+			pritext = _('Invalid User ID')
+			sectext = _('Jabber ID must be of the form "user@servername".')
+			ErrorDialog(pritext, sectext).get_response()
 			return
 
 		# check if contact is already in roster (user@server == UsEr@server)
@@ -367,7 +369,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				break
 		if already_in:
 			ErrorDialog(_('Contact already in roster'),
-			_('The contact is already registered in your roster.')).get_response()
+			_('The contact is already listed in your roster.')).get_response()
 			return
 
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
