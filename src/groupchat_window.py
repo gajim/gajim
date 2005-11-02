@@ -23,7 +23,6 @@ import gtk.glade
 import pango
 import gobject
 import time
-import sre
 import os
 
 import dialogs
@@ -1018,15 +1017,16 @@ current room topic.') % command, room_jid)
 		appear'''
 		
 		words = gajim.config.get('muc_highlight_words').split(';')
-		# Strip empties. ''.split(';') == [''] and would highlight everything.
-		words = [word for word in words if word]
 		words.append(nick)
+		# Strip empties: ''.split(';') == [''] and would highlight everything.
+		# Also lowercase everything for case insensitive compare.
+		words = [word.lower() for word in words if word]
+		text = text.lower()
 		
 		for word in words:
-			pattern = r'\b(' + sre.escape(word) + r')+\b'
-			if sre.search(pattern, text, sre.IGNORECASE | sre.UNICODE):
+			if word in text:
 				return True
-				
+		
 		return False
 
 	def kick(self, widget, room_jid, nick):
