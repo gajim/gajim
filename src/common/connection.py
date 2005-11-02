@@ -177,6 +177,26 @@ class Connection:
 		self.retrycount = 0
 	# END __init__
 
+	def strip_jid(self, jid):
+		'''look into gajim.contacts if we already have this jid CASE INSENSITIVE
+		and returns it
+		the function accetps jid and fjid'''
+		ji, resource = gajim.get_room_and_nick_from_fjid(jid)
+		for rjid in gajim.contacts[self.name]:
+			if ji.lower() == rjid.lower():
+				ji = rjid
+		if resource:
+			return ji + '/' + resource
+		return ji
+
+	def get_full_jid(self, iq_obj):
+		'''return the full jid (with resource) from an iq as unicode'''
+		return unicode(self.strip_jid(str(iq_obj.getFrom())))
+
+	def get_jid(self, iq_obj):
+		'''return the jid (without resource) from an iq as unicode'''
+		return unicode(self.strip_jid(iq_obj.getFrom().getStripped()))
+
 	def put_event(self, ev):
 		if gajim.events_for_ui.has_key(self.name):
 			gajim.events_for_ui[self.name].append(ev)
@@ -240,7 +260,7 @@ class Connection:
 		our_jid = gajim.get_jid_from_account(self.name)
 		resource = ''
 		if frm_iq:
-			frm = frm_iq.getStripped()
+			frm = self.get_jid(vc)
 			resource = frm_iq.getResource()
 		else:
 			frm = our_jid
@@ -298,7 +318,7 @@ class Connection:
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
-		frm = unicode(msg.getFrom())
+		frm = self.get_full_jid(msg)
 		encrypted = False
 		chatstate = None
 		xtags = msg.getTags('x')
@@ -348,8 +368,7 @@ class Connection:
 				if not msg.getTag('body'): #no <body>
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
-				gajim.logger.write('gc', msgtxt, unicode(msg.getFrom()),
-					tim = tim)
+				gajim.logger.write('gc', msgtxt, frm, tim = tim)
 		elif mtype == 'normal': # it's single message
 			log_msgtxt = msgtxt
 			if subject:
@@ -395,10 +414,9 @@ class Connection:
 			if x.getNamespace() == common.xmpp.NS_VCARD_UPDATE:
 				avatar_sha = x.getTagData('photo')
 				
-		jid_from = prs.getFrom()
-		who = unicode(jid_from)
-		jid_stripped = jid_from.getStripped()
-		resource = jid_from.getResource()
+		who = self.get_full_jid(prs)
+		jid_stripped = self.get_jid(prs)
+		resource = prs.getFrom().getResource()
 		status = prs.getStatus()
 		show = prs.getShow()
 		if not show in STATUS_LIST:
@@ -577,11 +595,11 @@ class Connection:
 		
 	def _bytestreamErrorCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamErrorCB')
-		frm = unicode(iq_obj.getFrom())
+		frm = self.get_full_jid(iq_obj)
 		id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
 		streamhost =  query.getTag('streamhost')
-		jid = iq_obj.getFrom().getStripped()
+		jid = self.get_jid(iq_obj)
 		id = id[3:]
 		if not self.files_props.has_key(id):
 			return
@@ -606,7 +624,7 @@ class Connection:
 					'target': target, 
 					'id': id, 
 					'sid': sid,
-					'initiator': unicode(iq_obj.getFrom())
+					'initiator': self.get_full_jid(iq_obj)
 				}
 				for attr in item.getAttrs():
 					host_dict[attr] = item.getAttr(attr)
@@ -678,7 +696,7 @@ class Connection:
 		
 	def _bytestreamResultCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamResultCB')
-		frm = unicode(iq_obj.getFrom())
+		frm = self.get_full_jid(iq_obj)
 		real_id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
 		streamhost = None
@@ -763,8 +781,8 @@ class Connection:
 			if file_props.has_key('fast'):
 				fasts = file_props['fast']
 				if len(fasts) > 0:
-					self._connect_error(unicode(iq_obj.getFrom()),
-						fasts[0]['id'], file_props['sid'], code = 406)
+					self._connect_error(frm, fasts[0]['id'], file_props['sid'],
+						code = 406)
 			
 		raise common.xmpp.NodeProcessed
 	
@@ -815,7 +833,7 @@ class Connection:
 		
 	def _discoGetCB(self, con, iq_obj):
 		''' get disco info '''
-		frm = unicode(iq_obj.getFrom())
+		frm = self.get_full_jid(iq_obj)
 		to = unicode(iq_obj.getAttr('to'))
 		id = unicode(iq_obj.getAttr('id'))
 		iq = common.xmpp.Iq(to = frm, typ = 'result', queryNS =\
@@ -848,8 +866,8 @@ class Connection:
 		if file_props is None:
 			# file properties for jid is none
 			return
-		file_props['receiver'] = unicode(iq_obj.getFrom())
-		jid = iq_obj.getFrom().getStripped()
+		file_props['receiver'] = self.get_full_jid(iq_obj)
+		jid = self.get_jid(iq_obj)
 		si = iq_obj.getTag('si')
 		feature = si.setTag('feature')
 		if feature.getNamespace() != common.xmpp.NS_FEATURE:
@@ -967,7 +985,7 @@ class Connection:
 			
 	def _siSetCB(self, con, iq_obj):
 		gajim.log.debug('_siSetCB')
-		jid = iq_obj.getFrom().getStripped()
+		jid = self.get_jid(iq_obj)
 		si = iq_obj.getTag('si')
 		profile = si.getAttr('profile')
 		mime_type = si.getAttr('mime-type')
@@ -991,7 +1009,7 @@ class Connection:
 		our_jid = gajim.get_jid_from_account(self.name)
 		resource = self.server_resource
 		file_props['receiver'] = our_jid + '/' + resource
-		file_props['sender'] = iq_obj.getFrom()
+		file_props['sender'] = self.get_full_jid(iq_obj)
 		file_props['request-id'] = unicode(iq_obj.getAttr('id'))
 		file_props['sid'] = unicode(si.getAttr('id'))
 		gajim.socks5queue.add_file_props(self.name, file_props)
@@ -1012,7 +1030,7 @@ class Connection:
 		if file_props is None:
 			# file properties for jid is none
 			return
-		jid = iq_obj.getFrom().getStripped()
+		jid = self.get_jid(iq_obj)
 		file_props['error'] = -3
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
 		raise common.xmpp.NodeProcessed
@@ -1091,7 +1109,7 @@ class Connection:
 
 	def _DiscoverItemsErrorCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsErrorCB')
-		jid = iq_obj.getFrom()
+		jid = self.get_full_jid(iq_obj)
 		self.dispatch('AGENT_ERROR_ITEMS', (jid))
 
 	def _DiscoverItemsCB(self, con, iq_obj):
@@ -1109,12 +1127,12 @@ class Connection:
 			for key in i.getAttrs():
 				attr[key] = i.getAttrs()[key]
 			items.append(attr)
-		jid = unicode(iq_obj.getFrom())
+		jid = self.get_full_jid(iq_obj)
 		self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoErrorCB')
-		jid = iq_obj.getFrom()
+		jid = self.get_full_jid(iq_obj)
 		self.dispatch('AGENT_ERROR_INFO', (jid))
 
 	def _DiscoverInfoCB(self, con, iq_obj):
@@ -1140,7 +1158,7 @@ class Connection:
 				features.append(i.getAttr('var'))
 			elif i.getName() == 'x' and i.getAttr('xmlns') == NS_DATA:
 				data.append(common.xmpp.DataForm(node=i))
-		jid = unicode(iq_obj.getFrom())
+		jid = self.get_full_jid(iq_obj)
 		if identities: #if not: an error occured
 			self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
 				features, data))
@@ -1168,7 +1186,7 @@ class Connection:
 			client_info += ' ' + qp.getTag('version').getData()
 		if qp.getTag('os'):
 			os_info += qp.getTag('os').getData()
-		jid = iq_obj.getFrom().getStripped()
+		jid = self.get_jid(iq_obj)
 		resource = iq_obj.getFrom().getResource()
 		self.dispatch('OS_INFO', (jid, resource, client_info, os_info))
 	
@@ -1237,11 +1255,11 @@ class Connection:
 		if not node:
 			return
 		dic = self.parse_data_form(node)
-		self.dispatch('GC_CONFIG', (unicode(iq_obj.getFrom()), dic))
+		self.dispatch('GC_CONFIG', (self.get_full_jid(iq_obj), dic))
 
 	def _MucErrorCB(self, con, iq_obj):
 		gajim.log.debug('MucErrorCB')
-		jid = unicode(iq_obj.getFrom())
+		jid = self.get_full_jid(iq_obj)
 		errmsg = iq_obj.getError()
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('MSGERROR', (jid, errcode, errmsg))
@@ -1351,7 +1369,7 @@ class Connection:
 	def _ErrorCB(self, con, iq_obj):
 		errmsg = iq_obj.getError()
 		errcode = iq_obj.getErrorCode()
-		jid_from = unicode(iq_obj.getFrom())
+		jid_from = self.get_full_jid(iq_obj)
 		id = unicode(iq_obj.getID())
 		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
 		
