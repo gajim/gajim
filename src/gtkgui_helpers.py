@@ -25,10 +25,15 @@ import pango
 import os
 import sys
 
+
+HAS_PYWIN32 = True
 if os.name == 'nt':
-	import win32file
-	import win32con
-	import pywintypes
+	try:
+		import win32file
+		import win32con
+		import pywintypes
+	except ImportError:
+		HAS_PYWIN32 = False
 
 from common import i18n
 i18n.init()
@@ -354,6 +359,9 @@ def possibly_move_window_in_current_desktop(window):
 def file_is_locked(path_to_file):
 	'''returns True if file is locked (WINDOWS ONLY)'''
 	if os.name != 'nt': # just in case
+		return
+	
+	if not HAS_PYWIN32:
 		return
 	
 	secur_att = pywintypes.SECURITY_ATTRIBUTES()
