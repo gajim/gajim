@@ -125,7 +125,19 @@ def get_room_and_nick_from_fjid(jid):
 	if len(l) == 1: # No nick
 		l.append('')
 	return l
-	
+
+def get_real_jid_from_fjid(account, fjid):
+	room_jid, nick = get_room_and_nick_from_fjid(fjid)
+	if not nick: # It's not a fake_jid, so it's not pm
+		return fjid
+	real_jid = fjid
+	gcs = interface.windows[account]['gc']
+	if gcs.has_key(room_jid):
+		# It's a pm, so if we have real jid it's in contact.jid
+		contact = gc_contacts[account][room_jid][nick]
+		real_jid = contact.jid
+	return real_jid
+
 def get_room_from_fjid(jid):
 	return get_room_and_nick_from_fjid(jid)[0]
 
