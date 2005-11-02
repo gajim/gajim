@@ -40,7 +40,7 @@ class GajimThemesWindow:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_themes_window', APP)
 		self.window = self.xml.get_widget('gajim_themes_window')
 		
-		self.options = ['account', 'group', 'contact', 'banner', 'lastmessage']
+		self.options = ['account', 'group', 'contact', 'banner']
 		self.options_combobox = self.xml.get_widget('options_combobox')
 		self.textcolor_checkbutton = self.xml.get_widget('textcolor_checkbutton')
 		self.background_checkbutton = self.xml.get_widget('background_checkbutton')
@@ -50,7 +50,6 @@ class GajimThemesWindow:
 		self.text_fontbutton = self.xml.get_widget('text_fontbutton')
 		self.bold_togglebutton = self.xml.get_widget('bold_togglebutton')
 		self.italic_togglebutton = self.xml.get_widget('italic_togglebutton')
-		self.underline_togglebutton = self.xml.get_widget('underline_togglebutton')
 		self.themes_tree = self.xml.get_widget('themes_treeview')
 		self.theme_options_vbox = self.xml.get_widget('theme_options_vbox')
 		model = gtk.ListStore(str)
@@ -151,7 +150,8 @@ class GajimThemesWindow:
 			return
 		if self.current_theme == gajim.config.get('roster_theme'):
 			dialogs.ErrorDialog(
-				_('You cannot delete your current theme')).get_response()
+				_('You cannot delete your current theme'),
+			_('Please first choose another for your current theme')).get_response()
 			return
 		self.theme_options_vbox.set_sensitive(False)
 		gajim.config.del_per('themes', self.current_theme)
@@ -233,9 +233,6 @@ class GajimThemesWindow:
 	def on_italic_togglebutton_toggled(self, widget):
 		self._set_font()
 	
-	def on_underline_togglebutton_toggled(self, widget):
-		self._set_font()
-	
 	def _set_color(self, state, widget, option):
 		''' set color value in prefs and update the UI '''
 		if state:
@@ -279,7 +276,6 @@ class GajimThemesWindow:
 		''' toggle font buttons with the bool values of font_props tuple'''
 		self.bold_togglebutton.set_active(font_props[0])
 		self.italic_togglebutton.set_active(font_props[1])
-		self.underline_togglebutton.set_active(font_props[2])
 	
 	def _get_font_description(self):
 		''' return a FontDescription from togglebuttons 
@@ -293,31 +289,27 @@ class GajimThemesWindow:
 		
 	def _set_font_widgets(self, font_attrs):
 		''' set the correct toggle state of font style buttons by
-		a font string of type 'BIU' '''
+		a font string of type 'BI' '''
 		font_props = [False, False, False]
 		if font_attrs:
 			if font_attrs.find('B') != -1:
 				font_props[0] = True
 			if font_attrs.find('I') != -1:
 				font_props[1] = True
-			if font_attrs.find('U') != -1:
-				font_props[2] = True
 		self._toggle_font_widgets(font_props)
 		
 	def _get_font_attrs(self):
-		''' get a string with letters of font attribures: 'BUI' '''
+		''' get a string with letters of font attribures: 'BI' '''
 		attrs = ''
 		if self.bold_togglebutton.get_active():
 			attrs += 'B'
 		if self.italic_togglebutton.get_active():
 			attrs += 'I'
-		if self.underline_togglebutton.get_active():
-			attrs += 'U'
 		return attrs
 		
 
 	def _get_font_props(self, font_name):
-		''' get tuple of font properties: Weight, Style, Underline '''
+		''' get tuple of font properties: Weight, Style '''
 		font_props = [False, False, False]
 		font_description = pango.FontDescription(font_name)
 		if font_description.get_weight() != pango.WEIGHT_NORMAL:
