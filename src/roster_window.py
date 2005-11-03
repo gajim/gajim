@@ -2491,4 +2491,4 @@ _('If "%s" accepts this request you will know his status.') %jid)
 
 		if len(gajim.connections) == 0: # if we have no account
 			gajim.interface.windows['wizard_window'] = \
-				config.FirstTimeWizardWindow()
+				config.AccountCreationWizardWindow()

@@ -2476,7 +2476,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 			field.set_text('')
 		self.autojoin_checkbutton.set_active(False)
 
-class FirstTimeWizardWindow:
+class AccountCreationWizardWindow:
 	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'wizard_window', APP)
 		self.window = self.xml.get_widget('wizard_window')
