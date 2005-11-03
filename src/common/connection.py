@@ -183,11 +183,15 @@ class Connection:
 		the function accetps jid and fjid'''
 		ji, resource = gajim.get_room_and_nick_from_fjid(jid)
 		for rjid in gajim.contacts[self.name]:
-			if ji.lower() == rjid.lower():
-				ji = rjid
-		if resource:
-			return ji + '/' + resource
-		return ji
+			if ji.lower() == rjid.lower(): # we found the jid
+				if not resource:
+					return rjid
+				for contact in gajim.contacts[self.name][rjid]:
+					if contact.resource.lower() == resource.lower(): 
+						# we found the resource
+						return rjid + '/' + contact.resource
+				return rjid + '/' + resource # we don't have this resource yet
+		return ji # We don't have the jid in our roster
 
 	def get_full_jid(self, iq_obj):
 		'''return the full jid (with resource) from an iq as unicode'''
@@ -260,8 +264,8 @@ class Connection:
 		our_jid = gajim.get_jid_from_account(self.name)
 		resource = ''
 		if frm_iq:
-			frm = self.get_jid(vc)
-			resource = frm_iq.getResource()
+			who = self.get_full_jid(vc)
+			frm, resource = gajim.get_room_and_nick_from_fjid(who)
 		else:
 			frm = our_jid
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
@@ -415,8 +419,7 @@ class Connection:
 				avatar_sha = x.getTagData('photo')
 				
 		who = self.get_full_jid(prs)
-		jid_stripped = self.get_jid(prs)
-		resource = prs.getFrom().getResource()
+		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		status = prs.getStatus()
 		show = prs.getShow()
 		if not show in STATUS_LIST:
@@ -1186,9 +1189,9 @@ class Connection:
 			client_info += ' ' + qp.getTag('version').getData()
 		if qp.getTag('os'):
 			os_info += qp.getTag('os').getData()
-		jid = self.get_jid(iq_obj)
-		resource = iq_obj.getFrom().getResource()
-		self.dispatch('OS_INFO', (jid, resource, client_info, os_info))
+		who = self.get_full_jid(iq_obj)
+		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+		self.dispatch('OS_INFO', (jid_stripped, resource, client_info, os_info))
 	
 	def parse_data_form(self, node):
 		dic = {}
