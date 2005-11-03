@@ -397,7 +397,6 @@ class RosterTooltip(BaseTooltip, StatusTable):
 				info += '\n<span weight="bold">' + _('OpenPGP: ') + \
 					'</span>' + gtkgui_helpers.escape_for_pango_markup(keyID)
 
-		single_line, resource_str, multiple_resource= '', '', False
 		num_resources = 0
 		for contact in contacts:
 			if contact.resource:

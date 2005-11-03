@@ -22,8 +22,6 @@ import gtk.glade
 import pango
 import gobject
 import time
-import urllib
-import base64
 import os
 
 import dialogs
