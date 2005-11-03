@@ -577,7 +577,7 @@ class GroupchatWindow(chat.Chat):
 	def on_message_textview_key_press_event(self, widget, event):
 		'''we use this cb instead of my_key_press to catch everything else
 		that is not registered as binding (see message_textview.py)'''
-		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
+		chat.Chat.on_message_textview_key_press_event(self, widget, event)
 
 	def on_message_textview_mykeypress_event(self, widget, event_keyval,
 	event_keymod):
