@@ -31,6 +31,7 @@ class Logger:
 		pass
 
 	def write(self, kind, msg, jid, show = None, tim = None):
+		jid = jid.lower()
 		if not tim:
 			tim = time.time()
 		else:
@@ -124,6 +125,7 @@ class Logger:
 	def get_no_of_lines(self, fjid):
 		'''return total number of lines in a log file
 		return 0 if log file does not exist'''
+		fjid = fjid.lower()
 		path_to_file = self.__get_path_to_file(fjid)
 		if not os.path.isfile(path_to_file):
 			return 0
@@ -137,6 +139,7 @@ class Logger:
 	def read(self, fjid, begin_line, end_line):
 		'''return number of lines read and the text in the lines
 		return 0 and empty respectively if log file does not exist'''
+		fjid = fjid.lower()
 		path_to_file = self.__get_path_to_file(fjid)
 		if not os.path.isfile(path_to_file):
 			return 0, []
