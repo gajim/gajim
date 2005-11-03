@@ -16290,8 +16290,7 @@ to the Jabber network.</property>
 		  <property name="items" translatable="yes">Account
 Group
 Contact
-Banner
-Last Message</property>
+Banner</property>
 		  <property name="add_tearoffs">True</property>
 		  <property name="focus_on_click">True</property>
 		  <signal name="changed" handler="on_options_combobox_changed" last_modification_time="Fri, 16 Sep 2005 21:44:05 GMT"/>

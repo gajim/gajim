@@ -40,7 +40,7 @@ class GajimThemesWindow:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_themes_window', APP)
 		self.window = self.xml.get_widget('gajim_themes_window')
 		
-		self.options = ['account', 'group', 'contact', 'banner', 'lastmessage']
+		self.options = ['account', 'group', 'contact', 'banner']
 		self.options_combobox = self.xml.get_widget('options_combobox')
 		self.textcolor_checkbutton = self.xml.get_widget('textcolor_checkbutton')
 		self.background_checkbutton = self.xml.get_widget('background_checkbutton')
