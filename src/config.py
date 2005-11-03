@@ -1027,30 +1027,17 @@ class AccountModificationWindow:
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
 
-	def __init__(self, account = ''):
+	def __init__(self, account):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_modification_window', APP)
 		self.window = self.xml.get_widget('account_modification_window')
 		self.account = account
-		self.modify = False # if we 're modifying an existing or creating a new account
 
 		# init proxy list
 		self.update_proxy_list()
 
 		self.xml.signal_autoconnect(self)
-		if account: # we modify an existing account
-			self.modify = True
-			self.init_account()
-			self.xml.get_widget('new_account_checkbutton').set_sensitive(False)
-			self.xml.get_widget('save_button').grab_focus()
-		else: # we create a new account
-			if len(gajim.connections) == 0: # is it the first accound we're creating?
-				# the first account *has* to sync by default
-				self.xml.get_widget('sync_with_global_status_checkbutton')\
-					.set_active(True)
-				# the first account *has* to autoconnect by default
-				self.xml.get_widget('autoconnect_checkbutton').set_active(True)
-				self.xml.get_widget('name_entry').set_text('Main')
-				self.xml.get_widget('jid_entry').grab_focus()
+		self.init_account()
+		self.xml.get_widget('save_button').grab_focus()
 		self.window.show_all()
 
 	def on_checkbutton_toggled(self, widget, widgets):
@@ -1153,14 +1140,11 @@ class AccountModificationWindow:
 		self.xml.get_widget('autoreconnect_checkbutton').set_active(gajim.config.\
 			get_per('accounts', self.account, 'autoreconnect'))
 
-		if len(gajim.connections) != 0:
-			# only if we already have one account already
-			# we check that so we avoid the first account to have sync=False
-			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(
-				gajim.config.get_per('accounts', self.account,
-					'sync_with_global_status'))
-			self.xml.get_widget('autoconnect_checkbutton').set_active(
-				gajim.config.get_per('accounts', self.account, 'autoconnect'))
+		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(
+			gajim.config.get_per('accounts', self.account,
+			'sync_with_global_status'))
+		self.xml.get_widget('autoconnect_checkbutton').set_active(
+			gajim.config.get_per('accounts', self.account, 'autoconnect'))
 		list_no_log_for = gajim.config.get_per('accounts', self.account,
 			'no_log_for').split()
 		if self.account in list_no_log_for:
@@ -1174,7 +1158,7 @@ class AccountModificationWindow:
 			if name != self.account and \
 			   gajim.connections[self.account].connected != 0:
 				dialogs.ErrorDialog(_('You are currently connected to the server'),
-_('To change the account name, you must be disconnected.')).get_response()
+		_('To change the account name, you must be disconnected.')).get_response()
 				return
 		if (name == ''):
 			dialogs.ErrorDialog(_('Invalid account name'),
@@ -1189,15 +1173,12 @@ _('To change the account name, you must be disconnected.')).get_response()
 			dialogs.ErrorDialog(_('Invalid Jabber ID'),
            _('A Jabber ID must be in the form "user@servername".')).get_response()
 			return
-		new_account = self.xml.get_widget('new_account_checkbutton').get_active()
 		config['savepass'] = self.xml.get_widget(
 				'save_password_checkbutton').get_active()
-		config['password'] = self.xml.get_widget('password_entry').get_text().decode('utf-8')
-		if new_account and config['password'] == '':
-			dialogs.ErrorDialog(_('Invalid password'),
-				_('You must enter a password for the new account.')).get_response()
-			return
-		config['resource'] = self.xml.get_widget('resource_entry').get_text().decode('utf-8')
+		config['password'] = self.xml.get_widget('password_entry').get_text().\
+			decode('utf-8')
+		config['resource'] = self.xml.get_widget('resource_entry').get_text().\
+			decode('utf-8')
 		config['priority'] = self.xml.get_widget('priority_spinbutton').\
 																			get_value_as_int()
 		config['autoconnect'] = self.xml.get_widget('autoconnect_checkbutton').\
@@ -1254,114 +1235,65 @@ _('To change the account name, you must be disconnected.')).get_response()
 					'gpg_save_password_checkbutton').get_active()
 			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry').\
 																		get_text().decode('utf-8')
-		#if we are modifying an account
-		if self.modify:
-			#if we modify the name of the account
-			if name != self.account:
-				#update variables
-				gajim.interface.windows[name] = gajim.interface.windows[self.account]
-				gajim.awaiting_events[name] = gajim.awaiting_events[self.account]
-				gajim.nicks[name] = gajim.nicks[self.account]
-				gajim.allow_notifications[name] = \
-					gajim.allow_notifications[self.account]
-				gajim.groups[name] = gajim.groups[self.account]
-				gajim.contacts[name] = gajim.contacts[self.account]
-				gajim.gc_contacts[name] = gajim.gc_contacts[self.account]
-				gajim.gc_connected[name] = gajim.gc_connected[self.account]
-				gajim.newly_added[name] = gajim.newly_added[self.account]
-				gajim.to_be_removed[name] = gajim.to_be_removed[self.account]
-				gajim.sleeper_state[name] = gajim.sleeper_state[self.account]
-				gajim.encrypted_chats[name] = gajim.encrypted_chats[self.account]
-				gajim.last_message_time[name] = \
-					gajim.last_message_time[self.account]
-				gajim.status_before_autoaway[name] = \
-					gajim.status_before_autoaway[self.account]
-				gajim.events_for_ui[name] = gajim.events_for_ui[self.account]
+		#if we modify the name of the account
+		if name != self.account:
+			#update variables
+			gajim.interface.windows[name] = gajim.interface.windows[self.account]
+			gajim.awaiting_events[name] = gajim.awaiting_events[self.account]
+			gajim.nicks[name] = gajim.nicks[self.account]
+			gajim.allow_notifications[name] = \
+				gajim.allow_notifications[self.account]
+			gajim.groups[name] = gajim.groups[self.account]
+			gajim.contacts[name] = gajim.contacts[self.account]
+			gajim.gc_contacts[name] = gajim.gc_contacts[self.account]
+			gajim.gc_connected[name] = gajim.gc_connected[self.account]
+			gajim.newly_added[name] = gajim.newly_added[self.account]
+			gajim.to_be_removed[name] = gajim.to_be_removed[self.account]
+			gajim.sleeper_state[name] = gajim.sleeper_state[self.account]
+			gajim.encrypted_chats[name] = gajim.encrypted_chats[self.account]
+			gajim.last_message_time[name] = \
+				gajim.last_message_time[self.account]
+			gajim.status_before_autoaway[name] = \
+				gajim.status_before_autoaway[self.account]
+			gajim.events_for_ui[name] = gajim.events_for_ui[self.account]
 
-				#upgrade account variable in opened windows
-				for kind in ('infos', 'disco', 'chats', 'gc', 'gc_config'):
-					for j in gajim.interface.windows[name][kind]:
-						gajim.interface.windows[name][kind][j].account = name
+			#upgrade account variable in opened windows
+			for kind in ('infos', 'disco', 'chats', 'gc', 'gc_config'):
+				for j in gajim.interface.windows[name][kind]:
+					gajim.interface.windows[name][kind][j].account = name
 
-				#upgrade account in systray
-				if gajim.interface.systray_enabled:
-					for list in gajim.interface.systray.jids:
-						if list[0] == self.account:
-							list[0] = name
+			#upgrade account in systray
+			if gajim.interface.systray_enabled:
+				for list in gajim.interface.systray.jids:
+					if list[0] == self.account:
+						list[0] = name
 
-				del gajim.interface.windows[self.account]
-				del gajim.awaiting_events[self.account]
-				del gajim.nicks[self.account]
-				del gajim.allow_notifications[self.account]
-				del gajim.groups[self.account]
-				del gajim.contacts[self.account]
-				del gajim.gc_contacts[self.account]
-				del gajim.gc_connected[self.account]
-				del gajim.newly_added[self.account]
-				del gajim.to_be_removed[self.account]
-				del gajim.sleeper_state[self.account]
-				del gajim.encrypted_chats[self.account]
-				del gajim.last_message_time[self.account]
-				del gajim.status_before_autoaway[self.account]
-				del gajim.events_for_ui[self.account]
-				gajim.connections[self.account].name = name
-				gajim.connections[name] = gajim.connections[self.account]
-				del gajim.connections[self.account]
-				gajim.config.del_per('accounts', self.account)
-				gajim.config.add_per('accounts', name)
-				self.account = name
+			del gajim.interface.windows[self.account]
+			del gajim.awaiting_events[self.account]
+			del gajim.nicks[self.account]
+			del gajim.allow_notifications[self.account]
+			del gajim.groups[self.account]
+			del gajim.contacts[self.account]
+			del gajim.gc_contacts[self.account]
+			del gajim.gc_connected[self.account]
+			del gajim.newly_added[self.account]
+			del gajim.to_be_removed[self.account]
+			del gajim.sleeper_state[self.account]
+			del gajim.encrypted_chats[self.account]
+			del gajim.last_message_time[self.account]
+			del gajim.status_before_autoaway[self.account]
+			del gajim.events_for_ui[self.account]
+			gajim.connections[self.account].name = name
+			gajim.connections[name] = gajim.connections[self.account]
+			del gajim.connections[self.account]
+			gajim.config.del_per('accounts', self.account)
+			gajim.config.add_per('accounts', name)
+			self.account = name
 			
-			for opt in config:
-				gajim.config.set_per('accounts', name, opt, config[opt])
-			if config['savepass']:
-				gajim.connections[name].password = config['password']
-			#refresh accounts window
-			if gajim.interface.windows.has_key('accounts'):
-				gajim.interface.windows['accounts'].init_accounts()
-			#refresh roster
-			gajim.interface.roster.draw_roster()
-			gajim.interface.save_config()
-			self.window.destroy()
-			return
-		#if it's a new account
-		if name in gajim.connections:
-			dialogs.ErrorDialog(_('Account name is in use'),
-				_('You already have an account using this name.')).get_response()
-			return
-		con = connection.Connection(name)
-		gajim.interface.register_handlers(con)
-		#if we need to register a new account
-		if new_account:
-			gajim.events_for_ui[name] = []
-			con.new_account(name, config)
-			return
-		# The account we add already exists on the server
-		gajim.connections[name] = con
-		gajim.config.add_per('accounts', name)
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
 		if config['savepass']:
 			gajim.connections[name].password = config['password']
-		#update variables
-		gajim.interface.windows[name] = {'infos': {}, 'disco': {}, 'chats': {},
-			'gc': {}, 'gc_config': {}}
-		gajim.interface.windows[name]['xml_console'] = \
-			dialogs.XMLConsoleWindow(name)
-		gajim.awaiting_events[name] = {}
-		gajim.connections[name].connected = 0
-		gajim.groups[name] = {}
-		gajim.contacts[name] = {}
-		gajim.gc_contacts[name] = {}
-		gajim.gc_connected[name] = {}
-		gajim.newly_added[name] = []
-		gajim.to_be_removed[name] = []
-		gajim.nicks[name] = config['name']
-		gajim.allow_notifications[name] = False
-		gajim.sleeper_state[name] = 'off'
-		gajim.encrypted_chats[name] = []
-		gajim.last_message_time[name] = {}
-		gajim.status_before_autoaway[name] = ''
-		gajim.events_for_ui[name] = []
 		#refresh accounts window
 		if gajim.interface.windows.has_key('accounts'):
 			gajim.interface.windows['accounts'].init_accounts()
@@ -1382,12 +1314,6 @@ _('To change the account name, you must be disconnected.')).get_response()
 			gajim.connections[self.account].change_password(new_password)
 			if self.xml.get_widget('save_password_checkbutton').get_active():
 				self.xml.get_widget('password_entry').set_text(new_password)
-
-	def account_is_ok(self, acct):
-		'''When the account has been created with success'''
-		self.xml.get_widget('new_account_checkbutton').set_active(False)
-		self.modify = True
-		self.account = acct
 
 	def on_edit_details_button_clicked(self, widget):
 		if not gajim.interface.windows.has_key(self.account):
@@ -1478,19 +1404,9 @@ _('There was a problem retrieving your OpenPGP secret keys.')).get_response()
 			self.xml.get_widget('gpg_password_entry')])
 
 	def on_save_password_checkbutton_toggled(self, widget):
-		if self.xml.get_widget('new_account_checkbutton').get_active():
-			return
 		self.on_checkbutton_toggled_and_clear(widget,
 			[self.xml.get_widget('password_entry')])
 		self.xml.get_widget('password_entry').grab_focus()
-
-	def on_new_account_checkbutton_toggled(self, widget):
-		password_entry = self.xml.get_widget('password_entry')
-		if widget.get_active():
-			password_entry.set_sensitive(True)
-		elif not self.xml.get_widget('save_password_checkbutton').get_active():
-			password_entry.set_sensitive(False)
-			password_entry.set_text('')
 
 #---------- ManageProxiesWindow class -------------#
 class ManageProxiesWindow:
@@ -2480,8 +2396,6 @@ class AccountCreationWizardWindow:
 	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'wizard_window', APP)
 		self.window = self.xml.get_widget('wizard_window')
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
 
 		# Connect events from comboboxentry.child
 		server_comboboxentry = self.xml.get_widget('existing_server_comboboxentry')
@@ -2509,7 +2423,26 @@ class AccountCreationWizardWindow:
 		self.notebook = self.xml.get_widget('notebook')
 		self.back_button = self.xml.get_widget('back_button')
 		self.finish_button = self.xml.get_widget('finish_button')
+		self.advanced_button = self.xml.get_widget('advanced_button')
 		self.finish_label = self.xml.get_widget('finish_label')
+
+		# Some vars
+		self.sync = False
+		self.autoconnect = False
+		if len(gajim.connections) == 0: # is it the first accound we're creating?
+			# the first account *has* to sync by default
+			self.sync = True
+			# the first account *has* to autoconnect by default
+			self.autoconnect = True
+		self.account = _('Main')
+		i = 1
+		while self.account in gajim.connections:
+			self.account = _('Main') + str(i)
+			i += 1
+
+		self.advanced_button.set_no_show_all(True)
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
 	def on_register_server_features_button_clicked(self, widget): 
 		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
@@ -2571,26 +2504,32 @@ class AccountCreationWizardWindow:
 				register_new = False
 				#FIXME: pango me
 				finish_text = _('Account has been added successfully.\n'
-'You can set advanced account options by clicking in Accounts menuitem under Edit menu from the main window.')
+'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
 			elif cur_page == 2:
 				widgets = self.get_widgets('register_')
 				register_new = True
 				#FIXME: pango me
 				finish_text = _('Your new account has been created successfully.\n'
-'You can set advanced account options by clicking in Accounts menuitem under Edit menu from the main window.')
+'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
 
 			username = widgets['nick_entry'].get_text().decode('utf-8')
 			server = widgets['server_comboboxentry'].child.get_text()
 			savepass = widgets['save_password_checkbutton'].get_active()
 			password = widgets['pass_entry'].get_text()
 			if self.check_data(username, server):
-				self.save_account(_('Main'), server, savepass, password, register_new)
+				self.save_account(self.account, server, savepass, password, register_new)
 				self.finish_label.set_text(finish_text)
 				self.xml.get_widget('cancel_button').hide()
 				self.back_button.hide()
 				self.xml.get_widget('forward_button').hide()
 				self.finish_button.set_sensitive(True)
+				self.advanced_button.show()
 				self.notebook.set_current_page(3)
+
+	def on_advanced_button_clicked(self, widget):
+		gajim.interface.windows[self.account]['account_modification'] = \
+			AccountModificationWindow(self.account)
+		self.window.destroy()
 
 	def on_finish_button_clicked(self, widget):
 		self.window.destroy()
@@ -2653,9 +2592,9 @@ _('You need to enter a valid server address to continue.')).get_response()
 			return
 		config['resource'] = 'Gajim'
 		config['priority'] = 5
-		config['autoconnect'] = True 
+		config['autoconnect'] = self.autoconnect
 		config['no_log_for'] = ''
-		config['sync_with_global_status'] = True
+		config['sync_with_global_status'] = self.sync
 		config['proxy'] = ''
 		config['usessl'] = False
 		config['use_custom_host'] = False
@@ -2681,8 +2620,8 @@ _('You need to enter a valid server address to continue.')).get_response()
 		gajim.config.add_per('accounts', name)
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
-			if config['savepass']:
-				gajim.connections[name].password = config['password']
+		if config['savepass']:
+			gajim.connections[name].password = config['password']
 		# update variables
 		gajim.interface.windows[name] = {'infos': {}, 'disco': {}, 'chats': {},
 			'gc': {}, 'gc_config': {}}

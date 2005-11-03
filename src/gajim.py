@@ -614,8 +614,6 @@ class Interface:
 		gajim.config.add_per('accounts', name)
 		for opt in array[1]:
 			gajim.config.set_per('accounts', name, opt, array[1][opt])
-		if self.windows.has_key('account_modification'):
-			self.windows['account_modification'].account_is_ok(array[0])
 		self.windows[name] = {'infos': {}, 'disco': {}, 'chats': {},
 			'gc': {}, 'gc_config': {}}
 		self.windows[name]['xml_console'] = dialogs.XMLConsoleWindow(name)
