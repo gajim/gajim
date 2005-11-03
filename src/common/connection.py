@@ -1257,14 +1257,14 @@ class Connection:
 			return
 		r = self.connection.getRoster().getRaw()
 
+		# Remove or jid
+		jid = gajim.get_jid_from_account(self.name)
+		if r.has_key(jid):
+			del r[jid]
+
 		roster = {}
 		for jid in r:
 			roster[helpers.parse_jid(jid)] = r[jid]
-
-		jid = gajim.get_jid_from_account(self.name)
-
-		if roster.has_key(jid):
-			del roster[jid]
 
 		self.dispatch('ROSTER', roster)
 
