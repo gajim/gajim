@@ -184,14 +184,10 @@ class Connection:
 		ji, resource = gajim.get_room_and_nick_from_fjid(jid)
 		for rjid in gajim.contacts[self.name]:
 			if ji.lower() == rjid.lower(): # we found the jid
-				if not resource:
-					return rjid
-				for contact in gajim.contacts[self.name][rjid]:
-					if contact.resource.lower() == resource.lower(): 
-						# we found the resource
-						return rjid + '/' + contact.resource
-				return rjid + '/' + resource # we don't have this resource yet
-		return ji # We don't have the jid in our roster
+				ji = rjid
+		if resource:
+			return ji + '/' + resource
+		return ji
 
 	def get_full_jid(self, iq_obj):
 		'''return the full jid (with resource) from an iq as unicode'''
