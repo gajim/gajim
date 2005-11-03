@@ -2410,12 +2410,8 @@ class AccountCreationWizardWindow:
 		self.window = self.xml.get_widget('wizard_window')
 
 		# Connect events from comboboxentry.child
-		server_comboboxentry = self.xml.get_widget('existing_server_comboboxentry')
+		server_comboboxentry = self.xml.get_widget('server_comboboxentry')
 		server_comboboxentry.child.connect('key_press_event',
-				self.on_server_comboboxentry_key_press_event)
-		register_server_comboboxentry = self.xml.get_widget(
-				'register_server_comboboxentry')
-		register_server_comboboxentry.child.connect('key_press_event', 
 				self.on_server_comboboxentry_key_press_event)
 
 		# parse servers.xml
@@ -2428,8 +2424,6 @@ class AccountCreationWizardWindow:
 		# Put servers into comboboxentries
 		server_comboboxentry.set_model(servers_model)
 		server_comboboxentry.set_text_column(0)
-		register_server_comboboxentry.set_model(servers_model)
-		register_server_comboboxentry.set_text_column(0)
 
 		# Generic widgets
 		self.notebook = self.xml.get_widget('notebook')
@@ -2460,12 +2454,7 @@ class AccountCreationWizardWindow:
 		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
 
 	def on_save_password_checkbutton_toggled(self, widget):
-		if widget.get_name() == 'existing_save_password_checkbutton':
-			widget2 = self.xml.get_widget('existing_pass_entry')
-			if widget2.get_property('sensitive'):
-				widget2.set_sensitive(False)
-			else:
-				widget2.set_sensitive(True)
+		self.xml.get_widget('pass_entry').grab_focus()
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
@@ -2473,11 +2462,9 @@ class AccountCreationWizardWindow:
 	def on_back_button_clicked(self, widget):
 		if self.notebook.get_current_page() == 1:
 			self.notebook.set_current_page(0)
-		elif self.notebook.get_current_page() == 2:
-			self.notebook.set_current_page(0)
 		self.back_button.set_sensitive(False)
 
-	def get_widgets(self, prefix):
+	def get_widgets(self):
 		widgets = {} 
 		for widget in (
 						'nick_entry',
@@ -2489,14 +2476,8 @@ class AccountCreationWizardWindow:
 						'proxyuser_entry',
 						'proxypass_entry',
 						'jid_label'):
-			widgets[widget] = self.xml.get_widget(prefix + widget)
+			widgets[widget] = self.xml.get_widget(widget)
 		return widgets
-
-	def get_matching_widgets(self, widget): 
-		if widget.get_name().startswith('existing_'):
-			return self.get_widgets('existing_')
-		elif widget.get_name().startswith('register_'):
-			return self.get_widgets('register_')
 
 	def on_forward_button_clicked(self, widget):
 		cur_page = self.notebook.get_current_page()
@@ -2504,31 +2485,31 @@ class AccountCreationWizardWindow:
 		if cur_page == 0:
 			widget = self.xml.get_widget('use_existing_account_radiobutton')
 			if widget.get_active():
-				self.notebook.set_current_page(1)
+				self.modify = True
+				self.xml.get_widget('server_features_button').hide()
 			else:
-				self.notebook.set_current_page(2)
+				self.modify = False
+				self.xml.get_widget('server_features_button').show()
+			self.notebook.set_current_page(1)
 			self.back_button.set_sensitive(True)
 			return
 		
 		else:
-			if cur_page == 1:
-				widgets = self.get_widgets('existing_')
-				register_new = False
+			if self.modify:
 				#FIXME: pango me
 				finish_text = _('Account has been added successfully.\n'
 'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
-			elif cur_page == 2:
-				widgets = self.get_widgets('register_')
-				register_new = True
+			else:
 				#FIXME: pango me
 				finish_text = _('Your new account has been created successfully.\n'
 'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
 
+			widgets = self.get_widgets()
 			username = widgets['nick_entry'].get_text().decode('utf-8')
 			server = widgets['server_comboboxentry'].child.get_text()
 			savepass = widgets['save_password_checkbutton'].get_active()
 			password = widgets['pass_entry'].get_text()
-			
+
 			jid = username + '@' + server
 			# check if jid is conform to RFC and stringprep it
 			try:
@@ -2539,15 +2520,14 @@ class AccountCreationWizardWindow:
 				return
 
 			username, server = gajim.get_room_name_and_server_from_room_jid(jid)
-			self.save_account(self.account, username, server, savepass, password,
-				register_new)
+			self.save_account(self.account, username, server, savepass, password)
 			self.finish_label.set_text(finish_text)
 			self.xml.get_widget('cancel_button').hide()
 			self.back_button.hide()
 			self.xml.get_widget('forward_button').hide()
 			self.finish_button.set_sensitive(True)
 			self.advanced_button.show()
-			self.notebook.set_current_page(3)
+			self.notebook.set_current_page(2)
 
 	def on_advanced_button_clicked(self, widget):
 		gajim.interface.windows[self.account]['account_modification'] = \
@@ -2566,41 +2546,44 @@ class AccountCreationWizardWindow:
 	def on_nick_entry_key_press_event(self, widget, event):
 		# Check for pressed @ and jump to combobox if found
 		if event.keyval == gtk.keysyms.at:
-			widgets = self.get_matching_widgets(widget)
-			widgets['server_comboboxentry'].grab_focus()
-			widgets['server_comboboxentry'].child.set_position(-1)
+			combobox = self.xml.get_widget('server_comboboxentry')
+			combobox.grab_focus()
+			combobox.child.set_position(-1)
 			return True
 
 	def on_server_comboboxentry_key_press_event(self, widget, event):
 		# If backspace is pressed in empty field, return to the nick entry field
-		widgets = self.get_matching_widgets(widget.parent)
 		backspace = event.keyval == gtk.keysyms.BackSpace
-		empty = len(widgets['server_comboboxentry'].get_active_text()) == 0
+		combobox = self.xml.get_widget('server_comboboxentry')
+		empty = len(combobox.get_active_text()) == 0
 		if backspace and empty:
-			widgets['nick_entry'].grab_focus()
-			widgets['nick_entry'].set_position(-1)
+			nick_entry = self.xml.get_widget('nick_entry')
+			nick_entry.grab_focus()
+			nick_entry.set_position(-1)
 			return True
 
 	def update_jid(self,widget):
-		widgets = self.get_matching_widgets(widget)
-		name = widgets['nick_entry'].get_text().decode('utf-8')
-		server = widgets['server_comboboxentry'].get_active_text()
+		nick_entry = self.xml.get_widget('nick_entry')
+		name = nick_entry.get_text().decode('utf-8')
+		combobox = self.xml.get_widget('server_comboboxentry')
+		server = combobox.get_active_text()
+		jid_label = self.xml.get_widget('jid_label')
 		if len(name) == 0 or len(server) == 0:
-			widgets['jid_label'].set_label('')
+			jid_label.set_label('')
 		else:
 			string = '<span background="lightyellow">%s@%s</span>' % (name, server)
-			widgets['jid_label'].set_label(string)
+			jid_label.set_label(string)
 
-	def save_account(self, name, login, server, savepass, password, new_account):
+	def save_account(self, name, login, server, savepass, password):
+		if not self.modify and password == '':
+			dialogs.ErrorDialog(_('Invalid password'),
+				_('You must enter a password for the new account.')).get_response()
+			return
 		config = {}
 		config['name'] = login
 		config['hostname'] = server
 		config['savepass'] = savepass
 		config['password'] = password
-		if new_account and config['password'] == '':
-			dialogs.ErrorDialog(_('Invalid password'),
-				_('You must enter a password for the new account.')).get_response()
-			return
 		config['resource'] = 'Gajim'
 		config['priority'] = 5
 		config['autoconnect'] = self.autoconnect
@@ -2622,7 +2605,7 @@ class AccountCreationWizardWindow:
 			return
 		con = connection.Connection(name)
 		gajim.interface.register_handlers(con)
-		if new_account:
+		if not self.modify:
 			gajim.events_for_ui[name] = []
 			con.new_account(name, config)
 			return
