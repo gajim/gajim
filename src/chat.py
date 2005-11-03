@@ -97,9 +97,7 @@ class Chat:
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
 		for jid in self.xmls:
 			self.conversation_textviews[jid].modify_font(font)
-			message_scrolledwindow = self.xmls[jid].get_widget(
-				'message_scrolledwindow')
-			msg_textview = message_scrolledwindow.get_children()[0]
+			msg_textview = self.message_textviews[jid]
 			msg_textview.modify_font(font)
 
 	def update_tags(self):
@@ -675,9 +673,6 @@ class Chat:
 			self.on_tab_eventbox_button_press_event, child)
 
 		self.notebook.append_page(child, tab_hbox)
-		message_scrolledwindow = self.xmls[jid].get_widget(
-			'message_scrolledwindow')
-		msg_textview = message_scrolledwindow.get_children()[0]
 		
 		msg_textview.modify_font(font)
 		msg_textview.connect('size-request', self.size_request,
@@ -728,9 +723,7 @@ class Chat:
 				conv_textview.get_buffer().set_text('')
 			elif event.keyval == gtk.keysyms.v: # CTRL + V
 				jid = self.get_active_jid()
-				message_scrolledwindow = self.xmls[jid].get_widget(
-					'message_scrolledwindow')
-				msg_textview = message_scrolledwindow.get_children()[0]
+				msg_textview = self.message_textviews[jid]
 				if not msg_textview.is_focus():
 					msg_textview.grab_focus()
 				msg_textview.emit('key_press_event', event)
@@ -792,10 +785,7 @@ class Chat:
 			conv_textview.get_buffer().set_text('')
 		elif event.keyval == gtk.keysyms.v and event.state & gtk.gdk.CONTROL_MASK:
 			# CTRL + V
-			jid = self.get_active_jid()
-			message_scrolledwindow = self.xmls[jid].get_widget(
-				'message_scrolledwindow')
-			msg_textview = message_scrolledwindow.get_children()[0]
+			msg_textview = self.message_textviews[jid]
 			if not msg_textview.is_focus():
 				msg_textview.grab_focus()
 			msg_textview.emit('key_press_event', event)
@@ -807,9 +797,7 @@ class Chat:
 			# others do their default work
 			pass
 		else: # it's a normal key press make sure message_textview has focus
-			message_scrolledwindow = self.xmls[jid].get_widget(
-				'message_scrolledwindow')
-			msg_textview = message_scrolledwindow.get_children()[0]
+			msg_textview = self.message_textviews[jid]
 			if msg_textview.get_property('sensitive'):
 				if not msg_textview.is_focus():
 					msg_textview.grab_focus()
