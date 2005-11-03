@@ -1174,16 +1174,23 @@ class AccountModificationWindow:
 		try:
 			jid = helpers.parse_jid(jid)
 		except helpers.InvalidFormat, s:
-			pritext = _('Invalid User ID')
-			dialogs.ErrorDialog(pritext, s).get_response()
+			pritext = _('Invalid Jabber ID')
+			dialogs.ErrorDialog(pritext, str(s)).get_response()
+			return
+
+		n, hn = jid.split('@', 1)
+		if not n:
+			pritext = _('Invalid Jabber ID')
+			sectext = _('A Jabber ID must be in the form "user@servername".')
+			dialogs.ErrorDialog(pritext, sectext).get_response()
 			return
 
 		resource = self.xml.get_widget('resource_entry').get_text().decode('utf-8')
 		try:
 			resource = helpers.parse_resource(resource)
 		except helpers.InvalidFormat, s:
-			pritext = _('Invalid User ID')
-			dialogs.ErrorDialog(pritext, s).get_response()
+			pritext = _('Invalid Jabber ID')
+			dialogs.ErrorDialog(pritext, (s)).get_response()
 			return
 
 		config['savepass'] = self.xml.get_widget(
@@ -1219,7 +1226,6 @@ class AccountModificationWindow:
 		config['proxy'] = proxy
 		
 		config['usessl'] = self.xml.get_widget('use_ssl_checkbutton').get_active()
-		n, hn = jid.split('@')
 		config['name'] = n
 		config['hostname'] = hn
 
@@ -2509,16 +2515,26 @@ class AccountCreationWizardWindow:
 
 			widgets = self.get_widgets()
 			username = widgets['nick_entry'].get_text().decode('utf-8')
+			if not username:
+				pritext = _('Invalid nickname')
+				sectext = _('You must provide a nickname to configure this account.')
+				dialogs.ErrorDialog(pritext, sectext).get_response()
+				return
 			server = widgets['server_comboboxentry'].child.get_text()
 			savepass = widgets['save_password_checkbutton'].get_active()
 			password = widgets['pass_entry'].get_text()
+
+			if not self.modify and password == '':
+				dialogs.ErrorDialog(_('Invalid password'),
+					_('You must enter a password for the new account.')).get_response()
+				return
 
 			jid = username + '@' + server
 			# check if jid is conform to RFC and stringprep it
 			try:
 				jid = helpers.parse_jid(jid)
 			except helpers.InvalidFormat, s:
-				pritext = _('Invalid User ID')
+				pritext = _('Invalid Jabber ID')
 				dialogs.ErrorDialog(pritext, str(s)).get_response()
 				return
 
@@ -2581,10 +2597,6 @@ class AccountCreationWizardWindow:
 			jid_label.set_label(string)
 
 	def save_account(self, name, login, server, savepass, password):
-		if not self.modify and password == '':
-			dialogs.ErrorDialog(_('Invalid password'),
-				_('You must enter a password for the new account.')).get_response()
-			return
 		config = {}
 		config['name'] = login
 		config['hostname'] = server
