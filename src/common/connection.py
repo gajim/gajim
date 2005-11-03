@@ -1085,7 +1085,7 @@ class Connection:
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
-			jid  = helprs.parse_jid(item.getAttr('jid'))
+			jid  = helpers.parse_jid(item.getAttr('jid'))
 			name = item.getAttr('name')
 			sub  = item.getAttr('subscription')
 			ask  = item.getAttr('ask')
