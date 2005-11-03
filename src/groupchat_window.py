@@ -698,7 +698,7 @@ class GroupchatWindow(chat.Chat):
 	def on_send_button_clicked(self, widget):
 		'''When send button is pressed: send the current message'''
 		room_jid = self.get_active_jid()
-		message_textview = self.message_textviews[jid]
+		message_textview = self.message_textviews[room_jid]
 		message_buffer = message_textview.get_buffer()
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
@@ -714,7 +714,7 @@ class GroupchatWindow(chat.Chat):
 		if not message:
 			return
 		room_jid = self.get_active_jid()
-		message_textview = self.message_textviews[jid]
+		message_textview = self.message_textviews[room_jid]
 		conv_textview = self.conversation_textviews[room_jid]
 		message_buffer = message_textview.get_buffer()
 		if message != '' or message != '\n':
@@ -1277,7 +1277,7 @@ current room topic.') % command, room_jid)
 
 	def got_connected(self, room_jid):
 		gajim.gc_connected[self.account][room_jid] = True
-		message_textview = self.message_textviews[jid]
+		message_textview = self.message_textviews[room_jid]
 		message_textview.set_sensitive(True)
 		self.xmls[room_jid].get_widget('send_button').set_sensitive(True)
 
@@ -1286,7 +1286,7 @@ current room topic.') % command, room_jid)
 		model.clear()
 		gajim.gc_contacts[self.account][room_jid] = {}
 		gajim.gc_connected[self.account][room_jid] = False
-		message_textview = self.message_textviews[jid]
+		message_textview = self.message_textviews[room_jid]
 		message_textview.set_sensitive(False)
 		self.xmls[room_jid].get_widget('send_button').set_sensitive(False)
 
