@@ -710,7 +710,6 @@ class Chat:
 			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
 				conv_textview.emit('key_press_event', event)
 	
-	
 	def on_conversation_textview_key_press_event(self, widget, event):
 		'''Do not block these events and send them to the notebook'''
 		if event.state & gtk.gdk.CONTROL_MASK:

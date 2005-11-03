@@ -604,28 +604,42 @@ class TabbedChatWindow(chat.Chat):
 		elif event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+UP
 				self.sent_messages_scroll(jid, 'up', widget.get_buffer())
-				return True # override the default gtk+ thing for ctrl+up
+				return
 		elif event.keyval == gtk.keysyms.Down:
 			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+Down
 				self.sent_messages_scroll(jid, 'down', widget.get_buffer())
-				return True # override the default gtk+ thing for ctrl+down
+				return
 		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
-			if gajim.config.get('send_on_ctrl_enter'): 
-				if not (event.state & gtk.gdk.CONTROL_MASK):
-					return False
-			elif (event.state & gtk.gdk.SHIFT_MASK):
-					return False
+			# NOTE: SHIFT + ENTER is not needed to be emulated as it is not
+			# binding at all (textview's default action is newline)
+
+			if gajim.config.get('send_on_ctrl_enter'):
+				# here, we emulate GTK default action on ENTER (add new line)
+				# normally I would add in keypress but it gets way to complex
+				# to get instant result on changing this advanced setting
+				if event.state == 0: # no ctrl, no shift just ENTER add newline
+					end_iter = message_buffer.get_end_iter()
+					message_buffer.insert(end_iter, '\n')
+					send_message = False
+				elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + ENTER
+					send_message = True
+			else: # send on Enter, do newline on Ctrl Enter
+				if event.state & gtk.gdk.CONTROL_MASK: # Ctrl + ENTER
+					end_iter = message_buffer.get_end_iter()
+					message_buffer.insert(end_iter, '\n')
+					send_message = False
+				else: # ENTER
+					send_message = True
+				
 			if gajim.connections[self.account].connected < 2: # we are not connected
 				dialogs.ErrorDialog(_('A connection is not available'),
 					_('Your message can not be sent until you are connected.')).get_response()
-				return True
+				send_message = False
 
-			# send the message
-			self.send_message(message)
-
-			message_buffer.set_text('')
-			return True
+			if send_message:
+				self.send_message(message) # send the message
+				message_buffer.set_text('') # clear msg buffer (and tv of course)
 
 	def send_chatstate(self, state, jid = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
