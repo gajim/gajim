@@ -1699,11 +1699,11 @@ class AccountsWindow:
 
 	def on_new_button_clicked(self, widget):
 		'''When new button is clicked: open an account information window'''
-		if gajim.interface.windows.has_key('account_modification'):
-			gajim.interface.windows['account_modification'].window.present()			
+		if gajim.interface.windows.has_key('wizard_window'):
+			gajim.interface.windows['wizard_window'].window.present()			
 		else:
-			gajim.interface.windows['account_modification'] = \
-				AccountModificationWindow('')
+			gajim.interface.windows['wizard_window'] = \
+				AccountCreationWizardWindow()
 
 	def on_remove_button_clicked(self, widget):
 		'''When delete button is clicked:
