@@ -1633,10 +1633,10 @@ class AccountsWindow:
 
 	def on_new_button_clicked(self, widget):
 		'''When new button is clicked: open an account information window'''
-		if gajim.interface.windows.has_key('wizard_window'):
-			gajim.interface.windows['wizard_window'].window.present()			
+		if gajim.interface.windows.has_key('account_creation_wizard'):
+			gajim.interface.windows['account_creation_wizard'].window.present()			
 		else:
-			gajim.interface.windows['wizard_window'] = \
+			gajim.interface.windows['account_creation_wizard'] = \
 				AccountCreationWizardWindow()
 
 	def on_remove_button_clicked(self, widget):
@@ -2412,8 +2412,8 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 
 class AccountCreationWizardWindow:
 	def __init__(self):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'wizard_window', APP)
-		self.window = self.xml.get_widget('wizard_window')
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_creation_wizard_window', APP)
+		self.window = self.xml.get_widget('account_creation_wizard_window')
 
 		# Connect events from comboboxentry.child
 		server_comboboxentry = self.xml.get_widget('server_comboboxentry')
@@ -2457,7 +2457,7 @@ class AccountCreationWizardWindow:
 		self.window.show_all()
 
 	def on_wizard_window_destroy(self, widget):
-		del gajim.interface.windows['wizard_window']
+		del gajim.interface.windows['account_creation_wizard']
 
 	def on_register_server_features_button_clicked(self, widget): 
 		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')

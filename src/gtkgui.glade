@@ -13483,7 +13483,7 @@ Status message</property>
   </child>
 </widget>
 
-<widget class="GtkWindow" id="wizard_window">
+<widget class="GtkWindow" id="account_creation_wizard_window">
   <property name="border_width">12</property>
   <property name="title" translatable="yes">Gajim: Account Creation Wizard</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -13719,6 +13719,7 @@ to the Jabber network.</property>
 		    <widget class="GtkEntry" id="nick_entry">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
+		      <property name="has_focus">True</property>
 		      <property name="editable">True</property>
 		      <property name="visibility">True</property>
 		      <property name="max_length">0</property>
@@ -14410,6 +14411,7 @@ to the Jabber network.</property>
 	    <widget class="GtkButton" id="forward_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-media-forward</property>
 	      <property name="use_stock">True</property>
