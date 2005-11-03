@@ -8798,7 +8798,7 @@ Custom</property>
 	  <child>
 	    <widget class="GtkLabel" id="label114">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">About</property>
+	      <property name="label" translatable="yes" comments="&quot;About&quot; is the text of a tab of vcard window">About</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
