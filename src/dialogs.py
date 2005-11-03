@@ -355,19 +355,16 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		if not jid:
 			return
 	
-		if jid.find('@') < 0:
+		# check if jid is conform to RFC and stringprep it
+		try:
+			jid = helpers.parse_jid(jid)
+		except helpers.InvalidFormat, s:
 			pritext = _('Invalid User ID')
-			sectext = _('Jabber ID must be of the form "user@servername".')
-			ErrorDialog(pritext, sectext).get_response()
+			ErrorDialog(pritext, s).get_response()
 			return
 
-		# check if contact is already in roster (user@server == UsEr@server)
-		already_in = False
-		for rjid in gajim.contacts[self.account]:
-			if jid.lower() == rjid.lower():
-				already_in = True
-				break
-		if already_in:
+		# Check if jid is already in roster
+		if jid in gajim.contacts[self.account]:
 			ErrorDialog(_('Contact already in roster'),
 			_('The contact is already listed in your roster.')).get_response()
 			return

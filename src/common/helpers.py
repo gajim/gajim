@@ -26,6 +26,7 @@ import stat
 
 import gajim
 from common import i18n
+from common.xmpp_stringprep import nodeprep, resourceprep, nameprep
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -35,15 +36,104 @@ except:
 _ = i18n._
 Q_ = i18n.Q_
 
+class InvalidFormat(Exception):
+	pass
+
+def parse_jid(jidstring):
+	'''Perform stringprep on all JID fragments from a string
+	and return the full jid'''
+	# This function comes from http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
+
+	user = None
+	server = None
+	resource = None
+
+	# Search for delimiters
+	user_sep = jidstring.find("@")
+	res_sep  = jidstring.find("/")
+
+	if user_sep == -1:		
+		if res_sep == -1:
+			# host
+			server = jidstring
+		else:
+			# host/resource
+			server = jidstring[0:res_sep]
+			resource = jidstring[res_sep + 1:] or None
+	else:
+		if res_sep == -1:
+			# user@host
+			user = jidstring[0:user_sep] or None
+			server = jidstring[user_sep + 1:]
+		else:
+			if user_sep < res_sep:
+				# user@host/resource
+				user = jidstring[0:user_sep] or None
+				server = jidstring[user_sep + 1:user_sep + (res_sep - user_sep)]
+				resource = jidstring[res_sep + 1:] or None
+			else:
+				# server/resource (with an @ in resource)
+				server = jidstring[0:res_sep]
+				resource = jidstring[res_sep + 1:] or None
+
+	return prep(user, server, resource)
+
+def parse_resource(resource):
+	'''Perform stringprep on resource and return it'''
+	if resource:
+		try:
+			return resourceprep.prepare(unicode(resource))
+		except UnicodeError:
+			raise InvalidFormat, "Invalid character in resource"
+
+def prep(user, server, resource):
+	'''Perform stringprep on all JID fragments and return the full jid'''
+	# This function comes from http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
+
+	if user:
+		try:
+			user = nodeprep.prepare(unicode(user))
+		except UnicodeError:
+			raise InvalidFormat, "Invalid character in username"
+	else:
+		user = None
+
+	if not server:
+		raise InvalidFormat, "Server address required."
+	else:
+		try:
+			server = nameprep.prepare(unicode(server))
+		except UnicodeError:
+			raise InvalidFormat, "Invalid character in hostname"
+
+	if resource:
+		try:
+			resource = resourceprep.prepare(unicode(resource))
+		except UnicodeError:
+			raise InvalidFormat, "Invalid character in resource"
+	else:
+		resource = None
+
+	if user:
+		if resource:
+			return "%s@%s/%s" % (user, server, resource)
+		else:
+			return "%s@%s" % (user, server)
+	else:
+		if resource:
+			return "%s/%s" % (server, resource)
+		else:
+			return server
+
 def temp_failure_retry(func, *args, **kwargs):
-    while True:
-        try:
-            return func(*args, **kwargs)
-        except (os.error, IOError), ex:
-            if ex.errno == errno.EINTR:
-                continue
-            else:
-                raise
+	while True:
+		try:
+			return func(*args, **kwargs)
+		except (os.error, IOError), ex:
+			if ex.errno == errno.EINTR:
+				continue
+			else:
+				raise
 
 def check_paths():
 	LOGPATH = gajim.LOGPATH
@@ -422,13 +512,13 @@ def one_account_connected():
 	return one_connected
 
 def get_output_of_command(command):
-    try:
-        child_stdin, child_stdout = os.popen2(command)
-    except ValueError:
-        return None
+	try:
+		child_stdin, child_stdout = os.popen2(command)
+	except ValueError:
+		return None
 
-    output = child_stdout.readlines()
-    child_stdout.close()
-    child_stdin.close()
-    
-    return output
+	output = child_stdout.readlines()
+	child_stdout.close()
+	child_stdin.close()
+	
+	return output

@@ -177,25 +177,14 @@ class Connection:
 		self.retrycount = 0
 	# END __init__
 
-	def strip_jid(self, jid):
-		'''look into gajim.contacts if we already have this jid CASE INSENSITIVE
-		and returns it
-		the function accetps jid and fjid'''
-		ji, resource = gajim.get_room_and_nick_from_fjid(jid)
-		for rjid in gajim.contacts[self.name]:
-			if ji.lower() == rjid.lower(): # we found the jid
-				ji = rjid
-		if resource:
-			return ji + '/' + resource
-		return ji
-
 	def get_full_jid(self, iq_obj):
 		'''return the full jid (with resource) from an iq as unicode'''
-		return unicode(self.strip_jid(str(iq_obj.getFrom())))
+		return helpers.parse_jid(str(iq_obj.getFrom()))
 
 	def get_jid(self, iq_obj):
 		'''return the jid (without resource) from an iq as unicode'''
-		return unicode(self.strip_jid(iq_obj.getFrom().getStripped()))
+		jid = self.get_full_jid(iq_obj)
+		return gajim.get_jid_without_resource(jid)
 
 	def put_event(self, ev):
 		if gajim.events_for_ui.has_key(self.name):
@@ -1096,7 +1085,7 @@ class Connection:
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
-			jid  = item.getAttr('jid')
+			jid  = helprs.parse_jid(item.getAttr('jid'))
 			name = item.getAttr('name')
 			sub  = item.getAttr('subscription')
 			ask  = item.getAttr('ask')
@@ -1266,9 +1255,11 @@ class Connection:
 	def _getRosterCB(self, con, iq_obj):
 		if not self.connection:
 			return
-		roster = self.connection.getRoster().getRaw().copy()
-		if not roster:
-			roster = {}
+		r = self.connection.getRoster().getRaw()
+
+		roster = {}
+		for jid in r:
+			roster[helpers.parse_jid(jid)] = r[jid]
 
 		jid = gajim.get_jid_from_account(self.name)
 

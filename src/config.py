@@ -1169,16 +1169,28 @@ class AccountModificationWindow:
 				_('Account name cannot contain spaces.')).get_response()
 			return
 		jid = self.xml.get_widget('jid_entry').get_text().decode('utf-8')
-		if jid == '' or jid.count('@') != 1:
-			dialogs.ErrorDialog(_('Invalid Jabber ID'),
-           _('A Jabber ID must be in the form "user@servername".')).get_response()
+
+		# check if jid is conform to RFC and stringprep it
+		try:
+			jid = helpers.parse_jid(jid)
+		except helpers.InvalidFormat, s:
+			pritext = _('Invalid User ID')
+			dialogs.ErrorDialog(pritext, s).get_response()
 			return
+
+		resource = self.xml.get_widget('resource_entry').get_text().decode('utf-8')
+		try:
+			resource = helpers.parse_resource(resource)
+		except helpers.InvalidFormat, s:
+			pritext = _('Invalid User ID')
+			dialogs.ErrorDialog(pritext, s).get_response()
+			return
+
 		config['savepass'] = self.xml.get_widget(
 				'save_password_checkbutton').get_active()
 		config['password'] = self.xml.get_widget('password_entry').get_text().\
 			decode('utf-8')
-		config['resource'] = self.xml.get_widget('resource_entry').get_text().\
-			decode('utf-8')
+		config['resource'] = resource
 		config['priority'] = self.xml.get_widget('priority_spinbutton').\
 																			get_value_as_int()
 		config['autoconnect'] = self.xml.get_widget('autoconnect_checkbutton').\
@@ -2516,16 +2528,26 @@ class AccountCreationWizardWindow:
 			server = widgets['server_comboboxentry'].child.get_text()
 			savepass = widgets['save_password_checkbutton'].get_active()
 			password = widgets['pass_entry'].get_text()
-			if self.check_data(username, server):
-				self.save_account(self.account, username, server, savepass, password,
-					register_new)
-				self.finish_label.set_text(finish_text)
-				self.xml.get_widget('cancel_button').hide()
-				self.back_button.hide()
-				self.xml.get_widget('forward_button').hide()
-				self.finish_button.set_sensitive(True)
-				self.advanced_button.show()
-				self.notebook.set_current_page(3)
+			
+			jid = username + '@' + server
+			# check if jid is conform to RFC and stringprep it
+			try:
+				jid = helpers.parse_jid(jid)
+			except helpers.InvalidFormat, s:
+				pritext = _('Invalid User ID')
+				dialogs.ErrorDialog(pritext, s).get_response()
+				return
+
+			username, server = gajim.get_room_name_and_server_from_room_jid(jid)
+			self.save_account(self.account, username, server, savepass, password,
+				register_new)
+			self.finish_label.set_text(finish_text)
+			self.xml.get_widget('cancel_button').hide()
+			self.back_button.hide()
+			self.xml.get_widget('forward_button').hide()
+			self.finish_button.set_sensitive(True)
+			self.advanced_button.show()
+			self.notebook.set_current_page(3)
 
 	def on_advanced_button_clicked(self, widget):
 		gajim.interface.windows[self.account]['account_modification'] = \
@@ -2534,18 +2556,6 @@ class AccountCreationWizardWindow:
 
 	def on_finish_button_clicked(self, widget):
 		self.window.destroy()
-
-	def check_data(self, username, server):
-		if len(username) == 0: 
-			dialogs.ErrorDialog(_('Username is missing'),
-			_('You need to enter a username to continue.')).get_response()
-			return False
-		elif len(server) == 0:
-			dialogs.ErrorDialog(_('Server address is missing'),
-_('You need to enter a valid server address to continue.')).get_response()
-			return False
-		else:
-			return True
 
 	def on_nick_entry_changed(self, widget):
 		self.update_jid(widget)
