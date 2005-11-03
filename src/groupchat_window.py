@@ -31,7 +31,6 @@ import cell_renderer_image
 import gtkgui_helpers
 import history_window
 import tooltips
-import message_textview
 
 from gajim import Contact
 from common import gajim
@@ -577,10 +576,8 @@ class GroupchatWindow(chat.Chat):
 
 	def on_message_textview_key_press_event(self, widget, event):
 		'''we use this cb instead of my_key_press to catch everything else
-		that is not registred as binding (see message_textview.py)'''
-		if event.keyval not in (gtk.keysyms.ISO_Left_Tab, gtk.keysyms.Tab):
-			room_jid = self.get_active_jid()
-			self.last_key_tabs[room_jid] = False
+		that is not registered as binding (see message_textview.py)'''
+		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
 
 	def on_message_textview_mykeypress_event(self, widget, event_keyval,
 	event_keymod):
@@ -681,16 +678,6 @@ class GroupchatWindow(chat.Chat):
 						return True
 				self.last_key_tabs[room_jid] = False
 				return False
-		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
-			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
-				self.notebook.emit('key_press_event', event)
-			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
-				conv_textview.emit('key_press_event', event)
-		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
-			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
-				self.notebook.emit('key_press_event', event)
-			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
-				conv_textview.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			if (event.state & gtk.gdk.SHIFT_MASK):
@@ -1327,17 +1314,6 @@ current room topic.') % command, room_jid)
 		self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
 			'list_treeview')
 		self.subject_tooltip[room_jid] = gtk.Tooltips()
-		
-		# add MessageTextView to UI
-		message_scrolledwindow = self.xmls[room_jid].get_widget(
-			'message_scrolledwindow')
-		
-		msg_textview = message_textview.MessageTextView()
-		msg_textview.connect('mykeypress',
-			self.on_message_textview_mykeypress_event)
-		msg_textview.connect('key_press_event',
-			self.on_message_textview_key_press_event)
-		message_scrolledwindow.add(msg_textview)
 		
 		chat.Chat.new_tab(self, room_jid)
 				

@@ -22,11 +22,13 @@ import gtk.glade
 import pango
 import gobject
 import time
+
 import dialogs
 import history_window
 import gtkgui_helpers
 import tooltips
 import conversation_textview
+import message_textview
 
 try:
 	import gtkspell
@@ -55,7 +57,8 @@ class Chat:
 		self.account = account
 		self.change_cursor = None
 		self.xmls = {}
-		self.conversation_textviews = {}
+		self.conversation_textviews = {} # holds per jid conversation textview
+		self.message_textviews = {} # holds per jid message (where we write) textview
 		self.nb_unread = {}
 		self.print_time_timeout_id = {}
 		self.names = {} # what is printed in the tab (eg. contact.name)
@@ -96,8 +99,8 @@ class Chat:
 			self.conversation_textviews[jid].modify_font(font)
 			message_scrolledwindow = self.xmls[jid].get_widget(
 				'message_scrolledwindow')
-			message_textview = message_scrolledwindow.get_children()[0]
-			message_textview.modify_font(font)
+			msg_textview = message_scrolledwindow.get_children()[0]
+			msg_textview.modify_font(font)
 
 	def update_tags(self):
 		for jid in self.conversation_textviews:
@@ -560,10 +563,10 @@ class Chat:
 		textview.scroll_to_iter(end_iter, 0, False, 1, 1)
 		return False
 
-	def size_request(self, message_textview , requisition, xml_top):
+	def size_request(self, msg_textview , requisition, xml_top):
 		''' When message_textview changes its size. If the new height
 		will enlarge the window, enable the scrollbar automatic policy'''
-		if message_textview.window is None:
+		if msg_textview.window is None:
 			return
 		message_scrolledwindow = xml_top.get_widget('message_scrolledwindow')
 
@@ -573,7 +576,7 @@ class Chat:
 
 		min_height = conversation_scrolledwindow.get_property('height-request')
 		conversation_height = conv_textview.window.get_size()[1]
-		message_height = message_textview.window.get_size()[1]
+		message_height = msg_textview.window.get_size()[1]
 		# new tab is not exposed yet
 		if conversation_height < 2:
 			return
@@ -591,7 +594,7 @@ class Chat:
 						gtk.POLICY_AUTOMATIC)
 					message_scrolledwindow.set_property('height-request', 
 						message_height + conversation_height - min_height)
-					self.bring_scroll_to_end(message_textview)
+					self.bring_scroll_to_end(msg_textview)
 			else:
 				message_scrolledwindow.set_property('vscrollbar-policy', 
 					gtk.POLICY_NEVER)
@@ -613,6 +616,7 @@ class Chat:
 			'underline_togglebutton'):
 			self.xmls[jid].get_widget(w).set_no_show_all(True)
 
+		# add ConversationTextView to UI and connect signals
 		conv_textview = self.conversation_textviews[jid] = \
 			conversation_textview.ConversationTextview(self.account)
 		conv_textview.show_all()
@@ -620,18 +624,26 @@ class Chat:
 			'conversation_scrolledwindow')
 		conversation_scrolledwindow.add(conv_textview)
 		conv_textview.connect('key_press_event', self.on_conversation_textview_key_press_event)
-
+		
+		# add MessageTextView to UI and connect signals
+		message_scrolledwindow = self.xmls[jid].get_widget(
+			'message_scrolledwindow')
+		msg_textview = self.message_textviews[jid] = \
+			message_textview.MessageTextView()
+		msg_textview.connect('mykeypress',
+			self.on_message_textview_mykeypress_event)
+		message_scrolledwindow.add(msg_textview)
+		msg_textview.connect('key_press_event',
+			self.on_message_textview_key_press_event)
+		
 		self.set_compact_view(self.always_compact_view)
 		self.nb_unread[jid] = 0
 		gajim.last_message_time[self.account][jid] = 0
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
 		
 		if gajim.config.get('use_speller') and 'gtkspell' in globals():
-			message_scrolledwindow = self.xmls[jid].get_widget(
-				'message_scrolledwindow')
-			message_textview = message_scrolledwindow.get_children()[0]
 			try:
-				gtkspell.Spell(message_textview)
+				gtkspell.Spell(msg_textview)
 			except gobject.GError, msg:
 				#FIXME: add a ui for this use spell.set_language()
 				dialogs.ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
@@ -665,10 +677,10 @@ class Chat:
 		self.notebook.append_page(child, tab_hbox)
 		message_scrolledwindow = self.xmls[jid].get_widget(
 			'message_scrolledwindow')
-		message_textview = message_scrolledwindow.get_children()[0]
+		msg_textview = message_scrolledwindow.get_children()[0]
 		
-		message_textview.modify_font(font)
-		message_textview.connect('size-request', self.size_request,
+		msg_textview.modify_font(font)
+		msg_textview.connect('size-request', self.size_request,
 			self.xmls[jid])
 		# init new sent history for this conversation
 		self.sent_history[jid] = []
@@ -678,6 +690,27 @@ class Chat:
 
 		self.show_title()
 
+	def on_message_textview_key_press_event(self, widget, event):
+		jid = self.get_active_jid()
+		conv_textview = self.conversation_textviews[jid]
+		
+		if self.widget_name == 'groupchat_window':
+			if event.keyval not in (gtk.keysyms.ISO_Left_Tab, gtk.keysyms.Tab):
+				room_jid = self.get_active_jid()
+				self.last_key_tabs[room_jid] = False
+		
+		if event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
+				self.notebook.emit('key_press_event', event)
+			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
+				conv_textview.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
+				self.notebook.emit('key_press_event', event)
+			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
+				conv_textview.emit('key_press_event', event)
+	
+	
 	def on_conversation_textview_key_press_event(self, widget, event):
 		'''Do not block these events and send them to the notebook'''
 		if event.state & gtk.gdk.CONTROL_MASK:
@@ -698,10 +731,10 @@ class Chat:
 				jid = self.get_active_jid()
 				message_scrolledwindow = self.xmls[jid].get_widget(
 					'message_scrolledwindow')
-				message_textview = message_scrolledwindow.get_children()[0]
-				if not message_textview.is_focus():
-					message_textview.grab_focus()
-				message_textview.emit('key_press_event', event)
+				msg_textview = message_scrolledwindow.get_children()[0]
+				if not msg_textview.is_focus():
+					msg_textview.grab_focus()
+				msg_textview.emit('key_press_event', event)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		st = '1234567890' # alt+1 means the first tab (tab 0)
@@ -763,10 +796,10 @@ class Chat:
 			jid = self.get_active_jid()
 			message_scrolledwindow = self.xmls[jid].get_widget(
 				'message_scrolledwindow')
-			message_textview = message_scrolledwindow.get_children()[0]
-			if not message_textview.is_focus():
-				message_textview.grab_focus()
-			message_textview.emit('key_press_event', event)
+			msg_textview = message_scrolledwindow.get_children()[0]
+			if not msg_textview.is_focus():
+				msg_textview.grab_focus()
+			msg_textview.emit('key_press_event', event)
 		elif event.state & gtk.gdk.CONTROL_MASK or \
 			  (event.keyval == gtk.keysyms.Control_L) or \
 			  (event.keyval == gtk.keysyms.Control_R):
@@ -777,11 +810,11 @@ class Chat:
 		else: # it's a normal key press make sure message_textview has focus
 			message_scrolledwindow = self.xmls[jid].get_widget(
 				'message_scrolledwindow')
-			message_textview = message_scrolledwindow.get_children()[0]
-			if message_textview.get_property('sensitive'):
-				if not message_textview.is_focus():
-					message_textview.grab_focus()
-				message_textview.emit('key_press_event', event)
+			msg_textview = message_scrolledwindow.get_children()[0]
+			if msg_textview.get_property('sensitive'):
+				if not msg_textview.is_focus():
+					msg_textview.grab_focus()
+				msg_textview.emit('key_press_event', event)
 
 	def on_conversation_vadjustment_value_changed(self, widget):
 		jid = self.get_active_jid()

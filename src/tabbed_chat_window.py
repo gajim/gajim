@@ -29,7 +29,6 @@ import os
 import dialogs
 import chat
 import gtkgui_helpers
-import message_textview
 
 from common import gajim
 from common import helpers
@@ -454,15 +453,6 @@ class TabbedChatWindow(chat.Chat):
 		self.childs[contact.jid] = self.xmls[contact.jid].get_widget('chats_vbox')
 		self.contacts[contact.jid] = contact
 		
-		# add MessageTextView to UI
-		message_scrolledwindow = self.xmls[contact.jid].get_widget(
-			'message_scrolledwindow')
-		
-		msg_textview = message_textview.MessageTextView()
-		msg_textview.connect('mykeypress',
-			self.on_message_textview_mykeypress_event)
-		message_scrolledwindow.add(msg_textview)
-		
 		self.show_avatar(contact.jid, contact.resource)			
 		
 		self.childs[contact.jid].connect('drag_data_received',
@@ -471,6 +461,9 @@ class TabbedChatWindow(chat.Chat):
 			gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP,
 			self.dnd_list, gtk.gdk.ACTION_COPY)
 		
+		chat.Chat.new_tab(self, contact.jid)
+		
+		msg_textview = self.message_textviews[contact.jid]
 		message_tv_buffer = msg_textview.get_buffer()
 		message_tv_buffer.connect('changed',
 			self.on_message_tv_buffer_changed, contact)
@@ -482,7 +475,6 @@ class TabbedChatWindow(chat.Chat):
 		xm.signal_autoconnect(self)
 		self.tabbed_chat_popup_menu = xm.get_widget('tabbed_chat_popup_menu')
 		
-		chat.Chat.new_tab(self, contact.jid)
 		self.redraw_tab(contact.jid)
 		self.draw_widgets(contact)
 
@@ -613,16 +605,6 @@ class TabbedChatWindow(chat.Chat):
 		if event.keyval == gtk.keysyms.Tab:
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
 				self.notebook.emit('key_press_event', event)
-		elif event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
-			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE DOWN
-				self.notebook.emit('key_press_event', event)
-			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
-				conv_textview.emit('key_press_event', event)
-		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
-			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + PAGE UP
-				self.notebook.emit('key_press_event', event)
-			elif event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
-				conv_textview.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+UP
 				self.sent_messages_scroll(jid, 'up', widget.get_buffer())
