@@ -2517,7 +2517,8 @@ class AccountCreationWizardWindow:
 			savepass = widgets['save_password_checkbutton'].get_active()
 			password = widgets['pass_entry'].get_text()
 			if self.check_data(username, server):
-				self.save_account(self.account, server, savepass, password, register_new)
+				self.save_account(self.account, username, server, savepass, password,
+					register_new)
 				self.finish_label.set_text(finish_text)
 				self.xml.get_widget('cancel_button').hide()
 				self.back_button.hide()
@@ -2580,9 +2581,9 @@ _('You need to enter a valid server address to continue.')).get_response()
 			string = '<span background="lightyellow">%s@%s</span>' % (name, server)
 			widgets['jid_label'].set_label(string)
 
-	def save_account(self, name, server, savepass, password, new_account):
+	def save_account(self, name, login, server, savepass, password, new_account):
 		config = {}
-		config['name'] = name
+		config['name'] = login
 		config['hostname'] = server
 		config['savepass'] = savepass
 		config['password'] = password
