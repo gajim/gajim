@@ -1144,7 +1144,7 @@ class Connection:
 				identities.append(attr)
 			elif i.getName() == 'feature':
 				features.append(i.getAttr('var'))
-			elif i.getName() == 'x' and i.getAttr('xmlns') == NS_DATA:
+			elif i.getName() == 'x' and i.getAttr('xmlns') == common.xmpp.NS_DATA:
 				data.append(common.xmpp.DataForm(node=i))
 		jid = self.get_full_jid(iq_obj)
 		if identities: #if not: an error occured
