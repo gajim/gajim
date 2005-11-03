@@ -2412,7 +2412,8 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 
 class AccountCreationWizardWindow:
 	def __init__(self):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_creation_wizard_window', APP)
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_creation_wizard_window',
+			APP)
 		self.window = self.xml.get_widget('account_creation_wizard_window')
 
 		# Connect events from comboboxentry.child
@@ -2545,8 +2546,9 @@ class AccountCreationWizardWindow:
 			self.back_button.hide()
 			self.xml.get_widget('forward_button').hide()
 			self.finish_button.set_sensitive(True)
+			self.finish_button.set_property('has-default', True)
 			self.advanced_button.show()
-			self.notebook.set_current_page(2)
+			self.notebook.set_current_page(2) # show finish page
 
 	def on_advanced_button_clicked(self, widget):
 		gajim.interface.windows[self.account]['account_modification'] = \
