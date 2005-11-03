@@ -196,9 +196,9 @@ class HistoryWindow:
 	def new_line(self, date, type, data):
 		'''add a new line in textbuffer'''
 		buff = self.history_buffer
-		start_iter = buff.get_start_iter()
+		end_iter = buff.get_end_iter()
 		tim = time.strftime('[%x %X] ', time.localtime(float(date)))
-		buff.insert(start_iter, tim)
+		buff.insert(end_iter, tim)
 		name = None
 		tag_name = ''
 		tag_msg = ''
@@ -234,8 +234,8 @@ class HistoryWindow:
 			before_str = gajim.config.get('before_nickname')
 			after_str = gajim.config.get('after_nickname')
 			format = before_str + name + after_str + ' '
-			buff.insert_with_tags_by_name(start_iter, format, tag_name)
+			buff.insert_with_tags_by_name(end_iter, format, tag_name)
 		if tag_msg:
-			buff.insert_with_tags_by_name(start_iter, msg, tag_msg)
+			buff.insert_with_tags_by_name(end_iter, msg, tag_msg)
 		else:
-			buff.insert(start_iter, msg)
+			buff.insert(end_iter, msg)
