@@ -506,7 +506,7 @@ class Connection:
 			if self.vcard_shas.has_key(jid_stripped):
 				if avatar_sha != self.vcard_shas[jid_stripped]:
 					# avatar has been updated
-					self.request_vcard(self.name, jid_stripped)
+					self.request_vcard(jid_stripped)
 			else:
 				self.vcard_shas[jid_stripped] = avatar_sha
 		if not ptype or ptype == 'unavailable':
