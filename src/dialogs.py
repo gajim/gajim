@@ -727,12 +727,6 @@ class NewMessageDialog:
 		_('Please make sure you are connected with "%s".' % self.account)
 			).get_response()
 			return
-	
-		if jid.find('@') == -1 and not jid.endswith('/echo'):
-			# if no @ was given and jid is not server.tld/echo
-			ErrorDialog(_('Invalid contact ID'),
-	_('Contact ID must be of the form "username@servername".')).get_response()
-			return
 
 		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
@@ -1070,12 +1064,6 @@ class SingleMessageWindow:
 		if to_whom_jid.find('/announce/') != -1:
 			gajim.connections[self.account].send_motd(to_whom_jid, subject,
 				message)
-			return
-
-		if to_whom_jid.find('@') == -1 and not to_whom_jid.endswith('/echo'):
-			# if no @ was given and jid is not server.tld/echo
-			ErrorDialog(_('Invalid contact ID'),
-		_('Contact ID must be of the form "username@servername".')).get_response()
 			return
 
 		# FIXME: allow GPG message some day
