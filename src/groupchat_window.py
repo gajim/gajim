@@ -587,7 +587,6 @@ class GroupchatWindow(chat.Chat):
 		# NOTE: handles mykeypress which is custom signal connected to this
 		# CB in new_room(). for this singal see message_textview.py
 		room_jid = self.get_active_jid()
-		conv_textview = self.conversation_textviews[room_jid]
 		message_buffer = widget.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
 		message = message_buffer.get_text(start_iter, end_iter,
@@ -716,7 +715,6 @@ class GroupchatWindow(chat.Chat):
 		room_jid = self.get_active_jid()
 		message_textview = self.message_textviews[room_jid]
 		conv_textview = self.conversation_textviews[room_jid]
-		message_buffer = message_textview.get_buffer()
 		if message != '' or message != '\n':
 			self.save_sent_message(room_jid, message)
 			
