@@ -127,7 +127,7 @@ def get_room_and_nick_from_fjid(jid):
 	return l
 
 def get_real_jid_from_fjid(account, fjid):
-	'''returns real jid, it returns None
+	'''returns real jid or returns None
 	if we don't know the real jid'''
 	room_jid, nick = get_room_and_nick_from_fjid(fjid)
 	if not nick: # It's not a fake_jid, it is a real jid
@@ -136,6 +136,8 @@ def get_real_jid_from_fjid(account, fjid):
 	gcs = interface.windows[account]['gc']
 	if gcs.has_key(room_jid):
 		# It's a pm, so if we have real jid it's in contact.jid
+		if not gc_contacts[account][room_jid].has_key(nick):
+			return
 		contact = gc_contacts[account][room_jid][nick]
 		# contact.jid is None when it's not a real jid (we don't know real jid)
 		real_jid = contact.jid
