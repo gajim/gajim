@@ -2450,6 +2450,9 @@ class AccountCreationWizardWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def on_wizard_window_destroy(self, widget):
+		del gajim.interface.windows['wizard_window']
+
 	def on_register_server_features_button_clicked(self, widget): 
 		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
 
@@ -2535,7 +2538,10 @@ class AccountCreationWizardWindow:
 		self.window.destroy()
 
 	def on_finish_button_clicked(self, widget):
+		go_online = self.xml.get_widget('go_online_checkbutton')
 		self.window.destroy()
+		if go_online:
+			gajim.interface.roster.send_status(self.account, 'online', '')
 
 	def on_nick_entry_changed(self, widget):
 		self.update_jid(widget)
