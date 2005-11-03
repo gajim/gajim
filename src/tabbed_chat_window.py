@@ -419,9 +419,7 @@ class TabbedChatWindow(chat.Chat):
 	def on_send_button_clicked(self, widget):
 		'''When send button is pressed: send the current message'''
 		jid = self.get_active_jid()
-		message_scrolledwindow = self.xmls[jid].get_widget(
-			'message_scrolledwindow')
-		message_textview = message_scrolledwindow.get_children()[0]
+		message_textview = self.message_textviews[jid]
 		message_buffer = message_textview.get_buffer()
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
@@ -518,9 +516,7 @@ class TabbedChatWindow(chat.Chat):
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
 		
-		message_scrolledwindow = self.xmls[jid].get_widget(
-			'message_scrolledwindow')
-		message_textview = message_scrolledwindow.get_children()[0]
+		message_textview = self.message_textviews[jid]
 		message_buffer = message_textview.get_buffer()
 		if self.kbd_activity_in_last_5_secs and message_buffer.get_char_count():
 			# Only composing if the keyboard activity was in text entry
@@ -724,9 +720,7 @@ class TabbedChatWindow(chat.Chat):
 			return
 
 		conv_textview = self.conversation_textviews[jid]
-		message_scrolledwindow = self.xmls[jid].get_widget(
-			'message_scrolledwindow')
-		message_textview = message_scrolledwindow.get_children()[0]
+		message_textview = self.message_textviews[jid]
 		message_buffer = message_textview.get_buffer()
 
 		if message != '' or message != '\n':
