@@ -2519,7 +2519,7 @@ class AccountCreationWizardWindow:
 				jid = helpers.parse_jid(jid)
 			except helpers.InvalidFormat, s:
 				pritext = _('Invalid User ID')
-				dialogs.ErrorDialog(pritext, s).get_response()
+				dialogs.ErrorDialog(pritext, str(s)).get_response()
 				return
 
 			username, server = gajim.get_room_name_and_server_from_room_jid(jid)

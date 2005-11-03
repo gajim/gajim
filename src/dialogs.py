@@ -360,7 +360,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			jid = helpers.parse_jid(jid)
 		except helpers.InvalidFormat, s:
 			pritext = _('Invalid User ID')
-			ErrorDialog(pritext, s).get_response()
+			ErrorDialog(pritext, str(s)).get_response()
 			return
 
 		# Check if jid is already in roster
