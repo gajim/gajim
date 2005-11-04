@@ -228,6 +228,12 @@ class Systray:
 		gajim.interface.roster.on_quit_menuitem_activate(widget)
 
 	def make_groups_submenus_for_chat_with(self, account):
+		iconset = gajim.config.get('iconset')
+		if not iconset:
+			iconset = 'sun'
+		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
+		state_images = gajim.interface.roster.load_iconset(path)
+		
 		groups_menu = gtk.Menu()
 		
 		for group in gajim.groups[account].keys():
@@ -239,16 +245,21 @@ class Systray:
 			groups_menu.append(item)
 			contacts_menu = gtk.Menu()
 			item.set_submenu(contacts_menu)
-			for users in gajim.contacts[account].values():
-				user = users[0]
-				if group in user.groups and user.show != 'offline' and \
-						user.show != 'error':
+			for contacts in gajim.contacts[account].values():
+				contact = gajim.get_highest_prio_contact_from_contacts(contacts)
+				if group in contact.groups and contact.show != 'offline' and \
+						contact.show != 'error':
 					at_least_one = True
-					show = helpers.get_uf_show(user.show)
-					s = user.name.replace('_', '__') + ' (' + show + ')'
-					item = gtk.MenuItem(s)
-					item.connect('activate', self.start_chat, account,\
-							user.jid)
+					s = contact.name.replace('_', '__') # FIXME: find a way to show one _ and not underline
+					item = gtk.ImageMenuItem(s)
+					# any given gtk widget can only be used in one place
+					# (here we use it in status menu too)
+					# gtk.Image is a widget, it's better we refactor to use gdk.gdk.Pixbuf allover
+					img = state_images[contact.show]
+					img_copy = gobject.new(gtk.Image, pixbuf=img.get_pixbuf())
+					item.set_image(img_copy)
+					item.connect('activate', self.start_chat, account,
+							contact.jid)
 					contacts_menu.append(item)
 			
 			if not at_least_one:
