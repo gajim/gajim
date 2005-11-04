@@ -971,7 +971,7 @@ class RosterWindow:
 		item = gtk.SeparatorMenuItem() # seperator
 		menu.append(item)
 
-		item = gtk.ImageMenuItem(_('Edit'))
+		item = gtk.ImageMenuItem(_('_Edit'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
