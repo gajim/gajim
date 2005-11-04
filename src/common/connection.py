@@ -1392,7 +1392,7 @@ class Connection:
 					req['password'] = self.new_account_info['password']
 					if not common.xmpp.features.register(self.connection, data[0],
 						req):
-						self.dispatch('ERROR', (_('Error:'), self.connection.lastErr))
+						self.dispatch('ACC_NOT_OK', (self.connection.lastErr))
 						return
 					self.connected = 0
 					self.password = self.new_account_info['password']
@@ -1931,7 +1931,9 @@ class Connection:
 			return
 		con, con_type = self.connect(config)
 		if not con_type:
-			return None
+			self.dispatch('ACC_NOT_OK',
+				(_('Could not connect to "%s"') % config['hostname']))
+			return
 
 		con.RegisterEventHandler(self._event_dispatcher)
 		self.new_account_info = config
@@ -1964,12 +1966,15 @@ class Connection:
 			c = f.read()
 			card = common.xmpp.Node(node = c)
 			vcard = self.node_to_dict(card)
-			if vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
-				cached_sha = vcard['PHOTO']['SHA']
-				if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
-					cached_sha:
-					# we had an old cached vcard
-					return {}
+			if vcard.has_key('PHOTO'):
+				if not isinstance(vcard['PHOTO'], dict):
+					del vcard['PHOTO']
+				elif vcard['PHOTO'].has_key('SHA'):
+					cached_sha = vcard['PHOTO']['SHA']
+					if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
+						cached_sha:
+						# we had an old cached vcard
+						return {}
 			vcard['jid'] = jid
 			vcard['resource'] = gajim.get_resource_from_jid(fjid)
 			return vcard
