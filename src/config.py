@@ -2434,10 +2434,13 @@ class AccountCreationWizardWindow:
 
 		# Generic widgets
 		self.notebook = self.xml.get_widget('notebook')
+		self.cancel_button = self.xml.get_widget('cancel_button')
 		self.back_button = self.xml.get_widget('back_button')
+		self.forward_button = self.xml.get_widget('forward_button')
 		self.finish_button = self.xml.get_widget('finish_button')
 		self.advanced_button = self.xml.get_widget('advanced_button')
 		self.finish_label = self.xml.get_widget('finish_label')
+		self.go_online_checkbutton = self.xml.get_widget('go_online_checkbutton')
 
 		# Some vars
 		self.sync = False
@@ -2453,6 +2456,7 @@ class AccountCreationWizardWindow:
 			self.account = _('Main') + str(i)
 			i += 1
 
+		self.notebook.set_current_page(0)
 		self.advanced_button.set_no_show_all(True)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -2472,7 +2476,10 @@ class AccountCreationWizardWindow:
 	def on_back_button_clicked(self, widget):
 		if self.notebook.get_current_page() == 1:
 			self.notebook.set_current_page(0)
-		self.back_button.set_sensitive(False)
+			self.back_button.set_sensitive(False)
+		elif self.notebook.get_current_page() == 3: # finish page
+			self.forward_button.show()
+			self.notebook.set_current_page(1) # Goto parameters page
 
 	def get_widgets(self):
 		widgets = {} 
@@ -2505,15 +2512,6 @@ class AccountCreationWizardWindow:
 			return
 		
 		else:
-			if self.modify:
-				#FIXME: pango me
-				finish_text = _('Account has been added successfully.\n'
-'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
-			else:
-				#FIXME: pango me
-				finish_text = _('Your new account has been created successfully.\n'
-'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
-
 			widgets = self.get_widgets()
 			username = widgets['nick_entry'].get_text().decode('utf-8')
 			if not username:
@@ -2540,15 +2538,53 @@ class AccountCreationWizardWindow:
 				return
 
 			username, server = gajim.get_room_name_and_server_from_room_jid(jid)
-			self.save_account(self.account, username, server, savepass, password)
-			self.finish_label.set_text(finish_text)
-			self.xml.get_widget('cancel_button').hide()
+			self.save_account(username, server, savepass, password)
+			self.cancel_button.hide()
 			self.back_button.hide()
-			self.xml.get_widget('forward_button').hide()
-			self.finish_button.set_sensitive(True)
-			self.finish_button.set_property('has-default', True)
-			self.advanced_button.show()
-			self.notebook.set_current_page(2) # show finish page
+			self.forward_button.hide()
+			if self.modify:
+				#FIXME: pango me
+				finish_text = _('Account has been added successfully.\n'
+'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
+				self.finish_label.set_text(finish_text)
+				self.finish_button.set_sensitive(True)
+				self.finish_button.set_property('has-default', True)
+				self.advanced_button.show()
+				self.go_online_checkbutton.show()
+				img = self.xml.get_widget('finish_image')
+				img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
+				self.notebook.set_current_page(3) # show finish page
+			else:
+				self.notebook.set_current_page(2) # show creqting page
+
+	def acc_is_ok(self, config):
+		'''Account creation succeeded'''
+		con = gajim.connections[self.account]
+		gajim.interface.register_handlers(con)
+		self.create_vars(config)
+		self.finish_button.set_sensitive(True)
+		self.finish_button.set_property('has-default', True)
+		self.advanced_button.show()
+		self.go_online_checkbutton.show()
+		img = self.xml.get_widget('finish_image')
+		img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
+		#FIXME: pango me
+		finish_text = _('Your new account has been created successfully.\n'
+'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
+		self.finish_label.set_text(finish_text)
+		self.notebook.set_current_page(3) # show finish page
+
+	def acc_is_not_ok(self, reason):
+		'''Account creation failed'''
+		self.back_button.show()
+		self.cancel_button.show()
+		self.go_online_checkbutton.hide()
+		img = self.xml.get_widget('finish_image')
+		img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
+		#FIXME: pango me
+		finish_text = _('An error occured during account creation:\n') + reason
+		self.finish_label.set_text(finish_text)
+		self.notebook.set_current_page(3) # show finish page
 
 	def on_advanced_button_clicked(self, widget):
 		gajim.interface.windows[self.account]['account_modification'] = \
@@ -2556,7 +2592,7 @@ class AccountCreationWizardWindow:
 		self.window.destroy()
 
 	def on_finish_button_clicked(self, widget):
-		go_online = self.xml.get_widget('go_online_checkbutton')
+		go_online = self.xml.get_widget('go_online_checkbutton').get_active()
 		self.window.destroy()
 		if go_online:
 			gajim.interface.roster.send_status(self.account, 'online', '')
@@ -2598,7 +2634,7 @@ class AccountCreationWizardWindow:
 			string = '<span background="lightyellow">%s@%s</span>' % (name, server)
 			jid_label.set_label(string)
 
-	def save_account(self, name, login, server, savepass, password):
+	def save_account(self, login, server, savepass, password):
 		config = {}
 		config['name'] = login
 		config['hostname'] = server
@@ -2619,43 +2655,44 @@ class AccountCreationWizardWindow:
 		config['savegpgpass'] = False
 		config['gpgpassword'] = ''
 
-		if name in gajim.connections:
+		if self.account in gajim.connections:
 			dialogs.ErrorDialog(_('Account name is in use'),
 				_('You already have an account using this name.')).get_response()
 			return
-		con = connection.Connection(name)
-		gajim.interface.register_handlers(con)
+		con = connection.Connection(self.account)
+		gajim.events_for_ui[self.account] = []
 		if not self.modify:
-			gajim.events_for_ui[name] = []
-			con.new_account(name, config)
+			con.new_account(self.account, config)
 			return
-		# The account we add already exists on the server
-		gajim.connections[name] = con
-		gajim.config.add_per('accounts', name)
+		gajim.connections[self.account] = con
+		gajim.interface.register_handlers(con)
+		self.create_vars(config)
+
+	def create_vars(self, config):
+		gajim.config.add_per('accounts', self.account)
 		for opt in config:
-			gajim.config.set_per('accounts', name, opt, config[opt])
-		if config['savepass']:
-			gajim.connections[name].password = config['password']
+			gajim.config.set_per('accounts', self.account, opt, config[opt])
+
 		# update variables
-		gajim.interface.windows[name] = {'infos': {}, 'disco': {}, 'chats': {},
-			'gc': {}, 'gc_config': {}}
-		gajim.interface.windows[name]['xml_console'] = \
-			dialogs.XMLConsoleWindow(name)
-		gajim.awaiting_events[name] = {}
-		gajim.connections[name].connected = 0
-		gajim.groups[name] = {}
-		gajim.contacts[name] = {}
-		gajim.gc_contacts[name] = {}
-		gajim.gc_connected[name] = {}
-		gajim.newly_added[name] = []
-		gajim.to_be_removed[name] = []
-		gajim.nicks[name] = config['name']
-		gajim.allow_notifications[name] = False
-		gajim.sleeper_state[name] = 'off'
-		gajim.encrypted_chats[name] = []
-		gajim.last_message_time[name] = {}
-		gajim.status_before_autoaway[name] = ''
-		gajim.events_for_ui[name] = []
+		gajim.interface.windows[self.account] = {'infos': {}, 'disco': {},
+			'chats': {}, 'gc': {}, 'gc_config': {}}
+		gajim.interface.windows[self.account]['xml_console'] = \
+			dialogs.XMLConsoleWindow(self.account)
+		gajim.awaiting_events[self.account] = {}
+		gajim.connections[self.account].connected = 0
+		gajim.groups[self.account] = {}
+		gajim.contacts[self.account] = {}
+		gajim.gc_contacts[self.account] = {}
+		gajim.gc_connected[self.account] = {}
+		gajim.newly_added[self.account] = []
+		gajim.to_be_removed[self.account] = []
+		gajim.nicks[self.account] = config['name']
+		gajim.allow_notifications[self.account] = False
+		gajim.sleeper_state[self.account] = 'off'
+		gajim.encrypted_chats[self.account] = []
+		gajim.last_message_time[self.account] = {}
+		gajim.status_before_autoaway[self.account] = ''
+		gajim.events_for_ui[self.account] = []
 		# refresh accounts window
 		if gajim.interface.windows.has_key('accounts'):
 			gajim.interface.windows['accounts'].init_accounts()

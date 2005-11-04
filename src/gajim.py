@@ -607,40 +607,17 @@ class Interface:
 			return
 
 	def handle_event_acc_ok(self, account, array):
-		#('ACC_OK', account, (name, config))
-		name = array[0]
-		dialogs.InformationDialog(_('Account registration successful'),
-			_('The account "%s" has been registered with the Jabber server.') % name)
-		gajim.config.add_per('accounts', name)
-		for opt in array[1]:
-			gajim.config.set_per('accounts', name, opt, array[1][opt])
-		self.windows[name] = {'infos': {}, 'disco': {}, 'chats': {},
-			'gc': {}, 'gc_config': {}}
-		self.windows[name]['xml_console'] = dialogs.XMLConsoleWindow(name)
-		gajim.awaiting_events[name] = {}
-		# disconnect from server - our status in roster is offline
-		gajim.connections[name].connected = 1
-		gajim.gc_contacts[name] = {}
-		gajim.gc_connected[name] = {}
-		gajim.nicks[name] = array[1]['name']
-		gajim.allow_notifications[name] = False
-		gajim.groups[name] = {}
-		gajim.contacts[name] = {}
-		gajim.newly_added[name] = []
-		gajim.to_be_removed[name] = []
-		gajim.sleeper_state[name] = 'off'
-		gajim.encrypted_chats[name] = []
-		gajim.last_message_time[name] = {}
-		gajim.status_before_autoaway[name] = ''
-		gajim.events_for_ui[name] = []
-		gajim.connections[name].change_status('offline', None, True)
-		gajim.connections[name].connected = 0
-		if self.windows.has_key('accounts'):
-			self.windows['accounts'].init_accounts()
-		self.roster.draw_roster()
-		
+		#('ACC_OK', account, (config))
+		if self.windows.has_key('account_creation_wizard'):
+			self.windows['account_creation_wizard'].acc_is_ok(array)
+
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('NewAccount', (account, array))
+
+	def handle_event_acc_not_ok(self, account, array):
+		#('ACC_NOT_OK', account, (reason))
+		if self.windows.has_key('account_creation_wizard'):
+			self.windows['account_creation_wizard'].acc_is_not_ok(array)
 
 	def handle_event_quit(self, p1, p2):
 		self.roster.quit_gtkgui_interface()
@@ -1144,6 +1121,7 @@ class Interface:
 			'AGENT_INFO_INFO': self.handle_event_agent_info_info,
 			'QUIT': self.handle_event_quit,
 			'ACC_OK': self.handle_event_acc_ok,
+			'ACC_NOT_OK': self.handle_event_acc_not_ok,
 			'MYVCARD': self.handle_event_myvcard,
 			'VCARD': self.handle_event_vcard,
 			'OS_INFO': self.handle_event_os_info,

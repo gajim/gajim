@@ -1402,8 +1402,9 @@ class Connection:
 					else:
 						gajim.config.set('usegpg', False)
 					gajim.connections[self.name] = self
-					self.dispatch('ACC_OK', (self.name, self.new_account_info))
+					self.dispatch('ACC_OK', (self.new_account_info))
 					self.new_account_info = None
+					self.connection = None
 					return
 				is_form = data[2]
 				if is_form:
