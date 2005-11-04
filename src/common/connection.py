@@ -30,6 +30,8 @@ import traceback
 import threading
 import select
 import socket
+import random
+random.seed()
 import signal
 if os.name != 'nt':
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
@@ -1415,6 +1417,30 @@ class Connection:
 			elif event == common.xmpp.transports.DATA_SENT:
 				self.dispatch('STANZA_SENT', unicode(data))
 
+	def select_next_host(self, hosts):
+		hosts_best_prio = []
+		best_prio = 65535
+		sum_weight = 0
+		for h in hosts:
+			if h['prio'] < best_prio:
+				hosts_best_prio = [h]
+				best_prio = h['prio']
+				sum_weight = h['weight']
+			elif h['prio'] == best_prio:
+				hosts_best_prio.append(h)
+				sum_weight += h['weight']
+		if len(hosts_best_prio) == 1:
+			return hosts_best_prio[0]
+		r = random.randint(0, sum_weight)
+		min_w = sum_weight
+		# We return the one for which has the minimum weight and weight >= r
+		for h in hosts_best_prio:
+			if h['weight'] >= r:
+				if h['weight'] <= min_w:
+					min_w = h['weight']
+					to_return = h
+		return h
+
 	def connect(self, data = None):
 		"""Connect and authenticate to the Jabber server
 		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')
@@ -1480,36 +1506,47 @@ class Connection:
 			p = custom_p
 			use_srv = False
 
+		hosts = []
 		# SRV resolver
 		if use_srv and (HAVE_DNSPYTHON or HAVE_PYDNS):
-			possible_queries = ['_xmpp-client._tcp.' + h]
-
-			for query in possible_queries:
-				try:
-					if HAVE_DNSPYTHON:
-						answers = [x for x in dns.resolver.query(query, 'SRV')]
-						if answers:
-							h = str(answers[0].target)
-							p = int(answers[0].port)
-							break
-					elif HAVE_PYDNS:
-						# ensure we haven't cached an old configuration
-						DNS.ParseResolvConf()
-						response = DNS.Request().req(query, qtype = 'SRV')
-						answers = response.answers
-						if len(answers) > 0:
-							# ignore the priority and weight for now
-							_t, _t, p, h = answers[0]['data']
-							del _t
-							p = int(p)
-							break
-				except:
-					gajim.log.debug('An error occurred while looking up %s' % query)
+			query = '_xmpp-client._tcp.' + h
+			try:
+				if HAVE_DNSPYTHON:
+					answers = [x for x in dns.resolver.query(query, 'SRV')]
+					if answers:
+						for a in answers:
+							hosts.append({'host': str(a.target),
+											'port': int(a.port),
+											'prio': int(a.priority),
+											'weight': int(a.weight)})
+				elif HAVE_PYDNS:
+					# ensure we haven't cached an old configuration
+					DNS.ParseResolvConf()
+					response = DNS.Request().req(query, qtype = 'SRV')
+					answers = response.answers
+					if len(answers) > 0:
+						# ignore the priority and weight for now
+						for a in answers:
+							prio, weight, port, host = answers[0]['data']
+							hosts.append({'host': host,
+											'port': port,
+											'prio': prio,
+											'weight': weight})
+			except:
+				gajim.log.debug('An error occurred while looking up %s' % query)
 		# end of SRV resolver
 
-		con_type = con.connect((h, p), proxy = proxy, secure = secur)
-		if not self.connected: # We went offline during connecting process
-			return None, ''
+		if len(hosts) == 0: # SRV fails or misconfigred on the server
+			hosts = [ {'host': h, 'port': p, 'prio': 10, 'weight': 10} ]
+
+		con_type = None
+		while len(hosts) and not con_type:
+			host = self.select_next_host(hosts)
+			con_type = con.connect((host['host'], host['port']), proxy = proxy,
+				secure = secur)
+			if not self.connected: # We went offline during connecting process
+				return None, ''
+			hosts.remove(host)
 		if not con_type:
 			gajim.log.debug('Could not connect to %s' % h)
 			if not self.retrycount:
