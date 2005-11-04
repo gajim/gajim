@@ -1542,20 +1542,23 @@ class Connection:
 		con_type = None
 		while len(hosts) and not con_type:
 			host = self.select_next_host(hosts)
+			hosts.remove(host)
 			con_type = con.connect((host['host'], host['port']), proxy = proxy,
 				secure = secur)
 			if not self.connected: # We went offline during connecting process
 				return None, ''
-			hosts.remove(host)
+			if not con_type:
+				gajim.log.debug('Could not connect to %s:%s' % (host['host'],
+					host['port']))
 		if not con_type:
-			gajim.log.debug('Could not connect to %s' % h)
 			if not self.retrycount:
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
 				self.dispatch('ERROR', (_('Could not connect to "%s"') % h,
 					_('Check your connection or try again later.')))
 			return None, ''
-		gajim.log.debug(_('Connected to server with %s') % con_type)
+		gajim.log.debug(_('Connected to server %s:%s with %s') % (host['host'],
+			host['port'], con_type)
 		return con, con_type
 
 	def connect_and_auth(self):
