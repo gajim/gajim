@@ -1416,7 +1416,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		one_connected = helpers.one_account_connected()
 		if active == 7: # We choose change status message (7 is that)
 			# do not change show, just show change status dialog
-			dlg = dialogs.ChangeStatusMessageDialog()
+			status = model[self.previous_status_combobox_active][2].decode('utf-8')
+			dlg = dialogs.ChangeStatusMessageDialog(status)
 			message = dlg.run()
 			if message is not None: # None if user pressed Cancel
 				for acct in accounts:
