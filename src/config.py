@@ -2418,7 +2418,7 @@ class AccountCreationWizardWindow:
 			APP)
 		self.window = self.xml.get_widget('account_creation_wizard_window')
 
-		# Connect events from combousboxentry.child
+		# Connect events from comboboxentry.child
 		server_comboboxentry = self.xml.get_widget('server_comboboxentry')
 		server_comboboxentry.child.connect('key_press_event',
 				self.on_server_comboboxentry_key_press_event)
