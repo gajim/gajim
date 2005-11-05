@@ -84,44 +84,45 @@ def parse_resource(resource):
 		try:
 			return resourceprep.prepare(unicode(resource))
 		except UnicodeError:
-			raise InvalidFormat, "Invalid character in resource"
+			raise InvalidFormat, 'Invalid character in resource.'
 
 def prep(user, server, resource):
 	'''Perform stringprep on all JID fragments and return the full jid'''
-	# This function comes from http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
+	# This function comes from
+	#http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
 
 	if user:
 		try:
 			user = nodeprep.prepare(unicode(user))
 		except UnicodeError:
-			raise InvalidFormat, "Invalid character in username"
+			raise InvalidFormat, 'Invalid character in username.'
 	else:
 		user = None
 
 	if not server:
-		raise InvalidFormat, "Server address required."
+		raise InvalidFormat, 'Server address required.'
 	else:
 		try:
 			server = nameprep.prepare(unicode(server))
 		except UnicodeError:
-			raise InvalidFormat, "Invalid character in hostname"
+			raise InvalidFormat, 'Invalid character in hostname'
 
 	if resource:
 		try:
 			resource = resourceprep.prepare(unicode(resource))
 		except UnicodeError:
-			raise InvalidFormat, "Invalid character in resource"
+			raise InvalidFormat, 'Invalid character in resource.'
 	else:
 		resource = None
 
 	if user:
 		if resource:
-			return "%s@%s/%s" % (user, server, resource)
+			return '%s@%s/%s' % (user, server, resource)
 		else:
-			return "%s@%s" % (user, server)
+			return '%s@%s' % (user, server)
 	else:
 		if resource:
-			return "%s/%s" % (server, resource)
+			return '%s/%s' % (server, resource)
 		else:
 			return server
 

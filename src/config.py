@@ -2418,7 +2418,7 @@ class AccountCreationWizardWindow:
 			APP)
 		self.window = self.xml.get_widget('account_creation_wizard_window')
 
-		# Connect events from comboboxentry.child
+		# Connect events from combousboxentry.child
 		server_comboboxentry = self.xml.get_widget('server_comboboxentry')
 		server_comboboxentry.child.connect('key_press_event',
 				self.on_server_comboboxentry_key_press_event)
@@ -2443,10 +2443,13 @@ class AccountCreationWizardWindow:
 		self.advanced_button = self.xml.get_widget('advanced_button')
 		self.finish_label = self.xml.get_widget('finish_label')
 		self.go_online_checkbutton = self.xml.get_widget('go_online_checkbutton')
+		self.progressbar = self.xml.get_widget('progressbar')
 
 		# Some vars
 		self.sync = False
 		self.autoconnect = False
+		self.update_progressbar_timeout_id = None
+		
 		if len(gajim.connections) == 0: # is it the first accound we're creating?
 			# the first account *has* to sync by default
 			self.sync = True
@@ -2486,7 +2489,7 @@ class AccountCreationWizardWindow:
 	def get_widgets(self):
 		widgets = {} 
 		for widget in (
-						'nick_entry',
+						'username_entry',
 						'server_comboboxentry',
 						'pass_entry',
 						'save_password_checkbutton',
@@ -2515,10 +2518,10 @@ class AccountCreationWizardWindow:
 		
 		else:
 			widgets = self.get_widgets()
-			username = widgets['nick_entry'].get_text().decode('utf-8')
+			username = widgets['username_entry'].get_text().decode('utf-8')
 			if not username:
-				pritext = _('Invalid nickname')
-				sectext = _('You must provide a nickname to configure this account.')
+				pritext = _('Invalid username')
+				sectext = _('You must provide a username to configure this account.')
 				dialogs.ErrorDialog(pritext, sectext).get_response()
 				return
 			server = widgets['server_comboboxentry'].child.get_text()
@@ -2558,6 +2561,12 @@ class AccountCreationWizardWindow:
 				self.notebook.set_current_page(3) # show finish page
 			else:
 				self.notebook.set_current_page(2) # show creqting page
+				self.update_progressbar_timeout_id = gobject.timeout_add(100,
+					self.update_progressbar)
+
+	def update_progressbar(self):
+		self.progressbar.pulse()
+		return True # loop forever
 
 	def acc_is_ok(self, config):
 		'''Account creation succeeded'''
@@ -2575,6 +2584,9 @@ class AccountCreationWizardWindow:
 'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
 		self.finish_label.set_text(finish_text)
 		self.notebook.set_current_page(3) # show finish page
+		
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
 
 	def acc_is_not_ok(self, reason):
 		'''Account creation failed'''
@@ -2599,13 +2611,13 @@ class AccountCreationWizardWindow:
 		if go_online:
 			gajim.interface.roster.send_status(self.account, 'online', '')
 
-	def on_nick_entry_changed(self, widget):
+	def on_username_entry_changed(self, widget):
 		self.update_jid(widget)
 
 	def on_server_comboboxentry_changed(self, widget):
 		self.update_jid(widget)
 
-	def on_nick_entry_key_press_event(self, widget, event):
+	def on_username_entry_key_press_event(self, widget, event):
 		# Check for pressed @ and jump to combobox if found
 		if event.keyval == gtk.keysyms.at:
 			combobox = self.xml.get_widget('server_comboboxentry')
@@ -2619,14 +2631,14 @@ class AccountCreationWizardWindow:
 		combobox = self.xml.get_widget('server_comboboxentry')
 		empty = len(combobox.get_active_text()) == 0
 		if backspace and empty:
-			nick_entry = self.xml.get_widget('nick_entry')
-			nick_entry.grab_focus()
-			nick_entry.set_position(-1)
+			username_entry = self.xml.get_widget('username_entry')
+			username_entry.grab_focus()
+			username_entry.set_position(-1)
 			return True
 
 	def update_jid(self,widget):
-		nick_entry = self.xml.get_widget('nick_entry')
-		name = nick_entry.get_text().decode('utf-8')
+		username_entry = self.xml.get_widget('username_entry')
+		name = username_entry.get_text().decode('utf-8')
 		combobox = self.xml.get_widget('server_comboboxentry')
 		server = combobox.get_active_text()
 		jid_label = self.xml.get_widget('jid_label')
