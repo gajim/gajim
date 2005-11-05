@@ -1405,6 +1405,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		active = self.status_combobox.get_active()
 		if active == -1: # no active item
 			return
+		if not self.combobox_callback_active:
+			self.previous_status_combobox_active = active
+			return
 		accounts = gajim.connections.keys()
 		if len(accounts) == 0:
 			dialogs.ErrorDialog(_('No account available'),
@@ -1426,9 +1429,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 						continue
 					current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
 					self.send_status(acct, current_show, message)
-			self.status_combobox.handler_block(self.id_signal_cb)
+			self.combobox_callback_active = False
 			self.status_combobox.set_active(self.previous_status_combobox_active)
-			self.status_combobox.handler_unblock(self.id_signal_cb)
+			self.combobox_callback_active = True
 			return
 		# we are about to change show, so save this new show so in case
 		# after user chooses "Change status message" menuitem
@@ -1472,9 +1475,9 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				maxi = gajim.connections[account].connected
 		# temporarily block signal in order not to send status that we show
 		# in the combobox
-		self.status_combobox.handler_block(self.id_signal_cb)
+		self.combobox_callback_active = False
 		self.status_combobox.set_active(table[maxi])
-		self.status_combobox.handler_unblock(self.id_signal_cb)
+		self.combobox_callback_active = True
 		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 
 						'xa', 'dnd', 'invisible']
 		if gajim.interface.systray_enabled:
@@ -2475,8 +2478,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.tree.connect('drag_data_get', self.drag_data_get_data)
 		self.tree.connect('drag_data_received', self.drag_data_received_data)
 		self.xml.signal_autoconnect(self)
-		self.id_signal_cb = self.status_combobox.connect('changed',
-			self.on_status_combobox_changed)
+		self.combobox_callback_active = True
 
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
 		self.tooltip = tooltips.RosterTooltip()
