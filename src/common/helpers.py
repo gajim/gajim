@@ -359,6 +359,7 @@ def get_uf_chatstate(chatstate):
 		return _('paused composing a message')
 	elif chatstate == 'gone':
 		return _('has closed the chat window or tab')
+	return ''
 
 def is_in_path(name_of_command, return_abs_path = False):
 	# if return_abs_path is True absolute path will be returned 
