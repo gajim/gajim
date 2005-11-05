@@ -2455,11 +2455,6 @@ class AccountCreationWizardWindow:
 			self.sync = True
 			# the first account *has* to autoconnect by default
 			self.autoconnect = True
-		self.account = _('Main')
-		i = 1
-		while self.account in gajim.connections:
-			self.account = _('Main') + str(i)
-			i += 1
 
 		self.notebook.set_current_page(0)
 		self.advanced_button.set_no_show_all(True)
@@ -2541,6 +2536,12 @@ class AccountCreationWizardWindow:
 				pritext = _('Invalid Jabber ID')
 				dialogs.ErrorDialog(pritext, str(s)).get_response()
 				return
+
+			self.account = server
+			i = 1
+			while self.account in gajim.connections:
+				self.account = server + str(i)
+				i += 1
 
 			username, server = gajim.get_room_name_and_server_from_room_jid(jid)
 			self.save_account(username, server, savepass, password)
