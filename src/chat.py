@@ -840,7 +840,7 @@ class Chat:
 		urgent = True
 		if (jid != self.get_active_jid() or \
 		   not self.window.is_active() or \
-		   not end) and kind == 'incoming':
+		   not end) and kind in ('incoming', 'incoming_queue'):
 			if self.widget_name == 'groupchat_window':
 				if text.find(self.nicks[jid]) == -1:
 					# Do not notify us for gc messages that are not for us
