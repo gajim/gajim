@@ -1302,7 +1302,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				self.set_connecting_state(account)
 
 			save_pass = gajim.config.get_per('accounts', account, 'savepass')
-			if not save_pass and gajim.connections[account].connected < 2:
+			if gajim.connections[account].connected < 2 and \
+				not gajim.connections[account].password:
 				passphrase = ''
 				w = dialogs.PassphraseDialog(
 					_('Password Required'),

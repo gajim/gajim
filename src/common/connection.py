@@ -1631,6 +1631,7 @@ class Connection:
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % hostname,
 				_('Check your connection or try again later')))
 			return None
+		self.password = None
 		if not self.connected: # We went offline during connecting process
 			return None
 		if hasattr(con, 'Resource'):

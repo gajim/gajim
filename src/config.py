@@ -1312,6 +1312,8 @@ class AccountModificationWindow:
 			gajim.config.set_per('accounts', name, opt, config[opt])
 		if config['savepass']:
 			gajim.connections[name].password = config['password']
+		else:
+			gajim.connections[name].password = None
 		#refresh accounts window
 		if gajim.interface.windows.has_key('accounts'):
 			gajim.interface.windows['accounts'].init_accounts()
@@ -2660,6 +2662,8 @@ class AccountCreationWizardWindow:
 				_('You already have an account using this name.')).get_response()
 			return
 		con = connection.Connection(self.account)
+		if savepass:
+			con.password = password
 		gajim.events_for_ui[self.account] = []
 		if not self.modify:
 			con.new_account(self.account, config)
