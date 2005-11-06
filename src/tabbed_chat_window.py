@@ -393,9 +393,9 @@ class TabbedChatWindow(chat.Chat):
 			gajim.config.set('chat-height', height)
 
 	def on_tabbed_chat_window_destroy(self, widget):
-		# Reset chatstates
+		# Reset contact chatstates to all open tabs
 		for jid in self.xmls:
-			c = self.contacts[jid].chatstate = None
+			self.contacts[jid].chatstate = None
 		#clean gajim.interface.windows[self.account]['chats']
 		chat.Chat.on_window_destroy(self, widget, 'chats')
 
