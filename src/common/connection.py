@@ -623,7 +623,7 @@ class Connection:
 			if self.files_props.has_key(sid):
 				file_props = self.files_props[sid]
 				file_props['fast'] = streamhosts
-				if file_props['type'] == 's':
+				if file_props['type'] == 's': # FIXME: remove fast xmlns
 					# only psi do this
 
 					if file_props.has_key('streamhosts'):
@@ -1534,7 +1534,8 @@ class Connection:
 											'prio': prio,
 											'weight': weight})
 			except:
-				gajim.log.debug('An error occurred while looking up %s' % query)
+				gajim.log.debug('An error occurred while looking up %s:' % query)
+				traceback.print_exc()
 		# end of SRV resolver
 
 		if len(hosts) == 0: # SRV fails or misconfigred on the server
