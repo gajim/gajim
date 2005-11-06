@@ -87,7 +87,7 @@ class PlugIn:
 import transports,dispatcher,auth,roster
 class CommonClient:
     """ Base for Client and Component classes."""
-    def __init__(self,server,port=5222,debug=['always', 'nodebuilder']):
+    def __init__(self,server,port=5222,debug=['always', 'nodebuilder'],caller=None):
         """ Caches server name and (optionally) port to connect to. "debug" parameter specifies
             the debug IDs that will go into debug output. You can either specifiy an "include"
             or "exclude" list. The latter is done via adding "always" pseudo-ID to the list.
@@ -99,6 +99,9 @@ class CommonClient:
         self.disconnect_handlers=[]
         self.Server=server
         self.Port=port
+        # Who initiated this client
+        # Used to register the EventDispatcher
+        self._caller=caller
         if debug and type(debug)<>list: debug=['always', 'nodebuilder']
         self._DEBUG=Debug.Debug(debug)
         self.DEBUG=self._DEBUG.Show

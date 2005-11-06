@@ -1487,7 +1487,7 @@ class Connection:
 		else:
 			proxy = None
 		if gajim.verbose:
-			con = common.xmpp.Client(hostname)
+			con = common.xmpp.Client(hostname, caller = self)
 		else:
 			con = common.xmpp.Client(hostname, debug = [])
 		common.xmpp.dispatcher.DefaultTimeout = try_connecting_for_foo_secs
@@ -1617,7 +1617,6 @@ class Connection:
 		con.RegisterHandler('iq', self._StanzaArrivedCB)
 		con.RegisterHandler('presence', self._StanzaArrivedCB)
 		con.RegisterHandler('message', self._StanzaArrivedCB)
-		con.RegisterEventHandler(self._event_dispatcher)
 
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
@@ -1636,7 +1635,6 @@ class Connection:
 			return None
 		if hasattr(con, 'Resource'):
 			self.server_resource = con.Resource
-		con.RegisterEventHandler(self._event_dispatcher)
 		if auth:
 			con.initRoster()
 			self.last_io = time.time()
@@ -1937,7 +1935,6 @@ class Connection:
 				(_('Could not connect to "%s"') % config['hostname']))
 			return
 
-		con.RegisterEventHandler(self._event_dispatcher)
 		self.new_account_info = config
 		self.connection = con
 		self.name = name

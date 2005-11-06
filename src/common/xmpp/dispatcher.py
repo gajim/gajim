@@ -69,6 +69,8 @@ class Dispatcher(PlugIn):
         self.RegisterProtocol('presence',Presence)
         self.RegisterProtocol('message',Message)
         self.RegisterDefaultHandler(self.returnStanzaHandler)
+        # Register Gajim's event handler as soon as dispatcher begins
+        self.RegisterEventHandler(self._owner._caller._event_dispatcher)
 #        self.RegisterHandler('error',self.streamErrorHandler,xmlns=NS_STREAMS)
 
     def plugin(self, owner):
