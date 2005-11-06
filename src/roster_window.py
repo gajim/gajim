@@ -232,10 +232,10 @@ class RosterWindow:
 		if contact.status and gajim.config.get('show_status_msgs_in_roster'):
 			status = contact.status.strip()
 			if status != '':
-					# escape markup entities and make them small italic and darkgrey
-					colorstring = gajim.config.get('color_for_status_msg_in_roster')
-					name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
-						% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
+				# escape markup entities and make them small italic and darkgrey
+				colorstring = gajim.config.get('color_for_status_msg_in_roster')
+				name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
+					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
 
 		state_images = self.get_appropriate_state_images(jid)
 		if gajim.awaiting_events[account].has_key(jid):
@@ -1338,8 +1338,8 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			if use_gpg_agent:
 				save_gpg_pass = False
 			else:
-			        save_gpg_pass = gajim.config.get_per('accounts', account, 
-				        'savegpgpass')
+				save_gpg_pass = gajim.config.get_per('accounts', account, 
+					'savegpgpass')
 			keyid = gajim.config.get_per('accounts', account, 'keyid')
 			if keyid and gajim.connections[account].connected < 2 and \
 				gajim.config.get('usegpg'):
