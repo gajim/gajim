@@ -3364,48 +3364,18 @@ Agent JID - node</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox2947">
+		<widget class="GtkCheckButton" id="show_status_msgs_in_roster_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">False</property>
-		  <property name="spacing">12</property>
-
-		  <child>
-		    <widget class="GtkCheckButton" id="use_emoticons_checkbutton">
-		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">If checked, Gajim will replace ascii smilies like ':)' with equivalent graphical emoticons</property>
-		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Use _emoticons</property>
-		      <property name="use_underline">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">True</property>
-		      <property name="active">False</property>
-		      <property name="inconsistent">False</property>
-		      <property name="draw_indicator">True</property>
-		      <signal name="toggled" handler="on_use_emoticons_checkbutton_toggled" last_modification_time="Wed, 19 Jan 2005 23:02:04 GMT"/>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkButton" id="add_remove_emoticons_button">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Manage...</property>
-		      <property name="use_underline">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">True</property>
-		      <signal name="clicked" handler="on_add_remove_emoticons_button_clicked" last_modification_time="Wed, 06 Apr 2005 14:31:44 GMT"/>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
-		  </child>
+		  <property name="tooltip" translatable="yes">If checked, Gajim will display the status message, if not empty, for every contact under the contact name in roster window</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Display status messages of contacts in roster</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="on_show_status_msgs_in_roster_checkbutton_toggled" last_modification_time="Sun, 06 Nov 2005 13:15:30 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -3719,6 +3689,57 @@ Agent JID - node</property>
 		  <property name="padding">0</property>
 		  <property name="expand">False</property>
 		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkHBox" id="hbox2947">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">12</property>
+
+		  <child>
+		    <widget class="GtkCheckButton" id="use_emoticons_checkbutton">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">If checked, Gajim will replace ascii smilies like ':)' with equivalent graphical emoticons</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Use _emoticons</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <signal name="toggled" handler="on_use_emoticons_checkbutton_toggled" last_modification_time="Wed, 19 Jan 2005 23:02:04 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkButton" id="add_remove_emoticons_button">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Manage...</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="on_add_remove_emoticons_button_clicked" last_modification_time="Wed, 06 Apr 2005 14:31:44 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">True</property>
 		</packing>
 	      </child>
 

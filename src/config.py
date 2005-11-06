@@ -111,6 +111,10 @@ class PreferencesWindow:
 		# Sort contacts by show
 		st = gajim.config.get('sort_by_show')
 		self.xml.get_widget('sort_by_show_checkbutton').set_active(st)
+		
+		# Display status msg under contact name in roster
+		st = gajim.config.get('show_status_msgs_in_roster')
+		self.xml.get_widget('show_status_msgs_in_roster_checkbutton').set_active(st)
 
 		#Use emoticons
 		st = gajim.config.get('useemoticons')
@@ -472,6 +476,10 @@ class PreferencesWindow:
 	
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
+		gajim.interface.roster.draw_roster()
+		
+	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
 		gajim.interface.roster.draw_roster()
 	
 	def on_use_emoticons_checkbutton_toggled(self, widget):

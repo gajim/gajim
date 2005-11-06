@@ -224,12 +224,22 @@ class RosterWindow:
 		contact_instances = gajim.get_contact_instances_from_jid(account, jid)
 		contact = gajim.get_highest_prio_contact_from_contacts(contact_instances)
 		name = contact.name
+		
 		if len(contact_instances) > 1:
 			name += ' (' + unicode(len(contact_instances)) + ')'
 
+		# add status msg, if not empty, under contact name in the treeview
+		if contact.status and gajim.config.get('show_status_msgs_in_roster'):
+			status = contact.status.strip()
+			if status != '':
+					# escape markup entities and make them small italic and darkgrey
+					colorstring = gajim.config.get('color_for_status_msg_in_roster')
+		        	name += '\n' '<span size="small" style="italic" foreground="%s">%s</span>'\
+						% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
+
 		state_images = self.get_appropriate_state_images(jid)
 		if gajim.awaiting_events[account].has_key(jid):
-			#TODO: change icon for FT
+			#FIXME: change icon for FT
 			img = state_images['message']
 		elif jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 			img = state_images[contact.show]					
@@ -2356,8 +2366,10 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.popups_notification_height = 0
 		self.popup_notification_windows = []
 		self.gpg_passphrase = {}
+
 		#(icon, name, type, jid, account, editable, secondary_pixbuf)
 		model = gtk.TreeStore(gtk.Image, str, str, str, str, bool, gtk.gdk.Pixbuf)
+
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
@@ -2449,7 +2461,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		render_text.connect('editing-canceled', self.on_editing_canceled)
 		render_text.connect('editing-started', self.on_editing_started)
 		col.pack_start(render_text, expand = True)
-		col.add_attribute(render_text, 'text', C_NAME) # where we hold the name
+		col.add_attribute(render_text, 'markup', C_NAME) # where we hold the name
 		col.add_attribute(render_text, 'editable', C_EDITABLE) # where we hold if the row is editable
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
 
