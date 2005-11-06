@@ -393,6 +393,9 @@ class TabbedChatWindow(chat.Chat):
 			gajim.config.set('chat-height', height)
 
 	def on_tabbed_chat_window_destroy(self, widget):
+		# Reset chatstates
+		for jid in self.xmls:
+			c = self.contacts[jid].chatstate = None
 		#clean gajim.interface.windows[self.account]['chats']
 		chat.Chat.on_window_destroy(self, widget, 'chats')
 
@@ -436,8 +439,9 @@ class TabbedChatWindow(chat.Chat):
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 
-		# chatstates - tab is destroyed, send gone
+		# chatstates - tab is destroyed, send gone and reset
 		self.send_chatstate('gone', jid)
+		self.contacts[jid].chatstate = None
 		
 		chat.Chat.remove_tab(self, jid, 'chats')
 		del self.contacts[jid]
