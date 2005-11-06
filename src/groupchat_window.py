@@ -49,7 +49,7 @@ gtk.glade.textdomain(APP)
 C_IMG, # image to show state (online, new message etc)
 C_TYPE, # type of the row ('contact' or 'group')
 C_NICK, # contact nickame or group name
-C_SHOWN, # text shown in the cellrenderer
+C_TEXT, # text shown in the cellrenderer
 ) = range(4)
 
 GTKGUI_GLADE = 'gtkgui.glade'
@@ -346,9 +346,6 @@ class GroupchatWindow(chat.Chat):
 		model.remove(iter)
 		if model.iter_n_children(parent_iter) == 0:
 			model.remove(parent_iter)
-
-	def escape(self, s):
-		return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 	
 	def add_contact_to_roster(self, room_jid, nick, show, role, jid, affiliation, status):
 		model = self.list_treeview[room_jid].get_model()
@@ -363,13 +360,23 @@ class GroupchatWindow(chat.Chat):
 				resource = jids[1]
 		else:
 			j = ''
+		
+		name = nick
+		# add status msg, if not empty, under contact name in the treeview
+		if status and gajim.config.get('show_status_msgs_in_roster'):  
+			status = status.strip()  
+			if status != '':  
+				# escape markup entities and make them small italic and fg color  
+				colorstring = gajim.config.get('color_for_status_msg_in_roster')  
+				name += '\n' '<span size="small" style="italic" foreground="%s">%s</span>'\
+					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))  
+		
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None,
 				(gajim.interface.roster.jabber_state_images['closed'], 'role', role,
 				'<b>%s</b>' % role_name))
-		iter = model.append(role_iter, (image, 'contact', nick,
-			self.escape(nick)))
+		iter = model.append(role_iter, (image, 'contact', nick, name))
 		gajim.gc_contacts[self.account][room_jid][nick] = \
 			Contact(jid = j, name = nick, show = show, resource = resource,
 			role = role, affiliation = affiliation, status = status)
@@ -1324,7 +1331,7 @@ current room topic.') % command, room_jid)
 
 		#status_image, type, nickname, shown_nick
 		store = gtk.TreeStore(gtk.Image, str, str, str)
-		store.set_sort_column_id(C_SHOWN, gtk.SORT_ASCENDING)
+		store.set_sort_column_id(C_TEXT, gtk.SORT_ASCENDING)
 		column = gtk.TreeViewColumn('contacts')
 		renderer_image = cell_renderer_image.CellRendererImage()
 		renderer_image.set_property('width', 20)
@@ -1332,7 +1339,7 @@ current room topic.') % command, room_jid)
 		column.add_attribute(renderer_image, 'image', 0)
 		renderer_text = gtk.CellRendererText()
 		column.pack_start(renderer_text, expand = True)
-		column.set_attributes(renderer_text, markup = C_SHOWN)
+		column.set_attributes(renderer_text, markup = C_TEXT)
 		column.set_cell_data_func(renderer_image, self.tree_cell_data_func, None)
 		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
 

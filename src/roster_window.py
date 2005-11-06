@@ -232,7 +232,7 @@ class RosterWindow:
 		if contact.status and gajim.config.get('show_status_msgs_in_roster'):
 			status = contact.status.strip()
 			if status != '':
-				# escape markup entities and make them small italic and darkgrey
+				# escape markup entities and make them small italic and fg color
 				colorstring = gajim.config.get('color_for_status_msg_in_roster')
 				name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
