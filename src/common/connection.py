@@ -1630,7 +1630,6 @@ class Connection:
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % hostname,
 				_('Check your connection or try again later')))
 			return None
-		self.password = None
 		if not self.connected: # We went offline during connecting process
 			return None
 		if hasattr(con, 'Resource'):
@@ -1641,6 +1640,9 @@ class Connection:
 			self.connected = 2
 			return con # return connection
 		else:
+			# Forget password if needed
+			if not gajim.config.get_per('accounts', self.name, 'savepass'):
+				self.password = None
 			gajim.log.debug("Couldn't authenticate to %s" % hostname)
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
