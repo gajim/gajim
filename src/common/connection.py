@@ -1489,7 +1489,7 @@ class Connection:
 		if gajim.verbose:
 			con = common.xmpp.Client(hostname, caller = self)
 		else:
-			con = common.xmpp.Client(hostname, debug = [])
+			con = common.xmpp.Client(hostname, debug = [], caller = self)
 		common.xmpp.dispatcher.DefaultTimeout = try_connecting_for_foo_secs
 		con.UnregisterDisconnectHandler(con.DisconnectHandler)
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
