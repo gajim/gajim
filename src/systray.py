@@ -350,7 +350,7 @@ class Systray:
 		gajim.interface.roster.status_combobox.set_active(index)
 
 	def on_change_status_message_activate(self, widget):
-		model = gajim.interface.status_combobox.get_model()
+		model = gajim.interface.roster.status_combobox.get_model()
 		status = model[active][2].decode('utf-8')
 		dlg = dialogs.ChangeStatusMessageDialog(status)
 		message = dlg.run()
