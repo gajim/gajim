@@ -50,15 +50,15 @@ from common import i18n
 _ = i18n._
 
 # determine which DNS resolution library is available
-HAVE_DNSPYTHON = False
-HAVE_PYDNS = False
+HAS_DNSPYTHON = False
+HAS_PYDNS = False
 try:
 	import dns.resolver # http://dnspython.org/
-	HAVE_DNSPYTHON = True
+	HAS_DNSPYTHON = True
 except ImportError:
 	try:
 		import DNS # http://pydns.sf.net/
-		HAVE_PYDNS = True
+		HAS_PYDNS = True
 	except ImportError:
 		gajim.log.debug("Could not load one of the supported DNS libraries (dnspython or pydns). SRV records will not be queried and you may need to set custom hostname/port for some servers to be accessible.")
 
@@ -1509,10 +1509,11 @@ class Connection:
 
 		hosts = []
 		# SRV resolver
-		if use_srv and (HAVE_DNSPYTHON or HAVE_PYDNS):
+		if use_srv and (HAS_DNSPYTHON or HAS_PYDNS):
 			query = '_xmpp-client._tcp.' + h
+			print query
 			try:
-				if HAVE_DNSPYTHON:
+				if HAS_DNSPYTHON:
 					answers = [x for x in dns.resolver.query(query, 'SRV')]
 					if answers:
 						for a in answers:
@@ -1520,7 +1521,7 @@ class Connection:
 											'port': int(a.port),
 											'prio': int(a.priority),
 											'weight': int(a.weight)})
-				elif HAVE_PYDNS:
+				elif HAS_PYDNS:
 					# ensure we haven't cached an old configuration
 					DNS.ParseResolvConf()
 					response = DNS.Request().req(query, qtype = 'SRV')
