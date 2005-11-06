@@ -1511,7 +1511,6 @@ class Connection:
 		# SRV resolver
 		if use_srv and (HAS_DNSPYTHON or HAS_PYDNS):
 			query = '_xmpp-client._tcp.' + h
-			print query
 			try:
 				if HAS_DNSPYTHON:
 					answers = [x for x in dns.resolver.query(query, 'SRV')]
