@@ -234,7 +234,7 @@ class RosterWindow:
 			if status != '':
 					# escape markup entities and make them small italic and darkgrey
 					colorstring = gajim.config.get('color_for_status_msg_in_roster')
-		        	name += '\n' '<span size="small" style="italic" foreground="%s">%s</span>'\
+					name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
 						% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
 
 		state_images = self.get_appropriate_state_images(jid)
