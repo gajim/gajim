@@ -312,6 +312,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.fill_jid()
 		if jid:
 			self.jid_entry.set_text(jid)
+			self.jid_entry.set_sensitive(False)
 			jid_splited = jid.split('@')
 			if jid_splited[1] in jid_agents:
 				uid = jid_splited[0].replace('%', '@')
@@ -321,6 +322,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				self.uid_entry.set_text(jid)
 				self.protocol_combobox.set_active(0)
 			self.set_nickname()
+			self.nickname_entry.grab_focus()
 
 		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
 		liststore = gtk.ListStore(str)
