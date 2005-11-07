@@ -251,6 +251,12 @@ class Interface:
 			gobject.timeout_add(30000, self.allow_notif, account)
 			model[self.roster.status_message_menuitem_iter][3] = True # sensitivity for this menuitem
 		self.roster.on_status_changed(account, status)
+		if account in self.show_vcard_when_connect:
+			jid = gajim.get_jid_from_account(account)
+			if not self.windows[account]['infos'].has_key('vcard'):
+				self.windows[account]['infos'][jid] = \
+					dialogs.VcardWindow(jid, account, True)
+				gajim.connections[account].request_vcard(jid)
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('AccountPresence', (status, account))
 	
@@ -629,8 +635,12 @@ class Interface:
 			if nick:
 				gajim.nicks[account] = nick
 		if self.windows[account]['infos'].has_key(array['jid']):
-			 win = self.windows[account]['infos'][array['jid']]
-			 win.set_values(array)
+			win = self.windows[account]['infos'][array['jid']]
+			win.set_values(array)
+			if account in self.show_vcard_when_connect:
+				win.xml.get_widget('information_notebook').set_current_page(-1)
+				win.xml.get_widget('set_avatar_button').clicked()
+				self.show_vcard_when_connect.remove(account)
 
 	def handle_event_vcard(self, account, vcard):
 		# ('VCARD', account, data)
@@ -1292,6 +1302,8 @@ class Interface:
 			self.enable_dbus()
 		else:
 			self.disable_dbus()
+
+		self.show_vcard_when_connect = []
 
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)

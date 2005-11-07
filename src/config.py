@@ -2616,7 +2616,10 @@ class AccountCreationWizardWindow:
 
 	def on_finish_button_clicked(self, widget):
 		go_online = self.xml.get_widget('go_online_checkbutton').get_active()
+		show_vcard = self.xml.get_widget('show_vcard_checkbutton').get_active()
 		self.window.destroy()
+		if show_vcard:
+			gajim.interface.show_vcard_when_connect.append(self.account)
 		if go_online:
 			gajim.interface.roster.send_status(self.account, 'online', '')
 
