@@ -1529,7 +1529,6 @@ current room topic.') % command, room_jid)
 		if model.iter_parent(iter):
 			bgcolor = gajim.config.get_per('themes', theme, 'contactbgcolor')
 		else: # it is root (eg. group)
-			print 'grp'
 			bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
 		if bgcolor:
 			renderer.set_property('cell-background', bgcolor)
