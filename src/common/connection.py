@@ -1486,13 +1486,6 @@ class Connection:
 			proxy['password'] = gajim.config.get_per('proxies', p, 'pass')
 		else:
 			proxy = None
-		if gajim.verbose:
-			con = common.xmpp.Client(hostname, caller = self)
-		else:
-			con = common.xmpp.Client(hostname, debug = [], caller = self)
-		common.xmpp.dispatcher.DefaultTimeout = try_connecting_for_foo_secs
-		con.UnregisterDisconnectHandler(con.DisconnectHandler)
-		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
 
 		h = hostname
 		p = 5222
@@ -1529,7 +1522,7 @@ class Connection:
 					if len(answers) > 0:
 						# ignore the priority and weight for now
 						for a in answers:
-							prio, weight, port, host = answers[0]['data']
+							prio, weight, port, host = a['data']
 							hosts.append({'host': host,
 											'port': port,
 											'prio': prio,
@@ -1544,6 +1537,13 @@ class Connection:
 
 		con_type = None
 		while len(hosts) and not con_type:
+			if gajim.verbose:
+				con = common.xmpp.Client(hostname, caller = self)
+			else:
+				con = common.xmpp.Client(hostname, debug = [], caller = self)
+			common.xmpp.dispatcher.DefaultTimeout = try_connecting_for_foo_secs
+			con.UnregisterDisconnectHandler(con.DisconnectHandler)
+
 			host = self.select_next_host(hosts)
 			hosts.remove(host)
 			con_type = con.connect((host['host'], host['port']), proxy = proxy,
@@ -1561,6 +1561,7 @@ class Connection:
 					_('Check your connection or try again later.')))
 			return None, ''
 		
+		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
 		gajim.log.debug(_('Connected to server %s:%s with %s') % (host['host'],
 			host['port'], con_type))
 		return con, con_type
