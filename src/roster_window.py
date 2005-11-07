@@ -215,7 +215,22 @@ class RosterWindow:
 			return self.transports_state_images[transport]
 		return self.jabber_state_images
 
-	def draw_contact(self, jid, account):
+	def _get_fade_color(self, selected):
+		'''get a gdk color that is halfway between foreground and background
+		colors of the cell'''
+		style = self.tree.style
+		if selected:
+			state = gtk.STATE_SELECTED
+		else:
+			state = gtk.STATE_NORMAL
+		bg = style.base[state]
+		fg = style.text[state]
+
+		return gtk.gdk.Color((bg.red + fg.red)/2,
+					(bg.green + fg.green)/2,
+					(bg.blue + fg.blue)/2)
+
+	def draw_contact(self, jid, account, selected=False):
 		'''draw the correct state image and name'''
 		model = self.tree.get_model()
 		iters = self.get_contact_iter(jid, account)
@@ -233,7 +248,8 @@ class RosterWindow:
 			status = contact.status.strip()
 			if status != '':
 				# escape markup entities and make them small italic and fg color
-				colorstring = gajim.config.get('color_for_status_msg_in_roster')
+				color = self._get_fade_color(selected)
+				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
 				name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
 
@@ -2055,7 +2071,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.update_status_comboxbox()
 
 	def repaint_themed_widgets(self):
-		"""Notify windows that contain themed widgets to repaint them"""
+		'''Notify windows that contain themed widgets to repaint them'''
 		for account in gajim.connections:
 			# Update opened chat windows/tabs
 			for jid in gajim.interface.windows[account]['chats']:
@@ -2341,10 +2357,48 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			return True
 		return False
 
+	def iter_contact_rows(self):
+		'''iterate over all contact rows in the tree model'''
+		model = self.tree.get_model()
+		account_iter = model.get_iter_root()
+		while account_iter:
+			group_iter = model.iter_children(account_iter)
+			while group_iter:
+				contact_iter = model.iter_children(group_iter)
+				while contact_iter:
+					yield model[contact_iter]
+					contact_iter = model.iter_next(contact_iter)
+				group_iter = model.iter_next(group_iter)
+			account_iter = model.iter_next(account_iter)
+
+	def _on_treeview_style_set(self, treeview, style):
+		'''When style (theme) changes, redraw all contacts'''
+		for contact in self.iter_contact_rows():
+			self.draw_contact(contact[C_JID], contact[C_ACCOUNT])
+
+	def _on_treeview_selection_changed(self, selection):
+		model, selected_iter = selection.get_selected()
+		if self._last_selected_contact is not None:
+			# update unselected row
+			jid, account = self._last_selected_contact
+			self.draw_contact(jid, account)
+		if selected_iter is None:
+			self._last_selected_contact = None
+			return
+		contact = model[selected_iter]
+		self._last_selected_contact = (contact[C_JID], contact[C_ACCOUNT])
+		if contact[C_TYPE] != 'contact':
+			return
+		self.draw_contact(contact[C_JID], contact[C_ACCOUNT], selected=True)
+
 	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
 		self.window = self.xml.get_widget('roster_window')
 		self.tree = self.xml.get_widget('roster_treeview')
+		self.tree.get_selection().connect('changed',
+			self._on_treeview_selection_changed)
+		self.tree.connect('style-set', self._on_treeview_style_set)
+		self._last_selected_contact = None # None or holds jid, account tupple
 		self.nb_unread = 0
 		self.last_save_dir = None
 		self.editing_path = None  # path of row with cell in edit mode

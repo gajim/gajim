@@ -155,7 +155,6 @@ class Config:
 		'set_xmpp://_handler_everytime': [opt_bool, False, _('If True, Gajim registers for xmpp:// on each startup.')],
 		'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
 		'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window')],
-		'color_for_status_msg_in_roster': [opt_str, 'dimgrey', ''],
 	}
 
 	__options_per_key = {
