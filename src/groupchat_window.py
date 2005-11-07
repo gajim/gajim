@@ -363,16 +363,16 @@ class GroupchatWindow(chat.Chat):
 		
 		name = nick
 		# add status msg, if not empty, under contact name in the treeview
-		if status and gajim.config.get('show_status_msgs_in_roster'):  
-			status = status.strip()  
+		if status and gajim.config.get('show_status_msgs_in_roster'):
+			status = status.strip()
 			if status != '':
 				colorstring = 'dimgrey'
-				# escape markup entities and make them small italic and fg color  
+				# escape markup entities and make them small italic and fg color
 				#color = gtkgui_helpers._get_fade_color(self.list_treeview[room_jid],
 				#	selected)
 				#colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
 				name += '\n' '<span size="small" style="italic" foreground="%s">%s</span>'\
-					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))  
+					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
 		
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
@@ -1529,8 +1529,12 @@ current room topic.') % command, room_jid)
 		if model.iter_parent(iter):
 			bgcolor = gajim.config.get_per('themes', theme, 'contactbgcolor')
 		else: # it is root (eg. group)
+			print 'grp'
 			bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
-		renderer.set_property('cell-background', bgcolor)
+		if bgcolor:
+			renderer.set_property('cell-background', bgcolor)
+		else:
+			renderer.set_property('cell-background', None)
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		'''popup user's group's or agent menu'''
