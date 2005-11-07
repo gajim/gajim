@@ -312,7 +312,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.fill_jid()
 		if jid:
 			self.jid_entry.set_text(jid)
-			self.jid_entry.set_sensitive(False)
+			self.uid_entry.set_sensitive(False)
 			jid_splited = jid.split('@')
 			if jid_splited[1] in jid_agents:
 				uid = jid_splited[0].replace('%', '@')
