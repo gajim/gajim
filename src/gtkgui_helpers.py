@@ -383,3 +383,18 @@ def file_is_locked(path_to_file):
 	else: # in case all went ok, close file handle (go to hell WinAPI)
 		hfile.Close()
 		return False
+
+def _get_fade_color(treeview, selected):
+	'''get a gdk color that is halfway between foreground and background
+	colors of the cell for the given treeview'''
+	style = treeview.style
+	if selected:
+		state = gtk.STATE_SELECTED
+	else:
+		state = gtk.STATE_NORMAL
+	bg = style.base[state]
+	fg = style.text[state]
+
+	return gtk.gdk.Color((bg.red + fg.red)/2,
+				(bg.green + fg.green)/2,
+				(bg.blue + fg.blue)/2)

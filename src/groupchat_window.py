@@ -365,9 +365,12 @@ class GroupchatWindow(chat.Chat):
 		# add status msg, if not empty, under contact name in the treeview
 		if status and gajim.config.get('show_status_msgs_in_roster'):  
 			status = status.strip()  
-			if status != '':  
+			if status != '':
+				colorstring = 'dimgrey'
 				# escape markup entities and make them small italic and fg color  
-				colorstring = gajim.config.get('color_for_status_msg_in_roster')  
+				#color = gtkgui_helpers._get_fade_color(self.list_treeview[room_jid],
+				#	selected)
+				#colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
 				name += '\n' '<span size="small" style="italic" foreground="%s">%s</span>'\
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))  
 		
@@ -1294,6 +1297,44 @@ current room topic.') % command, room_jid)
 		message_textview = self.message_textviews[room_jid]
 		message_textview.set_sensitive(False)
 		self.xmls[room_jid].get_widget('send_button').set_sensitive(False)
+		
+	def iter_contact_rows(self):
+		'''iterate over all contact rows in the tree model'''
+		return # FIXME: impl
+		model = self.tree.get_model()
+		account_iter = model.get_iter_root()
+		while account_iter:
+			group_iter = model.iter_children(account_iter)
+			while group_iter:
+				contact_iter = model.iter_children(group_iter)
+				while contact_iter:
+					yield model[contact_iter]
+					contact_iter = model.iter_next(contact_iter)
+				group_iter = model.iter_next(group_iter)
+			account_iter = model.iter_next(account_iter)
+
+	def _on_list_treeview_style_set(self, treeview, style):
+		'''When style (theme) changes, redraw all contacts'''
+		return # FIXME: impl
+		for contact in self.iter_contact_rows():
+			self.draw_contact(contact[C_JID], contact[C_ACCOUNT])
+
+	def _on_list_treeview_selection_changed(self, selection):
+		return # FIXME: impl
+		model, selected_iter = selection.get_selected()
+		if self._last_selected_contact is not None:
+			# update unselected row
+			jid, account = self._last_selected_contact
+			self.draw_contact(jid, account)
+		if selected_iter is None:
+			self._last_selected_contact = None
+			return
+		contact = model[selected_iter]
+		self._last_selected_contact = (contact[C_JID], contact[C_ACCOUNT])
+		if contact[C_TYPE] != 'contact':
+			return
+		self.draw_contact(contact[C_JID], contact[C_ACCOUNT], selected=True)
+
 
 	def new_room(self, room_jid, nick):
 		self.names[room_jid] = room_jid.split('@')[0]
@@ -1308,8 +1349,13 @@ current room topic.') % command, room_jid)
 		self.allow_focus_out_line[room_jid] = True
 		self.last_key_tabs[room_jid] = False
 		self.hpaneds[room_jid] = self.xmls[room_jid].get_widget('hpaned')
-		self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
+		list_treeview = self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
 			'list_treeview')
+		list_treeview.get_selection().connect('changed',
+			self._on_list_treeview_selection_changed)
+		list_treeview.connect('style-set', self._on_list_treeview_style_set)
+		self._last_selected_contact = None # None or holds jid, account tupple
+		
 		self.subject_tooltip[room_jid] = gtk.Tooltips()
 		
 		chat.Chat.new_tab(self, room_jid)

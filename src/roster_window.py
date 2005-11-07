@@ -215,21 +215,6 @@ class RosterWindow:
 			return self.transports_state_images[transport]
 		return self.jabber_state_images
 
-	def _get_fade_color(self, selected):
-		'''get a gdk color that is halfway between foreground and background
-		colors of the cell'''
-		style = self.tree.style
-		if selected:
-			state = gtk.STATE_SELECTED
-		else:
-			state = gtk.STATE_NORMAL
-		bg = style.base[state]
-		fg = style.text[state]
-
-		return gtk.gdk.Color((bg.red + fg.red)/2,
-					(bg.green + fg.green)/2,
-					(bg.blue + fg.blue)/2)
-
 	def draw_contact(self, jid, account, selected=False):
 		'''draw the correct state image and name'''
 		model = self.tree.get_model()
@@ -248,7 +233,7 @@ class RosterWindow:
 			status = contact.status.strip()
 			if status != '':
 				# escape markup entities and make them small italic and fg color
-				color = self._get_fade_color(selected)
+				color = gtkgui_helpers._get_fade_color(self.tree, selected)
 				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
 				name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
