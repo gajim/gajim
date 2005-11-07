@@ -750,7 +750,7 @@ class Chat:
 			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
 				conv_textview = self.conversation_textviews[jid]
 				rect = conv_textview.get_visible_rect()
-				iter = conv_textview.get_iter_at_location(rect.x,\
+				iter = conv_textview.get_iter_at_location(rect.x,
 					rect.y + rect.height)
 				conv_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
 		elif event.keyval == gtk.keysyms.Page_Up: 
@@ -759,7 +759,6 @@ class Chat:
 				rect = conv_textview.get_visible_rect()
 				iter = conv_textview.get_iter_at_location(rect.x, rect.y)
 				conv_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
-				# or event.keyval == gtk.keysyms.KP_Up
 		elif event.keyval == gtk.keysyms.Up: 
 			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + UP
 				conversation_scrolledwindow = self.xml.get_widget('conversation_scrolledwindow')
