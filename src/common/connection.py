@@ -1510,7 +1510,8 @@ class Connection:
 		hosts = []
 		# SRV resolver
 		if use_srv and (HAS_DNSPYTHON or HAS_PYDNS):
-			query = '_xmpp-client._tcp.' + h.decode('utf-8')
+			# query should not be Unicode instance or dnspython TBs!
+			query = '_xmpp-client._tcp.' + h.encode('utf-8')
 			try:
 				if HAS_DNSPYTHON:
 					answers = [x for x in dns.resolver.query(query, 'SRV')]
