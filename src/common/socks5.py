@@ -120,7 +120,7 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 			for host in file_props['streamhosts']:
 				if host['state'] != -1:
 					return
-		if file_props['failure_cb']:
+		if file_props.has_key('failure_cb') and file_props['failure_cb']:
 			file_props['failure_cb'](streamhost['initiator'], streamhost['id'], 
 				file_props['sid'], code = 404)
 		
