@@ -143,6 +143,19 @@ class RosterWindow:
 		elif user.groups == []:
 			user.groups.append(_('General'))
 
+		hide = True
+		if user.sub in ('both', 'to'):
+			hide = False
+		elif user.ask == 'subscribe':
+			hide = False
+		# FIXME: uncomment when we support contacts in no group
+#		elif user.name or len(user.groups):
+		elif user.name:
+			hide = False
+
+		# JEP-0162
+		if hide:
+			return
 		if user.show in ('offline', 'error') and \
 		   not showOffline and (not _('Transports') in user.groups or \
 			gajim.connections[account].connected < 2) and \
