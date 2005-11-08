@@ -1,4 +1,4 @@
-##	common/GnuPG.py
+# ##	common/GnuPG.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -105,24 +105,24 @@ else:
 				return str
 			proc = self.run(['-b', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status', 'stderr'])
 			proc.handles['stdin'].write(str)
-			 try:
-				 proc.handles['stdin'].close()
-			 except IOError:
-				 pass
+			try:
+				proc.handles['stdin'].close()
+			except IOError:
+				pass
 
 			output = proc.handles['stdout'].read()
-			 try:
-				 proc.handles['stdout'].close()
-				 proc.handles['stderr'].close()
-			 except IOError:
-				 pass
+			try:
+				proc.handles['stdout'].close()
+				proc.handles['stderr'].close()
+			except IOError:
+				pass
 
 			stat = proc.handles['status']
 			resp = self._read_response(stat)
-			 try:
-				 proc.handles['status'].close()
-			 except IOError:
-				 pass
+			try:
+				proc.handles['status'].close()
+			except IOError:
+				pass
 
 			try: proc.wait()
 			except IOError: pass
