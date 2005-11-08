@@ -1366,7 +1366,11 @@ class AccountModificationWindow:
 _('Without a connection, you can not edit your personal information.')
 ).get_response()
 			return
-		if not gajim.interface.windows[self.account]['infos'].has_key('vcard'):
+		
+		# in infos the key jid is OUR jid so we save the vcardwindow instance there
+		if gajim.interface.windows[self.account]['infos'].has_key(jid):
+			gajim.interface.windows[self.account]['infos'][jid].window.present()
+		else:
 			gajim.interface.windows[self.account]['infos'][jid] = \
 				dialogs.VcardWindow(jid, self.account, True)
 			gajim.connections[self.account].request_vcard(jid)
