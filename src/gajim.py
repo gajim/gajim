@@ -908,8 +908,10 @@ class Interface:
 			self.add_event(account, jid, msg_type, file_props)
 
 		if gajim.config.get('notify_on_file_complete') and \
-			gajim.config.get('autopopupaway') or \
-			gajim.connections[account].connected in (2, 3):
+			(gajim.config.get('autopopupaway') or \
+			gajim.connections[account].connected in (2, 3)):
+			# we want to be notified and we are online/chat or we don't mind
+			# bugged when away/na/busy
 			instance = dialogs.PopupNotificationWindow(event_type, jid, account,
 				msg_type, file_props)
 			self.roster.popup_notification_windows.append(instance)
