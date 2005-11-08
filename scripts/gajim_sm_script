@@ -1,0 +1,3 @@
+#!/bin/sh
+cd /home/nk/gajim/trunk/src
+exec python -OOt gajim.py $0 $@
