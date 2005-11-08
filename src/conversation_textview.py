@@ -544,7 +544,24 @@ class ConversationTextview(gtk.TextView):
 				tim = time.localtime()
 			before_str = gajim.config.get('before_time')
 			after_str = gajim.config.get('after_time')
-			format = before_str + '%H:%M:%S' + after_str
+			msg_day = time.strftime('%d', tim)
+			day = time.strftime('%d')
+			diff_day = 0
+			while day != msg_day:
+				diff_day += 1
+				before_tim = time.localtime(time.time()-24*3600*diff_day)
+				day = time.strftime('%d', before_tim)
+			if diff_day == 0:
+				day_str = ''
+			elif diff_day == 1:
+				day_str = _('Yesterday')
+			else:
+				#the number is >= 2
+				day_str = _('%i days ago') % diff_day
+			format = before_str
+			if day_str:
+				format += day_str + ' '
+			format += '%H:%M:%S' + after_str
 			tim_format = time.strftime(format, tim)
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
