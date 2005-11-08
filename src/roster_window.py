@@ -974,7 +974,7 @@ class RosterWindow:
 		
 		menu = gtk.Menu()
 
-		rename_item = gtk.ImageMenuItem(_('Rename'))
+		rename_item = gtk.ImageMenuItem(_('Re_name'))
 		rename_icon = gtk.image_new_from_stock(gtk.STOCK_REFRESH,
 			gtk.ICON_SIZE_MENU)
 		rename_item.set_image(rename_icon)
