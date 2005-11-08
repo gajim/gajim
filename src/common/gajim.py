@@ -49,7 +49,7 @@ if os.name == 'nt':
 	except KeyError:
 		# win9x, ./logs
 		LOGPATH = 'Logs'
-		LOGPATH = 'Vcards'
+		VCARDPATH = 'Vcards'
 try:
 	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
 	VCARDPATH = VCARDPATH.decode(sys.getfilesystemencoding())
