@@ -1,20 +1,20 @@
 # German translations for gajim package.
 # Copyright (C) 2005 THE gajim'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gajim package.
-# Fridtjof Busse <fbusse@gmx.de>, 2005.
+# Fridtjof Busse <fridtjof@fbunet.de>, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 13:07+0700\n"
-"PO-Revision-Date: 2005-09-21 07:46+0200\n"
-"Last-Translator: Fridtjof Busse <fbusse@gmx.de>\n"
+"POT-Creation-Date: 2005-09-17 16:55+0300\n"
+"PO-Revision-Date: 2005-11-08 12:41+0100\n"
+"Last-Translator: Fridtjof Busse <fridtjof@fbunet.de>\n"
 "Language-Team: German <translators@gajim.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../gajim.desktop.in.h:1
 msgid "A GTK+ Jabber client"
@@ -33,8 +33,9 @@ msgid ""
 "When we remove a contact, remove both his and our subscription, so we do not "
 "receive his presence anymore and he ours."
 msgstr ""
-"Wenn wir einen Kontakt entfernen, lösche sowohl sein als auch unser Abonnement, damit"
-"wir nicht mehr gegenseitig über die Präsenz informiert werden"
+"Wenn wir einen Kontakt entfernen, lösche sowohl sein als auch unser "
+"Abonnement, damitwir nicht mehr gegenseitig über die Präsenz informiert "
+"werden"
 
 #: ../src/common/config.py:50
 msgid "Time in minutes, after which your status changes to away."
@@ -56,7 +57,8 @@ msgstr "Nicht verfügbar, da untätig"
 msgid ""
 "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
 msgstr ""
-"Falls wahr, entferne */_ nicht. So wird *abc* fett aber * * wird nicht entfernt."
+"Falls wahr, entferne */_ nicht. So wird *abc* fett aber * * wird nicht "
+"entfernt."
 
 #: ../src/common/config.py:114
 msgid "Add * and [n] in roster title?"
@@ -67,12 +69,13 @@ msgid ""
 "How many lines to remember from previous conversation when a chat tab/window "
 "is reopened."
 msgstr ""
-"Wie viele Zeilen von der vorherigen Unterhaltung gespeichert werden, wenn ein Chat "
-"Tab/Fenster wieder geöffnet wird."
+"Wie viele Zeilen von der vorherigen Unterhaltung gespeichert werden, wenn "
+"ein Chat Tab/Fenster wieder geöffnet wird."
 
 #: ../src/common/config.py:116
 msgid "How many minutes should last lines from previous conversation last."
-msgstr "Wie viele Minuten die Zeilen vom vorherigen Chat angezeigt werden sollen."
+msgstr ""
+"Wie viele Minuten die Zeilen vom vorherigen Chat angezeigt werden sollen."
 
 #: ../src/common/config.py:117
 msgid ""
@@ -92,8 +95,8 @@ msgid ""
 "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
 "which means use wiktionary."
 msgstr ""
-"Entweder eine spezielle URL mit %s, wobei %s das Word/Phrase ist oder 'WIKTIONARY', "
-"was bedeutet, dass ein Wörterbuch verwendet wird."
+"Entweder eine spezielle URL mit %s, wobei %s das Word/Phrase ist oder "
+"'WIKTIONARY', was bedeutet, dass ein Wörterbuch verwendet wird."
 
 #: ../src/common/config.py:126
 msgid "Allow controlling Gajim via D-Bus service."
@@ -119,7 +122,8 @@ msgid ""
 "Overrides the host we send for File Transfer in case of address translation/"
 "port forwarding."
 msgstr ""
-"Überschreibt den Host für Datenübertragung für den Fall von NAT/Port-Forwarding"
+"Überschreibt den Host für Datenübertragung für den Fall von NAT/Port-"
+"Forwarding"
 
 #: ../src/common/config.py:136
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -142,8 +146,8 @@ msgid ""
 "If True, quits Gajim when X button of Window Manager is clicked. This option "
 "make sense only if trayicon is used."
 msgstr ""
-"Falls wahr, wird Gajim beendet, wenn der X-Button des Fenstermanagers geklickt wird."
-"Diese Option macht nur mit dem Trayicon-Unterstützung Sinn."
+"Falls wahr, wird Gajim beendet, wenn der X-Button des Fenstermanagers "
+"geklickt wird.Diese Option macht nur mit dem Trayicon-Unterstützung Sinn."
 
 #: ../src/common/config.py:150
 msgid "If True, Gajim registers for xmpp:// on each startup."
@@ -154,8 +158,8 @@ msgid ""
 "If True, Gajim will display an icon on each tab containing unread messages. "
 "Depending on the theme, this icon may be animated."
 msgstr ""
-"Falls wahr. wird Gajim ein Icon auf jedem Tab mit ungelesenen Nachrichten anzeigen."
-"Abhängig vom Theme ist dieses Icon animiert."
+"Falls wahr. wird Gajim ein Icon auf jedem Tab mit ungelesenen Nachrichten "
+"anzeigen.Abhängig vom Theme ist dieses Icon animiert."
 
 #: ../src/common/config.py:304
 msgid "Sleeping"
@@ -163,11 +167,11 @@ msgstr "Schlafen"
 
 #: ../src/common/config.py:305
 msgid "Back soon"
-msgstr "Gleich wieder da"
+msgstr "Bin gleich wieder da"
 
 #: ../src/common/config.py:305
 msgid "Back in some minutes."
-msgstr "Ich bin in ein paar Minuten zurück."
+msgstr "Bin in ein paar Minuten zurück."
 
 #: ../src/common/config.py:306
 msgid "Eating"
@@ -276,7 +280,9 @@ msgstr "Sie sind nicht in der Mitgliedliste"
 
 #: ../src/common/connection.py:401
 msgid "Your desired nickname is in use or registered by another user."
-msgstr "Der gwünschte Benutzername wird bereits verwendet oder von einem anderen Benutzer registriert"
+msgstr ""
+"Der gwünschte Benutzername wird bereits verwendet oder von einem anderen "
+"Benutzer registriert"
 
 #: ../src/common/connection.py:426 ../src/common/connection.py:448
 #: ../src/common/connection.py:477
@@ -842,11 +848,11 @@ msgstr "Sie müssen angemeldet sein um Dienste zu durchsuchen"
 #: ../src/config.py:2043
 #, python-format
 msgid "Service Discovery using %s account"
-msgstr "Dienste Durchsuchen für Konto %s"
+msgstr "Dienste durchsuchen für Konto %s"
 
 #: ../src/config.py:2045
 msgid "Service Discovery"
-msgstr "Dienste Durchsuchen"
+msgstr "Dienste durchsuchen"
 
 #: ../src/config.py:2065
 msgid "Service"
@@ -1243,7 +1249,9 @@ msgstr "vCard Veröffentlichung fehlgeschlagen"
 
 #: ../src/gajim.py:829
 msgid "There was an error while publishing your vCard, try again later."
-msgstr "Bei der Veröffentlichung Ihrer vCard ist ein Fehler aufgetreten, versuchen Sie es später nochmals."
+msgstr ""
+"Bei der Veröffentlichung Ihrer vCard ist ein Fehler aufgetreten, versuchen "
+"Sie es später nochmals."
 
 #. it is good to notify the user
 #. in case he cannot see the output of the console
@@ -1253,7 +1261,8 @@ msgstr "Kann Einstellungen nicht speichern"
 
 #: ../src/gajim.py:1233
 msgid "Session Management support not available (missing gnome.ui module)"
-msgstr "Sitzungsmanagment-Unterstützung nicht verfügbar (fehlendes gnome.ui Modul)"
+msgstr ""
+"Sitzungsmanagment-Unterstützung nicht verfügbar (fehlendes gnome.ui Modul)"
 
 #: ../src/gajim_themes_window.py:62
 msgid "Theme"
@@ -1411,16 +1420,18 @@ msgid ""
 "is currently in the room, he/she/it will also be kicked. Does NOT support "
 "spaces in nickname."
 msgstr ""
-"Bedienung: /%s <Spitzname|JID> [Grund], bannt die JID aus dem Raum. Der Spitzname"
-"eines Inhabers kann hinzugefügt werden, aber nicht, wenn es ein \"@\" enthält. Wenn die JID"
-"derzeit im Raum ist, wird er/sie/es ebenfalls gebannt. Unterstützt KEINE Leerzeichen im Spitznamen."
+"Bedienung: /%s <Spitzname|JID> [Grund], bannt die JID aus dem Raum. Der "
+"Spitznameeines Inhabers kann hinzugefügt werden, aber nicht, wenn es ein \"@"
+"\" enthält. Wenn die JIDderzeit im Raum ist, wird er/sie/es ebenfalls "
+"gebannt. Unterstützt KEINE Leerzeichen im Spitznamen."
 
 #: ../src/groupchat_window.py:789
 #, python-format
 msgid ""
 "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
 msgstr ""
-"Bedienung: /%s <Spitzname>, öffnet ein privates Chatfenster mit dem spezifierten Inhaber."
+"Bedienung: /%s <Spitzname>, öffnet ein privates Chatfenster mit dem "
+"spezifierten Inhaber."
 
 #: ../src/groupchat_window.py:792
 #, python-format
@@ -1456,8 +1467,8 @@ msgid ""
 "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
 "using specified nickname."
 msgstr ""
-"Bedienung: /$s <Raum>@<Server> [/Spitzname], bietet den Beitritt zu Raum@Server an, "
-"optional mit Spitznamen."
+"Bedienung: /$s <Raum>@<Server> [/Spitzname], bietet den Beitritt zu "
+"Raum@Server an, optional mit Spitznamen."
 
 #: ../src/groupchat_window.py:807
 #, python-format
@@ -1466,24 +1477,28 @@ msgid ""
 "from the room and optionally displays a reason. Does NOT support spaces in "
 "nickname."
 msgstr ""
-"Bedienung: /%s <Spitzname> [Grund], verweist den Inhaber des Spitznamen des Raumes "
-"und zeigt optional einen Grund. Unterstützt KEINE Leerzeichen im Spitznamen."
+"Bedienung: /%s <Spitzname> [Grund], verweist den Inhaber des Spitznamen des "
+"Raumes und zeigt optional einen Grund. Unterstützt KEINE Leerzeichen im "
+"Spitznamen."
 
 #: ../src/groupchat_window.py:811
 #, python-format
 msgid ""
 "Usage: /%s <action>, sends action to the current room. Use third person. (e."
 "g. /%s explodes.)"
-msgstr "Bedienung: /%s <Aktion>, sendet die Aktion im aktuellen Raum. Verwende dritte Person, "
-"z.B. /%s explodiert)."
+msgstr ""
+"Bedienung: /%s <Aktion>, sendet die Aktion im aktuellen Raum. Verwende "
+"dritte Person, z.B. /%s explodiert)."
 
 #: ../src/groupchat_window.py:815
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [message], opens a private message window and sends "
 "message to the occupant specified by nickname."
-msgstr "Bedienung: /%s <Spitzname> [Nachricht], öffnet ein privates Nachrichtenfenster und "
-"sendet die Nachricht zum Inhaber des angegebenen Spitznamen."
+msgstr ""
+"Bedienung: /%s <Spitzname> [Nachricht], öffnet ein privates "
+"Nachrichtenfenster und sendet die Nachricht zum Inhaber des angegebenen "
+"Spitznamen."
 
 #: ../src/groupchat_window.py:818
 #, python-format
@@ -1493,7 +1508,8 @@ msgstr "Bedienung: /%s <Spitzname>, ändert den Spitznamen im aktuellen Raum."
 #: ../src/groupchat_window.py:821
 #, python-format
 msgid "Usage: /%s [topic], displays or updatesthe current room topic."
-msgstr "Benutzung: /%s [topic] zeigt oder aktualisiert das derzeitige Raumthema"
+msgstr ""
+"Benutzung: /%s [topic] zeigt oder aktualisiert das derzeitige Raumthema"
 
 #: ../src/groupchat_window.py:824
 #, python-format
@@ -1521,7 +1537,9 @@ msgstr "%s verbannen"
 #: ../src/gtkgui_helpers.py:236
 #, python-format
 msgid "Could not write to %s. Session Management support will not work"
-msgstr "Konnte nicht an %s schreiben. Sitzungmanagment-Unterstützung wird nicht funktionieren"
+msgstr ""
+"Konnte nicht an %s schreiben. Sitzungmanagment-Unterstützung wird nicht "
+"funktionieren"
 
 #: ../src/history_window.py:138
 #, python-format
@@ -1633,7 +1651,7 @@ msgstr "_Ändern"
 
 #: ../src/roster_window.py:944 ../src/gtkgui.glade.h:376
 msgid "_Remove from Roster"
-msgstr "Entfernen von Kontaktliste"
+msgstr "Entfernen von _Kontaktliste"
 
 #: ../src/roster_window.py:1046
 msgid "Authorization has been sent"
@@ -1703,8 +1721,8 @@ msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
 msgstr ""
-"Wenn Sie Ihren Status auf unsichtbar setzen, werden sie von diesen Gruppenchats "
-"getrennt. Sind Sie sicher, dass sie unsichtbar werden möchten?"
+"Wenn Sie Ihren Status auf unsichtbar setzen, werden sie von diesen "
+"Gruppenchats getrennt. Sind Sie sicher, dass sie unsichtbar werden möchten?"
 
 #: ../src/roster_window.py:1338
 msgid "No account available"
@@ -2022,7 +2040,7 @@ msgstr "Sende _Betriebssystem-Information"
 #: ../src/gtkgui.glade.h:52
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
-"Popups/Benachrichtigungen zulassen, wenn ich _abwesend/NA/beschäftigt/"
+"Popups/Benachrichtigungen _zulassen, wenn ich abwesend/NA/beschäftigt/"
 "unsichtbar bin"
 
 #: ../src/gtkgui.glade.h:53
@@ -2107,7 +2125,8 @@ msgstr "Bricht den ausgewählten Dateitransfer ab"
 
 #: ../src/gtkgui.glade.h:74
 msgid "Cancels the selected file transfer and removes incomplete file"
-msgstr "Bricht den ausgewählten Dateitransfer ab und löscht unvollständige Daten"
+msgstr ""
+"Bricht den ausgewählten Dateitransfer ab und löscht unvollständige Daten"
 
 #: ../src/gtkgui.glade.h:75
 msgid "Chan_ge Password"
@@ -2319,7 +2338,7 @@ msgstr "Dateitransfers"
 
 #: ../src/gtkgui.glade.h:125
 msgid "File _Transfers"
-msgstr "Datei_transfers"
+msgstr "_Dateitransfers"
 
 #: ../src/gtkgui.glade.h:126
 msgid "File manager:"
@@ -2354,8 +2373,8 @@ msgid ""
 "Gajim can send and receive meta-information related to a conversation you "
 "may have with a contact"
 msgstr ""
-"Gajim kann Meta-Information, die eine Unterhaltung mit einem Kontakt betrifft,"
-" empfangen und versenden"
+"Gajim kann Meta-Information, die eine Unterhaltung mit einem Kontakt "
+"betrifft, empfangen und versenden"
 
 #: ../src/gtkgui.glade.h:135
 msgid ""
@@ -2439,7 +2458,7 @@ msgstr "Ich möchte ein neues Konto _erstellen"
 
 #: ../src/gtkgui.glade.h:153
 msgid "I would like to add you to my contact list."
-msgstr "Ich würde Sie gerne zu meiner Kontaktliste hinzufügen."
+msgstr "Ich würde Dich gerne zu meiner Kontaktliste hinzufügen."
 
 #: ../src/gtkgui.glade.h:154
 msgid "If checked, Gajim will also have a trayicon"
@@ -2509,8 +2528,9 @@ msgid ""
 "bottom of the roster window) will change the status of this account "
 "accordingly"
 msgstr ""
-"Wenn gewählt, wird jede Änderung des globalen Status (verwaltet von der Combobox "
-"am Fuße des Kontaktfenster) auch den Status dieses Kontakts entsprechend ändern"
+"Wenn gewählt, wird jede Änderung des globalen Status (verwaltet von der "
+"Combobox am Fuße des Kontaktfenster) auch den Status dieses Kontakts "
+"entsprechend ändern"
 
 #: ../src/gtkgui.glade.h:164
 msgid ""
@@ -2838,11 +2858,11 @@ msgstr "_Datei Senden"
 
 #: ../src/gtkgui.glade.h:247
 msgid "Send _New Message"
-msgstr "Sende neue Nachricht"
+msgstr "Sende _neue Nachricht"
 
 #: ../src/gtkgui.glade.h:248
 msgid "Send _New Message..."
-msgstr "Sende _Neue Nachricht..."
+msgstr "Sende _neue Nachricht..."
 
 #: ../src/gtkgui.glade.h:249
 msgid "Send keep-alive packets"
@@ -2894,7 +2914,7 @@ msgstr "Zeige _XML Konsole"
 
 #: ../src/gtkgui.glade.h:261
 msgid "Show only in _roster"
-msgstr "Nur in der Kontaktliste anzeigen"
+msgstr "Nur in der _Kontaktliste anzeigen"
 
 #: ../src/gtkgui.glade.h:262
 msgid "Shows a list of file transfers between you and other"
@@ -3161,7 +3181,7 @@ msgstr "_Ablehnen"
 
 #: ../src/gtkgui.glade.h:326
 msgid "_Discover Services"
-msgstr "Dienste durchsuchen"
+msgstr "_Dienste durchsuchen"
 
 #: ../src/gtkgui.glade.h:327
 msgid "_Discover Services..."
@@ -3383,7 +3403,7 @@ msgstr "_Sende Servernachricht"
 
 #: ../src/gtkgui.glade.h:384
 msgid "_Send Single Message"
-msgstr "_Sende Einzelne Nachricht"
+msgstr "Sende _einzelne Nachricht"
 
 #: ../src/gtkgui.glade.h:385
 msgid "_Server:"
@@ -3630,12 +3650,12 @@ msgstr "Möchten Sie die Datei überschreiben?"
 #: ../src/filetransfers_window.py:405
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
-msgstr ""
+msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
 #: ../src/filetransfers_window.py:449
 #, python-format
 msgid "(%s/s)"
-msgstr ""
+msgstr "(%s/s)"
 
 #: ../src/filetransfers_window.py:703
 msgid "Pause"
@@ -3714,9 +3734,10 @@ msgstr ""
 "aktiviert ist"
 
 #: ../src/gajim-remote.py:115
-#, fuzzy
 msgid "Show the chat dialog so that you can send messages to a contact"
-msgstr "Zeige Chatfenster, so dass eine Nachricht gesendet werden kann"
+msgstr ""
+"Zeige Chatfenster, so dass eine Nachricht an einen Kontakt gesendet werden "
+"kann"
 
 #: ../src/gajim-remote.py:118
 msgid "JID of the contact that you want to chat with"
@@ -3790,8 +3811,8 @@ msgid ""
 "Set value of 'key' to 'value'. If there is no such key, new item in the "
 "preferences is inserted."
 msgstr ""
-"Setze den Wert von 'key' auf 'value'. Wenn kein solcher key existiert wird"
-"eine neuer Wert in den Einstellungen erstellt."
+"Setze den Wert von 'key' auf 'value'. Wenn kein solcher key existiert "
+"wirdeine neuer Wert in den Einstellungen erstellt."
 
 #: ../src/gajim-remote.py:162
 msgid "key=value"
@@ -3799,7 +3820,9 @@ msgstr "key=value"
 
 #: ../src/gajim-remote.py:162
 msgid "'key' is the name of the preference, 'value' is the value to set it to"
-msgstr "'key' ist der Name der Einstellung, 'value' ist der Wert der einzustellende Wert"
+msgstr ""
+"'key' ist der Name der Einstellung, 'value' ist der Wert der einzustellende "
+"Wert"
 
 #: ../src/gajim-remote.py:167
 msgid "Delete a preference item"
@@ -3903,7 +3926,8 @@ msgstr "Es wurde ein Programmfehler entdeckt"
 msgid ""
 "It probably is not fatal, but should be reported to the developers "
 "nonetheless."
-msgstr "Es ist vermutlich nicht fatal, aber der Fehler sollte trotzdem den "
+msgstr ""
+"Es ist vermutlich nicht fatal, aber der Fehler sollte trotzdem den "
 "Entwicklern gemeldet werden"
 
 #: ../src/gtkexcepthook.py:53
@@ -3977,10 +4001,10 @@ msgstr "Details"
 #~ msgstr "_Chatraum betreten"
 
 #~ msgid "_Service Discovery"
-#~ msgstr "_Dienste Durchsuchen"
+#~ msgstr "_Dienste durchsuchen"
 
 #~ msgid "_Service Discovery..."
-#~ msgstr "_Dienste Durchsuchen"
+#~ msgstr "_Dienste durchsuchen"
 
 #~ msgid "Server response:"
 #~ msgstr "Server-Antwort:"
