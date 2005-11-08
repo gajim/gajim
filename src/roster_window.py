@@ -2199,7 +2199,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			renderer.set_property('xpad', 8)
 
 	def fill_secondary_pixbuf_rederer(self, column, renderer, model, iter, data=None):
-		'''When a row is added, set properties for secondary renderer (avatar or tls)'''
+		'''When a row is added, set properties for secondary renderer (avatar or padlock)'''
 		theme = gajim.config.get('roster_theme')
 		if model[iter][C_TYPE] == 'account':
 			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
@@ -2213,7 +2213,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				renderer.set_property('cell-background', color)
 			else:
 				renderer.set_property('cell-background', None)
-		else:
+		else: # contact
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			if jid in gajim.newly_added[account]:
@@ -2226,8 +2226,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					renderer.set_property('cell-background', color)
 				else:
 					renderer.set_property('cell-background', None)
-		#renderer.set_property('width', 20)
-		#renderer.set_property('xalign', 0)
+		renderer.set_property('xalign', 1) # align pixbuf to the right
 
 	def get_show(self, luser):
 		prio = luser[0].priority
