@@ -216,7 +216,7 @@ class RosterWindow:
 				model.remove(parent_i)
 				# We need to check all contacts, even offline contacts
 				for jid in gajim.contacts[account]:
-					if group in gajim.get_contact_instance_with_highest_priority(accound, jid).groups:
+					if group in gajim.get_contact_instance_with_highest_priority(account, jid).groups:
 						break
 				else:
 					if gajim.groups[account].has_key(group):
@@ -992,14 +992,14 @@ class RosterWindow:
 		jid = model[iter][C_JID].decode('utf-8')
 		path = model.get_path(iter)
 		account = model[iter][C_ACCOUNT].decode('utf-8')
-		user = gajim.get_contact_instance_with_highest_priority(accound, jid)
+		user = gajim.get_contact_instance_with_highest_priority(account, jid)
 		menu = gtk.Menu()
 		
 		item = gtk.ImageMenuItem(_('_Log on'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
-		show = gajim.get_contact_instance_with_highest_priority(accound, jid).show
+		show = gajim.get_contact_instance_with_highest_priority(account, jid).show
 		if show != 'offline' and show != 'error':
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, None, account)
@@ -1169,7 +1169,7 @@ class RosterWindow:
 				sub = 'subscribe', keyID = keyID)
 			gajim.contacts[account][jid] = [user1]
 		else:
-			user1 = gajim.get_contact_instance_with_highest_priority(accound, jid)
+			user1 = gajim.get_contact_instance_with_highest_priority(account, jid)
 			if not _('not in the roster') in user1.groups:
 				dialogs.InformationDialog(_('Subscription request has been sent'),
 _('If "%s" accepts this request you will know his status.') %jid)
@@ -1210,7 +1210,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			type = model[iter][C_TYPE]
 			if type in ('account', 'group'):
 				return
-			user = gajim.get_contact_instance_with_highest_priority(accound, jid)
+			user = gajim.get_contact_instance_with_highest_priority(account, jid)
 			if type == 'contact':
 				self.on_req_usub(widget, user, account)
 			elif type == 'agent':
@@ -1632,7 +1632,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 
 		if msg_type == 'normal': # it's single message
 			if popup:
-				contact = gajim.get_contact_instance_with_highest_priority(accound, jid)
+				contact = gajim.get_contact_instance_with_highest_priority(account, jid)
 				dialogs.SingleMessageWindow(account, contact.jid,
 					action = 'receive', from_whom = jid, subject = subject,
 					message = msg)
@@ -2016,7 +2016,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		jid = model[iter][C_JID].decode('utf-8')
 		type = model[iter][C_TYPE]
 		if type == 'contact':
-			old_text = gajim.get_contact_instance_with_highest_priority(accound, jid).name
+			old_text = gajim.get_contact_instance_with_highest_priority(account, jid).name
 			if old_text != new_text:
 				for u in gajim.contacts[account][jid]:
 					u.name = new_text
@@ -2029,7 +2029,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				return
 			#get all users in that group
 			for jid in gajim.contacts[account]:
-				user = gajim.get_contact_instance_with_highest_priority(accound, jid)
+				user = gajim.get_contact_instance_with_highest_priority(account, jid)
 				if old_name in user.groups:
 					#set them in the new one and remove it from the old
 					self.remove_contact(user, account)
@@ -2363,7 +2363,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				model.remove(iter_group_source)
 			# delete the group if it is empty (need to look for offline users too)
 			for jid in gajim.contacts[account]:
-				if grp_source in gajim.get_contact_instance_with_highest_priority(accound, jid).groups:
+				if grp_source in gajim.get_contact_instance_with_highest_priority(account, jid).groups:
 					break
 			else:
 				del gajim.groups[account][grp_source]
