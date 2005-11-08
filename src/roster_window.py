@@ -237,7 +237,7 @@ class RosterWindow:
 			return self.transports_state_images[transport]
 		return self.jabber_state_images
 
-	def draw_contact(self, jid, account, selected=False):
+	def draw_contact(self, jid, account, selected=False, focus=False):
 		'''draw the correct state image and name'''
 		model = self.tree.get_model()
 		iters = self.get_contact_iter(jid, account)
@@ -255,7 +255,7 @@ class RosterWindow:
 			status = contact.status.strip()
 			if status != '':
 				# escape markup entities and make them small italic and fg color
-				color = gtkgui_helpers._get_fade_color(self.tree, selected)
+				color = gtkgui_helpers._get_fade_color(self.tree, selected, focus)
 				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
 				name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
@@ -1751,12 +1751,29 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		return True # do NOT destory the window
 
 	def on_roster_window_focus_in_event(self, widget, event):
-		'''roster received focus, so if we had urgency REMOVE IT
-		NOTE: we do not have to read the message to remove urgency
-		so this functions does that'''
+		# roster received focus, so if we had urgency REMOVE IT
+		# NOTE: we do not have to read the message to remove urgency
+		# so this functions does that
 		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
 			if widget.props.urgency_hint:
 				widget.props.urgency_hint = False
+		
+		# if a contact row is selected, update colors (eg. for status msg)
+		# because gtk engines may differ in bg when window is selected
+		# or not
+		if self._last_selected_contact is not None:
+			jid, account = self._last_selected_contact
+			self.draw_contact(jid, account, selected = True,
+					   focus = True)
+
+	def on_roster_window_focus_out_event(self, widget, event):
+		# if a contact row is selected, update colors (eg. for status msg)
+		# because gtk engines may differ in bg when window is selected
+		# or not
+		if self._last_selected_contact is not None:
+			jid, account = self._last_selected_contact
+			self.draw_contact(jid, account, selected = True,
+					   focus = False)
 
 	def on_roster_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
@@ -2378,7 +2395,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				group_iter = model.iter_next(group_iter)
 			account_iter = model.iter_next(account_iter)
 
-	def _on_treeview_style_set(self, treeview, style):
+	def on_roster_treeview_style_set(self, treeview, style):
 		'''When style (theme) changes, redraw all contacts'''
 		for contact in self.iter_contact_rows():
 			self.draw_contact(contact[C_JID], contact[C_ACCOUNT])
@@ -2404,7 +2421,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		self.tree = self.xml.get_widget('roster_treeview')
 		self.tree.get_selection().connect('changed',
 			self._on_treeview_selection_changed)
-		self.tree.connect('style-set', self._on_treeview_style_set)
+		
 		self._last_selected_contact = None # None or holds jid, account tupple
 		self.nb_unread = 0
 		self.last_save_dir = None

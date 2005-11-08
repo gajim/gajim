@@ -23,6 +23,7 @@
   <signal name="delete_event" handler="on_roster_window_delete_event" last_modification_time="Mon, 21 Mar 2005 12:34:59 GMT"/>
   <signal name="focus_in_event" handler="on_roster_window_focus_in_event" last_modification_time="Sun, 04 Sep 2005 16:33:35 GMT"/>
   <signal name="key_press_event" handler="on_roster_window_key_press_event" last_modification_time="Tue, 20 Sep 2005 19:26:27 GMT"/>
+  <signal name="focus_out_event" handler="on_roster_window_focus_out_event" last_modification_time="Tue, 08 Nov 2005 14:01:01 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="roster_vbox">
@@ -376,6 +377,7 @@
 	      <signal name="motion_notify_event" handler="on_roster_treeview_motion_notify_event" last_modification_time="Wed, 06 Jul 2005 14:38:58 GMT"/>
 	      <signal name="leave_notify_event" handler="on_roster_treeview_leave_notify_event" last_modification_time="Wed, 06 Jul 2005 14:39:06 GMT"/>
 	      <signal name="scroll_event" handler="on_roster_treeview_scroll_event" last_modification_time="Fri, 08 Jul 2005 22:09:03 GMT"/>
+	      <signal name="style_set" handler="on_roster_treeview_style_set" last_modification_time="Tue, 08 Nov 2005 14:03:30 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
