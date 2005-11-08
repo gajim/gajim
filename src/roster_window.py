@@ -183,8 +183,17 @@ class RosterWindow:
 			if g == _('Transports'):
 				typestr = 'agent'
 
+			if gajim.config.get('show_avatars_in_roster'):
+				pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(jid)
+				if pixbuf in ('ask', None):
+					scaled_pixbuf = None
+				else:
+					scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
+						
+			else:
+				scaled_pixbuf = None
 			model.append(iterG, [self.jabber_state_images[user.show], user.name,
-					typestr, user.jid, account, False, None]) # FIXME None --> avatar
+				typestr, user.jid, account, False, scaled_pixbuf])
 			
 			if gajim.groups[account][g]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)

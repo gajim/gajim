@@ -298,7 +298,7 @@ class TabbedChatWindow(chat.Chat):
 			return
 		
 		# we assume contact has no avatar
-		scaled_buf = None
+		scaled_pixbuf = None
 
 		real_jid = gajim.get_real_jid_from_fjid(self.account, jid)
 		pixbuf = None
@@ -309,19 +309,11 @@ class TabbedChatWindow(chat.Chat):
 			gajim.connections[self.account].request_vcard(jid_with_resource)
 			return
 		if pixbuf is not None:
-			# resize to a width / height for the avatar not to have distortion
-			# (keep aspect ratio)
-			ratio = float(pixbuf.get_width()) / float(pixbuf.get_height())
-			if ratio > 1:
-				w = gajim.config.get('avatar_width')
-				h = int(w / ratio)
-			else:
-				h = gajim.config.get('avatar_height')
-				w = int(h * ratio)
-			scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
+			scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'chat')
+			
 
 		image = xml.get_widget('avatar_image')
-		image.set_from_pixbuf(scaled_buf)
+		image.set_from_pixbuf(scaled_pixbuf)
 		image.show_all()
 
 	def set_state_image(self, jid):
