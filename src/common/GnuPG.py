@@ -105,15 +105,24 @@ else:
 				return str
 			proc = self.run(['-b', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status', 'stderr'])
 			proc.handles['stdin'].write(str)
-			proc.handles['stdin'].close()
+			 try:
+				 proc.handles['stdin'].close()
+			 except IOError:
+				 pass
 
 			output = proc.handles['stdout'].read()
-			proc.handles['stdout'].close()
-			proc.handles['stderr'].close()
+			 try:
+				 proc.handles['stdout'].close()
+				 proc.handles['stderr'].close()
+			 except IOError:
+				 pass
 
 			stat = proc.handles['status']
 			resp = self._read_response(stat)
-			proc.handles['status'].close()
+			 try:
+				 proc.handles['status'].close()
+			 except IOError:
+				 pass
 
 			try: proc.wait()
 			except IOError: pass
