@@ -118,10 +118,9 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0,
 	'''Cut the chars after 'max_chars' on each line
 	and show only the first 'max_lines'. If there is more text
 	to be shown, display the whole text in tooltip on 'widget'
-	If any of the params is not present(None or 0) the action
+	If any of the params is not present (None or 0) the action
 	on it is not performed'''
-	text = text
-	
+
 	def _cut_if_long(str):
 		if len(str) > max_chars:
 			str = str[:max_chars - 3] + '...'

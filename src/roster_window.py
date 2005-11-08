@@ -254,6 +254,7 @@ class RosterWindow:
 		if contact.status and gajim.config.get('show_status_msgs_in_roster'):
 			status = contact.status.strip()
 			if status != '':
+				status = gtkgui_helpers.reduce_chars_newlines(status, max_lines = 1)
 				# escape markup entities and make them small italic and fg color
 				color = gtkgui_helpers._get_fade_color(self.tree, selected, focus)
 				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
