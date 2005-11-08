@@ -802,6 +802,13 @@ class RosterWindow:
 			del gajim.contacts[account][contact.jid]
 
 	def on_rename(self, widget, iter, path):
+		# this function is called either by F2 or by Rename menuitem
+		# to display that menuitem we show a menu, that does focus-out
+		# we then select Rename and focus-in
+		# focus-in callback checks on this var and if is NOT None
+		# it redraws the selected contact resulting in stopping our rename
+		# procedure. So set this to None to stop that 
+		self._last_selected_contact = None
 		model = self.tree.get_model()
 		
 		row_type = model[iter][C_TYPE]
