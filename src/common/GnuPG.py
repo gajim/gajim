@@ -1,4 +1,4 @@
-# ##	common/GnuPG.py
+##	common/GnuPG.py
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
