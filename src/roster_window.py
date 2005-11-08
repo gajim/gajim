@@ -54,7 +54,7 @@ C_TYPE, # account, group or contact?
 C_JID, # the jid of the row
 C_ACCOUNT, # cellrenderer text that holds account name
 C_EDITABLE, # cellrenderer text that holds name editable or not?
-C_SECPIXBUF, # econdary_pixbuf
+C_SECPIXBUF, # secondary_pixbuf (holds avatar or padlock)
 ) = range(7)
 
 
@@ -182,18 +182,10 @@ class RosterWindow:
 			typestr = 'contact'
 			if g == _('Transports'):
 				typestr = 'agent'
-
-			if gajim.config.get('show_avatars_in_roster'):
-				pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(jid)
-				if pixbuf in ('ask', None):
-					scaled_pixbuf = None
-				else:
-					scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
-						
-			else:
-				scaled_pixbuf = None
-			model.append(iterG, [self.jabber_state_images[user.show], user.name,
-				typestr, user.jid, account, False, scaled_pixbuf])
+				
+			# we add some values here. see draw_contact for more
+			model.append(iterG, (None, user.name,
+				typestr, user.jid, account, False, None))
 			
 			if gajim.groups[account][g]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)
@@ -238,7 +230,7 @@ class RosterWindow:
 		return self.jabber_state_images
 
 	def draw_contact(self, jid, account, selected=False, focus=False):
-		'''draw the correct state image and name'''
+		'''draw the correct state image, name and avatar'''
 		model = self.tree.get_model()
 		iters = self.get_contact_iter(jid, account)
 		if len(iters) == 0:
@@ -279,10 +271,22 @@ class RosterWindow:
 						img = state_images[contact.show]
 					else:
 						img = state_images['not in the roster']
+
+		#FIXME: here it gets called to often
+		# for example if we recv a message we also reset the avatar!
+		if gajim.config.get('show_avatars_in_roster'):
+			pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(jid)
+			if pixbuf in ('ask', None):
+				scaled_pixbuf = None
+			else:
+				scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
+		else:
+			scaled_pixbuf = None
+		
 		for iter in iters:
 			model[iter][C_IMG] = img
 			model[iter][C_NAME] = name
-			#FIXME: add avatar
+			model[iter][C_SECPIXBUF] = scaled_pixbuf
 
 	def join_gc_room(self, account, room_jid, nick, password):
 		if room_jid in gajim.interface.windows[account]['gc'] and \
