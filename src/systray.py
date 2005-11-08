@@ -345,7 +345,10 @@ class Systray:
 			self.make_menu(event)
 	
 	def on_show_menuitem_activate(self, widget, show):
-		l = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'offline']
+		# we all add some fake (we cannot select those nor have them as show)
+		# but this helps to align with roster's status_combobox index positions
+		l = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'SEPARATOR',
+			'CHANGE_STATUS_MSG_MENUITEM', 'SEPARATOR', 'offline']
 		index = l.index(show)
 		gajim.interface.roster.status_combobox.set_active(index)
 
