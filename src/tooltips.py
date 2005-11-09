@@ -124,6 +124,7 @@ class StatusTable:
 		self.current_row = 1
 		self.table = None
 		self.text_lable = None
+		self.spacer_label = '   '
 		
 	def create_table(self):
 		self.table = gtk.Table(3, 1)
@@ -155,11 +156,11 @@ class StatusTable:
 		files.append(os.path.join(file_path, state_file + '.gif'))
 		image = gtk.Image()
 		image.set_from_pixbuf(None)
-		spacer = gtk.Label('   ')
 		for file in files:
 			if os.path.exists(file):
 				image.set_from_file(file)
 				break
+		spacer = gtk.Label(self.spacer_label)
 		image.set_alignment(0., 1.)
 		self.table.attach(spacer, 1, 2, self.current_row, 
 			self.current_row + 1, 0, 0, 0, 0)
@@ -177,12 +178,8 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		BaseTooltip.__init__(self)
 		StatusTable.__init__(self)
 
-	def populate(self, data):
-		self.create_window()
-		self.create_table()
-		self.hbox = gtk.HBox()
-		self.table.set_property('column-spacing', 1)
-		text, single_line, accounts = '', '', []
+	def get_accounts_info(self):
+		accounts = []
 		if gajim.contacts:
 			for account in gajim.contacts.keys():
 				status_idx = gajim.connections[account].connected
@@ -202,11 +199,42 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 					message = helpers.get_uf_show(status)
 				accounts.append({'name': account, 'status_line': single_line, 
 						'show': status, 'message': message})
+		return accounts
+
+	def fill_table_with_accounts(self, accounts):
+		iconset = gajim.config.get('iconset')
+		if not iconset:
+			iconset = 'sun'
+		file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		for acct in accounts:
+			message = acct['message']
+			# before reducing the chars we should assure we send unicode, else 
+			# there are possible pango TBs on 'set_markup'
+			if isinstance(message, str):
+				message = unicode(message, encoding = 'utf-8')
+			message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
+			message = gtkgui_helpers.escape_for_pango_markup(message)
+			if message:
+				self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
+					gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>' 
+					+ ' - ' + message)
+			else:
+				self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
+					gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>')
+
+	def populate(self, data):
+		self.create_window()
+		self.create_table()
+		self.hbox = gtk.HBox()
+		self.table.set_property('column-spacing', 1)
+		text, single_line = '', ''
 
 		unread_chat = gajim.interface.roster.nb_unread
 		unread_single_chat = 0
 		unread_gc = 0
 		unread_pm = 0
+
+		accounts = self.get_accounts_info()
 
 		for acct in gajim.connections:
 			# we count unread chat/pm messages
@@ -257,29 +285,11 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			text = _('Gajim')
 			self.current_row = 1
 			self.table.resize(2, 1)
-			iconset = gajim.config.get('iconset')
-			if not iconset:
-				iconset = 'sun'
-			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
-			for acct in accounts:
-				message = acct['message']
-				# before reducing the chars we should assure we send unicode, else 
-				# there are possible pango TBs on 'set_markup'
-				if isinstance(message, str):
-					message = unicode(message, encoding = 'utf-8')
-				message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
-				message = gtkgui_helpers.escape_for_pango_markup(message)
-				if message:
-					self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
-						gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>' 
-						+ ' - ' + message)
-				else:
-					self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
-						gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>')
-					
+			self.fill_table_with_accounts(accounts)
+
 		elif len(accounts) == 1:
-			message = gtkgui_helpers.reduce_chars_newlines(accounts[0]['status_line'], 
-				50, 1)
+			message = accounts[0]['status_line']
+			message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
 			message = gtkgui_helpers.escape_for_pango_markup(message)
 			text = _('Gajim - %s') % message
 		else:
@@ -335,26 +345,31 @@ class GCTooltip(BaseTooltip, StatusTable):
 		hbox.add(self.text_lable)
 		self.win.add(hbox)
 
-class RosterTooltip(BaseTooltip, StatusTable):
+class RosterTooltip(NotificationAreaTooltip):
 	''' Tooltip that is shown in the roster treeview '''
 	def __init__(self):
 		self.account = None
-		
 		self.image = gtk.Image()
 		self.image.set_alignment(0., 0.)
 		# padding is independent of the total length and better than alignment
 		self.image.set_padding(1, 2) 
-		BaseTooltip.__init__(self)
-		StatusTable.__init__(self)
-		
+		NotificationAreaTooltip.__init__(self)
+
 	def populate(self, contacts):
-		if not contacts or len(contacts) == 0:
-			return
 		self.create_window()
 		self.hbox = gtk.HBox()
 		self.hbox.set_homogeneous(False)
 		self.hbox.set_spacing(0)
 		self.create_table()
+		if not contacts or len(contacts) == 0:
+			accounts = self.get_accounts_info()
+			self.current_row = 0
+			self.table.resize(2, 1)
+			self.spacer_label = ''
+			self.fill_table_with_accounts(accounts)
+			self.hbox.add(self.table)
+			self.win.add(self.hbox)
+			return
 		# primary contact
 		prim_contact = gajim.get_highest_prio_contact_from_contacts(contacts)
 		

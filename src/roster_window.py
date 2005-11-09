@@ -742,6 +742,10 @@ class RosterWindow:
 				# we're on an account entry in the roster
 				account = model[iter][C_ACCOUNT].decode('utf-8')
 				if account == 'all':
+					if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+						self.tooltip.id = row
+						self.tooltip.timeout = gobject.timeout_add(500,
+							self.show_tooltip, [])
 					return
 				jid = gajim.get_jid_from_account(account)
 				contacts = []
