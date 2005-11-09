@@ -64,12 +64,12 @@ class RosterWindow:
 	'''Class for main window of gtkgui interface'''
 
 	def get_account_iter(self, name):
-		if self.regroup:
-			return
 		model = self.tree.get_model()
 		if model is None:
 			return
 		account_iter = model.get_iter_root()
+		if self.regroup:
+			return account_iter
 		while account_iter:
 			account_name = model[account_iter][C_NAME].decode('utf-8')
 			if name == account_name:
@@ -106,14 +106,19 @@ class RosterWindow:
 		return found
 
 	def add_account_to_roster(self, account):
-		if self.regroup:
-			return
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
-		statuss = ['offline', 'connecting', 'online', 'chat',
+		show_list = ['offline', 'connecting', 'online', 'chat',
 			'away', 'xa', 'dnd', 'invisible']
-		status = statuss[gajim.connections[account].connected]
+
+		if self.regroup:
+			show = helpers.get_global_show()
+			model.append(None, [self.jabber_state_images[show],
+				_('Merged accounts'), 'account', '', 'all', False, None])
+			return
+
+		show = show_list[gajim.connections[account].connected]
 
 		tls_pixbuf = None
 		if gajim.con_types.has_key(account) and \
@@ -123,7 +128,7 @@ class RosterWindow:
 
 		our_jid = gajim.get_jid_from_account(account)
 
-		model.append(None, [self.jabber_state_images[status], account,
+		model.append(None, [self.jabber_state_images[show], account,
 			'account', our_jid, account, False, tls_pixbuf])
 
 	def remove_newly_added(self, jid, account):
@@ -175,8 +180,7 @@ class RosterWindow:
 				else:
 					ishidden = True
 				gajim.groups[account][g] = { 'expand': ishidden }
-			if not account in self.collapsed_rows and \
-			   not gajim.config.get('mergeaccounts'):
+			if not account in self.collapsed_rows:
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
 			typestr = 'contact'
@@ -736,7 +740,9 @@ class RosterWindow:
 						self.show_tooltip, gajim.contacts[account][jid])
 			elif model[iter][C_TYPE] == 'account':
 				# we're on an account entry in the roster
-				account = model[iter][C_NAME].decode('utf-8')
+				account = model[iter][C_ACCOUNT].decode('utf-8')
+				if account == 'all':
+					return
 				jid = gajim.get_jid_from_account(account)
 				contacts = []
 				connection = gajim.connections[account]
@@ -1056,11 +1062,7 @@ class RosterWindow:
 		if message is not None: # None is if user pressed Cancel
 			self.send_status(account, show, message)
 
-	def mk_menu_account(self, event, iter):
-		'''Make account's popup menu'''
-		model = self.tree.get_model()
-		account = model[iter][C_ACCOUNT].decode('utf-8')
-		
+	def build_account_menu(self, account):
 		#FIXME: make most menuitems of this menu insensitive if account is offline
 
 		# we have to create our own set of icons for the menu
@@ -1135,16 +1137,41 @@ class RosterWindow:
 			self.on_join_gc_activate, account)
 		new_message_menuitem.connect('activate',
 			self.on_new_message_menuitem_activate, account)
-		
+		return account_context_menu
+
+	def mk_menu_account(self, event, iter):
+		'''Make account's popup menu'''
+		model = self.tree.get_model()
+		account = model[iter][C_ACCOUNT].decode('utf-8')
+
+
+		if account != 'all':
+			menu = self.build_account_menu(account)
+		else:
+			menu = gtk.Menu()
+			iconset = gajim.config.get('iconset')
+			if not iconset:
+				iconset = 'sun'
+			path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
+			for account in gajim.connections:
+				state_images = self.load_iconset(path)
+				item = gtk.ImageMenuItem(account)
+				show = gajim.SHOW_LIST[gajim.connections[account].connected]
+				icon = state_images[show]
+				item.set_image(icon)
+				account_menu = self.build_account_menu(account)
+				item.set_submenu(account_menu)
+				menu.append(item)
+
 		event_button = self.get_possible_button_event(event)
-		
-		account_context_menu.popup(None, self.tree, None, event_button,
+
+		menu.popup(None, self.tree, None, event_button,
 			event.time)
-		account_context_menu.show_all()
+		menu.show_all()
 
 	def on_add_to_roster(self, widget, user, account):
 		dialogs.AddNewContactWindow(account, user.jid)
-	
+
 	def authorize(self, widget, jid, account):
 		'''Authorize a user (by re-sending auth menuitem)'''
 		gajim.connections[account].send_authorization(jid)
@@ -1360,7 +1387,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 						model[accountIter][0] =	self.jabber_state_images['offline']
 					if gajim.interface.systray_enabled:
 						gajim.interface.systray.change_status('offline')
-					self.update_status_comboxbox()
+					self.update_status_combobox()
 					return
 				gajim.connections[account].password = passphrase
 				if save:
@@ -1458,7 +1485,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			dialogs.ErrorDialog(_('No account available'),
 		_('You must create an account before you can chat with other contacts.')
 		).get_response()
-			self.update_status_comboxbox()
+			self.update_status_combobox()
 			return
 		status = model[active][2].decode('utf-8')
 		one_connected = helpers.one_account_connected()
@@ -1501,7 +1528,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					return
 		message = self.get_status_message(status)
 		if message is None: # user pressed Cancel to change status message dialog
-			self.update_status_comboxbox()
+			self.update_status_combobox()
 			return
 		for acct in accounts:
 			if not gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
@@ -1511,22 +1538,18 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			if not one_connected or gajim.connections[acct].connected > 1:
 				self.send_status(acct, status, message)
 	
-	def update_status_comboxbox(self):
+	def update_status_combobox(self):
 		# table to change index in connection.connected to index in combobox
-		table = {0:9, 1:9, 2:0, 3:1, 4:2, 5:3, 6:4, 7:5}
-		maxi = 0
-		for account in gajim.connections:
-			if gajim.connections[account].connected > maxi:
-				maxi = gajim.connections[account].connected
+		table = {'offline':9, 'connecting':9, 'online':0, 'chat':1, 'away':2,
+			'xa':3, 'dnd':4, 'invisible':5}
+		show = helpers.get_global_show()
 		# temporarily block signal in order not to send status that we show
 		# in the combobox
 		self.combobox_callback_active = False
-		self.status_combobox.set_active(table[maxi])
+		self.status_combobox.set_active(table[show])
 		self.combobox_callback_active = True
-		statuss = ['offline', 'connecting', 'online', 'chat', 'away', 
-						'xa', 'dnd', 'invisible']
 		if gajim.interface.systray_enabled:
-			gajim.interface.systray.change_status(statuss[maxi])
+			gajim.interface.systray.change_status(show)
 
 	def on_status_changed(self, account, status):
 		'''the core tells us that our status has changed'''
@@ -1546,7 +1569,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 					luser_copy.append(user)
 				for user in luser_copy:
 					self.chg_contact_status(user, 'offline', 'Disconnected', account)
-		self.update_status_comboxbox()
+		self.update_status_combobox()
 		self.make_menu()
 	
 	def new_chat(self, contact, account):
@@ -2104,7 +2127,7 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			for jid in gajim.interface.windows[account]['gc']:
 				if jid != 'tabbed':
 					gajim.interface.windows[account]['gc'][jid].update_state_images()
-		self.update_status_comboxbox()
+		self.update_status_combobox()
 
 	def repaint_themed_widgets(self):
 		'''Notify windows that contain themed widgets to repaint them'''
@@ -2307,18 +2330,12 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		model, iter = treeselection.get_selected()
 		path = model.get_path(iter)
 		data = ''
-		merge = 0
-		if gajim.config.get('mergeaccounts'):
-			merge = 1
-		if len(path) == 3 - merge:
+		if len(path) == 3:
 			data = model[iter][C_JID]
 		selection.set(selection.target, 8, data)
 
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
 		etime):
-		merge = 0
-		if gajim.config.get('mergeaccounts'):
-			merge = 1
 		model = treeview.get_model()
 		if not selection.data:
 			return
@@ -2327,19 +2344,18 @@ _('If "%s" accepts this request you will know his status.') %jid)
 		if not drop_info:
 			return
 		path_dest, position = drop_info
-		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2 - merge\
-			and path_dest[1 - merge] == 0: #droped before the first group
+		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2 \
+			and path_dest[1] == 0: # droped before the first group
 			return
-		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2 - merge:
-			#droped before a group : we drop it in the previous group
-			path_dest = (path_dest[1 - merge], path_dest[1 - merge]-1)
+		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
+			# droped before a group : we drop it in the previous group
+			path_dest = (path_dest[1], path_dest[1]-1)
 		iter_dest = model.get_iter(path_dest)
 		iter_source = treeview.get_selection().get_selected()[1]
 		path_source = model.get_path(iter_source)
-		if len(path_dest) == 1 and not merge: #droped on an account
+		if len(path_dest) == 1: # droped on an account
 			return
-		if path_dest[0] != path_source[0] and not merge:
-			#droped in another account
+		if path_dest[0] != path_source[0]: # droped in another account
 			return
 		iter_group_source = model.iter_parent(iter_source)
 		grp_source = model[iter_group_source][C_JID].decode('utf-8')

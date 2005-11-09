@@ -524,3 +524,11 @@ def get_output_of_command(command):
 	child_stdin.close()
 	
 	return output
+
+def get_global_show():
+	maxi = 0
+	for account in gajim.connections:
+		connected = gajim.connections[account].connected
+		if connected > maxi:
+			maxi = connected
+	return gajim.SHOW_LIST[maxi]
