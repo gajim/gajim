@@ -127,7 +127,7 @@ class Config:
 		'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
 		'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
 		'always_english_wikipedia': [opt_bool, False],
-		'always_english_wiktionary': [opt_bool, False],
+		'always_english_wiktionary': [opt_bool, True],
 		'use_dbus': [opt_bool, True, _('Allow controlling Gajim via D-Bus service.')],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
 		'autodetect_browser_mailer': [opt_bool, True],
