@@ -463,7 +463,6 @@ class PreferencesWindow:
 		if widget.get_active():
 			gajim.config.set('trayicon', True)
 			gajim.interface.show_systray()
-			gajim.interface.roster.update_status_comboxbox()
 		else:
 			gajim.config.set('trayicon', False)
 			gajim.interface.hide_systray()
