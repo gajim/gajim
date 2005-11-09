@@ -13147,7 +13147,7 @@ Status message</property>
 	      <child>
 		<widget class="GtkLabel" id="advanced_desc_label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes" comments="we talk about Description">(None)</property>
+		  <property name="label" translatable="yes"></property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -14402,7 +14402,7 @@ Please wait...</property>
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">False</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 
@@ -14411,9 +14411,9 @@ Please wait...</property>
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes"></property>
 		      <property name="use_underline">False</property>
-		      <property name="use_markup">False</property>
+		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
+		      <property name="wrap">True</property>
 		      <property name="selectable">False</property>
 		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
@@ -14426,8 +14426,8 @@ Please wait...</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
 		    </packing>
 		  </child>
 		</widget>

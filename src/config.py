@@ -2570,10 +2570,10 @@ class AccountCreationWizardWindow:
 			self.back_button.hide()
 			self.forward_button.hide()
 			if self.modify:
-				#FIXME: pango me
-				finish_text = _('Account has been added successfully.\n'
-'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
-				self.finish_label.set_text(finish_text)
+				finish_text = '<big><b>%s</b></big>\n\n%s' % (
+					_('Account has been added successfully'),
+_('You can set advanced account options by pressing Advanced button, or later by clicking in Accounts menuitem under Edit menu from the main window.'))
+				self.finish_label.set_markup(finish_text)
 				self.finish_button.set_sensitive(True)
 				self.finish_button.set_property('has-default', True)
 				self.advanced_button.show()
@@ -2601,10 +2601,11 @@ class AccountCreationWizardWindow:
 		self.go_online_checkbutton.show()
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
-		#FIXME: pango me
-		finish_text = _('Your new account has been created successfully.\n'
-'You can set advanced account options by pressing Advanced button,\nor later by clicking in Accounts menuitem under Edit menu from the main window.')
-		self.finish_label.set_text(finish_text)
+		
+		finish_text = '<big><b>%s</b></big>\n\n%s' % ( 
+			_('Your new account has been created successfully'),
+_('You can set advanced account options by pressing Advanced button,or later by clicking in Accounts menuitem under Edit menu from the main window.'))
+		self.finish_label.set_markup(finish_text)
 		self.notebook.set_current_page(3) # show finish page
 		
 		if self.update_progressbar_timeout_id is not None:
@@ -2617,9 +2618,8 @@ class AccountCreationWizardWindow:
 		self.go_online_checkbutton.hide()
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
-		#FIXME: pango me
-		finish_text = _('An error occured during account creation:\n') + reason
-		self.finish_label.set_text(finish_text)
+		finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occured during account creation') , reason)
+		self.finish_label.set_markup(finish_text)
 		self.notebook.set_current_page(3) # show finish page
 
 	def on_advanced_button_clicked(self, widget):
