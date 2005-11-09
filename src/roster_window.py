@@ -2345,17 +2345,17 @@ _('If "%s" accepts this request you will know his status.') %jid)
 			return
 		path_dest, position = drop_info
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2 \
-			and path_dest[1] == 0: # droped before the first group
+			and path_dest[1] == 0: # dropped before the first group
 			return
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
-			# droped before a group : we drop it in the previous group
+			# dropped before a group : we drop it in the previous group
 			path_dest = (path_dest[1], path_dest[1]-1)
 		iter_dest = model.get_iter(path_dest)
 		iter_source = treeview.get_selection().get_selected()[1]
 		path_source = model.get_path(iter_source)
-		if len(path_dest) == 1: # droped on an account
+		if len(path_dest) == 1: # dropped on an account
 			return
-		if path_dest[0] != path_source[0]: # droped in another account
+		if path_dest[0] != path_source[0]: # dropped in another account
 			return
 		iter_group_source = model.iter_parent(iter_source)
 		grp_source = model[iter_group_source][C_JID].decode('utf-8')
