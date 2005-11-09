@@ -21,7 +21,7 @@ def visit(arg, dirname, names):
 			endpos = path_to_po.find('/', pos)
 			name = path_to_po[pos:endpos]
 			if update: # update an existing po file)
-				os.system('msgmerge -q -U ../po/'+name+'/LC_MESSAGES/gajim.po ../po/gajim.pot')
+				os.system('msgmerge -q -U ../../po/'+name+'/LC_MESSAGES/gajim.po ../../po/gajim.pot')
 			if stats:
 				print name, 'has now:'
 				os.system('msgfmt --statistics ' + path_to_po)
@@ -36,17 +36,17 @@ def show_help():
 
 def update_pot():
 	# create header for glade strings
-	os.system('intltool-extract --type=gettext/glade ../src/gtkgui.glade')
+	os.system('intltool-extract --type=gettext/glade ../../src/gtkgui.glade')
 	# update the pot
-	os.system('make -C ../po/ all gajim.pot')
+	os.system('make -C ../../po/ all gajim.pot')
 	print 'gajim.pot was updated successfully'
 
 if __name__ == '__main__':
-	if os.path.basename(os.getcwd()) != 'scripts':
+	if os.path.basename(os.getcwd()) != 'dev':
 		print 'run me with cwd: scripts'
 		sys.exit()
 
-	path_to_dir = '../po'
+	path_to_dir = '../../po'
 
 	if len(sys.argv) == 2:
 		if sys.argv[1].startswith('h'):
