@@ -527,13 +527,15 @@ class ConversationTextview(gtk.TextView):
 			other_tags_for_name = [], other_tags_for_time = [], 
 			other_tags_for_text = [], subject = None):
 		'''prints 'chat' type messages'''
+		if kind == 'status' and not gajim.config.get('print_status_in_chats'):
+				return
 		buffer = self.get_buffer()
 		buffer.begin_user_action()
 		end_iter = buffer.get_end_iter()
 		at_the_end = False
 		if self.at_the_end():
 			at_the_end = True
-
+			
 		if buffer.get_char_count() > 0:
 			buffer.insert(end_iter, '\n')
 		if kind == 'incoming_queue':
