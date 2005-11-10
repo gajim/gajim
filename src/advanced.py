@@ -59,13 +59,13 @@ class AdvancedConfigurationWindow:
 		col.set_resizable(True)
 		
 		renderer_text = gtk.CellRendererText()
-		renderer_text.set_property('editable', 1)
 		renderer_text.connect('edited', self.on_config_edited)
 		col = treeview.insert_column_with_attributes(-1, _('Value'),
 			renderer_text, text = 1)
 		col.set_cell_data_func(renderer_text, self.cb_value_column_data)
 
-		col.set_resizable(True)
+		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
+			col.set_resizable(True) # there is a bug in 2.6.x series
 		col.set_max_width(250)
 
 		renderer_text = gtk.CellRendererText()
@@ -86,6 +86,8 @@ class AdvancedConfigurationWindow:
 		gajim.interface.windows['advanced_config'] = self
 
 	def cb_value_column_data(self, col, cell, model, iter):
+		'''check if it's boolen or holds password stuff and if yes
+		make the cellrenderertext not editable else it's editable'''
 		optname = model[iter][C_PREFNAME]
 		opttype = model[iter][C_TYPE]
 		if opttype == 'boolean' or optname in ('password', 'gpgpassword'):
