@@ -484,6 +484,7 @@ class GroupchatWindow(chat.Chat):
 					c.show = show
 					c.affiliation = affiliation
 					c.status = status
+#					self.draw_contact(room_jid, nick)
 					roster = gajim.interface.roster
 					state_images = roster.get_appropriate_state_images(jid)
 					image = state_images[show]
@@ -1568,7 +1569,11 @@ current room topic.') % command, room_jid)
 				fjid = gajim.construct_fjid(room_jid, nick)
 				if not gajim.interface.windows[self.account]['chats'].has_key(fjid):
 					show = gajim.gc_contacts[self.account][room_jid][nick].show
-					u = Contact(jid = fjid, name = nick, groups = ['none'],
+					c = gajim.gc_contacts[self.account][room_jid][nick]
+					j = fjid
+					if c.jid:
+						j = c.jid
+					u = Contact(jid = j, name = nick, groups = ['none'],
 						show = show, sub = 'none')
 					gajim.interface.roster.new_chat(u, self.account)
 				gajim.interface.windows[self.account]['chats'][fjid].set_active_tab(fjid)
@@ -1612,7 +1617,11 @@ current room topic.') % command, room_jid)
 			fjid = gajim.construct_fjid(room_jid, nick)
 			if not gajim.interface.windows[self.account]['chats'].has_key(fjid):
 				show = gajim.gc_contacts[self.account][room_jid][nick].show
-				u = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
+				c = gajim.gc_contacts[self.account][room_jid][nick]
+				j = fjid
+				if c.jid:
+					j = c.jid
+				u = Contact(jid = j, name = nick, groups = ['none'], show = show,
 					sub = 'none')
 				gajim.interface.roster.new_chat(u, self.account)
 			gajim.interface.windows[self.account]['chats'][fjid].set_active_tab(fjid)
