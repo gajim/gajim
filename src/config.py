@@ -2592,7 +2592,6 @@ _('You can set advanced account options by pressing Advanced button, or later by
 	def acc_is_ok(self, config):
 		'''Account creation succeeded'''
 		con = gajim.connections[self.account]
-		gajim.interface.register_handlers(con)
 		self.create_vars(config)
 		self.finish_button.set_sensitive(True)
 		self.finish_button.set_property('has-default', True)
@@ -2705,7 +2704,6 @@ _('You can set advanced account options by pressing Advanced button,or later by 
 			con.new_account(self.account, config)
 			return
 		gajim.connections[self.account] = con
-		gajim.interface.register_handlers(con)
 		self.create_vars(config)
 
 	def create_vars(self, config):

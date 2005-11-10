@@ -1111,7 +1111,7 @@ class Interface:
 		# update regular expressions
 		self.make_regexps()
 
-	def register_handlers(self, con):
+	def register_handlers(self):
 		self.handlers = {
 			'ROSTER': self.handle_event_roster,
 			'WARNING': self.handle_event_warning,
@@ -1273,6 +1273,7 @@ class Interface:
 		gajim.socks5queue = socks5.SocksQueue(
 			self.handle_event_file_rcv_completed, 
 			self.handle_event_file_progress)
+		self.register_handlers()
 		for account in gajim.config.get_per('accounts'):
 			gajim.connections[account] = common.connection.Connection(account)
 															
@@ -1357,7 +1358,6 @@ class Interface:
 		for account in gajim.connections:
 			self.windows[account]['xml_console'] = \
 				dialogs.XMLConsoleWindow(account)
-			self.register_handlers(gajim.connections[account])
 
 		gobject.timeout_add(100, self.autoconnect)
 		gobject.timeout_add(200, self.process_connections)
