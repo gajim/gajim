@@ -41,7 +41,7 @@ opts = {
 
 setup(
     name = 'Gajim',
-    version = '8',
+    version = '9',
     description = 'A Jabber client written in PyGTK',
     windows = [{'script': 'src/gajim.py',
                 'icon_resources': [(1, 'data/pixmaps/gajim.ico')]}],

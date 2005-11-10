@@ -23,8 +23,8 @@ exec python -OOt "$0" ${1+"$@"}
 ##
 		
 import sys
-import pygtk
 import os
+import pygtk
 
 from common import i18n
 i18n.init()
