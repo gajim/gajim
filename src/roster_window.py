@@ -1312,9 +1312,24 @@ _('If "%s" accepts this request you will know his status.') %jid)
 				gajim.interface.windows[account]['chats'][jid].window.present()
 			elif type == 'account':
 				account = model[iter][C_ACCOUNT]
-				show = gajim.connections[account].connected
-				if show > 1: # We are connected
-					self.on_change_status_message_activate(widget, account)
+				if account != 'all':
+					show = gajim.connections[account].connected
+					if show > 1: # We are connected
+						self.on_change_status_message_activate(widget, account)
+					return True
+				show = helpers.get_global_show()
+				if show == 'offline':
+					return True
+				dlg = dialogs.ChangeStatusMessageDialog(show)
+				message = dlg.run()
+				if not message:
+					return True
+				for acct in gajim.connections:
+					if not gajim.config.get_per('accounts', acct,
+						'sync_with_global_status'):
+						continue
+					current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
+					self.send_status(acct, current_show, message)
 			return True
 		
 		if event.button == 1: # Left click
