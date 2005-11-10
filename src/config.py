@@ -834,8 +834,13 @@ class PreferencesWindow:
 			gajim.config.del_per('statusmsg', msg)
 		iter = model.get_iter_first()
 		while iter:
-			val = model.get_value(iter, 0).decode('utf-8')
+			val = model[iter][0].decode('utf-8')
 			gajim.config.add_per('statusmsg', val)
+			if model[iter][1] is None: # here is the MESSAGE
+				# so when we press New this func is called by
+				# on_msg_treemodel_row_changed but message is None
+				# (hasn't been added yet) so do not TB
+				return
 			gajim.config.set_per('statusmsg', val, 'message',
 						model[iter][1].decode('utf-8'))
 			iter = model.iter_next(iter)
