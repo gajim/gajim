@@ -65,8 +65,7 @@ class AdvancedConfigurationWindow:
 			renderer_text, text = 1)
 		col.set_cell_data_func(renderer_text, self.cb_value_column_data)
 
-		#col.set_resizable(True) DO NOT REMOVE
-		# GTK+ bug http://bugzilla.gnome.org/show_bug.cgi?id=304139
+		col.set_resizable(True)
 		col.set_max_width(250)
 
 		renderer_text = gtk.CellRendererText()
@@ -89,11 +88,10 @@ class AdvancedConfigurationWindow:
 	def cb_value_column_data(self, col, cell, model, iter):
 		optname = model[iter][C_PREFNAME]
 		opttype = model[iter][C_TYPE]
-		if opttype == 'boolean' or optname.find('password') != -1 or\
-			optname.find('passphrase') != -1:
-			cell.set_property('editable', 0)
+		if opttype == 'boolean' or optname in ('password', 'gpgpassword'):
+			cell.set_property('editable', False)
 		else:
-			cell.set_property('editable', 1)
+			cell.set_property('editable', True)
 	
 	def on_advanced_treeview_selection_changed(self, treeselection):
 		iter = treeselection.get_selected()
@@ -103,8 +101,10 @@ class AdvancedConfigurationWindow:
 			opt = iter[0][iter[1]][0]
 			desc = gajim.config.get_desc(opt)
 			if desc:
+				# FIXME: DESC IS ALREADY _() why again _()?
 				self.desc_label.set_text(_(desc))
 			else:
+				#we talk about option description in advanced configuration editor
 				self.desc_label.set_text(_('(None)'))
 	
 	def on_advanced_treeview_row_activated(self, treeview, path, column):
@@ -174,7 +174,7 @@ class AdvancedConfigurationWindow:
 		type = ''
 		if val[OPT_TYPE]:
 			type = val[OPT_TYPE][0]
-		if name.find('password') != -1 or name.find('passphrase') != -1:
+		if name in ('password', 'gpgpassword'):
 			pass # FIXME: do not save Hidden as our pass!
 			# just opening once the advanced editor and then closing
 			# f$$cks it all up
@@ -183,7 +183,7 @@ class AdvancedConfigurationWindow:
 
 	def visible_func(self, model, iter):
 		str = self.entry.get_text().decode('utf-8')
-		if str is None or str == '':
+		if str in (None, ''):
 			return True # show all
 		name = model[iter][C_PREFNAME].decode('utf-8')
 		# If a child of the iter matches, we return True
@@ -206,5 +206,4 @@ class AdvancedConfigurationWindow:
 		return False
 		
 	def on_advanced_entry_changed(self, widget):
-		text = widget.get_text().decode('utf-8')
 		self.modelfilter.refilter()
