@@ -193,8 +193,15 @@ class VcardWindow:
 				f = dialog.get_filename()
 				try:
 					f = f.decode(sys.getfilesystemencoding())
-				except:
+				except UnicodeError:
 					pass
+				else:
+					filesize = os.path.getsize(f) # in bytes
+					if filesize > 8192: # 8 kb
+						dialogs.ErrorDialog(_('The filesize of image "%s" is too large')\
+							% os.path.basename(f),
+						_('The file must not be more than 8 kilobytes.')).get_response()
+						continue
 				if self.image_is_ok(f):
 					ok = True
 			else:
@@ -202,12 +209,6 @@ class VcardWindow:
 		dialog.destroy()
 
 		if f:
-			filesize = os.path.getsize(f) # in bytes
-			if filesize > 8192: # 8 kb
-				dialogs.ErrorDialog(_('The filesize of image "%s" is too large')\
-					% os.path.basename(f),
-					_('The file must not be more than 8 kilobytes.')).get_response()
-				return
 			fd = open(f, 'rb')
 			data = fd.read()
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
