@@ -74,18 +74,17 @@ import getopt
 import time
 import base64
 
-from common import socks5
 import gtkgui_helpers
 import vcard
-
+import notify
 
 import common.sleepy
 import check_for_new_version
 
+from common import socks5
 from common import gajim
 from common import connection
 from common import helpers
-
 from common import optparser
 
 profile = ''
@@ -364,9 +363,7 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
-						instance = dialogs.PopupNotificationWindow(
-							_('Contact Signed In'), jid, account)
-						self.roster.popup_notification_windows.append(instance)
+						notify.notify(_('Contact Signed In'), jid, account)
 				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactPresence',
 						(account, array))
@@ -385,9 +382,7 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
-						instance = dialogs.PopupNotificationWindow(
-							_('Contact Signed Out'), jid, account)
-						self.roster.popup_notification_windows.append(instance)
+						notify.notify(_('Contact Signed Out'), jid, account)
 				if self.remote and self.remote.is_enabled():
 					self.remote.raise_signal('ContactAbsence', (account, array))
 				# stop non active file transfers
@@ -421,9 +416,8 @@ class Interface:
 			if not self.windows[account]['chats'].has_key(fjid) and \
 				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
-					instance = dialogs.PopupNotificationWindow(
+					notify.notify(
 						_('New Private Message'), fjid, account, 'pm')
-					self.roster.popup_notification_windows.append(instance)
 
 			self.windows[account]['gc'][jid].on_private_message(jid, nick,
 				array[1], array[2])
@@ -466,13 +460,11 @@ class Interface:
 					show_notification = True
 				if show_notification:
 					if msg_type == 'normal': # single message
-						instance = dialogs.PopupNotificationWindow(
+						notify.notify(
 							_('New Single Message'), jid, account, msg_type)
 					else: # chat message
-						instance = dialogs.PopupNotificationWindow(
+						notify.notify(
 							_('New Message'), jid, account, msg_type)
-
-					self.roster.popup_notification_windows.append(instance)
 
 		# array : (contact, msg, time, encrypted, msg_type, subject)
 		self.roster.on_message(jid, array[1], array[2], account, array[3],
@@ -791,9 +783,8 @@ class Interface:
 		self.add_event(account, jid, 'file-send-error', file_props)
 
 		if gajim.show_notification(account):
-			instance = dialogs.PopupNotificationWindow(_('File Transfer Error'),
+			notify.notify(_('File Transfer Error'),
 				jid, account, 'file-send-error', file_props)
-			self.roster.popup_notification_windows.append(instance)
 
 	def add_event(self, account, jid, typ, args):
 		'''add an event to the awaiting_events var'''
@@ -849,9 +840,8 @@ class Interface:
 
 		if gajim.show_notification(account):
 			# check if we should be notified
-			instance = dialogs.PopupNotificationWindow(_('File Transfer Error'),
+			notify.notify(_('File Transfer Error'),
 				jid, account, msg_type, file_props)
-			self.roster.popup_notification_windows.append(instance)
 
 	def handle_event_file_request(self, account, array):
 		jid = array[0]
@@ -868,9 +858,8 @@ class Interface:
 		self.add_event(account, jid, 'file-request', file_props)
 
 		if gajim.show_notification(account):
-			instance = dialogs.PopupNotificationWindow(_('File Transfer Request'),
+			notify.notify(_('File Transfer Request'),
 				jid, account, 'file-request')
-			self.roster.popup_notification_windows.append(instance)
 
 	def handle_event_file_progress(self, account, file_props):
 		self.windows['file_transfers'].set_progress(file_props['type'], 
@@ -912,9 +901,8 @@ class Interface:
 			gajim.connections[account].connected in (2, 3)):
 			# we want to be notified and we are online/chat or we don't mind
 			# bugged when away/na/busy
-			instance = dialogs.PopupNotificationWindow(event_type, jid, account,
+			notify.notify(event_type, jid, account,
 				msg_type, file_props)
-			self.roster.popup_notification_windows.append(instance)
 
 	def handle_event_stanza_arrived(self, account, stanza):
 		if not self.windows.has_key(account):

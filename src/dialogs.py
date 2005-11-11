@@ -847,7 +847,7 @@ class PopupNotificationWindow:
 						account, receiver).name
 					txt = _('To %s') % name
 			else:
-				txt=''
+				txt = ''
 			event_description_label.set_text(txt)
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
