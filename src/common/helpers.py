@@ -544,7 +544,7 @@ def get_icon_name_to_show(contact, account):
 		return contact.show
 	if contact.ask == 'subscribe':
 		return 'requested'
-	transport = gajim.get_transport_name_from_jid(contat.jid)
+	transport = gajim.get_transport_name_from_jid(contact.jid)
 	if transport:
 		return contact.show
 	return 'not in the roster'
