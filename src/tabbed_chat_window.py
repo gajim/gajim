@@ -133,7 +133,7 @@ class TabbedChatWindow(chat.Chat):
 		real_jid = gajim.get_real_jid_from_fjid(self.account, jid)
 		if not real_jid: # this can happend if we're in a moderate room
 			return
-		avatar_pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(real_jid)
+		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
 		avatar_w = avatar_pixbuf.get_width()
 		avatar_h = avatar_pixbuf.get_height()
 		
@@ -160,7 +160,7 @@ class TabbedChatWindow(chat.Chat):
 		real_jid = gajim.get_real_jid_from_fjid(self.account, jid)
 		if not real_jid: # this can happend if we're in a moderate room
 			return
-		avatar_pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(real_jid)
+		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
 		screen_w = gtk.gdk.screen_width()
 		screen_h = gtk.gdk.screen_height()
 		avatar_w = avatar_pixbuf.get_width()
@@ -303,7 +303,7 @@ class TabbedChatWindow(chat.Chat):
 		real_jid = gajim.get_real_jid_from_fjid(self.account, jid)
 		pixbuf = None
 		if real_jid:
-			pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(real_jid)
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
 		if not real_jid or pixbuf == 'ask':
 			# we don't have the vcard or it's pm and we don't have the real jid
 			gajim.connections[self.account].request_vcard(jid_with_resource)

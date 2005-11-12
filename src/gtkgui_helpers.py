@@ -25,6 +25,8 @@ import pango
 import os
 import sys
 
+import vcard
+
 
 HAS_PYWIN32 = True
 if os.name == 'nt':
@@ -418,3 +420,19 @@ def get_scaled_pixbuf(pixbuf, type):
 		w = int(h * ratio)
 	scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 	return scaled_buf
+
+def get_avatar_pixbuf_from_cache(jid):
+	'''checks if jid has cached avatar and if that avatar is valid image
+	(can be shown)
+	return None if there is no image in vcard
+	return 'ask' if vcard is too old or if we don't have the vcard'''
+	if jid not in os.listdir(gajim.VCARDPATH):
+		return 'ask'
+
+	vcard_dict = gajim.connections.values()[0].get_cached_vcard(jid)
+	if not vcard_dict: # This can happen if cached vcard is too old
+		return 'ask'
+	if not vcard_dict.has_key('PHOTO'):
+		return None
+	pixbuf = vcard.get_avatar_pixbuf_encoded_mime(vcard_dict['PHOTO'])[0]
+	return pixbuf

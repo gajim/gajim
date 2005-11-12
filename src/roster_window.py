@@ -264,7 +264,7 @@ class RosterWindow:
 		#FIXME: here it gets called to often
 		# for example if we recv a message we also reset the avatar!
 		if gajim.config.get('show_avatars_in_roster'):
-			pixbuf = gajim.interface.get_avatar_pixbuf_from_cache(jid)
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
 			if pixbuf in ('ask', None):
 				scaled_pixbuf = None
 			else:

@@ -62,7 +62,14 @@ except ImportError:
 	dlg.destroy()
 	sys.exit()
 
-import gtkexcepthook
+path = os.getcwd()
+if '.svn' in os.listdir(path):
+	# import gtkexcepthook only for those that run svn
+	# those than run with --verbose run from terminal so no need to care
+	# about those
+	import gtkexcepthook
+del path
+
 import gobject
 if sys.version[:4] >= '2.4':
 	gobject.threads_init()
@@ -75,7 +82,6 @@ import time
 import base64
 
 import gtkgui_helpers
-import vcard
 import notify
 
 import common.sleepy
@@ -921,22 +927,6 @@ class Interface:
 
 	def handle_event_vcard_not_published(self, account, array):
 		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))
-
-	def get_avatar_pixbuf_from_cache(self, jid):
-		'''checks if jid has cached avatar and if that avatar is valid image
-		(can be shown)
-		return None if there is no image in vcard
-		return 'ask' if vcard is too old or if we don't have the vcard'''
-		if jid not in os.listdir(gajim.VCARDPATH):
-			return 'ask'
-
-		vcard_dict = gajim.connections.values()[0].get_cached_vcard(jid)
-		if not vcard_dict: # This can happen if cached vcard is too old
-			return 'ask'
-		if not vcard_dict.has_key('PHOTO'):
-			return None
-		pixbuf = vcard.get_avatar_pixbuf_encoded_mime(vcard_dict['PHOTO'])[0]
-		return pixbuf
 	
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
