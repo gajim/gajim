@@ -431,7 +431,7 @@ class Interface:
 		contact = gajim.get_first_contact_instance_from_jid(account, jid)
 		if self.windows[account]['chats'].has_key(jid):
 			chat_win = self.windows[account]['chats'][jid]
-			if chatstate is not None: # he sent us reply, so he supports jep85
+			if chatstate is not None: # he or she sent us reply, so he supports jep85
 				if contact.chatstate == 'ask': # we were jep85 disco?
 					contact.chatstate = 'active' # no more
 				
@@ -1177,7 +1177,7 @@ class Interface:
 			strerr = os.strerror(err_code)
 			print strerr
 			# it is good to notify the user
-			# in case he cannot see the output of the console
+			# in case he or she cannot see the output of the console
 			dialogs.ErrorDialog(_('Cannot save your preferences'),
 				strerr).get_response()
 			sys.exit(1)

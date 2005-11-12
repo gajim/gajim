@@ -2626,7 +2626,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		else:
 			if not gajim.config.get('trayicon'):
 				# cannot happen via GUI, but I put this incase user touches config
-				self.window.show_all() # without trayicon, he should see the roster!
+				self.window.show_all() # without trayicon, he or she should see the roster!
 				gajim.config.set('show_roster_on_startup', True)
 
 		if len(gajim.connections) == 0: # if we have no account

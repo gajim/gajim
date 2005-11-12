@@ -373,7 +373,7 @@ class ConversationTextview(gtk.TextView):
 				c = gajim.contacts[self.account][text][0]
 				if _('not in the roster') in c.groups:
 					allow_add = True
-			else: # he's not at all in the account contacts
+			else: # he or she's not at all in the account contacts
 				allow_add = True
 			
 			if allow_add:

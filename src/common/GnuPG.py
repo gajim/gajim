@@ -29,7 +29,7 @@ except ImportError:
 	try:
 		from common import GnuPGInterface # use 'our' file
 	except ImportError:
-		USE_GPG = False # user can't do OpenGPG only if he removed the file!
+		USE_GPG = False # user can't do OpenGPG only if he or she removed the file!
 	
 else:
 	class GnuPG(GnuPGInterface.GnuPG):
