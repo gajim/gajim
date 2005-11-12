@@ -258,7 +258,7 @@ class RosterWindow:
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
 
 		state_images = self.get_appropriate_state_images(jid)
-		icon_name = helpers.get_icon_name_to_show(account, contact)
+		icon_name = helpers.get_icon_name_to_show(contact, account)
 		img = state_images[icon_name]
 
 		#FIXME: here it gets called to often
