@@ -49,7 +49,7 @@ def dbus_get_interface():
 		return dbus.Interface(obj, 'org.freedesktop.Notifications')
 	except Exception, e:
 		return None
-	except dbus.dbus_bindings.DBusException, e:
+	except dbus.DBusException, e:
 		# This exception could give useful info about why notification breaks
 		print >> sys.stderr, e
 		return None
@@ -124,7 +124,7 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 	path = os.path.abspath(path)
 	notif = dbus_get_interface()
 	if notif is None:
-		raise dbus.dbus_bindings.DBusException()
+		raise dbus.DBusException()
 	notif.Notify(dbus.String(_('Gajim')), 
 		dbus.String(path), dbus.UInt32(0), ntype, dbus.Byte(0),
 		dbus.String(event_type), dbus.String(txt),
@@ -135,7 +135,7 @@ def notify(event_type, jid, account, msg_type = '', file_props = None):
 		try:
 			dbus_notify(event_type, jid, account, msg_type, file_props)
 			return
-		except dbus.dbus_bindings.DBusException, e:
+		except dbus.DBusException, e:
 			# Connection to DBus failed, try popup
 			pass
 		except TypeError, e:
