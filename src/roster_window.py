@@ -653,7 +653,7 @@ class RosterWindow:
 				gajim.groups[account][g] = { 'expand': ishidden }
 
 	def chg_contact_status(self, contact, show, status, account):
-		'''When a contact changes his status'''
+		'''When a contact changes his or her status'''
 		showOffline = gajim.config.get('showoffline')
 		model = self.tree.get_model()
 		contact_instances = gajim.contacts[account][contact.jid]
@@ -1203,7 +1203,7 @@ class RosterWindow:
 			user1 = gajim.get_contact_instance_with_highest_priority(account, jid)
 			if not _('not in the roster') in user1.groups:
 				dialogs.InformationDialog(_('Subscription request has been sent'),
-_('If "%s" accepts this request you will know his status.') %jid)
+_('If "%s" accepts this request you will know his or her status.') %jid)
 				return
 			user1.groups = [group]
 			user1.name = pseudo

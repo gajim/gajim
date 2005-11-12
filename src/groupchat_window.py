@@ -423,7 +423,7 @@ class GroupchatWindow(chat.Chat):
 
 	def chg_contact_status(self, room_jid, nick, show, status, role, affiliation,
 		jid, reason, actor, statusCode, new_nick, account):
-		'''When a user changes his status'''
+		'''When a user changes his or her status'''
 		if show == 'invisible':
 			return
 		if not role:
@@ -454,7 +454,7 @@ class GroupchatWindow(chat.Chat):
 						'who': actor,
 						'reason': reason }
 				self.print_conversation(s, room_jid)
-			elif statusCode == '303': # Someone changed his nick
+			elif statusCode == '303': # Someone changed his or her nick
 				if nick == self.nicks[room_jid]: # We changed our nick
 					self.nicks[room_jid] = new_nick
 					s = _('You are now known as %s') % new_nick

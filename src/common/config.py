@@ -158,7 +158,7 @@ class Config:
 		'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
 		'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window')],
 		'show_avatars_in_roster': [opt_bool, True],
-		'print_status_in_chats': [opt_bool, True, _('If False, you will no longer see status line in chats when a contact changes his status and/or his status message.')],
+		'print_status_in_chats': [opt_bool, True, _('If False, you will no longer see status line in chats when a contact changes his or her status and/or his status message.')],
 	}
 
 	__options_per_key = {

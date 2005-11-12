@@ -554,7 +554,7 @@ class Interface:
 			gajim.contacts[account][jid] = [contact1]
 			self.roster.add_contact_to_roster(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),
-				_('The contact "%s" has authorized you to see his status.')
+				_('The contact "%s" has authorized you to see his or her status.')
 				% jid)
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Subscribed', (account, array))
