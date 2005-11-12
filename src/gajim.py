@@ -561,7 +561,7 @@ class Interface:
 
 	def handle_event_unsubscribed(self, account, jid):
 		dialogs.InformationDialog(_('Contact "%s" removed subscription from you') % jid,
-				_('You will always see him as offline.'))
+				_('You will always see him or her as offline.'))
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('Unsubscribed', (account, jid))
 	

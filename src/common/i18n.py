@@ -52,7 +52,7 @@ def Q_(s):
 	# widget.set_text(s)
 	# Q_() removes the ?vcard: 
 	# but gettext while parsing the file detects ?vcard:Unknown as a whole string.
-	# translator can either put the ?vcard: part or no (easier for him to no)
+	# translator can either put the ?vcard: part or no (easier for him or her to no)
 	# nothing fails
 	s = _(s)
 	if s[0] == '?':

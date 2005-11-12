@@ -1353,7 +1353,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		'''Remove a contact'''
 		window = dialogs.ConfirmationDialogCheck(
 			_('Contact "%s" will be removed from your roster') % (user.name),
-			_('By removing this contact you also by default remove authorization resulting in him/her always seeing you as offline.'),
+			_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'),
 			_('I want this contact to know my status after removal'))
 		# FIXME:
 		# maybe use 2 optionboxes from which the user can select? (better)
