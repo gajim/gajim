@@ -538,7 +538,7 @@ def get_icon_name_to_show(contact, account):
 	if gajim.awaiting_events[account].has_key(contact.jid):
 		#FIXME: change icon for FT
 		return 'message'
-	if jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
+	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 		return contact.show
 	if contact.sub in ('both', 'to'):
 		return contact.show
