@@ -362,6 +362,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		self.hbox.set_spacing(0)
 		self.create_table()
 		if not contacts or len(contacts) == 0:
+			# Tooltip for merged accounts row
 			accounts = self.get_accounts_info()
 			self.current_row = 0
 			self.table.resize(2, 1)
@@ -374,7 +375,8 @@ class RosterTooltip(NotificationAreaTooltip):
 		prim_contact = gajim.get_highest_prio_contact_from_contacts(contacts)
 		
 		# try to find the image for the contact status
-		state_file = prim_contact.show.replace(' ', '_')
+		icon_name = helpers.get_icon_name_to_show(prim_contact)
+		state_file = icon_name.replace(' ', '_')
 		transport = gajim.get_transport_name_from_jid(prim_contact.jid)
 		if transport:
 			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports', 
@@ -424,7 +426,8 @@ class RosterTooltip(NotificationAreaTooltip):
 				if contact.resource:
 					status_line = self.get_status_info(contact.resource, contact.priority, 
 						contact.show, contact.status)
-					self.add_status_row(file_path, contact.show, status_line)
+					icon_name = helpers.get_icon_name_to_show(contact)
+					self.add_status_row(file_path, icon_name, status_line)
 					
 		else: # only one resource
 			if contact.resource:

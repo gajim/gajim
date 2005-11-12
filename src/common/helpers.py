@@ -532,3 +532,19 @@ def get_global_show():
 		if connected > maxi:
 			maxi = connected
 	return gajim.SHOW_LIST[maxi]
+
+def get_icon_name_to_show(contact, account):
+	'''Get the icon name to show in online, away, requested, ...'''
+	if gajim.awaiting_events[account].has_key(contact.jid):
+		#FIXME: change icon for FT
+		return 'message'
+	if jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
+		return contact.show
+	if contact.sub in ('both', 'to'):
+		return contact.show
+	if contact.ask == 'subscribe':
+		return 'requested'
+	transport = gajim.get_transport_name_from_jid(contat.jid)
+	if transport:
+		return contact.show
+	return 'not in the roster'

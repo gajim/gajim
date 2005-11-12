@@ -258,23 +258,8 @@ class RosterWindow:
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
 
 		state_images = self.get_appropriate_state_images(jid)
-		if gajim.awaiting_events[account].has_key(jid):
-			#FIXME: change icon for FT
-			img = state_images['message']
-		elif jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
-			img = state_images[contact.show]					
-		else:
-			if contact.sub in ('both', 'to'):
-				img = state_images[contact.show]
-			else:
-				if contact.ask == 'subscribe':
-					img = state_images['requested']
-				else:
-					transport = gajim.get_transport_name_from_jid(jid)
-					if transport and state_images.has_key(contact.show):
-						img = state_images[contact.show]
-					else:
-						img = state_images['not in the roster']
+		icon_name = helpers.get_icon_name_to_show(account, contact)
+		img = state_images[icon_name]
 
 		#FIXME: here it gets called to often
 		# for example if we recv a message we also reset the avatar!
