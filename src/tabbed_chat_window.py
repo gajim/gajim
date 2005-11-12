@@ -200,7 +200,7 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_window_avatar_leave_notify_event(self, widget, event):
 		'''we just left the popup window that holds avatar'''
-		self.bigger_avatar_window.hide()
+		self.bigger_avatar_window.destroy()
 
 	def on_window_motion_notify_event(self, widget, event):
 		'''we just moved the mouse so show the cursor'''
