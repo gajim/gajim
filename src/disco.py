@@ -179,7 +179,6 @@ class ServicesCache:
 				del self._items[key]
 		if self._info or self._items:
 			return True
-		gc.collect()
 		self._cleancid = None
 		return False
 
@@ -507,10 +506,6 @@ _('Without a connection, you can not browse available services')).get_response()
 			if chain and not self.parent.children:
 				self.parent.destroy(chain = chain)
 				self.parent = None
-
-		# This is for the icon cache. We do this here because we want to keep
-		# it cross-browser, but not when we close the window.
-		gc.collect()
 	
 	def travel(self, jid, node):
 		'''Travel to an agent within the current services window.'''
