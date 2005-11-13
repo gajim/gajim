@@ -83,7 +83,7 @@ class AdvancedConfigurationWindow:
 		
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
-		gajim.interface.windows['advanced_config'] = self
+		gajim.interface.instances['advanced_config'] = self
 
 	def cb_value_column_data(self, col, cell, model, iter):
 		'''check if it's boolen or holds password stuff and if yes
@@ -145,8 +145,8 @@ class AdvancedConfigurationWindow:
 
 	def on_advanced_configuration_window_destroy(self, widget):
 		# update ui of preferences window to get possible changes we did
-		gajim.interface.windows['preferences'].update_preferences_window()
-		del gajim.interface.windows['advanced_config']
+		gajim.interface.instances['preferences'].update_preferences_window()
+		del gajim.interface.instances['advanced_config']
 
 	def on_advanced_close_button_clicked(self, widget):
 		self.window.destroy()

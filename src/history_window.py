@@ -90,7 +90,7 @@ class HistoryWindow:
 		self.window.show_all()
 
 	def on_history_window_destroy(self, widget):
-		del gajim.interface.windows['logs'][self.jid]
+		del gajim.interface.instances['logs'][self.jid]
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()

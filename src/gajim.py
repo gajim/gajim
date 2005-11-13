@@ -187,7 +187,7 @@ class Interface:
 		title = data[1]
 		prompt = data[2]
 		proposed_nick = data[3]
-		w = self.windows[account]['gc']
+		w = self.instances[account]['gc']
 		if w.has_key(room_jid): # user may close the window before we are here
 			w[room_jid].show_change_nick_input_dialog(title, prompt, proposed_nick,
 				room_jid)
@@ -207,7 +207,7 @@ class Interface:
 		id, jid_from, errmsg, errcode = array
 		if unicode(errcode) in ('403', '406') and id:
 			# show the error dialog
-			ft = self.windows['file_transfers']
+			ft = self.instances['file_transfers']
 			sid = id
 			if len(id) > 3 and id[2] == '_':
 				sid = id[3:]
@@ -230,8 +230,8 @@ class Interface:
 					(jid_from, file_props))
 				conn.disconnect_transfer(file_props)
 				return
-		if jid_from in self.windows[account]['gc']:
-			self.windows[account]['gc'][jid_from].print_conversation(
+		if jid_from in self.instances[account]['gc']:
+			self.instances[account]['gc'][jid_from].print_conversation(
 				'Error %s: %s' % (array[2], array[1]), jid_from)
 
 	def handle_event_con_type(self, account, con_type):
@@ -251,16 +251,16 @@ class Interface:
 			if not gajim.gc_connected.has_key(account):
 				return
 			for room_jid in gajim.gc_connected[account]:
-				if self.windows[account]['gc'].has_key(room_jid):
-					self.windows[account]['gc'][room_jid].got_disconnected(room_jid)
+				if self.instances[account]['gc'].has_key(room_jid):
+					self.instances[account]['gc'][room_jid].got_disconnected(room_jid)
 		else:
 			gobject.timeout_add(30000, self.allow_notif, account)
 			model[self.roster.status_message_menuitem_iter][3] = True # sensitivity for this menuitem
 		self.roster.on_status_changed(account, status)
 		if account in self.show_vcard_when_connect:
 			jid = gajim.get_jid_from_account(account)
-			if not self.windows[account]['infos'].has_key('vcard'):
-				self.windows[account]['infos'][jid] = \
+			if not self.instances[account]['infos'].has_key('vcard'):
+				self.instances[account]['infos'][jid] = \
 					dialogs.VcardWindow(jid, account, True)
 				gajim.connections[account].request_vcard(jid)
 		if self.remote and self.remote.is_enabled():
@@ -359,7 +359,7 @@ class Interface:
 				if gajim.config.get_per('soundevents', 'contact_connected',
 					'enabled'):
 					helpers.play_sound('contact_connected')
-				if not self.windows[account]['chats'].has_key(jid) and \
+				if not self.instances[account]['chats'].has_key(jid) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
 					gajim.allow_notifications[account]:
@@ -379,7 +379,7 @@ class Interface:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
 						'enabled'):
 					helpers.play_sound('contact_disconnected')
-				if not self.windows[account]['chats'].has_key(jid) and \
+				if not self.instances[account]['chats'].has_key(jid) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signout'):
 					show_notification = False
@@ -417,16 +417,16 @@ class Interface:
 			elif gajim.connections[account].connected in (2, 3): # we're online or chat
 				show_notification = True
 
-		if self.windows[account]['gc'].has_key(jid): # it's a Private Message
+		if self.instances[account]['gc'].has_key(jid): # it's a Private Message
 			nick = gajim.get_nick_from_fjid(array[0])
 			fjid = array[0]
-			if not self.windows[account]['chats'].has_key(fjid) and \
+			if not self.instances[account]['chats'].has_key(fjid) and \
 				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
 					notify.notify(
 						_('New Private Message'), fjid, account, 'pm')
 
-			self.windows[account]['gc'][jid].on_private_message(jid, nick,
+			self.instances[account]['gc'][jid].on_private_message(jid, nick,
 				array[1], array[2])
 			return
 				
@@ -436,8 +436,8 @@ class Interface:
 
 		# Handle chat states  
 		contact = gajim.get_first_contact_instance_from_jid(account, jid)
-		if self.windows[account]['chats'].has_key(jid):
-			chat_win = self.windows[account]['chats'][jid]
+		if self.instances[account]['chats'].has_key(jid):
+			chat_win = self.instances[account]['chats'][jid]
 			if chatstate is not None: # he or she sent us reply, so he supports jep85
 				if contact.chatstate == 'ask': # we were jep85 disco?
 					contact.chatstate = 'active' # no more
@@ -455,7 +455,7 @@ class Interface:
 			return
 
 		first = False
-		if not self.windows[account]['chats'].has_key(jid) and \
+		if not self.instances[account]['chats'].has_key(jid) and \
 			not gajim.awaiting_events[account].has_key(jid):
 			first = True
 			if gajim.config.get('notify_on_new_message'):
@@ -490,11 +490,11 @@ class Interface:
 		fjid = array[0]
 		jids = fjid.split('/', 1)
 		jid = jids[0]
-		gcs = self.windows[account]['gc']
+		gcs = self.instances[account]['gc']
 		if jid in gcs:
 			if len(jids) > 1: # it's a pm
 				nick = jids[1]
-				if not self.windows[account]['chats'].has_key(fjid):
+				if not self.instances[account]['chats'].has_key(fjid):
 					gc = gcs[jid]
 					tv = gc.list_treeview[jid]
 					model = tv.get_model()
@@ -506,7 +506,7 @@ class Interface:
 					c = Contact(jid = fjid, name = nick, groups = ['none'],
 						show = show, ask = 'none')
 					self.roster.new_chat(c, account)
-				self.windows[account]['chats'][fjid].print_conversation(
+				self.instances[account]['chats'][fjid].print_conversation(
 					'Error %s: %s' % (array[1], array[2]), fjid, 'status')
 				return
 			gcs[jid].print_conversation('Error %s: %s' % \
@@ -613,16 +613,16 @@ class Interface:
 
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (config))
-		if self.windows.has_key('account_creation_wizard'):
-			self.windows['account_creation_wizard'].acc_is_ok(array)
+		if self.instances.has_key('account_creation_wizard'):
+			self.instances['account_creation_wizard'].acc_is_ok(array)
 
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('NewAccount', (account, array))
 
 	def handle_event_acc_not_ok(self, account, array):
 		#('ACC_NOT_OK', account, (reason))
-		if self.windows.has_key('account_creation_wizard'):
-			self.windows['account_creation_wizard'].acc_is_not_ok(array)
+		if self.instances.has_key('account_creation_wizard'):
+			self.instances['account_creation_wizard'].acc_is_not_ok(array)
 
 	def handle_event_quit(self, p1, p2):
 		self.roster.quit_gtkgui_interface()
@@ -633,8 +633,8 @@ class Interface:
 			nick = array['NICKNAME']
 			if nick:
 				gajim.nicks[account] = nick
-		if self.windows[account]['infos'].has_key(array['jid']):
-			win = self.windows[account]['infos'][array['jid']]
+		if self.instances[account]['infos'].has_key(array['jid']):
+			win = self.instances[account]['infos'][array['jid']]
 			win.set_values(array)
 			if account in self.show_vcard_when_connect:
 				win.xml.get_widget('information_notebook').set_current_page(-1)
@@ -649,19 +649,19 @@ class Interface:
 		
 		# vcard window
 		win = None
-		if self.windows[account]['infos'].has_key(jid):
-			win = self.windows[account]['infos'][jid]
-		elif self.windows[account]['infos'].has_key(jid + '/' + resource):
-			win = self.windows[account]['infos'][jid + '/' + resource]
+		if self.instances[account]['infos'].has_key(jid):
+			win = self.instances[account]['infos'][jid]
+		elif self.instances[account]['infos'].has_key(jid + '/' + resource):
+			win = self.instances[account]['infos'][jid + '/' + resource]
 		if win:
 			win.set_values(vcard)
 
 		# show avatar in chat
 		win = None
-		if self.windows[account]['chats'].has_key(jid):
-			win = self.windows[account]['chats'][jid]
-		elif self.windows[account]['chats'].has_key(jid + '/' + resource):
-			win = self.windows[account]['chats'][jid + '/' + resource]
+		if self.instances[account]['chats'].has_key(jid):
+			win = self.instances[account]['chats'][jid]
+		elif self.instances[account]['chats'].has_key(jid + '/' + resource):
+			win = self.instances[account]['chats'][jid + '/' + resource]
 		if win:
 			# FIXME: this will be removed when we have the thread working
 			win.show_avatar(jid, resource)
@@ -670,10 +670,10 @@ class Interface:
 
 	def handle_event_os_info(self, account, array):
 		win = None
-		if self.windows[account]['infos'].has_key(array[0]):
-			win = self.windows[account]['infos'][array[0]]
-		elif self.windows[account]['infos'].has_key(array[0] + '/' + array[1]):
-			win = self.windows[account]['infos'][array[0] + '/' + array[1]]
+		if self.instances[account]['infos'].has_key(array[0]):
+			win = self.instances[account]['infos'][array[0]]
+		elif self.instances[account]['infos'].has_key(array[0] + '/' + array[1]):
+			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
 		if win:
 			win.set_os_info(array[1], array[2], array[3])
 		if self.remote and self.remote.is_enabled():
@@ -686,10 +686,10 @@ class Interface:
 		resource = array[3]
 		if not resource:
 			resource = ''
-		if self.windows[account]['gc'].has_key(jid): # ji is then room_jid
+		if self.instances[account]['gc'].has_key(jid): # ji is then room_jid
 			#FIXME: upgrade the chat instances (for pm)
 			#FIXME: real_jid can be None
-			self.windows[account]['gc'][jid].chg_contact_status(jid, resource,
+			self.instances[account]['gc'][jid].chg_contact_status(jid, resource,
 				array[1], array[2], array[4], array[5], array[6], array[7],
 				array[8], array[9], array[10], account)
 			if self.remote and self.remote.is_enabled():
@@ -699,7 +699,7 @@ class Interface:
 		# ('GC_MSG', account, (jid, msg, time))
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
-		if not self.windows[account]['gc'].has_key(room_jid):
+		if not self.instances[account]['gc'].has_key(room_jid):
 			return
 		if len(jids) == 1:
 			# message from server
@@ -707,7 +707,7 @@ class Interface:
 		else:
 			# message from someone
 			nick = jids[1]
-		self.windows[account]['gc'][room_jid].on_message(room_jid, nick, array[1],
+		self.instances[account]['gc'][room_jid].on_message(room_jid, nick, array[1],
 			array[2])
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('GCMessage', (account, array))
@@ -716,18 +716,18 @@ class Interface:
 		#('GC_SUBJECT', account, (jid, subject))
 		jids = array[0].split('/', 1)
 		jid = jids[0]
-		if not self.windows[account]['gc'].has_key(jid):
+		if not self.instances[account]['gc'].has_key(jid):
 			return
-		self.windows[account]['gc'][jid].set_subject(jid, array[1])
+		self.instances[account]['gc'][jid].set_subject(jid, array[1])
 		if len(jids) > 1:
-			self.windows[account]['gc'][jid].print_conversation(
+			self.instances[account]['gc'][jid].print_conversation(
 				'%s has set the subject to %s' % (jids[1], array[1]), jid)
 
 	def handle_event_gc_config(self, account, array):
 		#('GC_CONFIG', account, (jid, config))  config is a dict
 		jid = array[0].split('/')[0]
-		if not self.windows[account]['gc_config'].has_key(jid):
-			self.windows[account]['gc_config'][jid] = \
+		if not self.instances[account]['gc_config'].has_key(jid):
+			self.instances[account]['gc_config'][jid] = \
 			config.GroupchatConfigWindow(account, jid, array[1])
 	
 	def handle_event_gc_invitation(self, account, array):
@@ -780,7 +780,7 @@ class Interface:
 	def handle_event_file_send_error(self, account, array):
 		jid = array[0]
 		file_props = array[1]
-		ft = self.windows['file_transfers']
+		ft = self.instances['file_transfers']
 		ft.set_status(file_props['type'], file_props['sid'], 'stop')
 
 		if gajim.popup_window(account):
@@ -827,7 +827,7 @@ class Interface:
 	def handle_event_file_request_error(self, account, array):
 		jid = array[0]
 		file_props = array[1]
-		ft = self.windows['file_transfers']
+		ft = self.instances['file_transfers']
 		ft.set_status(file_props['type'], file_props['sid'], 'stop')
 		errno = file_props['error']
 
@@ -858,7 +858,7 @@ class Interface:
 		contact = gajim.contacts[account][jid][0]
 
 		if gajim.popup_window(account):
-			self.windows['file_transfers'].show_file_request(account, contact,
+			self.instances['file_transfers'].show_file_request(account, contact,
 				file_props)
 			return
 
@@ -869,11 +869,11 @@ class Interface:
 				jid, account, 'file-request')
 
 	def handle_event_file_progress(self, account, file_props):
-		self.windows['file_transfers'].set_progress(file_props['type'], 
+		self.instances['file_transfers'].set_progress(file_props['type'], 
 			file_props['sid'], file_props['received-len'])
 			
 	def handle_event_file_rcv_completed(self, account, file_props):
-		ft = self.windows['file_transfers']
+		ft = self.instances['file_transfers']
 		if file_props['error'] == 0:
 			ft.set_progress(file_props['type'], file_props['sid'], 
 				file_props['received-len'])
@@ -912,16 +912,16 @@ class Interface:
 				msg_type, file_props)
 
 	def handle_event_stanza_arrived(self, account, stanza):
-		if not self.windows.has_key(account):
+		if not self.instances.has_key(account):
 			return
-		if self.windows[account].has_key('xml_console'):
-			self.windows[account]['xml_console'].print_stanza(stanza, 'incoming')
+		if self.instances[account].has_key('xml_console'):
+			self.instances[account]['xml_console'].print_stanza(stanza, 'incoming')
 
 	def handle_event_stanza_sent(self, account, stanza):
-		if not self.windows.has_key(account):
+		if not self.instances.has_key(account):
 			return
-		if self.windows[account].has_key('xml_console'):
-			self.windows[account]['xml_console'].print_stanza(stanza, 'outgoing')
+		if self.instances[account].has_key('xml_console'):
+			self.instances[account]['xml_console'].print_stanza(stanza, 'outgoing')
 
 	def handle_event_vcard_published(self, account, array):
 		dialogs.InformationDialog(_('vCard publication succeeded'), _('Your personal information has been published successfully.'))
@@ -1259,10 +1259,10 @@ class Interface:
 		gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
 		
-		self.windows = {'logs': {}}
+		self.instances = {'logs': {}}
 		
 		for a in gajim.connections:
-			self.windows[a] = {'infos': {}, 'disco': {}, 'chats': {},
+			self.instances[a] = {'infos': {}, 'disco': {}, 'chats': {},
 				'gc': {}, 'gc_config': {}}
 			gajim.contacts[a] = {}
 			gajim.groups[a] = {}
@@ -1329,11 +1329,11 @@ class Interface:
 		self.init_regexp()
 		
 		# get instances for windows/dialogs that will show_all()/hide()
-		self.windows['file_transfers'] = dialogs.FileTransfersWindow()
-		self.windows['preferences'] = config.PreferencesWindow()
+		self.instances['file_transfers'] = dialogs.FileTransfersWindow()
+		self.instances['preferences'] = config.PreferencesWindow()
 		
 		for account in gajim.connections:
-			self.windows[account]['xml_console'] = \
+			self.instances[account]['xml_console'] = \
 				dialogs.XMLConsoleWindow(account)
 
 		gobject.timeout_add(100, self.autoconnect)

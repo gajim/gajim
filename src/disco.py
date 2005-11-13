@@ -488,7 +488,7 @@ _('Without a connection, you can not browse available services')).get_response()
 
 		# self.browser._get_agent_address() would break when no browser.
 		addr = get_agent_address(self.jid, self.node)
-		del gajim.interface.windows[self.account]['disco'][addr]
+		del gajim.interface.instances[self.account]['disco'][addr]
 
 		if self.browser:
 			self.window.hide()
@@ -515,10 +515,10 @@ _('Without a connection, you can not browse available services')).get_response()
 		# Update the window list
 		if self.jid:
 			old_addr = get_agent_address(self.jid, self.node)
-			if gajim.interface.windows[self.account]['disco'].has_key(old_addr):
-				del gajim.interface.windows[self.account]['disco'][old_addr]
+			if gajim.interface.instances[self.account]['disco'].has_key(old_addr):
+				del gajim.interface.instances[self.account]['disco'][old_addr]
 		addr = get_agent_address(jid, node)
-		gajim.interface.windows[self.account]['disco'][addr] = self
+		gajim.interface.instances[self.account]['disco'][addr] = self
 		# We need to store these, self.browser is not always available.
 		self.jid = jid
 		self.node = node
@@ -549,7 +549,7 @@ _('This type of service does not contain any items to browse.')).get_response()
 	def open(self, jid, node):
 		'''Open an agent. By default, this happens in a new window.'''
 		try:
-			win = gajim.interface.windows[self.account]['disco']\
+			win = gajim.interface.instances[self.account]['disco']\
 				[get_agent_address(jid, node)]
 			win.window.present()
 			return
@@ -1388,10 +1388,10 @@ class MucBrowser(AgentBrowser):
 			service = services[1]
 		else:
 			room = model[iter][1].decode('utf-8')
-		if not gajim.interface.windows[self.account].has_key('join_gc'):
+		if not gajim.interface.instances[self.account].has_key('join_gc'):
 			dialogs.JoinGroupchatWindow(self.account, service, room)
 		else:
-			gajim.interface.windows[self.account]['join_gc'].window.present()
+			gajim.interface.instances[self.account]['join_gc'].window.present()
 		self.window.destroy(chain = True)
 
 	def update_actions(self):

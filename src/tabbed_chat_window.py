@@ -123,7 +123,7 @@ class TabbedChatWindow(chat.Chat):
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 				if os.path.isfile(path): # is it file?
-					gajim.interface.windows['file_transfers'].send_file(self.account,
+					gajim.interface.instances['file_transfers'].send_file(self.account,
 						contact, path)
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
@@ -388,7 +388,7 @@ class TabbedChatWindow(chat.Chat):
 		# Reset contact chatstates to all open tabs
 		for jid in self.xmls:
 			self.contacts[jid].chatstate = None
-		#clean gajim.interface.windows[self.account]['chats']
+		#clean gajim.interface.instances[self.account]['chats']
 		chat.Chat.on_window_destroy(self, widget, 'chats')
 
 	def on_tabbed_chat_window_focus_in_event(self, widget, event):
@@ -402,7 +402,7 @@ class TabbedChatWindow(chat.Chat):
 	def on_send_file_menuitem_activate(self, widget):
 		jid = self.get_active_jid()
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
-		gajim.interface.windows['file_transfers'].show_file_send_request( 
+		gajim.interface.instances['file_transfers'].show_file_send_request( 
 			self.account, contact)
 
 	def on_add_to_roster_menuitem_activate(self, widget):
@@ -800,7 +800,7 @@ class TabbedChatWindow(chat.Chat):
 		# Is it a pm ?
 		is_pm = False
 		room_jid = jid.split('/', 1)[0]
-		gcs = gajim.interface.windows[self.account]['gc']
+		gcs = gajim.interface.instances[self.account]['gc']
 		if gcs.has_key(room_jid):
 			is_pm = True
 		events_to_keep = []
@@ -836,7 +836,7 @@ class TabbedChatWindow(chat.Chat):
 		typ = 'chat' # Is it a normal chat or a pm ?
 		# reset to status image in gc if it is a pm
 		room_jid = jid.split('/', 1)[0]
-		gcs = gajim.interface.windows[self.account]['gc']
+		gcs = gajim.interface.instances[self.account]['gc']
 		if gcs.has_key(room_jid):
 			gcs[room_jid].update_state_images()
 			typ = 'pm'

@@ -238,7 +238,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 
 		for acct in gajim.connections:
 			# we count unread chat/pm messages
-			chat_wins = gajim.interface.windows[acct]['chats']
+			chat_wins = gajim.interface.instances[acct]['chats']
 			for jid in chat_wins:
 				if jid != 'tabbed':
 					if gajim.contacts[acct].has_key(jid):
@@ -246,7 +246,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 					else:
 						unread_pm += chat_wins[jid].nb_unread[jid]
 			# we count unread gc/pm messages
-			gc_wins = gajim.interface.windows[acct]['gc']
+			gc_wins = gajim.interface.instances[acct]['gc']
 			for jid in gc_wins:
 				if jid != 'tabbed':
 					pm_msgs = gc_wins[jid].get_specific_unread(jid)

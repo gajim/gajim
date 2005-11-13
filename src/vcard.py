@@ -98,7 +98,7 @@ class VcardWindow:
 		self.window.show_all()
 
 	def on_vcard_information_window_destroy(self, widget = None):
-		del gajim.interface.windows[self.account]['infos'][self.jid]
+		del gajim.interface.instances[self.account]['infos'][self.jid]
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:

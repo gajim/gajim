@@ -273,9 +273,9 @@ class Chat:
 		return 'pm'
 
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
-		'''clean gajim.interface.windows[self.account][kind]'''
+		'''clean gajim.interface.instances[self.account][kind]'''
 		for jid in self.xmls:
-			windows = gajim.interface.windows[self.account][kind]
+			windows = gajim.interface.instances[self.account][kind]
 			if kind == 'chats':
 				# send 'gone' chatstate to every tabbed chat tab
 				windows[jid].send_chatstate('gone', jid)
@@ -308,10 +308,10 @@ class Chat:
 		'''When history menuitem is pressed: call history window'''
 		if jid is None:
 			jid = self.get_active_jid()
-		if gajim.interface.windows['logs'].has_key(jid):
-			gajim.interface.windows['logs'][jid].window.present()
+		if gajim.interface.instances['logs'].has_key(jid):
+			gajim.interface.instances['logs'][jid].window.present()
 		else:
-			gajim.interface.windows['logs'][jid] = history_window.HistoryWindow(jid,
+			gajim.interface.instances['logs'][jid] = history_window.HistoryWindow(jid,
 				self.account)
 
 	def on_chat_window_focus_in_event(self, widget, event):
@@ -529,8 +529,8 @@ class Chat:
 
 			self.notebook.remove_page(self.notebook.page_num(self.childs[jid]))
 
-		if gajim.interface.windows[self.account][kind].has_key(jid):
-			del gajim.interface.windows[self.account][kind][jid]
+		if gajim.interface.instances[self.account][kind].has_key(jid):
+			del gajim.interface.instances[self.account][kind][jid]
 		del self.nb_unread[jid]
 		del gajim.last_message_time[self.account][jid]
 		del self.xmls[jid]

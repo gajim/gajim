@@ -820,12 +820,12 @@ class GroupchatWindow(chat.Chat):
 								server = servernick
 								nick = ''
 							#join_gc window is needed in order to provide for password entry.
-							if gajim.interface.windows[self.account].has_key('join_gc'):
-								gajim.interface.windows[self.account]['join_gc'].\
+							if gajim.interface.instances[self.account].has_key('join_gc'):
+								gajim.interface.instances[self.account]['join_gc'].\
 									window.present()
 							else:
 								try:
-									gajim.interface.windows[self.account]['join_gc'] =\
+									gajim.interface.instances[self.account]['join_gc'] =\
 										dialogs.JoinGroupchatWindow(self.account,
 											server = server, room = room, nick = nick)
 								except RuntimeError:
@@ -1103,14 +1103,14 @@ current room topic.') % command, room_jid)
 		else:
 			fjid = gajim.construct_fjid(room_jid, nick)
 			jid = fjid
-		if gajim.interface.windows[self.account]['infos'].has_key(jid):
-			gajim.interface.windows[self.account]['infos'][jid].window.present()
+		if gajim.interface.instances[self.account]['infos'].has_key(jid):
+			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
 			# we copy contact because c.jid must contain the fakeJid for vcard
 			c2 = Contact(jid = jid, name = c.name, groups = c.groups, 
 				show = c.show, status = c.status, sub = c.sub, 
 				resource = c.resource, role = c.role, affiliation = c.affiliation)
-			gajim.interface.windows[self.account]['infos'][jid] = \
+			gajim.interface.instances[self.account]['infos'][jid] = \
 				dialogs.VcardWindow(c2, self.account, False)
 
 	def on_history(self, widget, room_jid, nick):
@@ -1134,18 +1134,18 @@ current room topic.') % command, room_jid)
 			nick = model[iter][C_NICK].decode('utf-8')
 		room_jid = self.get_active_jid()
 		fjid = gajim.construct_fjid(room_jid, nick) # 'fake' jid
-		if not gajim.interface.windows[self.account]['chats'].has_key(fjid):
+		if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
 			show = gajim.gc_contacts[self.account][room_jid][nick].show
 			u = Contact(jid = fjid, name =  nick, groups = ['none'], show = show,
 				sub = 'none')
 			gajim.interface.roster.new_chat(u, self.account)
 		
 		#make active here in case we need to send a message
-		gajim.interface.windows[self.account]['chats'][fjid].set_active_tab(fjid)
+		gajim.interface.instances[self.account]['chats'][fjid].set_active_tab(fjid)
 
 		if msg:
-			gajim.interface.windows[self.account]['chats'][fjid].send_message(msg)
-		gajim.interface.windows[self.account]['chats'][fjid].window.present()
+			gajim.interface.instances[self.account]['chats'][fjid].send_message(msg)
+		gajim.interface.instances[self.account]['chats'][fjid].window.present()
 
 	def on_voice_checkmenuitem_activate(self, widget, room_jid, nick):
 		if widget.get_active():
@@ -1431,8 +1431,8 @@ current room topic.') % command, room_jid)
 			no_queue = False
 
 		# We print if window is opened
-		if gajim.interface.windows[self.account]['chats'].has_key(fjid):
-			chat_win = gajim.interface.windows[self.account]['chats'][fjid]
+		if gajim.interface.instances[self.account]['chats'].has_key(fjid):
+			chat_win = gajim.interface.instances[self.account]['chats'][fjid]
 			chat_win.print_conversation(msg, fjid, tim = tim)
 			return
 
@@ -1567,7 +1567,7 @@ current room topic.') % command, room_jid)
 			if len(path) == 2:
 				nick = model[iter][C_NICK].decode('utf-8')
 				fjid = gajim.construct_fjid(room_jid, nick)
-				if not gajim.interface.windows[self.account]['chats'].has_key(fjid):
+				if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
 					show = gajim.gc_contacts[self.account][room_jid][nick].show
 					c = gajim.gc_contacts[self.account][room_jid][nick]
 					j = fjid
@@ -1576,8 +1576,8 @@ current room topic.') % command, room_jid)
 					u = Contact(jid = j, name = nick, groups = ['none'],
 						show = show, sub = 'none')
 					gajim.interface.roster.new_chat(u, self.account)
-				gajim.interface.windows[self.account]['chats'][fjid].set_active_tab(fjid)
-				gajim.interface.windows[self.account]['chats'][fjid].window.present()
+				gajim.interface.instances[self.account]['chats'][fjid].set_active_tab(fjid)
+				gajim.interface.instances[self.account]['chats'][fjid].window.present()
 			return True
 			
 		elif event.button == 1: # left click
@@ -1615,7 +1615,7 @@ current room topic.') % command, room_jid)
 			room_jid = self.get_active_jid()
 			nick = model[iter][C_NICK].decode('utf-8')
 			jid = gajim.construct_fjid(room_jid, nick)
-			if not gajim.interface.windows[self.account]['chats'].has_key(jid):
+			if not gajim.interface.instances[self.account]['chats'].has_key(jid):
 				show = gajim.gc_contacts[self.account][room_jid][nick].show
 				c = gajim.gc_contacts[self.account][room_jid][nick]
 				j = jid
@@ -1625,8 +1625,8 @@ current room topic.') % command, room_jid)
 					sub = 'none')
 				gajim.interface.roster.new_chat(contact, self.account)
 				jid = contact.jid
-			gajim.interface.windows[self.account]['chats'][jid].set_active_tab(jid)
-			gajim.interface.windows[self.account]['chats'][jid].window.present()
+			gajim.interface.instances[self.account]['chats'][jid].set_active_tab(jid)
+			gajim.interface.instances[self.account]['chats'][jid].window.present()
 
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded: change the icon of the arrow'''

@@ -161,7 +161,7 @@ class SignalObject(DbusPrototype):
 		
 		if connected_account:
 			if os.path.isfile(file_path): # is it file?
-				gajim.interface.windows['file_transfers'].send_file(account, 
+				gajim.interface.instances['file_transfers'].send_file(account, 
 					contact, file_path)
 				return True
 		return False
@@ -219,7 +219,7 @@ class SignalObject(DbusPrototype):
 		first_connected_acct = None
 		for acct in accounts:
 			if gajim.connections[acct].connected > 1: # account is  online
-				if gajim.interface.windows[acct]['chats'].has_key(jid):
+				if gajim.interface.instances[acct]['chats'].has_key(jid):
 					connected_account = acct
 					break
 				# jid is in roster
@@ -240,7 +240,7 @@ class SignalObject(DbusPrototype):
 		if connected_account:
 			gajim.interface.roster.new_chat_from_jid(connected_account, jid)
 			# preserve the 'steal focus preservation'
-			win = gajim.interface.windows[connected_account]['chats'][jid].window
+			win = gajim.interface.instances[connected_account]['chats'][jid].window
 			if win.get_property('visible'):
 				win.window.focus()
 			return True
@@ -275,7 +275,7 @@ class SignalObject(DbusPrototype):
 		if len(gajim.interface.systray.jids) != 0:
 			account = gajim.interface.systray.jids[0][0]
 			jid = gajim.interface.systray.jids[0][1]
-			acc = gajim.interface.windows[account]
+			acc = gajim.interface.instances[account]
 			jid_tab = None
 			if acc['gc'].has_key(jid):
 				jid_tab = acc['gc'][jid]

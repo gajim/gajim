@@ -333,14 +333,14 @@ class ConversationTextview(gtk.TextView):
 
 	def on_join_group_chat_menuitem_activate(self, widget, jid):
 		room, server = jid.split('@')
-		if gajim.interface.windows[self.account].has_key('join_gc'):
-			instance = gajim.interface.windows[self.account]['join_gc']
+		if gajim.interface.instances[self.account].has_key('join_gc'):
+			instance = gajim.interface.instances[self.account]['join_gc']
 			instance.xml.get_widget('server_entry').set_text(server)
 			instance.xml.get_widget('room_entry').set_text(room)
-			gajim.interface.windows[self.account]['join_gc'].window.present()		
+			gajim.interface.instances[self.account]['join_gc'].window.present()		
 		else:
 			try:
-				gajim.interface.windows[self.account]['join_gc'] = \
+				gajim.interface.instances[self.account]['join_gc'] = \
 				dialogs.JoinGroupchatWindow(self.account, server, room)
 			except RuntimeError:
 				pass

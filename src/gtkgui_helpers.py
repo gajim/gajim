@@ -212,9 +212,9 @@ def resize_window(window, w, h):
 
 def one_window_opened(typ):
 	for account in gajim.connections:
-		if not gajim.interface.windows[account].has_key(typ):
+		if not gajim.interface.instances[account].has_key(typ):
 			continue
-		if len(gajim.interface.windows[account][typ]):
+		if len(gajim.interface.instances[account][typ]):
 			return True
 	return False
 

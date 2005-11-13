@@ -95,13 +95,13 @@ class Systray:
 		self.set_img()
 	
 	def start_chat(self, widget, account, jid):
-		if gajim.interface.windows[account]['chats'].has_key(jid):
-			gajim.interface.windows[account]['chats'][jid].window.present()
-			gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
+		if gajim.interface.instances[account]['chats'].has_key(jid):
+			gajim.interface.instances[account]['chats'][jid].window.present()
+			gajim.interface.instances[account]['chats'][jid].set_active_tab(jid)
 		elif gajim.contacts[account].has_key(jid):
 			gajim.interface.roster.new_chat(
 				gajim.contacts[account][jid][0], account)
-			gajim.interface.windows[account]['chats'][jid].set_active_tab(jid)
+			gajim.interface.instances[account]['chats'][jid].set_active_tab(jid)
 	
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When new message menuitem is activated:
@@ -219,10 +219,10 @@ class Systray:
 		win.present()
 
 	def on_preferences_menuitem_activate(self, widget):
-		if gajim.interface.windows['preferences'].window.get_property('visible'):
-			gajim.interface.windows['preferences'].window.present()
+		if gajim.interface.instances['preferences'].window.get_property('visible'):
+			gajim.interface.instances['preferences'].window.present()
 		else:
-			gajim.interface.windows['preferences'].window.show_all()
+			gajim.interface.instances['preferences'].window.show_all()
 
 	def on_quit_menuitem_activate(self, widget):	
 		gajim.interface.roster.on_quit_menuitem_activate(widget)
@@ -292,7 +292,7 @@ class Systray:
 		self.handle_event(account, jid, typ)
 
 	def handle_event(self, account, jid, typ):
-		wins = gajim.interface.windows[account]
+		wins = gajim.interface.instances[account]
 		w = None
 		if typ == 'gc':
 			if wins['gc'].has_key(jid):

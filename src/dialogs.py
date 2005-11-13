@@ -609,13 +609,13 @@ class SubscriptionRequestWindow:
 
 	def on_contact_info_button_clicked(self, widget):
 		'''ask vcard'''
-		if gajim.interface.windows[self.account]['infos'].has_key(self.jid):
-			gajim.interface.windows[self.account]['infos'][self.jid].window.present()
+		if gajim.interface.instances[self.account]['infos'].has_key(self.jid):
+			gajim.interface.instances[self.account]['infos'][self.jid].window.present()
 		else:
-			gajim.interface.windows[self.account]['infos'][self.jid] = \
+			gajim.interface.instances[self.account]['infos'][self.jid] = \
 				VcardWindow(self.jid, self.account, True)
 			#remove the publish / retrieve buttons
-			vcard_xml = gajim.interface.windows[self.account]['infos'][self.jid].xml
+			vcard_xml = gajim.interface.instances[self.account]['infos'][self.jid].xml
 			hbuttonbox = vcard_xml.get_widget('information_hbuttonbox')
 			children = hbuttonbox.get_children()
 			hbuttonbox.remove(children[0])
@@ -644,7 +644,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		self.xml.get_widget('room_entry').set_text(room)
 		self.xml.get_widget('nickname_entry').set_text(nick)
 		self.xml.signal_autoconnect(self)
-		gajim.interface.windows[account]['join_gc'] = self #now add us to open windows
+		gajim.interface.instances[account]['join_gc'] = self #now add us to open windows
 		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
 			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
@@ -671,7 +671,7 @@ _('You can not join a group chat unless you are connected.')).get_response()
 	def on_join_groupchat_window_destroy(self, widget):
 		'''close window'''
 		# remove us from open windows
-		del gajim.interface.windows[self.account]['join_gc']
+		del gajim.interface.instances[self.account]['join_gc']
 
 	def on_join_groupchat_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
@@ -911,7 +911,7 @@ class PopupNotificationWindow:
 
 		if self.msg_type == 'pm': # It's a private message
 			gajim.interface.roster.new_chat(contact, self.account)
-			chats_window = gajim.interface.windows[self.account]['chats'][self.jid]
+			chats_window = gajim.interface.instances[self.account]['chats'][self.jid]
 			chats_window.set_active_tab(self.jid)
 			chats_window.window.present()
 		elif self.msg_type in ('normal', 'file-request', 'file-request-error',
@@ -922,7 +922,7 @@ class PopupNotificationWindow:
 
 		else: # 'chat'
 			gajim.interface.roster.new_chat(contact, self.account)
-			chats_window = gajim.interface.windows[self.account]['chats'][self.jid]
+			chats_window = gajim.interface.instances[self.account]['chats'][self.jid]
 			chats_window.set_active_tab(self.jid)
 			chats_window.window.present()
 

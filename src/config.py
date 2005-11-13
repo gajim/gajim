@@ -495,10 +495,10 @@ class PreferencesWindow:
 			[self.xml.get_widget('add_remove_emoticons_button')])
 	
 	def on_add_remove_emoticons_button_clicked(self, widget):
-		if gajim.interface.windows.has_key('manage_emots'):
-			gajim.interface.windows['manage_emots'].window.present()
+		if gajim.interface.instances.has_key('manage_emots'):
+			gajim.interface.instances['manage_emots'].window.present()
 		else:
-			gajim.interface.windows['manage_emots'] = ManageEmoticonsWindow()
+			gajim.interface.instances['manage_emots'] = ManageEmoticonsWindow()
 
 	def on_iconset_combobox_changed(self, widget):
 		model = widget.get_model()
@@ -533,7 +533,7 @@ class PreferencesWindow:
 			buf1 = {}
 			buf2 = {}
 			saved_var = {}
-			windows = gajim.interface.windows[acct][kind]
+			windows = gajim.interface.instances[acct][kind]
 			jids = windows.keys()
 			for jid in jids:
 				window = windows[jid]
@@ -563,7 +563,7 @@ class PreferencesWindow:
 			buf1 = {}
 			buf2 = {}
 			saved_var = {}
-			windows = gajim.interface.windows[acct][kind]
+			windows = gajim.interface.instances[acct][kind]
 			jids = windows.keys()
 			if not 'tabbed' in jids:
 				continue
@@ -603,7 +603,7 @@ class PreferencesWindow:
 
 	def apply_speller(self, kind):
 		for acct in gajim.connections:
-			windows = gajim.interface.windows[acct][kind]
+			windows = gajim.interface.instances[acct][kind]
 			jids = windows.keys()
 			for jid in jids:
 				if jid == 'tabbed':
@@ -614,7 +614,7 @@ class PreferencesWindow:
 
 	def remove_speller(self, kind):
 		for acct in gajim.connections:
-			windows = gajim.interface.windows[acct][kind]
+			windows = gajim.interface.instances[acct][kind]
 			jids = windows.keys()
 			for jid in jids:
 				if jid == 'tabbed':
@@ -639,7 +639,7 @@ class PreferencesWindow:
 	def update_print_time(self):
 		'''Update time in Opened Chat Windows'''
 		for a in gajim.connections:
-			window = gajim.interface.windows[a]['chats']
+			window = gajim.interface.instances[a]['chats']
 			if window.has_key('tabbed'):
 				window['tabbed'].update_print_time()
 			else:
@@ -684,7 +684,7 @@ class PreferencesWindow:
 		'''Update color tags in Opened Chat Windows'''
 		for a in gajim.connections:
 			for kind in ('chats', 'gc'):
-				windows = gajim.interface.windows[a][kind]
+				windows = gajim.interface.instances[a][kind]
 				if windows.has_key('tabbed'):
 					windows['tabbed'].update_tags()
 				else:
@@ -695,7 +695,7 @@ class PreferencesWindow:
 		'''Update text font in Opened Chat Windows'''
 		for a in gajim.connections:
 			for kind in ('chats', 'gc'):
-				windows = gajim.interface.windows[a][kind]
+				windows = gajim.interface.instances[a][kind]
 				if windows.has_key('tabbed'):
 					windows['tabbed'].update_font()
 				else:
@@ -1026,10 +1026,10 @@ class PreferencesWindow:
 		model.set_value(iter, 1, 1)
 
 	def on_open_advanced_editor_button_clicked(self, widget, data = None):
-		if gajim.interface.windows.has_key('advanced_config'):
-			gajim.interface.windows['advanced_config'].window.present()
+		if gajim.interface.instances.has_key('advanced_config'):
+			gajim.interface.instances['advanced_config'].window.present()
 		else:
-			gajim.interface.windows['advanced_config'] = \
+			gajim.interface.instances['advanced_config'] = \
 				dialogs.AdvancedConfigurationWindow()
 
 #---------- AccountModificationWindow class -------------#
@@ -1037,12 +1037,12 @@ class AccountModificationWindow:
 	'''Class for account informations'''
 	def on_account_modification_window_destroy(self, widget):
 		'''close window'''
-		if gajim.interface.windows.has_key(self.account):
-			if gajim.interface.windows[self.account].has_key('account_modification'):
-				del gajim.interface.windows[self.account]['account_modification']
+		if gajim.interface.instances.has_key(self.account):
+			if gajim.interface.instances[self.account].has_key('account_modification'):
+				del gajim.interface.instances[self.account]['account_modification']
 				return
-		if gajim.interface.windows.has_key('account_modification'):
-			del gajim.interface.windows['account_modification']
+		if gajim.interface.instances.has_key('account_modification'):
+			del gajim.interface.instances['account_modification']
 	
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
@@ -1276,7 +1276,7 @@ class AccountModificationWindow:
 		#if we modify the name of the account
 		if name != self.account:
 			#update variables
-			gajim.interface.windows[name] = gajim.interface.windows[self.account]
+			gajim.interface.instances[name] = gajim.interface.windows[self.account]
 			gajim.awaiting_events[name] = gajim.awaiting_events[self.account]
 			gajim.nicks[name] = gajim.nicks[self.account]
 			gajim.allow_notifications[name] = \
@@ -1297,8 +1297,8 @@ class AccountModificationWindow:
 
 			#upgrade account variable in opened windows
 			for kind in ('infos', 'disco', 'chats', 'gc', 'gc_config'):
-				for j in gajim.interface.windows[name][kind]:
-					gajim.interface.windows[name][kind][j].account = name
+				for j in gajim.interface.instances[name][kind]:
+					gajim.interface.instances[name][kind][j].account = name
 
 			#upgrade account in systray
 			if gajim.interface.systray_enabled:
@@ -1306,7 +1306,7 @@ class AccountModificationWindow:
 					if list[0] == self.account:
 						list[0] = name
 
-			del gajim.interface.windows[self.account]
+			del gajim.interface.instances[self.account]
 			del gajim.awaiting_events[self.account]
 			del gajim.nicks[self.account]
 			del gajim.allow_notifications[self.account]
@@ -1335,8 +1335,8 @@ class AccountModificationWindow:
 		else:
 			gajim.connections[name].password = None
 		#refresh accounts window
-		if gajim.interface.windows.has_key('accounts'):
-			gajim.interface.windows['accounts'].init_accounts()
+		if gajim.interface.instances.has_key('accounts'):
+			gajim.interface.instances['accounts'].init_accounts()
 		#refresh roster
 		gajim.interface.roster.draw_roster()
 		gajim.interface.save_config()
@@ -1356,7 +1356,7 @@ class AccountModificationWindow:
 				self.xml.get_widget('password_entry').set_text(new_password)
 
 	def on_edit_details_button_clicked(self, widget):
-		if not gajim.interface.windows.has_key(self.account):
+		if not gajim.interface.instances.has_key(self.account):
 			dialogs.ErrorDialog(_('No such account available'),
 				_('You must create your account before editing your personal information.')).get_response()
 			return
@@ -1371,18 +1371,18 @@ _('Without a connection, you can not edit your personal information.')
 			return
 		
 		# in infos the key jid is OUR jid so we save the vcardwindow instance there
-		if gajim.interface.windows[self.account]['infos'].has_key(jid):
-			gajim.interface.windows[self.account]['infos'][jid].window.present()
+		if gajim.interface.instances[self.account]['infos'].has_key(jid):
+			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
-			gajim.interface.windows[self.account]['infos'][jid] = \
+			gajim.interface.instances[self.account]['infos'][jid] = \
 				dialogs.VcardWindow(jid, self.account, True)
 			gajim.connections[self.account].request_vcard(jid)
 
 	def on_manage_proxies_button_clicked(self, widget):
-		if gajim.interface.windows.has_key('manage_proxies'):
-			gajim.interface.windows['manage_proxies'].window.present()
+		if gajim.interface.instances.has_key('manage_proxies'):
+			gajim.interface.instances['manage_proxies'].window.present()
 		else:
-			gajim.interface.windows['manage_proxies'] = \
+			gajim.interface.instances['manage_proxies'] = \
 				ManageProxiesWindow()
 
 	def on_gpg_choose_button_clicked(self, widget, data = None):
@@ -1488,12 +1488,12 @@ class ManageProxiesWindow:
 
 	def on_manage_proxies_window_destroy(self, widget):
 		for account in gajim.connections:
-			if gajim.interface.windows[account].has_key('account_modification'):
-				gajim.interface.windows[account]['account_modification'].\
+			if gajim.interface.instances[account].has_key('account_modification'):
+				gajim.interface.instances[account]['account_modification'].\
 					update_proxy_list()
-		if gajim.interface.windows.has_key('account_modification'):
-			gajim.interface.windows['account_modification'].update_proxy_list()
-		del gajim.interface.windows['manage_proxies'] 
+		if gajim.interface.instances.has_key('account_modification'):
+			gajim.interface.instances['account_modification'].update_proxy_list()
+		del gajim.interface.instances['manage_proxies'] 
 
 	def on_add_proxy_button_clicked(self, widget):
 		model = self.proxies_treeview.get_model()
@@ -1613,7 +1613,7 @@ class ManageProxiesWindow:
 class AccountsWindow:
 	'''Class for accounts window: list of accounts'''
 	def on_accounts_window_destroy(self, widget):
-		del gajim.interface.windows['accounts'] 
+		del gajim.interface.instances['accounts'] 
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
@@ -1659,10 +1659,10 @@ class AccountsWindow:
 
 	def on_new_button_clicked(self, widget):
 		'''When new button is clicked: open an account information window'''
-		if gajim.interface.windows.has_key('account_creation_wizard'):
-			gajim.interface.windows['account_creation_wizard'].window.present()			
+		if gajim.interface.instances.has_key('account_creation_wizard'):
+			gajim.interface.instances['account_creation_wizard'].window.present()			
 		else:
-			gajim.interface.windows['account_creation_wizard'] = \
+			gajim.interface.instances['account_creation_wizard'] = \
 				AccountCreationWizardWindow()
 
 	def on_remove_button_clicked(self, widget):
@@ -1673,10 +1673,10 @@ class AccountsWindow:
 		if not iter:
 			return
 		account = model.get_value(iter, 0).decode('utf-8')
-		if gajim.interface.windows[account].has_key('remove_account'):
-			gajim.interface.windows[account]['remove_account'].window.present()
+		if gajim.interface.instances[account].has_key('remove_account'):
+			gajim.interface.instances[account]['remove_account'].window.present()
 		else:
-			gajim.interface.windows[account]['remove_account'] = \
+			gajim.interface.instances[account]['remove_account'] = \
 				RemoveAccountWindow(account)
 
 	def on_modify_button_clicked(self, widget):
@@ -1696,10 +1696,10 @@ class AccountsWindow:
 		self.show_modification_window(account)
 
 	def show_modification_window(self, account):
-		if gajim.interface.windows[account].has_key('account_modification'):
-			gajim.interface.windows[account]['account_modification'].window.present()
+		if gajim.interface.instances[account].has_key('account_modification'):
+			gajim.interface.instances[account]['account_modification'].window.present()
 		else:
-			gajim.interface.windows[account]['account_modification'] = \
+			gajim.interface.instances[account]['account_modification'] = \
 				AccountModificationWindow(account)
 
 class DataFormWindow:
@@ -1941,7 +1941,7 @@ class ManageEmoticonsWindow:
 	def on_manage_emoticons_window_destroy(self, widget):
 		gajim.interface.init_regexp() # update regexp [emoticons included]
 		# remove us from open windows
-		del gajim.interface.windows['manage_emots']
+		del gajim.interface.instances['manage_emots']
 	
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
@@ -2126,7 +2126,7 @@ class GroupchatConfigWindow(DataFormWindow):
 		self.room_jid = room_jid
 
 	def on_data_form_window_destroy(self, widget):
-		del gajim.interface.windows[self.account]['gc_config'][self.room_jid]
+		del gajim.interface.instances[self.account]['gc_config'][self.room_jid]
 
 	def on_apply_button_clicked(self, widget):
 		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
@@ -2138,8 +2138,8 @@ class RemoveAccountWindow:
 	and do removing of the account given'''
 	
 	def on_remove_account_window_destroy(self, widget):
-		if gajim.interface.windows.has_key(self.account):
-			del gajim.interface.windows[self.account]['remove_account']
+		if gajim.interface.instances.has_key(self.account):
+			del gajim.interface.instances[self.account]['remove_account']
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
@@ -2168,7 +2168,7 @@ class RemoveAccountWindow:
 		del gajim.connections[self.account]
 		gajim.config.del_per('accounts', self.account)
 		gajim.interface.save_config()
-		del gajim.interface.windows[self.account]
+		del gajim.interface.instances[self.account]
 		del gajim.awaiting_events[self.account]
 		del gajim.nicks[self.account]
 		del gajim.allow_notifications[self.account]
@@ -2184,8 +2184,8 @@ class RemoveAccountWindow:
 		del gajim.status_before_autoaway[self.account]
 		del gajim.events_for_ui[self.account]
 		gajim.interface.roster.draw_roster()
-		if gajim.interface.windows.has_key('accounts'):
-			gajim.interface.windows['accounts'].init_accounts()
+		if gajim.interface.instances.has_key('accounts'):
+			gajim.interface.instances['accounts'].init_accounts()
 		self.window.destroy()
 
 #---------- ManageBookmarksWindow class -------------#
@@ -2262,7 +2262,7 @@ class ManageBookmarksWindow:
 			return not self.check_valid_bookmark()
 
 	def on_manage_bookmarks_window_destroy(self, widget, event):
-		del gajim.interface.windows['manage_bookmarks']
+		del gajim.interface.instances['manage_bookmarks']
 
 	def on_add_bookmark_button_clicked(self,widget):
 		'''
@@ -2487,7 +2487,7 @@ class AccountCreationWizardWindow:
 		self.window.show_all()
 
 	def on_wizard_window_destroy(self, widget):
-		del gajim.interface.windows['account_creation_wizard']
+		del gajim.interface.instances['account_creation_wizard']
 
 	def on_register_server_features_button_clicked(self, widget): 
 		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
@@ -2626,7 +2626,7 @@ _('You can set advanced account options by pressing Advanced button,or later by 
 		self.notebook.set_current_page(3) # show finish page
 
 	def on_advanced_button_clicked(self, widget):
-		gajim.interface.windows[self.account]['account_modification'] = \
+		gajim.interface.instances[self.account]['account_modification'] = \
 			AccountModificationWindow(self.account)
 		self.window.destroy()
 
@@ -2717,9 +2717,9 @@ _('You can set advanced account options by pressing Advanced button,or later by 
 			gajim.config.set_per('accounts', self.account, opt, config[opt])
 
 		# update variables
-		gajim.interface.windows[self.account] = {'infos': {}, 'disco': {},
+		gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
 			'chats': {}, 'gc': {}, 'gc_config': {}}
-		gajim.interface.windows[self.account]['xml_console'] = \
+		gajim.interface.instances[self.account]['xml_console'] = \
 			dialogs.XMLConsoleWindow(self.account)
 		gajim.awaiting_events[self.account] = {}
 		gajim.connections[self.account].connected = 0
@@ -2737,8 +2737,8 @@ _('You can set advanced account options by pressing Advanced button,or later by 
 		gajim.status_before_autoaway[self.account] = ''
 		gajim.events_for_ui[self.account] = []
 		# refresh accounts window
-		if gajim.interface.windows.has_key('accounts'):
-			gajim.interface.windows['accounts'].init_accounts()
+		if gajim.interface.instances.has_key('accounts'):
+			gajim.interface.instances['accounts'].init_accounts()
 		# refresh roster
 		gajim.interface.roster.draw_roster()
 		gajim.interface.save_config()
