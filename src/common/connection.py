@@ -170,7 +170,7 @@ class Connection:
 		self.privacy_rules_supported = False
 		#Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
-		#List of IDs we are waiting answers for {id: type_of_request, }
+		#List of IDs we are waiting answers for {id: (type_of_request, data), }
 		self.awaiting_answers = {}
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
@@ -1374,10 +1374,36 @@ class Connection:
 		id = iq_obj.getID()
 		if id not in self.awaiting_answers:
 			return
-		if self.awaiting_answers[id] == VCARD_PUBLISHED:
+		if self.awaiting_answers[id][0] == VCARD_PUBLISHED:
 			typ = iq_obj.getType()
 			if iq_obj.getType() == 'result':
 				self.dispatch('VCARD_PUBLISHED', ())
+				vcard_iq = self.awaiting_answers[id][1]
+				# Save vcard to HD
+				#FIXME use has_child
+				if vcard_iq.getTag('PHOTO') and vcard_iq.getTag('PHOTO').getTag('SHA'):
+					new_sha = vcard_iq.getTag('PHOTO').getTagData('SHA')
+				else:
+					new_sha = ''
+
+				# Save it to file
+				our_jid = gajim.get_jid_from_account(self.name)
+				path_to_file = os.path.join(gajim.VCARDPATH, our_jid)
+				fil = open(path_to_file, 'w')
+				fil.write(str(vcard_iq))
+				fil.close()
+
+				# Send new presence if sha changed and we are not invisible
+				if self.vcard_sha != new_sha and STATUS_LIST[self.connected] != \
+					'invisible':
+					self.vcard_sha = new_sha
+					sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+					prio = unicode(gajim.config.get_per('accounts', self.name,
+						'priority'))
+					p = common.xmpp.Presence(typ = None, priority = prio,
+						show = sshow, status = self.status)
+					p = self.add_sha(p)
+					self.to_be_sent.append(p)
 			elif iq_obj.getType() == 'error':
 				self.dispatch('VCARD_NOT_PUBLISHED', ())
 		del self.awaiting_answers[id]
@@ -2018,10 +2044,23 @@ class Connection:
 						iq3.addChild(k).setData(j[k])
 			else:
 				iq2.addChild(i).setData(vcard[i])
+
 		id = self.connection.getAnID()
 		iq.setID(id)
-		self.awaiting_answers[str(id)] = VCARD_PUBLISHED
 		self.to_be_sent.append(iq)
+
+		# Add the sha of the avatar
+		if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
+		vcard['PHOTO'].has_key('BINVAL'):
+			photo = vcard['PHOTO']['BINVAL']
+			avatar_sha = sha.sha(photo).hexdigest()
+		else:
+			avatar_sha = ''
+
+		if avatar_sha:
+			iq2.getTag('PHOTO').setTagData('SHA', avatar_sha)
+
+		self.awaiting_answers[str(id)] = (VCARD_PUBLISHED, iq2)
 
 	def get_settings(self):
 		''' Get Gajim settings as described in JEP 0049 '''
