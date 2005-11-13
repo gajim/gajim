@@ -5,6 +5,7 @@
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
+##	- Travis Shirk <travis@pobox.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -1353,9 +1354,10 @@ class Connection:
 		if opt in ('yes', 'no'):
 			self.build_http_auth_answer(iq_obj, opt)
 		else:
+			id = iq_obj.getTagAttr('confirm', 'id')
 			method = iq_obj.getTagAttr('confirm', 'method')
 			url = iq_obj.getTagAttr('confirm', 'url')
-			self.dispatch('HTTP_AUTH', (method, url, iq_obj));
+			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj));
 		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
@@ -1837,7 +1839,8 @@ class Connection:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 
 		# chatstates - if peer supports jep85, send chatstates
-		# please note that the only valid tag inside a message containing a <body> tag is the active event
+		# please note that the only valid tag inside a message containing a <body>
+		# tag is the active event
 		if chatstate is not None:
 			msg_iq.setTag(chatstate, {},
 				namespace = 'http://jabber.org/protocol/chatstates')

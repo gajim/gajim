@@ -9,6 +9,7 @@ exec python -OOt "$0" ${1+"$@"}
 ## - Vincent Hanquez <tab@snarc.org>
 ## - Nikos Kouremenos <kourem@gmail.com>
 ## - Dimitur Kirov <dkirov@gmail.com>
+## - Travis Shirk <travis@pobox.com>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
@@ -192,9 +193,9 @@ class Interface:
 				room_jid)
 
 	def handle_event_http_auth(self, account, data):
-		#('HTTP_AUTH', account, (method, url, iq_obj))
-		dialog = dialogs.ConfirmationDialog(_('HTTP (%s) Authorization for %s') \
-			% (data[0], data[1]), _('Do you accept this request?'))
+		#('HTTP_AUTH', account, (method, url, transaction_id, iq_obj))
+		dialog = dialogs.ConfirmationDialog(_('HTTP (%s) Authorization for %s (id: %s)') \
+			% (data[0], data[1], data[2]), _('Do you accept this request?'))
 		if dialog.get_response() == gtk.RESPONSE_OK:
 			answer = 'yes'
 		else:

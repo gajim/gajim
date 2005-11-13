@@ -439,6 +439,7 @@ class AboutDialog:
 			'Vincent Hanquez <tab@snarc.org>',
 			'Nikos Kouremenos <kourem@gmail.com>',
 			'Dimitur Kirov <dkirov@gmail.com>',
+			'Travis Shirk <travis@pobox.com>',
 			'Gajim patchers'
 		]
 		
