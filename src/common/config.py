@@ -5,6 +5,7 @@
 ##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
+##	- Travis Shirk <travis@pobox.com>
 ##
 ## Copyright (C) 2003-2005 Gajim Team
 ##
@@ -280,12 +281,17 @@ class Config:
 		'(N)': '../data/emoticons/no.png',
 		'(P)': '../data/emoticons/photo.png',
 		'(K)': '../data/emoticons/kiss.png',
+		':-*': '../data/emoticons/kiss.png',
+		':*': '../data/emoticons/kiss.png',
 		'(R)': '../data/emoticons/rainbow.png',
 		':-|': '../data/emoticons/stare.png',
 		';-)': '../data/emoticons/wink.png',
 		';-(': '../data/emoticons/cry.png',
 		'(6)': '../data/emoticons/devil.png',
+		'>:)': '../data/emoticons/devil.png',
+		'>:-)': '../data/emoticons/devil.png',
 		'(L)': '../data/emoticons/heart.png',
+		'<3': '../data/emoticons/heart.png',
 		'(W)': '../data/emoticons/brflower.png',
 		':|': '../data/emoticons/stare.png',
 		':O': '../data/emoticons/oh.png',
