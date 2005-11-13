@@ -753,7 +753,7 @@ class Interface:
 		if not (array[2] or array[3]):
 			self.roster.remove_contact(contacts[0], account)
 			del gajim.contacts[account][jid]
-			#TODO if it was the only one in its group, remove the group
+			#FIXME if it was the only one in its group, remove the group
 			return
 		for contact in contacts:
 			name = array[1]

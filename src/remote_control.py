@@ -31,7 +31,7 @@ _ = i18n._
 
 try:
 	import dbus
-	_version = getattr(dbus, 'version', (0, 20, 0)) 
+	_version = getattr(dbus, 'version', (0, 20, 0))
 except ImportError:
 	_version = (0, 0, 0)
 	
