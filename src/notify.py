@@ -86,7 +86,7 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
 			txt = _('%(nickname)s in room %(room_name)s has sent you a new message.')\
-				% ('nickname': nick, 'room_name': room_name)
+				% {'nickname': nick, 'room_name': room_name}
 		else:
 			#we talk about a name here
 			txt = _('%s has sent you a new message.') % actor
@@ -110,10 +110,10 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 				filename = os.path.basename(file_props['file-name'])
 				if event_type == _('File Transfer Completed'):
 					txt = _('You successfully received %(filename)s from %(name)s.')\
-						% ('filename': filename, 'name': name)
+						% {'filename': filename, 'name': name}
 				else: # ft stopped
 					txt = _('File transfer of %(filename)s from %(name)s stopped.')\
-						% ('filename': filename, 'name': name)
+						% {'filename': filename, 'name': name}
 			else:
 				receiver = file_props['receiver']
 				if hasattr(receiver, 'jid'):
@@ -124,10 +124,10 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 					account, receiver).name
 				if event_type == _('File Transfer Completed'):
 					txt = _('You successfully sent %(filename)s to %(name)s.')\
-						% ('filename': filename, 'name': name)
+						% {'filename': filename, 'name': name}
 				else: # ft stopped
 					txt = _('File transfer of %(filename)s to %(name)s stopped.')\
-						% ('filename': filename, 'name': name)
+						% {'filename': filename, 'name': name}
 		else:
 			txt = ''
 
