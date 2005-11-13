@@ -1971,6 +1971,7 @@ class Connection:
 			# We have the vcard cached
 			f = open(path_to_file)
 			c = f.read()
+			f.close()
 			card = common.xmpp.Node(node = c)
 			vcard = self.node_to_dict(card)
 			if vcard.has_key('PHOTO'):
