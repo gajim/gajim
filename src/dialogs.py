@@ -24,8 +24,8 @@ import gobject
 import os
 
 import gtkgui_helpers
-import vcard
 
+from vcard import VcardWindow
 from filetransfers_window import FileTransfersWindow
 from gajim_themes_window import GajimThemesWindow
 from advanced import AdvancedConfigurationWindow
@@ -613,7 +613,7 @@ class SubscriptionRequestWindow:
 			gajim.interface.windows[self.account]['infos'][self.jid].window.present()
 		else:
 			gajim.interface.windows[self.account]['infos'][self.jid] = \
-				vcard.VcardWindow(self.jid, self.account, True)
+				VcardWindow(self.jid, self.account, True)
 			#remove the publish / retrieve buttons
 			vcard_xml = gajim.interface.windows[self.account]['infos'][self.jid].xml
 			hbuttonbox = vcard_xml.get_widget('information_hbuttonbox')
