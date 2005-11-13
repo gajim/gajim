@@ -1,4 +1,3 @@
-#!/bin/sh
 ##	notify.py
 ##
 ## Gajim Team:
@@ -23,12 +22,12 @@
 ## GNU General Public License for more details.
 ##
 
-DBUS_MODULE = True
+HAS_DBUS = True
 
 try:
 	import dbus
 except ImportError:
-	DBUS_MODULE = False
+	HAS_DBUS = False
 
 import os
 import sys
@@ -55,7 +54,7 @@ def dbus_get_interface():
 		return None
 
 def dbus_available():
-	if not DBUS_MODULE:
+	if not HAS_DBUS:
 		return False
 	if dbus_get_interface() is None:
 		return False
@@ -64,10 +63,11 @@ def dbus_available():
 		
 def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 	if jid in gajim.contacts[account]:
-		txt = gajim.get_highest_prio_contact_from_contacts(
-			gajim.contacts[account][jid]).name
+		actor = gajim.get_first_contact_instance_from_jid(account, jid).name
 	else:
-		txt = jid
+		actor = jid
+	
+	print account
 
 	img = 'chat.png' # img to display
 	ntype = 'im'     # Notification Type
@@ -85,13 +85,16 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 		if event_type == _('New Private Message'):
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
-			txt = _('From %s in room %s') % (nick, room_name)
+			txt = _('%(nickname)s in room %(room_name)s has sent you a new message.')\
+				% ('nickname': nick, 'room_name': room_name)
 		else:
-			txt = _('From %s') % txt
+			#we talk about a name here
+			txt = _('%s has sent you a new message.') % actor
 	elif event_type == _('File Transfer Request'):
 		img = 'requested.png' # FIXME: better img
 		ntype = 'transfer'
-		txt = _('From %s') % txt
+		#we talk about a name here
+		txt = _('%s wants to send you a file.') % actor
 	elif event_type == _('File Transfer Error'):
 		img = 'error.png' # FIXME: better img
 		ntype = 'transfer.error'
@@ -104,7 +107,13 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 				sender = unicode(file_props['sender']).split('/')[0]
 				name = gajim.get_first_contact_instance_from_jid( 
 					account, sender).name
-				txt = _('From %s') % name
+				filename = os.path.basename(file_props['file-name'])
+				if event_type == _('File Transfer Completed'):
+					txt = _('You successfully received %(filename)s from %(name)s.')\
+						% ('filename': filename, 'name': name)
+				else: # ft stopped
+					txt = _('File transfer of %(filename)s from %(name)s stopped.')\
+						% ('filename': filename, 'name': name)
 			else:
 				receiver = file_props['receiver']
 				if hasattr(receiver, 'jid'):
@@ -113,13 +122,19 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 				# get the name of the contact, as it is in the roster
 				name = gajim.get_first_contact_instance_from_jid( 
 					account, receiver).name
-				txt = _('To %s') % name
+				if event_type == _('File Transfer Completed'):
+					txt = _('You successfully sent %(filename)s to %(name)s.')\
+						% ('filename': filename, 'name': name)
+				else: # ft stopped
+					txt = _('File transfer of %(filename)s to %(name)s stopped.')\
+						% ('filename': filename, 'name': name)
 		else:
 			txt = ''
 
 	iconset = gajim.config.get('iconset')
 	if not iconset:
 		iconset = 'sun'
+	# FIXME: use 32x32 or 48x48 someday
 	path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset,	'16x16', img)
 	path = os.path.abspath(path)
 	notif = dbus_get_interface()
