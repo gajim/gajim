@@ -1380,7 +1380,6 @@ class Connection:
 				self.dispatch('VCARD_PUBLISHED', ())
 				vcard_iq = self.awaiting_answers[id][1]
 				# Save vcard to HD
-				#FIXME use has_child
 				if vcard_iq.getTag('PHOTO') and vcard_iq.getTag('PHOTO').getTag('SHA'):
 					new_sha = vcard_iq.getTag('PHOTO').getTagData('SHA')
 				else:
