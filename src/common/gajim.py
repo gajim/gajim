@@ -69,6 +69,7 @@ encrypted_chats = {} # list of encrypted chats {acct1: [jid1, jid2], ..}
 contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
 gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
 gc_connected = {} # tell if we are connected to the room or not {room_jid: True}
+gc_passwords = {} # list of the pass required to enter a room {room_jid: password}
 
 groups = {} # list of groups
 newly_added = {} # list of contacts that has just signed in

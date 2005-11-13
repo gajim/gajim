@@ -294,6 +294,8 @@ class RosterWindow:
 		gajim.interface.instances[account]['gc'][room_jid].set_active_tab(room_jid)
 		gajim.interface.instances[account]['gc'][room_jid].window.present()
 		gajim.connections[account].join_gc(nick, room, server, password)
+		if password:
+			gajim.gc_passwords[room_jid] = password
 
 	def on_bookmark_menuitem_activate(self, widget, account, bookmark):
 		self.join_gc_room(account, bookmark['jid'], bookmark['nick'],

@@ -775,6 +775,19 @@ class Interface:
 			if bm['autojoin'] in ('1', 'true'):
 				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
 					bm['password'])
+		for account in gajim.connections:
+			for room_jid in self.instances[account]['gc']:
+				if room_jid == 'tabbed':
+					continue
+				if not gajim.gc_connected[account][room_jid]:
+					room, server = gajim.get_room_name_and_server_from_room_jid(
+						room_jid)
+					nick = self.instances[account]['gc'][room_jid].nicks[room_jid]
+					password = ''
+					if gajim.gc_passwords.has_key(room_jid):
+						password = gajim.gc_passwords[room_jid]
+					gajim.connections[account].join_gc(nick, room, server, password)
+
 		self.roster.make_menu()
 								
 	def handle_event_file_send_error(self, account, array):
