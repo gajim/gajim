@@ -1053,11 +1053,11 @@ class Interface:
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
 		mail = r'\bmailto:\S*[^\s\W]|' r'\b\S+@\S+\.\S*[^\s\W]|'
 
-		#detects eg. *b* *bold* *bold bold* test *bold*
+		#detects eg. *b* *bold* *bold bold* test *bold* *bold*! (*bold*)
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
-		formatting = r'(?<!\S)' r'\*[^\s*]' r'([^*]*[^\s*])?' r'\*(?!\S)|'\
-						 r'(?<!\S)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\S)|'\
-						 r'(?<!\S)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\S)'
+		formatting = r'(?<!\w)' r'\*[^\s*]' r'([^*]*[^\s*])?' r'\*(?!\w)|'\
+                                                r'(?<!\w)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\w)|'\
+                                                r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
 
 		basic_pattern = links + mail + formatting
 		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
@@ -1073,7 +1073,9 @@ class Interface:
 			emoticons_pattern += emoticon_escaped + '|' # | means or in regexp
 		emoticons_pattern += ')(?!\w)|'
 
-		emot_and_basic_pattern = emoticons_pattern + basic_pattern
+		# because emoticons match later (in the string) they need to be after
+		# basic matches that may occur earlier
+		emot_and_basic_pattern = basic_pattern + '|' + emoticons_pattern
 		self.emot_and_basic_re = sre.compile(emot_and_basic_pattern, sre.IGNORECASE)
 		
 		# at least one character in 3 parts (before @, after @, after .)
