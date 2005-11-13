@@ -30,6 +30,7 @@ import tabbed_chat_window
 import groupchat_window
 import history_window
 import dialogs
+import vcard
 import config
 import disco
 import gtkgui_helpers
@@ -680,7 +681,7 @@ class RosterWindow:
 		if info.has_key(user.jid):
 			info[user.jid].window.present()
 		else:
-			info[user.jid] = dialogs.VcardWindow(user, account)
+			info[user.jid] = vcard.VcardWindow(user, account)
 
 	def show_tooltip(self, contact):
 		pointer = self.tree.get_pointer()

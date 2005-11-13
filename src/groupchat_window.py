@@ -26,6 +26,7 @@ import time
 import os
 
 import dialogs
+import vcard
 import chat
 import cell_renderer_image
 import gtkgui_helpers
@@ -1111,7 +1112,7 @@ current room topic.') % command, room_jid)
 				show = c.show, status = c.status, sub = c.sub, 
 				resource = c.resource, role = c.role, affiliation = c.affiliation)
 			gajim.interface.instances[self.account]['infos'][jid] = \
-				dialogs.VcardWindow(c2, self.account, False)
+				vcard.VcardWindow(c2, self.account, False)
 
 	def on_history(self, widget, room_jid, nick):
 		c = gajim.gc_contacts[self.account][room_jid][nick]

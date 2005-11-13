@@ -25,8 +25,8 @@ import base64
 import mimetypes
 import os
 import sys
-import dialogs
 import gtkgui_helpers
+import dialogs
 
 from common import helpers
 from common import gajim

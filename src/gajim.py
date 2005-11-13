@@ -155,6 +155,7 @@ class Contact:
 import roster_window
 import systray
 import dialogs
+import vcard
 import config
 import disco
 
@@ -261,7 +262,7 @@ class Interface:
 			jid = gajim.get_jid_from_account(account)
 			if not self.instances[account]['infos'].has_key('vcard'):
 				self.instances[account]['infos'][jid] = \
-					dialogs.VcardWindow(jid, account, True)
+					vcard.VcardWindow(jid, account, True)
 				gajim.connections[account].request_vcard(jid)
 		if self.remote and self.remote.is_enabled():
 			self.remote.raise_signal('AccountPresence', (status, account))

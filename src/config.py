@@ -27,6 +27,7 @@ import common.sleepy
 
 import gtkgui_helpers
 import dialogs
+import vcard
 import cell_renderer_image
 
 try:
@@ -1375,7 +1376,7 @@ _('Without a connection, you can not edit your personal information.')
 			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
 			gajim.interface.instances[self.account]['infos'][jid] = \
-				dialogs.VcardWindow(jid, self.account, True)
+				vcard.VcardWindow(jid, self.account, True)
 			gajim.connections[self.account].request_vcard(jid)
 
 	def on_manage_proxies_button_clicked(self, widget):
