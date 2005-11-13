@@ -12236,7 +12236,7 @@ Status message</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <signal name="delete_event" handler="on_add_remove_emoticons_window_delete_event" last_modification_time="Wed, 06 Apr 2005 15:34:38 GMT"/>
+  <signal name="destroy" handler="on_manage_emoticons_window_destroy" last_modification_time="Sun, 13 Nov 2005 14:52:28 GMT"/>
 
   <child>
     <widget class="GtkHBox" id="hbox2948">

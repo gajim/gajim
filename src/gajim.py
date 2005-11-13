@@ -22,7 +22,7 @@ exec python -OOt "$0" ${1+"$@"}
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
-		
+
 import sys
 import os
 import pygtk
@@ -1331,8 +1331,6 @@ class Interface:
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.windows['file_transfers'] = dialogs.FileTransfersWindow()
 		self.windows['preferences'] = config.PreferencesWindow()
-		self.windows['add_remove_emoticons'] = config.ManageEmoticonsWindow()
-		self.windows['roster'] = self.roster
 		
 		for account in gajim.connections:
 			self.windows[account]['xml_console'] = \

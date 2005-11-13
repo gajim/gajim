@@ -495,11 +495,10 @@ class PreferencesWindow:
 			[self.xml.get_widget('add_remove_emoticons_button')])
 	
 	def on_add_remove_emoticons_button_clicked(self, widget):
-		window = gajim.interface.windows['add_remove_emoticons'].window
-		if window.get_property('visible'):
-			window.present()
+		if gajim.interface.windows.has_key('manage_emots'):
+			gajim.interface.windows['manage_emots'].window.present()
 		else:
-			window.show_all()
+			gajim.interface.windows['manage_emots'] = ManageEmoticonsWindow()
 
 	def on_iconset_combobox_changed(self, widget):
 		model = widget.get_model()
@@ -1936,15 +1935,16 @@ class ManageEmoticonsWindow:
 		self.emot_tree.get_model().connect('row-changed', 
 				self.on_emoticons_treemodel_row_changed)
 
+		self.window.show_all()
 		self.xml.signal_autoconnect(self)
 
-	def on_add_remove_emoticons_window_delete_event(self, widget, event):
-		self.window.hide()
+	def on_manage_emoticons_window_destroy(self, widget):
 		gajim.interface.init_regexp() # update regexp [emoticons included]
-		return True # do NOT destroy the window
+		# remove us from open windows
+		del gajim.interface.windows['manage_emots']
 	
 	def on_close_button_clicked(self, widget):
-		self.window.hide()
+		self.window.destroy()
 
 	def on_emoticons_treemodel_row_changed(self, model, path, iter):
 		emots = gajim.config.get_per('emoticons')
