@@ -107,7 +107,7 @@ def _gen_agent_type_info():
 
 # Category type to "human-readable" description string, and sort priority
 _cat_to_descr = {
-	'other':		(_('Others'),		2),
+	'other':			(_('Others'),		2),
 	'gateway':		(_('Transports'),	0),
 	'_jid':			(_('Transports'),	0),
 	'conference':	(_('Conference'),	1),

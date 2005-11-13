@@ -544,7 +544,7 @@ _('Connection with peer cannot be established.'))
 			file_name = file_props['name']
 		text_props = gtkgui_helpers.escape_for_pango_markup(file_name) + '\n'
 		text_props += gtkgui_helpers.escape_for_pango_markup(contact.name)
-		self.model.set(iter, 1, text_labels, 2, text_props, C_SID, \
+		self.model.set(iter, 1, text_labels, 2, text_props, C_SID,
 			file_props['type'] + file_props['sid'])
 		self.set_progress(file_props['type'], file_props['sid'], 0, iter)
 		if file_props.has_key('started') and file_props['started'] is False:

@@ -423,8 +423,7 @@ class Interface:
 			if not self.instances[account]['chats'].has_key(fjid) and \
 				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
-					notify.notify(
-						_('New Private Message'), fjid, account, 'pm')
+					notify.notify(_('New Private Message'), fjid, account, 'pm')
 
 			self.instances[account]['gc'][jid].on_private_message(jid, nick,
 				array[1], array[2])
@@ -470,8 +469,7 @@ class Interface:
 						notify.notify(
 							_('New Single Message'), jid, account, msg_type)
 					else: # chat message
-						notify.notify(
-							_('New Message'), jid, account, msg_type)
+						notify.notify(_('New Message'), jid, account, msg_type)
 
 		# array : (contact, msg, time, encrypted, msg_type, subject)
 		self.roster.on_message(jid, array[1], array[2], account, array[3],
