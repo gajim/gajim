@@ -1062,14 +1062,14 @@ class Interface:
 		basic_pattern = links + mail + formatting
 		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
 		
-		emoticons_pattern = '(?<!\S)(?:'
+		emoticons_pattern = '(?<!\w)(?:'
 		# sort keys by length so :qwe emot is checked before :q
 		keys = self.emoticons.keys()
 		keys.sort(self.on_emoticon_sort)
 		for emoticon in keys: # travel thru emoticons list
 			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
 			emoticons_pattern += emoticon_escaped + '|' # | means or in regexp
-		emoticons_pattern += ')(?!\S)|'
+		emoticons_pattern += ')(?!\w)|'
 
 		emot_and_basic_pattern = emoticons_pattern + basic_pattern
 		self.emot_and_basic_re = sre.compile(emot_and_basic_pattern, sre.IGNORECASE)
