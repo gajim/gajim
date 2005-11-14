@@ -664,6 +664,8 @@ class Interface:
 		if win:
 			# FIXME: this will be removed when we have the thread working
 			win.show_avatar(jid, resource)
+		# Show avatar in roster
+		self.roster.draw_contact(jid, account)
 		if self.remote is not None:
 			self.remote.raise_signal('VcardInfo', (account, vcard))
 
