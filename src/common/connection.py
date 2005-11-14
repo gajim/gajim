@@ -504,7 +504,6 @@ class Connection:
 				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
 
-		avatar_sha = None
 		if avatar_sha:
 			if self.vcard_shas.has_key(jid_stripped):
 				if avatar_sha != self.vcard_shas[jid_stripped]:
