@@ -583,7 +583,7 @@ class RosterWindow:
 	def change_roster_style(self, option):
 		model = self.tree.get_model()
 		model.foreach(self._change_style, option)
-	
+
 	def draw_roster(self):
 		'''Clear and draw roster'''
 		self.tree.get_model().clear()
@@ -593,7 +593,7 @@ class RosterWindow:
 				self.add_contact_to_roster(jid, acct)
 		self.make_menu() # re-make menu in case an account was removed
 		#FIXME: maybe move thie make_menu() in where we remove the account?
-	
+
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
 		if not gajim.contacts.has_key(account):
@@ -639,6 +639,13 @@ class RosterWindow:
 				else:
 					ishidden = True
 				gajim.groups[account][g] = { 'expand': ishidden }
+
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(ji)
+			if pixbuf == 'ask':
+				jid_with_resource = contact1.jid
+				if contact1.resource:
+					jid_with_resource += '/' + contact1.resource
+				gajim.connections[account].request_vcard(jid_with_resource)
 
 	def chg_contact_status(self, contact, show, status, account):
 		'''When a contact changes his or her status'''
