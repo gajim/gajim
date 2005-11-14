@@ -1245,11 +1245,7 @@ class Interface:
 				'grouptextcolor', 'groupbgcolor', 'groupfont', 'groupfontattrs', 
 				'contacttextcolor', 'contactbgcolor', 'contactfont', 'contactfontattrs', 
 				'bannertextcolor', 'bannerbgcolor']
-			
-			font_str = gtkgui_helpers.get_default_font()
-			if font_str is None:
-				font_str = 'Sans 10'
-			
+
 			default = gajim.config.themes_default
 			for theme_name in default:
 				gajim.config.add_per('themes', theme_name)
