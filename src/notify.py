@@ -66,6 +66,9 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 		actor = gajim.get_first_contact_instance_from_jid(account, jid).name
 	else:
 		actor = jid
+	
+	# default value of txt
+	txt = actor
 
 	img = 'chat.png' # img to display
 	ntype = 'im'     # Notification Type
