@@ -746,12 +746,16 @@ class RosterWindow:
 				contacts = []
 				connection = gajim.connections[account]
 				# get our current contact info
-				contact = Contact(jid=jid, name=account, 
-					show=connection.get_status(), 
-					status=connection.status, 
-					resource=gajim.config.get_per('accounts', connection.name, 'resource'), 
-					priority=gajim.config.get_per('accounts', connection.name, 'priority'),
-					keyID=gajim.config.get_per('accounts', connection.name, 'keyid'))
+				contact = Contact(jid = jid, name = account, 
+					show = connection.get_status(), 
+					sub = 'both',
+					status = connection.status, 
+					resource = gajim.config.get_per('accounts', connection.name,
+						'resource'), 
+					priority = gajim.config.get_per('accounts', connection.name,
+						'priority'),
+					keyID = gajim.config.get_per('accounts', connection.name,
+						'keyid'))
 				contacts.append(contact)
 				# if we're online ...
 				if connection.connection:
