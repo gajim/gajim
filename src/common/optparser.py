@@ -147,13 +147,13 @@ class OptionsParser:
 			'accountfontattrs', 'grouptextcolor', 'groupbgcolor', 'groupfont',
 			'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 'contactfont',
 			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor']
-		for theme_name in ['grocery', 'plain']:
+		for theme_name in ('grocery', 'plain'):
 			if theme_name not in gajim.config.get_per('themes'):
 				gajim.config.add_per('themes', theme_name)
 				theme = gajim.config.themes_default[theme_name]
 				for o in d:
 					gajim.config.set_per('themes', theme_name, o, theme[d.index(o)])
-		# Remove cyan theme if it's not the default theme
+		# Remove cyan theme if it's not the current theme
 		if gajim.config.get('roster_theme') != 'cyan' and \
 			'cyan' in gajim.config.get_per('themes'):
 			gajim.config.del_per('themes', 'cyan')
@@ -161,11 +161,11 @@ class OptionsParser:
 		for account in gajim.config.get_per('accounts'):
 			proxies = gajim.config.get_per('accounts', account,
 				'file_transfer_proxies')
-			for new in ['proxy.netlab.cz', 'proxy65.jabber.ccc.de',
-				'proxy65.unstable.nl']:
+			for new in ('proxy.netlab.cz', 'proxy65.jabber.ccc.de',
+				'proxy65.unstable.nl'):
 				if proxies.find(new) < 0:
 					proxies += ', ' + new
-			gajim.config.set_per('accounts', account,'file_transfer_proxies',
+			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
 				proxies)
 		# Add some emots :-* :* >:) >:-) <3
 		for emot in [':-*', ':*', '>:)', '>:-)', '<3']:
