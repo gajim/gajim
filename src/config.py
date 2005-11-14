@@ -2166,6 +2166,8 @@ class RemoveAccountWindow:
 		
 		if self.remove_and_unregister_radiobutton.get_active():  
 			gajim.connections[self.account].unregister_account()
+		# Close all opened windows
+		gajim.interface.rostrer.close_all(gajim.interface.instances[self.account])
 		del gajim.connections[self.account]
 		gajim.config.del_per('accounts', self.account)
 		gajim.interface.save_config()
