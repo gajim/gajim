@@ -195,7 +195,7 @@ class Config:
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
 			# proxy65 for FT
 			'file_transfer_proxies': [opt_str, 
-			'proxy.jabber.org, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se, proxy.netlab.cz', 'proxy65.jabber.ccc.de','proxy65.unstable.nl'] 
+			'proxy.jabber.org, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se, proxy.netlab.cz, proxy65.jabber.ccc.de, proxy65.unstable.nl'] 
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
