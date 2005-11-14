@@ -1570,11 +1570,7 @@ current room topic.') % command, room_jid)
 				fjid = gajim.construct_fjid(room_jid, nick)
 				if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
 					show = gajim.gc_contacts[self.account][room_jid][nick].show
-					c = gajim.gc_contacts[self.account][room_jid][nick]
-					j = fjid
-					if c.jid:
-						j = c.jid
-					u = Contact(jid = j, name = nick, groups = ['none'],
+					u = Contact(jid = fjid, name = nick, groups = ['none'],
 						show = show, sub = 'none')
 					gajim.interface.roster.new_chat(u, self.account)
 				gajim.interface.instances[self.account]['chats'][fjid].set_active_tab(fjid)
@@ -1618,12 +1614,8 @@ current room topic.') % command, room_jid)
 			jid = gajim.construct_fjid(room_jid, nick)
 			if not gajim.interface.instances[self.account]['chats'].has_key(jid):
 				show = gajim.gc_contacts[self.account][room_jid][nick].show
-				c = gajim.gc_contacts[self.account][room_jid][nick]
-				j = jid
-				if c.jid:
-					j = c.jid
-				contact = Contact(jid = j, name = nick, groups = ['none'], show = show,
-					sub = 'none')
+				contact = Contact(jid = jid, name = nick, groups = ['none'],
+					show = show, sub = 'none')
 				gajim.interface.roster.new_chat(contact, self.account)
 				jid = contact.jid
 			gajim.interface.instances[self.account]['chats'][jid].set_active_tab(jid)
