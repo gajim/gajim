@@ -1163,7 +1163,8 @@ class XMLConsoleWindow:
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			at_the_end = True
 		end_iter = buffer.get_end_iter()
-		buffer.insert_with_tags_by_name(end_iter, stanza + '\n\n', kind)
+		buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') + \
+			'\n\n', kind)
 		if at_the_end:
 			gobject.idle_add(self.scroll_to_end)
 
