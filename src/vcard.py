@@ -175,19 +175,16 @@ class VcardWindow:
 		filtr.add_mime_type('image/png')
 		filtr.add_mime_type('image/jpeg')
 		filtr.add_mime_type('image/gif')
-		filtr.add_pattern('*.png')
-		filtr.add_pattern('*.jpg')
-		filtr.add_pattern('*.gif')
-		filtr.add_pattern('*.tif')
-		filtr.add_pattern('*.xpm')
+		filtr.add_mime_type('image/tiff')
+		filtr.add_mime_type('image/x-xpixmap') # xpm
 		dialog.add_filter(filtr)
 		dialog.set_filter(filtr)
 		dialog.set_use_preview_label(False)
 		dialog.set_preview_widget(gtk.Image())
 		dialog.connect('selection-changed', self.update_preview)
 
-		ok = False
-		while not ok:
+		done = False
+		while not done:
 			response = dialog.run()
 			if response == gtk.RESPONSE_OK:
 				f = dialog.get_filename()
@@ -203,12 +200,12 @@ class VcardWindow:
 						_('The file must not be more than 8 kilobytes.')).get_response()
 						continue
 				if self.image_is_ok(f):
-					ok = True
-			else:
-				ok = True
+					done = True
+			else: # Cancel or WM X button
+				done = True
 		dialog.destroy()
 
-		if f:
+		if response == gtk.RESPONSE_OK:
 			fd = open(f, 'rb')
 			data = fd.read()
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)

@@ -2057,11 +2057,8 @@ class ManageEmoticonsWindow:
 		filter.add_mime_type('image/png')
 		filter.add_mime_type('image/jpeg')
 		filter.add_mime_type('image/gif')
-		filter.add_pattern('*.png')
-		filter.add_pattern('*.jpg')
-		filter.add_pattern('*.gif')
-		filter.add_pattern('*.tif')
-		filter.add_pattern('*.xpm')
+		filter.add_mime_type('image/tiff')
+		filter.add_mime_type('image/x-xpixmap') # xpm
 		dialog.add_filter(filter)
 		dialog.set_filter(filter)
 		dialog.set_use_preview_label(False)
