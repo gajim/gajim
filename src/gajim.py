@@ -1073,7 +1073,7 @@ class Interface:
 		for emoticon in keys: # travel thru emoticons list
 			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
 			emoticons_pattern += emoticon_escaped + '|' # | means or in regexp
-		emoticons_pattern += ')(?!\w)|'
+		emoticons_pattern = emoticons_pattern[:-1] + ')(?!\w)'
 
 		# because emoticons match later (in the string) they need to be after
 		# basic matches that may occur earlier
