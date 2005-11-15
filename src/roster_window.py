@@ -234,6 +234,7 @@ class RosterWindow:
 
 	def draw_contact(self, jid, account, selected = False, focus = False):
 		'''draw the correct state image, name and avatar'''
+		# focus is about if the roster window has toplevel-focus or not
 		model = self.tree.get_model()
 		iters = self.get_contact_iter(jid, account)
 		if len(iters) == 0:
@@ -279,7 +280,7 @@ class RosterWindow:
 	def join_gc_room(self, account, room_jid, nick, password):
 		if room_jid in gajim.interface.instances[account]['gc'] and \
 		gajim.gc_connected[account][room_jid]:
-			dialogs.ErrorDialog(_('You are already in room %s') %room_jid
+			dialogs.ErrorDialog(_('You are already in room %s') % room_jid
 				).get_response()
 			return
 		invisible_show = gajim.SHOW_LIST.index('invisible')
@@ -636,7 +637,7 @@ class RosterWindow:
 			# when we draw the roster, we avoid having the same contact
 			# more than once (f.e. we avoid showing it twice when 2 resources)
 			gajim.contacts[account][ji] = [contact1]
-			for g in array[jid]['groups'] :
+			for g in array[jid]['groups']:
 				if g in gajim.groups[account].keys():
 					continue
 
@@ -2465,9 +2466,10 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			return
 		contact = model[selected_iter]
 		self._last_selected_contact = (contact[C_JID], contact[C_ACCOUNT])
+		# FIXME: we first set last selected contact and then test if contact??
 		if contact[C_TYPE] != 'contact':
 			return
-		self.draw_contact(contact[C_JID], contact[C_ACCOUNT], selected=True)
+		self.draw_contact(contact[C_JID], contact[C_ACCOUNT], selected = True)
 
 	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
