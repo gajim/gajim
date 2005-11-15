@@ -486,6 +486,13 @@ class PreferencesWindow:
 	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
 		gajim.interface.roster.draw_roster()
+		for account in gajim.connections:
+			gcs = gajim.interface.instances[account]['gc']
+			if gcs.has_key('tabbed'):
+				gcs['tabbed'].draw_all_roster()
+			else:
+				for room_jid in gcs:
+					gcs[room_jid].draw_all_roster()
 	
 	def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')

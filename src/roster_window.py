@@ -583,6 +583,14 @@ class RosterWindow:
 	def change_roster_style(self, option):
 		model = self.tree.get_model()
 		model.foreach(self._change_style, option)
+		# update gc's roster
+		for account in gajim.connections:
+			gcs = gajim.interface.instances[account]['gc']
+			if gcs.has_key('tabbed'):
+				gcs['tabbed'].draw_all_roster()
+			else:
+				for room_jid in gcs:
+					gcs[room_jid].draw_all_roster()
 
 	def draw_roster(self):
 		'''Clear and draw roster'''
@@ -2142,9 +2150,12 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 				if jid != 'tabbed':
 					gajim.interface.instances[account]['chats'][jid].set_state_image(jid)
 			# Update opened groupchat windows
-			for jid in gajim.interface.instances[account]['gc']:
-				if jid != 'tabbed':
-					gajim.interface.instances[account]['gc'][jid].update_state_images()
+			gcs = gajim.interface.instances[account]['gc']
+			if gcs.has_key('tabbed'):
+				gcs['tabbed'].draw_all_roster()
+			else:
+				for room_jid in gcs:
+					gcs[room_jid].draw_all_roster()
 		self.update_status_combobox()
 
 	def repaint_themed_widgets(self):

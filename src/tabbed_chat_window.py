@@ -838,7 +838,7 @@ class TabbedChatWindow(chat.Chat):
 		room_jid = jid.split('/', 1)[0]
 		gcs = gajim.interface.instances[self.account]['gc']
 		if gcs.has_key(room_jid):
-			gcs[room_jid].update_state_images()
+			gcs[room_jid].draw_all_roster()
 			typ = 'pm'
 
 		gajim.interface.roster.draw_contact(jid, self.account)

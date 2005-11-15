@@ -301,7 +301,7 @@ class GroupchatWindow(chat.Chat):
 		if not iter:
 			return None
 		while not fin:
-			role_name = model[iter][C_NICK]
+			role_name = model[iter][C_NICK].decode('utf-8')
 			if role == role_name:
 				return iter
 			iter = model.iter_next(iter)
@@ -347,10 +347,9 @@ class GroupchatWindow(chat.Chat):
 		model.remove(iter)
 		if model.iter_n_children(parent_iter) == 0:
 			model.remove(parent_iter)
-	
+
 	def add_contact_to_roster(self, room_jid, nick, show, role, jid, affiliation, status):
 		model = self.list_treeview[room_jid].get_model()
-		image = gajim.interface.roster.jabber_state_images[show]
 		resource = ''
 		role_name = helpers.get_uf_role(role, plural = True)
 
@@ -361,8 +360,40 @@ class GroupchatWindow(chat.Chat):
 				resource = jids[1]
 		else:
 			j = ''
-		
+
 		name = nick
+
+		role_iter = self.get_role_iter(room_jid, role)
+		if not role_iter:
+			role_iter = model.append(None,
+				(gajim.interface.roster.jabber_state_images['closed'], 'role', role,
+				'<b>%s</b>' % role_name))
+		iter = model.append(role_iter, (None, 'contact', nick, name))
+		if not gajim.gc_contacts[self.account][room_jid].has_key(nick):
+			gajim.gc_contacts[self.account][room_jid][nick] = \
+				Contact(jid = j, name = nick, show = show, resource = resource,
+				role = role, affiliation = affiliation, status = status)
+		self.draw_contact(room_jid, nick)
+		if nick == self.nicks[room_jid]: # we became online
+			self.got_connected(room_jid)
+		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)),
+			False)
+		return iter
+
+	def draw_contact(self, room_jid, nick, selected=False, focus=False):
+		iter = self.get_contact_iter(room_jid, nick)
+		if not iter:
+			return
+		model = self.list_treeview[room_jid].get_model()
+		contact = gajim.gc_contacts[self.account][room_jid][nick]
+		state_images = gajim.interface.roster.jabber_state_images
+		if gajim.awaiting_events[self.account].has_key(room_jid + '/' + nick):
+			image = state_images['message']
+		else:
+			image = state_images[contact.show]
+
+		name = contact.name
+		status = contact.status
 		# add status msg, if not empty, under contact name in the treeview
 		if status and gajim.config.get('show_status_msgs_in_roster'):
 			status = status.strip()
@@ -370,57 +401,35 @@ class GroupchatWindow(chat.Chat):
 				status = gtkgui_helpers.reduce_chars_newlines(status, max_lines = 1)
 				colorstring = 'dimgrey'
 				# escape markup entities and make them small italic and fg color
-				#color = gtkgui_helpers._get_fade_color(self.list_treeview[room_jid],
-				#	selected)
-				#colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
+				color = gtkgui_helpers._get_fade_color(self.list_treeview[room_jid],
+					selected, focus)
+				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
 				name += '\n' '<span size="small" style="italic" foreground="%s">%s</span>'\
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
-		
-		role_iter = self.get_role_iter(room_jid, role)
-		if not role_iter:
-			role_iter = model.append(None,
-				(gajim.interface.roster.jabber_state_images['closed'], 'role', role,
-				'<b>%s</b>' % role_name))
-		iter = model.append(role_iter, (image, 'contact', nick, name))
-		gajim.gc_contacts[self.account][room_jid][nick] = \
-			Contact(jid = j, name = nick, show = show, resource = resource,
-			role = role, affiliation = affiliation, status = status)
-		if nick == self.nicks[room_jid]: # we became online
-			self.got_connected(room_jid)
-		self.list_treeview[room_jid].expand_row((model.get_path(role_iter)),
-			False)
-		return iter
-	
+
+		model[iter][C_IMG] = image
+		model[iter][C_TEXT] = name
+
+	def draw_roster(self, room_jid):
+		model = self.list_treeview[room_jid].get_model()
+		model.clear()
+		for nick in gajim.gc_contacts[self.account][room_jid]:
+			contact = gajim.gc_contacts[self.account][room_jid][nick]
+			fjid = contact.jid
+			if contact.resource:
+				fjid += '/' + contact.resource
+			self.add_contact_to_roster(room_jid, nick, contact.show, contact.role,
+				fjid, contact.affiliation, contact.status)
+
 	def get_role(self, room_jid, nick):
 		if gajim.gc_contacts[self.account][room_jid].has_key(nick):
 			return gajim.gc_contacts[self.account][room_jid][nick].role
 		else:
 			return 'visitor'
 
-	def update_state_images(self):
-		roster = gajim.interface.roster
+	def draw_all_roster(self):
 		for room_jid in self.list_treeview:
-			model = self.list_treeview[room_jid].get_model()
-			role_iter = model.get_iter_root()
-			if not role_iter:
-				continue
-			while role_iter:
-				user_iter = model.iter_children(role_iter)
-				if not user_iter:
-					continue
-				while user_iter:
-					nick = model[user_iter][C_NICK].decode('utf-8')
-					show = gajim.gc_contacts[self.account][room_jid][nick].show
-					state_images = roster.get_appropriate_state_images(room_jid)
-					# We can't have FT events in gc, so if we have events, it's messages
-					if gajim.awaiting_events[self.account].has_key(room_jid + '/'\
-						+ nick):
-						image = state_images['message']
-					else:
-						image = state_images[show]
-					model[user_iter][C_IMG] = image
-					user_iter = model.iter_next(user_iter)
-				role_iter = model.iter_next(role_iter)
+			self.draw_roster(room_jid)
 
 	def chg_contact_status(self, room_jid, nick, show, status, role, affiliation,
 		jid, reason, actor, statusCode, new_nick, account):
@@ -431,7 +440,6 @@ class GroupchatWindow(chat.Chat):
 			role = 'visitor'
 		if not affiliation:
 			affiliation = 'none'
-		model = self.list_treeview[room_jid].get_model()
 		if show in ('offline', 'error'):
 			if statusCode == '307':
 				if actor is None: # do not print 'kicked by None'
@@ -485,11 +493,7 @@ class GroupchatWindow(chat.Chat):
 					c.show = show
 					c.affiliation = affiliation
 					c.status = status
-#					self.draw_contact(room_jid, nick)
-					roster = gajim.interface.roster
-					state_images = roster.get_appropriate_state_images(jid)
-					image = state_images[show]
-					model[iter][C_IMG] = image
+					self.draw_contact(room_jid, nick)
 		if (time.time() - self.room_creation[room_jid]) > 30 and \
 				nick != self.nicks[room_jid] and statusCode != '303':
 			if show == 'offline':
@@ -1301,43 +1305,47 @@ current room topic.') % command, room_jid)
 		message_textview.set_sensitive(False)
 		self.xmls[room_jid].get_widget('send_button').set_sensitive(False)
 		
-	def iter_contact_rows(self):
+	def iter_contact_rows(self, room_jid):
 		'''iterate over all contact rows in the tree model'''
-		return # FIXME: impl
-		model = self.tree.get_model()
-		account_iter = model.get_iter_root()
-		while account_iter:
-			group_iter = model.iter_children(account_iter)
-			while group_iter:
-				contact_iter = model.iter_children(group_iter)
-				while contact_iter:
-					yield model[contact_iter]
-					contact_iter = model.iter_next(contact_iter)
-				group_iter = model.iter_next(group_iter)
-			account_iter = model.iter_next(account_iter)
+		model = self.list_treeview[room_jid].get_model()
+		role_iter = model.get_iter_root()
+		while role_iter:
+			contact_iter = model.iter_children(role_iter)
+			while contact_iter:
+				yield model[contact_iter]
+				contact_iter = model.iter_next(contact_iter)
+			role_iter = model.iter_next(role_iter)
 
-	def _on_list_treeview_style_set(self, treeview, style):
+	def on_list_treeview_style_set(self, treeview, style):
 		'''When style (theme) changes, redraw all contacts'''
-		return # FIXME: impl
-		for contact in self.iter_contact_rows():
-			self.draw_contact(contact[C_JID], contact[C_ACCOUNT])
+		# Get the room_jid from treeview
+		for room_jid in self.list_treeview:
+			if self.list_treeview[room_jid] == treeview:
+				break
+		for contact in self.iter_contact_rows(room_jid):
+			nick = contact[C_NICK].decode('utf-8')
+			self.draw_contact(room_jid, nick)
 
-	def _on_list_treeview_selection_changed(self, selection):
-		return # FIXME: impl
+	def on_list_treeview_selection_changed(self, selection):
 		model, selected_iter = selection.get_selected()
+		# get room_jid from model
+		for room_jid in self.list_treeview:
+			mod = self.list_treeview[room_jid].get_model()
+			if model == mod:
+				break
 		if self._last_selected_contact is not None:
 			# update unselected row
-			jid, account = self._last_selected_contact
-			self.draw_contact(jid, account)
+			room_jid, nick = self._last_selected_contact
+			self.draw_contact(room_jid, nick)
 		if selected_iter is None:
 			self._last_selected_contact = None
 			return
 		contact = model[selected_iter]
-		self._last_selected_contact = (contact[C_JID], contact[C_ACCOUNT])
+		nick = contact[C_NICK].decode('utf-8')
+		self._last_selected_contact = (room_jid, nick)
 		if contact[C_TYPE] != 'contact':
 			return
-		self.draw_contact(contact[C_JID], contact[C_ACCOUNT], selected=True)
-
+		self.draw_contact(room_jid, nick, selected=True, focus=True)
 
 	def new_room(self, room_jid, nick):
 		self.names[room_jid] = room_jid.split('@')[0]
@@ -1355,8 +1363,8 @@ current room topic.') % command, room_jid)
 		list_treeview = self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
 			'list_treeview')
 		list_treeview.get_selection().connect('changed',
-			self._on_list_treeview_selection_changed)
-		list_treeview.connect('style-set', self._on_list_treeview_style_set)
+			self.on_list_treeview_selection_changed)
+		list_treeview.connect('style-set', self.on_list_treeview_style_set)
 		self._last_selected_contact = None # None or holds jid, account tupple
 		
 		self.subject_tooltip[room_jid] = gtk.Tooltips()
@@ -1489,8 +1497,7 @@ current room topic.') % command, room_jid)
 			typ = model[iter][C_TYPE].decode('utf-8')
 			if typ == 'contact':
 				account = self.account
-				
-				img = model[iter][C_IMG]
+
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
 					nick = model[iter][C_NICK].decode('utf-8')
