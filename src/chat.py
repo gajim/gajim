@@ -360,20 +360,25 @@ class Chat:
 		'''popup action menu'''
 		
 		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
-		self.actions_button = widget
+		self.button_clicked = widget
 		
 		menu = self.prepare_context_menu()
-		menu.popup(None, None, self.position_actions_menu, 1, 0)
+		menu.popup(None, None, self.position_menu_under_button, 1, 0)
 		menu.show_all()
 
 	def on_emoticons_button_clicked(self, widget):
 		'''popup emoticons menu'''
-		self.emoticons_menu.popup(None, None, None, 1, 0)
+		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
+		self.button_clicked = widget
+		self.emoticons_menu.popup(None, None, self.position_menu_under_button, 1, 0)
 
-	def position_actions_menu(self, menu):
+	def position_menu_under_button(self, menu):
+		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
+		# pass btn instance when this bug is over
+		button = self.button_clicked
 		# here I get the coordinates of the button relative to
 		# window (self.window)
-		button_x, button_y = self.actions_button.allocation.x, self.actions_button.allocation.y
+		button_x, button_y = button.allocation.x, button.allocation.y
 		
 		# now convert them to X11-relative
 		window_x, window_y = self.window.window.get_origin()
@@ -381,7 +386,7 @@ class Chat:
 		y = window_y + button_y
 		
 		# now move the menu below the button
-		y += self.actions_button.allocation.height
+		y += button.allocation.height
 
 		# push_in is True so all menu is always inside screen
 		push_in = True
