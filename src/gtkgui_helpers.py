@@ -424,8 +424,8 @@ def get_scaled_pixbuf(pixbuf, type):
 def get_avatar_pixbuf_from_cache(jid):
 	'''checks if jid has cached avatar and if that avatar is valid image
 	(can be shown)
-	return None if there is no image in vcard
-	return 'ask' if vcard is too old or if we don't have the vcard'''
+	returns None if there is no image in vcard
+	returns 'ask' if vcard is old (we have new sha) or if we don't have the vcard'''
 	if jid not in os.listdir(gajim.VCARDPATH):
 		return 'ask'
 

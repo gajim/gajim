@@ -646,13 +646,13 @@ class RosterWindow:
 				else:
 					ishidden = True
 				gajim.groups[account][g] = { 'expand': ishidden }
-
-			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(ji)
-			if pixbuf == 'ask':
-				jid_with_resource = contact1.jid
-				if contact1.resource:
-					jid_with_resource += '/' + contact1.resource
-				gajim.connections[account].request_vcard(jid_with_resource)
+			if gajim.config.get('ask_avatars_on_startup'):
+				pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(ji)
+				if pixbuf == 'ask':
+					jid_with_resource = contact1.jid
+					if contact1.resource:
+						jid_with_resource += '/' + contact1.resource
+					gajim.connections[account].request_vcard(jid_with_resource)
 
 	def chg_contact_status(self, contact, show, status, account):
 		'''When a contact changes his or her status'''
