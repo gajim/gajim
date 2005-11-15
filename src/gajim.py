@@ -1110,6 +1110,7 @@ class Interface:
 			emot_file = gajim.config.get_per('emoticons', emot, 'path')
 			if not self.image_is_ok(emot_file):
 				continue
+			# This avoids duplicated emoticons with the same image eg. :) and :-)
 			if not emot_file in self.emoticons.values():
 				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
 				if emot_file.endswith('.gif'):

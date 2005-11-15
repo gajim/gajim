@@ -808,9 +808,14 @@ class Chat:
 				parent = self.message_textviews[jid]
 				def set_emoticons_menu_position(w, parent=parent):
 					window = parent.get_window(gtk.TEXT_WINDOW_WIDGET)
+					# get the window position
 					origin = window.get_origin()
 					size = window.get_size()
-					return (origin[0], origin[1] + size[1], 0)
+					buf = parent.get_buffer()
+					# get the cursor position
+					cursor = parent.get_iter_location(buf.get_iter_at_mark(buf.get_insert()))
+					cursor =  parent.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT, cursor.x, cursor.y)
+					return (origin[0] + cursor[0], origin[1] + size[1], 0)
 				self.emoticons_menu.popup(None, None, set_emoticons_menu_position, 1, 0)
 		elif event.keyval == gtk.keysyms.Page_Down:
 			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
