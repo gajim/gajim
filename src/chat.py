@@ -117,8 +117,6 @@ class Chat:
 					self.print_time_timeout_id[jid] = gobject.timeout_add(300000,
 						self.print_time_timeout, jid)
 
-			self.conversation_textviews[jid].update_print_time()
-
 	def print_time_timeout(self, jid):
 		if not jid in self.xmls.keys():
 			return False
