@@ -449,7 +449,8 @@ class ConversationTextview(gtk.TextView):
 		buffer = self.get_buffer()
 
 		possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
-		if possible_emot_ascii_caps in gajim.interface.emoticons.keys():
+		if gajim.config.get('useemoticons') and \
+		possible_emot_ascii_caps in gajim.interface.emoticons.keys():
 			#it's an emoticon
 			emot_ascii = possible_emot_ascii_caps
 			end_iter = buffer.get_end_iter()
