@@ -541,9 +541,10 @@ class ConversationTextview(gtk.TextView):
 		if kind == 'incoming_queue':
 			kind = 'incoming'
 		# print the time stamp
+		if not tim:
+			#We don't have tim for outgoing messages...
+			tim = time.localtime()
 		if gajim.config.get('print_time') == 'always':
-			if not tim:
-				tim = time.localtime()
 			before_str = gajim.config.get('before_time')
 			after_str = gajim.config.get('after_time')
 			msg_day = time.strftime('%d', tim)
@@ -570,11 +571,10 @@ class ConversationTextview(gtk.TextView):
 		elif gajim.config.get('print_time') == 'sometimes':
 			every_foo_seconds = 60 * gajim.config.get(
 				'print_ichat_every_foo_minutes')
-			seconds_passed = time.time() - self.last_time_printout
+			seconds_passed = time.mktime(tim) - self.last_time_printout
 			if seconds_passed > every_foo_seconds:
-				self.last_time_printout = time.time()
+				self.last_time_printout = time.mktime(tim)
 				end_iter = buffer.get_end_iter()
-				tim = time.localtime()
 				tim_format = time.strftime('%H:%M', tim)
 				buffer.insert_with_tags_by_name(end_iter, tim_format + '\n',
 					'time_sometimes')
