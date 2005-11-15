@@ -110,8 +110,6 @@ class RosterWindow:
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
-		show_list = ['offline', 'connecting', 'online', 'chat',
-			'away', 'xa', 'dnd', 'invisible']
 
 		if self.regroup:
 			show = helpers.get_global_show()
@@ -119,7 +117,7 @@ class RosterWindow:
 				_('Merged accounts'), 'account', '', 'all', False, None])
 			return
 
-		show = show_list[gajim.connections[account].connected]
+		show = gajim.SHOW_LIST[gajim.connections[account].connected]
 
 		tls_pixbuf = None
 		if gajim.con_types.has_key(account) and \
@@ -234,7 +232,7 @@ class RosterWindow:
 			return self.transports_state_images[transport]
 		return self.jabber_state_images
 
-	def draw_contact(self, jid, account, selected=False, focus=False):
+	def draw_contact(self, jid, account, selected = False, focus = False):
 		'''draw the correct state image, name and avatar'''
 		model = self.tree.get_model()
 		iters = self.get_contact_iter(jid, account)

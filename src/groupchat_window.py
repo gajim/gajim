@@ -399,7 +399,6 @@ class GroupchatWindow(chat.Chat):
 			status = status.strip()
 			if status != '':
 				status = gtkgui_helpers.reduce_chars_newlines(status, max_lines = 1)
-				colorstring = 'dimgrey'
 				# escape markup entities and make them small italic and fg color
 				color = gtkgui_helpers._get_fade_color(self.list_treeview[room_jid],
 					selected, focus)
@@ -433,7 +432,7 @@ class GroupchatWindow(chat.Chat):
 
 	def chg_contact_status(self, room_jid, nick, show, status, role, affiliation,
 		jid, reason, actor, statusCode, new_nick, account):
-		'''When a user changes his or her status'''
+		'''When an occupant changes his or her status'''
 		if show == 'invisible':
 			return
 		if not role:
