@@ -1291,12 +1291,12 @@ class AccountModificationWindow:
 			config['keyid'] = self.xml.get_widget('gpg_key_label').get_text().decode('utf-8')
 			config['savegpgpass'] = self.xml.get_widget(
 					'gpg_save_password_checkbutton').get_active()
-			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry').\
-																		get_text().decode('utf-8')
+			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry'
+				).get_text().decode('utf-8')
 		#if we modify the name of the account
 		if name != self.account:
 			#update variables
-			gajim.interface.instances[name] = gajim.interface.windows[self.account]
+			gajim.interface.instances[name] = gajim.interface.instances[self.account]
 			gajim.awaiting_events[name] = gajim.awaiting_events[self.account]
 			gajim.nicks[name] = gajim.nicks[self.account]
 			gajim.allow_notifications[name] = \
