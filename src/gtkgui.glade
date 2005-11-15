@@ -9790,6 +9790,38 @@ topic</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">6</property>
 
+
+		  <child>
+		    <widget class="GtkButton" id="emoticons_button">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Click to insert an emoticon</property>
+		      <property name="can_focus">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <accessibility>
+			<atkproperty name="AtkObject::accessible_name" translatable="yes">Emoticons</atkproperty>
+		      </accessibility>
+		      <signal name="clicked" handler="on_emoticons_button_clicked" last_modification_time="Wed, 14 Sep 2005 15:16:41 GMT"/>
+
+		      <child>
+			<widget class="GtkImage" id="image1239">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-about</property>
+			  <property name="icon_size">4</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
 		  <child>
 		    <widget class="GtkButton" id="actions_button">
 		      <property name="visible">True</property>
@@ -11317,6 +11349,37 @@ Status message</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">6</property>
+
+		  <child>
+		    <widget class="GtkButton" id="emoticons_button">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Click to insert an emoticon</property>
+		      <property name="can_focus">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <accessibility>
+			<atkproperty name="AtkObject::accessible_name" translatable="yes">Emoticons</atkproperty>
+		      </accessibility>
+		      <signal name="clicked" handler="on_emoticons_button_clicked" last_modification_time="Wed, 14 Sep 2005 15:16:41 GMT"/>
+
+		      <child>
+			<widget class="GtkImage" id="image1239">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-about</property>
+			  <property name="icon_size">4</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 
 		  <child>
 		    <widget class="GtkButton" id="actions_button">

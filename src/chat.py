@@ -22,6 +22,7 @@ import gtk.glade
 import pango
 import gobject
 import time
+import math
 
 import dialogs
 import history_window
@@ -89,9 +90,21 @@ class Chat:
 		self.notebook.set_show_tabs(gajim.config.get('tabs_always_visible'))
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
+		if gajim.config.get('useemoticons'):
+			self.emoticons_menu = self.emoticons_menu()
+
 		# muc attention states (when we are mentioned in a muc)
 		# if the room jid is in the list, the room has mentioned us
 		self.muc_attentions = []
+
+	def update_emoticons_button(self):
+		for jid in self.xmls:
+			if gajim.config.get('useemoticons'):
+				self.xmls[jid].get_widget('emoticons_button').show()
+				self.xmls[jid].get_widget('emoticons_button').set_no_show_all(False)
+			else:
+				self.xmls[jid].get_widget('emoticons_button').hide()
+				self.xmls[jid].get_widget('emoticons_button').set_no_show_all(True)
 
 	def update_font(self):
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
@@ -353,6 +366,10 @@ class Chat:
 		menu.popup(None, None, self.position_actions_menu, 1, 0)
 		menu.show_all()
 
+	def on_emoticons_button_clicked(self, widget):
+		'''popup emoticons menu'''
+		self.emoticons_menu.popup(None, None, None, 1, 0)
+
 	def position_actions_menu(self, menu):
 		# here I get the coordinates of the button relative to
 		# window (self.window)
@@ -423,6 +440,35 @@ class Chat:
 			childs[4].set_active(self.compact_view_current_state)
 		menu = self.remove_possible_switch_to_menuitems(menu)
 		
+		return menu
+
+	def emoticons_menu(self):
+		menu = gtk.Menu()
+	
+		def append_emoticon(w, d):
+			jid = self.get_active_jid()
+			message_textview = self.message_textviews[jid]
+			message_textview.get_buffer().insert_at_cursor(" %s " % d)
+			message_textview.grab_focus()
+	
+		counter = 0
+		# Calculate the side lenght of the popup to make it a square
+		size = int(round(math.sqrt(len(gajim.interface.emoticons_images))))
+		for image in gajim.interface.emoticons_images:
+			item = gtk.MenuItem()
+			img = gtk.Image()
+			if type(image[1]) == gtk.gdk.PixbufAnimation:
+				img.set_from_animation(image[1])
+			else:
+				img.set_from_pixbuf(image[1])
+			item.add(img)
+			item.connect('activate', append_emoticon, image[0])
+			#FIXME: add tooltip with ascii
+			menu.attach(item,
+					counter % size, counter % size + 1,
+					counter / size, counter / size + 1)
+			counter += 1
+		menu.show_all()
 		return menu
 
 	def popup_menu(self, event):
@@ -645,6 +691,13 @@ class Chat:
 				dialogs.ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
 				gajim.config.set('use_speller', False)
 		
+		if gajim.config.get('useemoticons'):
+			self.xmls[jid].get_widget('emoticons_button').show()
+			self.xmls[jid].get_widget('emoticons_button').set_no_show_all(False)
+		else:
+			self.xmls[jid].get_widget('emoticons_button').hide()
+			self.xmls[jid].get_widget('emoticons_button').set_no_show_all(True)
+
 		conv_textview.modify_font(font)
 		conv_buffer = conv_textview.get_buffer()
 		end_iter = conv_buffer.get_end_iter()
@@ -744,6 +797,16 @@ class Chat:
 		elif event.keyval == gtk.keysyms.c and \
 			(event.state & gtk.gdk.MOD1_MASK): # alt + C toggles compact view
 			self.set_compact_view(not self.compact_view_current_state)
+		elif event.keyval == gtk.keysyms.e and \
+			(event.state & gtk.gdk.MOD1_MASK): # alt + E opens emoticons menu
+			if gajim.config.get('useemoticons'):
+				parent = self.message_textviews[jid]
+				def set_emoticons_menu_position(w, parent=parent):
+					window = parent.get_window(gtk.TEXT_WINDOW_WIDGET)
+					origin = window.get_origin()
+					size = window.get_size()
+					return (origin[0], origin[1] + size[1], 0)
+				self.emoticons_menu.popup(None, None, set_emoticons_menu_position, 1, 0)
 		elif event.keyval == gtk.keysyms.Page_Down:
 			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
 				conv_textview = self.conversation_textviews[jid]

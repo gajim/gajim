@@ -1064,16 +1064,17 @@ class Interface:
 		basic_pattern = links + mail + formatting
 		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
 		
-		# When an emoticon is bordered by an alpha-numeric character it is NOT
-		# expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc.
-		emoticons_pattern = '(?<!\w)(?:'
-		# sort keys by length so :qwe emot is checked before :q
-		keys = self.emoticons.keys()
-		keys.sort(self.on_emoticon_sort)
-		for emoticon in keys: # travel thru emoticons list
-			emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
-			emoticons_pattern += emoticon_escaped + '|' # | means or in regexp
-		emoticons_pattern = emoticons_pattern[:-1] + ')(?!\w)'
+		if gajim.config.get('useemoticons'):
+			# When an emoticon is bordered by an alpha-numeric character it is NOT
+			# expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc.
+			emoticons_pattern = '(?<!\w)(?:'
+				# sort keys by length so :qwe emot is checked before :q
+			keys = self.emoticons.keys()
+			keys.sort(self.on_emoticon_sort)
+			for emoticon in keys: # travel thru emoticons list
+				emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
+				emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
+			emoticons_pattern = emoticons_pattern[:-1] + ')(?!\w)'
 
 		# because emoticons match later (in the string) they need to be after
 		# basic matches that may occur earlier
@@ -1095,19 +1096,26 @@ class Interface:
 	def on_launch_browser_mailer(self, widget, url, kind):
 		helpers.launch_browser_mailer(kind, url)
 
-	def init_regexp(self):
-		#initialize emoticons dictionary
+	def init_emoticons(self):
+		if not gajim.config.get('useemoticons'):
+			return
+	
+		#initialize emoticons dictionary and unique images list
+		self.emoticons_images = list()
 		self.emoticons = dict()
+	
 		emots = gajim.config.get_per('emoticons')
 		for emot in emots:
 			emot_file = gajim.config.get_per('emoticons', emot, 'path')
 			if not self.image_is_ok(emot_file):
 				continue
+			if not emot_file in self.emoticons.values():
+				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
+				if emot_file.endswith('.gif'):
+					pix = gtk.gdk.PixbufAnimation(emot_file)
+				self.emoticons_images.append((emot, pix))
 			self.emoticons[emot.upper()] = emot_file
-		
-		# update regular expressions
-		self.make_regexps()
-
+	
 	def register_handlers(self):
 		self.handlers = {
 			'ROSTER': self.handle_event_roster,
@@ -1247,7 +1255,7 @@ class Interface:
 				'grouptextcolor', 'groupbgcolor', 'groupfont', 'groupfontattrs', 
 				'contacttextcolor', 'contactbgcolor', 'contactfont', 'contactfontattrs', 
 				'bannertextcolor', 'bannerbgcolor']
-
+			
 			default = gajim.config.themes_default
 			for theme_name in default:
 				gajim.config.add_per('themes', theme_name)
@@ -1340,7 +1348,8 @@ class Interface:
 		if gajim.config.get('check_for_new_version'):
 			check_for_new_version.Check_for_new_version_dialog()
 
-		self.init_regexp()
+		self.init_emoticons()
+		self.make_regexps()
 		
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.instances['file_transfers'] = dialogs.FileTransfersWindow()
