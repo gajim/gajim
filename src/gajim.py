@@ -1064,6 +1064,7 @@ class Interface:
 		basic_pattern = links + mail + formatting
 		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
 		
+		emoticons_pattern = ''
 		if gajim.config.get('useemoticons'):
 			# When an emoticon is bordered by an alpha-numeric character it is NOT
 			# expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc.
