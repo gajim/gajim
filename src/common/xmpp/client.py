@@ -197,7 +197,7 @@ class Client(CommonClient):
         while not self.Dispatcher.Stream.features and self.Process(): pass      # If we get version 1.0 stream the features tag MUST BE presented
         if not self.Dispatcher.Stream.features.getTag('starttls'): return self.connected       # TLS not supported by server
         while not self.TLS.starttls and self.Process(): pass
-        if self.TLS.starttls<>'success': self.event('tls_failed'); return self.connected
+        if not hasattr(self, 'TLS') and self.TLS.starttls!='success': self.event('tls_failed'); return self.connected
         self.connected='tls'
         return self.connected
 
