@@ -245,7 +245,24 @@ class RosterWindow:
 		
 		if len(contact_instances) > 1:
 			name += ' (' + unicode(len(contact_instances)) + ')'
-
+		
+		# FIXME: remove when we use metacontacts
+		# shoz (account_name) if there are 2 contact with same jid in merged mode
+		if self.regroup:
+			add_acct = False
+			# look through all contacts of all accounts
+			for a in gajim.connections:
+				for j in gajim.contacts[a]:
+					# [0] cause it'fster than highest_prio
+					c = gajim.contacts[a][j][0]
+					if c.name == contact.name and (j, a) != (jid, account):
+						add_acct = True
+						break
+				if add_acct:
+					# No need to continue in other account if we already found one
+					break
+			if add_acct:
+				name += ' (' + account + ')'
 		# add status msg, if not empty, under contact name in the treeview
 		if contact.status and gajim.config.get('show_status_msgs_in_roster'):
 			status = contact.status.strip()
