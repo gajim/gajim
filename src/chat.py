@@ -358,13 +358,12 @@ class Chat:
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''
-		
 		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
 		self.button_clicked = widget
 		
 		menu = self.prepare_context_menu()
-		menu.popup(None, None, self.position_menu_under_button, 1, 0)
 		menu.show_all()
+		menu.popup(None, None, self.position_menu_under_button, 1, 0)
 
 	def on_emoticons_button_clicked(self, widget):
 		'''popup emoticons menu'''
@@ -396,7 +395,7 @@ class Chat:
 			# now move the menu above the button
 			y -= menu_height
 
-		# push_in is True so all menu is always inside screen
+		# push_in is True so all the menuitems are always inside screen
 		push_in = True
 		return (x, y, push_in)
 
