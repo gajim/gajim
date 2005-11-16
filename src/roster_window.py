@@ -279,7 +279,6 @@ class RosterWindow:
 
 	def join_gc_room(self, account, room_jid, nick, password):
 		'''joins the room immediatelly'''
-		print 'JOIN_GC_ROOM'
 		if room_jid in gajim.interface.instances[account]['gc'] and \
 		gajim.gc_connected[account][room_jid]:
 			dialogs.ErrorDialog(_('You are already in room %s') % room_jid
