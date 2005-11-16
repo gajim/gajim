@@ -384,9 +384,17 @@ class Chat:
 		window_x, window_y = self.window.window.get_origin()
 		x = window_x + button_x
 		y = window_y + button_y
-		
-		# now move the menu below the button
-		y += button.allocation.height
+
+		menu_width, menu_height = menu.size_request()
+
+		## should we pop down or up?
+		if (y + button.allocation.height + menu_height
+		    < gtk.gdk.screen_height()):
+			# now move the menu below the button
+			y += button.allocation.height
+		else:
+			# now move the menu above the button
+			y -= menu_height
 
 		# push_in is True so all menu is always inside screen
 		push_in = True
