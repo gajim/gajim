@@ -738,7 +738,7 @@ class GroupchatWindow(chat.Chat):
 				message = message[1:]
 				message_array = message.split(' ', 1)
 				command = message_array.pop(0).lower()
-				if message_array = ['']:
+				if message_array == ['']:
 					message_array = []
 				if command == 'clear':
 					# clear the groupchat window
