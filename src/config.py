@@ -1971,7 +1971,7 @@ class ManageEmoticonsWindow:
 		emot = model.get_value(iter, 0).decode('utf-8').upper()
 		if not emot in emots:
 			gajim.config.add_per('emoticons', emot)
-			gajim.interface.init_regexp() # update regexp [emoticons included]
+			gajim.interface.init_emoticons() # update emoticons
 		image = model[iter][1]
 		if image:
 			image = image.decode('utf-8')
@@ -2031,7 +2031,7 @@ class ManageEmoticonsWindow:
 			model.remove(iter)
 		else:
 			gajim.config.add_per('emoticons', emot)
-			gajim.interface.init_regexp() # update regexp (emoticons included)
+			gajim.interface.init_emoticons() # update emoticons
 			gajim.config.set_per('emoticons', emot, 'path',
 				model[iter][1].decode('utf-8'))
 			model[iter][0] = emot
@@ -2128,7 +2128,7 @@ class ManageEmoticonsWindow:
 		if not iter:
 			return
 		gajim.config.del_per('emoticons', model.get_value(iter, 0).decode('utf-8'))
-		gajim.interface.init_regexp() # update regexp [emoticons included]
+		gajim.interface.init_emoticons() # update emoticons
 		gajim.interface.save_config()
 		model.remove(iter)
 
