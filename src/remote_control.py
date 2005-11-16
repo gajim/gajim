@@ -35,6 +35,7 @@ try:
 except ImportError:
 	_version = (0, 0, 0)
 	
+_version = (0,0,0)
 if _version >= (0, 41, 0):
 	import dbus.service
 	import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it

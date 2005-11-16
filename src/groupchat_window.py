@@ -64,7 +64,7 @@ class GroupchatWindow(chat.Chat):
 		
 		# alphanum sorted
 		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact', 'help', 'invite',
-			'join', 'kick', 'leave', 'me', 'msg', 'nick', 'part', 'topic']
+			'join', 'kick', 'leave', 'me', 'msg', 'nick', 'part', 'say', 'topic']
 		
 		self.nicks = {} # our nick for each groupchat we are in
 		self.list_treeview = {}
@@ -738,6 +738,8 @@ class GroupchatWindow(chat.Chat):
 				message = message[1:]
 				message_array = message.split(' ', 1)
 				command = message_array.pop(0).lower()
+				if message_array = ['']:
+					message_array = []
 				if command == 'clear':
 					# clear the groupchat window
 					conv_textview.clear()
@@ -891,6 +893,12 @@ class GroupchatWindow(chat.Chat):
 							'/' + message)
 					else:
 						self.get_command_help(command)
+				elif command == 'say':
+					if len(message_array):
+						gajim.connections[self.account].send_gc_message(room_jid,
+							message[4:])
+					else:
+						self.get_command_help(command)
 				else:
 					self.print_conversation(_('No such command: /%s') % command,
 						room_jid)
@@ -944,6 +952,8 @@ current room. Use third person. (e.g. /%s explodes.)') %
 		elif command == 'topic':
 			self.print_conversation(_('Usage: /%s [topic], displays or updates the \
 current room topic.') % command, room_jid)
+		elif command == 'say':
+			self.print_conversation(_('Usage: /%s <message>, sends a message without looking for other commands.') % command, room_jid)
 		else:
 			self.print_conversation(_('No help info for /%s') % command, room_jid)
 
