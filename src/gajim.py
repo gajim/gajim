@@ -774,8 +774,11 @@ class Interface:
 		# Auto join GC windows if neccessary
 		for bm in bms:
 			if bm['autojoin'] in ('1', 'true'):
-				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
-					bm['password'])
+				invisible_show = gajim.SHOW_LIST.index('invisible')
+				# do not autojoin if we are invisible
+				if gajim.connections[account].connected != invisible_show:
+					self.roster.join_gc_room(account, bm['jid'], bm['nick'],
+						bm['password'])
 		for account in gajim.connections:
 			for room_jid in self.instances[account]['gc']:
 				if room_jid == 'tabbed':

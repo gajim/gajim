@@ -278,6 +278,8 @@ class RosterWindow:
 			model[iter][C_SECPIXBUF] = scaled_pixbuf
 
 	def join_gc_room(self, account, room_jid, nick, password):
+		'''joins the room immediatelly'''
+		print 'JOIN_GC_ROOM'
 		if room_jid in gajim.interface.instances[account]['gc'] and \
 		gajim.gc_connected[account][room_jid]:
 			dialogs.ErrorDialog(_('You are already in room %s') % room_jid
@@ -1738,6 +1740,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		dialogs.AddNewContactWindow(account)
 
 	def on_join_gc_activate(self, widget, account):
+		'''when the join gc menuitem is clicked, show the join gc window'''
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
 			dialogs.ErrorDialog(_('You cannot join a room while you are invisible')
@@ -2598,7 +2601,6 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		col.add_attribute(render_text, 'markup', C_NAME) # where we hold the name
 		col.add_attribute(render_text, 'editable', C_EDITABLE) # where we hold if the row is editable
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
-
 		
 		render_pixbuf = gtk.CellRendererPixbuf() # tls or avatar img
 		col.pack_start(render_pixbuf, expand = False)
