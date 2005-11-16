@@ -772,13 +772,19 @@ class Interface:
 		# ('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
 		# We received a bookmark item from the server (JEP48)
 		# Auto join GC windows if neccessary
+		
+		self.roster.make_menu() # update the menu to show our bookmarks
+		invisible_show = gajim.SHOW_LIST.index('invisible')
+		# do not autojoin if we are invisible
+		if gajim.connections[account].connected == invisible_show:
+			return
+
+		# check for autojoins
 		for bm in bms:
 			if bm['autojoin'] in ('1', 'true'):
-				invisible_show = gajim.SHOW_LIST.index('invisible')
-				# do not autojoin if we are invisible
-				if gajim.connections[account].connected != invisible_show:
-					self.roster.join_gc_room(account, bm['jid'], bm['nick'],
-						bm['password'])
+				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
+					bm['password'])
+		# join already open groupchats # FIXME: why this happens here? nothing to do with BMs
 		for account in gajim.connections:
 			for room_jid in self.instances[account]['gc']:
 				if room_jid == 'tabbed':
@@ -791,8 +797,6 @@ class Interface:
 					if gajim.gc_passwords.has_key(room_jid):
 						password = gajim.gc_passwords[room_jid]
 					gajim.connections[account].join_gc(nick, room, server, password)
-
-		self.roster.make_menu()
 								
 	def handle_event_file_send_error(self, account, array):
 		jid = array[0]
