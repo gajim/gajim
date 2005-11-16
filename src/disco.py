@@ -68,7 +68,6 @@ gtk.glade.textdomain (APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-_icon_cache = weakref.WeakValueDictionary()
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
@@ -107,12 +106,66 @@ def _gen_agent_type_info():
 
 # Category type to "human-readable" description string, and sort priority
 _cat_to_descr = {
-	'other':			(_('Others'),		2),
+	'other':			(_('Others'),	2),
 	'gateway':		(_('Transports'),	0),
 	'_jid':			(_('Transports'),	0),
 	'conference':	(_('Conference'),	1),
 }
 
+
+class CacheDictionary:
+	'''A dictionary that keeps items around for only a specific time.
+	Lifetime is in minutes. Getrefresh specifies whether to refresh when
+	an item is merely accessed instead of set aswell.'''
+	def __init__(self, lifetime, getrefresh = True):
+		self.lifetime = lifetime * 1000 * 60
+		self.getrefresh = getrefresh
+		self.cache = {}
+
+	class CacheItem:
+		'''An object to store cache items and their timeouts.'''
+		def __init__(self, value):
+			self.value = value
+			self.source = None
+
+		def __call__(self):
+			return self.value
+
+	def _expire_timeout(self, key):
+		'''The timeout has expired, remove the object.'''
+		del self.cache[key]
+		return False
+
+	def _refresh_timeout(self, key):
+		'''The object was accessed, refresh the timeout.'''
+		item = self.cache[key]
+		if item.source:
+			gobject.source_remove(item.source)
+		source = gobject.timeout_add(self.lifetime, self._expire_timeout, key)
+		item.source = source
+
+	def __getitem__(self, key):
+		item = self.cache[key]
+		if self.getrefresh:
+			self._refresh_timeout(key)
+		return item()
+
+	def __setitem__(self, key, value):
+		item = self.CacheItem(value)
+		self.cache[key] = item
+		self._refresh_timeout(key)
+
+	def __delitem__(self, key):
+		item = self.cache[key]
+		if item.source:
+			gobject.source_remove(item.source)
+		del self.cache[key]
+
+	def __contains__(self, key):
+		return key in self.cache
+	has_key = __contains__
+
+_icon_cache = CacheDictionary(15)
 
 def get_agent_address(jid, node = None):
 	'''Returns an agent's address for displaying in the GUI.'''
@@ -161,26 +214,9 @@ class ServicesCache:
 	ServiceCache instance.'''
 	def __init__(self, account):
 		self.account = account
-		self._items = {}
-		self._info = {}
+		self._items = CacheDictionary(15, getrefresh = False)
+		self._info = CacheDictionary(15, getrefresh = False)
 		self._cbs = {}
-		self._cleancid = None
-
-	def _clean(self):
-		'''Purge outdated items in the cache.'''
-		now = time.time()
-		for key, value in self._info.items():
-			deltatime = now - value[0]
-			if deltatime > 1800: # 30 minutes.
-				del self._info[key]
-		for key, value in self._items.items():
-			deltatime = now - value[0]
-			if deltatime > 1800: # 30 minutes.
-				del self._items[key]
-		if self._info or self._items:
-			return True
-		self._cleancid = None
-		return False
 
 	def _clean_closure(self, cb, type, addr):
 		# A closure died, clean up
@@ -252,20 +288,11 @@ class ServicesCache:
 		addr = get_agent_address(jid, node)
 		# Check the cache
 		if self._info.has_key(addr):
-			deltatime = time.time() - self._info[addr][0]
-			if force or deltatime > 1800: # 30 minutes.
-				# Cache is outdated
-				del self._info[addr]
-			else:
-				# Cache hit
-				args = self._info[addr][1:] + args
-				cb(jid, node, *args)
-				return
+			args = self._info[addr] + args
+			cb(jid, node, *args)
+			return
 		if nofetch:
 			return
-		# Cache cleaning callback
-		if not self._cleancid:
-			self._cleancid = gobject.timeout_add(1800000, self._clean)
 
 		# Create a closure object
 		cbkey = ('info', addr)
@@ -283,20 +310,11 @@ class ServicesCache:
 		addr = get_agent_address(jid, node)
 		# Check the cache
 		if self._items.has_key(addr):
-			deltatime = time.time() - self._items[addr][0]
-			if force or deltatime > 1800: # 30 minutes.
-				# Cache is outdated
-				del self._items[addr]
-			else:
-				# Cache hit
-				args = self._items[addr][1:] + args
-				cb(jid, node, *args)
-				return
+			args = (self._items[addr],) + args
+			cb(jid, node, *args)
+			return
 		if nofetch:
 			return
-		# Cache cleaning callback
-		if not self._cleancid:
-			self._cleancid = gobject.timeout_add(1800000, self._clean)
 
 		# Create a closure object
 		cbkey = ('items', addr)
@@ -311,10 +329,10 @@ class ServicesCache:
 
 	def agent_info(self, jid, node, identities, features, data):
 		'''Callback for when we receive an agent's info.'''
-		# Store in cache
-		stamp = time.time()
 		addr = get_agent_address(jid, node)
-		self._info[addr] = (stamp, identities, features, data)
+
+		# Store in cache
+		self._info[addr] = (identities, features, data)
 
 		# Call callbacks
 		cbkey = ('info', addr)
@@ -327,10 +345,10 @@ class ServicesCache:
 
 	def agent_items(self, jid, node, items):
 		'''Callback for when we receive an agent's items.'''
-		# Store in cache
-		stamp = time.time()
 		addr = get_agent_address(jid, node)
-		self._items[addr] = (stamp, items)
+
+		# Store in cache
+		self._items[addr] = items
 
 		# Call callbacks
 		cbkey = ('items', addr)
@@ -344,8 +362,9 @@ class ServicesCache:
 	def agent_info_error(self, jid):
 		'''Callback for when a query fails. (even after the browse and agents
 		namespaces)'''
-		# Call callbacks
 		addr = get_agent_address(jid)
+
+		# Call callbacks
 		cbkey = ('info', addr)
 		if self._cbs.has_key(cbkey):
 			for cb in self._cbs[cbkey]:
@@ -357,8 +376,9 @@ class ServicesCache:
 	def agent_items_error(self, jid):
 		'''Callback for when a query fails. (even after the browse and agents
 		namespaces)'''
-		# Call callbacks
 		addr = get_agent_address(jid)
+
+		# Call callbacks
 		cbkey = ('items', addr)
 		if self._cbs.has_key(cbkey):
 			for cb in self._cbs[cbkey]:
