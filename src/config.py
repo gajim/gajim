@@ -501,18 +501,20 @@ class PreferencesWindow:
 	def on_use_emoticons_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'useemoticons', 
 			[self.xml.get_widget('add_remove_emoticons_button')])
-		self.update_emoticons_button()
+		gajim.interface.init_emoticons()
+		gajim.interface.make_regexps()
+		self.toggle_emoticons()
 
-	def update_emoticons_button(self):
-		'''Update emoticons button in Opened Chat Windows'''
+	def toggle_emoticons(self):
+		'''Update emoticons state in Opened Chat Windows'''
 		for a in gajim.connections:
 			for kind in ('chats', 'gc'):
 				windows = gajim.interface.instances[a][kind]
 				if windows.has_key('tabbed'):
-					windows['tabbed'].update_emoticons_button()
+					windows['tabbed'].toggle_emoticons()
 				else:
 					for jid in windows.keys():
-						windows[jid].update_emoticons_button()
+						windows[jid].toggle_emoticons()
 		
 	def on_add_remove_emoticons_button_clicked(self, widget):
 		if gajim.interface.instances.has_key('manage_emots'):

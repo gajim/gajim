@@ -91,17 +91,18 @@ class Chat:
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
 		if gajim.config.get('useemoticons'):
-			self.emoticons_menu = self.emoticons_menu()
+			self.emoticons_menu = self.prepare_emoticons_menu()
 
 		# muc attention states (when we are mentioned in a muc)
 		# if the room jid is in the list, the room has mentioned us
 		self.muc_attentions = []
 
-	def update_emoticons_button(self):
+	def toggle_emoticons(self):
 		for jid in self.xmls:
 			if gajim.config.get('useemoticons'):
 				self.xmls[jid].get_widget('emoticons_button').show()
 				self.xmls[jid].get_widget('emoticons_button').set_no_show_all(False)
+				self.emoticons_menu = self.prepare_emoticons_menu()
 			else:
 				self.xmls[jid].get_widget('emoticons_button').hide()
 				self.xmls[jid].get_widget('emoticons_button').set_no_show_all(True)
@@ -454,7 +455,7 @@ class Chat:
 		
 		return menu
 
-	def emoticons_menu(self):
+	def prepare_emoticons_menu(self):
 		menu = gtk.Menu()
 	
 		def append_emoticon(w, d):
