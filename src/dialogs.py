@@ -970,9 +970,6 @@ class SingleMessageWindow:
 		if self.action == 'send':
 			if self.message: # we come from a reply?
 				self.message_textview.grab_focus()
-				# add > at the begining of each line
-				self.message = '>' + self.message
-				self.message = self.message.replace('\n', '\n>')
 			else: # we write a new message
 				self.subject_entry.grab_focus()
 		elif self.action == 'receive':
@@ -988,6 +985,8 @@ class SingleMessageWindow:
 			self.subject = ''
 		self.subject_entry.set_text(self.subject)
 		self.message_tv_buffer.set_text(self.message)
+		if self.action == 'send' and self.message:
+			gobject.idle_add(self.set_cursor_to_end)
 		begin_iter = self.message_tv_buffer.get_start_iter()
 		self.message_tv_buffer.place_cursor(begin_iter)
 
@@ -1002,6 +1001,10 @@ class SingleMessageWindow:
 				gajim.config.get('single_msg-width'),
 				gajim.config.get('single_msg-height'))
 		self.window.show_all()
+
+	def set_cursor_to_end(self):
+			end_iter = self.message_tv_buffer.get_end_iter()
+			self.message_tv_buffer.place_cursor(end_iter)
 
 	def save_pos(self):
 		if gajim.config.get('saveposition'):
@@ -1083,7 +1086,9 @@ class SingleMessageWindow:
 	def on_reply_button_clicked(self, widget):
 		# we create a new blank window to send and we preset RE: and to jid
 		self.subject = _('RE: %s') % self.subject
-		self.message = _('\n\n\n== Original Message ==\n%s') % self.message
+		self.message = _('%s wrote:\n' % self.from_whom) + self.message
+		# add > at the begining of each line
+		self.message = self.message.replace('\n', '\n> ') + '\n\n'
 		self.window.destroy()
 		SingleMessageWindow(self.account, to = self.from_whom,
 			action = 'send',	from_whom = self.from_whom, subject = self.subject,
