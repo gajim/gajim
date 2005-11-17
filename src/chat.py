@@ -23,6 +23,7 @@ import pango
 import gobject
 import time
 import math
+import os
 
 import dialogs
 import history_window
@@ -98,14 +99,19 @@ class Chat:
 		self.muc_attentions = []
 
 	def toggle_emoticons(self):
+		'''hide show emoticons_button and make sure emoticons_menu is always there
+		when needed'''
+		if gajim.config.get('useemoticons'):
+			self.emoticons_menu = self.prepare_emoticons_menu()
+		
 		for jid in self.xmls:
+			emoticons_button = self.xmls[jid].get_widget('emoticons_button')
 			if gajim.config.get('useemoticons'):
-				self.xmls[jid].get_widget('emoticons_button').show()
-				self.xmls[jid].get_widget('emoticons_button').set_no_show_all(False)
-				self.emoticons_menu = self.prepare_emoticons_menu()
+				emoticons_button.show()
+				emoticons_button.set_no_show_all(False)
 			else:
-				self.xmls[jid].get_widget('emoticons_button').hide()
-				self.xmls[jid].get_widget('emoticons_button').set_no_show_all(True)
+				emoticons_button.hide()
+				emoticons_button.set_no_show_all(True)
 
 	def update_font(self):
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
@@ -704,12 +710,17 @@ class Chat:
 				dialogs.ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
 				gajim.config.set('use_speller', False)
 		
+		emoticons_button = self.xmls[jid].get_widget('emoticons_button')
+		# set image no matter if user wants at this time emoticons or not
+		# (so toggle works ok)
+		img = self.xmls[jid].get_widget('emoticons_button_image')
+		img.set_from_file(os.path.join(gajim.DATA_DIR, 'emoticons', 'smile.png'))
 		if gajim.config.get('useemoticons'):
-			self.xmls[jid].get_widget('emoticons_button').show()
-			self.xmls[jid].get_widget('emoticons_button').set_no_show_all(False)
+			emoticons_button.show()
+			emoticons_button.set_no_show_all(False)
 		else:
-			self.xmls[jid].get_widget('emoticons_button').hide()
-			self.xmls[jid].get_widget('emoticons_button').set_no_show_all(True)
+			emoticons_button.hide()
+			emoticons_button.set_no_show_all(True)
 
 		conv_textview.modify_font(font)
 		conv_buffer = conv_textview.get_buffer()
