@@ -970,6 +970,9 @@ class SingleMessageWindow:
 		if self.action == 'send':
 			if self.message: # we come from a reply?
 				self.message_textview.grab_focus()
+				# add > at the begining of each line
+				self.message = '>' + self.message
+				self.message = self.message.replace('\n', '\n>')
 			else: # we write a new message
 				self.subject_entry.grab_focus()
 		elif self.action == 'receive':
