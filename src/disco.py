@@ -492,9 +492,17 @@ _('Without a connection, you can not browse available services')).get_response()
 		theme = gajim.config.get('roster_theme')
 		bgcolor = gajim.config.get_per('themes', theme, 'bannerbgcolor')
 		textcolor = gajim.config.get_per('themes', theme, 'bannertextcolor')
-		self.banner_eventbox.modify_bg(gtk.STATE_NORMAL,
-			gtk.gdk.color_parse(bgcolor))
-		self.banner.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse(textcolor))
+		if bgcolor:
+			color = gtk.gdk.color_parse(bgcolor)
+		else:
+			color = None
+		self.banner_eventbox.modify_bg(gtk.STATE_NORMAL, color)
+
+		if textcolor:
+			color = gtk.gdk.color_parse(textcolor)
+		else:
+			color = None
+		self.banner.modify_fg(gtk.STATE_NORMAL, color)
 		if self.browser:
 			self.browser.update_theme()
 
@@ -934,7 +942,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 				# Normal/succes
 				cell.set_property('foreground_set', False)
 		else:
-			cell.set_property('cell_background_set', True)
+			theme = gajim.config.get('roster_theme')
+			bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
+			if bgcolor:
+				cell.set_property('cell_background_set', True)
 			cell.set_property('foreground_set', False)
 
 	def _treemodel_sort_func(self, model, iter1, iter2):
