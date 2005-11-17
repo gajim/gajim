@@ -1088,7 +1088,8 @@ class ToplevelAgentBrowser(AgentBrowser):
 	def update_theme(self):
 		theme = gajim.config.get('roster_theme')
 		bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
-		self._renderer.set_property('cell-background', bgcolor)
+		if bgcolor:
+			self._renderer.set_property('cell-background', bgcolor)
 		self.window.services_treeview.queue_draw()
 	
 	def on_register_button_clicked(self, widget = None):
