@@ -6,6 +6,7 @@ DefaultGroupName=Gajim
 UninstallDisplayIcon={app}\src\Gajim.exe
 Compression=lzma
 SolidCompression=yes
+SetupIconFile=data\pixmaps\gajim.ico
 
 [Components]
 Name: "main"; Description: "Main Files"; Types: full compact custom; Flags: fixed
