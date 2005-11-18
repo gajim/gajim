@@ -2321,15 +2321,15 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 
 	def compareIters(self, model, iter1, iter2, data = None):
 		'''Compare two iters to sort them'''
-		name1 = model.get_value(iter1, 1)
-		name2 = model.get_value(iter2, 1)
+		name1 = model[iter1][C_NAME]
+		name2 = model[iter2][C_NAME]
 		if not name1 or not name2:
 			return 0
 		else:
 			name1 = name1.decode('utf-8')
 			name2 = name2.decode('utf-8')
-		type1 = model.get_value(iter1, 2)
-		type2 = model.get_value(iter2, 2)
+		type1 = model[iter1][C_TYPE]
+		type2 = model[iter2][C_TYPE]
 		if type1 == 'group':
 			if name1 == _('Transports'):
 				return 1
@@ -2341,8 +2341,8 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 				return -1
 		if type1 == 'contact' and type2 == 'contact' and \
 				gajim.config.get('sort_by_show'):
-			account1 = model.get_value(iter1, 4)
-			account2 = model.get_value(iter2, 4)
+			account1 = model[iter1][C_ACCOUNT]
+			account2 = model[iter2][C_ACCOUNT]
 			if account1 and account2:
 				account1 = account1.decode('utf-8')
 				account2 = account2.decode('utf-8')
@@ -2368,7 +2368,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 					return 1
 		if name1.lower() < name2.lower():
 			return -1
-		if name2.lower < name1.lower():
+		if name2.lower() < name1.lower():
 			return 1
 		return 0
 
