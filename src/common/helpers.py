@@ -551,7 +551,8 @@ def get_icon_name_to_show(contact, account = None):
 
 def decode_string(string):
 	'''try to decode (to make it Unicode instance) given string'''
-	encodings = (sys.getfilesystemencoding(), 'utf-8', 'iso-8859-1', 'iso-8859-15')
+	# by the time we go to iso15 it better be the one else we show bad characters
+	encodings = (sys.getfilesystemencoding(), 'utf-8', 'iso-8859-15')
 	for encoding in encodings:
 		try:
 			string = string.decode(encoding)
