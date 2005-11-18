@@ -179,8 +179,7 @@ else:
 				if (sline[0] == 'sec' and secret) or \
 						(sline[0] == 'pub' and not secret):
 					# make it unicode instance
-					keys[sline[4][8:]] = sline[9].decode(
-						locale.getpreferredencoding())
+					keys[sline[4][8:]] = helpers.decode_string(sline[9])
 			return keys
 			try: proc.wait()
 			except IOError: pass
