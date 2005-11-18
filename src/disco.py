@@ -76,7 +76,7 @@ GTKGUI_GLADE = 'gtkgui.glade'
 def _gen_agent_type_info():
 	return {
 		# Defaults
-		(0, 0):						(None, 'unknown.png'),
+		(0, 0):						(None, None),
 		
 		# Jabber server
 		('server', 'im'):			(ToplevelAgentBrowser, 'jabber.png'),
@@ -96,14 +96,14 @@ def _gen_agent_type_info():
 		('_jid', 'aim'):			(False, 'aim.png'),
 		('gateway', 'gadu-gadu'):	(False, 'gadu-gadu.png'),
 		('_jid', 'gadugadu'):		(False, 'gadu-gadu.png'),
-		('gateway', 'http-ws'):		(False, 'unknown.png'),
+		('gateway', 'http-ws'):		(False, None),
 		('gateway', 'icq'):			(False, 'icq.png'),
 		('_jid', 'icq'):			(False, 'icq.png'),
 		('gateway', 'msn'):			(False, 'msn.png'),
 		('_jid', 'msn'):			(False, 'msn.png'),
-		('gateway', 'sms'):			(False, 'unknown.png'),
-		('_jid', 'sms'):			(False, 'unknown.png'),
-		('gateway', 'smtp'):		(False, 'unknown.png'),
+		('gateway', 'sms'):			(False, None),
+		('_jid', 'sms'):			(False, None),
+		('gateway', 'smtp'):		(False, None),
 		('gateway', 'yahoo'):		(False, 'yahoo.png'),
 		('_jid', 'yahoo'):			(False, 'yahoo.png'),
 	}
@@ -235,7 +235,7 @@ class ServicesCache:
 		if not self._cbs[cbkey]:
 			del self._cbs[cbkey]
 	
-	def get_icon(self, identities = []):
+	def get_icon(self, widget, identities = []):
 		'''Return the icon for an agent.'''
 		# Grab the first identity with an icon
 		for identity in identities:
@@ -256,8 +256,11 @@ class ServicesCache:
 		if filename in _icon_cache:
 			return _icon_cache[filename]
 		# Or load it
-		filepath = os.path.join(gajim.DATA_DIR, 'pixmaps/agents', filename)
-		pix = gtk.gdk.pixbuf_new_from_file(filepath)
+		if filename:
+			filepath = os.path.join(gajim.DATA_DIR, 'pixmaps/agents', filename)
+			pix = gtk.gdk.pixbuf_new_from_file(filepath)
+		else:
+			pix = widget.render_icon(gtk.STOCK_DIALOG_QUESTION, gtk.ICON_SIZE_DND)
 		# Store in cache
 		_icon_cache[filename] = pix
 		return pix
@@ -713,7 +716,7 @@ class AgentBrowser:
 				'%s</span>\n%s' % (name, self._get_agent_address()))
 		
 		# Add an icon to the banner.
-		pix = self.cache.get_icon(identities)
+		pix = self.cache.get_icon(self.window.services_treeview, identities)
 		self.window.banner_icon.set_from_pixbuf(pix)
 		self.window.banner_icon.show()
 	
@@ -1276,7 +1279,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 			# Put it in the 'other' category for now
 			cat_args = ('other',)
 		# Set the pixmap for the row
-		pix = self.cache.get_icon(identities)
+		pix = self.cache.get_icon(self.window.services_treeview, identities)
 		# Put it in the right category
 		cat = self._find_category(*cat_args)
 		if not cat:
@@ -1308,7 +1311,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self._update_progressbar()
 
 		# Search for an icon and category we can display
-		pix = self.cache.get_icon(identities)
+		pix = self.cache.get_icon(self.window.services_treeview, identities)
 		for identity in identities:
 			try:
 				cat, type = identity['category'], identity['type']
