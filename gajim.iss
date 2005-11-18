@@ -13,7 +13,7 @@ Name: "main"; Description: "Main Files"; Types: full compact custom; Flags: fixe
 
 [Tasks]
 Name: desktopicon; Description: "Create a &desktop icon"; GroupDescription: "Additional icons:"; Components: main
-Name: removeprevious; Description: "Remouve previously installed version"; GroupDescription: "Previous install:"; Components: main; Check: IsAlreadyInstalled('Gajim');
+Name: removeprevious; Description: "Remove previously installed version"; GroupDescription: "Previous install:"; Components: main; Check: IsAlreadyInstalled('Gajim');
 
 [Files]
 Source: "dist\*.pyd"; DestDir: "{app}\src"
