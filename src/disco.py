@@ -84,6 +84,7 @@ def _gen_agent_type_info():
 		
 		# Services
 		('conference', 'text'):		(MucBrowser, 'unknown.png'),
+		('headline', 'rss'):		(AgentBrowser, 'rss.png'),
 		
 		# Transports
 		('conference', 'irc'):		(False, 'irc.png'),
