@@ -548,3 +548,15 @@ def get_icon_name_to_show(contact, account = None):
 	if transport:
 		return contact.show
 	return 'not in the roster'
+
+def decode_string(string):
+	'''try to decode (to make it Unicode instance) given string'''
+	encodings = (sys.getfilesystemencoding(), 'utf-8', 'iso-8859-1', 'iso-8859-15')
+	for encoding in encodings:
+		try:
+			string = string.decode(encoding)
+		except UnicodeError:
+			continue
+		break
+	
+	return string
