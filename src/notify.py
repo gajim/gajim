@@ -144,7 +144,7 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 	notif.Notify(dbus.String(_('Gajim')), 
 		dbus.String(path), dbus.UInt32(0), ntype, dbus.Byte(0),
 		dbus.String(event_type), dbus.String(txt),
-		[dbus.String(path)], [''], [''], True, dbus.UInt32(3))
+		[dbus.String(path)], [''], [''], True, dbus.UInt32(5))
 
 def notify(event_type, jid, account, msg_type = '', file_props = None):
 	if dbus_available():
