@@ -83,7 +83,7 @@ def _gen_agent_type_info():
 		('services', 'jabber'):		(ToplevelAgentBrowser, 'jabber.png'),
 		
 		# Services
-		('conference', 'text'):		(MucBrowser, 'unknown.png'),
+		('conference', 'text'):		(MucBrowser, 'conference.png'),
 		('headline', 'rss'):		(AgentBrowser, 'rss.png'),
 		('headline', 'weather'):	(False, 'weather.png'),
 		('gateway', 'weather'):		(False, 'weather.png'),
