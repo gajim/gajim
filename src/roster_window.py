@@ -20,7 +20,6 @@
 
 import gtk
 import gtk.glade
-import pango
 import gobject
 import os
 import time
@@ -93,7 +92,6 @@ class RosterWindow:
 		model = self.tree.get_model()
 		acct = self.get_account_iter(account)
 		found = []
-		fin = False
 		if model is None: # when closing Gajim model can be none (async pbs?)
 			return found
 		group_iter = model.iter_children(acct)
@@ -675,7 +673,6 @@ class RosterWindow:
 	def chg_contact_status(self, contact, show, status, account):
 		'''When a contact changes his or her status'''
 		showOffline = gajim.config.get('showoffline')
-		model = self.tree.get_model()
 		contact_instances = gajim.contacts[account][contact.jid]
 		contact.show = show
 		contact.status = status
@@ -1107,7 +1104,7 @@ class RosterWindow:
 		
 		status_menuitem = childs[0]
 		# we skip the seperator
-		advanced_actions_menuitem = childs[2]
+		# skip advanced_actions_menuitem, childs[2]
 		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
 		set_motd_menuitem = xml.get_widget('set_motd_menuitem')
 		update_motd_menuitem = xml.get_widget('update_motd_menuitem')
@@ -1416,7 +1413,6 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			if gajim.connections[account].connected < 2:
 				self.set_connecting_state(account)
 
-			save_pass = gajim.config.get_per('accounts', account, 'savepass')
 			if gajim.connections[account].connected < 2 and \
 				not gajim.connections[account].password:
 				passphrase = ''
@@ -1496,7 +1492,6 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		return message
 
 	def connected_rooms(self, account):
-		accounts = gajim.connections.keys()
 		if True in gajim.gc_connected[account].values():
 			return True
 		return False
@@ -1684,7 +1679,6 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			path = None
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
-		save_in_queue = False
 
 		# Do we have a queue?
 		qs = gajim.awaiting_events[account]

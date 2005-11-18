@@ -1323,7 +1323,7 @@ class Connection:
 			for conf in confs:
 				autojoin_val = conf.getAttr('autojoin')
 				if autojoin_val is None: # not there (it's optional)
-					autojoin_val == False
+					autojoin_val = False
 				bm = { 'name': conf.getAttr('name'),
 					   'jid': conf.getAttr('jid'),
 					   'autojoin': autojoin_val,

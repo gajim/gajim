@@ -18,7 +18,6 @@
 ##
 
 from os import tmpfile
-import locale
 from common import helpers
 
 USE_GPG = True
@@ -167,7 +166,7 @@ else:
 				opt = '--list-secret-keys'
 			else:
 				opt = '--list-keys'
-			proc = self.run(['--with-colons', opt], \
+			proc = self.run(['--with-colons', opt],
 				create_fhs=['stdout'])
 			output = proc.handles['stdout'].read()
 			proc.handles['stdout'].close()
