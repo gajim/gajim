@@ -9793,7 +9793,7 @@ topic</property>
 		  <child>
 		    <widget class="GtkButton" id="emoticons_button">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Click to insert an emoticon</property>
+		      <property name="tooltip" translatable="yes">Click to insert an emoticon (Alt+E)</property>
 		      <property name="can_focus">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -11377,7 +11377,7 @@ Status message</property>
 		  <child>
 		    <widget class="GtkButton" id="emoticons_button">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Click to insert an emoticon</property>
+		      <property name="tooltip" translatable="yes">Click to insert an emoticon (Alt+E)</property>
 		      <property name="can_focus">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
