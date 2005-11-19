@@ -187,11 +187,12 @@ class RosterWindow:
 			# we add some values here. see draw_contact for more
 			model.append(iterG, (None, user.name,
 				typestr, user.jid, account, False, None))
-			
+
 			if gajim.groups[account][g]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)
 		self.draw_contact(jid, account)
-	
+		self.draw_avatar(jid, account)
+
 	def really_remove_contact(self, user, account):
 		if user.jid in gajim.newly_added[account]:
 			return
@@ -203,7 +204,7 @@ class RosterWindow:
 			self.draw_contact(user.jid, account)
 			return
 		self.remove_contact(user, account)
-	
+
 	def remove_contact(self, user, account):
 		'''Remove a user from the roster'''
 		if user.jid in gajim.to_be_removed[account]:
@@ -231,7 +232,7 @@ class RosterWindow:
 		return self.jabber_state_images
 
 	def draw_contact(self, jid, account, selected = False, focus = False):
-		'''draw the correct state image, name and avatar'''
+		'''draw the correct state image, name BUT not avatar'''
 		# focus is about if the roster window has toplevel-focus or not
 		model = self.tree.get_model()
 		iters = self.get_contact_iter(jid, account)
@@ -240,10 +241,10 @@ class RosterWindow:
 		contact_instances = gajim.get_contact_instances_from_jid(account, jid)
 		contact = gajim.get_highest_prio_contact_from_contacts(contact_instances)
 		name = contact.name
-		
+
 		if len(contact_instances) > 1:
 			name += ' (' + unicode(len(contact_instances)) + ')'
-		
+
 		# FIXME: remove when we use metacontacts
 		# shoz (account_name) if there are 2 contact with same jid in merged mode
 		if self.regroup:
@@ -261,6 +262,7 @@ class RosterWindow:
 					break
 			if add_acct:
 				name += ' (' + account + ')'
+
 		# add status msg, if not empty, under contact name in the treeview
 		if contact.status and gajim.config.get('show_status_msgs_in_roster'):
 			status = contact.status.strip()
@@ -276,8 +278,14 @@ class RosterWindow:
 		icon_name = helpers.get_icon_name_to_show(contact, account)
 		img = state_images[icon_name]
 
-		#FIXME: here it gets called to often
-		# for example if we recv a message we also reset the avatar!
+		for iter in iters:
+			model[iter][C_IMG] = img
+			model[iter][C_NAME] = name
+
+	def draw_avatar(self, jid, account):
+		'''draw the avatar'''
+		model = self.tree.get_model()
+		iters = self.get_contact_iter(jid, account)
 		if gajim.config.get('show_avatars_in_roster'):
 			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
 			if pixbuf in ('ask', None):
@@ -286,10 +294,7 @@ class RosterWindow:
 				scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
 		else:
 			scaled_pixbuf = None
-		
 		for iter in iters:
-			model[iter][C_IMG] = img
-			model[iter][C_NAME] = name
 			model[iter][C_SECPIXBUF] = scaled_pixbuf
 
 	def join_gc_room(self, account, room_jid, nick, password):
