@@ -1208,7 +1208,7 @@ class Interface:
 				strerr).get_response()
 			sys.exit(1)
 
-	def enable_dbus(self):
+	def enable_remote_control(self):
 		if 'remote_control' not in globals():
 			import remote_control
 		if not hasattr(self, 'remote') or not self.remote:
@@ -1225,7 +1225,7 @@ class Interface:
 			self.remote.set_enabled(True)
 		return True
 
-	def disable_dbus(self):
+	def disable_remote_control(self):
 		if hasattr(self, 'remote') and self.remote is not None:
 			# just tell the remote object to skip remote messages
 			self.remote.set_enabled(False)
@@ -1311,10 +1311,10 @@ class Interface:
 			gajim.events_for_ui[a] = []
 
 		self.roster = roster_window.RosterWindow()
-		if gajim.config.get('use_dbus'):
-			self.enable_dbus()
+		if gajim.config.get('remote_control'):
+			self.enable_remote_control()
 		else:
-			self.disable_dbus()
+			self.disable_remote_control()
 
 		self.show_vcard_when_connect = []
 

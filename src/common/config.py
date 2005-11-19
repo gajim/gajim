@@ -130,7 +130,7 @@ class Config:
 		'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
 		'always_english_wikipedia': [opt_bool, False],
 		'always_english_wiktionary': [opt_bool, True],
-		'use_dbus': [opt_bool, True, _('Allow controlling Gajim via D-Bus service.')],
+		'remote_control': [opt_bool, True, _('If checked, Gajim can be controlled remotely using gajim-remote.')],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
 		'autodetect_browser_mailer': [opt_bool, True],
 		'print_ichat_every_foo_minutes': [opt_int, 5],
