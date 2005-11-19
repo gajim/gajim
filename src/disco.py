@@ -38,7 +38,7 @@
 # * Should call the super class for this method.
 # All others do not have to call back to the super class. (but can if they want
 # the functionality)
-# There are more methods, ofcourse, but this is a basic set.
+# There are more methods, of course, but this is a basic set.
 
 import os
 import sys
