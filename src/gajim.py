@@ -167,8 +167,8 @@ class Interface:
 		#('ROSTER', account, array)
 		self.roster.fill_contacts_and_groups_dicts(data, account)
 		self.roster.draw_roster()
-		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('Roster', (account, data))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('Roster', (account, data))
 
 	def handle_event_warning(self, unused, data):
 		#('WARNING', account, (title_text, section_text))
@@ -264,8 +264,8 @@ class Interface:
 				self.instances[account]['infos'][jid] = \
 					vcard.VcardWindow(jid, account, True)
 				gajim.connections[account].request_vcard(jid)
-		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('AccountPresence', (status, account))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('AccountPresence', (status, account))
 	
 	def handle_event_notify(self, account, array):
 		#('NOTIFY', account, (jid, status, message, resource, priority, keyID))
@@ -372,8 +372,8 @@ class Interface:
 						show_notification = True
 					if show_notification:
 						notify.notify(_('Contact Signed In'), jid, account)
-				if self.remote and self.remote.is_enabled():
-					self.remote.raise_signal('ContactPresence',
+				if self.remote_ctrl:
+					self.remote_ctrl.raise_signal('ContactPresence',
 						(account, array))
 				
 			elif old_show > 1 and new_show < 2:
@@ -391,9 +391,9 @@ class Interface:
 						show_notification = True
 					if show_notification:
 						notify.notify(_('Contact Signed Out'), jid, account)
-				if self.remote and self.remote.is_enabled():
-					self.remote.raise_signal('ContactAbsence', (account, array))
-				# stop non active file transfers
+				if self.remote_ctrl:
+					self.remote_ctrl.raise_signal('ContactAbsence', (account, array))
+				# FIXME: stop non active file transfers
 		else:
 			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) doesn't follow the JEP
 			# remove in 2007
@@ -481,8 +481,8 @@ class Interface:
 		if gajim.config.get_per('soundevents', 'next_message_received',
 			'enabled') and not first:
 			helpers.play_sound('next_message_received')
-		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('NewMessage', (account, array))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('NewMessage', (account, array))
 
 	def handle_event_msgerror(self, account, array):
 		#('MSGERROR', account, (jid, error_code, error_msg, msg, time))
@@ -530,8 +530,8 @@ class Interface:
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text))
 		dialogs.SubscriptionRequestWindow(array[0], array[1], account)
-		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('Subscribe', (account, array))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('Subscribe', (account, array))
 
 	def handle_event_subscribed(self, account, array):
 		#('SUBSCRIBED', account, (jid, resource))
@@ -562,14 +562,14 @@ class Interface:
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his or her status.')
 				% jid)
-		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('Subscribed', (account, array))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('Subscribed', (account, array))
 
 	def handle_event_unsubscribed(self, account, jid):
 		dialogs.InformationDialog(_('Contact "%s" removed subscription from you') % jid,
 				_('You will always see him or her as offline.'))
-		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('Unsubscribed', (account, jid))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('Unsubscribed', (account, jid))
 	
 	def handle_event_agent_info_error(self, account, agent):
 		#('AGENT_ERROR_INFO', account, (agent))
@@ -615,8 +615,8 @@ class Interface:
 		if self.instances.has_key('account_creation_wizard'):
 			self.instances['account_creation_wizard'].acc_is_ok(array)
 
-		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('NewAccount', (account, array))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('NewAccount', (account, array))
 
 	def handle_event_acc_not_ok(self, account, array):
 		#('ACC_NOT_OK', account, (reason))
@@ -666,8 +666,8 @@ class Interface:
 			win.show_avatar(jid, resource)
 		# Show avatar in roster
 		self.roster.draw_avatar(jid, account)
-		if self.remote is not None:
-			self.remote.raise_signal('VcardInfo', (account, vcard))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('VcardInfo', (account, vcard))
 
 	def handle_event_os_info(self, account, array):
 		win = None
@@ -677,8 +677,8 @@ class Interface:
 			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
 		if win:
 			win.set_os_info(array[1], array[2], array[3])
-		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('OsInfo', (account, array))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('OsInfo', (account, array))
 
 	def handle_event_gc_notify(self, account, array):
 		#('GC_NOTIFY', account, (jid, status, message, resource,
@@ -693,8 +693,8 @@ class Interface:
 			self.instances[account]['gc'][jid].chg_contact_status(jid, resource,
 				array[1], array[2], array[4], array[5], array[6], array[7],
 				array[8], array[9], array[10], account)
-			if self.remote and self.remote.is_enabled():
-				self.remote.raise_signal('GCPresence', (account, array))
+			if self.remote_ctrl:
+				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 
 	def handle_event_gc_msg(self, account, array):
 		# ('GC_MSG', account, (jid, msg, time))
@@ -710,8 +710,8 @@ class Interface:
 			nick = jids[1]
 		self.instances[account]['gc'][room_jid].on_message(room_jid, nick, array[1],
 			array[2])
-		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('GCMessage', (account, array))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('GCMessage', (account, array))
 
 	def handle_event_gc_subject(self, account, array):
 		#('GC_SUBJECT', account, (jid, subject))
@@ -765,8 +765,8 @@ class Interface:
 			if array[4]:
 				contact.groups = array[4]
 		self.roster.draw_contact(jid, account)
-		if self.remote and self.remote.is_enabled():
-			self.remote.raise_signal('RosterInfo', (account, array))
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('RosterInfo', (account, array))
 
 	def handle_event_bookmarks(self, account, bms):
 		# ('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
@@ -1208,30 +1208,6 @@ class Interface:
 				strerr).get_response()
 			sys.exit(1)
 
-	def enable_remote_control(self):
-		if 'remote_control' not in globals():
-			import remote_control
-		if not hasattr(self, 'remote') or not self.remote:
-			try:
-				self.remote = remote_control.Remote()
-			except remote_control.DbusNotSupported:
-				self.remote = None
-				return False
-			except remote_control.SessionBusNotPresent:
-				self.remote = None
-				return False
-		else:
-			# enable the previously disabled object
-			self.remote.set_enabled(True)
-		return True
-
-	def disable_remote_control(self):
-		if hasattr(self, 'remote') and self.remote is not None:
-			# just tell the remote object to skip remote messages
-			self.remote.set_enabled(False)
-		else:
-			self.remote = None
-
 	def __init__(self):
 		helpers.check_paths()
 		gajim.interface = self
@@ -1311,10 +1287,15 @@ class Interface:
 			gajim.events_for_ui[a] = []
 
 		self.roster = roster_window.RosterWindow()
+		
 		if gajim.config.get('remote_control'):
-			self.enable_remote_control()
+			try:
+				import remote_control
+				self.remote_ctrl = remote_control.Remote()
+			except (remote_control.DbusNotSupported, remote_control.SessionBusNotPresent):
+				self.remote_ctrl = None
 		else:
-			self.disable_remote_control()
+			self.remote_ctrl = None
 
 		self.show_vcard_when_connect = []
 

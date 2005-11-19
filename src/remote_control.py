@@ -70,12 +70,6 @@ class Remote:
 		elif _version[1] <= 40 and _version[1] >= 20:
 			service=dbus.Service(SERVICE, session_bus)
 			self.signal_object = SignalObject(service)
-	
-	def set_enabled(self, status):
-		self.signal_object.disabled = not status
-		
-	def is_enabled(self):
-		return not self.signal_object.disabled
 
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
