@@ -29,8 +29,8 @@ import gtk
 import gobject
 
 import signal
-
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
+import traceback
 
 from common import i18n
 
@@ -38,7 +38,7 @@ _ = i18n._
 i18n.init()
 
 def send_error(error_message):
-		'''  Writes error message to stderr and exits '''
+		''' Writes error message to stderr and exits'''
 		sys.stderr.write(error_message + '\n')
 		sys.stderr.flush()
 		sys.exit(1)
@@ -46,7 +46,7 @@ def send_error(error_message):
 try:
 	import dbus
 except:
-	send_error('Dbus is not supported.\n')
+	send_error(_('Dbus is not supported.'))
 
 _version = getattr(dbus, 'version', (0, 20, 0))
 if _version[1] >= 41:
@@ -212,7 +212,7 @@ the contact list of this account'), False)
 				id = self.sbus.add_signal_receiver(self.show_vcard_info, 
 					'VcardInfo', INTERFACE, SERVICE, OBJ_PATH)
 			except Exception, e:
-				send_error(_('Service not available'))
+				send_error(_('Service not available') + ': ' + str(e))
 		
 		res = self.call_remote_method()
 		self.print_result(res)
@@ -258,7 +258,7 @@ Please specify account for sending the message.') % sys.argv[2])
 		try:
 			self.sbus = dbus.SessionBus()
 		except:
-			send_error(_('Session bus is not available.'))
+			send_error(_('Session bus is not available.') + ': ' + str(e))
 		
 		if _version[1] >= 30:
 			obj = self.sbus.get_object(SERVICE, OBJ_PATH)
@@ -541,7 +541,7 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 					sys.argv[5])
 			return res
 		except Exception, e:
-			send_error(_('Service not available'))
+			send_error(_('Service not available') + ': ' + str(e))
 		return None
 
 
