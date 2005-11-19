@@ -235,7 +235,7 @@ class ServicesCache:
 		if not self._cbs[cbkey]:
 			del self._cbs[cbkey]
 	
-	def get_icon(self, widget, identities = []):
+	def get_icon(self, identities = []):
 		'''Return the icon for an agent.'''
 		# Grab the first identity with an icon
 		for identity in identities:
@@ -252,15 +252,14 @@ class ServicesCache:
 			cat = type = 0
 			info = _agent_type_info[(0, 0)]
 			filename = info[1]
+		if not filename: # we don't have an image to show for this type
+			return
 		# Use the cache if possible
 		if filename in _icon_cache:
 			return _icon_cache[filename]
 		# Or load it
-		if filename:
-			filepath = os.path.join(gajim.DATA_DIR, 'pixmaps/agents', filename)
-			pix = gtk.gdk.pixbuf_new_from_file(filepath)
-		else:
-			pix = widget.render_icon(gtk.STOCK_DIALOG_QUESTION, gtk.ICON_SIZE_DND)
+		filepath = os.path.join(gajim.DATA_DIR, 'pixmaps', 'agents', filename)
+		pix = gtk.gdk.pixbuf_new_from_file(filepath)
 		# Store in cache
 		_icon_cache[filename] = pix
 		return pix
@@ -716,7 +715,7 @@ class AgentBrowser:
 				'%s</span>\n%s' % (name, self._get_agent_address()))
 		
 		# Add an icon to the banner.
-		pix = self.cache.get_icon(self.window.services_treeview, identities)
+		pix = self.cache.get_icon(identities)
 		self.window.banner_icon.set_from_pixbuf(pix)
 		self.window.banner_icon.show()
 	
@@ -1279,7 +1278,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 			# Put it in the 'other' category for now
 			cat_args = ('other',)
 		# Set the pixmap for the row
-		pix = self.cache.get_icon(self.window.services_treeview, identities)
+		pix = self.cache.get_icon(identities)
 		# Put it in the right category
 		cat = self._find_category(*cat_args)
 		if not cat:
@@ -1311,7 +1310,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self._update_progressbar()
 
 		# Search for an icon and category we can display
-		pix = self.cache.get_icon(self.window.services_treeview, identities)
+		pix = self.cache.get_icon(identities)
 		for identity in identities:
 			try:
 				cat, type = identity['category'], identity['type']
