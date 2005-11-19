@@ -136,6 +136,8 @@ class OptionsParser:
 			gajim.config.set('chat_avatar_width', self.old_values['avatar_width'])
 		if self.old_values.has_key('avatar_height'):
 			gajim.config.set('chat_avatar_height', self.old_values['avatar_height'])
+		if self.old_values.has_key('use_dbus'):
+			gajim.config.set('remote_control', self.old_values['use_dbus'])
 		# always_compact_view -> always_compact_view_chat / _gc
 		if self.old_values.has_key('always_compact_view'):
 			gajim.config.set('always_compact_view_chat',
