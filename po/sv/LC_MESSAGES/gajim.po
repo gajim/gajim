@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-16 23:27+0200\n"
+"POT-Creation-Date: 2005-11-19 23:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "A GTK+ Jabber client"
 msgstr "En GTK jabberklient"
 
-#: ../gajim.desktop.in.h:2 ../src/gtkgui.glade.h:136 ../src/notify.py:144
+#: ../gajim.desktop.in.h:2 ../src/gtkgui.glade.h:135 ../src/notify.py:144
 #: ../src/tooltips.py:285
 msgid "Gajim"
 msgstr "Gajim"
@@ -56,39 +56,39 @@ msgstr "Ingen"
 msgid "Hidden"
 msgstr "Mellannamn:"
 
-#: ../src/chat.py:166 ../src/gtkgui.glade.h:79
+#: ../src/chat.py:173 ../src/gtkgui.glade.h:79
 msgid "Chat"
 msgstr "Chatt"
 
-#: ../src/chat.py:168 ../src/gtkgui.glade.h:148
+#: ../src/chat.py:175 ../src/gtkgui.glade.h:147
 msgid "Group Chat"
 msgstr "Gruppchatt"
 
 #. if we have 2 or more accounts
-#: ../src/chat.py:182
+#: ../src/chat.py:189
 msgid "account: "
 msgstr "konto: "
 
 #. Check if jid is already in roster
 #. Groups maynot change name from or to 'not in the roster'
-#: ../src/chat.py:409 ../src/conversation_textview.py:374
+#: ../src/chat.py:416 ../src/conversation_textview.py:374
 #: ../src/dialogs.py:112 ../src/dialogs.py:331 ../src/dialogs.py:369
 #: ../src/dialogs.py:906 ../src/dialogs.py:907 ../src/gajim.py:543
-#: ../src/gajim.py:544 ../src/roster_window.py:967
-#: ../src/roster_window.py:1228 ../src/roster_window.py:1394
+#: ../src/gajim.py:544 ../src/roster_window.py:969
+#: ../src/roster_window.py:1230 ../src/roster_window.py:1396
 #: ../src/roster_window.py:1642 ../src/roster_window.py:1675
-#: ../src/roster_window.py:2095 ../src/roster_window.py:2338
-#: ../src/roster_window.py:2340 ../src/roster_window.py:2409
+#: ../src/roster_window.py:2094 ../src/roster_window.py:2337
+#: ../src/roster_window.py:2339 ../src/roster_window.py:2408
 msgid "not in the roster"
 msgstr "inte i registret"
 
-#: ../src/chat.py:493
+#: ../src/chat.py:500
 #, python-format
 msgid "Switch to %s"
 msgstr "Växla till %s"
 
 #. FIXME: add a ui for this use spell.set_language()
-#: ../src/chat.py:703
+#: ../src/chat.py:710
 msgid ""
 "If that is not your language for which you want to highlight misspelled "
 "words, then please set your $LANG as appropriate. Eg. for French do export "
@@ -121,147 +121,147 @@ msgstr "Händelse"
 msgid "Sound"
 msgstr "Ljud"
 
-#: ../src/config.py:944
+#: ../src/config.py:946
 msgid "status message title"
 msgstr "titel för statusmeddelande"
 
-#: ../src/config.py:944
+#: ../src/config.py:946
 msgid "status message text"
 msgstr "text för statusmeddelande"
 
-#: ../src/config.py:997
+#: ../src/config.py:999
 msgid "Choose Sound"
 msgstr "Välj ljud"
 
-#: ../src/config.py:1010 ../src/config.py:2070 ../src/vcard.py:173
+#: ../src/config.py:1012 ../src/config.py:2072 ../src/vcard.py:173
 msgid "All files"
 msgstr "Alla filer"
 
-#: ../src/config.py:1015
+#: ../src/config.py:1017
 msgid "Wav Sounds"
 msgstr "Wav ljud"
 
-#: ../src/config.py:1176
+#: ../src/config.py:1178
 msgid "OpenPGP is not usable in this computer"
 msgstr "OpenPGP är inte användbart i den här datorn"
 
-#: ../src/config.py:1200
+#: ../src/config.py:1202
 msgid "You are currently connected to the server"
 msgstr "Du är för närvarande ansluten till servern"
 
-#: ../src/config.py:1201
+#: ../src/config.py:1203
 msgid "To change the account name, you must be disconnected."
 msgstr "För att ändra kontonamnet måste du vara frånkopplad"
 
-#: ../src/config.py:1204 ../src/config.py:1208
+#: ../src/config.py:1206 ../src/config.py:1210
 msgid "Invalid account name"
 msgstr "Ogiltigt kontonamn"
 
-#: ../src/config.py:1205
+#: ../src/config.py:1207
 msgid "Account name cannot be empty."
 msgstr "Kontonamnet kan inte vara tomt."
 
-#: ../src/config.py:1209
+#: ../src/config.py:1211
 msgid "Account name cannot contain spaces."
 msgstr "Kontonamnet kan inte innehålla mellanslag."
 
-#: ../src/config.py:1217 ../src/config.py:1223 ../src/config.py:1232
-#: ../src/config.py:2580
+#: ../src/config.py:1219 ../src/config.py:1225 ../src/config.py:1234
+#: ../src/config.py:2582
 msgid "Invalid Jabber ID"
 msgstr "Ogiltigt Jabber-ID"
 
-#: ../src/config.py:1224
+#: ../src/config.py:1226
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Ett Jabber-ID måste vara i formen \"användare@server\"."
 
-#: ../src/config.py:1278
+#: ../src/config.py:1280
 msgid "Invalid entry"
 msgstr "Ogiltig post"
 
-#: ../src/config.py:1279
+#: ../src/config.py:1281
 msgid "Custom port must be a port number."
 msgstr "Inställd port måste vara ett portnummer."
 
-#: ../src/config.py:1380
+#: ../src/config.py:1382
 msgid "No such account available"
 msgstr "Inget sådant konto tillgängligt"
 
-#: ../src/config.py:1381
+#: ../src/config.py:1383
 msgid "You must create your account before editing your personal information."
 msgstr ""
 "Du måste skapa ditt konto innan du redigerar din personliga information."
 
-#: ../src/config.py:1388 ../src/dialogs.py:637 ../src/dialogs.py:738
-#: ../src/disco.py:408 ../src/vcard.py:394 ../src/vcard.py:422
+#: ../src/config.py:1390 ../src/dialogs.py:637 ../src/dialogs.py:738
+#: ../src/disco.py:414 ../src/vcard.py:394 ../src/vcard.py:422
 msgid "You are not connected to the server"
 msgstr "Du är inte ansluten till servern"
 
-#: ../src/config.py:1389
+#: ../src/config.py:1391
 msgid "Without a connection, you can not edit your personal information."
 msgstr "Utan en förbindelse kan du inte redigera din personliga information."
 
-#: ../src/config.py:1420
+#: ../src/config.py:1422
 msgid "Failed to get secret keys"
 msgstr "Lyckades inte hämta hemliga nycklar"
 
-#: ../src/config.py:1421
+#: ../src/config.py:1423
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "Det var problem med att hämta dina hemliga OpenPGP-nycklar."
 
-#: ../src/config.py:1424 ../src/gtkgui.glade.h:209
+#: ../src/config.py:1426 ../src/gtkgui.glade.h:208
 msgid "Passphrase"
 msgstr "Lösenfras"
 
-#: ../src/config.py:1425
+#: ../src/config.py:1427
 msgid "Choose your OpenPGP key"
 msgstr "Välj din OpenPGP-nyckel"
 
-#: ../src/config.py:1433 ../src/gtkgui.glade.h:197
+#: ../src/config.py:1435 ../src/gtkgui.glade.h:196
 msgid "No key selected"
 msgstr "Ingen nyckel vald"
 
 #. Name column
-#: ../src/config.py:1653 ../src/disco.py:653 ../src/disco.py:1347
+#: ../src/config.py:1655 ../src/disco.py:667 ../src/disco.py:1365
 msgid "Name"
 msgstr "Namn"
 
-#: ../src/config.py:1656
+#: ../src/config.py:1658
 msgid "Server"
 msgstr "Server"
 
 #. if not '@' or '@' starts the jid ==> agent
-#: ../src/config.py:1880 ../src/dialogs.py:112 ../src/dialogs.py:293
-#: ../src/dialogs.py:331 ../src/disco.py:110 ../src/disco.py:111
-#: ../src/disco.py:1132 ../src/roster_window.py:146
-#: ../src/roster_window.py:164 ../src/roster_window.py:186
-#: ../src/roster_window.py:2334 ../src/roster_window.py:2336
-#: ../src/roster_window.py:2409 ../src/systray.py:240
+#: ../src/config.py:1882 ../src/dialogs.py:112 ../src/dialogs.py:293
+#: ../src/dialogs.py:331 ../src/disco.py:114 ../src/disco.py:115
+#: ../src/disco.py:1150 ../src/roster_window.py:144
+#: ../src/roster_window.py:162 ../src/roster_window.py:184
+#: ../src/roster_window.py:2333 ../src/roster_window.py:2335
+#: ../src/roster_window.py:2408 ../src/systray.py:240
 msgid "Transports"
 msgstr "Transporter"
 
-#: ../src/config.py:1919
+#: ../src/config.py:1921
 #, python-format
 msgid "Edit %s"
 msgstr "Redigera %s"
 
-#: ../src/config.py:1921
+#: ../src/config.py:1923
 #, python-format
 msgid "Register to %s"
 msgstr "Registrera till %s"
 
-#: ../src/config.py:1940
+#: ../src/config.py:1942
 msgid "Text"
 msgstr "Text"
 
-#: ../src/config.py:1948
+#: ../src/config.py:1950
 msgid "Image"
 msgstr "Bild"
 
-#: ../src/config.py:1998
+#: ../src/config.py:2000
 msgid "Image is too big"
 msgstr "Bild är för stor"
 
-#: ../src/config.py:1998
+#: ../src/config.py:2000
 msgid ""
 "Image for emoticon has to be less than or equal to 24 pixels in width and 24 "
 "in height."
@@ -269,66 +269,66 @@ msgstr ""
 "Bilden för känsloikonen måste vara mindre än eller lika med 24 pixlar i "
 "bredd och 24 i höjd."
 
-#: ../src/config.py:2058
+#: ../src/config.py:2060
 msgid "Choose Image"
 msgstr "Välj bild"
 
-#: ../src/config.py:2075 ../src/vcard.py:178
+#: ../src/config.py:2077 ../src/vcard.py:178
 msgid "Images"
 msgstr "Bilder"
 
-#: ../src/config.py:2170
+#: ../src/config.py:2172
 #, python-format
 msgid "Removing %s account"
 msgstr "Tar bort %s konto"
 
-#: ../src/config.py:2177
+#: ../src/config.py:2179
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Konto \"%s\" är anslutet till servern"
 
-#: ../src/config.py:2178
+#: ../src/config.py:2180
 msgid "If you remove it, the connection will be lost."
 msgstr "Om du tar bort det kommer anslutningen förloras."
 
-#: ../src/config.py:2306
+#: ../src/config.py:2308
 msgid "New Room"
 msgstr "Nytt rum"
 
-#: ../src/config.py:2336
+#: ../src/config.py:2338
 msgid "This bookmark has invalid data"
 msgstr "Det här bokmärket har ogiltig data"
 
-#: ../src/config.py:2337
+#: ../src/config.py:2339
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Se till att fylla i server- och rumfälten eller ta bort det här bokmärket."
 
-#: ../src/config.py:2562
+#: ../src/config.py:2564
 #, fuzzy
 msgid "Invalid username"
 msgstr "Ogiltigt användarnamn"
 
-#: ../src/config.py:2563
+#: ../src/config.py:2565
 #, fuzzy
 msgid "You must provide a username to configure this account."
 msgstr "Du behöver ange ett användarnamn för att lägga till ett konto."
 
-#: ../src/config.py:2571 ../src/dialogs.py:757
+#: ../src/config.py:2573 ../src/dialogs.py:757
 msgid "Invalid password"
 msgstr "Ogiltigt lösenord"
 
-#: ../src/config.py:2572
+#: ../src/config.py:2574
 msgid "You must enter a password for the new account."
 msgstr "Du måste skriva in ett lösenord för det nya kontot."
 
-#: ../src/config.py:2597
+#: ../src/config.py:2599
 #, fuzzy
 msgid "Account has been added successfully"
 msgstr "Bokmärke har blivit ordentligt tillagt"
 
-#: ../src/config.py:2598
+#: ../src/config.py:2600
 #, fuzzy
 msgid ""
 "You can set advanced account options by pressing Advanced button, or later "
@@ -338,12 +338,12 @@ msgstr ""
 "Du kan ställa in avancerade alternativ genom att använda \"Redigera->Konton"
 "\" från huvudfönstret."
 
-#: ../src/config.py:2628
+#: ../src/config.py:2630
 #, fuzzy
 msgid "Your new account has been created successfully"
 msgstr "Bokmärke har blivit ordentligt tillagt"
 
-#: ../src/config.py:2629
+#: ../src/config.py:2631
 #, fuzzy
 msgid ""
 "You can set advanced account options by pressing Advanced button,or later by "
@@ -353,21 +353,21 @@ msgstr ""
 "Du kan ställa in avancerade alternativ genom att använda \"Redigera->Konton"
 "\" från huvudfönstret."
 
-#: ../src/config.py:2643
+#: ../src/config.py:2645
 msgid "An error occured during account creation"
 msgstr ""
 
-#: ../src/config.py:2720
+#: ../src/config.py:2722
 msgid "Account name is in use"
 msgstr "Kontonamn används redan"
 
-#: ../src/config.py:2721
+#: ../src/config.py:2723
 msgid "You already have an account using this name."
 msgstr "Du har redan ett konto med det namnet."
 
 #: ../src/conversation_textview.py:181
 msgid ""
-"Text below this ruler is what has been said since the last time you paid "
+"Text below this line is what has been said since the last time you paid "
 "attention to this group chat"
 msgstr ""
 
@@ -515,7 +515,7 @@ msgstr "Du kan inte gå med i en gruppchatt utan att vara ansluten."
 msgid "Join Group Chat as %s"
 msgstr "Anslut till gruppchatt som %s"
 
-#: ../src/dialogs.py:653 ../src/gtkgui.glade.h:179
+#: ../src/dialogs.py:653 ../src/gtkgui.glade.h:178
 msgid "Join Group Chat"
 msgstr "Anslut till gruppchatt"
 
@@ -539,11 +539,11 @@ msgstr ""
 "skicka ett chattmeddelande till:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:727 ../src/dialogs.py:1056 ../src/dialogs.py:1174
+#: ../src/dialogs.py:727 ../src/dialogs.py:1062 ../src/dialogs.py:1182
 msgid "Connection not available"
 msgstr "Förbindelse inte tillgänglig"
 
-#: ../src/dialogs.py:728 ../src/dialogs.py:1057 ../src/dialogs.py:1175
+#: ../src/dialogs.py:728 ../src/dialogs.py:1063 ../src/dialogs.py:1183
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Kontrollera att du är ansluten med \"%s\"."
@@ -618,146 +618,136 @@ msgstr "Filöverföring stoppad"
 msgid "To %s"
 msgstr "Till %s"
 
-#: ../src/dialogs.py:1020
+#: ../src/dialogs.py:1026
 #, python-format
 msgid "Single Message as %s"
 msgstr "Enstaka meddelande som %s"
 
-#: ../src/dialogs.py:1022
+#: ../src/dialogs.py:1028
 msgid "Single Message"
 msgstr "Enstaka meddelande"
 
-#: ../src/dialogs.py:1025
+#: ../src/dialogs.py:1031
 #, python-format
 msgid "Send %s"
 msgstr "Skicka %s"
 
-#: ../src/dialogs.py:1034
+#: ../src/dialogs.py:1040
 #, python-format
 msgid "Received %s"
 msgstr "Mottog %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:1082
+#: ../src/dialogs.py:1088
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: ../src/dialogs.py:1083
+#: ../src/dialogs.py:1089
 #, python-format
-msgid ""
-"\n"
-"\n"
-"\n"
-"== Original Message ==\n"
-"%s"
+msgid "%s wrote:\n"
 msgstr ""
-"\n"
-"\n"
-"\n"
-"== Originalmeddelande ==\n"
-"%s"
 
-#: ../src/dialogs.py:1125
+#: ../src/dialogs.py:1133
 #, python-format
 msgid "XML Console for %s"
 msgstr "XML konsoll för %s"
 
-#: ../src/dialogs.py:1127
+#: ../src/dialogs.py:1135
 msgid "XML Console"
 msgstr "XML konsole"
 
-#: ../src/dialogs.py:1210
+#: ../src/dialogs.py:1218
 #, fuzzy, python-format
 msgid "You have been invited to the %(room_jid)s room by %(contact_jid)s"
 msgstr "Du har blivit inbjuden till rummet %s av %s"
 
-#: ../src/dialogs.py:1213
+#: ../src/dialogs.py:1221
 #, python-format
 msgid "Comment: %s"
 msgstr "Kommentar: %s"
 
-#: ../src/disco.py:109
+#: ../src/disco.py:113
 msgid "Others"
 msgstr ""
 
-#: ../src/disco.py:112
+#: ../src/disco.py:116
 #, fuzzy
 msgid "Conference"
 msgstr "Inställningar"
 
-#: ../src/disco.py:409
+#: ../src/disco.py:415
 msgid "Without a connection, you can not browse available services"
 msgstr "Utan en förbindelse kan du inte bläddra bland tillgängliga tjänster"
 
-#: ../src/disco.py:483 ../src/disco.py:485
+#: ../src/disco.py:489 ../src/disco.py:491
 msgid "Service Discovery"
 msgstr "Tjänstefinnare"
 
-#: ../src/disco.py:555
+#: ../src/disco.py:569
 msgid "The service could not be found"
 msgstr ""
 
-#: ../src/disco.py:556
+#: ../src/disco.py:570
 msgid ""
 "There is no service at the address you entered, or it is not responding. "
 "Check the address and try again."
 msgstr ""
 
-#: ../src/disco.py:560 ../src/disco.py:843
+#: ../src/disco.py:574 ../src/disco.py:857
 #, fuzzy
 msgid "The service is not browsable"
 msgstr "Tjänst är inte tillgänglig"
 
-#: ../src/disco.py:561
+#: ../src/disco.py:575
 msgid "This type of service does not contain any items to browse."
 msgstr ""
 
-#: ../src/disco.py:639
+#: ../src/disco.py:653
 #, fuzzy, python-format
 msgid "Browsing %s"
 msgstr "Version %s"
 
 #. Address column
-#: ../src/disco.py:660
+#: ../src/disco.py:674
 msgid "JID"
 msgstr ""
 
-#: ../src/disco.py:679
+#: ../src/disco.py:693
 #, fuzzy
 msgid "_Browse"
 msgstr "_Webbläsare:"
 
-#: ../src/disco.py:844
+#: ../src/disco.py:858
 msgid "This service does not contain any items to browse."
 msgstr ""
 
-#: ../src/disco.py:1061 ../src/disco.py:1137
+#: ../src/disco.py:1078 ../src/disco.py:1155
 msgid "Re_gister"
 msgstr "Re_gistrera"
 
-#: ../src/disco.py:1135 ../src/gtkgui.glade.h:338 ../src/roster_window.py:1053
+#: ../src/disco.py:1153 ../src/gtkgui.glade.h:337 ../src/roster_window.py:1055
 msgid "_Edit"
 msgstr "R_edigera"
 
-#: ../src/disco.py:1172
+#: ../src/disco.py:1190
 #, python-format
 msgid "Scanning %d / %d.."
 msgstr ""
 
 #. Users column
-#: ../src/disco.py:1354
+#: ../src/disco.py:1372
 #, fuzzy
 msgid "Users"
 msgstr "Användar-ID:"
 
 #. Description column
-#: ../src/disco.py:1361
+#: ../src/disco.py:1379
 #, fuzzy
 msgid "Description"
 msgstr "Beskrivning: %s"
 
-#: ../src/disco.py:1388 ../src/gtkgui.glade.h:352
+#: ../src/disco.py:1406 ../src/gtkgui.glade.h:351
 msgid "_Join"
 msgstr "_Anslut till"
 
@@ -809,7 +799,7 @@ msgstr "Sparad i: %s"
 msgid "File transfer completed"
 msgstr "Filöverföring färdig"
 
-#: ../src/filetransfers_window.py:197 ../src/gtkgui.glade.h:369
+#: ../src/filetransfers_window.py:197 ../src/gtkgui.glade.h:368
 msgid "_Open Containing Folder"
 msgstr "_Öppna behållande mapp"
 
@@ -917,9 +907,13 @@ msgstr "Sändare: "
 msgid "Pause"
 msgstr "Paus"
 
-#: ../src/filetransfers_window.py:736 ../src/gtkgui.glade.h:331
+#: ../src/filetransfers_window.py:736 ../src/gtkgui.glade.h:330
 msgid "_Continue"
 msgstr "_Fortsätt"
+
+#: ../src/gajim-remote.py:49
+msgid "Dbus is not supported."
+msgstr ""
 
 #: ../src/gajim-remote.py:75
 msgid "show a help on specific command"
@@ -1222,8 +1216,8 @@ msgstr "Accepterar du den här förfrågan?"
 msgid "error while sending"
 msgstr "problem vid sändning"
 
-#: ../src/gajim.py:546 ../src/gajim.py:557 ../src/gtkgui.glade.h:145
-#: ../src/roster_window.py:148 ../src/roster_window.py:1215
+#: ../src/gajim.py:546 ../src/gajim.py:557 ../src/gtkgui.glade.h:144
+#: ../src/roster_window.py:146 ../src/roster_window.py:1217
 msgid "General"
 msgstr "Generellt"
 
@@ -1251,7 +1245,7 @@ msgstr "Du kommer alltid se honom som offline."
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Kontakt med \"%s\" kan inte etableras"
 
-#: ../src/gajim.py:595 ../src/common/connection.py:1587
+#: ../src/gajim.py:595 ../src/common/connection.py:1604
 msgid "Check your connection or try again later."
 msgstr "Kontrollera din förbindelse eller försök igen senare."
 
@@ -2027,88 +2021,83 @@ msgstr "Redigera personlig information..."
 msgid "Edit _Groups"
 msgstr "Redigera _grupper"
 
-#: ../src/gtkgui.glade.h:116
-#, fuzzy
-msgid "Emoticons"
-msgstr "Hantera känsloikoner"
-
 #. XML Console enable checkbutton
-#: ../src/gtkgui.glade.h:118
+#: ../src/gtkgui.glade.h:117
 msgid "Enable"
 msgstr "Aktivera"
 
-#: ../src/gtkgui.glade.h:119
+#: ../src/gtkgui.glade.h:118
 msgid "Enter it again for confirmation:"
 msgstr "Skriv in det igen för att bekräfta:"
 
-#: ../src/gtkgui.glade.h:120
+#: ../src/gtkgui.glade.h:119
 msgid "Enter new password:"
 msgstr "Skriv nytt lösenord:"
 
-#: ../src/gtkgui.glade.h:121
+#: ../src/gtkgui.glade.h:120
 msgid "Events"
 msgstr "Händelser"
 
-#: ../src/gtkgui.glade.h:122
+#: ../src/gtkgui.glade.h:121
 msgid "Every 5 _minutes"
 msgstr "Var 5e _minut"
 
-#: ../src/gtkgui.glade.h:123
+#: ../src/gtkgui.glade.h:122
 msgid "Extra Address:"
 msgstr "Extra adress:"
 
 #. Family Name
-#: ../src/gtkgui.glade.h:125
+#: ../src/gtkgui.glade.h:124
 msgid "Family:"
 msgstr "Efternamn:"
 
-#: ../src/gtkgui.glade.h:126
+#: ../src/gtkgui.glade.h:125
 msgid "File Transfers"
 msgstr "Filöverföringar"
 
-#: ../src/gtkgui.glade.h:127
+#: ../src/gtkgui.glade.h:126
 msgid "File _Transfers"
 msgstr "Fil_överföringar"
 
-#: ../src/gtkgui.glade.h:128
+#: ../src/gtkgui.glade.h:127
 msgid "File manager:"
 msgstr "Filhanterare:"
 
-#: ../src/gtkgui.glade.h:129
+#: ../src/gtkgui.glade.h:128
 msgid "Filter:"
 msgstr "Filter:"
 
-#: ../src/gtkgui.glade.h:130
+#: ../src/gtkgui.glade.h:129
 #, fuzzy
 msgid "Font style:"
 msgstr "Teckensnitt:"
 
-#: ../src/gtkgui.glade.h:131
+#: ../src/gtkgui.glade.h:130
 msgid "Font:"
 msgstr "Teckensnitt:"
 
-#: ../src/gtkgui.glade.h:132
+#: ../src/gtkgui.glade.h:131
 msgid "Format: YYYY-MM-DD"
 msgstr "Format: ÅÅÅÅ-MM-DD"
 
-#: ../src/gtkgui.glade.h:133
+#: ../src/gtkgui.glade.h:132
 msgid "Frequently Asked Questions (online)"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:134
+#: ../src/gtkgui.glade.h:133
 msgid "From:"
 msgstr "Från:"
 
-#: ../src/gtkgui.glade.h:135
+#: ../src/gtkgui.glade.h:134
 #, fuzzy
 msgid "G_o"
 msgstr "Kör"
 
-#: ../src/gtkgui.glade.h:137
+#: ../src/gtkgui.glade.h:136
 msgid "Gajim Themes Customization"
 msgstr "Gajim temaanpassare"
 
-#: ../src/gtkgui.glade.h:138
+#: ../src/gtkgui.glade.h:137
 #, fuzzy
 msgid ""
 "Gajim can send and receive meta-information related to a conversation you "
@@ -2118,7 +2107,7 @@ msgstr ""
 "information relaterad till en konversation som du kan ha med en kontakt, som "
 "att författa ett meddelande"
 
-#: ../src/gtkgui.glade.h:139
+#: ../src/gtkgui.glade.h:138
 msgid ""
 "Gajim will automatically show the new received message in a new chat window "
 "or tab in an existing chat window"
@@ -2126,7 +2115,7 @@ msgstr ""
 "Gajim kommer automatiskt visa nya inkommande meddelanden i ett nytt "
 "chattfönster eller en flik i ett existerande chattfönster"
 
-#: ../src/gtkgui.glade.h:140
+#: ../src/gtkgui.glade.h:139
 msgid ""
 "Gajim will notify you for new message via a popup in the bottom right of the "
 "screen"
@@ -2134,7 +2123,7 @@ msgstr ""
 "Gajim kommer säga till dig om nya meddelanden med en popup i det nedre högra "
 "hörnet av skärmen"
 
-#: ../src/gtkgui.glade.h:141
+#: ../src/gtkgui.glade.h:140
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed in"
@@ -2142,7 +2131,7 @@ msgstr ""
 "Gajim kommer säga till dig via ett popupfönster i det nedre högra hörnet av "
 "skärmen om kontakter som just loggat in"
 
-#: ../src/gtkgui.glade.h:142
+#: ../src/gtkgui.glade.h:141
 msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed out"
@@ -2150,83 +2139,83 @@ msgstr ""
 "Gajim kommer säga till dig via ett popupfönster i det nedre högra hörnet av "
 "skärmen om kontakter som just loggat ut"
 
-#: ../src/gtkgui.glade.h:143
+#: ../src/gtkgui.glade.h:142
 msgid ""
 "Gajim will only change the icon of the contact that sent the new message"
 msgstr ""
 "Gajim kommer ändra ikonen på kontakten som skickade det nya meddelandet"
 
-#: ../src/gtkgui.glade.h:144
+#: ../src/gtkgui.glade.h:143
 #, fuzzy
 msgid "Gajim: Account Creation Wizard"
 msgstr "Gajim: Första-gången guide"
 
 #. Given Name
-#: ../src/gtkgui.glade.h:147
+#: ../src/gtkgui.glade.h:146
 msgid "Given:"
 msgstr "Förnamn:"
 
-#: ../src/gtkgui.glade.h:149
+#: ../src/gtkgui.glade.h:148
 msgid "Group:"
 msgstr "Grupp:"
 
-#: ../src/gtkgui.glade.h:150
+#: ../src/gtkgui.glade.h:149
 msgid "HTTP Connect"
 msgstr "HTTP anslut"
 
-#: ../src/gtkgui.glade.h:151
+#: ../src/gtkgui.glade.h:150
 msgid "Help online"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:152
+#: ../src/gtkgui.glade.h:151
 msgid "Hides the window"
 msgstr "Gömmer fönstret"
 
-#: ../src/gtkgui.glade.h:153
+#: ../src/gtkgui.glade.h:152
 msgid "Homepage:"
 msgstr "Hemsida:"
 
-#: ../src/gtkgui.glade.h:154
+#: ../src/gtkgui.glade.h:153
 msgid "Hostname: "
 msgstr "Värdnamn: "
 
-#: ../src/gtkgui.glade.h:155
+#: ../src/gtkgui.glade.h:154
 msgid "I already have an account I want to use"
 msgstr "Jag har redan ett konto jag vill använda"
 
-#: ../src/gtkgui.glade.h:156
+#: ../src/gtkgui.glade.h:155
 msgid "I want to _register for a new account"
 msgstr "Jag vill _registrera ett nytt konto"
 
-#: ../src/gtkgui.glade.h:157
+#: ../src/gtkgui.glade.h:156
 msgid "I would like to add you to my contact list."
 msgstr "Jag vill lägga till dig i min kontaktlista."
 
-#: ../src/gtkgui.glade.h:158
+#: ../src/gtkgui.glade.h:157
 msgid "If checked, Gajim will also have a trayicon"
 msgstr "Om ikryssat kommer Gajim också att ha en systembrickeikon"
 
-#: ../src/gtkgui.glade.h:159
+#: ../src/gtkgui.glade.h:158
 msgid ""
 "If checked, Gajim will display an avatar, if one is set, for every contact "
 "in roster window"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:160
+#: ../src/gtkgui.glade.h:159
 msgid ""
 "If checked, Gajim will display the status message, if not empty, for every "
 "contact under the contact name in roster window"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:161
+#: ../src/gtkgui.glade.h:160
 msgid "If checked, Gajim will join this group chat on startup"
 msgstr "Om ikryssat kommer Gajim ansluta till den här gruppchatten vid start"
 
-#: ../src/gtkgui.glade.h:162
+#: ../src/gtkgui.glade.h:161
 msgid "If checked, Gajim will remember the password for this account"
 msgstr "Om ikryssat kommer Gajim komma ihåg lösenordet för det här kontot"
 
-#: ../src/gtkgui.glade.h:163
+#: ../src/gtkgui.glade.h:162
 msgid ""
 "If checked, Gajim will remember the roster and chat window positions in the "
 "screen and the sizes of them next time you run it"
@@ -2234,7 +2223,7 @@ msgstr ""
 "Om ikryssat kommer Gajim komma ihåg registrets och chatfönstrets positioner "
 "och storlekar på skärmen nästa gång du kör det"
 
-#: ../src/gtkgui.glade.h:164
+#: ../src/gtkgui.glade.h:163
 msgid ""
 "If checked, Gajim will replace ascii smilies like ':)' with equivalent "
 "graphical emoticons"
@@ -2242,7 +2231,7 @@ msgstr ""
 "Om ikryssat kommer Gajim ersätta ascii smilies som ':)' med liknande "
 "grafiska känsloikoner"
 
-#: ../src/gtkgui.glade.h:165
+#: ../src/gtkgui.glade.h:164
 msgid ""
 "If checked, Gajim will send keep-alive packets so it prevents connection "
 "timeout which results in disconnection"
@@ -2250,7 +2239,7 @@ msgstr ""
 "Om ikryssat kommer Gajim skicka håll-vid-liv paket som förhindrar att "
 "anslutningen gör timeout vilket leder till frånkoppling"
 
-#: ../src/gtkgui.glade.h:166
+#: ../src/gtkgui.glade.h:165
 #, fuzzy
 msgid ""
 "If checked, Gajim will store the password in ~/.gajim/config with 'read' "
@@ -2259,7 +2248,7 @@ msgstr ""
 "Om ikryssat kommer Gajim spara lösenordet i ~/.gajim/config med \"läs\"-"
 "rättigheter enbart för dig och såklart din administratör"
 
-#: ../src/gtkgui.glade.h:167
+#: ../src/gtkgui.glade.h:166
 msgid ""
 "If checked, Gajim will use protocol-specific status icons. (eg. A contact "
 "from MSN will have the equivalent msn icon for status online, away, busy, "
@@ -2269,7 +2258,7 @@ msgstr ""
 "kontakt för MSN kommer ha msns ikon för status online, borta, upptagen, "
 "osv...)"
 
-#: ../src/gtkgui.glade.h:168
+#: ../src/gtkgui.glade.h:167
 msgid ""
 "If checked, Gajim, when launched, will automatically connect to jabber using "
 "this account"
@@ -2277,14 +2266,14 @@ msgstr ""
 "Om ikryssat kommer Gajim, när det startar, att automatiskt ansluta till "
 "jabber genom det här kontot"
 
-#: ../src/gtkgui.glade.h:169
+#: ../src/gtkgui.glade.h:168
 msgid ""
 "If checked, any change to the global status (handled by the combobox at the "
 "bottom of the roster window) will change the status of this account "
 "accordingly"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:170
+#: ../src/gtkgui.glade.h:169
 msgid ""
 "If you have 2 or more accounts and it is checked, Gajim will list all "
 "contacts as if you had one account"
@@ -2292,189 +2281,189 @@ msgstr ""
 "Om du har 2 eller fler konton och det här är ikryssat kommer Gajim lista "
 "alla kontakter som om du hade ett konto"
 
-#: ../src/gtkgui.glade.h:171
+#: ../src/gtkgui.glade.h:170
 msgid "Incoming message:"
 msgstr "Inkommande meddelande:"
 
 #. Info/Query make the "IQ" initials. So translate like this 'YourLang/YourLang (Info/Query)'. Thanks (it's a tooltip so width is not a problem)
-#: ../src/gtkgui.glade.h:173
+#: ../src/gtkgui.glade.h:172
 msgid "Info/Query"
 msgstr "Info/Förfrågan (Info/Query)"
 
-#: ../src/gtkgui.glade.h:174
+#: ../src/gtkgui.glade.h:173
 #, fuzzy
 msgid "Information about you, as stored in the server"
 msgstr "Information om dig är sparad på servern som vCard"
 
-#: ../src/gtkgui.glade.h:175
+#: ../src/gtkgui.glade.h:174
 msgid "Invitation Received"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:176
+#: ../src/gtkgui.glade.h:175
 msgid "Italic"
 msgstr "Kursiv"
 
-#: ../src/gtkgui.glade.h:177
+#: ../src/gtkgui.glade.h:176
 msgid "Jabber"
 msgstr "Jabber"
 
-#: ../src/gtkgui.glade.h:178
+#: ../src/gtkgui.glade.h:177
 msgid "Jabber ID:"
 msgstr "Jabber-ID:"
 
-#: ../src/gtkgui.glade.h:180
+#: ../src/gtkgui.glade.h:179
 msgid "Join _Group Chat"
 msgstr "Anslut till _gruppchatt"
 
-#: ../src/gtkgui.glade.h:181
+#: ../src/gtkgui.glade.h:180
 msgid "Location"
 msgstr "Plats"
 
-#: ../src/gtkgui.glade.h:182
+#: ../src/gtkgui.glade.h:181
 msgid "Log history"
 msgstr "Logghistorik"
 
-#: ../src/gtkgui.glade.h:183
+#: ../src/gtkgui.glade.h:182
 msgid "Log presences in _contact's log file"
 msgstr "Logga närvaro i _kontaktens logfil"
 
-#: ../src/gtkgui.glade.h:184
+#: ../src/gtkgui.glade.h:183
 msgid "Log presences in an _external file"
 msgstr "Logga närvaro i en _extern fil"
 
-#: ../src/gtkgui.glade.h:185
+#: ../src/gtkgui.glade.h:184
 msgid "Manage Accounts"
 msgstr "Hantera konton"
 
-#: ../src/gtkgui.glade.h:186
+#: ../src/gtkgui.glade.h:185
 msgid "Manage Bookmarks"
 msgstr "Hantera bokmärken"
 
-#: ../src/gtkgui.glade.h:187
+#: ../src/gtkgui.glade.h:186
 msgid "Manage Emoticons"
 msgstr "Hantera känsloikoner"
 
-#: ../src/gtkgui.glade.h:188
+#: ../src/gtkgui.glade.h:187
 msgid "Manage Proxy Profiles"
 msgstr "Hantera proxyprofiler"
 
-#: ../src/gtkgui.glade.h:189
+#: ../src/gtkgui.glade.h:188
 msgid "Manage..."
 msgstr "Hantera..."
 
 #. Middle Name
-#: ../src/gtkgui.glade.h:191
+#: ../src/gtkgui.glade.h:190
 msgid "Middle:"
 msgstr "Mellannamn:"
 
-#: ../src/gtkgui.glade.h:192
+#: ../src/gtkgui.glade.h:191
 msgid "Mo_derator"
 msgstr "Mo_derator"
 
-#: ../src/gtkgui.glade.h:193
+#: ../src/gtkgui.glade.h:192
 msgid "More"
 msgstr "Mer"
 
-#: ../src/gtkgui.glade.h:194
+#: ../src/gtkgui.glade.h:193
 msgid "Name:"
 msgstr "Namn:"
 
-#: ../src/gtkgui.glade.h:195
+#: ../src/gtkgui.glade.h:194
 msgid "New version of Gajim available"
 msgstr "Ny version av Gajim släppt"
 
-#: ../src/gtkgui.glade.h:196
+#: ../src/gtkgui.glade.h:195
 msgid "Nickname:"
 msgstr "Smeknamn:"
 
 #. None means no proxy profile selected
-#: ../src/gtkgui.glade.h:199
+#: ../src/gtkgui.glade.h:198
 msgid "None"
 msgstr "Ingen"
 
-#: ../src/gtkgui.glade.h:200
+#: ../src/gtkgui.glade.h:199
 msgid "Notify me about contacts that: "
 msgstr "Notifiera mig om kontakter som: "
 
-#: ../src/gtkgui.glade.h:201
+#: ../src/gtkgui.glade.h:200
 msgid "OS:"
 msgstr "OS:"
 
-#: ../src/gtkgui.glade.h:202
+#: ../src/gtkgui.glade.h:201
 msgid "On every _message"
 msgstr "Vid varje _meddelande"
 
-#: ../src/gtkgui.glade.h:203
+#: ../src/gtkgui.glade.h:202
 msgid "Open Download Page"
 msgstr "Öppna nerladdningssida"
 
-#: ../src/gtkgui.glade.h:204
+#: ../src/gtkgui.glade.h:203
 msgid "Open..."
 msgstr "Öppna..."
 
-#: ../src/gtkgui.glade.h:205 ../src/tabbed_chat_window.py:218
+#: ../src/gtkgui.glade.h:204 ../src/tabbed_chat_window.py:218
 msgid "OpenPGP Encryption"
 msgstr "OpenPGP kryptering"
 
-#: ../src/gtkgui.glade.h:206
+#: ../src/gtkgui.glade.h:205
 msgid "Or choose a preset message:"
 msgstr "Eller välj ett förinställt meddelande:"
 
-#: ../src/gtkgui.glade.h:207
+#: ../src/gtkgui.glade.h:206
 msgid "Outgoing message:"
 msgstr "Utgående meddelande:"
 
-#: ../src/gtkgui.glade.h:208
+#: ../src/gtkgui.glade.h:207
 msgid "Pass_word:"
 msgstr "Lösen_ord:"
 
-#: ../src/gtkgui.glade.h:210
+#: ../src/gtkgui.glade.h:209
 msgid "Password:"
 msgstr "Lösenord:"
 
-#: ../src/gtkgui.glade.h:211
+#: ../src/gtkgui.glade.h:210
 #, fuzzy
 msgid "Personal Information"
 msgstr "Redigera personlig information..."
 
-#: ../src/gtkgui.glade.h:212
+#: ../src/gtkgui.glade.h:211
 msgid "Phone No.:"
 msgstr "Telefonnr.:"
 
-#: ../src/gtkgui.glade.h:213
+#: ../src/gtkgui.glade.h:212
 msgid "Play _sounds"
 msgstr "_Spela ljud"
 
-#: ../src/gtkgui.glade.h:214
+#: ../src/gtkgui.glade.h:213
 msgid "Port: "
 msgstr "Port: "
 
-#: ../src/gtkgui.glade.h:215
+#: ../src/gtkgui.glade.h:214
 msgid "Position:"
 msgstr "Position:"
 
-#: ../src/gtkgui.glade.h:216
+#: ../src/gtkgui.glade.h:215
 msgid "Postal Code:"
 msgstr "Postnummer:"
 
-#: ../src/gtkgui.glade.h:217
+#: ../src/gtkgui.glade.h:216
 msgid "Preferences"
 msgstr "Inställningar"
 
 #. Prefix in Name
-#: ../src/gtkgui.glade.h:219
+#: ../src/gtkgui.glade.h:218
 msgid "Prefix:"
 msgstr "Prefix:"
 
-#: ../src/gtkgui.glade.h:220
+#: ../src/gtkgui.glade.h:219
 msgid "Print time:"
 msgstr "Skriv ut tid:"
 
-#: ../src/gtkgui.glade.h:221
+#: ../src/gtkgui.glade.h:220
 msgid "Priori_ty:"
 msgstr "Priori_tet:"
 
-#: ../src/gtkgui.glade.h:222
+#: ../src/gtkgui.glade.h:221
 msgid ""
 "Priority is used in Jabber to determine who gets the events from the jabber "
 "server when two or more clients are connected using the same account; The "
@@ -2484,65 +2473,65 @@ msgstr ""
 "jabberservern när två eller flera klienter är anslutna på samma konto: "
 "Klienten med den högsta prioriteten får händelserna"
 
-#: ../src/gtkgui.glade.h:223
+#: ../src/gtkgui.glade.h:222
 msgid "Profile, Avatar"
 msgstr "Profil, avatar"
 
-#: ../src/gtkgui.glade.h:224
+#: ../src/gtkgui.glade.h:223
 msgid "Protocol:"
 msgstr "Protokoll:"
 
-#: ../src/gtkgui.glade.h:225
+#: ../src/gtkgui.glade.h:224
 msgid "Proxy:"
 msgstr "Proxy:"
 
-#: ../src/gtkgui.glade.h:226
+#: ../src/gtkgui.glade.h:225
 msgid "Re_quest Authorization from"
 msgstr "Be_gär auktorisering från"
 
-#: ../src/gtkgui.glade.h:227
+#: ../src/gtkgui.glade.h:226
 msgid "Recently:"
 msgstr "Nyligen:"
 
-#: ../src/gtkgui.glade.h:228
+#: ../src/gtkgui.glade.h:227
 msgid "Register to"
 msgstr "Registrera till"
 
-#: ../src/gtkgui.glade.h:229
+#: ../src/gtkgui.glade.h:228
 #, fuzzy
 msgid "Remove account _only from Gajim"
 msgstr "Ta bort konto enbart från Gajim"
 
-#: ../src/gtkgui.glade.h:230
+#: ../src/gtkgui.glade.h:229
 #, fuzzy
 msgid "Remove account from Gajim and from _server"
 msgstr "Ta bort konto från Gajim och från server"
 
-#: ../src/gtkgui.glade.h:231
+#: ../src/gtkgui.glade.h:230
 msgid "Remove file transfer from the list."
 msgstr "Ta bort filöverföring från listan."
 
-#: ../src/gtkgui.glade.h:232
+#: ../src/gtkgui.glade.h:231
 msgid "Removes completed, canceled and failed file transfers from the list"
 msgstr "Tar bort klara, avbrutna och felaktiga filöverföringar från listan"
 
-#: ../src/gtkgui.glade.h:233
+#: ../src/gtkgui.glade.h:232
 msgid "Removing selected file transfer"
 msgstr "Tar bort vald filöverföring"
 
-#: ../src/gtkgui.glade.h:234
+#: ../src/gtkgui.glade.h:233
 msgid "Reply to this message"
 msgstr "Svara på detta meddelande"
 
-#: ../src/gtkgui.glade.h:235
+#: ../src/gtkgui.glade.h:234
 msgid "Reset to Default Colors"
 msgstr "Återställ till standardfärgerna"
 
-#: ../src/gtkgui.glade.h:236
+#: ../src/gtkgui.glade.h:235
 msgid "Resour_ce: "
 msgstr "Resur_s: "
 
-#: ../src/gtkgui.glade.h:237
+#: ../src/gtkgui.glade.h:236
 msgid ""
 "Resource is sent to the Jabber server in order to separate the same JID in "
 "two or more parts depending on the number of the clients connected in the "
@@ -2556,228 +2545,228 @@ msgstr ""
 "och \"Jobb\" samtidigt. Resursen med högst prioritet kommer få händelserna. "
 "(se undertill)"
 
-#: ../src/gtkgui.glade.h:238
+#: ../src/gtkgui.glade.h:237
 msgid "Resource:"
 msgstr "Resurs:"
 
-#: ../src/gtkgui.glade.h:239
+#: ../src/gtkgui.glade.h:238
 msgid "Role:"
 msgstr "Roll:"
 
-#: ../src/gtkgui.glade.h:240
+#: ../src/gtkgui.glade.h:239
 msgid "Room Configuration"
 msgstr "Rumkonfiguration"
 
-#: ../src/gtkgui.glade.h:241
+#: ../src/gtkgui.glade.h:240
 msgid "Room:"
 msgstr "Rum:"
 
-#: ../src/gtkgui.glade.h:242
+#: ../src/gtkgui.glade.h:241
 msgid "Save _passphrase (insecure)"
 msgstr "Spara _lösenfras (osäkert)"
 
-#: ../src/gtkgui.glade.h:243
+#: ../src/gtkgui.glade.h:242
 msgid "Save _position and size for roster and chat windows"
 msgstr "Spara _position och storlek för register- och chattfönster"
 
-#: ../src/gtkgui.glade.h:244
+#: ../src/gtkgui.glade.h:243
 msgid "Save conversation _logs for all contacts"
 msgstr "Spara konversations_loggar för alla kontakter"
 
-#: ../src/gtkgui.glade.h:245
+#: ../src/gtkgui.glade.h:244
 msgid "Save pass_word"
 msgstr "Spara lösen_ord"
 
-#: ../src/gtkgui.glade.h:246
+#: ../src/gtkgui.glade.h:245
 msgid "Sen_d"
 msgstr "Skick_a"
 
-#: ../src/gtkgui.glade.h:247
+#: ../src/gtkgui.glade.h:246
 msgid "Send Authorization to"
 msgstr "Skicka auktorisering till"
 
-#: ../src/gtkgui.glade.h:248
+#: ../src/gtkgui.glade.h:247
 msgid "Send File"
 msgstr "Skicka fil"
 
-#: ../src/gtkgui.glade.h:249
+#: ../src/gtkgui.glade.h:248
 #, fuzzy
 msgid "Send New Message"
 msgstr "Nytt meddelande"
 
-#: ../src/gtkgui.glade.h:250
+#: ../src/gtkgui.glade.h:249
 msgid "Send Single _Message"
 msgstr "Skicka enstaka _meddelande"
 
-#: ../src/gtkgui.glade.h:251
+#: ../src/gtkgui.glade.h:250
 msgid "Send _File"
 msgstr "Skicka _fil"
 
-#: ../src/gtkgui.glade.h:252
+#: ../src/gtkgui.glade.h:251
 #, fuzzy
 msgid "Send _New Message"
 msgstr "_Nytt meddelande"
 
-#: ../src/gtkgui.glade.h:253
+#: ../src/gtkgui.glade.h:252
 #, fuzzy
 msgid "Send _New Message..."
 msgstr "_Nytt meddelande..."
 
-#: ../src/gtkgui.glade.h:254
+#: ../src/gtkgui.glade.h:253
 msgid "Send keep-alive packets"
 msgstr "Skicka håll-vid-liv paket"
 
-#: ../src/gtkgui.glade.h:255
+#: ../src/gtkgui.glade.h:254
 msgid "Send message"
 msgstr "Skicka meddelande"
 
-#: ../src/gtkgui.glade.h:256
+#: ../src/gtkgui.glade.h:255
 msgid "Send message and close window"
 msgstr "Skicka meddelande och stäng fönster"
 
-#: ../src/gtkgui.glade.h:257
+#: ../src/gtkgui.glade.h:256
 msgid "Sends a message to currently connected users to this server"
 msgstr ""
 "Skickar ett meddelande till nuvarande anslutna klienter på den här servern"
 
-#: ../src/gtkgui.glade.h:258
+#: ../src/gtkgui.glade.h:257
 msgid "Server:"
 msgstr "Server:"
 
-#: ../src/gtkgui.glade.h:259
+#: ../src/gtkgui.glade.h:258
 msgid "Servers Features"
 msgstr "Serverns funktioner"
 
-#: ../src/gtkgui.glade.h:260
+#: ../src/gtkgui.glade.h:259
 msgid "Set MOTD"
 msgstr "Ställ in MOTD"
 
-#: ../src/gtkgui.glade.h:261
+#: ../src/gtkgui.glade.h:260
 msgid "Set Message of the Day"
 msgstr "Ställ in dagens meddelande"
 
-#: ../src/gtkgui.glade.h:262
+#: ../src/gtkgui.glade.h:261
 msgid "Set _Avatar"
 msgstr "Ställ in _avatar"
 
-#: ../src/gtkgui.glade.h:263
+#: ../src/gtkgui.glade.h:262
 msgid "Set an avatar when I connect"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:264
+#: ../src/gtkgui.glade.h:263
 msgid "Sets Message of the Day"
 msgstr "Ställer in dagens meddelande"
 
-#: ../src/gtkgui.glade.h:265
+#: ../src/gtkgui.glade.h:264
 msgid "Show All Pending _Events"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:266
+#: ../src/gtkgui.glade.h:265
 msgid "Show _Offline Contacts"
 msgstr "Visa _frånkopplade kontakter"
 
-#: ../src/gtkgui.glade.h:267
+#: ../src/gtkgui.glade.h:266
 #, fuzzy
 msgid "Show _Roster"
 msgstr "Visa enbart i _registret"
 
-#: ../src/gtkgui.glade.h:268
+#: ../src/gtkgui.glade.h:267
 #, fuzzy
 msgid "Show _XML Console"
 msgstr "_XML konsoll"
 
-#: ../src/gtkgui.glade.h:269
+#: ../src/gtkgui.glade.h:268
 msgid "Show only in _roster"
 msgstr "Visa enbart i _registret"
 
-#: ../src/gtkgui.glade.h:270
+#: ../src/gtkgui.glade.h:269
 msgid "Shows a list of file transfers between you and other"
 msgstr "Visar en lista med filöverföringar mellan dig och andra"
 
-#: ../src/gtkgui.glade.h:271
+#: ../src/gtkgui.glade.h:270
 msgid "Sign _in"
 msgstr "Loggar _in"
 
-#: ../src/gtkgui.glade.h:272
+#: ../src/gtkgui.glade.h:271
 msgid "Sign _out"
 msgstr "Loggar _ut"
 
-#: ../src/gtkgui.glade.h:273
+#: ../src/gtkgui.glade.h:272
 msgid "Sort contacts by status"
 msgstr "Sortera kontakter efter status"
 
-#: ../src/gtkgui.glade.h:274
+#: ../src/gtkgui.glade.h:273
 msgid "Start _Chat"
 msgstr "Starta _chatt"
 
-#: ../src/gtkgui.glade.h:275
+#: ../src/gtkgui.glade.h:274
 msgid "State:"
 msgstr "Delstat:"
 
-#: ../src/gtkgui.glade.h:276
+#: ../src/gtkgui.glade.h:275
 msgid "Status"
 msgstr "Status"
 
-#: ../src/gtkgui.glade.h:277
+#: ../src/gtkgui.glade.h:276
 msgid "Status message:"
 msgstr "Statusmeddelande:"
 
-#: ../src/gtkgui.glade.h:278
+#: ../src/gtkgui.glade.h:277
 msgid "Status:"
 msgstr "Status:"
 
-#: ../src/gtkgui.glade.h:279
+#: ../src/gtkgui.glade.h:278
 msgid "Stoping selected file transfer"
 msgstr "Stoppar vald filöverföring"
 
-#: ../src/gtkgui.glade.h:280
+#: ../src/gtkgui.glade.h:279
 msgid "Street:"
 msgstr "Gatuadress:"
 
-#: ../src/gtkgui.glade.h:281
+#: ../src/gtkgui.glade.h:280
 msgid "Subject:"
 msgstr "Ämne:"
 
-#: ../src/gtkgui.glade.h:282
+#: ../src/gtkgui.glade.h:281
 msgid "Subscription Request"
 msgstr "Prenumerationsförfrågan"
 
-#: ../src/gtkgui.glade.h:283
+#: ../src/gtkgui.glade.h:282
 msgid "Subscription:"
 msgstr "Prenumeration:"
 
 #. Suffix in Name
-#: ../src/gtkgui.glade.h:285
+#: ../src/gtkgui.glade.h:284
 msgid "Suffix:"
 msgstr "Suffix:"
 
-#: ../src/gtkgui.glade.h:286
+#: ../src/gtkgui.glade.h:285
 msgid "Synch_ronize account status with global status"
 msgstr "Synk_ronisera kontostatus med global status"
 
-#: ../src/gtkgui.glade.h:287
+#: ../src/gtkgui.glade.h:286
 #, fuzzy
 msgid "Text _color:"
 msgstr "Textfärg"
 
-#: ../src/gtkgui.glade.h:288
+#: ../src/gtkgui.glade.h:287
 #, fuzzy
 msgid "Text _font:"
 msgstr "Textteckensnitt"
 
-#: ../src/gtkgui.glade.h:289
+#: ../src/gtkgui.glade.h:288
 msgid "The auto away status message"
 msgstr "Det automatiska borta statusmeddelandet"
 
-#: ../src/gtkgui.glade.h:290
+#: ../src/gtkgui.glade.h:289
 msgid "The auto not available status message"
 msgstr "Det automatiska inte tillgänglig statusmeddelandet"
 
-#: ../src/gtkgui.glade.h:291
+#: ../src/gtkgui.glade.h:290
 msgid "Theme:"
 msgstr "Tema:"
 
-#: ../src/gtkgui.glade.h:292
+#: ../src/gtkgui.glade.h:291
 msgid ""
 "This action removes single file transfer from the list. If the transfer is "
 "active, it is first stopped and then removed"
@@ -2785,76 +2774,76 @@ msgstr ""
 "Den här handlingen tar bort en enstaka filöverföring från listan. Om "
 "överföringen är aktiv, stoppas den först och tas sen bort"
 
-#: ../src/gtkgui.glade.h:293
+#: ../src/gtkgui.glade.h:292
 msgid "Title:"
 msgstr "Titel:"
 
-#: ../src/gtkgui.glade.h:294
+#: ../src/gtkgui.glade.h:293
 msgid "To:"
 msgstr "Till:"
 
-#: ../src/gtkgui.glade.h:295
+#: ../src/gtkgui.glade.h:294
 msgid "Toggle Open_PGP Encryption"
 msgstr "Slå på/av Open_PGP kryptering"
 
-#: ../src/gtkgui.glade.h:296
+#: ../src/gtkgui.glade.h:295
 #, fuzzy
 msgid "Type your new status message:"
 msgstr "Det automatiska borta statusmeddelandet"
 
-#: ../src/gtkgui.glade.h:297
+#: ../src/gtkgui.glade.h:296
 msgid "Type:"
 msgstr "Typ:"
 
-#: ../src/gtkgui.glade.h:298
+#: ../src/gtkgui.glade.h:297
 msgid "Underline"
 msgstr "Understrykning"
 
-#: ../src/gtkgui.glade.h:299
+#: ../src/gtkgui.glade.h:298
 msgid "Update MOTD"
 msgstr "Uppdatera MOTD"
 
-#: ../src/gtkgui.glade.h:300
+#: ../src/gtkgui.glade.h:299
 msgid "Update Message of the Day"
 msgstr "Uppdatera dagens meddelande"
 
-#: ../src/gtkgui.glade.h:301
+#: ../src/gtkgui.glade.h:300
 msgid "Updates Message of the Day"
 msgstr "Uppdaterar dagens meddelande"
 
-#: ../src/gtkgui.glade.h:302
+#: ../src/gtkgui.glade.h:301
 msgid "Use _SSL (legacy)"
 msgstr "Använd _SSL (föråldrat)"
 
-#: ../src/gtkgui.glade.h:303
+#: ../src/gtkgui.glade.h:302
 msgid "Use _emoticons"
 msgstr "Använd _känsloikoner"
 
-#: ../src/gtkgui.glade.h:304
+#: ../src/gtkgui.glade.h:303
 msgid "Use _transports iconsets"
 msgstr "Använd _transporternas ikonuppsättningar"
 
-#: ../src/gtkgui.glade.h:305
+#: ../src/gtkgui.glade.h:304
 msgid "Use a single chat window with _tabs"
 msgstr "Använd ett enkelt chattfönster med _flikar"
 
-#: ../src/gtkgui.glade.h:306
+#: ../src/gtkgui.glade.h:305
 msgid "Use authentication"
 msgstr "Använd autentisering"
 
-#: ../src/gtkgui.glade.h:307
+#: ../src/gtkgui.glade.h:306
 msgid "Use custom hostname/port"
 msgstr "Använd anpassat värdnamn/port"
 
-#: ../src/gtkgui.glade.h:308
+#: ../src/gtkgui.glade.h:307
 msgid "User ID:"
 msgstr "Användar-ID:"
 
-#: ../src/gtkgui.glade.h:309
+#: ../src/gtkgui.glade.h:308
 msgid "When a file transfer is complete show a popup notification"
 msgstr "När en filöverföring är färdig, visa en popupnotifiering"
 
-#: ../src/gtkgui.glade.h:310
+#: ../src/gtkgui.glade.h:309
 msgid ""
 "When a new message is received which is not from a contact already in a chat "
 "window, the three following actions may happen in order for you to be "
@@ -2864,15 +2853,15 @@ msgstr ""
 "chatfönster kan de tre följande handlingarna hända för att du ska får reda "
 "på det"
 
-#: ../src/gtkgui.glade.h:311
+#: ../src/gtkgui.glade.h:310
 msgid "When new message is received"
 msgstr "När ett nytt meddelande är mottaget"
 
-#: ../src/gtkgui.glade.h:312
+#: ../src/gtkgui.glade.h:311
 msgid "Work"
 msgstr "Jobb"
 
-#: ../src/gtkgui.glade.h:313
+#: ../src/gtkgui.glade.h:312
 #, fuzzy
 msgid ""
 "You need to have an account in order to connect\n"
@@ -2881,350 +2870,350 @@ msgstr ""
 "Du behöver ha ett konto för att kunna ansluta till\n"
 "Jabber-nätverket."
 
-#: ../src/gtkgui.glade.h:315
+#: ../src/gtkgui.glade.h:314
 msgid "Your JID:"
 msgstr "Ditt JID:"
 
-#: ../src/gtkgui.glade.h:316
+#: ../src/gtkgui.glade.h:315
 msgid "_Actions"
 msgstr "_Åtgärder"
 
-#: ../src/gtkgui.glade.h:317
+#: ../src/gtkgui.glade.h:316
 msgid "_Add Contact..."
 msgstr "_Lägg till kontakt..."
 
-#: ../src/gtkgui.glade.h:318
+#: ../src/gtkgui.glade.h:317
 msgid "_Add to Roster"
 msgstr "_Lägg till registret"
 
-#: ../src/gtkgui.glade.h:319
+#: ../src/gtkgui.glade.h:318
 msgid "_Address:"
 msgstr "_Adress:"
 
-#: ../src/gtkgui.glade.h:320
+#: ../src/gtkgui.glade.h:319
 msgid "_Admin"
 msgstr "_Admin"
 
-#: ../src/gtkgui.glade.h:321
+#: ../src/gtkgui.glade.h:320
 msgid "_Administrator"
 msgstr "_Administratör"
 
-#: ../src/gtkgui.glade.h:322
+#: ../src/gtkgui.glade.h:321
 msgid "_Advanced"
 msgstr "_Avancerat"
 
-#: ../src/gtkgui.glade.h:323
+#: ../src/gtkgui.glade.h:322
 msgid "_Authorize"
 msgstr "_Auktorisera"
 
-#: ../src/gtkgui.glade.h:324
+#: ../src/gtkgui.glade.h:323
 #, fuzzy
 msgid "_Background:"
 msgstr "Bakgrundsfärg"
 
-#: ../src/gtkgui.glade.h:325
+#: ../src/gtkgui.glade.h:324
 msgid "_Ban"
 msgstr "_Bannlys"
 
-#: ../src/gtkgui.glade.h:326
+#: ../src/gtkgui.glade.h:325
 msgid "_Bookmark This Room"
 msgstr "_Bokmärk det här rummet"
 
-#: ../src/gtkgui.glade.h:327
+#: ../src/gtkgui.glade.h:326
 msgid "_Browser:"
 msgstr "_Webbläsare:"
 
-#: ../src/gtkgui.glade.h:328
+#: ../src/gtkgui.glade.h:327
 msgid "_Cancel"
 msgstr "_Avbryt"
 
-#: ../src/gtkgui.glade.h:329
+#: ../src/gtkgui.glade.h:328
 msgid "_Compact View    Alt+C"
 msgstr "_Kompakt vy Alt+C"
 
-#: ../src/gtkgui.glade.h:330
+#: ../src/gtkgui.glade.h:329
 #, fuzzy
 msgid "_Contents"
 msgstr "_Fortsätt"
 
-#: ../src/gtkgui.glade.h:332
+#: ../src/gtkgui.glade.h:331
 msgid "_Copy JID/Email Address"
 msgstr "_Kopiera JID/e-postadress"
 
-#: ../src/gtkgui.glade.h:333
+#: ../src/gtkgui.glade.h:332
 msgid "_Copy Link Location"
 msgstr "_Kopiera länkadress"
 
-#: ../src/gtkgui.glade.h:334
+#: ../src/gtkgui.glade.h:333
 msgid "_Deny"
 msgstr "_Neka"
 
-#: ../src/gtkgui.glade.h:335
+#: ../src/gtkgui.glade.h:334
 msgid "_Discover Services"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:336
+#: ../src/gtkgui.glade.h:335
 msgid "_Discover Services..."
 msgstr ""
 
-#: ../src/gtkgui.glade.h:337
+#: ../src/gtkgui.glade.h:336
 msgid "_Earliest"
 msgstr "_Tidigast"
 
-#: ../src/gtkgui.glade.h:339
+#: ../src/gtkgui.glade.h:338
 msgid "_FAQ"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:339
 #, fuzzy
 msgid "_Filter:"
 msgstr "Filter:"
 
-#: ../src/gtkgui.glade.h:341
+#: ../src/gtkgui.glade.h:340
 msgid "_Finish"
 msgstr "_Slutför"
 
-#: ../src/gtkgui.glade.h:342
+#: ../src/gtkgui.glade.h:341
 #, fuzzy
 msgid "_Group Chat"
 msgstr "Gruppchatt"
 
-#: ../src/gtkgui.glade.h:343
+#: ../src/gtkgui.glade.h:342
 msgid "_Help"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:344
+#: ../src/gtkgui.glade.h:343
 msgid "_Highlight misspelled words"
 msgstr "_Markera felstavade ord"
 
-#: ../src/gtkgui.glade.h:345
+#: ../src/gtkgui.glade.h:344
 msgid "_History"
 msgstr "_Historik"
 
-#: ../src/gtkgui.glade.h:346
+#: ../src/gtkgui.glade.h:345
 msgid "_Host:"
 msgstr "_Värd:"
 
 #. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:347
 msgid "_IQ"
 msgstr "_IQ"
 
-#: ../src/gtkgui.glade.h:349
+#: ../src/gtkgui.glade.h:348
 msgid "_Icon in systray (aka. notification area)"
 msgstr "_Ikon i systemlåda (aka. notifieringsyta)"
 
-#: ../src/gtkgui.glade.h:350
+#: ../src/gtkgui.glade.h:349
 msgid "_Ignore events from contacts not in the roster"
 msgstr "_Ignorera händelser från kontakter som inte finns i registret"
 
-#: ../src/gtkgui.glade.h:351
+#: ../src/gtkgui.glade.h:350
 msgid "_Jabber ID:"
 msgstr "_Jabber-ID:"
 
-#: ../src/gtkgui.glade.h:353
+#: ../src/gtkgui.glade.h:352
 #, fuzzy
 msgid "_Join New Room..."
 msgstr "Nytt rum"
 
-#: ../src/gtkgui.glade.h:354
+#: ../src/gtkgui.glade.h:353
 msgid "_Kick"
 msgstr "_Sparka ut"
 
-#: ../src/gtkgui.glade.h:355
+#: ../src/gtkgui.glade.h:354
 msgid "_Latest"
 msgstr "_Tidigaste"
 
-#: ../src/gtkgui.glade.h:356
+#: ../src/gtkgui.glade.h:355
 msgid "_Mail client:"
 msgstr "_E-postklient:"
 
-#: ../src/gtkgui.glade.h:357
+#: ../src/gtkgui.glade.h:356
 msgid "_Member"
 msgstr "_Medlem"
 
-#: ../src/gtkgui.glade.h:358
+#: ../src/gtkgui.glade.h:357
 msgid "_Merge accounts"
 msgstr "Sa_mmanfoga konton"
 
-#: ../src/gtkgui.glade.h:359
+#: ../src/gtkgui.glade.h:358
 msgid "_Message"
 msgstr "_Meddelande"
 
-#: ../src/gtkgui.glade.h:360
+#: ../src/gtkgui.glade.h:359
 msgid "_Modify"
 msgstr "_Modifiera"
 
-#: ../src/gtkgui.glade.h:361
+#: ../src/gtkgui.glade.h:360
 #, fuzzy
 msgid "_Modify Account..."
 msgstr "_Redigera konton..."
 
-#: ../src/gtkgui.glade.h:362
+#: ../src/gtkgui.glade.h:361
 msgid "_Name: "
 msgstr "_Namn: "
 
-#: ../src/gtkgui.glade.h:363
+#: ../src/gtkgui.glade.h:362
 msgid "_Never"
 msgstr "_Aldrig"
 
-#: ../src/gtkgui.glade.h:364
+#: ../src/gtkgui.glade.h:363
 msgid "_Notify me about it"
 msgstr "_Notifiera mig om det"
 
-#: ../src/gtkgui.glade.h:365
+#: ../src/gtkgui.glade.h:364
 msgid "_Notify me when a file transfer is complete"
 msgstr "_Notifiera mig när en filöverföring är färdig"
 
-#: ../src/gtkgui.glade.h:366
+#: ../src/gtkgui.glade.h:365
 msgid "_OK"
 msgstr "_OK"
 
-#: ../src/gtkgui.glade.h:367
+#: ../src/gtkgui.glade.h:366
 msgid "_Occupant Actions"
 msgstr "_Innehavarhandlingar"
 
-#: ../src/gtkgui.glade.h:368
+#: ../src/gtkgui.glade.h:367
 msgid "_Online Users"
 msgstr "_Anslutna användare"
 
-#: ../src/gtkgui.glade.h:370
+#: ../src/gtkgui.glade.h:369
 msgid "_Open Email Composer"
 msgstr "_Öppna e-postförfattning"
 
-#: ../src/gtkgui.glade.h:371
+#: ../src/gtkgui.glade.h:370
 msgid "_Open Link in Browser"
 msgstr "_Öppna länk i webbläsare"
 
-#: ../src/gtkgui.glade.h:372
+#: ../src/gtkgui.glade.h:371
 msgid "_Owner"
 msgstr "_Ägare"
 
-#: ../src/gtkgui.glade.h:373
+#: ../src/gtkgui.glade.h:372
 msgid "_Password:"
 msgstr "_Lösenord:"
 
-#: ../src/gtkgui.glade.h:374
+#: ../src/gtkgui.glade.h:373
 msgid "_Pause"
 msgstr "_Paus"
 
-#: ../src/gtkgui.glade.h:375
+#: ../src/gtkgui.glade.h:374
 msgid "_Player:"
 msgstr "_Spelare:"
 
-#: ../src/gtkgui.glade.h:376
+#: ../src/gtkgui.glade.h:375
 msgid "_Pop it up"
 msgstr "_Poppa upp det"
 
-#: ../src/gtkgui.glade.h:377
+#: ../src/gtkgui.glade.h:376
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../src/gtkgui.glade.h:378
+#: ../src/gtkgui.glade.h:377
 msgid "_Preferences"
 msgstr "_Inställningar"
 
-#: ../src/gtkgui.glade.h:379
+#: ../src/gtkgui.glade.h:378
 msgid "_Presence"
 msgstr "_Närvaro"
 
-#: ../src/gtkgui.glade.h:380
+#: ../src/gtkgui.glade.h:379
 msgid "_Previous"
 msgstr "_Föregående"
 
-#: ../src/gtkgui.glade.h:381
+#: ../src/gtkgui.glade.h:380
 msgid "_Publish"
 msgstr "_Publicera"
 
-#: ../src/gtkgui.glade.h:382
+#: ../src/gtkgui.glade.h:381
 msgid "_Quit"
 msgstr "_Avsluta"
 
-#: ../src/gtkgui.glade.h:383
+#: ../src/gtkgui.glade.h:382
 msgid "_Remove"
 msgstr "Ta _bort"
 
-#: ../src/gtkgui.glade.h:384 ../src/roster_window.py:1059
+#: ../src/gtkgui.glade.h:383 ../src/roster_window.py:1061
 msgid "_Remove from Roster"
 msgstr "Ta bo_rt från register"
 
-#: ../src/gtkgui.glade.h:385
+#: ../src/gtkgui.glade.h:384
 msgid "_Rename"
 msgstr "Byt _namn"
 
-#: ../src/gtkgui.glade.h:386
+#: ../src/gtkgui.glade.h:385
 msgid "_Reply"
 msgstr "_Svara"
 
-#: ../src/gtkgui.glade.h:387
+#: ../src/gtkgui.glade.h:386
 msgid "_Retrieve"
 msgstr "_Hämta"
 
-#: ../src/gtkgui.glade.h:388
+#: ../src/gtkgui.glade.h:387
 msgid "_Send"
 msgstr "_Skicka"
 
-#: ../src/gtkgui.glade.h:389
+#: ../src/gtkgui.glade.h:388
 msgid "_Send & Close"
 msgstr "_Skicka & stäng"
 
-#: ../src/gtkgui.glade.h:390
+#: ../src/gtkgui.glade.h:389
 msgid "_Send Private Message"
 msgstr "_Skicka privat meddelande"
 
-#: ../src/gtkgui.glade.h:391
+#: ../src/gtkgui.glade.h:390
 msgid "_Send Server Message"
 msgstr "_Skicka server meddelande"
 
-#: ../src/gtkgui.glade.h:392
+#: ../src/gtkgui.glade.h:391
 msgid "_Send Single Message"
 msgstr "_Skicka enstaka meddelande"
 
-#: ../src/gtkgui.glade.h:393
+#: ../src/gtkgui.glade.h:392
 msgid "_Server:"
 msgstr "_Server:"
 
-#: ../src/gtkgui.glade.h:394
+#: ../src/gtkgui.glade.h:393
 msgid "_Set Image..."
 msgstr "_Ange bild..."
 
-#: ../src/gtkgui.glade.h:395
+#: ../src/gtkgui.glade.h:394
 msgid "_Start Chat"
 msgstr "_Starta chatt"
 
-#: ../src/gtkgui.glade.h:396
+#: ../src/gtkgui.glade.h:395
 msgid "_Status"
 msgstr "_Status"
 
-#: ../src/gtkgui.glade.h:397
+#: ../src/gtkgui.glade.h:396
 msgid "_Subscribe"
 msgstr "_Prenumerera"
 
-#: ../src/gtkgui.glade.h:398
+#: ../src/gtkgui.glade.h:397
 msgid "_Subscription"
 msgstr "_Prenumeration"
 
-#: ../src/gtkgui.glade.h:399
+#: ../src/gtkgui.glade.h:398
 msgid "_Use proxy"
 msgstr "_Använd proxy"
 
-#: ../src/gtkgui.glade.h:400
+#: ../src/gtkgui.glade.h:399
 msgid "_Username:"
 msgstr "_Användarnamn:"
 
-#: ../src/gtkgui.glade.h:401
+#: ../src/gtkgui.glade.h:400
 msgid "_Voice"
 msgstr "_Röst"
 
-#: ../src/gtkgui.glade.h:402
+#: ../src/gtkgui.glade.h:401
 msgid "_XML Console..."
 msgstr "_XML konsoll..."
 
-#: ../src/gtkgui.glade.h:403
+#: ../src/gtkgui.glade.h:402
 msgid "file transfers list"
 msgstr "filöverföringslista"
 
-#: ../src/gtkgui.glade.h:404
+#: ../src/gtkgui.glade.h:403
 msgid "minutes"
 msgstr "minuter"
 
@@ -3327,61 +3316,61 @@ msgstr "Sessionsbus inte tillgänglig"
 msgid "D-Bus is not present on this machine"
 msgstr "D-Bus finns inte på den här maskinen"
 
-#: ../src/roster_window.py:117
+#: ../src/roster_window.py:115
 #, fuzzy
 msgid "Merged accounts"
 msgstr "Sa_mmanfoga konton"
 
-#: ../src/roster_window.py:301
+#: ../src/roster_window.py:304
 #, python-format
 msgid "You are already in room %s"
 msgstr "Du är redan i rummet %s"
 
-#: ../src/roster_window.py:306 ../src/roster_window.py:1762
+#: ../src/roster_window.py:309 ../src/roster_window.py:1761
 #, fuzzy
 msgid "You cannot join a room while you are invisible"
 msgstr "Du kan inte gå med i en gruppchatt utan att vara ansluten."
 
-#: ../src/roster_window.py:459
+#: ../src/roster_window.py:462
 #, fuzzy
 msgid "_Join New Room"
 msgstr "Nytt rum"
 
-#: ../src/roster_window.py:474
+#: ../src/roster_window.py:477
 msgid "Manage Bookmarks..."
 msgstr "Hantera bokmärken..."
 
-#: ../src/roster_window.py:489
+#: ../src/roster_window.py:492
 #, python-format
 msgid "to %s account"
 msgstr "till %s konto"
 
-#: ../src/roster_window.py:501
+#: ../src/roster_window.py:504
 #, python-format
 msgid "using %s account"
 msgstr "använder %s konto"
 
-#: ../src/roster_window.py:517
+#: ../src/roster_window.py:520
 #, python-format
 msgid "as %s"
 msgstr "som %s"
 
-#: ../src/roster_window.py:528
+#: ../src/roster_window.py:531
 #, python-format
 msgid "for account %s"
 msgstr "för konto %s"
 
-#: ../src/roster_window.py:704
+#: ../src/roster_window.py:706
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s är nu %s (%s)"
 
-#: ../src/roster_window.py:822
+#: ../src/roster_window.py:824
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "Transporten \"%s\" kommer tas bort"
 
-#: ../src/roster_window.py:822
+#: ../src/roster_window.py:824
 #, fuzzy
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
@@ -3390,60 +3379,60 @@ msgstr ""
 "Du kommer inte längre kunna ta emot eller skicka meddelanden till kontakter "
 "från %s"
 
-#: ../src/roster_window.py:872
+#: ../src/roster_window.py:874
 msgid "Assign OpenPGP Key"
 msgstr "Tilldela OpenPGP-nyckel"
 
-#: ../src/roster_window.py:873
+#: ../src/roster_window.py:875
 msgid "Select a key to apply to the contact"
 msgstr "Välj en nyckel att tilldela kontakten"
 
-#: ../src/roster_window.py:983
+#: ../src/roster_window.py:985
 msgid "I would like to add you to my roster"
 msgstr "Jag skulle vilja lägga till dig i mitt register"
 
-#: ../src/roster_window.py:1011
+#: ../src/roster_window.py:1013
 #, fuzzy
 msgid "Re_name"
 msgstr "Döp om"
 
-#: ../src/roster_window.py:1032
+#: ../src/roster_window.py:1034
 msgid "_Log on"
 msgstr "_Logga på"
 
-#: ../src/roster_window.py:1041
+#: ../src/roster_window.py:1043
 msgid "Log _off"
 msgstr "L_ogga av"
 
-#: ../src/roster_window.py:1135
+#: ../src/roster_window.py:1137
 #, fuzzy
 msgid "_Change Status Message"
 msgstr "%s Statusmeddelande"
 
-#: ../src/roster_window.py:1206
+#: ../src/roster_window.py:1208
 msgid "Authorization has been sent"
 msgstr "Auktorisering har sänts"
 
-#: ../src/roster_window.py:1207
+#: ../src/roster_window.py:1209
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "Nu kommer \"%s\" veta din status."
 
-#: ../src/roster_window.py:1229
+#: ../src/roster_window.py:1231
 msgid "Subscription request has been sent"
 msgstr "Prenumerationsförfrågan har sänts"
 
-#: ../src/roster_window.py:1230
+#: ../src/roster_window.py:1232
 #, fuzzy, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "Om \"%s\" accepterar din förfrågan kommer du veta hans status."
 
-#: ../src/roster_window.py:1379
+#: ../src/roster_window.py:1381
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Kontakt \"%s\" kommer bli borttagen från registret"
 
-#: ../src/roster_window.py:1380
+#: ../src/roster_window.py:1382
 #, fuzzy
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
@@ -3452,33 +3441,33 @@ msgstr ""
 "Genom att ta bort den här kontakten kommer du också ta bort auktoriseringen. "
 "Kontakten \"%s\" kommer alltid se dig som nerkopplad."
 
-#: ../src/roster_window.py:1381
+#: ../src/roster_window.py:1383
 msgid "I want this contact to know my status after removal"
 msgstr ""
 
-#: ../src/roster_window.py:1424
+#: ../src/roster_window.py:1425
 msgid "Password Required"
 msgstr "Lösenord krävs"
 
-#: ../src/roster_window.py:1425
+#: ../src/roster_window.py:1426
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Skriv in lösenordet för kontot %s"
 
-#: ../src/roster_window.py:1426
+#: ../src/roster_window.py:1427
 msgid "Save password"
 msgstr "Spara lösenord"
 
-#: ../src/roster_window.py:1463
+#: ../src/roster_window.py:1464
 msgid "Passphrase Required"
 msgstr "Lösenfras krävs"
 
-#: ../src/roster_window.py:1464
+#: ../src/roster_window.py:1465
 #, python-format
 msgid "Enter GPG key passphrase for account %s"
 msgstr "Skriv in GPG-nyckelns lösenfras för konto %s"
 
-#: ../src/roster_window.py:1465
+#: ../src/roster_window.py:1466
 msgid "Save passphrase"
 msgstr "Spara lösenfras"
 
@@ -3500,11 +3489,11 @@ msgstr "Inget konto tillgängligt"
 msgid "You must create an account before you can chat with other contacts."
 msgstr "Du måste skapa ett konto innan du kan chatta med andra kontakter."
 
-#: ../src/roster_window.py:1921 ../src/roster_window.py:1927
+#: ../src/roster_window.py:1920 ../src/roster_window.py:1926
 msgid "You have unread messages"
 msgstr "Du har olästa meddelanden"
 
-#: ../src/roster_window.py:1922 ../src/roster_window.py:1928
+#: ../src/roster_window.py:1921 ../src/roster_window.py:1927
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
@@ -3512,7 +3501,7 @@ msgstr ""
 "Meddelanden kommer bara vara tillgängliga för läsning senare om du har "
 "historik påslagen."
 
-#: ../src/roster_window.py:2577
+#: ../src/roster_window.py:2576
 #, fuzzy
 msgid "Change Status Message..."
 msgstr "%s Statusmeddelande"
@@ -3763,208 +3752,208 @@ msgid ""
 "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
 msgstr ""
 
-#: ../src/common/config.py:119
+#: ../src/common/config.py:120
 msgid "Add * and [n] in roster title?"
 msgstr ""
 
-#: ../src/common/config.py:120
+#: ../src/common/config.py:121
 msgid ""
 "How many lines to remember from previous conversation when a chat tab/window "
 "is reopened."
 msgstr ""
 
-#: ../src/common/config.py:121
+#: ../src/common/config.py:122
 msgid "How many minutes should last lines from previous conversation last."
 msgstr ""
 
-#: ../src/common/config.py:122
+#: ../src/common/config.py:123
 msgid ""
 "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
 "Client default behaviour)."
 msgstr ""
 
-#: ../src/common/config.py:124
+#: ../src/common/config.py:125
 msgid "How many lines to store for key up."
 msgstr ""
 
 #. which version created the config
-#: ../src/common/config.py:126
+#: ../src/common/config.py:127
 #, fuzzy
 msgid "Use compact view when you open a chat window"
 msgstr "Banderollraden som är på toppen av chattfönster"
 
-#: ../src/common/config.py:127
+#: ../src/common/config.py:128
 msgid "Use compact view when you open a group chat window"
 msgstr ""
 
-#: ../src/common/config.py:129
+#: ../src/common/config.py:130
 #, python-format
 msgid ""
 "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
 "which means use wiktionary."
 msgstr ""
 
-#: ../src/common/config.py:132
+#: ../src/common/config.py:133
 msgid "Allow controlling Gajim via D-Bus service."
 msgstr ""
 
-#: ../src/common/config.py:136
+#: ../src/common/config.py:137
 msgid "Ask before closing a group chat tab/window."
 msgstr ""
 
 #. notif. on file complete
 #. port, used for file transfers
-#: ../src/common/config.py:139
+#: ../src/common/config.py:140
 msgid ""
 "Overrides the host we send for File Transfer in case of address translation/"
 "port forwarding."
 msgstr ""
 
-#: ../src/common/config.py:141
+#: ../src/common/config.py:142
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr ""
 
-#: ../src/common/config.py:149
+#: ../src/common/config.py:150
 #, fuzzy
 msgid "Show tab when only one conversation?"
 msgstr "uppmärksammar konversationen"
 
-#: ../src/common/config.py:150
+#: ../src/common/config.py:151
 msgid "Show tab border if one conversation?"
 msgstr ""
 
-#: ../src/common/config.py:151
+#: ../src/common/config.py:152
 msgid "Show close button in tab?"
 msgstr ""
 
-#: ../src/common/config.py:156
+#: ../src/common/config.py:157
 msgid ""
 "A semicolon-separated list of words that will be highlighted in multi-user "
 "chat."
 msgstr ""
 
-#: ../src/common/config.py:157
+#: ../src/common/config.py:158
 msgid ""
 "If True, quits Gajim when X button of Window Manager is clicked. This "
 "setting is taken into account only if trayicon is used."
 msgstr ""
 
-#: ../src/common/config.py:158
+#: ../src/common/config.py:159
 msgid "If True, Gajim registers for xmpp:// on each startup."
 msgstr ""
 
-#: ../src/common/config.py:159
+#: ../src/common/config.py:160
 msgid ""
 "If True, Gajim will display an icon on each tab containing unread messages. "
 "Depending on the theme, this icon may be animated."
 msgstr ""
 
-#: ../src/common/config.py:160
+#: ../src/common/config.py:161
 msgid ""
 "If True, Gajim will display the status message, if not empty, for every "
 "contact under the contact name in roster window"
 msgstr ""
 
-#: ../src/common/config.py:162
+#: ../src/common/config.py:163
 msgid ""
 "If True, Gajim will ask for avatar each contact that did not have an avatar "
 "last time or has one cache that is too old."
 msgstr ""
 
-#: ../src/common/config.py:163
+#: ../src/common/config.py:164
 msgid ""
 "If False, you will no longer see status line in chats when a contact changes "
 "his or her status and/or his status message."
 msgstr ""
 
-#: ../src/common/config.py:321
+#: ../src/common/config.py:322
 msgid "Sleeping"
 msgstr "Sover"
 
-#: ../src/common/config.py:322
+#: ../src/common/config.py:323
 msgid "Back soon"
 msgstr "Snart tillbaka"
 
-#: ../src/common/config.py:322
+#: ../src/common/config.py:323
 msgid "Back in some minutes."
 msgstr "Tillbaka om några minuter."
 
-#: ../src/common/config.py:323
+#: ../src/common/config.py:324
 msgid "Eating"
 msgstr "Äter"
 
-#: ../src/common/config.py:323
+#: ../src/common/config.py:324
 msgid "I'm eating, so leave me a message."
 msgstr "Jag äter, så lämna ett meddelande."
 
-#: ../src/common/config.py:324
+#: ../src/common/config.py:325
 msgid "Movie"
 msgstr "Film"
 
-#: ../src/common/config.py:324
+#: ../src/common/config.py:325
 msgid "I'm watching a movie."
 msgstr "Jag tittar på film."
 
-#: ../src/common/config.py:325
+#: ../src/common/config.py:326
 msgid "Working"
 msgstr "Arbetar"
 
-#: ../src/common/config.py:325
+#: ../src/common/config.py:326
 msgid "I'm working."
 msgstr "Jag arbetar."
 
-#: ../src/common/config.py:326
+#: ../src/common/config.py:327
 msgid "Phone"
 msgstr "Telefon"
 
-#: ../src/common/config.py:326
+#: ../src/common/config.py:327
 msgid "I'm on the phone."
 msgstr "Jag pratar i telefon."
 
-#: ../src/common/config.py:327
+#: ../src/common/config.py:328
 msgid "Out"
 msgstr "Ute"
 
-#: ../src/common/config.py:327
+#: ../src/common/config.py:328
 msgid "I'm out enjoying life"
 msgstr "Jag är ute och njuter av livet."
 
-#: ../src/common/config.py:336
+#: ../src/common/config.py:337
 msgid ""
 "Sound to play when a MUC message contains one of the words in "
 "muc_highlight_words, or when a MUC message contains your nickname."
 msgstr ""
 
-#: ../src/common/config.py:337
+#: ../src/common/config.py:338
 msgid ""
 "Sound to play when any MUC message arrives. (This setting is taken into "
 "account only if notify_on_all_muc_messages is True)"
 msgstr ""
 
 #. sorted alphanum
-#: ../src/common/config.py:342
+#: ../src/common/config.py:343
 msgid "green"
 msgstr ""
 
-#: ../src/common/config.py:346
+#: ../src/common/config.py:347
 msgid "grocery"
 msgstr ""
 
-#: ../src/common/config.py:350
+#: ../src/common/config.py:351
 msgid "human"
 msgstr ""
 
-#: ../src/common/config.py:354
+#: ../src/common/config.py:355
 #, fuzzy
 msgid "marine"
 msgstr "minuter"
 
-#: ../src/common/config.py:358
+#: ../src/common/config.py:359
 msgid "plain"
 msgstr ""
 
-#: ../src/common/connection.py:367 ../src/common/connection.py:384
-#: ../src/common/connection.py:1875
+#: ../src/common/connection.py:370 ../src/common/connection.py:387
+#: ../src/common/connection.py:1892
 #, python-format
 msgid ""
 "Subject: %s\n"
@@ -3976,131 +3965,141 @@ msgstr ""
 #. password required to join
 #. we are banned
 #. room does not exist
-#: ../src/common/connection.py:439 ../src/common/connection.py:442
-#: ../src/common/connection.py:445 ../src/common/connection.py:448
-#: ../src/common/connection.py:451 ../src/common/connection.py:454
-#: ../src/common/connection.py:461
+#: ../src/common/connection.py:442 ../src/common/connection.py:445
+#: ../src/common/connection.py:448 ../src/common/connection.py:451
+#: ../src/common/connection.py:454 ../src/common/connection.py:457
+#: ../src/common/connection.py:465
 msgid "Unable to join room"
 msgstr "Lyckades inte gå med i rummet"
 
-#: ../src/common/connection.py:440
+#: ../src/common/connection.py:443
 msgid "A password is required to join this room."
 msgstr ""
 
-#: ../src/common/connection.py:443
+#: ../src/common/connection.py:446
 #, fuzzy
 msgid "You are banned from this room."
 msgstr "Du är redan i rummet %s"
 
-#: ../src/common/connection.py:446
+#: ../src/common/connection.py:449
 msgid "Such room does not exist."
 msgstr ""
 
-#: ../src/common/connection.py:449
+#: ../src/common/connection.py:452
 msgid "Room creation is restricted."
 msgstr ""
 
-#: ../src/common/connection.py:452
+#: ../src/common/connection.py:455
 msgid "Your registered nickname must be used."
 msgstr ""
 
-#: ../src/common/connection.py:455
+#: ../src/common/connection.py:458
 #, fuzzy
 msgid "You are not in the members list."
 msgstr "Du är inte ansluten till servern"
 
-#: ../src/common/connection.py:462
+#: ../src/common/connection.py:466
 msgid ""
 "Your desired nickname is in use or registered by another occupant.\n"
 "Please specify another nickname below:"
 msgstr ""
 
-#: ../src/common/connection.py:486 ../src/common/connection.py:1893
+#: ../src/common/connection.py:490 ../src/common/connection.py:1910
 msgid "I would like to add you to my roster."
 msgstr "Jag skulle vilja lägga till dig i mitt register."
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection.py:491
+#: ../src/common/connection.py:495
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr "vi prenumererar nu på %s"
 
-#: ../src/common/connection.py:493
+#: ../src/common/connection.py:497
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "avprenumerationsförfrågan från %s"
 
-#: ../src/common/connection.py:495
+#: ../src/common/connection.py:499
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "vi prenumererar inte längre på %s"
 
-#: ../src/common/connection.py:530 ../src/common/connection.py:552
-#: ../src/common/connection.py:581
+#: ../src/common/connection.py:534 ../src/common/connection.py:556
+#: ../src/common/connection.py:585
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Anslutningen med konto \"%s\" har brutits"
 
-#: ../src/common/connection.py:531 ../src/common/connection.py:553
-#: ../src/common/connection.py:582
+#: ../src/common/connection.py:535 ../src/common/connection.py:557
+#: ../src/common/connection.py:586
 msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr "För att fortsätta skicka och ta emot meddelanden måste du återansluta."
 
-#: ../src/common/connection.py:1586 ../src/common/connection.py:1659
-#: ../src/common/connection.py:1967
+#: ../src/common/connection.py:1603 ../src/common/connection.py:1676
+#: ../src/common/connection.py:1992
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Kunde inte ansluta till \"%s\""
 
-#: ../src/common/connection.py:1591
+#: ../src/common/connection.py:1608
 #, fuzzy, python-format
 msgid "Connected to server %s:%s with %s"
 msgstr "Ansluten till server med %s"
 
-#: ../src/common/connection.py:1660
+#: ../src/common/connection.py:1677
 msgid "Check your connection or try again later"
 msgstr "Kontrollera din förbindelse eller försök igen"
 
-#: ../src/common/connection.py:1678
+#: ../src/common/connection.py:1695
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Inloggning misslyckades med \"%s\""
 
-#: ../src/common/connection.py:1679
+#: ../src/common/connection.py:1696
 msgid "Please check your login and password for correctness."
 msgstr "Kontrollera ditt inloggningsnamn och lösenord."
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:1746
+#: ../src/common/connection.py:1763
 msgid "OpenPGP passphrase was not given"
 msgstr "Lösenordsfras för OpenPGP angavs inte"
 
 #. %s is the account name here
-#: ../src/common/connection.py:1748
+#: ../src/common/connection.py:1765
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Du kommer ansluta till %s utan OpenPGP."
 
 #. do not show I'm invisible!
-#: ../src/common/connection.py:1779
+#: ../src/common/connection.py:1796
 msgid "invisible"
 msgstr "osynlig"
 
-#: ../src/common/connection.py:1780
+#: ../src/common/connection.py:1797
 msgid "offline"
 msgstr "nerkopplad"
 
-#: ../src/common/connection.py:1781
+#: ../src/common/connection.py:1798
 #, python-format
 msgid "I'm %s"
 msgstr "Jag är %s"
 
 #. we're not english
-#: ../src/common/connection.py:1851
+#: ../src/common/connection.py:1868
 msgid "[This message is encrypted]"
 msgstr "[Det här meddelandet är krypterat]"
 
-#: ../src/common/connection.py:2301 ../src/common/connection.py:2310
+#: ../src/common/connection.py:1961
+#, python-format
+msgid "Registration information for transport %s has not arrived in time"
+msgstr ""
+
+#: ../src/common/connection.py:2293
+#, fuzzy
+msgid "Timeout"
+msgstr "Tema"
+
+#: ../src/common/connection.py:2334 ../src/common/connection.py:2346
 msgid "A protocol error has occured:"
 msgstr ""
 
@@ -4331,6 +4330,23 @@ msgstr "fel: kan inte öppna %s för läsning"
 #, python-format
 msgid "Unable to write file in %s"
 msgstr "Lyckades inte skriva fil i %s"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "\n"
+#~ "== Original Message ==\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "\n"
+#~ "== Originalmeddelande ==\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Emoticons"
+#~ msgstr "Hantera känsloikoner"
 
 #, fuzzy
 #~ msgid ""
