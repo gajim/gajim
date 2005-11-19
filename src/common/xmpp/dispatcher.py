@@ -49,7 +49,7 @@ class Dispatcher(PlugIn):
     def getAnID(self):
         global ID
         ID+=1
-        return ID
+        return `ID`
 
     def dumpHandlers(self):
         """ Return set of user-registered callbacks in it's internal format.

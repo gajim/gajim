@@ -168,10 +168,13 @@ class Connection:
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
 		self.privacy_rules_supported = False
-		#Do we continue connection when we get roster (send presence,get vcard...)
+		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
-		#List of IDs we are waiting answers for {id: (type_of_request, data), }
+		# List of IDs we are waiting answers for {id: (type_of_request, data), }
 		self.awaiting_answers = {}
+		# List of IDs that will produce a timeout is answer doesn't arrive
+		# {time_of_the_timeout: (id, message to send to gui), }
+		self.awaiting_timeouts = {}
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG()
 			gajim.config.set('usegpg', True)
@@ -1372,6 +1375,16 @@ class Connection:
 
 	def _IqCB(self, con, iq_obj):
 		id = iq_obj.getID()
+
+		# Check if we were waiting a timeout for this id
+		found_tim = None
+		for tim in self.awaiting_timeouts:
+			if id == self.awaiting_timeouts[tim][0]:
+				found_tim = tim
+				break
+		if found_tim:
+			del self.awaiting_timeouts[found_tim]
+
 		if id not in self.awaiting_answers:
 			return
 		if self.awaiting_answers[id][0] == VCARD_PUBLISHED:
@@ -1940,7 +1953,15 @@ class Connection:
 	def request_register_agent_info(self, agent):
 		if not self.connection:
 			return None
-		common.xmpp.features.getRegInfo(self.connection, agent, sync = False)
+		iq=common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to=agent)
+		id = self.connection.getAnID()
+		iq.setID(id)
+		# Wait the answer during 30 secondes
+		self.awaiting_timeouts[time.time() + 30] = (id,
+			_('Registration information for transport %s has not arrived in time' % \
+			agent))
+		self.connection.SendAndCallForResponse(iq,
+			common.xmpp.features._ReceivedRegInfo, {'agent': agent})
 
 	def register_agent(self, agent, info, is_form = False):
 		if not self.connection:
@@ -2062,7 +2083,7 @@ class Connection:
 		if avatar_sha:
 			iq2.getTag('PHOTO').setTagData('SHA', avatar_sha)
 
-		self.awaiting_answers[str(id)] = (VCARD_PUBLISHED, iq2)
+		self.awaiting_answers[id] = (VCARD_PUBLISHED, iq2)
 
 	def get_settings(self):
 		''' Get Gajim settings as described in JEP 0049 '''
@@ -2265,6 +2286,14 @@ class Connection:
 		self.to_be_sent.append(' ')
 
 	def process(self, timeout):
+		# Check if a timeout append
+		if len(self.awaiting_timeouts):
+			first_tim = self.awaiting_timeouts.keys()[0]
+			if time.time() > first_tim:
+				self.dispatch('INFORMATION', (_('Timeout'),
+					self.awaiting_timeouts[first_tim][1]))
+				del self.awaiting_timeouts[first_tim]
+
 		if self.time_to_reconnect:
 			if self.connected < 2:
 				if time.time() > self.time_to_reconnect:
@@ -2285,7 +2314,7 @@ class Connection:
 					len(self.last_sent) < gajim.config.get_per('accounts',
 						self.name, 'max_stanza_per_sec'):
 				tosend = self.to_be_sent.pop(0)
-				
+
 				self.connection.send(tosend)
 				t = time.time()
 				self.last_io = t
