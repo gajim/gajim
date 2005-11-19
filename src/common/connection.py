@@ -1556,7 +1556,10 @@ class Connection:
 											'weight': weight})
 			except:
 				gajim.log.debug('An error occurred while looking up %s:' % query)
-				traceback.print_exc()
+				try:
+					traceback.print_exc()
+				except IOError:
+					pass
 		# end of SRV resolver
 
 		if len(hosts) == 0: # SRV fails or misconfigred on the server
@@ -2300,7 +2303,10 @@ class Connection:
 					self.connection.Process(timeout)
 			except:
 				gajim.log.debug(_('A protocol error has occured:'))
-				traceback.print_exc()
+				try:
+					traceback.print_exc()
+				except IOError:
+					pass
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
 				if not self.connection:
@@ -2309,6 +2315,9 @@ class Connection:
 					self.connection.disconnect()
 				except:
 					gajim.log.debug(_('A protocol error has occured:'))
-					traceback.print_exc()
+					try:
+						traceback.print_exc()
+					except IOError:
+						pass
 				self.connection = None
 # END Connection
