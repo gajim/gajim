@@ -76,34 +76,34 @@ GTKGUI_GLADE = 'gtkgui.glade'
 def _gen_agent_type_info():
 	return {
 		# Defaults
-		(0, 0):						(None, None),
+		(0, 0):							(None, None),
 		
 		# Jabber server
-		('server', 'im'):			(ToplevelAgentBrowser, 'jabber.png'),
+		('server', 'im'):				(ToplevelAgentBrowser, 'jabber.png'),
 		('services', 'jabber'):		(ToplevelAgentBrowser, 'jabber.png'),
 		
 		# Services
 		('conference', 'text'):		(MucBrowser, 'conference.png'),
-		('headline', 'rss'):		(AgentBrowser, 'rss.png'),
+		('headline', 'rss'):			(AgentBrowser, 'rss.png'),
 		('headline', 'weather'):	(False, 'weather.png'),
 		('gateway', 'weather'):		(False, 'weather.png'),
-		('_jid', 'weather'):		(False, 'weather.png'),
+		('_jid', 'weather'):			(False, 'weather.png'),
 		
 		# Transports
 		('conference', 'irc'):		(False, 'irc.png'),
-		('_jid', 'irc'):			(False, 'irc.png'),
+		('_jid', 'irc'):				(False, 'irc.png'),
 		('gateway', 'aim'):			(False, 'aim.png'),
-		('_jid', 'aim'):			(False, 'aim.png'),
+		('_jid', 'aim'):				(False, 'aim.png'),
 		('gateway', 'gadu-gadu'):	(False, 'gadu-gadu.png'),
 		('_jid', 'gadugadu'):		(False, 'gadu-gadu.png'),
-		('gateway', 'http-ws'):		(False, None),
+		('gateway', 'http-ws'):		(False, 'http-ws.png'),
 		('gateway', 'icq'):			(False, 'icq.png'),
-		('_jid', 'icq'):			(False, 'icq.png'),
+		('_jid', 'icq'):				(False, 'icq.png'),
 		('gateway', 'msn'):			(False, 'msn.png'),
-		('_jid', 'msn'):			(False, 'msn.png'),
-		('gateway', 'sms'):			(False, None),
-		('_jid', 'sms'):			(False, None),
-		('gateway', 'smtp'):		(False, None),
+		('_jid', 'msn'):				(False, 'msn.png'),
+		('gateway', 'sms'):			(False, 'sms.png'),
+		('_jid', 'sms'):				(False, 'sms.png'),
+		('gateway', 'smtp'):			(False, 'mail.png'),
 		('gateway', 'yahoo'):		(False, 'yahoo.png'),
 		('_jid', 'yahoo'):			(False, 'yahoo.png'),
 	}
