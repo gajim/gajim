@@ -87,6 +87,7 @@ def _gen_agent_type_info():
 		('gateway', 'sip'):			(False, 'sip.png'),
 		('directory', 'user'):		(None, 'jud.png'),
 		('pubsub', 'generic'):		(None, 'pubsub.png'),
+		('proxy', 'bytestreams'):	(None, 'bytestreams.png'), # Socks5 FT proxy
 		
 		# Transports
 		('conference', 'irc'):		(False, 'irc.png'),
