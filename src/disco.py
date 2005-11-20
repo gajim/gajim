@@ -560,7 +560,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		
 	def _travel(self, jid, node, identities, features, data):
 		'''Continuation of travel.'''
-		if self.dying:
+		if self.dying or jid != self.jid or node != self.node:
 			return
 		if not identities:
 			if not self.address_comboboxentry:
