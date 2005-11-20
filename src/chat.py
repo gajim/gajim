@@ -470,7 +470,7 @@ class Chat:
 			buffer = message_textview.get_buffer()
 			if buffer.get_char_count():
 				buffer.insert_at_cursor(' %s ' % d)
-			else:
+			else: # we are the beginning of buffer
 				buffer.insert_at_cursor('%s ' % d)
 			message_textview.grab_focus()
 	
