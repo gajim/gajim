@@ -1547,13 +1547,16 @@ class Connection:
 			query = '_xmpp-client._tcp.' + h.encode('utf-8')
 			try:
 				if HAS_DNSPYTHON:
-					answers = [x for x in dns.resolver.query(query, 'SRV')]
-					if answers:
-						for a in answers:
-							hosts.append({'host': str(a.target),
-											'port': int(a.port),
-											'prio': int(a.priority),
-											'weight': int(a.weight)})
+					try:
+						answers = [x for x in dns.resolver.query(query, 'SRV')]
+						if answers:
+							for a in answers:
+								hosts.append({'host': str(a.target),
+												'port': int(a.port),
+												'prio': int(a.priority),
+												'weight': int(a.weight)})
+					except:
+						pass
 				elif HAS_PYDNS:
 					# ensure we haven't cached an old configuration
 					DNS.ParseResolvConf()
