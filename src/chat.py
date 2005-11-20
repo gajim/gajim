@@ -467,7 +467,11 @@ class Chat:
 		def append_emoticon(w, d):
 			jid = self.get_active_jid()
 			message_textview = self.message_textviews[jid]
-			message_textview.get_buffer().insert_at_cursor(" %s " % d)
+			buffer = message_textview.get_buffer()
+			if buffer.get_char_count():
+				buffer.insert_at_cursor(' %s ' % d)
+			else:
+				buffer.insert_at_cursor('%s ' % d)
 			message_textview.grab_focus()
 	
 		counter = 0
