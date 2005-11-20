@@ -402,6 +402,7 @@ class Chat:
 			# now move the menu above the button
 			y -= menu_height
 
+
 		# push_in is True so all the menuitems are always inside screen
 		push_in = True
 		return (x, y, push_in)
@@ -836,9 +837,16 @@ class Chat:
 					size = window.get_size()
 					buf = parent.get_buffer()
 					# get the cursor position
-					cursor = parent.get_iter_location(buf.get_iter_at_mark(buf.get_insert()))
-					cursor =  parent.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT, cursor.x, cursor.y)
-					return (origin[0] + cursor[0], origin[1] + size[1], True) # push_in True
+					cursor = parent.get_iter_location(buf.get_iter_at_mark(
+						buf.get_insert()))
+					cursor =  parent.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
+						cursor.x, cursor.y)
+					x = origin[0] + cursor[0]
+					y = origin[1] + size[1]
+					menu_width, menu_height = self.emoticons_menu.size_request()
+					if y + menu_height > gtk.gdk.screen_height():
+						y -= menu_height
+					return (x, y, True) # push_in True
 				self.emoticons_menu.popup(None, None, set_emoticons_menu_position, 1, 0)
 		elif event.keyval == gtk.keysyms.Page_Down:
 			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
