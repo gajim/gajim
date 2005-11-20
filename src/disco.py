@@ -452,7 +452,7 @@ _('Without a connection, you can not browse available services')).get_response()
 			self.address_comboboxentry.set_model(liststore)
 			self.address_comboboxentry.set_text_column(0)
 			self.latest_addresses = gajim.config.get('latest_disco_addresses').split()
-			jid = gajim.get_hostname_from_account(self.account)
+			jid = gajim.get_hostname_from_account(self.account, True)
 			if jid in self.latest_addresses:
 				self.latest_addresses.remove(jid)
 			self.latest_addresses.insert(0, jid)

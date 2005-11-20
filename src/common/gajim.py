@@ -262,9 +262,10 @@ def get_jid_from_account(account_name):
 	jid = name + '@' + hostname
 	return jid
 
-def get_hostname_from_account(account_name):
+def get_hostname_from_account(account_name, use_srv = False):
 	'''returns hostname (if custom hostname is used, that is returned)'''
-	#FIXME: save srv record result and ask it here
+	if use_srv and connections[account_name].connected_hostname:
+		return connections[account_name].connected_hostname
 	if config.get_per('accounts', account_name, 'use_custom_host'):
 		return config.get_per('accounts', account_name, 'custom_host')
 	return config.get_per('accounts', account_name, 'hostname')

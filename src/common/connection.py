@@ -157,6 +157,7 @@ class Connection:
 		self.vcard_shas = {} # sha of contacts
 		self.status = ''
 		self.old_show = ''
+		self.connected_hostname = None
 		self.time_to_reconnect = None
 		self.new_account_info = None
 		self.bookmarks = []
@@ -1606,7 +1607,7 @@ class Connection:
 				self.dispatch('ERROR', (_('Could not connect to "%s"') % h,
 					_('Check your connection or try again later.')))
 			return None, ''
-		
+		self.connected_hostname = host['host']
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
 		gajim.log.debug(_('Connected to server %s:%s with %s') % (host['host'],
 			host['port'], con_type))
