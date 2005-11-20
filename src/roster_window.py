@@ -98,7 +98,8 @@ class RosterWindow:
 		while group_iter:
 			user_iter = model.iter_children(group_iter)
 			while user_iter:
-				if jid == model[user_iter][C_JID].decode('utf-8'):
+				if jid == model[user_iter][C_JID].decode('utf-8') and \
+					account == model[user_iter][C_ACCOUNT].decode('utf-8'):
 					found.append(user_iter)
 				user_iter = model.iter_next(user_iter)
 			group_iter = model.iter_next(group_iter)
