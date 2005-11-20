@@ -41,13 +41,9 @@
 # There are more methods, of course, but this is a basic set.
 
 import os
-import sys
-import gc
 import inspect
 import weakref
-import time
 import gobject
-import pango
 import gtk
 import gtk.glade
 
@@ -88,6 +84,7 @@ def _gen_agent_type_info():
 		('headline', 'weather'):	(False, 'weather.png'),
 		('gateway', 'weather'):		(False, 'weather.png'),
 		('_jid', 'weather'):			(False, 'weather.png'),
+		('gateway', 'sip'):			(False, 'sip.png'),
 		('directory', 'user'):		(None, 'jud.png'),
 		
 		# Transports
@@ -454,7 +451,7 @@ _('Without a connection, you can not browse available services')).get_response()
 			self.address_comboboxentry.set_model(liststore)
 			self.address_comboboxentry.set_text_column(0)
 			self.latest_addresses = gajim.config.get('latest_disco_addresses').split()
-			jid = gajim.config.get_per('accounts', self.account, 'hostname')
+			jid = gajim.get_hostname_from_account(self.account)
 			if jid in self.latest_addresses:
 				self.latest_addresses.remove(jid)
 			self.latest_addresses.insert(0, jid)
