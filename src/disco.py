@@ -88,6 +88,7 @@ def _gen_agent_type_info():
 		('headline', 'weather'):	(False, 'weather.png'),
 		('gateway', 'weather'):		(False, 'weather.png'),
 		('_jid', 'weather'):			(False, 'weather.png'),
+		('directory', 'user'):		(None, 'jud.png'),
 		
 		# Transports
 		('conference', 'irc'):		(False, 'irc.png'),
