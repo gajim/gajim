@@ -712,7 +712,7 @@ class AgentBrowser:
 		if identities[0].has_key('name'):
 			name = identities[0]['name']
 			self.window.banner.set_markup('<span weight="heavy" size="large">'\
-				'%s</span>\n%s' % (name, self._get_agent_address()))
+				'%s</span>\n%s' % (self._get_agent_address(), name))
 		
 		# Add an icon to the banner.
 		pix = self.cache.get_icon(identities)
