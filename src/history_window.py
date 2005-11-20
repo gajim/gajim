@@ -22,7 +22,7 @@ import gtk.glade
 import time
 import os
 
-import dialogs
+import gtkgui_helpers
 
 from common import gajim
 from common import helpers
@@ -41,7 +41,6 @@ class HistoryWindow:
 	def __init__(self, jid, account):
 		self.jid = jid
 		self.account = account
-		self.no_of_lines = gajim.logger.get_no_of_lines(jid)
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
 		if account and gajim.contacts[account].has_key(jid):
@@ -51,10 +50,6 @@ class HistoryWindow:
 			title = _('Conversation History with %s') % jid
 		self.window.set_title(title)
 		self.history_buffer = xml.get_widget('history_textview').get_buffer()
-		self.earliest_button = xml.get_widget('earliest_button')
-		self.previous_button = xml.get_widget('previous_button')
-		self.forward_button = xml.get_widget('forward_button')
-		self.latest_button = xml.get_widget('latest_button')
 		
 		xml.signal_autoconnect(self)
 
@@ -70,17 +65,10 @@ class HistoryWindow:
 		color = gajim.config.get('statusmsgcolor')
 		tag.set_property('foreground', color)
 
-		begin = 0
-		#FIXME: 50 is very bad. find a way to always fill size of window
-		#or come up with something better in general.
-		#investigate how other clients do this window
-		if self.no_of_lines > 50:
-			begin = self.no_of_lines - 50
-		nb, lines = gajim.logger.read(self.jid, begin, self.no_of_lines)
-		self.set_buttons_sensitivity(nb)
-		for line in lines:
-			self.new_line(line[0], line[1], line[2:])
-		self.num_begin = begin
+		date = time.localtime()
+		y, m, d = date[0], date[1], date[2]
+		self.add_lines_for_date(y, m, d)
+		
 		self.window.show_all()
 
 	def on_history_window_destroy(self, widget):
@@ -89,90 +77,27 @@ class HistoryWindow:
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
-	def on_earliest_button_clicked(self, widget):
-		start, end = self.history_buffer.get_bounds()
-		self.history_buffer.delete(start, end)
-		self.earliest_button.set_sensitive(False)
-		self.previous_button.set_sensitive(False)
-		self.forward_button.set_sensitive(True)
-		self.latest_button.set_sensitive(True)
-		end = 50
-		if end > self.no_of_lines:
-			end = self.no_of_lines
-		nb, lines = gajim.logger.read(self.jid, 0, end)
-		self.set_buttons_sensitivity(nb)
+	def on_calendar_day_selected(self, widget):
+		year, month, day = widget.get_date() # integers
+		month = gtkgui_helpers.make_gtk_month_python_month(month)
+		self.add_lines_for_date(year, month, day)
+
+	def add_lines_for_date(self, year, month, day):
+		'''adds all the lines for given date in textbuffer'''
+		self.history_buffer.set_text('') # clear the buffer first
+		lines = gajim.logger.get_conversation_for_date(self.jid, year, month, day)
 		for line in lines:
-			self.new_line(line[0], line[1], line[2:])
-		self.num_begin = 0
-
-	def on_previous_button_clicked(self, widget):
-		start, end = self.history_buffer.get_bounds()
-		self.history_buffer.delete(start, end)
-		self.earliest_button.set_sensitive(True)
-		self.previous_button.set_sensitive(True)
-		self.forward_button.set_sensitive(True)
-		self.latest_button.set_sensitive(True)
-		begin = self.num_begin - 50
-		if begin < 0:
-			begin = 0
-		end = begin + 50
-		if end > self.no_of_lines:
-			end = self.no_of_lines
-		nb, lines = gajim.logger.read(self.jid, begin, end)
-		self.set_buttons_sensitivity(nb)
-		for line in lines:
-			self.new_line(line[0], line[1], line[2:])
-		self.num_begin = begin
-
-	def on_forward_button_clicked(self, widget):
-		start, end = self.history_buffer.get_bounds()
-		self.history_buffer.delete(start, end)
-		self.earliest_button.set_sensitive(True)
-		self.previous_button.set_sensitive(True)
-		self.forward_button.set_sensitive(True)
-		self.latest_button.set_sensitive(True)
-		begin = self.num_begin + 50
-		if begin > self.no_of_lines:
-			begin = self.no_of_lines
-		end = begin + 50
-		if end > self.no_of_lines:
-			end = self.no_of_lines
-		nb, lines = gajim.logger.read(self.jid, begin, end)
-		self.set_buttons_sensitivity(nb)
-		for line in lines:
-			self.new_line(line[0], line[1], line[2:])
-		self.num_begin = begin
-
-	def on_latest_button_clicked(self, widget):
-		start, end = self.history_buffer.get_bounds()
-		self.history_buffer.delete(start, end)
-		self.earliest_button.set_sensitive(True)
-		self.previous_button.set_sensitive(True)
-		self.forward_button.set_sensitive(False)
-		self.latest_button.set_sensitive(False)
-		begin = self.no_of_lines - 50
-		if begin < 0:
-			begin = 0
-		nb, lines = gajim.logger.read(self.jid, begin, self.no_of_lines)
-		self.set_buttons_sensitivity(nb)
-		for line in lines:
-			self.new_line(line[0], line[1], line[2:])
-		self.num_begin = begin
-
-	def set_buttons_sensitivity(self, nb):
-		if nb == 50:
-			self.earliest_button.set_sensitive(False)
-			self.previous_button.set_sensitive(False)
-		if nb == self.no_of_lines:
-			self.forward_button.set_sensitive(False)
-			self.latest_button.set_sensitive(False)
-
-	def new_line(self, date, type, data):
+			# line[0] is date, line[1] is type of message
+			# line[2:] is message
+			date = line[0]
+			self.add_new_line(date, line[1], line[2:])
+	
+	def add_new_line(self, date, type, data):
 		'''add a new line in textbuffer'''
-		buff = self.history_buffer
-		end_iter = buff.get_end_iter()
-		tim = time.strftime('[%x %X] ', time.localtime(float(date)))
-		buff.insert(end_iter, tim)
+		buf = self.history_buffer
+		end_iter = buf.get_end_iter()
+		tim = time.strftime('[%X] ', time.localtime(float(date)))
+		buf.insert(end_iter, tim)
 		name = None
 		tag_name = ''
 		tag_msg = ''
@@ -184,7 +109,12 @@ class HistoryWindow:
 			nick = data[0]
 			show = data[1]
 			status_msg = ':'.join(data[2:])
-			msg = _('%s is now %s: %s') % (nick, show, status_msg)
+			if status_msg:
+				msg = _('%(nick)s is now %(status)s: %(status_msg)s') % {'nick': nick,
+					'status': show, 'status_msg': status_msg }
+			else:
+				msg = _('%(nick)s is now %(status)s') % {'nick': nick,
+					'status': show }
 			tag_msg = 'status'
 		elif type == 'recv':
 			try:
@@ -199,17 +129,21 @@ class HistoryWindow:
 			name = gajim.nicks[self.account]
 			msg = ':'.join(data[0:])
 			tag_name = 'outgoing'
-		else:
+		else: # status
 			status_msg = ':'.join(data[1:])
-			msg = _('Status is now: %s: %s') % (data[0], status_msg)
+			if status_msg:
+				msg = _('Status is now: %(status)s: %(status_msg)s') % \
+					{'status': data[0], 'status_msg': status_msg}
+			else:
+				msg = _('Status is now: %(status)s') % { 'status': data[0] }
 			tag_msg = 'status'
 
 		if name:
 			before_str = gajim.config.get('before_nickname')
 			after_str = gajim.config.get('after_nickname')
 			format = before_str + name + after_str + ' '
-			buff.insert_with_tags_by_name(end_iter, format, tag_name)
+			buf.insert_with_tags_by_name(end_iter, format, tag_name)
 		if tag_msg:
-			buff.insert_with_tags_by_name(end_iter, msg, tag_msg)
+			buf.insert_with_tags_by_name(end_iter, msg, tag_msg)
 		else:
-			buff.insert(end_iter, msg)
+			buf.insert(end_iter, msg)

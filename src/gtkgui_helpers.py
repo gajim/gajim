@@ -436,3 +436,9 @@ def get_avatar_pixbuf_from_cache(jid):
 		return None
 	pixbuf = vcard.get_avatar_pixbuf_encoded_mime(vcard_dict['PHOTO'])[0]
 	return pixbuf
+
+def make_gtk_month_python_month(month):
+	'''gtk start counting months from 0, so January is 0
+	but python's time start from 1, so align to python
+	month MUST be integer'''
+	return month + 1

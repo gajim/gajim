@@ -890,12 +890,16 @@ class TabbedChatWindow(chat.Chat):
 		# don't restore lines if it's a transport
 		if gajim.jid_is_transport(jid):
 			return
+		
+		return # FIXME: clean up logic, make most of it a func for logger.py
+		# see get_last_conversation_lines
+		# good to review to avoid dup last line (still happens)
 
 		# How many lines to restore and when to time them out
 		restore	= gajim.config.get('restore_lines')
-		time_out = gajim.config.get('restore_timeout')
+		timeout = gajim.config.get('restore_timeout') # in minutes
 		pos = 0 # position, while reading from history
-		size = 0 # how many lines we alreay retreived
+		size = 0 # how many lines we already retreived
 		lines = [] # we'll need to reverse the lines from history
 		count = gajim.logger.get_no_of_lines(jid)
 
@@ -910,17 +914,17 @@ class TabbedChatWindow(chat.Chat):
 		now = time.time()
 		while size <= restore:
 			if pos == count or size > restore - 1:
-				# don't try to read beyond history, not read more than required
+				# don't try to read beyond history, nor read more than required
 				break
 			
-			nb, line = gajim.logger.read(jid, count - 1 - pos, count - pos)
+			line = gajim.logger.read_from_line_to_line(jid, count - 1 - pos, count - pos)
 			pos = pos + 1
 
 			# line is [] if log file for jid is not a file (does not exist or dir)
 			if line == []:
 				break
 			
-			if (now - float(line[0][0]))/60 >= time_out:
+			if (now - float(line[0][0])) / 60 >= time_out:
 				# stop looking for messages if we found something too old
 				break
 	
@@ -934,17 +938,18 @@ class TabbedChatWindow(chat.Chat):
 		if lines != []:
 			lines.reverse()
 		
-		for msg in lines:
-			if msg[1] == 'sent':
+		print lines
+		for line in lines: # line[0] time, line[1] type, line[2:] the message
+			if line[1] == 'sent':
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
-			elif msg[1] == 'recv':
+			elif line[1] == 'recv':
 				kind = 'incoming'
 				name = self.contacts[jid].name
 
-			tim = time.localtime(float(msg[0]))
+			tim = time.localtime(float(line[0]))
 
-			text = ':'.join(msg[2:])[:-1] #remove the latest \n
+			text = ':'.join(line[2:])[:-1] #remove the latest \n
 			self.print_conversation_line(text, jid, kind, name, tim,
 				['small'], ['small', 'grey'], ['small', 'grey'], False)
 

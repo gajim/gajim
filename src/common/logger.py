@@ -129,31 +129,90 @@ class Logger:
 		path_to_file = self.__get_path_to_file(fjid)
 		if not os.path.isfile(path_to_file):
 			return 0
-		fil = open(path_to_file, 'r')
-		no_of_lines = 0 # number of lines
-		while fil.readline():
-			no_of_lines += 1
-		fil.close()
-		return no_of_lines
+		f = open(path_to_file, 'r')
+		return len(f.readlines()) # number of lines
 
-	def read(self, fjid, begin_line, end_line):
-		'''returns number of lines read and the text in the lines
-		returns 0 and empty string respectively if log file does not exist'''
+	# FIXME: remove me when refactor in TC is done
+	def read_from_line_to_line(self, fjid, begin_from_line, end_line):
+		'''returns the text in the lines (list),
+		returns empty list if log file does not exist'''
 		fjid = fjid.lower()
 		path_to_file = self.__get_path_to_file(fjid)
 		if not os.path.isfile(path_to_file):
-			return 0, []
-		fil = open(path_to_file, 'r')
-		no_of_lines = 0 # number of lines
+			return []
+
 		lines = []
-		while (no_of_lines < begin_line and fil.readline()):
+		
+		fil = open(path_to_file, 'r')
+		#fil.readlines(begin_from_line) # skip the previous lines
+		no_of_lines = begin_from_line # number of lines between being and end
+		while (no_of_lines < begin_from_line and fil.readline()):
 			no_of_lines += 1
+		
+		print begin_from_line, end_line
 		while no_of_lines < end_line:
 			line = fil.readline().decode('utf-8')
+			print `line`, '@', no_of_lines
 			if line:
 				line = helpers.from_one_line(line)
 				lineSplited = line.split(':')
 				if len(lineSplited) > 2:
 					lines.append(lineSplited)
-			no_of_lines += 1
-		return no_of_lines, lines
+				no_of_lines += 1
+			else: # emplty line (we are at the end of file)
+				break
+		return lines
+
+	def get_last_conversation_lines(self, jid, how_many_lines, timeout):
+		'''accepts how many lines to restore and when to time them out
+		(mark them as too old),	returns the lines (list), empty list if log file
+		does not exist'''
+		fjid = fjid.lower()
+		path_to_file = self.__get_path_to_file(fjid)
+		if not os.path.isfile(path_to_file):
+			return []
+		
+
+	def get_conversation_for_date(self, fjid, year, month, day):
+		'''returns the text in the lines (list),
+		returns empty list if log file does not exist'''
+		fjid = fjid.lower()
+		path_to_file = self.__get_path_to_file(fjid)
+		if not os.path.isfile(path_to_file):
+			return []
+		
+		lines = []
+		f = open(path_to_file, 'r')
+		done = False
+		found_first_line_that_matches = False
+		while not done:
+			line = f.readline().decode('utf-8')
+			if line:
+				line = helpers.from_one_line(line)
+				splitted_line = line.split(':')
+				if len(splitted_line) > 2:
+					if splitted_line:
+						# line[0] is date, line[1] is type of message
+						# line[2:] is message
+						date = splitted_line[0]
+						# eg. 2005
+						line_year = int(time.strftime('%Y', time.localtime(float(date))))
+						# (01 - 12)
+						line_month = int(time.strftime('%m', time.localtime(float(date))))
+						# (01 - 31)
+						line_day = int(time.strftime('%d', time.localtime(float(date))))
+						
+						# now check if that line is one of the lines we want
+						# (if it is in the date we want)
+						if line_year == year and line_month == month and line_day == day:
+							if found_first_line_that_matches is False:
+								found_first_line_that_matches = True
+							lines.append(splitted_line)
+						else:
+							if found_first_line_that_matches:
+								done = True
+			
+			else:
+				done = True
+
+		return lines
