@@ -1831,6 +1831,7 @@ class DataFormWindow:
 				widget.connect('changed', self.on_entry_changed, i)
 				if not self.config[i].has_key('values'):
 					self.config[i]['values'] = ['']
+				widget.set_text(self.config[i]['values'][0])
 				max = 3
 			i += 1
 			if max < 4:
