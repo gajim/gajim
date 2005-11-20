@@ -829,23 +829,24 @@ class Chat:
 		elif event.keyval == gtk.keysyms.e and \
 			(event.state & gtk.gdk.MOD1_MASK): # alt + E opens emoticons menu
 			if gajim.config.get('useemoticons'):
-				parent = self.message_textviews[jid]
-				def set_emoticons_menu_position(w, parent = parent):
-					window = parent.get_window(gtk.TEXT_WINDOW_WIDGET)
+				msg_tv = self.message_textviews[jid]
+				def set_emoticons_menu_position(w, msg_tv = msg_tv):
+					window = msg_tv.get_window(gtk.TEXT_WINDOW_WIDGET)
 					# get the window position
 					origin = window.get_origin()
 					size = window.get_size()
-					buf = parent.get_buffer()
+					buf = msg_tv.get_buffer()
 					# get the cursor position
-					cursor = parent.get_iter_location(buf.get_iter_at_mark(
+					cursor = msg_tv.get_iter_location(buf.get_iter_at_mark(
 						buf.get_insert()))
-					cursor =  parent.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
+					cursor =  msg_tv.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
 						cursor.x, cursor.y)
 					x = origin[0] + cursor[0]
 					y = origin[1] + size[1]
 					menu_width, menu_height = self.emoticons_menu.size_request()
 					if y + menu_height > gtk.gdk.screen_height():
-						y -= menu_height
+						# move menu just above cursor
+						y -= menu_height + (msg_tv.allocation.height / buf.get_line_count())
 					return (x, y, True) # push_in True
 				self.emoticons_menu.popup(None, None, set_emoticons_menu_position, 1, 0)
 		elif event.keyval == gtk.keysyms.Page_Down:
