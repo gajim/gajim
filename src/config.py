@@ -1646,8 +1646,7 @@ class AccountsWindow:
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
 		self.modify_button = self.xml.get_widget('modify_button')
 		self.remove_button = self.xml.get_widget('remove_button')
-		model = gtk.ListStore(str, str,
-					bool)
+		model = gtk.ListStore(str, str, bool)
 		self.accounts_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
