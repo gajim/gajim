@@ -86,6 +86,7 @@ def _gen_agent_type_info():
 		('_jid', 'weather'):			(False, 'weather.png'),
 		('gateway', 'sip'):			(False, 'sip.png'),
 		('directory', 'user'):		(None, 'jud.png'),
+		('pubsub', 'generic'):		(None, 'pubsub.png'),
 		
 		# Transports
 		('conference', 'irc'):		(False, 'irc.png'),
