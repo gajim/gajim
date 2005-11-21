@@ -2628,7 +2628,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		
 		finish_text = '<big><b>%s</b></big>\n\n%s' % ( 
 			_('Your new account has been created successfully'),
-_('You can set advanced account options by pressing Advanced button,or later by clicking in Accounts menuitem under Edit menu from the main window.'))
+_('You can set advanced account options by pressing Advanced button, or later by clicking in Accounts menuitem under Edit menu from the main window.'))
 		self.finish_label.set_markup(finish_text)
 		self.notebook.set_current_page(3) # show finish page
 		
