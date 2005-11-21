@@ -33,12 +33,12 @@ cur.executescript(
 
 con.commit()
 
-def from_one_line(msg):
-	# (?<!\\) is a lookbehind assertion which asks anything but '\'
-	# to match the regexp that follows it
+# (?<!\\) is a lookbehind assertion which asks anything but '\'
+# to match the regexp that follows it
+re = sre.compile(r'(?<!\\)\\n')
 
+def from_one_line(msg):
 	# So here match '\\n' but not if you have a '\' before that
-	re = sre.compile(r'(?<!\\)\\n')
 	msg = re.sub('\n', msg)
 	msg = msg.replace('\\\\', '\\')
 	# s12 = 'test\\ntest\\\\ntest'
@@ -123,7 +123,7 @@ if __name__ == '__main__':
 	f.write('We do not use plain-text files anymore, because they do not scale.\n')
 	f.write('Those files here are logs for Gajim up until 0.8.2\n')
 	f.write('We now use an sqlite database called logs.db found in ~/.gajim\n')
-	f.write('You can always run the migration script to import you old logs to the database\n')
+	f.write('You can always run the migration script to import your old logs to the database\n')
 	f.write('Thank you\n')
 	f.close()
 	# after huge import create the indices (they are slow on massive insert)
