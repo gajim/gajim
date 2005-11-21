@@ -844,9 +844,17 @@ class Chat:
 					x = origin[0] + cursor[0]
 					y = origin[1] + size[1]
 					menu_width, menu_height = self.emoticons_menu.size_request()
+					#FIXME: get_line_count is not so good
+					#get the iter of cursor, then tv.get_line_yrange
+					# so we know in which y we are typing (not how many lines we have
+					# then go show just above the current cursor line for up
+					# or just below the current cursor line for down
+					#TEST with having 3 lines and writing in the 2nd
 					if y + menu_height > gtk.gdk.screen_height():
 						# move menu just above cursor
 						y -= menu_height + (msg_tv.allocation.height / buf.get_line_count())
+					#else: # move menu just below cursor
+					#	y -= (msg_tv.allocation.height / buf.get_line_count())
 					return (x, y, True) # push_in True
 				self.emoticons_menu.popup(None, None, set_emoticons_menu_position, 1, 0)
 		elif event.keyval == gtk.keysyms.Page_Down:
