@@ -914,12 +914,19 @@ class Interface:
 			return
 
 		msg_type = ''
+		event_type = ''
 		if file_props['error'] == 0 and gajim.config.get('notify_on_file_complete'):
 			msg_type = 'file-completed'
 			event_type = _('File Transfer Completed')
 		elif file_props['error'] == -1:
 			msg_type = 'file-stopped'
 			event_type = _('File Transfer Stopped')
+		
+		if event_type == '': # FIXME: ugly workaround (this can happen Gajim sent, Gaim recvs)
+			# this should never happen but it does. see process_result() in socks5.py
+			# who calls this func (sth is really wrong unless this func is also registered
+			# as progress_cb
+			return
 
 		if msg_type:
 			self.add_event(account, jid, msg_type, file_props)
