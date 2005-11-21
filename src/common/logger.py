@@ -186,6 +186,7 @@ class Logger:
 		done = False
 		found_first_line_that_matches = False
 		while not done:
+			# it should be utf8 (I don't decode for optimization reasons)
 			line = f.readline()
 			if line:
 				line = helpers.from_one_line(line)

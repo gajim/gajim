@@ -113,7 +113,8 @@ class HistoryWindow:
 				msg = _('%(nick)s is now %(status)s: %(status_msg)s') % {'nick': nick,
 					'status': helpers.get_uf_show(show), 'status_msg': status_msg }
 			else:
-				msg = _('%(nick)s is now %(status)s') % {'nick': nick,
+				show = show[:-1] # remove last \n
+				msg = _('%(nick)s is now %(status)s\n') % {'nick': nick,
 					'status': helpers.get_uf_show(show) }
 			tag_msg = 'status'
 		elif type == 'recv':
@@ -135,7 +136,8 @@ class HistoryWindow:
 				msg = _('Status is now: %(status)s: %(status_msg)s') % \
 					{'status': helpers.get_uf_show(data[0]), 'status_msg': status_msg}
 			else:
-				msg = _('Status is now: %(status)s') % { 'status':
+				data[0] = data[0][:-1] # remove last \n
+				msg = _('Status is now: %(status)s\n') % { 'status':
 					helpers.get_uf_show(data[0]) }
 			tag_msg = 'status'
 
