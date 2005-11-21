@@ -123,6 +123,7 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 				# get the name of the contact, as it is in the roster
 				name = gajim.get_first_contact_instance_from_jid( 
 					account, receiver).name
+				filename = os.path.basename(file_props['file-name'])
 				if event_type == _('File Transfer Completed'):
 					txt = _('You successfully sent %(filename)s to %(name)s.')\
 						% {'filename': filename, 'name': name}
