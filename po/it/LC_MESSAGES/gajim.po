@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-21 16:07+0100\n"
+"POT-Creation-Date: 2005-11-21 19:29+0100\n"
 "PO-Revision-Date: 2005-11-21 16:43+0100\n"
 "Last-Translator: Mauro Brenna <malloblenne@gmail.com>\n"
 "Language-Team: Italian\n"
@@ -1444,8 +1444,8 @@ msgstr ""
 "motivo se specificato."
 
 #: ../src/groupchat_window.py:930
-#, python-format
-msgid "Usage: /%s, sets the groupchat window to compact\tmode."
+#, fuzzy, python-format
+msgid "Usage: /%s, sets the groupchat window to compact mode."
 msgstr ""
 "Uso: /%s, imposta la finestra di chat di gruppo alla modalità compatta."
 
@@ -2830,7 +2830,11 @@ msgid ""
 "following methods may be used to inform you about it. NOTE: New message "
 "events only occur if it is a new message from a contact you are not already "
 "chatting with"
-msgstr "Quando un nuovo evento (messaggio, richiesta di trasferimento file, ecc...) viene ricevuto, i seguenti metodi possono venire usati per informarti di ciò. NOTA: Gli eventi per i nuovi messaggi avverranno solo se si tratta di un nuovo messaggio da un contatto con cui non si sta già chattando"
+msgstr ""
+"Quando un nuovo evento (messaggio, richiesta di trasferimento file, ecc...) "
+"viene ricevuto, i seguenti metodi possono venire usati per informarti di "
+"ciò. NOTA: Gli eventi per i nuovi messaggi avverranno solo se si tratta di "
+"un nuovo messaggio da un contatto con cui non si sta già chattando"
 
 #: ../src/gtkgui.glade.h:310
 msgid "When new event is received"
@@ -3650,8 +3654,9 @@ msgid "This service has not yet responded with detailed information"
 msgstr "Questo servizio non ha ancora inviato informazioni dettagliate"
 
 #: ../src/tooltips.py:545
+#, fuzzy
 msgid ""
-"This service could not respond with detailed information\n"
+"This service could not respond with detailed information.\n"
 "It is most likely legacy or broken, and may not work as expected"
 msgstr ""
 "Questo servizio non ha inviato informazioni dettagliate.\n"

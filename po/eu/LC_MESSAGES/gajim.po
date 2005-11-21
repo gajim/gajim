@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-21 16:07+0100\n"
+"POT-Creation-Date: 2005-11-21 19:29+0100\n"
 "PO-Revision-Date: 2005-11-20 16:57+0100\n"
 "Last-Translator: Urtzi Alfaro <urtzi@altza.net>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -1427,8 +1427,8 @@ msgid ""
 msgstr "Erabilera: /%s [reason],  itxi leihoa, zergatia erakutsiz behar bada."
 
 #: ../src/groupchat_window.py:930
-#, python-format
-msgid "Usage: /%s, sets the groupchat window to compact\tmode."
+#, fuzzy, python-format
+msgid "Usage: /%s, sets the groupchat window to compact mode."
 msgstr "Erabilera: /%s, talde txat-eko leihoa compact\tmode moduan jarri."
 
 #: ../src/groupchat_window.py:933
@@ -3626,8 +3626,9 @@ msgid "This service has not yet responded with detailed information"
 msgstr "Zerbitzu honek ez du oraindik erantzun informazio detailatuz."
 
 #: ../src/tooltips.py:545
+#, fuzzy
 msgid ""
-"This service could not respond with detailed information\n"
+"This service could not respond with detailed information.\n"
 "It is most likely legacy or broken, and may not work as expected"
 msgstr ""
 "Zerbitzu honek ezin izan du erantzun/nSeguraski ez du erantzun espero bezala "

@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-21 16:07+0100\n"
-"PO-Revision-Date: 2005-11-21 18:10+0100\n"
-"Last-Translator: François Toussenel <francois.toussenel@toussenel.org>\n"
+"POT-Creation-Date: 2005-11-21 19:29+0100\n"
+"PO-Revision-Date: 2005-11-21 19:30+0100\n"
+"Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../gajim.desktop.in.h:1
 msgid "A GTK+ Jabber client"
-msgstr "Un client Jabber en GTK"
+msgstr "Un client Jabber en GTK+"
 
 #: ../gajim.desktop.in.h:2
 #: ../src/gtkgui.glade.h:135
@@ -1082,7 +1082,7 @@ msgstr "Liste toutes les préférences et leurs valeurs"
 
 #: ../src/gajim-remote.py:159
 msgid "Set value of 'key' to 'value'."
-msgstr ""
+msgstr "Définir la valeur de 'clé' à 'valeur'."
 
 #: ../src/gajim-remote.py:161
 msgid "key=value"
@@ -1157,7 +1157,7 @@ msgid ""
 "Usage: %s %s %s \n"
 "\t"
 msgstr ""
-"Utilisation : %s %s %s \n"
+"Usage : %s %s %s \n"
 "\t"
 
 #: ../src/gajim-remote.py:299
@@ -1175,7 +1175,7 @@ msgid ""
 "Usage: %s command [arguments]\n"
 "Command is one of:\n"
 msgstr ""
-"Utilisation : %s commande [arguments]\n"
+"Usage : %s commande [arguments]\n"
 "commande est l'une de :\n"
 
 #: ../src/gajim-remote.py:516
@@ -1294,7 +1294,7 @@ msgstr "Impossible de sauver vos préférences"
 
 #: ../src/gajim.py:1377
 msgid "Session Management support not available (missing gnome.ui module)"
-msgstr ""
+msgstr "Le support du gestionnaire de session n'est pas disponible (le module gnome.ui est manquant)"
 
 #: ../src/gajim_themes_window.py:57
 msgid "Theme"
@@ -1450,67 +1450,67 @@ msgstr " commandes : %s"
 #: ../src/groupchat_window.py:915
 #, python-format
 msgid "Usage: /%s <nickname|JID> [reason], bans the JID from the room. The nickname of an occupant may be substituted, but not if it contains \"@\". If the JID is currently in the room, he/she/it will also be kicked. Does NOT support spaces in nickname."
-msgstr ""
+msgstr "Usage : /%s <surnom|JID> [raison], bannit le JID du salon. Le surnom de l'occupant(e) peut etre utilisé s'il ne contiant pas de \"@\". Si le JID est actuellement dans le salon il/elle sera également éjecté(e). NE supporte PAS les espaces dans le surnom."
 
 #: ../src/groupchat_window.py:921
 #, python-format
 msgid "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
-msgstr ""
+msgstr "Usage : /%s <surnom>, ouvre une fenêtre de conversation privée avec l'occupant(e) spécifié(e)"
 
 #: ../src/groupchat_window.py:924
 #, python-format
 msgid "Usage: /%s, clears the text window."
-msgstr "Utilisation : /%s, vide la fenêtre de texte"
+msgstr "Usage : /%s, vide la fenêtre de texte"
 
 #: ../src/groupchat_window.py:927
 #, python-format
 msgid "Usage: /%s [reason], closes the current window or tab, displaying reason if specified."
-msgstr ""
+msgstr "Usage : /%s [raison], ferme la fenêtre ou l'onglet actuel(le), affiche la raison si elle est spécifiée."
 
 #: ../src/groupchat_window.py:930
 #, python-format
-msgid "Usage: /%s, sets the groupchat window to compact\tmode."
-msgstr ""
+msgid "Usage: /%s, sets the groupchat window to compact mode."
+msgstr "Usage : /%s, passe la fenêtre de groupe de discution en vue compacte."
 
 #: ../src/groupchat_window.py:933
 #, python-format
 msgid "Usage: /%s <JID> [reason], invites JID to the current room, optionally providing a reason."
-msgstr ""
+msgstr "Usage: /%s <JID> [raison], invite JID dans le salon actuel, fournit éventuellement une raison."
 
 #: ../src/groupchat_window.py:936
 #, python-format
 msgid "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally using specified nickname."
-msgstr ""
+msgstr "Usage : /%s <salon>@<serveur>[/surnom], propose de rejoindre salon@serveur en utilisant le surnom spécifié."
 
 #: ../src/groupchat_window.py:939
 #, python-format
 msgid "Usage: /%s <nickname> [reason], removes the occupant specified by nickname from the room and optionally displays a reason. Does NOT support spaces in nickname."
-msgstr ""
+msgstr "Usage : /%s <surnom> [raison], supprime l'occupant(e) spécifié(e) par le surnom du salon et affiche éventuellement une raison. NE supporte PAS les espaces dans le surnom."
 
 #: ../src/groupchat_window.py:943
 #, python-format
 msgid "Usage: /%s <action>, sends action to the current room. Use third person. (e.g. /%s explodes.)"
-msgstr ""
+msgstr "Usage : /%s <action>, envoie l'action au salon actuel. Utilise la troisième personne. (ex : /%s explose.)"
 
 #: ../src/groupchat_window.py:947
 #, python-format
 msgid "Usage: /%s <nickname> [message], opens a private message window and sends message to the occupant specified by nickname."
-msgstr ""
+msgstr "Usage : /%s <surnom> [message], ouvre une fenêtre de discution privée et envoie le message à l'occupant(e) spécifié(e) par le surnom."
 
 #: ../src/groupchat_window.py:950
 #, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current room."
-msgstr ""
+msgstr "Usage : /%s <surnom>, change votre surnom dans le salon actuel."
 
 #: ../src/groupchat_window.py:953
 #, python-format
 msgid "Usage: /%s [topic], displays or updates the current room topic."
-msgstr ""
+msgstr "/%s [sujet], affiche ou met à jour le sujet du salon actuel."
 
 #: ../src/groupchat_window.py:956
 #, python-format
 msgid "Usage: /%s <message>, sends a message without looking for other commands."
-msgstr ""
+msgstr "Usage : /%s <message>, envoie un message sans chercher les autres commandes."
 
 #: ../src/groupchat_window.py:958
 #, python-format
@@ -1678,6 +1678,10 @@ msgid ""
 "Contact\n"
 "Banner"
 msgstr ""
+"Compte\n"
+"Groupe\n"
+"Contact\n"
+"Bannière"
 
 #: ../src/gtkgui.glade.h:37
 msgid "Account Modification"
@@ -3080,7 +3084,7 @@ msgstr "Erreur lors de l'analyse du fichier :"
 #: ../src/gtkgui_helpers.py:293
 #, python-format
 msgid "Could not write to %s. Session Management support will not work"
-msgstr ""
+msgstr "Impossible d'écrire dans %s. Le support du gestionnaire de session ne fonctionnera pas"
 
 #: ../src/history_window.py:48
 #: ../src/history_window.py:50
@@ -3522,9 +3526,11 @@ msgstr "Ce service n'a pas encore répondu d'information détaillée"
 
 #: ../src/tooltips.py:545
 msgid ""
-"This service could not respond with detailed information\n"
+"This service could not respond with detailed information.\n"
 "It is most likely legacy or broken, and may not work as expected"
 msgstr ""
+"Ce service peut ne pas répondre avec les informations détaillées.\n"
+"Il est probablement cassé et fonctionne sans doute mal"
 
 #: ../src/vcard.py:167
 msgid "Choose Avatar"
@@ -3564,7 +3570,7 @@ msgstr "Vous devez être connecté pour récupérer vos informations."
 
 #: ../src/common/config.py:48
 msgid "Use DBus and Notification-Daemon to show notifications"
-msgstr ""
+msgstr "Utilise DBus et Notification-Daemon pour afficher les notifications"
 
 #: ../src/common/config.py:52
 msgid "Time in minutes, after which your status changes to away."
@@ -3584,7 +3590,7 @@ msgstr "Non disponible car inactif"
 
 #: ../src/common/config.py:82
 msgid "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
-msgstr ""
+msgstr "If vrai, ne supprime pas */_ . Donc *abc* sera en gras mais avec * * autour."
 
 #: ../src/common/config.py:121
 msgid "Add * and [n] in roster title?"
@@ -3618,7 +3624,7 @@ msgstr "Utiliser la vue compacte quand vous ouvrez une fenêtre de salon"
 #: ../src/common/config.py:131
 #, python-format
 msgid "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary."
-msgstr ""
+msgstr "Soit une url personnalisée contenant %s où %s est le mot/la phrase, soit \"WIKTIONARY\", ce qui signifie l'utilisation de wikitionary."
 
 #: ../src/common/config.py:134
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
@@ -3632,7 +3638,7 @@ msgstr "Demander avant de fermer un onglet ou une fenêtre de discussion."
 #. port, used for file transfers
 #: ../src/common/config.py:141
 msgid "Overrides the host we send for File Transfer in case of address translation/port forwarding."
-msgstr ""
+msgstr "Outrepasse le nom d'hôte pour les transferts de fichier en cas de traduction d'adresse/transfert de port."
 
 #: ../src/common/config.py:143
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -3656,15 +3662,15 @@ msgstr "Une liste de mots séparés par des points-virgules qui seront mis en su
 
 #: ../src/common/config.py:159
 msgid "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
-msgstr ""
+msgstr "Si vrai, quitte Gajim quand on clique sur le bouton X du gestionnaire de fenêtre. Cette option n'est prise en compte que si l'icône dans la barre de notification est utilisée."
 
 #: ../src/common/config.py:160
 msgid "If True, Gajim registers for xmpp:// on each startup."
-msgstr ""
+msgstr "Si vrai, Gajim s'enregistre pour xmpp:// à chaque démarrage."
 
 #: ../src/common/config.py:161
 msgid "If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated."
-msgstr ""
+msgstr "Si vrai, Gajim affichera dans chaque onglet une icône contenant les messages non-lus. En fonction du thème, cette icône peut être annimée."
 
 #: ../src/common/config.py:162
 msgid "If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window"
@@ -3672,7 +3678,7 @@ msgstr "Si vrai, Gajim affichera le message d'état, s'il n'est pas vide, pour c
 
 #: ../src/common/config.py:164
 msgid "If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cache that is too old."
-msgstr ""
+msgstr "Si vrai, Gajim demandera les avatars de tous les contacts qui n'avaient pas d'avatar la dernière fois ou en evaient un en cache trop ancien."
 
 #: ../src/common/config.py:165
 msgid "If False, you will no longer see status line in chats when a contact changes his or her status and/or his status message."
@@ -3812,6 +3818,8 @@ msgid ""
 "Your desired nickname is in use or registered by another occupant.\n"
 "Please specify another nickname below:"
 msgstr ""
+"Le surnom que vous désirez est déjà utilisé ou enregistré par un autre occupant.\n"
+"Choisissez un autre surnom ci-dessous :"
 
 #: ../src/common/connection.py:491
 #: ../src/common/connection.py:1914

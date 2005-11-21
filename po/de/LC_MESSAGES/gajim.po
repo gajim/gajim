@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-21 16:07+0100\n"
+"POT-Creation-Date: 2005-11-21 19:29+0100\n"
 "PO-Revision-Date: 2005-11-19 15:44+0100\n"
 "Last-Translator: Fridtjof Busse <fridtjof@fbunet.de>\n"
 "Language-Team: German <translators@gajim.org>\n"
@@ -1448,8 +1448,8 @@ msgstr ""
 "eines Grundes falls angegeben."
 
 #: ../src/groupchat_window.py:930
-#, python-format
-msgid "Usage: /%s, sets the groupchat window to compact\tmode."
+#, fuzzy, python-format
+msgid "Usage: /%s, sets the groupchat window to compact mode."
 msgstr "Bedienung: /%s, stellt das Gruppenchat-Fenster auf kompakt/tmode."
 
 #: ../src/groupchat_window.py:933
@@ -3664,8 +3664,9 @@ msgid "This service has not yet responded with detailed information"
 msgstr "Dieser Dienst hat nicht mit detaillierten Informationen geantwortet"
 
 #: ../src/tooltips.py:545
+#, fuzzy
 msgid ""
-"This service could not respond with detailed information\n"
+"This service could not respond with detailed information.\n"
 "It is most likely legacy or broken, and may not work as expected"
 msgstr ""
 "Dieser Dienst konnte nicht mit detaillierten Informationen antworten\n"

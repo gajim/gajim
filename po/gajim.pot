@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-21 16:07+0100\n"
+"POT-Creation-Date: 2005-11-21 19:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1386,7 +1386,7 @@ msgstr ""
 
 #: ../src/groupchat_window.py:930
 #, python-format
-msgid "Usage: /%s, sets the groupchat window to compact\tmode."
+msgid "Usage: /%s, sets the groupchat window to compact mode."
 msgstr ""
 
 #: ../src/groupchat_window.py:933
@@ -3488,7 +3488,7 @@ msgstr ""
 
 #: ../src/tooltips.py:545
 msgid ""
-"This service could not respond with detailed information\n"
+"This service could not respond with detailed information.\n"
 "It is most likely legacy or broken, and may not work as expected"
 msgstr ""
 
