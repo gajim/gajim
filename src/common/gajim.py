@@ -42,6 +42,8 @@ DATA_DIR = '../data'
 LOGPATH = os.path.expanduser('~/.gajim/logs')
 VCARDPATH = os.path.expanduser('~/.gajim/vcards')
 if os.name == 'nt':
+	if '.svn' not in os.listdir('.'): # we are normal users (not svn users)
+		DATA_DIR = 'data'
 	try:
 		# Documents and Settings\[User Name]\Application Data\Gajim\logs
 		LOGPATH = os.environ['appdata'] + '/Gajim/Logs'
