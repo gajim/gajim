@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-21 16:07+0100\n"
-"PO-Revision-Date: 2005-11-15 18:04+0100\n"
+"PO-Revision-Date: 2005-11-21 16:43+0100\n"
 "Last-Translator: Mauro Brenna <malloblenne@gmail.com>\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -350,7 +350,6 @@ msgid "You already have an account using this name."
 msgstr "Esiste già un account con lo stesso nome"
 
 #: ../src/conversation_textview.py:181
-#, fuzzy
 msgid ""
 "Text below this line is what has been said since the last time you paid "
 "attention to this group chat"
@@ -630,7 +629,7 @@ msgstr "RE: %s"
 #: ../src/dialogs.py:1089
 #, python-format
 msgid "%s wrote:\n"
-msgstr ""
+msgstr "%s ha scritto:\n"
 
 #: ../src/dialogs.py:1133
 #, python-format
@@ -870,9 +869,8 @@ msgid "File: "
 msgstr "File: "
 
 #: ../src/filetransfers_window.py:515
-#, fuzzy
 msgid "It is not possible to send empty files"
-msgstr "Non è possibile inviare file di dimensione 0 byte"
+msgstr "Non è possibile inviare file vuoti"
 
 #: ../src/filetransfers_window.py:535 ../src/tooltips.py:401
 #: ../src/tooltips.py:466
@@ -893,7 +891,7 @@ msgstr "_Continua"
 
 #: ../src/gajim-remote.py:49
 msgid "Dbus is not supported."
-msgstr ""
+msgstr "Dbus non è supportato."
 
 #: ../src/gajim-remote.py:75
 msgid "show a help on specific command"
@@ -1044,7 +1042,7 @@ msgstr "Mostra tutte le preferenze ed i relativi valori"
 
 #: ../src/gajim-remote.py:159
 msgid "Set value of 'key' to 'value'."
-msgstr ""
+msgstr "Imposta il valore di 'chiave' a 'valore'."
 
 #: ../src/gajim-remote.py:161
 msgid "key=value"
@@ -1396,9 +1394,9 @@ msgstr "Si è invitato %(contact_jid)s a %(room_jid)s."
 
 #. %s is something the user wrote but it is not a jid so we inform
 #: ../src/groupchat_window.py:813 ../src/groupchat_window.py:841
-#, fuzzy, python-format
+#, python-format
 msgid "%s does not appear to be a valid JID"
-msgstr "%s non sembra essere un JID"
+msgstr "%s non sembra essere un JID valido"
 
 #: ../src/groupchat_window.py:903
 #, python-format
@@ -1514,6 +1512,7 @@ msgstr ""
 msgid ""
 "Usage: /%s <message>, sends a message without looking for other commands."
 msgstr ""
+"Uso: /%s <messaggio>, invia un messaggio senza considerare gli altri comandi."
 
 #: ../src/groupchat_window.py:958
 #, python-format
@@ -1662,7 +1661,7 @@ msgstr "Un elenco dei trasferimenti di file attivi, completati ed annullati"
 
 #: ../src/gtkgui.glade.h:28
 msgid "A_ccounts"
-msgstr "A_ccount"
+msgstr "_Account"
 
 #. "About" is the text of a tab of vcard window
 #: ../src/gtkgui.glade.h:30
@@ -1903,9 +1902,8 @@ msgid "Click to change account's password"
 msgstr "Cliccare per cambiare la password dell'account"
 
 #: ../src/gtkgui.glade.h:89
-#, fuzzy
 msgid "Click to insert an emoticon (Alt+E)"
-msgstr "Cliccare per inserire un emoticon"
+msgstr "Cliccare per inserire un emoticon (Alt+E)"
 
 #: ../src/gtkgui.glade.h:90
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
@@ -2061,9 +2059,8 @@ msgid "Filter:"
 msgstr "Filtro:"
 
 #: ../src/gtkgui.glade.h:129
-#, fuzzy
 msgid "Font style:"
-msgstr "Stile carattere"
+msgstr "Stile carattere:"
 
 #: ../src/gtkgui.glade.h:130
 msgid "Font:"
@@ -2731,14 +2728,12 @@ msgid "Synch_ronize account status with global status"
 msgstr "_Sincronizza lo stato dell'account con lo stato globale"
 
 #: ../src/gtkgui.glade.h:286
-#, fuzzy
 msgid "Text _color:"
-msgstr "_Colore del testo"
+msgstr "_Colore del testo:"
 
 #: ../src/gtkgui.glade.h:287
-#, fuzzy
 msgid "Text _font:"
-msgstr "Carattere del _testo"
+msgstr "Carattere del _testo:"
 
 #: ../src/gtkgui.glade.h:288
 msgid "The auto away status message"
@@ -2835,12 +2830,11 @@ msgid ""
 "following methods may be used to inform you about it. NOTE: New message "
 "events only occur if it is a new message from a contact you are not already "
 "chatting with"
-msgstr ""
+msgstr "Quando un nuovo evento (messaggio, richiesta di trasferimento file, ecc...) viene ricevuto, i seguenti metodi possono venire usati per informarti di ciò. NOTA: Gli eventi per i nuovi messaggi avverranno solo se si tratta di un nuovo messaggio da un contatto con cui non si sta già chattando"
 
 #: ../src/gtkgui.glade.h:310
-#, fuzzy
 msgid "When new event is received"
-msgstr "Quando si riceve un nuovo messaggio"
+msgstr "Quando si riceve un nuovo evento"
 
 #: ../src/gtkgui.glade.h:311
 msgid "Work"
@@ -2891,9 +2885,8 @@ msgid "_Authorize"
 msgstr "_Autorizza"
 
 #: ../src/gtkgui.glade.h:323
-#, fuzzy
 msgid "_Background:"
-msgstr "_Sfondo"
+msgstr "_Sfondo:"
 
 #: ../src/gtkgui.glade.h:324
 msgid "_Ban"
@@ -3214,24 +3207,24 @@ msgstr "Cronologia conversazione con %s"
 #: ../src/history_window.py:113
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
-msgstr ""
+msgstr "%(nick)s ora è %(status)s: %(status_msg)s"
 
 #. remove last \n
 #: ../src/history_window.py:117
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s is now %(status)s\n"
-msgstr "%s è ora %s (%s)"
+msgstr "%(nick)s è ora %(status)s\n"
 
 #: ../src/history_window.py:136
-#, fuzzy, python-format
+#, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
-msgstr "Lo stato ora è: %s: %s"
+msgstr "Lo stato ora è: %(status)s: %(status_msg)s"
 
 #. remove last \n
 #: ../src/history_window.py:140
-#, fuzzy, python-format
+#, python-format
 msgid "Status is now: %(status)s\n"
-msgstr "Lo stato ora è: %s: %s"
+msgstr "Lo stato ora è: %(status)s\n"
 
 #: ../src/notify.py:95
 #, python-format
@@ -3702,7 +3695,7 @@ msgstr "Senza una connessione, non è possibile ottenere i dati personali."
 
 #: ../src/common/config.py:48
 msgid "Use DBus and Notification-Daemon to show notifications"
-msgstr ""
+msgstr "Usa DBus e Notification-Daemon per mostrare le notifiche"
 
 #: ../src/common/config.py:52
 msgid "Time in minutes, after which your status changes to away."
@@ -3777,6 +3770,7 @@ msgstr ""
 #: ../src/common/config.py:134
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr ""
+"Se marcato, Gajim può essere controllato da remoto usando gajim-remote."
 
 #: ../src/common/config.py:138
 msgid "Ask before closing a group chat tab/window."
@@ -3850,6 +3844,8 @@ msgid ""
 "If True, Gajim will ask for avatar each contact that did not have an avatar "
 "last time or has one cache that is too old."
 msgstr ""
+"Se Vero, Gajim chiederà un avatar ad ogni contatto che non aveva un avatar "
+"l'ultima volta o ne ha uno troppo vecchio in cache."
 
 #: ../src/common/config.py:165
 msgid ""
@@ -3982,7 +3978,7 @@ msgstr "Questa stanza non esiste."
 
 #: ../src/common/connection.py:453
 msgid "Room creation is restricted."
-msgstr ""
+msgstr "La creazione di stanze non è libera."
 
 #: ../src/common/connection.py:456
 msgid "Your registered nickname must be used."
@@ -4090,11 +4086,12 @@ msgstr "[Questo messaggio è cifrato]"
 #, python-format
 msgid "Registration information for transport %s has not arrived in time"
 msgstr ""
+"Le informazioni di registrazione per il transport %s non sono arrivate in "
+"tempo"
 
 #: ../src/common/connection.py:2301
-#, fuzzy
 msgid "Timeout"
-msgstr "Tempo"
+msgstr "Timeout"
 
 #: ../src/common/connection.py:2342 ../src/common/connection.py:2354
 msgid "A protocol error has occured:"
@@ -4345,6 +4342,22 @@ msgstr "Impossibile scrivere il file in %s"
 #~ "finestra di chat, le tre seguenti azioni possono accadere per informare "
 #~ "l'utente"
 
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "\n"
+#~ "== Original Message ==\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "\n"
+#~ "== Messaggio originale ==\n"
+#~ "%s"
+
+#~ msgid "Emoticons"
+#~ msgstr "Emoticon"
+
 #~ msgid "_Earliest"
 #~ msgstr "Più _vecchi"
 
@@ -4365,22 +4378,6 @@ msgstr "Impossibile scrivere il file in %s"
 
 #~ msgid "Allow controlling Gajim via D-Bus service."
 #~ msgstr "Permettere il controllo di Gajim attraverso il servizio D-Bus."
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "\n"
-#~ "== Original Message ==\n"
-#~ "%s"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "\n"
-#~ "== Messaggio originale ==\n"
-#~ "%s"
-
-#~ msgid "Emoticons"
-#~ msgstr "Emoticon"
 
 #~ msgid "Error:"
 #~ msgstr "Errore:"
