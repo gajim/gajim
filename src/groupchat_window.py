@@ -392,7 +392,7 @@ class GroupchatWindow(chat.Chat):
 		else:
 			image = state_images[contact.show]
 
-		name = contact.name
+		name = gtkgui_helpers.escape_for_pango_markup(contact.name)
 		status = contact.status
 		# add status msg, if not empty, under contact name in the treeview
 		if status and gajim.config.get('show_status_msgs_in_roster'):
@@ -810,7 +810,7 @@ class GroupchatWindow(chat.Chat):
 							self.print_conversation(s, room_jid)
 						else:
 							#%s is something the user wrote but it is not a jid so we inform
-							s = _('%s does not appear to be a JID') % invitee
+							s = _('%s does not appear to be a valid JID') % invitee
 							self.print_conversation(s, room_jid)
 					else:
 						self.get_command_help(command)
@@ -838,7 +838,7 @@ class GroupchatWindow(chat.Chat):
 									pass
 						else:
 							#%s is something the user wrote but it is not a jid so we inform
-							s = _('%s does not appear to be a JID') % message_array
+							s = _('%s does not appear to be a valid JID') % message_array
 							self.print_conversation(s, room_jid)
 					else:
 						self.get_command_help(command)
