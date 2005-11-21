@@ -387,6 +387,7 @@ class TabbedChatWindow(chat.Chat):
 	def on_tabbed_chat_window_destroy(self, widget):
 		# Reset contact chatstates to all open tabs
 		for jid in self.xmls:
+			self.send_chatstate('gone', jid)
 			self.contacts[jid].chatstate = None
 		#clean gajim.interface.instances[self.account]['chats']
 		chat.Chat.on_window_destroy(self, widget, 'chats')
