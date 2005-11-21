@@ -111,10 +111,10 @@ class HistoryWindow:
 			status_msg = ':'.join(data[2:])
 			if status_msg:
 				msg = _('%(nick)s is now %(status)s: %(status_msg)s') % {'nick': nick,
-					'status': show, 'status_msg': status_msg }
+					'status': helpers.get_uf_show(show), 'status_msg': status_msg }
 			else:
 				msg = _('%(nick)s is now %(status)s') % {'nick': nick,
-					'status': show }
+					'status': helpers.get_uf_show(show) }
 			tag_msg = 'status'
 		elif type == 'recv':
 			try:
@@ -133,9 +133,10 @@ class HistoryWindow:
 			status_msg = ':'.join(data[1:])
 			if status_msg:
 				msg = _('Status is now: %(status)s: %(status_msg)s') % \
-					{'status': data[0], 'status_msg': status_msg}
+					{'status': helpers.get_uf_show(data[0]), 'status_msg': status_msg}
 			else:
-				msg = _('Status is now: %(status)s') % { 'status': data[0] }
+				msg = _('Status is now: %(status)s') % { 'status':
+					helpers.get_uf_show(data[0]) }
 			tag_msg = 'status'
 
 		if name:
