@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gajim 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-21 16:07+0100\n"
-"PO-Revision-Date: 2005-11-21 16:08+0100\n"
-"Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
+"PO-Revision-Date: 2005-11-21 18:10+0100\n"
+"Last-Translator: François Toussenel <francois.toussenel@toussenel.org>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1307,11 +1307,11 @@ msgstr "nom du theme"
 
 #: ../src/gajim_themes_window.py:153
 msgid "You cannot delete your current theme"
-msgstr "Vous ne pouvez pas supprimez le thème actuel"
+msgstr "Vous ne pouvez pas supprimer le thème actuel"
 
 #: ../src/gajim_themes_window.py:154
 msgid "Please first choose another for your current theme."
-msgstr ""
+msgstr "Veuillez en choisir un autre comme nouveau thème actuel avant de supprimer celui-ci."
 
 #. if we are in many rooms
 #: ../src/groupchat_window.py:145
@@ -1540,7 +1540,7 @@ msgstr "Une erreure de programmation a été détectée"
 
 #: ../src/gtkexcepthook.py:47
 msgid "It probably is not fatal, but should be reported to the developers nonetheless."
-msgstr ""
+msgstr "Ce n'est probablement pas fatal, mais cela devrait tout de même être signalé aux développeurs."
 
 #: ../src/gtkexcepthook.py:53
 msgid "_Report Bug"
@@ -1561,6 +1561,9 @@ msgid ""
 "\n"
 "Please wait..."
 msgstr ""
+"<b>Création du compte en cours</b>\n"
+"\n"
+"Veuillez patienter..."
 
 #: ../src/gtkgui.glade.h:5
 msgid "<b>Advanced Configuration Editor</b>"
@@ -1960,7 +1963,7 @@ msgstr "_Affichier l'avatar des contacts dans la liste des contacts"
 
 #: ../src/gtkgui.glade.h:110
 msgid "Display status messages of contacts in roster"
-msgstr ""
+msgstr "Afficher les messages d'état des contacts dans la fenêtre principale"
 
 #: ../src/gtkgui.glade.h:111
 msgid "E-Mail"
@@ -2131,11 +2134,11 @@ msgstr "Si cette case est cochée, Gajim placera une icône dans la zone de noti
 
 #: ../src/gtkgui.glade.h:158
 msgid "If checked, Gajim will display an avatar, if one is set, for every contact in roster window"
-msgstr ""
+msgstr "Si cette case est cochée, Gajim affichera l'avatar, s'il est disponible, de chaque contact dans la fenêtre principale"
 
 #: ../src/gtkgui.glade.h:159
 msgid "If checked, Gajim will display the status message, if not empty, for every contact under the contact name in roster window"
-msgstr ""
+msgstr "Si cette case est cochée, Gajim affichera le message d'état, s'il n'est pas vide, pour chaque contact sous le nom du contact dans la fenêtre principale"
 
 #: ../src/gtkgui.glade.h:160
 msgid "If checked, Gajim will join this group chat on startup"
@@ -2171,7 +2174,7 @@ msgstr "Si cette case est cochée, au démarrage, Gajim se connectera automatiqu
 
 #: ../src/gtkgui.glade.h:168
 msgid "If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly"
-msgstr ""
+msgstr "Si cette case est cochée, toute modification de l'état global (accessible à l'aide du bouton en bas de la fenêtre principale) sera répercutée sur l'état de ce compte"
 
 #: ../src/gtkgui.glade.h:169
 msgid "If you have 2 or more accounts and it is checked, Gajim will list all contacts as if you had one account"
@@ -2709,7 +2712,7 @@ msgstr "Quand le transfert de fichier est terminé, montrer une fenêtre de noti
 
 #: ../src/gtkgui.glade.h:309
 msgid "When a new event (message, file transfer request etc..) is received, the following methods may be used to inform you about it. NOTE: New message events only occur if it is a new message from a contact you are not already chatting with"
-msgstr ""
+msgstr "Lorsqu'un nouvel événement (message, requête de transfert de fichier, etc.) est reçu, les méthodes suivantes peuvent être utilisées pour vous en informer. NB : Les événements de message nouveau ne surviennent que s'ils proviennent d'un contact avec qui vous n'êtes pas en train de parler"
 
 #: ../src/gtkgui.glade.h:310
 msgid "When new event is received"
@@ -3088,7 +3091,7 @@ msgstr "Historique de Conversation avec %s"
 #: ../src/history_window.py:113
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
-msgstr ""
+msgstr "%(nick)s est maintenant %(status)s : %(status_msg)s"
 
 #. remove last \n
 #: ../src/history_window.py:117
@@ -3110,7 +3113,7 @@ msgstr "L'état est maintenant : %(status)s\n"
 #: ../src/notify.py:95
 #, python-format
 msgid "%(nickname)s in room %(room_name)s has sent you a new message."
-msgstr ""
+msgstr "%(nickname)s du salon %(room_name)s vous a envoyé un nouveau message."
 
 #. we talk about a name here
 #: ../src/notify.py:99
@@ -3127,24 +3130,24 @@ msgstr "%s veut vous envoyer un fichier."
 #: ../src/notify.py:119
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
-msgstr ""
+msgstr "Vous avez bien reçu %(filename)s de la part de %(name)s."
 
 #. ft stopped
 #: ../src/notify.py:122
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
-msgstr ""
+msgstr "Le transfert du fichier %(filename)s de la part de %(name)s est arrêté."
 
 #: ../src/notify.py:134
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
-msgstr ""
+msgstr "Vous avez bien envoyé %(filename)s à %(name)s."
 
 #. ft stopped
 #: ../src/notify.py:137
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
-msgstr ""
+msgstr "Le transfert du fichier %(filename)s à %(name)s est arrêté."
 
 #: ../src/remote_control.py:55
 msgid "D-Bus python bindings are missing in this computer"
@@ -3275,7 +3278,7 @@ msgstr "En supprimant ce contact, vous supprimez également son autorisation. Le
 
 #: ../src/roster_window.py:1384
 msgid "I want this contact to know my status after removal"
-msgstr ""
+msgstr "Je veux que ce contact connaisse mon état de présence après la suppression"
 
 #: ../src/roster_window.py:1426
 msgid "Password Required"
@@ -3306,12 +3309,12 @@ msgstr "Enregistrer le mot de passe"
 #: ../src/roster_window.py:1509
 #: ../src/roster_window.py:1569
 msgid "You are participating in one or more group chats"
-msgstr ""
+msgstr "Vous participez à un ou plusieurs salons"
 
 #: ../src/roster_window.py:1510
 #: ../src/roster_window.py:1570
 msgid "Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?"
-msgstr ""
+msgstr "Basculer en état invisible aura pour effet de vous déconnecter de ces salons. Êtes-vous sûr(e) de vouloir être invisible ?"
 
 #: ../src/roster_window.py:1529
 msgid "No account available"
@@ -3515,7 +3518,7 @@ msgstr "En train de transférer"
 
 #: ../src/tooltips.py:543
 msgid "This service has not yet responded with detailed information"
-msgstr ""
+msgstr "Ce service n'a pas encore répondu d'information détaillée"
 
 #: ../src/tooltips.py:545
 msgid ""
@@ -3565,7 +3568,7 @@ msgstr ""
 
 #: ../src/common/config.py:52
 msgid "Time in minutes, after which your status changes to away."
-msgstr ""
+msgstr "Temps en minutes, au bout duquel votre état bascule en absent."
 
 #: ../src/common/config.py:53
 msgid "Away as a result of being idle"
@@ -3573,7 +3576,7 @@ msgstr "Absent car inactif"
 
 #: ../src/common/config.py:55
 msgid "Time in minutes, after which your status changes to not available."
-msgstr ""
+msgstr "Temps en minutes, au bout duquel votre état bascule en non disponible."
 
 #: ../src/common/config.py:56
 msgid "Not available as a result of being idle"
@@ -3585,23 +3588,23 @@ msgstr ""
 
 #: ../src/common/config.py:121
 msgid "Add * and [n] in roster title?"
-msgstr ""
+msgstr "Ajouter * et [n] dans le titre de la fenêtre principale ?"
 
 #: ../src/common/config.py:122
 msgid "How many lines to remember from previous conversation when a chat tab/window is reopened."
-msgstr ""
+msgstr "Nombre de lignes à réafficher d'anciennes conversations lorsque l'onglet ou la fenêtre de discussion est ouvert(e) à nouveau."
 
 #: ../src/common/config.py:123
 msgid "How many minutes should last lines from previous conversation last."
-msgstr ""
+msgstr "Durée de vie en minutes des dernières lignes des conversations précédentes."
 
 #: ../src/common/config.py:124
 msgid "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour)."
-msgstr ""
+msgstr "Envoyer le message avec Ctrl+Entrée et aller à la ligne avec Entrée (comportement par défaut du client ICQ de Mirabilis)."
 
 #: ../src/common/config.py:126
 msgid "How many lines to store for key up."
-msgstr ""
+msgstr "Nombre de lignes à stocker pour le rappel des lignes précédentes (avec Ctrl+flèche vers le haut)."
 
 #. which version created the config
 #: ../src/common/config.py:128
@@ -3610,7 +3613,7 @@ msgstr "Utiliser la vue compacte quand vous ouvrez une fenêtre de discussion"
 
 #: ../src/common/config.py:129
 msgid "Use compact view when you open a group chat window"
-msgstr ""
+msgstr "Utiliser la vue compacte quand vous ouvrez une fenêtre de salon"
 
 #: ../src/common/config.py:131
 #, python-format
@@ -3619,11 +3622,11 @@ msgstr ""
 
 #: ../src/common/config.py:134
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr ""
+msgstr "Si cette case est cochée, Gajim pourra être contrôlé à distance en utilisant gajim-remote."
 
 #: ../src/common/config.py:138
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
+msgstr "Demander avant de fermer un onglet ou une fenêtre de discussion."
 
 #. notif. on file complete
 #. port, used for file transfers
@@ -3633,7 +3636,7 @@ msgstr ""
 
 #: ../src/common/config.py:143
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
-msgstr ""
+msgstr "D'après le standard IEC, KiB = 1024 bytes, KB = 1000 bytes."
 
 #: ../src/common/config.py:151
 msgid "Show tab when only one conversation?"
@@ -3645,11 +3648,11 @@ msgstr "Montrer l'onglet quand il n'y a qu'une discution ?"
 
 #: ../src/common/config.py:153
 msgid "Show close button in tab?"
-msgstr ""
+msgstr "Afficher le bouton fermer sur l'onglet ?"
 
 #: ../src/common/config.py:158
 msgid "A semicolon-separated list of words that will be highlighted in multi-user chat."
-msgstr ""
+msgstr "Une liste de mots séparés par des points-virgules qui seront mis en surbrillance dans les salons."
 
 #: ../src/common/config.py:159
 msgid "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
@@ -3665,7 +3668,7 @@ msgstr ""
 
 #: ../src/common/config.py:162
 msgid "If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window"
-msgstr ""
+msgstr "Si vrai, Gajim affichera le message d'état, s'il n'est pas vide, pour chaque contact sous le nom du contact dans la fenêtre principale"
 
 #: ../src/common/config.py:164
 msgid "If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cache that is too old."
@@ -3673,7 +3676,7 @@ msgstr ""
 
 #: ../src/common/config.py:165
 msgid "If False, you will no longer see status line in chats when a contact changes his or her status and/or his status message."
-msgstr ""
+msgstr "Si faux, vous ne verrez plus les lignes d'état dans les conversations quand un contact modifie son état et/ou son message d'état."
 
 #: ../src/common/config.py:323
 msgid "Sleeping"
@@ -3729,11 +3732,11 @@ msgstr "Je suis dehors à profiter de la vie"
 
 #: ../src/common/config.py:338
 msgid "Sound to play when a MUC message contains one of the words in muc_highlight_words, or when a MUC message contains your nickname."
-msgstr ""
+msgstr "Son à jouer lorsqu'un message de salon contient un des mots de muc_highlight_words, ou lorsqu'un message de salon contient votre surnom."
 
 #: ../src/common/config.py:339
 msgid "Sound to play when any MUC message arrives. (This setting is taken into account only if notify_on_all_muc_messages is True)"
-msgstr ""
+msgstr "Son à jouer lorsqu'un message quelconque de salon arrive. (Ce réglage est pris en compte seulement si notify_on_all_muc_messages est vrai)"
 
 #. sorted alphanum
 #: ../src/common/config.py:344
@@ -3742,7 +3745,7 @@ msgstr "vert"
 
 #: ../src/common/config.py:348
 msgid "grocery"
-msgstr ""
+msgstr "épicerie"
 
 #: ../src/common/config.py:352
 msgid "human"
@@ -3782,7 +3785,7 @@ msgstr "Impossible de rejoindre le salon"
 
 #: ../src/common/connection.py:444
 msgid "A password is required to join this room."
-msgstr ""
+msgstr "Un mot de passe est requis pour rejoindre ce salon."
 
 #: ../src/common/connection.py:447
 msgid "You are banned from this room."
@@ -3798,7 +3801,7 @@ msgstr "La création de salon est réservée"
 
 #: ../src/common/connection.py:456
 msgid "Your registered nickname must be used."
-msgstr ""
+msgstr "Vous devez utiliser votre surnom enregistré."
 
 #: ../src/common/connection.py:459
 msgid "You are not in the members list."
@@ -3902,7 +3905,7 @@ msgstr "[ce message est chiffré]"
 #: ../src/common/connection.py:1969
 #, python-format
 msgid "Registration information for transport %s has not arrived in time"
-msgstr ""
+msgstr "L'information d'enregistrement pour le transport %s n'est pas arrivée à temps"
 
 #: ../src/common/connection.py:2301
 msgid "Timeout"
