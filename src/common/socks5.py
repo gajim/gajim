@@ -35,8 +35,7 @@ MAX_BUFF_LEN = 65536
 
 class SocksQueue:
 	''' queue for all file requests objects '''
-	def __init__(self, complete_transfer_cb = None, 
-		progress_transfer_cb = None):
+	def __init__(self, complete_transfer_cb = None, progress_transfer_cb = None):
 		self.connected = 0
 		self.readers = {}
 		self.files_props = {}
@@ -306,14 +305,11 @@ running instance of Gajim. \nFile Transfer will be canceled.\n==================
 		'''
 		if result is None:
 			return
-		if result in (0, -1) and \
-			self.complete_transfer_cb is not None:
+		if result in (0, -1) and self.complete_transfer_cb is not None:
 			account = actor.account
-			self.complete_transfer_cb(account, 
-				actor.file_props)
+			self.complete_transfer_cb(account, actor.file_props)
 		elif self.progress_transfer_cb is not None:
-			self.progress_transfer_cb(actor.account, 
-				actor.file_props)
+			self.progress_transfer_cb(actor.account, actor.file_props)
 	
 	def remove_receiver(self, idx, do_disconnect = True):
 		''' Remove reciver from the list and decrease 
