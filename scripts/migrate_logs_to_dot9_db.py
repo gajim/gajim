@@ -27,10 +27,6 @@ cur.executescript(
 		show TEXT,
 		message TEXT
 	);
-	
-	
-	CREATE UNIQUE INDEX JID_Index ON jids (jid);
-	CREATE INDEX JID_ID_Index ON logs (jid_id);
 	'''
 	)
 
@@ -129,3 +125,10 @@ if __name__ == '__main__':
 	f.write('You can always run the migration script to import you old logs to the database\n')
 	f.write('Thank you\n')
 	f.close()
+	# after huge import create the indices (they are slow on massive insert)
+	cur.executescript(
+		'''
+		CREATE UNIQUE INDEX JID_Index ON jids (jid);
+		CREATE INDEX JID_ID_Index ON logs (jid_id);
+		'''
+	)
