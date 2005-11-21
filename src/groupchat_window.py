@@ -1128,14 +1128,7 @@ current room topic.') % command, room_jid)
 				vcard.VcardWindow(c2, self.account, False)
 
 	def on_history(self, widget, room_jid, nick):
-		c = gajim.gc_contacts[self.account][room_jid][nick]
-		if c.jid and c.resource:
-			# on GC, we know resource only if we're mod and up
-			jid = c.jid
-			fjid = c.jid + '/' + c.resource
-		else:
-			fjid = gajim.construct_fjid(room_jid, nick)
-			jid = fjid
+		jid = gajim.construct_fjid(room_jid, nick)
 		self.on_history_menuitem_clicked(jid = jid)
 
 	def on_add_to_roster(self, widget, jid):
