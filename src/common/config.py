@@ -45,6 +45,7 @@ class Config:
 		'notify_on_signout': [ opt_bool, False ],
 		'notify_on_new_message': [ opt_bool, True ],
 		'autopopupaway': [ opt_bool, False ],
+		'use_notif_daemon': [ opt_bool, True , _('Use DBus and Notification-Daemon to show notifications') ],
 		'ignore_unknown_contacts': [ opt_bool, False ],
 		'showoffline': [ opt_bool, False ],
 		'autoaway': [ opt_bool, True ],

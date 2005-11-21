@@ -42,10 +42,16 @@ _ = i18n._
 
 def dbus_get_interface():
 	try:
-		session_bus = dbus.SessionBus()
-		obj = session_bus.get_object('org.freedesktop.Notifications',
-			'/org/freedesktop/Notifications')
-		return dbus.Interface(obj, 'org.freedesktop.Notifications')
+		interface = 'org.freedesktop.Notifications'
+		path = '/org/freedesktop/Notifications'
+		bus = dbus.SessionBus()
+		obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
+		dbus_iface = dbus.Interface(obj, 'org.freedesktop.DBus')
+		avail = dbus_iface.ListNames()
+		if not interface in avail:
+			return None
+		obj = bus.get_object(interface, path)
+		return dbus.Interface(obj, interface)
 	except Exception, e:
 		return None
 	except dbus.DBusException, e:
@@ -148,7 +154,7 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 		[dbus.String(path)], [''], [''], True, dbus.UInt32(5))
 
 def notify(event_type, jid, account, msg_type = '', file_props = None):
-	if dbus_available():
+	if dbus_available() and gajim.config.get('use_notif_daemon'):
 		try:
 			dbus_notify(event_type, jid, account, msg_type, file_props)
 			return
