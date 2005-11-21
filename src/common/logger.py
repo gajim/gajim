@@ -186,31 +186,31 @@ class Logger:
 		done = False
 		found_first_line_that_matches = False
 		while not done:
-			line = f.readline().decode('utf-8')
+			line = f.readline()
 			if line:
 				line = helpers.from_one_line(line)
 				splitted_line = line.split(':')
 				if len(splitted_line) > 2:
-					if splitted_line:
-						# line[0] is date, line[1] is type of message
-						# line[2:] is message
-						date = splitted_line[0]
-						# eg. 2005
-						line_year = int(time.strftime('%Y', time.localtime(float(date))))
-						# (01 - 12)
-						line_month = int(time.strftime('%m', time.localtime(float(date))))
-						# (01 - 31)
-						line_day = int(time.strftime('%d', time.localtime(float(date))))
-						
-						# now check if that line is one of the lines we want
-						# (if it is in the date we want)
-						if line_year == year and line_month == month and line_day == day:
-							if found_first_line_that_matches is False:
-								found_first_line_that_matches = True
-							lines.append(splitted_line)
-						else:
-							if found_first_line_that_matches:
-								done = True
+					# line[0] is date, line[1] is type of message
+					# line[2:] is message
+					date = splitted_line[0]
+					date = time.localtime(float(date))
+					# eg. 2005
+					line_year = int(time.strftime('%Y', date))
+					# (01 - 12)
+					line_month = int(time.strftime('%m', date))
+					# (01 - 31)
+					line_day = int(time.strftime('%d', date))
+					
+					# now check if that line is one of the lines we want
+					# (if it is in the date we want)
+					if line_year == year and line_month == month and line_day == day:
+						if found_first_line_that_matches is False:
+							found_first_line_that_matches = True
+						lines.append(splitted_line)
+					else:
+						if found_first_line_that_matches: # we had a match before
+							done = True # but no more. so we're done with that date
 			
 			else:
 				done = True
