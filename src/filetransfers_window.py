@@ -512,7 +512,7 @@ _('Connection with peer cannot be established.'))
 			return None
 		if stat[6] == 0:
 			dialogs.ErrorDialog(_('Invalid File'), 
-			_('It is not possible to send files with length of 0 byte')).get_response()
+			_('It is not possible to send empty files')).get_response()
 			return None
 		file_props['elapsed-time'] = 0
 		file_props['size'] = unicode(stat[6])
