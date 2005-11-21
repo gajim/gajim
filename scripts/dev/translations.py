@@ -43,7 +43,7 @@ def update_pot():
 
 if __name__ == '__main__':
 	if os.path.basename(os.getcwd()) != 'dev':
-		print 'run me with cwd: scripts'
+		print 'run me with cwd: scripts/dev'
 		sys.exit()
 
 	path_to_dir = '../../po'
