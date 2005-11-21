@@ -156,8 +156,7 @@ using this account'), False)
 					[ ]
 				],
 			'prefs_put': [
-					_('Set value of \'key\' to \'value\'. If there is no such key, \
-new item in the preferences is inserted.'),
+					_('Set value of \'key\' to \'value\'.'),
 					[
 						(_('key=value'), _('\'key\' is the name of the preference, \
 \'value\' is the value to set it to'), True)
