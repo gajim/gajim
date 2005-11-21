@@ -4629,16 +4629,16 @@ Agent JID - node</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkEventBox" id="eventbox1">
+				<widget class="GtkEventBox" id="eventbox">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">When a new message is received which is not from a contact already in a chat window, the three following actions may happen in order for you to be informed about it</property>
+				  <property name="tooltip" translatable="yes">When a new event (message, file transfer request etc..) is received, the following methods may be used to inform you about it. NOTE: New message events only occur if it is a new message from a contact you are not already chatting with</property>
 				  <property name="visible_window">True</property>
 				  <property name="above_child">False</property>
 
 				  <child>
 				    <widget class="GtkLabel" id="label233">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">When new message is received</property>
+				      <property name="label" translatable="yes">When new event is received</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
