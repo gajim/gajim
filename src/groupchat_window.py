@@ -928,7 +928,7 @@ to the specified occupant.') % command, room_jid)
 or tab, displaying reason if specified.') % command, room_jid)
 		elif command == 'compact':
 			self.print_conversation(_('Usage: /%s, sets the groupchat window to \
-compact	mode.') % command, room_jid)
+compact mode.') % command, room_jid)
 		elif command == 'invite':
 			self.print_conversation(_('Usage: /%s <JID> [reason], invites JID to the \
 current room, optionally providing a reason.') % command, room_jid)
