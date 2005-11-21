@@ -1954,6 +1954,10 @@ class Connection:
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
 
+	def _ReceivedRegInfo(self, con, resp, agent):
+		common.xmpp.features._ReceivedRegInfo(con, resp, agent)
+		self._IqCB(con, resp)
+
 	def request_register_agent_info(self, agent):
 		if not self.connection:
 			return None
@@ -1964,8 +1968,8 @@ class Connection:
 		self.awaiting_timeouts[time.time() + 30] = (id,
 			_('Registration information for transport %s has not arrived in time' % \
 			agent))
-		self.connection.SendAndCallForResponse(iq,
-			common.xmpp.features._ReceivedRegInfo, {'agent': agent})
+		self.connection.SendAndCallForResponse(iq, self._ReceivedRegInfo,
+			{'agent': agent})
 
 	def register_agent(self, agent, info, is_form = False):
 		if not self.connection:
