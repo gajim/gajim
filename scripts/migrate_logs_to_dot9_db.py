@@ -6,6 +6,7 @@ from pysqlite2 import dbapi2 as sqlite
 
 PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
 
+jid_in = []
 path_to_db = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
 con = sqlite.connect(path_to_db) 
 cur = con.cursor()
@@ -52,7 +53,7 @@ def from_one_line(msg):
 def get_jid(dirname, filename):
 	# TABLE NAME will be JID if TC-related, room_jid if GC-related,
 	# ROOM_JID/nick if pm-related
-	if dirname.endswith('logs/'): # basename(gajim.LOGPATH)
+	if dirname.endswith('logs'): # basename(gajim.LOGPATH)
 		# we have file (not dir) in logs base dir, so it's TC
 		jid = filename # file is JID
 	else:
@@ -70,15 +71,22 @@ def get_jid(dirname, filename):
 
 def visit(arg, dirname, filenames):
 	for filename in filenames:
+		if filename == 'notify.log':
+			continue
 		path_to_text_file = os.path.join(dirname, filename)
 		if os.path.isdir(path_to_text_file):
 			continue
 
 		jid = get_jid(dirname, filename)
-		cur.execute('INSERT INTO jids (jid) VALUES (?)', (jid,))
-		con.commit()
-		
-		cur.execute('SELECT MAX(jid) FROM jids')
+		print 'Processing', jid
+		if jid in jid_in:
+			cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
+		else:
+			jid_in.append(jid)
+			cur.execute('INSERT INTO jids (jid) VALUES (?)', (jid,))
+			con.commit()
+
+			cur.execute('SELECT MAX(jid) FROM jids')
 		JID_ID = cur.fetchone()[0]
 		
 		f = open(path_to_text_file, 'r')
@@ -86,13 +94,16 @@ def visit(arg, dirname, filenames):
 		for line in lines:
 			line = from_one_line(line)
 			splitted_line = line.split(':')
-			# 'gc', 'gcstatus', 'recv', 'sent' and if nothing of those
-			# it is status
-			type = splitted_line[1] # line[1] has type of logged message
-			message_data = splitted_line[2:] # line[2:] has message data
 			if len(splitted_line) > 2:
+				# 'gc', 'gcstatus', 'recv', 'sent' and if nothing of those
+				# it is status
+				type = splitted_line[1] # line[1] has type of logged message
+				message_data = splitted_line[2:] # line[2:] has message data
 				# line[0] is date,
-				tim = int(float(splitted_line[0]))
+				try:
+					tim = int(float(splitted_line[0]))
+				except:
+					continue
 				
 				sql = 'INSERT INTO logs (jid_id, contact_name, time, type, show, message) '\
 					'VALUES (?, ?, ?, ?, ?, ?)'
