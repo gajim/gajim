@@ -1118,6 +1118,9 @@ class Connection:
 		if not qp:
 			qp = []
 		for i in qp:
+			# CDATA payload is not processed, only nodes
+			if not isinstance(i, common.xmpp.simplexml.Node):
+				continue
 			attr = {}
 			for key in i.getAttrs():
 				attr[key] = i.getAttrs()[key]
