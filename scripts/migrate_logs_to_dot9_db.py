@@ -54,7 +54,7 @@ def from_one_line(msg):
 def get_jid(dirname, filename):
 	# TABLE NAME will be JID if TC-related, room_jid if GC-related,
 	# ROOM_JID/nick if pm-related
-	if dirname.endswith('logs'): # basename(gajim.LOGPATH)
+	if dirname.endswith('logs') or dirname.endswith('Logs'):
 		# we have file (not dir) in logs base dir, so it's TC
 		jid = filename # file is JID
 	else:
