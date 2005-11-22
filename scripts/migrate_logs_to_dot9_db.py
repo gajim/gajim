@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sre
+import sys
 
 from pysqlite2 import dbapi2 as sqlite
 
@@ -16,12 +17,16 @@ else:
 	PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
 	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
 
+if os.path.exists(PATH_TO_DB):
+	print 'file %s or directory already exists. Exiting..' % PATH_TO_DB
+	sys.exit()
+	
 jids_already_in = [] # jid we already put in DB
 con = sqlite.connect(PATH_TO_DB) 
 cur = con.cursor()
 # create the tables
 # type can be 'gc', 'gcstatus', 'recv', 'sent', 'status'
-# logs --> jids.jid_id but Sqlite doesn't do FK etc so it's done in python code
+# logs.jid_id --> jids.jid_id but Sqlite doesn't do FK etc so it's done in python code
 cur.executescript(
 	'''
 	CREATE TABLE jids(
@@ -60,8 +65,8 @@ def from_one_line(msg):
 
 
 def get_jid(dirname, filename):
-	# TABLE NAME will be JID if TC-related, room_jid if GC-related,
-	# ROOM_JID/nick if pm-related
+	# jids.jid text column will be JID if TC-related, room_jid if GC-related,
+	# ROOM_JID/nick if pm-related. Here I get names from filenames
 	if dirname.endswith('logs') or dirname.endswith('Logs'):
 		# we have file (not dir) in logs base dir, so it's TC
 		jid = filename # file is JID
