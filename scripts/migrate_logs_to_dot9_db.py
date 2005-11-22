@@ -18,7 +18,7 @@ else:
 	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
 
 if os.path.exists(PATH_TO_DB):
-	print 'file %s or directory already exists. Exiting..' % PATH_TO_DB
+	print '%s already exists. Exiting..' % PATH_TO_DB
 	sys.exit()
 	
 jids_already_in = [] # jid we already put in DB
