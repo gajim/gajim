@@ -1204,19 +1204,18 @@ class Interface:
 					gajim.mutex_events_for_ui.unlock()
 			time.sleep(0.01) # so threads in connection.py have time to run
 			return True # renew timeout (loop for ever)
-		except KeyboardInterrupt:
+		except KeyboardInterrupt: # FIXME: can this happen?? CTRL+C IS CATCHED BY SIGNAL
 			sys.exit()
 		return False
 
 	def save_config(self):
-		err_code = parser.write()
-		if err_code is not None:
-			strerr = os.strerror(err_code)
-			print strerr
+		err_str = parser.write()
+		if err_str is not None:
+			print >> sys.stderr, err_str
 			# it is good to notify the user
 			# in case he or she cannot see the output of the console
-			dialogs.ErrorDialog(_('Cannot save your preferences'),
-				strerr).get_response()
+			dialogs.ErrorDialog(_('Could not save your settings and preferences'),
+				err_str).get_response()
 			sys.exit(1)
 
 	def __init__(self):

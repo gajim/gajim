@@ -101,18 +101,14 @@ class OptionsParser:
 			pass
 		self.__tempfile = os.path.join(base_dir, '.' + filename)
 		try:
-			fd = open(self.__tempfile, 'w')
-		except:
-			#chances are we cannot write file in a directory
-			err_str = _('Unable to write file in %s') % base_dir
-			print err_str
-			return err_str
+			f = open(self.__tempfile, 'w')
+		except IOError, e:
+			return str(e)
 		try:
 			gajim.config.foreach(self.write_line, fd)
 		except IOError, e:
-			fd.close()
-			return e.errno
-		fd.close()
+			return str(e)
+		f.close()
 		if os.path.exists(self.__filename):
 			# win32 needs this
 			try:
@@ -122,7 +118,7 @@ class OptionsParser:
 		try:
 			os.rename(self.__tempfile, self.__filename)
 		except IOError, e:
-			return e.errno
+			return str(e)
 		os.chmod(self.__filename, 0600)
 
 	def update_config(self, old_version, new_version):
