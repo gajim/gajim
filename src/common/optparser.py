@@ -105,7 +105,7 @@ class OptionsParser:
 		except IOError, e:
 			return str(e)
 		try:
-			gajim.config.foreach(self.write_line, fd)
+			gajim.config.foreach(self.write_line, f)
 		except IOError, e:
 			return str(e)
 		f.close()
