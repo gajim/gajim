@@ -38,20 +38,25 @@ log = logging.getLogger('Gajim')
 log.addHandler(h)
 
 logger = common.logger.Logger()
-DATA_DIR = '../data'
-LOGPATH = os.path.expanduser('~/.gajim/logs')
-VCARDPATH = os.path.expanduser('~/.gajim/vcards')
 if os.name == 'nt':
 	if '.svn' not in os.listdir('.'): # we are normal users (not svn users)
 		DATA_DIR = 'data'
 	try:
 		# Documents and Settings\[User Name]\Application Data\Gajim\logs
-		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs')
+		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs') # deprecated
+		LOG_DB_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'logs.db')
 		VCARDPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Vcards')
 	except KeyError:
-		# win9x, ./logs
-		LOGPATH = 'Logs'
+		# win9x, ./Logs etc
+		LOGPATH = 'Logs' # deprecated
 		VCARDPATH = 'Vcards'
+		LOG_DB_PATH = 'logs.db'
+else: # Unices
+	DATA_DIR = '../data'
+	LOGPATH = os.path.expanduser('~/.gajim/logs') # deprecated
+	LOG_DB_PATH = os.path.expanduser('~/.gajim/logs.db')
+	VCARDPATH = os.path.expanduser('~/.gajim/vcards')
+
 try:
 	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
 	VCARDPATH = VCARDPATH.decode(sys.getfilesystemencoding())
