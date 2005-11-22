@@ -30,7 +30,7 @@ cur = con.cursor()
 cur.executescript(
 	'''
 	CREATE TABLE jids(
-		jid_id INTEGER PRIMARY KEY AUTOINCREMENT,
+		jid_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 		jid TEXT UNIQUE
 	);
 	
@@ -98,13 +98,14 @@ def visit(arg, dirname, filenames):
 		# jid is already in the DB, don't create the table, just get his jid_id
 		if jid in jids_already_in:
 			cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
+			JID_ID = cur.fetchone()[0]
 		else:
 			jids_already_in.append(jid)
 			cur.execute('INSERT INTO jids (jid) VALUES (?)', (jid,))
 			con.commit()
 
-			cur.execute('SELECT MAX(jid) FROM jids')
-		JID_ID = cur.fetchone()[0]
+			JID_ID = cur.lastrowid
+		
 		
 		f = open(path_to_text_file, 'r')
 		lines = f.readlines()
@@ -118,7 +119,7 @@ def visit(arg, dirname, filenames):
 				message_data = splitted_line[2:] # line[2:] has message data
 				# line[0] is date,
 
-				# some lines can be fucked up, just trop them
+				# some lines can be fucked up, just drop them
 				try:
 					tim = int(float(splitted_line[0]))
 				except:
@@ -160,6 +161,6 @@ if __name__ == '__main__':
 	cur.executescript(
 		'''
 		CREATE UNIQUE INDEX jids_already_index ON jids (jid);
-		CREATE INDEX JID_ID_Index ON logs (jid_id);
+		CREATE INDEX jid_id_index ON logs (jid_id);
 		'''
 	)
