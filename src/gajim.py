@@ -315,9 +315,9 @@ class Interface:
 					old_show = 0
 					contact1 = Contact(jid = contact1.jid, name = contact1.name,
 						groups = contact1.groups, show = contact1.show,
-						status = contact1.status, sub = contact1.sub, ask = contact1.ask,
-						resource = contact1.resource, priority = contact1.priority,
-						keyID = contact1.keyID)
+						status = contact1.status, sub = contact1.sub,
+						ask = contact1.ask, resource = contact1.resource,
+						priority = contact1.priority, keyID = contact1.keyID)
 					lcontact.append(contact1)
 				contact1.resource = resource
 			if contact1.jid.find('@') > 0 and len(lcontact) == 1: # It's not an agent
