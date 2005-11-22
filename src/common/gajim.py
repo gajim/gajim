@@ -37,10 +37,13 @@ h.setFormatter(f)
 log = logging.getLogger('Gajim')
 log.addHandler(h)
 
-logger = common.logger.Logger()
+logger = common.logger.Logger() # init the logger
+
 if os.name == 'nt':
 	if '.svn' not in os.listdir('.'): # we are normal users (not svn users)
 		DATA_DIR = 'data'
+	else:
+		DATA_DIR = os.path.join('..', 'data')
 	try:
 		# Documents and Settings\[User Name]\Application Data\Gajim\logs
 		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs') # deprecated
