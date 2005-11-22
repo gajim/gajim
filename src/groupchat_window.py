@@ -1339,7 +1339,9 @@ current room topic.') % command, room_jid)
 		if self._last_selected_contact is not None:
 			# update unselected row
 			room_jid, nick = self._last_selected_contact
-			self.draw_contact(room_jid, nick)
+			# last selected can be in a closed room, so prevent KeyError
+			if room_jid in self.list_treeview.keys():
+				self.draw_contact(room_jid, nick)
 		if selected_iter is None:
 			self._last_selected_contact = None
 			return
