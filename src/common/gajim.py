@@ -46,8 +46,8 @@ if os.name == 'nt':
 		DATA_DIR = 'data'
 	try:
 		# Documents and Settings\[User Name]\Application Data\Gajim\logs
-		LOGPATH = os.environ['appdata'] + '/Gajim/Logs'
-		VCARDPATH = os.environ['appdata'] + '/Gajim/Vcards'
+		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs')
+		VCARDPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Vcards')
 	except KeyError:
 		# win9x, ./logs
 		LOGPATH = 'Logs'

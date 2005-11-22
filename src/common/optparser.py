@@ -171,4 +171,5 @@ class OptionsParser:
 				gajim.config.add_per('emoticons', emot)
 				gajim.config.set_per('emoticons', emot, 'path',
 					gajim.config.emoticons_default[emot])
+		
 		gajim.config.set('version', '0.9')
