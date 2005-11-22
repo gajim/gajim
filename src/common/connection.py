@@ -2228,12 +2228,13 @@ class Connection:
 			if config[i].has_key('var'):
 				tag.setAttr('var', config[i]['var'])
 			if config[i].has_key('values'):
-				for val in  config[i]['values']:
+				for val in config[i]['values']:
 					if val == False:
 						val = '0'
 					elif val == True:
 						val = '1'
-					tag.setTagData('value', val)
+					# Force to create a new child
+					tag.addChild('value').addData(val)
 			i += 1
 
 	def send_gc_config(self, room_jid, config):

@@ -1727,6 +1727,13 @@ class DataFormWindow:
 	def on_checkbutton_toggled(self, widget, index):
 		self.config[index]['values'][0] = widget.get_active()
 
+	def on_checkbutton_toggled2(self, widget, index1, index2):
+		val = self.config[index1]['options'][index2]['values'][0]
+		if widget.get_active() and val not in self.config[index1]['values']:
+			self.config[index1]['values'].append(val)
+		elif not widget.get_active() and val in self.config[index1]['values']:
+			self.config[index1]['values'].remove(val)
+
 	def on_combobox_changed(self, widget, index):
 		self.config[index]['values'][0] = self.config[index]['options'][ \
 			widget.get_active()]['values'][0]
@@ -1739,6 +1746,7 @@ class DataFormWindow:
 		self.config[index]['values'][0] = widget.get_text(begin, end)
 		
 	def fill_table(self):
+		'''see JEP0004'''
 		if self.config.has_key('title'):
 			self.window.set_title(self.config['title'])
 		if self.config.has_key('instructions'):
@@ -1780,8 +1788,18 @@ class DataFormWindow:
 				#TODO
 				widget = gtk.Label('')
 			elif ctype == 'list-multi':
-				#TODO
-				widget = gtk.Label('')
+				j = 0
+				widget = gtk.Table(1, 1)
+				while self.config[i]['options'].has_key(j):
+					widget.resize(j + 1, 1)
+					child = gtk.CheckButton(self.config[i]['options'][j]['label'],
+						False)
+					if self.config[i]['options'][j]['values'][0] in self.config[i]['values']:
+						child.set_active(True)
+					child.connect('toggled', self.on_checkbutton_toggled2, i, j)
+					widget.attach(child, 0, 1, j, j+1)
+					j += 1
+				max = 4
 			elif ctype == 'list-single':
 				widget = gtk.combo_box_new_text()
 				widget.connect('changed', self.on_combobox_changed, i)
