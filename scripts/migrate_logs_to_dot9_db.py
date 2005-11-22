@@ -4,12 +4,15 @@ import sre
 
 from pysqlite2 import dbapi2 as sqlite
 
-PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
+if os.name == 'nt':
+	PATH_TO_LOGS_BASE_DIR = os.environ['appdata'] + '/Gajim/Logs'
+	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
+else:
+	PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
+	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
 
-# jid we already put in DB
-jid_in = []
-path_to_db = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
-con = sqlite.connect(path_to_db) 
+jids_already_in = [] # jid we already put in DB
+con = sqlite.connect(PATH_TO_DB) 
 cur = con.cursor()
 # create the tables
 # type can be 'gc', 'gcstatus', 'recv', 'sent', 'status'
@@ -83,10 +86,10 @@ def visit(arg, dirname, filenames):
 		jid = get_jid(dirname, filename)
 		print 'Processing', jid
 		# jid is already in the DB, don't create the table, just get his jid_id
-		if jid in jid_in:
+		if jid in jids_already_in:
 			cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
 		else:
-			jid_in.append(jid)
+			jids_already_in.append(jid)
 			cur.execute('INSERT INTO jids (jid) VALUES (?)', (jid,))
 			con.commit()
 
@@ -146,7 +149,7 @@ if __name__ == '__main__':
 	# after huge import create the indices (they are slow on massive insert)
 	cur.executescript(
 		'''
-		CREATE UNIQUE INDEX JID_Index ON jids (jid);
+		CREATE UNIQUE INDEX jids_already_index ON jids (jid);
 		CREATE INDEX JID_ID_Index ON logs (jid_id);
 		'''
 	)
