@@ -5,8 +5,13 @@ import sre
 from pysqlite2 import dbapi2 as sqlite
 
 if os.name == 'nt':
-	PATH_TO_LOGS_BASE_DIR = os.environ['appdata'] + '/Gajim/Logs'
-	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
+	try:
+		PATH_TO_LOGS_BASE_DIR = os.path.join(os.environ['appdata'], 'Gajim/Logs')
+		PATH_TO_DB = os.path.join(os.environ['appdata'], 'logs.db') # database is called logs.db
+	except KeyError:
+		# win9x
+		PATH_TO_LOGS_BASE_DIR = 'Logs'
+		PATH_TO_DB = 'logs.db'
 else:
 	PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
 	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
