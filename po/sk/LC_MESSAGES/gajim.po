@@ -1,35 +1,35 @@
 # Slovak translation for gajim
 # Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
 # This file is distributed under the same license as the gajim package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+# Juraj Michalek <juraj.michalek@asinus.org>, 2005.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-22 22:52+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-11-22 23:22+0100\n"
+"Last-Translator: Juraj Michalek <juraj.michalek@asinus.org>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 
 #: ../gajim.desktop.in.h:1
 msgid "A GTK+ Jabber client"
-msgstr ""
+msgstr "GTK+ Jabber klient"
 
-#: ../gajim.desktop.in.h:2 ../src/gtkgui.glade.h:134 ../src/notify.py:151
+#: ../gajim.desktop.in.h:2
+#: ../src/gtkgui.glade.h:134
+#: ../src/notify.py:151
 #: ../src/tooltips.py:285
 msgid "Gajim"
-msgstr ""
+msgstr "Gajim"
 
 #: ../gajim.desktop.in.h:3
 msgid "Jabber IM Client"
-msgstr ""
+msgstr "Jabber IM klient"
 
 #: ../src/advanced.py:57
 msgid "Preference Name"
@@ -50,58 +50,68 @@ msgstr ""
 
 #: ../src/advanced.py:181
 msgid "Hidden"
-msgstr ""
+msgstr "Skrytý"
 
-#: ../src/chat.py:173 ../src/gtkgui.glade.h:78
+#: ../src/chat.py:173
+#: ../src/gtkgui.glade.h:78
 msgid "Chat"
 msgstr "Rozhovor"
 
-#: ../src/chat.py:175 ../src/gtkgui.glade.h:146
+#: ../src/chat.py:175
+#: ../src/gtkgui.glade.h:146
 msgid "Group Chat"
 msgstr "Skupinový rozhovor"
 
 #. if we have 2 or more accounts
 #: ../src/chat.py:189
 msgid "account: "
-msgstr ""
+msgstr "účet:"
 
 #. Check if jid is already in roster
 #. Groups maynot change name from or to 'not in the roster'
-#: ../src/chat.py:417 ../src/conversation_textview.py:374
-#: ../src/dialogs.py:112 ../src/dialogs.py:331 ../src/dialogs.py:369
-#: ../src/dialogs.py:906 ../src/dialogs.py:907 ../src/gajim.py:547
-#: ../src/gajim.py:548 ../src/roster_window.py:970
-#: ../src/roster_window.py:1231 ../src/roster_window.py:1397
-#: ../src/roster_window.py:1643 ../src/roster_window.py:1676
-#: ../src/roster_window.py:2095 ../src/roster_window.py:2338
-#: ../src/roster_window.py:2340 ../src/roster_window.py:2409
+#: ../src/chat.py:417
+#: ../src/conversation_textview.py:374
+#: ../src/dialogs.py:112
+#: ../src/dialogs.py:331
+#: ../src/dialogs.py:369
+#: ../src/dialogs.py:906
+#: ../src/dialogs.py:907
+#: ../src/gajim.py:547
+#: ../src/gajim.py:548
+#: ../src/roster_window.py:970
+#: ../src/roster_window.py:1231
+#: ../src/roster_window.py:1397
+#: ../src/roster_window.py:1643
+#: ../src/roster_window.py:1676
+#: ../src/roster_window.py:2095
+#: ../src/roster_window.py:2338
+#: ../src/roster_window.py:2340
+#: ../src/roster_window.py:2409
 msgid "not in the roster"
 msgstr "nie je v zozname"
 
 #: ../src/chat.py:505
 #, python-format
 msgid "Switch to %s"
-msgstr ""
+msgstr "Prepnúť na %s"
 
 #. FIXME: add a ui for this use spell.set_language()
 #: ../src/chat.py:715
 msgid ""
-"If that is not your language for which you want to highlight misspelled "
-"words, then please set your $LANG as appropriate. Eg. for French do export "
-"LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it "
-"global in /etc/profile.\n"
+"If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n"
 "\n"
 "Highlighting misspelled words feature will not be used"
 msgstr ""
 
-#: ../src/config.py:188 ../src/config.py:426
+#: ../src/config.py:188
+#: ../src/config.py:426
 #, python-format
 msgid "Every %s _minutes"
-msgstr ""
+msgstr "Každých %s _minút"
 
 #: ../src/config.py:304
 msgid "Active"
-msgstr ""
+msgstr "Aktívne"
 
 #: ../src/config.py:312
 msgid "Event"
@@ -123,7 +133,9 @@ msgstr ""
 msgid "Choose Sound"
 msgstr "Vybrať zvuk"
 
-#: ../src/config.py:996 ../src/config.py:2056 ../src/vcard.py:173
+#: ../src/config.py:996
+#: ../src/config.py:2056
+#: ../src/vcard.py:173
 msgid "All files"
 msgstr "Všetky súbory"
 
@@ -143,7 +155,8 @@ msgstr "Práve ste pripojený na server"
 msgid "To change the account name, you must be disconnected."
 msgstr "Pre zmenu mena účtu sa musíte byť odpojený."
 
-#: ../src/config.py:1190 ../src/config.py:1194
+#: ../src/config.py:1190
+#: ../src/config.py:1194
 msgid "Invalid account name"
 msgstr "Nesprávne meno účtu"
 
@@ -155,7 +168,9 @@ msgstr "Meno účtu nemôže byť prázdne."
 msgid "Account name cannot contain spaces."
 msgstr "Meno účtu nemôže obsahovať medzery."
 
-#: ../src/config.py:1203 ../src/config.py:1209 ../src/config.py:1218
+#: ../src/config.py:1203
+#: ../src/config.py:1209
+#: ../src/config.py:1218
 #: ../src/config.py:2566
 msgid "Invalid Jabber ID"
 msgstr "Nespravné Jabber ID"
@@ -178,119 +193,132 @@ msgstr "Žiadný účet nie je k dispozícii"
 
 #: ../src/config.py:1367
 msgid "You must create your account before editing your personal information."
-msgstr ""
-"Musíte si vytvoriť účet, predtým než budete môcť editovať osobné informácie."
+msgstr "Musíte si vytvoriť účet, predtým než budete môcť editovať osobné informácie."
 
-#: ../src/config.py:1374 ../src/dialogs.py:637 ../src/dialogs.py:738
-#: ../src/disco.py:414 ../src/vcard.py:394 ../src/vcard.py:422
+#: ../src/config.py:1374
+#: ../src/dialogs.py:637
+#: ../src/dialogs.py:738
+#: ../src/disco.py:414
+#: ../src/vcard.py:394
+#: ../src/vcard.py:422
 msgid "You are not connected to the server"
-msgstr ""
+msgstr "Nie ste pripojený na server"
 
 #: ../src/config.py:1375
 msgid "Without a connection, you can not edit your personal information."
-msgstr ""
+msgstr "Bez pripojenie nemôžete editovať osobné informácie."
 
 #: ../src/config.py:1406
 msgid "Failed to get secret keys"
-msgstr ""
+msgstr "Nepodarilo sa vygenerovať tajné kľúče"
 
 #: ../src/config.py:1407
 msgid "There was a problem retrieving your OpenPGP secret keys."
-msgstr ""
+msgstr "Vznikol problém pri získavaní vášho OpenPGP tajného kľúča."
 
-#: ../src/config.py:1410 ../src/gtkgui.glade.h:205
+#: ../src/config.py:1410
+#: ../src/gtkgui.glade.h:205
 msgid "Passphrase"
-msgstr ""
+msgstr "Passfráza"
 
 #: ../src/config.py:1411
 msgid "Choose your OpenPGP key"
-msgstr ""
+msgstr "Vyberte váš OpenPGP kľúč"
 
-#: ../src/config.py:1419 ../src/gtkgui.glade.h:193
+#: ../src/config.py:1419
+#: ../src/gtkgui.glade.h:193
 msgid "No key selected"
-msgstr ""
+msgstr "Žiadny kľúč nie je vybraný"
 
 #. Name column
-#: ../src/config.py:1638 ../src/disco.py:667 ../src/disco.py:1365
+#: ../src/config.py:1638
+#: ../src/disco.py:667
+#: ../src/disco.py:1365
 msgid "Name"
-msgstr ""
+msgstr "Meno"
 
 #: ../src/config.py:1641
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #. if not '@' or '@' starts the jid ==> agent
-#: ../src/config.py:1866 ../src/dialogs.py:112 ../src/dialogs.py:293
-#: ../src/dialogs.py:331 ../src/disco.py:114 ../src/disco.py:115
-#: ../src/disco.py:1150 ../src/roster_window.py:145
-#: ../src/roster_window.py:163 ../src/roster_window.py:185
-#: ../src/roster_window.py:2334 ../src/roster_window.py:2336
-#: ../src/roster_window.py:2409 ../src/systray.py:240
+#: ../src/config.py:1866
+#: ../src/dialogs.py:112
+#: ../src/dialogs.py:293
+#: ../src/dialogs.py:331
+#: ../src/disco.py:114
+#: ../src/disco.py:115
+#: ../src/disco.py:1150
+#: ../src/roster_window.py:145
+#: ../src/roster_window.py:163
+#: ../src/roster_window.py:185
+#: ../src/roster_window.py:2334
+#: ../src/roster_window.py:2336
+#: ../src/roster_window.py:2409
+#: ../src/systray.py:240
 msgid "Transports"
-msgstr ""
+msgstr "Transport"
 
 #: ../src/config.py:1905
 #, python-format
 msgid "Edit %s"
-msgstr ""
+msgstr "Edit %s"
 
 #: ../src/config.py:1907
 #, python-format
 msgid "Register to %s"
-msgstr ""
+msgstr "Registrovať na %s"
 
 #: ../src/config.py:1926
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #: ../src/config.py:1934
 msgid "Image"
-msgstr ""
+msgstr "Obrázok"
 
 #: ../src/config.py:1984
 msgid "Image is too big"
-msgstr ""
+msgstr "Obrázok je príliš veľký"
 
 #: ../src/config.py:1984
-msgid ""
-"Image for emoticon has to be less than or equal to 24 pixels in width and 24 "
-"in height."
-msgstr ""
+msgid "Image for emoticon has to be less than or equal to 24 pixels in width and 24 in height."
+msgstr "Obrázok pre emotikon má menej alebo práve 24 pixelov šírku a 24 pixelov výšku."
 
 #: ../src/config.py:2044
 msgid "Choose Image"
-msgstr ""
+msgstr "Vyberte obrázok"
 
-#: ../src/config.py:2061 ../src/vcard.py:178
+#: ../src/config.py:2061
+#: ../src/vcard.py:178
 msgid "Images"
-msgstr ""
+msgstr "Obrázky"
 
 #: ../src/config.py:2156
 #, python-format
 msgid "Removing %s account"
-msgstr ""
+msgstr "Odstrániť %s účet"
 
 #: ../src/config.py:2163
 #, python-format
 msgid "Account \"%s\" is connected to the server"
-msgstr ""
+msgstr "Účet \"%s\" je pripojený na server"
 
 #: ../src/config.py:2164
 msgid "If you remove it, the connection will be lost."
-msgstr ""
+msgstr "Ak dôjde k odstráneniu, stratíte spojenie."
 
 #: ../src/config.py:2292
 msgid "New Room"
-msgstr ""
+msgstr "Nová miestnosť"
 
 #: ../src/config.py:2322
 msgid "This bookmark has invalid data"
-msgstr ""
+msgstr "Táto záložka obsahuje chybné údaje"
 
 #: ../src/config.py:2323
-msgid ""
-"Please be sure to fill out server and room fields or remove this bookmark."
-msgstr ""
+msgid "Please be sure to fill out server and room fields or remove this bookmark."
+msgstr "Prosim, uistite sa, že je vyplnená položka server a miestnosť alebo odstránte túto záložku."
 
 #: ../src/config.py:2548
 #, fuzzy
@@ -302,7 +330,8 @@ msgstr "Nesprávne meno účtu"
 msgid "You must provide a username to configure this account."
 msgstr "Musíte vložiť heslo pre nový účet."
 
-#: ../src/config.py:2557 ../src/dialogs.py:757
+#: ../src/config.py:2557
+#: ../src/dialogs.py:757
 msgid "Invalid password"
 msgstr "Nesprávne heslo"
 
@@ -312,21 +341,20 @@ msgstr "Musíte vložiť heslo pre nový účet."
 
 #: ../src/config.py:2583
 msgid "Account has been added successfully"
-msgstr ""
+msgstr "Účet bol úspešne pridaný"
 
-#: ../src/config.py:2584 ../src/config.py:2615
-msgid ""
-"You can set advanced account options by pressing Advanced button, or later "
-"by clicking in Accounts menuitem under Edit menu from the main window."
+#: ../src/config.py:2584
+#: ../src/config.py:2615
+msgid "You can set advanced account options by pressing Advanced button, or later by clicking in Accounts menuitem under Edit menu from the main window."
 msgstr ""
 
 #: ../src/config.py:2614
 msgid "Your new account has been created successfully"
-msgstr ""
+msgstr "Váš nový účet bol vytvorený úspešne"
 
 #: ../src/config.py:2629
 msgid "An error occured during account creation"
-msgstr ""
+msgstr "Nastala chyba pri vytváraní účtu"
 
 #: ../src/config.py:2706
 msgid "Account name is in use"
@@ -337,23 +365,21 @@ msgid "You already have an account using this name."
 msgstr "Už máte účet s týmto menom."
 
 #: ../src/conversation_textview.py:181
-msgid ""
-"Text below this line is what has been said since the last time you paid "
-"attention to this group chat"
+msgid "Text below this line is what has been said since the last time you paid attention to this group chat"
 msgstr ""
 
 #: ../src/conversation_textview.py:240
 #, python-format
 msgid "Actions for \"%s\""
-msgstr ""
+msgstr "Akcia pre \"%s\""
 
 #: ../src/conversation_textview.py:252
 msgid "Read _Wikipedia Article"
-msgstr ""
+msgstr "Čítať článok na _Wikipédii"
 
 #: ../src/conversation_textview.py:256
 msgid "Look it up in _Dictionary"
-msgstr ""
+msgstr "Pozrieť sa do _Slovníka"
 
 #. we must have %s in the url if not WIKTIONARY
 #: ../src/conversation_textview.py:271
@@ -369,17 +395,17 @@ msgstr ""
 
 #: ../src/conversation_textview.py:285
 msgid "Web _Search for it"
-msgstr ""
+msgstr "_Hľadať na webe"
 
 #: ../src/conversation_textview.py:561
 msgid "Yesterday"
-msgstr ""
+msgstr "Včera"
 
 #. the number is >= 2
 #: ../src/conversation_textview.py:564
 #, python-format
 msgid "%i days ago"
-msgstr ""
+msgstr "Pred %i dňami"
 
 #. if we have subject, show it too!
 #: ../src/conversation_textview.py:603
@@ -390,38 +416,38 @@ msgstr ""
 #: ../src/dialogs.py:54
 #, python-format
 msgid "Contact's name: <i>%s</i>"
-msgstr ""
+msgstr "Meno kontaktu: <i>%s</i>"
 
 #: ../src/dialogs.py:56
 #, python-format
 msgid "JID: <i>%s</i>"
-msgstr ""
+msgstr "JID: <i>%s</i>"
 
 #. we try to remove
 #. the last group
 #: ../src/dialogs.py:98
 msgid "Cannot remove last group"
-msgstr ""
+msgstr "Nie je možné odstrániť poslednú skupinu"
 
 #: ../src/dialogs.py:99
 msgid "At least one contact group must be present."
-msgstr ""
+msgstr "Minimálne jedna skupina kontaktov musí zostať."
 
 #: ../src/dialogs.py:120
 msgid "Group"
-msgstr ""
+msgstr "Skupina"
 
 #: ../src/dialogs.py:127
 msgid "In the group"
-msgstr ""
+msgstr "V skupine"
 
 #: ../src/dialogs.py:177
 msgid "KeyID"
-msgstr ""
+msgstr "ID kľúča"
 
 #: ../src/dialogs.py:180
 msgid "Contact name"
-msgstr ""
+msgstr "Kontaktné meno"
 
 #: ../src/dialogs.py:213
 #, python-format
@@ -482,7 +508,8 @@ msgstr ""
 msgid "Join Group Chat as %s"
 msgstr ""
 
-#: ../src/dialogs.py:653 ../src/gtkgui.glade.h:177
+#: ../src/dialogs.py:653
+#: ../src/gtkgui.glade.h:177
 msgid "Join Group Chat"
 msgstr ""
 
@@ -492,7 +519,9 @@ msgid "New Message as %s"
 msgstr ""
 
 #. chat message
-#: ../src/dialogs.py:718 ../src/dialogs.py:807 ../src/gajim.py:477
+#: ../src/dialogs.py:718
+#: ../src/dialogs.py:807
+#: ../src/gajim.py:477
 #: ../src/notify.py:88
 msgid "New Message"
 msgstr ""
@@ -504,11 +533,15 @@ msgid ""
 msgstr ""
 
 #. if offline or connecting
-#: ../src/dialogs.py:727 ../src/dialogs.py:1062 ../src/dialogs.py:1182
+#: ../src/dialogs.py:727
+#: ../src/dialogs.py:1062
+#: ../src/dialogs.py:1182
 msgid "Connection not available"
 msgstr ""
 
-#: ../src/dialogs.py:728 ../src/dialogs.py:1063 ../src/dialogs.py:1183
+#: ../src/dialogs.py:728
+#: ../src/dialogs.py:1063
+#: ../src/dialogs.py:1183
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr ""
@@ -531,56 +564,76 @@ msgstr ""
 
 #. img to display
 #. Notification Type
-#: ../src/dialogs.py:797 ../src/gajim.py:376 ../src/notify.py:82
+#: ../src/dialogs.py:797
+#: ../src/gajim.py:376
+#: ../src/notify.py:82
 msgid "Contact Signed In"
-msgstr ""
+msgstr "Kontakt sa pripojil"
 
-#: ../src/dialogs.py:802 ../src/gajim.py:395 ../src/notify.py:85
+#: ../src/dialogs.py:802
+#: ../src/gajim.py:395
+#: ../src/notify.py:85
 msgid "Contact Signed Out"
-msgstr ""
+msgstr "Kontakt sa odpojil"
 
-#: ../src/dialogs.py:807 ../src/gajim.py:475 ../src/notify.py:88
+#: ../src/dialogs.py:807
+#: ../src/gajim.py:475
+#: ../src/notify.py:88
 msgid "New Single Message"
-msgstr ""
+msgstr "Nová jednoduchá správa"
 
-#: ../src/dialogs.py:808 ../src/dialogs.py:812 ../src/gajim.py:430
-#: ../src/notify.py:89 ../src/notify.py:92
+#: ../src/dialogs.py:808
+#: ../src/dialogs.py:812
+#: ../src/gajim.py:430
+#: ../src/notify.py:89
+#: ../src/notify.py:92
 msgid "New Private Message"
-msgstr ""
+msgstr "Nová privátna správa"
 
 #: ../src/dialogs.py:815
 #, python-format
 msgid "From %s in room %s"
-msgstr ""
+msgstr "Od %s v miestnosti %s"
 
-#: ../src/dialogs.py:817 ../src/dialogs.py:823 ../src/dialogs.py:840
+#: ../src/dialogs.py:817
+#: ../src/dialogs.py:823
+#: ../src/dialogs.py:840
 #, python-format
 msgid "From %s"
-msgstr ""
+msgstr "Od %s"
 
-#: ../src/dialogs.py:819 ../src/gajim.py:893 ../src/notify.py:100
+#: ../src/dialogs.py:819
+#: ../src/gajim.py:893
+#: ../src/notify.py:100
 msgid "File Transfer Request"
-msgstr ""
+msgstr "Požiadavka na prenos súboru"
 
 #. check if we should be notified
-#: ../src/dialogs.py:825 ../src/gajim.py:818 ../src/gajim.py:875
+#: ../src/dialogs.py:825
+#: ../src/gajim.py:818
+#: ../src/gajim.py:875
 #: ../src/notify.py:105
 msgid "File Transfer Error"
-msgstr ""
+msgstr "Chyba pri prenose súboru"
 
-#: ../src/dialogs.py:830 ../src/gajim.py:924 ../src/notify.py:108
-#: ../src/notify.py:118 ../src/notify.py:133
+#: ../src/dialogs.py:830
+#: ../src/gajim.py:924
+#: ../src/notify.py:108
+#: ../src/notify.py:118
+#: ../src/notify.py:133
 msgid "File Transfer Completed"
-msgstr ""
+msgstr "Prenos súboru dokončený"
 
-#: ../src/dialogs.py:830 ../src/gajim.py:927 ../src/notify.py:108
+#: ../src/dialogs.py:830
+#: ../src/gajim.py:927
+#: ../src/notify.py:108
 msgid "File Transfer Stopped"
-msgstr ""
+msgstr "Prenos súboru zastavený"
 
 #: ../src/dialogs.py:849
 #, python-format
 msgid "To %s"
-msgstr ""
+msgstr "Pre %s"
 
 #: ../src/dialogs.py:1026
 #, python-format
@@ -594,233 +647,245 @@ msgstr ""
 #: ../src/dialogs.py:1031
 #, python-format
 msgid "Send %s"
-msgstr ""
+msgstr "Poslať %s"
 
 #: ../src/dialogs.py:1040
 #, python-format
 msgid "Received %s"
-msgstr ""
+msgstr "Prijatý %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
 #: ../src/dialogs.py:1088
 #, python-format
 msgid "RE: %s"
-msgstr ""
+msgstr "RE: %s"
 
 #: ../src/dialogs.py:1089
 #, python-format
 msgid "%s wrote:\n"
-msgstr ""
+msgstr "%s napísal:\n"
 
 #: ../src/dialogs.py:1133
 #, python-format
 msgid "XML Console for %s"
-msgstr ""
+msgstr "XML konzola pre %s"
 
 #: ../src/dialogs.py:1135
 msgid "XML Console"
-msgstr ""
+msgstr "XML konzola"
 
 #: ../src/dialogs.py:1218
 #, python-format
 msgid "You have been invited to the %(room_jid)s room by %(contact_jid)s"
-msgstr ""
+msgstr "Boli ste pozvaný(á) do %(room_jid)s miestnosti - %(contact_jid)s"
 
 #: ../src/dialogs.py:1221
 #, python-format
 msgid "Comment: %s"
-msgstr ""
+msgstr "Komentár: %s"
 
 #: ../src/disco.py:113
 msgid "Others"
-msgstr ""
+msgstr "Ostatný"
 
 #: ../src/disco.py:116
 msgid "Conference"
-msgstr ""
+msgstr "Konferencia"
 
 #: ../src/disco.py:415
 msgid "Without a connection, you can not browse available services"
-msgstr ""
+msgstr "Bez pripojenia, nemôžete prehľadávať dostupné služby"
 
-#: ../src/disco.py:489 ../src/disco.py:491
+#: ../src/disco.py:489
+#: ../src/disco.py:491
 msgid "Service Discovery"
-msgstr ""
+msgstr "Prehľadávanie služieb"
 
 #: ../src/disco.py:569
 msgid "The service could not be found"
-msgstr ""
+msgstr "Služba nebola nájdená"
 
 #: ../src/disco.py:570
-msgid ""
-"There is no service at the address you entered, or it is not responding. "
-"Check the address and try again."
-msgstr ""
+msgid "There is no service at the address you entered, or it is not responding. Check the address and try again."
+msgstr "Nie je k dispozícii žiadna služba na zadanej adrese alebo neodpovedá. Skontrolujte adresu a skúste neskôr."
 
-#: ../src/disco.py:574 ../src/disco.py:857
+#: ../src/disco.py:574
+#: ../src/disco.py:857
 msgid "The service is not browsable"
-msgstr ""
+msgstr "Služba nie je prechádzateľná"
 
 #: ../src/disco.py:575
 msgid "This type of service does not contain any items to browse."
-msgstr ""
+msgstr "Tento typ služby neobsahuje žiadne položky na prechádzanie."
 
 #: ../src/disco.py:653
 #, python-format
 msgid "Browsing %s"
-msgstr ""
+msgstr "Prechádzanie %s"
 
 #. Address column
 #: ../src/disco.py:674
 msgid "JID"
-msgstr ""
+msgstr "JID"
 
 #: ../src/disco.py:693
 msgid "_Browse"
-msgstr ""
+msgstr "_Prechádzať"
 
 #: ../src/disco.py:858
 msgid "This service does not contain any items to browse."
-msgstr ""
+msgstr "Táto služba neobsahuje žiadne položky."
 
-#: ../src/disco.py:1078 ../src/disco.py:1155
+#: ../src/disco.py:1078
+#: ../src/disco.py:1155
 msgid "Re_gister"
-msgstr ""
+msgstr "Re_gistrácia"
 
-#: ../src/disco.py:1153 ../src/gtkgui.glade.h:333 ../src/roster_window.py:1056
+#: ../src/disco.py:1153
+#: ../src/gtkgui.glade.h:333
+#: ../src/roster_window.py:1056
 msgid "_Edit"
-msgstr ""
+msgstr "_Upraviť"
 
 #: ../src/disco.py:1190
 #, python-format
 msgid "Scanning %d / %d.."
-msgstr ""
+msgstr "Prieskum %d / %d.."
 
 #. Users column
 #: ../src/disco.py:1372
 msgid "Users"
-msgstr ""
+msgstr "Používatelia"
 
 #. Description column
 #: ../src/disco.py:1379
 msgid "Description"
-msgstr ""
+msgstr "Popis"
 
-#: ../src/disco.py:1406 ../src/gtkgui.glade.h:347
+#: ../src/disco.py:1406
+#: ../src/gtkgui.glade.h:347
 msgid "_Join"
-msgstr ""
+msgstr "_Pripojiť"
 
 #: ../src/filetransfers_window.py:83
 msgid "File"
-msgstr ""
+msgstr "Súbor"
 
 #: ../src/filetransfers_window.py:98
 msgid "Time"
-msgstr ""
+msgstr "Čas"
 
 #: ../src/filetransfers_window.py:110
 msgid "Progress"
-msgstr ""
+msgstr "Stav"
 
-#: ../src/filetransfers_window.py:168 ../src/filetransfers_window.py:234
+#: ../src/filetransfers_window.py:168
+#: ../src/filetransfers_window.py:234
 #, python-format
 msgid "Filename: %s"
-msgstr ""
+msgstr "Meno súboru: %s"
 
-#: ../src/filetransfers_window.py:170 ../src/filetransfers_window.py:305
+#: ../src/filetransfers_window.py:170
+#: ../src/filetransfers_window.py:305
 #, python-format
 msgid "Size: %s"
-msgstr ""
+msgstr "Veľkosť: %s"
 
 #. You is a reply of who sent a file
 #. You is a reply of who received a file
-#: ../src/filetransfers_window.py:179 ../src/filetransfers_window.py:189
+#: ../src/filetransfers_window.py:179
+#: ../src/filetransfers_window.py:189
 msgid "You"
-msgstr ""
+msgstr "Vy"
 
-#: ../src/filetransfers_window.py:180 ../src/filetransfers_window.py:236
+#: ../src/filetransfers_window.py:180
+#: ../src/filetransfers_window.py:236
 #, python-format
 msgid "Sender: %s"
-msgstr ""
+msgstr "Odosielateľ: %s"
 
-#: ../src/filetransfers_window.py:181 ../src/filetransfers_window.py:539
+#: ../src/filetransfers_window.py:181
+#: ../src/filetransfers_window.py:539
 #: ../src/tooltips.py:484
 msgid "Recipient: "
-msgstr ""
+msgstr "Príjemca:"
 
 #: ../src/filetransfers_window.py:192
 #, python-format
 msgid "Saved in: %s"
-msgstr ""
+msgstr "Uložené do: %s"
 
 #: ../src/filetransfers_window.py:195
 msgid "File transfer completed"
-msgstr ""
+msgstr "Prenos súboru dokončený"
 
-#: ../src/filetransfers_window.py:197 ../src/gtkgui.glade.h:363
+#: ../src/filetransfers_window.py:197
+#: ../src/gtkgui.glade.h:363
 msgid "_Open Containing Folder"
-msgstr ""
+msgstr "_Otvoriť adresár"
 
-#: ../src/filetransfers_window.py:215 ../src/filetransfers_window.py:223
+#: ../src/filetransfers_window.py:215
+#: ../src/filetransfers_window.py:223
 msgid "File transfer canceled"
-msgstr ""
+msgstr "Prenos súboru bol zrušený"
 
-#: ../src/filetransfers_window.py:215 ../src/filetransfers_window.py:224
+#: ../src/filetransfers_window.py:215
+#: ../src/filetransfers_window.py:224
 msgid "Connection with peer cannot be established."
-msgstr ""
+msgstr "Spojenie s druhou stranou nie je možné nadviazať."
 
 #: ../src/filetransfers_window.py:238
 msgid "File transfer stopped by the contact of the other side"
-msgstr ""
+msgstr "Prenos súboru bol zastavený druhou stranou"
 
 #: ../src/filetransfers_window.py:244
 msgid "Choose File to Send..."
-msgstr ""
+msgstr "Vyberte súbor na odoslanie..."
 
 #: ../src/filetransfers_window.py:247
 msgid "Send"
-msgstr ""
+msgstr "Poslať"
 
 #: ../src/filetransfers_window.py:277
 msgid "Gajim cannot access this file"
-msgstr ""
+msgstr "Gajim nemôže pracovať s týmto súborom"
 
 #: ../src/filetransfers_window.py:278
 msgid "This file is being used by another process."
-msgstr ""
+msgstr "Tento súbor je používaný iným procesom."
 
 #: ../src/filetransfers_window.py:302
 #, python-format
 msgid "File: %s"
-msgstr ""
+msgstr "Súbor: %s"
 
 #: ../src/filetransfers_window.py:308
 #, python-format
 msgid "Type: %s"
-msgstr ""
+msgstr "Typ: %s"
 
 #: ../src/filetransfers_window.py:311
 #, python-format
 msgid "Description: %s"
-msgstr ""
+msgstr "Popis: %s"
 
 #: ../src/filetransfers_window.py:313
 #, python-format
 msgid "%s wants to send you a file:"
-msgstr ""
+msgstr "%s vám chce poslať súbor:"
 
 #: ../src/filetransfers_window.py:316
 msgid "Save File as..."
-msgstr ""
+msgstr "Uložiť ako..."
 
 #. FIXME: pango does not work here.
 #: ../src/filetransfers_window.py:338
 msgid "This file already exists"
-msgstr ""
+msgstr "Tento súbor už existuje"
 
 #: ../src/filetransfers_window.py:339
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "Prajete si prepísať ho?"
 
 #. Print remaining time in format 00:00:00
 #. You can change the places of (hours), (minutes), (seconds) -
@@ -828,7 +893,7 @@ msgstr ""
 #: ../src/filetransfers_window.py:411
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
-msgstr ""
+msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
@@ -836,108 +901,113 @@ msgstr ""
 #: ../src/filetransfers_window.py:466
 #, python-format
 msgid "(%s/s)"
-msgstr ""
+msgstr "(%s/s)"
 
-#: ../src/filetransfers_window.py:511 ../src/filetransfers_window.py:514
+#: ../src/filetransfers_window.py:511
+#: ../src/filetransfers_window.py:514
 #, fuzzy
 msgid "Invalid File"
 msgstr "Nesprávny záznam"
 
 #: ../src/filetransfers_window.py:511
 msgid "File: "
-msgstr ""
+msgstr "Súbor:"
 
 #: ../src/filetransfers_window.py:515
 msgid "It is not possible to send empty files"
-msgstr ""
+msgstr "Nie je možné poslať prázdne súbory"
 
-#: ../src/filetransfers_window.py:535 ../src/tooltips.py:401
+#: ../src/filetransfers_window.py:535
+#: ../src/tooltips.py:401
 #: ../src/tooltips.py:466
 msgid "Name: "
-msgstr ""
+msgstr "Meno:"
 
-#: ../src/filetransfers_window.py:537 ../src/tooltips.py:479
+#: ../src/filetransfers_window.py:537
+#: ../src/tooltips.py:479
 msgid "Sender: "
-msgstr ""
+msgstr "Odosielateľ:"
 
 #: ../src/filetransfers_window.py:725
 msgid "Pause"
-msgstr ""
+msgstr "Pauza"
 
-#: ../src/filetransfers_window.py:736 ../src/gtkgui.glade.h:327
+#: ../src/filetransfers_window.py:736
+#: ../src/gtkgui.glade.h:327
 msgid "_Continue"
-msgstr ""
+msgstr "_Pokračovať"
 
 #: ../src/gajim-remote.py:49
 msgid "Dbus is not supported."
-msgstr ""
+msgstr "Dbus nie je podporovaný."
 
 #: ../src/gajim-remote.py:75
 msgid "show a help on specific command"
-msgstr ""
+msgstr "ukáž pomoc pre špecifický príkaz"
 
 #. User gets help for the command, specified by this parameter
 #: ../src/gajim-remote.py:78
 msgid "command"
-msgstr ""
+msgstr "príkaz"
 
 #: ../src/gajim-remote.py:79
 msgid "show help on command"
-msgstr ""
+msgstr "ukáž pomoc pre príkaz"
 
 #: ../src/gajim-remote.py:83
 msgid "Shows or hides the roster window"
-msgstr ""
+msgstr "Ukázať alebo skryť okno so zoznamom"
 
 #: ../src/gajim-remote.py:87
 msgid "Popup a window with the next unread message"
-msgstr ""
+msgstr "Zobraz okno s ďalšou neprečítanou správou"
 
 #: ../src/gajim-remote.py:91
-msgid ""
-"Print a list of all contacts in the roster. Each contact appear on a "
-"separate line"
-msgstr ""
+msgid "Print a list of all contacts in the roster. Each contact appear on a separate line"
+msgstr "Vytlačiť zoznam všetkých kontaktov v zozname. Každý kontakt sa objaví na samostatnom riadku"
 
-#: ../src/gajim-remote.py:94 ../src/gajim-remote.py:109
-#: ../src/gajim-remote.py:121 ../src/gajim-remote.py:135
-#: ../src/gajim-remote.py:150 ../src/gajim-remote.py:180
+#: ../src/gajim-remote.py:94
+#: ../src/gajim-remote.py:109
+#: ../src/gajim-remote.py:121
+#: ../src/gajim-remote.py:135
+#: ../src/gajim-remote.py:150
+#: ../src/gajim-remote.py:180
 #: ../src/gajim-remote.py:188
 msgid "account"
-msgstr ""
+msgstr "účet"
 
 #: ../src/gajim-remote.py:94
 msgid "show only contacts of the given account"
-msgstr ""
+msgstr "zobraziť len kontakty daného účtu"
 
 #: ../src/gajim-remote.py:100
 msgid "Print a list of registered accounts"
-msgstr ""
+msgstr "Vytlačiť zoznam registrovaných účtov"
 
 #: ../src/gajim-remote.py:104
 msgid "Change the status of account or accounts"
-msgstr ""
+msgstr "Zmeniť stav účtu alebo účtov"
 
 #: ../src/gajim-remote.py:106
 msgid "status"
-msgstr ""
+msgstr "stav"
 
 #: ../src/gajim-remote.py:106
+#, fuzzy
 msgid "one of: offline, online, chat, away, xa, dnd, invisible "
-msgstr ""
+msgstr "jeden z: offline, online, chat, preč, xa, dnd, invisible"
 
-#: ../src/gajim-remote.py:108 ../src/gajim-remote.py:132
+#: ../src/gajim-remote.py:108
+#: ../src/gajim-remote.py:132
 msgid "message"
-msgstr ""
+msgstr "správa"
 
 #: ../src/gajim-remote.py:108
 msgid "status message"
-msgstr ""
+msgstr "správa o stave"
 
 #: ../src/gajim-remote.py:109
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
+msgid "change status of account \"account\". If not specified, try to change status of all accounts that have \"sync with global status\" option set"
 msgstr ""
 
 #: ../src/gajim-remote.py:115
@@ -948,15 +1018,13 @@ msgstr ""
 msgid "JID of the contact that you want to chat with"
 msgstr ""
 
-#: ../src/gajim-remote.py:121 ../src/gajim-remote.py:180
+#: ../src/gajim-remote.py:121
+#: ../src/gajim-remote.py:180
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
 
 #: ../src/gajim-remote.py:126
-msgid ""
-"Send new message to a contact in the roster. Both OpenPGP key and account "
-"are optional. If you want to set only 'account', without 'OpenPGP key', just "
-"set 'OpenPGP key' to ''."
+msgid "Send new message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''."
 msgstr ""
 
 #: ../src/gajim-remote.py:130
@@ -969,92 +1037,95 @@ msgstr ""
 
 #: ../src/gajim-remote.py:133
 msgid "pgp key"
-msgstr ""
+msgstr "pgp kľúč"
 
 #: ../src/gajim-remote.py:133
 msgid "if specified, the message will be encrypted using this public key"
-msgstr ""
+msgstr "ak je špecifikovaný, správa bude zašifrovaná s použitím verejného kľúča"
 
 #: ../src/gajim-remote.py:135
 msgid "if specified, the message will be sent using this account"
-msgstr ""
+msgstr "ak je špecifikovaný, správa bude odoslaná s použitím tohoto účtu"
 
 #: ../src/gajim-remote.py:140
 msgid "Get detailed info on a contact"
-msgstr ""
+msgstr "Získať detailné informácie o kontakte"
 
-#: ../src/gajim-remote.py:142 ../src/gajim-remote.py:149
+#: ../src/gajim-remote.py:142
+#: ../src/gajim-remote.py:149
 #: ../src/gajim-remote.py:179
 msgid "JID of the contact"
-msgstr ""
+msgstr "JID kontaktu"
 
 #: ../src/gajim-remote.py:146
 msgid "Send file to a contact"
-msgstr ""
+msgstr "Poslať súbor kontaktu"
 
 #: ../src/gajim-remote.py:148
 msgid "file"
-msgstr ""
+msgstr "súbor"
 
 #: ../src/gajim-remote.py:148
 msgid "File path"
-msgstr ""
+msgstr "Cesta k súboru"
 
 #: ../src/gajim-remote.py:150
 msgid "if specified, file will be sent using this account"
-msgstr ""
+msgstr "ak je špecifikovaný, súbor bude odoslaný pod týmto účtom"
 
 #: ../src/gajim-remote.py:155
 msgid "List all preferences and their values"
-msgstr ""
+msgstr "Výpis všetkých nastavení a hodnôt"
 
 #: ../src/gajim-remote.py:159
 msgid "Set value of 'key' to 'value'."
-msgstr ""
+msgstr "Nastaviť hodnotu 'kľúča' na 'hodnotu'."
 
 #: ../src/gajim-remote.py:161
 msgid "key=value"
-msgstr ""
+msgstr "kľúč=hodnota"
 
 #: ../src/gajim-remote.py:161
 msgid "'key' is the name of the preference, 'value' is the value to set it to"
-msgstr ""
+msgstr "'kľúč' je meno vlastnosti, 'hodnota' je hodnota, na ktorú má byť nastavený"
 
 #: ../src/gajim-remote.py:166
 msgid "Delete a preference item"
-msgstr ""
+msgstr "Zmazať položku z nastavenia"
 
 #: ../src/gajim-remote.py:168
 msgid "key"
-msgstr ""
+msgstr "kľúč"
 
 #: ../src/gajim-remote.py:168
 msgid "name of the preference to be deleted"
-msgstr ""
+msgstr "meno nastavenia bolo zmazané"
 
 #: ../src/gajim-remote.py:172
 msgid "Write the current state of Gajim preferences to the .config file"
-msgstr ""
+msgstr "Zapíš aktuálny stav Gajimu do súboru s nastavením .config"
 
 #: ../src/gajim-remote.py:177
 msgid "Remove contact from roster"
-msgstr ""
+msgstr "Odstrániť kontakt zo zoznamu"
 
 #: ../src/gajim-remote.py:186
 msgid "Add contact to roster"
-msgstr ""
+msgstr "Pridať kontakt do zoznamu"
 
 #: ../src/gajim-remote.py:188
 msgid "Add new contact to this account."
-msgstr ""
+msgstr "Pridať nový konakt pre tento účet"
 
 #: ../src/gajim-remote.py:209
+#, fuzzy
 msgid "Missing argument \"contact_jid\""
-msgstr ""
+msgstr "Chýbajúci argument \"contact_jid\""
 
-#: ../src/gajim-remote.py:214 ../src/gajim-remote.py:543
+#: ../src/gajim-remote.py:214
+#: ../src/gajim-remote.py:543
 msgid "Service not available"
-msgstr ""
+msgstr "Služba nie je dostupná"
 
 #: ../src/gajim-remote.py:232
 #, python-format
@@ -1065,11 +1136,12 @@ msgstr ""
 
 #: ../src/gajim-remote.py:235
 msgid "You have no active account"
-msgstr ""
+msgstr "Nemáte žiadny aktívny účet"
 
 #: ../src/gajim-remote.py:260
+#, fuzzy
 msgid "Session bus is not available."
-msgstr ""
+msgstr "Sedenie nie je dostupné."
 
 #: ../src/gajim-remote.py:269
 #, python-format
@@ -1082,15 +1154,17 @@ msgid ""
 "Usage: %s %s %s \n"
 "\t"
 msgstr ""
+"Použitie: %s %s %s \n"
+"\t"
 
 #: ../src/gajim-remote.py:299
 msgid "Arguments:"
-msgstr ""
+msgstr "Argumenty:"
 
 #: ../src/gajim-remote.py:303
 #, python-format
 msgid "%s not found"
-msgstr ""
+msgstr "%s nenájdený"
 
 #: ../src/gajim-remote.py:307
 #, python-format
@@ -1108,30 +1182,27 @@ msgstr ""
 
 #: ../src/gajim.py:38
 msgid "Gajim needs Xserver to run. Quiting..."
-msgstr ""
+msgstr "Gajim potrebuje Xserver pre svoj beh. Ukončenie..."
 
 #: ../src/gajim.py:42
 msgid "Gajim needs PyGTK 2.6+ to run. Quiting..."
-msgstr ""
+msgstr "Gajim potrebuje PyGTK 2.6+ pre svoj beh. Ukončenie..."
 
 #: ../src/gajim.py:45
 msgid "Gajim needs GTK 2.6+ to run. Quiting..."
-msgstr ""
+msgstr "Gajim potrebuje GTK 2.6+ pre svoj beh. Ukončenie..."
 
 #: ../src/gajim.py:51
 msgid "GTK+ runtime is missing libglade support"
-msgstr ""
+msgstr "GTK+ runtimu chýba podpora libglade"
 
 #: ../src/gajim.py:53
 #, python-format
-msgid ""
-"Please remove your current GTK+ runtime and install the latest stable "
-"version from %s"
+msgid "Please remove your current GTK+ runtime and install the latest stable version from %s"
 msgstr ""
 
 #: ../src/gajim.py:55
-msgid ""
-"Please make sure that gtk and pygtk have libglade support in your system."
+msgid "Please make sure that gtk and pygtk have libglade support in your system."
 msgstr ""
 
 #. ('HTTP_AUTH', account, (method, url, transaction_id, iq_obj))
@@ -1142,20 +1213,23 @@ msgstr ""
 
 #: ../src/gajim.py:201
 msgid "Do you accept this request?"
-msgstr ""
+msgstr "Akceptujete túto požiadavku?"
 
 #: ../src/gajim.py:523
 msgid "error while sending"
-msgstr ""
+msgstr "chyba pri odosielaní"
 
-#: ../src/gajim.py:550 ../src/gajim.py:561 ../src/gtkgui.glade.h:143
-#: ../src/roster_window.py:147 ../src/roster_window.py:1218
+#: ../src/gajim.py:550
+#: ../src/gajim.py:561
+#: ../src/gtkgui.glade.h:143
+#: ../src/roster_window.py:147
+#: ../src/roster_window.py:1218
 msgid "General"
-msgstr ""
+msgstr "Všeobecné"
 
 #: ../src/gajim.py:566
 msgid "Authorization accepted"
-msgstr ""
+msgstr "Autorizácia akceptovaná"
 
 #: ../src/gajim.py:567
 #, python-format
@@ -1169,48 +1243,47 @@ msgstr ""
 
 #: ../src/gajim.py:574
 msgid "You will always see him or her as offline."
-msgstr ""
+msgstr "Vždy uvidíte jeho alebo ju ako offline."
 
 #: ../src/gajim.py:598
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr ""
 
-#: ../src/gajim.py:599 ../src/common/connection.py:1611
+#: ../src/gajim.py:599
+#: ../src/common/connection.py:1611
 msgid "Check your connection or try again later."
 msgstr "Skontrolujte svoje pripojenie alebo skúste neskôr."
 
 #: ../src/gajim.py:749
 msgid "Your passphrase is incorrect"
-msgstr ""
+msgstr "Vaša passfráza je nesprávna"
 
 #: ../src/gajim.py:750
 msgid "You are currently connected without your OpenPGP key."
-msgstr ""
+msgstr "Momentálne ste pripojení(á) bez vášho OpenPGP kľúča."
 
 #: ../src/gajim.py:959
 msgid "vCard publication succeeded"
-msgstr ""
+msgstr "zverejnenie vCard úspešné"
 
 #: ../src/gajim.py:959
 msgid "Your personal information has been published successfully."
-msgstr ""
+msgstr "Vaše osobné informácie boli úspešne zverejnené."
 
 #: ../src/gajim.py:962
 msgid "vCard publication failed"
-msgstr ""
+msgstr "zverejnenia vCard zlyhalo"
 
 #: ../src/gajim.py:962
-msgid ""
-"There was an error while publishing your personal information, try again "
-"later."
-msgstr ""
+msgid "There was an error while publishing your personal information, try again later."
+msgstr "Nastala chyba pri zverejňovaní vašich osobných údajov, skúste prosím neskôr."
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
 #: ../src/gajim.py:1217
 msgid "Could not save your settings and preferences"
-msgstr ""
+msgstr "Nie je možné uložiť nastavenia."
 
 #: ../src/gajim.py:1380
 msgid "Session Management support not available (missing gnome.ui module)"
@@ -1218,26 +1291,26 @@ msgstr ""
 
 #: ../src/gajim_themes_window.py:57
 msgid "Theme"
-msgstr ""
+msgstr "Téma"
 
 #. don't confuse translators
 #: ../src/gajim_themes_window.py:135
 msgid "theme name"
-msgstr ""
+msgstr "meno témy"
 
 #: ../src/gajim_themes_window.py:153
 msgid "You cannot delete your current theme"
-msgstr ""
+msgstr "Nemôžete zmazať aktuálnu tému"
 
 #: ../src/gajim_themes_window.py:154
 msgid "Please first choose another for your current theme."
-msgstr ""
+msgstr "Prosím, vyberte najskôr inú tému."
 
 #. if we are in many rooms
 #: ../src/groupchat_window.py:145
 #, python-format
 msgid "Are you sure you want to leave rooms \"%s\"?"
-msgstr ""
+msgstr "Ste si istý, že chcete opustiť miestnosti  \"%s\"?"
 
 #: ../src/groupchat_window.py:146
 msgid "If you close this window, you will be disconnected from these rooms."
@@ -1257,7 +1330,8 @@ msgstr ""
 msgid "Do not ask me again"
 msgstr ""
 
-#: ../src/groupchat_window.py:287 ../src/groupchat_window.py:517
+#: ../src/groupchat_window.py:287
+#: ../src/groupchat_window.py:517
 msgid "This room has no subject"
 msgstr ""
 
@@ -1336,8 +1410,10 @@ msgstr ""
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 
-#: ../src/groupchat_window.py:768 ../src/groupchat_window.py:783
-#: ../src/groupchat_window.py:866 ../src/groupchat_window.py:880
+#: ../src/groupchat_window.py:768
+#: ../src/groupchat_window.py:783
+#: ../src/groupchat_window.py:866
+#: ../src/groupchat_window.py:880
 #, python-format
 msgid "Nickname not found: %s"
 msgstr ""
@@ -1348,7 +1424,8 @@ msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr ""
 
 #. %s is something the user wrote but it is not a jid so we inform
-#: ../src/groupchat_window.py:813 ../src/groupchat_window.py:841
+#: ../src/groupchat_window.py:813
+#: ../src/groupchat_window.py:841
 #, python-format
 msgid "%s does not appear to be a valid JID"
 msgstr ""
@@ -1365,17 +1442,12 @@ msgstr ""
 
 #: ../src/groupchat_window.py:916
 #, python-format
-msgid ""
-"Usage: /%s <nickname|JID> [reason], bans the JID from the room. The nickname "
-"of an occupant may be substituted, but not if it contains \"@\". If the JID "
-"is currently in the room, he/she/it will also be kicked. Does NOT support "
-"spaces in nickname."
+msgid "Usage: /%s <nickname|JID> [reason], bans the JID from the room. The nickname of an occupant may be substituted, but not if it contains \"@\". If the JID is currently in the room, he/she/it will also be kicked. Does NOT support spaces in nickname."
 msgstr ""
 
 #: ../src/groupchat_window.py:922
 #, python-format
-msgid ""
-"Usage: /%s <nickname>, opens a private chat window to the specified occupant."
+msgid "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
 msgstr ""
 
 #: ../src/groupchat_window.py:925
@@ -1385,9 +1457,7 @@ msgstr ""
 
 #: ../src/groupchat_window.py:928
 #, python-format
-msgid ""
-"Usage: /%s [reason], closes the current window or tab, displaying reason if "
-"specified."
+msgid "Usage: /%s [reason], closes the current window or tab, displaying reason if specified."
 msgstr ""
 
 #: ../src/groupchat_window.py:931
@@ -1397,38 +1467,27 @@ msgstr ""
 
 #: ../src/groupchat_window.py:934
 #, python-format
-msgid ""
-"Usage: /%s <JID> [reason], invites JID to the current room, optionally "
-"providing a reason."
+msgid "Usage: /%s <JID> [reason], invites JID to the current room, optionally providing a reason."
 msgstr ""
 
 #: ../src/groupchat_window.py:937
 #, python-format
-msgid ""
-"Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
-"using specified nickname."
+msgid "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally using specified nickname."
 msgstr ""
 
 #: ../src/groupchat_window.py:940
 #, python-format
-msgid ""
-"Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
-"from the room and optionally displays a reason. Does NOT support spaces in "
-"nickname."
+msgid "Usage: /%s <nickname> [reason], removes the occupant specified by nickname from the room and optionally displays a reason. Does NOT support spaces in nickname."
 msgstr ""
 
 #: ../src/groupchat_window.py:944
 #, python-format
-msgid ""
-"Usage: /%s <action>, sends action to the current room. Use third person. (e."
-"g. /%s explodes.)"
+msgid "Usage: /%s <action>, sends action to the current room. Use third person. (e.g. /%s explodes.)"
 msgstr ""
 
 #: ../src/groupchat_window.py:948
 #, python-format
-msgid ""
-"Usage: /%s <nickname> [message], opens a private message window and sends "
-"message to the occupant specified by nickname."
+msgid "Usage: /%s <nickname> [message], opens a private message window and sends message to the occupant specified by nickname."
 msgstr ""
 
 #: ../src/groupchat_window.py:951
@@ -1443,8 +1502,7 @@ msgstr ""
 
 #: ../src/groupchat_window.py:957
 #, python-format
-msgid ""
-"Usage: /%s <message>, sends a message without looking for other commands."
+msgid "Usage: /%s <message>, sends a message without looking for other commands."
 msgstr ""
 
 #: ../src/groupchat_window.py:959
@@ -1458,7 +1516,8 @@ msgstr ""
 msgid "Kicking %s"
 msgstr ""
 
-#: ../src/groupchat_window.py:1044 ../src/groupchat_window.py:1075
+#: ../src/groupchat_window.py:1044
+#: ../src/groupchat_window.py:1075
 msgid "You may specify a reason below:"
 msgstr ""
 
@@ -1473,9 +1532,7 @@ msgid "A programming error has been detected"
 msgstr ""
 
 #: ../src/gtkexcepthook.py:47
-msgid ""
-"It probably is not fatal, but should be reported to the developers "
-"nonetheless."
+msgid "It probably is not fatal, but should be reported to the developers nonetheless."
 msgstr ""
 
 #: ../src/gtkexcepthook.py:53
@@ -1776,18 +1833,11 @@ msgid "Check for new _version on Gajim startup"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:82
-msgid ""
-"Check this option, only if someone you don't have in the roster spams/annoys "
-"you. Use with caution, cause it blocks all messages from any contact that is "
-"not in the roster"
+msgid "Check this option, only if someone you don't have in the roster spams/annoys you. Use with caution, cause it blocks all messages from any contact that is not in the roster"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:83
-msgid ""
-"Check this so Gajim will connect in port 5223 where legacy servers are "
-"expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
-"default if broadcasted by the server, and with this option enabled TLS will "
-"be disabled"
+msgid "Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default if broadcasted by the server, and with this option enabled TLS will be disabled"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:84
@@ -1989,38 +2039,27 @@ msgid "Gajim Themes Customization"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:136
-msgid ""
-"Gajim can send and receive meta-information related to a conversation you "
-"may have with a contact"
+msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:137
-msgid ""
-"Gajim will automatically show the new received message in a new chat window "
-"or tab in an existing chat window"
+msgid "Gajim will automatically show the new received message in a new chat window or tab in an existing chat window"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:138
-msgid ""
-"Gajim will notify you for new message via a popup in the bottom right of the "
-"screen"
+msgid "Gajim will notify you for new message via a popup in the bottom right of the screen"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:139
-msgid ""
-"Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just signed in"
+msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed in"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:140
-msgid ""
-"Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just signed out"
+msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed out"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:141
-msgid ""
-"Gajim will only change the icon of the contact that sent the new message"
+msgid "Gajim will only change the icon of the contact that sent the new message"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:142
@@ -2073,15 +2112,11 @@ msgid "If checked, Gajim will also have a trayicon"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:157
-msgid ""
-"If checked, Gajim will display an avatar, if one is set, for every contact "
-"in roster window"
+msgid "If checked, Gajim will display an avatar, if one is set, for every contact in roster window"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:158
-msgid ""
-"If checked, Gajim will display the status message, if not empty, for every "
-"contact under the contact name in roster window"
+msgid "If checked, Gajim will display the status message, if not empty, for every contact under the contact name in roster window"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:159
@@ -2093,53 +2128,35 @@ msgid "If checked, Gajim will remember the password for this account"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:161
-msgid ""
-"If checked, Gajim will remember the roster and chat window positions in the "
-"screen and the sizes of them next time you run it"
+msgid "If checked, Gajim will remember the roster and chat window positions in the screen and the sizes of them next time you run it"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:162
-msgid ""
-"If checked, Gajim will replace ascii smilies like ':)' with equivalent "
-"graphical emoticons"
+msgid "If checked, Gajim will replace ascii smilies like ':)' with equivalent graphical emoticons"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:163
-msgid ""
-"If checked, Gajim will send keep-alive packets so it prevents connection "
-"timeout which results in disconnection"
+msgid "If checked, Gajim will send keep-alive packets so it prevents connection timeout which results in disconnection"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:164
-msgid ""
-"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
-"permission only for you"
+msgid "If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:165
-msgid ""
-"If checked, Gajim will use protocol-specific status icons. (eg. A contact "
-"from MSN will have the equivalent msn icon for status online, away, busy, "
-"etc...)"
+msgid "If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:166
-msgid ""
-"If checked, Gajim, when launched, will automatically connect to jabber using "
-"this account"
+msgid "If checked, Gajim, when launched, will automatically connect to jabber using this account"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:167
-msgid ""
-"If checked, any change to the global status (handled by the combobox at the "
-"bottom of the roster window) will change the status of this account "
-"accordingly"
+msgid "If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:168
-msgid ""
-"If you have 2 or more accounts and it is checked, Gajim will list all "
-"contacts as if you had one account"
+msgid "If you have 2 or more accounts and it is checked, Gajim will list all contacts as if you had one account"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:169
@@ -2253,7 +2270,8 @@ msgstr ""
 msgid "Open..."
 msgstr ""
 
-#: ../src/gtkgui.glade.h:201 ../src/tabbed_chat_window.py:218
+#: ../src/gtkgui.glade.h:201
+#: ../src/tabbed_chat_window.py:218
 msgid "OpenPGP Encryption"
 msgstr ""
 
@@ -2315,10 +2333,7 @@ msgid "Priori_ty:"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:218
-msgid ""
-"Priority is used in Jabber to determine who gets the events from the jabber "
-"server when two or more clients are connected using the same account; The "
-"client with the highest priority gets the events"
+msgid "Priority is used in Jabber to determine who gets the events from the jabber server when two or more clients are connected using the same account; The client with the highest priority gets the events"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:219
@@ -2378,12 +2393,7 @@ msgid "Resour_ce: "
 msgstr ""
 
 #: ../src/gtkgui.glade.h:233
-msgid ""
-"Resource is sent to the Jabber server in order to separate the same JID in "
-"two or more parts depending on the number of the clients connected in the "
-"same server with the same account. So you might be connected in the same "
-"account with resource 'Home' and 'Work' at the same time. The resource which "
-"has the highest priority will get the events. (see below)"
+msgid "Resource is sent to the Jabber server in order to separate the same JID in two or more parts depending on the number of the clients connected in the same server with the same account. So you might be connected in the same account with resource 'Home' and 'Work' at the same time. The resource which has the highest priority will get the events. (see below)"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:234
@@ -2600,9 +2610,7 @@ msgid "Theme:"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:288
-msgid ""
-"This action removes single file transfer from the list. If the transfer is "
-"active, it is first stopped and then removed"
+msgid "This action removes single file transfer from the list. If the transfer is active, it is first stopped and then removed"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:289
@@ -2674,11 +2682,7 @@ msgid "When a file transfer is complete show a popup notification"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:306
-msgid ""
-"When a new event (message, file transfer request etc..) is received, the "
-"following methods may be used to inform you about it. NOTE: New message "
-"events only occur if it is a new message from a contact you are not already "
-"chatting with"
+msgid "When a new event (message, file transfer request etc..) is received, the following methods may be used to inform you about it. NOTE: New message events only occur if it is a new message from a contact you are not already chatting with"
 msgstr ""
 
 #: ../src/gtkgui.glade.h:307
@@ -2941,7 +2945,8 @@ msgstr ""
 msgid "_Remove"
 msgstr ""
 
-#: ../src/gtkgui.glade.h:377 ../src/roster_window.py:1062
+#: ../src/gtkgui.glade.h:377
+#: ../src/roster_window.py:1062
 msgid "_Remove from Roster"
 msgstr ""
 
@@ -3026,7 +3031,8 @@ msgid "minutes"
 msgstr ""
 
 #. we talk about file
-#: ../src/gtkgui_helpers.py:99 ../src/gtkgui_helpers.py:114
+#: ../src/gtkgui_helpers.py:99
+#: ../src/gtkgui_helpers.py:114
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr ""
@@ -3046,7 +3052,8 @@ msgstr ""
 msgid "Could not write to %s. Session Management support will not work"
 msgstr ""
 
-#: ../src/history_window.py:48 ../src/history_window.py:50
+#: ../src/history_window.py:48
+#: ../src/history_window.py:50
 #, python-format
 msgid "Conversation History with %s"
 msgstr ""
@@ -3137,7 +3144,8 @@ msgstr ""
 msgid "You are already in room %s"
 msgstr ""
 
-#: ../src/roster_window.py:310 ../src/roster_window.py:1762
+#: ../src/roster_window.py:310
+#: ../src/roster_window.py:1762
 msgid "You cannot join a room while you are invisible"
 msgstr ""
 
@@ -3180,9 +3188,7 @@ msgid "Transport \"%s\" will be removed"
 msgstr ""
 
 #: ../src/roster_window.py:825
-msgid ""
-"You will no longer be able to send and receive messages to contacts from "
-"this transport."
+msgid "You will no longer be able to send and receive messages to contacts from this transport."
 msgstr ""
 
 #: ../src/roster_window.py:875
@@ -3237,9 +3243,7 @@ msgid "Contact \"%s\" will be removed from your roster"
 msgstr ""
 
 #: ../src/roster_window.py:1383
-msgid ""
-"By removing this contact you also by default remove authorization resulting "
-"in him or her always seeing you as offline."
+msgid "By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline."
 msgstr ""
 
 #: ../src/roster_window.py:1384
@@ -3272,14 +3276,14 @@ msgstr ""
 msgid "Save passphrase"
 msgstr ""
 
-#: ../src/roster_window.py:1509 ../src/roster_window.py:1569
+#: ../src/roster_window.py:1509
+#: ../src/roster_window.py:1569
 msgid "You are participating in one or more group chats"
 msgstr ""
 
-#: ../src/roster_window.py:1510 ../src/roster_window.py:1570
-msgid ""
-"Changing your status to invisible will result in disconnection from those "
-"group chats. Are you sure you want to go invisible?"
+#: ../src/roster_window.py:1510
+#: ../src/roster_window.py:1570
+msgid "Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?"
 msgstr ""
 
 #: ../src/roster_window.py:1529
@@ -3290,14 +3294,14 @@ msgstr ""
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 
-#: ../src/roster_window.py:1921 ../src/roster_window.py:1927
+#: ../src/roster_window.py:1921
+#: ../src/roster_window.py:1927
 msgid "You have unread messages"
 msgstr ""
 
-#: ../src/roster_window.py:1922 ../src/roster_window.py:1928
-msgid ""
-"Messages will only be available for reading them later if you have history "
-"enabled."
+#: ../src/roster_window.py:1922
+#: ../src/roster_window.py:1928
+msgid "Messages will only be available for reading them later if you have history enabled."
 msgstr ""
 
 #: ../src/roster_window.py:2577
@@ -3310,7 +3314,8 @@ msgstr ""
 
 #. for chat_with
 #. for new_message
-#: ../src/systray.py:179 ../src/systray.py:184
+#: ../src/systray.py:179
+#: ../src/systray.py:184
 msgid "as "
 msgstr ""
 
@@ -3322,7 +3327,8 @@ msgstr ""
 msgid "All contacts in this group are offline or have errors"
 msgstr ""
 
-#: ../src/systraywin32.py:278 ../src/systraywin32.py:297
+#: ../src/systraywin32.py:278
+#: ../src/systraywin32.py:297
 #: ../src/tooltips.py:261
 #, python-format
 msgid "Gajim - %d unread message"
@@ -3338,21 +3344,18 @@ msgid "%s has not broadcasted an OpenPGP key nor you have assigned one"
 msgstr ""
 
 #. %s is being replaced in the code with JID
-#: ../src/tabbed_chat_window.py:373 ../src/tabbed_chat_window.py:431
+#: ../src/tabbed_chat_window.py:373
+#: ../src/tabbed_chat_window.py:431
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr ""
 
 #: ../src/tabbed_chat_window.py:374
-msgid ""
-"If you close this tab and you have history disabled, this message will be "
-"lost."
+msgid "If you close this tab and you have history disabled, this message will be lost."
 msgstr ""
 
 #: ../src/tabbed_chat_window.py:432
-msgid ""
-"If you close this tab and you have history disabled, the message will be "
-"lost."
+msgid "If you close this tab and you have history disabled, the message will be lost."
 msgstr ""
 
 #. we are not connected
@@ -3406,7 +3409,8 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: ../src/tooltips.py:294 ../src/tooltips.py:296
+#: ../src/tooltips.py:294
+#: ../src/tooltips.py:296
 #, python-format
 msgid "Gajim - %s"
 msgstr ""
@@ -3419,12 +3423,15 @@ msgstr ""
 msgid "Affiliation: "
 msgstr ""
 
-#: ../src/tooltips.py:330 ../src/tooltips.py:424 ../src/tooltips.py:438
+#: ../src/tooltips.py:330
+#: ../src/tooltips.py:424
+#: ../src/tooltips.py:438
 #: ../src/tooltips.py:502
 msgid "Status: "
 msgstr ""
 
-#: ../src/tooltips.py:340 ../src/tooltips.py:434
+#: ../src/tooltips.py:340
+#: ../src/tooltips.py:434
 msgid "Resource: "
 msgstr ""
 
@@ -3456,7 +3463,8 @@ msgstr ""
 msgid "Transferred: "
 msgstr ""
 
-#: ../src/tooltips.py:505 ../src/tooltips.py:526
+#: ../src/tooltips.py:505
+#: ../src/tooltips.py:526
 msgid "Not started"
 msgstr ""
 
@@ -3464,7 +3472,8 @@ msgstr ""
 msgid "Stopped"
 msgstr ""
 
-#: ../src/tooltips.py:511 ../src/tooltips.py:514
+#: ../src/tooltips.py:511
+#: ../src/tooltips.py:514
 msgid "Completed"
 msgstr ""
 
@@ -3514,7 +3523,8 @@ msgstr ""
 msgid "?OS:Unknown"
 msgstr ""
 
-#: ../src/vcard.py:293 ../src/vcard.py:312
+#: ../src/vcard.py:293
+#: ../src/vcard.py:312
 msgid " resource with priority "
 msgstr ""
 
@@ -3547,8 +3557,7 @@ msgid "Not available as a result of being idle"
 msgstr "Nedostupný ako výsledok nečinnostii"
 
 #: ../src/common/config.py:82
-msgid ""
-"If True, do not remove */_ . So *abc* will be bold but with * * not removed."
+msgid "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
 msgstr ""
 
 #: ../src/common/config.py:119
@@ -3556,9 +3565,7 @@ msgid "Add * and [n] in roster title?"
 msgstr ""
 
 #: ../src/common/config.py:120
-msgid ""
-"How many lines to remember from previous conversation when a chat tab/window "
-"is reopened."
+msgid "How many lines to remember from previous conversation when a chat tab/window is reopened."
 msgstr ""
 
 #: ../src/common/config.py:121
@@ -3566,9 +3573,7 @@ msgid "How many minutes should last lines from previous conversation last."
 msgstr ""
 
 #: ../src/common/config.py:122
-msgid ""
-"Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
-"Client default behaviour)."
+msgid "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour)."
 msgstr ""
 
 #: ../src/common/config.py:124
@@ -3586,9 +3591,7 @@ msgstr ""
 
 #: ../src/common/config.py:129
 #, python-format
-msgid ""
-"Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
-"which means use wiktionary."
+msgid "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary."
 msgstr ""
 
 #: ../src/common/config.py:132
@@ -3602,9 +3605,7 @@ msgstr ""
 #. notif. on file complete
 #. port, used for file transfers
 #: ../src/common/config.py:139
-msgid ""
-"Overrides the host we send for File Transfer in case of address translation/"
-"port forwarding."
+msgid "Overrides the host we send for File Transfer in case of address translation/port forwarding."
 msgstr ""
 
 #: ../src/common/config.py:141
@@ -3625,15 +3626,11 @@ msgid "Show close button in tab?"
 msgstr ""
 
 #: ../src/common/config.py:156
-msgid ""
-"A semicolon-separated list of words that will be highlighted in multi-user "
-"chat."
+msgid "A semicolon-separated list of words that will be highlighted in multi-user chat."
 msgstr ""
 
 #: ../src/common/config.py:157
-msgid ""
-"If True, quits Gajim when X button of Window Manager is clicked. This "
-"setting is taken into account only if trayicon is used."
+msgid "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
 msgstr ""
 
 #: ../src/common/config.py:158
@@ -3641,27 +3638,19 @@ msgid "If True, Gajim registers for xmpp:// on each startup."
 msgstr ""
 
 #: ../src/common/config.py:159
-msgid ""
-"If True, Gajim will display an icon on each tab containing unread messages. "
-"Depending on the theme, this icon may be animated."
+msgid "If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated."
 msgstr ""
 
 #: ../src/common/config.py:160
-msgid ""
-"If True, Gajim will display the status message, if not empty, for every "
-"contact under the contact name in roster window"
+msgid "If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window"
 msgstr ""
 
 #: ../src/common/config.py:162
-msgid ""
-"If True, Gajim will ask for avatar each contact that did not have an avatar "
-"last time or has one cache that is too old."
+msgid "If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cache that is too old."
 msgstr ""
 
 #: ../src/common/config.py:163
-msgid ""
-"If False, you will no longer see status line in chats when a contact changes "
-"his or her status and/or his status message."
+msgid "If False, you will no longer see status line in chats when a contact changes his or her status and/or his status message."
 msgstr ""
 
 #: ../src/common/config.py:321
@@ -3717,15 +3706,11 @@ msgid "I'm out enjoying life"
 msgstr "Šiel som von užívať si život."
 
 #: ../src/common/config.py:336
-msgid ""
-"Sound to play when a MUC message contains one of the words in "
-"muc_highlight_words, or when a MUC message contains your nickname."
+msgid "Sound to play when a MUC message contains one of the words in muc_highlight_words, or when a MUC message contains your nickname."
 msgstr ""
 
 #: ../src/common/config.py:337
-msgid ""
-"Sound to play when any MUC message arrives. (This setting is taken into "
-"account only if notify_on_all_muc_messages is True)"
+msgid "Sound to play when any MUC message arrives. (This setting is taken into account only if notify_on_all_muc_messages is True)"
 msgstr ""
 
 #. sorted alphanum
@@ -3749,7 +3734,8 @@ msgstr ""
 msgid "plain"
 msgstr ""
 
-#: ../src/common/connection.py:371 ../src/common/connection.py:388
+#: ../src/common/connection.py:371
+#: ../src/common/connection.py:388
 #: ../src/common/connection.py:1899
 #, python-format
 msgid ""
@@ -3760,9 +3746,12 @@ msgstr ""
 #. password required to join
 #. we are banned
 #. room does not exist
-#: ../src/common/connection.py:443 ../src/common/connection.py:446
-#: ../src/common/connection.py:449 ../src/common/connection.py:452
-#: ../src/common/connection.py:455 ../src/common/connection.py:458
+#: ../src/common/connection.py:443
+#: ../src/common/connection.py:446
+#: ../src/common/connection.py:449
+#: ../src/common/connection.py:452
+#: ../src/common/connection.py:455
+#: ../src/common/connection.py:458
 #: ../src/common/connection.py:466
 msgid "Unable to join room"
 msgstr "Nie je možné vstúpiť do miestnosti"
@@ -3797,7 +3786,8 @@ msgid ""
 "Please specify another nickname below:"
 msgstr ""
 
-#: ../src/common/connection.py:491 ../src/common/connection.py:1921
+#: ../src/common/connection.py:491
+#: ../src/common/connection.py:1921
 msgid "I would like to add you to my roster."
 msgstr "Chcel by som si ťa pridať do môjho zoznamu."
 
@@ -3817,18 +3807,21 @@ msgstr ""
 msgid "we are now unsubscribed from %s"
 msgstr ""
 
-#: ../src/common/connection.py:535 ../src/common/connection.py:557
+#: ../src/common/connection.py:535
+#: ../src/common/connection.py:557
 #: ../src/common/connection.py:586
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr ""
 
-#: ../src/common/connection.py:536 ../src/common/connection.py:558
+#: ../src/common/connection.py:536
+#: ../src/common/connection.py:558
 #: ../src/common/connection.py:587
 msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr ""
 
-#: ../src/common/connection.py:1610 ../src/common/connection.py:1683
+#: ../src/common/connection.py:1610
+#: ../src/common/connection.py:1683
 #: ../src/common/connection.py:2007
 #, python-format
 msgid "Could not connect to \"%s\""
@@ -3891,7 +3884,8 @@ msgstr ""
 msgid "Timeout"
 msgstr ""
 
-#: ../src/common/connection.py:2349 ../src/common/connection.py:2361
+#: ../src/common/connection.py:2349
+#: ../src/common/connection.py:2361
 msgid "A protocol error has occured:"
 msgstr ""
 
@@ -3918,19 +3912,22 @@ msgstr ""
 msgid "creating logs database"
 msgstr ""
 
-#: ../src/common/helpers.py:182 ../src/common/helpers.py:194
+#: ../src/common/helpers.py:182
+#: ../src/common/helpers.py:194
 #, python-format
 msgid "%s is file but it should be a directory"
 msgstr ""
 
-#: ../src/common/helpers.py:183 ../src/common/helpers.py:195
+#: ../src/common/helpers.py:183
+#: ../src/common/helpers.py:195
 #: ../src/common/helpers.py:202
 msgid "Gajim will now exit"
 msgstr "Gajim bude ukončený"
 
 #. dot_gajim doesn't exist
 #. is '' on win9x so avoid that
-#: ../src/common/helpers.py:191 ../src/common/helpers.py:207
+#: ../src/common/helpers.py:191
+#: ../src/common/helpers.py:207
 #: ../src/common/helpers.py:210
 #, python-format
 msgid "creating %s directory"
@@ -4140,6 +4137,7 @@ msgstr ""
 
 #~ msgid "Error:"
 #~ msgstr "Chyba:"
-
 #~ msgid "error appeared while processing xmpp:"
 #~ msgstr "objavila sa chyba pri spracovaní  xmpp:"
+
+
