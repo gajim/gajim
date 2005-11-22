@@ -78,7 +78,7 @@ def visit(arg, dirname, filenames):
 		cur.execute('INSERT INTO jids (jid) VALUES (?)', (jid,))
 		con.commit()
 		
-		cur.execute('SELECT COUNT(*) FROM jids')
+		cur.execute('SELECT MAX(jid) FROM jids')
 		JID_ID = cur.fetchone()[0]
 		
 		f = open(path_to_text_file, 'r')
