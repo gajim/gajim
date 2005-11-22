@@ -95,23 +95,23 @@ def prep(user, server, resource):
 		try:
 			user = nodeprep.prepare(unicode(user))
 		except UnicodeError:
-			raise InvalidFormat, 'Invalid character in username.'
+			raise InvalidFormat, _('Invalid character in username.')
 	else:
 		user = None
 
 	if not server:
-		raise InvalidFormat, 'Server address required.'
+		raise InvalidFormat, _('Server address required.')
 	else:
 		try:
 			server = nameprep.prepare(unicode(server))
 		except UnicodeError:
-			raise InvalidFormat, 'Invalid character in hostname'
+			raise InvalidFormat, _('Invalid character in hostname.')
 
 	if resource:
 		try:
 			resource = resourceprep.prepare(unicode(resource))
 		except UnicodeError:
-			raise InvalidFormat, 'Invalid character in resource.'
+			raise InvalidFormat, _('Invalid character in resource.')
 	else:
 		resource = None
 
