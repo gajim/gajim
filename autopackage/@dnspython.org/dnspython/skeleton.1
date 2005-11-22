@@ -1,0 +1,22 @@
+# -*- shell-script-mode -*-
+
+[Meta]
+RootName: @dnspython.org/dnspython
+DisplayName: dnspython is a DNS toolkit for Python
+ShortName: dnspython
+Skeleton-Author: Filippos Papadopoulos <filip@cs.uoi.gr>
+Skeleton-Version: 1
+
+[Notes]
+Returns the full version e.g 1.3.3
+
+[Test]
+INTERFACE_VERSIONS=`python - <<EOF
+try:
+    import dns.version
+    print dns.version.version
+except:
+    pass
+EOF
+`
+SOFTWARE_VERSIONS="$INTERFACE_VERSIONS"

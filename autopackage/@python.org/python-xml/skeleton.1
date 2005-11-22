@@ -1,0 +1,23 @@
+# -*- shell-script-mode -*-
+
+[Meta]
+RootName: @python.org/python-xml
+DisplayName: Python bindings for XML
+ShortName: python-xml
+Skeleton-Author: Filippos Papadopoulos <filip@cs.uoi.gr>
+Skeleton-Version: 1
+
+[Notes]
+
+
+[Test]
+
+SOFTWARE_VERSIONS=$( locateCommand python -V 2>&1 )
+testForPythonModule xml
+if [[ "$?" != "0" ]]; then
+    INTERFACE_VERSIONS=""
+else
+    local v
+    v=$( echo $SOFTWARE_VERSIONS | awk '{print $2}' | awk -F. '{print $1 "." $2}' )
+    INTERFACE_VERSIONS=$( countDownVersions $v )
+fi

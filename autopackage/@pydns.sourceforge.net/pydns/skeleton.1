@@ -1,0 +1,22 @@
+# -*- shell-script-mode -*-
+
+[Meta]
+RootName: @pydns.sourceforge.net/pydns
+DisplayName: PyDNS provides a python module for performing DNS queries
+ShortName: pydns
+Skeleton-Author: Filippos Papadopoulos <filip@cs.uoi.gr>
+Skeleton-Version: 1
+
+[Notes]
+
+
+[Test]
+INTERFACE_VERSIONS=`python - <<EOF
+try:
+   import DNS
+   print DNS.__version__
+except:
+    pass
+EOF
+`
+SOFTWARE_VERSIONS="$INTERFACE_VERSIONS"
