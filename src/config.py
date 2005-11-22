@@ -398,14 +398,6 @@ class PreferencesWindow:
 				gajim.config.get('custommailapp'))
 			self.xml.get_widget('custom_file_manager_entry').set_text(
 				gajim.config.get('custom_file_manager'))
-
-		#log presences in user file
-		st = gajim.config.get('log_notif_in_user_file')
-		self.xml.get_widget('log_in_contact_checkbutton').set_active(st)
-
-		#log presences in external file
-		st = gajim.config.get('log_notif_in_sep_file')
-		self.xml.get_widget('log_in_extern_checkbutton').set_active(st)
 		
 		# send os info
 		st = gajim.config.get('send_os_info')
@@ -898,14 +890,6 @@ class PreferencesWindow:
 
 	def on_custom_file_manager_entry_changed(self, widget):
 		gajim.config.set('custom_file_manager', widget.get_text().decode('utf-8'))
-		gajim.interface.save_config()
-
-	def on_log_in_contact_checkbutton_toggled(self, widget):
-		gajim.config.set('log_notif_in_user_file', widget.get_active())
-		gajim.interface.save_config()
-
-	def on_log_in_extern_checkbutton_toggled(self, widget):
-		gajim.config.set('log_notif_in_sep_file', widget.get_active())
 		gajim.interface.save_config()
 
 	def on_send_os_info_checkbutton_toggled(self, widget):

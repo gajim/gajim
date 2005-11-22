@@ -116,8 +116,6 @@ class Config:
 		'check_for_new_version': [ opt_bool, False ],
 		'usegpg': [ opt_bool, False ],
 		'use_gpg_agent': [ opt_bool, False ],
-		'log_notif_in_user_file': [ opt_bool, True ],
-		'log_notif_in_sep_file': [ opt_bool, True ],
 		'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
 		'restore_lines': [opt_int, 4, _('How many lines to remember from previous conversation when a chat tab/window is reopened.')],
 		'restore_timeout': [opt_int, 60, _('How many minutes should last lines from previous conversation last.')],
