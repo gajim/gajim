@@ -501,7 +501,6 @@ class TabbedChatWindow(chat.Chat):
 		in the last 5 seconds?
 		if yes we go active for mouse, composing for kbd
 		if no we go paused if we were previously composing '''
-		print 'check for pause'
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 		if jid not in self.xmls or contact is None:
 			# the tab with jid is no longer open or contact left
@@ -509,7 +508,6 @@ class TabbedChatWindow(chat.Chat):
 			return False # stop looping
 
 		current_state = contact.our_chatstate
-		print 'current_state', current_state
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
 		
@@ -535,7 +533,6 @@ class TabbedChatWindow(chat.Chat):
 		in the last 30 seconds?
 		if yes we go active
 		if no we go inactive '''
-		print 'check for inactive'
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 		if jid not in self.xmls or contact is None:
 			# the tab with jid is no longer open or contact left
