@@ -900,7 +900,8 @@ class GroupchatWindow(chat.Chat):
 					else:
 						self.get_command_help(command)
 				else:
-					self.print_conversation(_('No such command: /%s') % command,
+					self.print_conversation(
+						_('No such command: /%s (if you want to sent this prefix it with /say)') % command,
 						room_jid)
 				return # don't print the command
 
