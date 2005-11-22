@@ -129,7 +129,7 @@ class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
 			ask='', resource='', priority=5, keyID='', role='', affiliation='',
-			chatstate=None):
+			our_chatstate=None, chatstate=None):
 		self.jid = jid
 		self.name = name
 		self.groups = groups
@@ -149,7 +149,9 @@ class Contact:
 		# None if no info about peer
 		# False if peer does not support jep85
 		# 'ask' if we sent the first 'active' chatstate and are waiting for reply
-		# this holds what WE SEND to contact (the current chatstate)
+		# this holds what WE SEND to contact (our current chatstate)
+		self.our_chatstate = our_chatstate
+		# this is contact's chatstate
 		self.chatstate = chatstate
 
 import roster_window
@@ -353,7 +355,7 @@ class Interface:
 			# reset chatstate if needed:
 			# (when contact signs out or has errors)
 			if array[1] in ('offline', 'error'):
-				contact1.chatstate = None
+				contact1.our_chatstate = contact1.chatstate = None
 			self.roster.chg_contact_status(contact1, array[1], array[2], account)
 			# play sound
 			if old_show < 2 and new_show > 1:
@@ -402,7 +404,8 @@ class Interface:
 			
 
 	def handle_event_msg(self, account, array):
-		#('MSG', account, (jid, msg, time, encrypted, msg_type, subject, chatstate))
+		# ('MSG', account, (jid, msg, time, encrypted, msg_type, subject,
+		# chatstate))
 		jid = gajim.get_jid_without_resource(array[0])
 		resource = gajim.get_resource_from_jid(array[0])
 		msg_type = array[4]
@@ -439,17 +442,18 @@ class Interface:
 		if self.instances[account]['chats'].has_key(jid):
 			chat_win = self.instances[account]['chats'][jid]
 			if chatstate is not None: # he or she sent us reply, so he supports jep85
-				if contact.chatstate == 'ask': # we were jep85 disco?
-					contact.chatstate = 'active' # no more
+				contact.chatstate = chatstate
+				if contact.our_chatstate == 'ask': # we were jep85 disco?
+					contact.our_chatstate = 'active' # no more
 				
-				chat_win.handle_incoming_chatstate(account, jid, chatstate)
+				chat_win.handle_incoming_chatstate(account, contact)
 			elif contact.chatstate != 'active':
 				# got no valid jep85 answer, peer does not support it
 				contact.chatstate = False
-		else:
+		elif contact and chatstate == 'active':
 			# Brand new message, incoming.  
-			if contact and chatstate == 'active':  
-				contact.chatstate = chatstate
+			contact.our_chatstate = chatstate
+			contact.chatstate = chatstate
 
 		if not array[1]: #empty message text
 			return

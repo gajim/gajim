@@ -254,13 +254,13 @@ class TabbedChatWindow(chat.Chat):
 		
 		
 		st = gajim.config.get('chat_state_notifications')
-		if chatstate and st in ('composing_only', 'all'):
+		if contact.chatstate and st in ('composing_only', 'all'):
 			if st == 'all':
-				chatstate = helpers.get_uf_chatstate(chatstate)
+				chatstate = helpers.get_uf_chatstate(contact.chatstate)
 			else: # 'composing_only'
 				if chatstate in ('composing', 'paused'):
 					# only print composing, paused
-					chatstate = helpers.get_uf_chatstate(chatstate)
+					chatstate = helpers.get_uf_chatstate(contact.chatstate)
 				else:
 					chatstate = ''
 			label_text = \
@@ -389,6 +389,7 @@ class TabbedChatWindow(chat.Chat):
 		for jid in self.xmls:
 			self.send_chatstate('gone', jid)
 			self.contacts[jid].chatstate = None
+			self.contacts[jid].our_chatstate = None
 		#clean gajim.interface.instances[self.account]['chats']
 		chat.Chat.on_window_destroy(self, widget, 'chats')
 
@@ -435,6 +436,7 @@ class TabbedChatWindow(chat.Chat):
 		# chatstates - tab is destroyed, send gone and reset
 		self.send_chatstate('gone', jid)
 		self.contacts[jid].chatstate = None
+		self.contacts[jid].our_chatstate = None
 		
 		chat.Chat.remove_tab(self, jid, 'chats')
 		del self.contacts[jid]
@@ -487,12 +489,11 @@ class TabbedChatWindow(chat.Chat):
 		self.possible_inactive_timeout_id[contact.jid] = gobject.timeout_add(
 			30000, self.check_for_possible_inactive_chatstate, contact.jid)
 		
-	def handle_incoming_chatstate(self, account, jid, chatstate):
+	def handle_incoming_chatstate(self, account, contact):
 		''' handle incoming chatstate that jid SENT TO us '''
-		contact = gajim.get_first_contact_instance_from_jid(account, jid)
-		self.draw_name_banner(contact, chatstate)
+		self.draw_name_banner(contact, contact.chatstate)
 		# update chatstate in tab for this chat
-		self.redraw_tab(contact.jid, chatstate)
+		self.redraw_tab(contact.jid, contact.chatstate)
 
 	def check_for_possible_paused_chatstate(self, jid):
 		''' did we move mouse of that window or write something in message
@@ -500,14 +501,15 @@ class TabbedChatWindow(chat.Chat):
 		in the last 5 seconds?
 		if yes we go active for mouse, composing for kbd
 		if no we go paused if we were previously composing '''
-		
+		print 'check for pause'
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 		if jid not in self.xmls or contact is None:
 			# the tab with jid is no longer open or contact left
 			# stop timer
 			return False # stop looping
 
-		current_state = contact.chatstate
+		current_state = contact.our_chatstate
+		print 'current_state', current_state
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
 		
@@ -533,12 +535,13 @@ class TabbedChatWindow(chat.Chat):
 		in the last 30 seconds?
 		if yes we go active
 		if no we go inactive '''
+		print 'check for inactive'
 		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
 		if jid not in self.xmls or contact is None:
 			# the tab with jid is no longer open or contact left
 			return False # stop looping
 
-		current_state = contact.chatstate
+		current_state = contact.our_chatstate
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
 		
@@ -672,15 +675,15 @@ class TabbedChatWindow(chat.Chat):
 		if contact.show == 'offline':
 			return
 
-		if contact.chatstate is False: # jid cannot do jep85
+		if contact.our_chatstate is False: # jid cannot do jep85
 			return
 
 		# if the new state we wanna send (state) equals 
-		# the current state (contact.chastate) then return
-		if contact.chatstate == state:
+		# the current state (contact.our_chatstate) then return
+		if contact.our_chatstate == state:
 			return
 
-		if contact.chatstate is None:
+		if contact.our_chatstate is None:
 			# we don't know anything about jid, so return
 			# NOTE:
 			# send 'active', set current state to 'ask' and return is done
@@ -689,27 +692,27 @@ class TabbedChatWindow(chat.Chat):
 			# 'active' until we know peer supports jep85
 			return 
 
-		if contact.chatstate == 'ask':
+		if contact.our_chatstate == 'ask':
 			return
 
 		# prevent going paused if we we were not composing (JEP violation)
-		if state == 'paused' and not contact.chatstate == 'composing':
+		if state == 'paused' and not contact.our_chatstate == 'composing':
 			gajim.connections[self.account].send_message(jid, None, None,
 				chatstate = 'active') # go active before
-			contact.chatstate = 'active'
+			contact.our_chatstate = 'active'
 			self.reset_kbd_mouse_timeout_vars()
 		
 		# if we're inactive prevent composing (JEP violation)
-		if contact.chatstate == 'inactive' and state == 'composing':
+		if contact.our_chatstate == 'inactive' and state == 'composing':
 			gajim.connections[self.account].send_message(jid, None, None,
 				chatstate = 'active') # go active before
-			contact.chatstate = 'active'
+			contact.our_chatstate = 'active'
 			self.reset_kbd_mouse_timeout_vars()
 
 		gajim.connections[self.account].send_message(jid, None, None,
 			chatstate = state)
-		contact.chatstate = state
-		if contact.chatstate == 'active':
+		contact.our_chatstate = state
+		if contact.our_chatstate == 'active':
 			self.reset_kbd_mouse_timeout_vars()
 
 	def send_message(self, message):
@@ -754,21 +757,21 @@ class TabbedChatWindow(chat.Chat):
 			chatstate_to_send = None
 			
 			if chatstates_on and contact is not None:
-				if contact.chatstate is None:
+				if contact.our_chatstate is None:
 					# no info about peer
 					# send active to discover chat state capabilities
 					# this is here (and not in send_chatstate)
 					# because we want it sent with REAL message
 					# (not standlone) eg. one that has body
 					chatstate_to_send = 'active'
-					contact.chatstate = 'ask' # pseudo state
+					contact.our_chatstate = 'ask' # pseudo state
 
 				# if peer supports jep85 and we are not 'ask', send 'active'
 				# NOTE: first active and 'ask' is set in gajim.py
-				elif contact.chatstate not in (False, 'ask'):
+				elif contact.our_chatstate not in (False, 'ask'):
 					#send active chatstate on every message (as JEP says)
 					chatstate_to_send = 'active'
-					contact.chatstate = 'active'
+					contact.our_chatstate = 'active'
 					
 					# refresh timers
 					# avoid sending composing in less than 5 seconds
