@@ -49,8 +49,8 @@ if os.name == 'nt':
 	except KeyError:
 		# win9x, ./Logs etc
 		LOGPATH = 'Logs' # deprecated
-		VCARDPATH = 'Vcards'
 		LOG_DB_PATH = 'logs.db'
+		VCARDPATH = 'Vcards'
 else: # Unices
 	DATA_DIR = '../data'
 	LOGPATH = os.path.expanduser('~/.gajim/logs') # deprecated
@@ -60,6 +60,7 @@ else: # Unices
 try:
 	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
 	VCARDPATH = VCARDPATH.decode(sys.getfilesystemencoding())
+	LOG_DB_PATH = LOG_DB_PATH.decode(sys.getfilesystemencoding())
 except:
 	pass
 
