@@ -6,6 +6,7 @@ from pysqlite2 import dbapi2 as sqlite
 
 PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
 
+# jid we already put in DB
 jid_in = []
 path_to_db = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
 con = sqlite.connect(path_to_db) 
@@ -71,6 +72,8 @@ def get_jid(dirname, filename):
 
 def visit(arg, dirname, filenames):
 	for filename in filenames:
+		# Don't take this file into account, this is dup info
+		# notifications are also in contact log file
 		if filename == 'notify.log':
 			continue
 		path_to_text_file = os.path.join(dirname, filename)
@@ -79,6 +82,7 @@ def visit(arg, dirname, filenames):
 
 		jid = get_jid(dirname, filename)
 		print 'Processing', jid
+		# jid is already in the DB, don't create the table, just get his jid_id
 		if jid in jid_in:
 			cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
 		else:
@@ -100,6 +104,8 @@ def visit(arg, dirname, filenames):
 				type = splitted_line[1] # line[1] has type of logged message
 				message_data = splitted_line[2:] # line[2:] has message data
 				# line[0] is date,
+
+				# some lines can be fucked up, just trop them
 				try:
 					tim = int(float(splitted_line[0]))
 				except:
