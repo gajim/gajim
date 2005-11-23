@@ -64,7 +64,7 @@ except ImportError:
 	sys.exit()
 
 from common import check_paths
-check_paths.check_and_possible_create_paths()
+check_paths.check_and_possibly_create_paths()
 
 path = os.getcwd()
 if '.svn' in os.listdir(path):

@@ -62,7 +62,7 @@ def create_log_db():
 
 	con.commit()
 
-def check_and_possible_create_paths():
+def check_and_possibly_create_paths():
 	LOG_DB_PATH = logger.LOG_DB_PATH
 	VCARDPATH = gajim.VCARDPATH
 	dot_gajim = os.path.dirname(VCARDPATH)
