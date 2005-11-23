@@ -399,6 +399,10 @@ class PreferencesWindow:
 			self.xml.get_widget('custom_file_manager_entry').set_text(
 				gajim.config.get('custom_file_manager'))
 		
+		# log status changes of contacts
+		st = gajim.config.get('log_contact_status_changes')
+		self.xml.get_widget('log_show_changes_checkbutton').set_active(st)
+		
 		# send os info
 		st = gajim.config.get('send_os_info')
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
@@ -892,13 +896,14 @@ class PreferencesWindow:
 		gajim.config.set('custom_file_manager', widget.get_text().decode('utf-8'))
 		gajim.interface.save_config()
 
+	def on_log_show_changes_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
+	
 	def on_send_os_info_checkbutton_toggled(self, widget):
-		gajim.config.set('send_os_info', widget.get_active())
-		gajim.interface.save_config()
+		self.on_checkbutton_toggled(widget, 'send_os_info')
 
 	def on_check_for_new_version_checkbutton_toggled(self, widget):
-		gajim.config.set('check_for_new_version', widget.get_active())
-		gajim.interface.save_config()
+		self.on_checkbutton_toggled(widget, 'check_for_new_version')
 
 	def fill_msg_treeview(self):
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
@@ -960,10 +965,8 @@ class PreferencesWindow:
 		model = self.sound_tree.get_model()
 		model.clear()
 		for sound in sounds:
-			val = gajim.config.get_per('soundevents', sound,
-								'enabled')
-			path = gajim.config.get_per('soundevents', sound,
-								'path')
+			val = gajim.config.get_per('soundevents', sound, 'enabled')
+			path = gajim.config.get_per('soundevents', sound, 'path')
 			iter = model.append((sound, val, path))
 
 	def on_treeview_sounds_cursor_changed(self, widget, data = None):

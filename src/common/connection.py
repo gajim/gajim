@@ -469,7 +469,8 @@ class Connection:
 					self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 						errmsg, errcode))
 			if not ptype or ptype == 'unavailable':
-				gajim.logger.write('gcstatus', who, status, show)
+				if gajim.config.get('log_contact_status_changes'):
+					gajim.logger.write('gcstatus', who, status, show)
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
@@ -517,7 +518,8 @@ class Connection:
 			else:
 				self.vcard_shas[jid_stripped] = avatar_sha
 		if not ptype or ptype == 'unavailable':
-			gajim.logger.write('status', jid_stripped, status, show)
+			if gajim.config.get('log_contact_status_changes'):
+				gajim.logger.write('status', jid_stripped, status, show)
 			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
 				keyID))
 	# END presenceCB
