@@ -150,7 +150,7 @@ def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
 	if not iconset:
 		iconset = 'sun'
 	# FIXME: use 32x32 or 48x48 someday
-	path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset,	'16x16', img)
+	path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16', img)
 	path = os.path.abspath(path)
 	notif = dbus_get_interface()
 	if notif is None:
