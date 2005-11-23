@@ -299,17 +299,14 @@ _('Connection with peer cannot be established.'))
 		if file_props is None or not file_props.has_key('name'):
 			return
 		last_save_dir = gajim.config.get('last_save_dir')
-		sec_text = '\t' + _('File: %s') % \
-			gtkgui_helpers.escape_for_pango_markup(file_props['name'])
+		sec_text = '\t' + _('File: %s') % file_props['name']
 		if file_props.has_key('size'):
 			sec_text += '\n\t' + _('Size: %s') % \
 				helpers.convert_bytes(file_props['size'])
 		if file_props.has_key('mime-type'):
-			sec_text += '\n\t' + _('Type: %s') % \
-				gtkgui_helpers.escape_for_pango_markup(file_props['mime-type'])
+			sec_text += '\n\t' + _('Type: %s') % file_props['mime-type']
 		if file_props.has_key('desc'):
-			sec_text += '\n\t' + _('Description: %s') % \
-				gtkgui_helpers.escape_for_pango_markup(file_props['desc'])
+			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
 		prim_text = _('%s wants to send you a file:') % contact.jid
 		dialog = dialogs.ConfirmationDialog(prim_text, sec_text)
 		if dialog.get_response() == gtk.RESPONSE_OK:
@@ -334,7 +331,6 @@ _('Connection with peer cannot be established.'))
 					file_path = dialog.get_filename()
 					file_path = file_path.decode('utf-8')
 					if not gtk28 and os.path.exists(file_path):
-						#FIXME: pango does not work here.
 						primtext = _('This file already exists')
 						sectext = _('Would you like to overwrite it?')
 						dialog2 = dialogs.ConfirmationDialog(primtext, sectext)
