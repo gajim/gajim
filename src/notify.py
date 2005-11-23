@@ -47,9 +47,10 @@ def dbus_get_interface():
 		bus = dbus.SessionBus()
 		obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
 		dbus_iface = dbus.Interface(obj, 'org.freedesktop.DBus')
-		avail = dbus_iface.ListNames()
-		if not interface in avail:
-			return None
+		#FIXME: this just disables notification-daemon for 99% of users
+		#avail = dbus_iface.ListNames()
+		#if not interface in avail:
+		#	return None
 		obj = bus.get_object(interface, path)
 		return dbus.Interface(obj, interface)
 	except Exception, e:
