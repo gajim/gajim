@@ -47,10 +47,16 @@ def dbus_get_interface():
 		bus = dbus.SessionBus()
 		obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
 		dbus_iface = dbus.Interface(obj, 'org.freedesktop.DBus')
-		#FIXME: this just disables notification-daemon for 99% of users
-		#avail = dbus_iface.ListNames()
-		#if not interface in avail:
-		#	return None
+		running_services = dbus_iface.ListNames()
+		started = True
+		if interface not in running_services:
+			# try to start the service (notif-daemon)
+			if dbus_iface.StartServiceByName(interface,dbus.UInt32(0)) == 1:
+				started = True
+			else:
+				started = False
+		if not started:
+			return None
 		obj = bus.get_object(interface, path)
 		return dbus.Interface(obj, interface)
 	except Exception, e:
