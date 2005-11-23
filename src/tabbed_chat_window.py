@@ -892,68 +892,36 @@ class TabbedChatWindow(chat.Chat):
 		if gajim.jid_is_transport(jid):
 			return
 		
-		return # FIXME: clean up logic, make most of it a func for logger.py
-		# see get_last_conversation_lines
-		# good to review to avoid dup last line (still happens)
-
-		# How many lines to restore and when to time them out
-		restore	= gajim.config.get('restore_lines')
-		timeout = gajim.config.get('restore_timeout') # in minutes
-		pos = 0 # position, while reading from history
-		size = 0 # how many lines we already retreived
-		lines = [] # we'll need to reverse the lines from history
-		count = gajim.logger.get_no_of_lines(jid)
-
-		# pos: number of messages that are in queue and are printed in log file
-		pos = 0
-		if gajim.awaiting_events[self.account].has_key(jid):
-			l = gajim.awaiting_events[self.account][jid]
-			for event in l:
-				if event[0] == 'chat':
-					pos += 1
-
-		now = time.time()
-		while size <= restore:
-			if pos == count or size > restore - 1:
-				# don't try to read beyond history, nor read more than required
-				break
-			
-			line = gajim.logger.read_from_line_to_line(jid, count - 1 - pos, count - pos)
-			pos = pos + 1
-
-			# line is [] if log file for jid is not a file (does not exist or dir)
-			if line == []:
-				break
-			
-			if (now - float(line[0][0])) / 60 >= time_out:
-				# stop looking for messages if we found something too old
-				break
-	
-			if line[0][1] != 'sent' and line[0][1] != 'recv':
-				# we don't want to display status lines, do we?
-				continue
-	
-			lines.append(line[0])
-			size = size + 1
-	
-		if lines != []:
-			lines.reverse()
+		return # FIXME: the logic below works, but needs db so return atm
 		
-		print lines
-		for line in lines: # line[0] time, line[1] type, line[2:] the message
-			if line[1] == 'sent':
+		# How many lines to restore and when to time them out
+		restore_how_many = gajim.config.get('restore_lines')
+		timeout = gajim.config.get('restore_timeout') # in minutes
+		# number of messages that are in queue and are already logged
+		pending_how_many = 0 # we want to avoid duplication
+		
+		if gajim.awaiting_events[self.account].has_key(jid):
+			events = gajim.awaiting_events[self.account][jid]
+			for event in events:
+				if event[0] == 'chat':
+					pending_how_many += 1
+
+		rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
+			pending_how_many, timeout)
+		
+		for row in rows: # row[0] time, row[1] has kind, row[2] the message
+			if row[1] in ('chat_msg_sent', 'single_msg_sent'):
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
-			elif line[1] == 'recv':
+			elif row[1] in ('single_msg_recv', 'chat_msg_recv'):
 				kind = 'incoming'
 				name = self.contacts[jid].name
 
-			tim = time.localtime(float(line[0]))
+			tim = time.localtime(float(row[0]))
 
-			text = ':'.join(line[2:])[:-1] #remove the latest \n
-			self.print_conversation_line(text, jid, kind, name, tim,
+			self.print_conversation_line(row[2], jid, kind, name, tim,
 				['small'], ['small', 'grey'], ['small', 'grey'], False)
 
-		if len(lines):
+		if len(rows):
 			conv_textview = self.conversation_textviews[jid]
 			conv_textview.print_empty_line()
