@@ -1452,7 +1452,7 @@ current room topic.') % command, room_jid)
 
 		if no_queue:
 			qs[fjid] = []
-		qs[fjid].append(('chat', (msg, '', 'incoming', tim, False)))
+		qs[fjid].append(('chat', (msg, '', 'incoming', tim, False, '')))
 		self.nb_unread[room_jid] += 1
 		
 		autopopup = gajim.config.get('autopopup')

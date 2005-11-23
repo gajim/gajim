@@ -1696,13 +1696,13 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			> 3):
 			popup = True
 
-		if msg_type == 'normal': # it's single message
-			if popup:
-				contact = gajim.get_contact_instance_with_highest_priority(account, jid)
-				dialogs.SingleMessageWindow(account, contact.jid,
-					action = 'receive', from_whom = jid, subject = subject,
-					message = msg)
-				return
+		if msg_type == 'normal' and popup: # it's single message to be autopopuped
+			contact = gajim.get_contact_instance_with_highest_priority(account,
+				jid)
+			dialogs.SingleMessageWindow(account, contact.jid,
+				action = 'receive', from_whom = jid, subject = subject,
+				message = msg)
+			return
 		
 		# We print if window is opened and it's not a single message
 		if gajim.interface.instances[account]['chats'].has_key(jid) and \
@@ -1710,8 +1710,8 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			typ = ''
 			if msg_type == 'error':
 				typ = 'status'
-			gajim.interface.instances[account]['chats'][jid].print_conversation(msg, 
-				jid, typ, tim = tim, encrypted = encrypted, subject = subject)
+			gajim.interface.instances[account]['chats'][jid].print_conversation(
+				msg, jid, typ, tim = tim, encrypted = encrypted, subject = subject)
 			return
 
 		# We save it in a queue
@@ -1720,7 +1720,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		kind = 'chat'
 		if msg_type == 'normal':
 			kind = 'normal'
-		qs[jid].append((kind, (msg, subject, msg_type, tim, encrypted)))
+		qs[jid].append((kind, (msg, subject, msg_type, tim, encrypted, resource)))
 		self.nb_unread += 1
 		if popup:
 			if not gajim.interface.instances[account]['chats'].has_key(jid):

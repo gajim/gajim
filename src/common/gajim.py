@@ -85,10 +85,11 @@ gc_passwords = {} # list of the pass required to enter a room {room_jid: passwor
 groups = {} # list of groups
 newly_added = {} # list of contacts that has just signed in
 to_be_removed = {} # list of contacts that has just signed out
+
 awaiting_events = {} # list of messages/FT reveived but not printed
 	# awaiting_events[jid] = (type, (data1, data2, ...))
 	# if type in ('chat', 'normal'): data = (message, subject, kind, time,
-		# encrypted)
+		# encrypted, resource)
 		# kind can be (incoming, error)
 	# if type in file-request, file-request-error, file-send-error, file-error, 
 	# file-completed, file-stopped:
