@@ -25,7 +25,10 @@ jids_already_in = [] # jid we already put in DB
 con = sqlite.connect(PATH_TO_DB) 
 cur = con.cursor()
 # create the tables
-# type can be 'gc', 'gcstatus', 'recv', 'sent', 'status'
+# kind can be
+# status, gcstatus, gc_msg, (we only recv for those 3),
+# single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent
+# to meet all our needs
 # logs.jid_id --> jids.jid_id but Sqlite doesn't do FK etc so it's done in python code
 cur.executescript(
 	'''
@@ -39,7 +42,7 @@ cur.executescript(
 		jid_id INTEGER,
 		contact_name TEXT,
 		time INTEGER,
-		type TEXT,
+		kind TEXT,
 		show TEXT,
 		message TEXT
 	);
@@ -84,6 +87,7 @@ def get_jid(dirname, filename):
 	return jid
 
 def visit(arg, dirname, filenames):
+	print 'Visiting', dirname
 	for filename in filenames:
 		# Don't take this file into account, this is dup info
 		# notifications are also in contact log file
@@ -97,7 +101,7 @@ def visit(arg, dirname, filenames):
 		print 'Processing', jid
 		# jid is already in the DB, don't create the table, just get his jid_id
 		if jid in jids_already_in:
-			cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
+			cur.execute('SELECT jid_id FROM jids WHERE jid = "%s"' % jid)
 			JID_ID = cur.fetchone()[0]
 		else:
 			jids_already_in.append(jid)
@@ -113,8 +117,16 @@ def visit(arg, dirname, filenames):
 			line = from_one_line(line)
 			splitted_line = line.split(':')
 			if len(splitted_line) > 2:
+				# type in logs is one of 
 				# 'gc', 'gcstatus', 'recv', 'sent' and if nothing of those
 				# it is status
+				# new db has:
+				# status, gcstatus, gc_msg, (we only recv those 3),
+				# single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent
+				# to meet all our needs
+				# here I convert
+				# gc ==> gc_msg, gcstatus ==> gcstatus, recv ==> chat_msg_recv
+				# sent ==> chat_msg_sent, status ==> status
 				type = splitted_line[1] # line[1] has type of logged message
 				message_data = splitted_line[2:] # line[2:] has message data
 				# line[0] is date,
@@ -125,7 +137,7 @@ def visit(arg, dirname, filenames):
 				except:
 					continue
 				
-				sql = 'INSERT INTO logs (jid_id, contact_name, time, type, show, message) '\
+				sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message) '\
 					'VALUES (?, ?, ?, ?, ?, ?)'
 		
 				contact_name = None
@@ -133,18 +145,24 @@ def visit(arg, dirname, filenames):
 				if type == 'gc':
 					contact_name = message_data[0]
 					message = ':'.join(message_data[1:])
+					kind == 'gc_msg'
 				elif type == 'gcstatus':
 					contact_name = message_data[0]
 					show = message_data[1]
 					message = ':'.join(message_data[2:]) # status msg
-				elif type in ('recv', 'sent'):
+					kind = type
+				elif type == 'recv':
 					message = ':'.join(message_data[0:])
+					kind = 'chat_msg_recv'
+				elif type == 'sent':
+					message = ':'.join(message_data[0:])
+					kind = 'chat_msg_sent'
 				else: # status
-					type = 'status'
+					kind = 'status'
 					show = message_data[0]
 					message = ':'.join(message_data[1:]) # status msg
 
-				values = (JID_ID, contact_name, tim, type, show, message)
+				values = (JID_ID, contact_name, tim, kind, show, message)
 				cur.execute(sql, values)
 				con.commit()
 
