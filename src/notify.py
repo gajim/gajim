@@ -51,7 +51,7 @@ def dbus_get_interface():
 		started = True
 		if interface not in running_services:
 			# try to start the service (notif-daemon)
-			if dbus_iface.StartServiceByName(interface,dbus.UInt32(0)) == 1:
+			if dbus_iface.StartServiceByName(interface, dbus.UInt32(0)) == 1:
 				started = True
 			else:
 				started = False
@@ -173,7 +173,6 @@ def notify(event_type, jid, account, msg_type = '', file_props = None):
 			print >> sys.stderr, e
 	instance = dialogs.PopupNotificationWindow(event_type, jid, account,
 		msg_type, file_props)
-	#roster = roster_window.RosterWindow()
 	gajim.interface.roster.popup_notification_windows.append(instance)
 
 
