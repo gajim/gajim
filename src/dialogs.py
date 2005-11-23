@@ -933,7 +933,7 @@ class SingleMessageWindow:
 	'''SingleMessageWindow can send or show a received
 	singled message depending on action argument'''
 	def __init__(self, account, to = '', action = '', from_whom = '',
-	subject = '', message = ''):
+	subject = '', message = '', resource = ''):
 		self.account = account
 		self.action = action
 
@@ -974,7 +974,10 @@ class SingleMessageWindow:
 				self.subject_entry.grab_focus()
 		elif self.action == 'receive':
 			self.from_whom = from_whom
-			self.from_entry.set_text(self.from_whom)
+			fjid = from_whom # Full jid of sender (with resource)
+			if resource:
+				fjid += resource
+			self.from_entry.set_text(fjid)
 			self.from_entry.set_property('editable', False)
 			self.subject_entry.set_property('editable', False)
 			self.message_textview.set_editable(False)

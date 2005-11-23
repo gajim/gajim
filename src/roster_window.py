@@ -1701,7 +1701,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 				jid)
 			dialogs.SingleMessageWindow(account, contact.jid,
 				action = 'receive', from_whom = jid, subject = subject,
-				message = msg)
+				message = msg, resource = resource)
 			return
 		
 		# We print if window is opened and it's not a single message
@@ -1942,7 +1942,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		if typ == 'normal':
 			dialogs.SingleMessageWindow(account, jid,
 				action = 'receive', from_whom = jid, subject = data[1],
-				message = data[0])
+				message = data[0], resource = data[5])
 			gajim.interface.remove_first_event(account, jid, typ)
 			return True
 		elif typ == 'file-request':
