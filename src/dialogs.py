@@ -971,7 +971,8 @@ class SingleMessageWindow:
 			if self.message: # we come from a reply?
 				self.message_textview.grab_focus()
 			else: # we write a new message
-				self.subject_entry.grab_focus()
+				if to: # do we already have jid?
+					self.subject_entry.grab_focus()
 		elif self.action == 'receive':
 			self.from_whom = from_whom
 			fjid = from_whom # Full jid of sender (with resource)
