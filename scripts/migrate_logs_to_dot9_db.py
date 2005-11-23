@@ -145,7 +145,7 @@ def visit(arg, dirname, filenames):
 				if type == 'gc':
 					contact_name = message_data[0]
 					message = ':'.join(message_data[1:])
-					kind == 'gc_msg'
+					kind = 'gc_msg'
 				elif type == 'gcstatus':
 					contact_name = message_data[0]
 					show = message_data[1]
