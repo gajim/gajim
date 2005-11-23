@@ -364,12 +364,12 @@ class Connection:
 				if not msg.getTag('body'): #no <body>
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
-				gajim.logger.write('gc', msgtxt, frm, tim = tim)
+				gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 		elif mtype == 'normal': # it's single message
 			log_msgtxt = msgtxt
 			if subject:
 				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
-			gajim.logger.write('incoming', log_msgtxt, frm, tim = tim)
+			gajim.logger.write('single_msg_recv', frm, log_msgtxt, tim = tim)
 			if invite is not None:
 				item = invite.getTag('invite')
 				jid_from = item.getAttr('from')
@@ -387,7 +387,7 @@ class Connection:
 			if subject:
 				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
 			if msg.getTag('body'):
-				gajim.logger.write('incoming', log_msgtxt, frm, tim = tim)
+				gajim.logger.write('chat_msg_recv', frm, log_msgtxt, tim = tim)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
 				chatstate))
 	# END messageCB
@@ -469,7 +469,7 @@ class Connection:
 					self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 						errmsg, errcode))
 			if not ptype or ptype == 'unavailable':
-				gajim.logger.write('status', status, who, show)
+				gajim.logger.write('gcstatus', who, status, show)
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
@@ -517,7 +517,7 @@ class Connection:
 			else:
 				self.vcard_shas[jid_stripped] = avatar_sha
 		if not ptype or ptype == 'unavailable':
-			gajim.logger.write('status', status, jid_stripped, show)
+			gajim.logger.write('status', jid_stripped, status, show)
 			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
 				keyID))
 	# END presenceCB
@@ -1898,7 +1898,11 @@ class Connection:
 		if subject:
 			log_msg = _('Subject: %s\n%s') % (subject, msg)
 		if log_msg:
-			gajim.logger.write('outgoing', log_msg, jid)
+			if type == 'chat':
+				kind = 'chat_msg_sent'
+			else:
+				kind = 'single_msg_sent'
+			gajim.logger.write(kind, jid, log_msg)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 
 	def send_stanza(self, stanza):

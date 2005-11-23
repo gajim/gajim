@@ -23,8 +23,10 @@ import urllib
 import errno
 import sys
 import stat
+from pysqlite2 import dbapi2 as sqlite
 
 import gajim
+import logger
 from common import i18n
 from common.xmpp_stringprep import nodeprep, resourceprep, nameprep
 
@@ -49,8 +51,8 @@ def parse_jid(jidstring):
 	resource = None
 
 	# Search for delimiters
-	user_sep = jidstring.find("@")
-	res_sep  = jidstring.find("/")
+	user_sep = jidstring.find('@')
+	res_sep  = jidstring.find('/')
 
 	if user_sep == -1:		
 		if res_sep == -1:
@@ -135,53 +137,6 @@ def temp_failure_retry(func, *args, **kwargs):
 				continue
 			else:
 				raise
-
-def check_paths():
-	LOGPATH = gajim.LOGPATH
-	VCARDPATH = gajim.VCARDPATH
-	dot_gajim = os.path.dirname(LOGPATH)
-	if os.path.isfile(dot_gajim):
-		print _('%s is file but it should be a directory') % dot_gajim
-		print _('Gajim will now exit')
-		sys.exit()
-	elif os.path.isdir(dot_gajim):
-		s = os.stat(dot_gajim)
-		if s.st_mode & stat.S_IROTH: # others have read permission!
-			os.chmod(dot_gajim, 0700) # rwx------
-
-		if not os.path.exists(LOGPATH):
-			print _('creating %s directory') % LOGPATH
-			os.mkdir(LOGPATH, 0700)
-		elif os.path.isfile(LOGPATH):
-			print _('%s is file but it should be a directory') % LOGPATH
-			print _('Gajim will now exit')
-			sys.exit()
-		elif os.path.isdir(LOGPATH):
-				s = os.stat(LOGPATH)
-				if s.st_mode & stat.S_IROTH: # others have read permission!
-					os.chmod(LOGPATH, 0700) # rwx------
-
-		if not os.path.exists(VCARDPATH):
-			print _('creating %s directory') % VCARDPATH
-			os.mkdir(VCARDPATH, 0700)
-		elif os.path.isfile(VCARDPATH):
-			print _('%s is file but it should be a directory') % VCARDPATH
-			print _('Gajim will now exit')
-			sys.exit()
-		elif os.path.isdir(VCARDPATH):
-				s = os.stat(VCARDPATH)
-				if s.st_mode & stat.S_IROTH: # others have read permission!
-					os.chmod(VCARDPATH, 0700) # rwx------
-	else: # dot_gajim doesn't exist
-		if dot_gajim: # is '' on win9x so avoid that
-			print _('creating %s directory') % dot_gajim
-			os.mkdir(dot_gajim, 0700)
-		if not os.path.isdir(LOGPATH):
-			print _('creating %s directory') % LOGPATH
-			os.mkdir(LOGPATH, 0700)
-		if not os.path.isdir(VCARDPATH):
-			print _('creating %s directory') % VCARDPATH
-			os.mkdir(VCARDPATH, 0700)
 
 def convert_bytes(string):
 	suffix = ''
@@ -452,7 +407,7 @@ def play_sound(event):
 		return
 	if not os.path.exists(path_to_soundfile):
 		return
-	if os.name  == 'nt':
+	if os.name == 'nt':
 		try:
 			winsound.PlaySound(path_to_soundfile,
 								winsound.SND_FILENAME|winsound.SND_ASYNC)

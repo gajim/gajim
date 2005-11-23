@@ -63,6 +63,9 @@ except ImportError:
 	dlg.destroy()
 	sys.exit()
 
+from common import check_paths
+check_paths.check_and_possible_create_paths()
+
 path = os.getcwd()
 if '.svn' in os.listdir(path):
 	# import gtkexcepthook only for those that run svn
@@ -1219,7 +1222,6 @@ class Interface:
 			sys.exit(1)
 
 	def __init__(self):
-		helpers.check_paths()
 		gajim.interface = self
 		self.default_values = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),

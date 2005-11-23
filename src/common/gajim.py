@@ -23,7 +23,7 @@ import logging
 import mutex
 
 import common.config
-import common.logger
+
 
 interface = None # The actual interface (the gtk one for the moment)
 version = '0.9'
@@ -37,6 +37,7 @@ h.setFormatter(f)
 log = logging.getLogger('Gajim')
 log.addHandler(h)
 
+import common.logger
 logger = common.logger.Logger() # init the logger
 
 if os.name == 'nt':
@@ -45,25 +46,21 @@ if os.name == 'nt':
 	else:
 		DATA_DIR = os.path.join('..', 'data')
 	try:
-		# Documents and Settings\[User Name]\Application Data\Gajim\logs
+		# Documents and Settings\[User Name]\Application Data\Gajim
 		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs') # deprecated
-		LOG_DB_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'logs.db')
 		VCARDPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Vcards')
 	except KeyError:
-		# win9x, ./Logs etc
+		# win9x, in cwd
 		LOGPATH = 'Logs' # deprecated
-		LOG_DB_PATH = 'logs.db'
 		VCARDPATH = 'Vcards'
 else: # Unices
 	DATA_DIR = '../data'
 	LOGPATH = os.path.expanduser('~/.gajim/logs') # deprecated
-	LOG_DB_PATH = os.path.expanduser('~/.gajim/logs.db')
 	VCARDPATH = os.path.expanduser('~/.gajim/vcards')
 
 try:
 	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
 	VCARDPATH = VCARDPATH.decode(sys.getfilesystemencoding())
-	LOG_DB_PATH = LOG_DB_PATH.decode(sys.getfilesystemencoding())
 except:
 	pass
 

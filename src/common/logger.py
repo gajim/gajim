@@ -18,202 +18,217 @@
 ##
 
 import os
+import sys
 import time
+import datetime
 
-import common.gajim
 from common import i18n
 _ = i18n._
-import helpers
 
+try:
+	from pysqlite2 import dbapi2 as sqlite
+except ImportError:
+	error = _('pysqlite2 (aka python-pysqlite2) dependency is missing. '\
+		'After you install pysqlite3, if you want to migrate your logs '\
+		'to the new database, please read: http://trac.gajim.org/wiki/MigrateLogToDot9DB '
+		'Exiting...'
+		)
+	print >> sys.stderr, error
+	sys.exit()
+
+GOT_JIDS_ALREADY_IN_DB = False
+
+if os.name == 'nt':
+	try:
+		# Documents and Settings\[User Name]\Application Data\Gajim\logs.db
+		LOG_DB_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'logs.db')
+	except KeyError:
+		# win9x, ./logs.db
+		LOG_DB_PATH = 'logs.db'
+else: # Unices
+	LOG_DB_PATH = os.path.expanduser('~/.gajim/logs.db')
+
+try:
+	LOG_DB_PATH = LOG_DB_PATH.decode(sys.getfilesystemencoding())
+except:
+	pass
 
 class Logger:
 	def __init__(self):
-		pass
+		if not os.path.exists(LOG_DB_PATH):
+			# this can happen only the first time (the time we create the db)
+			# db is created in src/common/checks_paths.py
+			return
+		
+		self.get_jids_already_in_db()
 
-	def write(self, kind, msg, jid, show = None, tim = None):
+	def get_jids_already_in_db(self):
+		con = sqlite.connect(LOG_DB_PATH)
+		cur = con.cursor()
+		cur.execute('SELECT jid FROM jids')
+		rows = cur.fetchall() # list of tupples: (u'aaa@bbb',), (u'cc@dd',)]
+		self.jids_already_in = []
+		for row in rows:
+			# row[0] is first item of row (the only result here, the jid)
+			self.jids_already_in.append(row[0])
+		con.close()
+		GOT_JIDS_ALREADY_IN_DB = True
+
+	def jid_is_from_pm(cur, jid):
+		'''if jid is gajim@conf/nkour it's likely a pm one, how we know
+		gajim@conf is not a normal guy and nkour is not his resource?
+		we ask if gajim@conf is already in jids (as room)
+		this fails if user disable logging for room and only enables for
+		pm (so higly unlikely) and if we fail we do not force chaos
+		(user will see the first pm as if it was message in room's public chat)'''
+		
+		possible_room_jid, possible_nick = jid.split('/', 1)
+		
+		cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % possible_room_jid)
+		jid_id = cur.fetchone()[0]
+		if jid_id:
+			return True
+		else:
+			return False
+	
+	def get_jid_id(self, jid):
+		'''jids table has jid and jid_id
+		logs table has log_id, jid_id, contact_name, time, kind, show, message
+		so to ask logs we need jid_id that matches our jid in jids table
+		this method asks jid and returns the jid_id for later sql-ing on logs
+		'''
+		con = sqlite.connect(LOG_DB_PATH)
+		cur = con.cursor()
+		
+		if jid in self.jids_already_in: # we already have jids in DB
+			cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
+			jid_id = cur.fetchone()[0]
+		else: # oh! a new jid :), we add him now
+			cur.execute('INSERT INTO jids (jid) VALUES (?)', (jid,))
+			con.commit()
+			jid_id = cur.lastrowid
+			self.jids_already_in.append(jid)
+		return jid_id
+	
+	def write(self, kind, jid, message = None, show = None, tim = None):
+		'''write a row (status, gcstatus, message etc) to logs database
+		kind can be status, gcstatus, gc_msg, (we only recv for those 3),
+		single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent
+		we cannot know if it is pm or normal chat message, we try to guess
+		see jid_is_from_pm()
+		
+		we analyze jid and store it as follows:
+		jids.jid text column will hold JID if TC-related, room_jid if GC-related,
+		ROOM_JID/nick if pm-related.'''
+		
+		if not GOT_JIDS_ALREADY_IN_DB:
+			self.get_jids_already_in_db()
+	
+		con = sqlite.connect(LOG_DB_PATH)
+		cur = con.cursor()
+		
 		jid = jid.lower()
-		if not tim:
-			tim = time.time()
+		contact_name_col = None # holds nickname for kinds gcstatus, gc_msg
+		# message holds the message unless kind is status or gcstatus,
+		# then it holds status message
+		message_col = message
+		show_col = show
+		if tim:
+			time_col = int(float(time.mktime(tim)))
 		else:
-			tim = time.mktime(tim)
+			time_col = int(float(time.time()))
 
-		if not msg:
-			msg = ''
-
-		msg = helpers.to_one_line(msg)
-		if len(jid.split('/')) > 1:
-			ji, nick = jid.split('/', 1)
-		else:
-			ji = jid
-			nick = ''
-		files = []
-		if kind == 'status': # we save time:jid:show:msg
-			if not show:
-				show = 'online'
-			if common.gajim.config.get('log_notif_in_user_file'):
-				path_to_file = os.path.join(common.gajim.LOGPATH, ji)
-				if os.path.isdir(path_to_file):
-					jid = 'gcstatus'
-					msg = show + ':' + msg
-					show = nick
-					files.append(ji + '/' + ji)
-					if os.path.isfile(jid):
-						files.append(jid)
-				else:
-					files.append(ji)
-			if common.gajim.config.get('log_notif_in_sep_file'):
-				files.append('notify.log')
-		elif kind == 'incoming': # we save time:recv:message
-			path_to_file = os.path.join(common.gajim.LOGPATH, ji)
-			if os.path.isdir(path_to_file):
-				files.append(jid)
-			else:
-				files.append(ji)
-			jid = 'recv'
-			show = msg
-			msg = ''
-		elif kind == 'outgoing': # we save time:sent:message
-			path_to_file = os.path.join(common.gajim.LOGPATH, ji)
-			if os.path.isdir(path_to_file):
-				files.append(jid)
-			else:
-				files.append(ji)
-			jid = 'sent'
-			show = msg
-			msg = ''
-		elif kind == 'gc': # we save time:gc:nick:message
-			# create the folder if needed
-			ji_fn = os.path.join(common.gajim.LOGPATH, ji)
-			if os.path.isfile(ji_fn):
-				os.remove(ji_fn)
-			if not os.path.isdir(ji_fn):
-				os.mkdir(ji_fn, 0700)
-			files.append(ji + '/' + ji)
-			jid = 'gc'
-			show = nick
-		# convert to utf8 before writing to file if needed
-		if isinstance(tim, unicode):
-			tim = tim.encode('utf-8')
-		if isinstance(jid, unicode):
-			jid = jid.encode('utf-8')
-		if isinstance(show, unicode):
-			show = show.encode('utf-8')
-		if msg and isinstance(msg, unicode):
-			msg = msg.encode('utf-8')
-		for f in files:
-			path_to_file = os.path.join(common.gajim.LOGPATH, f)
-			if os.path.isdir(path_to_file):
-				return
-			# this does it rw-r-r by default but is in a dir with 700 so it's ok
-			fil = open(path_to_file, 'a')
-			fil.write('%s:%s:%s' % (tim, jid, show))
-			if msg:
-				fil.write(':' + msg)
-			fil.write('\n')
-			fil.close()
-
-	def __get_path_to_file(self, fjid):
-		jid = fjid.split('/')[0]
-		path_to_file = os.path.join(common.gajim.LOGPATH, jid)
-		if os.path.isdir(path_to_file):
-			if fjid == jid: # we want to read the gc history
-				path_to_file = os.path.join(common.gajim.LOGPATH, jid + '/' + jid)
-			else: #we want to read pm history
-				path_to_file = os.path.join(common.gajim.LOGPATH, fjid)
-		return path_to_file
-
-	def get_no_of_lines(self, fjid):
-		'''returns total number of lines in a log file
-		returns 0 if log file does not exist'''
-		fjid = fjid.lower()
-		path_to_file = self.__get_path_to_file(fjid)
-		if not os.path.isfile(path_to_file):
-			return 0
-		f = open(path_to_file, 'r')
-		return len(f.readlines()) # number of lines
-
-	# FIXME: remove me when refactor in TC is done
-	def read_from_line_to_line(self, fjid, begin_from_line, end_line):
-		'''returns the text in the lines (list),
-		returns empty list if log file does not exist'''
-		fjid = fjid.lower()
-		path_to_file = self.__get_path_to_file(fjid)
-		if not os.path.isfile(path_to_file):
-			return []
-
-		lines = []
+		def commit_to_db(values, cur = cur):
+			sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message) '\
+					'VALUES (?, ?, ?, ?, ?, ?)'
+			cur.execute(sql, values)
+			cur.connection.commit()
 		
-		fil = open(path_to_file, 'r')
-		#fil.readlines(begin_from_line) # skip the previous lines
-		no_of_lines = begin_from_line # number of lines between being and end
-		while (no_of_lines < begin_from_line and fil.readline()):
-			no_of_lines += 1
-		
-		print begin_from_line, end_line
-		while no_of_lines < end_line:
-			line = fil.readline().decode('utf-8')
-			print `line`, '@', no_of_lines
-			if line:
-				line = helpers.from_one_line(line)
-				lineSplited = line.split(':')
-				if len(lineSplited) > 2:
-					lines.append(lineSplited)
-				no_of_lines += 1
-			else: # emplty line (we are at the end of file)
-				break
-		return lines
-
-	def get_last_conversation_lines(self, jid, how_many_lines, timeout):
-		'''accepts how many lines to restore and when to time them out
-		(mark them as too old),	returns the lines (list), empty list if log file
-		does not exist'''
-		fjid = fjid.lower()
-		path_to_file = self.__get_path_to_file(fjid)
-		if not os.path.isfile(path_to_file):
-			return []
-		
-
-	def get_conversation_for_date(self, fjid, year, month, day):
-		'''returns the text in the lines (list),
-		returns empty list if log file does not exist'''
-		fjid = fjid.lower()
-		path_to_file = self.__get_path_to_file(fjid)
-		if not os.path.isfile(path_to_file):
-			return []
-		
-		lines = []
-		f = open(path_to_file, 'r')
-		done = False
-		found_first_line_that_matches = False
-		while not done:
-			# it should be utf8 (I don't decode for optimization reasons)
-			line = f.readline()
-			if line:
-				line = helpers.from_one_line(line)
-				splitted_line = line.split(':')
-				if len(splitted_line) > 2:
-					# line[0] is date, line[1] is type of message
-					# line[2:] is message
-					date = splitted_line[0]
-					date = time.localtime(float(date))
-					# eg. 2005
-					line_year = int(time.strftime('%Y', date))
-					# (01 - 12)
-					line_month = int(time.strftime('%m', date))
-					# (01 - 31)
-					line_day = int(time.strftime('%d', date))
+		jid_id = self.get_jid_id(jid)
 					
-					# now check if that line is one of the lines we want
-					# (if it is in the date we want)
-					if line_year == year and line_month == month and line_day == day:
-						if found_first_line_that_matches is False:
-							found_first_line_that_matches = True
-						lines.append(splitted_line)
-					else:
-						if found_first_line_that_matches: # we had a match before
-							done = True # but no more. so we're done with that date
-			
-			else:
-				done = True
+		if kind == 'status': # we store (not None) time, jid, show, msg
+			# status for roster items
+			if show is None:
+				show_col = 'online'
 
-		return lines
+			values = (jid_id, contact_name_col, time_col, kind, show_col, message_col)
+			commit_to_db(values)
+		elif kind == 'gcstatus':
+			# status in ROOM (for pm status see status)
+			if show is None:
+				show_col = 'online'
+			
+			jid, nick = jid.split('/', 1)
+			
+			jid_id = self.get_jid_id(jid) # re-get jid_id for the new jid
+			contact_name_col = nick
+			values = (jid_id, contact_name_col, time_col, kind, show_col, message_col)
+			commit_to_db(values)
+		elif kind == 'gc_msg':
+			if jid.find('/') != -1: # if it has a /
+				jid, nick = jid.split('/', 1)
+			else:
+				# it's server message f.e. error message
+				# when user tries to ban someone but he's not allowed to
+				nick = None
+			jid_id = self.get_jid_id(jid) # re-get jid_id for the new jid
+			contact_name_col = nick
+			
+			values = (jid_id, contact_name_col, time_col, kind, show_col, message_col)
+			commit_to_db(values)
+		elif kind in ('single_msg_recv', 'chat_msg_recv', 'chat_msg_sent', 'single_msg_sent'):
+			values = (jid_id, contact_name_col, time_col, kind, show_col, message_col)
+			commit_to_db(values)
+		#con.close()
+
+	def get_last_conversation_lines(self, jid, restore_how_many_rows,
+		pending_how_many, timeout):
+		'''accepts how many rows to restore and when to time them out (in minutes)
+		(mark them as too old) and number of messages that are in queue
+		and are already logged but pending to be viewed,
+		returns a list of tupples containg time, kind, message,
+		list with empty tupple if nothing found to meet our demands'''
+		now = int(float(time.time()))
+		jid = jid.lower()
+		jid_id = self.get_jid_id(jid)
+		con = sqlite.connect(LOG_DB_PATH)
+		cur = con.cursor()
+		# so if we ask last 5 lines and we have 2 pending we get
+		# 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
+		cur.execute('''
+			SELECT time, kind, message FROM logs
+			WHERE jid_id = %d AND kind IN
+			('single_msg_recv', 'chat_msg_recv', 'chat_msg_sent', 'single_msg_sent')
+			ORDER BY time DESC LIMIT %d OFFSET %d
+			''' % (jid_id, restore_how_many_rows, pending_how_many)
+			)
+
+		results = cur.fetchall()
+		results.reverse()
+		return results
+
+	def get_conversation_for_date(self, jid, year, month, day):
+		'''returns contact_name, time, kind, show, message
+		for each row in a list of tupples,
+		returns list with empty tupple if we found nothing to meet our demands'''
+		jid = jid.lower()
+		jid_id = self.get_jid_id(jid)
+		
+		# gimme unixtime from year month day:
+		d = datetime.date(2005, 10, 3)
+		local_time = d.timetuple() # time tupple (compat with time.localtime())
+		start_of_day = int(time.mktime(local_time)) # we have time since epoch baby :)
+		
+		now = time.time()
+		
+		con = sqlite.connect(LOG_DB_PATH)
+		cur = con.cursor()
+		cur.execute('''
+			SELECT contact_name, time, kind, show, message FROM logs
+			WHERE jid_id = %d
+			AND time BETWEEN %d AND %d
+			ORDER BY time
+			''' % (jid_id, start_of_day, now))
+		
+		results = cur.fetchall()
+		return results

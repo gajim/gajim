@@ -892,8 +892,6 @@ class TabbedChatWindow(chat.Chat):
 		if gajim.jid_is_transport(jid):
 			return
 		
-		return # FIXME: the logic below works, but needs db so return atm
-		
 		# How many lines to restore and when to time them out
 		restore_how_many = gajim.config.get('restore_lines')
 		timeout = gajim.config.get('restore_timeout') # in minutes

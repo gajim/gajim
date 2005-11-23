@@ -175,10 +175,3 @@ if __name__ == '__main__':
 	f.write('You can always run the migration script to import your old logs to the database\n')
 	f.write('Thank you\n')
 	f.close()
-	# after huge import create the indices (they are slow on massive insert)
-	cur.executescript(
-		'''
-		CREATE UNIQUE INDEX jids_already_index ON jids (jid);
-		CREATE INDEX jid_id_index ON logs (jid_id);
-		'''
-	)

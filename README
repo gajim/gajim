@@ -4,7 +4,7 @@ Welcome and thanks for trying out Gajim.
 python2.4 (python2.3 should work too)
 pygtk2.6 or higher
 python-libglade
-python-pysqlite2
+pysqlite2 (aka. python-pysqlite2)
 
 some distros also split too much python standard library.
 I know SUSE does. In such distros you also need python-xml

@@ -86,67 +86,64 @@ class HistoryWindow:
 		'''adds all the lines for given date in textbuffer'''
 		self.history_buffer.set_text('') # clear the buffer first
 		lines = gajim.logger.get_conversation_for_date(self.jid, year, month, day)
+		# lines holds list with tupples that have:
+		# contact_name, time, kind, show, message
 		for line in lines:
-			# line[0] is date, line[1] is type of message
-			# line[2:] is message
-			date = line[0]
-			self.add_new_line(date, line[1], line[2:])
+			# line[0] is contact_name, line[1] is time of message
+			# line[2] is kind, line[3] is show, line[4] is message
+			self.add_new_line(line[0], line[1], line[2], line[3], line[4])
 	
-	def add_new_line(self, date, type, data):
+	def add_new_line(self, contact_name, tim, kind, show, message):
 		'''add a new line in textbuffer'''
 		buf = self.history_buffer
 		end_iter = buf.get_end_iter()
-		tim = time.strftime('[%X] ', time.localtime(float(date)))
-		buf.insert(end_iter, tim)
-		name = None
+		tim = time.strftime('[%X] ', time.localtime(float(tim)))
+		buf.insert(end_iter, tim) # add time
 		tag_name = ''
 		tag_msg = ''
-		if type == 'gc':
-			name = data[0]
-			msg = ':'.join(data[1:])
+		
+		if kind == 'gc_msg':
 			tag_name = 'incoming'
-		elif type == 'gcstatus':
-			nick = data[0]
-			show = data[1]
-			status_msg = ':'.join(data[2:])
-			if status_msg:
-				msg = _('%(nick)s is now %(status)s: %(status_msg)s') % {'nick': nick,
-					'status': helpers.get_uf_show(show), 'status_msg': status_msg }
+		elif kind in ('single_msg_recv', 'chat_msg_recv'):
+			try:
+				contact_name = gajim.contacts[self.account][self.jid][0].name
+			except:
+				contact_name = self.jid.split('@')[0]
+			tag_name = 'incoming'
+		elif kind in ('single_msg_sent', 'chat_msg_sent'):
+			contact_name = gajim.nicks[self.account]
+			tag_name = 'outgoing'
+		elif kind == 'gcstatus':
+			# message here (if not None) is status message
+			if message:
+				message = _('%(nick)s is now %(status)s: %(status_msg)s') %\
+					{'nick': contact_name, 'status': helpers.get_uf_show(show),
+					'status_msg': message }
 			else:
-				show = show[:-1] # remove last \n
-				msg = _('%(nick)s is now %(status)s\n') % {'nick': nick,
+				message = _('%(nick)s is now %(status)s') % {'nick': contact_name,
 					'status': helpers.get_uf_show(show) }
 			tag_msg = 'status'
-		elif type == 'recv':
-			try:
-				name = gajim.contacts[self.account][self.jid][0].name
-			except:
-				name = None
-			if not name:
-				name = self.jid.split('@')[0]
-			msg = ':'.join(data[0:])
-			tag_name = 'incoming'
-		elif type == 'sent':
-			name = gajim.nicks[self.account]
-			msg = ':'.join(data[0:])
-			tag_name = 'outgoing'
-		else: # status
-			status_msg = ':'.join(data[1:])
-			if status_msg:
-				msg = _('Status is now: %(status)s: %(status_msg)s') % \
-					{'status': helpers.get_uf_show(data[0]), 'status_msg': status_msg}
+		else: # 'status'
+			# message here (if not None) is status message
+			if message:
+				message = _('Status is now: %(status)s: %(status_msg)s') % \
+					{'status': helpers.get_uf_show(show), 'status_msg': message}
 			else:
-				data[0] = data[0][:-1] # remove last \n
-				msg = _('Status is now: %(status)s\n') % { 'status':
-					helpers.get_uf_show(data[0]) }
+				message = _('Status is now: %(status)s') % { 'status':
+					helpers.get_uf_show(show) }
 			tag_msg = 'status'
 
-		if name:
+		# do not do this if gcstats, avoid dupping contact_name
+		# eg. nkour: nkour is now Offline
+		if contact_name and kind != 'gcstatus':
+			# add stuff before and after contact name
 			before_str = gajim.config.get('before_nickname')
 			after_str = gajim.config.get('after_nickname')
-			format = before_str + name + after_str + ' '
+			format = before_str + contact_name + after_str + ' '
 			buf.insert_with_tags_by_name(end_iter, format, tag_name)
+
+		message = message + '\n'
 		if tag_msg:
-			buf.insert_with_tags_by_name(end_iter, msg, tag_msg)
+			buf.insert_with_tags_by_name(end_iter, message, tag_msg)
 		else:
-			buf.insert(end_iter, msg)
+			buf.insert(end_iter, message)
