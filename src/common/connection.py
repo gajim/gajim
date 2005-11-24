@@ -1267,16 +1267,16 @@ class Connection:
 	def _getRosterCB(self, con, iq_obj):
 		if not self.connection:
 			return
-		r = self.connection.getRoster().getRaw()
+		raw_roster = self.connection.getRoster().getRaw()
 
 		roster = {}
-		for jid in r:
+		for jid in raw_roster:
 			try:
 				j = helpers.parse_jid(jid)
 			except:
-				print >> sys.sterr, _('Jid %s is not RFC complient. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it')
+				print >> sys.sterr, _('Jid %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it') % jid
 			else:
-				roster[j] = r[jid]
+				roster[j] = raw_roster[jid]
 
 		# Remove or jid
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
