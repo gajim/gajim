@@ -2,6 +2,10 @@
 import os
 import sre
 import sys
+import time
+import signal
+
+signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
 from pysqlite2 import dbapi2 as sqlite
 
@@ -167,10 +171,13 @@ def visit(arg, dirname, filenames):
 				con.commit()
 
 if __name__ == '__main__':
+	print 'IMPORTNANT: PLEASE READ http://trac.gajim.org/wiki/MigrateLogToDot9DB'
+	print 'Migration will start in 40 seconds unless you press Ctrl+C'
+	time.sleep(40) # give him time to act
+	print
 	print 'Starting Logs Migration'
 	print '======================='
 	print 'Please do NOT run Gajim until this script is over'
-	print 'For more read http://trac.gajim.org/wiki/MigrateLogToDot9DB'
 	os.path.walk(PATH_TO_LOGS_BASE_DIR, visit, None)
 	f = open(os.path.join(PATH_TO_LOGS_BASE_DIR, 'README'), 'w')
 	f.write('We do not use plain-text files anymore, because they do not scale.\n')
