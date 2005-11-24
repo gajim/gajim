@@ -23,7 +23,8 @@ FILES_LIB	= `$(FIND_LIB)`
 
 SCRIPTS = \
 	scripts/gajim \
-	scripts/gajim-remote
+	scripts/gajim-remote \
+	scripts/migrate_logs_to_dot9_db.py
 
 all: translation trayicon gtkspell idle gajim.desktop
 
