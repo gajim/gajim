@@ -35,8 +35,8 @@ except ImportError:
 		)
 	print >> sys.stderr, error
 	sys.exit()
-
-GOT_JIDS_ALREADY_IN_DB = False
+	
+GOT_JIDS_ALREADY_IN_DB = False # see get_jids_already_in_db()
 
 if os.name == 'nt':
 	try:
@@ -53,6 +53,9 @@ try:
 except:
 	pass
 
+con = sqlite.connect(LOG_DB_PATH)
+cur = con.cursor()
+
 class Logger:
 	def __init__(self):
 		if not os.path.exists(LOG_DB_PATH):
@@ -63,15 +66,12 @@ class Logger:
 		self.get_jids_already_in_db()
 
 	def get_jids_already_in_db(self):
-		con = sqlite.connect(LOG_DB_PATH)
-		cur = con.cursor()
 		cur.execute('SELECT jid FROM jids')
 		rows = cur.fetchall() # list of tupples: (u'aaa@bbb',), (u'cc@dd',)]
 		self.jids_already_in = []
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
-		con.close()
 		GOT_JIDS_ALREADY_IN_DB = True
 
 	def jid_is_from_pm(cur, jid):
@@ -97,9 +97,8 @@ class Logger:
 		so to ask logs we need jid_id that matches our jid in jids table
 		this method asks jid and returns the jid_id for later sql-ing on logs
 		'''
-		con = sqlite.connect(LOG_DB_PATH)
-		cur = con.cursor()
-		
+		if jid.find('/') != -1: # if it has a /
+				jid = jid.split('/', 1)[0] # remove the resource
 		if jid in self.jids_already_in: # we already have jids in DB
 			cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
 			jid_id = cur.fetchone()[0]
@@ -120,13 +119,10 @@ class Logger:
 		we analyze jid and store it as follows:
 		jids.jid text column will hold JID if TC-related, room_jid if GC-related,
 		ROOM_JID/nick if pm-related.'''
-		
+
 		if not GOT_JIDS_ALREADY_IN_DB:
 			self.get_jids_already_in_db()
-	
-		con = sqlite.connect(LOG_DB_PATH)
-		cur = con.cursor()
-		
+			
 		jid = jid.lower()
 		contact_name_col = None # holds nickname for kinds gcstatus, gc_msg
 		# message holds the message unless kind is status or gcstatus,
@@ -138,13 +134,15 @@ class Logger:
 		else:
 			time_col = int(float(time.time()))
 
-		def commit_to_db(values, cur = cur):
+		def commit_to_db(values):
 			sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message) '\
 					'VALUES (?, ?, ?, ?, ?, ?)'
 			cur.execute(sql, values)
-			cur.connection.commit()
+			con.commit()
+			print 'saved', values
 		
 		jid_id = self.get_jid_id(jid)
+		print 'jid', jid, 'gets jid_id', jid_id
 					
 		if kind == 'status': # we store (not None) time, jid, show, msg
 			# status for roster items
@@ -179,7 +177,6 @@ class Logger:
 		elif kind in ('single_msg_recv', 'chat_msg_recv', 'chat_msg_sent', 'single_msg_sent'):
 			values = (jid_id, contact_name_col, time_col, kind, show_col, message_col)
 			commit_to_db(values)
-		#con.close()
 
 	def get_last_conversation_lines(self, jid, restore_how_many_rows,
 		pending_how_many, timeout):
@@ -191,8 +188,6 @@ class Logger:
 		now = int(float(time.time()))
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
-		con = sqlite.connect(LOG_DB_PATH)
-		cur = con.cursor()
 		# so if we ask last 5 lines and we have 2 pending we get
 		# 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
 		cur.execute('''
@@ -227,8 +222,6 @@ class Logger:
 		
 		now = int(time.time())
 		
-		con = sqlite.connect(LOG_DB_PATH)
-		cur = con.cursor()
 		cur.execute('''
 			SELECT contact_name, time, kind, show, message FROM logs
 			WHERE jid_id = %d
@@ -248,8 +241,6 @@ class Logger:
 		seconds_in_a_day = 86400 # 60 * 60 * 24
 		last_second_of_day = start_of_day + seconds_in_a_day - 1
 		
-		con = sqlite.connect(LOG_DB_PATH)
-		cur = con.cursor()
 		# just ask one row to see if we have sth for this date
 		cur.execute('''
 			SELECT log_line_id FROM logs
