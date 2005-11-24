@@ -206,7 +206,16 @@ class Logger:
 		results = cur.fetchall()
 		results.reverse()
 		return results
-
+	
+	def get_unix_time_from_date(self, year, month, day):
+		# year (fe 2005), month (fe 11), day (fe 25)
+		# returns time in seconds for the second that starts that date since epoch
+		# gimme unixtime from year month day:
+		d = datetime.date(year, month, day)
+		local_time = d.timetuple() # time tupple (compat with time.localtime())
+		start_of_day = int(time.mktime(local_time)) # we have time since epoch baby :)
+		return start_of_day
+	
 	def get_conversation_for_date(self, jid, year, month, day):
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
@@ -214,10 +223,7 @@ class Logger:
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		
-		# gimme unixtime from year month day:
-		d = datetime.date(year, month, day)
-		local_time = d.timetuple() # time tupple (compat with time.localtime())
-		start_of_day = int(time.mktime(local_time)) # we have time since epoch baby :)
+		start_of_day = self.get_unix_time_from_date(year, month, day)
 		
 		now = int(time.time())
 		
@@ -232,3 +238,28 @@ class Logger:
 		
 		results = cur.fetchall()
 		return results
+
+	def date_has_logs(self, jid, year, month, day):
+		'''returns True if we have logs for given day, else False'''
+		jid = jid.lower()
+		jid_id = self.get_jid_id(jid)
+		
+		start_of_day = self.get_unix_time_from_date(year, month, day)
+		seconds_in_a_day = 86400 # 60 * 60 * 24
+		last_second_of_day = start_of_day + seconds_in_a_day - 1
+		
+		con = sqlite.connect(LOG_DB_PATH)
+		cur = con.cursor()
+		# just ask one row to see if we have sth for this date
+		cur.execute('''
+			SELECT log_line_id FROM logs
+			WHERE jid_id = %d
+			AND time BETWEEN %d AND %d
+			ORDER BY time LIMIT 1
+			''' % (jid_id, start_of_day, last_second_of_day))
+		
+		results = cur.fetchone()
+		if results:
+			return True
+		else:
+			return False

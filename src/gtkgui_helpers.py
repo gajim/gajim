@@ -442,3 +442,6 @@ def make_gtk_month_python_month(month):
 	but python's time start from 1, so align to python
 	month MUST be integer'''
 	return month + 1
+
+def make_python_month_gtk_month(month):
+	return month - 1
