@@ -139,10 +139,10 @@ class Logger:
 					'VALUES (?, ?, ?, ?, ?, ?)'
 			cur.execute(sql, values)
 			con.commit()
-			print 'saved', values
+			#print 'saved', values
 		
 		jid_id = self.get_jid_id(jid)
-		print 'jid', jid, 'gets jid_id', jid_id
+		#print 'jid', jid, 'gets jid_id', jid_id
 					
 		if kind == 'status': # we store (not None) time, jid, show, msg
 			# status for roster items
