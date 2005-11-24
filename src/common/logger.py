@@ -215,11 +215,11 @@ class Logger:
 		jid_id = self.get_jid_id(jid)
 		
 		# gimme unixtime from year month day:
-		d = datetime.date(2005, 10, 3)
+		d = datetime.date(year, month, day)
 		local_time = d.timetuple() # time tupple (compat with time.localtime())
 		start_of_day = int(time.mktime(local_time)) # we have time since epoch baby :)
 		
-		now = time.time()
+		now = int(time.time())
 		
 		con = sqlite.connect(LOG_DB_PATH)
 		cur = con.cursor()
