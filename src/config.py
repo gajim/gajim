@@ -2496,17 +2496,9 @@ class AccountCreationWizardWindow:
 		self.go_online_checkbutton = self.xml.get_widget('go_online_checkbutton')
 		self.progressbar = self.xml.get_widget('progressbar')
 
-		# Some vars
-		self.sync = False
-		self.autoconnect = False
+		# some vars
 		self.update_progressbar_timeout_id = None
 		
-		if len(gajim.connections) == 0: # is it the first accound we're creating?
-			# the first account *has* to sync by default
-			self.sync = True
-			# the first account *has* to autoconnect by default
-			self.autoconnect = True
-
 		self.notebook.set_current_page(0)
 		self.advanced_button.set_no_show_all(True)
 		self.xml.signal_autoconnect(self)
@@ -2710,9 +2702,9 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		config['password'] = password
 		config['resource'] = 'Gajim'
 		config['priority'] = 5
-		config['autoconnect'] = self.autoconnect
+		config['autoconnect'] = True
 		config['no_log_for'] = ''
-		config['sync_with_global_status'] = self.sync
+		config['sync_with_global_status'] = True
 		config['proxy'] = ''
 		config['usessl'] = False
 		config['use_custom_host'] = False
