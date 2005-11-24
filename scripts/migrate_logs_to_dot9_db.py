@@ -97,6 +97,10 @@ def visit(arg, dirname, filenames):
 		# notifications are also in contact log file
 		if filename == 'notify.log':
 			continue
+		try:
+			filename.decode('utf-8')
+		except:
+			continue
 		path_to_text_file = os.path.join(dirname, filename)
 		if os.path.isdir(path_to_text_file):
 			continue
