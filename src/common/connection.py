@@ -1271,7 +1271,12 @@ class Connection:
 
 		roster = {}
 		for jid in r:
-			roster[helpers.parse_jid(jid)] = r[jid]
+			try:
+				j = helpers.parse_jid(jid)
+			except:
+				print >> sys.sterr, _('Jid %s is not RFC complient. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it')
+			else:
+				roster[j] = r[jid]
 
 		# Remove or jid
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
