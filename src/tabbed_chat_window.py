@@ -917,8 +917,8 @@ class TabbedChatWindow(chat.Chat):
 
 			tim = time.localtime(float(row[0]))
 
-			self.print_conversation_line(row[2], jid, kind, name, tim,
-				['small'], ['small', 'grey'], ['small', 'grey'], False)
+			chat.Chat.print_conversation_line(self, row[2], jid, kind, name, tim,
+				['small'], ['small', 'restored_message'], ['small', 'restored_message'], False)
 
 		if len(rows):
 			conv_textview = self.conversation_textviews[jid]

@@ -94,8 +94,9 @@ class ConversationTextview(gtk.TextView):
 		tag = buffer.create_tag('small')
 		tag.set_property('scale', pango.SCALE_SMALL)
 
-		tag = buffer.create_tag('grey')
-		tag.set_property('foreground', '#9e9e9e')
+		tag = buffer.create_tag('restored_message')
+		color = gajim.config.get('restored_messages_color')
+		tag.set_property('foreground', color)
 
 		tag = buffer.create_tag('url')
 		tag.set_property('foreground', '#0000ff')

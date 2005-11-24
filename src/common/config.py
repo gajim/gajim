@@ -162,6 +162,7 @@ class Config:
 		'ask_avatars_on_startup': [opt_bool, True, _('If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cache that is too old.')],
 		'print_status_in_chats': [opt_bool, True, _('If False, you will no longer see status line in chats when a contact changes his or her status and/or his status message.')],
 		'log_contact_status_changes': [opt_bool, True],
+		'restored_messages_color': [opt_str, 'grey'],
 	}
 
 	__options_per_key = {
