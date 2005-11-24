@@ -72,9 +72,12 @@ class Chat:
 		self.typing_new = {}
 		self.orig_msg = {}
 
+		# alignment before notebook (to control top padding for when showing tabs)
+		self.alignment = self.xml.get_widget('alignment')
+		
 		# notebook customizations
 		self.notebook = self.xml.get_widget('chat_notebook')
-		self.notebook.remove_page(0)
+		self.notebook.remove_page(0) # FIXME why??
 		pref_pos = gajim.config.get('tabs_position')
 		if pref_pos != 'top':
 			if pref_pos == 'bottom':
@@ -88,7 +91,11 @@ class Chat:
 		else:
 			nb_pos = gtk.POS_TOP
 		self.notebook.set_tab_pos(nb_pos)
-		self.notebook.set_show_tabs(gajim.config.get('tabs_always_visible'))
+		if gajim.config.get('tabs_always_visible'):
+			self.notebook.set_show_tabs(True)
+			self.alignment.set_property('top-padding', 1)
+		else:
+			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
 		if gajim.config.get('useemoticons'):
@@ -611,6 +618,10 @@ class Chat:
 		if len(self.xmls) == 1: # we now have only one tab
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
+			
+			if not show_tabs_if_one_tab:
+				self.alignment.set_property('top-padding', 0)
+			
 			self.show_title()
 
 	def bring_scroll_to_end(self, textview, diff_y = 0):
@@ -737,6 +748,7 @@ class Chat:
 
 		if len(self.xmls) > 1:
 			self.notebook.set_show_tabs(True)
+			self.alignment.set_property('top-padding', 1)
 
 		if self.widget_name == 'tabbed_chat_window':
 			xm = gtk.glade.XML(GTKGUI_GLADE, 'chats_eventbox', APP)
