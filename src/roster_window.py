@@ -939,7 +939,7 @@ class RosterWindow:
 		assign_openpgp_key_menuitem = childs[6]
 		
 		#skip a seperator
-		subscription_to_menuitem, subscription_from_menuitem =\
+		send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem =\
 			childs[8].get_submenu().get_children()
 		add_to_roster_menuitem = childs[9]
 		remove_from_roster_menuitem = childs[10]
@@ -980,10 +980,20 @@ class RosterWindow:
 				assign_openpgp_key_menuitem.connect('activate',
 					self.on_assign_pgp_key, contact, account)
 
-			subscription_to_menuitem.connect('activate', self.authorize, jid,
-				account)
-			subscription_from_menuitem.connect('activate', self.req_sub,
-				jid, _('I would like to add you to my roster'), account)
+			if contact.sub in ('from', 'both'):
+				send_auth_menuitem.set_sensitive(False)
+			else:
+				send_auth_menuitem.connect('activate', self.authorize, jid, account)
+			if contact.sub in ('to', 'both'):
+				ask_auth_menuitem.set_sensitive(False)
+			else:
+				ask_auth_menuitem.connect('activate', self.req_sub, jid,
+					_('I would like to add you to my roster'), account)
+			if contact.sub in ('to', 'none'):
+				revoke_auth_menuitem.set_sensitive(False)
+			else:
+				revoke_auth_menuitem.connect('activate', self.revoke_auth, jid,
+					account)
 			
 		else: # contact is in group 'not in the roster'
 			add_to_roster_menuitem.set_no_show_all(False)
@@ -1236,6 +1246,12 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			user1.name = pseudo
 			self.remove_contact(user1, account)
 		self.add_contact_to_roster(jid, account)
+
+	def revoke_auth(self, widget, jid, account):
+		'''Revoke a contact's authorization'''
+		gajim.connections[account].refuse_authorization(jid)
+		dialogs.InformationDialog(_('Authorization has been removed'),
+			_('Now "%s" will always see you as offline.') %jid)
 
 	def on_roster_treeview_scroll_event(self, widget, event):
 		self.tooltip.hide_tooltip()

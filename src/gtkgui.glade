@@ -16182,7 +16182,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image996">
+	<widget class="GtkImage" id="image1266">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -16202,7 +16202,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image997">
+	<widget class="GtkImage" id="image1267">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -16221,7 +16221,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image998">
+	<widget class="GtkImage" id="image1268">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-refresh</property>
 	  <property name="icon_size">1</property>
@@ -16255,7 +16255,7 @@ Banner</property>
       <signal name="activate" handler="on_send_file_menuitem_activate" last_modification_time="Thu, 01 Sep 2005 23:13:17 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image999">
+	<widget class="GtkImage" id="image1269">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-file</property>
 	  <property name="icon_size">1</property>
@@ -16275,7 +16275,7 @@ Banner</property>
       <signal name="activate" handler="on_assign_openpgp_key_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 22:57:59 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1000">
+	<widget class="GtkImage" id="image1270">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-dialog-authentication</property>
 	  <property name="icon_size">1</property>
@@ -16300,7 +16300,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1001">
+	<widget class="GtkImage" id="image1271">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-dialog-question</property>
 	  <property name="icon_size">1</property>
@@ -16317,11 +16317,11 @@ Banner</property>
 	  <child>
 	    <widget class="GtkImageMenuItem" id="resend_authorization_to_menuitem">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Send Authorization to</property>
+	      <property name="label" translatable="yes">Allow him/her to see my status</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1002">
+		<widget class="GtkImage" id="image1272">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-go-up</property>
 		  <property name="icon_size">1</property>
@@ -16337,13 +16337,34 @@ Banner</property>
 	  <child>
 	    <widget class="GtkImageMenuItem" id="rerequest_authorization_from_menuitem">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Re_quest Authorization from</property>
+	      <property name="label" translatable="yes">Ask to see his/her status</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1003">
+		<widget class="GtkImage" id="image1273">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-go-down</property>
+		  <property name="icon_size">1</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkImageMenuItem" id="forbid_him/her_to_see_my_status1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Forbid him/her to see my status</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="revoke_authorization_to_menuitem" last_modification_time="Fri, 25 Nov 2005 21:26:31 GMT"/>
+
+	      <child internal-child="image">
+		<widget class="GtkImage" id="image1274">
+		  <property name="visible">True</property>
+		  <property name="stock">gtk-stop</property>
 		  <property name="icon_size">1</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
@@ -16364,7 +16385,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1004">
+	<widget class="GtkImage" id="image1275">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -16383,7 +16404,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1005">
+	<widget class="GtkImage" id="image1276">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-remove</property>
 	  <property name="icon_size">1</property>
@@ -16415,7 +16436,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1006">
+	<widget class="GtkImage" id="image1277">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
