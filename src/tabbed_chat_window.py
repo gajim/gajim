@@ -440,24 +440,31 @@ class TabbedChatWindow(chat.Chat):
 		
 		chat.Chat.remove_tab(self, jid, 'chats')
 		del self.contacts[jid]
-	
+
+	def init_conversation(self, contact):
+		# restore previous conversation
+		self.restore_conversation(contact.jid)
+
+		if gajim.awaiting_events[self.account].has_key(contact.jid):
+			self.read_queue(contact.jid)
+
 	def new_tab(self, contact):
 		'''when new tab is created'''
 		self.names[contact.jid] = contact.name
 		self.xmls[contact.jid] = gtk.glade.XML(GTKGUI_GLADE, 'chats_vbox', APP)
 		self.childs[contact.jid] = self.xmls[contact.jid].get_widget('chats_vbox')
 		self.contacts[contact.jid] = contact
-		
+
 		self.show_avatar(contact.jid, contact.resource)			
-		
+
 		self.childs[contact.jid].connect('drag_data_received',
 			self.on_drag_data_received, contact)
 		self.childs[contact.jid].drag_dest_set( gtk.DEST_DEFAULT_MOTION |
 			gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP,
 			self.dnd_list, gtk.gdk.ACTION_COPY)
-		
+
 		chat.Chat.new_tab(self, contact.jid)
-		
+
 		msg_textview = self.message_textviews[contact.jid]
 		message_tv_buffer = msg_textview.get_buffer()
 		message_tv_buffer.connect('changed',
@@ -465,30 +472,25 @@ class TabbedChatWindow(chat.Chat):
 
 		if contact.jid in gajim.encrypted_chats[self.account]:
 			self.xmls[contact.jid].get_widget('gpg_togglebutton').set_active(True)
-		
+
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat_popup_menu', APP)
 		xm.signal_autoconnect(self)
 		self.tabbed_chat_popup_menu = xm.get_widget('tabbed_chat_popup_menu')
-		
+
 		self.redraw_tab(contact.jid)
 		self.draw_widgets(contact)
 
-		# restore previous conversation
-		self.restore_conversation(contact.jid)
-
-		if gajim.awaiting_events[self.account].has_key(contact.jid):
-			self.read_queue(contact.jid)
-
+		gobject.idle_add(self.init_conversation, contact)
 		self.childs[contact.jid].show_all()
 
 		# chatstates
 		self.reset_kbd_mouse_timeout_vars()
-		
+
 		self.possible_paused_timeout_id[contact.jid] = gobject.timeout_add(
 			5000, self.check_for_possible_paused_chatstate, contact.jid)
 		self.possible_inactive_timeout_id[contact.jid] = gobject.timeout_add(
 			30000, self.check_for_possible_inactive_chatstate, contact.jid)
-		
+
 	def handle_incoming_chatstate(self, account, contact):
 		''' handle incoming chatstate that jid SENT TO us '''
 		self.draw_name_banner(contact, contact.chatstate)
@@ -510,7 +512,7 @@ class TabbedChatWindow(chat.Chat):
 		current_state = contact.our_chatstate
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
-		
+
 		message_textview = self.message_textviews[jid]
 		message_buffer = message_textview.get_buffer()
 		if self.kbd_activity_in_last_5_secs and message_buffer.get_char_count():
@@ -521,7 +523,7 @@ class TabbedChatWindow(chat.Chat):
 		else:
 			if current_state == 'composing':
 				self.send_chatstate('paused', jid) # pause composing
-		
+
 		# assume no activity and let the motion-notify or 'insert-text' make them True
 		# refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
 		self.reset_kbd_mouse_timeout_vars()
@@ -541,10 +543,10 @@ class TabbedChatWindow(chat.Chat):
 		current_state = contact.our_chatstate
 		if current_state is False: # jid doesn't support chatstates
 			return False # stop looping
-		
+
 		if self.mouse_over_in_last_5_secs or self.kbd_activity_in_last_5_secs:
 			return True # loop forever
-		
+
 		if not (self.mouse_over_in_last_30_secs or\
 			self.kbd_activity_in_last_30_secs):
 			self.send_chatstate('inactive', jid)
@@ -552,7 +554,7 @@ class TabbedChatWindow(chat.Chat):
 		# assume no activity and let the motion-notify or 'insert-text' make them True
 		# refresh 30 seconds too or else it's 30 - 5 = 25 seconds!
 		self.reset_kbd_mouse_timeout_vars()
-		
+
 		return True # loop forever
 
 	def on_message_tv_buffer_changed(self, textbuffer, contact):
