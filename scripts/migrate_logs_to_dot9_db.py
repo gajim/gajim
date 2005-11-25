@@ -15,8 +15,8 @@ if os.name == 'nt':
 		PATH_TO_DB = os.path.join(os.environ['appdata'], 'Gajim', 'logs.db') # database is called logs.db
 	except KeyError:
 		# win9x
-		PATH_TO_LOGS_BASE_DIR = 'Logs'
-		PATH_TO_DB = 'logs.db'
+		PATH_TO_LOGS_BASE_DIR = '../src/Logs'
+		PATH_TO_DB = '../src/logs.db'
 else:
 	PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
 	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
