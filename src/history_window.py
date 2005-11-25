@@ -84,6 +84,7 @@ class HistoryWindow:
 		self.add_lines_for_date(year, month, day)
 		
 	def on_calendar_month_changed(self, widget):
+		return #FIXME: commit this when it works as it should
 		year, month, day = widget.get_date() # integers
 		month = gtkgui_helpers.make_gtk_month_python_month(month)
 		weekday, days_in_this_month = calendar.monthrange(year, month)
