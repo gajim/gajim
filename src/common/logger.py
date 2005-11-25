@@ -220,14 +220,15 @@ class Logger:
 		
 		start_of_day = self.get_unix_time_from_date(year, month, day)
 		
-		now = int(time.time())
+		seconds_in_a_day = 86400 # 60 * 60 * 24
+		last_second_of_day = start_of_day + seconds_in_a_day - 1
 		
 		cur.execute('''
 			SELECT contact_name, time, kind, show, message FROM logs
 			WHERE jid_id = %d
 			AND time BETWEEN %d AND %d
 			ORDER BY time
-			''' % (jid_id, start_of_day, now))
+			''' % (jid_id, start_of_day, last_second_of_day))
 		
 		results = cur.fetchall()
 		return results
