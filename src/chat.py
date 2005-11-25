@@ -93,7 +93,7 @@ class Chat:
 		self.notebook.set_tab_pos(nb_pos)
 		if gajim.config.get('tabs_always_visible'):
 			self.notebook.set_show_tabs(True)
-			self.alignment.set_property('top-padding', 1)
+			self.alignment.set_property('top-padding', 2)
 		else:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
@@ -748,7 +748,7 @@ class Chat:
 
 		if len(self.xmls) > 1:
 			self.notebook.set_show_tabs(True)
-			self.alignment.set_property('top-padding', 1)
+			self.alignment.set_property('top-padding', 2)
 
 		if self.widget_name == 'tabbed_chat_window':
 			xm = gtk.glade.XML(GTKGUI_GLADE, 'chats_eventbox', APP)
