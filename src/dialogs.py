@@ -667,6 +667,8 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		if len(self.recently_groupchat) and server == '' and room == '':
 			self.recently_combobox.set_active(0)
 			self.xml.get_widget('room_entry').select_region(0, -1)
+		elif room and server:
+			self.xml.get_widget('join_button').grab_focus()
 
 		self.window.show_all()
 
