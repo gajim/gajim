@@ -113,16 +113,13 @@ class Logger:
 		and after that all okay'''
 		
 		possible_room_jid, possible_nick = jid.split('/', 1)
-		print possible_room_jid
 		
 		cur.execute('SELECT jid_id FROM jids WHERE jid="%s" AND type=%d' %\
 			(possible_room_jid, constants.JID_ROOM_TYPE))
 		row = cur.fetchone()
 		if row is not None:
-			print 'PM!!!!!!!!!!!!!'
 			return True
 		else:
-			print 'NOT PM!!!'
 			return False
 	
 	def get_jid_id(self, jid):
