@@ -677,6 +677,21 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
 			widget.destroy()
 
+	def on_room_entry_key_press_event(self, widget, event):
+		# Check for pressed @ and jump to server_entry if found
+		if event.keyval == gtk.keysyms.at:
+			self.xml.get_widget('server_entry').grab_focus()
+			return True
+
+	def on_server_entry_key_press_event(self, widget, event):
+		# If backspace is pressed in empty server_entry, return to the room entry
+		backspace = event.keyval == gtk.keysyms.BackSpace
+		server_entry = self.xml.get_widget('server_entry')
+		empty = len(server_entry.get_text()) == 0
+		if backspace and empty:
+			self.xml.get_widget('room_entry').grab_focus()
+			return True
+
 	def on_recently_combobox_changed(self, widget):
 		model = widget.get_model()
 		iter = widget.get_active_iter()
