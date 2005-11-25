@@ -90,6 +90,19 @@ def get_jid(dirname, filename):
 	jid = jid.lower()
 	return jid
 
+def decode_string(string):
+	'''try to decode (to make it Unicode instance) given string'''
+	# by the time we go to iso15 it better be the one else we show bad characters
+	encodings = (sys.getfilesystemencoding(), 'utf-8', 'iso-8859-15')
+	for encoding in encodings:
+		try:
+			string = string.decode(encoding)
+		except UnicodeError:
+			continue
+		return string
+
+	return None
+
 def visit(arg, dirname, filenames):
 	print 'Visiting', dirname
 	for filename in filenames:
@@ -97,9 +110,8 @@ def visit(arg, dirname, filenames):
 		# notifications are also in contact log file
 		if filename == 'notify.log':
 			continue
-		try:
-			filename.decode('utf-8')
-		except:
+		filename = decode_string(filename)
+		if not filename:
 			continue
 		path_to_text_file = os.path.join(dirname, filename)
 		if os.path.isdir(path_to_text_file):
@@ -137,6 +149,9 @@ def visit(arg, dirname, filenames):
 				# sent ==> chat_msg_sent, status ==> status
 				type = splitted_line[1] # line[1] has type of logged message
 				message_data = splitted_line[2:] # line[2:] has message data
+				message_data = decode_string(message_data)
+				if not message_data:
+					continue
 				# line[0] is date,
 
 				# some lines can be fucked up, just drop them
