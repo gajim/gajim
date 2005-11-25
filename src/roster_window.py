@@ -46,7 +46,7 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-#(icon, name, type, jid, account, editable, s)
+#(icon, name, type, jid, account, editable, second pixbuf)
 (
 C_IMG, # image to show state (online, new message etc)
 C_NAME, # cellrenderer text that holds contact nickame

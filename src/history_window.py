@@ -29,6 +29,10 @@ from common import gajim
 from common import helpers
 from common import i18n
 
+from common.logger import Constants
+
+constants = Constants()
+
 _ = i18n._
 APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
@@ -97,6 +101,22 @@ class HistoryWindow:
 			else:
 				widget.unmark_day(day)
 
+	def get_string_show_from_constant_int(self, show):
+		if show == constants.SHOW_ONLINE:
+			show = 'online'
+		elif show == constants.SHOW_CHAT:
+			show = 'chat'
+		elif show == constants.SHOW_AWAY:
+			show = 'away'
+		elif show == constants.SHOW_XA:
+			show = 'xa'
+		elif show == constants.SHOW_DND:
+			show = 'dnd'
+		elif show == constants.SHOW_OFFLINE:
+			show = 'offline'
+
+		return show
+
 	def add_lines_for_date(self, year, month, day):
 		'''adds all the lines for given date in textbuffer'''
 		self.history_buffer.set_text('') # clear the buffer first
@@ -117,18 +137,20 @@ class HistoryWindow:
 		tag_name = ''
 		tag_msg = ''
 		
-		if kind == 'gc_msg':
+		show = self.get_string_show_from_constant_int(show)
+		
+		if kind == constants.KIND_GC_MSG:
 			tag_name = 'incoming'
-		elif kind in ('single_msg_recv', 'chat_msg_recv'):
+		elif kind in (constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV):
 			try:
 				contact_name = gajim.contacts[self.account][self.jid][0].name
 			except:
 				contact_name = self.jid.split('@')[0]
 			tag_name = 'incoming'
-		elif kind in ('single_msg_sent', 'chat_msg_sent'):
+		elif kind in (constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT):
 			contact_name = gajim.nicks[self.account]
 			tag_name = 'outgoing'
-		elif kind == 'gcstatus':
+		elif kind == constants.KIND_GCSTATUS:
 			# message here (if not None) is status message
 			if message:
 				message = _('%(nick)s is now %(status)s: %(status_msg)s') %\
@@ -150,7 +172,7 @@ class HistoryWindow:
 
 		# do not do this if gcstats, avoid dupping contact_name
 		# eg. nkour: nkour is now Offline
-		if contact_name and kind != 'gcstatus':
+		if contact_name and kind != constants.KIND_GCSTATUS:
 			# add stuff before and after contact name
 			before_str = gajim.config.get('before_nickname')
 			after_str = gajim.config.get('after_nickname')

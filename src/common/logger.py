@@ -30,7 +30,7 @@ try:
 except ImportError:
 	error = _('pysqlite2 (aka python-pysqlite2) dependency is missing. '\
 		'After you install pysqlite3, if you want to migrate your logs '\
-		'to the new database, please read: http://trac.gajim.org/wiki/MigrateLogToDot9DB '
+		'to the new database, please read: http://trac.gajim.org/wiki/MigrateLogToDot9DB '\
 		'Exiting...'
 		)
 	print >> sys.stderr, error
@@ -53,15 +53,44 @@ try:
 except:
 	pass
 
-con = sqlite.connect(LOG_DB_PATH)
-cur = con.cursor()
+class Constants:
+	def __init__(self):
+		(
+			self.JID_NORMAL_TYPE,
+			self.JID_ROOM_TYPE # image to show state (online, new message etc)
+		) = range(2)
+		
+		(
+			self.KIND_STATUS,
+			self.KIND_GCSTATUS,
+			self.KIND_GC_MSG,
+			self.KIND_SINGLE_MSG_RECV,
+			self.KIND_CHAT_MSG_RECV,
+			self.KIND_SINGLE_MSG_SENT,
+			self.KIND_CHAT_MSG_SENT
+		) = range(7)
+		
+		(
+			self.SHOW_ONLINE,
+			self.SHOW_CHAT,
+			self.SHOW_AWAY,
+			self.SHOW_XA,
+			self.SHOW_DND,
+			self.SHOW_OFFLINE
+		) = range(6)
+
+constants = Constants()
 
 class Logger:
 	def __init__(self):
 		if not os.path.exists(LOG_DB_PATH):
 			# this can happen only the first time (the time we create the db)
-			# db is created in src/common/checks_paths.py
+			# db is not created here but in src/common/checks_paths.py
 			return
+		
+		global con, cur
+		con = sqlite.connect(LOG_DB_PATH)
+		cur = con.cursor()
 		
 		self.get_jids_already_in_db()
 
@@ -74,21 +103,26 @@ class Logger:
 			self.jids_already_in.append(row[0])
 		GOT_JIDS_ALREADY_IN_DB = True
 
-	def jid_is_from_pm(cur, jid):
+	def jid_is_from_pm(self, jid):
 		'''if jid is gajim@conf/nkour it's likely a pm one, how we know
 		gajim@conf is not a normal guy and nkour is not his resource?
-		we ask if gajim@conf is already in jids (as room)
-		this fails if user disable logging for room and only enables for
-		pm (so higly unlikely) and if we fail we do not force chaos
-		(user will see the first pm as if it was message in room's public chat)'''
+		we ask if gajim@conf is already in jids (with type room jid)
+		this fails if user disables logging for room and only enables for
+		pm (so higly unlikely) and if we fail we do not go chaos
+		(user will see the first pm as if it was message in room's public chat)
+		and after that all okay'''
 		
 		possible_room_jid, possible_nick = jid.split('/', 1)
+		print possible_room_jid
 		
-		cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % possible_room_jid)
-		jid_id = cur.fetchone()[0]
-		if jid_id:
+		cur.execute('SELECT jid_id FROM jids WHERE jid="%s" AND type=%d' %\
+			(possible_room_jid, constants.JID_ROOM_TYPE))
+		row = cur.fetchone()
+		if row is not None:
+			print 'PM!!!!!!!!!!!!!'
 			return True
 		else:
+			print 'NOT PM!!!'
 			return False
 	
 	def get_jid_id(self, jid):
@@ -98,29 +132,113 @@ class Logger:
 		this method asks jid and returns the jid_id for later sql-ing on logs
 		'''
 		if jid.find('/') != -1: # if it has a /
+			is_pm = self.jid_is_from_pm(jid)
+			if not is_pm: # it's normal jid with resource
 				jid = jid.split('/', 1)[0] # remove the resource
 		if jid in self.jids_already_in: # we already have jids in DB
 			cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
 			jid_id = cur.fetchone()[0]
-		else: # oh! a new jid :), we add him now
+		else: # oh! a new jid :), we add it now
 			cur.execute('INSERT INTO jids (jid) VALUES (?)', (jid,))
 			con.commit()
 			jid_id = cur.lastrowid
 			self.jids_already_in.append(jid)
 		return jid_id
 	
-	def write(self, kind, jid, message = None, show = None, tim = None):
+	def convert_human_values_to_db_api_values(self, kind, show):
+		'''coverts from string style to constant ints for db'''
+		if kind == 'status':
+			kind_col = constants.KIND_STATUS
+		elif kind == 'gcstatus':
+			kind_col = constants.KIND_GCSTATUS
+		elif kind == 'gc_msg':
+			kind_col = constants.KIND_GC_MSG
+		elif kind == 'single_msg_recv':
+			kind_col = constants.KIND_SINGLE_MSG_RECV
+		elif kind == 'single_msg_sent':
+			kind_col = constants.KIND_SINGLE_MSG_SENT
+		elif kind == 'chat_msg_recv':
+			kind_col = constants.KIND_CHAT_MSG_RECV
+		elif kind == 'chat_msg_sent':
+			kind_col = constants.KIND_CHAT_MSG_SENT
+			
+		print 'show', show
+		
+		if show == 'online':
+			show_col = constants.SHOW_ONLINE
+		elif show == 'chat':
+			show_col = constants.SHOW_CHAT
+		elif show == 'away':
+			show_col = constants.SHOW_AWAY
+		elif show == 'xa':
+			show_col = constants.SHOW_XA
+		elif show == 'dnd':
+			show_col = constants.SHOW_DND
+		elif show == 'offline':
+			show_col = constants.SHOW_OFFLINE
+		elif show is None:
+			show_col = None
+		
+		return kind_col, show_col
+
+	def convert_db_api_values_to_human_values(self, kind_col, show_col):
+		'''coverts from db constant ints to string style'''
+		print 'kind_col', kind_col, 'show_col', show_col
+		if kind_col == constants.KIND_STATUS:
+			kind = 'status'
+		elif kind_col == constants.KIND_GCSTATUS:
+			kind = 'gcstatus'
+		elif kind_col == constants.KIND_GC_MSG:
+			kind = 'gc_msg'
+		elif kind_col == constants.KIND_SINGLE_MSG_RECV:
+			kind = 'single_msg_recv'
+		elif kind_col == constants.KIND_SINGLE_MSG_SENT:
+			kind = 'single_msg_sent'
+		elif kind_col == constants.KIND_CHAT_MSG_RECV:
+			kind = 'chat_msg_recv'
+		elif kind_col == constants.KIND_CHAT_MSG_SENT:
+			kind = 'chat_msg_sent'
+			
+		if show_col == constants.SHOW_ONLINE:
+			show = 'online'
+		elif show_col == constants.SHOW_CHAT:
+			show = 'chat'
+		elif show_col == constants.SHOW_AWAY:
+			show = 'away'
+		elif show_col == constants.SHOW_XA:
+			show = 'xa'
+		elif show_col == constants.SHOW_DND:
+			show = 'dnd'
+		elif show_col == constants.SHOW_OFFLINE:
+			show = 'offline'
+		elif show_col is None:
+			show = None
+		
+		return kind, show
+	
+	def commit_to_db(self, values):
+		#print 'saving', values
+		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) '\
+				'VALUES (?, ?, ?, ?, ?, ?, ?)'
+		cur.execute(sql, values)
+		con.commit()
+		
+	
+	def write(self, kind, jid, message = None, show = None, tim = None, subject = None):
 		'''write a row (status, gcstatus, message etc) to logs database
 		kind can be status, gcstatus, gc_msg, (we only recv for those 3),
 		single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent
 		we cannot know if it is pm or normal chat message, we try to guess
-		see jid_is_from_pm()
+		see jid_is_from_pm() which is called by get_jid_id()
 		
 		we analyze jid and store it as follows:
 		jids.jid text column will hold JID if TC-related, room_jid if GC-related,
 		ROOM_JID/nick if pm-related.'''
 
 		if not GOT_JIDS_ALREADY_IN_DB:
+			global con, cur
+			con = sqlite.connect(LOG_DB_PATH)
+			cur = con.cursor()
 			self.get_jids_already_in_db()
 			
 		jid = jid.lower()
@@ -128,40 +246,31 @@ class Logger:
 		# message holds the message unless kind is status or gcstatus,
 		# then it holds status message
 		message_col = message
-		show_col = show
+		subject_col = subject
 		if tim:
 			time_col = int(float(time.mktime(tim)))
 		else:
 			time_col = int(float(time.time()))
-
-		def commit_to_db(values):
-			sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message) '\
-					'VALUES (?, ?, ?, ?, ?, ?)'
-			cur.execute(sql, values)
-			con.commit()
-			#print 'saved', values
 		
 		jid_id = self.get_jid_id(jid)
-		#print 'jid', jid, 'gets jid_id', jid_id
+		
+		kind_col, show_col = self.convert_human_values_to_db_api_values(kind, show)
 					
+		# now we may have need to do extra care for some values in columns
 		if kind == 'status': # we store (not None) time, jid, show, msg
 			# status for roster items
 			if show is None:
-				show_col = 'online'
+				show_col = constants.SHOW_ONLINE
 
-			values = (jid_id, contact_name_col, time_col, kind, show_col, message_col)
-			commit_to_db(values)
 		elif kind == 'gcstatus':
 			# status in ROOM (for pm status see status)
 			if show is None:
-				show_col = 'online'
+				show_col = constants.SHOW_ONLINE
 			
 			jid, nick = jid.split('/', 1)
-			
 			jid_id = self.get_jid_id(jid) # re-get jid_id for the new jid
 			contact_name_col = nick
-			values = (jid_id, contact_name_col, time_col, kind, show_col, message_col)
-			commit_to_db(values)
+
 		elif kind == 'gc_msg':
 			if jid.find('/') != -1: # if it has a /
 				jid, nick = jid.split('/', 1)
@@ -171,12 +280,10 @@ class Logger:
 				nick = None
 			jid_id = self.get_jid_id(jid) # re-get jid_id for the new jid
 			contact_name_col = nick
-			
-			values = (jid_id, contact_name_col, time_col, kind, show_col, message_col)
-			commit_to_db(values)
-		elif kind in ('single_msg_recv', 'chat_msg_recv', 'chat_msg_sent', 'single_msg_sent'):
-			values = (jid_id, contact_name_col, time_col, kind, show_col, message_col)
-			commit_to_db(values)
+		
+		values = (jid_id, contact_name_col, time_col, kind_col, show_col,
+			message_col, subject_col)
+		self.commit_to_db(values)
 
 	def get_last_conversation_lines(self, jid, restore_how_many_rows,
 		pending_how_many, timeout):
@@ -192,10 +299,11 @@ class Logger:
 		# 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
 		cur.execute('''
 			SELECT time, kind, message FROM logs
-			WHERE jid_id = %d AND kind IN
-			('single_msg_recv', 'chat_msg_recv', 'chat_msg_sent', 'single_msg_sent')
+			WHERE jid_id = %d AND kind IN	(%d, %d, %d, %d)
 			ORDER BY time DESC LIMIT %d OFFSET %d
-			''' % (jid_id, restore_how_many_rows, pending_how_many)
+			''' % (constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
+				constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT,
+				jid_id, restore_how_many_rows, pending_how_many)
 			)
 
 		results = cur.fetchall()

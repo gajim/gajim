@@ -9,6 +9,35 @@ signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
 from pysqlite2 import dbapi2 as sqlite
 
+
+class Constants:
+	def __init__(self):
+		(
+			self.JID_NORMAL_TYPE,
+			self.JID_ROOM_TYPE # image to show state (online, new message etc)
+		) = range(2)
+		
+		(
+			self.KIND_STATUS,
+			self.KIND_GCSTATUS,
+			self.KIND_GC_MSG,
+			self.KIND_SINGLE_MSG_RECV,
+			self.KIND_CHAT_MSG_RECV,
+			self.KIND_SINGLE_MSG_SENT,
+			self.KIND_CHAT_MSG_SENT
+		) = range(7)
+		
+		(
+			self.SHOW_ONLINE,
+			self.SHOW_CHAT,
+			self.SHOW_AWAY,
+			self.SHOW_XA,
+			self.SHOW_DND,
+			self.SHOW_OFFLINE
+		) = range(6)
+
+constants = Constants()
+
 if os.name == 'nt':
 	try:
 		PATH_TO_LOGS_BASE_DIR = os.path.join(os.environ['appdata'], 'Gajim', 'Logs')
@@ -24,9 +53,10 @@ else:
 if os.path.exists(PATH_TO_DB):
 	print '%s already exists. Exiting..' % PATH_TO_DB
 	sys.exit()
-	
+
 jids_already_in = [] # jid we already put in DB
 con = sqlite.connect(PATH_TO_DB) 
+os.chmod(PATH_TO_DB, 0600) # rw only for us
 cur = con.cursor()
 # create the tables
 # kind can be
@@ -38,7 +68,8 @@ cur.executescript(
 	'''
 	CREATE TABLE jids(
 		jid_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-		jid TEXT UNIQUE
+		jid TEXT UNIQUE,
+		type INTEGER
 	);
 	
 	CREATE TABLE logs(
@@ -46,9 +77,10 @@ cur.executescript(
 		jid_id INTEGER,
 		contact_name TEXT,
 		time INTEGER,
-		kind TEXT,
-		show TEXT,
-		message TEXT
+		kind INTEGER,
+		show INTEGER,
+		message TEXT,
+		subject TEXT
 	);
 	'''
 	)
@@ -86,7 +118,7 @@ def get_jid(dirname, filename):
 
 	if jid.startswith('/'):
 		p = len(PATH_TO_LOGS_BASE_DIR)
-		jid = jid[p:]
+		jid = jid[p+1:]
 	jid = jid.lower()
 	return jid
 
@@ -118,14 +150,21 @@ def visit(arg, dirname, filenames):
 			continue
 
 		jid = get_jid(dirname, filename)
+		if filename == os.path.basename(dirname): # gajim@conf/gajim@conf then gajim@conf is type room
+			type = constants.JID_ROOM_TYPE
+			print 'marking jid as of type room'
+		else:
+			type = constants.JID_NORMAL_TYPE
+			print 'marking jid as of type normal'
+
 		print 'Processing', jid
-		# jid is already in the DB, don't create the table, just get his jid_id
+		# jid is already in the DB, don't create a new row, just get his jid_id
 		if jid in jids_already_in:
 			cur.execute('SELECT jid_id FROM jids WHERE jid = "%s"' % jid)
 			JID_ID = cur.fetchone()[0]
 		else:
 			jids_already_in.append(jid)
-			cur.execute('INSERT INTO jids (jid) VALUES (?)', (jid,))
+			cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid, type))
 			con.commit()
 
 			JID_ID = cur.lastrowid
@@ -150,7 +189,6 @@ def visit(arg, dirname, filenames):
 				type = splitted_line[1] # line[1] has type of logged message
 				message_data = splitted_line[2:] # line[2:] has message data
 				# line[0] is date,
-
 				# some lines can be fucked up, just drop them
 				try:
 					tim = int(float(splitted_line[0]))
@@ -165,24 +203,25 @@ def visit(arg, dirname, filenames):
 				if type == 'gc':
 					contact_name = message_data[0]
 					message = ':'.join(message_data[1:])
-					kind = 'gc_msg'
+					kind = constants.KIND_GC_MSG
 				elif type == 'gcstatus':
 					contact_name = message_data[0]
 					show = message_data[1]
 					message = ':'.join(message_data[2:]) # status msg
-					kind = type
+					kind = constants.KIND_GCSTATUS
 				elif type == 'recv':
 					message = ':'.join(message_data[0:])
-					kind = 'chat_msg_recv'
+					kind = constants.KIND_CHAT_MSG_RECV
 				elif type == 'sent':
 					message = ':'.join(message_data[0:])
-					kind = 'chat_msg_sent'
+					kind = constants.KIND_CHAT_MSG_SENT
 				else: # status
-					kind = 'status'
+					kind = constants.KIND_STATUS
 					show = message_data[0]
 					message = ':'.join(message_data[1:]) # status msg
 
 				message = decode_string(message)
+				message = message[:-1] # remove last \n
 				if not message:
 					continue
 				values = (JID_ID, contact_name, tim, kind, show, message)
@@ -192,7 +231,7 @@ def visit(arg, dirname, filenames):
 if __name__ == '__main__':
 	print 'IMPORTNANT: PLEASE READ http://trac.gajim.org/wiki/MigrateLogToDot9DB'
 	print 'Migration will start in 40 seconds unless you press Ctrl+C'
-	time.sleep(40) # give him time to act
+	time.sleep(40) # give the user time to act
 	print
 	print 'Starting Logs Migration'
 	print '======================='

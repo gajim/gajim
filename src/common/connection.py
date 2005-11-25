@@ -366,10 +366,7 @@ class Connection:
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
 				gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 		elif mtype == 'normal': # it's single message
-			log_msgtxt = msgtxt
-			if subject:
-				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
-			gajim.logger.write('single_msg_recv', frm, log_msgtxt, tim = tim)
+			gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim, subject = subject)
 			if invite is not None:
 				item = invite.getTag('invite')
 				jid_from = item.getAttr('from')
@@ -383,11 +380,8 @@ class Connection:
 		else: # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
 				return
-			log_msgtxt = msgtxt
-			if subject:
-				log_msgtxt = _('Subject: %s\n%s') % (subject, msgtxt)
 			if msg.getTag('body'):
-				gajim.logger.write('chat_msg_recv', frm, log_msgtxt, tim = tim)
+				gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim, subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
 				chatstate))
 	# END messageCB

@@ -31,6 +31,9 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
+from common.logger import Constants
+constants = Constants()
+
 from common import i18n
 
 _ = i18n._
@@ -910,10 +913,10 @@ class TabbedChatWindow(chat.Chat):
 			pending_how_many, timeout)
 		
 		for row in rows: # row[0] time, row[1] has kind, row[2] the message
-			if row[1] in ('chat_msg_sent', 'single_msg_sent'):
+			if row[1] in (constants.KIND_CHAT_MSG_SENT, constants.KIND_SINGLE_MSG_SENT):
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
-			elif row[1] in ('single_msg_recv', 'chat_msg_recv'):
+			elif row[1] in (constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV):
 				kind = 'incoming'
 				name = self.contacts[jid].name
 

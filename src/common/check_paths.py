@@ -32,6 +32,7 @@ from pysqlite2 import dbapi2 as sqlite # DO NOT MOVE ABOVE OF import gajim
 def create_log_db():
 	print _('creating logs database')
 	con = sqlite.connect(logger.LOG_DB_PATH) 
+	os.chmod(logger.LOG_DB_PATH, 0600) # rw only for us
 	cur = con.cursor()
 	# create the tables
 	# kind can be
@@ -45,17 +46,19 @@ def create_log_db():
 		'''
 		CREATE TABLE jids(
 			jid_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-			jid TEXT UNIQUE
+			jid TEXT UNIQUE,
+			type INTEGER
 		);
-
+		
 		CREATE TABLE logs(
 			log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			jid_id INTEGER,
 			contact_name TEXT,
 			time INTEGER,
-			kind TEXT,
-			show TEXT,
-			message TEXT
+			kind INTEGER,
+			show INTEGER,
+			message TEXT,
+			subject TEXT
 		);
 		'''
 		)
