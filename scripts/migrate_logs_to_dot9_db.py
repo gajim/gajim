@@ -149,9 +149,6 @@ def visit(arg, dirname, filenames):
 				# sent ==> chat_msg_sent, status ==> status
 				type = splitted_line[1] # line[1] has type of logged message
 				message_data = splitted_line[2:] # line[2:] has message data
-				message_data = decode_string(message_data)
-				if not message_data:
-					continue
 				# line[0] is date,
 
 				# some lines can be fucked up, just drop them
@@ -185,6 +182,9 @@ def visit(arg, dirname, filenames):
 					show = message_data[0]
 					message = ':'.join(message_data[1:]) # status msg
 
+				message = decode_string(message)
+				if not message:
+					continue
 				values = (JID_ID, contact_name, tim, kind, show, message)
 				cur.execute(sql, values)
 				con.commit()
