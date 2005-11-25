@@ -131,14 +131,19 @@ class GroupchatWindow(chat.Chat):
 		if gajim.gc_connected[self.account][room_jid]:
 			self.got_connected(room_jid)
 
-	def on_groupchat_window_delete_event(self, widget, event):
-		'''close window'''
+	def confirm_close(self, room_jid = None):
+		'''Returns True if we confirm we want to close
+		Returns False if we don't want to close anymore
+		if room_jid is given, ask only for it else ask for all opened rooms'''
 		# whether to ask for comfirmation before closing muc
 		if gajim.config.get('confirm_close_muc'):
 			names = []
-			for room_jid in self.xmls:
-				if gajim.gc_connected[self.account][room_jid]:
-					names.append(gajim.get_nick_from_jid(room_jid))
+			if not room_jid:
+				for r_jid in self.xmls:
+					if gajim.gc_connected[self.account][r_jid]:
+						names.append(gajim.get_nick_from_jid(r_jid))
+			else:
+				names = [room_jid]
 
 			rooms_no = len(names)
 			if rooms_no >= 2: # if we are in many rooms
@@ -148,18 +153,23 @@ class GroupchatWindow(chat.Chat):
 			elif rooms_no == 1: # just in one room
 				pritext = _('Are you sure you want to leave room "%s"?') % names[0]
 				sectext = _('If you close this window, you will be disconnected from this room.')
-			
+
 			if rooms_no > 0:
 				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
 					_('Do not ask me again'))
-			
-				if dialog.get_response() != gtk.RESPONSE_OK:
-					return True  # stop propagation of the delete event
-			
+
 				if dialog.is_checked():
 					gajim.config.set('confirm_close_muc', False)
 					dialog.destroy()
 
+				if dialog.get_response() != gtk.RESPONSE_OK:
+					return False
+		return True
+
+	def on_groupchat_window_delete_event(self, widget, event):
+		'''close window'''
+		if not self.confirm_close():
+			return True # stop propagation of the delete event
 		for room_jid in self.xmls:
 			if gajim.gc_connected[self.account][room_jid]:
 				gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
@@ -1279,6 +1289,9 @@ current room topic.') % command, room_jid)
 		menu.show_all()
 
 	def remove_tab(self, room_jid, reason = 'offline'):
+		if not self.confirm_close(room_jid):
+			return
+
 		chat.Chat.remove_tab(self, room_jid, 'gc')
 		if len(self.xmls) > 0:
 			gajim.connections[self.account].send_gc_status(self.nicks[room_jid],
