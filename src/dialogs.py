@@ -903,6 +903,9 @@ class PopupNotificationWindow:
 		gtk.gdk.screen_height() - gajim.interface.roster.popups_notification_height)
 
 	def on_popup_notification_window_button_press_event(self, widget, event):
+		if event.button != 1:
+			self.window.destroy()
+			return
 		# use Contact class, new_chat expects it that way
 		# is it in the roster?
 		if gajim.contacts[self.account].has_key(self.jid):
