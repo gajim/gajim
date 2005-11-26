@@ -120,7 +120,7 @@ class Logger:
 		if row is not None:
 			print 'PM!!'
 			return True
-		else:
+		else: # FIXME: THIS NEVER HAPPENS?
 			print ' NO PM!!'
 			return False
 	
@@ -277,9 +277,9 @@ class Logger:
 			SELECT time, kind, message FROM logs
 			WHERE jid_id = %d AND kind IN	(%d, %d, %d, %d)
 			ORDER BY time DESC LIMIT %d OFFSET %d
-			''' % (constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
+			''' % (jid_id, constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
 				constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT,
-				jid_id, restore_how_many_rows, pending_how_many)
+				restore_how_many_rows, pending_how_many)
 			)
 
 		results = cur.fetchall()
