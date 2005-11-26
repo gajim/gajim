@@ -123,7 +123,7 @@ def get_jid(dirname, filename):
 	return jid
 
 def decode_jid(string):
-	'''try to decode (to make it Unicode instance) given string'''
+	'''try to decode (to make it Unicode instance) given jid'''
 	# by the time we go to iso15 it better be the one else we show bad characters
 	encodings = (sys.getfilesystemencoding(), 'utf-8', 'iso-8859-15')
 	for encoding in encodings:
