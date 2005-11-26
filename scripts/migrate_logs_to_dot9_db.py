@@ -140,7 +140,7 @@ def visit(arg, dirname, filenames):
 	for filename in filenames:
 		# Don't take this file into account, this is dup info
 		# notifications are also in contact log file
-		if filename == 'notify.log':
+		if filename in ('notify.log', 'readme'):
 			continue
 		filename = decode_string(filename)
 		if not filename:
@@ -150,14 +150,14 @@ def visit(arg, dirname, filenames):
 			continue
 
 		jid = get_jid(dirname, filename)
+		
 		if filename == os.path.basename(dirname): # gajim@conf/gajim@conf then gajim@conf is type room
 			type = constants.JID_ROOM_TYPE
-			print 'marking jid as of type room'
+			print 'Processing', jid, 'of type room'
 		else:
 			type = constants.JID_NORMAL_TYPE
-			print 'marking jid as of type normal'
+			print 'Processing', jid, 'of type normal'
 
-		print 'Processing', jid
 		# jid is already in the DB, don't create a new row, just get his jid_id
 		if jid in jids_already_in:
 			cur.execute('SELECT jid_id FROM jids WHERE jid = "%s"' % jid)

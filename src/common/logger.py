@@ -118,25 +118,31 @@ class Logger:
 			(possible_room_jid, constants.JID_ROOM_TYPE))
 		row = cur.fetchone()
 		if row is not None:
+			print 'PM!!'
 			return True
 		else:
+			print ' NO PM!!'
 			return False
 	
-	def get_jid_id(self, jid):
+	def get_jid_id(self, jid, typestr = None):
 		'''jids table has jid and jid_id
 		logs table has log_id, jid_id, contact_name, time, kind, show, message
 		so to ask logs we need jid_id that matches our jid in jids table
 		this method asks jid and returns the jid_id for later sql-ing on logs
 		'''
 		if jid.find('/') != -1: # if it has a /
-			is_pm = self.jid_is_from_pm(jid)
-			if not is_pm: # it's normal jid with resource
+			jid_is_from_pm = self.jid_is_from_pm(jid)
+			if not jid_is_from_pm: # it's normal jid with resource
 				jid = jid.split('/', 1)[0] # remove the resource
 		if jid in self.jids_already_in: # we already have jids in DB
 			cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
 			jid_id = cur.fetchone()[0]
 		else: # oh! a new jid :), we add it now
-			cur.execute('INSERT INTO jids (jid) VALUES (?)', (jid,))
+			if typestr == 'ROOM':
+				typ = constants.JID_ROOM_TYPE
+			else:
+				typ = constants.JID_NORMAL_TYPE
+			cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid, typ))
 			con.commit()
 			jid_id = cur.lastrowid
 			self.jids_already_in.append(jid)
@@ -249,15 +255,17 @@ class Logger:
 		else:
 			time_col = int(float(time.time()))
 		
-		jid_id = self.get_jid_id(jid)
-		
-		kind_col, show_col = self.convert_human_values_to_db_api_values(kind, show)
+	
+		kind_col, show_col = self.convert_human_values_to_db_api_values(kind,
+			show)
 					
 		# now we may have need to do extra care for some values in columns
 		if kind == 'status': # we store (not None) time, jid, show, msg
 			# status for roster items
 			if show is None:
 				show_col = constants.SHOW_ONLINE
+			
+			jid_id = self.get_jid_id(jid)
 
 		elif kind == 'gcstatus':
 			# status in ROOM (for pm status see status)
@@ -265,7 +273,7 @@ class Logger:
 				show_col = constants.SHOW_ONLINE
 			
 			jid, nick = jid.split('/', 1)
-			jid_id = self.get_jid_id(jid) # re-get jid_id for the new jid
+			jid_id = self.get_jid_id(jid, 'ROOM') # re-get jid_id for the new jid
 			contact_name_col = nick
 
 		elif kind == 'gc_msg':
@@ -275,9 +283,11 @@ class Logger:
 				# it's server message f.e. error message
 				# when user tries to ban someone but he's not allowed to
 				nick = None
-			jid_id = self.get_jid_id(jid) # re-get jid_id for the new jid
+			jid_id = self.get_jid_id(jid, 'ROOM') # re-get jid_id for the new jid
 			contact_name_col = nick
-		
+		else:
+			jid_id = self.get_jid_id(jid)
+			
 		values = (jid_id, contact_name_col, time_col, kind_col, show_col,
 			message_col, subject_col)
 		self.commit_to_db(values)
