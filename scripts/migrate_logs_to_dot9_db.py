@@ -229,7 +229,7 @@ def visit(arg, dirname, filenames):
 
 				values = (JID_ID, contact_name, tim, kind, show, message)
 				cur.execute(sql, values)
-				con.commit()
+		con.commit()
 
 if __name__ == '__main__':
 	print 'IMPORTNANT: PLEASE READ http://trac.gajim.org/wiki/MigrateLogToDot9DB'
