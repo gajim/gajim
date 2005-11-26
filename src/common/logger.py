@@ -143,7 +143,10 @@ class Logger:
 			else:
 				typ = constants.JID_NORMAL_TYPE
 			cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid, typ))
-			con.commit()
+			try:
+				con.commit()
+			except sqlite.OperationalError, e:
+				print >> sys.sterr, str(e)
 			jid_id = cur.lastrowid
 			self.jids_already_in.append(jid)
 		return jid_id
@@ -183,49 +186,15 @@ class Logger:
 			show_col = None
 		
 		return kind_col, show_col
-
-	def convert_db_api_values_to_human_values(self, kind_col, show_col):
-		'''coverts from db constant ints to string style'''
-		print 'kind_col', kind_col, 'show_col', show_col
-		if kind_col == constants.KIND_STATUS:
-			kind = 'status'
-		elif kind_col == constants.KIND_GCSTATUS:
-			kind = 'gcstatus'
-		elif kind_col == constants.KIND_GC_MSG:
-			kind = 'gc_msg'
-		elif kind_col == constants.KIND_SINGLE_MSG_RECV:
-			kind = 'single_msg_recv'
-		elif kind_col == constants.KIND_SINGLE_MSG_SENT:
-			kind = 'single_msg_sent'
-		elif kind_col == constants.KIND_CHAT_MSG_RECV:
-			kind = 'chat_msg_recv'
-		elif kind_col == constants.KIND_CHAT_MSG_SENT:
-			kind = 'chat_msg_sent'
-			
-		if show_col == constants.SHOW_ONLINE:
-			show = 'online'
-		elif show_col == constants.SHOW_CHAT:
-			show = 'chat'
-		elif show_col == constants.SHOW_AWAY:
-			show = 'away'
-		elif show_col == constants.SHOW_XA:
-			show = 'xa'
-		elif show_col == constants.SHOW_DND:
-			show = 'dnd'
-		elif show_col == constants.SHOW_OFFLINE:
-			show = 'offline'
-		elif show_col is None:
-			show = None
-		
-		return kind, show
 	
 	def commit_to_db(self, values):
 		#print 'saving', values
-		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) '\
-				'VALUES (?, ?, ?, ?, ?, ?, ?)'
+		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
 		cur.execute(sql, values)
-		con.commit()
-		
+		try:
+			con.commit()
+		except sqlite.OperationalError, e:
+			print >> sys.sterr, str(e)
 	
 	def write(self, kind, jid, message = None, show = None, tim = None, subject = None):
 		'''write a row (status, gcstatus, message etc) to logs database
