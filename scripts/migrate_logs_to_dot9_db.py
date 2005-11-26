@@ -48,7 +48,7 @@ if os.name == 'nt':
 		PATH_TO_DB = '../src/logs.db'
 else:
 	PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
-	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
+	PATH_TO_DB = os.path.expanduser('~/.gajim/logs2.db') # database is called logs.db
 
 if os.path.exists(PATH_TO_DB):
 	print '%s already exists. Exiting..' % PATH_TO_DB
@@ -122,8 +122,8 @@ def get_jid(dirname, filename):
 	jid = jid.lower()
 	return jid
 
-def decode_string(string):
-	'''try to decode (to make it Unicode instance) given string'''
+def decode_jid(string):
+	'''try to decode (to make it Unicode instance) given jid'''
 	# by the time we go to iso15 it better be the one else we show bad characters
 	encodings = (sys.getfilesystemencoding(), 'utf-8', 'iso-8859-15')
 	for encoding in encodings:
@@ -142,34 +142,24 @@ def visit(arg, dirname, filenames):
 		# notifications are also in contact log file
 		if filename in ('notify.log', 'readme'):
 			continue
-		filename = decode_string(filename)
-		if not filename:
-			continue
 		path_to_text_file = os.path.join(dirname, filename)
 		if os.path.isdir(path_to_text_file):
 			continue
 
 		jid = get_jid(dirname, filename)
-		
+
+		jid = decode_jid(jid)
+		if not jid:
+			continue
+
 		if filename == os.path.basename(dirname): # gajim@conf/gajim@conf then gajim@conf is type room
-			type = constants.JID_ROOM_TYPE
+			jid_type = constants.JID_ROOM_TYPE
 			print 'Processing', jid, 'of type room'
 		else:
-			type = constants.JID_NORMAL_TYPE
+			jid_type = constants.JID_NORMAL_TYPE
 			print 'Processing', jid, 'of type normal'
 
-		# jid is already in the DB, don't create a new row, just get his jid_id
-		if jid in jids_already_in:
-			cur.execute('SELECT jid_id FROM jids WHERE jid = "%s"' % jid)
-			JID_ID = cur.fetchone()[0]
-		else:
-			jids_already_in.append(jid)
-			cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid, type))
-			con.commit()
-
-			JID_ID = cur.lastrowid
-		
-		
+		JID_ID = None
 		f = open(path_to_text_file, 'r')
 		lines = f.readlines()
 		for line in lines:
@@ -194,10 +184,7 @@ def visit(arg, dirname, filenames):
 					tim = int(float(splitted_line[0]))
 				except:
 					continue
-				
-				sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message) '\
-					'VALUES (?, ?, ?, ?, ?, ?)'
-		
+
 				contact_name = None
 				show = None
 				if type == 'gc':
@@ -220,10 +207,26 @@ def visit(arg, dirname, filenames):
 					show = message_data[0]
 					message = ':'.join(message_data[1:]) # status msg
 
-				message = decode_string(message)
+#				message = decode_string(message)
 				message = message[:-1] # remove last \n
 				if not message:
 					continue
+
+				# jid is already in the DB, don't create a new row, just get his jid_id
+				if not JID_ID:
+					if jid in jids_already_in:
+						cur.execute('SELECT jid_id FROM jids WHERE jid = "%s"' % jid)
+						JID_ID = cur.fetchone()[0]
+					else:
+						jids_already_in.append(jid)
+						cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)',
+							(jid, jid_type))
+						con.commit()
+						JID_ID = cur.lastrowid
+
+				sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message) '\
+					'VALUES (?, ?, ?, ?, ?, ?)'
+
 				values = (JID_ID, contact_name, tim, kind, show, message)
 				cur.execute(sql, values)
 				con.commit()
