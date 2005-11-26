@@ -154,10 +154,10 @@ def visit(arg, dirname, filenames):
 
 		if filename == os.path.basename(dirname): # gajim@conf/gajim@conf then gajim@conf is type room
 			jid_type = constants.JID_ROOM_TYPE
-			print 'Processing', jid, 'of type room'
+			print 'Processing', jid.encode('utf-8'), 'of type room'
 		else:
 			jid_type = constants.JID_NORMAL_TYPE
-			print 'Processing', jid, 'of type normal'
+			print 'Processing', jid.encode('utf-8'), 'of type normal'
 
 		JID_ID = None
 		f = open(path_to_text_file, 'r')
@@ -176,7 +176,7 @@ def visit(arg, dirname, filenames):
 				# here I convert
 				# gc ==> gc_msg, gcstatus ==> gcstatus, recv ==> chat_msg_recv
 				# sent ==> chat_msg_sent, status ==> status
-				type = splitted_line[1] # line[1] has type of logged message
+				typ = splitted_line[1] # line[1] has type of logged message
 				message_data = splitted_line[2:] # line[2:] has message data
 				# line[0] is date,
 				# some lines can be fucked up, just drop them
@@ -187,19 +187,19 @@ def visit(arg, dirname, filenames):
 
 				contact_name = None
 				show = None
-				if type == 'gc':
+				if typ == 'gc':
 					contact_name = message_data[0]
 					message = ':'.join(message_data[1:])
 					kind = constants.KIND_GC_MSG
-				elif type == 'gcstatus':
+				elif typ == 'gcstatus':
 					contact_name = message_data[0]
 					show = message_data[1]
 					message = ':'.join(message_data[2:]) # status msg
 					kind = constants.KIND_GCSTATUS
-				elif type == 'recv':
+				elif typ == 'recv':
 					message = ':'.join(message_data[0:])
 					kind = constants.KIND_CHAT_MSG_RECV
-				elif type == 'sent':
+				elif typ == 'sent':
 					message = ':'.join(message_data[0:])
 					kind = constants.KIND_CHAT_MSG_SENT
 				else: # status
