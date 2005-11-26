@@ -1585,6 +1585,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		_('You are participating in one or more group chats'),
 		_('Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
+					self.update_status_combobox()
 					return
 		message = self.get_status_message(status)
 		if message is None: # user pressed Cancel to change status message dialog
@@ -1597,6 +1598,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			# or no account is connected and we want to connect with new show and status
 			if not one_connected or gajim.connections[acct].connected > 1:
 				self.send_status(acct, status, message)
+		self.update_status_combobox()
 	
 	def update_status_combobox(self):
 		# table to change index in connection.connected to index in combobox
