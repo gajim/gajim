@@ -156,7 +156,7 @@ class GroupchatWindow(chat.Chat):
 
 			if rooms_no > 0:
 				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
-					_('Do not ask me again'))
+					_('Do _not ask me again'))
 
 				if dialog.is_checked():
 					gajim.config.set('confirm_close_muc', False)
