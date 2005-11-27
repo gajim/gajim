@@ -786,7 +786,7 @@ class Interface:
 		if gajim.connections[account].connected == invisible_show:
 			return
 
-		# join already open groupchats # FIXME: why this happens here? nothing to do with BMs
+		# join already open groupchats
 		for acct in gajim.connections:
 			for room_jid in self.instances[acct]['gc']:
 				if room_jid == 'tabbed':
