@@ -786,20 +786,7 @@ class Interface:
 		if gajim.connections[account].connected == invisible_show:
 			return
 
-		# join already open groupchats
-		for acct in gajim.connections:
-			for room_jid in self.instances[acct]['gc']:
-				if room_jid == 'tabbed':
-					continue
-				if not gajim.gc_connected[acct][room_jid]:
-					room, server = gajim.get_room_name_and_server_from_room_jid(
-						room_jid)
-					nick = self.instances[acct]['gc'][room_jid].nicks[room_jid]
-					password = ''
-					if gajim.gc_passwords.has_key(room_jid):
-						password = gajim.gc_passwords[room_jid]
-					gajim.connections[acct].join_gc(nick, room, server, password)
-		# join autojoinable ones AFTER the others to not open twice bookmarks
+		# join autojoinable rooms
 		for bm in bms:
 			if bm['autojoin'] in ('1', 'true'):
 				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
@@ -963,7 +950,25 @@ class Interface:
 
 	def handle_event_vcard_not_published(self, account, array):
 		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))
-	
+
+	def handle_event_sign_in(self, account, empty):
+		# SIGN_IN event is emitted when we sign in
+
+		# join already open groupchats
+		for acct in gajim.connections:
+			for room_jid in self.instances[acct]['gc']:
+				if room_jid == 'tabbed':
+					continue
+				if gajim.gc_connected[acct][room_jid]:
+					continue
+				room, server = gajim.get_room_name_and_server_from_room_jid(
+					room_jid)
+				nick = self.instances[acct]['gc'][room_jid].nicks[room_jid]
+				password = ''
+				if gajim.gc_passwords.has_key(room_jid):
+					password = gajim.gc_passwords[room_jid]
+				gajim.connections[acct].join_gc(nick, room, server, password)
+
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -1183,6 +1188,7 @@ class Interface:
 			'VCARD_PUBLISHED': self.handle_event_vcard_published,
 			'VCARD_NOT_PUBLISHED': self.handle_event_vcard_not_published,
 			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
+			'SIGN_IN': self.handle_event_sign_in,
 		}
 
 	def exec_event(self, account):

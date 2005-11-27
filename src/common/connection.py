@@ -1759,6 +1759,9 @@ class Connection:
 
 			#Get bookmarks from private namespace
 			self.get_bookmarks()
+			
+			#Inform GUI we just signed in
+			self.dispatch('SIGN_IN', ())
 
 	def get_signed_msg(self, msg):
 		signed = ''
