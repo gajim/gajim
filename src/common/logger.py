@@ -272,26 +272,22 @@ class Logger:
 		list with empty tupple if nothing found to meet our demands'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
+		now = int(float(time.time()))
+		timed_out = now - (timeout * 60) # before that they are too old
 		# so if we ask last 5 lines and we have 2 pending we get
 		# 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
 		cur.execute('''
 			SELECT time, kind, message FROM logs
-			WHERE jid_id = %d AND kind IN	(%d, %d, %d, %d)
+			WHERE jid_id = %d AND kind IN	(%d, %d, %d, %d) AND time > %d
 			ORDER BY time DESC LIMIT %d OFFSET %d
 			''' % (jid_id, constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
 				constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT,
-				restore_how_many_rows, pending_how_many)
+				timed_out, restore_how_many_rows, pending_how_many)
 			)
 
 		results = cur.fetchall()
-		now = time.time()
-		true_results = [] # results that are not too old
-		for result in results:
-			if result[0] < (now - timeout*60): # fom here they are too old
-				break
-			true_results.append(result)
-		true_results.reverse()
-		return true_results
+		results.reverse()
+		return results
 	
 	def get_unix_time_from_date(self, year, month, day):
 		# year (fe 2005), month (fe 11), day (fe 25)
