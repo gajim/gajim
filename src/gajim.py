@@ -1110,6 +1110,8 @@ class Interface:
 		
 		# at least one character in 3 parts (before @, after @, after .)
 		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?]')
+		
+		sre.purge() # clear the regular expression cache
 
 	def on_emoticon_sort(self, emot1, emot2):
 		len1 = len(emot1)
