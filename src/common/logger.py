@@ -89,7 +89,10 @@ class Logger:
 			return
 		
 		global con, cur
-		con = sqlite.connect(LOG_DB_PATH)
+		# if locked, wait up to 20 sec to unlock
+		# before raise (hopefully should be enough)
+		con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
+			isolation_level = 'IMMEDIATE')
 		cur = con.cursor()
 		
 		self.get_jids_already_in_db()
@@ -118,10 +121,8 @@ class Logger:
 			(possible_room_jid, constants.JID_ROOM_TYPE))
 		row = cur.fetchone()
 		if row is not None:
-			print 'PM!!'
 			return True
-		else: # FIXME: THIS NEVER HAPPENS?
-			print ' NO PM!!'
+		else:
 			return False
 	
 	def get_jid_id(self, jid, typestr = None):
@@ -209,7 +210,8 @@ class Logger:
 
 		if not GOT_JIDS_ALREADY_IN_DB:
 			global con, cur
-			con = sqlite.connect(LOG_DB_PATH)
+			con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
+				isolation_level = 'IMMEDIATE')
 			cur = con.cursor()
 			self.get_jids_already_in_db()
 			
@@ -316,7 +318,7 @@ class Logger:
 		
 		results = cur.fetchall()
 		return results
-
+	
 	def date_has_logs(self, jid, year, month, day):
 		'''returns True if we have logs for given day, else False'''
 		jid = jid.lower()
