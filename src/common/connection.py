@@ -365,7 +365,14 @@ class Connection:
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
 				gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
-		elif mtype == 'normal': # it's single message
+		elif mtype == 'chat': # it's type 'chat'
+			if not msg.getTag('body') and chatstate is None: #no <body>
+				return
+			if msg.getTag('body'):
+				gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim, subject = subject)
+			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
+				chatstate))
+		else: # it's single message
 			gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim, subject = subject)
 			if invite is not None:
 				item = invite.getTag('invite')
@@ -377,13 +384,6 @@ class Connection:
 			else:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
 					None))
-		else: # it's type 'chat'
-			if not msg.getTag('body') and chatstate is None: #no <body>
-				return
-			if msg.getTag('body'):
-				gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim, subject = subject)
-			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
