@@ -786,24 +786,24 @@ class Interface:
 		if gajim.connections[account].connected == invisible_show:
 			return
 
-		# check for autojoins
+		# join already open groupchats # FIXME: why this happens here? nothing to do with BMs
+		for acct in gajim.connections:
+			for room_jid in self.instances[acct]['gc']:
+				if room_jid == 'tabbed':
+					continue
+				if not gajim.gc_connected[acct][room_jid]:
+					room, server = gajim.get_room_name_and_server_from_room_jid(
+						room_jid)
+					nick = self.instances[acct]['gc'][room_jid].nicks[room_jid]
+					password = ''
+					if gajim.gc_passwords.has_key(room_jid):
+						password = gajim.gc_passwords[room_jid]
+					gajim.connections[acct].join_gc(nick, room, server, password)
+		# join autojoinable ones AFTER the others to not open twice bookmarks
 		for bm in bms:
 			if bm['autojoin'] in ('1', 'true'):
 				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
 					bm['password'])
-		# join already open groupchats # FIXME: why this happens here? nothing to do with BMs
-		for account in gajim.connections:
-			for room_jid in self.instances[account]['gc']:
-				if room_jid == 'tabbed':
-					continue
-				if not gajim.gc_connected[account][room_jid]:
-					room, server = gajim.get_room_name_and_server_from_room_jid(
-						room_jid)
-					nick = self.instances[account]['gc'][room_jid].nicks[room_jid]
-					password = ''
-					if gajim.gc_passwords.has_key(room_jid):
-						password = gajim.gc_passwords[room_jid]
-					gajim.connections[account].join_gc(nick, room, server, password)
 								
 	def handle_event_file_send_error(self, account, array):
 		jid = array[0]
