@@ -47,13 +47,13 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="new_message_menuitem">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Send _New Message</property>
+		      <property name="label" translatable="yes">_Start Chat</property>
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1253">
+			<widget class="GtkImage" id="image1298">
 			  <property name="visible">True</property>
-			  <property name="stock">gtk-new</property>
+			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
@@ -71,7 +71,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1254">
+			<widget class="GtkImage" id="image1299">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>
@@ -97,7 +97,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1255">
+			<widget class="GtkImage" id="image1300">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -117,7 +117,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1256">
+			<widget class="GtkImage" id="image1301">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find</property>
 			  <property name="icon_size">1</property>
@@ -164,7 +164,7 @@
 		      <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1257">
+			<widget class="GtkImage" id="image1302">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-quit</property>
 			  <property name="icon_size">1</property>
@@ -199,7 +199,7 @@
 		      <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1258">
+			<widget class="GtkImage" id="image1303">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-network</property>
 			  <property name="icon_size">1</property>
@@ -221,7 +221,7 @@
 		      <accelerator key="T" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1259">
+			<widget class="GtkImage" id="image1304">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-file</property>
 			  <property name="icon_size">1</property>
@@ -242,7 +242,7 @@
 		      <signal name="activate" handler="on_profile_avatar_activate" last_modification_time="Thu, 09 Jun 2005 22:22:16 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1260">
+			<widget class="GtkImage" id="image1305">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-properties</property>
 			  <property name="icon_size">1</property>
@@ -270,7 +270,7 @@
 		      <accelerator key="P" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1261">
+			<widget class="GtkImage" id="image1306">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-preferences</property>
 			  <property name="icon_size">1</property>
@@ -305,7 +305,7 @@
 		      <signal name="activate" handler="on_contents_menuitem_activate" last_modification_time="Thu, 06 Oct 2005 23:29:10 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1262">
+			<widget class="GtkImage" id="image1307">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-help</property>
 			  <property name="icon_size">1</property>
@@ -16197,7 +16197,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1277">
+	<widget class="GtkImage" id="image1308">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -16217,7 +16217,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1278">
+	<widget class="GtkImage" id="image1309">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -16236,7 +16236,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1279">
+	<widget class="GtkImage" id="image1310">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-refresh</property>
 	  <property name="icon_size">1</property>
@@ -16270,7 +16270,7 @@ Banner</property>
       <signal name="activate" handler="on_send_file_menuitem_activate" last_modification_time="Thu, 01 Sep 2005 23:13:17 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1280">
+	<widget class="GtkImage" id="image1311">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-file</property>
 	  <property name="icon_size">1</property>
@@ -16290,7 +16290,7 @@ Banner</property>
       <signal name="activate" handler="on_assign_openpgp_key_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 22:57:59 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1281">
+	<widget class="GtkImage" id="image1312">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-dialog-authentication</property>
 	  <property name="icon_size">1</property>
@@ -16315,7 +16315,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1282">
+	<widget class="GtkImage" id="image1313">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-dialog-question</property>
 	  <property name="icon_size">1</property>
@@ -16336,7 +16336,7 @@ Banner</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1283">
+		<widget class="GtkImage" id="image1314">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-go-up</property>
 		  <property name="icon_size">1</property>
@@ -16356,7 +16356,7 @@ Banner</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1284">
+		<widget class="GtkImage" id="image1315">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-go-down</property>
 		  <property name="icon_size">1</property>
@@ -16377,7 +16377,7 @@ Banner</property>
 	      <signal name="activate" handler="revoke_authorization_to_menuitem" last_modification_time="Fri, 25 Nov 2005 21:26:31 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1285">
+		<widget class="GtkImage" id="image1316">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-stop</property>
 		  <property name="icon_size">1</property>
@@ -16400,7 +16400,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1286">
+	<widget class="GtkImage" id="image1317">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -16419,7 +16419,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1287">
+	<widget class="GtkImage" id="image1318">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-remove</property>
 	  <property name="icon_size">1</property>
@@ -16451,7 +16451,7 @@ Banner</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1288">
+	<widget class="GtkImage" id="image1319">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
