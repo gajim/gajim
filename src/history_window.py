@@ -63,7 +63,10 @@ class HistoryWindow:
 		xml.signal_autoconnect(self)
 		
 		calendar = xml.get_widget('calendar')
-		calendar.emit('month-changed') # fake event so we start mark days procedure
+		# fake event so we start mark days procedure for selected month
+		# selected month is current month as calendar defaults to selecting
+		# current date
+		calendar.emit('month-changed')
 		
 
 		tag = self.history_buffer.create_tag('incoming')
