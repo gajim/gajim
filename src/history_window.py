@@ -19,6 +19,7 @@
 
 import gtk
 import gtk.glade
+import gobject
 import time
 import calendar
 import os
@@ -46,8 +47,11 @@ class HistoryWindow:
 	def __init__(self, jid, account):
 		self.jid = jid
 		self.account = account
+		self.mark_days_idle_call_id = None
+		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
+		
 		if account and gajim.contacts[account].has_key(jid):
 			contact = gajim.get_first_contact_instance_from_jid(account, jid)
 			title = _('Conversation History with %s') % contact.name
@@ -57,6 +61,10 @@ class HistoryWindow:
 		self.history_buffer = xml.get_widget('history_textview').get_buffer()
 		
 		xml.signal_autoconnect(self)
+		
+		calendar = xml.get_widget('calendar')
+		calendar.emit('month-changed') # fake event so we start mark days procedure
+		
 
 		tag = self.history_buffer.create_tag('incoming')
 		color = gajim.config.get('inmsgcolor')
@@ -87,19 +95,32 @@ class HistoryWindow:
 		month = gtkgui_helpers.make_gtk_month_python_month(month)
 		self.add_lines_for_date(year, month, day)
 		
-	def on_calendar_month_changed(self, widget):
-		return #FIXME: commit this when it works as it should
-		year, month, day = widget.get_date() # integers
-		month = gtkgui_helpers.make_gtk_month_python_month(month)
+	def do_possible_mark_for_days_in_this_month(self, widget, year, month):
+		'''this is a generator and does pseudo-threading via idle_add()
+		so it runs progressively! yea :)
+		asks for days in this month if they have logs it bolds them (marks them)'''
 		weekday, days_in_this_month = calendar.monthrange(year, month)
-		for day in xrange(1, days_in_this_month + 1): # count from 1, so add 1 more
-			#FIXME: optimize (ask db once per month and store days that have logs)
-			# return those here in tupple
-			#print 'ask', year, month, day
+		# count from 1 (gtk counts from 1), so add 1 more
+		for day in xrange(1, days_in_this_month + 1):
+			#print 'ask for logs for date:', year, month, day
 			if gajim.logger.date_has_logs(self.jid, year, month, day):
 				widget.mark_day(day)
-			else:
-				widget.unmark_day(day)
+			yield True # we have more work to do
+		yield False # we're done with this work
+	
+	def on_calendar_month_changed(self, widget):
+		year, month, day = widget.get_date() # integers
+		# in gtk January is 1, in python January is 0,
+		# I want the second
+		# first day of month is 1 not 0
+		if self.mark_days_idle_call_id:
+			# if user changed month, and we have a generator filling mark days
+			# stop him from marking dates for the previously selected month
+			gobject.source_remove(self.mark_days_idle_call_id)
+		widget.clear_marks()
+		month = gtkgui_helpers.make_gtk_month_python_month(month)
+		self.mark_days_idle_call_id = gobject.idle_add(
+			self.do_possible_mark_for_days_in_this_month(widget, year, month).next)
 
 	def get_string_show_from_constant_int(self, show):
 		if show == constants.SHOW_ONLINE:
