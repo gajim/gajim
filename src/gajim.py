@@ -1067,8 +1067,10 @@ class Interface:
 		# so http://be) will match http://be and http://be)be) will match http://be)be
 
 		prefixes = (r'http://', r'https://', r'news://', r'ftp://', r'ed2k://',
-			r'www\.', r'ftp\.')
+			r'magnet:', r', r'www\.', r'ftp\.')
 		# NOTE: it's ok to catch www.gr such stuff exist!
+		
+		#FIXME: recognize xmpp: and treat it specially
 		
 		prefix_pattern = ''
 		for prefix in prefixes:
