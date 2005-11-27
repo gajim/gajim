@@ -270,7 +270,6 @@ class Logger:
 		and are already logged but pending to be viewed,
 		returns a list of tupples containg time, kind, message,
 		list with empty tupple if nothing found to meet our demands'''
-		now = int(float(time.time()))
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		# so if we ask last 5 lines and we have 2 pending we get
@@ -285,8 +284,14 @@ class Logger:
 			)
 
 		results = cur.fetchall()
-		results.reverse()
-		return results
+		now = time.time()
+		true_results = [] # results that are not too old
+		for result in results:
+			if result[0] < (now - timeout*60): # fom here they are too old
+				break
+			true_results.append(result)
+		true_results.reverse()
+		return true_results
 	
 	def get_unix_time_from_date(self, year, month, day):
 		# year (fe 2005), month (fe 11), day (fe 25)
