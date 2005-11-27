@@ -88,6 +88,10 @@ class HistoryWindow:
 		self.window.show_all()
 
 	def on_history_window_destroy(self, widget):
+		if self.mark_days_idle_call_id:
+			# if user destroys the window, and we have a generator filling mark days
+			# stop him!
+			gobject.source_remove(self.mark_days_idle_call_id)
 		del gajim.interface.instances['logs'][self.jid]
 
 	def on_close_button_clicked(self, widget):
