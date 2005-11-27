@@ -951,8 +951,8 @@ class Interface:
 	def handle_event_vcard_not_published(self, account, array):
 		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))
 
-	def handle_event_sign_in(self, account, empty):
-		# SIGN_IN event is emitted when we sign in
+	def handle_event_signed_in(self, account, empty):
+		# SIGNED_IN event is emitted when we sign in
 
 		# join already open groupchats
 		for acct in gajim.connections:
@@ -1188,7 +1188,7 @@ class Interface:
 			'VCARD_PUBLISHED': self.handle_event_vcard_published,
 			'VCARD_NOT_PUBLISHED': self.handle_event_vcard_not_published,
 			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
-			'SIGN_IN': self.handle_event_sign_in,
+			'SIGNED_IN': self.handle_event_signed_in,
 		}
 
 	def exec_event(self, account):
