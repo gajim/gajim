@@ -2432,6 +2432,8 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			grp_dest = model[iter_dest][C_JID].decode('utf-8')
 		else:
 			grp_dest = model[model.iter_parent(iter_dest)][C_JID].decode('utf-8')
+		if grp_dest == _('Transports') or grp_dest == _('not in the roster'):
+			return
 		if grp_source == grp_dest:
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
