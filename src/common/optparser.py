@@ -145,16 +145,24 @@ class OptionsParser:
 			'accountfontattrs', 'grouptextcolor', 'groupbgcolor', 'groupfont',
 			'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 'contactfont',
 			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor']
-		for theme_name in ('grocery', 'plain'):
+		for theme_name in (_('grocery'), _('plain')):
 			if theme_name not in gajim.config.get_per('themes'):
 				gajim.config.add_per('themes', theme_name)
 				theme = gajim.config.themes_default[theme_name]
 				for o in d:
 					gajim.config.set_per('themes', theme_name, o, theme[d.index(o)])
 		# Remove cyan theme if it's not the current theme
-		if gajim.config.get('roster_theme') != 'cyan' and \
-			'cyan' in gajim.config.get_per('themes'):
+		if 'cyan' in gajim.config.get_per('themes'):
 			gajim.config.del_per('themes', 'cyan')
+		if _('cyan') in gajim.config.get_per('themes'):
+			gajim.config.del_per('themes', _('cyan'))
+		# If we removed our roster_theme, choose the default green one or another
+		# one if doesn't exists in config
+		if gajim.config.get('roster_theme') not in gajim.config.get_per('themes'):
+			theme = _('green')
+			if theme not in gajim.config.get_per('themes'):
+				theme = gajim.config.get_per('themes')[0]
+			gajim.config.set('roster_theme', theme)
 		# new proxies in accounts.name.file_transfer_proxies
 		for account in gajim.config.get_per('accounts'):
 			proxies = gajim.config.get_per('accounts', account,
