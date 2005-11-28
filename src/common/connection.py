@@ -21,6 +21,7 @@
 
 # kind of events we can wait for an answer
 VCARD_PUBLISHED = 'vcard_published'
+VCARD_ARRIVED = 'vcard_arrived'
 
 import sys
 import sha
@@ -1423,6 +1424,16 @@ class Connection:
 					self.to_be_sent.append(p)
 			elif iq_obj.getType() == 'error':
 				self.dispatch('VCARD_NOT_PUBLISHED', ())
+		elif self.awaiting_answers[id][0] == VCARD_ARRIVED:
+			# If vcard is empty, we send to the interface an empty vcard so that
+			# it knows it arrived
+			if not iq_obj.getTag('vCard'):
+				jid = self.awaiting_answers[id][1]
+				our_jid = gajim.get_jid_from_account(self.name)
+				if not jid or jid == our_jid:
+					self.dispatch('MYVCARD', {'jid': our_jid})
+				else:
+					self.dispatch('VCARD', {'jid': jid})
 		del self.awaiting_answers[id]
 
 	def _event_dispatcher(self, realm, event, data):
@@ -2064,6 +2075,10 @@ class Connection:
 		if jid:
 			iq.setTo(jid)
 		iq.setTag(common.xmpp.NS_VCARD + ' vCard')
+
+		id = self.connection.getAnID()
+		iq.setID(id)
+		self.awaiting_answers[id] = (VCARD_ARRIVED, jid)
 		self.to_be_sent.append(iq)
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 	

@@ -265,7 +265,7 @@ class Interface:
 		self.roster.on_status_changed(account, status)
 		if account in self.show_vcard_when_connect:
 			jid = gajim.get_jid_from_account(account)
-			if not self.instances[account]['infos'].has_key('vcard'):
+			if not self.instances[account]['infos'].has_key(jid):
 				self.instances[account]['infos'][jid] = \
 					vcard.VcardWindow(jid, account, True)
 				gajim.connections[account].request_vcard(jid)
@@ -651,13 +651,16 @@ class Interface:
 		# ('VCARD', account, data)
 		'''vcard holds the vcard data'''
 		jid = vcard['jid']
-		resource = vcard['resource']
+		resource = ''
+		if vcard.has_key('resource'):
+			resource = vcard['resource']
 		
 		# vcard window
 		win = None
 		if self.instances[account]['infos'].has_key(jid):
 			win = self.instances[account]['infos'][jid]
-		elif self.instances[account]['infos'].has_key(jid + '/' + resource):
+		elif resource and self.instances[account]['infos'].has_key(
+			jid + '/' + resource):
 			win = self.instances[account]['infos'][jid + '/' + resource]
 		if win:
 			win.set_values(vcard)
@@ -666,7 +669,8 @@ class Interface:
 		win = None
 		if self.instances[account]['chats'].has_key(jid):
 			win = self.instances[account]['chats'][jid]
-		elif self.instances[account]['chats'].has_key(jid + '/' + resource):
+		elif resource and self.instances[account]['chats'].has_key(
+			jid + '/' + resource):
 			win = self.instances[account]['chats'][jid + '/' + resource]
 		if win:
 			# FIXME: this will be removed when we have the thread working
