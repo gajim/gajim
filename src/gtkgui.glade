@@ -11770,25 +11770,49 @@ Status message</property>
 <widget class="GtkMenu" id="systray_context_menu">
 
   <child>
-    <widget class="GtkMenuItem" id="status_menu">
+    <widget class="GtkImageMenuItem" id="status_menu">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Status</property>
+      <property name="label" translatable="yes">Sta_tus</property>
       <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image1322">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-network</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
     </widget>
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="chat_with_menuitem">
+    <widget class="GtkImageMenuItem" id="chat_with_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Chat with</property>
+      <property name="label" translatable="yes">_Start Chat</property>
       <property name="use_underline">True</property>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image1320">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-jump-to</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
     </widget>
   </child>
 
   <child>
     <widget class="GtkImageMenuItem" id="new_message_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Send New Message</property>
+      <property name="label" translatable="yes">Send Single _Message</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
