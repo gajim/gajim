@@ -645,10 +645,8 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		self.xml.get_widget('nickname_entry').set_text(nick)
 		self.xml.signal_autoconnect(self)
 		gajim.interface.instances[account]['join_gc'] = self #now add us to open windows
-		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
-			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
-			title = _('Join Group Chat as %s') % our_jid
+			title = _('Join Group Chat with account %s') % account
 		else:
 			title = _('Join Group Chat')
 		self.window.set_title(title)
@@ -729,12 +727,10 @@ class NewMessageDialog:
 	def __init__(self, account):
 		self.account = account
 		
-		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
-			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
-			title = _('New Message as %s') % our_jid
+			title = _('Start Chat with account %s') % account
 		else:
-			title = _('New Message')
+			title = _('Start Chat')
 		prompt_text = _('Fill in the contact ID of the contact you would like\nto send a chat message to:')
 
 		InputDialog(title, prompt_text, is_modal = False, ok_handler = self.new_message_response)
@@ -1046,10 +1042,8 @@ class SingleMessageWindow:
 		self.save_pos()
 
 	def prepare_widgets_for(self, action):
-		our_jid = gajim.config.get_per('accounts', self.account, 'name') + '@' + \
-			gajim.config.get_per('accounts', self.account, 'hostname')
 		if len(gajim.connections) > 1:
-			title = _('Single Message as %s') % our_jid
+			title = _('Single Message with account %s') % self.account
 		else:
 			title = _('Single Message')
 
