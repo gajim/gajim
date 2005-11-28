@@ -1505,7 +1505,8 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 
 	def get_status_message(self, show):
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
-			(show == 'offline' and not gajim.config.get('ask_offline_status')):
+			(show == 'offline' and not gajim.config.get('ask_offline_status')) or \
+			show == 'invisible':
 			return ''
 		dlg = dialogs.ChangeStatusMessageDialog(show)
 		message = dlg.run()
