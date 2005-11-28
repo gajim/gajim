@@ -168,9 +168,7 @@ class Logger:
 			kind_col = constants.KIND_CHAT_MSG_RECV
 		elif kind == 'chat_msg_sent':
 			kind_col = constants.KIND_CHAT_MSG_SENT
-			
-		print 'show', show
-		
+
 		if show == 'online':
 			show_col = constants.SHOW_ONLINE
 		elif show == 'chat':
@@ -184,6 +182,8 @@ class Logger:
 		elif show == 'offline':
 			show_col = constants.SHOW_OFFLINE
 		elif show is None:
+			show_col = constants.SHOW_ONLINE
+		else:
 			show_col = None
 		
 		return kind_col, show_col
@@ -229,20 +229,17 @@ class Logger:
 	
 		kind_col, show_col = self.convert_human_values_to_db_api_values(kind,
 			show)
-					
+
+		if not show_col: # unknown show
+			return
+
 		# now we may have need to do extra care for some values in columns
 		if kind == 'status': # we store (not None) time, jid, show, msg
 			# status for roster items
-			if show is None:
-				show_col = constants.SHOW_ONLINE
-			
 			jid_id = self.get_jid_id(jid)
 
 		elif kind == 'gcstatus':
 			# status in ROOM (for pm status see status)
-			if show is None:
-				show_col = constants.SHOW_ONLINE
-			
 			jid, nick = jid.split('/', 1)
 			jid_id = self.get_jid_id(jid, 'ROOM') # re-get jid_id for the new jid
 			contact_name_col = nick
