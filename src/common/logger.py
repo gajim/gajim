@@ -181,6 +181,8 @@ class Logger:
 			show_col = constants.SHOW_DND
 		elif show == 'offline':
 			show_col = constants.SHOW_OFFLINE
+		elif show is None:
+			show_col = None
 		else: # invisible in GC when someone goes invisible
 			# it's a RFC violation .... but we should not crash
 			show_col = 'UNKNOWN'
