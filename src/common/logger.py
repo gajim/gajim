@@ -181,10 +181,9 @@ class Logger:
 			show_col = constants.SHOW_DND
 		elif show == 'offline':
 			show_col = constants.SHOW_OFFLINE
-		elif show is None:
-			show_col = constants.SHOW_ONLINE
-		else:
-			show_col = None
+		else: # invisible in GC when someone goes invisible
+			# it's a RFC violation .... but we should not crash
+			show_col = 'UNKNOWN'
 		
 		return kind_col, show_col
 	
@@ -230,16 +229,17 @@ class Logger:
 		kind_col, show_col = self.convert_human_values_to_db_api_values(kind,
 			show)
 
-		if not show_col: # unknown show
-			return
-
 		# now we may have need to do extra care for some values in columns
 		if kind == 'status': # we store (not None) time, jid, show, msg
 			# status for roster items
 			jid_id = self.get_jid_id(jid)
+			if show is None: # show is None (xmpp), but we say that 'online'
+				show_col = constants.SHOW_ONLINE
 
 		elif kind == 'gcstatus':
 			# status in ROOM (for pm status see status)
+			if show is None: # show is None (xmpp), but we say that 'online'
+				show_col = constants.SHOW_ONLINE
 			jid, nick = jid.split('/', 1)
 			jid_id = self.get_jid_id(jid, 'ROOM') # re-get jid_id for the new jid
 			contact_name_col = nick
@@ -255,6 +255,9 @@ class Logger:
 			contact_name_col = nick
 		else:
 			jid_id = self.get_jid_id(jid)
+		
+		if show_col == 'UNKNOWN': # unknown show, do not log
+			return
 			
 		values = (jid_id, contact_name_col, time_col, kind_col, show_col,
 			message_col, subject_col)
