@@ -444,13 +444,6 @@ class TabbedChatWindow(chat.Chat):
 		chat.Chat.remove_tab(self, jid, 'chats')
 		del self.contacts[jid]
 
-	def init_conversation(self, contact):
-		# restore previous conversation
-		self.restore_conversation(contact.jid)
-
-		if gajim.awaiting_events[self.account].has_key(contact.jid):
-			self.read_queue(contact.jid)
-
 	def new_tab(self, contact):
 		'''when new tab is created'''
 		self.names[contact.jid] = contact.name
@@ -483,7 +476,12 @@ class TabbedChatWindow(chat.Chat):
 		self.redraw_tab(contact.jid)
 		self.draw_widgets(contact)
 
-		gobject.idle_add(self.init_conversation, contact)
+		# restore previous conversation
+		self.restore_conversation(contact.jid)
+
+		if gajim.awaiting_events[self.account].has_key(contact.jid):
+			self.read_queue(contact.jid)
+
 		self.childs[contact.jid].show_all()
 
 		# chatstates
