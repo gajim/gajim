@@ -549,13 +549,13 @@ class ConversationTextview(gtk.TextView):
 		if gajim.config.get('print_time') == 'always':
 			before_str = gajim.config.get('before_time')
 			after_str = gajim.config.get('after_time')
-			msg_day = time.strftime('%d', tim)
-			day = time.strftime('%d')
+			msg_day = time.strftime('%j', tim)
+			day = time.strftime('%j')
 			diff_day = 0
 			while day != msg_day:
 				diff_day += 1
 				before_tim = time.localtime(time.time()-24*3600*diff_day)
-				day = time.strftime('%d', before_tim)
+				day = time.strftime('%j', before_tim)
 			if diff_day == 0:
 				day_str = ''
 			elif diff_day == 1:
