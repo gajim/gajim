@@ -77,7 +77,8 @@ class Chat:
 		
 		# notebook customizations
 		self.notebook = self.xml.get_widget('chat_notebook')
-		self.notebook.remove_page(0) # FIXME why??
+		# Remove the page that is in glade
+		self.notebook.remove_page(0)
 		pref_pos = gajim.config.get('tabs_position')
 		if pref_pos != 'top':
 			if pref_pos == 'bottom':
