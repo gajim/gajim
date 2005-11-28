@@ -2396,7 +2396,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		path = model.get_path(iter)
 		data = ''
 		if len(path) == 3:
-			data = model[iter][C_JID]
+			data = model[iter][C_JID].decode('utf-8')
 		selection.set(selection.target, 8, data)
 
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
@@ -2404,7 +2404,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		model = treeview.get_model()
 		if not selection.data:
 			return
-		data = selection.data.decode('utf-8')
+		data = selection.data
 		drop_info = treeview.get_dest_row_at_pos(x, y)
 		if not drop_info:
 			return
@@ -2490,7 +2490,8 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 	def on_roster_treeview_style_set(self, treeview, style):
 		'''When style (theme) changes, redraw all contacts'''
 		for contact in self.iter_contact_rows():
-			self.draw_contact(contact[C_JID], contact[C_ACCOUNT])
+			self.draw_contact(contact[C_JID].decode('utf-8'),
+				contact[C_ACCOUNT].decode('utf-8'))
 
 	def _on_treeview_selection_changed(self, selection):
 		model, selected_iter = selection.get_selected()
@@ -2502,11 +2503,13 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			self._last_selected_contact = None
 			return
 		contact = model[selected_iter]
-		self._last_selected_contact = (contact[C_JID], contact[C_ACCOUNT])
+		self._last_selected_contact = (contact[C_JID].decode('utf-8'),
+			contact[C_ACCOUNT].decode('utf-8'))
 		# FIXME: we first set last selected contact and then test if contact??
 		if contact[C_TYPE] != 'contact':
 			return
-		self.draw_contact(contact[C_JID], contact[C_ACCOUNT], selected = True)
+		self.draw_contact(contact[C_JID].decode('utf-8'),
+			contact[C_ACCOUNT].decode('utf-8'), selected = True)
 
 	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
