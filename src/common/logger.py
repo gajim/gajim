@@ -104,7 +104,6 @@ class Logger:
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
-		GOT_JIDS_ALREADY_IN_DB = True
 
 	def jid_is_from_pm(self, jid):
 		'''if jid is gajim@conf/nkour it's likely a pm one, how we know
@@ -209,7 +208,7 @@ class Logger:
 		jids.jid text column will hold JID if TC-related, room_jid if GC-related,
 		ROOM_JID/nick if pm-related.'''
 
-		if not GOT_JIDS_ALREADY_IN_DB:
+		if not hasattr(self, 'get_jids_already_in_db'):
 			global con, cur
 			con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 				isolation_level = 'IMMEDIATE')
