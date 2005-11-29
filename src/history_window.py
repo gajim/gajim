@@ -41,6 +41,15 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
+# contact_name, time, kind, show, message
+(
+C_CONTACT_NAME,
+C_TIME,
+C_KIND,
+C_SHOW,
+C_MESSAGE
+) = range(5)
+
 class HistoryWindow:
 	'''Class for browsing logs of conversations with contacts'''
 
@@ -51,6 +60,42 @@ class HistoryWindow:
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
+		self.query_entry = xml.get_widget('query_entry')
+		self.expander_vbox = xml.get_widget('expander_vbox')
+		self.results_treeview = xml.get_widget('results_treeview')
+		# contact_name, time, kind, show, message
+		model = gtk.ListStore(str,	str, str, str, str)
+		self.results_treeview.set_model(model)
+		
+		col = gtk.TreeViewColumn(_('Name'))
+		self.results_treeview.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text = C_CONTACT_NAME)
+		
+		col = gtk.TreeViewColumn(_('Date'))
+		self.results_treeview.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text = C_TIME)
+		
+		col = gtk.TreeViewColumn(_('Kind'))
+		self.results_treeview.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text = C_KIND)
+		
+		col = gtk.TreeViewColumn(_('Status'))
+		self.results_treeview.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text = C_SHOW)
+		
+		col = gtk.TreeViewColumn(_('Message'))
+		self.results_treeview.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text = C_MESSAGE)
 		
 		if account and gajim.contacts[account].has_key(jid):
 			contact = gajim.get_first_contact_instance_from_jid(account, jid)
@@ -212,3 +257,30 @@ class HistoryWindow:
 			buf.insert_with_tags_by_name(end_iter, message, tag_msg)
 		else:
 			buf.insert(end_iter, message)
+
+	def set_unset_expand_on_expander(self, widget):
+		'''expander has to have expand to TRUE so scrolledwindow resizes properly
+		and does not have a static size. when expander is not expanded we set
+		expand property (note the Box one) to FALSE
+		to do this, we first get the box and then apply to expander widget
+		the True/False thingy depending if it's expanded or not
+		this function is called in a timeout just after expanded state changes'''
+		parent = widget.get_parent() # vbox
+		parent.child_set_property(widget, 'expand', widget.get_expanded())
+	
+	def on_search_expander_activate(self, widget):
+		if widget.get_expanded(): # it's the OPPOSITE!, it's not expanded
+			gobject.timeout_add(200, self.set_unset_expand_on_expander, widget)
+		else:
+			gobject.timeout_add(200, self.set_unset_expand_on_expander, widget)
+	
+	def on_search_button_clicked(self, widget):
+		text = self.query_entry.get_text()
+		# contact_name, time, kind, show, message
+		results = gajim.logger.get_search_results_for_query(self.jid, text)
+		model = self.results_treeview.get_model()
+		model.clear()
+		for row in results:
+			iter = model.append((row[0], row[1], row[2], row[3], row[4]))
+			
+			

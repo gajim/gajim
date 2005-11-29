@@ -320,7 +320,31 @@ class Logger:
 		
 		results = cur.fetchall()
 		return results
-	
+
+	def get_search_results_for_query(self, jid, query):
+		'''returns contact_name, time, kind, show, message
+		for each row in a list of tupples,
+		returns list with empty tupple if we found nothing to meet our demands'''
+		jid = jid.lower()
+		jid_id = self.get_jid_id(jid)
+		if False: #query.startswith('SELECT '): # it's SQL query
+			try:
+				cur.execute(query)
+			except sqlite.OperationalError, e:
+				results = [('', '', '', '', str(e))]
+				return results
+			
+		else: # user just typed something, we search in message column
+			like_sql = '%' + query + '%'
+			cur.execute('''
+				SELECT contact_name, time, kind, show, message FROM logs
+				WHERE jid_id = ? AND message LIKE ?
+				ORDER BY time
+				''', (jid_id,like_sql))
+
+		results = cur.fetchall()
+		return results
+
 	def date_has_logs(self, jid, year, month, day):
 		'''returns True if we have logs for given day, else False'''
 		jid = jid.lower()
