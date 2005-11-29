@@ -206,25 +206,24 @@ class Chat:
 		# Update status images
 		self.set_state_image(jid)
 			
+		unread = ''
+		num_unread = 0
 		child = self.childs[jid]
 		hb = self.notebook.get_tab_label(child).get_children()[0]
 		if self.widget_name == 'tabbed_chat_window':
 			nickname = hb.get_children()[1]
 			close_button = hb.get_children()[2]
 
-			unread = ''
 			num_unread = self.nb_unread[jid]
 			if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
-				unread = '* '
+				unread = '*'
 			elif num_unread > 1:
-				unread = '[' + unicode(num_unread) + '] '
+				unread = '[' + unicode(num_unread) + ']'
 
 			# Draw tab label using chatstate 
 			theme = gajim.config.get('roster_theme')
 			color = None
-			if unread and chatstate == 'active':
-				color = gajim.config.get_per('themes', theme, 'state_unread_color')
-			elif chatstate is not None:
+			if chatstate is not None:
 				if chatstate == 'composing':
 					color = gajim.config.get_per('themes', theme,
 						'state_composing_color')
@@ -235,10 +234,6 @@ class Chat:
 					color = gajim.config.get_per('themes', theme, 'state_gone_color')
 				elif chatstate == 'paused':
 					color = gajim.config.get_per('themes', theme, 'state_paused_color')
-				elif unread and self.window.get_property('has-toplevel-focus'):
-					color = gajim.config.get_per('themes', theme, 'state_active_color')
-				elif unread:
-					color = gajim.config.get_per('themes', theme, 'state_unread_color')
 				else:
 					color = gajim.config.get_per('themes', theme, 'state_active_color')
 			if color:
@@ -258,7 +253,6 @@ class Chat:
 			nickname = hb.get_children()[0]
 			close_button = hb.get_children()[1]
 
-			unread = ''
 			has_focus = self.window.get_property('has-toplevel-focus')
 			current_tab = (self.notebook.page_num(child) == self.notebook.get_current_page())
 			color = None
@@ -289,7 +283,10 @@ class Chat:
 			close_button.hide()
 
 		nickname.set_max_width_chars(10)
-		nickname.set_text(unread + self.names[jid])
+		lbl = self.names[jid]
+		if num_unread:
+			lbl = "<b>" + unread + lbl + "</b>"
+		nickname.set_markup(lbl)
 
 	def get_message_type(self, jid):
 		if self.widget_name == 'groupchat_window':
