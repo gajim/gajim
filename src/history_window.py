@@ -126,6 +126,10 @@ class HistoryWindow:
 		color = gajim.config.get('statusmsgcolor')
 		tag.set_property('foreground', color)
 
+		tag = self.history_buffer.create_tag('time_sometimes')
+		tag.set_property('foreground', '#9e9e9e')
+		tag.set_property('justification', gtk.JUSTIFY_CENTER)
+
 		date = time.localtime()
 		y, m, d = date[0], date[1], date[2]
 		self.add_lines_for_date(y, m, d)
@@ -193,6 +197,7 @@ class HistoryWindow:
 	def add_lines_for_date(self, year, month, day):
 		'''adds all the lines for given date in textbuffer'''
 		self.history_buffer.set_text('') # clear the buffer first
+		self.last_time_printout = 0
 		lines = gajim.logger.get_conversation_for_date(self.jid, year, month, day)
 		# lines holds list with tupples that have:
 		# contact_name, time, kind, show, message
@@ -205,8 +210,23 @@ class HistoryWindow:
 		'''add a new line in textbuffer'''
 		buf = self.history_buffer
 		end_iter = buf.get_end_iter()
-		tim = time.strftime('[%X] ', time.localtime(float(tim)))
-		buf.insert(end_iter, tim) # add time
+		
+		if gajim.config.get('print_time') == 'always':
+			before_str = gajim.config.get('before_time')
+			after_str = gajim.config.get('after_time')
+			format = before_str + '%X' + after_str + ' '
+			tim = time.strftime(format, time.localtime(float(tim)))
+			buf.insert(end_iter, tim) # add time
+		elif gajim.config.get('print_time') == 'sometimes':
+			every_foo_seconds = 60 * gajim.config.get(
+				'print_ichat_every_foo_minutes')
+			seconds_passed = tim - self.last_time_printout
+			if seconds_passed > every_foo_seconds:
+				self.last_time_printout = tim
+				tim = time.strftime('%X ', time.localtime(float(tim)))
+				buf.insert_with_tags_by_name(end_iter, tim + '\n',
+					'time_sometimes')				
+
 		tag_name = ''
 		tag_msg = ''
 		
@@ -276,10 +296,12 @@ class HistoryWindow:
 	
 	def on_search_button_clicked(self, widget):
 		text = self.query_entry.get_text()
-		# contact_name, time, kind, show, message
-		results = gajim.logger.get_search_results_for_query(self.jid, text)
 		model = self.results_treeview.get_model()
 		model.clear()
+		if text == '':
+			return
+		# contact_name, time, kind, show, message
+		results = gajim.logger.get_search_results_for_query(self.jid, text)
 		for row in results:
 			iter = model.append((row[0], row[1], row[2], row[3], row[4]))
 			
