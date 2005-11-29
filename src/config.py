@@ -105,10 +105,6 @@ class PreferencesWindow:
 		st = gajim.config.get('saveposition')
 		self.xml.get_widget('save_position_checkbutton').set_active(st)
 		
-		#Merge accounts
-		st = gajim.config.get('mergeaccounts')
-		self.xml.get_widget('merge_checkbutton').set_active(st)
-
 		# Sort contacts by show
 		st = gajim.config.get('sort_by_show')
 		self.xml.get_widget('sort_by_show_checkbutton').set_active(st)
@@ -469,11 +465,6 @@ class PreferencesWindow:
 	
 	def on_save_position_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'saveposition')
-	
-	def on_merge_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'mergeaccounts')
-		gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
-		gajim.interface.roster.draw_roster()
 	
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
@@ -1646,6 +1637,10 @@ class AccountsWindow:
 		self.init_accounts()
 		self.window.show_all()
 
+		#Merge accounts
+		st = gajim.config.get('mergeaccounts')
+		self.xml.get_widget('merge_checkbutton').set_active(st)
+
 	def on_accounts_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
 			self.window.destroy()	
@@ -1709,6 +1704,12 @@ class AccountsWindow:
 		else:
 			gajim.interface.instances[account]['account_modification'] = \
 				AccountModificationWindow(account)
+
+	def on_merge_checkbutton_toggled(self, widget):
+		gajim.config.set('mergeaccounts', widget.get_active())
+		gajim.interface.save_config()
+		gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
+		gajim.interface.roster.draw_roster()
 
 class DataFormWindow:
 	def __init__(self, account, config):
