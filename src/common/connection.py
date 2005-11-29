@@ -1430,10 +1430,12 @@ class Connection:
 			if not iq_obj.getTag('vCard'):
 				jid = self.awaiting_answers[id][1]
 				our_jid = gajim.get_jid_from_account(self.name)
-				if not jid or jid == our_jid:
-					self.dispatch('MYVCARD', {'jid': our_jid})
-				else:
+				if jid and jid != our_jid:
 					self.dispatch('VCARD', {'jid': jid})
+					# Write an empty file
+					path_to_file = os.path.join(gajim.VCARDPATH, jid)
+					fil = open(path_to_file, 'w')
+					fil.close()
 		del self.awaiting_answers[id]
 
 	def _event_dispatcher(self, realm, event, data):
