@@ -87,7 +87,7 @@ class ConversationTextview(gtk.TextView):
 		tag.set_property('weight', pango.WEIGHT_BOLD)
 
 		tag = buffer.create_tag('time_sometimes')
-		tag.set_property('foreground', '#9e9e9e')
+		tag.set_property('foreground', 'grey')
 		tag.set_property('scale', pango.SCALE_SMALL)
 		tag.set_property('justification', gtk.JUSTIFY_CENTER)
 
@@ -99,12 +99,12 @@ class ConversationTextview(gtk.TextView):
 		tag.set_property('foreground', color)
 
 		tag = buffer.create_tag('url')
-		tag.set_property('foreground', '#0000ff')
+		tag.set_property('foreground', 'blue')
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 		tag.connect('event', self.hyperlink_handler, 'url')
 
 		tag = buffer.create_tag('mail')
-		tag.set_property('foreground', '#0000ff')
+		tag.set_property('foreground', 'blue')
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 		tag.connect('event', self.hyperlink_handler, 'mail')
 
