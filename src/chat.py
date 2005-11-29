@@ -284,8 +284,8 @@ class Chat:
 
 		nickname.set_max_width_chars(10)
 		lbl = self.names[jid]
-		if num_unread:
-			lbl = "<b>" + unread + lbl + "</b>"
+		if num_unread: # if unread, text in the label becomes bold
+			lbl = '<b>' + unread + lbl + '</b>'
 		nickname.set_markup(lbl)
 
 	def get_message_type(self, jid):
