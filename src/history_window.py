@@ -127,7 +127,7 @@ class HistoryWindow:
 		tag.set_property('foreground', color)
 
 		tag = self.history_buffer.create_tag('time_sometimes')
-		tag.set_property('foreground', '#9e9e9e')
+		tag.set_property('foreground', 'grey')
 		tag.set_property('justification', gtk.JUSTIFY_CENTER)
 
 		date = time.localtime()
