@@ -411,6 +411,10 @@ def get_scaled_pixbuf(pixbuf, type):
 	
 	# resize to a width / height for the avatar not to have distortion
 	# (keep aspect ratio)
+
+	if pixbuf.get_width() < gajim.config.get(type + '_avatar_width') and \
+		pixbuf.get_height() < gajim.config.get(type + '_avatar_height'):
+		return pixbuf # we don't want to make avatar bigger
 	ratio = float(pixbuf.get_width()) / float(pixbuf.get_height())
 	if ratio > 1:
 		w = gajim.config.get(type + '_avatar_width')
