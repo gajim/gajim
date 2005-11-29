@@ -240,7 +240,6 @@ class Config:
 
 			# http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html
 			# FIXME: not black but the default color from gtk+ theme
-			'state_unread_color': [ opt_color, 'black' ],
 			'state_active_color': [ opt_color, 'black' ],
 			'state_inactive_color': [ opt_color, 'grey62' ],
 			'state_composing_color': [ opt_color, 'green4' ],
