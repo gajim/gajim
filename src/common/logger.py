@@ -146,7 +146,7 @@ class Logger:
 			try:
 				con.commit()
 			except sqlite.OperationalError, e:
-				print >> sys.sterr, str(e)
+				print >> sys.stderr, str(e)
 			jid_id = cur.lastrowid
 			self.jids_already_in.append(jid)
 		return jid_id
@@ -195,7 +195,7 @@ class Logger:
 		try:
 			con.commit()
 		except sqlite.OperationalError, e:
-			print >> sys.sterr, str(e)
+			print >> sys.stderr, str(e)
 	
 	def write(self, kind, jid, message = None, show = None, tim = None, subject = None):
 		'''write a row (status, gcstatus, message etc) to logs database
@@ -226,7 +226,6 @@ class Logger:
 		else:
 			time_col = int(float(time.time()))
 		
-	
 		kind_col, show_col = self.convert_human_values_to_db_api_values(kind,
 			show)
 
