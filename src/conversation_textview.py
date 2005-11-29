@@ -562,11 +562,11 @@ class ConversationTextview(gtk.TextView):
 				day_str = _('Yesterday')
 			else:
 				#the number is >= 2
-				day_str = _('%i days ago') % diff_day
+				day_str = _('%d days ago') % diff_day
 			format = before_str
 			if day_str:
 				format += day_str + ' '
-			format += '%H:%M:%S' + after_str
+			format += '%X' + after_str
 			tim_format = time.strftime(format, tim)
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
