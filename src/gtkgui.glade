@@ -8976,7 +8976,7 @@ Custom</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_width">600</property>
+  <property name="default_width">650</property>
   <property name="default_height">350</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -8999,7 +8999,7 @@ Custom</property>
 	<widget class="GtkHPaned" id="hpaned">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="position">150</property>
+	  <property name="position">165</property>
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox">
