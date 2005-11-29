@@ -9074,7 +9074,7 @@ Custom</property>
 	<widget class="GtkExpander" id="search_expander">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="expanded">True</property>
+	  <property name="expanded">False</property>
 	  <property name="spacing">0</property>
 	  <signal name="activate" handler="on_search_expander_activate" last_modification_time="Tue, 29 Nov 2005 13:43:41 GMT"/>
 
