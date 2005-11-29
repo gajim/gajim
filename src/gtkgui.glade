@@ -9738,7 +9738,7 @@ topic</property>
 				  <child>
 				    <widget class="GtkLabel" id="label330">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">_Actions</property>
+				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not E/e (conflicts with Alt+E that is supposed to show the Emoticon Selector)">_Actions</property>
 				      <property name="use_underline">True</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -9845,7 +9845,7 @@ topic</property>
 				  <child>
 				    <widget class="GtkLabel" id="label328">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">_Send</property>
+				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not E/e (conflicts with Alt+E that is supposed to show the Emoticon Selector)">_Send</property>
 				      <property name="use_underline">True</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -11338,7 +11338,7 @@ Status message</property>
 				  <child>
 				    <widget class="GtkLabel" id="label350">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">_Actions</property>
+				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not E/e (conflicts with Alt+E that is supposed to show the Emoticon Selector)">_Actions</property>
 				      <property name="use_underline">True</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -11445,7 +11445,7 @@ Status message</property>
 				  <child>
 				    <widget class="GtkLabel" id="label313">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">_Send</property>
+				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not E/e (conflicts with Alt+E that is supposed to show the Emoticon Selector)">_Send</property>
 				      <property name="use_underline">True</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
