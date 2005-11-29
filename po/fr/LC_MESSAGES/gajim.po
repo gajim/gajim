@@ -2992,7 +2992,7 @@ msgstr "_Récupérer"
 
 #: ../src/gtkgui.glade.h:382
 msgid "_Send"
-msgstr "_Envoyer"
+msgstr "En_voyer"
 
 #: ../src/gtkgui.glade.h:383
 msgid "_Send & Close"
