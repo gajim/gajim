@@ -673,7 +673,6 @@ class Interface:
 			jid + '/' + resource):
 			win = self.instances[account]['chats'][jid + '/' + resource]
 		if win:
-			# FIXME: this will be removed when we have the thread working
 			win.show_avatar(jid, resource)
 		# Show avatar in roster
 		self.roster.draw_avatar(jid, account)
