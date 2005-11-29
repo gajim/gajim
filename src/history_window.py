@@ -60,6 +60,9 @@ class HistoryWindow:
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
 		self.window = xml.get_widget('history_window')
+		
+		self.calendar = xml.get_widget('calendar')
+		self.history_buffer = xml.get_widget('history_textview').get_buffer()
 		self.query_entry = xml.get_widget('query_entry')
 		self.expander_vbox = xml.get_widget('expander_vbox')
 		self.results_treeview = xml.get_widget('results_treeview')
@@ -103,15 +106,13 @@ class HistoryWindow:
 		else:
 			title = _('Conversation History with %s') % jid
 		self.window.set_title(title)
-		self.history_buffer = xml.get_widget('history_textview').get_buffer()
 		
 		xml.signal_autoconnect(self)
 		
-		calendar = xml.get_widget('calendar')
 		# fake event so we start mark days procedure for selected month
 		# selected month is current month as calendar defaults to selecting
 		# current date
-		calendar.emit('month-changed')
+		self.calendar.emit('month-changed')
 		
 
 		tag = self.history_buffer.create_tag('incoming')
@@ -303,6 +304,27 @@ class HistoryWindow:
 		# contact_name, time, kind, show, message
 		results = gajim.logger.get_search_results_for_query(self.jid, text)
 		for row in results:
-			iter = model.append((row[0], row[1], row[2], row[3], row[4]))
+			local_time = time.localtime(row[1])
+			tim = time.strftime('%x', local_time)
+			iter = model.append((row[0], tim, row[2], row[3], row[4]))
 			
-			
+	def on_results_treeview_row_activated(self, widget, path, column):
+		'''a row was double clicked, get date from row, and select it in caledar
+		and also show conversation logs for that date'''
+		# get currently selected date
+		cur_year, cur_month, cur_day = self.calendar.get_date()
+		cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
+		model = widget.get_model()
+		iter = model.get_iter(path)
+		# make it (Y, M, D, ...)
+		tim = time.strptime(model[iter][C_TIME], '%x')
+		year = tim[0]
+		gtk_month = tim[1]
+		month = gtkgui_helpers.make_python_month_gtk_month(gtk_month)
+		day = tim[2]
+		
+		# avoid reruning mark days algo if same month and year!
+		if year != cur_year or gtk_month != cur_month:
+			self.calendar.select_month(month, year)
+		
+		self.calendar.select_day(day)
