@@ -1,0 +1,29 @@
+# -*- shell-script-mode -*-
+
+[Meta]
+RootName: @gnome.org/pyglade
+DisplayName: Python bindings for Glade
+ShortName: pyglade
+Skeleton-Author: Filippos Papadopoulos <filip@cs.uoi.gr>
+Skeleton-Version: 1
+
+[Notes]
+Pyglade is bundled within pygtk sources so they have the same versions
+
+[Test]
+testForPythonModule gtk.glade
+if [[ "$?" != "0" ]]; then
+    INTERFACE_VERSIONS=""
+else
+	INTERFACE_VERSIONS=`python - <<EOF
+try:
+    import pygtk
+    import gtk.glade
+    print "%i.%i" % (gtk.pygtk_version[0], gtk.pygtk_version[1])
+except:
+    pass
+EOF
+`
+fi
+
+SOFTWARE_VERSIONS="$INTERFACE_VERSIONS"

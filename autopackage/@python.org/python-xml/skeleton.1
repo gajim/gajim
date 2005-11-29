@@ -8,16 +8,14 @@ Skeleton-Author: Filippos Papadopoulos <filip@cs.uoi.gr>
 Skeleton-Version: 1
 
 [Notes]
-
+Distros like SuSE split some features of core python (like xml) to python-xml e.t.c
+So python-xml must have the same versions as python
 
 [Test]
-
-SOFTWARE_VERSIONS=$( locateCommand python -V 2>&1 )
+SOFTWARE_VERSIONS=$( locateCommand python -V 2>&1 | cut -f2 -d' ' )
 testForPythonModule xml
 if [[ "$?" != "0" ]]; then
     INTERFACE_VERSIONS=""
 else
-    local v
-    v=$( echo $SOFTWARE_VERSIONS | awk '{print $2}' | awk -F. '{print $1 "." $2}' )
-    INTERFACE_VERSIONS=$( countDownVersions $v )
+    INTERFACE_VERSIONS=$( echo $SOFTWARE_VERSIONS | awk -F. '{print $1 "." $2}' )
 fi
