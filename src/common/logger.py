@@ -335,9 +335,12 @@ class Logger:
 			SELECT log_line_id FROM logs
 			WHERE jid_id = %d
 			AND time BETWEEN %d AND %d
-			ORDER BY time LIMIT 1
-			''' % (jid_id, start_of_day, last_second_of_day))
-		
+			AND kind IN (%d, %d, %d, %d, %d)
+			LIMIT 1
+			''' % (jid_id, start_of_day, last_second_of_day,
+			constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
+			constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT,
+			constants.KIND_GC_MSG))
 		results = cur.fetchone()
 		if results:
 			return True
