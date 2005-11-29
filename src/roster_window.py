@@ -2138,8 +2138,9 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 	def load_iconset(self, path):
 		imgs = {}
 		for state in ('connecting', 'online', 'chat', 'away', 'xa',
-							'dnd', 'invisible', 'offline', 'error', 'requested',
-							'message', 'opened', 'closed', 'not in the roster'):
+				'dnd', 'invisible', 'offline', 'error', 'requested',
+				'message', 'opened', 'closed', 'not in the roster',
+				'muc_active'):
 			
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
