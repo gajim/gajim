@@ -73,18 +73,23 @@ class HistoryWindow:
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = C_CONTACT_NAME)
+		col.set_sort_column_id(C_CONTACT_NAME)
+		col.set_resizable(True)
 		
 		col = gtk.TreeViewColumn(_('Date'))
 		self.results_treeview.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = C_TIME)
+		col.set_sort_column_id(C_TIME)
+		col.set_resizable(True)
 		
 		col = gtk.TreeViewColumn(_('Message'))
 		self.results_treeview.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = C_MESSAGE)
+		col.set_resizable(True)
 		
 		if account and gajim.contacts[account].has_key(jid):
 			contact = gajim.get_first_contact_instance_from_jid(account, jid)
